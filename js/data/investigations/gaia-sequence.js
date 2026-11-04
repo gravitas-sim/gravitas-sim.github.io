@@ -8,14 +8,14 @@
 // here, and the instructor modules read INSTRUCTOR. No imports: every number a step states is
 // recomputed in tests/gaiaLessons.test.js from the instruments (js/gaiaWidgets.js over
 // js/gaiaField.js and the kernel js/kernels/galactic/gaia.js), and every number about NGC 2420
-// or the validation is held to tests/fixtures/gaia-workflows/results.json or the pack.
+// or the validation is held to tests/fixtures/gaia-workflows/results.json or the dataset.
 // Every step carries a `sid`, an opaque stable id that student progress is keyed by.
 //
 // What they teach is the assumptions: a parallax measures 1 over the distance with an error,
 // a prior is a stated option and not a correction, the zero point is a stated offset whose own
 // uncertainty is not known here, and a sample is what passed its cuts. The cluster's distance
 // is stated with its labels (statistics only, no systematic floor, leg E1 NOT RUN, not validated
-// against a published catalogue) and no universal correction is applied to anything.
+// against a published catalog) and no universal correction is applied to anything.
 // =============================================================================
 
 const near = (x, target, tolerance) =>
@@ -118,13 +118,6 @@ export const HOW_FAR_AND_HOW_SURE = {
       ],
       because:
         'At 2.5 kpc. A parallax is the inverse of a distance, so the distance that agrees best with 0.40 mas is one divided by 0.40. The error does not move the peak; it sets how wide the likelihood is.',
-      misconceptions: [
-        {
-          id: 'read-as-distance',
-          option: 0,
-          say: 'A parallax is not a distance: it is one divided by the distance, in kiloparsecs when the parallax is in milliarcseconds. A larger parallax means a nearer star.',
-        },
-      ],
       tool: DIST(),
     },
     {
@@ -261,7 +254,7 @@ export const HOW_FAR_AND_HOW_SURE = {
       type: 'question',
       kind: 'choice',
       title: 'A negative parallax',
-      body: `Press “Negative parallax”: a measured parallax of −0.10 mas with an error of 0.05 mas. A catalogue can
+      body: `Press “Negative parallax”: a measured parallax of −0.10 mas with an error of 0.05 mas. A catalog can
              hold such a number, because a measurement with noise can come out below zero for a faraway star.`,
       prompt: 'What does the panel give for this star, and why?',
       options: [
@@ -482,7 +475,7 @@ export const HOW_FAR_AND_HOW_SURE_DEEPER = {
       type: 'question',
       kind: 'short',
       title: 'Report a distance',
-      body: `A catalogue lists a star with a parallax of 0.10 mas and an error of 0.10 mas, and a student writes
+      body: `A catalog lists a star with a parallax of 0.10 mas and an error of 0.10 mas, and a student writes
              “the star is 10 kpc away”.`,
       prompt:
         'Say what is wrong with the sentence, and write what the parallax supports instead, using numbers from the panel.',
@@ -678,8 +671,8 @@ export const HOW_FAR_AND_HOW_SURE_DEEPER = {
       depth: 'advanced',
       type: 'measure',
       title: 'The zero point',
-      body: `Gaia’s parallaxes have a small offset, the <strong>zero point</strong>, that depends on a star’s magnitude, colour
-             and sky position; it is negative, so the catalogue’s parallax is too small. Press “Well measured”, set the
+      body: `Gaia’s parallaxes have a small offset, the <strong>zero point</strong>, that depends on a star’s magnitude, color
+             and sky position; it is negative, so the catalog’s parallax is too small. Press “Well measured”, set the
              zero-point offset to −0.040 mas (a value near what NGC 2420’s stars need, below) and read the new distance.`,
       fields: [
         {
@@ -756,13 +749,13 @@ export const HOW_FAR_AND_HOW_SURE_DEEPER = {
       title: 'Say what the distance is',
       body: `The cluster’s corrected distance is 2.324 kpc with a statistical interval of 2.316 to 2.332 kpc. That interval
              has no systematic floor. The leg of the validation that would check the distance against a published,
-             Gaia-based catalogue distance (E1) was not run: the table it needs, Hunt and Reffert 2023, could not be fetched.
+             Gaia-based catalog distance (E1) was not run: the table it needs, Hunt and Reffert 2023, could not be fetched.
              The literature’s values in the validation range from 2.48 kpc (photometry, converted from a distance
              modulus) to 2.59 (Gaia DR2); one DR3 parallax as printed, with no zero point, gives 2.78 kpc.`,
       prompt:
         'Write the sentence you would put in a report for this distance, with its labels, and say what has not been done.',
       rubric:
-        'Credit for 2.324 kpc with the statistical interval 2.316 to 2.332 labelled as statistics only with no systematic floor; for saying the zero point’s own uncertainty is not known here; for saying the distance has not been validated against a published catalogue distance (E1 NOT RUN) and lies below the literature values listed; and for not calling it an agreement. Do not credit a sentence that gives 2.324 kpc as the cluster’s distance with no label.',
+        'Credit for 2.324 kpc with the statistical interval 2.316 to 2.332 labelled as statistics only with no systematic floor; for saying the zero point’s own uncertainty is not known here; for saying the distance has not been validated against a published catalog distance (E1 NOT RUN) and lies below the literature values listed; and for not calling it an agreement. Do not credit a sentence that gives 2.324 kpc as the cluster’s distance with no label.',
       rubricCriteria: [
         {
           name: 'States the value with its labels',
@@ -792,7 +785,7 @@ export const HOW_FAR_AND_HOW_SURE_DEEPER = {
             {
               label: 'Full',
               points: 2,
-              text: 'Says the distance is not validated against a published catalogue and that leg E1 was not run.',
+              text: 'Says the distance is not validated against a published catalog and that leg E1 was not run.',
             },
             {
               label: 'Not yet',
@@ -844,7 +837,7 @@ export const WHAT_GAIA_DOES_NOT_SEE = {
   thumbnail: 'images/investigations/what-gaia-does-not-see.webp',
   title: 'What Gaia does not see',
   subtitle:
-    'Cuts on magnitude, parallax over error and RUWE decide which stars a Gaia sample holds: watch the colour-magnitude diagram and the cluster’s distance change as stars are removed',
+    'Cuts on magnitude, parallax over error and RUWE decide which stars a Gaia sample holds: watch the color-magnitude diagram and the cluster’s distance change as stars are removed',
   duration: '8-12 min',
   level: 'Introductory astronomy',
   audience: 'intro',
@@ -856,8 +849,8 @@ export const WHAT_GAIA_DOES_NOT_SEE = {
   lock: { placement: true, inspector: true },
   depths: ['core', 'quantitative', 'advanced'],
   objectives: [
-    'Say that a catalogue sample is the stars that passed its cuts, and read what each cut removes from NGC 2420’s stars',
-    'Say which part of a colour-magnitude diagram a magnitude limit and a parallax-over-error cut remove',
+    'Say that a catalog sample is the stars that passed its cuts, and read what each cut removes from NGC 2420’s stars',
+    'Say which part of a color-magnitude diagram a magnitude limit and a parallax-over-error cut remove',
     'Say that a cut on the parallax moves a distance taken from the stars that are left, and that the interval does not contain the move',
     'Say what a cut does to a prior’s assumptions, and what the panel’s cuts are not: Gaia’s real selection',
   ],
@@ -867,11 +860,11 @@ export const WHAT_GAIA_DOES_NOT_SEE = {
       stage: STAGE_S,
       type: 'read',
       title: 'A sample is what passed its cuts',
-      body: `No catalogue holds every star. NGC 2420 is an old open cluster, and the pack holds 993 Gaia stars in its
+      body: `No catalog holds every star. NGC 2420 is an old open cluster, and the dataset holds 993 Gaia stars in its
              field: stars brighter than G = 17.5 whose astrometric solution was good enough (RUWE below 1.4; 55 more were dropped by
              that query before you saw anything). Every study then adds cuts of its own, and the stars left are the
              sample.\n\nThe panel lets you add three cuts: a limit on the magnitude, a minimum on the parallax over its
-             error, and a limit on RUWE. The diagram shows the stars kept (members in blue, others in grey) and the
+             error, and a limit on RUWE. The diagram shows the stars kept (members in blue, others in gray) and the
              stars removed (orange); the lines on the right say what each cut removed and what is left.`,
       tool: SAMP(),
     },
@@ -882,27 +875,20 @@ export const WHAT_GAIA_DOES_NOT_SEE = {
       reveal: 'read-what-is-left',
       title: 'Commit to a cut',
       body: `Before you move a slider: set the magnitude limit to G below 16, a cut that keeps only stars brighter than
-             magnitude 16. Most of the pack’s stars are faint, since fainter stars are more numerous.`,
-      prompt: 'About how much of the pack does G below 16 remove?',
+             magnitude 16. Most of the dataset’s stars are faint, since fainter stars are more numerous.`,
+      prompt: 'About how much of the dataset does G below 16 remove?',
       options: [
         'About a tenth',
         'About half',
         'About nine tenths',
-        'None: every star in the pack is brighter than 17.5',
+        'None: every star in the dataset is brighter than 17.5',
       ],
       answer: 1,
       hints: [
-        'The pack runs from G of about 9 to 17.5, and the number of stars rises steeply toward the faint end.',
+        'The dataset runs from G of about 9 to 17.5, and the number of stars rises steeply toward the faint end.',
       ],
       because:
-        'About half: 526 of 993. Stars rise in number toward fainter magnitudes, so a cut at 16 removes the faint half of the pack even though it is 1.5 magnitudes brighter than the limit the pack was made with.',
-      misconceptions: [
-        {
-          id: 'no-effect',
-          option: 3,
-          say: 'The pack’s own limit is G below 17.5. A cut at 16 is a new, tighter one: it removes everything between 16 and 17.5.',
-        },
-      ],
+        'About half: 526 of 993. Stars rise in number toward fainter magnitudes, so a cut at 16 removes the faint half of the dataset even though it is 1.5 magnitudes brighter than the limit the dataset was made with.',
       tool: SAMP({ mag: 16 }),
     },
     {
@@ -910,16 +896,15 @@ export const WHAT_GAIA_DOES_NOT_SEE = {
       stage: STAGE_S,
       type: 'measure',
       title: 'Read what is left',
-      body: `Tighten the magnitude limit to G below 15. Read how many stars the cut removes from the pack and how many
+      body: `Tighten the magnitude limit to G below 15. Read how many stars the cut removes from the dataset and how many
              are left.`,
       fields: [
         {
           id: 'removed',
           label: 'Stars removed by the cut',
-          unit: 'stars',
           hint: '755',
         },
-        { id: 'left', label: 'Stars left', unit: 'stars', hint: '238' },
+        { id: 'left', label: 'Stars left', hint: '238' },
       ],
       validate: v => {
         if (![v.removed, v.left].every(Number.isFinite)) return null;
@@ -927,7 +912,7 @@ export const WHAT_GAIA_DOES_NOT_SEE = {
           return {
             level: 'ok',
             message:
-              '755 of 993 stars are removed and 238 left: a limit 2.5 magnitudes brighter than the pack’s removes three quarters of it. The rows add up: 755 and 238 make 993.',
+              '755 of 993 stars are removed and 238 left: a limit 2.5 magnitudes brighter than the dataset’s removes three quarters of it. The rows add up: 755 and 238 make 993.',
           };
         }
         return {
@@ -949,7 +934,7 @@ export const WHAT_GAIA_DOES_NOT_SEE = {
         'Which part of the cluster’s diagram does a magnitude limit take away?',
       options: [
         'The red giants, which are rare',
-        'A band of colours, whatever the magnitude',
+        'A band of colors, whatever the magnitude',
         'The faint end of the main sequence: the lower-mass stars, which are numerous',
         'Stars at random across the diagram',
       ],
@@ -1042,18 +1027,18 @@ export const WHAT_GAIA_DOES_NOT_SEE = {
       kind: 'choice',
       title: 'What the panel’s cuts are not',
       body: `The panel’s cuts are the three a Gaia table’s rows carry: a magnitude, a parallax over error and RUWE. They
-             are applied here to a pack that already had two cuts of its own.`,
+             are applied here to a dataset that already had two cuts of its own.`,
       prompt: 'What do these cuts not tell you?',
       options: [
-        'How complete Gaia itself is: how likely a star of a given magnitude, colour and place was to be observed and measured at all',
-        'Which stars were in the pack',
+        'How complete Gaia itself is: how likely a star of a given magnitude, color and place was to be observed and measured at all',
+        'Which stars were in the dataset',
         'How many stars a cut removes',
         'What the diagram looks like after a cut',
       ],
       answer: 0,
       hints: ['Which of these four does the panel tell you directly?'],
       because:
-        'Gaia’s own completeness. The panel counts what its three cuts remove from the stars in the pack; it is not a model of how Gaia selects stars (crowding, scanning pattern, the magnitude at which the catalogue thins). The pack’s stars are only the ones Gaia measured, and a study of what Gaia did not see needs that selection, which is not built here.',
+        'Gaia’s own completeness. The panel counts what its three cuts remove from the stars in the dataset; it is not a model of how Gaia selects stars (crowding, scanning pattern, the magnitude at which the catalog thins). The dataset’s stars are only the ones Gaia measured, and a study of what Gaia did not see needs that selection, which is not built here.',
       tool: SAMP(),
     },
     {
@@ -1086,13 +1071,11 @@ export const WHAT_GAIA_DOES_NOT_SEE_DEEPER = {
         {
           id: 'alone',
           label: 'Removed by parallax over error alone',
-          unit: 'stars',
           hint: '189',
         },
         {
           id: 'after',
           label: 'Removed after the magnitude limit',
-          unit: 'stars',
           hint: '5',
         },
       ],
@@ -1150,7 +1133,7 @@ export const WHAT_GAIA_DOES_NOT_SEE_DEEPER = {
       depth: 'quantitative',
       type: 'measure',
       title: 'The zero point depends on the stars kept',
-      body: `The zero point is a function of a star’s magnitude, colour and latitude, so its mean over the stars kept
+      body: `The zero point is a function of a star’s magnitude, color and latitude, so its mean over the stars kept
              depends on which stars they are. With every cut off the panel reads a mean zero point of −0.0368 mas. Keep
              only stars with parallax over error at least 10 and read it again.`,
       fields: [
@@ -1333,7 +1316,7 @@ export const WHAT_GAIA_DOES_NOT_SEE_DEEPER = {
         'The counts stop at the limit: the faint main sequence is removed by a cut, not absent from the cluster, so the function is truncated',
         'Nothing: the stars left are a fair sample of the cluster',
         'The giants are counted twice',
-        'Counting is not allowed on a colour-magnitude diagram',
+        'Counting is not allowed on a color-magnitude diagram',
       ],
       answer: 0,
       hints: [
@@ -1350,12 +1333,12 @@ export const WHAT_GAIA_DOES_NOT_SEE_DEEPER = {
       type: 'question',
       kind: 'choice',
       title: 'A cut made before you saw the data',
-      body: `The pack’s own query held 1,048 stars brighter than G = 17.5 in the field and kept the 993 with RUWE below 1.4: it
+      body: `The dataset’s own query held 1,048 stars brighter than G = 17.5 in the field and kept the 993 with RUWE below 1.4: it
              had already dropped 55. The panel’s RUWE slider starts at 1.4, so it does nothing there; moving it to 1.1
              removes 168 more.`,
-      prompt: 'What does that tell you about a catalogue sample?',
+      prompt: 'What does that tell you about a catalog sample?',
       options: [
-        'The pack is not Gaia’s data',
+        'The dataset is not Gaia’s data',
         'RUWE is not a real cut',
         'The panel’s RUWE cut at 1.1 is the first cut ever made on these stars',
         'Cuts accumulate: some were made before a study started, and the stars removed by them cannot be seen or counted here',
@@ -1365,7 +1348,7 @@ export const WHAT_GAIA_DOES_NOT_SEE_DEEPER = {
         'Which cut is the 55 the result of, and could you undo it in the panel?',
       ],
       because:
-        'The first cut was made when the pack was built. A study works with stars that had already passed several cuts, and the panel can add cuts but never remove one: the 55 with RUWE of 1.4 or more are not in the table. Saying what a sample is means listing every cut, including those made before the data reached you.',
+        'The first cut was made when the dataset was built. A study works with stars that had already passed several cuts, and the panel can add cuts but never remove one: the 55 with RUWE of 1.4 or more are not in the table. Saying what a sample is means listing every cut, including those made before the data reached you.',
       tool: SAMP({ ruwe: 1.1 }),
     },
     {
@@ -1374,14 +1357,14 @@ export const WHAT_GAIA_DOES_NOT_SEE_DEEPER = {
       depth: 'advanced',
       type: 'question',
       kind: 'choice',
-      title: 'A pack that gives no distance',
+      title: 'A dataset that gives no distance',
       body: `Gravitas holds a second Gaia sample, stars near the Sun with radial velocities, but its parallaxes are
              rounded to 0.02 mas. In the validation, 80 percent of its 1,570 stars were rounded by more than a tenth of their
              parallax error (the largest rounding was 0.00999 mas; leg E3). The panel does not use it.`,
       prompt: 'Why is no distance taken from it?',
       options: [
         'Its stars are too close for parallax',
-        'Rounding is a measurement error the catalogue’s error does not contain, and for most of its stars it is a visible share of the error',
+        'Rounding is a measurement error the catalog’s error does not contain, and for most of its stars it is a visible share of the error',
         'Radial velocities cannot be combined with parallaxes',
         'Its stars are too bright for Gaia',
       ],
@@ -1390,7 +1373,7 @@ export const WHAT_GAIA_DOES_NOT_SEE_DEEPER = {
         'What does rounding to 0.02 mas do to a parallax error of 0.01 mas?',
       ],
       because:
-        'The rounding is an error of up to 0.01 mas that the quoted parallax error knows nothing about. For 80 percent of those stars it exceeds a tenth of the error, so a distance taken from the rounded value would carry an error the interval could not state. The cluster pack is precise; this one is for velocities.',
+        'The rounding is an error of up to 0.01 mas that the quoted parallax error knows nothing about. For 80 percent of those stars it exceeds a tenth of the error, so a distance taken from the rounded value would carry an error the interval could not state. The cluster dataset is precise; this one is for velocities.',
       tool: SAMP(),
     },
     {
@@ -1405,7 +1388,7 @@ export const WHAT_GAIA_DOES_NOT_SEE_DEEPER = {
       prompt:
         'Write the sentence, with the cuts, the number of stars, the distance and its labels.',
       rubric:
-        'Credit for naming the pack’s own cuts (G below 17.5, RUWE below 1.4, 55 dropped) and the added cut (parallax over error at least 10, 480 of 993 stars left); for the distance 2.299 kpc with a statistical interval of 2.291 to 2.308 labelled as statistics only with no systematic floor; for saying the zero point was applied per star with its own uncertainty not known here; and for saying the distance is not validated against a published catalogue distance. Do not credit a sentence with no cuts.',
+        'Credit for naming the dataset’s own cuts (G below 17.5, RUWE below 1.4, 55 dropped) and the added cut (parallax over error at least 10, 480 of 993 stars left); for the distance 2.299 kpc with a statistical interval of 2.291 to 2.308 labelled as statistics only with no systematic floor; for saying the zero point was applied per star with its own uncertainty not known here; and for saying the distance is not validated against a published catalog distance. Do not credit a sentence with no cuts.',
       rubricCriteria: [
         {
           name: 'Lists every cut',
@@ -1414,7 +1397,7 @@ export const WHAT_GAIA_DOES_NOT_SEE_DEEPER = {
             {
               label: 'Full',
               points: 2,
-              text: 'Names the pack’s cuts (G below 17.5, RUWE below 1.4) and the added one (parallax over error at least 10).',
+              text: 'Names the dataset’s cuts (G below 17.5, RUWE below 1.4) and the added one (parallax over error at least 10).',
             },
             {
               label: 'Not yet',
@@ -1447,7 +1430,7 @@ export const WHAT_GAIA_DOES_NOT_SEE_DEEPER = {
             {
               label: 'Full',
               points: 2,
-              text: 'Says the distance has not been checked against a published catalogue distance, and that the zero point’s own uncertainty is not known.',
+              text: 'Says the distance has not been checked against a published catalog distance, and that the zero point’s own uncertainty is not known.',
             },
             {
               label: 'Not yet',
@@ -1508,11 +1491,6 @@ export const HOW_FAR_AND_HOW_SURE_ES = {
       ],
       because:
         'En 2,5 kpc. Una paralaje es la inversa de una distancia, así que la distancia que mejor concuerda con 0,40 mas es uno dividido entre 0,40. El error no mueve el máximo; fija lo ancha que es la verosimilitud.',
-      misconceptions: [
-        {
-          say: 'Una paralaje no es una distancia: es uno dividido entre la distancia, en kiloparsecs cuando la paralaje está en milisegundos de arco. Una paralaje mayor significa una estrella más cercana.',
-        },
-      ],
     },
     {
       title: 'Lee la distancia y su intervalo',
@@ -1889,11 +1867,6 @@ export const WHAT_GAIA_DOES_NOT_SEE_ES = {
       ],
       because:
         'La mitad: 526 de 993. Las estrellas aumentan en número hacia las magnitudes más débiles, así que un corte en 16 quita la mitad débil del paquete aunque esté 1,5 magnitudes por encima del límite con el que se hizo.',
-      misconceptions: [
-        {
-          say: 'El límite propio del paquete es G menor que 17,5. Un corte en 16 es uno nuevo y más estricto: quita todo lo que hay entre 16 y 17,5.',
-        },
-      ],
     },
     {
       title: 'Lee lo que queda',
@@ -2245,7 +2218,7 @@ const CONTENT = {
       },
       {
         heading: 'The zero point is a stated offset',
-        body: 'The catalogue’s parallax is too small on average by an amount that depends on a star’s magnitude, colour and latitude. The correction applied here is an independent reimplementation of Lindegren et al. (2021); its own uncertainty is not known here, so every distance with the correction has no systematic floor and says so.',
+        body: 'The catalog’s parallax is too small on average by an amount that depends on a star’s magnitude, color and latitude. The correction applied here is an independent reimplementation of Lindegren et al. (2021); its own uncertainty is not known here, so every distance with the correction has no systematic floor and says so.',
       },
     ],
     features: [
@@ -2288,18 +2261,18 @@ const CONTENT = {
         claim:
           'The zero point is small enough to ignore, or has already been taken out.',
         response:
-          'For NGC 2420’s members it moves the cluster’s distance from 2.555 to 2.324 kpc, more than 25 times the statistical half-width. The catalogue’s parallaxes are not corrected, and the correction’s own uncertainty is not known here.',
+          'For NGC 2420’s members it moves the cluster’s distance from 2.555 to 2.324 kpc, more than 25 times the statistical half-width. The catalog’s parallaxes are not corrected, and the correction’s own uncertainty is not known here.',
       },
     ],
     teachingNotes: [
-      'Every input of the distance panel is a number the student sets; no star is claimed. The cluster values in the upper depth are from the pack and the validation (results.json), not from a literature table.',
+      'Every input of the distance panel is a number the student sets; no star is claimed. The cluster values in the upper depth are from the dataset and the validation (results.json), not from a literature table.',
       'The point-distance threshold of five is stated, not derived. Show students that nothing happens at five: the maximum of the likelihood is the same at 4.9 as at 5.1, and only the wording changes.',
       'The prior used is exponentially decreasing space density, so the prior on the distance is r squared times exp(−r over L), peaking at two L. Its scale length is the student’s to set; no value is claimed right. The panel states its sample assumptions beside it.',
       'The zero point has no uncertainty of its own in the kernel (the paper’s statement of it was not in the material supplied), so no systematic floor is shown or invented; the distance of NGC 2420 says so each time it appears.',
-      'The distance of NGC 2420 is 2.324 kpc with a statistical interval of 2.316 to 2.332 kpc, members from proper motion alone at probability 0.9, a per-star zero point and a 3-sigma clip. Leg E1 of the validation, which would check it against a published Gaia-based catalogue distance, was NOT RUN (Hunt and Reffert 2023 could not be fetched). The value is below every literature distance in the validation’s table, including the printed DR3 parallax’s lower end; the lesson says so and does not call it agreement.',
+      'The distance of NGC 2420 is 2.324 kpc with a statistical interval of 2.316 to 2.332 kpc, members from proper motion alone at probability 0.9, a per-star zero point and a 3-sigma clip. Leg E1 of the validation, which would check it against a published Gaia-based catalog distance, was NOT RUN (Hunt and Reffert 2023 could not be fetched). The value is below every literature distance in the validation’s table, including the printed DR3 parallax’s lower end; the lesson says so and does not call it agreement.',
     ],
     discussion: [
-      'A catalogue gives a star a parallax of 0.10 mas with an error of 0.10 mas. A colleague wants to put it on a map at 10 kpc. What would you put on the map instead?',
+      'A catalog gives a star a parallax of 0.10 mas with an error of 0.10 mas. A colleague wants to put it on a map at 10 kpc. What would you put on the map instead?',
       'Why is it more honest to keep a star with a negative parallax in a sample than to drop it? What does dropping it do to the mean?',
       'When would you be comfortable choosing a prior scale length, and what would you need to know about the sample to defend it?',
     ],
@@ -2310,26 +2283,26 @@ const CONTENT = {
     assessment:
       'Core: the prediction of where the likelihood peaks, the distance with its interval (2.5 kpc, 2.22 to 2.86), why the interval leans, what 0.10 mas with an error of 0.10 supports (a lower limit near 5 kpc), and what a negative parallax gives (a likelihood and no distance). Quantitative: the relative error of 12.5 percent, the threshold at 0.08 mas, the interval with no far end, a speed of 59.3 km/s and the inversion’s bias, and the report sentence. Advanced: the prior’s effect on a weak parallax and its absence on a strong one, what the prior assumes, the zero point’s shift of the distance, the cluster with and without it, and the sentence with its labels.',
     modelNotes:
-      'js/kernels/galactic/astrometry.js (the likelihood, the interval, the prior, the status ladder), zeropoint.js and cuts.js, js/gaiaField.js, js/gaiaWidgets.js, GAIA_WORKFLOWS.md. The thresholds are tests/fixtures/gaia-workflows/thresholds.json, committed before the kernel existed; the numbers a step quotes about the validation are in results.json, and the sample is NGC 2420 from the pack (version 1.1.0, CC BY-NC 3.0 IGO, ESA/Gaia/DPAC).',
+      'js/kernels/galactic/astrometry.js (the likelihood, the interval, the prior, the status ladder), zeropoint.js and cuts.js, js/gaiaField.js, js/gaiaWidgets.js, GAIA_WORKFLOWS.md. The thresholds are tests/fixtures/gaia-workflows/thresholds.json, committed before the kernel existed; the numbers a step quotes about the validation are in results.json, and the sample is NGC 2420 from the dataset (version 1.1.0, CC BY-NC 3.0 IGO, ESA/Gaia/DPAC).',
   },
   'what-gaia-does-not-see': {
     topic:
-      'A Gaia sample is what passed its cuts: a magnitude limit, a parallax-over-error minimum and RUWE, what each removes from NGC 2420’s stars, how the colour-magnitude diagram changes, how the cluster’s distance moves with the cut, and what the panel’s cuts are not',
+      'A Gaia sample is what passed its cuts: a magnitude limit, a parallax-over-error minimum and RUWE, what each removes from NGC 2420’s stars, how the color-magnitude diagram changes, how the cluster’s distance moves with the cut, and what the panel’s cuts are not',
     difficulty:
-      'Introductory (a cut and what it removes, the faint end of the diagram, parallax over error, a distance that moves); majors (overlapping cuts, the direction a cut on the measured parallax pushes, a zero point that depends on the stars kept, velocities at the cluster’s distance, answering a colleague); upper (completeness in distance, the diagram’s changed shape, cuts made before the data reached you, a pack that gives no distance, and the sentence a methods section needs)',
+      'Introductory (a cut and what it removes, the faint end of the diagram, parallax over error, a distance that moves); majors (overlapping cuts, the direction a cut on the measured parallax pushes, a zero point that depends on the stars kept, velocities at the cluster’s distance, answering a colleague); upper (completeness in distance, the diagram’s changed shape, cuts made before the data reached you, a dataset that gives no distance, and the sentence a methods section needs)',
     placement:
       'After Cluster Membership by Motion (which finds NGC 2420’s members) and How far, and how sure? (which says what a parallax supports), in a unit on survey samples, selection effects or data analysis. It pairs with the survey-design lessons, whose magnitude limits are the same idea in a different place.',
     overview:
-      'Students open NGC 2420’s 993 Gaia stars and add cuts one at a time. They predict what a magnitude limit removes, read how many stars remain, see that the faint end of the main sequence goes, and then see that a cut on parallax over error is close to a cut on magnitude but also changes the distance: the cluster’s distance moves from 2.324 to 2.299 kpc, outside its statistical interval. The majors depth shows cuts that overlap, why a cut on the measured parallax pushes the mean one way, and that the zero point follows the stars kept. The upper depth asks what a cut does to completeness, to a diagram’s shape and to what a pack already removed, and ends on the sentence a methods section needs.',
+      'Students open NGC 2420’s 993 Gaia stars and add cuts one at a time. They predict what a magnitude limit removes, read how many stars remain, see that the faint end of the main sequence goes, and then see that a cut on parallax over error is close to a cut on magnitude but also changes the distance: the cluster’s distance moves from 2.324 to 2.299 kpc, outside its statistical interval. The majors depth shows cuts that overlap, why a cut on the measured parallax pushes the mean one way, and that the zero point follows the stars kept. The upper depth asks what a cut does to completeness, to a diagram’s shape and to what a dataset already removed, and ends on the sentence a methods section needs.',
     priorKnowledge: [
-      'A colour-magnitude diagram and the main sequence, the turnoff and the giant branch (Cluster Membership by Motion)',
+      'A color-magnitude diagram and the main sequence, the turnoff and the giant branch (Cluster Membership by Motion)',
       'Parallax as a measure of distance and what an error is (How far, and how sure?)',
       'For the upper depth: what it means for a sample to be complete over a range',
     ],
     keyConcepts: [
       {
         heading: 'A sample is what passed its cuts',
-        body: 'The pack holds the 993 stars of 1,048 brighter than G = 17.5 that had RUWE below 1.4; the panel adds a magnitude limit, a parallax-over-error minimum and a lower RUWE limit and says what each removes alone and in order. Cuts overlap, so the order matters for what a cut appears to do.',
+        body: 'The dataset holds the 993 stars of 1,048 brighter than G = 17.5 that had RUWE below 1.4; the panel adds a magnitude limit, a parallax-over-error minimum and a lower RUWE limit and says what each removes alone and in order. Cuts overlap, so the order matters for what a cut appears to do.',
       },
       {
         heading: 'A cut changes the answer, not only the count',
@@ -2343,15 +2316,15 @@ const CONTENT = {
     features: [
       {
         name: 'The sample panel (gaia-sample)',
-        text: 'NGC 2420’s 993 stars from the Gaia pack with cuts as controls, the colour-magnitude diagram or the velocities of the members, what each cut removes alone and in order, the stars left and the members among them, the mean parallax, the distance with a statistical interval (no systematic floor) and the cluster’s velocities at its distance.',
+        text: 'NGC 2420’s 993 stars from the Gaia dataset with cuts as controls, the color-magnitude diagram or the velocities of the members, what each cut removes alone and in order, the stars left and the members among them, the mean parallax, the distance with a statistical interval (no systematic floor) and the cluster’s velocities at its distance.',
       },
       {
         name: 'Depth',
-        text: 'Quantitative: overlapping cuts, the direction of a cut’s push, the zero point under cuts, the velocity scatter and an answer to a colleague (a rubric with four criteria). Advanced: completeness in distance, the diagram’s shape, a cut made before the data, a pack that gives no distance and the methods sentence (a rubric with four criteria).',
+        text: 'Quantitative: overlapping cuts, the direction of a cut’s push, the zero point under cuts, the velocity scatter and an answer to a colleague (a rubric with four criteria). Advanced: completeness in distance, the diagram’s shape, a cut made before the data, a dataset that gives no distance and the methods sentence (a rubric with four criteria).',
       },
       {
         name: 'Validation',
-        text: 'The cuts were checked through the statistics kernel’s selection object against closed forms (legs S1 to S3 of GAIA_WORKFLOWS.md); the cluster’s distance is from the precise cluster pack under a contract fixed before it was run; the rounded neighbourhood pack is not used for a distance (leg E3).',
+        text: 'The cuts were checked through the statistics kernel’s selection object against closed forms (legs S1 to S3 of GAIA_WORKFLOWS.md); the cluster’s distance is from the precise cluster dataset under a contract fixed before it was run; the rounded neighbourhood dataset is not used for a distance (leg E3).',
       },
     ],
     misconceptions: [
@@ -2370,17 +2343,17 @@ const CONTENT = {
       {
         claim: 'The cuts in the panel are Gaia’s own selection.',
         response:
-          'They are three cuts that a table’s rows carry, applied to stars Gaia had already measured. Gaia’s own completeness (crowding, scanning, the thinning near the faint limit) is not modelled.',
+          'They are three cuts that a table’s rows carry, applied to stars Gaia had already measured. Gaia’s own completeness (crowding, scanning, the thinning near the faint limit) is not modeled.',
       },
       {
         claim: 'The data are what Gaia saw.',
         response:
-          'The pack had already dropped 55 stars with RUWE of 1.4 or more before any cut here. Every sample is the product of cuts made before it reached the student.',
+          'The dataset had already dropped 55 stars with RUWE of 1.4 or more before any cut here. Every sample is the product of cuts made before it reached the student.',
       },
     ],
     teachingNotes: [
-      'All numbers come from the pack (993 stars, 55 dropped from 1,048 by its own query) and the cluster contract of leg E1: members from proper motion alone at probability 0.9, a per-star zero point, a 3-sigma clip, no systematic floor. The cuts are applied to those members after the fit, as the panel’s note says.',
-      'The cluster’s distance is 2.324 kpc with every cut off, with a statistical interval of 2.316 to 2.332 kpc, and no systematic floor. It has not been validated against a published catalogue distance (E1 NOT RUN) and the panel and the lessons say so. The rounded neighbourhood pack is not used for any distance (E3: 80 percent of its stars round by more than a tenth of their parallax error).',
+      'All numbers come from the dataset (993 stars, 55 dropped from 1,048 by its own query) and the cluster contract of leg E1: members from proper motion alone at probability 0.9, a per-star zero point, a 3-sigma clip, no systematic floor. The cuts are applied to those members after the fit, as the panel’s note says.',
+      'The cluster’s distance is 2.324 kpc with every cut off, with a statistical interval of 2.316 to 2.332 kpc, and no systematic floor. It has not been validated against a published catalog distance (E1 NOT RUN) and the panel and the lessons say so. The rounded neighbourhood dataset is not used for any distance (E3: 80 percent of its stars round by more than a tenth of their parallax error).',
       'The direction of the move under a cut on parallax over error is what the panel computes; the lesson states the mechanism (a cut on the measured value keeps high measurements) without claiming the size of the effect for any other sample.',
       'A RUWE limit of 1.1 removes 168 stars and leaves the distance at 2.325 kpc, unchanged. The removed stars are on average brighter than the kept ones; the lesson does not say why.',
       'The velocity scatter includes the proper-motion errors, so it is an upper limit on the stars’ internal motion; the panel says so.',
@@ -2395,9 +2368,9 @@ const CONTENT = {
       'Compare the mean zero point with the cuts on and off, and say why a single quoted value cannot stand in for the per-star correction.',
     ],
     assessment:
-      'Core: the prediction of half the pack removed by G below 16, the counts at G below 15 (755 removed, 238 left), the faint end of the diagram, why parallax over error removes faint stars, and the two intervals that do not overlap (2.324 and 2.299 kpc). Quantitative: the overlap of cuts (189 alone, 5 after the limit), the direction of a cut’s push, the zero point under cuts, the velocity scatter, and the answer to a colleague. Advanced: completeness in distance, the diagram’s shape, the pack’s own cut, the pack that gives no distance, and the methods sentence with its labels.',
+      'Core: the prediction of half the dataset removed by G below 16, the counts at G below 15 (755 removed, 238 left), the faint end of the diagram, why parallax over error removes faint stars, and the two intervals that do not overlap (2.324 and 2.299 kpc). Quantitative: the overlap of cuts (189 alone, 5 after the limit), the direction of a cut’s push, the zero point under cuts, the velocity scatter, and the answer to a colleague. Advanced: completeness in distance, the diagram’s shape, the dataset’s own cut, the dataset that gives no distance, and the methods sentence with its labels.',
     modelNotes:
-      'js/kernels/galactic/cuts.js (the cuts as selection objects, 154), astrometry.js (the cluster’s mean parallax and distance), zeropoint.js, js/gaiaField.js, js/gaiaWidgets.js, GAIA_WORKFLOWS.md. The pack is gaia-dr3-ngc2420 version 1.1.0 (CC BY-NC 3.0 IGO, ESA/Gaia/DPAC; non-commercial). The cuts are the three a table carries, not a model of Gaia’s selection function.',
+      'js/kernels/galactic/cuts.js (the cuts as selection objects, 154), astrometry.js (the cluster’s mean parallax and distance), zeropoint.js, js/gaiaField.js, js/gaiaWidgets.js, GAIA_WORKFLOWS.md. The dataset is gaia-dr3-ngc2420 version 1.1.0 (CC BY-NC 3.0 IGO, ESA/Gaia/DPAC; non-commercial). The cuts are the three a table carries, not a model of Gaia’s selection function.',
   },
 };
 
@@ -2467,12 +2440,12 @@ const EXPECTATIONS = {
 const BANDS = {
   'how-far-and-how-sure': {
     core: 'short',
-    quantitative: 'short',
-    advanced: 'medium',
+    quantitative: 'medium',
+    advanced: 'long',
   },
   'what-gaia-does-not-see': {
     core: 'short',
-    quantitative: 'short',
+    quantitative: 'medium',
     advanced: 'medium',
   },
 };

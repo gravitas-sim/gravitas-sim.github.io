@@ -3,10 +3,6 @@
  "static": {
   "en": {
    "units": [
-    ["steps.read-what-is-left.fields.0.unit","stars"],
-    ["steps.read-what-is-left.fields.1.unit","stars"],
-    ["steps.cuts-overlap.fields.0.unit","stars"],
-    ["steps.cuts-overlap.fields.1.unit","stars"],
     ["steps.the-zero-point-under-cuts.fields.0.unit","mas"],
     ["steps.the-velocity-scatter.fields.0.unit","km/s"]
    ],

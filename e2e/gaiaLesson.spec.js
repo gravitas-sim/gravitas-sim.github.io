@@ -136,9 +136,9 @@ for (const c of CASES) {
       // The chart is drawn when the panel opens: a labelled svg with content.
       const chart = page.locator('#investigationTool svg[aria-label]:visible');
       await expect(chart.first()).toBeVisible();
-      expect(await chart.first().locator('path, circle').count()).toBeGreaterThan(
-        0
-      );
+      expect(
+        await chart.first().locator('path, circle').count()
+      ).toBeGreaterThan(0);
 
       for (const theme of THEMES) {
         await page.evaluate(async id => {

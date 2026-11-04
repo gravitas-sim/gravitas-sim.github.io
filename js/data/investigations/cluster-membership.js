@@ -12,7 +12,7 @@
 // the cluster's distance. The measured distance (Prompt 233, GAIA_WORKFLOWS.md) is
 // stated with its labels: a zero point per star, 2.324 kpc with a statistical
 // interval of 2.316 to 2.332 kpc and no systematic floor, leg E1 NOT RUN, and not
-// validated against a published catalogue distance. Its numbers are those of
+// validated against a published catalog distance. Its numbers are those of
 // tests/fixtures/gaia-workflows/results.json.
 // =============================================================================
 
@@ -46,7 +46,7 @@ const CLUSTER_MEMBERSHIP = {
     'Measure a cluster’s proper motion and its number of members from a fit that gives each star a probability',
     'Explain why a membership is a probability and a membership count depends on a threshold that is chosen',
     'Check a membership made from motion against a color-magnitude diagram that it did not use',
-    'State the cluster’s measured distance with its labels (a zero point per star, a statistical interval with no systematic floor) and say that it is not validated against a published catalogue distance',
+    'State the cluster’s measured distance with its labels (a zero point per star, a statistical interval with no systematic floor) and say that it is not validated against a published catalog distance',
   ],
   steps: [
     {
@@ -256,7 +256,7 @@ const CLUSTER_MEMBERSHIP = {
       body: `With the threshold at 0.5, read the members’ <strong>mean
              parallax</strong> and the reading the instrument gives from it, 1 ÷
              parallax, in kiloparsecs when the parallax is in milliarcseconds. It
-             is the catalogue’s parallax with no zero point, so it is not yet the
+             is the catalog’s parallax with no zero point, so it is not yet the
              cluster’s distance.`,
       fields: [
         {
@@ -281,7 +281,7 @@ const CLUSTER_MEMBERSHIP = {
           return {
             level: 'ok',
             message:
-              'The instrument’s uncorrected reading: a mean parallax of 0.385 mas is 1 ÷ parallax of 2.6 kpc, the catalogue’s parallax with no zero point, and not the cluster’s distance. With Gaia’s zero point applied star by star to members taken from proper motion alone (a different member list from this instrument’s, which also uses parallax), the astrometry panel measures 2.324 kpc with a statistical interval of 2.316 to 2.332 kpc, and that interval has no systematic floor: the zero point’s own uncertainty is not known here. The distance is not validated against a published catalogue distance: the check that would do it, leg E1 of the validation, is NOT RUN, waiting for a table that could not be fetched.',
+              'The instrument’s uncorrected reading: a mean parallax of 0.385 mas is 1 ÷ parallax of 2.6 kpc, the catalog’s parallax with no zero point, and not the cluster’s distance. With Gaia’s zero point applied star by star to members taken from proper motion alone (a different member list from this instrument’s, which also uses parallax), the astrometry panel measures 2.324 kpc with a statistical interval of 2.316 to 2.332 kpc, and that interval has no systematic floor: the zero point’s own uncertainty is not known here. The distance is not validated against a published catalog distance: the check that would do it, leg E1 of the validation, is NOT RUN, waiting for a table that could not be fetched.',
           };
         }
         return {
@@ -311,7 +311,7 @@ const CLUSTER_MEMBERSHIP = {
       answer: 0,
       hints: ['Compare the two distances, with the zero point and without it.'],
       because:
-        'It raises the parallax, so it lowers the distance: the members’ mean zero point is −0.0368 mas, and the distance goes from 2.555 kpc without it to 2.324 kpc with it. The interval of the corrected value, 2.316 to 2.332 kpc, is statistics only, with no systematic floor, and the distance is not validated against a published catalogue distance (E1 NOT RUN). The sources the validation lists: 2.48 and 2.54 kpc from photometry (converted here from a distance modulus), 2.59 kpc from Gaia DR2, 2.78 kpc from a DR3 parallax as printed with no zero point stated (2.38 to 3.33 kpc), and about 3 kpc with no method read. The corrected distance is below all of them: that is what the data gave under a contract fixed beforehand, not an agreement with the literature.',
+        'It raises the parallax, so it lowers the distance: the members’ mean zero point is −0.0368 mas, and the distance goes from 2.555 kpc without it to 2.324 kpc with it. The interval of the corrected value, 2.316 to 2.332 kpc, is statistics only, with no systematic floor, and the distance is not validated against a published catalog distance (E1 NOT RUN). The sources the validation lists: 2.48 and 2.54 kpc from photometry (converted here from a distance modulus), 2.59 kpc from Gaia DR2, 2.78 kpc from a DR3 parallax as printed with no zero point stated (2.38 to 3.33 kpc), and about 3 kpc with no method read. The corrected distance is below all of them: that is what the data gave under a contract fixed beforehand, not an agreement with the literature.',
       tool: CM({ view: 0, dims: 1, threshold: 0.5 }),
     },
     {
@@ -341,7 +341,7 @@ const CLUSTER_MEMBERSHIP = {
              population. With a zero point applied star by star, their parallax
              gives 2.324&nbsp;kpc, a statistical interval of 2.316 to 2.332&nbsp;kpc
              with no systematic floor, and not validated against a published
-             catalogue distance.`,
+             catalog distance.`,
       tool: CM({ view: 1, dims: 1, threshold: 0.5 }),
     },
   ],

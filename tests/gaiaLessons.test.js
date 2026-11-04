@@ -463,7 +463,10 @@ describe('the instructor content', () => {
         expect(sids.has(f.from)).toBe(true);
         expect(sids.has(f.to)).toBe(true);
       }
-      expect(INSTRUCTOR.bands[id].advanced).toBe('medium');
+      // The documented rule of tests/timeBands.test.js: extra steps at twice the core's minutes a step.
+      expect(INSTRUCTOR.bands[id].advanced).toBe(
+        id === 'how-far-and-how-sure' ? 'long' : 'medium'
+      );
     }
   });
 });

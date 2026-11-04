@@ -1,5 +1,5 @@
 // The Gaia astrometry panels' words, in English (Prompt 233 Part B). The inputs of the first
-// panel are numbers the student sets, not a star; the second panel is NGC 2420's real pack
+// panel are numbers the student sets, not a star; the second panel is NGC 2420's real dataset
 // and says what its cuts remove. Fixed text, so it translates by key. gaiaW.* ids.
 export const EN_GAIA = {
   'gaiaW.loading': 'loading the Gaia data…',
@@ -69,7 +69,7 @@ export const EN_GAIA = {
     'None: a star with no distance has no tangential speed.',
   'gaiaW.s.title': 'What Gaia keeps: NGC 2420',
   'gaiaW.s.note':
-    'The {n} Gaia DR3 stars of NGC 2420 in the pack: G below 17.5, RUWE below 1.4, parallax and proper motion known. Each cut removes the stars that fail it, and the diagram and the distance are of what is left. Members are the stars whose proper motion alone puts them in the cluster with probability {p} or more, a contract fixed before this result was seen. The distance carries a zero point per star and a {c}-sigma clip, and no systematic floor, so its interval is statistics only. The solar-neighbourhood pack is not used: its parallaxes are rounded and give no distance.',
+    'The {n} Gaia DR3 stars of NGC 2420 in the dataset: G below 17.5, RUWE below 1.4, parallax and proper motion known. Each cut removes the stars that fail it, and the diagram and the distance are of what is left. Members are the stars whose proper motion alone puts them in the cluster with probability {p} or more, a contract fixed before this result was seen. The distance carries a zero point per star and a {c}-sigma clip, and no systematic floor, so its interval is statistics only. The solar-neighbourhood dataset is not used: its parallaxes are rounded and give no distance.',
   'gaiaW.s.control.view': 'Picture',
   'gaiaW.s.control.mag': 'Magnitude limit: keep G below',
   'gaiaW.s.control.poe': 'Parallax over error: keep at least',
@@ -81,7 +81,7 @@ export const EN_GAIA = {
   'gaiaW.s.preset.bright': 'Bright stars only',
   'gaiaW.s.preset.precise': 'Precise parallaxes only',
   'gaiaW.s.preset.noZp': 'No zero point',
-  'gaiaW.s.axis.colour': 'BP − RP, color',
+  'gaiaW.s.axis.color': 'BP − RP, color',
   'gaiaW.s.axis.g': 'G magnitude (brighter up)',
   'gaiaW.s.axis.vra': 'Velocity along right ascension, km/s',
   'gaiaW.s.axis.vdec': 'Velocity along declination, km/s',
@@ -91,9 +91,9 @@ export const EN_GAIA = {
   'gaiaW.s.legend.velocity': 'Members kept, at the cluster’s distance',
   'gaiaW.s.row.source': 'The sample',
   'gaiaW.s.v.source':
-    'NGC 2420, Gaia DR3 (pack {v}): {n} stars. The pack’s own query had already dropped {d} stars with RUWE of 1.4 or more. Measured data, ESA/Gaia/DPAC, non-commercial.',
+    'NGC 2420, Gaia DR3 (dataset {v}): {n} stars. The dataset’s own query had already dropped {d} stars with RUWE of 1.4 or more. Measured data, ESA/Gaia/DPAC, non-commercial.',
   'gaiaW.s.row.cuts': 'Cuts on',
-  'gaiaW.s.v.noCuts': 'none: every star in the pack is kept.',
+  'gaiaW.s.v.noCuts': 'none: every star in the dataset is kept.',
   'gaiaW.s.cut.magnitude':
     'G below {x}: alone it removes {a} of {n} stars; of the stars the earlier cuts left it removes {r}',
   'gaiaW.s.cut.parallaxOverError':
@@ -113,7 +113,7 @@ export const EN_GAIA = {
     '{d} kpc, statistical interval {lo} to {hi} kpc. There is no systematic floor: the zero point’s own uncertainty is not known here, so this interval understates the error.',
   'gaiaW.s.row.limit': 'Not validated',
   'gaiaW.s.v.limit':
-    'This distance has not been checked against a published catalogue distance: leg E1 of the validation is NOT RUN, waiting for the table that could not be fetched.',
+    'This distance has not been checked against a published catalog distance: leg E1 of the validation is NOT RUN, waiting for the table that could not be fetched.',
   'gaiaW.s.row.velocity': 'Tangential velocities',
   'gaiaW.s.v.velocity':
     'At {d} kpc the members move at ({a}, {b}) km/s in right ascension and declination, with a scatter of {sa} and {sb} km/s (measurement errors included). The mean motion, {mu} mas/yr, is {v} km/s, interval {lo} to {hi} km/s (the distance’s statistical interval only).',
@@ -121,7 +121,7 @@ export const EN_GAIA = {
   'gaiaW.s.v.zeroPointOn':
     'The correction of Lindegren et al. (2021), per star, as an independent reimplementation; its own uncertainty is not built in.',
   'gaiaW.s.v.zeroPointOff':
-    'Not applied: the parallaxes are the catalogue’s, which Lindegren et al. (2021) find too small on average.',
+    'Not applied: the parallaxes are the catalog’s, which Lindegren et al. (2021) find too small on average.',
   'gaiaW.s.aria':
-    'Colour-magnitude diagram or velocity plot of NGC 2420: {k} of {n} stars kept.',
+    'Color-magnitude diagram or velocity plot of NGC 2420: {k} of {n} stars kept.',
 };

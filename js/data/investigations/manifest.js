@@ -1325,7 +1325,7 @@ export const MANIFEST = [
     id: 'what-gaia-does-not-see',
     title: 'What Gaia does not see',
     subtitle:
-      'Cuts on magnitude, parallax over error and RUWE decide which stars a Gaia sample holds: watch the colour-magnitude diagram and the cluster’s distance change as stars are removed',
+      'Cuts on magnitude, parallax over error and RUWE decide which stars a Gaia sample holds: watch the color-magnitude diagram and the cluster’s distance change as stars are removed',
     duration: '8-12 min',
     level: 'Introductory astronomy',
     thumbnail: 'images/investigations/what-gaia-does-not-see.webp',
