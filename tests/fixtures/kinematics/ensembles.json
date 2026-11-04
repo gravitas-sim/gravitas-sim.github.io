@@ -1,0 +1,506 @@
+{
+ "format": "gravitas.kinematics-ensembles/1",
+ "note": "truth manifests of the first three realizations of each ensemble",
+ "truth": {
+  "note": "Every number in this block is a synthetic truth chosen here for the test, labelled as such. None is a published value and none is tuned to a result; they are not claimed to describe the Galaxy.",
+  "disk": {
+   "R0": 8,
+   "unitR0": "kpc",
+   "V0": 220,
+   "unitV": "km/s",
+   "slope": -2,
+   "unitSlope": "km/s/kpc",
+   "curve": "V(R) = V0 + slope (R - R0), a straight line in R",
+   "A": 14.75,
+   "B": -12.75,
+   "relations": "A = (V0/R0 - slope)/2, B = -(V0/R0 + slope)/2"
+  },
+  "sunPeculiar": {
+   "U": 10,
+   "V": 13,
+   "W": 7,
+   "unit": "km/s",
+   "frame": "relative to the local standard of rest of the synthetic disk (a circular orbit at R0)"
+  },
+  "driftK": {
+   "value": 80,
+   "unit": "km/s",
+   "note": "the stated relation lag = sigma_R^2 / k; k is the cited constant of BT08 section 4.8.2 already in js/kernels/galactic/motion.js, here used as a synthetic truth"
+  },
+  "neighbourhoodPopulations": {
+   "young": {
+    "sigma": [
+     22,
+     15,
+     11
+    ],
+    "unit": "km/s",
+    "order": "sigma_U (radial), sigma_V (azimuthal), sigma_W (vertical)"
+   },
+   "old": {
+    "sigma": [
+     45,
+     32,
+     24
+    ],
+    "unit": "km/s"
+   },
+   "membership": "for a star of BP-RP rank fraction q (its rank among the pack's stars divided by the number of stars), the probability of the old population is q",
+   "meanLag": "each population's mean azimuthal velocity is V_c(R) - sigma_U^2 / k"
+  },
+  "segueBins": {
+   "edges": [
+    -1,
+    -0.5
+   ],
+   "unit": "dex",
+   "bin1": {
+    "label": "[Fe/H] < -1.0",
+    "sigma": [
+     140,
+     100,
+     95
+    ],
+    "meanAzimuthalVelocity": 0,
+    "unit": "km/s",
+    "note": "a population with no net rotation"
+   },
+   "bin2": {
+    "label": "-1.0 <= [Fe/H] < -0.5",
+    "sigma": [
+     63,
+     45,
+     38
+    ],
+    "lag": 40
+   },
+   "bin3": {
+    "label": "[Fe/H] >= -0.5",
+    "sigma": [
+     40,
+     27,
+     19
+    ],
+    "lag": 20
+   },
+   "assignment": "every star of a bin is of that bin's population, by the observed [Fe/H]; a bin of the real sample is whatever mixture lands in it, which leg D.D2 reports and does not band"
+  },
+  "toomrePopulations": {
+   "thin": {
+    "sigma": [
+     35,
+     25,
+     17
+    ],
+    "lag": 15,
+    "fraction": 0.85
+   },
+   "thick": {
+    "sigma": [
+     65,
+     48,
+     40
+    ],
+    "lag": 45,
+    "fraction": 0.145
+   },
+   "halo": {
+    "sigma": [
+     140,
+     100,
+     95
+    ],
+    "meanAzimuthalVelocity": 0,
+    "fraction": 0.005
+   },
+   "note": "committed for the legs that cannot run until a thresholds source is supplied (T1 to T3); not used by any other leg"
+  }
+ },
+ "manifests": {
+  "O:0": {
+   "kind": "synthetic neighbourhood on the real pack geometry",
+   "seed": 235002,
+   "stream": "235002:O:0",
+   "label": "O:0",
+   "stars": 1570,
+   "oldStars": 802,
+   "populations": "mixed",
+   "noise": true,
+   "dispersion": true,
+   "distance": null,
+   "truth": {
+    "A": 14.75,
+    "B": -12.75,
+    "disk": {
+     "R0": 8,
+     "unitR0": "kpc",
+     "V0": 220,
+     "unitV": "km/s",
+     "slope": -2,
+     "unitSlope": "km/s/kpc",
+     "curve": "V(R) = V0 + slope (R - R0), a straight line in R",
+     "A": 14.75,
+     "B": -12.75,
+     "relations": "A = (V0/R0 - slope)/2, B = -(V0/R0 + slope)/2"
+    },
+    "sunPeculiar": {
+     "U": 10,
+     "V": 13,
+     "W": 7,
+     "unit": "km/s",
+     "frame": "relative to the local standard of rest of the synthetic disk (a circular orbit at R0)"
+    },
+    "driftK": 80,
+    "vSun": 13
+   },
+   "note": "synthetic truth, labelled; no published value"
+  },
+  "O:1": {
+   "kind": "synthetic neighbourhood on the real pack geometry",
+   "seed": 235002,
+   "stream": "235002:O:1",
+   "label": "O:1",
+   "stars": 1570,
+   "oldStars": 805,
+   "populations": "mixed",
+   "noise": true,
+   "dispersion": true,
+   "distance": null,
+   "truth": {
+    "A": 14.75,
+    "B": -12.75,
+    "disk": {
+     "R0": 8,
+     "unitR0": "kpc",
+     "V0": 220,
+     "unitV": "km/s",
+     "slope": -2,
+     "unitSlope": "km/s/kpc",
+     "curve": "V(R) = V0 + slope (R - R0), a straight line in R",
+     "A": 14.75,
+     "B": -12.75,
+     "relations": "A = (V0/R0 - slope)/2, B = -(V0/R0 + slope)/2"
+    },
+    "sunPeculiar": {
+     "U": 10,
+     "V": 13,
+     "W": 7,
+     "unit": "km/s",
+     "frame": "relative to the local standard of rest of the synthetic disk (a circular orbit at R0)"
+    },
+    "driftK": 80,
+    "vSun": 13
+   },
+   "note": "synthetic truth, labelled; no published value"
+  },
+  "O:2": {
+   "kind": "synthetic neighbourhood on the real pack geometry",
+   "seed": 235002,
+   "stream": "235002:O:2",
+   "label": "O:2",
+   "stars": 1570,
+   "oldStars": 765,
+   "populations": "mixed",
+   "noise": true,
+   "dispersion": true,
+   "distance": null,
+   "truth": {
+    "A": 14.75,
+    "B": -12.75,
+    "disk": {
+     "R0": 8,
+     "unitR0": "kpc",
+     "V0": 220,
+     "unitV": "km/s",
+     "slope": -2,
+     "unitSlope": "km/s/kpc",
+     "curve": "V(R) = V0 + slope (R - R0), a straight line in R",
+     "A": 14.75,
+     "B": -12.75,
+     "relations": "A = (V0/R0 - slope)/2, B = -(V0/R0 + slope)/2"
+    },
+    "sunPeculiar": {
+     "U": 10,
+     "V": 13,
+     "W": 7,
+     "unit": "km/s",
+     "frame": "relative to the local standard of rest of the synthetic disk (a circular orbit at R0)"
+    },
+    "driftK": 80,
+    "vSun": 13
+   },
+   "note": "synthetic truth, labelled; no published value"
+  },
+  "neighbourhoodSelection": {
+   "statement": [
+    "Gaia DR3 stars with RUWE below 1.4, a parallax more than 10 times its error and a radial velocity (cuts made upstream of the pack, so they remove 0 of its 1570 rows).",
+    "Two strata, a random subset of each: parallax above 10 mas (closer than 100 pc), about 1 in 273 of the 133,468 that pass (489 in the pack); parallax 1 to 10 mas (100 pc to 1 kpc), about 1 in 9,065 of the 9,798,805 (1081 in the pack). The near stratum is over-sampled on purpose.",
+    "A radial velocity needs a bright star (G_RVS below about 14): the sample is not complete in distance and holds more bright, nearby stars than the sky does.",
+    "The Oort contract keeps stars nearer than 1 kpc by the catalogue parallax: 1570 stars."
+   ],
+   "alone": [
+    {
+     "id": "parallaxOverError",
+     "label": "parallax over error",
+     "limit": 10,
+     "removed": 0
+    },
+    {
+     "id": "ruwe",
+     "label": "RUWE",
+     "limit": 1.4,
+     "removed": 0
+    },
+    {
+     "id": "radialVelocity",
+     "label": "has a radial velocity",
+     "limit": true,
+     "removed": 0
+    },
+    {
+     "id": "distance",
+     "label": "distance limit (the method is first order in distance)",
+     "limit": 1,
+     "removed": 0
+    }
+   ],
+   "steps": [
+    {
+     "id": "parallaxOverError",
+     "label": "parallax over error",
+     "limit": 10,
+     "removed": 0,
+     "remaining": 1570
+    },
+    {
+     "id": "ruwe",
+     "label": "RUWE",
+     "limit": 1.4,
+     "removed": 0,
+     "remaining": 1570
+    },
+    {
+     "id": "radialVelocity",
+     "label": "has a radial velocity",
+     "limit": true,
+     "removed": 0,
+     "remaining": 1570
+    },
+    {
+     "id": "distance",
+     "label": "distance limit (the method is first order in distance)",
+     "limit": 1,
+     "removed": 0,
+     "remaining": 1570
+    }
+   ],
+   "strata": [
+    {
+     "id": "near",
+     "label": "parallax above 10 mas (closer than 100 pc)",
+     "kept": 489,
+     "ofTotal": 133468,
+     "oneIn": 273,
+     "inPack": 489
+    },
+    {
+     "id": "far",
+     "label": "parallax 1 to 10 mas (100 pc to 1 kpc)",
+     "kept": 1081,
+     "ofTotal": 9798805,
+     "oneIn": 9065,
+     "inPack": 1081
+    }
+   ]
+  },
+  "D:0": {
+   "kind": "synthetic SEGUE sight line on the real survivors",
+   "seed": 235002,
+   "stream": "235002:D:0",
+   "label": "D:0",
+   "stars": 286,
+   "truthByBin": [
+    {
+     "n": 24,
+     "mean": 74.509091,
+     "sigma": 132.60573
+    },
+    {
+     "n": 105,
+     "mean": 22.153856,
+     "sigma": 59.29527
+    },
+    {
+     "n": 157,
+     "mean": 16.257144,
+     "sigma": 37.220649
+    }
+   ],
+   "note": "synthetic truth, labelled; the intrinsic line-of-sight sigma is the pooled value of the bin before the window, with each star drawn from the population conditional on being outside its window"
+  },
+  "D:1": {
+   "kind": "synthetic SEGUE sight line on the real survivors",
+   "seed": 235002,
+   "stream": "235002:D:1",
+   "label": "D:1",
+   "stars": 286,
+   "truthByBin": [
+    {
+     "n": 24,
+     "mean": 74.509091,
+     "sigma": 132.60573
+    },
+    {
+     "n": 105,
+     "mean": 22.153856,
+     "sigma": 59.29527
+    },
+    {
+     "n": 157,
+     "mean": 16.257144,
+     "sigma": 37.220649
+    }
+   ],
+   "note": "synthetic truth, labelled; the intrinsic line-of-sight sigma is the pooled value of the bin before the window, with each star drawn from the population conditional on being outside its window"
+  },
+  "D:2": {
+   "kind": "synthetic SEGUE sight line on the real survivors",
+   "seed": 235002,
+   "stream": "235002:D:2",
+   "label": "D:2",
+   "stars": 286,
+   "truthByBin": [
+    {
+     "n": 24,
+     "mean": 74.509091,
+     "sigma": 132.60573
+    },
+    {
+     "n": 105,
+     "mean": 22.153856,
+     "sigma": 59.29527
+    },
+    {
+     "n": 157,
+     "mean": 16.257144,
+     "sigma": 37.220649
+    }
+   ],
+   "note": "synthetic truth, labelled; the intrinsic line-of-sight sigma is the pooled value of the bin before the window, with each star drawn from the population conditional on being outside its window"
+  },
+  "S:0": {
+   "kind": "synthetic neighbourhood on the real pack geometry",
+   "seed": 235003,
+   "stream": "235003:S:0",
+   "label": "S:0",
+   "stars": 1570,
+   "oldStars": 802,
+   "populations": "mixed",
+   "noise": true,
+   "dispersion": true,
+   "distance": null,
+   "truth": {
+    "A": 14.75,
+    "B": -12.75,
+    "disk": {
+     "R0": 8,
+     "unitR0": "kpc",
+     "V0": 220,
+     "unitV": "km/s",
+     "slope": -2,
+     "unitSlope": "km/s/kpc",
+     "curve": "V(R) = V0 + slope (R - R0), a straight line in R",
+     "A": 14.75,
+     "B": -12.75,
+     "relations": "A = (V0/R0 - slope)/2, B = -(V0/R0 + slope)/2"
+    },
+    "sunPeculiar": {
+     "U": 10,
+     "V": 13,
+     "W": 7,
+     "unit": "km/s",
+     "frame": "relative to the local standard of rest of the synthetic disk (a circular orbit at R0)"
+    },
+    "driftK": 80,
+    "vSun": 13
+   },
+   "note": "synthetic truth, labelled; no published value"
+  },
+  "S:1": {
+   "kind": "synthetic neighbourhood on the real pack geometry",
+   "seed": 235003,
+   "stream": "235003:S:1",
+   "label": "S:1",
+   "stars": 1570,
+   "oldStars": 758,
+   "populations": "mixed",
+   "noise": true,
+   "dispersion": true,
+   "distance": null,
+   "truth": {
+    "A": 14.75,
+    "B": -12.75,
+    "disk": {
+     "R0": 8,
+     "unitR0": "kpc",
+     "V0": 220,
+     "unitV": "km/s",
+     "slope": -2,
+     "unitSlope": "km/s/kpc",
+     "curve": "V(R) = V0 + slope (R - R0), a straight line in R",
+     "A": 14.75,
+     "B": -12.75,
+     "relations": "A = (V0/R0 - slope)/2, B = -(V0/R0 + slope)/2"
+    },
+    "sunPeculiar": {
+     "U": 10,
+     "V": 13,
+     "W": 7,
+     "unit": "km/s",
+     "frame": "relative to the local standard of rest of the synthetic disk (a circular orbit at R0)"
+    },
+    "driftK": 80,
+    "vSun": 13
+   },
+   "note": "synthetic truth, labelled; no published value"
+  },
+  "S:2": {
+   "kind": "synthetic neighbourhood on the real pack geometry",
+   "seed": 235003,
+   "stream": "235003:S:2",
+   "label": "S:2",
+   "stars": 1570,
+   "oldStars": 752,
+   "populations": "mixed",
+   "noise": true,
+   "dispersion": true,
+   "distance": null,
+   "truth": {
+    "A": 14.75,
+    "B": -12.75,
+    "disk": {
+     "R0": 8,
+     "unitR0": "kpc",
+     "V0": 220,
+     "unitV": "km/s",
+     "slope": -2,
+     "unitSlope": "km/s/kpc",
+     "curve": "V(R) = V0 + slope (R - R0), a straight line in R",
+     "A": 14.75,
+     "B": -12.75,
+     "relations": "A = (V0/R0 - slope)/2, B = -(V0/R0 + slope)/2"
+    },
+    "sunPeculiar": {
+     "U": 10,
+     "V": 13,
+     "W": 7,
+     "unit": "km/s",
+     "frame": "relative to the local standard of rest of the synthetic disk (a circular orbit at R0)"
+    },
+    "driftK": 80,
+    "vSun": 13
+   },
+   "note": "synthetic truth, labelled; no published value"
+  }
+ }
+}

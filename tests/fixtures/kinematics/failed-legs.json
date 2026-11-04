@@ -1,0 +1,357 @@
+{
+ "format": "gravitas.kinematics-failed-legs/1",
+ "note": "legs that crossed a committed bound; they stay failing and labelled, and only Carl resets a bound",
+ "legs": [
+  {
+   "id": "O.A1.exact",
+   "measured": {
+    "form": "committed",
+    "A": 12.6368,
+    "B": -10.4585,
+    "truthA": 14.75,
+    "truthB": -12.75,
+    "relA": 0.143,
+    "relB": 0.18
+   },
+   "note": "the committed (planar) form omits cos b: see AM1"
+  },
+  {
+   "id": "O.B1.oracle.am1",
+   "measured": {
+    "stars": 1569,
+    "largestDifferenceAB": 0.00000105,
+    "largestRelativeErrorDifference": 3.62e-9,
+    "kernel": {
+     "A": 10.984844,
+     "B": -11.712862
+    },
+    "oracle": {
+     "A": 10.984845,
+     "B": -11.712863
+    },
+    "versions": {
+     "python": "3.9.22",
+     "numpy": "1.26.4",
+     "scipy": "1.13.1",
+     "astropy": "6.0.1"
+    }
+   },
+   "note": ""
+  },
+  {
+   "id": "O.S1.recovery:O1",
+   "measured": {
+    "form": "committed",
+    "contract": "O1",
+    "maxDistance": 1,
+    "stars": 1566,
+    "A": {
+     "bias": -3.014,
+     "medianError": 2.111,
+     "biasInErrors": 1.43
+    },
+    "B": {
+     "bias": 0.7691,
+     "medianError": 1.482,
+     "biasInErrors": 0.519
+    }
+   },
+   "note": ""
+  },
+  {
+   "id": "O.S2.coverage:O1",
+   "measured": {
+    "form": "committed",
+    "contract": "O1",
+    "A": {
+     "c1": 0.335,
+     "c2": 0.735
+    },
+    "B": {
+     "c1": 0.635,
+     "c2": 0.93
+    }
+   },
+   "note": ""
+  },
+  {
+   "id": "O.S1.recovery:O2",
+   "measured": {
+    "form": "committed",
+    "contract": "O2",
+    "maxDistance": 0.5,
+    "stars": 881,
+    "A": {
+     "bias": -4.979,
+     "medianError": 6.385,
+     "biasInErrors": 0.78
+    },
+    "B": {
+     "bias": -0.4194,
+     "medianError": 4.508,
+     "biasInErrors": 0.093
+    }
+   },
+   "note": ""
+  },
+  {
+   "id": "O.D2.constrained:O2",
+   "measured": {
+    "form": "committed",
+    "contract": "O2",
+    "fractionConstrained": 0.02
+   },
+   "note": ""
+  },
+  {
+   "id": "O.S1.recovery:O3",
+   "measured": {
+    "form": "committed",
+    "contract": "O3",
+    "maxDistance": 0.25,
+    "stars": 585,
+    "A": {
+     "bias": -11.89,
+     "medianError": 19.57,
+     "biasInErrors": 0.607
+    },
+    "B": {
+     "bias": -5.537,
+     "medianError": 13.39,
+     "biasInErrors": 0.413
+    }
+   },
+   "note": ""
+  },
+  {
+   "id": "O.D2.constrained:O3",
+   "measured": {
+    "form": "committed",
+    "contract": "O3",
+    "fractionConstrained": 0
+   },
+   "note": ""
+  },
+  {
+   "id": "O.S1.recovery.am1:O1",
+   "measured": {
+    "form": "am1",
+    "contract": "O1",
+    "maxDistance": 1,
+    "stars": 1566,
+    "A": {
+     "bias": -1.797,
+     "medianError": 2.324,
+     "biasInErrors": 0.773
+    },
+    "B": {
+     "bias": -0.5252,
+     "medianError": 1.625,
+     "biasInErrors": 0.323
+    }
+   },
+   "note": ""
+  },
+  {
+   "id": "O.S2.coverage.am1:O1",
+   "measured": {
+    "form": "am1",
+    "contract": "O1",
+    "A": {
+     "c1": 0.55,
+     "c2": 0.91
+    },
+    "B": {
+     "c1": 0.655,
+     "c2": 0.935
+    }
+   },
+   "note": ""
+  },
+  {
+   "id": "O.S1.recovery.am1:O2",
+   "measured": {
+    "form": "am1",
+    "contract": "O2",
+    "maxDistance": 0.5,
+    "stars": 881,
+    "A": {
+     "bias": -3.001,
+     "medianError": 7.478,
+     "biasInErrors": 0.401
+    },
+    "B": {
+     "bias": -3.325,
+     "medianError": 5.327,
+     "biasInErrors": 0.624
+    }
+   },
+   "note": ""
+  },
+  {
+   "id": "O.D2.constrained.am1:O2",
+   "measured": {
+    "form": "am1",
+    "contract": "O2",
+    "fractionConstrained": 0.02
+   },
+   "note": ""
+  },
+  {
+   "id": "O.S1.recovery.am1:O3",
+   "measured": {
+    "form": "am1",
+    "contract": "O3",
+    "maxDistance": 0.25,
+    "stars": 585,
+    "A": {
+     "bias": -9.899,
+     "medianError": 23.03,
+     "biasInErrors": 0.43
+    },
+    "B": {
+     "bias": -10.16,
+     "medianError": 16,
+     "biasInErrors": 0.635
+    }
+   },
+   "note": ""
+  },
+  {
+   "id": "O.D2.constrained.am1:O3",
+   "measured": {
+    "form": "am1",
+    "contract": "O3",
+    "fractionConstrained": 0
+   },
+   "note": ""
+  },
+  {
+   "id": "O.R1.real:O3",
+   "measured": {
+    "form": "committed",
+    "contract": "O3",
+    "n": 585,
+    "A": -4.364,
+    "errA": 19.98,
+    "B": -0.2735,
+    "errB": 13.66,
+    "solarU": 7.97,
+    "solarV": 21.9,
+    "status": "not-constrained"
+   },
+   "note": ""
+  },
+  {
+   "id": "O.R1.real.am1:O3",
+   "measured": {
+    "form": "am1",
+    "contract": "O3",
+    "n": 585,
+    "A": 3.457,
+    "errA": 23.5,
+    "B": -7.835,
+    "errB": 16.31,
+    "solarU": 8,
+    "solarV": 21.9,
+    "status": "not-constrained"
+   },
+   "note": ""
+  },
+  {
+   "id": "D.S2.coverage",
+   "measured": [
+    {
+     "bin": 0,
+     "c1": 0.61,
+     "c2": 0.855
+    },
+    {
+     "bin": 1,
+     "c1": 0.675,
+     "c2": 0.94
+    },
+    {
+     "bin": 2,
+     "c1": 0.69,
+     "c2": 0.93
+    }
+   ],
+   "note": ""
+  },
+  {
+   "id": "D.D1.refusals",
+   "measured": {
+    "smallBinStatus": "not-constrained",
+    "fractionNotConstrainedWhenSigmaZero": [
+     0.88,
+     0.97,
+     0.95
+    ]
+   },
+   "note": ""
+  },
+  {
+   "id": "S.S2.coverage",
+   "measured": {
+    "form": "committed",
+    "vSun": {
+     "c1": 0.56,
+     "c2": 0.9
+    },
+    "k": {
+     "c1": 0.612,
+     "c2": 0.91,
+     "realizationsConstrained": 178,
+     "meanK": 88.082
+    }
+   },
+   "note": ""
+  },
+  {
+   "id": "S.S2.coverage.am2",
+   "measured": {
+    "form": "am2",
+    "vSun": {
+     "c1": 0.73,
+     "c2": 0.965
+    },
+    "k": {
+     "c1": 0.811,
+     "c2": 0.982,
+     "realizationsConstrained": 111,
+     "meanK": 85.344
+    }
+   },
+   "note": ""
+  },
+  {
+   "id": "S.R1.useful",
+   "measured": {
+    "form": "committed",
+    "vSun": -4.863,
+    "vSunErr": 5.3,
+    "slope": -0.01695,
+    "slopeErr": 0.00324,
+    "slopeSigmas": 5.23,
+    "k": 58.99,
+    "status": "constrained"
+   },
+   "note": ""
+  },
+  {
+   "id": "S.R1.useful.am2",
+   "measured": {
+    "form": "am2",
+    "vSun": -3.842,
+    "vSunErr": 11,
+    "slope": -0.01626,
+    "slopeErr": 0.00676,
+    "slopeSigmas": 2.41,
+    "k": null,
+    "status": "not-constrained"
+   },
+   "note": ""
+  }
+ ]
+}

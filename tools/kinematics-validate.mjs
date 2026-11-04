@@ -779,17 +779,13 @@ if (wanted('S.')) {
       const fit = K.driftFit(groups, f.opts);
       const relV = Math.abs(fit.vSun - vSun) / vSun;
       const relK = Math.abs(fit.k - k) / k;
-      row(
-        `S.A1.exactLine${f.suffix}`,
-        relV <= L.maxRel && relK <= L.maxRel,
-        {
-          form: f.id,
-          vSun: sig(fit.vSun, 12),
-          k: sig(fit.k, 12),
-          relV: sig(relV, 3),
-          relK: sig(relK, 3),
-        }
-      );
+      row(`S.A1.exactLine${f.suffix}`, relV <= L.maxRel && relK <= L.maxRel, {
+        form: f.id,
+        vSun: sig(fit.vSun, 12),
+        k: sig(fit.k, 12),
+        relV: sig(relV, 3),
+        relK: sig(relK, 3),
+      });
     }
     const L2 = lim('S.A2.lsrCorrection');
     const c = Base.lsrCorrection(40);
@@ -851,10 +847,7 @@ if (wanted('S.')) {
   {
     const R = lim('S.S1.recovery').realizations;
     const acc = Object.fromEntries(
-      FORMS_S.map(f => [
-        f.id,
-        { vs: [], ev: [], ks: [], ek: [], youngNot: 0 },
-      ])
+      FORMS_S.map(f => [f.id, { vs: [], ev: [], ks: [], ek: [], youngNot: 0 }])
     );
     for (let r = 0; r < R; r++) {
       const syn = S.syntheticNeighbourhood(COL, {
@@ -902,9 +895,7 @@ if (wanted('S.')) {
         }
       );
       const cv = cover(vs, ev, TRUTH.sunPeculiar.V);
-      const ck = ks.length
-        ? cover(ks, ek, TRUTH.driftK)
-        : { c1: NaN, c2: NaN };
+      const ck = ks.length ? cover(ks, ek, TRUTH.driftK) : { c1: NaN, c2: NaN };
       const ok = x =>
         x.c1 >= S2.level1[0] && x.c1 <= S2.level1[1] && x.c2 >= S2.level2Min;
       row(`S.S2.coverage${f.suffix}`, ok(cv) && ok(ck), {
@@ -1150,16 +1141,14 @@ if (flag('--write-oracle-inputs')) {
     const lo = Math.floor((k * ranked.length) / 6);
     const hi = Math.floor(((k + 1) * ranked.length) / 6);
     inp.drift.groups.push(
-      ranked
-        .slice(lo, hi)
-        .map(({ s }) => ({
-          ra: s.ra,
-          dec: s.dec,
-          parallax: s.parallax,
-          pmRa: s.pmRa,
-          pmDec: s.pmDec,
-          rv: s.rv,
-        }))
+      ranked.slice(lo, hi).map(({ s }) => ({
+        ra: s.ra,
+        dec: s.dec,
+        parallax: s.parallax,
+        pmRa: s.pmRa,
+        pmDec: s.pmDec,
+        rv: s.rv,
+      }))
     );
   }
   inp.manifests = { O: o.manifest, D: d.manifest, S: g.manifest };

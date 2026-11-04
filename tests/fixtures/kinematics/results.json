@@ -1,0 +1,1401 @@
+{
+ "format": "gravitas.kinematics-results/1",
+ "thresholdsSha256": "4abb971f6bd55b66c6a635ac1a6d88dafb052a0421a8081388257d6283ba1747",
+ "design": false,
+ "counts": {
+  "pass": 37,
+  "fail": 22,
+  "reported": 4,
+  "notRun": 3
+ },
+ "verdicts": {
+  "O": {
+   "binding": {
+    "contract": null,
+    "verdict": "C",
+    "tried": [
+     {
+      "contract": "O1",
+      "method": "O",
+      "verdict": "C",
+      "failedS": [
+       "O.A1.exact",
+       "O.S1.recovery:O1",
+       "O.S2.coverage:O1"
+      ],
+      "failedR": [],
+      "notRun": []
+     },
+     {
+      "contract": "O2",
+      "method": "O",
+      "verdict": "C",
+      "failedS": [
+       "O.A1.exact",
+       "O.S1.recovery:O2",
+       "O.D2.constrained:O2"
+      ],
+      "failedR": [],
+      "notRun": []
+     },
+     {
+      "contract": "O3",
+      "method": "O",
+      "verdict": "C",
+      "failedS": [
+       "O.A1.exact",
+       "O.S1.recovery:O3",
+       "O.D2.constrained:O3"
+      ],
+      "failedR": [
+       "O.R1.real:O3"
+      ],
+      "notRun": []
+     }
+    ]
+   },
+   "am1": {
+    "contract": null,
+    "verdict": "C",
+    "tried": [
+     {
+      "contract": "O1",
+      "method": "O",
+      "verdict": "C",
+      "failedS": [
+       "O.B1.oracle.am1",
+       "O.S1.recovery.am1:O1",
+       "O.S2.coverage.am1:O1"
+      ],
+      "failedR": [],
+      "notRun": []
+     },
+     {
+      "contract": "O2",
+      "method": "O",
+      "verdict": "C",
+      "failedS": [
+       "O.B1.oracle.am1",
+       "O.S1.recovery.am1:O2",
+       "O.D2.constrained.am1:O2"
+      ],
+      "failedR": [],
+      "notRun": []
+     },
+     {
+      "contract": "O3",
+      "method": "O",
+      "verdict": "C",
+      "failedS": [
+       "O.B1.oracle.am1",
+       "O.S1.recovery.am1:O3",
+       "O.D2.constrained.am1:O3"
+      ],
+      "failedR": [
+       "O.R1.real.am1:O3"
+      ],
+      "notRun": []
+     }
+    ]
+   },
+   "note": "the verdict that binds is the committed (planar) form’s; the latitude-corrected form (AM1) is a proposal for Carl to ratify"
+  },
+  "D": {
+   "method": "D",
+   "verdict": "C",
+   "failedS": [
+    "D.S2.coverage",
+    "D.D1.refusals"
+   ],
+   "failedR": [],
+   "notRun": []
+  },
+  "T": {
+   "method": "T",
+   "verdict": "C",
+   "failedS": [
+    "T.T1.coordinates",
+    "T.T2.classification"
+   ],
+   "failedR": [
+    "T.T3.real"
+   ],
+   "notRun": [
+    "T.T1.coordinates",
+    "T.T2.classification"
+   ]
+  },
+  "S": {
+   "binding": {
+    "method": "S",
+    "verdict": "C",
+    "failedS": [
+     "S.S2.coverage"
+    ],
+    "failedR": [
+     "S.R1.useful"
+    ],
+    "notRun": []
+   },
+   "am2": {
+    "method": "S",
+    "verdict": "C",
+    "failedS": [
+     "S.S2.coverage.am2"
+    ],
+    "failedR": [
+     "S.R1.useful.am2"
+    ],
+    "notRun": []
+   },
+   "note": "the verdict that binds is the committed form’s; the effective-variance form (AM2) is a proposal for Carl to ratify"
+  }
+ },
+ "rows": [
+  {
+   "id": "O.A1.exact",
+   "status": "fail",
+   "measured": {
+    "form": "committed",
+    "A": 12.6368,
+    "B": -10.4585,
+    "truthA": 14.75,
+    "truthB": -12.75,
+    "relA": 0.143,
+    "relB": 0.18
+   },
+   "note": "the committed (planar) form omits cos b: see AM1"
+  },
+  {
+   "id": "O.A1.exact.am1",
+   "status": "pass",
+   "measured": {
+    "form": "am1",
+    "A": 14.7427,
+    "B": -12.7565,
+    "truthA": 14.75,
+    "truthB": -12.75,
+    "relA": 0.000493,
+    "relB": 0.000512
+   },
+   "note": "the latitude-corrected form (AM1)"
+  },
+  {
+   "id": "O.A2.sameAsMotion",
+   "status": "pass",
+   "measured": {
+    "worstRelativeDifference": 1.5e-16,
+    "A": 12.6184,
+    "B": -11.8037
+   },
+   "note": "the planar form is motion.js’s fitOortConstants"
+  },
+  {
+   "id": "O.B1.oracle",
+   "status": "pass",
+   "measured": {
+    "stars": 1569,
+    "largestDifferenceAB": 7e-7,
+    "largestRelativeErrorDifference": 1.72e-9,
+    "kernel": {
+     "A": 9.7707875,
+     "B": -10.531401
+    },
+    "oracle": {
+     "A": 9.7707882,
+     "B": -10.531401
+    },
+    "versions": {
+     "python": "3.9.22",
+     "numpy": "1.26.4",
+     "scipy": "1.13.1",
+     "astropy": "6.0.1"
+    }
+   },
+   "note": ""
+  },
+  {
+   "id": "O.B1.oracle.am1",
+   "status": "fail",
+   "measured": {
+    "stars": 1569,
+    "largestDifferenceAB": 0.00000105,
+    "largestRelativeErrorDifference": 3.62e-9,
+    "kernel": {
+     "A": 10.984844,
+     "B": -11.712862
+    },
+    "oracle": {
+     "A": 10.984845,
+     "B": -11.712863
+    },
+    "versions": {
+     "python": "3.9.22",
+     "numpy": "1.26.4",
+     "scipy": "1.13.1",
+     "astropy": "6.0.1"
+    }
+   },
+   "note": ""
+  },
+  {
+   "id": "O.S1.recovery:O1",
+   "status": "fail",
+   "measured": {
+    "form": "committed",
+    "contract": "O1",
+    "maxDistance": 1,
+    "stars": 1566,
+    "A": {
+     "bias": -3.014,
+     "medianError": 2.111,
+     "biasInErrors": 1.43
+    },
+    "B": {
+     "bias": 0.7691,
+     "medianError": 1.482,
+     "biasInErrors": 0.519
+    }
+   },
+   "note": ""
+  },
+  {
+   "id": "O.S2.coverage:O1",
+   "status": "fail",
+   "measured": {
+    "form": "committed",
+    "contract": "O1",
+    "A": {
+     "c1": 0.335,
+     "c2": 0.735
+    },
+    "B": {
+     "c1": 0.635,
+     "c2": 0.93
+    }
+   },
+   "note": ""
+  },
+  {
+   "id": "O.D2.constrained:O1",
+   "status": "pass",
+   "measured": {
+    "form": "committed",
+    "contract": "O1",
+    "fractionConstrained": 1
+   },
+   "note": ""
+  },
+  {
+   "id": "O.S1.recovery:O2",
+   "status": "fail",
+   "measured": {
+    "form": "committed",
+    "contract": "O2",
+    "maxDistance": 0.5,
+    "stars": 881,
+    "A": {
+     "bias": -4.979,
+     "medianError": 6.385,
+     "biasInErrors": 0.78
+    },
+    "B": {
+     "bias": -0.4194,
+     "medianError": 4.508,
+     "biasInErrors": 0.093
+    }
+   },
+   "note": ""
+  },
+  {
+   "id": "O.S2.coverage:O2",
+   "status": "pass",
+   "measured": {
+    "form": "committed",
+    "contract": "O2",
+    "A": {
+     "c1": 0.61,
+     "c2": 0.92
+    },
+    "B": {
+     "c1": 0.69,
+     "c2": 0.97
+    }
+   },
+   "note": ""
+  },
+  {
+   "id": "O.D2.constrained:O2",
+   "status": "fail",
+   "measured": {
+    "form": "committed",
+    "contract": "O2",
+    "fractionConstrained": 0.02
+   },
+   "note": ""
+  },
+  {
+   "id": "O.S1.recovery:O3",
+   "status": "fail",
+   "measured": {
+    "form": "committed",
+    "contract": "O3",
+    "maxDistance": 0.25,
+    "stars": 585,
+    "A": {
+     "bias": -11.89,
+     "medianError": 19.57,
+     "biasInErrors": 0.607
+    },
+    "B": {
+     "bias": -5.537,
+     "medianError": 13.39,
+     "biasInErrors": 0.413
+    }
+   },
+   "note": ""
+  },
+  {
+   "id": "O.S2.coverage:O3",
+   "status": "pass",
+   "measured": {
+    "form": "committed",
+    "contract": "O3",
+    "A": {
+     "c1": 0.655,
+     "c2": 0.95
+    },
+    "B": {
+     "c1": 0.665,
+     "c2": 0.95
+    }
+   },
+   "note": ""
+  },
+  {
+   "id": "O.D2.constrained:O3",
+   "status": "fail",
+   "measured": {
+    "form": "committed",
+    "contract": "O3",
+    "fractionConstrained": 0
+   },
+   "note": ""
+  },
+  {
+   "id": "O.D1.noGradient",
+   "status": "pass",
+   "measured": {
+    "form": "committed",
+    "maxDistance": 0.1,
+    "stars": 487,
+    "fractionNotConstrained": 1,
+    "medianErrA": 28.56
+   },
+   "note": ""
+  },
+  {
+   "id": "O.S1.recovery.am1:O1",
+   "status": "fail",
+   "measured": {
+    "form": "am1",
+    "contract": "O1",
+    "maxDistance": 1,
+    "stars": 1566,
+    "A": {
+     "bias": -1.797,
+     "medianError": 2.324,
+     "biasInErrors": 0.773
+    },
+    "B": {
+     "bias": -0.5252,
+     "medianError": 1.625,
+     "biasInErrors": 0.323
+    }
+   },
+   "note": ""
+  },
+  {
+   "id": "O.S2.coverage.am1:O1",
+   "status": "fail",
+   "measured": {
+    "form": "am1",
+    "contract": "O1",
+    "A": {
+     "c1": 0.55,
+     "c2": 0.91
+    },
+    "B": {
+     "c1": 0.655,
+     "c2": 0.935
+    }
+   },
+   "note": ""
+  },
+  {
+   "id": "O.D2.constrained.am1:O1",
+   "status": "pass",
+   "measured": {
+    "form": "am1",
+    "contract": "O1",
+    "fractionConstrained": 1
+   },
+   "note": ""
+  },
+  {
+   "id": "O.S1.recovery.am1:O2",
+   "status": "fail",
+   "measured": {
+    "form": "am1",
+    "contract": "O2",
+    "maxDistance": 0.5,
+    "stars": 881,
+    "A": {
+     "bias": -3.001,
+     "medianError": 7.478,
+     "biasInErrors": 0.401
+    },
+    "B": {
+     "bias": -3.325,
+     "medianError": 5.327,
+     "biasInErrors": 0.624
+    }
+   },
+   "note": ""
+  },
+  {
+   "id": "O.S2.coverage.am1:O2",
+   "status": "pass",
+   "measured": {
+    "form": "am1",
+    "contract": "O2",
+    "A": {
+     "c1": 0.73,
+     "c2": 0.95
+    },
+    "B": {
+     "c1": 0.605,
+     "c2": 0.915
+    }
+   },
+   "note": ""
+  },
+  {
+   "id": "O.D2.constrained.am1:O2",
+   "status": "fail",
+   "measured": {
+    "form": "am1",
+    "contract": "O2",
+    "fractionConstrained": 0.02
+   },
+   "note": ""
+  },
+  {
+   "id": "O.S1.recovery.am1:O3",
+   "status": "fail",
+   "measured": {
+    "form": "am1",
+    "contract": "O3",
+    "maxDistance": 0.25,
+    "stars": 585,
+    "A": {
+     "bias": -9.899,
+     "medianError": 23.03,
+     "biasInErrors": 0.43
+    },
+    "B": {
+     "bias": -10.16,
+     "medianError": 16,
+     "biasInErrors": 0.635
+    }
+   },
+   "note": ""
+  },
+  {
+   "id": "O.S2.coverage.am1:O3",
+   "status": "pass",
+   "measured": {
+    "form": "am1",
+    "contract": "O3",
+    "A": {
+     "c1": 0.68,
+     "c2": 0.955
+    },
+    "B": {
+     "c1": 0.625,
+     "c2": 0.93
+    }
+   },
+   "note": ""
+  },
+  {
+   "id": "O.D2.constrained.am1:O3",
+   "status": "fail",
+   "measured": {
+    "form": "am1",
+    "contract": "O3",
+    "fractionConstrained": 0
+   },
+   "note": ""
+  },
+  {
+   "id": "O.D1.noGradient.am1",
+   "status": "pass",
+   "measured": {
+    "form": "am1",
+    "maxDistance": 0.1,
+    "stars": 487,
+    "fractionNotConstrained": 1,
+    "medianErrA": 34.96
+   },
+   "note": ""
+  },
+  {
+   "id": "O.R1.real:O1",
+   "status": "pass",
+   "measured": {
+    "form": "committed",
+    "contract": "O1",
+    "n": 1570,
+    "A": 13.52,
+    "errA": 2.354,
+    "B": -13.72,
+    "errB": 1.651,
+    "solarU": 7.91,
+    "solarV": 24.7,
+    "status": "constrained"
+   },
+   "note": ""
+  },
+  {
+   "id": "O.R2.halves:O1",
+   "status": "pass",
+   "measured": {
+    "form": "committed",
+    "contract": "O1",
+    "sigmasA": 1.83,
+    "sigmasB": 0.159
+   },
+   "note": ""
+  },
+  {
+   "id": "O.R1.real:O2",
+   "status": "pass",
+   "measured": {
+    "form": "committed",
+    "contract": "O2",
+    "n": 883,
+    "A": 20.72,
+    "errA": 6.685,
+    "B": -14.81,
+    "errB": 4.715,
+    "solarU": 7.66,
+    "solarV": 23.5,
+    "status": "constrained"
+   },
+   "note": ""
+  },
+  {
+   "id": "O.R2.halves:O2",
+   "status": "pass",
+   "measured": {
+    "form": "committed",
+    "contract": "O2",
+    "sigmasA": 0.681,
+    "sigmasB": 0.226
+   },
+   "note": ""
+  },
+  {
+   "id": "O.R1.real:O3",
+   "status": "fail",
+   "measured": {
+    "form": "committed",
+    "contract": "O3",
+    "n": 585,
+    "A": -4.364,
+    "errA": 19.98,
+    "B": -0.2735,
+    "errB": 13.66,
+    "solarU": 7.97,
+    "solarV": 21.9,
+    "status": "not-constrained"
+   },
+   "note": ""
+  },
+  {
+   "id": "O.R2.halves:O3",
+   "status": "pass",
+   "measured": {
+    "form": "committed",
+    "contract": "O3",
+    "sigmasA": 1.31,
+    "sigmasB": 1.21
+   },
+   "note": ""
+  },
+  {
+   "id": "O.R1.real.am1:O1",
+   "status": "pass",
+   "measured": {
+    "form": "am1",
+    "contract": "O1",
+    "n": 1570,
+    "A": 14.47,
+    "errA": 2.591,
+    "B": -15.24,
+    "errB": 1.812,
+    "solarU": 7.97,
+    "solarV": 24.7,
+    "status": "constrained"
+   },
+   "note": ""
+  },
+  {
+   "id": "O.R2.halves.am1:O1",
+   "status": "pass",
+   "measured": {
+    "form": "am1",
+    "contract": "O1",
+    "sigmasA": 1.94,
+    "sigmasB": 0.484
+   },
+   "note": ""
+  },
+  {
+   "id": "O.R1.real.am1:O2",
+   "status": "pass",
+   "measured": {
+    "form": "am1",
+    "contract": "O2",
+    "n": 883,
+    "A": 27.68,
+    "errA": 7.806,
+    "B": -19.16,
+    "errB": 5.557,
+    "solarU": 7.82,
+    "solarV": 23.5,
+    "status": "constrained"
+   },
+   "note": ""
+  },
+  {
+   "id": "O.R2.halves.am1:O2",
+   "status": "pass",
+   "measured": {
+    "form": "am1",
+    "contract": "O2",
+    "sigmasA": 0.675,
+    "sigmasB": 0.229
+   },
+   "note": ""
+  },
+  {
+   "id": "O.R1.real.am1:O3",
+   "status": "fail",
+   "measured": {
+    "form": "am1",
+    "contract": "O3",
+    "n": 585,
+    "A": 3.457,
+    "errA": 23.5,
+    "B": -7.835,
+    "errB": 16.31,
+    "solarU": 8,
+    "solarV": 21.9,
+    "status": "not-constrained"
+   },
+   "note": ""
+  },
+  {
+   "id": "O.R2.halves.am1:O3",
+   "status": "pass",
+   "measured": {
+    "form": "am1",
+    "contract": "O3",
+    "sigmasA": 1.28,
+    "sigmasB": 1.19
+   },
+   "note": ""
+  },
+  {
+   "id": "O.R3.literature",
+   "status": "reported",
+   "measured": {
+    "measuredAM1": {
+     "A": 14.47,
+     "errA": 2.591,
+     "B": -15.24,
+     "errB": 1.812
+    },
+    "measuredPlanar": {
+     "A": 13.52,
+     "errA": 2.354,
+     "B": -13.72,
+     "errB": 1.651
+    },
+    "literature": {
+     "A": 15.3,
+     "B": -11.9
+    },
+    "source": "GALACTIC_DYNAMICS.md records these from Bovy (2017); a discussion only, no band",
+    "sigmasFromLiteratureAM1": {
+     "A": -0.32,
+     "B": -1.84
+    }
+   },
+   "note": ""
+  },
+  {
+   "id": "D.A1.pooled",
+   "status": "pass",
+   "measured": [
+    {
+     "bin": 0,
+     "mc": 132.599,
+     "closedForm": 132.606,
+     "sigmas": 0.044,
+     "n": 400008
+    },
+    {
+     "bin": 1,
+     "mc": 59.3917,
+     "closedForm": 59.2953,
+     "sigmas": 1.45,
+     "n": 400050
+    },
+    {
+     "bin": 2,
+     "mc": 37.2598,
+     "closedForm": 37.2206,
+     "sigmas": 0.94,
+     "n": 400036
+    }
+   ],
+   "note": ""
+  },
+  {
+   "id": "D.A2.errors",
+   "status": "pass",
+   "measured": {
+    "sigma": 30.164,
+    "truth": 30,
+    "rel": 0.00548,
+    "errorStated": 0.153
+   },
+   "note": ""
+  },
+  {
+   "id": "D.A3.hole",
+   "status": "pass",
+   "measured": {
+    "corrected": 30.018,
+    "uncorrected": 34.778,
+    "truth": 30,
+    "relCorrected": 0.000605,
+    "relUncorrected": 0.159
+   },
+   "note": ""
+  },
+  {
+   "id": "D.B1.oracle",
+   "status": "pass",
+   "measured": [
+    {
+     "bin": 0,
+     "n": 24,
+     "relSigma": 1.92e-8,
+     "absMean": 5.36e-7,
+     "relErr": 0.00000217,
+     "kernel": {
+      "sigma": 128.9721,
+      "err": 16.175
+     },
+     "oracle": {
+      "sigma": 128.972,
+      "err": 16.175
+     }
+    },
+    {
+     "bin": 1,
+     "n": 105,
+     "relSigma": 6.47e-9,
+     "absMean": 5.87e-7,
+     "relErr": 0.00000166,
+     "kernel": {
+      "sigma": 58.52655,
+      "err": 3.381
+     },
+     "oracle": {
+      "sigma": 58.52655,
+      "err": 3.381
+     }
+    },
+    {
+     "bin": 2,
+     "n": 157,
+     "relSigma": 6.48e-9,
+     "absMean": 5.22e-8,
+     "relErr": 0.00000427,
+     "kernel": {
+      "sigma": 38.34743,
+      "err": 2.6902
+     },
+     "oracle": {
+      "sigma": 38.34743,
+      "err": 2.6901
+     }
+    }
+   ],
+   "note": ""
+  },
+  {
+   "id": "D.S1.recovery",
+   "status": "pass",
+   "measured": [
+    {
+     "bin": 0,
+     "truthSigma": 132.61,
+     "meanEstimate": 128.74,
+     "bias": -3.87,
+     "medianError": 15.89,
+     "biasInErrors": 0.244,
+     "stars": 24
+    },
+    {
+     "bin": 1,
+     "truthSigma": 59.295,
+     "meanEstimate": 58.775,
+     "bias": -0.5203,
+     "medianError": 3.819,
+     "biasInErrors": 0.136,
+     "stars": 105
+    },
+    {
+     "bin": 2,
+     "truthSigma": 37.221,
+     "meanEstimate": 36.885,
+     "bias": -0.3356,
+     "medianError": 2.066,
+     "biasInErrors": 0.162,
+     "stars": 157
+    }
+   ],
+   "note": ""
+  },
+  {
+   "id": "D.S2.coverage",
+   "status": "fail",
+   "measured": [
+    {
+     "bin": 0,
+     "c1": 0.61,
+     "c2": 0.855
+    },
+    {
+     "bin": 1,
+     "c1": 0.675,
+     "c2": 0.94
+    },
+    {
+     "bin": 2,
+     "c1": 0.69,
+     "c2": 0.93
+    }
+   ],
+   "note": ""
+  },
+  {
+   "id": "D.D1.refusals",
+   "status": "fail",
+   "measured": {
+    "smallBinStatus": "not-constrained",
+    "fractionNotConstrainedWhenSigmaZero": [
+     0.88,
+     0.97,
+     0.95
+    ]
+   },
+   "note": ""
+  },
+  {
+   "id": "D.D2.mixture",
+   "status": "reported",
+   "measured": {
+    "binOnePopulations": "70 percent bin-1, 30 percent bin-2 population",
+    "meanEstimate": 110.72,
+    "pooledTruthOfBin1WithMixture": 118.04,
+    "meanStatedError": 16.1,
+    "note": "a bin of a real sample is whatever mixture lands in it; the Gaussian estimate and the pooled truth differ by the amount shown"
+   },
+   "note": ""
+  },
+  {
+   "id": "D.R1.real",
+   "status": "pass",
+   "measured": {
+    "bins": [
+     {
+      "label": "[Fe/H] < -1.0",
+      "n": 24,
+      "status": "constrained",
+      "sigma": 98.2,
+      "sigmaErr": 15.2,
+      "mean": 80.36,
+      "uncorrectedSigma": 98.2
+     },
+     {
+      "label": "-1.0 <= [Fe/H] < -0.5",
+      "n": 105,
+      "status": "constrained",
+      "sigma": 42.26,
+      "sigmaErr": 3.96,
+      "mean": 39.38,
+      "uncorrectedSigma": 42.59
+     },
+     {
+      "label": "[Fe/H] >= -0.5",
+      "n": 157,
+      "status": "constrained",
+      "sigma": 33.33,
+      "sigmaErr": 1.58,
+      "mean": 41.43,
+      "uncorrectedSigma": 33.25
+     }
+    ],
+    "constrained": 3
+   },
+   "note": ""
+  },
+  {
+   "id": "D.R2.order",
+   "status": "reported",
+   "measured": {
+    "bins": [
+     {
+      "label": "[Fe/H] < -1.0",
+      "n": 24,
+      "sigma": 98.2,
+      "sigmaErr": 15.2,
+      "uncorrectedSigma": 98.2
+     },
+     {
+      "label": "-1.0 <= [Fe/H] < -0.5",
+      "n": 105,
+      "sigma": 42.26,
+      "sigmaErr": 3.96,
+      "uncorrectedSigma": 42.59
+     },
+     {
+      "label": "[Fe/H] >= -0.5",
+      "n": 157,
+      "sigma": 33.33,
+      "sigmaErr": 1.58,
+      "uncorrectedSigma": 33.25
+     }
+    ],
+    "fieldStatement": [
+     "SEGUE stars within 30 arcmin of NGC 2420 with parameters adopted by the SSPP (signal-to-noise above 10): 517 in the pack. SEGUE chose its targets by colour and magnitude, and two fibres on a plate could not be closer than 55 arcsec, so this is not every star there, and no model of that selection is built.",
+     "Outside 10 arcmin of the cluster centre (the region targeted for the cluster): 358 of 517 remain. The cluster's median velocity is 74.79 km/s and its median [Fe/H] -0.33 (from the pack, not the literature).",
+     "Excluding stars within 5 km/s of that velocity and 0.4 dex of that [Fe/H] (the cluster's outskirts) removes 72 more and leaves 286. It removes field stars too: the likelihood divides by the probability of a velocity outside the window for every star within 0.4 dex of the cluster's [Fe/H].",
+     "Velocities are along one line of sight (l about 198 degrees, b about +20): one component of the velocity ellipsoid, not three. A bin is whatever mixture of populations the metallicity puts in it."
+    ],
+    "removed": {
+     "alone": [
+      {
+       "id": "sspp",
+       "label": "SSPP adopted parameters (signal-to-noise above 10)",
+       "limit": 10,
+       "removed": 0
+      },
+      {
+       "id": "innerRadius",
+       "label": "outside 10 arcmin of the cluster centre",
+       "limit": 10,
+       "removed": 159
+      },
+      {
+       "id": "outskirts",
+       "label": "not within 5 km/s and 0.4 dex of the inner stars' medians",
+       "limit": 5,
+       "removed": 183
+      }
+     ],
+     "steps": [
+      {
+       "id": "sspp",
+       "label": "SSPP adopted parameters (signal-to-noise above 10)",
+       "limit": 10,
+       "removed": 0,
+       "remaining": 517
+      },
+      {
+       "id": "innerRadius",
+       "label": "outside 10 arcmin of the cluster centre",
+       "limit": 10,
+       "removed": 159,
+       "remaining": 358
+      },
+      {
+       "id": "outskirts",
+       "label": "not within 5 km/s and 0.4 dex of the inner stars' medians",
+       "limit": 5,
+       "removed": 72,
+       "remaining": 286
+      }
+     ]
+    },
+    "cluster": {
+     "rv": 74.79,
+     "feh": -0.332,
+     "inner": 159
+    },
+    "window": [
+     69.79,
+     79.79
+    ]
+   },
+   "note": ""
+  },
+  {
+   "id": "T.T1.coordinates",
+   "status": "not-run",
+   "measured": null,
+   "note": "tests/fixtures/kinematics/disk-halo-source.json (the cited thresholds) was not supplied: no threshold is typed from memory"
+  },
+  {
+   "id": "T.T2.classification",
+   "status": "not-run",
+   "measured": null,
+   "note": "tests/fixtures/kinematics/disk-halo-source.json (the cited thresholds) was not supplied: no threshold is typed from memory"
+  },
+  {
+   "id": "T.T3.real",
+   "status": "not-run",
+   "measured": null,
+   "note": "tests/fixtures/kinematics/disk-halo-source.json (the cited thresholds) was not supplied: no threshold is typed from memory"
+  },
+  {
+   "id": "S.A1.exactLine",
+   "status": "pass",
+   "measured": {
+    "form": "committed",
+    "vSun": 13,
+    "k": 80,
+    "relV": 2.73e-16,
+    "relK": 5.33e-16
+   },
+   "note": ""
+  },
+  {
+   "id": "S.A1.exactLine.am2",
+   "status": "pass",
+   "measured": {
+    "form": "am2",
+    "vSun": 13,
+    "k": 80,
+    "relV": 9.56e-16,
+    "relK": 3.55e-16
+   },
+   "note": ""
+  },
+  {
+   "id": "S.A2.lsrCorrection",
+   "status": "pass",
+   "measured": {
+    "correction": 20,
+    "stated": 20,
+    "lagK": 80
+   },
+   "note": ""
+  },
+  {
+   "id": "S.B1.oracle",
+   "status": "pass",
+   "measured": {
+    "form": "committed",
+    "intercept": {
+     "kernel": -13.747185,
+     "oracle": -13.747185
+    },
+    "slope": {
+     "kernel": -0.011146033,
+     "oracle": -0.011146034
+    },
+    "largestAbs": 9.37e-8,
+    "largestRelErr": 1.11e-8,
+    "versions": {
+     "python": "3.9.22",
+     "numpy": "1.26.4",
+     "scipy": "1.13.1",
+     "astropy": "6.0.1"
+    }
+   },
+   "note": ""
+  },
+  {
+   "id": "S.B1.oracle.am2",
+   "status": "pass",
+   "measured": {
+    "form": "am2",
+    "intercept": {
+     "kernel": -14.122111,
+     "oracle": -14.12211
+    },
+    "slope": {
+     "kernel": -0.010881015,
+     "oracle": -0.010881016
+    },
+    "largestAbs": 1.63e-7,
+    "largestRelErr": 3.25e-8,
+    "versions": {
+     "python": "3.9.22",
+     "numpy": "1.26.4",
+     "scipy": "1.13.1",
+     "astropy": "6.0.1"
+    }
+   },
+   "note": ""
+  },
+  {
+   "id": "S.S1.recovery",
+   "status": "pass",
+   "measured": {
+    "form": "committed",
+    "truthVSun": 13,
+    "meanEstimate": 13.241,
+    "bias": 0.2407,
+    "medianError": 3.399,
+    "biasInErrors": 0.0708
+   },
+   "note": ""
+  },
+  {
+   "id": "S.S2.coverage",
+   "status": "fail",
+   "measured": {
+    "form": "committed",
+    "vSun": {
+     "c1": 0.56,
+     "c2": 0.9
+    },
+    "k": {
+     "c1": 0.612,
+     "c2": 0.91,
+     "realizationsConstrained": 178,
+     "meanK": 88.082
+    }
+   },
+   "note": ""
+  },
+  {
+   "id": "S.D1.noLever",
+   "status": "pass",
+   "measured": {
+    "form": "committed",
+    "fractionNotConstrained": 0.995
+   },
+   "note": ""
+  },
+  {
+   "id": "S.S1.recovery.am2",
+   "status": "pass",
+   "measured": {
+    "form": "am2",
+    "truthVSun": 13,
+    "meanEstimate": 13.218,
+    "bias": 0.2183,
+    "medianError": 4.629,
+    "biasInErrors": 0.0471
+   },
+   "note": ""
+  },
+  {
+   "id": "S.S2.coverage.am2",
+   "status": "fail",
+   "measured": {
+    "form": "am2",
+    "vSun": {
+     "c1": 0.73,
+     "c2": 0.965
+    },
+    "k": {
+     "c1": 0.811,
+     "c2": 0.982,
+     "realizationsConstrained": 111,
+     "meanK": 85.344
+    }
+   },
+   "note": ""
+  },
+  {
+   "id": "S.D1.noLever.am2",
+   "status": "pass",
+   "measured": {
+    "form": "am2",
+    "fractionNotConstrained": 1
+   },
+   "note": ""
+  },
+  {
+   "id": "S.L1.lsrOptions",
+   "status": "pass",
+   "measured": {
+    "chosen": null,
+    "options": [
+     {
+      "id": "stromberg",
+      "vSunLsr": 2.6375
+     },
+     {
+      "id": "schonrich2010",
+      "vSunLsr": 12.24
+     }
+    ],
+    "sampleV": 23.632
+   },
+   "note": ""
+  },
+  {
+   "id": "S.R1.useful",
+   "status": "fail",
+   "measured": {
+    "form": "committed",
+    "vSun": -4.863,
+    "vSunErr": 5.3,
+    "slope": -0.01695,
+    "slopeErr": 0.00324,
+    "slopeSigmas": 5.23,
+    "k": 58.99,
+    "status": "constrained"
+   },
+   "note": ""
+  },
+  {
+   "id": "S.R1.useful.am2",
+   "status": "fail",
+   "measured": {
+    "form": "am2",
+    "vSun": -3.842,
+    "vSunErr": 11,
+    "slope": -0.01626,
+    "slopeErr": 0.00676,
+    "slopeSigmas": 2.41,
+    "k": null,
+    "status": "not-constrained"
+   },
+   "note": ""
+  },
+  {
+   "id": "S.R2.report",
+   "status": "reported",
+   "measured": {
+    "fits": {
+     "committed": {
+      "vSun": -4.863,
+      "vSunErr": 5.3,
+      "slope": -0.01695,
+      "slopeErr": 0.00324,
+      "chi2": 3.28,
+      "dof": 4,
+      "groups": [
+       {
+        "n": 260,
+        "sigmaU2": 1390.9,
+        "meanV": -17.29,
+        "err": 1.45
+       },
+       {
+        "n": 261,
+        "sigmaU2": 1974.3,
+        "meanV": -28.57,
+        "err": 2
+       },
+       {
+        "n": 261,
+        "sigmaU2": 1872.7,
+        "meanV": -27.35,
+        "err": 1.94
+       },
+       {
+        "n": 261,
+        "sigmaU2": 1746.5,
+        "meanV": -23.26,
+        "err": 1.72
+       },
+       {
+        "n": 261,
+        "sigmaU2": 1647,
+        "meanV": -24.4,
+        "err": 1.95
+       },
+       {
+        "n": 261,
+        "sigmaU2": 1436.9,
+        "meanV": -20.95,
+        "err": 1.43
+       }
+      ]
+     },
+     "am2": {
+      "vSun": -3.842,
+      "vSunErr": 11,
+      "slope": -0.01626,
+      "slopeErr": 0.00676,
+      "chi2": 0.896,
+      "dof": 4,
+      "groups": [
+       {
+        "n": 260,
+        "sigmaU2": 1390.9,
+        "meanV": -17.29,
+        "err": 1.45
+       },
+       {
+        "n": 261,
+        "sigmaU2": 1974.3,
+        "meanV": -28.57,
+        "err": 2
+       },
+       {
+        "n": 261,
+        "sigmaU2": 1872.7,
+        "meanV": -27.35,
+        "err": 1.94
+       },
+       {
+        "n": 261,
+        "sigmaU2": 1746.5,
+        "meanV": -23.26,
+        "err": 1.72
+       },
+       {
+        "n": 261,
+        "sigmaU2": 1647,
+        "meanV": -24.4,
+        "err": 1.95
+       },
+       {
+        "n": 261,
+        "sigmaU2": 1436.9,
+        "meanV": -20.95,
+        "err": 1.43
+       }
+      ]
+     }
+    },
+    "candidates": [
+     {
+      "id": "stromberg",
+      "vSunLsr": 2.6375
+     },
+     {
+      "id": "schonrich2010",
+      "vSunLsr": 12.24
+     }
+    ]
+   },
+   "note": ""
+  }
+ ]
+}

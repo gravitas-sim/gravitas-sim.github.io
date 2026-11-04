@@ -3,7 +3,10 @@
 
 Run offline, never by a test:
 
-    python3 tools/kinematics-oracle/oracle.py            # writes tests/fixtures/kinematics/oracle-results.json
+    /usr/local/bin/python3.9 tools/kinematics-oracle/oracle.py   # writes tests/fixtures/kinematics/oracle-results.json
+
+(the interpreter must have numpy, scipy, astropy and PyYAML: on the machine that ran it the first on PATH,
+/usr/bin/python3, lacks PyYAML, which astropy.coordinates imports; the versions used are in the output)
 
 It reads tests/fixtures/kinematics/oracle-inputs.json (written by
 `node tools/kinematics-validate.mjs --write-oracle-inputs`: pinned synthetic samples with their
@@ -20,6 +23,7 @@ truth manifests, no real data) and computes, with code that shares nothing with 
 The oracle is a cited independent routine in the sense of the roadmap: numpy (linalg.lstsq), scipy
 (optimize.minimize, stats.norm) and astropy (coordinates), versions recorded in the output.
 """
+import hashlib
 import json
 import pathlib
 import sys
@@ -195,7 +199,8 @@ def drift(groups):
 
 
 def main():
-    inputs = json.loads((DIR / "oracle-inputs.json").read_text())
+    raw = (DIR / "oracle-inputs.json").read_bytes()
+    inputs = json.loads(raw)
     out = {
         "format": "gravitas.kinematics-oracle-results/1",
         "tool": "tools/kinematics-oracle/oracle.py",
@@ -205,7 +210,7 @@ def main():
             "scipy": scipy.__version__,
             "astropy": astropy.__version__,
         },
-        "inputsSha256": inputs.get("sha256"),
+        "inputsSha256": hashlib.sha256(raw).hexdigest(),
         "oort": {
             "planar": oort(inputs["oort"]["rows"], inputs["oort"]["maxDistance"], True),
             "cosb": oort(inputs["oort"]["rows"], inputs["oort"]["maxDistance"], False),
