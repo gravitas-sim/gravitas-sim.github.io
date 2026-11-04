@@ -1,0 +1,146 @@
+{
+  "format": "gravitas.gaia-workflows-ensembles/1",
+  "label": "Synthetic data, with its truth manifest.",
+  "ensembles": {
+    "S1": {
+      "seed": 233003,
+      "stream": "noise:233003:S1",
+      "what": "identical stars, M_G = 5, uniform in a sphere of radius 300 pc; the magnitude is G = M + 5 log10(r / 10 pc)",
+      "n": 500000,
+      "truthMean": 11.661547,
+      "firstTruths": [
+        12.037282,
+        11.896986,
+        11.954846,
+        12.37982,
+        12.335357
+      ]
+    },
+    "C1:3": {
+      "seed": 233004,
+      "stream": "noise:233004:C1:3",
+      "what": "fixed true distance 1 kpc (parallax 1 mas), error 0.3333 mas; no prior",
+      "n": 4000,
+      "truthMean": 1,
+      "firstTruths": [
+        1,
+        1,
+        1,
+        1,
+        1
+      ]
+    },
+    "C1:10": {
+      "seed": 233004,
+      "stream": "noise:233004:C1:10",
+      "what": "fixed true distance 1 kpc (parallax 1 mas), error 0.1 mas; no prior",
+      "n": 4000,
+      "truthMean": 1,
+      "firstTruths": [
+        1,
+        1,
+        1,
+        1,
+        1
+      ]
+    },
+    "C1:30": {
+      "seed": 233004,
+      "stream": "noise:233004:C1:30",
+      "what": "fixed true distance 1 kpc (parallax 1 mas), error 0.03333 mas; no prior",
+      "n": 4000,
+      "truthMean": 1,
+      "firstTruths": [
+        1,
+        1,
+        1,
+        1,
+        1
+      ]
+    },
+    "C2:3": {
+      "seed": 233004,
+      "stream": "noise:233004:C2:3",
+      "what": "fixed true distance 1 kpc (parallax 1 mas), error 0.3333 mas; no prior",
+      "n": 4000,
+      "truthMean": 1,
+      "firstTruths": [
+        1,
+        1,
+        1,
+        1,
+        1
+      ]
+    },
+    "C2:10": {
+      "seed": 233004,
+      "stream": "noise:233004:C2:10",
+      "what": "fixed true distance 1 kpc (parallax 1 mas), error 0.1 mas; no prior",
+      "n": 4000,
+      "truthMean": 1,
+      "firstTruths": [
+        1,
+        1,
+        1,
+        1,
+        1
+      ]
+    },
+    "C2:30": {
+      "seed": 233004,
+      "stream": "noise:233004:C2:30",
+      "what": "fixed true distance 1 kpc (parallax 1 mas), error 0.03333 mas; no prior",
+      "n": 4000,
+      "truthMean": 1,
+      "firstTruths": [
+        1,
+        1,
+        1,
+        1,
+        1
+      ]
+    },
+    "C3:0.3": {
+      "seed": 233004,
+      "stream": "noise:233004:C3:0.3",
+      "what": "true distances from the prior (gamma, shape 3, scale 1 kpc), error 0.3 mas",
+      "n": 4000,
+      "truthMean": 3.0141947,
+      "firstTruths": [
+        2.110567,
+        5.4466466,
+        2.5766636,
+        2.874012,
+        3.5541691
+      ]
+    },
+    "C3:0.1": {
+      "seed": 233004,
+      "stream": "noise:233004:C3:0.1",
+      "what": "true distances from the prior (gamma, shape 3, scale 1 kpc), error 0.1 mas",
+      "n": 4000,
+      "truthMean": 2.9978646,
+      "firstTruths": [
+        1.5838639,
+        4.9142388,
+        2.4512281,
+        3.1484016,
+        2.4776921
+      ]
+    },
+    "C3:0.03": {
+      "seed": 233004,
+      "stream": "noise:233004:C3:0.03",
+      "what": "true distances from the prior (gamma, shape 3, scale 1 kpc), error 0.03 mas",
+      "n": 4000,
+      "truthMean": 3.0025589,
+      "firstTruths": [
+        1.9230416,
+        2.459697,
+        1.8658756,
+        3.3671635,
+        4.557771
+      ]
+    }
+  }
+}

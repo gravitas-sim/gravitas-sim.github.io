@@ -1,0 +1,5 @@
+{
+  "format": "gravitas.gaia-workflows-failed-legs/1",
+  "label": "These legs crossed a committed bound and stay failing; only Carl resets one.",
+  "legs": []
+}

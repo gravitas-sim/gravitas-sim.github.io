@@ -13,6 +13,7 @@
     "visual-binary:validate": "node tools/visual-binary-validate.mjs",
     "transit-delta:validate": "node tools/transit-delta-validate.mjs",
     "ttv:validate": "node tools/ttv-validate.mjs",
+    "gaia:validate": "node tools/gaia-validate.mjs",
     "joint-inference:validate": "node tools/joint-inference-validate.mjs",
     "occurrence:validate": "node tools/occurrence-validate.mjs",
     "ttv:pack": "node tools/ttv-pack.mjs",
