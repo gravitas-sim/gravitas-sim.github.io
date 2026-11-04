@@ -81,7 +81,7 @@ export const EN_GAIA = {
   'gaiaW.s.preset.bright': 'Bright stars only',
   'gaiaW.s.preset.precise': 'Precise parallaxes only',
   'gaiaW.s.preset.noZp': 'No zero point',
-  'gaiaW.s.axis.color': 'BP − RP, color',
+  'gaiaW.s.axis.colour': 'BP − RP, color',
   'gaiaW.s.axis.g': 'G magnitude (brighter up)',
   'gaiaW.s.axis.vra': 'Velocity along right ascension, km/s',
   'gaiaW.s.axis.vdec': 'Velocity along declination, km/s',
