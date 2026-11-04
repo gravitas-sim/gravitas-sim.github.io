@@ -1115,6 +1115,13 @@
       "student": false
     },
     {
+      "file": "ROTATION_DECOMPOSITION.md",
+      "kind": "feature",
+      "purpose": "Rotation-curve decomposition: a Hernquist bulge, a thin exponential disk and an NFW or pseudo-isothermal halo, the fit with its covariance and the disk-halo degeneracy, \"not constrained\", the validation contract with its four failed legs, and Part B deferred (Prompt 236).",
+      "owner": 236,
+      "student": false
+    },
+    {
       "file": "SPECTROGRAPH.md",
       "kind": "feature",
       "purpose": "The spectrograph model: the line-spread function, an arc-lamp wavelength solution with its uncertainty, a velocity with its medium, the slit trade, validation (Prompt 213).",

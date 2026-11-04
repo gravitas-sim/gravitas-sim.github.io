@@ -7,7 +7,12 @@
   "seeds": {
     "streams": "js/random/streams.js stream('noise', 'rotdec-236', <ensemble>, <realization>), mulberry32, Box-Muller normals",
     "oracleInput": "rotdec-236:oracle",
-    "ensembles": { "E1": 200, "E2": 200, "D1": 100, "D5": 100 }
+    "ensembles": {
+      "E1": 200,
+      "E2": 200,
+      "D1": 100,
+      "D5": 100
+    }
   },
   "supply": {
     "note": "Nothing public is needed to build the kernel or to run groups A to D. One thing is needed from Carl for group E: the published ranges leg E2 compares with. Agents do not fetch data and do not type a published number from memory.",
@@ -18,7 +23,7 @@
     }
   },
   "constants": {
-    "GM_sun_m3s2": 1.3271244e20,
+    "GM_sun_m3s2": 1.3271244e+20,
     "AU_m": 149597870700,
     "pc_m": "648000 / pi * AU_m",
     "kpc_m": "1000 * pc_m",
@@ -43,10 +48,44 @@
   },
   "truth": {
     "label": "synthetic: a galaxy that is a choice, not the Milky Way and not a published model",
-    "bulge": { "mass": 1e10, "scale": 0.7, "fixed": true },
-    "disk": { "mass": 4e10, "scale": 2.6, "luminosity": 5e10, "massToLightTruth": 0.8, "massToLightRange": [0.3, 1.5], "massRange": [1.5e10, 7.5e10] },
-    "halo": { "form": "nfw", "vs": 420, "rs": 20 },
-    "bounds": { "diskScale": [1, 6], "haloSpeed": [1, 1000], "logHaloScale": [0, 2.7] },
+    "bulge": {
+      "mass": 10000000000.0,
+      "scale": 0.7,
+      "fixed": true
+    },
+    "disk": {
+      "mass": 40000000000.0,
+      "scale": 2.6,
+      "luminosity": 50000000000.0,
+      "massToLightTruth": 0.8,
+      "massToLightRange": [
+        0.3,
+        1.5
+      ],
+      "massRange": [
+        15000000000.0,
+        75000000000.0
+      ]
+    },
+    "halo": {
+      "form": "nfw",
+      "vs": 420,
+      "rs": 20
+    },
+    "bounds": {
+      "diskScale": [
+        1,
+        6
+      ],
+      "haloSpeed": [
+        1,
+        1000
+      ],
+      "logHaloScale": [
+        0,
+        2.7
+      ]
+    },
     "note": "the luminosity and the mass-to-light range are chosen so that the truth lies inside the range the fit is told; a mass-to-light range that excludes the truth is a different (misspecified) case and is not part of these legs"
   },
   "ensembles": {
@@ -75,121 +114,173 @@
       "id": "A1",
       "group": "analytic",
       "what": "the Hernquist bulge speed equals G M r / (r + a)^2 under the square root for 12 (r, M, a) cases spanning 0.05 to 100 kpc, 1e8 to 1e11 solar masses and 0.1 to 3 kpc",
-      "limits": { "relative": 1e-12 }
+      "limits": {
+        "relative": 1e-12
+      }
     },
     {
       "id": "A2",
       "group": "analytic",
       "what": "the Hernquist speed with a = 1e-9 kpc equals the point-mass speed sqrt(G M / r) at 5 kpc",
-      "limits": { "relative": 1e-8 }
+      "limits": {
+        "relative": 1e-08
+      }
     },
     {
       "id": "A3",
       "group": "analytic",
       "what": "the NFW speed equals v_s sqrt(m(x) / x) for 12 (r, v_s, r_s) cases; and v_s^2 r_s / G = M_s reproduces M(<r) = M_s m(x) as v^2 r / G",
-      "limits": { "relative": 1e-12 }
+      "limits": {
+        "relative": 1e-12
+      }
     },
     {
       "id": "A4",
       "group": "analytic",
       "what": "the NFW speed has its maximum at the root of x^2 / (1 + x)^2 = ln(1 + x) - x / (1 + x) (found by bisection in the validator, not typed), the kernel's golden-section maximum agrees in x, and v_max / v_s equals sqrt(m(x*) / x*)",
-      "limits": { "xRelative": 1e-6, "vmaxRelative": 1e-9 }
+      "limits": {
+        "xRelative": 1e-06,
+        "vmaxRelative": 1e-09
+      }
     },
     {
       "id": "A5",
       "group": "analytic",
       "what": "the NFW inner limit: v^2 / (v_s^2 x / 2) = 1 at x = 1e-3",
-      "limits": { "relative": 1e-3 }
+      "limits": {
+        "relative": 0.001
+      }
     },
     {
       "id": "A6",
       "group": "analytic",
       "what": "the pseudo-isothermal speed equals v_inf sqrt(1 - (r_c / r) arctan(r / r_c)) for 12 cases",
-      "limits": { "relative": 1e-12 }
+      "limits": {
+        "relative": 1e-12
+      }
     },
     {
       "id": "A7",
       "group": "analytic",
       "what": "the pseudo-isothermal far field: v^2 / v_inf^2 = 1 - pi / (2 x) + 1 / x^2 - 1 / (3 x^4) at x = r / r_c = 1000 (the asymptotic series of arctan, error of order x^-6)",
-      "limits": { "relative": 1e-12 }
+      "limits": {
+        "relative": 1e-12
+      }
     },
     {
       "id": "A8",
       "group": "analytic",
       "what": "enclosed mass from the speed, v^2 r / G, equals the numerical integral of 4 pi r^2 rho(r) from 0 (adaptive Gauss-Legendre, density forms in 'relations') for the Hernquist bulge, the NFW halo and the pseudo-isothermal halo at 0.5, 3, 12 and 60 kpc",
-      "limits": { "relative": 1e-8 }
+      "limits": {
+        "relative": 1e-08
+      }
     },
     {
       "id": "A9",
       "group": "analytic",
       "what": "the disk's far field: v^2 r / (G M) = 1 at r = 100 R_d (the first correction is of order (R_d / r)^2, 7e-5 here, below the bound)",
-      "limits": { "relative": 1e-3 }
+      "limits": {
+        "relative": 0.001
+      }
     },
     {
       "id": "A10",
       "group": "analytic",
       "what": "the total speed squared equals the sum of the three components' squares at 30 radii for 6 parameter sets; v^2 scales with the bulge and disk masses and with v_s^2 exactly (doubling a mass doubles v^2 of that component, doubling v_s doubles the halo speed)",
-      "limits": { "relative": 1e-12 }
+      "limits": {
+        "relative": 1e-12
+      }
     },
     {
       "id": "B1",
       "group": "oracle",
       "what": "the kernel's component speeds equal the oracle's (tools/rotation-decomposition-oracle/oracle.py, written from this file alone: numpy and scipy.special, the disk through scipy's exponentially scaled Bessel functions) for 5 parameter sets at 20 radii each from 0.1 to 200 kpc: bulge, NFW and pseudo-isothermal to the first bound, the disk to the second",
-      "limits": { "closedFormRelative": 1e-11, "diskRelative": 1e-8 }
+      "limits": {
+        "closedFormRelative": 1e-11,
+        "diskRelative": 1e-08
+      }
     },
     {
       "id": "B2",
       "group": "oracle",
       "what": "the disk's shape function g(y) equals scipy's y^2 (ive(0,y) kve(0,y) - ive(1,y) kve(1,y)) at 40 values of y from 1e-3 to 500, log-spaced",
-      "limits": { "relative": 1e-9 }
+      "limits": {
+        "relative": 1e-09
+      }
     },
     {
       "id": "B3",
       "group": "oracle",
       "what": "on the oracle-inputs curve, the minimum chi-square of the kernel's fit and of the oracle's (scipy.optimize.least_squares, trf, with bounds, from several starts) agree",
-      "limits": { "relative": 1e-3 }
+      "limits": {
+        "relative": 0.001
+      }
     },
     {
       "id": "B4",
       "group": "oracle",
       "what": "the two fitted total curves agree at the data radii",
-      "limits": { "maxAbsoluteKms": 0.05 }
+      "limits": {
+        "maxAbsoluteKms": 0.05
+      }
     },
     {
       "id": "B5",
       "group": "oracle",
       "what": "the delta-method one-sigma of the total speed at 8 and 20 kpc from the kernel's covariance equals the oracle's, computed from its own central-difference Jacobian at its own best fit",
-      "limits": { "relative": 0.05 }
+      "limits": {
+        "relative": 0.05
+      }
     },
     {
       "id": "C1",
       "group": "coverage",
       "what": "E1: the 68.27 percent covariance interval covers the truth of log10 disk mass, the disk scale length and the halo's speed at 20 kpc, each at a rate between 0.60 and 0.76 (a realization whose fit does not converge counts as a miss)",
-      "limits": { "min": 0.6, "max": 0.76, "level": 0.6827, "ensemble": 200 }
+      "limits": {
+        "min": 0.6,
+        "max": 0.76,
+        "level": 0.6827,
+        "ensemble": 200
+      }
     },
     {
       "id": "C2",
       "group": "coverage",
       "what": "E1: the 95 percent covariance interval covers the same three truths at a rate of at least 0.90",
-      "limits": { "min": 0.9, "level": 0.95, "ensemble": 200 }
+      "limits": {
+        "min": 0.9,
+        "level": 0.95,
+        "ensemble": 200
+      }
     },
     {
       "id": "C3",
       "group": "coverage",
       "what": "E1: the 68.27 percent profile interval of log10 disk mass (an open side counts as covering that side) covers the truth at a rate between 0.60 and 0.76",
-      "limits": { "min": 0.6, "max": 0.76, "level": 0.6827, "ensemble": 200 }
+      "limits": {
+        "min": 0.6,
+        "max": 0.76,
+        "level": 0.6827,
+        "ensemble": 200
+      }
     },
     {
       "id": "C4",
       "group": "coverage",
       "what": "E1: the bias of log10 disk mass, |mean(estimate - truth)| / median(sigma), is at most 0.5",
-      "limits": { "max": 0.5 }
+      "limits": {
+        "max": 0.5
+      }
     },
     {
       "id": "C5",
       "group": "coverage",
       "what": "E2 (the degenerate direction): the 68.27 percent profile interval of log10 disk mass covers the truth at a rate of at least 0.60",
-      "limits": { "min": 0.6, "level": 0.6827, "ensemble": 200 }
+      "limits": {
+        "min": 0.6,
+        "level": 0.6827,
+        "ensemble": 200
+      }
     },
     {
       "id": "C6",
@@ -201,31 +292,45 @@
       "id": "D1",
       "group": "refusal",
       "what": "D1 (no points beyond 6 kpc): the halo is 'not constrained' in at least 0.90 of the realizations, and no halo interval is reported in any realization where it is not",
-      "limits": { "min": 0.9, "ensemble": 100 }
+      "limits": {
+        "min": 0.9,
+        "ensemble": 100
+      }
     },
     {
       "id": "D2",
       "group": "refusal",
       "what": "E1 (the positive control): the halo is 'constrained' in at least 0.90 of the realizations, so the refusal of D1 is not a blanket",
-      "limits": { "min": 0.9, "ensemble": 200 }
+      "limits": {
+        "min": 0.9,
+        "ensemble": 200
+      }
     },
     {
       "id": "D3",
       "group": "refusal",
       "what": "the inputs are refused, each with its own code and reason: fewer points than free parameters plus two; a non-positive or non-finite error; a non-positive radius; no disk mass range or luminosity with a mass-to-light range; an unknown halo form",
-      "limits": { "refusals": 5 }
+      "limits": {
+        "refusals": 5
+      }
     },
     {
       "id": "D4",
       "group": "refusal",
       "what": "D5 (a feature the model cannot make): the fit is flagged not adequate in at least 0.90 of the realizations",
-      "limits": { "min": 0.9, "ensemble": 100 }
+      "limits": {
+        "min": 0.9,
+        "ensemble": 100
+      }
     },
     {
       "id": "D5",
       "group": "refusal",
       "what": "E1 (the same model, a correct curve): the fit is flagged not adequate in at most 0.02 of the realizations",
-      "limits": { "max": 0.02, "ensemble": 200 }
+      "limits": {
+        "max": 0.02,
+        "ensemble": 200
+      }
     },
     {
       "id": "E1",
@@ -237,9 +342,22 @@
       "id": "E2",
       "group": "published",
       "what": "the published ranges (supply): for each quantity the supplied file lists that the decomposition produces under contract C2 for the set whose R0 the paper adopts (or the nearest set, stated), the fitted value lies within the published range widened by the fit's own one-sigma on each side; a quantity whose fit is 'not constrained' fails that quantity (a missing interval is not agreement)",
-      "limits": { "widenBySigma": 1 },
+      "limits": {
+        "widenBySigma": 1
+      },
       "unless": "the file is not supplied: NOT RUN"
     }
   ],
-  "amendments": []
+  "amendments": [
+    {
+      "id": "AM0",
+      "what": "documentation correction in the text of leg A9: the parenthetical gives the first correction of the disk's far field as (R_d / r)^2 = 7e-5; the correct first correction is (9 / 8) / y^2 with y = r / (2 R_d), 4.5e-4 at r = 100 R_d (derived from the large-argument series of I_nu K_nu while the kernel was written). The bound 1e-3 and the leg are unchanged.",
+      "after": "the kernel's first run of the validator (A9 measured 4.508e-4 against the expected 4.5e-4)"
+    },
+    {
+      "id": "AM1",
+      "what": "leg A3's reference m(x) = ln(1 + x) - x / (1 + x) is evaluated in two forms: as written (the committed form, which loses digits at small x) and with log1p (the same function, accurate). Both are measured on every run; the committed form's verdict binds and the log1p form's is a proposal for Carl to ratify. No bound is moved.",
+      "after": "the kernel's first run of the validator (the committed form crossed 1e-12 at 1.1e-12 on the mass round trip, the log1p form agrees to 4e-16)"
+    }
+  ]
 }

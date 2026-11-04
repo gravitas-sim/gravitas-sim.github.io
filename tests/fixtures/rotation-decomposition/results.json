@@ -1,0 +1,385 @@
+{
+  "format": "gravitas.rotation-decomposition-results/1",
+  "node": "v22.23.4",
+  "consumers": {
+    "rule": "panel, lesson depth and model-page section only if every row of the groups analytic, oracle, coverage and refusal passes",
+    "allPass": false,
+    "blocking": [
+      "A3",
+      "A5",
+      "C3",
+      "D4"
+    ]
+  },
+  "rows": [
+    {
+      "id": "A1",
+      "group": "analytic",
+      "status": "pass",
+      "measured": {
+        "worstRelative": 1.7683674751353794e-16,
+        "cases": 12
+      },
+      "note": ""
+    },
+    {
+      "id": "A2",
+      "group": "analytic",
+      "status": "pass",
+      "measured": {
+        "relative": 1.9999985083075492e-10
+      },
+      "note": ""
+    },
+    {
+      "id": "A3",
+      "group": "analytic",
+      "status": "fail",
+      "measured": {
+        "worstSpeedRelative": 5.696237880113086e-13,
+        "worstMassRelative": 1.1392459429151531e-12,
+        "amendedAM1": {
+          "worstSpeedRelative": 0,
+          "worstMassRelative": 3.5063875848068194e-16
+        }
+      },
+      "note": ""
+    },
+    {
+      "id": "A4",
+      "group": "analytic",
+      "status": "pass",
+      "measured": {
+        "xRelative": 2.1569548519304705e-8,
+        "vmaxRelative": 0,
+        "kernelPeakRatioRelative": 0,
+        "peakRatio": 2.1625815870646097
+      },
+      "note": ""
+    },
+    {
+      "id": "A5",
+      "group": "analytic",
+      "status": "fail",
+      "measured": {
+        "relative": 0.0013318349321365108,
+        "expectedFirstCorrection": 0.0013333333333333333,
+        "kernelAgainstThreeTermSeries": 1.6009353842605378e-9
+      },
+      "note": ""
+    },
+    {
+      "id": "A6",
+      "group": "analytic",
+      "status": "pass",
+      "measured": {
+        "worstRelative": 0
+      },
+      "note": ""
+    },
+    {
+      "id": "A7",
+      "group": "analytic",
+      "status": "pass",
+      "measured": {
+        "relative": 1.1119685888317866e-16
+      },
+      "note": ""
+    },
+    {
+      "id": "A8",
+      "group": "analytic",
+      "status": "pass",
+      "measured": {
+        "worstRelative": 2.381462434287139e-14,
+        "per": {
+          "hernquist@0.5": 1.3732910156249997e-16,
+          "hernquist@3": 1.4506445990668399e-16,
+          "hernquist@12": 2.1363629235161673e-16,
+          "hernquist@60": 3.904226091172959e-16,
+          "nfw@0.5": 8.663029029861288e-16,
+          "nfw@3": 1.6409956091708218e-16,
+          "nfw@12": 1.57303734808392e-16,
+          "nfw@60": 1.2680277272041188e-16,
+          "isothermal@0.5": 2.381462434287139e-14,
+          "isothermal@3": 3.442128176206469e-16,
+          "isothermal@12": 0,
+          "isothermal@60": 2.4971322760518936e-16
+        }
+      },
+      "note": ""
+    },
+    {
+      "id": "A9",
+      "group": "analytic",
+      "status": "pass",
+      "measured": {
+        "relative": 0.0004508472216280257,
+        "expectedFirstOrder": 0.00045
+      },
+      "note": ""
+    },
+    {
+      "id": "A10",
+      "group": "analytic",
+      "status": "pass",
+      "measured": {
+        "worstRelative": 5.031469334026169e-16
+      },
+      "note": ""
+    },
+    {
+      "id": "B1",
+      "group": "oracle",
+      "status": "pass",
+      "measured": {
+        "closedFormWorstRelative": 6.5206783213601915e-12,
+        "diskWorstRelative": 5.0368723977953854e-12,
+        "sets": 5,
+        "radiiPerSet": 20
+      },
+      "note": ""
+    },
+    {
+      "id": "B2",
+      "group": "oracle",
+      "status": "pass",
+      "measured": {
+        "worstRelative": 7.383439308498823e-11,
+        "values": 40
+      },
+      "note": ""
+    },
+    {
+      "id": "B3",
+      "group": "oracle",
+      "status": "pass",
+      "measured": {
+        "kernelChi2": 17.336378527690965,
+        "oracleChi2": 17.33637852738544,
+        "relative": 1.762341947407646e-11,
+        "kernelTheta": [
+          10.63101756189866,
+          2.724283127699816,
+          411.9714009175307,
+          1.30411790426223
+        ],
+        "oracleTheta": [
+          10.631017582565876,
+          2.724283153616901,
+          411.97140146708216,
+          1.304117937480604
+        ]
+      },
+      "note": ""
+    },
+    {
+      "id": "B4",
+      "group": "oracle",
+      "status": "pass",
+      "measured": {
+        "maxAbsoluteKms": 5.7169353340214e-7
+      },
+      "note": ""
+    },
+    {
+      "id": "B5",
+      "group": "oracle",
+      "status": "pass",
+      "measured": {
+        "kernel": [
+          1.5697748056606478,
+          1.689260811971781
+        ],
+        "oracle": [
+          1.5697748057121712,
+          1.6892608304767032
+        ],
+        "relative": [
+          3.28221933387663e-11,
+          1.0954449382434675e-8
+        ]
+      },
+      "note": ""
+    },
+    {
+      "id": "C1",
+      "group": "coverage",
+      "status": "pass",
+      "measured": {
+        "coverage": {
+          "logDiskMass": 0.605,
+          "diskScale": 0.66,
+          "vHalo20": 0.615
+        },
+        "converged": 200
+      },
+      "note": ""
+    },
+    {
+      "id": "C2",
+      "group": "coverage",
+      "status": "pass",
+      "measured": {
+        "coverage": {
+          "logDiskMass": 0.95,
+          "diskScale": 0.95,
+          "vHalo20": 0.945
+        }
+      },
+      "note": ""
+    },
+    {
+      "id": "C3",
+      "group": "coverage",
+      "status": "fail",
+      "measured": {
+        "coverage": 0.585
+      },
+      "note": ""
+    },
+    {
+      "id": "C4",
+      "group": "coverage",
+      "status": "pass",
+      "measured": {
+        "bias": 0.18477784492222682
+      },
+      "note": ""
+    },
+    {
+      "id": "D2",
+      "group": "refusal",
+      "status": "pass",
+      "measured": {
+        "haloConstrained": 1
+      },
+      "note": ""
+    },
+    {
+      "id": "D5",
+      "group": "refusal",
+      "status": "pass",
+      "measured": {
+        "falseAlarm": 0
+      },
+      "note": ""
+    },
+    {
+      "id": "C5",
+      "group": "coverage",
+      "status": "pass",
+      "measured": {
+        "coverage": 0.795
+      },
+      "note": ""
+    },
+    {
+      "id": "C6",
+      "group": "reported",
+      "status": "reported",
+      "measured": {
+        "covarianceCoverage": 0.945,
+        "profileOpenFraction": 0.47,
+        "medianClosedProfileWidthDex": 0.30825115312074836,
+        "medianDiskHaloCorrelation": 0.8785951667589988
+      },
+      "note": ""
+    },
+    {
+      "id": "D1",
+      "group": "refusal",
+      "status": "pass",
+      "measured": {
+        "notConstrained": 0.92,
+        "intervalsLeaked": false
+      },
+      "note": ""
+    },
+    {
+      "id": "D4",
+      "group": "refusal",
+      "status": "fail",
+      "measured": {
+        "flagged": 0.08
+      },
+      "note": ""
+    },
+    {
+      "id": "D3",
+      "group": "refusal",
+      "status": "pass",
+      "measured": {
+        "points": "points",
+        "error": "error",
+        "radius": "radius",
+        "disk-mass-range": "disk-mass-range",
+        "halo-form": "halo-form"
+      },
+      "note": ""
+    },
+    {
+      "id": "E1",
+      "group": "reported",
+      "status": "reported",
+      "measured": [
+        {
+          "set": "8.3/244",
+          "contract": "C1",
+          "points": 14,
+          "reduced": 4.8390540164602545,
+          "adequate": false,
+          "halo": "not constrained"
+        },
+        {
+          "set": "8.3/244",
+          "contract": "C2",
+          "points": 45,
+          "reduced": 2.579467766721571,
+          "adequate": false,
+          "halo": "constrained"
+        },
+        {
+          "set": "8/200",
+          "contract": "C1",
+          "points": 14,
+          "reduced": 5.1822074116962185,
+          "adequate": false,
+          "halo": "not constrained"
+        },
+        {
+          "set": "8/200",
+          "contract": "C2",
+          "points": 46,
+          "reduced": 4.079215974610018,
+          "adequate": false,
+          "halo": "constrained"
+        },
+        {
+          "set": "8.5/220",
+          "contract": "C1",
+          "points": 14,
+          "reduced": 4.7993387662465965,
+          "adequate": false,
+          "halo": "not constrained"
+        },
+        {
+          "set": "8.5/220",
+          "contract": "C2",
+          "points": 45,
+          "reduced": 2.6035956750554328,
+          "adequate": false,
+          "halo": "constrained"
+        }
+      ],
+      "note": ""
+    },
+    {
+      "id": "E2",
+      "group": "published",
+      "status": "not-run",
+      "measured": null,
+      "note": "the published ranges were not supplied (tests/fixtures/rotation-decomposition/published-ranges.json); only Carl can fetch them (thresholds.json, supply.E2)"
+    }
+  ]
+}
