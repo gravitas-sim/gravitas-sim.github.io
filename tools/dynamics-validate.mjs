@@ -745,6 +745,12 @@ function verdictOf() {
   return gate.every(id => get(id) === 'pass') ? 'A' : 'B';
 }
 
+const FAIL_NOTES = {
+  C1: 'over-covers on an exact-Plummer ensemble: the structure term of 0.15 is a stated assumption for profiles that are not Plummer and there is none here (the bootstrap part alone covers 0.727, inside the committed range); the bound is left as committed and the alternative (judge the structure term on a misspecified family) is a question for Carl',
+  C2: 'over-covers on an exact-Plummer ensemble for the same reason as C1 (the bootstrap part alone covers 0.963, inside the committed range); left failing, the alternative is a question for Carl',
+  R2: 'the reference code (a block-step Hermite scheme whose prediction and correction do not pair forces by Newton third law) conserves linear momentum to 8.2e-8 in Heggie units, above the committed 1e-9; angular momentum 2.3e-7 is inside its bound; this is the leg that makes the verdict C under the committed rule, and a bound that a symmetric scheme would meet is a question for Carl, not a change made here',
+  R7: 'hermite.c (eta 5e-4) and scipy DOP853 (rtol 1e-10) differ by 5.7e-4 at half a crossing time, above the committed 1e-5; the diagnostics run after the fact (not a bound change) show DOP853 at rtol 1e-10 differs from DOP853 at 1e-13 by 5.0e-5 and Hermite at eta 1e-4 agrees with DOP853 at 1e-13 to 3.2e-6: both integrators are under-converged in position at half a crossing time in a chaotic system. R7 was added by AM2 and is not in the committed verdict rule',
+};
 const complete = only.length === 0;
 const out = {
   format: 'gravitas.dynamics-results/1',
@@ -770,6 +776,7 @@ if (flag('--write-results')) {
       measured: r.measured,
       note:
         r.note ||
+        FAIL_NOTES[r.id] ||
         (r.status === 'fail'
           ? 'crossed the bound committed in thresholds.json; left failing'
           : ''),
