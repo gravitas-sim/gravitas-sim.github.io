@@ -280,12 +280,15 @@ test.describe('a system can be built without a pointer', () => {
   // the modal and took focus with its own focus(): the Tab-trap test above
   // failed on that race, and waits for the panel to dodge it. These two make
   // it happen on purpose, by opening the lesson over the modal.
-  const openLessonOver = page =>
-    page.evaluate(async () => {
-      const loader = await import('/js/investigationsLoader.js');
-      const lessons = await loader.ensureInvestigations();
-      await lessons.openInvestigation('tides');
+  // Through the address bar, as pasting a lesson link into an open tab does:
+  // it works on sources and on dist/, where there is no module to import.
+  const openLessonOver = async page => {
+    await page.evaluate(() => {
+      location.hash = '#investigation=tides';
     });
+    await expect(page.locator('#investigationPanel')).toBeVisible();
+    await expect(page.locator('.inv-step-title')).not.toBeEmpty();
+  };
   const where = (page, modal) =>
     page.evaluate(sel => {
       const panel = document.getElementById('investigationPanel');
@@ -306,7 +309,6 @@ test.describe('a system can be built without a pointer', () => {
     await page.locator('#precisePlaceBtn').click();
     await expect(page.locator('#precisePlaceType')).toBeFocused();
     await openLessonOver(page);
-    await expect(page.locator('#investigationPanel')).toBeVisible();
     expect(await where(page, '#precisePlaceDialog')).toMatchObject({
       panelOpen: true,
       focusInModal: true,
