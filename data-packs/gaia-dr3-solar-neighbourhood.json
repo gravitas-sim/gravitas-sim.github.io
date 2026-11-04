@@ -2,7 +2,7 @@
   "format": "gravitas.observation-data-pack",
   "formatVersion": 1,
   "id": "gaia-dr3-solar-neighbourhood",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "title": "The solar neighbourhood: 1,570 Gaia DR3 stars with radial velocities",
   "object": {
     "name": "the solar neighbourhood (stars within 1 kpc of the Sun)",
@@ -25,7 +25,7 @@
     "basis": "CC BY-NC 3.0 IGO permits copying, redistribution and adaptation, which includes a derived subset of the catalogue, with attribution and for non-commercial purposes; Gravitas is a free educational tool. It is the same licence, and so the same mechanism, as radiation-gaia-bandpasses (D-RAD-01), which the project owner shipped by explicit instruction; extending it to these Gaia samples is a delegated decision awaiting his review (DECISION_REGISTER.md D-GAIA-01), not a standing licence. Each sample is a pack of its own so that no other data is covered by the NC terms, and none may be bundled into a commercial redistribution of Gravitas (DATA_PACKS.md); removing the pack is removing its module, manifest and service-worker entry.",
     "nonCommercial": true
   },
-  "retrieved": "2026-10-10",
+  "retrieved": "2026-11-03",
   "columns": [
     {
       "id": "ra",
@@ -102,6 +102,54 @@
       "name": "BP-RP",
       "unit": "mag",
       "description": "Gaia BP minus RP colour (bp_rp), not corrected for extinction"
+    },
+    {
+      "id": "plx_pmra_corr",
+      "name": "parallax-pm ra correlation",
+      "unit": "",
+      "description": "correlation coefficient of the parallax and pm ra errors (parallax_pmra_corr)"
+    },
+    {
+      "id": "plx_pmdec_corr",
+      "name": "parallax-pm dec correlation",
+      "unit": "",
+      "description": "correlation coefficient of the parallax and pm dec errors (parallax_pmdec_corr)"
+    },
+    {
+      "id": "pm_corr",
+      "name": "pm ra-pm dec correlation",
+      "unit": "",
+      "description": "correlation coefficient of the pm ra and pm dec errors (pmra_pmdec_corr)"
+    },
+    {
+      "id": "ruwe",
+      "name": "RUWE",
+      "unit": "",
+      "description": "renormalised unit weight error of the astrometric solution (ruwe)"
+    },
+    {
+      "id": "params",
+      "name": "astrometric parameters solved",
+      "unit": "",
+      "description": "astrometric_params_solved: 31 is a five-parameter solution, 95 a six-parameter one"
+    },
+    {
+      "id": "nu_eff",
+      "name": "effective wavenumber",
+      "unit": "",
+      "description": "in inverse micrometres: nu_eff_used_in_astrometry, the colour a five-parameter solution used; empty for a six-parameter solution"
+    },
+    {
+      "id": "pseudocolour",
+      "name": "pseudocolour",
+      "unit": "",
+      "description": "in inverse micrometres: pseudocolour, the colour a six-parameter solution estimated; empty for a five-parameter solution"
+    },
+    {
+      "id": "ecl_lat",
+      "name": "ecliptic latitude",
+      "unit": "deg",
+      "description": "ecliptic latitude (ecl_lat), which the parallax zero point depends on"
     }
   ],
   "masks": [],
@@ -112,17 +160,18 @@
     "No parallax zero-point correction is applied (Lindegren et al. 2021 give about -0.017 mas on average: 1.7 percent at 100 pc, 1.7 percent at 1 kpc to the distance).",
     "Positions are rounded to 0.006 degree in right ascension and 0.004 degree in declination (22 and 14 arcsec), parallaxes to 0.02 mas, proper motions to 0.01 mas/yr, radial velocities to 0.02 km/s: good for Galactic coordinates to 0.01 degree and for velocities to under 0.1 km/s, not for a cross-match.",
     "Galactic longitude and latitude are not stored: the galactic kernel computes them from the position, and its transformation is tested against the values Gaia's archive gives.",
-    "The Gaia source ids are left out; the query in the pack's manifest returns them."
+    "The Gaia source ids are left out (a 64-bit id does not fit the table encoding); the query in the pack's manifest returns them, and the rows are in its order.",
+    "Version 1.1.0 (Prompt 233) adds eight columns to the same 1,570 rows, all stored to the step shown: the three error correlations, RUWE, the solution type, the effective wavenumber or pseudocolour (each empty for the other solution type), and the ecliptic latitude. Every earlier column is identical to version 1.0.0 (tests/fixtures/gaia-workflows/alignment.json holds its checksum). The parallax is still rounded to 0.02 mas: this pack is not used for a distance, because that rounding is as large as the parallax error of its far stratum."
   ],
   "source": {
     "archive": "ESA Gaia archive, Gaia DR3",
     "urls": [
-      "https://gea.esac.esa.int/tap-server/tap/sync?REQUEST=doQuery&LANG=ADQL&FORMAT=csv&QUERY=SELECT+ra%2C+dec%2C+parallax%2C+parallax_error%2C+pmra%2C+pmra_error%2C+pmdec%2C+pmdec_error%2C+radial_velocity%2C+radial_velocity_error%2C+phot_g_mean_mag%2C+bp_rp+FROM+gaiadr3.gaia_source+WHERE+ruwe%3C1.4+AND+radial_velocity+IS+NOT+NULL+AND+parallax_over_error%3E10+AND+%28%28parallax%3E10+AND+random_index%3C7000000%29+OR+%28parallax%3E1+AND+parallax%3C%3D10+AND+random_index%3C200000%29%29+ORDER+BY+source_id",
+      "https://gea.esac.esa.int/tap-server/tap/sync?REQUEST=doQuery&LANG=ADQL&FORMAT=csv&QUERY=SELECT+source_id%2C+ra%2C+dec%2C+parallax%2C+parallax_error%2C+pmra%2C+pmra_error%2C+pmdec%2C+pmdec_error%2C+radial_velocity%2C+radial_velocity_error%2C+phot_g_mean_mag%2C+bp_rp%2C+parallax_pmra_corr%2C+parallax_pmdec_corr%2C+pmra_pmdec_corr%2C+ruwe%2C+astrometric_params_solved%2C+nu_eff_used_in_astrometry%2C+pseudocolour%2C+ecl_lat+FROM+gaiadr3.gaia_source+WHERE+ruwe%3C1.4+AND+radial_velocity+IS+NOT+NULL+AND+parallax_over_error%3E10+AND+%28%28parallax%3E10+AND+random_index%3C7000000%29+OR+%28parallax%3E1+AND+parallax%3C%3D10+AND+random_index%3C200000%29%29+ORDER+BY+source_id",
       "https://gea.esac.esa.int/tap-server/tap/sync?REQUEST=doQuery&LANG=ADQL&FORMAT=csv&QUERY=SELECT+COUNT%28*%29+AS+n+FROM+gaiadr3.gaia_source+WHERE+ruwe%3C1.4+AND+radial_velocity+IS+NOT+NULL+AND+parallax_over_error%3E10+AND+parallax%3E10",
       "https://gea.esac.esa.int/tap-server/tap/sync?REQUEST=doQuery&LANG=ADQL&FORMAT=csv&QUERY=SELECT+COUNT%28*%29+AS+n+FROM+gaiadr3.gaia_source+WHERE+ruwe%3C1.4+AND+radial_velocity+IS+NOT+NULL+AND+parallax_over_error%3E10+AND+parallax%3E1+AND+parallax%3C%3D10"
     ],
     "queries": [
-      "SELECT ra, dec, parallax, parallax_error, pmra, pmra_error, pmdec, pmdec_error, radial_velocity, radial_velocity_error, phot_g_mean_mag, bp_rp FROM gaiadr3.gaia_source WHERE ruwe<1.4 AND radial_velocity IS NOT NULL AND parallax_over_error>10 AND ((parallax>10 AND random_index<7000000) OR (parallax>1 AND parallax<=10 AND random_index<200000)) ORDER BY source_id",
+      "SELECT source_id, ra, dec, parallax, parallax_error, pmra, pmra_error, pmdec, pmdec_error, radial_velocity, radial_velocity_error, phot_g_mean_mag, bp_rp, parallax_pmra_corr, parallax_pmdec_corr, pmra_pmdec_corr, ruwe, astrometric_params_solved, nu_eff_used_in_astrometry, pseudocolour, ecl_lat FROM gaiadr3.gaia_source WHERE ruwe<1.4 AND radial_velocity IS NOT NULL AND parallax_over_error>10 AND ((parallax>10 AND random_index<7000000) OR (parallax>1 AND parallax<=10 AND random_index<200000)) ORDER BY source_id",
       "SELECT COUNT(*) AS n FROM gaiadr3.gaia_source WHERE ruwe<1.4 AND radial_velocity IS NOT NULL AND parallax_over_error>10 AND parallax>10",
       "SELECT COUNT(*) AS n FROM gaiadr3.gaia_source WHERE ruwe<1.4 AND radial_velocity IS NOT NULL AND parallax_over_error>10 AND parallax>1 AND parallax<=10"
     ],
@@ -147,10 +196,10 @@
   },
   "raw": [
     {
-      "file": "gaia-dr3-solar-neighbourhood.csv",
-      "url": "https://gea.esac.esa.int/tap-server/tap/sync?REQUEST=doQuery&LANG=ADQL&FORMAT=csv&QUERY=SELECT+ra%2C+dec%2C+parallax%2C+parallax_error%2C+pmra%2C+pmra_error%2C+pmdec%2C+pmdec_error%2C+radial_velocity%2C+radial_velocity_error%2C+phot_g_mean_mag%2C+bp_rp+FROM+gaiadr3.gaia_source+WHERE+ruwe%3C1.4+AND+radial_velocity+IS+NOT+NULL+AND+parallax_over_error%3E10+AND+%28%28parallax%3E10+AND+random_index%3C7000000%29+OR+%28parallax%3E1+AND+parallax%3C%3D10+AND+random_index%3C200000%29%29+ORDER+BY+source_id",
-      "sha256": "7b324e0a01f7928537a9d71be5b0bbc6eaaa44dc4b32ee1e3b7dd3a3e2127a35",
-      "bytes": 266354
+      "file": "gaia-dr3-solar-neighbourhood-astrometry.csv",
+      "url": "https://gea.esac.esa.int/tap-server/tap/sync?REQUEST=doQuery&LANG=ADQL&FORMAT=csv&QUERY=SELECT+source_id%2C+ra%2C+dec%2C+parallax%2C+parallax_error%2C+pmra%2C+pmra_error%2C+pmdec%2C+pmdec_error%2C+radial_velocity%2C+radial_velocity_error%2C+phot_g_mean_mag%2C+bp_rp%2C+parallax_pmra_corr%2C+parallax_pmdec_corr%2C+pmra_pmdec_corr%2C+ruwe%2C+astrometric_params_solved%2C+nu_eff_used_in_astrometry%2C+pseudocolour%2C+ecl_lat+FROM+gaiadr3.gaia_source+WHERE+ruwe%3C1.4+AND+radial_velocity+IS+NOT+NULL+AND+parallax_over_error%3E10+AND+%28%28parallax%3E10+AND+random_index%3C7000000%29+OR+%28parallax%3E1+AND+parallax%3C%3D10+AND+random_index%3C200000%29%29+ORDER+BY+source_id",
+      "sha256": "1dd1b0acf57863c465b3d691399725b88ba948c08eb7c6cd80b5825a374d218f",
+      "bytes": 419455
     },
     {
       "file": "gaia-dr3-solar-near-pool.csv",
@@ -217,6 +266,38 @@
         {
           "id": "bp_rp",
           "step": 0.001
+        },
+        {
+          "id": "plx_pmra_corr",
+          "step": 0.001
+        },
+        {
+          "id": "plx_pmdec_corr",
+          "step": 0.001
+        },
+        {
+          "id": "pm_corr",
+          "step": 0.001
+        },
+        {
+          "id": "ruwe",
+          "step": 0.001
+        },
+        {
+          "id": "params",
+          "step": 1
+        },
+        {
+          "id": "nu_eff",
+          "step": 0.0001
+        },
+        {
+          "id": "pseudocolour",
+          "step": 0.0001
+        },
+        {
+          "id": "ecl_lat",
+          "step": 0.005
         }
       ]
     },
@@ -311,6 +392,62 @@
           "step": 0.001,
           "missing": 5,
           "maxRounding": 0.0005
+        },
+        {
+          "id": "plx_pmra_corr",
+          "type": "int16",
+          "step": 0.001,
+          "missing": 0,
+          "maxRounding": 0.0005
+        },
+        {
+          "id": "plx_pmdec_corr",
+          "type": "int16",
+          "step": 0.001,
+          "missing": 0,
+          "maxRounding": 0.0005
+        },
+        {
+          "id": "pm_corr",
+          "type": "int16",
+          "step": 0.001,
+          "missing": 0,
+          "maxRounding": 0.0005
+        },
+        {
+          "id": "ruwe",
+          "type": "int16",
+          "step": 0.001,
+          "missing": 0,
+          "maxRounding": 0.000499
+        },
+        {
+          "id": "params",
+          "type": "int16",
+          "step": 1,
+          "missing": 0,
+          "maxRounding": 0
+        },
+        {
+          "id": "nu_eff",
+          "type": "int16",
+          "step": 0.0001,
+          "missing": 41,
+          "maxRounding": 0.00005
+        },
+        {
+          "id": "pseudocolour",
+          "type": "int16",
+          "step": 0.0001,
+          "missing": 1529,
+          "maxRounding": 0.0000498
+        },
+        {
+          "id": "ecl_lat",
+          "type": "int16",
+          "step": 0.005,
+          "missing": 0,
+          "maxRounding": 0.0025
         }
       ]
     }
@@ -326,12 +463,12 @@
   "offline": "idle",
   "derived": {
     "file": "js/data/observations/gaiaSolarNeighbourhood.js",
-    "bytes": 7982,
-    "sha256": "f0effd8e7fa979ecdb71c8a79f7e62f01642d5fb880123dba0a28f5b62bf7e87",
+    "bytes": 10260,
+    "sha256": "35438256713daf697572d2e744d40d354e9e7852531c58232bd8768eb6b92b83",
     "sidecar": {
       "file": "gaia/solar-neighbourhood.json",
-      "bytes": 59345,
-      "sha256": "8e0a738c697822aa7204c6dcc1118bc1755380a6a7c635c6da4c5f5e6f8d3c23"
+      "bytes": 93287,
+      "sha256": "30d7f62d245c3eab7b09e34ad354599e83cae474016b721b3045161ad79c4699"
     }
   },
   "validation": {

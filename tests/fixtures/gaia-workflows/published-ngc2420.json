@@ -1,0 +1,16 @@
+{
+  "retrieved": "2026-11-03",
+  "note": "Extracted by Claude from the arXiv PDFs saved in scratch-data/gaia233/pub (pdftotext). VizieR/CDS was unreachable (timeouts, three hosts), so Hunt & Reffert 2023 (arXiv 2303.13424; table at CDS only) and Cantat-Gaudin 2020 tables were NOT fetched. No bibcodes are recorded because none was read from a source; cite by arXiv id.",
+  "entries": [
+    {"id": "P1", "arxiv": "astro-ph/0006033", "paper": "Richer et al. 2000 (WD cooling age of NGC 2420)", "quantity": "apparent V distance modulus (m-M)V", "value": 12.10, "uncertainty": null, "adopted_ebv": 0.04, "method": "mean of Demarque+1994 (12.05+-0.10) and Twarog+1999 (12.15); their own main-sequence fit gave 11.85-12.02 ([Fe/H]=-0.4) and 11.95-12.10 ([Fe/H]=-0.3)", "kind": "photometric, not Gaia", "units": "mag", "file": "pub/astro-ph_0006033.txt lines 335-360"},
+    {"id": "P2", "arxiv": "astro-ph/0510047", "paper": "Anthony-Twarog et al. 2006 (vbyCaHbeta photometry, NGC 2420)", "quantity": "apparent distance modulus", "value": 12.15, "uncertainty": null, "method": "isochrone scale of Twarog+1999, age 1.9 Gyr, kept unchanged after revised metallicity and reddening; text says 'apparent distance modulus', reddening not restated in the line read", "kind": "photometric, not Gaia", "units": "mag", "file": "pub/astro-ph_0510047.txt line 771"},
+    {"id": "P3", "arxiv": "2404.12523", "paper": "structural-parameters paper for NGC 188, 2420, 2425, 2682, 6791 (Table 1)", "quantity": "mean parallax recomputed with Gaia DR3 from Cantat-Gaudin+2020 members (no zero-point correction stated)", "value": 0.36, "uncertainty": 0.06, "units": "mas", "kind": "Gaia DR3 parallax, uncorrected as printed", "file": "pub/2404.12523.txt line 90 and Notes line 96"},
+    {"id": "P4", "arxiv": "2404.12523", "paper": "same Table 1, 'Distance' column, note (a): values from Cantat-Gaudin et al. 2020 derived from Gaia DR2", "quantity": "cluster distance", "value": 2587, "uncertainty": null, "units": "pc", "kind": "Gaia DR2-based (not DR3)", "file": "pub/2404.12523.txt line 90"},
+    {"id": "P5", "arxiv": "2101.07122", "paper": "UOCS III", "quantity": "distance, as text", "value": "about 3 kpc", "uncertainty": null, "kind": "rounded, no method stated in the line read", "file": "pub/2101.07122.txt line 1111"}
+  ],
+  "missing": [
+    "A DR3-based cluster distance from a catalogue table (Hunt & Reffert 2023, J/A+A/673/A114) was not obtained: CDS unreachable, and the paper says the table is CDS-only.",
+    "No eclipsing-binary distance was found in the sources fetched."
+  ],
+  "true_modulus_note": "P1 and P2 are apparent V moduli. With R_V = 3.1 and E(B-V) = 0.04 (P1), the true modulus is (m-M)V - 0.124; that conversion is arithmetic for the agent to apply and record, not a published value."
+}

@@ -113,15 +113,20 @@ const SOLAR_WHERE =
   'ruwe<1.4 AND radial_velocity IS NOT NULL AND parallax_over_error>10';
 export const QUERIES = {
   solar: `SELECT ${SOLAR_COLS} FROM gaiadr3.gaia_source WHERE ${SOLAR_WHERE} AND ((parallax>10 AND random_index<7000000) OR (parallax>1 AND parallax<=10 AND random_index<200000)) ORDER BY source_id`,
+  // Prompt 233: the same rows, with the columns the distance and zero-point workflow needs.
+  solarV2: `SELECT source_id, ra, dec, parallax, parallax_error, pmra, pmra_error, pmdec, pmdec_error, radial_velocity, radial_velocity_error, phot_g_mean_mag, bp_rp, parallax_pmra_corr, parallax_pmdec_corr, pmra_pmdec_corr, ruwe, astrometric_params_solved, nu_eff_used_in_astrometry, pseudocolour, ecl_lat FROM gaiadr3.gaia_source WHERE ${SOLAR_WHERE} AND ((parallax>10 AND random_index<7000000) OR (parallax>1 AND parallax<=10 AND random_index<200000)) ORDER BY source_id`,
   solarNear: `SELECT COUNT(*) AS n FROM gaiadr3.gaia_source WHERE ${SOLAR_WHERE} AND parallax>10`,
   solarFar: `SELECT COUNT(*) AS n FROM gaiadr3.gaia_source WHERE ${SOLAR_WHERE} AND parallax>1 AND parallax<=10`,
   cluster: `SELECT ra, dec, parallax, parallax_error, pmra, pmra_error, pmdec, pmdec_error, phot_g_mean_mag, bp_rp FROM gaiadr3.gaia_source WHERE ruwe<1.4 AND phot_g_mean_mag<17.5 AND parallax IS NOT NULL AND pmra IS NOT NULL AND ${CONE} ORDER BY source_id`,
+  clusterV2: `SELECT source_id, ra, dec, parallax, parallax_error, pmra, pmra_error, pmdec, pmdec_error, phot_g_mean_mag, bp_rp, parallax_pmra_corr, parallax_pmdec_corr, pmra_pmdec_corr, ruwe, astrometric_params_solved, nu_eff_used_in_astrometry, pseudocolour, ecl_lat FROM gaiadr3.gaia_source WHERE ruwe<1.4 AND phot_g_mean_mag<17.5 AND parallax IS NOT NULL AND pmra IS NOT NULL AND ${CONE} ORDER BY source_id`,
   clusterCone: `SELECT COUNT(*) AS n FROM gaiadr3.gaia_source WHERE phot_g_mean_mag<17.5 AND ${CONE}`,
   clusterRuwe: `SELECT COUNT(*) AS n FROM gaiadr3.gaia_source WHERE ruwe<1.4 AND phot_g_mean_mag<17.5 AND ${CONE}`,
   rotation: 'SELECT R0,V0,r,Vc,e_Vc FROM "J/ApJ/785/63/table2" ORDER BY recno',
 };
 
 const RETRIEVED = '2026-10-10';
+/** The re-query of Prompt 233 (the same rows, more columns). */
+const RETRIEVED_V2 = '2026-11-03';
 const LICENSE_URL = 'https://www.cosmos.esa.int/web/gaia-users/license';
 const GAIA_LICENSE = {
   status: 'cc-by-nc-3.0-igo',
@@ -196,11 +201,11 @@ export const GAIA_SOLAR = {
   raw: [
     {
       ...pinned(
-        'gaia-dr3-solar-neighbourhood.csv',
-        tapUrl(QUERIES.solar),
-        '7b324e0a01f7928537a9d71be5b0bbc6eaaa44dc4b32ee1e3b7dd3a3e2127a35'
+        'gaia-dr3-solar-neighbourhood-astrometry.csv',
+        tapUrl(QUERIES.solarV2),
+        '1dd1b0acf57863c465b3d691399725b88ba948c08eb7c6cd80b5825a374d218f'
       ),
-      bytes: 266354,
+      bytes: 419455,
     },
     {
       ...pinned(
@@ -290,6 +295,62 @@ export const GAIA_SOLAR = {
       0.001,
       'Gaia BP minus RP colour (bp_rp), not corrected for extinction'
     ),
+    col(
+      'plx_pmra_corr',
+      'parallax-pm ra correlation',
+      '',
+      0.001,
+      'correlation coefficient of the parallax and pm ra errors (parallax_pmra_corr)'
+    ),
+    col(
+      'plx_pmdec_corr',
+      'parallax-pm dec correlation',
+      '',
+      0.001,
+      'correlation coefficient of the parallax and pm dec errors (parallax_pmdec_corr)'
+    ),
+    col(
+      'pm_corr',
+      'pm ra-pm dec correlation',
+      '',
+      0.001,
+      'correlation coefficient of the pm ra and pm dec errors (pmra_pmdec_corr)'
+    ),
+    col(
+      'ruwe',
+      'RUWE',
+      '',
+      0.001,
+      'renormalised unit weight error of the astrometric solution (ruwe)'
+    ),
+    col(
+      'params',
+      'astrometric parameters solved',
+      '',
+      1,
+      'astrometric_params_solved: 31 is a five-parameter solution, 95 a six-parameter one'
+    ),
+    col(
+      'nu_eff',
+      'effective wavenumber',
+      '',
+      0.0001,
+      'in inverse micrometres: nu_eff_used_in_astrometry, the colour a five-parameter solution used; empty for a six-parameter solution'
+    ),
+    col(
+      'pseudocolour',
+      'pseudocolour',
+      '',
+      0.0001,
+      'in inverse micrometres: pseudocolour, the colour a six-parameter solution estimated; empty for a five-parameter solution'
+    ),
+    col(
+      'ecl_lat',
+      'ecliptic latitude',
+      'deg',
+      0.005,
+      'ecliptic latitude (ecl_lat), which the parallax zero point depends on'
+    ),
   ],
 
   build(raw) {
@@ -306,6 +367,15 @@ export const GAIA_SOLAR = {
       rv_err: r.radial_velocity_error,
       g: r.phot_g_mean_mag,
       bp_rp: r.bp_rp === '' ? null : r.bp_rp,
+      plx_pmra_corr: r.parallax_pmra_corr,
+      plx_pmdec_corr: r.parallax_pmdec_corr,
+      pm_corr: r.pmra_pmdec_corr,
+      ruwe: r.ruwe,
+      params: r.astrometric_params_solved,
+      nu_eff:
+        r.nu_eff_used_in_astrometry === '' ? null : r.nu_eff_used_in_astrometry,
+      pseudocolour: r.pseudocolour === '' ? null : r.pseudocolour,
+      ecl_lat: r.ecl_lat,
     }));
     const near = readCsv(raw[1])[0].n;
     const far = readCsv(raw[2])[0].n;
@@ -313,7 +383,7 @@ export const GAIA_SOLAR = {
     const nearKept = table.filter(r => r.parallax > 10).length;
     const meta = {
       id: this.id,
-      version: '1.0.0',
+      version: '1.1.0',
       title:
         'The solar neighbourhood: 1,570 Gaia DR3 stars with radial velocities',
       object: {
@@ -326,7 +396,7 @@ export const GAIA_SOLAR = {
       origin: 'observed',
       credit: GAIA_CREDIT,
       license: GAIA_LICENSE,
-      retrieved: RETRIEVED,
+      retrieved: RETRIEVED_V2,
       columns: described(this.columns),
       masks: [],
       reductions: [
@@ -336,14 +406,15 @@ export const GAIA_SOLAR = {
         'No parallax zero-point correction is applied (Lindegren et al. 2021 give about -0.017 mas on average: 1.7 percent at 100 pc, 1.7 percent at 1 kpc to the distance).',
         'Positions are rounded to 0.006 degree in right ascension and 0.004 degree in declination (22 and 14 arcsec), parallaxes to 0.02 mas, proper motions to 0.01 mas/yr, radial velocities to 0.02 km/s: good for Galactic coordinates to 0.01 degree and for velocities to under 0.1 km/s, not for a cross-match.',
         "Galactic longitude and latitude are not stored: the galactic kernel computes them from the position, and its transformation is tested against the values Gaia's archive gives.",
-        "The Gaia source ids are left out; the query in the pack's manifest returns them.",
+        "The Gaia source ids are left out (a 64-bit id does not fit the table encoding); the query in the pack's manifest returns them, and the rows are in its order.",
+        'Version 1.1.0 (Prompt 233) adds eight columns to the same 1,570 rows, all stored to the step shown: the three error correlations, RUWE, the solution type, the effective wavenumber or pseudocolour (each empty for the other solution type), and the ecliptic latitude. Every earlier column is identical to version 1.0.0 (tests/fixtures/gaia-workflows/alignment.json holds its checksum). The parallax is still rounded to 0.02 mas: this pack is not used for a distance, because that rounding is as large as the parallax error of its far stratum.',
       ],
     };
     const manifestRest = {
       source: {
         archive: 'ESA Gaia archive, Gaia DR3',
         urls: this.raw.map(r => r.url),
-        queries: [QUERIES.solar, QUERIES.solarNear, QUERIES.solarFar],
+        queries: [QUERIES.solarV2, QUERIES.solarNear, QUERIES.solarFar],
         citations: GAIA_CITATIONS,
       },
       raw: this.raw,
@@ -449,11 +520,11 @@ export const GAIA_NGC2420 = {
   raw: [
     {
       ...pinned(
-        'gaia-dr3-ngc2420.csv',
-        tapUrl(QUERIES.cluster),
-        '62e9aa5b9d9d755c02a2c6a2a83a3f128d748bceb43d31d9199f842e0945f39c'
+        'gaia-dr3-ngc2420-astrometry.csv',
+        tapUrl(QUERIES.clusterV2),
+        '46587315f277a4c3a18a6ae306b07fbba8c58567225cdebaffcb92c184bcd270'
       ),
-      bytes: 149370,
+      bytes: 246701,
     },
     {
       ...pinned(
@@ -522,6 +593,62 @@ export const GAIA_NGC2420 = {
       0.001,
       'Gaia BP minus RP colour, not corrected for extinction'
     ),
+    col(
+      'plx_pmra_corr',
+      'parallax-pm ra correlation',
+      '',
+      0.001,
+      'correlation coefficient of the parallax and pm ra errors (parallax_pmra_corr)'
+    ),
+    col(
+      'plx_pmdec_corr',
+      'parallax-pm dec correlation',
+      '',
+      0.001,
+      'correlation coefficient of the parallax and pm dec errors (parallax_pmdec_corr)'
+    ),
+    col(
+      'pm_corr',
+      'pm ra-pm dec correlation',
+      '',
+      0.001,
+      'correlation coefficient of the pm ra and pm dec errors (pmra_pmdec_corr)'
+    ),
+    col(
+      'ruwe',
+      'RUWE',
+      '',
+      0.001,
+      'renormalised unit weight error of the astrometric solution (ruwe)'
+    ),
+    col(
+      'params',
+      'astrometric parameters solved',
+      '',
+      1,
+      'astrometric_params_solved: 31 is a five-parameter solution, 95 a six-parameter one'
+    ),
+    col(
+      'nu_eff',
+      'effective wavenumber',
+      '',
+      0.0001,
+      'in inverse micrometres: nu_eff_used_in_astrometry, the colour a five-parameter solution used; empty for a six-parameter solution'
+    ),
+    col(
+      'pseudocolour',
+      'pseudocolour',
+      '',
+      0.0001,
+      'in inverse micrometres: pseudocolour, the colour a six-parameter solution estimated; empty for a five-parameter solution'
+    ),
+    col(
+      'ecl_lat',
+      'ecliptic latitude',
+      'deg',
+      0.005,
+      'ecliptic latitude (ecl_lat), which the parallax zero point depends on'
+    ),
   ],
 
   build(raw) {
@@ -536,6 +663,15 @@ export const GAIA_NGC2420 = {
       pmdec_err: r.pmdec_error,
       g: r.phot_g_mean_mag,
       bp_rp: r.bp_rp === '' ? null : r.bp_rp,
+      plx_pmra_corr: r.parallax_pmra_corr,
+      plx_pmdec_corr: r.parallax_pmdec_corr,
+      pm_corr: r.pmra_pmdec_corr,
+      ruwe: r.ruwe,
+      params: r.astrometric_params_solved,
+      nu_eff:
+        r.nu_eff_used_in_astrometry === '' ? null : r.nu_eff_used_in_astrometry,
+      pseudocolour: r.pseudocolour === '' ? null : r.pseudocolour,
+      ecl_lat: r.ecl_lat,
     }));
     const cone = readCsv(raw[1])[0].n;
     const ruweOk = readCsv(raw[2])[0].n;
@@ -546,7 +682,7 @@ export const GAIA_NGC2420 = {
     const { series, record } = encodeTable(table, this.columns);
     const meta = {
       id: this.id,
-      version: '1.0.0',
+      version: '1.1.0',
       title: 'NGC 2420: Gaia DR3 astrometry',
       object: {
         name: 'NGC 2420',
@@ -560,7 +696,7 @@ export const GAIA_NGC2420 = {
       origin: 'observed',
       credit: GAIA_CREDIT,
       license: GAIA_LICENSE,
-      retrieved: RETRIEVED,
+      retrieved: RETRIEVED_V2,
       columns: described(this.columns),
       masks: [
         {
@@ -574,14 +710,15 @@ export const GAIA_NGC2420 = {
         "Stars fainter than G = 17.5 are left out: their proper-motion errors approach the cluster's own spread.",
         "Gaia is not blind in the cluster's core, as SDSS is: its crowding limit is far higher, so the core is in this table.",
         'Positions are rounded to 0.00001 degree (0.04 arcsec), parallaxes, proper motions, errors and magnitudes to 0.001.',
-        "The Gaia source ids are left out; the query in the pack's manifest returns them.",
+        "The Gaia source ids are left out (a 64-bit id does not fit the table encoding); the query in the pack's manifest returns them, and the rows are in its order.",
+        'Version 1.1.0 (Prompt 233) adds eight columns to the same 993 rows, all stored to the step shown: the three error correlations, RUWE, the solution type, the effective wavenumber or pseudocolour (each empty for the other solution type), and the ecliptic latitude. Every earlier column is identical to version 1.0.0 (tests/fixtures/gaia-workflows/alignment.json holds its checksum).',
       ],
     };
     const manifestRest = {
       source: {
         archive: 'ESA Gaia archive, Gaia DR3',
         urls: this.raw.map(r => r.url),
-        queries: [QUERIES.cluster, QUERIES.clusterCone, QUERIES.clusterRuwe],
+        queries: [QUERIES.clusterV2, QUERIES.clusterCone, QUERIES.clusterRuwe],
         citations: GAIA_CITATIONS,
       },
       raw: this.raw,
@@ -592,14 +729,14 @@ export const GAIA_NGC2420 = {
           columns: this.columns.map(({ id, step }) => ({ id, step })),
         },
         steps: [
-          'Query Gaia DR3 for every star within 0.2357023 degree of the adopted center with RUWE below 1.4, G below 17.5 and a five-parameter astrometric solution, ordered by source id.',
+          'Query Gaia DR3 for every star within 0.2357023 degree of the adopted center with RUWE below 1.4, G below 17.5 and a parallax and proper motion (978 five-parameter and 15 six-parameter solutions), ordered by source id. Version 1.1.0 re-queries the same rows with the correlations, RUWE, the solution type and the colour and latitude the zero point needs.',
           'Count, in two further queries, the stars in the same circle with and without the RUWE cut, for the mask.',
           `Encode as ${ENCODING}: each column a whole number of its step from an offset, int16 where the range fits.`,
         ],
         record: { rows: table.length, columns: record },
       },
       assumptions: [
-        "Parallaxes are not corrected for the zero point (about -0.017 mas on average, Lindegren et al. 2021); at the cluster's 0.3 mas that is a 6 percent effect on its distance, which a lesson that quotes a distance says.",
+        "Parallaxes are not corrected for the zero point (about -0.017 mas on average, Lindegren et al. 2021); at the cluster's 0.3 mas that is a 6 percent effect on its distance, which a lesson that quotes a distance says. The kernel's per-star zero point (js/kernels/galactic/zeropoint.js) needs the added columns; the stored parallax is still the catalogue's.",
       ],
       compatible: { widgets: [], investigations: [] },
       offline: 'idle',
@@ -789,7 +926,7 @@ export const MILKY_WAY_ROTATION = {
         basis:
           "A published scientific data table, reproduced in full with citation and credit as scientific practice and the CDS's own acknowledgement policy expect, for education; the same basis as the other credited tables (D-SKY-02 is the same class of decision). 151 numbers, none of them the authors' code or text.",
       },
-      retrieved: RETRIEVED,
+      retrieved: RETRIEVED_V2,
       columns: described(this.columns),
       masks: [],
       reductions: [
