@@ -162,3 +162,51 @@ Binney and Tremaine (2008), Galactic Dynamics, section 4.8.2 (the stated lag rel
 `js/kernels/galactic/motion.js`); Bovy (2017) as GALACTIC_DYNAMICS.md records it; Schonrich, Binney and Dehnen (2010)
 as D-GAIA-03 records it; Gaia DR3 (CC BY-NC 3.0 IGO, D-GAIA-01) and SDSS DR18 SEGUE (public domain) through the
 packs already in the tree. Nothing was fetched for this prompt.
+
+## Addendum, 2026-11-04: the T legs run
+
+**What changed.** The thresholds source the gate lacked is now in the tree: `tests/fixtures/kinematics/disk-halo-source.json`,
+transcribed by Carl from two papers (Venn et al. 2004, Table 3; Bensby et al. 2014, Section 2 and Table A.1) and checked
+here against the extracted text of both PDFs (the check and its two additions are in the file's `verification` block).
+Legs T1 to T3 are therefore no longer NOT RUN; their results are below. **The verdicts of methods O, D and S are
+unchanged and no bound, threshold, tolerance or the verdict function was touched**: `thresholds.json` is byte-identical
+(sha256 4abb971f...), so `results.json` still names it. The Part A verdicts above stay as they were written; this
+addendum supersedes only the paragraph "T ... C, NOT RUN" and the sentence "All four verdicts are C" is replaced by the
+verdict stated in the Results subsection of this addendum.
+
+**Retrieval facts** (2026-11-04, by Carl, from arXiv; the PDFs are not committed). Venn et al. 2004, AJ 128, 1177,
+arXiv:astro-ph/0406120v1, `https://arxiv.org/pdf/astro-ph/0406120`, sha256
+`4b2228f22d7a55e86cfd6db7efc53fa13fa5606a3f5f312347443285d11554c9`. Bensby, Feltzing and Oey 2014, A&A 562, A71,
+arXiv:1309.2631v2, `https://arxiv.org/pdf/1309.2631`, sha256
+`fcea82d7e24559d713157cfe3d0e77cf7b0d0840d08d455f3c25018605635d42`.
+
+**How the committed legs are evaluated (written and committed before any T leg was run).** The committed legs say
+"the cited rule", and the file cites two rules in two velocity frames, so the procedure below was fixed first. It adds
+no bound: the bounds are the committed ones (T1 maxAbs 1e-9; T2 halo recall at least 0.80 and purity at least 0.50 over
+200 realizations; T3 none).
+
+- *Rule V (Venn Table 3).* In the Galactic rest frame (the Sun at the paper's (9, 232, 7) km/s) a star goes to the
+  class with the largest product of three independent normal densities, centres and sigmas from Table 3, under a
+  uniform prior (the paper's stated prior). The paper's extreme-retrograde and extreme-Toomre flags are not used (the
+  file says the table is the criterion). Toomre coordinates: V and T = sqrt(U^2 + W^2).
+- *Rule B (Bensby Eq. A.1 to A.3).* In the LSR frame (the Sun at the paper's (11.10, 12.24, 7.25) km/s) each class
+  has the Gaussian of Eq. A.1 centred on (Uasym, Vasym, 0) with its sigmas, weighted by its fraction X; the ratios
+  TD/D and TD/H are those of Eq. A.3. Halo is TD/H < 1 as the file states it (the paper's 36 halo stars are a
+  subset of its TD/D > 2 stars; the count of stars where the two readings differ is reported); thick TD/D > 2 and not
+  halo; thin TD/D < 0.5; otherwise in between. A rule is applied only in its own frame.
+- *T1* (exact, set S): noise-free stars on the neighbourhood pack's geometry (all 1,570 rows) with velocities drawn
+  from the committed three-population truth, each star's constructed velocity recorded; observables are formed, the
+  space velocity recovered by the kernel's `spaceVelocity` and referred to each frame with the constructed Sun; the
+  leg passes if the Toomre coordinates (V, T) in both frames differ from the constructed ones by at most 1e-9 km/s.
+- *T2* (ensemble, set S): 200 realizations of the same sample with the pack's own astrometric and radial-velocity
+  errors, each star one of thin, thick or halo with the committed fractions; each rule applied in its own frame with
+  its paper's Sun; halo recall and purity pooled over the 200 realizations. The leg passes only if **every** cited
+  rule meets both bounds (a crossed bound is a failed leg; there is no choosing between the two rules after the
+  fact). The per-rule numbers are reported either way.
+- *T3* (authentic, set R, no bound in the contract): the same two rules on the real neighbourhood pack, the count of each
+  class and its Poisson (Garwood) interval at one sigma and at 95 percent; rule B is also run with D-GAIA-03's other
+  candidate for the Sun's V (the sample's Stromberg value) and neither is chosen. With no bound committed, the only
+  criterion the definition contains is that it runs and the counts account for every star, which is what a pass means
+  here.
+- *Verdict.* The committed function: C if any S leg fails or is NOT RUN, B if the S legs pass and an R leg fails,
+  A otherwise.
