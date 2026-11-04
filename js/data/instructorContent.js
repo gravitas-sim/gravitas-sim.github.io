@@ -23,6 +23,7 @@ import { INSTRUCTOR as VETTING } from './investigations/vetting-sequence.js';
 import { INSTRUCTOR as IMAGING } from './investigations/imaging-sequence.js';
 import { INSTRUCTOR as JOINT } from './investigations/joint-sequence.js';
 import { INSTRUCTOR as OCCURRENCE } from './investigations/occurrence-sequence.js';
+import { INSTRUCTOR as GAIA } from './investigations/gaia-sequence.js';
 import { INSTRUCTOR as VARIABLES_II } from './investigations/variables-ii-sequence.js';
 import { INSTRUCTOR as STELLAR } from './investigations/stellar-sequence.js';
 import { INSTRUCTOR as EXOPLANET } from './investigations/exoplanet-sequence.js';
@@ -50,6 +51,7 @@ export const INSTRUCTOR_CONTENT = {
   ...IMAGING.content,
   ...JOINT.content,
   ...OCCURRENCE.content,
+  ...GAIA.content,
   ...VARIABLES_II.content,
   ...STELLAR.content,
   ...EXOPLANET.content,
@@ -5080,7 +5082,7 @@ export const INSTRUCTOR_CONTENT = {
       },
       {
         heading: 'What a parallax distance leaves out',
-        body: '1 over the mean parallax is 2.6 kpc; the zero-point offset of about 0.02 mas (about 5 percent) is not corrected and nothing else was used to check it. The investigation states the value and nothing more.',
+        body: '1 over the instrument’s mean parallax is an uncorrected reading, not the cluster’s distance. With a zero point per star the measured distance is 2.324 kpc, with a statistical interval of 2.316 to 2.332 kpc and no systematic floor; it is not validated against a published catalog distance (leg E1 is NOT RUN) and lies below every distance in the validation’s table of sources.',
       },
     ],
     features: [
@@ -5112,7 +5114,7 @@ export const INSTRUCTOR_CONTENT = {
       {
         claim: 'A distance from a parallax is exact.',
         response:
-          'What the distance leaves out. The zero-point alone is about 5 percent here.',
+          'What the distance leaves out. The zero point moves it from 2.555 to 2.324 kpc here, and the corrected value has no systematic floor.',
       },
       {
         claim: 'A smaller list of members is a cleaner one.',
@@ -5121,7 +5123,7 @@ export const INSTRUCTOR_CONTENT = {
       },
     ],
     teachingNotes: [
-      'OPEN ITEM (Carl): the members’ mean parallax of 0.385 mas (2.6 kpc) has not been compared with a literature distance for NGC 2420, and the package applies no zero-point correction. The investigation claims only what the instrument shows.',
+      'OPEN ITEM (Carl): the measured distance of 2.324 kpc has not been validated against a published catalog distance for NGC 2420: leg E1 of GAIA_WORKFLOWS.md is NOT RUN until the CDS table of Hunt and Reffert 2023 can be fetched. The instrument’s 1 over parallax reading (0.385 mas, 2.6 kpc) has no zero point and is stated as an uncorrected reading.',
       'The core measurement accepts the proper motion within 0.05 mas/yr of (−1.227, −2.041), the member count 506 within 8, 497 and 509 at the two thresholds within 6, and the mean parallax within 0.02.',
       'The fit starts from fixed values (cluster at (−1, −2) mas/yr and 0.3 mas, field broad) so a result is reproducible; the number of uncertain stars is 4 with parallax and 8 without.',
       'Gaia data are CC BY-NC 3.0 IGO: not for commercial use (D-GAIA-01).',

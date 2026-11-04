@@ -318,7 +318,8 @@ describe('the service worker manifest is current', () => {
     // 58 with How Many Earths? (Prompt 229, D-R10-229-06): lessons are never precached.
     // 57 with Why We Cannot See Earth From Here and Architectures (Prompt 230, D-R10-230-05): lessons are never precached.
     // 62 with the four exoplanet closeout investigations (Prompt 231, D-R10-231-01): lessons are never precached.
-    const NEVER_PRECACHED_LESSONS = 62;
+    // 64 with the two Gaia investigations (Prompt 233, D-R10-233-08): lessons are never precached.
+    const NEVER_PRECACHED_LESSONS = 64;
     expect(bodies.length + NEVER_PRECACHED_LESSONS).toBe(MANIFEST.length);
   });
 

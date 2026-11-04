@@ -58,6 +58,7 @@ import { DEPTH as VETTING_DEPTH } from '../data/investigations/vetting-sequence.
 import { DEPTH as IMAGING_DEPTH } from '../data/investigations/imaging-sequence.js';
 import { DEPTH as JOINT_DEPTH } from '../data/investigations/joint-sequence.js';
 import { DEPTH as OCCURRENCE_DEPTH } from '../data/investigations/occurrence-sequence.js';
+import { DEPTH as GAIA_DEPTH } from '../data/investigations/gaia-sequence.js';
 import { DEPTH as VARIABLES_II_DEPTH } from '../data/investigations/variables-ii-sequence.js';
 import { DEPTH as STELLAR_DEPTH } from '../data/investigations/stellar-sequence.js';
 import { DEPTH as EXOPLANET_DEPTH } from '../data/investigations/exoplanet-sequence.js';
@@ -121,6 +122,9 @@ export const DEEPER = Object.freeze({
   ),
   ...Object.fromEntries(
     Object.entries(OCCURRENCE_DEPTH).map(([id, d]) => [id, d.steps])
+  ),
+  ...Object.fromEntries(
+    Object.entries(GAIA_DEPTH).map(([id, d]) => [id, d.steps])
   ),
   ...Object.fromEntries(
     Object.entries(VARIABLES_II_DEPTH).map(([id, d]) => [id, d.steps])

@@ -23,6 +23,7 @@ import { INSTRUCTOR as VETTING } from './investigations/vetting-sequence.js';
 import { INSTRUCTOR as IMAGING } from './investigations/imaging-sequence.js';
 import { INSTRUCTOR as JOINT } from './investigations/joint-sequence.js';
 import { INSTRUCTOR as OCCURRENCE } from './investigations/occurrence-sequence.js';
+import { INSTRUCTOR as GAIA } from './investigations/gaia-sequence.js';
 import { INSTRUCTOR as VARIABLES_II } from './investigations/variables-ii-sequence.js';
 import { INSTRUCTOR as STELLAR } from './investigations/stellar-sequence.js';
 import { INSTRUCTOR as EXOPLANET } from './investigations/exoplanet-sequence.js';
@@ -53,6 +54,7 @@ export default {
     ...IMAGING.flow,
     ...JOINT.flow,
     ...OCCURRENCE.flow,
+    ...GAIA.flow,
     ...VARIABLES_II.flow,
     ...STELLAR.flow,
     ...EXOPLANET.flow,

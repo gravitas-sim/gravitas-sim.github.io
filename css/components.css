@@ -4781,8 +4781,13 @@
     border-top: 1px solid var(--border-subtle);
   }
   .inv-tool-controls .inv-ecc-row > span:first-child {
-    flex: none;
+    /* A long label (Spanish, mostly) wraps before it squeezes the slider
+       below a pressable width. */
+    flex: 0 1 auto;
     min-width: 10.5em;
+  }
+  .inv-tool-controls .inv-ecc-row input[type='range'] {
+    min-width: 5rem;
   }
   .inv-tool-controls[hidden],
   .inv-tool-actions[hidden],

@@ -1028,7 +1028,7 @@
       "kind": "feature",
       "purpose": "Gaia parallax workflows: distance by likelihood, a stated prior and zero point, velocity, the cuts, packs 1.1.0, validation and NGC 2420's NOT RUN leg (Prompt 233).",
       "owner": 233,
-      "student": false
+      "student": true
     },
     {
       "file": "TTV.md",

@@ -124,9 +124,9 @@ export const EN_GALACTIC = {
   'galW.cm.value.pm': '{a}, {d} mas/yr (right ascension, declination)',
   'galW.cm.row.width': 'Cluster’s spread in proper motion (before errors)',
   'galW.cm.row.parallax': 'Mean parallax of the members',
-  'galW.cm.row.distance': 'Distance from that parallax',
+  'galW.cm.row.distance': 'Reading from that parallax',
   'galW.cm.value.distance':
-    '{d} kpc, as 1 ÷ parallax, with no zero-point correction (about 0.02 mas) and no check against another method',
+    '{d} kpc, as 1 ÷ parallax, uncorrected: no zero point and no check against another method. It is not the cluster’s distance (the astrometry panel measures that)',
   'galW.cm.row.how': 'The fit',
   'galW.cm.value.how':
     'A narrow Gaussian for the cluster and a broad one for the field, fitted together by expectation-maximization from fixed starting values; each star’s own errors widen both.',

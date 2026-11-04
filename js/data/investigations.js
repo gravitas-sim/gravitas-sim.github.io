@@ -103,6 +103,7 @@ import VETTING_LESSONS from './investigations/vetting-sequence.js';
 import IMAGING_LESSONS from './investigations/imaging-sequence.js';
 import JOINT_LESSONS from './investigations/joint-sequence.js';
 import OCCURRENCE_LESSONS from './investigations/occurrence-sequence.js';
+import GAIA_LESSONS from './investigations/gaia-sequence.js';
 import VARIABLES_II_LESSONS from './investigations/variables-ii-sequence.js';
 import STELLAR_LESSONS from './investigations/stellar-sequence.js';
 import EXOPLANET_LESSONS from './investigations/exoplanet-sequence.js';
@@ -234,6 +235,7 @@ export const INVESTIGATIONS = [
   ...IMAGING_LESSONS,
   ...JOINT_LESSONS,
   ...OCCURRENCE_LESSONS,
+  ...GAIA_LESSONS,
   ...VARIABLES_II_LESSONS,
   ...TTV_LESSONS,
   ...SURVEY_LESSONS,

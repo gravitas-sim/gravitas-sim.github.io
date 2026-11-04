@@ -118,6 +118,12 @@ export default {
     'What the data say before a model is put on them, and how far a changed assumption (the Sun’s V, the weighting, the halo) moves the answer.',
     'Real measurements with real scatter; the models are simple and stated, and a membership is a probability, not a label.',
   ],
+  gaia: [
+    'Either the likelihood of every distance for one parallax and its error (distance across, relative likelihood up), or NGC 2420’s stars as Gaia measured them: a color and magnitude diagram, or the members’ velocities in km/s.',
+    'The likelihood’s maximum is 1 ÷ the corrected parallax and its width is the error: a wide curve open on the far side means the parallax gives a lower limit, not a distance. A cut removes the stars that fail it, and the diagram and the distance change with what is left.',
+    'The distance with its interval and what the prior or the zero point does to it; how many stars each cut removes, and how the colors and magnitudes that remain, and the cluster’s distance, move.',
+    'A cut changes which stars are counted, and with them any prior; it is not a model of Gaia’s real selection. The interval is statistics only: no systematic floor, and the cluster’s distance is not validated against a published catalogue.',
+  ],
   interiors: [
     'The inside of a star from center to surface: density, pressure, temperature and the mass inside each radius; the mass and radius of white dwarfs; or luminosity, radius and lifetime against mass for model stars.',
     'How the profile, the central values, the white-dwarf mass and the fitted exponents change as the polytropic index, the mass, the radius, the central density, the composition and the physics of the scaling change.',
