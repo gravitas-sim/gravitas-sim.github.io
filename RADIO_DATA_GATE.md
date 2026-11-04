@@ -79,7 +79,7 @@ Carl.
    period and dispersion-measure columns with their units and a reference per row. A candidate that lacks a fact is
    recorded with the lack. Size, convenience and consistency with earlier rows decide nothing.
 9. **Retrieval.** The session does not fetch. Carl retrieves the pages and evidence files into
-   `/Users/carl/Desktop/Gravitas/scratch-data/gate239/` (outside every repository); the record states that, with the
+   a scratch directory outside every repository; the record states that, with the
    retrieval date from his `retrieved.tsv` and each file's SHA-256. Only short quotations and hashes enter the
    repository, never the files. A page changed since retrieval is not re-read from memory.
 10. **Fallback is stated per dataset before the verdict**, so a C is never improvised (section 5).
@@ -148,7 +148,7 @@ for reading only; quotations are from the saved HTML or JSON. CDS and VizieR wer
 attempt), so no CDS page exists for HI4PI or LAB; three further requests returned an error or a 404 and are listed
 at the end of the table. `h2a-tangent/ads-anything.txt` is the HI4PI arXiv page again (same hash), not a source.
 
-| File (under `scratch-data/gate239/`) | URL as requested | UTC | HTTP | SHA-256 |
+| File (under the scratch directory) | URL as requested | UTC | HTTP | SHA-256 |
 | --- | --- | --- | --- | --- |
 | `p1a-epn/epn-home.html` | http://www.epta.eu.org/epndb/ | 2026-11-04T00:58:30Z | 200 | `a5ce16c990e87f38bc6bbd523747310abac032122dffe04cb341494cee55144f` |
 | `p2a-csiro/dap-atnf.html` | https://data.csiro.au/domain/atnf | 2026-11-04T00:58:33Z | 200 | `bccac225f87233bfec05f604f57b6f466e309abb228a3fb3e7f6821da472994c` |
@@ -351,7 +351,7 @@ named pack decision.
 
 ## 12. What would turn a C that is only a lack of evidence into an A or B
 
-Save under `scratch-data/gate239/<id>/` as before (curl with the UTC time recorded, or the browser's saved page).
+Save under the same scratch directory, one folder per source id, as before (curl with the UTC time recorded, or the browser's saved page).
 Rule 2 still applies: a read layer that restricts redistribution keeps the source at C whatever the others say.
 
 1. **LAB (row 03)**, the likeliest HI source to pass: the CDS VIII/76 page and ReadMe and the VizieR licence page from
