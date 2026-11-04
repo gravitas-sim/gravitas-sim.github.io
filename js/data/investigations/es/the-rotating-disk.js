@@ -13,7 +13,7 @@ export default {
   steps: [
     {
       title: 'La rotación de la Galaxia, en estrellas cercanas',
-      body: 'El Sol y las estrellas cercanas giran alrededor del centro galáctico, pero no a una rapidez común: las estrellas más próximas al centro dan la vuelta más deprisa. Vistas desde el Sol, eso hace que las estrellas cercanas se desplacen por el cielo según un patrón que depende de la <strong>longitud galáctica</strong>. Dos números, las <strong>constantes de Oort A y B</strong>, lo describen.\n\nLa imagen muestra el movimiento de 1.570 estrellas de Gaia a lo largo del plano galáctico según la longitud, en km/s por kiloparsec, agrupado en 12 intervalos, sin el movimiento propio del Sol. La curva es el ajuste. Los valores están en la lista.',
+      body: 'El Sol y las estrellas cercanas giran alrededor del centro galáctico, pero no a una rapidez común: las estrellas más próximas al centro dan la vuelta más deprisa. Vistas desde el Sol, eso hace que las estrellas cercanas se desplacen por el cielo según un patrón que depende de la <strong>longitud galáctica</strong>. Dos números, las <strong>constantes de Oort A y B</strong>, lo describen.\n\nLa imagen muestra el movimiento de 1.570 estrellas de Gaia a lo largo del plano galáctico según la longitud, en km/s por kiloparsec, agrupado en 12 intervalos, sin el movimiento propio del Sol. Las estrellas fuera del plano se corrigen con cos&nbsp;b, la distancia en el plano dividida entre la distancia. La curva es el ajuste. Los valores están en la lista.',
     },
     {
       title: '¿Qué forma?',
@@ -120,7 +120,7 @@ export default {
     },
     {
       title: 'Lo que has deducido',
-      body: 'Los movimientos propios de las estrellas cercanas hacen una onda doble en la longitud, cuya altura y centro son las constantes de Oort: A cerca de 13,5 y B cerca de −13,7&nbsp;km/s/kpc, así que la rapidez circular del Sol es cerca de 226&nbsp;km/s. La curva de rotación medida se mantiene plana hasta 25&nbsp;kpc; un bulbo y un disco, acotados en masa, la ajustan mal (χ² reducido de 50) y añadir un halo la ajusta diez veces mejor (4,8). Eso muestra que un halo basta dentro de un modelo simple con supuestos declarados: la cota del disco, la distancia y la rapidez del Sol.',
+      body: 'Los movimientos propios de las estrellas cercanas hacen una onda doble en la longitud, cuya altura y centro son las constantes de Oort: A cerca de 14,5 y B cerca de −15,2&nbsp;km/s/kpc, así que la rapidez circular del Sol es cerca de 247&nbsp;km/s. La curva de rotación medida se mantiene plana hasta 25&nbsp;kpc; un bulbo y un disco, acotados en masa, la ajustan mal (χ² reducido de 50) y añadir un halo la ajusta diez veces mejor (4,8). Eso muestra que un halo basta dentro de un modelo simple con supuestos declarados: la cota del disco, la distancia y la rapidez del Sol.',
     },
   ],
 };

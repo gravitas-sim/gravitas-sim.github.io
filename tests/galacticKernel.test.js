@@ -1,5 +1,6 @@
 // The galactic kernel (Roadmap II Prompt 92): transformation fixtures against
 // published values, synthetic fields with known answers, and the three packs.
+import { readFileSync } from 'node:fs';
 import {
   A_G,
   K_PM,
@@ -290,6 +291,63 @@ describe('space velocity, solar motion and the Oort constants', () => {
     expect(() => fitOortConstants(stars.slice(0, 3))).toThrow(/too few/);
   });
 
+  it('recovers A and B of a disk that fills the sky: the velocity along l is d cos b (A cos 2l + B), and the in-plane form is low', () => {
+    // Prompt 235 found fitOortConstants had left out cos b: on stars off the plane the planar fit
+    // returned the constants scaled down by about the sample's mean cos b. The truth here is built
+    // from the model's definition, independently of the fit: stars isotropic on the sky (sin b
+    // uniform, mean cos b = pi/4), each with the in-plane velocity d cos b (A cos 2l + B) along l
+    // plus the Sun's reflex.
+    const A = 15.3;
+    const B = -11.9;
+    const Sun = { U: 10, V: 12 };
+    const r = rng(235);
+    const stars = [];
+    let sumCosB = 0;
+    for (let i = 0; i < 600; i++) {
+      const l = r() * 360;
+      const b = Math.asin(2 * r() - 1) / DEG;
+      const d = 0.1 + r() * 0.9;
+      const cb = Math.cos(b * DEG);
+      sumCosB += cb;
+      const vl =
+        d * cb * (A * Math.cos(2 * l * DEG) + B) +
+        (Sun.U * Math.sin(l * DEG) - Sun.V * Math.cos(l * DEG));
+      const pmL = vl / (K_PM * d);
+      const { ra, dec } = galacticToIcrs(l, b);
+      const gl = [-Math.sin(l * DEG), Math.cos(l * DEG), 0];
+      const ve = [0, 1, 2].map(
+        k => A_G[0][k] * gl[0] * pmL + A_G[1][k] * gl[1] * pmL
+      );
+      const east = [-Math.sin(ra * DEG), Math.cos(ra * DEG), 0];
+      const north = [
+        -Math.cos(ra * DEG) * Math.sin(dec * DEG),
+        -Math.sin(ra * DEG) * Math.sin(dec * DEG),
+        Math.cos(dec * DEG),
+      ];
+      stars.push({
+        ra,
+        dec,
+        parallax: 1 / d,
+        pmRa: ve[0] * east[0] + ve[1] * east[1],
+        pmDec: ve[0] * north[0] + ve[1] * north[1] + ve[2] * north[2],
+      });
+    }
+    const meanCosB = sumCosB / stars.length;
+    expect(Math.abs(meanCosB - Math.PI / 4)).toBeLessThan(0.02);
+    const o = fitOortConstants(stars, { weight: 'none' });
+    // Absolute values: the constants themselves, not a ratio to the other form.
+    expect(Math.abs(o.A - A)).toBeLessThan(1e-6);
+    expect(Math.abs(o.B - B)).toBeLessThan(1e-6);
+    expect(Math.abs(o.solarU - Sun.U)).toBeLessThan(1e-6);
+    expect(Math.abs(o.solarV - Sun.V)).toBeLessThan(1e-6);
+    // The in-plane form is low in magnitude by about the mean cos b, 15 to 20 percent here.
+    const p = fitOortConstants(stars, { weight: 'none', planar: true });
+    expect(Math.abs(p.A)).toBeLessThan(0.9 * A);
+    expect(Math.abs(p.B)).toBeLessThan(0.9 * Math.abs(B));
+    expect(Math.abs(p.A - meanCosB * A)).toBeLessThan(1.5);
+    expect(Math.abs(p.B - meanCosB * B)).toBeLessThan(1.5);
+  });
+
   it('extrapolates the drift line to the LSR: an exact line returns its intercept and slope', () => {
     // Groups with mean V = -(Vsun) - sigmaU^2/80.
     const groups = [400, 900, 1600, 2500].map(s2 => {
@@ -425,16 +483,65 @@ describe('the packs', () => {
     ).toBeCloseTo(m.V - lsrCorrection(m.sigma.U), 9);
   });
 
-  it('give the Oort constants their signs and sizes, A = 13.5 and B = -13.7 km/s/kpc, each within 3 sigma of the literature', () => {
+  it('give the Oort constants their signs and sizes: A = 14.5 +/- 2.6 and B = -15.2 +/- 1.8 km/s/kpc with cos b, B 1.8 sigma and A 0.3 sigma from the literature', () => {
     const o = fitOortConstants(stars);
     expect(o.n).toBe(solar.n);
     expect(o.A).toBeGreaterThan(8);
     expect(o.B).toBeLessThan(-8);
-    // Bovy 2017 (ApJ 833, 31): A = 15.3, B = -11.9 km/s/kpc.
-    expect(Math.abs(o.A - 15.3)).toBeLessThan(3 * o.errA);
+    // Bovy 2017 (ApJ 833, 31): A = 15.3, B = -11.9 km/s/kpc. Within 3 sigma, not within 1: the fit
+    // does not recover B inside its interval at 1 kpc (KINEMATICS_GATE.md, asymmetric drift).
+    expect(Math.abs(o.A - 15.3)).toBeLessThan(0.5 * o.errA);
+    expect(Math.abs(o.B - -11.9)).toBeGreaterThan(1.5 * o.errB);
     expect(Math.abs(o.B - -11.9)).toBeLessThan(3 * o.errB);
     expect(o.omega).toBeGreaterThan(20);
     expect(o.omega).toBeLessThan(35);
+  });
+
+  it('match the independent oracle (numpy lstsq on astropy proper motions) in absolute value, the cos b form and the old in-plane form both', () => {
+    // tests/fixtures/oort-cosb/oracle-results.json, from tools/oort-oracle/oracle.py (Python 3.9.22,
+    // numpy 1.26.4, astropy 6.0.1), which shares only the IAU constant with the kernel. The
+    // frame matrix differs by about 1e-7, so the bound is 1e-5 km/s/kpc, absolute.
+    const oracle = JSON.parse(
+      readFileSync(
+        new URL('./fixtures/oort-cosb/oracle-results.json', import.meta.url),
+        'utf8'
+      )
+    );
+    const near = (got, want) => expect(Math.abs(got - want)).toBeLessThan(1e-5);
+    for (const [weight, key] of [
+      ['distance', 'distance'],
+      ['none', 'none'],
+    ])
+      for (const [planar, form] of [
+        [false, 'cosb'],
+        [true, 'planar'],
+      ]) {
+        const o = fitOortConstants(stars, { weight, planar });
+        const w = oracle[key][form];
+        expect(o.n).toBe(w.n);
+        near(o.A, w.A);
+        near(o.B, w.B);
+        near(o.solarU, w.solarU);
+        near(o.solarV, w.solarV);
+        near(o.errA, w.errA);
+        near(o.errB, w.errB);
+      }
+    // The numbers the lesson quotes, as absolute values: A 14.47 +/- 2.59, B -15.24 +/- 1.81
+    // (the gate's corrected real sample), and the in-plane form's 13.52 and -13.72, 7 and 10
+    // percent low in magnitude on these stars.
+    const c = fitOortConstants(stars);
+    expect(Math.abs(c.A - 14.47)).toBeLessThan(0.005);
+    expect(Math.abs(c.B - -15.24)).toBeLessThan(0.005);
+    expect(Math.abs(c.errA - 2.59)).toBeLessThan(0.005);
+    expect(Math.abs(c.errB - 1.81)).toBeLessThan(0.005);
+    expect(Math.abs(8.3 * c.omega - 246.6)).toBeLessThan(0.1);
+    const p = fitOortConstants(stars, { planar: true });
+    expect(Math.abs(p.A - 13.52)).toBeLessThan(0.005);
+    expect(Math.abs(p.B - -13.72)).toBeLessThan(0.005);
+    expect(p.A / c.A).toBeGreaterThan(0.92);
+    expect(p.A / c.A).toBeLessThan(0.95);
+    expect(p.B / c.B).toBeGreaterThan(0.88);
+    expect(p.B / c.B).toBeLessThan(0.92);
   });
 
   it('find NGC 2420 as a proper-motion and parallax clump of several hundred members', () => {

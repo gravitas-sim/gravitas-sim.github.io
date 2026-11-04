@@ -183,19 +183,28 @@ export const skyOf = (l, b) => hammerAitoff(l, b);
 export function oortFacts(stars, weight = 'distance') {
   const fit = fitOortConstants(stars, { weight });
   // Binned in longitude, weighted by 1/parallax^2 as the fit is (when it is);
-  // the Sun's own reflex is taken out with the fitted U and V, so the points
-  // show A cos 2l + B alone.
+  // the Sun's own reflex is taken out with the fitted U and V and the factor
+  // cos b divided out (its weight times cos^2 b, which is what the fit gives
+  // it), so the points show A cos 2l + B alone.
   const rows = Array.from({ length: 12 }, () => []);
   for (const s of stars) {
     if (!(s.parallax > 0)) continue;
-    const { l, pmL } = propermotionToGalactic(s.ra, s.dec, s.pmRa, s.pmDec);
+    const { l, b, pmL } = propermotionToGalactic(
+      s.ra,
+      s.dec,
+      s.pmRa,
+      s.pmDec
+    );
+    const cb = Math.cos((b * Math.PI) / 180);
+    if (!(cb > 1e-6)) continue;
     const L = (l * Math.PI) / 180;
     const y =
-      K_PM * pmL -
-      s.parallax * (fit.solarU * Math.sin(L) - fit.solarV * Math.cos(L));
+      (K_PM * pmL -
+        s.parallax * (fit.solarU * Math.sin(L) - fit.solarV * Math.cos(L))) /
+      cb;
     rows[Math.min(11, Math.floor(l / 30))].push({
       y,
-      w: weight === 'none' ? 1 : 1 / (s.parallax * s.parallax),
+      w: (weight === 'none' ? 1 : 1 / (s.parallax * s.parallax)) * cb * cb,
     });
   }
   const points = rows.map((b, k) => {

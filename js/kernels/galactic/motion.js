@@ -12,10 +12,16 @@
 //   lsrCorrection() estimates from the Stromberg relation.
 // - Velocity dispersions with their uncertainties.
 // - The Oort constants A and B from proper motions alone: to first order in
-//   distance a star at Galactic longitude l has
-//       4.74047 mu_l* [km/s/kpc] = A cos(2l) + B + (U sin l - V cos l) parallax
+//   distance a star at Galactic longitude l and latitude b has
+//       4.74047 mu_l* [km/s/kpc]
+//           = cos(b) (A cos(2l) + B) + (U sin l - V cos l) parallax
 //   (parallax in mas = 1/distance in kpc; the last term is the reflex of the
-//   Sun's own motion), a linear fit in four unknowns.
+//   Sun's own motion), a linear fit in four unknowns. The Oort formula holds
+//   in the plane: the velocity along l of a rotating disk is
+//   d cos(b) (A cos 2l + B), d cos b being the distance within the plane, so
+//   a sample that covers the sky needs the factor cos b. Before Prompt 235's
+//   correction this fit omitted it and its A and B were low in magnitude by
+//   the sample's mean cos b, about 15 percent for the whole sky.
 //
 // Pure: no DOM, no clock. Estimates carry errors from the scatter about the fit
 // (an unweighted fit has no other honest source) and say so.
@@ -208,17 +214,20 @@ function invert(a) {
  * The Oort constants from proper motions in Galactic longitude.
  *
  * Each star is a row of the linear model
- *   y = 4.74047 mu_l*  =  A cos 2l + B + c1 parallax sin l - c2 parallax cos l
+ *   y = 4.74047 mu_l*
+ *     = cos b (A cos 2l + B) + c1 parallax sin l - c2 parallax cos l
  * with y in km/s/kpc; c1 is the Sun's U and c2 its V (km/s) relative to the
- * stars fitted. `weight: 'distance'` weights each star by 1/parallax^2 times
+ * stars fitted. The factor cos b is the in-plane distance over the distance;
+ * `planar: true` drops it and returns the old in-plane form, which is low by
+ * about the sample's mean cos b and is kept to show that difference. `weight: 'distance'` weights each star by 1/parallax^2 times
  * 1, since a velocity scatter of sigma km/s is a scatter of sigma*parallax in y:
  * nearer stars are noisier in y, and an unweighted fit is dominated by them.
  *
  * @param {Array<{ra: number, dec: number, parallax: number, pmRa: number,
  *   pmDec: number}>} stars
  * @param {{maxDistance?: number, minParallaxOverError?: number,
- *   weight?: 'none'|'distance'}} [opts] - maxDistance in kpc; the weight
- *   defaults to 'distance', for the reason above
+ *   weight?: 'none'|'distance', planar?: boolean}} [opts] - maxDistance in
+ *   kpc; the weight defaults to 'distance', for the reason above
  * @returns {{n: number, A: number, B: number, errA: number, errB: number,
  *   solarU: number, solarV: number, omega: number, omegaErr: number,
  *   rms: number, errors: string}}
@@ -230,14 +239,20 @@ export function fitOortConstants(stars, opts = {}) {
     if (!(s.parallax > 0)) continue;
     if (opts.maxDistance !== undefined && 1 / s.parallax > opts.maxDistance)
       continue;
-    const { l, pmL } = propermotionToGalactic(s.ra, s.dec, s.pmRa, s.pmDec);
+    const { l, b, pmL } = propermotionToGalactic(
+      s.ra,
+      s.dec,
+      s.pmRa,
+      s.pmDec
+    );
     const y = K_PM * pmL;
     if (!Number.isFinite(y)) continue;
     const L = l * DEG;
+    const cb = opts.planar ? 1 : Math.cos(b * DEG);
     rows.push({
       x: [
-        Math.cos(2 * L),
-        1,
+        cb * Math.cos(2 * L),
+        cb,
         s.parallax * Math.sin(L),
         -s.parallax * Math.cos(L),
       ],

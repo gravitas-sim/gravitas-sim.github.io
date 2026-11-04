@@ -76,9 +76,9 @@ export default {
     },
     'the-rotating-disk': {
       'measure-a-and-b':
-        'With the weighted fit A is 13.5 ± 2.4 and B is −13.7 ± 1.7 km/s/kpc; each accepted within 1.',
+        'With the weighted fit A is 14.5 ± 2.6 and B is −15.2 ± 1.8 km/s/kpc; each accepted within 1.',
       'speed-at-the-sun':
-        '(A − B) × 8.3 kpc = 226 km/s, accepted within 5; the uncertainty is about 24 km/s, so 244 km/s from the curve agrees.',
+        '(A − B) × 8.3 kpc = 247 km/s, accepted within 5; the uncertainty is about 26 km/s, so 244 km/s from the curve agrees.',
       'fit-stars-only':
         'Stars only, disk bounded at 8 × 10^10: reduced chi-square about 50 (within 5) and the disk at its bound, 8.0 (within 0.3).',
       'fit-with-a-halo':
