@@ -1,0 +1,275 @@
+{
+  "format": "gravitas.dynamics-thresholds/1",
+  "prompt": "Roadmap III, Prompt 237: dynamical timescales and bounded dynamics with independent reference runs (tranche T4 by D-R10-232-01)",
+  "document": "DYNAMICS.md (\"Validation contract\") and DYNAMICS_REFERENCE_GATE.md",
+  "committed": "before any module under js/kernels/dynamics/ existed, before the independent reference code was written or run, and before the engine was run on any cluster of this prompt. The relations, the definitions, the ensembles, the measurement, the tolerances and the verdict rule are written out so that the oracle (numpy, scipy: no Gravitas code) builds its own clusters and orbits and the engine's runs are measured by the same written specification. No result of either side had been read, and no bound was chosen against one.",
+  "rule": "A crossed bound is a failed check, recorded in failed-legs.json and left failing; only Carl resets one. A leg that cannot be measured, or whose data was never supplied, is NOT RUN and says why. An amendment is recorded with its reason and never changes a bound already judged; the alternative a result suggests is written down as a question for Carl, never applied.",
+  "seeds": {
+    "oracle": 237,
+    "clusterS": "seeds 1 to 16 of numpy's PCG64 (default_rng), the oracle's initial conditions",
+    "clusterD": "seeds 101 to 116",
+    "coverage": "dyn-237-cov",
+    "refusal": "dyn-237-ref"
+  },
+  "supply": {
+    "note": "Nothing public is needed to build the kernel or to run the gate. Two things need Carl: (1) leg B1, a published table of relaxation times for named clusters, which only Carl can fetch (agents never fetch data and never type a published number from memory): without it B1 is NOT RUN; (2) optionally, a third-party N-body code's run of the same cluster (REBOUND with IAS15, or NBODY6) as a second reference, which would strengthen R-legs without changing any bound here. The coefficients of the cited relations in the kernel (CITED in js/kernels/dynamics/constants.js) are written from the cited texts by the author and are flagged for Carl to verify against the pages.",
+    "B1": {
+      "what": "Harris, W. E. (1996, 2010 edition), the Milky Way globular cluster catalogue: for each of at least 10 named clusters the columns that give the cluster's luminosity or mass, its half-light radius (angular, with the distance), and the catalogue's own central and half-mass relaxation times (log t_rc, log t_rh), with the catalogue's stated assumptions about the mass-to-light ratio. Fetched by Carl with its terms recorded; stored at tests/fixtures/dynamics/published-relaxation-times.json in the shape the validator's loader names."
+    }
+  },
+  "constants": {
+    "GM_sun_m3s2": 1.3271244e20,
+    "AU_m": 149597870700,
+    "pc_m": "648000 / pi * AU_m",
+    "Julian_year_s": 31557600,
+    "km_m": 1000,
+    "note": "IAU 2015 Resolution B3 nominal GM of the Sun, the astronomical unit as defined by the IAU 2012 Resolution B2, the parsec as 648000/pi astronomical units, the Julian year. G is never typed: the kernel and the oracle work in GM_sun."
+  },
+  "scope": {
+    "kernel": "the crossing time and the dynamical time; the half-mass relaxation time with a stated Coulomb logarithm; the local relaxation time; the mass-segregation and evaporation time scales as cited relations; Chandrasekhar dynamical friction in a Maxwellian background and the sinking time in a singular isothermal sphere with a stated Coulomb logarithm; the collisionless-versus-collisional criterion; the virial theorem's mass estimator for a pressure-supported cluster with its interval from the statistics kernel (Prompt 154) and its refusal.",
+    "reference": "planar clusters (two coordinates, the Newtonian 1/r^2 force law with the engine's softened inner force) because the engine is planar; a three-dimensional reference could not be compared with a planar engine and is not claimed. The validation contract of section 7.5 item 8 is met by the independent implementation tier (scipy DOP853 on the problem statement below), not by a published run; a published N-body table is an optional second reference (supply)."
+  },
+  "relations": {
+    "dynamicalTime": "t_dyn = sqrt(R^3 / (G M))",
+    "crossingTime": "t_cross = R / v for a stated R and speed v",
+    "halfMassRelaxation": "t_rh = 0.138 * N^(1/2) * r_h^(3/2) / (m_mean^(1/2) * G^(1/2) * ln(gamma N)), Spitzer (1987) form; the Coulomb logarithm's gamma is an argument and is stated with every use: 0.11 for equal masses (Giersz and Heggie 1994) is the default, 0.02 is listed for a mass spectrum (Giersz and Heggie 1996)",
+    "localRelaxation": "t_relax = v^3 / (8 pi G^2 m rho_n ln Lambda) with v the rms speed, rho_n the number density times the field-star mass, Chandrasekhar (1942), derived in DYNAMICS.md; the Coulomb logarithm is an argument",
+    "massSegregation": "t_seg = (m_mean / m) * t_rh for a star of mass m above the mean: an order of magnitude relation (Spitzer 1969), stated as such; the kernel never prints it without 'order of magnitude'",
+    "evaporation": "t_ev = c * t_rh with c an argument and 300 as the cited default for an isolated, tidally truncated cluster (Spitzer 1987); stated as an order of magnitude for a cluster of the size and structure the relation assumes",
+    "dynamicalFriction": "a = -4 pi G^2 M rho lnLambda f(X) v / v^3 with X = v / (sqrt(2) sigma), f(X) = erf(X) - 2 X exp(-X^2) / sqrt(pi) (Chandrasekhar 1943); the sinking time of a circular orbit of radius r_i in a singular isothermal sphere of circular speed v_c, t = r_i^2 v_c / (2 G M lnLambda f(1)); ln Lambda is an argument, never defaulted",
+    "coulombLogarithm": "ln Lambda = ln(b_max / b_min), refused unless b_max > b_min > 0",
+    "criterion": "with T the age or the time the question spans and t_rh the half-mass relaxation time: collisionless when T <= 0.1 t_rh, collisional when T >= t_rh, transitional between: a stated convention, not a law",
+    "virialMass": "M = eta sigma_los^2 R_h / G, with R_h the projected half-number radius and sigma_los the intrinsic line-of-sight dispersion from the maximum-likelihood fit with the measurement errors; eta = 32 / pi for an isotropic Plummer sphere (derived: <v^2> = (3 pi / 32) G M / a, R_h = a); the interval combines a case bootstrap of the members (statistics kernel) with a structure term of 15 percent (1 sigma, lognormal) that is an assumption stated in every report, and the estimate is 'not constrained' for fewer than 20 members or an unresolved dispersion"
+  },
+  "checks": [
+    {
+      "id": "A1",
+      "group": "analytic",
+      "what": "t_dyn and t_cross in Myr from R in pc, M in solar masses and v in km/s equal the oracle's values (SI path from GM_sun, the parsec, the Julian year) for 20 (R, M, v) cases spanning 0.1 to 100 pc, 10 to 1e7 solar masses, 0.5 to 200 km/s",
+      "limits": { "relative": 1e-9 }
+    },
+    {
+      "id": "A2",
+      "group": "analytic",
+      "what": "t_rh equals the oracle's value in Myr for 30 (N, r_h in pc, m_mean, gamma) cases, N from 20 to 1e7; and the identity t_rh = 0.138 (N / ln(gamma N)) t_dyn(r_h, N m_mean) holds",
+      "limits": { "relative": 1e-9, "identityRelative": 1e-12 }
+    },
+    {
+      "id": "A3",
+      "group": "analytic",
+      "what": "eta of an isotropic Plummer sphere: the kernel's 32/pi equals the value the oracle finds by numerical integration of the Plummer distribution function (sigma_los^2 from the integrated velocity moment, R_h from the projected mass profile), and M recovered from (sigma_los, R_h) equals the sphere's mass",
+      "limits": { "etaRelative": 1e-6, "massRelative": 1e-6 }
+    },
+    {
+      "id": "A4",
+      "group": "analytic",
+      "what": "Chandrasekhar's f(X) = erf(X) - 2X exp(-X^2)/sqrt(pi) equals scipy's value at 30 values of X from 0.01 to 6, its small-X limit 4 X^3 / (3 sqrt(pi)) holds to 1e-3 relative at X = 0.01, and f -> 1 at X = 6 to 1e-9",
+      "limits": { "absolute": 1e-12, "smallXRelative": 1e-3, "largeXAbsolute": 1e-9 }
+    },
+    {
+      "id": "A5",
+      "group": "analytic",
+      "what": "the time for a satellite of M / M_enc(r_i) = 0.01 on an initially circular orbit in a singular isothermal sphere to sink from r_i to 0.05 r_i equals the oracle's numerical integration of the equation of motion under Chandrasekhar's drag, within the tolerance of the closed form's circular-orbit approximation; the closed form is t(r_i to r_f) = (r_i^2 - r_f^2) v_c / (2 G M lnLambda f(1))",
+      "limits": { "relative": 0.05 }
+    },
+    {
+      "id": "A6",
+      "group": "analytic",
+      "what": "the Coulomb logarithm is ln(b_max / b_min) for 10 stated pairs to 1e-12, and is refused for b_max <= b_min or b_min <= 0",
+      "limits": { "absolute": 1e-12, "refusals": 4 }
+    },
+    {
+      "id": "A7",
+      "group": "analytic",
+      "what": "the local relaxation time reproduces the oracle's value to 1e-9 for 10 stated (v, rho_n, m, ln Lambda) cases in SI, and the half-mass relaxation time of an equal-mass Plummer model is within a factor of 2 of the local relaxation time at the half-mass radius (a consistency of two cited relations, not a validation of either)",
+      "limits": { "relative": 1e-9, "consistencyFactor": 2 }
+    },
+    {
+      "id": "O1",
+      "group": "oracle",
+      "what": "an independent implementation of the kernel's relations (tools/dynamics-oracle/oracle.py, written from this file alone) and the kernel agree on t_dyn, t_rh, t_seg, t_ev, the sinking time and the criterion's class on 200 random (seeded) cases across the stated ranges",
+      "limits": { "relative": 1e-9, "classEqual": true }
+    },
+    {
+      "id": "B1",
+      "group": "published",
+      "what": "the published table of relaxation times for named clusters (supply): for each named cluster, |log10(t_rh kernel) - log10(t_rh published)| <= 0.30 using the table's own inputs, m_mean = 0.4 solar masses and gamma = 0.11, both fixed here before the table is seen; at least 10 clusters",
+      "limits": { "dex": 0.3, "clusters": 10, "m_mean": 0.4, "gamma": 0.11 },
+      "unless": "the table is not supplied: NOT RUN"
+    },
+    {
+      "id": "C1",
+      "group": "coverage",
+      "what": "the 68.27 percent interval of the virial mass covers the true mass of a seeded ensemble of 300 synthetic Plummer clusters (members drawn from the isotropic distribution function, N_members uniform on 25 to 150, line-of-sight velocity errors 10 percent of the true sigma_los, projected positions with no error; the truth manifest is the sphere's mass) at a rate between 0.60 and 0.80",
+      "limits": { "min": 0.6, "max": 0.8, "level": 0.6827, "ensemble": 300 }
+    },
+    {
+      "id": "C2",
+      "group": "coverage",
+      "what": "the 95 percent interval on the same ensemble covers the true mass at a rate between 0.90 and 0.99",
+      "limits": { "min": 0.9, "max": 0.99, "level": 0.95, "ensemble": 300 }
+    },
+    {
+      "id": "C3",
+      "group": "coverage",
+      "what": "the median of estimate / truth on the same ensemble lies between 0.90 and 1.10",
+      "limits": { "min": 0.9, "max": 1.1, "ensemble": 300 }
+    },
+    {
+      "id": "D1",
+      "group": "refusal",
+      "what": "19 members: 'not constrained' with the count named; 20 members of a resolved dispersion: an estimate",
+      "limits": { "minimumMembers": 20 }
+    },
+    {
+      "id": "D2",
+      "group": "refusal",
+      "what": "an unresolved dispersion (measurement errors 2 times the true dispersion, 60 members): 'not constrained' in at least 90 percent of 100 seeded draws; a resolved one (errors 10 percent): an estimate in at least 95 percent of 100 draws",
+      "limits": { "unresolvedNotConstrainedMin": 0.9, "resolvedEstimateMin": 0.95, "draws": 100 }
+    },
+    {
+      "id": "D3",
+      "group": "refusal",
+      "what": "a non-finite velocity, a non-positive error, a non-finite position or a mismatched array length is refused with the reason, and a half-mass radius of zero (all members at one position) is refused",
+      "limits": { "cases": 5 }
+    },
+    {
+      "id": "D4",
+      "group": "refusal",
+      "what": "the criterion refuses a non-positive time or relaxation time; the relaxation and friction relations refuse a missing Coulomb logarithm (friction) or a non-positive count, radius or mass",
+      "limits": { "cases": 8 }
+    },
+    {
+      "id": "R1",
+      "group": "reference",
+      "what": "the reference code conserves energy: the largest relative change of the total energy (softened potential) over the 16 runs of family S and the 16 of family D, |E(t) - E(0)| / |E(0)|, over every output time",
+      "limits": { "max": 1e-5 }
+    },
+    {
+      "id": "R2",
+      "group": "reference",
+      "what": "the reference code conserves linear momentum (|P| <= 1e-9 in Heggie units at every output time of every run, total mass 1) and angular momentum (|L(t) - L(0)| <= 1e-6)",
+      "limits": { "momentum": 1e-9, "angularMomentum": 1e-6 }
+    },
+    {
+      "id": "R3",
+      "group": "reference",
+      "what": "the reference code's softened two-body orbit (separation always above the softening length) closes: the period over 10 revolutions of an eccentric (e = 0.5) two-body orbit matches 2 pi sqrt(a^3 / (G (m1 + m2))) and the energy and angular momentum are conserved",
+      "limits": { "periodRelative": 1e-6, "energyRelative": 1e-9, "angularMomentumRelative": 1e-9 }
+    },
+    {
+      "id": "R4",
+      "group": "reference",
+      "what": "the measurement specification implemented twice (in the oracle in Python, in the validator in JavaScript) agrees on the pinned snapshots: r10, r50, r90, the segregation index, the escaped mass fraction and the satellite radius, on 3 seeds at 3 times",
+      "limits": { "relative": 1e-9 }
+    },
+    {
+      "id": "R5",
+      "group": "reference",
+      "what": "the reference code is reproducible: run again at pin time, seed 1 of family S to the first sample time and seed 101 of family D to its first window reproduce the pinned observables",
+      "limits": { "relative": 1e-8 }
+    },
+    {
+      "id": "R6",
+      "group": "reference",
+      "what": "the initial conditions have the stated properties to the stated precision: total mass 1, centre of mass and momentum zero, virial ratio 2K / |W| = 1 with the softened potential, virial radius G M^2 / (2 |W|) = 1, for every seed of both families",
+      "limits": { "mass": 1e-12, "centre": 1e-12, "virial": 1e-9, "radius": 1e-9 }
+    },
+    {
+      "id": "G1",
+      "group": "gate",
+      "what": "family S, the half-mass Lagrangian radius r50 of the bound members: the engine's ensemble mean and the reference's at each of the 10 sample times differ by no more than 0.10 of the reference mean plus twice the combined standard error, at 9 of the 10 times including the last",
+      "limits": { "relative": 0.1, "times": 10, "minimumPassing": 9, "lastMustPass": true, "sigmas": 2 }
+    },
+    {
+      "id": "G2",
+      "group": "gate",
+      "what": "family S, the 10 percent Lagrangian radius r10: the same rule with 0.20",
+      "limits": { "relative": 0.2, "times": 10, "minimumPassing": 9, "lastMustPass": true, "sigmas": 2 }
+    },
+    {
+      "id": "G3",
+      "group": "gate",
+      "what": "family S, the 90 percent Lagrangian radius r90: the same rule with 0.15",
+      "limits": { "relative": 0.15, "times": 10, "minimumPassing": 9, "lastMustPass": true, "sigmas": 2 }
+    },
+    {
+      "id": "G4",
+      "group": "gate",
+      "what": "family S, the segregation index (the mean mass of the bound members inside r50 over the mean mass of all bound members): the same rule with 0.15",
+      "limits": { "relative": 0.15, "times": 10, "minimumPassing": 9, "lastMustPass": true, "sigmas": 2 }
+    },
+    {
+      "id": "G5",
+      "group": "gate",
+      "what": "family S, the escaped mass fraction (the mass not in the bound set over the total mass): the difference of the ensemble means is at most 0.03 (absolute) plus twice the combined standard error, at 9 of the 10 times including the last",
+      "limits": { "absolute": 0.03, "times": 10, "minimumPassing": 9, "lastMustPass": true, "sigmas": 2 }
+    },
+    {
+      "id": "G6",
+      "group": "gate",
+      "what": "family D, the satellite's radius from the cluster's centre of mass averaged over the window 5 to 10 crossing times (snapshot indices 50 to 99): the difference of the ensemble means is at most 0.25 of the reference mean plus twice the combined standard error",
+      "limits": { "relative": 0.25, "window": [50, 99], "sigmas": 2 }
+    },
+    {
+      "id": "G7",
+      "group": "gate",
+      "what": "family D, the same over the window 10 to 15 crossing times (snapshot indices 100 to 149)",
+      "limits": { "relative": 0.25, "window": [100, 149], "sigmas": 2 }
+    }
+  ],
+  "ensembles": {
+    "N": 128,
+    "NMax": 256,
+    "NMaxNote": "the largest cluster the engine's precomputed runs may use is 256 bodies; the gate measures N = 128 only and the verdict says nothing about 256",
+    "familyS": {
+      "seeds": 16,
+      "crossingTimes": 30,
+      "sampleEveryCrossingTimes": 3,
+      "sampleTimes": 10,
+      "massSpectrum": "dN/dm proportional to m^-2.35 on [0.3, 10] (relative masses), drawn by inverse transform from numpy's PCG64, normalized to a total mass of 1",
+      "positions": "planar, surface density proportional to (1 + R^2 / a^2)^-2, R = a sqrt(u / (1 - u)) with u uniform on [0, 0.97], uniform angle",
+      "velocities": "two Gaussian components with sigma^2 = 0.5 G M(<R) / (R + epsilon)",
+      "normalization": "the centre of mass and momentum removed, then the lengths scaled and the velocities scaled so that 2K / |W| = 1 and G M^2 / (2 |W|) = 1 with the softened potential, by fixed-point iteration to 1e-12"
+    },
+    "familyD": {
+      "seeds": 16,
+      "crossingTimes": 15,
+      "cluster": "128 equal-mass stars of total mass 1, the same sampler and normalization with no spectrum",
+      "satellite": "one body of mass 0.1 at distance 2.0 from the cluster's centre of mass at a uniform angle, on the circular speed sqrt(G M_enc / r) of the cluster stars inside that radius, tangential; the centre of mass of the whole system then moved to rest at the origin; the cluster's normalization is applied before the satellite is added",
+      "snapshotEvery": "113 steps",
+      "snapshots": 151
+    },
+    "heggieUnits": "G = 1, total cluster mass 1, virial radius 1; t_cross = 2 sqrt(2) = 2.8284271247",
+    "softening": "epsilon = 0.02: the force on i from j is G m_j (x_j - x_i) / max(r, epsilon)^3, the engine's inner force law, and the potential of the pair is -G m_j / r for r >= epsilon and -G m_j (3 epsilon^2 - r^2) / (2 epsilon^3) inside",
+    "step": "the reference's output times are j * 113 * 0.0025 for family D and k * 3394 * 0.0025 for family S: the engine's step is 0.0025 in Heggie units, the engine runs 33940 steps for family S and 16950 for D",
+    "engine": {
+      "units": "lengths x 100, masses x 100, G = 1, so velocities are unchanged and times are x 100: the engine's step is 0.25 and its softening floor 2",
+      "settings": "gravitational_constant 1; min_interaction_distance 2; integrator 'Symplectic Euler' (the engine's default scheme, chosen before any run); mutual_gravity true; use_barnes_hut false; enable_star_merging false; the bodies are persistent stars of radius 0.5; nothing else changed",
+      "initialConditions": "the oracle's pinned initial conditions, read from the fixture: the engine and the oracle integrate the same starting points, so the comparison is of the dynamics and chaos makes it statistical: 16 members of each ensemble, compared by ensemble mean"
+    },
+    "reference": {
+      "code": "tools/dynamics-oracle/reference.py, scipy.integrate.solve_ivp with method DOP853, rtol 1e-10, atol 1e-12, direct summation in numpy, no Gravitas code",
+      "output": "the observables at the sample times of every run, their per-seed values, and the full snapshots of seeds 1 and 2 and 3 at sample times 1, 5 and 10 for the measurement cross-check"
+    }
+  },
+  "definitions": {
+    "measurement": [
+      "Everything in Heggie units (the engine's values divided by 100 for lengths and masses).",
+      "E_i = 0.5 |v_i - V|^2 + phi_i, V the mass-weighted mean velocity of all bodies, phi_i the sum over j != i of m_j times the softened pair potential at the pair's separation.",
+      "The bound set B is {i : E_i < 0}; M_B its mass; c the mass-weighted mean position of B.",
+      "r_i = |x_i - c| for i in B; the Lagrangian radius r_p is the r of the first member, in order of increasing r_i, at which the cumulative mass reaches p M_B (p = 0.1, 0.5, 0.9).",
+      "The segregation index is the mean mass of the members of B with r_i <= r50 divided by the mean mass of B (means by number).",
+      "The escaped mass fraction is the mass not in B over the total mass.",
+      "Family D: the satellite radius is |x_s - c_c| with c_c the centre of mass of the cluster stars (all of them, bound or not)."
+    ],
+    "standardError": "for an observable at one time, s the sample standard deviation (n - 1) over the 16 seeds of each side, the combined standard error is sqrt(s_E^2 / 16 + s_R^2 / 16)",
+    "legPasses": "as each check states; the engine's mean is the mean over its 16 seeds, the reference's over its 16"
+  },
+  "verdict": {
+    "C": "the reference is not validated: any of R1 to R6 is failing or NOT RUN, or an observable of the gate cannot be measured (a mean of zero, fewer than 16 finished runs). The quantitative evolution claim is omitted; the analytic lesson stands; Prompt 238's 'A satellite falls in' becomes a reading step.",
+    "A": "the reference is validated (R1 to R6 pass) and every one of G1 to G7 passes. The engine's precomputed runs ship with the comparison shown, the upper depth on segregation and evaporation and 'A satellite falls in' with dynamical friction are built.",
+    "B": "the reference is validated and at least one of G1 to G7 fails. The reference runs alone are shown, with their provenance; the engine's runs are omitted. Which legs passed is recorded, and the alternative a partial pass suggests (a slice of the legs) is a question for Carl, not a verdict."
+  },
+  "amendments": []
+}
