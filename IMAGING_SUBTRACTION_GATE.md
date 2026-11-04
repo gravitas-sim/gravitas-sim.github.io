@@ -143,6 +143,9 @@ star, so subtraction removes light that was not the limit; the interesting regim
 modeled. A gate on that regime needs an authentic frame pair or a speckle model with its own validation, and
 neither was available.
 
+Ruled on 2026-11-04: the re-gate is declined for now and reopens only with an authentic frame pair or a
+validated speckle model (register row D-R10-230-91).
+
 ## Limits
 
 Synthetic frames and invented orbits throughout; a clean detector; one profile; the authentic leg not run;
