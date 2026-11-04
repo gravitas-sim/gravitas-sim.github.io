@@ -279,6 +279,16 @@
   },
   "amendments": [
     {
+      "id": "AM4",
+      "when": "after timing the shared-step Hermite code (5 time units took 55 s) and before any ensemble of either side was run or any engine result existed",
+      "what": "the reference's integrator becomes the same fourth-order Hermite scheme with individual block time steps (steps a power of two of the sampling interval, at most 1/1024 of it; the step of a body eta times its smallest pair time scale of AM3, rounded down to a power of two, doubling only at times commensurable with the doubled step) in place of the shared step, which makes the sample times exact for every body and the run some thirty times cheaper; eta = 0.0005 is chosen because, over 20 time units of seed 1 with the energy as the only measure, eta = 0.005 conserved the energy to 1.1e-5 and 0.00125 to 1.7e-6, and the bound R1 is 1e-5 over 85 time units of 32 runs. Energies and the size of the escaped fraction after these trials were read; no engine result existed and no bound was changed. Which eta passes R1 is part of the reference, not of the gate: the figure is recorded and R1 is judged on the pinned runs."
+    },
+    {
+      "id": "AM3",
+      "when": "after the first Hermite timing (about 0.3 ms per step and 1e5 steps per time unit, from a step criterion that shrinks without bound as two bodies pass through the harmonic core of the softened force) and before any ensemble of either side was run or any engine result existed",
+      "what": "the Hermite step is eta times the smallest pair time scale, min over pairs of min(r_e^3 / (m_i + m_j), (r_e / |v_ij|)^2)^(1/2) with r_e = max(r, epsilon), with eta = 0.02 (Hut, Makino and McMillan's pair criterion) in place of eta = 0.005 times |a| / |j| of AM2. The forces use Newton's third law. Nothing else changed; the energy, momentum, orbit-closure and cross-integrator legs (R1, R2, R3, R7) judge the code as it stands. Two timings and one energy figure of seed 1 over one Heggie time unit under the old criterion (about 2e-7) were read; no bound was changed."
+    },
+    {
       "id": "AM2",
       "when": "after the first timing of the reference code and before any ensemble of either side was run or any engine result existed",
       "what": "the reference's production integrator is changed from scipy DOP853 (about 110 s for one sampling interval of one run, 16 runs of 10 intervals being hours on the machine in use) to a fourth-order Hermite scheme with a shared adaptive time step written in C (tools/dynamics-oracle/hermite.c, step eta times the smallest |a| / |j|, eta = 0.005, two force evaluations per step), driven and measured from reference.py. DOP853 is kept as a second, unrelated integrator and becomes leg R7. R3 (the softened two-body orbit) and R1, R2 now judge the Hermite code. No bound of any leg changed, no engine result existed. The one number read before the amendment was the time and a single reference observable set of seed 1 at the first sample, which showed a large escaped fraction at 3 crossing times (the cluster's starting velocities are not a distribution-function equilibrium; DYNAMICS.md says so and the escaped fraction is not claimed as two-body evaporation); the starting points were NOT changed after seeing it."
