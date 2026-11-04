@@ -28,6 +28,12 @@ import { fileURLToPath } from 'node:url';
 import * as Base from '../js/kernels/galactic/index.js';
 import * as K from '../js/kernels/galactic/kinematics.js';
 import * as S from '../js/kernels/galactic/kinematicsSynthetic.js';
+import * as T from '../js/kernels/galactic/toomre.js';
+import { spaceVelocity } from '../js/kernels/galactic/coords.js';
+import {
+  poissonInterval,
+  levelOfSigma,
+} from '../js/kernels/statistics/intervals.js';
 import { stream, gaussian } from '../js/random/streams.js';
 import { tableOf } from '../js/tableObservation.js';
 import { PACK as SOLAR_PACK } from '../js/data/observations/gaiaSolarNeighbourhood.js';
@@ -731,18 +737,243 @@ if (wanted('D.')) {
 // ---- the Toomre diagram and the disk-halo separation ------------------------------
 
 if (wanted('T.')) {
-  const have = existsSync(path.join(ROOT, DIR, 'disk-halo-source.json'));
-  for (const id of ['T.T1.coordinates', 'T.T2.classification', 'T.T3.real'])
-    if (!have)
+  const srcPath = path.join(ROOT, DIR, 'disk-halo-source.json');
+  if (!existsSync(srcPath)) {
+    for (const id of ['T.T1.coordinates', 'T.T2.classification', 'T.T3.real'])
       notRun(
         id,
         'tests/fixtures/kinematics/disk-halo-source.json (the cited thresholds) was not supplied: no threshold is typed from memory'
       );
-    else
-      notRun(
-        id,
-        'the source file exists but this validator version has no classifier to run against it (a re-gate adds it)'
+  } else {
+    // The procedure is the one KINEMATICS_GATE.md's 2026-11-04 addendum states, committed before this ran.
+    const FILE = readJson(`${DIR}/disk-halo-source.json`);
+    const popsT = THRESHOLDS.syntheticTruth.toomrePopulations;
+    const venn = T.vennRule(FILE);
+    const bensby = T.bensbyRule(FILE);
+    const RULES = [
+      {
+        id: 'venn2004',
+        rule: venn,
+        frame: 'rest',
+        classes: ['thin disk', 'thick disk', 'halo'],
+        classify: uvw => T.vennClass(uvw, venn),
+      },
+      {
+        id: 'bensby2014',
+        rule: bensby,
+        frame: 'lsr',
+        classes: ['thin disk', 'thick disk', 'halo', 'between'],
+        classify: uvw => T.bensbyClass(uvw, bensby),
+      },
+    ];
+    const KIND = { thin: 'thin disk', thick: 'thick disk', halo: 'halo' };
+    const heliocentric = s => spaceVelocity(s);
+    // T1: exactness of the Toomre coordinates of constructed stars.
+    {
+      const L = lim('T.T1.coordinates');
+      const ex = S.syntheticToomre(COL, {
+        seed: seedFor(0),
+        label: 'T.T1',
+        truth: TRUTH,
+        populations: popsT,
+        noise: false,
+      });
+      const sunRest = {
+        U: TRUTH.sunPeculiar.U,
+        V: TRUTH.disk.V0 + TRUTH.sunPeculiar.V,
+        W: TRUTH.sunPeculiar.W,
+      };
+      let worst = 0;
+      let worstFrame = null;
+      for (const st of ex.stars) {
+        const hv = heliocentric(st);
+        const rest = T.referTo(hv, sunRest);
+        const want = T.toomreCoordinates(st.truthVelocity);
+        const got = T.toomreCoordinates(rest);
+        const lsrWant = T.toomreCoordinates({
+          U: st.truthVelocity.U,
+          V: st.truthVelocity.V - TRUTH.disk.V0,
+          W: st.truthVelocity.W,
+        });
+        const lsrGot = T.toomreCoordinates({
+          U: rest.U,
+          V: rest.V - TRUTH.disk.V0,
+          W: rest.W,
+        });
+        for (const [f, dv] of [
+          ['rest V', Math.abs(got.V - want.V)],
+          ['rest T', Math.abs(got.T - want.T)],
+          ['lsr V', Math.abs(lsrGot.V - lsrWant.V)],
+          ['lsr T', Math.abs(lsrGot.T - lsrWant.T)],
+        ])
+          if (dv > worst) {
+            worst = dv;
+            worstFrame = f;
+          }
+      }
+      row('T.T1.coordinates', worst <= L.maxAbs, {
+        stars: ex.stars.length,
+        maxAbs: worst,
+        bound: L.maxAbs,
+        worst: worstFrame,
+      });
+      manifests['T:T1'] = ex.manifest;
+    }
+    // T2: halo recall and purity of each rule over the realizations.
+    {
+      const L = lim('T.T2.classification');
+      const R = L.realizations;
+      const per = {};
+      for (const r of RULES)
+        per[r.id] = {
+          confusion: Object.fromEntries(
+            ['thin disk', 'thick disk', 'halo'].map(k => [
+              k,
+              Object.fromEntries(r.classes.map(c => [c, 0])),
+            ])
+          ),
+          recalls: [],
+          purities: [],
+          nested: 0,
+        };
+      for (let i = 0; i < R; i++) {
+        const sm = S.syntheticToomre(COL, {
+          seed: seedFor(0),
+          label: `T.T2:${i}`,
+          truth: TRUTH,
+          populations: popsT,
+        });
+        if (i < 3) manifests[`T:T2:${i}`] = sm.manifest;
+        const hv = sm.stars.map(st => heliocentric(st));
+        for (const r of RULES) {
+          const sun = r.rule.sun;
+          let tp = 0;
+          let fp = 0;
+          let fn = 0;
+          sm.stars.forEach((st, j) => {
+            const c = r.classify(T.referTo(hv[j], sun));
+            const truthC = KIND[st.truePopulation];
+            per[r.id].confusion[truthC][c]++;
+            if (r.id === 'bensby2014') {
+              const strict = T.bensbyClass(T.referTo(hv[j], sun), bensby, {
+                strictHalo: true,
+              });
+              if ((strict === 'halo') !== (c === 'halo')) per[r.id].nested++;
+            }
+            if (c === 'halo' && truthC === 'halo') tp++;
+            else if (c === 'halo') fp++;
+            else if (truthC === 'halo') fn++;
+          });
+          if (tp + fn) per[r.id].recalls.push(tp / (tp + fn));
+          if (tp + fp) per[r.id].purities.push(tp / (tp + fp));
+        }
+      }
+      const out = {};
+      let all = true;
+      for (const r of RULES) {
+        const cm = per[r.id].confusion;
+        const tp = cm.halo.halo;
+        const fn = Object.entries(cm.halo)
+          .filter(([c]) => c !== 'halo')
+          .reduce((a, [, v]) => a + v, 0);
+        const fp = ['thin disk', 'thick disk'].reduce(
+          (a, k) => a + cm[k].halo,
+          0
+        );
+        const recall = tp / (tp + fn);
+        const purity = tp + fp ? tp / (tp + fp) : 0;
+        const ok = recall >= L.minHaloRecall && purity >= L.minHaloPurity;
+        all = all && ok;
+        out[r.id] = {
+          frame: r.frame,
+          sun: [r.rule.sun.U, r.rule.sun.V, r.rule.sun.W],
+          haloRecall: sig(recall, 4),
+          haloPurity: sig(purity, 4),
+          meetsBounds: ok,
+          pooled: { truePositive: tp, falseNegative: fn, falsePositive: fp },
+          medianRealizationRecall: sig(median(per[r.id].recalls), 3),
+          medianRealizationPurity: sig(median(per[r.id].purities), 3),
+          confusion: cm,
+          ...(r.id === 'bensby2014'
+            ? { starsWhereNestedHaloDiffers: per[r.id].nested }
+            : {}),
+        };
+      }
+      out.bounds = {
+        minHaloRecall: L.minHaloRecall,
+        minHaloPurity: L.minHaloPurity,
+      };
+      out.realizations = R;
+      row(
+        'T.T2.classification',
+        all,
+        out,
+        'every cited rule must meet both bounds (KINEMATICS_GATE.md addendum); per-rule numbers are in measured'
       );
+    }
+    // T3: the real pack, each rule in its own frame; the counts with their Poisson intervals.
+    {
+      const real = REAL_STARS.map(st => ({ st, v: heliocentric(st) }));
+      const o = K.lsrOptions(K_VELOCITIES(REAL_STARS));
+      const stromberg = o.options.find(x => x.id === 'stromberg').vSunLsr;
+      const interval = (n, level) => {
+        const iv = poissonInterval([n], { level, method: 'garwood' });
+        return [sig(iv.lo, 4), sig(iv.hi, 4)];
+      };
+      const countsFor = (classify, sun) => {
+        const c = {};
+        for (const { v } of real) {
+          const k = classify(T.referTo(v, sun));
+          c[k] = (c[k] ?? 0) + 1;
+        }
+        return Object.fromEntries(
+          Object.entries(c).map(([k, n]) => [
+            k,
+            {
+              count: n,
+              oneSigma: interval(n, levelOfSigma(1)),
+              ci95: interval(n, 0.95),
+            },
+          ])
+        );
+      };
+      const res = {
+        stars: real.length,
+        venn2004: {
+          frame: 'rest',
+          sun: [venn.sun.U, venn.sun.V, venn.sun.W],
+          classes: countsFor(uvw => T.vennClass(uvw, venn), venn.sun),
+        },
+        bensby2014: {
+          frame: 'lsr',
+          sunPaper: [bensby.sun.U, bensby.sun.V, bensby.sun.W],
+          classesWithPaperSun: countsFor(
+            uvw => T.bensbyClass(uvw, bensby),
+            bensby.sun
+          ),
+          classesWithSampleStrombergV: {
+            vSun: sig(stromberg, 5),
+            classes: countsFor(uvw => T.bensbyClass(uvw, bensby), {
+              ...bensby.sun,
+              V: stromberg,
+            }),
+          },
+          note: 'both candidates for the Sun V are shown and neither is chosen (D-GAIA-03)',
+        },
+      };
+      const sum = o2 => Object.values(o2).reduce((a, x) => a + x.count, 0);
+      const ok =
+        sum(res.venn2004.classes) === real.length &&
+        sum(res.bensby2014.classesWithPaperSun) === real.length &&
+        sum(res.bensby2014.classesWithSampleStrombergV.classes) === real.length;
+      row(
+        'T.T3.real',
+        ok,
+        res,
+        'no bound is committed for this leg: it passes when it runs and the counts account for every star'
+      );
+    }
+  }
 }
 
 // ---- asymmetric drift --------------------------------------------------------------

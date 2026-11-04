@@ -181,6 +181,132 @@ export function syntheticNeighbourhood(design, opts) {
 }
 
 /**
+ * A synthetic three-population (thin disk, thick disk, halo) sample on the real
+ * pack's geometry, for the Toomre legs (T1, T2). Every star is one population
+ * with the committed fraction; a disk population's mean azimuthal speed is the
+ * rotation curve at its radius less its lag, the halo's is its stated value; the
+ * constructed rest-frame velocity of each star is kept as `truthVelocity`.
+ * `noise: false` gives exact observables (T1).
+ *
+ * @param {object} design - the pack's columns by id
+ * @param {{seed: number|string, label: string, truth: object, populations: object, noise?: boolean, rounding?: number}} opts
+ *   `populations` is thresholds.json's `syntheticTruth.toomrePopulations`
+ */
+export function syntheticToomre(design, opts) {
+  const truth = opts.truth;
+  const P = opts.populations;
+  const noise = opts.noise !== false;
+  const rounding = opts.rounding ?? 0.02;
+  const u = stream('noise', opts.seed, opts.label);
+  const z = gaussian(u);
+  const n = design.ra.length;
+  const D = truth.disk;
+  const kinds = ['thin', 'thick', 'halo'];
+  const stars = [];
+  const counts = { thin: 0, thick: 0, halo: 0 };
+  for (let i = 0; i < n; i++) {
+    const ra = design.ra[i];
+    const dec = design.dec[i];
+    const { l, b } = icrsToGalactic(ra, dec);
+    const plxTrue = design.parallax[i];
+    const d = 1 / plxTrue;
+    const cl = Math.cos(l * DEG);
+    const sl = Math.sin(l * DEG);
+    const cb = Math.cos(b * DEG);
+    const sb = Math.sin(b * DEG);
+    const x = -D.R0 + d * cb * cl;
+    const y = d * cb * sl;
+    const R = Math.hypot(x, y);
+    const eR = [x / R, y / R, 0];
+    const ePhi = [y / R, -x / R, 0];
+    const r = u();
+    let acc = 0;
+    let kind = kinds[kinds.length - 1];
+    for (const k of kinds) {
+      acc += P[k].fraction;
+      if (r < acc) {
+        kind = k;
+        break;
+      }
+    }
+    counts[kind]++;
+    const pop = P[kind];
+    const uR = pop.sigma[0] * z();
+    const vPhi = pop.sigma[1] * z();
+    const w = pop.sigma[2] * z();
+    const mean =
+      pop.meanAzimuthalVelocity !== undefined
+        ? pop.meanAzimuthalVelocity
+        : vcAt(R, D) - pop.lag;
+    const speedPhi = mean + vPhi;
+    const vs = [
+      speedPhi * ePhi[0] + uR * eR[0],
+      speedPhi * ePhi[1] + uR * eR[1],
+      w,
+    ];
+    const sun = [
+      truth.sunPeculiar.U,
+      D.V0 + truth.sunPeculiar.V,
+      truth.sunPeculiar.W,
+    ];
+    const v = [vs[0] - sun[0], vs[1] - sun[1], vs[2] - sun[2]];
+    const nHat = [cb * cl, cb * sl, sb];
+    const vr = v[0] * nHat[0] + v[1] * nHat[1] + v[2] * nHat[2];
+    const vt = [v[0] - vr * nHat[0], v[1] - vr * nHat[1], v[2] - vr * nHat[2]];
+    const vIcrs = [0, 1, 2].map(
+      k => A_G[0][k] * vt[0] + A_G[1][k] * vt[1] + A_G[2][k] * vt[2]
+    );
+    const east = [-Math.sin(ra * DEG), Math.cos(ra * DEG), 0];
+    const north = [
+      -Math.cos(ra * DEG) * Math.sin(dec * DEG),
+      -Math.sin(ra * DEG) * Math.sin(dec * DEG),
+      Math.cos(dec * DEG),
+    ];
+    const dot = (a, c) => a[0] * c[0] + a[1] * c[1] + a[2] * c[2];
+    let pmRa = dot(vIcrs, east) / (K_PM * d);
+    let pmDec = dot(vIcrs, north) / (K_PM * d);
+    let rv = vr;
+    let parallax = plxTrue;
+    if (noise) {
+      const sa = design.pmra_err[i];
+      const sd = design.pmdec_err[i];
+      const rho = design.pm_corr[i];
+      const z1 = z();
+      const z2 = z();
+      pmRa += sa * z1;
+      pmDec += sd * (rho * z1 + Math.sqrt(Math.max(0, 1 - rho * rho)) * z2);
+      rv += design.rv_err[i] * z();
+      parallax = plxTrue + design.parallax_err[i] * z();
+      if (rounding > 0) parallax = Math.round(parallax / rounding) * rounding;
+    }
+    stars.push({
+      ra,
+      dec,
+      parallax,
+      pmRa,
+      pmDec,
+      rv,
+      truePopulation: kind,
+      truthVelocity: { U: vs[0], V: vs[1], W: vs[2] },
+    });
+  }
+  return {
+    stars,
+    manifest: {
+      kind: 'synthetic three-population (thin, thick, halo) sample on the real pack geometry',
+      seed: opts.seed,
+      stream: u.stream.key,
+      label: opts.label,
+      stars: n,
+      counts,
+      noise,
+      truth: { disk: D, sunPeculiar: truth.sunPeculiar, populations: P },
+      note: 'synthetic truth, labelled; no published value',
+    },
+  };
+}
+
+/**
  * A synthetic SEGUE sample on the real survivors' design.
  *
  * @param {Array<{ra: number, dec: number, feh: number, e: number, windowed: boolean}>} design
