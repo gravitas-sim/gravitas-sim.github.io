@@ -49,6 +49,12 @@ cross-match); the near stratum is over-sampled on purpose.
   km/s/kpc against Bovy 2017's 15.3 and -11.9, each inside 3 sigma. An unweighted fit fails (A = -2.4 +/- 11.5),
   because the nearest stars carry the largest scatter in proper-motion units; the kernel defaults to the
   weighted fit and says why.
+  Correction (Prompt 235, `KINEMATICS_GATE.md`): this fit is the in-plane form and leaves out the factor cos b
+  that the velocity along l of a rotating disk carries, so on a sample that covers the whole sky its A and B are
+  low in magnitude by about 15 percent (a noise-free test returns A 12.6 and B -10.5 for a disk of 14.75 and
+  -12.75). With the factor the same stars give A 14.5 +/- 2.6 and B -15.2 +/- 1.8. The kernel and the lesson
+  text above are not changed by that prompt; the gate also found that this sample cannot recover the circular-orbit
+  constants within its own interval, because the asymmetric drift of its older stars shifts A by about 2 km/s/kpc.
 - The solar V relative to the sample is 21.9 km/s; after the Stromberg lag (sigma_U^2 / 80 = 18.1) the LSR
   value is 3.8 km/s, the old Dehnen and Binney 1998 value (5.2), not Schonrich et al. 2010's 12.2, which
   needs the metallicity-gradient argument. The drift fit across colour bins gives 12.3 +/- 6.7: too noisy to

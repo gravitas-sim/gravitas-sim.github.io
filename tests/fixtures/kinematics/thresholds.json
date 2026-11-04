@@ -1,0 +1,566 @@
+{
+  "format": "gravitas.kinematics-thresholds/1",
+  "prompt": "Roadmap III, Prompt 235, Galactic kinematics II: method demonstrations with selection stated (tranche T4 by D-R10-232-01)",
+  "document": "GALACTIC_KINEMATICS.md (\"Part A: the gate\"), written after this file",
+  "committed": "before js/kernels/galactic/kinematics.js, its synthetic generators, the validator tools/kinematics-validate.mjs, the oracle script tools/kinematics-oracle/oracle.py and its pinned results, and any panel or lesson of Prompt 235 existed. What was seen first, and only that: the packs' column lists and manifests; the row counts of the SEGUE pack per [Fe/H] bin and the count and the median radial velocity and [Fe/H] of the stars within 10 arcmin of the cluster (to set the exclusion rule and the bins); the neighbourhood pack's row and stratum counts; and, from earlier prompts' documents, the neighbourhood Oort fit (A 13.5 +/- 2.4, B -13.7 +/- 1.7 km/s/kpc, GALACTIC_DYNAMICS.md) and the drift fit (12.3 +/- 6.7 km/s). No dispersion by bin, no synthetic result and no output of the new kernel was seen. Every bound below is fixed before any result of Prompt 235 exists.",
+  "rule": "A crossed bound is a failed leg, recorded in failed-legs.json and left failing; only Carl resets one. A leg that cannot be measured (a file not supplied, a code not run) is NOT RUN and says why, and a NOT RUN leg in a method's S set (below) makes that method's verdict C. A leg marked REPORTED has no band and is never counted. No published value is typed anywhere except from a source file or document already in the repository, with its citation; no literature value is ever presented as recovered when the sample did not recover it, and the literature values are shown beside a result as a discussion only. Synthetic data carries its truth manifest (ensembles.json). The analysis contracts below are fixed here; a bound or an analysis choice is never changed after a result is seen: the alternative is recorded as a question for Carl.",
+  "seeds": {
+    "ensemble": "kin-235",
+    "synthetic": [
+      235001,
+      235002,
+      235003,
+      235004
+    ],
+    "design": "kin-235-design (used only to build and debug; never in a leg)"
+  },
+  "scope": {
+    "built": "four methods on two packs with their selection stated through 154's selection objects: (O) the first-order local expansion for the Oort constants A and B on the solar-neighbourhood pack; (D) velocity dispersions by [Fe/H] bin on the SEGUE pack (line-of-sight, one sight line, a stated exclusion of the cluster NGC 2420 with the hole it leaves handled by the likelihood); (T) the Toomre diagram and the disk-halo separation with thresholds from a cited source; (S) asymmetric drift as the stated relation <V> = -V_sun - sigma_U^2 / k, fitted over six BP-RP groups of the neighbourhood pack, with the LSR choice a stated option and D-GAIA-03 kept (both candidate values reported, neither chosen).",
+    "notBuilt": "a literature value recovered from a sample that did not recover it; a dispersion-age relation; a disk or halo membership from the neighbourhood pack's metallicity (it has none); a Toomre diagram or a disk-halo separation without a thresholds source supplied by Carl; a three-dimensional dispersion from the SEGUE pack (it has one sight line and no proper motion); a model of SEGUE's or Gaia's real selection function beyond the cuts stated; any value of the Sun's V against the local standard of rest chosen as the answer (D-GAIA-03)."
+  },
+  "syntheticTruth": {
+    "note": "Every number in this block is a synthetic truth chosen here for the test, labelled as such. None is a published value and none is tuned to a result; they are not claimed to describe the Galaxy.",
+    "disk": {
+      "R0": 8.0,
+      "unitR0": "kpc",
+      "V0": 220,
+      "unitV": "km/s",
+      "slope": -2.0,
+      "unitSlope": "km/s/kpc",
+      "curve": "V(R) = V0 + slope (R - R0), a straight line in R",
+      "A": 14.75,
+      "B": -12.75,
+      "relations": "A = (V0/R0 - slope)/2, B = -(V0/R0 + slope)/2"
+    },
+    "sunPeculiar": {
+      "U": 10.0,
+      "V": 13.0,
+      "W": 7.0,
+      "unit": "km/s",
+      "frame": "relative to the local standard of rest of the synthetic disk (a circular orbit at R0)"
+    },
+    "driftK": {
+      "value": 80,
+      "unit": "km/s",
+      "note": "the stated relation lag = sigma_R^2 / k; k is the cited constant of BT08 section 4.8.2 already in js/kernels/galactic/motion.js, here used as a synthetic truth"
+    },
+    "neighbourhoodPopulations": {
+      "young": {
+        "sigma": [
+          22,
+          15,
+          11
+        ],
+        "unit": "km/s",
+        "order": "sigma_U (radial), sigma_V (azimuthal), sigma_W (vertical)"
+      },
+      "old": {
+        "sigma": [
+          45,
+          32,
+          24
+        ],
+        "unit": "km/s"
+      },
+      "membership": "for a star of BP-RP rank fraction q (its rank among the pack's stars divided by the number of stars), the probability of the old population is q",
+      "meanLag": "each population's mean azimuthal velocity is V_c(R) - sigma_U^2 / k"
+    },
+    "segueBins": {
+      "edges": [
+        -1.0,
+        -0.5
+      ],
+      "unit": "dex",
+      "bin1": {
+        "label": "[Fe/H] < -1.0",
+        "sigma": [
+          140,
+          100,
+          95
+        ],
+        "meanAzimuthalVelocity": 0,
+        "unit": "km/s",
+        "note": "a population with no net rotation"
+      },
+      "bin2": {
+        "label": "-1.0 <= [Fe/H] < -0.5",
+        "sigma": [
+          63,
+          45,
+          38
+        ],
+        "lag": 40
+      },
+      "bin3": {
+        "label": "[Fe/H] >= -0.5",
+        "sigma": [
+          40,
+          27,
+          19
+        ],
+        "lag": 20
+      },
+      "assignment": "every star of a bin is of that bin's population, by the observed [Fe/H]; a bin of the real sample is whatever mixture lands in it, which leg D.D2 reports and does not band"
+    },
+    "toomrePopulations": {
+      "thin": {
+        "sigma": [
+          35,
+          25,
+          17
+        ],
+        "lag": 15,
+        "fraction": 0.85
+      },
+      "thick": {
+        "sigma": [
+          65,
+          48,
+          40
+        ],
+        "lag": 45,
+        "fraction": 0.145
+      },
+      "halo": {
+        "sigma": [
+          140,
+          100,
+          95
+        ],
+        "meanAzimuthalVelocity": 0,
+        "fraction": 0.005
+      },
+      "note": "committed for the legs that cannot run until a thresholds source is supplied (T1 to T3); not used by any other leg"
+    }
+  },
+  "design": {
+    "neighbourhood": {
+      "pack": "gaia-dr3-solar-neighbourhood 1.1.0 (1,570 rows)",
+      "syntheticSample": "the real rows' positions, parallaxes, proper-motion and parallax and radial-velocity errors and BP-RP are the design: a synthetic row keeps them as its sky position, true parallax (the row's catalogue parallax), errors and colour, takes its velocity from the synthetic disk, and is observed with its row's errors (proper motions with their correlation, parallax rounded to the pack's 0.02 mas after the error is added, the radial velocity with its error). The cuts and strata that made the real sample are therefore carried exactly.",
+      "selectionStatement": "154 selection objects: RUWE below 1.4, parallax over error above 10, a radial velocity present (each a cut upstream of the pack, so each removes nothing from it and the statement says that), and the two strata, whose inclusion probabilities are the pack manifest's (about 1 in 273 for parallax above 10 mas, about 1 in 9,065 from 1 to 10 mas)."
+    },
+    "segue": {
+      "pack": "sdss-dr18-ngc2420-segue 1.0.0 (517 rows)",
+      "centre": {
+        "ra": 114.602,
+        "dec": 21.575,
+        "unit": "deg"
+      },
+      "exclusion": {
+        "innerRadiusArcmin": 10,
+        "rule1": "a star within 10 arcmin of the cluster centre is excluded (the region SEGUE targeted for the cluster, 159 spectra)",
+        "rule2": "outside 10 arcmin, a star is excluded if its radial velocity is within 5 km/s of the median radial velocity of the stars within 10 arcmin and its [Fe/H] is within 0.4 dex of their median [Fe/H] (the cluster's outskirts); the median values come from the pack, not from the literature",
+        "hole": "rule 2 removes field stars too: a star whose [Fe/H] is within 0.4 dex of the inner median and whose measured velocity is inside the window. The synthetic sample draws each such star's velocity from the population conditional on being outside the window, and the estimator's likelihood divides by the probability of being outside it; the uncorrected estimate is reported beside it."
+      },
+      "bins": {
+        "edges": [
+          -1.0,
+          -0.5
+        ],
+        "unit": "dex",
+        "labels": [
+          "[Fe/H] < -1.0",
+          "-1.0 <= [Fe/H] < -0.5",
+          "[Fe/H] >= -0.5"
+        ]
+      },
+      "minStarsPerBin": 15,
+      "syntheticSample": "the real survivors of the exclusion are the design: each keeps its position, [Fe/H] and radial-velocity error, takes a line-of-sight velocity from its bin's synthetic population conditional on its window, and is observed with its error.",
+      "selectionStatement": "154 selection objects: SSPP adopted parameters (signal-to-noise above 10), the 30 arcmin SEGUE field, one spectrum per star, and the exclusion; SEGUE's colour and magnitude targeting and its fibre-collision limit are stated from the pack's manifest and are not modelled."
+    },
+    "drift": {
+      "groups": "six groups of equal count, ranked by BP-RP, of the neighbourhood pack",
+      "relation": "<V> = -V_sun - sigma_U^2 / k (V and V_sun relative to the stars' frame and the LSR as in motion.js), k fitted and also stated at 80 km/s"
+    }
+  },
+  "contracts": {
+    "oort": {
+      "estimator": "weighted linear least squares of 4.74047 mu_l* against cos 2l, 1, parallax sin l, -parallax cos l, weight 1/parallax^2 (the weight of a distance-independent velocity scatter), covariance from the weighted residual scatter",
+      "ladder": [
+        {
+          "id": "O1",
+          "maxDistance": 1.0,
+          "unit": "kpc",
+          "note": "all stars of the pack (parallax over error above 10 and a parallax above 1 mas bounds the pack at 1 kpc)"
+        },
+        {
+          "id": "O2",
+          "maxDistance": 0.5,
+          "unit": "kpc"
+        },
+        {
+          "id": "O3",
+          "maxDistance": 0.25,
+          "unit": "kpc"
+        }
+      ],
+      "ladderRule": "the method's contract is the first of O1, O2, O3 for which every leg of the O S set passes; if none does the method's verdict is C. The ladder is fixed here, before any result: it is one method with its distance limit as a stated option, not three methods. The parallax is the pack's catalogue value, uncorrected for the zero point, as in motion.js.",
+      "constrained": "A and B are both constrained when |A| / errA >= 3 and |B| / errB >= 3; otherwise the status is 'not-constrained' and the values are returned with that label"
+    },
+    "dispersion": {
+      "estimator": "Gaussian maximum likelihood of (mean, sigma) of the measured velocity v_i with per-star errors e_i, the likelihood of star i N(v_i | mu, sigma^2 + e_i^2), divided for a star that the exclusion window affects by the probability of a measured velocity outside the window; interval: the sandwich covariance (the score's empirical outer product between the inverse Hessians, by central differences) as a covariance interval",
+      "constrained": "n >= 15 and sigma >= 3 sigma_err; otherwise 'not-constrained'"
+    },
+    "drift": {
+      "estimator": "weighted straight line of group mean V against group sigma_U^2 (weights from the error of each mean), V_sun = minus the intercept and k = minus 1 over the slope; the intercept's error from the weighted normal equations and the slope's likewise; k's error by the delta method",
+      "constrained": "the slope is constrained when |slope| / err(slope) >= 3 (k is then reported, otherwise it is not)",
+      "usefulForTheLsr": "the sample can say something about the Sun's V against the LSR when the one-sigma half-width of V_sun is at most 4.2 km/s, half the gap between the two candidate values D-GAIA-03 reports (3.77 and 12.24 km/s: 4.235)"
+    },
+    "toomre": {
+      "thresholdsSource": "tests/fixtures/kinematics/disk-halo-source.json, a file Carl supplies: for each class (thin disk, thick disk, halo) the published criterion in the total space velocity or in Toomre-diagram coordinates, with the paper, its identifier, the table or equation and the retrieval date. No value is typed from memory. Absent, the legs below are NOT RUN and the method's verdict is C.",
+      "classes": [
+        "thin disk",
+        "thick disk",
+        "halo"
+      ]
+    }
+  },
+  "verdict": {
+    "rule": "per method: S set = every leg with set 'S'; R set = every leg with set 'R'. A: every S leg passes and every R leg passes (the method runs on the sample and its result is shown with its interval and selection statement beside the literature value as a discussion). B: every S leg passes and some R leg fails (the method runs on the synthetic sample only; the real sample is shown without a fit). C: any S leg fails or is NOT RUN (a reading step). A REPORTED leg is never in either set. For the Oort method the S set is judged under each contract of the ladder in order and the first that passes is the contract of the verdict.",
+    "applies": [
+      "O",
+      "D",
+      "T",
+      "S"
+    ]
+  },
+  "checks": [
+    {
+      "id": "O.A1.exact",
+      "set": "S",
+      "kind": "analytic",
+      "what": "noise-free, zero-dispersion circular rotation at 0.02 kpc from 400 stars at the pack's sky positions with the first-order limit exact to the stated bound: the fit returns A and B of the synthetic truth",
+      "limits": {
+        "stars": 400,
+        "distance": 0.02,
+        "maxRelA": 0.02,
+        "maxRelB": 0.02
+      }
+    },
+    {
+      "id": "O.A2.sameAsMotion",
+      "set": "S",
+      "kind": "analytic",
+      "what": "the new estimator on a fixed table equals motion.js's fitOortConstants in A, B, errA, errB",
+      "limits": {
+        "maxRel": 1e-09
+      }
+    },
+    {
+      "id": "O.B1.oracle",
+      "set": "S",
+      "kind": "oracle",
+      "what": "numpy.linalg.lstsq weighted fit, with astropy's ICRS to Galactic proper motions, on a pinned synthetic sample (tools/kinematics-oracle/oracle.py, oracle-results.json) agrees on A, B and their errors",
+      "limits": {
+        "maxAbsAB": 1e-06,
+        "maxRelErr": 1e-06,
+        "unitAB": "km/s/kpc"
+      }
+    },
+    {
+      "id": "O.S1.recovery",
+      "set": "S",
+      "kind": "ensemble",
+      "what": "the synthetic disk's A and B recovered under the selection: over the ensemble the mean of the estimate is within half the median stated error of the truth",
+      "limits": {
+        "realizations": 200,
+        "maxBiasInMedianErrors": 0.5
+      }
+    },
+    {
+      "id": "O.S2.coverage",
+      "set": "S",
+      "kind": "ensemble",
+      "what": "the stated one-sigma interval covers the truth at 0.60 to 0.76 and the 1.96-sigma interval at 0.90 or more, for A and for B",
+      "limits": {
+        "realizations": 200,
+        "level1": [
+          0.6,
+          0.76
+        ],
+        "level2Min": 0.9
+      }
+    },
+    {
+      "id": "O.D1.noGradient",
+      "set": "S",
+      "kind": "refusal",
+      "what": "a sample cut to 0.1 kpc or nearer removes the gradient: at least 90 percent of realizations return 'not-constrained'",
+      "limits": {
+        "maxDistance": 0.1,
+        "minFractionNotConstrained": 0.9,
+        "realizations": 200
+      }
+    },
+    {
+      "id": "O.D2.constrained",
+      "set": "S",
+      "kind": "refusal",
+      "what": "under the contract, at least 90 percent of full-geometry realizations are constrained (the method is of some use)",
+      "limits": {
+        "minFractionConstrained": 0.9,
+        "realizations": 200
+      }
+    },
+    {
+      "id": "O.R1.real",
+      "set": "R",
+      "kind": "authentic",
+      "what": "the contract's fit of the real neighbourhood pack is constrained and uses at least 200 stars",
+      "limits": {
+        "minStars": 200
+      }
+    },
+    {
+      "id": "O.R2.halves",
+      "set": "R",
+      "kind": "authentic",
+      "what": "two seeded random halves of the real sample agree within 3 combined sigma on A and on B",
+      "limits": {
+        "maxSigmas": 3,
+        "seed": 235004
+      }
+    },
+    {
+      "id": "O.R3.literature",
+      "set": null,
+      "kind": "authentic",
+      "what": "REPORTED: the real A and B beside the values GALACTIC_DYNAMICS.md records from Bovy (2017), as a discussion; no band, and never presented as recovered unless the interval covers them",
+      "limits": {}
+    },
+    {
+      "id": "D.A1.pooled",
+      "set": "S",
+      "kind": "analytic",
+      "what": "the closed-form pooled line-of-sight sigma of a synthetic bin against 400,000 Monte Carlo draws",
+      "limits": {
+        "draws": 400000,
+        "maxSigmasFromClosedForm": 4
+      }
+    },
+    {
+      "id": "D.A2.errors",
+      "set": "S",
+      "kind": "analytic",
+      "what": "20,000 stars with a known sigma and per-star errors, no window: the intrinsic sigma recovered with the errors removed",
+      "limits": {
+        "stars": 20000,
+        "maxRel": 0.02
+      }
+    },
+    {
+      "id": "D.A3.hole",
+      "set": "S",
+      "kind": "analytic",
+      "what": "20,000 stars with a window of 10 km/s removed about the mean: the likelihood with the window recovers sigma; the uncorrected value is reported",
+      "limits": {
+        "stars": 20000,
+        "maxRel": 0.03
+      }
+    },
+    {
+      "id": "D.B1.oracle",
+      "set": "S",
+      "kind": "oracle",
+      "what": "scipy.optimize maximum likelihood with the window, and a numerical sandwich, on three pinned synthetic bins: mean, sigma and sigma's error agree",
+      "limits": {
+        "maxRelSigma": 0.0001,
+        "maxAbsMean": 0.01,
+        "maxRelErr": 0.001
+      }
+    },
+    {
+      "id": "D.S1.recovery",
+      "set": "S",
+      "kind": "ensemble",
+      "what": "each bin's sigma recovered under the real sample's selection: the mean of the estimate within half the median stated error of the truth",
+      "limits": {
+        "realizations": 200,
+        "maxBiasInMedianErrors": 0.5
+      }
+    },
+    {
+      "id": "D.S2.coverage",
+      "set": "S",
+      "kind": "ensemble",
+      "what": "the one-sigma interval covers each bin's truth at 0.60 to 0.76 and the 1.96-sigma interval at 0.90 or more",
+      "limits": {
+        "realizations": 200,
+        "level1": [
+          0.6,
+          0.76
+        ],
+        "level2Min": 0.9
+      }
+    },
+    {
+      "id": "D.D1.refusals",
+      "set": "S",
+      "kind": "refusal",
+      "what": "a bin of fewer than 15 stars returns 'not-constrained'; a bin whose true intrinsic sigma is 0 is 'not-constrained' in at least 90 percent of realizations",
+      "limits": {
+        "smallBin": 8,
+        "minFractionNotConstrained": 0.9,
+        "realizations": 200
+      }
+    },
+    {
+      "id": "D.D2.mixture",
+      "set": null,
+      "kind": "refusal",
+      "what": "REPORTED: a bin that is 70 percent bin-1 population and 30 percent bin-2 population: the estimate against the pooled truth, to show what a bin of a real sample is",
+      "limits": {}
+    },
+    {
+      "id": "D.R1.real",
+      "set": "R",
+      "kind": "authentic",
+      "what": "on the real SEGUE survivors at least two of the three bins are constrained",
+      "limits": {
+        "minBinsConstrained": 2
+      }
+    },
+    {
+      "id": "D.R2.order",
+      "set": null,
+      "kind": "authentic",
+      "what": "REPORTED: the real sigma by bin, the number of stars, what the exclusion removed and the uncorrected values",
+      "limits": {}
+    },
+    {
+      "id": "T.T1.coordinates",
+      "set": "S",
+      "kind": "analytic",
+      "what": "NOT RUN until the thresholds source exists: the Toomre coordinates of constructed stars are exact",
+      "limits": {
+        "maxAbs": 1e-09
+      }
+    },
+    {
+      "id": "T.T2.classification",
+      "set": "S",
+      "kind": "ensemble",
+      "what": "NOT RUN until the thresholds source exists: on the committed three-population synthetic sample under the neighbourhood selection, the cited rule's halo class has recall of at least 0.80 and purity of at least 0.50 over 200 realizations",
+      "limits": {
+        "realizations": 200,
+        "minHaloRecall": 0.8,
+        "minHaloPurity": 0.5
+      }
+    },
+    {
+      "id": "T.T3.real",
+      "set": "R",
+      "kind": "authentic",
+      "what": "NOT RUN until the thresholds source exists: the cited rule on the real neighbourhood pack, with the count of each class and its Poisson interval",
+      "limits": {}
+    },
+    {
+      "id": "S.A1.exactLine",
+      "set": "S",
+      "kind": "analytic",
+      "what": "noise-free groups on the stated relation: the fit returns V_sun and k exactly",
+      "limits": {
+        "maxRel": 1e-09
+      }
+    },
+    {
+      "id": "S.A2.lsrCorrection",
+      "set": "S",
+      "kind": "analytic",
+      "what": "lsrCorrection(sigma_U) = sigma_U^2 / 80 and the fit's k equals the stated 80 on the relation's own points",
+      "limits": {
+        "maxRel": 1e-12
+      }
+    },
+    {
+      "id": "S.B1.oracle",
+      "set": "S",
+      "kind": "oracle",
+      "what": "numpy weighted straight-line fit on pinned synthetic groups agrees on intercept, slope and their errors",
+      "limits": {
+        "maxAbs": 1e-06,
+        "maxRelErr": 1e-06
+      }
+    },
+    {
+      "id": "S.S1.recovery",
+      "set": "S",
+      "kind": "ensemble",
+      "what": "V_sun recovered: over the ensemble the mean estimate is within half the median stated error of the truth",
+      "limits": {
+        "realizations": 200,
+        "maxBiasInMedianErrors": 0.5
+      }
+    },
+    {
+      "id": "S.S2.coverage",
+      "set": "S",
+      "kind": "ensemble",
+      "what": "the one-sigma interval of V_sun covers the truth at 0.60 to 0.76 and the 1.96-sigma interval at 0.90 or more; the same for k on the realizations whose slope is constrained",
+      "limits": {
+        "realizations": 200,
+        "level1": [
+          0.6,
+          0.76
+        ],
+        "level2Min": 0.9
+      }
+    },
+    {
+      "id": "S.D1.noLever",
+      "set": "S",
+      "kind": "refusal",
+      "what": "a sample with one population only (every star young) has no dispersion lever: at least 90 percent of realizations return k 'not-constrained'",
+      "limits": {
+        "minFractionNotConstrained": 0.9,
+        "realizations": 200
+      }
+    },
+    {
+      "id": "S.L1.lsrOptions",
+      "set": "S",
+      "kind": "refusal",
+      "what": "D-GAIA-03 kept: the LSR option returns both candidate values (the sample's Stromberg-corrected value and 12.24 km/s) and no chosen value",
+      "limits": {}
+    },
+    {
+      "id": "S.R1.useful",
+      "set": "R",
+      "kind": "authentic",
+      "what": "on the real neighbourhood pack the V_sun half-width is at most 4.2 km/s and the slope is constrained",
+      "limits": {
+        "maxHalfWidth": 4.2,
+        "unit": "km/s"
+      }
+    },
+    {
+      "id": "S.R2.report",
+      "set": null,
+      "kind": "authentic",
+      "what": "REPORTED: the real intercept, slope, errors and group table beside the two candidate values",
+      "limits": {}
+    }
+  ],
+  "questions": [
+    "AM1: ratify the latitude-corrected Oort estimator (the committed planar form fails its own analytic leg), so that the Oort verdict is judged on it? Until then the Oort verdict is C by the committed function.",
+    "AM2: ratify the effective-variance drift fit (the committed fit takes each group's sigma_U^2 as exact), so that the drift verdict is judged on it? Until then the drift verdict is the committed form's."
+  ],
+  "amendments": [
+    {
+      "id": "AM1",
+      "when": "after the committed thresholds (271452ca) and before any gate-stream result: no ensemble of seed 235001 to 235004, no oracle output and no real-sample fit of the new kernel had been run",
+      "found": "by the analytic leg O.A1.exact on its first run (a noise-free, zero-dispersion disk at 0.02 kpc, no random draw): the committed estimator returned A 12.52 and B -10.79 against the truth 14.75 and -12.75, a factor of 0.85. The committed model 4.74047 mu_l* = A cos 2l + B + ... is the in-plane form. The velocity along l of a rotating disk is d cos b (A cos 2l + B), so a star at latitude b carries the factor cos b, which is 1 only in the plane; the neighbourhood pack covers the whole sky. motion.js's fitOortConstants has the same omission.",
+      "change": "the Oort estimator is also run in its latitude-corrected form, 4.74047 mu_l* = cos b (A cos 2l + B) + parallax (U sin l - V cos l); nothing else about the contract changes (weight, ladder, constrained rule, bounds). Every O leg is measured for both forms: the committed (planar) form under the ids as committed, the corrected form under the same id with the suffix .am1.",
+      "binding": "The verdict that binds the build is the one the committed function gives on the committed (planar) form: leg O.A1.exact fails on it, so by the committed function the Oort verdict is C and it stays so. The verdict on the corrected form is recorded beside it as a proposal, and is Carl's to ratify: a corrected estimator that passes would make the Oort verdict A or B only by his ruling. No bound was changed, and the failing leg is kept failing and labelled.",
+      "alsoFound": "The Rotating Disk and The Sun's Motion's existing Oort values (A 13.5 +/- 2.4, B -13.7 +/- 1.7) come from the planar form and are about 15 percent too small in magnitude by the sky's mean cos b; the lesson text is not changed here (the lesson goldens stay identical, Part B owns the lessons)."
+    },
+    {
+      "id": "AM2",
+      "when": "after the committed thresholds and AM1 and after one design-seed run of the validator (seed kin-235-design, no gate seed), before any gate-stream result: no ensemble of seed 235001 to 235004, no oracle output and no gate-seed real-sample result of the new kernel had been produced",
+      "found": "by reading the drift estimator against its own stated limit and by the design run: the committed fit weights each group by the error of its mean V alone and takes each group's sigma_U^2 as exact, but a group of 260 stars has a sample variance with a relative sampling error of about 9 percent, which at a slope of 1/80 adds about 1.5 km/s of scatter in V per group, comparable with the stated error of 1.5 to 2 km/s. The formal errors are therefore too small by construction (the design run's one-sigma coverage of V_sun was 0.56). This is a defect of the estimator, found analytically, not a tuning of a bound.",
+      "change": "the drift fit is also run in the effective-variance form: each group's weight is 1 / (err^2 + slope^2 var(sigma_U^2)), var(sigma_U^2) = (m4 - (n-3)/(n-1) s^4) / n from the group's fourth central moment, the slope iterated to convergence; the constrained rule and every bound are unchanged. Every S leg that fits the line is measured for both forms: the committed form under the ids as committed, the effective-variance form under the same id with the suffix .am2.",
+      "binding": "As AM1: the verdict that binds the build is the committed form's; the effective-variance form's verdict is recorded beside it as a proposal and is Carl's to ratify. No bound was changed.",
+      "notAmended": "The dispersion estimator (a sandwich covariance), the Oort ladder, the constrained rules and every coverage band are as committed: a small-bin coverage shortfall of the sandwich, if the gate stream shows one, is a result of the committed method and is recorded as one."
+    }
+  ]
+}
