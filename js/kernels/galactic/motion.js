@@ -239,12 +239,7 @@ export function fitOortConstants(stars, opts = {}) {
     if (!(s.parallax > 0)) continue;
     if (opts.maxDistance !== undefined && 1 / s.parallax > opts.maxDistance)
       continue;
-    const { l, b, pmL } = propermotionToGalactic(
-      s.ra,
-      s.dec,
-      s.pmRa,
-      s.pmDec
-    );
+    const { l, b, pmL } = propermotionToGalactic(s.ra, s.dec, s.pmRa, s.pmDec);
     const y = K_PM * pmL;
     if (!Number.isFinite(y)) continue;
     const L = l * DEG;

@@ -189,12 +189,7 @@ export function oortFacts(stars, weight = 'distance') {
   const rows = Array.from({ length: 12 }, () => []);
   for (const s of stars) {
     if (!(s.parallax > 0)) continue;
-    const { l, b, pmL } = propermotionToGalactic(
-      s.ra,
-      s.dec,
-      s.pmRa,
-      s.pmDec
-    );
+    const { l, b, pmL } = propermotionToGalactic(s.ra, s.dec, s.pmRa, s.pmDec);
     const cb = Math.cos((b * Math.PI) / 180);
     if (!(cb > 1e-6)) continue;
     const L = (l * Math.PI) / 180;
