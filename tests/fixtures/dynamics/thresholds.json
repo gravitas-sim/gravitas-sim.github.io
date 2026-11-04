@@ -176,6 +176,12 @@
       "limits": { "mass": 1e-12, "centre": 1e-12, "virial": 1e-9, "radius": 1e-9 }
     },
     {
+      "id": "R7",
+      "group": "reference",
+      "what": "added by AM2: the reference's production integrator (a fourth-order Hermite scheme with a shared adaptive step, own C code) and a second, unrelated integrator (scipy DOP853, rtol 1e-10, atol 1e-12) agree on the same starting points: the largest difference of any body's position, over seeds 1 (family S) and 101 (family D), at t = 1.4142 Heggie time units (half a crossing time)",
+      "limits": { "positionAbsolute": 1e-5, "time": 1.4142 }
+    },
+    {
       "id": "G1",
       "group": "gate",
       "what": "family S, the half-mass Lagrangian radius r50 of the bound members: the engine's ensemble mean and the reference's at each of the 10 sample times differ by no more than 0.10 of the reference mean plus twice the combined standard error, at 9 of the 10 times including the last",
@@ -271,5 +277,16 @@
     "A": "the reference is validated (R1 to R6 pass) and every one of G1 to G7 passes. The engine's precomputed runs ship with the comparison shown, the upper depth on segregation and evaporation and 'A satellite falls in' with dynamical friction are built.",
     "B": "the reference is validated and at least one of G1 to G7 fails. The reference runs alone are shown, with their provenance; the engine's runs are omitted. Which legs passed is recorded, and the alternative a partial pass suggests (a slice of the legs) is a question for Carl, not a verdict."
   },
-  "amendments": []
+  "amendments": [
+    {
+      "id": "AM2",
+      "when": "after the first timing of the reference code and before any ensemble of either side was run or any engine result existed",
+      "what": "the reference's production integrator is changed from scipy DOP853 (about 110 s for one sampling interval of one run, 16 runs of 10 intervals being hours on the machine in use) to a fourth-order Hermite scheme with a shared adaptive time step written in C (tools/dynamics-oracle/hermite.c, step eta times the smallest |a| / |j|, eta = 0.005, two force evaluations per step), driven and measured from reference.py. DOP853 is kept as a second, unrelated integrator and becomes leg R7. R3 (the softened two-body orbit) and R1, R2 now judge the Hermite code. No bound of any leg changed, no engine result existed. The one number read before the amendment was the time and a single reference observable set of seed 1 at the first sample, which showed a large escaped fraction at 3 crossing times (the cluster's starting velocities are not a distribution-function equilibrium; DYNAMICS.md says so and the escaped fraction is not claimed as two-body evaporation); the starting points were NOT changed after seeing it."
+    },
+    {
+      "id": "AM1",
+      "when": "before any kernel module existed and before any kernel row was judged",
+      "what": "the relaxation relations (half-mass relaxation, local relaxation) are refused when the Coulomb logarithm is below 1, because the logarithm of a Coulomb logarithm's argument below e is not a Coulomb logarithm (ln(gamma N) < 1 for N below 25 at gamma 0.11, for N below 135 at gamma 0.02); the oracle's cases for A2 and O1 therefore draw N from 500 up. D4 counts this refusal among its cases. No bound changed."
+    }
+  ]
 }
