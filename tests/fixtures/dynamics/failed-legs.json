@@ -1,0 +1,52 @@
+{
+  "note": "Legs of tests/fixtures/dynamics/thresholds.json that crossed their bound or were not run, kept as measured. Only Carl resets a bound.",
+  "failed": [
+    {
+      "id": "B1",
+      "status": "not-run",
+      "measured": null,
+      "note": "no published table of relaxation times was supplied (tests/fixtures/dynamics/published-relaxation-times.json); only Carl can fetch one (thresholds.json, supply.B1)"
+    },
+    {
+      "id": "C1",
+      "status": "fail",
+      "measured": {
+        "coverage": 0.8533333333333334,
+        "estimates": 300,
+        "notConstrained": 0,
+        "level": 0.6827,
+        "informationOnlyWithoutStructureTerm": 0.7266666666666667
+      },
+      "note": "over-covers on an exact-Plummer ensemble: the structure term of 0.15 is a stated assumption for profiles that are not Plummer and there is none here (the bootstrap part alone covers 0.727, inside the committed range); the bound is left as committed and the alternative (judge the structure term on a misspecified family) is a question for Carl"
+    },
+    {
+      "id": "C2",
+      "status": "fail",
+      "measured": {
+        "coverage": 0.9966666666666667,
+        "estimates": 300,
+        "level": 0.95,
+        "informationOnlyWithoutStructureTerm": 0.9633333333333334
+      },
+      "note": "over-covers on an exact-Plummer ensemble for the same reason as C1 (the bootstrap part alone covers 0.963, inside the committed range); left failing, the alternative is a question for Carl"
+    },
+    {
+      "id": "R2",
+      "status": "fail",
+      "measured": {
+        "momentum": 8.232318858572644e-8,
+        "angularMomentum": 2.3224611574862442e-7
+      },
+      "note": "the reference code (a block-step Hermite scheme whose prediction and correction do not pair forces by Newton third law) conserves linear momentum to 8.2e-8 in Heggie units, above the committed 1e-9; angular momentum 2.3e-7 is inside its bound; this is the leg that makes the verdict C under the committed rule, and a bound that a symmetric scheme would meet is a question for Carl, not a change made here"
+    },
+    {
+      "id": "R7",
+      "status": "fail",
+      "measured": {
+        "positionAbsolute": 0.0005727733973958874,
+        "time": 1.4142
+      },
+      "note": "hermite.c (eta 5e-4) and scipy DOP853 (rtol 1e-10) differ by 5.7e-4 at half a crossing time, above the committed 1e-5; the diagnostics run after the fact (not a bound change) show DOP853 at rtol 1e-10 differs from DOP853 at 1e-13 by 5.0e-5 and Hermite at eta 1e-4 agrees with DOP853 at 1e-13 to 3.2e-6: both integrators are under-converged in position at half a crossing time in a chaotic system. R7 was added by AM2 and is not in the committed verdict rule"
+    }
+  ]
+}

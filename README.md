@@ -94,7 +94,7 @@ model page sets out the four different radii a body has under _Displayed
 sizes_.
 
 **A validation suite.** `npm run validate:physics` prints a PASS/FAIL table
-of <!--fact:physicsChecks-->352<!--/fact--> checks with measured error against a
+of <!--fact:physicsChecks-->358<!--/fact--> checks with measured error against a
 stated tolerance: orbital periods and Kepler's laws, conservation of momentum,
 angular momentum and energy, the convergence order of each selectable
 integrator, escape velocity, transit depth, radial-velocity semi-amplitude,
@@ -341,7 +341,7 @@ run directly, so debugging never requires a build step.
 ### Everything else
 
 ```bash
-npm test                  # <!--fact:jestTests-->19165<!--/fact--> tests across <!--fact:jestSuites-->530<!--/fact--> suites
+npm test                  # <!--fact:jestTests-->19184<!--/fact--> tests across <!--fact:jestSuites-->532<!--/fact--> suites
 npm run validate:physics  # the physics validation table
 npm run e2e               # browser smoke tests, against the sources
 npm run lint              # eslint
@@ -486,7 +486,7 @@ npm run e2e:ui                    # the Playwright inspector
 npm run e2e:report                # open the last HTML report
 ```
 
-The suite is <!--fact:e2eTests-->3287<!--/fact--> tests
+The suite is <!--fact:e2eTests-->3285<!--/fact--> tests
 in <!--fact:e2eFiles-->231<!--/fact--> files and takes several minutes in
 Chromium.
 
@@ -558,7 +558,7 @@ and against what.
 npm run validate:physics
 ```
 
-That is <!--fact:physicsChecks-->352<!--/fact--> deterministic checks, about
+That is <!--fact:physicsChecks-->358<!--/fact--> deterministic checks, about
 two minutes, printed as a table of measured value, expected value, error and
 tolerance. Five kinds, and the table labels each: closed-form arithmetic,
 quantities measured by running the N-body engine, literature values with their

@@ -1,0 +1,708 @@
+{
+  "format": "gravitas.dynamics-results/1",
+  "node": "v22.23.4",
+  "verdict": "C",
+  "rows": [
+    {
+      "id": "A1",
+      "group": "analytic",
+      "status": "pass",
+      "measured": {
+        "worstRelative": 4.222196396241602e-15,
+        "cases": 20
+      },
+      "note": ""
+    },
+    {
+      "id": "A2",
+      "group": "analytic",
+      "status": "pass",
+      "measured": {
+        "worstRelative": 3.251699310860109e-15,
+        "worstIdentity": 3.485573795346255e-16,
+        "cases": 30
+      },
+      "note": ""
+    },
+    {
+      "id": "A3",
+      "group": "analytic",
+      "status": "pass",
+      "measured": {
+        "etaRelative": 3.523200607134753e-10,
+        "massRelative": 3.523192848575718e-10,
+        "etaKernel": 10.185916357881302,
+        "etaOracle": 10.1859163542926
+      },
+      "note": ""
+    },
+    {
+      "id": "A4",
+      "group": "analytic",
+      "status": "pass",
+      "measured": {
+        "worstAbsolute": 9.79216707719388e-13,
+        "smallXRelative": 0.000059997857198120436,
+        "largeXAbsolute": 1.5543122344752192e-15
+      },
+      "note": ""
+    },
+    {
+      "id": "A5",
+      "group": "analytic",
+      "status": "pass",
+      "measured": {
+        "relative": 0.001958379437712584,
+        "kernelMyr": 3.8016956428953312,
+        "integratedMyr": 3.8091554145342066
+      },
+      "note": ""
+    },
+    {
+      "id": "A6",
+      "group": "analytic",
+      "status": "pass",
+      "measured": {
+        "worstAbsolute": 3.552713678800501e-14,
+        "refusals": 4
+      },
+      "note": ""
+    },
+    {
+      "id": "A7",
+      "group": "analytic",
+      "status": "pass",
+      "measured": {
+        "worstRelative": 3.814891159977421e-15,
+        "halfMassOverLocal": 0.6127807448935967,
+        "factor": 1.63190506283555
+      },
+      "note": ""
+    },
+    {
+      "id": "O1",
+      "group": "oracle",
+      "status": "pass",
+      "measured": {
+        "worstRelative": 5.047947239030267e-15,
+        "classesEqual": true,
+        "cases": 200
+      },
+      "note": ""
+    },
+    {
+      "id": "B1",
+      "group": "published",
+      "status": "not-run",
+      "measured": null,
+      "note": "no published table of relaxation times was supplied (tests/fixtures/dynamics/published-relaxation-times.json); only Carl can fetch one (thresholds.json, supply.B1)"
+    },
+    {
+      "id": "C1",
+      "group": "coverage",
+      "status": "fail",
+      "measured": {
+        "coverage": 0.8533333333333334,
+        "estimates": 300,
+        "notConstrained": 0,
+        "level": 0.6827,
+        "informationOnlyWithoutStructureTerm": 0.7266666666666667
+      },
+      "note": ""
+    },
+    {
+      "id": "C2",
+      "group": "coverage",
+      "status": "fail",
+      "measured": {
+        "coverage": 0.9966666666666667,
+        "estimates": 300,
+        "level": 0.95,
+        "informationOnlyWithoutStructureTerm": 0.9633333333333334
+      },
+      "note": ""
+    },
+    {
+      "id": "C3",
+      "group": "coverage",
+      "status": "pass",
+      "measured": {
+        "medianRatio": 0.9921533992344906,
+        "estimates": 300
+      },
+      "note": ""
+    },
+    {
+      "id": "D1",
+      "group": "refusal",
+      "status": "pass",
+      "measured": {
+        "at19": "not-constrained",
+        "at20": "ok"
+      },
+      "note": ""
+    },
+    {
+      "id": "D2",
+      "group": "refusal",
+      "status": "pass",
+      "measured": {
+        "unresolvedNotConstrained": 0.93,
+        "resolvedEstimate": 1
+      },
+      "note": ""
+    },
+    {
+      "id": "D3",
+      "group": "refusal",
+      "status": "pass",
+      "measured": {
+        "codes": [
+          "finite",
+          "error",
+          "finite",
+          "shape",
+          "radius"
+        ]
+      },
+      "note": ""
+    },
+    {
+      "id": "D4",
+      "group": "refusal",
+      "status": "pass",
+      "measured": {
+        "codes": [
+          "input",
+          "input",
+          "input",
+          "input",
+          "input",
+          "coulomb",
+          "coulomb",
+          "coulomb"
+        ]
+      },
+      "note": ""
+    },
+    {
+      "id": "R1",
+      "group": "reference",
+      "status": "pass",
+      "measured": {
+        "worst": 5.278219263882278e-7,
+        "runs": 32
+      },
+      "note": ""
+    },
+    {
+      "id": "R2",
+      "group": "reference",
+      "status": "fail",
+      "measured": {
+        "momentum": 8.232318858572644e-8,
+        "angularMomentum": 2.3224611574862442e-7
+      },
+      "note": ""
+    },
+    {
+      "id": "R3",
+      "group": "reference",
+      "status": "pass",
+      "measured": {
+        "periodRelative": 1.4387584131292901e-15,
+        "energyRelative": 3.517186542012497e-14,
+        "angularMomentumRelative": 1.2899625854847774e-14
+      },
+      "note": ""
+    },
+    {
+      "id": "R4",
+      "group": "reference",
+      "status": "pass",
+      "measured": {
+        "worstRelative": 1.6512719991367932e-15,
+        "comparisons": 54
+      },
+      "note": ""
+    },
+    {
+      "id": "R5",
+      "group": "reference",
+      "status": "pass",
+      "measured": {
+        "relative": 0
+      },
+      "note": ""
+    },
+    {
+      "id": "R6",
+      "group": "reference",
+      "status": "pass",
+      "measured": {
+        "mass": 2.220446049250313e-16,
+        "centre": 1.1796119636642288e-16,
+        "momentum": 5.551115123125783e-17,
+        "virial": 4.440892098500626e-16,
+        "radius": 4.440892098500626e-16
+      },
+      "note": ""
+    },
+    {
+      "id": "R7",
+      "group": "reference",
+      "status": "fail",
+      "measured": {
+        "positionAbsolute": 0.0005727733973958874,
+        "time": 1.4142
+      },
+      "note": ""
+    },
+    {
+      "id": "G1",
+      "group": "gate",
+      "status": "pass",
+      "measured": {
+        "observable": "r50",
+        "passing": 10,
+        "of": 10,
+        "last": true,
+        "perTime": [
+          {
+            "k": 1,
+            "engine": 1.1892,
+            "reference": 1.0525,
+            "bound": 0.3423,
+            "pass": true
+          },
+          {
+            "k": 2,
+            "engine": 1.888,
+            "reference": 1.8863,
+            "bound": 0.6906,
+            "pass": true
+          },
+          {
+            "k": 3,
+            "engine": 2.7182,
+            "reference": 2.4536,
+            "bound": 0.9318,
+            "pass": true
+          },
+          {
+            "k": 4,
+            "engine": 3.5424,
+            "reference": 3.1075,
+            "bound": 1.2518,
+            "pass": true
+          },
+          {
+            "k": 5,
+            "engine": 4.3222,
+            "reference": 3.8483,
+            "bound": 1.5503,
+            "pass": true
+          },
+          {
+            "k": 6,
+            "engine": 5.5034,
+            "reference": 4.6113,
+            "bound": 1.7222,
+            "pass": true
+          },
+          {
+            "k": 7,
+            "engine": 6.4049,
+            "reference": 5.1546,
+            "bound": 1.9362,
+            "pass": true
+          },
+          {
+            "k": 8,
+            "engine": 7.1241,
+            "reference": 5.387,
+            "bound": 2.2278,
+            "pass": true
+          },
+          {
+            "k": 9,
+            "engine": 7.5115,
+            "reference": 6.2374,
+            "bound": 2.4834,
+            "pass": true
+          },
+          {
+            "k": 10,
+            "engine": 7.696,
+            "reference": 6.7261,
+            "bound": 2.5394,
+            "pass": true
+          }
+        ]
+      },
+      "note": ""
+    },
+    {
+      "id": "G2",
+      "group": "gate",
+      "status": "pass",
+      "measured": {
+        "observable": "r10",
+        "passing": 10,
+        "of": 10,
+        "last": true,
+        "perTime": [
+          {
+            "k": 1,
+            "engine": 0.407,
+            "reference": 0.4125,
+            "bound": 0.2384,
+            "pass": true
+          },
+          {
+            "k": 2,
+            "engine": 0.7147,
+            "reference": 0.6581,
+            "bound": 0.3793,
+            "pass": true
+          },
+          {
+            "k": 3,
+            "engine": 1.1798,
+            "reference": 0.8977,
+            "bound": 0.6837,
+            "pass": true
+          },
+          {
+            "k": 4,
+            "engine": 1.5997,
+            "reference": 1.2247,
+            "bound": 0.9734,
+            "pass": true
+          },
+          {
+            "k": 5,
+            "engine": 2.0509,
+            "reference": 1.4252,
+            "bound": 1.2045,
+            "pass": true
+          },
+          {
+            "k": 6,
+            "engine": 2.5164,
+            "reference": 2.0808,
+            "bound": 1.4664,
+            "pass": true
+          },
+          {
+            "k": 7,
+            "engine": 3.104,
+            "reference": 2.2728,
+            "bound": 1.5089,
+            "pass": true
+          },
+          {
+            "k": 8,
+            "engine": 3.692,
+            "reference": 2.5276,
+            "bound": 1.8505,
+            "pass": true
+          },
+          {
+            "k": 9,
+            "engine": 4.1096,
+            "reference": 3.0367,
+            "bound": 2.1986,
+            "pass": true
+          },
+          {
+            "k": 10,
+            "engine": 4.5144,
+            "reference": 3.3232,
+            "bound": 2.6401,
+            "pass": true
+          }
+        ]
+      },
+      "note": ""
+    },
+    {
+      "id": "G3",
+      "group": "gate",
+      "status": "pass",
+      "measured": {
+        "observable": "r90",
+        "passing": 10,
+        "of": 10,
+        "last": true,
+        "perTime": [
+          {
+            "k": 1,
+            "engine": 4.292,
+            "reference": 4.2807,
+            "bound": 1.1509,
+            "pass": true
+          },
+          {
+            "k": 2,
+            "engine": 6.9045,
+            "reference": 6.562,
+            "bound": 1.7894,
+            "pass": true
+          },
+          {
+            "k": 3,
+            "engine": 8.732,
+            "reference": 8.5768,
+            "bound": 2.2759,
+            "pass": true
+          },
+          {
+            "k": 4,
+            "engine": 10.5409,
+            "reference": 10.4589,
+            "bound": 2.6958,
+            "pass": true
+          },
+          {
+            "k": 5,
+            "engine": 12.5018,
+            "reference": 12.3536,
+            "bound": 3.1977,
+            "pass": true
+          },
+          {
+            "k": 6,
+            "engine": 14.5296,
+            "reference": 13.9735,
+            "bound": 3.6412,
+            "pass": true
+          },
+          {
+            "k": 7,
+            "engine": 16.089,
+            "reference": 15.5447,
+            "bound": 4.2385,
+            "pass": true
+          },
+          {
+            "k": 8,
+            "engine": 17.9631,
+            "reference": 17.4417,
+            "bound": 4.8045,
+            "pass": true
+          },
+          {
+            "k": 9,
+            "engine": 19.8579,
+            "reference": 19.1046,
+            "bound": 5.2944,
+            "pass": true
+          },
+          {
+            "k": 10,
+            "engine": 21.5669,
+            "reference": 20.6666,
+            "bound": 5.8391,
+            "pass": true
+          }
+        ]
+      },
+      "note": ""
+    },
+    {
+      "id": "G4",
+      "group": "gate",
+      "status": "pass",
+      "measured": {
+        "observable": "seg",
+        "passing": 10,
+        "of": 10,
+        "last": true,
+        "perTime": [
+          {
+            "k": 1,
+            "engine": 1.4091,
+            "reference": 1.4421,
+            "bound": 0.3885,
+            "pass": true
+          },
+          {
+            "k": 2,
+            "engine": 1.4979,
+            "reference": 1.5085,
+            "bound": 0.3921,
+            "pass": true
+          },
+          {
+            "k": 3,
+            "engine": 1.5808,
+            "reference": 1.5396,
+            "bound": 0.4037,
+            "pass": true
+          },
+          {
+            "k": 4,
+            "engine": 1.5683,
+            "reference": 1.5586,
+            "bound": 0.396,
+            "pass": true
+          },
+          {
+            "k": 5,
+            "engine": 1.5626,
+            "reference": 1.5841,
+            "bound": 0.4243,
+            "pass": true
+          },
+          {
+            "k": 6,
+            "engine": 1.5141,
+            "reference": 1.6282,
+            "bound": 0.432,
+            "pass": true
+          },
+          {
+            "k": 7,
+            "engine": 1.5311,
+            "reference": 1.6101,
+            "bound": 0.4348,
+            "pass": true
+          },
+          {
+            "k": 8,
+            "engine": 1.5306,
+            "reference": 1.6418,
+            "bound": 0.4895,
+            "pass": true
+          },
+          {
+            "k": 9,
+            "engine": 1.5377,
+            "reference": 1.6516,
+            "bound": 0.5198,
+            "pass": true
+          },
+          {
+            "k": 10,
+            "engine": 1.5647,
+            "reference": 1.6627,
+            "bound": 0.4795,
+            "pass": true
+          }
+        ]
+      },
+      "note": ""
+    },
+    {
+      "id": "G5",
+      "group": "gate",
+      "status": "pass",
+      "measured": {
+        "observable": "esc",
+        "passing": 10,
+        "of": 10,
+        "last": true,
+        "perTime": [
+          {
+            "k": 1,
+            "engine": 0.1524,
+            "reference": 0.1603,
+            "bound": 0.0685,
+            "pass": true
+          },
+          {
+            "k": 2,
+            "engine": 0.2219,
+            "reference": 0.2378,
+            "bound": 0.0725,
+            "pass": true
+          },
+          {
+            "k": 3,
+            "engine": 0.2823,
+            "reference": 0.2886,
+            "bound": 0.0803,
+            "pass": true
+          },
+          {
+            "k": 4,
+            "engine": 0.3235,
+            "reference": 0.3261,
+            "bound": 0.077,
+            "pass": true
+          },
+          {
+            "k": 5,
+            "engine": 0.3623,
+            "reference": 0.3597,
+            "bound": 0.0877,
+            "pass": true
+          },
+          {
+            "k": 6,
+            "engine": 0.3808,
+            "reference": 0.3851,
+            "bound": 0.0828,
+            "pass": true
+          },
+          {
+            "k": 7,
+            "engine": 0.3986,
+            "reference": 0.4054,
+            "bound": 0.0841,
+            "pass": true
+          },
+          {
+            "k": 8,
+            "engine": 0.4165,
+            "reference": 0.4157,
+            "bound": 0.0871,
+            "pass": true
+          },
+          {
+            "k": 9,
+            "engine": 0.4327,
+            "reference": 0.435,
+            "bound": 0.0854,
+            "pass": true
+          },
+          {
+            "k": 10,
+            "engine": 0.4515,
+            "reference": 0.456,
+            "bound": 0.0863,
+            "pass": true
+          }
+        ]
+      },
+      "note": ""
+    },
+    {
+      "id": "G6",
+      "group": "gate",
+      "status": "pass",
+      "measured": {
+        "engine": 0.6617009111674845,
+        "reference": 0.7150432751773279,
+        "difference": -0.05334236400984338,
+        "bound": 0.45572354626840234,
+        "standardError": 0.13848136373703518
+      },
+      "note": ""
+    },
+    {
+      "id": "G7",
+      "group": "gate",
+      "status": "pass",
+      "measured": {
+        "engine": 1.2640739683481135,
+        "reference": 1.2564947676662113,
+        "difference": 0.0075792006819022095,
+        "bound": 0.7115688670338824,
+        "standardError": 0.19872258755866484
+      },
+      "note": ""
+    }
+  ]
+}
