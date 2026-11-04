@@ -236,12 +236,13 @@
     {
       "id": "B5.hostDistance",
       "leg": "b",
-      "what": "the distance from a redshift (the existing FLRW kernel, flat, H0 70, Om 0.3, OL 0.7) against astropy's FlatLambdaCDM luminosity distance with no radiation at z = 0.003, 0.01, 0.05 and 0.1, relative 1e-8; the Hubble-flow distance c z / H0 is the closed form at low redshift with the stated relative gap to the exact distance at each z (the gap is 0.75 z to first order, checked within 10 percent of that at z = 0.003 and 0.01); the peculiar-velocity uncertainty sigma_v adds a relative distance uncertainty sigma_v / (c z) exactly, and the kernel flags the result 'peculiar-velocity-dominated' when that exceeds 0.1 (z below 0.03 for 300 km/s) and refuses a redshift of 0 or below.",
+      "what": "the distance from a redshift (the existing FLRW kernel, flat, H0 70, Om 0.3, OL 0.7) against astropy's FlatLambdaCDM luminosity distance with no radiation at z = 0.003, 0.01, 0.05 and 0.1, relative 1e-8; the Hubble-flow distance c z / H0 is the closed form at low redshift with the stated relative gap to the exact distance at each z (the gap is (1 - q0) z / 2 = 0.775 z to first order for q0 = Om/2 - OL = -0.55, checked within 10 percent of that at z = 0.003 and 0.01); the peculiar-velocity uncertainty sigma_v adds a relative distance uncertainty sigma_v / (c z) exactly, and the kernel flags the result 'peculiar-velocity-dominated' when that exceeds 0.1 (z below 0.03 for 300 km/s) and refuses a redshift of 0 or below.",
       "limits": {
         "redshifts": [0.003, 0.01, 0.05, 0.1],
         "cosmology": { "H0": 70, "Om": 0.3, "OL": 0.7 },
         "maxRel": 1e-8,
         "firstOrderGapWithin": 0.1,
+        "firstOrderCoefficient": 0.775,
         "sigmaVKms": 300,
         "dominatedAbove": 0.1
       }
@@ -339,5 +340,12 @@
       "limits": { "maxCpuSeconds": 30, "recordedNotBound": true }
     }
   ],
-  "amendments": []
+  "amendments": [
+    {
+      "id": "AM1",
+      "check": "B5.hostDistance",
+      "what": "the first-order coefficient of the gap between the luminosity distance and c z / H0 was written as 0.75 and is (1 - q0) / 2 = 0.775 for H0 70, Om 0.3, OL 0.7 (q0 = Om/2 - OL); a slip of arithmetic in this file, corrected in the text and in a new limit, firstOrderCoefficient. The tolerance (10 percent) is unchanged.",
+      "when": "2026-11-04, before js/kernels/multimessenger existed and before any result"
+    }
+  ]
 }
