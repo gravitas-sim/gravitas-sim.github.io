@@ -36,8 +36,6 @@ import {
   rankAt,
   profile,
 } from '../../inference/fit.js';
-import { eigenSymmetric } from '../../numeric/linalg.js';
-import { cubicSpline } from '../../numeric/interp.js';
 import {
   covarianceInterval,
   profileInterval,
@@ -106,6 +104,97 @@ export function diskShapeDirect(y) {
   return y * y * (i0 * k0 - i1 * k1);
 }
 
+// A natural cubic spline and a symmetric eigen-solver, local on purpose: js/numeric/interp.js and
+// js/numeric/linalg.js are not installed in the app while no shipped module imports them (the
+// install tests of tests/numericRoutines.test.js), and this kernel is not shipped yet. When it is,
+// its adoption of those two is that decision's to make.
+function naturalSpline(xs, ys) {
+  const n = xs.length;
+  const m = new Float64Array(n);
+  const diag = new Float64Array(n);
+  const rhs = new Float64Array(n);
+  const h = i => xs[i + 1] - xs[i];
+  diag[0] = 1;
+  diag[n - 1] = 1;
+  for (let i = 1; i < n - 1; i++) {
+    diag[i] = 2 * (h(i - 1) + h(i));
+    rhs[i] = 6 * ((ys[i + 1] - ys[i]) / h(i) - (ys[i] - ys[i - 1]) / h(i - 1));
+  }
+  for (let i = 1; i < n; i++) {
+    const lower = i < n - 1 ? h(i - 1) : 0;
+    const upper = i - 1 > 0 ? h(i - 1) : 0;
+    const w = lower / diag[i - 1];
+    diag[i] -= w * upper;
+    rhs[i] -= w * rhs[i - 1];
+  }
+  m[n - 1] = rhs[n - 1] / diag[n - 1];
+  for (let i = n - 2; i >= 0; i--)
+    m[i] = (rhs[i] - (i > 0 ? h(i) : 0) * m[i + 1]) / diag[i];
+  return x => {
+    let lo = 0;
+    let hi = n - 1;
+    while (hi - lo > 1) {
+      const mid = (lo + hi) >> 1;
+      if (xs[mid] <= x) lo = mid;
+      else hi = mid;
+    }
+    const w = h(lo);
+    const a = (xs[lo + 1] - x) / w;
+    const b = (x - xs[lo]) / w;
+    return (
+      a * ys[lo] +
+      b * ys[lo + 1] +
+      (((a * a * a - a) * m[lo] + (b * b * b - b) * m[lo + 1]) * w * w) / 6
+    );
+  };
+}
+
+/** Eigenvalues and unit eigenvectors of a small symmetric matrix by cyclic Jacobi sweeps, largest first. */
+function eigenSymmetric(M) {
+  const n = M.length;
+  const A = M.map(r => r.slice());
+  const V = Array.from({ length: n }, (_, i) =>
+    Array.from({ length: n }, (_, j) => (i === j ? 1 : 0))
+  );
+  for (let sweep = 0; sweep < 60; sweep++) {
+    let off = 0;
+    for (let i = 0; i < n; i++)
+      for (let j = i + 1; j < n; j++) off += A[i][j] * A[i][j];
+    if (off < 1e-30) break;
+    for (let p = 0; p < n - 1; p++)
+      for (let q = p + 1; q < n; q++) {
+        if (Math.abs(A[p][q]) < 1e-300) continue;
+        const theta = (A[q][q] - A[p][p]) / (2 * A[p][q]);
+        const t =
+          Math.sign(theta || 1) / (Math.abs(theta) + Math.hypot(theta, 1));
+        const c = 1 / Math.hypot(t, 1);
+        const s = t * c;
+        for (let k = 0; k < n; k++) {
+          const akp = A[k][p];
+          const akq = A[k][q];
+          A[k][p] = c * akp - s * akq;
+          A[k][q] = s * akp + c * akq;
+        }
+        for (let k = 0; k < n; k++) {
+          const apk = A[p][k];
+          const aqk = A[q][k];
+          A[p][k] = c * apk - s * aqk;
+          A[q][k] = s * apk + c * aqk;
+        }
+        for (let k = 0; k < n; k++) {
+          const vkp = V[k][p];
+          const vkq = V[k][q];
+          V[k][p] = c * vkp - s * vkq;
+          V[k][q] = s * vkp + c * vkq;
+        }
+      }
+  }
+  return Array.from({ length: n }, (_, i) => ({
+    value: A[i][i],
+    vector: V.map(row => row[i]),
+  })).sort((a, b) => b.value - a.value);
+}
+
 const TABLE = { lnLo: Math.log(1e-6), lnHi: Math.log(1000), n: 4000 };
 let spline = null;
 function table() {
@@ -117,7 +206,7 @@ function table() {
       xs[j] = TABLE.lnLo + j * step;
       ys[j] = Math.log(diskShapeDirect(Math.exp(xs[j])));
     }
-    spline = cubicSpline(xs, ys);
+    spline = naturalSpline(xs, ys);
   }
   return spline;
 }
@@ -132,7 +221,7 @@ export function diskShape(y) {
   if (!(y > 0)) return 0;
   if (y < 1e-6) return y * y * (-Math.log(y / 2) - 0.5772156649015329 - 0.5);
   if (y > 1000) return (1 / (4 * y)) * (1 + 9 / (8 * y * y));
-  return Math.exp(table().at(Math.log(y)));
+  return Math.exp(table()(Math.log(y)));
 }
 
 // --- the components ------------------------------------------------------------------
@@ -268,11 +357,15 @@ export const DEFAULT_BOUNDS = Object.freeze({
 });
 
 const LABELS = {
-  logDiskMass: { label: 'disk mass, log10', unit: 'log10 solar masses' },
+  logDiskMass: { label: 'disk mass, log10', unit: 'solar masses', log10: true },
   diskScale: { label: 'disk scale length', unit: 'kpc' },
   haloSpeed: { label: 'halo speed scale', unit: 'km/s' },
-  logHaloScale: { label: 'halo scale radius, log10', unit: 'log10 kpc' },
-  logBulgeMass: { label: 'bulge mass, log10', unit: 'log10 solar masses' },
+  logHaloScale: { label: 'halo scale radius, log10', unit: 'kpc', log10: true },
+  logBulgeMass: {
+    label: 'bulge mass, log10',
+    unit: 'solar masses',
+    log10: true,
+  },
 };
 
 const MODEL = {

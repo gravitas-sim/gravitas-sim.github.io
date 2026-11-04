@@ -46,7 +46,7 @@ export default async function run({ add }) {
     name: 'An NFW halo’s circular speed peaks at 2.16 scale radii',
     measured: K.nfwPeakRatio(),
     expected: 0.5 * (lo + hi),
-    unit: 'r_s',
+    unit: '',
     tolerance: 1e-9,
     why: 'The condition d(m(x)/x)/dx = 0 for the enclosed-mass function m(x) = ln(1 + x) - x / (1 + x), solved by bisection in the suite and by the kernel independently of each other.',
     source: 'Navarro, Frenk and White 1996, ApJ 462, 563',

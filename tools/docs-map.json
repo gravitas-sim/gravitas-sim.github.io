@@ -1117,7 +1117,7 @@
     {
       "file": "ROTATION_DECOMPOSITION.md",
       "kind": "feature",
-      "purpose": "Rotation-curve decomposition: a Hernquist bulge, a thin exponential disk and an NFW or pseudo-isothermal halo, the fit with its covariance and the disk-halo degeneracy, \"not constrained\", the validation contract with its four failed legs, and Part B deferred (Prompt 236).",
+      "purpose": "Rotation-curve decomposition: bulge, thin disk and halo, the fit with its covariance and the disk-halo degeneracy, the validation contract with its failed legs, Part B deferred (Prompt 236).",
       "owner": 236,
       "student": false
     },
