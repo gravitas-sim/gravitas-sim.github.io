@@ -52,7 +52,8 @@ cross-match); the near stratum is over-sampled on purpose.
   claimed to (see the correction below). An unweighted fit fails (A = -1.9 +/- 13.2, B = -7.9 +/- 9.3), because
   the nearest stars carry the largest scatter in proper-motion units; the kernel defaults to the weighted fit
   and says why.
-  Correction (Prompt 235, `KINEMATICS_GATE.md`, and this change): until then the fit was the in-plane form and
+  Correction (found in Prompt 235, `KINEMATICS_GATE.md`, which recorded the defect and left the kernel and the
+  lesson unchanged; corrected by the change that followed, D-R10-235-05): the fit had been the in-plane form and
   left out cos b, so its A and B were low in magnitude by about the sample's mean cos b (0.85; 15 percent for a
   noise-free disk, A 12.6 and B -10.5 for a disk of 14.75 and -12.75). On these stars the planar form read
   A = 13.5 +/- 2.4 and B = -13.7 +/- 1.7 and a speed of 226 km/s: A 7, B 10 and the speed 8 percent low. The

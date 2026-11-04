@@ -275,6 +275,75 @@ test.describe('a system can be built without a pointer', () => {
     }
   });
 
+  // D-R10-228-07. The lesson's panel is mounted the first time a lesson opens,
+  // and on a loaded machine that is after a modal is. It came in live behind
+  // the modal and took focus with its own focus(): the Tab-trap test above
+  // failed on that race, and waits for the panel to dodge it. These two make
+  // it happen on purpose, by opening the lesson over the modal.
+  // Through the address bar, as pasting a lesson link into an open tab does:
+  // it works on sources and on dist/, where there is no module to import.
+  const openLessonOver = async page => {
+    await page.evaluate(() => {
+      location.hash = '#investigation=tides';
+    });
+    await expect(page.locator('#investigationPanel')).toBeVisible();
+    await expect(page.locator('.inv-step-title')).not.toBeEmpty();
+  };
+  const where = (page, modal) =>
+    page.evaluate(sel => {
+      const panel = document.getElementById('investigationPanel');
+      return {
+        panelOpen: panel ? !panel.hidden : false,
+        panelInert: panel ? Boolean(panel.closest('[inert]')) : null,
+        focusInModal: document
+          .querySelector(sel)
+          .contains(document.activeElement),
+      };
+    }, modal);
+
+  test('a lesson that opens over the form does not take focus from it', async ({
+    page,
+    app,
+  }) => {
+    await app.boot({ url: '/' });
+    await page.locator('#precisePlaceBtn').click();
+    await expect(page.locator('#precisePlaceType')).toBeFocused();
+    await openLessonOver(page);
+    expect(await where(page, '#precisePlaceDialog')).toMatchObject({
+      panelOpen: true,
+      focusInModal: true,
+    });
+    await page.locator('#precisePlace-mass').focus();
+    await page.keyboard.press('Tab');
+    expect(
+      await page.evaluate(() =>
+        document
+          .getElementById('precisePlaceDialog')
+          .contains(document.activeElement)
+      ),
+      'Tab from the mass field after the lesson opened'
+    ).toBe(true);
+  });
+
+  test('a lesson that opens over a page-isolating modal is inert until it closes', async ({
+    page,
+    app,
+  }) => {
+    await app.boot({ url: '/' });
+    await page.locator('#loadScenarioBtn').click();
+    await expect(page.locator('#scenarioSearch')).toBeFocused();
+    await openLessonOver(page);
+    expect(await where(page, '#scenarioListContent')).toEqual({
+      panelOpen: true,
+      panelInert: true,
+      focusInModal: true,
+    });
+    await page.keyboard.press('Escape');
+    await expect
+      .poll(() => where(page, '#scenarioListContent').then(w => w.panelInert))
+      .toBe(false);
+  });
+
   test('a bad value is explained on the field it is about', async ({
     page,
     app,
