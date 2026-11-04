@@ -5,6 +5,7 @@
 // Every function returns a record: { status: 'ok', value, unit: 'Myr', relation, assumes } or
 // { status: 'refused', code, why }. Lengths in parsecs, speeds in km/s, masses in solar masses.
 import { refused } from '../statistics/check.js';
+import { fixed } from '../../format.js';
 import {
   CITED,
   CRITERION,
@@ -70,7 +71,7 @@ function lnLambdaOf(N, gamma) {
     return {
       fail: refused(
         'coulomb',
-        `ln(gamma N) = ${Number.isFinite(L) ? L.toFixed(2) : 'not finite'} is below 1: the relation does not apply to so few stars`
+        `ln(gamma N) = ${Number.isFinite(L) ? fixed(L, 2) : 'not finite'} is below 1: the relation does not apply to so few stars`
       ),
     };
   return { L };
@@ -101,7 +102,7 @@ export function halfMassRelaxationTime({ N, halfMassRadius, meanMass, gamma }) {
   return {
     ...ok(t, 't_rh = c N^(1/2) r_h^(3/2) / (m^(1/2) G^(1/2) ln(gamma N))', [
       `c = ${CITED.spitzerRelaxation.value} (${CITED.spitzerRelaxation.source})`,
-      `ln(gamma N) with gamma = ${gamma}: ${L.toFixed(2)}`,
+      `ln(gamma N) with gamma = ${gamma}: ${fixed(L, 2)}`,
       'a self-gravitating system of N stars of one mean mass, in or near virial equilibrium',
     ]),
     coulombLogarithm: L,

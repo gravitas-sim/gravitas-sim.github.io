@@ -67,7 +67,8 @@ export function frictionDeceleration({
   return {
     status: 'ok',
     value: a,
-    unit: '(km/s) per Myr',
+    unit: 'km/s',
+    per: 'Myr',
     X,
     lnLambda,
     relation: 'dv/dt = -4 pi G^2 M rho lnLambda f(X) / v^2',

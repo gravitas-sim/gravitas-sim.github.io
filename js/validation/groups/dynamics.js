@@ -66,6 +66,8 @@ export default async function run({ add }) {
   add({
     group: GROUP,
     kind: 'data',
+    source:
+      'Aarseth, Henon and Wielen 1974, A&A 37, 183 (the Plummer distribution function and its sampling)',
     name: 'A sampled isotropic Plummer sphere of 20,000 stars gives G M / (sigma_los^2 R_h) = 32 / pi, the virial factor, within sampling error',
     measured: eta,
     expected: 32 / Math.PI,

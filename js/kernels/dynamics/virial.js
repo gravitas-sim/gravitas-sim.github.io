@@ -13,6 +13,7 @@
 import { refused, allFinite } from '../statistics/check.js';
 import { caseBootstrap } from '../statistics/resample.js';
 import { sigmaOfLevel } from '../statistics/intervals.js';
+import { fixed } from '../../format.js';
 import { G_PC_KMS2_MSUN, VIRIAL } from './constants.js';
 
 const { Math, Number, Float64Array } = globalThis;
@@ -144,7 +145,7 @@ export function virialMass({ x, y, v, e, level = 0.6827, draws = 400, seed }) {
       members: n,
       sigma: fit.sigma,
       sigmaError: fit.sigmaError,
-      why: `the dispersion is not resolved against the errors (${fit.sigma.toFixed(3)} km/s is less than ${VIRIAL.resolvedSigmas} times its error ${Number.isFinite(fit.sigmaError) ? fit.sigmaError.toFixed(3) : 'unbounded'})`,
+      why: `the dispersion is not resolved against the errors (${fixed(fit.sigma, 3)} km/s is less than ${VIRIAL.resolvedSigmas} times its error ${Number.isFinite(fit.sigmaError) ? fixed(fit.sigmaError, 3) : 'unbounded'})`,
     };
   const M = massOf(fit.sigma, rh);
   const boot = caseBootstrap({

@@ -3,7 +3,7 @@
  "version": "2.1.0",
  "passed": 358,
  "failed": 0,
- "elapsedMs": 156854,
+ "elapsedMs": 120896,
  "checks": [
   {
    "group": "Unit system",
@@ -4631,6 +4631,7 @@
   {
    "group": "Cluster dynamics",
    "kind": "data",
+   "source": "Aarseth, Henon and Wielen 1974, A&A 37, 183 (the Plummer distribution function and its sampling)",
    "name": "A sampled isotropic Plummer sphere of 20,000 stars gives G M / (sigma_los^2 R_h) = 32 / pi, the virial factor, within sampling error",
    "measured": 10.180878192527944,
    "expected": 10.185916357881302,
