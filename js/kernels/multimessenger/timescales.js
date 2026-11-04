@@ -90,11 +90,13 @@ export function parseUtc(s) {
 
 /** A calendar object as an ISO string with `digits` decimals in the seconds (second 60 is kept). */
 export function formatUtc(cal, digits = 3) {
-  const sec = cal.second.toFixed(digits);
-  const [whole, frac] = sec.split('.');
+  const scale = 10 ** digits;
+  const rounded = Math.round(cal.second * scale);
+  const whole = Math.floor(rounded / scale);
+  const frac = rounded - whole * scale;
   return (
     `${pad(cal.year, 4)}-${pad(cal.month, 2)}-${pad(cal.day, 2)}T` +
-    `${pad(cal.hour, 2)}:${pad(cal.minute, 2)}:${pad(+whole, 2)}${frac ? `.${frac}` : ''}`
+    `${pad(cal.hour, 2)}:${pad(cal.minute, 2)}:${pad(whole, 2)}${digits ? `.${pad(frac, digits)}` : ''}`
   );
 }
 

@@ -1110,7 +1110,7 @@
     {
       "file": "MULTIMESSENGER.md",
       "kind": "feature",
-      "purpose": "The multi-messenger kernel: time systems, the speed-of-gravity bound with its emission-delay assumption, sky areas, the host rule, an illustrative kilonova model and the detection rule, with the validation contract, the failed and not-run legs and the files requested from Carl (Prompt 244).",
+      "purpose": "The multi-messenger kernel: time systems, the speed bound with its emission-delay assumption, the host rule, a kilonova model and the detection rule, validation and the files requested (Prompt 244).",
       "owner": 244,
       "student": false
     },

@@ -91,7 +91,7 @@ export default async function run({ add }) {
     name: 'The whole sky is 4 pi (180/pi)^2 = 41,252.96 square degrees and a HEALPix pixel at nside 64 is that over 49,152',
     measured: K.healpixPixelAreaDeg2(64),
     expected: (4 * Math.PI * (180 / Math.PI) ** 2) / (12 * 64 * 64),
-    unit: 'deg^2',
+    unit: 'deg2',
     tolerance: 1e-12,
     why: 'The sky has 4 pi steradians and HEALPix divides it into 12 nside^2 pixels of equal area.',
   });

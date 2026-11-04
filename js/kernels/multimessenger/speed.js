@@ -147,6 +147,6 @@ export function boundCurve({ delay, distance, tauGrid }) {
 export function describeBound(r) {
   const f = x => x.toExponential(1);
   return r.status === 'bounded'
-    ? `(v_GW - c)/c lies between ${f(r.lower)} and ${f(r.upper)}, assuming ${r.assumption.text}, at ${r.distanceMpc.toPrecision(3)} Mpc (${r.distanceRule}).`
+    ? `(v_GW - c)/c lies between ${f(r.lower)} and ${f(r.upper)}, assuming ${r.assumption.text}, at ${Math.round(r.distanceMpc * 10) / 10} Mpc (${r.distanceRule}).`
     : `No bound: ${r.reason}. The assumption was ${r.assumption.text}.`;
 }
