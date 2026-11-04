@@ -82,9 +82,42 @@ Committed in `tests/fixtures/dynamics/thresholds.json` before the kernel existed
 `tests/fixtures/dynamics/results.json`, the failing and not-run legs are in `failed-legs.json`, and
 `npm run dynamics:validate` reruns the table.
 
-RESULTS_TABLE
+| Leg | What | Result |
+|---|---|---|
+| A1 | t_dyn and t_cross in Myr from R in pc, M in solar masses and v in km/s equal the oracle's values (SI path from | **pass**: worst relative 4.22e-15, 20 cases |
+| A2 | t_rh equals the oracle's value in Myr for 30 (N, r_h in pc, m_mean, gamma) cases, N from 20 to 1e7; and the id | **pass**: worst relative 3.25e-15, 30 cases |
+| A3 | eta of an isotropic Plummer sphere | **pass**: eta 32/pi against the integrated 10.185916354: 3.52e-10 |
+| A4 | Chandrasekhar's f(X) = erf(X) - 2X exp(-X^2)/sqrt(pi) equals scipy's value at 30 values of X from 0.01 to 6, i | **pass**: worst absolute 9.79e-13 |
+| A5 | the time for a satellite of M / M_enc(r_i) = 0.01 on an initially circular orbit in a singular isothermal sphe | **pass**: kernel 3.8017, integrated orbit 3.8092 (relative 0.00196) |
+| A6 | the Coulomb logarithm is ln(b_max / b_min) for 10 stated pairs to 1e-12, and is refused for b_max <= b_min or | **pass**: worst absolute 3.55e-14, 4 refusals |
+| A7 | the local relaxation time reproduces the oracle's value to 1e-9 for 10 stated (v, rho_n, m, ln Lambda) cases i | **pass**: relative 3.81e-15; half-mass over local 0.61 |
+| O1 | an independent implementation of the kernel's relations (tools/dynamics-oracle/oracle.py, written from this fi | **pass**: worst relative 5.05e-15, 200 cases |
+| B1 | the published table of relaxation times for named clusters (supply) | **NOT RUN**: no table supplied (only Carl can fetch one) |
+| C1 | the 68.27 percent interval of the virial mass covers the true mass of a seeded ensemble of 300 synthetic Plumm | **FAIL**: coverage 0.853 (the bootstrap part alone 0.727) |
+| C2 | the 95 percent interval on the same ensemble covers the true mass at a rate between 0.90 and 0.99 | **FAIL**: coverage 0.997 (the bootstrap part alone 0.963) |
+| C3 | the median of estimate / truth on the same ensemble lies between 0.90 and 1.10 | **pass**: median estimate over truth 0.992 |
+| D1 | fewer than 20 members | **pass**: 19 members not constrained, 20 an estimate |
+| D2 | an unresolved dispersion (measurement errors 2 times the true dispersion, 60 members) | **pass**: unresolved refused 0.93, resolved estimated 1.00 |
+| D3 | a non-finite velocity, a non-positive error, a non-finite position or a mismatched array length is refused wit | **pass**: all cases refused with a code |
+| D4 | the criterion refuses a non-positive time or relaxation time; the relaxation and friction relations refuse a m | **pass**: all cases refused with a code |
+| R1 | the reference code conserves energy | **pass**: worst 5.28e-07 over 32 runs |
+| R2 | the reference code conserves linear momentum (|P| <= 1e-9 in Heggie units at every output time of every run, t | **FAIL**: momentum 8.23e-08, angular momentum 2.32e-07 |
+| R3 | the reference code's softened two-body orbit (separation always above the softening length) closes | **pass**: period 1.44e-15, energy 3.52e-14 |
+| R4 | the measurement specification implemented twice (in the oracle in Python, in the validator in JavaScript) agre | **pass**: worst relative 1.65e-15 over 54 comparisons |
+| R5 | the reference code is reproducible | **pass**: relative 0 |
+| R6 | the initial conditions have the stated properties to the stated precision | **pass**: virial 4.44e-16, radius 4.44e-16 |
+| R7 | the production integrator against scipy DOP853 on the same starting points (added by AM2) | **FAIL**: position difference 0.000573 at half a crossing time |
+| G1 | family S, the half-mass Lagrangian radius r50 of the bound members | **pass**: r50: 10 of 10 times, last pass |
+| G2 | family S, the 10 percent Lagrangian radius r10 | **pass**: r10: 10 of 10 times, last pass |
+| G3 | family S, the 90 percent Lagrangian radius r90 | **pass**: r90: 10 of 10 times, last pass |
+| G4 | family S, the segregation index (the mean mass of the bound members inside r50 over the mean mass of all bound | **pass**: seg: 10 of 10 times, last pass |
+| G5 | family S, the escaped mass fraction (the mass not in the bound set over the total mass) | **pass**: esc: 10 of 10 times, last pass |
+| G6 | family D, the satellite's radius from the cluster's centre of mass averaged over the window 5 to 10 crossing t | **pass**: engine 0.662, reference 0.715, bound 0.456 |
+| G7 | family D, the same over the window 10 to 15 crossing times (snapshot indices 100 to 149) | **pass**: engine 1.264, reference 1.256, bound 0.712 |
 
-The suite group "Cluster dynamics" (`js/validation/groups/dynamics.js`, six checks) holds the closed forms, a sampled
+Verdict of the gate by the committed rule: **C** (R2 fails). Failing legs stay failing and labelled in `failed-legs.json`; the reasons and the questions for Carl are in `DYNAMICS_REFERENCE_GATE.md`.
+
+The suite group "Cluster dynamics" (`js/validation/groups/dynamics.js`) holds the closed forms, a sampled
 Plummer virial factor, the sinking time against an integrated orbit and the 19-member refusal; it does not repeat the
 legs that cross their bound.
 
