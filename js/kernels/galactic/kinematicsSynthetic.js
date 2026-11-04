@@ -42,7 +42,9 @@ const vcAt = (R, d) => d.V0 + d.slope * (R - d.R0);
 
 /** Row-order helper: ranks of a list (0 smallest), ties broken by index. */
 const rankFractions = values => {
-  const order = values.map((v, i) => i).sort((a, b) => values[a] - values[b] || a - b);
+  const order = values
+    .map((v, i) => i)
+    .sort((a, b) => values[a] - values[b] || a - b);
   const q = new Float64Array(values.length);
   order.forEach((i, r) => {
     q[i] = (r + 0.5) / values.length;
@@ -212,12 +214,15 @@ export function syntheticSegue(design, opts) {
       Math.sin(bb * DEG),
     ];
     // Heliocentric mean velocity of the population in the Galactic axes.
-    const azimuthal = pop.meanAzimuthal !== undefined ? pop.meanAzimuthal : V0 - pop.lag;
+    const azimuthal =
+      pop.meanAzimuthal !== undefined ? pop.meanAzimuthal : V0 - pop.lag;
     const mean = [-sun.U, azimuthal - (V0 + sun.V), -sun.W];
     const sig = opts.sigmaZero ? [0, 0, 0] : pop.sigma;
     const mLos = mean[0] * nHat[0] + mean[1] * nHat[1] + mean[2] * nHat[2];
     const vLos =
-      sig[0] ** 2 * nHat[0] ** 2 + sig[1] ** 2 * nHat[1] ** 2 + sig[2] ** 2 * nHat[2] ** 2;
+      sig[0] ** 2 * nHat[0] ** 2 +
+      sig[1] ** 2 * nHat[1] ** 2 +
+      sig[2] ** 2 * nHat[2] ** 2;
     const sLos = Math.sqrt(vLos);
     let measured;
     let tries = 0;
@@ -230,7 +235,13 @@ export function syntheticSegue(design, opts) {
       measured <= opts.window[1] &&
       tries < 10000
     );
-    stars.push({ feh: row.feh, v: measured, e: row.e, windowed: row.windowed, bin: b });
+    stars.push({
+      feh: row.feh,
+      v: measured,
+      e: row.e,
+      windowed: row.windowed,
+      bin: b,
+    });
     const a = acc[b];
     a.n++;
     a.m += mLos;
@@ -263,7 +274,11 @@ export function syntheticSegue(design, opts) {
 }
 
 /** The mean line-of-sight variance of a bin of the real design (closed form), for the analytic leg. */
-export function pooledLosSigma(design, bin, { truth = SYNTHETIC_TRUTH, edges = [-1.0, -0.5] } = {}) {
+export function pooledLosSigma(
+  design,
+  bin,
+  { truth = SYNTHETIC_TRUTH, edges = [-1.0, -0.5] } = {}
+) {
   const pop = [truth.segue.bin1, truth.segue.bin2, truth.segue.bin3][bin];
   const sun = truth.sunPeculiar;
   let n = 0;
@@ -280,9 +295,18 @@ export function pooledLosSigma(design, bin, { truth = SYNTHETIC_TRUTH, edges = [
       Math.cos(bb * DEG) * Math.sin(l * DEG),
       Math.sin(bb * DEG),
     ];
-    const az = pop.meanAzimuthal !== undefined ? pop.meanAzimuthal : truth.disk.V0 - pop.lag;
-    const m = -sun.U * nHat[0] + (az - (truth.disk.V0 + sun.V)) * nHat[1] - sun.W * nHat[2];
-    const v = pop.sigma[0] ** 2 * nHat[0] ** 2 + pop.sigma[1] ** 2 * nHat[1] ** 2 + pop.sigma[2] ** 2 * nHat[2] ** 2;
+    const az =
+      pop.meanAzimuthal !== undefined
+        ? pop.meanAzimuthal
+        : truth.disk.V0 - pop.lag;
+    const m =
+      -sun.U * nHat[0] +
+      (az - (truth.disk.V0 + sun.V)) * nHat[1] -
+      sun.W * nHat[2];
+    const v =
+      pop.sigma[0] ** 2 * nHat[0] ** 2 +
+      pop.sigma[1] ** 2 * nHat[1] ** 2 +
+      pop.sigma[2] ** 2 * nHat[2] ** 2;
     n++;
     sv += v;
     sm += m;

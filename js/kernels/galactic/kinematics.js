@@ -28,7 +28,7 @@
 // so the lessons that import the galactic index do not carry it.
 // =============================================================================
 
-import { K_PM, propermotionToGalactic } from './coords.js';
+import { K_PM, propermotionToGalactic, spaceVelocity } from './coords.js';
 import { lsrCorrection, solarMotion } from './motion.js';
 import { applyCuts, cutSelections } from './cuts.js';
 import { selection, all } from '../statistics/selection.js';
@@ -118,12 +118,7 @@ export function oortFit(stars, opts = {}) {
     if (!(s.parallax > 0)) continue;
     if (opts.maxDistance !== undefined && 1 / s.parallax > opts.maxDistance)
       continue;
-    const { l, b, pmL } = propermotionToGalactic(
-      s.ra,
-      s.dec,
-      s.pmRa,
-      s.pmDec
-    );
+    const { l, b, pmL } = propermotionToGalactic(s.ra, s.dec, s.pmRa, s.pmDec);
     const y = K_PM * pmL;
     if (!Number.isFinite(y)) continue;
     const L = l * DEG;
@@ -423,7 +418,8 @@ function logLik(mu, v, stars, window) {
     ll -= 0.5 * (LN_2PI + Math.log(s2) + (z * z) / s2);
     if (window && st.windowed) {
       const s = Math.sqrt(s2);
-      const p = normalCdf((window[1] - mu) / s) - normalCdf((window[0] - mu) / s);
+      const p =
+        normalCdf((window[1] - mu) / s) - normalCdf((window[0] - mu) / s);
       ll -= Math.log(Math.max(1 - p, 1e-300));
     }
   }
@@ -519,7 +515,8 @@ export function mleDispersion(stars, { window = null } = {}) {
       }
       const nf = f(nMu, nV);
       if (Number.isFinite(nf) && nf >= fx - 1e-12) {
-        const step = Math.abs(nMu - mu) / Math.sqrt(scaleV) + Math.abs(nV - v) / scaleV;
+        const step =
+          Math.abs(nMu - mu) / Math.sqrt(scaleV) + Math.abs(nV - v) / scaleV;
         mu = nMu;
         v = nV;
         const gain = nf - fx;
@@ -630,7 +627,8 @@ export function dispersionByBin(stars, opts = {}) {
     let reason;
     if (fit.atBoundary || !(fit.sigma >= minSigmas * fit.sigmaErr)) {
       status = 'not-constrained';
-      reason = 'the dispersion is not above its error (it may be below the measurement errors)';
+      reason =
+        'the dispersion is not above its error (it may be below the measurement errors)';
     }
     out.push({
       bin: b,
@@ -655,6 +653,32 @@ export function dispersionByBin(stars, opts = {}) {
 // ----- asymmetric drift -------------------------------------------------------------
 
 /**
+ * Groups of equal count by BP-RP rank, each as the stars' space velocities: the
+ * groups of the drift fit. A star with no usable astrometry or radial velocity
+ * is left out before the ranking.
+ *
+ * @param {Array<{ra: number, dec: number, parallax: number, pmRa: number, pmDec: number, rv: number, bpRp: number}>} stars
+ * @param {number} [count] - the number of groups (6 by default)
+ * @returns {Array<Array<{U: number, V: number, W: number}>>} bluest group first
+ */
+export function colourGroups(stars, count = 6) {
+  const v = [];
+  for (const s of stars) {
+    if (!Number.isFinite(s.bpRp)) continue;
+    const sv = spaceVelocity(s);
+    if (sv && Number.isFinite(sv.U + sv.V + sv.W)) v.push({ c: s.bpRp, sv });
+  }
+  v.sort((a, b) => a.c - b.c);
+  const groups = [];
+  for (let g = 0; g < count; g++) {
+    const lo = Math.floor((g * v.length) / count);
+    const hi = Math.floor(((g + 1) * v.length) / count);
+    groups.push(v.slice(lo, hi).map(x => x.sv));
+  }
+  return groups;
+}
+
+/**
  * Asymmetric drift as the stated relation <V> = -V_sun - sigma_U^2 / k, fitted to
  * groups of stars: a weighted straight line of each group's mean V against its
  * sigma_U^2. V_sun is minus the intercept (the Sun's V against a population at
@@ -667,42 +691,77 @@ export function dispersionByBin(stars, opts = {}) {
 export function driftFit(groups, opts = {}) {
   const minStars = opts.minStars ?? 5;
   const slopeSigmas = opts.slopeSigmas ?? KINEMATICS.slopeSigmas;
+  const xErrors = opts.xErrors === true;
   const g = groups
     .map(vs => {
       const n = vs.length;
       if (n < minStars) return null;
       const mu = vs.reduce((a, x) => a + x.U, 0) / n;
       const mv = vs.reduce((a, x) => a + x.V, 0) / n;
-      const su2 = vs.reduce((a, x) => a + (x.U - mu) ** 2, 0) / (n - 1);
+      let m2 = 0;
+      let m4 = 0;
+      for (const x of vs) {
+        const d = (x.U - mu) ** 2;
+        m2 += d;
+        m4 += d * d;
+      }
+      const su2 = m2 / (n - 1);
       const sv2 = vs.reduce((a, x) => a + (x.V - mv) ** 2, 0) / (n - 1);
-      return { n, sigmaU2: su2, meanV: mv, err: Math.sqrt(sv2 / n) };
+      // The variance of a sample variance: (m4 - (n-3)/(n-1) s^4) / n, which needs no Gaussian assumption.
+      const varX = Math.max((m4 / n - ((n - 3) / (n - 1)) * su2 * su2) / n, 0);
+      return { n, sigmaU2: su2, meanV: mv, err: Math.sqrt(sv2 / n), varX };
     })
     .filter(Boolean);
   if (g.length < 3)
     return { status: 'refused', why: 'too few groups for the drift fit' };
-  let sw = 0;
-  let sx = 0;
-  let sy = 0;
-  let sxx = 0;
-  let sxy = 0;
-  for (const x of g) {
-    const w = 1 / (x.err * x.err);
-    sw += w;
-    sx += w * x.sigmaU2;
-    sy += w * x.meanV;
-    sxx += w * x.sigmaU2 * x.sigmaU2;
-    sxy += w * x.sigmaU2 * x.meanV;
+  const line = slope0 => {
+    let sw = 0;
+    let sx = 0;
+    let sy = 0;
+    let sxx = 0;
+    let sxy = 0;
+    for (const x of g) {
+      const w = 1 / (x.err * x.err + slope0 * slope0 * x.varX);
+      sw += w;
+      sx += w * x.sigmaU2;
+      sy += w * x.meanV;
+      sxx += w * x.sigmaU2 * x.sigmaU2;
+      sxy += w * x.sigmaU2 * x.meanV;
+    }
+    const det = sw * sxx - sx * sx;
+    return {
+      sw,
+      sx,
+      sxx,
+      det,
+      slope: (sw * sxy - sx * sy) / det,
+      icpt: (sxx * sy - sx * sxy) / det,
+    };
+  };
+  let fit = line(0);
+  if (xErrors) {
+    // Effective-variance regression: each group's weight carries the slope's share of its sigma_U^2 error; iterate the slope.
+    for (let it = 0; it < 50; it++) {
+      const next = line(fit.slope);
+      const done =
+        Math.abs(next.slope - fit.slope) <= 1e-12 * Math.abs(fit.slope);
+      fit = next;
+      if (done) break;
+    }
   }
-  const det = sw * sxx - sx * sx;
-  const slope = (sw * sxy - sx * sy) / det;
-  const icpt = (sxx * sy - sx * sxy) / det;
+  const { sw, sx, sxx, det, slope, icpt } = fit;
   const slopeErr = Math.sqrt(sw / det);
   const icptErr = Math.sqrt(sxx / det);
-  const slopeConstrained = slope < 0 && Math.abs(slope) / slopeErr >= slopeSigmas;
+  const slopeConstrained =
+    slope < 0 && Math.abs(slope) / slopeErr >= slopeSigmas;
   let chi2 = 0;
-  for (const x of g) chi2 += ((x.meanV - icpt - slope * x.sigmaU2) / x.err) ** 2;
+  for (const x of g)
+    chi2 +=
+      (x.meanV - icpt - slope * x.sigmaU2) ** 2 /
+      (x.err * x.err + (xErrors ? slope * slope * x.varX : 0));
   return {
     status: slopeConstrained ? 'constrained' : 'not-constrained',
+    form: xErrors ? 'effective-variance' : 'committed',
     vSun: -icpt,
     vSunErr: icptErr,
     slope,
@@ -712,11 +771,18 @@ export function driftFit(groups, opts = {}) {
     covInterceptSlope: -sx / det,
     chi2,
     dof: g.length - 2,
-    groups: g,
+    groups: g.map(x => ({
+      n: x.n,
+      sigmaU2: x.sigmaU2,
+      meanV: x.meanV,
+      err: x.err,
+    })),
     assumes: [
       'the relation <V> = -V_sun - sigma_U^2 / k is stated, not derived: groups must differ in dispersion for the slope to be measured',
       'the groups are colour bins of a sample that needs a radial velocity: colour is a stand-in for age, not age',
-      'the errors are those of each group’s mean V; the scatter of sigma_U^2 about its true value is not propagated',
+      xErrors
+        ? 'each group’s sigma_U^2 error is propagated into its weight (effective variance), from the sample’s fourth moment'
+        : 'the errors are those of each group’s mean V; the scatter of sigma_U^2 about its true value is not propagated',
     ],
   };
 }

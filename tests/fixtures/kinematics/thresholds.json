@@ -542,7 +542,8 @@
     }
   ],
   "questions": [
-    "AM1: ratify the latitude-corrected Oort estimator (the committed planar form fails its own analytic leg), so that the Oort verdict is judged on it? Until then the Oort verdict is C by the committed function."
+    "AM1: ratify the latitude-corrected Oort estimator (the committed planar form fails its own analytic leg), so that the Oort verdict is judged on it? Until then the Oort verdict is C by the committed function.",
+    "AM2: ratify the effective-variance drift fit (the committed fit takes each group's sigma_U^2 as exact), so that the drift verdict is judged on it? Until then the drift verdict is the committed form's."
   ],
   "amendments": [
     {
@@ -552,6 +553,14 @@
       "change": "the Oort estimator is also run in its latitude-corrected form, 4.74047 mu_l* = cos b (A cos 2l + B) + parallax (U sin l - V cos l); nothing else about the contract changes (weight, ladder, constrained rule, bounds). Every O leg is measured for both forms: the committed (planar) form under the ids as committed, the corrected form under the same id with the suffix .am1.",
       "binding": "The verdict that binds the build is the one the committed function gives on the committed (planar) form: leg O.A1.exact fails on it, so by the committed function the Oort verdict is C and it stays so. The verdict on the corrected form is recorded beside it as a proposal, and is Carl's to ratify: a corrected estimator that passes would make the Oort verdict A or B only by his ruling. No bound was changed, and the failing leg is kept failing and labelled.",
       "alsoFound": "The Rotating Disk and The Sun's Motion's existing Oort values (A 13.5 +/- 2.4, B -13.7 +/- 1.7) come from the planar form and are about 15 percent too small in magnitude by the sky's mean cos b; the lesson text is not changed here (the lesson goldens stay identical, Part B owns the lessons)."
+    },
+    {
+      "id": "AM2",
+      "when": "after the committed thresholds and AM1 and after one design-seed run of the validator (seed kin-235-design, no gate seed), before any gate-stream result: no ensemble of seed 235001 to 235004, no oracle output and no gate-seed real-sample result of the new kernel had been produced",
+      "found": "by reading the drift estimator against its own stated limit and by the design run: the committed fit weights each group by the error of its mean V alone and takes each group's sigma_U^2 as exact, but a group of 260 stars has a sample variance with a relative sampling error of about 9 percent, which at a slope of 1/80 adds about 1.5 km/s of scatter in V per group, comparable with the stated error of 1.5 to 2 km/s. The formal errors are therefore too small by construction (the design run's one-sigma coverage of V_sun was 0.56). This is a defect of the estimator, found analytically, not a tuning of a bound.",
+      "change": "the drift fit is also run in the effective-variance form: each group's weight is 1 / (err^2 + slope^2 var(sigma_U^2)), var(sigma_U^2) = (m4 - (n-3)/(n-1) s^4) / n from the group's fourth central moment, the slope iterated to convergence; the constrained rule and every bound are unchanged. Every S leg that fits the line is measured for both forms: the committed form under the ids as committed, the effective-variance form under the same id with the suffix .am2.",
+      "binding": "As AM1: the verdict that binds the build is the committed form's; the effective-variance form's verdict is recorded beside it as a proposal and is Carl's to ratify. No bound was changed.",
+      "notAmended": "The dispersion estimator (a sandwich covariance), the Oort ladder, the constrained rules and every coverage band are as committed: a small-bin coverage shortfall of the sandwich, if the gate stream shows one, is a result of the committed method and is recorded as one."
     }
   ]
 }
