@@ -163,17 +163,17 @@ def main():
     # A1
     a1 = []
     for _ in range(20):
-        R = 10 ** rng.uniform(-1, 2)
-        M = 10 ** rng.uniform(1, 7)
-        v = 10 ** rng.uniform(math.log10(0.5), math.log10(200))
+        R = sig(10 ** rng.uniform(-1, 2), 12)
+        M = sig(10 ** rng.uniform(1, 7), 12)
+        v = sig(10 ** rng.uniform(math.log10(0.5), math.log10(200)), 12)
         a1.append({'R_pc': sig(R, 12), 'M_sun': sig(M, 12), 'v_kms': sig(v, 12), 'tDyn_Myr': sig(t_dyn_myr(R, M)), 'tCross_Myr': sig(t_cross_myr(R, v))})
     out['A1'] = a1
     # A2
     a2 = []
     for _ in range(30):
         N = int(10 ** rng.uniform(math.log10(500), 7))
-        rh = 10 ** rng.uniform(-1, 1.5)
-        m = 10 ** rng.uniform(math.log10(0.1), math.log10(2))
+        rh = sig(10 ** rng.uniform(-1, 1.5), 12)
+        m = sig(10 ** rng.uniform(math.log10(0.1), math.log10(2)), 12)
         gam = float(rng.choice([0.4, 0.11, 0.02]))
         a2.append({'N': N, 'rh_pc': sig(rh, 12), 'm_sun': sig(m, 12), 'gamma': gam, 'tRh_Myr': sig(t_rh_myr(N, rh, m, gam)),
                    'tDynAtRh_Myr': sig(t_dyn_myr(rh, N * m))})
@@ -192,34 +192,34 @@ def main():
     # A6
     a6 = []
     for _ in range(10):
-        bmin = 10 ** rng.uniform(-6, 0)
-        bmax = bmin * 10 ** rng.uniform(0.3, 6)
+        bmin = sig(10 ** rng.uniform(-6, 0), 12)
+        bmax = sig(bmin * 10 ** rng.uniform(0.3, 6), 12)
         a6.append({'bmax': sig(bmax, 12), 'bmin': sig(bmin, 12), 'lnLambda': sig(math.log(bmax / bmin))})
     out['A6'] = a6
     # A7
     a7 = []
     for _ in range(10):
-        v = 10 ** rng.uniform(0, 2.3)
-        rho = 10 ** rng.uniform(-2, 5)
-        m = 10 ** rng.uniform(-1, 0.5)
-        lnl = rng.uniform(5, 20)
+        v = sig(10 ** rng.uniform(0, 2.3), 12)
+        rho = sig(10 ** rng.uniform(-2, 5), 12)
+        m = sig(10 ** rng.uniform(-1, 0.5), 12)
+        lnl = sig(rng.uniform(5, 20), 12)
         a7.append({'v_kms': sig(v, 12), 'rho_Msun_pc3': sig(rho, 12), 'm_sun': sig(m, 12), 'lnLambda': sig(lnl, 12), 'tRelax_Myr': sig(local_relax_myr(v, rho, m, lnl))})
     out['A7'] = a7
     # O1
     o1 = []
     for _ in range(200):
         N = int(10 ** rng.uniform(math.log10(500), 7))
-        rh = 10 ** rng.uniform(-1, 1.5)
-        mmean = 10 ** rng.uniform(math.log10(0.1), math.log10(2))
+        rh = sig(10 ** rng.uniform(-1, 1.5), 12)
+        mmean = sig(10 ** rng.uniform(math.log10(0.1), math.log10(2)), 12)
         gam = float(rng.choice([0.4, 0.11, 0.02]))
-        mstar = mmean * 10 ** rng.uniform(0, 1.3)
-        T = 10 ** rng.uniform(1, 5)  # Myr
+        mstar = sig(mmean * 10 ** rng.uniform(0, 1.3), 12)
+        T = sig(10 ** rng.uniform(1, 5), 12)  # Myr
         trh = t_rh_myr(N, rh, mmean, gam)
         cls = 'collisionless' if T <= 0.1 * trh else ('collisional' if T >= trh else 'transitional')
-        r_i = 10 ** rng.uniform(-1, 1.5)
-        vc = 10 ** rng.uniform(0.7, 2.5)
-        Msat = 10 ** rng.uniform(2, 6)
-        lnl = rng.uniform(1.5, 12)
+        r_i = sig(10 ** rng.uniform(-1, 1.5), 12)
+        vc = sig(10 ** rng.uniform(0.7, 2.5), 12)
+        Msat = sig(10 ** rng.uniform(2, 6), 12)
+        lnl = sig(rng.uniform(1.5, 12), 12)
         o1.append({
             'N': N, 'rh_pc': sig(rh, 12), 'mMean_sun': sig(mmean, 12), 'gamma': gam, 'mStar_sun': sig(mstar, 12), 'T_Myr': sig(T, 12),
             'r_pc': sig(r_i, 12), 'vc_kms': sig(vc, 12), 'M_sun': sig(Msat, 12), 'lnLambda': sig(lnl, 12),

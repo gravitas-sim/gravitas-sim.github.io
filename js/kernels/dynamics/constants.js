@@ -27,7 +27,8 @@ export const CITED = Object.freeze({
   spitzerRelaxation: {
     value: 0.138,
     what: 'the coefficient of the half-mass relaxation time, t_rh = c N^(1/2) r_h^(3/2) / (m^(1/2) G^(1/2) ln(gamma N))',
-    source: 'Spitzer, L. 1987, Dynamical Evolution of Globular Clusters (Princeton University Press), chapter 2',
+    source:
+      'Spitzer, L. 1987, Dynamical Evolution of Globular Clusters (Princeton University Press), chapter 2',
     verify: true,
   },
   gamma: {
@@ -50,7 +51,8 @@ export const CITED = Object.freeze({
   evaporation: {
     value: 300,
     what: 'the evaporation time of an isolated, tidally truncated cluster in units of its half-mass relaxation time',
-    source: 'Spitzer, L. 1987, Dynamical Evolution of Globular Clusters (Princeton University Press)',
+    source:
+      'Spitzer, L. 1987, Dynamical Evolution of Globular Clusters (Princeton University Press)',
     verify: true,
   },
   segregation: {
@@ -65,7 +67,8 @@ export const CITED = Object.freeze({
   },
   plummer: {
     what: 'eta = 32 / pi for the virial mass M = eta sigma_los^2 R_h / G of an isotropic Plummer sphere, derived in DYNAMICS.md (<v^2> = 3 pi G M / (32 a), R_h = a)',
-    source: 'derived; the distribution function is Plummer, H. C. 1911, MNRAS 71, 460',
+    source:
+      'derived; the distribution function is Plummer, H. C. 1911, MNRAS 71, 460',
     verify: false,
   },
 });

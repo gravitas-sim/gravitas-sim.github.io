@@ -96,12 +96,14 @@ export function runEngine(P, lab, ic, every, snaps, onSnapshot) {
   return { bodies: bodies.filter(b => b.alive !== false).length };
 }
 
-const b64 = values => Buffer.from(new Float64Array(values).buffer).toString('base64');
+const b64 = values =>
+  Buffer.from(new Float64Array(values).buffer).toString('base64');
 
 function grid(id, seeds, axisName, axisValues, outputs, valuesOf, generator) {
   // dense layout, output by output, the last axis varying fastest: [output][seed][time]
   const flat = [];
-  for (const o of outputs) for (const s of seeds) for (const v of valuesOf(o, s)) flat.push(v);
+  for (const o of outputs)
+    for (const s of seeds) for (const v of valuesOf(o, s)) flat.push(v);
   return {
     format: 'gravitas.grid',
     formatVersion: 1,
@@ -109,9 +111,19 @@ function grid(id, seeds, axisName, axisValues, outputs, valuesOf, generator) {
     title: `${id}: the engine's precomputed cluster runs`,
     axes: [
       { name: 'seed', unit: '', values: seeds },
-      { name: axisName, unit: axisName === 'sample' ? 'sampling interval (3 crossing times)' : 'snapshot (0.1 crossing time)', values: axisValues },
+      {
+        name: axisName,
+        unit:
+          axisName === 'sample'
+            ? 'sampling interval (3 crossing times)'
+            : 'snapshot (0.1 crossing time)',
+        values: axisValues,
+      },
     ],
-    outputs: outputs.map(name => ({ name, unit: name === 'seg' || name === 'esc' ? '' : 'virial radius' })),
+    outputs: outputs.map(name => ({
+      name,
+      unit: name === 'seg' || name === 'esc' ? '' : 'virial radius',
+    })),
     generator,
     layout: 'dense',
     storage: { encoding: 'float64-le', data: b64(flat) },
@@ -119,8 +131,12 @@ function grid(id, seeds, axisName, axisValues, outputs, valuesOf, generator) {
 }
 
 async function inputsDigest() {
-  const { GRAPH } = await import(pathToFileURL(path.join(REPO, 'tools/generate-graph.mjs')));
-  const { digest } = await import(pathToFileURL(path.join(REPO, 'tools/generate.mjs')));
+  const { GRAPH } = await import(
+    pathToFileURL(path.join(REPO, 'tools/generate-graph.mjs'))
+  );
+  const { digest } = await import(
+    pathToFileURL(path.join(REPO, 'tools/generate.mjs'))
+  );
   const node = GRAPH.find(n => n.id === 'dynamics-runs');
   return { digest: digest(node, REPO), node: node.id, paths: node.inputs };
 }
@@ -139,41 +155,70 @@ async function main() {
     return 0;
   }
   const P = await import(pathToFileURL(path.join(REPO, 'js/physics.js')));
-  const { makeLab } = await import(pathToFileURL(path.join(REPO, 'js/validation/harness.js')));
+  const { makeLab } = await import(
+    pathToFileURL(path.join(REPO, 'js/validation/harness.js'))
+  );
   const lab = makeLab(P);
-  const ics = JSON.parse(readFileSync(path.join(FIX, 'initial-conditions.json'), 'utf8'));
+  const ics = JSON.parse(
+    readFileSync(path.join(FIX, 'initial-conditions.json'), 'utf8')
+  );
   const family = arg('family') ?? 'both';
-  const pick = (all, key) => (arg('seeds') ? arg('seeds').split(',').map(Number).filter(s => all.includes(s)) : all);
+  const pick = all =>
+    arg('seeds')
+      ? arg('seeds')
+          .split(',')
+          .map(Number)
+          .filter(s => all.includes(s))
+      : all;
   const S = {};
   const D = {};
   const t0 = Date.now();
   if (family === 'S' || family === 'both')
     for (const seed of pick(SEEDS_S)) {
       const rows = [];
-      const r = runEngine(P, lab, ics.S[seed], S_EVERY, S_SAMPLES, snap => rows.push(measureCluster(snap)));
+      const r = runEngine(P, lab, ics.S[seed], S_EVERY, S_SAMPLES, snap =>
+        rows.push(measureCluster(snap))
+      );
       S[seed] = { rows, bodies: r.bodies };
-      console.error(`S${seed}: ${((Date.now() - t0) / 1000).toFixed(0)} s, ${r.bodies} bodies`);
+      console.error(
+        `S${seed}: ${((Date.now() - t0) / 1000).toFixed(0)} s, ${r.bodies} bodies`
+      );
     }
   if (family === 'D' || family === 'both')
     for (const seed of pick(SEEDS_D)) {
       const rs = [];
-      const r = runEngine(P, lab, ics.D[seed], D_EVERY, D_SNAPS, snap => rs.push(measureSatellite(snap)));
+      const r = runEngine(P, lab, ics.D[seed], D_EVERY, D_SNAPS, snap =>
+        rs.push(measureSatellite(snap))
+      );
       D[seed] = { rs, bodies: r.bodies };
-      console.error(`D${seed}: ${((Date.now() - t0) / 1000).toFixed(0)} s, ${r.bodies} bodies`);
+      console.error(
+        `D${seed}: ${((Date.now() - t0) / 1000).toFixed(0)} s, ${r.bodies} bodies`
+      );
     }
   if (flag('print')) {
     console.log(JSON.stringify({ S, D }));
     return 0;
   }
   if (!flag('write')) {
-    console.error('nothing written: pass --write for the whole table or --print for a slice');
+    console.error(
+      'nothing written: pass --write for the whole table or --print for a slice'
+    );
     return 2;
   }
   const inputs = await inputsDigest();
   const generator = {
     name: 'tools/dynamics-runs.mjs',
     version: '1',
-    inputs: { settings: SETTINGS, step: STEP, scale: SCALE, sEvery: S_EVERY, dEvery: D_EVERY, initialConditions: 'tests/fixtures/dynamics/initial-conditions.json', measurement: 'tools/dynamics-measure.mjs', digest: inputs.digest },
+    inputs: {
+      settings: SETTINGS,
+      step: STEP,
+      scale: SCALE,
+      sEvery: S_EVERY,
+      dEvery: D_EVERY,
+      initialConditions: 'tests/fixtures/dynamics/initial-conditions.json',
+      measurement: 'tools/dynamics-measure.mjs',
+      digest: inputs.digest,
+    },
   };
   const doc = {
     format: 'gravitas.dynamics-engine-runs/1',
@@ -184,13 +229,32 @@ async function main() {
       S: Object.fromEntries(Object.entries(S).map(([k, v]) => [k, v.bodies])),
       D: Object.fromEntries(Object.entries(D).map(([k, v]) => [k, v.bodies])),
     },
-    S: grid('dynamics-engine-family-s', SEEDS_S, 'sample', Array.from({ length: S_SAMPLES + 1 }, (_, i) => i), ['r10', 'r50', 'r90', 'seg', 'esc'], (o, s) => S[s].rows.map(r => r[o]), generator),
-    D: grid('dynamics-engine-family-d', SEEDS_D, 'snapshot', Array.from({ length: D_SNAPS + 1 }, (_, i) => i), ['rs'], (o, s) => D[s].rs, generator),
+    S: grid(
+      'dynamics-engine-family-s',
+      SEEDS_S,
+      'sample',
+      Array.from({ length: S_SAMPLES + 1 }, (_, i) => i),
+      ['r10', 'r50', 'r90', 'seg', 'esc'],
+      (o, s) => S[s].rows.map(r => r[o]),
+      generator
+    ),
+    D: grid(
+      'dynamics-engine-family-d',
+      SEEDS_D,
+      'snapshot',
+      Array.from({ length: D_SNAPS + 1 }, (_, i) => i),
+      ['rs'],
+      (o, s) => D[s].rs,
+      generator
+    ),
   };
   writeFileSync(OUT, `${JSON.stringify(doc, null, 2)}\n`);
   console.log(`wrote ${path.relative(REPO, OUT)}`);
   return 0;
 }
 
-if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url))
+if (
+  process.argv[1] &&
+  path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)
+)
   process.exit(await main());

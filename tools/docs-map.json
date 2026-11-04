@@ -1094,6 +1094,20 @@
       "student": true
     },
     {
+      "file": "DYNAMICS.md",
+      "kind": "feature",
+      "purpose": "Cluster dynamics: crossing, relaxation, segregation and evaporation times, dynamical friction and the virial mass, with the validation contract and the failed legs (Prompt 237).",
+      "owner": 237,
+      "student": false
+    },
+    {
+      "file": "DYNAMICS_REFERENCE_GATE.md",
+      "kind": "gate",
+      "purpose": "Dynamics reference gate: the committed tolerances, the independent reference runs, the engine's precomputed runs and the verdict (Prompt 237 Part B).",
+      "owner": 237,
+      "student": false
+    },
+    {
       "file": "SPECTROGRAPH.md",
       "kind": "feature",
       "purpose": "The spectrograph model: the line-spread function, an arc-lamp wavelength solution with its uncertainty, a velocity with its medium, the slit trade, validation (Prompt 213).",

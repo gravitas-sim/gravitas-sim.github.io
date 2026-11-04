@@ -45,6 +45,8 @@ const NOT_PLAIN = {
   manual: 'deterministic, but needs a LaTeX engine a session may not have',
   'world-golden':
     'deterministic, regenerated only deliberately (it records behaviour)',
+  'dynamics-runs':
+    'deterministic, but about ten minutes of the engine: regenerated only when the engine or its inputs changed (its check is the staleness of the inputs)',
 };
 
 const rootDocs = root =>

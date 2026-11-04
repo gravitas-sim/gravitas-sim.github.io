@@ -29,22 +29,40 @@ export function frictionFunction(X) {
       sum += term;
       if (term < 1e-18 * sum) break;
     }
-    return ((2 / Math.sqrt(Math.PI)) * Math.exp(-X * X)) * sum;
+    return (2 / Math.sqrt(Math.PI)) * Math.exp(-X * X) * sum;
   }
   const erf = 1 - gammaQ(0.5, X * X);
   return erf - (2 * X * Math.exp(-X * X)) / Math.sqrt(Math.PI);
 }
 
 /** The deceleration, in (km/s) per Myr, of a body of mass M (solar masses) at speed v (km/s). */
-export function frictionDeceleration({ mass, speed, density, sigma, lnLambda }) {
+export function frictionDeceleration({
+  mass,
+  speed,
+  density,
+  sigma,
+  lnLambda,
+}) {
   if (![mass, speed, density, sigma].every(positive))
-    return refused('input', 'the mass, the speed, the density and the dispersion must be positive numbers');
+    return refused(
+      'input',
+      'the mass, the speed, the density and the dispersion must be positive numbers'
+    );
   if (!(Number.isFinite(lnLambda) && lnLambda > 0))
-    return refused('coulomb', 'the Coulomb logarithm must be stated, and positive: there is no default');
+    return refused(
+      'coulomb',
+      'the Coulomb logarithm must be stated, and positive: there is no default'
+    );
   const X = speed / (Math.SQRT2 * sigma);
   const a =
-    ((4 * Math.PI * G_PC_KMS2_MSUN ** 2 * mass * density * lnLambda * frictionFunction(X)) /
-      speed ** 2) /
+    (4 *
+      Math.PI *
+      G_PC_KMS2_MSUN ** 2 *
+      mass *
+      density *
+      lnLambda *
+      frictionFunction(X)) /
+    speed ** 2 /
     PC_PER_KMS_MYR;
   return {
     status: 'ok',
@@ -61,13 +79,32 @@ export function frictionDeceleration({ mass, speed, density, sigma, lnLambda }) 
 }
 
 /** The time for a circular orbit in a singular isothermal sphere to sink from r to rFinal (Myr). */
-export function sinkingTimeIsothermal({ radius, circularSpeed, mass, lnLambda, finalRadius = 0 }) {
+export function sinkingTimeIsothermal({
+  radius,
+  circularSpeed,
+  mass,
+  lnLambda,
+  finalRadius = 0,
+}) {
   if (![radius, circularSpeed, mass].every(positive))
-    return refused('input', 'the radius, the circular speed and the mass must be positive numbers');
-  if (!(Number.isFinite(finalRadius) && finalRadius >= 0 && finalRadius < radius))
-    return refused('range', 'the final radius must be from 0 up to the starting radius');
+    return refused(
+      'input',
+      'the radius, the circular speed and the mass must be positive numbers'
+    );
+  if (!(
+    Number.isFinite(finalRadius) &&
+    finalRadius >= 0 &&
+    finalRadius < radius
+  ))
+    return refused(
+      'range',
+      'the final radius must be from 0 up to the starting radius'
+    );
   if (!(Number.isFinite(lnLambda) && lnLambda > 0))
-    return refused('coulomb', 'the Coulomb logarithm must be stated, and positive: there is no default');
+    return refused(
+      'coulomb',
+      'the Coulomb logarithm must be stated, and positive: there is no default'
+    );
   const f1 = frictionFunction(1);
   const t =
     (((radius * radius - finalRadius * finalRadius) * circularSpeed) /

@@ -19,7 +19,7 @@ export default async function run({ add }) {
   const R = 2; // pc
   const M = 1e5; // solar masses
   const si = Math.sqrt(
-    (R * 3.0856775814913673e16) ** 3 / (REF.G * REF.solarMassKg * M)
+    (R * 3.085677581491367e16) ** 3 / (REF.G * REF.solarMassKg * M)
   );
   add({
     group: GROUP,
@@ -39,16 +39,29 @@ export default async function run({ add }) {
     group: GROUP,
     kind: 'analytic',
     name: 'The half-mass relaxation time of 50,000 stars of 0.5 solar masses at 3 parsecs is 0.138 N / ln(0.11 N) dynamical times',
-    measured: K.halfMassRelaxationTime({ N, halfMassRadius: 3, meanMass: 0.5, gamma }).value,
+    measured: K.halfMassRelaxationTime({
+      N,
+      halfMassRadius: 3,
+      meanMass: 0.5,
+      gamma,
+    }).value,
     expected: (0.138 * N * td) / Math.log(gamma * N),
     unit: 'Myr',
     tolerance: 1e-9,
     why: 'Spitzer’s form rewritten in the cluster’s dynamical time: an identity of the cited relation (the coefficient 0.138 is cited and flagged for verification, not tested here).',
   });
 
-  const big = K.plummerCluster({ members: 20000, scaleRadius: 2, mass: 1e5, errorFraction: 0.001, seed: 'validation-suite' });
+  const big = K.plummerCluster({
+    members: 20000,
+    scaleRadius: 2,
+    mass: 1e5,
+    errorFraction: 0.001,
+    seed: 'validation-suite',
+  });
   const s2 = Array.from(big.v).reduce((s, v) => s + v * v, 0) / big.v.length;
-  const rs = Array.from(big.x, (x, i) => Math.hypot(x, big.y[i])).sort((a, b) => a - b);
+  const rs = Array.from(big.x, (x, i) => Math.hypot(x, big.y[i])).sort(
+    (a, b) => a - b
+  );
   const eta = (K.G_PC_KMS2_MSUN * 1e5) / (s2 * rs[rs.length >> 1]);
   add({
     group: GROUP,
@@ -108,7 +121,13 @@ export default async function run({ add }) {
   const r0 = 1; // pc
   const vc = 10; // km/s
   const mass = (mu * vc * vc * r0) / K.G_PC_KMS2_MSUN;
-  const closed = K.sinkingTimeIsothermal({ radius: r0, circularSpeed: vc, mass, lnLambda: lnL, finalRadius: 0.05 * r0 });
+  const closed = K.sinkingTimeIsothermal({
+    radius: r0,
+    circularSpeed: vc,
+    mass,
+    lnLambda: lnL,
+    finalRadius: 0.05 * r0,
+  });
   add({
     group: GROUP,
     kind: 'integration',
@@ -120,13 +139,30 @@ export default async function run({ add }) {
     why: 'The orbit is integrated (fourth-order Runge-Kutta, step 0.001 of r_i / v_c) under Chandrasekhar’s drag with ln Lambda stated as 3; the closed form treats the orbit as circular at every radius, which a drag of this size keeps nearly true.',
   });
 
-  const few = K.plummerCluster({ members: 19, scaleRadius: 2, mass: 1e5, errorFraction: 0.1, seed: 'validation-few' });
-  const r19 = K.virialMass({ x: few.x, y: few.y, v: few.v, e: few.e, seed: 'few' });
+  const few = K.plummerCluster({
+    members: 19,
+    scaleRadius: 2,
+    mass: 1e5,
+    errorFraction: 0.1,
+    seed: 'validation-few',
+  });
+  const r19 = K.virialMass({
+    x: few.x,
+    y: few.y,
+    v: few.v,
+    e: few.e,
+    seed: 'few',
+  });
   add({
     group: GROUP,
     kind: 'analytic',
     name: 'A cluster with 19 members, fewer than the committed 20, returns "not constrained" and names the count',
-    measured: r19.status === 'not-constrained' && r19.code === 'members' && r19.members === 19 ? 1 : 0,
+    measured:
+      r19.status === 'not-constrained' &&
+      r19.code === 'members' &&
+      r19.members === 19
+        ? 1
+        : 0,
     expected: 1,
     unit: '',
     tolerance: 0,

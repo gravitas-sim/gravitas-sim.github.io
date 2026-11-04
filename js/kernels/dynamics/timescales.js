@@ -5,7 +5,12 @@
 // Every function returns a record: { status: 'ok', value, unit: 'Myr', relation, assumes } or
 // { status: 'refused', code, why }. Lengths in parsecs, speeds in km/s, masses in solar masses.
 import { refused } from '../statistics/check.js';
-import { CITED, CRITERION, G_PC_KMS2_MSUN, PC_PER_KMS_MYR } from './constants.js';
+import {
+  CITED,
+  CRITERION,
+  G_PC_KMS2_MSUN,
+  PC_PER_KMS_MYR,
+} from './constants.js';
 
 const { Math, Number } = globalThis;
 const positive = x => Number.isFinite(x) && x > 0;
@@ -23,13 +28,18 @@ export function dynamicalTime({ radius, mass }) {
   if (!positive(radius) || !positive(mass))
     return refused('input', 'the radius and the mass must be positive numbers');
   const t = Math.sqrt(radius ** 3 / (G_PC_KMS2_MSUN * mass)) * PC_PER_KMS_MYR;
-  return ok(t, 't_dyn = sqrt(R^3 / (G M))', ['R and M are the radius and the mass inside it']);
+  return ok(t, 't_dyn = sqrt(R^3 / (G M))', [
+    'R and M are the radius and the mass inside it',
+  ]);
 }
 
 /** The crossing time R / v for a stated size and speed. */
 export function crossingTime({ radius, speed }) {
   if (!positive(radius) || !positive(speed))
-    return refused('input', 'the radius and the speed must be positive numbers');
+    return refused(
+      'input',
+      'the radius and the speed must be positive numbers'
+    );
   return ok((radius / speed) * PC_PER_KMS_MYR, 't_cross = R / v', [
     'v is the speed the question means (the rms speed, not a line-of-sight component)',
   ]);
@@ -40,12 +50,21 @@ export function coulombLogarithm({ bmax, bmin }) {
   if (!positive(bmax) || !positive(bmin))
     return refused('input', 'both impact parameters must be positive numbers');
   if (!(bmax > bmin))
-    return refused('range', 'b_max must exceed b_min: the logarithm of a ratio of one or less is not a Coulomb logarithm');
-  return { status: 'ok', value: Math.log(bmax / bmin), unit: '', relation: 'ln Lambda = ln(b_max / b_min)' };
+    return refused(
+      'range',
+      'b_max must exceed b_min: the logarithm of a ratio of one or less is not a Coulomb logarithm'
+    );
+  return {
+    status: 'ok',
+    value: Math.log(bmax / bmin),
+    unit: '',
+    relation: 'ln Lambda = ln(b_max / b_min)',
+  };
 }
 
 function lnLambdaOf(N, gamma) {
-  if (!positive(gamma)) return { fail: refused('input', 'gamma must be a positive number') };
+  if (!positive(gamma))
+    return { fail: refused('input', 'gamma must be a positive number') };
   const L = Math.log(gamma * N);
   if (!(L >= 1))
     return {
@@ -64,9 +83,15 @@ function lnLambdaOf(N, gamma) {
  */
 export function halfMassRelaxationTime({ N, halfMassRadius, meanMass, gamma }) {
   if (!Number.isInteger(N) || N < 2)
-    return refused('input', 'the number of stars must be a whole number of at least 2');
+    return refused(
+      'input',
+      'the number of stars must be a whole number of at least 2'
+    );
   if (!positive(halfMassRadius) || !positive(meanMass))
-    return refused('input', 'the half-mass radius and the mean mass must be positive numbers');
+    return refused(
+      'input',
+      'the half-mass radius and the mean mass must be positive numbers'
+    );
   const { L, fail } = lnLambdaOf(N, gamma);
   if (fail) return fail;
   const t =
@@ -90,11 +115,18 @@ export function halfMassRelaxationTime({ N, halfMassRadius, meanMass, gamma }) {
  */
 export function localRelaxationTime({ speed, massDensity, mass, lnLambda }) {
   if (!positive(speed) || !positive(massDensity) || !positive(mass))
-    return refused('input', 'the speed, the mass density and the mass must be positive numbers');
+    return refused(
+      'input',
+      'the speed, the mass density and the mass must be positive numbers'
+    );
   if (!(Number.isFinite(lnLambda) && lnLambda >= 1))
-    return refused('coulomb', 'the Coulomb logarithm must be stated and at least 1');
+    return refused(
+      'coulomb',
+      'the Coulomb logarithm must be stated and at least 1'
+    );
   const t =
-    (speed ** 3 / (8 * Math.PI * G_PC_KMS2_MSUN ** 2 * mass * massDensity * lnLambda)) *
+    (speed ** 3 /
+      (8 * Math.PI * G_PC_KMS2_MSUN ** 2 * mass * massDensity * lnLambda)) *
     PC_PER_KMS_MYR;
   return ok(t, 't_relax = v^3 / (8 pi G^2 m rho ln Lambda)', [
     `ln Lambda = ${lnLambda}`,
@@ -105,19 +137,35 @@ export function localRelaxationTime({ speed, massDensity, mass, lnLambda }) {
 /** The mass-segregation time (m_mean / m) t_rh of a star above the mean: an order of magnitude. */
 export function segregationTime({ halfMassRelaxation, meanMass, mass }) {
   if (!positive(halfMassRelaxation) || !positive(meanMass) || !positive(mass))
-    return refused('input', 'the relaxation time and the masses must be positive numbers');
+    return refused(
+      'input',
+      'the relaxation time and the masses must be positive numbers'
+    );
   if (mass < meanMass)
-    return refused('range', 'a star below the mean mass does not sink: it is the heavy stars that segregate');
-  return ok((meanMass / mass) * halfMassRelaxation, 't_seg = (m_mean / m) t_rh', [
-    'an order of magnitude (Spitzer 1969): a factor of a few either way, never a prediction of one star',
-    CITED.segregation.source,
-  ]);
+    return refused(
+      'range',
+      'a star below the mean mass does not sink: it is the heavy stars that segregate'
+    );
+  return ok(
+    (meanMass / mass) * halfMassRelaxation,
+    't_seg = (m_mean / m) t_rh',
+    [
+      'an order of magnitude (Spitzer 1969): a factor of a few either way, never a prediction of one star',
+      CITED.segregation.source,
+    ]
+  );
 }
 
 /** The evaporation time c t_rh with c given or the cited 300: an order of magnitude. */
-export function evaporationTime({ halfMassRelaxation, coefficient = CITED.evaporation.value }) {
+export function evaporationTime({
+  halfMassRelaxation,
+  coefficient = CITED.evaporation.value,
+}) {
   if (!positive(halfMassRelaxation) || !positive(coefficient))
-    return refused('input', 'the relaxation time and the coefficient must be positive numbers');
+    return refused(
+      'input',
+      'the relaxation time and the coefficient must be positive numbers'
+    );
   return ok(coefficient * halfMassRelaxation, 't_ev = c t_rh', [
     `c = ${coefficient} (${CITED.evaporation.source}) for an isolated, tidally truncated cluster`,
     'an order of magnitude: a cluster in a tidal field, with a mass spectrum or with binaries evaporates at another rate',
@@ -127,7 +175,10 @@ export function evaporationTime({ halfMassRelaxation, coefficient = CITED.evapor
 /** Collisionless (T <= 0.1 t_rh), collisional (T >= t_rh) or transitional: a stated convention. */
 export function criterion({ time, halfMassRelaxation }) {
   if (!positive(time) || !positive(halfMassRelaxation))
-    return refused('input', 'the time and the relaxation time must be positive numbers');
+    return refused(
+      'input',
+      'the time and the relaxation time must be positive numbers'
+    );
   const ratio = time / halfMassRelaxation;
   const kind =
     ratio <= CRITERION.collisionlessBelow

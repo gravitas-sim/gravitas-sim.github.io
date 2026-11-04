@@ -62,7 +62,11 @@ export function intrinsicDispersion(v, e) {
     const w = 1 / (sigma * sigma + e[i] * e[i]);
     fisher += 2 * sigma * sigma * w * w;
   }
-  return { mean, sigma, sigmaError: sigma > 0 ? 1 / Math.sqrt(fisher) : Infinity };
+  return {
+    mean,
+    sigma,
+    sigmaError: sigma > 0 ? 1 / Math.sqrt(fisher) : Infinity,
+  };
 }
 
 /** The projected half-number radius about the centroid of the members. */
@@ -82,7 +86,8 @@ export function halfNumberRadius(x, y) {
   return n % 2 ? r[(n - 1) / 2] : 0.5 * (r[n / 2 - 1] + r[n / 2]);
 }
 
-const massOf = (sigma, rh) => (VIRIAL.eta * sigma * sigma * rh) / G_PC_KMS2_MSUN;
+const massOf = (sigma, rh) =>
+  (VIRIAL.eta * sigma * sigma * rh) / G_PC_KMS2_MSUN;
 
 /**
  * The virial mass of a cluster from its members.
@@ -94,13 +99,29 @@ const massOf = (sigma, rh) => (VIRIAL.eta * sigma * sigma * rh) / G_PC_KMS2_MSUN
  */
 export function virialMass({ x, y, v, e, level = 0.6827, draws = 400, seed }) {
   const n = v?.length;
-  if (!x || !y || !v || !e || x.length !== n || y.length !== n || e.length !== n)
-    return refused('shape', 'the positions, the velocities and the errors must be lists of one length');
+  if (
+    !x ||
+    !y ||
+    !v ||
+    !e ||
+    x.length !== n ||
+    y.length !== n ||
+    e.length !== n
+  )
+    return refused(
+      'shape',
+      'the positions, the velocities and the errors must be lists of one length'
+    );
   if (!(allFinite(x) && allFinite(y) && allFinite(v) && allFinite(e)))
-    return refused('finite', 'a position, a velocity or an error is not a finite number');
+    return refused(
+      'finite',
+      'a position, a velocity or an error is not a finite number'
+    );
   for (let i = 0; i < n; i++)
-    if (!(e[i] > 0)) return refused('error', `the error of member ${i} is not positive`);
-  if (!(level > 0 && level < 1)) return refused('level', 'the level is not between 0 and 1');
+    if (!(e[i] > 0))
+      return refused('error', `the error of member ${i} is not positive`);
+  if (!(level > 0 && level < 1))
+    return refused('level', 'the level is not between 0 and 1');
   if (n < VIRIAL.minimumMembers)
     return {
       status: 'not-constrained',
@@ -110,7 +131,11 @@ export function virialMass({ x, y, v, e, level = 0.6827, draws = 400, seed }) {
       why: `${n} members: a dispersion from fewer than ${VIRIAL.minimumMembers} stars is not a mass`,
     };
   const rh = halfNumberRadius(x, y);
-  if (!(rh > 0)) return refused('radius', 'the half-number radius is zero: every member is at one position');
+  if (!(rh > 0))
+    return refused(
+      'radius',
+      'the half-number radius is zero: every member is at one position'
+    );
   const fit = intrinsicDispersion(v, e);
   if (!(fit.sigma > 0) || fit.sigma < VIRIAL.resolvedSigmas * fit.sigmaError)
     return {
@@ -175,8 +200,12 @@ export function virialMass({ x, y, v, e, level = 0.6827, draws = 400, seed }) {
     sigmaLosError: fit.sigmaError,
     halfNumberRadius: rh,
     eta: VIRIAL.eta,
-    parts: { bootstrapSigmaLn: bootstrap, structureSigmaLn: VIRIAL.structureSigma },
-    method: 'case bootstrap of the members with a lognormal structure term, percentile-free (normal in the logarithm)',
+    parts: {
+      bootstrapSigmaLn: bootstrap,
+      structureSigmaLn: VIRIAL.structureSigma,
+    },
+    method:
+      'case bootstrap of the members with a lognormal structure term, percentile-free (normal in the logarithm)',
     assumes: [
       'the members are a random sample of the cluster, with no foreground, no binaries inflating the dispersion and no members chosen by velocity',
       'the cluster is in virial equilibrium, pressure supported and not rotating',
