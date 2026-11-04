@@ -1098,7 +1098,7 @@
       "kind": "feature",
       "purpose": "Cluster dynamics: crossing, relaxation, segregation and evaporation times, dynamical friction and the virial mass, with the validation contract and the failed legs (Prompt 237).",
       "owner": 237,
-      "student": false
+      "student": true
     },
     {
       "file": "DYNAMICS_REFERENCE_GATE.md",

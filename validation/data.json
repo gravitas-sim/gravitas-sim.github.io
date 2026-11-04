@@ -1,9 +1,9 @@
 {
- "generatedAt": "2026-10-31",
+ "generatedAt": "2026-11-04",
  "version": "2.1.0",
- "passed": 352,
+ "passed": 358,
  "failed": 0,
- "elapsedMs": 224347,
+ "elapsedMs": 156854,
  "checks": [
   {
    "group": "Unit system",
@@ -4600,6 +4600,84 @@
    "why": "The distance modulus is fixed by where the main sequence and its turnoff sit once the age is set; the age and the distance trade against each other, which the fit reports as a negative correlation.",
    "toleranceKind": "relative",
    "error": 0.0007212202874515639,
+   "pass": true
+  },
+  {
+   "group": "Cluster dynamics",
+   "kind": "analytic",
+   "name": "The dynamical time of 100,000 solar masses within 2 parsecs is sqrt(R^3 / (G M)), 4.3 million years",
+   "measured": 0.13335552922309976,
+   "expected": 0.13333842624115994,
+   "unit": "Myr",
+   "tolerance": 0.0005,
+   "why": "The kernel works in the IAU nominal GM of the Sun; the suite works in CODATA G and the solar mass, which differ by 2 parts in 10,000; 5e-4 bounds that.",
+   "toleranceKind": "relative",
+   "error": 0.00012826746514086714,
+   "pass": true
+  },
+  {
+   "group": "Cluster dynamics",
+   "kind": "analytic",
+   "name": "The half-mass relaxation time of 50,000 stars of 0.5 solar masses at 3 parsecs is 0.138 N / ln(0.11 N) dynamical times",
+   "measured": 392.55236420491644,
+   "expected": 392.5523642049164,
+   "unit": "Myr",
+   "tolerance": 1e-9,
+   "why": "Spitzer’s form rewritten in the cluster’s dynamical time: an identity of the cited relation (the coefficient 0.138 is cited and flagged for verification, not tested here).",
+   "toleranceKind": "relative",
+   "error": 1.4480467841771848e-16,
+   "pass": true
+  },
+  {
+   "group": "Cluster dynamics",
+   "kind": "data",
+   "name": "A sampled isotropic Plummer sphere of 20,000 stars gives G M / (sigma_los^2 R_h) = 32 / pi, the virial factor, within sampling error",
+   "measured": 10.180878192527944,
+   "expected": 10.185916357881302,
+   "unit": "",
+   "tolerance": 0.05,
+   "why": "The Plummer distribution function is sampled (Aarseth, Henon and Wielen 1974), projected along an axis, and the sphere’s true mass divided by sigma_los^2 R_h from the sample; the relative scatter of the sample’s dispersion and half-number radius at 20,000 stars is about 1 percent, so 5 percent is generous.",
+   "toleranceKind": "relative",
+   "error": 0.0004946207269275466,
+   "pass": true
+  },
+  {
+   "group": "Cluster dynamics",
+   "kind": "analytic",
+   "name": "Chandrasekhar’s friction function f(1) = erf(1) - 2 exp(-1) / sqrt(pi) is 0.4276",
+   "measured": 0.42759329552912023,
+   "expected": 0.4275932955291201,
+   "unit": "",
+   "tolerance": 1e-12,
+   "why": "erf(1) = 0.8427007929497149 is a standard tabulated value; the kernel evaluates the same function by its series.",
+   "toleranceKind": "relative",
+   "error": 2.5964462872396643e-16,
+   "pass": true
+  },
+  {
+   "group": "Cluster dynamics",
+   "kind": "integration",
+   "name": "A satellite of one percent of the enclosed mass sinks in a singular isothermal sphere in the time of the closed form (r_i^2 - r_f^2) v_c / (2 G M lnLambda f(1)), within 5 percent",
+   "measured": 3.8016956428953312,
+   "expected": 3.8091851580018417,
+   "unit": "Myr",
+   "tolerance": 0.05,
+   "why": "The orbit is integrated (fourth-order Runge-Kutta, step 0.001 of r_i / v_c) under Chandrasekhar’s drag with ln Lambda stated as 3; the closed form treats the orbit as circular at every radius, which a drag of this size keeps nearly true.",
+   "toleranceKind": "relative",
+   "error": 0.001966172500377781,
+   "pass": true
+  },
+  {
+   "group": "Cluster dynamics",
+   "kind": "analytic",
+   "name": "A cluster with 19 members, fewer than the committed 20, returns \"not constrained\" and names the count",
+   "measured": 1,
+   "expected": 1,
+   "unit": "",
+   "tolerance": 0,
+   "why": "The dispersion of fewer than 20 stars is uncertain by more than 16 percent before any other error; the estimator refuses rather than print a mass.",
+   "toleranceKind": "relative",
+   "error": 0,
    "pass": true
   }
  ]

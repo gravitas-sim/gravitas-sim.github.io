@@ -80,6 +80,9 @@ current, and the orchestrator checks it.
 | `docs-facts.mjs` | Documentation facts: derive the numbers, then hold the docs to them | `npm run docs:facts`, `npm run docs:sync`, `npm run docs:check`, `npm run docs:check:tests`, `npm run docs:check:build` |
 | `docs-map.mjs` | DOCUMENTS.md, the map of every root document, from a committed table |  |
 | `draw-trace.mjs` | The canvas calls a body makes, recorded and hashed |  |
+| `dynamics-measure.mjs` | (no header) |  |
+| `dynamics-runs.mjs` | The engine's precomputed cluster runs (Prompt 237, DYNAMICS_REFERENCE_GATE.md) |  |
+| `dynamics-validate.mjs` | The dynamics kernel and the engine's cluster runs against their committed thresholds (Prompt 237) | `npm run dynamics:validate` |
 | `e2e-shards.mjs` | Splitting the source browser suite into shards of equal duration |  |
 | `effects-trace.mjs` | The effects an engine event spawns, counted and hashed |  |
 | `empty-world.mjs` | A world with nothing in it |  |

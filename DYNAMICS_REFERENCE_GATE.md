@@ -134,7 +134,7 @@ fixtures with their generators, labelled, shipped nowhere.
 
 1. **The gate has little power, and the engine runs hot in the radii.** Each leg's bound is a fraction of the reference
    plus twice the combined standard error, and with 16 runs of a chaotic system the standard error is large: the r50
-   bound is 0.34 of the reference at the first sample and 0.38 at the last. Within it the engine's radii are above the
+   bound is 0.33 of the reference at the first sample and 0.38 at the last. Within it the engine's radii are above the
    reference at late times (r50 7.70 against 6.73, r10 4.51 against 3.32, r90 21.6 against 20.7 at 30 crossing times:
    14, 36 and 4 percent). That is not a failure of any committed leg; it is a bias nobody should call "tracks".
 2. **Family S is a dissolving cluster, not an evaporating one.** The starting velocities are not a distribution-function
