@@ -1,0 +1,50 @@
+{
+  "note": "Legs of tests/fixtures/rotation-decomposition/thresholds.json that crossed their bound or were not run, kept as measured. Only Carl resets a bound.",
+  "failed": [
+    {
+      "id": "A3",
+      "status": "fail",
+      "measured": {
+        "worstSpeedRelative": 5.696237880113086e-13,
+        "worstMassRelative": 1.1392459429151531e-12,
+        "amendedAM1": {
+          "worstSpeedRelative": 0,
+          "worstMassRelative": 3.5063875848068194e-16
+        }
+      },
+      "note": "the committed reference writes m(x) as ln(1 + x) - x / (1 + x); evaluated as written it loses digits at small x (its two terms agree to x^2 / 2; the smallest x of the cases is 8e-4), and the mass round trip crosses 1e-12 by 14 percent; the kernel uses log1p, and against the same function evaluated with log1p the worst relative is 4e-16 (amendment AM1, measured beside the committed form). The committed form binds; judging on the log1p form is a question for Carl"
+    },
+    {
+      "id": "A5",
+      "status": "fail",
+      "measured": {
+        "relative": 0.0013318349321365108,
+        "expectedFirstCorrection": 0.0013333333333333333,
+        "kernelAgainstThreeTermSeries": 1.6009353842605378e-9
+      },
+      "note": "the committed bound 1e-3 was miscalibrated: the inner limit v^2 / (v_s^2 x / 2) = 1 - 4x/3 + 3x^2/2 - ..., so its first correction is 1.33e-3 at x = 1e-3, above the bound; the kernel agrees with the three-term series to 2e-9. Left failing; the alternative (a bound of 2e-3, or x = 1e-4) is a question for Carl, not a change made here"
+    },
+    {
+      "id": "C3",
+      "status": "fail",
+      "measured": {
+        "coverage": 0.585
+      },
+      "note": "the profile interval of log10 disk mass covered 117 of 200 realizations, 3 short of the lower edge of the band (binomial sigma 0.035 at 0.68); the covariance interval covered 0.605. Left failing"
+    },
+    {
+      "id": "D4",
+      "status": "fail",
+      "measured": {
+        "flagged": 0.08
+      },
+      "note": "the adequacy test (chi-square survival probability below 0.001) flagged 8 percent of the curves that carry a 15 km/s bump of 1.2 kpc width: with four free parameters the fit absorbs part of a localized feature and 24 points dilute the rest, so the test has little power against it. The bound is left as committed; a residual diagnostic with power against a localized feature (the runs test of the statistics kernel on the normalised residuals) is a question for Carl, not a change made here"
+    },
+    {
+      "id": "E2",
+      "status": "not-run",
+      "measured": null,
+      "note": "the published ranges were not supplied (tests/fixtures/rotation-decomposition/published-ranges.json); only Carl can fetch them (thresholds.json, supply.E2)"
+    }
+  ]
+}

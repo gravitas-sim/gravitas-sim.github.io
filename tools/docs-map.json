@@ -1122,6 +1122,13 @@
       "student": false
     },
     {
+      "file": "ROTATION_DECOMPOSITION.md",
+      "kind": "feature",
+      "purpose": "Rotation-curve decomposition: bulge, thin disk and halo, the fit with its covariance and the disk-halo degeneracy, the validation contract with its failed legs, Part B deferred (Prompt 236).",
+      "owner": 236,
+      "student": false
+    },
+    {
       "file": "SPECTROGRAPH.md",
       "kind": "feature",
       "purpose": "The spectrograph model: the line-spread function, an arc-lamp wavelength solution with its uncertainty, a velocity with its medium, the slit trade, validation (Prompt 213).",

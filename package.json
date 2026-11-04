@@ -15,6 +15,7 @@
     "ttv:validate": "node tools/ttv-validate.mjs",
     "gaia:validate": "node tools/gaia-validate.mjs",
     "joint-inference:validate": "node tools/joint-inference-validate.mjs",
+    "decomposition:validate": "node tools/rotation-decomposition-validate.mjs",
     "dynamics:validate": "node tools/dynamics-validate.mjs",
     "multimessenger:validate": "node tools/multimessenger-validate.mjs",
     "occurrence:validate": "node tools/occurrence-validate.mjs",

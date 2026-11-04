@@ -1,0 +1,744 @@
+{
+  "note": "Truth manifests and summaries of the seeded ensembles and the pack decompositions of results.json. Synthetic data is labelled; the truth is the parameter set that made each curve.",
+  "ensembles": {
+    "E1": {
+      "n": 200,
+      "converged": 200,
+      "truth": {
+        "logDiskMass": 10.602059991327963,
+        "diskScale": 2.6,
+        "vHalo20": 184.58375511072026,
+        "label": "synthetic: a galaxy that is a choice, not the Milky Way and not a published model",
+        "halo": "nfw",
+        "bulgeMass": 10000000000,
+        "bulgeScale": 0.7,
+        "diskMass": 40000000000,
+        "haloSpeed": 420,
+        "haloScale": 20,
+        "luminosity": 50000000000,
+        "massToLight": {
+          "lo": 0.3,
+          "hi": 1.5
+        }
+      },
+      "coverage68": {
+        "logDiskMass": 0.605,
+        "diskScale": 0.66,
+        "vHalo20": 0.615
+      },
+      "coverage95": {
+        "logDiskMass": 0.95,
+        "diskScale": 0.95,
+        "vHalo20": 0.945
+      },
+      "profile68": 0.585,
+      "bias": 0.18477784492222682,
+      "haloConstrained": 1,
+      "falseAlarm": 0
+    },
+    "E2": {
+      "n": 200,
+      "profile68": 0.795,
+      "covariance68": 0.945,
+      "openFraction": 0.47,
+      "medianClosedWidthDex": 0.30825115312074836,
+      "medianDiskHaloCorrelation": 0.8785951667589988,
+      "haloConstrained": 0.225
+    },
+    "D1": {
+      "n": 100,
+      "notConstrained": 0.92,
+      "intervalsLeaked": false
+    },
+    "D5": {
+      "n": 100,
+      "flagged": 0.08
+    },
+    "pack": [
+      {
+        "set": {
+          "R0": 8.3,
+          "V0": 244
+        },
+        "contract": "C1",
+        "points": 14,
+        "converged": true,
+        "chi2": 48.39054016460254,
+        "dof": 10,
+        "reduced": 4.8390540164602545,
+        "adequate": false,
+        "halo": "not constrained",
+        "diskHaloCorrelation": 0.9344359636964538,
+        "parameters": [
+          {
+            "name": "logDiskMass",
+            "value": 11.142782046564326,
+            "onBound": false,
+            "sigma": 0.25603593054784834,
+            "profileInterval": {
+              "lo": 11.048420942255126,
+              "hi": 11.211437941967585,
+              "open": [
+                false,
+                false
+              ]
+            },
+            "constrained": true
+          },
+          {
+            "name": "diskScale",
+            "value": 3.9664470060769594,
+            "onBound": false,
+            "sigma": 0.3475541377056821,
+            "profileInterval": {
+              "lo": 3.696863438077444,
+              "hi": 4.224901869362588,
+              "open": [
+                false,
+                false
+              ]
+            },
+            "constrained": true
+          },
+          {
+            "name": "haloSpeed",
+            "value": 1000,
+            "onBound": true,
+            "sigma": null,
+            "profileInterval": null,
+            "constrained": false
+          },
+          {
+            "name": "logHaloScale",
+            "value": 2.5889755778370667,
+            "onBound": false,
+            "sigma": null,
+            "profileInterval": null,
+            "constrained": false
+          }
+        ],
+        "derived": [
+          {
+            "name": "haloMass20",
+            "value": null,
+            "sigma": null
+          },
+          {
+            "name": "haloMass50",
+            "value": null,
+            "sigma": null
+          },
+          {
+            "name": "vBulge",
+            "value": 66.38608858929199,
+            "sigma": 0
+          },
+          {
+            "name": "vDisk",
+            "value": 241.40606046302352,
+            "sigma": 62.421507145346474
+          },
+          {
+            "name": "vHalo",
+            "value": null,
+            "sigma": null
+          },
+          {
+            "name": "vTotal",
+            "value": 270.3306018701639,
+            "sigma": 0.5842550545071543
+          }
+        ],
+        "minimumDisk": {
+          "diskMass": 1000000000,
+          "chi2": 72.16564421765527,
+          "haloSpeed": 608.6425702394571,
+          "haloScale": 9.570255904877362
+        },
+        "maximumDisk": {
+          "diskMass": 200000000000.00003,
+          "chi2": 66.19498214494217,
+          "haloSpeed": 1,
+          "haloScale": 501.18723362727246
+        }
+      },
+      {
+        "set": {
+          "R0": 8.3,
+          "V0": 244
+        },
+        "contract": "C2",
+        "points": 45,
+        "converged": true,
+        "chi2": 105.7581784355844,
+        "dof": 41,
+        "reduced": 2.579467766721571,
+        "adequate": false,
+        "halo": "constrained",
+        "diskHaloCorrelation": 0.5251757431726305,
+        "parameters": [
+          {
+            "name": "logDiskMass",
+            "value": 11.20152328822762,
+            "onBound": false,
+            "sigma": 0.01896738729021858,
+            "profileInterval": {
+              "lo": 11.175150165439815,
+              "hi": 11.217134648212774,
+              "open": [
+                false,
+                false
+              ]
+            },
+            "constrained": true
+          },
+          {
+            "name": "diskScale",
+            "value": 4.124615140276797,
+            "onBound": false,
+            "sigma": 0.09950767228453661,
+            "profileInterval": {
+              "lo": 4.032020431952059,
+              "hi": 4.220906098412485,
+              "open": [
+                false,
+                false
+              ]
+            },
+            "constrained": true
+          },
+          {
+            "name": "haloSpeed",
+            "value": 304.06685619316875,
+            "onBound": false,
+            "sigma": 39.446017226519096,
+            "profileInterval": {
+              "lo": 279.5757933605873,
+              "hi": 349.35748211444417,
+              "open": [
+                false,
+                false
+              ]
+            },
+            "constrained": true
+          },
+          {
+            "name": "logHaloScale",
+            "value": 1.8636585891463306,
+            "onBound": false,
+            "sigma": 0.2630061655035754,
+            "profileInterval": {
+              "lo": 1.6417493311164069,
+              "hi": 2.0916184588405047,
+              "open": [
+                false,
+                false
+              ]
+            },
+            "constrained": true
+          }
+        ],
+        "derived": [
+          {
+            "name": "haloMass20",
+            "value": 42482679640.27509,
+            "sigma": 8629115527.398579
+          },
+          {
+            "name": "haloMass50",
+            "value": 180752870691.6024,
+            "sigma": 15956826312.70008
+          },
+          {
+            "name": "vBulge",
+            "value": 66.38608858929199,
+            "sigma": 0
+          },
+          {
+            "name": "vDisk",
+            "value": 252.99830717536193,
+            "sigma": 2.8041493546236786
+          },
+          {
+            "name": "vHalo",
+            "value": 67.43233768801375,
+            "sigma": 9.808438820883698
+          },
+          {
+            "name": "vTotal",
+            "value": 270.1154870751665,
+            "sigma": 0.5555110760514776
+          }
+        ],
+        "minimumDisk": {
+          "diskMass": 1000000000,
+          "chi2": 573.9996909988278,
+          "haloSpeed": 551.0153360599393,
+          "haloScale": 4.093175695079969
+        },
+        "maximumDisk": {
+          "diskMass": 200000000000.00003,
+          "chi2": 147.8770905113896,
+          "haloSpeed": 451.7269761234546,
+          "haloScale": 501.18723362727246
+        }
+      },
+      {
+        "set": {
+          "R0": 8,
+          "V0": 200
+        },
+        "contract": "C1",
+        "points": 14,
+        "converged": true,
+        "chi2": 51.822074116962185,
+        "dof": 10,
+        "reduced": 5.1822074116962185,
+        "adequate": false,
+        "halo": "not constrained",
+        "diskHaloCorrelation": 0.9882816149440016,
+        "parameters": [
+          {
+            "name": "logDiskMass",
+            "value": 10.890047459199122,
+            "onBound": false,
+            "sigma": 0.22635174461800325,
+            "profileInterval": {
+              "lo": 10.864541045802568,
+              "hi": 10.899740764061228,
+              "open": [
+                false,
+                false
+              ]
+            },
+            "constrained": true
+          },
+          {
+            "name": "diskScale",
+            "value": 2.8501716516272944,
+            "onBound": false,
+            "sigma": 0.39081746371548115,
+            "profileInterval": {
+              "lo": 2.779697702561471,
+              "hi": 2.9114757021479303,
+              "open": [
+                false,
+                false
+              ]
+            },
+            "constrained": true
+          },
+          {
+            "name": "haloSpeed",
+            "value": 1,
+            "onBound": true,
+            "sigma": null,
+            "profileInterval": null,
+            "constrained": false
+          },
+          {
+            "name": "logHaloScale",
+            "value": 2.7,
+            "onBound": true,
+            "sigma": null,
+            "profileInterval": null,
+            "constrained": false
+          }
+        ],
+        "derived": [
+          {
+            "name": "haloMass20",
+            "value": null,
+            "sigma": null
+          },
+          {
+            "name": "haloMass50",
+            "value": null,
+            "sigma": null
+          },
+          {
+            "name": "vBulge",
+            "value": 67.42272251793734,
+            "sigma": 0
+          },
+          {
+            "name": "vDisk",
+            "value": 207.89819141356858,
+            "sigma": 45.33526669409682
+          },
+          {
+            "name": "vHalo",
+            "value": null,
+            "sigma": null
+          },
+          {
+            "name": "vTotal",
+            "value": 218.55774824735207,
+            "sigma": 1.466989780724209
+          }
+        ],
+        "minimumDisk": {
+          "diskMass": 1000000000,
+          "chi2": 181.1858321529531,
+          "haloSpeed": 444.55823254989684,
+          "haloScale": 2.1582749447855436
+        },
+        "maximumDisk": {
+          "diskMass": 200000000000.00003,
+          "chi2": 1079.8833149312802,
+          "haloSpeed": 1,
+          "haloScale": 501.18723362727246
+        }
+      },
+      {
+        "set": {
+          "R0": 8,
+          "V0": 200
+        },
+        "contract": "C2",
+        "points": 46,
+        "converged": true,
+        "chi2": 171.32707093362077,
+        "dof": 42,
+        "reduced": 4.079215974610018,
+        "adequate": false,
+        "halo": "constrained",
+        "diskHaloCorrelation": 0.7340964518861368,
+        "parameters": [
+          {
+            "name": "logDiskMass",
+            "value": 10.73012419743131,
+            "onBound": false,
+            "sigma": 0.027187876071875602,
+            "profileInterval": {
+              "lo": 10.706684751495995,
+              "hi": 10.74731427122357,
+              "open": [
+                false,
+                false
+              ]
+            },
+            "constrained": true
+          },
+          {
+            "name": "diskScale",
+            "value": 2.376038259238233,
+            "onBound": false,
+            "sigma": 0.09651878770392663,
+            "profileInterval": {
+              "lo": 2.3010760103767147,
+              "hi": 2.451170012202519,
+              "open": [
+                false,
+                false
+              ]
+            },
+            "constrained": true
+          },
+          {
+            "name": "haloSpeed",
+            "value": 390.37506137686785,
+            "onBound": false,
+            "sigma": 21.39426528038478,
+            "profileInterval": {
+              "lo": 375.5766150095532,
+              "hi": 409.89827456734827,
+              "open": [
+                false,
+                false
+              ]
+            },
+            "constrained": true
+          },
+          {
+            "name": "logHaloScale",
+            "value": 1.7206460287149499,
+            "onBound": false,
+            "sigma": 0.12800158543047832,
+            "profileInterval": {
+              "lo": 1.6306438423068663,
+              "hi": 1.8154333838276424,
+              "open": [
+                false,
+                false
+              ]
+            },
+            "constrained": true
+          }
+        ],
+        "derived": [
+          {
+            "name": "haloMass20",
+            "value": 87204141046.95691,
+            "sigma": 7506715823.155144
+          },
+          {
+            "name": "haloMass50",
+            "value": 337035300727.295,
+            "sigma": 12063683417.964947
+          },
+          {
+            "name": "vBulge",
+            "value": 67.42272251793734,
+            "sigma": 0
+          },
+          {
+            "name": "vDisk",
+            "value": 181.1157777980336,
+            "sigma": 4.434653817099121
+          },
+          {
+            "name": "vHalo",
+            "value": 97.932087508797,
+            "sigma": 6.9525460168293485
+          },
+          {
+            "name": "vTotal",
+            "value": 216.65512281722795,
+            "sigma": 1.2500625244150345
+          }
+        ],
+        "minimumDisk": {
+          "diskMass": 1000000000,
+          "chi2": 330.9469647229548,
+          "haloSpeed": 446.86103930662716,
+          "haloScale": 3.7742440790806278
+        },
+        "maximumDisk": {
+          "diskMass": 200000000000.00003,
+          "chi2": 1226.2267299312473,
+          "haloSpeed": 374.10168732044065,
+          "haloScale": 501.18723362727246
+        }
+      },
+      {
+        "set": {
+          "R0": 8.5,
+          "V0": 220
+        },
+        "contract": "C1",
+        "points": 14,
+        "converged": true,
+        "chi2": 47.99338766246596,
+        "dof": 10,
+        "reduced": 4.7993387662465965,
+        "adequate": false,
+        "halo": "not constrained",
+        "diskHaloCorrelation": 0.9454840360582543,
+        "parameters": [
+          {
+            "name": "logDiskMass",
+            "value": 11.091532327600346,
+            "onBound": false,
+            "sigma": 0.22374061025986058,
+            "profileInterval": {
+              "lo": 11.010482947110464,
+              "hi": 11.119436633497344,
+              "open": [
+                false,
+                false
+              ]
+            },
+            "constrained": true
+          },
+          {
+            "name": "diskScale",
+            "value": 3.7726530088565275,
+            "onBound": false,
+            "sigma": 0.3573697639650814,
+            "profileInterval": {
+              "lo": 3.54728412256979,
+              "hi": 3.933301306504142,
+              "open": [
+                false,
+                false
+              ]
+            },
+            "constrained": true
+          },
+          {
+            "name": "haloSpeed",
+            "value": 521.8234813920445,
+            "onBound": false,
+            "sigma": null,
+            "profileInterval": null,
+            "constrained": false
+          },
+          {
+            "name": "logHaloScale",
+            "value": 2.7,
+            "onBound": true,
+            "sigma": null,
+            "profileInterval": null,
+            "constrained": false
+          }
+        ],
+        "derived": [
+          {
+            "name": "haloMass20",
+            "value": null,
+            "sigma": null
+          },
+          {
+            "name": "haloMass50",
+            "value": null,
+            "sigma": null
+          },
+          {
+            "name": "vBulge",
+            "value": 65.72069990818053,
+            "sigma": 0
+          },
+          {
+            "name": "vDisk",
+            "value": 233.23424147641782,
+            "sigma": 50.71672810283632
+          },
+          {
+            "name": "vHalo",
+            "value": null,
+            "sigma": null
+          },
+          {
+            "name": "vTotal",
+            "value": 246.93167180666813,
+            "sigma": 0.5966903932176018
+          }
+        ],
+        "minimumDisk": {
+          "diskMass": 1000000000,
+          "chi2": 78.47743175285053,
+          "haloSpeed": 526.5993697572841,
+          "haloScale": 6.862134664611666
+        },
+        "maximumDisk": {
+          "diskMass": 200000000000.00003,
+          "chi2": 223.25453501246847,
+          "haloSpeed": 1,
+          "haloScale": 501.18723362727246
+        }
+      },
+      {
+        "set": {
+          "R0": 8.5,
+          "V0": 220
+        },
+        "contract": "C2",
+        "points": 45,
+        "converged": true,
+        "chi2": 106.74742267727275,
+        "dof": 41,
+        "reduced": 2.6035956750554328,
+        "adequate": false,
+        "halo": "constrained",
+        "diskHaloCorrelation": 0.5909257422727373,
+        "parameters": [
+          {
+            "name": "logDiskMass",
+            "value": 11.026823361500497,
+            "onBound": false,
+            "sigma": 0.027006378633297138,
+            "profileInterval": {
+              "lo": 10.992273461402291,
+              "hi": 11.046038597892299,
+              "open": [
+                false,
+                false
+              ]
+            },
+            "constrained": true
+          },
+          {
+            "name": "diskScale",
+            "value": 3.612215322963974,
+            "onBound": false,
+            "sigma": 0.10390163159715,
+            "profileInterval": {
+              "lo": 3.5128459152979805,
+              "hi": 3.712811822940546,
+              "open": [
+                false,
+                false
+              ]
+            },
+            "constrained": true
+          },
+          {
+            "name": "haloSpeed",
+            "value": 316.17108357497347,
+            "onBound": false,
+            "sigma": 19.450270892015222,
+            "profileInterval": {
+              "lo": 303.18594997208504,
+              "hi": 339.7891561211493,
+              "open": [
+                false,
+                false
+              ]
+            },
+            "constrained": true
+          },
+          {
+            "name": "logHaloScale",
+            "value": 1.6208064228729209,
+            "onBound": false,
+            "sigma": 0.20296826192325576,
+            "profileInterval": {
+              "lo": 1.4342831255225796,
+              "hi": 1.7980365613621203,
+              "open": [
+                false,
+                false
+              ]
+            },
+            "constrained": true
+          }
+        ],
+        "derived": [
+          {
+            "name": "haloMass20",
+            "value": 65495448292.994385,
+            "sigma": 10557579412.004105
+          },
+          {
+            "name": "haloMass50",
+            "value": 235209303156.351,
+            "sigma": 13657514525.160185
+          },
+          {
+            "name": "vBulge",
+            "value": 65.72069990818053,
+            "sigma": 0
+          },
+          {
+            "name": "vDisk",
+            "value": 220.81013786911055,
+            "sigma": 4.75375538935666
+          },
+          {
+            "name": "vHalo",
+            "value": 89.05569439214318,
+            "sigma": 11.50627298837072
+          },
+          {
+            "name": "vTotal",
+            "value": 246.99644549236643,
+            "sigma": 0.5417452662802034
+          }
+        ],
+        "minimumDisk": {
+          "diskMass": 1000000000,
+          "chi2": 302.28381188220186,
+          "haloSpeed": 504.4628554915975,
+          "haloScale": 3.8906265169106296
+        },
+        "maximumDisk": {
+          "diskMass": 200000000000.00003,
+          "chi2": 264.5512053761052,
+          "haloSpeed": 231.0041351416319,
+          "haloScale": 1
+        }
+      }
+    ]
+  }
+}
