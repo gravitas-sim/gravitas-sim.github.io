@@ -278,15 +278,16 @@ describe('the document inventory', () => {
     // 1156 after How Many Earths? (Prompt 229): eleven more over 1145.
     // 1145 after Why We Cannot See Earth From Here and Architectures (Prompt 230): eleven more for each, as for any lesson with three depths.
     // 1200 after the four exoplanet closeout investigations (Prompt 231): eleven more for each, as for any lesson with three depths.
-    expect(inv.documents).toBe(1200);
-    expect(inv.byLocale).toEqual({ en: 548, es: 652 });
+    // 1222 after How far, and how sure? and What Gaia does not see (Prompt 233 Part B): eleven more for each, as for any lesson with three depths.
+    expect(inv.documents).toBe(1222);
+    expect(inv.byLocale).toEqual({ en: 558, es: 664 });
     expect(inv.byKind.notes).toBe(INVESTIGATIONS.length);
     expect(inv.byVariant).toEqual({
       activity: 12,
-      depth: 560,
-      full: 488,
+      depth: 572,
+      full: 496,
       general: 18,
-      notes: 122,
+      notes: 124,
     });
   });
 
@@ -314,7 +315,7 @@ describe('the document inventory', () => {
     const withDepth = INVESTIGATIONS.filter(
       i => withAllDepths(i).steps.length !== i.steps.length
     ).map(i => i.id);
-    expect(withDepth.length).toBe(96);
+    expect(withDepth.length).toBe(98);
     // A key for each depth the lesson offers: three for most, two for Design
     // the Schedule, whose upper depth (Prompt 214) has no quantitative layer.
     let keys = 0;

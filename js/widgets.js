@@ -104,7 +104,7 @@ const familyEntry = (load, path, exportName, ids, ready) => ({
 });
 
 // <generated:lazy-families>
-// tidal, darkMatter, spectra, light, variables, galactic, cosmology, sky, gwEvents, imaging, jovian, crater, sun, smallBodies, activity, variablesII wait on their own readiness (prose or data behind a second import); whenWidgetsReady() waits for it.
+// tidal, darkMatter, spectra, light, variables, galactic, cosmology, sky, gwEvents, imaging, jovian, crater, sun, smallBodies, activity, gaia, variablesII wait on their own readiness (prose or data behind a second import); whenWidgetsReady() waits for it.
 export const LAZY_FAMILIES = Object.freeze({
   energy: familyEntry(
     () => import('./energyWidgets.js'),
@@ -428,6 +428,13 @@ export const LAZY_FAMILIES = Object.freeze({
     'EXPOSURE_WIDGETS',
     ['exposure-planner']
   ),
+  gaia: familyEntry(
+    () => import('./gaiaWidgets.js'),
+    './gaiaWidgets.js',
+    'GAIA_WIDGETS',
+    ['gaia-distance', 'gaia-sample'],
+    'gaiaReady'
+  ),
   habitabilityLimits: familyEntry(
     () => import('./habitabilityLimitsWidgets.js'),
     './habitabilityLimitsWidgets.js',
@@ -725,6 +732,8 @@ export async function whenWidgetsReady() {
     'joint',
     // The occurrence family reaches the plot component, the occurrence kernel and the statistics kernel: late (Prompt 229).
     'occurrence',
+    // The Gaia family reaches the plot component, the Gaia kernel and the statistics kernel, and its sample is a sidecar: late for the same reason (Prompt 233).
+    'gaia',
     'surveyDesign',
   ];
   await Promise.all(families.filter(f => !late.includes(f)).map(loadFamily));

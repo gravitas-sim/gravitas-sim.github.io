@@ -24,7 +24,7 @@
     ["steps.move-the-threshold.fields.1.label","Stars above 0.1"],
     ["steps.move-the-threshold.fields.1.hint","509"],
     ["steps.read-the-distance.fields.0.hint","0.385"],
-    ["steps.read-the-distance.fields.1.label","Distance, 1 ÷ parallax"],
+    ["steps.read-the-distance.fields.1.label","Reading, 1 ÷ parallax (uncorrected)"],
     ["steps.read-the-distance.fields.1.hint","2.6"]
    ]
   },
@@ -34,7 +34,7 @@
     ["steps.measure-the-cluster.fields.2.label","Estrellas por encima de 0,5"],
     ["steps.move-the-threshold.fields.0.label","Estrellas por encima de 0,99"],
     ["steps.move-the-threshold.fields.1.label","Estrellas por encima de 0,1"],
-    ["steps.read-the-distance.fields.1.label","Distancia, 1 ÷ paralaje"]
+    ["steps.read-the-distance.fields.1.label","Lectura, 1 ÷ paralaje (sin corregir)"]
    ]
   }
  },
@@ -71,7 +71,7 @@
     "validate": {"calls":232,"distinct":2,"digest":"dfa06e39368c5ba7","samples":[null,{"level":"error","message":"Use the fit with proper motion and parallax. Set the threshold to 0.99 and read “Stars above the probability threshold”, then set it to 0.1 and read it again."}]}
    },
    "read-the-distance": {
-    "validate": {"calls":232,"distinct":2,"digest":"a42aec9ce19d885d","samples":[null,{"level":"error","message":"Set the threshold to 0.5 and read “Mean parallax of the members” and “Distance from that parallax”. The distance is 1 divided by the parallax."}]}
+    "validate": {"calls":232,"distinct":2,"digest":"74a1ce8e908a8a9a","samples":[null,{"level":"error","message":"Set the threshold to 0.5 and read “Mean parallax of the members” and “Reading from that parallax”. The reading is 1 divided by the parallax."}]}
    }
   },
   "es": "same"

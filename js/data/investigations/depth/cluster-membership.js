@@ -18,16 +18,18 @@ export default {
       depth: 'quantitative',
       type: 'question',
       kind: 'numeric',
-      title: 'The distance by hand',
+      title: 'The reciprocal by hand',
       body: `A star whose parallax is p milliarcseconds is 1 ÷ p kiloparsecs
-             away. The members’ mean parallax is 0.385&nbsp;mas.`,
-      prompt: 'The distance',
+             away. The members’ mean parallax is 0.385&nbsp;mas, and the
+             instrument’s reading is its reciprocal, uncorrected for the zero
+             point.`,
+      prompt: 'The reciprocal',
       unit: 'kpc',
       answer: 2.6,
       tolerance: 0.05,
       hints: ['Divide 1 by 0.385.'],
       worked:
-        '1 ÷ 0.385 = 2.60 kpc. A star at 1 kpc has a parallax of 1 mas; this cluster’s is a little more than a third of that.',
+        '1 ÷ 0.385 = 2.60 kpc. A star at 1 kpc has a parallax of 1 mas; this cluster’s is a little more than a third of that. It is the uncorrected reading, not the cluster’s distance: the astrometry panel’s measurement with a zero point is 2.324 kpc.',
       feedback: {
         close: 'Close. The distance is the reciprocal of the parallax.',
         'wrong-order-of-magnitude':
@@ -46,14 +48,14 @@ export default {
       body: `The row “Cluster’s spread in proper motion” says how much the
              members differ among themselves: 0.081&nbsp;mas/yr, before errors.
              A proper motion μ in mas/yr at a distance d in kpc is a speed
-             4.74 × μ × d in km/s. Use d = 2.6&nbsp;kpc.`,
+             4.74 × μ × d in km/s. Use d = 2.6&nbsp;kpc, the uncorrected reading.`,
       prompt: 'The members’ speed spread across the sky',
       unit: 'km/s',
       answer: 1,
       tolerance: 0.15,
       hints: ['Multiply 4.74 by 0.081 and by 2.6.'],
       worked:
-        '4.74 × 0.081 × 2.6 = 1.0 km/s. The stars of an old cluster stir among themselves at about a kilometer per second, small against the 20 or more km/s of the field’s spread.',
+        '4.74 × 0.081 × 2.6 = 1.0 km/s (0.9 with the measured 2.324 kpc). The stars of an old cluster stir among themselves at about a kilometer per second, small against the 20 or more km/s of the field’s spread.',
       feedback: {
         close: 'Close. The factor is 4.74 × μ × d.',
         off: 'Speed = 4.74 × μ × d, with μ = 0.081 mas/yr and d = 2.6 kpc.',

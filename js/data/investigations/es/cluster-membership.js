@@ -7,7 +7,7 @@ export default {
     'Medir el movimiento propio de un cúmulo y su número de miembros a partir de un ajuste que da a cada estrella una probabilidad',
     'Explicar por qué una pertenencia es una probabilidad y una cuenta de miembros depende de un umbral que se elige',
     'Comprobar una pertenencia hecha por movimiento con un diagrama color-magnitud que no usó',
-    'Decir qué da un paralaje medio para la distancia de un cúmulo, y qué no se ha corregido',
+    'Decir la distancia medida del cúmulo con sus etiquetas (un punto cero por estrella, un intervalo estadístico sin suelo sistemático) y decir que no está validada con la distancia de un catálogo publicado',
   ],
   steps: [
     {
@@ -106,25 +106,25 @@ export default {
     },
     {
       title: 'Una distancia por el paralaje',
-      body: 'Con el umbral en 0,5, lee el <strong>paralaje medio</strong> de los miembros y la distancia que da el instrumento a partir de él. La distancia es 1 ÷ paralaje, en kiloparsecs cuando el paralaje está en milisegundos de arco.',
+      body: 'Con el umbral en 0,5, lee el <strong>paralaje medio</strong> de los miembros y la lectura que da el instrumento a partir de él, 1 ÷ paralaje, en kiloparsecs cuando el paralaje está en milisegundos de arco. Es el paralaje del catálogo sin punto cero, así que aún no es la distancia del cúmulo.',
       fields: [
         { label: 'Paralaje medio de los miembros' },
-        { label: 'Distancia, 1 ÷ paralaje' },
+        { label: 'Lectura, 1 ÷ paralaje (sin corregir)' },
       ],
     },
     {
       title: 'Lo que la distancia deja fuera',
-      body: 'La fila de la distancia dice que no usa corrección del punto cero ni comprobación con otro método.',
-      prompt: '¿Qué haría corregir el punto cero?',
+      body: 'La fila de la distancia dice que no usa corrección del punto cero ni comprobación con otro método. El panel de astrometría aplica un punto cero a cada estrella.',
+      prompt: '¿Qué le hace el punto cero a la distancia del cúmulo?',
       options: [
-        'Cambiar el paralaje en unos 0,02 mas, cerca del 5 por ciento aquí, y así la distancia en una cantidad parecida',
+        'Sube el paralaje en unos 0,04 mas y mueve la distancia de 2,555 a 2,324 kpc, mucho más que su intervalo estadístico',
         'Cambiar el movimiento propio del cúmulo',
         'Quitar todas las estrellas del campo',
         'Nada: el paralaje es exacto',
       ],
-      hints: ['¿Qué fracción es 0,02 mas de 0,385?'],
+      hints: ['Compara las dos distancias, con el punto cero y sin él.'],
       because:
-        'Cerca del 5 por ciento: 0,02 de 0,385. Una distancia por paralaje lleva esa fracción directamente, así que los 2,6 kpc de aquí valen, como mucho, unos pocos por ciento antes de comprobarlos con otro método.',
+        'Sube el paralaje, así que baja la distancia: el punto cero medio de los miembros es −0,0368 mas, y la distancia pasa de 2,555 kpc sin él a 2,324 kpc con él. El intervalo del valor corregido, de 2,316 a 2,332 kpc, es solo estadístico, sin suelo sistemático, y la distancia no está validada con la distancia de un catálogo publicado (E1 NO SE EJECUTÓ). Las fuentes que lista la validación: 2,48 y 2,54 kpc por fotometría (convertidas aquí desde un módulo de distancia), 2,59 kpc de Gaia DR2, 2,78 kpc de un paralaje de DR3 tal como se imprimió, sin punto cero indicado (de 2,38 a 3,33 kpc), y cerca de 3 kpc sin método leído. La distancia corregida queda por debajo de todas: es lo que dieron los datos bajo un contrato fijado de antemano, no una concordancia con la literatura.',
     },
     {
       title: 'Por qué una probabilidad',
@@ -134,7 +134,7 @@ export default {
     },
     {
       title: 'Lo que has deducido',
-      body: 'Un cúmulo es un grupo en movimiento propio que el campo no hace. Un ajuste de mezcla pone un componente estrecho sobre él y uno ancho sobre el campo, y da a cada estrella una probabilidad. Unas 506 de 993 estrellas son miembros, con un movimiento de (−1,23, −2,04)&nbsp;mas/año; una cuenta depende de un umbral que se elige, aunque aquí apenas importa. Un diagrama color-magnitud que el ajuste nunca vio confirma una sola población, y el paralaje medio de los miembros da cerca de 2,6&nbsp;kpc, antes de una corrección del punto cero.',
+      body: 'Un cúmulo es un grupo en movimiento propio que el campo no hace. Un ajuste de mezcla pone un componente estrecho sobre él y uno ancho sobre el campo, y da a cada estrella una probabilidad. Unas 506 de 993 estrellas son miembros, con un movimiento de (−1,23, −2,04)&nbsp;mas/año; una cuenta depende de un umbral que se elige, aunque aquí apenas importa. Un diagrama color-magnitud que el ajuste nunca vio confirma una sola población, Con un punto cero aplicado estrella por estrella, su paralaje da 2,324&nbsp;kpc, un intervalo estadístico de 2,316 a 2,332&nbsp;kpc sin suelo sistemático, y no validado con la distancia de un catálogo publicado.',
     },
   ],
 };

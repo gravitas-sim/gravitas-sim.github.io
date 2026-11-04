@@ -127,9 +127,9 @@ export const ES_GALACTIC = {
   'galW.cm.row.width':
     'Dispersión del cúmulo en movimiento propio (antes de los errores)',
   'galW.cm.row.parallax': 'Paralaje medio de los miembros',
-  'galW.cm.row.distance': 'Distancia a partir de ese paralaje',
+  'galW.cm.row.distance': 'Lectura a partir de ese paralaje',
   'galW.cm.value.distance':
-    '{d} kpc, como 1 ÷ paralaje, sin corrección del punto cero (unos 0,02 mas) y sin comprobar con otro método',
+    '{d} kpc, como 1 ÷ paralaje, sin corregir: sin punto cero y sin comprobar con otro método. No es la distancia del cúmulo (eso lo mide el panel de astrometría)',
   'galW.cm.row.how': 'El ajuste',
   'galW.cm.value.how':
     'Una gaussiana estrecha para el cúmulo y una ancha para el campo, ajustadas juntas por maximización de la esperanza desde valores iniciales fijos; los errores propios de cada estrella ensanchan ambas.',

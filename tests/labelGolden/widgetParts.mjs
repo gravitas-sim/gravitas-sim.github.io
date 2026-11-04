@@ -99,6 +99,7 @@ export const PARTS = Object.freeze({
     'variables',
     'variablesII',
     'galactic',
+    'gaia',
     'cosmology',
     'compare',
     'gwEvents',

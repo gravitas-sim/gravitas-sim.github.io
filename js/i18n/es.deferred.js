@@ -1963,6 +1963,10 @@ export const ES_DEFERRED = {
     'Empieza aquí: el movimiento del propio Sol por la Galaxia, a partir de las estrellas que lo rodean.',
   'inv.seq.galaxies.the-rotating-disk':
     'Cómo gira todo el disco y por qué la curva de rotación no es la que predice la materia visible.',
+  'inv.seq.galaxies.how-far-and-how-sure':
+    'Lo que respalda una paralaje de Gaia: una verosimilitud de la distancia, su intervalo, un l\u00edmite inferior o nada cuando la paralaje es d\u00e9bil, y qu\u00e9 a\u00f1aden una distribuci\u00f3n previa y el punto cero.',
+  'inv.seq.galaxies.what-gaia-does-not-see':
+    'Una muestra de Gaia son las estrellas que pasaron sus cortes: lo que quita cada corte de NGC 2420, c\u00f3mo cambia de forma el diagrama y c\u00f3mo se mueve la distancia del c\u00famulo.',
   'inv.seq.galaxies.missing-mass':
     'La curva de rotación convertida en masa: la evidencia de la materia oscura, con galaxias reales.',
   'inv.seq.galaxies.bending-light':

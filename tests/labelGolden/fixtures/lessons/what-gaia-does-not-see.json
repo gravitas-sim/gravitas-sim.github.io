@@ -1,0 +1,45 @@
+{
+ "id": "what-gaia-does-not-see",
+ "static": {
+  "en": {
+   "units": [
+    ["steps.the-zero-point-under-cuts.fields.0.unit","mas"],
+    ["steps.the-velocity-scatter.fields.0.unit","km/s"]
+   ],
+   "numbered": [
+    ["steps.read-what-is-left.fields.0.hint","755"],
+    ["steps.read-what-is-left.fields.1.hint","238"],
+    ["steps.cuts-overlap.fields.0.hint","189"],
+    ["steps.cuts-overlap.fields.1.hint","5"],
+    ["steps.the-zero-point-under-cuts.fields.0.hint","-0.0417"],
+    ["steps.the-velocity-scatter.fields.0.hint","1.04"]
+   ]
+  },
+  "es": {
+   "units": [],
+   "numbered": []
+  }
+ },
+ "numeric": {
+  "answers": [],
+  "decimals": []
+ },
+ "precision": [],
+ "steps": {
+  "en": {
+   "read-what-is-left": {
+    "validate": {"calls":232,"distinct":2,"digest":"f7b431c255c553e2","samples":[null,{"level":"error","message":"Set the magnitude limit to 15.0 with every other cut off and read the “Cuts on” and “Stars left” lines; the two numbers add up to 993."}]}
+   },
+   "cuts-overlap": {
+    "validate": {"calls":232,"distinct":2,"digest":"d5a91855fc2db3ad","samples":[null,{"level":"error","message":"Set G below 16, parallax over error at least 5 and RUWE below 1.10 and read the second cut’s line: “removed alone” and “of those the earlier cuts left”."}]}
+   },
+   "the-zero-point-under-cuts": {
+    "validate": {"calls":97,"distinct":2,"digest":"a22c1c8da322a8c8","samples":[null,{"level":"error","message":"Set the parallax-over-error minimum to 10 with the zero point per star on, and read the “Mean parallax of the members” line: its last number is the mean zero point."}]}
+   },
+   "the-velocity-scatter": {
+    "validate": {"calls":97,"distinct":3,"digest":"3077246206e78177","samples":[null,{"level":"ok","message":"About 1.04 km/s along right ascension and 0.97 along declination. These include the proper-motion errors, so the stars’ real internal motion is smaller; the cluster hangs together to about a kilometre per second at 2.3 kpc."},{"level":"error","message":"Choose the velocities picture, with every cut off, and read the “Tangential velocities” line: the first of the two scatters."}]}
+   }
+  },
+  "es": "same"
+ }
+}
