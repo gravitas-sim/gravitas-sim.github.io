@@ -24,7 +24,7 @@
     }
   },
   "sourceFiles": 306,
-  "sourceDigest": "bf4ef456f4b01f581b6cdc6c70a69a2e4084390e4446fc6ce7cd81369bce9cd4",
+  "sourceDigest": "66950ea5453572e1e0ce5794587f377e81260b62910ff8406e45a418aec1c9a0",
   "sources": {
     "js/activities/activities.js": "39ac98cd99b8b0387c55e41d5d4530bad55a8da8758819ad056be73e7a716b01",
     "js/activities/activityBridge.js": "67a82aff98e0ed935d6b8b0f0f654c6ad4332ee929cb3604e896a7f790a6fdc1",
@@ -43,9 +43,9 @@
     "js/data/activityTeaching.js": "7694fc798f8c4130e5aead5357e69bab04d6a5d386013d009430dba9a1c31008",
     "js/data/exoplanetAnswerKey.js": "d00f17b6b41e8585a21ab7118b24c7ed43e008263693ac48e3e1df57f8233570",
     "js/data/instructorContent.es.js": "471a388f9e2abfbe837cdad387388f52f0a547d2ae5f466e66fa5680866d5d3c",
-    "js/data/instructorContent.js": "1a65b871e0256d8f35ba545dca14671b50d6450dd3ad45acf62fface4d0c2a47",
+    "js/data/instructorContent.js": "dd47aba24ffe89e03fd92a035757426fffe94c012ea0cdccba311d0eaac7336e",
     "js/data/instructorExpectations.es.js": "5ec751fabe0ed60f692799c260ab8f383ffae25379c4b426efdd4351e0ae00ee",
-    "js/data/instructorExpectations.js": "050a6bf9975d7d2cbc8b65d0d24192017aa2f271ee0a5295f81008ae9901c34d",
+    "js/data/instructorExpectations.js": "b902b2093bb0b43a887ec5e7f7e6459cf3cc1f7b628b8aae3ac6e2b9baff182f",
     "js/data/instructorFlow.es.js": "f1c087e5240114351245f6a7fa7ad9b3efd269ec6d415183fd945ac95534fd86",
     "js/data/instructorFlow.js": "33f6a2202b92883d11828ca421545944d9d67b6024b41bef716d83dbdc081fcc",
     "js/data/instructorLabels.js": "382bb5d24bd9f59e7bf6cbf68b645a340f7c6271897cecc2d0dc407753180265",
@@ -96,7 +96,7 @@
     "js/data/investigations/depth/es/the-expanding-universe.js": "e20308a43010a257b14c62a66fa3c48e2790f5777bd344a6a1677e79fa406f2a",
     "js/data/investigations/depth/es/the-first-rung.js": "9f927ab21414443bef643bc575fde3ea08775a836d439fc3ce7b41aba2a35bfa",
     "js/data/investigations/depth/es/the-limit.js": "62366990501103c74a32244f5e60f86be79f83cace0db87f95cb6399d413ab34",
-    "js/data/investigations/depth/es/the-rotating-disk.js": "4c45aee8e4133dc42b4086642f088ba01c933850d1c396d6eb6ea4d4282f7e90",
+    "js/data/investigations/depth/es/the-rotating-disk.js": "baf2c33ddc611f36b2cebac231e906679b8c5661df93533dfbe16a9b3961ded3",
     "js/data/investigations/depth/es/the-shape-of-expansion.js": "ff5f4d276edaa0d84ca8dbc8871cf3970e85cd859183dea5997a64ec55f57cda",
     "js/data/investigations/depth/es/the-sun-through-the-year.js": "6ea6c3c9ebb59c795d2b77c119dcde551db5b62d23811e7f3d29ca16206531be",
     "js/data/investigations/depth/es/the-suns-motion.js": "11947028467860f3058388a40999f3f8f6a707083202f6ce12ff8185f5bb93ee",
@@ -128,7 +128,7 @@
     "js/data/investigations/depth/the-expanding-universe.js": "5c524df01fa867a0ccb993eccc5aebfd55d97173f6ae9782be9ad3492c937881",
     "js/data/investigations/depth/the-first-rung.js": "c28bd587eff354470373b5acc8eb695e8bf569c3448a6cdd04fc7dc4818ef6d3",
     "js/data/investigations/depth/the-limit.js": "5ee69698cae2a2eb004cf64630ff05d8005e728e08a80a2f0a20e3df8b2b0763",
-    "js/data/investigations/depth/the-rotating-disk.js": "c6af3d8d4aa860cd99a7a52ad630276c46a03ecd5b10f7a2b4a7b85c8efe8c8e",
+    "js/data/investigations/depth/the-rotating-disk.js": "ec60ee3eed8c6f18ce47f2c4d3d68c479ac875842e09fa0867e932b9b1187116",
     "js/data/investigations/depth/the-shape-of-expansion.js": "4374c19edf8328e85412701051acf660febab6b8a74107eea76babdcaf092e77",
     "js/data/investigations/depth/the-sun-through-the-year.js": "3c027618e96f6907fb3f106d794efcedf6c157c53b4dcfef448917f442fb2bf0",
     "js/data/investigations/depth/the-suns-motion.js": "08a9be7666c4ec5f1860ee399b19e4bcedb4d98f1b0ec48fa04fba410000543f",
@@ -190,7 +190,7 @@
     "js/data/investigations/es/the-expanding-universe.js": "104c7a26a779083120dd3ada8d0305e86396955a37ce0dcb1ace61ed0e8f8456",
     "js/data/investigations/es/the-first-rung.js": "786faddcfcabd2bbfbecbdf23bc1e08bde1f01de694c3aca2d2072ac4e614768",
     "js/data/investigations/es/the-limit.js": "6e082433367832e5b5f2a7f6ecfb4771a18caea1f8a408562dc5935492833850",
-    "js/data/investigations/es/the-rotating-disk.js": "8b6b898874f88e467dc2ccf3164f90812ef06ba32dc95482ac099b2de12f8ccc",
+    "js/data/investigations/es/the-rotating-disk.js": "86f0884061e1af63c9be39dfa15147c88c7a2d8906205e76734e34e36fd8f8b7",
     "js/data/investigations/es/the-shape-of-expansion.js": "42cf4598f198826a8d02dc8d69df45479e797335cef60245d3f4c6aefe1fc4d5",
     "js/data/investigations/es/the-sun-through-the-year.js": "87beaee9c460a89d593060221a0217aa3a4de47b98cb16c12788284435ca2852",
     "js/data/investigations/es/the-suns-motion.js": "3bd14a608d9211270b5bf16ae2a209db1a52b02c7c6daddc68f19470cf1983d3",
@@ -259,7 +259,7 @@
     "js/data/investigations/the-expanding-universe.js": "4e2d6776b896a4a7b8424bf36f7f6afde0e9b75f2ff67dccf26f198b2b641b7c",
     "js/data/investigations/the-first-rung.js": "ae0d1e3cb1e9fc718746568b19cb546b25c9df8148d82354ab86c727a0c8cb8b",
     "js/data/investigations/the-limit.js": "0a00fc75c53f29053a6e1b44bc90d1f01fb24f5e2a905a3300c50e54a2fa8691",
-    "js/data/investigations/the-rotating-disk.js": "be3ee23a850dc476554f74590bef0549955f0653f999cbf057ac4d27760793aa",
+    "js/data/investigations/the-rotating-disk.js": "1fb1d02215ea597a167616ba4cbeae9974beaeefe61f44135a5a7e7f3042346b",
     "js/data/investigations/the-shape-of-expansion.js": "f473262ad1d1d7700ea39ed8100f5131af682dfda1ecbf716fa0ba4620a815da",
     "js/data/investigations/the-sun-through-the-year.js": "53522ff306c9c3c0dfc0397325acf8337f6d014fc0ab4f810ca1c591ec492cd6",
     "js/data/investigations/the-suns-motion.js": "95cd4c69b7abf709acf4464ffe977671dd52df6fa61de84fc304d25831153868",
@@ -333,5 +333,5 @@
     "tools/instructor-freshness.mjs": "96052b2f27080f0243fdd4d5f7608927bd67f0c50808b6eac3345a65c14d1e28",
     "tools/source-closure.mjs": "961828e4d0d40d8a6f8c029fe9b9435ecaf39a74b62640efc0b4145c35c7650a"
   },
-  "contentDigest": "13efc0cab31681f17c31ae80bc54f26928a5d3beeea5bd1d956c356f637372b6"
+  "contentDigest": "74895611cac4899a093cd40acca0101ac9e91b7d702801565f173dc67decf7d0"
 }

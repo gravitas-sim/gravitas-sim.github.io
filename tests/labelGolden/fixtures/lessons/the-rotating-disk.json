@@ -15,9 +15,9 @@
     ["steps.halo-share.unit","%"]
    ],
    "numbered": [
-    ["steps.measure-a-and-b.fields.0.hint","13"],
-    ["steps.measure-a-and-b.fields.1.hint","-14"],
-    ["steps.speed-at-the-sun.fields.0.hint","226"],
+    ["steps.measure-a-and-b.fields.0.hint","14"],
+    ["steps.measure-a-and-b.fields.1.hint","-15"],
+    ["steps.speed-at-the-sun.fields.0.hint","247"],
     ["steps.fit-stars-only.fields.0.hint","50"],
     ["steps.fit-stars-only.fields.1.label","Disk mass, in 10¹⁰ solar masses"],
     ["steps.fit-stars-only.fields.1.hint","8"],
@@ -36,7 +36,7 @@
   "answers": [
    {
     "sid": "v0-by-hand",
-    "answer": "226",
+    "answer": "247",
     "tolerance": "5",
     "unit": "km/s"
    },

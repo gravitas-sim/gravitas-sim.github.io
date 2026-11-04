@@ -55,8 +55,10 @@ const THE_ROTATING_DISK = {
              numbers, the <strong>Oort constants A and B</strong>, describe it.
              \n\nThe picture shows 1,570 Gaia stars’ motion along the Galactic
              plane against longitude, in km/s per kiloparsec, binned in
-             12 intervals, with the Sun’s own motion taken out. The curve is the
-             fit. The values are in the list.`,
+             12 intervals, with the Sun’s own motion taken out. Stars off the
+             plane are corrected by cos&nbsp;b, the distance within the plane
+             over the distance. The curve is the fit. The values are in the
+             list.`,
       tool: RD({ view: 0, weight: 0 }),
     },
     {
@@ -92,16 +94,16 @@ const THE_ROTATING_DISK = {
              centered. With the stars weighted by distance (the default), read
              <strong>Oort A</strong> and <strong>Oort B</strong>.`,
       fields: [
-        { id: 'A', label: 'Oort A', unit: 'km/s/kpc', hint: '13' },
-        { id: 'B', label: 'Oort B', unit: 'km/s/kpc', hint: '-14' },
+        { id: 'A', label: 'Oort A', unit: 'km/s/kpc', hint: '14' },
+        { id: 'B', label: 'Oort B', unit: 'km/s/kpc', hint: '-15' },
       ],
       validate: v => {
         if (![v.A, v.B].every(Number.isFinite)) return null;
-        if (Math.abs(v.A - 13.5) <= 1 && Math.abs(v.B - -13.7) <= 1) {
+        if (Math.abs(v.A - 14.5) <= 1 && Math.abs(v.B - -15.2) <= 1) {
           return {
             level: 'ok',
             message:
-              'A is positive and B negative, each with an uncertainty of a couple of km/s/kpc. The published values (Bovy 2017) are 15.3 and −11.9: both inside three of these uncertainties.',
+              'A is positive and B negative, each with an uncertainty of a couple of km/s/kpc. The published values (Bovy 2017) are 15.3 and −11.9: A is 0.3 of its uncertainty from that and B 1.8. The older stars lag the circular motion, which a synthetic test showed can shift A by about 2 km/s/kpc, so these are the constants of this sample’s own motion, not guaranteed to equal the circular-orbit ones inside the interval.',
           };
         }
         return {
@@ -150,16 +152,16 @@ const THE_ROTATING_DISK = {
           id: 'v0',
           label: 'Circular speed at the Sun',
           unit: 'km/s',
-          hint: '226',
+          hint: '247',
         },
       ],
       validate: v => {
         if (!Number.isFinite(v.v0)) return null;
-        if (Math.abs(v.v0 - 226) <= 5) {
+        if (Math.abs(v.v0 - 247) <= 5) {
           return {
             level: 'ok',
             message:
-              'About 226 km/s, with an uncertainty of about 24 km/s (8.3 times the uncertainty of A − B). It agrees with the rotation curve’s 244 km/s inside that uncertainty, from completely different data: proper motions, not Doppler shifts.',
+              'About 247 km/s, with an uncertainty of about 26 km/s (8.3 times the uncertainty of A − B). It agrees with the rotation curve’s 244 km/s inside that uncertainty, from completely different data: proper motions, not Doppler shifts. Bovy’s published A − B gives 226 km/s, also inside it.',
           };
         }
         return {
@@ -324,9 +326,9 @@ const THE_ROTATING_DISK = {
       type: 'read',
       title: 'What you worked out',
       body: `Nearby stars’ proper motions make a double wave in longitude, whose
-             height and center are the Oort constants: A about 13.5 and B about
-             −13.7&nbsp;km/s/kpc, so the Sun’s circular speed is about
-             226&nbsp;km/s. The measured rotation curve stays flat out to 25&nbsp;kpc;
+             height and center are the Oort constants: A about 14.5 and B about
+             −15.2&nbsp;km/s/kpc, so the Sun’s circular speed is about
+             247&nbsp;km/s. The measured rotation curve stays flat out to 25&nbsp;kpc;
              a bulge and disk, bounded in mass, fit it badly (reduced χ² of 50)
              and adding a halo fits it ten times better (4.8). That shows a halo is
              enough within a simple model with stated assumptions: the disk’s

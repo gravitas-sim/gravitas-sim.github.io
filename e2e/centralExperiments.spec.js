@@ -2094,8 +2094,8 @@ test.describe('the central experiment of each investigation', () => {
     }
 
     // 3. weighted by distance A is positive and B negative, near the model's values
-    expect(Math.abs(at[0].A - 13.5)).toBeLessThan(1);
-    expect(Math.abs(at[0].B + 13.7)).toBeLessThan(1);
+    expect(Math.abs(at[0].A - 14.5)).toBeLessThan(1);
+    expect(Math.abs(at[0].B + 15.2)).toBeLessThan(1);
     expect(Math.abs(at[1].A - at[0].A)).toBeGreaterThan(5);
 
     // 4. the evidence, written down and kept

@@ -21,19 +21,19 @@ export default {
       title: 'The speed by hand',
       body: `A circular orbit has speed V = R × Ω, with R the distance from the
              center and Ω the angular speed. Oort’s A − B is Ω at the Sun:
-             27.24&nbsp;km/s/kpc. Use R = 8.3&nbsp;kpc.`,
+             29.71&nbsp;km/s/kpc. Use R = 8.3&nbsp;kpc.`,
       prompt: 'The circular speed at the Sun',
       unit: 'km/s',
-      answer: 226,
+      answer: 247,
       tolerance: 5,
-      hints: ['Multiply 27.24 by 8.3.'],
+      hints: ['Multiply 29.71 by 8.3.'],
       worked:
-        '27.24 km/s/kpc × 8.3 kpc = 226 km/s. Its uncertainty is 8.3 times that of A − B (2.8 km/s/kpc), about 24 km/s, so 244 km/s from the curve agrees.',
+        '29.71 km/s/kpc × 8.3 kpc = 247 km/s. Its uncertainty is 8.3 times that of A − B (3.1 km/s/kpc), about 26 km/s, so 244 km/s from the curve agrees.',
       feedback: {
-        close: 'Close. Check the multiplication: 27.24 × 8.3.',
+        close: 'Close. Check the multiplication: 29.71 × 8.3.',
         'wrong-order-of-magnitude':
           'A power of ten out. A speed in a galaxy is of order 100 to 300 km/s.',
-        off: 'V = (A − B) × R, with A − B = 27.24 km/s/kpc and R = 8.3 kpc.',
+        off: 'V = (A − B) × R, with A − B = 29.71 km/s/kpc and R = 8.3 kpc.',
       },
       tool: RD({ view: 0, weight: 0 }),
     },
