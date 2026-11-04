@@ -1,0 +1,245 @@
+{
+  "format": "gravitas.rotation-decomposition-thresholds/1",
+  "prompt": "Roadmap III, Prompt 236 Part A, the kernel half: rotation-curve decomposition (tranche T4 by D-R10-232-01)",
+  "document": "ROTATION_DECOMPOSITION.md (\"Validation contract\")",
+  "committed": "before js/kernels/galactic/decomposition.js existed, before the independent oracle was written or run, before any decomposition of any curve (synthetic or the Milky Way pack) was run. What had been seen before committing, and only that: the pack's manifest and columns (data-packs/milky-way-rotation-curve.json: 151 rows in three (R0, V0) sets, 57 points below 25 kpc and 94 beyond); the existing kernel (js/kernels/galactic/rotation.js and js/darkMatter.js, the point-mass bulge, the Freeman disk and the pseudo-isothermal halo, and its search bounds, whose cited source nobody has verified); KINEMATICS_GATE.md and GALACTIC_DYNAMICS.md; and the forward (noise-free, unfitted) total curves of four candidate truth models of the synthetic galaxy, which were looked at only to choose one whose total curve is roughly flat beyond 4 kpc (disk 4e10 solar masses within a scale length of 2.6 kpc, an NFW halo of speed scale 420 km/s and scale radius 20 kpc, which rises to about 224 km/s at 8 kpc and falls to 203 at 60 kpc). No fit, no profile, no coverage count and no residual of any curve had been computed.",
+  "rule": "A crossed bound is a failed leg, recorded in failed-legs.json and left failing; only Carl resets one. A leg that cannot be measured, or whose data was never supplied, is NOT RUN and says why. A REPORTED leg has no bound: its numbers are recorded and nothing is claimed from them. An amendment is recorded with its reason and the run that prompted it, and an amended leg is measured for the committed form too, the committed form's verdict binding. Consumers rule (committed with the legs): the decomposition panel, the lesson depth and the model-page section are built only if every leg of the groups A, B, C and D passes; a failing or NOT RUN leg of those groups stops them and the question goes to Carl. Group E legs (the Milky Way pack) never stop the panel; they decide only what the lesson may say about the pack.",
+  "seeds": {
+    "streams": "js/random/streams.js stream('noise', 'rotdec-236', <ensemble>, <realization>), mulberry32, Box-Muller normals",
+    "oracleInput": "rotdec-236:oracle",
+    "ensembles": { "E1": 200, "E2": 200, "D1": 100, "D5": 100 }
+  },
+  "supply": {
+    "note": "Nothing public is needed to build the kernel or to run groups A to D. One thing is needed from Carl for group E: the published ranges leg E2 compares with. Agents do not fetch data and do not type a published number from memory.",
+    "E2": {
+      "file": "tests/fixtures/rotation-decomposition/published-ranges.json",
+      "what": "for each of the quantities the Milky Way's mass models are quoted in (at least: the stellar disk's mass, the disk's exponential scale length, the dark halo's mass inside a stated radius or its virial mass with the definition, and the circular speed at the Sun's radius), the published range or value with its uncertainty, the paper, its identifier, the table or equation and the retrieval date, transcribed from the paper and not from memory, with the Sun's Galactocentric radius that paper adopts. The Milky Way's mass-model literature is large; this session has read none of it. Review articles and mass-model papers are the usual places; the file's author chooses and names them.",
+      "rule": "with the file, leg E2 runs against the bound committed here; no bound is touched. Without it E2 is NOT RUN and says so."
+    }
+  },
+  "constants": {
+    "GM_sun_m3s2": 1.3271244e20,
+    "AU_m": 149597870700,
+    "pc_m": "648000 / pi * AU_m",
+    "kpc_m": "1000 * pc_m",
+    "note": "IAU 2015 Resolution B3 nominal GM of the Sun, the astronomical unit as defined by the IAU 2012 Resolution B2, the parsec as 648000/pi astronomical units. G is never typed: the kernel and the oracle work in GM_sun and the kpc, so G is 4.3009...e-6 kpc (km/s)^2 per solar mass as a consequence of definitions, not as a number."
+  },
+  "scope": {
+    "kernel": "an axisymmetric circular-speed model of three components: a Hernquist bulge (the scale a stated input, never fitted, the mass fixed or fitted), a razor-thin exponential disk (Freeman 1970) and one halo of two forms (NFW, Navarro, Frenk and White 1996; or the pseudo-isothermal sphere); a bounded weighted least-squares fit through the inference core (js/inference/fit.js: createProblem, refine, covarianceAt, rankAt, profile, crossing) with intervals labelled by the statistics kernel's methods; the disk-halo degeneracy as a profile over the disk mass and the correlation matrix's weakest direction; the disk mass range as a stated input (a luminosity with a mass-to-light range, or the mass range itself, never a default); 'not constrained' for the halo when its parameters' profile intervals are not both closed inside their bounds.",
+    "notClaimed": "a measured mass of the Milky Way or of any halo; a local dark-matter density or an escape speed (Prompt 236 Part B, deferred); a gas disk, a stellar halo, a bar, a thick disk, a flared or thick disk's vertical structure, non-circular motion or the asymmetric drift of the tracers, any of which a published mass model of the Galaxy includes; a halo's response to the baryons; the cosmological virial mass (it needs the critical density, hence H0, and is not computed)."
+  },
+  "relations": {
+    "hernquist": "v^2(r) = G M r / (r + a)^2; M(<r) = M r^2 / (r + a)^2; rho(r) = M a / (2 pi r (r + a)^3). Hernquist (1990), ApJ 356, 359. The scale a is a stated input; a -> 0 is the point mass",
+    "disk": "v^2(r) = (2 G M / R_d) g(y), g(y) = y^2 [I0(y) K0(y) - I1(y) K1(y)], y = r / (2 R_d), the circular speed in the plane of a razor-thin disk of surface density Sigma_0 exp(-r / R_d), M = 2 pi Sigma_0 R_d^2. Freeman (1970), ApJ 160, 811. A real disk has thickness and a thick disk is a different model: the thin form overstates the speed near the disk's peak by a few percent, which is stated, not corrected",
+    "nfw": "rho(r) = rho_s / ((r / r_s) (1 + r / r_s)^2); M(<r) = M_s m(x), m(x) = ln(1 + x) - x / (1 + x), x = r / r_s, M_s = 4 pi rho_s r_s^3; v^2(r) = v_s^2 m(x) / x with v_s^2 = G M_s / r_s = 4 pi G rho_s r_s^2. Navarro, Frenk and White (1996), ApJ 462, 563, and (1997), ApJ 490, 493. The parameters are v_s and r_s, not the cosmological concentration and virial mass",
+    "isothermal": "rho(r) = rho_0 / (1 + (r / r_c)^2); v^2(r) = v_inf^2 [1 - (r_c / r) arctan(r / r_c)], v_inf^2 = 4 pi G rho_0 r_c^2 (js/darkMatter.js haloCircularSpeed, the form of The Missing Mass)",
+    "total": "v_c^2 = v_bulge^2 + v_disk^2 + v_halo^2 (accelerations of the components add; spherical halo and bulge, thin disk, all in the disk's plane)",
+    "parameters": "free: log10 disk mass (solar masses), disk scale length (kpc), halo speed v_s or v_inf (km/s), log10 halo scale (kpc); the bulge mass joins as log10 when freed; searched within bounds that are inputs",
+    "diskMassInput": "the disk mass range is [Upsilon_lo L, Upsilon_hi L] for a stated luminosity L and mass-to-light range, or a stated mass range; refused when neither is given. Nothing is assumed about the stars' mass-to-light ratio beyond the range the caller states",
+    "notConstrained": "a halo parameter is 'constrained' iff its profile interval (Delta chi-square = 1, the others re-fitted at every value, on 25 equally spaced values across its bounds plus the best value) is closed on both sides strictly inside its bounds; the halo is constrained iff both of its parameters are; otherwise 'not constrained', and no interval is reported for a parameter that is not constrained",
+    "adequate": "a fit is 'adequate' iff the chi-square survival probability of (chi-square, dof) is at least 0.001; otherwise the model does not describe the points, which is said, and the intervals are also given scaled by sqrt(reduced chi-square)",
+    "derived": "enclosed halo mass within 20 and 50 kpc (v_halo^2 r / G) and the halo, disk and bulge speeds at a stated radius, with delta-method one-sigma from the covariance (central differences, relative step 1e-6)",
+    "intervals": "covariance interval: statistics kernel covarianceInterval, 68.27 and 95 percent; profile interval: statistics kernel profileInterval, Delta chi-square from the chi-square distribution on one degree of freedom (1 for 68.27 percent)"
+  },
+  "truth": {
+    "label": "synthetic: a galaxy that is a choice, not the Milky Way and not a published model",
+    "bulge": { "mass": 1e10, "scale": 0.7, "fixed": true },
+    "disk": { "mass": 4e10, "scale": 2.6, "luminosity": 5e10, "massToLightTruth": 0.8, "massToLightRange": [0.3, 1.5], "massRange": [1.5e10, 7.5e10] },
+    "halo": { "form": "nfw", "vs": 420, "rs": 20 },
+    "bounds": { "diskScale": [1, 6], "haloSpeed": [1, 1000], "logHaloScale": [0, 2.7] },
+    "note": "the luminosity and the mass-to-light range are chosen so that the truth lies inside the range the fit is told; a mass-to-light range that excludes the truth is a different (misspecified) case and is not part of these legs"
+  },
+  "ensembles": {
+    "E1": {
+      "what": "the full curve: 24 radii geometric from 1.5 to 40 kpc, r_i = 1.5 (40 / 1.5)^(i / 23), constant error 4 km/s, truth above, noise drawn per realization",
+      "n": 200
+    },
+    "E2": {
+      "what": "the degenerate direction: 12 radii geometric from 1.5 to 12 kpc, constant error 5 km/s, same truth (the halo is not yet dominant, so disk and halo trade against each other)",
+      "n": 200
+    },
+    "D1": {
+      "what": "no outer points: 10 radii geometric from 1.5 to 6 kpc, constant error 4 km/s, same truth",
+      "n": 100
+    },
+    "D5": {
+      "what": "a misspecified curve: the E1 radii and errors, the truth curve plus a Gaussian bump of amplitude 15 km/s at 9 kpc with width 1.2 kpc (a feature none of the three components can make)",
+      "n": 100
+    },
+    "oracle": {
+      "what": "one realization of E1-like data (seed rotdec-236:oracle) written to oracle-inputs.json for the oracle to fit; the same file is read by both codes"
+    }
+  },
+  "checks": [
+    {
+      "id": "A1",
+      "group": "analytic",
+      "what": "the Hernquist bulge speed equals G M r / (r + a)^2 under the square root for 12 (r, M, a) cases spanning 0.05 to 100 kpc, 1e8 to 1e11 solar masses and 0.1 to 3 kpc",
+      "limits": { "relative": 1e-12 }
+    },
+    {
+      "id": "A2",
+      "group": "analytic",
+      "what": "the Hernquist speed with a = 1e-9 kpc equals the point-mass speed sqrt(G M / r) at 5 kpc",
+      "limits": { "relative": 1e-8 }
+    },
+    {
+      "id": "A3",
+      "group": "analytic",
+      "what": "the NFW speed equals v_s sqrt(m(x) / x) for 12 (r, v_s, r_s) cases; and v_s^2 r_s / G = M_s reproduces M(<r) = M_s m(x) as v^2 r / G",
+      "limits": { "relative": 1e-12 }
+    },
+    {
+      "id": "A4",
+      "group": "analytic",
+      "what": "the NFW speed has its maximum at the root of x^2 / (1 + x)^2 = ln(1 + x) - x / (1 + x) (found by bisection in the validator, not typed), the kernel's golden-section maximum agrees in x, and v_max / v_s equals sqrt(m(x*) / x*)",
+      "limits": { "xRelative": 1e-6, "vmaxRelative": 1e-9 }
+    },
+    {
+      "id": "A5",
+      "group": "analytic",
+      "what": "the NFW inner limit: v^2 / (v_s^2 x / 2) = 1 at x = 1e-3",
+      "limits": { "relative": 1e-3 }
+    },
+    {
+      "id": "A6",
+      "group": "analytic",
+      "what": "the pseudo-isothermal speed equals v_inf sqrt(1 - (r_c / r) arctan(r / r_c)) for 12 cases",
+      "limits": { "relative": 1e-12 }
+    },
+    {
+      "id": "A7",
+      "group": "analytic",
+      "what": "the pseudo-isothermal far field: v^2 / v_inf^2 = 1 - pi / (2 x) + 1 / x^2 - 1 / (3 x^4) at x = r / r_c = 1000 (the asymptotic series of arctan, error of order x^-6)",
+      "limits": { "relative": 1e-12 }
+    },
+    {
+      "id": "A8",
+      "group": "analytic",
+      "what": "enclosed mass from the speed, v^2 r / G, equals the numerical integral of 4 pi r^2 rho(r) from 0 (adaptive Gauss-Legendre, density forms in 'relations') for the Hernquist bulge, the NFW halo and the pseudo-isothermal halo at 0.5, 3, 12 and 60 kpc",
+      "limits": { "relative": 1e-8 }
+    },
+    {
+      "id": "A9",
+      "group": "analytic",
+      "what": "the disk's far field: v^2 r / (G M) = 1 at r = 100 R_d (the first correction is of order (R_d / r)^2, 7e-5 here, below the bound)",
+      "limits": { "relative": 1e-3 }
+    },
+    {
+      "id": "A10",
+      "group": "analytic",
+      "what": "the total speed squared equals the sum of the three components' squares at 30 radii for 6 parameter sets; v^2 scales with the bulge and disk masses and with v_s^2 exactly (doubling a mass doubles v^2 of that component, doubling v_s doubles the halo speed)",
+      "limits": { "relative": 1e-12 }
+    },
+    {
+      "id": "B1",
+      "group": "oracle",
+      "what": "the kernel's component speeds equal the oracle's (tools/rotation-decomposition-oracle/oracle.py, written from this file alone: numpy and scipy.special, the disk through scipy's exponentially scaled Bessel functions) for 5 parameter sets at 20 radii each from 0.1 to 200 kpc: bulge, NFW and pseudo-isothermal to the first bound, the disk to the second",
+      "limits": { "closedFormRelative": 1e-11, "diskRelative": 1e-8 }
+    },
+    {
+      "id": "B2",
+      "group": "oracle",
+      "what": "the disk's shape function g(y) equals scipy's y^2 (ive(0,y) kve(0,y) - ive(1,y) kve(1,y)) at 40 values of y from 1e-3 to 500, log-spaced",
+      "limits": { "relative": 1e-9 }
+    },
+    {
+      "id": "B3",
+      "group": "oracle",
+      "what": "on the oracle-inputs curve, the minimum chi-square of the kernel's fit and of the oracle's (scipy.optimize.least_squares, trf, with bounds, from several starts) agree",
+      "limits": { "relative": 1e-3 }
+    },
+    {
+      "id": "B4",
+      "group": "oracle",
+      "what": "the two fitted total curves agree at the data radii",
+      "limits": { "maxAbsoluteKms": 0.05 }
+    },
+    {
+      "id": "B5",
+      "group": "oracle",
+      "what": "the delta-method one-sigma of the total speed at 8 and 20 kpc from the kernel's covariance equals the oracle's, computed from its own central-difference Jacobian at its own best fit",
+      "limits": { "relative": 0.05 }
+    },
+    {
+      "id": "C1",
+      "group": "coverage",
+      "what": "E1: the 68.27 percent covariance interval covers the truth of log10 disk mass, the disk scale length and the halo's speed at 20 kpc, each at a rate between 0.60 and 0.76 (a realization whose fit does not converge counts as a miss)",
+      "limits": { "min": 0.6, "max": 0.76, "level": 0.6827, "ensemble": 200 }
+    },
+    {
+      "id": "C2",
+      "group": "coverage",
+      "what": "E1: the 95 percent covariance interval covers the same three truths at a rate of at least 0.90",
+      "limits": { "min": 0.9, "level": 0.95, "ensemble": 200 }
+    },
+    {
+      "id": "C3",
+      "group": "coverage",
+      "what": "E1: the 68.27 percent profile interval of log10 disk mass (an open side counts as covering that side) covers the truth at a rate between 0.60 and 0.76",
+      "limits": { "min": 0.6, "max": 0.76, "level": 0.6827, "ensemble": 200 }
+    },
+    {
+      "id": "C4",
+      "group": "coverage",
+      "what": "E1: the bias of log10 disk mass, |mean(estimate - truth)| / median(sigma), is at most 0.5",
+      "limits": { "max": 0.5 }
+    },
+    {
+      "id": "C5",
+      "group": "coverage",
+      "what": "E2 (the degenerate direction): the 68.27 percent profile interval of log10 disk mass covers the truth at a rate of at least 0.60",
+      "limits": { "min": 0.6, "level": 0.6827, "ensemble": 200 }
+    },
+    {
+      "id": "C6",
+      "group": "reported",
+      "what": "E2: the covariance interval's coverage of log10 disk mass, the fraction of realizations whose profile interval is open on at least one side, the median profile width in dex, and the correlation of log10 disk mass with the halo speed; no bound",
+      "limits": {}
+    },
+    {
+      "id": "D1",
+      "group": "refusal",
+      "what": "D1 (no points beyond 6 kpc): the halo is 'not constrained' in at least 0.90 of the realizations, and no halo interval is reported in any realization where it is not",
+      "limits": { "min": 0.9, "ensemble": 100 }
+    },
+    {
+      "id": "D2",
+      "group": "refusal",
+      "what": "E1 (the positive control): the halo is 'constrained' in at least 0.90 of the realizations, so the refusal of D1 is not a blanket",
+      "limits": { "min": 0.9, "ensemble": 200 }
+    },
+    {
+      "id": "D3",
+      "group": "refusal",
+      "what": "the inputs are refused, each with its own code and reason: fewer points than free parameters plus two; a non-positive or non-finite error; a non-positive radius; no disk mass range or luminosity with a mass-to-light range; an unknown halo form",
+      "limits": { "refusals": 5 }
+    },
+    {
+      "id": "D4",
+      "group": "refusal",
+      "what": "D5 (a feature the model cannot make): the fit is flagged not adequate in at least 0.90 of the realizations",
+      "limits": { "min": 0.9, "ensemble": 100 }
+    },
+    {
+      "id": "D5",
+      "group": "refusal",
+      "what": "E1 (the same model, a correct curve): the fit is flagged not adequate in at most 0.02 of the realizations",
+      "limits": { "max": 0.02, "ensemble": 200 }
+    },
+    {
+      "id": "E1",
+      "group": "reported",
+      "what": "the Milky Way pack (milky-way-rotation-curve, 151 rows in three (R0, V0) sets) decomposed under one fixed contract per set: contract C1 uses the points of region 1 (r below 25 kpc) with r at least 3 kpc, contract C2 uses every point with r at least 3 kpc; NFW halo; bulge mass fixed at 1e10 solar masses with scale 0.7 kpc (a stated convention of this exercise, not a measurement and not a published value); disk mass searched in [1e9, 2e11] solar masses (wide on purpose, so that no literature prior leans on the result), disk scale in [1, 6] kpc, the other bounds as 'truth.bounds'; errors as the pack gives them. Reported per set and contract: the best fit and its profile intervals where constrained, chi-square, dof and reduced chi-square, adequate or not, the halo constrained or not, the disk-halo correlation and the maximum-disk and minimum-disk decompositions (disk mass at each end of the range). No bound",
+      "limits": {}
+    },
+    {
+      "id": "E2",
+      "group": "published",
+      "what": "the published ranges (supply): for each quantity the supplied file lists that the decomposition produces under contract C2 for the set whose R0 the paper adopts (or the nearest set, stated), the fitted value lies within the published range widened by the fit's own one-sigma on each side; a quantity whose fit is 'not constrained' fails that quantity (a missing interval is not agreement)",
+      "limits": { "widenBySigma": 1 },
+      "unless": "the file is not supplied: NOT RUN"
+    }
+  ],
+  "amendments": []
+}
