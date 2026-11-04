@@ -1,0 +1,164 @@
+# The galactic kinematics gate
+
+Roadmap III, Prompt 235, Part A. Four kinematic methods, each run on the sample it would run on in a lesson with
+the selection that sample carries stated, each tested on a synthetic sample with a known truth that has the same
+selection, each given a verdict by a function committed before any result existed. **All four verdicts are C: no
+kinematics kernel, panel, lesson or closure file is built, and the steps that would have used them are reading
+steps.** The record is decision-register rows D-R10-235-01 to D-R10-235-04 and D-R10-235-90.
+
+The numbers are in `tests/fixtures/kinematics/` (`thresholds.json` the contract and its two amendments,
+`results.json` the one gate run, `failed-legs.json` the failed legs, each labelled, `ensembles.json` the truth
+manifests, `oracle-results.json` the pinned output of the independent oracle). The kernel
+(`js/kernels/galactic/kinematics.js`, `kinematicsSynthetic.js`), the validator (`tools/kinematics-validate.mjs`),
+the oracle (`tools/kinematics-oracle/oracle.py`) and its pinned inputs are on `spike/kinematics-gate`, never merged
+(Prompt 235's rule 7.5.4: the prototype stays on a spike branch; this PR is documentation only). The gate stream
+ran on Node 22.23.4 in about ten seconds; the oracle on Python 3.9.22 with numpy 1.26.4, scipy 1.13.1 and astropy
+6.0.1.
+
+## What was committed first
+
+`thresholds.json` (`1eb1c923` here, `271452ca` on the spike) fixed, before any kernel, generator, validator or
+oracle existed: the four methods and the sample each runs on; the selection each carries, as 154's selection
+objects; the synthetic truth of every test (a disk with a straight rotation curve, R0 8 kpc, V0 220 km/s, slope
+-2 km/s/kpc, so A 14.75 and B -12.75 km/s/kpc; a Sun with a peculiar motion; two populations with the stated lag
+sigma_U^2 / 80; three metallicity-bin populations); the analysis contract of each method; 32 legs, each with a set
+(S the synthetic recovery under the selection, R the real sample, none for a REPORTED leg) and its bound; and the
+verdict function.
+
+| Verdict | Condition (committed) |
+| --- | --- |
+| A | every S leg and every R leg passes: the method runs on the sample, shown with its interval and selection statement beside the literature as a discussion |
+| B | every S leg passes and an R leg fails: the method on the synthetic sample only; the real sample shown without a fit |
+| C | an S leg fails or is NOT RUN: a reading step |
+
+What had been seen before committing, and only that: the packs' columns and manifests, the SEGUE pack's row counts
+per [Fe/H] bin and the inner stars' median velocity and [Fe/H] (to set the exclusion and the bins), the
+neighbourhood pack's counts, and, from earlier prompts' documents, the neighbourhood Oort fit (A 13.5 +/- 2.4, B
+-13.7 +/- 1.7) and the drift fit (12.3 +/- 6.7). No dispersion by bin, no synthetic result and no output of the new
+kernel was seen.
+
+## The four methods
+
+| Method | Sample and its selection | Synthetic test (same selection) | Criterion |
+| --- | --- | --- | --- |
+| **O** Oort constants, first-order local expansion | the neighbourhood pack, 1,570 Gaia DR3 stars with RUWE below 1.4, parallax over error above 10 and a radial velocity (cuts upstream of the pack), in two random strata (about 1 in 273 above 10 mas, 1 in 9,065 from 1 to 10 mas) | the real rows' sky positions, parallaxes, errors and colours, with velocities from the synthetic disk, observed with those errors and the pack's 0.02 mas rounding; 200 realizations | recovery within half the median error, 68 percent coverage 0.60 to 0.76 and 95 percent at least 0.90, "not constrained" when the gradient is removed; a ladder of distance limits (1, 0.5, 0.25 kpc) fixed in advance |
+| **D** dispersions by [Fe/H] bin | the SEGUE pack near NGC 2420, 517 spectra, the cluster excluded (inside 10 arcmin, then within 5 km/s and 0.4 dex of the inner medians: 286 survive) with the hole that leaves handled by the likelihood; line of sight only | the 286 survivors as the design, each star's velocity drawn from its bin's population conditional on its window | the same bands, per bin of at least 15 stars; refusal of a small bin and of a bin whose true sigma is 0 |
+| **T** Toomre diagram and disk-halo separation | the neighbourhood pack (three-dimensional velocities, no metallicity) | a three-population mixture under the pack's selection | halo recall at least 0.80 and purity at least 0.50 with **thresholds from a cited source** |
+| **S** asymmetric drift as a stated relation | the neighbourhood pack in six BP-RP groups of equal count | the same synthetic disk with two populations of known dispersion and lag | recovery and coverage of V_sun and k; "no lever" with one population; both candidate LSR values reported, neither chosen (D-GAIA-03) |
+
+## Amendments (both before the gate stream, neither moving a bound)
+
+**AM1.** The first run of the analytic leg `O.A1.exact` (a noise-free, zero-dispersion disk at 0.02 kpc) returned A
+12.52 and B -10.79 against 14.75 and -12.75. The committed model, `4.74047 mu_l* = A cos 2l + B + ...`, is the
+in-plane form: the velocity along l of a rotating disk is `d cos b (A cos 2l + B)`, and the neighbourhood pack
+covers the whole sky, so the planar fit is low by about the sky's mean cos b (about 0.86). `fitOortConstants` in
+`js/kernels/galactic/motion.js` has the same omission (leg `O.A2` shows the planar form equals it to 1.5e-16). The
+fix is a second form, with the factor; every O leg is measured for both. **The verdict that binds is the committed
+(planar) form's**, which fails `O.A1.exact`; the latitude-corrected form's verdict is a proposal for Carl to
+ratify. The existing Oort values of The Rotating Disk (A 13.5, B -13.7) are from the planar form and are about 15
+percent low in magnitude; the lesson is not changed here (the lesson goldens stay identical; Part B owns the
+lessons).
+
+**AM2.** The drift fit weighs each group by the error of its mean V alone and takes the group's sigma_U^2 as exact.
+A group of 260 stars has a sample variance with a relative error of about 9 percent, which at a slope of 1/80 is
+about 1.5 km/s of scatter in V per group, comparable with the stated error (the kernel's own text said so; the
+design run showed one-sigma coverage of 0.56). The second form is the effective-variance line (the slope's share
+of each group's sigma_U^2 error in its weight, from the group's fourth moment). As for AM1, the committed form's
+verdict binds and the second form's is a proposal.
+
+A single design realization (a seed that is not a gate seed) and one run of the validator at the design seed
+preceded the amendments; no gate seed (235001 to 235004) was run until both were recorded. The dispersion
+estimator (a sandwich covariance), the ladder, the constrained rules and every band are as committed.
+
+## Results
+
+66 rows: 37 pass, 22 fail, 4 REPORTED, 3 NOT RUN. The 22 failures are in `failed-legs.json` and stay failing.
+
+**O, Oort constants: C.** Committed (planar) form: `O.A1.exact` fails (A 12.64, B -10.46 against 14.75 and -12.75),
+and at O1 (all stars, 1,566 of 1,570 in the ensembles) A is recovered 3.0 km/s/kpc low (1.43 median errors, bound
+0.5) with 68 percent coverage of 0.335; O2 and O3 are constrained in 2 and 0 percent of realizations (their
+intervals are 6 to 20 km/s/kpc). Corrected (AM1) form: `O.A1.exact` passes (A 14.743, B -12.757), the oracle agrees
+to 7e-7 (planar) and **1.05e-6 (corrected: the bound is 1e-6, so `O.B1.oracle.am1` fails, a difference of 1e-7 in
+relative terms that is astropy's frame transformation against the Hipparcos matrix)**, but at O1 A is recovered
+1.80 km/s/kpc low (0.77 median errors, bound 0.5; coverage 0.55 and 0.91) and B is within bounds; O2 and O3 fail as
+before. The real sample (every R leg passes at O1): planar A 13.52 +/- 2.35, B -13.72 +/- 1.65; corrected A 14.47
++/- 2.59, B -15.24 +/- 1.81; two random halves agree within 1.9 and 0.5 sigma. Beside the values GALACTIC_DYNAMICS.md
+records from Bovy (2017), 15.3 and -11.9, as a discussion and no more: A is 0.3 and B 1.8 of the corrected fit's
+errors from them.
+
+*Cause (a diagnostic after the result, not a leg):* noise-free and cold on the pack's own distances the corrected
+fit returns A 14.78 and B -12.79, so the first-order truncation is not the cause at 1 kpc. Over 100 realizations at
+a design seed the ensemble mean is A 15.09 and B -12.43 when the synthetic stars have no lag and A 13.06 and B
+-12.83 with the asymmetric drift of the two populations (mean lag about 15 km/s): the lag of the older stars shifts
+A by about -2 km/s/kpc, 0.8 of its error. The constants a population with asymmetric drift shows are those of its
+own mean streaming field, not of the circular orbits, which is the review's point: this sample cannot recover the
+constants it is asked for within its own interval.
+
+**D, dispersions by [Fe/H] bin: C.** The closed forms, the independent oracle (sigma to 2e-8, its error to 2e-6)
+and the recovery pass (bias 0.24, 0.14 and 0.16 median errors in the bins of 24, 105 and 157 stars); two legs fail,
+both through the 24-star bin: `D.S2.coverage` (that bin's 68 percent coverage is 0.61 and its 95 percent 0.855 against
+0.90; the other two bins 0.675 and 0.69, 0.94 and 0.93) and `D.D1.refusals` (a true sigma of 0 is called "not constrained" in
+0.88, 0.97 and 0.95 of realizations against 0.90). The small-sample sandwich interval is the likely cause; the
+committed bin size (15) admitted the bin. The real sample, reported and not a fit that ships: line-of-sight sigma
+98.2 +/- 15.2, 42.3 +/- 4.0 and 33.3 +/- 1.6 km/s (the window correction moves the middle bin from 42.6 to 42.3);
+the 70/30 mixture leg reports a Gaussian estimate of 110.7 against a pooled truth of 118.0, which is what a bin of
+a real sample is.
+
+**T, Toomre diagram and disk-halo separation: C, NOT RUN.** The thresholds a cited separation needs are not in the
+repository and no value is typed from memory: `tests/fixtures/kinematics/disk-halo-source.json` was not supplied,
+so legs T1 to T3 are NOT RUN and the committed function gives C. (Under C no Toomre kernel is built.)
+
+**S, asymmetric drift: C.** The closed forms, the oracle (under 2e-7), the recovery (0.07 median errors), the no-lever
+refusal (0.995) and the two-option LSR report pass. Committed form: `S.S2.coverage` fails (V_sun one-sigma coverage
+0.56; k 0.61 and 0.91) and `S.R1.useful` fails (real V_sun -4.9 +/- 5.3 km/s against a half-width bound of 4.2; the
+slope is constrained at 5.2 sigma, k 59). Effective-variance form (AM2): coverage swings to 0.73 and 0.965 for V_sun
+and 0.81 and 0.98 for k (the k band is 0.60 to 0.76, so it now over-covers and fails), and the real slope is
+constrained at only 2.4 sigma with V_sun -3.8 +/- 11.0. The two candidate values for the Sun's V against the LSR
+are reported and neither is chosen: 2.64 km/s from this sample's Stromberg correction on all 1,570 stars (D-GAIA-03's
+3.77 is from the 489 stars within 100 pc) and 12.24 km/s.
+
+## What this means for Part B
+
+Nothing of Part B runs. "The Rotating Disk" gains no Oort-method depth, "Disk and halo" is not built as a method
+lesson, there is no kinematics panel and no model-page section; the Oort steps stay as they are until Carl rules on
+AM1 and the shipped values are corrected (a visible change to a scientific number, so a small separate PR).
+Reading steps may say what the sample cannot do and why: the Oort constants of a population with asymmetric drift,
+the line-of-sight-only dispersion of one sight line, the cluster's hole, and that a Toomre separation needs
+thresholds somebody published. No closure file, ceiling or budget changes, so there is no size figure to approve.
+
+## What to fetch
+
+For the Toomre diagram and disk-halo separation (leg T) one file, supplied by Carl, `tests/fixtures/kinematics/disk-halo-source.json`:
+for each class (thin disk, thick disk, halo) the published criterion in total space velocity or Toomre-diagram
+coordinates, with the paper, its identifier, the table or equation and the retrieval date, transcribed from the
+paper and not from memory. The two references usually cited for kinematic classification are Venn et al. (2004,
+AJ 128, 1177) and Bensby, Feltzing and Oey (2014, A&A 562, A71); this session has not read either, and their
+identifiers are named here only so the fetcher can check them. With that file the legs run against the bounds
+already committed; no bound is touched.
+
+## Questions for Carl
+
+1. **AM1.** Ratify the latitude-corrected Oort estimator? It does not change the Oort verdict by itself: the
+   corrected form also fails (A's recovery and coverage at 1 kpc, from the asymmetric drift, and the oracle
+   agreement by 5 percent over its bound).
+2. **AM2.** Ratify the effective-variance drift fit? It fails too (over-coverage of k, a real slope at 2.4 sigma).
+3. **The 24-star bin.** Both D failures are in the bin of 24 stars. A re-gate with a larger minimum bin (30, say)
+   would judge the other two bins; changing it after the result is Carl's, not this gate's.
+4. **The oracle bound.** `O.B1.oracle.am1` crossed 1e-6 by 5 percent (1.05e-6, the frame matrices); only Carl resets it.
+5. **The thresholds source** (above), and whether to correct the shipped Oort values (A 13.5, B -13.7) and the
+   lesson text now that the planar form is known to be low.
+6. **The next prompts.** 236's run condition (after 235 and 154) is met by this documentation-only landing.
+
+## Reproduction
+
+On `spike/kinematics-gate`: `node tools/kinematics-validate.mjs` (Node 22), `--write-oracle-inputs` then
+`/usr/local/bin/python3.9 tools/kinematics-oracle/oracle.py` for the oracle (the first `python3` on this machine
+lacks PyYAML, which astropy.coordinates imports), `KIN_DESIGN=1` for the design stream, which writes nothing.
+The run is reproducible: two runs give byte-identical `results.json`.
+
+## References
+
+Binney and Tremaine (2008), Galactic Dynamics, section 4.8.2 (the stated lag relation, as already used in
+`js/kernels/galactic/motion.js`); Bovy (2017) as GALACTIC_DYNAMICS.md records it; Schonrich, Binney and Dehnen (2010)
+as D-GAIA-03 records it; Gaia DR3 (CC BY-NC 3.0 IGO, D-GAIA-01) and SDSS DR18 SEGUE (public domain) through the
+packs already in the tree. Nothing was fetched for this prompt.
