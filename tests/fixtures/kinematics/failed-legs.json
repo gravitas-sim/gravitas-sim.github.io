@@ -292,6 +292,91 @@
    "note": ""
   },
   {
+   "id": "T.T2.classification",
+   "measured": {
+    "venn2004": {
+     "frame": "rest",
+     "sun": [
+      9,
+      232,
+      7
+     ],
+     "haloRecall": 0.9213,
+     "haloPurity": 0.2996,
+     "meetsBounds": false,
+     "pooled": {
+      "truePositive": 1451,
+      "falseNegative": 124,
+      "falsePositive": 3392
+     },
+     "medianRealizationRecall": 1,
+     "medianRealizationPurity": 0.308,
+     "confusion": {
+      "thin disk": {
+       "thin disk": 205315,
+       "thick disk": 61781,
+       "halo": 2
+      },
+      "thick disk": {
+       "thin disk": 10580,
+       "thick disk": 31357,
+       "halo": 3390
+      },
+      "halo": {
+       "thin disk": 9,
+       "thick disk": 115,
+       "halo": 1451
+      }
+     }
+    },
+    "bensby2014": {
+     "frame": "lsr",
+     "sun": [
+      11.1,
+      12.24,
+      7.25
+     ],
+     "haloRecall": 0.7968,
+     "haloPurity": 0.8584,
+     "meetsBounds": false,
+     "pooled": {
+      "truePositive": 1255,
+      "falseNegative": 320,
+      "falsePositive": 207
+     },
+     "medianRealizationRecall": 0.8,
+     "medianRealizationPurity": 0.875,
+     "confusion": {
+      "thin disk": {
+       "thin disk": 253137,
+       "thick disk": 4490,
+       "halo": 0,
+       "between": 9471
+      },
+      "thick disk": {
+       "thin disk": 15945,
+       "thick disk": 23814,
+       "halo": 207,
+       "between": 5361
+      },
+      "halo": {
+       "thin disk": 14,
+       "thick disk": 297,
+       "halo": 1255,
+       "between": 9
+      }
+     },
+     "starsWhereNestedHaloDiffers": 0
+    },
+    "bounds": {
+     "minHaloRecall": 0.8,
+     "minHaloPurity": 0.5
+    },
+    "realizations": 200
+   },
+   "note": "every cited rule must meet both bounds (KINEMATICS_GATE.md addendum); per-rule numbers are in measured"
+  },
+  {
    "id": "S.S2.coverage",
    "measured": {
     "form": "committed",

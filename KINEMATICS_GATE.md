@@ -104,7 +104,7 @@ committed bin size (15) admitted the bin. The real sample, reported and not a fi
 the 70/30 mixture leg reports a Gaussian estimate of 110.7 against a pooled truth of 118.0, which is what a bin of
 a real sample is.
 
-**T, Toomre diagram and disk-halo separation: C, NOT RUN.** The thresholds a cited separation needs are not in the
+**T, Toomre diagram and disk-halo separation: C, NOT RUN** (superseded for leg T by the addendum at the end of this file, which gives the run; the verdict is still C). The thresholds a cited separation needs are not in the
 repository and no value is typed from memory: `tests/fixtures/kinematics/disk-halo-source.json` was not supplied,
 so legs T1 to T3 are NOT RUN and the committed function gives C. (Under C no Toomre kernel is built.)
 
@@ -127,6 +127,8 @@ the line-of-sight-only dispersion of one sight line, the cluster's hole, and tha
 thresholds somebody published. No closure file, ceiling or budget changes, so there is no size figure to approve.
 
 ## What to fetch
+
+(Done on 2026-11-04: see the addendum at the end.)
 
 For the Toomre diagram and disk-halo separation (leg T) one file, supplied by Carl, `tests/fixtures/kinematics/disk-halo-source.json`:
 for each class (thin disk, thick disk, halo) the published criterion in total space velocity or Toomre-diagram
@@ -210,3 +212,46 @@ no bound: the bounds are the committed ones (T1 maxAbs 1e-9; T2 halo recall at l
   here.
 - *Verdict.* The committed function: C if any S leg fails or is NOT RUN, B if the S legs pass and an R leg fails,
   A otherwise.
+
+**Results.** One gate stream, re-run on Node 22.23.4 in about twelve seconds, on `spike/kinematics-gate-t-legs`
+(`4d6ab8a4`, never merged; it adds `js/kernels/galactic/toomre.js`, the generator `syntheticToomre` and the T block of
+`tools/kinematics-validate.mjs`, all committed before the run, and nothing else). Two runs give byte-identical
+`results.json`. The file now holds **66 rows: 39 pass, 23 fail, 4 REPORTED, 0 NOT RUN**; the 63 rows of methods O, D
+and S are byte-identical to the Part A run, and so are their verdicts.
+
+| Leg | Status | Measured |
+|---|---|---|
+| T1 Toomre coordinates of constructed stars exact (S) | pass | largest difference 8.5e-14 km/s over 1,570 stars, both frames, against 1e-9 |
+| T2 halo recall at least 0.80 and purity at least 0.50, 200 realizations (S) | **fail** | rule V (Venn, rest frame): recall 0.921, **purity 0.300** (1,451 true halo found, 3,392 thick-disk stars called halo); rule B (Bensby, LSR frame): **recall 0.7968**, purity 0.858 (1,255 found of 1,575, 207 false) |
+| T3 the rules on the real pack, with Poisson intervals (R, no bound) | pass (reported) | rule V: thin 1,213, thick 351, halo 6 (one sigma 3.6 to 9.6); rule B with the paper's Sun: thin 1,392, thick 95, between 80, halo 3 (1.4 to 5.9); with the sample's Stromberg V (2.64 km/s): thin 1,365, thick 125, between 76, halo 4 (2.1 to 7.2) |
+
+**The verdict for method T is C by the committed function** (`failedS`: `T.T2.classification`; nothing NOT RUN). It
+stays C however the two rules are weighed, because neither meets both bounds, so the "every cited rule" reading
+fixed beforehand decided nothing here. `T.T2.classification` is in `failed-legs.json` (now 23 legs) and stays failing
+and labelled; no bound moved and only Carl resets one. The verdicts of O, D and S are those of the Part A text, so
+all four methods remain C and Part B still builds nothing: no Toomre kernel, panel or lesson. The steps that would
+have used one stay reading steps; the one change to say is that a Toomre separation now has a tested reason it
+cannot ship as a method (below), not only a missing source.
+
+**What the numbers say, after the result and not a leg.** Rule V's purity fails because its prior is uniform (the
+paper's own choice, for samples it describes as chosen to enhance the less populous components) while the committed
+synthetic sample has 29 thick-disk stars for each halo star; rule V finds nearly every halo star and calls 3,392
+thick-disk stars halo with it. Rule B weights by the paper's fractions and calls few thick-disk stars halo, but
+misses 0.0032 of the bound on recall: 1,255 of 1,575 halo stars where 1,260 would pass. The sample has about eight
+halo stars per realization (1,570 stars at a fraction of 0.005), and the real pack's 3 to 6 halo stars carry 95 percent Poisson
+intervals that run from 0.6 to 13: a counted halo fraction from this pack would be reported with an interval
+wider than its value. The nested reading of rule B's halo (TD/H below 1 and TD/D above 2, the paper's own
+nesting) differs from the one used in no star of the 200 realizations.
+
+**Questions for Carl (new, none acted on).** (1) Whether to open a re-gate for method T judged on the single rule that
+nearly passes (rule B, recall 0.797 against 0.80); that moves a bound or the rule, so it is his, and as
+committed the leg fails. (2) Whether the 29-to-1 thick-to-halo ratio of the committed synthetic fractions is the
+sample a lesson would use; it was committed before the result and is not changed here. (3) Nothing about O, D or S
+changes: AM1, AM2, the 24-star bin and the oracle bound stand as in Questions for Carl above.
+
+**What the data files carry.** Reading Table 3 and Table A.1 against the extracted text found no transcription error: every
+number matched. The file as supplied omitted the solar motion each paper states (Venn's footnote 3 to Section 2,
+(9, 232, 7) km/s in the Galactic frame; Bensby's Section 3, (11.10, 12.24, 7.25) km/s from the LSR), which is what
+fixes each rule's frame, and it did not note that Bensby prints 89 stars in between in the text and 88 in a caption
+(the paper's text counts sum to 715 for a 714-star sample). Both are recorded in the file's `verification` block with
+their locations, as additions and not changes to any transcribed value.
