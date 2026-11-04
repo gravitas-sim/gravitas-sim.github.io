@@ -99,15 +99,26 @@ function isolate(host) {
     top = top.parentElement;
   }
   const changed = [];
-  for (const node of document.body.children) {
-    if (node === top || node.tagName === 'SCRIPT') continue;
-    if (node.hasAttribute('inert') || node.matches(LIVE)) continue;
+  const hide = node => {
+    if (node === top || node.nodeType !== 1 || node.tagName === 'SCRIPT')
+      return;
+    if (node.hasAttribute('inert') || node.matches(LIVE)) return;
     const aria = !node.hasAttribute('aria-hidden');
     node.setAttribute('inert', '');
     if (aria) node.setAttribute('aria-hidden', 'true');
     changed.push([node, aria]);
-  }
+  };
+  for (const node of document.body.children) hide(node);
+  // Markup that arrives while the dialog is open - a lazily mounted family, as
+  // the lesson panel is - is part of the page behind it too. Without this it
+  // came in live: focusable, and one focus() from the code that mounted it
+  // away from the dialog (D-R10-228-07).
+  const late = new MutationObserver(records => {
+    for (const record of records) record.addedNodes.forEach(hide);
+  });
+  late.observe(document.body, { childList: true });
   return () => {
+    late.disconnect();
     for (const [node, aria] of changed) {
       node.removeAttribute('inert');
       if (aria) node.removeAttribute('aria-hidden');
