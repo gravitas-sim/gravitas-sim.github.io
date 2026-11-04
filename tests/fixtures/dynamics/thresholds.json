@@ -279,6 +279,11 @@
   },
   "amendments": [
     {
+      "id": "AM5",
+      "when": "after the first judgement of the kernel's closed-form rows (A1 to A7, O1, D1 to D4)",
+      "what": "the oracle's cases were written to oracle-results.json with their inputs rounded to 12 significant digits while the outputs had been computed from the unrounded inputs, so an input and its output disagreed by up to 1e-11 relative, which failed A6 (absolute 1e-12 on ln(b_max / b_min) of a ratio up to 1e6) at 3.3e-12 while the kernel was right. The oracle now rounds each input first and computes from the rounded value; the same random draws, so the same cases to 12 digits. The kernel was not changed, no bound was changed, and the A6 row as first measured (fail, 3.3e-12) is recorded here, not in failed-legs.json, because it measured the oracle's file and not the kernel."
+    },
+    {
       "id": "AM4",
       "when": "after timing the shared-step Hermite code (5 time units took 55 s) and before any ensemble of either side was run or any engine result existed",
       "what": "the reference's integrator becomes the same fourth-order Hermite scheme with individual block time steps (steps a power of two of the sampling interval, at most 1/1024 of it; the step of a body eta times its smallest pair time scale of AM3, rounded down to a power of two, doubling only at times commensurable with the doubled step) in place of the shared step, which makes the sample times exact for every body and the run some thirty times cheaper; eta = 0.0005 is chosen because, over 20 time units of seed 1 with the energy as the only measure, eta = 0.005 conserved the energy to 1.1e-5 and 0.00125 to 1.7e-6, and the bound R1 is 1e-5 over 85 time units of 32 runs. Energies and the size of the escaped fraction after these trials were read; no engine result existed and no bound was changed. Which eta passes R1 is part of the reference, not of the gate: the figure is recorded and R1 is judged on the pinned runs."

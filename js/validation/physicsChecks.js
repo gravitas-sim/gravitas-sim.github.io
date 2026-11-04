@@ -93,6 +93,7 @@ const GROUPS = [
   () => import('./groups/atmospheres.js'),
   () => import('./groups/interiors.js'),
   () => import('./groups/clusters.js'),
+  () => import('./groups/dynamics.js'),
 ];
 
 /**
