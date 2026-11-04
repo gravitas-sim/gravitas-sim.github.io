@@ -1171,6 +1171,13 @@
       "student": false
     },
     {
+      "file": "RADIO_DATA_GATE.md",
+      "kind": "gate",
+      "purpose": "Radio data-rights gate: accepted bases, per-source decision rules, candidates, fallbacks and verdicts for HI spectra, pulse series and pulsar catalogs (Prompt 239).",
+      "owner": 239,
+      "student": false
+    },
+    {
       "file": "VISUAL_BINARY_GATE.md",
       "kind": "gate",
       "purpose": "Visual-binary gate: the photocentre contract, committed thresholds, the independent oracle, the verdict A and the circular real-star check (Prompt 218 Part B).",
