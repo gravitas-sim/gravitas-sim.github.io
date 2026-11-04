@@ -1,0 +1,81 @@
+{
+ "id": "how-far-and-how-sure",
+ "static": {
+  "en": {
+   "units": [
+    ["steps.read-the-distance.fields.0.unit","kpc"],
+    ["steps.read-the-distance.fields.1.unit","kpc"],
+    ["steps.read-the-distance.fields.2.unit","kpc"],
+    ["steps.the-relative-error.fields.0.unit","percent"],
+    ["steps.an-interval-with-no-far-end.fields.0.unit","kpc"],
+    ["steps.an-interval-with-no-far-end.fields.1.unit","kpc"],
+    ["steps.from-parallax-to-speed.fields.0.unit","km/s"],
+    ["steps.from-parallax-to-speed.fields.1.unit","km/s"],
+    ["steps.from-parallax-to-speed.fields.2.unit","km/s"],
+    ["steps.add-a-prior.fields.0.unit","kpc"],
+    ["steps.add-a-prior.fields.1.unit","kpc"],
+    ["steps.add-a-prior.fields.2.unit","kpc"],
+    ["steps.the-zero-point.fields.0.unit","kpc"],
+    ["steps.the-cluster-and-the-zero-point.fields.0.unit","kpc"],
+    ["steps.the-cluster-and-the-zero-point.fields.1.unit","kpc"]
+   ],
+   "numbered": [
+    ["steps.read-the-distance.fields.0.hint","2.5"],
+    ["steps.read-the-distance.fields.1.hint","2.22"],
+    ["steps.read-the-distance.fields.2.hint","2.86"],
+    ["steps.the-relative-error.fields.0.hint","12.5"],
+    ["steps.an-interval-with-no-far-end.fields.0.label","Lower end at 0.10 mas"],
+    ["steps.an-interval-with-no-far-end.fields.0.hint","5.0"],
+    ["steps.an-interval-with-no-far-end.fields.1.label","Upper end at 0.15 mas"],
+    ["steps.an-interval-with-no-far-end.fields.1.hint","20"],
+    ["steps.from-parallax-to-speed.fields.0.hint","59.3"],
+    ["steps.from-parallax-to-speed.fields.1.hint","52.7"],
+    ["steps.from-parallax-to-speed.fields.2.hint","67.7"],
+    ["steps.add-a-prior.fields.0.hint","5.11"],
+    ["steps.add-a-prior.fields.1.hint","3.85"],
+    ["steps.add-a-prior.fields.2.hint","6.93"],
+    ["steps.the-zero-point.fields.0.hint","2.27"],
+    ["steps.the-cluster-and-the-zero-point.fields.0.hint","2.324"],
+    ["steps.the-cluster-and-the-zero-point.fields.1.hint","2.555"]
+   ]
+  },
+  "es": {
+   "units": [],
+   "numbered": [
+    ["steps.an-interval-with-no-far-end.fields.0.label","Extremo inferior con 0,10 mas"],
+    ["steps.an-interval-with-no-far-end.fields.1.label","Extremo superior con 0,15 mas"]
+   ]
+  }
+ },
+ "numeric": {
+  "answers": [],
+  "decimals": []
+ },
+ "precision": [],
+ "steps": {
+  "en": {
+   "read-the-distance": {
+    "validate": {"calls":242,"distinct":2,"digest":"3bfa8290a6c9b6b4","samples":[null,{"level":"error","message":"Set the parallax to 0.40 and the error to 0.05, prior off, and read the “Distance from the likelihood” line: a distance with an interval from a lower to an upper end."}]}
+   },
+   "the-relative-error": {
+    "validate": {"calls":97,"distinct":2,"digest":"1ac61cddd723c8e1","samples":[null,{"level":"error","message":"Divide the error (0.05) by the parallax (0.40), and give the result in percent. The panel’s “times its error” is the inverse of this."}]}
+   },
+   "an-interval-with-no-far-end": {
+    "validate": {"calls":232,"distinct":2,"digest":"4bb18321ae8ea9c8","samples":[null,{"level":"error","message":"With 0.10 mas and an error of 0.10, read the lower end (the interval has no upper one); then set the parallax to 0.15 and read the upper end, one divided by 0.05."}]}
+   },
+   "from-parallax-to-speed": {
+    "validate": {"calls":242,"distinct":2,"digest":"d6228a810c113890","samples":[null,{"level":"error","message":"Set the proper motion to 5.0 mas/yr and read the “Tangential speed” line: the distance of 2.5 kpc and its interval, each times 4.74 times 5."}]}
+   },
+   "add-a-prior": {
+    "validate": {"calls":242,"distinct":2,"digest":"73dd1f5f4ede5075","samples":[null,{"level":"error","message":"Set the parallax to 0.10 and the error to 0.10, switch the prior on with a scale length of 1.0, and read the “With the prior” line."}]}
+   },
+   "the-zero-point": {
+    "validate": {"calls":97,"distinct":2,"digest":"198d0d44aa2d5e2c","samples":[null,{"level":"error","message":"Set the zero-point offset to −0.040 mas with a parallax of 0.40 and an error of 0.02. The corrected parallax is the observed one minus the offset: 0.44."}]}
+   },
+   "the-cluster-and-the-zero-point": {
+    "validate": {"calls":232,"distinct":2,"digest":"b198145bf50260b9","samples":[null,{"level":"error","message":"Read the “Distance of the cluster” line twice: once with “Zero point per star” on and once with it off. The first is the smaller distance."}]}
+   }
+  },
+  "es": "same"
+ }
+}

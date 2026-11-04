@@ -1309,6 +1309,32 @@ export const MANIFEST = [
     objectiveCount: 4,
   },
   {
+    id: 'how-far-and-how-sure',
+    title: 'How far, and how sure?',
+    subtitle:
+      'A parallax measures one over the distance, with an error: draw the likelihood, see when it gives a distance and when it gives only a limit, and what a prior and a zero point do',
+    duration: '8-12 min',
+    level: 'Introductory astronomy',
+    thumbnail: 'images/investigations/how-far-and-how-sure.webp',
+    depths: 3,
+    stepCount: 8,
+    gradedCount: 5,
+    objectiveCount: 4,
+  },
+  {
+    id: 'what-gaia-does-not-see',
+    title: 'What Gaia does not see',
+    subtitle:
+      'Cuts on magnitude, parallax over error and RUWE decide which stars a Gaia sample holds: watch the colour-magnitude diagram and the cluster’s distance change as stars are removed',
+    duration: '8-12 min',
+    level: 'Introductory astronomy',
+    thumbnail: 'images/investigations/what-gaia-does-not-see.webp',
+    depths: 3,
+    stepCount: 8,
+    gradedCount: 6,
+    objectiveCount: 4,
+  },
+  {
     id: 'the-metallicity-term',
     title: 'The Metallicity Term',
     subtitle:

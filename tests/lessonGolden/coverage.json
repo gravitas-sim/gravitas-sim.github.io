@@ -8,7 +8,7 @@
     "butterfly-effect",
     "binary-star-planets",
     "black-holes",
-    "propose-an-observation",
+    "how-far-and-how-sure",
     "weighing-stars",
     "a-night-at-the-telescope",
     "a-universe-of-stars",
@@ -17,6 +17,7 @@
     "extending-an-experiment",
     "measuring-the-moon",
     "power-law-gravity",
+    "propose-an-observation",
     "radial-velocity",
     "retrograde-motion"
   ],
@@ -173,8 +174,8 @@
       "key:question.checklist",
       "key:read.explainView"
     ],
-    "propose-an-observation": [
-      "key:measure.plan",
+    "how-far-and-how-sure": [
+      "key:predict.misconceptions",
       "key:question.rubricCriteria"
     ],
     "weighing-stars": [
@@ -201,6 +202,9 @@
     ],
     "power-law-gravity": [
       "key:question.explain"
+    ],
+    "propose-an-observation": [
+      "key:measure.plan"
     ],
     "radial-velocity": [
       "key:measure.setup"
@@ -277,18 +281,18 @@
     "pin:unpinned"
   ],
   "totals": {
-    "investigations": 122,
-    "steps": 1941,
+    "investigations": 124,
+    "steps": 1980,
     "activityCuts": 6,
-    "lessonTokens": 149,
+    "lessonTokens": 150,
     "activityTokens": 29,
     "stepTypes": {
-      "read": 371,
-      "predict": 196,
+      "read": 375,
+      "predict": 198,
       "ellipse": 1,
-      "question": 727,
-      "measure": 501,
-      "explore": 144,
+      "question": 748,
+      "measure": 512,
+      "explore": 145,
       "wedges": 1
     }
   }

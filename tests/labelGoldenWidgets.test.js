@@ -89,7 +89,8 @@ describe('the parts of the recording', () => {
     const ids = Object.values(recorded.ids).flat();
     expect(new Set(ids).size).toBe(ids.length);
     // 165 with the two direct-imaging panels (Prompt 230); 168 with the visual-pair panel (Prompt 218 Part B).
-    expect(ids.length).toBe(168);
+    // 170 with the two Gaia panels (Prompt 233 Part B).
+    expect(ids.length).toBe(170);
     const paths = Object.values(modules);
     expect(new Set(paths).size).toBe(paths.length);
   });
@@ -119,13 +120,15 @@ describe('the committed recording', () => {
   test('has a fixture for every family and none for a family that is gone', () => {
     expect(Object.keys(files).sort()).toEqual(Object.keys(modules).sort());
     // 53 with the direct-imaging family (Prompt 230).
-    expect(Object.keys(modules).length).toBe(54);
+    // 55 with the Gaia family (Prompt 233 Part B).
+    expect(Object.keys(modules).length).toBe(55);
   });
 
   test('has every widget in both locales', () => {
     const widgets = widgetsOf(recorded);
     // 165 with the two direct-imaging panels (Prompt 230); 168 with the visual-pair panel (Prompt 218 Part B).
-    expect(widgets.length).toBe(168);
+    // 170 with the two Gaia panels (Prompt 233 Part B).
+    expect(widgets.length).toBe(170);
     for (const [, rec] of widgets) {
       expect(rec.en.frames).toBeGreaterThan(0);
       // Spanish is either the same recording or its own.

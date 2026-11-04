@@ -1,0 +1,984 @@
+{
+ "id": "how-far-and-how-sure",
+ "locale": "en",
+ "title": "How far, and how sure?",
+ "steps": 21,
+ "depths": [
+  [
+   "core",
+   8
+  ],
+  [
+   "quantitative",
+   14
+  ],
+  [
+   "advanced",
+   21
+  ]
+ ],
+ "grading": [
+  {
+   "sid": "commit-to-a-distance",
+   "type": "predict",
+   "kind": null,
+   "grades": [
+    [
+     0,
+     false,
+     "incorrect"
+    ],
+    [
+     1,
+     false,
+     "incorrect"
+    ],
+    [
+     2,
+     true,
+     "correct"
+    ],
+    [
+     3,
+     false,
+     "incorrect"
+    ]
+   ]
+  },
+  {
+   "sid": "where-the-threshold-falls",
+   "type": "question",
+   "kind": "choice",
+   "grades": [
+    [
+     0,
+     false,
+     "incorrect"
+    ],
+    [
+     1,
+     true,
+     "correct"
+    ],
+    [
+     2,
+     false,
+     "incorrect"
+    ],
+    [
+     3,
+     false,
+     "incorrect"
+    ]
+   ]
+  },
+  {
+   "sid": "why-one-over-p-is-biased",
+   "type": "question",
+   "kind": "choice",
+   "grades": [
+    [
+     0,
+     false,
+     "incorrect"
+    ],
+    [
+     1,
+     false,
+     "incorrect"
+    ],
+    [
+     2,
+     false,
+     "incorrect"
+    ],
+    [
+     3,
+     true,
+     "correct"
+    ]
+   ]
+  },
+  {
+   "sid": "justify-a-report",
+   "type": "question",
+   "kind": "short",
+   "grades": [
+    [
+     "ungraded",
+     null
+    ]
+   ]
+  },
+  {
+   "sid": "double-the-scale-length",
+   "type": "question",
+   "kind": "choice",
+   "grades": [
+    [
+     0,
+     false,
+     "incorrect"
+    ],
+    [
+     1,
+     false,
+     "incorrect"
+    ],
+    [
+     2,
+     true,
+     "correct"
+    ],
+    [
+     3,
+     false,
+     "incorrect"
+    ]
+   ]
+  },
+  {
+   "sid": "when-the-data-win",
+   "type": "question",
+   "kind": "choice",
+   "grades": [
+    [
+     0,
+     true,
+     "correct"
+    ],
+    [
+     1,
+     false,
+     "incorrect"
+    ],
+    [
+     2,
+     false,
+     "incorrect"
+    ],
+    [
+     3,
+     false,
+     "incorrect"
+    ]
+   ]
+  },
+  {
+   "sid": "what-the-prior-assumes",
+   "type": "question",
+   "kind": "choice",
+   "grades": [
+    [
+     0,
+     false,
+     "incorrect"
+    ],
+    [
+     1,
+     false,
+     "incorrect"
+    ],
+    [
+     2,
+     false,
+     "incorrect"
+    ],
+    [
+     3,
+     true,
+     "correct"
+    ]
+   ]
+  },
+  {
+   "sid": "what-the-interval-leaves-out",
+   "type": "question",
+   "kind": "short",
+   "grades": [
+    [
+     "ungraded",
+     null
+    ]
+   ]
+  },
+  {
+   "sid": "why-the-interval-leans",
+   "type": "question",
+   "kind": "choice",
+   "grades": [
+    [
+     0,
+     false,
+     "incorrect"
+    ],
+    [
+     1,
+     false,
+     "incorrect"
+    ],
+    [
+     2,
+     true,
+     "correct"
+    ],
+    [
+     3,
+     false,
+     "incorrect"
+    ]
+   ]
+  },
+  {
+   "sid": "when-it-is-too-faint",
+   "type": "question",
+   "kind": "choice",
+   "grades": [
+    [
+     0,
+     false,
+     "incorrect"
+    ],
+    [
+     1,
+     true,
+     "correct"
+    ],
+    [
+     2,
+     false,
+     "incorrect"
+    ],
+    [
+     3,
+     false,
+     "incorrect"
+    ]
+   ]
+  },
+  {
+   "sid": "a-negative-parallax",
+   "type": "question",
+   "kind": "choice",
+   "grades": [
+    [
+     0,
+     false,
+     "incorrect"
+    ],
+    [
+     1,
+     false,
+     "incorrect"
+    ],
+    [
+     2,
+     false,
+     "incorrect"
+    ],
+    [
+     3,
+     true,
+     "correct"
+    ]
+   ]
+  }
+ ],
+ "progress": {
+  "record": {
+   "schema": 2,
+   "lesson": "how-far-and-how-sure",
+   "stepSid": "what-you-worked-out",
+   "responses": {
+    "how-far-and-how-sure:commit-to-a-distance": 2,
+    "how-far-and-how-sure:where-the-threshold-falls": 1,
+    "how-far-and-how-sure:why-one-over-p-is-biased": 3,
+    "how-far-and-how-sure:justify-a-report": "A fixed sentence for the golden.",
+    "how-far-and-how-sure:double-the-scale-length": 2,
+    "how-far-and-how-sure:when-the-data-win": 0,
+    "how-far-and-how-sure:what-the-prior-assumes": 3,
+    "how-far-and-how-sure:what-the-interval-leaves-out": "A fixed sentence for the golden.",
+    "how-far-and-how-sure:why-the-interval-leans": 2,
+    "how-far-and-how-sure:when-it-is-too-faint": 1,
+    "how-far-and-how-sure:a-negative-parallax": 3
+   },
+   "attempts": {
+    "how-far-and-how-sure:commit-to-a-distance": 1,
+    "how-far-and-how-sure:where-the-threshold-falls": 1,
+    "how-far-and-how-sure:why-one-over-p-is-biased": 1,
+    "how-far-and-how-sure:double-the-scale-length": 1,
+    "how-far-and-how-sure:when-the-data-win": 1,
+    "how-far-and-how-sure:what-the-prior-assumes": 1,
+    "how-far-and-how-sure:why-the-interval-leans": 1,
+    "how-far-and-how-sure:when-it-is-too-faint": 1,
+    "how-far-and-how-sure:a-negative-parallax": 1
+   },
+   "visited": [
+    "a-parallax-is-not-a-distance",
+    "commit-to-a-distance",
+    "read-the-distance",
+    "the-relative-error",
+    "where-the-threshold-falls",
+    "an-interval-with-no-far-end",
+    "from-parallax-to-speed",
+    "why-one-over-p-is-biased",
+    "justify-a-report",
+    "add-a-prior",
+    "double-the-scale-length",
+    "when-the-data-win",
+    "what-the-prior-assumes",
+    "the-zero-point",
+    "the-cluster-and-the-zero-point",
+    "what-the-interval-leaves-out",
+    "why-the-interval-leans",
+    "try-the-controls",
+    "when-it-is-too-faint",
+    "a-negative-parallax",
+    "what-you-worked-out"
+   ],
+   "startedAt": "2026-01-02T03:04:05.000Z",
+   "depth": "advanced",
+   "deepest": "advanced",
+   "spent": 600
+  },
+  "read": {
+   "responses": {
+    "how-far-and-how-sure:commit-to-a-distance": 2,
+    "how-far-and-how-sure:where-the-threshold-falls": 1,
+    "how-far-and-how-sure:why-one-over-p-is-biased": 3,
+    "how-far-and-how-sure:justify-a-report": "A fixed sentence for the golden.",
+    "how-far-and-how-sure:double-the-scale-length": 2,
+    "how-far-and-how-sure:when-the-data-win": 0,
+    "how-far-and-how-sure:what-the-prior-assumes": 3,
+    "how-far-and-how-sure:what-the-interval-leaves-out": "A fixed sentence for the golden.",
+    "how-far-and-how-sure:why-the-interval-leans": 2,
+    "how-far-and-how-sure:when-it-is-too-faint": 1,
+    "how-far-and-how-sure:a-negative-parallax": 3
+   },
+   "attempts": {
+    "how-far-and-how-sure:commit-to-a-distance": 1,
+    "how-far-and-how-sure:where-the-threshold-falls": 1,
+    "how-far-and-how-sure:why-one-over-p-is-biased": 1,
+    "how-far-and-how-sure:double-the-scale-length": 1,
+    "how-far-and-how-sure:when-the-data-win": 1,
+    "how-far-and-how-sure:what-the-prior-assumes": 1,
+    "how-far-and-how-sure:why-the-interval-leans": 1,
+    "how-far-and-how-sure:when-it-is-too-faint": 1,
+    "how-far-and-how-sure:a-negative-parallax": 1
+   },
+   "visited": [
+    "a-negative-parallax",
+    "a-parallax-is-not-a-distance",
+    "add-a-prior",
+    "an-interval-with-no-far-end",
+    "commit-to-a-distance",
+    "double-the-scale-length",
+    "from-parallax-to-speed",
+    "justify-a-report",
+    "read-the-distance",
+    "the-cluster-and-the-zero-point",
+    "the-relative-error",
+    "the-zero-point",
+    "try-the-controls",
+    "what-the-interval-leaves-out",
+    "what-the-prior-assumes",
+    "what-you-worked-out",
+    "when-it-is-too-faint",
+    "when-the-data-win",
+    "where-the-threshold-falls",
+    "why-one-over-p-is-biased",
+    "why-the-interval-leans"
+   ],
+   "stepSid": "what-you-worked-out",
+   "startedAt": "2026-01-02T03:04:05.000Z",
+   "depth": "advanced",
+   "deepest": "advanced",
+   "spent": 600,
+   "schema": 2,
+   "migrated": false,
+   "notes": []
+  }
+ },
+ "backup": {
+  "backup": {
+   "kind": "gravitas.investigation.progress",
+   "version": 2,
+   "savedAt": "2026-01-02T04:05:06.000Z",
+   "lesson": {
+    "id": "how-far-and-how-sure",
+    "title": "How far, and how sure?",
+    "stepCount": 21
+   },
+   "student": null,
+   "progress": {
+    "stepSid": "what-you-worked-out",
+    "startedAt": "2026-01-02T03:04:05.000Z",
+    "visited": [
+     "a-parallax-is-not-a-distance",
+     "commit-to-a-distance",
+     "read-the-distance",
+     "the-relative-error",
+     "where-the-threshold-falls",
+     "an-interval-with-no-far-end",
+     "from-parallax-to-speed",
+     "why-one-over-p-is-biased",
+     "justify-a-report",
+     "add-a-prior",
+     "double-the-scale-length",
+     "when-the-data-win",
+     "what-the-prior-assumes",
+     "the-zero-point",
+     "the-cluster-and-the-zero-point",
+     "what-the-interval-leaves-out",
+     "why-the-interval-leans",
+     "try-the-controls",
+     "when-it-is-too-faint",
+     "a-negative-parallax",
+     "what-you-worked-out"
+    ],
+    "responses": {
+     "how-far-and-how-sure:commit-to-a-distance": 2,
+     "how-far-and-how-sure:where-the-threshold-falls": 1,
+     "how-far-and-how-sure:why-one-over-p-is-biased": 3,
+     "how-far-and-how-sure:justify-a-report": "A fixed sentence for the golden.",
+     "how-far-and-how-sure:double-the-scale-length": 2,
+     "how-far-and-how-sure:when-the-data-win": 0,
+     "how-far-and-how-sure:what-the-prior-assumes": 3,
+     "how-far-and-how-sure:what-the-interval-leaves-out": "A fixed sentence for the golden.",
+     "how-far-and-how-sure:why-the-interval-leans": 2,
+     "how-far-and-how-sure:when-it-is-too-faint": 1,
+     "how-far-and-how-sure:a-negative-parallax": 3
+    },
+    "attempts": {
+     "how-far-and-how-sure:commit-to-a-distance": 1,
+     "how-far-and-how-sure:where-the-threshold-falls": 1,
+     "how-far-and-how-sure:why-one-over-p-is-biased": 1,
+     "how-far-and-how-sure:double-the-scale-length": 1,
+     "how-far-and-how-sure:when-the-data-win": 1,
+     "how-far-and-how-sure:what-the-prior-assumes": 1,
+     "how-far-and-how-sure:why-the-interval-leans": 1,
+     "how-far-and-how-sure:when-it-is-too-faint": 1,
+     "how-far-and-how-sure:a-negative-parallax": 1
+    }
+   },
+   "steps": [
+    {
+     "index": 0,
+     "sid": "a-parallax-is-not-a-distance",
+     "fingerprint": "read|-|gaia-distance|-|-|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 1,
+     "sid": "commit-to-a-distance",
+     "fingerprint": "predict|-|gaia-distance|-|-|4|a=2;c=2",
+     "optionCount": 4
+    },
+    {
+     "index": 2,
+     "sid": "read-the-distance",
+     "fingerprint": "measure|-|gaia-distance|-|distance+lo+hi|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 3,
+     "sid": "the-relative-error",
+     "fingerprint": "measure|-|gaia-distance|-|relative|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 4,
+     "sid": "where-the-threshold-falls",
+     "fingerprint": "question|choice|gaia-distance|-|-|4|a=1;c=1",
+     "optionCount": 4
+    },
+    {
+     "index": 5,
+     "sid": "an-interval-with-no-far-end",
+     "fingerprint": "measure|-|gaia-distance|-|lo+hi|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 6,
+     "sid": "from-parallax-to-speed",
+     "fingerprint": "measure|-|gaia-distance|-|speed+lo+hi|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 7,
+     "sid": "why-one-over-p-is-biased",
+     "fingerprint": "question|choice|gaia-distance|-|-|4|a=3;c=3",
+     "optionCount": 4
+    },
+    {
+     "index": 8,
+     "sid": "justify-a-report",
+     "fingerprint": "question|short|gaia-distance|-|-|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 9,
+     "sid": "add-a-prior",
+     "fingerprint": "measure|-|gaia-distance|-|median+lo+hi|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 10,
+     "sid": "double-the-scale-length",
+     "fingerprint": "question|choice|gaia-distance|-|-|4|a=2;c=2",
+     "optionCount": 4
+    },
+    {
+     "index": 11,
+     "sid": "when-the-data-win",
+     "fingerprint": "question|choice|gaia-distance|-|-|4|a=0;c=0",
+     "optionCount": 4
+    },
+    {
+     "index": 12,
+     "sid": "what-the-prior-assumes",
+     "fingerprint": "question|choice|gaia-distance|-|-|4|a=3;c=3",
+     "optionCount": 4
+    },
+    {
+     "index": 13,
+     "sid": "the-zero-point",
+     "fingerprint": "measure|-|gaia-distance|-|distance|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 14,
+     "sid": "the-cluster-and-the-zero-point",
+     "fingerprint": "measure|-|gaia-sample|-|with+without|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 15,
+     "sid": "what-the-interval-leaves-out",
+     "fingerprint": "question|short|gaia-sample|-|-|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 16,
+     "sid": "why-the-interval-leans",
+     "fingerprint": "question|choice|gaia-distance|-|-|4|a=2;c=2",
+     "optionCount": 4
+    },
+    {
+     "index": 17,
+     "sid": "try-the-controls",
+     "fingerprint": "explore|-|gaia-distance|-|-|-|-",
+     "optionCount": null
+    },
+    {
+     "index": 18,
+     "sid": "when-it-is-too-faint",
+     "fingerprint": "question|choice|gaia-distance|-|-|4|a=1;c=1",
+     "optionCount": 4
+    },
+    {
+     "index": 19,
+     "sid": "a-negative-parallax",
+     "fingerprint": "question|choice|gaia-distance|-|-|4|a=3;c=3",
+     "optionCount": 4
+    },
+    {
+     "index": 20,
+     "sid": "what-you-worked-out",
+     "fingerprint": "read|-|gaia-distance|-|-|-|-",
+     "optionCount": null
+    }
+   ]
+  },
+  "verdict": {
+   "ok": true
+  },
+  "restored": {
+   "responses": {
+    "how-far-and-how-sure:commit-to-a-distance": 2,
+    "how-far-and-how-sure:where-the-threshold-falls": 1,
+    "how-far-and-how-sure:why-one-over-p-is-biased": 3,
+    "how-far-and-how-sure:justify-a-report": "A fixed sentence for the golden.",
+    "how-far-and-how-sure:double-the-scale-length": 2,
+    "how-far-and-how-sure:when-the-data-win": 0,
+    "how-far-and-how-sure:what-the-prior-assumes": 3,
+    "how-far-and-how-sure:what-the-interval-leaves-out": "A fixed sentence for the golden.",
+    "how-far-and-how-sure:why-the-interval-leans": 2,
+    "how-far-and-how-sure:when-it-is-too-faint": 1,
+    "how-far-and-how-sure:a-negative-parallax": 3
+   },
+   "attempts": {
+    "how-far-and-how-sure:commit-to-a-distance": 1,
+    "how-far-and-how-sure:where-the-threshold-falls": 1,
+    "how-far-and-how-sure:why-one-over-p-is-biased": 1,
+    "how-far-and-how-sure:double-the-scale-length": 1,
+    "how-far-and-how-sure:when-the-data-win": 1,
+    "how-far-and-how-sure:what-the-prior-assumes": 1,
+    "how-far-and-how-sure:why-the-interval-leans": 1,
+    "how-far-and-how-sure:when-it-is-too-faint": 1,
+    "how-far-and-how-sure:a-negative-parallax": 1
+   },
+   "visited": [
+    "a-negative-parallax",
+    "a-parallax-is-not-a-distance",
+    "add-a-prior",
+    "an-interval-with-no-far-end",
+    "commit-to-a-distance",
+    "double-the-scale-length",
+    "from-parallax-to-speed",
+    "justify-a-report",
+    "read-the-distance",
+    "the-cluster-and-the-zero-point",
+    "the-relative-error",
+    "the-zero-point",
+    "try-the-controls",
+    "what-the-interval-leaves-out",
+    "what-the-prior-assumes",
+    "what-you-worked-out",
+    "when-it-is-too-faint",
+    "when-the-data-win",
+    "where-the-threshold-falls",
+    "why-one-over-p-is-biased",
+    "why-the-interval-leans"
+   ],
+   "stepIndex": 20,
+   "startedAt": "2026-01-02T03:04:05.000Z",
+   "moved": [],
+   "dropped": [],
+   "quarantined": {},
+   "uncertain": 0,
+   "discardedKeys": 0,
+   "byPosition": false
+  }
+ },
+ "ledger": {
+  "entry": "golden-how-far-and-how-sure",
+  "record": {
+   "ids": [
+    "golden-how-far-and-how-sure"
+   ],
+   "rows": [
+    [
+     "golden-how-far-and-how-sure",
+     "q1",
+     3.5247,
+     "d",
+     0.0012,
+     "measured",
+     "simulation",
+     "rv-fit",
+     null,
+     [
+      "s",
+      "d"
+     ]
+    ]
+   ],
+   "total": 1
+  },
+  "digest": "b3eab6e77d2e90378a7f7bf771d9620d55608bff7ef203d777709a52688a2bc7"
+ },
+ "tokens": {
+  "plain": {
+   "comfortable": true,
+   "ok": true,
+   "reason": null,
+   "backupIntact": true,
+   "payload": {
+    "v": 2,
+    "a": null,
+    "r": null,
+    "fl": "en"
+   },
+   "answers": [
+    {
+     "sid": "commit-to-a-distance",
+     "value": 2,
+     "locale": "en"
+    },
+    {
+     "sid": "where-the-threshold-falls",
+     "value": 1,
+     "locale": "en"
+    },
+    {
+     "sid": "why-one-over-p-is-biased",
+     "value": 3,
+     "locale": "en"
+    },
+    {
+     "sid": "justify-a-report",
+     "value": "A fixed sentence for the golden.",
+     "locale": "en"
+    },
+    {
+     "sid": "double-the-scale-length",
+     "value": 2,
+     "locale": "en"
+    },
+    {
+     "sid": "when-the-data-win",
+     "value": 0,
+     "locale": "en"
+    },
+    {
+     "sid": "what-the-prior-assumes",
+     "value": 3,
+     "locale": "en"
+    },
+    {
+     "sid": "what-the-interval-leaves-out",
+     "value": "A fixed sentence for the golden.",
+     "locale": "en"
+    },
+    {
+     "sid": "why-the-interval-leans",
+     "value": 2,
+     "locale": "en"
+    },
+    {
+     "sid": "when-it-is-too-faint",
+     "value": 1,
+     "locale": "en"
+    },
+    {
+     "sid": "a-negative-parallax",
+     "value": 3,
+     "locale": "en"
+    }
+   ]
+  },
+  "assignment": {
+   "comfortable": true,
+   "ok": true,
+   "reason": null,
+   "backupIntact": true,
+   "payload": {
+    "v": 2,
+    "a": "golden-assignment",
+    "r": "roster-1",
+    "fl": "en"
+   },
+   "answers": [
+    {
+     "sid": "commit-to-a-distance",
+     "value": 2,
+     "locale": "en"
+    },
+    {
+     "sid": "where-the-threshold-falls",
+     "value": 1,
+     "locale": "en"
+    },
+    {
+     "sid": "why-one-over-p-is-biased",
+     "value": 3,
+     "locale": "en"
+    },
+    {
+     "sid": "justify-a-report",
+     "value": "A fixed sentence for the golden.",
+     "locale": "en"
+    },
+    {
+     "sid": "double-the-scale-length",
+     "value": 2,
+     "locale": "en"
+    },
+    {
+     "sid": "when-the-data-win",
+     "value": 0,
+     "locale": "en"
+    },
+    {
+     "sid": "what-the-prior-assumes",
+     "value": 3,
+     "locale": "en"
+    },
+    {
+     "sid": "what-the-interval-leaves-out",
+     "value": "A fixed sentence for the golden.",
+     "locale": "en"
+    },
+    {
+     "sid": "why-the-interval-leans",
+     "value": 2,
+     "locale": "en"
+    },
+    {
+     "sid": "when-it-is-too-faint",
+     "value": 1,
+     "locale": "en"
+    },
+    {
+     "sid": "a-negative-parallax",
+     "value": 3,
+     "locale": "en"
+    }
+   ]
+  },
+  "evidence": {
+   "comfortable": true,
+   "ok": true,
+   "reason": null,
+   "backupIntact": true,
+   "payload": {
+    "v": 2,
+    "ev": {
+     "d": "b3eab6e77d2e90378a7f7bf771d9620d55608bff7ef203d777709a52688a2bc7",
+     "i": [
+      "golden-how-far-and-how-sure"
+     ],
+     "n": 1,
+     "r": [
+      [
+       "golden-how-far-and-how-sure",
+       "q1",
+       3.5247,
+       "d",
+       0.0012,
+       "measured",
+       "simulation",
+       "rv-fit",
+       null,
+       [
+        "s",
+        "d"
+       ]
+      ]
+     ]
+    },
+    "a": null,
+    "r": null,
+    "fl": "en"
+   },
+   "answers": [
+    {
+     "sid": "commit-to-a-distance",
+     "value": 2,
+     "locale": "en"
+    },
+    {
+     "sid": "where-the-threshold-falls",
+     "value": 1,
+     "locale": "en"
+    },
+    {
+     "sid": "why-one-over-p-is-biased",
+     "value": 3,
+     "locale": "en"
+    },
+    {
+     "sid": "justify-a-report",
+     "value": "A fixed sentence for the golden.",
+     "locale": "en"
+    },
+    {
+     "sid": "double-the-scale-length",
+     "value": 2,
+     "locale": "en"
+    },
+    {
+     "sid": "when-the-data-win",
+     "value": 0,
+     "locale": "en"
+    },
+    {
+     "sid": "what-the-prior-assumes",
+     "value": 3,
+     "locale": "en"
+    },
+    {
+     "sid": "what-the-interval-leaves-out",
+     "value": "A fixed sentence for the golden.",
+     "locale": "en"
+    },
+    {
+     "sid": "why-the-interval-leans",
+     "value": 2,
+     "locale": "en"
+    },
+    {
+     "sid": "when-it-is-too-faint",
+     "value": 1,
+     "locale": "en"
+    },
+    {
+     "sid": "a-negative-parallax",
+     "value": 3,
+     "locale": "en"
+    }
+   ]
+  },
+  "depth": {
+   "comfortable": true,
+   "ok": true,
+   "reason": null,
+   "backupIntact": true,
+   "payload": {
+    "v": 2,
+    "dp": "advanced",
+    "a": null,
+    "r": null,
+    "fl": "en"
+   },
+   "answers": [
+    {
+     "sid": "commit-to-a-distance",
+     "value": 2,
+     "locale": "en"
+    },
+    {
+     "sid": "where-the-threshold-falls",
+     "value": 1,
+     "locale": "en"
+    },
+    {
+     "sid": "why-one-over-p-is-biased",
+     "value": 3,
+     "locale": "en"
+    },
+    {
+     "sid": "justify-a-report",
+     "value": "A fixed sentence for the golden.",
+     "locale": "en"
+    },
+    {
+     "sid": "double-the-scale-length",
+     "value": 2,
+     "locale": "en"
+    },
+    {
+     "sid": "when-the-data-win",
+     "value": 0,
+     "locale": "en"
+    },
+    {
+     "sid": "what-the-prior-assumes",
+     "value": 3,
+     "locale": "en"
+    },
+    {
+     "sid": "what-the-interval-leaves-out",
+     "value": "A fixed sentence for the golden.",
+     "locale": "en"
+    },
+    {
+     "sid": "why-the-interval-leans",
+     "value": 2,
+     "locale": "en"
+    },
+    {
+     "sid": "when-it-is-too-faint",
+     "value": 1,
+     "locale": "en"
+    },
+    {
+     "sid": "a-negative-parallax",
+     "value": 3,
+     "locale": "en"
+    }
+   ]
+  }
+ }
+}

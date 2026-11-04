@@ -227,7 +227,8 @@ describe('the instructor expectations record', () => {
     // 533 after the five stellar investigations (Prompt 224): 7 more over 526.
     // 535 after What Is It Made Of? (Prompt 227): 2 more over 533.
     // 539 after Why We Cannot See Earth From Here and Architectures (Prompt 230): 4 more over 535.
-    expect(total).toBe(547);
+    // 551 after the two Gaia investigations (Prompt 233 Part B): 4 more over 547.
+    expect(total).toBe(551);
     // 542 after How Many Earths? (Prompt 229): 3 more over 539.
     // 547 after the four exoplanet closeout investigations (Prompt 231): 5 more over 542.
   });

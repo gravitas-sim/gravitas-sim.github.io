@@ -88,7 +88,7 @@ The browser half takes about seven minutes on the private port.
 | 6 | `butterfly-effect` | 3: `key:explore.rubric`, `key:predict.requires`, `lock:null` |
 | 7 | `binary-star-planets` | 2: `key:explore.requires`, `lock:{"placement":true}` |
 | 8 | `black-holes` | 2: `key:question.checklist`, `key:read.explainView` |
-| 9 | `propose-an-observation` | 2: `key:measure.plan`, `key:question.rubricCriteria` |
+| 9 | `how-far-and-how-sure` | 2: `key:predict.misconceptions`, `key:question.rubricCriteria` |
 | 10 | `weighing-stars` | 2: `key:explore.showBarycenter`, `key:read.showBarycenter` |
 | 11 | `a-night-at-the-telescope` | 1: `key:question.reflect` |
 | 12 | `a-universe-of-stars` | 1: `key:measure.checklist` |
@@ -97,8 +97,9 @@ The browser half takes about seven minutes on the private port.
 | 15 | `extending-an-experiment` | 1: `key:measure.compute` |
 | 16 | `measuring-the-moon` | 1: `key:question.maxUncertainty` |
 | 17 | `power-law-gravity` | 1: `key:question.explain` |
-| 18 | `radial-velocity` | 1: `key:measure.setup` |
-| 19 | `retrograde-motion` | 1: `lock:{"placement":true,"inspector":false}` |
+| 18 | `propose-an-observation` | 1: `key:measure.plan` |
+| 19 | `radial-velocity` | 1: `key:measure.setup` |
+| 20 | `retrograde-motion` | 1: `lock:{"placement":true,"inspector":false}` |
 
 | # | Activity cut | Tokens it adds |
 |---|---|---|
