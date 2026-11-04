@@ -139,6 +139,28 @@ DR3 parallax's range (2.38). That is what the data gave under a contract that wa
 lesson says so. The 2.6 kpc "about" statement of the earlier Cluster Membership lesson is not confirmed by it either. Carl chose to wait for the CDS table (Hunt and Reffert 2023, DR3) rather
 to re-gate against another source: the leg stays NOT RUN against the committed contract until it can be fetched (register, D-R10-233-06).
 
+## The panels and the two investigations (Part B)
+
+Two lesson widgets, `gaia-distance` and `gaia-sample` (`js/gaiaWidgets.js`, over the pure functions of `js/gaiaField.js`, which read the
+kernel through `js/kernels/galactic/gaia.js` and not through the galactic index), carry two bilingual investigations, "How far, and
+how sure?" and "What Gaia does not see" (`js/data/investigations/gaia-sequence.js`, the one instructor closure file of the sequence,
+with English and Spanish stubs beside it; both are in the galaxies sequence after "The rotating disk").
+
+- `gaia-distance` takes numbers the student sets (a parallax, its error, a zero-point offset, an optional exponentially decreasing space
+  density with a scale length, a proper motion) and draws the likelihood, the prior and the posterior through the plot component, with
+  the status (ok, low-signal, prior-dominated, likelihood-only), the interval, what the prior assumes, the line that no blanket
+  correction is applied, and the tangential velocity with its interval. It is not a Gaia star.
+- `gaia-sample` loads the NGC 2420 sidecar and applies the magnitude, parallax-over-error and RUWE cuts through the selection objects
+  of `cuts.js`, counting what each removes alone and in order. It draws the colour-magnitude diagram or the velocity plot of the stars
+  left, and states the cluster distance by the leg-E1 contract (members from proper motion at probability 0.9, a zero point per star,
+  a 3-sigma clip, systematic 0). The pack's own query had already dropped 55 stars with RUWE of 1.4 or more (1048 to 993). The
+  neighbourhood pack is not used for a distance (E3).
+- The lessons quote only numbers of `tests/fixtures/gaia-workflows/results.json` or of the pack, and `tests/gaiaLessons.test.js`
+  recomputes each: the NGC 2420 distance (2.324 kpc, 2.316 to 2.332, no systematic floor, E1 NOT RUN, not validated against a published
+  catalogue), the 2.299 kpc a parallax-over-error cut of 10 gives, the status ladder, the interval formulas and the answer positions.
+- "Cluster Membership by Motion" no longer says the cluster is "about 2.6 kpc" away: that was the uncorrected 1 / parallax reading, and
+  the lesson now says so and quotes the measured, labelled value.
+
 ## What is not built
 
 A universal or sample-wide parallax correction; a distance from the rounded neighbourhood pack; a third Gaia sample (the

@@ -63,6 +63,8 @@
   "eclipse-curve",
   "eclipse-fit",
   "exposure-planner",
+  "gaia-distance",
+  "gaia-sample",
   "hz-limits",
   "hz-locking",
   "hz-ages",

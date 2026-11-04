@@ -1186,6 +1186,26 @@
       "loop": ["which-test-catches", "deep-and-shallow"],
       "evidenceFrom": "model"
     },
+    "how-far-and-how-sure": {
+      "centralExperimentId": "ce.how-far-and-how-sure",
+      "object": "panel:gaia-distance",
+      "control": "gaia-distance/err",
+      "quantity": "the distance at the likelihood's maximum and its 68 percent interval for a parallax and an error the student sets, and what the corrected parallax over its error supports (a distance, a lower limit with no far end, or a likelihood and no distance)",
+      "evidence": "none",
+      "test": "e2e/gaiaLesson.spec.js",
+      "loop": ["commit-to-a-distance", "read-the-distance"],
+      "evidenceFrom": "model"
+    },
+    "what-gaia-does-not-see": {
+      "centralExperimentId": "ce.what-gaia-does-not-see",
+      "object": "panel:gaia-sample",
+      "control": "gaia-sample/mag",
+      "quantity": "the stars each cut removes from NGC 2420's 993 Gaia stars, alone and in order, the stars and members left, and the cluster's distance with its statistical interval (no systematic floor, not validated against a published catalogue)",
+      "evidence": "none",
+      "test": "e2e/gaiaLesson.spec.js",
+      "loop": ["commit-to-a-cut", "read-what-is-left"],
+      "evidenceFrom": "model"
+    },
     "how-many-earths": {
       "centralExperimentId": "ce.how-many-earths",
       "object": "panel:occurrence-efficiency",

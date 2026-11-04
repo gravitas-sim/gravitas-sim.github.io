@@ -1050,6 +1050,26 @@ export const DISCOVERY = {
     },
     courseLevel: 'majors',
   },
+  'how-far-and-how-sure': {
+    audience: 'intro',
+    mathematics: 'algebra',
+    prerequisites: ['the-suns-motion'],
+    textbook: {
+      chapter: 19,
+      section: null,
+    },
+    courseLevel: 'majors',
+  },
+  'what-gaia-does-not-see': {
+    audience: 'intro',
+    mathematics: 'algebra',
+    prerequisites: ['cluster-membership', 'how-far-and-how-sure'],
+    textbook: {
+      chapter: 22,
+      section: null,
+    },
+    courseLevel: 'majors',
+  },
   'the-metallicity-term': {
     audience: 'intro',
     mathematics: 'logarithms',

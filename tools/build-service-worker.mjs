@@ -536,6 +536,11 @@ export const NEVER_PRECACHED = [
   /^images\/investigations\/how-many-earths\.webp$/,
   /^js\/data\/investigations\/(es\/|depth\/|depth\/es\/)?(how-many-earths|occurrence-sequence)\.js$/,
   /^(js\/occurrenceWidgets\.js|js\/occurrenceField\.js|js\/data\/occurrenceSurvey\.js|js\/i18n\/(en|es)\.occurrence\.js|js\/kernels\/occurrence\/.*)$/,
+  // Prompt 233 Part B: the two Gaia panels, their field module, their words and the two lessons' one closure file. The lessons
+  // are NEVER_PRECACHED (the T4 terms); the kernel (js/kernels/galactic/) is lazy with the family.
+  /^images\/investigations\/(how-far-and-how-sure|what-gaia-does-not-see)\.webp$/,
+  /^js\/data\/investigations\/(es\/|depth\/|depth\/es\/)?(how-far-and-how-sure|what-gaia-does-not-see|gaia-sequence)\.js$/,
+  /^(js\/gaiaWidgets\.js|js\/gaiaField\.js|js\/i18n\/(en|es)\.gaia\.js)$/,
   // Prompt 214: the strategy kernel, planner extension, panels and the strategy lesson's one new file (D-R10-214-06).
   /^js\/kernels\/strategy\//,
   /^js\/data\/investigations\/(es\/|depth\/|depth\/es\/)?(why-the-period-is-wrong|strategy-sequence)\.js$/,

@@ -120,6 +120,10 @@
       "en": "Getting There From Here",
       "es": "Llegar hasta allí desde aquí"
     },
+    "how-far-and-how-sure": {
+      "en": "How far, and how sure?",
+      "es": "¿A qué distancia y con cuánta seguridad?"
+    },
     "how-far-is-that-star": {
       "en": "How Far Is That Star?",
       "es": "¿A qué distancia está esa estrella?"
@@ -419,6 +423,10 @@
     "what-does-plus-minus-claim": {
       "en": "What Does ± Claim?",
       "es": "¿Qué afirma el ±?"
+    },
+    "what-gaia-does-not-see": {
+      "en": "What Gaia does not see",
+      "es": "Lo que Gaia no ve"
     },
     "what-is-a-gravitational-wave": {
       "en": "What Is a Gravitational Wave?",

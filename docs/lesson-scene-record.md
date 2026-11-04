@@ -11,15 +11,15 @@ The hand-written, human-reviewed acceptance map is
 [`lesson-acceptance.json`](lesson-acceptance.json); `npm run
 audit:scene:check` fails if it disagrees with what is generated here.
 
-Across 122 investigations and 1505 steps: 1413 steps
+Across 124 investigations and 1521 steps: 1429 steps
 declare a scene, 167 let a reader change one, 177 read the
-running integration, 996 show a prescribed model result, 161 draw
-on a stored dataset, 865 put a self-contained panel beside the text,
-387 keep something, and 58 are prose.
-Of 193 prediction loops, 193 are returned to,
-193 produce a measurement before they are answered, and
+running integration, 1012 show a prescribed model result, 161 draw
+on a stored dataset, 881 put a self-contained panel beside the text,
+389 keep something, and 58 are prose.
+Of 195 prediction loops, 195 are returned to,
+195 produce a measurement before they are answered, and
 0 end in an explanation in the reader's own words.
-193 hold their marking until the experiment settles them.
+195 hold their marking until the experiment settles them.
 
 ## Kepler's Laws (`keplers-laws`)
 
@@ -1462,6 +1462,34 @@ Of 193 prediction loops, 193 are returned to,
 - **Recovery:** wrong body: the object list names what the step staged.
 - **Scene rebuilds:** none.
 - **Accepted central experiment** (reviewed 2026-09-11): object `panel:occurrence-efficiency`, control occurrence-efficiency/radius, measures the share of transiting planets the search recovers in a synthetic survey of 2000 stars, by planet radius and orbital period: a third of the smallest at 8 to 16 days, most of them above one Earth radius, and the rate a count of listings becomes when it is divided by that completeness, evidence `none`, covered by `e2e/occurrenceLesson.spec.js`.
+
+## How far, and how sure? (`how-far-and-how-sure`)
+
+- **Steps:** 8. Scene declared on 8; a reader can change something on 0; 8 declare a scene nobody on that step can touch.
+- **Where the numbers come from:** 0 live engine, 8 prescribed model, 0 stored dataset, 8 self-contained panel.
+- **What students do:** move-an-instrument-control, press-an-instrument-preset, commit-a-prediction, record-values, choose-an-option, tick-a-checklist.
+- **Objects the steps declare:** star.
+- **Instruments:** gaia-distance.
+- **Stored data:** none.
+- **Evidence kept:** notebook-fields.
+- **Prediction loops:** commit-to-a-distance → read-the-distance, why-the-interval-leans, try-the-controls, when-it-is-too-faint, a-negative-parallax, what-you-worked-out → read-the-distance.
+- **Recovery:** wrong body: the object list names what the step staged; ambiguous result: the check says in words how close is close enough.
+- **Scene rebuilds:** none.
+- **Accepted central experiment** (reviewed 2026-09-11): object `panel:gaia-distance`, control gaia-distance/err, measures the distance at the likelihood's maximum and its 68 percent interval for a parallax and an error the student sets, and what the corrected parallax over its error supports (a distance, a lower limit with no far end, or a likelihood and no distance), evidence `none`, covered by `e2e/gaiaLesson.spec.js`.
+
+## What Gaia does not see (`what-gaia-does-not-see`)
+
+- **Steps:** 8. Scene declared on 8; a reader can change something on 0; 8 declare a scene nobody on that step can touch.
+- **Where the numbers come from:** 0 live engine, 8 prescribed model, 0 stored dataset, 8 self-contained panel.
+- **What students do:** move-an-instrument-control, press-an-instrument-preset, commit-a-prediction, record-values, choose-an-option.
+- **Objects the steps declare:** member, field.
+- **Instruments:** gaia-sample.
+- **Stored data:** none.
+- **Evidence kept:** notebook-fields.
+- **Prediction loops:** commit-to-a-cut → read-what-is-left, which-stars-go, a-cut-on-parallax-over-error, the-distance-moves, not-gaias-selection, what-you-worked-out → read-what-is-left.
+- **Recovery:** wrong body: the object list names what the step staged; ambiguous result: the check says in words how close is close enough.
+- **Scene rebuilds:** none.
+- **Accepted central experiment** (reviewed 2026-09-11): object `panel:gaia-sample`, control gaia-sample/mag, measures the stars each cut removes from NGC 2420's 993 Gaia stars, alone and in order, the stars and members left, and the cluster's distance with its statistical interval (no systematic floor, not validated against a published catalogue), evidence `none`, covered by `e2e/gaiaLesson.spec.js`.
 
 ## The Metallicity Term (`the-metallicity-term`)
 

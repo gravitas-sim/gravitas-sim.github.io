@@ -115,6 +115,12 @@ export default {
     'Qué dicen los datos antes de ponerles un modelo, y cuánto mueve la respuesta un supuesto cambiado (la V del Sol, la ponderación, el halo).',
     'Mediciones reales con dispersión real; los modelos son simples y se declaran, y una pertenencia es una probabilidad, no una etiqueta.',
   ],
+  gaia: [
+    'O la verosimilitud de cada distancia para una paralaje y su error (distancia en horizontal, verosimilitud relativa en vertical), o las estrellas de NGC 2420 como las midió Gaia: un diagrama color-magnitud, o las velocidades de los miembros en km/s.',
+    'El máximo de la verosimilitud es 1 ÷ la paralaje corregida y su anchura es el error: una curva ancha y abierta por el lado lejano significa que la paralaje da un límite inferior, no una distancia. Un corte quita las estrellas que no lo cumplen, y el diagrama y la distancia cambian con las que quedan.',
+    'La distancia con su intervalo y lo que le hacen la previa o el punto cero; cuántas estrellas quita cada corte, y cómo se mueven los colores y magnitudes que quedan y la distancia del cúmulo.',
+    'Un corte cambia qué estrellas se cuentan, y con ellas cualquier previa; no es un modelo de la selección real de Gaia. El intervalo es solo estadístico: sin suelo sistemático, y la distancia del cúmulo no está validada con la de un catálogo publicado.',
+  ],
   interiors: [
     'El interior de una estrella del centro a la superficie: densidad, presión, temperatura y la masa dentro de cada radio; la masa y el radio de las enanas blancas; o luminosidad, radio y vida frente a la masa en estrellas modelo.',
     'Cómo cambian el perfil, los valores centrales, la masa de la enana blanca y los exponentes ajustados al cambiar el índice politrópico, la masa, el radio, la densidad central, la composición y la física de la escala.',

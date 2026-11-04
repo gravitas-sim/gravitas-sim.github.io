@@ -2,12 +2,12 @@
 export default {
   steps: [
     {
-      title: 'La distancia a mano',
-      body: 'Una estrella cuyo paralaje es p milisegundos de arco está a 1 ÷ p kiloparsecs. El paralaje medio de los miembros es 0,385&nbsp;mas.',
-      prompt: 'La distancia',
+      title: 'El inverso a mano',
+      body: 'Una estrella cuyo paralaje es p milisegundos de arco está a 1 ÷ p kiloparsecs. El paralaje medio de los miembros es 0,385&nbsp;mas, y la lectura del instrumento es su inverso, sin corregir por el punto cero.',
+      prompt: 'El inverso',
       hints: ['Divide 1 entre 0,385.'],
       worked:
-        '1 ÷ 0,385 = 2,60 kpc. Una estrella a 1 kpc tiene un paralaje de 1 mas; el de este cúmulo es un poco más de un tercio de eso.',
+        '1 ÷ 0,385 = 2,60 kpc. Una estrella a 1 kpc tiene un paralaje de 1 mas; el de este cúmulo es un poco más de un tercio de eso. Es la lectura sin corregir, no la distancia del cúmulo: la medición del panel de astrometría con punto cero es 2,324 kpc.',
       feedback: {
         close: 'Casi. La distancia es el inverso del paralaje.',
         'wrong-order-of-magnitude':
@@ -17,11 +17,11 @@ export default {
     },
     {
       title: 'Qué rápido se mueven los miembros entre sí',
-      body: 'La fila «Dispersión del cúmulo en movimiento propio» dice cuánto difieren los miembros entre sí: 0,081&nbsp;mas/año, antes de los errores. Un movimiento propio μ en mas/año a una distancia d en kpc es una rapidez de 4,74 × μ × d en km/s. Usa d = 2,6&nbsp;kpc.',
+      body: 'La fila «Dispersión del cúmulo en movimiento propio» dice cuánto difieren los miembros entre sí: 0,081&nbsp;mas/año, antes de los errores. Un movimiento propio μ en mas/año a una distancia d en kpc es una rapidez de 4,74 × μ × d en km/s. Usa d = 2,6&nbsp;kpc, la lectura sin corregir.',
       prompt: 'La dispersión de rapidez de los miembros a través del cielo',
       hints: ['Multiplica 4,74 por 0,081 y por 2,6.'],
       worked:
-        '4,74 × 0,081 × 2,6 = 1,0 km/s. Las estrellas de un cúmulo viejo se agitan entre sí a cerca de un kilómetro por segundo, poco frente a los 20 o más km/s de la dispersión del campo.',
+        '4,74 × 0,081 × 2,6 = 1,0 km/s (0,9 con los 2,324 kpc medidos). Las estrellas de un cúmulo viejo se agitan entre sí a cerca de un kilómetro por segundo, poco frente a los 20 o más km/s de la dispersión del campo.',
       feedback: {
         close: 'Casi. El factor es 4,74 × μ × d.',
         off: 'Rapidez = 4,74 × μ × d, con μ = 0,081 mas/año y d = 2,6 kpc.',

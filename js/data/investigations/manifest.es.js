@@ -1318,6 +1318,32 @@ export const MANIFEST = [
     objectiveCount: 4,
   },
   {
+    id: 'how-far-and-how-sure',
+    title: '¿A qué distancia y con cuánta seguridad?',
+    subtitle:
+      'Una paralaje mide uno entre la distancia, con un error: dibuja la verosimilitud, mira cuándo da una distancia y cuándo solo un límite, y qué hacen una distribución previa y un punto cero',
+    duration: '8-12 min',
+    level: 'Introductory astronomy',
+    thumbnail: 'images/investigations/how-far-and-how-sure.webp',
+    depths: 3,
+    stepCount: 8,
+    gradedCount: 5,
+    objectiveCount: 4,
+  },
+  {
+    id: 'what-gaia-does-not-see',
+    title: 'Lo que Gaia no ve',
+    subtitle:
+      'Los cortes de magnitud, paralaje sobre error y RUWE deciden qué estrellas contiene una muestra de Gaia: mira cómo cambian el diagrama color-magnitud y la distancia del cúmulo al quitar estrellas',
+    duration: '8-12 min',
+    level: 'Introductory astronomy',
+    thumbnail: 'images/investigations/what-gaia-does-not-see.webp',
+    depths: 3,
+    stepCount: 8,
+    gradedCount: 6,
+    objectiveCount: 4,
+  },
+  {
     id: 'the-metallicity-term',
     title: 'El término de metalicidad',
     subtitle:

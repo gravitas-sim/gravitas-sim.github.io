@@ -279,6 +279,8 @@ export const SEQUENCES = [
     [
       ['the-suns-motion', 'core'],
       ['the-rotating-disk', 'core', ['the-suns-motion']],
+      ['how-far-and-how-sure', 'core', ['the-suns-motion']],
+      ['what-gaia-does-not-see', 'core', ['how-far-and-how-sure']],
       ['missing-mass', 'quantitative'],
       ['bending-light', 'core'],
       ['einstein-rings-and-arcs', 'core', ['bending-light']],

@@ -1942,6 +1942,10 @@ export const EN_DEFERRED = {
     'Start here: the Sun’s own motion through the Galaxy, from the stars around it.',
   'inv.seq.galaxies.the-rotating-disk':
     'How the whole disk turns, and why the rotation curve is not what the visible matter predicts.',
+  'inv.seq.galaxies.how-far-and-how-sure':
+    'What a Gaia parallax supports: a likelihood of the distance, its interval, a lower limit or nothing when the parallax is weak, and what a prior and the zero point add.',
+  'inv.seq.galaxies.what-gaia-does-not-see':
+    'A Gaia sample is the stars that passed its cuts: what each cut removes from NGC 2420, how the diagram changes shape, and how the cluster’s distance moves.',
   'inv.seq.galaxies.missing-mass':
     'The rotation curve turned into a mass: the evidence for dark matter, with real galaxies.',
   'inv.seq.galaxies.bending-light':

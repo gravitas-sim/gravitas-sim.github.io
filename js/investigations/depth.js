@@ -189,6 +189,10 @@ const EXTENSIONS = {
     import('../data/investigations/depth/from-star-to-remnant.js'),
   'planet-or-not': () =>
     import('../data/investigations/depth/planet-or-not.js'),
+  'how-far-and-how-sure': () =>
+    import('../data/investigations/depth/how-far-and-how-sure.js'),
+  'what-gaia-does-not-see': () =>
+    import('../data/investigations/depth/what-gaia-does-not-see.js'),
   'why-we-cannot-see-earth': () =>
     import('../data/investigations/depth/why-we-cannot-see-earth.js'),
   architectures: () => import('../data/investigations/depth/architectures.js'),
@@ -368,6 +372,10 @@ const WORDS = {
       import('../data/investigations/depth/es/from-star-to-remnant.js'),
     'planet-or-not': () =>
       import('../data/investigations/depth/es/planet-or-not.js'),
+    'how-far-and-how-sure': () =>
+      import('../data/investigations/depth/es/how-far-and-how-sure.js'),
+    'what-gaia-does-not-see': () =>
+      import('../data/investigations/depth/es/what-gaia-does-not-see.js'),
     'why-we-cannot-see-earth': () =>
       import('../data/investigations/depth/es/why-we-cannot-see-earth.js'),
     architectures: () =>
