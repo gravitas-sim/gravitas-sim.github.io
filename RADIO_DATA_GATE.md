@@ -133,7 +133,9 @@ read. Phase 2 (this commit): the readings (section 9), the verdict table (sectio
 242 (section 11) and what would convert a C that is only a lack of evidence (section 12). Sections 1 to 7 are
 unchanged. **Nothing ships from this prompt.** The verdicts rest on terms pages only: no data body and no file header
 was retrieved, so every rule 8 fact (velocity frame, beam, channel frequencies, columns) is unverified for every
-source, and the identification of an exact product (rule 1) is complete for one source only.
+source, and the identification of an exact product (rule 1) is complete for one source only. The eleven C
+verdicts that rest only on lack of evidence are not final declines: they reopen as a re-gate under these same rules
+when the pages of section 12 are retrieved (section 10.0).
 
 ## 9. The readings
 
@@ -293,6 +295,29 @@ section 2. Retrieval dates are those of section 9.1.
 
 Verdict counts: A 0, B 1 (row 16), C 15 (11 for lack of evidence, 2 for terms read, 2 because no such product or
 consumer exists). Nothing is A.
+
+### 10.0 Which C verdicts are final and which reopen
+
+The fifteen C verdicts are of three kinds, and only one kind is a decline of the source.
+
+- **Eleven C verdicts rest only on lack of evidence and are not final declines** (rows 01, 03, 04, 05, 06, 07, 08, 09,
+  10, 14 and 15). The pages that would decide them were not retrieved, or were retrieved without a terms layer: CDS
+  and VizieR were unreachable when Carl's main session fetched on 2026-11-03 (local; 2026-11-04 UTC), and the
+  other pages named in section 12 were never saved. Nothing read for these sources states a term that fails a basis;
+  the rules simply do not let an unread layer count (rule 5). Each of these **reopens as a re-gate when the missing
+  pages are retrieved**: the same committed rules (section 3), the same bases (section 2) and the same verdict
+  definitions apply, the new readings are recorded as a new section with their retrieval dates and SHA-256, and the
+  row's verdict is replaced by a new register row that names the old one. No rule, basis or threshold is changed to
+  admit them. What to retrieve, source by source, is section 12.
+- **Two C verdicts rest on terms actually read** (rows 02 and 13): the LAMBDA HI4PI page's permission for "scientific
+  and educational purposes" and the CSIRO property and copyright terms that the ATNF catalogue falls under. They are
+  declines on the evidence in hand. They would change only if a layer not yet read states a basis of section 2 and
+  no read layer contradicts it (rule 2: the strictest governs), or if Carl adds a mechanism or records a permission as
+  its own decision.
+- **Two C verdicts say there is no such product or consumer** (rows 11 and 12): the NANOGrav record holds no
+  frequency-by-time series, and a single cited period and DM has no use while every dispersed-series row is C. They
+  are not about rights, and they change only with a different product (a different record, section 12 item 10) or
+  with a dispersed-series row that reaches A or B.
 
 ### 10.1 What row 16 would ship, and under what words
 
