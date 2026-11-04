@@ -70,6 +70,8 @@ beforeEach(() => {
 });
 
 afterEach(() => {
+  // A dialog left open would go on making whatever the next test mounts inert.
+  closeDialog($('box'));
   document.body.innerHTML = '';
   if (offsetParent) {
     Object.defineProperty(HTMLElement.prototype, 'offsetParent', offsetParent);
@@ -165,6 +167,57 @@ describe('isolate', () => {
     open();
     closeDialog($('box'));
     expect(document.activeElement).toBe($('trigger'));
+  });
+
+  // D-R10-228-07. The lesson's panel is mounted from a fragment the first time
+  // a lesson opens, which can be after a modal is open. It arrived as a new
+  // child of <body>, missed by the walk above, and was live behind the dialog:
+  // focusable, and one focus() from the code that mounted it away from it.
+  const mountLate = () => {
+    const late = document.createElement('aside');
+    late.id = 'late';
+    late.innerHTML = '<h2 id="lateTitle" tabindex="-1">Lesson</h2>';
+    document.body.append(late);
+    return late;
+  };
+  const afterObserver = () => new Promise(resolve => setTimeout(resolve));
+
+  test('and so is markup mounted after it opened, which arrives inert', async () => {
+    open();
+    const late = mountLate();
+    await afterObserver();
+    expect(late.hasAttribute('inert')).toBe(true);
+    expect(late.getAttribute('aria-hidden')).toBe('true');
+  });
+
+  test('a late arrival is released with the rest when the dialog closes', async () => {
+    open();
+    const late = mountLate();
+    await afterObserver();
+    closeDialog($('box'));
+    expect(late.hasAttribute('inert')).toBe(false);
+    expect(late.hasAttribute('aria-hidden')).toBe(false);
+  });
+
+  test("markup that arrives after it closed is nobody's to make inert", async () => {
+    open();
+    closeDialog($('box'));
+    const late = mountLate();
+    await afterObserver();
+    expect(late.hasAttribute('inert')).toBe(false);
+  });
+
+  test('a late live region is heard, and a late node already inert stays so', async () => {
+    open();
+    const status = document.createElement('p');
+    status.setAttribute('role', 'status');
+    const closed = document.createElement('div');
+    closed.setAttribute('inert', '');
+    document.body.append(status, closed);
+    await afterObserver();
+    expect(status.hasAttribute('inert')).toBe(false);
+    closeDialog($('box'));
+    expect(closed.hasAttribute('inert')).toBe(true);
   });
 
   test('is not the default: precise placement keeps the world in reach', () => {

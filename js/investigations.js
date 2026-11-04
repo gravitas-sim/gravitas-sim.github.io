@@ -2424,10 +2424,10 @@ export async function openInvestigation(id, opts = {}) {
     : inv.subtitle;
   document.body.classList.add('investigation-open');
   closeBrowser({ restoreFocus: false });
-  // Focus follows the choice into the panel. Without this, closing the browser
-  // destroys the focused card and drops a keyboard user at the top of the
-  // document, with the lesson they just started somewhere below them.
-  els.title.focus?.();
+  // Focus follows the choice (closing the browser destroys the focused card),
+  // but never out of an open modal: D-R10-228-08.
+  if (!document.activeElement?.closest?.('[aria-modal="true"]'))
+    els.title.focus?.();
   // A scenario introduction card left over from before the lesson opened lands
   // squarely on top of the instrument panel. New ones are suppressed for the
   // duration; this dismisses the one that may already be up.
