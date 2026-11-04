@@ -21,8 +21,40 @@ const LESSON = 'lives-of-stars';
 const STEPS = MANIFEST.find(i => i.id === LESSON).stepCount;
 
 /** Open the lesson through the interface, the way a student does. */
-async function openLesson(page, app, { locale, narrow = false } = {}) {
+async function openLesson(
+  page,
+  app,
+  { locale, narrow = false, resumeAt = 1 } = {}
+) {
   await app.boot();
+  if (resumeAt > 1) {
+    // Saved progress is what a student who left and came back has, and the
+    // card resumes there, so a long lesson can be entered mid-way without
+    // answering every step before it. Written after boot, never from an init
+    // script, which would run again on every reload.
+    await page.evaluate(
+      async ([lesson, step]) => {
+        const reg = await import('/js/data/investigations/registry.js');
+        const { writeProgress } =
+          await import('/js/investigations/progressSchema.js');
+        const inv = await reg.loadInvestigation(lesson);
+        localStorage.setItem(
+          `gravitas_investigation_${lesson}`,
+          JSON.stringify(
+            writeProgress({
+              lesson,
+              responses: {},
+              attempts: {},
+              visited: [],
+              stepSid: inv.steps[step - 1].sid,
+              startedAt: Date.now(),
+            })
+          )
+        );
+      },
+      [LESSON, resumeAt]
+    );
+  }
   if (locale) {
     await page.evaluate(async id => {
       const i18n = await import('/js/i18n/index.js');
@@ -172,36 +204,48 @@ test.describe('the lesson is reachable and complete', () => {
     await expect(card).toContainText(String(STEPS));
   });
 
-  test('every step draws an instrument and a readout with no placeholders', async ({
-    page,
-    app,
-  }) => {
-    test.slow();
-    await openLesson(page, app);
-    expect(await stepTotal(page)).toBe(STEPS);
-    const errors = [];
-    page.on('pageerror', e => errors.push(String(e.message)));
+  // The walk is split into windows of a few steps, each its own test, because
+  // one test of every step checked outlasted its timeout on a loaded
+  // machine. A window enters the lesson at its first step through saved
+  // progress, as a student returning to it would, then answers its way
+  // through the rest as the single walk did. Every step is checked by exactly
+  // one window with every assertion the one walk had, and the window's own
+  // first screen is checked to be the one it asked for.
+  const WINDOW = 6;
+  for (let first = 1; first <= STEPS; first += WINDOW) {
+    const last = Math.min(first + WINDOW - 1, STEPS);
+    test(`every step draws an instrument and a readout with no placeholders, steps ${first} to ${last}`, async ({
+      page,
+      app,
+    }) => {
+      test.slow();
+      const errors = [];
+      page.on('pageerror', e => errors.push(String(e.message)));
+      await openLesson(page, app, { resumeAt: first });
+      expect(await stepTotal(page)).toBe(STEPS);
+      expect(await stepNumber(page)).toBe(first);
 
-    for (let step = 1; step <= STEPS; step++) {
-      await expect(page.locator('.inv-step-title')).not.toBeEmpty();
-      await instrumentDrawn(page);
-      const canvas = page.locator('#investigationToolCanvas');
-      await expect(canvas).toBeVisible();
-      expect(await canvas.evaluate(c => c.width)).toBeGreaterThan(10);
+      for (let step = first; step <= last; step++) {
+        await expect(page.locator('.inv-step-title')).not.toBeEmpty();
+        await instrumentDrawn(page);
+        const canvas = page.locator('#investigationToolCanvas');
+        await expect(canvas).toBeVisible();
+        expect(await canvas.evaluate(c => c.width)).toBeGreaterThan(10);
 
-      const readout = page.locator('#investigationToolReadout');
-      await expect(readout).toBeVisible();
-      const text = await readout.innerText();
-      expect(text.length).toBeGreaterThan(10);
-      expect(text).not.toMatch(
-        /stelE\.|stelW\.|stellar\.|NaN|undefined|\{[a-z]+\}/
-      );
+        const readout = page.locator('#investigationToolReadout');
+        await expect(readout).toBeVisible();
+        const text = await readout.innerText();
+        expect(text.length).toBeGreaterThan(10);
+        expect(text).not.toMatch(
+          /stelE\.|stelW\.|stellar\.|NaN|undefined|\{[a-z]+\}/
+        );
 
-      if (step < STEPS) await answerAndAdvance(page, step);
-    }
-    expect(await stepNumber(page)).toBe(STEPS);
-    expect(errors).toEqual([]);
-  });
+        if (step < last) await answerAndAdvance(page, step);
+      }
+      expect(await stepNumber(page)).toBe(last);
+      expect(errors).toEqual([]);
+    });
+  }
 });
 
 test.describe('the playback behaves under a student', () => {
