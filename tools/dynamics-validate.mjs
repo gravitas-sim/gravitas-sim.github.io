@@ -734,7 +734,9 @@ rows.sort((a, b) => order.indexOf(a.id) - order.indexOf(b.id));
 
 function verdictOf() {
   const get = id => rows.find(r => r.id === id)?.status;
-  const refOk = ['R1', 'R2', 'R3', 'R4', 'R5', 'R6', 'R7'].every(
+  // thresholds.json, verdict.C names R1 to R6; R7 was added by amendment AM2 without amending the rule, so
+  // it is recorded and, when it fails, labelled, and does not enter the verdict (DYNAMICS_REFERENCE_GATE.md).
+  const refOk = ['R1', 'R2', 'R3', 'R4', 'R5', 'R6'].every(
     id => get(id) === 'pass'
   );
   const gate = ['G1', 'G2', 'G3', 'G4', 'G5', 'G6', 'G7'];
