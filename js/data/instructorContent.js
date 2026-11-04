@@ -5038,8 +5038,7 @@ export const INSTRUCTOR_CONTENT = {
     teachingNotes: [
       'The rotation curve is the R0 = 8.3 kpc, V0 = 244 km/s set of Bhattacharjee et al. 2014 Table 2, disk-region points from 2 to 25 kpc, with errors floored at 3 km/s. The data package carries two other sets; the instrument uses one and says so (D-GAIA-02: cited by region, not by point).',
       'The Sun’s distance 8.3 kpc is an assumption in the circular speed from the Oort constants, stated on screen.',
-      'The unweighted Oort fit is shown on purpose: A about −1.9 ± 13.2, B about −7.9 ± 9.3. It is a investigation in why a fit needs the right weights, not a second result.',
-      'The fit carries the factor cos b (the in-plane distance over the distance): the velocity along l of a rotating disk is d cos b (A cos 2l + B). Earlier editions left it out and read A 13.5, B −13.7 and a circular speed of 226 km/s: low by about the sample’s mean cos b (0.85) for a noise-free disk, and on these stars A by 7 percent, B by 10 percent and the speed by 8 percent; the corrected values are 14.5, −15.2 and 247 km/s (Prompt 235, KINEMATICS_GATE.md).',
+      'The unweighted Oort fit is shown on purpose: A about −1.9 ± 13.2, B about −7.9 ± 9.3. It is a investigation in why a fit needs the right weights, not a second result. The fit carries the factor cos b (the in-plane distance over the distance): the velocity along l of a rotating disk is d cos b (A cos 2l + B). Earlier editions left it out and read A 13.5, B −13.7 and a circular speed of 226 km/s: low by about the sample’s mean cos b (0.85) for a noise-free disk, and on these stars A by 7 percent, B by 10 percent and the speed by 8 percent; the corrected values are 14.5, −15.2 and 247 km/s (Prompt 235, KINEMATICS_GATE.md).',
       'The model fit is Nelder-Mead with several starts in the galactic kernel; the best-fit values the investigation quotes are deterministic.',
     ],
     discussion: [
