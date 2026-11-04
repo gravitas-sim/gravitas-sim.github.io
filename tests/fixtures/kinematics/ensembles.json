@@ -388,6 +388,266 @@
    ],
    "note": "synthetic truth, labelled; the intrinsic line-of-sight sigma is the pooled value of the bin before the window, with each star drawn from the population conditional on being outside its window"
   },
+  "T:T1": {
+   "kind": "synthetic three-population (thin, thick, halo) sample on the real pack geometry",
+   "seed": 235001,
+   "stream": "235001:T.T1",
+   "label": "T.T1",
+   "stars": 1570,
+   "counts": {
+    "thin": 1339,
+    "thick": 226,
+    "halo": 5
+   },
+   "noise": false,
+   "truth": {
+    "disk": {
+     "R0": 8,
+     "unitR0": "kpc",
+     "V0": 220,
+     "unitV": "km/s",
+     "slope": -2,
+     "unitSlope": "km/s/kpc",
+     "curve": "V(R) = V0 + slope (R - R0), a straight line in R",
+     "A": 14.75,
+     "B": -12.75,
+     "relations": "A = (V0/R0 - slope)/2, B = -(V0/R0 + slope)/2"
+    },
+    "sunPeculiar": {
+     "U": 10,
+     "V": 13,
+     "W": 7,
+     "unit": "km/s",
+     "frame": "relative to the local standard of rest of the synthetic disk (a circular orbit at R0)"
+    },
+    "populations": {
+     "thin": {
+      "sigma": [
+       35,
+       25,
+       17
+      ],
+      "lag": 15,
+      "fraction": 0.85
+     },
+     "thick": {
+      "sigma": [
+       65,
+       48,
+       40
+      ],
+      "lag": 45,
+      "fraction": 0.145
+     },
+     "halo": {
+      "sigma": [
+       140,
+       100,
+       95
+      ],
+      "meanAzimuthalVelocity": 0,
+      "fraction": 0.005
+     },
+     "note": "committed for the legs that cannot run until a thresholds source is supplied (T1 to T3); not used by any other leg"
+    }
+   },
+   "note": "synthetic truth, labelled; no published value"
+  },
+  "T:T2:0": {
+   "kind": "synthetic three-population (thin, thick, halo) sample on the real pack geometry",
+   "seed": 235001,
+   "stream": "235001:T.T2:0",
+   "label": "T.T2:0",
+   "stars": 1570,
+   "counts": {
+    "thin": 1332,
+    "thick": 234,
+    "halo": 4
+   },
+   "noise": true,
+   "truth": {
+    "disk": {
+     "R0": 8,
+     "unitR0": "kpc",
+     "V0": 220,
+     "unitV": "km/s",
+     "slope": -2,
+     "unitSlope": "km/s/kpc",
+     "curve": "V(R) = V0 + slope (R - R0), a straight line in R",
+     "A": 14.75,
+     "B": -12.75,
+     "relations": "A = (V0/R0 - slope)/2, B = -(V0/R0 + slope)/2"
+    },
+    "sunPeculiar": {
+     "U": 10,
+     "V": 13,
+     "W": 7,
+     "unit": "km/s",
+     "frame": "relative to the local standard of rest of the synthetic disk (a circular orbit at R0)"
+    },
+    "populations": {
+     "thin": {
+      "sigma": [
+       35,
+       25,
+       17
+      ],
+      "lag": 15,
+      "fraction": 0.85
+     },
+     "thick": {
+      "sigma": [
+       65,
+       48,
+       40
+      ],
+      "lag": 45,
+      "fraction": 0.145
+     },
+     "halo": {
+      "sigma": [
+       140,
+       100,
+       95
+      ],
+      "meanAzimuthalVelocity": 0,
+      "fraction": 0.005
+     },
+     "note": "committed for the legs that cannot run until a thresholds source is supplied (T1 to T3); not used by any other leg"
+    }
+   },
+   "note": "synthetic truth, labelled; no published value"
+  },
+  "T:T2:1": {
+   "kind": "synthetic three-population (thin, thick, halo) sample on the real pack geometry",
+   "seed": 235001,
+   "stream": "235001:T.T2:1",
+   "label": "T.T2:1",
+   "stars": 1570,
+   "counts": {
+    "thin": 1349,
+    "thick": 213,
+    "halo": 8
+   },
+   "noise": true,
+   "truth": {
+    "disk": {
+     "R0": 8,
+     "unitR0": "kpc",
+     "V0": 220,
+     "unitV": "km/s",
+     "slope": -2,
+     "unitSlope": "km/s/kpc",
+     "curve": "V(R) = V0 + slope (R - R0), a straight line in R",
+     "A": 14.75,
+     "B": -12.75,
+     "relations": "A = (V0/R0 - slope)/2, B = -(V0/R0 + slope)/2"
+    },
+    "sunPeculiar": {
+     "U": 10,
+     "V": 13,
+     "W": 7,
+     "unit": "km/s",
+     "frame": "relative to the local standard of rest of the synthetic disk (a circular orbit at R0)"
+    },
+    "populations": {
+     "thin": {
+      "sigma": [
+       35,
+       25,
+       17
+      ],
+      "lag": 15,
+      "fraction": 0.85
+     },
+     "thick": {
+      "sigma": [
+       65,
+       48,
+       40
+      ],
+      "lag": 45,
+      "fraction": 0.145
+     },
+     "halo": {
+      "sigma": [
+       140,
+       100,
+       95
+      ],
+      "meanAzimuthalVelocity": 0,
+      "fraction": 0.005
+     },
+     "note": "committed for the legs that cannot run until a thresholds source is supplied (T1 to T3); not used by any other leg"
+    }
+   },
+   "note": "synthetic truth, labelled; no published value"
+  },
+  "T:T2:2": {
+   "kind": "synthetic three-population (thin, thick, halo) sample on the real pack geometry",
+   "seed": 235001,
+   "stream": "235001:T.T2:2",
+   "label": "T.T2:2",
+   "stars": 1570,
+   "counts": {
+    "thin": 1359,
+    "thick": 203,
+    "halo": 8
+   },
+   "noise": true,
+   "truth": {
+    "disk": {
+     "R0": 8,
+     "unitR0": "kpc",
+     "V0": 220,
+     "unitV": "km/s",
+     "slope": -2,
+     "unitSlope": "km/s/kpc",
+     "curve": "V(R) = V0 + slope (R - R0), a straight line in R",
+     "A": 14.75,
+     "B": -12.75,
+     "relations": "A = (V0/R0 - slope)/2, B = -(V0/R0 + slope)/2"
+    },
+    "sunPeculiar": {
+     "U": 10,
+     "V": 13,
+     "W": 7,
+     "unit": "km/s",
+     "frame": "relative to the local standard of rest of the synthetic disk (a circular orbit at R0)"
+    },
+    "populations": {
+     "thin": {
+      "sigma": [
+       35,
+       25,
+       17
+      ],
+      "lag": 15,
+      "fraction": 0.85
+     },
+     "thick": {
+      "sigma": [
+       65,
+       48,
+       40
+      ],
+      "lag": 45,
+      "fraction": 0.145
+     },
+     "halo": {
+      "sigma": [
+       140,
+       100,
+       95
+      ],
+      "meanAzimuthalVelocity": 0,
+      "fraction": 0.005
+     },
+     "note": "committed for the legs that cannot run until a thresholds source is supplied (T1 to T3); not used by any other leg"
+    }
+   },
+   "note": "synthetic truth, labelled; no published value"
+  },
   "S:0": {
    "kind": "synthetic neighbourhood on the real pack geometry",
    "seed": 235003,
