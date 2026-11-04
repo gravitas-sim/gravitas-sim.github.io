@@ -104,7 +104,7 @@ committed bin size (15) admitted the bin. The real sample, reported and not a fi
 the 70/30 mixture leg reports a Gaussian estimate of 110.7 against a pooled truth of 118.0, which is what a bin of
 a real sample is.
 
-**T, Toomre diagram and disk-halo separation: C, NOT RUN.** The thresholds a cited separation needs are not in the
+**T, Toomre diagram and disk-halo separation: C, NOT RUN** (superseded for leg T by the addendum at the end of this file, which gives the run; the verdict is still C). The thresholds a cited separation needs are not in the
 repository and no value is typed from memory: `tests/fixtures/kinematics/disk-halo-source.json` was not supplied,
 so legs T1 to T3 are NOT RUN and the committed function gives C. (Under C no Toomre kernel is built.)
 
@@ -127,6 +127,8 @@ the line-of-sight-only dispersion of one sight line, the cluster's hole, and tha
 thresholds somebody published. No closure file, ceiling or budget changes, so there is no size figure to approve.
 
 ## What to fetch
+
+(Done on 2026-11-04: see the addendum at the end.)
 
 For the Toomre diagram and disk-halo separation (leg T) one file, supplied by Carl, `tests/fixtures/kinematics/disk-halo-source.json`:
 for each class (thin disk, thick disk, halo) the published criterion in total space velocity or Toomre-diagram
@@ -162,3 +164,94 @@ Binney and Tremaine (2008), Galactic Dynamics, section 4.8.2 (the stated lag rel
 `js/kernels/galactic/motion.js`); Bovy (2017) as GALACTIC_DYNAMICS.md records it; Schonrich, Binney and Dehnen (2010)
 as D-GAIA-03 records it; Gaia DR3 (CC BY-NC 3.0 IGO, D-GAIA-01) and SDSS DR18 SEGUE (public domain) through the
 packs already in the tree. Nothing was fetched for this prompt.
+
+## Addendum, 2026-11-04: the T legs run
+
+**What changed.** The thresholds source the gate lacked is now in the tree: `tests/fixtures/kinematics/disk-halo-source.json`,
+transcribed by Carl from two papers (Venn et al. 2004, Table 3; Bensby et al. 2014, Section 2 and Table A.1) and checked
+here against the extracted text of both PDFs (the check and its two additions are in the file's `verification` block).
+Legs T1 to T3 are therefore no longer NOT RUN; their results are below. **The verdicts of methods O, D and S are
+unchanged and no bound, threshold, tolerance or the verdict function was touched**: `thresholds.json` is byte-identical
+(sha256 4abb971f...), so `results.json` still names it. The Part A verdicts above stay as they were written; this
+addendum supersedes only the paragraph "T ... C, NOT RUN" and the sentence "All four verdicts are C" is replaced by the
+verdict stated in the Results subsection of this addendum.
+
+**Retrieval facts** (2026-11-04, by Carl, from arXiv; the PDFs are not committed). Venn et al. 2004, AJ 128, 1177,
+arXiv:astro-ph/0406120v1, `https://arxiv.org/pdf/astro-ph/0406120`, sha256
+`4b2228f22d7a55e86cfd6db7efc53fa13fa5606a3f5f312347443285d11554c9`. Bensby, Feltzing and Oey 2014, A&A 562, A71,
+arXiv:1309.2631v2, `https://arxiv.org/pdf/1309.2631`, sha256
+`fcea82d7e24559d713157cfe3d0e77cf7b0d0840d08d455f3c25018605635d42`.
+
+**How the committed legs are evaluated (written and committed before any T leg was run).** The committed legs say
+"the cited rule", and the file cites two rules in two velocity frames, so the procedure below was fixed first. It adds
+no bound: the bounds are the committed ones (T1 maxAbs 1e-9; T2 halo recall at least 0.80 and purity at least 0.50 over
+200 realizations; T3 none).
+
+- *Rule V (Venn Table 3).* In the Galactic rest frame (the Sun at the paper's (9, 232, 7) km/s) a star goes to the
+  class with the largest product of three independent normal densities, centres and sigmas from Table 3, under a
+  uniform prior (the paper's stated prior). The paper's extreme-retrograde and extreme-Toomre flags are not used (the
+  file says the table is the criterion). Toomre coordinates: V and T = sqrt(U^2 + W^2).
+- *Rule B (Bensby Eq. A.1 to A.3).* In the LSR frame (the Sun at the paper's (11.10, 12.24, 7.25) km/s) each class
+  has the Gaussian of Eq. A.1 centred on (Uasym, Vasym, 0) with its sigmas, weighted by its fraction X; the ratios
+  TD/D and TD/H are those of Eq. A.3. Halo is TD/H < 1 as the file states it (the paper's 36 halo stars are a
+  subset of its TD/D > 2 stars; the count of stars where the two readings differ is reported); thick TD/D > 2 and not
+  halo; thin TD/D < 0.5; otherwise in between. A rule is applied only in its own frame.
+- *T1* (exact, set S): noise-free stars on the neighbourhood pack's geometry (all 1,570 rows) with velocities drawn
+  from the committed three-population truth, each star's constructed velocity recorded; observables are formed, the
+  space velocity recovered by the kernel's `spaceVelocity` and referred to each frame with the constructed Sun; the
+  leg passes if the Toomre coordinates (V, T) in both frames differ from the constructed ones by at most 1e-9 km/s.
+- *T2* (ensemble, set S): 200 realizations of the same sample with the pack's own astrometric and radial-velocity
+  errors, each star one of thin, thick or halo with the committed fractions; each rule applied in its own frame with
+  its paper's Sun; halo recall and purity pooled over the 200 realizations. The leg passes only if **every** cited
+  rule meets both bounds (a crossed bound is a failed leg; there is no choosing between the two rules after the
+  fact). The per-rule numbers are reported either way.
+- *T3* (authentic, set R, no bound in the contract): the same two rules on the real neighbourhood pack, the count of each
+  class and its Poisson (Garwood) interval at one sigma and at 95 percent; rule B is also run with D-GAIA-03's other
+  candidate for the Sun's V (the sample's Stromberg value) and neither is chosen. With no bound committed, the only
+  criterion the definition contains is that it runs and the counts account for every star, which is what a pass means
+  here.
+- *Verdict.* The committed function: C if any S leg fails or is NOT RUN, B if the S legs pass and an R leg fails,
+  A otherwise.
+
+**Results.** One gate stream, re-run on Node 22.23.4 in about twelve seconds, on `spike/kinematics-gate-t-legs`
+(`4d6ab8a4`, never merged; it adds `js/kernels/galactic/toomre.js`, the generator `syntheticToomre` and the T block of
+`tools/kinematics-validate.mjs`, all committed before the run, and nothing else). Two runs give byte-identical
+`results.json`. The file now holds **66 rows: 39 pass, 23 fail, 4 REPORTED, 0 NOT RUN**; the 63 rows of methods O, D
+and S are byte-identical to the Part A run, and so are their verdicts.
+
+| Leg | Status | Measured |
+|---|---|---|
+| T1 Toomre coordinates of constructed stars exact (S) | pass | largest difference 8.5e-14 km/s over 1,570 stars, both frames, against 1e-9 |
+| T2 halo recall at least 0.80 and purity at least 0.50, 200 realizations (S) | **fail** | rule V (Venn, rest frame): recall 0.921, **purity 0.300** (1,451 true halo found, 3,392 thick-disk stars called halo); rule B (Bensby, LSR frame): **recall 0.7968**, purity 0.858 (1,255 found of 1,575, 207 false) |
+| T3 the rules on the real pack, with Poisson intervals (R, no bound) | pass (reported) | rule V: thin 1,213, thick 351, halo 6 (one sigma 3.6 to 9.6); rule B with the paper's Sun: thin 1,392, thick 95, between 80, halo 3 (1.4 to 5.9); with the sample's Stromberg V (2.64 km/s): thin 1,365, thick 125, between 76, halo 4 (2.1 to 7.2) |
+
+**The verdict for method T is C by the committed function** (`failedS`: `T.T2.classification`; nothing NOT RUN). It
+stays C however the two rules are weighed, because neither meets both bounds, so the "every cited rule" reading
+fixed beforehand decided nothing here. `T.T2.classification` is in `failed-legs.json` (now 23 legs) and stays failing
+and labelled; no bound moved and only Carl resets one. The verdicts of O, D and S are those of the Part A text, so
+all four methods remain C and Part B still builds nothing: no Toomre kernel, panel or lesson. The steps that would
+have used one stay reading steps; the one change to say is that a Toomre separation now has a tested reason it
+cannot ship as a method (below), not only a missing source.
+
+**What the numbers say, after the result and not a leg.** Rule V's purity fails because its prior is uniform (the
+paper's own choice, for samples it describes as chosen to enhance the less populous components) while the committed
+synthetic sample has 29 thick-disk stars for each halo star; rule V finds nearly every halo star and calls 3,392
+thick-disk stars halo with it. Rule B weights by the paper's fractions and calls few thick-disk stars halo, but
+misses 0.0032 of the bound on recall: 1,255 of 1,575 halo stars where 1,260 would pass. The sample has about eight
+halo stars per realization (1,570 stars at a fraction of 0.005), and the real pack's 3 to 6 halo stars carry 95 percent Poisson
+intervals that run from 0.6 to 13: a counted halo fraction from this pack would be reported with an interval
+wider than its value. The nested reading of rule B's halo (TD/H below 1 and TD/D above 2, the paper's own
+nesting) differs from the one used in no star of the 200 realizations.
+
+**Questions for Carl (new, none acted on).** (1) Whether to open a re-gate for method T judged on the single rule that
+nearly passes (rule B, recall 0.797 against 0.80); that moves a bound or the rule, so it is his, and as
+committed the leg fails. (2) Whether the 29-to-1 thick-to-halo ratio of the committed synthetic fractions is the
+sample a lesson would use; it was committed before the result and is not changed here. (3) Nothing about O, D or S
+changes: AM1, AM2, the 24-star bin and the oracle bound stand as in Questions for Carl above.
+
+**What the data files carry.** Reading Table 3 and Table A.1 against the extracted text found no transcription error: every
+number matched. The file as supplied omitted the solar motion each paper states (Venn's footnote 3 to Section 2,
+(9, 232, 7) km/s in the Galactic frame; Bensby's Section 3, (11.10, 12.24, 7.25) km/s from the LSR), which is what
+fixes each rule's frame, and it did not note that Bensby prints 89 stars in between in the text and 88 in a caption
+(the paper's text counts sum to 715 for a 714-star sample). Both are recorded in the file's `verification` block with
+their locations, as additions and not changes to any transcribed value.
