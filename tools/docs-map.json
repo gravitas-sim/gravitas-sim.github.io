@@ -1054,7 +1054,7 @@
     {
       "file": "KINEMATICS_GATE.md",
       "kind": "gate",
-      "purpose": "Galactic kinematics gate: Oort constants, dispersions by metallicity bin, the Toomre separation and asymmetric drift on the neighbourhood and SEGUE packs with the selection stated; the committed bounds, the measured and failed legs, verdict C for all four (Prompt 235 Part A).",
+      "purpose": "Galactic kinematics gate: four methods on the Gaia and SEGUE packs with the selection stated, the committed bounds, the failed legs, verdict C for all four (Prompt 235 Part A).",
       "owner": 235,
       "student": false
     },
