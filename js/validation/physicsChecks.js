@@ -94,6 +94,7 @@ const GROUPS = [
   () => import('./groups/interiors.js'),
   () => import('./groups/clusters.js'),
   () => import('./groups/dynamics.js'),
+  () => import('./groups/multimessenger.js'),
 ];
 
 /**

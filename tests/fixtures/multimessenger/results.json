@@ -1,0 +1,570 @@
+{
+  "format": "gravitas.multimessenger-results/1",
+  "rows": [
+    {
+      "id": "A1.timeCases",
+      "status": "pass",
+      "measured": {
+        "maxSecondsError": 0,
+        "maxMjdError": 0,
+        "roundTrip": true,
+        "stepDelta": 2,
+        "refused": [
+          true,
+          true
+        ]
+      },
+      "note": ""
+    },
+    {
+      "id": "A10.falseAlarm",
+      "status": "pass",
+      "measured": {
+        "maxRelVsScipy": 1.5740133930512337e-14,
+        "monteCarlo": {
+          "analytic": 0.00008141184250867392,
+          "fraction": 0.000085,
+          "sigmas": 0.252,
+          "flagged": 34
+        }
+      },
+      "note": ""
+    },
+    {
+      "id": "A2.boundForms",
+      "status": "pass",
+      "measured": {
+        "maxRelFirstOrder": 2.029879626054054e-16,
+        "maxRelExact": 4.059759252108112e-16,
+        "exactVsFirstOrderWithinFactor": true,
+        "upperAtTauEqualsDelay": 0
+      },
+      "note": ""
+    },
+    {
+      "id": "A3.boundStructure",
+      "status": "pass",
+      "measured": {
+        "inverseDistanceRel": 0,
+        "independenceRel": 0,
+        "slopeRel": 4.059759252108108e-16,
+        "widthsMonotone": true,
+        "curveOk": true,
+        "conservativeDistance": true
+      },
+      "note": ""
+    },
+    {
+      "id": "A4.timeline",
+      "status": "pass",
+      "measured": {
+        "order": true,
+        "offsetErrorS": 3.294553607702255e-8,
+        "sigmaRel": 0,
+        "sigmaAbsentWhenEitherAbsent": true,
+        "systemsKept": true,
+        "sameInstantOffsetS": 0
+      },
+      "note": "the scene is SYNTHETIC (an invented merger, the table of the thresholds file)"
+    },
+    {
+      "id": "A5.skyArea",
+      "status": "pass",
+      "measured": {
+        "circleRelHalfAngleForm": 1.8278670042633964e-16,
+        "circleRelCosForm": 5.500274134877723e-13,
+        "hemisphereRel": 3.0286778532527596e-8,
+        "wholeSkyRel": 1.7637418972646115e-16,
+        "healpixRel": 1.3228064229484588e-16,
+        "gaussianMonteCarlo": [
+          {
+            "level": 0.5,
+            "fraction": 0.4998,
+            "sigmas": 0.253,
+            "closedFormRel": 0
+          },
+          {
+            "level": 0.9,
+            "fraction": 0.89994,
+            "sigmas": 0.132,
+            "closedFormRel": 0
+          }
+        ],
+        "refusedWide": true
+      },
+      "note": "the 1 - cos form is shown for contrast: it loses digits at small radii, which is why the kernel uses the half-angle form"
+    },
+    {
+      "id": "A6.expectedCount",
+      "status": "pass",
+      "measured": {
+        "quadratureRel": 2.0332343895347793e-16,
+        "oracleRel": 2.241512749461116e-16,
+        "poissonNoneRel": 1.137425202438236e-13,
+        "atLeastOneAtTinyNRel": 0
+      },
+      "note": ""
+    },
+    {
+      "id": "A7.hostRule",
+      "status": "pass",
+      "measured": {
+        "closedFormRel": 4.1996330269815537e-16,
+        "massScaleRel": 0,
+        "permutationRel": 0,
+        "removalRel": 1.2725962387098953e-16,
+        "massFreeRel": 0,
+        "gnomonicCentre": [
+          0,
+          0
+        ],
+        "gnomonicSmallOffsetRel": 1.0154325644218254e-8
+      },
+      "note": ""
+    },
+    {
+      "id": "A8.photosphere",
+      "status": "pass",
+      "measured": {
+        "radiusRel": 0,
+        "temperatureRel": 0,
+        "luminosityRel": 0,
+        "floorHeld": true,
+        "monotone": true,
+        "T0AtRefRel": 0,
+        "doubledVelocityRel": 0
+      },
+      "note": ""
+    },
+    {
+      "id": "A9.colourMonotone",
+      "status": "pass",
+      "measured": {
+        "steps": 60,
+        "colourFirst": -0.4283,
+        "colourLast": 3.851,
+        "constantAfterFloor": 0
+      },
+      "note": ""
+    },
+    {
+      "id": "B1.timeOracle",
+      "status": "pass",
+      "measured": {
+        "instants": 218,
+        "maxGpsErrorS": 1.1920928955078125e-7,
+        "maxMetErrorS": 1.1920928955078125e-7,
+        "maxMjdErrorDays": 7.275957614183426e-12,
+        "maxInverseErrorS": 1.678466787780053e-7,
+        "calendarMismatches": 0,
+        "maxDelayErrorS": 2.384185791015625e-7
+      },
+      "note": ""
+    },
+    {
+      "id": "B2.timeAuthentic",
+      "status": "not-run",
+      "measured": null,
+      "note": "authentic/leap-seconds.list was not supplied"
+    },
+    {
+      "id": "B3.boundExact",
+      "status": "pass",
+      "measured": {
+        "cases": 40,
+        "maxRel": 4.3304098689154414e-16
+      },
+      "note": ""
+    },
+    {
+      "id": "B4.boundPublished",
+      "status": "not-run",
+      "measured": null,
+      "note": "authentic/published-bound.json was not supplied"
+    },
+    {
+      "id": "B5.hostDistance",
+      "status": "pass",
+      "measured": {
+        "maxRelVsOracle": 1.646366526749367e-16,
+        "firstOrderGap": [
+          {
+            "z": 0.003,
+            "gap": 0.002323,
+            "firstOrder": 0.002325,
+            "rel": 0.0010595747001329635
+          },
+          {
+            "z": 0.01,
+            "gap": 0.007723,
+            "firstOrder": 0.00775,
+            "rel": 0.0035310647381344854
+          }
+        ],
+        "peculiarRelExact": 0,
+        "flags": [
+          {
+            "z": 0.003,
+            "flagged": true,
+            "expected": true
+          },
+          {
+            "z": 0.01,
+            "flagged": true,
+            "expected": true
+          },
+          {
+            "z": 0.05,
+            "flagged": false,
+            "expected": false
+          },
+          {
+            "z": 0.1,
+            "flagged": false,
+            "expected": false
+          }
+        ],
+        "refusedZero": true
+      },
+      "note": ""
+    },
+    {
+      "id": "B6.kilonovaMagnitudes",
+      "status": "pass",
+      "measured": {
+        "cells": 105,
+        "maxMagError": 0.00000946682236246943,
+        "maxColourError": 0.000009443780236040311,
+        "colourIndependence": 3.552713678800501e-15
+      },
+      "note": ""
+    },
+    {
+      "id": "B7.detectionProbability",
+      "status": "pass",
+      "measured": {
+        "sequences": 20,
+        "maxRel": 1.4382622170029212e-15,
+        "maxAbs": 6.661338147750939e-16
+      },
+      "note": ""
+    },
+    {
+      "id": "C1.hostCalibration",
+      "status": "pass",
+      "measured": {
+        "bins": [
+          {
+            "bin": "[0, 0.01)",
+            "n": 82972,
+            "fractionHost": 0.0005665,
+            "meanWeight": 0.00052,
+            "covers": true
+          },
+          {
+            "bin": "[0.01, 0.1)",
+            "n": 9078,
+            "fractionHost": 0.03988,
+            "meanWeight": 0.0376,
+            "covers": true
+          },
+          {
+            "bin": "[0.1, 0.5)",
+            "n": 4869,
+            "fractionHost": 0.2395,
+            "meanWeight": 0.244,
+            "covers": true
+          },
+          {
+            "bin": "[0.5, 0.9)",
+            "n": 2074,
+            "fractionHost": 0.702,
+            "meanWeight": 0.702,
+            "covers": true
+          },
+          {
+            "bin": "[0.9, 1)",
+            "n": 1007,
+            "fractionHost": 0.9623,
+            "meanWeight": 0.9648,
+            "covers": true
+          }
+        ],
+        "covering": 5,
+        "topAccuracy": 0.696,
+        "meanTopWeight": 0.6984,
+        "topSigmas": 0.332,
+        "sensitivityNotJudged": {
+          "massTermDropped": {
+            "binsCovering": 5,
+            "topAccuracy": 0.569,
+            "meanTopWeight": 0.5713
+          }
+        }
+      },
+      "note": "the sensitivity entry shows how little this ensemble can say about the mass term (0.5 dex of scatter); A7 holds the mass term exactly"
+    },
+    {
+      "id": "C1b.misspecifiedHostRule",
+      "status": "reported",
+      "measured": {
+        "binsCovering": 1,
+        "of": 5,
+        "bins": [
+          {
+            "bin": "[0, 0.01)",
+            "n": 87080,
+            "fractionHost": 0.003617,
+            "meanWeight": 0.0003005,
+            "covers": false
+          },
+          {
+            "bin": "[0.01, 0.1)",
+            "n": 5742,
+            "fractionHost": 0.07506,
+            "meanWeight": 0.03825,
+            "covers": false
+          },
+          {
+            "bin": "[0.1, 0.5)",
+            "n": 3727,
+            "fractionHost": 0.2299,
+            "meanWeight": 0.2459,
+            "covers": true
+          },
+          {
+            "bin": "[0.5, 0.9)",
+            "n": 1967,
+            "fractionHost": 0.5648,
+            "meanWeight": 0.7097,
+            "covers": false
+          },
+          {
+            "bin": "[0.9, 1)",
+            "n": 1484,
+            "fractionHost": 0.8666,
+            "meanWeight": 0.9716,
+            "covers": false
+          }
+        ],
+        "topAccuracy": 0.6468,
+        "meanTopWeight": 0.7657
+      },
+      "note": "the rule with half the true distance width: its weights are overconfident; nothing is judged"
+    },
+    {
+      "id": "C2.completenessCoverage",
+      "status": "pass",
+      "measured": {
+        "cells": 48,
+        "covering": 48,
+        "coverFraction": 1,
+        "nontrivialCells": 10,
+        "medianWidth": 0.0555,
+        "failingCells": [],
+        "curve": [
+          {
+            "peak": 21,
+            "analytic": 1,
+            "fraction": 1
+          },
+          {
+            "peak": 21.5,
+            "analytic": 0.9945,
+            "fraction": 0.995
+          },
+          {
+            "peak": 22,
+            "analytic": 0.4041,
+            "fraction": 0.399
+          },
+          {
+            "peak": 22.5,
+            "analytic": 0.02281,
+            "fraction": 0.016
+          },
+          {
+            "peak": 23,
+            "analytic": 0.0004684,
+            "fraction": 0
+          },
+          {
+            "peak": 23.5,
+            "analytic": 0.000002397,
+            "fraction": 0
+          },
+          {
+            "peak": 24,
+            "analytic": 1.952e-8,
+            "fraction": 0
+          },
+          {
+            "peak": 24.5,
+            "analytic": 6.427e-10,
+            "fraction": 0
+          }
+        ]
+      },
+      "note": ""
+    },
+    {
+      "id": "D1.noBound",
+      "status": "pass",
+      "measured": {
+        "cases": [
+          true,
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        "refusals": [
+          true,
+          true,
+          true,
+          true,
+          true,
+          true
+        ]
+      },
+      "note": ""
+    },
+    {
+      "id": "D2.names",
+      "status": "pass",
+      "measured": {
+        "refusedMessengers": [
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        "photonWithoutBand": true,
+        "gravitationalWaveWithBand": true,
+        "noSystem": true,
+        "noDefinition": true,
+        "hintNamesTheTwo": true
+      },
+      "note": ""
+    },
+    {
+      "id": "D3.hostRefusals",
+      "status": "pass",
+      "measured": {
+        "twoIdentical": true,
+        "loneFarCandidate": true,
+        "identifiedWhenStrong": true,
+        "ambiguousWhenWeak": true,
+        "refusals": [
+          true,
+          true,
+          true,
+          true
+        ]
+      },
+      "note": ""
+    },
+    {
+      "id": "D4.kilonovaDomain",
+      "status": "pass",
+      "measured": {
+        "refusals": [
+          true,
+          true,
+          true,
+          true,
+          true,
+          true,
+          true,
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        "noMassOrFitFunction": true
+      },
+      "note": ""
+    },
+    {
+      "id": "D5.detectionRefusals",
+      "status": "pass",
+      "measured": {
+        "refusals": [
+          true,
+          true,
+          true,
+          true,
+          true,
+          true,
+          true,
+          true
+        ]
+      },
+      "note": "the pure-noise flags are leg A10"
+    },
+    {
+      "id": "E1.delayFromPacks",
+      "status": "not-run",
+      "measured": null,
+      "note": "authentic/published-bound.json was not supplied"
+    },
+    {
+      "id": "E2.packDistanceVsRedshift",
+      "status": "pass",
+      "measured": {
+        "redshift": 0.01,
+        "kernelDistanceMpc": 43.16,
+        "packInterval": [
+          25,
+          47
+        ],
+        "relativePeculiar": 0.1001,
+        "flagged": true
+      },
+      "note": "AM2: the flag is raised at 0.10007 against 0.1, a margin the pack's redshift (rounded to 0.01) does not support"
+    },
+    {
+      "id": "E3.kilonovaReddening",
+      "status": "not-run",
+      "measured": null,
+      "note": "authentic/kilonova-photometry.csv was not supplied"
+    },
+    {
+      "id": "P1.speed",
+      "status": "pass",
+      "measured": {
+        "cpuSeconds": 0.947
+      },
+      "note": "recorded, not a physics bound"
+    },
+    {
+      "id": "R1.volumeVsComoving",
+      "status": "reported",
+      "measured": {
+        "table": [
+          {
+            "centreMpc": 20,
+            "ratio": 1.019
+          },
+          {
+            "centreMpc": 40,
+            "ratio": 1.039
+          },
+          {
+            "centreMpc": 100,
+            "ratio": 1.097
+          },
+          {
+            "centreMpc": 200,
+            "ratio": 1.196
+          }
+        ],
+        "largestCentreWithin10Percent": 100
+      },
+      "note": "not a judged leg: the table that sets the stated domain"
+    }
+  ]
+}

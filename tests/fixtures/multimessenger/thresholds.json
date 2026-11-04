@@ -157,12 +157,12 @@
     {
       "id": "A5.skyArea",
       "leg": "a",
-      "what": "sky areas against closed forms: a circle of radius r has 2 pi (1 - cos r) steradians (checked as 4 pi sin^2(r/2) at 0.5, 1, 5, 20 and 90 degrees, relative 1e-12; 90 degrees is a hemisphere of 20626.48 square degrees to 1e-8), the whole sky is 4 pi (180/pi)^2 square degrees, a HEALPix pixel at nside n is the sky over 12 n^2 (nside 1, 64, 512), and the area of the level-p region of a circular Gaussian of width sigma is -2 pi sigma^2 ln(1 - p) (small-angle, stated with its domain sigma <= 10 degrees) with a seeded Monte Carlo of 400000 draws at levels 0.5 and 0.9 whose enclosed fraction is within 4 binomial sigma of the level.",
+      "what": "sky areas against closed forms: a circle of radius r has 2 pi (1 - cos r) steradians (checked as 4 pi sin^2(r/2) at 0.5, 1, 5, 20 and 90 degrees, relative 1e-12; 90 degrees is a hemisphere of 20626.48 square degrees to 3e-7, AM4), the whole sky is 4 pi (180/pi)^2 square degrees, a HEALPix pixel at nside n is the sky over 12 n^2 (nside 1, 64, 512), and the area of the level-p region of a circular Gaussian of width sigma is -2 pi sigma^2 ln(1 - p) (small-angle, stated with its domain sigma <= 10 degrees) with a seeded Monte Carlo of 400000 draws at levels 0.5 and 0.9 whose enclosed fraction is within 4 binomial sigma of the level.",
       "limits": {
         "radiiDeg": [0.5, 1, 5, 20, 90],
         "maxRel": 1e-12,
         "hemisphereDeg2": 20626.48,
-        "hemisphereMaxRel": 1e-8,
+        "hemisphereMaxRel": 3e-7,
         "nsides": [1, 64, 512],
         "gaussian": { "sigmaDeg": 3, "levels": [0.5, 0.9], "draws": 400000, "maxSigmas": 4, "maxSigmaDeg": 10 }
       }
@@ -236,7 +236,7 @@
     {
       "id": "B5.hostDistance",
       "leg": "b",
-      "what": "the distance from a redshift (the existing FLRW kernel, flat, H0 70, Om 0.3, OL 0.7) against astropy's FlatLambdaCDM luminosity distance with no radiation at z = 0.003, 0.01, 0.05 and 0.1, relative 1e-8; the Hubble-flow distance c z / H0 is the closed form at low redshift with the stated relative gap to the exact distance at each z (the gap is (1 - q0) z / 2 = 0.775 z to first order for q0 = Om/2 - OL = -0.55, checked within 10 percent of that at z = 0.003 and 0.01); the peculiar-velocity uncertainty sigma_v adds a relative distance uncertainty sigma_v / (c z) exactly, and the kernel flags the result 'peculiar-velocity-dominated' when that exceeds 0.1 (z below 0.03 for 300 km/s) and refuses a redshift of 0 or below.",
+      "what": "the distance from a redshift (the existing FLRW kernel, flat, H0 70, Om 0.3, OL 0.7) against astropy's FlatLambdaCDM luminosity distance with no radiation at z = 0.003, 0.01, 0.05 and 0.1, relative 1e-8; the Hubble-flow distance c z / H0 is the closed form at low redshift with the stated relative gap to the exact distance at each z (the gap is (1 - q0) z / 2 = 0.775 z to first order for q0 = Om/2 - OL = -0.55, checked within 10 percent of that at z = 0.003 and 0.01); the peculiar-velocity uncertainty sigma_v adds a relative distance uncertainty sigma_v / (c z) exactly, and the kernel flags the result 'peculiar-velocity-dominated' when that exceeds 0.1 (z below 0.010 for 300 km/s: 300 / (c z) = 0.1 at z = 0.01001) and refuses a redshift of 0 or below.",
       "limits": {
         "redshifts": [0.003, 0.01, 0.05, 0.1],
         "cosmology": { "H0": 70, "Om": 0.3, "OL": 0.7 },
@@ -341,6 +341,24 @@
     }
   ],
   "amendments": [
+    {
+      "id": "AM4",
+      "check": "A5.skyArea",
+      "what": "the hemisphere's literal 20626.48 has seven significant figures (the value is 2 pi (180/pi)^2 = 20626.4806...), so a relative bound of 1e-8 cannot hold for any correct kernel; the bound becomes 3e-7 (the half unit of the last printed digit is 2.4e-7). The kernel's own accuracy is judged by the closed form 4 pi sin^2(r/2) at 1e-12 in the same leg. A specification slip found by inspection before the validator ran, not a result.",
+      "when": "2026-11-04, before any validator run"
+    },
+    {
+      "id": "AM2",
+      "check": "B5.hostDistance",
+      "what": "the redshift below which the peculiar-velocity flag is raised at 300 km/s was written as 0.03 and is 0.010 (300 / 299792.458 = 1.0007e-3, divided by 0.1 gives 0.01001); a second arithmetic slip of this file, corrected before any result. The consequence for E2 is stated and not hidden: the pack's redshift 0.01 gives a relative uncertainty of 0.10007, above 0.1 by 7e-4, so the flag is raised by a knife-edge margin that the pack's rounding of the redshift to 0.01 does not support; E2 keeps its committed expectation (flag raised) and the document says the margin is not meaningful.",
+      "when": "2026-11-04, before any kernel result"
+    },
+    {
+      "id": "AM3",
+      "check": "B5.hostDistance",
+      "what": "the independent reference of B5 is a scipy adaptive quadrature (epsrel 1e-13) of the flat Lambda-CDM integral in tools/multimessenger-oracle/oracle.py, not astropy's FlatLambdaCDM: astropy.cosmology could not be imported in the session's Python (its PyYAML dependency is missing) and nothing is installed. The bound (relative 1e-8) is unchanged. The existing cosmology kernel was itself validated against astropy to 1.8e-12 (its header), which is a second link.",
+      "when": "2026-11-04, before any kernel result"
+    },
     {
       "id": "AM1",
       "check": "B5.hostDistance",
