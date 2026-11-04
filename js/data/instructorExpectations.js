@@ -30,6 +30,7 @@ import { INSTRUCTOR as VETTING } from './investigations/vetting-sequence.js';
 import { INSTRUCTOR as IMAGING } from './investigations/imaging-sequence.js';
 import { INSTRUCTOR as JOINT } from './investigations/joint-sequence.js';
 import { INSTRUCTOR as OCCURRENCE } from './investigations/occurrence-sequence.js';
+import { INSTRUCTOR as GAIA } from './investigations/gaia-sequence.js';
 import { INSTRUCTOR as VARIABLES_II } from './investigations/variables-ii-sequence.js';
 import { INSTRUCTOR as STELLAR } from './investigations/stellar-sequence.js';
 import { INSTRUCTOR as EXOPLANET } from './investigations/exoplanet-sequence.js';
@@ -60,6 +61,7 @@ export default {
     ...IMAGING.expectations,
     ...JOINT.expectations,
     ...OCCURRENCE.expectations,
+    ...GAIA.expectations,
     ...VARIABLES_II.expectations,
     ...STELLAR.expectations,
     ...EXOPLANET.expectations,
@@ -88,7 +90,7 @@ export default {
       'move-the-threshold':
         '497 stars above 0.99 and 509 above 0.1, each within 6: the count barely moves.',
       'read-the-distance':
-        'Mean parallax of the members 0.385 mas (within 0.02) and the distance 2.6 kpc (within 0.15), with no zero-point correction.',
+        'Mean parallax of the members 0.385 mas (within 0.02) and the uncorrected 1 over parallax reading 2.6 kpc (within 0.15), with no zero-point correction; the feedback gives the measured 2.324 kpc with its labels.',
     },
     'who-gets-counted': {
       'count-a-shallow-survey':

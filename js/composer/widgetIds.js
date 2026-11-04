@@ -80,6 +80,7 @@ export const WIDGET_FAMILIES = Object.freeze({
   gw: ['gw-lab', 'gw-real'],
   light: ['blackbody', 'spectrum-viewer', 'kirchhoff'],
   galactic: ['solar-motion', 'rotating-disk', 'cluster-members'],
+  gaia: ['gaia-distance', 'gaia-sample'],
   interiors: ['polytrope', 'wd-mass-radius', 'ms-scaling'],
   variables: ['variable-fold', 'leavitt-law', 'variable-class'],
   lensing: ['light-bending', 'lens-plane', 'lens-passing'],
