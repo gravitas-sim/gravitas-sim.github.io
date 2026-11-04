@@ -217,12 +217,13 @@ test('what-gaia-does-not-see: a tighter magnitude limit removes stars and moves 
   await expect(page.locator('#investigationToolReadout')).not.toContainText(
     /loading/i
   );
-  const none = await readout(page);
-  expect(none['Stars left']).toMatch(/^993 of 993/);
-  const { before, after } = await setControl(page, 'mag', 15);
+  // The step that settles the prediction opens the panel at G below 15.
+  const first = await readout(page);
+  expect(first['Stars left']).toMatch(/^238 of 993/);
+  const { before, after } = await setControl(page, 'mag', 16);
   expect(after['Stars left']).not.toBe(before['Stars left']);
-  expect(after['Stars left']).toMatch(/^238 of 993/);
-  expect(after['Cuts on']).toMatch(/755 of 993/);
+  expect(after['Stars left']).toMatch(/^467 of 993/);
+  expect(after['Cuts on']).toMatch(/526 of 993/);
   // The distance is stated with its labels, and is not claimed as validated.
   expect(after['Not validated']).toMatch(/NOT RUN/);
   expect(after['Distance of the cluster']).toMatch(/no systematic floor/);

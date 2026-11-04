@@ -71,7 +71,7 @@ export const ES_GAIA = {
   'gaiaW.s.note':
     'Las {n} estrellas de Gaia DR3 de NGC 2420 del paquete: G menor que 17,5, RUWE menor que 1,4, con paralaje y movimiento propio conocidos. Cada corte quita las estrellas que no lo cumplen, y el diagrama y la distancia son de las que quedan. Son miembros las estrellas cuyo movimiento propio por sí solo las pone en el cúmulo con probabilidad {p} o más, un contrato fijado antes de ver este resultado. La distancia lleva un punto cero por estrella y un recorte de {c} sigma, y ningún suelo sistemático, así que su intervalo es solo estadístico. No se usa el paquete del entorno solar: sus paralajes están redondeadas y no dan distancia.',
   'gaiaW.s.control.view': 'Imagen',
-  'gaiaW.s.control.mag': 'Límite de magnitud: conservar G menor que',
+  'gaiaW.s.control.mag': 'Magnitud: conservar G menor que',
   'gaiaW.s.control.poe': 'Paralaje sobre error: conservar al menos',
   'gaiaW.s.control.ruwe': 'RUWE: conservar menor que',
   'gaiaW.s.control.zp': 'Punto cero por estrella',
