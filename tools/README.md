@@ -194,6 +194,7 @@ current, and the orchestrator checks it.
 | `remnants-pin.mjs` | The cooling-table pin of the remnants validation (Prompt 222, REMNANTS.md) |  |
 | `remnants-validate.mjs` | The remnants kernel against its committed thresholds (Prompt 222) | `npm run remnants:validate` |
 | `reversibility-probe.mjs` | Does the engine run backwards? | `npm run probe:reversibility` |
+| `rotation-decomposition-validate.mjs` | The rotation-curve decomposition kernel against its committed thresholds (Prompt 236, Part A) | `npm run decomposition:validate` |
 | `route-budget.mjs` | What a fresh visitor downloads, route by route | `npm run budget:routes` |
 | `scenario-stability.mjs` | Scenario stability probe | `npm run validate:scenarios` |
 | `seeded-step.mjs` | A preset world stepped under a seed, every body kept at full precision |  |

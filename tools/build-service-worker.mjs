@@ -541,6 +541,9 @@ export const NEVER_PRECACHED = [
   /^images\/investigations\/(how-far-and-how-sure|what-gaia-does-not-see)\.webp$/,
   /^js\/data\/investigations\/(es\/|depth\/|depth\/es\/)?(how-far-and-how-sure|what-gaia-does-not-see|gaia-sequence)\.js$/,
   /^(js\/gaiaWidgets\.js|js\/gaiaField\.js|js\/i18n\/(en|es)\.gaia\.js)$/,
+  // Prompt 236 Part A: the rotation-curve decomposition kernel and its synthetic curves. No shipped module imports them yet (the panel and the
+  // lesson depth wait for Carl, D-R10-236-02), so no page can fetch one; they stay out of the install until the panel that imports them lands.
+  /^js\/kernels\/galactic\/decomposition(Synthetic)?\.js$/,
   // Prompt 214: the strategy kernel, planner extension, panels and the strategy lesson's one new file (D-R10-214-06).
   /^js\/kernels\/strategy\//,
   /^js\/data\/investigations\/(es\/|depth\/|depth\/es\/)?(why-the-period-is-wrong|strategy-sequence)\.js$/,
