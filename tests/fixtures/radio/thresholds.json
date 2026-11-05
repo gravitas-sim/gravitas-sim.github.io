@@ -1,0 +1,468 @@
+{
+  "format": "gravitas.radio-hi-thresholds/1",
+  "prompt": "Roadmap III, Prompt 241, the HI spectroscopy pathway (tranche T4 by D-R10-232-01): the kernel and validation part only",
+  "document": "RADIO.md (\"Validation contract\"), written after this file",
+  "committed": "before js/kernels/radio/*, the validator, the oracle scripts and their pinned results, the synthetic generator's output, and before any spectrum, tangent velocity or oracle output of Prompt 241 existed. Phase 1 of the session (reading the roadmap, the register, RADIO_DATA_GATE.md, the checkpoint, the galactic, statistics, radiation and spectrograph kernels) preceded it and fixed nothing here from a result. No expected value below is the output of the kernel: every one is either arithmetic written in the leg or a bound set by the stated discretisation.",
+  "rule": "A crossed bound is a failed check, recorded in failed-legs.json and left failing; only Carl resets one. A leg that cannot be measured (a file not supplied) is NOT RUN and says why. No published number or licence term is typed anywhere from memory except the two atomic constants of the 21-cm line (the rest frequency and the spin-flip rate), which are physical constants, are held in ONE module with their status 'no source file in the tree, not verified by a fetch', and are a question for Carl; nothing here is quoted from a survey, a table or a paper. Every velocity the kernel returns carries the frame (heliocentric or LSR), the Doppler convention and the LSR option it was computed with. A tangent velocity is never shown without the assumed R0 and Theta0 and the LSR choice. The tangent-point method is only ever run on the fixed longitude mask below.",
+  "seeds": {
+    "noiseC1": 241001,
+    "analystSigmaC1": 241002,
+    "noiseC2": 241003,
+    "analystSigmaC2": 241004,
+    "ensemble": "hi-241",
+    "design": "hi-241-design (used only to calibrate the one shape term and to debug; never in a leg)",
+    "oracleNumpy": 241
+  },
+  "scope": {
+    "built": "(1) the 21-cm rest frequency and the radio, optical and relativistic Doppler conventions on a frequency axis; (2) the heliocentric to LSR velocity transform with the two options of D-GAIA-03 kept (Schonrich, Binney and Dehnen 2010's (U, V, W) and the same with V replaced by the Stromberg value of the register row), a caller-supplied (U, V, W), and 'none', each returned with the shift it applied; (3) the fixed longitude mask, the geometry of line-of-sight velocity under an axisymmetric circular rotation curve, the tangent point and its refusals; (4) the terminal-velocity rule (edge rule E below) with the dispersion correction computed from the universal shape of a Gaussian-smoothed tangent edge; (5) the circular speed at the tangent radius with a 68.27 and 95 percent interval from the statistics kernel's covariance interval; (6) the column density from the integrated line under the optically thin assumption with an opacity diagnostic and the regime where the assumption fails; (7) a synthetic HI spectrum generator (a stated rotation curve, a gas disk of constant density between two radii, Gaussian gas dispersion, an optional spin temperature that makes the radiative transfer exact, white noise from a named stream) with a truth manifest and a label.",
+    "notBuilt": "the spectra viewer's radio mode, the sightline selector, the tangent-point tool and the 150 record, both investigations, the model-page section and instructor materials (a separate instructional PR after Carl's go-ahead); any pack (packs have 0 B of room and every HI row of the data-rights gate is C: the synthetic generator is the pack and it is code); any fit outside the mask; non-circular motions, a warp, a bar, gas outside the plane (b is 0 on the mask); self-absorption beyond the opacity diagnostic; correlated noise; stray radiation and baselines.",
+    "notRun": "E1 (the HI pack under a fixed contract against a published curve's uncertainties) and B7 (a pinned published tangent-velocity table): rows 01 to 05 of RADIO_DATA_GATE.md are C, no HI spectra and no tangent-velocity table were read, so nothing authentic is supplied. A file Carl may supply later is described in RADIO.md."
+  },
+  "synthetic": {
+    "label": "SYNTHETIC HI SPECTRA: invented worlds with a stated rotation curve and gas disk, not measurements of the Galaxy. R0, Theta0 and every curve parameter below are the world's truth, chosen round, and no published value.",
+    "r0Kpc": 8,
+    "theta0KmS": 220,
+    "curve": "Theta(R) = Theta0 k (R / sqrt(R^2 + Rc^2)) (R / R0)^alpha with k = sqrt(R0^2 + Rc^2) / R0, so Theta(R0) = Theta0",
+    "rcKpc": 1.5,
+    "alphas": {
+      "flat": 0,
+      "rising": 0.05,
+      "falling": -0.05
+    },
+    "gas": {
+      "thinDensityCm3": 0.05,
+      "rInKpc": 1,
+      "rOutKpc": 18,
+      "note": "constant n between R_in and R_out, zero outside"
+    },
+    "sigmaVKmS": [
+      5,
+      8
+    ],
+    "worlds": [
+      "flat:5",
+      "flat:8",
+      "rising:5",
+      "rising:8",
+      "falling:5",
+      "falling:8"
+    ],
+    "lsrTruth": "schonrich",
+    "channels": {
+      "count": 501,
+      "widthKmSAtRest": 1,
+      "axis": "uniform in frequency about the rest frequency, so uniform in radio velocity to first order and not exactly"
+    },
+    "narrow": {
+      "sigmaVKmS": 0.5,
+      "count": 5001,
+      "widthKmSAtRest": 0.1
+    },
+    "noiseK": 0.1,
+    "losStepKpc": 0.0025,
+    "opacity": {
+      "thinWithSpinTemperature": {
+        "densityCm3": 0.02,
+        "spinTemperatureK": 120
+      },
+      "thick": {
+        "densityCm3": 0.5,
+        "spinTemperatureK": 120
+      },
+      "thinTauLimit": 0.1,
+      "note": "the opacity diagnostic reports the thin assumption as failed when the peak optical depth tau = -ln(1 - T_peak / T_s) exceeds this limit"
+    },
+    "mask": {
+      "firstQuadrantDeg": [
+        20,
+        25,
+        30,
+        35,
+        40,
+        45,
+        50,
+        55,
+        60,
+        65
+      ],
+      "fourthQuadrantDeg": [
+        295,
+        300,
+        305,
+        310,
+        315,
+        320,
+        325,
+        330,
+        335,
+        340
+      ],
+      "bDeg": 0,
+      "why": "inside 20 degrees the tangent radius is under 0.35 R0 and an axisymmetric circular model is not claimed there; past 65 degrees the terminal velocity falls toward the dispersion of the local gas and the edge cannot be separated from it (the kernel also refuses by measurement, rule E7)"
+    }
+  },
+  "edgeRule": {
+    "name": "edge rule E (stated, committed)",
+    "steps": [
+      "E1 the terminal side: x = s v_LSR with s = +1 in the first quadrant and -1 in the fourth, channels sorted by x",
+      "E2 the noise: sigma_n from the caller, else 1.4826 times the median absolute deviation about the median of the outermost tenth of the channels in x",
+      "E3 the outer edge of emission x_out: the largest x that ends a run of at least 3 consecutive channels all at or above L_out = max(5 sigma_n, 1e-3 times the largest T on the side)",
+      "E4 the window [x_out - 5 sigma_v, x_out]; T_pk is the largest T in it, at x_pk; refused ('edge-not-significant') if T_pk is below 10 sigma_n",
+      "E5 x_e: the outermost crossing of T = f T_pk beyond x_pk, by linear interpolation, with f = 0.5",
+      "E6 the terminal velocity x_t = x_e - c_f sigma_v, where c_f (in units of sigma_v) is the distance between the true edge of an inverse-square-root tangent profile smoothed by a Gaussian and the point where that smoothed profile falls to f of its own peak; it is computed by quadrature in the kernel, not tuned",
+      "E7 refused ('edge-not-separable') if x_t is below 3 sigma_v"
+    ],
+    "f": 0.5,
+    "runChannels": 3,
+    "outerSigma": 5,
+    "windowSigmaV": 5,
+    "significanceSigma": 10,
+    "separableSigmaV": 3,
+    "floorFraction": 0.001,
+    "outerFraction": 0.1
+  },
+  "uncertainty": {
+    "formula": "sigma_Theta^2 = sigma_x^2 + (w / sqrt(12))^2 + (c_f sigma_sigmaV)^2 + (tau sigma_v)^2 + (sin(l) sigma_Theta0)^2; sigma_x = sigma_n sqrt(1 + f^2) / |slope| with slope the least-squares dT/dx over the five channels about the crossing; w the channel width in velocity; sigma_sigmaV the stated uncertainty of the assumed gas dispersion; tau the shape term. The interval is the statistics kernel's covarianceInterval at 0.6827 and 0.95.",
+    "tauShape": 0.05,
+    "tauNote": "Set by AM2 from 0.25 (the value first written, provisional) to 0.05, from the noise-free design run only (six worlds, the 20 mask longitudes, the exact gas dispersion, the kernel's rule as built; 114 sightlines accepted, 6 refused by E7): the departure of the recovered circular speed from the world's, in units of the gas dispersion, has root-mean-square 0.032 and maximum 0.049; tau is that maximum rounded up to 0.05. No test seed, no noise draw and no oracle output had been run.",
+    "sigmaSigmaVFraction": 0.15,
+    "sigmaTheta0KmS": 8
+  },
+  "checks": [
+    {
+      "id": "A1.doppler",
+      "leg": "a",
+      "what": "the Doppler scale: a frequency below the rest frequency is a positive velocity (receding); v = 0 at the rest frequency; the radio-convention velocity v = c (1 - f / f0) round-trips through the frequency to within a relative 1e-12 at 50 velocities between -300 and 300 km/s; the optical-convention velocity minus the radio-convention velocity at the same frequency is v_r^2 / (c - v_r) to 1e-9 km/s; the relativistic velocity v = c (f0^2 - f^2) / (f0^2 + f^2) lies between the radio and optical values at 300 km/s; the three conventions differ by under 0.5 km/s at 5 km/s",
+      "limits": {
+        "velocities": 50,
+        "range": [
+          -300,
+          300
+        ],
+        "maxRoundTripRel": 1e-12,
+        "maxOpticalIdentityKmS": 1e-09,
+        "smallV": 5,
+        "smallVSpreadKmS": 0.5
+      }
+    },
+    {
+      "id": "A2.lsr",
+      "leg": "a",
+      "what": "the LSR transform v_LSR = v_helio + (U cos l + V sin l) cos b + W sin b: the shift is U at (l, b) = (0, 0), V at (90, 0), W at (0, 90); it is zero at the longitude l = atan2(-U, V) for b = 0; the transform and its inverse compose to the identity to 1e-12 km/s; the option 'schonrich' equals (11.1, 12.24, 7.25) and the option 'stromberg' has V = 3.77 with the same U and W (D-GAIA-03); 'none' shifts nothing; each result names the option and the shift; an unknown option is refused",
+      "limits": {
+        "maxShiftErrorKmS": 1e-12,
+        "schonrich": [
+          11.1,
+          12.24,
+          7.25
+        ],
+        "strombergV": 3.77
+      }
+    },
+    {
+      "id": "A3.geometry",
+      "leg": "a",
+      "what": "the line-of-sight velocity v = (Theta(R) R0 / R - Theta0) sin l cos b with R^2 = R0^2 + (d cos b)^2 - 2 R0 d cos b cos l: for a flat curve Theta = Theta0 the terminal velocity is Theta0 (1 - |sin l|), the tangent radius R0 |sin l| and the tangent distance R0 cos l; for each of the three world curves at the mask's longitudes the maximum of v along the sightline, found by golden-section search to 1e-9 kpc, equals the tangent value to 1e-9 km/s and lies at d = R0 cos l to 1e-6 kpc; the circular speed recovered from the terminal velocity, |v_t| + Theta0 |sin l|, equals Theta(R_t) to 1e-9 km/s; the suitability test (Theta / R decreasing over the mask's radii) passes for the three world curves and fails for solid-body rotation Theta = 10 R",
+      "limits": {
+        "maxVelocityErrorKmS": 1e-09,
+        "maxDistanceErrorKpc": 1e-06,
+        "solidBodySlope": 10
+      }
+    },
+    {
+      "id": "A4.refusals",
+      "leg": "a",
+      "what": "the tangent point and the mask refuse by code: longitudes 90, 95, 100, 135, 180, 225, 265 and 270 have no tangent point ('no-tangent-point': the sightline does not pass inside the solar circle); longitudes 0, 10, 15, 22, 70, 75, 80, 285, 345 and 355 are outside the fixed mask ('outside-mask') although some have a tangent point; a latitude other than 0 is 'outside-mask'; every longitude of the mask is accepted; the mask has 10 + 10 longitudes and equals the list in this file",
+      "limits": {
+        "noTangent": [
+          90,
+          95,
+          100,
+          135,
+          180,
+          225,
+          265,
+          270
+        ],
+        "outside": [
+          0,
+          10,
+          15,
+          22,
+          70,
+          75,
+          80,
+          285,
+          345,
+          355
+        ],
+        "badLatitude": 1
+      }
+    },
+    {
+      "id": "A5.columnThin",
+      "leg": "a",
+      "what": "the column density of an optically thin line: for the noise-free thin spectrum of world flat:5 at l = 30 the thin column from the integrated line (the kernel's coefficient times the trapezoid integral of T over velocity) equals the generator's own column (the integral of n along the sightline, in cm^-2) to a relative 2e-4; doubling n doubles the column; the integral is independent of the channel width to 2e-4 (a spectrum regridded to 2 channels per original channel is not tested here; the channel-width test is the 5001-channel narrow world against the 501-channel one at the same sigma_v)",
+      "limits": {
+        "world": "flat:5",
+        "lDeg": 30,
+        "maxRel": 0.0002,
+        "doubling": 1e-09
+      }
+    },
+    {
+      "id": "A6.edgeShape",
+      "leg": "a",
+      "what": "the universal edge profile g(x) = 2 integral_0^inf phi(x + t^2) dt (phi the standard normal density; the inverse-square-root edge smoothed by a unit Gaussian, x measured outward from the true edge): g(0) = 2^(-3/4) Gamma(1/4) / sqrt(2 pi) to a relative 1e-8, with Gamma from the statistics kernel's lnGamma; g is positive, has one maximum at x_pk below 0, falls beyond it, and c_f(f) is increasing in 1 - f; c_f(0.5) lies between 0 and 1.5 and the profile at c_f(0.5) is half of the peak to 1e-9",
+      "limits": {
+        "maxRelG0": 1e-08,
+        "f": 0.5,
+        "cfRange": [
+          0,
+          1.5
+        ],
+        "halfTol": 1e-09
+      }
+    },
+    {
+      "id": "A7.recoveryNarrow",
+      "leg": "a",
+      "what": "the tangent velocity is recovered on noise-free narrow-line spectra: gas dispersion 0.5 km/s, 5001 channels of 0.1 km/s, the three world curves at longitudes 20, 35, 50, 65, 295, 320 and 340, the correct R0, Theta0, LSR option and gas dispersion: the recovered circular speed differs from the world's Theta(R_t) by at most 0.3 km/s, and no sightline is refused",
+      "limits": {
+        "curves": [
+          "flat",
+          "rising",
+          "falling"
+        ],
+        "longitudes": [
+          20,
+          35,
+          50,
+          65,
+          295,
+          320,
+          340
+        ],
+        "maxErrorKmS": 0.3
+      }
+    },
+    {
+      "id": "A8.lsrShift",
+      "leg": "a",
+      "what": "the LSR choice moves the recovered circular speed by an exact amount: between options o1 and o2 the circular speed at a first-quadrant longitude changes by (U2 - U1) cos l + (V2 - V1) sin l and at a fourth-quadrant longitude by -(U2 - U1) cos l + (V2 - V1) |sin l| (so a change of V looks like a change of Theta0 and a change of U is an asymmetry between the quadrants); checked on the same noisy spectrum of world flat:8 at every mask longitude between 'schonrich' and 'stromberg' to 1e-9 km/s",
+      "limits": {
+        "world": "flat:8",
+        "maxErrorKmS": 1e-09
+      }
+    },
+    {
+      "id": "B1.dopplerOracle",
+      "leg": "b",
+      "what": "the Doppler conversions against astropy.units' doppler_radio, doppler_optical and doppler_relativistic equivalencies with the same rest frequency, on 200 frequencies between -500 and 500 km/s (seed oracleNumpy 241), the kernel's velocity from frequency and its frequency from velocity in all three conventions. This tests the conversion, not the rest frequency, which is the same input to both",
+      "limits": {
+        "frequencies": 200,
+        "range": [
+          -500,
+          500
+        ],
+        "maxVelocityErrorKmS": 1e-09,
+        "maxFrequencyRel": 1e-13
+      }
+    },
+    {
+      "id": "B2.losOracle",
+      "leg": "b",
+      "what": "the line-of-sight velocity of the kernel against an independent numpy implementation on the three world curves, 7 mask longitudes and 40 distances each (agreement of v to 1e-10 km/s), and the terminal velocity against scipy.optimize.minimize_scalar maximising v along each sightline (agreement of the maximum to 1e-8 km/s)",
+      "limits": {
+        "maxVelocityErrorKmS": 1e-10,
+        "maxTerminalErrorKmS": 1e-08,
+        "longitudes": [
+          20,
+          35,
+          50,
+          65,
+          295,
+          320,
+          340
+        ],
+        "distances": 40
+      }
+    },
+    {
+      "id": "B3.spectrumOracle",
+      "leg": "b",
+      "what": "the forward model against an independent numpy implementation (a matrix over distance and channel with a midpoint rule on a 0.001 kpc grid, cumulative optical depth by cumsum) for the six worlds at longitudes 20, 40, 65, 295 and 340, thin: the largest difference over the spectrum is at most 5e-4 of its peak; and the three world curves at the same longitudes with the thin-with-spin-temperature and thick opacity settings of this file (radiative transfer with foreground absorption): at most 1e-3 of the peak",
+      "limits": {
+        "longitudes": [
+          20,
+          40,
+          65,
+          295,
+          340
+        ],
+        "maxThinOfPeak": 0.0005,
+        "maxThickOfPeak": 0.001
+      }
+    },
+    {
+      "id": "B4.analysisOracle",
+      "leg": "b",
+      "what": "the analysis against an independent numpy implementation of the stated rules (the LSR transform, edge rule E1 to E7 and the uncertainty formula) run on the same spectra, noisy ones included: for 24 spectra (six worlds, two longitudes each in each quadrant, noise realisations fixed in the inputs file) the outer edge, the edge crossing, the terminal velocity and the circular speed agree to 1e-6 km/s and the interval half-widths to a relative 1e-9; the refusal codes agree",
+      "limits": {
+        "spectra": 24,
+        "maxVelocityErrorKmS": 1e-06,
+        "maxWidthRel": 1e-09
+      }
+    },
+    {
+      "id": "B5.columnOracle",
+      "leg": "b",
+      "what": "the column-density coefficient N = 32 pi k nu0^2 / (3 h c^3 A10) times the integral of T dv (v in km/s, converted to cm/s) from scipy.constants' exact SI constants with the kernel's two atomic constants as inputs: the coefficient agrees to a relative 1e-12 and the column from a pinned noise-free spectrum to 1e-10. This tests the arithmetic, not the two atomic constants",
+      "limits": {
+        "maxCoefficientRel": 1e-12,
+        "maxColumnRel": 1e-10
+      }
+    },
+    {
+      "id": "B6.edgeShapeOracle",
+      "leg": "b",
+      "what": "the universal edge's peak position, peak value and c_f(0.5) against scipy.integrate.quad and scipy.optimize (minimize_scalar for the peak, brentq for the crossing): peak position and c_f within 1e-7 of x, peak value within a relative 1e-9",
+      "limits": {
+        "maxXError": 1e-07,
+        "maxValueRel": 1e-09
+      }
+    },
+    {
+      "id": "B7.publishedTangent",
+      "leg": "b",
+      "what": "a pinned tangent-velocity curve from a cited independent analysis of the same survey cut: NOT RUN while no such table has been read (RADIO_DATA_GATE.md row 05 is C: nothing retrieved). The oracle of record is therefore the independent implementation of B2 to B6, which the roadmap's 7.5.8(b) allows ('or an independent implementation'). The leg runs when Carl supplies tests/fixtures/radio/authentic/published-tangent.json (schema in RADIO.md)",
+      "limits": {}
+    },
+    {
+      "id": "C1.coverage",
+      "leg": "c",
+      "what": "coverage of the circular-speed interval at the true tangent radius on a seeded ensemble: the six worlds, the 20 mask longitudes, 25 noise realisations each (3,000 intervals; noise 0.1 K white, seed noiseC1), the correct R0, Theta0, LSR and a gas dispersion the analyst assumes with error: sigma_v_assumed = sigma_v (1 + 0.15 z), z standard normal from seed analystSigmaC1, stated uncertainty 0.15 of the assumed value, Theta0 uncertainty 0. The share of the realisations whose 68.27 percent interval holds the truth must lie in 0.60 to 0.76 and the share for the 95 percent interval in 0.90 to 0.99; no realisation is refused. The realisations share each world's shape error, so the effective sample is nearer the 120 world-longitude cases than 3,000: the bands are wide for that reason, set before any run",
+      "limits": {
+        "realisations": 25,
+        "noiseK": 0.1,
+        "sigmaVFractionError": 0.15,
+        "band68": [
+          0.6,
+          0.76
+        ],
+        "band95": [
+          0.9,
+          0.99
+        ],
+        "refusalRule": {
+          "allowedCode": "edge-not-separable",
+          "truthTerminalOverAssumedSigmaVMax": 3.2,
+          "note": "AM1: realisations refused by E7 where the truth terminal speed is under 3.2 times the assumed gas dispersion are the rule working as committed; they leave the coverage denominator and are counted and reported; any other refusal, or such a refusal above that ratio, fails the leg"
+        }
+      }
+    },
+    {
+      "id": "C2.coverageTheta0",
+      "leg": "c",
+      "what": "the same ensemble (seeds noiseC2 and analystSigmaC2) with the analyst's Theta0 wrong by a draw of 8 km/s sd (Theta0' = Theta0 + 8 z') and the stated uncertainty 8 km/s carried into the interval through sin(l): coverage of the 68.27 and 95 percent intervals against the truth Theta(R_t) in the same bands. The tangent radius is not part of the vertical interval (it moves the plotted point, not its height); the radius uncertainty is reported",
+      "limits": {
+        "band68": [
+          0.6,
+          0.76
+        ],
+        "band95": [
+          0.9,
+          0.99
+        ],
+        "refusalRule": {
+          "allowedCode": "edge-not-separable",
+          "truthTerminalOverAssumedSigmaVMax": 3.2,
+          "note": "AM1: realisations refused by E7 where the truth terminal speed is under 3.2 times the assumed gas dispersion are the rule working as committed; they leave the coverage denominator and are counted and reported; any other refusal, or such a refusal above that ratio, fails the leg"
+        }
+      }
+    },
+    {
+      "id": "C3.coverageDetail",
+      "leg": "c",
+      "what": "REPORTED, not judged: coverage and the median absolute error by quadrant and by gas dispersion for C1, the median interval half-width, and the share of the interval's variance due to noise, to the dispersion correction and to the shape term",
+      "limits": {}
+    },
+    {
+      "id": "D1.refusals",
+      "leg": "d",
+      "what": "the method refuses or says 'not constrained' where it must: a spectrum of pure noise at a mask longitude is refused 'edge-not-significant'; a world with gas dispersion 20 km/s at l = 65 (terminal velocity near one dispersion) is refused 'edge-not-separable'; a frequency axis that does not contain the rest frequency within 1000 km/s is refused 'axis'; a spectrum whose temperatures are not finite, or whose channels are not in order, is refused 'bad-spectrum'; a missing gas dispersion, R0 or Theta0 is refused 'missing-assumption'; each refusal returns its code and a reason in words and no number for the circular speed",
+      "limits": {
+        "noiseOnlySeedOffset": 7,
+        "wideSigmaVKmS": 20,
+        "wideLongitudeDeg": 65
+      }
+    },
+    {
+      "id": "D2.opticalDepth",
+      "leg": "d",
+      "what": "the column-density test under the optically thin assumption says so when it fails: the thin-with-spin-temperature world (n 0.02 cm^-3, T_s 120 K) is judged 'ok' with the thin column within 3 percent of the generator's column; the thick world (n 0.5 cm^-3, T_s 120 K) is judged 'thin-assumption-fails', its peak optical depth exceeds the limit 0.1, and the generator's column exceeds the thin estimate by a factor of at least 1.2; a spectrum whose peak reaches the spin temperature is reported 'saturated' with no column; a call without a spin temperature returns the thin column labelled 'opacity not assessed'",
+      "limits": {
+        "thinMaxRel": 0.03,
+        "thickMinFactor": 1.2,
+        "tauLimit": 0.1
+      }
+    },
+    {
+      "id": "R1.opacityOnEdge",
+      "leg": "r",
+      "what": "REPORTED, not judged: the error of the recovered circular speed on the thick world (the edge rule on a saturated line) and on the thin-with-spin-temperature world, against the thin world at the same longitudes, so the limit of the edge rule in opacity is on the page",
+      "limits": {}
+    },
+    {
+      "id": "R2.streaming",
+      "leg": "r",
+      "what": "REPORTED, not judged: the recovered circular speed when the world's gas has a constant 7 km/s of non-circular streaming (added to the line-of-sight velocity as a radial velocity component, kept out of the method's model), and when the gas disk ends inside the tangent radius (R_out = 0.9 R_t at l = 30 and 50), against the circular-orbit truth; the method has no way to see either",
+      "limits": {
+        "streamingKmS": 7,
+        "longitudes": [
+          30,
+          50
+        ],
+        "holeFraction": 1.1
+      }
+    },
+    {
+      "id": "E1.packContract",
+      "leg": "e",
+      "what": "the HI pack under a fixed contract against the cited published curve's uncertainties: NOT RUN. RADIO_DATA_GATE.md rows 01 to 05 are C (the CDS and VizieR pages were not retrieved for HI4PI and LAB, GALFA-HI's host and coverage were not read, no published tangent-velocity table was chosen), so no HI spectrum is in the tree and the 239 C path applies: the synthetic generator built here is the pack, labelled, and the authentic leg waits for Carl",
+      "limits": {}
+    }
+  ],
+  "amendments": [
+    {
+      "id": "AM1",
+      "check": "C1.coverage, C2.coverageTheta0",
+      "what": "the legs were written with 'no realisation is refused'. Rule E7 (committed in the same file) refuses a sightline whose terminal velocity is under three gas dispersions, and at l = 65 and 295 degrees the terminal speed is about 19.5 km/s, under three times 8 km/s: so the mask's two outermost longitudes are refused at a gas dispersion of 8 km/s by the rule as committed, and the leg as written contradicted it. A specification slip found by a noise-free design run before any leg ran, not a result. The leg now allows exactly that refusal (code edge-not-separable, truth terminal speed under 3.2 times the assumed dispersion, 3.2 being 3 plus a margin larger than the recovery error and the 0.15 dispersion error combined near the boundary), takes those realisations out of the coverage denominator and reports their number; any other refusal fails. The mask's rationale (past 65 degrees) is unchanged: the document states that at a dispersion of 8 km/s the rule stops at 60 and 300 degrees.",
+      "when": "2026-11-04, before any validator run"
+    },
+    {
+      "id": "AM2",
+      "check": "uncertainty.tauShape",
+      "what": "the shape term tau, written provisionally as 0.25 and declared the one calibrated number of the file, set to 0.05 from the design run (see tauNote). 0.25 would have made the interval about three times wider than the errors it covers (over-coverage, which the upper bands would have failed); the calibration is the one the file said it would make, on no test seed.",
+      "when": "2026-11-04, before any validator run"
+    },
+    {
+      "id": "AM3",
+      "check": "B6.edgeShapeOracle",
+      "what": "the oracle finds the peak of the universal edge as the root of dg/dx by scipy.optimize.brentq (with scipy.integrate.quad for the integral) rather than by scipy.optimize.minimize_scalar on g. A flat maximum cannot be located to better than about the square root of the machine precision by comparing values, so the committed 1e-7 bound on the peak position could not be met by the value-based method for any correct kernel; the bound is unchanged and the kernel also uses the derivative. A specification slip found before the oracle ran.",
+      "when": "2026-11-04, before any validator run"
+    },
+    {
+      "id": "AM4",
+      "check": "edgeRule",
+      "what": "step E2 says 'the outermost tenth of the channels'; the key outerFraction = 0.1 is added to edgeRule so the validator and the oracle read the same number from the file (the prose and the kernel already said one tenth). No bound changes.",
+      "when": "2026-11-04, before any validator run"
+    },
+    {
+      "id": "AM5",
+      "check": "A5.columnThin, R2.streaming",
+      "what": "two specification slips found while writing the validator, before it ran. (1) A5's channel-width comparison named the 0.5 km/s narrow world at 501 channels of 1 km/s, a line sampled at half its width: the trapezoid sum of a Gaussian sampled at spacing h has a relative error near 2 exp(-2 pi^2 sigma^2 / h^2), which is 1.5e-2 at sigma = 0.5 and h = 1, so no correct kernel meets 2e-4 there. The comparison is made at a gas dispersion of 2 km/s, 501 channels of 1 km/s against 1251 of 0.4 km/s, at the same 2e-4. (2) R2's second case, a gas disk ending at 0.9 R_t, leaves a sightline with no gas at all (every point of it is at R >= R_t), so it tests nothing. It is replaced by a hole: the gas disk begins at 1.1 R_t (R_in = 1.1 R_t) at l = 30 and 50, so the line of sight misses the tangent point; the leg is REPORTED either way. No bound of a judged leg changes.",
+      "when": "2026-11-04, before any validator run"
+    }
+  ]
+}
