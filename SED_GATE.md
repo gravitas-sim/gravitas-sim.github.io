@@ -116,6 +116,23 @@ by a session; the legs read what arrives.
    ran yourself on the points of `star.json`: `{"tool": {"name", "version", "command", "citation"}, "points": [...],
    "temperature": {"value", "sigma"}}`. The kernel must agree within three combined sigma.
 
+## Follow-up (2026-11-05): the new legs and the verdict beside the first
+
+The follow-up thresholds (`tests/fixtures/sed/followup/thresholds.json`, 0af41d8f) were committed before any follow-up code
+or run; no first-gate bound moved and D3 has no new leg (Carl, `DECISIONS_2026-11-05.md`). Results: B1b **FAIL** (one
+sub-check of the zero-point agreement, 1.2e-12 against a 1e-12 bound on a 6.6e-5 quantity; the conversions themselves agree to
+5.6e-16 and 1.9e-16), B2b pass, C2b pass (coverage 0.587 and 0.947), E1b reported, the authentic row NOT RUN.
+
+| Group | Legs | Status |
+|---|---|---|
+| Conversion | A1, A2, D2, D6 pass; B2b pass; **B1b FAIL** | not claimable |
+| Fit | A4, B3, C1, C3, D1, D4 pass; **D3 FAIL** | not claimable |
+| Luminosity | A3, A5, B4, C2b, D5 pass | claimable only with the fit group (the committed rule) |
+
+**Follow-up kernel verdict: C**, from B1b. If the zero-point agreement sub-check is judged absolutely the verdict becomes B,
+and D3 alone then holds the fit and luminosity groups. The first gate's verdict (C) is unchanged. The consumers rule is
+unchanged: nothing visible is built before Carl confirms.
+
 ## Questions for Carl
 
 1. **The verdict.** B1 and B2 fail on conventions and quadrature, not on physics, and the committed function makes the
@@ -131,3 +148,6 @@ by a session; the legs read what arrives.
    contract; I did not change it.
 5. **The files above** (the star, the services, the saved pages), and a go-ahead for a labelled synthetic SED view, which
    the consumers rule does not yet permit.
+6. **Follow-up: B1b's third sub-check.** It compares two routes to a 6.6e-5 quantity at 1e-12 relative, which is below the
+   arithmetic of double precision (1.2e-12 measured). It stays failing. Judging that sub-check by the absolute difference in
+   magnitude (1e-15) would pass it and make the follow-up verdict B; I did not move it.

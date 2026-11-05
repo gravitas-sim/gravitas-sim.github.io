@@ -157,6 +157,53 @@ band-integrated and pivot-monochromatic AB magnitudes differ by up to 0.2 mag fo
 5. **Widening matters.** With three nonsimultaneous points and no allowance the 68 percent interval covered 28 percent
    of the time; with the allowance equal to the true variability it covered 68 percent.
 
+## Follow-up legs (2026-11-05, Carl's ruling: failed legs stay failing, no bound moves)
+
+New legs for the four open questions, committed first (`tests/fixtures/sed/followup/thresholds.json`, 0af41d8f, before any
+code or run), validator `npm run sed:followup` (Node 22, about 20 s), independent oracle
+`tools/sed-oracle/oracle-followup.py` (no Gravitas code), results `tests/fixtures/sed/followup/results.json`,
+`failed-legs.json`. B1, B2, C2, D3 and E1 above stay on record unchanged; D3 stays failing with no new leg.
+
+| Leg | What | Result |
+|---|---|---|
+| B1b | f_lambda routes against astropy (1e-12); AB magnitude scaling against astropy times z = 3631 Jy / 3630.78 Jy (1e-12); the zero-point difference REPORTED | **FAIL** on one sub-check, see below; routes 5.6e-16, scaling 1.9e-16 (34 comparisons) |
+| B2b | band means and pivots against exact 40-point Gauss-Legendre, tolerance from the trapezoid's own Richardson estimate | pass: 56 comparisons, worst 0.44 of its own tolerance (tolerances 6.4e-8 to 1e-4) |
+| C2b | luminosity interval by model-residual integration, C2's ensemble | pass: coverage 0.587 and 0.947 (bands 0.55 to 0.80, 0.88 to 0.995); noise-free total 1.4e-11 of truth (1e-8) |
+| E1b | colour temperature against a published temperature, REPORTED with the adequacy flag | reported; the authentic row is NOT RUN (no `star.json`) |
+
+**B1b.** The AB zero point is a definition difference and is reported, not judged: the tree's 3631 Jy is 1.00006044 times
+astropy's 48.60 mag flux density (3630.7805 Jy), 6.562e-5 mag. With that constant factored out the conversions agree to
+5.6e-16 (f_lambda routes) and 1.9e-16 (magnitude scaling). The leg fails as committed because its third sub-check, that the
+kernel's value of the difference from its constants agrees with the reported value to 1e-12 relative, measures 1.2e-12:
+the quantity is 6.6e-5, two algebraically equal routes (`2.5 log10(3631/z0)` and `-2.5 log10(z0/3631)`) differ by about
+1e-16 absolute, which is 1.2e-12 of it. That is the conditioning of a small number, not a conversion error, and the bound
+is mine; it stays failing. A bound on the absolute difference (1e-15 mag) would pass, and is Carl's to set.
+
+**B2b.** The rule is stated in the thresholds: a trapezoid's error is O(h^2), estimated as 3 |T_h - T_(h/2)| / |T_h|
+(every interval split at its midpoint), floor 1e-9, per band and temperature, computed before the oracle was read. The
+radiation kernel's 1 nm trapezoid and its pivot on the band's own nodes are inside that rule on every band: B2's failure is
+the oracle's tolerance, not a defect of the radiation kernel beyond its stated order.
+
+**C2b.** `bolometricLuminosity(points, { integration: 'model-residual' })` integrates the exact fitted blackbody between the
+first and last wavelength and adds the trapezoid integral of each point's residual from the model (the point's monochromatic
+equivalent, so band points need no pivot guess); the tails are added as before and labelled extrapolated, and the result
+carries `modelAdequate` and says when the data-range flux is model-dependent. The default 'chords' is unchanged. On the same
+150 realisations the chords cover 0.033 and 0.220 (mean ratio to truth 0.9786) and the residual method 0.587 and 0.947
+(mean ratio 0.9999). It removes the chords' bias for a source the blackbody fits; for a source it does not fit, the flag is
+the warning and the residual is only as good as its trapezoid.
+
+**E1b (reported).** The four SDSS spectra of the pack through V, R, r, i at 0.02 mag, the pipeline temperature as the
+published value: A0 7609 K (68 percent 7378 to 7858) against 7852 K (-1.0 sigma, adequate, p 0.47); G2 7144 K against 5625
+K (+7.3 sigma, adequate, p 0.84); K3 4176 K against 4775 K (-9.0 sigma, adequate, p 0.98); M1 2944 K against 3980 K
+(-31 sigma, inadequate, p 3.6e-4). Four bands and two parameters leave two degrees of freedom, so the adequacy flag
+does not detect that a colour temperature is not an effective temperature: only the M dwarf is flagged. Every result
+carries the label that the temperature is a colour temperature, not an effective one, not corrected for reddening, and that
+is the only statement the leg commits. Nothing is claimed about any real star until `authentic/star.json` arrives.
+
+**Follow-up verdict (committed function, recorded statuses).** Kernel C: B1b fails as committed and D3 still fails. The
+conversion group would pass with B1b's third sub-check reset (verdict B); the fit group still fails on D3. The first gate's
+verdict is not recomputed.
+
 ## Open questions for Carl
 
 See `SED_GATE.md`, "Questions for Carl".

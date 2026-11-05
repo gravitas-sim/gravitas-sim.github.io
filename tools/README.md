@@ -203,6 +203,7 @@ current, and the orchestrator checks it.
 | `rotation-decomposition-validate.mjs` | The rotation-curve decomposition kernel against its committed thresholds (Prompt 236, Part A) | `npm run decomposition:validate` |
 | `route-budget.mjs` | What a fresh visitor downloads, route by route | `npm run budget:routes` |
 | `scenario-stability.mjs` | Scenario stability probe | `npm run validate:scenarios` |
+| `sed-followup-validate.mjs` | The SED kernel's follow-up legs against their committed thresholds (Prompt 245, follow-up) | `npm run sed:followup` |
 | `sed-scenes.mjs` | The committed scenes of the SED kernel's validation (Prompt 245) |  |
 | `sed-validate.mjs` | The SED kernel against its committed thresholds (Prompt 245) | `npm run sed:validate` |
 | `seeded-step.mjs` | A preset world stepped under a seed, every body kept at full precision |  |
