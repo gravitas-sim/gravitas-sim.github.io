@@ -171,9 +171,10 @@ run the remaining legs and what the instructional pull request would need, each 
 1. **The consumers rule.** May the instructional pull request (overlays, the equivalent-width tool, the three investigations,
    the model section) proceed on this kernel, and which of the requests above must land first? Items 2 and 3 gate the
    Balmer and sodium investigations; items 1 and 4 gate the identification overlay's oxygen, nitrogen, sulphur and band rows.
-2. **The sodium investigation at SDSS resolution.** The in-tree spectra cannot give a sodium column (the binned pack is
-   under one pixel per resolution element); do you want the lesson built on a high-resolution spectrum (a new pack and a rights
-   decision) or on the synthetic world with the refusal as the lesson?
+2. **The sodium investigation at SDSS resolution (answered by Carl's overnight delegation, 2026-11-05; a plan, not a built item).** The in-tree
+   spectra cannot give a sodium column (the binned pack is under one pixel per resolution element). When the lessons come, "The gas
+   on the way" is built on the synthetic sodium world with the refusal as the lesson (a saturated doublet and an unresolved single line
+   are refused by code, legs D1 and D5). No high-resolution pack and no new rights decision is planned for it. Nothing of it is built here.
 3. **E1, E2 and B6** need the files above; **Part B** needs the atomic data and the independent pipeline of
    `PLASMA_DIAGNOSTICS_GATE.md`.
 

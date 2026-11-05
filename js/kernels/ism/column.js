@@ -170,7 +170,7 @@ export function columnDensity({ lines } = {}) {
       return {
         ...refused(
           'saturated',
-          `the peak optical depth ${Number(t.tau0.toPrecision(3))} exceeds ${TAU0_MAX}: outside the linear regime`
+          `the peak optical depth ${Math.round(t.tau0 * 100) / 100} exceeds ${TAU0_MAX}: outside the linear regime`
         ),
         regime,
       };
