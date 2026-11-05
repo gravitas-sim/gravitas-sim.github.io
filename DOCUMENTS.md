@@ -63,6 +63,8 @@ catalogue refers to it, so a change to it can reach a student.
 | [FORWARD_MODELS.md](FORWARD_MODELS.md) | The forward-model loop. | feature | P84 | written | no |
 | [FRAME_PIPELINE.md](FRAME_PIPELINE.md) | The frame pipeline from a stack of frames to a light curve over the calibration lab, registration, detection and photometry: the algorithm, the limits, the oracle and the validation (Prompt 185). | feature | P185 | written | no |
 | [GALACTIC_DYNAMICS.md](GALACTIC_DYNAMICS.md) | Galactic dynamics with Gaia. | feature | P92 | written | yes |
+| [GALAXY_MORPHOLOGY.md](GALAXY_MORPHOLOGY.md) | The galaxy-morphology kernel: isophotes, profile, half-light radius, magnitude, concentration, asymmetry, validation, failed legs and requested files (Prompt 249, Part A). | feature | P249 | written | no |
+| [GALAXY_PROFILES_GATE.md](GALAXY_PROFILES_GATE.md) | The galaxy-profiles gate: committed fit, two-component and Tully-Fisher thresholds and verdict function, nothing measured, Tully-Fisher data unmet (Prompt 249, Part B). | gate | P249 | written | no |
 | [GALAXY_SPECTRA.md](GALAXY_SPECTRA.md) | The galaxy-spectra kernel: redshift by lines and by correlation, the 4000-angstrom break and its limits, validation and the files requested (Prompt 248). | feature | P248 | written | no |
 | [GRAVITATIONAL_LENSING.md](GRAVITATIONAL_LENSING.md) | Gravitational lensing. | feature | P94 | written | yes |
 | [GRAVITATIONAL_WAVES.md](GRAVITATIONAL_WAVES.md) | What the application computes for gravitational waves. | feature | unassigned | written | no |

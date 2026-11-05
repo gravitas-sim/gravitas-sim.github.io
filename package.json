@@ -26,6 +26,7 @@
     "ism:validate": "node tools/ism-validate.mjs",
     "galaxy:validate": "node tools/galaxy-validate.mjs",
     "agn:validate": "node tools/agn-validate.mjs",
+    "morphology:validate": "node tools/morphology-validate.mjs",
     "occurrence:validate": "node tools/occurrence-validate.mjs",
     "ttv:pack": "node tools/ttv-pack.mjs",
     "cluster:validate": "node tools/cluster-fit-validate.mjs",

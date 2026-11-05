@@ -560,6 +560,9 @@ export const NEVER_PRECACHED = [
   // Prompt 248: the galaxy-spectra kernel (redshift by lines and by cross-correlation, the 4000-angstrom break) and its validation group. No shipped module
   // imports them (the viewer's galaxy mode, the two investigations and the model section wait for Carl, D-R10-248-01), so no page can fetch one.
   /^(js\/kernels\/galaxy\/.*|js\/validation\/groups\/galaxy\.js)$/,
+  // Prompt 249: the galaxy-morphology kernel is under js/kernels/galaxy/morphology/ (the pattern above); its validation group is one more file. No shipped
+  // module imports either (the image panel's galaxy tools and 'Shapes of galaxies' wait for Carl, D-R10-249-01), so no page can fetch one.
+  /^js\/validation\/groups\/morphology\.js$/,
   // Prompt 252: the AGN kernel (the quasar redshift from broad lines, the luminosity and the bolometric term, the Eddington bound, the variability size bound,
   // the BPT classes) and its validation group. No shipped module imports them (no viewer mode, lesson or model section is built, D-R10-252-01), so no page can fetch one.
   /^(js\/kernels\/agn\/.*|js\/validation\/groups\/agn\.js)$/,
