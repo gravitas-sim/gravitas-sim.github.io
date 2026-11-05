@@ -683,5 +683,55 @@
       }
     }
   ],
-  "amendments": []
+  "amendments": [
+    {
+      "id": "AM1",
+      "step": "checks.B2.distanceOracle",
+      "what": "B2's oracle for the luminosity distance is an independent implementation by scipy.integrate.quad (flat and open, no radiation, c exact), not astropy.cosmology.LambdaCDM; the tolerance (relative 1e-6) and the redshifts and cosmologies are unchanged.",
+      "why": "Recorded before any validator run: astropy.cosmology cannot be imported in the session's Python (its PyYAML dependency is missing and nothing is installed or fetched); the same substitution was recorded as AM3 of Prompt 244's contract. The Eddington oracle (astropy.constants) is unaffected. No bound moved."
+    },
+    {
+      "id": "AM2",
+      "step": "checks.A7.quasarShift",
+      "what": "The integer-lag list of A7 becomes k = 500, 1500, 2000 and 2500 (z = 0.2589, 1.0000, 1.5119 and 2.1623) in place of 500, 1500, 2500 and 3500.",
+      "overrides": [
+        {
+          "check": "A7.quasarShift",
+          "limit": "lags",
+          "value": [
+            500,
+            1500,
+            2000,
+            2500
+          ]
+        }
+      ],
+      "why": "Recorded before any validator run, from arithmetic alone: log10(1 + z) = 3500 x 2e-4 gives z = 4.01, outside the contract's own redshift range [0, 2.6] and past the spectrum's last wavelength for every line of the world, so the committed case could not be recovered by any method. A case list error of the contract, found before any result existed. The tolerance (1e-6) and the other cases are unchanged; no bound moved."
+    },
+    {
+      "id": "AM3",
+      "step": "analysisRule.V1 (nSigma) and checks.A5, B5, C4, D5",
+      "what": "The significance a pair must have is nSigma = 5 sigma of the difference, not 3; the guard kGuard stays 3. The kernel constant N_SIGMA is 5; the oracle reads it from oracle-inputs.json.",
+      "why": "Recorded before any validator run, from arithmetic alone: a 60-epoch curve has 1770 pairs, so a 3-sigma pair (two-sided probability 0.0027) is expected about 4.8 times by chance in a flat light curve and D5 (100 of 100 flat curves not constrained) could not pass for any estimator that uses a per-pair 3-sigma cut without a trial correction; at 5 sigma (5.7e-7) the expected number is 0.001. A defect of the committed rule found before any result existed. No bound moved; A5 (noise-free), B5 (oracle arithmetic), C4 and D5 keep their text and limits."
+    },
+    {
+      "id": "AM4",
+      "step": "checks.C5.bptEnsemble",
+      "what": "The number of narrow-line worlds drawn is 2000, not 600; the number judged stays 300 (the first 300 worlds whose four lines are all measured), and every bound is unchanged.",
+      "overrides": [
+        {
+          "check": "C5.bptEnsemble",
+          "limit": "nWorlds",
+          "value": 2000
+        }
+      ],
+      "why": "Recorded before any validator run, from arithmetic alone: with a per-pixel signal to noise of 5 to 15 and the x and y ranges committed, a line needs a flux above about 2.7 / snr (in units of the continuum at 550 nm times nm) to be detected at 3 sigma, which leaves roughly 40 percent of worlds with all four lines measured, so 600 worlds could not supply the 300 the leg judges. The bounds, the ranges and the seeds are untouched."
+    },
+    {
+      "id": "AM5",
+      "step": "checks.A3.bolometricTerms (the modelLimited flag)",
+      "what": "The flag is true when the scatter exceeds the statistical term by more than a relative 1e-9 (the kernel's MODEL_LIMITED_TOLERANCE), so that (0.1, 0.1) dex, which differ only by floating-point rounding in the conversion of the flux error, is false.",
+      "why": "Recorded before any validator run: the statistical sigma is computed as sigma_F / (F ln 10) from an error built as 0.1 ln 10 F, which can differ from 0.1 in the last bit, and the committed case (0.1, 0.1) is meant to be an equality. A discretisation of a comparison, not a bound."
+    }
+  ]
 }
