@@ -27,6 +27,28 @@
       "note": "The committed expectation was an error made when the contract was written: a break of 1 for a flat spectrum holds for a spectrum flat in F_nu; the flat world is flat in F_lambda, whose F_nu rises as lambda squared, so the definition gives the ratio of the band means of lambda squared, not 1. The correlation and the line method behaved as committed, and a spectrum flat in F_nu returns 1 (flatFnu). The leg is left failing as committed; only Carl resets a bound."
     },
     {
+      "id": "D2b.flatFnuSpectrum",
+      "measured": {
+        "per": [
+          {
+            "z": 0.1,
+            "xc": "low-significance",
+            "lines": "too-few-features",
+            "breakD": 0.9999999999999992,
+            "breakPresent": false
+          },
+          {
+            "z": 0.25,
+            "xc": "low-significance",
+            "lines": "too-few-features",
+            "breakD": 1.0000000000000007,
+            "breakPresent": false
+          }
+        ]
+      },
+      "note": "The break is 1 to 1e-15 with no break flagged, and the line method is not constrained, as committed. The correlation is not refused no-structure: a spectrum flat in F_nu is a power law in F_lambda, which the 101-sample high-pass does not remove exactly, so a smooth residual correlates weakly with the template and the answer is returned with the low-significance flag (q under 10, never ok). The committed expectation presumed a constant spectrum. Left failing as committed; a later contract should expect \"not ok\" here."
+    },
+    {
       "id": "D3.templateMismatch",
       "measured": {
         "worlds": 200,

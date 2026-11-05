@@ -17,6 +17,7 @@
 
 import { refused } from '../statistics/check.js';
 import { covarianceInterval } from '../statistics/intervals.js';
+import { chi2Quantile } from '../statistics/special.js';
 import { cubicSpline } from '../../numeric/interp.js';
 import { checkSpectrum, robustSigma } from '../ism/spectrum.js';
 import { checkLogGrid, highPass } from './grid.js';
@@ -37,6 +38,8 @@ export const MIN_OVERLAP_SAMPLES = 50;
 export const MIN_OVERLAP_FRACTION = 0.5;
 /** The step, in samples, of the second difference. */
 export const CURVATURE_STEP = 0.1;
+/** The false-refusal level of the goodness-of-fit test (GALAXY-RULE-2, M2): a design choice, not a published value. */
+export const MISFIT_LEVEL = 1e-4;
 
 const notConstrained = (code, why, extra = {}) => ({
   status: 'not-constrained',
@@ -112,7 +115,7 @@ function checkTemplate(template, spec) {
 export function crossCorrelate(
   spec,
   template,
-  { zRange, keepProfile = false } = {}
+  { zRange, keepProfile = false, refuseMisfit = false } = {}
 ) {
   const bad = checkSpectrum(spec, { needResolution: true });
   if (bad) return bad;
@@ -318,9 +321,11 @@ export function crossCorrelate(
   const sigmaLag = 1 / Math.sqrt(qPeak * -qpp);
   const sigmaZ = (1 + z) * Math.LN10 * step * sigmaLag;
   const interval = covarianceInterval(z, sigmaZ);
-  // the best-fit amplitude of the filtered template: S / T at the refined lag
+  // the best-fit amplitude of the filtered template: S / T at the refined lag, and the residual chi-square (M1)
   let S = 0;
   let T = 0;
+  let F = 0;
+  let nOv = 0;
   {
     const lo = Math.max(0, Math.ceil(kBest));
     const hi = Math.min(N - 1, Math.floor(M - 1 + kBest));
@@ -328,8 +333,30 @@ export function crossCorrelate(
       const tv = spline.at(i - kBest);
       S += wf[i] * tv;
       T += w[i] * tv * tv;
+      F += w[i] * f[i] * f[i];
+      nOv++;
     }
   }
+  const fit = {
+    chi2Min: F - (S * S) / T,
+    dof: nOv - 2,
+    tested: !errorsFromScatter,
+  };
+  if (fit.tested) {
+    fit.chi2Cut = chi2Quantile(1 - MISFIT_LEVEL, fit.dof);
+    fit.chi2Reduced = fit.chi2Min / fit.dof;
+    fit.misfit = fit.chi2Min > fit.chi2Cut;
+  } else fit.note = 'misfit-untested: errors from scatter';
+  if (refuseMisfit && fit.misfit)
+    return {
+      ...refused(
+        'template-misfit',
+        'the residual of the best template match exceeds what the noise allows: the template does not describe the spectrum'
+      ),
+      template: base.template,
+      method: base.method,
+      fit,
+    };
   return {
     ...base,
     status: qPeak >= Q_OK ? 'ok' : 'low-significance',
@@ -339,6 +366,10 @@ export function crossCorrelate(
     amplitude: S / T,
     sigmaAmplitude: 1 / Math.sqrt(T),
     curvature: qpp,
-    flags: qPeak >= Q_OK ? [] : ['low-significance'],
+    fit,
+    flags: [
+      ...(qPeak >= Q_OK ? [] : ['low-significance']),
+      ...(fit.misfit ? ['misfit'] : []),
+    ],
   };
 }

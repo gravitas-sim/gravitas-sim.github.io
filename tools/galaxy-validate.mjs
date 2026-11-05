@@ -36,9 +36,11 @@ const ROOT = path.join(path.dirname(fileURLToPath(import.meta.url)), '..');
 const DIR = 'tests/fixtures/galaxy';
 const read = rel => JSON.parse(readFileSync(path.join(ROOT, rel), 'utf8'));
 export const THRESHOLDS = read(`${DIR}/thresholds.json`);
+export const FOLLOWUP = read(`${DIR}/followup-thresholds.json`);
 const ORACLE = read(`${DIR}/oracle-results.json`);
 const INPUTS = read(`${DIR}/oracle-inputs.json`);
-const lim = id => THRESHOLDS.checks.find(c => c.id === id).limits;
+const lim = id =>
+  [...THRESHOLDS.checks, ...FOLLOWUP.checks].find(c => c.id === id).limits;
 const SEEDS = THRESHOLDS.seeds;
 const ZR = THRESHOLDS.worlds.ensembles.zRange;
 const BANDS = G.INVENTED_BREAK_BANDS;
@@ -1210,6 +1212,165 @@ export function runValidation({ only = [] } = {}) {
         }),
       },
       'The line method is built for resolved emission lines; passive and broad-line spectra are where it answers less often or wrongly, and the correlation is the comparison.'
+    );
+  }
+
+  // ---- D2b: a spectrum flat in F_nu (the follow-up, followup-thresholds.json) ---------------------
+
+  if (wanted('D2b.')) {
+    const L = lim('D2b.flatFnuSpectrum');
+    const per = [];
+    let ok = true;
+    for (const z of L.z) {
+      const w = world('flat', 0, { noise: false, snr: 10, alpha: -2 });
+      const r = xc(w, 'passive');
+      const l = linesZ(w);
+      const b = brk(w, z);
+      const good =
+        r.status === 'refused' &&
+        r.code === 'no-structure' &&
+        l.status === 'not-constrained' &&
+        l.code === 'too-few-features' &&
+        b.status === 'ok' &&
+        Math.abs(b.D - 1) <= L.maxBreakError &&
+        b.breakPresent === false;
+      if (!good) ok = false;
+      per.push({
+        z,
+        xc: r.code,
+        lines: l.code,
+        breakD: b.D,
+        breakPresent: b.breakPresent,
+      });
+    }
+    row(
+      'D2b.flatFnuSpectrum',
+      ok,
+      { per },
+      'The break is 1 to 1e-15 with no break flagged, and the line method is not constrained, as committed. The correlation is not refused no-structure: a spectrum flat in F_nu is a power law in F_lambda, which the 101-sample high-pass does not remove exactly, so a smooth residual correlates weakly with the template and the answer is returned with the low-significance flag (q under 10, never ok). The committed expectation presumed a constant spectrum. Left failing as committed; a later contract should expect "not ok" here.'
+    );
+  }
+
+  // ---- D3b: the same mismatched worlds with the goodness-of-fit refusal --------------------------
+
+  if (wanted('D3b.')) {
+    const L = lim('D3b.templateMismatchWithFitTest');
+    const { u } = drawsOf(FOLLOWUP.seeds.mismatch, 'params');
+    let wrong = 0;
+    let misfit = 0;
+    let okCount = 0;
+    const total = 2 * L.n;
+    for (let i = 0; i < total; i++) {
+      const kind = KINDS[i % 2];
+      const other = KINDS[(i + 1) % 2];
+      const z = u(0.01, 0.3);
+      const w = world(kind, z, { seed: `d3-${i}`, snr: u(5, 15) });
+      const r = xc(w, other, { refuseMisfit: true });
+      if (confidentlyWrong(r, z)) wrong++;
+      if (r.code === 'template-misfit') misfit++;
+      if (r.status === 'ok') okCount++;
+    }
+    // the exact-template worlds of C1: the test must not refuse good fits
+    const { u: u1 } = drawsOf(FOLLOWUP.seeds.ensembleXc, 'params');
+    const list = [];
+    let falseRefusals = 0;
+    let exactWrong = 0;
+    for (let i = 0; i < L.exactTemplateWorlds; i++) {
+      const kind = KINDS[i % 2];
+      const z = u1(0.01, 0.3);
+      const snr = u1(5, 15);
+      const r = xc(world(kind, z, { seed: `c1-${i}`, snr }), kind, {
+        refuseMisfit: true,
+      });
+      if (r.code === 'template-misfit') falseRefusals++;
+      if (confidentlyWrong(r, z)) exactWrong++;
+      if (r.sigmaZ !== undefined)
+        list.push({ value: r.z, sigma: r.sigmaZ, truth: z });
+    }
+    const c = coverage(list);
+    row(
+      'D3b.templateMismatchWithFitTest',
+      wrong / total <= L.maxWrongFraction &&
+        falseRefusals / L.exactTemplateWorlds <= L.maxFalseRefusalFraction &&
+        inRange(c.coverage, L.coverageBand) &&
+        inRange(c.sdZ, L.sdBand),
+      {
+        mismatchedWorlds: total,
+        confidentlyWrong: wrong,
+        confidentlyWrongFraction: wrong / total,
+        refusedAsMisfit: misfit,
+        statusOk: okCount,
+        exactTemplate: {
+          worlds: L.exactTemplateWorlds,
+          falseRefusals,
+          falseRefusalFraction: falseRefusals / L.exactTemplateWorlds,
+          confidentlyWrong: exactWrong,
+          ...c,
+        },
+      },
+      'See GALAXY_SPECTRA.md, "Follow-up: the goodness-of-fit refusal".'
+    );
+  }
+
+  // ---- R1b: the misfit worlds of R1 with the refusal --------------------------------------------
+
+  if (wanted('R1b.')) {
+    const L = lim('R1b.templateMisfitWithFitTest');
+    const { u } = drawsOf(SEEDS.misfit, 'params');
+    const list = [];
+    let refusedMisfit = 0;
+    let wrong = 0;
+    for (let i = 0; i < L.n; i++) {
+      const kind = KINDS[i % 2];
+      const z = u(0.01, 0.3);
+      const K = G.GALAXY_WORLD.kinds[kind];
+      const lineScale = {};
+      for (const id of [
+        ...Object.keys(K.absorption ?? {}),
+        ...Object.keys(K.emission ?? {}),
+      ])
+        lineScale[id] = u(0.7, 1.3);
+      const extra =
+        kind === 'star-forming'
+          ? [
+              {
+                id: 'invented-emission',
+                kind: 'emission',
+                restNm: 545,
+                fractionOfHBeta: 0.2,
+              },
+            ]
+          : [
+              {
+                id: 'invented-absorption',
+                kind: 'absorption',
+                restNm: 460,
+                depth: 0.15,
+                sigmaKmS: 250,
+              },
+            ];
+      const w = world(kind, z, {
+        seed: `r1-${i}`,
+        snr: u(5, 15),
+        lineScale,
+        sigmaScale: u(0.8, 1.25),
+        extraLines: extra,
+      });
+      const r = xc(w, kind, { refuseMisfit: true });
+      if (r.code === 'template-misfit') refusedMisfit++;
+      else if (r.sigmaZ !== undefined)
+        list.push({ value: r.z, sigma: r.sigmaZ, truth: z });
+      if (confidentlyWrong(r, z)) wrong++;
+    }
+    reported(
+      'R1b.templateMisfitWithFitTest',
+      {
+        n: L.n,
+        refusedAsMisfit: refusedMisfit,
+        confidentlyWrong: wrong,
+        notRefused: list.length ? coverage(list) : null,
+      },
+      'The strict test refuses worlds whose lines are drawn away from the template (strengths up to 30 percent, widths 20 to 25 percent, one extra line) at these signal to noise; those it lets through are the closest matches.'
     );
   }
 

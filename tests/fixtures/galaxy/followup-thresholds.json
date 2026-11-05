@@ -1,0 +1,51 @@
+{
+  "format": "gravitas.galaxy-followup-thresholds/1",
+  "prompt": "Prompt 248 follow-up (Carl, DECISIONS_2026-11-05.md): a goodness-of-fit refusal for the cross-correlation as a NEW leg D3b, a flat-F_nu break as a NEW leg D2b, and the D3 worlds re-run with the new test as a reported row R1b",
+  "document": "GALAXY_SPECTRA.md (\"Follow-up: the goodness-of-fit refusal\"), written after this file",
+  "committed": "before any code of the follow-up existed and before the goodness-of-fit statistic was computed on any spectrum. The only things read before this file were the 248 results (D3: 21 of 200 mismatched-template worlds ok and wrong; D2: the flat world is flat in F_lambda). The cut below is a stated rule about the statistic's null distribution, not a value chosen from the 21 failures, and nothing was run to choose it.",
+  "rule": "The failed legs D2, D3 and C2 of thresholds.json stay failing and labelled in their own files; no bound of that file is moved or reread. The new legs are judged against the bounds below. A crossed bound is a failed leg, recorded in failed-legs.json and left failing; only Carl resets one. The refusal is OPT-IN (an option of crossCorrelate, off by default), so every result of the committed 27 legs is unchanged and D3 is still measured as it was. Nothing is typed from memory.",
+  "seeds": {
+    "mismatch": 248005,
+    "ensembleXc": 248001,
+    "note": "the same seeds as D3 and C1, so D3b judges exactly the D3 worlds and the false-refusal check exactly the C1 worlds"
+  },
+  "analysisRule": {
+    "name": "GALAXY-RULE-2 (committed here before the follow-up code existed)",
+    "steps": [
+      "M1 the statistic: at the refined best lag, over the n samples the template covers, chi2_min = sum w_i f_i^2 - S^2 / T (the weighted sum of squares of the high-passed spectrum minus the part the best-fit template amplitude explains, with S, T and w_i as in X3), with nu = n - 2 degrees of freedom (the amplitude and the lag). The result always carries chi2_min, nu and their ratio.",
+      "M2 the cut: under an exact template and independent white noise of the stated sigma, chi2_min is chi-square distributed with nu degrees of freedom up to the variance the high-pass removes (a factor of about 1 - 1/101, which makes the test conservative, never too strict). The refusal fires when chi2_min exceeds the 1 - 1e-4 quantile of chi-square with nu degrees of freedom (the statistics kernel's chi2Quantile): a false refusal rate of 1e-4 per spectrum under the model's own assumptions. The level 1e-4 is a design choice of this kernel stated here, not a published value.",
+      "M3 when it fires, with the option refuseMisfit true, the answer is status 'refused' with code 'template-misfit', the redshift withheld, and chi2_min, nu and the quantile named; with the option off (the default) the answer is what it was and the statistic is reported beside it with the flag 'misfit' when the cut is crossed.",
+      "M4 the statistic is tested only when sigma was supplied: without a sigma the noise level comes from the spectrum's own successive differences, which carry the line power, and the test would measure the scatter against itself; then the result says 'misfit-untested: errors from scatter'. A peak refused for significance or ambiguity is refused before the test."
+    ],
+    "assumes": "the stated per-pixel sigma is right (a wrong sigma is a wrong test); independent noise; the template, if it is the object, equals it up to an amplitude and a shift, so any structure in the spectrum the template does not carry is a misfit by this test, including a line the template lacks and a line-width difference at high signal to noise"
+  },
+  "checks": [
+    {
+      "id": "D2b.flatFnuSpectrum",
+      "leg": "d",
+      "what": "the reworded D2: a noise-free spectrum flat in F_nu (the flat kind with alpha = -2, a given sigma): the cross-correlation is refused with code no-structure, the line method is not-constrained (too-few-features), and the break is 1 to a relative 1e-9 with the flag that no break is present, at z = 0.1 and 0.25",
+      "limits": { "z": [0.1, 0.25], "maxBreakError": 1e-9 }
+    },
+    {
+      "id": "D3b.templateMismatchWithFitTest",
+      "leg": "d",
+      "what": "the same 200 mismatched-template worlds as D3 (seed 248005: 100 star-forming worlds against the passive template and 100 passive worlds against the star-forming template, random z, snr 5 to 15), analysed with refuseMisfit true: no more than 5 percent of the 200 are confidently wrong (status ok and an error above 5 sigma). The leg ALSO requires that the test does not refuse good fits: over the 300 exact-template worlds of C1 (seed 248001), with refuseMisfit true, no more than 1 percent are refused template-misfit and the coverage and standard deviation stay inside C1's bands. The number refused as misfit among the 200 is reported",
+      "limits": {
+        "n": 100,
+        "maxWrongFraction": 0.05,
+        "exactTemplateWorlds": 300,
+        "maxFalseRefusalFraction": 0.01,
+        "coverageBand": [0.602, 0.763],
+        "sdBand": [0.85, 1.15],
+        "refusalLevel": 0.0001
+      }
+    },
+    {
+      "id": "R1b.templateMisfitWithFitTest",
+      "leg": "r",
+      "what": "REPORTED, not judged: the 200 worlds of R1 (lines drawn away from the template: strengths times a factor on [0.7, 1.3], widths times a factor on [0.8, 1.25], one invented extra line; seed 248007) analysed with refuseMisfit true: how many are refused template-misfit, and the coverage and standard deviation of the normalised error of those not refused, so the cost of a strict test on a template that is only approximately the object is on the page",
+      "limits": { "n": 200 }
+    }
+  ],
+  "amendments": []
+}
