@@ -79,6 +79,23 @@ const measure = (w, z = w.truth.z) =>
   });
 const zOfLag = k => 10 ** (k * STEP) - 1;
 
+/**
+ * Why each failing leg fails, written after the first run and left with the leg (nothing here moves a bound).
+ * The causes named are the evidence's, with the ones not isolated by an experiment said so.
+ */
+const WHY = {
+  'A7.quasarShift':
+    'Nine noise-free cases: four are recovered inside the bound or near it (k = 500 at 1.7e-7 and z = 0.1234 at 1.1e-7 pass; z = 1.0777 reads 2.2e-5, k = 2000 reads 1.9e-6), k = 1500 reads 1.3e-4 against 1e-6, z = 1.9999 reads 4.4e-4 against 5e-5, and three (k = 2500, z = 0.5555, z = 2.3456) are refused ambiguous-peak. The refusal is the galaxy kernel\u2019s committed 0.8 rule doing its work: the world\u2019s three invented ultraviolet lines sit at 0.2, 0.3 and 0.4 of H-alpha, a 2:3:4 spacing under which the template shifted by a modest factor lines up with itself, so a second correlation peak reaches 0.8 of the best. Where a case is recovered the departure is a systematic floor of 1e-6 to 4e-4 in z, which we attribute (not isolated by an experiment) to the high-pass filter\u2019s edge effects at the spectrum\u2019s cut at 1000 nm with a 401-sample window and to the template\u2019s different extent. Left failing as committed; a world whose invented lines are not harmonic, and a leg that expects a refusal where the world is ambiguous, are questions for Carl in AGN.md.',
+  'B3.redshiftOracle':
+    'Five of the eight noisy worlds are refused ambiguous-peak by the kernel (the oracle has no ambiguity rule and returns a redshift for all eight), so the leg, which requires status ok on every case, fails on the committed text. On the three recovered worlds the kernel and the independent implementation agree to 8.6e-9 in z, 8.0e-9 relative in sigma, 6.3e-14 relative in q and 4.4e-15 of the profile maximum, far inside the bounds. The cause of the refusals is the harmonic spacing of the invented lines named under A7. Left failing as committed.',
+  'B6.lineFluxOracle':
+    'The kernel\u2019s fit and scipy\u2019s curve_fit on the same window and model differ by up to 1.08 of a sigma in the flux (bound 0.25) and by up to 48 percent in the reported sigma (bound 5 percent). The windows are 7 pixels half-width for the two lines near their neighbour and 10 for the others, a five-parameter fit in 15 to 23 pixels of a line about 2 pixels wide, so the two optimisers settle at different points of a poorly conditioned surface; the kernel\u2019s fit errors are larger than scipy\u2019s in 23 of 24 lines, by 1 to 48 percent. Not isolated further. C5 shows the kernel\u2019s own intervals cover (x 0.63, y 0.72), so the consequence is a disagreement between two fits, not a measured miscalibration. Left failing as committed.',
+  'C1.redshiftCoverage':
+    '134 of 300 worlds are refused ambiguous-peak (the harmonic spacing named under A7), so the ok share is 0.553 against the committed 0.95. Among the 166 answered, the coverage of the one-sigma interval is 0.446 (band 0.602 to 0.763) and the standard deviation of the normalised error is 16.5 (band 0.85 to 1.15): the median absolute error 6.1e-5 is close to the median sigma 5.3e-5, so the failure is in the tail (a few answers with errors of 1e-3 and sigmas of 1e-5, where the systematic floor named under A7 exceeds the noise at high signal to noise). No catastrophic answer. The interval carries noise only, as the kernel states. Left failing as committed.',
+  'D2.undetectedAndBlended':
+    'The blend half passes (50 of 50 unresolved-blend). In the weak-line half 48 of 50 worlds return line-not-detected for the invented O line as committed, and 2 return line-fit-failed: the fit of a line that is not there did not converge, which the committed rule does not treat as a non-detection. Left failing as committed; mapping a failed fit at the expected position to line-not-detected is a question for Carl.',
+};
+
 /** Coverage and normalised-error statistics of a list of {value, sigma, truth}. */
 function coverage(list) {
   const z = list.map(r => (r.value - r.truth) / r.sigma);
@@ -156,7 +173,7 @@ export function runValidation({ only = [] } = {}) {
       id,
       status: pass ? 'pass' : 'fail',
       measured,
-      note: pass ? '' : note,
+      note: pass ? '' : (WHY[id] ?? note),
     });
   const reported = (id, measured, note = '') =>
     rows.push({ id, status: 'reported', measured, note });
@@ -224,7 +241,7 @@ export function runValidation({ only = [] } = {}) {
       (cosmology.luminosityDistance(1.5) / cosmology.luminosityDistance(0.5)) **
         2
     );
-    const e4 = Math.abs(a.restNm - 550 / 1.5);
+    const e4 = Math.abs(a.restNm - a.observedNm / (1 + a.z));
     const e5 = rel(bandAt(0.5, 2 * F, 0).luminosityW / a.luminosityW, 2);
     row(
       'A2.luminosityScaling',
@@ -394,14 +411,20 @@ export function runValidation({ only = [] } = {}) {
       const e = r.status === 'ok' ? Math.abs(r.z - z) : Infinity;
       if (r.status !== 'ok') allOk = false;
       worstLag = Math.max(worstLag, e);
-      per.push({ k, z: sig(z, 6), error: sig(e) });
+      per.push({
+        k,
+        z: sig(z, 6),
+        error: sig(e),
+        status: r.status,
+        code: r.code ?? null,
+      });
     }
     for (const z of L.zs) {
       const r = xcq(qworld(z, { noise: false, snr: 20 }));
       const e = r.status === 'ok' ? Math.abs(r.z - z) : Infinity;
       if (r.status !== 'ok') allOk = false;
       worstSub = Math.max(worstSub, e);
-      per.push({ z, error: sig(e) });
+      per.push({ z, error: sig(e), status: r.status, code: r.code ?? null });
     }
     row(
       'A7.quasarShift',
@@ -471,6 +494,7 @@ export function runValidation({ only = [] } = {}) {
     let worstQ = 0;
     let worstP = 0;
     let allOk = true;
+    const codes = [];
     const tpl = {
       ...TPL,
       flux: Float64Array.from(INPUTS.template.flux),
@@ -482,6 +506,7 @@ export function runValidation({ only = [] } = {}) {
         keepProfile: true,
       });
       const o = ORACLE.b3[i];
+      codes.push(r.status === 'ok' ? 'ok' : (r.code ?? r.status));
       if (r.status !== 'ok') {
         allOk = false;
         return;
@@ -508,7 +533,7 @@ export function runValidation({ only = [] } = {}) {
         worstS <= L.maxRelativeSigma &&
         worstQ <= L.maxRelativeQ &&
         worstP <= L.maxRelativeProfile,
-      { worstZ, worstSigma: worstS, worstQ, worstProfile: worstP }
+      { worstZ, worstSigma: worstS, worstQ, worstProfile: worstP, codes }
     );
   }
 
@@ -614,11 +639,16 @@ export function runValidation({ only = [] } = {}) {
     const list = [];
     let ok = 0;
     let catastrophic = 0;
+    const status = {};
+    const errs = [];
     for (let i = 0; i < L.n; i++) {
       const z = u(L.zRange[0], L.zRange[1]);
       const snr = u(L.snrRange[0], L.snrRange[1]);
       const r = xcq(qworld(z, { seed: `c1-${i}`, snr }));
+      const key = r.status === 'ok' ? 'ok' : (r.code ?? r.status);
+      status[key] = (status[key] ?? 0) + 1;
       if (r.status === 'ok') {
+        errs.push(Math.abs(r.z - z));
         ok++;
         list.push({ value: r.z, sigma: r.sigmaZ, truth: z });
       }
@@ -631,7 +661,14 @@ export function runValidation({ only = [] } = {}) {
         inRange(c.sdZ, L.sdBand) &&
         ok / L.n >= L.minOkFraction &&
         catastrophic / L.n <= L.maxCatastrophic,
-      { ...c, okFraction: ok / L.n, catastrophic: catastrophic / L.n }
+      {
+        ...c,
+        okFraction: ok / L.n,
+        catastrophic: catastrophic / L.n,
+        status,
+        medianAbsErrorZ: sig(median(errs), 3),
+        medianSigmaZ: sig(median(list.map(r => r.sigma)), 3),
+      }
     );
   }
 

@@ -732,6 +732,12 @@
       "step": "checks.A3.bolometricTerms (the modelLimited flag)",
       "what": "The flag is true when the scatter exceeds the statistical term by more than a relative 1e-9 (the kernel's MODEL_LIMITED_TOLERANCE), so that (0.1, 0.1) dex, which differ only by floating-point rounding in the conversion of the flux error, is false.",
       "why": "Recorded before any validator run: the statistical sigma is computed as sigma_F / (F ln 10) from an error built as 0.1 ln 10 F, which can differ from 0.1 in the last bit, and the committed case (0.1, 0.1) is meant to be an equality. A discretisation of a comparison, not a bound."
+    },
+    {
+      "id": "AM6",
+      "step": "checks.A2.luminosityScaling (item iv, in the validator's code)",
+      "what": "The validator's expression for item (iv) is corrected to compare the reported rest wavelength with lambda_obs / (1 + z) of the same band (the committed text), where the first run compared it with 550 / (1 + z) of a band observed at 550 (1 + z) nm.",
+      "why": "Recorded AFTER the first validator run (run 1), because the first run showed the expression was wrong, not the kernel: A2 failed only on item (iv), with restWavelengthError 183.33 nm (= 550 - 550 / 1.5), the other four items passing at 1.7e-16, 1.55e-5, 1.2e-16 and 0. The committed text and its bound (exactly equal) are unchanged and nothing in the kernel changed; the correction is of the validator's arithmetic only. Every other leg of run 1 is left as it was and the five other failures (A7, B3, B6, C1, D2) are NOT amended."
     }
   ]
 }

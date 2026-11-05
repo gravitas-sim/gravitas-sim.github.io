@@ -1,0 +1,610 @@
+{
+  "format": "gravitas.agn-results/1",
+  "rows": [
+    {
+      "id": "A1.eddingtonClosedForm",
+      "status": "pass",
+      "measured": {
+        "closedForm": 1.8343066423132704e-16,
+        "linearity": 0,
+        "inverse": 0,
+        "ratio": 0
+      },
+      "note": ""
+    },
+    {
+      "id": "A2.luminosityScaling",
+      "status": "pass",
+      "measured": {
+        "nuFnu": 1.7385364302391444e-16,
+        "lowZ": 0.00001550000531250272,
+        "ratio": 1.197798012025295e-16,
+        "restWavelengthError": 0,
+        "doubling": 0
+      },
+      "note": ""
+    },
+    {
+      "id": "A3.bolometricTerms",
+      "status": "pass",
+      "measured": {
+        "central": 0,
+        "halfWidth": 5.689893001203927e-14,
+        "quadrature": 1.7347234759768068e-16,
+        "per": [
+          {
+            "stat": 0.02,
+            "scatter": 0.2,
+            "modelLimited": true
+          },
+          {
+            "stat": 0.2,
+            "scatter": 0.02,
+            "modelLimited": false
+          },
+          {
+            "stat": 0.1,
+            "scatter": 0.1,
+            "modelLimited": false
+          }
+        ]
+      },
+      "note": ""
+    },
+    {
+      "id": "A4.sizeBound",
+      "status": "pass",
+      "measured": {
+        "worstRelative": 0
+      },
+      "note": ""
+    },
+    {
+      "id": "A5.sinusoidTimescale",
+      "status": "pass",
+      "measured": {
+        "per": [
+          {
+            "amplitude": 0.3,
+            "tauMinDays": 50.608,
+            "ratio": 1.0000134
+          },
+          {
+            "amplitude": 0.6,
+            "tauMinDays": 21.2207,
+            "ratio": 1.0000175
+          },
+          {
+            "amplitude": 0.9,
+            "tauMinDays": 7.70823,
+            "ratio": 1.0000563
+          }
+        ]
+      },
+      "note": ""
+    },
+    {
+      "id": "A6.bptKnownPoints",
+      "status": "pass",
+      "measured": {
+        "correct": 12,
+        "of": 12,
+        "per": [
+          {
+            "x": -1.5,
+            "y": 0.3875,
+            "expected": "star-forming",
+            "got": "star-forming"
+          },
+          {
+            "x": -1.5,
+            "y": 0.7718,
+            "expected": "composite",
+            "got": "composite"
+          },
+          {
+            "x": -1.5,
+            "y": 1.1561,
+            "expected": "agn",
+            "got": "agn"
+          },
+          {
+            "x": -1,
+            "y": 0.24545,
+            "expected": "star-forming",
+            "got": "star-forming"
+          },
+          {
+            "x": -1,
+            "y": 0.66144,
+            "expected": "composite",
+            "got": "composite"
+          },
+          {
+            "x": -1,
+            "y": 1.0774,
+            "expected": "agn",
+            "got": "agn"
+          },
+          {
+            "x": -0.5,
+            "y": -0.13333,
+            "expected": "star-forming",
+            "got": "star-forming"
+          },
+          {
+            "x": -0.5,
+            "y": 0.39524,
+            "expected": "composite",
+            "got": "composite"
+          },
+          {
+            "x": -0.5,
+            "y": 0.92381,
+            "expected": "agn",
+            "got": "agn"
+          },
+          {
+            "x": 0.2,
+            "y": -0.6,
+            "expected": "composite",
+            "got": "composite"
+          },
+          {
+            "x": 0.2,
+            "y": 0.5,
+            "expected": "agn",
+            "got": "agn"
+          },
+          {
+            "x": 0.7,
+            "y": -0.5,
+            "expected": "agn",
+            "got": "agn"
+          }
+        ]
+      },
+      "note": ""
+    },
+    {
+      "id": "A7.quasarShift",
+      "status": "fail",
+      "measured": {
+        "worstLag": null,
+        "worstSub": null,
+        "per": [
+          {
+            "k": 500,
+            "z": 0.258925,
+            "error": 1.684e-7,
+            "status": "ok",
+            "code": null
+          },
+          {
+            "k": 1500,
+            "z": 0.995262,
+            "error": 0.0001257,
+            "status": "ok",
+            "code": null
+          },
+          {
+            "k": 2000,
+            "z": 1.51189,
+            "error": 0.000001869,
+            "status": "ok",
+            "code": null
+          },
+          {
+            "k": 2500,
+            "z": 2.16228,
+            "error": null,
+            "status": "refused",
+            "code": "ambiguous-peak"
+          },
+          {
+            "z": 0.1234,
+            "error": 1.099e-7,
+            "status": "ok",
+            "code": null
+          },
+          {
+            "z": 0.5555,
+            "error": null,
+            "status": "refused",
+            "code": "ambiguous-peak"
+          },
+          {
+            "z": 1.0777,
+            "error": 0.0000223,
+            "status": "ok",
+            "code": null
+          },
+          {
+            "z": 1.9999,
+            "error": 0.000441,
+            "status": "ok",
+            "code": null
+          },
+          {
+            "z": 2.3456,
+            "error": null,
+            "status": "refused",
+            "code": "ambiguous-peak"
+          }
+        ]
+      },
+      "note": "Nine noise-free cases: four are recovered inside the bound or near it (k = 500 at 1.7e-7 and z = 0.1234 at 1.1e-7 pass; z = 1.0777 reads 2.2e-5, k = 2000 reads 1.9e-6), k = 1500 reads 1.3e-4 against 1e-6, z = 1.9999 reads 4.4e-4 against 5e-5, and three (k = 2500, z = 0.5555, z = 2.3456) are refused ambiguous-peak. The refusal is the galaxy kernel’s committed 0.8 rule doing its work: the world’s three invented ultraviolet lines sit at 0.2, 0.3 and 0.4 of H-alpha, a 2:3:4 spacing under which the template shifted by a modest factor lines up with itself, so a second correlation peak reaches 0.8 of the best. Where a case is recovered the departure is a systematic floor of 1e-6 to 4e-4 in z, which we attribute (not isolated by an experiment) to the high-pass filter’s edge effects at the spectrum’s cut at 1000 nm with a 401-sample window and to the template’s different extent. Left failing as committed; a world whose invented lines are not harmonic, and a leg that expects a refusal where the world is ambiguous, are questions for Carl in AGN.md."
+    },
+    {
+      "id": "B1.eddingtonOracle",
+      "status": "pass",
+      "measured": {
+        "worstRelative": 0,
+        "note": "the oracle reads the same installed astropy constants as the pinned file: this checks the arithmetic and the units, not the constants"
+      },
+      "note": ""
+    },
+    {
+      "id": "B2.distanceOracle",
+      "status": "pass",
+      "measured": {
+        "distance": 2.928509236755831e-16,
+        "luminosity": 7.856747779923446e-16
+      },
+      "note": ""
+    },
+    {
+      "id": "B3.redshiftOracle",
+      "status": "fail",
+      "measured": {
+        "worstZ": 8.601056755708214e-9,
+        "worstSigma": 7.99487971318249e-9,
+        "worstQ": 6.326224058972937e-14,
+        "worstProfile": 4.3508138495046706e-15,
+        "codes": [
+          "ok",
+          "ambiguous-peak",
+          "ambiguous-peak",
+          "ok",
+          "ambiguous-peak",
+          "ambiguous-peak",
+          "ambiguous-peak",
+          "ok"
+        ]
+      },
+      "note": "Five of the eight noisy worlds are refused ambiguous-peak by the kernel (the oracle has no ambiguity rule and returns a redshift for all eight), so the leg, which requires status ok on every case, fails on the committed text. On the three recovered worlds the kernel and the independent implementation agree to 8.6e-9 in z, 8.0e-9 relative in sigma, 6.3e-14 relative in q and 4.4e-15 of the profile maximum, far inside the bounds. The cause of the refusals is the harmonic spacing of the invented lines named under A7. Left failing as committed."
+    },
+    {
+      "id": "B4.bptOracle",
+      "status": "pass",
+      "measured": {
+        "worstRelative": 3.3600800848609854e-16,
+        "identicalClasses": 3000,
+        "of": 3000
+      },
+      "note": ""
+    },
+    {
+      "id": "B5.timescaleOracle",
+      "status": "pass",
+      "measured": {
+        "worstRelative": 2.1596805010072518e-16,
+        "samePairs": true
+      },
+      "note": ""
+    },
+    {
+      "id": "B6.lineFluxOracle",
+      "status": "fail",
+      "measured": {
+        "worstFluxSigmas": 1.0807345788453393,
+        "worstRelativeSigma": 0.4841289194703021
+      },
+      "note": "The kernel’s fit and scipy’s curve_fit on the same window and model differ by up to 1.08 of a sigma in the flux (bound 0.25) and by up to 48 percent in the reported sigma (bound 5 percent). The windows are 7 pixels half-width for the two lines near their neighbour and 10 for the others, a five-parameter fit in 15 to 23 pixels of a line about 2 pixels wide, so the two optimisers settle at different points of a poorly conditioned surface; the kernel’s fit errors are larger than scipy’s in 23 of 24 lines, by 1 to 48 percent. Not isolated further. C5 shows the kernel’s own intervals cover (x 0.63, y 0.72), so the consequence is a disagreement between two fits, not a measured miscalibration. Left failing as committed."
+    },
+    {
+      "id": "B7.sdssPipelineOracle",
+      "status": "not-run",
+      "measured": null,
+      "note": "No SDSS quasar spectrum and no pipeline redshift or line ratio for one is in the tree, and nothing is fetched. AGN.md (\"Files requested from Carl\") names the spectra, the pipeline products and the terms pages to save; the bound when run is fixed in thresholds.json."
+    },
+    {
+      "id": "C1.redshiftCoverage",
+      "status": "fail",
+      "measured": {
+        "n": 166,
+        "coverage": 0.4457831325301205,
+        "meanZ": 4.280451087247568,
+        "sdZ": 16.456850476175845,
+        "okFraction": 0.5533333333333333,
+        "catastrophic": 0,
+        "status": {
+          "ambiguous-peak": 134,
+          "ok": 166
+        },
+        "medianAbsErrorZ": 0.0000613,
+        "medianSigmaZ": 0.0000527
+      },
+      "note": "134 of 300 worlds are refused ambiguous-peak (the harmonic spacing named under A7), so the ok share is 0.553 against the committed 0.95. Among the 166 answered, the coverage of the one-sigma interval is 0.446 (band 0.602 to 0.763) and the standard deviation of the normalised error is 16.5 (band 0.85 to 1.15): the median absolute error 6.1e-5 is close to the median sigma 5.3e-5, so the failure is in the tail (a few answers with errors of 1e-3 and sigmas of 1e-5, where the systematic floor named under A7 exceeds the noise at high signal to noise). No catastrophic answer. The interval carries noise only, as the kernel states. Left failing as committed."
+    },
+    {
+      "id": "C2.luminosityCoverage",
+      "status": "pass",
+      "measured": {
+        "n": 3000,
+        "coverage1": 0.6853333333333333,
+        "coverage2": 0.9573333333333334,
+        "statOnlyCoverage1": 0.10666666666666667
+      },
+      "note": ""
+    },
+    {
+      "id": "C3.eddingtonBoundCoverage",
+      "status": "pass",
+      "measured": {
+        "n": 3000,
+        "holds": 0.9983333333333333
+      },
+      "note": ""
+    },
+    {
+      "id": "C4.sizeBoundHolds",
+      "status": "pass",
+      "measured": {
+        "n": 500,
+        "answeredFraction": 1,
+        "holdsFraction": 0.964,
+        "medianTauUpOverTauMin": 1.091030968372643
+      },
+      "note": ""
+    },
+    {
+      "id": "C5.bptEnsemble",
+      "status": "pass",
+      "measured": {
+        "measuredWorlds": 300,
+        "x": {
+          "n": 300,
+          "coverage": 0.63,
+          "meanZ": 0.09848325240900244,
+          "sdZ": 1.076107708835874
+        },
+        "y": {
+          "n": 300,
+          "coverage": 0.7166666666666667,
+          "meanZ": -0.011567914462236028,
+          "sdZ": 0.9471751420022274
+        },
+        "classed": 256,
+        "correctFraction": 0.9921875,
+        "ambiguous": 44,
+        "refusedBeforeRatios": 5
+      },
+      "note": ""
+    },
+    {
+      "id": "D1.linesOutsideCoverage",
+      "status": "pass",
+      "measured": {
+        "refused": 120,
+        "of": 120,
+        "codes": {
+          "line-outside-coverage": 120
+        }
+      },
+      "note": ""
+    },
+    {
+      "id": "D2.undetectedAndBlended",
+      "status": "fail",
+      "measured": {
+        "weakRefused": 48,
+        "blendRefused": 50,
+        "of": 50,
+        "codes": {
+          "line-not-detected": 48,
+          "blend:unresolved-blend": 50,
+          "line-fit-failed": 2
+        }
+      },
+      "note": "The blend half passes (50 of 50 unresolved-blend). In the weak-line half 48 of 50 worlds return line-not-detected for the invented O line as committed, and 2 return line-fit-failed: the fit of a line that is not there did not converge, which the committed rule does not treat as a non-detection. Left failing as committed; mapping a failed fit at the expected position to line-not-detected is a question for Carl."
+    },
+    {
+      "id": "D3.bandMismatch",
+      "status": "pass",
+      "measured": {
+        "refused": "band-mismatch",
+        "accepted": "ok",
+        "noSource": "no-source",
+        "noScatter": "bad-scatter",
+        "noBand": "no-band"
+      },
+      "note": ""
+    },
+    {
+      "id": "D4.boundLabelAndInputs",
+      "status": "pass",
+      "measured": {
+        "labelOk": true,
+        "refusals": [
+          true,
+          true,
+          true,
+          true
+        ],
+        "weak": "no-lower-limit"
+      },
+      "note": ""
+    },
+    {
+      "id": "D5.lightCurveRefusals",
+      "status": "pass",
+      "measured": {
+        "notConstrained": 100,
+        "of": 100,
+        "checks": {
+          "nonIncreasing": true,
+          "fewEpochs": true,
+          "badError": true,
+          "mismatch": true
+        }
+      },
+      "note": ""
+    },
+    {
+      "id": "D6.featurelessSpectrum",
+      "status": "pass",
+      "measured": {
+        "okFraction": 0.01,
+        "status": {
+          "refused:ambiguous-peak": 188,
+          "ok": 2,
+          "not-constrained": 4,
+          "low-significance": 6
+        },
+        "maxQ": 12.36
+      },
+      "note": ""
+    },
+    {
+      "id": "D7.bptAmbiguous",
+      "status": "pass",
+      "measured": {
+        "ambiguous": 50,
+        "assigned": 0,
+        "of": 50
+      },
+      "note": ""
+    },
+    {
+      "id": "E1.sdssQuasarPack",
+      "status": "not-run",
+      "measured": null,
+      "note": "No SDSS quasar spectrum at any redshift and no pipeline value for one is in the tree, and nothing is fetched. AGN.md (\"Files requested from Carl\") names the three objects to choose, the products, the fields and the terms pages to save; the bound when run is fixed in thresholds.json."
+    },
+    {
+      "id": "E2.bptPublished",
+      "status": "not-run",
+      "measured": null,
+      "note": "No published BPT dividing line and no published line ratio for a named object is in the tree, and nothing is fetched or typed. AGN.md names the papers and the numbers Carl reads from them; the bound when run is fixed in thresholds.json."
+    },
+    {
+      "id": "E3.measuredLightCurve",
+      "status": "not-run",
+      "measured": null,
+      "note": "No measured AGN light curve with a published time scale is in the tree, and nothing is fetched. AGN.md names the product and the fields to save."
+    },
+    {
+      "id": "E4.bolometricLiterature",
+      "status": "not-run",
+      "measured": null,
+      "note": "No cited bolometric correction, its scatter and rest band, and no published Eddington ratio of a named object is in the tree; none is typed from memory. AGN.md names the values to read from the paper and the source string to save."
+    },
+    {
+      "id": "G1.sampleRights",
+      "status": "not-run",
+      "measured": null,
+      "note": "NOT RUN: the gate's files are not in the tree and nothing is fetched or typed (AGN_LUMINOSITY_FUNCTION_GATE.md, \"Files requested from Carl\"). No verdict, nothing is built within the gate, and the consumers take the C alternative (a reading step). Threshold fixed in gate-thresholds.json."
+    },
+    {
+      "id": "G2.completenessDocumented",
+      "status": "not-run",
+      "measured": null,
+      "note": "NOT RUN: the gate's files are not in the tree and nothing is fetched or typed (AGN_LUMINOSITY_FUNCTION_GATE.md, \"Files requested from Carl\"). No verdict, nothing is built within the gate, and the consumers take the C alternative (a reading step). Threshold fixed in gate-thresholds.json."
+    },
+    {
+      "id": "G3.kCorrectionSource",
+      "status": "not-run",
+      "measured": null,
+      "note": "NOT RUN: the gate's files are not in the tree and nothing is fetched or typed (AGN_LUMINOSITY_FUNCTION_GATE.md, \"Files requested from Carl\"). No verdict, nothing is built within the gate, and the consumers take the C alternative (a reading step). Threshold fixed in gate-thresholds.json."
+    },
+    {
+      "id": "G4.vmaxVsOracle",
+      "status": "not-run",
+      "measured": null,
+      "note": "NOT RUN: the gate's files are not in the tree and nothing is fetched or typed (AGN_LUMINOSITY_FUNCTION_GATE.md, \"Files requested from Carl\"). No verdict, nothing is built within the gate, and the consumers take the C alternative (a reading step). Threshold fixed in gate-thresholds.json."
+    },
+    {
+      "id": "G5.binIntervals",
+      "status": "not-run",
+      "measured": null,
+      "note": "NOT RUN: the gate's files are not in the tree and nothing is fetched or typed (AGN_LUMINOSITY_FUNCTION_GATE.md, \"Files requested from Carl\"). No verdict, nothing is built within the gate, and the consumers take the C alternative (a reading step). Threshold fixed in gate-thresholds.json."
+    },
+    {
+      "id": "G6.noOmission",
+      "status": "not-run",
+      "measured": null,
+      "note": "NOT RUN: the gate's files are not in the tree and nothing is fetched or typed (AGN_LUMINOSITY_FUNCTION_GATE.md, \"Files requested from Carl\"). No verdict, nothing is built within the gate, and the consumers take the C alternative (a reading step). Threshold fixed in gate-thresholds.json."
+    },
+    {
+      "id": "G7.malmquistDemonstration",
+      "status": "not-run",
+      "measured": null,
+      "note": "NOT RUN: the gate's files are not in the tree and nothing is fetched or typed (AGN_LUMINOSITY_FUNCTION_GATE.md, \"Files requested from Carl\"). No verdict, nothing is built within the gate, and the consumers take the C alternative (a reading step). Threshold fixed in gate-thresholds.json."
+    },
+    {
+      "id": "R1.templateMismatch",
+      "status": "reported",
+      "measured": {
+        "n": 96,
+        "coverage": 0.03125,
+        "meanZ": 8.046269009734479,
+        "sdZ": 58.51979915919349,
+        "status": {
+          "ok": 96,
+          "refused:ambiguous-peak": 104
+        },
+        "meanKmS": 29.7
+      },
+      "note": "A template that is not the object, and lines that do not share one redshift, give an interval that undercovers: the cost is on the page."
+    },
+    {
+      "id": "R2.lineShiftSystematic",
+      "status": "reported",
+      "measured": {
+        "-500": {
+          "meanBiasKmS": -366,
+          "n": 30
+        },
+        "-1000": {
+          "meanBiasKmS": -679,
+          "n": 29
+        },
+        "-2000": {
+          "meanBiasKmS": -1150,
+          "n": 26
+        }
+      },
+      "note": "The redshift moves by a fraction of the offset between line families; the interval does not contain it (the caller’s systematicKmS adds it as a model-limited term)."
+    },
+    {
+      "id": "R3.kCorrectionAbsence",
+      "status": "reported",
+      "measured": {
+        "alpha=-0.5,z=0.5": 1.22474,
+        "alpha=-0.5,z=1": 1.41421,
+        "alpha=-0.5,z=2": 1.73205,
+        "alpha=-1.5,z=0.5": 0.816497,
+        "alpha=-1.5,z=1": 0.707107,
+        "alpha=-1.5,z=2": 0.57735,
+        "alpha=-2.5,z=0.5": 0.544331,
+        "alpha=-2.5,z=1": 0.353553,
+        "alpha=-2.5,z=2": 0.19245
+      },
+      "note": "The luminosity at a fixed rest wavelength over the observed-band luminosity at the same redshift, for a power-law continuum: (1 + z)^(alpha + 1), the cost of the K-correction the kernel does not apply."
+    },
+    {
+      "id": "R4.dividingCurveSensitivity",
+      "status": "reported",
+      "measured": {
+        "starForming.c+0.05": 0.00933,
+        "starForming.c-0.05": 0.00967,
+        "starForming.a*1.2": 0.0267,
+        "agn.c+0.05": 0.015,
+        "agn.c-0.05": 0.015,
+        "agn.a*1.2": 0.032
+      },
+      "note": "The share of random (x, y) points whose class changes when a dividing curve moves: the boundary is a definition and the number says how much of the plane it decides."
+    }
+  ]
+}
