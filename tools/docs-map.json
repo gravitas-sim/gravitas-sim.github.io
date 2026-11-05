@@ -1117,7 +1117,7 @@
     {
       "file": "RADIO.md",
       "kind": "feature",
-      "purpose": "The HI spectroscopy kernel: the 21-cm Doppler scale, the LSR options, the fixed mask, the tangent-point circular speed with its interval, the thin column density and the labelled synthetic spectra, validation and its failed legs (Prompt 241).",
+      "purpose": "The HI spectroscopy kernel: Doppler scale, LSR options, the fixed mask, tangent-point circular speed, column density, synthetic spectra, validation and failed legs (Prompt 241).",
       "owner": 241,
       "student": false
     },

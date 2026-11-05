@@ -117,6 +117,6 @@ export function columnDensityThin({
     peakBias,
     note: thin
       ? 'the peak optical depth is below the limit, so the thin column is a lower bound within a few percent'
-      : `the peak optical depth (${tauPeak.toFixed(2)}) is above ${tauLimit}: the thin assumption fails and the column is a lower bound that may be far too low`,
+      : `the peak optical depth (${Math.round(tauPeak * 100) / 100}) is above ${tauLimit}: the thin assumption fails and the column is a lower bound that may be far too low`,
   };
 }
