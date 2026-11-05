@@ -1,0 +1,29 @@
+{
+  "format": "gravitas.radio-failed-legs/1",
+  "label": "These legs crossed a committed bound and stay failing; only Carl resets one.",
+  "legs": [
+    {
+      "id": "A1.doppler",
+      "measured": {
+        "maxRoundTripRel": 4.9265480583926774e-12,
+        "maxOpticalIdentityKmS": 5.2938084471598756e-11,
+        "zeroAtRest": true,
+        "lowerFrequencyIsPositive": true,
+        "relativisticBetween": true,
+        "smallVSpreadKmS": 0.00008339245345378998
+      },
+      "note": ""
+    },
+    {
+      "id": "C2.coverageTheta0",
+      "measured": {
+        "intervals": 2837,
+        "coverage68": 0.6873,
+        "coverage95": 0.9535,
+        "refusedByE7": 162,
+        "refusedOther": 1
+      },
+      "note": ""
+    }
+  ]
+}
