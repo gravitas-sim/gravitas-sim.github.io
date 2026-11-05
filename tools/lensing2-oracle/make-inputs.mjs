@@ -11,14 +11,21 @@
 
 import { readFileSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
+import process from 'node:process';
 import { fileURLToPath } from 'node:url';
 import { gaussian, stream } from '../../js/random/streams.js';
 import { syntheticArc } from '../../js/kernels/lensing/enclosed/synthetic.js';
 
-const ROOT = path.join(path.dirname(fileURLToPath(import.meta.url)), '..', '..');
+const ROOT = path.join(
+  path.dirname(fileURLToPath(import.meta.url)),
+  '..',
+  '..'
+);
 const DIR = path.join(ROOT, 'tests', 'fixtures', 'lensing2');
 const T = JSON.parse(readFileSync(path.join(DIR, 'thresholds.json'), 'utf8'));
-const G = JSON.parse(readFileSync(path.join(DIR, 'gate-thresholds.json'), 'utf8'));
+const G = JSON.parse(
+  readFileSync(path.join(DIR, 'gate-thresholds.json'), 'utf8')
+);
 const lim = id => T.checks.find(c => c.id.startsWith(`${id}.`)).limits;
 const glim = id => G.checks.find(c => c.id.startsWith(`${id}.`)).limits;
 
@@ -49,7 +56,15 @@ const out = {
   thetaEArcsec: lim('B2').thetaEArcsec,
   images: { nY: lim('B3').nY, yRange: lim('B3').yRange },
   arcs,
-  interval: { thetaEArcsec: 3.2, sigmaArcsec: 0.096, zl: 0.3, zs: 1.0, levels: [0.68, 0.95], draws: lim('B5').draws, seed: 251 },
+  interval: {
+    thetaEArcsec: 3.2,
+    sigmaArcsec: 0.096,
+    zl: 0.3,
+    zs: 1.0,
+    levels: [0.68, 0.95],
+    draws: lim('B5').draws,
+    seed: 251,
+  },
   delay: {
     sis: [
       { zl: 0.5, zs: 2.0, thetaEArcsec: 1.0, y: 0.3 },
@@ -63,4 +78,4 @@ const out = {
   p1: glim('P1'),
 };
 writeFileSync(path.join(DIR, 'oracle-inputs.json'), `${JSON.stringify(out)}\n`);
-console.log(`wrote oracle-inputs.json: ${arcs.length} arcs`);
+process.stdout.write(`wrote oracle-inputs.json: ${arcs.length} arcs\n`);

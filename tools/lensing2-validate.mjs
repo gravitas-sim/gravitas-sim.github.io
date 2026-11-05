@@ -29,7 +29,6 @@ import {
   microlensingFlux,
   pointSourceMagnification,
   pointTimeDelay,
-  sisEinsteinAngle,
 } from '../js/kernels/lensing/index.js';
 import * as K from '../js/kernels/lensing/enclosed/index.js';
 
@@ -48,13 +47,19 @@ const sig = (v, d = 4) => (Number.isFinite(v) ? Number(v.toPrecision(d)) : v);
 const rel = (a, b) => Math.abs(a - b) / Math.max(Math.abs(b), 1e-300);
 const maxOf = a => a.reduce((m, v) => Math.max(m, v), 0);
 const MPC = PARSEC_M * 1e6;
-const COSMO = { H0: INPUTS.cosmology.H0, Om: INPUTS.cosmology.Om, OL: INPUTS.cosmology.OL };
-const PAIRS = THRESHOLDS.worlds.redshiftPairs;
-const TRIPLES = THRESHOLDS.worlds.distanceTriplesMpc.map(t => t.map(d => d * MPC));
+const COSMO = {
+  H0: INPUTS.cosmology.H0,
+  Om: INPUTS.cosmology.Om,
+  OL: INPUTS.cosmology.OL,
+};
+const TRIPLES = THRESHOLDS.worlds.distanceTriplesMpc.map(t =>
+  t.map(d => d * MPC)
+);
 const inBand = (v, [lo, hi]) => v >= lo && v <= hi;
 
 /** The closed form c^2 theta^2 Dl Ds / (4 G Dls) written here, not taken from the kernel. */
-const mClosed = (th, dl, ds, dls) => (C_SI * C_SI * th * th * dl * ds) / (4 * G_SI * dls);
+const mClosed = (th, dl, ds, dls) =>
+  (C_SI * C_SI * th * th * dl * ds) / (4 * G_SI * dls);
 
 /** One ensemble: fit each world's points and push the radius through the mass. */
 function runEnsemble(kind, seed, worlds, o = {}) {
@@ -65,12 +70,25 @@ function runEnsemble(kind, seed, worlds, o = {}) {
   let bracketCover = 0;
   let bracketOk = 0;
   for (let i = 0; i < worlds; i++) {
-    const w = K.ensembleWorld({ seed, index: i, kind, cosmology: COSMO, ...o.world });
+    const w = K.ensembleWorld({
+      seed,
+      index: i,
+      kind,
+      cosmology: COSMO,
+      ...o.world,
+    });
     const t = w.truth;
-    const trueMass = K.enclosedMass(t.thetaE, t.distancesM.dl, t.distancesM.ds, t.distancesM.dls);
+    const trueMass = K.enclosedMass(
+      t.thetaE,
+      t.distancesM.dl,
+      t.distancesM.ds,
+      t.distancesM.dls
+    );
     const fit = K.fitArc(
       w.points,
-      o.fixedCentre ? { sigma: 1, centre: { x: t.centre.x, y: t.centre.y, sigma: 0 } } : { sigma: 1 }
+      o.fixedCentre
+        ? { sigma: 1, centre: { x: t.centre.x, y: t.centre.y, sigma: 0 } }
+        : { sigma: 1 }
     );
     if (fit.status !== 'ok') {
       refused++;
@@ -93,10 +111,12 @@ function runEnsemble(kind, seed, worlds, o = {}) {
         const n = r.statisticalIfOnAxis;
         if (n.lo <= trueMass && trueMass <= n.hi) narrowCover[level]++;
         if (level === 0.68) {
-          if (r.bracket.lo <= trueMass && trueMass <= r.bracket.hi) bracketCover++;
+          if (r.bracket.lo <= trueMass && trueMass <= r.bracket.hi)
+            bracketCover++;
           if (r.bracket.lo > 0.25 * r.bracket.hi) bracketOk++;
         }
-      } else if (r.interval.lo <= trueMass && trueMass <= r.interval.hi) cover[level]++;
+      } else if (r.interval.lo <= trueMass && trueMass <= r.interval.hi)
+        cover[level]++;
     }
   }
   return { answered, refused, cover, narrowCover, bracketCover, bracketOk };
@@ -113,7 +133,8 @@ export async function runValidation({ only = [], authDir = AUTH_DIR } = {}) {
     rows.push({ id, status: pass ? 'pass' : 'fail', measured, note });
   const reported = (id, measured, note = '') =>
     rows.push({ id, status: 'reported', measured, note });
-  const notRun = (id, note) => rows.push({ id, status: 'not-run', measured: null, note });
+  const notRun = (id, note) =>
+    rows.push({ id, status: 'not-run', measured: null, note });
   const wanted = id => !only.length || only.some(p => id.startsWith(p));
   const cpu0 = process.cpuUsage();
 
@@ -123,8 +144,16 @@ export async function runValidation({ only = [], authDir = AUTH_DIR } = {}) {
     const L = lim('A1');
     const e = [];
     for (const [dl, ds, dls] of TRIPLES)
-      e.push(rel(K.sigmaCritical(dl, ds, dls), (C_SI * C_SI * ds) / (4 * Math.PI * G_SI * dl * dls)));
-    row('A1.criticalDensity', maxOf(e) <= L.maxRel, { worstRel: sig(maxOf(e), 3), cases: e.length });
+      e.push(
+        rel(
+          K.sigmaCritical(dl, ds, dls),
+          (C_SI * C_SI * ds) / (4 * Math.PI * G_SI * dl * dls)
+        )
+      );
+    row('A1.criticalDensity', maxOf(e) <= L.maxRel, {
+      worstRel: sig(maxOf(e), 3),
+      cases: e.length,
+    });
   }
 
   if (wanted('A2.')) {
@@ -135,14 +164,18 @@ export async function runValidation({ only = [], authDir = AUTH_DIR } = {}) {
         const th = ta * ARCSEC;
         const m = K.enclosedMass(th, dl, ds, dls);
         e.closed.push(rel(m, mClosed(th, dl, ds, dls)));
-        e.pi.push(rel(m, Math.PI * K.sigmaCritical(dl, ds, dls) * (th * dl) ** 2));
+        e.pi.push(
+          rel(m, Math.PI * K.sigmaCritical(dl, ds, dls) * (th * dl) ** 2)
+        );
         e.viaPoint.push(rel(m, massFromEinstein(th, dl, ds, dls)));
         e.scaling.push(rel(K.enclosedMass(2 * th, dl, ds, dls) / m, 4));
       }
     const worst = maxOf(Object.values(e).map(maxOf));
     row('A2.enclosedMassClosed', worst <= L.maxRel, {
       worstRel: sig(worst, 3),
-      perPart: Object.fromEntries(Object.entries(e).map(([k, v]) => [k, sig(maxOf(v), 3)])),
+      perPart: Object.fromEntries(
+        Object.entries(e).map(([k, v]) => [k, sig(maxOf(v), 3)])
+      ),
     });
   }
 
@@ -162,7 +195,9 @@ export async function runValidation({ only = [], authDir = AUTH_DIR } = {}) {
     const worst = maxOf(Object.values(e).map(maxOf));
     row('A3.sisDispersionInput', worst <= L.maxRel, {
       worstRel: sig(worst, 3),
-      perPart: Object.fromEntries(Object.entries(e).map(([k, v]) => [k, sig(maxOf(v), 3)])),
+      perPart: Object.fromEntries(
+        Object.entries(e).map(([k, v]) => [k, sig(maxOf(v), 3)])
+      ),
     });
   }
 
@@ -185,11 +220,15 @@ export async function runValidation({ only = [], authDir = AUTH_DIR } = {}) {
       const pb = K.pointImagePositions(20 * ARCSEC, y * 20 * ARCSEC).theta;
       pa.forEach((v, i) => sc.push(rel(pb[i], 10 * v)));
     }
-    row('A4.imagePositions', maxOf(res) <= L.maxAbs && maxOf(sc) <= L.maxRel && maxOf(mag) <= L.maxRel, {
-      worstResidual: sig(maxOf(res), 3),
-      worstScaleRel: sig(maxOf(sc), 3),
-      worstMagnificationRel: sig(maxOf(mag), 3),
-    });
+    row(
+      'A4.imagePositions',
+      maxOf(res) <= L.maxAbs && maxOf(sc) <= L.maxRel && maxOf(mag) <= L.maxRel,
+      {
+        worstResidual: sig(maxOf(res), 3),
+        worstScaleRel: sig(maxOf(sc), 3),
+        worstMagnificationRel: sig(maxOf(mag), 3),
+      }
+    );
   }
 
   if (wanted('A5.')) {
@@ -207,14 +246,21 @@ export async function runValidation({ only = [], authDir = AUTH_DIR } = {}) {
       const plus = Math.abs(p[0]);
       const minus = Math.abs(p[1]);
       const closed = (plus + minus) / (2 * Math.sqrt(plus * minus));
-      ratioErr.push(rel(pi.disagreement, closed), rel(pi.other.thetaE / pi.thetaE, closed));
+      ratioErr.push(
+        rel(pi.disagreement, closed),
+        rel(pi.other.thetaE / pi.thetaE, closed)
+      );
       minRatio = Math.min(minRatio, pi.disagreement);
     }
-    row('A5.imageInversion', maxOf(e) <= L.maxRel && maxOf(ratioErr) <= L.maxRel && minRatio >= 1, {
-      worstRoundTripRel: sig(maxOf(e), 3),
-      worstDisagreementRel: sig(maxOf(ratioErr), 3),
-      minDisagreement: sig(minRatio, 6),
-    });
+    row(
+      'A5.imageInversion',
+      maxOf(e) <= L.maxRel && maxOf(ratioErr) <= L.maxRel && minRatio >= 1,
+      {
+        worstRoundTripRel: sig(maxOf(e), 3),
+        worstDisagreementRel: sig(maxOf(ratioErr), 3),
+        minDisagreement: sig(minRatio, 6),
+      }
+    );
   }
 
   if (wanted('A6.')) {
@@ -230,18 +276,34 @@ export async function runValidation({ only = [], authDir = AUTH_DIR } = {}) {
         n: L.n,
         sigma: 0,
       });
-      const fx = K.fitArc(a.points, { sigma: 1, centre: { x: L.centrePx[0], y: L.centrePx[1] } });
+      const fx = K.fitArc(a.points, {
+        sigma: 1,
+        centre: { x: L.centrePx[0], y: L.centrePx[1] },
+      });
       worst.fixed = Math.max(worst.fixed, rel(fx.radius, L.radiusPx));
       worst.rms = Math.max(worst.rms, fx.rms);
       const fr = K.fitArc(a.points, { sigma: 1 });
       statusOk = statusOk && fr.status === 'ok';
       worst.free = Math.max(worst.free, rel(fr.radius, L.radiusPx));
-      worst.centre = Math.max(worst.centre, Math.hypot(fr.centre.x - L.centrePx[0], fr.centre.y - L.centrePx[1]));
+      worst.centre = Math.max(
+        worst.centre,
+        Math.hypot(fr.centre.x - L.centrePx[0], fr.centre.y - L.centrePx[1])
+      );
     }
     row(
       'A6.arcCircleNoiseFree',
-      statusOk && worst.fixed <= L.maxRelFixed && worst.rms <= 1e-12 && worst.free <= L.maxRelFree && worst.centre <= L.maxAbsCentrePx,
-      { fixedRel: sig(worst.fixed, 3), fixedRmsPx: sig(worst.rms, 3), freeRel: sig(worst.free, 3), centrePx: sig(worst.centre, 3), freeStatusOk: statusOk }
+      statusOk &&
+        worst.fixed <= L.maxRelFixed &&
+        worst.rms <= 1e-12 &&
+        worst.free <= L.maxRelFree &&
+        worst.centre <= L.maxAbsCentrePx,
+      {
+        fixedRel: sig(worst.fixed, 3),
+        fixedRmsPx: sig(worst.rms, 3),
+        freeRel: sig(worst.free, 3),
+        centrePx: sig(worst.centre, 3),
+        freeStatusOk: statusOk,
+      }
     );
   }
 
@@ -256,9 +318,22 @@ export async function runValidation({ only = [], authDir = AUTH_DIR } = {}) {
     let structure = true;
     const per = [];
     for (const level of L.levels) {
-      const r = K.massFromArc({ radius: th, sigmaRadius: sg, zl: L.zl, zs: L.zs, cosmology: COSMO, level });
-      e.push(rel(r.interval.lo, M(th - r.z * sg)), rel(r.interval.hi, M(th + r.z * sg)), rel(r.mass, M(th)));
-      w.push(rel((r.interval.hi - r.interval.lo) / r.mass, (4 * r.z * sg) / th));
+      const r = K.massFromArc({
+        radius: th,
+        sigmaRadius: sg,
+        zl: L.zl,
+        zs: L.zs,
+        cosmology: COSMO,
+        level,
+      });
+      e.push(
+        rel(r.interval.lo, M(th - r.z * sg)),
+        rel(r.interval.hi, M(th + r.z * sg)),
+        rel(r.mass, M(th))
+      );
+      w.push(
+        rel((r.interval.hi - r.interval.lo) / r.mass, (4 * r.z * sg) / th)
+      );
       structure =
         structure &&
         r.interval.lo < r.mass &&
@@ -266,14 +341,23 @@ export async function runValidation({ only = [], authDir = AUTH_DIR } = {}) {
         r.interval.hi - r.mass > r.mass - r.interval.lo &&
         r.angular.sigma === sg &&
         r.angular.thetaE === th;
-      per.push({ level, z: sig(r.z, 8), lo: sig(r.interval.lo, 8), hi: sig(r.interval.hi, 8) });
+      per.push({
+        level,
+        z: sig(r.z, 8),
+        lo: sig(r.interval.lo, 8),
+        hi: sig(r.interval.hi, 8),
+      });
     }
-    row('A7.intervalStructure', structure && maxOf(e) <= L.maxRel && maxOf(w) <= L.maxRelWidth, {
-      worstRel: sig(maxOf(e), 3),
-      worstWidthRel: sig(maxOf(w), 3),
-      structure,
-      per,
-    });
+    row(
+      'A7.intervalStructure',
+      structure && maxOf(e) <= L.maxRel && maxOf(w) <= L.maxRelWidth,
+      {
+        worstRel: sig(maxOf(e), 3),
+        worstWidthRel: sig(maxOf(w), 3),
+        structure,
+        per,
+      }
+    );
   }
 
   // ---- B: against the independent oracle ---------------------------------------------------
@@ -282,9 +366,16 @@ export async function runValidation({ only = [], authDir = AUTH_DIR } = {}) {
     const L = lim('B1');
     const e = ORACLE.distances.map(o => {
       const d = K.lensDistances({ zl: o.zl, zs: o.zs, cosmology: COSMO });
-      return maxOf([rel(d.dl / MPC, o.dlMpc), rel(d.ds / MPC, o.dsMpc), rel(d.dls / MPC, o.dlsMpc)]);
+      return maxOf([
+        rel(d.dl / MPC, o.dlMpc),
+        rel(d.ds / MPC, o.dsMpc),
+        rel(d.dls / MPC, o.dlsMpc),
+      ]);
     });
-    row('B1.distances', maxOf(e) <= L.maxRel, { worstRel: sig(maxOf(e), 3), pairs: e.length });
+    row('B1.distances', maxOf(e) <= L.maxRel, {
+      worstRel: sig(maxOf(e), 3),
+      pairs: e.length,
+    });
   }
 
   if (wanted('B2.')) {
@@ -293,7 +384,12 @@ export async function runValidation({ only = [], authDir = AUTH_DIR } = {}) {
     for (const o of ORACLE.mass) {
       const d = K.lensDistances({ zl: o.zl, zs: o.zs, cosmology: COSMO });
       e.sigmaCrit.push(rel(K.sigmaCritical(d.dl, d.ds, d.dls), o.sigmaCrit));
-      e.mass.push(rel(K.enclosedMass(o.thetaEArcsec * ARCSEC, d.dl, d.ds, d.dls), o.massKg));
+      e.mass.push(
+        rel(
+          K.enclosedMass(o.thetaEArcsec * ARCSEC, d.dl, d.ds, d.dls),
+          o.massKg
+        )
+      );
     }
     const worst = maxOf([maxOf(e.sigmaCrit), maxOf(e.mass)]);
     row('B2.sigmaCritAndMass', worst <= L.maxRel, {
@@ -320,11 +416,15 @@ export async function runValidation({ only = [], authDir = AUTH_DIR } = {}) {
         mu.push(rel(s.mu[i], o.sis.mu[i]));
       });
     }
-    row('B3.imagesRootFind', maxOf(pos) <= L.maxAbs && maxOf(mu) <= L.maxRelMu, {
-      worstAbsPosition: sig(maxOf(pos), 3),
-      worstRelMagnification: sig(maxOf(mu), 3),
-      n: ORACLE.images.length,
-    });
+    row(
+      'B3.imagesRootFind',
+      maxOf(pos) <= L.maxAbs && maxOf(mu) <= L.maxRelMu,
+      {
+        worstAbsPosition: sig(maxOf(pos), 3),
+        worstRelMagnification: sig(maxOf(mu), 3),
+        n: ORACLE.images.length,
+      }
+    );
   }
 
   if (wanted('B4.')) {
@@ -336,9 +436,14 @@ export async function runValidation({ only = [], authDir = AUTH_DIR } = {}) {
       const fr = K.fitArc(arc.points, { sigma: arc.sigma });
       statuses[fr.status] = (statuses[fr.status] ?? 0) + 1;
       e.radius.push(rel(fr.radius, o.free.radius));
-      e.centre.push(Math.hypot(fr.centre.x - o.free.cx, fr.centre.y - o.free.cy));
+      e.centre.push(
+        Math.hypot(fr.centre.x - o.free.cx, fr.centre.y - o.free.cy)
+      );
       e.sigma.push(rel(fr.sigmaRadius, o.free.sigmaRadius));
-      const fx = K.fitArc(arc.points, { sigma: arc.sigma, centre: { x: arc.centre.x, y: arc.centre.y, sigma: 0 } });
+      const fx = K.fitArc(arc.points, {
+        sigma: arc.sigma,
+        centre: { x: arc.centre.x, y: arc.centre.y, sigma: 0 },
+      });
       e.fixed.push(rel(fx.radius, o.fixed.radius));
       e.fixedSigma.push(rel(fx.sigmaRadius, o.fixed.sigmaRadius));
     });
@@ -373,13 +478,21 @@ export async function runValidation({ only = [], authDir = AUTH_DIR } = {}) {
         level: o.level,
       });
       const bound = o.level === 0.68 ? L.maxRel68 : L.maxRel95;
-      e.push({ level: o.level, rel: maxOf([rel(r.interval.lo, o.mcLo), rel(r.interval.hi, o.mcHi)]), bound });
+      e.push({
+        level: o.level,
+        rel: maxOf([rel(r.interval.lo, o.mcLo), rel(r.interval.hi, o.mcHi)]),
+        bound,
+      });
       z.push(Math.abs(r.z - o.z));
     });
-    row('B5.intervalMonteCarlo', e.every(x => x.rel <= x.bound) && maxOf(z) <= L.maxAbsZ, {
-      perLevel: e.map(x => ({ level: x.level, rel: sig(x.rel, 3) })),
-      worstAbsZ: sig(maxOf(z), 3),
-    });
+    row(
+      'B5.intervalMonteCarlo',
+      e.every(x => x.rel <= x.bound) && maxOf(z) <= L.maxAbsZ,
+      {
+        perLevel: e.map(x => ({ level: x.level, rel: sig(x.rel, 3) })),
+        worstAbsZ: sig(maxOf(z), 3),
+      }
+    );
   }
 
   if (wanted('B6.')) {
@@ -388,7 +501,12 @@ export async function runValidation({ only = [], authDir = AUTH_DIR } = {}) {
         'B6.citedTool',
         'tests/fixtures/lensing2/authentic/tool-pin.json was not supplied (LENSING_II.md, Files requested from Carl); the cited lens-modelling tool is not installed and nothing was fetched'
       );
-    else reported('B6.citedTool', { file: 'arrived' }, 'the comparison is computed by the analysis the file names');
+    else
+      reported(
+        'B6.citedTool',
+        { file: 'arrived' },
+        'the comparison is computed by the analysis the file names'
+      );
   }
 
   // ---- C: coverage on seeded ensembles -----------------------------------------------------
@@ -398,24 +516,40 @@ export async function runValidation({ only = [], authDir = AUTH_DIR } = {}) {
     const r = runEnsemble('ring', THRESHOLDS.seeds.C1, L.worlds);
     const c68 = r.cover[0.68] / r.answered;
     const c95 = r.cover[0.95] / r.answered;
-    row('C1.ringCoverage', inBand(c68, L.band68) && inBand(c95, L.band95) && r.refused <= L.maxRefused, {
-      worlds: L.worlds,
-      answered: r.answered,
-      refused: r.refused,
-      coverage68: sig(c68, 4),
-      coverage95: sig(c95, 4),
-    });
+    row(
+      'C1.ringCoverage',
+      inBand(c68, L.band68) &&
+        inBand(c95, L.band95) &&
+        r.refused <= L.maxRefused,
+      {
+        worlds: L.worlds,
+        answered: r.answered,
+        refused: r.refused,
+        coverage68: sig(c68, 4),
+        coverage95: sig(c95, 4),
+      }
+    );
   }
 
   if (wanted('C2.')) {
     const L = lim('C2');
-    const r = runEnsemble('partial', THRESHOLDS.seeds.C2, L.worlds, { world: { extentRangeDeg: [100, 200] } });
+    const r = runEnsemble('partial', THRESHOLDS.seeds.C2, L.worlds, {
+      world: { extentRangeDeg: [100, 200] },
+    });
     const c68 = r.cover[0.68] / r.answered;
     const c95 = r.cover[0.95] / r.answered;
     row(
       'C2.partialArcCoverage',
-      inBand(c68, L.band68) && inBand(c95, L.band95) && r.refused / L.worlds <= L.maxRefusedFraction,
-      { worlds: L.worlds, answered: r.answered, refused: r.refused, coverage68: sig(c68, 4), coverage95: sig(c95, 4) }
+      inBand(c68, L.band68) &&
+        inBand(c95, L.band95) &&
+        r.refused / L.worlds <= L.maxRefusedFraction,
+      {
+        worlds: L.worlds,
+        answered: r.answered,
+        refused: r.refused,
+        coverage68: sig(c68, 4),
+        coverage95: sig(c95, 4),
+      }
     );
   }
 
@@ -429,13 +563,17 @@ export async function runValidation({ only = [], authDir = AUTH_DIR } = {}) {
     });
     if (wanted('C3.')) {
       const cov = offset.bracketCover / offset.answered;
-      row('C3.offsetBracket', cov >= L.minCoverage && offset.bracketOk === offset.answered, {
-        worlds: L.worlds,
-        answered: offset.answered,
-        refused: offset.refused,
-        bracketCoverage: sig(cov, 4),
-        bracketsWithLowAboveQuarterOfHigh: offset.bracketOk,
-      });
+      row(
+        'C3.offsetBracket',
+        cov >= L.minCoverage && offset.bracketOk === offset.answered,
+        {
+          worlds: L.worlds,
+          answered: offset.answered,
+          refused: offset.refused,
+          bracketCoverage: sig(cov, 4),
+          bracketsWithLowAboveQuarterOfHigh: offset.bracketOk,
+        }
+      );
     }
     if (wanted('C4.'))
       reported(
@@ -452,10 +590,24 @@ export async function runValidation({ only = [], authDir = AUTH_DIR } = {}) {
   // ---- D: refusals -------------------------------------------------------------------------
 
   if (wanted('D1.')) {
-    const base = { radius: 3 * ARCSEC, sigmaRadius: 0.1 * ARCSEC, cosmology: COSMO };
+    const base = {
+      radius: 3 * ARCSEC,
+      sigmaRadius: 0.1 * ARCSEC,
+      cosmology: COSMO,
+    };
     const cases = [
-      ...[undefined, NaN, 0, -1].map(zl => ({ ...base, zl, zs: 1, want: 'no-lens-redshift' })),
-      ...[undefined, NaN, 0, -2].map(zs => ({ ...base, zl: 0.3, zs, want: 'no-source-redshift' })),
+      ...[undefined, NaN, 0, -1].map(zl => ({
+        ...base,
+        zl,
+        zs: 1,
+        want: 'no-lens-redshift',
+      })),
+      ...[undefined, NaN, 0, -2].map(zs => ({
+        ...base,
+        zl: 0.3,
+        zs,
+        want: 'no-source-redshift',
+      })),
       { ...base, zl: undefined, zs: undefined, want: 'no-lens-redshift' },
     ];
     let ok = true;
@@ -473,18 +625,49 @@ export async function runValidation({ only = [], authDir = AUTH_DIR } = {}) {
       ok = ok && good;
       got.push(`${r.status}:${r.code}`);
     }
-    row('D1.noLensRedshift', ok, { cases: cases.length, results: [...new Set(got)] });
+    row('D1.noLensRedshift', ok, {
+      cases: cases.length,
+      results: [...new Set(got)],
+    });
   }
 
   if (wanted('D2.')) {
-    const base = { radius: 3 * ARCSEC, sigmaRadius: 0.1 * ARCSEC, cosmology: COSMO };
+    const base = {
+      radius: 3 * ARCSEC,
+      sigmaRadius: 0.1 * ARCSEC,
+      cosmology: COSMO,
+    };
     const cases = [
       { ...base, zl: 0.5, zs: 0.5, want: 'source-not-behind-lens' },
       { ...base, zl: 0.5, zs: 0.4, want: 'source-not-behind-lens' },
-      { ...base, zl: 0.3, zs: 1, cosmology: { H0: 70, Om: 0.3, OL: 0.6 }, want: 'non-flat-cosmology' },
-      { ...base, zl: 0.3, zs: 1, cosmology: { H0: 0, Om: 0.3, OL: 0.7 }, want: 'bad-cosmology' },
-      { ...base, zl: 0.3, zs: 1, cosmology: { H0: -70, Om: 0.3, OL: 0.7 }, want: 'bad-cosmology' },
-      { ...base, zl: 0.3, zs: 1, cosmology: { H0: 70, Om: -0.1, OL: 1.1 }, want: 'bad-cosmology' },
+      {
+        ...base,
+        zl: 0.3,
+        zs: 1,
+        cosmology: { H0: 70, Om: 0.3, OL: 0.6 },
+        want: 'non-flat-cosmology',
+      },
+      {
+        ...base,
+        zl: 0.3,
+        zs: 1,
+        cosmology: { H0: 0, Om: 0.3, OL: 0.7 },
+        want: 'bad-cosmology',
+      },
+      {
+        ...base,
+        zl: 0.3,
+        zs: 1,
+        cosmology: { H0: -70, Om: 0.3, OL: 0.7 },
+        want: 'bad-cosmology',
+      },
+      {
+        ...base,
+        zl: 0.3,
+        zs: 1,
+        cosmology: { H0: 70, Om: -0.1, OL: 1.1 },
+        want: 'bad-cosmology',
+      },
     ];
     let ok = true;
     const got = [];
@@ -502,7 +685,12 @@ export async function runValidation({ only = [], authDir = AUTH_DIR } = {}) {
     let ringRefused = 0;
     for (let i = 0; i < L.arcs; i++) {
       const mk = extentDeg => {
-        const u = stream('noise', THRESHOLDS.seeds.D3, extentDeg === 360 ? 'ring' : 'short', String(i));
+        const u = stream(
+          'noise',
+          THRESHOLDS.seeds.D3,
+          extentDeg === 360 ? 'ring' : 'short',
+          String(i)
+        );
         const a = K.syntheticArc({
           centre: { x: 256, y: 256 },
           radius: 100,
@@ -510,19 +698,33 @@ export async function runValidation({ only = [], authDir = AUTH_DIR } = {}) {
           startDeg: u() * 360,
           n: 12,
           sigma: 1.5,
-          normal: gaussian(stream('noise', THRESHOLDS.seeds.D3, extentDeg === 360 ? 'ring' : 'short', String(i), 'position')),
+          normal: gaussian(
+            stream(
+              'noise',
+              THRESHOLDS.seeds.D3,
+              extentDeg === 360 ? 'ring' : 'short',
+              String(i),
+              'position'
+            )
+          ),
         });
         return K.fitArc(a.points, { sigma: 1.5 });
       };
       const s = mk(L.extentDeg);
-      if (s.status === 'not-constrained' && s.code === 'radius-unconstrained') shortRefused++;
+      if (s.status === 'not-constrained' && s.code === 'radius-unconstrained')
+        shortRefused++;
       const r = mk(360);
       if (r.status !== 'ok') ringRefused++;
     }
-    row('D3.shortArcRefusal', shortRefused / L.arcs >= L.minRefused && ringRefused / L.arcs <= L.ringsMaxRefused, {
-      shortArcsRefusedFraction: shortRefused / L.arcs,
-      ringsRefusedFraction: ringRefused / L.arcs,
-    });
+    row(
+      'D3.shortArcRefusal',
+      shortRefused / L.arcs >= L.minRefused &&
+        ringRefused / L.arcs <= L.ringsMaxRefused,
+      {
+        shortArcsRefusedFraction: shortRefused / L.arcs,
+        ringsRefusedFraction: ringRefused / L.arcs,
+      }
+    );
   }
 
   if (wanted('D4.')) {
@@ -533,13 +735,28 @@ export async function runValidation({ only = [], authDir = AUTH_DIR } = {}) {
     const e = K.invertImages(-2, NaN);
     const f = K.invertImages(-2, 1);
     const ok =
-      a.status === 'refused' && a.code === 'images-same-side' &&
-      b.status === 'refused' && b.code === 'images-same-side' &&
-      c.status === 'not-constrained' && c.code === 'single-image' && c.bound.thetaEAtMost === 3 && c.thetaE === undefined &&
-      d.status === 'refused' && d.code === 'bad-position' &&
-      e.status === 'refused' && e.code === 'bad-position' &&
-      f.status === 'ok' && f.thetaE === 1.5;
-    row('D4.imageInversionRefusals', ok, { sameSide: a.code, negativeSameSide: b.code, single: c.code, zero: d.code, nan: e.code, negativeIsInner: f.status });
+      a.status === 'refused' &&
+      a.code === 'images-same-side' &&
+      b.status === 'refused' &&
+      b.code === 'images-same-side' &&
+      c.status === 'not-constrained' &&
+      c.code === 'single-image' &&
+      c.bound.thetaEAtMost === 3 &&
+      c.thetaE === undefined &&
+      d.status === 'refused' &&
+      d.code === 'bad-position' &&
+      e.status === 'refused' &&
+      e.code === 'bad-position' &&
+      f.status === 'ok' &&
+      f.thetaE === 1.5;
+    row('D4.imageInversionRefusals', ok, {
+      sameSide: a.code,
+      negativeSameSide: b.code,
+      single: c.code,
+      zero: d.code,
+      nan: e.code,
+      negativeIsInner: f.status,
+    });
   }
 
   if (wanted('D5.')) {
@@ -548,8 +765,23 @@ export async function runValidation({ only = [], authDir = AUTH_DIR } = {}) {
     const M = t => mClosed(Math.max(t, 0), d.dl, d.ds, d.dls);
     const r0 = 3 * ARCSEC;
     const s0 = 0.1 * ARCSEC;
-    const un = K.massFromArc({ radius: r0, sigmaRadius: s0, zl: 0.3, zs: 1, cosmology: COSMO, kind: 'arc' });
-    const bd = K.massFromArc({ radius: r0, sigmaRadius: s0, zl: 0.3, zs: 1, cosmology: COSMO, kind: 'arc', sourceOffsetMax: 0.1 });
+    const un = K.massFromArc({
+      radius: r0,
+      sigmaRadius: s0,
+      zl: 0.3,
+      zs: 1,
+      cosmology: COSMO,
+      kind: 'arc',
+    });
+    const bd = K.massFromArc({
+      radius: r0,
+      sigmaRadius: s0,
+      zl: 0.3,
+      zs: 1,
+      cosmology: COSMO,
+      kind: 'arc',
+      sourceOffsetMax: 0.1,
+    });
     const e = [
       rel(un.bracket.lo, M(r0 / 2 - 2 * s0)),
       rel(un.bracket.hi, M(r0 + 2 * s0)),
@@ -558,10 +790,15 @@ export async function runValidation({ only = [], authDir = AUTH_DIR } = {}) {
     ];
     const ok =
       maxOf(e) <= L.maxRel &&
-      un.interval === null && bd.interval === null &&
+      un.interval === null &&
+      bd.interval === null &&
       un.mass === null &&
-      un.modelLimited === 'offset-unbounded' && bd.modelLimited === 'offset-bounded';
-    row('D5.singleArcWithoutOffset', ok, { worstRel: sig(maxOf(e), 3), flags: [un.modelLimited, bd.modelLimited] });
+      un.modelLimited === 'offset-unbounded' &&
+      bd.modelLimited === 'offset-bounded';
+    row('D5.singleArcWithoutOffset', ok, {
+      worstRel: sig(maxOf(e), 3),
+      flags: [un.modelLimited, bd.modelLimited],
+    });
   }
 
   // ---- E: authentic data (never fetched) ---------------------------------------------------
@@ -570,11 +807,27 @@ export async function runValidation({ only = [], authDir = AUTH_DIR } = {}) {
     if (!wanted(`${id}.`)) return;
     const name = THRESHOLDS.checks.find(c => c.id.startsWith(`${id}.`)).id;
     if (!existsSync(path.join(authDir, file)))
-      notRun(name, `tests/fixtures/lensing2/authentic/${file} was not supplied (LENSING_II.md, Files requested from Carl); ${why}; nothing was fetched`);
-    else reported(name, { file: 'arrived' }, 'the comparison is computed by the analysis the file names');
+      notRun(
+        name,
+        `tests/fixtures/lensing2/authentic/${file} was not supplied (LENSING_II.md, Files requested from Carl); ${why}; nothing was fetched`
+      );
+    else
+      reported(
+        name,
+        { file: 'arrived' },
+        'the comparison is computed by the analysis the file names'
+      );
   };
-  needFile('E1', 'cluster.json', 'no published cluster Einstein radius or mass is typed from memory');
-  needFile('E2', 'arc-marks.json', 'no image panel, lensing image or confirmed image terms exist on v3 (D-R10-249-01, D-R10-249-02)');
+  needFile(
+    'E1',
+    'cluster.json',
+    'no published cluster Einstein radius or mass is typed from memory'
+  );
+  needFile(
+    'E2',
+    'arc-marks.json',
+    'no image panel, lensing image or confirmed image terms exist on v3 (D-R10-249-01, D-R10-249-02)'
+  );
   needFile('E3', 'dispersion.json', 'no lens dispersion is typed from memory');
 
   // ---- R: reported -------------------------------------------------------------------------
@@ -582,7 +835,11 @@ export async function runValidation({ only = [], authDir = AUTH_DIR } = {}) {
   if (wanted('R2.'))
     reported(
       'R2.solarMassConvention',
-      { treeSolarMassKg: SOLAR_MASS_KG, oracleSolarMassKg: ORACLE.constants.Msun, relDifference: sig(rel(SOLAR_MASS_KG, ORACLE.constants.Msun), 3) },
+      {
+        treeSolarMassKg: SOLAR_MASS_KG,
+        oracleSolarMassKg: ORACLE.constants.Msun,
+        relDifference: sig(rel(SOLAR_MASS_KG, ORACLE.constants.Msun), 3),
+      },
       'every mass leg is in kilograms; a displayed solar-mass figure carries this difference'
     );
 
@@ -590,47 +847,93 @@ export async function runValidation({ only = [], authDir = AUTH_DIR } = {}) {
 
   if (wanted('P0.')) {
     const L = glim('P0');
-    const e = ORACLE.delay.point.map(o => rel(pointTimeDelay(o.massKg, o.y, o.zl), o.delayS));
-    row('P0.pointDelayVsFermat', maxOf(e) <= L.maxRel, { worstRel: sig(maxOf(e), 3), cases: e.length });
+    const e = ORACLE.delay.point.map(o =>
+      rel(pointTimeDelay(o.massKg, o.y, o.zl), o.delayS)
+    );
+    row('P0.pointDelayVsFermat', maxOf(e) <= L.maxRel, {
+      worstRel: sig(maxOf(e), 3),
+      cases: e.length,
+    });
   }
   if (wanted('P1.')) {
     const L = glim('P1');
-    const e = ORACLE.finite.map(o => rel(finiteSourceMagnification(o.u, o.rho), o.magnification));
-    const centre = L.rho.map(r => rel(finiteSourceMagnification(0, r), Math.sqrt(r * r + 4) / r));
+    const e = ORACLE.finite.map(o =>
+      rel(finiteSourceMagnification(o.u, o.rho), o.magnification)
+    );
+    const centre = L.rho.map(r =>
+      rel(finiteSourceMagnification(0, r), Math.sqrt(r * r + 4) / r)
+    );
     const worst = ORACLE.finite[e.indexOf(maxOf(e))];
-    row('P1.finiteSourceVsDiscIntegral', maxOf(e) <= L.maxRel && maxOf(centre) <= L.maxRelCentre, {
-      worstRel: sig(maxOf(e), 3),
-      worstAt: { rho: worst.rho, uOverRho: worst.uOverRho },
-      worstRelCentre: sig(maxOf(centre), 3),
-      cases: e.length,
-    });
+    row(
+      'P1.finiteSourceVsDiscIntegral',
+      maxOf(e) <= L.maxRel && maxOf(centre) <= L.maxRelCentre,
+      {
+        worstRel: sig(maxOf(e), 3),
+        worstAt: { rho: worst.rho, uOverRho: worst.uOverRho },
+        worstRelCentre: sig(maxOf(centre), 3),
+        cases: e.length,
+      }
+    );
   }
   if (wanted('P2.')) {
     const L = glim('P2');
     const A = u => (u * u + 2) / (u * Math.sqrt(u * u + 4));
-    const lim1 = L.u.map(u => rel(finiteSourceMagnification(u, L.rho), pointSourceMagnification(u)));
+    const lim1 = L.u.map(u =>
+      rel(finiteSourceMagnification(u, L.rho), pointSourceMagnification(u))
+    );
     const bl = [];
     for (const fs of [1, 0.6, 0.2])
-      for (const u of L.u) bl.push(rel(microlensingFlux([0], { t0: 0, u0: u, tE: 1, fs })[0], fs * A(u) + (1 - fs)));
-    row('P2.finiteSourcePointLimit', maxOf(lim1) <= L.maxRel && maxOf(bl) <= L.maxRelBlend, {
-      worstRelLimit: sig(maxOf(lim1), 3),
-      worstRelBlend: sig(maxOf(bl), 3),
-    });
+      for (const u of L.u)
+        bl.push(
+          rel(
+            microlensingFlux([0], { t0: 0, u0: u, tE: 1, fs })[0],
+            fs * A(u) + (1 - fs)
+          )
+        );
+    row(
+      'P2.finiteSourcePointLimit',
+      maxOf(lim1) <= L.maxRel && maxOf(bl) <= L.maxRelBlend,
+      {
+        worstRelLimit: sig(maxOf(lim1), 3),
+        worstAtU: L.u[lim1.indexOf(maxOf(lim1))],
+        perU: lim1.map(v => sig(v, 3)),
+        worstRelBlend: sig(maxOf(bl), 3),
+      }
+    );
   }
   for (const c of GATE.checks.filter(c => c.leg === 'prototype'))
     if (wanted(c.id.split('.')[0] + '.'))
-      notRun(c.id, 'the prototype belongs on a spike branch that is never merged (7.5 rule 4) and does not exist; LENSING_DELAYS_GATE.md');
-  for (const [id, file] of [['G6', 'delay.json'], ['G9', 'event.json']])
+      notRun(
+        c.id,
+        'the prototype belongs on a spike branch that is never merged (7.5 rule 4) and does not exist; LENSING_DELAYS_GATE.md'
+      );
+  for (const [id, file] of [
+    ['G6', 'delay.json'],
+    ['G9', 'event.json'],
+  ])
     if (wanted(`${id}.`)) {
       const name = GATE.checks.find(c => c.id.startsWith(`${id}.`)).id;
       if (!existsSync(path.join(authDir, file)))
-        notRun(name, `tests/fixtures/lensing2/authentic/${file} was not supplied (LENSING_DELAYS_GATE.md, Files requested from Carl); nothing was fetched`);
-      else reported(name, { file: 'arrived' }, 'the comparison is computed by the analysis the file names');
+        notRun(
+          name,
+          `tests/fixtures/lensing2/authentic/${file} was not supplied (LENSING_DELAYS_GATE.md, Files requested from Carl); nothing was fetched`
+        );
+      else
+        reported(
+          name,
+          { file: 'arrived' },
+          'the comparison is computed by the analysis the file names'
+        );
     }
 
   const cpu = process.cpuUsage(cpu0);
   const cpuSeconds = sig((cpu.user + cpu.system) / 1e6, 3);
-  if (wanted('R1.')) reported('R1.cpuSeconds', { cpuSeconds }, 'CPU time of this run, recorded and never compared');
+  if (wanted('R1.'))
+    reported(
+      'R1.cpuSeconds',
+      { cpuSeconds },
+      'CPU time of this run, recorded and never compared'
+    );
   rows.cpuSeconds = cpuSeconds;
   return rows;
 }
@@ -654,32 +957,48 @@ export function gateFrom(rows) {
       verdict: 'none',
       why: 'G1 to G5, G7 and G8 are NOT RUN (no prototype), G6 and G9 have no data; P0 to P2 test merged code only and decide nothing',
       mergedCodeLegs: { P0: st('P0'), P1: st('P1'), P2: st('P2') },
-      reachable: run('P0') ? 'at most B, and only after the prototype legs are run' : 'not reachable until P0 is repaired',
+      reachable: run('P0')
+        ? 'at most B, and only after the prototype legs are run'
+        : 'not reachable until P0 is repaired',
     },
   };
 }
 
-const isMain = process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href;
+const isMain =
+  process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href;
 if (isMain) {
   const args = process.argv.slice(2);
-  const only = (args.find(a => a.startsWith('--only=')) ?? '').slice(7).split(',').filter(Boolean);
+  const only = (args.find(a => a.startsWith('--only=')) ?? '')
+    .slice(7)
+    .split(',')
+    .filter(Boolean);
   const rows = await runValidation({ only });
   const gate = gateFrom(rows);
   const result = {
     format: 'gravitas.lensing2-results/1',
     rows: [...rows],
     gate,
-    meta: { cpuSeconds: rows.cpuSeconds, node: process.version, oracle: ORACLE.versions },
+    meta: {
+      cpuSeconds: rows.cpuSeconds,
+      node: process.version,
+      oracle: ORACLE.versions,
+    },
   };
-  if (args.includes('--json')) process.stdout.write(`${JSON.stringify(result)}\n`);
+  if (args.includes('--json'))
+    process.stdout.write(`${JSON.stringify(result)}\n`);
   else {
     for (const r of rows)
-      console.log(`${r.status.toUpperCase().padEnd(8)} ${r.id.padEnd(32)} ${JSON.stringify(r.measured)}${r.note ? `  (${r.note})` : ''}`);
+      console.log(
+        `${r.status.toUpperCase().padEnd(8)} ${r.id.padEnd(32)} ${JSON.stringify(r.measured)}${r.note ? `  (${r.note})` : ''}`
+      );
     console.log(JSON.stringify(gate, null, 2));
     console.log(`cpu ${rows.cpuSeconds} s`);
   }
   if (args.includes('--write-results') && !only.length)
-    writeFileSync(path.join(ROOT, DIR, 'results.json'), `${JSON.stringify(result, null, 1)}\n`);
+    writeFileSync(
+      path.join(ROOT, DIR, 'results.json'),
+      `${JSON.stringify(result, null, 1)}\n`
+    );
   if (args.includes('--write-failed') && !only.length) {
     const failed = rows.filter(r => r.status === 'fail');
     writeFileSync(

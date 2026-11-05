@@ -563,6 +563,9 @@ export const NEVER_PRECACHED = [
   // Prompt 249: the galaxy-morphology kernel is under js/kernels/galaxy/morphology/ (the pattern above); its validation group is one more file. No shipped
   // module imports either (the image panel's galaxy tools and 'Shapes of galaxies' wait for Carl, D-R10-249-01), so no page can fetch one.
   /^js\/validation\/groups\/morphology\.js$/,
+  // Prompt 251: the enclosed-mass extension of the lensing kernel (distances from redshifts, the mass inside an Einstein radius, image inversions, the arc fit and the
+  // mass bracket) and its validation group. Nothing shipped imports them and js/kernels/lensing/index.js does not re-export them (D-R10-251-01), so no page can fetch one.
+  /^(js\/kernels\/lensing\/enclosed\/.*|js\/validation\/groups\/lensing2\.js)$/,
   // Prompt 214: the strategy kernel, planner extension, panels and the strategy lesson's one new file (D-R10-214-06).
   /^js\/kernels\/strategy\//,
   /^js\/data\/investigations\/(es\/|depth\/|depth\/es\/)?(why-the-period-is-wrong|strategy-sequence)\.js$/,

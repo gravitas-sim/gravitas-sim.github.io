@@ -152,6 +152,7 @@ current, and the orchestrator checks it.
 | `lab3d-guides-key.mjs` | The 3-D curriculum's answer key: a reference run of every guide | `npm run lab3d:key` |
 | `label-golden-investigations.mjs` | npm run label:golden:investigations [-- --regenerate-label-golden] | `npm run label:golden:investigations` |
 | `label-golden.mjs` | npm run label:golden [-- --regenerate-label-golden] | `npm run label:golden` |
+| `lensing2-validate.mjs` | The enclosed-mass lensing extension against its committed thresholds (Prompt 251) | `npm run lensing2:validate` |
 | `lesson-coverage.mjs` | npm run lesson:coverage | `npm run lesson:coverage` |
 | `lesson-golden-dom.mjs` | npm run lesson:golden:dom -- --regenerate-lesson-golden | `npm run lesson:golden:dom` |
 | `lesson-golden.mjs` | npm run lesson:golden -- --regenerate-lesson-golden | `npm run lesson:golden` |
