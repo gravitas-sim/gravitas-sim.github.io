@@ -551,6 +551,9 @@ export const NEVER_PRECACHED = [
   // Prompt 243: the X-ray counts kernel and its validation group. No shipped module imports them (the lessons and the light-curve counts mode wait for Carl),
   // and the idle precache has no room (checkpoint IV, term 2), so no page can fetch one and they stay out of the install.
   /^(js\/kernels\/xray\/.*|js\/validation\/groups\/xray\.js)$/,
+  // Prompt 245: the SED kernel (flux-density conventions, the band-integrated point, the blackbody fit, the integrated SED) and its validation group. No shipped
+  // module imports them (the SED view and the investigation wait for Carl, D-R10-245-01), and the idle precache has no room (checkpoint IV, term 2).
+  /^(js\/kernels\/sed\/.*|js\/validation\/groups\/sed\.js)$/,
   // Prompt 247: the ISM kernel (line identification, equivalent widths, the linear column density, the Balmer decrement) and its validation group. No shipped
   // module imports them (the viewer's overlays, the three investigations and the model section wait for Carl, D-R10-247-01), so no page can fetch one.
   /^(js\/kernels\/ism\/.*|js\/validation\/groups\/ism\.js)$/,

@@ -1143,6 +1143,20 @@
       "student": false
     },
     {
+      "file": "SED.md",
+      "kind": "feature",
+      "purpose": "The SED kernel: flux-density conventions, the point contract, the blackbody fit, nonsimultaneity, the integrated SED and luminosity, validation and failed legs (Prompt 245).",
+      "owner": 245,
+      "student": false
+    },
+    {
+      "file": "SED_GATE.md",
+      "kind": "gate",
+      "purpose": "The SED contract and gate: the committed rules, the amendments, the verdict function, what was measured and the files requested from Carl (Prompt 245, Part A).",
+      "owner": 245,
+      "student": false
+    },
+    {
       "file": "PULSARS.md",
       "kind": "feature",
       "purpose": "The pulsar kernel: dispersion constant, de-dispersion, folding, period and DM with intervals, the labelled DM distance, synthetic series, validation and failed legs (Prompt 242).",
