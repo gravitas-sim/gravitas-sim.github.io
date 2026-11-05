@@ -149,8 +149,9 @@ export function generateDynamicSpectrum(o) {
     for (let j = 0; j < nsamp; j++) {
       const t = j * w.dt;
       let v = 0;
-      for (let s = 0; s < m; s++)
-        v += profileAt((t - subDelay[s]) / w.period - w.phase0, comps);
+      if (w.amplitude !== 0)
+        for (let s = 0; s < m; s++)
+          v += profileAt((t - subDelay[s]) / w.period - w.phase0, comps);
       v /= m;
       energy += v * v;
       data[row + j] = v + (w.noiseSigma > 0 ? w.noiseSigma * draw() : 0);

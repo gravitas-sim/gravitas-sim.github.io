@@ -2,7 +2,7 @@
 // Pulsar kernel: the period with an interval, the periodogram, the whole analysis
 // -----------------------------------------------------------------------------
 //   refinePeriod          MEASURED: the period from the phase drift of M = 8
-//                         sub-integrations (PULSAR-RULE-1 S9): each sub-integration is
+//                         sub-integrations of whole pulses (PULSAR-RULE-1 S9, AM10): each is
 //                         the channels aligned at the DM and summed, its arrival phase is
 //                         taken against a leave-one-out template of the others, and a
 //                         weighted line through phase against time gives a frequency
@@ -63,12 +63,21 @@ export function refinePeriod(dyn, o) {
     );
   const sig = channelSigmas(dyn, o.sigma);
   const top = f[nchan - 1];
-  const edges = Array.from({ length: M + 1 }, (_, m) =>
-    Math.floor((m * nsamp) / M)
-  );
   let P = o.period;
   let out = null;
   for (let pass = 0; pass < passes; pass++) {
+    // Sub-integrations hold whole pulses (AM10): a pulse split by a boundary distorts the
+    // profile of both neighbours, a bias that noise-free data show and white noise hides.
+    const pulses = Math.floor((nsamp * dt) / P);
+    if (pulses < M)
+      return refusal(
+        'too-few-subintegrations',
+        `the series holds ${pulses} whole pulses at this period, fewer than the ${M} sub-integrations`,
+        { pulses, period: P }
+      );
+    const edges = Array.from({ length: M + 1 }, (_, m) =>
+      Math.min(nsamp, Math.ceil((Math.floor((m * pulses) / M + 0.5) * P) / dt))
+    );
     const subs = [];
     for (let m = 0; m < M; m++) {
       const per = [];
@@ -291,7 +300,11 @@ export function analyzePulsar(dyn, o) {
   }
   stages.coarse = coarse;
   const dd = dedisperse(dyn, coarse.dm, { method: 'nearest', constant: K });
-  const sumSigma = noiseSigma(dd.series);
+  const sumSigma =
+    o.sigma === undefined || o.sigma === null
+      ? noiseSigma(dd.series)
+      : Math.sqrt(channelSigmas(dyn, o.sigma).reduce((a, b) => a + b * b, 0)) /
+        nchan;
   const search = searchPeriod(dd.series, dt, {
     pMin,
     pMax,

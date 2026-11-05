@@ -356,10 +356,13 @@ def refine_dm(s, period, dm0, sigmas, nbin=64, snr_min=5.0, max_passes=5):
 def refine_period(s, period, dm, sigmas, nbin=64, M=8, snr_min=5.0, passes=2):
     f, dt, n, nchan = s['freqs'], s['dt'], s['n'], s['nchan']
     top = f[-1]
-    edges = [int(math.floor(m * n / M)) for m in range(M + 1)]
     P = period
     out = None
     for _ in range(passes):
+        pulses = int(math.floor(n * dt / P))
+        if pulses < M:
+            return {'refused': 'too-few-subintegrations'}
+        edges = [min(n, int(math.ceil(math.floor(m * pulses / M + 0.5) * P / dt))) for m in range(M + 1)]
         subs = []
         for m in range(M):
             per = []
