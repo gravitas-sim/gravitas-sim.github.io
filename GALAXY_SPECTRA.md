@@ -186,16 +186,53 @@ What is needed to run the remaining legs and what the instructional pull request
 5. **Packs.** Packs have 0 B of room, raw and gzip. Four spectra as sidecar files that no precache tier reads, counting only
    the manifest, is the pattern of Prompt 220; a manifest that does not fit is a pack decision for Carl.
 
+## Follow-up: the goodness-of-fit refusal
+
+Carl ruled on 2026-11-05 ("go with your recommendations", `DECISIONS_2026-11-05.md`): the failed legs stay failing and labelled
+and nothing moves. The follow-up therefore adds legs and leaves the old ones alone. `tests/fixtures/galaxy/followup-thresholds.json`
+was committed (21af2aec) before any code of the follow-up existed and before the statistic was computed on any spectrum; it
+holds GALAXY-RULE-2, the legs D2b, D3b and R1b and no amendment.
+
+**The rule (M1 to M4).** At the refined best lag, over the n samples the template covers, chi2_min = sum w f^2 - S^2/T (the
+weighted sum of squares of the high-passed spectrum less what the best-fit amplitude explains) with n - 2 degrees of freedom.
+The cut is the 1 - 1e-4 quantile of chi-square with those degrees of freedom (`chi2Quantile`), a false-refusal rate of 1e-4 per
+spectrum under the model's own assumptions. The level is a design choice of this kernel, not a value read off the 21 failures, and
+nothing was run to choose it. The refusal is opt-in (`crossCorrelate(..., { refuseMisfit: true })`, off by default) so the
+committed 27 legs are byte-identical; with it off the statistic is still reported on the result as `fit`, with the flag `misfit`
+when the cut is crossed. It is tested only when sigma was supplied (a sigma from the spectrum's own scatter carries the line
+power, so the test would measure the scatter against itself): then `fit.note` reads `misfit-untested: errors from scatter`. A peak
+refused for significance or ambiguity is refused before the test.
+
+**Measured (`results.json`, 30 rows: 18 pass, 4 fail, 5 reported, 3 not run).**
+
+| Leg | Verdict | Measured |
+| --- | --- | --- |
+| D3b | **pass** | the D3 worlds: 0 of 200 confidently wrong (bound 5 percent); 22 refused `template-misfit`, none ok; exact-template worlds: 0 of 300 falsely refused (bound 1 percent), coverage 0.667, sd 1.042 |
+| D2b | **fail** | the break is 1 to 1e-15 with no break flagged and the line method is not constrained, as committed; the correlation is `low-significance`, not refused `no-structure` |
+| R1b | reported | 75 of 200 approximately-right templates refused as misfit, 0 confidently wrong; the 125 let through have coverage 0.648, sd 1.089 |
+
+**What D3b means.** Most mismatched pairs were already refused as ambiguous or not significant; of the 200, D3's 21 confident errors
+are now refused for misfit and none is returned ok. The price is on the page: R1b shows the strict test refuses 75 of 200 worlds
+whose lines are drawn away from the template (strengths by up to 30 percent, widths by 20 to 25 percent, one extra line) at these signal to noise, since
+any structure the template lacks is a misfit by this test (the stated sigma must also be right). That is a truthful statement that the
+template is not the object, not a defect of the test; a caller who wants an answer from an approximate template leaves the option off
+and reads the `fit` report and the flag. D3 itself still fails as measured: the default correlation is as unsafe as before.
+
+**What D2b means.** A spectrum flat in F_nu is a power law in F_lambda, which the 101-sample high-pass does not remove exactly, so a
+smooth residual correlates weakly with the template and the correlation returns a weak answer flagged low-significance (q below 10,
+never `ok`). The committed D2b expectation (refusal `no-structure`) presumed a constant spectrum and is wrong in the same way D2 was.
+It is left failing and labelled; a later contract should expect "not ok" here. D2 stays failing as a wrong expectation.
+
 ## Open questions for Carl
 
 1. **The consumers rule.** May the instructional pull request (viewer galaxy mode, the two investigations, the model section)
    proceed on this kernel, and which of the requests above must land first? The synthetic path stays labelled synthetic until
    they arrive; the investigations would teach on synthetic galaxies and the line identification and the correlation, and "Old or
    young?" would teach the break's order, its limits and the dust and emission biases above, with no age number.
-2. **D3.** Add a goodness-of-fit test (the residual chi-square after the best template) to the correlation's refusal rule, with its
+2. **D3 (answered 2026-11-05, see the follow-up).** Add a goodness-of-fit test (the residual chi-square after the best template) to the correlation's refusal rule, with its
    thresholds committed before the next run, or leave the correlation as a tool that is only safe with the right template? Until
    one of them is decided no investigation should let a student choose a mismatched template and read `ok`.
-3. **D2.** Reword the flat-spectrum leg to flat F_nu in a follow-up contract; the failing row stays as it is until then.
+3. **D2 (answered; D2b also fails, see the follow-up).** Reword the flat-spectrum leg to flat F_nu in a follow-up contract; the failing row stays as it is until then.
 
 ## Inherited limits to state in claims built on this kernel
 
@@ -211,4 +248,4 @@ The cross-correlation technique for redshifts is the Fourier-era standard (Tonry
 directly in log wavelength with the uncertainty derived from the profile chi-square rather than a published coefficient. The CCM89
 law is Cardelli, Clayton and Mathis 1989 as `js/kernels/radiation/extinction.js` cites it; the rest wavelengths are the NIST Atomic
 Spectra Database as the line pack records; the SDSS spectra are DR18 (Almeida et al. 2023) as the pack records. The break
-definitions are not cited here because their edges are the caller's. `DECISION_REGISTER.md` D-R10-248-01 to -05.
+definitions are not cited here because their edges are the caller's. `DECISION_REGISTER.md` D-R10-248-01 to -05 and, for the follow-up, -06 to -09.
