@@ -1,0 +1,433 @@
+{
+  "format": "gravitas.pulsar-results/1",
+  "rows": [
+    {
+      "id": "A1.dispersionLaw",
+      "status": "pass",
+      "measured": {
+        "ratio": 0,
+        "linear": 1.48e-16,
+        "sweep": 1.209e-15,
+        "inverse": 1.776e-16,
+        "units": 0,
+        "lowerLater": true,
+        "refusals": true
+      },
+      "note": ""
+    },
+    {
+      "id": "A2.dispersionConstant",
+      "status": "pass",
+      "measured": {
+        "relative": 0,
+        "inputsEqualFixture": true,
+        "statusNamesSource": true,
+        "astropy": "6.0.1",
+        "reference": "CODATA 2018"
+      },
+      "note": ""
+    },
+    {
+      "id": "A3.smearing",
+      "status": "pass",
+      "measured": {
+        "identityRelative": 1.751e-16,
+        "formulaDeparture": 0.00009512
+      },
+      "note": ""
+    },
+    {
+      "id": "A4.deDispersionNoiseFree",
+      "status": "pass",
+      "measured": {
+        "centroidLinearTurn": 0.0001098,
+        "centroidNearestTurn": 0.001113,
+        "conservation": 4.841e-15,
+        "minStatisticRatio": 2.476
+      },
+      "note": ""
+    },
+    {
+      "id": "A5.periodNoiseFree",
+      "status": "fail",
+      "measured": {
+        "relativeError": 0.00000253,
+        "relativeErrorBySeries": [
+          0.000001107,
+          4.129e-7,
+          0.00000253,
+          0.000001098,
+          3.951e-7,
+          8.4e-7
+        ],
+        "periodogramErrorOverWidth": 0.004742
+      },
+      "note": "Left failing and labelled, not tuned: the worst of the six noise-free periods is off by a relative amount above the committed 2e-6 (the grid-and-sub-integration period of a noise-free series is limited by how the 8 whole-pulse sub-integrations quantise the samples); the bound is Carl's to reset (AM9, AM10 record the two earlier fixes to the worlds)."
+    },
+    {
+      "id": "A6.dmNoiseFree",
+      "status": "pass",
+      "measured": {
+        "maxErrorPcCm3": 0.03034,
+        "errorBySeries": [
+          0.03034,
+          0.00796,
+          0.001171,
+          0.0002014,
+          0.005075,
+          0.01704
+        ],
+        "refused": 0
+      },
+      "note": ""
+    },
+    {
+      "id": "A7.foldStatisticCalibration",
+      "status": "pass",
+      "measured": {
+        "meanOverDof": 0.9884,
+        "fractionBelow0p05": 0.0475,
+        "trialCorrectionMonotone": true,
+        "chi2Check": 0.4763
+      },
+      "note": ""
+    },
+    {
+      "id": "A8.dmDistance",
+      "status": "pass",
+      "measured": {
+        "relative": 0,
+        "everyResultLabelled": true,
+        "rangeOk": true,
+        "refusalCodes": [
+          "missing-density",
+          "missing-density",
+          "missing-density",
+          "missing-density",
+          "missing-density",
+          "bad-argument",
+          "missing-density"
+        ]
+      },
+      "note": ""
+    },
+    {
+      "id": "B1.constantVsAstropy",
+      "status": "pass",
+      "measured": {
+        "constantRelative": 3.011e-12,
+        "delayRelative": 3.011e-12,
+        "astropy": "6.0.1"
+      },
+      "note": ""
+    },
+    {
+      "id": "B2.periodogramVsAstropy",
+      "status": "pass",
+      "measured": {
+        "maxAbsolute": 1.293e-13,
+        "periods": 40,
+        "astropy": "6.0.1"
+      },
+      "note": ""
+    },
+    {
+      "id": "B3.deDisperseFoldVsNumpy",
+      "status": "pass",
+      "measured": {
+        "nearestProfileOfPeak": 3.298e-11,
+        "linearProfileOfPeak": 2.774e-11,
+        "statisticRelative": 2.644e-10,
+        "sameLength": true,
+        "generatorFirst40MaxDifference": 4.154e-11
+      },
+      "note": "the generator is compared too (its first 40 samples of every channel against the oracle's forward model and port of the named stream); its difference is a measured fact, not a committed bound"
+    },
+    {
+      "id": "B4.dmMeasureVsNumpy",
+      "status": "pass",
+      "measured": {
+        "series": 24,
+        "dmPcCm3": 1.678e-7,
+        "sigmaRelative": 4.113e-8,
+        "phaseTurn": 9.346e-10,
+        "usedChannelsEqual": true,
+        "refusedByBoth": 0,
+        "disagreementOnRefusal": 0,
+        "numpy": "1.26.4",
+        "scipy": "1.13.1"
+      },
+      "note": ""
+    },
+    {
+      "id": "B5.periodVsNumpy",
+      "status": "pass",
+      "measured": {
+        "periodRelative": 3.929e-11,
+        "sigmaRelative": 2.556e-7
+      },
+      "note": ""
+    },
+    {
+      "id": "B6.toolkit",
+      "status": "not-run",
+      "measured": null,
+      "note": "no independent pulsar toolkit is installed here and installing one is a download that was not made; the oracle of record is the independent implementation of B1 to B5. To run it: tools/pulsar-oracle/export-series.mjs writes the series, a toolkit of Carl's choice is run on it, and its output goes to tests/fixtures/pulsars/toolkit/result.json (schema in PULSARS.md)"
+    },
+    {
+      "id": "C1.dmCoverage",
+      "status": "pass",
+      "measured": {
+        "realisations": 200,
+        "returned": 200,
+        "refused": 0,
+        "refusalCodes": {},
+        "coverage68": 0.695,
+        "coverage95": 0.94
+      },
+      "note": ""
+    },
+    {
+      "id": "C2.periodCoverage",
+      "status": "pass",
+      "measured": {
+        "returned": 200,
+        "coverage68": 0.665,
+        "coverage95": 0.94
+      },
+      "note": ""
+    },
+    {
+      "id": "C3.falseAlarm",
+      "status": "pass",
+      "measured": {
+        "series": 200,
+        "refusalRate": 1,
+        "refusalCodes": {
+          "no-pulsar": 200
+        },
+        "returnedANumber": 0
+      },
+      "note": ""
+    },
+    {
+      "id": "C4.blindRecovery",
+      "status": "pass",
+      "measured": {
+        "realisations": 6,
+        "refused": 0,
+        "periodInside95": 6,
+        "dmInside95": 6,
+        "detail": [
+          {
+            "periodZ": 0.778,
+            "dmZ": -0.684
+          },
+          {
+            "periodZ": -1.03,
+            "dmZ": 0.0413
+          },
+          {
+            "periodZ": 0.222,
+            "dmZ": 0.641
+          },
+          {
+            "periodZ": 0.182,
+            "dmZ": -0.778
+          },
+          {
+            "periodZ": -0.97,
+            "dmZ": 0.531
+          },
+          {
+            "periodZ": 0.31,
+            "dmZ": 0.272
+          }
+        ]
+      },
+      "note": ""
+    },
+    {
+      "id": "C5.detectionPower",
+      "status": "reported",
+      "measured": {
+        "realisationsPerAmplitude": 40,
+        "byAmplitude": {
+          "1": {
+            "notRefusedNoPulsar": 1,
+            "fullResult": 1
+          },
+          "0.25": {
+            "notRefusedNoPulsar": 1,
+            "fullResult": 0.225
+          },
+          "0.5": {
+            "notRefusedNoPulsar": 1,
+            "fullResult": 1
+          }
+        }
+      },
+      "note": ""
+    },
+    {
+      "id": "D1.singleFrequency",
+      "status": "pass",
+      "measured": {
+        "singleChannel": {
+          "status": "partial",
+          "periodInside95": true,
+          "dmCode": "not-constrained"
+        },
+        "narrowBand": {
+          "status": "refused",
+          "code": "not-constrained"
+        }
+      },
+      "note": ""
+    },
+    {
+      "id": "D2.noiseOnly",
+      "status": "pass",
+      "measured": {
+        "status": "refused",
+        "code": "no-pulsar",
+        "trialCorrectedP": 1,
+        "trials": 412723
+      },
+      "note": ""
+    },
+    {
+      "id": "D3.dmOutsideRange",
+      "status": "pass",
+      "measured": {
+        "status": "refused",
+        "code": "dm-at-range-edge"
+      },
+      "note": ""
+    },
+    {
+      "id": "D4.wrongPeriod",
+      "status": "pass",
+      "measured": {
+        "status": "refused",
+        "code": "no-pulsar"
+      },
+      "note": ""
+    },
+    {
+      "id": "D5.fewChannels",
+      "status": "pass",
+      "measured": {
+        "status": "refused",
+        "code": "too-few-channels",
+        "used": 2
+      },
+      "note": ""
+    },
+    {
+      "id": "D6.badInputs",
+      "status": "pass",
+      "measured": {
+        "codes": {
+          "nonPositiveDt": "bad-argument",
+          "nanInData": "bad-argument",
+          "nbinTooSmall": "bad-argument",
+          "periodTooLong": "bad-argument",
+          "descendingFrequencies": "bad-frequencies",
+          "invertedDmRange": "bad-range",
+          "negativeDmStart": "bad-range",
+          "lengthMismatch": "bad-argument"
+        }
+      },
+      "note": ""
+    },
+    {
+      "id": "D7.labelAndManifest",
+      "status": "pass",
+      "measured": {
+        "manifestComplete": true,
+        "labelled": true,
+        "refusalCodes": [
+          "bad-argument",
+          "bad-argument",
+          "bad-argument",
+          "bad-argument",
+          "bad-argument"
+        ]
+      },
+      "note": ""
+    },
+    {
+      "id": "E1.authenticSeries",
+      "status": "not-run",
+      "measured": null,
+      "note": "no authentic dynamic spectrum or folded profile is in the tree: RADIO_DATA_GATE.md rows P1 to P3 and K1a to K1c are C, and the one row that passes (16, the NANOGrav 15-year table) has no series; the authentic leg waits for Carl (what to supply is in PULSARS.md)"
+    },
+    {
+      "id": "E2.catalogueRows",
+      "status": "pass",
+      "measured": {
+        "eligibleRows": 6,
+        "analysed": 6,
+        "refused": 0,
+        "refusalCodes": {},
+        "threw": 0,
+        "dmCoverage95": 1,
+        "notCovered": [],
+        "authentic": false
+      },
+      "note": "synthetic series built from the pack's own periods and DMs: the generator's truth is the row, so this is not an authentic leg"
+    },
+    {
+      "id": "R1.smearingBias",
+      "status": "reported",
+      "measured": {
+        "realisations": 60,
+        "byConfiguration": {
+          "16 channels, 1 sub-bands": {
+            "returned": 60,
+            "meanZ": 0.125,
+            "sdZ": 0.9458,
+            "meanSigmaPcCm3": 1.198,
+            "meanReducedChi2": 1.305
+          },
+          "16 channels, 4 sub-bands": {
+            "returned": 60,
+            "meanZ": -0.2348,
+            "sdZ": 1.032,
+            "meanSigmaPcCm3": 1.319,
+            "meanReducedChi2": 1.39
+          },
+          "64 channels, 1 sub-bands": {
+            "returned": 60,
+            "meanZ": -0.04581,
+            "sdZ": 0.8239,
+            "meanSigmaPcCm3": 0.526,
+            "meanReducedChi2": 1.102
+          },
+          "64 channels, 4 sub-bands": {
+            "returned": 60,
+            "meanZ": 0.02081,
+            "sdZ": 1.035,
+            "meanSigmaPcCm3": 0.5458,
+            "meanReducedChi2": 1.16
+          }
+        }
+      },
+      "note": ""
+    },
+    {
+      "id": "R2.profileEvolution",
+      "status": "reported",
+      "measured": {
+        "realisations": 60,
+        "returned": 60,
+        "meanZ": 0.5015,
+        "sdZ": 1.079,
+        "meanReducedChi2": 1.164,
+        "flaggedStructuredResiduals": 0
+      },
+      "note": ""
+    }
+  ]
+}
