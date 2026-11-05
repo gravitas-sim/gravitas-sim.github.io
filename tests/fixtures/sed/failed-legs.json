@@ -1,0 +1,56 @@
+{
+ "format": "gravitas.sed-failed-legs/1",
+ "note": "the legs that crossed a committed bound; they stay failing, only Carl resets a bound",
+ "legs": [
+  {
+   "id": "B1.astropyConversions",
+   "measured": {
+    "worstRelativeError": 0.0000604,
+    "comparisons": 34,
+    "astropy": "6.0.1"
+   },
+   "note": ""
+  },
+  {
+   "id": "B2.bandMeanOracle",
+   "measured": {
+    "worstRelativeMean": 0.0000176,
+    "worstRelativePivot": 0.0000446,
+    "comparisons": 56
+   },
+   "note": ""
+  },
+  {
+   "id": "C2.coverageLuminosity",
+   "measured": {
+    "n": 150,
+    "draws": 200,
+    "failedRealisations": 0,
+    "coverage": [
+     0.03333,
+     0.22
+    ],
+    "bands": [
+     [
+      0.55,
+      0.8
+     ],
+     [
+      0.88,
+      0.995
+     ]
+    ]
+   },
+   "note": ""
+  },
+  {
+   "id": "D3.rayleighJeansOnly",
+   "measured": {
+    "n": 50,
+    "refusedShare": 0.72,
+    "controlConstrainedShare": 1
+   },
+   "note": ""
+  }
+ ]
+}
