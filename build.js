@@ -77,6 +77,8 @@ const STATIC_FILES = [
   // binned; fetched on demand by the activity instruments, in no precache tier.
   'variables/tess-au-mic-s1.json',
   'variables/tess-ek-dra-s16.json',
+  // The NANOGrav 15-year pulsars' table (Prompt 240): fetched on demand, in no precache tier.
+  'radio/nanograv-15yr-pulsars.json',
   // The synthetic labelled sample of the classification instrument.
   'variables/class-sample.json',
   // The cosmology tables' rows (data-packs/hubble-1929-table1.json and three

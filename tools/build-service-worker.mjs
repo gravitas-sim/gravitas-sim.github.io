@@ -582,6 +582,9 @@ export const NEVER_PRECACHED = [
   /^js\/kernels\/activity\//,
   /^js\/activityData\.js$/,
   /^js\/data\/observations\/(tessAuMicS1|tessEkDraS16)\.js$/,
+  // Prompt 240: the NANOGrav 15-year pulsars' pack record. No shipped module imports it yet (the pulsar
+  // lessons are 242's), so no page can fetch it; its first adopter deletes this entry (D-R10-240-05).
+  /^js\/data\/observations\/nanograv15yrPulsars\.js$/,
 ];
 
 const ON_DEMAND_ONLY = new Set([

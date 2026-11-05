@@ -507,6 +507,14 @@ mist-v12-tracks: MIST v1.2 evolutionary tracks: eight model stars at solar metal
     Paxton et al. 2015, ApJS 220, 15 (MESA), doi:10.1088/0067-0049/220/1/15
     Asplund et al. 2009, ARA&A 47, 481 (the solar abundances MIST scales), doi:10.1146/annurev.astro.46.060407.145222
 
+nanograv-15yr-pulsars: The 68 NANOGrav 15-year pulsars: spin frequencies and dispersion measures
+  File: js/data/observations/nanograv15yrPulsars.js (compilation)
+  Licence: CC BY 4.0. The Zenodo record 10.5281/zenodo.16051178 (version 2.1.0, published 2025-07-17, creator The NANOGrav Collaboration, access open) states the licence CC BY 4.0 in its licence field (the record's JSON, retrieved 2026-11-05). None of the release's README files states a licence, a citation request or a condition (README and narrowband/README.narrowband were read in full, and every README of the release, including wideband, residuals, clock and the correlations', was searched for licence, copyright, citation, acknowledgement, redistribution, permission and condition terms, 2026-11-05). The README names Agazie et al. 2023 and the record's DOI as the data set's description and home. Attribute: The NANOGrav Collaboration, the NANOGrav 15-year Data Set, v2.1.0, doi:10.5281/zenodo.16051178; Agazie et al. 2023, ApJL 951, L9. The table was extracted and reformatted from the timing models, and the values are summarised as the manifest states.
+  Cite:
+    The NANOGrav Collaboration, The NANOGrav 15-Year Data Set, public release v2.1.0 (2025-07-17), Zenodo, doi:10.5281/zenodo.16051178
+    The NANOGrav 15-year Data Set, all versions (Zenodo concept record), doi:10.5281/zenodo.7967584
+    Agazie et al. 2023, ApJL 951, L9 (The NANOGrav 15-year Data Set: Observations and Timing of 68 Millisecond Pulsars), doi:10.3847/2041-8213/acda9a
+
 ngc3198-synthetic-curve: NGC 3198: a synthetic rotation curve
   File: js/data/ngc3198Synthetic.js (synthetic)
   Licence: CC BY 4.0. Gravitas’s own synthetic data, licensed as its teaching material is (CC BY 4.0, LICENSES.md).

@@ -25,7 +25,7 @@
 
 import { UNITS, unitIdOf } from '../units/registry.js';
 
-/** The axes of a dimension vector: SI symbols, then the three non-SI ones. */
+/** The axes of a dimension vector: SI symbols, then the non-SI ones. */
 export const AXES = Object.freeze([
   'm',
   'kg',
@@ -36,6 +36,7 @@ export const AXES = Object.freeze([
   'mag',
   'dex',
   'sim',
+  'dm',
 ]);
 /** The first of the axes that are not multiplicative. */
 const OPAQUE_FROM = 6;
@@ -71,6 +72,7 @@ export const DIMS = Object.freeze({
   magnitude: [vec({ mag: 1 }), 1],
   logarithm: [vec({ dex: 1 }), 1],
   simulation: [vec({ sim: 1 }), 1],
+  'dispersion-measure': [vec({ dm: 1 }), 1],
 });
 
 /** Whether a dimension vector has a non-multiplicative axis. */
