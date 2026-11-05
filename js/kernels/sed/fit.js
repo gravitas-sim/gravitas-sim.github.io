@@ -296,7 +296,7 @@ export function fitBlackbody(rawPoints, opts = {}) {
     return attach({
       status: 'not-constrained',
       code: 'temperature-open',
-      message: `the profile of chi-square does not close inside ${domain.minK} K to ${domain.maxK} K at level ${primary.level.toPrecision(4)}: these points do not fix a temperature`,
+      message: `the profile of chi-square does not close inside ${domain.minK} K to ${domain.maxK} K at the primary level (${Math.round(primary.level * 10000) / 100} percent): these points do not fix a temperature`,
       bestFit: {
         T: core.T,
         theta: Math.exp(0.5 * core.u),
