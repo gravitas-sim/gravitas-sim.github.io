@@ -100,6 +100,7 @@ const GROUPS = [
   () => import('./groups/radio.js'),
   () => import('./groups/pulsars.js'),
   () => import('./groups/ism.js'),
+  () => import('./groups/galaxy.js'),
 ];
 
 /**

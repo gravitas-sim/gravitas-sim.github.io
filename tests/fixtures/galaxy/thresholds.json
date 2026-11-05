@@ -138,109 +138,215 @@
       "id": "A1.integerShift",
       "leg": "a",
       "what": "a noise-free spectrum that is the template shifted by an integer number of samples (log10(1 + z) = k step, k = 200, 777 and 1234) of each of the star-forming and passive kinds is recovered by the cross-correlation to an absolute 1e-6 in z (the filter's edge effects are the only departure), with the peak status ok",
-      "limits": { "lags": [200, 777, 1234], "maxAbsoluteZ": 1e-6 }
+      "limits": {
+        "lags": [
+          200,
+          777,
+          1234
+        ],
+        "maxAbsoluteZ": 1e-06
+      }
     },
     {
       "id": "A2.subPixelShift",
       "leg": "a",
       "what": "noise-free spectra of both kinds at z = 0.0123, 0.0777, 0.1999 and 0.3333 (sub-sample shifts) against the template of the same kind: the cross-correlation redshift to an absolute 2e-5 and the line-identification redshift of the star-forming kind to an absolute 5e-5",
-      "limits": { "z": [0.0123, 0.0777, 0.1999, 0.3333], "maxAbsoluteZXc": 2e-5, "maxAbsoluteZLines": 5e-5 }
+      "limits": {
+        "z": [
+          0.0123,
+          0.0777,
+          0.1999,
+          0.3333
+        ],
+        "maxAbsoluteZXc": 2e-05,
+        "maxAbsoluteZLines": 5e-05
+      }
     },
     {
       "id": "A3.curvatureAnalytic",
       "leg": "a",
       "what": "the correlation peak's curvature uncertainty against the analytic Cramer-Rao value sigma_k^2 = sigma^2 / sum_i (d mu_i / dk)^2 for a single Gaussian emission line (sigma 1.5 samples, amplitude 40 sigma_pixel, invented) with the exact template, the derivative of the pixel-integrated line taken by a central difference of 1e-3 sample in the validator: relative difference within 3 percent",
-      "limits": { "maxRelative": 0.03, "lineSigmaSamples": 1.5, "amplitudeOverSigma": 40 }
+      "limits": {
+        "maxRelative": 0.03,
+        "lineSigmaSamples": 1.5,
+        "amplitudeOverSigma": 40
+      }
     },
     {
       "id": "A4.breakStep",
       "leg": "a",
       "what": "the break of a noise-free flat-F_nu spectrum with a hard step of fractional depth d at 400 nm (rest) is 1 / (1 - d) for d = 0.2 and 0.5, at z = 0, 0.1 and 0.3, with the invented bands: relative error within 1e-6",
-      "limits": { "depths": [0.2, 0.5], "z": [0, 0.1, 0.3], "maxRelative": 1e-6 }
+      "limits": {
+        "depths": [
+          0.2,
+          0.5
+        ],
+        "z": [
+          0,
+          0.1,
+          0.3
+        ],
+        "maxRelative": 1e-06
+      }
     },
     {
       "id": "A5.breakQuadrature",
       "leg": "a",
       "what": "the break of noise-free star-forming and passive worlds at z = 0.02, 0.15 and 0.3 against the generator's truth, the ratio of the band means of F_nu of the noise-free model integrated by Gauss-Legendre quadrature (independent of the sampled spectrum): relative error within 2e-3",
-      "limits": { "z": [0.02, 0.15, 0.3], "maxRelative": 0.002 }
+      "limits": {
+        "z": [
+          0.02,
+          0.15,
+          0.3
+        ],
+        "maxRelative": 0.002
+      }
     },
     {
       "id": "A6.fluxKind",
       "leg": "a",
       "what": "the break of a spectrum given as F_lambda equals the break of the same spectrum converted to F_nu = lambda^2 F_lambda and given as F_nu, to a relative 1e-12",
-      "limits": { "maxRelative": 1e-12 }
+      "limits": {
+        "maxRelative": 1e-12
+      }
     },
     {
       "id": "B1.correlationVsOracle",
       "leg": "b",
       "what": "the redshift, its error and the peak significance of the cross-correlation against the independent implementation (numpy and scipy, no Gravitas code) on 8 noisy spectra (4 star-forming, 4 passive): redshift within 1e-6 absolute, error within 1 percent relative, significance within 0.1 percent relative",
-      "limits": { "maxAbsoluteZ": 1e-6, "maxRelativeSigma": 0.01, "maxRelativeQ": 0.001, "cases": 8 }
+      "limits": {
+        "maxAbsoluteZ": 1e-06,
+        "maxRelativeSigma": 0.01,
+        "maxRelativeQ": 0.001,
+        "cases": 8
+      }
     },
     {
       "id": "B2.directEqualsFft",
       "leg": "b",
       "what": "the direct lagged correlation's integer-lag profile q(k) equals an FFT-based correlation computed by numpy on the same filtered series, for 4 noisy spectra: the largest absolute difference over the largest q within 1e-9 (221's FFT is not in the tree, so the direct correlation is the shipped one and the FFT is the oracle)",
-      "limits": { "maxRelative": 1e-9, "cases": 4 }
+      "limits": {
+        "maxRelative": 1e-09,
+        "cases": 4
+      }
     },
     {
       "id": "B3.breakVsOracle",
       "leg": "b",
       "what": "the break and its uncertainty against numpy on the same 8 noisy spectra: both within a relative 1e-10",
-      "limits": { "maxRelative": 1e-10, "cases": 8 }
+      "limits": {
+        "maxRelative": 1e-10,
+        "cases": 8
+      }
     },
     {
       "id": "B4.lineRedshiftVsScipy",
       "leg": "b",
       "what": "the line-identification redshift of 6 noisy star-forming spectra against scipy.optimize.curve_fit pixel-integrated Gaussian fits of the same lines (the lines the world's truth names, the windows of L2) and their inverse-variance mean: the redshift within 0.1 of the kernel's own error, when the kernel identified the same set of lines",
-      "limits": { "maxSigmaFraction": 0.1, "cases": 6 }
+      "limits": {
+        "maxSigmaFraction": 0.1,
+        "cases": 6
+      }
     },
     {
       "id": "B5.toolkit",
       "leg": "b",
       "what": "a cited independent spectral tool in a pinned environment on the exported spectra: NOT RUN (none is installed and installing one is a download); the leg would compare its redshift and break to the kernel's within 3 combined sigma",
-      "limits": { "maxCombinedSigma": 3 }
+      "limits": {
+        "maxCombinedSigma": 3
+      }
     },
     {
       "id": "C1.correlationCoverage",
       "leg": "c",
       "what": "300 worlds (the ensemble of 'worlds', exact template of the world's kind): the fraction whose cross-correlation interval (one sigma) holds the true redshift lies in [0.602, 0.763] and the standard deviation of the normalised error in [0.85, 1.15]; at least 98 percent return status ok; no more than 1 percent are confidently wrong (status ok and an error above 5 sigma)",
-      "limits": { "n": 300, "coverageBand": [0.602, 0.763], "sdBand": [0.85, 1.15], "minOkFraction": 0.98, "maxWrongFraction": 0.01 }
+      "limits": {
+        "n": 300,
+        "coverageBand": [
+          0.602,
+          0.763
+        ],
+        "sdBand": [
+          0.85,
+          1.15
+        ],
+        "minOkFraction": 0.98,
+        "maxWrongFraction": 0.01
+      }
     },
     {
       "id": "C2.linesCoverage",
       "leg": "c",
       "what": "300 star-forming worlds with random z, the line-identification redshift: among the answered, the coverage lies in [0.602, 0.763] and the standard deviation of the normalised error in [0.85, 1.15]; at least 90 percent are answered; no more than 2 percent of the answered are wrong by more than the larger of 5 sigma and 1e-3 in z",
-      "limits": { "n": 300, "coverageBand": [0.602, 0.763], "sdBand": [0.85, 1.15], "minAnsweredFraction": 0.9, "maxWrongFraction": 0.02, "wrongFloorZ": 1e-3 }
+      "limits": {
+        "n": 300,
+        "coverageBand": [
+          0.602,
+          0.763
+        ],
+        "sdBand": [
+          0.85,
+          1.15
+        ],
+        "minAnsweredFraction": 0.9,
+        "maxWrongFraction": 0.02,
+        "wrongFloorZ": 0.001
+      }
     },
     {
       "id": "C3.breakCoverage",
       "leg": "c",
       "what": "300 worlds (both kinds, E(B-V) 0), the break against the generator's truth: with the true redshift given, and again with the cross-correlation redshift and its error carried into the break's uncertainty: each coverage in [0.602, 0.763] and each standard deviation of the normalised error in [0.85, 1.15]",
-      "limits": { "n": 300, "coverageBand": [0.602, 0.763], "sdBand": [0.85, 1.15] }
+      "limits": {
+        "n": 300,
+        "coverageBand": [
+          0.602,
+          0.763
+        ],
+        "sdBand": [
+          0.85,
+          1.15
+        ]
+      }
     },
     {
       "id": "D1.noiseOnly",
       "leg": "d",
       "what": "200 flat-continuum noise-only spectra (snr 10 per pixel) against each template: no cross-correlation returns status ok, no more than 2 percent return the low-significance flag, and the line method returns a redshift for no more than 2 percent",
-      "limits": { "n": 200, "snr": 10, "maxLowFraction": 0.02, "maxLinesAnsweredFraction": 0.02 }
+      "limits": {
+        "n": 200,
+        "snr": 10,
+        "maxLowFraction": 0.02,
+        "maxLinesAnsweredFraction": 0.02
+      }
     },
     {
       "id": "D2.flatSpectrum",
       "leg": "d",
       "what": "a perfectly flat noise-free spectrum with a given sigma: the cross-correlation is refused with code no-structure, the line method is not-constrained (too-few-features), and the break is 1 to a relative 1e-9 with the flag that no break is present",
-      "limits": { "maxBreakError": 1e-9 }
+      "limits": {
+        "maxBreakError": 1e-09
+      }
     },
     {
       "id": "D3.templateMismatch",
       "leg": "d",
       "what": "100 star-forming worlds against the passive template and 100 passive worlds against the star-forming template (random z, snr 5 to 15): no more than 5 percent of the 200 are confidently wrong (status ok and the error above 5 sigma); the fraction refused or flagged low-significance is reported",
-      "limits": { "n": 100, "maxWrongFraction": 0.05 }
+      "limits": {
+        "n": 100,
+        "maxWrongFraction": 0.05
+      }
     },
     {
       "id": "D4.alias",
       "leg": "d",
       "what": "20 worlds whose template and spectrum are the same comb of 12 equally spaced lines (spacing 60 samples, invented) at random z: every one is refused ambiguous-peak with both candidates, the true redshift being one of them",
-      "limits": { "n": 20, "teeth": 12, "spacingSamples": 60, "minRefused": 20 }
+      "limits": {
+        "n": 20,
+        "teeth": 12,
+        "spacingSamples": 60,
+        "minRefused": 20
+      }
     },
     {
       "id": "D5.crossCorrelationRefusals",
@@ -264,38 +370,125 @@
       "id": "E1.authenticGalaxyRedshift",
       "leg": "e",
       "what": "SDSS DR18 galaxy spectra (a star-forming spiral, an elliptical, a Seyfert and a LINER) under a fixed analysis contract against the pipeline's redshift: NOT RUN unless the files, the pipeline values, the cited templates and the terms are supplied (no galaxy spectrum and no template is in the tree and none is fetched; the request is in GALAXY_SPECTRA.md). Its bound when run is fixed here: the line-identification redshift and the cross-correlation redshift each within 3 combined sigma of the pipeline's and within 5e-4 absolute; a cross-correlation against the pipeline's own templates is not independent of the pipeline's redshift and is recorded as such",
-      "limits": { "maxCombinedSigma": 3, "maxAbsoluteZ": 5e-4 }
+      "limits": {
+        "maxCombinedSigma": 3,
+        "maxAbsoluteZ": 0.0005
+      }
     },
     {
       "id": "E2.authenticBreak",
       "leg": "e",
       "what": "the break of the same spectra, with the band definition the catalogue's own documentation states (the source string supplied with the file), against the catalogue's value for the same galaxy: NOT RUN unless supplied. Its bound when run is fixed here: within 3 combined sigma of the catalogue's value when the catalogue states an error, and within 5 percent otherwise; the catalogue's aperture and redshift treatment are recorded, and a difference they explain is not a pass",
-      "limits": { "maxCombinedSigma": 3, "maxRelativeWithoutError": 0.05 }
+      "limits": {
+        "maxCombinedSigma": 3,
+        "maxRelativeWithoutError": 0.05
+      }
     },
     {
       "id": "E3.starsAsMutualTemplates",
       "leg": "e",
       "what": "REPORTED, not judged: the four in-tree SDSS stars (public domain by the pack's record) as authentic spectra with the pipeline's redshift in the pack's records: the cross-correlation of each of the G, K and M stars against the G star's spectrum used as the template (and the G star against the K star), over a range of +-0.005 in z, the difference of the two redshifts against the difference of the pipeline's two redshifts, the significance, and the sampling (the pack is binned to 0.8 sample per resolution element). The rule is fixed here; the output is whatever it is, and a stellar template is not a galaxy template",
-      "limits": { "pairs": [["k", "g"], ["m", "g"], ["g", "k"]], "zRange": { "min": -0.005, "max": 0.005 } }
+      "limits": {
+        "pairs": [
+          [
+            "k",
+            "g"
+          ],
+          [
+            "m",
+            "g"
+          ],
+          [
+            "g",
+            "k"
+          ]
+        ],
+        "zRange": {
+          "min": -0.005,
+          "max": 0.005
+        }
+      }
     },
     {
       "id": "R1.templateMisfit",
       "leg": "r",
       "what": "REPORTED, not judged: the coverage, the standard deviation of the normalised error, the bias and the status counts of the cross-correlation over 200 worlds whose lines are drawn away from the template's: each line's strength times a factor uniform on [0.7, 1.3], the intrinsic velocity width times a factor uniform on [0.8, 1.25], and one invented extra line (the star-forming kind: depth or flux 20 percent of H-beta's; the passive: 0.15 absorption), so the cost of a template that is not the object is on the page",
-      "limits": { "n": 200, "strengthRange": [0.7, 1.3], "widthRange": [0.8, 1.25] }
+      "limits": {
+        "n": 200,
+        "strengthRange": [
+          0.7,
+          1.3
+        ],
+        "widthRange": [
+          0.8,
+          1.25
+        ]
+      }
     },
     {
       "id": "R2.breakSystematics",
       "leg": "r",
       "what": "REPORTED, not judged: the bias of the break (relative) of the passive and star-forming worlds from (a) a redshift error of 1e-3 and 5e-3, (b) E(B-V) = 0.1 and 0.3 mag of CCM89 dust (R_V 3.1) the analysis does not remove, and (c) an invented emission line of flux 0.5 of H-beta's inside the blue band, so that each stated limit has a number",
-      "limits": { "zErrors": [0.001, 0.005], "ebv": [0.1, 0.3], "RV": 3.1, "emissionFractionOfHBeta": 0.5, "n": 50 }
+      "limits": {
+        "zErrors": [
+          0.001,
+          0.005
+        ],
+        "ebv": [
+          0.1,
+          0.3
+        ],
+        "RV": 3.1,
+        "emissionFractionOfHBeta": 0.5,
+        "n": 50
+      }
     },
     {
       "id": "R3.lineMethodDomain",
       "leg": "r",
       "what": "REPORTED, not judged: the line-identification redshift on 100 passive worlds (broad absorption lines) and 100 star-forming worlds with a broad component on the Balmer lines (intrinsic sigma 1500 km/s, invented): the answered fraction, the coverage, the wrong fraction and the cross-correlation's on the same worlds",
-      "limits": { "n": 100, "broadSigmaKmS": 1500 }
+      "limits": {
+        "n": 100,
+        "broadSigmaKmS": 1500
+      }
     }
   ],
-  "amendments": []
+  "amendments": [
+    {
+      "id": "AM1",
+      "step": "checks.C3.breakCoverage",
+      "what": "C3 judges the worlds whose two bands, observed at the true redshift, lie inside the spectrum, and requires every other world (z below about 0.0215, where the blue band's inner edge 372 nm times 1 + z falls under the spectrum's first wavelength of 380 nm) to be refused with the code band-outside-spectrum; the redshift range of the ensemble is not changed.",
+      "why": "Recorded after one design run on the design seed (150 worlds, then 600 correlation-only worlds), before any validator run and before any bound was compared with a result: the design run showed that 2 of 150 worlds drawn on [0.01, 0.30] have no blue band in the spectrum, and the break rule's own first refusal (B1: a band not inside the spectrum) returns them. Counting a correct refusal as a coverage failure would test the ensemble's range and not the break; the refusal is itself a committed behaviour (D6) and is held here for every such world. No bound moved."
+    },
+    {
+      "id": "AM2",
+      "step": "worlds.kinds.emission",
+      "what": "The star-forming world's relative line strengths are relative line FLUXES (each line's flux is its ratio times the H-beta flux, and the peak follows from the line's own width), as the committed worlds text says; the H-beta peak is 3 continuum units at its own wavelength.",
+      "why": "Recorded before any validator run, when the generator was written: the committed text calls the ratios 'relative line fluxes' and gives the H-beta peak, and the generator implements exactly that (a flux ratio at a fixed velocity width differs from a peak ratio by the wavelength ratio of the two lines, at most 30 percent). It is a statement of how the committed text was implemented, not a change of any parameter. No bound moved."
+    },
+    {
+      "id": "AM3",
+      "step": "checks.A4.breakStep, checks.A5.breakQuadrature",
+      "what": "For the committed redshifts below 0.03 (A4 at z = 0, A5 at z = 0.02) the world is generated on a grid that starts at 340 nm instead of 380 nm (the same logarithmic step, the same samples above 380 nm, 482 more below it); every other leg keeps the committed grid.",
+      "why": "Recorded after a first partial validator run (the A, B, D5 to D7 and E legs, before any ensemble leg and before any bound was met by a coverage or refusal result): with the committed grid the blue band, observed at z of 0 or 0.02, lies below the spectrum's first wavelength, so the kernel refuses it by the committed rule (D6 holds that refusal) and A4 and A5 returned a refusal at those two redshifts instead of a value. The estimator is what A4 and A5 test, so the world is given the blue samples it needs; the refusal at the committed grid is held by C3 and D6. No bound moved."
+    },
+    {
+      "id": "AM4",
+      "step": "checks.B4.lineRedshiftVsScipy and tools/galaxy-oracle/oracle.py",
+      "what": "The oracle fits every line the world's truth names (emission and absorption, the forward model's own list) with scipy.optimize.curve_fit and reports each line's redshift and error; B4 compares, for the lines the kernel identified, each line's redshift with the oracle's (within 0.1 of the kernel's per-line error) and the combined redshift against the L2 inverse-variance mean of the oracle's per-line values over exactly the same lines (within 0.1 of the kernel's combined error), in all 6 cases.",
+      "why": "Recorded after the same first partial validator run: the first oracle fitted only the emission lines the world names, the kernel also identifies the weak Ca II K absorption line in some worlds, so the committed condition 'the kernel identified the same set of lines' held in none of the 6 cases and the leg could not be measured. Fitting every named line and combining over the kernel's own set keeps the comparison to the committed bound and makes the sets equal by construction; the fits are the independent part, the weighted mean is the rule L2 states. No bound moved. The oracle's fit window is the nearest sample plus or minus the half width, as rule L2 states (the first oracle used one sample more on each side, which the rule does not say, and disagreed with the kernel by up to 0.34 of a sigma; at the rule's window they agree to 0.09)."
+    },
+    {
+      "id": "AM5",
+      "step": "checks.B4.lineRedshiftVsScipy",
+      "what": "B4 compares the kernel's per-line redshifts with the oracle's for the identified lines that the world names; a line the kernel identifies that the world does not name is a misidentification, is counted and listed in the leg's output, and is left out of the combined comparison (the case is still compared on its other lines).",
+      "why": "Recorded after the second partial validator run, which showed that in one of the six worlds the kernel identified a feature at the Ca II H absorption line as H-epsilon (the two rest wavelengths differ by 0.16 nm), a line the world does not name, so no oracle fit existed for it. The leg is about whether the Gaussian fit and the weighted mean agree with an independent implementation; whether identification is right is measured by C2 (the wrong fraction) and R3, so a misidentification is reported here and not allowed to hide the comparison of the fits. Fewer than two named lines makes a case incomparable and the leg requires all six to be comparable. No bound moved."
+    },
+    {
+      "id": "AM6",
+      "step": "worlds (the comb of D4)",
+      "what": "The comb's first tooth is at template sample 1300 (rest wavelength 404.8 nm; it was sample 400, 329.2 nm), so that all 12 teeth fall inside the spectrum for 0.02 <= z <= 0.2; the committed text names the tooth count and spacing and no position.",
+      "why": "Recorded after the full validator run and before the results were pinned: the generator's first tooth (template sample 400, rest 329 nm) put the lower teeth of the comb below the spectrum's first wavelength at the committed redshifts, so D4 had been run on partial combs of 4 to 9 teeth, not the 12 the leg names. The committed text fixes no position, the bound (all 20 worlds refused as ambiguous with the truth among the candidates) is unchanged, and D4 is re-run on full combs and its result is the one pinned. No bound moved."
+    }
+  ]
 }

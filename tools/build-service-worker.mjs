@@ -554,6 +554,9 @@ export const NEVER_PRECACHED = [
   // Prompt 247: the ISM kernel (line identification, equivalent widths, the linear column density, the Balmer decrement) and its validation group. No shipped
   // module imports them (the viewer's overlays, the three investigations and the model section wait for Carl, D-R10-247-01), so no page can fetch one.
   /^(js\/kernels\/ism\/.*|js\/validation\/groups\/ism\.js)$/,
+  // Prompt 248: the galaxy-spectra kernel (redshift by lines and by cross-correlation, the 4000-angstrom break) and its validation group. No shipped module
+  // imports them (the viewer's galaxy mode, the two investigations and the model section wait for Carl, D-R10-248-01), so no page can fetch one.
+  /^(js\/kernels\/galaxy\/.*|js\/validation\/groups\/galaxy\.js)$/,
   // Prompt 214: the strategy kernel, planner extension, panels and the strategy lesson's one new file (D-R10-214-06).
   /^js\/kernels\/strategy\//,
   /^js\/data\/investigations\/(es\/|depth\/|depth\/es\/)?(why-the-period-is-wrong|strategy-sequence)\.js$/,

@@ -359,6 +359,13 @@
       "student": true
     },
     {
+      "file": "GALAXY_SPECTRA.md",
+      "kind": "feature",
+      "purpose": "The galaxy-spectra kernel: redshift by lines and by correlation, the 4000-angstrom break and its limits, validation and the files requested (Prompt 248).",
+      "owner": 248,
+      "student": false
+    },
+    {
       "file": "GRAVITATIONAL_LENSING.md",
       "kind": "feature",
       "purpose": "Gravitational lensing.",

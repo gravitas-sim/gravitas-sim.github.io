@@ -1,0 +1,49 @@
+{
+  "format": "gravitas.galaxy-failed-legs/1",
+  "label": "These legs crossed a committed bound and stay failing; only Carl resets one.",
+  "legs": [
+    {
+      "id": "C2.linesCoverage",
+      "measured": {
+        "n": 300,
+        "coverage": 0.7766666666666666,
+        "meanZ": 0.013591004225210384,
+        "sdZ": 0.8638591760169587,
+        "answeredFraction": 1,
+        "wrongFraction": 0
+      },
+      "note": "The line method answers every world and is never wrong, but its one-sigma interval is conservative: the coverage is above the committed band and the standard deviation of the normalised error is under 1 (the cause was not isolated: the per-line fit errors and the scatter inflation are the candidates). Left failing as committed; the intervals are safe to quote and not tight."
+    },
+    {
+      "id": "D2.flatSpectrum",
+      "measured": {
+        "xc": "no-structure",
+        "lines": "too-few-features",
+        "breakD": 1.221664446256826,
+        "breakPresent": true,
+        "flatFnuBreak": 0.9999999999999992,
+        "flatFlambdaAnalytic": 1.2215739133645986
+      },
+      "note": "The committed expectation was an error made when the contract was written: a break of 1 for a flat spectrum holds for a spectrum flat in F_nu; the flat world is flat in F_lambda, whose F_nu rises as lambda squared, so the definition gives the ratio of the band means of lambda squared, not 1. The correlation and the line method behaved as committed, and a spectrum flat in F_nu returns 1 (flatFnu). The leg is left failing as committed; only Carl resets a bound."
+    },
+    {
+      "id": "D3.templateMismatch",
+      "measured": {
+        "worlds": 200,
+        "confidentlyWrong": 21,
+        "confidentlyWrongFraction": 0.105,
+        "statusOk": 21,
+        "refusedOrFlagged": 179,
+        "answered": 22,
+        "confidentlyWrongByWorld": {
+          "star-forming": 21,
+          "passive": 0
+        },
+        "medianAbsErrorZ": 0.128,
+        "maxAbsErrorZ": 0.2742,
+        "medianErrorSigmas": 1189
+      },
+      "note": "A template that is not the object can give a confident redshift that is wrong by more than its stated error: the curvature uncertainty assumes the template is the truth. Left failing as committed; see GALAXY_SPECTRA.md."
+    }
+  ]
+}
