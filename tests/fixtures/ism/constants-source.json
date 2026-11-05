@@ -1,0 +1,54 @@
+{
+  "format": "gravitas.ism-constants-source/1",
+  "reader": "tools/ism-oracle/constants.py (offline, no network)",
+  "astropy": "6.0.1",
+  "note": "read from the installed library, not typed and not fetched; the library's reference string says which edition of the constants it holds, which is not necessarily the current one",
+  "alpha": {
+    "name": "Fine-structure constant",
+    "value": 0.0072973525693,
+    "unit": "",
+    "uncertainty": 1.1e-12,
+    "reference": "CODATA 2018",
+    "system": null
+  },
+  "h": {
+    "name": "Planck constant",
+    "value": 6.62607015e-34,
+    "unit": "J s",
+    "uncertainty": 0.0,
+    "reference": "CODATA 2018",
+    "system": null
+  },
+  "m_e": {
+    "name": "Electron mass",
+    "value": 9.1093837015e-31,
+    "unit": "kg",
+    "uncertainty": 2.8e-40,
+    "reference": "CODATA 2018",
+    "system": null
+  },
+  "c": {
+    "name": "Speed of light in vacuum",
+    "value": 299792458.0,
+    "unit": "m / s",
+    "uncertainty": 0.0,
+    "reference": "CODATA 2018",
+    "system": null
+  },
+  "e": {
+    "name": "Electron charge",
+    "value": 1.602176634e-19,
+    "unit": "C",
+    "uncertainty": 0.0,
+    "reference": "CODATA 2018",
+    "system": null
+  },
+  "eps0": {
+    "name": "Vacuum electric permittivity",
+    "value": 8.8541878128e-12,
+    "unit": "F / m",
+    "uncertainty": 1.3e-21,
+    "reference": "CODATA 2018",
+    "system": null
+  }
+}

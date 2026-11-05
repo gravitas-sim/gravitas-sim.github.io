@@ -139,6 +139,7 @@ current, and the orchestrator checks it.
 | `instruments-validate.mjs` | npm run instruments:validate | `npm run instruments:validate` |
 | `interaction-contract.mjs` | Is a surface keeping the interaction contract? |  |
 | `interiors-validate.mjs` | The interiors kernel's Part A against its committed thresholds (Prompt 203) | `npm run interiors:validate` |
+| `ism-validate.mjs` | The ISM kernel against its committed thresholds (Prompt 247, Part A) | `npm run ism:validate` |
 | `jest-sequencer.mjs` | Start the slowest suites first |  |
 | `joint-inference-validate.mjs` | The joint transit and radial-velocity model against its committed thresholds (Prompt 227) | `npm run joint-inference:validate` |
 | `key-groups-check.mjs` | Key groups: does the rewritten catalog equal its source? |  |

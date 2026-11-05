@@ -1,0 +1,69 @@
+{
+  "format": "gravitas.plasma-diagnostics-gate-thresholds/1",
+  "prompt": "Roadmap III, Prompt 247 Part B: the plasma-diagnostics gate (docs/plasma-diagnostics-gate): the [O III] electron temperature and the [S II] electron density from line ratios",
+  "document": "PLASMA_DIAGNOSTICS_GATE.md, written after this file",
+  "committed": "before any atomic datum, any diagnostic code, any oracle output and any spectrum for this gate exists in the tree. Nothing of the atomic data has been read, typed or fetched.",
+  "rule": "7.5 rule 3 and 4: a gate commits its thresholds first. A threshold that proves unmeasurable fails the gate on that threshold and only Carl resets it. A leg whose atomic data or independent pipeline is absent is NOT RUN (Carl's overnight delegation, 2026-11-05): until the files arrive there is no verdict, nothing is built within one, and the consumers take the C alternative (a reading step; 253's From a nebula to a galaxy uses the line tools only). No atomic coefficient, collision strength, transition probability or published ratio is typed from memory; none is fetched by the session that wrote this file.",
+  "verdictRule": {
+    "A": "both diagnostics pass G1 to G6 (the temperature from the auroral-to-nebular [O III] ratio and the density from the [S II] doublet, each with an interval and a stated domain)",
+    "B": "exactly one passes G1 to G6; that one is built and the other is a reading step",
+    "C": "neither passes; a reading step, and the diagnostic panel and the majors step 'the temperature and density from ratios' are not built",
+    "notDecided": "any of G1, G2, G3 or G6 NOT RUN: no verdict, and the effective state for consumers is C until the legs run"
+  },
+  "needs": {
+    "atomicData": "one named atomic-data compilation with its version, the transition probabilities and the collision strengths (or the collisional rate coefficients) of O++ and S+ it holds, its licence read with a retrieval date, and the file's SHA-256; the diagnostic code reads the values from the pinned file and never contains one",
+    "pipeline": "one independent nebular-analysis package, cited with its version, whose output (temperature and density from the same line ratios, the ratio-to-diagnostic curves, and the diagnostic limits) is pinned as the oracle, run by Carl or an offline-capable session from a pinned install",
+    "spectra": "an SDSS H II region spectrum and a planetary nebula spectrum, each with the lines the ratios need measured under ISM-RULE-1 and de-reddened by the decrement (Part A)"
+  },
+  "checks": [
+    {
+      "id": "G1.atomicDataPinned",
+      "what": "the atomic-data source, version, licence reading with retrieval date and SHA-256 are recorded in the repository and the file is present; the diagnostic reads no value that is not in it",
+      "limits": {}
+    },
+    {
+      "id": "G2.ratioCurveVsOracle",
+      "what": "the diagnostic curves (the [O III] auroral-to-nebular ratio as a function of temperature at a fixed low density; the [S II] doublet ratio as a function of density at a fixed temperature) from the kernel against the oracle's, on a grid of 12 temperatures spanning the oracle's stated valid range and 12 densities spanning the oracle's stated range, agree to a relative 1e-3; the grids are chosen by rule (equal steps in the logarithm between the oracle's own stated limits), not by choice",
+      "limits": {
+        "gridPoints": 12,
+        "maxRelative": 0.001
+      }
+    },
+    {
+      "id": "G3.inversionVsOracle",
+      "what": "the temperature recovered from a given [O III] ratio and the density recovered from a given [S II] ratio equal the oracle's inversion of the same ratios to a relative 5e-3 inside the diagnostics' stated domains",
+      "limits": {
+        "maxRelativeTemperature": 0.005,
+        "maxRelativeDensity": 0.005
+      }
+    },
+    {
+      "id": "G4.coverage",
+      "what": "over 300 seeded synthetic line-flux sets (ratios drawn from the oracle's curves with measurement noise of the stated signal-to-noise: the auroral line at least 5 sigma) the one-sigma interval of each diagnostic covers the truth at a rate in [0.602, 0.763]",
+      "limits": {
+        "n": 300,
+        "coverageRange": [
+          0.602,
+          0.763
+        ],
+        "minAuroralSignalToNoise": 5
+      }
+    },
+    {
+      "id": "G5.domainRefusals",
+      "what": "the domain of each diagnostic is the interval between the diagnostic's low-limit and high-limit ratios (computed from the pinned atomic data at the working value of the other quantity, not typed) shrunk by a margin of 10 percent of the ratio range at each end: a ratio outside it is refused 'outside-domain' with the limit named; a temperature or density result is never reported outside its domain; an auroral line under 5 sigma is refused 'low-signal'; a ratio on the wrong side of a limit is refused 'ratio-beyond-limit'",
+      "limits": {
+        "domainMarginFraction": 0.1,
+        "minAuroralSignalToNoise": 5
+      }
+    },
+    {
+      "id": "G6.authenticVsPipeline",
+      "what": "on the supplied H II region and planetary nebula spectra, both measured under ISM-RULE-1 and de-reddened, the kernel's temperature and density agree with the pipeline's on the same line fluxes within 2 combined sigma, and each result sits inside its domain or is refused; no published value is used to choose a line, a window or a parameter",
+      "limits": {
+        "maxCombinedSigma": 2
+      }
+    }
+  ],
+  "amendments": []
+}
