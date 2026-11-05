@@ -101,6 +101,7 @@ const GROUPS = [
   () => import('./groups/pulsars.js'),
   () => import('./groups/ism.js'),
   () => import('./groups/sed.js'),
+  () => import('./groups/galaxy.js'),
 ];
 
 /**

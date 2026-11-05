@@ -1,0 +1,732 @@
+{
+  "format": "gravitas.galaxy-results/1",
+  "rows": [
+    {
+      "id": "A1.integerShift",
+      "status": "pass",
+      "measured": {
+        "worstAbsoluteZ": 6.107946970423939e-8,
+        "per": [
+          {
+            "kind": "star-forming",
+            "k": 200,
+            "error": 5.348e-8
+          },
+          {
+            "kind": "star-forming",
+            "k": 777,
+            "error": 6.108e-8
+          },
+          {
+            "kind": "star-forming",
+            "k": 1234,
+            "error": 5.692e-8
+          },
+          {
+            "kind": "passive",
+            "k": 200,
+            "error": 1.805e-8
+          },
+          {
+            "kind": "passive",
+            "k": 777,
+            "error": 2.061e-8
+          },
+          {
+            "kind": "passive",
+            "k": 1234,
+            "error": 4.533e-8
+          }
+        ]
+      },
+      "note": ""
+    },
+    {
+      "id": "A2.subPixelShift",
+      "status": "pass",
+      "measured": {
+        "worstXc": 9.034393816387265e-8,
+        "worstLines": 1.3666961695690816e-7,
+        "per": [
+          {
+            "z": 0.0123,
+            "kind": "star-forming",
+            "xc": 1.414e-8,
+            "lines": 1.047e-7
+          },
+          {
+            "z": 0.0123,
+            "kind": "passive",
+            "xc": 1.52e-8
+          },
+          {
+            "z": 0.0777,
+            "kind": "star-forming",
+            "xc": 6.21e-8,
+            "lines": 1.123e-7
+          },
+          {
+            "z": 0.0777,
+            "kind": "passive",
+            "xc": 1.902e-8
+          },
+          {
+            "z": 0.1999,
+            "kind": "star-forming",
+            "xc": 8.278e-8,
+            "lines": 1.236e-7
+          },
+          {
+            "z": 0.1999,
+            "kind": "passive",
+            "xc": 1.363e-8
+          },
+          {
+            "z": 0.3333,
+            "kind": "star-forming",
+            "xc": 9.034e-8,
+            "lines": 1.367e-7
+          },
+          {
+            "z": 0.3333,
+            "kind": "passive",
+            "xc": 5.202e-8
+          }
+        ]
+      },
+      "note": ""
+    },
+    {
+      "id": "A3.curvatureAnalytic",
+      "status": "pass",
+      "measured": {
+        "relativeDifference": 0.00407786985022451,
+        "kernelSigmaLag": 0.03356855579573135,
+        "analyticSigmaLag": 0.03343222353933433,
+        "status": "ok"
+      },
+      "note": ""
+    },
+    {
+      "id": "A4.breakStep",
+      "status": "pass",
+      "measured": {
+        "worstRelative": 1.1102230246251565e-15,
+        "per": [
+          {
+            "d": 0.2,
+            "z": 0,
+            "D": 1.2500000000000002,
+            "error": 1.776e-16
+          },
+          {
+            "d": 0.2,
+            "z": 0.1,
+            "D": 1.2500000000000007,
+            "error": 5.329e-16
+          },
+          {
+            "d": 0.2,
+            "z": 0.3,
+            "D": 1.2500000000000002,
+            "error": 1.776e-16
+          },
+          {
+            "d": 0.5,
+            "z": 0,
+            "D": 1.9999999999999978,
+            "error": 1.11e-15
+          },
+          {
+            "d": 0.5,
+            "z": 0.1,
+            "D": 2.0000000000000018,
+            "error": 8.882e-16
+          },
+          {
+            "d": 0.5,
+            "z": 0.3,
+            "D": 2.000000000000001,
+            "error": 4.441e-16
+          }
+        ]
+      },
+      "note": ""
+    },
+    {
+      "id": "A5.breakQuadrature",
+      "status": "pass",
+      "measured": {
+        "worstRelative": 0.00003703190720335207,
+        "per": [
+          {
+            "kind": "star-forming",
+            "z": 0.02,
+            "D": 1.08078,
+            "truth": 1.0808,
+            "error": 0.00001853
+          },
+          {
+            "kind": "star-forming",
+            "z": 0.15,
+            "D": 1.08078,
+            "truth": 1.0808,
+            "error": 0.00001853
+          },
+          {
+            "kind": "star-forming",
+            "z": 0.3,
+            "D": 1.08078,
+            "truth": 1.0808,
+            "error": 0.00001965
+          },
+          {
+            "kind": "passive",
+            "z": 0.02,
+            "D": 1.96904,
+            "truth": 1.96897,
+            "error": 0.00003224
+          },
+          {
+            "kind": "passive",
+            "z": 0.15,
+            "D": 1.96904,
+            "truth": 1.96897,
+            "error": 0.00003189
+          },
+          {
+            "kind": "passive",
+            "z": 0.3,
+            "D": 1.96905,
+            "truth": 1.96897,
+            "error": 0.00003703
+          }
+        ]
+      },
+      "note": ""
+    },
+    {
+      "id": "A6.fluxKind",
+      "status": "pass",
+      "measured": {
+        "relativeD": 0,
+        "relativeSigma": 0
+      },
+      "note": ""
+    },
+    {
+      "id": "B1.correlationVsOracle",
+      "status": "pass",
+      "measured": {
+        "worstAbsoluteZ": 7.113420963378303e-10,
+        "worstRelativeSigma": 6.05193039078687e-8,
+        "worstRelativeQ": 2.8929792988851146e-13,
+        "per": [
+          {
+            "id": "case0",
+            "dz": 1.049e-10,
+            "relSigma": 4.314e-9,
+            "relQ": 1.781e-14
+          },
+          {
+            "id": "case1",
+            "dz": 2.545e-10,
+            "relSigma": 2.32e-9,
+            "relQ": 4.893e-14
+          },
+          {
+            "id": "case2",
+            "dz": 4.387e-10,
+            "relSigma": 2.352e-8,
+            "relQ": 2.893e-13
+          },
+          {
+            "id": "case3",
+            "dz": 1.276e-10,
+            "relSigma": 5.021e-9,
+            "relQ": 1.366e-16
+          },
+          {
+            "id": "case4",
+            "dz": 1.312e-10,
+            "relSigma": 2.265e-9,
+            "relQ": 4.646e-15
+          },
+          {
+            "id": "case5",
+            "dz": 7.113e-10,
+            "relSigma": 6.052e-8,
+            "relQ": 8.29e-15
+          },
+          {
+            "id": "case6",
+            "dz": 1.835e-10,
+            "relSigma": 6.882e-9,
+            "relQ": 1.6e-14
+          },
+          {
+            "id": "case7",
+            "dz": 1.58e-10,
+            "relSigma": 1.84e-10,
+            "relQ": 6.84e-15
+          }
+        ]
+      },
+      "note": ""
+    },
+    {
+      "id": "B2.directEqualsFft",
+      "status": "pass",
+      "measured": {
+        "worstRelativeProfileDifference": 3.97062847628072e-15
+      },
+      "note": ""
+    },
+    {
+      "id": "B3.breakVsOracle",
+      "status": "pass",
+      "measured": {
+        "worstRelative": 2.8158232921676453e-15
+      },
+      "note": ""
+    },
+    {
+      "id": "B4.lineRedshiftVsScipy",
+      "status": "pass",
+      "measured": {
+        "comparable": 6,
+        "worstLineSigmaFraction": 0.08579174862326977,
+        "worstCombinedSigmaFraction": 0.002833362588802651,
+        "misidentified": [
+          {
+            "id": "case6",
+            "lines": [
+              "h-epsilon"
+            ]
+          }
+        ],
+        "per": [
+          {
+            "id": "case0",
+            "comparable": true,
+            "lines": 6,
+            "worstLineSigmaFraction": 0.00005212,
+            "combinedSigmaFraction": 0.00000356
+          },
+          {
+            "id": "case2",
+            "comparable": true,
+            "lines": 7,
+            "worstLineSigmaFraction": 0.0342,
+            "combinedSigmaFraction": 0.0002842
+          },
+          {
+            "id": "case4",
+            "comparable": true,
+            "lines": 7,
+            "worstLineSigmaFraction": 0.08579,
+            "combinedSigmaFraction": 0.002463
+          },
+          {
+            "id": "case6",
+            "comparable": true,
+            "lines": 6,
+            "worstLineSigmaFraction": 0.01193,
+            "combinedSigmaFraction": 0
+          },
+          {
+            "id": "case8",
+            "comparable": true,
+            "lines": 7,
+            "worstLineSigmaFraction": 0.00004679,
+            "combinedSigmaFraction": 0.000002709
+          },
+          {
+            "id": "case9",
+            "comparable": true,
+            "lines": 6,
+            "worstLineSigmaFraction": 0.06221,
+            "combinedSigmaFraction": 0.002833
+          }
+        ]
+      },
+      "note": ""
+    },
+    {
+      "id": "B5.toolkit",
+      "status": "not-run",
+      "measured": null,
+      "note": "No cited independent spectral tool is installed and installing one is a download, which this prompt does not do. The leg would run it on the exported spectra and compare its redshift and break to the kernel’s within 3 combined sigma; GALAXY_SPECTRA.md names the request."
+    },
+    {
+      "id": "C1.correlationCoverage",
+      "status": "pass",
+      "measured": {
+        "n": 300,
+        "coverage": 0.6666666666666666,
+        "meanZ": -0.03517274266793952,
+        "sdZ": 1.042118700645922,
+        "okFraction": 1,
+        "wrongFraction": 0
+      },
+      "note": ""
+    },
+    {
+      "id": "C2.linesCoverage",
+      "status": "fail",
+      "measured": {
+        "n": 300,
+        "coverage": 0.7766666666666666,
+        "meanZ": 0.013591004225210384,
+        "sdZ": 0.8638591760169587,
+        "answeredFraction": 1,
+        "wrongFraction": 0
+      },
+      "note": "The line method answers every world and is never wrong, but its one-sigma interval is conservative: the coverage is above the committed band and the standard deviation of the normalised error is under 1 (the cause was not isolated: the per-line fit errors and the scatter inflation are the candidates). Left failing as committed; the intervals are safe to quote and not tight."
+    },
+    {
+      "id": "C3.breakCoverage",
+      "status": "pass",
+      "measured": {
+        "trueRedshift": {
+          "n": 291,
+          "coverage": 0.6941580756013745,
+          "meanZ": -0.03040931411606909,
+          "sdZ": 0.9293161845257086
+        },
+        "correlationRedshift": {
+          "n": 291,
+          "coverage": 0.6907216494845361,
+          "meanZ": -0.03190110602271534,
+          "sdZ": 0.9255914099105289
+        },
+        "refusedBandOutside": 9
+      },
+      "note": ""
+    },
+    {
+      "id": "D1.noiseOnly",
+      "status": "pass",
+      "measured": {
+        "crossCorrelations": 400,
+        "ok": 0,
+        "lowSignificance": 0,
+        "linesAnswered": 0
+      },
+      "note": ""
+    },
+    {
+      "id": "D2.flatSpectrum",
+      "status": "fail",
+      "measured": {
+        "xc": "no-structure",
+        "lines": "too-few-features",
+        "breakD": 1.221664446256826,
+        "breakPresent": true,
+        "flatFnuBreak": 0.9999999999999992,
+        "flatFlambdaAnalytic": 1.2215739133645986
+      },
+      "note": "The committed expectation was an error made when the contract was written: a break of 1 for a flat spectrum holds for a spectrum flat in F_nu; the flat world is flat in F_lambda, whose F_nu rises as lambda squared, so the definition gives the ratio of the band means of lambda squared, not 1. The correlation and the line method behaved as committed, and a spectrum flat in F_nu returns 1 (flatFnu). The leg is left failing as committed; only Carl resets a bound."
+    },
+    {
+      "id": "D3.templateMismatch",
+      "status": "fail",
+      "measured": {
+        "worlds": 200,
+        "confidentlyWrong": 21,
+        "confidentlyWrongFraction": 0.105,
+        "statusOk": 21,
+        "refusedOrFlagged": 179,
+        "answered": 22,
+        "confidentlyWrongByWorld": {
+          "star-forming": 21,
+          "passive": 0
+        },
+        "medianAbsErrorZ": 0.128,
+        "maxAbsErrorZ": 0.2742,
+        "medianErrorSigmas": 1189
+      },
+      "note": "A template that is not the object can give a confident redshift that is wrong by more than its stated error: the curvature uncertainty assumes the template is the truth. Left failing as committed; see GALAXY_SPECTRA.md."
+    },
+    {
+      "id": "D4.alias",
+      "status": "pass",
+      "measured": {
+        "refusedAmbiguous": 20,
+        "truthAmongCandidates": 20,
+        "misses": []
+      },
+      "note": ""
+    },
+    {
+      "id": "D5.crossCorrelationRefusals",
+      "status": "pass",
+      "measured": {
+        "cases": [
+          {
+            "expected": "medium-missing",
+            "status": "refused",
+            "code": "medium-missing"
+          },
+          {
+            "expected": "medium-mismatch",
+            "status": "refused",
+            "code": "medium-mismatch"
+          },
+          {
+            "expected": "missing-source",
+            "status": "refused",
+            "code": "missing-source"
+          },
+          {
+            "expected": "template-resolution",
+            "status": "refused",
+            "code": "template-resolution"
+          },
+          {
+            "expected": "not-log-uniform",
+            "status": "refused",
+            "code": "not-log-uniform"
+          },
+          {
+            "expected": "z-range-outside-overlap",
+            "status": "refused",
+            "code": "z-range-outside-overlap"
+          },
+          {
+            "expected": "not-finite",
+            "status": "refused",
+            "code": "not-finite"
+          },
+          {
+            "expected": "not-increasing",
+            "status": "refused",
+            "code": "not-increasing"
+          },
+          {
+            "expected": "bad-z-range",
+            "status": "refused",
+            "code": "bad-z-range"
+          }
+        ]
+      },
+      "note": ""
+    },
+    {
+      "id": "D6.breakRefusals",
+      "status": "pass",
+      "measured": {
+        "cases": [
+          {
+            "expected": "no-definition",
+            "status": "refused",
+            "code": "no-definition",
+            "wantStatus": "refused"
+          },
+          {
+            "expected": "missing-source",
+            "status": "refused",
+            "code": "missing-source",
+            "wantStatus": "refused"
+          },
+          {
+            "expected": "bands-overlap-or-misordered",
+            "status": "refused",
+            "code": "bands-overlap-or-misordered",
+            "wantStatus": "refused"
+          },
+          {
+            "expected": "bands-overlap-or-misordered",
+            "status": "refused",
+            "code": "bands-overlap-or-misordered",
+            "wantStatus": "refused"
+          },
+          {
+            "expected": "flux-kind-missing",
+            "status": "refused",
+            "code": "flux-kind-missing",
+            "wantStatus": "refused"
+          },
+          {
+            "expected": "band-outside-spectrum",
+            "status": "refused",
+            "code": "band-outside-spectrum",
+            "wantStatus": "refused"
+          },
+          {
+            "expected": "too-few-samples",
+            "status": "refused",
+            "code": "too-few-samples",
+            "wantStatus": "refused"
+          },
+          {
+            "expected": "non-positive-flux",
+            "status": "refused",
+            "code": "non-positive-flux",
+            "wantStatus": "refused"
+          },
+          {
+            "expected": "noise-dominated",
+            "status": "not-constrained",
+            "code": "noise-dominated",
+            "wantStatus": "not-constrained"
+          }
+        ]
+      },
+      "note": ""
+    },
+    {
+      "id": "D7.labelAndManifest",
+      "status": "pass",
+      "measured": {
+        "manifest": true,
+        "deterministic": true,
+        "seedMatters": true
+      },
+      "note": ""
+    },
+    {
+      "id": "E1.authenticGalaxyRedshift",
+      "status": "not-run",
+      "measured": null,
+      "note": "No SDSS galaxy spectrum, no pipeline redshift for one and no cited template is in the tree, and nothing is fetched. GALAXY_SPECTRA.md (\"Files requested from Carl\") names the four spectra, the template source and the terms pages; the bound when run is fixed in thresholds.json."
+    },
+    {
+      "id": "E2.authenticBreak",
+      "status": "not-run",
+      "measured": null,
+      "note": "No catalogue break index and no band definition with a source is in the tree, and nothing is fetched. GALAXY_SPECTRA.md names the catalogue product and the terms page to save; the bound when run is fixed in thresholds.json."
+    },
+    {
+      "id": "E3.starsAsMutualTemplates",
+      "status": "reported",
+      "measured": {
+        "resolvingPowerUsed": 1974.1,
+        "pairs": [
+          {
+            "spectrum": "k",
+            "template": "g",
+            "status": "ok",
+            "code": null,
+            "z": 0.0001982,
+            "sigmaZ": 0.0000107,
+            "q": 64.74,
+            "pipelineRelativeZ": 0.0002523,
+            "differenceKmS": -16.2,
+            "pipelineErrorKmS": 3.09
+          },
+          {
+            "spectrum": "m",
+            "template": "g",
+            "status": "ok",
+            "code": null,
+            "z": 0.00021691,
+            "sigmaZ": 0.0000247,
+            "q": 28.73,
+            "pipelineRelativeZ": 0.00027477,
+            "differenceKmS": -17.3,
+            "pipelineErrorKmS": 3.45
+          },
+          {
+            "spectrum": "g",
+            "template": "k",
+            "status": "ok",
+            "code": null,
+            "z": -0.00022612,
+            "sigmaZ": 0.00000463,
+            "q": 136.7,
+            "pipelineRelativeZ": -0.00025223,
+            "differenceKmS": 7.83,
+            "pipelineErrorKmS": 3.09
+          }
+        ]
+      },
+      "note": "A stellar template is not a galaxy template and the pack is binned to under one sample per resolution element; the numbers are what the fixed contract returns, not a validation of the galaxy method."
+    },
+    {
+      "id": "R1.templateMisfit",
+      "status": "reported",
+      "measured": {
+        "n": 200,
+        "coverage": 0.66,
+        "meanZ": -0.02154417662108246,
+        "sdZ": 1.1190978321027385,
+        "statuses": {
+          "ok": 200
+        },
+        "confidentlyWrong": 0
+      },
+      "note": "Worlds whose lines are drawn away from the template: coverage below the one-sigma band means the curvature uncertainty is too small for a template that is not the object."
+    },
+    {
+      "id": "R2.breakSystematics",
+      "status": "reported",
+      "measured": {
+        "star-forming": {
+          "redshiftError": {
+            "0.001": -0.000006739,
+            "0.005": -0.00003535
+          },
+          "dustEbv": {
+            "0.1": 0.036,
+            "0.3": 0.112
+          },
+          "emissionInBlueBand": -0.02784,
+          "n": 50
+        },
+        "passive": {
+          "redshiftError": {
+            "0.001": -0.00002027,
+            "0.005": -0.0002518
+          },
+          "dustEbv": {
+            "0.1": 0.03601,
+            "0.3": 0.112
+          },
+          "emissionInBlueBand": -0.1181,
+          "n": 50
+        }
+      },
+      "note": "Mean relative bias of the break against the unperturbed truth (a fraction): each stated limit of D has a number."
+    },
+    {
+      "id": "R3.lineMethodDomain",
+      "status": "reported",
+      "measured": {
+        "passive": {
+          "lines": {
+            "answeredFraction": 0.59,
+            "wrongFraction": 0,
+            "n": 59,
+            "coverage": 0.3898305084745763,
+            "meanZ": -0.11836684060863903,
+            "sdZ": 2.1276662566324887
+          },
+          "correlation": {
+            "n": 100,
+            "coverage": 0.66,
+            "meanZ": 0.0648363562731248,
+            "sdZ": 1.0285948410934784
+          }
+        },
+        "starFormingBroadBalmer": {
+          "lines": {
+            "answeredFraction": 0.73,
+            "wrongFraction": 0.0410958904109589,
+            "n": 73,
+            "coverage": 0.9315068493150684,
+            "meanZ": 4.55198748661029,
+            "sdZ": 141.24080680612443
+          },
+          "correlation": {
+            "n": 100,
+            "coverage": 0.14,
+            "meanZ": 0.20212721924808316,
+            "sdZ": 4.533621919976765
+          }
+        }
+      },
+      "note": "The line method is built for resolved emission lines; passive and broad-line spectra are where it answers less often or wrongly, and the correlation is the comparison."
+    }
+  ]
+}

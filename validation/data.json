@@ -1,9 +1,9 @@
 {
  "generatedAt": "2026-11-05",
  "version": "2.1.0",
- "passed": 401,
+ "passed": 407,
  "failed": 0,
- "elapsedMs": 129504,
+ "elapsedMs": 117203,
  "checks": [
   {
    "group": "Unit system",
@@ -5241,6 +5241,84 @@
    "toleranceKind": "relative",
    "why": "The rule adds the allowance in quadrature to the stated error, and a point with no epoch counts as nonsimultaneous.",
    "error": 1.962615573354719e-16,
+   "pass": true
+  },
+  {
+   "group": "Galaxy spectra: redshift and the 4000-angstrom break",
+   "kind": "analytic",
+   "name": "A noise-free spectrum that is the template shifted by an integer number of samples of log wavelength returns its redshift to 1e-6",
+   "measured": 0.19591415830801462,
+   "expected": 0.19591413769407562,
+   "unit": "",
+   "tolerance": 0.000001,
+   "toleranceKind": "absolute",
+   "why": "A redshift multiplies every wavelength by 1 + z, a shift of log10(lambda); the filtered template shifted equals the filtered spectrum, so the correlation profile peaks at the shift and only the high-pass’s edge effects remain (the contract leg A1).",
+   "error": 2.0613939000213577e-8,
+   "pass": true
+  },
+  {
+   "group": "Galaxy spectra: redshift and the 4000-angstrom break",
+   "kind": "analytic",
+   "name": "The correlation peak’s curvature uncertainty is finite, positive and below one sample for a strong single line",
+   "measured": 1,
+   "expected": 1,
+   "unit": "",
+   "tolerance": 0,
+   "why": "var(k) = 1 / (q |q″|) from the profile chi-square (the contract rule X5); a single strong line fixes its position to a small fraction of a sample (leg A3 holds the value to the Cramer-Rao bound within 3 percent).",
+   "toleranceKind": "relative",
+   "error": 0,
+   "pass": true
+  },
+  {
+   "group": "Galaxy spectra: redshift and the 4000-angstrom break",
+   "kind": "analytic",
+   "name": "The break of a flat-F_nu spectrum with a hard step of depth 0.5 is 1 / (1 - 0.5) = 2",
+   "measured": 2.0000000000000018,
+   "expected": 2,
+   "unit": "",
+   "tolerance": 0.000001,
+   "toleranceKind": "absolute",
+   "why": "D is the ratio of the band means of F_nu = lambda^2 F_lambda; for a flat F_nu the bands see the two sides of the step and nothing else (the contract leg A4).",
+   "error": 1.7763568394002505e-15,
+   "pass": true
+  },
+  {
+   "group": "Galaxy spectra: redshift and the 4000-angstrom break",
+   "kind": "analytic",
+   "name": "A break without a stated definition and source is refused: the kernel holds no published band edges",
+   "measured": 1,
+   "expected": 1,
+   "unit": "",
+   "tolerance": 0,
+   "why": "The published definitions’ band edges are published numbers; the caller states one with its source and there is no default (the contract rule B1, leg D6).",
+   "toleranceKind": "relative",
+   "error": 0,
+   "pass": true
+  },
+  {
+   "group": "Galaxy spectra: redshift and the 4000-angstrom break",
+   "kind": "analytic",
+   "name": "A template in air against a spectrum in vacuum is refused, never converted",
+   "measured": 1,
+   "expected": 1,
+   "unit": "",
+   "tolerance": 0,
+   "why": "The air and vacuum conventions differ by tens of km/s, a redshift of 1e-4 or more, so a mismatch is a refusal with a code (the contract rule X1, leg D5).",
+   "toleranceKind": "relative",
+   "error": 0,
+   "pass": true
+  },
+  {
+   "group": "Galaxy spectra: redshift and the 4000-angstrom break",
+   "kind": "analytic",
+   "name": "A spectrum and template that are the same comb of equally spaced lines give two equal correlation peaks and the redshift is refused as ambiguous",
+   "measured": 1,
+   "expected": 1,
+   "unit": "",
+   "tolerance": 0,
+   "why": "A second peak within 20 percent of the best (rule X6) means the redshift is not unique; a periodic pattern cannot fix it (the contract leg D4).",
+   "toleranceKind": "relative",
+   "error": 0,
    "pass": true
   }
  ]

@@ -98,6 +98,7 @@ current, and the orchestrator checks it.
 | `frame-pipeline-synth.mjs` | The committed scene of the frame-pipeline checks (Prompt 185, FRAME_PIPELINE.md) |  |
 | `frame-pipeline-validate.mjs` | The frame pipeline against its committed thresholds (Prompt 185) | `npm run frame-pipeline:validate` |
 | `gaia-validate.mjs` | The Gaia parallax workflow kernel against its committed thresholds (Prompt 233) | `npm run gaia:validate` |
+| `galaxy-validate.mjs` | The galaxy-spectra kernel against its committed thresholds (Prompt 248) | `npm run galaxy:validate` |
 | `galilean-validate.mjs` | Validation of the Galilean-moon kernel (Prompt 193, SATELLITE_EPHEMERIS.md) |  |
 | `generate-graph.mjs` | Every generated artifact, what it is made from, and what it must follow |  |
 | `generate-lesson-cards.mjs` | A card picture for a lesson that stages its own scene | `npm run cards` |
