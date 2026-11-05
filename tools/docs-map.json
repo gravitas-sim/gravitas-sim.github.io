@@ -1355,14 +1355,14 @@
     {
       "file": "LENSING_DELAYS_GATE.md",
       "kind": "gate",
-      "purpose": "The lensing time-delay and finite-source gate: the delay model and the mass-sheet degeneracy, the committed thresholds and verdict function, the legs on merged code measured, the prototype legs and the data legs not run (Prompt 251, Part B).",
+      "purpose": "The lensing time-delay and finite-source gate: delay model, mass-sheet degeneracy, committed thresholds, merged-code legs measured, the rest not run (Prompt 251, Part B).",
       "owner": 251,
       "student": false
     },
     {
       "file": "LENSING_II.md",
       "kind": "feature",
-      "purpose": "The enclosed-mass extension of the lensing kernel: distances from redshifts, the mass inside an Einstein radius, image inversions, the arc-radius fit and the mass bracket, validation, failed legs and requested files (Prompt 251, Part A).",
+      "purpose": "The enclosed-mass lensing extension: distances, the mass inside an Einstein radius, image inversions, the arc-radius fit, validation and requested files (Prompt 251, Part A).",
       "owner": 251,
       "student": false
     }
