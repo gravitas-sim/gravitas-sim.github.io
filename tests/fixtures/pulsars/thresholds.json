@@ -448,6 +448,12 @@
       "step": "S5, S4",
       "what": "Refusal precedence in the whole analysis: 'no-pulsar' (S5, the trial-corrected probability) first, then 'dm-at-range-edge', then 'ambiguous-dm', then 'period-at-range-edge' (the strongest period is at an edge of the range: the true period may lie outside), then the refusals of the refinement stages. The trial count in S5 is the period grid size times the number of DM trials. A single-channel series skips the DM stages, folds as it is and returns the period with the DM refused 'not-constrained' (status 'partial').",
       "why": "S5 and S4 each said when to refuse but not which wins when several hold; a noise-only series must say 'no-pulsar', not report an arbitrary DM edge (D2). No bound changed."
+    },
+    {
+      "id": "AM5",
+      "step": "S5",
+      "what": "The period search takes the grid maximum as its period; the golden-section refinement between the neighbours of the maximum is dropped. The sub-integration phase drift (S9, two passes) is the refinement and gives the interval. The grid, the statistic, the significance and the trial correction are unchanged.",
+      "why": "Found while checking the kernel's analysis against the oracle's on the 24 B4 and B5 worlds, before the validator existed (so before any leg was judged): the fold statistic is a ragged function of the period at scales finer than the grid, because samples change bins one at a time, so a golden-section search in the kernel and a bounded Brent search in the oracle settled on different local maxima (the periods differed by 1e-7 to 8e-5 of themselves) and the DMs by up to 0.3 pc/cm3 through the period. The grid maximum is the same in both. This is a design change made after seeing a kernel output, and it is recorded as such; no bound was changed."
     }
   ]
 }
