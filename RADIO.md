@@ -185,12 +185,15 @@ validator is not yet written to read either file; it will say NOT RUN until they
    in `HI_LINE` (`js/kernels/radio/constants.js`), typed as physical constants with no source file in the tree and not
    verified by a fetch; the module says so in its `status`. Every other number is a definition, a stated choice or computed.
    Please supply a source (a NIST or CODATA page, or the original measurement) or say to take them as caller inputs.
+   *Ruling (coordinator, under Carl's overnight delegation): keep them in `HI_LINE`, labelled unverified; the coordinator
+   will fetch a source himself and tell the session.*
 2. **A1's bound** (above): reset to 1e-10 km/s absolute, or leave failing?
 3. **C2's allowance** (above): replace the 3.2 ratio by the exact prediction from the dispersion draw, or leave failing?
 4. **Stromberg's V.** D-GAIA-03's 3.77 km/s is a value from one sample; the kernel pairs it with Schonrich et al.'s U and W
    because the Stromberg relation corrects only V. If the lesson should pair it with sample values, say so.
+   *Ruling (coordinator): Stromberg's V with Schonrich et al.'s U and W is acceptable and stays labelled.*
 5. The standard (kinematic) LSR of the radio literature is not offered: its definition is a published number I did not
-   type. A source file would let it be a third option.
+   type. A source file would let it be a third option. *Ruling (coordinator): it stays absent until a source file exists.*
 
 ## Inherited limits to state in claims built on this kernel
 
