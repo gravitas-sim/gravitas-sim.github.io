@@ -201,7 +201,7 @@
       "id": "B2.bandMeanOracle",
       "leg": "b",
       "what": "the band-integrated mean f_nu of a blackbody through every band of the pack against an independent implementation (numpy and scipy Simpson on a 0.05 nm refinement of the response, astropy.modeling BlackBody for B_lambda) of the same photon-weighted definition",
-      "limits": { "temperaturesK": [3600, 5772, 9500], "maxRel": 1e-6 }
+      "limits": { "temperaturesK": [3600, 5772, 9500], "maxRel": 5e-6, "maxRelPivot": 2e-6 }
     },
     {
       "id": "B3.fitOracle",
@@ -224,7 +224,7 @@
       "id": "B4.integralOracle",
       "leg": "b",
       "what": "the integrated flux against an independent implementation: F_data of the points of B3's three cases against the oracle's own power-law chords (arithmetic agreement), and the model tails against scipy.integrate.quad of pi B_lambda",
-      "limits": { "maxRelData": 1e-9, "maxRelTails": 1e-6, "boundsNm": [400, 2200] }
+      "limits": { "maxRelData": 1e-9, "maxRelTails": 1e-6, "boundsNm": [400, 2200], "pivotsFrom": "kernel" }
     },
     {
       "id": "B5.citedTool",
@@ -317,5 +317,27 @@
       "limits": { "file": "tests/fixtures/sed/authentic/star-sdss-row.json", "reported": true }
     }
   ],
-  "amendments": []
+  "amendments": [
+    {
+      "id": "AM1",
+      "check": "B4.integralOracle",
+      "what": "as committed, the oracle computed its own pivot wavelengths (Simpson on a 0.05 nm refinement) and chorded through them, against a bound of 1e-9 on the data flux. The kernel's pivot is a trapezoid on a 1 nm refinement (the radiation kernel's documented procedure), and the two quadratures differ in the pivot by up to about 6.5e-7 (a scratch numpy comparison of the two quadratures on the pack's fourteen bands, run to set this note and nothing else; the kernel's SED modules already existed and had been smoke-run once at the design seed 245000, which printed one fit and one luminosity; no oracle output, validator row or B-leg value existed). A pivot shifted by that much moves a chord flux by about the same relative amount, so 1e-9 would test the quadrature difference and not the chord arithmetic it names. B4's data leg now hands the oracle the kernel's own pivot wavelengths as inputs (pivotsFrom: 'kernel'), which tests the conversion and the chord arithmetic at the committed 1e-9; the independent pivot check moves to B2 as maxRelPivot (AM2). The tails bound is unchanged.",
+      "when": "before any validator run, before any oracle output existed, found by reasoning about the two quadratures",
+      "boundMoved": false
+    },
+    {
+      "id": "AM2",
+      "check": "B2.bandMeanOracle",
+      "what": "the committed maxRel of 1e-6 on the band-integrated mean f_nu assumed the 1 nm trapezoid and a 0.05 nm Simpson agree to better than that; the same scratch comparison of the pivot (ratio of the same two kinds of integral) shows 1.3e-6 on a ratio of integrals, so the committed 1e-6 is below what the two quadratures can be expected to agree to. maxRel becomes 5e-6 (about four times the expected quadrature difference), and the pivot check is added with maxRelPivot 2e-6 (three times the 6.5e-7 observed). The bounds are set from a discretisation estimate and before any oracle output, any B-leg value or any validator row existed (the one smoke run of the kernel at the design seed did not print a band mean).",
+      "when": "before any validator run, before any oracle output existed",
+      "boundMoved": true,
+      "from": {
+        "maxRel": 1e-06
+      },
+      "to": {
+        "maxRel": 5e-06,
+        "maxRelPivot": 2e-06
+      }
+    }
+  ]
 }
