@@ -363,7 +363,7 @@ its checksum is refused), so the 639 MB file is never unpacked. What the files
 do and do not say is in the manifest's reductions and assumptions:
 
 - **The files state no unit.** Hz and pc/cm3 are the par-file convention of
-  tempo2 and PINT. `pc/cm3` joined `js/units/registry.js` for it.
+  tempo2 and PINT. `pc/cm3` joined `js/units/registry.js` for it, with a dimension of its own and no factor, as a magnitude has.
 - **A file's DM line is not the pulsar's DM.** It is a fixed baseline (J1024-0719's
   differs by about 2 between the narrowband and wideband files); the fitted
   per-epoch DMX offsets carry the variation. The pack states baseline plus the mean

@@ -122,13 +122,11 @@ export const UNITS = Object.freeze({
     symbol: 'km/s/Mpc',
   },
 
-  // A pulsar's dispersion measure (Roadmap III Prompt 240): the column density of
-  // free electrons along the line of sight. One pc/cm3 is 3.0857e16 m over 1e-6 m3.
-  'pc/cm3': {
-    dim: 'column-density',
-    factor: 3.085677581491367e22,
-    symbol: 'pc/cm³',
-  },
+  // A pulsar's dispersion measure (Roadmap III Prompt 240): the column of free
+  // electrons along the line of sight. It has a dimension of its own and no factor,
+  // as a magnitude has, so it converts to nothing and never takes the place of an
+  // inverse area in a formula's result.
+  'pc/cm3': { dim: 'dispersion-measure', factor: null, symbol: 'pc/cm³' },
 
   W: { dim: 'power', factor: 1, symbol: 'W' },
   // IAU 2015 nominal solar luminosity.
