@@ -22,7 +22,10 @@
   },
   "instrument": {
     "label": "SYNTHETIC PULSAR SERIES: an invented pulsar observed by an invented receiver, with a stated period, dispersion measure and pulse profile, not a measurement of any pulsar. The band, channel count, sampling and every parameter below are the world's truth, chosen round, and no published value.",
-    "bandMHz": [1200, 1500],
+    "bandMHz": [
+      1200,
+      1500
+    ],
     "note": "channel centres fLo + (i + 1/2) df, ascending; the dispersion delay is relative to infinite frequency, and de-dispersion references the top of the band",
     "channels": 16,
     "dtS": 0.002,
@@ -32,12 +35,42 @@
     "profile": {
       "kind": "one Gaussian component, periodic (images at +-1 turn summed)",
       "sigmaTurns": 0.03,
-      "peakAmplitude": { "bright": 1, "faint": 0.5, "weak": 0.25 },
+      "peakAmplitude": {
+        "bright": 1,
+        "faint": 0.5,
+        "weak": 0.25
+      },
       "note": "amplitude in units of the per-sample noise sigma; peak amplitude is the same in every channel unless a spectral index is given"
     },
-    "subchannels": { "analytic": 1, "ensemble": 4, "note": "the generator averages the delayed pulse over this many equal sub-bands of a channel (intra-channel smearing); 1 is the exact centre-frequency delay of the analytic legs" },
-    "periodTruthS": { "analytic": [0.2, 0.2373, 0.25, 0.2719, 0.29, 0.3], "ensemble": "uniform on [0.2, 0.3]", "note": "invented values; the analytic values are chosen incommensurate with the sampling" },
-    "dmTruth": { "analytic": [10, 30, 60, 90, 120, 140], "ensemble": "uniform on [20, 120] pc/cm3", "unit": "pc/cm3" },
+    "subchannels": {
+      "analytic": 1,
+      "ensemble": 4,
+      "note": "the generator averages the delayed pulse over this many equal sub-bands of a channel (intra-channel smearing); 1 is the exact centre-frequency delay of the analytic legs"
+    },
+    "periodTruthS": {
+      "analytic": [
+        0.2,
+        0.2373,
+        0.25,
+        0.2719,
+        0.29,
+        0.3
+      ],
+      "ensemble": "uniform on [0.2, 0.3]",
+      "note": "invented values; the analytic values are chosen incommensurate with the sampling"
+    },
+    "dmTruth": {
+      "analytic": [
+        10,
+        30,
+        60,
+        90,
+        120,
+        140
+      ],
+      "ensemble": "uniform on [20, 120] pc/cm3",
+      "unit": "pc/cm3"
+    },
     "phase0": "uniform on [0, 1) turns",
     "referenceFrequency": "top of the band for de-dispersion"
   },
@@ -59,7 +92,9 @@
     "subintegrations": 8,
     "periodGridOversample": 2,
     "dmStepFraction": "pGuess / 128",
-    "detection": { "trialCorrectedP": 1e-3 },
+    "detection": {
+      "trialCorrectedP": 0.001
+    },
     "channelSnrMin": 5,
     "minChannels": 4,
     "harmonicNoiseMultiple": 9,
@@ -82,79 +117,143 @@
       "id": "A1.dispersionLaw",
       "leg": "a",
       "what": "the delay t(f, DM) = K DM / f^2: t(f) / t(2 f) = 4 and t(DM2) / t(DM1) = DM2 / DM1 each to a relative 1e-14 at five frequencies and five dispersion measures; a lower frequency arrives later; sweep(f1, f2, DM) equals t(f1) - t(f2) exactly (relative 1e-14) and is positive for f1 < f2; the dispersion measure from a sweep inverts it to a relative 1e-12; the frequency in Hz, MHz and GHz agree to a relative 1e-14; a non-positive frequency or negative DM-range is refused by code",
-      "limits": { "maxRelative": 1e-14, "maxInverseRelative": 1e-12, "frequenciesMHz": [400, 800, 1200, 1400, 1500], "dms": [1, 10, 50, 100, 300] }
+      "limits": {
+        "maxRelative": 1e-14,
+        "maxInverseRelative": 1e-12,
+        "frequenciesMHz": [
+          400,
+          800,
+          1200,
+          1400,
+          1500
+        ],
+        "dms": [
+          1,
+          10,
+          50,
+          100,
+          300
+        ]
+      }
     },
     {
       "id": "A2.dispersionConstant",
       "leg": "a",
       "what": "the module's derived constant equals alpha h / (4 pi^2 m_e) (PC_M 1e6 / 1e12) recomputed in the validator from the values in constants-source.json to a relative 1e-14; the two inputs in the module equal the fixture's to the last digit; the module's status string names the source file and says the values are not verified by a fetch",
-      "limits": { "maxRelative": 1e-14 }
+      "limits": {
+        "maxRelative": 1e-14
+      }
     },
     {
       "id": "A3.smearing",
       "leg": "a",
       "what": "the intra-channel smearing 2 K DM df / f^3 equals the exact difference of the delays at the channel's edges times (1 - x^2)^2, x = df / (2 f), to a relative 1e-12 at the instrument's band (channel width 18.75 MHz) at DM 10, 60 and 120; the ratio of the formula to the exact difference differs from 1 by under 5e-5 at the instrument's centre channel",
-      "limits": { "maxRelative": 1e-12, "maxFormulaDeparture": 5e-5, "dms": [10, 60, 120] }
+      "limits": {
+        "maxRelative": 1e-12,
+        "maxFormulaDeparture": 0.00005,
+        "dms": [
+          10,
+          60,
+          120
+        ]
+      }
     },
     {
       "id": "A4.deDispersionNoiseFree",
       "leg": "a",
       "what": "noise-free series of the analytic worlds (one sub-band, the exact centre delays): the linearly interpolated de-dispersion at the true DM then folded puts the profile's centroid at the world's pulse phase to 2e-4 turn on all six worlds; the nearest-sample version to 6e-4 turn; the fold conserves the sum (sum of n_b m_b equals the sum of the series to a relative 1e-12); de-dispersing at a DM off by an amount whose band sweep is 2 pulse standard deviations lowers the fold statistic by a factor of at least 1.5 against the true DM",
-      "limits": { "centroidLinearTurn": 2e-4, "centroidNearestTurn": 6e-4, "conservation": 1e-12, "sweepSigmas": 2, "minStatisticRatio": 1.5 }
+      "limits": {
+        "centroidLinearTurn": 0.0002,
+        "centroidNearestTurn": 0.0006,
+        "conservation": 1e-12,
+        "sweepSigmas": 2,
+        "minStatisticRatio": 1.5
+      }
     },
     {
       "id": "A5.periodNoiseFree",
       "leg": "a",
       "what": "the fold search plus the sub-integration refinement recovers the period of noise-free series (the six analytic periods, DM at the true value) to a relative 2e-6; the period from the existing Lomb-Scargle periodogram on the channel sum rebinned to 1 ms-multiples recovers it to within the periodogram's peak width P^2 / T",
-      "limits": { "relativePeriod": 2e-6, "periodogramWithinWidthFactor": 1 }
+      "limits": {
+        "relativePeriod": 0.000002,
+        "periodogramWithinWidthFactor": 1
+      }
     },
     {
       "id": "A6.dmNoiseFree",
       "leg": "a",
       "what": "the DM measurement (coarse search, then arrival-time refinement, with the noise sigma given as 1e-3 of the amplitude because a noise-free series has none to estimate) recovers the six analytic dispersion measures to 0.05 pc/cm3 absolute",
-      "limits": { "maxErrorPcCm3": 0.05, "givenSigmaFractionOfAmplitude": 1e-3 }
+      "limits": {
+        "maxErrorPcCm3": 0.05,
+        "givenSigmaFractionOfAmplitude": 0.001
+      }
     },
     {
       "id": "A7.foldStatisticCalibration",
       "leg": "a",
       "what": "on 400 noise-only channel-sum series folded at a fixed period (not searched), the fold statistic has mean within 4 percent of its degrees of freedom (nbin - 1) and the fraction with p < 0.05 is within [0.02, 0.08]; the trial correction p_corr = min(1, N p) is monotone and never below p",
-      "limits": { "series": 400, "meanTolerance": 0.04, "fractionBand": [0.02, 0.08] }
+      "limits": {
+        "series": 400,
+        "meanTolerance": 0.04,
+        "fractionBand": [
+          0.02,
+          0.08
+        ]
+      }
     },
     {
       "id": "A8.dmDistance",
       "leg": "a",
       "what": "the distance is DM / n_e exactly (relative 1e-15) for three pairs; a density range gives [DM / n_hi, DM / n_lo]; every result, at any call, carries the label 'crude; assumes this electron density', the density and its source; a missing, zero, negative or non-finite density, a negative DM, or a missing source string is refused by code ('missing-density', 'bad-argument'); the function returns no distance on a refusal",
-      "limits": { "maxRelative": 1e-15 }
+      "limits": {
+        "maxRelative": 1e-15
+      }
     },
     {
       "id": "B1.constantVsAstropy",
       "leg": "b",
       "what": "the oracle (astropy.constants: e, eps0, m_e, c; independent algebra e^2 / (8 pi^2 eps0 m_e c)) gives the same dispersion constant as the module to a relative 1e-9, and the same delays at eight frequencies and three DMs to a relative 1e-9",
-      "limits": { "maxRelative": 1e-9 }
+      "limits": {
+        "maxRelative": 1e-9
+      }
     },
     {
       "id": "B2.periodogramVsAstropy",
       "leg": "b",
       "what": "the existing periodogram (js/kernels/variables/period.js) against astropy's Lomb-Scargle in its standard normalisation with a floating mean on the same rebinned channel sum at 40 trial periods: absolute difference in power under 1e-8",
-      "limits": { "maxAbsolute": 1e-8, "periods": 40 }
+      "limits": {
+        "maxAbsolute": 1e-8,
+        "periods": 40
+      }
     },
     {
       "id": "B3.deDisperseFoldVsNumpy",
       "leg": "b",
       "what": "de-dispersion (nearest and linear) and folding of one fixed noisy series against a numpy implementation of the same stated rules (np.interp for the linear shifts, np.bincount for the fold): the folded profile differs by under 1e-9 of its peak, the fold statistic by a relative 1e-9, the channel-sum length is equal",
-      "limits": { "profileOfPeak": 1e-9, "statisticRelative": 1e-9 }
+      "limits": {
+        "profileOfPeak": 1e-9,
+        "statisticRelative": 1e-9
+      }
     },
     {
       "id": "B4.dmMeasureVsNumpy",
       "leg": "b",
       "what": "the DM measurement on 24 noisy series (the A=1 bright world, fixed seeds) against an independent implementation of S4 to S8 in numpy and scipy (np.fft.rfft for the harmonics, scipy.optimize.minimize_scalar for the arrival phases, weighted lstsq for the fit): the DM differs by under 1e-5 pc/cm3, the DM standard deviation by a relative 1e-4, each channel's arrival phase by under 1e-7 turn, the number of used channels is equal",
-      "limits": { "series": 24, "dmPcCm3": 1e-5, "sigmaRelative": 1e-4, "phaseTurn": 1e-7 }
+      "limits": {
+        "series": 24,
+        "dmPcCm3": 0.00001,
+        "sigmaRelative": 0.0001,
+        "phaseTurn": 1e-7
+      }
     },
     {
       "id": "B5.periodVsNumpy",
       "leg": "b",
       "what": "the final period with its interval on the same 24 series against the oracle's (grid of the fold statistic, scipy refinement, the sub-integration phase fit of S9 with np.polyfit weights): the period differs by a relative 2e-7 and its standard deviation by a relative 1e-3",
-      "limits": { "periodRelative": 2e-7, "sigmaRelative": 1e-3 }
+      "limits": {
+        "periodRelative": 2e-7,
+        "sigmaRelative": 0.001
+      }
     },
     {
       "id": "B6.toolkit",
@@ -166,31 +265,65 @@
       "id": "C1.dmCoverage",
       "leg": "c",
       "what": "on 200 seeded realisations (the faint world, amplitude 0.5, four sub-bands, period uniform on [0.2, 0.3], DM uniform on [20, 120], phase uniform, search ranges DM [10, 140] and period [0.15, 0.35]) the 68.27 percent interval of the DM covers the truth at a rate within [0.58, 0.78] and the 95 percent interval within [0.90, 0.99]; every realisation returns a DM (a refusal is a failed leg because the world is bright enough that none is expected)",
-      "limits": { "n": 200, "band68": [0.58, 0.78], "band95": [0.9, 0.99], "refusalsAllowed": 0 }
+      "limits": {
+        "n": 200,
+        "band68": [
+          0.58,
+          0.78
+        ],
+        "band95": [
+          0.9,
+          0.99
+        ],
+        "refusalsAllowed": 0
+      }
     },
     {
       "id": "C2.periodCoverage",
       "leg": "c",
       "what": "the same 200 realisations: the period's 68.27 percent interval covers the truth within [0.58, 0.78] and the 95 percent interval within [0.90, 0.99]",
-      "limits": { "n": 200, "band68": [0.58, 0.78], "band95": [0.9, 0.99] }
+      "limits": {
+        "n": 200,
+        "band68": [
+          0.58,
+          0.78
+        ],
+        "band95": [
+          0.9,
+          0.99
+        ]
+      }
     },
     {
       "id": "C3.falseAlarm",
       "leg": "c",
       "what": "on 200 noise-only series (the instrument, no pulsar, the same search ranges) the analysis refuses 'no-pulsar' (or another refusal by code, never a number) in at least 0.98 of them, and none returns a DM or a period",
-      "limits": { "n": 200, "minRefusalRate": 0.98 }
+      "limits": {
+        "n": 200,
+        "minRefusalRate": 0.98
+      }
     },
     {
       "id": "C4.blindRecovery",
       "leg": "c",
       "what": "six realisations of the bright world analysed blind (DM range [0, 200], period range [0.05, 1.0]): none refused; the period lies inside its 95 percent interval of the truth in at least five and the DM in at least five",
-      "limits": { "n": 6, "minInside": 5 }
+      "limits": {
+        "n": 6,
+        "minInside": 5
+      }
     },
     {
       "id": "C5.detectionPower",
       "leg": "c",
       "what": "REPORTED, not judged: the fraction of 40 realisations detected (not refused 'no-pulsar') at amplitudes 0.25, 0.5 and 1, so the limit of the search in signal-to-noise is on the page",
-      "limits": { "n": 40, "amplitudes": [0.25, 0.5, 1] }
+      "limits": {
+        "n": 40,
+        "amplitudes": [
+          0.25,
+          0.5,
+          1
+        ]
+      }
     },
     {
       "id": "D1.singleFrequency",
@@ -208,25 +341,38 @@
       "id": "D3.dmOutsideRange",
       "leg": "d",
       "what": "the bright world at DM 400 with the search range [0, 200]: refused by code ('dm-at-range-edge', or another refusal), never a confident number inside the range",
-      "limits": { "dm": 400, "range": [0, 200] }
+      "limits": {
+        "dm": 400,
+        "range": [
+          0,
+          200
+        ]
+      }
     },
     {
       "id": "D4.wrongPeriod",
       "leg": "d",
       "what": "the DM measurement given a period 3 percent from the truth (the fold smears the pulse): status is not ok (refused 'no-pulsar' or 'too-few-channels'), no DM returned",
-      "limits": { "periodOffsetFraction": 0.03 }
+      "limits": {
+        "periodOffsetFraction": 0.03
+      }
     },
     {
       "id": "D5.fewChannels",
       "leg": "d",
       "what": "a spectrum whose channels are all noise except two: refused 'too-few-channels'",
-      "limits": { "brightChannels": 2 }
+      "limits": {
+        "brightChannels": 2
+      }
     },
     {
       "id": "D6.badInputs",
       "leg": "d",
       "what": "refusals by code, never an exception of another kind and never a number: a non-positive sample time, a NaN in the data, nbin below 8, a period of more than a third of the series length, channel frequencies not strictly ascending, an inverted DM range, a negative DM range start, a data array whose length is not nchan times nsamp",
-      "limits": { "minBins": 8, "maxPeriodFractionOfSeries": 0.3333333333333333 }
+      "limits": {
+        "minBins": 8,
+        "maxPeriodFractionOfSeries": 0.3333333333333333
+      }
     },
     {
       "id": "D7.labelAndManifest",
@@ -244,20 +390,64 @@
       "id": "E2.catalogueRows",
       "leg": "e",
       "what": "the pack's own pulsars as the parameters of synthetic series (period 1 / F0 and the narrowband DM of each row of radio/nanograv-15yr-pulsars.json with a period between 8 ms and 100 ms and a DM between 5 and 300 pc/cm3; the instrument of the analytic worlds with the channel count 64 and the sample time 1/50.3 of the period, one hundred pulses, amplitude 1, four sub-bands): the 95 percent DM interval covers the row's DM in at least 0.88 of the rows not refused, every refusal carries a code, no row throws. This is NOT an authentic leg: the generator's truth is the row's value, so it tests that the kernel recovers the catalogue's periods and DMs from series built with them, and E1 stays NOT RUN",
-      "limits": { "periodMs": [8, 100], "dmPcCm3": [5, 300], "channels": 64, "samplesPerPeriod": 50.3, "pulses": 100, "minCoverage95": 0.88 }
+      "limits": {
+        "periodMs": [
+          8,
+          100
+        ],
+        "dmPcCm3": [
+          5,
+          300
+        ],
+        "channels": 64,
+        "samplesPerPeriod": 50.3,
+        "pulses": 100,
+        "minCoverage95": 0.88
+      }
     },
     {
       "id": "R1.smearingBias",
       "leg": "r",
       "what": "REPORTED, not judged: the mean of (DM measured - truth) / sigma_DM over 60 realisations at 16 and at 64 channels (same band) at DM 120, with and without the four sub-bands, so the effect of intra-channel smearing on the arrival-time method is on the page",
-      "limits": { "n": 60 }
+      "limits": {
+        "n": 60
+      }
     },
     {
       "id": "R2.profileEvolution",
       "leg": "r",
       "what": "REPORTED, not judged: the DM bias in units of sigma_DM and the fraction flagged 'structured residuals' over 60 realisations when the profile changes with frequency (the pulse width grows by 50 percent from the top of the band to the bottom, and a second component at 0.12 turn whose amplitude rises linearly with 1/f), so the method's blind spot (a frequency-dependent profile moves the arrival time like a dispersion measure) is on the page",
-      "limits": { "n": 60, "widthGrowth": 0.5, "secondComponentTurn": 0.12 }
+      "limits": {
+        "n": 60,
+        "widthGrowth": 0.5,
+        "secondComponentTurn": 0.12
+      }
     }
   ],
-  "amendments": []
+  "amendments": [
+    {
+      "id": "AM1",
+      "step": "S4",
+      "what": "The coarse DM statistic is the harmonic-summed Fourier power of the nearest-shift channel sum, not its variance. The channel sum is the mean of the shifted channels, mean-removed and zero-padded to the next power of two at or above twice its length; the power is |X_k|^2 / (L sigma_sum^2) with sigma_sum = sqrt(sum sigma_c^2) / nchan; for each fundamental bin k from floor(N dt / pMax) to ceil(N dt / pMin) the statistic is the sum over h = 1 .. 4 of the largest power within ceil(h / 2) bins of h k, and the trial value is the maximum over k. The DM step is unchanged and the maximum over the grid is refined by a parabola as before. The edge and ambiguity rules are unchanged except that the main lobe (the run around the maximum above half its excess over the grid median, widened by three steps on each side) is excluded when looking for a second maximum, so a broad flat top is not read as a second DM. A band whose sweep at the largest DM of the range is under 1/128 of the period guess (step > dmMax) is refused 'not-constrained' before any search.",
+      "why": "One design run on the design seed (period 0.2373, DM 60, amplitude 0.5, four sub-bands): the variance statistic had a lobe about 35 pc/cm3 wide, a signal-to-noise of about 4.6 per trial, put its maximum at 65.2 and was refused 'ambiguous-dm' by a noisy shoulder inside the lobe; the Fourier statistic peaked at 60.15. No leg had run; no bound changed."
+    },
+    {
+      "id": "AM2",
+      "step": "E2",
+      "what": "E2 search ranges, fixed here before any validator run: the DM range is [DM_row - 10, DM_row + 10] clipped at 0 (the catalogue value as the analyst's prior from an earlier observation, which is also why E2 is not an authentic test) and the period range is [0.8 P, 1.25 P] with P = 1 / F0 (an analyst who knows the period to 25 percent).",
+      "why": "The thresholds said the instrument and the sampling but not the search ranges; at periods of 8 to 100 ms the DM step is 0.04 to 0.5 pc/cm3 and a blind range of hundreds would cost minutes per pulsar. No leg had run."
+    },
+    {
+      "id": "AM3",
+      "step": "S9",
+      "what": "The sub-integration slope is multiplied by (M - 1) / M because each sub-integration is matched to a template of the OTHER sub-integrations: for equal weights the phase of one against the mean phase of the others is s M / (M - 1) (t_m - mean t). The standard deviation takes the same factor. This is a derivation, written before the validator ran; B5 compares against an oracle that applies the same factor, and A5 and C2 test that it is right (a wrong factor would show as a period bias of one part in M).",
+      "why": "S9 said a weighted line gives a frequency offset s; it did not say what the leave-one-out template does to the slope. No bound changed."
+    },
+    {
+      "id": "AM4",
+      "step": "S5, S4",
+      "what": "Refusal precedence in the whole analysis: 'no-pulsar' (S5, the trial-corrected probability) first, then 'dm-at-range-edge', then 'ambiguous-dm', then 'period-at-range-edge' (the strongest period is at an edge of the range: the true period may lie outside), then the refusals of the refinement stages. The trial count in S5 is the period grid size times the number of DM trials. A single-channel series skips the DM stages, folds as it is and returns the period with the DM refused 'not-constrained' (status 'partial').",
+      "why": "S5 and S4 each said when to refuse but not which wins when several hold; a noise-only series must say 'no-pulsar', not report an arbitrary DM edge (D2). No bound changed."
+    }
+  ]
 }
