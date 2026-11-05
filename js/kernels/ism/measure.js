@@ -117,7 +117,9 @@ export function fitContinuum(spec, windows, { order = 1 } = {}) {
   }
   const rms = Math.sqrt(rss / (idx.length - p));
   const errorsFromScatter = !spec.sigma;
-  if (errorsFromScatter) for (const row of cov) for (let j = 0; j < row.length; j++) row[j] *= rms * rms;
+  if (errorsFromScatter)
+    for (const row of cov)
+      for (let j = 0; j < row.length; j++) row[j] *= rms * rms;
   return {
     status: 'ok',
     order,
@@ -276,7 +278,10 @@ export function fitGaussianLine(spec, { guessNm, halfWidthPx } = {}) {
     scatterExceedsErrors: fit.scatterExceedsErrors,
     reducedChi2: fit.reducedChi2,
     errorsFromScatter: fit.errorsFromScatter,
-    window: [lambdaAtIndex(spec.lambdaNm, fit.window[0]), lambdaAtIndex(spec.lambdaNm, fit.window[1])],
+    window: [
+      lambdaAtIndex(spec.lambdaNm, fit.window[0]),
+      lambdaAtIndex(spec.lambdaNm, fit.window[1]),
+    ],
     pixels: fit.pixels,
     converged: fit.converged,
     fit,
@@ -300,7 +305,10 @@ export function restOf(line, medium) {
  * @param {object} spec
  * @param {{restNm: number, restMedium: string, guessNm?: number, z0?: number, halfWidthPx?: number}} o
  */
-export function lineVelocity(spec, { restNm, restMedium, guessNm, z0 = 0, halfWidthPx } = {}) {
+export function lineVelocity(
+  spec,
+  { restNm, restMedium, guessNm, z0 = 0, halfWidthPx } = {}
+) {
   const bad = checkSpectrum(spec, { needResolution: true });
   if (bad) return bad;
   if (!restMedium)

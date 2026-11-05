@@ -73,7 +73,9 @@ describe('the committed legs and their pinned results', () => {
     expect(THR.rule).toMatch(/from memory/);
     expect(THR.rule).toMatch(/DERIVED/);
     expect(THR.rule).toMatch(/no default/);
-    expect(THR.analysisRule.constants.columnDensity).toMatch(/constants-source\.json/);
+    expect(THR.analysisRule.constants.columnDensity).toMatch(
+      /constants-source\.json/
+    );
   });
   test("the committed analysis rule and worlds are the kernel's", async () => {
     const K = await import('../js/kernels/ism/index.js');
@@ -82,7 +84,9 @@ describe('the committed legs and their pinned results', () => {
     expect(THR.worlds.nebula.grid.log10Step).toBe(K.ISM_WORLD.log10Step);
     expect(THR.worlds.nebula.grid.samples).toBe(K.ISM_WORLD.samples);
     expect(THR.worlds.nebula.sigmaPixel).toBe(K.ISM_WORLD.sigmaPixel);
-    expect(THR.worlds.nebula.intrinsicRatios['h-alpha/h-beta']).toBe(K.ISM_WORLD.intrinsic['h-alpha']);
+    expect(THR.worlds.nebula.intrinsicRatios['h-alpha/h-beta']).toBe(
+      K.ISM_WORLD.intrinsic['h-alpha']
+    );
     expect(THR.worlds.sodium.sigmaPixel).toBe(0.002);
     expect(K.DIP_CUT).toBe(0.1);
     expect(K.TAU0_MAX).toBe(0.3);
@@ -98,10 +102,16 @@ describe('the committed legs and their pinned results', () => {
 
 describe('the plasma-diagnostics gate has committed thresholds and no result', () => {
   test('its thresholds were committed before any datum and name what is needed', () => {
-    expect(GATE.committed).toMatch(/Nothing of the atomic data has been read, typed or fetched/);
+    expect(GATE.committed).toMatch(
+      /Nothing of the atomic data has been read, typed or fetched/
+    );
     expect(GATE.rule).toMatch(/NOT RUN/);
     expect(GATE.verdictRule.notDecided).toMatch(/no verdict/);
-    expect(Object.keys(GATE.needs).sort()).toEqual(['atomicData', 'pipeline', 'spectra']);
+    expect(Object.keys(GATE.needs).sort()).toEqual([
+      'atomicData',
+      'pipeline',
+      'spectra',
+    ]);
     expect(GATE.checks.map(c => c.id)).toEqual([
       'G1.atomicDataPinned',
       'G2.ratioCurveVsOracle',
@@ -115,7 +125,9 @@ describe('the plasma-diagnostics gate has committed thresholds and no result', (
   test('no atomic datum, diagnostic or gate result exists in the tree', async () => {
     const K = await import('../js/kernels/ism/index.js');
     for (const name of Object.keys(K))
-      expect(name).not.toMatch(/temperature|electronDensity|collision|nebularDiagnostic/i);
+      expect(name).not.toMatch(
+        /temperature|electronDensity|collision|nebularDiagnostic/i
+      );
   });
 });
 

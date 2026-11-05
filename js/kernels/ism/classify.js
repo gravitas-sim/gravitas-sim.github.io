@@ -22,7 +22,12 @@ import { refused } from '../statistics/check.js';
 import { C_LIGHT } from '../radiation/constants.js';
 import { FWHM_PER_SIGMA } from '../spectrograph/lsf.js';
 import { lineVelocity } from './measure.js';
-import { checkSpectrum, lsfFwhmAt, dispersionAtIndex, nearestIndex } from './spectrum.js';
+import {
+  checkSpectrum,
+  lsfFwhmAt,
+  dispersionAtIndex,
+  nearestIndex,
+} from './spectrum.js';
 
 const { Math, Number } = globalThis;
 const C_KM_S = C_LIGHT / 1000;
@@ -60,7 +65,11 @@ export function stellarVelocity(spec, { lines, broadSigmaKmS, z0 = 0 } = {}) {
     sw += w;
     sv += w * r.velocityKmS;
     ss += w * ((C_KM_S * r.fit.sigmaNm) / r.fit.centreNm);
-    per.push({ restNm: l.restNm, velocityKmS: r.velocityKmS, sigmaKmS: r.sigmaKmS });
+    per.push({
+      restNm: l.restNm,
+      velocityKmS: r.velocityKmS,
+      sigmaKmS: r.sigmaKmS,
+    });
   }
   if (!per.length)
     return refused('no-stellar-lines', 'no broad line could be fitted');
@@ -83,7 +92,10 @@ export function classifyAbsorption(spec, feature, star) {
   if (!feature || feature.status !== 'ok' || !feature.fit)
     return refused('no-feature', 'a fitted feature is required');
   if (feature.fit.kind !== 'absorption')
-    return refused('not-absorption', 'the classification is for absorption lines');
+    return refused(
+      'not-absorption',
+      'the classification is for absorption lines'
+    );
   const bad = checkSpectrum(spec, { needResolution: true });
   if (bad) return bad;
   const lambda = feature.fit.centreNm;
@@ -112,6 +124,6 @@ export function classifyAbsorption(spec, feature, star) {
     sigmaDeltaKmS: sigmaDelta,
     sigmaObsKmS,
     sigmaLsfKmS: sigmaLsf,
-    note: 'a class from width and velocity offset is evidence, never a proof; a narrow line at the star\'s own velocity can be stellar or interstellar',
+    note: "a class from width and velocity offset is evidence, never a proof; a narrow line at the star's own velocity can be stellar or interstellar",
   };
 }

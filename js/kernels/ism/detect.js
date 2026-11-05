@@ -36,7 +36,10 @@ export const DIFFUSE_BAND_LABEL = 'unidentified diffuse band';
  * @param {{snrMin?: number, medianWindow?: number}} [o]
  * @returns {{status: 'ok', features: Array<{centreNm: number, sigmaCentreNm: number, snr: number, kind: string, index: number}>}|object}
  */
-export function detectFeatures(spec, { snrMin = DETECTION_SNR, medianWindow = MEDIAN_WINDOW } = {}) {
+export function detectFeatures(
+  spec,
+  { snrMin = DETECTION_SNR, medianWindow = MEDIAN_WINDOW } = {}
+) {
   const bad = checkSpectrum(spec, { needResolution: true });
   if (bad) return bad;
   const n = spec.lambdaNm.length;
@@ -45,13 +48,20 @@ export function detectFeatures(spec, { snrMin = DETECTION_SNR, medianWindow = ME
   for (let i = 0; i < n; i++) {
     const lo = Math.max(0, i - half);
     const hi = Math.min(n - 1, i + half);
-    resid[i] = spec.flux[i] - median(spec.flux.subarray ? spec.flux.subarray(lo, hi + 1) : spec.flux.slice(lo, hi + 1));
+    resid[i] =
+      spec.flux[i] -
+      median(
+        spec.flux.subarray
+          ? spec.flux.subarray(lo, hi + 1)
+          : spec.flux.slice(lo, hi + 1)
+      );
   }
   const globalSigma = spec.sigma ? null : robustSigma(spec.flux);
   const sig = i => (spec.sigma ? spec.sigma[i] : globalSigma);
   const snr = new Float64Array(n);
   for (let i = 0; i < n; i++) {
-    const lsfPx = lsfFwhmAt(spec, spec.lambdaNm[i]) / dispersionAtIndex(spec.lambdaNm, i);
+    const lsfPx =
+      lsfFwhmAt(spec, spec.lambdaNm[i]) / dispersionAtIndex(spec.lambdaNm, i);
     const s = Math.max(0.5, lsfPx / FWHM_PER_SIGMA);
     const h = Math.max(2, Math.ceil(3 * s));
     let num = 0;
@@ -90,9 +100,15 @@ export function detectFeatures(spec, { snrMin = DETECTION_SNR, medianWindow = ME
   found.sort((p, q) => Math.abs(q.snr) - Math.abs(p.snr));
   const kept = [];
   for (const f of found)
-    if (!kept.some(k => Math.abs(k.centreNm - f.centreNm) < k.fwhmNm)) kept.push(f);
+    if (!kept.some(k => Math.abs(k.centreNm - f.centreNm) < k.fwhmNm))
+      kept.push(f);
   kept.sort((p, q) => p.centreNm - q.centreNm);
-  return { status: 'ok', features: kept, snrMin, continuum: 'running median, 61 samples' };
+  return {
+    status: 'ok',
+    features: kept,
+    snrMin,
+    continuum: 'running median, 61 samples',
+  };
 }
 
 const tolerance = (f, pixelNm) => Math.max(3 * f.sigmaCentreNm, pixelNm);
@@ -103,9 +119,16 @@ const tolerance = (f, pixelNm) => Math.max(3 * f.sigmaCentreNm, pixelNm);
  * @param {Array<object>} lines - the line pack's LINES
  * @param {{medium: 'air'|'vacuum', z?: number, pixelNm?: number, bands?: Array<{id: string, centreNm: number, widthNm: number}>, bandsSource?: string}} o
  */
-export function identifyFeatures(features, lines, { medium, z = 0, pixelNm = 0, bands, bandsSource } = {}) {
+export function identifyFeatures(
+  features,
+  lines,
+  { medium, z = 0, pixelNm = 0, bands, bandsSource } = {}
+) {
   if (medium !== 'air' && medium !== 'vacuum')
-    return refused('medium-missing', "the medium ('air' or 'vacuum') is required");
+    return refused(
+      'medium-missing',
+      "the medium ('air' or 'vacuum') is required"
+    );
   if (bands && (typeof bandsSource !== 'string' || !bandsSource.trim()))
     return refused(
       'missing-source',
@@ -118,13 +141,17 @@ export function identifyFeatures(features, lines, { medium, z = 0, pixelNm = 0, 
       const rest = line[medium];
       if (!Number.isFinite(rest)) continue;
       const off = f.centreNm - rest * (1 + z);
-      if (Math.abs(off) <= tol) cand.push({ id: line.id, restNm: rest, offsetNm: off });
+      if (Math.abs(off) <= tol)
+        cand.push({ id: line.id, restNm: rest, offsetNm: off });
     }
     cand.sort((p, q) => Math.abs(p.offsetNm) - Math.abs(q.offsetNm));
-    const band = bands?.find(b => Math.abs(f.centreNm - b.centreNm) <= b.widthNm / 2);
+    const band = bands?.find(
+      b => Math.abs(f.centreNm - b.centreNm) <= b.widthNm / 2
+    );
     let label;
     if (cand.length === 1 && !band) label = 'identified';
-    else if (cand.length > 1 || (cand.length === 1 && band)) label = 'ambiguous';
+    else if (cand.length > 1 || (cand.length === 1 && band))
+      label = 'ambiguous';
     else if (band) label = DIFFUSE_BAND_LABEL;
     else label = 'unidentified';
     return {
@@ -146,9 +173,16 @@ export function identifyFeatures(features, lines, { medium, z = 0, pixelNm = 0, 
  * @param {{medium: string, z0?: number, zRange?: {min: number, max: number, step: number}, pixelNm?: number}} o
  *   the trial redshift z0, or a grid to search
  */
-export function solveRedshift(features, lines, { medium, z0, zRange, pixelNm = 0 } = {}) {
+export function solveRedshift(
+  features,
+  lines,
+  { medium, z0, zRange, pixelNm = 0 } = {}
+) {
   if (medium !== 'air' && medium !== 'vacuum')
-    return refused('medium-missing', "the medium ('air' or 'vacuum') is required");
+    return refused(
+      'medium-missing',
+      "the medium ('air' or 'vacuum') is required"
+    );
   const score = z => {
     const r = identifyFeatures(features, lines, { medium, z, pixelNm });
     return r.features.filter(f => f.label === 'identified').length;
@@ -156,7 +190,10 @@ export function solveRedshift(features, lines, { medium, z0, zRange, pixelNm = 0
   let zTrial = z0;
   if (!Number.isFinite(zTrial)) {
     if (!zRange)
-      return refused('no-trial', 'a trial redshift or a redshift grid is required');
+      return refused(
+        'no-trial',
+        'a trial redshift or a redshift grid is required'
+      );
     let best = -1;
     let plateaus = [];
     const steps = Math.round((zRange.max - zRange.min) / zRange.step);
@@ -173,7 +210,10 @@ export function solveRedshift(features, lines, { medium, z0, zRange, pixelNm = 0
       }
     }
     if (best < 1)
-      return refused('no-match', 'no redshift in the grid identifies a feature');
+      return refused(
+        'no-match',
+        'no redshift in the grid identifies a feature'
+      );
     const centres = plateaus.map(p => p[(p.length - 1) >> 1]);
     if (centres.length > 1) {
       // a tie: two separated redshifts match the same number of lines
@@ -191,7 +231,10 @@ export function solveRedshift(features, lines, { medium, z0, zRange, pixelNm = 0
   const id = identifyFeatures(features, lines, { medium, z: zTrial, pixelNm });
   const used = id.features.filter(f => f.label === 'identified');
   if (!used.length)
-    return refused('no-match', 'no feature is identified at the trial redshift');
+    return refused(
+      'no-match',
+      'no feature is identified at the trial redshift'
+    );
   let sw = 0;
   let sz = 0;
   for (const f of used) {

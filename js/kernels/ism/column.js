@@ -44,7 +44,7 @@ export function linearRegimeRatio(tau0) {
   if (!(tau0 > 0)) return 1;
   const n = 4000;
   const a = -9;
-  const h = -2 * a / n;
+  const h = (-2 * a) / n;
   let s = 0;
   for (let i = 0; i <= n; i++) {
     const u = a + i * h;
@@ -73,7 +73,8 @@ function peakDepthTest(fit) {
       tested: false,
       why: "the line is not resolved: its width is the instrument's, so its depth says nothing about the gas",
     };
-  if (!(fit.peakDepth > 0)) return { tested: false, why: 'not an absorption line' };
+  if (!(fit.peakDepth > 0))
+    return { tested: false, why: 'not an absorption line' };
   const tau0 = fit.peakDepth >= 1 ? Infinity : -Math.log(1 - fit.peakDepth);
   return { tested: true, tau0, passed: tau0 <= TAU0_MAX };
 }
@@ -100,7 +101,10 @@ export function columnDensity({ lines } = {}) {
     if (!(Number.isFinite(l.lambdaNm) && l.lambdaNm > 0))
       return refused('bad-wavelength', 'the rest wavelength must be positive');
     if (!l.width || !Number.isFinite(l.width.widthNm) || !(l.width.sigmaNm > 0))
-      return refused('bad-width', 'an equivalent width with its error is needed');
+      return refused(
+        'bad-width',
+        'an equivalent width with its error is needed'
+      );
     if (!(l.width.widthNm / l.width.sigmaNm >= MIN_WIDTH_SNR))
       return refused(
         'no-detection',
@@ -117,7 +121,8 @@ export function columnDensity({ lines } = {}) {
   });
   let regime;
   if (lines.length === 2) {
-    const [strong, weak] = strength(lines[0]) >= strength(lines[1]) ? [0, 1] : [1, 0];
+    const [strong, weak] =
+      strength(lines[0]) >= strength(lines[1]) ? [0, 1] : [1, 0];
     const ratioLinear = strength(lines[strong]) / strength(lines[weak]);
     const ratio = lines[strong].width.widthNm / lines[weak].width.widthNm;
     const sigmaRatio =

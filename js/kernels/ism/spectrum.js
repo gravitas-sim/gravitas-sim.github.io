@@ -68,7 +68,8 @@ export function pixelWidths(lambdaNm) {
   const w = new Float64Array(n);
   w[0] = lambdaNm[1] - lambdaNm[0];
   w[n - 1] = lambdaNm[n - 1] - lambdaNm[n - 2];
-  for (let i = 1; i < n - 1; i++) w[i] = 0.5 * (lambdaNm[i + 1] - lambdaNm[i - 1]);
+  for (let i = 1; i < n - 1; i++)
+    w[i] = 0.5 * (lambdaNm[i + 1] - lambdaNm[i - 1]);
   return w;
 }
 

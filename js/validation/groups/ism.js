@@ -56,7 +56,11 @@ export default async function run({ add }) {
   const fb = K.fitGaussianLine(world, { guessNm: vac('h-beta') });
   const dec = K.balmerDecrement({
     numerator: { lambdaNm: vac('h-alpha'), flux: fa.flux, sigma: fa.sigmaFlux },
-    denominator: { lambdaNm: vac('h-beta'), flux: fb.flux, sigma: fb.sigmaFlux },
+    denominator: {
+      lambdaNm: vac('h-beta'),
+      flux: fb.flux,
+      sigma: fb.sigmaFlux,
+    },
     intrinsic: { ratio: 3, source: 'the synthetic world (invented)' },
     RV: 3.1,
     law: LAW,
@@ -87,7 +91,10 @@ export default async function run({ add }) {
     group: GROUP,
     kind: 'analytic',
     name: 'A velocity from an air-wavelength spectrum against a vacuum rest wavelength is refused, never converted',
-    measured: mismatch.status === 'refused' && mismatch.code === 'medium-mismatch' ? 1 : 0,
+    measured:
+      mismatch.status === 'refused' && mismatch.code === 'medium-mismatch'
+        ? 1
+        : 0,
     expected: 1,
     unit: '',
     tolerance: 0,
@@ -102,7 +109,9 @@ export default async function run({ add }) {
     sigmaPixel: 0.002,
   });
   const rows = sod.truth.lines.map(t => {
-    const sg = (t.observedNm * Math.hypot(3, 299792.458 / 30000 / FWHM_PER_SIGMA)) / 299792.458;
+    const sg =
+      (t.observedNm * Math.hypot(3, 299792.458 / 30000 / FWHM_PER_SIGMA)) /
+      299792.458;
     const e = K.equivalentWidth(sod, {
       lineWindow: [t.observedNm - 5 * sg, t.observedNm + 5 * sg],
       continuumWindows: [
@@ -110,26 +119,48 @@ export default async function run({ add }) {
         [t.observedNm + 6 * sg, t.observedNm + 12 * sg],
       ],
     });
-    return { id: t.id, lambdaNm: t.restNm, f: { 'na1-d1': 0.2, 'na1-d2': 0.45 }[t.id], fSource: 'the synthetic world (invented)', width: { widthNm: e.widthNm, sigmaNm: e.sigmaNm } };
+    return {
+      id: t.id,
+      lambdaNm: t.restNm,
+      f: { 'na1-d1': 0.2, 'na1-d2': 0.45 }[t.id],
+      fSource: 'the synthetic world (invented)',
+      width: { widthNm: e.widthNm, sigmaNm: e.sigmaNm },
+    };
   });
   const col = K.columnDensity({ lines: rows });
   add({
     group: GROUP,
     kind: 'analytic',
     name: 'A saturated sodium doublet (peak optical depth 5) is refused a column density: the doublet ratio is far below the atomic ratio',
-    measured: col.status === 'refused' && col.code === 'saturated' && col.columnCm2 === undefined ? 1 : 0,
+    measured:
+      col.status === 'refused' &&
+      col.code === 'saturated' &&
+      col.columnCm2 === undefined
+        ? 1
+        : 0,
     expected: 1,
     unit: '',
     tolerance: 0,
     why: 'The linear-regime test T1 compares the observed equivalent-width ratio with f2 lambda2^2 / (f1 lambda1^2) and refuses by code when the stronger line is saturated (the contract leg D1).',
   });
 
-  const star = K.generateStar({ lines: LINES, seed: 'validation-group', stellarVelocityKmS: 40, ismVelocityKmS: 40 });
+  const star = K.generateStar({
+    lines: LINES,
+    seed: 'validation-group',
+    stellarVelocityKmS: 40,
+    ismVelocityKmS: 40,
+  });
   const sv = K.stellarVelocity(star, {
-    lines: ['h-beta', 'h-gamma', 'h-delta'].map(id => ({ restNm: vac(id), restMedium: 'vacuum' })),
+    lines: ['h-beta', 'h-gamma', 'h-delta'].map(id => ({
+      restNm: vac(id),
+      restMedium: 'vacuum',
+    })),
     broadSigmaKmS: 500,
   });
-  const ca = K.lineVelocity(star, { restNm: vac('ca2-k'), restMedium: 'vacuum' });
+  const ca = K.lineVelocity(star, {
+    restNm: vac('ca2-k'),
+    restMedium: 'vacuum',
+  });
   const cls = K.classifyAbsorption(star, ca, sv);
   add({
     group: GROUP,

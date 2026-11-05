@@ -67,9 +67,21 @@ function logGrid({ log10Start, log10Step, samples }) {
 
 const continuumAt = (c, lambda) =>
   c.c0 * (1 + (c.slope * (lambda - 550)) / 550) +
-  (c.curvature ? c.c0 * c.curvature * ((lambda - c.curvatureCentre) / c.curvatureHalf) ** 2 : 0);
+  (c.curvature
+    ? c.c0 * c.curvature * ((lambda - c.curvatureCentre) / c.curvatureHalf) ** 2
+    : 0);
 
-function finish({ lambda, flux, sigmaPixel, noise, seed, label, medium, resolvingPower, truth }) {
+function finish({
+  lambda,
+  flux,
+  sigmaPixel,
+  noise,
+  seed,
+  label,
+  medium,
+  resolvingPower,
+  truth,
+}) {
   const n = lambda.length;
   const out = new Float64Array(flux);
   if (noise) {
@@ -229,8 +241,10 @@ export function generateStar({
       sigmaIntKmS: sIntKmS,
     });
   };
-  for (const id of stellarIds) add(id, 'stellar', stellarVelocityKmS, stellarSigmaKmS, stellarDepth);
-  for (const id of ismIds) add(id, 'interstellar', ismVelocityKmS, ismSigmaKmS, ismDepth);
+  for (const id of stellarIds)
+    add(id, 'stellar', stellarVelocityKmS, stellarSigmaKmS, stellarDepth);
+  for (const id of ismIds)
+    add(id, 'interstellar', ismVelocityKmS, ismSigmaKmS, ismDepth);
   const flux = new Float64Array(samples);
   for (let i = 0; i < samples; i++) {
     const w = g.hi[i] - g.lo[i];
@@ -238,7 +252,8 @@ export function generateStar({
     let dip = 0;
     for (const c of comps) {
       if (Math.abs(g.lambda[i] - c.centre) > 8 * c.sigmaObsNm + w) continue;
-      dip += (c.ewNm * gaussianArea(c.centre, c.sigmaObsNm, g.lo[i], g.hi[i])) / w;
+      dip +=
+        (c.ewNm * gaussianArea(c.centre, c.sigmaObsNm, g.lo[i], g.hi[i])) / w;
     }
     flux[i] = C * (1 - dip);
   }
@@ -299,7 +314,8 @@ export function generateSodium({
     .map((id, k) => ({ k, s: f[id] * rest[k] * rest[k] }))
     .sort((p, q) => q.s - p.s)[0].k;
   const NCm2 =
-    N ?? columnFromPeakDepth(tau0, f[ids[strong]], rest[strong], intrinsicSigmaKmS);
+    N ??
+    columnFromPeakDepth(tau0, f[ids[strong]], rest[strong], intrinsicSigmaKmS);
   const lambdaMid = 0.5 * (windowNm[0] + windowNm[1]);
   const sigmaLsfNm = lambdaMid / resolvingPower / FWHM_PER_SIGMA;
   const comps = ids.map((id, k) => {
@@ -318,12 +334,15 @@ export function generateSodium({
   // build it plainly: sub-sample m of pixel i sits at log10 position (i - 0.5 + (m + 0.5) / sub) step
   for (let i = 0; i < samples; i++)
     for (let m = 0; m < sub; m++)
-      fineLambda[i * sub + m] = 10 ** (log0 + (i - 0.5 + (m + 0.5) / sub) * log10Step);
+      fineLambda[i * sub + m] =
+        10 ** (log0 + (i - 0.5 + (m + 0.5) / sub) * log10Step);
   const depth = new Float64Array(fine); // 1 - exp(-tau) before the line-spread function
   const ewTruth = comps.map(() => 0);
   for (let j = 0; j < fine; j++) {
     let tau = 0;
-    for (const c of comps) tau += c.tau0 * Math.exp((-0.5 * ((fineLambda[j] - c.centre) / c.sigmaNm) ** 2));
+    for (const c of comps)
+      tau +=
+        c.tau0 * Math.exp(-0.5 * ((fineLambda[j] - c.centre) / c.sigmaNm) ** 2);
     depth[j] = 1 - Math.exp(-tau);
   }
   // the equivalent width of each line alone, by the fine grid (the convolution conserves area)
@@ -331,9 +350,14 @@ export function generateSodium({
     let s = 0;
     for (let j = 0; j < fine; j++) {
       if (Math.abs(fineLambda[j] - c.centre) > 10 * c.sigmaNm) continue;
-      const w =
-        fineLambda[j] * Math.LN10 * stepFine;
-      s += (1 - Math.exp(-c.tau0 * Math.exp(-0.5 * ((fineLambda[j] - c.centre) / c.sigmaNm) ** 2))) * w;
+      const w = fineLambda[j] * Math.LN10 * stepFine;
+      s +=
+        (1 -
+          Math.exp(
+            -c.tau0 *
+              Math.exp(-0.5 * ((fineLambda[j] - c.centre) / c.sigmaNm) ** 2)
+          )) *
+        w;
     }
     ewTruth[k] = s;
   });
@@ -387,8 +411,7 @@ export function generateSodium({
         f: c.f,
         tau0: c.tau0,
         equivalentWidthNm: ewTruth[k],
-        equivalentWidthLinearNm:
-          c.tau0 * c.sigmaNm * Math.sqrt(2 * Math.PI),
+        equivalentWidthLinearNm: c.tau0 * c.sigmaNm * Math.sqrt(2 * Math.PI),
         fInvented: true,
       })),
     },

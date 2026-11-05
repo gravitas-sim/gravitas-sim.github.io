@@ -34,20 +34,32 @@ const kOf = (lambdaNm, RV, law) => RV * extinctionRatio(lambdaNm, RV, law);
  * @param {number} o.RV
  * @param {object} o.law - the extinction pack's LAW
  */
-export function balmerDecrement({ numerator, denominator, intrinsic, RV, law } = {}) {
+export function balmerDecrement({
+  numerator,
+  denominator,
+  intrinsic,
+  RV,
+  law,
+} = {}) {
   if (!intrinsic || !(intrinsic.ratio > 0))
     return refused(
       'missing-intrinsic-ratio',
       'the intrinsic ratio is an input with a source; there is no default'
     );
   if (typeof intrinsic.source !== 'string' || !intrinsic.source.trim())
-    return refused('missing-source', 'the intrinsic ratio needs a source string');
+    return refused(
+      'missing-source',
+      'the intrinsic ratio needs a source string'
+    );
   if (!(Number.isFinite(RV) && RV > 0))
     return refused('missing-RV', 'R_V is an input; there is no default');
   if (!law) return refused('missing-law', 'the extinction law is required');
   for (const l of [numerator, denominator]) {
     if (!l || !(l.flux > 0) || !Number.isFinite(l.flux) || !(l.sigma > 0))
-      return refused('bad-flux', 'each line needs a positive flux and a positive error');
+      return refused(
+        'bad-flux',
+        'each line needs a positive flux and a positive error'
+      );
     if (l.flux / l.sigma < MIN_LINE_SNR)
       return refused(
         'low-signal',
@@ -69,8 +81,11 @@ export function balmerDecrement({ numerator, denominator, intrinsic, RV, law } =
   const R = numerator.flux / denominator.flux;
   const ebv = (2.5 * Math.log10(R / intrinsic.ratio)) / (k2 - k1);
   const sigma =
-    ((2.5 / Math.LN10) / (k2 - k1)) *
-    Math.hypot(numerator.sigma / numerator.flux, denominator.sigma / denominator.flux);
+    (2.5 / Math.LN10 / (k2 - k1)) *
+    Math.hypot(
+      numerator.sigma / numerator.flux,
+      denominator.sigma / denominator.flux
+    );
   const interval = covarianceInterval(ebv, sigma);
   const flags = [];
   if (R < intrinsic.ratio) flags.push('below-intrinsic');
@@ -107,7 +122,10 @@ export function deredden({ flux, lambdaNm, ebv, sigmaEbv = 0, RV, law } = {}) {
     return refused('missing-RV', 'R_V is an input; there is no default');
   const k = kOf(lambdaNm, RV, law);
   if (!Number.isFinite(k))
-    return refused('outside-law', 'the wavelength lies outside the extinction law');
+    return refused(
+      'outside-law',
+      'the wavelength lies outside the extinction law'
+    );
   const factor = 10 ** (0.4 * k * ebv);
   return {
     status: 'ok',
