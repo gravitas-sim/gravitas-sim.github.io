@@ -155,7 +155,7 @@
     "net": "N_s ~ Poisson(T (S + r B)), N_b ~ Poisson(T_b B), S >= 0: the interval of S is the set where the profile deviance (B profiled out) is at most the chi-square quantile on one degree of freedom at the level; the estimate is max(0, N_s / T - r N_b / T_b)",
     "hardness": "HR = (H - S) / (H + S) of the source-region counts in the two stated bands; total form: the exact conditional-binomial (Clopper-Pearson) interval of p = H / (H + S) at the level, HR = 2 p - 1; net form: the profile deviance in HR with the two net rates and the two backgrounds profiled out, S >= 0",
     "binByCounts": "greedy: consecutive bins are merged until the chosen band's source-region counts reach minCounts; a group never joins bins whose gap (start of the next minus stop of the previous) exceeds maxGap; the last group of a run that cannot reach minCounts is kept and flagged short",
-    "outburst": "q = the median rate over bins with exposure above 0; a bin is elevated when its Garwood lower bound at level 0.9973 exceeds factor * q (factor 3); a run is at least 3 consecutive elevated bins with gaps at most maxGap; if more than half of the live bins are elevated there is no quiet level and the search is refused (noQuietLevel)",
+    "outburst": "q = the lower quartile of the rates over bins with exposure above 0 (the 25th percentile by linear interpolation; AM1); a bin is elevated when its Garwood lower bound at level 0.9973 exceeds factor * q (factor 3); a run is at least 3 consecutive elevated bins with gaps at most maxGap; if more than half of the live bins are elevated there is no quiet level and the search is refused (noQuietLevel)",
     "period": "generalized Lomb-Scargle (js/measure/periodogram.js: floating mean, power the weighted variance fraction), t the bin midpoint, y = counts / exposure, weight proportional to exposure under the constant-rate null with rate lambda = total counts / total exposure; grid f = 1/maxPeriod + k df, df = 1 / (oversample T), T = the range of the midpoints, oversample 5, as the existing module; significance p = (1 + #{simulated maxima >= observed maximum}) / (nSim + 1) over the whole grid, each simulation Poisson(lambda * exposure_i) per bin; nSim at least 99 (default 999); minimum period at least twice the widest bin",
     "periodInterval": "parametric bootstrap: 200 Poisson series from the best sinusoid plus floating mean, each searched in a window of plus and minus 2 frequency resolutions, the 0.6827 percentile interval of the periods",
     "alias": "window W(f) = |sum w exp(2 pi i f t)|^2 / (sum w)^2 on the grid; a sampling frequency is a local maximum of W with W >= 0.25 and f >= 2 / T; delta = 1 / T; a candidate is flagged atSampling when it lies within delta of a sampling frequency, and aliasPair when another local maximum of the periodogram with power >= 0.8 of the highest has |f - f'| or f + f' within delta of a sampling frequency; both members of a pair are flagged",
@@ -888,5 +888,18 @@
       }
     }
   ],
-  "amendments": []
+  "amendments": [
+    {
+      "id": "AM1",
+      "check": "A6.outburstRecovery, rules.outburst",
+      "what": "the rule as committed took q as the MEDIAN rate and refused when more than half of the live bins are elevated (above factor times q). With q the median that refusal can never fire: more than half of the bins above 3 times the median would put the median above 3 times itself. So the refusal clause, and the 'high' case of A6 that requires it, contradicted the rule's own definition of q. q becomes the lower quartile (25th percentile by linear interpolation of the sorted rates), which stays at the quiet level when up to about three quarters of a series is quiet and sits in the bright level only when more than three quarters of it is bright. The factor, the level, minBins, the refusal condition (more than half elevated) and every bound of A6 are unchanged. A specification slip found by reasoning about the rule before the validator existed, not a result.",
+      "when": "2026-11-04, before any validator run"
+    },
+    {
+      "id": "AM2",
+      "check": "D5.aliasFlags (i)",
+      "what": "leg (i) says the candidate is found at 0.007 or its reflection 0.003. On a series sampled once per 100 s every frequency k/100 +/- 0.007 (k = 0 to 5: 0.003, 0.007, 0.013, 0.017, 0.023, 0.027, ...) is an exact alias of the true one, with powers that differ only by the dwell's own smearing (a fraction of a percent to two percent) and by noise, so which alias is highest is not decided by the sampling. The leg's purpose is that the result is never reported clean, so (i) is read as: the candidate lies within 2 grid steps of one of the frequencies |k/100 +/- 0.007| (k = 0 to 5) inside the searched range, AND carries an aliasPair or atSampling flag, AND the result is not clean. The (ii) and (iii) clauses and the frequencies are unchanged. A specification slip found by reasoning about the sampling before the validator existed, not a result.",
+      "when": "2026-11-04, before any validator run"
+    }
+  ]
 }
