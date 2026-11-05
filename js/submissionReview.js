@@ -1356,10 +1356,12 @@ function wire() {
   $('paste-go').addEventListener('click', async () => {
     const text = $('paste').value;
     if (!text.trim()) return;
+    // Emptied before the await, not after: a second report pasted while this
+    // one is read would otherwise be wiped when the first finishes.
+    $('paste').value = '';
     if (isContext(text.trim()))
       await takeContext(t('sub.paste.source'), text.trim());
     else await accept(t('sub.paste.source'), text, 'token');
-    $('paste').value = '';
   });
   $('clear').addEventListener('click', clearAll);
   $('archiveSave')?.addEventListener('click', archive);
