@@ -1,0 +1,181 @@
+{
+  "format": "gravitas.xray-failed-legs/1",
+  "label": "These legs crossed a committed bound and stay failing; only Carl resets one.",
+  "legs": [
+    {
+      "id": "A4.periodRecovery",
+      "measured": {
+        "recovered": "19 of 20",
+        "noFalseAlarmField": true,
+        "failing": [
+          {
+            "seed": 243100,
+            "period": 553.698,
+            "errorInResolutions": 7.19,
+            "p": 0.005,
+            "flags": [],
+            "truePeakOverTop": 0.932
+          }
+        ]
+      }
+    },
+    {
+      "id": "B6.netHardnessOracle",
+      "measured": {
+        "worstAbsolute": "a case the kernel refuses",
+        "worstOverTheCasesTheKernelAnswers": 1.13e-8,
+        "cases": [
+          {
+            "case": [
+              12,
+              8,
+              30,
+              10
+            ],
+            "kernel": [
+              0.3014,
+              0.61853
+            ],
+            "oracle": [
+              0.3014,
+              0.61853
+            ]
+          },
+          {
+            "case": [
+              40,
+              6,
+              8,
+              4
+            ],
+            "kernel": [
+              -0.79814,
+              -0.56826
+            ],
+            "oracle": [
+              -0.79814,
+              -0.56826
+            ]
+          },
+          {
+            "case": [
+              5,
+              20,
+              5,
+              20
+            ],
+            "kernel": "refused noCounts",
+            "oracle": [
+              -1,
+              1
+            ]
+          },
+          {
+            "case": [
+              100,
+              10,
+              60,
+              10
+            ],
+            "kernel": [
+              -0.33628,
+              -0.17776
+            ],
+            "oracle": [
+              -0.33628,
+              -0.17776
+            ]
+          },
+          {
+            "case": [
+              0,
+              2,
+              9,
+              3
+            ],
+            "kernel": [
+              0.88197,
+              1
+            ],
+            "oracle": [
+              0.88197,
+              1
+            ]
+          },
+          {
+            "case": [
+              25,
+              25,
+              25,
+              25
+            ],
+            "kernel": [
+              -0.19413,
+              0.19413
+            ],
+            "oracle": [
+              -0.19413,
+              0.19413
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "C3.netRateCoverage",
+      "measured": {
+        "minimum": 0.8724,
+        "mean": 0.951,
+        "per": [
+          {
+            "S": 0,
+            "B": 1,
+            "coverage": 0.9894
+          },
+          {
+            "S": 0,
+            "B": 4,
+            "coverage": 0.9814
+          },
+          {
+            "S": 0.5,
+            "B": 1,
+            "coverage": 0.981
+          },
+          {
+            "S": 0.5,
+            "B": 4,
+            "coverage": 0.9736
+          },
+          {
+            "S": 2,
+            "B": 1,
+            "coverage": 0.8724
+          },
+          {
+            "S": 2,
+            "B": 4,
+            "coverage": 0.9261
+          },
+          {
+            "S": 6,
+            "B": 1,
+            "coverage": 0.9396
+          },
+          {
+            "S": 6,
+            "B": 4,
+            "coverage": 0.9448
+          }
+        ]
+      }
+    },
+    {
+      "id": "C5.periodIntervalCoverage",
+      "measured": {
+        "coverage": 0.54,
+        "medianHalfWidthSeconds": 0.654
+      }
+    }
+  ]
+}

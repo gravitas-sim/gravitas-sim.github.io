@@ -1122,6 +1122,20 @@
       "student": false
     },
     {
+      "file": "HIGH_ENERGY.md",
+      "kind": "feature",
+      "purpose": "The X-ray counts kernel: Poisson rates, hardness, binning, outbursts, the period search with simulated significance, validation and failed legs (Prompt 243).",
+      "owner": 243,
+      "student": false
+    },
+    {
+      "file": "X_RAY_COUNTS_GATE.md",
+      "kind": "gate",
+      "purpose": "The X-ray counts contract and gate: the committed rules, the verdict function, what was measured and the files requested from Carl (Prompt 243, Part A).",
+      "owner": 243,
+      "student": false
+    },
+    {
       "file": "PULSARS.md",
       "kind": "feature",
       "purpose": "The pulsar kernel: dispersion constant, de-dispersion, folding, period and DM with intervals, the labelled DM distance, synthetic series, validation and failed legs (Prompt 242).",

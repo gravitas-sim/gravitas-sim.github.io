@@ -548,6 +548,9 @@ export const NEVER_PRECACHED = [
   // Prompt 241: the HI spectroscopy kernel and its validation group. No shipped module imports them (the viewer's radio mode and the lessons wait for
   // Carl, D-R10-241-03), so no page can fetch one; installed they would take the first-visit tier 14.2 KB over its ceiling (Node 22, over v3 c0c877cc).
   /^(js\/kernels\/radio\/.*|js\/validation\/groups\/(radio|pulsars)\.js)$/,
+  // Prompt 243: the X-ray counts kernel and its validation group. No shipped module imports them (the lessons and the light-curve counts mode wait for Carl),
+  // and the idle precache has no room (checkpoint IV, term 2), so no page can fetch one and they stay out of the install.
+  /^(js\/kernels\/xray\/.*|js\/validation\/groups\/xray\.js)$/,
   // Prompt 247: the ISM kernel (line identification, equivalent widths, the linear column density, the Balmer decrement) and its validation group. No shipped
   // module imports them (the viewer's overlays, the three investigations and the model section wait for Carl, D-R10-247-01), so no page can fetch one.
   /^(js\/kernels\/ism\/.*|js\/validation\/groups\/ism\.js)$/,
