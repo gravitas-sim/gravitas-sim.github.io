@@ -20,7 +20,7 @@ import { covarianceInterval } from '../statistics/intervals.js';
 import { chi2Quantile } from '../statistics/special.js';
 import { cubicSpline } from '../../numeric/interp.js';
 import { checkSpectrum, robustSigma } from '../ism/spectrum.js';
-import { checkLogGrid, highPass } from './grid.js';
+import { checkLogGrid, highPass, HIGH_PASS_WINDOW } from './grid.js';
 
 const { Math, Number, Float64Array } = globalThis;
 
@@ -110,12 +110,17 @@ function checkTemplate(template, spec) {
  * The redshift from the direct lagged cross-correlation with a template (GALAXY-RULE-1, X1 to X6).
  * @param {{lambdaNm: ArrayLike<number>, flux: ArrayLike<number>, sigma?: ArrayLike<number>|null, medium: string, resolvingPower?: number, lsfFwhmNm?: number}} spec
  * @param {{lambdaNm: ArrayLike<number>, flux: ArrayLike<number>, medium: string, resolvingPower: number, source: string, label?: string}} template
- * @param {{zRange: {min: number, max: number}, keepProfile?: boolean}} o
+ * @param {{zRange: {min: number, max: number}, keepProfile?: boolean, refuseMisfit?: boolean, highPassWindow?: number}} o highPassWindow is the linear high-pass width in samples, 101 unless a broad-line caller (Prompt 252) widens it
  */
 export function crossCorrelate(
   spec,
   template,
-  { zRange, keepProfile = false, refuseMisfit = false } = {}
+  {
+    zRange,
+    keepProfile = false,
+    refuseMisfit = false,
+    highPassWindow = HIGH_PASS_WINDOW,
+  } = {}
 ) {
   const bad = checkSpectrum(spec, { needResolution: true });
   if (bad) return bad;
@@ -179,8 +184,8 @@ export function crossCorrelate(
     const s = errorsFromScatter ? sig0 : spec.sigma[i];
     w[i] = 1 / (s * s);
   }
-  const f = highPass(spec.flux);
-  const t = highPass(template.flux);
+  const f = highPass(spec.flux, highPassWindow);
+  const t = highPass(template.flux, highPassWindow);
   let vf = 0;
   let vt = 0;
   for (let i = 0; i < N; i++) vf += f[i] * f[i];

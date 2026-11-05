@@ -1,0 +1,38 @@
+{
+  "format": "gravitas.agn-constants-source/1",
+  "reader": "tools/agn-oracle/constants.py (offline, no network)",
+  "astropy": "6.0.1",
+  "note": "read from the installed library, not typed and not fetched; the library's reference string says which edition of the constants it holds, which is not necessarily the current one; GM_sun is the IAU nominal value as astropy holds it",
+  "GM_sun": {
+    "name": "Nominal solar mass parameter",
+    "value": 1.3271244e+20,
+    "unit": "m3 / s2",
+    "uncertainty": 0.0,
+    "reference": "IAU 2015 Resolution B 3",
+    "system": null
+  },
+  "m_p": {
+    "name": "Proton mass",
+    "value": 1.67262192369e-27,
+    "unit": "kg",
+    "uncertainty": 5.1e-37,
+    "reference": "CODATA 2018",
+    "system": null
+  },
+  "sigma_T": {
+    "name": "Thomson scattering cross-section",
+    "value": 6.6524587321e-29,
+    "unit": "m2",
+    "uncertainty": 6e-38,
+    "reference": "CODATA 2018",
+    "system": null
+  },
+  "c": {
+    "name": "Speed of light in vacuum",
+    "value": 299792458.0,
+    "unit": "m / s",
+    "uncertainty": 0.0,
+    "reference": "CODATA 2018",
+    "system": null
+  }
+}
