@@ -548,6 +548,9 @@ export const NEVER_PRECACHED = [
   // Prompt 241: the HI spectroscopy kernel and its validation group. No shipped module imports them (the viewer's radio mode and the lessons wait for
   // Carl, D-R10-241-03), so no page can fetch one; installed they would take the first-visit tier 14.2 KB over its ceiling (Node 22, over v3 c0c877cc).
   /^(js\/kernels\/radio\/.*|js\/validation\/groups\/(radio|pulsars)\.js)$/,
+  // Prompt 247: the ISM kernel (line identification, equivalent widths, the linear column density, the Balmer decrement) and its validation group. No shipped
+  // module imports them (the viewer's overlays, the three investigations and the model section wait for Carl, D-R10-247-01), so no page can fetch one.
+  /^(js\/kernels\/ism\/.*|js\/validation\/groups\/ism\.js)$/,
   // Prompt 214: the strategy kernel, planner extension, panels and the strategy lesson's one new file (D-R10-214-06).
   /^js\/kernels\/strategy\//,
   /^js\/data\/investigations\/(es\/|depth\/|depth\/es\/)?(why-the-period-is-wrong|strategy-sequence)\.js$/,

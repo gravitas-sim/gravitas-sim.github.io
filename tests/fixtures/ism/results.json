@@ -1,0 +1,794 @@
+{
+  "format": "gravitas.ism-results/1",
+  "rows": [
+    {
+      "id": "A1.electronRadius",
+      "status": "pass",
+      "measured": {
+        "derivation": 0,
+        "consistency": 3.0102987334438345e-12,
+        "inputsEqual": true,
+        "formula": 0,
+        "electronRadiusCm": 2.817940326213411e-13
+      },
+      "note": ""
+    },
+    {
+      "id": "A10.sampling",
+      "status": "pass",
+      "measured": {
+        "pixelsPerFwhm": [
+          2.413,
+          1.206,
+          0.8042
+        ],
+        "verdicts": [
+          "ok",
+          "undersampled",
+          "severely-undersampled"
+        ],
+        "formula": 0,
+        "binnedFit": {
+          "status": "not-constrained",
+          "code": "severely-undersampled"
+        }
+      },
+      "note": ""
+    },
+    {
+      "id": "A11.identification",
+      "status": "pass",
+      "measured": {
+        "detected": 10,
+        "labels": [
+          "identified"
+        ],
+        "names": [
+          "ca2-h",
+          "ca2-k",
+          "h-alpha",
+          "h-beta",
+          "h-delta",
+          "h-gamma",
+          "he1-4472",
+          "he1-5876",
+          "he2-4686",
+          "na1-d2"
+        ],
+        "redshiftError": -0.000003870714727396626,
+        "matched": 10
+      },
+      "note": ""
+    },
+    {
+      "id": "A2.curveOfGrowth",
+      "status": "pass",
+      "measured": {
+        "worstRelative": 5.459342090718472e-15,
+        "atCut": 0.9020605987503235,
+        "per": [
+          {
+            "tau0": 0.01,
+            "ratio": 0.99647407,
+            "series": 0.9964740678024315
+          },
+          {
+            "tau0": 0.1,
+            "ratio": 0.96558645,
+            "series": 0.9655864451379949
+          },
+          {
+            "tau0": 0.3,
+            "ratio": 0.9020606,
+            "series": 0.9020605987503243
+          }
+        ]
+      },
+      "note": ""
+    },
+    {
+      "id": "A3.noiseFreeVelocity",
+      "status": "pass",
+      "measured": {
+        "worstVelocityErrorKmS": 0.016146490264475233,
+        "worstSigmaRelative": 0.00010124809313942203,
+        "per": [
+          {
+            "v": -300,
+            "error": -0.01615
+          },
+          {
+            "v": -100,
+            "error": -0.01561
+          },
+          {
+            "v": 0,
+            "error": -0.0154
+          },
+          {
+            "v": 150,
+            "error": -0.01492
+          },
+          {
+            "v": 300,
+            "error": -0.01489
+          }
+        ]
+      },
+      "note": ""
+    },
+    {
+      "id": "A4.noiseFreeEquivalentWidth",
+      "status": "pass",
+      "measured": {
+        "worstDirect": 0.0000026952141217382726,
+        "worstGauss": 0.00010957806335367,
+        "continuumSystematic": {
+          "predictedDiffNm": 0.014866657312986087,
+          "measuredDiffNm": 0.014760912362992817,
+          "relativeError": 0.00711289348822891,
+          "sameSign": true
+        },
+        "per": [
+          {
+            "id": "h-beta",
+            "direct": 6.011e-7,
+            "gauss": 0.0001096
+          },
+          {
+            "id": "ca2-k",
+            "direct": 3.646e-7,
+            "gauss": 0.00006706
+          },
+          {
+            "id": "h-beta",
+            "direct": 6.088e-7,
+            "gauss": 0.00004499
+          },
+          {
+            "id": "ca2-k",
+            "direct": 3.644e-7,
+            "gauss": 0.00007141
+          },
+          {
+            "id": "h-beta",
+            "direct": 6.006e-7,
+            "gauss": 0.0001036
+          },
+          {
+            "id": "ca2-k",
+            "direct": 0.000002695,
+            "gauss": 0.000006917
+          }
+        ]
+      },
+      "note": ""
+    },
+    {
+      "id": "A5.noiseFreeColourExcess",
+      "status": "pass",
+      "measured": {
+        "worstErrorMag": 0.00016368493496488057,
+        "per": [
+          {
+            "ebv": 0.1,
+            "error": 0.0001636
+          },
+          {
+            "ebv": 0.5,
+            "error": 0.0001636
+          },
+          {
+            "ebv": 1,
+            "error": 0.0001637
+          },
+          {
+            "ebv": 1.5,
+            "error": 0.0001637
+          }
+        ]
+      },
+      "note": ""
+    },
+    {
+      "id": "A6.noReddening",
+      "status": "pass",
+      "measured": {
+        "zero": 0,
+        "below": -0.225726747320272,
+        "belowFlags": [
+          "below-intrinsic"
+        ],
+        "noisyEbv": -0.225726747320272,
+        "noisyInterval": [
+          -0.486021332173718,
+          0.03456783753317397
+        ],
+        "noisyNote": "no reddening detected: the one-sigma interval contains zero"
+      },
+      "note": ""
+    },
+    {
+      "id": "A7.dereddening",
+      "status": "pass",
+      "measured": {
+        "recovered": 0.5000642112830298,
+        "truth": 0.5,
+        "relative": 0.000128422566059605
+      },
+      "note": ""
+    },
+    {
+      "id": "A8.mediumConvention",
+      "status": "pass",
+      "measured": {
+        "mismatch": "medium-mismatch",
+        "noMedium": "medium-missing",
+        "airMinusVacuumKmS": 0.00031490312495918715,
+        "offsetKmS": 82.8190032522812,
+        "offsetCheck": 0,
+        "wrongMediumMovesVelocityByKmS": -82.80756211081025
+      },
+      "note": ""
+    },
+    {
+      "id": "A9.pairResolution",
+      "status": "pass",
+      "measured": {
+        "halfFwhmDip": 0,
+        "threeFwhmDip": 0.9960937500000568,
+        "sodiumSeparationNm": 0.5974999999999682,
+        "sodiumDoublet": [
+          {
+            "R": 1800,
+            "separationFwhm": 1.824,
+            "dip": 0.8005,
+            "resolved": true
+          },
+          {
+            "R": 30000,
+            "separationFwhm": 30.39,
+            "dip": 1,
+            "resolved": true
+          }
+        ]
+      },
+      "note": ""
+    },
+    {
+      "id": "B1.equivalentWidthVsIndependent",
+      "status": "pass",
+      "measured": {
+        "n": 24,
+        "failed": 0,
+        "worstWidthRelative": 7.12697724505013e-15,
+        "worstSigmaRelative": 8.068494547387925e-16,
+        "worstContinuumRelative": 3.2912777456386464e-13
+      },
+      "note": ""
+    },
+    {
+      "id": "B2.gaussianCentreVsScipy",
+      "status": "pass",
+      "measured": {
+        "n": 24,
+        "failed": 0,
+        "worstCentreInSigma": 2.3412769060681343e-7,
+        "worstFluxInSigma": 2.3741190003728037e-7,
+        "worstUncertaintyRelative": 4.359536689336541e-8
+      },
+      "note": ""
+    },
+    {
+      "id": "B3.extinctionVsIndependent",
+      "status": "pass",
+      "measured": {
+        "worstRatioRelative": 0,
+        "worstColourExcessMag": 5.551115123125783e-17,
+        "limitation": "the coefficient table is shared between kernel and oracle, so a transcription error in the pack's table would not be caught here; the pack's own validation record and the CCM89 values at the standard bands (not typed here) are the check on it"
+      },
+      "note": ""
+    },
+    {
+      "id": "B4.columnVsAstropy",
+      "status": "pass",
+      "measured": {
+        "n": 12,
+        "worstRelative": 3.010390019449527e-12,
+        "electronRadiusRatio": 1.0000000000030103
+      },
+      "note": ""
+    },
+    {
+      "id": "B5.authenticEquivalentWidthVsIndependent",
+      "status": "pass",
+      "measured": {
+        "worstRelative": 2.547703822257676e-15,
+        "per": [
+          {
+            "id": "h-beta",
+            "widthNm": 1.1629029995324647,
+            "sigmaNm": 0.016341524104850465,
+            "relativeToOracle": 2.547703822257676e-15
+          },
+          {
+            "id": "h-gamma",
+            "widthNm": 1.2597009588827646,
+            "sigmaNm": 0.023361023553417366,
+            "relativeToOracle": 1.1881147053408422e-15
+          },
+          {
+            "id": "h-delta",
+            "widthNm": 1.3589351145824131,
+            "sigmaNm": 0.016377077492489348,
+            "relativeToOracle": 2.118477459451925e-16
+          }
+        ]
+      },
+      "note": ""
+    },
+    {
+      "id": "B6.toolkit",
+      "status": "not-run",
+      "measured": null,
+      "note": "No cited independent spectral tool is installed and installing one is a download; the oracle of B1 to B5 is an independent implementation by the same author, not a cited tool. The request is in ISM.md."
+    },
+    {
+      "id": "C1.velocityCoverage",
+      "status": "pass",
+      "measured": {
+        "n": 300,
+        "coverage": 0.67,
+        "meanZ": 0.04556072810581405,
+        "sdZ": 1.0239410779413358,
+        "failedFits": 0
+      },
+      "note": ""
+    },
+    {
+      "id": "C2.colourExcessCoverage",
+      "status": "pass",
+      "measured": {
+        "n": 300,
+        "coverage": 0.6933333333333334,
+        "meanZ": -0.10080827558740277,
+        "sdZ": 0.9804125875916385,
+        "refused": 0
+      },
+      "note": ""
+    },
+    {
+      "id": "C3.equivalentWidthCoverage",
+      "status": "pass",
+      "measured": {
+        "direct": {
+          "n": 300,
+          "coverage": 0.6766666666666666,
+          "meanZ": 0.043971267446955405,
+          "sdZ": 0.9828377803326841
+        },
+        "gaussian": {
+          "n": 300,
+          "coverage": 0.68,
+          "meanZ": -0.028870344966595164,
+          "sdZ": 0.9971016359076926
+        },
+        "failed": 0
+      },
+      "note": ""
+    },
+    {
+      "id": "C4.columnCoverage",
+      "status": "pass",
+      "measured": {
+        "n": 283,
+        "coverage": 0.6501766784452296,
+        "meanZ": -0.42701426841110796,
+        "sdZ": 1.014977240847405,
+        "passRate": 0.9433333333333334,
+        "meanFractionalBias": -0.02517349046007122,
+        "refusalCodes": {
+          "saturated": 16,
+          "no-detection": 1
+        }
+      },
+      "note": ""
+    },
+    {
+      "id": "C5.classification",
+      "status": "pass",
+      "measured": {
+        "n": 200,
+        "narrowOffsetLines": {
+          "interstellar-candidate": 200
+        },
+        "stellarLines": {
+          "stellar": 200
+        },
+        "interstellarRate": 1,
+        "stellarRate": 1
+      },
+      "note": ""
+    },
+    {
+      "id": "D1.saturatedLine",
+      "status": "pass",
+      "measured": {
+        "doublet": {
+          "code": "saturated",
+          "ratio": 1.3558286379323146,
+          "ratioLinear": 2.2454432190887377
+        },
+        "singleSaturated": {
+          "code": "saturated",
+          "regime": {
+            "test": "T2 peak depth",
+            "tested": true,
+            "tau0": 1.6704512260937388,
+            "passed": false
+          }
+        },
+        "singleUnresolved": {
+          "code": "linear-regime-untested"
+        }
+      },
+      "note": ""
+    },
+    {
+      "id": "D10.labelAndManifest",
+      "status": "pass",
+      "measured": {
+        "labelled": true,
+        "manifest": true,
+        "keys": true,
+        "deterministic": true
+      },
+      "note": ""
+    },
+    {
+      "id": "D2.blendFlagged",
+      "status": "pass",
+      "measured": {
+        "blend": {
+          "status": "ok",
+          "broadened": true,
+          "widthExcess": 0.28581752098463303,
+          "resolvedByPairRule": false
+        },
+        "far": {
+          "status": "ok",
+          "broadened": false,
+          "widthExcess": 0.08016684253897613,
+          "resolvedByPairRule": true
+        }
+      },
+      "note": ""
+    },
+    {
+      "id": "D3.mediumRefusals",
+      "status": "pass",
+      "measured": {
+        "missingSpectrumMedium": "medium-missing",
+        "missingRestMedium": "medium-missing",
+        "mismatch": "medium-mismatch",
+        "noRestWavelength": "no-rest-wavelength"
+      },
+      "note": ""
+    },
+    {
+      "id": "D4.decrementRefusals",
+      "status": "pass",
+      "measured": {
+        "codes": {
+          "missingIntrinsic": "missing-intrinsic-ratio",
+          "missingSource": "missing-source",
+          "missingRV": "missing-RV",
+          "lowSignal": "low-signal",
+          "outsideLaw": "outside-law",
+          "badFlux": "bad-flux"
+        },
+        "belowFlags": [
+          "below-intrinsic"
+        ],
+        "noisyNote": "no reddening detected: the one-sigma interval contains zero"
+      },
+      "note": ""
+    },
+    {
+      "id": "D5.undersampledRefused",
+      "status": "pass",
+      "measured": {
+        "binned": {
+          "status": "not-constrained",
+          "code": "severely-undersampled"
+        },
+        "column": "linear-regime-untested",
+        "onePointFivePixels": {
+          "status": "ok",
+          "verdict": "undersampled",
+          "pixelsPerFwhm": 1.4998273127497108
+        }
+      },
+      "note": ""
+    },
+    {
+      "id": "D6.classificationAmbiguity",
+      "status": "pass",
+      "measured": {
+        "narrowAtStar": "ambiguous",
+        "broadOffset": "ambiguous",
+        "note": "a class from width and velocity offset is evidence, never a proof; a narrow line at the star's own velocity can be stellar or interstellar"
+      },
+      "note": ""
+    },
+    {
+      "id": "D7.identificationRefusals",
+      "status": "pass",
+      "measured": {
+        "ambiguous": [
+          "invented-a",
+          "invented-b"
+        ],
+        "unidentified": "unidentified",
+        "band": "unidentified diffuse band",
+        "noSource": "missing-source",
+        "tie": "redshift-tie",
+        "tieCandidates": [
+          -0.08180000000000001,
+          0.009999999999999995
+        ]
+      },
+      "note": ""
+    },
+    {
+      "id": "D8.noiseOnly",
+      "status": "pass",
+      "measured": {
+        "n": 100,
+        "featuresFound": 0
+      },
+      "note": ""
+    },
+    {
+      "id": "D9.badInputs",
+      "status": "pass",
+      "measured": {
+        "notIncreasing": "not-increasing",
+        "notFinite": "not-finite",
+        "tooFew": "too-few-samples",
+        "tooFewContinuum": "too-few-continuum-samples",
+        "emptyWindow": "empty-window",
+        "badF": "bad-oscillator-strength",
+        "missingSourceF": "missing-source",
+        "missingSourceIntrinsic": "missing-source",
+        "missingSourceBands": "missing-source"
+      },
+      "note": ""
+    },
+    {
+      "id": "E1.authenticNebula",
+      "status": "not-run",
+      "measured": null,
+      "note": "No SDSS H II region spectrum is in the tree and none was fetched; the exact request, with the published decrement the contract needs, is in ISM.md (Rights and the authentic legs)."
+    },
+    {
+      "id": "E2.authenticStarSodium",
+      "status": "not-run",
+      "measured": null,
+      "note": "No SDSS stellar spectrum with a published interstellar sodium measurement is in the tree and none was fetched; the request is in ISM.md."
+    },
+    {
+      "id": "E3.inTreeStars",
+      "status": "reported",
+      "measured": {
+        "resolvingPowerDerivedFromPack": 1974,
+        "stars": [
+          {
+            "star": "a",
+            "z": -0.0008099225,
+            "lines": [
+              {
+                "id": "h-beta",
+                "status": "ok",
+                "widthNm": 1.1629,
+                "sigmaNm": 0.016342,
+                "constantContinuumSystematicNm": 0.000845
+              },
+              {
+                "id": "h-gamma",
+                "status": "ok",
+                "widthNm": 1.2597,
+                "sigmaNm": 0.023361,
+                "constantContinuumSystematicNm": 0.000647
+              },
+              {
+                "id": "h-delta",
+                "status": "ok",
+                "widthNm": 1.3589,
+                "sigmaNm": 0.016377,
+                "constantContinuumSystematicNm": 0.00116
+              }
+            ],
+            "sodium": {
+              "pixelsPerFwhm": 0.7333,
+              "verdict": "severely-undersampled",
+              "fit": {
+                "status": "not-constrained",
+                "code": "severely-undersampled"
+              },
+              "columnDensity": {
+                "status": "refused",
+                "code": "linear-regime-untested"
+              },
+              "pairMidpointNm": 588.98
+            }
+          },
+          {
+            "star": "g",
+            "z": -0.0002128853,
+            "lines": [
+              {
+                "id": "h-beta",
+                "status": "ok",
+                "widthNm": 0.27966,
+                "sigmaNm": 0.059123,
+                "constantContinuumSystematicNm": 0.00101
+              },
+              {
+                "id": "h-gamma",
+                "status": "ok",
+                "widthNm": 0.11936,
+                "sigmaNm": 0.10896,
+                "constantContinuumSystematicNm": 0.0131
+              },
+              {
+                "id": "h-delta",
+                "status": "ok",
+                "widthNm": 0.15824,
+                "sigmaNm": 0.11644,
+                "constantContinuumSystematicNm": 0.00921
+              }
+            ],
+            "sodium": {
+              "pixelsPerFwhm": 0.7333,
+              "verdict": "severely-undersampled",
+              "fit": {
+                "status": "not-constrained",
+                "code": "severely-undersampled"
+              },
+              "columnDensity": {
+                "status": "refused",
+                "code": "linear-regime-untested"
+              },
+              "pairMidpointNm": 589.332
+            }
+          },
+          {
+            "star": "k",
+            "z": 0.00003935811,
+            "lines": [
+              {
+                "id": "h-beta",
+                "status": "ok",
+                "widthNm": 0.21687,
+                "sigmaNm": 0.15025,
+                "constantContinuumSystematicNm": 0.00435
+              },
+              {
+                "id": "h-gamma",
+                "status": "ok",
+                "widthNm": -0.6809,
+                "sigmaNm": 0.30897,
+                "constantContinuumSystematicNm": 0.0186
+              },
+              {
+                "id": "h-delta",
+                "status": "ok",
+                "widthNm": -0.35401,
+                "sigmaNm": 0.27602,
+                "constantContinuumSystematicNm": 0.000213
+              }
+            ],
+            "sodium": {
+              "pixelsPerFwhm": 0.7333,
+              "verdict": "severely-undersampled",
+              "fit": {
+                "status": "not-constrained",
+                "code": "severely-undersampled"
+              },
+              "columnDensity": {
+                "status": "refused",
+                "code": "linear-regime-untested"
+              },
+              "pairMidpointNm": 589.48
+            }
+          },
+          {
+            "star": "m",
+            "z": 0.0000618252,
+            "lines": [
+              {
+                "id": "h-beta",
+                "status": "ok",
+                "widthNm": 0.30394,
+                "sigmaNm": 0.11707,
+                "constantContinuumSystematicNm": 0.041
+              },
+              {
+                "id": "h-gamma",
+                "status": "ok",
+                "widthNm": -0.49566,
+                "sigmaNm": 0.26076,
+                "constantContinuumSystematicNm": 0.0188
+              },
+              {
+                "id": "h-delta",
+                "status": "ok",
+                "widthNm": -0.010638,
+                "sigmaNm": 0.22178,
+                "constantContinuumSystematicNm": 0.00334
+              }
+            ],
+            "sodium": {
+              "pixelsPerFwhm": 0.7333,
+              "verdict": "severely-undersampled",
+              "fit": {
+                "status": "not-constrained",
+                "code": "severely-undersampled"
+              },
+              "columnDensity": {
+                "status": "refused",
+                "code": "linear-regime-untested"
+              },
+              "pairMidpointNm": 589.493
+            }
+          }
+        ]
+      },
+      "note": "The resolving power is derived from the pack record's statement that SDSS resolves about 2.2 samples of its native 1e-4 dex step; the pack's own 3-sample binning (step 3e-4 dex) gives 0.73 pixels per FWHM at that resolving power, so no sodium line can be fitted on it."
+    },
+    {
+      "id": "R1.decrementMisspecification",
+      "status": "reported",
+      "measured": {
+        "base": {
+          "n": 100,
+          "meanBiasMag": 0.001347,
+          "sdMag": 0.04905
+        },
+        "rv25": {
+          "n": 100,
+          "meanBiasMag": 0.03707,
+          "sdMag": 0.05212
+        },
+        "rv40": {
+          "n": 100,
+          "meanBiasMag": -0.04489,
+          "sdMag": 0.05151
+        },
+        "ratio5": {
+          "n": 100,
+          "meanBiasMag": -0.04801,
+          "sdMag": 0.04905
+        },
+        "absorption5": {
+          "n": 100,
+          "meanBiasMag": 0.05335,
+          "sdMag": 0.05157
+        }
+      },
+      "note": "The bias in mag of E(B-V) when the analysis takes a wrong R_V, an intrinsic ratio 5 percent off, or the world carries stellar absorption equal to 5 percent of the H-beta flux."
+    },
+    {
+      "id": "R2.continuumSystematic",
+      "status": "reported",
+      "measured": {
+        "n": 100,
+        "meanDirectBiasNm": 0.07678,
+        "sdDirectBiasNm": 0.01263,
+        "meanConstantMinusLinearNm": -0.0003368
+      },
+      "note": "A quadratic term of 2 percent at 12 sigma_obs the linear side-window continuum does not follow; the bias is in nm of equivalent width."
+    }
+  ]
+}
