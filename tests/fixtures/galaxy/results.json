@@ -429,6 +429,29 @@
       "note": "The committed expectation was an error made when the contract was written: a break of 1 for a flat spectrum holds for a spectrum flat in F_nu; the flat world is flat in F_lambda, whose F_nu rises as lambda squared, so the definition gives the ratio of the band means of lambda squared, not 1. The correlation and the line method behaved as committed, and a spectrum flat in F_nu returns 1 (flatFnu). The leg is left failing as committed; only Carl resets a bound."
     },
     {
+      "id": "D2b.flatFnuSpectrum",
+      "status": "fail",
+      "measured": {
+        "per": [
+          {
+            "z": 0.1,
+            "xc": "low-significance",
+            "lines": "too-few-features",
+            "breakD": 0.9999999999999992,
+            "breakPresent": false
+          },
+          {
+            "z": 0.25,
+            "xc": "low-significance",
+            "lines": "too-few-features",
+            "breakD": 1.0000000000000007,
+            "breakPresent": false
+          }
+        ]
+      },
+      "note": "The break is 1 to 1e-15 with no break flagged, and the line method is not constrained, as committed. The correlation is not refused no-structure: a spectrum flat in F_nu is a power law in F_lambda, which the 101-sample high-pass does not remove exactly, so a smooth residual correlates weakly with the template and the answer is returned with the low-significance flag (q under 10, never ok). The committed expectation presumed a constant spectrum. Left failing as committed; a later contract should expect \"not ok\" here."
+    },
+    {
       "id": "D3.templateMismatch",
       "status": "fail",
       "measured": {
@@ -447,6 +470,28 @@
         "medianErrorSigmas": 1189
       },
       "note": "A template that is not the object can give a confident redshift that is wrong by more than its stated error: the curvature uncertainty assumes the template is the truth. Left failing as committed; see GALAXY_SPECTRA.md."
+    },
+    {
+      "id": "D3b.templateMismatchWithFitTest",
+      "status": "pass",
+      "measured": {
+        "mismatchedWorlds": 200,
+        "confidentlyWrong": 0,
+        "confidentlyWrongFraction": 0,
+        "refusedAsMisfit": 22,
+        "statusOk": 0,
+        "exactTemplate": {
+          "worlds": 300,
+          "falseRefusals": 0,
+          "falseRefusalFraction": 0,
+          "confidentlyWrong": 0,
+          "n": 300,
+          "coverage": 0.6666666666666666,
+          "meanZ": -0.03517274266793952,
+          "sdZ": 1.042118700645922
+        }
+      },
+      "note": ""
     },
     {
       "id": "D4.alias",
@@ -657,6 +702,22 @@
         "confidentlyWrong": 0
       },
       "note": "Worlds whose lines are drawn away from the template: coverage below the one-sigma band means the curvature uncertainty is too small for a template that is not the object."
+    },
+    {
+      "id": "R1b.templateMisfitWithFitTest",
+      "status": "reported",
+      "measured": {
+        "n": 200,
+        "refusedAsMisfit": 75,
+        "confidentlyWrong": 0,
+        "notRefused": {
+          "n": 125,
+          "coverage": 0.648,
+          "meanZ": -0.08520394453522227,
+          "sdZ": 1.0892517002287856
+        }
+      },
+      "note": "The strict test refuses worlds whose lines are drawn away from the template (strengths up to 30 percent, widths 20 to 25 percent, one extra line) at these signal to noise; those it lets through are the closest matches."
     },
     {
       "id": "R2.breakSystematics",

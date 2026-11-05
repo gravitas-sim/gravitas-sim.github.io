@@ -29,6 +29,7 @@ describe('the committed constants', () => {
     expect(G.MAX_RELATIVE_ERROR).toBe(0.25);
     expect(G.PRESENT_SIGMAS).toBe(3);
     expect(G.MIN_LINES).toBe(2);
+    expect(G.MISFIT_LEVEL).toBe(1e-4);
   });
   test('the kernel holds no default template and no default break definition', () => {
     for (const name of Object.keys(G))
@@ -152,6 +153,47 @@ describe('the cross-correlation', () => {
   test('the high-pass is linear and removes a constant', () => {
     const y = Float64Array.from({ length: 300 }, () => 7);
     for (const v of G.highPass(y)) expect(Math.abs(v)).toBeLessThan(1e-12);
+  });
+});
+
+describe('the goodness-of-fit test (GALAXY-RULE-2)', () => {
+  test('an exact template is not misfit and the statistic is reported', () => {
+    const w = world('star-forming', 0.1, { seed: 'g1', snr: 10 });
+    const r = G.crossCorrelate(w, tpl('star-forming'), {
+      zRange: ZR,
+      refuseMisfit: true,
+    });
+    expect(r.status).toBe('ok');
+    expect(r.fit.tested).toBe(true);
+    expect(r.fit.misfit).toBe(false);
+    expect(r.fit.chi2Reduced).toBeGreaterThan(0.8);
+    expect(r.fit.chi2Reduced).toBeLessThan(1.2);
+    expect(r.flags).not.toContain('misfit');
+  });
+  test('a template that is not the object is refused template-misfit, only when asked', () => {
+    const w = world('star-forming', 0.1, { seed: 'm18', snr: 15 });
+    const off = G.crossCorrelate(w, tpl('passive'), { zRange: ZR });
+    const on = G.crossCorrelate(w, tpl('passive'), {
+      zRange: ZR,
+      refuseMisfit: true,
+    });
+    expect(off.fit.misfit).toBe(true);
+    expect(off.flags).toContain('misfit');
+    expect(on.status).toBe('refused');
+    expect(on.code).toBe('template-misfit');
+    expect(on.z).toBeUndefined();
+    expect(on.fit.chi2Min).toBeGreaterThan(on.fit.chi2Cut);
+  });
+  test('without a sigma the test says it was not run', () => {
+    const w = world('star-forming', 0.1, { seed: 'm18', snr: 15 });
+    const r = G.crossCorrelate({ ...w, sigma: null }, tpl('passive'), {
+      zRange: ZR,
+      refuseMisfit: true,
+    });
+    expect(r.status).toBe('ok');
+    expect(r.fit.tested).toBe(false);
+    expect(r.fit.note).toMatch(/misfit-untested/);
+    expect(r.code).not.toBe('template-misfit');
   });
 });
 

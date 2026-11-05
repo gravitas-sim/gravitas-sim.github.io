@@ -17,6 +17,7 @@ import { URL } from 'node:url';
 const read = rel =>
   JSON.parse(readFileSync(new URL(`../${rel}`, import.meta.url), 'utf8'));
 const THR = read('tests/fixtures/galaxy/thresholds.json');
+const FOLLOW = read('tests/fixtures/galaxy/followup-thresholds.json');
 const RESULTS = read('tests/fixtures/galaxy/results.json');
 const FAILED = read('tests/fixtures/galaxy/failed-legs.json');
 const ORACLE = read('tests/fixtures/galaxy/oracle-results.json');
@@ -25,7 +26,7 @@ const INPUTS = read('tests/fixtures/galaxy/oracle-inputs.json');
 describe('the committed legs and their pinned results', () => {
   test('every committed check has a row and no row is uncommitted', () => {
     expect(RESULTS.rows.map(r => r.id).sort()).toEqual(
-      THR.checks.map(c => c.id).sort()
+      [...THR.checks, ...FOLLOW.checks].map(c => c.id).sort()
     );
   });
   test('the failed-legs file is exactly the failing rows, each with its reason', () => {
@@ -49,6 +50,7 @@ describe('the committed legs and their pinned results', () => {
       'E2.authenticBreak:not-run',
       'E3.starsAsMutualTemplates:reported',
       'R1.templateMisfit:reported',
+      'R1b.templateMisfitWithFitTest:reported',
       'R2.breakSystematics:reported',
       'R3.lineMethodDomain:reported',
     ]);
@@ -107,6 +109,37 @@ describe('the committed legs and their pinned results', () => {
   });
 });
 
+describe('the follow-up contract (goodness-of-fit refusal)', () => {
+  test('it was committed before any run, keeps the failed legs, and moves no bound', () => {
+    expect(FOLLOW.committed).toMatch(
+      /before any code of the follow-up existed/
+    );
+    expect(FOLLOW.rule).toMatch(/stay failing and labelled/);
+    expect(FOLLOW.rule).toMatch(/OPT-IN/);
+    expect(FOLLOW.checks.map(c => c.id)).toEqual([
+      'D2b.flatFnuSpectrum',
+      'D3b.templateMismatchWithFitTest',
+      'R1b.templateMisfitWithFitTest',
+    ]);
+    const d3 = THR.checks.find(c => c.id === 'D3.templateMismatch').limits;
+    const d3b = FOLLOW.checks[1].limits;
+    expect(d3b.maxWrongFraction).toBe(d3.maxWrongFraction);
+    expect(d3b.n).toBe(d3.n);
+    expect(FOLLOW.seeds.mismatch).toBe(THR.seeds.mismatch);
+    expect(FOLLOW.amendments).toEqual([]);
+  });
+  test('the cut is the stated quantile level and the committed legs keep their failed status', async () => {
+    const G = await import('../js/kernels/galaxy/index.js');
+    expect(G.MISFIT_LEVEL).toBe(FOLLOW.checks[1].limits.refusalLevel);
+    for (const id of [
+      'C2.linesCoverage',
+      'D2.flatSpectrum',
+      'D3.templateMismatch',
+    ])
+      expect(FAILED.legs.map(l => l.id)).toContain(id);
+  });
+});
+
 describe('the oracle inputs and results', () => {
   test('the oracle read its inputs file: same case counts, versions recorded', () => {
     expect(ORACLE.b1).toHaveLength(8);
@@ -134,7 +167,11 @@ describe('the validator reproduces the pinned statuses of its cheap legs', () =>
     JSON.parse(
       execFileSync(
         process.execPath,
-        ['tools/galaxy-validate.mjs', '--json', '--only=A,B,D5,D6,D7,E1,E2,E3'],
+        [
+          'tools/galaxy-validate.mjs',
+          '--json',
+          '--only=A,B,D2b,D5,D6,D7,E1,E2,E3',
+        ],
         {
           cwd: new URL('..', import.meta.url).pathname,
           encoding: 'utf8',
@@ -152,7 +189,7 @@ describe('the validator reproduces the pinned statuses of its cheap legs', () =>
     }
   })();
   const pinned = RESULTS.rows.filter(r =>
-    /^(A|B|D5|D6|D7|E1|E2|E3)/.test(r.id)
+    /^(A|B|D2b|D5|D6|D7|E1|E2|E3)/.test(r.id)
   );
   test('every status equals its pinned status (the CPU-time figure is recorded, not compared)', () => {
     expect(
