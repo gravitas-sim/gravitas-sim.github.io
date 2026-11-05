@@ -1115,6 +1115,13 @@
       "student": false
     },
     {
+      "file": "RADIO.md",
+      "kind": "feature",
+      "purpose": "The HI spectroscopy kernel: the 21-cm Doppler scale, the LSR options, the fixed mask, the tangent-point circular speed with its interval, the thin column density and the labelled synthetic spectra, validation and its failed legs (Prompt 241).",
+      "owner": 241,
+      "student": false
+    },
+    {
       "file": "DYNAMICS_REFERENCE_GATE.md",
       "kind": "gate",
       "purpose": "Dynamics reference gate: the committed tolerances, the independent reference runs, the engine's precomputed runs and the verdict (Prompt 237 Part B).",

@@ -54,7 +54,7 @@ export const SHAPE_TERM = 0.05;
 export const ASSUMPTIONS = Object.freeze([
   'gas on circular orbits about the Galactic centre at one speed per radius',
   'R0 and Theta0 as given: the method measures Theta(R) + (Theta0 + V) sin l, not Theta alone',
-  'the LSR option shown: the choice of the Sun\'s V changes every circular speed by the same amount times |sin l|',
+  "the LSR option shown: the choice of the Sun's V changes every circular speed by the same amount times |sin l|",
   'the gas dispersion given: the terminal velocity is the half-peak crossing less a distance computed from it',
   'an optically thin line: a saturated line moves the edge (RADIO.md)',
   'the fixed longitude mask only: no sightline outside it is fitted',
@@ -123,8 +123,15 @@ export function tangentPoint(o) {
     );
   const inc = frequencyHz[1] > frequencyHz[0];
   for (let i = 1; i < n; i++)
-    if (inc ? !(frequencyHz[i] > frequencyHz[i - 1]) : !(frequencyHz[i] < frequencyHz[i - 1]))
-      return refusal('bad-spectrum', 'the channels are not in order: frequencies must be strictly monotone');
+    if (
+      inc
+        ? !(frequencyHz[i] > frequencyHz[i - 1])
+        : !(frequencyHz[i] < frequencyHz[i - 1])
+    )
+      return refusal(
+        'bad-spectrum',
+        'the channels are not in order: frequencies must be strictly monotone'
+      );
   if (!frequencyHz.every(f => f > 0))
     return refusal('bad-spectrum', 'frequencies must be positive');
 
@@ -138,7 +145,9 @@ export function tangentPoint(o) {
   const lw = wrapLongitude(l);
   const side = sideOf(lw);
   const shift = lsrShift(lw, b, lsr);
-  const vHelio = frequencyHz.map(f => velocityFromFrequency(f, { convention, restHz }));
+  const vHelio = frequencyHz.map(f =>
+    velocityFromFrequency(f, { convention, restHz })
+  );
   if (!vHelio.some(v => Math.abs(v) <= 1000))
     return refusal(
       'axis',
@@ -166,9 +175,7 @@ export function tangentPoint(o) {
     shape: shapeTerm * sigmaV,
     theta0: sinL * sigmaTheta0,
   };
-  const sigma = Math.sqrt(
-    Object.values(terms).reduce((s, t) => s + t * t, 0)
-  );
+  const sigma = Math.sqrt(Object.values(terms).reduce((s, t) => s + t * t, 0));
   const alternatives = ['schonrich', 'stromberg', 'none'].map(name => {
     const s2 = lsrShift(lw, b, name);
     return {
@@ -193,7 +200,15 @@ export function tangentPoint(o) {
     interval95: covarianceInterval(theta, sigma, { level: 0.95 }),
     terminalVelocity: { lsr: vTerminal, frame: 'LSR', convention },
     edge,
-    assumed: { r0, theta0, sigmaTheta0, sigmaV, sigmaSigmaV, shapeTerm, restHz },
+    assumed: {
+      r0,
+      theta0,
+      sigmaTheta0,
+      sigmaV,
+      sigmaSigmaV,
+      shapeTerm,
+      restHz,
+    },
     lsr: { ...lsr, shift },
     lsrAlternatives: alternatives,
     assumptions: ASSUMPTIONS,

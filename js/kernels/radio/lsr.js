@@ -37,7 +37,8 @@ export const LSR_OPTIONS = Object.freeze({
     U: 11.1,
     V: 3.77,
     W: 7.25,
-    label: "the Stromberg-corrected V of D-GAIA-03, with Schonrich et al.'s U and W",
+    label:
+      "the Stromberg-corrected V of D-GAIA-03, with Schonrich et al.'s U and W",
   }),
   none: Object.freeze({
     U: 0,
@@ -75,7 +76,9 @@ export function lsrShift(lDeg, bDeg, option = 'schonrich') {
   const m = resolveLsr(option);
   const l = lDeg * DEG;
   const b = bDeg * DEG;
-  return (m.U * Math.cos(l) + m.V * Math.sin(l)) * Math.cos(b) + m.W * Math.sin(b);
+  return (
+    (m.U * Math.cos(l) + m.V * Math.sin(l)) * Math.cos(b) + m.W * Math.sin(b)
+  );
 }
 
 /**

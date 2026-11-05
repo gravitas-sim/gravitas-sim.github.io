@@ -137,7 +137,9 @@ export function terminalEdge({
   f = EDGE_RULE.f,
 }) {
   const n = velocity.length;
-  const order = velocity.map((_, i) => i).sort((p, q) => side * velocity[p] - side * velocity[q]);
+  const order = velocity
+    .map((_, i) => i)
+    .sort((p, q) => side * velocity[p] - side * velocity[q]);
   const x = order.map(i => side * velocity[i]);
   const T = order.map(i => temperature[i]);
 
@@ -153,12 +155,16 @@ export function terminalEdge({
   // E3
   let sideMax = 0;
   for (let i = 0; i < n; i++) if (x[i] >= 0 && T[i] > sideMax) sideMax = T[i];
-  const level = Math.max(EDGE_RULE.outerSigma * sn, EDGE_RULE.floorFraction * sideMax);
+  const level = Math.max(
+    EDGE_RULE.outerSigma * sn,
+    EDGE_RULE.floorFraction * sideMax
+  );
   const run = EDGE_RULE.runChannels;
   let iOut = -1;
   for (let i = n - 1; i >= run - 1; i--) {
     let ok = true;
-    for (let j = 0; j < run; j++) if (!(T[i - j] >= level) || !(T[i - j] > 0)) ok = false;
+    for (let j = 0; j < run; j++)
+      if (!(T[i - j] >= level) || !(T[i - j] > 0)) ok = false;
     if (ok) {
       iOut = i;
       break;
@@ -176,7 +182,11 @@ export function terminalEdge({
   let iPk = -1;
   for (let i = 0; i <= iOut; i++)
     if (x[i] >= lo && (iPk < 0 || T[i] > T[iPk])) iPk = i;
-  if (iPk < 0 || !(T[iPk] > 0) || (sn > 0 && T[iPk] < EDGE_RULE.significanceSigma * sn))
+  if (
+    iPk < 0 ||
+    !(T[iPk] > 0) ||
+    (sn > 0 && T[iPk] < EDGE_RULE.significanceSigma * sn)
+  )
     return refusal(
       'edge-not-significant',
       'the line at the edge is too weak (under ten times the noise) for the terminal velocity to be read'
@@ -197,12 +207,17 @@ export function terminalEdge({
       'edge-not-significant',
       'the line does not fall to half its peak beyond the peak'
     );
-  const xEdge = x[j - 1] + ((target - T[j - 1]) * (x[j] - x[j - 1])) / (T[j] - T[j - 1]);
+  const xEdge =
+    x[j - 1] + ((target - T[j - 1]) * (x[j] - x[j - 1])) / (T[j] - T[j - 1]);
 
   // The slope there by least squares over the five channels about the crossing.
   const a = Math.max(0, j - 3);
   const b = Math.min(n - 1, j + 1);
-  let sx = 0, st = 0, sxx = 0, sxt = 0, m = 0;
+  let sx = 0,
+    st = 0,
+    sxx = 0,
+    sxt = 0,
+    m = 0;
   for (let i = a; i <= b; i++) {
     sx += x[i];
     st += T[i];

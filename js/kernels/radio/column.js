@@ -52,7 +52,9 @@ export const COLUMN_COEFFICIENT = columnCoefficient();
 /** The integral of T dv (K km/s) by the trapezoid rule over channels in any order. */
 export function integratedLine(velocity, temperature) {
   const n = velocity.length;
-  const idx = velocity.map((_, i) => i).sort((p, q) => velocity[p] - velocity[q]);
+  const idx = velocity
+    .map((_, i) => i)
+    .sort((p, q) => velocity[p] - velocity[q]);
   let s = 0;
   for (let k = 1; k < n; k++) {
     const i = idx[k - 1];
@@ -79,7 +81,10 @@ export function columnDensityThin({
   tauLimit = TAU_LIMIT,
 }) {
   if (!velocity?.length || velocity.length !== temperature?.length)
-    refuse('bad-spectrum', 'velocity and temperature must be arrays of one length');
+    refuse(
+      'bad-spectrum',
+      'velocity and temperature must be arrays of one length'
+    );
   const integral = integratedLine(velocity, temperature);
   const column = COLUMN_COEFFICIENT * integral;
   const peak = Math.max(...temperature);

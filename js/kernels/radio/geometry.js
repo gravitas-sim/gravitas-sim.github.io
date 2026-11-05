@@ -36,7 +36,9 @@ const DEG = Math.PI / 180;
  */
 export const MASK = Object.freeze({
   firstQuadrant: Object.freeze([20, 25, 30, 35, 40, 45, 50, 55, 60, 65]),
-  fourthQuadrant: Object.freeze([295, 300, 305, 310, 315, 320, 325, 330, 335, 340]),
+  fourthQuadrant: Object.freeze([
+    295, 300, 305, 310, 315, 320, 325, 330, 335, 340,
+  ]),
   b: 0,
 });
 
@@ -59,7 +61,10 @@ export const sideOf = l => (wrapLongitude(l) < 180 ? 1 : -1);
  */
 export function maskRefusal(lDeg, bDeg = 0) {
   if (!Number.isFinite(lDeg) || !Number.isFinite(bDeg))
-    return refusal('outside-mask', 'the longitude and latitude must be numbers');
+    return refusal(
+      'outside-mask',
+      'the longitude and latitude must be numbers'
+    );
   const l = wrapLongitude(lDeg);
   if (Math.cos(l * DEG) <= 1e-12)
     return refusal(
@@ -67,7 +72,10 @@ export function maskRefusal(lDeg, bDeg = 0) {
       'a sightline at this longitude does not pass inside the solar circle, so it has no tangent point'
     );
   if (bDeg !== 0)
-    return refusal('outside-mask', 'the mask is in the plane: the latitude must be 0');
+    return refusal(
+      'outside-mask',
+      'the mask is in the plane: the latitude must be 0'
+    );
   if (!MASK_LONGITUDES.some(m => Math.abs(m - l) < 1e-9))
     return refusal(
       'outside-mask',
@@ -88,7 +96,10 @@ export function tangentGeometry(lDeg, r0) {
   finite(r0, 'r0');
   const l = wrapLongitude(lDeg) * DEG;
   if (Math.cos(l) <= 1e-12)
-    return refusal('no-tangent-point', 'no tangent point outside the solar circle');
+    return refusal(
+      'no-tangent-point',
+      'no tangent point outside the solar circle'
+    );
   return {
     status: 'ok',
     radius: r0 * Math.abs(Math.sin(l)),
@@ -138,12 +149,17 @@ export function losVelocity({ l, b = 0, d, curve, r0, theta0, radialKmS = 0 }) {
 export function terminalVelocity({ l, curve, r0, theta0 }) {
   const t = tangentGeometry(l, r0);
   if (t.status !== 'ok') return NaN;
-  return t.side * (curve(t.radius) - theta0 * Math.abs(Math.sin(wrapLongitude(l) * DEG)));
+  return (
+    t.side *
+    (curve(t.radius) - theta0 * Math.abs(Math.sin(wrapLongitude(l) * DEG)))
+  );
 }
 
 /** The circular speed at the tangent radius from a terminal velocity, km/s. */
 export function circularSpeedFromTerminal(vTerminal, lDeg, theta0) {
-  return Math.abs(vTerminal) + theta0 * Math.abs(Math.sin(wrapLongitude(lDeg) * DEG));
+  return (
+    Math.abs(vTerminal) + theta0 * Math.abs(Math.sin(wrapLongitude(lDeg) * DEG))
+  );
 }
 
 /**

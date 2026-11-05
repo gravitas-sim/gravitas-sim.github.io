@@ -22,12 +22,7 @@
 // =============================================================================
 
 import { gaussian, stream } from '../../random/streams.js';
-import {
-  C_KMS,
-  HI_LINE,
-  KPC_CM,
-  refuse,
-} from './constants.js';
+import { C_KMS, HI_LINE, KPC_CM, refuse } from './constants.js';
 import { lsrShift } from './lsr.js';
 import {
   losVelocity,
@@ -69,7 +64,10 @@ export function channelFrequencies({
   restHz = HI_LINE.restFrequencyHz,
 } = {}) {
   const df = (restHz * widthKmS) / C_KMS;
-  return Array.from({ length: count }, (_, i) => restHz + (i - (count - 1) / 2) * df);
+  return Array.from(
+    { length: count },
+    (_, i) => restHz + (i - (count - 1) / 2) * df
+  );
 }
 
 /**
@@ -91,7 +89,10 @@ export function generateSpectrum(o) {
   const l = wrapLongitude(o.l);
   const geo = tangentGeometry(l, w.r0);
   if (geo.status !== 'ok')
-    refuse('no-tangent-point', 'the generator makes sightlines inside the solar circle');
+    refuse(
+      'no-tangent-point',
+      'the generator makes sightlines inside the solar circle'
+    );
   const curve =
     o.curve ??
     worldCurve({
@@ -100,7 +101,10 @@ export function generateSpectrum(o) {
       rc: w.rc,
       alpha: WORLD.alphas[o.curveName ?? 'flat'],
     });
-  const frequencyHz = channelFrequencies({ count: w.channels, widthKmS: w.widthKmS });
+  const frequencyHz = channelFrequencies({
+    count: w.channels,
+    widthKmS: w.widthKmS,
+  });
   const n = frequencyHz.length;
   const vHelio = frequencyHz.map(
     f => C_KMS * (1 - f / HI_LINE.restFrequencyHz)
@@ -110,7 +114,7 @@ export function generateSpectrum(o) {
   const thin = !Number.isFinite(Ts);
   const sig = w.sigmaV;
   const norm = 1 / (sig * Math.sqrt(2 * Math.PI));
-  const reach = Math.ceil(7 * sig / w.widthKmS) + 3;
+  const reach = Math.ceil((7 * sig) / w.widthKmS) + 3;
 
   const sl = Math.sin((l * Math.PI) / 180);
   const dMax =
@@ -147,7 +151,7 @@ export function generateSpectrum(o) {
     const z = Math.min(n - 1, c0 + reach);
     for (let c = a; c <= z; c++) {
       const dv = vHelio[c] - vh;
-      const phi = Math.exp(-0.5 * (dv * dv) / (sig * sig)) * norm;
+      const phi = Math.exp((-0.5 * (dv * dv)) / (sig * sig)) * norm;
       const colV = colPerParcel * phi; // cm^-2 per km/s
       if (thin) T[c] += colV / COLUMN_COEFFICIENT;
       else {
@@ -175,10 +179,18 @@ export function generateSpectrum(o) {
       rIn: w.rIn,
       rOut: w.rOut,
       radialStreamingKmS: w.radialStreamingKmS ?? 0,
-      lsr: { option: typeof w.lsr === 'string' ? w.lsr : 'custom', shiftKmS: shift },
+      lsr: {
+        option: typeof w.lsr === 'string' ? w.lsr : 'custom',
+        shiftKmS: shift,
+      },
       tangentRadiusKpc: geo.radius,
       tangentDistanceKpc: geo.distance,
-      terminalVelocityLsr: terminalVelocity({ l, curve, r0: w.r0, theta0: w.theta0 }),
+      terminalVelocityLsr: terminalVelocity({
+        l,
+        curve,
+        r0: w.r0,
+        theta0: w.theta0,
+      }),
       circularSpeedAtTangent: curve(geo.radius),
       lineOfSightExtremeLsr: side > 0 ? vMax : vMin,
       columnCm2,
@@ -199,6 +211,10 @@ export function withNoise(spectrum, sigmaK, seed, ...labels) {
   return {
     ...spectrum,
     temperature: spectrum.temperature.map(t => t + sigmaK * draw()),
-    truth: { ...spectrum.truth, noiseK: sigmaK, noiseSeed: [seed, ...labels].join(':') },
+    truth: {
+      ...spectrum.truth,
+      noiseK: sigmaK,
+      noiseSeed: [seed, ...labels].join(':'),
+    },
   };
 }

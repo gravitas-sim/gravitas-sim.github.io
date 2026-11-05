@@ -145,10 +145,7 @@ export function runValidation({ only = [] } = {}) {
       const back = K.velocityFromFrequency(f);
       rt = Math.max(rt, Math.abs(back - v) / Math.max(Math.abs(v), 1));
       const vo = K.velocityFromFrequency(f, { convention: 'optical' });
-      ident = Math.max(
-        ident,
-        Math.abs(vo - v - (v * v) / (K.C_KMS - v))
-      );
+      ident = Math.max(ident, Math.abs(vo - v - (v * v) / (K.C_KMS - v)));
     }
     const f0 = K.HI_LINE.restFrequencyHz;
     const zero = K.velocityFromFrequency(f0);
@@ -176,7 +173,10 @@ export function runValidation({ only = [] } = {}) {
         lowerFrequencyIsPositive: recedes,
         relativisticBetween: ordered,
         smallVSpreadKmS: spread,
-      }
+      },
+      rt > L.maxRoundTripRel
+        ? 'the committed relative bound of 1e-12 on the round trip is below what a double can hold for a 1.42 GHz frequency: the spacing of doubles there is 2.4e-7 Hz, which is 5.0e-11 km/s of velocity, so the error relative to the smallest velocity tested (6.1 km/s) cannot be under about 8e-12. The kernel is at that floor. Left failing; a bound of 1e-10 km/s absolute would be the achievable one, and only Carl resets it'
+        : ''
     );
   }
 
@@ -198,7 +198,10 @@ export function runValidation({ only = [] } = {}) {
       const l = 9 * i;
       const b = -60 + 3 * i;
       const there = K.heliocentricToLsr(v, l, b, 'schonrich');
-      round = Math.max(round, Math.abs(K.lsrToHeliocentric(there.v, l, b, 'schonrich').v - v));
+      round = Math.max(
+        round,
+        Math.abs(K.lsrToHeliocentric(there.v, l, b, 'schonrich').v - v)
+      );
     }
     const s = K.LSR_OPTIONS.schonrich;
     const t = K.LSR_OPTIONS.stromberg;
@@ -318,11 +321,13 @@ export function runValidation({ only = [] } = {}) {
         JSON.stringify(SYN.mask.fourthQuadrantDeg) &&
       K.MASK.firstQuadrant.length === 10 &&
       K.MASK.fourthQuadrant.length === 10;
-    row(
-      'A4.refusals',
-      noTangent && outside && badB && accepted && sameMask,
-      { noTangent, outside, badLatitude: badB, maskAccepted: accepted, sameMask }
-    );
+    row('A4.refusals', noTangent && outside && badB && accepted && sameMask, {
+      noTangent,
+      outside,
+      badLatitude: badB,
+      maskAccepted: accepted,
+      sameMask,
+    });
   }
 
   // ---- A5: the column density ------------------------------------------------------------
@@ -374,7 +379,8 @@ export function runValidation({ only = [] } = {}) {
   if (wanted('A6.')) {
     const L = lim('A6.edgeShape');
     const g0 = K.edgeProfile(0);
-    const exact = (2 ** -0.75 * Math.exp(lnGamma(0.25))) / Math.sqrt(2 * Math.PI);
+    const exact =
+      (2 ** -0.75 * Math.exp(lnGamma(0.25))) / Math.sqrt(2 * Math.PI);
     const e = K.universalEdge(L.f);
     let positive = true;
     let sign = [];
@@ -386,7 +392,10 @@ export function runValidation({ only = [] } = {}) {
       prev = gx;
     }
     // one rise then one fall about x_pk
-    const flips = sign.reduce((n, s, i) => (i && s !== sign[i - 1] ? n + 1 : n), 0);
+    const flips = sign.reduce(
+      (n, s, i) => (i && s !== sign[i - 1] ? n + 1 : n),
+      0
+    );
     const increasing =
       K.universalEdge(0.8).cf < K.universalEdge(0.5).cf &&
       K.universalEdge(0.5).cf < K.universalEdge(0.2).cf;
@@ -435,7 +444,10 @@ export function runValidation({ only = [] } = {}) {
           refused++;
           continue;
         }
-        worst = Math.max(worst, Math.abs(r.theta - s.truth.circularSpeedAtTangent));
+        worst = Math.max(
+          worst,
+          Math.abs(r.theta - s.truth.circularSpeedAtTangent)
+        );
       }
     row('A7.recoveryNarrow', worst <= L.maxErrorKmS && refused === 0, {
       spectra: n,
@@ -455,7 +467,13 @@ export function runValidation({ only = [] } = {}) {
     let altWorst = 0;
     const used = [];
     for (const l of K.MASK_LONGITUDES) {
-      const s = K.withNoise(clean(w, l), THRESHOLDS.synthetic.noiseK, SEEDS.ensemble, 'a8', l);
+      const s = K.withNoise(
+        clean(w, l),
+        THRESHOLDS.synthetic.noiseK,
+        SEEDS.ensemble,
+        'a8',
+        l
+      );
       const r1 = K.tangentPoint(baseOptions(s, { lsr: 'schonrich' }));
       const r2 = K.tangentPoint(baseOptions(s, { lsr: 'stromberg' }));
       if (r1.status !== 'ok' || r2.status !== 'ok') continue;
@@ -465,16 +483,21 @@ export function runValidation({ only = [] } = {}) {
       const expected =
         side > 0
           ? (str.U - sch.U) * Math.cos(lr) + (str.V - sch.V) * Math.sin(lr)
-          : -(str.U - sch.U) * Math.cos(lr) + (str.V - sch.V) * Math.abs(Math.sin(lr));
+          : -(str.U - sch.U) * Math.cos(lr) +
+            (str.V - sch.V) * Math.abs(Math.sin(lr));
       worst = Math.max(worst, Math.abs(r2.theta - r1.theta - expected));
       const alt = r1.lsrAlternatives.find(a => a.option === 'stromberg');
       altWorst = Math.max(altWorst, Math.abs(alt.theta - r2.theta));
     }
-    row('A8.lsrShift', worst <= L.maxErrorKmS && altWorst <= L.maxErrorKmS && used.length >= 16, {
-      longitudesUsed: used.length,
-      maxErrorKmS: worst,
-      alternativesErrorKmS: altWorst,
-    });
+    row(
+      'A8.lsrShift',
+      worst <= L.maxErrorKmS && altWorst <= L.maxErrorKmS && used.length >= 16,
+      {
+        longitudesUsed: used.length,
+        maxErrorKmS: worst,
+        alternativesErrorKmS: altWorst,
+      }
+    );
   }
 
   // ---- B1: Doppler against astropy ------------------------------------------------------------
@@ -488,20 +511,32 @@ export function runValidation({ only = [] } = {}) {
       D.frequencyHz.forEach((f, i) => {
         ev = Math.max(
           ev,
-          Math.abs(K.velocityFromFrequency(f, { convention: conv }) - D.vFromF[conv][i])
+          Math.abs(
+            K.velocityFromFrequency(f, { convention: conv }) - D.vFromF[conv][i]
+          )
         );
         ef = Math.max(
           ef,
-          Math.abs(K.frequencyFromVelocity(D.velocityKmS[i], { convention: conv }) / D.fFromV[conv][i] - 1)
+          Math.abs(
+            K.frequencyFromVelocity(D.velocityKmS[i], { convention: conv }) /
+              D.fFromV[conv][i] -
+              1
+          )
         );
       });
     }
-    row('B1.dopplerOracle', ev <= L.maxVelocityErrorKmS && ef <= L.maxFrequencyRel && D.frequencyHz.length === L.frequencies, {
-      frequencies: D.frequencyHz.length,
-      maxVelocityErrorKmS: ev,
-      maxFrequencyRel: ef,
-      astropy: ORACLE.tools.astropy,
-    });
+    row(
+      'B1.dopplerOracle',
+      ev <= L.maxVelocityErrorKmS &&
+        ef <= L.maxFrequencyRel &&
+        D.frequencyHz.length === L.frequencies,
+      {
+        frequencies: D.frequencyHz.length,
+        maxVelocityErrorKmS: ev,
+        maxFrequencyRel: ef,
+        astropy: ORACLE.tools.astropy,
+      }
+    );
   }
 
   // ---- B2: the line of sight against numpy and scipy ---------------------------------------------
@@ -513,15 +548,30 @@ export function runValidation({ only = [] } = {}) {
     for (const c of ORACLE.los) {
       const curve = curveOf(c.curve);
       c.d.forEach((d, i) => {
-        ev = Math.max(ev, Math.abs(K.losVelocity({ l: c.l, d, curve, r0: R0, theta0: TH0 }) - c.v[i]));
+        ev = Math.max(
+          ev,
+          Math.abs(
+            K.losVelocity({ l: c.l, d, curve, r0: R0, theta0: TH0 }) - c.v[i]
+          )
+        );
       });
-      et = Math.max(et, Math.abs(K.terminalVelocity({ l: c.l, curve, r0: R0, theta0: TH0 }) - c.terminal));
+      et = Math.max(
+        et,
+        Math.abs(
+          K.terminalVelocity({ l: c.l, curve, r0: R0, theta0: TH0 }) -
+            c.terminal
+        )
+      );
     }
-    row('B2.losOracle', ev <= L.maxVelocityErrorKmS && et <= L.maxTerminalErrorKmS, {
-      cases: ORACLE.los.length,
-      maxVelocityErrorKmS: ev,
-      maxTerminalErrorKmS: et,
-    });
+    row(
+      'B2.losOracle',
+      ev <= L.maxVelocityErrorKmS && et <= L.maxTerminalErrorKmS,
+      {
+        cases: ORACLE.los.length,
+        maxVelocityErrorKmS: ev,
+        maxTerminalErrorKmS: et,
+      }
+    );
   }
 
   // ---- B3: the forward model against numpy ---------------------------------------------------------
@@ -534,7 +584,10 @@ export function runValidation({ only = [] } = {}) {
       const w = WORLDS.find(x => x.id === o.world);
       const s = clean(w, o.l);
       const peak = Math.max(...o.T);
-      thin = Math.max(thin, maxOf(s.temperature.map((t, i) => Math.abs(t - o.T[i]))) / peak);
+      thin = Math.max(
+        thin,
+        maxOf(s.temperature.map((t, i) => Math.abs(t - o.T[i]))) / peak
+      );
     }
     for (const o of ORACLE.spectra.thick) {
       const set = SYN.opacity[o.setting];
@@ -546,14 +599,21 @@ export function runValidation({ only = [] } = {}) {
         spinTemperatureK: set.spinTemperatureK,
       });
       const peak = Math.max(...o.T);
-      thick = Math.max(thick, maxOf(s.temperature.map((t, i) => Math.abs(t - o.T[i]))) / peak);
+      thick = Math.max(
+        thick,
+        maxOf(s.temperature.map((t, i) => Math.abs(t - o.T[i]))) / peak
+      );
     }
-    row('B3.spectrumOracle', thin <= L.maxThinOfPeak && thick <= L.maxThickOfPeak, {
-      thinSpectra: ORACLE.spectra.thin.length,
-      thickSpectra: ORACLE.spectra.thick.length,
-      maxThinOfPeak: thin,
-      maxThickOfPeak: thick,
-    });
+    row(
+      'B3.spectrumOracle',
+      thin <= L.maxThinOfPeak && thick <= L.maxThickOfPeak,
+      {
+        thinSpectra: ORACLE.spectra.thin.length,
+        thickSpectra: ORACLE.spectra.thick.length,
+        maxThinOfPeak: thin,
+        maxThickOfPeak: thick,
+      }
+    );
   }
 
   // ---- B4: the analysis against numpy ----------------------------------------------------------------
@@ -568,8 +628,9 @@ export function runValidation({ only = [] } = {}) {
     const regenDiff = maxOf(
       regen.map(
         (s, i) =>
-          maxOf(s.temperature.map((t, j) => Math.abs(t - mine[i].temperature[j]))) /
-          Math.max(...mine[i].temperature)
+          maxOf(
+            s.temperature.map((t, j) => Math.abs(t - mine[i].temperature[j]))
+          ) / Math.max(...mine[i].temperature)
       )
     );
     const same = regenDiff <= 1e-9;
@@ -579,7 +640,10 @@ export function runValidation({ only = [] } = {}) {
     const ch = SYN.channels;
     mine.forEach((s, i) => {
       const o = ORACLE.analysis[i];
-      const freq = K.channelFrequencies({ count: ch.count, widthKmS: ch.widthKmSAtRest });
+      const freq = K.channelFrequencies({
+        count: ch.count,
+        widthKmS: ch.widthKmSAtRest,
+      });
       const r = K.tangentPoint({
         l: s.l,
         frequencyHz: freq,
@@ -592,7 +656,10 @@ export function runValidation({ only = [] } = {}) {
         lsr: 'schonrich',
         shapeTerm: UNC.tauShape,
       });
-      if (r.status !== o.status || (r.code ?? undefined) !== (o.code ?? undefined)) {
+      if (
+        r.status !== o.status ||
+        (r.code ?? undefined) !== (o.code ?? undefined)
+      ) {
         codes = false;
         return;
       }
@@ -612,8 +679,19 @@ export function runValidation({ only = [] } = {}) {
     });
     row(
       'B4.analysisOracle',
-      same && codes && mine.length === L.spectra && ev <= L.maxVelocityErrorKmS && ew <= L.maxWidthRel,
-      { spectra: mine.length, regeneratedWithin1e9OfPeak: same, regeneratedMaxOfPeak: regenDiff, codesAgree: codes, maxVelocityErrorKmS: ev, maxWidthRel: ew }
+      same &&
+        codes &&
+        mine.length === L.spectra &&
+        ev <= L.maxVelocityErrorKmS &&
+        ew <= L.maxWidthRel,
+      {
+        spectra: mine.length,
+        regeneratedWithin1e9OfPeak: same,
+        regeneratedMaxOfPeak: regenDiff,
+        codesAgree: codes,
+        maxVelocityErrorKmS: ev,
+        maxWidthRel: ew,
+      }
     );
   }
 
@@ -625,20 +703,31 @@ export function runValidation({ only = [] } = {}) {
     const mine = INPUTS.b5;
     const regen = b5Spectrum();
     const regenDiff =
-      maxOf(regen.temperature.map((t, j) => Math.abs(t - mine.temperature[j]))) /
-      Math.max(...mine.temperature);
+      maxOf(
+        regen.temperature.map((t, j) => Math.abs(t - mine.temperature[j]))
+      ) / Math.max(...mine.temperature);
     const same = regenDiff <= 1e-9;
-    const freq = K.channelFrequencies({ count: SYN.channels.count, widthKmS: SYN.channels.widthKmSAtRest });
+    const freq = K.channelFrequencies({
+      count: SYN.channels.count,
+      widthKmS: SYN.channels.widthKmSAtRest,
+    });
     const v = freq.map(f => K.velocityFromFrequency(f));
-    const col = K.columnDensityThin({ velocity: v, temperature: mine.temperature });
+    const col = K.columnDensityThin({
+      velocity: v,
+      temperature: mine.temperature,
+    });
     const cRel = Math.abs(K.COLUMN_COEFFICIENT / O.coefficient - 1);
     const nRel = Math.abs(col.columnCm2 / O.columnCm2 - 1);
-    row('B5.columnOracle', same && cRel <= L.maxCoefficientRel && nRel <= L.maxColumnRel, {
-      regeneratedWithin1e9OfPeak: same,
-      regeneratedMaxOfPeak: regenDiff,
-      coefficientRel: cRel,
-      columnRel: nRel,
-    });
+    row(
+      'B5.columnOracle',
+      same && cRel <= L.maxCoefficientRel && nRel <= L.maxColumnRel,
+      {
+        regeneratedWithin1e9OfPeak: same,
+        regeneratedMaxOfPeak: regenDiff,
+        coefficientRel: cRel,
+        columnRel: nRel,
+      }
+    );
   }
 
   // ---- B6: the universal edge against scipy --------------------------------------------------------------
@@ -649,12 +738,18 @@ export function runValidation({ only = [] } = {}) {
     const dx = Math.abs(e.xPeak - ORACLE.edge.xPeak);
     const dc = Math.abs(e.cf - ORACLE.edge.cf);
     const dg = Math.abs(e.gPeak / ORACLE.edge.gPeak - 1);
-    row('B6.edgeShapeOracle', dx <= L.maxXError && dc <= L.maxXError && dg <= L.maxValueRel, {
-      peakPositionError: dx,
-      cfError: dc,
-      peakValueRel: dg,
-      minimizeScalarPeakDifference: Math.abs(ORACLE.edge.minimizeScalarPeak - ORACLE.edge.xPeak),
-    });
+    row(
+      'B6.edgeShapeOracle',
+      dx <= L.maxXError && dc <= L.maxXError && dg <= L.maxValueRel,
+      {
+        peakPositionError: dx,
+        cfError: dc,
+        peakValueRel: dg,
+        minimizeScalarPeakDifference: Math.abs(
+          ORACLE.edge.minimizeScalarPeak - ORACLE.edge.xPeak
+        ),
+      }
+    );
   }
 
   if (wanted('B7.'))
@@ -673,6 +768,7 @@ export function runValidation({ only = [] } = {}) {
     let in95 = 0;
     let refusedAllowed = 0;
     let refusedOther = 0;
+    const otherList = [];
     const errs = [];
     const widths = [];
     const byQuad = { 1: { n: 0, k: 0 }, '-1': { n: 0, k: 0 } };
@@ -682,7 +778,14 @@ export function runValidation({ only = [] } = {}) {
       for (const l of K.MASK_LONGITUDES) {
         const base = clean(w, l);
         for (let rep = 0; rep < reps; rep++) {
-          const s = K.withNoise(base, THRESHOLDS.synthetic.noiseK, noiseSeed, w.id, l, rep);
+          const s = K.withNoise(
+            base,
+            THRESHOLDS.synthetic.noiseK,
+            noiseSeed,
+            w.id,
+            l,
+            rep
+          );
           const draw = gaussian(stream('forward', analystSeed, w.id, l, rep));
           const sv = w.sigmaV * (1 + UNC.sigmaSigmaVFraction * draw());
           const th0 = wrongTheta0 ? TH0 + UNC.sigmaTheta0KmS * draw() : TH0;
@@ -695,10 +798,24 @@ export function runValidation({ only = [] } = {}) {
             const rule = lim('C1.coverage').refusalRule;
             if (
               r.code === rule.allowedCode &&
-              Math.abs(s.truth.terminalVelocityLsr) < rule.truthTerminalOverAssumedSigmaVMax * sv
+              Math.abs(s.truth.terminalVelocityLsr) <
+                rule.truthTerminalOverAssumedSigmaVMax * sv
             )
               refusedAllowed++;
-            else refusedOther++;
+            else {
+              refusedOther++;
+              if (otherList.length < 5)
+                otherList.push({
+                  world: w.id,
+                  l,
+                  rep,
+                  code: r.code,
+                  assumedSigmaV: sig(sv),
+                  truthTerminalOverAssumedSigmaV: sig(
+                    Math.abs(s.truth.terminalVelocityLsr) / sv
+                  ),
+                });
+            }
             continue;
           }
           n++;
@@ -717,11 +834,30 @@ export function runValidation({ only = [] } = {}) {
           if (k68) b.k++;
           b.err.push(Math.abs(e));
           const tot = r.sigma * r.sigma;
-          for (const key of Object.keys(share)) share[key] += (r.terms[key] * r.terms[key]) / tot;
+          for (const key of Object.keys(share))
+            share[key] += (r.terms[key] * r.terms[key]) / tot;
         }
       }
-    return { L, n, in68, in95, refusedAllowed, refusedOther, errs, widths, byQuad, bySigma, share };
+    return {
+      L,
+      n,
+      in68,
+      in95,
+      refusedAllowed,
+      refusedOther,
+      otherList,
+      errs,
+      widths,
+      byQuad,
+      bySigma,
+      share,
+    };
   };
+
+  const refusalNote = e =>
+    e.refusedOther
+      ? `${e.refusedOther} realisation(s) were refused by E7 outside the allowance the leg committed (truth terminal speed under 3.2 times the assumed gas dispersion); the rule behaved as committed and the allowance was set too tight for the tail of the analyst's dispersion draws (the margin ignores that a dispersion drawn high lowers the recovered terminal speed by about c_f times the excess). Left failing; coverage itself is reported beside it`
+      : '';
 
   if (wanted('C1.') || wanted('C3.') || wanted('C2.')) {
     const e1 = ensemble({
@@ -746,7 +882,9 @@ export function runValidation({ only = [] } = {}) {
           coverage95: sig(f95),
           refusedByE7: e1.refusedAllowed,
           refusedOther: e1.refusedOther,
-        }
+          otherRefusals: e1.otherList,
+        },
+        refusalNote(e1)
       );
     if (wanted('C3.'))
       reported('C3.coverageDetail', {
@@ -788,7 +926,9 @@ export function runValidation({ only = [] } = {}) {
           coverage95: sig(g95),
           refusedByE7: e2.refusedAllowed,
           refusedOther: e2.refusedOther,
-        }
+          otherRefusals: e2.otherList,
+        },
+        refusalNote(e2)
       );
     }
   }
@@ -837,7 +977,10 @@ export function runValidation({ only = [] } = {}) {
     ];
     const codes = all.map(r => r.code);
     const okCodes = codes.every((c, i) => c === expected[i]);
-    const noNumber = all.every(r => r.status === 'refused' && r.theta === undefined && r.reason?.length > 10);
+    const noNumber = all.every(
+      r =>
+        r.status === 'refused' && r.theta === undefined && r.reason?.length > 10
+    );
     row('D1.refusals', okCodes && noNumber, { codes, noNumber });
   }
 
@@ -872,7 +1015,10 @@ export function runValidation({ only = [] } = {}) {
       temperature: thinS.temperature.map(t => t * 0 + 130),
       spinTemperatureK: 120,
     });
-    const none = K.columnDensityThin({ velocity: thinS.velocityHelio, temperature: thinS.temperature });
+    const none = K.columnDensityThin({
+      velocity: thinS.velocityHelio,
+      temperature: thinS.temperature,
+    });
     row(
       'D2.opticalDepth',
       thin.status === 'ok' &&
@@ -904,7 +1050,12 @@ export function runValidation({ only = [] } = {}) {
     const out = {};
     for (const l of [30, 50, 305]) {
       const mkr = (key, extra) => {
-        const s = K.generateSpectrum({ l, curveName: 'flat', sigmaV: 5, ...extra });
+        const s = K.generateSpectrum({
+          l,
+          curveName: 'flat',
+          sigmaV: 5,
+          ...extra,
+        });
         const r = K.tangentPoint(baseOptions(s, { sigmaNoise: 0 }));
         return r.status === 'ok'
           ? sig(r.theta - s.truth.circularSpeedAtTangent)
@@ -931,9 +1082,16 @@ export function runValidation({ only = [] } = {}) {
     for (const l of L.longitudes) {
       const geo = K.tangentGeometry(l, R0);
       const mkr = extra => {
-        const s = K.generateSpectrum({ l, curveName: 'flat', sigmaV: 5, ...extra });
+        const s = K.generateSpectrum({
+          l,
+          curveName: 'flat',
+          sigmaV: 5,
+          ...extra,
+        });
         const r = K.tangentPoint(baseOptions(s, { sigmaNoise: 0 }));
-        return r.status === 'ok' ? sig(r.theta - s.truth.circularSpeedAtTangent) : r.code;
+        return r.status === 'ok'
+          ? sig(r.theta - s.truth.circularSpeedAtTangent)
+          : r.code;
       };
       out[l] = {
         circular: mkr({}),
@@ -968,12 +1126,16 @@ if (process.argv[1] === fileURLToPath(import.meta.url)) {
   const only = onlyArg ? onlyArg.slice(7).split(',').filter(Boolean) : [];
   const all = runValidation({ only });
   const rows = all.filter(r => r.id !== '_cpu');
-  const sorted = [...rows].sort((a, b) => (a.id < b.id ? -1 : a.id > b.id ? 1 : 0));
+  const sorted = [...rows].sort((a, b) =>
+    a.id < b.id ? -1 : a.id > b.id ? 1 : 0
+  );
   if (args.includes('--json')) {
     process.stdout.write(`${JSON.stringify(all)}\n`);
   } else {
     for (const r of sorted)
-      console.log(`${r.status.toUpperCase().padEnd(8)} ${r.id.padEnd(22)} ${JSON.stringify(r.measured)}`);
+      console.log(
+        `${r.status.toUpperCase().padEnd(8)} ${r.id.padEnd(22)} ${JSON.stringify(r.measured)}`
+      );
     const count = s => rows.filter(r => r.status === s).length;
     console.log(
       `\n${rows.length} rows: ${count('pass')} pass, ${count('fail')} fail, ${count('reported')} reported, ${count('not-run')} not run`
@@ -990,8 +1152,11 @@ if (process.argv[1] === fileURLToPath(import.meta.url)) {
       `${JSON.stringify(
         {
           format: 'gravitas.radio-failed-legs/1',
-          label: 'These legs crossed a committed bound and stay failing; only Carl resets one.',
-          legs: sorted.filter(r => r.status === 'fail').map(r => ({ id: r.id, measured: r.measured, note: r.note })),
+          label:
+            'These legs crossed a committed bound and stay failing; only Carl resets one.',
+          legs: sorted
+            .filter(r => r.status === 'fail')
+            .map(r => ({ id: r.id, measured: r.measured, note: r.note })),
         },
         null,
         2

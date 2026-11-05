@@ -12,7 +12,7 @@
         "relativisticBetween": true,
         "smallVSpreadKmS": 0.00008339245345378998
       },
-      "note": ""
+      "note": "the committed relative bound of 1e-12 on the round trip is below what a double can hold for a 1.42 GHz frequency: the spacing of doubles there is 2.4e-7 Hz, which is 5.0e-11 km/s of velocity, so the error relative to the smallest velocity tested (6.1 km/s) cannot be under about 8e-12. The kernel is at that floor. Left failing; a bound of 1e-10 km/s absolute would be the achievable one, and only Carl resets it"
     },
     {
       "id": "C2.coverageTheta0",
@@ -21,9 +21,19 @@
         "coverage68": 0.6873,
         "coverage95": 0.9535,
         "refusedByE7": 162,
-        "refusedOther": 1
+        "refusedOther": 1,
+        "otherRefusals": [
+          {
+            "world": "rising:8",
+            "l": 55,
+            "rep": 19,
+            "code": "edge-not-separable",
+            "assumedSigmaV": 11.14,
+            "truthTerminalOverAssumedSigmaV": 3.216
+          }
+        ]
       },
-      "note": ""
+      "note": "1 realisation(s) were refused by E7 outside the allowance the leg committed (truth terminal speed under 3.2 times the assumed gas dispersion); the rule behaved as committed and the allowance was set too tight for the tail of the analyst's dispersion draws (the margin ignores that a dispersion drawn high lowers the recovered terminal speed by about c_f times the excess). Left failing; coverage itself is reported beside it"
     }
   ]
 }
