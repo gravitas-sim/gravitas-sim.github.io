@@ -147,10 +147,10 @@
     {
       "id": "A3.smearing",
       "leg": "a",
-      "what": "the intra-channel smearing 2 K DM df / f^3 equals the exact difference of the delays at the channel's edges times (1 - x^2)^2, x = df / (2 f), to a relative 1e-12 at the instrument's band (channel width 18.75 MHz) at DM 10, 60 and 120; the ratio of the formula to the exact difference differs from 1 by under 5e-5 at the instrument's centre channel",
+      "what": "the intra-channel smearing 2 K DM df / f^3 equals the exact difference of the delays at the channel's edges times (1 - x^2)^2, x = df / (2 f), to a relative 1e-12 at the instrument's band (channel width 18.75 MHz) at DM 10, 60 and 120; the ratio of the formula to the exact difference differs from 1 by under 1.2e-4 at the instrument's centre channel",
       "limits": {
         "maxRelative": 1e-12,
-        "maxFormulaDeparture": 0.00005,
+        "maxFormulaDeparture": 0.00012,
         "dms": [
           10,
           60,
@@ -161,12 +161,12 @@
     {
       "id": "A4.deDispersionNoiseFree",
       "leg": "a",
-      "what": "noise-free series of the analytic worlds (one sub-band, the exact centre delays): the linearly interpolated de-dispersion at the true DM then folded puts the profile's centroid at the world's pulse phase to 2e-4 turn on all six worlds; the nearest-sample version to 6e-4 turn; the fold conserves the sum (sum of n_b m_b equals the sum of the series to a relative 1e-12); de-dispersing at a DM off by an amount whose band sweep is 2 pulse standard deviations lowers the fold statistic by a factor of at least 1.5 against the true DM",
+      "what": "noise-free series of the analytic worlds (one sub-band, the exact centre delays): the linearly interpolated de-dispersion at the true DM then folded puts the profile's centroid at the world's pulse phase to 2e-4 turn on all six worlds; the nearest-sample version to 2.5e-3 turn; the fold conserves the sum (sum of n_b m_b equals the sum of the series to a relative 1e-12); de-dispersing at a DM off by an amount whose band sweep is 6 pulse standard deviations lowers the fold statistic by a factor of at least 1.5 against the true DM",
       "limits": {
         "centroidLinearTurn": 0.0002,
-        "centroidNearestTurn": 0.0006,
+        "centroidNearestTurn": 0.0025,
         "conservation": 1e-12,
-        "sweepSigmas": 2,
+        "sweepSigmas": 6,
         "minStatisticRatio": 1.5
       }
     },
@@ -454,6 +454,24 @@
       "step": "S5",
       "what": "The period search takes the grid maximum as its period; the golden-section refinement between the neighbours of the maximum is dropped. The sub-integration phase drift (S9, two passes) is the refinement and gives the interval. The grid, the statistic, the significance and the trial correction are unchanged.",
       "why": "Found while checking the kernel's analysis against the oracle's on the 24 B4 and B5 worlds, before the validator existed (so before any leg was judged): the fold statistic is a ragged function of the period at scales finer than the grid, because samples change bins one at a time, so a golden-section search in the kernel and a bounded Brent search in the oracle settled on different local maxima (the periods differed by 1e-7 to 8e-5 of themselves) and the DMs by up to 0.3 pc/cm3 through the period. The grid maximum is the same in both. This is a design change made after seeing a kernel output, and it is recorded as such; no bound was changed."
+    },
+    {
+      "id": "AM6",
+      "step": "A3",
+      "what": "The bound on the departure of the smearing formula from the exact edge difference at the instrument's centre channel is 1.2e-4, not 5e-5.",
+      "why": "Arithmetic slip in the committed bound, found on re-reading before the validator existed: the formula over the exact difference is (1 - x^2)^2 with x = df / (2 f) = 18.75 / 2700 = 6.94e-3 for the 16-channel instrument (the 5e-5 came from a 64-channel width), so the departure is 1 - (1 - 4.82e-5)^2 = 9.6e-5, above 5e-5 by arithmetic. 1.2e-4 is 1.25 times the arithmetic value. No result was involved."
+    },
+    {
+      "id": "AM7",
+      "step": "A4",
+      "what": "The bound on the centroid error of the nearest-sample de-dispersion is 2.5e-3 turn, not 6e-4.",
+      "why": "Arithmetic slip, found before the validator existed: each channel's shift is rounded to a sample, an error uniform on +-dt/2 = +-1 ms, so the mean over 16 channels has a standard deviation of 1 ms / sqrt(12) / 4 = 0.144 ms, which is 5.8e-4 turn at P = 0.25 and 7.2e-4 at P = 0.2: 6e-4 is about one standard deviation, not a bound. 2.5e-3 is about three. No result was involved."
+    },
+    {
+      "id": "AM8",
+      "step": "A4",
+      "what": "The de-dispersion misalignment of the fold-statistic leg is a band sweep of 6 pulse standard deviations, not 2.",
+      "why": "Arithmetic slip, found before the validator existed: with channel offsets spread uniformly over a sweep of k pulse standard deviations the summed profile has width sqrt(1 + k^2 / 12) times the pulse's and the fold statistic falls by the same factor, 1.15 at k = 2 (below the committed ratio of 1.5, so the bound could not be met by any kernel) and 2.0 at k = 6. The ratio bound 1.5 is unchanged. No result was involved."
     }
   ]
 }
