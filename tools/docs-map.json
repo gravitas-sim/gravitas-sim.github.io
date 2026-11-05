@@ -1136,6 +1136,13 @@
       "student": false
     },
     {
+      "file": "PULSARS.md",
+      "kind": "feature",
+      "purpose": "The pulsar kernel: dispersion constant, de-dispersion, folding, period and DM with intervals, the labelled DM distance, synthetic series, validation and failed legs (Prompt 242).",
+      "owner": 242,
+      "student": false
+    },
+    {
       "file": "DYNAMICS_REFERENCE_GATE.md",
       "kind": "gate",
       "purpose": "Dynamics reference gate: the committed tolerances, the independent reference runs, the engine's precomputed runs and the verdict (Prompt 237 Part B).",

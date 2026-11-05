@@ -1,0 +1,22 @@
+{
+  "format": "gravitas.pulsar-failed-legs/1",
+  "label": "These legs crossed a committed bound and stay failing; only Carl resets one.",
+  "legs": [
+    {
+      "id": "A5.periodNoiseFree",
+      "measured": {
+        "relativeError": 0.00000253,
+        "relativeErrorBySeries": [
+          0.000001107,
+          4.129e-7,
+          0.00000253,
+          0.000001098,
+          3.951e-7,
+          8.4e-7
+        ],
+        "periodogramErrorOverWidth": 0.004742
+      },
+      "note": "Left failing and labelled, not tuned: the worst of the six noise-free periods is off by a relative amount above the committed 2e-6 (the grid-and-sub-integration period of a noise-free series is limited by how the 8 whole-pulse sub-integrations quantise the samples); the bound is Carl's to reset (AM9, AM10 record the two earlier fixes to the worlds)."
+    }
+  ]
+}

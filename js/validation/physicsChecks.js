@@ -98,6 +98,7 @@ const GROUPS = [
   () => import('./groups/xray.js'),
   () => import('./groups/rotation-decomposition.js'),
   () => import('./groups/radio.js'),
+  () => import('./groups/pulsars.js'),
 ];
 
 /**
