@@ -35,6 +35,7 @@ import {
   mkdtempSync,
   writeFileSync,
   mkdirSync,
+  rmSync,
 } from 'node:fs';
 import { Buffer } from 'node:buffer';
 import { createHash } from 'node:crypto';
@@ -917,33 +918,41 @@ export async function testExtension(ext, { type, manifest: m }) {
         );
   } else if (type === 'capability') {
     const dir = materialize(ext, { rewrite: true });
-    for (const family of m.provides.widgetFamilies) {
-      const asset = (m.assets || []).find(a => a.role === 'code');
-      const mod = await import(
-        pathToFileURL(path.resolve(dir, asset.path)).href
-      );
-      const widgets = Object.values(mod).find(
-        v => Array.isArray(v) && v.some(w => w && family.widgets.includes(w.id))
-      );
-      check(
-        Boolean(widgets),
-        `${asset.path} exports the family's widgets as an array`
-      );
-      if (!widgets) continue;
-      check(
-        JSON.stringify(widgets.map(w => w.id).sort()) ===
-          JSON.stringify([...family.widgets].sort()),
-        `the exported widgets are exactly ${family.widgets.join(', ')}`
-      );
-      for (const w of widgets)
-        for (const [ok, what] of widgetContract(w))
-          check(ok, `${w.id}: ${what}`);
+    try {
+      for (const family of m.provides.widgetFamilies) {
+        const asset = (m.assets || []).find(a => a.role === 'code');
+        const mod = await import(
+          pathToFileURL(path.resolve(dir, asset.path)).href
+        );
+        const widgets = Object.values(mod).find(
+          v =>
+            Array.isArray(v) && v.some(w => w && family.widgets.includes(w.id))
+        );
+        check(
+          Boolean(widgets),
+          `${asset.path} exports the family's widgets as an array`
+        );
+        if (!widgets) continue;
+        check(
+          JSON.stringify(widgets.map(w => w.id).sort()) ===
+            JSON.stringify([...family.widgets].sort()),
+          `the exported widgets are exactly ${family.widgets.join(', ')}`
+        );
+        for (const w of widgets)
+          for (const [ok, what] of widgetContract(w))
+            check(ok, `${w.id}: ${what}`);
+      }
+    } finally {
+      rmSync(dir, { recursive: true, force: true });
     }
   }
   return { passed, failed };
 }
 
-/** An archive's files on disk, so its code can be imported to be tested. */
+/**
+ * An archive's files on disk, so its code can be imported to be tested. The
+ * caller removes the directory once the code is imported and checked.
+ */
 function materialize(ext, { rewrite = false } = {}) {
   const dir = mkdtempSync(path.join(tmpdir(), 'gravitas-ext-'));
   for (const [name, body] of ext.files) {
@@ -1120,17 +1129,21 @@ export async function describeExtension(
       if (c.missing.length) say(`  absent     ${c.missing.join(', ')}`);
     } else if (type === 'capability') {
       const dir = materialize(ext, { rewrite: true });
-      const asset = m.assets.find(a => a.role === 'code');
-      const mod = await import(
-        pathToFileURL(path.resolve(dir, asset.path)).href
-      );
-      for (const w of Object.values(mod).find(v => Array.isArray(v)) || []) {
-        const values = Object.fromEntries(
-          (w.controls || []).map(c => [c.id, c.value])
+      try {
+        const asset = m.assets.find(a => a.role === 'code');
+        const mod = await import(
+          pathToFileURL(path.resolve(dir, asset.path)).href
         );
-        say(`  instrument ${w.id}: ${w.title}`);
-        for (const r of w.readout?.(values) || [])
-          say(`               ${r.label}: ${r.value}`);
+        for (const w of Object.values(mod).find(v => Array.isArray(v)) || []) {
+          const values = Object.fromEntries(
+            (w.controls || []).map(c => [c.id, c.value])
+          );
+          say(`  instrument ${w.id}: ${w.title}`);
+          for (const r of w.readout?.(values) || [])
+            say(`               ${r.label}: ${r.value}`);
+        }
+      } finally {
+        rmSync(dir, { recursive: true, force: true });
       }
     }
   }
