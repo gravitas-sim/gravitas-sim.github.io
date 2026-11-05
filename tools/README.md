@@ -192,6 +192,7 @@ current, and the orchestrator checks it.
 | `prepare-pages.mjs` | Assemble the tree that gets published |  |
 | `project-metadata.mjs` | The project's own description of itself |  |
 | `prose-whitespace.mjs` | Prose whitespace: write a lesson's line wrapping once, in the source only |  |
+| `radio-validate.mjs` | The HI spectroscopy kernel against its committed thresholds (Prompt 241) | `npm run radio:validate` |
 | `release-check.mjs` | npm run release:check | `npm run release:check` |
 | `remnants-pin.mjs` | The cooling-table pin of the remnants validation (Prompt 222, REMNANTS.md) |  |
 | `remnants-validate.mjs` | The remnants kernel against its committed thresholds (Prompt 222) | `npm run remnants:validate` |

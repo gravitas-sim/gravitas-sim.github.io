@@ -1,0 +1,320 @@
+{
+  "format": "gravitas.radio-results/1",
+  "rows": [
+    {
+      "id": "A1.doppler",
+      "status": "fail",
+      "measured": {
+        "maxRoundTripRel": 4.9265480583926774e-12,
+        "maxOpticalIdentityKmS": 5.2938084471598756e-11,
+        "zeroAtRest": true,
+        "lowerFrequencyIsPositive": true,
+        "relativisticBetween": true,
+        "smallVSpreadKmS": 0.00008339245345378998
+      },
+      "note": "the committed relative bound of 1e-12 on the round trip is below what a double can hold for a 1.42 GHz frequency: the spacing of doubles there is 2.4e-7 Hz, which is 5.0e-11 km/s of velocity, so the error relative to the smallest velocity tested (6.1 km/s) cannot be under about 8e-12. The kernel is at that floor. Left failing; a bound of 1e-10 km/s absolute would be the achievable one, and only Carl resets it"
+    },
+    {
+      "id": "A2.lsr",
+      "status": "pass",
+      "measured": {
+        "maxShiftError": 8.881784197001252e-16,
+        "longitudeOfZeroShift": -42.20371373615458,
+        "roundTrip": 0,
+        "optionsOk": true,
+        "named": true,
+        "unknownRefused": true
+      },
+      "note": ""
+    },
+    {
+      "id": "A3.geometry",
+      "status": "pass",
+      "measured": {
+        "flatTerminalError": 1.5631940186722204e-13,
+        "flatGeometryError": 6.217248937900877e-15,
+        "scanVelocityError": 2.1316282072803006e-13,
+        "scanDistanceError": 1.8198882578701614e-7,
+        "thetaFromTerminalError": 0,
+        "worldCurvesSuitable": true,
+        "solidBodyRefused": true
+      },
+      "note": ""
+    },
+    {
+      "id": "A4.refusals",
+      "status": "pass",
+      "measured": {
+        "noTangent": true,
+        "outside": true,
+        "badLatitude": true,
+        "maskAccepted": true,
+        "sameMask": true
+      },
+      "note": ""
+    },
+    {
+      "id": "A5.columnThin",
+      "status": "pass",
+      "measured": {
+        "relativeToGenerator": 7.249756350802272e-14,
+        "doubling": 0,
+        "channelWidthPair": 2.220446049250313e-15,
+        "coefficient": 1812709268418681900
+      },
+      "note": ""
+    },
+    {
+      "id": "A6.edgeShape",
+      "status": "pass",
+      "measured": {
+        "g0RelError": 6.439293542825908e-15,
+        "xPeak": -0.7649508673897856,
+        "cf": 0.6976685935164111,
+        "halfError": 1.2878587085651816e-14,
+        "profilePositive": true,
+        "sign_changes": 1,
+        "cfIncreasingInOneMinusF": true
+      },
+      "note": ""
+    },
+    {
+      "id": "A7.recoveryNarrow",
+      "status": "pass",
+      "measured": {
+        "spectra": 21,
+        "maxErrorKmS": 0.0007952566250821747,
+        "refused": 0
+      },
+      "note": ""
+    },
+    {
+      "id": "A8.lsrShift",
+      "status": "pass",
+      "measured": {
+        "longitudesUsed": 16,
+        "maxErrorKmS": 2.9753977059954195e-14,
+        "alternativesErrorKmS": 2.842170943040401e-14
+      },
+      "note": ""
+    },
+    {
+      "id": "B1.dopplerOracle",
+      "status": "pass",
+      "measured": {
+        "frequencies": 200,
+        "maxVelocityErrorKmS": 3.2798652682686225e-11,
+        "maxFrequencyRel": 0,
+        "astropy": "5.3.2"
+      },
+      "note": ""
+    },
+    {
+      "id": "B2.losOracle",
+      "status": "pass",
+      "measured": {
+        "cases": 21,
+        "maxVelocityErrorKmS": 1.1368683772161603e-13,
+        "maxTerminalErrorKmS": 1.4210854715202004e-13
+      },
+      "note": ""
+    },
+    {
+      "id": "B3.spectrumOracle",
+      "status": "pass",
+      "measured": {
+        "thinSpectra": 30,
+        "thickSpectra": 30,
+        "maxThinOfPeak": 0.00024408663861440693,
+        "maxThickOfPeak": 0.00035355482091797293
+      },
+      "note": ""
+    },
+    {
+      "id": "B4.analysisOracle",
+      "status": "pass",
+      "measured": {
+        "spectra": 24,
+        "regeneratedWithin1e9OfPeak": true,
+        "regeneratedMaxOfPeak": 5.307389625077981e-16,
+        "codesAgree": true,
+        "maxVelocityErrorKmS": 1.7053025658242404e-13,
+        "maxWidthRel": 4.773959005888173e-15
+      },
+      "note": ""
+    },
+    {
+      "id": "B5.columnOracle",
+      "status": "pass",
+      "measured": {
+        "regeneratedWithin1e9OfPeak": true,
+        "regeneratedMaxOfPeak": 4.730864735501045e-16,
+        "coefficientRel": 3.3306690738754696e-16,
+        "columnRel": 8.881784197001252e-16
+      },
+      "note": ""
+    },
+    {
+      "id": "B6.edgeShapeOracle",
+      "status": "pass",
+      "measured": {
+        "peakPositionError": 2.609024107869118e-14,
+        "cfError": 2.120525977034049e-14,
+        "peakValueRel": 2.6645352591003757e-15,
+        "minimizeScalarPeakDifference": 1.22489034470874e-8
+      },
+      "note": ""
+    },
+    {
+      "id": "B7.publishedTangent",
+      "status": "not-run",
+      "measured": null,
+      "note": "no tangent-velocity table was read (RADIO_DATA_GATE.md row 05 is C); the oracle of record is the independent implementation of B2 to B6"
+    },
+    {
+      "id": "C1.coverage",
+      "status": "pass",
+      "measured": {
+        "intervals": 2827,
+        "coverage68": 0.7588,
+        "coverage95": 0.9798,
+        "refusedByE7": 173,
+        "refusedOther": 0,
+        "otherRefusals": []
+      },
+      "note": ""
+    },
+    {
+      "id": "C2.coverageTheta0",
+      "status": "fail",
+      "measured": {
+        "intervals": 2837,
+        "coverage68": 0.6873,
+        "coverage95": 0.9535,
+        "refusedByE7": 162,
+        "refusedOther": 1,
+        "otherRefusals": [
+          {
+            "world": "rising:8",
+            "l": 55,
+            "rep": 19,
+            "code": "edge-not-separable",
+            "assumedSigmaV": 11.14,
+            "truthTerminalOverAssumedSigmaV": 3.216
+          }
+        ]
+      },
+      "note": "1 realisation(s) were refused by E7 outside the allowance the leg committed (truth terminal speed under 3.2 times the assumed gas dispersion); the rule behaved as committed and the allowance was set too tight for the tail of the analyst's dispersion draws (the margin ignores that a dispersion drawn high lowers the recovered terminal speed by about c_f times the excess). Left failing; coverage itself is reported beside it"
+    },
+    {
+      "id": "C3.coverageDetail",
+      "status": "reported",
+      "measured": {
+        "coverage68ByQuadrant": {
+          "first": 0.7689,
+          "fourth": 0.7486
+        },
+        "coverage68ByGasDispersion": {
+          "5": 0.792,
+          "8": 0.7215
+        },
+        "medianAbsErrorKmS": 0.4562,
+        "medianAbsErrorByGasDispersionKmS": {
+          "5": 0.3566,
+          "8": 0.6081
+        },
+        "medianHalfWidth68KmS": 0.7484,
+        "varianceShare": {
+          "noise": 0.0114,
+          "channel": 0.154,
+          "dispersion": 0.68,
+          "shape": 0.155,
+          "theta0": 0
+        }
+      },
+      "note": ""
+    },
+    {
+      "id": "D1.refusals",
+      "status": "pass",
+      "measured": {
+        "codes": [
+          "edge-not-significant",
+          "edge-not-separable",
+          "axis",
+          "bad-spectrum",
+          "bad-spectrum",
+          "missing-assumption",
+          "missing-assumption",
+          "missing-assumption"
+        ],
+        "noNumber": true
+      },
+      "note": ""
+    },
+    {
+      "id": "D2.opticalDepth",
+      "status": "pass",
+      "measured": {
+        "thinStatus": "ok",
+        "thinRelativeError": 0.02135402696846833,
+        "thinTauPeak": 0.0751,
+        "thickStatus": "thin-assumption-fails",
+        "thickTauPeak": 1.877,
+        "thickUnderestimateFactor": 1.614,
+        "saturated": "saturated",
+        "notAssessed": "opacity-not-assessed"
+      },
+      "note": ""
+    },
+    {
+      "id": "E1.packContract",
+      "status": "not-run",
+      "measured": null,
+      "note": "no HI spectrum is in the tree: RADIO_DATA_GATE.md rows 01 to 05 are C, so the synthetic generator is the pack and the authentic leg waits for Carl"
+    },
+    {
+      "id": "R1.opacityOnEdge",
+      "status": "reported",
+      "measured": {
+        "errorKmSByLongitude": {
+          "30": {
+            "thin": -0.1142,
+            "thinWithSpinTemperature": -0.04452,
+            "thick": 1.582
+          },
+          "50": {
+            "thin": -0.1114,
+            "thinWithSpinTemperature": -0.01238,
+            "thick": 2.264
+          },
+          "305": {
+            "thin": -0.1115,
+            "thinWithSpinTemperature": -0.006104,
+            "thick": 2.394
+          }
+        }
+      },
+      "note": ""
+    },
+    {
+      "id": "R2.streaming",
+      "status": "reported",
+      "measured": {
+        "errorKmSByLongitude": {
+          "30": {
+            "circular": -0.1142,
+            "streaming": 0.01703,
+            "hole": -19.99
+          },
+          "50": {
+            "circular": -0.1114,
+            "streaming": 0.009584,
+            "hole": -21.82
+          }
+        }
+      },
+      "note": ""
+    }
+  ]
+}
