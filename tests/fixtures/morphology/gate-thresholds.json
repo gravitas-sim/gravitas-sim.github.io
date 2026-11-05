@@ -1,0 +1,57 @@
+{
+  "format": "gravitas.morphology-gate-thresholds/1",
+  "prompt": "Roadmap III, Prompt 249, Part B (docs/galaxy-profiles-gate): the PSF-convolved Sersic and exponential-plus-de Vaucouleurs models, the degeneracy statement, the independent fit pinned as the oracle, the Tully-Fisher data requirement and the tolerances. This file commits the gate's thresholds and its verdict function; no leg of it is run in this pull request.",
+  "document": "GALAXY_PROFILES_GATE.md, written after this file",
+  "committed": "in the same commit as thresholds.json of Prompt 249 Part A, before any kernel, oracle output or image of Prompt 249 existed and before any fit code existed. Part B's prototype belongs on a spike branch that is never merged (7.5 rule 4); that branch, the fitter and the measurements are not part of this pull request.",
+  "rule": "A gate names its A deliverables and its predefined B slices before the prototype; a threshold that proves unmeasurable fails the gate on that threshold and only Carl resets it; a leg not measured is never a pass. Nothing is fitted without the PSF. No Tully-Fisher claim is made without matched extragalactic HI line widths under a recorded rights decision. No published number, width, catalogue value or licence term is typed from memory.",
+  "verdicts": {
+    "A": "G1, G2, G3, G4 and G5 pass and G6 has data: the two-component fit with its degeneracy statement and Tully-Fisher with the widths; builds the upper depth 'the two-component fit and its degeneracy' and 'The relations'.",
+    "B": "G1, G2 and G3 pass (G4 and G5 may fail or be NOT RUN, and then the two-component part is skipped), G6 has no data: the PSF-convolved single-Sersic fit only; no Tully-Fisher.",
+    "C": "any of G1, G2, G3 fails or is NOT RUN: neither; Part A stands and the upper depth keeps the profile and the half-light radius.",
+    "order": "A, then B, then C by the first rule that holds; a leg that is NOT RUN holds nothing",
+    "current": "no verdict: G1 to G5 are NOT RUN (the fitter does not exist) and G6 has no data. At most B is reachable, because G6 has no data and no rights decision, which is the decision recorded in D-R10-249-04."
+  },
+  "models": {
+    "psfConvolvedSersic": "the elliptical Sersic of thresholds.json (worlds.sersic) rendered with the same sub-pixel rule and convolved with the declared Gaussian PSF before comparison with the data; parameters: centre (2), n, R_e, q, pa, total flux, sky offset; the likelihood is the Gaussian chi-square with the true variance map",
+    "exponentialPlusDeVaucouleurs": "an n = 1 component and an n = 4 component sharing a centre, each with its own R_e, q, pa and flux (the bulge-to-total fraction is flux_4 / (flux_1 + flux_4)), both PSF-convolved; a one-component fit and a two-component fit compete by the difference in the Bayesian information criterion, the two-component model being preferred only when it lowers BIC by at least 10",
+    "degeneracyStatement": "n and R_e are strongly and positively correlated for a single Sersic fitted to a noisy image: a larger n with a larger R_e fits nearly as well. The kernel must report the profile-likelihood interval of n and of R_e and the correlation coefficient of their estimates, and must return not-constrained for n when the 68 percent interval of n is wider than 1.5. A two-component fit's bulge fraction is degenerate with the disk's scale length when the bulge radius is below the PSF FWHM, and the fit must say so."
+  },
+  "checks": [
+    {
+      "id": "G1.sersicRecovery",
+      "what": "the PSF-convolved single-Sersic fit recovers the truth on the 18 galaxies (n = 1, 2, 4; q = 0.45, 0.75, 0.95; R_e 9 px) at total flux 200000 electrons: R_e within a relative 0.03, n within 0.3 absolute, q within 0.03, centre within 0.05 px; and at total flux 20000: R_e within 0.08, n within 0.8 or returned not-constrained, q within 0.05",
+      "limits": { "highFlux": 200000, "lowFlux": 20000, "maxRelRe": 0.03, "maxAbsN": 0.3, "maxAbsQ": 0.03, "maxCentrePx": 0.05, "lowMaxRelRe": 0.08, "lowMaxAbsN": 0.8, "lowMaxAbsQ": 0.05 }
+    },
+    {
+      "id": "G2.independentFit",
+      "what": "an independent fit (scipy.optimize.least_squares in a script that holds no Gravitas code, pinned in a fixture with its environment) on 6 pinned noisy 96 by 96 images agrees with the kernel's fit: R_e within a relative 0.01, n within 0.05, q within 0.01, flux within a relative 0.01",
+      "limits": { "cases": 6, "maxRelRe": 0.01, "maxAbsN": 0.05, "maxAbsQ": 0.01, "maxRelFlux": 0.01 }
+    },
+    {
+      "id": "G3.degeneracy",
+      "what": "on 100 seeded noisy galaxies at total flux 20000, the 68 percent profile-likelihood interval of R_e covers the truth in 0.543 to 0.823 of them, the reported n-R_e correlation is at least 0.8 in at least 90 of them, and a galaxy at total flux 3000 returns not-constrained for n in at least 80 percent",
+      "limits": { "n": 100, "coverageBand": [0.543, 0.823], "minCorrelation": 0.8, "minFractionCorrelated": 0.9, "lowFlux": 3000, "minNotConstrainedFraction": 0.8 }
+    },
+    {
+      "id": "G4.twoComponent",
+      "what": "exponential-plus-de Vaucouleurs fits (bulge radius 3 PSF FWHM, disk R_e 9 px) recover B/T within 0.1 for B/T = 0.2, 0.5, 0.8 at total flux 200000, the BIC rule prefers one component for pure n = 1 and pure n = 4 galaxies in at least 90 percent of 50 seeds each, and a bulge radius of 0.5 PSF FWHM returns the degeneracy flag",
+      "limits": { "bulgeToTotal": [0.2, 0.5, 0.8], "maxAbsBT": 0.1, "seeds": 50, "minOneComponentFraction": 0.9, "bulgeReOverFwhm": 3, "smallBulgeReOverFwhm": 0.5 }
+    },
+    {
+      "id": "G5.psfMismatch",
+      "what": "REPORTED then judged: fitting with a declared PSF FWHM wrong by plus or minus 20 percent biases R_e by at most a relative 0.10 for R_e / FWHM at least 3 (n = 1, 4)",
+      "limits": { "fwhmError": 0.2, "maxRelRe": 0.1, "minReOverFwhm": 3 }
+    },
+    {
+      "id": "G6.tullyFisherData",
+      "what": "the data requirement of a Tully-Fisher relation: matched extragalactic HI line widths (a width measure, its correction for inclination and instrumental broadening, and a distance independent of the relation) for at least 20 galaxies that also have the images and total magnitudes of this kernel, under a recorded per-source rights decision (public domain; CC BY; or another basis only as its own recorded decision); none is in the repository and no rights decision exists, so the requirement is recorded as unmet",
+      "limits": { "minGalaxies": 20 }
+    },
+    {
+      "id": "G7.cost",
+      "what": "the fitter, when built, adds no more deferred JavaScript than the measured overrun the standing size-budget approval covers, loads lazily and stays NEVER_PRECACHED; measured on Node 22",
+      "limits": {}
+    }
+  ],
+  "amendments": []
+}

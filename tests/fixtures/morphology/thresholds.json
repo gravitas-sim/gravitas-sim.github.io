@@ -1,0 +1,241 @@
+{
+  "format": "gravitas.morphology-thresholds/1",
+  "prompt": "Roadmap III, Prompt 249, Part A: galaxy morphology and sizes on an image (elliptical isophotes from moments then annuli, the surface-brightness profile, the half-light radius from the curve of growth, total magnitude and colour, concentration and asymmetry, a classification rule, an unresolved refusal), tranche T4 by D-R10-232-01: the kernel and validation part only",
+  "document": "GALAXY_MORPHOLOGY.md (section Validation contract), written after this file",
+  "committed": "before js/kernels/galaxy/morphology/, the validator, the oracle script and its pinned results, the generator's output, and before any galaxy image, isophote, profile, radius, magnitude, concentration, asymmetry or class of Prompt 249 existed. The only things read before this file were the repository's existing photometry adapter, detection and statistics-kernel exports (their rules and signatures), the sibling kernels' thresholds files (Prompts 245, 247, 248) as patterns, and the roadmap text of Prompt 249. One analytic planning calculation was made in a scratch Python session (the Petrosian and concentration values of a Sersic profile for n from 0.5 to 6, from the incomplete gamma function) to choose the sizes of the synthetic worlds and the invented stand-in rule; it ran no Gravitas code and no kernel.",
+  "rule": "A crossed bound is a failed check, recorded in failed-legs.json and left failing; only Carl resets one. A leg that cannot be measured (a file not supplied, a tool not installed) is NOT RUN and says why. A leg marked REPORTED is not judged. No published number, zero point, catalogue value, classification threshold, pipeline value or licence term is typed from memory: every one is DERIVED here, read from a pack, or supplied by the caller with a source string and no default. The classification thresholds of any published rule are such numbers: the kernel holds none; the synthetic stand-in rule below uses thresholds INVENTED here, labelled invented, and its error rate is REPORTED, never judged, and never called the error rate of a cited rule. The photometric zero point of the synthetic worlds is invented. Synthetic worlds carry invented parameters, labelled as invented, with a truth manifest. The kernel never subtracts a PSF-free size from a PSF-included one: a measured size is a size in the image as observed.",
+  "seeds": {
+    "ensemble": 249001,
+    "ensembleColour": 249002,
+    "analytic": 249003,
+    "unresolved": 249004,
+    "lowSignal": 249005,
+    "frameCut": 249006,
+    "sky": 249007,
+    "asymmetry": 249008,
+    "oracleInputs": 249009,
+    "report": 249010,
+    "noiseInjection": 249011,
+    "design": "morphology-249-design (used only to debug and to calibrate stated discretisations; never in a leg)",
+    "oraclePython": 249
+  },
+  "scope": {
+    "built": "(1) an image check and a sky from the frame's rim (a clipped mean with a flatness test between the four sides); (2) a start from the connected region of the smoothed image above a stated level, with first and second moments; (3) the Petrosian radius (the ratio of the mean surface brightness in the elliptical annulus 0.8a to 1.25a to the mean inside a, first crossing of 0.2) in elliptical apertures whose centre, axis ratio and position angle are the fixed point of the second moments inside 2 r_P; (4) elliptical isophotes by annuli (axis ratio and position angle from the second moments inside each annulus); (5) the surface-brightness profile in log-spaced elliptical annuli with its sigma and a labelled interval from the statistics kernel; (6) the curve of growth in elliptical apertures and from it the total flux inside 2 r_P, the half-light radius, r_20 and r_80; (7) the total magnitude with a caller-supplied zero point (instrumental when none) and the colour by the same aperture applied to a second band; (8) concentration C = 5 log10(r_80 / r_20) and the 180-degree-rotation asymmetry A with the background term removed; (9) uncertainties for every number by seeded noise injection through the whole pipeline; (10) the refusals by code: not-a-frame, no-sky, sky-not-flat, no-source, low-signal, petrosian-not-reached, frame-too-small, and the status unresolved; (11) a classification function that takes a rule the caller supplies (thresholds and a source string, no default) and returns a class, or not-constrained when a measure's sigma straddles a threshold; (12) a labelled synthetic image generator (Sersic and Gaussian profiles with an optional clump, PSF-convolved, with the Poisson-variance noise and the true variance map) with a truth manifest.",
+    "notBuilt": "the image panel's galaxy tools (isophote overlays, the profile plot), 'Shapes of galaxies' (survey and majors), the model-page section, instructor materials, Spanish strings, any SDSS image pack, and every Part B item (the PSF-convolved Sersic fit, the exponential-plus-de Vaucouleurs fit, Tully-Fisher): the consumers rule is unmet (no go-ahead, and the kernel's authentic legs did not run), so nothing a student sees is built.",
+    "notRun": "every authentic leg: the SDSS pipeline's published profile and half-light radius as the oracle (E1), the classification error rate on real galaxies against a cited catalogue's classes (E2), and the quantitative contract filled from the survey's documentation for a pack (E3). No SDSS image, catalogue value, class or documentation page is in the repository, nothing was fetched, and the image terms were not confirmed (the Run condition asks for them; D-R10-249-02 records that they were not). Part B's legs (gate-thresholds.json) are NOT RUN."
+  },
+  "worlds": {
+    "label": "SYNTHETIC GALAXY IMAGES: every parameter is invented for the test, every image has a truth manifest, none is a model of a real galaxy. A pixel of the model image is the mean of the elliptical Sersic surface brightness over a 5 by 5 grid of sub-pixel centres at offsets (k + 0.5) / 5 - 0.5 for k = 0..4 (a 15 by 15 grid for pixels whose centre lies within 4 pixels of the model centre); the image is then convolved with the effective Gaussian PSF (weights exp(-r^2 / (2 sigma^2)) over |dx|, |dy| <= ceil(4 sigma), normalised to a sum of 1, zero padding), the sky is added, and noise is drawn Gaussian with the true variance (model plus sky plus read noise squared).",
+    "frame": { "width": 160, "height": 160, "centre": "pixel (0, 0) is the centre of the first pixel; the nominal centre is (79.5, 79.5)" },
+    "sky": { "electronsPerPixel": 100, "readNoiseElectrons": 5, "note": "a constant sky; gradient worlds add a plane" },
+    "psf": { "fwhmPixels": 3.0, "note": "an effective Gaussian PSF that includes the pixel response by assumption; sigma = fwhm / 2.3548200450309493 (derived)" },
+    "zeroPoint": { "mag": 25.0, "note": "INVENTED; exposure 1 s so a pixel value in electrons is a rate in electrons per second" },
+    "sersic": "I(r) = I_e exp(-b_n ((r / R_e)^(1/n) - 1)) with b_n defined by gammainc(2n, b_n) = 0.5 (regularised lower incomplete gamma), r the elliptical radius sqrt(u^2 + (v / q)^2) with u along the major axis at position angle pa (degrees, counter-clockwise from the +x axis) and v across it; the total flux is F = 2 pi n e^(b_n) Gamma(2n) b_n^(-2n) R_e^2 q I_e; R_e is a semi-major axis in pixels",
+    "gaussian": "I(r) = F / (2 pi q s^2) exp(-r^2 / (2 s^2)) with the same elliptical radius and s the semi-major sigma",
+    "clump": "an extra circular Gaussian of flux fraction f of the total (the Sersic carries 1 - f), sigma 0.25 R_e, at the elliptical coordinates (u, v) = (1.5 R_e, 0)",
+    "ensembles": {
+      "main": { "n": 100, "sersicN": [0.8, 4.5], "q": [0.4, 1.0], "reSemiMajorPixels": [7, 11], "paDegrees": [0, 180], "centreOffsetPixels": [-1, 1], "totalFluxElectronsLogUniform": [15000, 200000], "note": "uniform draws except the flux, which is log-uniform; every draw is from stream(seed, k)" },
+      "colourOffsetMag": 0.5
+    },
+    "standInRule": { "name": "INVENTED synthetic stand-in rule (not a cited rule)", "irregularAsymmetryAtLeast": 0.3, "smoothCompactConcentrationAtLeast": 3.6, "order": "asymmetry first, then concentration", "note": "INVENTED for a REPORTED confusion matrix on synthetic worlds; no published classification boundary is held" }
+  },
+  "analysisRule": {
+    "name": "MORPH-RULE-1",
+    "steps": [
+      "S0 the frame check: width and height at least 64, finite values, a variance map that is finite and positive, a declared PSF FWHM between 1.5 and 10 pixels; else refused not-a-frame.",
+      "S1 the sky: a rim of width max(8, round(0.075 min(width, height))) pixels; its pixels are clipped iteratively (five passes, 3 sigma_i about the running mean) and the sky is their mean, with sigma_sky = sqrt(sum sigma_i^2) / n; four strips (top, bottom, left, right, corners excluded) are compared pairwise and the frame is refused as sky-not-flat if any |m_i - m_j| exceeds 4 sqrt(SE_i^2 + SE_j^2); a rim with fewer than 200 kept pixels is refused no-sky.",
+      "S2 the start: the sky-subtracted image is smoothed with a Gaussian of sigma = PSF FWHM / 2.3548200450309493; the smoothed noise is sigma_pixel / (2 sqrt(pi) sigma_kernel); the connected region (8-neighbour) above 3 smoothed-noise units that contains the brightest smoothed pixel inside the central 50 percent box is the source; fewer than 12 pixels is refused no-source; the start centre is the flux-weighted centroid and the start axis ratio and angle come from its flux-weighted second moments.",
+      "S3 the apertures: elliptical radius m of a sub-pixel (3 by 3 per pixel, flux spread uniformly) about the current centre, axis ratio q and angle; fluxes and areas accumulate in bins of 0.05 pixel in m; the cumulative flux F(<a) interpolates linearly inside a bin.",
+      "S4 the Petrosian radius: eta(a) = mean surface brightness in the annulus [0.8 a, 1.25 a] divided by the mean surface brightness inside a, on a grid a_k = PSF FWHM * 1.05^k; r_P is the first a with eta <= 0.2, by linear interpolation in log a; none up to the largest a that fits is refused petrosian-not-reached; 2 r_P not fitting between the centre and the rim is refused frame-too-small.",
+      "S5 the shape: the second moments of the sky-subtracted flux inside the ellipse of semi-major axis 2 r_P (the current centre and shape) give a new centre, axis ratio q = sqrt(lambda_min / lambda_max) and angle of the major axis; S3 to S5 repeat (r_P recomputed each pass) until |dq| < 0.001, |dpa| < 0.1 degree and the centre moves less than 0.01 pixel, at most 15 passes; the axis ratio is the fixed point and pa is reported in [0, 180).",
+      "S6 the totals: F_T = F(<2 r_P); R50, r_20, r_80 are the semi-major radii at which F(<a) = 0.5, 0.2 and 0.8 of F_T; the circularised half-light radius is R50 sqrt(q); low-signal: F_T / sigma_F_T below 10 is refused low-signal (sigma_F_T from the variance in the aperture and the sky's term).",
+      "S7 the profile: 14 elliptical annuli with geometric edges from 0.5 PSF FWHM to 2 r_P; the surface brightness is the annulus flux over its area (the area measured from the sub-pixel count, so a frame edge is honest), its sigma from the variance map and the sky term, its interval from the statistics kernel's covarianceInterval (label 'covariance').",
+      "S8 the isophotes: 8 annuli with geometric edges from PSF FWHM to 2 r_P, the same centre; axis ratio and angle of each from the second moments of the flux in that annulus (pixel centres); a similar-ellipse annulus has the same shape as its isophotes.",
+      "S9 the magnitude: m = zero point - 2.5 log10(F_T / exposure) with the caller's zero point and its source string, else the instrumental magnitude -2.5 log10(F_T / exposure) and the flag no-zero-point; sigma_m = 1.0857362047581294 sigma_F_T / F_T. Colour: the same centre, shape, r_P and F_T aperture applied to a second band of the same grid; colour = m_1 - m_2; a PSF FWHM ratio outside [0.8, 1.25] sets the flag psf-mismatch.",
+      "S10 concentration C = 5 log10(r_80 / r_20); asymmetry A = sum |I - I_180| / sum |I| over the circle of radius 2 r_P sqrt(q) about the centre that minimises it (pattern search from the S5 centre, initial step 0.5 pixel, halved eight times, bilinear interpolation of the 180-degree rotation), minus A_bg: the same sum on a circle of the same radius centred on the frame corner whose circle fits inside the frame and is farthest from the galaxy, divided by the galaxy's sum |I|; a frame in which no corner circle fits gives A with status not-constrained (code no-background-patch) and everything else stands.",
+      "S11 resolved: unresolved if R50 sqrt(q) < 1.25 (PSF FWHM / 2) + sigma_R50c, where PSF FWHM / 2 is the half-light radius of a Gaussian PSF; an unresolved result carries the observed R50 as an upper limit R50c + 2 sigma and no size claim.",
+      "S12 uncertainties: M = 40 noise-injection draws; each adds a Gaussian deviate of the pixel's true variance to the observed image and re-runs S1 to S10 from the observed solution (shape passes capped at 6); a quantity's sigma is the sample standard deviation over the draws that completed; fewer than 36 completed draws gives sigma = NaN and the flag unstable-uncertainty."
+    ],
+    "assumes": [
+      "the variance map is the true variance of independent pixel noise (a real survey frame has correlated noise; a caller must inflate the variance or the kernel's sigmas are too small by the correlation factor, which the kernel does not know)",
+      "the PSF is round and Gaussian with the FWHM declared; no PSF is deconvolved and no size is corrected for it",
+      "the galaxy's isophotes are concentric and similar ellipses inside 2 r_P (a bar, a warp, a companion or a ring breaks this and the fixed point is then a moment-weighted compromise)",
+      "the rim of the frame is sky: a neighbour or a gradient there is detected only as a side difference larger than the clip and the flatness test see",
+      "the 'total' flux is the Petrosian flux inside 2 r_P, which is a fraction of the Sersic total that falls with n (R2 reports it); it is not the asymptote of the curve of growth"
+    ],
+    "constants": {
+      "petrosianEta": 0.2,
+      "annulusFactors": [0.8, 1.25],
+      "totalRadiusFactor": 2,
+      "radiusGridRatio": 1.05,
+      "subSamples": 3,
+      "binPixels": 0.05,
+      "profileAnnuli": 14,
+      "isophoteAnnuli": 8,
+      "noiseDraws": 40,
+      "minDraws": 36,
+      "minSignalToNoise": 10,
+      "unresolvedFactor": 1.25,
+      "note": "the Petrosian eta of 0.2 and the 2 r_P total are conventions of the SDSS photometric pipeline family; here they are options chosen by this contract, not values taken from that pipeline (E1, which would compare with it, is NOT RUN)"
+    }
+  },
+  "checks": [
+    {
+      "id": "A1.gaussianGalaxy",
+      "leg": "a",
+      "what": "a noise-free, PSF-free elliptical Gaussian galaxy (q 0.5, pa 25 degrees, semi-major sigma 9 pixels, total flux 200000 electrons, centre offset (0.37, -0.61) pixel) is recovered: axis ratio to an absolute 0.002, position angle to 0.2 degree, centre to 0.01 pixel, and against the closed form (the Petrosian radius and the total inside 2 r_P found by bisection: for the Gaussian eta = x / (e^x - 1) with x = a^2 / (2 s^2), and the flux fraction inside a is 1 - e^-x): r_P, R50, r_20, r_80 to a relative 0.005 and the total magnitude to 0.005 mag and C to 0.02",
+      "limits": { "maxAbsQ": 0.002, "maxAbsPaDeg": 0.2, "maxAbsCentrePx": 0.01, "maxRelRadius": 0.005, "maxAbsMag": 0.005, "maxAbsC": 0.02 }
+    },
+    {
+      "id": "A2.sersicNoiseFree",
+      "leg": "a",
+      "what": "noise-free PSF-free elliptical Sersic galaxies, n = 1, 2 and 4, q = 0.6, pa 70 degrees, R_e 9 pixels, total flux 200000: axis ratio to 0.005, position angle to 0.3 degree, and against the analytic Sersic cumulative flux (the regularised incomplete gamma function): r_P, R50 to a relative 0.01, the total magnitude (the analytic flux inside twice the analytic Petrosian radius) to 0.01 mag, C to 0.05",
+      "limits": { "n": [1, 2, 4], "maxAbsQ": 0.005, "maxAbsPaDeg": 0.3, "maxRelRadius": 0.01, "maxAbsMag": 0.01, "maxAbsC": 0.05 }
+    },
+    {
+      "id": "A3.sersicNoisy",
+      "leg": "a",
+      "what": "the same galaxies with n = 1 and 4 at total flux 200000 electrons (S/N about 270 in the aperture), PSF-free, with noise (12 seeds each): R50 within a relative 0.03 of the analytic PSF-free value in at least 11 of 12, and the axis ratio within 0.03",
+      "limits": { "n": [1, 4], "seeds": 12, "minWithin": 11, "maxRelRadius": 0.03, "maxAbsQ": 0.03 }
+    },
+    {
+      "id": "A4.magnitudeAndColour",
+      "leg": "a",
+      "what": "magnitude arithmetic and colour: the noise-free Gaussian galaxy of A1 with a second band whose image is the first scaled by 10^(-0.4 * 0.5): the colour equals 0.5 mag to an absolute 1e-6, each magnitude is the zero point 25.0 minus 2.5 log10 of the flux within 2 r_P (reproduced from the returned flux) to 1e-9, a frame given no zero point returns the instrumental magnitude and the flag no-zero-point, and a second band of a different frame size is refused",
+      "limits": { "maxAbsColour": 1e-6, "maxAbsMagArithmetic": 1e-9, "colourOffsetMag": 0.5 }
+    },
+    {
+      "id": "A5.asymmetry",
+      "leg": "a",
+      "what": "asymmetry: an exactly point-symmetric noise-free PSF-free image (the A1 Gaussian) has A at most 0.02 and the same image with noise at S/N about 100 has the background-corrected A within 0.03 of zero in the mean over 20 seeds; for n = 1 galaxies with a clump carrying 0, 0.1, 0.2 and 0.3 of the flux, A rises strictly with the fraction and A at 0.3 is at least 0.2",
+      "limits": { "maxASymmetric": 0.02, "maxMeanAbsANoisy": 0.03, "seeds": 20, "clumpFractions": [0, 0.1, 0.2, 0.3], "minAAtThird": 0.2 }
+    },
+    {
+      "id": "A6.profile",
+      "leg": "a",
+      "what": "the surface-brightness profile of a noise-free PSF-free exponential galaxy (n = 1, q 0.7, pa 40, R_e 9, total 200000): each annulus' surface brightness equals the analytic mean in that elliptical annulus (the difference of the incomplete-gamma fluxes over the annulus's measured area) to a relative 0.02, for the annuli whose inner edge is at least 3 pixels",
+      "limits": { "maxRel": 0.02, "minInnerEdgePx": 3 }
+    },
+    {
+      "id": "A7.isophotes",
+      "leg": "a",
+      "what": "the isophote annuli of a noise-free PSF-free Sersic galaxy (n 2, q 0.55, pa 130): axis ratio within 0.01 and position angle within 1 degree of the truth in every annulus whose inner edge is at least 2 PSF FWHM",
+      "limits": { "maxAbsQ": 0.01, "maxAbsPaDeg": 1, "minInnerEdgeFwhm": 2 }
+    },
+    {
+      "id": "B1.forwardModel",
+      "leg": "b",
+      "what": "the independent oracle (numpy and scipy, no Gravitas code) re-implements the forward model from the truth manifests of 8 cases (in oracle-inputs.json): its image and the generator's noise-free image agree at the 48 fixed sample pixels and in the total to a relative 1e-6 of the case's peak",
+      "limits": { "maxRelToPeak": 1e-6, "cases": 8 }
+    },
+    {
+      "id": "B2.measurement",
+      "leg": "b",
+      "what": "the independent oracle re-implements the rule MORPH-RULE-1 (S1 to S10, sub-pixel sorting at 5 by 5 instead of 3 by 3 binned, scipy's bilinear rotation) and measures the same 8 noise-free PSF-convolved images (6 Sersic, 2 with a clump); the kernel agrees: centre to 0.01 pixel, axis ratio to 0.005, position angle to 0.5 degree (1 degree where q > 0.85), r_P, R50, r_20, r_80 to a relative 0.01, total flux to 0.005 relative, C to 0.03, A to an absolute 0.01, the profile to a relative 0.02 in every annulus",
+      "limits": { "maxCentrePx": 0.01, "maxQ": 0.005, "maxPaDeg": 0.5, "maxPaDegRound": 1, "roundAbove": 0.85, "maxRelRadius": 0.01, "maxRelFlux": 0.005, "maxC": 0.03, "maxA": 0.01, "maxRelProfile": 0.02 }
+    },
+    {
+      "id": "C1.sizeCoverage",
+      "leg": "c",
+      "what": "the 68 percent interval R50 plus or minus sigma covers the truth on the main ensemble (100 PSF-convolved noisy galaxies; the truth is the oracle's R50 on the same galaxy's noise-free image, measured by MORPH-RULE-1's definitions at the true centre and shape): the coverage lies in the binomial three-sigma band around 0.6827 (0.543 to 0.823), the mean normalised error is within 0.35 of zero and its standard deviation lies in 0.7 to 1.4; at least 90 of the 100 galaxies are answered",
+      "limits": { "n": 100, "level": 0.6826894921370859, "coverageBand": [0.543, 0.823], "maxAbsMeanZ": 0.35, "sdZBand": [0.7, 1.4], "minAnswered": 90 }
+    },
+    {
+      "id": "C2.magnitudeCoverage",
+      "leg": "c",
+      "what": "the same for the total magnitude (the truth is the oracle's flux inside 2 r_P of the noise-free image at the true centre and shape, as a magnitude with the zero point 25.0): the same band, mean and standard-deviation conditions",
+      "limits": { "n": 100, "level": 0.6826894921370859, "coverageBand": [0.543, 0.823], "maxAbsMeanZ": 0.35, "sdZBand": [0.7, 1.4], "minAnswered": 90 }
+    },
+    {
+      "id": "C3.colourCoverage",
+      "leg": "c",
+      "what": "the colour of the same ensemble in two bands (the second band is the first galaxy at 10^(-0.4 * 0.5) times the flux, same PSF, independent noise): the 68 percent interval covers the exact colour 0.5 mag in the same band, with the mean and standard-deviation conditions",
+      "limits": { "n": 100, "level": 0.6826894921370859, "coverageBand": [0.543, 0.823], "maxAbsMeanZ": 0.35, "sdZBand": [0.7, 1.4], "minAnswered": 90, "colourOffsetMag": 0.5 }
+    },
+    {
+      "id": "D1a.pointSources",
+      "leg": "d",
+      "what": "a point source (the effective PSF itself, total flux 100000 electrons, 50 seeds) is returned unresolved in at least 95 percent",
+      "limits": { "n": 50, "totalFluxElectrons": 100000, "minUnresolvedFraction": 0.95 }
+    },
+    {
+      "id": "D1b.smallerThanPsf",
+      "leg": "d",
+      "what": "galaxies smaller than the PSF (half-light radius 0.25 times the PSF FWHM = 0.75 pixel, n = 1 and n = 4, q 0.8, total flux 100000, 25 seeds each) are returned unresolved in at least 95 percent",
+      "limits": { "reOverFwhm": 0.25, "n": [1, 4], "seeds": 25, "totalFluxElectrons": 100000, "minUnresolvedFraction": 0.95 }
+    },
+    {
+      "id": "D1c.clearlyResolved",
+      "leg": "d",
+      "what": "galaxies with a half-light radius 2 times the PSF FWHM (6 pixels, n = 1 and n = 4, q 0.8, total flux 100000, 25 seeds each) are never returned unresolved in more than 5 percent",
+      "limits": { "reOverFwhm": 2, "n": [1, 4], "seeds": 25, "totalFluxElectrons": 100000, "maxUnresolvedFraction": 0.05 }
+    },
+    {
+      "id": "D2.lowSignal",
+      "leg": "d",
+      "what": "a galaxy of total flux 1000 electrons (S/N about 1.6 in the aperture; n = 1, R_e 9, q 0.7; 50 seeds) is never reported ok and is refused or not constrained in at least 95 percent",
+      "limits": { "totalFluxElectrons": 1000, "seeds": 50, "maxOkFraction": 0, "minRefusedFraction": 0.95 }
+    },
+    {
+      "id": "D3.frameCut",
+      "leg": "d",
+      "what": "a galaxy whose 2 r_P does not fit the frame (n = 1, R_e 25 pixels, q 0.8, total flux 200000; 20 seeds) is refused frame-too-small or petrosian-not-reached in at least 95 percent and never reported ok",
+      "limits": { "reSemiMajorPixels": 25, "seeds": 20, "maxOkFraction": 0, "minRefusedFraction": 0.95 }
+    },
+    {
+      "id": "D4.skyGradient",
+      "leg": "d",
+      "what": "a plane gradient of 3.0 electrons per pixel peak to peak across x added to the sky of an otherwise ordinary galaxy (n = 1, R_e 9, q 0.7, total 100000; 40 seeds) is refused sky-not-flat in at least 95 percent",
+      "limits": { "gradientPeakToPeak": 3.0, "seeds": 40, "minRefusedFraction": 0.95, "code": "sky-not-flat" }
+    },
+    {
+      "id": "D4b.skyControl",
+      "leg": "d",
+      "what": "the same galaxies with no gradient (40 seeds) are refused sky-not-flat in at most 2 percent of draws",
+      "limits": { "seeds": 40, "maxRefusedFraction": 0.02, "code": "sky-not-flat" }
+    },
+    {
+      "id": "D5.classificationAmbiguity",
+      "leg": "d",
+      "what": "the classification function, given a rule and measures constructed to sit one tenth of a sigma from a threshold, returns not-constrained naming the two classes; given the same measures at five sigma from it, returns the class; a rule without a source string or without thresholds is refused with the code missing-rule",
+      "limits": { "sigmasInside": 0.1, "sigmasOutside": 5 }
+    },
+    {
+      "id": "E1.authenticSdssProfile",
+      "leg": "e",
+      "what": "NOT RUN: the half-light radius, total magnitude and surface-brightness profile of an SDSS galaxy against the survey pipeline's published values for the same objects, under a fixed analysis contract (the frames' own sky and noise, the declared PSF FWHM from the frame header or the catalogue); no SDSS image, catalogue value or documentation page is in the repository and nothing was fetched (the fetch request is in GALAXY_MORPHOLOGY.md)",
+      "limits": {}
+    },
+    {
+      "id": "E2.authenticClassification",
+      "leg": "e",
+      "what": "NOT RUN: the classification error rate of a cited rule on the packs' galaxies against a cited catalogue's classes; no pack galaxy, catalogue class or cited rule is in the repository and nothing was fetched",
+      "limits": {}
+    },
+    {
+      "id": "E3.quantitativeContract",
+      "leg": "e",
+      "what": "NOT RUN: an image pack's quantitative contract (pixel units, gain, read noise, saturation, noise provenance) filled from the survey's documentation; none was supplied, so any pack built later is display-only, and the kernel says so by refusing a frame that carries no variance map",
+      "limits": {}
+    },
+    {
+      "id": "R1.psfBias",
+      "leg": "r",
+      "what": "REPORTED, not judged: for noise-free PSF-convolved galaxies (n = 1, 2, 4; q 0.7; R_e / PSF FWHM = 1, 2, 3, 6) the observed R50, r_P, C, A, q against the PSF-free analytic values: the ratio and the difference, so a reader sees what the PSF costs and for which sizes",
+      "limits": { "n": [1, 2, 4], "reOverFwhm": [1, 2, 3, 6], "q": 0.7 }
+    },
+    {
+      "id": "R2.totalFraction",
+      "leg": "r",
+      "what": "REPORTED, not judged: the fraction of the Sersic total flux inside 2 r_P (and the magnitude offset) for n from 0.5 to 6, from the analytic formula, and the kernel's measured value on noise-free PSF-free galaxies of n = 1, 2, 4: the stated limit that 'total' means the Petrosian flux",
+      "limits": { "n": [0.5, 1, 2, 4, 6] }
+    },
+    {
+      "id": "R3.standInClassification",
+      "leg": "r",
+      "what": "REPORTED, not judged, SYNTHETIC ONLY: the confusion matrix of the INVENTED stand-in rule over 60 smooth (n = 4), 60 disk (n = 1) and 60 clumpy (n = 1 plus a clump of 0.3) PSF-convolved worlds at total flux 100000, with the not-constrained count; not the error rate of a cited rule and not an error rate on real galaxies (E2 is NOT RUN)",
+      "limits": { "perKind": 60, "totalFluxElectrons": 100000, "clumpFraction": 0.3 }
+    }
+  ],
+  "amendments": []
+}
