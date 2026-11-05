@@ -74,6 +74,7 @@ the release rather than in the tag.
 
 ### Fixed
 
+- **A report pasted while the previous one is being read is no longer wiped.** On the submission review page (`/instructors/submissions/`) the paste box was emptied after the previous report finished loading, so a second report pasted in that window was cleared before Add was pressed and was silently dropped. `js/submissionReview.js` now empties the box when Add is pressed, before the reading begins. Found as a 1-in-15 failure of `e2e/instructorFlow.spec.js`.
 - **A lesson that opens while a dialog is open stays behind it.** The lesson panel is mounted the first time a lesson opens, which can be after a dialog has made the rest of the page inert; it came in live and its title took keyboard focus out of the dialog, so Tab from the precise-placement form or Settings reached the lesson's close button. `js/dialog.js` now makes markup that arrives while an isolating dialog is open inert too (and puts it back on close), and opening a lesson no longer moves focus out of an open modal (D-R10-228-08).
 
 ## [2.1.0] - 2026-10-24
