@@ -5,8 +5,9 @@ Map the Galaxy's rotation from the hydrogen line, on a stated set of sightlines.
 `js/kernels/radio/`, its validator `tools/radio-validate.mjs`, an independent oracle `tools/radio-oracle/`, a validation
 group of six checks, and the fixtures under `tests/fixtures/radio/`. The spectra viewer's radio mode, the tangent-point
 tool, the investigations ("The hydrogen line", "The rotation curve from scratch") and the model-page section are a separate
-instructional pull request that waits for Carl's go-ahead. The pulsar work of Prompt 242 will join this directory and this
-document.
+instructional pull request that waits for Carl's go-ahead. The pulsar kernel of Prompt 242 has joined this directory (`pulsar*.js`
+and `dispersion.js`, with its own contract, oracle and table in [PULSARS.md](PULSARS.md)); nothing in it shares a leg or a
+bound with the HI legs below.
 
 The validation contract was committed first, in `tests/fixtures/radio/thresholds.json`, before any kernel, oracle output,
 spectrum or result existed. This document was written after it. A crossed bound is a failed leg and stays failing; only

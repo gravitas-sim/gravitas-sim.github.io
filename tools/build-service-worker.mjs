@@ -544,9 +544,10 @@ export const NEVER_PRECACHED = [
   // Prompt 236 Part A: the rotation-curve decomposition kernel and its synthetic curves. No shipped module imports them yet (the panel and the
   // lesson depth wait for Carl, D-R10-236-02), so no page can fetch one; they stay out of the install until the panel that imports them lands.
   /^js\/kernels\/galactic\/decomposition(Synthetic)?\.js$/,
+  // Prompt 242 adds the pulsar kernel (the same directory) and its group to this entry; nothing imports them either (D-R10-242-03).
   // Prompt 241: the HI spectroscopy kernel and its validation group. No shipped module imports them (the viewer's radio mode and the lessons wait for
   // Carl, D-R10-241-03), so no page can fetch one; installed they would take the first-visit tier 14.2 KB over its ceiling (Node 22, over v3 c0c877cc).
-  /^(js\/kernels\/radio\/.*|js\/validation\/groups\/radio\.js)$/,
+  /^(js\/kernels\/radio\/.*|js\/validation\/groups\/(radio|pulsars)\.js)$/,
   // Prompt 214: the strategy kernel, planner extension, panels and the strategy lesson's one new file (D-R10-214-06).
   /^js\/kernels\/strategy\//,
   /^js\/data\/investigations\/(es\/|depth\/|depth\/es\/)?(why-the-period-is-wrong|strategy-sequence)\.js$/,

@@ -19,6 +19,7 @@
     "dynamics:validate": "node tools/dynamics-validate.mjs",
     "multimessenger:validate": "node tools/multimessenger-validate.mjs",
     "radio:validate": "node tools/radio-validate.mjs",
+    "pulsar:validate": "node tools/pulsar-validate.mjs",
     "occurrence:validate": "node tools/occurrence-validate.mjs",
     "ttv:pack": "node tools/ttv-pack.mjs",
     "cluster:validate": "node tools/cluster-fit-validate.mjs",

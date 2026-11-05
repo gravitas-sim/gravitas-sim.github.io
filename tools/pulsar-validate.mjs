@@ -344,7 +344,10 @@ export function runValidation({ only = [] } = {}) {
         relativeError: sig(worst),
         relativeErrorBySeries: per,
         periodogramErrorOverWidth: sig(lsWorst),
-      }
+      },
+      worst <= L.relativePeriod
+        ? ''
+        : "Left failing and labelled, not tuned: the worst of the six noise-free periods is off by a relative amount above the committed 2e-6 (the grid-and-sub-integration period of a noise-free series is limited by how the 8 whole-pulse sub-integrations quantise the samples); the bound is Carl's to reset (AM9, AM10 record the two earlier fixes to the worlds)."
     );
   }
 
