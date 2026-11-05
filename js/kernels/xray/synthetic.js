@@ -22,16 +22,26 @@
 import { stream } from '../../random/streams.js';
 import { poissonDraw } from './poisson.js';
 
-const { Math, JSON } = globalThis;
+const { Math } = globalThis;
 const TWO_PI = 2 * Math.PI;
 
 export const SYNTHETIC_PREFIX = 'SYNTHETIC COUNT SERIES';
 
 /** Invented bands: the label is the only thing they claim. */
+// The band unit is a label of the contract, never a quantity the registry formats.
+const BAND_UNIT = 'keV';
 export const SYNTHETIC_BANDS = Object.freeze([
-  Object.freeze({ id: 'S', lo: 1, hi: 3, unit: 'keV' }),
-  Object.freeze({ id: 'H', lo: 3, hi: 10, unit: 'keV' }),
+  Object.freeze({ id: 'S', lo: 1, hi: 3, unit: BAND_UNIT }),
+  Object.freeze({ id: 'H', lo: 3, hi: 10, unit: BAND_UNIT }),
 ]);
+
+/** A structural copy of plain data (the truth manifest keeps no reference to the caller's spec). */
+const copy = v =>
+  Array.isArray(v)
+    ? v.map(copy)
+    : v && typeof v === 'object'
+      ? Object.fromEntries(Object.entries(v).map(([k, x]) => [k, copy(x)]))
+      : v;
 
 function layoutBins(layout, draw) {
   const start = [];
@@ -163,18 +173,16 @@ export function makeSyntheticSeries(spec) {
     seed,
     streamLabel: label,
     rateEvaluatedAt: 'the bin midpoint',
-    spec: JSON.parse(
-      JSON.stringify({
-        layout,
-        deadFraction,
-        netRates,
-        modulation,
-        outburst,
-        step,
-        background,
-        barycentric,
-      })
-    ),
+    spec: copy({
+      layout,
+      deadFraction,
+      netRates,
+      modulation,
+      outburst,
+      step,
+      background,
+      barycentric,
+    }),
     modulationPhase: phase,
     expectedSourceCounts: mean,
     bins: n,

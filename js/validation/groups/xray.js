@@ -13,6 +13,8 @@ import { stream } from '../../random/streams.js';
  */
 export default async function run({ add }) {
   const GROUP = 'X-ray counts';
+  // The band unit is a label of the contract, never a quantity the registry formats.
+  const BAND_UNIT = 'keV';
   const mini = (counts, T) => ({
     format: 'gravitas.counts-series/1',
     time: { system: 'TDB', barycentric: true },
@@ -20,8 +22,8 @@ export default async function run({ add }) {
     stop: [T],
     exposure: [T],
     bands: [
-      { id: 'S', lo: 1, hi: 3, unit: 'keV' },
-      { id: 'H', lo: 3, hi: 10, unit: 'keV' },
+      { id: 'S', lo: 1, hi: 3, unit: BAND_UNIT },
+      { id: 'H', lo: 3, hi: 10, unit: BAND_UNIT },
     ],
     counts: { S: [counts], H: [0] },
     background: { kind: 'none', negligible: true },
@@ -35,7 +37,7 @@ export default async function run({ add }) {
     name: 'No counts in 10 s of exposure at level 0.95: the exact Poisson interval is [0, ln(40) / 10] per second (not 0 +/- 0)',
     measured: K.rate(mini(0, 10), { level: 0.95 }).pooled.hi,
     expected: Math.log(40) / 10,
-    unit: '1/s',
+    unit: 'Hz',
     tolerance: 1e-10,
     toleranceKind: 'relative',
     why: 'The upper end of the exact interval at no counts is -ln(alpha) / T with alpha = 0.025, a closed form; sqrt(N) would give an interval of zero width.',
@@ -100,8 +102,8 @@ export default async function run({ add }) {
         stop,
         exposure,
         bands: [
-          { id: 'S', lo: 1, hi: 3, unit: 'keV' },
-          { id: 'H', lo: 3, hi: 10, unit: 'keV' },
+          { id: 'S', lo: 1, hi: 3, unit: BAND_UNIT },
+          { id: 'H', lo: 3, hi: 10, unit: BAND_UNIT },
         ],
         counts: { S, H },
         background: { kind: 'none', negligible: true },
@@ -163,7 +165,7 @@ export default async function run({ add }) {
       Math.abs(sum2 / n - (sum / n) ** 2 - 41.5) / (41.5 * Math.sqrt(2 / n))
     ),
     expected: 0,
-    unit: 'sigma',
+    unit: '',
     tolerance: 4,
     toleranceKind: 'absolute',
     why: 'The mean of a Poisson variable is its parameter with standard error sqrt(mu / n); the variance equals the mean with standard error about mu sqrt(2 / n).',
