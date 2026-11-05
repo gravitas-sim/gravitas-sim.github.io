@@ -1,0 +1,511 @@
+{
+ "format": "gravitas.sed-results/1",
+ "rows": [
+  {
+   "id": "A1.conversionsClosed",
+   "status": "pass",
+   "measured": {
+    "worstErrorInBounds": 0.00711,
+    "perPart": {
+     "ab0": 0,
+     "ab5": 0,
+     "roundTrip": 0.000291,
+     "nuFnu": 0.000263,
+     "flatAb": 0.00000193,
+     "vegaChain": 0.00711,
+     "mJy": 0
+    }
+   },
+   "note": ""
+  },
+  {
+   "id": "A2.bandIntegratedBox",
+   "status": "pass",
+   "measured": {
+    "worstMeanErrorInBounds": 0.733,
+    "worstDifferenceErrorInBounds": 0.061,
+    "differenceNonzero": [
+     true,
+     true
+    ],
+    "zeroDifferenceInBounds": 2.24e-10,
+    "pivotRelativeError": 2.43e-7
+   },
+   "note": ""
+  },
+  {
+   "id": "A3.blackbodyTotal",
+   "status": "pass",
+   "measured": {
+    "worstRelativeError": 0
+   },
+   "note": ""
+  },
+  {
+   "id": "A4.noiseFreeRecovery",
+   "status": "pass",
+   "measured": {
+    "worstRelativeT": 3.94e-12,
+    "worstRelativeTheta": 1.13e-12,
+    "worstRelativeL": 1.38e-11
+   },
+   "note": ""
+  },
+  {
+   "id": "A5.luminosityRecovery",
+   "status": "pass",
+   "measured": {
+    "worstDataOnly": 0.0369,
+    "worstWithTails": 0.0306,
+    "cases": [
+     {
+      "star": "cool",
+      "set": "optical-nir",
+      "dataOnly": 0.0369,
+      "withTails": 0.0306
+     },
+     {
+      "star": "cool",
+      "set": "sdss-2mass",
+      "dataOnly": 0.0246,
+      "withTails": 0.0207
+     },
+     {
+      "star": "cool",
+      "set": "with-mir",
+      "dataOnly": 0.0233,
+      "withTails": 0.0232
+     },
+     {
+      "star": "sun",
+      "set": "optical-nir",
+      "dataOnly": 0.0264,
+      "withTails": 0.0207
+     },
+     {
+      "star": "sun",
+      "set": "sdss-2mass",
+      "dataOnly": 0.0237,
+      "withTails": 0.0208
+     },
+     {
+      "star": "sun",
+      "set": "with-mir",
+      "dataOnly": 0.0229,
+      "withTails": 0.0212
+     },
+     {
+      "star": "hot",
+      "set": "optical-nir",
+      "dataOnly": 0.0128,
+      "withTails": 0.00613
+     },
+     {
+      "star": "hot",
+      "set": "sdss-2mass",
+      "dataOnly": 0.0179,
+      "withTails": 0.0113
+     },
+     {
+      "star": "hot",
+      "set": "with-mir",
+      "dataOnly": 0.0176,
+      "withTails": 0.0113
+     }
+    ]
+   },
+   "note": ""
+  },
+  {
+   "id": "B1.astropyConversions",
+   "status": "fail",
+   "measured": {
+    "worstRelativeError": 0.0000604,
+    "comparisons": 34,
+    "astropy": "6.0.1"
+   },
+   "note": ""
+  },
+  {
+   "id": "B2.bandMeanOracle",
+   "status": "fail",
+   "measured": {
+    "worstRelativeMean": 0.0000176,
+    "worstRelativePivot": 0.0000446,
+    "comparisons": 56
+   },
+   "note": ""
+  },
+  {
+   "id": "B3.fitOracle",
+   "status": "pass",
+   "measured": {
+    "worst": {
+     "T": 8.49e-7,
+     "theta": 0.0000012,
+     "chi2": 0.00000612,
+     "interval": 8.5e-7
+    },
+    "cases": [
+     {
+      "label": "B3a",
+      "T": 5757.5,
+      "oracleT": 5757.5
+     },
+     {
+      "label": "B3b",
+      "T": 3620.49,
+      "oracleT": 3620.49
+     },
+     {
+      "label": "B3c",
+      "T": 9469.63,
+      "oracleT": 9469.64
+     }
+    ],
+    "oracle": {
+     "python": "3.9.22",
+     "numpy": "1.26.4",
+     "scipy": "1.13.1",
+     "astropy": "6.0.1"
+    }
+   },
+   "note": ""
+  },
+  {
+   "id": "B4.integralOracle",
+   "status": "pass",
+   "measured": {
+    "worstRelativeData": 6.97e-16,
+    "worstRelativeTails": 5.3e-15
+   },
+   "note": ""
+  },
+  {
+   "id": "B5.citedTool",
+   "status": "not-run",
+   "measured": null,
+   "note": "tests/fixtures/sed/authentic/tool-fit.json was not supplied (SED_GATE.md, Files requested from Carl); nothing was fetched"
+  },
+  {
+   "id": "C1.coverageTemperature",
+   "status": "pass",
+   "measured": {
+    "n": 300,
+    "coverage": [
+     0.67,
+     0.97
+    ],
+    "bands": [
+     [
+      0.6,
+      0.76
+     ],
+     [
+      0.91,
+      0.99
+     ]
+    ]
+   },
+   "note": ""
+  },
+  {
+   "id": "C2.coverageLuminosity",
+   "status": "fail",
+   "measured": {
+    "n": 150,
+    "draws": 200,
+    "failedRealisations": 0,
+    "coverage": [
+     0.03333,
+     0.22
+    ],
+    "bands": [
+     [
+      0.55,
+      0.8
+     ],
+     [
+      0.88,
+      0.995
+     ]
+    ]
+   },
+   "note": ""
+  },
+  {
+   "id": "C3.coverageNonsimultaneous",
+   "status": "pass",
+   "measured": {
+    "n": 300,
+    "coverage": [
+     0.68,
+     0.95
+    ],
+    "bands": [
+     [
+      0.6,
+      0.76
+     ],
+     [
+      0.91,
+      0.99
+     ]
+    ],
+    "flaggedInadequate": 0.01
+   },
+   "note": ""
+  },
+  {
+   "id": "C4.unwidenedCoverage",
+   "status": "reported",
+   "measured": {
+    "n": 300,
+    "coverageWithoutWidening": [
+     0.28,
+     0.5633
+    ],
+    "coverageWithWidening": [
+     0.68,
+     0.95
+    ],
+    "flaggedInadequateWithout": 0.803,
+    "flaggedInadequateWith": 0.01
+   },
+   "note": "not judged: it shows what the widening rule changes"
+  },
+  {
+   "id": "D1.twoPoints",
+   "status": "pass",
+   "measured": {
+    "twoPoints": [
+     "not-constrained:too-few-points",
+     "not-constrained:too-few-points",
+     "not-constrained:too-few-points"
+    ],
+    "three": {
+     "status": "ok",
+     "dof": 1
+    }
+   },
+   "note": ""
+  },
+  {
+   "id": "D2.refusals",
+   "status": "pass",
+   "measured": {
+    "codes": [
+     "convention-unknown",
+     "convention-unknown",
+     "no-bandpass",
+     "vega-offset-missing",
+     "band-flux-per-wavelength",
+     "wavelength",
+     "flux",
+     "flux",
+     "sigma",
+     "sigma",
+     "sigma",
+     "error-too-large",
+     "reference-epoch"
+    ],
+    "namesTheRefusedId": true
+   },
+   "note": ""
+  },
+  {
+   "id": "D3.rayleighJeansOnly",
+   "status": "fail",
+   "measured": {
+    "n": 50,
+    "refusedShare": 0.72,
+    "controlConstrainedShare": 1
+   },
+   "note": ""
+  },
+  {
+   "id": "D4.excessFlagged",
+   "status": "pass",
+   "measured": {
+    "flaggedShare": 1,
+    "controlFlaggedShare": 0.005,
+    "n": 100,
+    "controlN": 200
+   },
+   "note": ""
+  },
+  {
+   "id": "D5.extrapolationLabels",
+   "status": "pass",
+   "measured": {
+    "insideExtrapolated": false,
+    "outsideExtrapolated": [
+     true,
+     true
+    ],
+    "plainTails": null,
+    "tailsLabelled": true,
+    "extrapolatedFraction": 0.2213
+   },
+   "note": ""
+  },
+  {
+   "id": "D6.wideningRule",
+   "status": "pass",
+   "measured": {
+    "flagged": [
+     false,
+     false,
+     true,
+     true,
+     true
+    ],
+    "worstAbsoluteError": 0,
+    "noAllowance": {
+     "rule": "none",
+     "assumesSimultaneous": true,
+     "widened": []
+    }
+   },
+   "note": ""
+  },
+  {
+   "id": "E0.rightsPerSource",
+   "status": "not-run",
+   "measured": null,
+   "note": "no catalogue terms page was saved and read in this session; every catalogue row is rights basis C and nothing of it ships (SED_GATE.md, D-R10-245-02)"
+  },
+  {
+   "id": "E1.authenticStar",
+   "status": "not-run",
+   "measured": null,
+   "note": "tests/fixtures/sed/authentic/star.json was not supplied (SED_GATE.md, Files requested from Carl); nothing was fetched"
+  },
+  {
+   "id": "E2.sdssSpectrumPhotometry",
+   "status": "reported",
+   "measured": [
+    {
+     "spectrum": "a",
+     "subClass": "A0",
+     "pipelineTeffK": 7852,
+     "bandsUsed": [
+      "V",
+      "R",
+      "r",
+      "i"
+     ],
+     "status": "ok",
+     "colourTemperatureK": 7609.3,
+     "interval68": [
+      7377.8,
+      7857.5
+     ],
+     "pAdequate": 0.467,
+     "bandMinusPivotAbMag": {
+      "V": 0.00705,
+      "R": -0.0177,
+      "r": 0.0197,
+      "i": -0.00517
+     }
+    },
+    {
+     "spectrum": "g",
+     "subClass": "G2",
+     "pipelineTeffK": 5625,
+     "bandsUsed": [
+      "V",
+      "R",
+      "r",
+      "i"
+     ],
+     "status": "ok",
+     "colourTemperatureK": 7144.1,
+     "interval68": [
+      6942.1,
+      7359.5
+     ],
+     "pAdequate": 0.839,
+     "bandMinusPivotAbMag": {
+      "V": 0.0367,
+      "R": -0.000234,
+      "r": 0.00556,
+      "i": -0.00668
+     }
+    },
+    {
+     "spectrum": "k",
+     "subClass": "K3",
+     "pipelineTeffK": 4775,
+     "bandsUsed": [
+      "V",
+      "R",
+      "r",
+      "i"
+     ],
+     "status": "ok",
+     "colourTemperatureK": 4176.3,
+     "interval68": [
+      4110.6,
+      4244.3
+     ],
+     "pAdequate": 0.981,
+     "bandMinusPivotAbMag": {
+      "V": 0.0594,
+      "R": 0.0324,
+      "r": -0.0215,
+      "i": 0.0161
+     }
+    },
+    {
+     "spectrum": "m",
+     "subClass": "M1",
+     "pipelineTeffK": 3980,
+     "bandsUsed": [
+      "V",
+      "R",
+      "r",
+      "i"
+     ],
+     "status": "ok",
+     "colourTemperatureK": 2943.8,
+     "interval68": [
+      2910.9,
+      2977.5
+     ],
+     "pAdequate": 0.000359,
+     "bandMinusPivotAbMag": {
+      "V": 0.081,
+      "R": 0.121,
+      "r": -0.197,
+      "i": 0.116
+     }
+    }
+   ],
+   "note": "points derived from one spectrum are not independent measurements; the angular radius is not reported because the spectra are not flux calibrated in absolute terms"
+  },
+  {
+   "id": "E3.catalogColoursVsSpectrum",
+   "status": "not-run",
+   "measured": null,
+   "note": "tests/fixtures/sed/authentic/star-sdss-row.json was not supplied (SED_GATE.md, Files requested from Carl); nothing was fetched"
+  }
+ ],
+ "gate": {
+  "kernelVerdict": "C",
+  "conversions": "not claimable",
+  "temperature": "not claimable",
+  "luminosity": "not claimable",
+  "productVerdict": "NOT ESTABLISHED (E0, E1 and B5 NOT RUN: no catalogue file was supplied, every catalogue row is basis C)"
+ },
+ "meta": {
+  "cpuSeconds": 12.1,
+  "node": "v22.23.4",
+  "oracle": {
+   "python": "3.9.22",
+   "numpy": "1.26.4",
+   "scipy": "1.13.1",
+   "astropy": "6.0.1"
+  }
+ }
+}

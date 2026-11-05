@@ -170,7 +170,9 @@
         "exponents": [-2, 0, 2, 4],
         "maxRel": 1e-5,
         "maxRelDifference": 1e-3,
-        "differenceMustBeNonzeroFor": [-2, 2, 4]
+        "differenceMustBeNonzeroFor": [2, 4],
+        "differenceZeroFor": [-2],
+        "maxRelZeroDifference": 1e-6
       }
     },
     {
@@ -338,6 +340,13 @@
         "maxRel": 5e-06,
         "maxRelPivot": 2e-06
       }
+    },
+    {
+      "id": "AM3",
+      "check": "A2.bandIntegratedBox, B3.fitOracle, B4.integralOracle",
+      "what": "found after the first run of legs A and B (kernel code, the committed bounds and the oracle's B1 comparison unchanged by it). (a) A2: the box band was built from two nodes, and the radiation kernel's pivotWavelength integrates a band on its own nodes, so a two-node box had its pivot 0.9 percent off its closed form (a slip in how the leg builds its box, not in a bound); the box is now built from nodes every 1 nm. And the committed list of exponents whose monochromatic-minus-band-integrated difference must be nonzero named -2: for f_nu proportional to lambda^2 the pivot wavelength is by definition the wavelength at which f_nu equals the photon-weighted mean (pivot^2 = integral S lambda / integral S/lambda), so the difference is zero by construction, and the list loses -2, which gets its own zero check (|difference| at most 1e-6 of the mean). (b) the oracle script converted AB magnitudes for B3 and B4 through astropy's ABmag, which is the 48.60 mag definition (3630.78 Jy), where the committed rule says 3631 Jy x 10^(-0.4 m); it now converts AB for B3 and B4 by the committed rule. B1 keeps astropy's definition on purpose and reports the difference (6.0e-5 relative, 6.5e-5 mag) as a finding, so B1 stays failing. No bound moved; B2 stays as committed and is judged as it stands.",
+      "when": "after the first partial run of legs A and B; the kernel's outputs had been seen; no bound was moved and no row was re-judged by a changed bound",
+      "boundMoved": false
     }
   ]
 }
