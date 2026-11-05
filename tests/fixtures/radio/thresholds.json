@@ -419,11 +419,11 @@
       "what": "REPORTED, not judged: the recovered circular speed when the world's gas has a constant 7 km/s of non-circular streaming (added to the line-of-sight velocity as a radial velocity component, kept out of the method's model), and when the gas disk ends inside the tangent radius (R_out = 0.9 R_t at l = 30 and 50), against the circular-orbit truth; the method has no way to see either",
       "limits": {
         "streamingKmS": 7,
-        "truncationFraction": 0.9,
         "longitudes": [
           30,
           50
-        ]
+        ],
+        "holeFraction": 1.1
       }
     },
     {
@@ -456,6 +456,12 @@
       "id": "AM4",
       "check": "edgeRule",
       "what": "step E2 says 'the outermost tenth of the channels'; the key outerFraction = 0.1 is added to edgeRule so the validator and the oracle read the same number from the file (the prose and the kernel already said one tenth). No bound changes.",
+      "when": "2026-11-04, before any validator run"
+    },
+    {
+      "id": "AM5",
+      "check": "A5.columnThin, R2.streaming",
+      "what": "two specification slips found while writing the validator, before it ran. (1) A5's channel-width comparison named the 0.5 km/s narrow world at 501 channels of 1 km/s, a line sampled at half its width: the trapezoid sum of a Gaussian sampled at spacing h has a relative error near 2 exp(-2 pi^2 sigma^2 / h^2), which is 1.5e-2 at sigma = 0.5 and h = 1, so no correct kernel meets 2e-4 there. The comparison is made at a gas dispersion of 2 km/s, 501 channels of 1 km/s against 1251 of 0.4 km/s, at the same 2e-4. (2) R2's second case, a gas disk ending at 0.9 R_t, leaves a sightline with no gas at all (every point of it is at R >= R_t), so it tests nothing. It is replaced by a hole: the gas disk begins at 1.1 R_t (R_in = 1.1 R_t) at l = 30 and 50, so the line of sight misses the tangent point; the leg is REPORTED either way. No bound of a judged leg changes.",
       "when": "2026-11-04, before any validator run"
     }
   ]
