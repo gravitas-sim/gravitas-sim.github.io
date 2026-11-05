@@ -47,7 +47,7 @@ export const DISPERSION_CONSTANT = (DISPERSION_SI * PC_M * 1e6) / 1e12;
 /** The provenance every result can cite. */
 export const DISPERSION = Object.freeze({
   constant: DISPERSION_CONSTANT,
-  unit: 's MHz^2 / (pc cm^-3)',
+  units: 's MHz^2 / (pc cm^-3)',
   derivation:
     'K = alpha h / (4 pi^2 m_e), times the parsec in metres and 1e6 per cm3 over 1e12',
   alpha: ALPHA_FS,

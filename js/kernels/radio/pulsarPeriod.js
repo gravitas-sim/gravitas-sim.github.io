@@ -316,7 +316,7 @@ export function analyzePulsar(dyn, o) {
   if (!(search.pCorrected < alpha))
     return refusal(
       'no-pulsar',
-      `no period in the range folds the de-dispersed series to a profile above the noise (trial-corrected probability ${search.pCorrected.toPrecision(3)} over ${search.trials} trials)`,
+      `no period in the range folds the de-dispersed series to a profile above the noise (trial-corrected probability ${Number(search.pCorrected.toExponential(2))} over ${search.trials} trials)`,
       { search, coarse: summary(coarse) }
     );
   if (coarse.atEdge)

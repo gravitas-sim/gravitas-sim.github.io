@@ -69,7 +69,7 @@ export default async function run({ add }) {
     name: 'De-dispersing a noise-free series at the true DM sharpens the folded profile by at least a factor 1.5 against a DM whose band sweep is 6 pulse widths off',
     measured: fold(60 + (6 * 0.03 * P) / span) / fold(60),
     expected: 1 / 1.5,
-    unit: 'ratio of the fold statistic off the true DM to at it',
+    unit: '',
     tolerance: 0,
     toleranceKind: 'bound',
     why: 'A bound: channel offsets spread over a sweep of k pulse standard deviations widen the summed pulse by sqrt(1 + k^2 / 12) and the fold statistic falls by the same factor, to 0.5 at k = 6, and the committed ratio of 1.5 is a fall to 0.667 (the contract leg A4).',
