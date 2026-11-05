@@ -16,6 +16,8 @@ catalogue refers to it, so a change to it can reach a student.
 | [ACTIVITY_AGES_GATE.md](ACTIVITY_AGES_GATE.md) | Activity ages gate: the committed relations, domain and bounds for gyrochronology ages and flare energies in erg, the measured legs and the verdict (Prompt 220 Part B). | gate | P220 | written | yes |
 | [ADOPTER_GUIDE.md](ADOPTER_GUIDE.md) | The instructor adopter's guide and the newcomer docs test. | guide | P114 | regions (docs) | no |
 | [ADOPTION.md](ADOPTION.md) | The instructor path and the adoption pages. | guide | P76 | regions (docs) | yes |
+| [AGN.md](AGN.md) | The AGN kernel: broad-line redshift, luminosity, the Eddington bound, the variability size bound and BPT classes, validation and files requested (Prompt 252). | feature | P252 | written | no |
+| [AGN_LUMINOSITY_FUNCTION_GATE.md](AGN_LUMINOSITY_FUNCTION_GATE.md) | The AGN luminosity-function gate (Prompt 252 Part B): committed thresholds, no verdict, the files requested. | feature | P252 | written | no |
 | [AI_ASSISTANCE_GATE.md](AI_ASSISTANCE_GATE.md) | Instructor-side AI assistance gate. | gate | unassigned | written | no |
 | [ANALYSIS_LAB.md](ANALYSIS_LAB.md) | The analysis laboratory. | feature | unassigned | written | no |
 | [ARCHIVE_IMPORT.md](ARCHIVE_IMPORT.md) | Importing from an archive. | feature | unassigned | written | no |

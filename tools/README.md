@@ -8,6 +8,7 @@ current, and the orchestrator checks it.
 | --- | --- | --- |
 | `acceptance-bindings.mjs` | What it takes for a test to accept a central experiment |  |
 | `add-step-ids.mjs` | One-time: give every lesson step a stable id |  |
+| `agn-validate.mjs` | The AGN kernel against its committed thresholds (Prompt 252) | `npm run agn:validate` |
 | `analysis-validate.mjs` | The analysis laboratory's recovery, coverage and error-rate tables | `npm run analysis:validate` |
 | `archive-check.mjs` | Can somebody who only has the archive rebuild this? | `npm run archive:check` |
 | `archive-live-check.mjs` | Does CDS still answer the way the archive import was built for? | `npm run archive:live` |

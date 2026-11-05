@@ -1,0 +1,743 @@
+{
+  "format": "gravitas.agn-thresholds/1",
+  "prompt": "Roadmap III, Prompt 252 Part A, active galactic nuclei: the redshift of a quasar from its broad lines, its luminosity from flux and redshift through the cosmology kernel with the band and the absence of a K-correction stated, a bolometric correction as a cited factor whose scatter is a model-limited term, the Eddington luminosity and the mass it bounds, a variability time scale as a light-crossing size bound, and the BPT classification with its limits (tranche T4 by D-R10-232-01): the kernel and validation part only",
+  "document": "AGN.md (\"Validation contract\"), written after this file",
+  "committed": "before js/kernels/agn/, the validator, the oracle script and its pinned results, the generator's output and the constants reading existed, and before any quasar spectrum, luminosity, Eddington mass, variability time scale or BPT class of Prompt 252 existed. The only things read before this file were the repository's existing galaxy, ISM, spectrograph, cosmology and statistics kernels (their exports and rules), the radiation line pack's record, the sibling contracts of Prompts 247 and 248 and the decision register; no flux value of any in-tree spectrum was opened for this prompt.",
+  "rule": "A crossed bound is a failed check, recorded in failed-legs.json and left failing; only Carl resets one. A leg that cannot be measured (a file not supplied, a tool not installed) is NOT RUN and says why. No published number, template, line wavelength, dividing line, bolometric correction, catalogue value or licence term is typed from memory: every one is DERIVED, read from a pack, read from the pinned offline reading of astropy's constants, or supplied by the caller with a source string and no default. The BPT dividing curves, the bolometric correction and its scatter, the broad-line templates and the wavelengths of the forbidden lines are such numbers: the kernel holds none, and the synthetic worlds use curves, a factor, lines and templates INVENTED by a stated rule that equal no published ones and are labelled. The mass of the Sun times G, the proton mass and the Thomson cross section are read from tests/fixtures/agn/constants-source.json, which tools/agn-oracle/constants.py writes from the installed astropy. A bound never moves after a result; the alternative is recorded as a question for Carl. An amendment is recorded in `amendments` before any validator run it affects; a design run on the design seed is allowed to debug the generator and the kernel and is never a leg.",
+  "seeds": {
+    "ensembleRedshift": 252001,
+    "ensembleLuminosity": 252002,
+    "ensembleEddington": 252003,
+    "ensembleVariability": 252004,
+    "ensembleBpt": 252005,
+    "featureless": 252006,
+    "oracleInputs": 252007,
+    "systematics": 252008,
+    "refusals": 252009,
+    "design": "agn-252-design (used only to debug the generator and the kernel; never in a leg)",
+    "oraclePython": 252
+  },
+  "scope": {
+    "built": "(1) the redshift of a quasar by direct lagged cross-correlation with a caller-supplied broad-line template (Prompt 248's correlation with a broad high-pass window, an opt-in parameter whose default is unchanged); (2) the luminosity at the observed band from a flux and a redshift through the cosmology kernel's luminosity distance, in the rest wavelength lambda_obs / (1 + z), with the band and the absence of a K-correction on the result; (3) the bolometric luminosity as a caller-supplied factor with its scatter in dex, the scatter reported as a separate model-limited term beside the statistical one, a refusal when the observed band does not map to the factor's rest band within a stated fraction; (4) the Eddington luminosity 4 pi G M m_p c / sigma_T and the mass it bounds from below, always labelled a bound with its assumptions; (5) the fastest significant e-folding time scale of a light curve over pairs of epochs, a conservative upper form of it, and the light-crossing size bound R <= c tau delta / (1 + z) with the Doppler factor an explicit input; (6) the BPT classification from the four line fluxes with caller-supplied dividing curves (star-forming, composite, AGN), seeded class probabilities, the refusals and the explicit limits of two ratios; (7) a labelled synthetic quasar and narrow-line generator with a truth manifest.",
+    "notBuilt": "any viewer mode, lesson, model-page section, instructor material, Spanish string, pack or precache entry; any SDSS quasar spectrum, pipeline value, template, dividing-line coefficient or bolometric correction; the luminosity function and every Part B leg (AGN_LUMINOSITY_FUNCTION_GATE.md, gate-thresholds.json: no verdict, nothing built within it); a K-correction; a black-hole mass from a line width (single-epoch virial masses are not in this prompt)."
+  },
+  "worlds": {
+    "label": "SYNTHETIC QUASAR SPECTRUM: an invented object observed by an invented spectrograph, with a stated redshift, continuum, broad lines and noise, not a measurement of any quasar. Every parameter below is invented by a rule and is not a published value; the hydrogen line wavelengths are the radiation line pack's, which are not invented.",
+    "quasar": {
+      "grid": {
+        "log10StartNm": "log10(380)",
+        "log10Step": 0.0002,
+        "samples": 2100,
+        "unit": "nm",
+        "medium": "vacuum",
+        "resolvingPower": 1000
+      },
+      "templateGrid": {
+        "log10StartNm": "log10(100)",
+        "log10Step": 0.0002,
+        "samples": 5000,
+        "note": "rest frame, the same step and line-spread as the spectra; the noise-free world at z = 0"
+      },
+      "continuum": "F_lambda = (lambda / 550 nm)^alpha with alpha = -1.5 (invented), in units of the continuum at 550 nm",
+      "broadLines": {
+        "intrinsicSigmaKmS": 2500,
+        "peakOverContinuum": {
+          "h-alpha": 2.5,
+          "h-beta": 1.0,
+          "h-gamma": 0.4,
+          "invented-A": 2.0,
+          "invented-B": 1.2,
+          "invented-C": 1.6
+        },
+        "note": "Gaussian profiles of the stated sigma convolved with the line-spread, peaks as fractions of the continuum at the line"
+      },
+      "inventedLines": {
+        "rule": "invented-A, -B and -C have rest wavelengths 0.2, 0.3 and 0.4 times the vacuum wavelength of H-alpha (the pack's); they stand for ultraviolet broad lines and are not the wavelengths of any published line",
+        "factorsOfHAlpha": {
+          "invented-A": 0.2,
+          "invented-B": 0.3,
+          "invented-C": 0.4
+        }
+      },
+      "noise": "independent Gaussian, per-pixel sigma = 1 / snr with the continuum at 550 nm as the unit",
+      "zRange": {
+        "min": 0.0,
+        "max": 2.6
+      }
+    },
+    "narrowLine": {
+      "grid": {
+        "log10StartNm": "log10(380)",
+        "log10Step": 0.0001,
+        "samples": 3840,
+        "unit": "nm",
+        "medium": "vacuum",
+        "resolvingPower": 1800
+      },
+      "continuum": "F_lambda = (lambda / 550 nm)^-1.5 (invented)",
+      "lines": "H-alpha and H-beta (the pack's) and two invented narrow lines: invented-N at 1.0046 times the vacuum wavelength of H-alpha and invented-O at 1.042 times that of H-beta; these stand for the nitrogen and oxygen forbidden lines and equal no published wavelength",
+      "intrinsicSigmaKmS": 100,
+      "balmerDecrement": "F(H-alpha) / F(H-beta) = 3.0 (invented, dust-free)",
+      "fluxes": "F(H-alpha) a given amount in units of the continuum at 550 nm times nm; F(invented-N) = 10^x F(H-alpha); F(invented-O) = 10^y F(H-beta)"
+    },
+    "dividingCurves": {
+      "form": "y = a / (x - b) + c with x = log10(F_N / F_Halpha), y = log10(F_O / F_Hbeta), valid for x < b; the form is the shape the literature uses, the numbers are not",
+      "invented": {
+        "starForming": {
+          "a": 0.5,
+          "b": 0.1,
+          "c": 1.0
+        },
+        "agn": {
+          "a": 0.5,
+          "b": 0.55,
+          "c": 1.1
+        }
+      },
+      "source": "INVENTED by the contract AGN.md: equal to no published dividing line; the kernel has no default and the caller's source string is returned with every class"
+    },
+    "bolometric": {
+      "invented": {
+        "factor": 8.0,
+        "scatterDex": 0.2,
+        "restBandNm": 550,
+        "toleranceFraction": 0.1
+      },
+      "source": "INVENTED for the validation worlds; not a published correction",
+      "note": "the factor stands for a ratio of bolometric to band luminosity; its value and scatter are the contract's"
+    },
+    "cosmologies": [
+      {
+        "H0": 70,
+        "Om": 0.3,
+        "OL": 0.7
+      },
+      {
+        "H0": 65,
+        "Om": 0.25,
+        "OL": 0.75
+      },
+      {
+        "H0": 72,
+        "Om": 0.3,
+        "OL": 0.6
+      }
+    ],
+    "cosmologyNote": "the cosmology is an assumed input, stated on every result; no distance uncertainty from it is carried"
+  },
+  "analysisRule": {
+    "name": "AGN-RULE-1 (committed here before the kernel existed)",
+    "steps": [
+      "R1 redshift: the galaxy kernel's direct lagged cross-correlation of the high-passed spectrum and a caller-supplied template on a common logarithmic grid, with the high-pass window set by the caller (the kernel's quasar default is 401 samples, about 55000 km/s at the quasar grid; the galaxy default of 101 samples is unchanged); every other rule (significance ladder 6 and 10, ambiguity ratio 0.8, curvature uncertainty, refusals by code) is the galaxy kernel's GALAXY-RULE-1 and is not restated here",
+      "L1 luminosity: nuL_nu at the rest wavelength lambda_obs / (1 + z) is 4 pi d_L^2 times lambda F_lambda at lambda_obs, with d_L the cosmology kernel's luminosity distance in the assumed cosmology; no K-correction is applied, so the result is the luminosity at a rest wavelength that changes with redshift and two quasars at different z are compared at different rest wavelengths; the flux error is propagated to the logarithm to first order (sigma_log10 = sigma_F / (F ln 10)); no distance uncertainty",
+      "L2 bolometric: L_bol = BC L_band with BC {value > 0, scatterDex >= 0, restBandNm, toleranceFraction, source} all required, no default; refused 'band-mismatch' when |lambda_obs / (1 + z) - restBandNm| > toleranceFraction restBandNm; the interval is formed in log10: statistical sigma from the flux, model sigma = scatterDex, total = their quadrature sum, a normal interval at the stated level (0.6827 default) exponentiated; both terms and a modelLimited flag (model sigma larger than statistical sigma) are returned; the one-sided lower limit at 0.95 uses 1.645 sigma_total",
+      "E1 Eddington: L_Edd = 4 pi G M m_p c / sigma_T from the pinned constants; the mass bound M >= L_bol / (L_Edd per solar mass) is a lower bound valid for a steadily radiating, spherically symmetric, ionised-hydrogen source whose bolometric luminosity does not exceed the Eddington value; the result is labelled 'lower-bound' with those assumptions and is returned as a one-sided limit from the lower limit of L_bol; the Eddington ratio L_bol / L_Edd(M) is returned for a caller's mass",
+      "V1 time scale: for every pair of epochs i < j with both fluxes positive and |F_j - F_i| >= nSigma sqrt(sigma_i^2 + sigma_j^2) (nSigma = 3) the e-folding time tau_ij = (t_j - t_i) / |ln(F_j / F_i)|, with sigma_ln = sqrt((sigma_i/F_i)^2 + (sigma_j/F_j)^2); the point estimate is the minimum tau_ij over significant pairs; the conservative form tau_up_ij = (t_j - t_i) / max(|ln(F_j/F_i)| - kGuard sigma_ln, tiny) with kGuard = 3 and its minimum over significant pairs is the value the size bound uses; fewer than 5 epochs or non-increasing times are refused by code; no significant pair is 'not-constrained'",
+      "V2 size: R <= c tau_up delta / (1 + z) with the Doppler factor delta an explicit input whose default is 1 and which is stated on the result; the time dilation (1 + z) converts the observed time scale to the rest frame; the bound assumes one coherent region varying as a whole, no light-travel smearing beyond c tau, and no gravitational lensing or beaming other than delta",
+      "B1 BPT: x = log10(F_N / F_Halpha), y = log10(F_O / F_Hbeta), first-order sigma_x, sigma_y from the four flux errors; every line needs a signal to noise >= 3 else 'not-constrained' ('line-not-detected'); star-forming when x < b_sf and y < f_sf(x); AGN when x >= b_agn or y > f_agn(x) (x < b_agn); composite otherwise; a class is assigned when its seeded Monte Carlo probability (2000 Gaussian draws of the four fluxes, a fixed stream) is at least 0.9, else 'not-constrained' ('class-ambiguous') with the three probabilities; b_sf < b_agn required of the caller's curves; the caller's dividing-curve source is returned; the result always carries the limits: two ratios only, no Seyfert-LINER split, a definition-dependent boundary, the Balmer-absorption bias on H-beta, a single aperture, narrow lines only (a broad component refused by the caller or flagged), and the detection floor",
+      "B2 line fluxes for BPT: each of the four lines fitted with the ISM kernel's pixel-integrated Gaussian on a linear continuum at the observed wavelength rest (1 + z) in the spectrum's medium, the window half-width the smaller of the default and 0.4 of the distance to the nearest of the other three lines; a line whose observed wavelength lies outside the spectrum, or within 1.5 line-spread FWHM of another BPT line (an unresolved blend), is not measured and the result is 'not-constrained' with the code 'line-outside-coverage' or 'unresolved-blend'; the redshift is an input (from the galaxy kernel's tools), not fitted here",
+      "X1 refusals by code are part of the result; a refused or not-constrained result carries no number"
+    ]
+  },
+  "checks": [
+    {
+      "id": "A1.eddingtonClosedForm",
+      "leg": "a",
+      "what": "for masses 1, 1e3, 1e6, 1e8 and 1e10 solar masses the kernel's Eddington luminosity equals 4 pi (GM_sun M) m_p c / sigma_T evaluated in the test from the pinned constants to a relative 1e-14; L_Edd(2 M) / L_Edd(M) = 2 to 1e-15; the mass bound of a source whose luminosity is exactly L_Edd(M) with no uncertainty returns M to a relative 1e-12 and its Eddington ratio 1 to 1e-12",
+      "limits": {
+        "masses": [
+          1,
+          1000.0,
+          1000000.0,
+          100000000.0,
+          10000000000.0
+        ],
+        "maxRelativeClosedForm": 1e-14,
+        "maxRelativeLinearity": 1e-15,
+        "maxRelativeInverse": 1e-12
+      }
+    },
+    {
+      "id": "A2.luminosityScaling",
+      "leg": "a",
+      "what": "(i) lambda F_lambda converted through F_nu = lambda^2 F_lambda / c to nu F_nu equals lambda F_lambda to a relative 1e-13; (ii) at z = 1e-5 the band luminosity equals 4 pi (c z / H0)^2 lambda F_lambda to a relative 1e-4 (the first-order correction of the distance is below that); (iii) at fixed flux the luminosity ratio between z = 0.5 and z = 1.5 equals the square of the cosmology kernel's luminosity distance ratio to 1e-12; (iv) the rest wavelength reported equals lambda_obs / (1 + z) exactly; (v) doubling the flux doubles the luminosity to 1e-15",
+      "limits": {
+        "maxRelativeNuFnu": 1e-13,
+        "zLow": 1e-05,
+        "maxRelativeLowZ": 0.0001,
+        "maxRelativeRatio": 1e-12
+      }
+    },
+    {
+      "id": "A3.bolometricTerms",
+      "leg": "a",
+      "what": "L_bol equals BC L_band to a relative 1e-14; with no flux error the interval's half-width in log10 equals the scatter to a relative 1e-9; with no scatter it equals the statistical term; sigma_total^2 equals the sum of the squares to 1e-12; the modelLimited flag is true exactly when the scatter exceeds the statistical term, checked at (stat, scatter) = (0.02, 0.2), (0.2, 0.02) and (0.1, 0.1) dex, the last false",
+      "limits": {
+        "maxRelativeCentral": 1e-14,
+        "maxRelativeHalfWidth": 1e-09,
+        "maxRelativeQuadrature": 1e-12,
+        "cases": [
+          [
+            0.02,
+            0.2
+          ],
+          [
+            0.2,
+            0.02
+          ],
+          [
+            0.1,
+            0.1
+          ]
+        ]
+      }
+    },
+    {
+      "id": "A4.sizeBound",
+      "leg": "a",
+      "what": "R = c tau delta / (1 + z) to a relative 1e-14 at (tau days, z, delta) = (1, 0, 1), (1, 1, 1), (0.5, 2, 1) and (1, 0, 10), c exact, the day 86400 s",
+      "limits": {
+        "maxRelative": 1e-14,
+        "cases": [
+          [
+            1,
+            0,
+            1
+          ],
+          [
+            1,
+            1,
+            1
+          ],
+          [
+            0.5,
+            2,
+            1
+          ],
+          [
+            1,
+            0,
+            10
+          ]
+        ]
+      }
+    },
+    {
+      "id": "A5.sinusoidTimescale",
+      "leg": "a",
+      "what": "a noise-free light curve F = F0 (1 + A sin(omega t)), period 100 days, 800 epochs over two periods, errors 1e-9 of the flux, has the closed-form fastest instantaneous e-folding time tau_min = sqrt(1 - A^2) / (A omega) (the minimum of F / |dF/dt|); for A = 0.3, 0.6 and 0.9 the point estimate satisfies tau_min (1 - 1e-9) <= tau_hat <= 1.01 tau_min (a finite difference over a pair cannot be faster than the instantaneous rate)",
+      "limits": {
+        "amplitudes": [
+          0.3,
+          0.6,
+          0.9
+        ],
+        "periodDays": 100,
+        "epochs": 800,
+        "relativeError": 1e-09,
+        "upperRatio": 1.01,
+        "lowerSlack": 1e-09
+      }
+    },
+    {
+      "id": "A6.bptKnownPoints",
+      "leg": "a",
+      "what": "with the contract's invented dividing curves and errors of 1e-6 of the flux, every one of these points gets its class with status ok: at x = -1.5, -1.0 and -0.5 a star-forming point 0.3 dex under the star-forming curve, a composite point midway between the two curves and an AGN point 0.3 dex over the AGN curve; at x = 0.2 (right of the star-forming asymptote) a point at y = -0.6 is composite and a point at y = 0.5 is AGN; at x = 0.7 (right of the AGN asymptote) a point at y = -0.5 is AGN; 100 percent correct",
+      "limits": {
+        "xs": [
+          -1.5,
+          -1.0,
+          -0.5
+        ],
+        "offsetDex": 0.3,
+        "rightOfAsymptotes": [
+          [
+            0.2,
+            -0.6,
+            "composite"
+          ],
+          [
+            0.2,
+            0.5,
+            "agn"
+          ],
+          [
+            0.7,
+            -0.5,
+            "agn"
+          ]
+        ],
+        "fluxRelativeError": 1e-06,
+        "minCorrect": 1.0
+      }
+    },
+    {
+      "id": "A7.quasarShift",
+      "leg": "a",
+      "what": "a noise-free quasar spectrum that is the template shifted by an integer number of samples (log10(1 + z) = k step, k = 500, 1500, 2500, 3500 at step 2e-4) is recovered by the cross-correlation to an absolute 1e-6 in z with status ok; noise-free spectra at z = 0.1234, 0.5555, 1.0777, 1.9999 and 2.3456 (sub-sample shifts) to an absolute 5e-5",
+      "limits": {
+        "lags": [
+          500,
+          1500,
+          2500,
+          3500
+        ],
+        "maxAbsoluteZLag": 1e-06,
+        "zs": [
+          0.1234,
+          0.5555,
+          1.0777,
+          1.9999,
+          2.3456
+        ],
+        "maxAbsoluteZSub": 5e-05,
+        "zRange": {
+          "min": 0.0,
+          "max": 2.6
+        }
+      }
+    },
+    {
+      "id": "B1.eddingtonOracle",
+      "leg": "b",
+      "what": "the Eddington luminosity per solar mass and the mass bound of five luminosities from the kernel against the Python oracle (astropy.constants: G M_sun, m_p, sigma_T, c) to a relative 1e-12; the oracle reads the same installed constants as the pinned file, so this leg checks the arithmetic and the unit handling, not the constants",
+      "limits": {
+        "maxRelative": 1e-12
+      }
+    },
+    {
+      "id": "B2.distanceOracle",
+      "leg": "b",
+      "what": "the luminosity distance of the cosmology kernel against astropy.cosmology.LambdaCDM (no radiation term) for the three contract cosmologies at z = 0.01, 0.1, 0.5, 1, 2, 3 and 5 to a relative 1e-6, and the band luminosity from a fixed flux against the oracle's 4 pi d_L^2 F to a relative 1e-6",
+      "limits": {
+        "maxRelative": 1e-06,
+        "zs": [
+          0.01,
+          0.1,
+          0.5,
+          1,
+          2,
+          3,
+          5
+        ]
+      }
+    },
+    {
+      "id": "B3.redshiftOracle",
+      "leg": "b",
+      "what": "eight noisy quasar spectra (the forward model, in oracle-inputs.json): the kernel's redshift agrees with the independent Python correlation (FFT profile, scipy cubic spline and bounded minimiser, numpy) to an absolute 1e-6, the uncertainty to a relative 1e-4 and the significance to a relative 1e-6; the kernel's integer-lag profile agrees with the FFT profile to a relative 1e-9 of its maximum on four of them",
+      "limits": {
+        "n": 8,
+        "maxAbsoluteZ": 1e-06,
+        "maxRelativeSigma": 0.0001,
+        "maxRelativeQ": 1e-06,
+        "profileCases": 4,
+        "maxRelativeProfile": 1e-09
+      }
+    },
+    {
+      "id": "B4.bptOracle",
+      "leg": "b",
+      "what": "3000 seeded random flux sets with errors: x, y, sigma_x and sigma_y of the kernel against the Python oracle to a relative 1e-12; and 3000 random (x, y) points (x uniform on [-2, 0.9], y uniform on [-1.5, 1.2]) classified by the kernel's deterministic rule against the oracle's implementation of rule B1: identical classes on all",
+      "limits": {
+        "nFluxSets": 3000,
+        "nPoints": 3000,
+        "maxRelative": 1e-12,
+        "xRange": [
+          -2,
+          0.9
+        ],
+        "yRange": [
+          -1.5,
+          1.2
+        ],
+        "minIdentical": 1.0
+      }
+    },
+    {
+      "id": "B5.timescaleOracle",
+      "leg": "b",
+      "what": "ten noisy light curves (forward model, in oracle-inputs.json): tau_hat and tau_up of the kernel against the Python (numpy) pair minimum of rule V1 to a relative 1e-12 and the same pair",
+      "limits": {
+        "n": 10,
+        "maxRelative": 1e-12
+      }
+    },
+    {
+      "id": "B6.lineFluxOracle",
+      "leg": "b",
+      "what": "the four BPT line fluxes of six noisy narrow-line worlds from the kernel's fit against scipy.optimize.curve_fit on the same window and model: each flux within 0.25 of its sigma and the sigmas within 5 percent",
+      "limits": {
+        "n": 6,
+        "maxSigmas": 0.25,
+        "maxRelativeSigma": 0.05
+      }
+    },
+    {
+      "id": "B7.sdssPipelineOracle",
+      "leg": "b",
+      "what": "a pinned redshift and line ratios from the SDSS pipeline (cited, retrieved with its terms) for the quasar spectra of E1 as the oracle of the redshift and the ratios; NOT RUN until the files are supplied",
+      "limits": {
+        "redshift": "absolute 5e-4 or three of the correlation's sigmas, whichever is larger",
+        "ratios": "within three combined sigmas"
+      },
+      "needsFile": true
+    },
+    {
+      "id": "C1.redshiftCoverage",
+      "leg": "c",
+      "what": "300 quasar worlds, z uniform on [0.1, 2.4], snr uniform on [8, 20], the matched template: of the worlds with status ok, the share with |z - truth| <= sigma_z lies in [0.602, 0.763] (a 3-sigma binomial band at 0.6827 for n = 300), the standard deviation of the normalised error in [0.85, 1.15], the share with status ok at least 0.95, and the catastrophic share (|z - truth| > 0.01 among all worlds) at most 0.01",
+      "limits": {
+        "n": 300,
+        "zRange": [
+          0.1,
+          2.4
+        ],
+        "snrRange": [
+          8,
+          20
+        ],
+        "coverageBand": [
+          0.602,
+          0.763
+        ],
+        "sdBand": [
+          0.85,
+          1.15
+        ],
+        "minOkFraction": 0.95,
+        "maxCatastrophic": 0.01
+      }
+    },
+    {
+      "id": "C2.luminosityCoverage",
+      "leg": "c",
+      "what": "3000 worlds: z uniform on [0.1, 2], the true band flux log-uniform over four decades, the measured flux with a relative error uniform on [0.02, 0.10] (sigma = error times the measured flux), the true bolometric factor the contract's invented 8.0 times 10^(0.2 N(0,1)), the observed band chosen so its rest wavelength is the factor's band (tolerance zero by construction): the interval for the bolometric luminosity at levels 0.6827 and 0.9545 covers the truth with shares in [0.657, 0.708] and [0.943, 0.966]; the same interval with the model term left out covers at most 0.30 at 0.6827 (so the term is needed, not decoration)",
+      "limits": {
+        "n": 3000,
+        "coverage1Band": [
+          0.657,
+          0.708
+        ],
+        "coverage2Band": [
+          0.943,
+          0.966
+        ],
+        "statOnlyMax": 0.3,
+        "errorRange": [
+          0.02,
+          0.1
+        ],
+        "scatterDex": 0.2
+      }
+    },
+    {
+      "id": "C3.eddingtonBoundCoverage",
+      "leg": "c",
+      "what": "3000 worlds: the true mass log-uniform on [1e6, 1e10] solar masses, the true Eddington ratio log-uniform on [0.01, 1], the bolometric luminosity their product, measured through the C2 chain: the one-sided 95 percent lower mass bound (from the lower limit of the luminosity at 1.645 sigma_total) is at most the true mass in at least 0.94 of the worlds",
+      "limits": {
+        "n": 3000,
+        "massRange": [
+          1000000.0,
+          10000000000.0
+        ],
+        "ratioRange": [
+          0.01,
+          1
+        ],
+        "minHolds": 0.94
+      }
+    },
+    {
+      "id": "C4.sizeBoundHolds",
+      "leg": "c",
+      "what": "500 noisy sinusoidal light curves (amplitude uniform on [0.2, 0.9], period log-uniform on [20, 200] days, 60 epochs uniform over two periods, relative error uniform on [0.005, 0.02], z uniform on [0, 2]): the truth is the closed-form size R_true = c tau_min / (1 + z) of a source that varies as fast as light allows; the bound R <= c tau_up / (1 + z) holds (R_true <= bound) in at least 0.95 of the worlds that return a value, the share returning a value is at least 0.8, and the median of tau_up / tau_min is at most 6 (a bound that holds but is useless fails)",
+      "limits": {
+        "n": 500,
+        "amplitudeRange": [
+          0.2,
+          0.9
+        ],
+        "periodRangeDays": [
+          20,
+          200
+        ],
+        "epochs": 60,
+        "errorRange": [
+          0.005,
+          0.02
+        ],
+        "zRange": [
+          0,
+          2
+        ],
+        "minHolds": 0.95,
+        "minAnswered": 0.8,
+        "maxMedianRatio": 6
+      }
+    },
+    {
+      "id": "C5.bptEnsemble",
+      "leg": "c",
+      "what": "600 narrow-line worlds (z uniform on [0.02, 0.25], x uniform on [-1.4, 0.3], y uniform on [-1.0, 1.0], H-alpha flux uniform on [1, 3] in units of the continuum at 550 nm times nm, continuum snr uniform on [5, 15], line wavelengths from the spectrum at the true z): among the worlds whose four lines are all measured, the share with each of x and y within one sigma of the truth lies in [0.602, 0.763] (n = 300 required: the first 300 such worlds are judged; fewer is a failure) and, among the worlds given a class, the share of correct classes (the truth class from the true x, y and the curves) is at least 0.88",
+      "limits": {
+        "nWorlds": 600,
+        "nJudged": 300,
+        "zRange": [
+          0.02,
+          0.25
+        ],
+        "xRange": [
+          -1.4,
+          0.3
+        ],
+        "yRange": [
+          -1.0,
+          1.0
+        ],
+        "hAlphaFluxRange": [
+          1,
+          3
+        ],
+        "snrRange": [
+          5,
+          15
+        ],
+        "coverageBand": [
+          0.602,
+          0.763
+        ],
+        "minCorrect": 0.88
+      }
+    },
+    {
+      "id": "D1.linesOutsideCoverage",
+      "leg": "d",
+      "what": "narrow-line worlds at z = 0.5, 0.6, 0.7, 0.8 and 0.9 (H-alpha past 920 nm, outside the spectrum) and at z = -0.25 (H-beta shifted to below the first wavelength, 365 nm against 380 nm), 20 seeds each: every one returns not-constrained with the code line-outside-coverage and no ratio",
+      "limits": {
+        "zs": [
+          0.5,
+          0.6,
+          0.7,
+          0.8,
+          0.9,
+          -0.25
+        ],
+        "seeds": 20,
+        "minRefused": 1.0
+      }
+    },
+    {
+      "id": "D2.undetectedAndBlended",
+      "leg": "d",
+      "what": "(i) 50 narrow-line worlds with H-alpha and the two other lines strong and the invented O line at 0.5 percent of H-beta (below a signal to noise of 3): all not-constrained with the code line-not-detected naming the line; (ii) the same lines with the invented N line placed 0.3 nm from H-alpha (inside 1.5 line-spread widths): all not-constrained with the code unresolved-blend",
+      "limits": {
+        "n": 50,
+        "oFraction": 0.005,
+        "blendSeparationNm": 0.3,
+        "minRefused": 1.0
+      }
+    },
+    {
+      "id": "D3.bandMismatch",
+      "leg": "d",
+      "what": "a band luminosity at z = 0.5 observed at 550 nm (rest 366.7 nm) given a bolometric factor whose rest band is 550 nm with tolerance 0.1 is refused with the code band-mismatch and no number; at z = 0.05 (rest 523.8 nm, 4.8 percent away) it is accepted; a factor with no source, no scatter or no band is refused by code",
+      "limits": {
+        "zRefused": 0.5,
+        "zAccepted": 0.05,
+        "observedNm": 550,
+        "restBandNm": 550,
+        "toleranceFraction": 0.1
+      }
+    },
+    {
+      "id": "D4.boundLabelAndInputs",
+      "leg": "d",
+      "what": "the mass bound carries kind 'lower-bound', a non-empty assumptions list that names electron scattering, steady emission, spherical symmetry and ionised hydrogen, and the sign 'M >='; a non-positive luminosity, a missing source or a negative scatter is refused by code; a luminosity whose lower limit is non-positive is returned with no bound and the code 'not-constrained'",
+      "limits": {}
+    },
+    {
+      "id": "D5.lightCurveRefusals",
+      "leg": "d",
+      "what": "a flat noisy light curve (60 epochs, errors 2 percent, no signal) returns not-constrained in 100 of 100 seeds with the code no-significant-pair; non-increasing times, fewer than 5 epochs, a non-positive error and mismatched arrays are each refused by code",
+      "limits": {
+        "n": 100,
+        "epochs": 60,
+        "relativeError": 0.02,
+        "minNotConstrained": 1.0
+      }
+    },
+    {
+      "id": "D6.featurelessSpectrum",
+      "leg": "d",
+      "what": "200 quasar-grid spectra that are a power-law continuum with noise only (snr uniform on [8, 20]) correlated against the broad-line template over z in [0, 2.6]: at most 1 percent return status ok",
+      "limits": {
+        "n": 200,
+        "maxOkFraction": 0.01,
+        "snrRange": [
+          8,
+          20
+        ],
+        "zRange": {
+          "min": 0.0,
+          "max": 2.6
+        }
+      }
+    },
+    {
+      "id": "D7.bptAmbiguous",
+      "leg": "d",
+      "what": "50 points placed exactly on the star-forming curve and on the AGN curve (25 each) with line errors giving 0.1 dex in x and y: all return not-constrained with the code class-ambiguous and the three probabilities, none a class",
+      "limits": {
+        "n": 50,
+        "errorDex": 0.1,
+        "minAmbiguous": 1.0
+      }
+    },
+    {
+      "id": "E1.sdssQuasarPack",
+      "leg": "e",
+      "what": "SDSS quasar spectra at three redshifts under a recorded basis, analysed under AGN-RULE-1 with the fixed contract: the redshift within the larger of 5e-4 and three sigmas of the pipeline's, the band luminosity and Eddington lower bound reported; NOT RUN until the files and terms are supplied",
+      "limits": {},
+      "needsFile": true
+    },
+    {
+      "id": "E2.bptPublished",
+      "leg": "e",
+      "what": "BPT classes of published objects (with the published line ratios and the published dividing lines read from the papers by Carl) against the kernel's classes under those curves; NOT RUN until the curves and ratios are supplied",
+      "limits": {},
+      "needsFile": true
+    },
+    {
+      "id": "E3.measuredLightCurve",
+      "leg": "e",
+      "what": "a measured AGN light curve with its published fastest time scale: the size bound against the published size; NOT RUN until the file is supplied",
+      "limits": {},
+      "needsFile": true
+    },
+    {
+      "id": "E4.bolometricLiterature",
+      "leg": "e",
+      "what": "a cited bolometric correction with its stated scatter and rest band, entered with its source string, and a cited Eddington ratio of a named object recomputed; NOT RUN until the numbers and their source are supplied",
+      "limits": {},
+      "needsFile": true
+    },
+    {
+      "id": "R1.templateMismatch",
+      "leg": "r",
+      "what": "REPORTED, not judged: the correlation's coverage, the standard deviation of the normalised error, the bias and the status counts over 200 quasar worlds whose lines are drawn away from the template's (each line's strength times a factor uniform on [0.5, 1.5], the width factor uniform on [0.7, 1.4], each line shifted by a velocity drawn N(0, 300 km/s)), so the cost of a template that is not the object, and of lines that do not share one redshift, is on the page",
+      "limits": {
+        "n": 200,
+        "strengthRange": [
+          0.5,
+          1.5
+        ],
+        "widthRange": [
+          0.7,
+          1.4
+        ],
+        "lineShiftKmS": 300
+      }
+    },
+    {
+      "id": "R2.lineShiftSystematic",
+      "leg": "r",
+      "what": "REPORTED, not judged: the redshift bias (in km/s) when all the invented ultraviolet lines are shifted by -500, -1000 and -2000 km/s relative to the Balmer lines (a velocity offset between line families), 50 worlds each",
+      "limits": {
+        "shiftsKmS": [
+          -500,
+          -1000,
+          -2000
+        ],
+        "n": 50
+      }
+    },
+    {
+      "id": "R3.kCorrectionAbsence",
+      "leg": "r",
+      "what": "REPORTED, not judged: for the invented continuum F_lambda proportional to lambda^-1.5, the ratio of the luminosity at a fixed rest wavelength (the absent K-corrected value) to the observed-band luminosity at z = 0.5, 1 and 2, and the same for indices -0.5 and -2.5, so the cost of the missing correction has a number",
+      "limits": {
+        "zs": [
+          0.5,
+          1,
+          2
+        ],
+        "alphas": [
+          -0.5,
+          -1.5,
+          -2.5
+        ]
+      }
+    },
+    {
+      "id": "R4.dividingCurveSensitivity",
+      "leg": "r",
+      "what": "REPORTED, not judged: the share of 3000 random (x, y) points whose class changes when each dividing curve's c parameter moves by +0.05 and by -0.05 dex, and when its a parameter moves by 20 percent, so the boundary's definition dependence has a number",
+      "limits": {
+        "n": 3000,
+        "dc": [
+          0.05,
+          -0.05
+        ],
+        "dA": 0.2
+      }
+    }
+  ],
+  "amendments": [
+    {
+      "id": "AM1",
+      "step": "checks.B2.distanceOracle",
+      "what": "B2's oracle for the luminosity distance is an independent implementation by scipy.integrate.quad (flat and open, no radiation, c exact), not astropy.cosmology.LambdaCDM; the tolerance (relative 1e-6) and the redshifts and cosmologies are unchanged.",
+      "why": "Recorded before any validator run: astropy.cosmology cannot be imported in the session's Python (its PyYAML dependency is missing and nothing is installed or fetched); the same substitution was recorded as AM3 of Prompt 244's contract. The Eddington oracle (astropy.constants) is unaffected. No bound moved."
+    },
+    {
+      "id": "AM2",
+      "step": "checks.A7.quasarShift",
+      "what": "The integer-lag list of A7 becomes k = 500, 1500, 2000 and 2500 (z = 0.2589, 1.0000, 1.5119 and 2.1623) in place of 500, 1500, 2500 and 3500.",
+      "overrides": [
+        {
+          "check": "A7.quasarShift",
+          "limit": "lags",
+          "value": [
+            500,
+            1500,
+            2000,
+            2500
+          ]
+        }
+      ],
+      "why": "Recorded before any validator run, from arithmetic alone: log10(1 + z) = 3500 x 2e-4 gives z = 4.01, outside the contract's own redshift range [0, 2.6] and past the spectrum's last wavelength for every line of the world, so the committed case could not be recovered by any method. A case list error of the contract, found before any result existed. The tolerance (1e-6) and the other cases are unchanged; no bound moved."
+    },
+    {
+      "id": "AM3",
+      "step": "analysisRule.V1 (nSigma) and checks.A5, B5, C4, D5",
+      "what": "The significance a pair must have is nSigma = 5 sigma of the difference, not 3; the guard kGuard stays 3. The kernel constant N_SIGMA is 5; the oracle reads it from oracle-inputs.json.",
+      "why": "Recorded before any validator run, from arithmetic alone: a 60-epoch curve has 1770 pairs, so a 3-sigma pair (two-sided probability 0.0027) is expected about 4.8 times by chance in a flat light curve and D5 (100 of 100 flat curves not constrained) could not pass for any estimator that uses a per-pair 3-sigma cut without a trial correction; at 5 sigma (5.7e-7) the expected number is 0.001. A defect of the committed rule found before any result existed. No bound moved; A5 (noise-free), B5 (oracle arithmetic), C4 and D5 keep their text and limits."
+    },
+    {
+      "id": "AM4",
+      "step": "checks.C5.bptEnsemble",
+      "what": "The number of narrow-line worlds drawn is 2000, not 600; the number judged stays 300 (the first 300 worlds whose four lines are all measured), and every bound is unchanged.",
+      "overrides": [
+        {
+          "check": "C5.bptEnsemble",
+          "limit": "nWorlds",
+          "value": 2000
+        }
+      ],
+      "why": "Recorded before any validator run, from arithmetic alone: with a per-pixel signal to noise of 5 to 15 and the x and y ranges committed, a line needs a flux above about 2.7 / snr (in units of the continuum at 550 nm times nm) to be detected at 3 sigma, which leaves roughly 40 percent of worlds with all four lines measured, so 600 worlds could not supply the 300 the leg judges. The bounds, the ranges and the seeds are untouched."
+    },
+    {
+      "id": "AM5",
+      "step": "checks.A3.bolometricTerms (the modelLimited flag)",
+      "what": "The flag is true when the scatter exceeds the statistical term by more than a relative 1e-9 (the kernel's MODEL_LIMITED_TOLERANCE), so that (0.1, 0.1) dex, which differ only by floating-point rounding in the conversion of the flux error, is false.",
+      "why": "Recorded before any validator run: the statistical sigma is computed as sigma_F / (F ln 10) from an error built as 0.1 ln 10 F, which can differ from 0.1 in the last bit, and the committed case (0.1, 0.1) is meant to be an equality. A discretisation of a comparison, not a bound."
+    },
+    {
+      "id": "AM6",
+      "step": "checks.A2.luminosityScaling (item iv, in the validator's code)",
+      "what": "The validator's expression for item (iv) is corrected to compare the reported rest wavelength with lambda_obs / (1 + z) of the same band (the committed text), where the first run compared it with 550 / (1 + z) of a band observed at 550 (1 + z) nm.",
+      "why": "Recorded AFTER the first validator run (run 1), because the first run showed the expression was wrong, not the kernel: A2 failed only on item (iv), with restWavelengthError 183.33 nm (= 550 - 550 / 1.5), the other four items passing at 1.7e-16, 1.55e-5, 1.2e-16 and 0. The committed text and its bound (exactly equal) are unchanged and nothing in the kernel changed; the correction is of the validator's arithmetic only. Every other leg of run 1 is left as it was and the five other failures (A7, B3, B6, C1, D2) are NOT amended."
+    }
+  ]
+}
