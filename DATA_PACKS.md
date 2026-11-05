@@ -344,6 +344,44 @@ SDK): the PDCSAP pack's depth at 1.763588 days (Esteves et al. 2015), and the
 SAP pack's against that depth times CROWDSAP, which is what a corrected and an
 uncorrected light curve of a crowded star should differ by.
 
+## Radio: the NANOGrav 15-year pulsars (Prompt 240)
+
+The radio data-rights gate (RADIO_DATA_GATE.md, Prompt 239) released one source:
+the NANOGrav 15-year data set, release v2.1.0 (Zenodo 10.5281/zenodo.16051178,
+CC BY 4.0 in the record's licence field), as a table of periods and dispersion
+measures (D-R10-239-16, verdict B). Every other radio row is C, so no HI
+spectrum, folded profile or dispersed series is a pack here: 241 and 242 build
+the labelled synthetic ones.
+
+| Pack | What it holds | Raw product | Check |
+|---|---|---|---|
+| `nanograv-15yr-pulsars` | 68 pulsars: spin frequency (Hz), dispersion measure (pc/cm3) from the narrowband models and from the wideband models, the spread of the DM over epochs, the number of epochs | `NANOGrav15yr_PulsarTiming_v2.1.0.tar.gz`, 638,719,668 bytes, SHA-256 `91476bf2...c5708f` | periods of 1 to 100 ms, at least 60 pulsars with the two DMs within 0.1 pc/cm3 (65 do) |
+
+`tools/data-packs/radio.mjs` inflates the archive as a stream and keeps only
+`narrowband/par/*.nb.par` and `wideband/par/*.wb.par` (a tar header that fails
+its checksum is refused), so the 639 MB file is never unpacked. What the files
+do and do not say is in the manifest's reductions and assumptions:
+
+- **The files state no unit.** Hz and pc/cm3 are the par-file convention of
+  tempo2 and PINT. `pc/cm3` joined `js/units/registry.js` for it.
+- **A file's DM line is not the pulsar's DM.** It is a fixed baseline (J1024-0719's
+  differs by about 2 between the narrowband and wideband files); the fitted
+  per-epoch DMX offsets carry the variation. The pack states baseline plus the mean
+  offset, the spread, and the same from the wideband models.
+- **No DM uncertainty ships.** 62 of the 68 files carry none and six carry a frozen
+  parameter's, so by the gate's rule that column is C. The difference between the
+  two DMs is the only scatter offered; three pulsars differ by more than 0.5.
+- **The 8 single-telescope models** (a name that is another pulsar plus `ao` or
+  `gbt`) are second models of pulsars already in the table and are not rows.
+- **The rows are a sidecar** (`radio/nanograv-15yr-pulsars.json`, 1.8 KB), in no
+  precache tier; the pack's record module is NEVER_PRECACHED until its first
+  adopter. No Library entry: the Library lists datasets the Observatory opens as
+  fixtures, and this has none yet (the pack's rights label is on the model page,
+  in LICENSES.md and in NOTICE).
+- **Provenance** needs the archive in `.packs-cache/`, so
+  `npm run packs:provenance` (the monthly CI job) downloads 639 MB for this pack.
+  The pack's `timeoutMs` is 30 minutes for that.
+
 ## Commands
 
 ```bash

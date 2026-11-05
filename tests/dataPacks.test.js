@@ -407,6 +407,8 @@ function copyForCheck() {
     'variables',
     'js/kernels/variables',
     'js/data/radiation',
+    // The radio pack's rows are a sidecar file (Prompt 240).
+    'radio',
     // The Sky Lab's star pack checks its sidecar, and the colours it derives run the radiation kernel.
     'js/data/sky',
     'sky',
