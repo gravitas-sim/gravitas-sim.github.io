@@ -158,7 +158,7 @@ export default async function run({ add }) {
   }
   add({
     group: GROUP,
-    kind: 'statistical',
+    kind: 'analytic',
     name: 'The exact Poisson sampler has mean 41.5 and variance 41.5 over 20,000 draws, to four standard errors',
     measured: Math.max(
       Math.abs(sum / n - 41.5) / Math.sqrt(41.5 / n),
