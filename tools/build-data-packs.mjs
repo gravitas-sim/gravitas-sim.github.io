@@ -62,6 +62,7 @@ import { SKY_PACKS } from './data-packs/sky.mjs';
 import { GALACTIC_PACKS } from './data-packs/gaia-dynamics.mjs';
 import { VARIABLES_PACKS } from './data-packs/variables.mjs';
 import { ACTIVITY_PACKS } from './data-packs/activity.mjs';
+import { RADIO_PACKS } from './data-packs/radio.mjs';
 import { COSMOLOGY_PACKS } from './data-packs/cosmology.mjs';
 import { IMAGE_PACKS } from './data-packs/image-packs.mjs';
 
@@ -448,6 +449,8 @@ export const PACKS = [
   ...VARIABLES_PACKS,
   // Stellar rotation and flares (Roadmap III Prompt 220).
   ...ACTIVITY_PACKS,
+  // Radio: the NANOGrav 15-year pulsars (Roadmap III Prompt 240).
+  ...RADIO_PACKS,
   // Cosmology and extragalactic data (Roadmap II Prompt 91).
   ...COSMOLOGY_PACKS,
   // Image packs for the first slice (Roadmap III Prompt 189).
@@ -702,6 +705,7 @@ const rawOf = (pack, { offline = true, offlineFlag = false } = {}) =>
         offlineFlag,
         refetch: pack.refetch || 'npm run packs:data',
         headers: pack.headers,
+        ...(pack.timeoutMs ? { timeoutMs: pack.timeoutMs } : {}),
       })
     )
   );

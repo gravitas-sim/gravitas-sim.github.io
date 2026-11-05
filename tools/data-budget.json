@@ -5,14 +5,14 @@
     {
       "key": "packBytes",
       "label": "Observation packs, raw (data-packs/*.json)",
-      "ceiling": 342740,
+      "ceiling": 355282,
       "unit": "bytes",
       "measuredBy": "tools/data-budget.mjs"
     },
     {
       "key": "packGzipBytes",
       "label": "Observation packs, gzip level 6",
-      "ceiling": 107061,
+      "ceiling": 111422,
       "unit": "bytes",
       "measuredBy": "tools/data-budget.mjs"
     },

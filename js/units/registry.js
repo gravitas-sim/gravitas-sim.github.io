@@ -122,6 +122,12 @@ export const UNITS = Object.freeze({
     symbol: 'km/s/Mpc',
   },
 
+  // A pulsar's dispersion measure (Roadmap III Prompt 240): the column of free
+  // electrons along the line of sight. It has a dimension of its own and no factor,
+  // as a magnitude has, so it converts to nothing and never takes the place of an
+  // inverse area in a formula's result.
+  'pc/cm3': { dim: 'dispersion-measure', factor: null, symbol: 'pc/cm³' },
+
   W: { dim: 'power', factor: 1, symbol: 'W' },
   // IAU 2015 nominal solar luminosity.
   Lsun: { dim: 'power', factor: 3.828e26, symbol: 'L☉' },
