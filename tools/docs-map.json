@@ -359,6 +359,20 @@
       "student": true
     },
     {
+      "file": "GALAXY_MORPHOLOGY.md",
+      "kind": "feature",
+      "purpose": "The galaxy-morphology kernel: isophotes, profile, half-light radius, magnitude, concentration, asymmetry, validation, failed legs and requested files (Prompt 249, Part A).",
+      "owner": 249,
+      "student": false
+    },
+    {
+      "file": "GALAXY_PROFILES_GATE.md",
+      "kind": "gate",
+      "purpose": "The galaxy-profiles gate: committed fit, two-component and Tully-Fisher thresholds and verdict function, nothing measured, Tully-Fisher data unmet (Prompt 249, Part B).",
+      "owner": 249,
+      "student": false
+    },
+    {
       "file": "GALAXY_SPECTRA.md",
       "kind": "feature",
       "purpose": "The galaxy-spectra kernel: redshift by lines and by correlation, the 4000-angstrom break and its limits, validation and the files requested (Prompt 248).",
