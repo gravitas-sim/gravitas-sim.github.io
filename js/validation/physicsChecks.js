@@ -103,6 +103,7 @@ const GROUPS = [
   () => import('./groups/sed.js'),
   () => import('./groups/galaxy.js'),
   () => import('./groups/morphology.js'),
+  () => import('./groups/agn.js'),
 ];
 
 /**

@@ -1,0 +1,71 @@
+{
+  "format": "gravitas.agn-luminosity-function-gate-thresholds/1",
+  "prompt": "Roadmap III, Prompt 252 Part B: the AGN luminosity-function gate (docs/agn-luminosity-function-gate): a quasar luminosity function by 1/Vmax from a flux-limited catalogue subset, with the sample's completeness and K-corrections, against a published function pinned as the oracle",
+  "document": "AGN_LUMINOSITY_FUNCTION_GATE.md, written after this file",
+  "committed": "before any catalogue row, completeness document, K-correction, published luminosity function, estimator code or oracle output for this gate exists in the tree. Nothing of the catalogue has been read, typed or fetched.",
+  "rule": "7.5 rule 3 and 4: a gate commits its thresholds first. A threshold that proves unmeasurable fails the gate on that threshold and only Carl resets it. A data-rights decision is per source and per intended redistribution form. A leg whose catalogue, completeness document, K-correction source or published function is absent is NOT RUN (Carl's delegation, 2026-11-05): until the files arrive there is no verdict, nothing is built within one, and the consumers take the C alternative (a reading step). No luminosity-function value, K-correction, selection limit, area, catalogue column name or licence term is typed from memory; none is fetched by the session that wrote this file. A luminosity function is never presented without its completeness correction and K-correction.",
+  "verdictRule": {
+    "A": "G1 to G6 pass: a luminosity function by 1/Vmax with intervals, the completeness correction and the K-correction stated",
+    "B": "G1, G2 and G7 pass and any of G3 to G6 fails: the Malmquist demonstration on the sample without a luminosity function (the mean luminosity of the flux-limited sample against redshift, with the limiting luminosity curve); nothing else is built",
+    "C": "G1 or G2 fails (or the sample cannot be redistributed): a reading step",
+    "notDecided": "any of G1, G2, G3 or G7 NOT RUN: no verdict, and the effective state for consumers is C until the legs run"
+  },
+  "needs": {
+    "sample": "one SDSS quasar catalogue subset (exact product and data release, the columns and rows used, the selection and its flux limit, the survey area, the redistribution terms read with a retrieval date, the file's SHA-256) with the sample's completeness documentation as a function of magnitude and redshift",
+    "kCorrection": "one named K-correction source (a published continuum-and-lines recipe or table, its version and licence read, its SHA-256) for the band the sample is selected in",
+    "oracle": "one published luminosity function for the same band, redshift bins and cosmology, in a table with its terms read, pinned as the oracle; the bins and the cosmology conversion are recorded",
+    "completenessObject": "154's selection-function object (js/kernels/statistics/selection.js) carries the completeness; no separate completeness code is written"
+  },
+  "checks": [
+    {
+      "id": "G1.sampleRights",
+      "what": "the sample's product, release, columns, selection, flux limit, area, redistribution terms with a retrieval date and the SHA-256 are recorded and the file is present with a rights basis accepted under rule 4 (public domain, CC BY, or a stated no-licence-credited basis as its own decision); the analysis reads no value that is not in the file",
+      "limits": {}
+    },
+    {
+      "id": "G2.completenessDocumented",
+      "what": "the sample's completeness as a function of apparent magnitude and redshift is documented by the survey and loaded into the selection-function object; the correction and its uncertainty are applied to every bin, never omitted",
+      "limits": {}
+    },
+    {
+      "id": "G3.kCorrectionSource",
+      "what": "the K-correction's source, its band and the redshift range of its validity are recorded; a source outside its range is refused; the K-correction is applied by the pinned source's own recipe and compared with the source's stated example values to a relative 1e-3 where it states any",
+      "limits": {
+        "maxRelativeExample": 0.001
+      }
+    },
+    {
+      "id": "G4.vmaxVsOracle",
+      "what": "the 1/Vmax luminosity function (with the completeness correction and the K-correction) against the pinned published function in every bin they share: at least 80 percent of the shared bins agree within two combined standard errors and no bin differs by more than 0.3 dex",
+      "limits": {
+        "minAgreeingFraction": 0.8,
+        "sigmas": 2,
+        "maxDex": 0.3
+      }
+    },
+    {
+      "id": "G5.binIntervals",
+      "what": "the interval of each bin (Poisson with the completeness correction, 154's counting intervals) covers a withheld half of the sample's function at the stated level on 200 seeded half-sample splits: the share of bin-splits covered lies within a 3-sigma binomial band of the level, at 0.6827",
+      "limits": {
+        "splits": 200,
+        "level": 0.6827
+      }
+    },
+    {
+      "id": "G6.noOmission",
+      "what": "the function is refused (no table is returned) when the completeness correction or the K-correction is absent, in 100 of 100 attempts with either omitted",
+      "limits": {
+        "attempts": 100,
+        "minRefused": 1.0
+      }
+    },
+    {
+      "id": "G7.malmquistDemonstration",
+      "what": "the mean luminosity of the flux-limited sample in redshift bins rises with redshift and sits above the sample's limiting luminosity at every redshift, the limiting-luminosity curve computed through the cosmology kernel and the K-correction of G3, to a stated tolerance of zero violations over the sample",
+      "limits": {
+        "maxViolations": 0
+      }
+    }
+  ],
+  "amendments": []
+}

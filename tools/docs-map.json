@@ -44,6 +44,20 @@
       "student": true
     },
     {
+      "file": "AGN.md",
+      "kind": "feature",
+      "purpose": "The AGN kernel: broad-line redshift, luminosity, the Eddington bound, the variability size bound and BPT classes, validation and files requested (Prompt 252).",
+      "owner": 252,
+      "student": false
+    },
+    {
+      "file": "AGN_LUMINOSITY_FUNCTION_GATE.md",
+      "kind": "feature",
+      "purpose": "The AGN luminosity-function gate (Prompt 252 Part B): committed thresholds, no verdict, the files requested.",
+      "owner": 252,
+      "student": false
+    },
+    {
       "file": "AI_ASSISTANCE_GATE.md",
       "kind": "gate",
       "purpose": "Instructor-side AI assistance gate.",

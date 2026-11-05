@@ -1,0 +1,134 @@
+{
+  "format": "gravitas.agn-failed-legs/1",
+  "label": "These legs crossed a committed bound and stay failing; only Carl resets one.",
+  "legs": [
+    {
+      "id": "A7.quasarShift",
+      "measured": {
+        "worstLag": null,
+        "worstSub": null,
+        "per": [
+          {
+            "k": 500,
+            "z": 0.258925,
+            "error": 1.684e-7,
+            "status": "ok",
+            "code": null
+          },
+          {
+            "k": 1500,
+            "z": 0.995262,
+            "error": 0.0001257,
+            "status": "ok",
+            "code": null
+          },
+          {
+            "k": 2000,
+            "z": 1.51189,
+            "error": 0.000001869,
+            "status": "ok",
+            "code": null
+          },
+          {
+            "k": 2500,
+            "z": 2.16228,
+            "error": null,
+            "status": "refused",
+            "code": "ambiguous-peak"
+          },
+          {
+            "z": 0.1234,
+            "error": 1.099e-7,
+            "status": "ok",
+            "code": null
+          },
+          {
+            "z": 0.5555,
+            "error": null,
+            "status": "refused",
+            "code": "ambiguous-peak"
+          },
+          {
+            "z": 1.0777,
+            "error": 0.0000223,
+            "status": "ok",
+            "code": null
+          },
+          {
+            "z": 1.9999,
+            "error": 0.000441,
+            "status": "ok",
+            "code": null
+          },
+          {
+            "z": 2.3456,
+            "error": null,
+            "status": "refused",
+            "code": "ambiguous-peak"
+          }
+        ]
+      },
+      "note": "Nine noise-free cases: four are recovered inside the bound or near it (k = 500 at 1.7e-7 and z = 0.1234 at 1.1e-7 pass; z = 1.0777 reads 2.2e-5, k = 2000 reads 1.9e-6), k = 1500 reads 1.3e-4 against 1e-6, z = 1.9999 reads 4.4e-4 against 5e-5, and three (k = 2500, z = 0.5555, z = 2.3456) are refused ambiguous-peak. The refusal is the galaxy kernel’s committed 0.8 rule doing its work: the world’s three invented ultraviolet lines sit at 0.2, 0.3 and 0.4 of H-alpha, a 2:3:4 spacing under which the template shifted by a modest factor lines up with itself, so a second correlation peak reaches 0.8 of the best. Where a case is recovered the departure is a systematic floor of 1e-6 to 4e-4 in z, which we attribute (not isolated by an experiment) to the high-pass filter’s edge effects at the spectrum’s cut at 1000 nm with a 401-sample window and to the template’s different extent. Left failing as committed; a world whose invented lines are not harmonic, and a leg that expects a refusal where the world is ambiguous, are questions for Carl in AGN.md."
+    },
+    {
+      "id": "B3.redshiftOracle",
+      "measured": {
+        "worstZ": 8.601056755708214e-9,
+        "worstSigma": 7.99487971318249e-9,
+        "worstQ": 6.326224058972937e-14,
+        "worstProfile": 4.3508138495046706e-15,
+        "codes": [
+          "ok",
+          "ambiguous-peak",
+          "ambiguous-peak",
+          "ok",
+          "ambiguous-peak",
+          "ambiguous-peak",
+          "ambiguous-peak",
+          "ok"
+        ]
+      },
+      "note": "Five of the eight noisy worlds are refused ambiguous-peak by the kernel (the oracle has no ambiguity rule and returns a redshift for all eight), so the leg, which requires status ok on every case, fails on the committed text. On the three recovered worlds the kernel and the independent implementation agree to 8.6e-9 in z, 8.0e-9 relative in sigma, 6.3e-14 relative in q and 4.4e-15 of the profile maximum, far inside the bounds. The cause of the refusals is the harmonic spacing of the invented lines named under A7. Left failing as committed."
+    },
+    {
+      "id": "B6.lineFluxOracle",
+      "measured": {
+        "worstFluxSigmas": 1.0807345788453393,
+        "worstRelativeSigma": 0.4841289194703021
+      },
+      "note": "The kernel’s fit and scipy’s curve_fit on the same window and model differ by up to 1.08 of a sigma in the flux (bound 0.25) and by up to 48 percent in the reported sigma (bound 5 percent). The windows are 7 pixels half-width for the two lines near their neighbour and 10 for the others, a five-parameter fit in 15 to 23 pixels of a line about 2 pixels wide, so the two optimisers settle at different points of a poorly conditioned surface; the kernel’s fit errors are larger than scipy’s in 23 of 24 lines, by 1 to 48 percent. Not isolated further. C5 shows the kernel’s own intervals cover (x 0.63, y 0.72), so the consequence is a disagreement between two fits, not a measured miscalibration. Left failing as committed."
+    },
+    {
+      "id": "C1.redshiftCoverage",
+      "measured": {
+        "n": 166,
+        "coverage": 0.4457831325301205,
+        "meanZ": 4.280451087247568,
+        "sdZ": 16.456850476175845,
+        "okFraction": 0.5533333333333333,
+        "catastrophic": 0,
+        "status": {
+          "ambiguous-peak": 134,
+          "ok": 166
+        },
+        "medianAbsErrorZ": 0.0000613,
+        "medianSigmaZ": 0.0000527
+      },
+      "note": "134 of 300 worlds are refused ambiguous-peak (the harmonic spacing named under A7), so the ok share is 0.553 against the committed 0.95. Among the 166 answered, the coverage of the one-sigma interval is 0.446 (band 0.602 to 0.763) and the standard deviation of the normalised error is 16.5 (band 0.85 to 1.15): the median absolute error 6.1e-5 is close to the median sigma 5.3e-5, so the failure is in the tail (a few answers with errors of 1e-3 and sigmas of 1e-5, where the systematic floor named under A7 exceeds the noise at high signal to noise). No catastrophic answer. The interval carries noise only, as the kernel states. Left failing as committed."
+    },
+    {
+      "id": "D2.undetectedAndBlended",
+      "measured": {
+        "weakRefused": 48,
+        "blendRefused": 50,
+        "of": 50,
+        "codes": {
+          "line-not-detected": 48,
+          "blend:unresolved-blend": 50,
+          "line-fit-failed": 2
+        }
+      },
+      "note": "The blend half passes (50 of 50 unresolved-blend). In the weak-line half 48 of 50 worlds return line-not-detected for the invented O line as committed, and 2 return line-fit-failed: the fit of a line that is not there did not converge, which the committed rule does not treat as a non-detection. Left failing as committed; mapping a failed fit at the expected position to line-not-detected is a question for Carl."
+    }
+  ]
+}

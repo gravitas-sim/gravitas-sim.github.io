@@ -1,9 +1,9 @@
 {
  "generatedAt": "2026-11-05",
  "version": "2.1.0",
- "passed": 413,
+ "passed": 418,
  "failed": 0,
- "elapsedMs": 129298,
+ "elapsedMs": 118792,
  "checks": [
   {
    "group": "Unit system",
@@ -5395,6 +5395,71 @@
    "unit": "",
    "tolerance": 0,
    "why": "A published classification’s thresholds are published numbers; the caller states a rule with its source and there is no default (the contract leg D5).",
+   "toleranceKind": "relative",
+   "error": 0,
+   "pass": true
+  },
+  {
+   "group": "Active galactic nuclei: the Eddington bound and the size bound",
+   "kind": "analytic",
+   "name": "The Eddington luminosity of 1e8 solar masses equals 4 pi G M m_p c / sigma_T",
+   "measured": 1.2570651798467909e+39,
+   "expected": 1.2570651798467909e+39,
+   "unit": "W",
+   "tolerance": 1e-12,
+   "toleranceKind": "relative",
+   "why": "Radiation pressure on free electrons balances gravity on the protons they drag along; the constants are the pinned offline reading of astropy (the contract leg A1, B1).",
+   "error": 0,
+   "pass": true
+  },
+  {
+   "group": "Active galactic nuclei: the Eddington bound and the size bound",
+   "kind": "analytic",
+   "name": "The mass bound of a source radiating exactly the Eddington luminosity is that mass, and is labelled a lower bound",
+   "measured": 100000000,
+   "expected": 100000000,
+   "unit": "solar masses",
+   "tolerance": 1e-12,
+   "toleranceKind": "relative",
+   "why": "M >= L / L_Edd(1 solar mass) inverts the closed form; it is a bound, not an estimate, and carries its assumptions (the contract leg A1, D4).",
+   "error": 0,
+   "pass": true
+  },
+  {
+   "group": "Active galactic nuclei: the Eddington bound and the size bound",
+   "kind": "analytic",
+   "name": "A one-day variability at z = 1 bounds the size by c times one day over 1 + z",
+   "measured": 12951034185600,
+   "expected": 12951034185600,
+   "unit": "m",
+   "tolerance": 1e-14,
+   "toleranceKind": "relative",
+   "why": "A region cannot vary coherently faster than light crosses it; time dilation stretches the observed time scale by 1 + z (the contract leg A4).",
+   "error": 0,
+   "pass": true
+  },
+  {
+   "group": "Active galactic nuclei: the Eddington bound and the size bound",
+   "kind": "analytic",
+   "name": "The fastest e-folding time of a sinusoidal light curve of amplitude 0.6 is within 1 percent of sqrt(1 - A^2) / (A omega)",
+   "measured": 1.0000175390474098,
+   "expected": 1,
+   "unit": "",
+   "tolerance": 0.01,
+   "toleranceKind": "absolute",
+   "why": "The minimum of F / |dF/dt| for F = 1 + A sin(wt) is sqrt(1 - A^2) / (A w); a finite difference over a pair of epochs cannot be faster than the instantaneous rate (the contract leg A5).",
+   "error": 0.00001753904740975365,
+   "pass": true
+  },
+  {
+   "group": "Active galactic nuclei: the Eddington bound and the size bound",
+   "kind": "analytic",
+   "name": "Points 0.3 dex under, midway between and 0.3 dex over two dividing curves classify as star-forming, composite and AGN",
+   "measured": 1,
+   "expected": 1,
+   "unit": "",
+   "tolerance": 0,
+   "why": "The curves are INVENTED by the contract (the kernel holds none): the leg checks the rule, not any published boundary (the contract leg A6).",
    "toleranceKind": "relative",
    "error": 0,
    "pass": true
