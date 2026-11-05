@@ -1,0 +1,52 @@
+{
+  "format": "gravitas.sed-followup-thresholds/1",
+  "prompt": "Roadmap III, Prompt 245, follow-up: four NEW legs (B1b, B2b, C2b, E1b) after the first gate's failed and flagged legs, under Carl's ruling of 2026-11-05 (DECISIONS_2026-11-05.md: failed legs stay failing and labelled, no committed bound moves, the same pattern as new legs committed first)",
+  "document": "SED.md and SED_GATE.md (a follow-up section, written after this file)",
+  "committed": "before any code of the follow-up (the residual integration, the follow-up validator, the follow-up oracle), before any run of a new leg, and before any new oracle output. What was known when this was written: the first gate's table (B1 failed at 6.04e-5 on the AB zero point, B2 at 1.76e-5 and 4.46e-5, C2 covered 0.033 and 0.220, E1 flagged, E2 reported), which is why these legs exist. No new bound below is set from those numbers: B1b's pass condition is the same 1e-12 as B1's, applied where the definitions agree; B2b's bound is computed per band from the quadrature's own stated error rule; C2b's bands are C2's bands; E1b judges nothing but reports. The old legs B1, B2, C2, D3 and E1 stay on record unchanged and keep their verdicts; the original gate's verdict (kernel C) is not recomputed.",
+  "rule": "A crossed bound is a failed check, recorded in failed-legs.json and left failing; only Carl resets one. The first gate's rules apply unchanged (nothing typed from memory, nothing fetched, every authentic fact from a pack in the tree or a file Carl supplies under tests/fixtures/sed/authentic/). A new leg that fails is recorded as failing. No bound of any first-gate leg moves, and D3 stays failing and labelled with no new leg.",
+  "seeds": { "ensemble": "sed-245b", "design": "none used: no design run is made before the first validator run", "note": "C2b reuses C2's seed 245022 and label C2 so that the same 150 realisations are judged by both integrals" },
+  "rules": {
+    "convention": "AB is defined here by the 3631 Jy reference of the radiation kernel (Oke and Gunn 1983): f_nu = 3631 Jy x 10^(-0.4 m). astropy's ABmag is the 48.60 mag definition, f_nu = 10^(-48.60 / 2.5) erg s^-1 cm^-2 Hz^-1 (3630.78 Jy). The two differ by a constant factor z = 3631 Jy / (astropy's zero-magnitude flux density); B1b separates that constant from everything else",
+    "quadratureErrorRule": "The radiation kernel integrates a band by the trapezoid rule: the mean f_nu on the response refined to steps of at most 1 nm, the pivot on the band's own nodes. A trapezoid rule's error is O(h^2), so the error of a trapezoid T_h is estimated by Richardson from the same rule at half the step, T_(h/2) (every interval split at its midpoint, the response interpolated linearly): E_h is about (4/3)(T_h - T_(h/2)). The tolerance of a comparison with an exact quadrature is 3 |T_h - T_(h/2)| / |T_h| (about twice the Richardson estimate) with a floor of 1e-9 for arithmetic. It is computed per band and per temperature by the validator from the kernel's own procedure, before it sees any oracle value",
+    "residualIntegration": "integration: 'model-residual' (an option of bolometricLuminosity; the default 'chords' is unchanged). With a constrained blackbody fit (T, theta): each point's monochromatic equivalent at its wavelength is f_i x mono_i / m_i (m_i the model through the point's band, mono_i the model at the point's wavelength; the ratio is 1 for a monochromatic point), its residual is that minus mono_i; the flux in the data range is the exact model flux between the first and last wavelength plus the trapezoid integral in wavelength of the residuals (in f_lambda); nothing outside the range is data. The model tails are added as before and labelled extrapolated. The result states modelAdequate (the fit's adequacy flag) and says the data-range flux is model-dependent when it is false. The bootstrap interval is as before, each draw refitting and recomputing"
+  },
+  "checks": [
+    {
+      "id": "B1b.abConventions",
+      "leg": "b",
+      "what": "the conversions against astropy where the definitions agree, and the difference where they do not: (a) f_lambda in W/m2/nm and erg/s/cm2/Angstrom to f_nu in Jy against astropy.units spectral_density, 1e-12 relative; (b) AB magnitudes to Jy against astropy's ABmag multiplied by z = 3631 Jy / astropy's zero-magnitude flux density, 1e-12 relative, which compares the magnitude scaling and not the zero point; (c) REPORTED, not judged: the zero-point difference z - 1 and its size in magnitudes, 2.5 log10(z), from astropy's own zero-magnitude flux density, with a check that the kernel's value of the same quantity from its constants agrees to 1e-12",
+      "limits": { "wavelengthsNm": [150, 550, 2200, 22000, 1000000], "fluxes": [1e-20, 1e-17, 3e-14], "magnitudes": [0, 5, 12.5, 23], "maxRel": 1e-12, "maxRelReported": 1e-12 }
+    },
+    {
+      "id": "B2b.quadratureErrorRule",
+      "leg": "b",
+      "what": "the radiation kernel's band means and pivots against an exact quadrature (the oracle integrates every response segment by 40-point Gauss-Legendre, which is exact for a piecewise-linear response times a smooth function to arithmetic), with the tolerance of each comparison set by the quadrature's stated error rule (rules.quadratureErrorRule): 3 |T_h - T_(h/2)| / |T_h| per band and temperature for the mean (the kernel's procedure: refinement to at most 1 nm, trapezoid) and per band for the pivot (the kernel's procedure: the band's own nodes, trapezoid), floor 1e-9; the leg passes when every comparison is inside its own tolerance",
+      "limits": { "temperaturesK": [3600, 5772, 9500], "safety": 3, "floor": 1e-9, "meanRefineNm": 1, "gaussLegendreNodes": 40 }
+    },
+    {
+      "id": "C2b.luminosityResidual",
+      "leg": "c",
+      "what": "the luminosity interval that carries the chords' bias, by the residual integration of rules.residualIntegration: (a) coverage of the truth 4 pi R^2 sigma T^4 by the bootstrap interval at 0.6827 and 0.95 on C2's ensemble (the sun on with-mir, noise on, seed 245022, label C2, 150 realisations of 200 draws, the distance known exactly), in C2's bands; (b) the noise-free total flux against the truth sigma T^4 theta^2 for the stars cool, sun, hot on the optical-nir, sdss-2mass and with-mir sets, 1e-8 relative; (c) REPORTED beside it: the same 150 realisations' coverage by the chord integral (C2's number, recomputed), and the mean ratio of the integrated luminosity to the truth by each method",
+      "limits": { "star": "sun", "set": "with-mir", "seed": 245022, "label": "C2", "n": 150, "draws": 200, "levels": [0.6826894921370859, 0.95], "bands": [[0.55, 0.80], [0.88, 0.995]], "noiseFree": { "stars": ["cool", "sun", "hot"], "sets": ["optical-nir", "sdss-2mass", "with-mir"], "maxRel": 1e-8 } }
+    },
+    {
+      "id": "E1b.colourVersusPublished",
+      "leg": "e",
+      "what": "REPORTED, not judged, with the adequacy flag: the fitted blackbody colour temperature against a published temperature, and whether the fit says it is adequate. On the in-tree stand-in (the four SDSS spectra of the pack, the pipeline temperature the pack records as the published value, the bands V R r i, sigma 0.02 mag, the same contract as E2) each row reports the temperature, its 68 percent interval, the adequacy flag and p, the published temperature, the difference in kelvin and in combined sigma, and the range. The statement the leg commits is the kernel's label: every result carries the text that the temperature is a colour temperature, not an effective one, and not corrected for reddening. When tests/fixtures/sed/authentic/star.json arrives the same row is reported for the authentic star, with the published temperature from that file, under the unchanged contract; until then the authentic row is NOT RUN",
+      "limits": { "reported": true, "spectra": ["a", "g", "k", "m"], "bands": ["V", "R", "r", "i"], "sigmaMag": 0.02, "file": "tests/fixtures/sed/authentic/star.json" }
+    }
+  ],
+  "gate": {
+    "followUpVerdictFunction": {
+      "what": "a second verdict beside the first, which stays kernel C. The three groups are the first gate's with the new legs standing where Carl's ruling named them: B1b for B1, B2b for B2, C2b for C2; D3 stays in the fit group and keeps failing; E1b judges nothing",
+      "kernelLegGroups": {
+        "conversionLegs": ["A1", "A2", "B1b", "B2b", "D2", "D6"],
+        "fitLegs": ["A4", "B3", "C1", "C3", "D1", "D3", "D4"],
+        "luminosityLegs": ["A3", "A5", "B4", "C2b", "D5"]
+      },
+      "kernel": "A when every leg of the three groups passes; B when every conversion leg passes and not every other leg does; C when a conversion leg fails. A leg of the first gate's table counts with its recorded status; a new leg counts with its follow-up status",
+      "consumers": "the first gate's consumers rule, read with the follow-up verdict; nothing visible is built before Carl confirms"
+    }
+  },
+  "amendments": []
+}
