@@ -1,0 +1,181 @@
+{
+ "format": "gravitas.sed-followup-results/1",
+ "rows": [
+  {
+   "id": "B1b.abConventions",
+   "status": "fail",
+   "measured": {
+    "worstRelativeRoute": 5.64e-16,
+    "worstRelativeMagnitudeScaling": 1.91e-16,
+    "comparisons": 34,
+    "reportedZeroPointRatio": 1.000060442,
+    "reportedZeroPointDifferenceRelative": 0.00006044,
+    "reportedZeroPointDifferenceMag": 0.00006562,
+    "kernelAgreesWithReported": false,
+    "reportedKernelAgreementRelative": 1.2e-12,
+    "subLegs": {
+     "fluxRoutes": "pass",
+     "magnitudeScaling": "pass",
+     "zeroPointAgreement": "fail"
+    },
+    "astropy": "6.0.1",
+    "note": "the 3631 Jy of the tree and the 48.60 mag of astropy differ by the constant ratio above; it is reported, not judged"
+   },
+   "note": ""
+  },
+  {
+   "id": "B2b.quadratureErrorRule",
+   "status": "pass",
+   "measured": {
+    "worstMeanErrorOverItsTolerance": 0.444,
+    "worstPivotErrorOverItsTolerance": 0.444,
+    "comparisons": 56,
+    "smallestTolerance": 6.41e-8,
+    "largestTolerance": 0.0001,
+    "validatorTrapezoidMatchesKernelTo": 0
+   },
+   "note": ""
+  },
+  {
+   "id": "C2b.luminosityResidual",
+   "status": "pass",
+   "measured": {
+    "n": 150,
+    "draws": 200,
+    "failedRealisations": 0,
+    "coverageResidual": [
+     0.5867,
+     0.9467
+    ],
+    "bands": [
+     [
+      0.55,
+      0.8
+     ],
+     [
+      0.88,
+      0.995
+     ]
+    ],
+    "worstNoiseFreeRelativeError": 1.39e-11,
+    "reported": {
+     "coverageChords": [
+      0.03333,
+      0.22
+     ],
+     "meanRatioResidual": 0.99991,
+     "meanRatioChords": 0.97863
+    }
+   },
+   "note": ""
+  },
+  {
+   "id": "E1b.colourVersusPublished",
+   "status": "reported",
+   "measured": {
+    "inTreeStandIn": [
+     {
+      "spectrum": "a",
+      "subClass": "A0",
+      "status": "ok",
+      "colourTemperatureK": 7609.3,
+      "interval68": [
+       7377.8,
+       7857.5
+      ],
+      "adequate": true,
+      "pAdequate": 0.467,
+      "publishedK": 7852,
+      "differenceK": -242.7,
+      "differenceInSigma": -1.01,
+      "rangeNm": [
+       548.8,
+       749
+      ],
+      "labelStatesColourTemperature": true
+     },
+     {
+      "spectrum": "g",
+      "subClass": "G2",
+      "status": "ok",
+      "colourTemperatureK": 7144.1,
+      "interval68": [
+       6942.1,
+       7359.5
+      ],
+      "adequate": true,
+      "pAdequate": 0.839,
+      "publishedK": 5625,
+      "differenceK": 1519,
+      "differenceInSigma": 7.29,
+      "rangeNm": [
+       548.8,
+       749
+      ],
+      "labelStatesColourTemperature": true
+     },
+     {
+      "spectrum": "k",
+      "subClass": "K3",
+      "status": "ok",
+      "colourTemperatureK": 4176.3,
+      "interval68": [
+       4110.6,
+       4244.3
+      ],
+      "adequate": true,
+      "pAdequate": 0.981,
+      "publishedK": 4775,
+      "differenceK": -598.7,
+      "differenceInSigma": -8.95,
+      "rangeNm": [
+       548.8,
+       749
+      ],
+      "labelStatesColourTemperature": true
+     },
+     {
+      "spectrum": "m",
+      "subClass": "M1",
+      "status": "ok",
+      "colourTemperatureK": 2943.8,
+      "interval68": [
+       2910.9,
+       2977.5
+      ],
+      "adequate": false,
+      "pAdequate": 0.000359,
+      "publishedK": 3980,
+      "differenceK": -1036,
+      "differenceInSigma": -31.1,
+      "rangeNm": [
+       548.8,
+       749
+      ],
+      "labelStatesColourTemperature": true
+     }
+    ],
+    "authentic": "NOT RUN: tests/fixtures/sed/authentic/star.json was not supplied; nothing was fetched"
+   },
+   "note": "a blackbody colour temperature is not an effective temperature; the adequacy flag and the label say so; nothing is judged"
+  }
+ ],
+ "gate": {
+  "firstGateKernelVerdict": "C",
+  "followUpKernelVerdict": "C",
+  "conversions": "not claimable",
+  "temperature": "not claimable",
+  "luminosity": "not claimable",
+  "productVerdict": "NOT ESTABLISHED (E0, E1 and B5 NOT RUN: no catalogue file was supplied, every catalogue row is basis C)"
+ },
+ "meta": {
+  "cpuSeconds": 20.5,
+  "node": "v22.23.4",
+  "oracle": {
+   "python": "3.9.22",
+   "numpy": "1.26.4",
+   "scipy": "1.13.1",
+   "astropy": "6.0.1"
+  }
+ }
+}

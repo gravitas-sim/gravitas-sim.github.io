@@ -1,0 +1,27 @@
+{
+ "format": "gravitas.sed-followup-failed-legs/1",
+ "note": "the follow-up legs that crossed a committed bound; they stay failing, only Carl resets a bound",
+ "legs": [
+  {
+   "id": "B1b.abConventions",
+   "measured": {
+    "worstRelativeRoute": 5.64e-16,
+    "worstRelativeMagnitudeScaling": 1.91e-16,
+    "comparisons": 34,
+    "reportedZeroPointRatio": 1.000060442,
+    "reportedZeroPointDifferenceRelative": 0.00006044,
+    "reportedZeroPointDifferenceMag": 0.00006562,
+    "kernelAgreesWithReported": false,
+    "reportedKernelAgreementRelative": 1.2e-12,
+    "subLegs": {
+     "fluxRoutes": "pass",
+     "magnitudeScaling": "pass",
+     "zeroPointAgreement": "fail"
+    },
+    "astropy": "6.0.1",
+    "note": "the 3631 Jy of the tree and the 48.60 mag of astropy differ by the constant ratio above; it is reported, not judged"
+   },
+   "note": ""
+  }
+ ]
+}
