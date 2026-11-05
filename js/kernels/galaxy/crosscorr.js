@@ -346,14 +346,12 @@ export function crossCorrelate(
     fit.chi2Cut = chi2Quantile(1 - MISFIT_LEVEL, fit.dof);
     fit.chi2Reduced = fit.chi2Min / fit.dof;
     fit.misfit = fit.chi2Min > fit.chi2Cut;
-  } else
-    fit.note =
-      'misfit-untested: errors from scatter (the noise level carries the line power)';
+  } else fit.note = 'misfit-untested: errors from scatter';
   if (refuseMisfit && fit.misfit)
     return {
       ...refused(
         'template-misfit',
-        'the residual of the best template match exceeds what the noise allows: the template does not describe the spectrum, and a redshift from it would carry an error the stated one does not'
+        'the residual of the best template match exceeds what the noise allows: the template does not describe the spectrum'
       ),
       template: base.template,
       method: base.method,
