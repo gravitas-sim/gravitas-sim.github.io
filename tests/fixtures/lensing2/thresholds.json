@@ -433,6 +433,14 @@
    "why": "Recorded before any validator run, by arithmetic and before the kernel had produced a number: at (z_l, z_s) near (0.35, 1.35) D_ls / D_s is about one half, and a dispersion of 150 km/s then gives theta_E of about 0.3 arcsec, 3 pixels, so a radius with a 1 pixel noise per coordinate could never be constrained and C1's 'no world is refused' would test the world draw, not the kernel (the contract's sentence for the worlds says theta_E 3 to 30 arcsec was the intended range). No bound moved.",
    "boundMoved": false,
    "when": "before any validator run"
+  },
+  {
+   "id": "AM2",
+   "step": "checks A6 and D4 (wording)",
+   "what": "Two readings fixed, no number changed. A6's 'a zero sigma' for a noise-free fixed-centre fit is the residual: the root-mean-square distance of the points from the fitted circle is at most 1e-12 pixel (the declared per-point sigma, 1 pixel, is an input and stays). D4's 'a zero or negative separation input' is a position that is zero or not finite, refused 'bad-position'; a negative position is valid, it is the inner image on the other side of the lens (R9), and is not refused.",
+   "why": "Recorded before any validator run, while writing the validator from the committed sentences: a declared sigma cannot be zero, and the contract's own sign convention (R9) makes a negative position a normal input. No bound moved.",
+   "boundMoved": false,
+   "when": "before any validator run"
   }
  ]
 }
