@@ -1,0 +1,510 @@
+{
+  "format": "gravitas.ism-thresholds/1",
+  "prompt": "Roadmap III, Prompt 247 Part A, the interstellar medium: line identification, equivalent widths, Doppler velocities, the linear column density, the Balmer decrement and the stellar-versus-interstellar distinction (tranche T4 by D-R10-232-01): the kernel and validation part only",
+  "document": "ISM.md (\"Validation contract\"), written after this file",
+  "committed": "before js/kernels/ism/, the validator, the oracle scripts and their pinned results, the generator's output, and before any spectrum, line fit, equivalent width, velocity, column density or decrement of Prompt 247 existed. The only things read before this file were the repository's existing line, extinction and spectrograph kernels (their exports and rules) and the pack records; no flux value of any in-tree spectrum was opened.",
+  "rule": "A crossed bound is a failed check, recorded in failed-legs.json and left failing; only Carl resets one. A leg that cannot be measured (a file not supplied, a tool not installed, an atomic datum not in the tree) is NOT RUN and says why. No published number, atomic coefficient, rest wavelength, oscillator strength, intrinsic line ratio or licence term is typed from memory: every one is DERIVED from a pinned reading, read from a pack, or supplied by the caller with a source string and no default. Synthetic worlds carry invented parameters, labelled as invented.",
+  "seeds": {
+    "ensembleVelocity": 247001,
+    "ensembleEbv": 247002,
+    "ensembleEw": 247003,
+    "ensembleColumn": 247004,
+    "classification": 247005,
+    "noiseOnly": 247006,
+    "oracleInputs": 247007,
+    "report": 247008,
+    "design": "ism-247-design (used only to calibrate stated discretisations and to debug; never in a leg)",
+    "oracleNumpy": 247
+  },
+  "scope": {
+    "built": "(1) line detection, identification against the radiation line pack (air and vacuum carried; the medium of the spectrum is required), a redshift from the identified lines, and a label for features that match a caller-supplied list of diffuse bands; (2) a continuum from stated side windows, the direct equivalent width with the continuum choice recorded, and a Gaussian line fit through the spectrograph kernel's fitLine, each with an uncertainty; (3) a Doppler velocity from a line centre with the medium rule and the 154 interval; (4) the resolution flags (undersampled, broadened, an unresolved pair); (5) the column density from a linear-regime equivalent width, with the classical electron radius derived from a pinned reading of astropy's constants, the oscillator strength a required input, the linear regime tested by the doublet ratio or by the line's own peak depth, and refused otherwise; (6) the Balmer decrement and the colour excess it gives through the CCM89 law already in the radiation kernel, the intrinsic ratio and R_V required inputs with sources and no default, and the de-reddening of a line flux; (7) the stellar-versus-interstellar classification by width and velocity offset; (8) a labelled synthetic generator with a truth manifest",
+    "notBuilt": "the spectra viewer's overlays and equivalent-width tool, the three investigations, the model-page section, the SDSS nebular packs, instructor materials and Spanish strings (an instructional pull request that waits for Carl's go-ahead and a committed consumers rule); Part B's diagnostic kernel (no verdict exists, so nothing is built within one)",
+    "notRun": "E1 and E2 (an authentic H II region spectrum against its published decrement, and an authentic stellar spectrum with interstellar sodium absorption: no such file is in the tree and none is fetched; the request is in ISM.md); B6 (a pinned output of a cited independent spectral tool: none is installed and installing one is a download); the oxygen, nitrogen and sulphur lines and the diffuse-band centres (the line pack holds hydrogen, helium, calcium, sodium, magnesium and iron only, and no band table is in the tree; the requests are in ISM.md); every Part B leg (PLASMA_DIAGNOSTICS_GATE.md, gate-thresholds.json)"
+  },
+  "worlds": {
+    "label": "SYNTHETIC ISM SPECTRUM: an invented object observed by an invented spectrograph, with stated line fluxes, reddening, velocities, column densities and noise, not a measurement of any object. Every parameter below is invented by a rule and is not a published value; the line wavelengths are the radiation line pack's, which are not invented.",
+    "nebula": {
+      "note": "an emission-line object at SDSS-like resolution on a log-wavelength grid",
+      "grid": {
+        "log10StartA": "log10(380 nm)",
+        "log10Step": 0.0001,
+        "samples": 3840,
+        "unit": "nm"
+      },
+      "resolvingPower": 1800,
+      "continuum": "linear: C(lambda) = 1 + 0.2 (lambda - 550 nm) / (550 nm), arbitrary flux units",
+      "sigmaPixel": 0.05,
+      "sigmaPixelNote": "the per-pixel error, white and Gaussian, in the same units; passed to the analysis",
+      "lines": [
+        "h-beta",
+        "h-alpha",
+        "h-gamma"
+      ],
+      "intrinsicRatios": {
+        "h-alpha/h-beta": 3.0,
+        "h-gamma/h-beta": 0.5,
+        "note": "INVENTED, not a recombination value: the analysis takes its intrinsic ratio as an input, so the world's own value is what a correct caller passes"
+      },
+      "intrinsicSigmaKmS": 30,
+      "observedHBetaPeak": "uniform on [0.5, 2.0] in continuum units (so a peak signal-to-noise of 10 to 40 before reddening of H-alpha)",
+      "ebvTruth": {
+        "analytic": [
+          0.1,
+          0.5,
+          1.0,
+          1.5
+        ],
+        "ensemble": "uniform on [0.2, 1.0] mag",
+        "RV": 3.1,
+        "RVNote": "the world's R_V; INVENTED as a choice, equal to the value the extinction kernel's own documentation names for the diffuse medium; the analysis takes R_V as an input"
+      },
+      "velocityTruthKmS": "uniform on [-300, 300]"
+    },
+    "star": {
+      "note": "a hot star with broad stellar Balmer absorption and narrow interstellar absorption, at SDSS-like resolution on the nebula's grid",
+      "stellarLines": [
+        "h-beta",
+        "h-gamma",
+        "h-delta"
+      ],
+      "stellarSigmaKmS": 500,
+      "stellarDepth": 0.5,
+      "interstellarLines": [
+        "ca2-k",
+        "ca2-h"
+      ],
+      "interstellarSigmaKmS": 3,
+      "interstellarDepth": 0.25,
+      "offsetKmS": "interstellar minus stellar velocity, magnitude uniform on [60, 120] with a random sign",
+      "stellarVelocityKmS": "uniform on [-100, 100]",
+      "sigmaPixel": 0.01
+    },
+    "sodium": {
+      "note": "an interstellar sodium doublet in front of a flat continuum at high resolution, the two lines of the pack's na1-d1 and na1-d2",
+      "resolvingPower": 30000,
+      "log10Step": 4e-6,
+      "windowNm": [
+        580,
+        600
+      ],
+      "continuum": "flat, 1",
+      "sigmaPixel": 0.01,
+      "oscillatorStrengths": {
+        "na1-d1": 0.2,
+        "na1-d2": 0.45,
+        "note": "INVENTED, not sodium's: the analysis takes them as inputs with a source string; the world's own values are what a correct caller passes"
+      },
+      "intrinsicSigmaKmS": 3,
+      "tau0Truth": {
+        "linear": "uniform on [0.02, 0.1] for the stronger line",
+        "saturated": 5
+      },
+      "velocityTruthKmS": "uniform on [-40, 40]"
+    }
+  },
+  "analysisRule": {
+    "name": "ISM-RULE-1 (committed here before the kernel existed)",
+    "steps": [
+      "S1 inputs: a spectrum {lambdaNm ascending, flux, sigma or null, medium 'air' or 'vacuum' (required: a spectrum without one is refused), the resolving power or the line-spread FWHM in nm (required by every flag and by the classification)}. Refused by code: non-finite values, a non-increasing axis, fewer than 20 samples, a missing medium.",
+      "S2 continuum, direct method: the straight line fitted by least squares to the flux in two caller-given side windows [aLo, aHi] and [bLo, bHi] in nm (weighted by 1/sigma^2 when sigma is given, else unweighted, the pixel error then being the window scatter about the line, marked 'errors from scatter'); at least 3 samples on each side and 8 in all or it is refused. The result carries the windows, the order (1), the coefficients, their covariance and the scatter.",
+      "S3 direct equivalent width: W = sum over the samples whose centres lie in the line window [lo, hi] of (1 - F_i / C_i) w_i with w_i the pixel width (half the distance between its two neighbours; the one-sided distance at an end). Positive for absorption, negative for emission. Its variance is the sum of (w_i sigma_i / C_i)^2 and the continuum fit's covariance propagated through dW/dc_k = sum_i w_i F_i / C_i^2 x_k. The continuum choice is recorded in the result and a second equivalent width with the constant (mean) continuum of the same windows is reported beside it as the continuum systematic.",
+      "S4 Gaussian line: the spectrograph kernel's fitLine (a pixel-integrated Gaussian and a linear continuum, five parameters, weighted least squares, covariance (J^T W J)^-1, scaled by the reduced chi-square when it exceeds the 0.99 quantile) with the sample index as the pixel coordinate, the window half width the larger of 8 pixels and 4 FWHM, the start the nearest strong sample to the guess. The sample index is linear in wavelength to first order on a uniform or a logarithmic grid; the curvature over the window is stated and bounded (the A3 leg). The centre in nm is the interpolated axis at the fitted index; the flux and the equivalent width are converted from pixels by the local sample width.",
+      "S5 velocity: the relativistic Doppler velocity of the fitted centre against the rest wavelength of the pack line in the spectrum's own medium; the uncertainty is the fitted centre's, to first order, through the spectrograph kernel's radialVelocity (which refuses a missing or mismatched medium). The interval is the 154 covarianceInterval at one sigma.",
+      "S6 flags: 'undersampled' below 2 pixels per FWHM and 'severely-undersampled' (the line is not fitted: not-constrained) below 1, from the line-spread FWHM; 'broadened' when the fitted FWHM exceeds the line-spread FWHM by more than 3 sigma and more than 10 percent (fitLine's rule); a pair of lines whose separation is under the value at which the Gaussian pair's central dip is 0.10 of its peak (pairDip) is 'unresolved-pair'.",
+      "S7 column density, linear regime only: N = W / (pi r_e f lambda^2) with W and lambda in one length unit and r_e the classical electron radius derived from the pinned constants, in cm^-2 for lengths in cm. The oscillator strength f and its source are required inputs with no default. The regime is tested before a number is returned: T1 (a doublet) the ratio of the two equivalent widths W2 / W1 against the ratio the atomic data give, f2 lambda2^2 / (f1 lambda1^2): linear only when they agree within 2 sigma of the observed ratio, saturated when the observed ratio is below it by more than 2 sigma, 'ratio-above-atomic' (refused) when above by more than 2 sigma; T2 (one line) the line must be resolved (the fitted sigma exceeds the line-spread sigma by more than 3 sigma of the fitted sigma and by more than 25 percent) and its peak optical depth tau0 = -ln(1 - depth) from the fitted peak must not exceed 0.3 (a Gaussian line's equivalent width is then below its linear value by about 10 percent: A2). When neither test can be applied the column density is refused as 'linear-regime-untested'. The uncertainty is the equivalent width's, relative; the oscillator strength's own uncertainty is not propagated and the result says so.",
+      "S8 Balmer decrement: the observed ratio R of two hydrogen line fluxes (the line's fitted fluxes, with the covariance of the pair taken as zero) against the intrinsic ratio R0 the caller supplies with a source string and conditions string (no default). The colour excess E(B-V) = 2.5 log10(R / R0) / (k(lambda_2) - k(lambda_1)) with k(lambda) = R_V A(lambda)/A(V) from the CCM89 law the radiation kernel holds (the law object is passed in; R_V is a required input), lambda_1 the line in the numerator. Uncertainty by first-order propagation of the two flux errors. Refused: a line signal-to-noise under 5 (flux over its error), a wavelength outside the law's range, a missing intrinsic ratio or R_V. When R is below R0 the signed (negative) value is returned flagged 'below-intrinsic', with its interval, and the result says that no reddening is detected when the interval contains zero. The de-reddened flux of a line is F 10^(0.4 k E(B-V)).",
+      "S9 classification of an absorption feature against a star: sigma_obs the fitted sigma, sigma_lsf the line-spread sigma, sigma_ref the sigma of the star's own broad line, v the feature's velocity, v_star the star's, with d = v - v_star and sigma_d the quadrature of the two uncertainties. narrow: sigma_obs below 1.5 sigma_lsf at SDSS-like resolution, or generally below 0.5 sigma_ref; offset: |d| at least 3 sigma_d. narrow and offset: 'interstellar-candidate'; narrow and not offset: 'ambiguous' (a narrow line at the star's velocity can be stellar or interstellar); not narrow and not offset: 'stellar'; not narrow and offset: 'ambiguous'. A classification is never a proof and the result says so.",
+      "S10 detection and identification: the continuum is a running median over 61 samples; the residual is matched-filtered with a Gaussian of the line-spread sigma, each term weighted by 1/sigma_i^2; a feature is a local extremum of |S/N| of at least 5, features nearer than one FWHM keep the stronger. A feature is identified with the pack lines whose observed wavelength at the trial redshift lies within max(3 sigma_centre, one pixel): exactly one is 'identified', more than one 'ambiguous' with the list, none 'unidentified'; a feature within a caller-given band's stated width is labelled 'unidentified diffuse band' (the band table is a caller input with a source string, no default). The redshift is the inverse-variance weighted mean of lambda_obs / lambda_rest - 1 over the identified features, from the trial redshift the caller gives or the one that matches the most pack lines; refused when two redshifts more than 3 sigma apart tie."
+    ],
+    "assumes": "a continuum that is linear over the continuum windows and the line window; Gaussian line profiles (the instrument's line-spread function is Gaussian, as the spectrograph kernel assumes); independent pixel errors; the rest wavelengths and the extinction law of the packs as published; an intrinsic Balmer ratio the caller states; a single velocity component per line; a uniform foreground screen of dust for the decrement, not dust mixed with the gas; no underlying stellar absorption in the emission lines (a bias the result's notes name); no velocity broadening above the line-spread function in the nebular lines beyond the world's stated 30 km/s",
+    "constants": {
+      "columnDensity": "N = W / (pi r_e f lambda^2): r_e = alpha h / (2 pi m_e c), derived in the module from the values of alpha, h, m_e and c in tests/fixtures/ism/constants-source.json (written by tools/ism-oracle/constants.py from astropy.constants as installed: name, value, unit, uncertainty and reference as the library gives them); the module copies the four values and says so",
+      "convention": "no published number in the module: the classical electron radius is a derived value"
+    }
+  },
+  "checks": [
+    {
+      "id": "A1.electronRadius",
+      "leg": "a",
+      "what": "the module's classical electron radius equals alpha h / (2 pi m_e c) recomputed in the validator from the values in constants-source.json to a relative 1e-14; it equals e^2 / (4 pi eps0 m_e c^2) from the same file to a relative 1e-9 (CODATA's internal consistency); the four values in the module equal the fixture's to the last digit; N from a one-angstrom equivalent width at 589 nm for f = 1 follows N = W / (pi r_e f lambda^2) to a relative 1e-14",
+      "limits": {
+        "maxRelativeDerivation": 1e-14,
+        "maxRelativeConsistency": 1e-9
+      }
+    },
+    {
+      "id": "A2.curveOfGrowth",
+      "leg": "a",
+      "what": "the ratio of a Gaussian optical-depth line's equivalent width to its linear value, by numerical integration, follows the series sum_{n>=1} (-tau0)^(n-1) / (n! sqrt(n)) to a relative 1e-6 at tau0 = 0.01, 0.1 and 0.3, and lies in [0.89, 0.91] at tau0 = 0.3 (the committed saturation cut of S7 costs about ten percent of the column)",
+      "limits": {
+        "tau0": [
+          0.01,
+          0.1,
+          0.3
+        ],
+        "maxRelative": 1e-6,
+        "ratioAtCutRange": [
+          0.89,
+          0.91
+        ]
+      }
+    },
+    {
+      "id": "A3.noiseFreeVelocity",
+      "leg": "a",
+      "what": "the Gaussian fit's velocity of h-alpha on noise-free nebula worlds at velocities -300, -100, 0, 150 and 300 km/s is within 0.05 km/s of the truth (the sample index is linear in wavelength to the curvature of the log grid, a few 1e-5 of a pixel), and the fitted intrinsic-plus-line-spread sigma within 1e-3 relative of the generator's",
+      "limits": {
+        "velocitiesKmS": [
+          -300,
+          -100,
+          0,
+          150,
+          300
+        ],
+        "maxVelocityErrorKmS": 0.05,
+        "maxSigmaRelative": 0.001
+      }
+    },
+    {
+      "id": "A4.noiseFreeEquivalentWidth",
+      "leg": "a",
+      "what": "on noise-free star worlds with a sloped continuum the direct equivalent width of a stellar Balmer line (windows set by the rule of E3) and of an interstellar line equal the generator's analytic equivalent width to a relative 1e-3, and the Gaussian fit's to a relative 1e-3; the direct method's equivalent width with the constant continuum differs from the linear one by the amount the slope predicts (the sign is checked)",
+      "limits": {
+        "maxRelativeDirect": 0.001,
+        "maxRelativeGaussian": 0.001
+      }
+    },
+    {
+      "id": "A5.noiseFreeColourExcess",
+      "leg": "a",
+      "what": "the colour excess from the decrement of a noise-free nebula world with E(B-V) = 0.1, 0.5, 1.0 and 1.5 mag (intrinsic h-alpha/h-beta and R_V the world's) is within 1e-3 mag of the truth",
+      "limits": {
+        "maxErrorMag": 0.001
+      }
+    },
+    {
+      "id": "A6.noReddening",
+      "leg": "a",
+      "what": "an observed ratio equal to the intrinsic one gives E(B-V) = 0 within 1e-3 mag with no flag; an observed ratio 20 percent below the intrinsic one gives a negative value flagged 'below-intrinsic', and when its interval contains zero the result says 'no reddening detected'",
+      "limits": {
+        "maxErrorMag": 0.001,
+        "belowFraction": 0.2
+      }
+    },
+    {
+      "id": "A7.dereddening",
+      "leg": "a",
+      "what": "de-reddening the observed h-gamma and h-beta fluxes of a noise-free world (E(B-V) = 0.5) with the excess the decrement of h-alpha and h-beta gave returns their intrinsic ratio to a relative 5e-3",
+      "limits": {
+        "maxRelative": 0.005
+      }
+    },
+    {
+      "id": "A8.mediumConvention",
+      "leg": "a",
+      "what": "a velocity of h-alpha measured in a spectrum labelled air against the pack's vacuum rest wavelength is refused 'medium-mismatch'; a spectrum with no medium is refused 'medium-missing'; the same fit against the air wavelength agrees with the vacuum fit against the vacuum wavelength in a vacuum spectrum to 0.2 km/s; the two conventions differ at h-alpha by the pack's c (vacuum/air - 1), checked to a relative 1e-9 against the spectrograph kernel's mediaOffsetKmS",
+      "limits": {
+        "maxAgreementKmS": 0.2,
+        "maxRelative": 1e-9
+      }
+    },
+    {
+      "id": "A9.pairResolution",
+      "leg": "a",
+      "what": "the unresolved-pair rule (the Gaussian pair's central dip below 0.10 of its peak, pairDip): a separation of 0.5 FWHM is flagged, 3 FWHM is not; the sodium doublet's separation is computed from the pack's two wavelengths and its pair verdict at resolving powers 1800 and 30000 is recorded (a pair that is resolved by the line-spread function can still be unmeasurable if the grid is undersampled: the two flags are independent)",
+      "limits": {
+        "dipCut": 0.1,
+        "separationsFwhm": [
+          0.5,
+          3.0
+        ],
+        "resolvingPowers": [
+          1800,
+          30000
+        ]
+      }
+    },
+    {
+      "id": "A10.sampling",
+      "leg": "a",
+      "what": "the pixels per FWHM of the nebula grid (R = 1800, log step 1e-4) equal 1 / (R step ln 10) to a relative 1e-12 and are judged 'ok'; a binned grid of step 3e-4 at R = 1800 is judged 'severely-undersampled' and a fit there returns not-constrained; step 2e-4 is judged 'undersampled'",
+      "limits": {
+        "maxRelative": 1e-12,
+        "steps": [
+          0.0001,
+          0.0002,
+          0.0003
+        ]
+      }
+    },
+    {
+      "id": "A11.identification",
+      "leg": "a",
+      "what": "on a noise-free nebula-grid spectrum with emission lines of ten pack lines (the Balmer lines h-alpha to h-delta, he1-5876, he1-4472, he2-4686, ca2-k, ca2-h and na1-d2, with invented fluxes) at a stated redshift of 0.0123, every feature above the threshold is identified as its line, none is called ambiguous or unidentified, and the weighted redshift is within 5e-5 (15 km/s) of the truth",
+      "limits": {
+        "redshift": 0.0123,
+        "maxRedshiftError": 0.00005
+      }
+    },
+    {
+      "id": "B1.equivalentWidthVsIndependent",
+      "leg": "b",
+      "what": "the direct equivalent width and its uncertainty (S2, S3) of 24 exported synthetic absorption and emission spectra, computed by tools/ism-oracle/oracle.py (numpy, no Gravitas code) from the same written rule, equal the kernel's to a relative 1e-8; the continuum coefficients to a relative 1e-9",
+      "limits": {
+        "n": 24,
+        "maxRelativeWidth": 1e-8,
+        "maxRelativeContinuum": 1e-9
+      }
+    },
+    {
+      "id": "B2.gaussianCentreVsScipy",
+      "leg": "b",
+      "what": "the Gaussian fit's centre, sigma and flux of the same spectra against scipy's curve_fit of the same pixel-integrated model (starting from the generator's truth, the scatter-scaled covariance): centres within 0.01 of the kernel's centre uncertainty, fluxes within 0.01 of the flux uncertainty, and the uncertainties themselves within 2 percent",
+      "limits": {
+        "n": 24,
+        "maxCentreInSigma": 0.01,
+        "maxFluxInSigma": 0.01,
+        "maxSigmaRelative": 0.02
+      }
+    },
+    {
+      "id": "B3.extinctionVsIndependent",
+      "leg": "b",
+      "what": "A(lambda) / A(V) from the CCM89 coefficients of the pack at 12 wavelengths (Balmer lines and others in the law's range) by the oracle's independent implementation of the published equations (it reads the coefficient values from the exported pack data and nothing else) equals the radiation kernel's to a relative 1e-12; the colour excess from the same 12 pairs of invented line fluxes equals the kernel's to 1e-10 mag",
+      "limits": {
+        "maxRelative": 1e-12,
+        "maxColourExcessMag": 1e-10,
+        "limitation": "the coefficient table is shared between kernel and oracle, so a transcription error in the pack's table would not be caught here; the pack's own validation record and the CCM89 values at the standard bands (not typed here) are the check on it"
+      }
+    },
+    {
+      "id": "B4.columnVsAstropy",
+      "leg": "b",
+      "what": "the column density of 12 invented equivalent widths and oscillator strengths against the oracle's value with r_e from astropy.constants of the installed version (e, epsilon0, m_e, c: an independent route from the module's alpha h / (2 pi m_e c)) agrees to a relative 1e-8",
+      "limits": {
+        "n": 12,
+        "maxRelative": 1e-8
+      }
+    },
+    {
+      "id": "B5.authenticEquivalentWidthVsIndependent",
+      "leg": "b",
+      "what": "on the in-tree SDSS stellar spectrum of the A star (js/data/spectra/sdssSpectra.js, the first of the four) the direct equivalent widths of h-beta, h-gamma and h-delta under the fixed rule of E3 (windows below), the kernel against the oracle's independent implementation of the same rule on the decoded spectrum exported to the oracle inputs, agree to a relative 1e-8 with the errors from scatter",
+      "limits": {
+        "maxRelative": 1e-8
+      }
+    },
+    {
+      "id": "B6.toolkit",
+      "leg": "b",
+      "what": "the equivalent widths and the line list of the same spectrum by a cited independent spectral tool, pinned: NOT RUN unless a tool and its pinned output are supplied (none is installed and installing one is a download; the request is in ISM.md). The oracle of B1 to B5 is an independent implementation by the same author, not a cited tool, and the table says so",
+      "limits": {}
+    },
+    {
+      "id": "C1.velocityCoverage",
+      "leg": "c",
+      "what": "over 300 seeded nebula worlds (velocity, h-beta peak and E(B-V) drawn as the world states) the one-sigma velocity interval of h-alpha from the Gaussian fit covers the truth at a rate in [0.602, 0.763] (the binomial 3-sigma band of 0.6827 at n = 300), and the mean of (v - truth)/sigma is within 0.2 of 0 with a standard deviation in [0.85, 1.15]",
+      "limits": {
+        "n": 300,
+        "coverageRange": [
+          0.602,
+          0.763
+        ],
+        "maxMeanZ": 0.2,
+        "sdZRange": [
+          0.85,
+          1.15
+        ]
+      }
+    },
+    {
+      "id": "C2.colourExcessCoverage",
+      "leg": "c",
+      "what": "over 300 seeded nebula worlds with a signal-to-noise of at least 10 in h-beta after reddening the one-sigma E(B-V) interval from the decrement covers the truth at a rate in [0.602, 0.763] with a standard deviation of the normalised error in [0.85, 1.15]",
+      "limits": {
+        "n": 300,
+        "coverageRange": [
+          0.602,
+          0.763
+        ],
+        "sdZRange": [
+          0.85,
+          1.15
+        ]
+      }
+    },
+    {
+      "id": "C3.equivalentWidthCoverage",
+      "leg": "c",
+      "what": "over 300 seeded star worlds the one-sigma interval of the direct equivalent width of a stellar line covers the generator's analytic equivalent width at a rate in [0.602, 0.763], and the same for the Gaussian fit's equivalent width of an interstellar line",
+      "limits": {
+        "n": 300,
+        "coverageRange": [
+          0.602,
+          0.763
+        ]
+      }
+    },
+    {
+      "id": "C4.columnCoverage",
+      "leg": "c",
+      "what": "over 300 seeded sodium worlds in the linear regime (tau0 of the stronger line uniform on [0.02, 0.1], R = 30000, the doublet resolved) the one-sigma interval of the column density covers the truth at a rate in [0.602, 0.763]; the regime test passes for at least 90 percent of them (the doublet test has power only against a deficit larger than its own uncertainty, and the rate of passing is part of the result); the mean fractional bias is within 0.05 (saturation at the cut costs 10 percent at most, less here)",
+      "limits": {
+        "n": 300,
+        "coverageRange": [
+          0.602,
+          0.763
+        ],
+        "minPassRate": 0.9,
+        "maxMeanBias": 0.05
+      }
+    },
+    {
+      "id": "C5.classification",
+      "leg": "c",
+      "what": "over 200 seeded star worlds each of two kinds (a narrow line offset from the star's velocity by the world's 60 to 120 km/s; a stellar Balmer line): at least 90 percent of the narrow offset lines are 'interstellar-candidate' and none is 'stellar'; at least 90 percent of the stellar lines are 'stellar' and at most 2 percent are 'interstellar-candidate'; the rest are 'ambiguous'",
+      "limits": {
+        "n": 200,
+        "minInterstellarRate": 0.9,
+        "maxInterstellarAsStellar": 0,
+        "minStellarRate": 0.9,
+        "maxStellarAsInterstellar": 0.02
+      }
+    },
+    {
+      "id": "D1.saturatedLine",
+      "leg": "d",
+      "what": "a sodium world with tau0 = 5 (R = 30000, resolved doublet) is refused a column density with reason 'saturated' (T1) and the observed doublet ratio is reported; a single saturated resolved line is refused by T2; a single unresolved line (R = 1800) is refused 'linear-regime-untested'; no refusal returns a number",
+      "limits": {
+        "tau0": 5
+      }
+    },
+    {
+      "id": "D2.blendFlagged",
+      "leg": "d",
+      "what": "two lines 0.6 FWHM apart (an invented second line beside h-alpha) fitted as one are flagged 'broadened'; the pair rule flags them 'unresolved-pair'; a pair 3 FWHM apart is not flagged; the single-line fit of the blend does not hide the flag",
+      "limits": {
+        "separationFwhm": [
+          0.6,
+          3.0
+        ]
+      }
+    },
+    {
+      "id": "D3.mediumRefusals",
+      "leg": "d",
+      "what": "a missing medium is refused 'medium-missing', a mismatch 'medium-mismatch'; a line table entry without the requested medium is refused 'no-rest-wavelength'",
+      "limits": {}
+    },
+    {
+      "id": "D4.decrementRefusals",
+      "leg": "d",
+      "what": "the decrement is refused for: a missing intrinsic ratio ('missing-intrinsic-ratio'), a missing R_V ('missing-RV'), a line with signal-to-noise under 5 ('low-signal'), a wavelength outside the CCM89 range ('outside-law'), a non-positive flux ('bad-flux'); with R below R0 by 20 percent the result is flagged 'below-intrinsic'; with equal ratios at noise the interval contains zero and 'no reddening detected' is said",
+      "limits": {}
+    },
+    {
+      "id": "D5.undersampledRefused",
+      "leg": "d",
+      "what": "a fit on the binned grid (R = 1800, step 3e-4) returns not-constrained 'severely-undersampled' and a column density from it is refused; a fit with 1.5 pixels per FWHM is flagged 'undersampled' and goes ahead",
+      "limits": {}
+    },
+    {
+      "id": "D6.classificationAmbiguity",
+      "leg": "d",
+      "what": "a narrow line at the star's own velocity is 'ambiguous', never 'stellar' and never 'interstellar-candidate'; a broad line offset from the star is 'ambiguous'; the result's note says the class is not a proof",
+      "limits": {}
+    },
+    {
+      "id": "D7.identificationRefusals",
+      "leg": "d",
+      "what": "a feature within the tolerance of two pack lines is 'ambiguous' with both listed; a feature with no line is 'unidentified'; a feature inside a caller-supplied band (an INVENTED centre and width, labelled) is 'unidentified diffuse band'; a band list with no source string is refused; two redshifts more than 3 sigma apart that match the same number of lines are refused 'redshift-tie'",
+      "limits": {}
+    },
+    {
+      "id": "D8.noiseOnly",
+      "leg": "d",
+      "what": "over 100 seeded noise-only spectra of the nebula grid (no lines) the detector at S/N 5 finds at most 2 features in all",
+      "limits": {
+        "n": 100,
+        "maxFeatures": 2
+      }
+    },
+    {
+      "id": "D9.badInputs",
+      "leg": "d",
+      "what": "refused by code: a non-increasing axis ('not-increasing'), a non-finite flux ('not-finite'), fewer than 20 samples ('too-few-samples'), continuum windows holding too few samples ('too-few-continuum-samples'), a line window with no samples ('empty-window'), a non-positive oscillator strength ('bad-oscillator-strength'), a missing source string on an intrinsic ratio, an oscillator strength or a band table ('missing-source'); none throws without a code",
+      "limits": {}
+    },
+    {
+      "id": "D10.labelAndManifest",
+      "leg": "d",
+      "what": "every synthetic spectrum carries the label that begins SYNTHETIC ISM SPECTRUM and a truth manifest (the velocities, line fluxes, E(B-V), R_V, optical depths, oscillator strengths, widths, noise and seed); the label text equals the thresholds file's; the generator is deterministic for a seed",
+      "limits": {}
+    },
+    {
+      "id": "E1.authenticNebula",
+      "leg": "e",
+      "what": "an SDSS H II region spectrum under a fixed analysis contract (the lines, windows and R_V fixed before the file is opened, the intrinsic ratio the contract names with its source) against the decrement published for it: NOT RUN unless the file and the published value are supplied (no nebular spectrum is in the tree and none is fetched; the request is in ISM.md). Its bound when run is fixed here: the colour excess within 2 sigma of the combined uncertainty of the measurement and the published one, with the published value not used to choose any window, line or intrinsic ratio",
+      "limits": {
+        "maxCombinedSigma": 2
+      }
+    },
+    {
+      "id": "E2.authenticStarSodium",
+      "leg": "e",
+      "what": "an SDSS stellar spectrum with interstellar sodium absorption: velocity and column density in the linear regime against a published value: NOT RUN unless supplied (the request is in ISM.md). Its bound when run is fixed here: the velocity within 2 combined sigma and, if the regime test passes, the column density within 2 combined sigma of the published one (a refusal is a correct outcome at SDSS resolution and is recorded as such)",
+      "limits": {
+        "maxCombinedSigma": 2
+      }
+    },
+    {
+      "id": "E3.inTreeStars",
+      "leg": "e",
+      "what": "REPORTED, not judged (no published value exists for it): the fixed contract on the four in-tree SDSS stellar spectra: the direct equivalent width and its uncertainty of h-beta, h-gamma and h-delta of each star with the line and continuum windows of 'limits' about the line, and the sodium region of each: the sampling verdict, the fit's outcome and the column density's outcome. The rule is fixed here; the output is whatever it is",
+      "limits": {
+        "lineWindowHalfWidthAngstrom": 30,
+        "continuumWindowsAngstrom": [
+          [
+            -80,
+            -50
+          ],
+          [
+            50,
+            80
+          ]
+        ],
+        "lines": [
+          "h-beta",
+          "h-gamma",
+          "h-delta"
+        ],
+        "centre": "the pack's vacuum rest wavelength of the line times (1 + z) with the z of the spectrum's record in data-packs/sdss-dr18-stellar-spectra.json (the pack's wavelengths are vacuum and heliocentric)",
+        "sodiumRegion": "na1-d1 and na1-d2, the same rule, line window [-12, +12] angstrom about each, continuum windows [-60, -30] and [+30, +60] about the pair's midpoint"
+      }
+    },
+    {
+      "id": "R1.decrementMisspecification",
+      "leg": "r",
+      "what": "REPORTED, not judged: the bias of E(B-V) in mag over 100 nebula worlds when the analysis takes the wrong R_V (the world's 3.1 against an analysis value of 2.5 and 4.0) and when the analysis takes an intrinsic ratio 5 percent off, and the bias when a stellar-absorption fraction of 5 percent of the h-beta line flux is present, so that the cost of each assumption is on the page",
+      "limits": {
+        "n": 100,
+        "analysisRV": [
+          2.5,
+          4.0
+        ],
+        "intrinsicRatioOffset": 0.05,
+        "stellarAbsorptionFraction": 0.05
+      }
+    },
+    {
+      "id": "R2.continuumSystematic",
+      "leg": "r",
+      "what": "REPORTED, not judged: over 100 star worlds with a continuum curvature the linear side-window fit does not follow (a quadratic term of 2 percent over the window), the direct equivalent width's bias against the analytic one, and the difference between the linear and the constant continuum result, so the continuum choice's cost is on the page",
+      "limits": {
+        "n": 100,
+        "curvature": 0.02
+      }
+    }
+  ],
+  "amendments": []
+}
