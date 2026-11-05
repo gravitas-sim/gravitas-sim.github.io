@@ -118,7 +118,8 @@
     "windowSigmaV": 5,
     "significanceSigma": 10,
     "separableSigmaV": 3,
-    "floorFraction": 0.001
+    "floorFraction": 0.001,
+    "outerFraction": 0.1
   },
   "uncertainty": {
     "formula": "sigma_Theta^2 = sigma_x^2 + (w / sqrt(12))^2 + (c_f sigma_sigmaV)^2 + (tau sigma_v)^2 + (sin(l) sigma_Theta0)^2; sigma_x = sigma_n sqrt(1 + f^2) / |slope| with slope the least-squares dT/dx over the five channels about the crossing; w the channel width in velocity; sigma_sigmaV the stated uncertainty of the assumed gas dispersion; tau the shape term. The interval is the statistics kernel's covarianceInterval at 0.6827 and 0.95.",
@@ -449,6 +450,12 @@
       "id": "AM3",
       "check": "B6.edgeShapeOracle",
       "what": "the oracle finds the peak of the universal edge as the root of dg/dx by scipy.optimize.brentq (with scipy.integrate.quad for the integral) rather than by scipy.optimize.minimize_scalar on g. A flat maximum cannot be located to better than about the square root of the machine precision by comparing values, so the committed 1e-7 bound on the peak position could not be met by the value-based method for any correct kernel; the bound is unchanged and the kernel also uses the derivative. A specification slip found before the oracle ran.",
+      "when": "2026-11-04, before any validator run"
+    },
+    {
+      "id": "AM4",
+      "check": "edgeRule",
+      "what": "step E2 says 'the outermost tenth of the channels'; the key outerFraction = 0.1 is added to edgeRule so the validator and the oracle read the same number from the file (the prose and the kernel already said one tenth). No bound changes.",
       "when": "2026-11-04, before any validator run"
     }
   ]
