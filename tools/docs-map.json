@@ -46,7 +46,7 @@
     {
       "file": "AGN.md",
       "kind": "feature",
-      "purpose": "The AGN kernel: the quasar redshift from broad lines, the luminosity and the bolometric term, the Eddington bound, the variability size bound and the BPT classes, validation and the files requested (Prompt 252).",
+      "purpose": "The AGN kernel: broad-line redshift, luminosity, the Eddington bound, the variability size bound and BPT classes, validation and files requested (Prompt 252).",
       "owner": 252,
       "student": false
     },

@@ -116,7 +116,7 @@ export function bolometricLuminosity({ band, bc, level } = {}) {
     return {
       ...refused(
         'band-mismatch',
-        `the observed band maps to a rest wavelength of ${band.restNm.toPrecision(4)} nm, ${(100 * off).toPrecision(2)} percent from the correction's band, more than its tolerance: no K-correction exists to move it`
+        `the observed band maps to a rest wavelength of ${Math.round(band.restNm * 10) / 10} nm, ${Math.round(1000 * off) / 10} percent from the correction's band, more than its tolerance: no K-correction exists to move it`
       ),
       restNm: band.restNm,
       bcRestNm: bc.restNm,

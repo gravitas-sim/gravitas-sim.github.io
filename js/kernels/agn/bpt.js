@@ -231,7 +231,7 @@ export function measureBptLines(spec, { z, rest, sources, halfWidthPx } = {}) {
     return {
       status: 'not-constrained',
       code: 'unresolved-blend',
-      why: `${pair.join(' and ')} are ${minSep.toPrecision(2)} nm apart, under ${BLEND_FWHM} line-spread widths (${fwhm.toPrecision(2)} nm each): their fluxes cannot be separated here`,
+      why: `${pair.join(' and ')} are ${Math.round(minSep * 100) / 100} nm apart, under ${BLEND_FWHM} line-spread widths (${Math.round(fwhm * 100) / 100} nm each): their fluxes cannot be separated here`,
       lines: pair,
       limits: BPT_LIMITS,
     };
