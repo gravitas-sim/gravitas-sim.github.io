@@ -1,0 +1,724 @@
+{
+  "format": "gravitas.morphology-results/1",
+  "rows": [
+    {
+      "id": "A1.gaussianGalaxy",
+      "status": "pass",
+      "measured": {
+        "absQ": 0.0007382,
+        "absPa": 3.507e-05,
+        "centre": 1.866e-06,
+        "relRp": 0.002093,
+        "relR50": 0.001475,
+        "relR20": 0.002281,
+        "relR80": 0.002162,
+        "absMag": 1.414e-05,
+        "absC": 0.0002584
+      },
+      "note": ""
+    },
+    {
+      "id": "A2.sersicNoiseFree",
+      "status": "fail",
+      "measured": {
+        "per": [
+          {
+            "n": 1,
+            "absQ": 0.0005966,
+            "absPa": 0.001754,
+            "relRp": 0.001975,
+            "relR50": 0.001043,
+            "absMag": 5.018e-05,
+            "absC": 0.01687
+          },
+          {
+            "n": 2,
+            "absQ": 0.000819,
+            "absPa": 0.01218,
+            "relRp": 0.001183,
+            "relR50": 0.002945,
+            "absMag": 0.0005984,
+            "absC": 0.04057
+          },
+          {
+            "n": 4,
+            "absQ": 0.001294,
+            "absPa": 0.0415,
+            "relRp": 0.0001171,
+            "relR50": 0.002721,
+            "absMag": 0.003321,
+            "absC": 0.0967
+          }
+        ]
+      },
+      "note": ""
+    },
+    {
+      "id": "A3.sersicNoisy",
+      "status": "pass",
+      "measured": {
+        "per": [
+          {
+            "n": 1,
+            "radiusWithin": 12,
+            "qWithin": 12,
+            "worstRel": 0.01554
+          },
+          {
+            "n": 4,
+            "radiusWithin": 12,
+            "qWithin": 12,
+            "worstRel": 0.01318
+          }
+        ]
+      },
+      "note": "read as: each condition holds in at least 11 of the 12 galaxies of each n"
+    },
+    {
+      "id": "A4.magnitudeAndColour",
+      "status": "fail",
+      "measured": {
+        "colourError": 1,
+        "magArithmetic": 0,
+        "instrumental": true,
+        "mismatchCode": "band-mismatch",
+        "colour": -0.5,
+        "expectedColour": 0.5
+      },
+      "note": ""
+    },
+    {
+      "id": "A4b.magnitudeAndColourSigned",
+      "status": "pass",
+      "measured": {
+        "colourError": 0,
+        "magArithmetic": 0,
+        "instrumental": true,
+        "mismatchCode": "band-mismatch",
+        "colour": -0.5,
+        "expectedColour": -0.5
+      },
+      "note": ""
+    },
+    {
+      "id": "A5.asymmetry",
+      "status": "pass",
+      "measured": {
+        "aSymmetric": 0.005941,
+        "noisyMean": 0.002609,
+        "noisyUsed": 20,
+        "clumps": [
+          0.006824,
+          0.206,
+          0.4091,
+          0.5094
+        ]
+      },
+      "note": ""
+    },
+    {
+      "id": "A6.profile",
+      "status": "pass",
+      "measured": {
+        "annuli": 10,
+        "worstRel": 0.00804
+      },
+      "note": ""
+    },
+    {
+      "id": "A7.isophotes",
+      "status": "fail",
+      "measured": {
+        "annuli": 5,
+        "worstQ": 0.01345,
+        "worstPaDeg": 0.4926
+      },
+      "note": ""
+    },
+    {
+      "id": "B1.forwardModel",
+      "status": "pass",
+      "measured": {
+        "per": [
+          {
+            "id": "b1",
+            "worstSample": 1.599e-16,
+            "totalDiff": 0
+          },
+          {
+            "id": "b2",
+            "worstSample": 3.708e-17,
+            "totalDiff": 4.746e-13
+          },
+          {
+            "id": "b3",
+            "worstSample": 3.174e-16,
+            "totalDiff": 3.059e-13
+          },
+          {
+            "id": "b4",
+            "worstSample": 2.452e-16,
+            "totalDiff": 1.569e-12
+          },
+          {
+            "id": "b5",
+            "worstSample": 1.336e-16,
+            "totalDiff": 2.85e-13
+          },
+          {
+            "id": "b6",
+            "worstSample": 1.876e-16,
+            "totalDiff": 2.306e-12
+          },
+          {
+            "id": "b7",
+            "worstSample": 1.843e-16,
+            "totalDiff": 1.132e-12
+          },
+          {
+            "id": "b8",
+            "worstSample": 1.513e-16,
+            "totalDiff": 6.973e-13
+          }
+        ]
+      },
+      "note": ""
+    },
+    {
+      "id": "B2.measurement",
+      "status": "fail",
+      "measured": {
+        "per": [
+          {
+            "id": "b1",
+            "centre": 0.000222,
+            "q": 9.557e-06,
+            "pa": 0.001866,
+            "rP": 0.0002264,
+            "r50": 0.0002753,
+            "r20": 0.000823,
+            "r80": 0.0001365,
+            "flux": 1.45e-05,
+            "c": 0.001492,
+            "aAvailabilityAgrees": true,
+            "a": 4.509e-07,
+            "profile": 0.004247,
+            "roundCase": false,
+            "ok": true
+          },
+          {
+            "id": "b2",
+            "centre": 0.0002662,
+            "q": 0.0001456,
+            "pa": 0.01171,
+            "rP": 0.0006563,
+            "r50": 0.001144,
+            "r20": 0.001437,
+            "r80": 0.0005357,
+            "flux": 6.933e-05,
+            "c": 0.004282,
+            "aAvailabilityAgrees": true,
+            "a": 0,
+            "profile": 0.00937,
+            "roundCase": true,
+            "ok": true
+          },
+          {
+            "id": "b3",
+            "centre": 0.001125,
+            "q": 0.000141,
+            "pa": 0.01965,
+            "rP": 0.001801,
+            "r50": 0.0001294,
+            "r20": 0.0005808,
+            "r80": 0.001065,
+            "flux": 0.0003926,
+            "c": 0.003573,
+            "aAvailabilityAgrees": true,
+            "a": 2.897e-05,
+            "profile": 0.007764,
+            "roundCase": false,
+            "ok": true
+          },
+          {
+            "id": "b4",
+            "centre": 7.246e-14,
+            "q": 4.192e-05,
+            "pa": 0.002473,
+            "rP": 0.0002049,
+            "r50": 0.0005953,
+            "r20": 0.01147,
+            "r80": 0.0001003,
+            "flux": 2.466e-07,
+            "c": 0.02484,
+            "aAvailabilityAgrees": true,
+            "a": 0.001273,
+            "profile": 0.01358,
+            "roundCase": false,
+            "ok": false
+          },
+          {
+            "id": "b5",
+            "centre": 0.0002203,
+            "q": 5.429e-05,
+            "pa": 0.005508,
+            "rP": 0.0003066,
+            "r50": 0.0009463,
+            "r20": 0.003393,
+            "r80": 4.939e-05,
+            "flux": 2.467e-05,
+            "c": 0.007273,
+            "aAvailabilityAgrees": true,
+            "a": 1.371e-05,
+            "profile": 0.02499,
+            "roundCase": false,
+            "ok": false
+          },
+          {
+            "id": "b6",
+            "centre": 2.378e-05,
+            "q": 4.445e-05,
+            "pa": 0.01298,
+            "rP": 6.771e-05,
+            "r50": 0.0001324,
+            "r20": 0.0006128,
+            "r80": 0.000121,
+            "flux": 1.646e-06,
+            "c": 0.001594,
+            "aAvailabilityAgrees": true,
+            "a": 0,
+            "profile": 0.002044,
+            "roundCase": true,
+            "ok": true
+          },
+          {
+            "id": "b7",
+            "centre": 0.000125,
+            "q": 0.0001791,
+            "pa": 0.002091,
+            "rP": 0.0001171,
+            "r50": 0.001288,
+            "r20": 0.004126,
+            "r80": 0.0001409,
+            "flux": 6.743e-06,
+            "c": 0.008672,
+            "aAvailabilityAgrees": true,
+            "a": 2.414e-05,
+            "profile": 0.02617,
+            "roundCase": false,
+            "ok": false
+          },
+          {
+            "id": "b8",
+            "centre": 0.001061,
+            "q": 0.0001272,
+            "pa": 0.00456,
+            "rP": 0.0005107,
+            "r50": 0.000973,
+            "r20": 0.0003895,
+            "r80": 0.0004384,
+            "flux": 2.902e-05,
+            "c": 0.000106,
+            "aAvailabilityAgrees": true,
+            "a": 0.0002845,
+            "profile": 0.01831,
+            "roundCase": false,
+            "ok": true
+          }
+        ]
+      },
+      "note": ""
+    },
+    {
+      "id": "C1.sizeCoverage",
+      "status": "fail",
+      "measured": {
+        "answered": 100,
+        "noSigma": 13,
+        "coverageIfMissingCountAsMisses": 0.51,
+        "n": 87,
+        "coverage": 0.5862,
+        "meanZ": -0.381,
+        "sdZ": 1.252
+      },
+      "note": ""
+    },
+    {
+      "id": "C2.magnitudeCoverage",
+      "status": "pass",
+      "measured": {
+        "answered": 100,
+        "noSigma": 0,
+        "coverageIfMissingCountAsMisses": 0.66,
+        "n": 100,
+        "coverage": 0.66,
+        "meanZ": 0.1316,
+        "sdZ": 1.046
+      },
+      "note": ""
+    },
+    {
+      "id": "C3.colourCoverage",
+      "status": "pass",
+      "measured": {
+        "answered": 100,
+        "noSigma": 0,
+        "coverageIfMissingCountAsMisses": 0.77,
+        "n": 100,
+        "coverage": 0.77,
+        "meanZ": 0.04289,
+        "sdZ": 0.828
+      },
+      "note": ""
+    },
+    {
+      "id": "D1a.pointSources",
+      "status": "pass",
+      "measured": {
+        "unresolvedFraction": 1,
+        "statuses": {
+          "unresolved": 50
+        }
+      },
+      "note": ""
+    },
+    {
+      "id": "D1b.smallerThanPsf",
+      "status": "fail",
+      "measured": {
+        "unresolvedFraction": 0.64,
+        "statuses": {
+          "unresolved": 32,
+          "ok": 18
+        },
+        "byN": {
+          "1": {
+            "unresolved": 25
+          },
+          "4": {
+            "ok": 18,
+            "unresolved": 7
+          }
+        }
+      },
+      "note": ""
+    },
+    {
+      "id": "D1c.clearlyResolved",
+      "status": "pass",
+      "measured": {
+        "unresolvedFraction": 0,
+        "statuses": {
+          "ok": 50
+        },
+        "byN": {
+          "1": {
+            "ok": 25
+          },
+          "4": {
+            "ok": 25
+          }
+        }
+      },
+      "note": ""
+    },
+    {
+      "id": "D2.lowSignal",
+      "status": "pass",
+      "measured": {
+        "okFraction": 0,
+        "refusedFraction": 1,
+        "statuses": {
+          "refused": 50
+        }
+      },
+      "note": ""
+    },
+    {
+      "id": "D3.frameCut",
+      "status": "pass",
+      "measured": {
+        "codes": {
+          "frame-too-small": 20
+        }
+      },
+      "note": ""
+    },
+    {
+      "id": "D4.skyGradient",
+      "status": "pass",
+      "measured": {
+        "refusedFraction": 1,
+        "codes": {
+          "sky-not-flat": 40
+        }
+      },
+      "note": ""
+    },
+    {
+      "id": "D4b.skyControl",
+      "status": "pass",
+      "measured": {
+        "refusedFraction": 0,
+        "codes": {
+          "ok": 40
+        }
+      },
+      "note": ""
+    },
+    {
+      "id": "D5.classificationAmbiguity",
+      "status": "pass",
+      "measured": {
+        "near": "concentration-at-boundary",
+        "far": "smooth-compact",
+        "nearA": "asymmetry-at-boundary",
+        "farA": "irregular",
+        "noSource": "missing-rule",
+        "noThresholds": "missing-rule"
+      },
+      "note": ""
+    },
+    {
+      "id": "E1.authenticSdssProfile",
+      "status": "not-run",
+      "measured": null,
+      "note": "No SDSS image, catalogue value or documentation page is in the repository and nothing was fetched. The exact request (frames, the catalogue fields the pipeline publishes for the same objects, the terms pages) is in GALAXY_MORPHOLOGY.md, section Files requested from Carl."
+    },
+    {
+      "id": "E2.authenticClassification",
+      "status": "not-run",
+      "measured": null,
+      "note": "No pack galaxy, cited catalogue class or cited rule is in the repository and nothing was fetched; the error rate on real galaxies cannot be measured. The request is in GALAXY_MORPHOLOGY.md."
+    },
+    {
+      "id": "E3.quantitativeContract",
+      "status": "not-run",
+      "measured": null,
+      "note": "No survey documentation page was supplied, so no pack can be given a quantitative contract; any pack built later is display-only. The request is in GALAXY_MORPHOLOGY.md."
+    },
+    {
+      "id": "R1.psfBias",
+      "status": "reported",
+      "measured": {
+        "table": [
+          {
+            "n": 1,
+            "reOverFwhm": 1,
+            "r50Ratio": 1.176,
+            "rPRatio": 1.124,
+            "cDiff": -0.3565,
+            "q": 0.7564,
+            "a": 1.173e-14
+          },
+          {
+            "n": 1,
+            "reOverFwhm": 2,
+            "r50Ratio": 1.047,
+            "rPRatio": 1.031,
+            "cDiff": -0.1528,
+            "q": 0.7169,
+            "a": -4.637e-10
+          },
+          {
+            "n": 1,
+            "reOverFwhm": 3,
+            "r50Ratio": 1.022,
+            "rPRatio": 1.016,
+            "cDiff": -0.06625,
+            "q": 0.7078,
+            "a": "no-background-patch"
+          },
+          {
+            "n": 1,
+            "reOverFwhm": 6,
+            "status": "refused",
+            "code": "frame-too-small"
+          },
+          {
+            "n": 2,
+            "reOverFwhm": 1,
+            "r50Ratio": 1.263,
+            "rPRatio": 1.158,
+            "cDiff": -0.8996,
+            "q": 0.7487,
+            "a": -1.355e-08
+          },
+          {
+            "n": 2,
+            "reOverFwhm": 2,
+            "r50Ratio": 1.073,
+            "rPRatio": 1.039,
+            "cDiff": -0.4184,
+            "q": 0.7157,
+            "a": -0.0004219
+          },
+          {
+            "n": 2,
+            "reOverFwhm": 3,
+            "r50Ratio": 1.033,
+            "rPRatio": 1.019,
+            "cDiff": -0.2285,
+            "q": 0.7075,
+            "a": "no-background-patch"
+          },
+          {
+            "n": 2,
+            "reOverFwhm": 6,
+            "status": "refused",
+            "code": "frame-too-small"
+          },
+          {
+            "n": 4,
+            "reOverFwhm": 1,
+            "r50Ratio": 1.52,
+            "rPRatio": 1.31,
+            "cDiff": -1.539,
+            "q": 0.7577,
+            "a": -1.173e-05
+          },
+          {
+            "n": 4,
+            "reOverFwhm": 2,
+            "r50Ratio": 1.141,
+            "rPRatio": 1.081,
+            "cDiff": -0.9939,
+            "q": 0.722,
+            "a": -0.001274
+          },
+          {
+            "n": 4,
+            "reOverFwhm": 3,
+            "r50Ratio": 1.059,
+            "rPRatio": 1.032,
+            "cDiff": -0.6356,
+            "q": 0.711,
+            "a": -0.01169
+          },
+          {
+            "n": 4,
+            "reOverFwhm": 6,
+            "r50Ratio": 0.952,
+            "rPRatio": 0.9507,
+            "cDiff": -0.3182,
+            "q": 0.7034,
+            "a": "no-background-patch"
+          }
+        ]
+      },
+      "note": ""
+    },
+    {
+      "id": "R2.totalFraction",
+      "status": "reported",
+      "measured": {
+        "analytic": [
+          {
+            "n": 0.5,
+            "fraction": 1,
+            "magnitudeOffset": 3.139e-05
+          },
+          {
+            "n": 1,
+            "fraction": 0.9933,
+            "magnitudeOffset": 0.00733
+          },
+          {
+            "n": 2,
+            "fraction": 0.943,
+            "magnitudeOffset": 0.06374
+          },
+          {
+            "n": 4,
+            "fraction": 0.8165,
+            "magnitudeOffset": 0.2201
+          },
+          {
+            "n": 6,
+            "fraction": 0.7046,
+            "magnitudeOffset": 0.3801
+          }
+        ],
+        "measured": [
+          {
+            "n": 1,
+            "fraction": 0.9933
+          },
+          {
+            "n": 2,
+            "fraction": 0.9425
+          },
+          {
+            "n": 4,
+            "fraction": 0.814
+          }
+        ]
+      },
+      "note": ""
+    },
+    {
+      "id": "R3.standInClassification",
+      "status": "reported",
+      "measured": {
+        "matrix": {
+          "smooth-compact": {
+            "not-constrained": 3,
+            "smooth-compact": 57
+          },
+          "disk-like": {
+            "disk-like": 60
+          },
+          "irregular": {
+            "disk-like": 1,
+            "irregular": 55,
+            "not-constrained": 4
+          }
+        },
+        "label": "SYNTHETIC ONLY, INVENTED stand-in rule: not the error rate of a cited rule and not an error rate on real galaxies"
+      },
+      "note": ""
+    },
+    {
+      "id": "G1.sersicRecovery",
+      "status": "not-run",
+      "measured": null,
+      "note": "The PSF-convolved Sersic fitter does not exist; Part B is a separate session on a spike branch (gate-thresholds.json is committed, GALAXY_PROFILES_GATE.md)."
+    },
+    {
+      "id": "G2.independentFit",
+      "status": "not-run",
+      "measured": null,
+      "note": "No fitter and no pinned independent-fit fixture exist: the independent fit is a Part B deliverable on the spike branch, after the fitter it would check."
+    },
+    {
+      "id": "G3.degeneracy",
+      "status": "not-run",
+      "measured": null,
+      "note": "No fitter exists, so no profile-likelihood interval or n-R_e correlation was measured."
+    },
+    {
+      "id": "G4.twoComponent",
+      "status": "not-run",
+      "measured": null,
+      "note": "No two-component fitter exists; the exponential-plus-de Vaucouleurs fit and its BIC rule are Part B work on the spike branch."
+    },
+    {
+      "id": "G5.psfMismatch",
+      "status": "not-run",
+      "measured": null,
+      "note": "No fitter exists, so the cost of a wrong declared PSF width on a fitted R_e was not measured (Part B)."
+    },
+    {
+      "id": "G6.tullyFisherData",
+      "status": "not-run",
+      "measured": null,
+      "note": "Unmet by data: no matched extragalactic HI line widths are in the repository and no rights decision exists (D-R10-249-04); Tully-Fisher is not built and no claim is made."
+    },
+    {
+      "id": "G7.cost",
+      "status": "not-run",
+      "measured": null,
+      "note": "Nothing was built, so there is no deferred-JavaScript cost of a fitter to measure; Part B measures it on Node 22 when it builds one."
+    }
+  ]
+}

@@ -1,0 +1,239 @@
+{
+  "format": "gravitas.morphology-failed-legs/1",
+  "label": "These legs crossed a committed bound and stay failing; only Carl resets one.",
+  "legs": [
+    {
+      "id": "A2.sersicNoiseFree",
+      "measured": {
+        "per": [
+          {
+            "n": 1,
+            "absQ": 0.0005966,
+            "absPa": 0.001754,
+            "relRp": 0.001975,
+            "relR50": 0.001043,
+            "absMag": 0.00005018,
+            "absC": 0.01687
+          },
+          {
+            "n": 2,
+            "absQ": 0.000819,
+            "absPa": 0.01218,
+            "relRp": 0.001183,
+            "relR50": 0.002945,
+            "absMag": 0.0005984,
+            "absC": 0.04057
+          },
+          {
+            "n": 4,
+            "absQ": 0.001294,
+            "absPa": 0.0415,
+            "relRp": 0.0001171,
+            "relR50": 0.002721,
+            "absMag": 0.003321,
+            "absC": 0.0967
+          }
+        ]
+      },
+      "note": "Fails on one sub-check: the concentration of the n = 4 galaxy differs from the analytic PSF-free value by 0.097 against a bound of 0.05 (n = 1: 0.017, n = 2: 0.041, both inside). Shape, radii and magnitude pass for all three n. The cause was not isolated: the candidates are the central cusp of an n = 4 profile, which the sub-pixel model and the 3 by 3 growth binning resolve less well at r_20 (about 1.6 px), and the 0.05 pixel bins. Left failing as committed."
+    },
+    {
+      "id": "A4.magnitudeAndColour",
+      "measured": {
+        "colourError": 1,
+        "magArithmetic": 0,
+        "instrumental": true,
+        "mismatchCode": "band-mismatch",
+        "colour": -0.5,
+        "expectedColour": 0.5
+      },
+      "note": "Fails on the colour sub-check only, by a sign: the kernel's colour (m_1 - m_2, rule S9) for a second band at 10^(-0.4 * 0.5) times the flux is -0.5 to better than 1e-6, and the committed sentence says 0.5. The magnitude arithmetic, the instrumental-magnitude flag and the band-mismatch refusal pass. Left failing as committed; A4b (AM4) is the new leg with the sign stated and passes."
+    },
+    {
+      "id": "A7.isophotes",
+      "measured": {
+        "annuli": 5,
+        "worstQ": 0.01345,
+        "worstPaDeg": 0.4926
+      },
+      "note": "The annulus axis ratio of a noise-free PSF-free n = 2 galaxy is within 0.0135 of the truth in the worst of 5 annuli against a bound of 0.01 (position angle 0.49 degree, inside its 1 degree). The cause was not isolated; the candidate is the pixel-centre assignment of the second moments to thin annuli (8 geometric annuli, no fractional pixel weights), which is coarse at the inner annuli. Left failing as committed."
+    },
+    {
+      "id": "B2.measurement",
+      "measured": {
+        "per": [
+          {
+            "id": "b1",
+            "centre": 0.000222,
+            "q": 0.000009557,
+            "pa": 0.001866,
+            "rP": 0.0002264,
+            "r50": 0.0002753,
+            "r20": 0.000823,
+            "r80": 0.0001365,
+            "flux": 0.0000145,
+            "c": 0.001492,
+            "aAvailabilityAgrees": true,
+            "a": 4.509e-7,
+            "profile": 0.004247,
+            "roundCase": false,
+            "ok": true
+          },
+          {
+            "id": "b2",
+            "centre": 0.0002662,
+            "q": 0.0001456,
+            "pa": 0.01171,
+            "rP": 0.0006563,
+            "r50": 0.001144,
+            "r20": 0.001437,
+            "r80": 0.0005357,
+            "flux": 0.00006933,
+            "c": 0.004282,
+            "aAvailabilityAgrees": true,
+            "a": 0,
+            "profile": 0.00937,
+            "roundCase": true,
+            "ok": true
+          },
+          {
+            "id": "b3",
+            "centre": 0.001125,
+            "q": 0.000141,
+            "pa": 0.01965,
+            "rP": 0.001801,
+            "r50": 0.0001294,
+            "r20": 0.0005808,
+            "r80": 0.001065,
+            "flux": 0.0003926,
+            "c": 0.003573,
+            "aAvailabilityAgrees": true,
+            "a": 0.00002897,
+            "profile": 0.007764,
+            "roundCase": false,
+            "ok": true
+          },
+          {
+            "id": "b4",
+            "centre": 7.246e-14,
+            "q": 0.00004192,
+            "pa": 0.002473,
+            "rP": 0.0002049,
+            "r50": 0.0005953,
+            "r20": 0.01147,
+            "r80": 0.0001003,
+            "flux": 2.466e-7,
+            "c": 0.02484,
+            "aAvailabilityAgrees": true,
+            "a": 0.001273,
+            "profile": 0.01358,
+            "roundCase": false,
+            "ok": false
+          },
+          {
+            "id": "b5",
+            "centre": 0.0002203,
+            "q": 0.00005429,
+            "pa": 0.005508,
+            "rP": 0.0003066,
+            "r50": 0.0009463,
+            "r20": 0.003393,
+            "r80": 0.00004939,
+            "flux": 0.00002467,
+            "c": 0.007273,
+            "aAvailabilityAgrees": true,
+            "a": 0.00001371,
+            "profile": 0.02499,
+            "roundCase": false,
+            "ok": false
+          },
+          {
+            "id": "b6",
+            "centre": 0.00002378,
+            "q": 0.00004445,
+            "pa": 0.01298,
+            "rP": 0.00006771,
+            "r50": 0.0001324,
+            "r20": 0.0006128,
+            "r80": 0.000121,
+            "flux": 0.000001646,
+            "c": 0.001594,
+            "aAvailabilityAgrees": true,
+            "a": 0,
+            "profile": 0.002044,
+            "roundCase": true,
+            "ok": true
+          },
+          {
+            "id": "b7",
+            "centre": 0.000125,
+            "q": 0.0001791,
+            "pa": 0.002091,
+            "rP": 0.0001171,
+            "r50": 0.001288,
+            "r20": 0.004126,
+            "r80": 0.0001409,
+            "flux": 0.000006743,
+            "c": 0.008672,
+            "aAvailabilityAgrees": true,
+            "a": 0.00002414,
+            "profile": 0.02617,
+            "roundCase": false,
+            "ok": false
+          },
+          {
+            "id": "b8",
+            "centre": 0.001061,
+            "q": 0.0001272,
+            "pa": 0.00456,
+            "rP": 0.0005107,
+            "r50": 0.000973,
+            "r20": 0.0003895,
+            "r80": 0.0004384,
+            "flux": 0.00002902,
+            "c": 0.000106,
+            "aAvailabilityAgrees": true,
+            "a": 0.0002845,
+            "profile": 0.01831,
+            "roundCase": false,
+            "ok": true
+          }
+        ]
+      },
+      "note": "The kernel and the independent oracle agree to 1e-3 or better on centre, axis ratio, position angle, r_P, R50, flux and C in all 8 cases, and fail the committed bounds on two quantities: r_20 of b4 (n 1, q 0.4) differs by 1.15 percent against 1 percent, and the profile of b5 (2.5 percent) and b7 (2.6 percent) against 2 percent, in the inner annuli where the kernel's 3 by 3 binned growth and the oracle's 5 by 5 sorted growth differ. The cause was not isolated beyond that. Left failing as committed."
+    },
+    {
+      "id": "C1.sizeCoverage",
+      "measured": {
+        "answered": 100,
+        "noSigma": 13,
+        "coverageIfMissingCountAsMisses": 0.51,
+        "n": 87,
+        "coverage": 0.5862,
+        "meanZ": -0.381,
+        "sdZ": 1.252
+      },
+      "note": "The interval's coverage (0.586 over the 87 galaxies with a sigma) is inside the band, the standard deviation of the normalised error (1.25) is inside its band, and the mean normalised error is -0.381 against a bound of 0.35: the measured R50 is on average 0.38 sigma below the oracle's truth. 13 of the 100 answered galaxies have no R50 sigma (fewer than 36 noise draws completed, flag unstable-uncertainty; they are the faint ones, flux 15000 to 23000 electrons, where a noise draw falls under the signal-to-noise floor of 10); counting them as misses gives a coverage of 0.51, below the band. The bias is not isolated (candidates: the noise bias of the Petrosian radius, the clipped sky, the truncation at 2 r_P). Left failing as committed."
+    },
+    {
+      "id": "D1b.smallerThanPsf",
+      "measured": {
+        "unresolvedFraction": 0.64,
+        "statuses": {
+          "unresolved": 32,
+          "ok": 18
+        },
+        "byN": {
+          "1": {
+            "unresolved": 25
+          },
+          "4": {
+            "ok": 18,
+            "unresolved": 7
+          }
+        }
+      },
+      "note": "32 of 50 galaxies with a half-light radius 0.25 times the PSF FWHM are unresolved (0.64 against 0.95): all 25 of n = 1 and 7 of 25 of n = 4. The 18 n = 4 galaxies have a circularised R50 of about 1.92 px against the rule's limit of 1.875 px (1.25 times the PSF's half-light radius of 1.5 px) plus a sigma of about 0.008: the wings of a de Vaucouleurs profile make the convolved R50 about 2.4 percent larger than the margin allows. The committed factor 1.25 is too tight for n = 4; it was not changed. See the questions for Carl."
+    }
+  ]
+}
