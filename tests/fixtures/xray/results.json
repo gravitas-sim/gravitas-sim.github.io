@@ -1,0 +1,699 @@
+{
+  "format": "gravitas.xray-results/1",
+  "rows": [
+    {
+      "id": "A1.garwoodClosed",
+      "status": "pass",
+      "measured": {
+        "worstErrorInBounds": 0.000011,
+        "exactRate": true,
+        "label": "poisson-garwood",
+        "refusals": [
+          "counts",
+          "counts",
+          "exposure"
+        ]
+      },
+      "note": ""
+    },
+    {
+      "id": "A2.hardnessClosed",
+      "status": "pass",
+      "measured": {
+        "worstInBounds": 6.66e-7,
+        "mirror": 6.661338147750939e-16,
+        "refusedNoCounts": true,
+        "cases": [
+          {
+            "hard": 30,
+            "soft": 10,
+            "hr": 0.5,
+            "lo": 0.325541988113927,
+            "hi": 0.6453975860962493
+          },
+          {
+            "hard": 10,
+            "soft": 10,
+            "hr": 0,
+            "lo": -0.2654649836750722,
+            "hi": 0.2654649836750722
+          },
+          {
+            "hard": 0,
+            "soft": 10,
+            "hr": -1,
+            "lo": -1,
+            "hi": -0.383005784362479
+          },
+          {
+            "hard": 10,
+            "soft": 0,
+            "hr": 1,
+            "lo": 0.3830057843624788,
+            "hi": 1
+          },
+          {
+            "hard": 0,
+            "soft": 1,
+            "hr": -1,
+            "lo": -1,
+            "hi": 0.9499999999999997
+          }
+        ]
+      },
+      "note": ""
+    },
+    {
+      "id": "A3.binConservation",
+      "status": "pass",
+      "measured": {
+        "groups": 78,
+        "short": 6,
+        "binsIn": 240,
+        "valid": true,
+        "counts": true,
+        "exposure": true,
+        "consecutive": true,
+        "gaps": true,
+        "minimal": true,
+        "shortRule": true
+      },
+      "note": ""
+    },
+    {
+      "id": "A4.periodRecovery",
+      "status": "fail",
+      "measured": {
+        "recovered": "19 of 20",
+        "noFalseAlarmField": true,
+        "failing": [
+          {
+            "seed": 243100,
+            "period": 553.698,
+            "errorInResolutions": 7.19,
+            "p": 0.005,
+            "flags": [],
+            "truePeakOverTop": 0.932
+          }
+        ]
+      },
+      "note": ""
+    },
+    {
+      "id": "A5.hardnessRecovery",
+      "status": "pass",
+      "measured": {
+        "inside": "5 of 5",
+        "worstHalfWidth": 0.0547,
+        "pooledAgreement": 0,
+        "per": [
+          {
+            "seed": 243001,
+            "hr": -0.1723,
+            "lo": -0.2255,
+            "hi": -0.1185
+          },
+          {
+            "seed": 243002,
+            "hr": -0.2279,
+            "lo": -0.2821,
+            "hi": -0.1728
+          },
+          {
+            "seed": 243003,
+            "hr": -0.215,
+            "lo": -0.2685,
+            "hi": -0.1606
+          },
+          {
+            "seed": 243004,
+            "hr": -0.2005,
+            "lo": -0.2548,
+            "hi": -0.1454
+          },
+          {
+            "seed": 243005,
+            "hr": -0.2179,
+            "lo": -0.2718,
+            "hi": -0.163
+          }
+        ]
+      },
+      "note": ""
+    },
+    {
+      "id": "A6.outburstRecovery",
+      "status": "pass",
+      "measured": {
+        "runs": [
+          {
+            "tStart": 12000,
+            "tStop": 17600,
+            "peakBin": 120,
+            "bins": 56
+          }
+        ],
+        "quietRate": 1.97,
+        "falseRunsInQuietSeries": 0,
+        "quietRefused": 0,
+        "highCase": "refused noQuietLevel"
+      },
+      "note": ""
+    },
+    {
+      "id": "B1.garwoodOracle",
+      "status": "pass",
+      "measured": {
+        "intervals": 1818,
+        "worstRelative": 1.82e-14
+      },
+      "note": ""
+    },
+    {
+      "id": "B2.clopperPearsonOracle",
+      "status": "pass",
+      "measured": {
+        "intervals": 180,
+        "worstAbsolute": 7.11e-15
+      },
+      "note": ""
+    },
+    {
+      "id": "B3.glsOracle",
+      "status": "pass",
+      "measured": {
+        "worstPowerDifference": 5.10702591327572e-15,
+        "gridEqualsExistingModuleAndOracle": true,
+        "peakDifferenceInGridSteps": 2.954311031921897e-8,
+        "existingModulePeriod": 611.7594681590272,
+        "kernelPeriod": 611.7594682123372
+      },
+      "note": ""
+    },
+    {
+      "id": "B4.significanceOracle",
+      "status": "pass",
+      "measured": {
+        "series": [
+          {
+            "seed": 243401,
+            "kernelP": 0.812,
+            "oracleP": 0.8114,
+            "difference": 0.0006,
+            "tolerance": 0.0517,
+            "observedMaxPowerDifference": 0.0011622303657403618
+          },
+          {
+            "seed": 243402,
+            "kernelP": 0.3,
+            "oracleP": 0.31115,
+            "difference": 0.0111,
+            "tolerance": 0.0607,
+            "observedMaxPowerDifference": 0.0007166019499082535
+          },
+          {
+            "seed": 243403,
+            "kernelP": 0.863,
+            "oracleP": 0.89275,
+            "difference": 0.0298,
+            "tolerance": 0.0435,
+            "observedMaxPowerDifference": 0.0006268029866801569
+          },
+          {
+            "seed": 243404,
+            "kernelP": 0.809,
+            "oracleP": 0.8006,
+            "difference": 0.0084,
+            "tolerance": 0.0524,
+            "observedMaxPowerDifference": 0.00014659971419805906
+          },
+          {
+            "seed": 243405,
+            "kernelP": 0.764,
+            "oracleP": 0.7477,
+            "difference": 0.0163,
+            "tolerance": 0.0567,
+            "observedMaxPowerDifference": 3.95516952522712e-16
+          },
+          {
+            "seed": 243406,
+            "kernelP": 0.041,
+            "oracleP": 0.0354,
+            "difference": 0.0056,
+            "tolerance": 0.0259,
+            "observedMaxPowerDifference": 0.002913401842114846
+          }
+        ]
+      },
+      "note": ""
+    },
+    {
+      "id": "B5.netRateOracle",
+      "status": "pass",
+      "measured": {
+        "intervals": 24,
+        "worstRelative": 1.19e-14
+      },
+      "note": ""
+    },
+    {
+      "id": "B6.netHardnessOracle",
+      "status": "fail",
+      "measured": {
+        "worstAbsolute": "a case the kernel refuses",
+        "worstOverTheCasesTheKernelAnswers": 1.13e-8,
+        "cases": [
+          {
+            "case": [
+              12,
+              8,
+              30,
+              10
+            ],
+            "kernel": [
+              0.3014,
+              0.61853
+            ],
+            "oracle": [
+              0.3014,
+              0.61853
+            ]
+          },
+          {
+            "case": [
+              40,
+              6,
+              8,
+              4
+            ],
+            "kernel": [
+              -0.79814,
+              -0.56826
+            ],
+            "oracle": [
+              -0.79814,
+              -0.56826
+            ]
+          },
+          {
+            "case": [
+              5,
+              20,
+              5,
+              20
+            ],
+            "kernel": "refused noCounts",
+            "oracle": [
+              -1,
+              1
+            ]
+          },
+          {
+            "case": [
+              100,
+              10,
+              60,
+              10
+            ],
+            "kernel": [
+              -0.33628,
+              -0.17776
+            ],
+            "oracle": [
+              -0.33628,
+              -0.17776
+            ]
+          },
+          {
+            "case": [
+              0,
+              2,
+              9,
+              3
+            ],
+            "kernel": [
+              0.88197,
+              1
+            ],
+            "oracle": [
+              0.88197,
+              1
+            ]
+          },
+          {
+            "case": [
+              25,
+              25,
+              25,
+              25
+            ],
+            "kernel": [
+              -0.19413,
+              0.19413
+            ],
+            "oracle": [
+              -0.19413,
+              0.19413
+            ]
+          }
+        ]
+      },
+      "note": "a case with no net counts in either band is refused by the kernel (the hardness is not defined there)"
+    },
+    {
+      "id": "B7.timingPackage",
+      "status": "not-run",
+      "measured": null,
+      "note": "authentic/timing-package.json was not supplied"
+    },
+    {
+      "id": "C1.hardnessCoverage",
+      "status": "pass",
+      "measured": {
+        "points": 40,
+        "minimumCoverageMinusLevel": 0.008610534667965464,
+        "meanExcess": 0.0994
+      },
+      "note": ""
+    },
+    {
+      "id": "C1b.hardnessCoverageEndToEnd",
+      "status": "pass",
+      "measured": {
+        "per": [
+          {
+            "targetCounts": 5,
+            "coverage": 0.983,
+            "noCounts": 18
+          },
+          {
+            "targetCounts": 20,
+            "coverage": 0.9655,
+            "noCounts": 0
+          },
+          {
+            "targetCounts": 100,
+            "coverage": 0.955,
+            "noCounts": 0
+          }
+        ]
+      },
+      "note": ""
+    },
+    {
+      "id": "C2.rateCoverage",
+      "status": "pass",
+      "measured": {
+        "points": 18,
+        "minimumCoverageMinusLevel": 0.00040834652049359654
+      },
+      "note": ""
+    },
+    {
+      "id": "C3.netRateCoverage",
+      "status": "fail",
+      "measured": {
+        "minimum": 0.8724,
+        "mean": 0.951,
+        "per": [
+          {
+            "S": 0,
+            "B": 1,
+            "coverage": 0.9894
+          },
+          {
+            "S": 0,
+            "B": 4,
+            "coverage": 0.9814
+          },
+          {
+            "S": 0.5,
+            "B": 1,
+            "coverage": 0.981
+          },
+          {
+            "S": 0.5,
+            "B": 4,
+            "coverage": 0.9736
+          },
+          {
+            "S": 2,
+            "B": 1,
+            "coverage": 0.8724
+          },
+          {
+            "S": 2,
+            "B": 4,
+            "coverage": 0.9261
+          },
+          {
+            "S": 6,
+            "B": 1,
+            "coverage": 0.9396
+          },
+          {
+            "S": 6,
+            "B": 4,
+            "coverage": 0.9448
+          }
+        ]
+      },
+      "note": ""
+    },
+    {
+      "id": "C3b.netHardnessCoverage",
+      "status": "pass",
+      "measured": {
+        "per": [
+          {
+            "net": [
+              8,
+              2
+            ],
+            "truth": -0.6,
+            "coverage": 0.946
+          },
+          {
+            "net": [
+              4,
+              4
+            ],
+            "truth": 0,
+            "coverage": 0.927
+          },
+          {
+            "net": [
+              2,
+              8
+            ],
+            "truth": 0.6,
+            "coverage": 0.944
+          },
+          {
+            "net": [
+              1,
+              1
+            ],
+            "truth": 0,
+            "coverage": 0.913
+          }
+        ]
+      },
+      "note": ""
+    },
+    {
+      "id": "C4.significanceCalibration",
+      "status": "pass",
+      "measured": {
+        "fractionAt05": 0.04,
+        "fractionAt01": 0,
+        "medianP": 0.52
+      },
+      "note": ""
+    },
+    {
+      "id": "C5.periodIntervalCoverage",
+      "status": "fail",
+      "measured": {
+        "coverage": 0.54,
+        "medianHalfWidthSeconds": 0.654
+      },
+      "note": ""
+    },
+    {
+      "id": "D1.noGtiRefused",
+      "status": "pass",
+      "measured": {
+        "entryPointsChecked": 16,
+        "wrong": [],
+        "missingExposureCode": "exposure"
+      },
+      "note": ""
+    },
+    {
+      "id": "D2.contractRefusals",
+      "status": "pass",
+      "measured": {
+        "variants": 14,
+        "wrong": [],
+        "unmodifiedAccepted": true
+      },
+      "note": ""
+    },
+    {
+      "id": "D3.nonBarycentricPeriod",
+      "status": "pass",
+      "measured": {
+        "searchCode": "notBarycentric",
+        "rateStatus": "ok",
+        "hardnessStatus": "ok"
+      },
+      "note": ""
+    },
+    {
+      "id": "D4.searchRules",
+      "status": "pass",
+      "measured": {
+        "undersampled": "undersampled",
+        "fewSimulations": "simulations",
+        "smallestP": 0.01,
+        "trials": 1245,
+        "noCounts": "noCounts",
+        "oneBin": "tooFew"
+      },
+      "note": ""
+    },
+    {
+      "id": "D5.aliasFlags",
+      "status": "pass",
+      "measured": {
+        "regular": {
+          "frequency": 0.0070001,
+          "flags": [
+            "aliasPair"
+          ],
+          "nearAlias": true
+        },
+        "atSamplingCase": {
+          "frequency": 0.030019,
+          "flags": [
+            "atSampling",
+            "aliasPair"
+          ]
+        },
+        "jitter": {
+          "foundNear0_007": "20 of 20",
+          "flagged": "0 of 20"
+        }
+      },
+      "note": ""
+    },
+    {
+      "id": "D6.backgroundPeriodic",
+      "status": "pass",
+      "measured": {
+        "foundAndFlagged": "5 of 5",
+        "controlFlagged": "0 of 5",
+        "per": [
+          {
+            "seed": 243950,
+            "backgroundCase": {
+              "p": 0.005,
+              "flagged": true
+            },
+            "controlFlagged": false,
+            "controlP": 0.005
+          },
+          {
+            "seed": 243951,
+            "backgroundCase": {
+              "p": 0.005,
+              "flagged": true
+            },
+            "controlFlagged": false,
+            "controlP": 0.005
+          },
+          {
+            "seed": 243952,
+            "backgroundCase": {
+              "p": 0.005,
+              "flagged": true
+            },
+            "controlFlagged": false,
+            "controlP": 0.005
+          },
+          {
+            "seed": 243953,
+            "backgroundCase": {
+              "p": 0.005,
+              "flagged": true
+            },
+            "controlFlagged": false,
+            "controlP": 0.005
+          },
+          {
+            "seed": 243954,
+            "backgroundCase": {
+              "p": 0.005,
+              "flagged": true
+            },
+            "controlFlagged": false,
+            "controlP": 0.005
+          }
+        ]
+      },
+      "note": ""
+    },
+    {
+      "id": "D7.syntheticLabel",
+      "status": "pass",
+      "measured": {
+        "unlabelled": [],
+        "flagOnControl": [],
+        "manifest": true
+      },
+      "note": ""
+    },
+    {
+      "id": "E0.productFillsContract",
+      "status": "not-run",
+      "measured": null,
+      "note": "no authentic product was supplied (nothing was fetched): tests/fixtures/xray/authentic/ does not exist"
+    },
+    {
+      "id": "E1.pulsarCatalogue",
+      "status": "not-run",
+      "measured": null,
+      "note": "no authentic product was supplied (nothing was fetched): tests/fixtures/xray/authentic/ does not exist"
+    },
+    {
+      "id": "E2.transientOutburst",
+      "status": "not-run",
+      "measured": null,
+      "note": "no authentic product was supplied (nothing was fetched): tests/fixtures/xray/authentic/ does not exist"
+    },
+    {
+      "id": "P1.speed",
+      "status": "pass",
+      "measured": {
+        "cpuSeconds": 50.1
+      },
+      "note": "recorded, not a physics bound"
+    }
+  ],
+  "gate": {
+    "kernelVerdict": "B",
+    "failingNonPeriodLegs": [],
+    "failingPeriodLegs": [
+      "A4",
+      "C5"
+    ],
+    "netForms": "total forms only (not passing: B6, C3)",
+    "productVerdict": "NOT ESTABLISHED: no authentic product was supplied; treated as C for any statement about a real source",
+    "productLegs": [
+      "E0:not-run",
+      "E1:not-run",
+      "E2:not-run"
+    ]
+  }
+}

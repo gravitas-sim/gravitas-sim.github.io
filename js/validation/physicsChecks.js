@@ -95,6 +95,7 @@ const GROUPS = [
   () => import('./groups/clusters.js'),
   () => import('./groups/dynamics.js'),
   () => import('./groups/multimessenger.js'),
+  () => import('./groups/xray.js'),
   () => import('./groups/rotation-decomposition.js'),
   () => import('./groups/radio.js'),
 ];
