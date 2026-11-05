@@ -1129,6 +1129,20 @@
       "student": false
     },
     {
+      "file": "ISM.md",
+      "kind": "feature",
+      "purpose": "The interstellar-medium kernel: line identification, equivalent widths, velocities, the linear column density, the Balmer decrement, validation and the files requested (Prompt 247).",
+      "owner": 247,
+      "student": false
+    },
+    {
+      "file": "PLASMA_DIAGNOSTICS_GATE.md",
+      "kind": "gate",
+      "purpose": "Plasma diagnostics gate: committed thresholds for the [O III] temperature and [S II] density, every leg NOT RUN, and the fetch request (Prompt 247 Part B).",
+      "owner": 247,
+      "student": false
+    },
+    {
       "file": "DYNAMICS_REFERENCE_GATE.md",
       "kind": "gate",
       "purpose": "Dynamics reference gate: the committed tolerances, the independent reference runs, the engine's precomputed runs and the verdict (Prompt 237 Part B).",
