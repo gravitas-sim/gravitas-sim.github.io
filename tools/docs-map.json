@@ -44,6 +44,20 @@
       "student": true
     },
     {
+      "file": "AGN.md",
+      "kind": "feature",
+      "purpose": "The AGN kernel: the quasar redshift from broad lines, the luminosity and the bolometric term, the Eddington bound, the variability size bound and the BPT classes, validation and the files requested (Prompt 252).",
+      "owner": 252,
+      "student": false
+    },
+    {
+      "file": "AGN_LUMINOSITY_FUNCTION_GATE.md",
+      "kind": "feature",
+      "purpose": "The AGN luminosity-function gate (Prompt 252 Part B): committed thresholds, no verdict, the files requested.",
+      "owner": 252,
+      "student": false
+    },
+    {
       "file": "AI_ASSISTANCE_GATE.md",
       "kind": "gate",
       "purpose": "Instructor-side AI assistance gate.",
