@@ -31,8 +31,54 @@
  },
  "worlds": {
   "cosmology": "flat Lambda-CDM with H0 = 70 km/s/Mpc, Om = 0.3, OL = 0.7: the validation cosmology, round numbers, no radiation, a claim about nothing",
-  "redshiftPairs": [[0.05, 0.5], [0.2, 0.8], [0.3, 1.0], [0.4, 1.5], [0.5, 2.0], [0.8, 3.0]],
-  "distanceTriplesMpc": [[500, 1000, 700], [1000, 2000, 1200], [1500, 1700, 500], [100, 1500, 1400]],
+  "redshiftPairs": [
+   [
+    0.05,
+    0.5
+   ],
+   [
+    0.2,
+    0.8
+   ],
+   [
+    0.3,
+    1.0
+   ],
+   [
+    0.4,
+    1.5
+   ],
+   [
+    0.5,
+    2.0
+   ],
+   [
+    0.8,
+    3.0
+   ]
+  ],
+  "distanceTriplesMpc": [
+   [
+    500,
+    1000,
+    700
+   ],
+   [
+    1000,
+    2000,
+    1200
+   ],
+   [
+    1500,
+    1700,
+    500
+   ],
+   [
+    100,
+    1500,
+    1400
+   ]
+  ],
   "ensemble": "per world: sigma_d log-uniform in [150, 1000] km/s; z_l uniform in [0.1, 0.6]; z_s = z_l + uniform [0.5, 2]; theta_E from the SIS relation (R3); pixel scale 0.1 arcsec per pixel; per-coordinate position noise 1 pixel declared to the fit; the truth mass is R2 at the true theta_E"
  },
  "checks": [
@@ -40,97 +86,231 @@
    "id": "A1.criticalDensity",
    "leg": "a",
    "what": "the critical surface density equals c^2 D_s / (4 pi G D_l D_ls) written in the leg from the tree's constants, for the four distance triples (Mpc, converted with the tree's parsec), to a relative 1e-12",
-   "limits": { "maxRel": 1e-12 }
+   "limits": {
+    "maxRel": 1e-12
+   }
   },
   {
    "id": "A2.enclosedMassClosed",
    "leg": "a",
    "what": "the enclosed mass equals c^2 theta_E^2 D_l D_s / (4 G D_ls) and equals pi Sigma_cr (theta_E D_l)^2, for theta_E in {0.5, 1, 5, 10, 30} arcsec on every triple, each to a relative 1e-12; it equals the existing massFromEinstein of lens.js to a relative 1e-12; it scales as theta_E squared (doubling theta_E gives four times the mass to 1e-12)",
-   "limits": { "thetaEArcsec": [0.5, 1, 5, 10, 30], "maxRel": 1e-12 }
+   "limits": {
+    "thetaEArcsec": [
+     0.5,
+     1,
+     5,
+     10,
+     30
+    ],
+    "maxRel": 1e-12
+   }
   },
   {
    "id": "A3.sisDispersionInput",
    "leg": "a",
    "what": "for sigma in {150, 250, 400, 800, 1100} km/s on every triple: theta_E = 4 pi (sigma / c)^2 D_ls / D_s, the round trip sigma -> theta_E -> sigma, and the mass from the dispersion pi sigma^2 theta_E D_l / G equals the critical-density mass at that theta_E, each to a relative 1e-12",
-   "limits": { "sigmaKms": [150, 250, 400, 800, 1100], "maxRel": 1e-12 }
+   "limits": {
+    "sigmaKms": [
+     150,
+     250,
+     400,
+     800,
+     1100
+    ],
+    "maxRel": 1e-12
+   }
   },
   {
    "id": "A4.imagePositions",
    "leg": "a",
    "what": "the singular isothermal sphere's images x = y + 1 and x = y - 1 (the second for y < 1) satisfy y = x - sign(x), and the point lens's x = (y +- sqrt(y^2 + 4)) / 2 satisfy y = x - 1/x and x_+ x_- = -1, for y in {0.01, 0.1, 0.5, 0.9, 1, 1.5, 3} in units of theta_E, to an absolute 1e-12; the angular positions scale as theta_E (the same y at theta_E = 2 arcsec and 20 arcsec differ by exactly the factor, relative 1e-12); the SIS total magnification is 2 / y for y < 1 and 1 + 1 / y beyond, relative 1e-12",
-   "limits": { "y": [0.01, 0.1, 0.5, 0.9, 1, 1.5, 3], "maxAbs": 1e-12, "maxRel": 1e-12 }
+   "limits": {
+    "y": [
+     0.01,
+     0.1,
+     0.5,
+     0.9,
+     1,
+     1.5,
+     3
+    ],
+    "maxAbs": 1e-12,
+    "maxRel": 1e-12
+   }
   },
   {
    "id": "A5.imageInversion",
    "leg": "a",
    "what": "the forward images of (theta_E, beta) inverted return theta_E and beta to a relative 1e-12 (SIS: theta_E = (theta_+ + |theta_-|) / 2; point: theta_E = sqrt(theta_+ |theta_-|) and the point lens's y); the disagreement of the two models on one pair equals (theta_+ + |theta_-|) / (2 sqrt(theta_+ |theta_-|)), at least one (the arithmetic mean over the geometric mean), to a relative 1e-12, so the SIS value applied to a point lens's images overstates theta_E by that closed-form factor",
-   "limits": { "cases": [[2, 0.3], [5, 1.2], [10, 4], [1, 0.05]], "maxRel": 1e-12 }
+   "limits": {
+    "cases": [
+     [
+      2,
+      0.3
+     ],
+     [
+      5,
+      1.2
+     ],
+     [
+      10,
+      4
+     ],
+     [
+      1,
+      0.05
+     ]
+    ],
+    "maxRel": 1e-12
+   }
   },
   {
    "id": "A6.arcCircleNoiseFree",
    "leg": "a",
    "what": "24 noise-free points on a circle of radius 80 pixels about (37.3, -12.1) pixels, over extents 360, 180 and 90 degrees: the fixed-centre radius to a relative 1e-12 and a zero sigma; the free-centre radius to a relative 1e-8 and the centre to an absolute 1e-6 pixel",
-   "limits": { "extentsDeg": [360, 180, 90], "n": 24, "radiusPx": 80, "centrePx": [37.3, -12.1], "maxRelFixed": 1e-12, "maxRelFree": 1e-8, "maxAbsCentrePx": 1e-6 }
+   "limits": {
+    "extentsDeg": [
+     360,
+     180,
+     90
+    ],
+    "n": 24,
+    "radiusPx": 80,
+    "centrePx": [
+     37.3,
+     -12.1
+    ],
+    "maxRelFixed": 1e-12,
+    "maxRelFree": 1e-08,
+    "maxAbsCentrePx": 1e-06
+   }
   },
   {
    "id": "A7.intervalStructure",
    "leg": "a",
    "what": "for theta_E = 3.2 arcsec with sigma 0.1 arcsec at (z_l, z_s) = (0.3, 1.0) in the validation cosmology, at levels 0.68 and 0.95: the interval ends equal M(theta_E -+ z sigma) from the closed form with the z the result reports, each to a relative 1e-12; the lower end is below the mass and the upper end above it; the upper half-width is larger than the lower; (hi - lo) / M equals 4 z sigma / theta_E to within the second-order term (relative 1e-2 at this 3 percent radius error); the angular result is reported with its sigma",
-   "limits": { "thetaEArcsec": 3.2, "sigmaArcsec": 0.1, "levels": [0.68, 0.95], "zl": 0.3, "zs": 1.0, "maxRel": 1e-12, "maxRelWidth": 1e-2 }
+   "limits": {
+    "thetaEArcsec": 3.2,
+    "sigmaArcsec": 0.1,
+    "levels": [
+     0.68,
+     0.95
+    ],
+    "zl": 0.3,
+    "zs": 1.0,
+    "maxRel": 1e-12,
+    "maxRelWidth": 0.01
+   }
   },
   {
    "id": "B1.distances",
    "leg": "b",
    "what": "the kernel's D_l, D_s and D_ls for the six redshift pairs in the validation cosmology against astropy's FlatLambdaCDM (Tcmb0 = 0, so no radiation, the kernel's own neglect) angular_diameter_distance and angular_diameter_distance_z1z2 in Mpc, relative 1e-9 (the cosmology kernel's header reports 1.8e-12 against astropy; the bound leaves room for D_ls as a difference)",
-   "limits": { "maxRel": 1e-9 }
+   "limits": {
+    "maxRel": 1e-09
+   }
   },
   {
    "id": "B2.sigmaCritAndMass",
    "leg": "b",
    "what": "the critical surface density and the enclosed mass in kilograms for the six pairs and theta_E in {1, 5, 20} arcsec against the oracle, which takes astropy's constants and distances and obtains the mass by quadrature of the singular isothermal sphere's projected density 2 pi R Sigma(R) over the disc of radius theta_E D_l (the sigma from the Einstein relation), a different route from the kernel's critical-density form; relative 1e-8 (the tree's parsec is rounded to ten digits, 5e-10 from astropy's, and enters the mass through D_l D_s / D_ls and the radius)",
-   "limits": { "thetaEArcsec": [1, 5, 20], "maxRel": 1e-8 }
+   "limits": {
+    "thetaEArcsec": [
+     1,
+     5,
+     20
+    ],
+    "maxRel": 1e-08
+   }
   },
   {
    "id": "B3.imagesRootFind",
    "leg": "b",
    "what": "the image positions of the SIS and the point lens for 40 values of y between 0.02 and 3 (log-spaced) against scipy brentq roots of the lens equation, absolute 1e-10 in units of theta_E; the magnifications against the oracle's 1 / det of the numerical Jacobian (central differences with step 1e-5), relative 1e-6",
-   "limits": { "nY": 40, "yRange": [0.02, 3], "maxAbs": 1e-10, "maxRelMu": 1e-6 }
+   "limits": {
+    "nY": 40,
+    "yRange": [
+     0.02,
+     3
+    ],
+    "maxAbs": 1e-10,
+    "maxRelMu": 1e-06
+   }
   },
   {
    "id": "B4.circleFitOracle",
    "leg": "b",
    "what": "20 noisy arcs (extents 120 to 360 degrees, 24 points, radius 100 pixels, noise 1 pixel per coordinate, seeds B4) written to the oracle's inputs: the kernel's free-centre radius against scipy least_squares on the full geometric residual (xtol 1e-14) relative 1e-6, the centre absolute 1e-5 pixel, sigma_r relative 1e-4; the fixed-centre radius and sigma_r against numpy's weighted mean relative 1e-12",
-   "limits": { "nArcs": 20, "maxRelRadius": 1e-6, "maxAbsCentrePx": 1e-5, "maxRelSigma": 1e-4, "maxRelFixed": 1e-12 }
+   "limits": {
+    "nArcs": 20,
+    "maxRelRadius": 1e-06,
+    "maxAbsCentrePx": 1e-05,
+    "maxRelSigma": 0.0001,
+    "maxRelFixed": 1e-12
+   }
   },
   {
    "id": "B5.intervalMonteCarlo",
    "leg": "b",
    "what": "the mass interval at 0.68 and 0.95 for theta_E = 3.2 arcsec, sigma 0.096 arcsec at (0.3, 1.0) against the oracle's quantiles of 400000 normal draws pushed through the mass: relative 2e-3 at 0.68 and 3e-3 at 0.95 (the quantile's Monte Carlo error is below 3e-4 of the mass at that size); the z the kernel uses against scipy norm.ppf((1 + L) / 2) to an absolute 1e-9",
-   "limits": { "draws": 400000, "maxRel68": 2e-3, "maxRel95": 3e-3, "maxAbsZ": 1e-9 }
+   "limits": {
+    "draws": 400000,
+    "maxRel68": 0.002,
+    "maxRel95": 0.003,
+    "maxAbsZ": 1e-09
+   }
   },
   {
    "id": "B6.citedTool",
    "leg": "b",
    "what": "the Einstein radius and the enclosed mass of the same radius and redshifts from a cited independent lens-modelling tool, its version and output pinned as a fixture: NOT RUN unless tests/fixtures/lensing2/authentic/tool-pin.json exists (the tool is not installed here and nothing is fetched); then relative 1e-6 on the mass inside the radius",
-   "limits": { "maxRel": 1e-6 }
+   "limits": {
+    "maxRel": 1e-06
+   }
   },
   {
    "id": "C1.ringCoverage",
    "leg": "c",
    "what": "400 seeded worlds (worlds.ensemble), a full ring of 24 marked points about the true centre with the centre free in the fit: the 0.68 mass interval covers the truth in a fraction within [0.610, 0.750] and the 0.95 interval within [0.917, 0.983] (nominal plus and minus three binomial standard deviations at 400 worlds); no world is refused",
-   "limits": { "worlds": 400, "band68": [0.61, 0.75], "band95": [0.917, 0.983], "maxRefused": 0 }
+   "limits": {
+    "worlds": 400,
+    "band68": [
+     0.61,
+     0.75
+    ],
+    "band95": [
+     0.917,
+     0.983
+    ],
+    "maxRefused": 0
+   }
   },
   {
    "id": "C2.partialArcCoverage",
    "leg": "c",
    "what": "400 seeded worlds, an arc of 100 to 200 degrees of 24 marked points with the centre free: among the worlds the kernel answers, the 0.68 interval covers within [0.610, 0.750] and the 0.95 within [0.917, 0.983]; the refused fraction is at most 0.5 (a refusal is not a coverage failure but a method that refuses most arcs is not claimed)",
-   "limits": { "worlds": 400, "band68": [0.61, 0.75], "band95": [0.917, 0.983], "maxRefusedFraction": 0.5 }
+   "limits": {
+    "worlds": 400,
+    "band68": [
+     0.61,
+     0.75
+    ],
+    "band95": [
+     0.917,
+     0.983
+    ],
+    "maxRefusedFraction": 0.5
+   }
   },
   {
    "id": "C3.offsetBracket",
    "leg": "c",
    "what": "400 seeded worlds in which the source lies at y uniform in (0, 0.3) theta_E and the marked arc (60 to 120 degrees, 24 points, centre fixed and known) is the outer image at theta_E (1 + y): with the caller's sourceOffsetMax 0.3 the mass bracket (R6) contains the truth in at least 0.97 of the worlds, and every bracket's lower end is above a quarter of its upper end",
-   "limits": { "worlds": 400, "yMax": 0.3, "minCoverage": 0.97 }
+   "limits": {
+    "worlds": 400,
+    "yMax": 0.3,
+    "minCoverage": 0.97
+   }
   },
   {
    "id": "C4.unwidenedCoverageOffset",
@@ -154,7 +334,12 @@
    "id": "D3.shortArcRefusal",
    "leg": "d",
    "what": "100 seeded arcs of 15 degrees (12 points, radius 100 pixels, noise 1.5 pixels per coordinate, centre free): at least 0.95 are 'not-constrained' with the code 'radius-unconstrained'; 100 seeded full rings of the same noise: at most 0.02 are refused",
-   "limits": { "arcs": 100, "extentDeg": 15, "minRefused": 0.95, "ringsMaxRefused": 0.02 }
+   "limits": {
+    "arcs": 100,
+    "extentDeg": 15,
+    "minRefused": 0.95,
+    "ringsMaxRefused": 0.02
+   }
   },
   {
    "id": "D4.imageInversionRefusals",
@@ -166,13 +351,17 @@
    "id": "D5.singleArcWithoutOffset",
    "leg": "d",
    "what": "a single arc with no sourceOffsetMax returns the mass bracket (M(r) / 4, M(r)) widened by the statistical two sigma, an interval of null, and the model-limited flag 'offset-unbounded'; with sourceOffsetMax 0.1 the bracket is [M(r/1.1), M(r)] widened likewise; both to a relative 1e-12 of the closed form",
-   "limits": { "maxRel": 1e-12 }
+   "limits": {
+    "maxRel": 1e-12
+   }
   },
   {
    "id": "E1.publishedCluster",
    "leg": "e",
    "what": "a published lensing cluster's Einstein radius for a stated source redshift and its enclosed mass, from a table or paper under a recorded rights decision, with the cluster and source redshifts: the kernel's mass inside the published radius against the published mass within the published uncertainty, a contract fixed before the file is read: NOT RUN unless tests/fixtures/lensing2/authentic/cluster.json exists; the published numbers are the only ones that would be used and none was tuned to",
-   "limits": { "nSigma": 2 }
+   "limits": {
+    "nSigma": 2
+   }
   },
   {
    "id": "E2.imageArcRadius",
@@ -203,13 +392,47 @@
   "verdictFunction": {
    "what": "the Part A kernel verdict, a function of the rows alone: A when every closed-form leg (A1 to A7), every oracle leg that was run (B1 to B5) and every refusal leg (D1 to D5) passes and C1, C2 and C3 pass; B when A1 to A7, B1 to B5 and D1, D2, D4 and D5 pass but a coverage leg (C1, C2, C3) or D3 fails: the enclosed mass and its closed forms are claimable and the interval's coverage is not; C when any of A1 to A7, B1 to B5, D1, D2, D4 or D5 fails: nothing of the kernel is claimable. The product verdict is NOT ESTABLISHED while B6, E1 and E2 are NOT RUN. The consumers clause (a viewer mode, a lesson, a pack) is unmet whatever the kernel verdict.",
    "kernelLegGroups": {
-    "closedLegs": ["A1", "A2", "A3", "A4", "A5", "A6", "A7"],
-    "oracleLegs": ["B1", "B2", "B3", "B4", "B5"],
-    "refusalCore": ["D1", "D2", "D4", "D5"],
-    "coverageLegs": ["C1", "C2", "C3"],
-    "refusalCoverage": ["D3"]
+    "closedLegs": [
+     "A1",
+     "A2",
+     "A3",
+     "A4",
+     "A5",
+     "A6",
+     "A7"
+    ],
+    "oracleLegs": [
+     "B1",
+     "B2",
+     "B3",
+     "B4",
+     "B5"
+    ],
+    "refusalCore": [
+     "D1",
+     "D2",
+     "D4",
+     "D5"
+    ],
+    "coverageLegs": [
+     "C1",
+     "C2",
+     "C3"
+    ],
+    "refusalCoverage": [
+     "D3"
+    ]
    }
   }
  },
- "amendments": []
+ "amendments": [
+  {
+   "id": "AM1",
+   "step": "worlds.ensemble, checks C1, C2, C3",
+   "what": "The ensemble draws the Einstein angle directly, log-uniform in [3, 30] arcsec (a radius of 30 to 300 pixels at 0.1 arcsec per pixel); the singular-isothermal-sphere dispersion is then derived from it through R3 and reported in the truth manifest instead of being drawn log-uniform in [150, 1000] km/s. The redshifts (z_l uniform in [0.1, 0.6], z_s = z_l + uniform [0.5, 2]), the pixel scale, the noise (1 pixel per coordinate) and every coverage band are unchanged.",
+   "why": "Recorded before any validator run, by arithmetic and before the kernel had produced a number: at (z_l, z_s) near (0.35, 1.35) D_ls / D_s is about one half, and a dispersion of 150 km/s then gives theta_E of about 0.3 arcsec, 3 pixels, so a radius with a 1 pixel noise per coordinate could never be constrained and C1's 'no world is refused' would test the world draw, not the kernel (the contract's sentence for the worlds says theta_E 3 to 30 arcsec was the intended range). No bound moved.",
+   "boundMoved": false,
+   "when": "before any validator run"
+  }
+ ]
 }
