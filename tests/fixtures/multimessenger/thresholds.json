@@ -1,0 +1,369 @@
+{
+  "format": "gravitas.multimessenger-thresholds/1",
+  "prompt": "Roadmap III, Prompt 244, the multi-messenger timeline: GW170817 (tranche T4 by D-R10-232-01), the kernel and packs part",
+  "document": "MULTIMESSENGER.md (\"Validation contract\"), written after this file",
+  "committed": "before js/kernels/multimessenger/*, the validator, the oracle scripts and their pinned results, the synthetic scenes, any pack sidecar, any lesson, and before any datum, published value or oracle output of Prompt 244 existed. Phase 1 of the session (reading the roadmap, the register, the checkpoint, the existing GW pack and the statistics, radiation and cosmology kernels) preceded it and fixed nothing here from a result. The expected values written below as literals are arithmetic on the calendar (days times 86400 plus counted leap seconds under the invented table of this file) checked once with an independent script before this file was committed; none is the output of the kernel.",
+  "rule": "A crossed bound is a failed check, recorded in failed-legs.json and left failing; only Carl resets one. A leg that cannot be measured (a file not supplied) is NOT RUN and says why. No published number, leap-second table, catalogue value, licence term or citation detail is typed anywhere from memory: every authentic value comes from a file Carl supplied under tests/fixtures/multimessenger/authentic/, with its source, its terms as read and its retrieval date in that directory's SOURCES.json; a page that was not retrieved is rights basis C. The speed-of-gravity bound is never stated or displayed without the emission-delay assumption it rests on. The bands (gamma-ray, optical, infrared) are never called messengers: the two messengers are gravitational waves and photons.",
+  "seeds": {
+    "ensemble": "mm-244",
+    "synthetic": [244001, 244002, 244003, 244004],
+    "design": "mm-244-design (used only to build and debug; never in a leg)",
+    "oracleNumpy": 244
+  },
+  "scope": {
+    "built": "(1) a timeline of events of the two messengers across bands, each time carrying its system (GPS, Fermi mission elapsed time, UTC as an ISO string or MJD) and its definition (catalogue merger time, instrument trigger, first detection, peak), converted to one continuous scale through a leap-second table the caller supplies (no table is embedded); (2) the speed-of-gravity bound as a function of the assumed intrinsic emission delay (a minimum and a maximum are explicit inputs; the observed delay and the distance are inputs; the bound is returned as an interval, with the conditions under which it refuses); (3) the sky area of a localisation (circle, Gaussian level, HEALPix pixels) and the galaxy-count problem (expected count in the localisation volume, the probability of no candidate); (4) a stated host-ranking rule on a tangent plane (posterior weight proportional to a mass weight times a Gaussian in distance times a Gaussian in position), with refusals; (5) the distance from a redshift through the existing FLRW kernel with the peculiar-velocity uncertainty carried; (6) an expanding-blackbody kilonova model (R = v t, T(t) = max(T_floor, T0 (t/t_ref)^-p)) with AB magnitudes and colours through the existing radiation kernel and a declared time domain; (7) a transient-detection rule on difference-flux light curves (a source is detected when at least k epochs reach n sigma), its exact false-alarm probability, its exact detection probability for a given flux sequence and its completeness on injected transients with exact binomial intervals; (8) a labelled synthetic scene (times in three systems, kilonova photometry, a galaxy catalogue with its host) with a truth manifest.",
+    "notBuilt": "a fit of the kilonova model to any data, an ejecta mass, a heavy-element yield or any inference from the colours; a model of the gamma-ray burst's emission, jet or intrinsic delay (the delay is an input assumption, never a result); a burst-onset or T90 estimator; difference-image subtraction (the rule runs on light curves, the second option the prompt names); a HEALPix map reader; a galaxy catalogue's selection function; a claim that the host ranking identifies the host; a tighter bound by choosing the most favourable assumption; any number typed from a paper."
+  },
+  "synthetic": {
+    "label": "SYNTHETIC LEAP TABLE: invented, not the IERS table. Its first entry (TAI - UTC = 10 s from 1972-01-01) and its 19 s at 1980-01-01 are the definitions the GPS scale needs (GPS = TAI - 19 s and equals UTC at 1980-01-06); every later step is invented so that the code paths are tested without a published table. The authentic table is requested from Carl (authentic/leap-seconds.list).",
+    "leapTable": [
+      { "from": "1972-01-01", "taiMinusUtc": 10 },
+      { "from": "1980-01-01", "taiMinusUtc": 19 },
+      { "from": "2000-01-01", "taiMinusUtc": 20 },
+      { "from": "2010-01-01", "taiMinusUtc": 21 },
+      { "from": "2016-01-01", "taiMinusUtc": 22 }
+    ],
+    "kilonovaModel": {
+      "label": "ILLUSTRATIVE parameters of the expanding-blackbody model, chosen for the tests; they are not fitted to any observation and no number here is a published result",
+      "velocityC": 0.2,
+      "T0K": 6000,
+      "tRefDays": 1,
+      "coolingExponent": 0.6,
+      "floorK": 2200,
+      "domainDays": [0.25, 15],
+      "distanceMpc": 40
+    }
+  },
+  "checks": [
+    {
+      "id": "A1.timeCases",
+      "leg": "a",
+      "what": "the time systems against hand-computed values under the synthetic leap table: GPS 0 at 1980-01-06T00:00:00; one second later 1; the leap second 1999-12-31T23:59:60 sits between 630719999 and 630720001; the instant after it is GPS 630720001 and MJD 51544 (2000-01-01 is MJD 51544 by the definition JD - 2400000.5); 2010-01-01T00:00:00 is GPS 946339202 and Fermi MET 283996801 (3287 days plus the one second the table inserts after 2001-01-01); 2016-01-01T00:00:00 is GPS 1135641603; the Fermi MET of 2001-01-01T00:00:00 is 0 (the mission's epoch is that UTC instant); noon of 2000-01-01 is MJD 51544.5 and GPS 630763201. Every case is also run backwards (GPS to UTC reproduces the ISO string, the leap second as second 60). The GPS difference across the step is 2 s for 1 s of UTC clock, and a second 60 on a day that is not a leap day is refused.",
+      "limits": {
+        "cases": [
+          { "utc": "1980-01-06T00:00:00", "gps": 0 },
+          { "utc": "1980-01-06T00:00:01", "gps": 1 },
+          { "utc": "1999-12-31T23:59:59", "gps": 630719999 },
+          { "utc": "1999-12-31T23:59:60", "gps": 630720000 },
+          { "utc": "2000-01-01T00:00:00", "gps": 630720001, "mjd": 51544 },
+          { "utc": "2000-01-01T12:00:00", "gps": 630763201, "mjd": 51544.5 },
+          { "utc": "2010-01-01T00:00:00", "gps": 946339202, "met": 283996801 },
+          { "utc": "2016-01-01T00:00:00", "gps": 1135641603 },
+          { "utc": "2001-01-01T00:00:00", "met": 0 }
+        ],
+        "maxGpsErrorS": 1e-6,
+        "maxMjdErrorDays": 1e-9,
+        "gpsGranularityNote": "a double at 1.2e9 s has a spacing of 2.4e-7 s, so 1e-6 s is the finest bound a leg can meet",
+        "stepDeltaS": 2,
+        "refusedUtc": ["1999-12-30T23:59:60", "1971-12-31T23:59:59"]
+      }
+    },
+    {
+      "id": "B1.timeOracle",
+      "leg": "b",
+      "what": "the kernel's conversions against an independent Python implementation (integer day counts and datetime, no Gravitas code) under the same synthetic table, on 200 instants between 1980-01-06 and 2025-12-31 (seed oracleNumpy 244) plus the instants half a second either side of every step and the leap seconds themselves: UTC string to GPS, to Fermi MET and to MJD, and GPS back to a UTC calendar time; and the delay between a GPS stamp and a MET stamp of the same instant plus a stated true delay recovers the delay.",
+      "limits": {
+        "instants": 200,
+        "maxGpsErrorS": 1e-6,
+        "maxMetErrorS": 1e-6,
+        "maxMjdErrorDays": 1e-9,
+        "maxDelayErrorS": 1e-6
+      }
+    },
+    {
+      "id": "B2.timeAuthentic",
+      "leg": "b",
+      "what": "with the authentic leap-second list Carl supplies, the kernel's conversions against astropy (erfa's own table) on the same 200 instants between 1980 and the list's end, and the list's own consistency: TAI - UTC is 19 at 1980-01-06, the steps are integers, the dates are first of a month, the entries are in order, and its expiry date is after the retrieval date.",
+      "limits": {
+        "instants": 200,
+        "maxGpsErrorS": 1e-6,
+        "maxMetErrorS": 1e-6,
+        "needs": "authentic/leap-seconds.list and its SOURCES.json entry",
+        "ifMissing": "NOT RUN"
+      }
+    },
+    {
+      "id": "A2.boundForms",
+      "leg": "a",
+      "what": "the speed bound against its closed form. With the delay Dt (photon arrival minus GW arrival), the distance D, and an emission delay tau (photons emitted tau after the gravitational waves), the fractional speed difference (v_GW - c)/c is c (Dt - tau)/D to first order (the published form) and 1/(1 - c (Dt - tau)/D) - 1 exactly. Eight cases (Dt, D, tau_min, tau_max in s and Mpc): the upper end is the first-order form at tau_min, the lower end at tau_max, exactly; the exact form differs from the first-order one by a relative amount of at most 2 c |Dt - tau|/D; the value at tau = Dt is 0.",
+      "limits": {
+        "cases": [
+          { "dt": 1.0, "distanceMpc": 1.0, "tauMin": 0, "tauMax": 10 },
+          { "dt": 1.0, "distanceMpc": 40.0, "tauMin": 0, "tauMax": 10 },
+          { "dt": 1.0, "distanceMpc": 40.0, "tauMin": 0, "tauMax": 1 },
+          { "dt": 2.5, "distanceMpc": 25.0, "tauMin": 0.5, "tauMax": 5 },
+          { "dt": 0.1, "distanceMpc": 100.0, "tauMin": 0, "tauMax": 0.1 },
+          { "dt": 3.0, "distanceMpc": 400.0, "tauMin": 1, "tauMax": 100 },
+          { "dt": -2.0, "distanceMpc": 40.0, "tauMin": -3, "tauMax": 0 },
+          { "dt": 10.0, "distanceMpc": 0.5, "tauMin": 0, "tauMax": 30 }
+        ],
+        "maxRel": 1e-12,
+        "maxRelExactVsFirstOrderFactor": 2
+      }
+    },
+    {
+      "id": "A3.boundStructure",
+      "leg": "a",
+      "what": "the structure of the bound: it scales as 1/D (doubling the distance halves both ends), the upper end depends only on the minimum emission delay and the lower end only on the maximum (varying the other changes neither), it is linear in tau with slope -c/D, widening the assumed emission-delay interval never narrows the bound, and the function of the maximum emission delay (the bound curve) is monotone non-increasing in the lower end. The conservative distance rule: with a distance given as value and a lower and an upper offset, the bound uses the lower end of the distance and says so.",
+      "limits": {
+        "maxRel": 1e-12,
+        "curveGridS": [0, 0.5, 1, 2, 5, 10, 20, 50]
+      }
+    },
+    {
+      "id": "B3.boundExact",
+      "leg": "b",
+      "what": "the bound against an independent rational-arithmetic evaluation (Python fractions, c exact, the parsec from the IAU 2015 definition with pi as the double the kernel uses) of the exact form on 40 pinned cases drawn with seed oracleNumpy, delays from -5 to 20 s, distances from 1 to 500 Mpc, emission delays from -2 to 50 s.",
+      "limits": { "cases": 40, "maxRel": 1e-9 }
+    },
+    {
+      "id": "B4.boundPublished",
+      "leg": "b",
+      "what": "the published bound's paper as the external reference: with the delay, the distance and the emission-delay interval the paper states (read from the supplied file, with the page or equation each came from), the kernel's interval, rounded to the number of significant figures the paper prints, equals the paper's printed pair. The paper's own definition of its delay (which two instants) is recorded with it; if it is not trigger minus merger, the fixture says so and E1 is NOT RUN with the reason.",
+      "limits": {
+        "rule": "round(kernel, printedSignificantFigures) equals printed for both ends",
+        "needs": "authentic/published-bound.json and the paper's file or text in authentic/",
+        "ifMissing": "NOT RUN"
+      }
+    },
+    {
+      "id": "D1.noBound",
+      "leg": "d",
+      "what": "the refusals of the bound. The bound exists only when the assumed emission-delay interval contains the observed delay (tau_min <= Dt <= tau_max): then the observation is consistent with equal speeds and the interval is a statement about how far they can differ. When the assumed minimum emission delay exceeds the observed delay (the prompt's case), or the assumed maximum is below it, the assumption itself excludes equal speeds and the result is 'no-bound' with null ends, a reason, and the conditional interval under 'implied' marked as not a bound. tau_min = Dt gives a bound with upper end 0. A negative or zero distance, an interval with tau_max < tau_min, a non-finite input, and a missing assumption (no tau_max) are refused with a code. A delay observed as negative (photons first) with tau_min >= 0 gives 'no-bound'.",
+      "limits": {
+        "cases": [
+          { "dt": 1.74, "tauMin": 0, "tauMax": 10, "status": "bounded" },
+          { "dt": 1.74, "tauMin": 1.74, "tauMax": 10, "status": "bounded", "upper": 0 },
+          { "dt": 1.74, "tauMin": 2.0, "tauMax": 10, "status": "no-bound" },
+          { "dt": 1.74, "tauMin": 0, "tauMax": 1.0, "status": "no-bound" },
+          { "dt": -0.5, "tauMin": 0, "tauMax": 10, "status": "no-bound" },
+          { "dt": 1.74, "tauMin": 11, "tauMax": 12, "status": "no-bound" }
+        ],
+        "refusedCodes": ["bad-distance", "bad-interval", "not-finite", "assumption-required"]
+      }
+    },
+    {
+      "id": "A4.timeline",
+      "leg": "a",
+      "what": "the timeline structure: an event of a band named as a messenger is refused ('bad-messenger'; the two messengers are gravitational-wave and photon, and the bands gamma, x-ray, ultraviolet, optical, infrared and radio belong to photons only); an event without a time system, without a definition, or with an unknown system is refused; sorting is by the common scale; the offset of each event from a named reference is the difference of the common-scale times within 1e-6 s; the uncertainty of an offset is the quadrature sum of the two events' uncertainties (relative 1e-12) and is absent when either is absent; every entry of the output keeps its system and definition; two events of different systems at the same instant have offset 0 within 1e-6 s.",
+      "limits": { "maxOffsetErrorS": 1e-6, "maxRel": 1e-12 }
+    },
+    {
+      "id": "D2.names",
+      "leg": "d",
+      "what": "naming: messenger 'gamma-ray', 'optical', 'x-ray', 'kilonova' and 'GW' are refused with the code and a hint naming the two messengers; 'photon' with band null is refused (a photon event states its band); 'gravitational-wave' with a band is refused.",
+      "limits": { "refusedMessengers": ["gamma-ray", "optical", "x-ray", "kilonova", "GW"] }
+    },
+    {
+      "id": "A5.skyArea",
+      "leg": "a",
+      "what": "sky areas against closed forms: a circle of radius r has 2 pi (1 - cos r) steradians (checked as 4 pi sin^2(r/2) at 0.5, 1, 5, 20 and 90 degrees, relative 1e-12; 90 degrees is a hemisphere of 20626.48 square degrees to 3e-7, AM4), the whole sky is 4 pi (180/pi)^2 square degrees, a HEALPix pixel at nside n is the sky over 12 n^2 (nside 1, 64, 512), and the area of the level-p region of a circular Gaussian of width sigma is -2 pi sigma^2 ln(1 - p) (small-angle, stated with its domain sigma <= 10 degrees) with a seeded Monte Carlo of 400000 draws at levels 0.5 and 0.9 whose enclosed fraction is within 4 binomial sigma of the level.",
+      "limits": {
+        "radiiDeg": [0.5, 1, 5, 20, 90],
+        "maxRel": 1e-12,
+        "hemisphereDeg2": 20626.48,
+        "hemisphereMaxRel": 3e-7,
+        "nsides": [1, 64, 512],
+        "gaussian": { "sigmaDeg": 3, "levels": [0.5, 0.9], "draws": 400000, "maxSigmas": 4, "maxSigmaDeg": 10 }
+      }
+    },
+    {
+      "id": "A6.expectedCount",
+      "leg": "a",
+      "what": "the galaxy-count problem against numerical integration: the expected number of catalogue galaxies of number density n in a localisation of area A between distances lo and hi is n (A / 4 pi sr) (4 pi / 3)(hi^3 - lo^3); checked on 6 cases against an adaptive quadrature of the volume (relative 1e-10, js/numeric) and against a numpy double integral in the oracle (relative 1e-9); the probability of no candidate is exp(-N) (against scipy's Poisson, 1e-12) and of at least one is its complement computed without cancellation (-expm1(-N), relative 1e-12 at N = 1e-9).",
+      "limits": {
+        "cases": [
+          { "areaDeg2": 28, "loMpc": 20, "hiMpc": 60, "densityPerMpc3": 0.01 },
+          { "areaDeg2": 28, "loMpc": 30, "hiMpc": 47, "densityPerMpc3": 0.01 },
+          { "areaDeg2": 1000, "loMpc": 10, "hiMpc": 100, "densityPerMpc3": 0.005 },
+          { "areaDeg2": 0.5, "loMpc": 100, "hiMpc": 300, "densityPerMpc3": 0.02 },
+          { "areaDeg2": 41252.96, "loMpc": 0, "hiMpc": 10, "densityPerMpc3": 0.1 },
+          { "areaDeg2": 5, "loMpc": 39, "hiMpc": 41, "densityPerMpc3": 1e-9 }
+        ],
+        "maxRelQuadrature": 1e-10,
+        "maxRelOracle": 1e-9,
+        "maxRelPoisson": 1e-12
+      }
+    },
+    {
+      "id": "R1.volumeVsComoving",
+      "leg": "-",
+      "what": "REPORTED, not judged: the ratio of the kernel's Euclidean shell volume (distances read as the luminosity distances the localisation gives, no redshift correction) to the comoving shell volume from the FLRW kernel (H0 70, Om 0.3, flat) for shells of plus and minus 20 percent about luminosity distances of 20, 40, 100 and 200 Mpc. The kernel's stated domain is the largest of these distances whose ratio is within 10 percent of 1, written into MULTIMESSENGER.md from the measured table after the table exists; the domain is not tuned.",
+      "limits": { "centresMpc": [20, 40, 100, 200], "halfWidthFraction": 0.2, "domainRatioWithin": 0.1, "reportedNotBound": true }
+    },
+    {
+      "id": "A7.hostRule",
+      "leg": "a",
+      "what": "the stated host-ranking rule against its closed form on three candidates (tangent-plane offsets in degrees, distances in Mpc, masses in arbitrary units): weight_i proportional to m_i exp(-(D_i - D_hat)^2 / (2 s_D^2)) exp(-(x_i^2 + y_i^2) / (2 s_x^2)), normalised to sum 1 (relative 1e-12); multiplying every mass by a constant changes no weight; permuting the candidates permutes the weights and changes none; removing a candidate with weight w rescales the others by 1/(1 - w) (relative 1e-12); the mass-free option (m_i = 1) is the same rule with equal masses. The gnomonic helper maps the centre to (0, 0) and, within 0.01 degrees, a small offset in right ascension to dRA cos(dec) and in declination to dDec (relative 1e-5).",
+      "limits": {
+        "candidates": [
+          { "x": 0.5, "y": -0.2, "dMpc": 41, "mass": 3.0 },
+          { "x": 2.0, "y": 1.0, "dMpc": 38, "mass": 1.0 },
+          { "x": -1.0, "y": 0.4, "dMpc": 55, "mass": 10.0 }
+        ],
+        "sigmaDMpc": 6,
+        "sigmaSkyDeg": 1.5,
+        "dHatMpc": 40,
+        "maxRel": 1e-12,
+        "gnomonicMaxRel": 1e-5
+      }
+    },
+    {
+      "id": "C1.hostCalibration",
+      "leg": "c",
+      "what": "calibration of the host rule on a seeded ensemble drawn from the very model the rule assumes (so the rule is correct and its weights must be honest): 4000 fields, each a disc of radius 8 degrees on a tangent plane holding 25 galaxies with distances uniform in volume on 10 to 100 Mpc, positions uniform on the disc and masses with log10(m) normal(0, 0.5); the true host is one galaxy chosen with probability proportional to its mass; the measured distance is the host's plus normal(0, 8 Mpc) and the measured position is the host's plus normal(0, 2 degrees) in each axis. Over all (field, galaxy) pairs binned by weight [0, .01), [.01, .1), [.1, .5), [.5, .9), [.9, 1], the exact binomial 99.9 percent interval of the fraction that were the true host contains the bin's mean weight in all five bins; and the fraction of fields whose top-weight galaxy is the true host is within 4 binomial sigma of the mean top weight. The same fields ranked by a rule whose distance width is half the truth (C1b) are REPORTED with the number of bins that cover, to show the overconfidence of a misspecified rule; nothing is judged on C1b.",
+      "limits": {
+        "fields": 4000,
+        "galaxies": 25,
+        "radiusDeg": 8,
+        "distanceRangeMpc": [10, 100],
+        "log10MassSigma": 0.5,
+        "sigmaDMpc": 8,
+        "sigmaSkyDeg": 2,
+        "bins": [0, 0.01, 0.1, 0.5, 0.9, 1.0000001],
+        "level": 0.999,
+        "binsMustCover": 5,
+        "topMaxSigmas": 4,
+        "misspecifiedSigmaDFactor": 0.5
+      }
+    },
+    {
+      "id": "D3.hostRefusals",
+      "leg": "d",
+      "what": "the host rule refuses to identify: two identical candidates give identified false with top weight 0.5; the rule calls a host identified only when its weight is at least 0.9; a single candidate 5 sigma away on the sky (weights normalise to 1) returns status 'no-consistent-candidate' because the best candidate's chi-square on 3 degrees of freedom (distance and two position axes) has a survival probability below 0.001, and the host is null; an empty candidate list, a non-positive width, a non-finite coordinate and a negative mass are refused with a code.",
+      "limits": { "identifyWeight": 0.9, "minChi2P": 0.001, "refusedCodes": ["no-candidates", "bad-width", "not-finite", "bad-mass"] }
+    },
+    {
+      "id": "B5.hostDistance",
+      "leg": "b",
+      "what": "the distance from a redshift (the existing FLRW kernel, flat, H0 70, Om 0.3, OL 0.7) against astropy's FlatLambdaCDM luminosity distance with no radiation at z = 0.003, 0.01, 0.05 and 0.1, relative 1e-8; the Hubble-flow distance c z / H0 is the closed form at low redshift with the stated relative gap to the exact distance at each z (the gap is (1 - q0) z / 2 = 0.775 z to first order for q0 = Om/2 - OL = -0.55, checked within 10 percent of that at z = 0.003 and 0.01); the peculiar-velocity uncertainty sigma_v adds a relative distance uncertainty sigma_v / (c z) exactly, and the kernel flags the result 'peculiar-velocity-dominated' when that exceeds 0.1 (z below 0.010 for 300 km/s: 300 / (c z) = 0.1 at z = 0.01001) and refuses a redshift of 0 or below.",
+      "limits": {
+        "redshifts": [0.003, 0.01, 0.05, 0.1],
+        "cosmology": { "H0": 70, "Om": 0.3, "OL": 0.7 },
+        "maxRel": 1e-8,
+        "firstOrderGapWithin": 0.1,
+        "firstOrderCoefficient": 0.775,
+        "sigmaVKms": 300,
+        "dominatedAbove": 0.1
+      }
+    },
+    {
+      "id": "E2.packDistanceVsRedshift",
+      "leg": "e",
+      "what": "authentic applicability on the existing GWOSC pack row of GW170817 (the catalogue's luminosity distance with its lower and upper offsets and its redshift, as the pack holds them; nothing typed here): the distance the kernel gives for the pack's redshift (cosmology of B5) lies inside the pack's own distance interval, and the kernel flags it peculiar-velocity-dominated at 300 km/s. This is a consistency check with the interval GWOSC prints, not a measurement of the host.",
+      "limits": { "event": "GW170817", "mustLieInsideInterval": true, "sigmaVKms": 300, "pack": "js/data/gw/gwoscEvents.js" }
+    },
+    {
+      "id": "A8.photosphere",
+      "leg": "a",
+      "what": "the expanding photosphere against its closed form at t = 0.5, 1, 2, 4, 8 days with the illustrative parameters: R = v c t (relative 1e-12); T = max(T_floor, T0 (t / t_ref)^-p) (relative 1e-12) and exactly T0 at t_ref; the bolometric luminosity equals 4 pi R^2 sigma T^4 with the radiation kernel's constant (relative 1e-12); T never falls below the floor and never rises with time; doubling v at fixed T quadruples L; the model's published domain is the stated time domain.",
+      "limits": { "daysGrid": [0.5, 1, 2, 4, 8], "maxRel": 1e-12 }
+    },
+    {
+      "id": "B6.kilonovaMagnitudes",
+      "leg": "b",
+      "what": "AB magnitudes of a blackbody sphere through the SDSS g, r, i, z and 2MASS J, H and Ks bandpasses of the radiation pack (a flux (R/D)^2 times pi B_lambda, the AB zero point 3631 Jy) against an independent Python integration (numpy trapezoid on a 0.25 nm grid, its own Planck function and AB definition, the bandpass tables exported from the pack and read as data) for temperatures 2500, 4000, 6000, 9000 and 14000 K at the radii of 1e14, 1e15 and 1e16 m (the product of v c t for the illustrative velocity and 0.5 to 8 days spans this) at 40 Mpc, within 5e-4 mag; the colour g - i equals the oracle's within 5e-4 mag and is identical (1e-12 mag) at two radii and two distances for the same temperature.",
+      "limits": {
+        "bands": ["g", "r", "i", "z", "J", "H", "Ks"],
+        "temperaturesK": [2500, 4000, 6000, 9000, 14000],
+        "radiiM": [1e14, 1e15, 1e16],
+        "distanceMpc": 40,
+        "maxMag": 5e-4,
+        "colourIndependenceMag": 1e-12
+      }
+    },
+    {
+      "id": "A9.colourMonotone",
+      "leg": "a",
+      "what": "the colour evolution the model makes: along the model's time grid (0.25 to 15 days in 60 log-spaced steps) the colour g - i is non-decreasing in time and strictly increasing wherever the temperature is above the floor (a blackbody's colour between two bands is monotone in temperature), and constant after the floor is reached (to 1e-12 mag). This is a property of the model, not a finding about any event.",
+      "limits": { "steps": 60, "constantAfterFloorMag": 1e-12 }
+    },
+    {
+      "id": "D4.kilonovaDomain",
+      "leg": "d",
+      "what": "the model refuses outside its domain: a time outside the declared domain throws 'out-of-domain' unless allowOutside is set, in which case the result carries outOfDomain true; a velocity of zero, negative or at least 1 (in c), a non-positive temperature, floor, reference time or distance, a negative cooling exponent and a floor above T0 are refused with a code; no function of the module returns an ejecta mass, an abundance or a fitted parameter.",
+      "limits": { "refusedCodes": ["out-of-domain", "bad-velocity", "bad-temperature", "bad-parameter"] }
+    },
+    {
+      "id": "A10.falseAlarm",
+      "leg": "a",
+      "what": "the detection rule's false-alarm probability: a source is flagged when at least k of N epochs of pure noise reach n sigma, which has probability P(Binomial(N, 1 - Phi(n)) >= k), computed in the kernel without cancellation and checked against scipy's exact binomial survival function on n in {3, 4, 5}, k in {1, 2, 3}, N in {5, 10, 29} (relative 1e-9) and against a seeded Monte Carlo of 400000 noise light curves at n = 3, k = 2, N = 10 within 4 binomial sigma.",
+      "limits": { "n": [3, 4, 5], "k": [1, 2, 3], "N": [5, 10, 29], "maxRel": 1e-9, "mc": { "n": 3, "k": 2, "N": 10, "trials": 400000, "maxSigmas": 4 } }
+    },
+    {
+      "id": "B7.detectionProbability",
+      "leg": "b",
+      "what": "the exact detection probability of a given flux sequence (each epoch an independent Gaussian of known mean and sigma, success at n sigma, at least k successes, the Poisson-binomial tail) against an independent numpy convolution on 20 pinned sequences of 3 to 29 epochs (relative 1e-10, absolute 1e-14).",
+      "limits": { "sequences": 20, "maxRel": 1e-10, "maxAbs": 1e-14 }
+    },
+    {
+      "id": "C2.completenessCoverage",
+      "leg": "c",
+      "what": "the rule's completeness on injected transients: the model kilonova in the g band at peak apparent magnitudes 21.0 to 24.5 in steps of 0.5, a survey whose 5 sigma depth is 23.0 (a constant flux uncertainty), epochs from 0.5 day at cadences of 0.5, 1 and 3 days to day 14, the rule k = 1 and k = 2 at 5 sigma: 48 cells, 1000 injections each through the rule on noisy light curves (seed ensemble). The exact binomial 99 percent interval of each cell contains the exact analytic detection probability (B7's formula) in at least 90 percent of the 48 cells (44), and the median width of the intervals of the cells whose probability lies between 0.02 and 0.98 is at most 0.10.",
+      "limits": {
+        "peakMags": [21.0, 21.5, 22.0, 22.5, 23.0, 23.5, 24.0, 24.5],
+        "depth5SigmaMag": 23.0,
+        "cadencesDays": [0.5, 1, 3],
+        "startDay": 0.5,
+        "endDay": 14,
+        "kValues": [1, 2],
+        "thresholdSigma": 5,
+        "injections": 1000,
+        "level": 0.99,
+        "minCoverFraction": 0.9,
+        "maxMedianWidth": 0.1,
+        "peakDefinition": "the brightest model magnitude in the g band over the model's own time grid, shifted by a constant to the stated peak"
+      }
+    },
+    {
+      "id": "D5.detectionRefusals",
+      "leg": "d",
+      "what": "the detection rule refuses: fewer epochs than k, a non-positive or non-finite sigma, a non-finite flux, a threshold of zero or below, k below 1 or not an integer; and pure-noise light curves produce no more flags than the A10 probability allows (that Monte Carlo).",
+      "limits": { "refusedCodes": ["not-enough-epochs", "bad-sigma", "not-finite", "bad-threshold", "bad-k"] }
+    },
+    {
+      "id": "E1.delayFromPacks",
+      "leg": "e",
+      "what": "authentic applicability of the delay: from the existing GW pack's merger time (GPS, as the pack holds it, 0.1 s precision) and the instrument trigger time of the gamma-ray burst from the supplied archive row (with its time system, read from the file), the kernel's delay agrees with the published delay (B4's fixture) if and only if both are defined as merger-to-trigger; the tolerance is 0.05 s (half the pack's time precision) plus three times the published delay's stated uncertainty. If the published delay is defined between other instants, E1 is NOT RUN and the difference of definitions is recorded, never absorbed into the tolerance.",
+      "limits": { "tolerance": "0.05 + 3 * sigma_published", "needs": "authentic/grb-trigger.json (trigger time, system, header keys, archive and product), authentic/published-bound.json", "ifMissing": "NOT RUN" }
+    },
+    {
+      "id": "E3.kilonovaReddening",
+      "leg": "e",
+      "what": "authentic applicability of the colour trend: in the supplied counterpart photometry (one paper's table, CC BY), pairs of g and i (or the nearest available pair) taken within 0.1 day of each other in the first 7 days after the merger: the colour at the latest pair exceeds the colour at the earliest pair by more than three times their combined uncertainty. The model makes the same qualitative claim (A9); no parameter is fitted and no value is compared.",
+      "limits": { "windowDays": 7, "pairMaxGapDays": 0.1, "minSigmas": 3, "needs": "authentic/kilonova-photometry.csv and its SOURCES.json entry (the paper, the table, its licence as read)", "ifMissing": "NOT RUN" }
+    },
+    {
+      "id": "P1.speed",
+      "leg": "-",
+      "what": "the whole validation table (without the Python oracle) runs in at most 30 s of CPU; recorded, not a physics bound",
+      "limits": { "maxCpuSeconds": 30, "recordedNotBound": true }
+    }
+  ],
+  "amendments": [
+    {
+      "id": "AM4",
+      "check": "A5.skyArea",
+      "what": "the hemisphere's literal 20626.48 has seven significant figures (the value is 2 pi (180/pi)^2 = 20626.4806...), so a relative bound of 1e-8 cannot hold for any correct kernel; the bound becomes 3e-7 (the half unit of the last printed digit is 2.4e-7). The kernel's own accuracy is judged by the closed form 4 pi sin^2(r/2) at 1e-12 in the same leg. A specification slip found by inspection before the validator ran, not a result.",
+      "when": "2026-11-04, before any validator run"
+    },
+    {
+      "id": "AM2",
+      "check": "B5.hostDistance",
+      "what": "the redshift below which the peculiar-velocity flag is raised at 300 km/s was written as 0.03 and is 0.010 (300 / 299792.458 = 1.0007e-3, divided by 0.1 gives 0.01001); a second arithmetic slip of this file, corrected before any result. The consequence for E2 is stated and not hidden: the pack's redshift 0.01 gives a relative uncertainty of 0.10007, above 0.1 by 7e-4, so the flag is raised by a knife-edge margin that the pack's rounding of the redshift to 0.01 does not support; E2 keeps its committed expectation (flag raised) and the document says the margin is not meaningful.",
+      "when": "2026-11-04, before any kernel result"
+    },
+    {
+      "id": "AM3",
+      "check": "B5.hostDistance",
+      "what": "the independent reference of B5 is a scipy adaptive quadrature (epsrel 1e-13) of the flat Lambda-CDM integral in tools/multimessenger-oracle/oracle.py, not astropy's FlatLambdaCDM: astropy.cosmology could not be imported in the session's Python (its PyYAML dependency is missing) and nothing is installed. The bound (relative 1e-8) is unchanged. The existing cosmology kernel was itself validated against astropy to 1.8e-12 (its header), which is a second link.",
+      "when": "2026-11-04, before any kernel result"
+    },
+    {
+      "id": "AM1",
+      "check": "B5.hostDistance",
+      "what": "the first-order coefficient of the gap between the luminosity distance and c z / H0 was written as 0.75 and is (1 - q0) / 2 = 0.775 for H0 70, Om 0.3, OL 0.7 (q0 = Om/2 - OL); a slip of arithmetic in this file, corrected in the text and in a new limit, firstOrderCoefficient. The tolerance (10 percent) is unchanged.",
+      "when": "2026-11-04, before js/kernels/multimessenger existed and before any result"
+    }
+  ]
+}

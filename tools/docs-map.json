@@ -1108,6 +1108,13 @@
       "student": true
     },
     {
+      "file": "MULTIMESSENGER.md",
+      "kind": "feature",
+      "purpose": "The multi-messenger kernel: time systems, the speed bound with its emission-delay assumption, the host rule, a kilonova model and the detection rule, validation and the files requested (Prompt 244).",
+      "owner": 244,
+      "student": false
+    },
+    {
       "file": "DYNAMICS_REFERENCE_GATE.md",
       "kind": "gate",
       "purpose": "Dynamics reference gate: the committed tolerances, the independent reference runs, the engine's precomputed runs and the verdict (Prompt 237 Part B).",
