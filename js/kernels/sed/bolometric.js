@@ -35,7 +35,13 @@ import { gaussian, stream } from '../../random/streams.js';
 import { sigmaOfLevel } from '../statistics/index.js';
 import { jyToFlambda } from './conventions.js';
 import { applyNonsimultaneity, normalizePoints } from './points.js';
-import { DOMAIN, basisSignature, makeBasis } from './model.js';
+import {
+  DOMAIN,
+  basisSignature,
+  interpolate,
+  lnMonochromatic,
+  makeBasis,
+} from './model.js';
 import { DEFAULT_LEVELS, fitBlackbody, fitCore } from './fit.js';
 
 const { Math } = globalThis;
@@ -146,6 +152,44 @@ function sortedFlambda(pts) {
   return { lam, fl };
 }
 
+/**
+ * The flux in the data range by the model-residual integration: the exact flux of the fitted
+ * blackbody between the first and the last wavelength, plus the trapezoid integral (in
+ * wavelength, in f_lambda) of the residuals. A point's residual is its monochromatic
+ * equivalent at its wavelength (f_i mono_i / m_i, with m_i the model through the point's band
+ * and mono_i the model at the wavelength: 1 for a monochromatic point) minus mono_i. With a
+ * blackbody that fits, the residuals are small and the chords' bias (a chord through a curved
+ * SED, a band point placed at its pivot) is not in the answer; nothing outside the range is data.
+ * @param {object[]} pts - Normalised points, in the order the basis was made for
+ * @param {object} basis - The basis of those points
+ * @param {number} u - ln theta^2 of the fit
+ * @param {number} v - ln T of the fit
+ */
+export function residualDataFlux(pts, basis, u, v) {
+  const T = Math.exp(v);
+  const theta = Math.exp(0.5 * u);
+  const items = pts
+    .map((p, i) => {
+      const m = Math.exp(u + interpolate(basis, i, v)[0]);
+      const mono = Math.exp(u + lnMonochromatic(T, p.lambdaNm));
+      return {
+        lam: p.lambdaNm,
+        r: jyToFlambda((Math.exp(p.lnF) / m - 1) * mono, p.lambdaNm),
+      };
+    })
+    .sort((a, b) => a.lam - b.lam);
+  let resid = 0;
+  for (let i = 1; i < items.length; i++)
+    resid +=
+      0.5 * (items[i].r + items[i - 1].r) * (items[i].lam - items[i - 1].lam);
+  return {
+    fluxWm2:
+      modelFluxBetween(T, theta, items[0].lam, items[items.length - 1].lam) +
+      resid,
+    residualWm2: resid,
+  };
+}
+
 const refused = r => ({
   status: 'refused',
   code: r.code,
@@ -216,6 +260,7 @@ export function integrateSed(
  * @param {object} opts
  * @param {{pc: number, sigmaPc?: number}} opts.distance - Required
  * @param {boolean} [opts.includeModelTails] - Add the labelled model tails (needs a constrained fit)
+ * @param {'chords'|'model-residual'} [opts.integration] - The data-range integral: power-law chords (default) or the model-residual integration (needs a constrained fit)
  * @param {number} [opts.draws] - Bootstrap draws (200)
  * @param {number|string} [opts.seed] - Seed of the bootstrap stream
  * @param {number[]} [opts.levels]
@@ -225,6 +270,7 @@ export function bolometricLuminosity(rawPoints, opts = {}) {
     bands = {},
     distance,
     includeModelTails = false,
+    integration = 'chords',
     draws = 200,
     seed = 0,
     levels = DEFAULT_LEVELS,
@@ -255,9 +301,16 @@ export function bolometricLuminosity(rawPoints, opts = {}) {
       code: 'too-few-points',
       message: 'an integral needs at least two points',
     };
+  const residual = integration === 'model-residual';
+  if (!residual && integration !== 'chords')
+    return {
+      status: 'refused',
+      code: 'integration',
+      message: "integration must be 'chords' or 'model-residual'",
+    };
   let bs = null;
   let fit = null;
-  if (includeModelTails) {
+  if (includeModelTails || residual) {
     bs =
       basis && basis.signature === basisSignature(pts, domain)
         ? basis
@@ -272,8 +325,30 @@ export function bolometricLuminosity(rawPoints, opts = {}) {
       domain,
     });
   }
+  if (residual && fit.status !== 'ok')
+    return {
+      status: 'refused',
+      code: 'no-model-for-residual',
+      message: 'the model-residual integration needs a constrained fit',
+    };
   const base = integrateSed(rawPoints, { bands, fit, includeModelTails });
   if (base.status !== 'ok') return base;
+  const chordData = base.dataFluxWm2;
+  if (residual) {
+    const rd = residualDataFlux(
+      pts,
+      bs,
+      2 * Math.log(fit.model.theta),
+      Math.log(fit.model.T)
+    );
+    base.dataFluxWm2 = rd.fluxWm2;
+    if (includeModelTails)
+      base.totalFluxWm2 =
+        rd.fluxWm2 + base.tails.belowWm2 + base.tails.aboveWm2;
+    if (includeModelTails)
+      base.extrapolatedFraction =
+        (base.tails.belowWm2 + base.tails.aboveWm2) / base.totalFluxWm2;
+  }
   const flux = includeModelTails ? base.totalFluxWm2 : base.dataFluxWm2;
   // seeded parametric bootstrap: move each point by its effective sigma, refit, integrate again
   const draw = gaussian(stream('noise', seed, 'sed-luminosity'));
@@ -286,14 +361,17 @@ export function bolometricLuminosity(rawPoints, opts = {}) {
     });
     const { lam, fl } = sortedFlambda(star);
     let f = chordFlux(lam, fl);
-    if (includeModelTails) {
+    if (includeModelTails || residual) {
       const core = fitCore(star, bs);
       if (core.atBound) {
         failed++;
         continue;
       }
-      const t = modelTails(core.T, core.theta, lam[0], lam[lam.length - 1]);
-      f += t.below + t.above;
+      if (residual) f = residualDataFlux(star, bs, core.u, core.v).fluxWm2;
+      if (includeModelTails) {
+        const t = modelTails(core.T, core.theta, lam[0], lam[lam.length - 1]);
+        f += t.below + t.above;
+      }
     }
     lnFs.push(Math.log(f));
   }
@@ -313,6 +391,16 @@ export function bolometricLuminosity(rawPoints, opts = {}) {
     totalFluxWm2: base.totalFluxWm2,
     extrapolatedFraction: base.extrapolatedFraction,
     includesExtrapolation: includeModelTails,
+    integration,
+    ...(residual
+      ? {
+          chordDataFluxWm2: chordData,
+          modelAdequate: fit.adequate,
+          dataFluxNote: fit.adequate
+            ? "the data-range flux is the fitted blackbody plus the integral of the residuals; the chords' bias is not in it"
+            : "the data-range flux is model-dependent: the blackbody is not an adequate fit, so the residuals are large and the flux is the data's only through their trapezoid",
+        }
+      : {}),
     label: includeModelTails
       ? `${base.label}; plus the model tails, ${TAIL_LABEL}`
       : base.label,
