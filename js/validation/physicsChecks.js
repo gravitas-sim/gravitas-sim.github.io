@@ -102,6 +102,7 @@ const GROUPS = [
   () => import('./groups/ism.js'),
   () => import('./groups/sed.js'),
   () => import('./groups/galaxy.js'),
+  () => import('./groups/agn.js'),
 ];
 
 /**
