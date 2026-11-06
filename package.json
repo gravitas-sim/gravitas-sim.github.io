@@ -30,6 +30,7 @@
     "lensing2:validate": "node tools/lensing2-validate.mjs",
     "morphology:validate": "node tools/morphology-validate.mjs",
     "clusters:validate": "node tools/clusters-validate.mjs",
+    "clusters:followup": "node tools/clusters-followup-validate.mjs",
     "occurrence:validate": "node tools/occurrence-validate.mjs",
     "ttv:pack": "node tools/ttv-pack.mjs",
     "cluster:validate": "node tools/cluster-fit-validate.mjs",

@@ -98,11 +98,13 @@ export function clusterWorld(o) {
     });
   }
   const nInt = kind === 'field' ? N : Math.round(frac * N);
+  let insideWindow = 0;
   for (let i = 0; i < nInt; i++) {
     const R = apertureMpc * Math.sqrt(intr());
     const bearing = 2 * Math.PI * intr();
     const sky = destination(centre.ra, centre.dec, bearing, R / da);
     const v = (2 * intr() - 1) * extentKms;
+    if (Math.abs(v) < 3 * sigma) insideWindow++;
     galaxies.push({ ...sky, z: zOf(v + errorKms * err()), zErr });
   }
 
@@ -118,6 +120,7 @@ export function clusterWorld(o) {
     members: memberCount,
     memberIds: Array.from({ length: memberCount }, (_, i) => i),
     interlopers: nInt,
+    interlopersInsideWindow3Sigma: insideWindow,
     eta,
     massKg: toyMassKg(sigma, rt) * (1 + eta),
     idealisedMassKg: toyMassKg(sigma, rt),
