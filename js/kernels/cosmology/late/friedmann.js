@@ -266,7 +266,7 @@ export function createFriedmann(params) {
     if (s * x >= Math.PI)
       refuse(
         'beyond-antipode',
-        `the light has crossed half of the closed space (sqrt|Ok| D_C H0/c = ${(s * x).toFixed(4)} >= pi): D_M would be zero or negative`
+        `the light has crossed half of the closed space (sqrt|Ok| D_C H0/c = ${Math.round(s * x * 1e4) / 1e4} >= pi): D_M would be zero or negative`
       );
     return { m: Math.sin(s * x) / s, d: Math.cos(s * x) };
   };
