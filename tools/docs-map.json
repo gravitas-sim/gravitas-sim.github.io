@@ -1407,6 +1407,13 @@
       "purpose": "The Galactic closeout (Prompt 238): what 233 to 237 landed, the two Gaia investigations checked, the package change, each closeout item done, not applicable or blocked, the cohesion record.",
       "owner": 238,
       "student": false
+    },
+    {
+      "file": "EXTRAGALACTIC_CLOSEOUT.md",
+      "kind": "record",
+      "purpose": "The extragalactic and interstellar-medium closeout (Prompt 253): what 247 to 252 landed, each closeout item done or blocked, the package reading step, the cohesion record.",
+      "owner": 253,
+      "student": false
     }
   ]
 }

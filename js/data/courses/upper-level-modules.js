@@ -13,7 +13,7 @@ export const UPPER_LEVEL_MODULES = {
   format: ID_COURSE_PACK,
   formatVersion: 2,
   id: 'upper-level-modules',
-  version: '1.3.0',
+  version: '1.4.0',
   gravitas: '1.0.0',
   locales: ['en', 'es'],
   pinning: 'compatible',
@@ -849,6 +849,37 @@ export const UPPER_LEVEL_MODULES = {
           pin: {
             fp: 'ee81ac4a',
             n: 9,
+          },
+        },
+        {
+          id: 'not-yet-the-gas-and-the-galaxies',
+          kind: 'reading',
+          path: 'advanced',
+          minutes: 90,
+          objectives: [],
+          title: {
+            en: 'Astronomy 2e, chapters 20, 26, 27 and 28',
+            es: 'Astronomy 2e, capítulos 20, 26, 27 y 28 (en inglés)',
+            esOf: '272ecf1e',
+          },
+          cite: {
+            authors:
+              'Andrew Fraknoi, David Morrison, Sidney C. Wolff and others',
+            year: 2022,
+            source: 'OpenStax, Rice University',
+            url: 'https://openstax.org/details/books/astronomy-2e',
+          },
+          license: 'CC BY 4.0',
+          access: 'open',
+          studentNote: {
+            en: 'Gravitas has no investigation yet for the gas and dust between the stars, for a galaxy’s colour and its stars, for dust in a galaxy, for the Local Group, for the shapes of galaxies, for clusters of galaxies, or for active galactic nuclei. The methods that would carry some of them did not pass their tests, or wait for data that has not been supplied, so none is offered; these chapters are the reading for what lies between the stars and for the galaxies themselves.',
+            es: 'Gravitas aún no tiene una investigación sobre el gas y el polvo entre las estrellas, el color de una galaxia y sus estrellas, el polvo en una galaxia, el Grupo Local, las formas de las galaxias, los cúmulos de galaxias ni los núcleos activos de galaxias. Los métodos que servirían para algunos no pasaron sus pruebas o esperan datos que no se han aportado, así que no se ofrece ninguno; estos capítulos son la lectura para lo que hay entre las estrellas y para las propias galaxias.',
+            esOf: '47297899',
+          },
+          teacherNote: {
+            en: 'Why each is missing, as recorded: the interstellar-medium line tools (identifying lines, equivalent widths, the Balmer decrement) pass their synthetic tests but have no viewer, no authentic spectrum and no atomic data for plasma diagnostics, so nothing is built on them; the galaxy-spectra tools (a redshift from lines or by correlation, the 4000-angstrom break) have legs that fail, among them a mismatched template that can read as a good redshift, and no galaxy spectra were supplied; the galaxy-morphology tools have failing legs and no image was supplied; the cluster dispersion and mass tools have failing legs and no cluster table was supplied; the mass inside an Einstein radius passes its tests but nothing is built on it, and the time-delay gate returned C; the active-galactic-nucleus tools have failing legs and their luminosity-function gate never ran for want of a catalogue; the Local Group has no table of distances and motions fetched under a recorded rights decision; large-scale structure stays at the counts of Where Galaxies Live because no two-point statistic exists yet. The Expanding Universe, Standard Candles, The Shape of Expansion and Where Galaxies Live above, and the galactic dynamics unit, are the investigations that do exist.',
+            es: 'Por qué falta cada uno, según el registro: las herramientas de líneas del medio interestelar (identificar líneas, anchos equivalentes, el decremento de Balmer) pasan sus pruebas sintéticas pero no tienen visor, espectro auténtico ni datos atómicos para diagnósticos de plasma, así que nada se construye sobre ellas; las herramientas de espectros de galaxias (un corrimiento al rojo por líneas o por correlación, el salto de 4000 angstroms) tienen tramos que fallan, entre ellos una plantilla equivocada que puede leerse como un buen corrimiento, y no se aportaron espectros de galaxias; las herramientas de morfología de galaxias tienen tramos fallidos y no se aportó ninguna imagen; las herramientas de dispersión y masa de cúmulos tienen tramos fallidos y no se aportó ninguna tabla de cúmulos; la masa dentro de un radio de Einstein pasa sus pruebas pero nada se construye sobre ella, y la puerta de los retardos devolvió C; las herramientas de núcleos activos tienen tramos fallidos y su puerta de la función de luminosidad nunca se ejecutó por falta de un catálogo; el Grupo Local no tiene una tabla de distancias y movimientos obtenida con una decisión de derechos registrada; la estructura a gran escala se queda en los recuentos de Dónde viven las galaxias porque aún no existe un estadístico de dos puntos. Arriba, El universo en expansión, Candelas estándar, La forma de la expansión y Dónde viven las galaxias, y la unidad de dinámica galáctica son las investigaciones que sí existen.',
+            esOf: '0b20a16b',
           },
         },
       ],
