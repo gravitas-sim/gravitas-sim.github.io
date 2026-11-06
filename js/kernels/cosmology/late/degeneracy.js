@@ -133,24 +133,38 @@ export function distanceContour({ base, z, quantity, x, y, target }) {
 /**
  * The local degeneracy direction at a point (the base's own values unless `at` is given): the gradient of the
  * quantity by five-point central differences with a step of 1 percent of each parameter's scale, the contour's
- * slope dy/dx and its unit tangent (x component positive).
+ * slope dy/dx and its unit tangent (x component positive). `rule: 'richardson'` (Prompt 255b, opt-in, the
+ * default is 'five-point') combines the five-point difference at h and at h/2 as (16 g(h/2) - g(h))/15, whose
+ * truncation error is O(h^6) instead of O(h^4).
  */
-export function degeneracyDirection({ base, z, quantity, x, y, at }) {
+export function degeneracyDirection({
+  base,
+  z,
+  quantity,
+  x,
+  y,
+  at,
+  rule = 'five-point',
+}) {
+  if (rule !== 'five-point' && rule !== 'richardson')
+    bad(`unknown differencing rule '${rule}'`);
   checkAxes(base, quantity, [x, y]);
   const v0 = paramsFor(base, {});
   const px = at?.x ?? v0[x];
   const py = at?.y ?? v0[y];
   const grad = (name, value, other, otherValue) => {
-    const h = 0.01 * Math.max(Math.abs(value), SCALE_FLOOR[name]);
+    const h0 = 0.01 * Math.max(Math.abs(value), SCALE_FLOOR[name]);
     const f = t =>
       quantityAt(base, { [name]: t, [other]: otherValue }, z, quantity);
-    return (
+    const five = h =>
       (-f(value + 2 * h) +
         8 * f(value + h) -
         8 * f(value - h) +
         f(value - 2 * h)) /
-      (12 * h)
-    );
+      (12 * h);
+    return rule === 'richardson'
+      ? (16 * five(h0 / 2) - five(h0)) / 15
+      : five(h0);
   };
   const dx = grad(x, px, y, py);
   const dy = grad(y, py, x, px);
