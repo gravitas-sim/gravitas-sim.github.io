@@ -1,0 +1,116 @@
+{
+  "format": "gravitas.agn-followup-thresholds/1",
+  "prompt": "Roadmap III, Prompt 252 follow-up (252b): new legs for the questions Carl ruled on in DECISIONS_2026-11-05.md (items 2, 3, 4 of the 252 AGN questions; item 5, the 5 sigma pair cut, stands and is not a leg). Kernel and validation part only, like Prompt 252 itself.",
+  "document": "AGN.md (section \"Follow-up (252b)\"), written after this file",
+  "committed": "before any follow-up code, generator option, oracle input, validator leg or result existed, and before any run of the new world, the new redshift term or the new refusal mapping. What was read before this file: tests/fixtures/agn/thresholds.json (the committed contract of PR #536, merged), the Carl rulings, the radiation line pack's three Balmer wavelengths, and the old legs' own text. The old legs' results (their failure numbers) were known to the author when this file was written; every bound below is therefore set by the stated rule next to it, and no bound is a function of any old failure number. The one place a number of that kind could have leaked in is the model-limited floor of C1c: its rule is the textbook sd of a uniform quantisation of one grid sample, stated below, and was not fitted to anything.",
+  "rule": "Old A7, B3, C1, D2 and B6 stay failing and labelled, unchanged in thresholds.json, failed-legs.json and results.json; no bound of theirs moves, no limit is overridden and no result is re-judged. The new legs are separate (followup-results.json, followup-failed-legs.json) and carry their own verdicts. A new leg that crosses its bound is recorded as failed and left failing; only Carl resets one. A rule below that is a question rather than a bound is not a leg.",
+  "ruleForBounds": "Every bound of a new leg is either (1) the SAME bound as the old leg it replaces, because the leg's question (does the kernel recover the redshift, does it agree with an independent implementation, are the intervals calibrated, are weak lines refused) is unchanged and only the world or the rule under test changed, or (2) derived from a binomial or counting rule written beside it. No bound is looser than its old leg's.",
+  "seeds": {
+    "ensembleRedshift": 252101,
+    "oracleInputs": 252107,
+    "refusals": 252109,
+    "design": "agn-252b-design (used only to debug the generator and the kernel; never in a leg)",
+    "note": "the seeds are new (the old legs' streams are not reused) so a new leg is not a replay of an old failure; C1b and C1c deliberately share one ensemble (ensembleRedshift) so that they differ only by the term under test"
+  },
+  "worlds": {
+    "label": "SYNTHETIC QUASAR SPECTRUM, NON-HARMONIC LINE SET: the same invented object, grid, continuum, broad-line widths, peaks, noise and spectrograph as the world of thresholds.json; only the three invented ultraviolet rest wavelengths differ. Invented, equal to no published line, not a measurement of any quasar.",
+    "unchanged": "grid (log10 start log10(380), step 2e-4, 2100 samples, R = 1000, vacuum), template grid (log10 start log10(100), step 2e-4, 5000 samples), alpha = -1.5, broad sigma 2500 km/s, peaks h-alpha 2.5, h-beta 1.0, h-gamma 0.4, invented-A 2.0, invented-B 1.2, invented-C 1.6, noise = 1 / snr, zRange [0, 2.6]",
+    "inventedFactors": {
+      "invented-A": 0.175,
+      "invented-B": 0.285,
+      "invented-C": 0.35
+    },
+    "factorRule": "The factors are the triple, on a grid of 0.005 in [0.17, 0.45], that (i) leaves at least two of the six broad lines inside the observed window [380 nm (1 + m), 1000 nm / (1 + m)] with the edge margin m = 0.03 at every z on a 0.01 grid from 0.10 to 2.40, and (ii) maximises the separation S = the smallest of the fifteen pairwise differences of log10 rest wavelength between the six lines (Hgamma, Hbeta, Halpha as the pack's vacuum values, plus the three invented lines) and of the smallest gap between any two of those fifteen differences. S measures how far apart the lags are at which two different pairs of lines can be mistaken for one another: a template shifted to put a line on a different line of the spectrum, which is what produced the second correlation peak that the committed 0.8 ambiguity rule refuses. Ties would be broken by the smaller triple. The rule was evaluated by an arithmetic script (not by the kernel, the generator or the validator) before this file was written; the result is S = 0.0246 dex against 0.0035 dex for the harmonic world of thresholds.json (the broad line's FWHM is 0.0085 dex). The factors are labelled invented and are not compared with any catalogue.",
+    "templateRule": "the template of a non-harmonic world is the noise-free world at z = 0 with the same line list, on the template grid, as for the harmonic world"
+  },
+  "scope": {
+    "built": "(a) a generator option that selects the non-harmonic line set (the harmonic one stays the default, so every old leg and golden is unchanged); (b) the fit-failure mapping of the BPT line measurement: a fit at the expected position that does not converge, or returns a non-finite, non-positive or non-integrable flux, is reported as not-constrained with the code line-not-detected and a flag naming the fit failure, instead of line-fit-failed; (c) a default model-limited term for the quasar redshift (a velocity floor, below), carried in modelSigmaZ and sigmaZTotal beside the unchanged noise-only sigmaZ; the validator legs A7b, B3b, C1b, C1c, D2b and their pinned results.",
+    "notBuilt": "any viewer mode, lesson, model-page section, instructor material, Spanish string, pack or precache entry; any SDSS quasar spectrum, template, dividing curve or bolometric correction; the luminosity function (Part B) and every leg of it; any change to the old legs, to any bound of thresholds.json, or to the 5 sigma pair cut; a K-correction."
+  },
+  "analysisRule": {
+    "name": "AGN-RULE-2 (committed here before the new code existed)",
+    "steps": [
+      "W1 world: the generator takes an option naming the line set, 'harmonic' (default, the factors 0.2, 0.3, 0.4 of thresholds.json) or 'non-harmonic' (the factors above); nothing else about the forward model changes.",
+      "F1 fit failure: the BPT line measurement (B2 of AGN-RULE-1) maps a line fit that fails at its expected position (the fit does not converge, or its flux is not finite and positive, or its error is not finite and positive) to the not-constrained result with the code 'line-not-detected', naming the line, with the flag fitFailed true and the underlying reason kept in the result; the code 'line-fit-failed' is no longer returned by the BPT measurement for a line the world places inside the coverage and outside a blend. The mapping is a statement about what the user may conclude (a line that cannot be fitted where it is expected is not measured), not a statement that the line is absent. A line outside the coverage or inside a blend keeps its own code, which comes first.",
+      "R2 floor: quasarRedshift returns, for a result with status ok or low-significance and with no systematicKmS given, the model-limited term modelSigmaZ = (1 + z) v_floor / c and sigmaZTotal = hypot(sigmaZ, modelSigmaZ), with v_floor = c ln(10) step / sqrt(12) where step is the spectrum's own log10 wavelength step (the median of the successive differences of log10 lambda). v_floor is the standard deviation of a uniform error spread over one sample of the grid: the template is a sampled function and its placement relative to the spectrum is not known to better than that, whatever the noise. It is a floor, not an estimate of line-family disagreement or of a template that does not describe the object, which the caller states with systematicKmS (a given systematicKmS replaces v_floor, as before). sigmaZ stays the correlation's noise-only interval; the old legs read it and are unchanged. The result states the term, its rule and that it is a floor."
+    ]
+  },
+  "checks": [
+    {
+      "id": "A7b.quasarShiftNonHarmonic",
+      "leg": "a",
+      "replaces": "A7.quasarShift (which stays failing)",
+      "what": "A7 on the non-harmonic world: a noise-free quasar spectrum that is the template shifted by an integer number of samples (log10(1 + z) = k step, k = 500, 1500, 2000, 2500 at step 2e-4, the list of thresholds.json after its AM2) is recovered by the cross-correlation to an absolute 1e-6 in z with status ok; noise-free spectra at z = 0.1234, 0.5555, 1.0777, 1.9999 and 2.3456 (sub-sample shifts) to an absolute 5e-5. The bounds are the old leg's; only the world changed.",
+      "limits": {
+        "lags": [500, 1500, 2000, 2500],
+        "maxAbsoluteZLag": 0.000001,
+        "zs": [0.1234, 0.5555, 1.0777, 1.9999, 2.3456],
+        "maxAbsoluteZSub": 0.00005,
+        "zRange": { "min": 0, "max": 2.6 }
+      }
+    },
+    {
+      "id": "B3b.redshiftOracleNonHarmonic",
+      "leg": "b",
+      "replaces": "B3.redshiftOracle (which stays failing)",
+      "what": "B3 on the non-harmonic world: eight noisy quasar spectra (the forward model of the non-harmonic world, in oracle-inputs-followup.json, seed oracleInputs, z uniform on [0.1, 2.4] and snr uniform on [8, 20] as in B3): the kernel's redshift has status ok on all eight and agrees with the independent Python correlation (FFT profile, scipy cubic spline and bounded minimiser, numpy; the same oracle script, with no Gravitas code) to an absolute 1e-6, the uncertainty to a relative 1e-4 and the significance to a relative 1e-6; the kernel's integer-lag profile agrees with the FFT profile to a relative 1e-9 of its maximum on four of them. The bounds are the old leg's. The oracle has no ambiguity rule; a kernel refusal on one of the eight is a failure of the leg, as in B3.",
+      "limits": {
+        "n": 8,
+        "maxAbsoluteZ": 0.000001,
+        "maxRelativeSigma": 0.0001,
+        "maxRelativeQ": 0.000001,
+        "profileCases": 4,
+        "maxRelativeProfile": 1e-9,
+        "zRange": [0.1, 2.4],
+        "snrRange": [8, 20]
+      }
+    },
+    {
+      "id": "C1b.redshiftCoverageNonHarmonic",
+      "leg": "c",
+      "replaces": "C1.redshiftCoverage (which stays failing)",
+      "what": "C1 on the non-harmonic world with the noise-only interval sigmaZ (no floor): 300 quasar worlds (seed ensembleRedshift), z uniform on [0.1, 2.4], snr uniform on [8, 20], the matched template: of the worlds with status ok, the share with |z - truth| <= sigmaZ lies in [0.602, 0.763] (a 3-sigma binomial band at 0.6827 for n = 300), the standard deviation of the normalised error in [0.85, 1.15], the share with status ok at least 0.95, and the catastrophic share (|z - truth| > 0.01 among all worlds) at most 0.01. The bounds are the old leg's. This leg isolates the world: it is expected to say whether the harmonic spacing was the cause of the refusals, and, separately, whether a noise-only interval is honest.",
+      "limits": {
+        "n": 300,
+        "zRange": [0.1, 2.4],
+        "snrRange": [8, 20],
+        "coverageBand": [0.602, 0.763],
+        "sdBand": [0.85, 1.15],
+        "minOkFraction": 0.95,
+        "maxCatastrophic": 0.01
+      }
+    },
+    {
+      "id": "C1c.redshiftCoverageWithFloor",
+      "leg": "c",
+      "replaces": "C1.redshiftCoverage (which stays failing)",
+      "what": "C1b on the same 300 worlds (same seed, same draws) with the total interval sigmaZTotal of the redshift's default floor (rule R2): the share of the worlds with status ok with |z - truth| <= sigmaZTotal lies in the same band [0.602, 0.763] and the standard deviation of (z - truth) / sigmaZTotal in [0.85, 1.15]; the share with status ok and the catastrophic share are those of C1b by construction and are judged on the same bounds. The band is two-sided, as in C1: an interval much wider than the error is also a failure (it is not calibrated), and is recorded as one. Reported, not judged: the coverage at the 0.9545 level (twice the interval), and the share of the total interval's variance that is the floor.",
+      "limits": {
+        "n": 300,
+        "zRange": [0.1, 2.4],
+        "snrRange": [8, 20],
+        "coverageBand": [0.602, 0.763],
+        "sdBand": [0.85, 1.15],
+        "minOkFraction": 0.95,
+        "maxCatastrophic": 0.01
+      }
+    },
+    {
+      "id": "D2b.failedFitIsNondetection",
+      "leg": "d",
+      "replaces": "D2.undetectedAndBlended (which stays failing)",
+      "what": "(i) 200 narrow-line worlds (seed refusals) with H-alpha and the two other lines strong (the world of D2: z = 0.1, x = -0.5, H-alpha flux 3, snr 10) and the invented O line at 0.5 percent of H-beta: every one is not-constrained with the code line-not-detected naming the line (none line-fit-failed, none a class); (ii) the same lines with the invented N line placed 0.3 nm from H-alpha: every one unresolved-blend (the old leg's second half, unchanged); (iii) a guard that the mapping does not eat measurable lines: 100 worlds of D2's strong-line world with the O line at the strength of H-beta (200 times the weak case) return status ok on the measurement and never the code line-not-detected. The count of worlds in (i) that reached line-not-detected through a fit failure (flag fitFailed) is reported, not judged: n is 200 so that a path of a few percent probability is exercised many times, and the mapping itself is also covered by a Jest test on a forced failing fit.",
+      "limits": {
+        "nWeak": 200,
+        "oFraction": 0.005,
+        "blendSeparationNm": 0.3,
+        "nBlend": 200,
+        "nGuard": 100,
+        "guardOFraction": 1,
+        "minRefused": 1,
+        "maxGuardNondetected": 0
+      }
+    }
+  ],
+  "amendments": []
+}

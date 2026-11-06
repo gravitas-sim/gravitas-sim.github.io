@@ -77,6 +77,23 @@ export const QUASAR_WORLD = Object.freeze({
   }),
 });
 
+/**
+ * The non-harmonic line set of the follow-up (252b, followup-thresholds.json worlds.factorRule): factors chosen
+ * to maximise the separation of the fifteen pairwise log wavelength differences of the six lines while keeping two
+ * lines in the window at every redshift of the ensemble. INVENTED; equal to no published line.
+ */
+export const NON_HARMONIC_FACTORS = Object.freeze({
+  'invented-A': 0.175,
+  'invented-B': 0.285,
+  'invented-C': 0.35,
+});
+
+/** The invented-line sets a quasar world can use: the harmonic one (default, Prompt 252) and the non-harmonic one. */
+export const QUASAR_LINE_SETS = Object.freeze({
+  harmonic: QUASAR_WORLD.inventedFactors,
+  'non-harmonic': NON_HARMONIC_FACTORS,
+});
+
 /** The narrow-line world's grid and invented lines. */
 export const NARROW_WORLD = Object.freeze({
   resolvingPower: 1800,
@@ -97,14 +114,20 @@ const byId = (lines, id) => {
 };
 
 /** The broad lines of a quasar world: {id, restNm, peak (over the continuum), sigmaKmS}. */
-export function quasarLineList({ lines, medium = 'vacuum' } = {}) {
+export function quasarLineList({
+  lines,
+  medium = 'vacuum',
+  lineSet = 'harmonic',
+} = {}) {
+  const factors = QUASAR_LINE_SETS[lineSet];
+  if (!factors) throw new Error(`agn synthetic: no line set ${lineSet}`);
   const ha = byId(lines, 'h-alpha')[medium];
   const out = ['h-alpha', 'h-beta', 'h-gamma'].map(id => ({
     id,
     restNm: byId(lines, id)[medium],
     peak: QUASAR_WORLD.peak[id],
   }));
-  for (const [id, f] of Object.entries(QUASAR_WORLD.inventedFactors))
+  for (const [id, f] of Object.entries(factors))
     out.push({
       id,
       restNm: ha * f,
@@ -179,8 +202,9 @@ export function generateQuasar({
   samples = QUASAR_WORLD.samples,
   label = QUASAR_SYNTHETIC_LABEL,
   featureless = false,
+  lineSet = 'harmonic',
 } = {}) {
-  const list = featureless ? [] : quasarLineList({ lines, medium });
+  const list = featureless ? [] : quasarLineList({ lines, medium, lineSet });
   const m = quasarModel({
     list,
     alpha,
@@ -226,6 +250,7 @@ export function generateQuasar({
       resolvingPower,
       medium,
       featureless,
+      lineSet,
       lines: m.em.map(l => ({
         id: l.id,
         restNm: l.restNm,
@@ -243,9 +268,11 @@ export function quasarTemplate({
   medium = 'vacuum',
   resolvingPower = QUASAR_WORLD.resolvingPower,
   log10Step = QUASAR_WORLD.log10Step,
+  lineSet = 'harmonic',
 } = {}) {
   const w = generateQuasar({
     lines,
+    lineSet,
     z: 0,
     noise: false,
     medium,

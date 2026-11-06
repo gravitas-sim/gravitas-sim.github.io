@@ -26,6 +26,7 @@
     "ism:validate": "node tools/ism-validate.mjs",
     "galaxy:validate": "node tools/galaxy-validate.mjs",
     "agn:validate": "node tools/agn-validate.mjs",
+    "agn:followup": "node tools/agn-followup-validate.mjs",
     "lensing2:validate": "node tools/lensing2-validate.mjs",
     "morphology:validate": "node tools/morphology-validate.mjs",
     "occurrence:validate": "node tools/occurrence-validate.mjs",
