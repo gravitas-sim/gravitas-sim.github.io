@@ -179,9 +179,14 @@ export function classifyBpt({
 /**
  * The four BPT line fluxes from a spectrum, at a redshift.
  * @param {object} spec - a spectrum (medium and resolving power required)
- * @param {{z: number, rest: {ha: number, hb: number, n: number, o: number}, sources: {n: string, o: string}, halfWidthPx?: number}} o
+ * @param {{z: number, rest: {ha: number, hb: number, n: number, o: number}, sources: {n: string, o: string}, halfWidthPx?: number, fitFailureCode?: 'line-not-detected'|'line-fit-failed'}} o
+ *   fitFailureCode: a fit that fails at the expected position is, by default (AGN-RULE-2 F1), not-constrained with the code
+ *   line-not-detected and fitFailed true; 'line-fit-failed' is the committed rule of Prompt 252, kept so the old D2 leg replays
  */
-export function measureBptLines(spec, { z, rest, sources, halfWidthPx } = {}) {
+export function measureBptLines(
+  spec,
+  { z, rest, sources, halfWidthPx, fitFailureCode = 'line-not-detected' } = {}
+) {
   const bad = checkSpectrum(spec, { needResolution: true });
   if (bad) return bad;
   if (!Number.isFinite(z))
@@ -237,6 +242,7 @@ export function measureBptLines(spec, { z, rest, sources, halfWidthPx } = {}) {
     };
   const out = {};
   const flags = [];
+  const failed = [];
   for (const k of names) {
     const i0 = nearestIndex(lam, obs[k]);
     const disp = dispersionAtIndex(lam, i0);
@@ -254,14 +260,10 @@ export function measureBptLines(spec, { z, rest, sources, halfWidthPx } = {}) {
         Math.min(defaultHalf, Math.floor((WINDOW_SHARE * sepNearest) / disp))
       );
     const fit = fitGaussianLine(spec, { guessNm: obs[k], halfWidthPx: half });
-    if (fit.status !== 'ok' || !(fit.sigmaFlux > 0))
-      return {
-        status: 'not-constrained',
-        code: 'line-fit-failed',
-        why: `the fit of ${k} failed (${fit.code ?? fit.status})`,
-        lines: [k],
-        limits: BPT_LIMITS,
-      };
+    if (fit.status !== 'ok' || !(fit.sigmaFlux > 0)) {
+      failed.push({ line: k, reason: fit.code ?? fit.status });
+      continue;
+    }
     out[k] = {
       flux: fit.flux,
       sigma: fit.sigmaFlux,
@@ -269,6 +271,26 @@ export function measureBptLines(spec, { z, rest, sources, halfWidthPx } = {}) {
       fwhmNm: fit.fwhmNm,
     };
     if (fit.fwhmNm > 4 * fit.lsfFwhmNm) flags.push(`wide-line:${k}`);
+  }
+  if (failed.length) {
+    const names2 = failed.map(f => f.line);
+    if (fitFailureCode === 'line-fit-failed')
+      return {
+        status: 'not-constrained',
+        code: 'line-fit-failed',
+        why: `the fit of ${names2[0]} failed (${failed[0].reason})`,
+        lines: [names2[0]],
+        limits: BPT_LIMITS,
+      };
+    return {
+      status: 'not-constrained',
+      code: 'line-not-detected',
+      fitFailed: true,
+      why: `the fit of ${names2.join(', ')} did not converge at the expected position (${failed.map(f => f.reason).join(', ')}): the line is not measured, which is not a statement that it is absent`,
+      lines: names2,
+      failedFits: failed,
+      limits: BPT_LIMITS,
+    };
   }
   return {
     status: 'ok',

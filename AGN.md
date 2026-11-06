@@ -150,6 +150,67 @@ interval is a noise floor, not an accuracy; the luminosity is at the observed ba
 bolometric interval is dominated by the correction's scatter when it is a typical one; the Eddington mass is a lower bound;
 the size is an upper limit; the BPT class is a definition-dependent label that the kernel withholds near a curve.
 
+## Follow-up (252b): the three rulings, as new legs
+
+Carl ruled on 2026-11-05 (`DECISIONS_2026-11-05.md`, the 252 questions) that a non-harmonic world, a failed fit read as a
+non-detection and a stated redshift floor are each built as a NEW leg with its thresholds committed first, that A7, B3, C1 and
+D2 stay failing, and that the 5 sigma pair cut stands. The thresholds are `tests/fixtures/agn/followup-thresholds.json`
+(commit ee333267, before any follow-up code, with no amendment); the verdicts are `followup-results.json` and
+`followup-failed-legs.json`; the validator is `tools/agn-followup-validate.mjs` (`npm run agn:followup`, about ten seconds).
+The old legs, their thresholds, results and failed-legs file are byte for byte unchanged, and the old validator still
+reproduces them. **The five new legs all fail and stay failing**, and the reasons are below.
+
+**The rules (AGN-RULE-2, in the thresholds file).**
+
+- **W1, the world.** `generateQuasar` and `quasarTemplate` take `lineSet`: `'harmonic'` (default, the factors 0.2, 0.3, 0.4
+  of H-alpha) or `'non-harmonic'` (0.175, 0.285, 0.35). The factors come from a rule written before they were computed: among
+  triples on a 0.005 grid in [0.17, 0.45] that leave two of the six lines in the observed window with a 3 percent edge margin
+  at every z from 0.10 to 2.40, take the one that maximises the separation of the fifteen pairwise log wavelength differences
+  (the smallest of those differences and of the gaps between them). The separation is 0.0246 dex against 0.0035 for the
+  harmonic world; the broad line's FWHM is 0.0085 dex. The factors are invented and compared with no catalogue.
+- **F1, the fit.** `measureBptLines` returns, for a line whose fit fails at its expected position (not converged, or a flux or
+  error not finite and positive), `not-constrained` with the code `line-not-detected`, `fitFailed: true`, the line named, the
+  reason kept in `failedFits`, and the sentence that this is not a statement that the line is absent. This is now the default;
+  `fitFailureCode: 'line-fit-failed'` keeps the committed rule of #536 so the old D2 replays as it was. A line outside the
+  coverage or inside a blend keeps its own code, which comes first.
+- **R2, the floor.** `quasarRedshift` returns, with no `systematicKmS` given, `modelSigmaZ = (1 + z) v / c` and
+  `sigmaZTotal = hypot(sigmaZ, modelSigmaZ)` with `v = c ln(10) step / sqrt(12)`: the standard deviation of a uniform error over
+  one sample of the spectrum's own grid (40 km/s at the contract grid). A `systematicKmS` replaces it. `sigmaZ` is still the
+  correlation's noise-only interval, so the old legs read the same number; the result's `modelTerm` states the rule and that
+  this is a floor and not an estimate of template mismatch or line-family disagreement.
+
+**The legs** (bounds are the old legs' own, because each leg asks the old question of a different world or rule; none is looser).
+
+| Leg | Verdict | What it measured |
+| --- | --- | --- |
+| A7b noise-free shifts, non-harmonic world | **fail** | 7 of 9 answered, 2 refused ambiguous-peak (z = 0.5555, 2.3456); errors 1.1e-7 and 1.7e-7 inside the bounds, 1.4e-6 to 1.2e-3 elsewhere |
+| B3b oracle, non-harmonic world | **fail** | 6 of 8 answered; where answered the kernel and the oracle agree to 4.9e-9 in z, 1.6e-9 in sigma, 2.3e-14 in q |
+| C1b coverage, noise-only interval | **fail** | 41 of 300 refused (C1: 134); coverage 0.375, sd 445, catastrophic share 0.03 |
+| C1c coverage, with the floor | **fail** | coverage 0.772 (band to 0.763), sd 299; the floor is 0.97 of the interval variance; 0.822 at twice the interval (reported) |
+| D2b failed fit is a non-detection | **fail** | 199 of 200 weak lines refused as line-not-detected (13 of them through a fit failure), 200 of 200 blends, guard 100 of 100 measured and none turned into a non-detection |
+
+**What they say.**
+
+1. *The harmonic spacing was a cause of the refusals but not the only one.* The share refused fell from 0.447 to 0.137, and
+   the separation rule did its job, but two failures remain, and a one-off diagnostic (not a leg, not an isolating
+   experiment) shows where they sit. For z = 0.54 to 0.73, where H-alpha has just left the spectrum's cut at 1000 nm
+   (z = 0.523), the correlation statistic S / sqrt(T) (T the overlapped template energy) can be higher at a lag where
+   the template's strongest line lands on the world's H-beta than at the true lag, because the true lag overlaps less of the
+   template. At z = 0.5555 the highest peak is the wrong one (z = 0.152, the true lag 0.90 of it, refused); 7 of 300 worlds at
+   z = 0.58 to 0.61 are answered ok at the wrong redshift (an error of about -0.41, the rival just under 0.8): these dominate
+   C1b's and C1c's standard deviations and the catastrophic share, and no floor can cover them. This is a property of
+   GALAXY-RULE-1's statistic, not of the quasar world, and is not changed here.
+2. *The floor closes the undercoverage and slightly overshoots.* Without it the noise-only interval covers 0.385 of the 252
+   answered worlds that are not gross misses; with it 0.794 (0.772 over all 259). The rule (one sample over the square root
+   of twelve) was written without looking at any measurement, and it was not tuned.
+3. *The mapping works, and its leg's bound was ill-conditioned.* D2b fails on one world of 200: the 0.5 percent O line passed
+   the signal-to-noise cut of 3 by a noise fluctuation and was classified. A bound of "all 200" fails by chance, for a perfect
+   implementation, with a probability of order a quarter if each world had a 1.35e-3 chance of a 3-sigma upward fluctuation,
+   and this line has some flux; the committed bound is left as it is and the alternative is a question.
+4. *The user-visible limits do not change:* a broad-line redshift is good only where the template is unaliased; the interval is
+   now noise plus a one-sample floor, and still not the template-mismatch or line-family systematic (R2 above: hundreds of
+   km/s, not contained in either interval).
+
 ## Reported legs
 
 R1 (200 worlds whose lines are drawn away from the template: strengths x 0.5 to 1.5, widths x 0.7 to 1.4, each line shifted by
@@ -189,12 +250,19 @@ papers before any lesson cites them).
 
 1. **The consumers rule.** What must hold before "A quasar's spectrum" and "What powers it?" are built: the failed legs
    reset or replaced, the files above, or both? Until a rule is committed nothing visible is built.
-2. **A non-harmonic world.** Replace the 2:3:4 invented lines (a new world with thresholds committed first, as the
-   2026-11-05 ruling did for Prompts 245 and 248; the five failed legs stay on record), or leave the redshift legs as they are?
-3. **A fit that fails at the expected position.** Should it be a non-detection (`line-not-detected`) in a new leg?
-4. **The systematic floor.** Add a stated floor (a few times 1e-4 in z) as a model-limited term to the correlation's interval by
-   default, or only on the caller's request (`systematicKmS`, as now)?
-5. **The chance-pair cut (AM3).** 5 sigma was fixed from arithmetic before any run; confirm or reset.
+2. **A non-harmonic world.** *Ruled 2026-11-05: yes, as new legs; built in 252b (A7b, B3b, C1b), all failing; see the follow-up
+   section above.*
+3. **A fit that fails at the expected position.** *Ruled: yes, as a new leg; built in 252b (D2b, failing on one world of 200).*
+4. **The systematic floor.** *Ruled: a default model-limited term, as a new leg; built in 252b (R2 and C1c, failing).*
+5. **The chance-pair cut (AM3).** *Ruled: stands.*
+6. **The overlap bias (252b).** Where the strongest template line leaves the spectrum (z = 0.54 to 0.73 here), the correlation's
+   statistic prefers a lag that overlaps more of the template, and a wrong redshift can be answered. Options, none built: a
+   minimum overlapped template-energy fraction at a lag (a GALAXY-RULE-1 change, opt-in, new leg), a quasar redshift range
+   that keeps the strongest line in the window (new leg), or accepting the refusals and wrong answers there and saying so.
+7. **The floor's size (252b).** One sample over the square root of twelve covers slightly too much (0.772 against 0.763) and is
+   97 percent of the interval; a smaller or redshift-dependent floor is a new leg, committed first, if wanted.
+8. **A count bound for D2b (252b).** Replace the all-of-n bound by a binomial upper band for the false-detection share, as a
+   new leg committed first.
 
 ## Inherited limits to state in claims built on this kernel
 
