@@ -283,5 +283,14 @@
    }
   }
  },
- "amendments": []
+ "amendments": [
+  {
+   "id": "AM1",
+   "step": "analysisRule R3 and worlds.ensemble (wording), check D5",
+   "what": "Two things the committed text left open, fixed before the kernel or any validator run existed and with no number changed. (1) The order in which a refused set's code is chosen when it breaks several rules is the order of domain.codes: not-finite, then bad-H0, then negative-density, then density-out-of-domain, then w-out-of-domain, then bounce (the bounce scan is run only for a set that passed the first five). The oracle's own domain check, written after this file, applies the same order, and D5 compares codes, so the order is part of the contract. (2) The ensemble's w is drawn uniform in [-3.3, 0.2] of which 0.5 of 3.5, about 14 percent, lies outside the domain [-3, 0]; the committed sentence says 'about 2 percent', an arithmetic slip in the description of the draw. The draw itself, the w range, the count of 400 and every bound are as committed; D5's minAcceptedAndRefusedEach of 20 stands.",
+   "why": "Recorded before js/kernels/cosmology/late existed and before any oracle output was inspected. The slip was found by redoing the arithmetic of the draw while writing the oracle. No bound moved.",
+   "boundMoved": false,
+   "when": "before any kernel code and any validator run"
+  }
+ ]
 }
