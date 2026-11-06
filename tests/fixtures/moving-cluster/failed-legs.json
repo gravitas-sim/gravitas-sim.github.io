@@ -1,0 +1,228 @@
+{
+  "format": "gravitas.moving-cluster-failed-legs/1",
+  "note": "Every failing leg of the gate stream, each labelled and left failing. Only Carl resets a bound; a corrected estimator may enter only as new legs with thresholds committed first.",
+  "thresholdsSha256": "b4dcc1580eb50de90998fe6869d16ef5c81416105a1e3d831529ad87271657fa",
+  "legs": [
+    {
+      "form": "committed",
+      "id": "A1.cp.exact",
+      "label": "FAILED (committed form)",
+      "measured": {
+        "maxCpErrDeg": 6.402e-14,
+        "recall": [0.9867, 0.9967, 0.98],
+        "recallAll": [0.9867, 0.9967, 0.98],
+        "status": ["ok", "ok", "ok"]
+      },
+      "note": "recall over every member the selection keeps (committed)"
+    },
+    {
+      "form": "committed",
+      "id": "C1.membership",
+      "label": "FAILED (committed form)",
+      "measured": {
+        "medianRecall": 0.07,
+        "medianPurity": 0.03554,
+        "withConvergentPoint": 132,
+        "of": 200
+      },
+      "note": ""
+    },
+    {
+      "form": "committed",
+      "id": "C2.cp",
+      "label": "FAILED (committed form)",
+      "measured": {
+        "medianDeg": 140.3,
+        "p95Deg": 146.6,
+        "refusedFraction": 1
+      },
+      "note": ""
+    },
+    {
+      "form": "committed",
+      "id": "C3.coverage68",
+      "label": "FAILED (committed form)",
+      "measured": {
+        "coverage": 0,
+        "ok": 0,
+        "of": 200,
+        "statuses": {
+          "refused:no-cluster": 132,
+          "refused:no-convergence": 68
+        }
+      },
+      "note": ""
+    },
+    {
+      "form": "committed",
+      "id": "C4.coverage95",
+      "label": "FAILED (committed form)",
+      "measured": {
+        "coverage": 0,
+        "ok": 0,
+        "of": 200,
+        "statuses": {
+          "refused:no-cluster": 132,
+          "refused:no-convergence": 68
+        }
+      },
+      "note": ""
+    },
+    {
+      "form": "committed",
+      "id": "C5.recovery",
+      "label": "FAILED (committed form)",
+      "measured": {
+        "medianZ": null,
+        "medianRelBias": null,
+        "n": 0
+      },
+      "note": ""
+    },
+    {
+      "form": "committed",
+      "id": "C6.agree",
+      "label": "FAILED (committed form)",
+      "measured": {
+        "fractionAgree": 0
+      },
+      "note": ""
+    },
+    {
+      "form": "committed",
+      "id": "C7.useful",
+      "label": "FAILED (committed form)",
+      "measured": {
+        "medianSigmaRel": null,
+        "n": 0
+      },
+      "note": ""
+    },
+    {
+      "form": "committed",
+      "id": "D2a.noRv.cp",
+      "label": "FAILED (committed form)",
+      "measured": {
+        "fractionReturned": 0.74,
+        "medianCpErrDeg": 140.5,
+        "medianRecall": 0.07,
+        "reasons": {
+          "refused:no-convergence": 13,
+          "refused:no-cluster": 37
+        }
+      },
+      "note": ""
+    },
+    {
+      "form": "committed",
+      "id": "R1.members",
+      "label": "FAILED (committed form)",
+      "measured": {
+        "sha256": "5e3c8ab9b56a16def4495c669667b33aada8d856262ab64a812b23c5914290f6",
+        "rows": 4873,
+        "droppedByCuts": 1014,
+        "noZeroPoint": 3,
+        "zeroPointOutOfRange": 521,
+        "rowsWithRadialVelocity": 2821,
+        "stars": 3856,
+        "status": "refused",
+        "reason": "no-convergence",
+        "members": 0,
+        "membersWithRv": 0,
+        "steps": 30
+      },
+      "note": ""
+    },
+    {
+      "form": "committed",
+      "id": "R2.agree",
+      "label": "FAILED (committed form)",
+      "measured": {
+        "status": "refused",
+        "reason": "no-convergence",
+        "note": "no distance: the pipeline did not return one"
+      },
+      "note": ""
+    },
+    {
+      "form": "committed",
+      "id": "R3.useful",
+      "label": "FAILED (committed form)",
+      "measured": {
+        "status": "refused",
+        "reason": "no-convergence"
+      },
+      "note": ""
+    },
+    {
+      "form": "committed",
+      "id": "R4.split",
+      "label": "FAILED (committed form)",
+      "measured": {
+        "note": "no members"
+      },
+      "note": ""
+    },
+    {
+      "form": "committed",
+      "id": "R5.cpSplit",
+      "label": "FAILED (committed form)",
+      "measured": {
+        "note": "no members"
+      },
+      "note": ""
+    },
+    {
+      "form": "committed",
+      "id": "B5.oracle.cp.real",
+      "label": "FAILED (committed form)",
+      "measured": {
+        "note": "no convergent point from one side"
+      },
+      "note": ""
+    },
+    {
+      "form": "amended",
+      "id": "C3.coverage68",
+      "label": "FAILED (amended form)",
+      "measured": {
+        "coverage": 0.495,
+        "ok": 192,
+        "of": 200,
+        "statuses": {
+          "ok": 192,
+          "refused:no-convergence": 7,
+          "refused:no-cluster": 1
+        }
+      },
+      "note": ""
+    },
+    {
+      "form": "amended",
+      "id": "C4.coverage95",
+      "label": "FAILED (amended form)",
+      "measured": {
+        "coverage": 0.885,
+        "ok": 192,
+        "of": 200,
+        "statuses": {
+          "ok": 192,
+          "refused:no-convergence": 7,
+          "refused:no-cluster": 1
+        }
+      },
+      "note": ""
+    },
+    {
+      "form": "amended",
+      "id": "C5.recovery",
+      "label": "FAILED (amended form)",
+      "measured": {
+        "medianZ": 0.8907,
+        "medianRelBias": 0.01168,
+        "n": 192
+      },
+      "note": ""
+    }
+  ]
+}

@@ -1,0 +1,302 @@
+{
+  "format": "gravitas.moving-cluster-oracle-results/1",
+  "note": "The pinned output of tools/moving-cluster-oracle/oracle.py (on spike/moving-cluster-gate), run once on Python 3.9 with the versions below, over the pinned synthetic inputs and the real file. Per-star rows are not committed (no Gaia-derived per-star value, D-GAIA-01): a member list and the per-star parallaxes are held as counts and sha256 digests of the indices, and the production module is compared with the full lists when the validator runs.",
+  "versions": {
+    "python": "3.9.22",
+    "numpy": "1.26.4",
+    "scipy": "1.13.1",
+    "astropy": "6.0.1"
+  },
+  "bootstrap": {
+    "B": 4000,
+    "generator": "numpy.random.default_rng(234004)"
+  },
+  "script": {
+    "path": "tools/moving-cluster-oracle/oracle.py",
+    "sha256": "2c8ce13523a702f83d5bd750f388b1d519457fcd9a40511a1979e22253e25542"
+  },
+  "synthetic": {
+    "sha256": "5daa9248766b96ea7d1a5d18bc795d790c66ba25016d07d39adf59e17ff0b9d6",
+    "thresholdsSha256": "b4dcc1580eb50de90998fe6869d16ef5c81416105a1e3d831529ad87271657fa"
+  },
+  "cases": [
+    {
+      "id": "O1",
+      "astropyMaxDiff": 0.0,
+      "forms": {
+        "committed": {
+          "status": "refused",
+          "reason": "no-cluster",
+          "steps": 11,
+          "n_members": 172,
+          "rv_members": 14,
+          "cp": [0.38860192005394567, 0.8687782940620364, 0.30694107495909484],
+          "V": null,
+          "piMC": null,
+          "n_used": null,
+          "sigma_off": 3.797478317719299,
+          "sigmaMC": null,
+          "membersSha256": "580584d1ba5badd82fbc36936150ebdf585fecfb68d8781708f81a0981be9210",
+          "members": 172,
+          "perStarSha256": null
+        },
+        "amended": {
+          "status": "ok",
+          "reason": null,
+          "steps": 8,
+          "n_members": 296,
+          "rv_members": 146,
+          "cp": [
+            -0.16517174950526195, 0.9862448153463667, 0.006281509992178358
+          ],
+          "V": 44.645432102311574,
+          "piMC": 20.073476083447492,
+          "n_used": 296,
+          "sigma_off": 0.5757741587253099,
+          "sigmaMC": 0.2691971178438912,
+          "membersSha256": "870e44d0bb572df28adf9f3c0bc8eaba2b0a9d4daecbd4579289f6a76fe955ba",
+          "members": 296,
+          "perStarSha256": "ab8b6ac699a8b795ff87881cc996c90e97343928eceb85a3246aed2eece6aefa"
+        }
+      }
+    },
+    {
+      "id": "O2",
+      "astropyMaxDiff": 0.0,
+      "forms": {
+        "committed": {
+          "status": "refused",
+          "reason": "no-cluster",
+          "steps": 16,
+          "n_members": 681,
+          "rv_members": 331,
+          "cp": [
+            -0.46160810612328573, -0.8147292122551296, -0.3509049259548934
+          ],
+          "V": null,
+          "piMC": null,
+          "n_used": null,
+          "sigma_off": 4.108968043042723,
+          "sigmaMC": null,
+          "membersSha256": "29cf2e70216f382055108f2bad84631a9610e44428a26fcab3d03e30f72de6cf",
+          "members": 681,
+          "perStarSha256": null
+        },
+        "amended": {
+          "status": "ok",
+          "reason": null,
+          "steps": 5,
+          "n_members": 303,
+          "rv_members": 144,
+          "cp": [
+            -0.15958372879004365, 0.9871501171708359, 0.008226765772176625
+          ],
+          "V": 44.30873986116421,
+          "piMC": 20.231864424920943,
+          "n_used": 303,
+          "sigma_off": 0.6793547380314342,
+          "sigmaMC": 0.2580002594267583,
+          "membersSha256": "f059bf3d0a612ff138764ae4569e080be71c17a6608a6ecabd60869fc36816ca",
+          "members": 303,
+          "perStarSha256": "88b519f4611d296052984387942b7bd47285a538baab0f41a49badcb5e8a69e4"
+        }
+      }
+    },
+    {
+      "id": "O3",
+      "astropyMaxDiff": 0.0,
+      "forms": {
+        "committed": {
+          "status": "refused",
+          "reason": "no-convergence",
+          "steps": 29,
+          "n_members": null,
+          "rv_members": null,
+          "cp": null,
+          "V": null,
+          "piMC": null,
+          "n_used": null,
+          "sigma_off": null,
+          "sigmaMC": null,
+          "membersSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "members": 0,
+          "perStarSha256": null
+        },
+        "amended": {
+          "status": "refused",
+          "reason": "no-convergence",
+          "steps": 29,
+          "n_members": null,
+          "rv_members": null,
+          "cp": null,
+          "V": null,
+          "piMC": null,
+          "n_used": null,
+          "sigma_off": null,
+          "sigmaMC": null,
+          "membersSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "members": 0,
+          "perStarSha256": null
+        }
+      }
+    },
+    {
+      "id": "O4",
+      "astropyMaxDiff": 0.0,
+      "forms": {
+        "committed": {
+          "status": "refused",
+          "reason": "no-convergence",
+          "steps": 29,
+          "n_members": null,
+          "rv_members": null,
+          "cp": null,
+          "V": null,
+          "piMC": null,
+          "n_used": null,
+          "sigma_off": null,
+          "sigmaMC": null,
+          "membersSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "members": 0,
+          "perStarSha256": null
+        },
+        "amended": {
+          "status": "refused",
+          "reason": "no-convergence",
+          "steps": 29,
+          "n_members": null,
+          "rv_members": null,
+          "cp": null,
+          "V": null,
+          "piMC": null,
+          "n_used": null,
+          "sigma_off": null,
+          "sigmaMC": null,
+          "membersSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "members": 0,
+          "perStarSha256": null
+        }
+      }
+    },
+    {
+      "id": "O5",
+      "astropyMaxDiff": 0.0,
+      "forms": {
+        "committed": {
+          "status": "refused",
+          "reason": "no-convergence",
+          "steps": 29,
+          "n_members": null,
+          "rv_members": null,
+          "cp": null,
+          "V": null,
+          "piMC": null,
+          "n_used": null,
+          "sigma_off": null,
+          "sigmaMC": null,
+          "membersSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "members": 0,
+          "perStarSha256": null
+        },
+        "amended": {
+          "status": "cp-only",
+          "reason": "no-rv",
+          "steps": 3,
+          "n_members": 311,
+          "rv_members": 0,
+          "cp": [
+            -0.16491555802059232, 0.9862893467816845, 0.006015242947259636
+          ],
+          "V": null,
+          "piMC": null,
+          "n_used": null,
+          "sigma_off": 0.6989317441229801,
+          "sigmaMC": null,
+          "membersSha256": "6ec87c442bd9350f3f2ca687383aa5f568bcde5c81342b7b037b84dae521f70c",
+          "members": 311,
+          "perStarSha256": null
+        }
+      }
+    },
+    {
+      "id": "O6",
+      "astropyMaxDiff": 0.0,
+      "forms": {
+        "committed": {
+          "status": "refused",
+          "reason": "no-cluster",
+          "steps": 9,
+          "n_members": 595,
+          "rv_members": 273,
+          "cp": [-0.3923423336716322, -0.8517256284369786, -0.3473196612239675],
+          "V": null,
+          "piMC": null,
+          "n_used": null,
+          "sigma_off": 4.186494167410155,
+          "sigmaMC": null,
+          "membersSha256": "a9c46a6889101ba23b36bdf79b6e5f0146c3f59daafa754c9ca316766a94e080",
+          "members": 595,
+          "perStarSha256": null
+        },
+        "amended": {
+          "status": "refused",
+          "reason": "no-cluster",
+          "steps": 25,
+          "n_members": 230,
+          "rv_members": 27,
+          "cp": [0.16256537314641822, 0.9860553716633544, 0.03559920599690536],
+          "V": null,
+          "piMC": null,
+          "n_used": null,
+          "sigma_off": 4.033187350522735,
+          "sigmaMC": null,
+          "membersSha256": "3f6b57a6909c4edb8bb9a29f473b6d744b437a0b672fd8661a3572affbf4b401",
+          "members": 230,
+          "perStarSha256": null
+        }
+      }
+    }
+  ],
+  "real": {
+    "sha256": "5e3c8ab9b56a16def4495c669667b33aada8d856262ab64a812b23c5914290f6",
+    "maskSha256": "fd6b31e7433007dd2184432fad7a673ec6fe9170d3221777f2e7734494bb9093",
+    "rowsDroppedOnlyByZeroPointMask": 3,
+    "maskRowsOutsideCuts": 0,
+    "astropyMaxDiff": 0.0,
+    "forms": {
+      "committed": {
+        "status": "refused",
+        "reason": "no-convergence",
+        "steps": 29,
+        "n_members": null,
+        "rv_members": null,
+        "cp": null,
+        "V": null,
+        "piMC": null,
+        "n_used": null,
+        "sigma_off": null,
+        "sigmaMC": null,
+        "membersSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "members": 0,
+        "perStarSha256": null
+      },
+      "amended": {
+        "status": "ok",
+        "reason": null,
+        "steps": 3,
+        "n_members": 497,
+        "rv_members": 218,
+        "cp": [-0.12286876841788122, 0.9847445631871332, 0.12321286873072723],
+        "V": 46.28974254435189,
+        "piMC": null,
+        "n_used": 497,
+        "sigma_off": 0.428652850655291,
+        "sigmaMC": null,
+        "membersSha256": "9afca4c981fe52a88694eec699f29bcb17f13e9901fdb0a7424d2115408de686",
+        "members": 497,
+        "perStarSha256": "4a5ff69049371fefc3ece3c9f1dc724080d44ec395fc4fcde0352fd688780b46"
+      }
+    },
+    "note": "The real file's moving-cluster parallax and its bootstrap error are withheld here: the gate does not report a distance below verdict A (Prompt 234). The relative agreements the validator compares are in results.json."
+  }
+}

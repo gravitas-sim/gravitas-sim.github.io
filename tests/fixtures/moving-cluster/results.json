@@ -1,0 +1,998 @@
+{
+  "format": "gravitas.moving-cluster-results/1",
+  "thresholdsSha256": "b4dcc1580eb50de90998fe6869d16ef5c81416105a1e3d831529ad87271657fa",
+  "node": "v22.23.4",
+  "date": "2026-11-06T11:49:23.273Z",
+  "forms": {
+    "committed": {
+      "definition": {
+        "seed": "density",
+        "qAlways": false,
+        "recallWindow": false
+      },
+      "verdict": {
+        "verdict": "C",
+        "geoFailing": [
+          "A1.cp.exact",
+          "C1.membership",
+          "C2.cp",
+          "D2a.noRv.cp",
+          "R1.members",
+          "R5.cpSplit",
+          "B5.oracle.cp.real"
+        ],
+        "distFailing": [
+          "B3.oracle.dist.synthetic",
+          "C3.coverage68",
+          "C4.coverage95",
+          "C5.recovery",
+          "C6.agree",
+          "C7.useful",
+          "R2.agree",
+          "R3.useful",
+          "R4.split"
+        ]
+      },
+      "counts": {
+        "pass": 13,
+        "fail": 15,
+        "reported": 3,
+        "not-run": 4,
+        "rows": 35
+      },
+      "real": {
+        "info": {
+          "sha256": "5e3c8ab9b56a16def4495c669667b33aada8d856262ab64a812b23c5914290f6",
+          "rows": 4873,
+          "droppedByCuts": 1014,
+          "noZeroPoint": 3,
+          "zeroPointOutOfRange": 521,
+          "rowsWithRadialVelocity": 2821,
+          "stars": 3856
+        },
+        "status": "refused",
+        "reason": "no-convergence",
+        "members": 0,
+        "withRv": 0,
+        "steps": 30
+      }
+    },
+    "amended": {
+      "definition": {
+        "seed": "cp",
+        "qAlways": true,
+        "recallWindow": true
+      },
+      "verdict": {
+        "verdict": "B",
+        "geoFailing": [],
+        "distFailing": ["C3.coverage68", "C4.coverage95", "C5.recovery"]
+      },
+      "counts": {
+        "pass": 26,
+        "fail": 3,
+        "reported": 3,
+        "not-run": 3,
+        "rows": 35
+      },
+      "real": {
+        "info": {
+          "sha256": "5e3c8ab9b56a16def4495c669667b33aada8d856262ab64a812b23c5914290f6",
+          "rows": 4873,
+          "droppedByCuts": 1014,
+          "noZeroPoint": 3,
+          "zeroPointOutOfRange": 521,
+          "rowsWithRadialVelocity": 2821,
+          "stars": 3856
+        },
+        "status": "ok",
+        "reason": null,
+        "members": 497,
+        "withRv": 218,
+        "steps": 3,
+        "sigmaOffDeg": 0.4287,
+        "rvScatter": 0.6549,
+        "cp": {
+          "ra": 97.1122,
+          "dec": 7.07756
+        },
+        "memberDigest": "8e964f16074d283e8799bc7c6c5e3719b222f161cbc153c36984977b3a59aa09",
+        "V": 46.29,
+        "ratioMCoverPlx": 1.01458,
+        "sigmaMCRel": 0.007858,
+        "piMCOverPlxStat": 0.00005633,
+        "meanZeroPoint": -0.04505,
+        "used": 497,
+        "bootstrap": {
+          "B": 4000,
+          "discarded": 0
+        }
+      }
+    }
+  },
+  "rows": [
+    {
+      "form": "committed",
+      "id": "A1.cp.exact",
+      "status": "fail",
+      "measured": {
+        "maxCpErrDeg": 6.402e-14,
+        "recall": [0.9867, 0.9967, 0.98],
+        "recallAll": [0.9867, 0.9967, 0.98],
+        "status": ["ok", "ok", "ok"]
+      },
+      "note": "recall over every member the selection keeps (committed)"
+    },
+    {
+      "form": "committed",
+      "id": "A2.dist.exact",
+      "status": "pass",
+      "measured": {
+        "relV": 1.332e-15,
+        "relPerStar": 5.107e-15,
+        "relCluster": 3.22e-15,
+        "status": ["ok", "ok", "ok"]
+      },
+      "note": ""
+    },
+    {
+      "form": "committed",
+      "id": "A3.hand",
+      "status": "pass",
+      "measured": {
+        "value": 23.702352230000002,
+        "relDiff": 2.22e-16
+      },
+      "note": ""
+    },
+    {
+      "form": "committed",
+      "id": "A4.approaching",
+      "status": "pass",
+      "measured": {
+        "relV": 3.997e-15,
+        "relPerStar": 1.044e-14,
+        "cpErrDeg": 2.221e-13,
+        "status": ["ok", "ok", "ok"],
+        "reason": [null, null, null]
+      },
+      "note": ""
+    },
+    {
+      "form": "committed",
+      "id": "A5.perpendicular",
+      "status": "pass",
+      "measured": {
+        "fractionPerpendicular": 1,
+        "cpErrDeg": 4.136e-13,
+        "status": ["cp-only", "cp-only", "cp-only"],
+        "reason": ["perpendicular", "perpendicular", "perpendicular"]
+      },
+      "note": ""
+    },
+    {
+      "form": "committed",
+      "id": "A6.greatCircle",
+      "status": "pass",
+      "measured": {
+        "maxOffsetRad": 3.608e-16,
+        "towardsOk": 200,
+        "awayOk": 200
+      },
+      "note": ""
+    },
+    {
+      "form": "committed",
+      "id": "B1.oracle.members.synthetic",
+      "status": "pass",
+      "measured": [
+        {
+          "id": "O1",
+          "jaccard": 1,
+          "statusAgree": true
+        },
+        {
+          "id": "O2",
+          "jaccard": 1,
+          "statusAgree": true
+        },
+        {
+          "id": "O3",
+          "jaccard": 1,
+          "statusAgree": true
+        },
+        {
+          "id": "O4",
+          "jaccard": 1,
+          "statusAgree": true
+        },
+        {
+          "id": "O5",
+          "jaccard": 1,
+          "statusAgree": true
+        },
+        {
+          "id": "O6",
+          "jaccard": 1,
+          "statusAgree": true
+        }
+      ],
+      "note": ""
+    },
+    {
+      "form": "committed",
+      "id": "B2.oracle.cp.synthetic",
+      "status": "pass",
+      "measured": [
+        {
+          "id": "O1",
+          "cpDeg": 2.013e-14
+        },
+        {
+          "id": "O2",
+          "cpDeg": 2.564e-14
+        },
+        {
+          "id": "O6",
+          "cpDeg": 2.448e-14
+        }
+      ],
+      "note": ""
+    },
+    {
+      "form": "committed",
+      "id": "B3.oracle.dist.synthetic",
+      "status": "not-run",
+      "measured": null,
+      "note": "no oracle case returned a distance in this form, so there is nothing to compare"
+    },
+    {
+      "form": "committed",
+      "id": "C1.membership",
+      "status": "fail",
+      "measured": {
+        "medianRecall": 0.07,
+        "medianPurity": 0.03554,
+        "withConvergentPoint": 132,
+        "of": 200
+      },
+      "note": ""
+    },
+    {
+      "form": "committed",
+      "id": "C2.cp",
+      "status": "fail",
+      "measured": {
+        "medianDeg": 140.3,
+        "p95Deg": 146.6,
+        "refusedFraction": 1
+      },
+      "note": ""
+    },
+    {
+      "form": "committed",
+      "id": "C3.coverage68",
+      "status": "fail",
+      "measured": {
+        "coverage": 0,
+        "ok": 0,
+        "of": 200,
+        "statuses": {
+          "refused:no-cluster": 132,
+          "refused:no-convergence": 68
+        }
+      },
+      "note": ""
+    },
+    {
+      "form": "committed",
+      "id": "C4.coverage95",
+      "status": "fail",
+      "measured": {
+        "coverage": 0,
+        "ok": 0,
+        "of": 200,
+        "statuses": {
+          "refused:no-cluster": 132,
+          "refused:no-convergence": 68
+        }
+      },
+      "note": ""
+    },
+    {
+      "form": "committed",
+      "id": "C5.recovery",
+      "status": "fail",
+      "measured": {
+        "medianZ": null,
+        "medianRelBias": null,
+        "n": 0
+      },
+      "note": ""
+    },
+    {
+      "form": "committed",
+      "id": "C6.agree",
+      "status": "fail",
+      "measured": {
+        "fractionAgree": 0
+      },
+      "note": ""
+    },
+    {
+      "form": "committed",
+      "id": "C7.useful",
+      "status": "fail",
+      "measured": {
+        "medianSigmaRel": null,
+        "n": 0
+      },
+      "note": ""
+    },
+    {
+      "form": "committed",
+      "id": "D1.field",
+      "status": "pass",
+      "measured": {
+        "fractionRefused": 1,
+        "reasons": {
+          "refused:no-convergence": 33,
+          "refused:no-cluster": 67
+        }
+      },
+      "note": ""
+    },
+    {
+      "form": "committed",
+      "id": "D2a.noRv.cp",
+      "status": "fail",
+      "measured": {
+        "fractionReturned": 0.74,
+        "medianCpErrDeg": 140.5,
+        "medianRecall": 0.07,
+        "reasons": {
+          "refused:no-convergence": 13,
+          "refused:no-cluster": 37
+        }
+      },
+      "note": ""
+    },
+    {
+      "form": "committed",
+      "id": "D2b.noRv.refusal",
+      "status": "pass",
+      "measured": {
+        "returnedWithDistance": 0,
+        "returned": 37
+      },
+      "note": ""
+    },
+    {
+      "form": "committed",
+      "id": "D3.dispersion",
+      "status": "pass",
+      "measured": {
+        "fractionSafe": 1,
+        "statuses": {
+          "refused:no-cluster": 67,
+          "refused:no-convergence": 33
+        }
+      },
+      "note": ""
+    },
+    {
+      "form": "committed",
+      "id": "D4.few",
+      "status": "pass",
+      "measured": {
+        "fractionRefused": 1,
+        "reasons": {
+          "refused:no-cluster": 68,
+          "refused:no-convergence": 32
+        }
+      },
+      "note": ""
+    },
+    {
+      "form": "committed",
+      "id": "D5.expansion",
+      "status": "reported",
+      "measured": {
+        "ok": 0,
+        "of": 100,
+        "medianZ": null,
+        "medianRelBias": null,
+        "coverage68": 0,
+        "coverage95": 0
+      },
+      "note": ""
+    },
+    {
+      "form": "committed",
+      "id": "P1.speed",
+      "status": "reported",
+      "measured": {
+        "pipelineCpuS": 0.3652,
+        "bootstrap4000CpuS": 0
+      },
+      "note": "recorded, not a physics bound"
+    },
+    {
+      "form": "committed",
+      "id": "R1.members",
+      "status": "fail",
+      "measured": {
+        "sha256": "5e3c8ab9b56a16def4495c669667b33aada8d856262ab64a812b23c5914290f6",
+        "rows": 4873,
+        "droppedByCuts": 1014,
+        "noZeroPoint": 3,
+        "zeroPointOutOfRange": 521,
+        "rowsWithRadialVelocity": 2821,
+        "stars": 3856,
+        "status": "refused",
+        "reason": "no-convergence",
+        "members": 0,
+        "membersWithRv": 0,
+        "steps": 30
+      },
+      "note": ""
+    },
+    {
+      "form": "committed",
+      "id": "R2.agree",
+      "status": "fail",
+      "measured": {
+        "status": "refused",
+        "reason": "no-convergence",
+        "note": "no distance: the pipeline did not return one"
+      },
+      "note": ""
+    },
+    {
+      "form": "committed",
+      "id": "R3.useful",
+      "status": "fail",
+      "measured": {
+        "status": "refused",
+        "reason": "no-convergence"
+      },
+      "note": ""
+    },
+    {
+      "form": "committed",
+      "id": "R4.split",
+      "status": "fail",
+      "measured": {
+        "note": "no members"
+      },
+      "note": ""
+    },
+    {
+      "form": "committed",
+      "id": "R5.cpSplit",
+      "status": "fail",
+      "measured": {
+        "note": "no members"
+      },
+      "note": ""
+    },
+    {
+      "form": "committed",
+      "id": "R6.rvcut",
+      "status": "reported",
+      "measured": {
+        "note": "the full run returned no convergent point"
+      },
+      "note": ""
+    },
+    {
+      "form": "committed",
+      "id": "B4.oracle.members.real",
+      "status": "pass",
+      "measured": {
+        "jaccard": 1,
+        "production": "refused",
+        "oracle": "refused",
+        "reason": ["no-convergence", "no-convergence"]
+      },
+      "note": ""
+    },
+    {
+      "form": "committed",
+      "id": "B5.oracle.cp.real",
+      "status": "fail",
+      "measured": {
+        "note": "no convergent point from one side"
+      },
+      "note": ""
+    },
+    {
+      "form": "committed",
+      "id": "B6.oracle.dist.real",
+      "status": "pass",
+      "measured": {
+        "production": "refused",
+        "oracle": "refused"
+      },
+      "note": "no distance to compare"
+    },
+    {
+      "form": "committed",
+      "id": "R7.published.cp",
+      "status": "not-run",
+      "measured": null,
+      "note": "the pipeline's convergent point against a published convergent point of the Hyades with its uncertainty from a cited independent implementation, pinned as a fixture. The value is not in the repository and is not typed from memory; the exact fetch request is in MOVING_CLUSTER_GATE.md. Not in the verdict; required by Part B (b)."
+    },
+    {
+      "form": "committed",
+      "id": "R8.published.distance",
+      "status": "not-run",
+      "measured": null,
+      "note": "pi_MC and pi_plx against a published Hyades parallax or moving-cluster distance with its uncertainty and stated method. Not in the repository, not typed from memory; fetch request in MOVING_CLUSTER_GATE.md. Not in the verdict; required by Part B (e)."
+    },
+    {
+      "form": "committed",
+      "id": "R9.isochrone",
+      "status": "not-run",
+      "measured": null,
+      "note": "the isochrone distance of Prompt 219 for the members. 219's grid is SDSS g and r (MIST) over log age 9.0 to 9.6 and the sample has Gaia G and BP-RP; no band transformation or Gaia-band isochrone set is in the repository, and an age is a published quantity not typed here. Fetch request in MOVING_CLUSTER_GATE.md. Not in the verdict."
+    },
+    {
+      "form": "amended",
+      "id": "A1.cp.exact",
+      "status": "pass",
+      "measured": {
+        "maxCpErrDeg": 6.402e-14,
+        "recall": [1, 1, 1],
+        "recallAll": [0.9867, 0.9967, 0.98],
+        "status": ["ok", "ok", "ok"]
+      },
+      "note": "recall over members inside the contract window (AM2)"
+    },
+    {
+      "form": "amended",
+      "id": "A2.dist.exact",
+      "status": "pass",
+      "measured": {
+        "relV": 1.332e-15,
+        "relPerStar": 5.107e-15,
+        "relCluster": 3.22e-15,
+        "status": ["ok", "ok", "ok"]
+      },
+      "note": ""
+    },
+    {
+      "form": "amended",
+      "id": "A3.hand",
+      "status": "pass",
+      "measured": {
+        "value": 23.702352230000002,
+        "relDiff": 2.22e-16
+      },
+      "note": ""
+    },
+    {
+      "form": "amended",
+      "id": "A4.approaching",
+      "status": "pass",
+      "measured": {
+        "relV": 3.997e-15,
+        "relPerStar": 1.044e-14,
+        "cpErrDeg": 2.221e-13,
+        "status": ["ok", "ok", "ok"],
+        "reason": [null, null, null]
+      },
+      "note": ""
+    },
+    {
+      "form": "amended",
+      "id": "A5.perpendicular",
+      "status": "pass",
+      "measured": {
+        "fractionPerpendicular": 1,
+        "cpErrDeg": 4.136e-13,
+        "status": ["cp-only", "cp-only", "cp-only"],
+        "reason": ["perpendicular", "perpendicular", "perpendicular"]
+      },
+      "note": ""
+    },
+    {
+      "form": "amended",
+      "id": "A6.greatCircle",
+      "status": "pass",
+      "measured": {
+        "maxOffsetRad": 3.608e-16,
+        "towardsOk": 200,
+        "awayOk": 200
+      },
+      "note": ""
+    },
+    {
+      "form": "amended",
+      "id": "B1.oracle.members.synthetic",
+      "status": "pass",
+      "measured": [
+        {
+          "id": "O1",
+          "jaccard": 1,
+          "statusAgree": true
+        },
+        {
+          "id": "O2",
+          "jaccard": 1,
+          "statusAgree": true
+        },
+        {
+          "id": "O3",
+          "jaccard": 1,
+          "statusAgree": true
+        },
+        {
+          "id": "O4",
+          "jaccard": 1,
+          "statusAgree": true
+        },
+        {
+          "id": "O5",
+          "jaccard": 1,
+          "statusAgree": true
+        },
+        {
+          "id": "O6",
+          "jaccard": 1,
+          "statusAgree": true
+        }
+      ],
+      "note": ""
+    },
+    {
+      "form": "amended",
+      "id": "B2.oracle.cp.synthetic",
+      "status": "pass",
+      "measured": [
+        {
+          "id": "O1",
+          "cpDeg": 1.066e-13
+        },
+        {
+          "id": "O2",
+          "cpDeg": 2.757e-14
+        },
+        {
+          "id": "O5",
+          "cpDeg": 2.721e-14
+        },
+        {
+          "id": "O6",
+          "cpDeg": 1.217e-14
+        }
+      ],
+      "note": ""
+    },
+    {
+      "form": "amended",
+      "id": "B3.oracle.dist.synthetic",
+      "status": "pass",
+      "measured": [
+        {
+          "id": "O1",
+          "relV": 1.776e-15,
+          "relPi": 4.219e-15,
+          "relPerStar": 7.438e-15,
+          "relSigma": 0.03843
+        },
+        {
+          "id": "O2",
+          "relV": 1.11e-16,
+          "relPi": 1.221e-15,
+          "relPerStar": 1.443e-15,
+          "relSigma": 0.03036
+        }
+      ],
+      "note": ""
+    },
+    {
+      "form": "amended",
+      "id": "C1.membership",
+      "status": "pass",
+      "measured": {
+        "medianRecall": 0.9833,
+        "medianPurity": 0.977,
+        "withConvergentPoint": 193,
+        "of": 200
+      },
+      "note": ""
+    },
+    {
+      "form": "amended",
+      "id": "C2.cp",
+      "status": "pass",
+      "measured": {
+        "medianDeg": 0.3933,
+        "p95Deg": 0.8246,
+        "refusedFraction": 0.04
+      },
+      "note": ""
+    },
+    {
+      "form": "amended",
+      "id": "C3.coverage68",
+      "status": "fail",
+      "measured": {
+        "coverage": 0.495,
+        "ok": 192,
+        "of": 200,
+        "statuses": {
+          "ok": 192,
+          "refused:no-convergence": 7,
+          "refused:no-cluster": 1
+        }
+      },
+      "note": ""
+    },
+    {
+      "form": "amended",
+      "id": "C4.coverage95",
+      "status": "fail",
+      "measured": {
+        "coverage": 0.885,
+        "ok": 192,
+        "of": 200,
+        "statuses": {
+          "ok": 192,
+          "refused:no-convergence": 7,
+          "refused:no-cluster": 1
+        }
+      },
+      "note": ""
+    },
+    {
+      "form": "amended",
+      "id": "C5.recovery",
+      "status": "fail",
+      "measured": {
+        "medianZ": 0.8907,
+        "medianRelBias": 0.01168,
+        "n": 192
+      },
+      "note": ""
+    },
+    {
+      "form": "amended",
+      "id": "C6.agree",
+      "status": "pass",
+      "measured": {
+        "fractionAgree": 0.91
+      },
+      "note": ""
+    },
+    {
+      "form": "amended",
+      "id": "C7.useful",
+      "status": "pass",
+      "measured": {
+        "medianSigmaRel": 0.01253,
+        "n": 192
+      },
+      "note": ""
+    },
+    {
+      "form": "amended",
+      "id": "D1.field",
+      "status": "pass",
+      "measured": {
+        "fractionRefused": 1,
+        "reasons": {
+          "refused:no-convergence": 48,
+          "refused:no-cluster": 52
+        }
+      },
+      "note": ""
+    },
+    {
+      "form": "amended",
+      "id": "D2a.noRv.cp",
+      "status": "pass",
+      "measured": {
+        "fractionReturned": 0.98,
+        "medianCpErrDeg": 0.3209,
+        "medianRecall": 0.9833,
+        "reasons": {
+          "cp-only:no-rv": 49,
+          "refused:no-convergence": 1
+        }
+      },
+      "note": ""
+    },
+    {
+      "form": "amended",
+      "id": "D2b.noRv.refusal",
+      "status": "pass",
+      "measured": {
+        "returnedWithDistance": 0,
+        "returned": 49
+      },
+      "note": ""
+    },
+    {
+      "form": "amended",
+      "id": "D3.dispersion",
+      "status": "pass",
+      "measured": {
+        "fractionSafe": 1,
+        "statuses": {
+          "refused:no-cluster": 55,
+          "refused:no-convergence": 45
+        }
+      },
+      "note": ""
+    },
+    {
+      "form": "amended",
+      "id": "D4.few",
+      "status": "pass",
+      "measured": {
+        "fractionRefused": 1,
+        "reasons": {
+          "refused:no-cluster": 58,
+          "refused:no-convergence": 42
+        }
+      },
+      "note": ""
+    },
+    {
+      "form": "amended",
+      "id": "D5.expansion",
+      "status": "reported",
+      "measured": {
+        "ok": 96,
+        "of": 100,
+        "medianZ": -4.566,
+        "medianRelBias": -0.05711,
+        "coverage68": 0,
+        "coverage95": 0.01
+      },
+      "note": ""
+    },
+    {
+      "form": "amended",
+      "id": "P1.speed",
+      "status": "reported",
+      "measured": {
+        "pipelineCpuS": 0.8209,
+        "bootstrap4000CpuS": 0.1683
+      },
+      "note": "recorded, not a physics bound"
+    },
+    {
+      "form": "amended",
+      "id": "R1.members",
+      "status": "pass",
+      "measured": {
+        "sha256": "5e3c8ab9b56a16def4495c669667b33aada8d856262ab64a812b23c5914290f6",
+        "rows": 4873,
+        "droppedByCuts": 1014,
+        "noZeroPoint": 3,
+        "zeroPointOutOfRange": 521,
+        "rowsWithRadialVelocity": 2821,
+        "stars": 3856,
+        "status": "ok",
+        "reason": null,
+        "members": 497,
+        "membersWithRv": 218,
+        "steps": 3
+      },
+      "note": ""
+    },
+    {
+      "form": "amended",
+      "id": "R2.agree",
+      "status": "pass",
+      "measured": {
+        "relDifference": 0.01458,
+        "sigmasCombined": 1.829,
+        "sigmaMCRel": 0.007858,
+        "status": "ok",
+        "reason": null
+      },
+      "note": "ratio of the two parallaxes; the distance is not reported below verdict A"
+    },
+    {
+      "form": "amended",
+      "id": "R3.useful",
+      "status": "pass",
+      "measured": {
+        "sigmaMCRel": 0.007858
+      },
+      "note": ""
+    },
+    {
+      "form": "amended",
+      "id": "R4.split",
+      "status": "pass",
+      "measured": {
+        "halfSizes": [248, 249],
+        "relDifference": -0.01791,
+        "sigmasCombined": 1.152
+      },
+      "note": ""
+    },
+    {
+      "form": "amended",
+      "id": "R5.cpSplit",
+      "status": "pass",
+      "measured": {
+        "separationDeg": 0.05402,
+        "radiusADeg": 0.1247,
+        "radiusBDeg": 0.1067
+      },
+      "note": ""
+    },
+    {
+      "form": "amended",
+      "id": "R6.rvcut",
+      "status": "reported",
+      "measured": {
+        "status": "ok",
+        "members": 498,
+        "cpSeparationDeg": 0.004143,
+        "relChangePi": -0.0007484
+      },
+      "note": ""
+    },
+    {
+      "form": "amended",
+      "id": "B4.oracle.members.real",
+      "status": "pass",
+      "measured": {
+        "jaccard": 1,
+        "production": "ok",
+        "oracle": "ok",
+        "reason": [null, null]
+      },
+      "note": ""
+    },
+    {
+      "form": "amended",
+      "id": "B5.oracle.cp.real",
+      "status": "pass",
+      "measured": {
+        "cpDeg": 8.546e-14
+      },
+      "note": ""
+    },
+    {
+      "form": "amended",
+      "id": "B6.oracle.dist.real",
+      "status": "pass",
+      "measured": {
+        "relV": 8.882e-16,
+        "relPi": 3.997e-15,
+        "relPerStar": 1.332e-14,
+        "relSigma": 0.01869
+      },
+      "note": ""
+    },
+    {
+      "form": "amended",
+      "id": "R7.published.cp",
+      "status": "not-run",
+      "measured": null,
+      "note": "the pipeline's convergent point against a published convergent point of the Hyades with its uncertainty from a cited independent implementation, pinned as a fixture. The value is not in the repository and is not typed from memory; the exact fetch request is in MOVING_CLUSTER_GATE.md. Not in the verdict; required by Part B (b)."
+    },
+    {
+      "form": "amended",
+      "id": "R8.published.distance",
+      "status": "not-run",
+      "measured": null,
+      "note": "pi_MC and pi_plx against a published Hyades parallax or moving-cluster distance with its uncertainty and stated method. Not in the repository, not typed from memory; fetch request in MOVING_CLUSTER_GATE.md. Not in the verdict; required by Part B (e)."
+    },
+    {
+      "form": "amended",
+      "id": "R9.isochrone",
+      "status": "not-run",
+      "measured": null,
+      "note": "the isochrone distance of Prompt 219 for the members. 219's grid is SDSS g and r (MIST) over log age 9.0 to 9.6 and the sample has Gaia G and BP-RP; no band transformation or Gaia-band isochrone set is in the repository, and an age is a published quantity not typed here. Fetch request in MOVING_CLUSTER_GATE.md. Not in the verdict."
+    }
+  ]
+}
