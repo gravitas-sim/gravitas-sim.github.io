@@ -1,0 +1,5 @@
+{
+ "format": "gravitas.cosmology2-followup-failed-legs/1",
+ "note": "the follow-up legs that crossed a committed bound; they stay failing, only Carl resets a bound",
+ "legs": []
+}
