@@ -46,3 +46,10 @@ instructor material and e2e landed in #254, which also gave The First Rung
 (#252) its Hubble-constant step. Still not built are the datasets named under
 Data packs (SPARC, Faber-Jackson, Coma from SDSS; Pantheon+ shipped later, D-RIGHTS-04, as a loadable pack with no instrument yet reading it); the Coma pack's
 radius and masses stay unsourced teaching values.
+
+## Late-time depth (Roadmap III, Prompt 255)
+
+[COSMOLOGY_II.md](COSMOLOGY_II.md) documents `js/kernels/cosmology/late/`, which adds radiation, a constant-w dark-energy
+component, closed universes, the deceleration parameter and transition redshift, a stated domain with refusals and the
+degeneracy contours beside this kernel without changing it. Its committed validation gives kernel verdict C (four legs
+fail as committed, none a disagreement with the independent oracle); no panel, lesson or model-page section is built.

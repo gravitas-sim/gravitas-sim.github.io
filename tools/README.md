@@ -70,6 +70,7 @@ current, and the orchestrator checks it.
 | `conformance.mjs` | The scoped accessibility conformance report (Roadmap III, Prompt 127) |  |
 | `conservation-trace.mjs` | The engine's conservation and energy numbers along a seeded run |  |
 | `cosmology-validate.mjs` | (no header) | `npm run cosmology:validate` |
+| `cosmology2-validate.mjs` | The late-time FLRW kernel against its committed thresholds (Prompt 255) | `npm run cosmology2:validate` |
 | `craters-validate.mjs` | Crater counting against its committed thresholds (Prompt 195) | `npm run craters:validate` |
 | `csp.mjs` | A Content-Security-Policy on every page |  |
 | `data-budget.mjs` | The data plane's budget: what Gravitas stores and keeps, not just what it ships | `npm run budget:data` |

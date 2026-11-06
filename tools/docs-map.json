@@ -1414,6 +1414,13 @@
       "purpose": "The extragalactic and interstellar-medium closeout (Prompt 253): what 247 to 252 landed, each closeout item done or blocked, the package reading step, the cohesion record.",
       "owner": 253,
       "student": false
+    },
+    {
+      "file": "COSMOLOGY_II.md",
+      "kind": "feature",
+      "purpose": "The late-time FLRW kernel (radiation, constant w, closed universes, transition, refusals, degeneracy contours): equations, domain, validation table, failed legs and the file requested (Prompt 255).",
+      "owner": 255,
+      "student": false
     }
   ]
 }
