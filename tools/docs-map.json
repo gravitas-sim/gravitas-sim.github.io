@@ -1386,6 +1386,13 @@
       "purpose": "The enclosed-mass lensing extension: distances, the mass inside an Einstein radius, image inversions, the arc-radius fit, validation and requested files (Prompt 251, Part A).",
       "owner": 251,
       "student": false
+    },
+    {
+      "file": "TIME_DOMAIN_CLOSEOUT.md",
+      "kind": "record",
+      "purpose": "The time-domain closeout (Prompt 246): what 239 to 245 landed, what a student can do today, each closeout item done, not applicable or blocked, the cohesion record.",
+      "owner": 246,
+      "student": false
     }
   ]
 }
