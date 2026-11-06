@@ -342,7 +342,7 @@ if (want('B1.dist')) {
 
 // ---- A3, A4, A5, A11 (both treatments)
 const thetas = (() => {
-  const draw = stream('sn-likelihood-256', 256001, 'theta');
+  const draw = stream('noise', 256001, 'theta');
   const list = [];
   let guard = 0;
   while (list.length < 10 && guard++ < 200) {
@@ -511,7 +511,7 @@ if (treatmentOf.cov.status === 'ok') {
   }
   if (want('A9.pd')) {
     const minSigmaInGroups = Math.min(...Tc.groups.flatMap(g => g.map(i => S.sigma[i])));
-    const draw = stream('sn-likelihood-256', 256002, 'rows');
+    const draw = stream('noise', 256002, 'rows');
     const n = N;
     const groupOf = new Map();
     Tc.groups.forEach((g, q) => g.forEach(i => groupOf.set(i, q)));
@@ -528,7 +528,7 @@ if (treatmentOf.cov.status === 'ok') {
     push('A9.pd', 'cov', verdictOf(minSigmaInGroups > TAU && worst <= 1e-12), { minSigmaInGroups, tau: TAU, maxResidual: worst, groups: Tc.groups.length });
   }
   if (want('A10.condition')) {
-    const draw = stream('sn-likelihood-256', 256003, 'start');
+    const draw = stream('noise', 256003, 'start');
     const start = Float64Array.from({ length: N }, () => 0.5 + draw());
     const est = conditionEstimate(Tc, start);
     const estD = conditionEstimate(treatmentOf.diag, start);
@@ -716,7 +716,7 @@ function ensembleTools(t) {
   const trueModel = setModel('P1', 0.3, 0.7);
   const vt = T.whiten(trueModel);
   const draws = (seed, label, scale = 1) => {
-    const g = gaussian(stream('sn-likelihood-256', seed, label));
+    const g = gaussian(stream('noise', seed, label));
     return () => {
       const eps = Float64Array.from({ length: n }, g);
       const noise = new Float64Array(n);
