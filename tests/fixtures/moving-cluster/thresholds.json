@@ -1,0 +1,473 @@
+{
+  "format": "gravitas.moving-cluster-thresholds/1",
+  "prompt": "Roadmap III, Prompt 234 Part A, Moving groups: one bounded moving-cluster comparison (tranche T4 by D-R10-232-01)",
+  "document": "MOVING_CLUSTER_GATE.md, written after this file",
+  "committed": "before any code of this prompt (the membership, convergent-point, velocity and distance functions, the synthetic generator, the validator tools/moving-cluster-validate.mjs, the oracle script tools/moving-cluster-oracle/oracle.py and its pinned results) existed and before any statistic of the Hyades file was computed. What was seen first, and only that: README.txt, query.adql, sha256.txt and retrieved.txt of the data folder; that hyades.csv has the sha256 below, 4,873 data rows and 2,821 with a radial velocity; the 18 column names and the first three data rows (printed once to read the columns); the register rows and documents of Prompts 219, 233 and 235 and the code of js/kernels/galactic and js/kernels/clusters. No parallax, proper motion or radial velocity distribution of the file, no membership, no convergent point, no velocity and no distance of any sample was computed or seen. No published Hyades value (distance, convergent point, velocity, member list, age) was fetched or typed from memory; every number in syntheticTruth is a synthetic design choice of this gate, labelled so, and none is claimed to describe the Hyades.",
+  "rule": "A crossed bound is a failed leg, recorded in failed-legs.json and left failing; only Carl resets one. A leg that cannot be measured (a file not supplied, a code not run) is NOT RUN and says why. A leg marked REPORTED has no band and is never counted. Legs have a set (S the synthetic cluster under the sample's selection; R the real Hyades sample; none) and a group (geo: the membership and the convergent point; dist: the space speed and the distance); the verdict function below reads both. Amendments are recorded in this file's amendments array before the gate stream is run, with what was found and how; the committed form's verdict binds until Carl rules. A bound, an estimator choice or a constant below is never changed after a result of the gate stream is seen: an improvement enters only as a NEW leg whose thresholds are committed before its first run, and the failed leg stays on record. No published value is typed anywhere except from a source file or document already in the repository, with its citation; a published comparison that needs a value not in the repository is a NOT RUN leg with an exact fetch request in MOVING_CLUSTER_GATE.md. The moving-cluster distance is not presented as a result of the project under any verdict below A.",
+  "seeds": {
+    "ensemble": "moving-cluster-234",
+    "synthetic": [234001, 234002, 234003, 234004],
+    "use": {
+      "234001": "E1, the baseline ensemble (legs C1 to C7), and the oracle realizations O1 to O3",
+      "234002": "E2 field only (D1), E3 no radial velocities (D2a, D2b), E4 few members (D4), and the oracle realizations O4 to O6",
+      "234003": "E5 large internal dispersion (D3) and E6 expansion (D5)",
+      "234004": "the real sample's bootstrap and its split halves (R legs) and the oracle's own bootstrap"
+    },
+    "design": "moving-cluster-234-design (used only to build and debug on synthetic data; never in a leg, never on the real file)"
+  },
+  "data": {
+    "file": "hyades.csv (Gaia DR3 gaiadr3.gaia_source through the ESA archive TAP sync service, retrieved 2026-11-06T11:13:30Z by Carl's session; held outside every repository at /Users/carl/Desktop/Gravitas/scratch-data/gaia234/)",
+    "sha256": "5e3c8ab9b56a16def4495c669667b33aada8d856262ab64a812b23c5914290f6",
+    "query": "query.adql: a 25 degree cone at (66.75, 15.87) degrees; parallax 12 to 40 mas; parallax_over_error above 10; pmra 0 to 250 and pmdec -150 to 50 mas/yr; ordered by source_id",
+    "rows": 4873,
+    "rowsWithRadialVelocity": 2821,
+    "columns": "source_id, ra, dec, parallax, parallax_error, pmra, pmra_error, pmdec, pmdec_error, radial_velocity, radial_velocity_error, phot_g_mean_mag, bp_rp, ruwe, astrometric_params_solved, nu_eff_used_in_astrometry, pseudocolour, ecl_lat",
+    "licence": "CC BY-NC 3.0 IGO (D-GAIA-01 labelling: the data are labelled wherever shown, non-commercial). The file is not committed; this record commits its sha256, its query and aggregate results only, and no per-star row, no source_id list and no Gaia-derived per-star value (membership is recorded as a count and the sha256 of the sorted member source_id list).",
+    "notIncluded": "parallax-proper-motion error correlations and the parallax zero-point flags are not columns of this file; the correlations are taken as zero (stated in the contract)"
+  },
+  "scope": {
+    "built": "a membership rule from proper motion, parallax window and radial velocity; a convergent point from proper-motion directions; the space speed from radial velocities; the moving-cluster parallax of each star and of the cluster, with a bootstrap interval; the comparison with 233's parallax distance (js/kernels/galactic/astrometry.js clusterParallax with the per-star zero point of js/kernels/galactic/zeropoint.js) on the same stars with the same weights; refusals. All of it on a spike branch that is never merged.",
+    "notBuilt": "a cluster age or isochrone distance (leg R9, NOT RUN: the isochrone grid of 219 is SDSS g and r over log age 9.0 to 9.6 and the sample has Gaia G and BP-RP); a published convergent point or distance comparison (R7 and R8, NOT RUN: not in the repository); a Gaia selection function; binaries; an unresolved cluster expansion or rotation; a kernel, a pack, a panel, a lesson or a viewer (Part B is not run)",
+    "consumersRule": "no lesson, panel, viewer or pack is authorized by any verdict of this gate; Carl's ruling of 2026-11-05 holds until a gate passes and he goes ahead.",
+    "distanceRule": "a distance is reported only when the verdict is A; below A the comparison is stated as the ratio of the two parallaxes and the leg outcomes, and no distance is given as a result."
+  },
+  "syntheticTruth": {
+    "note": "Every number in this block is a synthetic truth chosen here for the test, labelled as such. None is a published value, none is tuned to any result, and none is claimed to describe the Hyades or any real cluster. The cluster's sky position is the query's cone centre (query.adql); the rest are round design choices that put the synthetic cluster's proper motion inside the query's proper-motion box.",
+    "cluster": {
+      "members": 300,
+      "centre": {
+        "ra": 66.75,
+        "dec": 15.87,
+        "unit": "degrees (the query's cone centre)"
+      },
+      "centreParallax": 20.0,
+      "unitParallax": "mas",
+      "positionSigma": 5.0,
+      "unitPosition": "pc per axis, isotropic Gaussian about the centre",
+      "convergentPoint": { "ra": 100.0, "dec": 0.0, "unit": "degrees" },
+      "speed": 45.0,
+      "unitSpeed": "km/s, the space velocity of the cluster along the convergent point",
+      "internalSigma": 0.5,
+      "unitInternal": "km/s per axis, isotropic Gaussian, added to each star's velocity",
+      "radialVelocityFraction": 0.6
+    },
+    "errors": {
+      "parallaxSigma": {
+        "min": 0.03,
+        "max": 0.4,
+        "law": "log-uniform",
+        "unit": "mas"
+      },
+      "properMotionSigma": "equal to the star's parallax sigma, in mas/yr, independent draws, correlations zero",
+      "radialVelocitySigma": {
+        "min": 0.2,
+        "max": 5.0,
+        "law": "log-uniform",
+        "unit": "km/s; a star with sigma above 3 km/s is treated as having no radial velocity by the contract"
+      },
+      "zeroPoint": {
+        "mean": -0.03,
+        "sigma": 0.01,
+        "unit": "mas",
+        "use": "added to each star's observed parallax; the pipeline is given each star's zero point exactly (its own removal is 233's, validated there)"
+      },
+      "note": "the error scales are of the order of the first rows of the file (seen), not fitted to it"
+    },
+    "field": {
+      "stars": 4500,
+      "stat": "stars that pass the sample's selection (parallax 12 to 40 mas, parallax over error above 10, the proper-motion box, the 25 degree cone) after errors, generated until 4500 pass",
+      "space": "uniform space density inside the cone between parallaxes 12 and 40 mas",
+      "velocity": {
+        "mean": [-10, -15, -8],
+        "sigma": [35, 25, 20],
+        "unit": "km/s heliocentric U, V, W",
+        "law": "independent Gaussians"
+      },
+      "radialVelocityFraction": 0.58
+    },
+    "selection": "every synthetic star, cluster or field, is cut by the file's own query (parallax 12 to 40 mas observed, parallax over error above 10, pmra 0 to 250, pmdec -150 to 50 mas/yr, inside the cone), so a cluster member the cut removes is not a member of the sample; the truth manifest records which survived",
+    "variants": {
+      "E1": "the cluster and the field above, 200 realizations",
+      "E2": "the field only, 100 realizations",
+      "E3": "E1's construction with the radial velocities removed, 50 realizations",
+      "E4": "the cluster with 15 members (about 9 with a radial velocity), 100 realizations",
+      "E5": "the cluster with internal sigma 5 km/s per axis, 100 realizations",
+      "E6": "the cluster with an isotropic expansion of 0.05 km/s per pc added to each member's velocity about the centre, 100 realizations",
+      "approaching": "A3: the convergent point 130 degrees from the cluster centre along the baseline direction (the cluster approaches the Sun)",
+      "perpendicular": "A5: the convergent point 90 degrees from the cluster centre"
+    },
+    "truth": "per realization: the member flags, each member's true parallax, the cluster velocity vector and its convergent point, and pi_true = the sum of w_i * true parallax_i over the stars the pipeline used for its distance and that are cluster members, divided by the sum of their w_i, with w_i = 1 / (parallax sigma_i)^2 (the estimand of the comparison below; a contaminant has no cluster truth and is counted by the purity leg)"
+  },
+  "contracts": {
+    "constants": {
+      "K": "4.740470446 km/s per (mas/yr * kpc) (js/kernels/galactic/coords.js K_PM)",
+      "rvSigmaFloor": "1.0 km/s (sigma0, a stated floor for the intrinsic velocity scatter and the unmodelled radial-velocity error; not a published dispersion)",
+      "rvErrorCut": "3.0 km/s (a star with a missing radial velocity or an error above this is treated as having none)"
+    },
+    "sample": {
+      "cuts": "astrometric_params_solved 31 or 95; ruwe below 1.4; finite parallax, proper motion and their errors; parallax_error above 0. No other cut: the file's own query is the sample's selection, stated through 154's selection object by the analysis",
+      "geometry": "n_i the unit vector of (ra, dec); east e_i = (-sin ra, cos ra, 0); north g_i = (-cos ra sin dec, -sin ra sin dec, cos dec); the sky proper motion p_i = pmra e_i + pmdec g_i in mas/yr, mu_i = |p_i|, t_i = p_i / mu_i; the great-circle normal b_i = n_i x t_i (a unit vector)"
+    },
+    "convergentPoint": {
+      "estimator": "c is the unit vector minimising the sum over members of (b_i . c)^2: the eigenvector of the sum of b_i b_i^T for the smallest eigenvalue (a 3 by 3 symmetric eigenproblem, unweighted: the pm direction error is a constant sigma_int / V for every star, because sin(theta) cancels, and the measurement part is far smaller). The sign: c is the convergent point, the direction the stars move towards, so the sign is chosen so that the sum over members of t_i . u_i is positive, u_i = (c - (c . n_i) n_i) / |c - (c . n_i) n_i|, the unit tangent at star i towards c",
+      "derived": "theta_i = acos(n_i . c) the angle of star i from the convergent point; off_i = asin(b_i . c) in degrees the star's offset from its great circle; mu_par_i = p_i . u_i the proper motion along the direction to c",
+      "limits": "the convergent point is two numbers on the sky; the assumed common velocity is an assumption, stated. A star with theta below 5.7 degrees (sin theta below 0.1) carries no distance."
+    },
+    "speed": {
+      "estimator": "weighted least squares of the radial velocity on cos(theta_i) through the origin over the members with a usable radial velocity, weight 1 / (rv_error_i^2 + sigma0^2): V = sum(w v_i cos theta_i) / sum(w cos^2 theta_i); V must be positive",
+      "limits": "the fit has one parameter; if the mean of cos^2 theta over the used stars is below 0.05 the speed is not constrained ('perpendicular')"
+    },
+    "distance": {
+      "perStar": "pi_i = K mu_par_i / (V sin theta_i), in mas (mu_par in mas/yr, V in km/s); for a star with sin theta at least 0.1 and mu_par positive",
+      "cluster": "pi_MC = sum(w_i pi_i) / sum(w_i) over the used stars (members with a usable radial velocity or not: the speed needs the radial velocities, the per-star parallax does not; the used stars are the members with sin theta at least 0.1), w_i = 1 / parallax_error_i^2, the weights of 233's clusterParallax. The distance is 1 / pi_MC.",
+      "interval": "a bootstrap of the members (with replacement, the member set fixed, the convergent point and the speed refitted in each replicate, without clipping); B = 400 replicates per synthetic realization and 4000 for the real sample; sigma_MC is half the distance between the 15.865th and 84.135th percentiles of pi_MC (linear interpolation of the sorted replicates); the 95.45 percent interval is the 2.275th to 97.725th percentiles. A replicate with a non-positive speed or fewer than 5 stars is discarded; more than 5 percent discarded refuses ('unstable')."
+    },
+    "membership": {
+      "stage0": "the sample cuts above on all rows; the radial velocity is used only where present with error at most the cut",
+      "seed": "scaled coordinates x = (parallax / 2.0 mas, pmra / 20 mas/yr, pmdec / 20 mas/yr); the kernel density at each star f_i = sum_j exp(-|x_i - x_j|^2 / 2) over all sample stars; mean shift from the star of largest f_i (x <- sum_j K_j x_j / sum_j K_j with K_j = exp(-|x - x_j|^2 / 2)) until the step is below 1e-6 or 100 steps; the seed set is every star with |x_j - x*| at most 2. The seed is the only place a parallax scale enters before the iteration.",
+      "iteration": "from the seed set M_0, for k = 0, 1, ...: (1) fit c on M_k; (2) off_i for every sample star and sigma_off = 1.4826 times the median absolute deviation of off over M_k (floor 0.01 degrees); (3) V by the speed estimator over the members of M_k with a usable radial velocity, stopping with 'no-rv' when fewer than 10 have one (the radial-velocity and magnitude rules below are then not applied); (4) pi_i for every sample star with sin theta at least 0.1; q_i = pi_i / parallax_i (the observed parallax, so no zero-point code enters) and sigma_q = 1.4826 MAD of ln q over M_k (floor 1e-4). M_{k+1} is every sample star with: t_i . u_i positive; |off_i| at most min(3 sigma_off, 6 degrees); |parallax_i / median(parallax over M_k) - 1| at most 0.30; where V is defined and the star has a usable radial velocity, |v_i - V cos theta_i| at most 3 sqrt(rv_error_i^2 + sigma0^2); where V is defined, sin theta at least 0.1 and |ln q_i - median(ln q over M_k)| at most min(3 sigma_q, 0.25). Stop when M_{k+1} = M_k or after 30 steps ('no-convergence' if not converged, a refusal).",
+      "centring": "the magnitude rule is centred on the sample's own median of ln q, not on zero: it truncates scatter about the centre and does not select for agreement with the parallax scale",
+      "members": "the stars of the final M_k; the distance uses those with sin theta at least 0.1"
+    },
+    "refusals": {
+      "noCluster": "fewer than 20 members, or sigma_off above 3 degrees, or the robust scatter 1.4826 MAD of the members' radial-velocity residuals above 3 km/s, or fewer than 5 stars at any step ('no-cluster')",
+      "noRv": "fewer than 10 members with a usable radial velocity: the convergent point is returned and the speed and the distance are null ('no-rv')",
+      "perpendicular": "mean cos^2 theta of the used stars below 0.05: the convergent point is returned, the distance null",
+      "sign": "V not positive",
+      "interval": "sigma_MC / pi_MC above 0.10: not constrained",
+      "noConvergence": "30 steps without a fixed point"
+    },
+    "comparison": {
+      "plx": "233's clusterParallax on the used stars: parallax, parallax_error and the per-star zero point of js/kernels/galactic/zeropoint.js (the synthetic stars carry theirs), systematic 0 (233 states a floor with its source or says it has none: none is stated here, the cap below carries the unmodelled), no clip. pi_plx the weighted mean, sigma_plx its statistical error.",
+      "tolerance": "the leg agree passes when |pi_MC - pi_plx| <= 3 sqrt(sigma_MC^2 + sigma_plx^2) (consistent within the statistics) and |pi_MC - pi_plx| / pi_plx <= 0.03 (an accuracy cap of 3 percent of the parallax, so a wide interval cannot pass a poor method). The 3 percent and the factor 3 are stated choices committed here, not tuned and not published values.",
+      "usefulness": "sigma_MC / pi_MC <= 0.02"
+    },
+    "oracle": {
+      "what": "tools/moving-cluster-oracle/oracle.py: numpy, scipy and astropy only, no Gravitas code, written from the contract above. It receives the sample (the real file by path; the synthetic realizations as pinned input files) and the per-star zero points as data, and recomputes the whole pipeline: seed, iteration, convergent point (numpy.linalg.eigh), speed, per-star and cluster parallax, and a bootstrap with its own generator (numpy default_rng, seed 234004). astropy is used for an independent coordinate check of the sky vectors (SkyCoord) and the Galactic frame, not for the estimator.",
+      "pinnedAs": "oracle-results.json: the oracle's outputs, its versions, the sha256 of its inputs and of the script"
+    }
+  },
+  "verdict": {
+    "rule": "S set = every leg with set 'S'; R set = every leg with set 'R'; each is also in group geo or dist. A: every S leg and every R leg passes (the moving-cluster distance with its interval, compared with 233's parallax distance on the same stars; the isochrone distance, leg R9, and the published comparisons, legs R7 and R8, are NOT RUN and not in either set, and any figure that shows three distances shows two until R9 runs). B: every geo S leg and every geo R leg passes and some dist leg of S or R fails or is NOT RUN (the convergent point and the method's geometry, with no distance anywhere). C: a geo S leg or a geo R leg fails or is NOT RUN (a reading step). A REPORTED leg, a NOT RUN leg without a set, and P1 are never in either set. B never authorizes the A scope.",
+    "applies": ["moving cluster, Hyades"],
+    "partB": "a Part B proceeds only within the verdict and only after Carl goes ahead (consumers rule); its legs (b) a pinned convergent point from a cited independent implementation and (e) the Hyades within the published value's uncertainty need the fetch requests of R7 and R8 to be answered and are not in this gate's verdict."
+  },
+  "checks": [
+    {
+      "id": "A1.cp.exact",
+      "set": "S",
+      "group": "geo",
+      "kind": "analytic",
+      "what": "a noise-free, zero-dispersion cluster of 300 stars (no field, no errors beyond the floor) with the baseline convergent point and speed: the pipeline's convergent point is the truth to 1e-6 degrees, and every member is found",
+      "limits": { "maxCpErrorDeg": 1e-6, "minRecall": 1.0, "realizations": 3 }
+    },
+    {
+      "id": "A2.dist.exact",
+      "set": "S",
+      "group": "dist",
+      "kind": "analytic",
+      "what": "the same noise-free cluster: the speed is the truth to 1e-9 relative, every per-star pi_i is the star's true parallax to 1e-9 relative, and pi_MC equals the weighted true parallax (the comparison's estimand)",
+      "limits": {
+        "maxRelSpeed": 1e-9,
+        "maxRelPerStar": 1e-9,
+        "maxRelCluster": 1e-9,
+        "realizations": 3
+      }
+    },
+    {
+      "id": "A3.hand",
+      "set": "S",
+      "group": "dist",
+      "kind": "analytic",
+      "what": "the closed form by hand: V 40 km/s, theta 30 degrees and mu_par 100 mas/yr give pi = K * 100 / (40 * 0.5) = 23.70235223 mas (K 4.740470446), to 1e-12 relative, through the production function",
+      "limits": {
+        "V": 40,
+        "thetaDeg": 30,
+        "muPar": 100,
+        "expected": 23.70235223,
+        "maxRel": 1e-12
+      }
+    },
+    {
+      "id": "A4.approaching",
+      "set": "S",
+      "group": "dist",
+      "kind": "analytic",
+      "what": "the noise-free cluster whose convergent point is 130 degrees from its centre (cos theta negative, the radial velocities negative): the convergent point has the sign of the motion, V is positive and equals the truth to 1e-9 relative, the per-star parallaxes are exact to 1e-9 and the convergent point is exact to 1e-6 degrees",
+      "limits": {
+        "separationDeg": 130,
+        "maxRel": 1e-9,
+        "maxCpErrorDeg": 1e-6,
+        "realizations": 3
+      }
+    },
+    {
+      "id": "A5.perpendicular",
+      "set": "S",
+      "group": "dist",
+      "kind": "analytic",
+      "what": "the noise-free cluster whose convergent point is 90 degrees from its centre (the radial velocities are about zero): the speed and the distance are 'not constrained' with the reason 'perpendicular' in every realization, and the convergent point is still returned within 1e-6 degrees",
+      "limits": {
+        "separationDeg": 90,
+        "maxCpErrorDeg": 1e-6,
+        "realizations": 3,
+        "minFractionRefused": 1.0
+      }
+    },
+    {
+      "id": "A6.greatCircle",
+      "set": "S",
+      "group": "geo",
+      "kind": "analytic",
+      "what": "a star placed anywhere with its proper motion exactly towards c has an offset of at most 1e-12 radians and a positive t . u; the same star with the proper motion reversed has t . u negative and is not a member; 200 random positions and directions",
+      "limits": { "stars": 200, "maxOffsetRad": 1e-12 }
+    },
+    {
+      "id": "B1.oracle.members.synthetic",
+      "set": "S",
+      "group": "geo",
+      "kind": "oracle",
+      "what": "the independent Python oracle on six pinned synthetic realizations (O1 to O3 baseline, O4 field only, O5 no radial velocities, O6 few members): the member sets are identical (Jaccard 1) and the refusal status and reason agree",
+      "limits": { "realizations": 6, "minJaccard": 1.0 }
+    },
+    {
+      "id": "B2.oracle.cp.synthetic",
+      "set": "S",
+      "group": "geo",
+      "kind": "oracle",
+      "what": "the oracle's convergent point against the production module's on every realization that returns one, to 1e-6 degrees",
+      "limits": { "maxDeg": 1e-6 }
+    },
+    {
+      "id": "B3.oracle.dist.synthetic",
+      "set": "S",
+      "group": "dist",
+      "kind": "oracle",
+      "what": "the oracle's speed, per-star parallaxes and pi_MC against the production module's, 1e-8 relative on each; the oracle's bootstrap sigma_MC (4000 replicates, its own generator) against the production module's (4000 replicates), within 10 percent relative, on the baseline realizations",
+      "limits": { "maxRel": 1e-8, "maxRelSigma": 0.1, "bootstrap": 4000 }
+    },
+    {
+      "id": "C1.membership",
+      "set": "S",
+      "group": "geo",
+      "kind": "coverage",
+      "what": "on E1 (200 realizations) the median recall of the cluster's true members that survive the sample's selection is at least 0.85 and the median purity (true members among the selected) is at least 0.90",
+      "limits": {
+        "realizations": 200,
+        "minMedianRecall": 0.85,
+        "minMedianPurity": 0.9
+      }
+    },
+    {
+      "id": "C2.cp",
+      "set": "S",
+      "group": "geo",
+      "kind": "coverage",
+      "what": "on E1 the median angular error of the convergent point is at most 1.0 degree, its 95th percentile at most 3.0 degrees, and at most 5 percent of realizations are refused",
+      "limits": {
+        "maxMedianDeg": 1.0,
+        "maxP95Deg": 3.0,
+        "maxRefusedFraction": 0.05
+      }
+    },
+    {
+      "id": "C3.coverage68",
+      "set": "S",
+      "group": "dist",
+      "kind": "coverage",
+      "what": "the 68.27 percent bootstrap interval of pi_MC holds pi_true on E1 at a rate in 0.58 to 0.78 (a refused realization counts as not covering; the band is about 3 binomial standard errors of 200 draws about 0.68)",
+      "limits": { "min": 0.58, "max": 0.78 }
+    },
+    {
+      "id": "C4.coverage95",
+      "set": "S",
+      "group": "dist",
+      "kind": "coverage",
+      "what": "the 95.45 percent bootstrap interval holds pi_true on E1 at a rate in 0.90 to 0.99",
+      "limits": { "min": 0.9, "max": 0.99 }
+    },
+    {
+      "id": "C5.recovery",
+      "set": "S",
+      "group": "dist",
+      "kind": "coverage",
+      "what": "on E1 the median of (pi_MC - pi_true) / sigma_MC is within 0.27 of zero (three standard errors of a median of 200 unit normals) and the median relative bias of pi_MC is within 0.005",
+      "limits": { "maxAbsMedianZ": 0.27, "maxAbsMedianRel": 0.005 }
+    },
+    {
+      "id": "C6.agree",
+      "set": "S",
+      "group": "dist",
+      "kind": "coverage",
+      "what": "the committed tolerance rule (3 sigma combined and 3 percent) between pi_MC and 233's pi_plx on the same stars passes on at least 90 percent of E1 realizations: its false-alarm rate in a world where the two agree",
+      "limits": { "minFraction": 0.9, "nSigma": 3, "cap": 0.03 }
+    },
+    {
+      "id": "C7.useful",
+      "set": "S",
+      "group": "dist",
+      "kind": "coverage",
+      "what": "the median sigma_MC / pi_MC on E1 (non-refused) is at most 0.02: in a world like the stated one the method is useful",
+      "limits": { "maxMedianRel": 0.02 }
+    },
+    {
+      "id": "D1.field",
+      "set": "S",
+      "group": "geo",
+      "kind": "refusal",
+      "what": "E2, a field with no cluster (100 realizations): at least 90 percent return a refusal ('no-cluster' or 'no-convergence'), never a convergent point or a distance",
+      "limits": { "realizations": 100, "minFractionRefused": 0.9 }
+    },
+    {
+      "id": "D2a.noRv.cp",
+      "set": "S",
+      "group": "geo",
+      "kind": "refusal",
+      "what": "E3, the baseline with the radial velocities removed (50 realizations): the convergent point is still returned in at least 90 percent, with a median error of at most 2 degrees and a median recall of at least 0.80",
+      "limits": {
+        "realizations": 50,
+        "minFractionReturned": 0.9,
+        "maxMedianDeg": 2.0,
+        "minMedianRecall": 0.8
+      }
+    },
+    {
+      "id": "D2b.noRv.refusal",
+      "set": "S",
+      "group": "dist",
+      "kind": "refusal",
+      "what": "E3: the speed and the distance are null ('no-rv') in every realization that returns a convergent point",
+      "limits": { "minFractionNull": 1.0 }
+    },
+    {
+      "id": "D3.dispersion",
+      "set": "S",
+      "group": "dist",
+      "kind": "refusal",
+      "what": "E5, an internal sigma of 5 km/s per axis (100 realizations): in at least 90 percent the result is a refusal or the 95.45 percent interval holds pi_true; the method never answers confidently and wrongly",
+      "limits": { "realizations": 100, "minFractionSafe": 0.9 }
+    },
+    {
+      "id": "D4.few",
+      "set": "S",
+      "group": "geo",
+      "kind": "refusal",
+      "what": "E4, a cluster of 15 members (100 realizations): at least 95 percent return a refusal",
+      "limits": { "realizations": 100, "minFractionRefused": 0.95 }
+    },
+    {
+      "id": "D5.expansion",
+      "set": null,
+      "group": "dist",
+      "kind": "refusal",
+      "what": "REPORTED, no band: E6, an isotropic expansion of 0.05 km/s per pc that the model does not have: the median of (pi_MC - pi_true) / sigma_MC, the median relative bias and the 68.27 and 95.45 percent coverage",
+      "limits": { "realizations": 100, "expansion": 0.05 }
+    },
+    {
+      "id": "P1.speed",
+      "set": null,
+      "group": "dist",
+      "kind": "speed",
+      "what": "RECORDED, no band: CPU seconds of one pipeline run on a baseline realization (about 7,000 stars) and of one 4000-replicate bootstrap; not a physics bound",
+      "limits": {}
+    },
+    {
+      "id": "R1.members",
+      "set": "R",
+      "group": "geo",
+      "kind": "authentic",
+      "what": "the Hyades file under the contract: the pipeline converges and is not refused, and at least 30 members have a usable radial velocity",
+      "limits": { "minMembersWithRv": 30 }
+    },
+    {
+      "id": "R2.agree",
+      "set": "R",
+      "group": "dist",
+      "kind": "authentic",
+      "what": "the tolerance rule of the contract between pi_MC and 233's pi_plx on the same stars: |difference| at most 3 sigma combined and at most 3 percent of pi_plx",
+      "limits": { "nSigma": 3, "cap": 0.03 }
+    },
+    {
+      "id": "R3.useful",
+      "set": "R",
+      "group": "dist",
+      "kind": "authentic",
+      "what": "sigma_MC / pi_MC at most 0.02 on the real sample",
+      "limits": { "maxRel": 0.02 }
+    },
+    {
+      "id": "R4.split",
+      "set": "R",
+      "group": "dist",
+      "kind": "authentic",
+      "what": "the final members split into two halves by seeded random assignment (seed 234004, labelled 'halves'): the two halves' pi_MC (each its own bootstrap) differ by at most 3 sqrt(sigma_A^2 + sigma_B^2)",
+      "limits": { "nSigma": 3, "bootstrap": 4000 }
+    },
+    {
+      "id": "R5.cpSplit",
+      "set": "R",
+      "group": "geo",
+      "kind": "authentic",
+      "what": "the same two halves' convergent points are separated by at most 3 sqrt(r_A^2 + r_B^2), r the 68.27th percentile of the angular separation between each bootstrap convergent point and the half's own",
+      "limits": { "nSigma": 3, "bootstrap": 4000 }
+    },
+    {
+      "id": "B4.oracle.members.real",
+      "set": "R",
+      "group": "geo",
+      "kind": "oracle",
+      "what": "the oracle on the real file: the member sets are identical (Jaccard 1) and the status agrees",
+      "limits": { "minJaccard": 1.0 }
+    },
+    {
+      "id": "B5.oracle.cp.real",
+      "set": "R",
+      "group": "geo",
+      "kind": "oracle",
+      "what": "the oracle's convergent point against the production module's on the real file, 1e-6 degrees",
+      "limits": { "maxDeg": 1e-6 }
+    },
+    {
+      "id": "B6.oracle.dist.real",
+      "set": "R",
+      "group": "dist",
+      "kind": "oracle",
+      "what": "the oracle's speed, per-star parallaxes and pi_MC against the production module's on the real file, 1e-8 relative; the bootstrap sigma_MC within 10 percent relative",
+      "limits": { "maxRel": 1e-8, "maxRelSigma": 0.1, "bootstrap": 4000 }
+    },
+    {
+      "id": "R6.rvcut",
+      "set": null,
+      "group": "dist",
+      "kind": "authentic",
+      "what": "REPORTED, no band: the same analysis with the radial-velocity error cut at 1 km/s instead of 3: the member count, the convergent point's separation from the full run's and the relative change of pi_MC",
+      "limits": { "cut": 1.0 }
+    },
+    {
+      "id": "R7.published.cp",
+      "set": null,
+      "group": "geo",
+      "kind": "authentic",
+      "what": "NOT RUN by committed precondition: the pipeline's convergent point against a published convergent point of the Hyades with its uncertainty from a cited independent implementation, pinned as a fixture. The value is not in the repository and is not typed from memory; the exact fetch request is in MOVING_CLUSTER_GATE.md. Not in the verdict; required by Part B (b).",
+      "limits": {}
+    },
+    {
+      "id": "R8.published.distance",
+      "set": null,
+      "group": "dist",
+      "kind": "authentic",
+      "what": "NOT RUN by committed precondition: pi_MC and pi_plx against a published Hyades parallax or moving-cluster distance with its uncertainty and stated method. Not in the repository, not typed from memory; fetch request in MOVING_CLUSTER_GATE.md. Not in the verdict; required by Part B (e).",
+      "limits": {}
+    },
+    {
+      "id": "R9.isochrone",
+      "set": null,
+      "group": "dist",
+      "kind": "authentic",
+      "what": "NOT RUN by committed precondition: the isochrone distance of Prompt 219 for the members. 219's grid is SDSS g and r (MIST) over log age 9.0 to 9.6 and the sample has Gaia G and BP-RP; no band transformation or Gaia-band isochrone set is in the repository, and an age is a published quantity not typed here. Fetch request in MOVING_CLUSTER_GATE.md. Not in the verdict.",
+      "limits": {}
+    }
+  ],
+  "questions": [],
+  "amendments": []
+}
