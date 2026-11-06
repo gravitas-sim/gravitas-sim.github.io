@@ -1,0 +1,49 @@
+{
+ "format": "gravitas.clusters-followup-failed-legs/1",
+ "note": "the follow-up legs that crossed a committed bound; they stay failing, only Carl resets a bound",
+ "legs": [
+  {
+   "id": "C4b.lightCoverageWithDistance",
+   "measured": {
+    "answered": 200,
+    "notAnswered": 0,
+    "cover68": 0.58,
+    "cover95": 0.88,
+    "meanPhotometricTerm": 0.00794,
+    "meanDistanceTerm": 0.008458
+   },
+   "note": ""
+  },
+  {
+   "id": "D3b.contaminationBiasFlag",
+   "measured": {
+    "calibration": {
+     "0.1": {
+      "answered": 100,
+      "meanEstimated": 0.02548,
+      "meanRealized": 0.03392,
+      "ratio": 0.7511
+     },
+     "0.2": {
+      "answered": 100,
+      "meanEstimated": 0.05659,
+      "meanRealized": 0.0873,
+      "ratio": 0.6482
+     },
+     "0.5": {
+      "answered": 100,
+      "meanEstimated": 0.1394,
+      "meanRealized": 0.3568,
+      "ratio": 0.3908
+     }
+    },
+    "biasedWorlds": 114,
+    "flaggedShare": 0.9561,
+    "fineWorlds": 282,
+    "falseFlagShare": 0.03901,
+    "unjudgedMiddle": 204
+   },
+   "note": ""
+  }
+ ]
+}

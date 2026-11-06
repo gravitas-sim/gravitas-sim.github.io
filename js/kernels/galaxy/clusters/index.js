@@ -9,5 +9,6 @@ export * from './geometry.js';
 export * from './mass.js';
 export * from './light.js';
 export * from './morphology.js';
+export * from './followup.js';
 export * from './analyse.js';
 export * from './synthetic.js';

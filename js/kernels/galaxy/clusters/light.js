@@ -25,6 +25,7 @@ export function clusterLight({
   solarAbsMag,
   limitMag,
   missing = null,
+  distanceRelSigma = 0,
   levels = [levelOfSigma(1)],
 }) {
   if (
@@ -67,6 +68,8 @@ export function clusterLight({
     );
   let value = sum;
   let rel = Math.sqrt(var2) / sum;
+  const photometricRelSigma = rel;
+  if (distanceRelSigma > 0) rel = Math.hypot(rel, distanceRelSigma);
   if (missing) {
     if (
       !(missing.fraction >= 0 && missing.fraction < 1) ||
@@ -86,6 +89,7 @@ export function clusterLight({
     solar: value,
     sumSolar: sum,
     relSigma: rel,
+    terms: { photometric: photometricRelSigma, distance: distanceRelSigma },
     used,
     skippedNoMagnitude: skipped,
     fainterThanLimit: faintCut,

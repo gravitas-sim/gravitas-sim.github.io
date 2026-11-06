@@ -38,6 +38,13 @@ import {
   separation,
 } from './geometry.js';
 import { clusterLight, massToLight } from './light.js';
+import {
+  biasFlagThreshold,
+  clusterRedshiftSigma,
+  distanceRelSigma,
+  expectedBias,
+  overdensityTest,
+} from './followup.js';
 import { baryonBudget, checkFactor, virialMass } from './mass.js';
 import { localDensities, morphologyDensity } from './morphology.js';
 import { median, restVelocity, sigmaClip } from './velocity.js';
@@ -67,6 +74,8 @@ export function analyseCluster(o) {
     radiusKind = 'half-number',
     redshiftWindow = null,
     velocityExtentKms = null,
+    contaminationRule = 'share',
+    requireOverdensity = false,
   } = o;
 
   const cosmo = cosmologyOf(o.cosmology);
@@ -89,6 +98,8 @@ export function analyseCluster(o) {
     );
   if (!centre || !Number.isFinite(centre.ra) || !Number.isFinite(centre.dec))
     return refused('bad-centre', 'the centre needs ra and dec in degrees');
+  if (contaminationRule !== 'share' && contaminationRule !== 'bias')
+    return refused('bad-contamination-rule', "the rule is 'share' or 'bias'");
   if (method === 'biweight') {
     if (
       !tuning ||
@@ -229,7 +240,31 @@ export function analyseCluster(o) {
     extentKms: velocityExtentKms ?? 0,
     members: members.length,
   });
-  if (cont.status === 'ok' && cont.flag) flags.push('contaminated');
+  const nMembers = members.length;
+  const biasEstimate =
+    cont.status === 'ok'
+      ? {
+          expectedBias: expectedBias(cont.expectedInside, nMembers, kappa),
+          threshold: biasFlagThreshold(nMembers),
+        }
+      : null;
+  if (biasEstimate)
+    biasEstimate.flag = biasEstimate.expectedBias > biasEstimate.threshold;
+  if (contaminationRule === 'bias') {
+    if (biasEstimate?.flag) flags.push('contaminated-bias');
+  } else if (cont.status === 'ok' && cont.flag) flags.push('contaminated');
+  const overdensity = overdensityTest({
+    nIn: nMembers,
+    nPre: select.length,
+    halfWidthKms: kappa * sUsed,
+    extentKms: velocityExtentKms,
+  });
+  if (requireOverdensity && overdensity.status === 'ok' && overdensity.refuse)
+    return notConstrained(
+      'no-overdensity',
+      'the window is no fuller than a field uniform in velocity would make it',
+      { overdensity, count: nMembers, dropped }
+    );
 
   const sky = members.map(g => ({ ra: g.ra, dec: g.dec }));
   const radius = projectedRadius({
@@ -270,7 +305,12 @@ export function analyseCluster(o) {
       intervals: dispIntervals,
       kappa,
     },
-    diagnostics: { gaussianity: kurt, contamination: cont },
+    diagnostics: {
+      gaussianity: kurt,
+      contamination: cont,
+      contaminationBias: biasEstimate,
+      overdensity,
+    },
     flags,
     claimable: flags.length === 0,
     radius,
@@ -284,6 +324,13 @@ export function analyseCluster(o) {
       solarAbsMag: o.light.solarAbsMag,
       limitMag: o.light.limitMag,
       missing: o.light.missing ?? null,
+      distanceRelSigma: o.light.distanceTerm
+        ? distanceRelSigma(
+            cosmo,
+            zc,
+            clusterRedshiftSigma(members.map(g => g.z))
+          )
+        : 0,
       levels,
     });
     out.light = light;

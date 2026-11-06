@@ -1,0 +1,208 @@
+{
+ "format": "gravitas.clusters-followup-results/1",
+ "node": "v22.23.4",
+ "rows": [
+  {
+   "id": "A15.distanceTermClosed",
+   "status": "pass",
+   "measured": {
+    "dlnClosed": 0,
+    "dlnVsDifference": 3.4911306109070985e-11,
+    "distanceRelSigma": 2.1446741858105144e-16,
+    "optionOffExact": true,
+    "optionOffPhotometric": 2.2187081931048584e-16,
+    "sigmaZc": 0,
+    "pipelineOk": true
+   },
+   "note": ""
+  },
+  {
+   "id": "A16.expectedBiasClosed",
+   "status": "pass",
+   "measured": {
+    "worst": 0,
+    "atKappa3": 0,
+    "threshold": 0,
+    "above": true,
+    "below": true,
+    "shareRule": true
+   },
+   "note": ""
+  },
+  {
+   "id": "A17.overdensityClosed",
+   "status": "pass",
+   "measured": {
+    "worstTail": 4.926614671774132e-16,
+    "boundary": true,
+    "mu": [
+     12.3,
+     100
+    ],
+    "tails": [
+     3.132048715570869e-10,
+     0.5132987982791896
+    ],
+    "unknown": true,
+    "fieldOk": true
+   },
+   "note": ""
+  },
+  {
+   "id": "B6.followupOracle",
+   "status": "pass",
+   "measured": {
+    "redshifts": 12,
+    "worstDlnRel": 4.215002978440561e-9,
+    "pairs": 20,
+    "worstPoissonAbs": 4.085620730620576e-14
+   },
+   "note": ""
+  },
+  {
+   "id": "C4b.lightCoverageWithDistance",
+   "status": "fail",
+   "measured": {
+    "answered": 200,
+    "notAnswered": 0,
+    "cover68": 0.58,
+    "cover95": 0.88,
+    "meanPhotometricTerm": 0.00794,
+    "meanDistanceTerm": 0.008458
+   },
+   "note": ""
+  },
+  {
+   "id": "D3b.contaminationBiasFlag",
+   "status": "fail",
+   "measured": {
+    "calibration": {
+     "0.1": {
+      "answered": 100,
+      "meanEstimated": 0.02548,
+      "meanRealized": 0.03392,
+      "ratio": 0.7511
+     },
+     "0.2": {
+      "answered": 100,
+      "meanEstimated": 0.05659,
+      "meanRealized": 0.0873,
+      "ratio": 0.6482
+     },
+     "0.5": {
+      "answered": 100,
+      "meanEstimated": 0.1394,
+      "meanRealized": 0.3568,
+      "ratio": 0.3908
+     }
+    },
+    "biasedWorlds": 114,
+    "flaggedShare": 0.9561,
+    "fineWorlds": 282,
+    "falseFlagShare": 0.03901,
+    "unjudgedMiddle": 204
+   },
+   "note": ""
+  },
+  {
+   "id": "R6b.fieldRefusal",
+   "status": "pass",
+   "measured": {
+    "fieldRefused": 100,
+    "cleanAnswered": 400,
+    "cleanWorlds": 400,
+    "optionOffFieldAnswered": 100
+   },
+   "note": ""
+  },
+  {
+   "id": "R11.overdensityOnWeakClusters",
+   "status": "reported",
+   "measured": {
+    "refusedByMemberCount": {
+     "40-80": "0 of 126",
+     "80-160": "0 of 123",
+     "160-300": "0 of 151"
+    },
+    "largestTail": 0.000001403,
+    "smallestTail": 1.4355459683283251e-130
+   },
+   "note": "what a weak cluster costs under the test"
+  },
+  {
+   "id": "X1.oldLegsUnchanged",
+   "status": "pass",
+   "measured": {
+    "rows": 42,
+    "differences": [],
+    "failing": [
+     "C1b.dispersionBootstrapCoverage",
+     "C4.lightCoverage",
+     "D3.contaminationFlag"
+    ]
+   },
+   "note": ""
+  },
+  {
+   "id": "R9.solarMassDisplayed",
+   "status": "reported",
+   "measured": {
+    "treeOverAstropy_minus1": 0.00029678453655113124
+   },
+   "note": "displayed solar-mass figures keep the tree value; the difference is stated"
+  },
+  {
+   "id": "R10.interlopersBiasLadder",
+   "status": "reported",
+   "measured": {
+    "0": {
+     "answered": 100,
+     "meanRealizedBias": 0.004266,
+     "meanEstimatedBias": 0.001131,
+     "flaggedByBiasRule": 0,
+     "flaggedByShareRule": 0
+    },
+    "0.02": {
+     "answered": 100,
+     "meanRealizedBias": 0.0013,
+     "meanEstimatedBias": 0.006222,
+     "flaggedByBiasRule": 0,
+     "flaggedByShareRule": 0
+    },
+    "0.05": {
+     "answered": 100,
+     "meanRealizedBias": 0.008094,
+     "meanEstimatedBias": 0.01294,
+     "flaggedByBiasRule": 0.02,
+     "flaggedByShareRule": 0
+    },
+    "0.1": {
+     "answered": 100,
+     "meanRealizedBias": 0.03392,
+     "meanEstimatedBias": 0.02548,
+     "flaggedByBiasRule": 0.29,
+     "flaggedByShareRule": 0
+    },
+    "0.2": {
+     "answered": 100,
+     "meanRealizedBias": 0.0873,
+     "meanEstimatedBias": 0.05659,
+     "flaggedByBiasRule": 0.87,
+     "flaggedByShareRule": 0.05
+    },
+    "0.5": {
+     "answered": 100,
+     "meanRealizedBias": 0.3568,
+     "meanEstimatedBias": 0.1394,
+     "flaggedByBiasRule": 0.96,
+     "flaggedByShareRule": 0.72
+    }
+   },
+   "note": "the realized bias, the estimate and the two flags per interloper fraction"
+  }
+ ],
+ "gate": {
+  "followupVerdict": "B",
+  "consumers": "unmet whatever the verdict (Carl, 2026-11-06, question 1)"
+ }
+}
