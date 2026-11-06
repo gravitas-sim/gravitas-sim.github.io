@@ -1393,6 +1393,13 @@
       "purpose": "The time-domain closeout (Prompt 246): what 239 to 245 landed, what a student can do today, each closeout item done, not applicable or blocked, the cohesion record.",
       "owner": 246,
       "student": false
+    },
+    {
+      "file": "GALACTIC_CLOSEOUT.md",
+      "kind": "record",
+      "purpose": "The Galactic closeout (Prompt 238): what 233 to 237 landed, the two Gaia investigations checked, the package change, each closeout item done, not applicable or blocked, the cohesion record.",
+      "owner": 238,
+      "student": false
     }
   ]
 }
