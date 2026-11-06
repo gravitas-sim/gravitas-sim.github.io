@@ -1094,6 +1094,13 @@
       "student": false
     },
     {
+      "file": "MOVING_CLUSTER_GATE.md",
+      "kind": "gate",
+      "purpose": "Moving-cluster gate: the Hyades convergent-point method, its committed bounds, synthetic coverage, failed legs; committed verdict C, amended form B, no distance (Prompt 234 Part A).",
+      "owner": 234,
+      "student": false
+    },
+    {
       "file": "KINEMATICS_GATE.md",
       "kind": "gate",
       "purpose": "Galactic kinematics gate: four methods on the Gaia and SEGUE packs with the selection stated, the committed bounds, the failed legs, verdict C for all four (Prompt 235 Part A).",
