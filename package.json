@@ -28,6 +28,7 @@
     "agn:validate": "node tools/agn-validate.mjs",
     "agn:followup": "node tools/agn-followup-validate.mjs",
     "lensing2:validate": "node tools/lensing2-validate.mjs",
+    "cosmology2:validate": "node tools/cosmology2-validate.mjs",
     "morphology:validate": "node tools/morphology-validate.mjs",
     "clusters:validate": "node tools/clusters-validate.mjs",
     "clusters:followup": "node tools/clusters-followup-validate.mjs",

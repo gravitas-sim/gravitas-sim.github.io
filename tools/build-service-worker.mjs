@@ -572,6 +572,9 @@ export const NEVER_PRECACHED = [
   // Prompt 251: the enclosed-mass extension of the lensing kernel (distances from redshifts, the mass inside an Einstein radius, image inversions, the arc fit and the
   // mass bracket) and its validation group. Nothing shipped imports them and js/kernels/lensing/index.js does not re-export them (D-R10-251-01), so no page can fetch one.
   /^(js\/kernels\/lensing\/enclosed\/.*|js\/validation\/groups\/lensing2\.js)$/,
+  // Prompt 255: the late-time FLRW kernel (radiation, w, closed universes, the transition, the domain refusals, degeneracy contours) and its validation group.
+  // Nothing shipped imports them and js/kernels/cosmology/index.js does not re-export them (D-R10-255-01), so no page can fetch one.
+  /^(js\/kernels\/cosmology\/late\/.*|js\/validation\/groups\/cosmology2\.js)$/,
   // Prompt 214: the strategy kernel, planner extension, panels and the strategy lesson's one new file (D-R10-214-06).
   /^js\/kernels\/strategy\//,
   /^js\/data\/investigations\/(es\/|depth\/|depth\/es\/)?(why-the-period-is-wrong|strategy-sequence)\.js$/,

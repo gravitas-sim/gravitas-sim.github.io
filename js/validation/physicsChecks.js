@@ -106,6 +106,7 @@ const GROUPS = [
   () => import('./groups/morphology.js'),
   () => import('./groups/galaxyclusters.js'),
   () => import('./groups/agn.js'),
+  () => import('./groups/cosmology2.js'),
 ];
 
 /**

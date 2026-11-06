@@ -1,0 +1,71 @@
+{
+ "format": "gravitas.cosmology2-failed-legs/1",
+ "note": "the legs that crossed a committed bound; they stay failing, only Carl resets a bound",
+ "legs": [
+  {
+   "id": "A7.matterOnlyNotFlat",
+   "measured": {
+    "worstRelLuminosity": 2.83e-13,
+    "worstRelAge": 2,
+    "worstRelAgePerOm": {
+     "2": 2.23e-16,
+     "3": 4.96e-16,
+     "0.1": 2,
+     "0.3": 2,
+     "0.7": 2,
+     "1.2": 0,
+     "1.5": 8.32e-16
+    },
+    "diagnosticOpenFormNegated": 3.57e-16,
+    "existingKernelRefusesClosed": true
+   },
+   "note": ""
+  },
+  {
+   "id": "B1.astropyTenSets",
+   "measured": {
+    "worstPerQuantity": {
+     "E": 2e-16,
+     "Dc": 4.08e-14,
+     "Dm": 4.08e-14,
+     "Dl": 4.08e-14,
+     "Da": 4.08e-14,
+     "mu": 8.53e-14,
+     "lookback": 4.59e-15,
+     "ageAtZ": 4.99e-7,
+     "age0": 1.78e-14
+    },
+    "quantitiesOverBound": [
+     "ageAtZ"
+    ],
+    "rowsCompared": 70,
+    "antipodeMismatch": 0
+   },
+   "note": ""
+  },
+  {
+   "id": "B3.oracleAgreesWithItself",
+   "measured": {
+    "worstRel": 4.99e-7,
+    "rowsOverBound": 3,
+    "quantitiesOverBound": [
+     "ageAtZ"
+    ],
+    "firstRows": [
+     "S2 z=1100 ageAtZ",
+     "S9 z=1100 ageAtZ",
+     "S10 z=1100 ageAtZ"
+    ]
+   },
+   "note": ""
+  },
+  {
+   "id": "F3.hubbleScaling",
+   "measured": {
+    "dLnDdLnH0": -0.99999996,
+    "worstRelH0ClosedForm": 2.17e-16
+   },
+   "note": ""
+  }
+ ]
+}

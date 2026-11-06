@@ -1,0 +1,433 @@
+{
+ "format": "gravitas.cosmology2-results/1",
+ "rows": [
+  {
+   "id": "A1.einsteinDeSitter",
+   "status": "pass",
+   "measured": {
+    "worstRel": 2.6e-14,
+    "worstRelEAndQ": 1.57e-16,
+    "closureExact": true,
+    "cases": 189
+   },
+   "note": ""
+  },
+  {
+   "id": "A2.emptyUniverse",
+   "status": "pass",
+   "measured": {
+    "worstRel": 5.34e-15,
+    "worstAbsQ": 0,
+    "transitionReasonOk": true,
+    "cases": 189
+   },
+   "note": ""
+  },
+  {
+   "id": "A3.deSitter",
+   "status": "pass",
+   "measured": {
+    "worstRel": 7.99e-16,
+    "worstAbsQ": 0,
+    "ageRefused": true
+   },
+   "note": ""
+  },
+  {
+   "id": "A4.radiationOnly",
+   "status": "pass",
+   "measured": {
+    "worstRel": 1.07e-14,
+    "worstRelQ": 0
+   },
+   "note": ""
+  },
+  {
+   "id": "A5.wOneThirdIsCurvature",
+   "status": "pass",
+   "measured": {
+    "worstRelE": 0,
+    "worstRelDc": 1.62e-15,
+    "worstRelDm": 1.77e-15,
+    "worstRelQ": 3.27e-16
+   },
+   "note": ""
+  },
+  {
+   "id": "A6.flatLambdaClosedForms",
+   "status": "pass",
+   "measured": {
+    "worstRel": 1.34e-15,
+    "worstRelQ": 0,
+    "worstRelTransition": 0,
+    "worstAbsQAtTransition": 8.22e-17
+   },
+   "note": ""
+  },
+  {
+   "id": "A7.matterOnlyNotFlat",
+   "status": "fail",
+   "measured": {
+    "worstRelLuminosity": 2.83e-13,
+    "worstRelAge": 2,
+    "worstRelAgePerOm": {
+     "2": 2.23e-16,
+     "3": 4.96e-16,
+     "0.1": 2,
+     "0.3": 2,
+     "0.7": 2,
+     "1.2": 0,
+     "1.5": 8.32e-16
+    },
+    "diagnosticOpenFormNegated": 3.57e-16,
+    "existingKernelRefusesClosed": true
+   },
+   "note": ""
+  },
+  {
+   "id": "A8.identities",
+   "status": "pass",
+   "measured": {
+    "worstAbsE0": 1.11e-16,
+    "worstAbsClosure": 1.11e-16,
+    "worstRelDistanceIdentity": 1.74e-16,
+    "worstAbsMu": 7.11e-15,
+    "worstAbsFractions": 2.22e-16,
+    "worstRelAgeSplit": 5.17e-15,
+    "monotone": true,
+    "quantityEqualsMethodToTheBit": true,
+    "repeatedCallsIdentical": true,
+    "frozenInputUnchanged": true
+   },
+   "note": ""
+  },
+  {
+   "id": "A9.existingKernelAgrees",
+   "status": "pass",
+   "measured": {
+    "worstRel": 3.46e-16,
+    "worstAbsMu": 0,
+    "existingRefusesClosed": true,
+    "lateAcceptsClosed": true
+   },
+   "note": ""
+  },
+  {
+   "id": "B1.astropyTenSets",
+   "status": "fail",
+   "measured": {
+    "worstPerQuantity": {
+     "E": 2e-16,
+     "Dc": 4.08e-14,
+     "Dm": 4.08e-14,
+     "Dl": 4.08e-14,
+     "Da": 4.08e-14,
+     "mu": 8.53e-14,
+     "lookback": 4.59e-15,
+     "ageAtZ": 4.99e-7,
+     "age0": 1.78e-14
+    },
+    "quantitiesOverBound": [
+     "ageAtZ"
+    ],
+    "rowsCompared": 70,
+    "antipodeMismatch": 0
+   },
+   "note": ""
+  },
+  {
+   "id": "B2.independentQuadrature",
+   "status": "pass",
+   "measured": {
+    "worstPerQuantity": {
+     "E": 2e-16,
+     "Dc": 4.04e-16,
+     "Dm": 4.04e-16,
+     "Dl": 3.89e-16,
+     "Da": 4.24e-16,
+     "mu": 7.11e-15,
+     "lookback": 5.83e-16,
+     "ageAtZ": 8.32e-15,
+     "age0": 3.57e-16
+    },
+    "rowsCompared": 70,
+    "antipodeMismatch": 0
+   },
+   "note": ""
+  },
+  {
+   "id": "B3.oracleAgreesWithItself",
+   "status": "fail",
+   "measured": {
+    "worstRel": 4.99e-7,
+    "rowsOverBound": 3,
+    "quantitiesOverBound": [
+     "ageAtZ"
+    ],
+    "firstRows": [
+     "S2 z=1100 ageAtZ",
+     "S9 z=1100 ageAtZ",
+     "S10 z=1100 ageAtZ"
+    ]
+   },
+   "note": ""
+  },
+  {
+   "id": "B4.decelerationAndTransition",
+   "status": "pass",
+   "measured": {
+    "worstAbsQ": 6.11e-16,
+    "worstAbsTransition": 1.11e-15,
+    "nullVerdictsMatch": true
+   },
+   "note": ""
+  },
+  {
+   "id": "B5.errorEstimateCovers",
+   "status": "pass",
+   "measured": {
+    "values": 290,
+    "covered": 290,
+    "coverage": 1,
+    "allErrorsFiniteNonnegative": true,
+    "firstMisses": []
+   },
+   "note": ""
+  },
+  {
+   "id": "B6.publishedTable",
+   "status": "not-run",
+   "measured": null,
+   "note": "tests/fixtures/cosmology2/authentic/published-table.json was not supplied (COSMOLOGY_II.md, Files requested from Carl); nothing was fetched and no table was typed"
+  },
+  {
+   "id": "C1.seededEnsemble",
+   "status": "pass",
+   "measured": {
+    "draws": 400,
+    "acceptedByOracle": 295,
+    "values": 2642,
+    "worstRel": 1.07e-13,
+    "coverage": 1,
+    "allFinite": true,
+    "unexpectedRefusals": 0
+   },
+   "note": ""
+  },
+  {
+   "id": "D1.bounceRefused",
+   "status": "pass",
+   "measured": {
+    "results": [
+     "bounce",
+     "bounce",
+     "bounce",
+     "accepted",
+     "accepted"
+    ]
+   },
+   "note": ""
+  },
+  {
+   "id": "D2.densitiesRefused",
+   "status": "pass",
+   "measured": {
+    "results": [
+     "negative-density",
+     "negative-density",
+     "negative-density",
+     "density-out-of-domain",
+     "density-out-of-domain",
+     "density-out-of-domain"
+    ]
+   },
+   "note": ""
+  },
+  {
+   "id": "D3.wAndH0Refused",
+   "status": "pass",
+   "measured": {
+    "results": [
+     "w-out-of-domain",
+     "w-out-of-domain",
+     "w-out-of-domain",
+     "w-out-of-domain",
+     "accepted",
+     "accepted",
+     "bad-H0",
+     "bad-H0",
+     "bad-H0",
+     "bad-argument"
+    ]
+   },
+   "note": ""
+  },
+  {
+   "id": "D4.redshiftAndAntipode",
+   "status": "pass",
+   "measured": {
+    "zRefusals": [
+     "z-out-of-domain",
+     "z-out-of-domain",
+     "z-out-of-domain",
+     "z-out-of-domain"
+    ],
+    "antipodeInside": true,
+    "antipodeBeyond": "beyond-antipode",
+    "flatAt1e4Accepted": true
+   },
+   "note": ""
+  },
+  {
+   "id": "D5.domainAgreesWithOracle",
+   "status": "pass",
+   "measured": {
+    "draws": 400,
+    "excludedMargin": 0,
+    "acceptedByBoth": 295,
+    "refusedByBoth": 105,
+    "disagreements": 0,
+    "firstDisagreements": [],
+    "antipodeDisagreements": 0
+   },
+   "note": ""
+  },
+  {
+   "id": "D6.ageUnbounded",
+   "status": "pass",
+   "measured": {
+    "ageCode": "age-unbounded",
+    "ageAtCode": "age-unbounded",
+    "distancesStillAvailable": true,
+    "ageWithMatter": 13.467
+   },
+   "note": ""
+  },
+  {
+   "id": "D7.refusalsAreExplained",
+   "status": "pass",
+   "measured": {
+    "refusalsChecked": 150,
+    "badRefusals": 0,
+    "ensembleOutputsFinite": true,
+    "distinctCodes": [
+     "age-unbounded",
+     "bad-H0",
+     "bad-argument",
+     "beyond-antipode",
+     "bounce",
+     "density-out-of-domain",
+     "negative-density",
+     "not-finite",
+     "w-out-of-domain",
+     "z-out-of-domain"
+    ]
+   },
+   "note": ""
+  },
+  {
+   "id": "F1.contoursReproduceTheDistance",
+   "status": "pass",
+   "measured": {
+    "worstRelTarget": 4.21e-16,
+    "worstOracleDiffOverRange": 3.11e-15,
+    "pointsInRange": true,
+    "everyGridValueAccounted": true,
+    "skipped": {
+     "flatOmW": [],
+     "openOmOde": [
+      "14:no-root"
+     ],
+     "hubbleOm": []
+    }
+   },
+   "note": ""
+  },
+  {
+   "id": "F2.directionAgreesWithOracle",
+   "status": "pass",
+   "measured": {
+    "worstRelSlope": 3.47e-8,
+    "worstRelGradient": 4e-8,
+    "worstAbsPerpendicular": 0
+   },
+   "note": ""
+  },
+  {
+   "id": "F3.hubbleScaling",
+   "status": "fail",
+   "measured": {
+    "dLnDdLnH0": -0.99999996,
+    "worstRelH0ClosedForm": 2.17e-16
+   },
+   "note": ""
+  },
+  {
+   "id": "F4.contourSkips",
+   "status": "pass",
+   "measured": {
+    "skipRefusalsPoints": 12,
+    "skipRefusalsSkipped": 0,
+    "unreachablePoints": 0,
+    "unreachableSkipped": 5,
+    "skipMatchesOracle": true
+   },
+   "note": ""
+  },
+  {
+   "id": "R1.cpuTime",
+   "status": "reported",
+   "measured": {
+    "validationCpuSeconds": 14.1,
+    "msPerConstructionAndDistance": 2.34,
+    "msPerAge": 0.277
+   },
+   "note": "wall time on this machine; no bound committed"
+  }
+ ],
+ "gate": {
+  "kernelVerdict": "C",
+  "distancesTimesAges": "not claimable",
+  "ensembleAndContours": "not claimable",
+  "productVerdict": "NOT ESTABLISHED (B6 NOT RUN: no authentic file was supplied)",
+  "consumers": "unmet (the consumers rule holds: no panel, lesson or model-page section is built; the product verdict is not A)",
+  "legs": {
+   "A1": "pass",
+   "A2": "pass",
+   "A3": "pass",
+   "A4": "pass",
+   "A5": "pass",
+   "A6": "pass",
+   "A7": "fail",
+   "A8": "pass",
+   "A9": "pass",
+   "B1": "fail",
+   "B2": "pass",
+   "B3": "fail",
+   "B4": "pass",
+   "B5": "pass",
+   "D1": "pass",
+   "D2": "pass",
+   "D3": "pass",
+   "D4": "pass",
+   "D6": "pass",
+   "D7": "pass",
+   "C1": "pass",
+   "D5": "pass",
+   "F1": "pass",
+   "F2": "pass",
+   "F3": "fail",
+   "F4": "pass",
+   "B6": "not-run"
+  }
+ },
+ "meta": {
+  "node": "v22.23.4",
+  "oracle": {
+   "python": "3.9.6",
+   "numpy": "1.26.4",
+   "scipy": "1.13.1",
+   "astropy": "6.0.1"
+  }
+ }
+}

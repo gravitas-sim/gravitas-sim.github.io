@@ -81,7 +81,9 @@ export function distanceContour({ base, z, quantity, x, y, target }) {
   linspace(x.min, x.max, x.n).forEach((xv, index) => {
     const f = yv => {
       try {
-        return quantityAt(base, { [x.name]: xv, [y.name]: yv }, z, quantity) - tgt;
+        return (
+          quantityAt(base, { [x.name]: xv, [y.name]: yv }, z, quantity) - tgt
+        );
       } catch (e) {
         if (e instanceof FriedmannDomainError) return null;
         throw e;
@@ -121,7 +123,9 @@ export function distanceContour({ base, z, quantity, x, y, target }) {
       skipped.push({ index, x: xv, code: 'no-root' });
       return;
     }
-    points.push(changes > 1 ? { x: xv, y: root, multipleRoots: true } : { x: xv, y: root });
+    points.push(
+      changes > 1 ? { x: xv, y: root, multipleRoots: true } : { x: xv, y: root }
+    );
   });
   return { target: tgt, points, skipped };
 }
@@ -141,13 +145,19 @@ export function degeneracyDirection({ base, z, quantity, x, y, at }) {
     const f = t =>
       quantityAt(base, { [name]: t, [other]: otherValue }, z, quantity);
     return (
-      (-f(value + 2 * h) + 8 * f(value + h) - 8 * f(value - h) + f(value - 2 * h)) /
+      (-f(value + 2 * h) +
+        8 * f(value + h) -
+        8 * f(value - h) +
+        f(value - 2 * h)) /
       (12 * h)
     );
   };
   const dx = grad(x, px, y, py);
   const dy = grad(y, py, x, px);
-  if (dy === 0) bad('the quantity does not depend on the second axis here: no degeneracy direction');
+  if (dy === 0)
+    bad(
+      'the quantity does not depend on the second axis here: no degeneracy direction'
+    );
   const n = Math.hypot(dx, dy);
   let t = { x: -dy / n, y: dx / n };
   if (t.x < 0) t = { x: -t.x, y: -t.y };

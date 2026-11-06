@@ -96,7 +96,10 @@ function integrate(f, lo, hi) {
 /** Validate a parameter set and return the normalized one; throws FriedmannDomainError. */
 export function checkParameters(params) {
   if (params === null || typeof params !== 'object')
-    refuse('bad-argument', 'the parameters must be an object {H0, Om, Or, Ode, w}');
+    refuse(
+      'bad-argument',
+      'the parameters must be an object {H0, Om, Or, Ode, w}'
+    );
   const { H0, Om } = params;
   if (typeof H0 !== 'number' || typeof Om !== 'number')
     refuse('bad-argument', 'H0 and Om are required numbers');
@@ -112,7 +115,10 @@ export function checkParameters(params) {
     ['w', w],
   ])
     if (typeof v !== 'number' || !Number.isFinite(v))
-      refuse('not-finite', `${name} must be a finite number`);
+      refuse(
+        'not-finite',
+        `${name} must be a finite number, but it is ${String(v)}: the Friedmann equation is not defined for it`
+      );
   if (!(H0 > DOMAIN.H0[0] && H0 <= DOMAIN.H0[1]))
     refuse(
       'bad-H0',
@@ -166,7 +172,8 @@ export function checkParameters(params) {
   if (best > 0) {
     // refine the minimum between its neighbours by golden section in ln a
     let lo = l0 * ((SCAN_POINTS - Math.max(bestI - 1, 0)) / SCAN_POINTS);
-    let hi = l0 * ((SCAN_POINTS - Math.min(bestI + 1, SCAN_POINTS)) / SCAN_POINTS);
+    let hi =
+      l0 * ((SCAN_POINTS - Math.min(bestI + 1, SCAN_POINTS)) / SCAN_POINTS);
     if (lo > hi) [lo, hi] = [hi, lo];
     const g = (Math.sqrt(5) - 1) / 2;
     let c = hi - g * (hi - lo);
@@ -217,8 +224,10 @@ export function createFriedmann(params) {
   const E = z => Math.sqrt(E2(1 + z));
 
   // ln(1 + z) integrals
-  const chi = z => integrate(u => Math.exp(u) / Math.sqrt(E2(Math.exp(u))), 0, Math.log1p(z));
-  const look = z => integrate(u => 1 / Math.sqrt(E2(Math.exp(u))), 0, Math.log1p(z));
+  const chi = z =>
+    integrate(u => Math.exp(u) / Math.sqrt(E2(Math.exp(u))), 0, Math.log1p(z));
+  const look = z =>
+    integrate(u => 1 / Math.sqrt(E2(Math.exp(u))), 0, Math.log1p(z));
 
   // the leading small-a term of F: smallest exponent with a positive coefficient
   const lead = [
@@ -286,7 +295,10 @@ export function createFriedmann(params) {
       name === 'modulus'
     ) {
       if (name === 'modulus' && z === 0)
-        refuse('z-out-of-domain', 'the distance modulus is undefined at z = 0 (D_L = 0)');
+        refuse(
+          'z-out-of-domain',
+          'the distance modulus is undefined at z = 0 (D_L = 0)'
+        );
       const c = z === 0 ? { value: 0, error: 0 } : chi(z);
       const geo = geometry(c.value);
       const dm = dh * geo.m;
