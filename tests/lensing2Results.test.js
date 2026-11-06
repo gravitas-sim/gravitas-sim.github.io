@@ -92,8 +92,8 @@ describe('the committed legs and their pinned results', () => {
     expect(RESULTS.gate.kernelVerdict).toBe(
       ok(G.coverageLegs) && ok(G.refusalCoverage) ? 'A' : 'B'
     );
-    expect(RESULTS.gate.partB.verdict).toBe('none');
-    expect(GATE.verdicts.current).toMatch(/^no verdict/);
+    expect(RESULTS.gate.partB.verdict).toBe('C');
+    expect(GATE.verdicts.current).toMatch(/^C by the committed function/);
   });
   test('the thresholds record their amendments with the reason and the time, and no bound moved', () => {
     expect(THR.amendments.map(a => a.id)).toEqual(['AM1', 'AM2']);
@@ -101,7 +101,7 @@ describe('the committed legs and their pinned results', () => {
       expect(a.when).toMatch(/before any validator run/);
       expect(a.boundMoved).toBe(false);
     }
-    expect(GATE.amendments).toEqual([]);
+    expect(GATE.amendments.map(a => a.id)).toEqual(['AM1', 'AM2', 'AM3']);
   });
   test('the committed rule forbids typing published numbers and fetching', () => {
     expect(THR.rule).toMatch(/from memory/);

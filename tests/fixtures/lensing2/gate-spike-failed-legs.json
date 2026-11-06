@@ -1,0 +1,51 @@
+{
+ "format": "gravitas.lensing2-gate-spike-failed-legs/1",
+ "note": "the Part B spike legs that crossed a committed bound; they stay failing, only Carl resets a bound",
+ "legs": [
+  {
+   "id": "G3.sheetImagesInvariant",
+   "measured": {
+    "worstAbsPositionInThetaE": 2.33e-16,
+    "worstRelFluxRatioVsClosedForms": 3.63e-16,
+    "worstRelFluxRatioVsOraclesNumericalJacobian": 1.66e-07,
+    "worstRelIndividualMagnificationVsOracle": 1.56e-07,
+    "cases": 9
+   },
+   "note": ""
+  },
+  {
+   "id": "G7.finiteSourceFitCoverage",
+   "measured": {
+    "events": 200,
+    "returnedValue": 56,
+    "coverage68": 0.2857,
+    "coverage95": 0.4464,
+    "upperLimitOnly": 144,
+    "eventsWhereTheProfileMinimumIsAboveTheOraclesFitByMoreThan1": 36,
+    "upperLimitCoverageReported": 0.9861,
+    "agreementWithOracleWithin10PercentReported": "53 of 56",
+    "byClass": {
+     "near": {
+      "n": 100,
+      "value": 54
+     },
+     "far": {
+      "n": 100,
+      "value": 2
+     }
+    }
+   },
+   "note": ""
+  },
+  {
+   "id": "G8.blendedBaselineDegeneracy",
+   "measured": {
+    "events": 100,
+    "flaggedBlendDegenerate": 98,
+    "withTERange": 95,
+    "truthInIntervalReported": 0.96
+   },
+   "note": ""
+  }
+ ]
+}

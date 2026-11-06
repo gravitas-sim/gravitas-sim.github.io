@@ -905,7 +905,7 @@ export async function runValidation({ only = [], authDir = AUTH_DIR } = {}) {
     if (wanted(c.id.split('.')[0] + '.'))
       notRun(
         c.id,
-        'the prototype belongs on a spike branch that is never merged (7.5 rule 4) and does not exist; LENSING_DELAYS_GATE.md'
+        'not run by this validator: the prototype lives on spike/lensing-delays-gate, which is never merged; the recorded result is tests/fixtures/lensing2/gate-spike-results.json (LENSING_DELAYS_GATE.md)'
       );
   for (const [id, file] of [
     ['G6', 'delay.json'],
@@ -938,6 +938,22 @@ export async function runValidation({ only = [], authDir = AUTH_DIR } = {}) {
   return rows;
 }
 
+/** The Part B state: the spike's recorded verdict when its results file is present, plus the merged-code legs. */
+function spikeSummary(st) {
+  const file = path.join(ROOT, DIR, 'gate-spike-results.json');
+  const merged = { P0: st('P0'), P1: st('P1'), P2: st('P2') };
+  if (!existsSync(file))
+    return { verdict: 'none', why: 'no spike result is recorded', mergedCodeLegs: merged };
+  const spike = JSON.parse(readFileSync(file, 'utf8'));
+  return {
+    verdict: spike.verdict.verdict,
+    source: `tests/fixtures/lensing2/gate-spike-results.json (spike/lensing-delays-gate, ${spike.spike.commit})`,
+    legs: Object.fromEntries(spike.rows.map(r => [r.id.split('.')[0], r.status])),
+    mergedCodeLegs: merged,
+    note: 'the verdict is the committed function of the spike rows; G6 and G9 have no data, so A is unreachable',
+  };
+}
+
 /** The kernel verdict and the Part B state, computed from the rows by the functions committed in the thresholds. */
 export function gateFrom(rows) {
   const G = THRESHOLDS.gate.verdictFunction.kernelLegGroups;
@@ -945,7 +961,6 @@ export function gateFrom(rows) {
   const ok = list => list.every(p => st(p) === 'pass');
   const core = ok(G.closedLegs) && ok(G.oracleLegs) && ok(G.refusalCore);
   const cov = ok(G.coverageLegs) && ok(G.refusalCoverage);
-  const run = id => st(id) === 'pass';
   return {
     kernelVerdict: core ? (cov ? 'A' : 'B') : 'C',
     enclosedMassClosedForms: core ? 'claimable' : 'not claimable',
@@ -953,14 +968,7 @@ export function gateFrom(rows) {
     productVerdict:
       'NOT ESTABLISHED (B6, E1, E2 and E3 NOT RUN: no authentic file and no cited tool output was supplied)',
     consumers: 'unmet (no consumers rule; nothing visible is built)',
-    partB: {
-      verdict: 'none',
-      why: 'G1 to G5, G7 and G8 are NOT RUN (no prototype), G6 and G9 have no data; P0 to P2 test merged code only and decide nothing',
-      mergedCodeLegs: { P0: st('P0'), P1: st('P1'), P2: st('P2') },
-      reachable: run('P0')
-        ? 'at most B, and only after the prototype legs are run'
-        : 'not reachable until P0 is repaired',
-    },
+    partB: spikeSummary(st),
   };
 }
 

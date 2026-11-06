@@ -1,0 +1,248 @@
+{
+ "format": "gravitas-lensing2-gate-spike/1",
+ "spike": {
+  "branch": "spike/lensing-delays-gate",
+  "commit": "432f4068c503465f4fc30439f1632c8406a9d276",
+  "node": "v22.23.4"
+ },
+ "rows": [
+  {
+   "id": "G1.sisDelayFermat",
+   "status": "pass",
+   "measured": {
+    "worstRel": 1.06e-14,
+    "roundedParsecWorstRel": 1.59e-10,
+    "worstRelVsClosedForm": 2.16e-16,
+    "cases": 3
+   },
+   "note": ""
+  },
+  {
+   "id": "G2.pointDelayFermat",
+   "status": "pass",
+   "measured": {
+    "worstRelVsOracle": 1.42e-15,
+    "worstRelVsPointTimeDelay": 1.57e-15,
+    "cases": 8
+   },
+   "note": ""
+  },
+  {
+   "id": "G3.sheetImagesInvariant",
+   "status": "fail",
+   "measured": {
+    "worstAbsPositionInThetaE": 2.33e-16,
+    "worstRelFluxRatioVsClosedForms": 3.63e-16,
+    "worstRelFluxRatioVsOraclesNumericalJacobian": 1.66e-07,
+    "worstRelIndividualMagnificationVsOracle": 1.56e-07,
+    "cases": 9
+   },
+   "note": ""
+  },
+  {
+   "id": "G4.sheetDelayScales",
+   "status": "pass",
+   "measured": {
+    "worstRelDelayRatioVsLambda": 5.79e-16,
+    "worstRelDelayVsOracle": 1.13e-14,
+    "roundedParsecWorstRelDelayVsOracle": 1.59e-10,
+    "worstRelH0VsOracle": 1.23e-14,
+    "worstRelH0VsTrueOverLambda": 1.11e-14,
+    "cases": 9
+   },
+   "note": ""
+  },
+  {
+   "id": "G5.hubbleRefusalAndCoverage",
+   "status": "pass",
+   "measured": {
+    "worlds": 400,
+    "refusedWithoutKappa": 400,
+    "coverage68": 0.7,
+    "coverage95": 0.9675,
+    "widerThanDelayAlone": 400
+   },
+   "note": ""
+  },
+  {
+   "id": "G6.publishedDelay",
+   "status": "not-run",
+   "measured": null,
+   "note": "tests/fixtures/lensing2/authentic/delay.json was not supplied; nothing was fetched"
+  },
+  {
+   "id": "G7.finiteSourceFitCoverage",
+   "status": "fail",
+   "measured": {
+    "events": 200,
+    "returnedValue": 56,
+    "coverage68": 0.2857,
+    "coverage95": 0.4464,
+    "upperLimitOnly": 144,
+    "eventsWhereTheProfileMinimumIsAboveTheOraclesFitByMoreThan1": 36,
+    "upperLimitCoverageReported": 0.9861,
+    "agreementWithOracleWithin10PercentReported": "53 of 56",
+    "byClass": {
+     "near": {
+      "n": 100,
+      "value": 54
+     },
+     "far": {
+      "n": 100,
+      "value": 2
+     }
+    }
+   },
+   "note": ""
+  },
+  {
+   "id": "G8.blendedBaselineDegeneracy",
+   "status": "fail",
+   "measured": {
+    "events": 100,
+    "flaggedBlendDegenerate": 98,
+    "withTERange": 95,
+    "truthInIntervalReported": 0.96
+   },
+   "note": ""
+  },
+  {
+   "id": "G9.authenticEvent",
+   "status": "not-run",
+   "measured": null,
+   "note": "tests/fixtures/lensing2/authentic/event.json was not supplied; nothing was fetched"
+  }
+ ],
+ "verdict": {
+  "verdict": "C",
+  "bDelay": false,
+  "bFinite": false,
+  "aNeedsG6AndG9": true
+ },
+ "cpuSeconds": 3530,
+ "run1": {
+  "note": "The first run, commit cc08c7bd1626377096a820a9ed5146931e82b1f6. G7 and G8 failed there partly from a prototype optimiser defect: the profile fits over rho and the blend were stuck above the oracle chi-square, so intervals were spuriously narrow (29 of 53 value-returning G7 fits agreed with the oracle, against 53 of 56 in the second run). The optimiser was repaired (warm and rho-scaled cold starts, a descending pass) with no bound or amendment changed and the legs re-run; this first run stays on record. Its G3 row measured the flux ratio against the oracle numerical Jacobian only (1.66e-7); the second run reports the closed-form comparison beside it.",
+  "spike": {
+   "branch": "spike/lensing-delays-gate",
+   "commit": "cc08c7bd1626377096a820a9ed5146931e82b1f6"
+  },
+  "rows": [
+   {
+    "id": "G1.sisDelayFermat",
+    "status": "pass",
+    "measured": {
+     "worstRel": 1.06e-14,
+     "roundedParsecWorstRel": 1.59e-10,
+     "worstRelVsClosedForm": 2.16e-16,
+     "cases": 3
+    },
+    "note": ""
+   },
+   {
+    "id": "G2.pointDelayFermat",
+    "status": "pass",
+    "measured": {
+     "worstRelVsOracle": 1.42e-15,
+     "worstRelVsPointTimeDelay": 1.57e-15,
+     "cases": 8
+    },
+    "note": ""
+   },
+   {
+    "id": "G3.sheetImagesInvariant",
+    "status": "fail",
+    "measured": {
+     "worstAbsPositionInThetaE": 2.33e-16,
+     "worstRelFluxRatio": 1.66e-07,
+     "worstRelIndividualMagnificationVsOracle": 1.56e-07,
+     "cases": 9
+    },
+    "note": ""
+   },
+   {
+    "id": "G4.sheetDelayScales",
+    "status": "pass",
+    "measured": {
+     "worstRelDelayRatioVsLambda": 5.79e-16,
+     "worstRelDelayVsOracle": 1.13e-14,
+     "roundedParsecWorstRelDelayVsOracle": 1.59e-10,
+     "worstRelH0VsOracle": 1.23e-14,
+     "worstRelH0VsTrueOverLambda": 1.11e-14,
+     "cases": 9
+    },
+    "note": ""
+   },
+   {
+    "id": "G5.hubbleRefusalAndCoverage",
+    "status": "pass",
+    "measured": {
+     "worlds": 400,
+     "refusedWithoutKappa": 400,
+     "coverage68": 0.7,
+     "coverage95": 0.9675,
+     "widerThanDelayAlone": 400
+    },
+    "note": ""
+   },
+   {
+    "id": "G6.publishedDelay",
+    "status": "not-run",
+    "measured": null,
+    "note": "tests/fixtures/lensing2/authentic/delay.json was not supplied; nothing was fetched"
+   },
+   {
+    "id": "G7.finiteSourceFitCoverage",
+    "status": "fail",
+    "measured": {
+     "events": 200,
+     "returnedValue": 53,
+     "coverage68": 0.1887,
+     "coverage95": 0.2264,
+     "upperLimitOnly": 147,
+     "upperLimitCoverageReported": 0.9728,
+     "agreementWithOracleWithin10PercentReported": "29 of 53",
+     "byClass": {
+      "near": {
+       "n": 100,
+       "value": 52
+      },
+      "far": {
+       "n": 100,
+       "value": 1
+      }
+     }
+    },
+    "note": ""
+   },
+   {
+    "id": "G8.blendedBaselineDegeneracy",
+    "status": "fail",
+    "measured": {
+     "events": 100,
+     "flaggedBlendDegenerate": 99,
+     "withTERange": 78,
+     "truthInIntervalReported": 0.79
+    },
+    "note": ""
+   },
+   {
+    "id": "G9.authenticEvent",
+    "status": "not-run",
+    "measured": null,
+    "note": "tests/fixtures/lensing2/authentic/event.json was not supplied; nothing was fetched"
+   }
+  ],
+  "verdict": {
+   "verdict": "C",
+   "bDelay": false,
+   "bFinite": false,
+   "aNeedsG6AndG9": true
+  },
+  "cpuSeconds": 801
+ },
+ "readings": {
+  "G8": "The runner required every event flagged blend-degenerate (98) to carry a tE range (95), a rule stricter than the committed sentence and AM3, which count events returned blend-degenerate with a tE range: 95 of 100 = 0.95, above the 0.9 bound. The row is recorded as the run produced it (fail) and is not re-run or re-labelled after the result; the literal reading is a pass and does not change the verdict (C), since G3 and G7 fail. Which reading is the record is a question for Carl.",
+  "G3": "G1 to G5 are exact to 1e-14 or better against the closed forms; G3 fails against the oracle only, because the oracle pins its magnifications by finite differences (about 1e-7 noise), so the committed 1e-9 on that comparison cannot be met by any code. The kernel agrees with the closed forms to 3.6e-16. The leg stays failing.",
+  "G7": "The profile minimum is still above the oracle scipy fit by more than 1 in chi-square for 36 of 200 events, so the prototype optimiser is not yet the oracle one; the coverage 0.286 and 0.446 are against the committed bands [0.610, 0.750] and [0.917, 0.983]. Far events (u0 above 3 rho) return a value in 2 of 100 cases, as the leg requires of unconstrained rho."
+ }
+}
