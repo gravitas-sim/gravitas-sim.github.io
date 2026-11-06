@@ -465,6 +465,25 @@
           "text": "The Galactic closeout (Prompt 238)"
         }
       ]
+    },
+    {
+      "id": "cosmology-investigations-recomputed",
+      "claim": "The numbers the four cosmology investigations ask a student for are recomputed from the project's own Hubble-law, expansion-diagram and redshift-wedge instruments over the cosmology kernel, each step's grader accepts the recomputed value, and the sentences the steps write about those numbers are true.",
+      "scope": "The Expanding Universe, Standard Candles, The Shape of Expansion and Where Galaxies Live, in the English text; the Spanish follows the English step for step by a machine check; the data are Hubble's 1929 table, two supernova Hubble diagrams, an SDSS redshift strip and the Coma values the scenario quotes, as their packs record them.",
+      "version": "2.1.0",
+      "class": "V-internal",
+      "status": "established",
+      "method": "tests/cosmologyInvestigations.test.js recomputes every figure a step states through the instruments' own views and feeds it to the step's validator, and recomputes the depth steps' expected values",
+      "evaluator": "the project",
+      "artifact": "tests/cosmologyInvestigations.test.js",
+      "limitations": "Internal validation against the project's own cosmology kernel; the Where Galaxies Live clustering ratio carries no interval and its upper depth does not state the statistic's limits (EXTRAGALACTIC_CLOSEOUT.md); the strip's thinning is selection by the flux limit and is not corrected; the Spanish has not been read by a fluent reader; no student has used the investigations; no external scientist has reviewed them (D-R10-253-04).",
+      "date": "2026-11-06",
+      "anchors": [
+        {
+          "file": "CHANGELOG.md",
+          "text": "The extragalactic closeout (Prompt 253)"
+        }
+      ]
     }
   ]
 }
