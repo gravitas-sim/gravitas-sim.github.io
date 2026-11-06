@@ -33,7 +33,7 @@ stays failing and labelled; only Carl resets a bound.
 | Prompt | Landed as | Student-facing | Legs: pass / fail / reported / not run | Failed and not-run legs, by id | Verdict |
 | --- | --- | --- | --- | --- | --- |
 | 233 Gaia workflows | Part A #511 (kernel, packs 1.1.0); Part B #516 | two investigations, two panels, a model-page section; the NGC 2420 text in Cluster Membership by Motion corrected | 23 / 0 / 3 / 1 | not run: E1 (NGC 2420 against a published, Gaia-based catalog distance) | none; the lessons state the distance with its labels (E1 NOT RUN, no systematic floor) |
-| 234 Moving groups | not run | none | not applicable | no branch, pull request or register row exists | not applicable |
+| 234 Moving groups | not run when this closeout was written; the gate ran afterwards (#545, follow-up #546; MOVING_CLUSTER_GATE.md) | none | not applicable | at the time: no branch, pull request or register row existed; since then the gate's committed form returned C and its follow-up C, and Part B was not run | **C** (committed form and follow-up); no panel, no distance |
 | 235 Kinematics gate | #520, follow-up #522; the Oort correction #521 | the Rotating Disk's corrected Oort values (#521) | 39 / 23 / 4 / 0 | 23 failing (the planar Oort form, the Oort recovery and coverage legs, the dispersion legs, the Toomre classification, the drift legs, each with its amendment-form twin) | **C for all four methods** (Oort, dispersions by metallicity, Toomre, drift); Part B does not run |
 | 236 Rotation-curve decomposition | Part A #523 | none | 21 / 4 / 2 / 1 | fail A3, A5, C3, D4; not run E2 (published ranges not supplied) | no gate verdict; the consumers rule is unmet (four legs fail); Part B deferred, no sample (D-R10-236-90) |
 | 237 Stellar dynamics | part 1 #518 | none | 25 / 4 / 0 / 1 | fail C1, C2, R2, R7; not run B1 (the Harris table was not supplied) | **C** by the committed rule (R2 fails); the analytic lessons stand but are not built |
@@ -99,7 +99,7 @@ set of sequences (a new one is a deliberate change to a test that names nine). C
   does to it" (English and Spanish, the Spanish unreviewed by a fluent reader like the rest of the package).
 - **A reading step**, `not-yet-the-galaxy-as-a-whole`: Astronomy 2e chapter 25, "The Milky Way Galaxy" (CC BY 4.0, the same citation the
   other packages use), whose student note says what has no investigation and that the chapter is the reading for the whole Galaxy, and
-  whose teacher note gives each missing item's reason as recorded (moving groups never run; the four kinematic methods verdict C; the
+  whose teacher note gives each missing item's reason as recorded (moving groups never run, as written then, and since package 1.5.0 the gate's C and the unrun Part B; the four kinematic methods verdict C; the
   decomposition's failing legs and no panel; a satellite falling in waiting on a gate that returned C; 21-cm with no authentic data; the
   center, the arms and the history with no catalog or map fetched under a rights decision). The chapter is named by its title only; no claim
   is made about which sections cover which topic.
