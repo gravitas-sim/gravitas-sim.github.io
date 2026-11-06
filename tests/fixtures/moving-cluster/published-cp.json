@@ -1,0 +1,55 @@
+{
+  "format": "gravitas.moving-cluster-published-cp/1",
+  "retrieved": "2026-11-06",
+  "retrievedBy": "Carl's session, from arXiv (outside every repository, in his scratch-data folder gaia234/pub, with published.json whose sha256 is 7cbcc2159ec6b949b3e043d7c6c1b11e76e2b9741cec87f252df6295a4186570); untrusted data, read and transcribed as printed, nothing fetched by the session that wrote this file",
+  "checked": "every number below was checked against the text extracted beside the PDF (astro-ph_9707253.txt, Section 6 and Table 3; 1811.03845.txt, Introduction); none was typed from memory",
+  "source": {
+    "paper": "Perryman et al. 1998, A&A 331, 81: The Hyades: distance, structure, dynamics, and age",
+    "identifier": "arXiv:astro-ph/9707253v1",
+    "sha256": "924ec0c8be983608c9a1c5eebac65a7edae1d4e711f6ae744916cb332e71f670",
+    "where": "Section 6, the paragraph after the iteration of the centre of mass (\"The resulting value of the space velocity in equatorial coordinates (ICRS) is ...\"); speeds from Table 3"
+  },
+  "method": "Hipparcos astrometry (epoch J1991.25, ICRS) with ground-based radial velocities; centre of mass and mass motion of the members, iterated; this is the cluster space velocity, whose direction is the convergent point",
+  "independence": "a Hipparcos result with a different member set and a different method: independent of Gaia and of this gate code",
+  "values": [
+    {
+      "selection": "members within r < 10 pc of the cluster centre",
+      "stars": 134,
+      "convergentPoint_deg": {
+        "alpha": 97.91,
+        "delta": 6.66
+      },
+      "spaceVelocityEquatorial_km_s": [
+        -6.28,
+        45.19,
+        5.31
+      ],
+      "speed_km_s": {
+        "value": 45.93,
+        "uncertainty": 0.23,
+        "where": "Table 3"
+      }
+    },
+    {
+      "selection": "members within r < 20 pc of the cluster centre",
+      "stars": 180,
+      "convergentPoint_deg": {
+        "alpha": 97.96,
+        "delta": 6.61
+      },
+      "spaceVelocityEquatorial_km_s": [
+        -6.32,
+        45.24,
+        5.3
+      ],
+      "speed_km_s": {
+        "value": 45.98,
+        "uncertainty": 0.2,
+        "where": "Table 3"
+      }
+    }
+  ],
+  "uncertainty": null,
+  "uncertaintyNote": "the convergent point has NO printed uncertainty in the passage read (the space velocity components have none printed there either); this file states none and the gate rule RK7 is written for that",
+  "primaryRule": "the 134-star determination (r < 10 pc, the one the paper adopts as the reference) is the compared value of RK7; the 180-star one is REPORTED"
+}

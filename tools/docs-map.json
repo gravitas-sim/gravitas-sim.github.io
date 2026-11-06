@@ -1096,7 +1096,7 @@
     {
       "file": "MOVING_CLUSTER_GATE.md",
       "kind": "gate",
-      "purpose": "Moving-cluster gate: the Hyades convergent-point method, its committed bounds, synthetic coverage, failed legs; committed verdict C, amended form B, no distance (Prompt 234 Part A).",
+      "purpose": "Moving-cluster gate: Hyades convergent point and bounds, failed legs; verdict C (amended B); follow-up corrected-estimator and published-value legs (verdict C); no distance (Prompt 234).",
       "owner": 234,
       "student": false
     },

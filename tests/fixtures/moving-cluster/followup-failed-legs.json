@@ -1,0 +1,63 @@
+{
+  "format": "gravitas.moving-cluster-followup-failed-legs/1",
+  "note": "Every failing follow-up leg, labelled and left failing. Only Carl resets a bound.",
+  "shas": {
+    "thresholds": "0aa46799dfbcb83a4b3281d0f5d9bcdc3fc7aeebcc6c230477984b37d264a491",
+    "followupThresholds": "2723d77eb8c6c07363f0651254694903db61c1bf66000bf83b41f0f0d6de14f2",
+    "publishedCp": "8f1c812b1ccb3bb518ae4b0ffb5e1a603a33fce28a1f2db0d8095a5da4bea931",
+    "publishedDistance": "4fb827963092a2665d056dc777b11ad11b05accf4f77d64a84b1649552b5f745"
+  },
+  "legs": [
+    {
+      "id": "K4.cp",
+      "label": "FAILED (follow-up)",
+      "measured": {
+        "medianDeg": 0.169,
+        "p95Deg": 0.5044,
+        "refusedFraction": 0.06,
+        "plainMedianDeg": 0.3736,
+        "medianTauDeg": 0.6401,
+        "maxCeIterations": 5
+      },
+      "note": ""
+    },
+    {
+      "id": "K11.dispersion1",
+      "label": "FAILED (follow-up)",
+      "measured": {
+        "coverage68": 0.245,
+        "coverage95": 0.395,
+        "medianZ": 0.9465,
+        "medianRelBias": 0.02095,
+        "ok": 117,
+        "of": 200,
+        "statuses": {
+          "refused:ce-no-convergence": 9,
+          "ok": 117,
+          "cp-only:unstable": 20,
+          "refused:no-convergence": 29,
+          "refused:no-cluster": 25
+        }
+      },
+      "note": ""
+    },
+    {
+      "id": "K12.separation60",
+      "label": "FAILED (follow-up)",
+      "measured": {
+        "coverage68": 0.635,
+        "coverage95": 0.85,
+        "medianZ": -0.0212,
+        "medianRelBias": -0.0003553,
+        "ok": 178,
+        "of": 200,
+        "statuses": {
+          "ok": 178,
+          "refused:no-convergence": 12,
+          "refused:no-cluster": 10
+        }
+      },
+      "note": ""
+    }
+  ]
+}

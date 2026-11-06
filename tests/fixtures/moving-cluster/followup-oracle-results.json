@@ -1,0 +1,151 @@
+{
+  "format": "gravitas.moving-cluster-followup-oracle-results/1",
+  "note": "The independent oracle (tools/moving-cluster-oracle/oracle_ce.py on spike/moving-cluster-followup, numpy, no Gravitas code) of the CE estimator. The real file moving-cluster parallax and its bootstrap error are withheld: the gate reports no distance below a ratified verdict A; the relative agreements are in followup-results.json.",
+  "versions": {
+    "python": "3.9.22",
+    "numpy": "1.26.4",
+    "scipy": "1.13.1",
+    "astropy": "6.0.1"
+  },
+  "bootstrap": {
+    "B": 4000,
+    "generator": "numpy.random.default_rng(seed), seeds {\"cases\": 234102, \"real\": 234103}"
+  },
+  "script": {
+    "path": "tools/moving-cluster-oracle/oracle_ce.py",
+    "sha256": "26795074fb9ef98b439a862c0bbc07381ffe1c5449f733477ee8d3af74262575"
+  },
+  "synthetic": {
+    "sha256": "9e03554698419410b7a8e34133b3c107a289f14a722506387b2cd8829402eab6",
+    "thresholdsSha256": "0aa46799dfbcb83a4b3281d0f5d9bcdc3fc7aeebcc6c230477984b37d264a491",
+    "followupSha256": "2723d77eb8c6c07363f0651254694903db61c1bf66000bf83b41f0f0d6de14f2"
+  },
+  "cases": [
+    {
+      "id": "O1",
+      "status": "ok",
+      "reason": null,
+      "nMembers": 292,
+      "membersSha256": "273faf8a1b0f148427d31ff6d885037a07bb762307fbe80611d612110ebaffcc",
+      "cp": [
+        -0.1731441338931118,
+        0.9848960820239728,
+        -0.0009036106637927421
+      ],
+      "tau2": 0.00010310243487138931,
+      "iterations": 5,
+      "V": 44.75214433394193,
+      "piMC": 20.131798498259396,
+      "sigmaMC": 0.22681185381813052,
+      "perStarSha256": "f4c39b05ffc8483a23df322f42ccbe028c7ac4b8ab17fe2390a27e3488ee079f"
+    },
+    {
+      "id": "O2",
+      "status": "ok",
+      "reason": null,
+      "nMembers": 302,
+      "membersSha256": "f695bee26de52397f901c0dc9c2232da1896ddd2bc7526d92638fd6714e32c08",
+      "cp": [
+        -0.1811319424368626,
+        0.9834484601683567,
+        -0.004510612102254563
+      ],
+      "tau2": 0.00012424035639524544,
+      "iterations": 5,
+      "V": 45.14410067563496,
+      "piMC": 19.47232613500351,
+      "sigmaMC": 0.23210940114215184,
+      "perStarSha256": "567a222471a9a0e05f9c5fd201c552baa9b12dc45d00c9f966abee6278b0f4e4"
+    },
+    {
+      "id": "O3",
+      "status": "ok",
+      "reason": null,
+      "nMembers": 303,
+      "membersSha256": "b7108283d962003832caaab8240e55801af74f221fe618a95c57189413b540bf",
+      "cp": [
+        -0.1759243784914311,
+        0.984401785650565,
+        -0.0019332512466334606
+      ],
+      "tau2": 0.000140107195691527,
+      "iterations": 5,
+      "V": 45.15110429629956,
+      "piMC": 19.955325896341687,
+      "sigmaMC": 0.25262901451445074,
+      "perStarSha256": "013d03545d21c5f143a9f343001b886a74be93c355e53077b94a1bec2946d97b"
+    },
+    {
+      "id": "O4",
+      "status": "refused",
+      "reason": "ce-no-convergence",
+      "nMembers": 430,
+      "membersSha256": "cd9374275faa7adabc1f171a5088f3e355ee9aa64c53fe13f1f420618d071246",
+      "cp": null,
+      "tau2": null,
+      "iterations": 100,
+      "V": null,
+      "piMC": null,
+      "sigmaMC": null,
+      "perStarSha256": null
+    },
+    {
+      "id": "O5",
+      "status": "ok",
+      "reason": null,
+      "nMembers": 296,
+      "membersSha256": "954c3fc34a6cdabef9513f9f55d2a1481ab7a3d97e9fa83a9d7f0973d66b1ef7",
+      "cp": [
+        -0.5136889038072175,
+        0.8373246218442801,
+        -0.18711276749242045
+      ],
+      "tau2": 0.00012140845302018839,
+      "iterations": 5,
+      "V": 45.74456436537887,
+      "piMC": 19.489941947233845,
+      "sigmaMC": 0.3469083093748342,
+      "perStarSha256": "eeb42eec266abdf4acd42e3c655cf9ecbd6b6c1c1b2dd87c0afe6eceeb32ca90"
+    },
+    {
+      "id": "O6",
+      "status": "cp-only",
+      "reason": "no-rv",
+      "nMembers": 305,
+      "membersSha256": "99b005a671889c562785394764871d5be2033033c388e50341046b8197849ea4",
+      "cp": [
+        -0.1714973616235186,
+        0.9851823984477348,
+        0.002072859122208115
+      ],
+      "tau2": 0.00011933563462065297,
+      "iterations": 5,
+      "V": null,
+      "piMC": null,
+      "sigmaMC": null,
+      "perStarSha256": null
+    }
+  ],
+  "real": {
+    "sha256": "5e3c8ab9b56a16def4495c669667b33aada8d856262ab64a812b23c5914290f6",
+    "maskSha256": "cf22688e497f4de495e68ab591bde5bb1f36a853aba11aa4c6c956e119682d7a",
+    "ce": {
+      "id": "real",
+      "status": "ok",
+      "reason": null,
+      "nMembers": 497,
+      "membersSha256": "5908d02ffa1f1f124ea31b76f494156e1a8508cb51f13b8b02fc7087e2ce2d56",
+      "cp": [
+        -0.12457080662060502,
+        0.9846118273125786,
+        0.1225628967268505
+      ],
+      "tau2": 0.00005457773854241179,
+      "iterations": 5,
+      "V": 46.338578881805816,
+      "piMC": null,
+      "sigmaMC": null,
+      "perStarSha256": "6161c5da5ad99dd515e842029dc444e501a9255108cc36f3a73012975ccede4a"
+    }
+  }
+}

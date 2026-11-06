@@ -1,0 +1,500 @@
+{
+  "format": "gravitas.moving-cluster-followup-results/1",
+  "note": "The follow-up legs of Prompt 234 Part A (corrected-eigenvector convergent point CE; published-value legs RK7 and RK8). The membership iteration is the amended form of Part A used without ratifying it; the committed form verdict C binds.",
+  "shas": {
+    "thresholds": "0aa46799dfbcb83a4b3281d0f5d9bcdc3fc7aeebcc6c230477984b37d264a491",
+    "followupThresholds": "2723d77eb8c6c07363f0651254694903db61c1bf66000bf83b41f0f0d6de14f2",
+    "publishedCp": "8f1c812b1ccb3bb518ae4b0ffb5e1a603a33fce28a1f2db0d8095a5da4bea931",
+    "publishedDistance": "4fb827963092a2665d056dc777b11ad11b05accf4f77d64a84b1649552b5f745"
+  },
+  "node": "v22.23.4",
+  "spike": {
+    "commit": "c39f57529f78b9863cd86cfad756001be7b62cbb",
+    "clean": true
+  },
+  "date": "2026-11-06T14:05:30.824Z",
+  "elapsedS": 849.708,
+  "verdict": {
+    "verdict": "C",
+    "geoFailing": [
+      "K4.cp"
+    ],
+    "distFailing": [
+      "K11.dispersion1",
+      "K12.separation60"
+    ]
+  },
+  "counts": {
+    "pass": 19,
+    "fail": 3,
+    "reported": 7,
+    "not-run": 1,
+    "rows": 30
+  },
+  "real": {
+    "info": {
+      "sha256": "5e3c8ab9b56a16def4495c669667b33aada8d856262ab64a812b23c5914290f6",
+      "stars": 3856
+    },
+    "status": "ok",
+    "members": 497,
+    "cp": {
+      "ra": 97.2106,
+      "dec": 7.04004
+    },
+    "V": 46.34,
+    "memberDigest": "8e964f16074d283e8799bc7c6c5e3719b222f161cbc153c36984977b3a59aa09",
+    "ratio": 1.0103206669266405,
+    "sigmaMCRel": 0.008027208380094474,
+    "published": {
+      "sep10": 0.791581959840025,
+      "r": 0.0796420568197347,
+      "f": 1.2364595741967987,
+      "T": 1.2593323602422155
+    },
+    "bs": {
+      "B": 4000,
+      "discarded": 0
+    },
+    "oracle": {
+      "perStarSha256": "6161c5da5ad99dd515e842029dc444e501a9255108cc36f3a73012975ccede4a"
+    }
+  },
+  "rows": [
+    {
+      "id": "K1.exact",
+      "status": "pass",
+      "measured": {
+        "maxCpErrDeg": 6.584e-14,
+        "maxCeVsPlainDeg": 0,
+        "maxTau2": 4.705e-32,
+        "maxRel": 4.219e-15,
+        "status": [
+          "ok",
+          "ok",
+          "ok"
+        ]
+      },
+      "note": ""
+    },
+    {
+      "id": "K2.hand",
+      "status": "pass",
+      "measured": {
+        "a_relative": 2.22e-16,
+        "b_tau2Relative": 4.441e-16,
+        "c_ceVsPlainRad": 0,
+        "c_tau2": 5.315e-33,
+        "d_matrixRelative": 7.805e-21
+      },
+      "note": ""
+    },
+    {
+      "id": "K4.cp",
+      "status": "fail",
+      "measured": {
+        "medianDeg": 0.169,
+        "p95Deg": 0.5044,
+        "refusedFraction": 0.06,
+        "plainMedianDeg": 0.3736,
+        "medianTauDeg": 0.6401,
+        "maxCeIterations": 5
+      },
+      "note": ""
+    },
+    {
+      "id": "K5.coverage68",
+      "status": "pass",
+      "measured": {
+        "coverage": 0.72,
+        "ok": 188,
+        "of": 200,
+        "statuses": {
+          "ok": 188,
+          "refused:no-convergence": 12
+        }
+      },
+      "note": ""
+    },
+    {
+      "id": "K6.coverage95",
+      "status": "pass",
+      "measured": {
+        "coverage": 0.925,
+        "ok": 188,
+        "of": 200,
+        "statuses": {
+          "ok": 188,
+          "refused:no-convergence": 12
+        }
+      },
+      "note": ""
+    },
+    {
+      "id": "K7.recovery",
+      "status": "pass",
+      "measured": {
+        "medianZ": -0.158,
+        "medianRelBias": -0.002023,
+        "n": 188
+      },
+      "note": ""
+    },
+    {
+      "id": "K8.agree",
+      "status": "pass",
+      "measured": {
+        "fractionAgree": 0.94
+      },
+      "note": ""
+    },
+    {
+      "id": "K9.useful",
+      "status": "pass",
+      "measured": {
+        "medianSigmaRel": 0.01244,
+        "n": 188
+      },
+      "note": ""
+    },
+    {
+      "id": "K13.report.plain",
+      "status": "reported",
+      "measured": {
+        "n": 188,
+        "medianZ": 0.7162,
+        "medianRelBias": 0.009124,
+        "coverage68": 0.57,
+        "coverage95": 0.845,
+        "note": "the plain eigenvector estimator on the same members and realizations as K4 to K9"
+      },
+      "note": ""
+    },
+    {
+      "id": "K11.dispersion1",
+      "status": "fail",
+      "measured": {
+        "coverage68": 0.245,
+        "coverage95": 0.395,
+        "medianZ": 0.9465,
+        "medianRelBias": 0.02095,
+        "ok": 117,
+        "of": 200,
+        "statuses": {
+          "refused:ce-no-convergence": 9,
+          "ok": 117,
+          "cp-only:unstable": 20,
+          "refused:no-convergence": 29,
+          "refused:no-cluster": 25
+        }
+      },
+      "note": ""
+    },
+    {
+      "id": "K12.separation60",
+      "status": "fail",
+      "measured": {
+        "coverage68": 0.635,
+        "coverage95": 0.85,
+        "medianZ": -0.0212,
+        "medianRelBias": -0.0003553,
+        "ok": 178,
+        "of": 200,
+        "statuses": {
+          "ok": 178,
+          "refused:no-convergence": 12,
+          "refused:no-cluster": 10
+        }
+      },
+      "note": ""
+    },
+    {
+      "id": "K10.noRv.cp",
+      "status": "pass",
+      "measured": {
+        "fractionReturned": 0.96,
+        "medianDeg": 0.2248,
+        "plainMedianDeg": 0.3848,
+        "fractionNull": 1
+      },
+      "note": ""
+    },
+    {
+      "id": "K14.report.dispersion5",
+      "status": "reported",
+      "measured": {
+        "realizations": 100,
+        "refusedFraction": 1,
+        "returnedDistance": 0,
+        "coverage68OfReturned": null,
+        "coverage95OfReturned": null,
+        "statuses": {
+          "refused:no-cluster": 59,
+          "refused:no-convergence": 41
+        }
+      },
+      "note": ""
+    },
+    {
+      "id": "K15.report.expansion",
+      "status": "reported",
+      "measured": {
+        "realizations": 100,
+        "medianZ": -5.662,
+        "medianRelBias": -0.07167,
+        "coverage68": 0,
+        "n": 95
+      },
+      "note": ""
+    },
+    {
+      "id": "KP1.speed",
+      "status": "reported",
+      "measured": {
+        "cpuSecondsOneCeFit": 0.000319,
+        "cpuSeconds4000ReplicateBootstrap": 1.413
+      },
+      "note": ""
+    },
+    {
+      "id": "K3a.oracle.cp.synthetic",
+      "status": "pass",
+      "measured": {
+        "minJaccard": 1,
+        "statusAndReasonAgree": true,
+        "maxCpDeg": 2.109e-13,
+        "maxRelTau2": 1.354e-14,
+        "maxIterationDifference": 0,
+        "cases": [
+          {
+            "id": "O1",
+            "status": [
+              "ok",
+              "ok"
+            ]
+          },
+          {
+            "id": "O2",
+            "status": [
+              "ok",
+              "ok"
+            ]
+          },
+          {
+            "id": "O3",
+            "status": [
+              "ok",
+              "ok"
+            ]
+          },
+          {
+            "id": "O4",
+            "status": [
+              "refused",
+              "refused"
+            ]
+          },
+          {
+            "id": "O5",
+            "status": [
+              "ok",
+              "ok"
+            ]
+          },
+          {
+            "id": "O6",
+            "status": [
+              "cp-only",
+              "cp-only"
+            ]
+          }
+        ]
+      },
+      "note": ""
+    },
+    {
+      "id": "K3b.oracle.dist.synthetic",
+      "status": "pass",
+      "measured": {
+        "maxRel": 1.332e-14,
+        "maxRelSigma": 0.01468
+      },
+      "note": ""
+    },
+    {
+      "id": "RK1.members",
+      "status": "pass",
+      "measured": {
+        "sha256": "5e3c8ab9b56a16def4495c669667b33aada8d856262ab64a812b23c5914290f6",
+        "stars": 3856,
+        "status": "ok",
+        "reason": null,
+        "members": 497,
+        "membersWithRv": 218,
+        "membershipSteps": 3,
+        "ceIterations": 5
+      },
+      "note": ""
+    },
+    {
+      "id": "RK2.agree",
+      "status": "pass",
+      "measured": {
+        "ratioMCoverPlx": 1.01032,
+        "sigmasCombined": 1.273,
+        "sigmaMCRel": 0.008027
+      },
+      "note": "ratio of the two parallaxes; the moving-cluster distance is not reported below a ratified verdict A"
+    },
+    {
+      "id": "RK3.useful",
+      "status": "pass",
+      "measured": {
+        "sigmaMCRel": 0.008027
+      },
+      "note": ""
+    },
+    {
+      "id": "RK4.split",
+      "status": "pass",
+      "measured": {
+        "halfSizes": [
+          248,
+          249
+        ],
+        "relDifference": 0.01269,
+        "sigmasCombined": 0.7869
+      },
+      "note": ""
+    },
+    {
+      "id": "RK5.cpSplit",
+      "status": "pass",
+      "measured": {
+        "separationDeg": 0.1985,
+        "radiusADeg": 0.1448,
+        "radiusBDeg": 0.088
+      },
+      "note": ""
+    },
+    {
+      "id": "RK7.published.cp",
+      "status": "pass",
+      "measured": {
+        "separationDeg": 0.7916,
+        "toleranceDeg": 1.259,
+        "bootstrapRadiusDeg": 0.07964,
+        "floorDeg": 1.236,
+        "separationOverRadius": 9.939
+      },
+      "note": "the published convergent point has no printed uncertainty"
+    },
+    {
+      "id": "RK7r.report.published",
+      "status": "reported",
+      "measured": {
+        "ce_vs_pub20_deg": 0.8594,
+        "plain_vs_pub10_deg": 0.8954,
+        "plain_vs_pub20_deg": 0.9629,
+        "ce_vs_pub10_over_r": 9.939,
+        "pub10_vs_pub20_deg": 0.07047,
+        "speed_difference_km_s": 0.4086,
+        "speed_difference_over_printed_sigma": 1.776
+      },
+      "note": ""
+    },
+    {
+      "id": "RK8.published.distance",
+      "status": "pass",
+      "measured": {
+        "relDifference": -0.02634,
+        "sigmasCombined": 2.702,
+        "toleranceOverPi": 0.03148,
+        "floorRel": 0.01164,
+        "relSigmaMC": 0.008027,
+        "relSigmaPub": 0.005826
+      },
+      "note": "recorded as a relative difference and sigma units; no parallax or distance of the moving-cluster estimate is written"
+    },
+    {
+      "id": "RK8r.report.published",
+      "status": "reported",
+      "measured": {
+        "ce_vs_perryman134": {
+          "relDifference": -0.02634,
+          "sigmas": -2.702
+        },
+        "ce_vs_perryman180": {
+          "relDifference": -0.01772,
+          "sigmas": -1.72
+        },
+        "plain_vs_perryman134": {
+          "relDifference": -0.02223,
+          "sigmas": -2.311
+        },
+        "plx233_vs_perryman134": {
+          "relDifference": -0.03628,
+          "sigmas": -6.227
+        },
+        "ce_vs_gaiaDR2_secondHand": {
+          "relDifference": -0.001964,
+          "sigmas": -0.2281
+        },
+        "ce_vs_gaiaDR1_secondHand": {
+          "relDifference": -0.01772,
+          "sigmas": -1.406
+        },
+        "plx233_vs_gaiaDR2_secondHand": {
+          "relDifference": -0.01216,
+          "sigmas": -3.85
+        },
+        "note": "the Gaia values are second-hand quotations of Roser et al. 2019, not primary sources"
+      },
+      "note": ""
+    },
+    {
+      "id": "RK6.report.shift",
+      "status": "reported",
+      "measured": {
+        "cpShiftPlainToCeDeg": 0.1047,
+        "tauDeg": 0.4233,
+        "impliedInternalScatterKmS": 0.3423,
+        "ceIterations": 5,
+        "ratioPlain": 1.01458,
+        "ratioCe": 1.01032,
+        "sigmaMCRelPlain": 0.007826,
+        "sigmaMCRelCe": 0.008027
+      },
+      "note": ""
+    },
+    {
+      "id": "K16a.oracle.cp.real",
+      "status": "pass",
+      "measured": {
+        "jaccard": 1,
+        "production": "ok",
+        "oracle": "ok",
+        "cpDeg": 2.233e-13,
+        "relTau2": 1.144e-14
+      },
+      "note": ""
+    },
+    {
+      "id": "K16b.oracle.dist.real",
+      "status": "pass",
+      "measured": {
+        "relV": 1.11e-15,
+        "relPi": 8.216e-15,
+        "relPerStar": 3.531e-14,
+        "relSigma": 0.02591
+      },
+      "note": ""
+    },
+    {
+      "id": "RK9.isochrone",
+      "status": "not-run",
+      "measured": null,
+      "note": "no Gaia-band isochrone set or band transformation in the repository; an age is not typed here (fetch request 3 of MOVING_CLUSTER_GATE.md)"
+    }
+  ]
+}
