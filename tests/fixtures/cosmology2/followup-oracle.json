@@ -1,0 +1,53 @@
+{
+ "format": "gravitas.cosmology2-followup-oracle/1",
+ "note": "written by tools/cosmology2-oracle/followup-oracle.py (numpy, scipy; no Gravitas code) after followup-thresholds.json and before the follow-up kernel option or validator existed",
+ "tools": {
+  "python": "3.9.6",
+  "numpy": "1.26.4",
+  "scipy": "1.13.1"
+ },
+ "H0": 70,
+ "gyrPerInvH0": 977.7922216807892,
+ "ages": [
+  {
+   "Om": 0.05,
+   "ageGyr": 13.060613217518974
+  },
+  {
+   "Om": 0.1,
+   "ageGyr": 12.545522946517707
+  },
+  {
+   "Om": 0.3,
+   "ageGyr": 11.297596476496738
+  },
+  {
+   "Om": 0.5,
+   "ageGyr": 10.52592655761514
+  },
+  {
+   "Om": 0.7,
+   "ageGyr": 9.957752439063993
+  },
+  {
+   "Om": 0.9,
+   "ageGyr": 9.507008759023378
+  },
+  {
+   "Om": 1.2,
+   "ageGyr": 8.968591908989913
+  },
+  {
+   "Om": 1.5,
+   "ageGyr": 8.538350629866594
+  },
+  {
+   "Om": 2,
+   "ageGyr": 7.973145835771655
+  },
+  {
+   "Om": 3,
+   "ageGyr": 7.169539776216053
+  }
+ ]
+}
