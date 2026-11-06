@@ -62,6 +62,7 @@ current, and the orchestrator checks it.
 | `checks.mjs` | One list of what has to pass |  |
 | `ci-cost.mjs` | What one CI run cost |  |
 | `cluster-fit-validate.mjs` | The cluster fit against its committed thresholds (Prompt 219 Part A) | `npm run cluster:validate` |
+| `clusters-validate.mjs` | The galaxy-cluster kernel against its committed thresholds (Prompt 250) | `npm run clusters:validate` |
 | `compute-answers.mjs` | The answers the reviewed notebooks gave, as fixtures for the tests |  |
 | `compute-examples.mjs` | The compute page's two Gravitas-made example inputs |  |
 | `compute.mjs` | The compute page's generated files: the frame, its pin, the catalogue's hashes |  |

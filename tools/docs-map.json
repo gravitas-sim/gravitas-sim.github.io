@@ -373,6 +373,13 @@
       "student": true
     },
     {
+      "file": "GALAXY_CLUSTERS.md",
+      "kind": "feature",
+      "purpose": "The galaxy-cluster kernel: membership, velocity dispersion, virial mass, light, morphology-density, validation, failed legs and the requested table (Prompt 250).",
+      "owner": 250,
+      "student": false
+    },
+    {
       "file": "GALAXY_MORPHOLOGY.md",
       "kind": "feature",
       "purpose": "The galaxy-morphology kernel: isophotes, profile, half-light radius, magnitude, concentration, asymmetry, validation, failed legs and requested files (Prompt 249, Part A).",
