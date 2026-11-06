@@ -205,7 +205,7 @@ catalogue refers to it, so a change to it can reach a student.
 | [VO_ARCHIVE_GATE.md](VO_ARCHIVE_GATE.md) | Astronomy archives and the Virtual Observatory gate. | gate | unassigned | written | no |
 | [WORKER_POOL.md](WORKER_POOL.md) | The Worker pool contract: typed jobs, generations, memory and concurrency caps, transfer, deterministic scheduling and per-job random streams. | feature | P153 | written | no |
 | [paper.md](paper.md) | The JOSS-style summary paper. | front-door | unassigned | regions (docs) | no |
-| [LENSING_DELAYS_GATE.md](LENSING_DELAYS_GATE.md) | The lensing time-delay and finite-source gate: delay model, mass-sheet degeneracy, committed thresholds, merged-code legs measured, the rest not run (Prompt 251, Part B). | gate | P251 | written | no |
+| [LENSING_DELAYS_GATE.md](LENSING_DELAYS_GATE.md) | The lensing time-delay and finite-source gate: delay model, mass-sheet degeneracy, committed thresholds, the spike's result (verdict C; G3, G7, G8 fail), G6 and G9 not run (Prompt 251, Part B). | gate | P251 | written | no |
 | [LENSING_II.md](LENSING_II.md) | The enclosed-mass lensing extension: distances, the mass inside an Einstein radius, image inversions, the arc-radius fit, validation and requested files (Prompt 251, Part A). | feature | P251 | written | no |
 
 ## Authoritative sources

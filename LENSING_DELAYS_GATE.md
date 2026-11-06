@@ -1,14 +1,14 @@
 # The lensing time-delay and finite-source gate (Prompt 251, Part B)
 
 Part B of Prompt 251 is a gate. Its thresholds and its verdict function are committed in `tests/fixtures/lensing2/gate-thresholds.json`, in the same commit
-(`29b4f276`) as Part A's contract and before any kernel, oracle output or fit code of this prompt existed. **In this pull request three legs that test already-merged code were
-measured (P0 to P2); every leg that needs a prototype is NOT RUN, every leg that needs data is NOT RUN, and there is no verdict.** The rule that holds throughout: *no Hubble
-constant is reported from a delay without the mass-sheet degeneracy statement and the verdict*, and none is reported anywhere in this pull request.
+(`29b4f276`) as Part A's contract and before any kernel, oracle output or fit code of this prompt existed. The first pull request (#537) measured three legs on merged code (P0 to P2) and
+left every prototype leg NOT RUN. **This second pull request records the spike: the prototype was built on `spike/lensing-delays-gate` (never merged), run for G1 to G5, G7 and G8 against the committed
+bounds and the pinned oracle, and the verdict by the committed function is C. G3, G7 and G8 fail and stay failing; G6 and G9 are NOT RUN (no data).** The rule that holds throughout: *no Hubble
+constant is reported from a delay without the mass-sheet degeneracy statement and the verdict*, and no Hubble constant is reported as a value anywhere in this pull request.
 
-A gate's prototype belongs on a spike branch that is never merged (7.5 rule 4). That branch does not exist: this session was scoped to the kernel, the contract and the
-validation-gate documents, and a delay model written in the kernel directory would be exactly the unspiked prototype the rule forbids. What this pull request does carry is the
-other half the gate needs before a prototype: the committed models and thresholds, and the **independent oracle's calculations pinned** (`oracle-results.json`, group `delay`),
-written before any prototype.
+No prototype code is in this pull request. The spike is commit `432f4068c503465f4fc30439f1632c8406a9d276` on `spike/lensing-delays-gate` (run 1 is `cc08c7bd`); the records are `tests/fixtures/lensing2/gate-spike-results.json`,
+`gate-spike-failed-legs.json`, the three amendments in `gate-thresholds.json`, and the independent oracle's fit of the G7 events (`oracle-finite.json`, with `tools/lensing2-oracle/make-finite-inputs.mjs` and `finite-fit.py`,
+pinned before the prototype ran, its integral self-checked against the pinned quadrature to 8.9e-16).
 
 ## The models the gate commits (`gate-thresholds.json`, `models`)
 
@@ -41,11 +41,36 @@ From `oracle.py` (astropy distances, brentq roots, the Fermat potential differen
 | P0 | `pointTimeDelay` against the oracle's differenced Fermat potential, relative 1e-9 | **pass** (2.2e-16, 8 cases) |
 | P1 | `finiteSourceMagnification` against the oracle's disc integral (polar angle about the lens, closed radial integral), relative 1e-6; u = 0 closed form to 1e-12 | **pass** (5.7e-8 worst, at rho 0.01, u/rho 1.1; 28 cases) |
 | P2 | at rho = 1e-5 the finite-source magnification equals the point-source one to 1e-8; the blend arithmetic to 1e-14 | **FAIL** (1.2e-7 worst, at u = 1; the blend arithmetic is exact) |
-| G1 to G4 | SIS delay by Fermat; point delay by Fermat; images invariant and delays scaled under the sheet; H0 shifted by 1/lambda | NOT RUN (no prototype) |
-| G5 | the refusal 'mass-sheet-degenerate' without kappa_ext; coverage of the H0 interval with it on 400 seeded lenses | NOT RUN (no prototype) |
-| G6 | a published delay with its covariance, the lens model and the paper's H0, within two published sigma | NOT RUN (no file) |
-| G7, G8 | a rho search with coverage on 200 events and an upper limit where rho is unconstrained; the blended-baseline degeneracy flagged on 100 low-magnification events | NOT RUN (no prototype) |
+| G1 | SIS delay by Fermat against the oracle, relative 1e-10 | **pass** (1.1e-14 on the exact Mpc; 1.6e-10 with the tree's rounded parsec, reported, see below) |
+| G2 | point-lens delay by Fermat against the oracle and `pointTimeDelay` | **pass** (1.4e-15, 8 cases) |
+| G3 | images invariant and flux ratios invariant under the sheet to 1e-9 against the oracle's pinned roots and Jacobians | **FAIL** (1.7e-7 against the oracle's finite-difference Jacobian; positions 2.3e-16; the closed forms 3.6e-16) |
+| G4 | delays scale as lambda; H0 inferred with lambda = 1 is true H0 over lambda | **pass** (5.8e-16 on the scaling; 1.1e-14 on H0; 9 cases) |
+| G5 | the refusal 'mass-sheet-degenerate' without kappa_ext; coverage with it on 400 seeded lenses | **pass** (400 of 400 refused; coverage 0.700 and 0.9675 against [0.610, 0.750] and [0.917, 0.983]; all 400 wider than the delay's error alone) |
+| G6 | a published delay with its covariance, the lens model and the paper's H0 | NOT RUN (no file; nothing fetched) |
+| G7 | a rho search, coverage on 200 events, an upper limit where rho is unconstrained | **FAIL** (56 of 200 returned a value; coverage 0.286 and 0.446 against [0.610, 0.750] and [0.917, 0.983]) |
+| G8 | the blended-baseline degeneracy flagged on 100 low-magnification events, at least 0.9 | **FAIL as run** (98 flagged, 95 with a tE range; see the reading below) |
 | G9 | an authentic event against a published independent fit | NOT RUN (no file; D-LENS-01 and D-RIGHTS-02 record that no event is bundled) |
+
+## The spike
+
+The prototype (the Fermat potential for both lenses, the mass-sheet transformation, `hubbleFromDelay` and the conditional H0, a finite-source fit that profiles rho on a grid of 0 and 36 log-spaced values, and a blend
+profile over the share) was written from the committed sentences. Three amendments were recorded in `gate-thresholds.json` **before any prototype run**, none moves a bound: AM1 (the G5 ensemble, and the exact Mpc used for G1 to G4),
+AM2 (the G7 ensemble and what "recovers rho within the interval" is read as: the truth, not the oracle's own estimate, in the interval) and AM3 (the G8 ensemble and the rule for "not constrained").
+`verdicts.current` in that file is updated to the result and nothing else in it changed after a run.
+
+**Two runs, both on record.** Run 1 (`cc08c7bd`) failed G3, G7 and G8. Reading its diagnostics, the profile fits for G7 and G8 were stuck above the oracle's chi-square (the inner optimiser, not the model), which made the intervals spuriously narrow
+(29 of 53 value-returning G7 fits agreed with the oracle). The optimiser was repaired (warm starts and rho-scaled cold starts, a descending pass over the grid), no bound and no amendment changed, and the legs were run again (run 2, `432f4068`, 3,530 s of CPU on a loaded machine).
+Run 1 is kept in `gate-spike-results.json` under `run1`. The second run's rows are the ones the verdict uses.
+
+**Findings, stated against the bounds.**
+
+* **G3 is an oracle limit, and the leg stays failing.** The kernel agrees with the closed forms to 3.6e-16 on the flux ratios and to 2.3e-16 on positions. The oracle pins its magnifications by finite differences of the lens map, which carry about 1e-7 of noise, so the committed
+  1e-9 against those numbers cannot be met by any code, correct or not. That is a defect in the committed leg's construction (an oracle Jacobian from the closed form would have been exact), found by running it. The bound is not moved; the leg is FAIL on record, and the closed-form comparison is reported beside it.
+* **The parsec.** The tree's ten-digit parsec differs from the exact value by 4.9e-10, which is above G1's 1e-10 by itself and a delay is proportional to a distance. AM1 chose the exact Mpc (the one the cosmology kernel derives its Gyr scale from) for G1 to G4 before the run and reported the rounded-parsec figure (1.6e-10) beside each: G1 and G4 would fail on the rounded one.
+* **G7 fails, and not narrowly.** Of 200 events 56 returned a value (the rule: no value unless the 0.95 lower end is above zero); of those 28.6 percent (0.68) and 44.6 percent (0.95) contained the true rho. Far events (u0 above 3 rho) returned a value in 2 of 100, as the leg wants; the upper limits covered the truth in 0.986 of 144 (reported, no bound); 53 of the 56 values agree with the oracle's scipy fit to a relative 0.1 (reported). In 36 of 200 events the profile minimum is still above the oracle's fit by more than 1 in chi-square, so the prototype's optimiser has not reached the oracle's optimum on those. A selection effect (a value is returned only when the fit prefers a large rho) may explain part of the undercoverage; that is a hypothesis, not tested here.
+* **G8 as run is FAIL, and its reading is a question.** 98 of 100 events were flagged 'blend-degenerate' and 95 of the 100 carried a tE range. The committed sentence and AM3 both count events returned blend-degenerate with a tE range: 95 of 100 is 0.95, above the bound of 0.9, a pass.
+  The runner enforced something stricter (every flagged event must carry a range, 98 against 95), and a result is not re-labelled after it is seen. The row is therefore recorded as run (FAIL), the literal reading is recorded beside it (`readings.G8`), and the verdict does not depend on it (G3 and G7 fail).
+* **G5 passes by construction in part:** the ensemble's kappa_ext is calibrated to the truth's distribution ('synthetic ensemble, calibrated by construction'), so the coverage tests the arithmetic of the interval, not a real external-convergence prior.
 
 ### P2 stays failing, and what it means
 
@@ -66,7 +91,7 @@ A, then B-delay or B-finite, then C, by the first rule that holds, a NOT RUN leg
   **B-finite**: G7 and G8 pass alone: the finite-source fit with its blended baseline on synthetic events. Each builds only its own item.
 * **C**: neither: reading steps only; Part A stands.
 
-**Current: no verdict.** At most B is reachable until Carl supplies the files below, because A needs G6 and G9.
+**Current: C**, by that function on the spike rows (`gate-spike-results.json`, `verdict`): B-delay needs G3 and it fails; B-finite needs G7 and G8 and both fail as run. Even with G8 read literally, B-finite fails on G7 and B-delay fails on G3; A would also need G6 and G9, which have no data. Part A stands: the enclosed-mass kernel is unchanged, nothing student-facing is built (no "A delayed echo", no upper depth for "A Lens Passing By"), and no H0 value is reported.
 
 ## What Carl would supply, and what a Part B session would then do
 
@@ -78,8 +103,7 @@ Nothing was fetched and no published delay, covariance, event or licence term wa
    `SOURCES.json` (terms as read from a saved copy, retrieval date). The contract is fixed: the kernel's conditional H0 with the paper's kappa_ext against the paper's value within two published sigma.
 2. **G9.** One microlensing event whose data terms allow redistribution (D-LENS-01 and D-RIGHTS-02: the survey archives are linked and not bundled; a per-event rights decision is new), its photometry,
    and a published independent fit (parameters with uncertainties, including the finite-source parameter and the blend). File `event.json` with `SOURCES.json`.
-3. **The spike.** A session told to run Part B creates `spike/lensing-delays-gate` from this branch's tip, builds `delays.js` (the Fermat potential for both lenses, the sheet transformation, `hubbleFromDelay`) and a rho search beside the existing fit, runs G1 to G5, G7, G8 against the pinned oracle, and lands a documentation-only
-   pull request with the results and a register row; only then does a verdict exist, and only then a build ("A delayed echo"; "A Lens Passing By" with its upper depth), each under the consumers rule.
+3. **The spike's open questions** (the spike itself is done, see above). (a) G3: replace the oracle's finite-difference Jacobian by an analytic one in a later contract, committed before a run, with this G3 left failing on record. (b) G8: which reading is the record (95 of 100 passes; the runner's stricter rule fails). (c) G7: a later contract could commit an ensemble and a fit that return a value more often, or read the coverage over all 200 events with the upper limits counted; no bound is moved by this note. (d) P2 as above. Only a verdict of B or A would permit a build, each under the consumers rule.
 
 ## Rights
 

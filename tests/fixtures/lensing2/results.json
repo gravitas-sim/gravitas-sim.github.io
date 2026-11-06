@@ -341,43 +341,43 @@
    "id": "G1.sisDelayFermat",
    "status": "not-run",
    "measured": null,
-   "note": "the prototype belongs on a spike branch that is never merged (7.5 rule 4) and does not exist; LENSING_DELAYS_GATE.md"
+   "note": "not run by this validator: the prototype lives on spike/lensing-delays-gate, which is never merged; the recorded result is tests/fixtures/lensing2/gate-spike-results.json (LENSING_DELAYS_GATE.md)"
   },
   {
    "id": "G2.pointDelayFermat",
    "status": "not-run",
    "measured": null,
-   "note": "the prototype belongs on a spike branch that is never merged (7.5 rule 4) and does not exist; LENSING_DELAYS_GATE.md"
+   "note": "not run by this validator: the prototype lives on spike/lensing-delays-gate, which is never merged; the recorded result is tests/fixtures/lensing2/gate-spike-results.json (LENSING_DELAYS_GATE.md)"
   },
   {
    "id": "G3.sheetImagesInvariant",
    "status": "not-run",
    "measured": null,
-   "note": "the prototype belongs on a spike branch that is never merged (7.5 rule 4) and does not exist; LENSING_DELAYS_GATE.md"
+   "note": "not run by this validator: the prototype lives on spike/lensing-delays-gate, which is never merged; the recorded result is tests/fixtures/lensing2/gate-spike-results.json (LENSING_DELAYS_GATE.md)"
   },
   {
    "id": "G4.sheetDelayScales",
    "status": "not-run",
    "measured": null,
-   "note": "the prototype belongs on a spike branch that is never merged (7.5 rule 4) and does not exist; LENSING_DELAYS_GATE.md"
+   "note": "not run by this validator: the prototype lives on spike/lensing-delays-gate, which is never merged; the recorded result is tests/fixtures/lensing2/gate-spike-results.json (LENSING_DELAYS_GATE.md)"
   },
   {
    "id": "G5.hubbleRefusalAndCoverage",
    "status": "not-run",
    "measured": null,
-   "note": "the prototype belongs on a spike branch that is never merged (7.5 rule 4) and does not exist; LENSING_DELAYS_GATE.md"
+   "note": "not run by this validator: the prototype lives on spike/lensing-delays-gate, which is never merged; the recorded result is tests/fixtures/lensing2/gate-spike-results.json (LENSING_DELAYS_GATE.md)"
   },
   {
    "id": "G7.finiteSourceFitCoverage",
    "status": "not-run",
    "measured": null,
-   "note": "the prototype belongs on a spike branch that is never merged (7.5 rule 4) and does not exist; LENSING_DELAYS_GATE.md"
+   "note": "not run by this validator: the prototype lives on spike/lensing-delays-gate, which is never merged; the recorded result is tests/fixtures/lensing2/gate-spike-results.json (LENSING_DELAYS_GATE.md)"
   },
   {
    "id": "G8.blendedBaselineDegeneracy",
    "status": "not-run",
    "measured": null,
-   "note": "the prototype belongs on a spike branch that is never merged (7.5 rule 4) and does not exist; LENSING_DELAYS_GATE.md"
+   "note": "not run by this validator: the prototype lives on spike/lensing-delays-gate, which is never merged; the recorded result is tests/fixtures/lensing2/gate-spike-results.json (LENSING_DELAYS_GATE.md)"
   },
   {
    "id": "G6.publishedDelay",
@@ -395,7 +395,7 @@
    "id": "R1.cpuSeconds",
    "status": "reported",
    "measured": {
-    "cpuSeconds": 0.52
+    "cpuSeconds": 0.406
    },
    "note": "CPU time of this run, recorded and never compared"
   }
@@ -407,18 +407,29 @@
   "productVerdict": "NOT ESTABLISHED (B6, E1, E2 and E3 NOT RUN: no authentic file and no cited tool output was supplied)",
   "consumers": "unmet (no consumers rule; nothing visible is built)",
   "partB": {
-   "verdict": "none",
-   "why": "G1 to G5, G7 and G8 are NOT RUN (no prototype), G6 and G9 have no data; P0 to P2 test merged code only and decide nothing",
+   "verdict": "C",
+   "source": "tests/fixtures/lensing2/gate-spike-results.json (spike/lensing-delays-gate, 432f4068c503465f4fc30439f1632c8406a9d276)",
+   "legs": {
+    "G1": "pass",
+    "G2": "pass",
+    "G3": "fail",
+    "G4": "pass",
+    "G5": "pass",
+    "G6": "not-run",
+    "G7": "fail",
+    "G8": "fail",
+    "G9": "not-run"
+   },
    "mergedCodeLegs": {
     "P0": "pass",
     "P1": "pass",
     "P2": "fail"
    },
-   "reachable": "at most B, and only after the prototype legs are run"
+   "note": "the verdict is the committed function of the spike rows; G6 and G9 have no data, so A is unreachable"
   }
  },
  "meta": {
-  "cpuSeconds": 0.52,
+  "cpuSeconds": 0.406,
   "node": "v22.23.4",
   "oracle": {
    "python": "3.9.22",

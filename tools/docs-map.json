@@ -1369,7 +1369,7 @@
     {
       "file": "LENSING_DELAYS_GATE.md",
       "kind": "gate",
-      "purpose": "The lensing time-delay and finite-source gate: delay model, mass-sheet degeneracy, committed thresholds, merged-code legs measured, the rest not run (Prompt 251, Part B).",
+      "purpose": "The lensing time-delay and finite-source gate: delay model, mass-sheet degeneracy, committed thresholds, the spike's result (verdict C; G3, G7, G8 fail), G6 and G9 not run (Prompt 251, Part B).",
       "owner": 251,
       "student": false
     },
