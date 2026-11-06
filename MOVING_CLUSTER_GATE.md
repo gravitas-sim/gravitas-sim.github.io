@@ -6,7 +6,8 @@ distance and a coverage test on synthetic clusters, all committed before any cod
 The amended form, a proposal for Carl to ratify, gives B** (the convergent point and the method's geometry, with no distance).
 No kernel, pack, panel, lesson or viewer is built or authorized (consumers rule, Carl 2026-11-05), and no distance is reported:
 the moving-cluster distance is shown only as a ratio to the parallax distance, below verdict A. The record is decision-register
-rows D-R10-234-01 to D-R10-234-04 and D-R10-234-90.
+rows D-R10-234-01 to D-R10-234-04 and D-R10-234-90. A follow-up section near the end adds a bias-corrected
+convergent-point estimator as new legs (follow-up verdict C) and the published-value comparisons; it changes none of the above.
 
 The numbers are in `tests/fixtures/moving-cluster/` (`thresholds.json` the contract, its design findings and three amendments;
 `results.json` the gate stream for both forms; `failed-legs.json` every failing leg, labelled; `ensembles.json` the truth manifests of
@@ -175,6 +176,149 @@ budget changes, so there is no size figure to approve.
 4. **The tolerance.** C6 passes at 0.91 against 0.90 and the real sample passes both tolerances at 1.83 sigma and 1.46 percent. Both
    were committed first and are unchanged; say if you want them reviewed for a later contract.
 5. **The fetch requests above**, and whether to supply the isochrones for the three-distance comparison.
+
+## Follow-up (docs/moving-cluster-followup): the corrected convergent point and the published-value legs
+
+Carl's rulings of 2026-11-06 ("go with your recommendations"): a bias-corrected convergent-point estimator enters as NEW legs with their
+thresholds committed first; the published Hyades values he fetched (outside every repository, untrusted data, read and transcribed as
+printed) make legs R7 and R8 runnable; the committed form's verdict C binds, AM1 to AM3 stay an unratified proposal, the consumers rule is
+held, and no moving-cluster distance is written as a result. **Follow-up verdict by the committed function, applied to the follow-up legs
+alone: C** (one geo leg fails). It changes neither the committed verdict C nor the amended form's B, authorizes no Part B and no consumer, and
+the 18 failing legs above stay failing and bit-identical (their files are not edited and not re-run). Register rows D-R10-234-05 to
+D-R10-234-07 and D-R10-234-91.
+
+### What was committed first, and the order
+
+| Commit | What | Before |
+| --- | --- | --- |
+| `1d71cd33` | `followup-thresholds.json` (the estimator, 30 legs, the rule for every bound, the R7 and R8 rules, the verdict function), `published-cp.json`, `published-distance.json` | any code, any run, any CE number |
+| `5729b051` | design findings F5, F6 and amendment AM4 (membership-stage refusals stay at the plain point) | any gate seed |
+| `06ec0b58` | finding F7 and amendment AM5 (leg K2 part d uses three stars: tau^2 is undefined for two) | any gate seed |
+| spike `c39f5752` | `js/kernels/galactic/movingClusterCorrected.js`, `tools/moving-cluster-followup.mjs`, `tools/moving-cluster-oracle/oracle_ce.py` on `spike/moving-cluster-followup`, never merged | the gate stream |
+| `f8e785fb` | the results, on Node 22.23.4 (one stream, 850 s; the oracle on Python 3.9.22, numpy 1.26.4, scipy 1.13.1, astropy 6.0.1) | |
+
+A first launch of the stream crashed in its validator (a result refused by the membership stage carries no CE fit and the code read one) before
+it wrote any row; the fault was fixed in the spike and the stream rerun from the start. No leg result had been seen. The design stream used a
+design seed on synthetic data only; it found F5 (the estimator works as specified), F6 and F7 and was never a leg.
+
+### The estimator (CE)
+
+The plain convergent point is the smallest eigenvector of S = sum b b^T. A proper-motion direction rotated by a small angle delta in the sky
+turns b into b0 cos(delta) - t sin(delta), so E[S] carries sum E[delta^2] t t^T, whose component along c is sin theta: the fit is pulled
+towards the cluster along the one direction the stars constrain weakly (F4). CE subtracts the noise matrix: S* = sum b b^T - sum delta_i^2
+t_i t_i^T with delta_i^2 = tau^2 / sin^2 theta_i + (proper-motion error across the track / mu_i)^2, where tau, the intrinsic scatter of the
+offsets b.c (an isotropic internal velocity scatter divided by V), is estimated **from the offsets alone**: tau^2 = max(0, (lambda n /
+(n - 2) - sum M) / n), lambda = sum (b.c)^2. The smallest eigenvector of S* is iterated to a fixed point (1e-12 rad). No radial velocity, no
+tuning constant. Members are those of the amended iteration (used without ratifying it, as the committed seed cannot find the cluster); CE is
+a refit on them; the speed, the per-star and cluster parallax and every other refusal are Part A's.
+
+### The rule that set every bound, and what the author had seen
+
+Each bound is the bound of the committed leg it re-tests, on an ensemble of the same size (the 68.27 percent band is the nominal rate plus or
+minus three binomial standard errors at n = 200, committed 0.58 to 0.78; 0.90 to 0.99; |median z| 0.27 = three standard errors of a median
+of 200 unit normals; |median relative bias| 0.005); the two further worlds E7 (internal scatter 1.0 km/s) and E8 (convergent point 60 degrees
+away) take the same four bounds. No value came from the failing legs' numbers. The R7 and R8 rules use only committed constants (below).
+Stated for the record: before committing, the author had read all of Part A (including the amended form's real-sample convergent point and
+ratio) and the published-value file (including the printed values); the R7 and R8 rules were not set from the gap between those.
+
+### Results (30 legs: 19 pass, 3 fail, 7 reported, 1 not run)
+
+| Leg | Set, group | What | Result | Measured |
+| --- | --- | --- | --- | --- |
+| K1.exact | S, geo | noise-free cluster, stated errors 0: tau^2 zero, CE = plain = truth, exact parallaxes | PASS | 6.6e-14 deg; tau^2 5e-32; 4e-15 relative |
+| K2.hand | S, dist | delta^2, tau^2, CE = plain at tau^2 = 0, and S* of three stars, by hand | PASS | all within 1e-15 |
+| K3a, K3b | S, geo and dist | independent oracle: members, CE point, tau^2, speed, parallaxes, bootstrap sigma | PASS | Jaccard 1; 2e-13 deg; 1e-14; sigma within 1.5 percent |
+| **K4.cp** | S, geo | E1 (seed 234101, 200): CE point median error <= 1.0, p95 <= 3.0 deg, refused <= 5 percent | **FAIL** | median 0.169, p95 0.504 deg; **refused 0.06** (12 of 200) |
+| K5.coverage68 | S, dist | 68.27 percent interval covers in 0.58 to 0.78 | PASS | 0.72 |
+| K6.coverage95 | S, dist | 95.45 percent interval covers in 0.90 to 0.99 | PASS | 0.925 |
+| K7.recovery | S, dist | median z within 0.27, median relative bias within 0.005 | PASS | z -0.158; bias -0.20 percent |
+| K8.agree | S, dist | tolerance rule with 233 on at least 90 percent | PASS | 0.94 |
+| K9.useful | S, dist | median sigma / pi <= 0.02 | PASS | 0.0124 |
+| K10.noRv.cp | S, geo | E3, no radial velocities: CE point returned, speed and distance null | PASS | 0.96 returned; 0.22 deg; null 1.0 |
+| **K11.dispersion1** | S, dist | E7, internal scatter 1.0 km/s: both coverages, z and bias in the C3 to C5 bands | **FAIL** | coverage 0.245 and 0.395; z +0.95; bias +2.1 percent; 117 of 200 return a distance |
+| **K12.separation60** | S, dist | E8, convergent point 60 degrees away: the same four conditions | **FAIL** | coverage95 0.85 (below 0.90); coverage68 0.635, z -0.02 and bias -0.04 percent pass; 178 of 200 return a distance |
+| RK1.members | R, geo | the Hyades file converges, is not refused, at least 30 members with a radial velocity | PASS | 497 members, 218 with one; CE in 5 iterations |
+| RK2.agree | R, dist | tolerance rule with 233's parallax | PASS | ratio 1.0103, 1.27 sigma combined |
+| RK3.useful | R, dist | sigma / pi <= 0.02 | PASS | 0.0080 |
+| RK4.split, RK5.cpSplit | R | two seeded halves agree (distance, convergent point) | PASS | 0.79 sigma; 0.199 deg against radii 0.145 and 0.088 |
+| K16a, K16b | R | oracle on the real file | PASS | Jaccard 1; 2e-13 deg; 8e-15; sigma within 2.6 percent |
+| RK7.published.cp | R, geo | CE point against the published point, tolerance sqrt((3 r)^2 + f^2) | PASS | 0.79 deg against 1.26 |
+| RK8.published.distance | R, dist | CE parallax against the published distance's parallax, floor and 3 percent cap | PASS | -2.63 percent, 2.70 sigma combined, against 3.15 percent |
+| K13, K14, K15, KP1, RK6, RK7r, RK8r | reported | see below | REPORTED | |
+| RK9.isochrone | - | the isochrone distance | NOT RUN | fetch request 3 |
+
+**What the correction did.** On the same realizations and members, the plain estimator has median z +0.72, median relative bias +0.91 percent
+and coverages 0.57 and 0.845 (K13); CE has -0.16, -0.20 percent, 0.72 and 0.925. The estimated tau was 0.640 degrees (median) for a true 0.637;
+the median convergent-point error fell from 0.37 to 0.17 degrees; the fixed point converged in at most 5 iterations; one fit costs 0.3 ms and a
+4000-replicate bootstrap 1.4 s of CPU. The three legs that carry the correction's purpose (K5, K6, K7) pass, and so do usefulness and agreement.
+
+**The three failures stay failing, and what they are.** (1) K4 fails on the refused fraction, 0.06 against 0.05: the 12 refusals are all the
+membership iteration's no-convergence (Part A's amended iteration, the same code that refused 0.04 on its own seed); CE converged in every
+realization that reached it. The bound was not moved. (2) K11: in a cluster with an internal scatter of 1.0 km/s in the field only 117 of 200
+return a distance (29 no-convergence, 25 no-cluster, 20 unstable, 9 CE no-convergence), and those are biased by +2.1 percent. A diagnostic on the
+design seed, which is not a leg, on 60 such clusters in the field: 25 refused, tau overestimated at 1.48 degrees for a true 1.27 (field stars
+inside the member set), mean bias 12.6 percent against the plain 17.5 percent. So CE is not shown to be robust to a larger scatter in the field;
+the limit is the membership iteration, which CE does not touch. In the same world without a field (design stream, F5) the bias is +0.06 percent.
+(3) K12: bias and z are right (-0.04 percent, -0.02) and 170 of the 178 returned 95.45 percent intervals cover, but 22 realizations are refused by
+the membership iteration (12 no-convergence, 10 no-cluster) and a refusal counts as not covering, so the leg reads 0.85. E5 (internal scatter
+5 km/s) is refused in every realization, as Part A's D3 had it (K14). E6 (expansion 0.05 km/s per pc), which nothing here models: z -5.7,
+bias -7.2 percent, coverage 0 (K15), as for the plain estimator in D5: the method does not detect it.
+
+### The real sample, and the published values
+
+CE on the 497 members (218 with a radial velocity): convergent point (97.21, 7.04) degrees, V 46.34 km/s, tau 0.42 degrees (an internal
+velocity scatter of 0.34 km/s per axis, implied); it moves the plain point by 0.105 degrees and the ratio of the moving-cluster parallax to 233's
+from 1.0146 to 1.0103; the relative error is 0.80 percent. Not a distance: the moving-cluster parallax and distance are written nowhere.
+
+* **RK7.** The published point (Perryman et al. 1998, the 134 Hipparcos stars within 10 pc, arXiv:astro-ph/9707253, equatorial (97.91, 6.66)
+  degrees) **has no printed uncertainty**, so the rule has no published part: the tolerance is sqrt((3 r)^2 + f^2) with r the 68.27th percentile
+  of the 4000 bootstrap convergent points about the estimate (0.080 degrees) and f = sigma0 / V = 1.0 km/s over the fitted speed (1.24
+  degrees), the stated allowance for two different member selections (committed constants only). The separation is 0.79 degrees: the leg
+  passes. **That pass rests on the floor:** the separation is 9.9 bootstrap radii, so the statistical term alone would fail; the plain (amended)
+  estimate is 0.90 degrees away and the 180-star published point 0.86 degrees. The fitted speed exceeds the printed 45.93 +- 0.23 km/s by 0.41
+  km/s (1.8 printed sigma; reported).
+* **RK8.** Perryman's reference distance, 46.34 +- 0.27 pc, is to the centre of mass of the Hipparcos members within 10 pc (a concept the paper
+  calls meaningful only in that context); the rule is the quadrature of 3 sigma combined and a stated floor (g = (5 pc / d)^2 = 1.16 percent
+  of the parallax, the second-order difference between a mean parallax and the inverse distance of the centre) with the committed 3 percent cap.
+  The CE parallax is 2.63 percent below the published parallax (2.70 sigma combined, the tolerance 3.15 percent): **a narrow pass**, which
+  would fail without the floor. Reported beside it: the plain estimate is 2.22 percent below (2.31 sigma), 233's parallax 3.63 percent below
+  (6.2 sigma), the 180-star published distance 1.77 percent. Against the two **second-hand** Gaia quotations (Roser et al. 2019, not primary
+  sources, not the same estimand) CE is 0.20 percent (DR2, 0.23 sigma) and 1.77 percent (DR1) below. The direction is that of the difference
+  between the Hipparcos-era and Gaia-era values the cluster has, not a claim about either; the sign is opposite to the concept floor's (a mean
+  parallax is expected above the centre's), which the floor does not explain.
+
+## What the follow-up does not do
+
+No Part B, lesson, panel, viewer or pack; no ratification of AM1 to AM3 (every follow-up leg runs on that membership and says so); no change
+to any Part A file, bound or result; no distance above the verdict line; R9 (the isochrone distance) still NOT RUN. The membership iteration is
+the part that limits the follow-up (K4, K11, K12) and was not modified: a membership that survives a larger scatter in the field would be a new
+contract.
+
+## Still to fetch
+
+3. A Gaia-band isochrone set, or a G, BP-RP to SDSS g, r transformation, with a published age (R9; unchanged).
+4. The parallax zero point's systematic floor (233's open item; unchanged).
+5. A Gaia DR3-based Hyades distance from a primary source (the Gaia values above are second-hand quotations of earlier releases).
+Requests 1 and 2 of the original list are answered (`published-cp.json`, `published-distance.json`).
+
+## Questions for Carl (follow-up)
+
+1. **Verdict.** The follow-up verdict is C by the function (K4's refusal rate 0.06 against 0.05). Leave it at that, or review the K4 bound for
+   a later contract? It was committed as C2's bound and not moved; the 0.06 is within binomial noise of 0.05 (standard deviation 0.015).
+2. **A membership iteration for a larger scatter.** K11 and K12 fail in the field for a reason CE does not touch. Open a new contract for a
+   robust membership (committed first), or accept that the method is shown only for a scatter of about 0.5 km/s?
+3. **R7 and R8 passed on a floor.** RK7 passes on the allowance f (statistically the points differ by 9.9 radii) and RK8 narrowly on the
+   concept floor. Say if the floors should be reviewed for a later contract; they were committed from constants before the run.
+4. **AM1 to AM3** (unchanged question): ratify the amended form? The follow-up uses its membership either way.
+5. **A DR3-based published distance and the isochrones** (still to fetch above), and whether Part B should wait for them.
+
+## Reproduction (follow-up)
+
+On `spike/moving-cluster-followup` (c39f5752, Node 22): `node tools/moving-cluster-followup.mjs --write-oracle-inputs DIR`, then
+`/usr/local/bin/python3.9 tools/moving-cluster-oracle/oracle_ce.py --synthetic DIR/synthetic.json --csv hyades.csv --mask DIR/real-zeropoints.json --out FILE`,
+then `node tools/moving-cluster-followup.mjs --out PART --oracle FILE` and `node tools/moving-cluster-followup-fixtures.mjs --part PART --oracle FILE --out-dir DIR`
+(the stream reads the fixtures directory with `--fixtures DIR` and records the sha256 of each file it read). The real file is Carl's
+`scratch-data/gaia234/hyades.csv`, checked against its committed sha256.
 
 ## Reproduction
 
