@@ -1,6 +1,6 @@
 {
   "schema": 1,
-  "note": "One record per public claim (Roadmap III rule 7.5.10). Classes: S software works, V-internal and V-external science valid, A adopted, L learning measured. status is established, partial, or UNKNOWN (not established); nothing upgrades UNKNOWN on the strength of a unit test. anchors are exact single-line texts a public page carries; the test fails when one is missing or when a claim-bearing line on a scanned page matches no record. Run: node tools/evidence-status.mjs --write",
+  "note": "One record per public claim (Roadmap III rule 7.5.10). Classes: S software works, V-internal and V-external science valid, A adopted, L learning measured. status is established, partial, or UNKNOWN (not established); nothing upgrades UNKNOWN on the strength of a unit test. anchors are exact single-line texts a public page carries; the test fails when one is missing or when a claim-bearing line on a scanned page matches no record. Run: node tools/evidence-status.mjs --write Kernel rows (ids beginning kernel-): established when no committed leg of the kernel fails or is NOT RUN, partial when a leg fails or is NOT RUN, UNKNOWN when the gate’s verdict for what the kernel carries is C.",
   "novelty": {
     "note": "Novelty is not field use. A badge says a surface is new in a version; it says nothing about whether a class has used it, which is recorded by the adoption (A) and learning (L) claims. Pages carry the badge when listed here, D-R8-01 fixed the nine of 2.0; tests/noveltyBadges.test.js holds the pages to the list in both languages.",
     "badge": {
@@ -482,6 +482,842 @@
         {
           "file": "CHANGELOG.md",
           "text": "The extragalactic closeout (Prompt 253)"
+        }
+      ]
+    },
+    {
+      "id": "kernel-galilean-moons",
+      "claim": "The Galilean moons kernel’s results match the checks its committed thresholds set for it: analytic cases, an independent oracle where one was named, and synthetic worlds whose truth is known.",
+      "scope": "js/satellites/ (Prompt 193), as its validator tools/galilean-validate.mjs and the pinned records in tests/fixtures/galilean/ state it; not any lesson or panel built on it.",
+      "version": "2.1.0",
+      "class": "V-internal",
+      "status": "partial",
+      "method": "tools/galilean-validate.mjs against the thresholds committed before the kernel; the gate and the failing legs are in SATELLITE_EPHEMERIS.md.",
+      "evaluator": "the project",
+      "artifact": "tools/galilean-validate.mjs",
+      "limitations": "Failing legs, named: b2.aliasDesigned, c1.periodAmplitude, c2.mass, d1.coverage; they stay failing as committed. No gate verdict (a kernel prompt). The ephemeris leg uses authentic JPL Horizons positions; the frame sequences are synthetic with a truth manifest. Internal validation against the project’s own committed thresholds, oracle and synthetic worlds; no outside scientist has reviewed the kernel (see external-science-review).",
+      "date": "2026-11-06",
+      "anchors": [
+        {
+          "file": "SATELLITE_EPHEMERIS.md",
+          "text": "# Satellite ephemeris and Jupiter's moons"
+        }
+      ]
+    },
+    {
+      "id": "kernel-sun",
+      "claim": "The Sun (disc geometry, spot rotation, solar constant) kernel’s results match the checks its committed thresholds set for it: analytic cases, an independent oracle where one was named, and synthetic worlds whose truth is known.",
+      "scope": "js/kernels/sun/ (Prompt 194), as its validator tools/sun-validate.mjs and the pinned records in tests/fixtures/sun/ state it; not any lesson or panel built on it.",
+      "version": "2.1.0",
+      "class": "V-internal",
+      "status": "partial",
+      "method": "tools/sun-validate.mjs against the thresholds committed before the kernel; the gate and the failing legs are in SUN_KERNEL.md.",
+      "evaluator": "the project",
+      "artifact": "tools/sun-validate.mjs",
+      "limitations": "Failing legs, named: a7.noiseFree.synodicRoute, e1.authentic.G2, e1.limb, e2.au; they stay failing as committed. NOT RUN or not measured, named: b4.package (sunpy absent). No gate verdict. Carl ruled on the failing legs (D-R10-194-01); they stay failing. The authentic tier is a short sequence of HMI browse pictures, labelled not astrometry (D-R10-92). Internal validation against the project’s own committed thresholds, oracle and synthetic worlds; no outside scientist has reviewed the kernel (see external-science-review).",
+      "date": "2026-11-06",
+      "anchors": [
+        {
+          "file": "SUN_KERNEL.md",
+          "text": "# The Sun as a measurement: disc geometry, rotation from spots and the solar constant"
+        }
+      ]
+    },
+    {
+      "id": "kernel-crater-counting",
+      "claim": "The crater counting kernel’s results match the checks its committed thresholds set for it: analytic cases, an independent oracle where one was named, and synthetic worlds whose truth is known.",
+      "scope": "js/measure/craters.js (Prompt 195), as its validator tools/craters-validate.mjs and its document state it; not any lesson or panel built on it.",
+      "version": "2.1.0",
+      "class": "V-internal",
+      "status": "partial",
+      "method": "tools/craters-validate.mjs against the thresholds committed before the kernel; the gate and the failing legs are in CRATER_COUNTING.md.",
+      "evaluator": "the project",
+      "artifact": "tools/craters-validate.mjs",
+      "limitations": "The chronology gate of Prompt 196 (CRATER_CHRONOLOGY_GATE.md) returned verdict C: no absolute age is offered and the kernel is not used for one. No leg of its validator fails. NOT RUN or not measured, named: b4 (a crater-statistics tool’s curve; craterstats not installed), e1 (the reference regions’ published counts), e.published (a second lunar catalogue; the host refused connections), e.frames (no marks by a person exist). The authentic tier is partly open; the formula oracle and the injection legs pass. Internal validation against the project’s own committed thresholds, oracle and synthetic worlds; no outside scientist has reviewed the kernel (see external-science-review).",
+      "date": "2026-11-06",
+      "anchors": [
+        {
+          "file": "CRATER_COUNTING.md",
+          "text": "# Crater counting: relative ages, size-frequency distributions and diameter uncertainty"
+        }
+      ]
+    },
+    {
+      "id": "kernel-atmospheres-energy-balance",
+      "claim": "The atmospheres I (energy balance, greenhouse models, scale height) kernel’s results match the checks its committed thresholds set for it: analytic cases, an independent oracle where one was named, and synthetic worlds whose truth is known.",
+      "scope": "js/kernels/atmospheres/ (Prompt 200), as its validator tools/atmospheres-validate.mjs and its document state it; not any lesson or panel built on it.",
+      "version": "2.1.0",
+      "class": "V-internal",
+      "status": "established",
+      "method": "tools/atmospheres-validate.mjs against the thresholds committed before the kernel; the gate and the failing legs are in ATMOSPHERES.md.",
+      "evaluator": "the project",
+      "artifact": "tools/atmospheres-validate.mjs",
+      "limitations": "Built within verdict B of Prompt 199: no escape or retention panel. No leg of its validator fails. The body table is typed from sources and marked checked: false until read. Internal validation against the project’s own committed thresholds, oracle and synthetic worlds; no outside scientist has reviewed the kernel (see external-science-review).",
+      "date": "2026-11-06",
+      "anchors": [
+        {
+          "file": "ATMOSPHERES.md",
+          "text": "# Atmospheres I: energy balance, two greenhouse models and the scale height"
+        }
+      ]
+    },
+    {
+      "id": "kernel-atmospheres-eclipse-phase",
+      "claim": "The atmospheres II (eclipse and phase slice) kernel’s results match the checks its committed thresholds set for it: analytic cases, an independent oracle where one was named, and synthetic worlds whose truth is known.",
+      "scope": "js/kernels/atmospheres/ (Prompt 202), as its validator tools/atmospheres-ii-validate.mjs and its document state it; not any lesson or panel built on it.",
+      "version": "2.1.0",
+      "class": "V-internal",
+      "status": "partial",
+      "method": "tools/atmospheres-ii-validate.mjs against the thresholds committed before the kernel; the gate and the failing legs are in ATMOSPHERES.md.",
+      "evaluator": "the project",
+      "artifact": "tools/atmospheres-ii-validate.mjs",
+      "limitations": "Built within verdict B of the Prompt 201 gate (ATMOSPHERES_GATE_II.md, after Carl’s reset): the transmission piece is not built; on the gate spike X3 and X4 fail and XR, XT and D1 to D3 were not measured. No leg of its validator fails. NOT RUN or not measured, named: A1 (the authentic-data leg, not measured: no published table was available). The eclipse and phase data are synthetic with a truth manifest. Internal validation against the project’s own committed thresholds, oracle and synthetic worlds; no outside scientist has reviewed the kernel (see external-science-review).",
+      "date": "2026-11-06",
+      "anchors": [
+        {
+          "file": "ATMOSPHERES.md",
+          "text": "# Atmospheres I: energy balance, two greenhouse models and the scale height"
+        }
+      ]
+    },
+    {
+      "id": "kernel-tides-rings",
+      "claim": "The rings, Roche limits and analytic tides kernel’s results match the checks its committed thresholds set for it: analytic cases, an independent oracle where one was named, and synthetic worlds whose truth is known.",
+      "scope": "js/kernels/tides/ (Prompt 204), as its validator tools/tides-validate.mjs and its document state it; not any lesson or panel built on it.",
+      "version": "2.1.0",
+      "class": "V-internal",
+      "status": "established",
+      "method": "tools/tides-validate.mjs against the thresholds committed before the kernel; the gate and the failing legs are in TIDAL_KERNEL.md.",
+      "evaluator": "the project",
+      "artifact": "tools/tides-validate.mjs",
+      "limitations": "Gate verdict B: a precomputed trajectory and no engine torque; the gate’s torque legs belong to the unmerged spike. No leg of its validator fails. Internal validation against the project’s own committed thresholds, oracle and synthetic worlds; no outside scientist has reviewed the kernel (see external-science-review).",
+      "date": "2026-11-06",
+      "anchors": [
+        {
+          "file": "TIDAL_KERNEL.md",
+          "text": "# Rings, Roche limits and analytic tides (Prompt 204, part A)"
+        }
+      ]
+    },
+    {
+      "id": "kernel-interiors-bulk",
+      "claim": "The interiors I (bulk comparison of the planets) kernel’s results match the checks its committed thresholds set for it: analytic cases, an independent oracle where one was named, and synthetic worlds whose truth is known.",
+      "scope": "js/kernels/interiors/ (Prompt 203), as its validator tools/interiors-validate.mjs and the pinned records in tests/fixtures/interiors-gate/ state it; not any lesson or panel built on it.",
+      "version": "2.1.0",
+      "class": "V-internal",
+      "status": "established",
+      "method": "tools/interiors-validate.mjs against the thresholds committed before the kernel; the gate and the failing legs are in INTERIORS.md.",
+      "evaluator": "the project",
+      "artifact": "tools/interiors-validate.mjs",
+      "limitations": "The gate (INTERIORS_GATE.md) returned verdict C as committed, on one leg: O6.coverage fails on the conservative side and its bound was not reset. No inversion and no oblateness is built; the bulk kernel is what is validated here. No leg of its validator fails. The body table is typed from sources and marked checked: false. Internal validation against the project’s own committed thresholds, oracle and synthetic worlds; no outside scientist has reviewed the kernel (see external-science-review).",
+      "date": "2026-11-06",
+      "anchors": [
+        {
+          "file": "INTERIORS.md",
+          "text": "# Interiors I: bulk comparison of the planets"
+        }
+      ]
+    },
+    {
+      "id": "kernel-small-bodies",
+      "claim": "The small bodies (the belts and the spin from a light curve) kernel’s results match the checks its committed thresholds set for it: analytic cases, an independent oracle where one was named, and synthetic worlds whose truth is known.",
+      "scope": "js/kernels/smallbodies/ (Prompt 198), as its validator tools/small-bodies-validate.mjs and the pinned records in tests/fixtures/small-bodies/ state it; not any lesson or panel built on it.",
+      "version": "2.1.0",
+      "class": "V-internal",
+      "status": "partial",
+      "method": "tools/small-bodies-validate.mjs against the thresholds committed before the kernel; the gate and the failing legs are in SMALL_BODIES.md.",
+      "evaluator": "the project",
+      "artifact": "tools/small-bodies-validate.mjs",
+      "limitations": "Failing legs, named: b3.rotationPeriod, c1.coverage.7:3, c1.coverage.2:1, d3.warned, c3.noise0.01.amplitude, c3.noise0.01.amplitudeCoverage, c3.noise0.01.boundHolds, c3.noise0.03.period, c3.noise0.03.amplitude, c3.noise0.03.amplitudeCoverage; they stay failing as committed. NOT RUN or not measured, named: e1.cited, e2.lightcurve. No gate verdict. The failing legs are kept as measured under Carl’s ruling D-R10-198-03; the spin curve is synthetic and the catalogue leg ran on a JPL SBDB cut. Internal validation against the project’s own committed thresholds, oracle and synthetic worlds; no outside scientist has reviewed the kernel (see external-science-review).",
+      "date": "2026-11-06",
+      "anchors": [
+        {
+          "file": "SMALL_BODIES.md",
+          "text": "# The belts from a catalog and the spin from a light curve"
+        }
+      ]
+    },
+    {
+      "id": "kernel-habitable-zone",
+      "claim": "The habitable zone II (threshold limits) kernel’s results match the checks its committed thresholds set for it: analytic cases, an independent oracle where one was named, and synthetic worlds whose truth is known.",
+      "scope": "js/kernels/habitablezone/ (Prompt 205), as its validator tools/habitable-zone-validate.mjs and its document state it; not any lesson or panel built on it.",
+      "version": "2.1.0",
+      "class": "V-internal",
+      "status": "established",
+      "method": "tools/habitable-zone-validate.mjs against the thresholds committed before the kernel; the gate and the failing legs are in HABITABLE_ZONE_II.md.",
+      "evaluator": "the project",
+      "artifact": "tools/habitable-zone-validate.mjs",
+      "limitations": "Built within verdict B of Prompt 199: no escape bar and no spectra. No leg of its validator fails. The oracle is the author’s own implementation and its coefficient table was typed from the same source as the kernel’s, so its independence is weak; the values are marked checked: false. Internal validation against the project’s own committed thresholds, oracle and synthetic worlds; no outside scientist has reviewed the kernel (see external-science-review).",
+      "date": "2026-11-06",
+      "anchors": [
+        {
+          "file": "HABITABLE_ZONE_II.md",
+          "text": "# Habitable zone II: threshold limits (Prompt 205, part A, the kernel)"
+        }
+      ]
+    },
+    {
+      "id": "kernel-telescopes",
+      "claim": "The telescopes and resolution kernel’s results match the checks its committed thresholds set for it: analytic cases, an independent oracle where one was named, and synthetic worlds whose truth is known.",
+      "scope": "js/kernels/detector/ (Prompt 208), as its validator tools/telescopes-validate.mjs and the pinned records in tests/fixtures/telescopes/ state it; not any lesson or panel built on it.",
+      "version": "2.1.0",
+      "class": "V-internal",
+      "status": "partial",
+      "method": "tools/telescopes-validate.mjs against the thresholds committed before the kernel; the gate and the failing legs are in TELESCOPES.md.",
+      "evaluator": "the project",
+      "artifact": "tools/telescopes-validate.mjs",
+      "limitations": "No leg of its validator fails. NOT RUN or not measured, named: A1.authentic (not measured). No gate verdict. Internal validation against the project’s own committed thresholds, oracle and synthetic worlds; no outside scientist has reviewed the kernel (see external-science-review).",
+      "date": "2026-11-06",
+      "anchors": [
+        {
+          "file": "TELESCOPES.md",
+          "text": "# Telescopes and resolution over the existing PSF"
+        }
+      ]
+    },
+    {
+      "id": "kernel-instrument-library",
+      "claim": "The instrument library kernel’s results match the checks its committed thresholds set for it: analytic cases, an independent oracle where one was named, and synthetic worlds whose truth is known.",
+      "scope": "js/instruments/ (Prompt 209), as its validator tools/instruments-validate.mjs and its document state it; not any lesson or panel built on it.",
+      "version": "2.1.0",
+      "class": "V-internal",
+      "status": "partial",
+      "method": "tools/instruments-validate.mjs against the thresholds committed before the kernel; the gate and the failing legs are in INSTRUMENTS.md.",
+      "evaluator": "the project",
+      "artifact": "tools/instruments-validate.mjs",
+      "limitations": "Failing legs, named: o5.zero-point-throughput (the lco-0m35 and qhy600 u and z bands); they stay failing as committed. No gate verdict. Cross-checks of a cited table, not a model: the failing cross-check is named in INSTRUMENTS.md and kept failing. Internal validation against the project’s own committed thresholds, oracle and synthetic worlds; no outside scientist has reviewed the kernel (see external-science-review).",
+      "date": "2026-11-06",
+      "anchors": [
+        {
+          "file": "INSTRUMENTS.md",
+          "text": "# The instrument library"
+        }
+      ]
+    },
+    {
+      "id": "kernel-exposure-planning",
+      "claim": "The exposure planning kernel’s results match the checks its committed thresholds set for it: analytic cases, an independent oracle where one was named, and synthetic worlds whose truth is known.",
+      "scope": "js/kernels/detector/ (Prompt 210), as its validator tools/exposure-validate.mjs and the pinned records in tests/fixtures/exposure/ state it; not any lesson or panel built on it.",
+      "version": "2.1.0",
+      "class": "V-internal",
+      "status": "partial",
+      "method": "tools/exposure-validate.mjs against the thresholds committed before the kernel; the gate and the failing legs are in EXPOSURE_PLANNING.md.",
+      "evaluator": "the project",
+      "artifact": "tools/exposure-validate.mjs",
+      "limitations": "Failing legs, named: B2.readNoiseLoss, B3.doubling, B4.offFiducial; they stay failing as committed. NOT RUN or not measured, named: E1.authentic. No gate verdict. The failing legs are against the published Rubin depth model. Internal validation against the project’s own committed thresholds, oracle and synthetic worlds; no outside scientist has reviewed the kernel (see external-science-review).",
+      "date": "2026-11-06",
+      "anchors": [
+        {
+          "file": "EXPOSURE_PLANNING.md",
+          "text": "# Exposure planning: the CCD-equation kernel, the planner and the lesson"
+        }
+      ]
+    },
+    {
+      "id": "kernel-detector-effects",
+      "claim": "The detector effects II kernel’s results match the checks its committed thresholds set for it: analytic cases, an independent oracle where one was named, and synthetic worlds whose truth is known.",
+      "scope": "js/kernels/detector/ (Prompt 211), as its validator tools/detector-effects-validate.mjs and the pinned records in tests/fixtures/detector-effects/ state it; not any lesson or panel built on it.",
+      "version": "2.1.0",
+      "class": "V-internal",
+      "status": "partial",
+      "method": "tools/detector-effects-validate.mjs against the thresholds committed before the kernel; the gate and the failing legs are in DETECTOR_EFFECTS.md.",
+      "evaluator": "the project",
+      "artifact": "tools/detector-effects-validate.mjs",
+      "limitations": "Failing legs, named: B1.cosmic.internal, B3.cosmic.agreement, D1.refusals; they stay failing as committed. NOT RUN or not measured, named: E1.authentic (not measured). No gate verdict. Internal validation against the project’s own committed thresholds, oracle and synthetic worlds; no outside scientist has reviewed the kernel (see external-science-review).",
+      "date": "2026-11-06",
+      "anchors": [
+        {
+          "file": "DETECTOR_EFFECTS.md",
+          "text": "# Detector effects II"
+        }
+      ]
+    },
+    {
+      "id": "kernel-photometric-calibration",
+      "claim": "The photometric calibration kernel’s results match the checks its committed thresholds set for it: analytic cases, an independent oracle where one was named, and synthetic worlds whose truth is known.",
+      "scope": "js/kernels/detector/photcal.js (Prompt 212), as its validator tools/photometric-calibration-validate.mjs and the pinned records in tests/fixtures/photometric-calibration/ state it; not any lesson or panel built on it.",
+      "version": "2.1.0",
+      "class": "V-internal",
+      "status": "partial",
+      "method": "tools/photometric-calibration-validate.mjs against the thresholds committed before the kernel; the gate and the failing legs are in PHOTOMETRIC_CALIBRATION.md.",
+      "evaluator": "the project",
+      "artifact": "tools/photometric-calibration-validate.mjs",
+      "limitations": "Failing legs, named: B4b.firstOrder.lackOfFit, P3.physical.limit, C2.coverage.underestimated, E1.authentic; they stay failing as committed. No gate verdict. C2 means the kernel’s interval is too narrow on the ensemble, and E1 is an authentic leg that fails. Internal validation against the project’s own committed thresholds, oracle and synthetic worlds; no outside scientist has reviewed the kernel (see external-science-review).",
+      "date": "2026-11-06",
+      "anchors": [
+        {
+          "file": "PHOTOMETRIC_CALIBRATION.md",
+          "text": "# Photometric calibration"
+        }
+      ]
+    },
+    {
+      "id": "kernel-spectrograph",
+      "claim": "The spectrograph model kernel’s results match the checks its committed thresholds set for it: analytic cases, an independent oracle where one was named, and synthetic worlds whose truth is known.",
+      "scope": "js/kernels/spectrograph/ (Prompt 213), as its validator tools/spectrograph-validate.mjs and the pinned records in tests/fixtures/spectrograph/ state it; not any lesson or panel built on it.",
+      "version": "2.1.0",
+      "class": "V-internal",
+      "status": "established",
+      "method": "tools/spectrograph-validate.mjs against the thresholds committed before the kernel; the gate and the failing legs are in SPECTROGRAPH.md.",
+      "evaluator": "the project",
+      "artifact": "tools/spectrograph-validate.mjs",
+      "limitations": "No leg of its validator fails. No gate verdict. The authentic legs E1 and E2 pass. Internal validation against the project’s own committed thresholds, oracle and synthetic worlds; no outside scientist has reviewed the kernel (see external-science-review).",
+      "date": "2026-11-06",
+      "anchors": [
+        {
+          "file": "SPECTROGRAPH.md",
+          "text": "# The spectrograph model and wavelength calibration"
+        }
+      ]
+    },
+    {
+      "id": "kernel-observing-strategy",
+      "claim": "The observing strategy kernel’s results match the checks its committed thresholds set for it: analytic cases, an independent oracle where one was named, and synthetic worlds whose truth is known.",
+      "scope": "js/kernels/strategy/ (Prompt 214), as its validator tools/strategy-validate.mjs and the pinned records in tests/fixtures/strategy/ state it; not any lesson or panel built on it.",
+      "version": "2.1.0",
+      "class": "V-internal",
+      "status": "established",
+      "method": "tools/strategy-validate.mjs against the thresholds committed before the kernel; the gate and the failing legs are in OBSERVING_STRATEGY.md.",
+      "evaluator": "the project",
+      "artifact": "tools/strategy-validate.mjs",
+      "limitations": "No leg of its validator fails. No gate verdict. Internal validation against the project’s own committed thresholds, oracle and synthetic worlds; no outside scientist has reviewed the kernel (see external-science-review).",
+      "date": "2026-11-06",
+      "anchors": [
+        {
+          "file": "OBSERVING_STRATEGY.md",
+          "text": "# Observing strategy: cadence, aliasing and window functions"
+        }
+      ]
+    },
+    {
+      "id": "kernel-survey-design",
+      "claim": "The survey design kernel’s results match the checks its committed thresholds set for it: analytic cases, an independent oracle where one was named, and synthetic worlds whose truth is known.",
+      "scope": "js/kernels/survey/ (Prompt 215), as its validator tools/survey-validate.mjs and the pinned records in tests/fixtures/survey/ state it; not any lesson or panel built on it.",
+      "version": "2.1.0",
+      "class": "V-internal",
+      "status": "partial",
+      "method": "tools/survey-validate.mjs against the thresholds committed before the kernel; the gate and the failing legs are in SURVEY_DESIGN.md.",
+      "evaluator": "the project",
+      "artifact": "tools/survey-validate.mjs",
+      "limitations": "Failing legs, named: A3.skyLimited, A4.optimum, A5.timeRatio, B2.cosmology; they stay failing as committed. NOT RUN or not measured, named: E1.authentic (no real catalogue with a stated completeness). No gate verdict. Internal validation against the project’s own committed thresholds, oracle and synthetic worlds; no outside scientist has reviewed the kernel (see external-science-review).",
+      "date": "2026-11-06",
+      "anchors": [
+        {
+          "file": "SURVEY_DESIGN.md",
+          "text": "# Survey design and \"design an observation\""
+        }
+      ]
+    },
+    {
+      "id": "kernel-eclipsing-binaries",
+      "claim": "The eclipsing binaries kernel’s results match the checks its committed thresholds set for it: analytic cases, an independent oracle where one was named, and synthetic worlds whose truth is known.",
+      "scope": "js/inference/binaries.js (Prompt 217), as its validator tools/binaries-validate.mjs and the pinned records in tests/fixtures/binaries/ state it; not any lesson or panel built on it.",
+      "version": "2.1.0",
+      "class": "V-internal",
+      "status": "partial",
+      "method": "tools/binaries-validate.mjs against the thresholds committed before the kernel; the gate and the failing legs are in BINARIES.md.",
+      "evaluator": "the project",
+      "artifact": "tools/binaries-validate.mjs",
+      "limitations": "Failing legs, named: D1.grazing, E1.authentic (V505 Per: the inclinations disagree); they stay failing as committed. No gate verdict. Internal validation against the project’s own committed thresholds, oracle and synthetic worlds; no outside scientist has reviewed the kernel (see external-science-review).",
+      "date": "2026-11-06",
+      "anchors": [
+        {
+          "file": "BINARIES.md",
+          "text": "# Eclipsing binaries: a detached model with identifiability stated"
+        }
+      ]
+    },
+    {
+      "id": "kernel-binary-masses",
+      "claim": "The binary masses (SB2 with an eclipse) kernel’s results match the checks its committed thresholds set for it: analytic cases, an independent oracle where one was named, and synthetic worlds whose truth is known.",
+      "scope": "js/inference/binaryMasses.js (Prompt 218), as its validator tools/binary-masses-validate.mjs and the pinned records in tests/fixtures/binary-masses/ state it; not any lesson or panel built on it.",
+      "version": "2.1.0",
+      "class": "V-internal",
+      "status": "partial",
+      "method": "tools/binary-masses-validate.mjs against the thresholds committed before the kernel; the gate and the failing legs are in BINARY_MASSES.md.",
+      "evaluator": "the project",
+      "artifact": "tools/binary-masses-validate.mjs",
+      "limitations": "Failing legs, named: C1.coverageSb2, D4.grazing, E1.authentic; they stay failing as committed. No gate verdict for Part A. Internal validation against the project’s own committed thresholds, oracle and synthetic worlds; no outside scientist has reviewed the kernel (see external-science-review).",
+      "date": "2026-11-06",
+      "anchors": [
+        {
+          "file": "BINARY_MASSES.md",
+          "text": "# Binary masses and radii: the double-lined orbit and the joint eclipse solution"
+        }
+      ]
+    },
+    {
+      "id": "kernel-visual-binary",
+      "claim": "The visual binary (the mass sum, the mass fraction and the companion mass) kernel’s results match the checks its committed thresholds set for it: analytic cases, an independent oracle where one was named, and synthetic worlds whose truth is known.",
+      "scope": "js/measure/visualBinary.js (Prompt 218), as its validator tools/visual-binary-validate.mjs and the pinned records in tests/fixtures/visual-binary/ state it; not any lesson or panel built on it.",
+      "version": "2.1.0",
+      "class": "V-internal",
+      "status": "established",
+      "method": "tools/visual-binary-validate.mjs against the thresholds committed before the kernel; the gate and the failing legs are in VISUAL_BINARY_GATE.md.",
+      "evaluator": "the project",
+      "artifact": "tools/visual-binary-validate.mjs",
+      "limitations": "Gate verdict A for the Part B slice that was built: the mass sum, the mass fraction and the photocentre companion mass. No leg of its validator fails. E1 passes as a circular units check on the published elements, not as an authentic fit. Internal validation against the project’s own committed thresholds, oracle and synthetic worlds; no outside scientist has reviewed the kernel (see external-science-review).",
+      "date": "2026-11-06",
+      "anchors": [
+        {
+          "file": "VISUAL_BINARY_GATE.md",
+          "text": "# The visual-binary branch: the gate (Prompt 218, Part B)"
+        }
+      ]
+    },
+    {
+      "id": "kernel-cluster-fitting",
+      "claim": "The cluster fitting kernel’s results match the checks its committed thresholds set for it: analytic cases, an independent oracle where one was named, and synthetic worlds whose truth is known.",
+      "scope": "js/kernels/clusters/ (Prompt 219), as its validator tools/cluster-fit-validate.mjs and the pinned records in tests/fixtures/cluster-fit/ state it; not any lesson or panel built on it.",
+      "version": "2.1.0",
+      "class": "V-internal",
+      "status": "partial",
+      "method": "tools/cluster-fit-validate.mjs against the thresholds committed before the kernel; the gate and the failing legs are in CLUSTER_FITTING.md.",
+      "evaluator": "the project",
+      "artifact": "tools/cluster-fit-validate.mjs",
+      "limitations": "The Part B gate (CLUSTER_FOUR_PARAMETER_GATE.md) returned verdict C (G1, G3, G4, H1 and H3 fail): Part A stands and metallicity is not fitted. Failing legs, named: D6.edge, E1.ngc2420 (NGC 2420: neither fitted interval overlaps the published one); they stay failing as committed. Internal validation against the project’s own committed thresholds, oracle and synthetic worlds; no outside scientist has reviewed the kernel (see external-science-review).",
+      "date": "2026-11-06",
+      "anchors": [
+        {
+          "file": "CLUSTER_FITTING.md",
+          "text": "# Cluster fitting: an age and a distance at a stated metallicity"
+        }
+      ]
+    },
+    {
+      "id": "kernel-stellar-activity",
+      "claim": "The stellar rotation and flares kernel’s results match the checks its committed thresholds set for it: analytic cases, an independent oracle where one was named, and synthetic worlds whose truth is known.",
+      "scope": "js/kernels/activity/ (Prompt 220), as its validator tools/stellar-activity-validate.mjs and the pinned records in tests/fixtures/stellar-activity/ state it; not any lesson or panel built on it.",
+      "version": "2.1.0",
+      "class": "V-internal",
+      "status": "partial",
+      "method": "tools/stellar-activity-validate.mjs against the thresholds committed before the kernel; the gate and the failing legs are in STELLAR_ACTIVITY.md.",
+      "evaluator": "the project",
+      "artifact": "tools/stellar-activity-validate.mjs",
+      "limitations": "The Part B gate returned verdict C: no ages and no flare energies; one reading step. Failing legs, named: B4.periodOracle, D4.doubleDipUnequal; they stay failing as committed. The authentic legs (AU Mic and EK Dra periods) pass. Internal validation against the project’s own committed thresholds, oracle and synthetic worlds; no outside scientist has reviewed the kernel (see external-science-review).",
+      "date": "2026-11-06",
+      "anchors": [
+        {
+          "file": "STELLAR_ACTIVITY.md",
+          "text": "# Stellar rotation and flares (Prompt 220)"
+        }
+      ]
+    },
+    {
+      "id": "kernel-remnants",
+      "claim": "The stellar remnants kernel’s results match the checks its committed thresholds set for it: analytic cases, an independent oracle where one was named, and synthetic worlds whose truth is known.",
+      "scope": "js/kernels/remnants/ (Prompt 222), as its validator tools/remnants-validate.mjs and the pinned records in tests/fixtures/remnants/ state it; not any lesson or panel built on it.",
+      "version": "2.1.0",
+      "class": "V-internal",
+      "status": "partial",
+      "method": "tools/remnants-validate.mjs against the thresholds committed before the kernel; the gate and the failing legs are in REMNANTS.md.",
+      "evaluator": "the project",
+      "artifact": "tools/remnants-validate.mjs",
+      "limitations": "Failing legs, named: A6.ifmrContinuity, A9.neutronStars; they stay failing as committed. No gate verdict. E1 passes and says it is an applicability check on the rows the relation was fitted to, not independent. Internal validation against the project’s own committed thresholds, oracle and synthetic worlds; no outside scientist has reviewed the kernel (see external-science-review).",
+      "date": "2026-11-06",
+      "anchors": [
+        {
+          "file": "REMNANTS.md",
+          "text": "# Remnants: cooling ages, the initial-final mass relation, probabilistic outcomes (Prompt 222)"
+        }
+      ]
+    },
+    {
+      "id": "kernel-variables-ii",
+      "claim": "The variable stars II kernel’s results match the checks its committed thresholds set for it: analytic cases, an independent oracle where one was named, and synthetic worlds whose truth is known.",
+      "scope": "js/kernels/variables/ (Prompt 223), as its validator tools/variables-ii-validate.mjs and the pinned records in tests/fixtures/variables-ii/ state it; not any lesson or panel built on it.",
+      "version": "2.1.0",
+      "class": "V-internal",
+      "status": "established",
+      "method": "tools/variables-ii-validate.mjs against the thresholds committed before the kernel; the gate and the failing legs are in VARIABLES_II.md.",
+      "evaluator": "the project",
+      "artifact": "tools/variables-ii-validate.mjs",
+      "limitations": "The Part B gate (VARIABLE_CLASSIFIER_GATE.md) returned verdict B: G2.accuracyCalled and G6.bootstrap fail on the spike and the classifier slice is not built. No leg of its validator fails. Internal validation against the project’s own committed thresholds, oracle and synthetic worlds; no outside scientist has reviewed the kernel (see external-science-review).",
+      "date": "2026-11-06",
+      "anchors": [
+        {
+          "file": "VARIABLES_II.md",
+          "text": "# Variables II: light-curve features, the metallicity term, and when not to say a class (Prompt 223)"
+        }
+      ]
+    },
+    {
+      "id": "kernel-transit-delta",
+      "claim": "The transit depth change (delta) kernel’s results match the checks its committed thresholds set for it: analytic cases, an independent oracle where one was named, and synthetic worlds whose truth is known.",
+      "scope": "js/kernels/ (Prompt 225), as its validator tools/transit-delta-validate.mjs and the pinned records in tests/fixtures/transit-delta/ state it; not any lesson or panel built on it.",
+      "version": "2.1.0",
+      "class": "V-internal",
+      "status": "partial",
+      "method": "tools/transit-delta-validate.mjs against the thresholds committed before the kernel; the gate and the failing legs are in TRANSIT_DELTA.md.",
+      "evaluator": "the project",
+      "artifact": "tools/transit-delta-validate.mjs",
+      "limitations": "Failing legs, named: B1, B2, B2b, B3, B3b, B4, C1, C2, C3, D2, D3; they stay failing as committed. NOT RUN or not measured, named: A8 (the Claret table), E1. No gate verdict. The coverage legs C1 to C3 fall short of their level. Internal validation against the project’s own committed thresholds, oracle and synthetic worlds; no outside scientist has reviewed the kernel (see external-science-review).",
+      "date": "2026-11-06",
+      "anchors": [
+        {
+          "file": "TRANSIT_DELTA.md",
+          "text": "# The transit model delta (Prompt 225)"
+        }
+      ]
+    },
+    {
+      "id": "kernel-ttv",
+      "claim": "The transit timing variations kernel’s results match the checks its committed thresholds set for it: analytic cases, an independent oracle where one was named, and synthetic worlds whose truth is known.",
+      "scope": "js/kernels/ttv/ (Prompt 226), as its validator tools/ttv-validate.mjs and the pinned records in tests/fixtures/ttv/ state it; not any lesson or panel built on it.",
+      "version": "2.1.0",
+      "class": "V-internal",
+      "status": "partial",
+      "method": "tools/ttv-validate.mjs against the thresholds committed before the kernel; the gate and the failing legs are in TTV.md.",
+      "evaluator": "the project",
+      "artifact": "tools/ttv-validate.mjs",
+      "limitations": "The Part B gate (TTV_MASS_GATE.md) returned verdict B: a circular-pair mass bound only, labelled; the mass slice is not built. Failing legs, named: C2, C3, D1, D2; they stay failing as committed. NOT RUN or not measured, named: E1 (the Kepler-9 times were unreachable). Internal validation against the project’s own committed thresholds, oracle and synthetic worlds; no outside scientist has reviewed the kernel (see external-science-review).",
+      "date": "2026-11-06",
+      "anchors": [
+        {
+          "file": "TTV.md",
+          "text": "# Transit timing variations (Prompt 226)"
+        }
+      ]
+    },
+    {
+      "id": "kernel-joint-transit-rv",
+      "claim": "The joint transit and radial-velocity fit kernel’s results match the checks its committed thresholds set for it: analytic cases, an independent oracle where one was named, and synthetic worlds whose truth is known.",
+      "scope": "js/inference/ (Prompt 227), as its validator tools/joint-inference-validate.mjs and the pinned records in tests/fixtures/joint-inference/ state it; not any lesson or panel built on it.",
+      "version": "2.1.0",
+      "class": "V-internal",
+      "status": "partial",
+      "method": "tools/joint-inference-validate.mjs against the thresholds committed before the kernel; the gate and the failing legs are in JOINT_INFERENCE.md.",
+      "evaluator": "the project",
+      "artifact": "tools/joint-inference-validate.mjs",
+      "limitations": "Failing legs, named: C4, D6; they stay failing as committed. NOT RUN or not measured, named: E1. No gate verdict. Internal validation against the project’s own committed thresholds, oracle and synthetic worlds; no outside scientist has reviewed the kernel (see external-science-review).",
+      "date": "2026-11-06",
+      "anchors": [
+        {
+          "file": "JOINT_INFERENCE.md",
+          "text": "# Joint transit and radial-velocity inference with the star inside (Prompt 227)"
+        }
+      ]
+    },
+    {
+      "id": "kernel-vetting",
+      "claim": "The candidate vetting kernel’s results match the checks its committed thresholds set for it: analytic cases, an independent oracle where one was named, and synthetic worlds whose truth is known.",
+      "scope": "js/kernels/vetting/ (Prompt 228), as its validator tools/vetting-validate.mjs and the pinned records in tests/fixtures/vetting/ state it; not any lesson or panel built on it.",
+      "version": "2.1.0",
+      "class": "V-internal",
+      "status": "established",
+      "method": "tools/vetting-validate.mjs against the thresholds committed before the kernel; the gate and the failing legs are in VETTING.md.",
+      "evaluator": "the project",
+      "artifact": "tools/vetting-validate.mjs",
+      "limitations": "No leg of its validator fails. No gate verdict. The authentic Kepler-13 TESS check passes. Internal validation against the project’s own committed thresholds, oracle and synthetic worlds; no outside scientist has reviewed the kernel (see external-science-review).",
+      "date": "2026-11-06",
+      "anchors": [
+        {
+          "file": "VETTING.md",
+          "text": "# Vetting with ambiguity (Prompt 228)"
+        }
+      ]
+    },
+    {
+      "id": "kernel-occurrence",
+      "claim": "The occurrence rates kernel’s results match the checks its committed thresholds set for it: analytic cases, an independent oracle where one was named, and synthetic worlds whose truth is known.",
+      "scope": "js/kernels/occurrence/ (Prompt 229), as its validator tools/occurrence-validate.mjs and the pinned records in tests/fixtures/occurrence/ state it; not any lesson or panel built on it.",
+      "version": "2.1.0",
+      "class": "V-internal",
+      "status": "partial",
+      "method": "tools/occurrence-validate.mjs against the thresholds committed before the kernel; the gate and the failing legs are in OCCURRENCE_GATE.md.",
+      "evaluator": "the project",
+      "artifact": "tools/occurrence-validate.mjs",
+      "limitations": "Gate verdict A; the lesson was built within the bounds. Failing legs, named: D4, D4b (unmeasurable: no rich bin at the longest periods); they stay failing as committed. NOT RUN or not measured, named: E1. Internal validation against the project’s own committed thresholds, oracle and synthetic worlds; no outside scientist has reviewed the kernel (see external-science-review).",
+      "date": "2026-11-06",
+      "anchors": [
+        {
+          "file": "OCCURRENCE_GATE.md",
+          "text": "# Occurrence rates: the gate (Prompt 229, Part A)"
+        }
+      ]
+    },
+    {
+      "id": "kernel-direct-imaging",
+      "claim": "The direct imaging contrast kernel’s results match the checks its committed thresholds set for it: analytic cases, an independent oracle where one was named, and synthetic worlds whose truth is known.",
+      "scope": "js/kernels/imaging/ (Prompt 230), as its validator tools/imaging-validate.mjs and the pinned records in tests/fixtures/imaging/ state it; not any lesson or panel built on it.",
+      "version": "2.1.0",
+      "class": "V-internal",
+      "status": "partial",
+      "method": "tools/imaging-validate.mjs against the thresholds committed before the kernel; the gate and the failing legs are in IMAGING.md.",
+      "evaluator": "the project",
+      "artifact": "tools/imaging-validate.mjs",
+      "limitations": "The Part B gate (IMAGING_SUBTRACTION_GATE.md) returned verdict C (C1, C2, D1, O2, O3 and O6 fail): no subtraction demonstration and no subtract or orbit module. No leg of its validator fails. NOT RUN or not measured, named: E2. Internal validation against the project’s own committed thresholds, oracle and synthetic worlds; no outside scientist has reviewed the kernel (see external-science-review).",
+      "date": "2026-11-06",
+      "anchors": [
+        {
+          "file": "IMAGING.md",
+          "text": "# Direct imaging: contrast and separation (Prompt 230, Part A)"
+        }
+      ]
+    },
+    {
+      "id": "kernel-gaia-workflows",
+      "claim": "The Gaia parallax workflows and sample selection kernel’s results match the checks its committed thresholds set for it: analytic cases, an independent oracle where one was named, and synthetic worlds whose truth is known.",
+      "scope": "js/kernels/galactic/ (Prompt 233), as its validator tools/gaia-validate.mjs and the pinned records in tests/fixtures/gaia-workflows/ state it; not any lesson or panel built on it.",
+      "version": "2.1.0",
+      "class": "V-internal",
+      "status": "partial",
+      "method": "tools/gaia-validate.mjs against the thresholds committed before the kernel; the gate and the failing legs are in GAIA_WORKFLOWS.md.",
+      "evaluator": "the project",
+      "artifact": "tools/gaia-validate.mjs",
+      "limitations": "No leg of its validator fails. NOT RUN or not measured, named: E1 (NGC 2420 against a published catalogue distance), E3 (rounding, where the re-queried file is absent). No gate verdict. The Gaia columns are CC BY-NC 3.0 IGO and labelled non-commercial. Internal validation against the project’s own committed thresholds, oracle and synthetic worlds; no outside scientist has reviewed the kernel (see external-science-review).",
+      "date": "2026-11-06",
+      "anchors": [
+        {
+          "file": "GAIA_WORKFLOWS.md",
+          "text": "# Gaia parallax workflows and sample selection (Roadmap III, Prompt 233)"
+        }
+      ]
+    },
+    {
+      "id": "kernel-rotation-decomposition",
+      "claim": "The rotation-curve decomposition kernel’s results match the checks its committed thresholds set for it: analytic cases, an independent oracle where one was named, and synthetic worlds whose truth is known.",
+      "scope": "js/kernels/galactic/decomposition.js (Prompt 236), as its validator tools/rotation-decomposition-validate.mjs and the pinned records in tests/fixtures/rotation-decomposition/ state it; not any lesson or panel built on it.",
+      "version": "2.1.0",
+      "class": "V-internal",
+      "status": "partial",
+      "method": "tools/rotation-decomposition-validate.mjs against the thresholds committed before the kernel; the gate and the failing legs are in ROTATION_DECOMPOSITION.md.",
+      "evaluator": "the project",
+      "artifact": "tools/rotation-decomposition-validate.mjs",
+      "limitations": "Failing legs, named: A3, A5, C3, D4; they stay failing as committed. NOT RUN or not measured, named: E2. No gate verdict: Part B was deferred and the consumers rule holds the panel and the lesson depth. Internal validation against the project’s own committed thresholds, oracle and synthetic worlds; no outside scientist has reviewed the kernel (see external-science-review).",
+      "date": "2026-11-06",
+      "anchors": [
+        {
+          "file": "ROTATION_DECOMPOSITION.md",
+          "text": "# Rotation-curve decomposition (Roadmap III Prompt 236, Part A: the kernel)"
+        }
+      ]
+    },
+    {
+      "id": "kernel-stellar-dynamics",
+      "claim": "The cluster dynamics (timescales, virial, friction) kernel’s results match the checks its committed thresholds set for it: analytic cases, an independent oracle where one was named, and synthetic worlds whose truth is known.",
+      "scope": "js/kernels/dynamics/ (Prompt 237), as its validator tools/dynamics-validate.mjs and the pinned records in tests/fixtures/dynamics/ state it; not any lesson or panel built on it.",
+      "version": "2.1.0",
+      "class": "V-internal",
+      "status": "UNKNOWN",
+      "method": "tools/dynamics-validate.mjs against the thresholds committed before the kernel; the gate and the failing legs are in DYNAMICS_REFERENCE_GATE.md.",
+      "evaluator": "the project",
+      "artifact": "tools/dynamics-validate.mjs",
+      "limitations": "Gate verdict C, by the committed rule: the quantitative claim is omitted and no analytic lesson is built. Failing legs, named: C1, C2, R2, R7; they stay failing as committed. NOT RUN or not measured, named: B1. Internal validation against the project’s own committed thresholds, oracle and synthetic worlds; no outside scientist has reviewed the kernel (see external-science-review).",
+      "date": "2026-11-06",
+      "anchors": [
+        {
+          "file": "DYNAMICS_REFERENCE_GATE.md",
+          "text": "# Dynamics reference gate (Prompt 237, Part B)"
+        }
+      ]
+    },
+    {
+      "id": "kernel-multimessenger-timeline",
+      "claim": "The multi-messenger timeline kernel’s results match the checks its committed thresholds set for it: analytic cases, an independent oracle where one was named, and synthetic worlds whose truth is known.",
+      "scope": "js/kernels/multimessenger/ (Prompt 244), as its validator tools/multimessenger-validate.mjs and the pinned records in tests/fixtures/multimessenger/ state it; not any lesson or panel built on it.",
+      "version": "2.1.0",
+      "class": "V-internal",
+      "status": "partial",
+      "method": "tools/multimessenger-validate.mjs against the thresholds committed before the kernel; the gate and the failing legs are in MULTIMESSENGER.md.",
+      "evaluator": "the project",
+      "artifact": "tools/multimessenger-validate.mjs",
+      "limitations": "No leg of its validator fails. NOT RUN or not measured, named: B2, B4, E1, E3. No gate verdict. No authentic data were fetched. Internal validation against the project’s own committed thresholds, oracle and synthetic worlds; no outside scientist has reviewed the kernel (see external-science-review).",
+      "date": "2026-11-06",
+      "anchors": [
+        {
+          "file": "MULTIMESSENGER.md",
+          "text": "# The multi-messenger timeline: kernel and validation (Prompt 244)"
+        }
+      ]
+    },
+    {
+      "id": "kernel-xray-timing",
+      "claim": "The X-ray counts and timing kernel’s results match the checks its committed thresholds set for it: analytic cases, an independent oracle where one was named, and synthetic worlds whose truth is known.",
+      "scope": "js/kernels/xray/ (Prompt 243), as its validator tools/xray-validate.mjs and the pinned records in tests/fixtures/xray/ state it; not any lesson or panel built on it.",
+      "version": "2.1.0",
+      "class": "V-internal",
+      "status": "partial",
+      "method": "tools/xray-validate.mjs against the thresholds committed before the kernel; the gate and the failing legs are in X_RAY_COUNTS_GATE.md.",
+      "evaluator": "the project",
+      "artifact": "tools/xray-validate.mjs",
+      "limitations": "Kernel verdict B: total-count forms only, and no period claims. Failing legs, named: A4.periodRecovery, B6.netHardnessOracle, C3.netRateCoverage, C5.periodIntervalCoverage; they stay failing as committed. NOT RUN or not measured, named: B7, E0, E1, E2. Internal validation against the project’s own committed thresholds, oracle and synthetic worlds; no outside scientist has reviewed the kernel (see external-science-review).",
+      "date": "2026-11-06",
+      "anchors": [
+        {
+          "file": "X_RAY_COUNTS_GATE.md",
+          "text": "# X-ray timing on the counts contract: the contract and the gate (Prompt 243, Part A)"
+        }
+      ]
+    },
+    {
+      "id": "kernel-sed",
+      "claim": "The spectral energy distributions kernel’s results match the checks its committed thresholds set for it: analytic cases, an independent oracle where one was named, and synthetic worlds whose truth is known.",
+      "scope": "js/kernels/sed/ (Prompt 245), as its validator tools/sed-validate.mjs and the pinned records in tests/fixtures/sed/ state it; not any lesson or panel built on it.",
+      "version": "2.1.0",
+      "class": "V-internal",
+      "status": "UNKNOWN",
+      "method": "tools/sed-validate.mjs against the thresholds committed before the kernel; the gate and the failing legs are in SED_GATE.md.",
+      "evaluator": "the project",
+      "artifact": "tools/sed-validate.mjs",
+      "limitations": "Kernel verdict C by the committed function, and again C in the follow-up; no product is established. Failing legs, named: B1.astropyConversions, B2.bandMeanOracle, C2.coverageLuminosity, D3.rayleighJeansOnly, B1b (the follow-up leg, held failing by Carl’s ruling); they stay failing as committed. NOT RUN or not measured, named: B5, E0, E1, E3. Internal validation against the project’s own committed thresholds, oracle and synthetic worlds; no outside scientist has reviewed the kernel (see external-science-review).",
+      "date": "2026-11-06",
+      "anchors": [
+        {
+          "file": "SED_GATE.md",
+          "text": "# One spectral energy distribution: the contract and the gate (Prompt 245, Part A)"
+        }
+      ]
+    },
+    {
+      "id": "kernel-hi-spectroscopy",
+      "claim": "The HI (21-cm) spectroscopy kernel’s results match the checks its committed thresholds set for it: analytic cases, an independent oracle where one was named, and synthetic worlds whose truth is known.",
+      "scope": "js/kernels/radio/ (Prompt 241), as its validator tools/radio-validate.mjs and the pinned records in tests/fixtures/radio/ state it; not any lesson or panel built on it.",
+      "version": "2.1.0",
+      "class": "V-internal",
+      "status": "partial",
+      "method": "tools/radio-validate.mjs against the thresholds committed before the kernel; the gate and the failing legs are in RADIO.md.",
+      "evaluator": "the project",
+      "artifact": "tools/radio-validate.mjs",
+      "limitations": "Failing legs, named: A1.doppler, C2.coverageTheta0; they stay failing as committed. NOT RUN or not measured, named: B7, E1. No kernel verdict. Every pulse-series and spectrum source row of the radio data gate is basis C, so the synthetic generator is the data. Internal validation against the project’s own committed thresholds, oracle and synthetic worlds; no outside scientist has reviewed the kernel (see external-science-review).",
+      "date": "2026-11-06",
+      "anchors": [
+        {
+          "file": "RADIO.md",
+          "text": "# The HI spectroscopy pathway: kernel and validation (Prompt 241)"
+        }
+      ]
+    },
+    {
+      "id": "kernel-pulsars",
+      "claim": "The pulsar dispersion and folding kernel’s results match the checks its committed thresholds set for it: analytic cases, an independent oracle where one was named, and synthetic worlds whose truth is known.",
+      "scope": "js/kernels/radio/ (Prompt 242), as its validator tools/pulsar-validate.mjs and the pinned records in tests/fixtures/pulsars/ state it; not any lesson or panel built on it.",
+      "version": "2.1.0",
+      "class": "V-internal",
+      "status": "partial",
+      "method": "tools/pulsar-validate.mjs against the thresholds committed before the kernel; the gate and the failing legs are in PULSARS.md.",
+      "evaluator": "the project",
+      "artifact": "tools/pulsar-validate.mjs",
+      "limitations": "Failing legs, named: A5.periodNoiseFree; they stay failing as committed. NOT RUN or not measured, named: B6, E1. No kernel verdict. Part B (timing and the interferometer) is not decided. Internal validation against the project’s own committed thresholds, oracle and synthetic worlds; no outside scientist has reviewed the kernel (see external-science-review).",
+      "date": "2026-11-06",
+      "anchors": [
+        {
+          "file": "PULSARS.md",
+          "text": "# The pulsar kernel: dispersion and folding (Prompt 242, Part A)"
+        }
+      ]
+    },
+    {
+      "id": "kernel-ism",
+      "claim": "The the interstellar medium (lines, widths, columns, reddening) kernel’s results match the checks its committed thresholds set for it: analytic cases, an independent oracle where one was named, and synthetic worlds whose truth is known.",
+      "scope": "js/kernels/ism/ (Prompt 247), as its validator tools/ism-validate.mjs and the pinned records in tests/fixtures/ism/ state it; not any lesson or panel built on it.",
+      "version": "2.1.0",
+      "class": "V-internal",
+      "status": "partial",
+      "method": "tools/ism-validate.mjs against the thresholds committed before the kernel; the gate and the failing legs are in ISM.md.",
+      "evaluator": "the project",
+      "artifact": "tools/ism-validate.mjs",
+      "limitations": "The Part B plasma-diagnostics gate (PLASMA_DIAGNOSTICS_GATE.md) has no verdict: every leg is NOT RUN for want of atomic data, and nothing is built within it. No leg of its validator fails. NOT RUN or not measured, named: B6, E1, E2. Internal validation against the project’s own committed thresholds, oracle and synthetic worlds; no outside scientist has reviewed the kernel (see external-science-review).",
+      "date": "2026-11-06",
+      "anchors": [
+        {
+          "file": "ISM.md",
+          "text": "# The interstellar medium kernel: lines, widths, velocities, columns and reddening (Prompt 247, Part A)"
+        }
+      ]
+    },
+    {
+      "id": "kernel-galaxy-spectra",
+      "claim": "The galaxy spectra (redshift and the 4000-angstrom break) kernel’s results match the checks its committed thresholds set for it: analytic cases, an independent oracle where one was named, and synthetic worlds whose truth is known.",
+      "scope": "js/kernels/galaxy/ (Prompt 248), as its validator tools/galaxy-validate.mjs and the pinned records in tests/fixtures/galaxy/ state it; not any lesson or panel built on it.",
+      "version": "2.1.0",
+      "class": "V-internal",
+      "status": "partial",
+      "method": "tools/galaxy-validate.mjs against the thresholds committed before the kernel; the gate and the failing legs are in GALAXY_SPECTRA.md.",
+      "evaluator": "the project",
+      "artifact": "tools/galaxy-validate.mjs",
+      "limitations": "Failing legs, named: C2.linesCoverage, D2.flatSpectrum, D2b.flatFnuSpectrum, D3.templateMismatch; they stay failing as committed. NOT RUN or not measured, named: B5, E1, E2. No gate verdict. D3b passes as a new leg; the consumers rule is held. Internal validation against the project’s own committed thresholds, oracle and synthetic worlds; no outside scientist has reviewed the kernel (see external-science-review).",
+      "date": "2026-11-06",
+      "anchors": [
+        {
+          "file": "GALAXY_SPECTRA.md",
+          "text": "# The galaxy-spectra kernel: redshift by lines and by correlation, and the 4000-angstrom break (Prompt 248)"
+        }
+      ]
+    },
+    {
+      "id": "kernel-agn",
+      "claim": "The active galactic nuclei kernel’s results match the checks its committed thresholds set for it: analytic cases, an independent oracle where one was named, and synthetic worlds whose truth is known.",
+      "scope": "js/kernels/agn/ (Prompt 252), as its validator tools/agn-validate.mjs and the pinned records in tests/fixtures/agn/ state it; not any lesson or panel built on it.",
+      "version": "2.1.0",
+      "class": "V-internal",
+      "status": "partial",
+      "method": "tools/agn-validate.mjs against the thresholds committed before the kernel; the gate and the failing legs are in AGN.md.",
+      "evaluator": "the project",
+      "artifact": "tools/agn-validate.mjs",
+      "limitations": "The Part B luminosity-function gate (AGN_LUMINOSITY_FUNCTION_GATE.md) has no verdict; its legs G1 to G7 are NOT RUN. Failing legs, named: A7.quasarShift, B3.redshiftOracle, B6.lineFluxOracle, C1.redshiftCoverage, D2.undetectedAndBlended; they stay failing as committed. NOT RUN or not measured, named: B7, E1 to E4. The follow-up legs for the failing ones also fail. Internal validation against the project’s own committed thresholds, oracle and synthetic worlds; no outside scientist has reviewed the kernel (see external-science-review).",
+      "date": "2026-11-06",
+      "anchors": [
+        {
+          "file": "AGN.md",
+          "text": "# Active galactic nuclei: broad-line redshift, luminosity, the Eddington bound, variability and the BPT classes (Prompt 252)"
+        }
+      ]
+    },
+    {
+      "id": "kernel-lensing-enclosed-mass",
+      "claim": "The lensing II (the mass inside an Einstein radius) kernel’s results match the checks its committed thresholds set for it: analytic cases, an independent oracle where one was named, and synthetic worlds whose truth is known.",
+      "scope": "js/kernels/lensing/enclosed/ (Prompt 251), as its validator tools/lensing2-validate.mjs and the pinned records in tests/fixtures/lensing2/ state it; not any lesson or panel built on it.",
+      "version": "2.1.0",
+      "class": "V-internal",
+      "status": "partial",
+      "method": "tools/lensing2-validate.mjs against the thresholds committed before the kernel; the gate and the failing legs are in LENSING_II.md.",
+      "evaluator": "the project",
+      "artifact": "tools/lensing2-validate.mjs",
+      "limitations": "Part A verdict A (the mass bracket); the Part B time-delay and finite-source gate (LENSING_DELAYS_GATE.md) returned verdict C on the spike (G3, G7 and G8 fail; G6 and G9 NOT RUN): no Hubble-constant value is offered. Failing legs, named: P2.finiteSourcePointLimit; they stay failing as committed. NOT RUN or not measured, named: B6, E1 to E3. Internal validation against the project’s own committed thresholds, oracle and synthetic worlds; no outside scientist has reviewed the kernel (see external-science-review).",
+      "date": "2026-11-06",
+      "anchors": [
+        {
+          "file": "LENSING_II.md",
+          "text": "# Lensing II: the mass inside an Einstein radius, image inversions and the arc radius (Prompt 251, Part A)"
+        }
+      ]
+    },
+    {
+      "id": "kernel-galaxy-morphology",
+      "claim": "The galaxy morphology kernel’s results match the checks its committed thresholds set for it: analytic cases, an independent oracle where one was named, and synthetic worlds whose truth is known.",
+      "scope": "js/kernels/galaxy/morphology/ (Prompt 249), as its validator tools/morphology-validate.mjs and the pinned records in tests/fixtures/morphology/ state it; not any lesson or panel built on it.",
+      "version": "2.1.0",
+      "class": "V-internal",
+      "status": "partial",
+      "method": "tools/morphology-validate.mjs against the thresholds committed before the kernel; the gate and the failing legs are in GALAXY_MORPHOLOGY.md.",
+      "evaluator": "the project",
+      "artifact": "tools/morphology-validate.mjs",
+      "limitations": "The Part B profiles gate (GALAXY_PROFILES_GATE.md) has no verdict: no leg has run. Failing legs, named: A2.sersicNoiseFree, A4.magnitudeAndColour, A7.isophotes, B2.measurement, C1.sizeCoverage, D1b.smallerThanPsf; they stay failing as committed. NOT RUN or not measured, named: E1 to E3. Internal validation against the project’s own committed thresholds, oracle and synthetic worlds; no outside scientist has reviewed the kernel (see external-science-review).",
+      "date": "2026-11-06",
+      "anchors": [
+        {
+          "file": "GALAXY_MORPHOLOGY.md",
+          "text": "# The galaxy-morphology kernel: shapes, sizes, magnitudes and colours on an image (Prompt 249, Part A)"
+        }
+      ]
+    },
+    {
+      "id": "kernel-galaxy-clusters",
+      "claim": "The galaxy clusters (dispersion, virial mass, light) kernel’s results match the checks its committed thresholds set for it: analytic cases, an independent oracle where one was named, and synthetic worlds whose truth is known.",
+      "scope": "js/kernels/galaxy/clusters/ (Prompt 250), as its validator tools/clusters-validate.mjs and the pinned records in tests/fixtures/clusters/ state it; not any lesson or panel built on it.",
+      "version": "2.1.0",
+      "class": "V-internal",
+      "status": "partial",
+      "method": "tools/clusters-validate.mjs against the thresholds committed before the kernel; the gate and the failing legs are in GALAXY_CLUSTERS.md.",
+      "evaluator": "the project",
+      "artifact": "tools/clusters-validate.mjs",
+      "limitations": "Kernel verdict B, and again B in the follow-up: the closed forms, the oracle agreement, the refusals and the non-Gaussian flag are claimable; the bootstrap interval, the light interval and the contamination flag as committed are not. Failing legs, named: C1b.dispersionBootstrapCoverage, C4.lightCoverage, D3.contaminationFlag, C4b (follow-up), D3b (follow-up); they stay failing as committed. NOT RUN or not measured, named: E1 to E4. Internal validation against the project’s own committed thresholds, oracle and synthetic worlds; no outside scientist has reviewed the kernel (see external-science-review).",
+      "date": "2026-11-06",
+      "anchors": [
+        {
+          "file": "GALAXY_CLUSTERS.md",
+          "text": "# The galaxy-cluster kernel: dispersion, virial mass, light and morphology (Prompt 250)"
         }
       ]
     }

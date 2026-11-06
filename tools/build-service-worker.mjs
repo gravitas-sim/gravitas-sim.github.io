@@ -613,6 +613,13 @@ export const NEVER_PRECACHED = [
   // Prompt 240: the NANOGrav 15-year pulsars' pack record. No shipped module imports it yet (the pulsar
   // lessons are 242's), so no page can fetch it; its first adopter deletes this entry (D-R10-240-05).
   /^js\/data\/observations\/nanograv15yrPulsars\.js$/,
+  // Checkpoint V repair R-A (D-R10-254-02): the stellar-dynamics kernel (Prompt 237), the multi-messenger kernel (Prompt 244) and the Gaia parallax workflow files
+  // of the galactic kernel (Prompt 233: astrometry, cuts, gaia, zeropoint, zeropointTables). They sat in the install-time core tier, 42.7 KB gzipped of first-visit
+  // growth, though no start-up path imports them: the first two are imported by their validation groups and the rotation-curve decomposition only, and the
+  // galactic files by js/gaiaField.js, a lazy module of the two Gaia lessons (themselves never installed). The older galactic modules (coords, motion, rotation,
+  // membership and the index) stay installed: the Milky Way lessons import them.
+  /^js\/kernels\/(dynamics|multimessenger)\//,
+  /^js\/kernels\/galactic\/(astrometry|cuts|gaia|zeropoint|zeropointTables)\.js$/,
 ];
 
 const ON_DEMAND_ONLY = new Set([
