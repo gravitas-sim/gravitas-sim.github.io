@@ -94,5 +94,30 @@
    "limits": { "nSigma": 2 }
   }
  ],
- "amendments": []
+ "amendments": [
+  {
+   "id": "AM1",
+   "step": "checks G5 (the ensemble) and G1 to G4 (the distances)",
+   "what": "G5's 400 seeded synthetic lenses (seed 'lensing2-G5', the 'noise' stream forked by the world index): z_l uniform in [0.2, 0.6], z_s = z_l + uniform [0.5, 1.5], theta_E log-uniform in [0.8, 3] arcsec, source offset y = beta / theta_E uniform in [0.1, 0.8], true H0 = 70 km/s/Mpc in the validation cosmology (Om 0.3, OL 0.7), true external convergence kappa_true drawn from a normal of mean 0.05 and sigma 0.03, the delay measured with a Gaussian relative error of 0.03 on the true delay (1 - kappa_true) times the unsheeted delay; the caller supplies kappa_ext = 0.05 with sigma 0.03 and the source 'synthetic ensemble, calibrated by construction'. The image positions are taken as exact (the gate tests the delay and the sheet, not astrometry). The interval is at the two-sided levels 0.68 and 0.95 and the width test is: half the 0.95 interval is larger than z times 0.03 times the point value (the kappa_ext term is in it). Separately, G1 to G4 use distances in metres from the cosmology kernel's own Mpc (the value flrw.js derives its Gyr scale from), not the ten-digit parsec of constants.js: the tree's parsec is 4.9e-10 from the exact one, which alone would exceed G1's committed 1e-10, and a delay is proportional to a distance. The rounded-parsec figure is reported beside each of these legs, and no bound moves.",
+   "why": "Recorded before any prototype run, on the spike branch, while writing the prototype from the committed sentences, which fix the bounds and the lens model but not the ensemble's draws or which metre. No bound moved.",
+   "boundMoved": false,
+   "when": "before any prototype run"
+  },
+  {
+   "id": "AM2",
+   "step": "check G7 (reading, the ensemble, no new bound)",
+   "what": "G7 is read as follows. The 200 seeded events (seed 'lensing2-G7', the 'noise' stream forked by the event index) have t0 = 0, tE = 20 d, rho log-uniform in [0.03, 0.3], 100 events with u0 uniform in [0.1, 2] rho (finite-source signal) and 100 with u0 uniform in [3, 6] rho (the source disc far from the lens, rho weakly constrained), the blend f_s uniform in [0.5, 1], 61 points uniform over t0 +- 2.5 tE and a noise of 0.01 of the baseline. The prototype searches rho (and t0, u0, tE and the blend) by the profile chi-square over rho on a grid of 0 and 36 log-spaced values in [0.005, 1] with warm starts, its 0.68 and 0.95 intervals are the crossings of the profile at the Delta chi-square of the normal quantile squared, and it returns a value only when the lower end of the 0.95 interval is above zero; otherwise it returns an upper limit and no value. The leg's committed bands apply to the fraction of the events that returned a value whose interval contains the true rho (the truth, not the oracle's estimate, is what 'recovers rho within the interval' can mean at a rate in [0.610, 0.750]; an oracle estimate inside an interval around itself would be 1). The oracle's scipy fit of the same 200 events (tools/lensing2-oracle/finite-fit.py, pinned in oracle-finite.json before the prototype ran) is the agreement check: the fraction of value-returning events whose rho agrees with the oracle's to a relative 0.1 is REPORTED with no bound, as is the coverage of the upper limits and the number of events that returned no value. The structural clause (no value where the 0.95 lower end is not above zero) holds by construction and is asserted. No new numerical bound is committed.",
+   "why": "Recorded before any prototype run: the committed sentence compares a coverage rate to the oracle, which as written would be one by construction, and gives no ensemble.",
+   "boundMoved": false,
+   "when": "before any prototype run"
+  },
+  {
+   "id": "AM3",
+   "step": "check G8 (the ensemble and the rule)",
+   "what": "G8's 100 seeded low-magnification events (seed 'lensing2-G8'): t0 = 0, tE = 20 d, u0 uniform in [0.85, 2] (peak magnification below 1.5), rho = 0.02 held, blend f_s uniform in [0.3, 1], 61 points over t0 +- 2.5 tE, noise 0.01 of the baseline. The blend is 'not constrained' when the 0.95 interval of the profile chi-square over f_s (a grid of 0.05 to 1 in steps of 0.05, the other parameters refitted, the amplitude linear) is wider than 0.5, half the physical range; the result then states the degeneracy with the code 'blend-degenerate' and returns tE with its range over the interval. The leg passes when at least 0.9 of the 100 events are returned 'blend-degenerate' with a tE range. The fraction of those events whose true f_s lies in the interval is reported with no bound.",
+   "why": "Recorded before any prototype run: the committed sentence says 'returned as not constrained' without a rule for it.",
+   "boundMoved": false,
+   "when": "before any prototype run"
+  }
+ ]
 }
