@@ -36,9 +36,20 @@ export function archivesToReview(base) {
       .filter(f => f.endsWith('.gxp'))
       .sort();
   const git = (...a) => execFileSync('git', a, { encoding: 'utf8' });
-  // A pull request checks out a shallow merge commit: fetch the base's tip.
+  // Fetch the base's tip. Only a clone that is already shallow gets
+  // --depth=1: in a full clone (CI checks out with fetch-depth 0) it makes the
+  // tip a shallow boundary, cuts it off from its parents, and a later step's
+  // `git merge-base` (tools/generated-tripwire.mjs) finds no common ancestor
+  // for any pull request whose base has moved since it branched.
+  const shallow = git('rev-parse', '--is-shallow-repository').trim() === 'true';
   try {
-    git('fetch', '--no-tags', '--depth=1', 'origin', base);
+    git(
+      'fetch',
+      '--no-tags',
+      ...(shallow ? ['--depth=1'] : []),
+      'origin',
+      base
+    );
   } catch {
     /* already present locally */
   }
