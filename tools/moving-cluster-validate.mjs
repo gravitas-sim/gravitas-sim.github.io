@@ -732,12 +732,12 @@ export function runLegs(form, { oracle, csv, only }) {
       res.status !== 'refused' &&
         (res.rvMembers ?? 0) >= lim('R1.members').minMembersWithRv,
       {
+        ...info,
         status: res.status,
         reason: res.reason ?? null,
         members: res.nMembers ?? 0,
-        withRv: res.rvMembers ?? 0,
+        membersWithRv: res.rvMembers ?? 0,
         steps: res.steps ?? null,
-        ...info,
       }
     );
     if (res.status === 'ok' || res.status === 'cp-only') {
@@ -1022,7 +1022,7 @@ export function realRows(file) {
       droppedByCuts: dropped,
       noZeroPoint: noZp,
       zeroPointOutOfRange: flagged,
-      withRv: raw.filter(r => Number.isFinite(r.rv)).length,
+      rowsWithRadialVelocity: raw.filter(r => Number.isFinite(r.rv)).length,
     },
   };
 }
@@ -1072,11 +1072,14 @@ function summariseReal(real) {
   }
   if (res.status === 'ok' && real.bs && real.plx) {
     out.ratioMCoverPlx = sig(real.ratio, 6);
-    out.sigmaMCRel = sig(real.bs.sigma / res.piMC);
+    out.sigmaMCRel = sig(real.bs.sigmaMC / res.piMC);
     out.piMCOverPlxStat = sig(real.plx.statError / real.plx.mean);
     out.meanZeroPoint = sig(real.plx.meanZeroPoint);
     out.used = res.nUsed;
-    out.bootstrap = { B: real.bs.B, discarded: real.bs.discarded };
+    out.bootstrap = {
+      B: real.bs.bootstrap.B,
+      discarded: real.bs.bootstrap.discarded,
+    };
   }
   return out;
 }
