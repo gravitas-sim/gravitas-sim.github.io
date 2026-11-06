@@ -104,6 +104,7 @@ const GROUPS = [
   () => import('./groups/galaxy.js'),
   () => import('./groups/lensing2.js'),
   () => import('./groups/morphology.js'),
+  () => import('./groups/galaxyclusters.js'),
   () => import('./groups/agn.js'),
 ];
 

@@ -1,0 +1,627 @@
+{
+ "format": "gravitas.clusters-run1/1",
+ "note": "Run 1 of tools/clusters-validate.mjs on kernel commit 6fd19769, kept as a record: 26 pass, 4 fail (A4, C1b, C4, D3). A4 failed because the kernel took the sampling error of the dispersion from the corrected dispersion instead of the observed one, against rules R7 and R8 as committed. The oracle had the same misreading, so B2 passed in run 1 with the shared defect; the closed form written in leg A4 is what caught it. The kernel and the oracle were both repaired to the committed formula, d sigma_int = (s / sigma_int) * s / sqrt(2 (n - 1)), divided by the truncation factor; no bound moved and the other three failures are untouched (GALAXY_CLUSTERS.md).",
+ "rows": [
+  {
+   "id": "A1.restVelocity",
+   "status": "pass",
+   "measured": {
+    "worstAbsKms": 2.7284841053187847e-12,
+    "worstRelativisticRatio": 0.5
+   },
+   "note": ""
+  },
+  {
+   "id": "A2.truncationFixedPoint",
+   "status": "pass",
+   "measured": {
+    "xStar": [
+     0.7257409525,
+     0.9848461864,
+     0.9994601477,
+     0.999992565
+    ],
+    "worstResidual": 1.1102230246251565e-16,
+    "increasing": true,
+    "refused": true
+   },
+   "note": ""
+  },
+  {
+   "id": "A3.plainDispersion",
+   "status": "pass",
+   "measured": {
+    "off": 9.582771385197131e-16,
+    "on": 9.43755585433146e-16,
+    "shift": 1.916554277039428e-16,
+    "perm": 0,
+    "scale": 0
+   },
+   "note": ""
+  },
+  {
+   "id": "A4.errorSubtraction",
+   "status": "fail",
+   "measured": {
+    "sigmaInt": 1.0178779619696183e-15,
+    "error": 0.05855399731277921,
+    "e300": "errors-exceed-scatter",
+    "biweight": "errors-with-biweight"
+   },
+   "note": ""
+  },
+  {
+   "id": "A5.massClosed",
+   "status": "pass",
+   "measured": {
+    "mass": 0,
+    "sLnM": 0,
+    "lo": 1.34402703371177e-16,
+    "hi": 0,
+    "noFactorLo": 1.2985549547253109e-16,
+    "withoutFactorField": 1.2985549547253109e-16,
+    "quadruple": 0
+   },
+   "note": ""
+  },
+  {
+   "id": "A6.regularGeometry",
+   "status": "pass",
+   "measured": {
+    "halfNumber": 2.842170943040401e-14,
+    "harmonic": 1.0316476319141782e-07,
+    "separation": 0,
+    "symmetricBitwise": true
+   },
+   "note": ""
+  },
+  {
+   "id": "A7.truncatedSphereGeometry",
+   "status": "pass",
+   "measured": {
+    "xHalf": 0.3600349828,
+    "sampleMedian": 0.359711,
+    "rel": 0.0008999,
+    "kPhys": 5.5550157
+   },
+   "note": ""
+  },
+  {
+   "id": "A8.clopperPearsonExactCoverage",
+   "status": "pass",
+   "measured": {
+    "worstCoverageMinusLevel": 0.00569011,
+    "closedFormWorstAbs": 1.9984014443252818e-15,
+    "monotone": true
+   },
+   "note": ""
+  },
+  {
+   "id": "A9.kurtosisAndSe",
+   "status": "pass",
+   "measured": {
+    "g2": 3.851742669,
+    "diff": 0,
+    "seDiff": 0
+   },
+   "note": ""
+  },
+  {
+   "id": "A10.lightClosed",
+   "status": "pass",
+   "measured": {
+    "each": 0,
+    "sum": 0,
+    "error": 0,
+    "missing": 0,
+    "missingErr": 0,
+    "distanceModulus": 7.105427357601002e-15,
+    "used": 2,
+    "refused": "missing-solar-source"
+   },
+   "note": ""
+  },
+  {
+   "id": "A11.massToLightClosed",
+   "status": "pass",
+   "measured": {
+    "value": 0,
+    "relSigma": 0,
+    "upperBound": true
+   },
+   "note": ""
+  },
+  {
+   "id": "A12.localDensity",
+   "status": "pass",
+   "measured": {
+    "worstAbs": 0,
+    "bins1": [
+     [
+      5,
+      3
+     ],
+     [
+      0,
+      0
+     ]
+    ],
+    "bins2": [
+     [
+      2,
+      2
+     ],
+     [
+      3,
+      1
+     ]
+    ]
+   },
+   "note": ""
+  },
+  {
+   "id": "A13.baryonBudget",
+   "status": "pass",
+   "measured": {
+    "gas": 0,
+    "gasRel": 0,
+    "baryon": 0,
+    "baryonRel": 0,
+    "codes": [
+     "missing-gas-source",
+     "bad-gas",
+     "missing-gas-aperture"
+    ]
+   },
+   "note": ""
+  },
+  {
+   "id": "A14.syntheticClusterRecovery",
+   "status": "pass",
+   "measured": [
+    {
+     "index": 0,
+     "zSigma": -0.2903,
+     "zMass": -0.4522,
+     "completeness": 0.9952,
+     "purity": 0.9952,
+     "passes": 2,
+     "n": 209
+    },
+    {
+     "index": 1,
+     "zSigma": -0.7289,
+     "zMass": 0.5976,
+     "completeness": 1,
+     "purity": 1,
+     "passes": 2,
+     "n": 58
+    },
+    {
+     "index": 2,
+     "zSigma": -1.471,
+     "zMass": -0.9752,
+     "completeness": 1,
+     "purity": 1,
+     "passes": 2,
+     "n": 54
+    },
+    {
+     "index": 3,
+     "zSigma": 0.666,
+     "zMass": 1.264,
+     "completeness": 1,
+     "purity": 0.9873,
+     "passes": 2,
+     "n": 79
+    },
+    {
+     "index": 4,
+     "zSigma": 0.01037,
+     "zMass": 0.8125,
+     "completeness": 1,
+     "purity": 1,
+     "passes": 2,
+     "n": 54
+    }
+   ],
+   "note": ""
+  },
+  {
+   "id": "B1.dispersionOracle",
+   "status": "pass",
+   "measured": {
+    "statusAgree": 30,
+    "keptSetsEqual": 30,
+    "worstRel": {
+     "z": 7.343944823810437e-16,
+     "sigma": 4.092728202979566e-16,
+     "x": 3.381918029131052e-16,
+     "bwScale": 1.860123244326498e-15,
+     "bwLoc": 0
+    }
+   },
+   "note": ""
+  },
+  {
+   "id": "B2.geometryAndMassOracle",
+   "status": "pass",
+   "measured": {
+    "da": 3.873634812607913e-14,
+    "half": 4.376865413548131e-13,
+    "harmonic": 1.3798776444163494e-11,
+    "mass": 4.3812294205596444e-13,
+    "interval": 4.678814328008113e-13,
+    "xHalf": 4.625479790730625e-16,
+    "kPhys": 4.796629531017023e-16
+   },
+   "note": ""
+  },
+  {
+   "id": "B3.binomialOracle",
+   "status": "pass",
+   "measured": {
+    "rows": 60,
+    "worstAbs": 3.552713678800501e-15
+   },
+   "note": ""
+  },
+  {
+   "id": "B4.kurtosisDensityOracle",
+   "status": "pass",
+   "measured": {
+    "answered": 30,
+    "binCountsEqual": 30,
+    "g2": 1.0163429447164661e-13,
+    "se": 0,
+    "density": 2.029640861616375e-11
+   },
+   "note": ""
+  },
+  {
+   "id": "B5.lightOracle",
+   "status": "pass",
+   "measured": {
+    "worlds": 10,
+    "worstRel": 6.565102134670665e-14
+   },
+   "note": ""
+  },
+  {
+   "id": "C1.dispersionCoverage",
+   "status": "pass",
+   "measured": {
+    "answered": 400,
+    "cover68": 0.65,
+    "cover95": 0.93,
+    "meanZ": -0.0706
+   },
+   "note": ""
+  },
+  {
+   "id": "C1b.dispersionBootstrapCoverage",
+   "status": "fail",
+   "measured": {
+    "answered": 400,
+    "cover68": 0.6025,
+    "cover95": 0.885
+   },
+   "note": ""
+  },
+  {
+   "id": "C2.massCoverageStatistical",
+   "status": "pass",
+   "measured": {
+    "answered": 400,
+    "cover68": 0.685,
+    "cover95": 0.9575
+   },
+   "note": ""
+  },
+  {
+   "id": "C3.massCoverageWithFactor",
+   "status": "pass",
+   "measured": {
+    "answered": 400,
+    "cover68": 0.635,
+    "cover95": 0.9225
+   },
+   "note": ""
+  },
+  {
+   "id": "C4.lightCoverage",
+   "status": "fail",
+   "measured": {
+    "answered": 200,
+    "cover68": 0.46,
+    "cover95": 0.74
+   },
+   "note": ""
+  },
+  {
+   "id": "C5.membershipRecovery",
+   "status": "pass",
+   "measured": {
+    "answered": 400,
+    "notAnswered": 0,
+    "meanCompleteness": 0.9962,
+    "meanPurity": 0.9953
+   },
+   "note": ""
+  },
+  {
+   "id": "D1.fewMembers",
+   "status": "pass",
+   "measured": [
+    {
+     "N": 0,
+     "status": "not-constrained",
+     "code": "too-few-members"
+    },
+    {
+     "N": 1,
+     "status": "not-constrained",
+     "code": "too-few-members"
+    },
+    {
+     "N": 2,
+     "status": "not-constrained",
+     "code": "too-few-members"
+    },
+    {
+     "N": 5,
+     "status": "not-constrained",
+     "code": "too-few-members"
+    },
+    {
+     "N": 19,
+     "status": "not-constrained",
+     "code": "too-few-members"
+    },
+    {
+     "N": 20,
+     "status": "ok",
+     "members": 20
+    }
+   ],
+   "note": ""
+  },
+  {
+   "id": "D2.nonGaussianFlag",
+   "status": "pass",
+   "measured": {
+    "answered": 100,
+    "flagged": 100,
+    "handledByStatus": 0,
+    "flaggedShare": 1,
+    "cleanFalseFlagRate": 0
+   },
+   "note": ""
+  },
+  {
+   "id": "D3.contaminationFlag",
+   "status": "fail",
+   "measured": {
+    "answered": 100,
+    "flagged": 74,
+    "flaggedShare": 0.74,
+    "cleanFalseFlagRate": 0,
+    "unknownWithoutExtent": true
+   },
+   "note": ""
+  },
+  {
+   "id": "D4.inputRefusals",
+   "status": "pass",
+   "measured": [
+    {
+     "name": "no factor",
+     "got": "refused/missing-factor",
+     "ok": true
+    },
+    {
+     "name": "bad factor",
+     "got": "bad-factor+bad-factor",
+     "ok": true
+    },
+    {
+     "name": "empty factor source",
+     "got": "refused/missing-factor-source",
+     "ok": true
+    },
+    {
+     "name": "radius mismatch",
+     "got": "refused/factor-radius-mismatch",
+     "ok": true
+    },
+    {
+     "name": "cosmology",
+     "got": "bad-cosmology+bad-cosmology",
+     "ok": true
+    },
+    {
+     "name": "bad redshifts",
+     "got": "ok dropped 3 / too-few-members",
+     "ok": true
+    },
+    {
+     "name": "aperture 0",
+     "got": "refused/bad-aperture",
+     "ok": true
+    },
+    {
+     "name": "empty list",
+     "got": "not-constrained/too-few-members",
+     "ok": true
+    },
+    {
+     "name": "no solar source",
+     "got": "refused/missing-solar-source",
+     "ok": true
+    },
+    {
+     "name": "neighbours",
+     "got": "refused/bad-neighbours",
+     "ok": true
+    },
+    {
+     "name": "biweight without tuning",
+     "got": "refused/missing-tuning",
+     "ok": true
+    },
+    {
+     "name": "clip level 1.5",
+     "got": "refused/bad-clip-level",
+     "ok": true
+    }
+   ],
+   "note": ""
+  },
+  {
+   "id": "D5.clipIterationCap",
+   "status": "pass",
+   "measured": {
+    "forcedOne": "not-constrained/clip-not-converged",
+    "passesReported": 1,
+    "ensembleMaxPasses": 5,
+    "ensembleNotConverged": 0
+   },
+   "note": ""
+  },
+  {
+   "id": "E1.comaPublished",
+   "status": "not-run",
+   "measured": null,
+   "note": "no table was supplied (tests/fixtures/clusters/authentic is absent) and nothing was fetched; the exact request is in GALAXY_CLUSTERS.md"
+  },
+  {
+   "id": "E2.independentAnalysis",
+   "status": "not-run",
+   "measured": null,
+   "note": "no table was supplied (tests/fixtures/clusters/authentic is absent) and nothing was fetched; the exact request is in GALAXY_CLUSTERS.md"
+  },
+  {
+   "id": "E3.morphologyDensityAuthentic",
+   "status": "not-run",
+   "measured": null,
+   "note": "no table was supplied (tests/fixtures/clusters/authentic is absent) and nothing was fetched; the exact request is in GALAXY_CLUSTERS.md"
+  },
+  {
+   "id": "E4.massToLightAuthentic",
+   "status": "not-run",
+   "measured": null,
+   "note": "no table was supplied (tests/fixtures/clusters/authentic is absent) and nothing was fetched; the exact request is in GALAXY_CLUSTERS.md"
+  },
+  {
+   "id": "R2.solarMassConvention",
+   "status": "reported",
+   "measured": {
+    "treeOverAstropy_minus1": 0.00029678453655113124
+   },
+   "note": "the tree rounds the solar mass; displayed figures keep the tree value"
+  },
+  {
+   "id": "R3.gravitationalConstantConvention",
+   "status": "reported",
+   "measured": {
+    "treeOverAstropy_minus1": 0
+   },
+   "note": "the oracle comparison of B2 is run with the tree G as an input"
+  },
+  {
+   "id": "R4.contaminationLadder",
+   "status": "reported",
+   "measured": {
+    "0": {
+     "answered": 200,
+     "meanFractionalBias": 0.0006318,
+     "flaggedContaminated": 0
+    },
+    "0.02": {
+     "answered": 200,
+     "meanFractionalBias": 0.007141,
+     "flaggedContaminated": 0
+    },
+    "0.05": {
+     "answered": 200,
+     "meanFractionalBias": 0.02044,
+     "flaggedContaminated": 0
+    },
+    "0.1": {
+     "answered": 200,
+     "meanFractionalBias": 0.03486,
+     "flaggedContaminated": 0
+    },
+    "0.2": {
+     "answered": 200,
+     "meanFractionalBias": 0.08383,
+     "flaggedContaminated": 0.03
+    },
+    "0.5": {
+     "answered": 196,
+     "meanFractionalBias": 0.3526,
+     "flaggedContaminated": 0.6582
+    }
+   },
+   "note": "no background correction is applied; the flag is the kernel's only guard"
+  },
+  {
+   "id": "R5.truncationCorrectionEffect",
+   "status": "reported",
+   "measured": {
+    "answered": 400,
+    "rawMeanBias": -0.01222,
+    "correctedMeanBias": 0.002983,
+    "rawCover68": 0.64,
+    "correctedCover68": 0.6375
+   },
+   "note": "coverage here is at one analytic sigma (0.6827) without the stated errors"
+  },
+  {
+   "id": "R6.fieldWithoutCluster",
+   "status": "reported",
+   "measured": {
+    "statuses": {
+     "ok": 100
+    },
+    "meanDispersionKmsWhenAnswered": 4447,
+    "answeredWithAFlag": 0
+   },
+   "note": "a field of uniform redshifts is a limit the kernel does not detect as such; reported, not judged"
+  },
+  {
+   "id": "R7.mismodelledMass",
+   "status": "reported",
+   "measured": {
+    "c3WithoutFactorCover68": 0.5075,
+    "c3WithoutFactorCover95": 0.81,
+    "eta04FullCover68": 0.25,
+    "eta04FullCover95": 0.72
+   },
+   "note": "the factor's stated 0.15 does not cover a true departure of 0.4"
+  },
+  {
+   "id": "R8.biweightVersusPlain",
+   "status": "reported",
+   "measured": {
+    "answered": 200,
+    "plainMean": 0.02649,
+    "plainSd": 0.0936,
+    "biweightMean": 0.01857,
+    "biweightSd": 0.09086
+   },
+   "note": "the biweight constants are the leg's tuning, not a citation"
+  },
+  {
+   "id": "R1.cpuSeconds",
+   "status": "reported",
+   "measured": null,
+   "note": "CPU seconds vary by machine; not pinned"
+  }
+ ],
+ "gate": {
+  "kernelVerdict": "C",
+  "productVerdict": "NOT ESTABLISHED (E1 to E4 NOT RUN: no cluster table was supplied)",
+  "consumers": "unmet: no cluster panel, lesson, pack or Coma re-sourcing (Carl's consumers rule of 2026-11-05; no table supplied)"
+ }
+}
