@@ -1,0 +1,304 @@
+{
+ "format": "gravitas.cosmology2-thresholds/1",
+ "prompt": "Roadmap III, Prompt 255, Cosmology kernel II: late-time FLRW depth (tranche T5, authorized by Checkpoint V's recorded outcome CONTINUE AS PLANNED, DECISIONS_2026-11-06.md). This pull request is the kernel, contract and validation part. The panels, the lessons and the model-page section of the prompt's items 2 to 4 are held by the consumers rule (Carl's 2026-11-05 and 2026-11-06 rulings).",
+ "document": "COSMOLOGY_II.md (the kernel, its equations, domain and limits, the validation table, failed legs and the files requested), written after this file",
+ "committed": "before js/kernels/cosmology/late/*, the validator, the oracle script and its pinned output, and before any distance, time, age, deceleration parameter, transition redshift, contour or oracle number of Prompt 255 existed. Phase 1 of the session (reading the roadmap's section 255, Operating rules 7.5, Appendix C, the register, Checkpoint V and its decisions, Carl's rulings of 2026-11-05 and 2026-11-06, the existing cosmology kernel js/kernels/cosmology/flrw.js and COSMOLOGY.md, js/numeric/quadrature.js and roots.js, and the sibling gates' form for 250 and 251) preceded it and fixed nothing here from a result. The only arithmetic done before this file was input design with numpy and no Gravitas code: the scale-free ratio r(a) = F(a) / (Or + Om a + |Ok| a^2 + Ode a^(1 - 3w)) with F(a) = a^4 E(a)^2, scanned on a log grid of a, was used to pick parameter sets that bounce (r <= 0 somewhere in (0, 1]) and sets that sit close to a bounce without one; the line-of-sight integral of dz / E to z = 1e4 was evaluated to find a closed set whose light crosses the antipode. No expected value below is the output of the kernel: every one is a closed form written in the leg, the output of the oracle script (written after this file and before the kernel), a bound set by double precision or by a stated quadrature tolerance, or a count of a stated seeded ensemble.",
+ "rule": "A crossed bound is a failed check, recorded in failed-legs.json and left failing; only Carl resets one. A leg that cannot be measured (a file not supplied, a tool not installed) is NOT RUN and says why, and nothing is fetched. No published distance, age, table value, cosmological parameter of a survey, licence term or citation detail is typed anywhere from memory. Every parameter set below is a round number chosen for the test and is a claim about nothing in the sky. Every authentic fact would come from a file Carl supplied under tests/fixtures/cosmology2/authentic/ with its source, its terms as read from a saved copy and its retrieval date in that directory's SOURCES.json. Failed legs are never rescued by moving a bound, re-reading a committed threshold after a result or counting a case out; the alternative is recorded as a question for Carl. Amendments are recorded in the amendments list below before any validator run that could depend on them.",
+ "seeds": {
+  "C1": "the oracle's own numpy default_rng(255) draws the ensemble (tools/cosmology2-oracle/oracle.py) and writes the inputs it drew beside its results, so the kernel is run on exactly those inputs",
+  "stream": "no Gravitas random stream is used: the kernel is deterministic and the ensemble belongs to the oracle"
+ },
+ "scope": {
+  "built": "js/kernels/cosmology/late/: the Friedmann equation with matter, radiation, curvature and a dark-energy component of constant equation of state w (Ok derived from the closure, flat when no dark-energy density is given); comoving, transverse, luminosity and angular-diameter distances, the distance modulus, lookback time, the age and the age at a redshift, each with the integrator's error estimate carried; the deceleration parameter, the density fractions and the transition redshift; the domain check with its refusals (a bounce, a negative density, w out of range, a closed universe's antipode, an unbounded age); the parameter-degeneracy tool (a distance at fixed redshift as a contour in a plane of two parameters, and the local degeneracy direction); an expansion-history table function",
+  "notBuilt": "the cosmology panels' full parameter set, the 'history of the expansion' plot and the distance-redshift family (item 2), 'The Expanding Universe' and 'The Shape of Expansion' upper depths and 'How old is the universe?' (item 3), the model-page section (item 4): the consumers rule of Carl's 2026-11-05 ruling is unmet. The extension is imported by no shipped module, js/kernels/cosmology/index.js does not re-export it, and it is NEVER_PRECACHED. Not built at all, by the prompt's own Do-not: a sound horizon, an acoustic scale, a fitting formula for either (257, 258). Not built: massive neutrinos (radiation is one component, w = 1/3, a caller-supplied density), a time-varying equation of state, interacting dark energy, perturbations, growth (259).",
+  "reuse": "delta table (rule 9): existing authority js/kernels/cosmology/flrw.js (flat and open Lambda-CDM, w = -1, radiation neglected, closed refused) and js/numeric/quadrature.js (adaptive, gaussLegendre) and roots.js (brent); missing behaviour: radiation, w, closed universes with sin geometry, the transition, the domain refusals, the error carried, the degeneracy contours; adopter: this prompt's own validation group and, later and gated, 256 to 259; duplication removed: the late kernel imports C_KMS, GYR_PER_INV_H0 and the quadrature from the existing files and re-derives nothing; flrw.js, fit.js and index.js are not edited, so every cosmology lesson golden is unchanged by construction."
+ },
+ "analysisRule": {
+  "R1": "Units: distances in Mpc, times in Gyr, H0 in km/s/Mpc, densities as fractions of today's critical density, z dimensionless: the units of flrw.js. The speed of light is the tree's C_KMS and the Gyr per inverse Hubble time the tree's GYR_PER_INV_H0; a caller who holds metres or seconds converts.",
+  "R2": "The Friedmann equation: E(z)^2 = Om x^3 + Or x^4 + Ok x^2 + Ode x^(3 (1 + w)), x = 1 + z, with Ok = 1 - Om - Or - Ode, so E(0) = 1 exactly in exact arithmetic. When no Ode is supplied the universe is flat (Ode = 1 - Om - Or). Radiation is one component with w = 1/3 and a density the caller supplies; no number for the CMB temperature or the neutrino count is in the kernel.",
+  "R3": "Validated domain: H0 in (0, 1000]; Om in [0, 10]; Or in [0, 1]; Ode in [0, 10]; w in [-3, 0]; z in [0, 1e4] for distances and lookback times; every parameter finite. Outside it the kernel throws FriedmannDomainError with a code and a reason; it never returns a number for a refused set. Negative Om, Or or Ode are refused 'negative-density' (a negative dark-energy density is outside the validated domain, whatever its physical interest).",
+  "R4": "A bounce is refused ('bounce'): with F(a) = a^4 E^2 = Or + Om a + Ok a^2 + Ode a^(1 - 3w) the set is refused when the scale-free ratio r(a) = F / (Or + Om a + |Ok| a^2 + Ode a^(1 - 3w)) is at or below zero anywhere on [1e-8, 1] (a log-spaced scan of 20000 points refined at the minimum). That covers a universe that stops contracting in the past, a closed universe dominated by Lambda with too little matter, and a set with no big bang. A recollapse in the future (a > 1) is not tested and not refused: nothing here evaluates the future.",
+  "R5": "A closed universe's distances are D_M = (c/H0) / sqrt(|Ok|) sin(sqrt(|Ok|) D_C H0 / c), refused 'beyond-antipode' when sqrt(|Ok|) D_C H0 / c reaches pi (the light has crossed half of the closed space, D_M would be zero or negative). An open universe uses sinh, a flat one D_M = D_C. D_L = (1 + z) D_M, D_A = D_M / (1 + z), mu = 5 log10(D_L / 10 pc) with D_L in Mpc plus 25.",
+  "R6": "The age is the integral of a da / sqrt(F(a)) from 0 to 1, the age at redshift z the same to a = 1 / (1 + z), the lookback time the integral of dz / ((1 + z) E(z)); the age by the identity lookback(z) + age(z) = age(0) is a check between two different integrals, not a definition. The age is refused 'age-unbounded' when no matter, radiation or curvature term leads at small a and the integral diverges (pure Lambda with w = -1 and Ok = 0, de Sitter).",
+  "R7": "The deceleration parameter is q(z) = [Om x^3 + 2 Or x^4 + (1 + 3 w) Ode x^(3 (1 + w))] / (2 E^2), curvature contributing nothing. The transition redshift is the unique root of Om x^(-3 w) + 2 Or x^(1 - 3 w) + (1 + 3 w) Ode = 0 for x >= 1 (the left side increases with x for w <= 0), found by Brent's rule; it is null with the reason 'decelerating-today' when q(0) >= 0, and with 'always-accelerating' when no radiation or matter term makes the left side positive.",
+  "R8": "The integrals are adaptive Gauss-Legendre (js/numeric/quadrature.js, 16 points per panel) in u = ln(1 + z) for distances and lookback, and in v = ln a for the age, with the tolerance and depth stated in COSMOLOGY_II.md; the age integral starts at a = 1e-10 with the leading small-a behaviour added analytically. The integrator's error estimate (the sum of its accepted panels' disagreements, which the library says is an estimate and not a bound) plus eight units of rounding on the value is returned beside every integral-based value and propagated through the geometry; an integral that does not converge is refused 'not-converged'. It is called an error estimate everywhere; B5 tests whether it covers the truth.",
+  "R9": "The degeneracy tool: for a base cosmology, a redshift, a quantity (comoving, transverse, luminosity, angularDiameter, modulus, lookback) and two axes chosen from H0, Om, Ode, w (Ode only when the set is not flat), the contour at the base's own value of the quantity is traced by finding, for each value of the first parameter on a grid, the second parameter that reproduces the target: 64 scan points over the second parameter's range, the first sign change between two consecutive in-domain points refined by Brent's rule. A grid value with no sign change is skipped 'no-root', one whose scan points are all refused is skipped 'all-refused', and a contour never contains a point of a refused set; when the scan finds more than one sign change the first is used and the point carries multipleRoots. The local degeneracy direction at a point is the tangent (-dD/dy, dD/dx) of the contour from five-point central differences with a step of 1 percent of each parameter's scale, returned with the slope dy/dx and the gradient.",
+  "R10": "Fixed seeded draws and fixed parameter sets are inputs. The oracle's own domain check is an independent brute-force implementation (a dense scan of 200001 points and its own rules) and its verdict on each draw is what the kernel is compared with; a draw whose scale-free ratio minimum is within 1e-4 of zero, or whose w is within 1e-9 of a bound, is flagged 'margin' by the oracle and is excluded from the agreement count (the exclusions are counted and reported).",
+  "R11": "The consumers clause: a panel, a lesson, a viewer or the model-page section is not built while the product verdict is anything but A, and the product verdict is NOT ESTABLISHED while E1 is NOT RUN."
+ },
+ "domain": {
+  "H0": [0, 1000],
+  "Om": [0, 10],
+  "Or": [0, 1],
+  "Ode": [0, 10],
+  "w": [-3, 0],
+  "z": [0, 10000],
+  "codes": ["not-finite", "bad-H0", "negative-density", "density-out-of-domain", "w-out-of-domain", "bounce", "z-out-of-domain", "beyond-antipode", "age-unbounded", "not-converged", "bad-argument"]
+ },
+ "worlds": {
+  "zGrid": [0.05, 0.3, 1, 2.5, 7, 100, 1100],
+  "zGridClosedForms": [0.01, 0.1, 0.5, 1, 2, 5, 10, 100, 1000],
+  "H0Grid": [50, 70, 100],
+  "tenSets": [
+   { "id": "S1", "what": "flat Lambda-CDM", "H0": 70, "Om": 0.3, "Ode": 0.7, "w": -1, "tcmbK": 0 },
+   { "id": "S2", "what": "flat Lambda-CDM with radiation (astropy's photon and massless-neutrino density at T = 2.7 K, N_eff = 3; the density is read back from the oracle and given to the kernel as Or)", "H0": 67.5, "Om": 0.31, "flat": true, "w": -1, "tcmbK": 2.7, "neff": 3 },
+   { "id": "S3", "what": "open Lambda-CDM", "H0": 65, "Om": 0.25, "Ode": 0.5, "w": -1, "tcmbK": 0 },
+   { "id": "S4", "what": "closed Lambda-CDM", "H0": 75, "Om": 0.4, "Ode": 0.8, "w": -1, "tcmbK": 0 },
+   { "id": "S5", "what": "flat wCDM, quintessence", "H0": 70, "Om": 0.3, "flat": true, "w": -0.8, "tcmbK": 0 },
+   { "id": "S6", "what": "flat wCDM, phantom", "H0": 72, "Om": 0.28, "flat": true, "w": -1.2, "tcmbK": 0 },
+   { "id": "S7", "what": "open wCDM", "H0": 68, "Om": 0.3, "Ode": 0.55, "w": -0.9, "tcmbK": 0 },
+   { "id": "S8", "what": "Einstein-de Sitter", "H0": 50, "Om": 1, "Ode": 0, "w": -1, "tcmbK": 0 },
+   { "id": "S9", "what": "open wCDM with radiation (T = 2.7 K, N_eff = 3)", "H0": 70, "Om": 0.3, "Ode": 0.65, "w": -0.95, "tcmbK": 2.7, "neff": 3 },
+   { "id": "S10", "what": "closed matter-only", "H0": 60, "Om": 1.5, "Ode": 0, "w": -1, "tcmbK": 0 }
+  ],
+  "refusedSets": {
+   "bounce": [
+    { "Om": 0.05, "Ode": 1.6, "w": -1, "H0": 70 },
+    { "Om": 0.1, "Ode": 1.5, "w": -1, "H0": 70 },
+    { "Om": 0, "Ode": 1.5, "w": -1, "H0": 70 }
+   ],
+   "acceptedNearEdge": [
+    { "Om": 0.3, "Ode": 1.3, "w": -1, "H0": 70 },
+    { "Om": 0.3, "Ode": 1.4, "w": -1, "H0": 70 }
+   ],
+   "negativeDensity": [
+    { "Om": -0.1, "Ode": 0.7, "w": -1, "H0": 70, "parameter": "Om" },
+    { "Om": 0.3, "Or": -0.00001, "Ode": 0.7, "w": -1, "H0": 70, "parameter": "Or" },
+    { "Om": 0.3, "Ode": -0.1, "w": -1, "H0": 70, "parameter": "Ode" }
+   ],
+   "densityOutOfDomain": [
+    { "Om": 10.5, "Ode": 0, "w": -1, "H0": 70 },
+    { "Om": 0.3, "Or": 1.5, "Ode": 0, "w": -1, "H0": 70 },
+    { "Om": 0.3, "Ode": 10.5, "w": -1, "H0": 70 }
+   ],
+   "wOutOfDomain": [-3.01, 0.01, 1, -10],
+   "wAcceptedEdges": [-3, 0],
+   "badH0": [0, -70, 1000.01],
+   "notFinite": ["NaN", "Infinity", "-Infinity"],
+   "badZ": [-0.1, 10001],
+   "antipodeSet": { "Om": 0.3, "Ode": 1.4, "w": -1, "H0": 70, "zInside": 1, "zBeyond": 10000 },
+   "ageUnbounded": { "Om": 0, "Or": 0, "Ode": 1, "w": -1, "H0": 70 }
+  },
+  "ensemble": {
+   "n": 400,
+   "draw": "H0 uniform in [30, 120]; Om uniform in [0, 2]; Or zero with probability 0.5 and otherwise uniform in [0, 2e-4]; Ode uniform in [0, 2]; w uniform in [-3.3, 0.2] (so that about 2 percent of the draws are outside the w domain)",
+   "z": [0.1, 1, 10],
+   "quantities": ["luminosity", "lookback", "age"]
+  },
+  "contours": {
+   "flatOmW": { "base": { "H0": 70, "Om": 0.3, "w": -0.9, "flat": true }, "z": 0.5, "quantity": "luminosity", "x": { "name": "Om", "min": 0.15, "max": 0.6, "n": 19 }, "y": { "name": "w", "min": -3, "max": 0 } },
+   "openOmOde": { "base": { "H0": 70, "Om": 0.3, "Ode": 0.6, "w": -1 }, "z": 1, "quantity": "luminosity", "x": { "name": "Om", "min": 0.1, "max": 0.8, "n": 15 }, "y": { "name": "Ode", "min": 0, "max": 2 } },
+   "hubbleOm": { "base": { "H0": 70, "Om": 0.3, "w": -1, "flat": true }, "z": 0.3, "quantity": "luminosity", "x": { "name": "Om", "min": 0.1, "max": 0.7, "n": 13 }, "y": { "name": "H0", "min": 40, "max": 120 } },
+   "skipRefusals": { "base": { "H0": 70, "Om": 0.3, "Ode": 0.6, "w": -1 }, "z": 1, "quantity": "luminosity", "x": { "name": "Om", "min": 0.02, "max": 0.4, "n": 12 }, "y": { "name": "Ode", "min": 0, "max": 2.5 } },
+   "unreachableTarget": { "base": { "H0": 70, "Om": 0.3, "w": -1, "flat": true }, "z": 0.5, "quantity": "luminosity", "x": { "name": "Om", "min": 0.2, "max": 0.4, "n": 5 }, "y": { "name": "w", "min": -3, "max": -2.5 } },
+   "oracleXIndices": [2, 6, 10, 14, 17]
+  },
+  "directions": [
+   { "base": { "H0": 70, "Om": 0.3, "w": -0.9, "flat": true }, "z": 0.5, "quantity": "luminosity", "x": "Om", "y": "w" },
+   { "base": { "H0": 70, "Om": 0.3, "Ode": 0.6, "w": -1 }, "z": 1, "quantity": "luminosity", "x": "Om", "y": "Ode" },
+   { "base": { "H0": 70, "Om": 0.3, "w": -1, "flat": true }, "z": 2, "quantity": "comoving", "x": "Om", "y": "H0" }
+  ]
+ },
+ "checks": [
+  {
+   "id": "A1.einsteinDeSitter",
+   "leg": "a",
+   "what": "Om = 1, Or = Ode = 0 (Einstein-de Sitter), for H0 in {50, 70, 100} and the zGridClosedForms: D_C = (2c/H0)(1 - (1+z)^(-1/2)), D_M = D_C, D_L = (1+z) D_M, D_A = D_M/(1+z), the lookback time (2/(3 H0))(1 - (1+z)^(-3/2)) in Gyr, the age at redshift z (2/(3 H0))(1+z)^(-3/2), the age (2/(3 H0)), each to a relative 1e-10; E(z) = (1+z)^(3/2) and q = 1/2 to a relative 1e-14; the closure Ok = 0 exactly",
+   "limits": { "maxRel": 1e-10, "maxRelE": 1e-14 }
+  },
+  {
+   "id": "A2.emptyUniverse",
+   "leg": "a",
+   "what": "Om = Or = Ode = 0 (the empty, Milne universe, Ok = 1): E = 1 + z, D_C = (c/H0) ln(1+z), D_M = (c/H0) sinh(ln(1+z)), D_L = (1+z) D_M, the lookback time (1/H0) z/(1+z), the age (1/H0), the age at redshift z (1/H0)/(1+z), each to a relative 1e-10 on the same grid; q = 0 to an absolute 1e-15; the transition is null with the reason 'decelerating-today'",
+   "limits": { "maxRel": 1e-10, "maxAbsQ": 1e-15 }
+  },
+  {
+   "id": "A3.deSitter",
+   "leg": "a",
+   "what": "Om = Or = 0, Ode = 1, w = -1 (de Sitter, E = 1): D_C = (c/H0) z, D_L = (1+z) D_C, the lookback time (1/H0) ln(1+z), each to a relative 1e-10 on the grid, q = -1 to an absolute 1e-15, and the age and the age at a redshift are refused 'age-unbounded'",
+   "limits": { "maxRel": 1e-10, "maxAbsQ": 1e-15 }
+  },
+  {
+   "id": "A4.radiationOnly",
+   "leg": "a",
+   "what": "Or = 1, Om = Ode = 0 (flat, radiation only): E = (1+z)^2, D_C = (c/H0) z/(1+z), the lookback time (1/(2 H0))(1 - (1+z)^(-2)), the age (1/(2 H0)), the age at redshift z (1/(2 H0))(1+z)^(-2), each to a relative 1e-10 on the grid; q = 1 to a relative 1e-14",
+   "limits": { "maxRel": 1e-10, "maxRelQ": 1e-14 }
+  },
+  {
+   "id": "A5.wOneThirdIsCurvature",
+   "leg": "a",
+   "what": "Om = 0.3, Ode = 0.5, w = -1/3 (Ok = 0.2): the dark-energy term x^2 is indistinguishable from curvature in E(z), so E(z) equals that of Om = 0.3, Ode = 0, Ok = 0.7 to a relative 1e-14; the comoving distance equals the closed form (c/H0)(1/sqrt(K)) [ln((s - sqrt(K))/(s + sqrt(K))) - ln((s1 - sqrt(K))/(s1 + sqrt(K)))], s = sqrt(Om x + K), s1 = sqrt(Om + K), K = Ok + Ode = 0.7, to a relative 1e-9 for z in {0.2, 0.5, 1, 2, 5, 10}; the transverse distance is the closed form built from Ok = 0.2 alone, (c/H0)/sqrt(0.2) sinh(sqrt(0.2) D_C H0/c) with that D_C, to a relative 1e-9 (the dark energy bends nothing); and q equals Om x^3 / (2 E^2) to a relative 1e-14 (1 + 3w = 0)",
+   "limits": { "maxRelE": 1e-14, "maxRelDc": 1e-9, "maxRelDm": 1e-9, "maxRelQ": 1e-14 }
+  },
+  {
+   "id": "A6.flatLambdaClosedForms",
+   "leg": "a",
+   "what": "flat Lambda-CDM, w = -1, Or = 0, (Om, OL) in {(0.3, 0.7), (0.25, 0.75), (0.5, 0.5), (0.1, 0.9)} and H0 in {60, 70, 80}: the age (2/(3 H0 sqrt(OL))) asinh(sqrt(OL/Om)) and the lookback time (2/(3 H0 sqrt(OL))) [asinh(sqrt(OL/Om)) - asinh(sqrt(OL/Om)(1+z)^(-3/2))] for z in {0.1, 1, 5, 20}, each to a relative 1e-10; q(z) = (Om x^3 - 2 OL) / (2 (Om x^3 + OL)) to a relative 1e-12 (an absolute 1e-14 near zero); the transition redshift (2 OL / Om)^(1/3) - 1 to a relative 1e-11, and |q| at the returned redshift at most 1e-9",
+   "limits": { "maxRel": 1e-10, "maxRelQ": 1e-12, "maxAbsQ": 1e-14, "maxRelTransition": 1e-11, "maxAbsQAtTransition": 1e-9 }
+  },
+  {
+   "id": "A7.matterOnlyNotFlat",
+   "leg": "a",
+   "what": "Lambda = 0, Or = 0, matter only and not flat: the luminosity distance of Mattig, (2c/(H0 Om^2)) [Om z + (Om - 2)(sqrt(1 + Om z) - 1)], for Om in {0.1, 0.3, 0.7, 1.2, 1.5, 2, 3} (open and closed) and z in {0.1, 0.5, 1, 2, 5, 20}, to a relative 1e-10; the age H0 t0 = Om/(2 (1 - Om)^(3/2)) arccosh(2/Om - 1) - 1/(1 - Om) for Om < 1 and Om/(2 (Om - 1)^(3/2)) arccos(2/Om - 1) - 1/(Om - 1) for Om > 1, to a relative 1e-10; closed Om values are accepted where the existing kernel refuses them",
+   "limits": { "maxRel": 1e-10 }
+  },
+  {
+   "id": "A8.identities",
+   "leg": "a",
+   "what": "on the ten parameter sets, a mixed grid of z and a pure function check on frozen inputs: E(0) = 1 to an absolute 1e-15; Om + Or + Ok + Ode = 1 to 1e-15; D_L = (1+z)^2 D_A and D_L = (1+z) D_M to a relative 1e-14; mu = 5 log10(D_L / 10 pc) written in the leg to an absolute 1e-12; the density fractions sum to 1 to 1e-14; the lookback time plus the age at redshift z equals the age to a relative 1e-10 (two different integrals) on every set whose age exists; D_C and the lookback time are nondecreasing in z; the quantity() value equals the plain method's to the bit; two calls give identical bits; the frozen input object is not changed",
+   "limits": { "maxAbsE0": 1e-15, "maxAbsClosure": 1e-15, "maxRelDist": 1e-14, "maxAbsMu": 1e-12, "maxAbsFractions": 1e-14, "maxRelAgeSplit": 1e-10 }
+  },
+  {
+   "id": "A9.existingKernelAgrees",
+   "leg": "a",
+   "what": "for (H0, Om, OL) in {(70, 0.3, 0.7), (65, 0.25, 0.5), (70, 1, 0), (60, 0.1, 0), (72, 0.5, 0.2)} (flat or open, w = -1, no radiation) and z in {0.05, 0.5, 1, 3, 10}: the late kernel and the existing createCosmology (flrw.js, unchanged) agree on the comoving, transverse, luminosity and angular-diameter distances, the distance modulus (absolute 1e-9), the lookback time and the age to a relative 1e-9; the existing kernel still refuses a closed set with ClosedModelError (the late kernel accepts it): the delta is stated by a test and nothing in flrw.js changed",
+   "limits": { "maxRel": 1e-9, "maxAbsMu": 1e-9 }
+  },
+  {
+   "id": "B1.astropyTenSets",
+   "leg": "oracle",
+   "what": "the ten parameter sets and the zGrid (to z = 1100) against astropy 6.0.1 (its FlatLambdaCDM, LambdaCDM, FlatwCDM and wCDM, a cited independent cosmology code; radiation from its photon and massless-neutrino densities, read back and passed to the kernel as Or): E(z), the comoving, transverse, luminosity and angular-diameter distances, the lookback time, the age and the age at redshift z each to a relative 1e-8 (the default relative tolerance of the quad calls astropy states), the distance modulus to an absolute 1e-7 magnitude; a (set, z) whose closed-universe light passes the antipode is compared only in the quantities that exist and counted",
+   "limits": { "maxRel": 1e-8, "maxAbsMu": 1e-7 }
+  },
+  {
+   "id": "B2.independentQuadrature",
+   "leg": "oracle",
+   "what": "the same sets and quantities against the oracle's own implementation (scipy quad at epsabs 0 and epsrel 1e-13, limit 500, with its own formulas for E, the geometry and the age in the scale factor; no Gravitas code): relative 1e-10, the distance modulus to an absolute 1e-9 magnitude",
+   "limits": { "maxRel": 1e-10, "maxAbsMu": 1e-9 }
+  },
+  {
+   "id": "B3.oracleAgreesWithItself",
+   "leg": "oracle",
+   "what": "the oracle's two implementations (astropy and the scipy quadrature) agree with each other on every row to a relative 1e-7 (a check of the oracle, so that B1 and B2 are not two measurements of one mistake); a row on which they disagree by more makes B1 and B2 on that row meaningless and fails this leg",
+   "limits": { "maxRel": 1e-7 }
+  },
+  {
+   "id": "B4.decelerationAndTransition",
+   "leg": "oracle",
+   "what": "q(z) against the oracle's complex-step derivative q = -1 + (1+z) E'(z)/E(z) on the ten sets and the zGrid to an absolute 1e-10; the transition redshift against the oracle's Brent root of that q (its own, null when q(0) >= 0) to an absolute 1e-10, with the null/not-null verdict equal on every set",
+   "limits": { "maxAbsQ": 1e-10, "maxAbsTransition": 1e-10 }
+  },
+  {
+   "id": "B5.errorEstimateCovers",
+   "leg": "oracle",
+   "what": "on every row of B2 the reported error estimate plus 1e-13 of the value covers the kernel's actual departure from the high-precision oracle: |kernel - oracle| <= error + 1e-13 |value|, for the comoving, luminosity, lookback and age values; at least 99 percent of rows, and every error estimate finite and nonnegative",
+   "limits": { "minCoverage": 0.99, "floorRel": 1e-13 }
+  },
+  {
+   "id": "B6.publishedTable",
+   "leg": "authentic",
+   "what": "a published table of distances and ages for a stated standard cosmology, read from a file Carl supplies (the values as printed, the printed parameters, the rounding), against the kernel at those parameters within the table's own printed precision (one unit in the last printed digit); NOT RUN until the file arrives; no table is typed from memory",
+   "limits": { "fileRequired": "tests/fixtures/cosmology2/authentic/published-table.json" }
+  },
+  {
+   "id": "C1.seededEnsemble",
+   "leg": "ensemble",
+   "what": "the oracle's 400 seeded draws (numpy default_rng(255)): on every draw the oracle accepts, the kernel's luminosity distance, lookback time and age at z in {0.1, 1, 10} agree with the oracle's quadrature to a relative 1e-9 (a quantity the oracle refuses past the antipode or as age-unbounded is not compared); every returned number is finite; the error estimate covers the departure on at least 99 percent of values. (c) of the validation contract, a stated uncertainty covering the truth at a stated rate, is not applicable to a fitted uncertainty here, because nothing is fitted; this leg covers the one uncertainty the kernel carries, the integrator's estimate",
+   "limits": { "maxRel": 1e-9, "minCoverage": 0.99, "minAccepted": 100 }
+  },
+  {
+   "id": "D1.bounceRefused",
+   "leg": "refusal",
+   "what": "the three bounce sets of worlds.refusedSets are refused with the code 'bounce' and a reason that names the scale-free ratio; the two near-edge sets are accepted and give finite distances and an age; no refused construction returns an object",
+   "limits": {}
+  },
+  {
+   "id": "D2.densitiesRefused",
+   "leg": "refusal",
+   "what": "a negative Om, Or or Ode is refused 'negative-density' with the parameter named in the reason; an Om, Or or Ode above its domain bound is refused 'density-out-of-domain'",
+   "limits": {}
+  },
+  {
+   "id": "D3.wAndH0Refused",
+   "leg": "refusal",
+   "what": "w in {-3.01, 0.01, 1, -10} is refused 'w-out-of-domain'; w = -3 and w = 0 are accepted; H0 in {0, -70, 1000.01} is refused 'bad-H0'; NaN and infinite values of any one parameter are refused 'not-finite'; a missing Om is refused 'bad-argument'",
+   "limits": {}
+  },
+  {
+   "id": "D4.redshiftAndAntipode",
+   "leg": "refusal",
+   "what": "z = -0.1, z = 10001 and a non-finite z are refused 'z-out-of-domain'; on the antipode set the luminosity distance at z = 1 is finite and at z = 10000 is refused 'beyond-antipode'; a flat set at z = 10000 is accepted",
+   "limits": {}
+  },
+  {
+   "id": "D5.domainAgreesWithOracle",
+   "leg": "refusal",
+   "what": "on the ensemble's 400 draws the kernel's accept or refuse verdict and its code agree with the oracle's independent brute-force domain check on every draw the oracle does not flag 'margin' (R10), with zero disagreements, and the kernel's beyond-antipode verdict at each z of the ensemble agrees with the oracle's for every accepted draw",
+   "limits": { "maxDisagreements": 0, "minAcceptedAndRefusedEach": 20 }
+  },
+  {
+   "id": "D6.ageUnbounded",
+   "leg": "refusal",
+   "what": "de Sitter (Om = Or = 0, Ode = 1, w = -1) gives its distances and lookback time and refuses age() and ageAt(z) with 'age-unbounded'; a set with Om > 0 gives an age",
+   "limits": {}
+  },
+  {
+   "id": "D7.refusalsAreExplained",
+   "leg": "refusal",
+   "what": "every refusal the other D legs provoke throws a FriedmannDomainError whose code is in domain.codes and whose message is a sentence of at least 30 characters stating the reason; no method returns NaN or Infinity for an accepted set on the ensemble",
+   "limits": { "minMessageLength": 30 }
+  },
+  {
+   "id": "F1.contoursReproduceTheDistance",
+   "leg": "degeneracy",
+   "what": "for the flatOmW, openOmOde and hubbleOm contours: every returned point, run back through the kernel, reproduces the contour's target to a relative 1e-9; the points are within the parameter ranges; the skipped list names a code for every grid value not returned; at the oracleXIndices the second parameter equals the oracle's independent solution (scipy brentq on its own distance, same scan rule) to an absolute 1e-7 relative to the parameter's range",
+   "limits": { "maxRelTarget": 1e-9, "maxRelYRange": 1e-7 }
+  },
+  {
+   "id": "F2.directionAgreesWithOracle",
+   "leg": "degeneracy",
+   "what": "for the three directions: the slope dy/dx of the degeneracy direction equals -(dD/dx)/(dD/dy) from the oracle's complex-step gradient to a relative 1e-6, the gradient components agree with the oracle's to a relative 1e-6, and the unit tangent is perpendicular to the gradient to an absolute 1e-12",
+   "limits": { "maxRelSlope": 1e-6, "maxRelGradient": 1e-6, "maxAbsPerp": 1e-12 }
+  },
+  {
+   "id": "F3.hubbleScaling",
+   "leg": "degeneracy",
+   "what": "at fixed redshift every distance scales exactly as 1/H0 (the lookback time too): d ln D / d ln H0 = -1 to an absolute 1e-8 from the direction tool's gradient on the hubbleOm contour's base, and the contour in the (Om, H0) plane satisfies H0 = (c (1+z) I(Om)) / D_target for the luminosity distance, I the line-of-sight integral, with I from the oracle's quadrature, to a relative 1e-9",
+   "limits": { "maxAbsLogSlope": 1e-8, "maxRel": 1e-9 }
+  },
+  {
+   "id": "F4.contourSkips",
+   "leg": "degeneracy",
+   "what": "the skipRefusals contour (x from 0.02 to 0.4, y = Ode up to 2.5, whose scan passes through bounce sets at small Om and large Ode): it returns at least one point, every skipped entry carries a code from {no-root, all-refused}, no returned point is a refused set (each is constructed again by the kernel without refusal); the unreachableTarget contour (a w range that cannot give the target) returns no point and skips every grid value 'no-root'",
+   "limits": {}
+  },
+  {
+   "id": "R1.cpuTime",
+   "leg": "reported",
+   "what": "the CPU time of the full validation, and of one distance, one age and one contour point, reported without a bound",
+   "limits": {}
+  }
+ ],
+ "gate": {
+  "verdictFunction": {
+   "what": "the Part A kernel verdict, a function of the rows alone: A when every closed-form leg (A1 to A9), every oracle leg that was run (B1 to B5), every refusal leg (D1 to D7), the ensemble C1 and every degeneracy leg (F1 to F4) passes; B when A1 to A9, B1 to B5 and D1 to D4, D6 and D7 pass but C1, D5 or any of F1 to F4 fails: the distances, times, ages, deceleration parameter and transition redshift are claimable and the ensemble agreement or the degeneracy contours are not; C when any of A1 to A9, B1 to B5, D1 to D4, D6 or D7 fails: nothing of the kernel is claimable. The product verdict is NOT ESTABLISHED while B6 is NOT RUN. The consumers clause (a panel, a lesson, the model-page section) is unmet whatever the kernel verdict, and is met only by a product verdict of A.",
+   "kernelLegGroups": {
+    "closedLegs": ["A1", "A2", "A3", "A4", "A5", "A6", "A7", "A8", "A9"],
+    "oracleLegs": ["B1", "B2", "B3", "B4", "B5"],
+    "refusalCore": ["D1", "D2", "D3", "D4", "D6", "D7"],
+    "coverageLegs": ["C1"],
+    "refusalCoverage": ["D5"],
+    "degeneracyLegs": ["F1", "F2", "F3", "F4"],
+    "authenticLegs": ["B6"]
+   }
+  }
+ },
+ "amendments": [
+  {
+   "id": "AM1",
+   "step": "analysisRule R3 and worlds.ensemble (wording), check D5",
+   "what": "Two things the committed text left open, fixed before the kernel or any validator run existed and with no number changed. (1) The order in which a refused set's code is chosen when it breaks several rules is the order of domain.codes: not-finite, then bad-H0, then negative-density, then density-out-of-domain, then w-out-of-domain, then bounce (the bounce scan is run only for a set that passed the first five). The oracle's own domain check, written after this file, applies the same order, and D5 compares codes, so the order is part of the contract. (2) The ensemble's w is drawn uniform in [-3.3, 0.2] of which 0.5 of 3.5, about 14 percent, lies outside the domain [-3, 0]; the committed sentence says 'about 2 percent', an arithmetic slip in the description of the draw. The draw itself, the w range, the count of 400 and every bound are as committed; D5's minAcceptedAndRefusedEach of 20 stands.",
+   "why": "Recorded before js/kernels/cosmology/late existed and before any oracle output was inspected. The slip was found by redoing the arithmetic of the draw while writing the oracle. No bound moved.",
+   "boundMoved": false,
+   "when": "before any kernel code and any validator run"
+  },
+  {
+   "id": "AM2",
+   "step": "check F1 (wording), worlds.contours.oracleXIndices",
+   "what": "oracleXIndices lists five grid indices, [2, 6, 10, 14, 17], written for the 19-point flatOmW contour; the openOmOde contour has 15 grid points and hubbleOm 13. The reading fixed here: on each contour the oracle comparison uses the listed indices that exist on its grid (flatOmW all five, openOmOde 2, 6, 10 and 14, hubbleOm 2, 6 and 10), and a listed index beyond a contour's grid is skipped, not a failure. No bound changed.",
+   "why": "Found when the first validator run stopped with a TypeError at the first out-of-range index, before it printed or wrote any row, so no leg's result had been seen. Recorded before the second run.",
+   "boundMoved": false,
+   "when": "before any validator row was seen"
+  }
+ ]
+}

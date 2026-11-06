@@ -1,0 +1,175 @@
+{
+ "format": "gravitas.cosmology2-first-run/1",
+ "note": "the validator on kernel commit before the D7 message fix; a record, never read by a gate. Kept so the failed legs of the first complete run stay visible after a kernel defect was fixed (COSMOLOGY_II.md section 8).",
+ "kernelVerdict": "C",
+ "rows": [
+  {
+   "id": "A1.einsteinDeSitter",
+   "status": "pass"
+  },
+  {
+   "id": "A2.emptyUniverse",
+   "status": "pass"
+  },
+  {
+   "id": "A3.deSitter",
+   "status": "pass"
+  },
+  {
+   "id": "A4.radiationOnly",
+   "status": "pass"
+  },
+  {
+   "id": "A5.wOneThirdIsCurvature",
+   "status": "pass"
+  },
+  {
+   "id": "A6.flatLambdaClosedForms",
+   "status": "pass"
+  },
+  {
+   "id": "A7.matterOnlyNotFlat",
+   "status": "fail",
+   "measured": {
+    "worstRelLuminosity": 2.83e-13,
+    "worstRelAge": 2,
+    "existingKernelRefusesClosed": true
+   }
+  },
+  {
+   "id": "A8.identities",
+   "status": "pass"
+  },
+  {
+   "id": "A9.existingKernelAgrees",
+   "status": "pass"
+  },
+  {
+   "id": "B1.astropyTenSets",
+   "status": "fail",
+   "measured": {
+    "worstPerQuantity": {
+     "E": 2e-16,
+     "Dc": 4.08e-14,
+     "Dm": 4.08e-14,
+     "Dl": 4.08e-14,
+     "Da": 4.08e-14,
+     "mu": 8.53e-14,
+     "lookback": 4.59e-15,
+     "ageAtZ": 4.99e-7,
+     "age0": 1.78e-14
+    },
+    "quantitiesOverBound": [
+     "ageAtZ"
+    ],
+    "rowsCompared": 70,
+    "antipodeMismatch": 0
+   }
+  },
+  {
+   "id": "B2.independentQuadrature",
+   "status": "pass"
+  },
+  {
+   "id": "B3.oracleAgreesWithItself",
+   "status": "fail",
+   "measured": {
+    "worstRel": 4.99e-7,
+    "rowsOverBound": 3,
+    "quantitiesOverBound": [
+     "ageAtZ"
+    ],
+    "firstRows": [
+     "S2 z=1100 ageAtZ",
+     "S9 z=1100 ageAtZ",
+     "S10 z=1100 ageAtZ"
+    ]
+   }
+  },
+  {
+   "id": "B4.decelerationAndTransition",
+   "status": "pass"
+  },
+  {
+   "id": "B5.errorEstimateCovers",
+   "status": "pass"
+  },
+  {
+   "id": "B6.publishedTable",
+   "status": "not-run"
+  },
+  {
+   "id": "C1.seededEnsemble",
+   "status": "pass"
+  },
+  {
+   "id": "D1.bounceRefused",
+   "status": "pass"
+  },
+  {
+   "id": "D2.densitiesRefused",
+   "status": "pass"
+  },
+  {
+   "id": "D3.wAndH0Refused",
+   "status": "pass"
+  },
+  {
+   "id": "D4.redshiftAndAntipode",
+   "status": "pass"
+  },
+  {
+   "id": "D5.domainAgreesWithOracle",
+   "status": "pass"
+  },
+  {
+   "id": "D6.ageUnbounded",
+   "status": "pass"
+  },
+  {
+   "id": "D7.refusalsAreExplained",
+   "status": "fail",
+   "measured": {
+    "refusalsChecked": 150,
+    "badRefusals": 15,
+    "ensembleOutputsFinite": true,
+    "distinctCodes": [
+     "age-unbounded",
+     "bad-H0",
+     "bad-argument",
+     "beyond-antipode",
+     "bounce",
+     "density-out-of-domain",
+     "negative-density",
+     "not-finite",
+     "w-out-of-domain",
+     "z-out-of-domain"
+    ]
+   }
+  },
+  {
+   "id": "F1.contoursReproduceTheDistance",
+   "status": "pass"
+  },
+  {
+   "id": "F2.directionAgreesWithOracle",
+   "status": "pass"
+  },
+  {
+   "id": "F3.hubbleScaling",
+   "status": "fail",
+   "measured": {
+    "dLnDdLnH0": -0.99999996,
+    "worstRelH0ClosedForm": 2.17e-16
+   }
+  },
+  {
+   "id": "F4.contourSkips",
+   "status": "pass"
+  },
+  {
+   "id": "R1.cpuTime",
+   "status": "reported"
+  }
+ ]
+}
