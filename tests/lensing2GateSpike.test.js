@@ -12,13 +12,16 @@ import { describe, test, expect } from '@jest/globals';
 import { existsSync, readFileSync } from 'node:fs';
 import { URL } from 'node:url';
 
-const read = rel => JSON.parse(readFileSync(new URL(`../${rel}`, import.meta.url), 'utf8'));
+const read = rel =>
+  JSON.parse(readFileSync(new URL(`../${rel}`, import.meta.url), 'utf8'));
 const GATE = read('tests/fixtures/lensing2/gate-thresholds.json');
 const SPIKE = read('tests/fixtures/lensing2/gate-spike-results.json');
 const FAILED = read('tests/fixtures/lensing2/gate-spike-failed-legs.json');
 const FINITE = read('tests/fixtures/lensing2/oracle-finite.json');
 
-const protoIds = GATE.checks.filter(c => c.leg === 'prototype' || c.leg === 'data').map(c => c.id);
+const protoIds = GATE.checks
+  .filter(c => c.leg === 'prototype' || c.leg === 'data')
+  .map(c => c.id);
 
 describe('the recorded gate spike', () => {
   test('every prototype and data leg has one row, in committed order', () => {
@@ -30,7 +33,10 @@ describe('the recorded gate spike', () => {
   });
   test('the failed-legs file is exactly the failing rows, each with its measured numbers', () => {
     expect(FAILED.legs.map(l => l.id).sort()).toEqual(
-      SPIKE.rows.filter(r => r.status === 'fail').map(r => r.id).sort()
+      SPIKE.rows
+        .filter(r => r.status === 'fail')
+        .map(r => r.id)
+        .sort()
     );
     for (const l of FAILED.legs)
       expect(l.measured).toEqual(SPIKE.rows.find(r => r.id === l.id).measured);
@@ -49,8 +55,16 @@ describe('the recorded gate spike', () => {
   test('the spike is a recorded commit on a branch that is not merged, and its code is not in this tree', () => {
     expect(SPIKE.spike.branch).toBe('spike/lensing-delays-gate');
     expect(SPIKE.spike.commit).toMatch(/^[0-9a-f]{40}$/);
-    expect(existsSync(new URL('../js/kernels/lensing/enclosed/delays.js', import.meta.url))).toBe(false);
-    expect(existsSync(new URL('../js/kernels/lensing/enclosed/finiteFit.js', import.meta.url))).toBe(false);
+    expect(
+      existsSync(
+        new URL('../js/kernels/lensing/enclosed/delays.js', import.meta.url)
+      )
+    ).toBe(false);
+    expect(
+      existsSync(
+        new URL('../js/kernels/lensing/enclosed/finiteFit.js', import.meta.url)
+      )
+    ).toBe(false);
   });
   test('the amendments were recorded before the run and moved no bound', () => {
     expect(GATE.amendments.map(a => a.id)).toEqual(['AM1', 'AM2', 'AM3']);

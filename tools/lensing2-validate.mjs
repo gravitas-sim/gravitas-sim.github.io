@@ -943,12 +943,18 @@ function spikeSummary(st) {
   const file = path.join(ROOT, DIR, 'gate-spike-results.json');
   const merged = { P0: st('P0'), P1: st('P1'), P2: st('P2') };
   if (!existsSync(file))
-    return { verdict: 'none', why: 'no spike result is recorded', mergedCodeLegs: merged };
+    return {
+      verdict: 'none',
+      why: 'no spike result is recorded',
+      mergedCodeLegs: merged,
+    };
   const spike = JSON.parse(readFileSync(file, 'utf8'));
   return {
     verdict: spike.verdict.verdict,
     source: `tests/fixtures/lensing2/gate-spike-results.json (spike/lensing-delays-gate, ${spike.spike.commit})`,
-    legs: Object.fromEntries(spike.rows.map(r => [r.id.split('.')[0], r.status])),
+    legs: Object.fromEntries(
+      spike.rows.map(r => [r.id.split('.')[0], r.status])
+    ),
     mergedCodeLegs: merged,
     note: 'the verdict is the committed function of the spike rows; G6 and G9 have no data, so A is unreachable',
   };
