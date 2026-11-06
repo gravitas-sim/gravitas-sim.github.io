@@ -140,9 +140,13 @@ export function evaluate(r, B, randCE, randPlain) {
   };
   if (res.cpVector) {
     out.cpErrDeg = MC.angleBetween(res.cpVector, r.truth.cpVector);
-    out.tauDeg = (Math.sqrt(res.tau2) / DEG);
-    out.ceIterations = res.ceIterations;
-    out.plainCpErrDeg = MC.angleBetween(res.plain.cpVector, r.truth.cpVector);
+    // a result refused by the membership stage carries the plain point and no CE fit
+    const plain = res.plain ?? res;
+    if (res.plain) {
+      out.tauDeg = Math.sqrt(res.tau2) / DEG;
+      out.ceIterations = res.ceIterations;
+    }
+    out.plainCpErrDeg = MC.angleBetween(plain.cpVector, r.truth.cpVector);
   }
   if (res.status === 'ok') {
     const full = B ? CE.withIntervalCE(stars, res, B, randCE) : res;
@@ -518,8 +522,8 @@ export function runLegs({ oracle, csv, only }) {
           p95Deg: sig(p95),
           refusedFraction: sig(refusedFrac),
           plainMedianDeg: sig(med(withCp.map(e => e.plainCpErrDeg))),
-          medianTauDeg: sig(med(withCp.map(e => e.tauDeg))),
-          maxCeIterations: Math.max(...withCp.map(e => e.ceIterations)),
+          medianTauDeg: sig(med(withCp.filter(e => Number.isFinite(e.tauDeg)).map(e => e.tauDeg))),
+          maxCeIterations: Math.max(...withCp.filter(e => e.ceIterations).map(e => e.ceIterations)),
         }
       );
     }
