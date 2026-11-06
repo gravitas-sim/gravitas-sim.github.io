@@ -1,0 +1,61 @@
+{
+  "format": "gravitas.moving-cluster-published-distance/1",
+  "retrieved": "2026-11-06",
+  "retrievedBy": "Carl's session, from arXiv (outside every repository, in his scratch-data folder gaia234/pub, with published.json whose sha256 is 7cbcc2159ec6b949b3e043d7c6c1b11e76e2b9741cec87f252df6295a4186570); untrusted data, read and transcribed as printed, nothing fetched by the session that wrote this file",
+  "checked": "every number below was checked against the text extracted beside the PDF (astro-ph_9707253.txt, Section 6 and Table 3; 1811.03845.txt, Introduction); none was typed from memory",
+  "sources": [
+    {
+      "role": "primary, non-Gaia (Hipparcos)",
+      "paper": "Perryman et al. 1998, A&A 331, 81: The Hyades: distance, structure, dynamics, and age",
+      "identifier": "arXiv:astro-ph/9707253v1",
+      "sha256": "924ec0c8be983608c9a1c5eebac65a7edae1d4e711f6ae744916cb332e71f670",
+      "where": "Section 6 (the reference distance) and Table 3",
+      "method": "Hipparcos astrometry with ground-based radial velocities; the distance is to the centre of mass of the Hipparcos members (the paper says the concept is meaningful only in that restricted context)",
+      "values": [
+        {
+          "selection": "members within r < 10 pc of the cluster centre",
+          "stars": 134,
+          "distance_pc": {
+            "value": 46.34,
+            "uncertainty": 0.27
+          },
+          "distanceModulus_mag": {
+            "value": 3.33,
+            "uncertainty": 0.01
+          },
+          "note": "the reference distance adopted by the paper (Section 6); for objects in the Hipparcos Catalogue within 10 pc of the cluster centre"
+        },
+        {
+          "selection": "members within r < 20 pc of the cluster centre",
+          "stars": 180,
+          "distance_pc": {
+            "value": 46.75,
+            "uncertainty": 0.31
+          },
+          "where": "Table 3, last line; read from the extracted text, not in published.json"
+        }
+      ],
+      "compared": "the 134-star reference distance is the compared value of RK8; the 180-star determination is REPORTED"
+    },
+    {
+      "role": "SECOND-HAND quotation of Gaia values: not primary sources, not the same estimand",
+      "paper": "Roser, Schilbach, Goldman, Henning, Kroupa, Pflamm-Altenburg 2019 (A&A), The Hyades tidal tails revealed by Gaia DR2",
+      "identifier": "arXiv:1811.03845v1",
+      "sha256": "64266b1de9198356ddafceaddcf1e822237205e46b3eaec010c44e41b35268d8",
+      "where": "Introduction",
+      "quoted": {
+        "gaia_dr1_pc": {
+          "value": 46.75,
+          "uncertainty": 0.46,
+          "cited_as": "Gaia Collaboration et al. 2017"
+        },
+        "gaia_dr2_pc": {
+          "value": 47.5,
+          "uncertainty": 0.15,
+          "cited_as": "Gaia Collaboration et al. 2018a"
+        }
+      },
+      "frameNote": "quoted for the distance of the cluster centre from the Sun in an introduction to a paper about tidal tails; the primary Gaia Collaboration papers were not fetched; no DR3-based value was found, and the first DR3-based figure is still an open request. REPORTED only (RK8r), never a leg."
+    }
+  ]
+}

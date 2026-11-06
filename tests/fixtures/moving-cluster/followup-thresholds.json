@@ -1,0 +1,425 @@
+{
+  "format": "gravitas.moving-cluster-followup-thresholds/1",
+  "prompt": "Roadmap III, Prompt 234 Part A follow-up (docs/moving-cluster-followup): a bias-corrected convergent-point estimator as NEW legs (Carl 2026-11-06), and the published-value legs R7 and R8 now that the data exist",
+  "document": "MOVING_CLUSTER_GATE.md, follow-up section, written after this file",
+  "committed": "before any code of the follow-up (the corrected estimator, its module, its validator and its oracle), before any follow-up run on any seed or on the real file. The Part A files (thresholds.json, results.json, failed-legs.json, ensembles.json, oracle-results.json) are not edited: the 18 failing legs (C3, C4, C5 of the amended form and the committed form failures) stay failing and bit-identical, and the committed verdict C and the unratified amended form B are neither re-measured nor re-read.",
+  "rule": "A crossed bound is a failed leg, recorded in followup-failed-legs.json and left failing; only Carl resets one. A leg that cannot be measured is NOT RUN and says why. A REPORTED leg has no band and is never counted. Every leg has a set (S synthetic, R real) and a group (geo or dist) as in thresholds.json. No bound, estimator choice or constant in this file is changed after a result of the follow-up gate stream is seen; the design stream below may find an implementation fault or an error of the specification before that stream, an error of the specification is recorded as an amendment in the amendments array with the finding BEFORE any gate seed runs, and no amendment may change a bound.",
+  "consumersRule": "No lesson, panel, viewer, pack or Part B is authorized by anything in this file (Carl 2026-11-05 and 2026-11-06). The binding verdict is the committed one (C). The follow-up verdict below describes the corrected estimator on its own legs; it moves nothing until Carl rules, and no moving-cluster distance is written as a result of the project below a ratified verdict A: the real-sample comparisons are recorded as relative differences, ratios and sigma units, and neither the moving-cluster parallax nor a distance in pc of the moving-cluster estimate is written to any file or document.",
+  "seeds": {
+    "stream": "the noise stream of js/random/streams.js, forked by seed, variant label and realization index, exactly as Part A",
+    "gate": [
+      234101,
+      234102,
+      234103
+    ],
+    "use": {
+      "234101": "E1 (K1, K4 to K9, K13), E7 (K11), E8 (K12) and the oracle realizations O1 to O5; new seeds, none of Part A (234001 to 234004) is reused",
+      "234102": "E3 (K10), E5 (K14), E6 (K15) and the oracle realization O6",
+      "234103": "the real sample CE bootstrap and halves (RK legs) and the oracle own bootstrap"
+    },
+    "design": "moving-cluster-234-followup-design (synthetic data only, to build and debug the implementation; never a gate seed, never the real file, never a leg)"
+  },
+  "basis": {
+    "membership": "the membership iteration of the amended form of Part A (AM1 count in convergent-point space on the Fibonacci lattice, AM3 the magnitude rule without a speed), with the plain eigenvector convergent point inside it. The committed form seed cannot find the cluster (design finding F1, found before any gate seed of Part A), so a corrected estimator has no members to correct without it. USING IT IS NOT RATIFYING IT: AM1 to AM3 remain an unratified proposal, the committed form verdict C binds, and the follow-up legs say so on every row.",
+    "data": "tests/fixtures/moving-cluster/thresholds.json \"data\" (hyades.csv, sha256 5e3c8ab9b56a16def4495c669667b33aada8d856262ab64a812b23c5914290f6, Gaia DR3, CC BY-NC 3.0 IGO, D-GAIA-01 labelling); the same sample cuts and the same per-star zero point of 233; no per-star value, source id or moving-cluster distance is committed",
+    "synthetic": "tests/fixtures/moving-cluster/thresholds.json \"syntheticTruth\" unchanged; the variants E1 (200), E3 (50), E5 (100), E6 (100) as there, plus E7 (internal sigma 1.0 km/s per axis, 200) and E8 (convergent point 60 degrees from the cluster centre, 200), both with the baseline field and errors",
+    "singleFile": "the validator reads thresholds.json, this file and the published-value fixtures from one fixtures directory and records the sha256 of each in its output"
+  },
+  "estimator": {
+    "name": "CE, the corrected-eigenvector convergent point: an errors-in-variables correction of the committed eigenvector estimator (the plain estimator and its legs are unchanged)",
+    "problem": "design finding F4 of Part A: the plain convergent point is the smallest eigenvector of S = sum b_i b_i^T, b_i = n_i x t_i. A star whose observed proper-motion direction is rotated in the tangent plane by a small angle delta_i has b_i = b0_i cos(delta_i) - t_i sin(delta_i), b0_i perpendicular to the true convergent point c, so E[S] = sum (1 - E delta_i^2) b0_i b0_i^T + sum E delta_i^2 t_i t_i^T. The second sum is not perpendicular to c (t_i . c = sin theta_i) and pulls the smallest eigenvector towards the cluster, along the one direction the stars constrain weakly (their great circles are nearly parallel): the bias of +1.29 percent in pi_MC measured on the design stream of Part A.",
+    "noiseVariance": "delta_i^2 = tau^2 / sin^2(theta_i) + s_i^2 / mu_i^2 (rad^2). First term: an isotropic internal velocity scatter sigma_int per axis rotates the observed direction of the tangential motion by sigma_int / (V sin theta_i), so the offsets b_i . c have the same intrinsic scatter tau = sigma_int / V (rad) for every star and the direction error is tau / sin theta_i. Second term: the measurement; s_i^2 = (b_i . e_i)^2 sigma_pmra,i^2 + (b_i . g_i)^2 sigma_pmdec,i^2 is the variance of the proper motion across the track (e_i east, g_i north; the correlation is zero, as committed), mu_i the observed proper-motion magnitude.",
+    "tau": "estimated from the offsets alone (no radial velocity, no speed): over U, the members with sin theta_i >= 0.1 at the current c, n = |U| > 2: lambda = sum_U (b_i . c)^2; M_i = sin^2(theta_i) s_i^2 / mu_i^2 (the measurement part of the variance of b_i . c); tau^2 = max(0, (lambda n / (n - 2) - sum_U M_i) / n). The factor n / (n - 2) restores the two parameters the fit used. The 3-sigma clip of the membership iteration truncates the offsets and shrinks lambda by about 2.7 percent; that is not corrected and is a stated limit.",
+    "iteration": "c_0 is the plain eigenvector of the stars of U_0 (members with sin theta >= 0.1 at the plain convergent point), signed so that sum t_i . u_i > 0. For k = 1, 2, ...: U_k is formed at c_{k-1}; tau^2 and delta_i^2 are computed at c_{k-1}; S*_k = sum_{U_k} b_i b_i^T - sum_{U_k} delta_i^2 t_i t_i^T; c_k is the eigenvector of the smallest eigenvalue of S*_k (a 3 by 3 symmetric eigenproblem), signed by the same rule. Stop when the angle between c_k and c_{k-1} is at most 1e-12 rad. 100 iterations without a stop: the CE estimate is not returned, the result is refused with the reason ce-no-convergence (no fallback to the plain estimate; a refused realization counts as not covering).",
+    "rest": "the speed V (weighted least squares of the radial velocity on cos theta, committed), the per-star and cluster parallax (committed formulas, weights 1 / parallax_error^2) and every refusal (fewer than 20 members, sigma_off above 3 degrees, radial-velocity scatter above 3 km/s, fewer than 10 members with a radial velocity, perpendicular, sign, interval above 10 percent, more than 5 percent of replicates discarded) are those of Part A, evaluated at the CE convergent point and applied to the members the amended iteration found. The members are NOT reselected with CE inside the iteration (stated choice).",
+    "bootstrap": "the members are resampled with replacement (member set fixed, as committed), CE is refitted in every replicate (tau^2 re-estimated from the replicate), the speed is refitted, pi_MC recomputed; B = 400 per synthetic realization, 4000 for the real sample; sigma_MC half the distance between the 15.865th and 84.135th percentiles; the 95.45 percent interval the 2.275th to 97.725th (as committed). A replicate whose CE does not converge, with a non-positive speed or fewer than 5 stars, is discarded; more than 5 percent discarded refuses (unstable).",
+    "inputs": "the proper-motion errors: the file pmra_error and pmdec_error columns for the real sample; for synthetic stars both equal to the star parallax sigma (the committed syntheticTruth.errors.properMotionSigma). Correlations are zero (not columns of the file).",
+    "assumptions": "stated, and the legs test the first two on worlds where they hold and E6 reports a world where the third fails: the internal velocity scatter is isotropic; the cluster shares one space velocity; there is no expansion or rotation (D5 and K15 report what the plain and corrected estimators do when there is). The correction is first order in delta^2 (delta below about 0.1 rad for sin theta >= 0.1).",
+    "whatItIsNot": "no tuning constant, no knob: every quantity is read from the data or is a committed constant (the 0.1 floor on sin theta, 1e-12 rad, 100 iterations); not a maximum-likelihood fit (that is a different estimator and would be a new contract)."
+  },
+  "thresholdRule": {
+    "rule": "Every bound of a follow-up leg is fixed by the following rule, which was written before any follow-up number existed. (1) A leg that re-tests a committed leg takes that leg bound unchanged on an ensemble of the same size, so the committed arithmetic holds. The nominal levels of the intervals are 68.27 and 95.45 percent (one and two Gaussian standard deviations). The coverage band of the 68.27 percent interval is the nominal rate plus or minus three binomial standard errors at n = 200: 0.6827 +- 3 sqrt(0.6827 * 0.3173 / 200) = 0.584 to 0.781, committed as 0.58 to 0.78 (C3). The band of the 95.45 percent interval is the committed 0.90 to 0.99 (C4; the upper bound below 1 because a finite bootstrap cannot be asked to cover always). The bound on the median of z is three standard errors of a median of 200 unit normals, 3 * 1.2533 / sqrt(200) = 0.266, committed as 0.27 (C5); the bound on the median relative bias is the committed 0.005 (C5). The usefulness, agreement, convergent-point, no-radial-velocity, analytic, oracle and real-sample bounds are the committed C7, C6, C2, D2a and D2b, A1 to A3, B2, B3, B5, B6 and R1 to R5 bounds. (2) E7 and E8 have no committed analogue; each takes the four C3 to C5 bounds at the same n = 200. (3) No value is derived from a measured number of the failing legs C3, C4, C5 (coverage 0.495 and 0.885, median z +0.89, median relative bias +0.0117), or from any other result of Part A. (4) R7 and R8 use only committed constants (the 3 sigma factor, the 3 percent cap, sigma0 = 1.0 km/s, the synthetic positionSigma 5 pc) and the printed values of the published-value fixtures; their rules are written below and not changed after the real-sample CE run.",
+    "disclosure": "What the author of this follow-up had seen before writing this file, stated so the order can be judged: all of Part A (MOVING_CLUSTER_GATE.md and the fixtures, including the amended form real-sample convergent point at (97.11, 7.08) degrees, V of 46.3 km/s, the ratio 1.0146 to 233 pi_plx, and the synthetic bias of F4); and the published-value file Carl fetched (including the printed Perryman convergent point and distance). The R7 and R8 rules were not set from the gap between those; they are built from the committed constants named in (4). No CE number of any kind, on any seed or on the real file, existed when this file was committed.",
+    "noPowerClaim": "A band that cannot fail would be no test: K5 to K7 would have failed on the plain estimator of Part A (they are its C3 to C5, which failed) and a corrected estimator that carries the same bias fails them again."
+  },
+  "publishedComparisons": {
+    "sources": "tests/fixtures/moving-cluster/published-cp.json and published-distance.json, transcribed from the PDFs Carl fetched (arXiv:astro-ph/9707253v1, sha256 924ec0c8...f670, and arXiv:1811.03845v1, sha256 64266b1d...68d8) as printed, checked line by line against the text extracted beside them. Untrusted data: read, not executed, nothing fetched by this session, no number typed from memory.",
+    "cpHasNoUncertainty": "Perryman et al. print the convergent point, for 134 and for 180 stars, with no uncertainty. RK7 therefore has no published sigma: its tolerance is ours (3 r of the bootstrap) plus the stated floor f for the difference between two member selections. A pass says the two convergent points agree to within what the Hipparcos core and our larger Gaia sample may be expected to differ by; it is not a statement that the published value is exact.",
+    "distanceConcept": "the published distance is to the centre of mass of the Hipparcos members within 10 pc (the paper says the concept is meaningful only in that restricted context); our pi_MC is a parallax-weighted mean over our members. The floor g pi_pub in RK8 is the stated allowance for that concept difference. The Gaia DR2 (47.50 +- 0.15 pc) and DR1 (46.75 +- 0.46 pc) values are second-hand quotations from the introduction of Roser et al. 2019, not primary sources, not the same estimand, and are REPORTED only (RK8r).",
+    "epoch": "Perryman et al. use Hipparcos astrometry at epoch J1991.25; the sample is Gaia DR3 at J2016.0 (ICRS). The convergent point is a direction of the cluster space velocity and does not depend on the epoch; the two member sets differ."
+  },
+  "gate": {
+    "verdictFunction": "the committed verdict function of thresholds.json applied to the follow-up rows alone: S legs are the follow-up legs with set S, R legs those with set R; A when every S and R follow-up leg passes; B when every geo leg of S and R passes and some dist leg fails or is NOT RUN; C when a geo leg fails or is NOT RUN. A REPORTED leg and a NOT RUN leg without a set are never in either set. It describes the corrected estimator on these legs; it does not change the committed verdict C (whose legs stay as recorded and are not re-measured), does not ratify AM1 to AM3, and authorizes no consumer, no Part B and no distance (consumersRule above).",
+    "legGroups": {
+      "S geo": [
+        "K1.exact",
+        "K3a.oracle.cp.synthetic",
+        "K4.cp",
+        "K10.noRv.cp"
+      ],
+      "S dist": [
+        "K2.hand",
+        "K3b.oracle.dist.synthetic",
+        "K5.coverage68",
+        "K6.coverage95",
+        "K7.recovery",
+        "K8.agree",
+        "K9.useful",
+        "K11.dispersion1",
+        "K12.separation60"
+      ],
+      "R geo": [
+        "RK1.members",
+        "RK5.cpSplit",
+        "K16a.oracle.cp.real",
+        "RK7.published.cp"
+      ],
+      "R dist": [
+        "RK2.agree",
+        "RK3.useful",
+        "RK4.split",
+        "K16b.oracle.dist.real",
+        "RK8.published.distance"
+      ]
+    }
+  },
+  "amendments": [],
+  "checks": [
+    {
+      "id": "K1.exact",
+      "set": "S",
+      "group": "geo",
+      "kind": "analytic",
+      "what": "a noise-free, zero-dispersion cluster of 300 stars (the committed A1 construction, three realizations of the follow-up seed 234101, no field, stated proper-motion errors 0 passed to the estimator): the estimated intrinsic scatter tau^2 is at most 1e-20 rad^2, the CE convergent point equals the truth and equals the plain eigenvector convergent point to 1e-6 degrees (the committed A1 tolerance), and the speed, every per-star parallax and pi_MC equal the truth to 1e-9 relative (the committed A2 tolerance)",
+      "limits": {
+        "maxCpErrorDeg": 1e-06,
+        "maxTau2": 1e-20,
+        "maxRel": 1e-09,
+        "realizations": 3
+      }
+    },
+    {
+      "id": "K2.hand",
+      "set": "S",
+      "group": "dist",
+      "kind": "analytic",
+      "what": "closed forms by hand through the production functions, to 1e-12 relative: (a) one star with sin theta 0.5, tau 0.01 rad, a proper-motion error across the track of 0.1 mas/yr and mu 100 mas/yr has delta^2 = 0.01^2 / 0.5^2 + (0.1 / 100)^2 = 4.01e-4 rad^2; (b) twelve stars whose offsets b.c are all +-0.01 rad with no measurement term give lambda = 1.2e-3 and tau^2 = (1.2e-3 * 12 / 10) / 12 = 1.2e-4 rad^2; (c) with tau^2 = 0 and no measurement term the CE convergent point of a stated 40-star set equals the plain eigenvector convergent point to 1e-12 rad; (d) the corrected matrix of two stated stars equals S - sum delta^2 t t^T entry by entry written out in the leg",
+      "limits": {
+        "maxRel": 1e-12,
+        "maxRad": 1e-12
+      }
+    },
+    {
+      "id": "K3a.oracle.cp.synthetic",
+      "set": "S",
+      "group": "geo",
+      "kind": "oracle",
+      "what": "the independent Python oracle (no Gravitas code, written from this file) on six pinned follow-up realizations (O1 to O3 baseline E1 of seed 234101, O4 internal sigma 1 km/s, O5 convergent point 60 degrees away, O6 no radial velocities): the member sets of the amended iteration are identical (Jaccard 1), the CE convergent point agrees to 1e-6 degrees, the estimated tau^2 agrees to 1e-6 relative, and the number of fixed-point iterations agrees to within 1",
+      "limits": {
+        "minJaccard": 1.0,
+        "maxDeg": 1e-06,
+        "maxRelTau2": 1e-06,
+        "maxIterationDifference": 1,
+        "realizations": 6
+      }
+    },
+    {
+      "id": "K3b.oracle.dist.synthetic",
+      "set": "S",
+      "group": "dist",
+      "kind": "oracle",
+      "what": "the oracle on the same cases: the speed, per-star parallaxes and pi_MC at the CE convergent point agree with the production module to 1e-8 relative (the committed B3 tolerance), and the oracle bootstrap sigma_MC of the CE estimator (4000 replicates, its own generator, tau^2 re-estimated in every replicate) agrees with the production module (4000 replicates) within 10 percent relative, on the cases that return a distance",
+      "limits": {
+        "maxRel": 1e-08,
+        "maxRelSigma": 0.1,
+        "bootstrap": 4000
+      }
+    },
+    {
+      "id": "K4.cp",
+      "set": "S",
+      "group": "geo",
+      "kind": "coverage",
+      "what": "on E1 (200 realizations, seed 234101) the CE convergent point has a median angular error of at most 1.0 degree, a 95th percentile of at most 3.0 degrees, and at most 5 percent of realizations are refused (the committed C2 bounds)",
+      "limits": {
+        "maxMedianDeg": 1.0,
+        "maxP95Deg": 3.0,
+        "maxRefusedFraction": 0.05,
+        "realizations": 200
+      }
+    },
+    {
+      "id": "K5.coverage68",
+      "set": "S",
+      "group": "dist",
+      "kind": "coverage",
+      "what": "on E1 (200 realizations, seed 234101) the 68.27 percent bootstrap interval of the CE pi_MC (the convergent point refitted by CE in every replicate) holds pi_true at a rate in 0.58 to 0.78 (the committed C3 band; a refused realization counts as not covering)",
+      "limits": {
+        "min": 0.58,
+        "max": 0.78
+      }
+    },
+    {
+      "id": "K6.coverage95",
+      "set": "S",
+      "group": "dist",
+      "kind": "coverage",
+      "what": "on E1 the 95.45 percent bootstrap interval of the CE pi_MC holds pi_true at a rate in 0.90 to 0.99 (the committed C4 band)",
+      "limits": {
+        "min": 0.9,
+        "max": 0.99
+      }
+    },
+    {
+      "id": "K7.recovery",
+      "set": "S",
+      "group": "dist",
+      "kind": "coverage",
+      "what": "on E1 the median of (pi_MC - pi_true) / sigma_MC of the CE estimator is within 0.27 of zero and its median relative bias within 0.005 (the committed C5 bounds)",
+      "limits": {
+        "maxAbsMedianZ": 0.27,
+        "maxAbsMedianRel": 0.005
+      }
+    },
+    {
+      "id": "K8.agree",
+      "set": "S",
+      "group": "dist",
+      "kind": "coverage",
+      "what": "on E1 the committed tolerance rule (3 sigma combined and 3 percent) between the CE pi_MC and 233 pi_plx on the same stars passes on at least 90 percent of the realizations (the committed C6 bound)",
+      "limits": {
+        "minFraction": 0.9,
+        "nSigma": 3,
+        "cap": 0.03
+      }
+    },
+    {
+      "id": "K9.useful",
+      "set": "S",
+      "group": "dist",
+      "kind": "coverage",
+      "what": "on E1 the median sigma_MC / pi_MC of the CE estimator (non-refused) is at most 0.02 (the committed C7 bound): the correction must not cost the usefulness the plain estimator had",
+      "limits": {
+        "maxMedianRel": 0.02
+      }
+    },
+    {
+      "id": "K10.noRv.cp",
+      "set": "S",
+      "group": "geo",
+      "kind": "refusal",
+      "what": "E3 of seed 234102 (E1 with the radial velocities removed, 50 realizations): the CE convergent point (it needs no radial velocity) is returned in at least 90 percent with a median error of at most 2 degrees, and the speed and the distance are null in every realization that returns one (the committed D2a and D2b bounds)",
+      "limits": {
+        "realizations": 50,
+        "minFractionReturned": 0.9,
+        "maxMedianDeg": 2.0,
+        "minFractionNull": 1.0
+      }
+    },
+    {
+      "id": "K11.dispersion1",
+      "set": "S",
+      "group": "dist",
+      "kind": "coverage",
+      "what": "a second synthetic world, E7: the baseline with the internal velocity scatter 1.0 km/s per axis instead of 0.5 (200 realizations, seed 234101): both bootstrap coverages in the committed bands (0.58 to 0.78 and 0.90 to 0.99), |median z| at most 0.27 and |median relative bias| at most 0.005; the correction must not be tuned to the baseline scatter",
+      "limits": {
+        "coverage68": {
+          "min": 0.58,
+          "max": 0.78
+        },
+        "coverage95": {
+          "min": 0.9,
+          "max": 0.99
+        },
+        "maxAbsMedianZ": 0.27,
+        "maxAbsMedianRel": 0.005,
+        "realizations": 200
+      }
+    },
+    {
+      "id": "K12.separation60",
+      "set": "S",
+      "group": "dist",
+      "kind": "coverage",
+      "what": "a third synthetic world, E8: the baseline with the convergent point 60 degrees from the cluster centre instead of the baseline separation (200 realizations, seed 234101): the same four conditions as K11; the correction must not be tuned to the baseline geometry",
+      "limits": {
+        "coverage68": {
+          "min": 0.58,
+          "max": 0.78
+        },
+        "coverage95": {
+          "min": 0.9,
+          "max": 0.99
+        },
+        "maxAbsMedianZ": 0.27,
+        "maxAbsMedianRel": 0.005,
+        "realizations": 200
+      }
+    },
+    {
+      "id": "K13.report.plain",
+      "set": null,
+      "group": "dist",
+      "kind": "coverage",
+      "what": "REPORTED, no band: on the same E1 realizations the plain (committed eigenvector) estimator with the same members: median z, median relative bias and both coverages, so the correction can be seen beside what it replaces",
+      "limits": {}
+    },
+    {
+      "id": "K14.report.dispersion5",
+      "set": null,
+      "group": "dist",
+      "kind": "refusal",
+      "what": "REPORTED, no band: E5 of seed 234102 (internal scatter 5 km/s per axis, 100 realizations): the fraction refused, and the coverage of the realizations that return a distance",
+      "limits": {}
+    },
+    {
+      "id": "K15.report.expansion",
+      "set": null,
+      "group": "dist",
+      "kind": "refusal",
+      "what": "REPORTED, no band: E6 of seed 234102 (an isotropic expansion of 0.05 km/s per pc, 100 realizations, which no estimator of this file models): median z, median relative bias and the 68.27 percent coverage of the CE estimator",
+      "limits": {}
+    },
+    {
+      "id": "KP1.speed",
+      "set": null,
+      "group": "dist",
+      "kind": "speed",
+      "what": "RECORDED, no band: CPU seconds of one CE fit on a baseline member set and of one 4000-replicate CE bootstrap; not a physics bound",
+      "limits": {}
+    },
+    {
+      "id": "RK1.members",
+      "set": "R",
+      "group": "geo",
+      "kind": "authentic",
+      "what": "the Hyades file (sha256 5e3c8ab9...90f6) under the follow-up form (the amended membership AM1 to AM3, then CE): the pipeline converges, is not refused, the CE fixed point converges, and at least 30 members have a usable radial velocity (the committed R1 bound)",
+      "limits": {
+        "minMembersWithRv": 30
+      }
+    },
+    {
+      "id": "RK2.agree",
+      "set": "R",
+      "group": "dist",
+      "kind": "authentic",
+      "what": "the committed tolerance rule between the CE pi_MC and 233 pi_plx on the same stars: |difference| at most 3 sigma combined and at most 3 percent of pi_plx (the committed R2 rule); recorded as a ratio and sigma units, never as a distance",
+      "limits": {
+        "nSigma": 3,
+        "cap": 0.03
+      }
+    },
+    {
+      "id": "RK3.useful",
+      "set": "R",
+      "group": "dist",
+      "kind": "authentic",
+      "what": "sigma_MC / pi_MC of the CE estimator at most 0.02 on the real sample (the committed R3 bound)",
+      "limits": {
+        "maxRel": 0.02
+      }
+    },
+    {
+      "id": "RK4.split",
+      "set": "R",
+      "group": "dist",
+      "kind": "authentic",
+      "what": "the final members split into two halves by seeded random assignment (seed 234103, labelled halves): the two halves CE pi_MC (each its own 4000-replicate CE bootstrap) differ by at most 3 sqrt(sigma_A^2 + sigma_B^2) (the committed R4 rule)",
+      "limits": {
+        "nSigma": 3,
+        "bootstrap": 4000
+      }
+    },
+    {
+      "id": "RK5.cpSplit",
+      "set": "R",
+      "group": "geo",
+      "kind": "authentic",
+      "what": "the same halves CE convergent points are separated by at most 3 sqrt(r_A^2 + r_B^2), r the 68.27th percentile of the angular separation between each bootstrap convergent point and the half own (the committed R5 rule)",
+      "limits": {
+        "nSigma": 3,
+        "bootstrap": 4000
+      }
+    },
+    {
+      "id": "K16a.oracle.cp.real",
+      "set": "R",
+      "group": "geo",
+      "kind": "oracle",
+      "what": "the oracle on the real file: identical member sets (Jaccard 1), status agrees, the CE convergent point agrees to 1e-6 degrees and tau^2 to 1e-6 relative",
+      "limits": {
+        "minJaccard": 1.0,
+        "maxDeg": 1e-06,
+        "maxRelTau2": 1e-06
+      }
+    },
+    {
+      "id": "K16b.oracle.dist.real",
+      "set": "R",
+      "group": "dist",
+      "kind": "oracle",
+      "what": "the oracle on the real file: the speed, per-star parallaxes and pi_MC at the CE convergent point to 1e-8 relative; the oracle bootstrap sigma_MC (4000 replicates) within 10 percent relative",
+      "limits": {
+        "maxRel": 1e-08,
+        "maxRelSigma": 0.1,
+        "bootstrap": 4000
+      }
+    },
+    {
+      "id": "RK7.published.cp",
+      "set": "R",
+      "group": "geo",
+      "kind": "authentic",
+      "what": "the CE convergent point against the published convergent point of Perryman et al. 1998 for the 134 Hipparcos stars within 10 pc of the cluster centre (published-cp.json): the angular separation is at most T = sqrt((3 r)^2 + f^2), r the 68.27th percentile of the angular separation between the 4000 CE bootstrap convergent points and the CE estimate, f = sigma0 / V (radians, converted to degrees) the angle subtended by the committed velocity floor sigma0 = 1.0 km/s at the fitted speed V. The published value has NO printed uncertainty, so the tolerance has no published part: the three-sigma statistical term is ours alone, and f is the stated allowance for a difference between the mean velocities of two member selections (core Hipparcos members against the Gaia sample, different epoch and membership). The rule uses only committed constants",
+      "limits": {
+        "nSigma": 3,
+        "floorVelocityKmS": 1.0,
+        "bootstrap": 4000
+      }
+    },
+    {
+      "id": "RK8.published.distance",
+      "set": "R",
+      "group": "dist",
+      "kind": "authentic",
+      "what": "the CE pi_MC against the published distance of Perryman et al. 1998 (the reference distance and its printed uncertainty, to the centre of mass of the Hipparcos members within 10 pc; published-distance.json), converted to a parallax pi_pub = 1000 / d_pub mas with sigma_pub = 1000 sigma_d / d^2: pass when |pi_MC - pi_pub| <= sqrt(9 (sigma_MC^2 + sigma_pub^2) + (g pi_pub)^2) and |pi_MC - pi_pub| / pi_pub <= 0.03 (the committed accuracy cap), g = (s / d_pub)^2 with s = 5 pc, the synthetic truth positionSigma, a stated scale of the line-of-sight spread of a bound cluster and not a Hyades value: the second-order difference between a mean parallax of members and the inverse distance of their centre. Recorded as a relative difference and sigma units, never as a distance",
+      "limits": {
+        "nSigma": 3,
+        "cap": 0.03,
+        "spreadPc": 5.0
+      }
+    },
+    {
+      "id": "RK6.report.shift",
+      "set": null,
+      "group": "geo",
+      "kind": "authentic",
+      "what": "REPORTED, no band: on the real sample the angular shift of the convergent point from the plain eigenvector estimate to the CE estimate, the estimated tau (degrees) and the implied internal velocity scatter tau V (km/s per axis), the number of CE iterations, and the change of the ratio pi_MC / pi_plx from the plain to the CE estimate",
+      "limits": {}
+    },
+    {
+      "id": "RK7r.report.published",
+      "set": null,
+      "group": "geo",
+      "kind": "authentic",
+      "what": "REPORTED, no band: the same comparison for the 180 stars within 20 pc (published-cp.json) and for the plain (amended-form) convergent point against both published points; the CE speed against the printed speed of the 134-star determination (45.93 +- 0.23 km/s, Table 3); the separations in degrees and as multiples of r",
+      "limits": {}
+    },
+    {
+      "id": "RK8r.report.published",
+      "set": null,
+      "group": "dist",
+      "kind": "authentic",
+      "what": "REPORTED, no band: relative differences and sigma units of the CE pi_MC, the plain pi_MC and 233 pi_plx against the Perryman distances (the 134-star 46.34 +- 0.27 pc and the 180-star determination of Table 3) and against the two SECOND-HAND quotations of Roser et al. 2019 (the Gaia DR1 and DR2 distances of the cluster centre, not primary sources and not the same estimand); no absolute parallax or distance of the moving-cluster estimate is written anywhere",
+      "limits": {}
+    },
+    {
+      "id": "RK9.isochrone",
+      "set": null,
+      "group": "dist",
+      "kind": "authentic",
+      "what": "NOT RUN by committed precondition (unchanged from R9): the isochrone distance of Prompt 219; no Gaia-band isochrone set or band transformation is in the repository and an age is not typed. Not in the verdict",
+      "limits": {}
+    }
+  ]
+}
