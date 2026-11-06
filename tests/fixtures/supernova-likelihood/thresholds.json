@@ -176,6 +176,12 @@
    "recorded": "before any prototype code or validator run",
    "text": "The prototype's condition-number estimate (conditioning, A10.condition) iterates until the Rayleigh quotient changes by less than 1e-10 relative, at most 2000 power iterations and 2000 inverse iterations, instead of the committed 100 of each: a matrix whose extreme eigenvalues form clusters (a diagonal that varies slowly) converges slowly, and a fixed 100 would measure the start vector's overlap with the cluster, not the solver. The bound is unchanged (within 1 percent of the oracle's eigenvalue ratio, at most 1e6).",
    "moves": "no bound"
+  },
+  {
+   "id": "AM3",
+   "recorded": "after the validator's first start stopped on an unregistered stream id (before any leg was recorded) and before any leg result existed; the oracle was run again against the file that carries this amendment",
+   "text": "js/random/streams.js registers six stream ids (engine, effects, forward, noise, experiments, injection); 'sn-likelihood-256' is not one. The prototype's ensembles use stream('noise', seed, label) with the seeds and labels committed in ensembles.seeds and oracle.pinned; nothing else about the draws changes.",
+   "moves": "no bound"
   }
  ],
  "questions": []
