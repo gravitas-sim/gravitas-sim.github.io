@@ -103,5 +103,8 @@
    }
   }
  },
- "amendments": []
+ "amendments": [
+  {"id": "AM1", "step": "checks B2 (and B5)", "what": "The oracle is not asked to reproduce the kernel's bootstrap. The kernel's radius uncertainty (a seeded bootstrap on the statistics kernel's stream) is written into the oracle's inputs as a declared number, so the oracle's mass interval is its own three-term algebra (its own analytic dispersion error, the declared radius error, the declared factor error, z from scipy's normal quantile) applied to its own dispersion, radius and distance. The radius and dispersion estimates, the distance and the mass are compared as written; the bootstrap itself is judged only by the coverage legs C1b, C2 and C3.", "why": "Recorded before any oracle or validator run, while writing the oracle's inputs: a numpy generator cannot reproduce the tree's mulberry32 stream and a second bootstrap implementation would check nothing about the kernel's.", "when": "before any validator run and before any oracle run", "boundMoved": false},
+  {"id": "AM2", "step": "check A3", "what": "The shift invariance of the plain dispersion is tested on the velocities (adding a constant to every velocity changes the dispersion by no more than 1e-12 relative), not on the redshifts: the factor 1 / (1 + z_c) of rule R2 makes a redshift shift change the velocities' scale by a relative delta z / (1 + z_c), which is the rule, not a defect.", "why": "Found while reading the committed text against rule R2 before the validator existed: shifting every redshift by a constant also shifts z_c, so the sentence as written would have demanded an invariance R2 forbids. Permutation invariance and the factor-3 scaling are unchanged.", "when": "before any validator run and before any oracle run", "boundMoved": false}
+ ]
 }
