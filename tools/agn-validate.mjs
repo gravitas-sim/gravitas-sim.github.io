@@ -76,6 +76,8 @@ const measure = (w, z = w.truth.z) =>
     z,
     rest: w.truth.restNm,
     sources: w.truth.sources,
+    // the committed rule of Prompt 252 (a failed fit is its own code), so D2 replays as committed; 252b's D2b uses the default
+    fitFailureCode: 'line-fit-failed',
   });
 const zOfLag = k => 10 ** (k * STEP) - 1;
 

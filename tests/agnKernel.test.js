@@ -384,7 +384,8 @@ describe('the quasar redshift', () => {
     expect(r.status).toBe('ok');
     expect(Math.abs(r.z - 0.1234)).toBeLessThan(1e-5);
     expect(r.limits.join(' ')).toMatch(/noise only/);
-    expect(r.modelSigmaZ).toBeNull();
+    expect(r.modelTerm.kind).toBe('grid-floor');
+    expect(r.sigmaZTotal).toBeGreaterThan(r.sigmaZ);
   });
   test('a caller’s velocity systematic enters as a separate model-limited term', () => {
     const w = A.generateQuasar({ lines: LINES, z: 0.3, snr: 15, seed: 'sys' });
