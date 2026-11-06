@@ -15,6 +15,7 @@ the release rather than in the tag.
 
 ### Added
 
+- **The galaxy-cluster kernel and gate (Prompt 250, kernel, contract and validation; nothing student-facing).** `js/kernels/galaxy/clusters/`: rest-frame velocities, membership by an iterated sigma clip with a stated pass cap and the clip's Gaussian truncation factor, the plain or biweight velocity dispersion with analytic or bootstrap uncertainty and per-galaxy error subtraction, a kurtosis flag and a contamination flag, great-circle geometry with the half-number and harmonic radii, the virial mass `K sigma^2 R / G` with a caller-supplied projection factor and a three-term interval, the cluster's light and mass-to-light ratio (bounds labelled), the morphology-density fraction with exact binomial intervals, the baryon budget from a cited gas mass, and labelled synthetic clusters; an independent numpy/scipy/astropy oracle, a validator with its committed thresholds (`npm run clusters:validate`), a six-check validation group, and `GALAXY_CLUSTERS.md`. 42 legs: 27 pass, 3 fail and stay failing (the bootstrap interval of the dispersion, the light interval, the contamination flag), 4 not run (no cluster table was supplied and nothing was fetched), 8 reported; kernel verdict B. No panel, lesson, model section or pack, and the Coma pack's re-sourcing waits for a table.
 - **The time-domain closeout (Prompt 246; documentation only, nothing student-facing).** `TIME_DOMAIN_CLOSEOUT.md`: what Prompts 239 to 245 landed (kernels, validators and gate records; no lesson, panel, viewer or pack), what a student can and cannot do in the time domain today, each of the closeout items recorded as done, not applicable or blocked with its reason, the cohesion check (section 9.4) run against the tree, and the files and rulings that would unlock the five connecting investigations. No investigation, sequence, alignment row, topic page or course item is added; the unit is NOT READY as a student-facing unit. No bound moved, nothing fetched, no ceiling raised.
 - **The Galactic closeout (Prompt 238).** `GALACTIC_CLOSEOUT.md`: what Prompts 233 to 237 landed (two Gaia investigations and their panels; 234 never run; a kinematics gate with verdict C for all four methods; a rotation-curve decomposition kernel and a stellar-dynamics kernel, each with failing legs and no consumer), each closeout item recorded as done, not applicable or blocked with its reason, the cohesion check (section 9.4) and the acceptance sheet (8.4) run over the two Gaia investigations, the data ledger, and what would unlock the connecting investigations. The upper-level astrophysics package, 1.2.0 to 1.3.0, gains How far, and how sure? and What Gaia does not see at the advanced depth and a reading step for what the Galaxy unit has no investigation for (the center, the arms, the Galaxy's history, a satellite falling in, 21-cm mapping), each missing item's reason recorded. No connecting investigation, sequence, alignment row or topic page is added; the unit is NOT READY as a student-facing unit. No bound moved, nothing fetched; one precache ceiling raised by its measured 32 bytes.
 - **The lensing time-delay and finite-source spike, result only (Prompt 251, Part B; nothing student-facing).** The prototype (delay model, mass-sheet transformation, conditional H0, finite-source rho search, blend profile) was run on `spike/lensing-delays-gate`, which is never merged, against the committed bounds and the pinned independent oracle; this records the results in `tests/fixtures/lensing2/gate-spike-results.json` and `gate-spike-failed-legs.json`, the three amendments recorded before the run (`gate-thresholds.json`), the oracle's scipy fit of the 200 finite-source events, and `LENSING_DELAYS_GATE.md`. Verdict C by the committed function: G1, G2, G4 and G5 pass; G3, G7 and G8 fail and stay failing; G6 and G9 are NOT RUN (no data). No H0 value is reported and nothing is built (D-R10-251-06).
@@ -192,7 +193,7 @@ Observatory, the 3-D lab and the mission lab), a shared shell, a Library, a
 workspace for each student's own work, an instructor path from adoption page to
 gradebook file, <!--fact:instructorDocuments-->1222<!--/fact--> generated
 instructor documents, a public validation suite
-of <!--fact:physicsChecks-->425<!--/fact--> checks, and authoring tools
+of <!--fact:physicsChecks-->431<!--/fact--> checks, and authoring tools
 (Scenario Studio, Investigation Composer, course packs and an extension SDK).
 The Library lists <!--fact:libraryScenarios-->69<!--/fact--> ready-made
 scenarios: the 59 in the sandbox and <!--fact:systems3dScenarios-->8<!--/fact-->
@@ -1977,7 +1978,7 @@ listed here because this is the release that first carries it.
   the share dialog and the scenario gallery keyboard traps in practice.
 - Three modal dialogs declared `aria-modal="true"` without trapping focus.
 - Stale counts across the documentation: `/model/` claimed 135 physics checks
-  against a suite of <!--fact:physicsChecks-->425<!--/fact-->, and 48 scenarios
+  against a suite of <!--fact:physicsChecks-->431<!--/fact-->, and 48 scenarios
   against a catalog of <!--fact:scenarios-->61<!--/fact-->.
 
 ### Removed

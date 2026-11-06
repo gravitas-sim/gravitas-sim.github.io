@@ -1,0 +1,35 @@
+{
+ "format": "gravitas.clusters-failed-legs/1",
+ "note": "the legs that crossed a committed bound; they stay failing, only Carl resets a bound",
+ "legs": [
+  {
+   "id": "C1b.dispersionBootstrapCoverage",
+   "measured": {
+    "answered": 400,
+    "cover68": 0.6025,
+    "cover95": 0.885
+   },
+   "note": ""
+  },
+  {
+   "id": "C4.lightCoverage",
+   "measured": {
+    "answered": 200,
+    "cover68": 0.46,
+    "cover95": 0.74
+   },
+   "note": ""
+  },
+  {
+   "id": "D3.contaminationFlag",
+   "measured": {
+    "answered": 100,
+    "flagged": 74,
+    "flaggedShare": 0.74,
+    "cleanFalseFlagRate": 0,
+    "unknownWithoutExtent": true
+   },
+   "note": ""
+  }
+ ]
+}
