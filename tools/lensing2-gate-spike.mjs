@@ -92,6 +92,7 @@ export function runSpike() {
     const L4 = glim('G4');
     const pos = [];
     const ratio = [];
+    const ratioOracle = [];
     const muOracleVsClosed = [];
     const dr = [];
     const dOracle = [];
@@ -108,9 +109,10 @@ export function runSpike() {
         Math.abs(im.theta[1] - c.thetaMinus) / thE
       );
       const unsheeted = D.sheetImages({ thetaE: thE, beta });
-      ratio.push(rel(im.mu[0] / im.mu[1], c.muPlus / c.muMinus));
+      ratioOracle.push(rel(im.mu[0] / im.mu[1], c.muPlus / c.muMinus));
       muOracleVsClosed.push(rel(im.mu[0], c.muPlus), rel(im.mu[1], c.muMinus));
       ratio.push(rel(im.mu[0] / im.mu[1], unsheeted.mu[0] / unsheeted.mu[1]));
+      ratio.push(rel(im.mu[0] / im.mu[1], (1 + c.y) / (c.y - 1)));
       for (const exact of [true, false]) {
         const d = dd(c, exact);
         const s = D.sisSheetDelay({ ...t, ddt: d.ddt }).delayS;
@@ -136,12 +138,22 @@ export function runSpike() {
       h0o.push(rel(h.h0Model, c.h0Lambda1));
       h0t.push(rel(h.h0Model, c.h0True / c.lambda));
     }
-    row('G3', maxOf(pos) <= L3.maxAbs && maxOf(ratio) <= L3.maxRel, {
-      worstAbsPositionInThetaE: sig(maxOf(pos), 3),
-      worstRelFluxRatio: sig(maxOf(ratio), 3),
-      worstRelIndividualMagnificationVsOracle: sig(maxOf(muOracleVsClosed), 3),
-      cases: pos.length / 2,
-    });
+    row(
+      'G3',
+      maxOf(pos) <= L3.maxAbs &&
+        maxOf(ratio) <= L3.maxRel &&
+        maxOf(ratioOracle) <= L3.maxRel,
+      {
+        worstAbsPositionInThetaE: sig(maxOf(pos), 3),
+        worstRelFluxRatioVsClosedForms: sig(maxOf(ratio), 3),
+        worstRelFluxRatioVsOraclesNumericalJacobian: sig(maxOf(ratioOracle), 3),
+        worstRelIndividualMagnificationVsOracle: sig(
+          maxOf(muOracleVsClosed),
+          3
+        ),
+        cases: pos.length / 2,
+      }
+    );
     row(
       'G4',
       maxOf(dr) <= L4.maxRel &&
@@ -245,12 +257,14 @@ export function runSpike() {
     let limits = 0;
     let limitsCover = 0;
     let structuralOk = true;
+    let chiWorse = 0;
     let agree = 0;
     let agreeOf = 0;
     const byClass = { near: { n: 0, value: 0 }, far: { n: 0, value: 0 } };
     FINITE_IN.events.forEach((ev, i) => {
       const r = F.fitFiniteSource({ x: ev.x, y: ev.y, sigma: ev.sigma });
       const cls = ev.near ? byClass.near : byClass.far;
+      if (r.chi2Min > FINITE_OR.fits[i].chi2 + 1) chiWorse++;
       cls.n++;
       if (r.status === 'ok') {
         returned++;
@@ -278,6 +292,7 @@ export function runSpike() {
       coverage68: sig(c68, 4),
       coverage95: sig(c95, 4),
       upperLimitOnly: limits,
+      eventsWhereTheProfileMinimumIsAboveTheOraclesFitByMoreThan1: chiWorse,
       upperLimitCoverageReported: limits ? sig(limitsCover / limits, 4) : null,
       agreementWithOracleWithin10PercentReported: agreeOf
         ? `${agree} of ${agreeOf}`

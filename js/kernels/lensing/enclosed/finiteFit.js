@@ -73,7 +73,7 @@ function fitAt(data, { rho, fixedFs }, starts) {
     );
   let best = null;
   for (const s of list) {
-    const r = refine(problem, s, { maxIterations: starts ? 60 : 120 });
+    const r = refine(problem, s, { maxIterations: 120 });
     if (!best || r.best.chi2 < best.best.chi2) best = r;
   }
   return { theta: best.theta, chi2: best.best.chi2, linear: best.best.linear };
@@ -111,11 +111,30 @@ export function fitFiniteSource(data, { levels = [0.68, 0.95] } = {}) {
   const chi2 = new Float64Array(grid.length);
   const base = fitAt(data, { rho: 0 });
   chi2[0] = base.chi2;
+  const thetas = new Array(grid.length);
+  thetas[0] = base.theta;
+  const peakT = base.theta[0];
   let prev = base.theta;
   for (let i = 1; i < grid.length; i++) {
-    const r = fitAt(data, { rho: grid[i] }, [prev, base.theta]);
+    const rho = grid[i];
+    // run 2 (the optimiser repair, LENSING_DELAYS_GATE.md): warm starts plus three cold starts scaled to rho
+    const cold = [0.3, 1, 2.5].map(k => [peakT, k * rho, base.theta[2]]);
+    const r = fitAt(data, { rho }, [prev, base.theta, ...cold]);
     chi2[i] = r.chi2;
+    thetas[i] = r.theta;
     prev = r.theta;
+  }
+  // a descending pass from the best point, keeping the better of the two fits at each grid value
+  let ib = 0;
+  for (let i = 1; i < grid.length; i++) if (chi2[i] < chi2[ib]) ib = i;
+  prev = thetas[ib];
+  for (let i = ib - 1; i >= 1; i--) {
+    const r = fitAt(data, { rho: grid[i] }, [prev, thetas[i]]);
+    if (r.chi2 < chi2[i]) {
+      chi2[i] = r.chi2;
+      thetas[i] = r.theta;
+    }
+    prev = thetas[i];
   }
   let im = 0;
   for (let i = 1; i < grid.length; i++) if (chi2[i] < chi2[im]) im = i;
@@ -166,7 +185,13 @@ export function assessBlend(data, { rho }) {
   const tE = [];
   let prev = free.theta;
   for (const fs of grid) {
-    const r = fitAt(data, { rho, fixedFs: fs }, [prev, free.theta]);
+    const [t0f, u0f, tEf] = free.theta;
+    const r = fitAt(data, { rho, fixedFs: fs }, [
+      prev,
+      free.theta,
+      [t0f, 0.3 * u0f, tEf],
+      [t0f, 3 * u0f, tEf],
+    ]);
     chi2.push(r.chi2);
     tE.push(r.theta[2]);
     prev = r.theta;
