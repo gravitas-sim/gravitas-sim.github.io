@@ -42,7 +42,9 @@ const FIX = 'tests/fixtures/supernova-likelihood';
 const thrText = readFileSync(`${FIX}/thresholds.json`);
 const THR = JSON.parse(thrText);
 const THR_SHA = createHash('sha256').update(thrText).digest('hex');
-const O = JSON.parse(readFileSync(process.env.ORACLE ?? `${FIX}/oracle-results.json`, 'utf8'));
+const ORACLE_PATH = process.env.ORACLE ?? `${FIX}/oracle-results.json`;
+const ORACLE_SHA = createHash('sha256').update(readFileSync(ORACLE_PATH)).digest('hex');
+const O = JSON.parse(readFileSync(ORACLE_PATH, 'utf8'));
 const log = (...a) => console.error(`[${((Date.now() - T0) / 1000).toFixed(0)}s]`, ...a);
 const T0 = Date.now();
 const cpu = () => {
@@ -932,6 +934,8 @@ const results = {
   format: 'gravitas.supernova-likelihood-results/1',
   thresholdsSha256: THR_SHA,
   oracleThresholdsSha256: O.thresholdsSha256,
+  oracleFileSha256: ORACLE_SHA,
+  spikeCommit: process.env.SPIKE_COMMIT ?? null,
   node: process.version,
   N,
   rows,
