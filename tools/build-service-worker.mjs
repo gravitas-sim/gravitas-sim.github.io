@@ -566,6 +566,9 @@ export const NEVER_PRECACHED = [
   // Prompt 252: the AGN kernel (the quasar redshift from broad lines, the luminosity and the bolometric term, the Eddington bound, the variability size bound,
   // the BPT classes) and its validation group. No shipped module imports them (no viewer mode, lesson or model section is built, D-R10-252-01), so no page can fetch one.
   /^(js\/kernels\/agn\/.*|js\/validation\/groups\/agn\.js)$/,
+  // Prompt 251: the enclosed-mass extension of the lensing kernel (distances from redshifts, the mass inside an Einstein radius, image inversions, the arc fit and the
+  // mass bracket) and its validation group. Nothing shipped imports them and js/kernels/lensing/index.js does not re-export them (D-R10-251-01), so no page can fetch one.
+  /^(js\/kernels\/lensing\/enclosed\/.*|js\/validation\/groups\/lensing2\.js)$/,
   // Prompt 214: the strategy kernel, planner extension, panels and the strategy lesson's one new file (D-R10-214-06).
   /^js\/kernels\/strategy\//,
   /^js\/data\/investigations\/(es\/|depth\/|depth\/es\/)?(why-the-period-is-wrong|strategy-sequence)\.js$/,

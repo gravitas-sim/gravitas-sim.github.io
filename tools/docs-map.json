@@ -1365,6 +1365,20 @@
       "purpose": "The JOSS-style summary paper.",
       "owner": null,
       "student": false
+    },
+    {
+      "file": "LENSING_DELAYS_GATE.md",
+      "kind": "gate",
+      "purpose": "The lensing time-delay and finite-source gate: delay model, mass-sheet degeneracy, committed thresholds, merged-code legs measured, the rest not run (Prompt 251, Part B).",
+      "owner": 251,
+      "student": false
+    },
+    {
+      "file": "LENSING_II.md",
+      "kind": "feature",
+      "purpose": "The enclosed-mass lensing extension: distances, the mass inside an Einstein radius, image inversions, the arc-radius fit, validation and requested files (Prompt 251, Part A).",
+      "owner": 251,
+      "student": false
     }
   ]
 }

@@ -1,0 +1,98 @@
+{
+ "format": "gravitas.lensing2-gate-thresholds/1",
+ "prompt": "Roadmap III, Prompt 251, Part B (docs/lensing-delays-gate): the time-delay model, the mass-sheet degeneracy statement, the published delay and its covariance, the independent H0 calculation pinned as the oracle, the finite-source and blended-baseline microlensing model with a cited event, and the tolerances. This file commits the gate's thresholds and its verdict function. In this pull request the legs that test already-merged code (P0 to P2) are run; every leg that needs a prototype (G1 to G5, G7, G8) is NOT RUN and every leg that needs data (G6, G9) is NOT RUN with a fetch request; no verdict is given.",
+ "document": "LENSING_DELAYS_GATE.md, written after this file",
+ "committed": "in the same commit as thresholds.json of Prompt 251 Part A, before any kernel, oracle output or fit code of Prompt 251 existed. Part B's prototype (the delay model, the H0 inversion, a finite-source parameter search) belongs on a spike branch that is never merged (7.5 rule 4); that branch and its measurements are not part of this pull request. The oracle's independent delay and H0 calculations are pinned in this pull request (tests/fixtures/lensing2/oracle-results.json, group 'delay'), written after this file and before any prototype.",
+ "rule": "A gate names its A deliverables and its predefined B slices before the prototype; a threshold that proves unmeasurable fails the gate on that threshold and only Carl resets it; a leg not measured is never a pass. No Hubble constant is reported from a delay without the mass-sheet degeneracy statement and the verdict. No published delay, covariance, event, parameter, catalogue value or licence term is typed from memory; every authentic fact comes from a file Carl supplies under tests/fixtures/lensing2/authentic/ with its terms as read from a saved copy and its retrieval date.",
+ "verdicts": {
+  "A": "G1 to G5 and G7 to G8 pass, and G6 and G9 have data and pass: the delay-based Hubble constant with the degeneracy statement, and the finite-source fit with its blended baseline on a cited event; builds 'A delayed echo' with the H0 step and 'A Lens Passing By' with its upper depth.",
+  "B": "either (B-delay) G1 to G4 pass and G5 passes: the delay demonstration with the degeneracy shown and no H0 number (a delay is turned into H0 only as a function of the unknown external convergence, never as a value), or (B-finite) G7 and G8 pass alone: the finite-source fit with its blended baseline on synthetic events, no authentic event; each slice builds only its own item.",
+  "C": "neither B slice holds: reading steps only; Part A stands.",
+  "order": "A, then B-delay or B-finite (both may hold), then C by the first rule that holds; a leg that is NOT RUN holds nothing",
+  "current": "no verdict: G1 to G5, G7, G8 are NOT RUN (no prototype exists) and G6 and G9 have no data. At most B is reachable until Carl supplies the files named in LENSING_DELAYS_GATE.md, because A needs G6 and G9."
+ },
+ "models": {
+  "fermatPotential": "tau(theta; beta) = (1 + z_l) / c * (D_l D_s / D_ls) * [ (theta - beta)^2 / 2 - psi(theta) ] with psi the lens potential (grad psi = alpha); the delay between two images is the difference of tau; the time-delay distance is D_dt = (1 + z_l) D_l D_s / D_ls and scales as 1 / H0 at fixed density parameters",
+  "sis": "psi = theta_E |theta|; images theta_+- = beta +- theta_E; the delay is Delta t = D_dt / (2 c) (theta_+^2 - theta_-^2) = 2 D_dt theta_E beta / c, the image nearer the lens arriving later",
+  "pointLens": "psi = theta_E^2 ln|theta|; Delta t = (4 G M / c^3)(1 + z_l)[ y sqrt(y^2 + 4) / 2 + ln((sqrt(y^2 + 4) + y) / (sqrt(y^2 + 4) - y)) ], the form of lens.js pointTimeDelay",
+  "massSheetDegeneracy": "the transformation kappa -> lambda kappa + (1 - lambda), beta -> lambda beta leaves every image position and every flux ratio unchanged and multiplies every time delay by lambda; so delays and images alone fix D_dt only up to lambda, the Hubble constant inferred with lambda = 1 is H0_model and the true value is lambda H0_model = (1 - kappa_ext) H0_model for a sheet of external convergence kappa_ext. It is an unresolvable scaling without external information (stellar kinematics of the lens, a weak-lensing or number-count estimate of kappa_ext, or a model of the environment) and is never fitted away.",
+  "hubbleFromDelay": "H0 = (1 - kappa_ext) H0_model(Delta t); the kernel returns H0 only when the caller supplies kappa_ext with its sigma and source, as a value with the combined interval; without it the kernel returns the scaling law, a null value and the code 'mass-sheet-degenerate'",
+  "finiteSource": "a uniform disc of radius rho in Einstein radii, the flux F = F_base (f_s A + 1 - f_s) with f_s the source's share of the baseline; the ratio rho = theta_star / theta_E is constrained only where the event crosses or nearly crosses the disc (u0 not much larger than rho); the blend f_s is degenerate with u0 and tE in low-magnification events",
+  "independentFit": "the oracle fits the same synthetic events with scipy least_squares from several starts and reports parameters with covariance; for an authentic event it is a published fit pinned as a fixture"
+ },
+ "checks": [
+  {
+   "id": "P0.pointDelayVsFermat",
+   "leg": "run",
+   "what": "the existing pointTimeDelay (lens.js) against the oracle's delay obtained by finding both images with brentq and differencing the Fermat potential, for y in {0.05, 0.3, 1, 2.5}, M = 1e30 kg and z_l in {0, 0.5}: relative 1e-9",
+   "limits": { "y": [0.05, 0.3, 1, 2.5], "massKg": 1e30, "zl": [0, 0.5], "maxRel": 1e-9 }
+  },
+  {
+   "id": "P1.finiteSourceVsDiscIntegral",
+   "leg": "run",
+   "what": "the existing finiteSourceMagnification (microlensing.js) against the oracle's integral of the point-source magnification over the disc, done in polar angle about the lens with scipy quad and the closed radial integral, for rho in {0.01, 0.05, 0.2, 1} and u / rho in {0.25, 0.9, 1, 1.1, 2, 5, 20}: relative 1e-6; at u = 0 the closed form sqrt(rho^2 + 4) / rho to 1e-12",
+   "limits": { "rho": [0.01, 0.05, 0.2, 1], "uOverRho": [0.25, 0.9, 1, 1.1, 2, 5, 20], "maxRel": 1e-6, "maxRelCentre": 1e-12 }
+  },
+  {
+   "id": "P2.finiteSourcePointLimit",
+   "leg": "run",
+   "what": "at rho = 1e-5 the finite-source magnification equals the point-source magnification at u in {0.1, 0.5, 1, 2} to a relative 1e-8; the blended flux f_s A + (1 - f_s) equals the arithmetic in the leg to 1e-14 for f_s in {1, 0.6, 0.2}",
+   "limits": { "rho": 1e-5, "u": [0.1, 0.5, 1, 2], "maxRel": 1e-8, "maxRelBlend": 1e-14 }
+  },
+  {
+   "id": "G1.sisDelayFermat",
+   "leg": "prototype",
+   "what": "the SIS delay from the Fermat potential differenced at the two images equals the closed form D_dt theta_E beta 2 / c (the oracle's pinned values) to a relative 1e-10 for the redshift pairs and (theta_E, beta) of the oracle's delay group",
+   "limits": { "maxRel": 1e-10 }
+  },
+  {
+   "id": "G2.pointDelayFermat",
+   "leg": "prototype",
+   "what": "the point-lens delay from the Fermat potential agrees with pointTimeDelay and the oracle's pinned values to a relative 1e-9",
+   "limits": { "maxRel": 1e-9 }
+  },
+  {
+   "id": "G3.sheetImagesInvariant",
+   "leg": "prototype",
+   "what": "for lambda in {0.7, 0.85, 1.15} the SIS plus uniform sheet (theta_E' = lambda theta_E, kappa_s = 1 - lambda, beta' = lambda beta) has image positions equal to the unsheeted lens to an absolute 1e-9 (units of theta_E) and flux ratios to a relative 1e-9 (the oracle's pinned roots and Jacobians)",
+   "limits": { "lambda": [0.7, 0.85, 1.15], "maxAbs": 1e-9, "maxRel": 1e-9 }
+  },
+  {
+   "id": "G4.sheetDelayScales",
+   "leg": "prototype",
+   "what": "the delay of that sheeted lens equals lambda times the unsheeted delay to a relative 1e-10 (the oracle's pinned values), and the H0 inferred from the delay with lambda = 1 is the true H0 divided by lambda to a relative 1e-9",
+   "limits": { "maxRel": 1e-10, "maxRelH0": 1e-9 }
+  },
+  {
+   "id": "G5.hubbleRefusalAndCoverage",
+   "leg": "prototype",
+   "what": "without kappa_ext the kernel returns a null H0, the scaling law and the code 'mass-sheet-degenerate' (every case); with kappa_ext and its sigma supplied, on 400 seeded synthetic lenses with a delay measured to 3 percent, the 0.68 and 0.95 intervals of H0 cover the truth within [0.610, 0.750] and [0.917, 0.983], and the interval is wider than the delay's error alone (the kappa_ext term is in it)",
+   "limits": { "worlds": 400, "band68": [0.61, 0.75], "band95": [0.917, 0.983] }
+  },
+  {
+   "id": "G6.publishedDelay",
+   "leg": "data",
+   "what": "a published time delay of a lensed quasar with its covariance, its lens model's image positions, the redshifts and the paper's own H0 under a recorded rights decision: the kernel's conditional H0 with the paper's kappa_ext against the paper's value within its published uncertainty, a contract fixed before the file is read: NOT RUN unless tests/fixtures/lensing2/authentic/delay.json exists",
+   "limits": { "nSigma": 2 }
+  },
+  {
+   "id": "G7.finiteSourceFitCoverage",
+   "leg": "prototype",
+   "what": "a fit that searches rho beside t0, u0, tE and the blend, against the oracle's scipy fit of the same 200 seeded synthetic events (u0 below 2 rho and above 3 rho), recovers rho within the oracle's interval at the stated rate [0.610, 0.750] for 0.68 and [0.917, 0.983] for 0.95, and returns an upper limit only (no value) where the data do not constrain rho",
+   "limits": { "events": 200, "band68": [0.61, 0.75], "band95": [0.917, 0.983] }
+  },
+  {
+   "id": "G8.blendedBaselineDegeneracy",
+   "leg": "prototype",
+   "what": "on low-magnification synthetic events (peak magnification below 1.5) the blend share is returned as not constrained and tE is returned with the degeneracy stated, in at least 0.9 of 100 seeded events",
+   "limits": { "events": 100, "peakMax": 1.5, "minFlagged": 0.9 }
+  },
+  {
+   "id": "G9.authenticEvent",
+   "leg": "data",
+   "what": "an authentic microlensing event under a recorded rights decision, a published independent fit pinned as the oracle: the kernel's fit against the published parameters within the published uncertainties, fixed before the file is read: NOT RUN unless tests/fixtures/lensing2/authentic/event.json exists (D-LENS-01 and D-RIGHTS-02 record that no event is bundled)",
+   "limits": { "nSigma": 2 }
+  }
+ ],
+ "amendments": []
+}

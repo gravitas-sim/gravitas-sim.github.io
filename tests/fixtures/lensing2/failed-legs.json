@@ -1,0 +1,21 @@
+{
+ "format": "gravitas.lensing2-failed-legs/1",
+ "note": "the legs that crossed a committed bound; they stay failing, only Carl resets a bound",
+ "legs": [
+  {
+   "id": "P2.finiteSourcePointLimit",
+   "measured": {
+    "worstRelLimit": 1.19e-7,
+    "worstAtU": 1,
+    "perU": [
+     4.33e-8,
+     1.03e-7,
+     1.19e-7,
+     7.56e-8
+    ],
+    "worstRelBlend": 0
+   },
+   "note": ""
+  }
+ ]
+}
