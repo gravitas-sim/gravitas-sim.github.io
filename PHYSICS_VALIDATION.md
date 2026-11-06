@@ -12,7 +12,7 @@ reason for every tolerance.
 npm run validate:physics
 ```
 
-That is <!--fact:physicsChecks-->431<!--/fact--> checks, about two minutes, and a
+That is <!--fact:physicsChecks-->439<!--/fact--> checks, about two minutes, and a
 PASS/FAIL table with measured error against stated tolerance. Add `--verbose` to print the rationale for each tolerance,
 `--json` for machine-readable output, or `--group "Conservation"` to run one
 section. Exit status is 0 only if everything passes, so it works in CI unchanged.
@@ -81,7 +81,8 @@ are two front ends onto it.
 | Galaxy morphology: size, shape and magnitude on an image | 6 | 6 analytic |
 | Galaxy clusters: membership, dispersion and virial mass | 6 | 6 analytic |
 | Active galactic nuclei: the Eddington bound and the size bound | 5 | 5 analytic |
-| **Total** | **431** | 212 analytic, 125 integrated, 67 published, 24 approximation, 1 empirical, 2 recovery |
+| Cosmology II: late-time FLRW depth | 8 | 8 analytic |
+| **Total** | **439** | 220 analytic, 125 integrated, 67 published, 24 approximation, 1 empirical, 2 recovery |
 <!--/fact-block-->
 
 Nothing here reads a pixel. Every check is a deterministic number-in,
