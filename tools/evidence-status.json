@@ -446,6 +446,25 @@
           "text": "Exoplanet investigations, a sequence and a course"
         }
       ]
+    },
+    {
+      "id": "gaia-lessons-recomputed",
+      "claim": "The numbers the two Gaia investigations ask a student for are recomputed from the project's own distance and sample panels over the astrometry kernel, the cluster distance they state carries its labels, and each step's grader accepts the recomputed value and refuses a wrong one.",
+      "scope": "How far, and how sure? and What Gaia does not see, in the English text; the Spanish follows the English step for step by a machine check; the parallax cases are synthetic with the truth stated, and the cluster is NGC 2420 from the Gaia DR3 pack.",
+      "version": "2.1.0",
+      "class": "V-internal",
+      "status": "established",
+      "method": "tests/gaiaLessons.test.js recomputes every figure a step states through the panels' own functions and the pack, and holds the stated cluster distance to tests/fixtures/gaia-workflows/results.json; the kernel's own legs are in GAIA_WORKFLOWS.md",
+      "evaluator": "the project",
+      "artifact": "tests/gaiaLessons.test.js",
+      "limitations": "Internal validation against the project's own kernel, an independent numpy and scipy implementation and the zero-point package's output; the cluster distance has no systematic floor and was not validated against a published catalog (leg E1 NOT RUN, D-R10-233-06); no distance is taken from the rounded neighbourhood pack; no model of Gaia's real selection; the Spanish has not been read by a fluent reader; no student has used the investigations (D-R10-238-04).",
+      "date": "2026-11-05",
+      "anchors": [
+        {
+          "file": "CHANGELOG.md",
+          "text": "The Galactic closeout (Prompt 238)"
+        }
+      ]
     }
   ]
 }

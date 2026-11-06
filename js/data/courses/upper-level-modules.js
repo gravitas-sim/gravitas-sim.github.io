@@ -13,7 +13,7 @@ export const UPPER_LEVEL_MODULES = {
   format: ID_COURSE_PACK,
   formatVersion: 2,
   id: 'upper-level-modules',
-  version: '1.2.0',
+  version: '1.3.0',
   gravitas: '1.0.0',
   locales: ['en', 'es'],
   pinning: 'compatible',
@@ -61,6 +61,14 @@ export const UPPER_LEVEL_MODULES = {
         en: 'Infer mass distributions from rotation curves and lensing.',
         es: 'Inferir distribuciones de masa a partir de curvas de rotación y lentes.',
         esOf: 'a5eb7b85',
+      },
+    },
+    {
+      id: 'astrometry',
+      text: {
+        en: 'Turn a parallax into a distance with an interval, and say what a sample’s selection does to it.',
+        es: 'Convertir una paralaje en una distancia con un intervalo, y decir qué le hace la selección de una muestra.',
+        esOf: '3d83b70a',
       },
     },
     {
@@ -480,6 +488,30 @@ export const UPPER_LEVEL_MODULES = {
           },
         },
         {
+          id: 'how-far-and-how-sure',
+          kind: 'lesson',
+          lesson: 'how-far-and-how-sure',
+          depth: 'advanced',
+          objectives: ['astrometry'],
+          needs: ['the-suns-motion'],
+          pin: {
+            fp: '953ed4be',
+            n: 8,
+          },
+        },
+        {
+          id: 'what-gaia-does-not-see',
+          kind: 'lesson',
+          lesson: 'what-gaia-does-not-see',
+          depth: 'advanced',
+          objectives: ['astrometry'],
+          needs: ['how-far-and-how-sure'],
+          pin: {
+            fp: '92378a26',
+            n: 8,
+          },
+        },
+        {
           id: 'missing-mass',
           kind: 'lesson',
           lesson: 'missing-mass',
@@ -523,6 +555,37 @@ export const UPPER_LEVEL_MODULES = {
             en: 'This dataset has no stated license; credit the makers in anything you share.',
             es: 'Este conjunto de datos no declara licencia; reconoce a sus autores en todo lo que compartas.',
             esOf: '2f405901',
+          },
+        },
+        {
+          id: 'not-yet-the-galaxy-as-a-whole',
+          kind: 'reading',
+          path: 'advanced',
+          minutes: 60,
+          objectives: [],
+          title: {
+            en: 'Astronomy 2e, chapter 25: The Milky Way Galaxy',
+            es: 'Astronomy 2e, capítulo 25: La Vía Láctea (en inglés)',
+            esOf: '7d9741fc',
+          },
+          cite: {
+            authors:
+              'Andrew Fraknoi, David Morrison, Sidney C. Wolff and others',
+            year: 2022,
+            source: 'OpenStax, Rice University',
+            url: 'https://openstax.org/details/books/astronomy-2e',
+          },
+          license: 'CC BY 4.0',
+          access: 'open',
+          studentNote: {
+            en: 'Gravitas has no investigation yet for the Galaxy’s center and spiral arms, its stellar populations and history, a satellite falling in, or mapping with 21-cm lines. The methods that would carry some of them did not pass their tests or are held back, so none is offered; this chapter is the reading for the whole Galaxy.',
+            es: 'Gravitas aún no tiene una investigación sobre el centro y los brazos espirales de la Galaxia, sus poblaciones estelares y su historia, un satélite que cae, ni sobre el mapeo con las líneas de 21 cm. Los métodos que servirían para algunos no pasaron sus pruebas o se mantienen en reserva, así que no se ofrece ninguno; este capítulo es la lectura para la Galaxia entera.',
+            esOf: 'a9e3e116',
+          },
+          teacherNote: {
+            en: 'Why each is missing, as recorded: moving groups were never run; the four kinematic methods (Oort constants, velocity dispersions by metallicity, the Toomre diagram, the solar-motion drift) each got verdict C at their gate; the rotation-curve decomposition has a kernel with failing legs and no panel; a satellite falling in waits on the dynamics gate, which returned C, and the analytic cluster lesson is not built; 21-cm has a kernel and no authentic data; the center, the arms and the Galaxy’s history have no catalog or cited map fetched under a recorded rights decision.',
+            es: 'Por qué falta cada uno, según el registro: los grupos en movimiento nunca se ejecutaron; los cuatro métodos cinemáticos (constantes de Oort, dispersiones de velocidad por metalicidad, el diagrama de Toomre, la deriva del movimiento solar) recibieron el veredicto C en su puerta; la descomposición de la curva de rotación tiene un núcleo con tramos fallidos y ningún panel; un satélite que cae espera a la puerta de dinámica, que devolvió C, y la lección analítica del cúmulo no está construida; los 21 cm tienen un núcleo y ningún dato auténtico; el centro, los brazos y la historia de la Galaxia no tienen un catálogo ni un mapa citado obtenidos con una decisión de derechos registrada.',
+            esOf: 'de4b4a95',
           },
         },
       ],

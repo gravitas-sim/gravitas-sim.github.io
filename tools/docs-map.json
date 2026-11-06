@@ -1379,6 +1379,13 @@
       "purpose": "The enclosed-mass lensing extension: distances, the mass inside an Einstein radius, image inversions, the arc-radius fit, validation and requested files (Prompt 251, Part A).",
       "owner": 251,
       "student": false
+    },
+    {
+      "file": "GALACTIC_CLOSEOUT.md",
+      "kind": "record",
+      "purpose": "The Galactic closeout (Prompt 238): what 233 to 237 landed, the two Gaia investigations checked, the package change, each closeout item done, not applicable or blocked, the cohesion record.",
+      "owner": 238,
+      "student": false
     }
   ]
 }
