@@ -1,7 +1,7 @@
 {
   "format": "gravitas.moving-cluster-failed-legs/1",
   "note": "Every failing leg of the gate stream, each labelled and left failing. Only Carl resets a bound; a corrected estimator may enter only as new legs with thresholds committed first.",
-  "thresholdsSha256": "b4dcc1580eb50de90998fe6869d16ef5c81416105a1e3d831529ad87271657fa",
+  "thresholdsSha256": "0aa46799dfbcb83a4b3281d0f5d9bcdc3fc7aeebcc6c230477984b37d264a491",
   "legs": [
     {
       "form": "committed",

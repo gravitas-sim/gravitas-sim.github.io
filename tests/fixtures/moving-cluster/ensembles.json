@@ -1,7 +1,7 @@
 {
   "format": "gravitas.moving-cluster-ensembles/1",
   "note": "Synthetic data with its truth manifest: the generator parameters are thresholds.json syntheticTruth; each row is one realization summary (no per-star values).",
-  "thresholdsSha256": "b4dcc1580eb50de90998fe6869d16ef5c81416105a1e3d831529ad87271657fa",
+  "thresholdsSha256": "0aa46799dfbcb83a4b3281d0f5d9bcdc3fc7aeebcc6c230477984b37d264a491",
   "seeds": {
     "ensemble": "moving-cluster-234",
     "synthetic": [234001, 234002, 234003, 234004],

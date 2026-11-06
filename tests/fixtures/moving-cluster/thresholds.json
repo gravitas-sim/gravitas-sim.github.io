@@ -16,7 +16,7 @@
     "design": "moving-cluster-234-design (used only to build and debug on synthetic data; never in a leg, never on the real file)"
   },
   "data": {
-    "file": "hyades.csv (Gaia DR3 gaiadr3.gaia_source through the ESA archive TAP sync service, retrieved 2026-11-06T11:13:30Z by Carl's session; held outside every repository at /Users/carl/Desktop/Gravitas/scratch-data/gaia234/)",
+    "file": "hyades.csv (Gaia DR3 gaiadr3.gaia_source through the ESA archive TAP sync service, retrieved 2026-11-06T11:13:30Z by Carl's session; held outside every repository, in Carl's scratch-data folder gaia234)",
     "sha256": "5e3c8ab9b56a16def4495c669667b33aada8d856262ab64a812b23c5914290f6",
     "query": "query.adql: a 25 degree cone at (66.75, 15.87) degrees; parallax 12 to 40 mas; parallax_over_error above 10; pmra 0 to 250 and pmdec -150 to 50 mas/yr; ordered by source_id",
     "rows": 4873,

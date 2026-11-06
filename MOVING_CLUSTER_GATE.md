@@ -15,7 +15,9 @@ the synthetic ensembles; `oracle-results.json` the pinned output of the independ
 oracle (`tools/moving-cluster-oracle/oracle.py`) are on `spike/moving-cluster-gate` (bbef546a), never merged (Prompt 234's rule 7.5.4):
 this PR is documentation and fixtures only. The gate stream ran on Node 22.23.4 (about 9 minutes for the amended form, 4 for the
 committed); the oracle on Python 3.9.22 with numpy 1.26.4, scipy 1.13.1 and astropy 6.0.1. Two full runs agree row for row (only the
-CPU timing and the report fields of R1 differ).
+CPU timing and the report fields of R1 differ). After the stream, one wording change was made to `thresholds.json` (the `data.file` text no
+longer names a home directory, which the repository text test forbids; no bound, estimator or number changed, and the sha256 recorded in
+the result files was updated to the new file's).
 
 ## What was committed first
 
@@ -179,7 +181,7 @@ budget changes, so there is no size figure to approve.
 On `spike/moving-cluster-gate` (Node 22): `node tools/moving-cluster-validate.mjs --write-oracle-inputs DIR`, then
 `/usr/local/bin/python3.9 tools/moving-cluster-oracle/oracle.py --synthetic DIR/synthetic.json --csv hyades.csv --mask DIR/real-zeropoints.json --out FILE`,
 then `node tools/moving-cluster-validate.mjs --form=committed|amended --oracle FILE --out PART` for each form and
-`--merge PART PART --out-dir DIR`. The real file is read from `/Users/carl/Desktop/Gravitas/scratch-data/gaia234/hyades.csv` (checked against the committed sha256).
+`--merge PART PART --out-dir DIR`. The real file is read from Carl's `scratch-data/gaia234/hyades.csv` (checked against the committed sha256).
 
 ## References
 
