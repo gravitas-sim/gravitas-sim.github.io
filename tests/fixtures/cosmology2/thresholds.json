@@ -291,6 +291,14 @@
    "why": "Recorded before js/kernels/cosmology/late existed and before any oracle output was inspected. The slip was found by redoing the arithmetic of the draw while writing the oracle. No bound moved.",
    "boundMoved": false,
    "when": "before any kernel code and any validator run"
+  },
+  {
+   "id": "AM2",
+   "step": "check F1 (wording), worlds.contours.oracleXIndices",
+   "what": "oracleXIndices lists five grid indices, [2, 6, 10, 14, 17], written for the 19-point flatOmW contour; the openOmOde contour has 15 grid points and hubbleOm 13. The reading fixed here: on each contour the oracle comparison uses the listed indices that exist on its grid (flatOmW all five, openOmOde 2, 6, 10 and 14, hubbleOm 2, 6 and 10), and a listed index beyond a contour's grid is skipped, not a failure. No bound changed.",
+   "why": "Found when the first validator run stopped with a TypeError at the first out-of-range index, before it printed or wrote any row, so no leg's result had been seen. Recorded before the second run.",
+   "boundMoved": false,
+   "when": "before any validator row was seen"
   }
  ]
 }
