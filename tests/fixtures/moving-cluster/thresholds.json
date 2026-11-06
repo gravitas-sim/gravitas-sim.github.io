@@ -44,7 +44,11 @@
       "unitParallax": "mas",
       "positionSigma": 5.0,
       "unitPosition": "pc per axis, isotropic Gaussian about the centre",
-      "convergentPoint": { "ra": 100.0, "dec": 0.0, "unit": "degrees" },
+      "convergentPoint": {
+        "ra": 100.0,
+        "dec": 0.0,
+        "unit": "degrees"
+      },
       "speed": 45.0,
       "unitSpeed": "km/s, the space velocity of the cluster along the convergent point",
       "internalSigma": 0.5,
@@ -159,7 +163,11 @@
       "group": "geo",
       "kind": "analytic",
       "what": "a noise-free, zero-dispersion cluster of 300 stars (no field, no errors beyond the floor) with the baseline convergent point and speed: the pipeline's convergent point is the truth to 1e-6 degrees, and every member is found",
-      "limits": { "maxCpErrorDeg": 1e-6, "minRecall": 1.0, "realizations": 3 }
+      "limits": {
+        "maxCpErrorDeg": 1e-6,
+        "minRecall": 1.0,
+        "realizations": 3
+      }
     },
     {
       "id": "A2.dist.exact",
@@ -220,7 +228,10 @@
       "group": "geo",
       "kind": "analytic",
       "what": "a star placed anywhere with its proper motion exactly towards c has an offset of at most 1e-12 radians and a positive t . u; the same star with the proper motion reversed has t . u negative and is not a member; 200 random positions and directions",
-      "limits": { "stars": 200, "maxOffsetRad": 1e-12 }
+      "limits": {
+        "stars": 200,
+        "maxOffsetRad": 1e-12
+      }
     },
     {
       "id": "B1.oracle.members.synthetic",
@@ -228,7 +239,10 @@
       "group": "geo",
       "kind": "oracle",
       "what": "the independent Python oracle on six pinned synthetic realizations (O1 to O3 baseline, O4 field only, O5 no radial velocities, O6 few members): the member sets are identical (Jaccard 1) and the refusal status and reason agree",
-      "limits": { "realizations": 6, "minJaccard": 1.0 }
+      "limits": {
+        "realizations": 6,
+        "minJaccard": 1.0
+      }
     },
     {
       "id": "B2.oracle.cp.synthetic",
@@ -236,7 +250,9 @@
       "group": "geo",
       "kind": "oracle",
       "what": "the oracle's convergent point against the production module's on every realization that returns one, to 1e-6 degrees",
-      "limits": { "maxDeg": 1e-6 }
+      "limits": {
+        "maxDeg": 1e-6
+      }
     },
     {
       "id": "B3.oracle.dist.synthetic",
@@ -244,7 +260,11 @@
       "group": "dist",
       "kind": "oracle",
       "what": "the oracle's speed, per-star parallaxes and pi_MC against the production module's, 1e-8 relative on each; the oracle's bootstrap sigma_MC (4000 replicates, its own generator) against the production module's (4000 replicates), within 10 percent relative, on the baseline realizations",
-      "limits": { "maxRel": 1e-8, "maxRelSigma": 0.1, "bootstrap": 4000 }
+      "limits": {
+        "maxRel": 1e-8,
+        "maxRelSigma": 0.1,
+        "bootstrap": 4000
+      }
     },
     {
       "id": "C1.membership",
@@ -276,7 +296,10 @@
       "group": "dist",
       "kind": "coverage",
       "what": "the 68.27 percent bootstrap interval of pi_MC holds pi_true on E1 at a rate in 0.58 to 0.78 (a refused realization counts as not covering; the band is about 3 binomial standard errors of 200 draws about 0.68)",
-      "limits": { "min": 0.58, "max": 0.78 }
+      "limits": {
+        "min": 0.58,
+        "max": 0.78
+      }
     },
     {
       "id": "C4.coverage95",
@@ -284,7 +307,10 @@
       "group": "dist",
       "kind": "coverage",
       "what": "the 95.45 percent bootstrap interval holds pi_true on E1 at a rate in 0.90 to 0.99",
-      "limits": { "min": 0.9, "max": 0.99 }
+      "limits": {
+        "min": 0.9,
+        "max": 0.99
+      }
     },
     {
       "id": "C5.recovery",
@@ -292,7 +318,10 @@
       "group": "dist",
       "kind": "coverage",
       "what": "on E1 the median of (pi_MC - pi_true) / sigma_MC is within 0.27 of zero (three standard errors of a median of 200 unit normals) and the median relative bias of pi_MC is within 0.005",
-      "limits": { "maxAbsMedianZ": 0.27, "maxAbsMedianRel": 0.005 }
+      "limits": {
+        "maxAbsMedianZ": 0.27,
+        "maxAbsMedianRel": 0.005
+      }
     },
     {
       "id": "C6.agree",
@@ -300,7 +329,11 @@
       "group": "dist",
       "kind": "coverage",
       "what": "the committed tolerance rule (3 sigma combined and 3 percent) between pi_MC and 233's pi_plx on the same stars passes on at least 90 percent of E1 realizations: its false-alarm rate in a world where the two agree",
-      "limits": { "minFraction": 0.9, "nSigma": 3, "cap": 0.03 }
+      "limits": {
+        "minFraction": 0.9,
+        "nSigma": 3,
+        "cap": 0.03
+      }
     },
     {
       "id": "C7.useful",
@@ -308,7 +341,9 @@
       "group": "dist",
       "kind": "coverage",
       "what": "the median sigma_MC / pi_MC on E1 (non-refused) is at most 0.02: in a world like the stated one the method is useful",
-      "limits": { "maxMedianRel": 0.02 }
+      "limits": {
+        "maxMedianRel": 0.02
+      }
     },
     {
       "id": "D1.field",
@@ -316,7 +351,10 @@
       "group": "geo",
       "kind": "refusal",
       "what": "E2, a field with no cluster (100 realizations): at least 90 percent return a refusal ('no-cluster' or 'no-convergence'), never a convergent point or a distance",
-      "limits": { "realizations": 100, "minFractionRefused": 0.9 }
+      "limits": {
+        "realizations": 100,
+        "minFractionRefused": 0.9
+      }
     },
     {
       "id": "D2a.noRv.cp",
@@ -337,7 +375,9 @@
       "group": "dist",
       "kind": "refusal",
       "what": "E3: the speed and the distance are null ('no-rv') in every realization that returns a convergent point",
-      "limits": { "minFractionNull": 1.0 }
+      "limits": {
+        "minFractionNull": 1.0
+      }
     },
     {
       "id": "D3.dispersion",
@@ -345,7 +385,10 @@
       "group": "dist",
       "kind": "refusal",
       "what": "E5, an internal sigma of 5 km/s per axis (100 realizations): in at least 90 percent the result is a refusal or the 95.45 percent interval holds pi_true; the method never answers confidently and wrongly",
-      "limits": { "realizations": 100, "minFractionSafe": 0.9 }
+      "limits": {
+        "realizations": 100,
+        "minFractionSafe": 0.9
+      }
     },
     {
       "id": "D4.few",
@@ -353,7 +396,10 @@
       "group": "geo",
       "kind": "refusal",
       "what": "E4, a cluster of 15 members (100 realizations): at least 95 percent return a refusal",
-      "limits": { "realizations": 100, "minFractionRefused": 0.95 }
+      "limits": {
+        "realizations": 100,
+        "minFractionRefused": 0.95
+      }
     },
     {
       "id": "D5.expansion",
@@ -361,7 +407,10 @@
       "group": "dist",
       "kind": "refusal",
       "what": "REPORTED, no band: E6, an isotropic expansion of 0.05 km/s per pc that the model does not have: the median of (pi_MC - pi_true) / sigma_MC, the median relative bias and the 68.27 and 95.45 percent coverage",
-      "limits": { "realizations": 100, "expansion": 0.05 }
+      "limits": {
+        "realizations": 100,
+        "expansion": 0.05
+      }
     },
     {
       "id": "P1.speed",
@@ -377,7 +426,9 @@
       "group": "geo",
       "kind": "authentic",
       "what": "the Hyades file under the contract: the pipeline converges and is not refused, and at least 30 members have a usable radial velocity",
-      "limits": { "minMembersWithRv": 30 }
+      "limits": {
+        "minMembersWithRv": 30
+      }
     },
     {
       "id": "R2.agree",
@@ -385,7 +436,10 @@
       "group": "dist",
       "kind": "authentic",
       "what": "the tolerance rule of the contract between pi_MC and 233's pi_plx on the same stars: |difference| at most 3 sigma combined and at most 3 percent of pi_plx",
-      "limits": { "nSigma": 3, "cap": 0.03 }
+      "limits": {
+        "nSigma": 3,
+        "cap": 0.03
+      }
     },
     {
       "id": "R3.useful",
@@ -393,7 +447,9 @@
       "group": "dist",
       "kind": "authentic",
       "what": "sigma_MC / pi_MC at most 0.02 on the real sample",
-      "limits": { "maxRel": 0.02 }
+      "limits": {
+        "maxRel": 0.02
+      }
     },
     {
       "id": "R4.split",
@@ -401,7 +457,10 @@
       "group": "dist",
       "kind": "authentic",
       "what": "the final members split into two halves by seeded random assignment (seed 234004, labelled 'halves'): the two halves' pi_MC (each its own bootstrap) differ by at most 3 sqrt(sigma_A^2 + sigma_B^2)",
-      "limits": { "nSigma": 3, "bootstrap": 4000 }
+      "limits": {
+        "nSigma": 3,
+        "bootstrap": 4000
+      }
     },
     {
       "id": "R5.cpSplit",
@@ -409,7 +468,10 @@
       "group": "geo",
       "kind": "authentic",
       "what": "the same two halves' convergent points are separated by at most 3 sqrt(r_A^2 + r_B^2), r the 68.27th percentile of the angular separation between each bootstrap convergent point and the half's own",
-      "limits": { "nSigma": 3, "bootstrap": 4000 }
+      "limits": {
+        "nSigma": 3,
+        "bootstrap": 4000
+      }
     },
     {
       "id": "B4.oracle.members.real",
@@ -417,7 +479,9 @@
       "group": "geo",
       "kind": "oracle",
       "what": "the oracle on the real file: the member sets are identical (Jaccard 1) and the status agrees",
-      "limits": { "minJaccard": 1.0 }
+      "limits": {
+        "minJaccard": 1.0
+      }
     },
     {
       "id": "B5.oracle.cp.real",
@@ -425,7 +489,9 @@
       "group": "geo",
       "kind": "oracle",
       "what": "the oracle's convergent point against the production module's on the real file, 1e-6 degrees",
-      "limits": { "maxDeg": 1e-6 }
+      "limits": {
+        "maxDeg": 1e-6
+      }
     },
     {
       "id": "B6.oracle.dist.real",
@@ -433,7 +499,11 @@
       "group": "dist",
       "kind": "oracle",
       "what": "the oracle's speed, per-star parallaxes and pi_MC against the production module's on the real file, 1e-8 relative; the bootstrap sigma_MC within 10 percent relative",
-      "limits": { "maxRel": 1e-8, "maxRelSigma": 0.1, "bootstrap": 4000 }
+      "limits": {
+        "maxRel": 1e-8,
+        "maxRelSigma": 0.1,
+        "bootstrap": 4000
+      }
     },
     {
       "id": "R6.rvcut",
@@ -441,7 +511,9 @@
       "group": "dist",
       "kind": "authentic",
       "what": "REPORTED, no band: the same analysis with the radial-velocity error cut at 1 km/s instead of 3: the member count, the convergent point's separation from the full run's and the relative change of pi_MC",
-      "limits": { "cut": 1.0 }
+      "limits": {
+        "cut": 1.0
+      }
     },
     {
       "id": "R7.published.cp",
@@ -469,5 +541,49 @@
     }
   ],
   "questions": [],
-  "amendments": []
+  "amendments": [
+    {
+      "id": "AM1",
+      "when": "after the committed thresholds (6d1fbd0e) and before any gate-stream result: no ensemble of seed 234001 to 234004, no oracle output and no run on the real file had been made",
+      "found": "design finding F1",
+      "change": "the seed. The seed set is found by a count in convergent-point space instead of the density in (parallax, proper motion): the unit vectors c_k of a Fibonacci lattice of 20000 points (z_k = 1 - (2k + 1) / 20000, phi_k = k pi (3 - sqrt 5)); for each, the number of sample stars with |b_i . c_k| <= sin 1.5 degrees and t_i . u_i(c_k) > 0; the lattice point with the largest count (the first on a tie) is refined up to 8 times by fitting c to the counted stars and recounting at the fitted c until the counted set repeats; the seed set is the counted set. The seed uses no parallax at all, so no parallax scale enters before the iteration (the contract's iteration still uses the parallax window and the centred magnitude rule). The iteration is unchanged.",
+      "binding": "the committed form's verdict binds; the amended form's is a proposal for Carl to ratify"
+    },
+    {
+      "id": "AM2",
+      "when": "as AM1",
+      "found": "design finding F3",
+      "change": "the recall of legs A1, A2 and A4 (minRecall 1.0 on A1; the 'every member' premise of A2 and A4's per-star statements) is over the cluster members the sample's selection keeps whose true parallax lies within 30 percent of the median true parallax of those members. The bound (1.0) is unchanged; its denominator is the set the contract's own window can admit.",
+      "binding": "the committed form's verdict binds; the amended form's is a proposal for Carl to ratify"
+    },
+    {
+      "id": "AM3",
+      "when": "as AM1",
+      "found": "design finding F2",
+      "change": "in the iteration the magnitude rule (|ln q_i - median| <= min(3 sigma_q, 0.25)) is applied also when no speed is defined (fewer than 10 members with a radial velocity, a perpendicular geometry, or a non-positive speed), with V replaced by 1 in q_i: the rule is centred on the median of ln q, so the speed cancels. With a speed it is the contract's rule exactly.",
+      "binding": "the committed form's verdict binds; the amended form's is a proposal for Carl to ratify"
+    }
+  ],
+  "forms": {
+    "rule": "Every leg is measured for two forms of the analysis, as Prompt 235 did for its amendments. The COMMITTED form is the contract above, unchanged, with every bound as committed; it binds. The AMENDED form adds AM1 to AM3 below and is a proposal for Carl to ratify: its verdict is reported beside the committed one and binds only if Carl ratifies it. No bound of any leg is moved in either form except AM2's recall definition on three analytic legs, stated in the amendment.",
+    "committed": {
+      "seed": "density",
+      "magnitudeRuleWithoutSpeed": false,
+      "analyticRecall": "every cluster member the sample's selection keeps"
+    },
+    "amended": {
+      "seed": "cp",
+      "magnitudeRuleWithoutSpeed": true,
+      "analyticRecall": "every cluster member the sample's selection keeps whose true parallax lies within 30 percent of the median true parallax of the members (the contract's own window)"
+    }
+  },
+  "design": {
+    "stream": "moving-cluster-234-design, synthetic data only, run before the gate stream and never on the real file: 3 noise-free clusters (and 2 each at 90 and 130 degrees), and 10 realizations each of the baseline, field only, no radial velocities, 15 members and internal sigma 5 km/s; 40 field-free baseline clusters for the diagnostic below. No gate seed (234001 to 234004) had been run.",
+    "findings": [
+      "F1. The committed seed (mean shift of the kernel density in parallax and proper motion) found a clump of the synthetic field and not the cluster: on the first baseline design realization the iteration ran 30 steps without converging, 139 degrees from the true convergent point. The cluster's proper motions are spread over tens of mas/yr by perspective, so it is not the densest clump in that space. A count in convergent-point space finds it (AM1): the same realization converged in 6 steps to 297 members at 0.35 degrees.",
+      "F2. With no radial velocities the committed iteration (which applies the magnitude rule only where a speed exists) drifts onto the field and does not converge (6 of 6). The magnitude rule is centred on the median of ln q, so the speed cancels from it and it can be applied without one (AM3): 6 of 6 then return a convergent point at 0.3 to 0.7 degrees.",
+      "F3. A noise-free, zero-dispersion cluster is recovered exactly (convergent point to 1e-13 degrees, pi_MC equal to the truth), but 3 or 4 of its 300 members are not found: the contract's parallax window (30 percent about the median) excludes members on the near tail of a cluster whose depth is 10 percent (the committed analytic recall of 1.0 counted them). AM2 restates that recall over members inside the window.",
+      "F4. A bias of the plain eigenvector convergent point. On 40 field-free baseline design clusters the relative bias of pi_MC against the weighted true parallax is: true convergent point and true speed -0.05 percent (se 0.03); true convergent point, fitted speed -0.07 percent (se 0.04); fitted convergent point and fitted speed +1.29 percent (se 0.14, sd 0.88). The bias is from the convergent-point fit: the proper-motion direction noise (internal velocity scatter over V sin theta) enters the great-circle normals, and the least-squares criterion is weighted by sin^2 theta, which depends on c, so the minimum is pulled towards the cluster (smaller theta, larger pi). This is not amended: the committed estimator stands, legs C3 to C5 are expected to fail, and a corrected estimator may enter only as new legs with thresholds committed first (a question for Carl)."
+    ]
+  }
 }
