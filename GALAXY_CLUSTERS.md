@@ -129,6 +129,39 @@ When the files land, a later session writes the reader and runs E1 to E4 under t
 - The linear rest-frame velocity differs from the relativistic one by `v / 2c`, 0.3 percent at 2000 km/s.
 - Local densities near the aperture's edge are underestimated.
 
+
+## The follow-up legs (250b)
+
+Carl's rulings of 2026-11-06 (`DECISIONS_2026-11-06.md`): hold the consumers rule; C1b stays failing, the analytic interval stays the default and the bootstrap is a labelled option (no new leg); **new legs, thresholds committed first, for C4 (the distance term), D3 (a flag on the expected bias) and the field with no cluster (R6)**; the truncation correction stays on by default with the raw dispersion beside it; the tree's rounded solar mass is kept for displayed figures (3.0e-4 above astropy's, R2 and R9). Nothing here is a background-corrected dispersion, a panel, a lesson or a pack.
+
+- **Contract.** `tests/fixtures/clusters/followup-thresholds.json` was committed (c35c2278) before any follow-up code, oracle or run; every bound has its rule written beside it and none was set from the numbers of C4, D3 or R6. No amendment. The first gate's `thresholds.json`, `results.json`, `failed-legs.json` and `run1-results.json` are not edited, every new option is opt-in with the old behaviour as its default, and leg X1 (and `tests/clustersResults.test.js`) re-run the first validator and find all 42 rows, measured numbers included, identical, the failing three still C1b, C4 and D3.
+- **Code**: `js/kernels/galaxy/clusters/followup.js` and three opt-in options of `analyseCluster`: `light.distanceTerm`, `contaminationRule: 'bias'` and `requireOverdensity`. The truth manifest of a synthetic world gained one field (`interlopersInsideWindow3Sigma`); no draw changed.
+- **R16, the distance term of the light.** `L` goes as `D_L(z_c)^2`, so the cluster redshift's error `sigma_zc = sd(z)/sqrt(n)` gives a relative error `2 (d ln D_L/dz) sigma_zc`, with `d ln D_L/dz = 1/(1+z) + (c/H0)/(E(z) D_C(z))` in closed form, added in quadrature to the photometric term. It carries the cluster redshift's statistical error only (not the cluster's peculiar velocity, the clipped members or the selection scatter at the limit).
+- **R17, the flag on the expected bias.** Field galaxies inside the window raise the variance by `(N_b/n)(w^2/3 - s^2)`, so the dispersion's bias is `b = (1/2)(N_b/n)(kappa^2/3 - 1)` to first order (`N_b/n` at kappa 3); `contaminated-bias` is raised when `b` exceeds half the dispersion's analytic relative error (a half-standard-error bias lowers the one-sigma coverage from 0.683 to 0.625). It is an estimate that flags and is never subtracted.
+- **R18, the overdensity test.** A field uniform in velocity over the extent puts `mu = n_pre min(1, w/E)` galaxies in the window; the cluster is refused (`no-overdensity`) when the exact Poisson upper tail `P(X >= n_in | mu)` exceeds 0.001. It needs `velocityExtentKms`, is lenient because the window is fitted to the galaxies, and is off by default.
+
+Run (Node 22.23.4, `npm run clusters:followup`; oracle `tools/clusters-oracle/oracle-followup.py`, scipy and astropy, no Gravitas code): **11 rows, 6 pass, 2 fail, 3 reported; follow-up kernel verdict B** (the first gate's verdict B stands).
+
+| Leg | Status | Measured |
+|---|---|---|
+| A15.distanceTermClosed | PASS | closed form of d ln D_L/dz to 0 (against a central difference 3.5e-11); the light's error, the option-off identity, sigma_zc and the pipeline |
+| A16.expectedBiasClosed | PASS | closed forms to 0; threshold at 1/(2 sqrt(2(n-1))); the share rule still flags 0.12 and not 0.08 |
+| A17.overdensityClosed | PASS | Poisson tails to 5e-16; refusal exactly where the tail exceeds 0.001; a field answered by default and refused with the option |
+| B6.followupOracle | PASS | 12 redshifts to 4.2e-9 relative, 20 Poisson tails to 4.1e-14 |
+| C4b.lightCoverageWithDistance | FAIL | coverage 0.58 and 0.88 against bands 0.563 to 0.803 and 0.89 to 0.99: the one-sigma band passes, the 95 percent band is missed by 0.01 |
+| D3b.contaminationBiasFlag | FAIL | power 0.956 and false flags 0.039 pass (114 clearly biased, 282 clearly fine worlds); the calibration fails at 50 percent interlopers: estimated 0.139 against realized 0.357, ratio 0.39 against the band 0.5 to 2 (0.75 at 10 percent and 0.65 at 20 percent pass) |
+| R6b.fieldRefusal | PASS | 100 of 100 fields refused, 400 of 400 clean clusters answered, the fields answered without the option |
+| X1.oldLegsUnchanged | PASS | 42 rows, no difference, C1b, C4 and D3 still failing |
+| R9, R10, R11 | reported | solar mass 3.0e-4 above astropy's; the bias ladder; the weak-cluster price |
+
+What the failures say, without moving a bound:
+
+- **C4b**: the distance term roughly doubles the claimed light error (a mean photometric term of 0.8 percent and a mean distance term of 0.85 percent) and the one-sigma coverage rises from 0.46 to 0.58, so the term was real and is not the whole story: the 95 percent coverage of 0.88 is 0.01 under its band. What remains is among the terms the rule names as not carried (the clipped members, the selection scatter at the limit) and was not measured separately.
+- **D3b**: the flag does its job (it is raised in 96 percent of the clearly biased worlds and 4 percent of the clearly fine ones, where the first gate's share flag fired in 72 percent of the 50 percent worlds and in 0 of the 10 percent worlds, which are biased by 3.4 percent); the failure is the first-order estimate of the size of the bias, which falls short by a factor 2.6 when half of the galaxies are interlopers, because the window widens as the contamination grows and takes more of them in, a feedback the formula ignores. The estimate is right in order up to 20 percent interlopers.
+- **R6b** passes with room, and R11 shows why: the faintest clean cluster of 400 has a tail of 1.4e-6, so the test refused none of them; a cluster that is only weakly over a field (not in this ensemble) is where the 0.001 would bite, and that was not probed.
+
+Questions for Carl (none applied): C4b and D3b as new failed legs (a later contract could add the clipped-member and selection terms to the light, and a feedback-aware bias estimate such as the clip's own fixed point, thresholds committed first); whether the three options become defaults for a lesson (they are opt-in so the first gate stays bit-identical); and a weak-cluster leg for the overdensity test.
+
 ## References
 
 Each is cited by author and year only and is **unverified**: Carl verifies the papers before any lesson cites them (DECISIONS_2026-11-05.md).
