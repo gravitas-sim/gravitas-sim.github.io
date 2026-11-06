@@ -67,7 +67,9 @@ describe('the follow-up legs and their pinned results', () => {
     expect(f('B3b').maxRel).toBe(old('B3').maxRel);
     expect(f('F3b').maxAbsLogSlope).toBe(old('F3').maxAbsLogSlope);
     expect(f('F3b').maxRelSlope).toBe(old('F2').maxRelSlope);
-    expect(FU.ruleForBounds).toMatch(/No bound of a new leg is read from a measurement/);
+    expect(FU.ruleForBounds).toMatch(
+      /No bound of a new leg is read from a measurement/
+    );
   });
   test('the first run of the follow-up validator is kept: B3b failed on an implementation slip', () => {
     expect(FIRST.rows.filter(r => r.status === 'fail').map(r => r.id)).toEqual([
