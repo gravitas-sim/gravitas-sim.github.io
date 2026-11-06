@@ -119,7 +119,7 @@ def analyse(w):
     amp = s_raw / sint
     x = xstar(kappa)
     sigma = sint / x
-    sig_err = amp * sigma / np.sqrt(2 * (n - 1))
+    sig_err = amp * s_raw / x / np.sqrt(2 * (n - 1))
     tuning = inp['tuning']
     # biweight on the plain members (no errors), tuning of the input
     bw_scale = float(biweight_scale(v, c=tuning['cScale'], M=np.median(v)))

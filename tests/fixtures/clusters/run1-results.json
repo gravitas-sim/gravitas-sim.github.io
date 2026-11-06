@@ -1,6 +1,6 @@
 {
  "format": "gravitas.clusters-run1/1",
- "note": "Run 1 of tools/clusters-validate.mjs on kernel commit 6fd19769, kept as a record. A4 failed because the kernel took the sampling error of the dispersion from the corrected dispersion instead of the observed one, against rule R7/R8 as committed; the kernel was repaired to the committed formula, no bound moved (GALAXY_CLUSTERS.md).",
+ "note": "Run 1 of tools/clusters-validate.mjs on kernel commit 6fd19769, kept as a record: 26 pass, 4 fail (A4, C1b, C4, D3). A4 failed because the kernel took the sampling error of the dispersion from the corrected dispersion instead of the observed one, against rules R7 and R8 as committed. The oracle had the same misreading, so B2 passed in run 1 with the shared defect; the closed form written in leg A4 is what caught it. The kernel and the oracle were both repaired to the committed formula, d sigma_int = (s / sigma_int) * s / sqrt(2 (n - 1)), divided by the truncation factor; no bound moved and the other three failures are untouched (GALAXY_CLUSTERS.md).",
  "rows": [
   {
    "id": "A1.restVelocity",

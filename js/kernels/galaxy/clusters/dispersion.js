@@ -163,7 +163,7 @@ export function dispersion(v, o) {
     x = f;
   }
   const kms = intrinsic / x;
-  const analytic = (amp * kms) / Math.sqrt(2 * (n - 1));
+  const analytic = (amp * s) / x / Math.sqrt(2 * (n - 1));
   const out = {
     status: 'ok',
     method: 'plain',
