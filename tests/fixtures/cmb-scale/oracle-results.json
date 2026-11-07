@@ -7,7 +7,7 @@
   "scipy": "1.13.1",
   "astropy": "6.0.1"
  },
- "thresholdsSha256": "d3fe79595d7c4f9cadc055942ee28008d62f6603f8692ca8c1bb78a53a968aa8",
+ "thresholdsSha256": "ace5d09b2306676687e04b802f6b73641fb4c05c52fd0069306c8c389d90a231",
  "planckExtractionSha256": "32d58ab4c512f939a4307219f11e4e00dbc204a97abfa6a5e3b1cca6c733a46e",
  "constants": {
   "c_kms": 299792.458,
