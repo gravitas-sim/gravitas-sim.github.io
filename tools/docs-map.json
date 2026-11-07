@@ -1437,6 +1437,13 @@
       "student": false
     },
     {
+      "file": "GROWTH_GATE.md",
+      "kind": "gate",
+      "purpose": "Structure-growth gate: the growth equation and its domain, shape, variance and Jeans criterion, 31 legs, oracle, verdict C by the committed function; no imagery (Prompt 259).",
+      "owner": 259,
+      "student": false
+    },
+    {
       "file": "CMB_SCALE_GATE.md",
       "kind": "gate",
       "purpose": "Microwave background angular-scale gate: r_s(z*), D_M(z*), theta*, the peak relation and claim rule, 42 legs, verdict C; spectrum, grid and cited formulas NOT RUN (Prompt 258).",

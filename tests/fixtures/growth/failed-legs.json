@@ -1,0 +1,44 @@
+{
+ "format": "gravitas.growth-failed-legs/1",
+ "note": "Every failing row of results.json and nothing else; left failing.",
+ "legs": [
+  {
+   "id": "C1.cptFit",
+   "group": "cited",
+   "status": "fail",
+   "bound": "relative 0.02 (a design bound for a stated approximation, not a published accuracy)",
+   "measured": {
+    "maxRelativeDeviation": 0.02017401989450951,
+    "perSet": {
+     "S1": 2.6865398794484463e-11,
+     "S2": 0.006570960449382102,
+     "S3": 0.016824985366172163,
+     "S4": 0.0013399063397629973,
+     "S5": 0.02017401989450951,
+     "S6": 0.0006502928246681083,
+     "S7": 0.003998497864621364,
+     "S8": 0.0042756105695722635
+    },
+    "fitVsOracleImplementation": 3.3306690738754696e-16
+   }
+  },
+  {
+   "id": "R2.growthAccepted",
+   "group": "refusals",
+   "status": "fail",
+   "bound": "exact",
+   "measured": {
+    "sets": 6875,
+    "refused": 1,
+    "firstRefused": [
+     {
+      "Om": 0.1,
+      "Ode": 1.2,
+      "w": -1.5,
+      "code": "bounce"
+     }
+    ]
+   }
+  }
+ ]
+}
