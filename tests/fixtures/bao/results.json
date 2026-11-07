@@ -1,0 +1,679 @@
+{
+ "format": "gravitas.bao-gate-results/1",
+ "thresholdsSha256": "ca68ea56449bd37526f7b5f9540c3e26150f61b6b804b66ce9f27f2fa530307f",
+ "oracleSha256": "a3699c3880da5b4e57c08003717a94e53b54c781228f06ec18fb9ecf18963c19",
+ "planckExtractionSha256": "7ff7d98b592a0432490035b6813980708432c7a7efee9cbc9bf898484f3f286f",
+ "node": "v22.23.4",
+ "seconds": 37.1,
+ "counts": {
+  "rows": 44,
+  "pass": 27,
+  "reported": 4,
+  "not-run": 10,
+  "fail": 2,
+  "omitted": 1
+ },
+ "verdict": {
+  "kernel": "KERNEL FAIL",
+  "product": "C",
+  "consumersClause": "unmet",
+  "demonstration": "not detectable at this size: not built",
+  "combinationWith256": "omitted (256 verdict FC)"
+ },
+ "rows": [
+  {
+   "id": "I1.pack",
+   "status": "pass",
+   "measured": {
+    "sha256": "60b2c7f99007a79b47c5f912f6bc25d4080b3b6402cbf2bdf335d4841419ff40",
+    "rows": 2911,
+    "oracleSha256": "60b2c7f99007a79b47c5f912f6bc25d4080b3b6402cbf2bdf335d4841419ff40"
+   },
+   "bound": "exact"
+  },
+  {
+   "id": "I2.decode",
+   "status": "pass",
+   "measured": {
+    "sane": true,
+    "relativeDifferenceOfSums": 3.0245167200900704e-15,
+    "firstFiveDifference": 0,
+    "raMin": 130.26049999999998,
+    "raMax": 239.9991
+   },
+   "bound": "sums 1e-12, first five 1e-12, sane"
+  },
+  {
+   "id": "G1.edsClosedForm",
+   "status": "pass",
+   "measured": {
+    "maxRelative": 3.3044033231755253e-15
+   },
+   "bound": 1e-11
+  },
+  {
+   "id": "G2.emptyClosedForm",
+   "status": "pass",
+   "measured": {
+    "maxRelative": 5.438547836683751e-16
+   },
+   "bound": 1e-11
+  },
+  {
+   "id": "G3.astropy",
+   "status": "pass",
+   "measured": {
+    "maxRelative": 7.9542087097326765e-16,
+    "cases": 80
+   },
+   "bound": 1e-10
+  },
+  {
+   "id": "G4.identityDV",
+   "status": "pass",
+   "measured": {
+    "maxRelative": 5.929555894882272e-16,
+    "cases": 80
+   },
+   "bound": 1e-12
+  },
+  {
+   "id": "G5.scaling",
+   "status": "pass",
+   "measured": {
+    "maxRelative": 3.5087236927040674e-16,
+    "cases": 240
+   },
+   "bound": 1e-13
+  },
+  {
+   "id": "G6.lowRedshift",
+   "status": "pass",
+   "measured": {
+    "maxDeviation": 0.00004501851936655754
+   },
+   "bound": 0.0005
+  },
+  {
+   "id": "R1.radiation",
+   "status": "pass",
+   "measured": {
+    "maxRelative": 4.995153822710818e-13,
+    "Neff": [
+     3.046,
+     2,
+     4
+    ]
+   },
+   "bound": 1e-9
+  },
+  {
+   "id": "R2.closedForm",
+   "status": "pass",
+   "measured": {
+    "perSet": [
+     1.4027711217006771e-16,
+     2.7544808434307265e-16,
+     2.8458341211620384e-16,
+     0,
+     1.4292407266520322e-16
+    ]
+   },
+   "bound": 1e-10
+  },
+  {
+   "id": "R3.quadrature",
+   "status": "pass",
+   "measured": {
+    "perWorld": [
+     1.063624774156336e-13,
+     1.1207398555732794e-13,
+     1.0848539608785236e-13,
+     1.0617215195252695e-13,
+     1.0655502747992983e-13,
+     1.0655728154301154e-13,
+     1.0655728047418291e-13,
+     1.038422627489974e-13,
+     1.1084503778968588e-13,
+     7.682031874470233e-14
+    ]
+   },
+   "bound": 1e-9
+  },
+  {
+   "id": "R4.baryonFree",
+   "status": "pass",
+   "measured": {
+    "relative": 5.8299188545273905e-8
+   },
+   "bound": 0.000001
+  },
+  {
+   "id": "R5.monotone",
+   "status": "pass",
+   "measured": [
+    {
+     "name": "zd",
+     "steps": 20,
+     "decreasing": 20
+    },
+    {
+     "name": "omegaB",
+     "steps": 20,
+     "decreasing": 20
+    },
+    {
+     "name": "Om",
+     "steps": 20,
+     "decreasing": 20
+    },
+    {
+     "name": "Neff",
+     "steps": 20,
+     "decreasing": 20
+    }
+   ],
+   "bound": "every step in every direction"
+  },
+  {
+   "id": "R6.errorCover",
+   "status": "pass",
+   "measured": {
+    "covered": 10,
+    "of": 10
+   },
+   "bound": "10 of 10"
+  },
+  {
+   "id": "X1.reportedRs",
+   "status": "reported",
+   "measured": [
+    {
+     "id": "W1",
+     "prototype": 145.89969814597418,
+     "oracleOwn": 145.89969814597418,
+     "oracleAstropyH": 145.8996981459897,
+     "error": 2.628846196309861e-13
+    },
+    {
+     "id": "W2",
+     "prototype": 153.42663259349214,
+     "oracleOwn": 153.42663259349212,
+     "oracleAstropyH": 153.42663259350934,
+     "error": 3.007102031226578e-13
+    },
+    {
+     "id": "W3",
+     "prototype": 145.92648156912594,
+     "oracleOwn": 145.92648156912594,
+     "oracleAstropyH": 145.92648156914177,
+     "error": 2.9042092447373493e-13
+    },
+    {
+     "id": "W4",
+     "prototype": 145.8935451029998,
+     "oracleOwn": 145.8935451029998,
+     "oracleAstropyH": 145.8935451030153,
+     "error": 2.740177685198738e-13
+    },
+    {
+     "id": "W5",
+     "prototype": 145.90278306068316,
+     "oracleOwn": 145.90278306068316,
+     "oracleAstropyH": 145.9027830606987,
+     "error": 2.6706912912365024e-13
+    },
+    {
+     "id": "W6",
+     "prototype": 145.899696701196,
+     "oracleOwn": 145.89969670119604,
+     "oracleAstropyH": 145.89969670121155,
+     "error": 2.7820772553672474e-13
+    },
+    {
+     "id": "W7",
+     "prototype": 145.89969816465089,
+     "oracleOwn": 145.8996981646509,
+     "oracleAstropyH": 145.89969816466643,
+     "error": 2.703140055900682e-13
+    },
+    {
+     "id": "W8",
+     "prototype": 154.6409467886103,
+     "oracleOwn": 154.64094678861034,
+     "oracleAstropyH": 154.64094678862637,
+     "error": 3.0070035421994764e-13
+    },
+    {
+     "id": "W9",
+     "prototype": 145.12771936736846,
+     "oracleOwn": 145.12771936736846,
+     "oracleAstropyH": 145.12771936738454,
+     "error": 2.696180944941804e-13
+    },
+    {
+     "id": "W10",
+     "prototype": 151.3203713156422,
+     "oracleOwn": 151.32037131564218,
+     "oracleAstropyH": 151.32037131565383,
+     "error": 2.766926990734012e-13
+    }
+   ],
+   "bound": "REPORTED"
+  },
+  {
+   "id": "P1.plankRdrag",
+   "status": "not-run",
+   "measured": null,
+   "bound": "as publishedComparison.pass",
+   "note": "AM2: Table 1's best-fit column prints no z_drag; see P1b"
+  },
+  {
+   "id": "P1b.plankRdragT2",
+   "status": "pass",
+   "measured": {
+    "rdragPrinted": 147.049,
+    "rL": 147.05904368316433,
+    "rH": 152.23448376493644,
+    "u": 0.03087230660649847,
+    "interval": [
+     147.02817137655782,
+     152.26535607154295
+    ]
+   },
+   "bound": "rdrag in [r_lo - u, r_hi + u]"
+  },
+  {
+   "id": "X2.reportedBracket",
+   "status": "reported",
+   "measured": {
+    "fractionBetween": -0.0019406433087111377,
+    "outsideInUnitsOfU": 0.3253298592924806
+   },
+   "bound": "REPORTED"
+  },
+  {
+   "id": "P2.plankZdrag",
+   "status": "not-run",
+   "measured": null,
+   "bound": "needs F1",
+   "note": "F1: no fitting formula fetched, none typed"
+  },
+  {
+   "id": "E1.coverage68",
+   "status": "pass",
+   "measured": {
+    "prototype": 0.692,
+    "oracle": 0.6935,
+    "draws": 2000
+   },
+   "bound": [
+    0.6514783217139116,
+    0.7139216782860883
+   ]
+  },
+  {
+   "id": "E2.coverage95",
+   "status": "pass",
+   "measured": {
+    "prototype": 0.9605,
+    "oracle": 0.9605,
+    "draws": 2000
+   },
+   "bound": [
+    0.9405202333710466,
+    0.9684797666289534
+   ]
+  },
+  {
+   "id": "E3.pinned",
+   "status": "pass",
+   "measured": {
+    "worstOverBound": 0.0037493364320712362,
+    "vectors": 3
+   },
+   "bound": "each quantity within its tolerance"
+  },
+  {
+   "id": "E4.notConstrained",
+   "status": "pass",
+   "measured": {
+    "prototypeOpen": 1,
+    "oracleOpen": 1,
+    "violationPrototype": false,
+    "violationOracle": false
+   },
+   "bound": ">= 0.95 and no violation"
+  },
+  {
+   "id": "E5.misspecified",
+   "status": "fail",
+   "measured": {
+    "prototypePoorFit": 0.288,
+    "oraclePoorFit": 0.314,
+    "truthVectorDifference": 3.51443012622722e-16
+   },
+   "bound": ">= 0.80 each"
+  },
+  {
+   "id": "K1.product",
+   "status": "pass",
+   "measured": {
+    "sumDifference": 0,
+    "atNodes": 2.0316741177434195e-13,
+    "bestOm": 0.29100000000000004,
+    "interval68": [
+     0.26531185318204786,
+     0.31691019718896446
+    ],
+    "between": true
+   },
+   "bound": "as stated"
+  },
+  {
+   "id": "X4.reportedCombination",
+   "status": "omitted",
+   "measured": null,
+   "bound": "OMITTED",
+   "note": "Appendix C: 256's verdict is FC; nothing computed"
+  },
+  {
+   "id": "Z1.refusalEnsemble",
+   "status": "pass",
+   "measured": {
+    "draws": 400,
+    "disagreements": 0,
+    "accepted": 27,
+    "worstRsRelative": 6.223646879885041e-16,
+    "counts": {
+     "w-out-of-domain": 62,
+     "negative-density": 84,
+     "bad-baryons": 59,
+     "accept": 27,
+     "bad-drag-redshift": 117,
+     "bad-H0": 43,
+     "no-radiation": 8
+    }
+   },
+   "bound": "0 disagreements, 1e-9"
+  },
+  {
+   "id": "Z2.inputRefusals",
+   "status": "pass",
+   "measured": {
+    "prototype": [
+     "1-datum:underdetermined",
+     "2-data:underdetermined",
+     "asymmetric:bad-covariance",
+     "not-positive-definite:bad-covariance",
+     "nan-datum:not-finite",
+     "dimension-mismatch:bad-argument"
+    ],
+    "agreeWithOracle": 6
+   },
+   "bound": "6 of 6 each"
+  },
+  {
+   "id": "F1.zdFormula",
+   "status": "not-run",
+   "measured": null,
+   "bound": "within the source's stated accuracy plus the printed digits",
+   "note": "request F1: the source text of the cited fitting formulas; no coefficient typed"
+  },
+  {
+   "id": "F2.rdFormulaVsIntegral",
+   "status": "not-run",
+   "measured": null,
+   "bound": "within the source's stated accuracy plus the bracketed neutrino difference where the formula models neutrinos",
+   "note": "request F1: the source text of the cited fitting formulas; no coefficient typed"
+  },
+  {
+   "id": "F3.rdFormulaVsPublished",
+   "status": "not-run",
+   "measured": null,
+   "bound": "within the stated accuracy plus the print precision",
+   "note": "request F1: the source text of the cited fitting formulas; no coefficient typed"
+  },
+  {
+   "id": "F4.formulaDomain",
+   "status": "not-run",
+   "measured": null,
+   "bound": "12 of 12",
+   "note": "request F1: the source text of the cited fitting formulas; no coefficient typed"
+  },
+  {
+   "id": "F5.statedError",
+   "status": "not-run",
+   "measured": null,
+   "bound": "as stated by the source",
+   "note": "request F1: the source text of the cited fitting formulas; no coefficient typed"
+  },
+  {
+   "id": "O1.tableIntegrity",
+   "status": "not-run",
+   "measured": null,
+   "bound": "as stated",
+   "note": "request O1: a BAO release's table, covariance and fiducial cosmology; none fetched"
+  },
+  {
+   "id": "O2.printedFit",
+   "status": "not-run",
+   "measured": null,
+   "bound": "as stated",
+   "note": "request O1: a BAO release's table, covariance and fiducial cosmology; none fetched"
+  },
+  {
+   "id": "O3.fiducialRescale",
+   "status": "not-run",
+   "measured": null,
+   "bound": "one unit of the last printed digit",
+   "note": "request O1: a BAO release's table, covariance and fiducial cosmology; none fetched"
+  },
+  {
+   "id": "D1.stream",
+   "status": "pass",
+   "measured": [
+    {
+     "key": "257:bao:randoms",
+     "firstEqual": true,
+     "lastEqual": true,
+     "sumEqual": true,
+     "hashEqual": true
+    },
+    {
+     "key": "257:bao:null:0",
+     "firstEqual": true,
+     "lastEqual": true,
+     "sumEqual": true,
+     "hashEqual": true
+    },
+    {
+     "key": "257",
+     "firstEqual": true,
+     "lastEqual": true,
+     "sumEqual": true,
+     "hashEqual": true
+    }
+   ],
+   "bound": "0 differences"
+  },
+  {
+   "id": "D2.counts",
+   "status": "pass",
+   "measured": {
+    "worstOverTolerance": 0,
+    "DD": [
+     98015,
+     107469,
+     122719,
+     139828,
+     145773,
+     158872,
+     168718,
+     172891,
+     175009,
+     182162,
+     182612,
+     177116
+    ]
+   },
+   "bound": "max(2, 1e-4 x count) per bin"
+  },
+  {
+   "id": "D3.estimator",
+   "status": "pass",
+   "measured": {
+    "maxAbsolute": 0
+   },
+   "bound": 0.0001
+  },
+  {
+   "id": "D4.jackknife",
+   "status": "pass",
+   "measured": {
+    "maxRelative": 0
+   },
+   "bound": 0.001
+  },
+  {
+   "id": "D5.nullEnsemble",
+   "status": "pass",
+   "measured": {
+    "prototypePassBins": 12,
+    "oraclePassBins": 12,
+    "worstDifferenceFromOracle": 0
+   },
+   "bound": ">= 11 of 12 each"
+  },
+  {
+   "id": "D6.detectable",
+   "status": "fail",
+   "measured": {
+    "prototypeMaxWindowSN": 0.5386147442525026,
+    "oracleMaxWindowSN": 0.5386147442525036,
+    "agree": true,
+    "refused": false
+   },
+   "bound": "max S/N >= 4",
+   "note": "NOT detectable at this size (a measurement, not a defect of the kernel; the demonstration is not built)"
+  },
+  {
+   "id": "X3.reportedPairs",
+   "status": "reported",
+   "measured": {
+    "DD": [
+     98015,
+     107469,
+     122719,
+     139828,
+     145773,
+     158872,
+     168718,
+     172891,
+     175009,
+     182162,
+     182612,
+     177116
+    ],
+    "xi": [
+     0.05489853272991609,
+     -0.01449561336438681,
+     -0.012302770041300887,
+     0.026505042417475075,
+     -0.014464068658619673,
+     0.01010940711244925,
+     0.02502589262144953,
+     0.011889174343794322,
+     -0.014407333197081252,
+     0.004165241381361611,
+     -0.008943587435557444,
+     -0.05042483464791208
+    ],
+    "sigmaJackknife": [
+     0.08759009485707658,
+     0.06664597556220532,
+     0.05561424435117864,
+     0.04736008467890662,
+     0.0560300197278535,
+     0.04186608895377728,
+     0.057940741645803415,
+     0.06921691847636807,
+     0.06092974727007319,
+     0.04489717957749659,
+     0.040870951500518546,
+     0.05603480573274423
+    ],
+    "smoothFit": [
+     0.12946847906079903,
+     -0.06711411160009827
+    ],
+    "sn": [
+     0.41538878199279566,
+     -0.4075444380354302,
+     -0.361403449737542,
+     0.48309952146597507,
+     -0.2577423796356245,
+     0.3194492522556968,
+     0.5386147442525026,
+     0.29938634326294306,
+     -0.05159318346685634,
+     0.3936153845541785,
+     0.1626149274855701,
+     -0.5869770983654418
+    ]
+   },
+   "bound": "REPORTED"
+  },
+  {
+   "id": "X5.reportedExtent",
+   "status": "reported",
+   "measured": {
+    "prototypeMaxWindowSN": 0.4907465697802532,
+    "oracleMaxWindowSN": 0.4907465697802563,
+    "xi": [
+     0.0023940220390034467,
+     -0.06704238635761962,
+     -0.05369208987151798,
+     -0.007659530831218258,
+     -0.03593975894162119,
+     -0.013311000709251699,
+     0.002440612704275302,
+     0.002478219667400962,
+     -0.014157769284077446,
+     0.014683380729313238,
+     -0.0012154329587604781,
+     -0.031236076894645522
+    ],
+    "sigmaJackknife": [
+     0.047679635687647076,
+     0.03346202316634747,
+     0.02927146521537946,
+     0.020441009675902358,
+     0.04333442905495231,
+     0.035650011905044174,
+     0.04045437655738673,
+     0.04998241272109269,
+     0.03505533449600336,
+     0.04006502511651949,
+     0.036793546921182446,
+     0.03355794535420105
+    ],
+    "sn": [
+     0.8873094419127368,
+     -0.970016314811863,
+     -0.8043533204753113,
+     0.9142336266301082,
+     -0.2980569382672525,
+     0.18959291181668197,
+     0.4907465697802532,
+     0.34961620344722916,
+     -0.039239668343210965,
+     0.6345149884480469,
+     0.20724894453094794,
+     -0.7201345659800787
+    ]
+   },
+   "bound": "REPORTED"
+  }
+ ]
+}
