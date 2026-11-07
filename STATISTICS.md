@@ -750,7 +750,8 @@ by Carl's session, with the terms and a sha256):
   Anderson 2002, or the R documentation example).
 - N3: a published false-alarm probability for the eta Aquilae TESS period.
 
-**Not built, and why.** The "compare models" panel of the comparison instrument
+**Not built, and why.** The "compare models" panel of the comparison instrument,
+the model page's statistics section (it would state a method no student is offered)
 and the three investigations ("Is it really a planet?" revisited, "One line or
 two?", "How many parameters?") are not built: the consumers rule (Carl, 2026-11-05
 and 2026-11-06; Checkpoint V's operating term 8) holds for kernels without a
