@@ -1,0 +1,20 @@
+{
+ "format": "gravitas.experiment-ensemble-amendments/1",
+ "rule": "Each amendment is recorded before the run it concerns, as wording or definition of a leg; no bound moves. The thresholds file is not edited: its sha256 is in oracle-results.json and in results.json.",
+ "amendments": [
+  {
+   "id": "AM1",
+   "recordedBefore": "any run of the validator and any ensemble code",
+   "concerns": "R2 and D2 (the fork rule)",
+   "text": "R2 says trial i draws from stream(id, seed, 'trial', i). A sweep keeps the legacy draws its recorded results were made with: its trial's world is built with the manifest's own seed text (the engine stream, key = that seed as given), and its distribution values from stream('experiments', that seed) (A6). So a record's fork rule is 'trial-index' for every kind except 'sweep', whose fork rule is 'legacy-sweep'; D2 therefore refuses a fork rule other than those two, and refuses 'legacy-sweep' on any other kind and 'trial-index' on a sweep that lists seeds.",
+   "weakens": false
+  },
+  {
+   "id": "AM2",
+   "recordedBefore": "any run of the validator and any ensemble code",
+   "concerns": "A8 (the regression context)",
+   "text": "A8 calls the three-body kind's trial function directly with stream('experiments', seed) for the integers 1000..1049 (key the integer, no fork), because the group's seeds are plain integers and a record's fork rule is trial-index. It is a comparison of the kind's trial with the group's drift(), not a replay of a record. The bound (1e-9 relative on the median and the 90th percentile, and inside RECORDED x margin) is unchanged.",
+   "weakens": false
+  }
+ ]
+}
