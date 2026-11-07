@@ -7,6 +7,7 @@
 //   npm run crossmatch:validate -- --write-results   rewrite tests/fixtures/crossmatch/results.json
 //   npm run crossmatch:validate -- --write-failed    rewrite tests/fixtures/crossmatch/failed-legs.json
 //   --only=A1,E4                                     run the legs whose id starts with these
+//   --followup [--write-results]                     run AM2's three follow-up legs (A6b, B1b, G2e) and write followup-results.json
 //
 // tests/fixtures/crossmatch/thresholds.json fixed every bound before
 // js/kernels/crossmatch/ existed; this reads the bounds from that file. The B, C,
@@ -21,6 +22,7 @@ import process from 'node:process';
 import { fileURLToPath } from 'node:url';
 import * as X from '../js/kernels/crossmatch/index.js';
 import { poissonInterval } from '../js/kernels/statistics/intervals.js';
+import { lnGamma } from '../js/kernels/statistics/special.js';
 import { stream, gaussian } from '../js/random/streams.js';
 import { tableOf } from '../js/tableObservation.js';
 import { validateArtifact } from '../js/platform/artifact.js';
@@ -37,7 +39,9 @@ const read = rel => JSON.parse(readFileSync(path.join(ROOT, rel), 'utf8'));
 export const THRESHOLDS = read(`${DIR}/thresholds.json`);
 const ORACLE = read(`${DIR}/oracle-results.json`);
 
-const check = id => THRESHOLDS.checks.find(c => c.id === id);
+const check = id =>
+  THRESHOLDS.checks.find(c => c.id === id) ??
+  THRESHOLDS.followUp.checks.find(c => c.id === id);
 const ARCSEC = X.ARCSEC;
 const STEP = { raDeg: 1e-5, decDeg: 1e-5 };
 const FOOT = 14.1421 * 60;
@@ -70,7 +74,7 @@ function planeToSky(x, y, ra0, dec0) {
       X_ * Math.sin(c),
       rho * Math.cos(d0) * Math.cos(c) - Y_ * Math.sin(d0) * Math.sin(c)
     );
-  return [(((ra * 180) / Math.PI) % 360 + 360) % 360, (dec * 180) / Math.PI];
+  return [((((ra * 180) / Math.PI) % 360) + 360) % 360, (dec * 180) / Math.PI];
 }
 
 const discPoint = (u, R) => {
@@ -114,7 +118,10 @@ const diffCount = (pairsA, pairsB) => {
 async function loadPacks() {
   const gaiaSeries = read('gaia/ngc2420.json');
   const neighSeries = read('gaia/solar-neighbourhood.json');
-  const g = X.catalogFromPack(tableOf({ PACK: GAIA, SERIES: gaiaSeries }), GAIA);
+  const g = X.catalogFromPack(
+    tableOf({ PACK: GAIA, SERIES: gaiaSeries }),
+    GAIA
+  );
   const s = X.catalogFromPack(
     tableOf({ PACK: SDSS, SERIES: SDSS_SERIES }),
     SDSS
@@ -265,9 +272,7 @@ function legsA() {
     },
     25
   );
-  const raMoved = Math.abs(
-    ((pc.ra[0] - ORACLE.O1.ra[pole] + 540) % 360) - 180
-  );
+  const raMoved = Math.abs(((pc.ra[0] - ORACLE.O1.ra[pole] + 540) % 360) - 180);
   const a6 =
     big.status === 'refused' &&
     big.code === 'shift-too-large' &&
@@ -325,7 +330,12 @@ function legsC() {
   const r = X.crossmatch(A, B, { radiusArcsec: 2, toEpoch: 2000 });
   const mine = r.pairs.map(p => [p.a, p.b, p.distanceArcsec]);
   const d = diffCount(mine, w.pairs);
-  bound('C1.pairs', d <= check('C1.pairs').limits.maxDifferences, d, `${mine.length} pairs`);
+  bound(
+    'C1.pairs',
+    d <= check('C1.pairs').limits.maxDifferences,
+    d,
+    `${mine.length} pairs`
+  );
   const omap = new Map(w.pairs.map(p => [`${p[0]},${p[1]}`, p[2]]));
   let md = 0;
   for (const m of mine) {
@@ -337,7 +347,11 @@ function legsC() {
   let diffs = 0;
   for (const c of w.cones)
     for (const rad of [5, 20, 60]) {
-      const got = X.coneSearch(B, { raDeg: c.ra, decDeg: c.dec, radiusArcsec: rad });
+      const got = X.coneSearch(B, {
+        raDeg: c.ra,
+        decDeg: c.dec,
+        radiusArcsec: rad,
+      });
       const have = new Set(got.members.map(m => m.index));
       const want = new Set(c.members[String(rad)]);
       for (const k of have) if (!want.has(k)) diffs++;
@@ -384,20 +398,32 @@ async function legsD(packs) {
   const run = (radius, B = s, toEpoch = 2000, falseMatch = null) =>
     X.crossmatch(g, B, { radiusArcsec: radius, toEpoch, falseMatch });
   const sameInputs =
-    g.ra.length === O.nA && s.ra.length === O.nB && g.epoch === O.epochA && s.epoch === O.epochB;
+    g.ra.length === O.nA &&
+    s.ra.length === O.nB &&
+    g.epoch === O.epochA &&
+    s.epoch === O.epochB;
   let r1 = run(1);
   const d1 = diffCount(
     r1.pairs.map(p => [p.a, p.b]),
     O.radii['1.0'].pairs
   );
-  bound('D1.packPairs', sameInputs && d1 <= 0, d1, `${r1.pairs.length} pairs; inputs equal the oracle's: ${sameInputs}`);
+  bound(
+    'D1.packPairs',
+    sameInputs && d1 <= 0,
+    d1,
+    `${r1.pairs.length} pairs; inputs equal the oracle's: ${sameInputs}`
+  );
   const ds = [0.5, 2].map(r =>
     diffCount(
       run(r).pairs.map(p => [p.a, p.b]),
       O.radii[r.toFixed(1)].pairs
     )
   );
-  bound('D2.packRadii', ds.every(v => v <= 0), ds);
+  bound(
+    'D2.packRadii',
+    ds.every(v => v <= 0),
+    ds
+  );
   // D3: counts
   const rep = {};
   for (const r of [1, 2]) {
@@ -423,7 +449,11 @@ async function legsD(packs) {
     let differ = 0;
     for (const k of set) if (!base.has(k)) differ++;
     for (const k of base) if (!set.has(k)) differ++;
-    sens[e] = { pairs: m.pairs.length, differ, oracleDiffer: O.epochSensitivity[e].differ };
+    sens[e] = {
+      pairs: m.pairs.length,
+      differ,
+      oracleDiffer: O.epochSensitivity[e].differ,
+    };
   }
   add('D4.epochSensitivity', 'reported', sens);
   add(
@@ -450,7 +480,12 @@ async function legsD(packs) {
       Math.abs(c[1] - O.shifts.counts[k][1])
     );
   });
-  bound('E2.shiftCountsPacks', worst <= 0, worst, `p_hat ${fm.falseMatch.p.toPrecision(4)}, false-match fraction ${fm.falseMatch.fraction?.toPrecision(4)}`);
+  bound(
+    'E2.shiftCountsPacks',
+    worst <= 0,
+    worst,
+    `p_hat ${fm.falseMatch.p.toPrecision(4)}, false-match fraction ${fm.falseMatch.fraction?.toPrecision(4)}`
+  );
   return fm;
 }
 
@@ -461,7 +496,11 @@ function legsE() {
     toEpoch: 2000,
     falseMatch: {
       distanceArcsec: w.shifts.distanceArcsec,
-      footprint: { raDeg: w.centre[0], decDeg: w.centre[1], radiusArcsec: w.footprintArcsec },
+      footprint: {
+        raDeg: w.centre[0],
+        decDeg: w.centre[1],
+        radiusArcsec: w.footprintArcsec,
+      },
     },
   });
   let worst = 0;
@@ -472,7 +511,11 @@ function legsE() {
       Math.abs(c.eligible - w.shifts.counts[k][1])
     );
   });
-  bound('E1.shiftCounts', worst <= check('E1.shiftCounts').limits.maxAbsDifference, worst);
+  bound(
+    'E1.shiftCounts',
+    worst <= check('E1.shiftCounts').limits.maxAbsDifference,
+    worst
+  );
 }
 
 // ---- ensemble worlds -----------------------------------------------------
@@ -507,7 +550,8 @@ function legsEnsembleFalse() {
   const first = w2World('E4', 0);
   add(
     'E3.fractionRecovered',
-    Math.abs(first.falseMatch.fraction - 1) <= check('E3.fractionRecovered').limits.maxAbs
+    Math.abs(first.falseMatch.fraction - 1) <=
+      check('E3.fractionRecovered').limits.maxAbs
       ? 'pass'
       : 'fail',
     {
@@ -526,13 +570,27 @@ function legsEnsembleFalse() {
     if (r.falseMatch.pLo <= pTrue && pTrue <= r.falseMatch.pHi) covered++;
   }
   const bias = sumRatio / M - 1;
-  bound('E4.bias', Math.abs(bias) <= check('E4.bias').limits.maxAbs, bias, `${M} worlds, p_true ${pTrue.toPrecision(5)}`);
-  bound('E5.coverage', covered / M >= check('E5.coverage').limits.minCoverage, covered / M, `${M} worlds at level 0.95`);
+  bound(
+    'E4.bias',
+    Math.abs(bias) <= check('E4.bias').limits.maxAbs,
+    bias,
+    `${M} worlds, p_true ${pTrue.toPrecision(5)}`
+  );
+  bound(
+    'E5.coverage',
+    covered / M >= check('E5.coverage').limits.minCoverage,
+    covered / M,
+    `${M} worlds at level 0.95`
+  );
   // E9
   const crowded = w2World('E9', 0, { nB: 20000 });
   const w3 = crowded.falseMatch.status;
   const w2 = first.falseMatch.status;
-  bound('E9.crowded', w3 === 'unreliable' && w2 === 'ok', { w3, w2, w3p: crowded.falseMatch.p });
+  bound('E9.crowded', w3 === 'unreliable' && w2 === 'ok', {
+    w3,
+    w2,
+    w3p: crowded.falseMatch.p,
+  });
 }
 
 function w1World(i) {
@@ -610,52 +668,121 @@ function legsEnsembleTrue() {
     sumEst += r.falseMatch.fraction ?? 0;
     sumReal += realized;
     recov += truePairs / N;
-    const nv = X.crossmatch(
-      cat(A.ra, A.dec),
-      Bc,
-      { radiusArcsec: 2, toEpoch: 2000 }
-    );
+    const nv = X.crossmatch(cat(A.ra, A.dec), Bc, {
+      radiusArcsec: 2,
+      toEpoch: 2000,
+    });
     naive += nv.pairs.filter(p => p.a < N && p.b === p.a).length / N;
   }
-  bound('E6.upperBound', boundHolds / M >= check('E6.upperBound').limits.minFraction, boundHolds / M, `tightness (mean estimate over mean realized): ${(sumEst / sumReal).toPrecision(3)}; mean estimate ${(sumEst / M).toPrecision(3)}, mean realized ${(sumReal / M).toPrecision(3)}`);
-  bound('E7.recovery', recov / M >= check('E7.recovery').limits.minMean, recov / M, `${M} worlds`);
-  bound('E8.naiveControl', naive / M <= check('E8.naiveControl').limits.maxMean, naive / M, 'proper motions removed and epochs declared equal');
+  bound(
+    'E6.upperBound',
+    boundHolds / M >= check('E6.upperBound').limits.minFraction,
+    boundHolds / M,
+    `tightness (mean estimate over mean realized): ${(sumEst / sumReal).toPrecision(3)}; mean estimate ${(sumEst / M).toPrecision(3)}, mean realized ${(sumReal / M).toPrecision(3)}`
+  );
+  bound(
+    'E7.recovery',
+    recov / M >= check('E7.recovery').limits.minMean,
+    recov / M,
+    `${M} worlds`
+  );
+  bound(
+    'E8.naiveControl',
+    naive / M <= check('E8.naiveControl').limits.maxMean,
+    naive / M,
+    'proper motions removed and epochs declared equal'
+  );
 }
 
 function legsF(packs) {
-  const base = (n = 3, extra = {}) => cat(Array.from({ length: n }, (_, i) => i * 0.01), Array.from({ length: n }, () => 10), extra);
+  const base = (n = 3, extra = {}) =>
+    cat(
+      Array.from({ length: n }, (_, i) => i * 0.01),
+      Array.from({ length: n }, () => 10),
+      extra
+    );
   const m = (a, b, o = {}) =>
     X.crossmatch(a, b, { radiusArcsec: 1, toEpoch: 2000, ...o });
   // F1
   const noA = m({ ...base(), epoch: undefined }, base());
   const nanB = m(base(), { ...base(), epoch: NaN });
-  bound('F1.epochAbsent', noA.code === 'epoch' && nanB.code === 'epoch', [noA.code, nanB.code]);
+  bound('F1.epochAbsent', noA.code === 'epoch' && nanB.code === 'epoch', [
+    noA.code,
+    nanB.code,
+  ]);
   // F2
   const other = { ...base(), epoch: 2016 };
   const f2a = m(other, base());
   const f2b = m({ ...other, pmra: [0, 0, 0], pmdec: [0, 0, 0] }, base());
   const f2c = m({ ...base(), epoch: 2000 }, base());
-  bound('F2.noProperMotion', f2a.code === 'proper-motion' && f2b.status === 'ok' && f2c.status === 'ok', [f2a.code, f2b.status, f2c.status]);
+  bound(
+    'F2.noProperMotion',
+    f2a.code === 'proper-motion' && f2b.status === 'ok' && f2c.status === 'ok',
+    [f2a.code, f2b.status, f2c.status]
+  );
   // F3
   const codes = [1, 5, 10].map(r => m(packs.n, packs.s, { radiusArcsec: r }));
-  const f3 = codes.every(c => c.status === 'refused' && c.code === 'rounded-positions' && /arcsec/.test(c.why));
-  bound('F3.roundedPack', f3, codes.map(c => c.code), codes[0].why);
+  const f3 = codes.every(
+    c =>
+      c.status === 'refused' &&
+      c.code === 'rounded-positions' &&
+      /arcsec/.test(c.why)
+  );
+  bound(
+    'F3.roundedPack',
+    f3,
+    codes.map(c => c.code),
+    codes[0].why
+  );
   // F4
-  const rr = [10, 10.0001, 0, -1, NaN].map(r => m(base(), base(), { radiusArcsec: r }));
-  bound('F4.maxRadius', rr[0].status === 'ok' && rr.slice(1).every(r => r.code === 'radius'), rr.map(r => r.code ?? r.status));
+  const rr = [10, 10.0001, 0, -1, NaN].map(r =>
+    m(base(), base(), { radiusArcsec: r })
+  );
+  bound(
+    'F4.maxRadius',
+    rr[0].status === 'ok' && rr.slice(1).every(r => r.code === 'radius'),
+    rr.map(r => r.code ?? r.status)
+  );
   // F5
   const f5a = m(base(3, { positionStep: undefined }), base());
   const noRec = X.catalogFromPack(
-    { columns: [{ id: 'ra', unit: 'deg', values: [1] }, { id: 'dec', unit: 'deg', values: [2] }] },
-    { id: 'x', object: { frame: 'ICRS, epoch J2000' }, reductions: ['Positions are somewhere.'] }
+    {
+      columns: [
+        { id: 'ra', unit: 'deg', values: [1] },
+        { id: 'dec', unit: 'deg', values: [2] },
+      ],
+    },
+    {
+      id: 'x',
+      object: { frame: 'ICRS, epoch J2000' },
+      reductions: ['Positions are somewhere.'],
+    }
   );
   const f5b = m(noRec, base());
-  bound('F5.resolutionUnstated', f5a.code === 'resolution' && f5b.code === 'resolution' && noRec.positionStep === null, [f5a.code, f5b.code]);
+  bound(
+    'F5.resolutionUnstated',
+    f5a.code === 'resolution' &&
+      f5b.code === 'resolution' &&
+      noRec.positionStep === null,
+    [f5a.code, f5b.code]
+  );
   // F6
   const pre = m(packs.g, packs.s);
-  const exact = m(base(3, { positionStep: { raDeg: 0.5 / 3600, decDeg: 0.5 / 3600 } }), base());
-  const over = m(base(3, { positionStep: { raDeg: 0.52 / 3600, decDeg: 0.52 / 3600 } }), base());
-  bound('F6.precisePackAccepted', pre.status === 'ok' && exact.status === 'ok' && over.code === 'rounded-positions', [pre.status, exact.status, over.code]);
+  const exact = m(
+    base(3, { positionStep: { raDeg: 0.5 / 3600, decDeg: 0.5 / 3600 } }),
+    base()
+  );
+  const over = m(
+    base(3, { positionStep: { raDeg: 0.52 / 3600, decDeg: 0.52 / 3600 } }),
+    base()
+  );
+  bound(
+    'F6.precisePackAccepted',
+    pre.status === 'ok' &&
+      exact.status === 'ok' &&
+      over.code === 'rounded-positions',
+    [pre.status, exact.status, over.code]
+  );
   // F7
   const bad = [
     m({ ...base(), ra: [NaN, 1, 2] }, base()),
@@ -664,9 +791,18 @@ function legsF(packs) {
     m(cat(new Array(20001).fill(1), new Array(20001).fill(1)), base()),
     m(base(), cat(new Array(20001).fill(1), new Array(20001).fill(1))),
   ];
-  bound('F7.badInput', bad.every(r => r.code === 'input'), bad.map(r => r.code));
+  bound(
+    'F7.badInput',
+    bad.every(r => r.code === 'input'),
+    bad.map(r => r.code)
+  );
   // F8
-  const a8 = { ...base(5), epoch: 2016, pmra: [1, NaN, 1, NaN, 1], pmdec: [1, 1, NaN, 1, 1] };
+  const a8 = {
+    ...base(5),
+    epoch: 2016,
+    pmra: [1, NaN, 1, NaN, 1],
+    pmdec: [1, 1, NaN, 1, 1],
+  };
   const r8 = m(a8, base());
   bound('F8.missingProperMotion', r8.excluded.a === 3, r8.excluded);
 }
@@ -679,7 +815,11 @@ function legsG() {
     const c = Math.floor(u() * 300);
     const d = X.distribution(new Array(c).fill(0.5), { edges: [0, 1] });
     const e = poissonInterval([c], { level: 0.95 });
-    maxd = Math.max(maxd, Math.abs(d.bins[0].intervalLo - e.lo), Math.abs(d.bins[0].intervalHi - e.hi));
+    maxd = Math.max(
+      maxd,
+      Math.abs(d.bins[0].intervalLo - e.lo),
+      Math.abs(d.bins[0].intervalHi - e.hi)
+    );
   }
   bound('G1.intervals', maxd <= 0, maxd);
   // G2
@@ -699,7 +839,11 @@ function legsG() {
     });
   }
   const cv = cover.map(c => c / W);
-  bound('G2.coverage', Math.min(...cv) >= check('G2.coverage').limits.minCoveragePerBin, cv);
+  bound(
+    'G2.coverage',
+    Math.min(...cv) >= check('G2.coverage').limits.minCoveragePerBin,
+    cv
+  );
   // G3, G4, G6
   const pair = (n, shift, leg, i) => {
     const s = stream('noise', 'p263', leg, i);
@@ -722,10 +866,21 @@ function legsG() {
   const s30 = rate(30, 0, 'G3');
   const s100 = rate(100, 0, 'G3b');
   const L3 = check('G3.size').limits;
-  bound('G3.size', s30.rej >= L3.n30[0] && s30.rej <= L3.n30[1] && s100.rej >= L3.n100[0] && s100.rej <= L3.n100[1], { n30: s30.rej, n100: s100.rej });
+  bound(
+    'G3.size',
+    s30.rej >= L3.n30[0] &&
+      s30.rej <= L3.n30[1] &&
+      s100.rej >= L3.n100[0] &&
+      s100.rej <= L3.n100[1],
+    { n30: s30.rej, n100: s100.rej }
+  );
   const pw = rate(100, 0.5, 'G4');
   bound('G4.power', pw.rej >= check('G4.power').limits.minPower, pw.rej);
-  bound('G6.coverage', pw.cov >= check('G6.coverage').limits.minCoverage, pw.cov);
+  bound(
+    'G6.coverage',
+    pw.cov >= check('G6.coverage').limits.minCoverage,
+    pw.cov
+  );
   // G5
   const ok = Array.from({ length: 30 }, (_, i) => i);
   const g5 = [
@@ -733,7 +888,11 @@ function legsG() {
     X.compareSamples([...ok.slice(0, 29), NaN], ok),
     X.compareSamples(new Array(30).fill(1), new Array(30).fill(1)),
   ];
-  bound('G5.refusal', g5.every(r => r.status !== 'ok' && (r.p === undefined || r.p === null)), g5.map(r => r.code ?? r.status));
+  bound(
+    'G5.refusal',
+    g5.every(r => r.status !== 'ok' && (r.p === undefined || r.p === null)),
+    g5.map(r => r.code ?? r.status)
+  );
   // G7
   const expo = (n, leg) => {
     let rej = 0;
@@ -753,26 +912,123 @@ function legsH() {
   const r = X.crossmatch(A, B, {
     radiusArcsec: 2,
     toEpoch: 2000,
-    falseMatch: { footprint: { raDeg: w.centre[0], decDeg: w.centre[1], radiusArcsec: w.footprintArcsec } },
+    falseMatch: {
+      footprint: {
+        raDeg: w.centre[0],
+        decDeg: w.centre[1],
+        radiusArcsec: w.footprintArcsec,
+      },
+    },
   });
-  const rec = X.crossmatchRecord(r, { source: { kind: 'pipeline', id: 'p263-w1' } });
+  const rec = X.crossmatchRecord(r, {
+    source: { kind: 'pipeline', id: 'p263-w1' },
+  });
   const problems = validateArtifact(rec);
-  bound('H1.record', problems.length === 0 && [1, 2].includes(rec.formatVersion), { problems: problems.length, formatVersion: rec.formatVersion });
+  bound(
+    'H1.record',
+    problems.length === 0 && [1, 2].includes(rec.formatVersion),
+    { problems: problems.length, formatVersion: rec.formatVersion }
+  );
   const dq = rec.quantities.filter(q => q.id.endsWith('.epochDifference'));
   const sq = rec.quantities.filter(q => q.id.endsWith('.distance'));
   const exact =
     rec.quantities.length === 7 + 2 * r.pairs.length &&
     dq.every(q => q.value === 16) &&
     sq.every((q, k) => q.value === r.pairs[k].distanceArcsec);
-  bound('H2.rows', exact, { quantities: rec.quantities.length, pairs: r.pairs.length });
+  bound('H2.rows', exact, {
+    quantities: rec.quantities.length,
+    pairs: r.pairs.length,
+  });
   const colsA = [{ id: 'g', unit: 'mag', values: A.ra.map((_, i) => i * 0.5) }];
   const colsB = [{ id: 'z', unit: '', values: B.ra.map((_, i) => i + 0.25) }];
-  const t = X.joinedTable(r, { ...A, columns: colsA }, { ...B, columns: colsB }, { passA: ['g'], passB: ['z'] });
+  const t = X.joinedTable(
+    r,
+    { ...A, columns: colsA },
+    { ...B, columns: colsB },
+    { passA: ['g'], passB: ['z'] }
+  );
   const okT =
     t.n === r.pairs.length &&
     t.columns.every(c => c.values.length === t.n) &&
-    r.pairs.every((p, k) => t.columns.find(c => c.id === 'a.g').values[k] === p.a * 0.5 && t.columns.find(c => c.id === 'b.z').values[k] === p.b + 0.25 && t.columns.find(c => c.id === 'epochDifference').values[k] === 16);
+    r.pairs.every(
+      (p, k) =>
+        t.columns.find(c => c.id === 'a.g').values[k] === p.a * 0.5 &&
+        t.columns.find(c => c.id === 'b.z').values[k] === p.b + 0.25 &&
+        t.columns.find(c => c.id === 'epochDifference').values[k] === 16
+    );
   bound('H3.joined', okT, { rows: t.n, columns: t.columns.map(c => c.id) });
+}
+
+// ---- the follow-up legs (thresholds.json followUp, AM2) ---------------------
+
+const followCheck = id => THRESHOLDS.followUp.checks.find(c => c.id === id);
+
+function legsFollowUp() {
+  // A6b: a pole crossing in closed form
+  const dec0 = 90 - 0.00001;
+  const ra0 = 33;
+  const pm = 5;
+  const dt = 25;
+  const p = X.propagateCatalog(
+    { ra: [ra0], dec: [dec0], epoch: 0, pmra: [0], pmdec: [pm] },
+    dt
+  );
+  const s = pm * X.MAS * dt;
+  const d0 = (dec0 * Math.PI) / 180;
+  const h = Math.cos(d0) - s * Math.sin(d0);
+  const decE =
+    (Math.atan2(Math.sin(d0) + s * Math.cos(d0), Math.abs(h)) * 180) / Math.PI;
+  const raE = (ra0 + (h < 0 ? 180 : 0)) % 360;
+  const sepErr = sepOf(p.ra[0], p.dec[0], raE, decE);
+  const raErr = Math.abs(((p.ra[0] - raE + 540) % 360) - 180);
+  const L = followCheck('A6b.poleCrossing').limits;
+  bound(
+    'A6b.poleCrossing',
+    h < 0 && sepErr <= L.maxAbsArcsec && raErr <= L.maxRaErrDeg,
+    { crossed: h < 0, sepErr, raErr, dec: p.dec[0] }
+  );
+  // B1b: the oracle's pole-crossing sources
+  const o = ORACLE.O1b;
+  const q = X.propagateCatalog(
+    {
+      ra: o.ra,
+      dec: o.dec,
+      epoch: o.dt.map(v => -v),
+      pmra: o.pmra,
+      pmdec: o.pmdec,
+    },
+    0
+  );
+  let worst = 0;
+  for (let i = 0; i < o.ra.length; i++)
+    worst = Math.max(worst, sepOf(q.ra[i], q.dec[i], o.raOut[i], o.decOut[i]));
+  bound(
+    'B1b.poleCrossing',
+    worst <= followCheck('B1b.poleCrossing').limits.maxSepArcsec,
+    worst,
+    `${o.ra.length} sources`
+  );
+  // G2e: exact coverage
+  const means = [2, 5, 12, 30, 80, 150];
+  const cover = means.map(mu => {
+    let cov = 0;
+    let mass = 0;
+    for (let k = 0; k <= mu + 14 * Math.sqrt(mu) + 60; k++) {
+      const pmf = Math.exp(k * Math.log(mu) - mu - lnGamma(k + 1));
+      mass += pmf;
+      const b = X.distribution(new Array(k).fill(0.5), { edges: [0, 1] })
+        .bins[0];
+      if (b.intervalLo <= mu && mu <= b.intervalHi) cov += pmf;
+    }
+    return { mean: mu, coverage: cov, mass };
+  });
+  bound(
+    'G2e.exactCoverage',
+    cover.every(c => 1 - c.mass < 1e-12) &&
+      Math.min(...cover.map(c => c.coverage)) >=
+        followCheck('G2e.exactCoverage').limits.minCoveragePerMean,
+    cover.map(c => Number(c.coverage.toFixed(5)))
+  );
 }
 
 // ---------------------------------------------------------------------------
@@ -780,27 +1036,35 @@ function legsH() {
 function verdict() {
   const bounded = rows.filter(r => !['reported', 'not run'].includes(r.status));
   const failed = bounded.filter(r => r.status === 'fail').map(r => r.id);
-  return failed.length ? { verdict: 'FAILED LEG(S)', failed } : { verdict: 'VALIDATED', failed };
+  return failed.length
+    ? { verdict: 'FAILED LEG(S)', failed }
+    : { verdict: 'VALIDATED', failed };
 }
 
 async function main() {
   const args = process.argv.slice(2);
-  const only = (args.find(a => a.startsWith('--only=')) ?? '').slice(7).split(',').filter(Boolean);
+  const only = (args.find(a => a.startsWith('--only=')) ?? '')
+    .slice(7)
+    .split(',')
+    .filter(Boolean);
   const on = id => only.length === 0 || only.some(p => p[0] === id[0]);
   const t0 = process.cpuUsage();
   const packs = await loadPacks();
-  const steps = [
-    ['A', legsA],
-    ['B', legsB],
-    ['C', legsC],
-    ['D', () => legsD(packs)],
-    ['E1', legsE],
-    ['E3', legsEnsembleFalse],
-    ['E6', legsEnsembleTrue],
-    ['F', () => legsF(packs)],
-    ['G', legsG],
-    ['H', legsH],
-  ];
+  const followup = args.includes('--followup');
+  const steps = followup
+    ? [['X', legsFollowUp]]
+    : [
+        ['A', legsA],
+        ['B', legsB],
+        ['C', legsC],
+        ['D', () => legsD(packs)],
+        ['E1', legsE],
+        ['E3', legsEnsembleFalse],
+        ['E6', legsEnsembleTrue],
+        ['F', () => legsF(packs)],
+        ['G', legsG],
+        ['H', legsH],
+      ];
   for (const [id, fn] of steps) if (on(id)) await fn();
   if (only.length)
     for (let i = rows.length - 1; i >= 0; i--)
@@ -814,22 +1078,44 @@ async function main() {
     node: process.version,
     cpuSeconds: Number(((cpu.user + cpu.system) / 1e6).toFixed(1)),
     ...v,
-    counts: Object.fromEntries(['pass', 'fail', 'reported', 'not run'].map(s => [s, rows.filter(r => r.status === s).length])),
+    counts: Object.fromEntries(
+      ['pass', 'fail', 'reported', 'not run'].map(s => [
+        s,
+        rows.filter(r => r.status === s).length,
+      ])
+    ),
     rows,
   };
   if (args.includes('--json')) console.log(JSON.stringify(out, null, 1));
   else {
     for (const r of rows)
-      console.log(`${r.status.toUpperCase().padEnd(8)} ${r.id.padEnd(24)} ${JSON.stringify(r.measured)?.slice(0, 160)}${r.note ? '  # ' + r.note : ''}`);
-    console.log(`\n${out.verdict}  ${JSON.stringify(out.counts)}  cpu ${out.cpuSeconds}s`);
+      console.log(
+        `${r.status.toUpperCase().padEnd(8)} ${r.id.padEnd(24)} ${JSON.stringify(r.measured)?.slice(0, 160)}${r.note ? '  # ' + r.note : ''}`
+      );
+    console.log(
+      `\n${out.verdict}  ${JSON.stringify(out.counts)}  cpu ${out.cpuSeconds}s`
+    );
   }
   if (args.includes('--write-results'))
-    writeFileSync(path.join(ROOT, DIR, 'results.json'), JSON.stringify(out, null, 1) + '\n');
-  if (args.includes('--write-failed')) {
-    const legs = rows.filter(r => r.status === 'fail').map(r => ({ id: r.id, measured: r.measured, note: r.note }));
+    writeFileSync(
+      path.join(ROOT, DIR, followup ? 'followup-results.json' : 'results.json'),
+      JSON.stringify(out, null, 1) + '\n'
+    );
+  if (args.includes('--write-failed') && !followup) {
+    const legs = rows
+      .filter(r => r.status === 'fail')
+      .map(r => ({ id: r.id, measured: r.measured, note: r.note }));
     writeFileSync(
       path.join(ROOT, DIR, 'failed-legs.json'),
-      JSON.stringify({ format: 'gravitas.crossmatch-failed-legs/1', note: 'the legs that crossed a committed bound; they stay failing, only Carl resets a bound', legs }, null, 1) + '\n'
+      JSON.stringify(
+        {
+          format: 'gravitas.crossmatch-failed-legs/1',
+          note: 'the legs that crossed a committed bound; they stay failing, only Carl resets a bound',
+          legs,
+        },
+        null,
+        1
+      ) + '\n'
     );
   }
   process.exitCode = out.failed.length ? 1 : 0;
