@@ -7,7 +7,7 @@
   "scipy": "1.13.1",
   "astropy": "6.0.1"
  },
- "thresholdsSha256": "ee2d7405b8abaadc67513749615e7f6403d39e99cff6957a117cf785d1c309c7",
+ "thresholdsSha256": "ca68ea56449bd37526f7b5f9540c3e26150f61b6b804b66ce9f27f2fa530307f",
  "constants": {
   "c_kms": 299792.458,
   "G_SI": 6.6743e-11,
@@ -6976,5 +6976,5 @@
   ],
   "passBins": 12
  },
- "seconds": 23.2
+ "seconds": 23.3
 }
