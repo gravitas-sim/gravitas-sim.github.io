@@ -139,8 +139,61 @@ I['maxRatioDiagOverErr'] = float(np.max(dg / F_ERR))
 res['covariance'] = I
 res['published'] = dict(sha256=PUB_SHA, Omega_M=OM_PUB, sigma=SIG_PUB)
 log('integrity measured', I['spearman'], I['maxDiagMinusErr'])
-if I['spearman'] < 0.99 or not shape_ok:
-    res['stopped'] = 'I4a failed or the file has the wrong shape: every later leg is NOT RUN'
+if not shape_ok:
+    res['stopped'] = 'the file has the wrong shape: every later leg is NOT RUN'
+    json.dump(res, open(os.path.join(OUTDIR, 'followup-oracle-results.json'), 'w'), indent=1)
+    sys.exit(0)
+
+# ---- AM1: the row mapping proven by the covariance's own structure (permutation tests, seeded)
+d_all = np.sqrt(np.diag(C_ALL))
+CORR = C_ALL / np.outer(d_all, d_all)
+cids = [r['cid'] for r in FILE_ROWS]
+bycid = {}
+for i_, c_ in enumerate(cids):
+    bycid.setdefault(c_, []).append(i_)
+pairs = [(a_, b_) for v_ in bycid.values() if len(v_) > 1 for k_, a_ in enumerate(v_) for b_ in v_[k_ + 1:]]
+pi_, pj_ = np.array([p[0] for p in pairs]), np.array([p[1] for p in pairs])
+obs_c = float(CORR[pi_, pj_].mean())
+rng = np.random.default_rng(np.random.SeedSequence([256, 3, 0]))
+perm_c = np.empty(2000)
+for t_ in range(2000):
+    pm = rng.permutation(NC)
+    perm_c[t_] = CORR[pm[pi_], pm[pj_]].mean()
+I['cidPairs'] = dict(pairs=len(pairs), observedMean=obs_c, permutedMean=float(perm_c.mean()), permutedSd=float(perm_c.std(ddof=1)),
+                     permutedMax=float(perm_c.max()), z=float((obs_c - perm_c.mean()) / perm_c.std(ddof=1)),
+                     aboveAll=bool(obs_c > perm_c.max()))
+surv_all = np.array([r['survey'] for r in FILE_ROWS])
+C2 = C_ALL ** 2
+np.fill_diagonal(C2, 0.0)
+tot_off = float(C2.sum())
+codes = np.unique(surv_all)
+Mind = (surv_all[:, None] == codes[None, :]).astype(float)
+def share(M_):
+    return float(np.sum((C2 @ M_) * M_) / tot_off)
+obs_s = share(Mind)
+rng = np.random.default_rng(np.random.SeedSequence([256, 3, 1]))
+perm_s = np.empty(2000)
+for t_ in range(2000):
+    perm_s[t_] = share(Mind[rng.permutation(NC)])
+I['surveyShare'] = dict(surveys=int(len(codes)), observedShare=obs_s, permutedMean=float(perm_s.mean()), permutedSd=float(perm_s.std(ddof=1)),
+                        permutedMax=float(perm_s.max()), z=float((obs_s - perm_s.mean()) / perm_s.std(ddof=1)),
+                        aboveAll=bool(obs_s > perm_s.max()))
+log('AM1 mapping tests', I['cidPairs']['z'], I['surveyShare']['z'])
+# R9: the pack's errors against the file's diagonal
+excess = F_ERR ** 2 - np.diag(C_ALL)
+bands = [(0, 0.01), (0.01, 0.03), (0.03, 0.1), (0.1, 0.5), (0.5, 3.0)]
+ratio = d_all / F_ERR
+def stats(m):
+    return dict(n=int(m.sum()), median=float(np.median(ratio[m])), min=float(ratio[m].min()), max=float(ratio[m].max())) if m.any() else dict(n=0)
+R9 = dict(rowsCiiAboveErrSq=int((excess < 0).sum()), maxCiiMinusErrSq=float((-excess).max()),
+          spearmanExcessVsZ=float(sst.spearmanr(excess, F_Z).correlation),
+          bySurvey={str(int(c)): stats(surv_all == c) for c in codes},
+          byBand={f'{a}-{b}': stats((F_Z >= a) & (F_Z < b)) for a, b in bands},
+          calibrators=stats(F_CAL == 1), nonCalibrators=stats(F_CAL == 0))
+res['covariance'] = I
+res['diagonalReport'] = R9
+if not (I['cidPairs']['aboveAll'] and I['cidPairs']['z'] >= 10 and I['surveyShare']['aboveAll'] and I['surveyShare']['z'] >= 10):
+    res['stopped'] = 'I4c or I4d failed: the row mapping is unproven and every later leg is NOT RUN'
     json.dump(res, open(os.path.join(OUTDIR, 'followup-oracle-results.json'), 'w'), indent=1)
     sys.exit(0)
 

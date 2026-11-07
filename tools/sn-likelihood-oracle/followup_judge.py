@@ -75,6 +75,10 @@ row('I4a.rowmap', pf(cov['spearman'] >= 0.99), cov['spearman'], 'at least 0.99')
 row('I4b.premise', pf(cov['maxDiagMinusErr'] <= 1e-5),
     dict(maxAbsDiff=cov['maxDiagMinusErr'], ratioMin=cov['minRatioDiagOverErr'], ratioMedian=cov['medianRatioDiagOverErr'], ratioMax=cov['maxRatioDiagOverErr']),
     'at most 1e-5 mag')
+c_ = cov['cidPairs']
+row('I4c.cidPairs', pf(c_['aboveAll'] and c_['z'] >= 10), c_, 'above all 2,000 permutations and z at least 10')
+c_ = cov['surveyShare']
+row('I4d.surveyShare', pf(c_['aboveAll'] and c_['z'] >= 10), c_, 'above all 2,000 permutations and z at least 10')
 s = M['solvers']
 row('I5.solvers', pf(s['maxRelDiff'] <= 1e-8 and s['choleskyResidual'] <= 1e-8), s, '1e-8 and 1e-8')
 g = M['regression']
@@ -157,7 +161,7 @@ for n in (100, 300, 800):
 REP = OR['reported']
 for c in CT['checks']:
     if c['set'] is None and c['id'] != 'X1.fitPackage':
-        row(c['id'], 'reported', REP.get(c['id']) if c['id'] in REP else dict(
+        row(c['id'], 'reported', REP.get(c['id']) if c['id'] in REP else dict(R9=OR['diagonalReport'],
             R6=dict(DIAG=D['L1']), R7={k: v['forms'] for k, v in M['t1'].items()}).get(c['id'][:2]), 'REPORTED, no bound')
 row('X1.fitPackage', 'notrun', 'not fetched; downloading or running code is not authorised', 'NOT RUN')
 
@@ -174,8 +178,6 @@ elif q1_split:
     split_form = 'DIAG-GRADE'
 else:
     split_form = 'INADEQUATE'
-FA = passing(ids_I) and passing(['E3a.fullVsPublished', 'E3d.fullScale']) and passing(split_q)
-base_ok = passing([i for i in ids_I if i != 'I4b.premise']) and passing(['E3a.fullVsPublished', 'E3d.fullScale'])
 alts = []
 for k in (10, 30, 100):
     X = f'T2-k{k}'
@@ -184,16 +186,35 @@ for k in (10, 30, 100):
 for n in (100, 300, 800):
     if passing([f'{p}.T1-n{n}' for p in ('U1', 'U2', 'U3', 'W1')]):
         alts.append(dict(form=f'T1-n{n}', bytes=OR['reported']['R5.sizes'][f'T1-n{n}']['bytes']))
-if FA:
-    letter = 'FA'
-elif base_ok and alts:
-    letter = 'FB'
-else:
-    letter = 'FC'
 alts.sort(key=lambda a: a['bytes'])
-verdict = dict(letter=letter, splitForm=split_form, passingAlternatives=alts,
-               recommendedAlternative=(alts[0] if letter == 'FB' else None),
-               FA=FA, referenceConfirmed=bool(base_ok))
+
+
+def letter_for(ids_base):
+    FA = passing(ids_I) and passing(['E3a.fullVsPublished', 'E3d.fullScale']) and passing(split_q)
+    base_ok = passing(ids_base) and passing(['E3a.fullVsPublished', 'E3d.fullScale'])
+    if FA:
+        return 'FA', base_ok
+    if base_ok and alts:
+        return 'FB', base_ok
+    return 'FC', base_ok
+
+
+# (1) the committed function, as committed: I1 to I4a, I5, I6 all required for FB (I4b too for FA)
+committed_base = [i for i in ids_I if i != 'I4b.premise']
+letter, base_ok = letter_for(committed_base)
+# (2) the reading under AM1: I4a replaced by I4c and I4d, I2 not required; FA' is impossible while I4b fails
+am1_base = ['I1.file', 'I3.positive', 'I4c.cidPairs', 'I4d.surveyShare', 'I5.solvers', 'I6.regression']
+am1_ok = passing(am1_base) and passing(['E3a.fullVsPublished', 'E3d.fullScale'])
+if by['I4b.premise']['status'] == 'pass' and am1_ok and passing(split_q) and passing(['I2.symmetry']):
+    letter_am1 = "FA'"
+elif am1_ok and alts:
+    letter_am1 = "FB'"
+else:
+    letter_am1 = "FC'"
+verdict = dict(letter=letter, splitForm=split_form, referenceConfirmed=bool(base_ok),
+               passingAlternatives=alts, recommendedAlternative=(alts[0] if letter == 'FB' else None),
+               underAM1=dict(letter=letter_am1, referenceConfirmed=bool(am1_ok),
+                             recommendedAlternative=(alts[0] if letter_am1 == "FB'" else None)))
 
 counts = {k: sum(1 for r in rows if r['status'] == k) for k in ('pass', 'fail', 'reported', 'notrun')}
 out = dict(format='gravitas.supernova-likelihood-followup-results/1',
@@ -207,4 +228,4 @@ failed = [dict(id=r['id'], measured=r['measured'], bound=r['bound']) for r in ro
 with open(os.path.join(OUTDIR, 'followup-failed-legs.json'), 'w') as f:
     json.dump(dict(format='gravitas.supernova-likelihood-followup-failed/1', count=len(failed), legs=failed), f, indent=1)
     f.write('\n')
-print(counts, verdict['letter'], verdict['splitForm'])
+print(counts, verdict['letter'], verdict['splitForm'], verdict['underAM1']['letter'])
