@@ -5,6 +5,8 @@ Students have two tables and no way to join them. This is the kernel that joins 
 
 **Status: FAILED LEG(S) by the committed function, with both failures understood (section 5).** 43 rows of the committed table: 37 pass, 2 fail (`A6.largeShift`, `G2.coverage`), 3 reported, 1 not run. Three new follow-up legs committed after the first run (A6b, B1b, G2e) pass; they re-bound nothing. The kernel is not offered to a consumer by this prompt in any case.
 
+**Follow-up (section 10, the same prompt, 2026-11-07).** With Carl's permission to download public data, requests R1 to R3 were fetched and the leg that was not run was run: the kernel's pairs with the survey's own per-object SDSS epochs equal an independent astropy calculation pair for pair (604, none differing), agree with the Gaia archive's published best-neighbour table within the committed tolerance (1 of 604 kernel pairs absent from the published table, none of the published pairs absent from the kernel's), and the survey's epochs change nothing in the pair set. `D5.publishedTool` in the first-run table above stays NOT RUN: that table is the first-run record, and `tests/fixtures/crossmatch/data-legs-results.json` is its run. A6 and G2 stay failing; nothing was re-bounded.
+
 ## 1. What was committed first, and the order
 
 | Commit | What | Before |
@@ -72,18 +74,20 @@ The product verdict by the function stays FAILED LEG(S) while A6 and G2 fail; on
 ## 6. Limits a consumer must state
 
 1. Straight-line motion with radial velocity zero. A source with a large radial velocity at a small distance has an unmodelled perspective term; the 3600 arcsec cap bounds nothing about it.
-2. The epoch of the SDSS pack is the **declared** `J2000`, not each object's observation epoch (request R1). For clusters (proper motions of a few mas/yr) it does not change the pair set (D4); for field stars with 100 mas/yr and a spread of years it would.
+2. The epoch of the SDSS pack is the **declared** `J2000`, not each object's observation epoch. Request R1 has since been fetched (section 10): the pack's rows were observed on three nights in 2002 (J2002.04 to J2002.93, a spread of 0.89 yr), and the pair set with those epochs is identical to the declared-epoch set (D4b: 0 pairs differ). For clusters (proper motions of a few mas/yr) it does not change the pair set; for field stars with 100 mas/yr and a spread of years it would.
 3. The false-match estimate is for chance coincidences of the radius in the density of the field, not for blends or for a counterpart that is the wrong object; it is an upper bound where counterparts exist; the shifted-match test assumes the density is locally the same after a shift, which a clustered field violates at the scale of the shift (the packs' 20 arcsec shifts are small against the structure, and the result is reported with its footprint).
 4. The packs' positions are rounded to 0.00001 degree (0.04 arcsec) and carry no positional errors, so the match distance of a pack pair has no uncertainty (`sigmaArcsec` is null).
 5. The two-sample comparison is for means of independent samples of at least 30; it says nothing of the shapes of the distributions.
 
-## 7. Requests (nothing was fetched by an agent)
+## 7. Requests (fetched in the follow-up, section 10)
 
-| ID | What | Feeds |
-| --- | --- | --- |
-| R1 | the SDSS pack's query with each object's observation date (`mjd`) added, into `scratch-data/crossmatch263/`, terms read, sha256 | D5, and D4 with the survey's own spread |
-| R2 | a published crossmatch output for the same tables (the Gaia archive's best-neighbour table to an SDSS release, or the CDS XMatch result with its parameters) | D5 (`NOT RUN`) |
-| R3 | the published description of the shifted (offset) crossmatch false-rate test, page read, for the citation | the citation of the estimate |
+| ID | What | Feeds | Status |
+| --- | --- | --- | --- |
+| R1 | the SDSS pack's query with each object's observation date (`mjd`) added, into `scratch-data/crossmatch263/`, terms read, sha256 | D5, and D4 with the survey's own spread | **fetched** (2301 rows, the pack's own); D5b, D4b |
+| R2 | a published crossmatch output for the same tables (the Gaia archive's best-neighbour table to an SDSS release, or the CDS XMatch result with its parameters) | D5 | **fetched**: `gaiadr3.sdssdr13_best_neighbour` for the 993 sources; the CDS XMatch alternative not run (it adds no second published algorithm for the same rows) |
+| R3 | the published description of the shifted (offset) crossmatch false-rate test, page read | the citation of the false-match estimate | **read**: Wilson and Naylor 2018 (arXiv:1809.00018) section 4.2.3, see section 10 |
+
+Every file, its URL, its retrieval time, its terms and its sha256 are in `tests/fixtures/crossmatch/SOURCES.json`; the files themselves are in `scratch-data/crossmatch263/`, outside every repository, and nothing downloaded was run.
 
 ## 8. Not built, and what a later prompt needs
 
@@ -91,4 +95,26 @@ The table view's crossmatch tool (choose two tables, the epoch, the radius; the 
 
 ## 9. Files and commands
 
-`js/kernels/crossmatch/` (the kernel), `tools/crossmatch-validate.mjs` (`npm run crossmatch:validate`, `-- --followup` for AM2's legs; `--write-results`, `--write-failed`), `tools/crossmatch-oracle/oracle.py` (`python3 -E tools/crossmatch-oracle/oracle.py tests/fixtures/crossmatch/thresholds.json tests/fixtures/crossmatch/oracle-results.json`, about 5 s), `tests/fixtures/crossmatch/` (`thresholds.json` the contract, `oracle-results.json`, `results.json`, `followup-results.json`, `failed-legs.json`), `tests/crossmatchKernel.test.js` (the contract in small cases), `tests/crossmatchResults.test.js` (the record against the committed bounds). Part B is `CLUSTERING_GATE.md`.
+`js/kernels/crossmatch/` (the kernel), `tools/crossmatch-validate.mjs` (`npm run crossmatch:validate`, `-- --followup` for AM2's legs; `--write-results`, `--write-failed`), `tools/crossmatch-oracle/oracle.py` (`python3 -E tools/crossmatch-oracle/oracle.py tests/fixtures/crossmatch/thresholds.json tests/fixtures/crossmatch/oracle-results.json`, about 5 s), `tests/fixtures/crossmatch/` (`thresholds.json` the contract, `oracle-results.json`, `results.json`, `followup-results.json`, `failed-legs.json`), `tests/crossmatchKernel.test.js` (the contract in small cases), `tests/crossmatchResults.test.js` (the record against the committed bounds). Part B is `CLUSTERING_GATE.md`. The follow-up's files: `tests/fixtures/crossmatch/data-legs-thresholds.json` (committed first), `SOURCES.json`, `data-legs-oracle.json` (`python3 -E tools/crossmatch-oracle/oracle_data.py tests/fixtures/crossmatch/data-legs-thresholds.json <scratch-data> tests/fixtures/crossmatch/data-legs-oracle.json`, about 10 s), `data-legs-results.json` (`node tools/crossmatch-data-validate.mjs --data <scratch-data> --write-results`), `tests/crossmatchDataLegs.test.js`.
+
+## 10. The data legs (the follow-up, 2026-11-07)
+
+Carl's own words of 2026-11-07, recorded in `DECISIONS_2026-11-07.md` ("Let them grab any data they need to download"), permit an agent to download public data into `scratch-data/` outside every repository. Running downloaded code stays not permitted and nothing was run. The order: `SOURCES.json` (the files, their terms and sha256, nothing analysed), then `data-legs-thresholds.json` alone (`b4bf0b9b`: D5a to D5e, D4b and the clustering legs, every bound set by a stated rule, before any pair was computed on the downloads), then amendment AM1 (a sort clarification for a clustering identity leg; the first oracle run had been read; no bound moved), the independent oracle pinned (`6e691648`), the validator checked for syntax only, and one run of each.
+
+**What was fetched.** R1: the pack manifest's SkyServer query for the SDSS NGC 2420 photometry with `objID` and `mjd` added (2301 rows; the pack's rows, checked row by row against the packs to within half the pack's own storage step, D5a). R2: `gaiadr3.sdssdr13_best_neighbour` and `_neighbourhood` for the 993 Gaia sources of the pack, from the archive's TAP service. R3: Wilson and Naylor 2018 (arXiv:1809.00018). Terms: SDSS states that all data in its public releases are public domain, and asks for the survey and the release to be acknowledged; the Gaia archive's data are under CC BY-NC 3.0 IGO, so nothing of the Gaia tables is committed beyond counts and two identifiers. What the archive's documentation says of the published algorithm (Gaia DR3 documentation, sections 15.2 and 15.3.3): each Gaia object is moved with its proper motion to the epoch of the external candidate, only SDSS primary objects are used, SDSS objects with a position error over 1 arcsec are excluded, and the best neighbour has the highest figure of merit of a match against a chance coincidence: it is not a nearest-neighbour rule.
+
+**The per-object epochs (D5b).** The 2301 SDSS rows were observed on three nights, MJD 52288 (J2002.04, 1633 rows), 52585 (J2002.85, 414 rows) and 52614 (J2002.93, 254 rows): a spread of 0.89 yr, and 13.1 to 14.0 yr before the Gaia epoch. The kernel takes one common epoch per run, so the per-object epoch of the archive's rule is reproduced by one run per distinct SDSS epoch (A moved to it, the SDSS rows at it) and the nearest candidate over the runs.
+
+| Leg | Result | Status |
+| --- | --- | --- |
+| D5a row identity | 993 and 2301 rows; the packs equal the downloads to 1.0 of half the pack's storage step in every column checked (the app's reader and the oracle's decoder agree) | pass |
+| D5c pairs against astropy | kernel 604 pairs, oracle 604, **0 differing**; distances agree to 5.8e-10 arcsec | pass |
+| D5d against the published table | **1 of 604** kernel pairs is absent from the published pairs for pack objects (0.17 percent), **0** published pairs of at most 1 arcsec are absent from the kernel's; tolerance 0.05 each way (ten times the larger disagreement this gate had measured, 4 percent, rounded up to one in twenty) | pass |
+| D4b survey's epochs | the declared-epoch pairs (604) and the per-object-epoch pairs (604) are the same set; the agreement with the published table is the same | reported |
+| D5e what the disagreement is | the published table has 704 rows for the 993 Gaia sources, of which 603 are to SDSS objects the pack holds, all at most 0.139 arcsec (median 0.018, 95th percentile 0.071), 101 to SDSS objects outside the pack; the 603 common pairs are the same pairs, and the published and the kernel's distances differ by at most 0.039 arcsec (median 0.0096); the one kernel-only pair is Gaia 865416054512271872 with SDSS 1237660564039532919, whose published best neighbour is the adjacent object id ending 920, at 1.204 arcsec and not a pack row | reported |
+
+So on these two packs the kernel's nearest-neighbour pairs inside 1 arcsec with the survey's own epochs are the published best-neighbour pairs, to one pair in 604. What this does not show: the packs' proper motions are a few mas/yr and the epoch gap 13 to 14 years, so the two catalogs agree to within the packs' rounding whether or not the epochs are applied (D4, D4b); the epoch rule is exercised by the synthetic world (E8), not by this data. The published algorithm is not reproduced by the kernel (its figure of merit, error model and density term are not in the kernel), and the agreement says the two give the same pairs here, not that they are the same method. The CDS XMatch alternative was not run.
+
+**The citation of the shifted-match test (R3).** Wilson and Naylor 2018, section 4.2.3, estimate the false-match level of a Gaia to WISE match by moving the Gaia sources of a Galactic box by 10 degrees in longitude, matching them to the original WISE catalogue, and counting what matches (about 0.6 percent of the WISE catalogue with their probability-based match against 4 percent expected from a nearest-neighbour match). That is the same idea as the kernel's: a shifted copy has no true counterparts, so what matches is chance. The kernel's own scheme (20 radii along 8 bearings, an exact Poisson interval, the footprint correction) is not theirs, and their match is not a nearest-neighbour match; the citation supports the definition, not the numbers.
+
+**Not run.** The CDS XMatch result (above). `D5.publishedTool` as a row of `results.json` (that file is the first-run record and is untouched).

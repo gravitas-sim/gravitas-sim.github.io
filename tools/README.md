@@ -74,6 +74,7 @@ current, and the orchestrator checks it.
 | `cosmology2-followup.mjs` | The late-time FLRW kernel's follow-up legs against their committed thresholds (Prompt 255b) | `npm run cosmology2:followup` |
 | `cosmology2-validate.mjs` | The late-time FLRW kernel against its committed thresholds (Prompt 255) | `npm run cosmology2:validate` |
 | `craters-validate.mjs` | Crater counting against its committed thresholds (Prompt 195) | `npm run craters:validate` |
+| `crossmatch-data-validate.mjs` | The crossmatch kernel's data legs (Prompt 263 follow-up: D5a to D5e, D4b) |  |
 | `crossmatch-validate.mjs` | The crossmatch kernel against its committed thresholds (Prompt 263, Part A) | `npm run crossmatch:validate` |
 | `csp.mjs` | A Content-Security-Policy on every page |  |
 | `data-budget.mjs` | The data plane's budget: what Gravitas stores and keeps, not just what it ships | `npm run budget:data` |
