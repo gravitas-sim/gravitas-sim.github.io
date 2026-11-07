@@ -75,24 +75,26 @@ const RULE = {
   'B6.errorCovers': m => m.covered === 10 && m.of === 10,
   'E1.coverage68': m => cover(m, 0.6827, SP.draws.E1),
   'E2.coverage95': m => cover(m, 0.9545, SP.draws.E2),
-  'E3.pinned': m => P(m.maxAbsoluteDifference, thresholds.pinnedVectors.tolerance),
+  'E3.pinned': m =>
+    P(m.maxAbsoluteDifference, thresholds.pinnedVectors.tolerance),
   'E4.coarse': m =>
     m.prototypeCodes['too-few-bins'] === SP.draws.E4 &&
     m.oracleCodes['too-few-bins'] === SP.draws.E4 &&
     m.apexOrIntervalReported === 0,
   'E5.noPeak': m =>
     m.prototypeNotConstrained >= 0.95 && m.oracleNotConstrained >= 0.95,
-  'E6a.coverage68Symmetric': m =>
-    cover(m, 0.6827, SP.symmetricTruth.draws.E6a),
-  'E6b.coverage95Symmetric': m =>
-    cover(m, 0.9545, SP.symmetricTruth.draws.E6b),
+  'E6a.coverage68Symmetric': m => cover(m, 0.6827, SP.symmetricTruth.draws.E6a),
+  'E6b.coverage95Symmetric': m => cover(m, 0.9545, SP.symmetricTruth.draws.E6b),
   'Z1.refusals': m =>
-    m.disagreements === 0 && P(m.maxRelativeOfAccepted, TOL.refusalAcceptedQuantity),
+    m.disagreements === 0 &&
+    P(m.maxRelativeOfAccepted, TOL.refusalAcceptedQuantity),
   'Z2.peakInputs': m =>
     JSON.stringify(m.prototype) === JSON.stringify(m.committed) &&
     JSON.stringify(m.oracle) === JSON.stringify(m.committed),
   'K1.claimRule': m =>
-    m.violatingFlagged === 12 && m.cleanFlagged === 0 && m.agreeWithOracleOn === 24,
+    m.violatingFlagged === 12 &&
+    m.cleanFlagged === 0 &&
+    m.agreeWithOracleOn === 24,
   'K2.tree': m => m.violations === 0,
   'G2.linear': m =>
     P(m.maxRelative, TOL.gridLinear) &&
@@ -208,7 +210,9 @@ describe('the committed contract', () => {
     expect(thresholds.scope.notBuilt).toMatch(/consumers rule/);
     expect(thresholds.scope.notBuilt).toMatch(/Part B is not begun/);
     expect(thresholds.verdict.partB).toMatch(/not begun/);
-    expect(thresholds.verdict.consumersClause).toMatch(/no panel, lesson, guide/);
+    expect(thresholds.verdict.consumersClause).toMatch(
+      /no panel, lesson, guide/
+    );
   });
 });
 
@@ -245,7 +249,9 @@ describe('the gate stream', () => {
       'not-run': 8,
     });
     expect(results.counts).toEqual({ rows: 42, ...counts });
-    expect(doc).toMatch(/42 rows: \*\*25 pass, 5 fail, 4 reported, 8 not run\*\*/);
+    expect(doc).toMatch(
+      /42 rows: \*\*25 pass, 5 fail, 4 reported, 8 not run\*\*/
+    );
   });
 
   test('every pass/fail row has the status its committed bound gives', () => {
@@ -261,14 +267,20 @@ describe('the gate stream', () => {
 
   test('the NOT RUN and reported rows are the committed ones and carry their reason', () => {
     expect(
-      results.rows.filter(r => r.status === 'not-run').map(r => r.id).sort()
+      results.rows
+        .filter(r => r.status === 'not-run')
+        .map(r => r.id)
+        .sort()
     ).toEqual([...NOT_RUN].sort());
     for (const r of results.rows.filter(x => x.status === 'not-run')) {
       expect(r.measured).toBe(null);
       expect(r.note).toBeTruthy();
     }
     expect(
-      results.rows.filter(r => r.status === 'reported').map(r => r.id).sort()
+      results.rows
+        .filter(r => r.status === 'reported')
+        .map(r => r.id)
+        .sort()
     ).toEqual([...REPORTED].sort());
   });
 
@@ -290,7 +302,12 @@ describe('the gate stream', () => {
       )
       .map(c => c.id);
     const p = ['P1.thetaPlanck', 'P2.rstarPlanck', 'P3.oracleAtPlanck'].map(by);
-    const s = ['S1.spectrumIntegrity', 'S2.peakFromSpectrum', 'S3.coarseRebin', 'S4.rights'].map(by);
+    const s = [
+      'S1.spectrumIntegrity',
+      'S2.peakFromSpectrum',
+      'S3.coarseRebin',
+      'S4.rights',
+    ].map(by);
     const verdictOf = status => {
       const kernel =
         kernelIds.every(id => (status[id] ?? by(id).status) === 'pass') &&
@@ -348,11 +365,21 @@ describe('the gate stream', () => {
     expect(by('E2.coverage95').prototype.rate).toBeCloseTo(0.2935, 4);
     expect(by('E6a.coverage68Symmetric').prototype.rate).toBeCloseTo(0.399, 3);
     expect(by('E6b.coverage95Symmetric').prototype.rate).toBeCloseTo(0.7425, 4);
-    expect(by('X2.reportedPlanckSensitivity').massless255Style.theta100).toBeCloseTo(1.03953, 5);
+    expect(
+      by('X2.reportedPlanckSensitivity').massless255Style.theta100
+    ).toBeCloseTo(1.03953, 5);
     expect(by('X4.reportedCurvature').dLnThetaDOk).toBeCloseTo(-1.3775, 4);
     expect(by('K2.tree').contextSentences).toBe(39);
     expect(by('Z1.refusals').accepted).toBe(7);
-    for (const s of ['1.041087', '144.394', '0.1355', '0.2935', '1.03953', '-1.38', '0.1245'])
+    for (const s of [
+      '1.041087',
+      '144.394',
+      '0.1355',
+      '0.2935',
+      '1.03953',
+      '-1.38',
+      '0.1245',
+    ])
       expect(doc).toContain(s);
   });
 });
