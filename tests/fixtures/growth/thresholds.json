@@ -1,0 +1,194 @@
+{
+  "format": "gravitas.growth-gate-thresholds/1",
+  "prompt": "Roadmap III, Prompt 259 Part A, Structure growth in a declared domain (tranche T5, authorized by Checkpoint V's recorded outcome CONTINUE AS PLANNED, DECISIONS_2026-11-06.md; prerequisites 255, 152 and 157 are merged on v3). Documentation and fixtures only; the prototype, the oracle, the extraction scripts and the validator live on spike/structure-growth-gate and are never merged (7.5 rule 4).",
+  "document": "GROWTH_GATE.md (the equations and their domain, the legs, the measurements, the verdict and the requests), written after this file",
+  "committed": "before any prototype code, validator, oracle script or oracle output of this prompt existed, and before any growth factor, growth rate, transfer function, variance, normalisation or Jeans quantity of this prompt was computed. Nothing was fetched by this session and no published number, coefficient, table value, simulation datum, citation detail or licence term was typed from memory.",
+  "rule": "A crossed bound is a failed leg, recorded in failed-legs.json and left failing; only Carl resets one. A leg that cannot be measured (a file not supplied, a source text not fetched, a code not installed) is NOT RUN and carries an exact request. Amendments are recorded in this file (amendments array) before any validator run and move no bound; a leg is added only as a NEW leg with its bound committed before its first run. A threshold that proves unmeasurable fails the gate on that threshold. Nothing is moved, re-read or re-defined after a result.",
+  "seenBeforeCommitting": [
+    "the roadmap sections named in the task (7 with 7.5, 12.1, 13, Appendix C, prompt 259 with its Run condition and full prompt)",
+    "CONTINUATION_CHECKPOINT_V.md and DECISIONS_2026-11-06.md (outside the repository), the register rows and gate documents of 255, 256 and 257, the 255 kernel's file list, domain constants and refusal codes, NUMERICS.md and the list of exports of js/numeric/ (no ODE integrator is among them)",
+    "the saved extracted text of Eisenstein and Hu 1998 (astro-ph/9709112, scratch-data/bao257/eh98.txt) in the passages of equations 26 to 31 and A1 to A7, and the PDF pages 14, 15 and 18 rendered, to check the transcription of those equations by eye; no number was computed from them",
+    "the saved extracted text of Planck 2018 VI (arXiv:1807.06209, scratch-data/cosmo255/1807.06209.txt), lines 1128 to 1180 (Table 1), including the printed sigma_8 of the best-fit column; leg X1 below is therefore NOT blind to that one printed value, and it is stated here, before any model value exists",
+    "the python packages installed on this machine (numpy 1.26.4, scipy 1.13.1, astropy 6.0.1; no mpmath, no sympy, no CAMB, CLASS, pyccl or colossus)"
+  ],
+  "model": {
+    "background": "E(a)^2 = Om a^-3 + Ok a^-2 + Ode a^(-3(1+w)), Ok = 1 - Om - Ode, a = 1/(1+z), w constant; radiation is not in the perturbation equation and Or must be 0 (refusal 'radiation-in-growth')",
+    "growthEquation": "in u = ln a, with primes d/du:  D'' + (2 + dlnE/du) D' - (3/2) Omega_m(a) D = 0,  Omega_m(a) = Om a^-3 / E(a)^2,  dlnE/du = [-3 Om a^-3 - 2 Ok a^-2 - 3 (1+w) Ode a^(-3(1+w))] / (2 E^2). Linear perturbations of pressureless matter, sub-horizon, general relativity, a smooth (unclustered) dark energy with constant w. The growth rate is f = dlnD/du = D'/D.",
+    "normalisation": "D is the growing mode normalised to D -> a in the matter era (so D(a) = a for Om = 1); the kernel starts at a_i = 1e-6 with D = a_i (1 - (4/7)(Ok/Om) a_i) and D' = a_i (1 - (8/7)(Ok/Om) a_i), the first-order matter-era series with the curvature term (derived in GROWTH_GATE.md section 2 and tested by leg G1 to G4 and O1, not assumed)",
+    "growthDomain": "Om in [0.1, 1]; Ode in [0, 1.2]; w in [-1.5, -0.5]; Or = 0; scale factor a in [0.01, 1] (z up to 99). Linear scales only. A set that breaks a rule is refused with a code and no number is returned. Codes in the order they are judged: not-finite, bad-argument, radiation-in-growth, density-out-of-domain, w-out-of-domain, bounce; at the call: a-out-of-domain.",
+    "numerics": "the kernel integrates the equation with an embedded Dormand-Prince 5(4) pair in u (relative tolerance 1e-11) with the sum of the accepted steps' error estimates carried beside every output, plus the initial-condition truncation term (K a_i)^2 + (Ode/Om) a_i^(-3w) with K = |Ok|/Om; it is an estimate, not a bound, and leg O2 tests whether it covers. 152 (js/numeric) has no ODE routine: this is the delta table's missing behaviour, recorded as decision DEC2, and the integrator is a private function of the prototype, not an extraction.",
+    "shape": "Eisenstein and Hu 1998, equations (28) to (31) with s from (26): the zero-baryon form T0(q) = L0/(L0 + C0 q^2) with L0 = ln(2e + 1.8 q) and C0 = 14.2 + 731/(1 + 62.5 q), applied at q_eff = (k/(h Mpc^-1)) Theta_2.7^2 / Gamma_eff with Gamma_eff(k) = Om h (alpha_Gamma + (1 - alpha_Gamma)/(1 + (0.43 k s)^4)), alpha_Gamma = 1 - 0.328 ln(431 Om h^2) (Ob/Om) + 0.38 ln(22.3 Om h^2) (Ob/Om)^2, s = 44.5 ln(9.83/(Om h^2)) / sqrt(1 + 10 (Ob h^2)^(3/4)) Mpc, and k s read with k in Mpc^-1 (the printed s is in Mpc); T(k) = T0(q_eff). The coefficients are transcribed from the saved text into authentic/eh98-formulas.json by hand with the line of the text beside each token, and the test checks every token against the saved text's sha256 (the text itself is not in the repository). Theta_2.7 = 2.728/2.7, the value the paper prints for the COBE temperature. Baryon acoustic oscillations are not modelled (the no-wiggle form).",
+    "shapeDomain": "h in [0.3, 1.2]; Om h^2 in [0.025, 0.5] and Ob h^2 >= 0.0125 (the range over which the paper states its sound-horizon fit holds to about 2 percent); Ob/Om <= 0.5 (the paper says the neglect of the oscillations is not a good approximation above about that); spectral index ns in [0.5, 1.5]; sigma8 in (0, 3]; k in [1e-5, 1e4] h/Mpc; R in [0.1, 1000] Mpc/h. Codes in order: not-finite, bad-argument, h-out-of-domain, omega-m-h2, omega-b-h2, baryon-fraction, ns-out-of-domain, sigma8-out-of-domain; at the call: k-out-of-domain, R-out-of-domain. Neutrino mass, the oscillations and any tensor or running term are not modelled.",
+    "variance": "sigma^2(R) = Integral_0^inf (dk/k) Delta^2(k) [3 j1(kR)/(kR)]^2 (the printed form A7, whose j1 differs from the usual sign and is squared), Delta^2(k) = N k^(3+ns) T(k)^2, N fixed by sigma(8 Mpc/h) = sigma8 (a declared INPUT, never a measurement), k in h/Mpc, R in Mpc/h; sigma(R, a) = sigma(R, 1) D(a)/D(1). The kernel integrates in ln k over [1e-5, 1e4] h/Mpc with 152's adaptive quadrature on 200 equal panels.",
+    "jeans": "A single pressure-supported fluid in the expanding background, Newtonian and sub-horizon, constant sound speed c_s as an INPUT (no thermal history, no gas temperature, no baryon-dark matter two-fluid coupling): D'' + (2 + dlnE/du) D' + [ (c_s k / (H0 a E))^2 - (3/2) Omega_m(a) ] D = 0, the comoving Jeans wavenumber k_J(a) = sqrt(3 Omega_m(a)/2) a E H0 / c_s (c_s in km/s, H0 in km/s/Mpc, k in 1/Mpc), growth for k < k_J and oscillation for k > k_J. The kernel takes its initial data from the same matter-era series as the pressureless equation; the legs compare solutions of the stated equation with the stated data. Domain: c_s in (0, 100] km/s, k in (0, 1e4] 1/Mpc; codes not-finite, bad-sound-speed, bad-wavenumber. Not modelled: dark-matter free streaming, the baryon Jeans mass of the real gas (it needs the thermal history), relativistic pressure.",
+    "imagery": "NONE. No simulation release is named, none was fetched, no rights decision exists for any, and the contract's slices need one per source and per redistribution form (7.5 rule 4). The alternative the prompt names is the growth curve itself. Verdict A is therefore not attainable in this gate by construction (the verdict function below), and request S1 lists what an imagery decision would need. A computed Gaussian-field image is not made: it is not in the tested scope and could be mistaken for a simulation slice.",
+    "claimRule": "No sandbox, N-body or rescaled run is shown as cosmological structure formation, as a cosmological simulation or as the cosmic web, in any student-facing string of the tree (leg Q1), and no lesson, panel or viewer is built in Part A (the consumers rule)."
+  },
+  "parameterSets": {
+    "grid": "41 scale factors a_i = 10^(-2 + 2 i/40), i = 0..40 (0.01 to 1, the last exactly 1)",
+    "growth": [
+      {"id": "S1", "Om": 1.0, "Ode": 0.0, "w": -1.0, "note": "Einstein-de Sitter"},
+      {"id": "S2", "Om": 0.3, "Ode": 0.0, "w": -1.0, "note": "open, matter only"},
+      {"id": "S3", "Om": 0.1, "Ode": 0.0, "w": -1.0, "note": "open, matter only, low density"},
+      {"id": "S4", "Om": 0.3, "Ode": 0.7, "w": -1.0, "note": "flat Lambda"},
+      {"id": "S5", "Om": 0.1, "Ode": 0.9, "w": -1.0, "note": "flat Lambda, low matter"},
+      {"id": "S6", "Om": 0.5, "Ode": 0.5, "w": -1.0, "note": "flat Lambda, high matter"},
+      {"id": "S7", "Om": 0.3, "Ode": 0.5, "w": -1.0, "note": "open with Lambda"},
+      {"id": "S8", "Om": 0.3, "Ode": 0.9, "w": -1.0, "note": "closed with Lambda"},
+      {"id": "S9", "Om": 0.3, "Ode": 0.7, "w": -0.8, "note": "flat, w above -1"},
+      {"id": "S10", "Om": 0.3, "Ode": 0.7, "w": -1.2, "note": "flat, w below -1"},
+      {"id": "S11", "Om": 0.3, "Ode": 0.6, "w": -0.9, "note": "open with w"},
+      {"id": "S12", "Om": 0.2, "Ode": 0.8, "w": -0.6, "note": "flat, w near the edge of the domain"},
+      {"id": "S13", "Om": 0.4, "Ode": 0.6, "w": -1.4, "note": "flat, w near the other edge"}
+    ],
+    "openClosedForm": ["S2", "S3", "Om 0.5 (Ode 0)", "Om 0.8 (Ode 0)"],
+    "flatClosedForm": "Om in {0.1, 0.3, 0.5, 0.8} with Ode = 1 - Om, w = -1",
+    "heath": "(Om, Ode) in {(0.3, 0.5), (0.3, 0.9), (0.2, 0.6), (0.5, 0.9), (0.1, 1.2)}, w = -1",
+    "shape": [
+      {"id": "T1", "Om": 0.3, "Ob": 0.05, "h": 0.7, "note": "Om h2 0.147, Ob h2 0.0245"},
+      {"id": "T2", "Om": 0.25, "Ob": 0.04, "h": 0.72, "note": "Om h2 0.1296, Ob h2 0.0207"},
+      {"id": "T3", "Om": 0.4, "Ob": 0.06, "h": 0.65, "note": "Om h2 0.169, Ob h2 0.0254"},
+      {"id": "T4", "Om": 0.2, "Ob": 0.03, "h": 0.8, "note": "Om h2 0.128, Ob h2 0.0192"}
+    ],
+    "shapeInputs": "spectral index ns = 1 and sigma8 = 0.8, declared test inputs; none is a survey's or a paper's value",
+    "radii": "R in {1, 8, 30, 100} Mpc/h",
+    "wavenumbers": "301 log-spaced k from 1e-4 to 1e3 h/Mpc for the transfer legs; q from 1e-4 to 1e4 for P1",
+    "jeans": {
+      "backgrounds": ["S1", "S4"],
+      "kappa": [0.5, 2, 10, 50, 300],
+      "kappaNote": "kappa = c_s k / H0 (dimensionless: c_s in km/s, k in 1/Mpc, H0 in km/s/Mpc)",
+      "edsCrossing": "kappa in {2, 10, 50}"
+    }
+  },
+  "oracle": {
+    "what": "an independent implementation: python -E, python 3.9.6, numpy 1.26.4, scipy 1.13.1, the standard library's decimal module for the open-universe closed form; no Gravitas code is read or run by it and no output of the prototype is read by it. Its output is pinned in oracle-results.json before the prototype is run.",
+    "growth": "scipy solve_ivp DOP853 in u with rtol 1e-13 and atol 1e-300 from its own initial data (a = 1e-10, matter-era with the first-order curvature term, a different start from the kernel's); the Peebles open closed form D(x) = 1 + 3/x + 3 sqrt(1+x) x^(-3/2) ln(sqrt(1+x) - sqrt(x)), x = (1/Om - 1) a, evaluated with 200 decimal digits and normalised by its own small-x limit so that D -> a; flat Lambda: D = a 2F1(1/3, 1; 11/6; -(Ode/Om) a^3) with scipy.special.hyp2f1; Lambda with curvature: D = (5 Om/2) E(a) Integral_0^a da'/(a' E(a'))^3 by scipy quad (epsabs 0, epsrel 1e-13) with f = dlnE/du + 1/(a^2 E^3 I) for the same integral I; each closed form is first checked by the oracle against its own DOP853 solve and its own residual is recorded",
+    "shape": "its own Python implementation of equations (26) to (31) from the transcribed coefficients; sigma(R) by scipy quad in ln k (limit 4000, epsabs 0, epsrel 1e-12, split at ln k = ln(1/R) and a decade either side); the closed form sigma^2 = 3 A/(10 pi R) for Delta^2 = (A/(2 pi^2)) k (P = A k^-2) checked against its own quad; the Planck chain of leg X1 with its own D(1) from the Heath integral (w = -1, flat)",
+    "jeans": "k_J by its own algebra; the pressure equation by DOP853 with the same stated initial data; the Einstein-de Sitter crossing a* = 3/(2 kappa^2) in closed form",
+    "ensemble": "none (the kernel is deterministic and has no stated random uncertainty); tier (c) of 7.5.8 is NOT APPLICABLE and is stated here and in GROWTH_GATE.md; leg O2 tests the carried error estimate against the oracle instead"
+  },
+  "tolerance": {
+    "closedForm": 1e-8,
+    "oracle": 1e-8,
+    "errorEstimateFactor": 10,
+    "errorEstimateFloor": 1e-13,
+    "cptFit": 0.02,
+    "transferZeroBaryon": 1e-13,
+    "transferShape": 1e-12,
+    "sigmaPowerLaw": 1e-6,
+    "sigmaOracle": 1e-8,
+    "normalisation": 1e-10,
+    "scaling": 1e-12,
+    "planckSigma8": 0.05,
+    "jeansAlgebra": 1e-12,
+    "jeansOde": 1e-7,
+    "crossing": 1e-10
+  },
+  "refusals": {
+    "growth": [
+      {"id": "RG1", "input": {"Om": "NaN", "Ode": 0.7}, "code": "not-finite"},
+      {"id": "RG2", "input": {"Om": 0.3}, "code": "bad-argument", "note": "Ode missing"},
+      {"id": "RG3", "input": {"Om": 0.3, "Ode": 0.7, "Or": 0.0001}, "code": "radiation-in-growth"},
+      {"id": "RG4", "input": {"Om": 0.05, "Ode": 0.95}, "code": "density-out-of-domain"},
+      {"id": "RG5", "input": {"Om": 0.3, "Ode": 1.3}, "code": "density-out-of-domain"},
+      {"id": "RG6", "input": {"Om": 0.3, "Ode": 0.7, "w": -0.4}, "code": "w-out-of-domain"},
+      {"id": "RG7", "input": {"Om": 0.3, "Ode": 0.7, "w": -1.6}, "code": "w-out-of-domain"},
+      {"id": "RG8", "input": {"Om": "NaN", "Ode": 0.7, "Or": 0.0001}, "code": "not-finite", "note": "judged before the radiation rule"},
+      {"id": "RG9", "input": {"Om": 0.05, "Ode": 0.95, "Or": 0.0001}, "code": "radiation-in-growth", "note": "judged before the density rule"},
+      {"id": "RG10", "input": {"Om": 0.3, "Ode": 0.7}, "a": [0.005], "code": "a-out-of-domain"},
+      {"id": "RG11", "input": {"Om": 0.3, "Ode": 0.7}, "a": [1.2], "code": "a-out-of-domain"},
+      {"id": "RG12", "input": {"Om": 0.3, "Ode": 0.7}, "a": ["NaN"], "code": "not-finite"}
+    ],
+    "growthAccepted": "a 25 x 25 x 11 grid of (Om, Ode, w) over the whole domain, Om in [0.1, 1], Ode in [0, 1.2], w in [-1.5, -0.5]: no set is refused (in particular none with 'bounce'), because the domain admits no bounce; this is a test of the guard, and the doc says so",
+    "shape": [
+      {"id": "RS1", "input": {"Om": 0.3, "Ob": 0.05, "h": 0.2}, "code": "h-out-of-domain"},
+      {"id": "RS2", "input": {"Om": 0.03, "Ob": 0.005, "h": 0.7}, "code": "omega-m-h2", "note": "Om h2 = 0.0147"},
+      {"id": "RS3", "input": {"Om": 1.2, "Ob": 0.05, "h": 0.7}, "code": "omega-m-h2", "note": "Om h2 = 0.588"},
+      {"id": "RS4", "input": {"Om": 0.3, "Ob": 0.01, "h": 0.7}, "code": "omega-b-h2", "note": "Ob h2 = 0.0049"},
+      {"id": "RS5", "input": {"Om": 0.3, "Ob": 0.2, "h": 0.7}, "code": "baryon-fraction", "note": "Ob/Om = 0.667"},
+      {"id": "RS6", "input": {"Om": 0.3, "Ob": 0.05, "h": 0.7, "ns": 2.0}, "code": "ns-out-of-domain"},
+      {"id": "RS7", "input": {"Om": 0.3, "Ob": 0.05, "h": 0.7, "sigma8": 0}, "code": "sigma8-out-of-domain"},
+      {"id": "RS8", "input": {"Om": 0.03, "Ob": 0.005, "h": 0.2}, "code": "h-out-of-domain", "note": "judged before omega-m-h2"},
+      {"id": "RS9", "input": {"Om": 0.3, "Ob": 0.05, "h": 0.7}, "k": 1e-07, "code": "k-out-of-domain"},
+      {"id": "RS10", "input": {"Om": 0.3, "Ob": 0.05, "h": 0.7}, "R": 0.01, "code": "R-out-of-domain"}
+    ],
+    "jeans": [
+      {"id": "RJ1", "input": {"cs": 0, "k": 1}, "code": "bad-sound-speed"},
+      {"id": "RJ2", "input": {"cs": -1, "k": 1}, "code": "bad-sound-speed"},
+      {"id": "RJ3", "input": {"cs": 500, "k": 1}, "code": "bad-sound-speed"},
+      {"id": "RJ4", "input": {"cs": 5, "k": 0}, "code": "bad-wavenumber"},
+      {"id": "RJ5", "input": {"cs": 5, "k": "NaN"}, "code": "not-finite"}
+    ]
+  },
+  "authentic": {
+    "X1": "The Planck 2018 VI 'Plik best fit' column of Table 1 (arXiv:1807.06209, Carl's saved extracted text, rights as D-R10-255-11: printed numbers and cited facts, no text reproduced) is read by script on the spike into authentic/planck-best-fit.json with the line of every value: Omega_b h^2, Omega_c h^2, ln(10^10 A_s), n_s, H0, Omega_m h^2, Omega_m, sigma_8, and the pivot scale k0 of the A_s definition (0.05 per Mpc, printed at the line the extraction records). The fixed analysis contract: Om = (Omega_b h^2 + Omega_c h^2)/h^2 with h = H0/100, Ob = Omega_b h^2/h^2, flat (Ode = 1 - Om), w = -1, Or = 0, Theta_2.7 = 2.728/2.7; Delta_R^2(k) = A_s (k_phys/k0)^(n_s - 1), k_phys = h k; Delta^2(k, a = 1) = (4/25) (c k_phys / H0)^4 Om^-2 D(1)^2 T(k)^2 Delta_R^2(k) with c = 299792.458 km/s (the SI definition) and D(1) the kernel's growth factor (the matter-era Poisson relation, derived in GROWTH_GATE.md); sigma_8(model) from A7 at R = 8 Mpc/h. The printed sigma_8 was not used to choose any model feature, bound or parameter; the bound is the paper's own accuracy statement for the shape fit, 5 percent. Massive neutrinos (Omega_m printed includes one 0.06 eV neutrino) and the oscillations are not modelled; that omission is part of what the bound tests.",
+    "X1rule": "pass iff |sigma_8(model)/sigma_8(printed) - 1| <= 0.05; otherwise the leg fails and stays failing, and the verdict is B2 (below). The deviation is REPORTED in either case.",
+    "notUsed": "no printed growth table, f sigma_8 or power-spectrum value is used: none is in the saved texts (the saved EH98 text gives equation (A4), a fit, which is leg C1 and not a table)"
+  },
+  "checks": [
+    {"id": "I1.sources", "group": "integrity", "what": "the sha256 of the saved EH98 text (3d777eee...) and PDF (1d283b1a...) and of the saved Planck text (75476bdb...) equal the pinned values in authentic/SOURCES.json, and every token of authentic/eh98-formulas.json appears in the saved text on the line the fixture cites (the test checks this when the saved text is present and otherwise checks the pinned hashes of the fixture's own lines)", "bound": "exact", "needs": null},
+    {"id": "I2.inputs", "group": "integrity", "what": "the oracle and the prototype were run on the same parameterSets of this file (the sha256 of this file is recorded in both outputs)", "bound": "exact", "needs": null},
+    {"id": "G1.eds", "group": "closedForm", "what": "Einstein-de Sitter (S1): D(a) = a and f = 1 on the 41-point grid", "bound": "relative 1e-8 in D and 1e-8 absolute in f", "needs": null},
+    {"id": "G2.openMatterOnly", "group": "closedForm", "what": "open matter-only universes Om in {0.1, 0.3, 0.5, 0.8}: D and f against the Peebles closed form at 200 digits, normalised by its small-x limit", "bound": "relative 1e-8 in D, 1e-8 absolute in f", "needs": null},
+    {"id": "G3.flatLambda", "group": "closedForm", "what": "flat Lambda Om in {0.1, 0.3, 0.5, 0.8}: D against a 2F1(1/3, 1; 11/6; -(Ode/Om) a^3); f against the Heath-integral rate", "bound": "relative 1e-8 in D, 1e-8 absolute in f", "needs": null},
+    {"id": "G4.heathCurved", "group": "closedForm", "what": "Lambda with curvature, the five (Om, Ode) of parameterSets.heath: D and f against the Heath integral", "bound": "relative 1e-8 in D, 1e-8 absolute in f", "needs": null},
+    {"id": "O1.dop853", "group": "oracle", "what": "all thirteen growth sets S1 to S13, D and f at the 41 grid points, against the oracle's DOP853 solve from its own initial data", "bound": "relative 1e-8 in D, 1e-8 absolute in f", "needs": null},
+    {"id": "O2.errorCoverage", "group": "oracle", "what": "the error estimate the kernel carries beside D covers its actual error against the oracle: |D_kernel - D_oracle|/D_oracle <= 10 x estimate + 1e-13 at every point of every set; the fraction covered is REPORTED", "bound": "every point covered", "needs": null},
+    {"id": "C1.cptFit", "group": "cited", "what": "equation (A4) with (A5) and (A6) of EH98 (the Lahav and Carroll fit, printed in the saved text) against the kernel's D(a) on S1 to S8 (w = -1), a in [0.01, 1]: the largest |D_fit/D_kernel - 1| is REPORTED and bounded", "bound": "relative 0.02 (a design bound for a stated approximation, not a published accuracy)", "needs": null},
+    {"id": "C2.publishedTable", "group": "cited", "what": "a published growth-factor (or growth-rate) table for a stated cosmology, transcribed by Carl's session as tests/fixtures/growth/authentic/published-growth.json, against the kernel", "bound": "the table's printed precision plus the kernel's carried estimate", "needs": "request C2", "expected": "not-run"},
+    {"id": "C3.citedCode", "group": "cited", "what": "the output of a cited Boltzmann or growth code (CAMB, CLASS, pyccl or colossus) pinned as a fixture for the same parameter sets, against the kernel", "bound": "the code's stated accuracy", "needs": "request C3", "expected": "not-run"},
+    {"id": "P1.zeroBaryon", "group": "power", "what": "T0(q), equation (29), at 301 log-spaced q from 1e-4 to 1e4: kernel against the oracle", "bound": "relative 1e-13", "needs": null},
+    {"id": "P2.effectiveShape", "group": "power", "what": "T(k) = T0(q_eff) with equations (26), (28), (30), (31) on T1 to T4 at 301 k from 1e-4 to 1e3 h/Mpc: kernel against the oracle", "bound": "relative 1e-12", "needs": null},
+    {"id": "P3.sigmaPowerLaw", "group": "power", "what": "the variance integral for P = A k^-2 over k from 1e-9 to 1e4 per Mpc/h at R in {1, 8, 30}: kernel against 3 A/(10 pi R) (the oracle checks the closed form against its own quadrature to 1e-9 before the kernel is run)", "bound": "relative 1e-6", "needs": null},
+    {"id": "P4.sigmaOracle", "group": "power", "what": "sigma(R) normalised to sigma8 = 0.8 at 8 Mpc/h, ns = 1, on T1 to T4 at the four radii: kernel against the oracle's quadrature", "bound": "relative 1e-8", "needs": null},
+    {"id": "P5.normalisation", "group": "power", "what": "sigma(8 Mpc/h, z = 0) equals the declared sigma8 and sigma(R, a)/sigma(R, 1) equals D(a)/D(1) from the kernel's own growth factor at the 41 grid points for S4", "bound": "relative 1e-10 and 1e-12", "needs": null},
+    {"id": "P6.numericalTransfer", "group": "power", "what": "a numerical Boltzmann code's transfer function or matter power spectrum for the T1 to T4 sets (or one printed in a paper), against the fit; the paper's own statements of 1 and 5 percent accuracy are quoted claims and are not tested here", "bound": "to be stated with the file by the request", "needs": "request P6", "expected": "not-run"},
+    {"id": "X1.planckSigma8", "group": "authentic", "what": "the analysis contract of authentic.X1 on the Planck best-fit column", "bound": "relative 0.05 (authentic.X1rule)", "needs": null},
+    {"id": "J1.jeansWavenumber", "group": "jeans", "what": "k_J(a) at the 41 grid points on S1 and S4 for c_s in {1, 5, 20} km/s, H0 = 70: kernel against the oracle's algebra", "bound": "relative 1e-12", "needs": null},
+    {"id": "J2.pressureOde", "group": "jeans", "what": "the pressure equation on S1 and S4 for kappa in {0.5, 2, 10, 50, 300}: D and D' at the grid points against the oracle's DOP853 solve of the same equation with the same initial data, errors measured relative to max |D| over the grid", "bound": "relative 1e-7", "needs": null},
+    {"id": "J3.zeroPressure", "group": "jeans", "what": "kappa = 0 gives exactly the pressureless kernel's D and f on S1 and S4", "bound": "exact (bit for bit)", "needs": null},
+    {"id": "J4.edsCrossing", "group": "jeans", "what": "in Einstein-de Sitter the scale factor at which k = k_J(a) for kappa in {2, 10, 50}: the kernel's root against the closed form a* = 3/(2 kappa^2)", "bound": "relative 1e-10", "needs": null},
+    {"id": "R1.growthRefusals", "group": "refusals", "what": "the twelve growth cases of refusals.growth give the stated code and no number", "bound": "exact", "needs": null},
+    {"id": "R2.growthAccepted", "group": "refusals", "what": "refusals.growthAccepted: no in-domain set is refused", "bound": "exact", "needs": null},
+    {"id": "R3.shapeRefusals", "group": "refusals", "what": "the ten shape cases of refusals.shape give the stated code and no number", "bound": "exact", "needs": null},
+    {"id": "R4.jeansRefusals", "group": "refusals", "what": "the five Jeans cases of refusals.jeans give the stated code and no number", "bound": "exact", "needs": null},
+    {"id": "Q1.claimRule", "group": "claimRule", "what": "no student-facing string of the tree (js/i18n/*.js, js/data/**/*.js, library/library.json, the root *.html pages) puts the words sandbox, N-body or rescaled within 300 characters of structure formation, cosmological simulation, cosmic web, formacion de estructuras (accent-folded) or simulacion cosmologica (accent-folded)", "bound": "zero matches", "needs": null},
+    {"id": "W1.growthIndex", "group": "reported", "what": "the growth index gamma in f = Omega_m(a)^gamma least-squares fitted over a in [0.3, 1] for flat Lambda Om in {0.25, 0.3, 0.35}, as measured on the kernel; a comparison with any published value is NOT RUN (no published value is in the saved texts)", "bound": "reported", "needs": null},
+    {"id": "W2.radiation", "group": "reported", "what": "the sensitivity of D(a)/D(1) at a = 0.01 and 0.1 to a radiation term in the background (Or = 8.5e-5 as a round test input, the Meszaros matter-radiation initial data D = 1 + 3y/2, y = a/a_eq, a_eq = Or/Om) against the matter-only kernel, flat Lambda Om 0.3, by the oracle's DOP853 only (the kernel refuses Or > 0); it measures how much the 'Or = 0' domain costs at its lower edge", "bound": "reported", "needs": null},
+    {"id": "W3.cpu", "group": "reported", "what": "kernel CPU time for one growth solve to a = 1 and for one sigma(R) integral, on this machine (Node 22.23.4)", "bound": "reported", "needs": null},
+    {"id": "W4.imageryDecision", "group": "reported", "what": "imagery: none (model.imagery); A is not attainable", "bound": "not applicable", "needs": "request S1 for any future decision", "expected": "omitted"}
+  ],
+  "verdict": {
+    "rows": "A leg with a group other than 'reported' and no 'expected' passes or fails by its bound; a leg with 'expected: not-run' is NOT RUN until its request is met and never counts as a pass; a pass/fail leg that cannot be measured fails the gate on that threshold; X1 is judged separately from the kernel legs.",
+    "kernel": "KERNEL PASS iff every leg of groups integrity, closedForm, oracle, power, jeans, refusals and claimRule passes and C1 passes; otherwise KERNEL FAIL.",
+    "A": "not attainable in this gate: it needs vetted density slices from a public simulation release under a recorded rights decision as 157 image packs, and the committed imagery decision is none.",
+    "B": "KERNEL PASS and X1 passes: the growth kernel without imagery (Appendix C's B): the growth factor and rate in the declared domain, the transfer-function shape, sigma(R) and its normalisation to a declared sigma8, the Jeans criterion as a bounded derivation, each with the domain stated.",
+    "B2": "KERNEL PASS and X1 fails: a named narrower slice, stated before any run: the growth factor and rate, the Jeans criterion and the transfer-function SHAPE with an unnormalised amplitude; no sigma_8 or sigma(R) normalised to data and no chain from a primordial amplitude; the scale that matters is read from the shape alone.",
+    "C": "KERNEL FAIL: a reading step (Appendix C); 260's The pillars omits growth.",
+    "notRunLegs": "C2, C3 and P6 NOT RUN do not change the letter, and they are named in every sentence that states it; they are what a later run needs before the consumers condition can be met.",
+    "consumersClause": "the consumers condition of Carl's rulings of 2026-11-05 and 2026-11-06 is met iff the verdict is B or B2 AND at least one of C2 and C3 has run and passed. Whatever the verdict, no panel, lesson, viewer or contour is built until Carl lifts the consumers rule.",
+    "partB": "after B or B2, and only after Carl goes ahead; not begun in this session (the execution contract forbids starting the next part)."
+  },
+  "externalRequests": {
+    "C2": "NOT RUN. A published growth-factor or growth-rate table for a stated cosmology (a paper's table, a textbook table or a code paper's appendix), transcribed by Carl's session from the source's text or data file into tests/fixtures/growth/authentic/published-growth.json: the source's identifiers, the cosmological parameters as printed (Om, Ode, w, h), each tabulated redshift or scale factor with D or f as printed and its precision, the page or table number, the terms as read with a retrieval date and the rights basis (7.5 rule 4). Nothing typed from memory. Leg C2.",
+    "C3": "NOT RUN. The output of one cited code for the parameter sets S4, S9, S10 and T1 to T4: the growth factor D(z) and the linear matter power spectrum at z = 0 and z = 1, as a file produced by Carl's session (installing CAMB, CLASS, pyccl or colossus and running it is a download and execution of code and needs his permission; this session did not). The fixture records the code, its version and its sha256, the input ini or call, the date, and the output file with its sha256. Leg C3, and P6 through the power spectra.",
+    "P6": "NOT RUN. The same as C3 for the transfer function T(k) (a numerical Boltzmann output), or a paper's printed table of it, for the sets T1 to T4. Leg P6.",
+    "S1": "NOT DECIDED. Any imagery needs, per 7.5 rule 4: a named public cosmological simulation release (product and version), the terms as read with a retrieval date, the rights basis accepted (public domain; CC BY; CC BY-SA or NC only under the existing labelled mechanisms; or a 'no licence stated, credited' basis only as its own recorded decision), the transformation (a projected density slice, its colour map and size), the attribution, the fallback (the growth curve) and the redshifts; each slice as a 157 image pack with provenance. Until it exists the imagery decision is none."
+  },
+  "scope": {
+    "built": "on the spike only: a prototype kernel (growth solver with error estimate, growth rate, transfer-function shape, variance and normalisation, Jeans wavenumber and the pressure equation, refusals), its validator, the extraction scripts and the independent oracle. In the repository (this PR): the committed thresholds, the formula transcription and its sources record, the Planck extraction, the oracle's pinned output, the gate stream's results, the failed legs, GROWTH_GATE.md, the register rows, the record's test, the docs-map entry.",
+    "notBuilt": "any module under js/ in the product tree, any panel, lesson, model-page section, data pack, image pack or viewer; Part B is not begun in this session (the execution contract forbids starting the next part) and the consumers rule holds",
+    "consumersRule": "no lesson, panel or viewer until the verdict is B or B2, a request among C2 and C3 has run and passed, and Carl lifts the rule"
+  },
+  "seeds": "none: every computation is deterministic",
+  "amendments": [],
+  "decisions": [
+    {"id": "DEC1", "what": "Part A only. The execution contract forbids starting the next part; Part B (the kernel in the product tree, a panel, the lesson 'From ripples to galaxies' and the model-page section) is not begun, and its lesson and panel could not be built under the consumers rule in any case.", "consequence": "Nothing under js/ changes and no size ceiling moves."},
+    {"id": "DEC2", "what": "152 (js/numeric) has no ODE routine: quadrature, linear algebra, roots, interpolation and polynomial fits only. The growth equation is solved by a private embedded Dormand-Prince 5(4) in the prototype with a carried error estimate, not through 152, and the doc's delta table states that as missing behaviour. The prompt's 'solved through 152' is met for the variance integral (152's adaptive quadrature) and the Jeans root (152's Brent), not for the ODE.", "consequence": "If Part B follows, the integrator lands as a private function of the growth kernel with its own validation (this gate's legs), not as a shared module (7.2 item 6)."},
+    {"id": "DEC3", "what": "The imagery decision is none: nothing is fetched by this session and no simulation release has a recorded rights decision.", "consequence": "A is not attainable; the verdict function says so before any run."},
+    {"id": "DEC4", "what": "The independent reference of the contract's item (b) is split: an independent implementation (the oracle; 7.5.8 lists it beside a published table and a cited code) is the pass/fail reference, and the published table and the cited code are legs C2, C3 and P6, NOT RUN with exact requests. The letter of the verdict does not depend on them; the consumers condition does.", "consequence": "A B or B2 here is a statement about the kernel against independent mathematics and one published fit, never about agreement with a published growth table."},
+    {"id": "DEC5", "what": "Tier (c), ensemble coverage, is not applicable: the kernel has no random input and states no coverage. The carried error estimate is tested against the oracle instead (O2). Tier (d), refusals, is groups R1 to R4. Tier (e), authentic data, is X1 (one chain, one published value, a 5 percent bound fixed here) and C2 or C3 when they run.", "consequence": "The validation table of the doc has (a) G, (b) O, C, P, (c) not applicable, (d) R, (e) X1 with C2 and C3 NOT RUN."},
+    {"id": "DEC6", "what": "sigma8, the spectral index and the density parameters of the shape sets are declared test inputs; no survey's value is typed. The only published numbers used are read by script from the saved Planck text for X1, and the EH98 coefficients are transcribed with their lines.", "consequence": "Nothing in the gate states a measured value of sigma8 or Om."}
+  ],
+  "questions": []
+}
