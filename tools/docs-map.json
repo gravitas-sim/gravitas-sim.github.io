@@ -1428,6 +1428,13 @@
       "purpose": "Supernova likelihood gate: split-covariance decision, planes, oracle, 58 legs, verdict A (narrow); follow-up against the release covariance and published value, verdict FC (Prompt 256).",
       "owner": 256,
       "student": false
+    },
+    {
+      "file": "BAO_GATE.md",
+      "kind": "gate",
+      "purpose": "Baryon acoustic oscillation gate: the observable as a form, the sound-horizon integral, 39 legs, oracle, verdict C by the committed function; formulas and release table not run (Prompt 257).",
+      "owner": 257,
+      "student": false
     }
   ]
 }

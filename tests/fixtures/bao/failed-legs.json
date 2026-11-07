@@ -1,0 +1,27 @@
+{
+ "format": "gravitas.bao-failed-legs/1",
+ "note": "every row that crossed its committed bound, left failing",
+ "failed": [
+  {
+   "id": "E5.misspecified",
+   "measured": {
+    "prototypePoorFit": 0.288,
+    "oraclePoorFit": 0.314,
+    "truthVectorDifference": 3.51443012622722e-16
+   },
+   "bound": ">= 0.80 each",
+   "note": null
+  },
+  {
+   "id": "D6.detectable",
+   "measured": {
+    "prototypeMaxWindowSN": 0.5386147442525026,
+    "oracleMaxWindowSN": 0.5386147442525036,
+    "agree": true,
+    "refused": false
+   },
+   "bound": "max S/N >= 4",
+   "note": "NOT detectable at this size (a measurement, not a defect of the kernel; the demonstration is not built)"
+  }
+ ]
+}
