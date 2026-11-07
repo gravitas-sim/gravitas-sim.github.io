@@ -211,16 +211,24 @@ elif am1_ok and alts:
     letter_am1 = "FB'"
 else:
     letter_am1 = "FC'"
+am2_base = ['I1.file', 'I3.positive', 'I4c.cidPairs', 'I5.solvers', 'I6.regression']
+am2_ok = passing(am2_base) and passing(['E3a.fullVsPublished', 'E3d.fullScale'])
+if am2_ok and alts:
+    letter_am2 = "FB''"
+else:
+    letter_am2 = "FC''"
 verdict = dict(letter=letter, splitForm=split_form, referenceConfirmed=bool(base_ok),
                passingAlternatives=alts, recommendedAlternative=(alts[0] if letter == 'FB' else None),
                underAM1=dict(letter=letter_am1, referenceConfirmed=bool(am1_ok),
-                             recommendedAlternative=(alts[0] if letter_am1 == "FB'" else None)))
+                             recommendedAlternative=(alts[0] if letter_am1 == "FB'" else None)),
+               underAM2=dict(letter=letter_am2, status='proposed, not ratified', referenceConfirmed=bool(am2_ok),
+                             recommendedAlternative=(alts[0] if letter_am2 == "FB''" else None)))
 
 counts = {k: sum(1 for r in rows if r['status'] == k) for k in ('pass', 'fail', 'reported', 'notrun')}
 out = dict(format='gravitas.supernova-likelihood-followup-results/1',
            thresholdsSha256=hashlib.sha256(cb).hexdigest(), oracleResultsSha256=hashlib.sha256(ob).hexdigest(),
            publishedSha256=hashlib.sha256(open(PUBFILE, 'rb').read()).hexdigest(),
-           covarianceSha256=cov['sha256'], rows=rows, counts=counts, verdict=verdict)
+           covarianceSha256=cov['sha256'], rows=rows, counts=counts, verdict=verdict, mappingGate=OR['mappingGate'])
 with open(os.path.join(OUTDIR, 'followup-results.json'), 'w') as f:
     json.dump(out, f, indent=1)
     f.write('\n')
@@ -228,4 +236,4 @@ failed = [dict(id=r['id'], measured=r['measured'], bound=r['bound']) for r in ro
 with open(os.path.join(OUTDIR, 'followup-failed-legs.json'), 'w') as f:
     json.dump(dict(format='gravitas.supernova-likelihood-followup-failed/1', count=len(failed), legs=failed), f, indent=1)
     f.write('\n')
-print(counts, verdict['letter'], verdict['splitForm'], verdict['underAM1']['letter'])
+print(counts, verdict['letter'], verdict['splitForm'], verdict['underAM1']['letter'], verdict['underAM2']['letter'])

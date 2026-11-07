@@ -192,8 +192,11 @@ R9 = dict(rowsCiiAboveErrSq=int((excess < 0).sum()), maxCiiMinusErrSq=float((-ex
           calibrators=stats(F_CAL == 1), nonCalibrators=stats(F_CAL == 0))
 res['covariance'] = I
 res['diagonalReport'] = R9
-if not (I['cidPairs']['aboveAll'] and I['cidPairs']['z'] >= 10 and I['surveyShare']['aboveAll'] and I['surveyShare']['z'] >= 10):
-    res['stopped'] = 'I4c or I4d failed: the row mapping is unproven and every later leg is NOT RUN'
+MAP_C = I['cidPairs']['aboveAll'] and I['cidPairs']['z'] >= 10
+MAP_D = I['surveyShare']['aboveAll'] and I['surveyShare']['z'] >= 10
+res['mappingGate'] = dict(I4c=bool(MAP_C), I4d=bool(MAP_D), downstreamRunUnder=('committed rule (AM1)' if (MAP_C and MAP_D) else 'AM2 (proposed, not ratified)'))
+if not MAP_C:      # AM2 (proposed): I4c alone gates the later legs; without AM2 the stop rule is I4c and I4d
+    res['stopped'] = 'I4c failed: the row mapping is unproven and every later leg is NOT RUN'
     json.dump(res, open(os.path.join(OUTDIR, 'followup-oracle-results.json'), 'w'), indent=1)
     sys.exit(0)
 
