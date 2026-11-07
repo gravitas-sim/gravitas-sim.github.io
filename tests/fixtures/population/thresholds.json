@@ -1,0 +1,287 @@
+{
+  "format": "gravitas.population-inference-gate-thresholds/1",
+  "prompt": "Roadmap III, Prompt 264 Part A, Population inference: one selected-population likelihood (tranche T5, authorized by Checkpoint V's recorded outcome CONTINUE AS PLANNED, register row D-R10-254-01 and DECISIONS_2026-11-06.md; the hard prerequisites 154 (D-R10-31), 229 (verdict A, D-R10-229-90) and 262 (verdict B, slice B-KM, PR 561) are merged on v3). Documentation and fixtures only; the prototype, the oracle and the validator live on spike/population-inference-gate and are never merged (7.5 rule 4).",
+  "document": "POPULATION_INFERENCE_GATE.md (the likelihood, its domain and its limits, the legs, the measurements, the verdict and the requests), written after this file",
+  "committed": "before any prototype code, validator, oracle script or oracle output of this prompt existed, and before any rate estimate, likelihood value, interval, coverage or random sample of this prompt was computed. Nothing was fetched by this session and no published number, coefficient, table value, citation detail, sample or licence term was typed from memory. The hand-worked examples below were derived on paper from the definitions in this file.",
+  "rule": "A crossed bound is a failed leg, recorded in failed-legs.json and left failing; only Carl resets one. A leg that cannot be measured (a file not supplied, a source text not fetched, a code not installed) is NOT RUN and carries an exact request. Amendments are recorded in this file (amendments array) before any validator run and move no bound; a leg is added only as a NEW leg with its bound committed before its first run. A threshold that proves unmeasurable fails the gate on that threshold. Nothing is moved, re-read or re-defined after a result.",
+  "seenBeforeCommitting": [
+    "the roadmap sections named in the task (7 with 7.5, 12.1, 13, Appendix C, prompt 264 with its Run condition and full prompt)",
+    "the register rows D-R10-254-01, D-R10-31 and D-R10-229-01 to -90 and D-R10-262-01 to -05, DECISIONS_2026-11-07.md (outside the repository), OCCURRENCE_RATES.md and CENSORING_TRUNCATION_GATE.md, and the export lists and the code of js/kernels/occurrence/ (rates.js, population.js, survey.js) and js/kernels/statistics/ (selection.js, intervals.js, check.js, special.js), js/random/streams.js, and the stored survey js/data/occurrenceSurvey.js (its grid of summed completeness E is the planet case of the equivalence legs)",
+    "the form of the previous gates of this horizon (the censoring gate's thresholds file, validator header and record test), read for form only",
+    "the python packages installed for /usr/bin/python3 (3.9.6, numpy 1.26.4, scipy 1.13.1), run under python -E",
+    "one throwaway calculation of the effective volumes of scenario M (the shell sum of its selection, no estimator, no random draw): the volume of a bin runs from about 1.4e2 (lowest mass bin) to about 3.3e7 (highest), five orders of magnitude, which is why scenario M is declared by its expected listings and not by its density",
+    "no paper, table, catalogue or data file on population inference, deconvolution, occurrence rates or mass functions was read or fetched by this session"
+  ],
+  "problem": {
+    "statement": "A population has an unknown distribution of a value u (a planet's period and radius, a star's mass). A survey lists the objects it can see: each object has a selection probability that depends on its true value and on the target that was searched, and each listed object has a measured value x with its own known uncertainty sigma. The rates are the expected number of objects of the population per unit of exposure in each bin of the true value. One likelihood is committed; the planet occurrence engine of Prompt 229 is its special case with no per-object uncertainty.",
+    "bins": "J contiguous bins [e_0, e_1), ..., [e_(J-1), e_J] of the true value with widths w_j; the true value is uniform inside a bin (declared: no continuous model).",
+    "exposure": "E_j >= 0, the expected number of objects listed per unit rate in true bin j: the summed completeness of the searched targets for planets, the effective volume for stars. It is built from Prompt 154's selection object by E_j = sum over targets of weight_t times the mean of the target's inclusion probability over 64 midpoints of the bin (a target is {selection, weight}; for a volume the targets are shells of exact volume and the selection reads the shell's distance beside the value). It may also be given directly (the stored planet survey). Prompt 262's effective volume (the integral of the completeness over the volume) is the same quantity; its module is on a spike, not merged, so it is not imported, and leg A5 reproduces its hand case by this definition.",
+    "reliability": "r_j in (0, 1], the stated probability that a listing in bin j is real (default 1), never estimated here; false listings are taken to follow the distribution of the real ones of their bin (as in Prompt 229).",
+    "rate": "Gamma_j >= 0, the expected number of population objects per unit of exposure in true bin j (it may exceed one); mu_j = E_j Gamma_j / r_j is the expected number of listings that belong to true bin j.",
+    "sample": "either counts n_j (objects whose measured value is taken as exact: sigma = 0), or objects {x_i, sigma_i} with sigma_i >= 0 known and independent of the true bin (DEC2).",
+    "likelihood": "The listings are a Poisson process over the measured value. With K_ij = [Phi((x_i - e_(j-1)) / sigma_i) - Phi((x_i - e_j) / sigma_i)] / w_j (the density of x_i from a true value uniform in bin j: the convolution over bins; for sigma_i = 0, 1 / w_j if x_i is in bin j and 0 otherwise), the extended log-likelihood is  l(mu) = sum_i ln(sum_j mu_j K_ij) - sum_j mu_j  (terms that do not depend on mu dropped). Counts n_j with exact bins give l = sum_j (n_j ln mu_j - mu_j) and the maximum mu_j = n_j, so Gamma_j = n_j r_j / E_j: the rate of Prompt 229. l is concave in mu.",
+    "maximum": "mu_hat = the maximiser on mu >= 0 by the EM iteration (mu_j <- mu_j sum_i K_ij / D_i, D_i = sum_l mu_l K_il) accelerated by SQUAREM, started from a uniform mu summing to the number of objects; the counts path uses the closed form. Bins with E_j = 0 are not in the model.",
+    "interval": "The profile-likelihood interval of Gamma_j at level L: the set of Gamma with D_j(Gamma) = 2 [l(mu_hat) - max over the other mu of l with mu_j = E_j Gamma / r_j] <= chi-square quantile of L on one degree of freedom. D_j is convex (the partial maximum of a concave function), so the set is an interval; its ends come from bracketing and bisection on D_j. The upper end is null (status unbounded) when D_j has not reached the threshold at 1e6 times max(mu_hat_j, 1) r_j / E_j. The counts path returns Prompt 154's Poisson interval (Garwood below 100 listings, the deviance interval above) at exposure E_j / r_j, so that Prompt 229's intervals are reproduced exactly; its method string says so.",
+    "zero": "A bin whose maximum mu_hat_j is below 1e-6 is not given an interval: it gets the one-sided upper limit at 95 percent, the Gamma at which D_j equals -2 ln(1 - 0.95) (for a count of zero this is exactly -ln(0.05) / E_j, Prompt 229's limit).",
+    "floor": "A bin with E_j below 5 is not constrained: no rate, no limit (Prompt 229's floor); if every bin is below the floor the result is not constrained as a whole. The bin stays in the fit, so that its listings are not forced into its neighbours.",
+    "resolution": "The result states the median of sigma_i / w over the objects and `resolutionOk` = (that median is at most 0.5). The committed domain is resolutionOk: a bin narrower than twice the typical uncertainty is not resolved and the likelihood leaves the split between neighbours to the data's noise.",
+    "penalty": "A toggle, named as a penalty. With kappa > 0 the estimate maximises  l(mu) - (kappa / 2) sum_(j=2)^(J-1) (theta_(j-1) - 2 theta_j + theta_(j+1))^2  with theta_j = ln Gamma_j, over all bins (every bin needs E_j > 0). It is a roughness penalty on the log rate, a regularisation chosen by the user; it is not a prior and its result is not a posterior, and no interval is returned for a penalised estimate (the result carries the unpenalised fit beside it). kappa = 0 is the unpenalised maximum.",
+    "limits": "No continuous model of the distribution, no sampler (D-SAMPLER-01), no marginal likelihood, no hierarchical or population-of-populations model, no fitting of sigma, no model for the dependence of selection on sigma, and no more than 64 bins."
+  },
+  "constants": {
+    "levels": [0.6827, 0.95],
+    "limitLevel": 0.95,
+    "floor": 5,
+    "zeroMu": 1e-6,
+    "exposureNodes": 64,
+    "resolutionMax": 0.5,
+    "emRelTol": 1e-13,
+    "emMaxIter": 20000,
+    "unboundedFactor": 1e6,
+    "bisectRelTol": 1e-10,
+    "kappaGrid": [1, 4, 16],
+    "kappaDefault": 4,
+    "richMu": 25,
+    "note": "Declared defaults, set before any measurement and not tuned to a result. levels are the one-sigma level of Prompt 229 and the usual 95 percent."
+  },
+  "tolerance": {
+    "closedForm": 1e-12,
+    "equivalence": 1e-14,
+    "oracleLogLik": 1e-8,
+    "oracleMu": 1e-3,
+    "oracleEndpoint": 1e-3,
+    "oracleExposure": 1e-4,
+    "penaltyOracle": 1e-4,
+    "continuity": 1e-5,
+    "note": "oracleMu and oracleEndpoint are relative, for bins whose maximum mu_hat is at least 1 (endpoints: relative, or absolute 1e-6 where the oracle's end is 0). oracleLogLik is absolute. penaltyOracle is the largest absolute difference of ln Gamma. continuity compares the profile path at sigma = 1e-4 w to the counts path."
+  },
+  "oracle": {
+    "path": "tools/population-oracle/oracle.py (on the spike branch)",
+    "run": "/usr/bin/python3 -E tools/population-oracle/oracle.py tests/fixtures/population/thresholds.json tests/fixtures/population/oracle-results.json",
+    "independence": "Reads no Gravitas code and no output of the prototype; numpy, scipy and the standard library only. Its output is pinned before the prototype is run. It writes the reference samples (numpy default_rng) that the prototype fits, the exposures by scipy.integrate.quad, and for each sample the maximum by scipy.optimize (L-BFGS-B on the log-likelihood in mu with analytic gradient and a tight tolerance) and by its own EM (a second algorithm), the profile deviance by constrained L-BFGS-B at fixed mu_j, the interval ends by scipy.optimize.brentq on it, the penalised maximum by scipy.optimize.minimize on the penalised objective, the Garwood intervals from scipy.stats.chi2, and its own coverage ensemble on scenario U1 (300 replicates).",
+    "cited": "scipy.optimize (L-BFGS-B, brentq, minimize), scipy.integrate.quad and scipy.stats (norm, chi2, poisson). No cited occurrence or population code is run; a cited published pipeline would be a downloaded program and is request R4.",
+    "pythonRuns": "python -E (no environment, no user site packages that shadow)"
+  },
+  "scenarios": {
+    "streams": "Every ensemble replicate r of a scenario uses seed baseSeed + r: the spike's JavaScript draws from stream('noise', baseSeed + r, 'objects'); the oracle from numpy default_rng(baseSeed + r). The two are different realizations of the same population, by design. A replicate the estimator refuses or does not converge counts as not covering and is reported.",
+    "sampling": "For bin j draw n_j from Poisson(mu_j), mu_j = E_j Gamma_j / r_j (r_j = 1 in U and M); each object has a true value u uniform in bin j, a sigma log-uniform between sigmaLo and sigmaHi times the bin width, and a measured value x = u + sigma z, z standard normal. Poisson draws are Knuth's multiplication in chunks of mean 30 (Prompt 229's).",
+    "U1": {
+      "what": "the planet-like scenario with per-object uncertainties, the committed domain",
+      "edges": "0, 1, ..., 8 (J = 8, unit width)",
+      "targets": "500 targets, weight 1, each with the selection p_t(u) = 1 / (1 + exp((m_t - u) / 0.35)), m_t = 0.5 + 0.8 h_t, the 500 values m_t = 0.5 + 0.8 (t + 0.5) / 500, t = 0 to 499 (no random draw); the selection is built as 154's selection object per target",
+      "gamma": [0.3, 0.3, 0.3, 0.3, 0.3, 0.06, 0.06, 0.06],
+      "reliability": 1,
+      "sigma": "log-uniform between 0.1 and 0.4 of a bin width",
+      "replicates": 1000,
+      "baseSeed": 264100,
+      "truth": "Gamma as given; mu_j follows from the exposure; the rate falls five-fold between bins 4 and 5, so that measurement spill matters"
+    },
+    "U3": {
+      "what": "U1 with Gamma divided by six: sparse counts",
+      "gamma": "U1's gamma divided by 6",
+      "replicates": 1000,
+      "baseSeed": 264300
+    },
+    "U2": {
+      "what": "U1 with sigma log-uniform between 0.6 and 1.2 of a bin width: outside the committed domain",
+      "replicates": 500,
+      "baseSeed": 264700
+    },
+    "M": {
+      "what": "a mass function through a flux limit: stars of a log-mass u, a magnitude-limited volume, per-star mass uncertainty",
+      "edges": "-0.5, -0.3, ..., 1.5 (J = 10, width 0.2)",
+      "targets": "40 distance shells d in [0, 200], shell k from 5k to 5(k+1), weight the exact shell volume (4 pi / 3)(d_hi^3 - d_lo^3), the selection read as all(value, distance): p = 1 / (1 + exp(-(u - uLim(d)) / 0.1)), uLim(d) = (-1 + 2 log10 d_mid) / 3.5 with d_mid the shell midpoint (a declared synthetic mass-flux relation of slope 3.5 and a declared limit)",
+      "mustar": "mu_j = 400 x 0.75^j (400, 300, 225, ... ): Gamma_j = mu_j / E_j, E_j from the oracle's pinned quadrature",
+      "reliability": 1,
+      "sigma": "log-uniform between 0.2 and 0.5 of a bin width",
+      "replicates": 500,
+      "baseSeed": 264500
+    },
+    "recovery": {
+      "what": "U1 and M with the weight of every target multiplied by 100 (so mu is 100 times larger): one realization each, seeds 264900 (U1) and 264901 (M)"
+    },
+    "Q": {
+      "what": "the planet case of Prompt 229: its stars (makeStars seed occ-229, n 2000), its truth rates (truthRates()), its stored grid of summed completeness (js/data/occurrenceSurvey.js, SURVEY.E), reliability by period bin 0.95, 0.95, 0.9, 0.9, 0.85, 0.85, 0.8, 0.8, populations from simulatePopulation seed pop264-Q-r for r = 0 to 199; the 40 cells (period bin by radius bin) are the J = 40 bins of the general kernel, so the general kernel sees the grid as a list"
+    },
+    "P3": {
+      "what": "the smoothing-penalty ensemble: J = 10 unit bins on [0, 10), exposure 12 in every bin, Gamma_j = 0.4 exp(-0.15 j) (log-linear, so its second differences are zero), r = 1, every object sigma = 0.2 of a bin, 400 replicates, baseSeed 264800"
+    },
+    "P4": {
+      "what": "the sharp-feature ensemble: as P3 with exposure 60 and Gamma_j = 0.1 everywhere except bin 4, which is 0.6; 400 replicates, baseSeed 264850"
+    },
+    "misspecified": "On the first 400 replicates of U1: W1 declares the exposure of bins 4 to 7 as 0.7 of the truth (a wrong selection function); W2 declares every sigma as 0.5 of the truth; W3 declares every sigma as 2 of the truth."
+  },
+  "referenceSamples": {
+    "note": "The oracle generates these (numpy default_rng(seed)) and pins the objects, the exposures it computed by quad, its fits and intervals; the prototype reads them from oracle-results.json and fits the same objects with the same exposures. Bin widths unit unless stated; sigma in units of a bin width.",
+    "designs": [
+      {"id": "S1", "seed": 264201, "edges": "0..6", "mu": [30, 60, 90, 90, 60, 30], "sigma": [0.1, 0.3], "reliability": 1, "kind": "objects"},
+      {"id": "S2", "seed": 264202, "edges": "0..6", "mu": [30, 60, 90, 0, 60, 3], "exposure": [40, 80, 120, 120, 80, 3], "sigma": [0.1, 0.3], "reliability": 1, "kind": "objects", "feature": "a bin with no listings (mu 0) and a bin below the floor (exposure 3)"},
+      {"id": "S3", "seed": 264203, "edges": "0..8", "mu": [80, 80, 80, 80, 16, 16, 16, 16], "sigma": [0.3, 0.5], "reliability": 1, "kind": "objects", "feature": "a five-fold step and the largest committed uncertainty"},
+      {"id": "S4", "seed": 264204, "edges": "0, 0.5, 1.5, 3, 5, 8, 12", "mu": [20, 40, 60, 80, 70, 40], "sigma": [0.1, 0.3], "reliability": 1, "kind": "objects", "feature": "unequal widths (sigma is a fraction of the width of the object's true bin)"},
+      {"id": "S5", "seed": 264205, "edges": "0..6", "mu": [30, 60, 90, 90, 60, 30], "sigma": [0.1, 0.3], "reliability": [1, 0.95, 0.9, 0.85, 0.8, 0.7], "kind": "objects", "feature": "reliability by bin (mu is the expected listings: E Gamma / r)"},
+      {"id": "S6", "seed": 264206, "edges": "0..6", "mu": [30, 0, 0, 90, 60, 30], "sigma": [0.1, 0.3], "reliability": 1, "kind": "objects", "feature": "two adjacent empty bins between populated ones"},
+      {"id": "S7", "seed": 264207, "edges": "0..6", "mu": [600, 1200, 1800, 1800, 1200, 600], "sigma": [0.1, 0.3], "reliability": 1, "kind": "objects", "feature": "about 7000 objects"},
+      {"id": "S8", "seed": 264208, "edges": "0..6", "mu": [30, 60, 90, 90, 60, 30], "sigma": [0, 0], "reliability": [1, 0.95, 0.9, 0.85, 0.8, 0.7], "kind": "counts", "feature": "exact bins: the counts path"}
+    ],
+    "exposure": "except where a design gives one, E_j = 100 for every bin of S1, S3 to S8 (so Gamma = mu r / 100); it is passed to the prototype as data. The oracle also computes the exposure of the selection of scenario U1 (the same 500 values m_t) by scipy.integrate.quad for leg A4.",
+    "penalty": "the oracle's penalised maximum at kappa 1, 4 and 16 on S1 and S3"
+  },
+  "handExamples": {
+    "note": "Derived on paper from the definitions above before any computation. Units are arbitrary.",
+    "A1": {
+      "what": "counts n = [3, 0, 10], exposure E = [10, 8, 20], reliability r = [1, 0.5, 0.8], edges 0, 1, 2, 3, all exact",
+      "expected": "Gamma = [0.3, no rate, 0.4] (n r / E: 3 / 10 and 10 x 0.8 / 20); the middle bin an upper limit at 95 percent of -ln(0.05) / 8 (E, not E / r); the first and third bins are not below the floor of 5 (E = 10, 8, 20)"
+    },
+    "A2": {
+      "what": "two unit bins [0, 1) and [1, 2), exposure 1 each, one object at x = 1 with sigma = 0.5",
+      "derivation": "K_i1 = Phi(2) - Phi(0) and K_i2 = Phi(0) - Phi(-2) are equal (call it k = Phi(2) - 1/2), so l = ln(k (mu_1 + mu_2)) - (mu_1 + mu_2): the maximum is mu_1 + mu_2 = 1, l_hat = ln(Phi(2) - 1/2) - 1, and the split is not identified. The profile of mu_1: D(g) = 0 for g in [0, 1] (the other bin takes up the rest) and, for g > 1 (the other bin 0), D(g) = 2 (g - 1 - ln g); so the 95 percent interval of mu_1 is [0, g*] with g* the root above 1 of 2 (g - 1 - ln g) = chi-square quantile(0.95, 1)."
+    },
+    "A3": {
+      "what": "one target with the constant selection p = 0.37 (cut none), three bins: E_j = 0.37 times the weight of the target in every bin; with 2 targets of weights 1 and 3: E_j = 1.48",
+      "expected": "[1.48, 1.48, 1.48]"
+    },
+    "A5": {
+      "what": "the effective volume as the exposure: two shells with exact volumes 1 (d in [0, 1), V = d^3) and 7 (d in [1, 2)), a selection that is 1 for the first and 0.5 for the second, one bin: E = 1 x 1 + 7 x 0.5",
+      "expected": "4.5 (the same hand case as Prompt 262's effective-volume leg A7)"
+    }
+  },
+  "refusals": {
+    "base": [
+      {"code": "edges", "case": "fewer than 2 edges, edges not strictly increasing, or a non-finite edge"},
+      {"code": "exposure", "case": "an exposure list of the wrong length, a negative or non-finite exposure"},
+      {"code": "reliability", "case": "a reliability of 0, above 1 or not a number"},
+      {"code": "count", "case": "a count that is not a whole number of at least 0"},
+      {"code": "counts", "case": "a counts list of the wrong length"},
+      {"code": "sample", "case": "neither counts nor objects given, or both"},
+      {"code": "level", "case": "a level not strictly between 0 and 1"},
+      {"code": "penalty", "case": "a negative or non-finite kappa"}
+    ],
+    "objects": [
+      {"code": "sigma", "case": "a negative or non-finite sigma"},
+      {"code": "object", "case": "a measured value that is not finite"},
+      {"code": "outside", "case": "an object with sigma 0 outside the edges"},
+      {"code": "unplaceable", "case": "an object whose likelihood in every bin underflows (the sum of K_ij below 1e-300)"},
+      {"code": "penalty-gap", "case": "a penalty requested with a bin of exposure 0"}
+    ],
+    "rule": "A refusal is the record { status: 'refused', code, why } of statistics/check.js. A misuse that is not a refusal fails its leg."
+  },
+  "checks": [
+    {"id": "I1.inputs", "group": "integrity", "scope": "all", "tier": "-", "statement": "oracle-results.json records the sha256 of the thresholds file it read and it equals this file's; results.json records the same and the oracle output's", "bound": "exact"},
+    {"id": "O1.twoAlgorithms", "group": "oracle", "scope": "all", "tier": "b", "statement": "the oracle's L-BFGS-B maximum against its own EM maximum on every object-form reference sample, the log-likelihood", "bound": "max absolute 1e-8 (tolerance.oracleLogLik)"},
+    {"id": "O2.hand", "group": "oracle", "scope": "unc", "tier": "b", "statement": "the oracle on hand example A2: total mu 1 and l_hat = ln(Phi(2) - 1/2) - 1, and the upper end g* of the profile interval of mu_1", "bound": "max absolute 1e-9 on the total, 1e-12 on l_hat, relative 1e-9 on g*"},
+    {"id": "O3.garwood", "group": "oracle", "scope": "base", "tier": "b", "statement": "the oracle's counts-path rates and Garwood intervals (scipy.stats.chi2) on S8 against n r / E and the closed form", "bound": "max relative 1e-12"},
+    {"id": "O4.profileEnds", "group": "oracle", "scope": "unc", "tier": "b", "statement": "the oracle's profile deviance evaluated at each interval end it found equals the threshold (the definition of the end)", "bound": "max absolute 1e-6 of the deviance"},
+    {"id": "A1.handCounts", "group": "analytic", "scope": "base", "tier": "a", "statement": "hand example A1 through the counts path", "bound": "rates to 1e-12 relative, the limit to 1e-12, the statuses as stated"},
+    {"id": "A2.handNonIdentified", "group": "analytic", "scope": "unc", "tier": "a", "statement": "hand example A2 through the object path: the maximum total mu 1, l_hat, the interval of mu_1 = [0, g*]", "bound": "total 1e-9 absolute, l_hat 1e-12 absolute, g* 1e-9 relative, lo exactly 0"},
+    {"id": "A3.exposureConstant", "group": "analytic", "scope": "base", "tier": "a", "statement": "exposure from a constant selection and two weighted targets (hand example A3)", "bound": "1e-12 relative"},
+    {"id": "A4.exposureLogistic", "group": "analytic", "scope": "base", "tier": "a", "statement": "exposure of scenario U1's 500 selections by 154's object with 64 midpoints per bin against the oracle's scipy.integrate.quad, every bin", "bound": "max relative tolerance.oracleExposure"},
+    {"id": "A5.exposureVolume", "group": "analytic", "scope": "base", "tier": "a", "statement": "the effective volume as the exposure (hand example A5), through a selection reading the value and the distance", "bound": "1e-12 relative of 4.5"},
+    {"id": "Q1.equivalenceCounts", "group": "equivalence", "scope": "base", "tier": "b", "statement": "the planet case: for every cell of 200 simulated populations (8000 cells), the general kernel's counts path against Prompt 229's occurrenceGrid on the same counts, exposures and reliabilities: status, rate, lower and upper end, limit, and the method string", "bound": "statuses and method strings identical; max relative difference of rate, lo, hi, limit 1e-14 (tolerance.equivalence)"},
+    {"id": "Q2.equivalenceObjects", "group": "equivalence", "scope": "base", "tier": "b", "statement": "the same cells given as objects with sigma = 0 at the midpoint of their measured bin", "bound": "as Q1"},
+    {"id": "Q3.continuity", "group": "equivalence", "scope": "unc", "tier": "b", "statement": "on 20 of the populations of Q (the first 20, cells with at least one listing): the profile path with every sigma = 1e-4 of a bin (objects at the midpoint) against the counts path: the rate; and the profile interval ends against Prompt 154's poissonInterval with method 'profile' at exposure E / r", "bound": "rates relative 1e-6; ends relative tolerance.continuity"},
+    {"id": "R1.countsReference", "group": "reference", "scope": "base", "tier": "b", "statement": "the prototype's counts path on S8 against the oracle: rates, ends, floor statuses", "bound": "rates 1e-12 relative; ends relative 1e-12; statuses identical"},
+    {"id": "R2.logLik", "group": "reference", "scope": "unc", "tier": "b", "statement": "the prototype's maximum log-likelihood on the seven object-form samples S1 to S7 against the oracle's", "bound": "max absolute tolerance.oracleLogLik"},
+    {"id": "R3.mu", "group": "reference", "scope": "unc", "tier": "b", "statement": "mu_hat against the oracle's, bins with the oracle's mu_hat at least 1 (S1 to S7)", "bound": "max relative tolerance.oracleMu"},
+    {"id": "R4.endpoints", "group": "reference", "scope": "unc", "tier": "b", "statement": "the profile interval ends (levels 0.6827 and 0.95) against the oracle's brentq ends, bins that are neither below the floor nor zero (S1 to S7)", "bound": "max relative tolerance.oracleEndpoint (absolute 1e-6 where the oracle's end is 0)"},
+    {"id": "R5.zeroAndFloor", "group": "reference", "scope": "unc", "tier": "b", "statement": "S2 and S6: the bins with no listings get the upper limit and the bin below the floor gets 'not-constrained', against the oracle's", "bound": "statuses identical; limits relative tolerance.oracleEndpoint"},
+    {"id": "R6.resolutionFlag", "group": "reference", "scope": "unc", "tier": "b", "statement": "the resolution record (median sigma over width and resolutionOk) on S1 to S7 against the oracle's", "bound": "median 1e-9 relative; flag identical"},
+    {"id": "V1.recoveryU1", "group": "recovery", "scope": "unc", "tier": "a", "statement": "U1 at 100 times the exposure (one realization): the largest relative error of Gamma_hat over the 8 bins, with the true selection", "bound": "max |Gamma_hat / Gamma - 1| <= 0.05"},
+    {"id": "V2.recoveryM", "group": "recovery", "scope": "unc", "tier": "a", "statement": "M at 100 times the exposure (one realization): the largest relative error over the 10 bins", "bound": "max |Gamma_hat / Gamma - 1| <= 0.08"},
+    {"id": "C1.coverageU1", "group": "coverage", "scope": "unc", "tier": "c", "statement": "U1, 1000 replicates, the reported statement of every bin with true mu at least 25 (the set is fixed by the truth and the exposure, not by the replicate): coverage at 0.95, the mean over those bins", "bound": "in [0.93, 0.97]"},
+    {"id": "C1b.coverageU1PerBin", "group": "coverage", "scope": "unc", "tier": "c", "statement": "as C1, the lowest single bin", "bound": ">= 0.91"},
+    {"id": "C2.coverageU1sigma", "group": "coverage", "scope": "unc", "tier": "c", "statement": "as C1 at the level 0.6827, the mean over the same bins", "bound": "in [0.65, 0.72]"},
+    {"id": "C3.coverageU3", "group": "coverage", "scope": "unc", "tier": "c", "statement": "U3 (sparse), 1000 replicates, coverage at 0.95 of the reported statement of every bin (a bin whose estimate is zero is covered when the truth is below its upper limit), the mean over the bins", "bound": "in [0.90, 0.99]"},
+    {"id": "C4.coverageM", "group": "coverage", "scope": "unc", "tier": "c", "statement": "M, 500 replicates, coverage at 0.95 over the bins with true mu at least 25 (fixed by the truth), the mean", "bound": "in [0.93, 0.97]"},
+    {"id": "C4b.coverageMPerBin", "group": "coverage", "scope": "unc", "tier": "c", "statement": "as C4, the lowest single bin", "bound": ">= 0.90"},
+    {"id": "C5.bias", "group": "coverage", "scope": "unc", "tier": "c", "statement": "U1: the mean over replicates of Gamma_hat / Gamma in every rich bin", "bound": "each within 0.03 of 1"},
+    {"id": "C6.converged", "group": "coverage", "scope": "unc", "tier": "c", "statement": "the share of fits (the unconstrained and every constrained fit) that did not converge in 20000 iterations or were refused, over U1, U3 and M", "bound": "<= 0.005"},
+    {"id": "C7.coverageOracle", "group": "coverage", "scope": "unc", "tier": "c", "statement": "the oracle's own implementation on its own numpy ensemble of U1 (300 replicates, base seed 264100), coverage at 0.95 of the profile interval at the truth (D_j(Gamma) <= threshold), the pooled mean over the rich bins", "bound": "in [0.92, 0.98]"},
+    {"id": "D1.widthWithSigma", "group": "misspecified", "scope": "unc", "tier": "d", "statement": "the same 400 U1 samples fitted with every declared sigma doubled (W3): the median over replicates and rich bins of the relative interval width (hi - lo) / Gamma_hat at 0.95, divided by the same at the true sigma", "bound": ">= 1.05 (a coarser measurement must widen the interval)"},
+    {"id": "D2.resolutionFlag", "group": "misspecified", "scope": "unc", "tier": "d", "statement": "resolutionOk is true in every U1 replicate and false in at least 99 percent of the U2 replicates", "bound": "U1 1.000; U2 >= 0.99"},
+    {"id": "D3.refusalsCounts", "group": "refusals", "scope": "base", "tier": "d", "statement": "the eight base refusal codes, each from a case built to trigger it, and no refusal for the valid neighbour of each case", "bound": "every code as committed"},
+    {"id": "D4.refusalsObjects", "group": "refusals", "scope": "unc", "tier": "d", "statement": "the five object refusal codes, as D3", "bound": "every code as committed"},
+    {"id": "D5.floorCounts", "group": "refusals", "scope": "base", "tier": "d", "statement": "the floor: counts with exposure [4.9, 5, 40] give 'not-constrained' (no rate, no limit) for the first only; all exposures below 5 give a not-constrained result as a whole", "bound": "as stated"},
+    {"id": "D6.floorObjects", "group": "refusals", "scope": "unc", "tier": "d", "statement": "the floor on the object path: a bin below the floor with listings gets no rate while the rates of its neighbours are still returned", "bound": "as stated"},
+    {"id": "D7.emptySample", "group": "refusals", "scope": "unc", "tier": "d", "statement": "an empty object list: every bin at or above the floor gets the upper limit -ln(0.05) / E_j", "bound": "1e-9 relative"},
+    {"id": "D8.noZeroRule", "group": "misspecified", "scope": "unc", "tier": "d", "statement": "the upper limit of a zero bin under uncertainty, coverage of U3's zero-estimate statements: over the replicates and bins whose estimate is zero, the share whose limit is at or above the truth", "bound": ">= 0.94"},
+    {"id": "P1.zeroKappa", "group": "penalty", "scope": "penalty", "tier": "a", "statement": "kappa = 0 equals the unpenalised maximum on S1 to S7", "bound": "max relative difference of Gamma 1e-9"},
+    {"id": "P2.penaltyOracle", "group": "penalty", "scope": "penalty", "tier": "b", "statement": "the penalised estimate at kappa 1, 4 and 16 on S1 and S3 against the oracle's scipy.optimize.minimize", "bound": "max absolute difference of ln Gamma tolerance.penaltyOracle"},
+    {"id": "P3.penaltyHelps", "group": "penalty", "scope": "penalty", "tier": "c", "statement": "P3 (smooth truth, sparse counts), 400 replicates: the mean over replicates of the sum over bins of (Gamma_hat / Gamma - 1)^2 at kappa = 4 divided by the same at kappa = 0", "bound": "<= 0.9"},
+    {"id": "P4.penaltyNamed", "group": "penalty", "scope": "penalty", "tier": "d", "statement": "a penalised result names itself a penalised maximum likelihood with its kappa and its roughness kind, carries the unpenalised fit beside it, returns no interval, and neither its record nor its strings contain the words prior, posterior, credible or Bayes (case-insensitive)", "bound": "every item holds on S1 and S3"},
+    {"id": "P5.penaltyGap", "group": "penalty", "scope": "penalty", "tier": "d", "statement": "kappa < 0 and a penalty with a bin of exposure 0 are refused with the committed codes", "bound": "as stated"},
+    {"id": "N1.naiveCoverage", "group": "reported", "scope": "unc", "tier": "c", "statement": "U1: the coverage at 0.95 of the naive method (every listing counted in its measured bin and Prompt 229's rate and interval on those counts, the same exposure), the mean over the bins and the coverage in bin 5", "bound": "reported"},
+    {"id": "N2.wrongExposure", "group": "reported", "scope": "unc", "tier": "d", "statement": "W1: the first 400 U1 replicates with the exposure of bins 4 to 7 declared as 0.7 of the truth: the mean of Gamma_hat / Gamma and the coverage in those bins", "bound": "reported"},
+    {"id": "N3.wrongSigma", "group": "reported", "scope": "unc", "tier": "d", "statement": "W2: the first 400 U1 replicates fitted with every sigma declared as half the truth: coverage at 0.95 over the rich bins", "bound": "reported"},
+    {"id": "N4.outsideDomain", "group": "reported", "scope": "unc", "tier": "d", "statement": "U2 (sigma 0.6 to 1.2 of a bin width): the share of bins with an unbounded upper end, the median interval width relative to U1's and the coverage at 0.95 over the bins", "bound": "reported"},
+    {"id": "N5.penaltyFeature", "group": "reported", "scope": "penalty", "tier": "d", "statement": "P4 (a sharp feature): the mean of Gamma_hat / Gamma in the feature bin at kappa 1, 4 and 16, and the mean of the neighbours' ratio", "bound": "reported"},
+    {"id": "N6.cpuTime", "group": "reported", "scope": "all", "tier": "-", "statement": "CPU time of every ensemble", "bound": "reported"},
+    {"id": "X1.occurrenceAuthentic", "group": "authentic", "scope": "unc", "tier": "e", "statement": "the general kernel on a real survey's planet candidates with the survey's published injection-and-recovery completeness and stated reliability, against its published occurrence table, a table whose values were not used to tune anything", "bound": "inside the published table's own uncertainty, set by the request's data", "expected": "not-run", "request": "R1"},
+    {"id": "X2.massFunctionAuthentic", "group": "authentic", "scope": "unc", "tier": "e", "statement": "the general kernel on a real cluster's members with per-star mass uncertainty and a stated completeness, as a present-day mass function of a selected sample", "bound": "set by the request's data", "expected": "not-run", "request": "R2"},
+    {"id": "X3.citedImplementation", "group": "authentic", "scope": "unc", "tier": "e", "statement": "agreement with a cited published implementation of the same likelihood on the same samples", "bound": "set by the request's data", "expected": "not-run", "request": "R4"}
+  ],
+  "verdict": {
+    "rows": "A leg of group integrity, oracle, analytic, equivalence, reference, recovery, coverage, misspecified or refusals passes or fails by its bound; a leg of group penalty or reported has no effect on the letter (penalty legs pass or fail by their bounds, reported legs have none); a leg with expected not-run is NOT RUN until its request is met and never counts as a pass; a pass/fail leg that cannot be measured fails the gate on that threshold.",
+    "base": "BASE PASSES iff every leg of scope base or all, in the groups named above (not penalty, reported or authentic), passes.",
+    "unc": "UNC PASSES iff every leg of scope unc or all, in the same groups, passes.",
+    "A": "BASE PASSES and UNC PASSES: the general kernel (Part B builds the maximum-likelihood rates with their intervals, per-object uncertainties by the convolution over bins, the selection function from 154's object, and the floor).",
+    "B": "BASE PASSES and UNC does not: without per-object uncertainties (Part B builds the counts path on arbitrary bins and exposures, 229's engine on a general bin list and a general exposure, and nothing that takes a sigma).",
+    "C": "BASE does not pass: 229's engine stays specific; 266 omits the population investigation (Appendix C's c).",
+    "penalty": "PENALTY ADMITTED iff every leg of group penalty passes. It does not change the letter; if it fails the toggle is not built in Part B.",
+    "notRunLegs": "X1 to X3 NOT RUN do not change the letter and are named in every sentence that states it. A letter is therefore a verdict on the synthetic tiers a to d and the oracle, never on real data.",
+    "consumers": "No verdict releases a panel, a lesson or a viewer: the consumers rule (Carl, 2026-11-05, 2026-11-06 and 2026-11-07) holds for kernel gates."
+  },
+  "externalRequests": [
+    {
+      "id": "R1",
+      "for": "X1",
+      "request": "Save under scratch-data/population264/ (outside any repository) the data of one published exoplanet occurrence calculation that publishes its search completeness: (a) the planet candidate list of the survey with each candidate's period, radius and its uncertainties and the candidate reliability the catalogue states, (b) the survey's published injection-and-recovery completeness (a table or a per-target completeness product) with its version and date, (c) the published occurrence table of the calculation (rates with intervals, in period and radius bins) and the bins' definitions, with the paper's text. The release, the survey and the paper are for the person fetching to name from the catalogue's own documentation; this session names none and types no value. Record the terms of each file and the retrieval date."
+    },
+    {
+      "id": "R2",
+      "for": "X2",
+      "request": "Save under scratch-data/population264/ a cluster's member list with each member's mass (or a luminosity from which the kernel's declared relation gives one) and the stated per-star uncertainty, the survey's completeness as a function of magnitude, and the published present-day mass function of that cluster, with the paper's text and the terms. A cluster already in the repository's cluster pack may be used if its members' photometry and uncertainties are enough; say which."
+    },
+    {
+      "id": "R3",
+      "for": "X2",
+      "request": "The printed form of the initial mass function that a later lesson would compare a synthetic population with (the equation and its stated range), as text with the equation number and the source's terms. Part A uses none."
+    },
+    {
+      "id": "R4",
+      "for": "X3",
+      "request": "A cited published implementation of an occurrence or binned-rate likelihood with a selection function (name it from the documentation of R1's calculation), its licence, and the printed output of its example run on the example data it ships, as files; running it is a downloaded program and needs Carl's permission, so only files and printed output are asked."
+    }
+  ],
+  "scope": {
+    "inScope": "the general binned selected-population likelihood, its maximum, its profile intervals, the floor, the resolution record, the smoothing penalty, the exposure from 154's selection object, all on synthetic populations with a truth manifest, on hand examples and on the stored planet case of Prompt 229, with an independent oracle",
+    "notInScope": "real-data applicability (tier e, NOT RUN), a panel, a lesson or a viewer of any kind (consumers rule), a present-day mass function of a real sample, the initial mass function (a later lesson on a synthetic population with a known history), any continuous model, sampler or marginal likelihood, any change to the shipped js/kernels/ authorities, any byte shipped"
+  },
+  "amendments": [
+    {
+      "id": "AM1",
+      "recordedBefore": "the oracle's first run and every validator run",
+      "text": "Definitions the contract left open, fixed before any number existed. (1) The resolution record's width: w_i is the width of the bin that contains the measured value x_i (the nearest bin if x_i is outside the edges); the record is the median of sigma_i / w_i and resolutionOk = (median <= 0.5); sigma_i = 0 objects count as 0. (2) The reported statement of a bin in a coverage ensemble is covered when: status ok and D_j(Gamma_true) <= the chi-square threshold of the level (measured by one extra constrained fit at the truth); status upper-limit and Gamma_true <= the limit (at the 0.95 limit level, also in the 0.6827 ensembles); status not-constrained, refused or not converged: not covered. A bin with an unbounded upper end is covered by the same test. (3) The relative width of D1 is (hi - lo) / Gamma_hat over the bins with status ok and a finite hi; the median is over every such (replicate, rich bin) pair, and the ratio is of the medians. (4) C5's ratio uses the replicates that converged. (5) C6 counts every fit, the unconstrained fit and each constrained fit at the truth. (6) P3's sum runs over all ten bins, with the unpenalised fit as the kappa = 0 fit; a replicate in which either fit does not converge is dropped from both and counted. (7) The zero rule is tested on the fit: mu_hat_j < 1e-6 (listing units). (8) In the oracle's reference samples the bins' truth mu is the expected number of listings of the bin (not the rate) and counts are Poisson draws of it. No bound is moved."
+    },
+    {
+      "id": "AM2",
+      "recordedBefore": "the first validator run",
+      "text": "Two departures from the letter of two legs, recorded before any validator run and moving no bound. (1) Hand example A2 (and the oracle's A2) has exposure 1 in each bin, which is below the floor of 5, so both are run with the floor option set to 0 so that the intervals exist; the floor itself is tested by D5 and D6. (2) Leg P1 is evaluated on S1, S3, S4, S5 and S7: S2 and S6 hold bins whose unpenalised maximum is zero, for which the log rate does not exist, so the comparison of a penalised log-rate with it is not defined there; this is a stated reduction of the leg's samples, not a pass. (3) The truth rates of scenario M are the oracle's pinned gamma (mu*_j divided by the oracle's quadrature exposure), and 'rich' is decided from the prototype's exposure times that gamma."
+    },
+    {
+      "id": "AM3",
+      "recordedBefore": "the second and later validator runs; recorded AFTER the first run, which it describes",
+      "text": "What the first validator run showed and what changed because of it. The first run (pinned as first-run-results.json, thresholds sha256 as of AM2) gave 41 pass, 2 fail (D8, P2), 6 reported, 3 not run, letter B. D8 is a failure of the leg as committed and stays failing (see the gate document). P2 is not: the validator computed P2's status with a condition that the committed bound does not contain (that every penalised fit meets the Newton gradient criterion), and R2, Q3, V1 and V2 carried the same kind of extra condition (convergence). The committed bounds are the numerical ones in the checks array; the validator is corrected so that every status is computed from the committed bound alone, and the convergence counts become measured fields. Under the committed bound P2 passes (the largest absolute difference of ln Gamma to the oracle is 9.1e-9 against 1e-4; 2 of the 6 penalised fits had stopped at the gradient criterion, 1e-10 absolute, in 1000 iterations). No other row's measured numbers change, no bound moves, no leg is added or removed, and nothing in the prototype changes. The oracle and the stream are run again against the file that carries AM3. This is a correction of the validator to the contract, made after a result, and is flagged to Carl as such."
+    }
+  ],
+  "decisions": [
+    {"id": "DEC1", "text": "The likelihood is stated from its definition, an extended Poisson-process likelihood over the measured value with the true value uniform in a bin, and checked against an independent implementation, not transcribed from a source: no text of any paper on deconvolution or occurrence calculations was available, so their printed forms are request R4 and the correspondence is NOT RUN. A verdict is therefore V-internal, synthetic and oracle."},
+    {"id": "DEC2", "text": "Each object's sigma is known, Gaussian and independent of its true bin; it is not fitted and the selection is not made to depend on it. Where the selection depends on the measured value (a cut on x) the exposure is not the one of this likelihood; that case is outside the domain."},
+    {"id": "DEC3", "text": "Reliability and false listings follow Prompt 229: a stated input per bin, false listings distributed like real ones of their bin."},
+    {"id": "DEC4", "text": "Intervals come from the profile likelihood on the object path and from Prompt 154's Poisson interval on the counts path, so that Prompt 229's intervals are reproduced exactly; the method string names which, and continuity between them is leg Q3. Coverage of a profile interval is measured by the equivalent test D_j(Gamma_true) <= threshold, which is exact because D_j is convex."},
+    {"id": "DEC5", "text": "The penalty is a roughness penalty on the second difference of the log rate: a quadratic form with one user-chosen weight kappa, named as a penalty everywhere, no interval returned for the penalised fit, never described as a prior, a posterior, a credible or a Bayesian quantity."},
+    {"id": "DEC6", "text": "The exposure generalises Prompt 229's summed completeness and Prompt 262's effective volume into one quantity built from 154's selection object. No second selection-function object is built and Prompt 262's unmerged module is not imported (its truncation estimator, which failed a leg, is not relied on in any way here; the censoring estimator is not needed)."},
+    {"id": "DEC7", "text": "The maximum is found by EM with SQUAREM acceleration: the log-likelihood is concave in mu, so a fixed point of the EM map is the global maximum; a fit that does not converge is reported, not accepted."},
+    {"id": "DEC8", "text": "The scope of the letter is the pair of sets named in verdict: BASE (the general likelihood's counts case, its equivalence to Prompt 229, its exposure, floor and refusals) and UNC (everything that takes a per-object sigma). The penalty is a separate toggle with its own admission. A gate may not expand its tested scope by calling untested work another instance of the same family, so no mass-function claim, no initial mass function and no real sample rests on this gate."}
+  ],
+  "questions": []
+}
