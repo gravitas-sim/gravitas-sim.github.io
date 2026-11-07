@@ -202,17 +202,30 @@ function deviance(P, fit, j, m) {
   return { dev: Math.max(0, 2 * (fit.ll - f.ll)), converged: f.converged };
 }
 
-function bisect(f, lo, hi, increasing) {
-  // f(lo) and f(hi) bracket 0; `increasing` says which way f crosses.
+/** Illinois false position on f between a and b, where fa = f(a) and fb = f(b) have opposite signs. */
+function falsePosition(f, a, b, fa, fb) {
+  let side = 0;
   for (let it = 0; it < 200; it++) {
-    const mid = 0.5 * (lo + hi);
-    if (mid === lo || mid === hi) break;
-    const v = f(mid);
-    if (v < 0 === increasing) lo = mid;
-    else hi = mid;
-    if (hi - lo <= BISECT_REL_TOL * Math.max(hi, 1e-9)) break;
+    const c = (a * fb - b * fa) / (fb - fa);
+    const fc = f(c);
+    if (
+      Math.abs(fc) <= 1e-10 ||
+      Math.abs(b - a) <= BISECT_REL_TOL * Math.max(Math.abs(c), 1e-9)
+    )
+      return c;
+    if (fc * fb > 0) {
+      b = c;
+      fb = fc;
+      if (side === -1) fa /= 2;
+      side = -1;
+    } else {
+      a = c;
+      fa = fc;
+      if (side === 1) fb /= 2;
+      side = 1;
+    }
   }
-  return 0.5 * (lo + hi);
+  return 0.5 * (a + b);
 }
 
 /** The profile interval of bin j in mu units at a deviance threshold: [lo, hi|null]. */
@@ -220,27 +233,44 @@ function profileEnds(P, fit, j, dev) {
   const mh = fit.mu[j];
   const D = m => deviance(P, fit, j, m).dev;
   let lo = 0;
-  if (D(0) > dev) lo = bisect(m => D(m) - dev, 0, mh, false);
+  const d0 = D(0);
+  if (d0 > dev) lo = falsePosition(m => D(m) - dev, 0, mh, d0 - dev, -dev);
   let prev = mh;
+  let fprev = -dev;
   let top = Math.max(mh, 1);
   const cap = UNBOUNDED * Math.max(mh, 1);
-  while (D(top) < dev) {
+  let ftop = D(top) - dev;
+  while (ftop < 0) {
     prev = top;
+    fprev = ftop;
     if (top >= cap) return [lo, null];
-    top *= 2;
+    top *= 4;
+    ftop = D(top) - dev;
   }
-  return [lo, bisect(m => D(m) - dev, prev, top, true)];
+  return [lo, falsePosition(m => D(m) - dev, prev, top, fprev, ftop)];
 }
 
 /** The upper limit of a zero bin: the mu at which the deviance reaches -2 ln(1 - level). */
 function profileLimit(P, fit, j, level) {
   const target = -2 * Math.log(1 - level);
+  let prev = 0;
+  let fprev = -target;
   let top = 1;
-  while (deviance(P, fit, j, top).dev < target) {
-    top *= 2;
+  let ftop = deviance(P, fit, j, top).dev - target;
+  while (ftop < 0) {
+    prev = top;
+    fprev = ftop;
+    top *= 4;
     if (top > 1e9) return null;
+    ftop = deviance(P, fit, j, top).dev - target;
   }
-  return bisect(m => deviance(P, fit, j, m).dev - target, 0, top, true);
+  return falsePosition(
+    m => deviance(P, fit, j, m).dev - target,
+    prev,
+    top,
+    fprev,
+    ftop
+  );
 }
 
 // ---- the penalised maximum ---------------------------------------------------------------
@@ -386,6 +416,7 @@ export function populationRates({
   limitLevel = LIMIT_LEVEL,
   floor = FLOOR,
   penalty = null,
+  intervals = true,
 }) {
   if (!validEdges(edges))
     return refused(
@@ -603,7 +634,7 @@ export function populationRates({
         };
         continue;
       }
-      const ivs = levels.map(level => {
+      const ivs = (intervals ? levels : []).map(level => {
         const [lo, hi] = profileEnds(P, fit, j, chi2Quantile(level, 1));
         return {
           level,
@@ -616,9 +647,9 @@ export function populationRates({
         status: 'ok',
         ...base,
         rate: (fit.mu[j] * r[j]) / E[j],
-        lo: ivs[0].lo,
-        hi: ivs[0].hi,
-        level: ivs[0].level,
+        lo: ivs[0]?.lo ?? null,
+        hi: ivs[0]?.hi ?? null,
+        level: ivs[0]?.level ?? null,
         method: 'profile-likelihood',
         unbounded: ivs.some(v => v.hi === null),
         intervals: ivs,
@@ -630,6 +661,7 @@ export function populationRates({
     ll = fit.ll;
   }
 
+  const stats = { fits: exact ? 0 : 1, bad: exact || fit.converged ? 0 : 1 };
   const out = {
     status: allBelow ? 'not-constrained' : 'ok',
     path: exact ? 'counts' : 'objects',
@@ -648,8 +680,11 @@ export function populationRates({
     /** The deviance of bin j at the rate gamma (for coverage and for a reader's own interval). */
     deviance: (j, gamma) => {
       const d = deviance(P, fit, j, (gamma * E[j]) / r[j]);
+      stats.fits++;
+      if (!d.converged) stats.bad++;
       return d.dev;
     },
+    stats,
   };
   if (allBelow)
     out.why =
