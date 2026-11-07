@@ -1,0 +1,20 @@
+{
+ "format": "gravitas.censoring-truncation-failed-legs/1",
+ "note": "Every failing row of results.json and nothing else; left failing.",
+ "legs": [
+  {
+   "id": "C2o.cmCoverageOracle",
+   "group": "coverage",
+   "estimator": "cm",
+   "tier": "c",
+   "status": "fail",
+   "bound": "each in [0.92, 0.98]",
+   "measured": {
+    "T1": 0.919,
+    "T2": 0.952,
+    "T1refused": 0,
+    "T2refused": 0
+   }
+  }
+ ]
+}

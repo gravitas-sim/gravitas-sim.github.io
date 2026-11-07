@@ -1,0 +1,762 @@
+{
+ "format": "gravitas.censoring-truncation-gate-results/1",
+ "environment": {
+  "node": "v22.23.4",
+  "thresholdsSha256": "9d7356ba020c528f337592a032a2b80780e8981114f6f037b96892b79ea7e3d3",
+  "oracleSha256": "380818a1b806e14b4511c625da0e6f2dbe1da449bbf2d35797bef9c470507aa7",
+  "spike": {
+   "branch": "spike/censoring-truncation-gate",
+   "validatorAndPrototypeCommit": "4735488a"
+  },
+  "runs": "two complete runs agree row for row (all numbers) except cpuSeconds"
+ },
+ "rows": [
+  {
+   "id": "I1.inputs",
+   "group": "integrity",
+   "estimator": "all",
+   "tier": "-",
+   "status": "pass",
+   "bound": "exact",
+   "measured": {
+    "thresholdsSha256": "9d7356ba020c528f337592a032a2b80780e8981114f6f037b96892b79ea7e3d3",
+    "oracleRecorded": "9d7356ba020c528f337592a032a2b80780e8981114f6f037b96892b79ea7e3d3",
+    "oracleOutputSha256": "380818a1b806e14b4511c625da0e6f2dbe1da449bbf2d35797bef9c470507aa7"
+   }
+  },
+  {
+   "id": "O0.kmInternal",
+   "group": "oracle",
+   "estimator": "km",
+   "tier": "b",
+   "status": "pass",
+   "bound": "max absolute 1e-12 (tolerance.oracleMass)",
+   "measured": {
+    "maxAbs": 1.6653345369377348e-16
+   }
+  },
+  {
+   "id": "O1.cmInternal",
+   "group": "oracle",
+   "estimator": "cm",
+   "tier": "b",
+   "status": "pass",
+   "bound": "max absolute 1e-7 (tolerance.emAlgorithm)",
+   "measured": {
+    "maxAbs": 3.191891195797325e-16,
+    "iterations": [
+     [
+      "U01",
+      2
+     ],
+     [
+      "U02",
+      1
+     ],
+     [
+      "U03",
+      25
+     ],
+     [
+      "U04",
+      21
+     ],
+     [
+      "U05",
+      16
+     ],
+     [
+      "U06",
+      21
+     ],
+     [
+      "U07",
+      20
+     ],
+     [
+      "U08",
+      32
+     ]
+    ]
+   }
+  },
+  {
+   "id": "O2.hand",
+   "group": "oracle",
+   "estimator": "all",
+   "tier": "a",
+   "status": "pass",
+   "bound": "absolute or relative 1e-12 (tolerance.closedForm)",
+   "measured": {
+    "agrees": true
+   }
+  },
+  {
+   "id": "O3.logrankInternal",
+   "group": "oracle",
+   "estimator": "km",
+   "tier": "b",
+   "status": "pass",
+   "bound": "relative 1e-9 (tolerance.logrank)",
+   "measured": {
+    "maxZRel": 9.510186349804198e-15,
+    "maxPRel": 2.773216717601267e-14,
+    "checkedSamples": 8
+   }
+  },
+  {
+   "id": "A1.kmUncensored",
+   "group": "analytic",
+   "estimator": "km",
+   "tier": "a",
+   "status": "pass",
+   "bound": "1e-12",
+   "measured": {
+    "status": "complete",
+    "mean": 3.700000000000001,
+    "variance": 1.6320000000000003
+   }
+  },
+  {
+   "id": "A2.kmHand",
+   "group": "analytic",
+   "estimator": "km",
+   "tier": "a",
+   "status": "pass",
+   "bound": "1e-12",
+   "measured": {
+    "status": "complete",
+    "mean": 3.8,
+    "variance": 0.938666666666667,
+    "masses": {
+     "2": 0.5333333333333334,
+     "5": 0.2666666666666666,
+     "7": 0.19999999999999996
+    }
+   }
+  },
+  {
+   "id": "A3.kmBounded",
+   "group": "analytic",
+   "estimator": "km",
+   "tier": "a",
+   "status": "pass",
+   "bound": "1e-12 and the refusal code",
+   "measured": {
+    "status": "bounded",
+    "meanLow": 4.75,
+    "meanHigh": 5.25,
+    "variance": 1.671875,
+    "tailMass": 0.25,
+    "noFloor": "unbounded-tail"
+   }
+  },
+  {
+   "id": "A4.cmHand",
+   "group": "analytic",
+   "estimator": "cm",
+   "tier": "a",
+   "status": "pass",
+   "bound": "1e-12",
+   "measured": {
+    "sets": {
+     "2": 2,
+     "3": 3,
+     "4": 3,
+     "5": 2,
+     "6": 1
+    },
+    "masses": {
+     "2": 0.5,
+     "3": 0.16666666666666663,
+     "4": 0.1111111111111111,
+     "5": 0.11111111111111113,
+     "6": 0.11111111111111113
+    },
+    "mean": 3.166666666666667,
+    "variance": 0.7793209876543211
+   }
+  },
+  {
+   "id": "A5.cmNoTruncation",
+   "group": "analytic",
+   "estimator": "cm",
+   "tier": "a",
+   "status": "pass",
+   "bound": "1e-12",
+   "measured": {
+    "masses": [
+     0.19999999999999996,
+     0.19999999999999996,
+     0.2,
+     0.20000000000000004,
+     0.20000000000000004
+    ],
+    "mean": 3.7000000000000006,
+    "variance": 1.6320000000000008
+   }
+  },
+  {
+   "id": "A6.vmaxHand",
+   "group": "analytic",
+   "estimator": "vmax",
+   "tier": "a",
+   "status": "pass",
+   "bound": "1e-12",
+   "measured": {
+    "status": "ok",
+    "n": 3,
+    "meanVOverVmax": 0.4166666666666667,
+    "z": -0.4999999999999999,
+    "sumInverseVmax": 1.25,
+    "variance": 1.03125
+   }
+  },
+  {
+   "id": "A7.vmaxEffective",
+   "group": "analytic",
+   "estimator": "vmax",
+   "tier": "a",
+   "status": "pass",
+   "bound": "1e-12",
+   "measured": {
+    "veff": 4.5,
+    "inverseVeff": 0.2222222222222222
+   }
+  },
+  {
+   "id": "R1.kmReference",
+   "group": "reference",
+   "estimator": "km",
+   "tier": "b",
+   "status": "pass",
+   "bound": "masses absolute 1e-12; mean, bounds, variance relative 1e-10; status and support exact",
+   "measured": {
+    "samples": 12,
+    "worstMassAbs": 0,
+    "worstRelative": 0,
+    "notes": []
+   }
+  },
+  {
+   "id": "R2.cmReference",
+   "group": "reference",
+   "estimator": "cm",
+   "tier": "b",
+   "status": "pass",
+   "bound": "masses absolute 1e-12; mean, variance relative 1e-10",
+   "measured": {
+    "samples": 8,
+    "worstMassAbs": 0,
+    "worstRelative": 0,
+    "setsExact": true,
+    "bad": []
+   }
+  },
+  {
+   "id": "R3.logrankReference",
+   "group": "reference",
+   "estimator": "km",
+   "tier": "b",
+   "status": "pass",
+   "bound": "z relative 1e-9, p relative 1e-9 (or absolute 1e-12 below 1e-12), flag and the unchecked reason exact",
+   "measured": {
+    "samples": 12,
+    "checked": 8,
+    "worstZRel": 9.510186349804198e-15,
+    "worstPRel": 3.2246706018619384e-14,
+    "bad": []
+   }
+  },
+  {
+   "id": "R4.veffReference",
+   "group": "reference",
+   "estimator": "vmax",
+   "tier": "b",
+   "status": "pass",
+   "bound": "relative 1e-8 (tolerance.quadrature)",
+   "measured": {
+    "pairs": 20,
+    "worstRelative": 3.799171485825e-16
+   }
+  },
+  {
+   "id": "L1.kmLarge",
+   "group": "accuracy",
+   "estimator": "km",
+   "tier": "a",
+   "status": "pass",
+   "bound": "sup distance of the CDF <= 0.04 over the support; |mean - 2| <= 0.06",
+   "measured": {
+    "n": 20000,
+    "status": "complete",
+    "supDistance": 0.005360516703415419,
+    "mean": 2.0009728810329204,
+    "tailMass": 0
+   }
+  },
+  {
+   "id": "L2.cmLarge",
+   "group": "accuracy",
+   "estimator": "cm",
+   "tier": "a",
+   "status": "pass",
+   "bound": "sup distance of the CDF <= 0.05 over the support; |mean - truth| <= 0.05",
+   "measured": {
+    "N": 20000,
+    "riskAtFrom": 1050,
+    "supDistance": 0.017156057288836263,
+    "mean": 0.49735409294441973,
+    "truth": 0.5091604338370335
+   }
+  },
+  {
+   "id": "C1a.kmCoverageK1",
+   "group": "coverage",
+   "estimator": "km",
+   "tier": "c",
+   "status": "pass",
+   "bound": "in [0.92, 0.98]",
+   "measured": {
+    "coverage": 0.944,
+    "refused": 0,
+    "bounded": 0.359,
+    "replicates": 1000
+   }
+  },
+  {
+   "id": "C1b.kmCoverageK2",
+   "group": "coverage",
+   "estimator": "km",
+   "tier": "c",
+   "status": "pass",
+   "bound": "in [0.92, 0.98]",
+   "measured": {
+    "coverage": 0.938,
+    "refused": 0,
+    "bounded": 0.366,
+    "replicates": 1000
+   }
+  },
+  {
+   "id": "C1c.kmCoverageK3",
+   "group": "coverage",
+   "estimator": "km",
+   "tier": "c",
+   "status": "pass",
+   "bound": "in [0.92, 0.98]",
+   "measured": {
+    "coverage": 0.945,
+    "refused": 0,
+    "bounded": 0.331,
+    "replicates": 1000
+   }
+  },
+  {
+   "id": "C1o.kmCoverageOracle",
+   "group": "coverage",
+   "estimator": "km",
+   "tier": "c",
+   "status": "pass",
+   "bound": "each in [0.92, 0.98]",
+   "measured": {
+    "K1": 0.932,
+    "K2": 0.937,
+    "K3": 0.948
+   }
+  },
+  {
+   "id": "C2a.cmCoverageT1",
+   "group": "coverage",
+   "estimator": "cm",
+   "tier": "c",
+   "status": "pass",
+   "bound": "in [0.92, 0.98]",
+   "measured": {
+    "coverage": 0.951,
+    "coverageOfNotRefused": 0.951,
+    "refused": 0,
+    "replicates": 1000,
+    "truth": 0.5091604338370335,
+    "medianRiskAtFrom": 58
+   }
+  },
+  {
+   "id": "C2b.cmCoverageT2",
+   "group": "coverage",
+   "estimator": "cm",
+   "tier": "c",
+   "status": "pass",
+   "bound": "in [0.92, 0.98]",
+   "measured": {
+    "coverage": 0.949,
+    "coverageOfNotRefused": 0.949,
+    "refused": 0,
+    "replicates": 1000,
+    "truth": 0.6458393710168174,
+    "medianRiskAtFrom": 37
+   }
+  },
+  {
+   "id": "C2o.cmCoverageOracle",
+   "group": "coverage",
+   "estimator": "cm",
+   "tier": "c",
+   "status": "fail",
+   "bound": "each in [0.92, 0.98]",
+   "measured": {
+    "T1": 0.919,
+    "T2": 0.952,
+    "T1refused": 0,
+    "T2refused": 0
+   }
+  },
+  {
+   "id": "T3.cmThinRisk",
+   "group": "reported",
+   "estimator": "cm",
+   "tier": "d",
+   "status": "reported",
+   "bound": "reported, no bound",
+   "measured": {
+    "coverage": 0.376,
+    "coverageOfNotRefused": 0.6245847176079734,
+    "refused": 199,
+    "replicates": 500,
+    "truth": 0.13878975045885075,
+    "medianRiskAtFrom": 18
+   }
+  },
+  {
+   "id": "D5.naiveBias",
+   "group": "reported",
+   "estimator": "cm",
+   "tier": "d",
+   "status": "reported",
+   "bound": "reported, no bound",
+   "measured": {
+    "replicates": 1000,
+    "meanNaiveBias": 0.40131088681388005,
+    "meanEstimatorBias": 0.00032036590258196666,
+    "fractionNaiveBeyond2se": 1,
+    "fractionEstimatorBeyond2se": 0.044
+   }
+  },
+  {
+   "id": "D1.dependenceFlag",
+   "group": "misspecified",
+   "estimator": "km",
+   "tier": "d",
+   "status": "pass",
+   "bound": ">= 0.90",
+   "measured": {
+    "fraction": 1,
+    "flagged": 500,
+    "unchecked": 0,
+    "refused": 0,
+    "replicates": 500
+   }
+  },
+  {
+   "id": "D1b.dependenceWeak",
+   "group": "reported",
+   "estimator": "km",
+   "tier": "d",
+   "status": "reported",
+   "bound": "reported, no bound",
+   "measured": {
+    "fraction": 0.954,
+    "flagged": 477,
+    "unchecked": 0,
+    "refused": 0,
+    "replicates": 500
+   }
+  },
+  {
+   "id": "D2.falseAlarm",
+   "group": "misspecified",
+   "estimator": "km",
+   "tier": "d",
+   "status": "pass",
+   "bound": "<= 0.02",
+   "measured": {
+    "fraction": 0.019,
+    "flagged": 19,
+    "unchecked": 0,
+    "refused": 0,
+    "replicates": 1000
+   }
+  },
+  {
+   "id": "D3.kmRefusals",
+   "group": "refusals",
+   "estimator": "km",
+   "tier": "d",
+   "status": "pass",
+   "bound": "all six exact",
+   "measured": {
+    "cases": [
+     {
+      "name": "four detections",
+      "want": "too-few-detections",
+      "got": "too-few-detections",
+      "ok": true
+     },
+     {
+      "name": "no floor",
+      "want": "unbounded-tail",
+      "got": "unbounded-tail",
+      "ok": true
+     },
+     {
+      "name": "truncation bound on a row",
+      "want": "truncated-input",
+      "got": "truncated-input",
+      "ok": true
+     },
+     {
+      "name": "truncated sample",
+      "want": "truncated-input",
+      "got": "truncated-input",
+      "ok": true
+     },
+     {
+      "name": "NaN value",
+      "want": "non-finite",
+      "got": "non-finite",
+      "ok": true
+     },
+     {
+      "name": "flag not boolean",
+      "want": "bad-flag",
+      "got": "bad-flag",
+      "ok": true
+     },
+     {
+      "name": "level 1.5",
+      "want": "level",
+      "got": "level",
+      "ok": true
+     }
+    ]
+   }
+  },
+  {
+   "id": "D4.cmRefusals",
+   "group": "refusals",
+   "estimator": "cm",
+   "tier": "d",
+   "status": "pass",
+   "bound": "all exact",
+   "measured": {
+    "cases": [
+     {
+      "name": "associated set of 1 at from",
+      "want": "thin-risk-set",
+      "got": "thin-risk-set",
+      "ok": true
+     },
+     {
+      "name": "row without a bound",
+      "want": "missing-truncation-bound",
+      "got": "missing-truncation-bound",
+      "ok": true
+     },
+     {
+      "name": "a censored sample",
+      "want": "censored-input",
+      "got": "censored-input",
+      "ok": true
+     },
+     {
+      "name": "row flagged censored",
+      "want": "censored-input",
+      "got": "censored-input",
+      "ok": true
+     },
+     {
+      "name": "u above x",
+      "want": "bound-above-value",
+      "got": "bound-above-value",
+      "ok": true
+     },
+     {
+      "name": "NaN x",
+      "want": "non-finite",
+      "got": "non-finite",
+      "ok": true
+     },
+     {
+      "name": "level 0",
+      "want": "level",
+      "got": "level",
+      "ok": true
+     }
+    ]
+   }
+  },
+  {
+   "id": "D6.vmaxRefusals",
+   "group": "refusals",
+   "estimator": "vmax",
+   "tier": "d",
+   "status": "pass",
+   "bound": "all exact",
+   "measured": {
+    "cases": [
+     {
+      "name": "four objects",
+      "want": "too-few-objects",
+      "got": "too-few-objects",
+      "ok": true
+     },
+     {
+      "name": "zero distance",
+      "want": "bad-distance",
+      "got": "bad-distance",
+      "ok": true
+     },
+     {
+      "name": "NaN",
+      "want": "non-finite",
+      "got": "non-finite",
+      "ok": true
+     },
+     {
+      "name": "completeness 1.2",
+      "want": "bad-completeness",
+      "got": "bad-completeness",
+      "ok": true
+     },
+     {
+      "name": "increasing completeness",
+      "want": "bad-completeness",
+      "got": "bad-completeness",
+      "ok": true
+     },
+     {
+      "name": "empty bin",
+      "want": "upper-limit and no density",
+      "got": "upper-limit null",
+      "ok": true
+     }
+    ]
+   }
+  },
+  {
+   "id": "V1.vmaxNull",
+   "group": "coverage",
+   "estimator": "vmax",
+   "tier": "c",
+   "status": "pass",
+   "bound": "in [0.035, 0.065]",
+   "measured": {
+    "rejectionRate": 0.049,
+    "refused": 0,
+    "meanN": 139.0635,
+    "meanZ": 0.0016785470910654552,
+    "varZ": 0.9930200593668831
+   }
+  },
+  {
+   "id": "V1n.vmaxEvolution",
+   "group": "misspecified",
+   "estimator": "vmax",
+   "tier": "d",
+   "status": "pass",
+   "bound": ">= 0.95",
+   "measured": {
+    "rejectionRate": 1,
+    "refused": 0
+   }
+  },
+  {
+   "id": "C4.densityCoverage",
+   "group": "coverage",
+   "estimator": "vmax",
+   "tier": "c",
+   "status": "pass",
+   "bound": "in [0.92, 0.98]",
+   "measured": {
+    "coverage": 0.945,
+    "emptyBins": 0,
+    "meanBinCount": 54.445,
+    "truth": 22.975495352881588,
+    "replicates": 1000
+   }
+  },
+  {
+   "id": "C4b.rampCoverage",
+   "group": "coverage",
+   "estimator": "vmax",
+   "tier": "c",
+   "status": "pass",
+   "bound": "in [0.92, 0.98]",
+   "measured": {
+    "coverage": 0.963,
+    "emptyBins": 0,
+    "meanBinCount": 54.518,
+    "truth": 22.975495352881588,
+    "replicates": 1000
+   }
+  },
+  {
+   "id": "X1.kmAuthentic",
+   "group": "authentic",
+   "estimator": "km",
+   "tier": "e",
+   "status": "not-run",
+   "bound": "within the published value's own uncertainty and 1e-6 relative on the product-limit curve (set by the request's data)",
+   "measured": {
+    "request": "R1"
+   }
+  },
+  {
+   "id": "X2.cmAuthentic",
+   "group": "authentic",
+   "estimator": "cm",
+   "tier": "e",
+   "status": "not-run",
+   "bound": "as X1",
+   "measured": {
+    "request": "R2"
+   }
+  },
+  {
+   "id": "X3.vmaxAuthentic",
+   "group": "authentic",
+   "estimator": "vmax",
+   "tier": "e",
+   "status": "not-run",
+   "bound": "as X1",
+   "measured": {
+    "request": "R3"
+   }
+  },
+  {
+   "id": "X4.citedForms",
+   "group": "authentic",
+   "estimator": "all",
+   "tier": "e",
+   "status": "not-run",
+   "bound": "the printed equation is the same function; any difference is recorded and a leg is added for it",
+   "measured": {
+    "request": "R4"
+   }
+  }
+ ],
+ "counts": {
+  "pass": 33,
+  "fail": 1,
+  "reported": 3,
+  "not-run": 4
+ },
+ "verdict": {
+  "km": true,
+  "cm": false,
+  "vmaxAdmitted": true,
+  "letter": "B",
+  "slice": "B-KM"
+ },
+ "cpuSeconds": 6.339619185
+}
