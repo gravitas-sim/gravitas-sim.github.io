@@ -1,0 +1,189 @@
+# The supernova likelihood gate
+
+Roadmap III, Prompt 256, Part A (tranche T5, authorized by Checkpoint V's recorded outcome CONTINUE AS PLANNED). One covariance
+decision for a browser likelihood on the Pantheon+ rows already in the tree, its size against the data budget, its conditioning, the
+solver, the nuisance treatment, the planes and their delta levels, an independent calculation and the tolerances, all committed before
+any code, then measured on a spike. **Verdict by the committed function: A, which here means a narrow thing** (section 5): the
+two-parameter contours of the decided covariance, a covariance this gate chose and stated, agree with an independent implementation to
+1e-9 in chi-square and cover the truth at the stated rates. Nothing compares them with the published contour (that leg is NOT RUN,
+section 7), nothing is built, and the consumers rule (Carl, 2026-11-05) holds every panel, lesson, viewer and contour. **Part B is not
+begun and is declined in this session**: the execution contract forbids starting the next part, and no consumer may be built on this
+kernel until the published-contour leg has run and passed. The record is decision-register rows D-R10-256-01 to D-R10-256-05.
+
+The numbers are in `tests/fixtures/supernova-likelihood/` (`thresholds.json` the contract and its three amendments; `oracle-results.json`
+the pinned independent calculation; `results.json` the gate stream; `failed-legs.json`, empty: no leg failed). The prototype
+(`js/kernels/cosmology/likelihood/snLikelihood.js`), the validator (`tools/sn-likelihood-validate.mjs`) and the oracle
+(`tools/sn-likelihood-oracle/oracle.py`) are on `spike/supernova-likelihood-gate` (bc9d5844), never merged (rule 7.5.4): this PR is
+documentation and fixtures only. The gate stream ran on Node 22.23.4 (about 270 s on a loaded Mac); the oracle on Python 3.9.6 with
+numpy 1.26.4, scipy 1.13.1 and astropy 6.0.1 (about 300 s). Two complete runs agree row for row (only the CPU timings differ).
+
+## 1. What was committed first, and the order
+
+| Commit | What | Before |
+| --- | --- | --- |
+| `4f298510` | `thresholds.json`: the decision, the model, the 40 legs with their bounds, the ensembles and their coverage bounds, the verdict function, the four external requests | any code, oracle, run or statistic of the rows |
+| `b8b5fdb5` | AM1 (a node on the bounce boundary, and a node whose astropy distances are not finite, are refused by both implementations) and AM2 (the condition estimate iterates to convergence, not a fixed 100) | any prototype code or validator run |
+| `dd30dfa0`, spike `b31e60f5` | the oracle (no Gravitas code) and its pinned output | the prototype was written |
+| `025845be` | AM3 (the registered random stream is `noise`: `js/random/streams.js` allows six ids) | any leg result |
+| `47ae82e5` | the oracle's output run again against the file that carries AM1 to AM3 (numbers unchanged, only the thresholds sha256 it records) | the prototype was run |
+| spike `758bfd35`, `bc9d5844` | the prototype and the validator; the stream run twice from the final spike commit | |
+| `7b3ab574` | `results.json` and `failed-legs.json` (run 2, spike `bc9d5844`) | |
+
+What had been seen before the thresholds were committed, and only that: the Pantheon+ pack's record (1,701 light curves, 77 calibrators,
+the columns, the raw checksum, and its recorded diagonal-only fit, Om 0.351 and chi-square 745.4 for 1,699 dof, against a published value an earlier
+session typed there), the raw file's header and first four rows, the Prompt 255 kernel and its failed legs, `js/numeric/linalg.js` and
+`js/kernels/statistics/`. Nothing of any distribution. After the commit and before the oracle, one throwaway line printed the sample's
+count after the cuts (1,580), its largest redshift, its smallest error and that the decided covariance is positive definite; after the oracle and before
+the prototype, its output was read (best fits, the open contours of the 12-row set, the one synthetic set whose best fit lies four sigma from its truth, a rare draw by a 300-draw check of the oracle's generator and not a fault,
+section 5). None changed a bound; the three amendments are mechanical (a crash and two method details) and were recorded first. **Nothing was fetched and
+no published number, licence term or covariance value was typed from memory.**
+
+## 2. The decision
+
+The release's full systematic covariance is tens of megabytes; the pack carries none of it. `mu_err` is the diagonal of that covariance,
+so it already holds the systematic variances: adding systematic terms to it in quadrature would count them twice. The three options of the
+prompt, against the tree:
+
+| Option | Needs | Size (32-bit floats) | This gate |
+| --- | --- | --- | --- |
+| T1, a subset with its covariance block | the release's covariance file | 4 n (n + 1) / 2: 4,995,960 B for n = 1,580; 180,600 B for 300; 20,200 B for 100 | NOT RUN (request X3) |
+| T2, a low-rank projection with its retained variance | the same file | 4 (k n + n): 69,520 B for k = 10, 195,920 for 30, 638,320 for 100 at n = 1,580 | NOT RUN (request X3) |
+| T3, the statistical diagonal with named systematic terms | nothing beyond the pack | 0 B added | **decided, in the split form below** |
+
+**Decided: T3, split form.** C has the pack's `mu_err` squared on the diagonal, unchanged (no variance added, none removed), and
+tau^2 between every pair of rows of one survey (the pack's survey code, a survey with at least two rows in the sample): a named term,
+"survey-coherent zero point", of tau = 0.02 mag. tau is a stated design size, **not a published systematic**: nothing here claims to
+reproduce the release's covariance, and a contour drawn on it is a contour of this covariance. The matrix is positive definite exactly when
+every error in a multi-row survey exceeds tau, and otherwise the likelihood refuses ('not-positive-definite'). A common offset of all rows (the
+supernova absolute magnitude together with 5 log10 H0) is not in C: it is the nuisance. Rejected: diagonal plus tau^2 on the diagonal
+(double counts the pack's diagonal), shipping the release's matrix (the packs' raw and gzip ceilings, 355,282 and 111,422 B, are at their limits, 0 B of room;
+`S2.alternatives` reports the sizes and the full lower triangle at 5,790,204 B, which can only be an opt-in download into the 209,715,200 B
+IndexedDB-plus-cache allowance and is not recommended). The diagonal likelihood is the fall-back slice (verdict B) and is measured as the DIAG treatment in
+every leg.
+
+**Sample.** The rows with no Cepheid calibrator and z at least 0.01 (a stated design cut: below it the peculiar-velocity term, carried only on the diagonal,
+dominates): 1,580 rows of the pack's 1,701, largest z 2.26137, smallest error 0.1148 mag, twenty surveys, the smallest with 6 rows (every survey has a coherent block).
+**Observable:** the pack's `mu` (MU_SH0ES) with `mu_err`.
+**Model:** the distance modulus of Prompt 255's FLRW (Om, Ode, w; radiation neglected, H0 = 70 as a reference that the offset absorbs: leg A4).
+**Nuisance:** one additive offset with a flat prior, marginalised analytically: chi2 = r^T C^-1 r - (1^T C^-1 r)^2 / (1^T C^-1 1), equal to the profile; the marginal
+likelihood differs by the theta-independent factor sqrt(2 pi / 1^T C^-1 1) (A11, 5e-13). **Flat universe:** Ode = 1 - Om, in the one-parameter profile L1 and in the plane P2.
+**Planes:** L1 (flat Lambda-CDM, Om in 0 to 1, 201 points), P1 (Om 0 to 1 by 0.02, Ode 0 to 1.5 by 0.03, w = -1; 74 of 2,601 nodes refused: 73 by the Prompt 255 kernel, a bounce or beyond the antipode, and one marginal node
+on the bounce boundary, AM1), P2 (flat constant w, Om 0 to 1, w -3 to 0 by 0.06; none refused).
+**Delta levels** (computed, not typed): for 2 free parameters -2 ln(1 - p) at p = erf(k / sqrt 2), 2.2957, 6.1801 and 11.8292 (68.27, 95.45 and 99.73 percent);
+1 parameter k^2. **Solver:** Prompt 152's `cholesky`, unchanged, once per sample, then one forward substitution per node (O(N^2)). **Conditioning:**
+cond(C) = 42.1 (the DIAG matrix 41.1), from eigenvalues 0.0129 to 0.5414; a bound of 1e6 was committed. **Tolerances:** chi-square 1e-6 absolute, edge
+fractions 1e-4, slice crossings 1e-6, distances 1e-8 mag.
+
+## 3. Results
+
+58 rows: **50 pass, 0 fail, 5 reported, 3 not run** (a leg with both treatments is two rows, a diag row and a cov row). Rows with a set in group diag
+(25) and in group cov (25) all pass.
+
+| Tier | Legs | Bound | Measured (worst of the rows) | Status |
+| --- | --- | --- | --- | --- |
+| data | M0.data: pack decode equals the raw file; raw sha256 equals the pack record's | the pack's rounding steps | 7e-15 mag, 4e-16 in z; sha256 1cb0fc37... both; N 1,580 | pass |
+| (a) analytic | A1 Einstein-de Sitter closed form, 40 z | 1e-10 | 2.6e-14 | pass |
+| | A2 prototype against the Prompt 255 kernel, 6 parameter sets, every z | 1e-9 mag | 1.4e-14 | pass |
+| | A3 marginalisation against a golden-section minimum, 10 theta, both treatments | 1e-9 | 4.5e-15 | pass |
+| | A4 shift invariance (0.5 mag, H0 70 to 73) | 1e-10 | 3.4e-14 | pass |
+| | A5 noise-free data: chi2 at the truth, at Om 0.35 | 1e-9; at least 1 | 6e-12; 2.71 (DIAG), 1.94 (cov) | pass |
+| | A6 delta levels against closed forms and scipy | 1e-9 | 5.9e-15 | pass |
+| | A7 Cholesky, `invertSpd` and Woodbury agree (n = 30) | 1e-10 | 5.9e-16 | pass |
+| | A8 Cholesky against Woodbury at the sample's N | 1e-9 | 3.8e-15 | pass |
+| | A9 C positive definite; L L^T reproduces C on 200 rows | 1e-12 | 1.4e-16 | pass |
+| | A10 condition estimate against eigvalsh; at most 1e6 | 1 percent | 1.7e-9; 42.1 | pass |
+| | A11 marginalisation constant | 1e-8 | 5.1e-13 | pass |
+| | A12 152's `cholesky` factors the 1,580 x 1,580 matrix | 30 CPU s | 1.0 to 1.6 s | pass |
+| (b) oracle | B1 distances against astropy, 6 sets, every z | 1e-8 mag | 5.0e-11 | pass |
+| | B2 chi-square at 5,329 accepted nodes (L1, P1, P2), both treatments | 1e-6 | 1.0e-9 | pass |
+| | B3 the kernel's accepted set equals the brute-force set | 0 disagreements | 0 (one marginal node excluded and counted) | pass |
+| | B4 refined minima (L1, P1, P2) | 1e-6 | 5.5e-10 | pass |
+| | B5 edge-crossing sets of 3 levels per plane, 2 for L1 | same edges, f to 1e-4 | same; 1.8e-10 | pass |
+| | B6 exact slice crossings (4 slices, 2 levels) | 1e-6 | 7.7e-13 | pass |
+| | B7 L1 best fit and the 1 and 2 sigma interval endpoints | 1e-6 | 5.8e-13 | pass |
+| | B8 three pinned synthetic sets (300 rows each), B2 to B6 | as above | 9.3e-10 chi-square, 9.3e-7 edge fraction (DIAG, set c) | pass |
+| (c) coverage | C1 L1, 200 draws, Om 0.30, 68.27 and 95.45 percent | 0.58 to 0.78; 0.90 to 0.99 | DIAG 0.615, 0.945; cov 0.685, 0.955 | pass |
+| | C2 P1, 100 draws, (0.30, 0.70) | 0.55 to 0.81; 0.88 to 1.00 | DIAG 0.63, 0.93; cov 0.70, 0.93 | pass |
+| | C3 P2, 100 draws, (0.30, -1.0) | same | DIAG 0.72, 0.95; cov 0.61, 0.91 | pass |
+| | C4 the oracle's own numpy ensembles (L1, P1) | as C1, C2 | L1 0.755, 0.96 and 0.685, 0.935; P1 0.71, 0.96 and 0.69, 0.92 | pass |
+| (d) refusals | D1 12 rows: L1 and P1 95.45 percent contours open ("not constrained") in both implementations | statuses equal | open in both, both treatments; the 300-row set agrees to 6e-13 | pass |
+| | D2 closure statuses, three data sets, three levels | 0 disagreements | 0 | pass |
+| | D3 goodness-of-fit flag: false alarms; detections at errors 1.5 times too small | at most 0.01; at least 0.99 | 0 and 1.00 (both treatments) | pass |
+| | D4 a non-positive-definite covariance is refused with no number | exact | refused 'not-positive-definite'; tau 0.02 accepted | pass |
+| | D5 non-finite, mismatched, too few, non-positive sigma | exact | all four refused with their codes | pass |
+| (e) authentic | E1 the sample constrains L1 (95.45 percent interval closed) and P1 (68.27 percent contour closed) in both implementations | closed | closed; P1 closed at all three levels | pass |
+| size | S1 the decided treatment adds 0 data bytes | 0 B | 0 B, 2 constants (tau and the rule) | pass |
+| reported | E2, E4, E5, S2, P1.time | | section 4 | REPORTED |
+| not run | B10.cited, E3.published, X3.fullCovariance | | section 7 | NOT RUN |
+
+## 4. What the real sample says (REPORTED, not a verdict)
+
+| | DIAG | decided covariance |
+| --- | --- | --- |
+| L1 best fit Om | 0.3491 | 0.3470 |
+| 68.27 percent interval | 0.3304 to 0.3684 | 0.3238 to 0.3710 |
+| 95.45 percent interval | 0.3120 to 0.3880 | 0.3014 to 0.3957 |
+| interval width, cov over DIAG | | 1.24 |
+| chi-square at the best fit, per degree of freedom (1,578) | 681.3, 0.432 | 684.2, 0.434 |
+| P1 best fit (Om, Ode) | (0.304, 0.588) | (0.303, 0.584) |
+| P2 best fit (Om, w) | (0.298, -0.881) | (0.295, -0.872) |
+| P2 closed at 68.27, 95.45, 99.73 percent | yes, yes, no | yes, no, no |
+
+* **The diagonal is not the scatter.** chi-square per degree of freedom is 0.43 in both treatments: the release's diagonal carries systematic and
+  peculiar-velocity variance that is not scatter, so a likelihood that treats it as independent noise is conservative, and its contour is wider than the scatter
+  alone supports. The coherent term of the decided covariance widens the Om interval by 24 percent, because a survey's rows then share their offset.
+* **Duplicates.** The 1,580 light curves are 1,466 distinct supernovae (the pack has no identifier; the raw file's CID column was used for this report only).
+  Keeping each supernova once moves the best fit by +0.0034 (DIAG) and +0.0039 (cov), 0.18 and 0.17 of a half width: small against the interval, and
+  both treatments treat repeated light curves as independent.
+* **The pack's recorded published value** (Om 0.334, "Brout et al. 2022, ApJ 938, 110", as an earlier session typed it into the pack's validation block; this gate did not
+  verify it and read it from the file) lies 0.80 (DIAG) and 0.55 (cov) half widths below the best fit. This is a report, not leg E3.
+* **Cost.** 152's `cholesky` factors the 1,580 x 1,580 matrix in 1.0 to 1.6 CPU seconds; a node costs 4 ms (DIAG) or 6 ms (cov) with the single factor, about 45 and 36 CPU
+  seconds for the three planes. These are Mac figures under Node 22, not browser claims; a low-end device is not measured.
+
+## 5. What verdict A does and does not say
+
+* It says the likelihood of this covariance is computed correctly (closed forms, the Prompt 255 kernel, astropy, an independently written scipy implementation, 1e-9),
+  its contours are reproduced edge for edge by that implementation, the intervals cover at the stated rates when the data are drawn from the same covariance, the
+  method refuses what it should (a small subset, a non-positive-definite matrix, bad input) and the solver is well-conditioned (42) and factors the matrix in about a second in Node (a Worker is not measured).
+* It does **not** say the decided covariance resembles the release's. tau is a stated size. Coverage is self-consistent by construction (the ensembles are drawn
+  from the covariance being analysed), and the goodness-of-fit legs are easy to pass (0 false alarms, all detections). The oracle and the prototype were written by the
+  same hand from the same text; the one outside implementation of the distances is astropy's.
+* The pinned set SYN300a happens to be a four-sigma draw: its flat best fit (Om about 0.10) is far from its truth (0.30), which does not matter to any
+  agreement leg (the truth is not an input to one) and is the reason no leg uses a single draw for coverage.
+* The contours are contours of the decided covariance and carry no claim about the published ones. Until E3.published and B10.cited have run, no lesson may cite
+  them, and the consumers rule holds.
+
+## 6. What Part B would be, and why it is not begun
+
+After A or B, branch `feat/supernova-cosmology`: the kernel (the Prompt 255 distance modulus with the offset; the marginalised chi-square; the profile over Om and Ode;
+the contours; w as the upper axis), its validation group, the Hubble-diagram panel's likelihood view, "The accelerating universe" and the model-page section.
+Not begun: the execution contract forbids starting the next part, and the consumers rule holds every panel, lesson, viewer and contour for a kernel whose published-contour
+leg has not run. Of the kernel alone: it would add code to the lazy tier (NEVER_PRECACHED) against 110 B of deferred room (a raise of exactly the measured overrun under the standing
+approval, with a register row), and no data; its size is not measured here. The existing line fit and `flat-lcdm-sn` model are untouched by this gate.
+
+## 7. Files requested from Carl (nothing fetched, nothing typed)
+
+1. **B10.cited.** A cosmology-fitting package's contour on this sample and treatment (no such package is installed): Carl names one and installs it for a session, or
+   runs it and supplies the output and settings.
+2. **E3.published.** The published flat-case matter-density value and 1 sigma of the Pantheon+ supernova-only analysis, read from the paper the pack cites, with the
+   table or sentence and a retrieval date, as `tests/fixtures/supernova-likelihood/authentic/published-flat.json`. The leg passes when the cov treatment's best fit lies
+   within one published sigma.
+3. **X3.fullCovariance (T1 and T2).** The release's full statistical-plus-systematic covariance, from the release folder that holds `Pantheon+SH0ES.dat` (the pack's URL names
+   the path and commit), the exact file named by Carl from the release page, with sha256, size and the terms as read from a saved copy; held outside every repository. With it: T1's
+   chi-square against the full matrix on a subset, T2's retained variance, and how far the decided covariance is from the release's.
+4. **X4.** Rights for any number derived from the full covariance and shown (7.5.4: per source and per form). The pack's basis, "no licence stated, credited" (D-RIGHTS-04), is not inherited by another file.
+
+## 8. Questions for Carl
+
+1. **The decision.** Is T3 in the split form (the pack's diagonal kept, a named survey-coherent tau of 0.02 mag) the covariance you want a browser likelihood to use,
+   given that it cannot be validated against the release without request 3? Recommendation: yes as a labelled design, no consumer until E3 and request 3 run.
+2. **tau.** It is a stated size. If you prefer another (or one per survey from the release), it enters as NEW legs with thresholds committed first; the stream
+   passes at 0.02 and the cost of a change is one oracle run.
+3. **The fetches** (1 to 3 above), in the order that unblocks most: the published value (cheap), the full covariance (decides T1, T2 and the size of tau), a fitting package (the cited contour).
+4. **Part B.** Wait for E3 and request 3, then run Part B once with every tier, or build the kernel now with no consumer? Recommendation: wait.
+5. **The reported 0.43 chi-square per degree of freedom.** Should a lesson say "the released errors are not independent scatter" (a reading step, no new kernel)?
+
+## 9. Reproduce
+
+`node tools/sn-likelihood-validate.mjs <outdir>` on the spike branch (the oracle: `python3 tools/sn-likelihood-oracle/oracle.py <out.json>` with an import-only
+PyYAML stand-in on `PYTHONPATH` outside the tree, as in Prompt 255; astropy's import needs it and nothing was installed). The validator reads every bound from `thresholds.json`.

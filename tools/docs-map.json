@@ -1421,6 +1421,13 @@
       "purpose": "The late-time FLRW kernel (radiation, constant w, closed universes, transition, refusals, degeneracy contours): equations, domain, validation table, failed legs and the file requested (Prompt 255).",
       "owner": 255,
       "student": false
+    },
+    {
+      "file": "SN_LIKELIHOOD_GATE.md",
+      "kind": "gate",
+      "purpose": "Supernova likelihood gate: covariance decision (survey-coherent split), nuisance, planes, oracle, coverage, 58 legs, verdict A (narrow); published-contour legs not run (Prompt 256 Part A).",
+      "owner": 256,
+      "student": false
     }
   ]
 }

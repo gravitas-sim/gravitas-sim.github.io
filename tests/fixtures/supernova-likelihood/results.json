@@ -1,0 +1,1373 @@
+{
+ "format": "gravitas.supernova-likelihood-results/1",
+ "thresholdsSha256": "5382560db3189941e071e1817451d809dcd4177e2c6d6c5c636fe70174150fee",
+ "oracleThresholdsSha256": "5382560db3189941e071e1817451d809dcd4177e2c6d6c5c636fe70174150fee",
+ "oracleFileSha256": "736b9f5acf19a15443dc6d80bd4ad952f169ce3890631e22f3a97f0ef7a0ddcc",
+ "spikeCommit": "bc9d5844",
+ "node": "v22.23.4",
+ "N": 1580,
+ "rows": [
+  {
+   "id": "M0.data.diag",
+   "base": "M0.data",
+   "set": "M",
+   "group": "diag",
+   "status": "pass",
+   "measured": {
+    "N": 1580,
+    "dz": 4.440892098500626e-16,
+    "dmu": 7.105427357601002e-15,
+    "derr": 1.1102230246251565e-16,
+    "flags": 0,
+    "rawSha256": "1cb0fc379ef066afdc2ffd1857681cc478024570d8a3eba284fb645775198cf8",
+    "packRecordSha256": "1cb0fc379ef066afdc2ffd1857681cc478024570d8a3eba284fb645775198cf8",
+    "oracleSha256": "1cb0fc379ef066afdc2ffd1857681cc478024570d8a3eba284fb645775198cf8",
+    "calibratorsInRaw": 77,
+    "rawRows": 1701,
+    "minSigma": 0.114803
+   },
+   "bound": "as stated"
+  },
+  {
+   "id": "A1.eds.diag",
+   "base": "A1.eds",
+   "set": "S",
+   "group": "diag",
+   "status": "pass",
+   "measured": {
+    "maxRelative": 2.581743780755626e-14
+   },
+   "bound": "relative 1e-10"
+  },
+  {
+   "id": "A2.kernel.diag",
+   "base": "A2.kernel",
+   "set": "S",
+   "group": "diag",
+   "status": "pass",
+   "measured": {
+    "maxAbsMag": 1.4210854715202004e-14,
+    "sets": 6
+   },
+   "bound": "absolute 1e-9 mag"
+  },
+  {
+   "id": "B1.dist.diag",
+   "base": "B1.dist",
+   "set": "M",
+   "group": "diag",
+   "status": "pass",
+   "measured": {
+    "maxAbsMag": 5.005773573429906e-11
+   },
+   "bound": "absolute 1e-8 mag"
+  },
+  {
+   "id": "A3.marg.diag",
+   "base": "A3.marg",
+   "set": "S",
+   "group": "diag",
+   "status": "pass",
+   "measured": {
+    "maxRelative": 4.546808269214441e-15,
+    "thetas": 10
+   },
+   "bound": "relative 1e-9"
+  },
+  {
+   "id": "A4.shift.diag",
+   "base": "A4.shift",
+   "set": "S",
+   "group": "diag",
+   "status": "pass",
+   "measured": {
+    "maxRelative": 3.3944681571763255e-14
+   },
+   "bound": "relative 1e-10"
+  },
+  {
+   "id": "A5.perfect.diag",
+   "base": "A5.perfect",
+   "set": "S",
+   "group": "diag",
+   "status": "pass",
+   "measured": {
+    "chi2AtTruth": -3.637978807091713e-12,
+    "chi2AtOm035": 2.7109680177227347
+   },
+   "bound": "absolute 1e-9; at least 1"
+  },
+  {
+   "id": "A11.constant.diag",
+   "base": "A11.constant",
+   "set": "S",
+   "group": "diag",
+   "status": "pass",
+   "measured": {
+    "integral": 0.012841104677522634,
+    "closedForm": 0.012841104677527,
+    "relative": 3.4002518464591363e-13
+   },
+   "bound": "relative 1e-8"
+  },
+  {
+   "id": "A3.marg.cov",
+   "base": "A3.marg",
+   "set": "S",
+   "group": "cov",
+   "status": "pass",
+   "measured": {
+    "maxRelative": 3.9227563440527356e-15,
+    "thetas": 10
+   },
+   "bound": "relative 1e-9"
+  },
+  {
+   "id": "A4.shift.cov",
+   "base": "A4.shift",
+   "set": "S",
+   "group": "cov",
+   "status": "pass",
+   "measured": {
+    "maxRelative": 8.71922174336003e-15
+   },
+   "bound": "relative 1e-10"
+  },
+  {
+   "id": "A5.perfect.cov",
+   "base": "A5.perfect",
+   "set": "S",
+   "group": "cov",
+   "status": "pass",
+   "measured": {
+    "chi2AtTruth": 6.366462912410498e-12,
+    "chi2AtOm035": 1.9422672159325884
+   },
+   "bound": "absolute 1e-9; at least 1"
+  },
+  {
+   "id": "A11.constant.cov",
+   "base": "A11.constant",
+   "set": "S",
+   "group": "cov",
+   "status": "pass",
+   "measured": {
+    "integral": 0.020298366217201373,
+    "closedForm": 0.02029836621721182,
+    "relative": 5.146475662398047e-13
+   },
+   "bound": "relative 1e-8"
+  },
+  {
+   "id": "A6.levels.diag",
+   "base": "A6.levels",
+   "set": "S",
+   "group": "diag",
+   "status": "pass",
+   "measured": {
+    "maxRelative": 5.921189464667502e-15,
+    "levels": [
+     {
+      "k": 1,
+      "p": 0.6826894921370862,
+      "d2": 2.2957489288986332,
+      "d1": 0.9999999999999991
+     },
+     {
+      "k": 2,
+      "p": 0.9544997361036416,
+      "d2": 6.1800743062441725,
+      "d1": 3.9999999999999973
+     },
+     {
+      "k": 3,
+      "p": 0.9973002039367398,
+      "d2": 11.829158081900758,
+      "d1": 8.999999999999947
+     }
+    ]
+   },
+   "bound": "relative 1e-9"
+  },
+  {
+   "id": "A7.small.cov",
+   "base": "A7.small",
+   "set": "S",
+   "group": "cov",
+   "status": "pass",
+   "measured": {
+    "maxRelative": 5.917790577386144e-16,
+    "groups": 8
+   },
+   "bound": "relative 1e-10"
+  },
+  {
+   "id": "A8.woodbury.cov",
+   "base": "A8.woodbury",
+   "set": "M",
+   "group": "cov",
+   "status": "pass",
+   "measured": {
+    "maxRelative": 3.752871475629476e-15
+   },
+   "bound": "relative 1e-9"
+  },
+  {
+   "id": "A9.pd.cov",
+   "base": "A9.pd",
+   "set": "M",
+   "group": "cov",
+   "status": "pass",
+   "measured": {
+    "minSigmaInGroups": 0.11480299999999999,
+    "tau": 0.02,
+    "maxResidual": 1.3877787807814457e-16,
+    "groups": 20
+   },
+   "bound": "absolute 1e-12"
+  },
+  {
+   "id": "A10.condition.cov",
+   "base": "A10.condition",
+   "set": "M",
+   "group": "cov",
+   "status": "pass",
+   "measured": {
+    "estimate": {
+     "lmax": 0.5413689323770589,
+     "lmin": 0.01285654408324421,
+     "cond": 42.10843356284361,
+     "iterations": [
+      45,
+      248
+     ]
+    },
+    "oracle": {
+     "lmax": 0.5413689324350588,
+     "lmin": 0.01285654406338697,
+     "cond": 42.108433632392405
+    },
+    "relative": 1.6516595868765194e-9,
+    "diagEstimate": 41.07567986518965,
+    "diagOracle": 41.0756799340453
+   },
+   "bound": "within 1 percent; at most 1e6"
+  },
+  {
+   "id": "A12.factor.cov",
+   "base": "A12.factor",
+   "set": "M",
+   "group": "cov",
+   "status": "pass",
+   "measured": {
+    "factorCpuSeconds": 0.9726229999999999,
+    "n": 1580
+   },
+   "bound": "at most 30 CPU seconds"
+  },
+  {
+   "id": "S1.size.cov",
+   "base": "S1.size",
+   "set": "M",
+   "group": "cov",
+   "status": "pass",
+   "measured": {
+    "addedDataBytes": 0,
+    "constants": 2,
+    "note": "the survey code is a pack column; tau and the rule are the only constants"
+   },
+   "bound": "0 bytes added"
+  },
+  {
+   "id": "B3.domain.diag",
+   "base": "B3.domain",
+   "set": "M",
+   "group": "diag",
+   "status": "pass",
+   "measured": {
+    "P1": {
+     "rawDisagreements": 0,
+     "finalDisagreements": 0,
+     "marginalOrNonFinite": 1
+    },
+    "P2": {
+     "rawDisagreements": 0,
+     "finalDisagreements": 0,
+     "marginalOrNonFinite": 0
+    }
+   },
+   "bound": "0 disagreements"
+  },
+  {
+   "id": "B2.nodes.diag",
+   "base": "B2.nodes",
+   "set": "M",
+   "group": "diag",
+   "status": "pass",
+   "measured": {
+    "nodes": 5329,
+    "chiMax": 1.0008989193011075e-9,
+    "setMismatch": 0,
+    "minDiff": 5.46265255252365e-10,
+    "edgeFMax": 1.8345902574878892e-10,
+    "edgeSets": true,
+    "closedEqual": true,
+    "sliceMax": 7.174261185127762e-13,
+    "sliceCountOk": true,
+    "notes": []
+   },
+   "bound": "absolute 1e-6"
+  },
+  {
+   "id": "B4.minimum.diag",
+   "base": "B4.minimum",
+   "set": "M",
+   "group": "diag",
+   "status": "pass",
+   "measured": {
+    "minDiff": 5.46265255252365e-10,
+    "best": {
+     "L1": 681.2687552625463,
+     "P1": 680.8116741849752,
+     "P2": 680.9092875683311
+    },
+    "oracleBest": {
+     "L1": 681.268755262,
+     "P1": 680.811674185,
+     "P2": 680.909287568
+    },
+    "position": {
+     "L1": 0.3491437221026361,
+     "P1": [
+      0.3039546772089077,
+      0.5879674443647644
+     ],
+     "P2": [
+      0.2980249901665268,
+      -0.8807371076964565
+     ]
+    },
+    "oraclePosition": {
+     "L1": 0.3491437193563064,
+     "P1": [
+      0.3039546308633251,
+      0.5879673739130125
+     ],
+     "P2": [
+      0.2980248847209087,
+      -0.8807369060421422
+     ]
+    }
+   },
+   "bound": "absolute 1e-6"
+  },
+  {
+   "id": "B5.crossings.diag",
+   "base": "B5.crossings",
+   "set": "M",
+   "group": "diag",
+   "status": "pass",
+   "measured": {
+    "nodes": 5329,
+    "chiMax": 1.0008989193011075e-9,
+    "setMismatch": 0,
+    "minDiff": 5.46265255252365e-10,
+    "edgeFMax": 1.8345902574878892e-10,
+    "edgeSets": true,
+    "closedEqual": true,
+    "sliceMax": 7.174261185127762e-13,
+    "sliceCountOk": true,
+    "notes": []
+   },
+   "bound": "same edges; f within 1e-4"
+  },
+  {
+   "id": "B6.slices.diag",
+   "base": "B6.slices",
+   "set": "M",
+   "group": "diag",
+   "status": "pass",
+   "measured": {
+    "sliceMax": 7.174261185127762e-13,
+    "sliceCountOk": true
+   },
+   "bound": "within 1e-6 in the parameter; same number of crossings"
+  },
+  {
+   "id": "B7.profile.diag",
+   "base": "B7.profile",
+   "set": "M",
+   "group": "diag",
+   "status": "pass",
+   "measured": {
+    "positionDiff": 2.746329719194307e-9,
+    "maxCrossingDiff": 5.848099782213012e-13,
+    "best": 681.2687552625463,
+    "oracleBest": 681.268755262,
+    "intervals": {
+     "d1": {
+      "crossings": [
+       0.33037395424319976,
+       0.3683576972429332
+      ],
+      "lowerOpen": false,
+      "upperOpen": false
+     },
+     "d4": {
+      "crossings": [
+       0.31204191811712534,
+       0.38802261224590706
+      ],
+      "lowerOpen": false,
+      "upperOpen": false
+     }
+    }
+   },
+   "bound": "within 1e-6"
+  },
+  {
+   "id": "E1.realConstrained.diag",
+   "base": "E1.realConstrained",
+   "set": "M",
+   "group": "diag",
+   "status": "pass",
+   "measured": {
+    "L1Closed": true,
+    "oracleL1Closed": true,
+    "P1_68_closed": true,
+    "oracleP1_68_closed": true,
+    "P1closedAllLevels": [
+     true,
+     true,
+     true
+    ],
+    "P2closedAllLevels": [
+     true,
+     true,
+     false
+    ]
+   },
+   "bound": "closed; statuses equal"
+  },
+  {
+   "id": "B2.nodes.cov",
+   "base": "B2.nodes",
+   "set": "M",
+   "group": "cov",
+   "status": "pass",
+   "measured": {
+    "nodes": 5329,
+    "chiMax": 6.741629476891831e-10,
+    "setMismatch": 0,
+    "minDiff": 4.4281023292569444e-10,
+    "edgeFMax": 9.140310730515466e-11,
+    "edgeSets": true,
+    "closedEqual": true,
+    "sliceMax": 7.664979762012081e-13,
+    "sliceCountOk": true,
+    "notes": []
+   },
+   "bound": "absolute 1e-6"
+  },
+  {
+   "id": "B4.minimum.cov",
+   "base": "B4.minimum",
+   "set": "M",
+   "group": "cov",
+   "status": "pass",
+   "measured": {
+    "minDiff": 4.4281023292569444e-10,
+    "best": {
+     "L1": 684.1625777170368,
+     "P1": 683.785197450178,
+     "P2": 683.8797513605572
+    },
+    "oracleBest": {
+     "L1": 684.162577717,
+     "P1": 683.78519745,
+     "P2": 683.879751361
+    },
+    "position": {
+     "L1": 0.34701857869523667,
+     "P1": [
+      0.3025614392054967,
+      0.583545948098573
+     ],
+     "P2": [
+      0.29465953719979,
+      -0.8720921112797246
+     ]
+    },
+    "oraclePosition": {
+     "L1": 0.34701856112649426,
+     "P1": [
+      0.3025613549622571,
+      0.5835459192968594
+     ],
+     "P2": [
+      0.29465945510067626,
+      -0.8720919687608365
+     ]
+    }
+   },
+   "bound": "absolute 1e-6"
+  },
+  {
+   "id": "B5.crossings.cov",
+   "base": "B5.crossings",
+   "set": "M",
+   "group": "cov",
+   "status": "pass",
+   "measured": {
+    "nodes": 5329,
+    "chiMax": 6.741629476891831e-10,
+    "setMismatch": 0,
+    "minDiff": 4.4281023292569444e-10,
+    "edgeFMax": 9.140310730515466e-11,
+    "edgeSets": true,
+    "closedEqual": true,
+    "sliceMax": 7.664979762012081e-13,
+    "sliceCountOk": true,
+    "notes": []
+   },
+   "bound": "same edges; f within 1e-4"
+  },
+  {
+   "id": "B6.slices.cov",
+   "base": "B6.slices",
+   "set": "M",
+   "group": "cov",
+   "status": "pass",
+   "measured": {
+    "sliceMax": 7.664979762012081e-13,
+    "sliceCountOk": true
+   },
+   "bound": "within 1e-6 in the parameter; same number of crossings"
+  },
+  {
+   "id": "B7.profile.cov",
+   "base": "B7.profile",
+   "set": "M",
+   "group": "cov",
+   "status": "pass",
+   "measured": {
+    "positionDiff": 1.7568742405327242e-8,
+    "maxCrossingDiff": 7.664979762012081e-13,
+    "best": 684.1625777170368,
+    "oracleBest": 684.162577717,
+    "intervals": {
+     "d1": {
+      "crossings": [
+       0.3238286077291704,
+       0.37095960219960816
+      ],
+      "lowerOpen": false,
+      "upperOpen": false
+     },
+     "d4": {
+      "crossings": [
+       0.30137381164274846,
+       0.3956681592291935
+      ],
+      "lowerOpen": false,
+      "upperOpen": false
+     }
+    }
+   },
+   "bound": "within 1e-6"
+  },
+  {
+   "id": "E1.realConstrained.cov",
+   "base": "E1.realConstrained",
+   "set": "M",
+   "group": "cov",
+   "status": "pass",
+   "measured": {
+    "L1Closed": true,
+    "oracleL1Closed": true,
+    "P1_68_closed": true,
+    "oracleP1_68_closed": true,
+    "P1closedAllLevels": [
+     true,
+     true,
+     true
+    ],
+    "P2closedAllLevels": [
+     true,
+     false,
+     false
+    ]
+   },
+   "bound": "closed; statuses equal"
+  },
+  {
+   "id": "B8.synthetic.diag",
+   "base": "B8.synthetic",
+   "set": "S",
+   "group": "diag",
+   "status": "pass",
+   "measured": {
+    "worst": {
+     "chi": 9.271730050386395e-10,
+     "minimum": 9.662329603088438e-8,
+     "edgeF": 9.3369887349537e-7,
+     "slice": 4.19263490591959e-9
+    },
+    "notes": []
+   },
+   "bound": "as B2, B4, B5, B6"
+  },
+  {
+   "id": "B8.synthetic.cov",
+   "base": "B8.synthetic",
+   "set": "S",
+   "group": "cov",
+   "status": "pass",
+   "measured": {
+    "worst": {
+     "chi": 7.386802280962002e-10,
+     "minimum": 3.823856786766555e-10,
+     "edgeF": 3.5878264248445646e-10,
+     "slice": 1.988964548615968e-12
+    },
+    "notes": []
+   },
+   "bound": "as B2, B4, B5, B6"
+  },
+  {
+   "id": "D1.notConstrained.diag",
+   "base": "D1.notConstrained",
+   "set": "S",
+   "group": "diag",
+   "status": "pass",
+   "measured": {
+    "SYN12": {
+     "L1open": true,
+     "oracleL1open": true,
+     "P1_95open": true,
+     "oracleP1_95open": true
+    },
+    "SYN300a": {
+     "maxCrossingDiff": 5.874259412230742e-13,
+     "P1closed": [
+      false,
+      false,
+      false
+     ],
+     "oracleP1closed": [
+      false,
+      false,
+      false
+     ]
+    }
+   },
+   "bound": "statuses equal; crossings within 1e-6"
+  },
+  {
+   "id": "D1.notConstrained.cov",
+   "base": "D1.notConstrained",
+   "set": "S",
+   "group": "cov",
+   "status": "pass",
+   "measured": {
+    "SYN12": {
+     "L1open": true,
+     "oracleL1open": true,
+     "P1_95open": true,
+     "oracleP1_95open": true
+    },
+    "SYN300a": {
+     "maxCrossingDiff": 4.852923618514637e-13,
+     "P1closed": [
+      false,
+      false,
+      false
+     ],
+     "oracleP1closed": [
+      false,
+      false,
+      false
+     ]
+    }
+   },
+   "bound": "statuses equal; crossings within 1e-6"
+  },
+  {
+   "id": "D2.contourOpen.diag",
+   "base": "D2.contourOpen",
+   "set": "S",
+   "group": "diag",
+   "status": "pass",
+   "measured": {
+    "disagreements": 0,
+    "table": {
+     "SYN12": {
+      "prototype": [
+       false,
+       false,
+       false
+      ],
+      "oracle": [
+       false,
+       false,
+       false
+      ]
+     },
+     "SYN300a": {
+      "prototype": [
+       false,
+       false,
+       false
+      ],
+      "oracle": [
+       false,
+       false,
+       false
+      ]
+     },
+     "real": {
+      "prototype": [
+       true,
+       true,
+       true
+      ],
+      "oracle": [
+       true,
+       true,
+       true
+      ]
+     }
+    }
+   },
+   "bound": "0 disagreements"
+  },
+  {
+   "id": "D2.contourOpen.cov",
+   "base": "D2.contourOpen",
+   "set": "S",
+   "group": "cov",
+   "status": "pass",
+   "measured": {
+    "disagreements": 0,
+    "table": {
+     "SYN12": {
+      "prototype": [
+       false,
+       false,
+       false
+      ],
+      "oracle": [
+       false,
+       false,
+       false
+      ]
+     },
+     "SYN300a": {
+      "prototype": [
+       false,
+       false,
+       false
+      ],
+      "oracle": [
+       false,
+       false,
+       false
+      ]
+     },
+     "real": {
+      "prototype": [
+       true,
+       true,
+       true
+      ],
+      "oracle": [
+       true,
+       true,
+       true
+      ]
+     }
+    }
+   },
+   "bound": "0 disagreements"
+  },
+  {
+   "id": "C1.coverL1.diag",
+   "base": "C1.coverL1",
+   "set": "S",
+   "group": "diag",
+   "status": "pass",
+   "measured": {
+    "coverage68": 0.615,
+    "coverage95": 0.945,
+    "draws": 200,
+    "meanWidth68": 0.03558520551662327
+   },
+   "bound": "0.58 to 0.78; 0.90 to 0.99"
+  },
+  {
+   "id": "C2.coverP1.diag",
+   "base": "C2.coverP1",
+   "set": "S",
+   "group": "diag",
+   "status": "pass",
+   "measured": {
+    "coverage68": 0.63,
+    "coverage95": 0.93,
+    "draws": 100
+   },
+   "bound": "0.55 to 0.81; 0.88 to 1.00"
+  },
+  {
+   "id": "C3.coverP2.diag",
+   "base": "C3.coverP2",
+   "set": "S",
+   "group": "diag",
+   "status": "pass",
+   "measured": {
+    "coverage68": 0.72,
+    "coverage95": 0.95,
+    "draws": 100
+   },
+   "bound": "0.55 to 0.81; 0.88 to 1.00"
+  },
+  {
+   "id": "D3.gof.diag",
+   "base": "D3.gof",
+   "set": "S",
+   "group": "diag",
+   "status": "pass",
+   "measured": {
+    "threshold": 1757.3182371630965,
+    "falseAlarmRate": 0,
+    "detectionRate": 1
+   },
+   "bound": "false alarms at most 0.01; detections at least 0.99"
+  },
+  {
+   "id": "C4.coverOracle.diag",
+   "base": "C4.coverOracle",
+   "set": "S",
+   "group": "diag",
+   "status": "pass",
+   "measured": {
+    "L1": [
+     0.755,
+     0.96
+    ],
+    "P1": [
+     0.71,
+     0.96
+    ]
+   },
+   "bound": "as C1 and C2"
+  },
+  {
+   "id": "C1.coverL1.cov",
+   "base": "C1.coverL1",
+   "set": "S",
+   "group": "cov",
+   "status": "pass",
+   "measured": {
+    "coverage68": 0.685,
+    "coverage95": 0.955,
+    "draws": 200,
+    "meanWidth68": 0.04397147396835557
+   },
+   "bound": "0.58 to 0.78; 0.90 to 0.99"
+  },
+  {
+   "id": "C2.coverP1.cov",
+   "base": "C2.coverP1",
+   "set": "S",
+   "group": "cov",
+   "status": "pass",
+   "measured": {
+    "coverage68": 0.7,
+    "coverage95": 0.93,
+    "draws": 100
+   },
+   "bound": "0.55 to 0.81; 0.88 to 1.00"
+  },
+  {
+   "id": "C3.coverP2.cov",
+   "base": "C3.coverP2",
+   "set": "S",
+   "group": "cov",
+   "status": "pass",
+   "measured": {
+    "coverage68": 0.61,
+    "coverage95": 0.91,
+    "draws": 100
+   },
+   "bound": "0.55 to 0.81; 0.88 to 1.00"
+  },
+  {
+   "id": "D3.gof.cov",
+   "base": "D3.gof",
+   "set": "S",
+   "group": "cov",
+   "status": "pass",
+   "measured": {
+    "threshold": 1757.3182371630965,
+    "falseAlarmRate": 0,
+    "detectionRate": 1
+   },
+   "bound": "false alarms at most 0.01; detections at least 0.99"
+  },
+  {
+   "id": "C4.coverOracle.cov",
+   "base": "C4.coverOracle",
+   "set": "S",
+   "group": "cov",
+   "status": "pass",
+   "measured": {
+    "L1": [
+     0.685,
+     0.935
+    ],
+    "P1": [
+     0.69,
+     0.92
+    ]
+   },
+   "bound": "as C1 and C2"
+  },
+  {
+   "id": "D4.nonpd.cov",
+   "base": "D4.nonpd",
+   "set": "S",
+   "group": "cov",
+   "status": "pass",
+   "measured": {
+    "bad": {
+     "status": "refused",
+     "code": "not-positive-definite"
+    },
+    "good": {
+     "status": "ok"
+    }
+   },
+   "bound": "exact"
+  },
+  {
+   "id": "D5.inputs.diag",
+   "base": "D5.inputs",
+   "set": "S",
+   "group": "diag",
+   "status": "pass",
+   "measured": {
+    "cases": [
+     {
+      "want": "non-finite",
+      "code": "non-finite",
+      "status": "refused",
+      "hasNumber": false
+     },
+     {
+      "want": "mismatch",
+      "code": "mismatch",
+      "status": "refused",
+      "hasNumber": false
+     },
+     {
+      "want": "too-few",
+      "code": "too-few",
+      "status": "refused",
+      "hasNumber": false
+     },
+     {
+      "want": "bad-sigma",
+      "code": "bad-sigma",
+      "status": "refused",
+      "hasNumber": false
+     }
+    ]
+   },
+   "bound": "exact"
+  },
+  {
+   "id": "E2.real",
+   "base": "E2.real",
+   "set": null,
+   "group": null,
+   "status": "reported",
+   "measured": {
+    "treatments": {
+     "diag": {
+      "OmBest": 0.3491437221026361,
+      "chi2Min": 681.2687552625463,
+      "interval68": [
+       0.33037395424319976,
+       0.3683576972429332
+      ],
+      "interval95": [
+       0.31204191811712534,
+       0.38802261224590706
+      ],
+      "P1best": [
+       0.3039546772089077,
+       0.5879674443647644
+      ],
+      "P1chi2": 680.8116741849752,
+      "P2best": [
+       0.2980249901665268,
+       -0.8807371076964565
+      ],
+      "P2chi2": 680.9092875683311,
+      "P1closed": [
+       true,
+       true,
+       true
+      ],
+      "P2closed": [
+       true,
+       true,
+       false
+      ]
+     },
+     "cov": {
+      "OmBest": 0.34701857869523667,
+      "chi2Min": 684.1625777170368,
+      "interval68": [
+       0.3238286077291704,
+       0.37095960219960816
+      ],
+      "interval95": [
+       0.30137381164274846,
+       0.3956681592291935
+      ],
+      "P1best": [
+       0.3025614392054967,
+       0.583545948098573
+      ],
+      "P1chi2": 683.785197450178,
+      "P2best": [
+       0.29465953719979,
+       -0.8720921112797246
+      ],
+      "P2chi2": 683.8797513605572,
+      "P1closed": [
+       true,
+       true,
+       true
+      ],
+      "P2closed": [
+       true,
+       false,
+       false
+      ]
+     }
+    },
+    "widthRatioCovOverDiag": 1.2408201706390158,
+    "packPublishedComparison": {
+     "quantity": "Omega_m, flat Lambda-CDM, supernovae only",
+     "value": 0.334,
+     "unit": "",
+     "ref": "Brout et al. 2022, ApJ 938, 110"
+    },
+    "differenceInHalfWidths": {
+     "diag": 0.7973791367924095,
+     "cov": 0.5524423510054455
+    }
+   },
+   "bound": "REPORTED"
+  },
+  {
+   "id": "E5.chi2dof",
+   "base": "E5.chi2dof",
+   "set": null,
+   "group": null,
+   "status": "reported",
+   "measured": {
+    "diag": {
+     "chi2": 681.2687552625463,
+     "dof": 1578,
+     "perDof": 0.4317292492158088
+    },
+    "cov": {
+     "chi2": 684.1625777170368,
+     "dof": 1578,
+     "perDof": 0.43356310374970647
+    }
+   },
+   "bound": "REPORTED"
+  },
+  {
+   "id": "E4.duplicates",
+   "base": "E4.duplicates",
+   "set": null,
+   "group": null,
+   "status": "reported",
+   "measured": {
+    "N": 1580,
+    "unique": 1466,
+    "oracle": {
+     "N": 1580,
+     "unique": 1466,
+     "diag.all": {
+      "best": 681.2687552624697,
+      "position": 0.3491437193563064,
+      "intervals": {
+       "d1": {
+        "crossings": [
+         0.3303739542437846,
+         0.36835769724237766
+        ],
+        "lowerOpen": false,
+        "upperOpen": false
+       },
+       "d4": {
+        "crossings": [
+         0.31204191811722415,
+         0.388022612245567
+        ],
+        "lowerOpen": false,
+        "upperOpen": false
+       },
+       "d9": {
+        "crossings": [
+         0.29414137539780316,
+         0.40814542727161784
+        ],
+        "lowerOpen": false,
+        "upperOpen": false
+       }
+      }
+     },
+     "diag.unique": {
+      "best": 639.468250832379,
+      "position": 0.3524852665942358,
+      "intervals": {
+       "d1": {
+        "crossings": [
+         0.3329423125434594,
+         0.3725182788984801
+        ],
+        "lowerOpen": false,
+        "upperOpen": false
+       },
+       "d4": {
+        "crossings": [
+         0.31388153353852427,
+         0.39304955925971424
+        ],
+        "lowerOpen": false,
+        "upperOpen": false
+       },
+       "d9": {
+        "crossings": [
+         0.29529532920622764,
+         0.4140875913519748
+        ],
+        "lowerOpen": false,
+        "upperOpen": false
+       }
+      }
+     },
+     "cov.all": {
+      "best": 684.162577717,
+      "position": 0.34701856112649426,
+      "intervals": {
+       "d1": {
+        "crossings": [
+         0.323828607729502,
+         0.37095960219884166
+        ],
+        "lowerOpen": false,
+        "upperOpen": false
+       },
+       "d4": {
+        "crossings": [
+         0.3013738116434312,
+         0.3956681592287096
+        ],
+        "lowerOpen": false,
+        "upperOpen": false
+       },
+       "d9": {
+        "crossings": [
+         0.279639106574513,
+         0.4211615129489432
+        ],
+        "lowerOpen": false,
+        "upperOpen": false
+       }
+      }
+     },
+     "cov.unique": {
+      "best": 641.7778694171334,
+      "position": 0.3509736653860212,
+      "intervals": {
+       "d1": {
+        "crossings": [
+         0.32712077654286326,
+         0.3756262781153528
+        ],
+        "lowerOpen": false,
+        "upperOpen": false
+       },
+       "d4": {
+        "crossings": [
+         0.30404981064449793,
+         0.4010975133018754
+        ],
+        "lowerOpen": false,
+        "upperOpen": false
+       },
+       "d9": {
+        "crossings": [
+         0.28174360699270623,
+         0.42740690383360797
+        ],
+        "lowerOpen": false,
+        "upperOpen": false
+       }
+      }
+     }
+    },
+    "diag.all": {
+     "position": 0.3491437221026361,
+     "d1": [
+      0.33037395424319976,
+      0.3683576972429332
+     ],
+     "d4": [
+      0.31204191811712534,
+      0.38802261224590706
+     ],
+     "best": 681.2687552625463
+    },
+    "diag.unique": {
+     "position": 0.3524852661733515,
+     "d1": [
+      0.3329423125431614,
+      0.37251827889870204
+     ],
+     "d4": [
+      0.3138815335388638,
+      0.3930495592597796
+     ],
+     "best": 639.4682508324163
+    },
+    "diag.shiftInHalfWidths": 0.17594601304767973,
+    "cov.all": {
+     "position": 0.34701857869523667,
+     "d1": [
+      0.3238286077291704,
+      0.37095960219960816
+     ],
+     "d4": [
+      0.30137381164274846,
+      0.3956681592291935
+     ],
+     "best": 684.1625777170368
+    },
+    "cov.unique": {
+     "position": 0.3509736415487419,
+     "d1": [
+      0.32712077654346644,
+      0.3756262781157279
+     ],
+     "d4": [
+      0.30404981064387426,
+      0.4010975133018705
+     ],
+     "best": 641.7778694171427
+    },
+    "cov.shiftInHalfWidths": 0.1678327774724115
+   },
+   "bound": "REPORTED"
+  },
+  {
+   "id": "S2.alternatives",
+   "base": "S2.alternatives",
+   "set": null,
+   "group": null,
+   "status": "reported",
+   "measured": {
+    "N": 1580,
+    "ceilings": {
+     "packBytes": 355282,
+     "packGzipBytes": 111422,
+     "precacheFirstVisitGzipBytes": 5365197,
+     "indexedDbAndCacheBytes": 209715200
+    },
+    "T1": {
+     "n=1580": 4995960,
+     "n=300": 180600,
+     "n=100": 20200
+    },
+    "T2": {
+     "k=10": 69520,
+     "k=30": 195920,
+     "k=100": 638320
+    },
+    "fullLowerTriangleFloat32OfTheRelease": 5790204,
+    "note": "the pack ceilings have 0 B of room (packBytes and packGzipBytes at their measured values per tools/data-budget.json)"
+   },
+   "bound": "REPORTED"
+  },
+  {
+   "id": "P1.time",
+   "base": "P1.time",
+   "set": null,
+   "group": null,
+   "status": "reported",
+   "measured": {
+    "diag": {
+     "factorCpuSeconds": 0,
+     "perNodeMs": 4.1930200000001605,
+     "planeAnalysisCpuSeconds": 44.573374
+    },
+    "cov": {
+     "factorCpuSeconds": 0.9726229999999999,
+     "perNodeMs": 5.855119999999943,
+     "planeAnalysisCpuSeconds": 36.07314399999999
+    }
+   },
+   "bound": "REPORTED"
+  },
+  {
+   "id": "B10.cited",
+   "base": "B10.cited",
+   "set": null,
+   "group": null,
+   "status": "not-run",
+   "measured": {
+    "request": "B10.cited, NOT RUN. A cosmology-fitting code's contour on the same sample and treatment: Carl names a package (for example one he has used) and either installs it for a session or runs it and supplies its output with the settings; the pinned output is then compared with this gate's by the committed tolerance."
+   },
+   "bound": "NOT RUN"
+  },
+  {
+   "id": "E3.published",
+   "base": "E3.published",
+   "set": null,
+   "group": null,
+   "status": "not-run",
+   "measured": {
+    "request": "E3.published, NOT RUN. The published flat-case matter-density value and 1 sigma uncertainty of the Pantheon+ supernova-only analysis, read by Carl from the paper whose citation the pack records (Brout et al. 2022, ApJ 938, 110), with the table or sentence it was read from and a retrieval date, as tests/fixtures/supernova-likelihood/authentic/published-flat.json. The leg passes when the decided treatment's L1 best fit lies within one published sigma of it. No published number was typed here."
+   },
+   "bound": "NOT RUN"
+  },
+  {
+   "id": "X3.fullCovariance",
+   "base": "X3.fullCovariance",
+   "set": null,
+   "group": null,
+   "status": "not-run",
+   "measured": {
+    "request": "T1 and T2, NOT RUN. The release's full statistical-plus-systematic covariance matrix, which the release folder that holds Pantheon+SH0ES.dat (the pack's URL names its path and commit) provides beside it; Carl names the exact file from the release page as read, fetches it at the pack's commit, records its sha256, size and the terms as read from a saved copy (the pack's basis for the .dat is 'no licence stated, credited' and is not inherited by another file, rule 7.5.4). It is held outside every repository; with it the gate can state T1's chi2 against the full matrix on a subset, T2's retained variance, and the decided treatment's difference from the release's."
+   },
+   "bound": "NOT RUN"
+  }
+ ],
+ "counts": {
+  "rows": 58,
+  "pass": 50,
+  "reported": 5,
+  "not-run": 3
+ },
+ "verdict": "A",
+ "diagFailing": [],
+ "covFailing": []
+}
