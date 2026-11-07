@@ -62,7 +62,7 @@ export function propagateCatalog(cat, toEpoch) {
     if (shift > LIMITS.maxShiftArcsec * (1 + 1e-12))
       return refused(
         'shift-too-large',
-        `row ${i} moves ${shift.toFixed(1)} arcsec in ${dt} yr; the limit is ${LIMITS.maxShiftArcsec} arcsec`
+        `row ${i} moves ${Math.round(shift * 10) / 10} arcsec in ${dt} yr; the limit is ${LIMITS.maxShiftArcsec} arcsec`
       );
     const ca = Math.cos(a);
     const sna = Math.sin(a);

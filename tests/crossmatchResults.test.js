@@ -112,7 +112,9 @@ describe('the crossmatch kernel legs', () => {
       new URL('../tools/crossmatch-oracle/oracle.py', import.meta.url),
       'utf8'
     );
-    expect(py).not.toMatch(/gravitas|from js|import js/i);
+    expect(py).not.toMatch(
+      /^\s*(from|import)\s+(js|tools|gravitas)\b|^\s*from\s+\./im
+    );
   });
 });
 

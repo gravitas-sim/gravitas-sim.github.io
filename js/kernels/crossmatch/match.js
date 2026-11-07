@@ -100,7 +100,7 @@ function prepare(cat, role, radius, toEpoch) {
   if (half > LIMITS.roundingFraction * radius * (1 + 1e-9))
     return refused(
       'rounded-positions',
-      `catalog ${role} stores positions to ${step.toPrecision(3)} arcsec (rounding error up to ${half.toPrecision(3)} arcsec), more than ${LIMITS.roundingFraction} of the ${radius} arcsec radius; use the precise table`
+      `catalog ${role} stores positions to ${Math.round(step * 10) / 10} arcsec (rounding error up to ${Math.round(half * 10) / 10} arcsec), more than ${LIMITS.roundingFraction} of the ${radius} arcsec radius; use the precise table`
     );
   const differs = (() => {
     const e = cat.epoch;
@@ -302,7 +302,7 @@ function shiftedMatch(A, B, radius, nMatches, o) {
           ]),
       ...(unreliable
         ? [
-            `the chance of a row having an unrelated neighbour in the radius is ${p.toPrecision(2)}, over ${LIMITS.maxChance}: the radius is too large for this density and the match is not reliable`,
+            `the chance of a row having an unrelated neighbour in the radius is ${Math.round(p * 100) / 100}, over ${LIMITS.maxChance}: the radius is too large for this density and the match is not reliable`,
           ]
         : []),
     ],
