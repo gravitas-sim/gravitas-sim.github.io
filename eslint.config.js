@@ -171,6 +171,7 @@ export default [
       'js/chartWorker.js',
       'js/validationWorker.js',
       'js/experiments/experimentWorker.js',
+      'js/experiments/ensemble/worker.js',
       'js/inference/inferenceWorker.js',
       'js/lab3d/worker.js',
       'js/mission/worker.js',

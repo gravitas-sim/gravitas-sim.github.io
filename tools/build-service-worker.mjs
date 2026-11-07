@@ -246,6 +246,9 @@ export const NEVER_PRECACHED = [
   // measured cost is in D-R10-30). Its first adopter deletes this entry, and
   // tests/workerPoolAdoption.test.js fails until it is deleted.
   /^js\/workers\/pool\.js$/,
+  // The ensemble runner (Prompt 265, EXPERIMENT_ENSEMBLES.md): the record, the kinds, the summary, the pool client and its Worker. No shipped
+  // module imports them (the panel and the lessons wait for Carl, D-R10-265-03), so no page can fetch one and an install has no use for them.
+  /^js\/experiments\/ensemble\//,
   // The data kinds (Prompt 157, DATA_PACKS.md): the image, sequence and grid
   // contracts, the bounded local FITS reader and its Worker. The first adopter
   // is the image marks instrument (Prompt 179), which takes the contract and

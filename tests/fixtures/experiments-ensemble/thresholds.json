@@ -1,0 +1,168 @@
+{
+ "format": "gravitas.experiment-ensemble-thresholds/1",
+ "prompt": "Roadmap III, Prompt 265, Experiment runner II: reproducible random experiments (tranche T5, authorized by Checkpoint V's recorded outcome CONTINUE AS PLANNED, DECISIONS_2026-11-06.md and the INTEGRATION.md line; hard prerequisites 134, 148 to 153 landed on v3 b664d664, and 154's statistics kernel)",
+ "document": "EXPERIMENT_ENSEMBLES.md (the record, the kinds, the limits, the validation table and the items not built), written after this file",
+ "committed": "before js/experiments/ensemble/*, the validator, the oracle script and its pinned output, and before any ensemble, interval, coverage or replay figure of this prompt existed. No Gravitas code of this prompt had been written when this file was committed (git history shows the order).",
+ "rule": "A crossed bound is a failed check, recorded in failed-legs.json and left failing; nothing is moved after a result; only Carl resets a bound. Amendments are recorded in amendments.json BEFORE the run they concern. A leg that cannot be measured here is NOT RUN with its exact request, never a pass.",
+ "scope": {
+  "built": "js/experiments/ensemble/: the experiment record as gravitas.experiment/2 (named streams, the stream fork per trial, the kernel versions, written only when used), four experiment kinds (sweep through 149's streams, ensemble of the same world with different seeds, injection campaign with 229's matched-filter recovery as the client, bootstrap over the trials of a finished result), the runner as a client of 153's pool with cancellation, progress and resume, a trial's result as a gravitas.artifact envelope (150), the ensemble's summary through 154, replay from the record alone, and the record's digest a report can cite.",
+  "notBuilt": "Item 4 (the upper depths of 'Extending an Experiment' and 'Integrators in Practice', and the investigation 'Luck or law?') and the bench's and analysis lab's panels reading the summaries: a lesson step changes the instructor answer keys, which only Carl's ciphertext rebuild can follow (instructors/materials is not editable here), the instructor closure is at its cap, and the deferred bundle has about 0.1 KB of room; the consumers rule holds for a kernel until it passes. The bench and the analysis lab read an ensemble result through pure adapters that hand them the shape they already read (tested), not through a changed panel. Frame injection (Prompt 184's campaign) is not registered as a client: it needs a frame source from the Observatory and already carries its own (seed, trial) keys and replay; the client slot is the same registry.",
+  "reuse": "delta table (rule 9): existing authority js/experiments/experimentManifest.js (manifest, trial plan, hash, migrate), trialRunner.js (a trial in a realm), js/random/streams.js (149), js/workers/pool.js (153), js/kernels/statistics (154), js/platform/artifact.js (150), js/hash.js (143), js/kernels/occurrence/injection.js (229); missing behaviour: named streams and a fork per trial on the record, ensembles and campaigns, a summary with intervals, replay from the record, a digest; adopters: the runner's lazy module, the corpus row, the two lessons later; duplication removed: none added (the new kinds delegate; the sweep kind calls runTrial)."
+ },
+ "contract": {
+  "R1": "Record. A manifest that uses an ensemble field is gravitas.experiment/2; one that does not is written as gravitas/1 exactly as before (the bytes of a /1 manifest do not change). A 2.0.0 reader refuses /2 by its version in words; the current reader reads it; a round trip is lossless. The corpus row 'ensemble-fields' (tests/compat/boundary.mjs) is its proof and FORMATS.md carries it.",
+  "R2": "Streams. Trial i draws only from stream(id, seed, 'trial', i) of Prompt 149 (key '<seed>:trial:<i>'), for the stream identity the kind names; the record lists each stream as {id, algorithm, version, key}. No trial's draws depend on the order trials ran in or on the realm that ran them. A sweep keeps its legacy draws: a distribution's values are stream('experiments', seed) of the manifest's own seed, equal to valuesFor.",
+  "R3": "Replay. A record re-runs from itself alone (its manifest, its streams, its kernel versions) and the new record's digest equals the old one. The digest is SHA-256 over the exact canonical JSON of the manifest and every trial's quantities. A record whose kernel version or engine fingerprint differs from this build's is reported as not reproducible with the reason, and is still replayed so the difference can be seen.",
+  "R4": "Summary through Prompt 154: the mean with Student's t interval (studentInterval), quantiles by linear interpolation (type 7), a case-bootstrap percentile interval of the median on a named stream (caseBootstrap, percentileInterval), the counts and shares of outcome classes. Trials that did not give a number are counted and not averaged in. An ensemble with fewer than 2 usable trials, or constant values, says 'not constrained' for the interval; it never invents a width.",
+  "R5": "Pool. The runner submits jobs to createPool with deterministic scheduling, the stream on the job, per-trial and total time limits, a result byte cap and a memory declaration from the profile; cancellation keeps what finished; resume runs only trials not kept; the finished record is identical to an uninterrupted run's.",
+  "R6": "Units and determinism. Every quantity of a trial carries a unit id of js/units/registry.js or the empty unit; nothing reads a clock or Math.random; engines differ in the last bit of Math.log, exp, sin and cos (CI runs Node 20, this Mac Node 24), so a replay is compared in one environment and no stored golden holds a number that passed through them. What is stored is exact: raw draws, counts and the digest of a kind whose arithmetic is + - * / and sqrt only.",
+  "R7": "Claims. An ensemble of runs of this engine reports what this engine does under its stated numerics (a fixed step, a stated perturbation); it is not a measurement of the three-body problem, and the three-body kind's drift is a regression context (Prompt 137), not validation. The injection campaign recovers the matched filter's statistic, which is optimistic by Prompt 229's stated simplifications. Evidence class: S (software works) only; no V claim is made here."
+ },
+ "worlds": {
+  "analyticDraw": "kind 'analytic-draw': trial i draws u = stream('experiments', seed, 'trial', i)() (uniform) and z from gaussian() of the same stream; quantities u (unitless), z (unitless), and the class 'high' when u >= 0.5. Arithmetic is + - * / and Math.log, sqrt, cos, sin only through Box-Muller (z); u itself is exact on every engine.",
+  "threeBody": "kind 'ensemble' on scenario three-body-sensitivity-lab (Lagrange's equilateral triangle of three 6-solar-mass stars, G = 2): every coordinate and velocity component nudged by up to the stated fraction (0.01) of its scale, the nudges from stream('experiments', seed, 'trial', i) in the order x, y, vx, vy per star, 1000 steps of 0.05 s; quantities: relative energy drift |E_end - E_start| / |E_start|, the closest pair separation, the largest distance from the centre of mass, and the outcome class (bound: no body beyond 3 initial radii; one-escaper: one; dispersed: two or three).",
+  "regressionSeeds": "keys 1000..1049 as plain integers: the seed list of js/validation/groups/long-term-regression.js. Under the legacy-seed rule (key = the integer, no fork) the kind draws the same numbers in the same order as that group.",
+  "injection": "kind 'injection' with client 'matched-filter-229': trial i draws e = gaussian(stream('injection', seed, 'trial', i))() and is recovered when S_true + e >= 7.1 (Prompt 229's THRESHOLD) through recover() of js/kernels/occurrence/injection.js, with a signal of s2 = S_true^2 and a star of sigma 1 at N = 5 transits; analytic efficiency Phi(S_true - 7.1) (analyticEfficiency).",
+  "bootstrap": "kind 'bootstrap': the values of one metric of a finished result are carried in the record; draw d resamples n values with replacement, idx = floor(u * n) with u the next draw of stream('experiments', seed, 'bootstrap', metric) (caseBootstrap's rule); the statistic is the median."
+ },
+ "checks": [
+  {
+   "id": "A1.streamForkOracle",
+   "leg": "a",
+   "what": "Trial forks against an independent implementation. A Python script written from the stated algorithm alone (FNV-1a of the key text for a text seed, a non-negative integer as itself, mulberry32, the key '<seed>:trial:<i>') and run with python -E draws 64 uniforms for each of 20 trial indices for each of the seeds 'a', 'ensemble-7', 'ünï', '42' (text) and 42 (integer); the module's forks give the same 64 doubles for each.",
+   "limits": { "maxMismatches": 0 }
+  },
+  {
+   "id": "A2.serialReplay",
+   "leg": "a",
+   "what": "kind analytic-draw, 200 trials, seed 'p265-a2': run, then replay from the record alone: the two records' digests are equal and every trial quantity is equal by Object.is.",
+   "limits": { "maxDifferences": 0 }
+  },
+  {
+   "id": "A3.poolOrderIndependence",
+   "leg": "a",
+   "what": "The same 200-trial record run on 153's pool with realms that finish in a shuffled order, at concurrency 1, 3 and 8: each record's digest equals the serial one.",
+   "limits": { "maxDifferences": 0 }
+  },
+  {
+   "id": "A4.cancelAndResume",
+   "leg": "a",
+   "what": "Cancelled after 60 trials have finished: the finished trials equal the serial run's by Object.is, every other trial is reported canceled (none dropped), the summary says it is partial; resuming runs only the other trials and the final digest equals the uninterrupted run's.",
+   "limits": { "maxDifferences": 0, "rerunOfKeptTrials": 0 }
+  },
+  {
+   "id": "A5.engineReplay",
+   "leg": "a",
+   "what": "kind ensemble on three-body-sensitivity-lab, 24 trials, seed 'p265-a5': recorded in one fresh Node process and replayed in another: every trial quantity equal by Object.is and the digests equal; also the same record run through a real worker_threads realm per trial equals it.",
+   "limits": { "maxDifferences": 0 }
+  },
+  {
+   "id": "A6.legacyDistribution",
+   "leg": "a",
+   "what": "The ensemble module's sweep values for a distribution entry equal valuesFor(entry) by Object.is for 20 seeds (text and numeric as text) and sample counts 3, 5, 8, 13, 20.",
+   "limits": { "maxMismatches": 0 }
+  },
+  {
+   "id": "A7.legacyTrials",
+   "leg": "a",
+   "what": "kind sweep over the corpus manifest (binary-planet-lab, binary_lab_planet_a 0.1 to 0.4 in 4 values, seeds a and b, 10000 units): the first 3 trials through the ensemble runner equal runTrial's results in every metric by Object.is (wall time and timing excluded), and the recorded results of the existing experiment tests are untouched (those suites pass unchanged).",
+   "limits": { "maxDifferences": 0 }
+  },
+  {
+   "id": "A8.regressionContext",
+   "leg": "a",
+   "what": "kind ensemble with the regression seeds 1000..1049 under the legacy-seed rule: the median and the 90th percentile of the relative energy drift equal long-term-regression.js distribution() to a relative 1e-9, and both stay inside the group's committed regression bound (RECORDED x REGRESSION.margin).",
+   "limits": { "maxRelDifference": 1e-9, "withinCommittedBound": true }
+  },
+  {
+   "id": "B1.meanSd",
+   "leg": "b",
+   "what": "Mean and sample standard deviation of 5 pinned arrays of 40 trial values (analytic-draw u and z) against numpy (python -E).",
+   "limits": { "maxRel": 1e-12 }
+  },
+  {
+   "id": "B2.studentInterval",
+   "leg": "b",
+   "what": "The 95% Student t interval of the mean of the same arrays against scipy.stats.t.ppf.",
+   "limits": { "maxRel": 1e-9 }
+  },
+  {
+   "id": "B3.quantiles",
+   "leg": "b",
+   "what": "Quantiles 0.05, 0.25, 0.5, 0.75, 0.95 by linear interpolation against numpy.quantile(method='linear').",
+   "limits": { "maxRel": 1e-12 }
+  },
+  {
+   "id": "B4.bootstrapInterval",
+   "leg": "b",
+   "what": "The case-bootstrap percentile interval of the median (500 draws, level 0.95) on the named stream: an independent Python implementation of the stated rule (mulberry32, floor(u * n), the sorted draws' linear-interpolated quantiles) gives the same lo, value and hi.",
+   "limits": { "maxRel": 1e-12 }
+  },
+  {
+   "id": "B5.outcomeShares",
+   "leg": "b",
+   "what": "Counts and shares of the outcome classes of the same arrays against collections.Counter; the shares sum to 1 within 1e-15; every trial is in exactly one class.",
+   "limits": { "maxAbs": 0 }
+  },
+  {
+   "id": "C1.meanIntervalCoverage",
+   "leg": "c",
+   "what": "Coverage of the 95% Student interval of the mean over 400 fixed-seed ensembles of 30 analytic-draw trials (z, true mean 0): the share of intervals holding 0.",
+   "limits": { "min": 0.925, "max": 0.975 }
+  },
+  {
+   "id": "C2.medianIntervalCoverage",
+   "leg": "c",
+   "what": "Coverage of the 95% bootstrap percentile interval of the median over 200 fixed-seed ensembles of 50 analytic-draw trials (u, true median 0.5, 400 draws each).",
+   "limits": { "min": 0.9, "max": 0.99 }
+  },
+  {
+   "id": "C3.injectionRecovery",
+   "leg": "c",
+   "what": "The recovered fraction of an injection campaign of 2000 trials at S_true 6.0, 7.1 and 8.0 against the analytic Phi(S_true - 7.1) (0.1357, 0.5, 0.8159 in closed form), and the campaign's own 95% interval holding the analytic value at each.",
+   "limits": { "maxAbs": 0.04, "intervalHoldsAnalytic": true }
+  },
+  {
+   "id": "D1.refusals",
+   "leg": "d",
+   "what": "Each of these is refused or reported, with a message, and never turned into a number: fewer than 2 trials; more trials than the profile's cap; an unknown stream identity, kind, client or kernel; a trial with a non-finite quantity (counted and left out, the summary says how many); an all-failed ensemble (the summary says not constrained); constant values (the interval says not constrained); a record whose digest does not match its content; a record whose engine fingerprint or kernel version differs from this build's (not reproducible, with the reason, and still replayed).",
+   "limits": { "refusedWithMessage": "all" }
+  },
+  {
+   "id": "D2.misspecified",
+   "leg": "d",
+   "what": "A stream named for another purpose (a record that lists the 'noise' stream for the draws of a kind that uses 'experiments') is refused at validation; a fork rule other than trial-index is refused; a bootstrap whose source values hold fewer than 2 finite numbers is refused.",
+   "limits": { "refusedWithMessage": "all" }
+  },
+  {
+   "id": "E1.recordCorpus",
+   "leg": "e",
+   "what": "The corpus row 'ensemble-fields' carries a boundary: the /1 corpus manifest is written as /1 byte for byte, a manifest with ensemble fields is written as /2, the 2.0.0 reader refuses /2 with its 'newer' message, the current reader reads it, and a rewrite reads the same.",
+   "limits": { "boundaryCarried": true }
+  },
+  {
+   "id": "E2.trialEnvelope",
+   "leg": "e",
+   "what": "Every trial of every kind above is a gravitas.artifact envelope that validateArtifact accepts with no problem, with its unit ids in the registry, and the envelope's version is the lowest one that carries it.",
+   "limits": { "maxProblems": 0 }
+  },
+  {
+   "id": "E3.digestCitation",
+   "leg": "e",
+   "what": "A report cites an experiment by the record's digest: citation(record) carries the digest, the kind, the stream list and the kernel versions as a gravitas.artifact provenance block that validateArtifact accepts; editing one trial changes the digest.",
+   "limits": { "maxProblems": 0 }
+  },
+  {
+   "id": "F1.authenticData",
+   "leg": "f",
+   "what": "Authentic-data applicability (rule 7.5.8 e): NOT APPLICABLE. The runner is an instrument for repeating runs; it makes no statement about real data, so no authentic dataset is used and no V claim is made. An ensemble of this engine's runs is not a measurement of nature.",
+   "limits": { "status": "not applicable" }
+  },
+  {
+   "id": "F2.otherEngines",
+   "leg": "f",
+   "what": "Cross-engine replay (Node 20, Firefox, WebKit) of the engine kind. Reported, not asserted here: CI runs Node 20 and the browser engines; a stored number that passed through Math.log, exp, sin or cos would differ in the last bit, so none is stored.",
+   "limits": { "status": "NOT RUN here; CI's runs are the request" }
+  }
+ ]
+}

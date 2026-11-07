@@ -1,0 +1,104 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://gravitas-sim.online/sdk/schemas/experiment-2.schema.json",
+  "title": "gravitas.experiment/2",
+  "description": "An experiment record that uses an ensemble field: the kind, the master seed, the number of trials, the named random streams, the fork each trial draws from, the kernel versions and the kind's config, and, once it has run, the result: every trial as a gravitas.artifact envelope, the engine fingerprint, the summary and the digest a report cites. A manifest with no ensemble field is gravitas.experiment/1 (experiment-1.schema.json). js/experiments/ensemble/record.js validateEnsemble() is the authority; it also holds the number of trials to a ceiling, a stream's key to its seed and a kind's config to its kind, which this schema does not. A sweep carries the /1 manifest's own fields beside the block. Neither reader refuses a field it does not know, so neither does this schema. EXPERIMENT_ENSEMBLES.md describes it; FORMATS.md lists it.",
+  "type": "object",
+  "required": ["format", "formatVersion", "title", "ensemble"],
+  "properties": {
+    "format": { "const": "gravitas.experiment" },
+    "formatVersion": { "const": 2 },
+    "title": { "type": "string", "pattern": "\\S" },
+    "ensemble": {
+      "type": "object",
+      "required": [
+        "kind",
+        "seed",
+        "trials",
+        "fork",
+        "streams",
+        "kernels",
+        "config",
+        "summary"
+      ],
+      "properties": {
+        "kind": { "enum": ["ensemble", "injection", "bootstrap", "sweep"] },
+        "seed": { "type": "string", "pattern": "\\S" },
+        "trials": { "type": "integer", "minimum": 2 },
+        "fork": { "enum": ["trial-index", "legacy-sweep"] },
+        "streams": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "required": ["id", "algorithm", "version", "key"],
+            "properties": {
+              "id": {
+                "enum": [
+                  "engine",
+                  "effects",
+                  "forward",
+                  "noise",
+                  "experiments",
+                  "injection"
+                ]
+              },
+              "algorithm": { "const": "mulberry32" },
+              "version": { "const": 1 },
+              "key": { "type": "string", "pattern": "\\S" }
+            }
+          }
+        },
+        "kernels": {
+          "type": "object",
+          "additionalProperties": { "type": "string" }
+        },
+        "config": { "type": "object" },
+        "summary": {
+          "type": "object",
+          "required": ["level", "draws"],
+          "properties": {
+            "level": {
+              "type": "number",
+              "exclusiveMinimum": 0,
+              "exclusiveMaximum": 1
+            },
+            "draws": { "type": "integer", "minimum": 100, "maximum": 20000 }
+          }
+        },
+        "limits": { "type": "object" },
+        "result": {
+          "type": "object",
+          "required": ["status", "trials", "digest"],
+          "properties": {
+            "status": { "enum": ["complete", "partial", "canceled"] },
+            "stopReason": { "type": "string" },
+            "engine": {
+              "type": "object",
+              "required": ["fingerprint"],
+              "properties": { "fingerprint": { "type": "string" } }
+            },
+            "trials": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": ["index", "status"],
+                "properties": {
+                  "index": { "type": "integer", "minimum": 0 },
+                  "status": { "type": "string" },
+                  "outcome": { "type": "string" },
+                  "artifact": {
+                    "type": "object",
+                    "required": ["format", "formatVersion", "id", "quantities"]
+                  }
+                }
+              }
+            },
+            "digest": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+            "summary": { "type": "object" }
+          }
+        }
+      }
+    }
+  }
+}

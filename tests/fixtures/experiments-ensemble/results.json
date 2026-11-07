@@ -1,0 +1,435 @@
+{
+ "format": "gravitas.experiment-ensemble-results/1",
+ "thresholdsSha256": "16bae232803d947f294575ce0ec9cf4db72c38682df65f48a875472ad710ab41",
+ "amendmentsSha256": "f6e62e2eaa1261819f23c4cf4af260847805109944fa2b3e7a97fc1ab1e8bd76",
+ "oracleSha256": "af5d868465496a2b5b6bb1a9e007ae3cff99bad943690772dd0a0eb3129b574b",
+ "node": "v22.23.4",
+ "counts": {
+  "pass": 22,
+  "fail": 1,
+  "not-applicable": 1,
+  "not-run": 1
+ },
+ "checks": [
+  {
+   "id": "A1.streamForkOracle",
+   "status": "pass",
+   "measured": {
+    "mismatches": 0,
+    "compared": 6400
+   },
+   "limit": {
+    "maxMismatches": 0
+   }
+  },
+  {
+   "id": "A2.serialReplay",
+   "status": "pass",
+   "measured": {
+    "differences": 0,
+    "digest": "4742bbadddbf3f8541bb8c0b6edc2e1c6f4cb68c134a81b1ce23f091bb63d026"
+   },
+   "limit": {
+    "maxDifferences": 0
+   }
+  },
+  {
+   "id": "A3.poolOrderIndependence",
+   "status": "pass",
+   "measured": {
+    "digestEqualByConcurrency": {
+     "1": true,
+     "3": true,
+     "8": true
+    }
+   },
+   "limit": {
+    "maxDifferences": 0
+   }
+  },
+  {
+   "id": "A4.cancelAndResume",
+   "status": "pass",
+   "measured": {
+    "kept": 60,
+    "canceled": 140,
+    "dropped": 0,
+    "keptDifferences": 0,
+    "rerunOfKeptTrials": 0,
+    "partialSummaryComplete": false,
+    "resumedDigestEqual": true
+   },
+   "limit": {
+    "maxDifferences": 0,
+    "rerunOfKeptTrials": 0
+   }
+  },
+  {
+   "id": "A5.engineReplay",
+   "status": "pass",
+   "measured": {
+    "differences": 0,
+    "digest": "c7be2a6bdb77f6e052d9f66504a301b3194bcc7158412af7ea04937a8372035d",
+    "outcomes": {
+     "bound": 12,
+     "one-escaper": 9,
+     "dispersed": 3
+    }
+   },
+   "limit": {
+    "maxDifferences": 0
+   }
+  },
+  {
+   "id": "A6.legacyDistribution",
+   "status": "pass",
+   "measured": {
+    "mismatches": 0,
+    "compared": 100
+   },
+   "limit": {
+    "maxMismatches": 0
+   }
+  },
+  {
+   "id": "A7.legacyTrials",
+   "status": "pass",
+   "measured": {
+    "differences": 0,
+    "trialsCompared": 3,
+    "valuesCompared": 9,
+    "manifestProblems": 0
+   },
+   "limit": {
+    "maxDifferences": 0
+   },
+   "note": "the existing experiment suites pass unchanged is asserted by the full Jest run, not here"
+  },
+  {
+   "id": "A8.regressionContext",
+   "status": "fail",
+   "measured": {
+    "median": 0.00578459045542643,
+    "p90": 0.3136102253170561,
+    "groupMedian": 0.0061484217010952386,
+    "groupP90": 0.4790509263528271,
+    "recorded": {
+     "median": 0.00615,
+     "p90": 0.479
+    },
+    "margin": 1.25,
+    "relMedian": 0.05917473838920287,
+    "relP90": 0.3453509677881758,
+    "withinCommittedBound": true
+   },
+   "limit": {
+    "maxRelDifference": 1e-9,
+    "withinCommittedBound": true
+   },
+   "note": "amendment AM3 says this leg is expected to fail"
+  },
+  {
+   "id": "A8b.regressionContextLab",
+   "status": "pass",
+   "measured": {
+    "median": 0.0061484217010952386,
+    "p90": 0.4790509263528271,
+    "groupMedian": 0.0061484217010952386,
+    "groupP90": 0.4790509263528271,
+    "recorded": {
+     "median": 0.00615,
+     "p90": 0.479
+    },
+    "margin": 1.25,
+    "relMedian": 0,
+    "relP90": 0,
+    "withinCommittedBound": true
+   },
+   "limit": {
+    "maxRelDifference": 1e-9,
+    "withinCommittedBound": true
+   },
+   "note": "amendment AM3: a new leg"
+  },
+  {
+   "id": "B0.drawsAgree",
+   "status": "pass",
+   "measured": {
+    "uMismatches": 0,
+    "zMaxRel": 4.427140622098918e-16
+   },
+   "limit": {
+    "uMismatches": 0,
+    "zMaxRel": 1e-12
+   },
+   "note": "not a committed leg: the oracle regenerates the trial values (u exactly, z through libm); B1 to B5 are stated on them"
+  },
+  {
+   "id": "B1.meanSd",
+   "status": "pass",
+   "measured": {
+    "maxRel": 6.172033942318344e-16
+   },
+   "limit": {
+    "maxRel": 1e-12
+   }
+  },
+  {
+   "id": "B2.studentInterval",
+   "status": "pass",
+   "measured": {
+    "maxRel": 1.3358964679746153e-15
+   },
+   "limit": {
+    "maxRel": 1e-9
+   }
+  },
+  {
+   "id": "B3.quantiles",
+   "status": "pass",
+   "measured": {
+    "maxRel": 1.9440854648201792e-16
+   },
+   "limit": {
+    "maxRel": 1e-12
+   }
+  },
+  {
+   "id": "B4.bootstrapInterval",
+   "status": "pass",
+   "measured": {
+    "maxRel": 0,
+    "lo": 0.31474904029164463,
+    "value": 0.5165256354957819,
+    "hi": 0.6524456624028971
+   },
+   "limit": {
+    "maxRel": 1e-12
+   }
+  },
+  {
+   "id": "B5.outcomeShares",
+   "status": "pass",
+   "measured": {
+    "mismatches": 0
+   },
+   "limit": {
+    "maxAbs": 0
+   }
+  },
+  {
+   "id": "C1.meanIntervalCoverage",
+   "status": "pass",
+   "measured": {
+    "coverage": 0.9475,
+    "replicates": 400
+   },
+   "limit": {
+    "min": 0.925,
+    "max": 0.975
+   }
+  },
+  {
+   "id": "C2.medianIntervalCoverage",
+   "status": "pass",
+   "measured": {
+    "coverage": 0.91,
+    "replicates": 200
+   },
+   "limit": {
+    "min": 0.9,
+    "max": 0.99
+   }
+  },
+  {
+   "id": "C3.injectionRecovery",
+   "status": "pass",
+   "measured": {
+    "6": {
+     "recovered": 0.129,
+     "analytic": 0.13566606094638273,
+     "abs": 0.006666060946382724,
+     "intervalHoldsAnalytic": true
+    },
+    "8": {
+     "recovered": 0.8175,
+     "analytic": 0.8159398746532407,
+     "abs": 0.0015601253467593112,
+     "intervalHoldsAnalytic": true
+    },
+    "7.1": {
+     "recovered": 0.498,
+     "analytic": 0.5,
+     "abs": 0.0020000000000000018,
+     "intervalHoldsAnalytic": true
+    }
+   },
+   "limit": {
+    "maxAbs": 0.04,
+    "intervalHoldsAnalytic": true
+   }
+  },
+  {
+   "id": "D1.refusals",
+   "status": "pass",
+   "measured": {
+    "refusals": [
+     {
+      "label": "fewer than 2 trials",
+      "refused": true,
+      "message": "ensemble.trials a whole number from 2 to 1953"
+     },
+     {
+      "label": "more trials than the cap",
+      "refused": true,
+      "message": "ensemble.trials a whole number from 2 to 1953"
+     },
+     {
+      "label": "unknown kind",
+      "refused": true,
+      "message": "ensemble.kind one of ensemble, injection, bootstrap, sweep"
+     },
+     {
+      "label": "unknown stream identity",
+      "refused": true,
+      "message": "ensemble.streams[0].id one of engine, effects, forward, noise, experiments, injection"
+     },
+     {
+      "label": "unknown client",
+      "refused": true,
+      "message": "ensemble.config.client one of matched-filter-229"
+     },
+     {
+      "label": "unknown world",
+      "refused": true,
+      "message": "ensemble.config.world one of analytic-draw, three-body"
+     },
+     {
+      "label": "other algorithm",
+      "refused": true,
+      "message": "ensemble.streams[0].algorithm this build draws mulberry32 version 1"
+     }
+    ],
+    "reported": [
+     {
+      "what": "an all-failed ensemble says not constrained",
+      "ok": true
+     },
+     {
+      "what": "constant values: the interval is not constrained",
+      "ok": true
+     },
+     {
+      "what": "one value: the interval is not constrained",
+      "ok": true
+     },
+     {
+      "what": "an edited record is reported with its digests",
+      "ok": true
+     },
+     {
+      "what": "a kernel version that differs is reported",
+      "ok": true
+     },
+     {
+      "what": "an engine fingerprint that differs is reported",
+      "ok": true
+     },
+     {
+      "what": "a record that is not reproducible is still replayed",
+      "ok": true
+     }
+    ]
+   },
+   "limit": {
+    "refusedWithMessage": "all"
+   }
+  },
+  {
+   "id": "D2.misspecified",
+   "status": "pass",
+   "measured": [
+    {
+     "label": "noise stream for an experiments kind",
+     "refused": true,
+     "message": "ensemble.streams[0].id a ensemble experiment draws from the \"experiments\" stream, not \"noise\""
+    },
+    {
+     "label": "fork rule that is neither",
+     "refused": true,
+     "message": "ensemble.fork must be \"trial-index\": trial i draws from stream(id, seed, \"trial\", i)"
+    },
+    {
+     "label": "legacy fork on an ensemble",
+     "refused": true,
+     "message": "ensemble.fork must be \"trial-index\": trial i draws from stream(id, seed, \"trial\", i)"
+    },
+    {
+     "label": "bootstrap of one value",
+     "refused": true,
+     "message": "ensemble.config.source.values at least 2 numbers, all finite"
+    },
+    {
+     "label": "bootstrap with a non-finite value",
+     "refused": true,
+     "message": "ensemble.config.source.values at least 2 numbers, all finite"
+    }
+   ],
+   "limit": {
+    "refusedWithMessage": "all"
+   }
+  },
+  {
+   "id": "E1.recordCorpus",
+   "status": "pass",
+   "measured": {
+    "v1UnchangedByteForByte": true,
+    "ensembleWrittenAsV2": true,
+    "currentReaderAccepts": true,
+    "roundTrip": true
+   },
+   "limit": {
+    "boundaryCarried": true
+   },
+   "note": "the 2.0.0 reader refusing it and the rewrite check are tests/compat/boundary.test.js (row ensemble-fields), run by the full Jest"
+  },
+  {
+   "id": "E2.trialEnvelope",
+   "status": "pass",
+   "measured": {
+    "problems": 0,
+    "recordsChecked": 3
+   },
+   "limit": {
+    "maxProblems": 0
+   }
+  },
+  {
+   "id": "E3.digestCitation",
+   "status": "pass",
+   "measured": {
+    "problems": 0,
+    "editChangesDigest": true
+   },
+   "limit": {
+    "maxProblems": 0
+   }
+  },
+  {
+   "id": "F1.authenticData",
+   "status": "not-applicable",
+   "measured": "the runner makes no statement about real data; no authentic dataset is used and no V claim is made",
+   "limit": {
+    "status": "not applicable"
+   }
+  },
+  {
+   "id": "F2.otherEngines",
+   "status": "not-run",
+   "measured": "Node 20 and the browser engines are CI runs; no stored number passed through libm",
+   "limit": {
+    "status": "NOT RUN here; CI's runs are the request"
+   }
+  }
+ ]
+}
