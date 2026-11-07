@@ -43,7 +43,7 @@ const trialMod = await imp('js/experiments/ensemble/trial.js');
 const { stream } = await imp('js/random/streams.js');
 const { validateArtifact } = await imp('js/platform/artifact.js');
 const manifestMod = await imp('js/experiments/experimentManifest.js');
-const { buildScenario, runTrial } = await imp('js/experiments/trialRunner.js');
+const { runTrial } = await imp('js/experiments/trialRunner.js');
 
 const results = [];
 const add = (id, status, measured, limit, note) =>
@@ -56,7 +56,6 @@ const add = (id, status, measured, limit, note) =>
   });
 const bound = id => thresholds.checks.find(c => c.id === id).limits;
 const rel = (a, b) => Math.abs(a - b) / Math.max(Math.abs(b), 1e-300);
-const quantile = sum.quantile;
 
 const tmp = mkdtempSync(path.join(realpathSync(tmpdir()), 'p265-'));
 let serialNo = 0;
@@ -378,59 +377,35 @@ let sweepRecord;
 }
 
 // --- A8 and A8b: the three-body kind against the regression group (Prompt 137) ----------
-{
-  const realm = await trialMod.loadRealm();
-  const lt = await imp('js/validation/groups/long-term-regression.js');
-  const { makeLab, LAB_SETTINGS } = await imp('js/validation/harness.js');
-  const { REGRESSION } = await imp('js/validation/engineTolerances.js');
-  const lab = makeLab(realm.physics);
-  const group = lt.distribution(realm.physics, lab);
-  const statsOf = all => {
-    const s = [...all].sort((a, b) => a - b);
-    return { median: quantile(s, 0.5), p90: quantile(s, 0.9) };
-  };
-  for (const [id, config, labSettings] of [
-    ['A8.regressionContext', {}, undefined],
-    ['A8b.regressionContextLab', { physics: 'validation-lab' }, LAB_SETTINGS],
-  ]) {
-    const drifts = Array.from(
-      { length: REGRESSION.seeds },
-      (_, k) =>
-        kinds.threeBodyTrial(
-          realm,
-          buildScenario,
-          config,
-          stream('experiments', 1000 + k),
-          labSettings
-        ).quantities[0].value
-    );
-    const mine = statsOf(drifts);
-    const dm = rel(mine.median, group.median);
-    const dp = rel(mine.p90, group.p90);
-    const within =
-      mine.median <= lt.RECORDED.median * REGRESSION.margin &&
-      mine.p90 <= lt.RECORDED.p90 * REGRESSION.margin;
-    const lim = bound('A8.regressionContext');
-    add(
-      id,
-      dm <= lim.maxRelDifference && dp <= lim.maxRelDifference && within
-        ? 'pass'
-        : 'fail',
-      {
-        median: mine.median,
-        p90: mine.p90,
-        groupMedian: group.median,
-        groupP90: group.p90,
-        relMedian: dm,
-        relP90: dp,
-        withinCommittedBound: within,
-      },
-      lim,
-      id === 'A8b.regressionContextLab'
-        ? 'amendment AM3: a new leg'
-        : 'amendment AM3 says this leg is expected to fail'
-    );
-  }
+// Each in a fresh process: an engine realm remembers the previous build (amendment AM4).
+for (const [id, mode] of [
+  ['A8.regressionContext', 'default'],
+  ['A8b.regressionContextLab', 'lab'],
+]) {
+  const out = JSON.parse(
+    execFileSync(
+      process.execPath,
+      [path.join(REPO, 'tools/experiment-ensemble-regression-child.mjs'), mode],
+      { cwd: REPO, encoding: 'utf8' }
+    )
+  );
+  const dm = rel(out.median, out.groupMedian);
+  const dp = rel(out.p90, out.groupP90);
+  const within =
+    out.median <= out.recorded.median * out.margin &&
+    out.p90 <= out.recorded.p90 * out.margin;
+  const lim = bound('A8.regressionContext');
+  add(
+    id,
+    dm <= lim.maxRelDifference && dp <= lim.maxRelDifference && within
+      ? 'pass'
+      : 'fail',
+    { ...out, relMedian: dm, relP90: dp, withinCommittedBound: within },
+    lim,
+    id === 'A8b.regressionContextLab'
+      ? 'amendment AM3: a new leg'
+      : 'amendment AM3 says this leg is expected to fail'
+  );
 }
 
 // --- B: summaries against the oracle ---------------------------------------------------
@@ -613,7 +588,7 @@ let injectionRecord;
     const r = await run.runSerial(m);
     injectionRecord ??= r;
     const mean = r.ensemble.result.summary.metrics.recovered;
-    const analytic = oracle.analyticEfficiency[String(S)];
+    const analytic = oracle.analyticEfficiency[S.toFixed(1)];
     const holds =
       mean.interval.status === 'ok' &&
       mean.interval.lo <= analytic &&
