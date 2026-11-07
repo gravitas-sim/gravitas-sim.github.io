@@ -59,7 +59,7 @@ export function propagateCatalog(cat, toEpoch) {
     const sa = mua * MAS * dt;
     const sd = mud * MAS * dt;
     const shift = Math.hypot(sa, sd) / ARCSEC;
-    if (shift > LIMITS.maxShiftArcsec)
+    if (shift > LIMITS.maxShiftArcsec * (1 + 1e-12))
       return refused(
         'shift-too-large',
         `row ${i} moves ${shift.toFixed(1)} arcsec in ${dt} yr; the limit is ${LIMITS.maxShiftArcsec} arcsec`
