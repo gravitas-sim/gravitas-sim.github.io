@@ -1,0 +1,69 @@
+{
+ "format": "gravitas.bao-followup-failed-legs/1",
+ "note": "every follow-up row that crossed its committed bound (or was decided failing by the committed rule), left failing",
+ "failed": [
+  {
+   "id": "F1.zdFormula",
+   "measured": {
+    "zdEq4": 1020.70170831997,
+    "zdPrinted": 1059.94,
+    "relative": -0.03701935173691917,
+    "inUnitsOfPrintedSigma": -130.79430560010036,
+    "statedAccuracy": null
+   },
+   "bound": "within the source's stated accuracy plus the printed digits (the committed bound). The paper states no accuracy for equation (4): the threshold is unmeasurable and the leg FAILS by the committed rule (AM3). The measured difference is reported with the row.",
+   "note": "AM3: the source states no accuracy for equation (4); the committed threshold is unmeasurable and fails by the committed rule"
+  },
+  {
+   "id": "F2.rdFormulaVsIntegral",
+   "measured": {
+    "nodes": 23,
+    "refused": 0,
+    "maxRelative": 0.031034901125252645,
+    "worstNode": {
+     "omega0": 0.025,
+     "omegaB": 0.024166666666666666,
+     "zd": 1014.4811937144195
+    },
+    "nodesOver2Percent": 4,
+    "neutrinoTerm": 0
+   },
+   "bound": "<= 0.02 at every node",
+   "note": null
+  },
+  {
+   "id": "F5.statedError",
+   "measured": {
+    "oracleMaxRelative": 0.03103490112525331,
+    "prototypeMaxRelative": 0.031034901125252645,
+    "s26Agreement": 0,
+    "integralAgreement": 6.999278454950493e-16,
+    "zdAgreement": 3.3734770353088143e-16
+   },
+   "bound": "<= 0.02; 1e-12; 1e-9",
+   "note": null
+  },
+  {
+   "id": "P2.plankZdrag",
+   "measured": {
+    "zdEq4": 1020.70170831997,
+    "zdPrinted": 1059.94,
+    "relative": -0.03701935173691917,
+    "statedAccuracy": null
+   },
+   "bound": "as F1 (the same unmeasurable threshold): FAILS by the committed rule (AM3); the measured difference is reported",
+   "note": "AM3: as F1"
+  },
+  {
+   "id": "F1b.zdDesign",
+   "measured": {
+    "zdEq4": 1020.70170831997,
+    "zdPrinted": 1059.94,
+    "relative": -0.03701935173691917,
+    "inUnitsOfPrintedSigma": -130.79430560010036
+   },
+   "bound": "|relative| <= 0.02 (design)",
+   "note": null
+  }
+ ]
+}
