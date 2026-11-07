@@ -1,0 +1,211 @@
+{
+ "format": "gravitas.model-comparison-thresholds/1",
+ "prompt": "Roadmap III, Prompt 261, Model comparison II within valid model classes (tranche T5, authorized by Checkpoint V's recorded outcome CONTINUE AS PLANNED, DECISIONS_2026-11-06.md; hard prerequisites 154 (the statistics kernel, #397) and 254 landed on v3). Production prompt, validation contract of section 7.5.8. This pull request is the kernel (item 1), its validation, STATISTICS.md (item 4) and the files it asks for; the comparison instrument's panel (item 2) and the three investigations (item 3) are NOT built (consumers rule held, see consumers).",
+ "document": "STATISTICS.md, section 'Model comparison II' (the classes, the equations, the limits, the validation table, the failed legs and the files requested), written after this file",
+ "committed": "before js/kernels/statistics/modelcompare.js, the validator, the oracle script and its pinned output, and before any p value, F value, information criterion, cross-validation score, false-positive rate or oracle number of Prompt 261 existed. Phase order: this file ALONE (commit 1); the independent oracle and its pinned output (commit 2, before the kernel); the kernel (commit 3); the validator and tests, run once, results pinned with the first run kept (commit 4). Any amendment is a separate commit before any run of the validator and records the reason and that no result had been seen.",
+ "rule": "A crossed bound is a failed check, recorded in failed-legs.json and left failing; nothing is moved after a result; only Carl resets a bound. A leg that cannot be measured (a file not supplied, a tool not installed) is NOT RUN and says why, and nothing is fetched by any agent. No published number is typed from memory: published values enter only as files Carl's session fetches into scratch-data/ (outside every repository), or as values already committed in the tree with their citation (Anscombe's R-squared and residual standard error, committed by Prompt 154).",
+ "seeds": {
+  "oracle": "numpy default_rng: 261 for the datasets and for the selection of the searched case, 2611 and 2612 for the oracle's two independent null ensembles; written beside its results with the inputs it drew, so the kernel is run on exactly those inputs",
+  "kernel": "the kernel's draws come from js/random/streams.js, the 'noise' stream, keyed 'p261:<leg>:<index>' (Prompt 149's API); the ensembles' own data come from js/rng.js mulberry32 with the integer seed 2610000 + 1000 * leg number + series index; no Math.random, no clock"
+ },
+ "scope": {
+  "built": "js/kernels/statistics/modelcompare.js: a model-pair classifier over three declared flags (nested, boundary, searched) with three classes (nested and regular, nested and non-regular, non-nested); simulation-calibrated significance (a parametric bootstrap of the statistic under the simpler model, search included, with the add-one p value) with indexable draws so a chunked run equals a serial one; the Akaike (AIC, AICc) and Bayesian (BIC) criteria as labelled penalised likelihoods with a refusal below the committed sample size; deterministic leave-one-out cross-validation; and a dispatcher that names the class and runs only the methods valid for it (the F-test of Prompt 154 for the first class).",
+  "notBuilt": "the 'compare models' panel of the comparison instrument (item 2) and the investigations 'Is it really a planet?' revisited, 'One line or two?' and 'How many parameters?' with their Spanish, depths, instructor materials and Library entries (item 3): the consumers rule (Carl, 2026-11-05 and 2026-11-06; Checkpoint V operating term 8) holds for every kernel without a released consumer, one of the three investigations rests on 247's held line tools, and instructor materials need the ciphertext rebuild that only Carl's session performs. Model averaging, Akaike weights, Bayes factors, evidence, a sampler (D-SAMPLER-01), a Worker job type (no consumer named by Appendix C beyond the pool contract; the draws are indexable so that one can be added without changing a result).",
+  "reuse": "delta table (rule 9): existing authority js/kernels/statistics/compare.js `fTest` (nested regular models, refuses searched and boundary), special.js (fSf, normalSf, sigmaOfLevel), resample.js (DRAW_BUDGET, StatisticsError, checkDraws behaviour), js/random/streams.js (the noise stream and its fork), js/kernels/variables/period.js (`periodogram`, `periodGrid`: the validator's searched statistic) and the check.js refusal record; missing behaviour: the class of a pair, a calibrated significance for searched and non-regular alternatives, penalised likelihoods with a refusal rule, deterministic cross-validation, one dispatcher; adopter: tools/model-comparison-validate.mjs and tests/modelComparison*.test.js now, the comparison instrument's panel (not built) next; duplication removed: none (the F-test is called, not copied)."
+ },
+ "contract": {
+  "R1": "Classes. A pair of models is described by three flags the caller must declare, none defaulted: nested (the reduced model is the full model at a fixed value of some parameters), boundary (a null value sits on the edge of the parameter space: a variance, an amplitude, a mixing fraction at zero) and searched (an extra parameter, or the choice among alternatives, is found by a search over a grid or a set of trials). Class 'nested-regular' is nested true, boundary false, searched false. Class 'nested-nonregular' is nested true and boundary or searched true. Class 'non-nested' is nested false, whatever the other two say. A missing or non-boolean flag is refused ('undeclared'): the permissive reading is never the default.",
+  "R2": "Valid methods by class. nested-regular: the F-test of Prompt 154 is primary; the information criteria and leave-one-out are also valid. nested-nonregular: simulation-calibrated significance is primary; leave-one-out is also valid; the F-test is refused with the code 'searched' (searched true) or 'boundary' (boundary true; 'searched' when both, matching Prompt 154's order); the information criteria are not offered (a boundary breaks their asymptotics and a search is not penalised by k). non-nested: the information criteria are primary (penalised likelihoods with stated limits: no evidence, no model averaging, no weights, no Bayes factor) and leave-one-out is also valid; the F-test is refused 'not-nested'; simulation-calibrated significance is not offered for a non-nested pair by this kernel.",
+  "R3": "Simulation-calibrated significance. The caller supplies `observed` (the statistic of the data, search included) and `simulate(uniform)`, which draws one dataset under the SIMPLER model as fitted (a parametric bootstrap) and returns the same statistic, search included. Draw i uses the stream('noise', seed, label).fork(i), so a draw depends on its index and nothing else (a chunk of draws on a pool equals the same draws serially, bit for bit). p = (1 + #{T*_i >= T_obs}) / (1 + B) (Davison and Hinkley 1997, 4.2; North, Curtis and Sham 2002): never 0, exactly valid for exchangeable draws, ties count against the alternative. When no draw reaches the observed value the record says `atFloor` and the claim is p <= 1/(1 + B), never p = 0. The Monte Carlo standard error sqrt(p (1 - p) / B) is reported. A level alpha is optional; one smaller than 1/(1 + B) is refused ('too-few-draws'). B defaults to 999 (the default of DRAW_BUDGET, 1000, less one) and is capped by DRAW_BUDGET.max (20000, code 'budget', thrown like Prompt 154's). A non-finite draw refuses the whole run ('non-finite-draws', with the count), because dropping it would change the reference distribution; a non-finite observed statistic is refused ('input'). The p value is exact for the stated null and only for it: a null that is wrong (a variance, a noise shape) calibrates a different test, and the record says so.",
+  "R4": "Information criteria, Gaussian errors of one variance. From the residual sum of squares: lnL = -(n/2)(ln(2 pi RSS / n) + 1) with the variance counted as one more parameter (K = k + 1; differences between models are unaffected); or lnL given with K as given. AIC = -2 lnL + 2 K; AICc = AIC + 2 K (K + 1) / (n - K - 1) (Hurvich and Tsai 1989); BIC = -2 lnL + K ln n (Schwarz 1978). Reported as differences from the smallest value of each criterion; no weights, no probabilities, no Bayes factor, no model average; the record states `evidence: null`, `weights: null` and that a difference is not evidence, and flags `disagree` when AIC and BIC prefer different models. Refused ('sample-size') when n < 20 or n < 5 K for any model (the criteria are asymptotic; Burnham and Anderson 2002 advise AICc below n / K = 40, and the kernel reports AICc always), ('input') for a non-finite or non-positive RSS or a non-finite lnL, ('counts') for n or k that are not whole numbers with n >= 1 and k >= 0, ('zero-rss') for RSS = 0 (an infinite likelihood), and ('models') for fewer than two or more than twelve models. A model flagged `searched` carries the caution 'searched parameter not penalised by K': a search over a grid costs more than one parameter, and no value of K stated here is calibrated.",
+  "R5": "Leave-one-out cross-validation, deterministic. For each row i the caller's `fitPredict(trainIndex, testIndex)` fits on all rows but i and predicts row i; the score is the mean squared prediction error; two or more models are compared by the paired differences d_i = e1_i^2 - e2_i^2, their mean and the NAIVE standard error sd(d)/sqrt(n), labelled naive (the folds share data and the standard error is too small, Bengio and Grandvalet 2004), with the number of rows each model wins. Refused ('sample-size') for n < 5 and 'budget' (thrown) above 500 rows; ('non-finite') when a prediction or an observation is not finite. No randomness: two calls give identical records.",
+  "R6": "The dispatcher `compareModels` takes the pair's flags, n and, for each of the two models, k and rss (or lnL), plus the optional calibration inputs and leave-one-out models; it names the class, the primary method, the methods refused with their codes and reasons, and the result table of the method it ran. A class that needs a simulation and receives none returns 'needs-simulation' naming the class, never a substitute number.",
+  "R7": "Units: none; every quantity is in the caller's units. Domain stated in STATISTICS.md. Determinism: nothing reads a clock or Math.random; engines differ in the last bit of Math.log, exp, sin and cos (CI runs Node 22, a Mac Node 24), so no verdict here depends on a last bit: closed forms are held to tolerances orders of magnitude above one ulp and every ensemble to a statistical band; the pinned results.json records the statuses, and the numbers are not asserted to their last digit."
+ },
+ "worlds": {
+  "series": {
+   "n": 40,
+   "time": "t_i = i + 0.5 ((7 i mod 11) / 10 - 0.5), i = 0..39 (integer arithmetic, exact on every engine)",
+   "grid": "js/kernels/variables/period.js periodGrid(minPeriod 2, maxPeriod 40, baseline = t_39 - t_0, oversample 4); the oracle rebuilds the same frequencies in numpy from the stated formula (fmin = 1 / maxPeriod, df = 1 / (oversample T), m = floor((fmax - fmin) / df) + 1)",
+   "statistic": "the maximum over the grid of the fraction of the variance one sinusoid and a floating mean explain (periodogram power; astropy's standard normalization)",
+   "nullModel": "a constant mean: y* = mean(y) + sigma_hat e, e standard normal, sigma_hat = sqrt(sum (y - mean)^2 / (n - 1)); the same stated null in the kernel run and in the oracle",
+   "searchedCase": "the oracle draws datasets y = 1 + a sin(2 pi t / P + phi) + e (n = 40, e standard normal, one P uniform in [4, 20], phi uniform in [0, 2 pi), a uniform in [0.55, 0.95]) from seed 261 in order and takes the first whose oracle p value (20000 draws) lies in [0.02, 0.30]; the dataset and its P, phi, a are written beside the result"
+  },
+  "regular": {
+   "n": 30,
+   "design": "x_i = i, i = 0..29; the models are the constant (reduced) and the line (full); the oracle's datasets are y = 1 + 0.12 x + e (a clear slope) and y = 1 + e (no slope) from seed 261, and y = 1 + 0.4 sin(2 pi x / 12) + 0.3 cos(2 pi x / 12) + e for the known-frequency pair (constant reduced, sinusoid at the stated period 12 full, two added parameters)",
+   "criteriaPair": "n = 40, x_i = 1 + i / 4; y = 2 + 0.7 x + e from seed 261; model 1: a + b x (k = 2); model 2: a + b ln x + c / x (k = 3, not nested in model 1); also the polynomial ladder of degrees 0, 1, 2, 3 for the 'how many parameters' reading"
+  }
+ },
+ "checks": [
+  {
+   "id": "A1.fTestMatchesRegression",
+   "leg": "a",
+   "what": "The dispatcher's F-test for the line against the constant on the oracle's two datasets (clear slope; no slope): F equals the square of the slope's t statistic and p equals the two-sided p of scipy.stats.linregress (an independent implementation), and the class is 'nested-regular'.",
+   "limits": { "maxRelF": 1e-10, "maxRelP": 1e-8, "maxAbsP": 1e-12 }
+  },
+  {
+   "id": "A2.fTestTwoParameters",
+   "leg": "a",
+   "what": "Constant against a sinusoid of the stated period 12 (cos and sin amplitudes free, d1 = 2): F and p equal numpy least squares and scipy.stats.f.sf in the oracle.",
+   "limits": { "maxRelF": 1e-10, "maxRelP": 1e-8, "maxAbsP": 1e-12 }
+  },
+  {
+   "id": "A3.criteriaDefinitions",
+   "leg": "a",
+   "what": "AIC, AICc and BIC of the criteriaPair's two models and of the polynomial ladder (degrees 0 to 3), from the residual sums of squares of numpy least-squares fits, equal the oracle's values from the Gaussian maximum log-likelihood summed by scipy.stats.norm.logpdf at sigma_hat = sqrt(RSS / n), with K = k + 1, in absolute value; the differences from the smallest and the preferred model by each criterion agree; and a hand case (RSS 100 and 80, n = 40, k = 2 and 3) from the three definitions written out in the oracle.",
+   "limits": { "maxAbs": 1e-9 }
+  },
+  {
+   "id": "A4.classifierTable",
+   "leg": "a",
+   "what": "The classifier over all eight combinations of (nested, boundary, searched): nested true with neither other flag is 'nested-regular'; nested true with boundary or searched is 'nested-nonregular'; nested false is 'non-nested' in all four combinations; each row names its primary method and its refused methods with the codes of R2; a missing flag, a null and a string for a flag are each 'undeclared'.",
+   "limits": { "exact": true }
+  },
+  {
+   "id": "A5.leaveOneOutEqualsPress",
+   "leg": "a",
+   "what": "Leave-one-out with least-squares fitPredict for the constant and the line on the oracle's no-slope dataset and for the criteriaPair's two models: the score equals the oracle's PRESS / n from the hat matrix (e_i / (1 - h_ii)), and every held-out residual equals it row by row; the call is repeated and is bit-identical.",
+   "limits": { "maxRelScore": 1e-9, "maxAbsResidual": 1e-9 }
+  },
+  {
+   "id": "A6.drawsAreIndexable",
+   "leg": "a",
+   "what": "The calibrated statistic draws for seed 's' and label 'x' computed in two chunks ([0, 300) and [300, 999)) and merged equal the 999 computed serially exactly, equal a second serial call exactly, and differ for another seed; the stream identity is recorded.",
+   "limits": { "exact": true }
+  },
+  {
+   "id": "A7.pValueEstimator",
+   "leg": "a",
+   "what": "The add-one estimator on a statistic with a known distribution (simulate returns the next uniform, observed 0.9: p = 0.1 within 4 binomial standard errors sqrt(0.1 0.9 / 999) of the exact 0.1); an observed value above every draw gives p = 1 / (1 + B) exactly with atFloor true; one below every draw gives p = 1 exactly; a tie counts against the alternative (p counts draws >= observed); a level of 0.001 with 999 draws is accepted and 0.0009 refused 'too-few-draws'.",
+   "limits": { "binomialSigmas": 4 }
+  },
+  {
+   "id": "A8.textbookFTest",
+   "leg": "a",
+   "what": "Anscombe's dataset I (committed by Prompt 154 with its citation): the F-test of the line against the constant has F = 9 R^2 / (1 - R^2) for the published multiple R-squared 0.6665 as R prints it, within the half unit of the printed last digit (R^2 in [0.66645, 0.66655]), d1 = 1 and d2 = 9, and p equals the t-distribution's two-sided p of the slope computed by the kernel's own tSf at t = sqrt(F).",
+   "limits": { "r2HalfUnit": 0.00005, "maxRelPvsT": 1e-9 }
+  },
+  {
+   "id": "B1.statisticParity",
+   "leg": "b",
+   "what": "The searched statistic (the maximum power over the grid) of the oracle's searched case, from js/kernels/variables/period.js, equals astropy.timeseries.LombScargle(fit_mean=True, center_data=True) standard power at the same frequencies.",
+   "limits": { "maxRel": 1e-9 }
+  },
+  {
+   "id": "B2.calibratedPAgainstOracle",
+   "leg": "b",
+   "what": "The kernel's simulation-calibrated p value of the searched case (999 draws, the stated null) against the oracle's p value from its own implementation (numpy design-matrix least squares at every frequency on 20000 independent draws, numpy default_rng 2611): |p_kernel - p_oracle| <= 4 sqrt(p_oracle (1 - p_oracle) (1 / 1000 + 1 / 20001)).",
+   "limits": { "sigmas": 4 }
+  },
+  {
+   "id": "B3.oracleSelfConsistency",
+   "leg": "b",
+   "what": "The oracle's two independent ensembles (seeds 2611 and 2612, 20000 draws each) agree: |p_2611 - p_2612| <= 4 sqrt(2 p (1 - p) / 20001) at their mean p; this is a check of the oracle.",
+   "limits": { "sigmas": 4 }
+  },
+  {
+   "id": "B4.baluevReported",
+   "leg": "b",
+   "what": "REPORTED, no bound: astropy's analytic false-alarm probability (method 'baluev') of the observed peak beside the simulated p value, as an approximation to the maximum over frequencies (an upper bound that is good where small).",
+   "limits": { "reported": true }
+  },
+  {
+   "id": "C1.fTestFalsePositive",
+   "leg": "c",
+   "what": "Under the constant, line against constant, n = 30, 2000 series: the share with F-test p < 0.05 equals 0.05 within 4 binomial standard errors of 2000 trials (the exact level of a continuous test).",
+   "limits": { "series": 2000, "alpha": 0.05, "binomialSigmas": 4 }
+  },
+  {
+   "id": "C2.calibratedFalsePositive",
+   "leg": "c",
+   "what": "Under the constant, the searched sinusoid-over-constant statistic of the world 'series' (n = 40, the grid), 800 series each calibrated on 99 draws: the share with p <= 0.05 equals floor(0.05 x 100) / 100 = 0.05 exactly in expectation (the add-one test is valid at levels that are multiples of 1 / (1 + B)), within 4 binomial standard errors of 800 trials.",
+   "limits": { "series": 800, "draws": 99, "alpha": 0.05, "expected": 0.05, "binomialSigmas": 4 }
+  },
+  {
+   "id": "C3.criteriaFalsePreference",
+   "leg": "c",
+   "what": "Under the constant, n = 30, 4000 series: the share in which AIC (and, separately, BIC) prefers the line is the exact probability that F(1, 28) exceeds (n - 2)(exp(2 / n) - 1) (AIC) or (n - 2)(exp(ln n / n) - 1) (BIC), computed by the oracle with scipy.stats.f.sf, within 4 binomial standard errors. Neither is a level: a criterion's false-preference rate is a property of the penalty and the sample, and is reported with its expected value.",
+   "limits": { "series": 4000, "binomialSigmas": 4 }
+  },
+  {
+   "id": "C4.searchedLimits",
+   "leg": "c",
+   "what": "Under the constant, the same 800 series as C2: the share in which (a) the naive F-test (the best power turned into an F with d1 = 2, d2 = n - 3 and no allowance for the search, computed by the validator only to measure the reason for the refusal) has p < 0.05, and (b) AIC with the sinusoid counted as three added parameters prefers the sinusoid; each must be at least 0.30, far above 0.05 and above the 0.157 AIC rate of a regular parameter (reasoned from about twenty independent frequencies in the grid before any run: 1 - 0.95^20 is 0.64).",
+   "limits": { "minNaiveRate": 0.3, "minAicSearchedRate": 0.3 }
+  },
+  {
+   "id": "C5.leaveOneOutReported",
+   "leg": "c",
+   "what": "REPORTED, no bound: under the constant (n = 30, 1000 series) the share in which leave-one-out prefers the line, and the power of the calibrated test (C2's statistic, 200 series with a planted sinusoid of semi-amplitude 0.8, period 9, random phase, 99 draws) at 0.05.",
+   "limits": { "reported": true }
+  },
+  {
+   "id": "D1.refusals",
+   "leg": "d",
+   "what": "The F-test through the dispatcher is refused with code 'searched' for a searched alternative (the periodogram case), 'boundary' for a boundary null, 'not-nested' for a non-nested pair; each refusal's record names the class and the method that is valid; the criteria and the calibrated test are not offered where R2 says so.",
+   "limits": { "exact": true }
+  },
+  {
+   "id": "D2.criteriaSampleSize",
+   "leg": "d",
+   "what": "The criteria are refused 'sample-size' for n = 19 (below 20) with k = 2, for n = 24 with k = 5 for a model (below 5 K, K = 6 gives 30), and accepted at n = 20 with K = 4 (n = 5 K exactly); refused 'input' for RSS <= 0 or NaN, 'zero-rss' for RSS = 0, 'counts' for a fractional n, 'models' for one model.",
+   "limits": { "exact": true }
+  },
+  {
+   "id": "D3.calibrationRefusals",
+   "leg": "d",
+   "what": "Calibration: a draw count above 20000 throws 'budget'; no seed throws 'seed'; a draw count that is not a whole number throws 'draws'; a level below 1 / (1 + B) is refused 'too-few-draws'; a simulate that returns NaN once is refused 'non-finite-draws' with the count and no p value; a non-finite observed statistic is refused 'input'; a class that needs a simulation and receives none returns 'needs-simulation' with the class named.",
+   "limits": { "exact": true }
+  },
+  {
+   "id": "D4.leaveOneOutRefusals",
+   "leg": "d",
+   "what": "Leave-one-out is refused 'sample-size' for n = 4, throws 'budget' for 501 rows, is refused 'non-finite' for a prediction that is NaN and for a NaN observation, and accepts n = 5.",
+   "limits": { "exact": true }
+  },
+  {
+   "id": "E1.misspecifiedNullReported",
+   "leg": "d",
+   "what": "REPORTED, no bound: the share with p <= 0.05 of C2's calibration when the truth is the constant with a standard deviation that grows five-fold along the series (400 series, 99 draws, the null still homoscedastic): the calibration answers the stated null only, and this is the measured size of the failure the record warns of.",
+   "limits": { "reported": true }
+  },
+  {
+   "id": "F1.authenticCepheid",
+   "leg": "e",
+   "what": "Authentic data with a fixed analysis contract: eta Aquilae, TESS sector 81 (data-packs/tess-eta-aql-s81.json, variables/tess-eta-aql-s81.json, a classical Cepheid), every tenth bin from the first (55 points), periods 1 to 20 days, oversample 4, the constant against the best sinusoid, 999 draws, the null of the world 'series': p must be at the floor (atFloor true, p <= 1 / 1000). The pack's recorded published period is read for the report and was not used to choose anything.",
+   "limits": { "draws": 999, "everyKth": 10, "minPeriod": 1, "maxPeriod": 20, "oversample": 4, "maxP": 0.001 }
+  },
+  {
+   "id": "F2.authenticShuffledControl",
+   "leg": "e",
+   "what": "The same star's fluxes with their times permuted (20 permutations from mulberry32 seeds 2615000 + k), each calibrated on 99 draws at level 0.05: at most 4 of the 20 reach p <= 0.05 (the 0.05 expectation plus 4 binomial standard errors of 20 trials, 0.05 + 4 x 0.0487 = 0.245). The marginal distribution of the flux is not Gaussian and the null is: this is the robustness check, and a failure is reported as one.",
+   "limits": { "permutations": 20, "draws": 99, "alpha": 0.05, "maxRejections": 4 }
+  }
+ ],
+ "notRun": [
+  {
+   "id": "N1.publishedSearchedPValue",
+   "leg": "b",
+   "what": "A published simulation-calibrated significance for a searched case with its data and its stated null, the oracle of leg (b) in the form the roadmap names first ('a pinned simulation-calibrated p-value from a cited independent implementation'); the independent implementation written for B2 stands in as the oracle and this leg is not claimed.",
+   "request": "A published table or worked example that prints a simulated false-alarm probability or p value for a periodogram peak (for example the worked examples of Horne and Baliunas 1986, ApJ 302, 757, of Press and Rybicki 1989, or of the astropy.timeseries LombScargle documentation's bootstrap method) together with the data and noise model it used, saved with its terms and sha256 into scratch-data/modelcompare261/N1/ by Carl's session."
+  },
+  {
+   "id": "N2.publishedCriteriaTable",
+   "leg": "a",
+   "what": "Published values of AIC, AICc and BIC for a dataset and a model pair printed in a source (a textbook worked example or the statsmodels / R documentation example output), against the kernel's values for the same data; A3 (an independent computation) stands in.",
+   "request": "One worked example that prints the data, the fitted residual sums of squares or log-likelihoods and the AIC, AICc and BIC of two or more models (Burnham and Anderson 2002, chapter 2 or 4, or R's documentation example for AIC and BIC), saved with its terms into scratch-data/modelcompare261/N2/ by Carl's session."
+  },
+  {
+   "id": "N3.cepheidPublishedSignificance",
+   "leg": "e",
+   "what": "A published significance of the period of a pulsating variable from a sector of TESS data, to compare the F1 result with; F1 is judged at the floor without one.",
+   "request": "A refereed or archive-published false-alarm probability for the eta Aquilae TESS period, saved with its terms into scratch-data/modelcompare261/N3/ by Carl's session."
+  }
+ ],
+ "verdict": {
+  "function": "VALIDATED (class V-internal for the kernel's own statements, with the leg N1 to N3 NOT RUN and no V-external claim) if every committed check A1 to F2 passes; otherwise FAILED LEG(S) with the failing legs named in failed-legs.json and the kernel is not offered to any consumer; there is no partial credit and nothing is re-bounded after a result. REPORTED rows (B4, C5, E1) and the NOT RUN rows do not enter the function. The consumers clause: a panel, a lesson or a viewer is not built on this kernel by this prompt in any case (scope.notBuilt).",
+  "consumers": "The panel (item 2) and the investigations (item 3) are not built. They are named, not removed: a later prompt that Carl releases builds them on the kernel, if every check passes, with the numbers and the limits of STATISTICS.md."
+ },
+ "amendments": []
+}
