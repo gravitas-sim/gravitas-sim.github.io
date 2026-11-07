@@ -1,0 +1,1028 @@
+{
+ "format": "gravitas.supernova-likelihood-followup-results/1",
+ "thresholdsSha256": "e18f27276b55d017fdafb84385845ca71cc8607f50aa4e3a14de5bd7cb499c66",
+ "oracleResultsSha256": "4223909147f260ae942d3b848dbb241fde0526417cb97178222f8a790c625684",
+ "publishedSha256": "45f0df9d68390cedd98e64958dd9e6759a6b8987d7b1a3fbf5d68bda0009d7fb",
+ "spikeCommit": "7e724b78",
+ "oracleScriptSha256": "ef9fae9b9b77bffbd5da1fca0c23416d1b4220d0f335f710f43b36b937ddc8ec",
+ "judgeScriptSha256": "5b24668d3f9db96b4e417cf39ac962ebc14d13e8d47cb303986e174f85743a4a",
+ "covarianceSha256": "abf806d966485e64afdb359c87bffc0ecc00d05eff0a31ced66f247385df0fdc",
+ "rows": [
+  {
+   "id": "I1.file",
+   "set": "I",
+   "status": "pass",
+   "measured": {
+    "sha256": "abf806d966485e64afdb359c87bffc0ecc00d05eff0a31ced66f247385df0fdc",
+    "bytes": 33284960,
+    "firstLine": 1701,
+    "values": 2893401
+   },
+   "bound": "exact"
+  },
+  {
+   "id": "I2.symmetry",
+   "set": "I",
+   "status": "fail",
+   "measured": 3.0000000000038676e-08,
+   "bound": "at most 1e-9"
+  },
+  {
+   "id": "I3.positive",
+   "set": "I",
+   "status": "pass",
+   "measured": {
+    "eigMinFull": 0.0008027816532258561,
+    "eigMinSample": 0.005195877236093138,
+    "conditionSample": 460.1793832996059
+   },
+   "bound": "above 0, Cholesky succeeds"
+  },
+  {
+   "id": "I4a.rowmap",
+   "set": "I",
+   "status": "fail",
+   "measured": 0.9319605244800531,
+   "bound": "at least 0.99"
+  },
+  {
+   "id": "I4b.premise",
+   "set": "I",
+   "status": "fail",
+   "measured": {
+    "maxAbsDiff": 1.3382055610965662,
+    "ratioMin": 0.11754059738430804,
+    "ratioMedian": 0.7131250124495431,
+    "ratioMax": 1.007519130480482
+   },
+   "bound": "at most 1e-5 mag"
+  },
+  {
+   "id": "I4c.cidPairs",
+   "set": "I",
+   "status": "pass",
+   "measured": {
+    "pairs": 191,
+    "observedMean": 0.4213478942698172,
+    "permutedMean": 0.000286596334677989,
+    "permutedSd": 0.0031258307340427255,
+    "permutedMax": 0.013041332792104236,
+    "z": 134.7038063672017,
+    "aboveAll": true
+   },
+   "bound": "above all 2,000 permutations and z at least 10"
+  },
+  {
+   "id": "I4d.surveyShare",
+   "set": "I",
+   "status": "fail",
+   "measured": {
+    "surveys": 20,
+    "observedShare": 0.1378871817366943,
+    "permutedMean": 0.10575511155725377,
+    "permutedSd": 0.005791208860844008,
+    "permutedMax": 0.13101018685935675,
+    "z": 5.548421918728312,
+    "aboveAll": true
+   },
+   "bound": "above all 2,000 permutations and z at least 10"
+  },
+  {
+   "id": "I5.solvers",
+   "set": "I",
+   "status": "pass",
+   "measured": {
+    "nodes": 30,
+    "maxRelDiff": 1.885785107729989e-15,
+    "choleskyResidual": 1.9539925233402755e-14
+   },
+   "bound": "1e-8 and 1e-8"
+  },
+  {
+   "id": "I6.regression",
+   "set": "I",
+   "status": "pass",
+   "measured": {
+    "maxAbsDiff": 0.0,
+    "N": 1580,
+    "fullSha256Old": "736b9f5acf19a15443dc6d80bd4ad952f169ce3890631e22f3a97f0ef7a0ddcc"
+   },
+   "bound": "within 1e-6; N = 1,580"
+  },
+  {
+   "id": "E3a.fullVsPublished",
+   "set": "E",
+   "status": "pass",
+   "measured": {
+    "OmFull": 0.3316292166024769,
+    "OmPublished": 0.334,
+    "sigmaPublished": 0.018,
+    "difference": -0.002370783397523113,
+    "inSigmas": -0.13171018875128407
+   },
+   "bound": "at most 1.0 sigma_pub"
+  },
+  {
+   "id": "E3b.decidedVsPublished",
+   "set": "E",
+   "status": "pass",
+   "measured": {
+    "OmSplit": 0.34701856112649426,
+    "difference": 0.013018561126494244,
+    "inSigmas": 0.723253395916347
+   },
+   "bound": "at most 1.0 sigma_pub"
+  },
+  {
+   "id": "E3d.fullScale",
+   "set": "E",
+   "status": "pass",
+   "measured": {
+    "h68Full": 0.018208321161506696,
+    "ratio": 1.0115733978614831
+   },
+   "bound": "[2/3, 3/2]"
+  },
+  {
+   "id": "E3e.decidedScale",
+   "set": "E",
+   "status": "pass",
+   "measured": {
+    "h68Split": 0.02356549723466983,
+    "ratio": 1.3091942908149907
+   },
+   "bound": "[2/3, 3/2]"
+  },
+  {
+   "id": "Q1.bestFit.SPLIT",
+   "set": "Q",
+   "status": "fail",
+   "measured": {
+    "difference": 0.015389344524017357,
+    "u": 0.018991871499296542,
+    "inUnits": 0.8103121656329328
+   },
+   "bound": "at most 0.25 u"
+  },
+  {
+   "id": "Q2.width.SPLIT",
+   "set": "Q",
+   "status": "fail",
+   "measured": {
+    "ratio68": 1.294215816254849,
+    "ratio95": 1.2943907278472566
+   },
+   "bound": "each in [0.80, 1.25]"
+  },
+  {
+   "id": "Q3.planeBestFit.SPLIT",
+   "set": "Q",
+   "status": "fail",
+   "measured": {
+    "P1.a": {
+     "difference": 0.0023368243050824744,
+     "s": 0.1
+    },
+    "P1.b": {
+     "difference": 0.036657953221181705,
+     "s": 0.13499999999999998
+    },
+    "P2.a": {
+     "difference": 4.9465710608820324e-05,
+     "s": 0.13
+    },
+    "P2.b": {
+     "difference": 0.03616102402392385,
+     "s": 0.23999999999999994
+    }
+   },
+   "bound": "at most 0.25 s on each of four"
+  },
+  {
+   "id": "Q4.planeOverlap.SPLIT",
+   "set": "Q",
+   "status": "fail",
+   "measured": {
+    "P1.68": 0.5,
+    "P1.95": 0.5273972602739726,
+    "P2.68": 0.42105263157894735,
+    "P2.95": 0.5222222222222223
+   },
+   "bound": "each at least 0.70"
+  },
+  {
+   "id": "Q5.beatsDiag.SPLIT",
+   "set": "Q",
+   "status": "fail",
+   "measured": {
+    "logWidthX": 0.2579049644401366,
+    "logWidthDiag": 0.042132375528826704,
+    "jaccardP1_68": 0.5,
+    "jaccardP1_68Diag": 0.4666666666666667
+   },
+   "bound": "both"
+  },
+  {
+   "id": "Q1.bestFit.T2-k10",
+   "set": "Q",
+   "status": "pass",
+   "measured": {
+    "difference": 0.0015568088086823084,
+    "u": 0.018991871499296542,
+    "inUnits": 0.08197237479939629
+   },
+   "bound": "at most 0.25 u"
+  },
+  {
+   "id": "Q2.width.T2-k10",
+   "set": "Q",
+   "status": "fail",
+   "measured": {
+    "ratio68": 0.7404485328122371,
+    "ratio95": 0.7403691306605473
+   },
+   "bound": "each in [0.80, 1.25]"
+  },
+  {
+   "id": "Q3.planeBestFit.T2-k10",
+   "set": "Q",
+   "status": "pass",
+   "measured": {
+    "P1.a": {
+     "difference": 0.008272219754361265,
+     "s": 0.1
+    },
+    "P1.b": {
+     "difference": 0.011321983224729881,
+     "s": 0.13499999999999998
+    },
+    "P2.a": {
+     "difference": 0.018427161456121888,
+     "s": 0.13
+    },
+    "P2.b": {
+     "difference": 0.04145019904490599,
+     "s": 0.23999999999999994
+    }
+   },
+   "bound": "at most 0.25 s on each of four"
+  },
+  {
+   "id": "Q4.planeOverlap.T2-k10",
+   "set": "Q",
+   "status": "fail",
+   "measured": {
+    "P1.68": 0.75,
+    "P1.95": 0.65,
+    "P2.68": 0.5789473684210527,
+    "P2.95": 0.6666666666666666
+   },
+   "bound": "each at least 0.70"
+  },
+  {
+   "id": "Q5.beatsDiag.T2-k10",
+   "set": "Q",
+   "status": "fail",
+   "measured": {
+    "logWidthX": 0.30049915098179913,
+    "logWidthDiag": 0.042132375528826704,
+    "jaccardP1_68": 0.75,
+    "jaccardP1_68Diag": 0.4666666666666667
+   },
+   "bound": "both"
+  },
+  {
+   "id": "Q1.bestFit.T2-k30",
+   "set": "Q",
+   "status": "fail",
+   "measured": {
+    "difference": 0.016313382642933083,
+    "u": 0.018991871499296542,
+    "inUnits": 0.8589665659615131
+   },
+   "bound": "at most 0.25 u"
+  },
+  {
+   "id": "Q2.width.T2-k30",
+   "set": "Q",
+   "status": "pass",
+   "measured": {
+    "ratio68": 0.8782254456956693,
+    "ratio95": 0.8781774889150248
+   },
+   "bound": "each in [0.80, 1.25]"
+  },
+  {
+   "id": "Q3.planeBestFit.T2-k30",
+   "set": "Q",
+   "status": "pass",
+   "measured": {
+    "P1.a": {
+     "difference": 0.02212304028402695,
+     "s": 0.1
+    },
+    "P1.b": {
+     "difference": 0.006715297925873331,
+     "s": 0.13499999999999998
+    },
+    "P2.a": {
+     "difference": 0.023506450674778523,
+     "s": 0.13
+    },
+    "P2.b": {
+     "difference": 0.01561367446456885,
+     "s": 0.23999999999999994
+    }
+   },
+   "bound": "at most 0.25 s on each of four"
+  },
+  {
+   "id": "Q4.planeOverlap.T2-k30",
+   "set": "Q",
+   "status": "fail",
+   "measured": {
+    "P1.68": 0.4857142857142857,
+    "P1.95": 0.6179775280898876,
+    "P2.68": 0.4782608695652174,
+    "P2.95": 0.6296296296296297
+   },
+   "bound": "each at least 0.70"
+  },
+  {
+   "id": "Q5.beatsDiag.T2-k30",
+   "set": "Q",
+   "status": "fail",
+   "measured": {
+    "logWidthX": 0.12985194644432405,
+    "logWidthDiag": 0.042132375528826704,
+    "jaccardP1_68": 0.4857142857142857,
+    "jaccardP1_68Diag": 0.4666666666666667
+   },
+   "bound": "both"
+  },
+  {
+   "id": "Q1.bestFit.T2-k100",
+   "set": "Q",
+   "status": "pass",
+   "measured": {
+    "difference": 0.003662974475981573,
+    "u": 0.018991871499296542,
+    "inUnits": 0.19287064342854518
+   },
+   "bound": "at most 0.25 u"
+  },
+  {
+   "id": "Q2.width.T2-k100",
+   "set": "Q",
+   "status": "pass",
+   "measured": {
+    "ratio68": 0.9353219970463619,
+    "ratio95": 0.9352974106192246
+   },
+   "bound": "each in [0.80, 1.25]"
+  },
+  {
+   "id": "Q3.planeBestFit.T2-k100",
+   "set": "Q",
+   "status": "pass",
+   "measured": {
+    "P1.a": {
+     "difference": 0.0005033008017068519,
+     "s": 0.1
+    },
+    "P1.b": {
+     "difference": 0.008887263094074282,
+     "s": 0.13499999999999998
+    },
+    "P2.a": {
+     "difference": 0.00143547440092473,
+     "s": 0.13
+    },
+    "P2.b": {
+     "difference": 0.005745486374362896,
+     "s": 0.23999999999999994
+    }
+   },
+   "bound": "at most 0.25 s on each of four"
+  },
+  {
+   "id": "Q4.planeOverlap.T2-k100",
+   "set": "Q",
+   "status": "pass",
+   "measured": {
+    "P1.68": 0.7333333333333333,
+    "P1.95": 0.8641975308641975,
+    "P2.68": 0.75,
+    "P2.95": 0.8333333333333334
+   },
+   "bound": "each at least 0.70"
+  },
+  {
+   "id": "Q5.beatsDiag.T2-k100",
+   "set": "Q",
+   "status": "fail",
+   "measured": {
+    "logWidthX": 0.06686442711150785,
+    "logWidthDiag": 0.042132375528826704,
+    "jaccardP1_68": 0.7333333333333333,
+    "jaccardP1_68Diag": 0.4666666666666667
+   },
+   "bound": "both"
+  },
+  {
+   "id": "V0.T2-k10",
+   "set": "Q",
+   "status": "pass",
+   "measured": {
+    "minResidualDiag": 0.0008681087863453008,
+    "maxDiagDiff": 2.7755575615628914e-17,
+    "cholOk": true,
+    "retainedTrace": 0.1095416825818075,
+    "retainedOffDiagEnergy": 1.039804197644703
+   },
+   "bound": "as stated"
+  },
+  {
+   "id": "V0.T2-k30",
+   "set": "Q",
+   "status": "pass",
+   "measured": {
+    "minResidualDiag": 3.142646970033525e-05,
+    "maxDiagDiff": 2.7755575615628914e-17,
+    "cholOk": true,
+    "retainedTrace": 0.16112167605762545,
+    "retainedOffDiagEnergy": 1.047186052509665
+   },
+   "bound": "as stated"
+  },
+  {
+   "id": "V0.T2-k100",
+   "set": "Q",
+   "status": "pass",
+   "measured": {
+    "minResidualDiag": 5.85757247489882e-06,
+    "maxDiagDiff": 2.7755575615628914e-17,
+    "cholOk": true,
+    "retainedTrace": 0.26847544082339836,
+    "retainedOffDiagEnergy": 1.0398235439194738
+   },
+   "bound": "as stated"
+  },
+  {
+   "id": "U1.T1-n100",
+   "set": "T",
+   "status": "pass",
+   "measured": 0.8757984406602617,
+   "bound": "at most 4"
+  },
+  {
+   "id": "U2.T1-n100",
+   "set": "T",
+   "status": "pass",
+   "measured": 0.991246709193291,
+   "bound": "at most 6.180074306244173"
+  },
+  {
+   "id": "U3.T1-n100",
+   "set": "T",
+   "status": "pass",
+   "measured": 0.9734936806279961,
+   "bound": "at most 6.180074306244173"
+  },
+  {
+   "id": "W1.T1-n100",
+   "set": "T",
+   "status": "fail",
+   "measured": {
+    "ratio": 2.993038012778354,
+    "h68": 0.05449819738526605,
+    "expectedBySqrtRule": 3.9749213828703582
+   },
+   "bound": "at most 2.0"
+  },
+  {
+   "id": "U1.T1-n300",
+   "set": "T",
+   "status": "pass",
+   "measured": 0.012633514700496562,
+   "bound": "at most 4"
+  },
+  {
+   "id": "U2.T1-n300",
+   "set": "T",
+   "status": "pass",
+   "measured": 0.038711885475549934,
+   "bound": "at most 6.180074306244173"
+  },
+  {
+   "id": "U3.T1-n300",
+   "set": "T",
+   "status": "pass",
+   "measured": 0.05420781064964331,
+   "bound": "at most 6.180074306244173"
+  },
+  {
+   "id": "W1.T1-n300",
+   "set": "T",
+   "status": "pass",
+   "measured": {
+    "ratio": 1.954140429647439,
+    "h68": 0.03558161653770525,
+    "expectedBySqrtRule": 2.2949219304078006
+   },
+   "bound": "at most 2.0"
+  },
+  {
+   "id": "U1.T1-n800",
+   "set": "T",
+   "status": "pass",
+   "measured": 0.3463086409907419,
+   "bound": "at most 4"
+  },
+  {
+   "id": "U2.T1-n800",
+   "set": "T",
+   "status": "pass",
+   "measured": 0.5168007034226321,
+   "bound": "at most 6.180074306244173"
+  },
+  {
+   "id": "U3.T1-n800",
+   "set": "T",
+   "status": "pass",
+   "measured": 0.6714610606737779,
+   "bound": "at most 6.180074306244173"
+  },
+  {
+   "id": "W1.T1-n800",
+   "set": "T",
+   "status": "pass",
+   "measured": {
+    "ratio": 1.3208217526177348,
+    "h68": 0.024049946668767863,
+    "expectedBySqrtRule": 1.4053469322555197
+   },
+   "bound": "at most 2.0"
+  },
+  {
+   "id": "R1.allRows",
+   "set": null,
+   "status": "reported",
+   "measured": {
+    "FULL": {
+     "rows": 1701,
+     "calibrators": 77,
+     "best": 0.3612043063423747,
+     "lo68": 0.34276627532565423,
+     "hi68": 0.38009008037816017,
+     "h68": 0.018661902526252966
+    },
+    "DIAG": {
+     "rows": 1701,
+     "calibrators": 77,
+     "best": 0.35081813402038237,
+     "lo68": 0.3322707682191594,
+     "hi68": 0.369793224806505,
+     "h68": 0.0187612282936728
+    }
+   },
+   "bound": "REPORTED, no bound"
+  },
+  {
+   "id": "R2.structure",
+   "set": null,
+   "status": "reported",
+   "measured": {
+    "fullOffDiagEnergy": 6.536034392604466,
+    "fullSharedWithinSurvey": 0.14976631410716482,
+    "splitOffDiagEnergy": 0.04680544000000004,
+    "fullOffDiagMean": 5.1523477284934375e-06,
+    "fullOffDiagMeanWithinSurvey": 0.0005702412497008894,
+    "fullOffDiagMeanBetweenSurveys": -6.990952745465391e-05,
+    "fullNegativeOffDiagFraction": 0.5024386528887855,
+    "eigenShareLeading1": 0.0503238775557022,
+    "eigenShareLeading10": 0.1095416825818075
+   },
+   "bound": "REPORTED, no bound"
+  },
+  {
+   "id": "R3.tauStar",
+   "set": null,
+   "status": "reported",
+   "measured": {
+    "found": false,
+    "tauRange": [
+     0.0001,
+     0.114688197
+    ],
+    "hFullGrid": 0.018204298688194648,
+    "hAtLow": 0.01891363143734881,
+    "hAtHigh": 0.02766318362532702
+   },
+   "bound": "REPORTED, no bound"
+  },
+  {
+   "id": "R4.retained",
+   "set": null,
+   "status": "reported",
+   "measured": {
+    "k10": {
+     "minResidualDiag": 0.0008681087863453008,
+     "maxDiagDiff": 2.7755575615628914e-17,
+     "cholOk": true,
+     "retainedTrace": 0.1095416825818075,
+     "retainedOffDiagEnergy": 1.039804197644703
+    },
+    "k30": {
+     "minResidualDiag": 3.142646970033525e-05,
+     "maxDiagDiff": 2.7755575615628914e-17,
+     "cholOk": true,
+     "retainedTrace": 0.16112167605762545,
+     "retainedOffDiagEnergy": 1.047186052509665
+    },
+    "k100": {
+     "minResidualDiag": 5.85757247489882e-06,
+     "maxDiagDiff": 2.7755575615628914e-17,
+     "cholOk": true,
+     "retainedTrace": 0.26847544082339836,
+     "retainedOffDiagEnergy": 1.0398235439194738
+    }
+   },
+   "bound": "REPORTED, no bound"
+  },
+  {
+   "id": "R5.sizes",
+   "set": null,
+   "status": "reported",
+   "measured": {
+    "T1-n100": {
+     "bytes": 20200,
+     "zlibBytes": 18942
+    },
+    "T1-n300": {
+     "bytes": 180600,
+     "zlibBytes": 167614
+    },
+    "T1-n800": {
+     "bytes": 1281600,
+     "zlibBytes": 1189344
+    },
+    "T1-n1580": {
+     "bytes": 4995960,
+     "zlibBytes": 4627746
+    },
+    "T2-k10": {
+     "bytes": 69520,
+     "zlibBytes": 65253
+    },
+    "T2-k30": {
+     "bytes": 195920,
+     "zlibBytes": 184008
+    },
+    "T2-k100": {
+     "bytes": 638320,
+     "zlibBytes": 599295
+    }
+   },
+   "bound": "REPORTED, no bound"
+  },
+  {
+   "id": "R6.diagBaseline",
+   "set": null,
+   "status": "reported",
+   "measured": {
+    "DIAGagainstFULL": {
+     "bestFitDifference": 0.017514502753829486,
+     "inUnitsOfDiagHalfWidth": 0.9222104706467829,
+     "ratio68": 1.0430325415967678,
+     "ratio95": 1.042996833783492,
+     "P1": {
+      "bestFitDifference": [
+       0.003730100206150444,
+       0.03223649860502864
+      ],
+      "jaccard68": 0.4666666666666667,
+      "jaccard95": 0.5929203539823009
+     },
+     "P2": {
+      "bestFitDifference": [
+       0.0033159639096236315,
+       0.027516086742618184
+      ],
+      "jaccard68": 0.5357142857142857,
+      "jaccard95": 0.6376811594202898
+     }
+    },
+    "DIAG": {
+     "best": 0.3491437193563064,
+     "chi2min": 681.2687552624697,
+     "i68": {
+      "lo": 0.3303739542437846,
+      "hi": 0.36835769724237766,
+      "h": 0.018991871499296542
+     },
+     "i95": {
+      "lo": 0.31204191811722415,
+      "hi": 0.388022612245567,
+      "h": 0.037990347064171426
+     },
+     "open68": false,
+     "open95": false
+    }
+   },
+   "bound": "REPORTED, no bound"
+  },
+  {
+   "id": "R7.subsetBlockValue",
+   "set": null,
+   "status": "reported",
+   "measured": {
+    "n100": {
+     "diag": {
+      "best": 0.29328628219747266,
+      "h68": 0.07515784469191944
+     },
+     "cov": {
+      "best": 0.29208591515225973,
+      "h68": 0.0765561058007169
+     }
+    },
+    "n300": {
+     "diag": {
+      "best": 0.35241650835020194,
+      "h68": 0.04503932506165431
+     },
+     "cov": {
+      "best": 0.3516272168960831,
+      "h68": 0.04796644952499113
+     }
+    },
+    "n800": {
+     "diag": {
+      "best": 0.3577504944934618,
+      "h68": 0.027072286378036603
+     },
+     "cov": {
+      "best": 0.360827207957043,
+      "h68": 0.03148250706441774
+     }
+    }
+   },
+   "bound": "REPORTED, no bound"
+  },
+  {
+   "id": "R8.spectrum",
+   "set": null,
+   "status": "reported",
+   "measured": {
+    "ranks": [
+     1,
+     2,
+     5,
+     10,
+     30,
+     100,
+     300,
+     1580
+    ],
+    "eigenvalues": [
+     2.391035582205801,
+     0.9166582635765571,
+     0.2563904723429596,
+     0.16521364382412557,
+     0.10088312440275124,
+     0.06166384798081463,
+     0.038110920134871926,
+     0.005195877236093138
+    ],
+    "condition": 460.1793832996059
+   },
+   "bound": "REPORTED, no bound"
+  },
+  {
+   "id": "R9.diagonalExcess",
+   "set": null,
+   "status": "reported",
+   "measured": {
+    "rowsCiiAboveErrSq": 1,
+    "maxCiiMinusErrSq": 0.0006405379839999892,
+    "spearmanExcessVsZ": -0.18079375049863977,
+    "bySurvey": {
+     "1": {
+      "n": 321,
+      "median": 0.71185682699192,
+      "min": 0.41179439020395325,
+      "max": 0.7864778065281632
+     },
+     "4": {
+      "n": 160,
+      "median": 0.71232711115022,
+      "min": 0.6888064852415201,
+      "max": 0.7982699928470254
+     },
+     "5": {
+      "n": 89,
+      "median": 0.7230086002936768,
+      "min": 0.20012671829216036,
+      "max": 0.9759889241468682
+     },
+     "10": {
+      "n": 203,
+      "median": 0.7103448426595812,
+      "min": 0.6806559567776912,
+      "max": 0.8139586083374425
+     },
+     "15": {
+      "n": 269,
+      "median": 0.7094784123171283,
+      "min": 0.6235892811687246,
+      "max": 0.9606507096315385
+     },
+     "18": {
+      "n": 15,
+      "median": 0.7096494674044728,
+      "min": 0.19584469197898519,
+      "max": 0.7287546305884072
+     },
+     "50": {
+      "n": 46,
+      "median": 0.7189854722402699,
+      "min": 0.25379643362400917,
+      "max": 0.8491452936180006
+     },
+     "51": {
+      "n": 48,
+      "median": 0.7117123235366104,
+      "min": 0.11754059738430804,
+      "max": 0.8460198058619176
+     },
+     "56": {
+      "n": 57,
+      "median": 0.7192883433490285,
+      "min": 0.12252027609875722,
+      "max": 0.9303766807841126
+     },
+     "57": {
+      "n": 105,
+      "median": 0.7156346378809019,
+      "min": 0.3272294033745454,
+      "max": 0.9558790262165267
+     },
+     "61": {
+      "n": 13,
+      "median": 0.7102031772767068,
+      "min": 0.29973790151196017,
+      "max": 0.738635025316096
+     },
+     "62": {
+      "n": 24,
+      "median": 0.7164235405102368,
+      "min": 0.5665298078396538,
+      "max": 0.8373110130550738
+     },
+     "63": {
+      "n": 34,
+      "median": 0.7132911086313207,
+      "min": 0.4189448756646545,
+      "max": 1.007519130480482
+     },
+     "64": {
+      "n": 58,
+      "median": 0.7105825713063626,
+      "min": 0.3860938717009338,
+      "max": 0.8707909109514498
+     },
+     "65": {
+      "n": 38,
+      "median": 0.7204872686707234,
+      "min": 0.7034404921716217,
+      "max": 0.9413237099252005
+     },
+     "66": {
+      "n": 12,
+      "median": 0.7154951515722296,
+      "min": 0.4774736153728443,
+      "max": 0.7434564001560053
+     },
+     "100": {
+      "n": 16,
+      "median": 0.7152792850437311,
+      "min": 0.7090343482229902,
+      "max": 0.7491997233055531
+     },
+     "101": {
+      "n": 6,
+      "median": 0.7134164575367886,
+      "min": 0.7092365436094888,
+      "max": 0.7221137875859004
+     },
+     "106": {
+      "n": 8,
+      "median": 0.7237769896447133,
+      "min": 0.7122507323819687,
+      "max": 0.7540056688002034
+     },
+     "150": {
+      "n": 179,
+      "median": 0.7176600420687581,
+      "min": 0.36910807870300877,
+      "max": 0.9500145241403833
+     }
+    },
+    "byBand": {
+     "0-0.01": {
+      "n": 111,
+      "median": 0.5635415850324474,
+      "min": 0.11754059738430804,
+      "max": 0.9759889241468682
+     },
+     "0.01-0.03": {
+      "n": 357,
+      "median": 0.719955698763098,
+      "min": 0.5065028899697728,
+      "max": 1.007519130480482
+     },
+     "0.03-0.1": {
+      "n": 273,
+      "median": 0.7179492030625384,
+      "min": 0.5305672532805057,
+      "max": 0.9500145241403833
+     },
+     "0.1-0.5": {
+      "n": 750,
+      "median": 0.710210136182579,
+      "min": 0.41179439020395325,
+      "max": 0.9606507096315385
+     },
+     "0.5-3.0": {
+      "n": 210,
+      "median": 0.7130907823082111,
+      "min": 0.6888064852415201,
+      "max": 0.7982699928470254
+     }
+    },
+    "calibrators": {
+     "n": 77,
+     "median": 0.44862230853377005,
+     "min": 0.11754059738430804,
+     "max": 0.9759889241468682
+    },
+    "nonCalibrators": {
+     "n": 1624,
+     "median": 0.7136259451406434,
+     "min": 0.20557563384192676,
+     "max": 1.007519130480482
+    }
+   },
+   "bound": "REPORTED, no bound"
+  },
+  {
+   "id": "X1.fitPackage",
+   "set": null,
+   "status": "notrun",
+   "measured": "not fetched; downloading or running code is not authorised",
+   "bound": "NOT RUN"
+  }
+ ],
+ "counts": {
+  "pass": 31,
+  "fail": 17,
+  "reported": 9,
+  "notrun": 1
+ },
+ "verdict": {
+  "letter": "FC",
+  "splitForm": "INADEQUATE",
+  "referenceConfirmed": false,
+  "passingAlternatives": [
+   {
+    "form": "T1-n300",
+    "bytes": 180600
+   },
+   {
+    "form": "T1-n800",
+    "bytes": 1281600
+   }
+  ],
+  "recommendedAlternative": null,
+  "underAM1": {
+   "letter": "FC'",
+   "referenceConfirmed": false,
+   "recommendedAlternative": null
+  },
+  "underAM2": {
+   "letter": "FB''",
+   "status": "proposed, not ratified",
+   "referenceConfirmed": true,
+   "recommendedAlternative": {
+    "form": "T1-n300",
+    "bytes": 180600
+   }
+  }
+ },
+ "mappingGate": {
+  "I4c": true,
+  "I4d": false,
+  "downstreamRunUnder": "AM2 (proposed, not ratified)"
+ }
+}
