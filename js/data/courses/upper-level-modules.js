@@ -13,7 +13,7 @@ export const UPPER_LEVEL_MODULES = {
   format: ID_COURSE_PACK,
   formatVersion: 2,
   id: 'upper-level-modules',
-  version: '1.5.0',
+  version: '1.6.0',
   gravitas: '1.0.0',
   locales: ['en', 'es'],
   pinning: 'compatible',
@@ -101,6 +101,14 @@ export const UPPER_LEVEL_MODULES = {
         en: 'Correct a sample for the selection that made it.',
         es: 'Corregir una muestra por la selección que la produjo.',
         esOf: 'c5fa1871',
+      },
+    },
+    {
+      id: 'claims',
+      text: {
+        en: 'State what a measurement and its uncertainty claim, test the claim against a known truth, and say when a method must refuse.',
+        es: 'Enunciar lo que afirman una medida y su incertidumbre, probar la afirmación frente a una verdad conocida y decir cuándo un método debe negarse a responder.',
+        esOf: '9b90e824',
       },
     },
     {
@@ -892,6 +900,51 @@ export const UPPER_LEVEL_MODULES = {
         esOf: 'b0d689c4',
       },
       items: [
+        {
+          id: 'what-is-a-measurement',
+          kind: 'lesson',
+          lesson: 'what-is-a-measurement',
+          depth: 'advanced',
+          objectives: ['claims'],
+          pin: {
+            fp: '94a8b464',
+            n: 12,
+          },
+        },
+        {
+          id: 'what-does-plus-minus-claim',
+          kind: 'lesson',
+          lesson: 'what-does-plus-minus-claim',
+          depth: 'advanced',
+          objectives: ['claims'],
+          needs: ['what-is-a-measurement'],
+          pin: {
+            fp: '54a84bde',
+            n: 13,
+          },
+        },
+        {
+          id: 'when-the-method-must-refuse',
+          kind: 'lesson',
+          lesson: 'when-the-method-must-refuse',
+          depth: 'advanced',
+          objectives: ['claims'],
+          needs: ['what-does-plus-minus-claim'],
+          pin: {
+            fp: '2805600e',
+            n: 13,
+          },
+          studentNote: {
+            en: 'These three investigations are the whole measurement and inference path Gravitas offers so far: marks and their spread, what an interval claims, and when a method must say it cannot tell. There is no investigation yet for choosing between models, for limits mixed with detections, for matching two catalogues, for measuring clustering, for fitting a population, or for running a random experiment many times. The methods that would carry them did not pass all of their tests, so none is offered; your course’s statistics text is the reading for them.',
+            es: 'Estas tres investigaciones son todo el recorrido de medición e inferencia que Gravitas ofrece por ahora: las marcas y su dispersión, lo que afirma un intervalo y cuándo un método debe decir que no puede distinguir. Aún no hay una investigación para elegir entre modelos, para límites mezclados con detecciones, para cruzar dos catálogos, para medir el agrupamiento, para ajustar una población ni para repetir muchas veces un experimento aleatorio. Los métodos que las sostendrían no pasaron todas sus pruebas, así que no se ofrece ninguno; el texto de estadística de tu curso es la lectura para ellos.',
+            esOf: 'c82fd9c9',
+          },
+          teacherNote: {
+            en: 'Why each is missing, as recorded: choosing between models by a test that is valid for the pair (the nested F-test, a simulation-calibrated significance for a searched signal, the information criteria) passes its synthetic checks and fails its one authentic-data check, a Cepheid’s period, so nothing is built on it; the estimator for upper limits mixed with detections passes its tests, but the estimator for truncated samples does not, and neither is offered; the cross-match of two catalogues with their epochs had two failing checks, each followed by a corrected check that passes, and its clustering gate returned the slice for synthetic samples only; fitting a population with its selection passes without each object’s uncertainty and fails one check with it; random experiments that replay exactly fail one check, on the scenario’s own settings, and pass on the lab’s. The three investigations here are what exists: the marks and the standard error, what an interval claims and how often it holds, and a fit that must say it cannot tell. Each missing investigation would carry the same discipline (a prediction first, a known truth, a stated limit) into one of these methods; none is built on a method that failed a test.',
+            es: 'Por qué falta cada una, según el registro: elegir entre modelos con una prueba válida para el par (la prueba F anidada, una significancia calibrada por simulación para una señal buscada, los criterios de información) pasa sus comprobaciones sintéticas y falla su única comprobación con datos auténticos, el período de una cefeida, así que nada se construye sobre ella; el estimador para límites superiores mezclados con detecciones pasa sus pruebas, pero el estimador para muestras truncadas no, y no se ofrece ninguno; el cruce de dos catálogos con sus épocas tuvo dos comprobaciones fallidas, cada una seguida de una comprobación corregida que pasa, y su puerta de agrupamiento devolvió solo la parte para muestras sintéticas; el ajuste de una población con su selección pasa sin la incertidumbre de cada objeto y falla una comprobación con ella; los experimentos aleatorios que se repiten exactamente fallan una comprobación, con los ajustes propios del escenario, y pasan con los del laboratorio. Las tres investigaciones de aquí son lo que existe: las marcas y el error estándar, lo que afirma un intervalo y con qué frecuencia se cumple, y un ajuste que debe decir que no puede distinguir. Cada investigación que falta llevaría la misma disciplina (una predicción primero, una verdad conocida, un límite declarado) a uno de estos métodos; ninguna se construye sobre un método que falló una prueba.',
+            esOf: 'b7a634b0',
+          },
+        },
         {
           id: 'who-gets-counted',
           kind: 'lesson',
