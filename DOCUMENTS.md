@@ -214,7 +214,7 @@ catalogue refers to it, so a change to it can reach a student.
 | [EXTRAGALACTIC_CLOSEOUT.md](EXTRAGALACTIC_CLOSEOUT.md) | The extragalactic and interstellar-medium closeout (Prompt 253): what 247 to 252 landed, each closeout item done or blocked, the package reading step, the cohesion record. | record | P253 | written | no |
 | [COSMOLOGY_II.md](COSMOLOGY_II.md) | The late-time FLRW kernel (radiation, constant w, closed universes, refusals, contours): equations, domain, validation, failed legs, follow-up and the age-only published-age leg B6 (Prompt 255). | feature | P255 | written | no |
 | [SN_LIKELIHOOD_GATE.md](SN_LIKELIHOOD_GATE.md) | Supernova likelihood gate: split-covariance decision, planes, oracle, 58 legs, verdict A (narrow); follow-up against the release covariance and published value, verdict FC (Prompt 256). | gate | P256 | written | no |
-| [BAO_GATE.md](BAO_GATE.md) | Baryon acoustic oscillation gate: the observable as a form, the sound-horizon integral, 39 legs, oracle, verdict C by the committed function; formulas and release table not run (Prompt 257). | gate | P257 | written | no |
+| [BAO_GATE.md](BAO_GATE.md) | Baryon acoustic oscillation gate: the observable as a form, the sound-horizon integral, 44 legs and a 19-row follow-up on the BOSS DR12 table and Eisenstein-Hu formulas, verdict C (Prompt 257). | gate | P257 | written | no |
 
 ## Authoritative sources
 
