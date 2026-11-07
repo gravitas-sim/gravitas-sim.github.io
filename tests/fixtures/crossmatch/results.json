@@ -1,0 +1,580 @@
+{
+ "format": "gravitas.crossmatch-results/1",
+ "thresholdsSha": "d327e91a04e9a50b649315f17704cbba105c344f9181c347a0454fba99fcd004",
+ "node": "v22.23.4",
+ "cpuSeconds": 24.5,
+ "verdict": "FAILED LEG(S)",
+ "failed": [
+  "A6.largeShift",
+  "G2.coverage"
+ ],
+ "counts": {
+  "pass": 37,
+  "fail": 2,
+  "reported": 3,
+  "not run": 1
+ },
+ "rows": [
+  {
+   "id": "A1.north",
+   "group": "analytic",
+   "status": "pass",
+   "measured": 1.144999685326866e-11,
+   "bound": {
+    "maxAbsArcsec": 1e-8
+   },
+   "note": null
+  },
+  {
+   "id": "A2.east",
+   "group": "analytic",
+   "status": "pass",
+   "measured": 1.802465545408486e-10,
+   "bound": {
+    "maxAbsArcsec": 1e-8
+   },
+   "note": null
+  },
+  {
+   "id": "A3.zero",
+   "group": "analytic",
+   "status": "pass",
+   "measured": 0,
+   "bound": {
+    "maxAbsArcsec": 0
+   },
+   "note": null
+  },
+  {
+   "id": "A4.sigma",
+   "group": "analytic",
+   "status": "pass",
+   "measured": 2.220445992406896e-16,
+   "bound": {
+    "maxRel": 1e-12
+   },
+   "note": null
+  },
+  {
+   "id": "A5.small",
+   "group": "analytic",
+   "status": "pass",
+   "measured": 3.2979685649081603e-10,
+   "bound": {
+    "maxRel": 1e-9
+   },
+   "note": null
+  },
+  {
+   "id": "A6.largeShift",
+   "group": "refusal",
+   "status": "fail",
+   "measured": {
+    "over": "shift-too-large",
+    "edge": "ok",
+    "poleDec": 89.99993472222222,
+    "poleRaMoved": 0
+   },
+   "bound": {
+    "refused": true
+   },
+   "note": null
+  },
+  {
+   "id": "B1.propagation",
+   "group": "oracle",
+   "status": "pass",
+   "measured": 2.351325562030939e-8,
+   "bound": {
+    "maxSepArcsec": 0.00001
+   },
+   "note": "301 sources"
+  },
+  {
+   "id": "C1.pairs",
+   "group": "oracle",
+   "status": "pass",
+   "measured": 0,
+   "bound": {
+    "maxDifferences": 0
+   },
+   "note": "606 pairs"
+  },
+  {
+   "id": "C2.distance",
+   "group": "oracle",
+   "status": "pass",
+   "measured": 1.7921114592311937e-10,
+   "bound": {
+    "maxAbsArcsec": 0.000001
+   },
+   "note": null
+  },
+  {
+   "id": "C3.cone",
+   "group": "oracle",
+   "status": "pass",
+   "measured": 0,
+   "bound": {
+    "maxDifferences": 0
+   },
+   "note": null
+  },
+  {
+   "id": "C4.oneToOne",
+   "group": "analytic",
+   "status": "pass",
+   "measured": {
+    "case1": true,
+    "case2": true,
+    "case3": true
+   },
+   "bound": {
+    "exact": true
+   },
+   "note": null
+  },
+  {
+   "id": "D1.packPairs",
+   "group": "authentic",
+   "status": "pass",
+   "measured": 0,
+   "bound": {
+    "maxDifferences": 0
+   },
+   "note": "604 pairs; inputs equal the oracle's: true"
+  },
+  {
+   "id": "D2.packRadii",
+   "group": "authentic",
+   "status": "pass",
+   "measured": [
+    0,
+    0
+   ],
+   "bound": {
+    "maxDifferences": 0
+   },
+   "note": null
+  },
+  {
+   "id": "D3.packCounts",
+   "group": "authentic",
+   "status": "reported",
+   "measured": {
+    "1": {
+     "pairs": 604,
+     "unmatchedA": 389,
+     "unmatchedB": 1697,
+     "ambiguous": 0,
+     "shared": 0,
+     "medianArcsec": 0.02820836755654145,
+     "p95Arcsec": 0.08642817424601724
+    },
+    "2": {
+     "pairs": 605,
+     "unmatchedA": 388,
+     "unmatchedB": 1697,
+     "ambiguous": 1,
+     "shared": 1,
+     "medianArcsec": 0.02820836755654145,
+     "p95Arcsec": 0.08749674446413855
+    }
+   },
+   "bound": null,
+   "note": null
+  },
+  {
+   "id": "D4.epochSensitivity",
+   "group": "authentic",
+   "status": "reported",
+   "measured": {
+    "1992": {
+     "pairs": 602,
+     "differ": 2,
+     "oracleDiffer": 2
+    },
+    "1996": {
+     "pairs": 604,
+     "differ": 0,
+     "oracleDiffer": 0
+    },
+    "2000": {
+     "pairs": 604,
+     "differ": 0,
+     "oracleDiffer": 0
+    },
+    "2004": {
+     "pairs": 604,
+     "differ": 0,
+     "oracleDiffer": 0
+    },
+    "2008": {
+     "pairs": 604,
+     "differ": 0,
+     "oracleDiffer": 0
+    }
+   },
+   "bound": null,
+   "note": null
+  },
+  {
+   "id": "D5.publishedTool",
+   "group": "authentic",
+   "status": "not run",
+   "measured": null,
+   "bound": null,
+   "note": "needs R1 (the SDSS per-object observation epoch) and R2 (a published crossmatch output); neither was fetched"
+  },
+  {
+   "id": "E1.shiftCounts",
+   "group": "oracle",
+   "status": "pass",
+   "measured": 0,
+   "bound": {
+    "maxAbsDifference": 0
+   },
+   "note": null
+  },
+  {
+   "id": "E2.shiftCountsPacks",
+   "group": "authentic",
+   "status": "pass",
+   "measured": 0,
+   "bound": {
+    "maxAbsDifference": 0
+   },
+   "note": "p_hat 0.002406, false-match fraction 0.003955"
+  },
+  {
+   "id": "E3.fractionRecovered",
+   "group": "ensemble",
+   "status": "pass",
+   "measured": {
+    "fraction": 1,
+    "matches": 49,
+    "pHat": 0.038792024693417866
+   },
+   "bound": {
+    "maxAbs": 0.25
+   },
+   "note": null
+  },
+  {
+   "id": "E4.bias",
+   "group": "ensemble",
+   "status": "pass",
+   "measured": -0.0002706444224410687,
+   "bound": {
+    "maxAbs": 0.01
+   },
+   "note": "1000 worlds, p_true 0.036806"
+  },
+  {
+   "id": "E5.coverage",
+   "group": "ensemble",
+   "status": "pass",
+   "measured": 0.956,
+   "bound": {
+    "minCoverage": 0.92
+   },
+   "note": "1000 worlds at level 0.95"
+  },
+  {
+   "id": "E6.upperBound",
+   "group": "ensemble",
+   "status": "pass",
+   "measured": 1,
+   "bound": {
+    "minFraction": 0.95
+   },
+   "note": "tightness (mean estimate over mean realized): 3.97; mean estimate 0.0461, mean realized 0.0116"
+  },
+  {
+   "id": "E7.recovery",
+   "group": "ensemble",
+   "status": "pass",
+   "measured": 0.9997750000000002,
+   "bound": {
+    "minMean": 0.995
+   },
+   "note": "200 worlds"
+  },
+  {
+   "id": "E8.naiveControl",
+   "group": "ensemble",
+   "status": "pass",
+   "measured": 0.289325,
+   "bound": {
+    "maxMean": 0.5
+   },
+   "note": "proper motions removed and epochs declared equal"
+  },
+  {
+   "id": "E9.crowded",
+   "group": "refusal",
+   "status": "pass",
+   "measured": {
+    "w3": "unreliable",
+    "w2": "ok",
+    "w3p": 0.39343169125614735
+   },
+   "bound": {
+    "w3Unreliable": true,
+    "w2Unreliable": false
+   },
+   "note": null
+  },
+  {
+   "id": "F1.epochAbsent",
+   "group": "refusal",
+   "status": "pass",
+   "measured": [
+    "epoch",
+    "epoch"
+   ],
+   "bound": {
+    "refused": true
+   },
+   "note": null
+  },
+  {
+   "id": "F2.noProperMotion",
+   "group": "refusal",
+   "status": "pass",
+   "measured": [
+    "proper-motion",
+    "ok",
+    "ok"
+   ],
+   "bound": {
+    "refused": true
+   },
+   "note": null
+  },
+  {
+   "id": "F3.roundedPack",
+   "group": "refusal",
+   "status": "pass",
+   "measured": [
+    "rounded-positions",
+    "rounded-positions",
+    "rounded-positions"
+   ],
+   "bound": {
+    "refused": true
+   },
+   "note": "catalog A stores positions to 21.6 arcsec (rounding error up to 10.8 arcsec), more than 0.25 of the 1 arcsec radius; use the precise table"
+  },
+  {
+   "id": "F4.maxRadius",
+   "group": "refusal",
+   "status": "pass",
+   "measured": [
+    "ok",
+    "radius",
+    "radius",
+    "radius",
+    "radius"
+   ],
+   "bound": {
+    "refused": true
+   },
+   "note": null
+  },
+  {
+   "id": "F5.resolutionUnstated",
+   "group": "refusal",
+   "status": "pass",
+   "measured": [
+    "resolution",
+    "resolution"
+   ],
+   "bound": {
+    "refused": true
+   },
+   "note": null
+  },
+  {
+   "id": "F6.precisePackAccepted",
+   "group": "refusal",
+   "status": "pass",
+   "measured": [
+    "ok",
+    "ok",
+    "rounded-positions"
+   ],
+   "bound": {
+    "accepted": true
+   },
+   "note": null
+  },
+  {
+   "id": "F7.badInput",
+   "group": "refusal",
+   "status": "pass",
+   "measured": [
+    "input",
+    "input",
+    "input",
+    "input",
+    "input"
+   ],
+   "bound": {
+    "refused": true
+   },
+   "note": null
+  },
+  {
+   "id": "F8.missingProperMotion",
+   "group": "refusal",
+   "status": "pass",
+   "measured": {
+    "a": 3,
+    "b": 0
+   },
+   "bound": {
+    "exact": true
+   },
+   "note": null
+  },
+  {
+   "id": "G1.intervals",
+   "group": "population",
+   "status": "pass",
+   "measured": 0,
+   "bound": {
+    "maxAbsDifference": 0
+   },
+   "note": null
+  },
+  {
+   "id": "G2.coverage",
+   "group": "population",
+   "status": "fail",
+   "measured": [
+    0.984,
+    0.9795,
+    0.9575,
+    0.9535,
+    0.959,
+    0.9385
+   ],
+   "bound": {
+    "minCoveragePerBin": 0.94
+   },
+   "note": null
+  },
+  {
+   "id": "G3.size",
+   "group": "population",
+   "status": "pass",
+   "measured": {
+    "n30": 0.05575,
+    "n100": 0.04925
+   },
+   "bound": {
+    "n30": [
+     0.04,
+     0.07
+    ],
+    "n100": [
+     0.04,
+     0.06
+    ]
+   },
+   "note": null
+  },
+  {
+   "id": "G4.power",
+   "group": "population",
+   "status": "pass",
+   "measured": 0.94175,
+   "bound": {
+    "minPower": 0.9
+   },
+   "note": null
+  },
+  {
+   "id": "G5.refusal",
+   "group": "population",
+   "status": "pass",
+   "measured": [
+    "sample-size",
+    "input",
+    "degenerate"
+   ],
+   "bound": {
+    "refused": true
+   },
+   "note": null
+  },
+  {
+   "id": "G6.coverage",
+   "group": "population",
+   "status": "pass",
+   "measured": 0.9495,
+   "bound": {
+    "minCoverage": 0.93
+   },
+   "note": null
+  },
+  {
+   "id": "G7.skewed",
+   "group": "population",
+   "status": "reported",
+   "measured": {
+    "n30": 0.049,
+    "n100": 0.0495
+   },
+   "bound": null,
+   "note": null
+  },
+  {
+   "id": "H1.record",
+   "group": "record",
+   "status": "pass",
+   "measured": {
+    "problems": 0,
+    "formatVersion": 2
+   },
+   "bound": {
+    "problems": 0
+   },
+   "note": null
+  },
+  {
+   "id": "H2.rows",
+   "group": "record",
+   "status": "pass",
+   "measured": {
+    "quantities": 1219,
+    "pairs": 606
+   },
+   "bound": {
+    "exact": true
+   },
+   "note": null
+  },
+  {
+   "id": "H3.joined",
+   "group": "record",
+   "status": "pass",
+   "measured": {
+    "rows": 606,
+    "columns": [
+     "aIndex",
+     "bIndex",
+     "distance",
+     "epochDifference",
+     "a.g",
+     "b.z"
+    ]
+   },
+   "bound": {
+    "exact": true
+   },
+   "note": null
+  }
+ ]
+}
