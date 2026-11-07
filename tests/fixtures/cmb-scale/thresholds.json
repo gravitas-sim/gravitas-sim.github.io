@@ -642,7 +642,20 @@
   "consumersClause": "met iff the verdict is A or B. Whatever the verdict, no panel, lesson, guide, viewer, grid or spectrum file is built until Carl lifts the consumers rule.",
   "partB": "after A or B, and only after Carl goes ahead; not begun in this session; with C, there is no Part B (Appendix C: a reading step)."
  },
- "amendments": [],
+ "amendments": [
+  {
+   "id": "AM1",
+   "recorded": "after the extraction fixture (commit 2f94a46f) and before any oracle, prototype or validator run",
+   "what": "refusals.codesInOrder is read with one more code appended: beyond-antipode, the 255 kernel's own call-time code (a closed world whose light has crossed half of the closed space, sqrt|Ok| D_C H0/c >= pi, at z_star), decided AFTER the ten parameter checks. The Part A text listed only the parameter-time codes, but D_M(z_star) is a call-time quantity in the 255 kernel and the seeded draws include strongly closed worlds. The oracle's brute-force decision computes chi = Int_0^{z_star} dz/E and refuses when sqrt|Ok| chi >= pi; the prototype passes the kernel's code through. No bound moves.",
+   "moves": "no bound"
+  },
+  {
+   "id": "AM2",
+   "recorded": "after the extraction fixture (commit 2f94a46f) and before any oracle, prototype or validator run",
+   "what": "Clarification, no new condition: seeds.streamCheck (the first 1,000 uniforms of the seed text '258:cmb:peak:E1' agree exactly between the JavaScript stream and the oracle's re-implementation of mulberry32 and FNV-1a) is part of leg I1.fixtures and I1 fails if they differ; the oracle also draws the 200 grid points of G3 from its re-implementation of stream('injection', '258:cmb:grid').",
+   "moves": "no bound"
+  }
+ ],
  "decisions": [
   {
    "id": "DEC1",
