@@ -1444,6 +1444,13 @@
       "student": false
     },
     {
+      "file": "CENSORING_TRUNCATION_GATE.md",
+      "kind": "gate",
+      "purpose": "Censoring and truncation gate: the two problems kept apart, a product-limit estimator with an independence check, the Lynden-Bell estimator, V/Vmax, 41 legs, verdict B-KM (Prompt 262).",
+      "owner": 262,
+      "student": false
+    },
+    {
       "file": "CMB_SCALE_GATE.md",
       "kind": "gate",
       "purpose": "Microwave background angular-scale gate: r_s(z*), D_M(z*), theta*, the peak relation and claim rule, 42 legs, verdict C; spectrum, grid and cited formulas NOT RUN (Prompt 258).",
