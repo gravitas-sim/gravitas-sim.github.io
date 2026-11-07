@@ -1,0 +1,693 @@
+{
+ "format": "gravitas.growth-results/1",
+ "thresholdsSha256": "bcf04aaf7c79452e8744a34ec9515e99b6f55ff65b6b3f63b1a905f1315e88d6",
+ "oracleSha256": "4ddd03d8e8e8fd15892f5eb16c939faac89e22c19ddccfe935b68877223aa46d",
+ "environment": {
+  "node": "v22.23.4",
+  "platform": "darwin"
+ },
+ "counts": {
+  "rows": 31,
+  "pass": 22,
+  "fail": 2,
+  "reported": 3,
+  "notRun": 3,
+  "omitted": 1
+ },
+ "kernel": "KERNEL FAIL",
+ "failedKernelLegs": [
+  "C1.cptFit",
+  "R2.growthAccepted"
+ ],
+ "verdict": "C",
+ "rows": [
+  {
+   "id": "I2.inputs",
+   "group": "integrity",
+   "status": "pass",
+   "bound": "exact",
+   "measured": {
+    "thresholdsSha256": "bcf04aaf7c79452e8744a34ec9515e99b6f55ff65b6b3f63b1a905f1315e88d6",
+    "oracleRecorded": "bcf04aaf7c79452e8744a34ec9515e99b6f55ff65b6b3f63b1a905f1315e88d6"
+   }
+  },
+  {
+   "id": "I1.sources",
+   "group": "integrity",
+   "status": "pass",
+   "bound": "exact",
+   "measured": {
+    "recordsAgree": true,
+    "checked": 19,
+    "found": 19,
+    "textPresent": true,
+    "textSha256Equal": true
+   }
+  },
+  {
+   "id": "G1.eds",
+   "group": "closedForm",
+   "status": "pass",
+   "bound": "relative 1e-8 in D and 1e-8 absolute in f",
+   "measured": {
+    "maxRelD": 2.6865398794484463e-11,
+    "maxAbsF": 2.220446049250313e-16
+   }
+  },
+  {
+   "id": "G2.openMatterOnly",
+   "group": "closedForm",
+   "status": "pass",
+   "bound": "relative 1e-8 in D, 1e-8 absolute in f",
+   "measured": {
+    "maxRelD": 3.7597480684326e-11,
+    "maxAbsF": 2.3632762413683395e-12,
+    "per": {
+     "0.1": {
+      "maxRelD": 3.7597480684326e-11,
+      "maxAbsF": 2.3632762413683395e-12
+     },
+     "0.3": {
+      "maxRelD": 1.9675372442407024e-11,
+      "maxAbsF": 2.2360446827462965e-12
+     },
+     "0.5": {
+      "maxRelD": 2.3776314250767427e-11,
+      "maxAbsF": 1.8663959266973507e-12
+     },
+     "0.8": {
+      "maxRelD": 2.561151291047281e-11,
+      "maxAbsF": 5.954126081064715e-13
+     }
+    }
+   }
+  },
+  {
+   "id": "G3.flatLambda",
+   "group": "closedForm",
+   "status": "pass",
+   "bound": "relative 1e-8 in D, 1e-8 absolute in f",
+   "measured": {
+    "maxRelD": 2.6222135574016647e-11,
+    "maxAbsF": 4.006572851267265e-12,
+    "per": {
+     "0.1": {
+      "maxRelD": 2.492117623376089e-11,
+      "maxAbsF": 4.004796494427865e-12
+     },
+     "0.3": {
+      "maxRelD": 2.5731416997132328e-11,
+      "maxAbsF": 3.994249375693926e-12
+     },
+     "0.5": {
+      "maxRelD": 2.6222135574016647e-11,
+      "maxAbsF": 4.006572851267265e-12
+     },
+     "0.8": {
+      "maxRelD": 2.5912605394751154e-11,
+      "maxAbsF": 1.224020884649235e-12
+     }
+    }
+   }
+  },
+  {
+   "id": "G4.heathCurved",
+   "group": "closedForm",
+   "status": "pass",
+   "bound": "relative 1e-8 in D, 1e-8 absolute in f",
+   "measured": {
+    "maxRelD": 2.6298296873505933e-11,
+    "maxAbsF": 9.974243653232406e-12,
+    "per": {
+     "0.3_0.5": {
+      "maxRelD": 2.4700907985675258e-11,
+      "maxAbsF": 3.985145546891999e-12
+     },
+     "0.3_0.9": {
+      "maxRelD": 2.6121993457195458e-11,
+      "maxAbsF": 4.768407890765047e-12
+     },
+     "0.2_0.6": {
+      "maxRelD": 2.3727686482288846e-11,
+      "maxAbsF": 3.740341369962152e-12
+     },
+     "0.5_0.9": {
+      "maxRelD": 2.6298296873505933e-11,
+      "maxAbsF": 4.980127421561065e-12
+     },
+     "0.1_1.2": {
+      "maxRelD": 2.1008528250376912e-11,
+      "maxAbsF": 9.974243653232406e-12
+     }
+    }
+   }
+  },
+  {
+   "id": "O1.dop853",
+   "group": "oracle",
+   "status": "pass",
+   "bound": "relative 1e-8 in D, 1e-8 absolute in f",
+   "measured": {
+    "maxRelD": 5.822142767897276e-11,
+    "maxAbsF": 6.816325281988611e-12,
+    "per": {
+     "S1": {
+      "maxRelD": 2.703037793594376e-11,
+      "maxAbsF": 6.661338147750939e-16,
+      "carriedErrorMax": 3.3343849924631887e-9,
+      "steps": 590
+     },
+     "S2": {
+      "maxRelD": 1.9799939465769967e-11,
+      "maxAbsF": 2.2349344597216714e-12,
+      "carriedErrorMax": 2.7534751820116804e-9,
+      "steps": 582
+     },
+     "S3": {
+      "maxRelD": 3.749112131856691e-11,
+      "maxAbsF": 2.398470311248957e-12,
+      "carriedErrorMax": 2.6831607286656574e-9,
+      "steps": 564
+     },
+     "S4": {
+      "maxRelD": 2.585420766365587e-11,
+      "maxAbsF": 4.000133557724439e-12,
+      "carriedErrorMax": 3.130150436017842e-9,
+      "steps": 608
+     },
+     "S5": {
+      "maxRelD": 2.524025433103816e-11,
+      "maxAbsF": 4.4965142720343465e-12,
+      "carriedErrorMax": 3.0700690696670086e-9,
+      "steps": 610
+     },
+     "S6": {
+      "maxRelD": 2.6351809623292866e-11,
+      "maxAbsF": 4.019673482957842e-12,
+      "carriedErrorMax": 3.162147062513021e-9,
+      "steps": 604
+     },
+     "S7": {
+      "maxRelD": 2.478439675712707e-11,
+      "maxAbsF": 3.826827743580452e-12,
+      "carriedErrorMax": 2.988536978782898e-9,
+      "steps": 600
+     },
+     "S8": {
+      "maxRelD": 2.620814676390637e-11,
+      "maxAbsF": 4.5432546613710656e-12,
+      "carriedErrorMax": 3.302768122252222e-9,
+      "steps": 631
+     },
+     "S9": {
+      "maxRelD": 2.5982771489907464e-11,
+      "maxAbsF": 4.3434145169385374e-12,
+      "carriedErrorMax": 3.0898110748970508e-9,
+      "steps": 609
+     },
+     "S10": {
+      "maxRelD": 2.637490226220507e-11,
+      "maxAbsF": 5.2698956309882306e-12,
+      "carriedErrorMax": 3.171575769101521e-9,
+      "steps": 609
+     },
+     "S11": {
+      "maxRelD": 2.581534985779399e-11,
+      "maxAbsF": 5.125344593182035e-12,
+      "carriedErrorMax": 3.041421538105948e-9,
+      "steps": 606
+     },
+     "S12": {
+      "maxRelD": 5.822142767897276e-11,
+      "maxAbsF": 2.7071678232459817e-12,
+      "carriedErrorMax": 3.0419109449117595e-9,
+      "steps": 600
+     },
+     "S13": {
+      "maxRelD": 2.713851365854225e-11,
+      "maxAbsF": 6.816325281988611e-12,
+      "carriedErrorMax": 3.203613950023592e-9,
+      "steps": 611
+     }
+    }
+   }
+  },
+  {
+   "id": "O2.errorCoverage",
+   "group": "oracle",
+   "status": "pass",
+   "bound": "every point covered",
+   "measured": {
+    "points": 533,
+    "covered": 533,
+    "fraction": 1
+   }
+  },
+  {
+   "id": "C1.cptFit",
+   "group": "cited",
+   "status": "fail",
+   "bound": "relative 0.02 (a design bound for a stated approximation, not a published accuracy)",
+   "measured": {
+    "maxRelativeDeviation": 0.02017401989450951,
+    "perSet": {
+     "S1": 2.6865398794484463e-11,
+     "S2": 0.006570960449382102,
+     "S3": 0.016824985366172163,
+     "S4": 0.0013399063397629973,
+     "S5": 0.02017401989450951,
+     "S6": 0.0006502928246681083,
+     "S7": 0.003998497864621364,
+     "S8": 0.0042756105695722635
+    },
+    "fitVsOracleImplementation": 3.3306690738754696e-16
+   }
+  },
+  {
+   "id": "C2.publishedTable",
+   "group": "cited",
+   "status": "not-run",
+   "bound": "the table's printed precision plus the kernel's carried estimate",
+   "measured": {
+    "request": "C2"
+   }
+  },
+  {
+   "id": "C3.citedCode",
+   "group": "cited",
+   "status": "not-run",
+   "bound": "the code's stated accuracy",
+   "measured": {
+    "request": "C3"
+   }
+  },
+  {
+   "id": "P1.zeroBaryon",
+   "group": "power",
+   "status": "pass",
+   "bound": "relative 1e-13",
+   "measured": {
+    "maxRelative": 2.220446049250313e-16,
+    "points": 301
+   }
+  },
+  {
+   "id": "P2.effectiveShape",
+   "group": "power",
+   "status": "pass",
+   "bound": "relative 1e-12",
+   "measured": {
+    "maxRelative": 2.220446049250313e-16
+   }
+  },
+  {
+   "id": "P3.sigmaPowerLaw",
+   "group": "power",
+   "status": "pass",
+   "bound": "relative 1e-6",
+   "measured": {
+    "maxRelative": 1.5915532558530288e-8,
+    "perRadius": {
+     "1.0": {
+      "relative": 5.313868234324559e-10,
+      "converged": true
+     },
+     "8.0": {
+      "relative": 4.244210205506249e-9,
+      "converged": true
+     },
+     "30.0": {
+      "relative": 1.5915532558530288e-8,
+      "converged": true
+     }
+    }
+   }
+  },
+  {
+   "id": "P4.sigmaOracle",
+   "group": "power",
+   "status": "pass",
+   "bound": "relative 1e-8",
+   "measured": {
+    "maxRelative": 5.651035195342047e-14,
+    "perSet": {
+     "T1": {
+      "1": 8.548717289613705e-15,
+      "8": 0,
+      "30": 2.7755575615628914e-15,
+      "100": 1.3877787807814457e-14
+     },
+     "T2": {
+      "1": 2.6645352591003757e-15,
+      "8": 0,
+      "30": 3.3639757646142243e-14,
+      "100": 4.796163466380676e-14
+     },
+     "T3": {
+      "1": 6.772360450213455e-15,
+      "8": 0,
+      "30": 4.884981308350689e-15,
+      "100": 1.2434497875801753e-14
+     },
+     "T4": {
+      "1": 4.3298697960381105e-15,
+      "8": 0,
+      "30": 2.853273173286652e-14,
+      "100": 5.651035195342047e-14
+     }
+    }
+   }
+  },
+  {
+   "id": "P5.normalisation",
+   "group": "power",
+   "status": "pass",
+   "bound": "relative 1e-10 and 1e-12",
+   "measured": {
+    "normalisationRelative": 0,
+    "scalingRelative": 2.220446049250313e-16
+   }
+  },
+  {
+   "id": "P6.numericalTransfer",
+   "group": "power",
+   "status": "not-run",
+   "bound": "to be stated with the file by the request",
+   "measured": {
+    "request": "P6"
+   }
+  },
+  {
+   "id": "X1.planckSigma8",
+   "group": "authentic",
+   "status": "pass",
+   "bound": "relative 0.05 (authentic.X1rule)",
+   "measured": {
+    "sigma8Model": 0.8311462283658264,
+    "sigma8Printed": 0.812,
+    "relativeDeviation": 0.023579098972692503,
+    "D1": 0.7874764834796194,
+    "Om": 0.3144164902317362,
+    "OmPrinted": 0.3158,
+    "oracleSigma8Model": 0.831146228344051,
+    "kernelVsOracleModel": 2.619926497970937e-11
+   }
+  },
+  {
+   "id": "J1.jeansWavenumber",
+   "group": "jeans",
+   "status": "pass",
+   "bound": "relative 1e-12",
+   "measured": {
+    "maxRelative": 2.220446049250313e-16
+   }
+  },
+  {
+   "id": "J2.pressureOde",
+   "group": "jeans",
+   "status": "pass",
+   "bound": "relative 1e-7",
+   "measured": {
+    "maxRelativeToMax": 3.767426890532286e-9,
+    "perCase": {
+     "S1/0.5": 2.6127039061939996e-11,
+     "S1/2.0": 2.2107287060293123e-11,
+     "S1/10.0": 3.005756515774858e-11,
+     "S1/50.0": 4.31082269065753e-10,
+     "S1/300.0": 3.433659977524942e-9,
+     "S4/0.5": 2.537471538272398e-11,
+     "S4/2.0": 1.9918382580266257e-11,
+     "S4/10.0": 5.942481377894491e-11,
+     "S4/50.0": 4.0647869042323015e-10,
+     "S4/300.0": 3.767426890532286e-9
+    }
+   }
+  },
+  {
+   "id": "J3.zeroPressure",
+   "group": "jeans",
+   "status": "pass",
+   "bound": "exact (bit for bit)",
+   "measured": {
+    "bitForBit": true
+   }
+  },
+  {
+   "id": "J4.edsCrossing",
+   "group": "jeans",
+   "status": "pass",
+   "bound": "relative 1e-10",
+   "measured": {
+    "maxRelative": 4.440892098500626e-16,
+    "perKappa": {
+     "2.0": 1.1102230246251565e-16,
+     "10.0": 0,
+     "50.0": 4.440892098500626e-16
+    }
+   }
+  },
+  {
+   "id": "R1.growthRefusals",
+   "group": "refusals",
+   "status": "pass",
+   "bound": "exact",
+   "measured": {
+    "cases": [
+     {
+      "id": "RG1",
+      "expected": "not-finite",
+      "got": "not-finite"
+     },
+     {
+      "id": "RG2",
+      "expected": "bad-argument",
+      "got": "bad-argument"
+     },
+     {
+      "id": "RG3",
+      "expected": "radiation-in-growth",
+      "got": "radiation-in-growth"
+     },
+     {
+      "id": "RG4",
+      "expected": "density-out-of-domain",
+      "got": "density-out-of-domain"
+     },
+     {
+      "id": "RG5",
+      "expected": "density-out-of-domain",
+      "got": "density-out-of-domain"
+     },
+     {
+      "id": "RG6",
+      "expected": "w-out-of-domain",
+      "got": "w-out-of-domain"
+     },
+     {
+      "id": "RG7",
+      "expected": "w-out-of-domain",
+      "got": "w-out-of-domain"
+     },
+     {
+      "id": "RG8",
+      "expected": "not-finite",
+      "got": "not-finite"
+     },
+     {
+      "id": "RG9",
+      "expected": "radiation-in-growth",
+      "got": "radiation-in-growth"
+     },
+     {
+      "id": "RG10",
+      "expected": "a-out-of-domain",
+      "got": "a-out-of-domain"
+     },
+     {
+      "id": "RG11",
+      "expected": "a-out-of-domain",
+      "got": "a-out-of-domain"
+     },
+     {
+      "id": "RG12",
+      "expected": "not-finite",
+      "got": "not-finite"
+     }
+    ]
+   }
+  },
+  {
+   "id": "R2.growthAccepted",
+   "group": "refusals",
+   "status": "fail",
+   "bound": "exact",
+   "measured": {
+    "sets": 6875,
+    "refused": 1,
+    "firstRefused": [
+     {
+      "Om": 0.1,
+      "Ode": 1.2,
+      "w": -1.5,
+      "code": "bounce"
+     }
+    ]
+   }
+  },
+  {
+   "id": "R3.shapeRefusals",
+   "group": "refusals",
+   "status": "pass",
+   "bound": "exact",
+   "measured": {
+    "cases": [
+     {
+      "id": "RS1",
+      "expected": "h-out-of-domain",
+      "got": "h-out-of-domain"
+     },
+     {
+      "id": "RS2",
+      "expected": "omega-m-h2",
+      "got": "omega-m-h2"
+     },
+     {
+      "id": "RS3",
+      "expected": "omega-m-h2",
+      "got": "omega-m-h2"
+     },
+     {
+      "id": "RS4",
+      "expected": "omega-b-h2",
+      "got": "omega-b-h2"
+     },
+     {
+      "id": "RS5",
+      "expected": "baryon-fraction",
+      "got": "baryon-fraction"
+     },
+     {
+      "id": "RS6",
+      "expected": "ns-out-of-domain",
+      "got": "ns-out-of-domain"
+     },
+     {
+      "id": "RS7",
+      "expected": "sigma8-out-of-domain",
+      "got": "sigma8-out-of-domain"
+     },
+     {
+      "id": "RS8",
+      "expected": "h-out-of-domain",
+      "got": "h-out-of-domain"
+     },
+     {
+      "id": "RS9",
+      "expected": "k-out-of-domain",
+      "got": "k-out-of-domain"
+     },
+     {
+      "id": "RS10",
+      "expected": "R-out-of-domain",
+      "got": "R-out-of-domain"
+     }
+    ]
+   }
+  },
+  {
+   "id": "R4.jeansRefusals",
+   "group": "refusals",
+   "status": "pass",
+   "bound": "exact",
+   "measured": {
+    "cases": [
+     {
+      "id": "RJ1",
+      "expected": "bad-sound-speed",
+      "got": "bad-sound-speed"
+     },
+     {
+      "id": "RJ2",
+      "expected": "bad-sound-speed",
+      "got": "bad-sound-speed"
+     },
+     {
+      "id": "RJ3",
+      "expected": "bad-sound-speed",
+      "got": "bad-sound-speed"
+     },
+     {
+      "id": "RJ4",
+      "expected": "bad-wavenumber",
+      "got": "bad-wavenumber"
+     },
+     {
+      "id": "RJ5",
+      "expected": "not-finite",
+      "got": "not-finite"
+     }
+    ]
+   }
+  },
+  {
+   "id": "Q1.claimRule",
+   "group": "claimRule",
+   "status": "pass",
+   "bound": "zero matches",
+   "measured": {
+    "filesScanned": 756,
+    "matches": 0,
+    "hits": []
+   }
+  },
+  {
+   "id": "W1.growthIndex",
+   "group": "reported",
+   "status": "reported",
+   "bound": "reported",
+   "measured": {
+    "gammaLeastSquares": {
+     "0.25": 0.5535864022568611,
+     "0.3": 0.5524817980577151,
+     "0.35": 0.5515557485123948
+    },
+    "comparison": "NOT RUN (no published value in the saved texts)"
+   }
+  },
+  {
+   "id": "W2.radiation",
+   "group": "reported",
+   "status": "reported",
+   "bound": "reported",
+   "measured": {
+    "oracle": {
+     "Or": 0.000085,
+     "ratioWithRadiationAt0p01": 0.018513430209942117,
+     "ratioWithRadiationAt0p1": 0.0015226368860339345,
+     "note": "relative change of D(a)/D(1) when a radiation term is in the background (flat, Om 0.3), Meszaros initial data, DOP853"
+    },
+    "kernelRefusesRadiation": "radiation-in-growth"
+   }
+  },
+  {
+   "id": "W3.cpu",
+   "group": "reported",
+   "status": "reported",
+   "bound": "reported",
+   "measured": {
+    "msPerGrowthSolve41Points": 4.876075307692307,
+    "msPerSigmaNormalisation": 13.153397000000012,
+    "node": "v22.23.4"
+   }
+  },
+  {
+   "id": "W4.imageryDecision",
+   "group": "reported",
+   "status": "omitted",
+   "bound": "not applicable",
+   "measured": {
+    "imagery": "none"
+   }
+  }
+ ]
+}
