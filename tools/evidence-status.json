@@ -1320,6 +1320,82 @@
           "text": "# The galaxy-cluster kernel: dispersion, virial mass, light and morphology (Prompt 250)"
         }
       ]
+    },
+    {
+      "id": "measurement-investigations-recomputed",
+      "claim": "The numbers the three measurement, uncertainty and claim-limits investigations ask a student for are recomputed from their own instrument’s statistics and checked against closed forms, each step’s grader accepts the recomputed value, and the sentences the steps write about those numbers are true.",
+      "scope": "What Is a Measurement?, What Does ± Claim? and When the Method Must Refuse, in the English text; the Spanish follows the English step for step by a machine check; every datum is synthetic, with its truth stated in the lesson.",
+      "version": "2.1.0",
+      "class": "V-internal",
+      "status": "established",
+      "method": "tests/claimInvestigations.test.js recomputes every figure a step states through the instrument’s own functions and feeds it to the step’s validator, and checks the closed forms (chi-square quantiles, Gehrels upper limits, the normal distribution function).",
+      "evaluator": "the project",
+      "artifact": "tests/claimInvestigations.test.js",
+      "limitations": "Internal validation on synthetic worlds against the project’s own instrument; the instrument carries its own small statistics and does not use the statistics kernel (MEASUREMENT_CLAIMS.md); no authentic data are used on purpose; the Spanish has not been read by a fluent reader; no student has used the investigations; no external scientist has reviewed them (INFERENCE_CLOSEOUT.md).",
+      "date": "2026-11-07",
+      "anchors": [
+        {
+          "file": "MEASUREMENT_CLAIMS.md",
+          "text": "# Measurement, uncertainty and claim-limits investigations"
+        }
+      ]
+    },
+    {
+      "id": "kernel-model-comparison",
+      "claim": "The model-comparison kernel’s results match the checks its committed thresholds set for it: analytic cases, an independent oracle where one was named, and synthetic worlds whose truth is known.",
+      "scope": "js/kernels/statistics/modelcompare.js (Prompt 261), as its validator tools/model-comparison-validate.mjs and the pinned records in tests/fixtures/model-comparison/ state it; not any lesson or panel built on it (none exists).",
+      "version": "2.1.0",
+      "class": "V-internal",
+      "status": "partial",
+      "method": "tools/model-comparison-validate.mjs against the thresholds committed before the kernel; the contract and the failing leg are in STATISTICS.md.",
+      "evaluator": "the project",
+      "artifact": "tools/model-comparison-validate.mjs",
+      "limitations": "Verdict FAILED LEG(S); the kernel is offered to no consumer. Failing leg, named: F1.authenticCepheid (one Cepheid’s TESS light curve; the calibrated p value is 0.011 where the committed leg required the floor); it stays failing as committed. NOT RUN, named: N1.publishedSearchedPValue, N2.publishedCriteriaTable, N3.cepheidPublishedSignificance. Internal validation against the project’s own committed thresholds, oracle and synthetic worlds; no outside scientist has reviewed the kernel (see external-science-review).",
+      "date": "2026-11-07",
+      "anchors": [
+        {
+          "file": "STATISTICS.md",
+          "text": "# Statistics kernel"
+        }
+      ]
+    },
+    {
+      "id": "kernel-crossmatch",
+      "claim": "The crossmatch kernel’s results match the checks its committed thresholds set for it: analytic cases, an independent oracle where one was named, and synthetic worlds whose truth is known.",
+      "scope": "js/kernels/crossmatch/ (Prompt 263), as its validators tools/crossmatch-validate.mjs and tools/crossmatch-data-validate.mjs and the pinned records in tests/fixtures/crossmatch/ state it; not any lesson or panel built on it (none exists).",
+      "version": "2.1.0",
+      "class": "V-internal",
+      "status": "partial",
+      "method": "tools/crossmatch-validate.mjs against the thresholds committed before the kernel, then the data legs of tools/crossmatch-data-validate.mjs; the contract and the failing legs are in CROSSMATCH.md and CLUSTERING_GATE.md.",
+      "evaluator": "the project",
+      "artifact": "tools/crossmatch-validate.mjs",
+      "limitations": "Verdict FAILED LEG(S); the kernel is offered to no consumer. Failing legs, named: A6.largeShift (the committed expectation was a derivation mistake) and G2.coverage (sampling noise against the committed bound); they stay failing as committed, and the corrected legs A6b, B1b and G2e pass. NOT RUN in the first run, named: D5.publishedTool (the data legs D5a, D5c and D5d later pass; D5b, D5e and D4b are reported). The clustering gate of Part B returned verdict B, the estimator on a synthetic clustered sample only, with B9.authenticReference NOT RUN. Internal validation against the project’s own committed thresholds, oracle, public data and synthetic worlds; no outside scientist has reviewed the kernel (see external-science-review).",
+      "date": "2026-11-07",
+      "anchors": [
+        {
+          "file": "CROSSMATCH.md",
+          "text": "# The crossmatch kernel"
+        }
+      ]
+    },
+    {
+      "id": "kernel-experiment-ensemble",
+      "claim": "The experiment-ensemble runner’s results match the checks its committed thresholds set for it: named random streams, replay to the digit, the pool, the summary through the statistics kernel, coverage and refusals.",
+      "scope": "js/experiments/ensemble/ (Prompt 265), as its validator tools/experiment-ensemble-validate.mjs and the pinned records in tests/fixtures/experiments-ensemble/ state it; not any lesson or panel built on it (none exists).",
+      "version": "2.1.0",
+      "class": "V-internal",
+      "status": "partial",
+      "method": "tools/experiment-ensemble-validate.mjs against the thresholds committed before the module; the contract and the failing leg are in EXPERIMENT_ENSEMBLES.md.",
+      "evaluator": "the project",
+      "artifact": "tools/experiment-ensemble-validate.mjs",
+      "limitations": "Failing leg, named: A8.regressionContext (the three-body kind on the scenario’s own settings does not reproduce the regression group’s median and 90th percentile to the committed tolerance); it stays failing as committed, and A8b, on the lab’s settings, passes to the digit and is the statement a lesson would make. NOT RUN, named: F2.otherEngines (Node 20, Firefox and WebKit are the CI runs’ evidence). Internal validation against the project’s own committed thresholds and oracle; no outside scientist has reviewed the module (see external-science-review).",
+      "date": "2026-11-07",
+      "anchors": [
+        {
+          "file": "EXPERIMENT_ENSEMBLES.md",
+          "text": "# Experiment runner II: reproducible random experiments"
+        }
+      ]
     }
   ]
 }

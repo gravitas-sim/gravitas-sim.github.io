@@ -1484,6 +1484,13 @@
       "purpose": "Microwave background angular-scale gate: r_s(z*), D_M(z*), theta*, the peak relation and claim rule, 42 legs, verdict C; spectrum, grid and cited formulas NOT RUN (Prompt 258).",
       "owner": 258,
       "student": false
+    },
+    {
+      "file": "INFERENCE_CLOSEOUT.md",
+      "kind": "record",
+      "purpose": "The inference closeout (Prompt 266): what 261 to 265 landed, the methods sequence as it exists, each closeout item done or held, the package change, the cohesion record.",
+      "owner": 266,
+      "student": false
     }
   ]
 }
