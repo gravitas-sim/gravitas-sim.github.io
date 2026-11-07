@@ -21,7 +21,10 @@ import { readFileSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
 import process from 'node:process';
 import { fileURLToPath, pathToFileURL } from 'node:url';
-import * as S from '../js/kernels/statistics/index.js';
+import * as S0 from '../js/kernels/statistics/index.js';
+import * as M from '../js/kernels/statistics/modelcompare.js';
+
+const S = { ...S0, ...M };
 import { periodogram, periodGrid } from '../js/kernels/variables/period.js';
 import { mulberry32 } from '../js/rng.js';
 import { gaussian } from '../js/random/streams.js';

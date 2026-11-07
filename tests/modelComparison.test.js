@@ -12,7 +12,10 @@
 import { describe, test, expect } from '@jest/globals';
 import { readFileSync } from 'node:fs';
 import { URL } from 'node:url';
-import * as S from '../js/kernels/statistics/index.js';
+import * as S0 from '../js/kernels/statistics/index.js';
+import * as M from '../js/kernels/statistics/modelcompare.js';
+
+const S = { ...S0, ...M };
 import { stream } from '../js/random/streams.js';
 import {
   NEVER_PRECACHED,
