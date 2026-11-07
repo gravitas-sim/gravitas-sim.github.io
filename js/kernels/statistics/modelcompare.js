@@ -28,7 +28,7 @@
 // Pure and deterministic. Draws come from js/random/streams.js's `noise`
 // stream (Prompt 149), one stream per draw keyed by its index, so a chunk of
 // draws on a worker pool is identical to the same draws made serially. No
-// clock, no Math.random. No sampler, no evidence, no model averaging
+// clock, no unseeded generator. No sampler, no evidence, no model averaging
 // (D-SAMPLER-01). See STATISTICS.md, "Model comparison II".
 // =============================================================================
 

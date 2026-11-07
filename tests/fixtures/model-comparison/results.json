@@ -1,0 +1,398 @@
+{
+ "format": "gravitas.model-comparison-results/1",
+ "rows": [
+  {
+   "id": "A1.fTestMatchesRegression",
+   "leg": "a",
+   "status": "pass",
+   "measured": {
+    "per": [
+     {
+      "name": "slope",
+      "relF": 1.0575e-15,
+      "relP": 5.7401e-16
+     },
+     {
+      "name": "null",
+      "relF": 6.7474e-16,
+      "relP": 3.107e-15
+     }
+    ]
+   },
+   "note": null
+  },
+  {
+   "id": "A2.fTestTwoParameters",
+   "leg": "a",
+   "status": "pass",
+   "measured": {
+    "relF": 3.9099e-16,
+    "relP": 5.0689e-15,
+    "d1": 2,
+    "d2": 27
+   },
+   "note": null
+  },
+  {
+   "id": "A3.criteriaDefinitions",
+   "leg": "a",
+   "status": "pass",
+   "measured": {
+    "worstAbs": 2.8422e-14,
+    "worstHandAbs": 0,
+    "preferredAgree": true,
+    "disagree": {
+     "pair": false,
+     "ladder": false
+    }
+   },
+   "note": null
+  },
+  {
+   "id": "A4.classifierTable",
+   "leg": "a",
+   "status": "pass",
+   "measured": {
+    "rows": 8,
+    "undeclaredRefused": true
+   },
+   "note": null
+  },
+  {
+   "id": "A5.leaveOneOutEqualsPress",
+   "leg": "a",
+   "status": "pass",
+   "measured": {
+    "worstRelScore": 1.9834e-15,
+    "worstAbsResidual": 2.2649e-14,
+    "repeatBitIdentical": true
+   },
+   "note": null
+  },
+  {
+   "id": "A6.drawsAreIndexable",
+   "leg": "a",
+   "status": "pass",
+   "measured": {
+    "chunkedEqualsSerial": true,
+    "repeatEqual": true,
+    "otherSeedDiffers": true,
+    "stream": {
+     "id": "noise",
+     "algorithm": "mulberry32",
+     "version": 1,
+     "key": "p261:A6:x"
+    }
+   },
+   "note": null
+  },
+  {
+   "id": "A7.pValueEstimator",
+   "leg": "a",
+   "status": "pass",
+   "measured": {
+    "pUniform": 0.127,
+    "bound": 0.037966,
+    "floorP": 0.001,
+    "tieP": 1,
+    "level0_001": "ok",
+    "level0_0009": "too-few-draws"
+   },
+   "note": null
+  },
+  {
+   "id": "A8.textbookFTest",
+   "leg": "a",
+   "status": "pass",
+   "measured": {
+    "r2": 0.66654,
+    "F": 17.99,
+    "p": 0.0021696,
+    "pFromT": 0.0021696
+   },
+   "note": null
+  },
+  {
+   "id": "B1.statisticParity",
+   "leg": "b",
+   "status": "pass",
+   "measured": {
+    "relVsAstropy": 3.4769e-16,
+    "nGrid": 75,
+    "worstRelFrequency": 1.3711e-16
+   },
+   "note": null
+  },
+  {
+   "id": "B2.calibratedPAgainstOracle",
+   "leg": "b",
+   "status": "pass",
+   "measured": {
+    "pKernel": 0.282,
+    "pOracle": 0.26373681315934205,
+    "absDifference": 0.018263,
+    "bound": 0.057116,
+    "kernelSe": 0.014237
+   },
+   "note": null
+  },
+  {
+   "id": "B3.oracleSelfConsistency",
+   "leg": "b",
+   "status": "pass",
+   "measured": {
+    "p2611": 0.26373681315934205,
+    "p2612": 0.2591370431478426,
+    "absDifference": 0.0045998,
+    "bound": 0.017576
+   },
+   "note": null
+  },
+  {
+   "id": "B4.baluevReported",
+   "leg": "b",
+   "status": "reported",
+   "measured": {
+    "falseAlarmBaluevAstropy": 0.27043,
+    "simulatedPOracle": 0.2614369281535923,
+    "nullQuantiles": {
+     "0.5": 0.20502163684610153,
+     "0.9": 0.2835839217332694,
+     "0.95": 0.3124728534933276,
+     "0.99": 0.3714593315831452
+    }
+   },
+   "note": "an analytic upper bound on the maximum over frequencies, beside the simulation"
+  },
+  {
+   "id": "C1.fTestFalsePositive",
+   "leg": "c",
+   "status": "pass",
+   "measured": {
+    "rate": 0.052,
+    "expected": 0.05,
+    "bound": 0.019494,
+    "series": 2000
+   },
+   "note": null
+  },
+  {
+   "id": "C2.calibratedFalsePositive",
+   "leg": "c",
+   "status": "pass",
+   "measured": {
+    "rate": 0.0425,
+    "expected": 0.05,
+    "bound": 0.030822,
+    "series": 800,
+    "draws": 99
+   },
+   "note": null
+  },
+  {
+   "id": "C4.searchedLimits",
+   "leg": "c",
+   "status": "pass",
+   "measured": {
+    "naiveFRate": 0.92375,
+    "aicSearchedRate": 0.9625,
+    "minNaive": 0.3,
+    "minAic": 0.3
+   },
+   "note": null
+  },
+  {
+   "id": "C3.criteriaFalsePreference",
+   "leg": "c",
+   "status": "pass",
+   "measured": {
+    "aic": {
+     "rate": 0.182,
+     "expected": 0.17568,
+     "bound": 0.024068
+    },
+    "bic": {
+     "rate": 0.08075,
+     "expected": 0.077393,
+     "bound": 0.0169
+    },
+    "series": 4000
+   },
+   "note": null
+  },
+  {
+   "id": "C5.leaveOneOutReported",
+   "leg": "c",
+   "status": "reported",
+   "measured": {
+    "looPrefersLineUnderConstant": 0.169,
+    "series": 1000,
+    "calibratedPowerAt0_05": 0.425,
+    "powerSeries": 200
+   },
+   "note": null
+  },
+  {
+   "id": "D1.refusals",
+   "leg": "d",
+   "status": "pass",
+   "measured": {
+    "searched": {
+     "class": "nested-nonregular",
+     "refused": "searched",
+     "valid": "simulation-calibrated",
+     "status": "refused",
+     "code": "needs-simulation"
+    },
+    "boundary": {
+     "class": "nested-nonregular",
+     "refused": "boundary",
+     "valid": "simulation-calibrated",
+     "status": "refused",
+     "code": "needs-simulation"
+    },
+    "nonNested": {
+     "class": "non-nested",
+     "refused": "not-nested",
+     "valid": "information-criteria",
+     "status": "ok"
+    },
+    "directFTest": "searched",
+    "notOfferedForBoundary": [
+     "information-criteria"
+    ]
+   },
+   "note": null
+  },
+  {
+   "id": "D2.criteriaSampleSize",
+   "leg": "d",
+   "status": "pass",
+   "measured": {
+    "n19": "sample-size",
+    "n24k5": "sample-size",
+    "n20K4": "ok",
+    "nan": "input",
+    "negative": "input",
+    "zero": "zero-rss",
+    "fractional": "counts",
+    "oneModel": "models"
+   },
+   "note": null
+  },
+  {
+   "id": "D3.calibrationRefusals",
+   "leg": "d",
+   "status": "pass",
+   "measured": {
+    "budget": "budget",
+    "noSeed": "seed",
+    "fractional": "draws",
+    "tooFew": "too-few-draws",
+    "nanDraw": "non-finite-draws",
+    "observedNan": "input",
+    "needsSimulation": "needs-simulation"
+   },
+   "note": null
+  },
+  {
+   "id": "D4.leaveOneOutRefusals",
+   "leg": "d",
+   "status": "pass",
+   "measured": {
+    "n4": "sample-size",
+    "n501": "budget",
+    "nanPrediction": "non-finite",
+    "nanObservation": "non-finite",
+    "n5": "ok"
+   },
+   "note": null
+  },
+  {
+   "id": "E1.misspecifiedNullReported",
+   "leg": "d",
+   "status": "reported",
+   "measured": {
+    "rateAt0_05": 0.0325,
+    "series": 400,
+    "statedLevel": 0.05
+   },
+   "note": "the stated null is homoscedastic and the truth is not"
+  },
+  {
+   "id": "F1.authenticCepheid",
+   "leg": "e",
+   "status": "fail",
+   "measured": {
+    "points": 55,
+    "p": 0.011,
+    "atFloor": false,
+    "bestPeriod": 7.4346,
+    "peakPower": 0.28137,
+    "packRecordedPublishedPeriodReportedOnly": 7.1767
+   },
+   "note": null
+  },
+  {
+   "id": "F2.authenticShuffledControl",
+   "leg": "e",
+   "status": "pass",
+   "measured": {
+    "rejections": 0,
+    "of": 20,
+    "maxAllowed": 4
+   },
+   "note": null
+  },
+  {
+   "id": "N1.publishedSearchedPValue",
+   "leg": "b",
+   "status": "notrun",
+   "measured": {
+    "reason": "the file was not supplied; nothing is fetched by an agent"
+   },
+   "note": "A published table or worked example that prints a simulated false-alarm probability or p value for a periodogram peak (for example the worked examples of Horne and Baliunas 1986, ApJ 302, 757, of Press and Rybicki 1989, or of the astropy.timeseries LombScargle documentation's bootstrap method) together with the data and noise model it used, saved with its terms and sha256 into scratch-data/modelcompare261/N1/ by Carl's session."
+  },
+  {
+   "id": "N2.publishedCriteriaTable",
+   "leg": "a",
+   "status": "notrun",
+   "measured": {
+    "reason": "the file was not supplied; nothing is fetched by an agent"
+   },
+   "note": "One worked example that prints the data, the fitted residual sums of squares or log-likelihoods and the AIC, AICc and BIC of two or more models (Burnham and Anderson 2002, chapter 2 or 4, or R's documentation example for AIC and BIC), saved with its terms into scratch-data/modelcompare261/N2/ by Carl's session."
+  },
+  {
+   "id": "N3.cepheidPublishedSignificance",
+   "leg": "e",
+   "status": "notrun",
+   "measured": {
+    "reason": "the file was not supplied; nothing is fetched by an agent"
+   },
+   "note": "A refereed or archive-published false-alarm probability for the eta Aquilae TESS period, saved with its terms into scratch-data/modelcompare261/N3/ by Carl's session."
+  }
+ ],
+ "verdict": {
+  "verdict": "FAILED LEG(S)",
+  "failing": [
+   "F1.authenticCepheid"
+  ],
+  "notJudged": [],
+  "notRun": [
+   "N1.publishedSearchedPValue",
+   "N2.publishedCriteriaTable",
+   "N3.cepheidPublishedSignificance"
+  ],
+  "consumers": "panel and investigations not built (consumers rule)"
+ },
+ "meta": {
+  "node": "v22.23.4",
+  "oracle": {
+   "python": "3.9.6",
+   "numpy": "1.26.4",
+   "scipy": "1.13.1",
+   "astropy": "6.0.1"
+  },
+  "seconds": 16
+ }
+}
