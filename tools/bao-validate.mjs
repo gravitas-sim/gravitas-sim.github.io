@@ -183,9 +183,10 @@ const dropFlat = p => (p.Ode === 'flat' ? { ...p, Ode: undefined } : p);
 let planck = null;
 if (planckPath && existsSync(planckPath)) planck = JSON.parse(readFileSync(planckPath));
 {
+  row('P1.plankRdrag', 'not-run', null, 'as publishedComparison.pass', "AM2: Table 1's best-fit column prints no z_drag; see P1b");
   if (!planck || planck.ambiguous) {
-    row('P1.plankRdrag', 'not-run', null, 'as publishedComparison.pass', planck ? planck.reason : 'no extraction fixture supplied');
-    row('X2.reportedBracket', 'not-run', null, 'REPORTED', 'needs the P1 extraction');
+    row('P1b.plankRdragT2', 'not-run', null, 'r_drag in [r_lo - u, r_hi + u]', planck ? planck.reason : 'no extraction fixture supplied');
+    row('X2.reportedBracket', 'not-run', null, 'REPORTED', 'needs the P1b extraction');
   } else {
     const V = planck.values;
     const num = k => Number(V[k]);
@@ -219,12 +220,12 @@ if (planckPath && existsSync(planckPath)) planck = JSON.parse(readFileSync(planc
       const b = cases(...dn);
       const dL = Math.abs(a.L - b.L) / (2 * x * 1e-4);
       const dH = Math.abs(a.H - b.H) / (2 * x * 1e-4);
-      prop += Math.max(dL, dH) * 0.5 * unit(nm);
+      prop += Math.max(dL, dH) * (nm === 'zdrag' ? Number(V.zdragSigma) + 0.5 * unit(nm) : 0.5 * unit(nm));
     }
     const u = unit('rdrag') + prop;
     const r = num('rdrag');
     const pass = r >= lo - u && r <= hi + u;
-    row('P1.plankRdrag', pass ? 'pass' : 'fail', { rdragPrinted: r, rL: base.L, rH: base.H, u, interval: [lo - u, hi + u] }, 'rdrag in [r_lo - u, r_hi + u]');
+    row('P1b.plankRdragT2', pass ? 'pass' : 'fail', { rdragPrinted: r, rL: base.L, rH: base.H, u, interval: [lo - u, hi + u] }, 'rdrag in [r_lo - u, r_hi + u]');
     row('X2.reportedBracket', 'reported', { fractionBetween: (r - lo) / (hi - lo), outsideInUnitsOfU: r < lo ? (lo - r) / u : r > hi ? (r - hi) / u : 0 }, 'REPORTED');
   }
   row('P2.plankZdrag', 'not-run', null, 'needs F1', 'F1: no fitting formula fetched, none typed');
@@ -448,7 +449,7 @@ const by = id => rows.find(r => r.id === id);
 const group = g => T.checks.filter(c => c.group === g).map(c => by(c.id));
 const kernelGroups = ['integrity', 'ruler', 'ensemble', 'combination', 'refusals'];
 const kernelRows = kernelGroups.flatMap(group);
-const p1 = by('P1.plankRdrag');
+const p1 = by('P1b.plankRdragT2');
 const demoRows = ['D1.stream', 'D2.counts', 'D3.estimator', 'D4.jackknife', 'D5.nullEnsemble'].map(by);
 const kernelPass = kernelRows.every(r => r.status === 'pass') && (p1.status === 'pass' || p1.status === 'not-run') &&
   (!detectable || demoRows.every(r => r.status === 'pass'));
