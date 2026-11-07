@@ -82,7 +82,10 @@ export async function runJob(manifest, job, { realm, now } = {}) {
             realm ?? (await loadRealm()),
             buildScenario,
             e.config,
-            draw
+            draw,
+            e.config.physics === 'validation-lab'
+              ? (await import('../../validation/harness.js')).LAB_SETTINGS
+              : undefined
           )
         : await plainTrial(e, draw);
   }

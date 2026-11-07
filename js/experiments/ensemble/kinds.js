@@ -76,18 +76,30 @@ export const THREE_BODY = Object.freeze({
  * long-term-regression.js (Prompt 137), which this is the ensemble form of.
  * @param {object} m - The realm's modules (physics, build, scenarios, appState,
  *   rng, timestep, units); `buildScenario` from ../trialRunner.js is passed in
+ * @param {object} [labSettings] - js/validation/harness.js LAB_SETTINGS, for config.physics 'validation-lab'
  */
-export function threeBodyTrial(m, buildScenario, config, draw) {
+export function threeBodyTrial(m, buildScenario, config, draw, labSettings) {
   const c = { ...THREE_BODY, ...config };
   const settings = buildScenario(m, { scenario: c.scenario, seed: 'ensemble' });
   const { physics } = m;
+  // The validation lab's world (js/validation/harness.js LAB_SETTINGS) on the built
+  // stars: no orbit decay, a softening floor of 1e-6, the application's G.
+  if (c.physics === 'validation-lab')
+    physics.updatePhysicsSettings({
+      ...labSettings,
+      gravitational_constant: 2,
+      mutual_gravity: true,
+      star_only_gravity: false,
+      enable_star_merging: false,
+    });
   const stars = physics.stars;
   if (stars.length !== 3)
     return {
       status: STATUS.BUILD_FAILED,
       error: 'the world has not three stars',
     };
-  const G = settings.gravitational_constant;
+  const G =
+    c.physics === 'validation-lab' ? 2 : settings.gravitational_constant;
   const MASS = stars[0].mass;
   const R = c.radius;
   const SIDE = R * Math.sqrt(3);
@@ -227,6 +239,8 @@ export const KINDS = Object.freeze({
       const out = [];
       if (!WORLDS.includes(ens.config?.world))
         out.push(['config.world', `one of ${WORLDS.join(', ')}`]);
+      if (![undefined, 'validation-lab'].includes(ens.config?.physics))
+        out.push(['config.physics', 'absent, or "validation-lab"']);
       return out;
     },
   },

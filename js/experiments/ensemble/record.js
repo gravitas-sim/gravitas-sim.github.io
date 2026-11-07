@@ -137,7 +137,8 @@ export function ensembleManifest({
  */
 export function validateEnsemble(m) {
   const out = [];
-  const need = (ok, path, message) => ok || out.push({ path, message });
+  const need = (ok, path, message) =>
+    Boolean(ok) || (out.push({ path, message }), false);
   if (!isObject(m)) return [{ path: '', message: 'is not an object' }];
   need(m.format === FORMAT, 'format', `must be "${FORMAT}"`);
   need(

@@ -35,6 +35,8 @@ export default {
   async read(load, doc) {
     const m = await load('js/experiments/experimentManifest.js');
     const migrated = m.migrateExperiment(doc);
+    // A version this build does not read is refused in the reader's own words.
+    if (migrated?.error) return { accepted: false, problems: [migrated.error] };
     const manifest = migrated?.manifest ?? migrated;
     const problems = m.validateExperiment(manifest);
     return problems.length
