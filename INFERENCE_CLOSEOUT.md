@@ -44,8 +44,8 @@ failing and labelled; only Carl resets a bound. "Legs" are the rows of the resul
 | 264 Population inference | gate, spike only, #563 | none | 42 / 1 / 6 / 3 (52 legs) | fail D8.noZeroRule (a limit statement among zero estimates: 0.623 against 0.94; the leg conditions on the outcome); not run X1 to X3 | **B**: the version without per-object uncertainties passes; the version with them fails D8 |
 | 265 Experiment runner II | module `js/experiments/ensemble/`, #565 | none | 22 / 1 / not-applicable 1 / not run 1 (25 checks) | fail A8.regressionContext (the three-body kind on the scenario's own settings); A8b on the lab's settings passes to the digit; not run F2.otherEngines (CI's evidence) | one failing leg; item 4, the creating panel and 184 as a client held |
 
-No shipped investigation, course package, data pack or Library entry changed in this range (`git log` from the 260 merge to this base shows
-only regeneration and the registers). Carl's rulings bear on it: the consumers rule is held for every kernel above; F1, C2o, A6, G2, D8 and A8
+No shipped investigation, course package, data pack or Library entry changed in this range (`git diff` from `v3` 1bc9c07f, the tip 261
+was cut from, to this base is empty over `js/data/investigations`, `js/data/courses`, `data-packs`, `library` and `catalog`). Carl's rulings bear on it: the consumers rule is held for every kernel above; F1, C2o, A6, G2, D8 and A8
 stay failing and labelled, each with its replacement leg committed first where one exists; the data legs of 263 were fetched under his
 words of 2026-11-07 and nothing downloaded was run; 264's follow-ups (D8b, a penalty-convergence leg) and 262's (C2c) are approved for
 later and none has run.
@@ -180,14 +180,21 @@ Run against `v3` 7bf95b8f with this pull request's tree. An internal inspection,
 | Every new item discoverable by sequence, topic page, course, related or next link, search and recommended start | pass: there is no new investigation or tool; the three lessons that join the package are reached through their sequence, the Library, search and now the package |
 | No duplicated terminology | pass: no label or glossary entry added |
 | Default choice counts not substantially increased | pass: unchanged |
-| Structural navigation checks green | RESULTS_NAV |
+| Structural navigation checks green | pass: `npm run navigation:check`, `npm run surface:check`, `npm run check:architecture`, `npm run docs-map:check` and `npm run packs:check` exit 0 on Node 22.23.4, and the library, relations, sequence, course-pack, navigation and surface suites pass in the full Jest run |
 
 The check passes because the one visible change is a course package's items and notes. It is not evidence that the held investigations would
 pass.
 
 ## Data and size
 
-No pack, sidecar or data file is added or changed, and nothing was downloaded. RESULTS_SIZE
+No pack, sidecar or data file is added or changed, and nothing was downloaded. Measured on a Node 22.23.4 build of this branch over `v3`
+7bf95b8f (`npm run budget:data`, `npm run budget:check`, `npm run budget:routes`, `npm run budget:composition -- --check`): packs 355,282 of
+355,282 bytes raw and 111,422 of 111,422 gzip (no room, nothing added), first-visit precache 5,324,306 of 5,365,197, initial download
+801.7 KB, every route within its ceiling, indexedDB and cache 18,508,011 of 209,715,200. Deferred JavaScript reads 3,165,346 bytes gzipped
+(3091.2 of 3091.2 KB) **with and without** the package change, because a course package is in no deferred chunk. **One ceiling is raised:** the
+idle precache tier, 1,610,682 to 1,610,724 bytes (`tools/data-budget.json`), exactly the 42-byte overrun that `library/library.json` caused
+when it regenerated (the three investigations now list the course that holds them), under the standing approval of 2026-10-10 and with a
+register row (D-R10-266-05); the queue confirms it on CI. The instructor closure is unchanged and no closure file is added.
 
 ## What would unlock each held item
 
@@ -222,5 +229,5 @@ The order follows the prerequisites, not importance.
 - No investigation, lesson, panel, viewer mode, pack, Library entry, sequence, topic page or alignment row.
 - No instructor materials and no instructor bundle rebuild (the queue owns it), no passphrase, no Spanish catalog string beyond the package's
   own texts.
-- No ceiling raised unless the section "Data and size" says so, no `.github` edit, no bound moved, no failed leg re-labelled, no data
+- No ceiling raised but the one named in "Data and size", no `.github` edit, no bound moved, no failed leg re-labelled, no data
   fetched, no published number typed, no count typed (every leg count above is read from a committed results file).
