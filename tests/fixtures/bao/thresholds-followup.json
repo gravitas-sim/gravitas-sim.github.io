@@ -120,6 +120,13 @@
    "recorded": "after the fixtures were read and before any program of this follow-up ran",
    "what": "The delegate's rulings of 2026-11-07 (DECISIONS_2026-11-07.md): E5 stays failing and labelled (it is not rerun and not touched); a flag-calibration leg is added as NEW leg E6 and a tighter P1b as NEW leg P1c, each with its bound committed here; the optional demonstration (D6) is closed for this pack and not rerun; Part B waits; the consumers rule holds (no lesson, panel or viewer). P1c is NOT blind (the parent's numbers were seen). Seeds of E6 are new (conventions of the leg) so that the parent's E5 stream is not reused.",
    "moves": "no committed bound; E5 and D6 are not rerun and stay as the parent recorded them"
+  },
+  {
+   "id": "AM6",
+   "recorded": "after the second oracle's FIRST run (its output was read) and before the prototype additions or the validator existed or ran; the oracle was then run again against this file",
+   "what": "Two clarifications that move no bound. (1) E6 (c) says 'lambda and p_pred of the prototype equal the oracle's to 1e-9 relative'. For the no-misfit vector lambda is zero by construction and the oracle's value is rounding noise (about -3e-11), so a relative comparison is undefined there: (c) compares the MISFIT lambda and both p_pred relative to 1e-9 as committed, and compares the no-misfit lambda in ABSOLUTE value to 1e-9 (p_pred of the no-misfit case is the closed-form 0.0027 in both, compared as committed). (2) The oracle's first run had a unit slip in the reported row X6 (it used E where the basis holds 1/E: its fit ran to the grid edge with chi-square 100); fixed in the oracle before any validator run; X6 is REPORTED, with no bound.",
+   "seen": "The first run's output was read before this amendment: the grid errors of equation (26) (a maximum above 3 percent at the low-omega0, high-baryon-fraction corner of the stated domain, so F2 and F5 are expected to FAIL their committed 2 percent), equation (4)'s z_d at the Planck row about 1020.7 against the printed 1059.94 (so F1b is expected to FAIL), equation (26) at the Planck row 149.95 (F3 a narrow pass), the P1c integral 147.0523 inside u, the E6 prediction and rates, the BAO-only fit (best Omega_m 0.366, 95 percent set 0.262 to 0.498, chi-square 1.99), and O3b's alphas inside three sigma. No bound was changed by any of these; this amendment cannot affect a status because it concerns a degenerate comparison and a reported row.",
+   "moves": "no bound"
   }
  ],
  "checks": [
