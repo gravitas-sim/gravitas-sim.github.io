@@ -1159,7 +1159,7 @@
     {
       "file": "MULTIMESSENGER.md",
       "kind": "feature",
-      "purpose": "The multi-messenger kernel: time systems, the speed bound with its emission-delay assumption, the host rule, a kilonova model and the detection rule, validation and the files requested (Prompt 244).",
+      "purpose": "The multi-messenger kernel: time systems, the speed bound with its assumption, host rule, kilonova model, detection rule, validation, authentic-data legs B2, B4, E1 (Prompt 244).",
       "owner": 244,
       "student": false
     },
