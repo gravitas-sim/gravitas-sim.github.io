@@ -163,9 +163,25 @@
     },
     {
       "id": "B2.timeAuthentic",
-      "status": "not-run",
-      "measured": null,
-      "note": "authentic/leap-seconds.list was not supplied"
+      "status": "pass",
+      "measured": {
+        "instants": 205,
+        "maxGpsErrorS": 1.1920928955078125e-7,
+        "maxMetErrorS": 1.1920928955078125e-7,
+        "entries": 28
+      },
+      "note": "the list passes its own checks (first of a month, ascending, 19 s at the GPS epoch, not expired)"
+    },
+    {
+      "id": "B2b.leapListParse",
+      "status": "pass",
+      "measured": {
+        "entries": 28,
+        "oracleEntries": 28,
+        "expiryNtp": 4023129600,
+        "lastUpdateNtp": 3992312697
+      },
+      "note": ""
     },
     {
       "id": "B3.boundExact",
@@ -178,9 +194,44 @@
     },
     {
       "id": "B4.boundPublished",
-      "status": "not-run",
-      "measured": null,
-      "note": "authentic/published-bound.json was not supplied"
+      "status": "pass",
+      "measured": {
+        "kernel": {
+          "lower": -3.0865751620341704e-15,
+          "upper": 6.501986418812901e-16
+        },
+        "printed": {
+          "lower": "-3e-15",
+          "upper": "+7e-16",
+          "printedSignificantFigures": 1,
+          "form": "(v_GW - v_EM)/v_EM between -3 x 10^-15 and +7 x 10^-16",
+          "locator": "abstract; Equation 1"
+        },
+        "delayDefinition": "the paper writes the GRB170817A-minus-GW170817 time lag as (+1.74 +/- 0.05) s ('between GRB170817A and GW170817'); the GW signal arrives first; the paper's own definition is of the GBM trigger T0GBM against the GW time T0GW (a gamma-ray emission onset 0.310 +/- 0.048 s before T0GBM is also printed)",
+        "status": "bounded"
+      },
+      "note": ""
+    },
+    {
+      "id": "B4o.boundOracle",
+      "status": "pass",
+      "measured": {
+        "relLower": 1.2778903214868134e-16,
+        "relUpper": 1.5165767321093506e-16,
+        "oracleFirstOrder": {
+          "lower": -3.08657516203417e-15,
+          "upper": 6.5019864188129e-16
+        },
+        "oracleRounded": {
+          "lower": -3e-15,
+          "upper": 7e-16
+        },
+        "printed": {
+          "lower": -3e-15,
+          "upper": 7e-16
+        }
+      },
+      "note": ""
     },
     {
       "id": "B5.hostDistance",
@@ -509,7 +560,23 @@
       "id": "E1.delayFromPacks",
       "status": "not-run",
       "measured": null,
-      "note": "authentic/published-bound.json was not supplied"
+      "note": "the published delay is defined as 'emission-onset-minus-merger-at-geocenter', not trigger minus merger: a different quantity, recorded, not absorbed into a tolerance"
+    },
+    {
+      "id": "E1b.onsetDelayFromPacks",
+      "status": "pass",
+      "measured": {
+        "kernelDelayS": 2.0745978355407715,
+        "oracleDelayS": 2.0745978951538846,
+        "oracleDiffS": 5.961311311253326e-8,
+        "expectedS": 2.046824,
+        "toleranceS": 0.2579326814139615,
+        "differenceS": 0.027773835540771508,
+        "literalDifferenceToPrintedS": 0.3345978355407715,
+        "paperMergerGps": 1187008882.43,
+        "packMergerGps": 1187008882.4
+      },
+      "note": "the published 1.74 s is an emission onset, not a trigger (E1 is NOT RUN for that reason); the literal difference is reported, not judged"
     },
     {
       "id": "E2.packDistanceVsRedshift",
@@ -536,7 +603,7 @@
       "id": "P1.speed",
       "status": "pass",
       "measured": {
-        "cpuSeconds": 0.947
+        "cpuSeconds": 1.15
       },
       "note": "recorded, not a physics bound"
     },

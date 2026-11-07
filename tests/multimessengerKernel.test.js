@@ -379,6 +379,14 @@ describe('the authentic readers and the legs that wait for them', () => {
         authDir: dir,
       });
       const by = Object.fromEntries(rows.map(r => [r.id, r]));
+      // the pinned oracle output is for the files as supplied, so synthetic files are not judged by it
+      for (const id of [
+        'B2b.leapListParse',
+        'B4o.boundOracle',
+        'E1b.onsetDelayFromPacks',
+      ])
+        expect(by[id].status).toBe('not-run');
+      expect(by['B4o.boundOracle'].note).toMatch(/was not made from/);
       expect(by['B2.timeAuthentic'].status).toBe('fail');
       expect(by['B4.boundPublished'].status).toBe('fail');
       expect(by['E1.delayFromPacks'].status).toBe('pass');
@@ -400,6 +408,32 @@ describe('the authentic readers and the legs that wait for them', () => {
     }
   });
 
+  test('B4 reads a bound printed as strings (AM5), and a different printed pair fails it', () => {
+    const dir = realpathSync(mkdtempSync(path.join(tmpdir(), 'mm244-')));
+    try {
+      const file = (lower, upper) =>
+        writeFileSync(
+          path.join(dir, 'published-bound.json'),
+          JSON.stringify({
+            delay: { value: 1.74, sigma: 0.05, definition: 'free text' },
+            distance: { value: 26 },
+            emissionDelay: { min: 0, max: 10 },
+            bound: { lower, upper, printedSignificantFigures: 1 },
+          })
+        );
+      file('-3e-15', '+7e-16');
+      expect(runValidation({ only: ['B4.'], authDir: dir })[0].status).toBe(
+        'pass'
+      );
+      file('-3e-15', '+6e-16');
+      expect(runValidation({ only: ['B4.'], authDir: dir })[0].status).toBe(
+        'fail'
+      );
+    } finally {
+      rmSync(dir, { recursive: true, force: true });
+    }
+  });
+
   test('with no authentic files the four legs are NOT RUN and say which file is missing', () => {
     const dir = realpathSync(mkdtempSync(path.join(tmpdir(), 'mm244-')));
     try {
@@ -409,8 +443,11 @@ describe('the authentic readers and the legs that wait for them', () => {
       });
       expect(rows.map(r => `${r.id}:${r.status}`)).toEqual([
         'B2.timeAuthentic:not-run',
+        'B2b.leapListParse:not-run',
         'B4.boundPublished:not-run',
+        'B4o.boundOracle:not-run',
         'E1.delayFromPacks:not-run',
+        'E1b.onsetDelayFromPacks:not-run',
         'E3.kilonovaReddening:not-run',
       ]);
       expect(rows.every(r => /was not supplied/.test(r.note))).toBe(true);
