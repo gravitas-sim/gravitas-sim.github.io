@@ -1,0 +1,9 @@
+{
+  "retrieved": "2026-11-06",
+  "retrievedBy": "Carl's session, from arXiv; transcribed from the PDF text as printed",
+  "paper": "Brout et al. 2022, ApJ 938, 110: The Pantheon+ Analysis: Cosmological Constraints",
+  "identifier": "arXiv:2202.04077", "sha256": "d55cb577ed3b0481fc32e86f6cdfa0651987ee8d5bb88e31a1755d98947aeac3",
+  "location": "Abstract and Table (FlatLCDM row, SNe Ia alone), PDF text lines 70, 893, 963",
+  "flat_lcdm_sne_alone": { "Omega_M": 0.334, "sigma": 0.018, "Omega_Lambda": "0.666 +/- 0.018 (printed in the table)", "H0_column": "73.6 +/- 1.1 (printed in the same row; a SH0ES-calibrated column, not the SN-only shape constraint)" },
+  "frameNote": "This is the paper's published constraint with its full systematic covariance, SH0ES calibrators included in the sample; the 256 gate's pack has 1,580 rows with the pack's errors, so agreement is a comparison of two different analyses, not a test of identity."
+}
