@@ -1,6 +1,6 @@
 {
  "format": "gravitas.censoring-truncation-oracle-results/1",
- "thresholdsSha256": "d9e54b22abba43d7ff35cf9b1371e5211cd8be05ac0c5b6d8ab14e7e28086fff",
+ "thresholdsSha256": "9d7356ba020c528f337592a032a2b80780e8981114f6f037b96892b79ea7e3d3",
  "environment": {
   "python": "3.9.6",
   "numpy": "1.26.4",
@@ -18144,6 +18144,6 @@
   "maxLogrankZRel": 9.510186349804198e-15,
   "maxLogrankZAbsRel": 9.510186349804198e-15,
   "maxLogrankPRel": 2.773216717601267e-14,
-  "cpuSeconds": 23.491519
+  "cpuSeconds": 17.231069
  }
 }
