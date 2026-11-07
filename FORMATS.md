@@ -2,7 +2,7 @@
 
 # Formats
 
-Every versioned format Gravitas reads or writes: 67 of them. 37 have a JSON Schema in `sdk/schemas`, and 14 read their previous version rather than only their own.
+Every versioned format Gravitas reads or writes: 67 of them. 37 have a JSON Schema in `sdk/schemas`, and 15 read their previous version rather than only their own.
 
 Roadmap II Prompt 61 puts each under one rule:
 - a JSON Schema;
@@ -43,7 +43,7 @@ The columns:
 | gravitas.system3d | format, formatVersion | 1 | js/lab3d/state.js migrateSystem | file, repository | v1 only; reads orbital-system/1 | refused, in words | no |
 | gravitas.lab3d.snapshot | format, formatVersion | 1 | js/lab3d/snapshot.js snapshotProblem | memory | v1 only | refused | no |
 | gravitas.experiment | format, formatVersion | 1 | js/experiments/experimentManifest.js migrateExperiment | download (the runner’s manifest, and the bench’s comparison), memory, inside results | converts an unversioned sweep spec; the retired id gravitas-experiment is version 0 | refused, in words | [yes](sdk/schemas/experiment-1.schema.json) |
-| gravitas.experiment (with an ensemble block) | format, formatVersion | 2 | js/experiments/ensemble/record.js validateEnsemble, withVersion; the shipped reader js/experiments/experimentManifest.js migrateExperiment | download, memory | v1 only: a manifest without an ensemble block is still written as /1 | refused, in words | [yes](sdk/schemas/experiment-2.schema.json) |
+| gravitas.experiment (with an ensemble block) | format, formatVersion | 2 | js/experiments/ensemble/record.js validateEnsemble, withVersion; the shipped reader js/experiments/experimentManifest.js migrateExperiment | download, memory | reads v1: a manifest without an ensemble block is still written as /1 | refused, in words | [yes](sdk/schemas/experiment-2.schema.json) |
 | gravitas.experiment-result | format, formatVersion | 1 | js/experiments/experimentManifest.js reproducibility; the bench’s records, js/experiments/store.js migrate | download, localStorage (the bench’s saved comparisons and reliability checks) | the store’s v1 to v3 and the retired gravitas-reliability-check are version 0 | refused; the analysis panel does not check | [yes](sdk/schemas/experiment-result-1.schema.json) |
 | experiment store | v, beside format and formatVersion | 3 | js/experiments/store.js migrate | localStorage | migrates v1 and v2; a record without a format is read by v | refused by reason code | no |
 | gravitas.mission-plan | format, formatVersion | 1 | js/mission/link.js readPlan | download, My work | v1 only | fields it does not know are dropped; a plan with a wrong field is refused, in words | no |

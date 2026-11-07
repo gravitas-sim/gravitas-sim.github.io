@@ -1460,7 +1460,7 @@
     {
       "file": "EXPERIMENT_ENSEMBLES.md",
       "kind": "feature",
-      "purpose": "Experiment runner II: the gravitas.experiment/2 record (named streams, the fork per trial, kernel versions), ensembles, injection campaigns, bootstrap, the pool client, replay to the digit, validation, the failed leg (Prompt 265).",
+      "purpose": "Experiment runner II: the experiment/2 record (named streams, fork per trial, kernel versions), ensembles, injection, bootstrap, pool client, replay to the digit, validation (Prompt 265).",
       "owner": 265,
       "student": false
     },

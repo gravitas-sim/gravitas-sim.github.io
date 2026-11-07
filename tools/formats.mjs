@@ -295,7 +295,7 @@ export const FORMATS = Object.freeze([
       'js/experiments/ensemble/record.js validateEnsemble, withVersion; the shipped reader js/experiments/experimentManifest.js migrateExperiment',
     persisted: 'download, memory',
     older:
-      'v1 only: a manifest without an ensemble block is still written as /1',
+      'reads v1: a manifest without an ensemble block is still written as /1',
     newer: 'refused, in words',
     schema: 'experiment-2.schema.json',
   },

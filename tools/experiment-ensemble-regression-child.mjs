@@ -19,7 +19,7 @@ const { loadRealm } = await imp('js/experiments/ensemble/trial.js');
 const { buildScenario } = await imp('js/experiments/trialRunner.js');
 const { quantile } = await imp('js/experiments/ensemble/summary.js');
 const lt = await imp('js/validation/groups/long-term-regression.js');
-const { makeLab, LAB_SETTINGS } = await imp('js/validation/harness.js');
+const { makeLab, applyLabSettings } = await imp('js/validation/harness.js');
 const { REGRESSION } = await imp('js/validation/engineTolerances.js');
 
 const lab = process.argv[2] === 'lab';
@@ -32,7 +32,7 @@ const drifts = Array.from(
       buildScenario,
       lab ? { physics: 'validation-lab' } : {},
       stream('experiments', 1000 + k),
-      lab ? LAB_SETTINGS : undefined
+      lab ? applyLabSettings : undefined
     ).quantities[0].value
 );
 const sorted = [...drifts].sort((a, b) => a - b);
