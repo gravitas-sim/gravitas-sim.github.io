@@ -7,7 +7,7 @@
   "scipy": "1.13.1",
   "astropy": "6.0.1"
  },
- "thresholdsSha256": "7eb7d488201389646bce97aa605099a6d69ddcb83dcfce029710f35f0c5ac9f3",
+ "thresholdsSha256": "d3fe79595d7c4f9cadc055942ee28008d62f6603f8692ca8c1bb78a53a968aa8",
  "planckExtractionSha256": "32d58ab4c512f939a4307219f11e4e00dbc204a97abfa6a5e3b1cca6c733a46e",
  "constants": {
   "c_kms": 299792.458,
@@ -232,6 +232,7 @@
   "rs_vs_omegaB": true,
   "rs_vs_Om": true,
   "rs_vs_zstar": false,
+  "rs_decreases_with_zstar": true,
   "DM_vs_zstar": true
  },
  "planck": {
@@ -5967,6 +5968,26 @@
   "medianSigma": 0.7838816323924571,
   "meanApexError": 2.304685755810798
  },
+ "E6a": {
+  "n": 2000,
+  "covered": 792,
+  "rate": 0.396,
+  "codes": {
+   "ok": 2000
+  },
+  "medianSigma": 0.7066085341843036,
+  "meanApexError": -0.007155802902897008
+ },
+ "E6b": {
+  "n": 2000,
+  "covered": 1508,
+  "rate": 0.754,
+  "codes": {
+   "ok": 2000
+  },
+  "medianSigma": 0.7034713992448569,
+  "meanApexError": -0.022283240687060314
+ },
  "E4": {
   "n": 500,
   "covered": 0,
@@ -8140,5 +8161,5 @@
    ]
   ]
  },
- "seconds": 5.1
+ "seconds": 5.7
 }
