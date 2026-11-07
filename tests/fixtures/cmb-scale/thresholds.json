@@ -654,6 +654,12 @@
    "recorded": "after the extraction fixture (commit 2f94a46f) and before any oracle, prototype or validator run",
    "what": "Clarification, no new condition: seeds.streamCheck (the first 1,000 uniforms of the seed text '258:cmb:peak:E1' agree exactly between the JavaScript stream and the oracle's re-implementation of mulberry32 and FNV-1a) is part of leg I1.fixtures and I1 fails if they differ; the oracle also draws the 200 grid points of G3 from its re-implementation of stream('injection', '258:cmb:grid').",
    "moves": "no bound"
+  },
+  {
+   "id": "AM3",
+   "recorded": "after AM1 and AM2 (commit edd2ebf1) and before any oracle, prototype or validator run",
+   "what": "Four clarifications of text that was ambiguous when written; no bound moves. (1) bad-window is the input refusal for data that hold a single bin (n = 1); data with two or more bins and fewer than 5 in the window are NOT refused but not-constrained with the code too-few-bins (so E4's coarse spectra, about four bins wide, give too-few-bins, and Z2's sixth input is a one-bin data set refused with bad-window). (2) P1's D_M(z_star) comes from the massive-neutrino model's own integral (the 255 kernel has no massive neutrino); the 255 kernel's value with massless radiation at the same inputs is REPORTED in X2 with the difference, and neither is a bound. (3) A2's five closed-form sets (H0, omegaB, Neff, z_star) are (70, 0.0224, 3.046, 1090), (60, 0.02, 3.046, 1000), (75, 0.025, 2.0, 1100), (67.4, 0.0224, 3.5, 1050), (50, 0.03, 3.046, 1200). (4) G2's six outside points are, for each axis of the synthetic grid in turn, the point one percent of the axis range below the first node and the one percent above the last, the other axes at their middle node.",
+   "moves": "no bound"
   }
  ],
  "decisions": [
