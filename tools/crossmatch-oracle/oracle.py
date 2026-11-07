@@ -162,6 +162,26 @@ res["O1"] = {
     "raOut": rnd(ra2, 11), "decOut": rnd(dec2, 11),
 }
 
+# O1b (AM2, thresholds.json followUp B1b): sources within 0.1 arcsec of a pole, moving past it
+rng = np.random.default_rng([2631, 1])
+nb = 20
+north = rng.random(nb) < 0.5
+dist = rng.uniform(0.005, 0.1, nb)  # arcsec from the pole
+decb = np.where(north, 90.0 - dist / 3600.0, -90.0 + dist / 3600.0)
+rab = np.round(rng.uniform(0, 360, nb), 9)
+shift = dist * rng.uniform(1.5, 3.0, nb)  # arcsec over dt
+dtb = np.full(nb, 10.0)
+pmdecb = np.where(north, 1.0, -1.0) * shift / dtb * 1000.0  # mas/yr toward the pole
+pmrab = rng.normal(0, 5.0, nb)
+decb = np.round(decb, 12)
+pmdecb, pmrab = np.round(pmdecb, 9), np.round(pmrab, 9)
+rab2, decb2 = propagate(rab, decb, pmrab, pmdecb, dtb)
+res["O1b"] = {
+    "seed": [2631, 1],
+    "ra": rnd(rab, 9), "dec": rnd(decb, 12), "pmra": rnd(pmrab, 9), "pmdec": rnd(pmdecb, 9), "dt": rnd(dtb, 9),
+    "raOut": rnd(rab2, 11), "decOut": rnd(decb2, 12),
+}
+
 # ------------------------------------------------------------------ O2 (world W1)
 rng = np.random.default_rng(2632)
 RA0, DEC0, R = 150.0, 30.0, 300.0
