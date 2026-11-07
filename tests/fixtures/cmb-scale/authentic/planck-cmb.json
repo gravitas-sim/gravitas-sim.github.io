@@ -1,0 +1,101 @@
+{
+ "format": "gravitas.cmb-scale-planck-extraction/1",
+ "note": "Written by tools/cmb-extract-planck.mjs on spike/cmb-scale-gate from the saved extracted text of arXiv:1807.06209 (Carl's session, 2026-11-06), by anchored row, after thresholds.json (commit 641c275e) and before any oracle, prototype or validator run; nothing typed by hand.",
+ "source": {
+  "identifier": "arXiv:1807.06209",
+  "savedTextSha256": "75476bdbcfeb893c3be2274cb796becf55a9a174c40b4c265a9fcc9870fa0a4d",
+  "rights": "D-R10-255-11 (same document, same use: printed numbers, no text reproduced)"
+ },
+ "values": {
+  "omegaB": "0.022383",
+  "omegaC": "0.12011",
+  "H0": "67.32",
+  "theta100Table1Best": "1.041085",
+  "zstar": "1089.92",
+  "zstarSigma": "0.25",
+  "rstar": "144.43",
+  "rstarSigma": "0.26",
+  "theta100Table2": "1.04110",
+  "theta100Table2Sigma": "0.00031",
+  "neutrinoMassEv": "0.06"
+ },
+ "where": {
+  "omegaB": "Table 1, Plik best fit column",
+  "omegaC": "Table 1, Plik best fit column",
+  "H0": "Table 1, Plik best fit column",
+  "theta100Table1Best": "Table 1, Plik best fit column (100 theta_star, the full numerical result of the Boltzmann code)",
+  "zstar": "Table 2, fifth numerical column (TT,TE,EE+lowE+lensing), a marginalised mean",
+  "zstarSigma": "the same entry, printed uncertainty",
+  "rstar": "Table 2, fifth numerical column, a marginalised mean, Mpc",
+  "rstarSigma": "the same entry, printed uncertainty",
+  "theta100Table2": "Table 2, fifth numerical column, a marginalised mean (reported only)",
+  "theta100Table2Sigma": "the same entry, printed uncertainty",
+  "neutrinoMassEv": "Table 1's caption: Omega_m includes one neutrino of 0.06 eV"
+ },
+ "assumptions": [
+  "Neff = 3.046 is ASSUMED: not read from the paper",
+  "the columns are mixed: a best-fit parameter vector (Table 1) with a marginalised-mean z_star and r_star (Table 2)"
+ ],
+ "lines": [
+  {
+   "line": 1136,
+   "text": "Parameter Plik best fit Plik [1] CamSpec [2] ([2] − [1])/σ1 Combined",
+   "label": "Table 1 header: the first numerical column is the Plik best fit"
+  },
+  {
+   "line": 1139,
+   "text": "0.022383 0.02237 ± 0.00015 0.02229 ± 0.00015 −0.5 0.02233 ± 0.00015",
+   "label": "omega_b h^2, best fit (the row label is split over two lines above)"
+  },
+  {
+   "line": 1140,
+   "text": "Ωc h2 . . . . . . . . . . . . . 0.12011 0.1200 ± 0.0012 0.1197 ± 0.0012 −0.3 0.1198 ± 0.0012",
+   "label": "omega_c h^2, best fit"
+  },
+  {
+   "line": 1147,
+   "text": "H0 [ km s−1 Mpc−1 ] . . . 67.32 67.36 ± 0.54 67.39 ± 0.54 +0.1 67.37 ± 0.54",
+   "label": "H0, best fit"
+  },
+  {
+   "line": 1153,
+   "text": "100θ∗ . . . . . . . . . . . . 1.041085 1.04110 ± 0.00031 1.04106 ± 0.00031 −0.1 1.04108 ± 0.00031",
+   "label": "100 theta_star, best fit, Table 1 (the full numerical result)"
+  },
+  {
+   "line": 1133,
+   "text": "parameters are derived from the first six. Note that Ωm includes the contribution from one neutrino with a mass of 0.06 eV. The",
+   "label": "Table 1's caption: Omega_m includes one neutrino of 0.06 eV"
+  },
+  {
+   "line": 1134,
+   "text": "quantity θMC is an approximation to the acoustic scale angle, while θ∗ is the full numerical result.",
+   "label": "Table 1's caption: theta_star is the full numerical result, theta_MC an approximation"
+  },
+  {
+   "line": 1174,
+   "text": "TT+lowE TE+lowE EE+lowE TT,TE,EE+lowE TT,TE,EE+lowE+lensing TT,TE,EE+lowE+lensing+BAO",
+   "label": "Table 2 header: the fifth numerical column is TT,TE,EE+lowE+lensing"
+  },
+  {
+   "line": 1220,
+   "text": "z∗ . . . . . . . . . . . 1090.30 ± 0.41 1089.57 ± 0.42 1087.8+1.6",
+   "label": "z_star row, columns 1 to 3 (the third is split over two lines)"
+  },
+  {
+   "line": 1221,
+   "text": "−1.7 1089.95 ± 0.27 1089.92 ± 0.25 1089.80 ± 0.21",
+   "label": "z_star row, columns 4 to 6"
+  },
+  {
+   "line": 1222,
+   "text": "r∗ [Mpc] . . . . . . . . 144.46 ± 0.48 144.95 ± 0.48 144.29 ± 0.64 144.39 ± 0.30 144.43 ± 0.26 144.57 ± 0.22",
+   "label": "r_star row"
+  },
+  {
+   "line": 1223,
+   "text": "100θ∗ . . . . . . . . . 1.04097 ± 0.00046 1.04156 ± 0.00049 1.04001 ± 0.00086 1.04109 ± 0.00030 1.04110 ± 0.00031 1.04119 ± 0.00029",
+   "label": "100 theta_star row of Table 2"
+  }
+ ]
+}
