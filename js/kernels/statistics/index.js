@@ -9,3 +9,4 @@ export * from './resample.js';
 export * from './diagnostics.js';
 export * from './compare.js';
 export * from './selection.js';
+export * from './modelcompare.js';
