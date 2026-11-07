@@ -1,0 +1,66 @@
+{
+ "format": "gravitas.bao-planck-extraction/1",
+ "note": "Written by tools/bao-extract-planck.mjs on spike/bao-gate from the saved extracted text of arXiv:1807.06209 (Carl's session, 2026-11-06), by line, after AM2 of thresholds.json; nothing typed by hand.",
+ "source": {
+  "identifier": "arXiv:1807.06209",
+  "savedTextSha256": "75476bdbcfeb893c3be2274cb796becf55a9a174c40b4c265a9fcc9870fa0a4d",
+  "rights": "D-R10-255-11 (same document, same use: printed numbers, no text reproduced)"
+ },
+ "values": {
+  "omegaB": "0.022383",
+  "omegaC": "0.12011",
+  "H0": "67.32",
+  "rdrag": "147.049",
+  "zdrag": "1059.94",
+  "zdragSigma": "0.30",
+  "neutrinoMassEv": "0.06"
+ },
+ "where": {
+  "omegaB": "Table 1, Plik best fit column",
+  "omegaC": "Table 1, Plik best fit column",
+  "H0": "Table 1, Plik best fit column",
+  "rdrag": "Table 1, Plik best fit column",
+  "zdrag": "Table 2, fifth numerical column (TT,TE,EE+lowE+lensing), a marginalised mean",
+  "zdragSigma": "the same entry, printed uncertainty",
+  "neutrinoMassEv": "Table 1's caption: Omega_m includes one neutrino of 0.06 eV"
+ },
+ "lines": [
+  {
+   "line": 1136,
+   "text": "Parameter Plik best fit Plik [1] CamSpec [2] ([2] − [1])/σ1 Combined"
+  },
+  {
+   "line": 1139,
+   "text": "0.022383 0.02237 ± 0.00015 0.02229 ± 0.00015 −0.5 0.02233 ± 0.00015",
+   "label": "omega_b h^2 (the row label is split over lines 1137 and 1138: \"Ωb h\", \"2\")"
+  },
+  {
+   "line": 1137,
+   "text": "Ωb h . . . . . . . . . . . . ."
+  },
+  {
+   "line": 1140,
+   "text": "Ωc h2 . . . . . . . . . . . . . 0.12011 0.1200 ± 0.0012 0.1197 ± 0.0012 −0.3 0.1198 ± 0.0012"
+  },
+  {
+   "line": 1147,
+   "text": "H0 [ km s−1 Mpc−1 ] . . . 67.32 67.36 ± 0.54 67.39 ± 0.54 +0.1 67.37 ± 0.54"
+  },
+  {
+   "line": 1154,
+   "text": "rdrag [Mpc] . . . . . . . . . 147.049 147.09 ± 0.26 147.26 ± 0.28 +0.6 147.18 ± 0.29"
+  },
+  {
+   "line": 1174,
+   "text": "TT+lowE TE+lowE EE+lowE TT,TE,EE+lowE TT,TE,EE+lowE+lensing TT,TE,EE+lowE+lensing+BAO"
+  },
+  {
+   "line": 1224,
+   "text": "zdrag . . . . . . . . . . 1059.39 ± 0.46 1060.03 ± 0.54 1063.2 ± 2.4 1059.93 ± 0.30 1059.94 ± 0.30 1060.01 ± 0.29"
+  },
+  {
+   "line": 1133,
+   "text": "parameters are derived from the first six. Note that Ωm includes the contribution from one neutrino with a mass of 0.06 eV. The"
+  }
+ ]
+}
