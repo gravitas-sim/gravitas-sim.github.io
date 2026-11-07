@@ -1409,6 +1409,13 @@
       "student": false
     },
     {
+      "file": "COSMOLOGY_CLOSEOUT_II.md",
+      "kind": "record",
+      "purpose": "The cosmology closeout (Prompt 260): what 255 to 259 landed, what a student can do today, each closeout item done, not applicable or blocked, the cohesion record.",
+      "owner": 260,
+      "student": false
+    },
+    {
       "file": "EXTRAGALACTIC_CLOSEOUT.md",
       "kind": "record",
       "purpose": "The extragalactic and interstellar-medium closeout (Prompt 253): what 247 to 252 landed, each closeout item done or blocked, the package reading step, the cohesion record.",
