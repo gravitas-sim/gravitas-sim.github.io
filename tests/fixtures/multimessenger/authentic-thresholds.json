@@ -1,0 +1,112 @@
+{
+  "format": "gravitas.multimessenger-authentic-thresholds/1",
+  "prompt": "Roadmap III, Prompt 244 follow-up: the authentic-data legs B2, B4 and E1 of the multi-messenger gate (E3 stays NOT RUN: no kilonova photometry was fetched)",
+  "document": "MULTIMESSENGER.md (\"Authentic-data legs\"), written after this file",
+  "committed": "before the three authentic files were copied into tests/fixtures/multimessenger/authentic/, before the validator or any oracle script was run on them, and before any result of this follow-up existed. What the session had read before writing this file: Carl's three data files and the extracted text of the published paper (to see their shape and the paper's own definition of the delay), and Carl's session notes. It had also done two pieces of hand arithmetic, stated here so they are not hidden: (i) the printed bound's upper end evaluates to 6.502e-16 for 1.74 s, 26 Mpc and a zero emission delay, which is 0.03 percent above the midpoint 6.5e-16 of the rounding to one figure, so B4's upper end sits on the paper's own rounding edge; (ii) the trigger-minus-merger delay is about 2.05 s, not 1.74 s (the paper's 1.74 s is the burst's emission ONSET, see the reading below). No bound below was chosen after either number: each is inherited unchanged from thresholds.json or is a formula over printed numbers and bounds already committed there.",
+  "rule": "Every numeric bound of B2, B4 and E1 is the bound thresholds.json already committed for that leg; the legs and bounds added here (B2b, B4o, E1b) are each either an exact equality, a bound inherited from a committed leg of the same kind (the 1e-6 s time bound, B3's 1e-9 relative bound for exact-rational comparisons), or a formula over printed numbers and a committed form (E1's 0.05 + 3 sigma). A crossed bound is a failed leg, recorded in failed-legs.json and left failing; only Carl resets one. A leg that cannot be measured is NOT RUN and says why. The amendments below were written before any validator run on the authentic files; nothing is moved after a result. No published number is typed from memory: every authentic number comes from a file under tests/fixtures/multimessenger/authentic/ (the two numbers of published-bound-supplement.json were read by this session from the supplied paper text by search, with a locator). The bands (gamma-ray, optical) are never called messengers; the two messengers are gravitational waves and photons; the speed bound is never stated without its emission-delay assumption.",
+  "pins": {
+    "note": "sha256 of the files as Carl's session retrieved them (outside any repository); the copies under authentic/ must match byte for byte (tests/multimessengerResults.test.js)",
+    "leap-seconds.list": "db5a895f16853b03bfc865e8d68f9fc8710ef1740e3400c701cd46a5bbbc3433",
+    "published-bound.json": "22bca5bf78bf09c23628ce4d5a9bf257b9850e9873720b73f5ad5d51a21e47ff",
+    "grb-trigger.json": "32680d1e91fd416ff379cab4517d3e87c83ce46eaf14b1a219ba0070cd267200",
+    "paperTextSha256": "7fd295d66324e299f3a9395f7cef2955f726387be93cb463748077f84a98803c",
+    "paperPdfSha256": "bf06bd2ae6a23cf7f7092307677c2b681ce02abab3b5bbe37bbce76a8960140a",
+    "fitsHeaderSha256": "db49f7e685d41b11847eeabd6d58f93a2ba1892aa6ac2810dee21fa90b9550fe",
+    "retrieved": "2026-11-06"
+  },
+  "packMergerGps": {
+    "value": 1187008882.4,
+    "locator": "js/data/gw/gwoscEvents.js, EVENTS.GW170817.gps (the existing GWOSC pack, 0.1 s precision); the validator asserts the equality, the oracle reads the value from here"
+  },
+  "readings": [
+    {
+      "id": "R1",
+      "what": "What the paper's 1.74 s is. Read from the extracted text of arXiv:1710.05834 (sha above), Section 2 (the paragraph on the fit of the main pulse): the fit gives 'a gamma-ray emission onset of 0.310 +/- 0.048 s before T0GBM, where T0GBM is defined as the time of the GBM trigger'; the signal 'arrives at Fermi 3.176 ms before it arrives at geocenter'; 'With this correction we find that the start of the gamma-ray emission relative to the T0GW is (+1.74 +/- 0.05) s'. So the published delay is the burst's emission onset at the geocenter minus T0GW, NOT the instrument trigger minus the merger time. Section 4.1 then uses it as the delay with D = 26 Mpc and emission offsets of 0 and 10 s. The 'definition' text of published-bound.json (Carl's session's transcription) says the paper's own definition is of the GBM trigger against the GW time; the paper's text, read here, says onset. The disagreement is recorded, not resolved by editing Carl's file.",
+      "consequence": "E1 as committed requires the published delay to be defined merger-to-trigger; it is not, so by the committed rule E1 is NOT RUN, with the difference of definitions recorded and never absorbed into a tolerance. B4 is unaffected: the bound's emission-offset assumption (zero or ten seconds) is measured from the same onset the 1.74 s is."
+    },
+    {
+      "id": "R2",
+      "what": "published-bound.json prints the bound's two ends as strings ('-3e-15', '+7e-16'). The committed B4 rule compares the kernel's rounded value with the printed pair; a string cannot equal a number under the validator's strict comparison, so the validator parses the printed strings with Number() before comparing (the rule itself is unchanged)."
+    },
+    {
+      "id": "R3",
+      "what": "The Fermi trigger time is a mission elapsed time in the header's TIMESYS 'TT' with MJDREF 51910 + 7.428703703703703D-4 (read as 51910.00074287037037, the Fortran D exponent read as e): that is 2001-01-01T00:01:04.184 TT, which is the instant 2001-01-01T00:00:00 UTC (32 s of TAI - UTC plus 32.184 s of TT - TAI). The kernel's FERMI_MET (SI seconds since 2001-01-01T00:00:00 UTC) is the same count; the oracle of E1b builds the trigger instant from the header's MJDREF in TT, independent of the kernel's epoch convention and of any leap list, and so tests that convention too."
+    }
+  ],
+  "supplement": {
+    "path": "tests/fixtures/multimessenger/authentic/published-bound-supplement.json",
+    "why": "two numbers E1b needs are printed in the paper's text (reading R1) but are not fields of published-bound.json, which stays byte for byte as supplied; they are recorded in a separate file with the locator and the paper's text hash, read from the supplied text by search, not from memory"
+  },
+  "checks": [
+    {
+      "id": "B2.timeAuthentic",
+      "leg": "b",
+      "what": "unchanged from thresholds.json: the kernel under the authentic list against astropy (erfa's own table) on the 200 instants of oracle-astropy-times.json (pinned before the list existed), and the list's own consistency (first of a month, integer steps, ascending, 19 s at the GPS epoch, not expired at the retrieval date)",
+      "limits": { "inheritedFrom": "thresholds.json B2.timeAuthentic", "maxGpsErrorS": 1e-6, "maxMetErrorS": 1e-6, "rule": "a double at 1.2e9 s spaces 2.4e-7 s, so 1e-6 s is the finest bound a leg can meet (B1's rule)" }
+    },
+    {
+      "id": "B2b.leapListParse",
+      "leg": "b",
+      "what": "the list as the validator's parser reads it equals an independent Python parse of the same file (tools/multimessenger-oracle/oracle-published.py: re and datetime, python -E, no Gravitas code): the number of entries, each entry's NTP seconds, calendar date and TAI - UTC, and the '#$' and '#@' lines. An exact equality, no tolerance: a parse is right or it is not.",
+      "limits": { "rule": "exact equality of the entry list and of both header numbers", "needs": "authentic/leap-seconds.list, oracle-published.json", "ifMissing": "NOT RUN" }
+    },
+    {
+      "id": "B4.boundPublished",
+      "leg": "b",
+      "what": "unchanged from thresholds.json: with the delay, the distance and the emission-delay interval the paper prints (from published-bound.json), the kernel's interval rounded to the printed number of significant figures equals the printed pair (reading R2: the strings are parsed). The paper's delay is an onset (reading R1), which is what the bound's emission-offset assumption is measured from.",
+      "limits": { "inheritedFrom": "thresholds.json B4.boundPublished", "rule": "Number(kernel.toPrecision(printedSignificantFigures)) equals Number(printed) for both ends", "knifeEdge": "the upper end is 0.03 percent above the rounding midpoint (see 'committed'); the rule is applied as committed, no tolerance is added" }
+    },
+    {
+      "id": "B4o.boundOracle",
+      "leg": "b",
+      "what": "the kernel's first-order interval for the same inputs against an independent Python computation in exact rational arithmetic (Fractions; c and the astronomical unit as exact integers, the parsec as 648000/pi astronomical units with pi from a Machin series; python -E, no Gravitas code; tools/multimessenger-oracle/oracle-published.py), and the oracle's own rounding to the printed figures equals the printed pair.",
+      "limits": { "maxRel": 1e-9, "inheritedFrom": "thresholds.json B3.boundExact (exact-rational comparisons of the same quantity)", "oracleRoundingEqualsPrinted": true, "needs": "authentic/published-bound.json, oracle-published.json", "ifMissing": "NOT RUN" }
+    },
+    {
+      "id": "E1.delayFromPacks",
+      "leg": "e",
+      "what": "unchanged from thresholds.json: the kernel's delay from the pack's merger time and the archive's trigger time agrees with the published delay if and only if both are defined merger-to-trigger; tolerance 0.05 s + 3 sigma. By reading R1 the published delay is an emission onset, so the leg is NOT RUN, with the difference of definitions recorded and never absorbed into the tolerance.",
+      "limits": { "inheritedFrom": "thresholds.json E1.delayFromPacks", "tolerance": "0.05 + 3 * sigma_published", "expected": "NOT RUN (reading R1)" }
+    },
+    {
+      "id": "E1b.onsetDelayFromPacks",
+      "leg": "e",
+      "what": "the comparison that the definitions permit. Two parts, both required. (i) The kernel's trigger-minus-merger delay (the pack's merger time on GPS and the header's trigger time on FERMI_MET, through the authentic leap list) equals the delay computed by an independent Python oracle (astropy.time: the trigger instant from the header's MJDREF in TT plus the elapsed seconds, converted to GPS by astropy's own table; no Gravitas code) within 1e-6 s. (ii) That delay agrees with the delay the paper's printed numbers imply for the trigger: expected = 1.74 + 0.310 - 0.003176 s (the onset at geocenter after T0GW, plus the onset's lead over the trigger, less the 3.176 ms the signal reaches Fermi before geocenter; reading R1), within tolerance = 0.05 + 3 * sigma, with sigma = sqrt(0.05^2 + 0.048^2) (the paper's two printed uncertainties taken as independent: an assumption, since both come from one fit and one lag, and the real combined uncertainty may be smaller or larger). The 0.05 s is E1's half of the pack's 0.1 s time precision, which also covers the pack's merger time being 0.03 s from the paper's own T0GW = 1187008882.430 (supplement). Reported beside it, not judged: the literal difference between the kernel's delay and the printed 1.74 s.",
+      "limits": {
+        "oracleToleranceS": 1e-6,
+        "expectedS": "delay + onsetBeforeTrigger - geocenterCorrection, from published-bound.json and the supplement",
+        "toleranceS": "0.05 + 3 * sqrt(sigmaDelay^2 + sigmaOnset^2)",
+        "inheritedFrom": "thresholds.json E1.delayFromPacks (0.05 + 3 sigma) and B1.timeOracle (1e-6 s)",
+        "cannotSee": "an error in the time conversion smaller than the tolerance (about 0.26 s); it does see a leap-second error (a whole second or more), a wrong epoch, a GPS/TT mix-up, and a trigger-for-onset confusion that is not offset by the 0.310 s",
+        "needs": "authentic/published-bound.json, authentic/published-bound-supplement.json, authentic/grb-trigger.json, authentic/leap-seconds.list, oracle-published.json",
+        "ifMissing": "NOT RUN"
+      }
+    },
+    {
+      "id": "E3.kilonovaReddening",
+      "leg": "e",
+      "what": "unchanged: NOT RUN. No kilonova photometry was fetched (Carl's instruction); the synthetic illustrative path stands and its rights basis is unchanged.",
+      "limits": { "expected": "NOT RUN (authentic/kilonova-photometry.csv not supplied)" }
+    }
+  ],
+  "amendments": [
+    {
+      "id": "AM5",
+      "check": "B4.boundPublished",
+      "what": "reading R2: the printed bound ends are strings in the supplied file and are parsed with Number() before the committed comparison. A specification slip found by reading the file's shape before any validator run, not a result.",
+      "when": "2026-11-06, before any validator run on the authentic files"
+    },
+    {
+      "id": "AM6",
+      "check": "E1.delayFromPacks",
+      "what": "reading R1: the supplied file's free-text delay definition is not the token the committed validator tests ('trigger-minus-merger'), and the paper's text defines the 1.74 s as an emission onset. E1 therefore stays as committed and is expected NOT RUN with its reason; the validator's note names the paper's own definition. Nothing about E1's tolerance changes.",
+      "when": "2026-11-06, before any validator run on the authentic files"
+    },
+    {
+      "id": "AM7",
+      "check": "B2, B4, E1",
+      "what": "three legs added beside the committed ones, so that each authentic leg has an independent reference where the gate pattern calls for one and so that the delay can be compared on the definition the paper gives: B2b (an independent parse of the leap list), B4o (an exact-rational oracle of the bound) and E1b (the delay to the trigger from the pack and the header, against astropy and against the paper's own printed numbers). They add judgements; they remove none and loosen none. E1b's expected value is derived from the paper's text (reading R1) after the session knew the delay to the trigger is near 2.05 s; its tolerance form is E1's committed one, and its use of the printed 0.310 s is the point of the leg, not a way to make it pass: the leg would fail by more than 1 s if the leap seconds or the epoch were wrong.",
+      "when": "2026-11-06, before any validator run on the authentic files"
+    }
+  ]
+}
