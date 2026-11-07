@@ -1,0 +1,742 @@
+{
+ "format": "gravitas.cmb-scale-gate-thresholds/1",
+ "prompt": "Roadmap III, Prompt 258 Part A, The microwave background's angular scale: a geometry demonstration (tranche T5, authorized by Checkpoint V's recorded outcome CONTINUE AS PLANNED, DECISIONS_2026-11-06.md; prerequisites 255 and 157 are merged on v3). Documentation and fixtures only; the prototype, the oracle and the validator live on spike/cmb-scale-gate and are never merged (7.5 rule 4).",
+ "document": "CMB_SCALE_GATE.md (the conventions, the legs, the measurements, the verdict, the requests), written after this file",
+ "committed": "before any prototype code, validator, oracle script or oracle output of this prompt existed, and before any sound horizon, angular diameter distance, acoustic scale, peak fit, coverage rate or interval of this prompt was computed. Nothing was fetched and no published number, coefficient, offset, spectrum value, licence term or citation detail was typed from memory.",
+ "rule": "A crossed bound is a failed leg, recorded in failed-legs.json and left failing; only Carl resets one. A leg that cannot be measured (a file not supplied, a source text not fetched, a code not run) is NOT RUN and carries an exact request. Amendments are recorded in this file (amendments array) before any validator run and move no bound; a leg is added only as a NEW leg with its bound committed before its first run. A threshold that proves unmeasurable fails the gate on that threshold. Nothing is moved, re-read or re-defined after a result. A leg whose inputs were seen before this file was committed is labelled NOT BLIND in its row.",
+ "seenBeforeCommitting": [
+  "The roadmap sections named by CLAUDE.md for this prompt (7, 7.5, 12.1, 13, Appendix C, section 258), DECISIONS_2026-11-05.md to DECISIONS_2026-11-07.md, CONTINUATION_CHECKPOINT_V.md (the lines that name 258 or the consumers rule), BAO_GATE.md (both parts) and its thresholds file, COSMOLOGY_II.md sections 1 and 2.",
+  "The 257 spike's prototype (the sound-horizon integral, the radiation function, the one-massive-neutrino integral of P1c) and its oracles, read to reuse their structure; js/kernels/cosmology/late (the API, the domain z <= 1e4), js/dataKinds/grid.js (readGrid, interpolate: multilinear, refuses outside), js/random/streams.js, js/numeric/polyfit.js.",
+  "Carl's saved extracted text of arXiv:1807.06209 (scratch-data/cosmo255/1807.06209.txt), lines 1128 to 1240: the printed rows of Table 1 (best-fit column: omega_b h^2, omega_c h^2, H0, 100 theta_star, r_drag) and of Table 2 (fifth numerical column: z_star, r_star, 100 theta_star, z_drag), as PRINTED NUMBERS, while locating the rows that legs P1 and P2 name. No quantity of this gate was computed from them. Legs P1 and P2 are therefore NOT BLIND: their bounds below are set by the rule stated in their text, not from any computed result.",
+  "The saved text's abstract states the angular acoustic scale precision (0.03 percent) and that theta_star is the full numerical result of the Boltzmann code while theta_MC is an approximation (the caption of Table 1).",
+  "No fitting formula, coefficient, peak-offset formula, binned spectrum value or Boltzmann-code output was read: none is available to this session and none is typed."
+ ],
+ "conventions": {
+  "commitment": "Every quantity below is defined here, in SI-free cosmological units (Mpc, km/s/Mpc, densities as fractions of the critical density), and is the only meaning the gate, the prototype and any later lesson may give it.",
+  "recombinationRedshift": {
+   "definition": "z_star is the redshift of recombination (the peak of the photon visibility function in the Boltzmann code that defines it). It is an INPUT of every function of the gate: no fitting formula for it is implemented, because its coefficients are published data (request F1).",
+   "designDomain": "z_star in [800, 1500]; outside it the function refuses with code bad-recombination-redshift. This is a DESIGN domain of the integral, not the domain of any cited fitting formula; that domain is part of request F1 and is NOT COMMITTED here."
+  },
+  "soundHorizon": {
+   "definition": "r_s(z_star) = Int_0^{a_star} c_s c da / (a^2 H(a)), a_star = 1/(1 + z_star), c_s = 1/sqrt(3 (1 + R)), R = 3 rho_b / (4 rho_gamma) = (3 omegaB / (4 omegaGamma)) a, a^2 H = H0 sqrt(Om a + Or + Ok a^2 + Ode a^(1 - 3 w)) finite at a = 0, in Mpc, comoving.",
+   "whyTheIntegral": "r_s must come from the integral: DECISIONS_2026-11-07.md and BAO_GATE.md section 10 record that the Eisenstein and Hu 1998 fitting formula for the sound horizon fails its legs and that the drag-redshift fit is 3.7 percent from the printed value; no fitting formula stands in for the integral anywhere in this gate.",
+   "radiation": "omegaGamma from T = 2.7255 K (astropy 6.0.1's Planck18 Tcmb0, read by the oracle from the installed data file and pinned) with the exact SI constants and G from astropy.constants; photons plus massless neutrinos with Neff = 3.046 give Or h^2 = omegaGamma (1 + (7/8)(4/11)^(4/3) Neff). Generic worlds (groups relation, oracle, refusals) use this massless treatment; the published comparison (P1, P2) models one 0.06 eV species by its Fermi-Dirac density as P1c of the 257 follow-up did.",
+   "massiveNeutrino": "For P1 and P2 only: one of the three species of weight Neff/3 has mass m = 0.06 eV with density rho_nu(a) = rho_gamma(a) (7/8)(4/11)^(4/3) (Neff/3) f(y0 a), f(y) = [Int_0^inf x^2 sqrt(x^2 + y^2) / (e^x + 1) dx] / (7 pi^4/120), y0 = m / (k T_nu0), T_nu0 = (4/11)^(1/3) T; the other two are massless; the cosmological constant is chosen to close flatness today. D_M(z_star) uses the same E(a)."
+  },
+  "angularDiameterDistance": {
+   "definition": "D_M(z_star) is the comoving transverse (angular-diameter-comoving) distance at z_star, in Mpc: D_M = (c/H0) S_k(chi), chi = Int_0^{z_star} dz / E(z), S_k = sinh(sqrt(Ok) chi)/sqrt(Ok) (Ok > 0), chi (Ok = 0), sin(sqrt(-Ok) chi)/sqrt(-Ok) (Ok < 0), with radiation included in E, supplied by the 255 kernel (js/kernels/cosmology/late, validated to z = 1100 against astropy). The angular-diameter distance is D_M/(1 + z_star), and the gate always uses the comoving D_M with the comoving r_s."
+  },
+  "acousticScale": {
+   "theta": "theta_star = r_s(z_star) / D_M(z_star), in radians, the angle subtended by the comoving sound horizon; 100 theta_star is the number a CMB paper prints (about 1.04 for the Planck cosmology); theta_MC (the code's approximation) is not used.",
+   "ellA": "ell_A = pi / theta_star, the acoustic multipole (the spacing of the peaks).",
+   "firstPeak": "the position of the m-th peak is ell_m = ell_A (m - phi_m); for m = 1, ell_1 = ell_A (1 - phi_1). The offset phi_1 is a phase shift (driving, the early-ISW effect, the baryon-photon ratio) that depends weakly on the parameters; its cited fitting formula is published data and is request F2. In this gate phi_1 is an INPUT with design domain [0, 0.5]; outside it the function refuses with code bad-offset. A value of phi_1 used in a leg is labelled DESIGN, never the cited offset.",
+   "inverse": "theta_star = pi (1 - phi_1) / ell_1: the geometry a lesson may read from the first peak's position is theta_star under the stated offset, then D_M(z_star) = r_s / theta_star at an r_s the lesson states with its inputs; an Omega_k or a curvature statement is conditional on those inputs and on the offset, and is never unconditional."
+  }
+ },
+ "claimRule": {
+  "rule": "A lesson reads the geometry (the angular scale, theta_star, D_M(z_star), and a curvature statement conditional on stated inputs) from the position of the first peak through the stated relation. It NEVER reads a Hubble constant, a matter or baryon density or any composition from which precomputed grid spectrum looks closest to a measured spectrum; a grid is a comparison drawn at the grid node nearest to the parameters the student sets, with at most linear interpolation between grid nodes, stated; a grid is never a fitter.",
+  "testForm": "A sentence violates iff it matches GRID and READ and does not match NEG (case-insensitive, Unicode word boundaries, sentences split on . ! ? ; and newlines). GRID: grid, nearest spectrum, closest spectrum, closest model, closest curve, looks closest, look closest, best-matching spectrum, best matching spectrum, best-matching model, rejilla, cuadricula, cuadrícula, espectro mas cercano, espectro más cercano, espectro mas parecido, espectro más parecido, se parece mas, se parece más. READ: H0, Hubble constant, constante de Hubble, composition, composicion, composición, baryon density, densidad barionica, densidad bariónica, matter density, densidad de materia, dark matter, materia oscura, Omega_m, Omega m, omega_b, omega_c. NEG: not, never, cannot, can't, does not, doesn't, no, nunca, jamas, jamás, sin, ni, no se.",
+  "scanScope": "K3 scans every string of the shipped English and Spanish catalogues and lesson files for sentences that contain a CMB context word (CMB, microwave background, cosmic microwave, acoustic scale, acoustic peak, fondo cosmico de microondas, fondo cósmico de microondas, escala acustica, escala acústica, pico acustico, pico acústico) and applies the rule to them; today no CMB lesson exists, so the expected count of violations is 0 and the count of scanned context sentences is reported.",
+  "violating": [
+   "The grid spectrum that looks closest to the data gives the Hubble constant.",
+   "Pick the closest model in the grid and read off the matter density.",
+   "The nearest spectrum in the grid tells us the composition of the universe.",
+   "Whichever grid curve fits best shows the dark matter fraction.",
+   "The best-matching model in the grid measures H0 for the CMB.",
+   "From the closest curve in the grid we get the baryon density.",
+   "El espectro de la rejilla que se parece más a los datos da la constante de Hubble.",
+   "Elige el modelo más cercano de la cuadrícula y lee la densidad de materia.",
+   "El espectro más cercano de la rejilla nos dice la composición del universo.",
+   "La curva de la cuadrícula que mejor ajusta muestra la materia oscura.",
+   "El espectro más parecido de la rejilla mide H0 con el fondo cósmico de microondas.",
+   "De la curva más cercana de la rejilla obtenemos la densidad bariónica."
+  ],
+  "clean": [
+   "The position of the first peak gives the angular scale of the sound horizon.",
+   "The grid is a comparison only; it does not give the Hubble constant.",
+   "Nearest grid spectrum to your slider values is drawn with its parameters shown.",
+   "The peak position depends on the geometry, and the grid never fixes a composition.",
+   "A closed universe moves the first peak to a different multipole than a flat one.",
+   "Between grid points the spectrum is interpolated linearly, as stated here.",
+   "La posición del primer pico da la escala angular del horizonte sonoro.",
+   "La rejilla es solo una comparación; no da la constante de Hubble.",
+   "Se dibuja el espectro de la rejilla más cercano a los valores de tus controles.",
+   "La posición del pico depende de la geometría, y la rejilla nunca fija una composición.",
+   "Un universo cerrado desplaza el primer pico a otro multipolo que uno plano.",
+   "Entre los puntos de la rejilla el espectro se interpola linealmente, como se indica aquí."
+  ]
+ },
+ "peakFit": {
+  "label": "The bounded peak fit of the gate's prototype (a weighted quadratic by least squares, deliberately the simplest bounded method; the fitter authority of 154 and js/numeric/polyfit.js supply the least-squares step in the product kernel, and the oracle uses numpy lstsq).",
+  "input": "bins: centre ell_c (strictly increasing, finite), value D (finite) and sigma (finite, > 0), equal length >= 1; refusals: not-finite, bad-sigma, not-sorted, length-mismatch, empty.",
+  "window": "k = the index of the largest D; the window holds the bins with |ell_c - ell_c[k]| <= 75 multipoles (inclusive).",
+  "model": "t = (ell - ell_c[k]) / 75; D = a + b t + c t^2 by weighted least squares with weights 1/sigma^2; the apex is t* = -b / (2c), ell* = ell_c[k] + 75 t*.",
+  "interval": "sigma_ell = 75 sqrt(g^T V g) with g the gradient of t* with respect to (a, b, c) and V the coefficient covariance (A^T W A)^-1 (not rescaled by chi-square); the 68.27 percent interval is ell* +- sigma_ell and the 95.45 percent interval ell* +- 2 sigma_ell (the Gaussian delta-method intervals).",
+  "notConstrained": "In this order, the fit returns not-constrained with the first code that holds: too-few-bins (fewer than 5 bins in the window), no-curvature (c >= 0 or c / sigma_c > -5), apex-outside-window (|t*| > 1), interval-too-wide (2 sigma_ell > 150, the window's width). A not-constrained fit returns no apex and no interval number.",
+  "whyFiveSigma": "The window is centred on the largest bin, which is biased towards an upward fluctuation, so a flat noisy spectrum is concave more often than a coin; the 5 sigma curvature cut is the committed defence and leg E5 measures it."
+ },
+ "syntheticPeak": {
+  "label": "DESIGN, not any measurement's, not the CMB's: a labelled synthetic binned spectrum with its truth manifest (7.5 rule 8). It has a skewed peak so that the quadratic fit is not exact; it says nothing about real spectra and recovery of it alone validates nothing for real data.",
+  "truth": {
+   "ell0": 230.0,
+   "base": 800.0,
+   "amplitude": 4600.0,
+   "widthBelow": 60.0,
+   "widthAbove": 66.0,
+   "form": "D(ell) = base + amplitude exp(-(ell - ell0)^2 / (2 w^2)), w = widthBelow for ell < ell0, widthAbove otherwise; the maximum is at ell0 exactly."
+  },
+  "binning": "bin centres ell_c = u + width k for k = 0..N with u a uniform draw in [0, width) per draw ('grid phase') and the centres in [20, 700]; each bin's value is the truth at its centre (no averaging over the bin: a stated simplification), sigma = 0.015 D_true(ell_c) (relative), the data = D_true + sigma z, z standard normal.",
+  "widths": {
+   "fine": 30,
+   "coarse": 200
+  },
+  "noPeak": "D = 3000 at every centre, sigma 0.015 D, the same binning; there is no peak.",
+  "draws": {
+   "E1": 2000,
+   "E2": 2000,
+   "E4": 500,
+   "E5": 500
+  },
+  "coverageRule": "a draw covers when ell0 lies in the interval of a fit that is not not-constrained; a not-constrained draw counts as NOT covering (so a fit that refuses often fails its leg); the rate is judged against the nominal 0.6827 (E1) and 0.9545 (E2) with a binomial three-sigma band sqrt(p (1 - p) / n) x 3, separately for the prototype and the oracle.",
+  "symmetricTruth": {
+   "label": "DESIGN (AM4, NOT BLIND): the same peak with widthBelow = widthAbove = 60 and the same binning and noise, so that the quadratic fit's apex is not biased by a skew and the delta-method interval can be judged on its own. Max at ell0 exactly.",
+   "draws": {
+    "E6a": 2000,
+    "E6b": 2000
+   }
+  }
+ },
+ "pinnedVectors": {
+  "rule": "three vectors without a random number: truth at width 30, grid phase u in {0, 10, 20}, with the deterministic perturbation e_i = 0.01 D_true(ell_c,i) sin(i (k + 1) + 0.3), k = 0, 1, 2 the vector's index, i the bin's index from 0, sigma = 0.015 D_true; the prototype and the oracle must agree on ell*, sigma_ell, c / sigma_c, the window's bin count and the code if not constrained.",
+  "tolerance": 1e-09
+ },
+ "worlds": {
+  "note": "DESIGN parameter sets, not published cosmologies. Ode 'flat' means Ode = 1 - Om - Or; Or is derived from T and Neff as stated and passed to the kernel; omegaB is the physical baryon density Omega_b h^2; Om includes the baryons.",
+  "list": [
+   {
+    "id": "W1",
+    "H0": 67.4,
+    "Om": 0.315,
+    "Ode": "flat",
+    "w": -1,
+    "Neff": 3.046,
+    "omegaB": 0.0224,
+    "zstar": 1090
+   },
+   {
+    "id": "W2",
+    "H0": 60,
+    "Om": 0.35,
+    "Ode": "flat",
+    "w": -1,
+    "Neff": 3.046,
+    "omegaB": 0.021,
+    "zstar": 1085
+   },
+   {
+    "id": "W3",
+    "H0": 75,
+    "Om": 0.25,
+    "Ode": "flat",
+    "w": -1,
+    "Neff": 3.046,
+    "omegaB": 0.0235,
+    "zstar": 1095
+   },
+   {
+    "id": "W4",
+    "H0": 67.4,
+    "Om": 0.315,
+    "Ode": 0.7,
+    "w": -1,
+    "Neff": 3.046,
+    "omegaB": 0.0224,
+    "zstar": 1090
+   },
+   {
+    "id": "W5",
+    "H0": 67.4,
+    "Om": 0.315,
+    "Ode": 0.66,
+    "w": -1,
+    "Neff": 3.046,
+    "omegaB": 0.0224,
+    "zstar": 1090
+   },
+   {
+    "id": "W6",
+    "H0": 55,
+    "Om": 0.5,
+    "Ode": 0.55,
+    "w": -1,
+    "Neff": 3.046,
+    "omegaB": 0.022,
+    "zstar": 1090
+   },
+   {
+    "id": "W7",
+    "H0": 80,
+    "Om": 0.2,
+    "Ode": 0.75,
+    "w": -1,
+    "Neff": 3.046,
+    "omegaB": 0.0225,
+    "zstar": 1090
+   },
+   {
+    "id": "W8",
+    "H0": 67.4,
+    "Om": 0.315,
+    "Ode": "flat",
+    "w": -0.9,
+    "Neff": 3.046,
+    "omegaB": 0.0224,
+    "zstar": 1090
+   },
+   {
+    "id": "W9",
+    "H0": 67.4,
+    "Om": 0.315,
+    "Ode": "flat",
+    "w": -1,
+    "Neff": 2.0,
+    "omegaB": 0.0224,
+    "zstar": 1090
+   },
+   {
+    "id": "W10",
+    "H0": 67.4,
+    "Om": 0.315,
+    "Ode": "flat",
+    "w": -1,
+    "Neff": 3.046,
+    "omegaB": 0.0224,
+    "zstar": 1150
+   }
+  ],
+  "offsets": [
+   0.0,
+   0.1,
+   0.2,
+   0.25,
+   0.3,
+   0.4,
+   0.5,
+   0.15,
+   0.35
+  ],
+  "designOffset": 0.25
+ },
+ "oracle": {
+  "scripts": "tools/cmb-oracle/oracle.py on spike/cmb-scale-gate: python3 -E, numpy, scipy, astropy 6.0.1 (an import-only PyYAML stand-in outside the tree, STUBS, because astropy.cosmology imports yaml); it imports no Gravitas code and reads only this file's blocks and the Planck extraction fixture.",
+  "distances": "astropy FlatLambdaCDM, LambdaCDM, FlatwCDM with Tcmb0 = 2.7255 K, Neff, m_nu = 0 for the ten worlds: comoving_transverse_distance at z_star, H(z).",
+  "soundHorizon": "scipy.integrate.quad at epsabs 0, epsrel 1e-13, limit 500, over a in [0, a_star] in its own variable (a = a_star t^2, split at t = 0.1, 0.3, 0.6), once with its own E(z) and once with astropy's H(z); the Lambda-free matter-radiation closed form of the 257 gate (derived there by differentiating the logarithm) for five Lambda-free sets.",
+  "massiveNeutrino": "the Fermi-Dirac ratio f(y) by scipy quad (pieces 0,1,4,12,30,80) and r_s and D_M of the one-0.06-eV-species model by scipy quad, independent of the prototype.",
+  "peakFit": "numpy.linalg.lstsq on the weighted design matrix, the covariance by numpy.linalg.inv of A^T W A, the delta method written out; ensemble draws by numpy default_rng(258) (an independent stream from the prototype's).",
+  "gridNearest": "a brute-force nearest node by normalised axis distance over every node of the synthetic grid.",
+  "citedCode": "the cited Boltzmann code's theta_star and first-peak position for the ten sets is NOT in the oracle: it is request X1 (leg C1)."
+ },
+ "tolerance": {
+  "closedFormDistance": 1e-11,
+  "distance": 1e-10,
+  "soundHorizonVsQuad": 1e-09,
+  "soundHorizonVsClosedForm": 1e-10,
+  "theta": 1e-09,
+  "radiation": 1e-09,
+  "scaleInvariance": 1e-13,
+  "relationRoundTrip": 1e-14,
+  "curvatureContinuity": 1e-07,
+  "gridLinear": 1e-12,
+  "pinnedVector": 1e-09,
+  "refusalAcceptedQuantity": 1e-09
+ },
+ "publishedComparison": {
+  "label": "Legs P1 and P2: the integral and the relation against the one published full (Boltzmann-code) calculation this session can read: the printed rows of arXiv:1807.06209 in Carl's saved extracted text, read by a script that prints each line it used, after this file was committed. NOT BLIND (seenBeforeCommitting).",
+  "inputs": "Table 1, best-fit column of the first (Plik) data combination: omega_b h^2, omega_c h^2, H0, and the printed 100 theta_star; Table 2, the fifth numerical column (TT,TE,EE+lowE+lensing, a marginalised mean): z_star, r_star and their printed uncertainties; the caption's one 0.06 eV neutrino. Neff = 3.046 is ASSUMED (not read from the paper). The columns are MIXED (a best-fit parameter vector with a marginalised-mean z_star), a stated approximation.",
+  "P1": "relative difference between 100 theta_star computed (the massive-neutrino model of conventions.soundHorizon, flat, z_star from Table 2) and the printed best-fit 100 theta_star <= 5e-4. Rule for the bound, fixed before any computation: about 1.7 times the printed 1 sigma precision of theta_star (3.0e-4 relative), covering the mixed columns and the missing massive-neutrino detail of the integral, and far below the 1 percent level at which a geometry lesson reads.",
+  "P2": "relative difference between r_s(z_star) of the same model and the printed marginalised r_star <= 1e-3. Rule: about 0.55 of the printed 1 sigma (1.8e-3 relative); the mixed columns add of the order of the difference between the best-fit and marginalised r_drag of Table 1 (2.8e-4).",
+  "P3": "the prototype and the oracle (own quadrature) agree on r_s, D_M and theta_star at those inputs to 1e-9 (independent of the printed values).",
+  "reported": "X2 reports the relative difference at the unrounded printed z_star +- its printed sigma and at Neff 3.044 and 3.05 (the stated assumption's sensitivity), after the verdict-bearing rows are fixed; it moves no bound."
+ },
+ "refusals": {
+  "ensemble": {
+   "draws": 400,
+   "seed": 258,
+   "rule": "numpy default_rng(258); each draw has H0 U(-20, 120), Om U(-0.1, 1.2), Ode 'flat' with probability 0.7 else U(0, 1.2), w U(-3.5, 0.5), Or U(-1e-5, 2e-4), omegaGamma U(-1e-6, 3e-5), omegaB U(-0.005, 0.03), zstar U(-100, 6000), phi U(-0.2, 0.8); the oracle's brute-force decision (finite; the 255 bounds; E^2(x) > 0 on a log grid of 400,001 points for x in [1, 1e8]; the three new rules) in the committed order is the reference; the prototype must agree on accept or refuse and on the code for every draw, and on r_s, D_M and theta_star of every accepted draw to 1e-9 relative to the oracle's own quad."
+  },
+  "codesInOrder": [
+   "not-finite",
+   "bad-H0",
+   "negative-density",
+   "density-out-of-domain",
+   "w-out-of-domain",
+   "bounce",
+   "no-radiation",
+   "bad-baryons",
+   "bad-recombination-redshift",
+   "bad-offset"
+  ],
+  "peakFitInputs": [
+   "not-finite",
+   "bad-sigma",
+   "not-sorted",
+   "length-mismatch",
+   "empty",
+   "bad-window"
+  ]
+ },
+ "apiSurface": {
+  "rule": "The prototype module js/kernels/cosmology/cmb/cmb.js exports exactly these names and no function that takes a spectrum and returns a cosmological parameter through a grid.",
+  "exports": [
+   "CmbDomainError",
+   "radiation",
+   "checkRecombination",
+   "soundHorizon",
+   "comovingDistance",
+   "acousticScale",
+   "peakMultipole",
+   "thetaFromPeak",
+   "massiveNuModel",
+   "fitPeak",
+   "nearestNode",
+   "claimViolations",
+   "PEAK_WINDOW",
+   "NU_FACTOR"
+  ]
+ },
+ "externalRequests": {
+  "S1": "NOT RUN, NOT DECIDED. A binned CMB temperature power spectrum (the first acoustic peak must be in range with bins finer than 100 multipoles), read and saved by Carl's session into scratch-data/ (outside every repository) with its sha256, as tests/fixtures/cmb-scale/authentic/binned-spectrum.json: columns ell centre, bin edges, D_ell (microkelvin squared) and its uncertainty as the release prints them, the release's name and version, the exact product, the instrument and data combination, the terms as read with a retrieval date, and the rights basis proposed (7.5 rule 4: public domain, CC BY, or a cite-only basis as its own recorded decision, never inherited from another source). Candidates for Carl's session to choose and record: the Planck 2018 release's binned TT spectrum from the ESA Planck Legacy Archive; the WMAP nine-year binned TT spectrum from NASA's LAMBDA archive. This session types no value. Rights decision: NOT DECIDED; no byte is shipped. Legs S1 to S3.",
+  "G1": "NOT RUN, NOT DECIDED. The precomputed spectrum grid, produced offline by a cited public Boltzmann code (candidates: CAMB, CLASS) in Carl's environment (downloading or running code needs Carl's separate permission; this session does neither): the exact code and version (with its licence terms as read), the command, the exact input parameter files and a grid over at most three named parameters (omega_b h^2, omega_c h^2 and one of H0 or 100 theta_star), at most 4,096 nodes per axis and a size bound Carl names, written as a gravitas.grid document (157) with the generator recorded in provenance and the sha256 of the code, the inputs and the output. The same code's theta_star and first-peak multipole for the ten parameter sets of the 'worlds' block (request X1) pin the oracle's cited-code tier. Rights decision: NOT DECIDED. Legs G1 and C1.",
+  "F1": "NOT RUN. The source text of the cited fitting formula for the redshift of recombination z_star as a function of the physical baryon and matter densities: the equation(s) with every coefficient and exponent as printed, the stated domain of validity and the stated accuracy, and the terms as read, as tests/fixtures/cmb-scale/authentic/zstar-formula.json (a transcription checked against the paper's extracted text, with the PDF's sha256). A candidate for Carl's session to choose and record: Hu and Sugiyama (1996). This session types no coefficient. Leg F1.",
+  "F2": "NOT RUN. The source text of the cited fitting formula for the peak offset phi_1 (the phase shift of the first peak) and its stated accuracy, as tests/fixtures/cmb-scale/authentic/peak-offset.json, with the terms as read. A candidate: Hu, Fukugita, Zaldarriaga and Tegmark (2001). This session types no coefficient. Legs F2 and S2.",
+  "X1": "NOT RUN, never requested of this session: the cited Boltzmann code's theta_star, z_star, r_s and first-peak multipole for the ten parameter sets of the 'worlds' block, pinned as tests/fixtures/cmb-scale/authentic/code-output.json with the code's version and the inputs (the same code as G1). Leg C1."
+ },
+ "scope": {
+  "built": "on the spike only: a prototype kernel (sound-horizon integral at z_star, the angular scale and the peak relation, the massive-neutrino model, the bounded peak fit and its intervals, the nearest-node function, the claim rule), its validator, and the independent oracle. In the repository (this PR): the committed thresholds, the Planck extraction, the oracle's pinned output, the gate stream's results, the failed legs, CMB_SCALE_GATE.md, the register rows, the record's test, the docs-map entry.",
+  "notBuilt": "any module under js/ in the product tree, any panel, lesson, 'Is space flat?' guide, model-page section, data pack, grid or spectrum file: the verdict decides what Part B may be, Part B is not begun in this session (the contract forbids the next part), and the consumers rule (Carl, 2026-11-05 and 2026-11-06) holds for every kernel gate.",
+  "kernelsAreInTheLazyTier": "any later kernel file goes in the lazy tier (NEVER_PRECACHED), as the checkpoint's repair R-A decided."
+ },
+ "seeds": {
+  "oracleEnsemble": 258,
+  "prototypePeak": "stream('noise', '258:cmb:peak:<leg>') on mulberry32 with Box-Muller gaussians, <leg> in E1, E2, E4, E5",
+  "gridPoints": "stream('injection', '258:cmb:grid') draws 200 points",
+  "streamCheck": "the first 1,000 uniforms of the seed text '258:cmb:peak:E1' agree exactly between the JavaScript stream and the oracle's re-implementation of mulberry32 and FNV-1a"
+ },
+ "syntheticGrid": {
+  "label": "DESIGN: a labelled synthetic gravitas.grid used only to test the MECHANICS of the comparison surface (the nearest node and linear interpolation inside the axes, no extrapolation); its outputs mean nothing physical.",
+  "axes": [
+   {
+    "name": "omegaB",
+    "values": [
+     0.02,
+     0.022,
+     0.024,
+     0.026
+    ]
+   },
+   {
+    "name": "omegaC",
+    "values": [
+     0.1,
+     0.12,
+     0.14
+    ]
+   },
+   {
+    "name": "H0",
+    "values": [
+     60,
+     65,
+     70,
+     75,
+     80
+    ]
+   }
+  ],
+  "output": "y = 3 + 100 omegaB - 40 omegaC + 0.2 H0 (exactly linear, so multilinear interpolation is exact)",
+  "nearestRule": "per axis the node with the least |x - node| / (axis range) (ties to the lower index), the node of the grid being the tuple; points outside an axis's range are refused with code outside-domain",
+  "points": 200
+ },
+ "checks": [
+  {
+   "id": "I1.fixtures",
+   "group": "integrity",
+   "what": "the Planck extraction fixture's sha256 recorded by the oracle equals the one the validator reads, and the thresholds sha256 the oracle recorded equals the validator's",
+   "bound": "exact",
+   "needs": null
+  },
+  {
+   "id": "I2.surface",
+   "group": "integrity",
+   "what": "the prototype's exports equal apiSurface.exports (as a set)",
+   "bound": "exact",
+   "needs": null
+  },
+  {
+   "id": "A1.edsDistance",
+   "group": "relation",
+   "what": "Einstein-de Sitter (Om 1, Or 0, Ode 0): D_M(z_star) = 2 (c/H0) (1 - 1/sqrt(1 + z_star)) at z_star in {800, 1090, 1500} and H0 in {50, 70}",
+   "bound": "1e-11",
+   "needs": null
+  },
+  {
+   "id": "A2.soundHorizonClosedForm",
+   "group": "relation",
+   "what": "the Lambda-free flat matter-radiation sound horizon in closed form (b = 3 omegaB / (4 omegaGamma); r_s = (c/H0)(1/sqrt 3)(2/sqrt(b Om))[ln(sqrt(b (Om a* + Or)) + sqrt(Om (1 + b a*))) - ln(sqrt(b Or) + sqrt(Om))], Om = 1 - Or) at five (H0, omegaB, Neff, z_star) sets",
+   "bound": "1e-10",
+   "needs": null
+  },
+  {
+   "id": "A3.scaleInvariance",
+   "group": "relation",
+   "what": "theta_star is unchanged by H0 -> lambda H0 at fixed density fractions Om, Or, Ode and fixed b = 3 omegaB / (4 omegaGamma), lambda in {0.5, 2, 3.7}, ten worlds",
+   "bound": "1e-13",
+   "needs": null
+  },
+  {
+   "id": "A4.peakRelation",
+   "group": "relation",
+   "what": "ell_A = pi / theta_star, ell_1 = ell_A (1 - phi_1), and thetaFromPeak(ell_1, phi_1) returns theta_star, ten worlds x nine offsets; the round trip and the closed forms",
+   "bound": "1e-14",
+   "needs": null
+  },
+  {
+   "id": "A5.curvature",
+   "group": "relation",
+   "what": "at fixed omegaB, H0, Om and Or, theta_star is strictly monotone in Ok over 21 values in [-0.05, 0.05] (Ode takes the balance), its direction is reported (X4), and theta_star at Ok = +-1e-9 differs from Ok = 0 by at most 1e-7 relatively",
+   "bound": "strict monotone; 1e-7",
+   "needs": null
+  },
+  {
+   "id": "B1.distance",
+   "group": "oracle",
+   "what": "D_M(z_star) of the ten worlds against astropy 6.0.1 (massless neutrinos, Tcmb0 as pinned)",
+   "bound": "1e-10",
+   "needs": null
+  },
+  {
+   "id": "B2.soundHorizon",
+   "group": "oracle",
+   "what": "r_s(z_star) of the ten worlds against scipy quad with the oracle's own E(z) and with astropy's H(z)",
+   "bound": "1e-9",
+   "needs": null
+  },
+  {
+   "id": "B3.theta",
+   "group": "oracle",
+   "what": "theta_star, ell_A and ell_1 (phi_1 = 0.25, DESIGN) of the ten worlds, prototype against oracle",
+   "bound": "1e-9",
+   "needs": null
+  },
+  {
+   "id": "B4.radiation",
+   "group": "oracle",
+   "what": "omegaGamma and Or h^2 (photons plus massless neutrinos) against astropy's Ogamma0 and Onu0 at the pinned Tcmb0 and Neff = 3.046",
+   "bound": "1e-9",
+   "needs": null
+  },
+  {
+   "id": "B5.directions",
+   "group": "oracle",
+   "what": "r_s decreases with omegaB, decreases with Om (fixed H0), increases with z_star, and D_M(z_star) increases with z_star: 20 of 20 steps each on W1",
+   "bound": "20 of 20 each",
+   "needs": null
+  },
+  {
+   "id": "B6.errorCovers",
+   "group": "oracle",
+   "what": "the integrator's error estimate for r_s covers its difference from the oracle's quad in 10 of 10 worlds",
+   "bound": "10 of 10",
+   "needs": null
+  },
+  {
+   "id": "C1.citedCode",
+   "group": "code",
+   "what": "theta_star and the first-peak multipole of a cited Boltzmann code for the ten sets against the prototype",
+   "bound": "pinned by request X1",
+   "needs": "X1",
+   "expected": "not-run"
+  },
+  {
+   "id": "E1.coverage68",
+   "group": "ensemble",
+   "what": "the peak position's 68.27 percent interval covers ell0 (a not-constrained draw counts as not covering) on 2,000 draws at bin width 30, prototype and oracle separately",
+   "bound": "binomial 3 sigma band around 0.6827",
+   "needs": null
+  },
+  {
+   "id": "E2.coverage95",
+   "group": "ensemble",
+   "what": "the 95.45 percent interval, the same",
+   "bound": "binomial 3 sigma band around 0.9545",
+   "needs": null
+  },
+  {
+   "id": "E3.pinned",
+   "group": "ensemble",
+   "what": "the three pinned vectors, prototype against oracle (ell*, sigma_ell, c/sigma_c, bin count, code)",
+   "bound": "1e-9",
+   "needs": null
+  },
+  {
+   "id": "E4.coarse",
+   "group": "ensemble",
+   "what": "bins 200 wide: not-constrained in every one of 500 draws in both implementations, with the code too-few-bins, and no apex or interval reported",
+   "bound": "500 of 500",
+   "needs": null
+  },
+  {
+   "id": "E5.noPeak",
+   "group": "ensemble",
+   "what": "a spectrum without a peak (constant, 1.5 percent noise): not-constrained in at least 95 percent of 500 draws in both implementations",
+   "bound": "95 percent",
+   "needs": null
+  },
+  {
+   "id": "Z1.refusals",
+   "group": "refusals",
+   "what": "400 seeded parameter sets: accept or code, in the committed order, prototype against oracle brute force; r_s, D_M and theta_star of the accepted sets",
+   "bound": "0 disagreements; 1e-9",
+   "needs": null
+  },
+  {
+   "id": "Z2.peakInputs",
+   "group": "refusals",
+   "what": "six peak-fit inputs (not finite, sigma <= 0, unsorted centres, mismatched lengths, empty, a one-bin window) each refused with the committed code, both implementations",
+   "bound": "6 of 6",
+   "needs": null
+  },
+  {
+   "id": "K1.claimRule",
+   "group": "claim",
+   "what": "the claim rule flags 12 of 12 violating sentences and passes 12 of 12 clean sentences (English and Spanish), prototype function against the oracle's own implementation",
+   "bound": "12 of 12 each; agree on all 24",
+   "needs": null
+  },
+  {
+   "id": "K2.tree",
+   "group": "claim",
+   "what": "the claim rule over every shipped catalogue and lesson string that has a CMB context word: 0 violations (the count of scanned context sentences is reported)",
+   "bound": "0",
+   "needs": null
+  },
+  {
+   "id": "G1.provenance",
+   "group": "grid",
+   "what": "the precomputed spectrum grid's integrity, its generator and its provenance record, with the cited code's version and inputs",
+   "bound": "pinned by request G1",
+   "needs": "G1",
+   "expected": "not-run"
+  },
+  {
+   "id": "G2.linear",
+   "group": "grid",
+   "what": "readGrid and interpolate on the synthetic grid reproduce the exactly linear output at 200 stream points to 1e-12, and refuse the six committed outside points (one per axis end, both sides on two axes) with code outside-domain",
+   "bound": "1e-12; 6 of 6",
+   "needs": null
+  },
+  {
+   "id": "G3.nearest",
+   "group": "grid",
+   "what": "nearestNode on the 200 points: the prototype's node equals the oracle's brute force for every point; ties to the lower index; outside points refused",
+   "bound": "200 of 200",
+   "needs": null
+  },
+  {
+   "id": "P1.thetaPlanck",
+   "group": "published",
+   "what": "100 theta_star of the integral and the 255 kernel's relation at Planck 2018 VI's printed inputs against the printed best-fit 100 theta_star (NOT BLIND)",
+   "bound": "5e-4 relative",
+   "needs": null
+  },
+  {
+   "id": "P2.rstarPlanck",
+   "group": "published",
+   "what": "r_s(z_star) at the same inputs against the printed marginalised r_star (NOT BLIND)",
+   "bound": "1e-3 relative",
+   "needs": null
+  },
+  {
+   "id": "P3.oracleAtPlanck",
+   "group": "published",
+   "what": "prototype and oracle agree on r_s, D_M and theta_star at the same inputs",
+   "bound": "1e-9",
+   "needs": null
+  },
+  {
+   "id": "F1.zstarFormula",
+   "group": "formula",
+   "what": "the cited z_star fitting formula against the printed z_star, and over its stated domain against the integral's own recombination",
+   "bound": "pinned by request F1",
+   "needs": "F1",
+   "expected": "not-run"
+  },
+  {
+   "id": "F2.peakOffset",
+   "group": "formula",
+   "what": "the cited peak-offset formula against a code's first-peak position",
+   "bound": "pinned by request F2",
+   "needs": "F2",
+   "expected": "not-run"
+  },
+  {
+   "id": "S1.spectrumIntegrity",
+   "group": "spectrum",
+   "what": "the binned spectrum: sha256, columns, bins ascending, bin width finer than 100 multipoles near the first peak, uncertainties positive",
+   "bound": "pinned by request S1",
+   "needs": "S1",
+   "expected": "not-run"
+  },
+  {
+   "id": "S2.peakFromSpectrum",
+   "group": "spectrum",
+   "what": "the first peak's position from the binned spectrum by the committed fit, converted with the cited offset (F2) to theta_star, against the printed best-fit 100 theta_star, and prototype against oracle on the fit to 1e-9",
+   "bound": "relative 5 percent for the geometry; 1e-9 between implementations",
+   "needs": "S1,F2",
+   "expected": "not-run"
+  },
+  {
+   "id": "S3.coarseRebin",
+   "group": "spectrum",
+   "what": "the release's spectrum rebinned to 200-wide bins returns not-constrained",
+   "bound": "pinned by request S1",
+   "needs": "S1",
+   "expected": "not-run"
+  },
+  {
+   "id": "S4.rights",
+   "group": "spectrum",
+   "what": "a recorded rights decision for the binned spectrum and the grid (7.5 rule 4)",
+   "bound": "NOT DECIDED",
+   "needs": "S1,G1",
+   "expected": "not-run"
+  },
+  {
+   "id": "X1.reportedWorlds",
+   "group": "reported",
+   "what": "r_s, D_M, theta_star, ell_A and ell_1 (phi_1 = 0.25) of the ten worlds",
+   "bound": "REPORTED",
+   "needs": null
+  },
+  {
+   "id": "X2.reportedPlanckSensitivity",
+   "group": "reported",
+   "what": "the relative difference of P1 and P2 at z_star +- its printed sigma and at Neff 3.044 and 3.05 (the assumed Neff's sensitivity)",
+   "bound": "REPORTED",
+   "needs": null
+  },
+  {
+   "id": "X3.reportedApexBias",
+   "group": "reported",
+   "what": "the apex bias of the noise-free fit of the synthetic skewed peak at bin widths 10, 30 and 50 and grid phases 0 to width, and the sigma_ell median of E1",
+   "bound": "REPORTED",
+   "needs": null
+  },
+  {
+   "id": "X4.reportedCurvature",
+   "group": "reported",
+   "what": "d ln theta_star / d Ok at W1 and ell_1 at Ok in {-0.05, 0, +0.05}",
+   "bound": "REPORTED",
+   "needs": null
+  },
+  {
+   "id": "B5b.directionOfRsWithZstar",
+   "group": "oracle",
+   "what": "AM4 (NEW, NOT BLIND): r_s(z_star) DEcreases with z_star (a later epoch accumulates more of the sound horizon): 20 of 20 steps on W1 over z_star in [900, 1300], prototype and oracle",
+   "bound": "20 of 20",
+   "needs": null,
+   "new": true,
+   "notBlind": true
+  },
+  {
+   "id": "E6a.coverage68Symmetric",
+   "group": "ensemble",
+   "what": "AM4 (NEW, NOT BLIND): the 68.27 percent interval's coverage of ell0 on the symmetric truth, 2,000 draws at width 30, prototype and oracle separately (a not-constrained draw counts as not covering)",
+   "bound": "binomial 3 sigma band around 0.6827",
+   "needs": null,
+   "new": true,
+   "notBlind": true
+  },
+  {
+   "id": "E6b.coverage95Symmetric",
+   "group": "ensemble",
+   "what": "AM4 (NEW, NOT BLIND): the 95.45 percent interval, the same",
+   "bound": "binomial 3 sigma band around 0.9545",
+   "needs": null,
+   "new": true,
+   "notBlind": true
+  }
+ ],
+ "verdict": {
+  "rows": "A leg with a group other than 'reported' and no 'expected: not-run' passes or fails by its bound; a leg with 'expected: not-run' is NOT RUN until its request is met; P1, P2 and P3 are NOT RUN if the extraction is ambiguous; a pass/fail leg that cannot be measured fails the gate on that threshold.",
+  "kernel": "KERNEL PASS iff every leg of groups integrity, relation, oracle, ensemble, refusals, claim and grid-mechanics (G2, G3) passes, and P1, P2 and P3 each pass or are NOT RUN; otherwise KERNEL FAIL.",
+  "A": "KERNEL PASS and S1 to S4, G1, C1, F1 and F2 all RUN and pass: the demonstration with the spectrum and the grid comparison.",
+  "B": "KERNEL PASS and S1 to S4, F2 RUN and pass, while G1 is NOT RUN or fails: the demonstration with the spectrum alone.",
+  "C": "KERNEL FAIL, or any S leg that ran fails, or any S leg NOT RUN: the relation alone as a reading step; 260's The pillars omits the CMB (Appendix C). A C reached because an S leg is NOT RUN is a C BY ABSENCE, not by failure, and is reported as NOT ESTABLISHED for A and B.",
+  "consumersClause": "met iff the verdict is A or B. Whatever the verdict, no panel, lesson, guide, viewer, grid or spectrum file is built until Carl lifts the consumers rule.",
+  "partB": "after A or B, and only after Carl goes ahead; not begun in this session; with C, there is no Part B (Appendix C: a reading step).",
+  "newLegs": "Legs marked new (AM4) are reported and judged by their own bounds but never enter the verdict function."
+ },
+ "amendments": [
+  {
+   "id": "AM1",
+   "recorded": "after the extraction fixture (commit 2f94a46f) and before any oracle, prototype or validator run",
+   "what": "refusals.codesInOrder is read with one more code appended: beyond-antipode, the 255 kernel's own call-time code (a closed world whose light has crossed half of the closed space, sqrt|Ok| D_C H0/c >= pi, at z_star), decided AFTER the ten parameter checks. The Part A text listed only the parameter-time codes, but D_M(z_star) is a call-time quantity in the 255 kernel and the seeded draws include strongly closed worlds. The oracle's brute-force decision computes chi = Int_0^{z_star} dz/E and refuses when sqrt|Ok| chi >= pi; the prototype passes the kernel's code through. No bound moves.",
+   "moves": "no bound"
+  },
+  {
+   "id": "AM2",
+   "recorded": "after the extraction fixture (commit 2f94a46f) and before any oracle, prototype or validator run",
+   "what": "Clarification, no new condition: seeds.streamCheck (the first 1,000 uniforms of the seed text '258:cmb:peak:E1' agree exactly between the JavaScript stream and the oracle's re-implementation of mulberry32 and FNV-1a) is part of leg I1.fixtures and I1 fails if they differ; the oracle also draws the 200 grid points of G3 from its re-implementation of stream('injection', '258:cmb:grid').",
+   "moves": "no bound"
+  },
+  {
+   "id": "AM3",
+   "recorded": "after AM1 and AM2 (commit edd2ebf1) and before any oracle, prototype or validator run",
+   "what": "Four clarifications of text that was ambiguous when written; no bound moves. (1) bad-window is the input refusal for data that hold a single bin (n = 1); data with two or more bins and fewer than 5 in the window are NOT refused but not-constrained with the code too-few-bins (so E4's coarse spectra, about four bins wide, give too-few-bins, and Z2's sixth input is a one-bin data set refused with bad-window). (2) P1's D_M(z_star) comes from the massive-neutrino model's own integral (the 255 kernel has no massive neutrino); the 255 kernel's value with massless radiation at the same inputs is REPORTED in X2 with the difference, and neither is a bound. (3) A2's five closed-form sets (H0, omegaB, Neff, z_star) are (70, 0.0224, 3.046, 1090), (60, 0.02, 3.046, 1000), (75, 0.025, 2.0, 1100), (67.4, 0.0224, 3.5, 1050), (50, 0.03, 3.046, 1200). (4) G2's six outside points are, for each axis of the synthetic grid in turn, the point one percent of the axis range below the first node and the one percent above the last, the other axes at their middle node.",
+   "moves": "no bound"
+  },
+  {
+   "id": "AM4",
+   "recorded": "after the oracle's FIRST run (tools/cmb-oracle/oracle.py on the spike, run against the thresholds of commit 48f6d5c9) and before any prototype code or validator run; the first run's output was not committed and is replaced by a re-run against this file",
+   "seenInTheFirstOracleRun": "E1 coverage 0.1245 (249 of 2000) and E2 0.3205 with a mean apex error of +2.33 multipoles against a median sigma_ell of 0.78 (the skew of the DESIGN peak biases the quadratic fit by about three times its statistical error); E4 500 of 500 too-few-bins; E5 500 of 500 not constrained (405 no-curvature, 95 too-few-bins); E3's three vectors fitted (apex 234.07, 230.96, 232.40; sigma_ell 0.76, 0.92, 0.70; curvature -22 to -23 sigma); Z1 7 of 400 accepted (122 bad-recombination-redshift, 81 negative-density, 75 w-out-of-domain, 58 bad-H0, 48 bad-baryons, 5 bad-offset, 4 no-radiation, 0 beyond-antipode, 0 bounce); Z2's six codes as committed; K1 12 of 12 and 12 of 12; the oracle's B5 direction r_s versus z_star came out False; and the oracle's value at the Planck inputs (the massive-neutrino model): 100 theta_star 1.0410866 against the printed 1.041085, r_s 144.3935 against the printed 144.43, and with massless radiation at the same inputs 100 theta_star 1.03953.",
+   "what": "(1) B5 as committed says r_s INCREASES with z_star; that is wrong physics (r_s is the integral from a = 0 up to a_star, so a larger z_star, a smaller a_star, gives a smaller r_s). B5 STAYS as committed and will fail on its fourth component (the committed direction is the mistake, the kernel's is right); it is left failing and labelled, and only Carl resets it. A NEW leg B5b with the corrected direction is added. (2) E1 and E2 STAY as committed and are expected to fail (bias exceeds the statistical error at this signal to noise; X3 reports it); NEW legs E6a and E6b judge the delta-method interval alone on a symmetric truth (syntheticPeak.symmetricTruth). All three new legs are NOT BLIND (designed after the oracle's first run was read) and are never part of the verdict function. (3) The oracle is re-run against this file; its numbers for the committed legs are unchanged.",
+   "moves": "no bound; three NEW legs added"
+  },
+  {
+   "id": "AM5",
+   "recorded": "after the validator's FIRST run (spike commit 5e114d4e, Node 22.23.4, 2 s) and before its second and third runs; the first run's results were not committed",
+   "what": "A defect of the validator, not of a bound: leg B6 compared the difference of r_s from the oracle's quadrature with the error estimate of theta_star (a dimensionless number of about 1e-17) instead of the error estimate of r_s, and so reported 8 of 10 covered. The committed bound is 'the integrator's error estimate for r_s covers its difference from the oracle's quad in 10 of 10 worlds', and the validator is corrected to measure that (the r_s error of soundHorizon). No bound moves, no other row of the first run changes, and every other row of the first run is as the later runs give it. The oracle is re-run against this file (numbers unchanged; only the thresholds sha256 and the run time differ).",
+   "firstRunSummary": "42 rows: 24 pass, 6 fail (B5, B6 as measured wrongly, E1, E2, E6a, E6b), 8 not run, 4 reported; P1 relative difference 1.5e-6, P2 2.5e-4, P3 2.6e-16; K2 0 violations in 39 context sentences of 2,820 files.",
+   "moves": "no bound"
+  }
+ ],
+ "decisions": [
+  {
+   "id": "DEC1",
+   "what": "The conventions are committed as definitions and the data as requests: the binned spectrum, the Boltzmann-code outputs, the grid, the z_star and offset fitting formulas are published data or code outputs that this session neither fetches, runs nor types; they are requests S1, G1, F1, F2 and X1 with exact contents, and their legs are NOT RUN.",
+   "consequence": "No A or B can be reached in this session; the verdict is at best C by absence."
+  },
+  {
+   "id": "DEC2",
+   "what": "z_star and the peak offset are INPUTS, not formulas: no fitting formula's coefficient is typed. r_s comes from the integral (the Eisenstein and Hu fit failed its legs in 257).",
+   "consequence": "The geometry relation is validated end to end against an independent calculation and one published full calculation, without any cited formula."
+  },
+  {
+   "id": "DEC3",
+   "what": "The grid is a comparison drawn at the node nearest to the student's own parameters, with linear interpolation inside the grid and no extrapolation; the prototype has no function from a spectrum to a parameter through a grid (I2), and the claim rule is a test over strings (K1, K2).",
+   "consequence": "No Hubble constant or composition is ever read from a grid label."
+  },
+  {
+   "id": "DEC4",
+   "what": "The peak fit is the simplest bounded method (a weighted quadratic in a window of +-75 multipoles about the largest bin) with a 5 sigma curvature cut; the synthetic ensemble is labelled DESIGN with a skewed peak, so coverage can fail by bias and a failure stays failing.",
+   "consequence": "Coverage (E1, E2) and the false-positive rate (E5) are measured, not assumed."
+  },
+  {
+   "id": "DEC5",
+   "what": "P1 and P2 are NOT BLIND: the printed numbers were seen before this file was committed (seenBeforeCommitting); their bounds are stated by a rule written before any computation.",
+   "consequence": "A pass says the integral reproduces a published full calculation at the stated precision; it does not say the model was tuned blind."
+  }
+ ],
+ "questions": []
+}

@@ -1,0 +1,141 @@
+{
+ "format": "gravitas.cmb-scale-failed-legs/1",
+ "note": "every row that crossed its committed bound, left failing",
+ "failed": [
+  {
+   "id": "B5.directions",
+   "measured": {
+    "stepsOf20": {
+     "rsDecreasesWithOmegaB": 20,
+     "rsDecreasesWithOm": 20,
+     "rsIncreasesWithZstar_asCommitted": 0,
+     "DMIncreasesWithZstar": 20
+    },
+    "oracle": {
+     "rs_vs_omegaB": true,
+     "rs_vs_Om": true,
+     "rs_vs_zstar": false,
+     "DM_vs_zstar": true
+    }
+   },
+   "bound": "20 of 20 each",
+   "note": "the committed direction of r_s with z_star (increasing) is wrong physics (AM4); left failing, B5b carries the corrected direction"
+  },
+  {
+   "id": "E1.coverage68",
+   "measured": {
+    "prototype": {
+     "rate": 0.1355,
+     "covered": 271,
+     "medianSigma": 0.790847109491304,
+     "meanApexError": 2.329668638988169,
+     "codes": {
+      "ok": 2000
+     }
+    },
+    "oracle": {
+     "rate": 0.1245,
+     "covered": 249,
+     "medianSigma": 0.7806463440224698,
+     "meanApexError": 2.334691186346854,
+     "codes": {
+      "ok": 2000
+     }
+    },
+    "band": [
+     0.6514783217139116,
+     0.7139216782860883
+    ]
+   },
+   "bound": "|rate - 0.6827| <= 3 sigma binomial",
+   "note": "the quadratic apex is biased by the DESIGN peak's skew (X3): a stated systematic, not noise"
+  },
+  {
+   "id": "E2.coverage95",
+   "measured": {
+    "prototype": {
+     "rate": 0.2935,
+     "covered": 587,
+     "medianSigma": 0.781903189931648,
+     "meanApexError": 2.304584466829001,
+     "codes": {
+      "ok": 2000
+     }
+    },
+    "oracle": {
+     "rate": 0.3205,
+     "covered": 641,
+     "medianSigma": 0.7838816323924571,
+     "meanApexError": 2.304685755810798,
+     "codes": {
+      "ok": 2000
+     }
+    },
+    "band": [
+     0.9405202333710466,
+     0.9684797666289534
+    ]
+   },
+   "bound": "|rate - 0.9545| <= 3 sigma binomial",
+   "note": "as E1"
+  },
+  {
+   "id": "E6a.coverage68Symmetric",
+   "measured": {
+    "prototype": {
+     "rate": 0.399,
+     "covered": 798,
+     "medianSigma": 0.7074567236272419,
+     "meanApexError": -0.008675696623456105,
+     "codes": {
+      "ok": 2000
+     }
+    },
+    "oracle": {
+     "rate": 0.396,
+     "covered": 792,
+     "medianSigma": 0.7066085341843036,
+     "meanApexError": -0.007155802902897008,
+     "codes": {
+      "ok": 2000
+     }
+    },
+    "band": [
+     0.6514783217139116,
+     0.7139216782860883
+    ]
+   },
+   "bound": "|rate - 0.6827| <= 3 sigma binomial",
+   "note": "NEW leg (AM4), NOT BLIND, outside the verdict function"
+  },
+  {
+   "id": "E6b.coverage95Symmetric",
+   "measured": {
+    "prototype": {
+     "rate": 0.7425,
+     "covered": 1485,
+     "medianSigma": 0.7050476494344777,
+     "meanApexError": 0.018094095058030602,
+     "codes": {
+      "ok": 2000
+     }
+    },
+    "oracle": {
+     "rate": 0.754,
+     "covered": 1508,
+     "medianSigma": 0.7034713992448569,
+     "meanApexError": -0.022283240687060314,
+     "codes": {
+      "ok": 2000
+     }
+    },
+    "band": [
+     0.9405202333710466,
+     0.9684797666289534
+    ]
+   },
+   "bound": "|rate - 0.9545| <= 3 sigma binomial",
+   "note": "NEW leg (AM4), NOT BLIND, outside the verdict function"
+  }
+ ]
+}
