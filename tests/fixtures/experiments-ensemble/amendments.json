@@ -15,6 +15,13 @@
    "concerns": "A8 (the regression context)",
    "text": "A8 calls the three-body kind's trial function directly with stream('experiments', seed) for the integers 1000..1049 (key the integer, no fork), because the group's seeds are plain integers and a record's fork rule is trial-index. It is a comparison of the kind's trial with the group's drift(), not a replay of a record. The bound (1e-9 relative on the median and the 90th percentile, and inside RECORDED x margin) is unchanged.",
    "weakens": false
+  },
+  {
+   "id": "AM3",
+   "recordedBefore": "the validator's first run and before the kind has a 'physics' option",
+   "concerns": "A8 (the regression context): a new leg A8b, and what A8 is expected to show",
+   "text": "A smoke probe of the three-body kind (default config, the scenario as the engine builds it) against long-term-regression.js distribution() was made while writing the kind, before this amendment, and is disclosed here: median 0.00578 against 0.00615 and 90th percentile 0.314 against 0.479; the third seed (a regular orbit) agrees to the digit and the chaotic ones do not. The cause is the world, not the draws: the scenario carries orbit_decay_rate 0.005 and min_interaction_distance 0, which the validation lab (js/validation/harness.js LAB_SETTINGS) sets to 0 and 1e-6. A8 is therefore expected to FAIL on its 1e-9 bound and is run once as committed and left failing. A8b is NEW: the same comparison with the kind's config option physics 'validation-lab', which applies LAB_SETTINGS and the application's G = 2 (mutual gravity on, no merging, nothing else) to the built scenario before the nudges; bound 1e-9 relative on the median and the 90th percentile, and the same committed regression bound. The option is the only thing added after the probe; the kind's default is unchanged.",
+   "weakens": false
   }
  ]
 }
