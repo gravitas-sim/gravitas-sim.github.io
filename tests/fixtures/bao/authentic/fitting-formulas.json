@@ -1,0 +1,246 @@
+{
+ "format": "gravitas.bao-eh98-transcription/1",
+ "coefficients": {
+  "zd.a": {
+   "equation": "4",
+   "token": "1291",
+   "line": 236,
+   "pdfPage": 5,
+   "lineText": "zd = 1291 [1 + b1 (Ωb h2 )b2 ],",
+   "value": 1291
+  },
+  "zd.exponentOfOmega0h2": {
+   "equation": "4",
+   "token": "0.251",
+   "line": 235,
+   "pdfPage": 5,
+   "lineText": "(Ω0 h2 )0.251",
+   "value": 0.251
+  },
+  "zd.denominatorCoefficient": {
+   "equation": "4",
+   "token": "0.659",
+   "line": 237,
+   "pdfPage": 5,
+   "lineText": "1 + 0.659(Ω0h2 )0.828",
+   "value": 0.659
+  },
+  "zd.denominatorExponent": {
+   "equation": "4",
+   "token": "0.828",
+   "line": 237,
+   "pdfPage": 5,
+   "lineText": "1 + 0.659(Ω0h2 )0.828",
+   "value": 0.828
+  },
+  "b1.a": {
+   "equation": "4",
+   "token": "0.313",
+   "line": 238,
+   "pdfPage": 5,
+   "lineText": "b1 = 0.313(Ω0h2 )−0.419 [1 + 0.607(Ω0h2 )0.674 ],",
+   "value": 0.313
+  },
+  "b1.exponentOfOmega0h2": {
+   "equation": "4",
+   "token": "−0.419",
+   "line": 238,
+   "pdfPage": 5,
+   "lineText": "b1 = 0.313(Ω0h2 )−0.419 [1 + 0.607(Ω0h2 )0.674 ],",
+   "value": -0.419
+  },
+  "b1.bracketCoefficient": {
+   "equation": "4",
+   "token": "0.607",
+   "line": 238,
+   "pdfPage": 5,
+   "lineText": "b1 = 0.313(Ω0h2 )−0.419 [1 + 0.607(Ω0h2 )0.674 ],",
+   "value": 0.607
+  },
+  "b1.bracketExponent": {
+   "equation": "4",
+   "token": "0.674",
+   "line": 238,
+   "pdfPage": 5,
+   "lineText": "b1 = 0.313(Ω0h2 )−0.419 [1 + 0.607(Ω0h2 )0.674 ],",
+   "value": 0.674
+  },
+  "b2.a": {
+   "equation": "4",
+   "token": "0.238",
+   "line": 239,
+   "pdfPage": 5,
+   "lineText": "b2 = 0.238(Ω0h2 )0.223 , (4)",
+   "value": 0.238
+  },
+  "b2.exponentOfOmega0h2": {
+   "equation": "4",
+   "token": "0.223",
+   "line": 239,
+   "pdfPage": 5,
+   "lineText": "b2 = 0.238(Ω0h2 )0.223 , (4)",
+   "value": 0.223
+  },
+  "R.a": {
+   "equation": "5",
+   "token": "31.5",
+   "line": 249,
+   "pdfPage": 5,
+   "lineText": "R ≡ 3ρb /4ργ = 31.5Ωb h2 Θ2.7",
+   "value": 31.5
+  },
+  "R.zScale.power10": {
+   "equation": "5",
+   "token": "103",
+   "line": 251,
+   "pdfPage": 5,
+   "lineText": "(z/103)−1 . (5)",
+   "exponent": 3,
+   "base": 10,
+   "note": "the superscript is glued to the 10 by the extraction; checked against the page image"
+  },
+  "zeq.mantissa": {
+   "equation": "2",
+   "token": "2.50",
+   "line": 183,
+   "pdfPage": 4,
+   "lineText": "zeq = 2.50 × 104 Ω0 h2 Θ−4",
+   "value": 2.5
+  },
+  "zeq.power10": {
+   "equation": "2",
+   "token": "104",
+   "line": 183,
+   "pdfPage": 4,
+   "lineText": "zeq = 2.50 × 104 Ω0 h2 Θ−4",
+   "exponent": 4,
+   "base": 10,
+   "note": "the superscript is glued to the 10 by the extraction; checked against the page image"
+  },
+  "keq.mantissa": {
+   "equation": "3",
+   "token": "7.46",
+   "line": 190,
+   "pdfPage": 4,
+   "lineText": "keq ≡ (2Ω0 H02 zeq )1/2 = 7.46 × 10−2 Ω0 h2 Θ−2",
+   "value": 7.46
+  },
+  "keq.power10": {
+   "equation": "3",
+   "token": "10−2",
+   "line": 190,
+   "pdfPage": 4,
+   "lineText": "keq ≡ (2Ω0 H02 zeq )1/2 = 7.46 × 10−2 Ω0 h2 Θ−2",
+   "exponent": -2,
+   "base": 10,
+   "note": "the superscript is glued to the 10 by the extraction; checked against the page image"
+  },
+  "s26.a": {
+   "equation": "26",
+   "token": "44.5",
+   "line": 579,
+   "pdfPage": 12,
+   "lineText": "44.5 ln(9.83/Ω0 h2 )",
+   "value": 44.5
+  },
+  "s26.lnArgument": {
+   "equation": "26",
+   "token": "9.83",
+   "line": 579,
+   "pdfPage": 12,
+   "lineText": "44.5 ln(9.83/Ω0 h2 )",
+   "value": 9.83
+  },
+  "s26.denominatorCoefficient": {
+   "equation": "26",
+   "token": "10",
+   "line": 581,
+   "pdfPage": 12,
+   "lineText": "1 + 10(Ωb h2 )3/4",
+   "value": 10
+  },
+  "s26.denominatorExponent": {
+   "equation": "26",
+   "token": "3/4",
+   "line": 581,
+   "pdfPage": 12,
+   "lineText": "1 + 10(Ωb h2 )3/4",
+   "value": 0.75
+  },
+  "accuracy.percent": {
+   "equation": "26 text",
+   "token": "2",
+   "line": 582,
+   "pdfPage": 12,
+   "lineText": "approximates the sound horizon to ∼ 2% over the range Ωb h2 > ∼ 0.0125 and 0.025 <",
+   "value": 2
+  },
+  "domain.omegaBh2.lower": {
+   "equation": "26 text",
+   "token": "0.0125",
+   "line": 582,
+   "pdfPage": 12,
+   "lineText": "approximates the sound horizon to ∼ 2% over the range Ωb h2 > ∼ 0.0125 and 0.025 <",
+   "value": 0.0125
+  },
+  "domain.omega0h2.lower": {
+   "equation": "26 text",
+   "token": "0.025",
+   "line": 582,
+   "pdfPage": 12,
+   "lineText": "approximates the sound horizon to ∼ 2% over the range Ωb h2 > ∼ 0.0125 and 0.025 <",
+   "value": 0.025
+  },
+  "domain.omega0h2.upper": {
+   "equation": "26 text",
+   "token": "0.5",
+   "line": 584,
+   "pdfPage": 12,
+   "lineText": "∼ Ω0 h <∼ 0.5. The value",
+   "value": 0.5
+  },
+  "domain.omegaBh2.upperForDragEpoch": {
+   "equation": "4 text",
+   "token": "0.03",
+   "line": 242,
+   "pdfPage": 5,
+   "lineText": "∼ 0.03,",
+   "value": 0.03
+  },
+  "T.cobe": {
+   "equation": "text",
+   "token": "2.728",
+   "line": 159,
+   "pdfPage": 4,
+   "lineText": "FIRAS instrument are 2.728 ± 0.004 K (Fixsen et al. 1996; 95% confidence interval). We assume that the",
+   "value": 2.728
+  },
+  "z.reductionFactorFromHS96": {
+   "equation": "4 text",
+   "token": "0.96",
+   "line": 241,
+   "pdfPage": 5,
+   "lineText": "where we have reduced zd by a factor of 0.96 from HS96 on phenomenological grounds. For Ωb h2 <",
+   "value": 0.96
+  }
+ },
+ "forms": {
+  "eq4": "z_d = a (w0^e1) / (1 + c (w0^e2)) [1 + b1 (wb^b2)], b1 = a1 (w0^e3) [1 + c1 (w0^e4)], b2 = a2 (w0^e5); w0 = Omega0 h^2, wb = Omega_b h^2 (pdf page 5)",
+  "eq5": "R(z) = 3 rho_b / (4 rho_gamma) = a wb Theta27^-4 (z / 10^3)^-1 (pdf page 5)",
+  "eq2": "z_eq = m 10^4 w0 Theta27^-4 (pdf page 4)",
+  "eq3": "k_eq = m 10^-2 w0 Theta27^-2 per Mpc, equal to (2 Omega0 H0^2 z_eq)^(1/2) (pdf page 4)",
+  "eq6": "s = 2 / (3 k_eq) sqrt(6 / R_eq) ln[(sqrt(1 + R_d) + sqrt(R_d + R_eq)) / (1 + sqrt(R_eq))], R_d = R(z_d), R_eq = R(z_eq) (pdf page 5)",
+  "eq26": "s = a ln(l / w0) / sqrt(1 + c wb^(3/4)) Mpc (pdf page 12)",
+  "theta27": "Theta27 = T_CMB / 2.7 K; the paper fixes T_CMB to the COBE value 2.728 K and does not vary Theta27 in its fits (pdf page 4)",
+  "neutrinos": "three massless species at (4/11)^(1/3) the photon temperature (pdf page 4)",
+  "omega0": "Omega0 = Omega_b + Omega_c, no neutrino mass (pdf page 4)"
+ },
+ "source": {
+  "identifier": "arXiv:astro-ph/9709112v1",
+  "citation": "Eisenstein and Hu 1998, Baryonic Features in the Matter Transfer Function, ApJ 496, 605",
+  "pdfSha256": "1d283b1a416be45c684eb18adf78983ced73b449e80ec3caed2897842e20fa59",
+  "layoutTextSha256": "3d777eee2e9d0f4495910ead9e989f1638c3b3ccd457abd3198e204e5d1de748",
+  "rawTextSha256": "3a0892f1b8d9e77d09ba2772d8dbec2119409189bb36180904ddd63291afa0b8",
+  "tool": "pdftotext -layout and pdftotext -raw (poppler 26.08.0)"
+ }
+}

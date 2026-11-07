@@ -1,0 +1,70 @@
+{
+ "retrieved": "2026-11-07",
+ "retrievedBy": "Carl's session (coordinator), from the SDSS-III data release; transcribed by script/copy, not from memory",
+ "citation": {
+  "paper": "Alam et al. 2017, MNRAS 470, 2617, The clustering of galaxies in the completed SDSS-III BOSS: cosmological analysis of the DR12 galaxy sample",
+  "arXiv": "1607.03155",
+  "pdf_sha256": "47ef72af92d496266a383e8ee1275300c8bdeef92d071ec39b2d0d8bdd42c98b"
+ },
+ "data": {
+  "tarball_url": "https://data.sdss.org/sas/dr12/boss/papers/clustering/ALAM_ET_AL_2016_consensus_and_individual_Gaussian_constraints.tar.gz",
+  "tarball_sha256": "23c82f1b17279176167d7de62dac197be36f41c135fa38116f43abec771aac32",
+  "files": {
+   "results": "COMBINEDDR12_BAO_consensus_dM_Hz/BAO_consensus_results_dM_Hz.txt",
+   "covariance": "COMBINEDDR12_BAO_consensus_dM_Hz/BAO_consensus_covtot_dM_Hz.txt",
+   "sha256": {
+    "cons/COMBINEDDR12_BAO_consensus_dM_Hz/BAO_consensus_covtot_dM_Hz.txt": "05c04829c8edc117870efe809494593a23de6c35547f8b66760a5250804b65cf",
+    "cons/COMBINEDDR12_BAO_consensus_dM_Hz/BAO_consensus_results_dM_Hz.txt": "30e784fa08e7eddb2fdd1ab09411424e67aa9b75df58f4bb330a889c9b9c478e"
+   }
+  }
+ },
+ "measurements_BAO_only_consensus": {
+  "order": [
+   "DM(0.38)",
+   "H(0.38)",
+   "DM(0.51)",
+   "H(0.51)",
+   "DM(0.61)",
+   "H(0.61)"
+  ],
+  "z_eff": [
+   0.38,
+   0.51,
+   0.61
+  ],
+  "DM_rd_fid_over_rd_Mpc": {
+   "0.38": 1512.39,
+   "0.51": 1975.22,
+   "0.61": 2306.68
+  },
+  "H_rd_over_rd_fid_km_s_Mpc": {
+   "0.38": 81.2087,
+   "0.51": 90.9029,
+   "0.61": 98.9647
+  },
+  "printed_Table7_rounded": {
+   "DM": [
+    "1512\u00b122\u00b111",
+    "1975\u00b127\u00b114",
+    "2307\u00b133\u00b117"
+   ],
+   "H": [
+    "81.2\u00b12.2\u00b11.0",
+    "90.9\u00b12.1\u00b11.1",
+    "99.0\u00b12.2\u00b11.2"
+   ]
+  },
+  "covariance_note": "6x6, total (stat+sys), in the same row order and units as the values (Mpc and km/s/Mpc, rd/rd_fid factors omitted). sqrt(624.707)=25.0 matches 22 and 11 added in quadrature (24.6) to print rounding."
+ },
+ "fiducial": {
+  "Om": 0.31,
+  "h": 0.676,
+  "omegaB_h2": 0.022,
+  "sigma8": 0.8,
+  "ns": 0.97,
+  "rd_fid_Mpc": 147.78,
+  "note": "Neff and neutrino mass are in the paper's Section 2.2 but were not transcribed; request them from the PDF if a leg needs them."
+ },
+ "printed_flat_LCDM_Om_BAO_only": "NOT FOUND as a clean BAO-only number; the paper prints Om=0.310\u00b10.005 for Planck+BAO+FS (flat LCDM), and Planck alone 0.317\u00b10.009. Leg O3's BAO-only Om stays NOT RUN unless a source is named.",
+ "terms": "SDSS public data: the SDSS 'How to Cite SDSS' page (sdss4.org/collaboration/citing-sdss/) asks users of public SDSS data to cite the survey papers; no licence text read beyond that. Use: derived numbers and short fixtures with citation."
+}

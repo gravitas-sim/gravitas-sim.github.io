@@ -1,0 +1,79 @@
+{
+ "format": "gravitas.bao-authentic-sources/1",
+ "note": "Sources of the authentic fixtures of the follow-up to BAO_GATE.md (Prompt 257). Fetched by Carl's session (the coordinator) on 2026-11-07 outside every repository, nothing fetched and no downloaded code run by the follow-up session. Only derived numbers and short fixtures are kept here: the two consensus files (a 6-value results list and a 6 x 6 covariance, byte for byte), the transcription of one table and the paper's printed facts, and the transcription of the fitting formulas. No PDF, no extracted text, no tarball and no paper text beyond short printed equation lines and numbers is reproduced. No home path is in any fixture.",
+ "retrieved": "2026-11-07",
+ "files": {
+  "BAO_consensus_results_dM_Hz.txt": {
+   "sha256": "30e784fa08e7eddb2fdd1ab09411424e67aa9b75df58f4bb330a889c9b9c478e",
+   "bytes": 203
+  },
+  "BAO_consensus_covtot_dM_Hz.txt": {
+   "sha256": "05c04829c8edc117870efe809494593a23de6c35547f8b66760a5250804b65cf",
+   "bytes": 288
+  },
+  "published-release.json": {
+   "sha256": "22a0e4e2e3ae8bd846a80f104f764a68c3376c868098a0e3cd9b256c18abeb55",
+   "bytes": 2768
+  },
+  "fitting-formulas.json": {
+   "sha256": "722194eea6f4829dc055681be0c91a6782a44b24cbf51b7ea8b0d3b216f8359e",
+   "bytes": 6809
+  },
+  "alam-printed.json": {
+   "sha256": "bee3a975c92e64641edb910ac3793be6cf323bf7b51b358b7dee979aa39bb296",
+   "bytes": 2518
+  }
+ },
+ "sources": [
+  {
+   "id": "BOSS-DR12-consensus",
+   "identifier": "arXiv:1607.03155",
+   "citation": "Alam et al. 2017, MNRAS 470, 2617, The clustering of galaxies in the completed SDSS-III Baryon Oscillation Spectroscopic Survey: cosmological analysis of the DR12 galaxy sample",
+   "pdfSha256": "47ef72af92d496266a383e8ee1275300c8bdeef92d071ec39b2d0d8bdd42c98b",
+   "dataUrl": "https://data.sdss.org/sas/dr12/boss/papers/clustering/ALAM_ET_AL_2016_consensus_and_individual_Gaussian_constraints.tar.gz",
+   "dataTarballSha256": "23c82f1b17279176167d7de62dac197be36f41c135fa38116f43abec771aac32",
+   "dataTarballBytes": 5044,
+   "dataTarballKept": false,
+   "filesUsed": "cons/COMBINEDDR12_BAO_consensus_dM_Hz/BAO_consensus_results_dM_Hz.txt and BAO_consensus_covtot_dM_Hz.txt (the BAO-only consensus, total covariance, statistical plus systematic); their sha256 are in files above and in published-release.json",
+   "locators": {
+    "fiducialCosmology": "pdf page 5: flat LCDM, Omega_m 0.31, h 0.676, Omega_b h^2 0.022, sigma_8 0.8, n_s 0.97; the sound horizon of this fiducial is r_d,fid = 147.78 Mpc (also pdf page 11)",
+    "table7": "pdf page 20: the BAO-only consensus D_M r_d,fid/r_d and H r_d/r_d,fid at z = 0.38, 0.51, 0.61, first error statistical, second systematic",
+    "alphaDefinition": "pdf page 8, equation 11: alpha_perp and alpha_par are the ratios to the fiducial values; the paper prints no alpha values for the consensus, only the D_M and H values of Table 7",
+    "neutrinoSector": "pdf page 27: the cosmological chains use a minimal neutrino sector, one species of 0.06 eV and two massless; this is stated for the chains, NOT for the fiducial cosmology that converted redshifts to distances, whose Neff and neutrino mass the paper does not state",
+    "table10": "pdf page 28: flat LCDM Omega_m 0.317 (9) for Planck, 0.309 (6) for Planck + BAO, 0.311 (6) for Planck + BAO + FS; there is no row for BAO alone",
+    "notPrinted": "a BAO-alone flat-LCDM matter density; the alphas of the consensus; the fiducial's Neff and neutrino mass"
+   },
+   "termsAsRead": "the SDSS 'How to Cite SDSS' page (read 2026-11-07 by Carl's session) asks that users of public SDSS data cite the survey and data-release papers; no licence text was read beyond that. Basis accepted: cite-only; derived numbers and short fixtures with the citation.",
+   "rightsBasis": "7.5 rule 4: public SDSS data, cited; the two data files are 6 and 36 numbers and are kept byte for byte as a short fixture; nothing else of the release is kept",
+   "transcriptionOfPrintedNumbers": "tests/fixtures/bao/authentic/alam-printed.json, by script (tools/bao-extract-alam.mjs on the spike branch): each number is a regular expression on one anchored line of the layout text of the PDF; layout text sha256 is in that file. The Table 10 rows were also checked against the rendered pdf page 28 by eye.",
+   "layoutTextSha256": "72645c57ede79cfeb27a10572eb125bbef27ad5b2ae228d300068825c8dbd000"
+  },
+  {
+   "id": "EH98",
+   "identifier": "arXiv:astro-ph/9709112v1",
+   "citation": "Eisenstein and Hu 1998, Baryonic Features in the Matter Transfer Function, ApJ 496, 605",
+   "pdfSha256": "1d283b1a416be45c684eb18adf78983ced73b449e80ec3caed2897842e20fa59",
+   "layoutTextSha256": "3d777eee2e9d0f4495910ead9e989f1638c3b3ccd457abd3198e204e5d1de748",
+   "rawTextSha256": "3a0892f1b8d9e77d09ba2772d8dbec2119409189bb36180904ddd63291afa0b8",
+   "locators": {
+    "equations2to6": "pdf pages 4 and 5: z_eq (2), k_eq (3), z_d (4), R (5), s (6)",
+    "equation26": "pdf page 12: the fitting formula for the sound horizon, with its stated accuracy (about 2 percent) and the range it is stated for",
+    "temperature": "pdf page 4: T_CMB = 2.728 K (COBE), three massless neutrino species at (4/11)^(1/3) the photon temperature, fixed in the fits"
+   },
+   "stated": {
+    "accuracyOfEquation26": "about 2 percent, over Omega_b h^2 of about 0.0125 or more and Omega_0 h^2 of about 0.025 to about 0.5",
+    "accuracyOfEquation4": "NOT STATED: the paper says only that it is a fit to numerical recombination results with z_d reduced by a factor 0.96 from the earlier work on phenomenological grounds",
+    "accuracyOfEquation6": "NOT STATED (an analytic result for the model with the printed three-digit constants of equations 2, 3 and 5)"
+   },
+   "transcription": "tests/fixtures/bao/authentic/fitting-formulas.json, by script (tools/bao-extract-eh98.mjs on the spike branch): every number is a regular expression applied to one anchored line of the layout text, checked against an independent raw-mode extraction, and the equation structures and the three pages were checked against the rendered PDF pages 4, 5 and 12 by eye in this session; no coefficient was typed",
+   "termsAsRead": "NOT READ: neither the coordinator nor this session read the arXiv licence page of this paper (README of the scratch directory: cite-only). Only numbers, equation coefficients (facts) and cited statements are recorded, with the citation; no paper text is reproduced beyond the short printed equation lines in the transcription. A rights decision on the licence page is a question for Carl.",
+   "rightsBasis": "cite-only, numbers and coefficients as facts; DELEGATED row cites this file"
+  },
+  {
+   "id": "Planck-2018-VI",
+   "identifier": "arXiv:1807.06209",
+   "note": "already recorded in tests/fixtures/bao/authentic/planck-table1.json and D-R10-255-11; used here again for P2 and P1c, no new fetch"
+  }
+ ],
+ "notFound": "The paper prints no BAO-alone flat-LCDM matter density and no alpha values for the consensus (see the locators), so legs O2 and O3 of the committed contract are NOT RUN."
+}
