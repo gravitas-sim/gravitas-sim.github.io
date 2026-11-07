@@ -1,0 +1,135 @@
+{
+  "format": "gravitas.cosmology2-b6-thresholds/1",
+  "prompt": "Roadmap III, Prompt 255, leg B6 (the published table), run after Carl's session fetched the published data. This file is the comparison rule: the tolerance of every leg, the radiation density supplied, the allowance for the radiation and neutrino difference, the verdict function and what a pass does and does not establish. It is committed alone, before the kernel was run on any of these inputs.",
+  "document": "COSMOLOGY_II.md (section 10, written after this file)",
+  "committed": "before the kernel was called with any of the parameter sets below, before tools/cosmology2-b6.mjs existed and before any B6 number existed. The only arithmetic done before this file was plain arithmetic on the printed numbers (no kernel, no oracle, no integral of the age): the tolerance terms of the legs and the closed-form radiation bound below. No result of the kernel, of astropy or of any quadrature on these inputs had been seen. The first and second gates' files (thresholds.json, results.json, failed-legs.json, followup-*.json) are not edited.",
+  "data": {
+    "file": "tests/fixtures/cosmology2/authentic/published-table.json (added in the commit after this one, byte for byte the file Carl's session fetched and transcribed, which sits outside every repository)",
+    "sha256": "675ce014b34b10f0e4b2a0dd5fac94804fc2aa5bca64f1fb55397ec8c49f27be",
+    "retrieved": "2026-11-06",
+    "sources": [
+      {
+        "identifier": "arXiv:1807.06209",
+        "what": "Planck 2018 results VI, Table 1, best-fit column of the Plik likelihood (TT,TE,EE+lowE+lensing, base LCDM, which the paper defines as spatially flat)",
+        "pdfSha256": "8e172730faf07c9f4ff3fdcc7043f76ed67df6f76066d47df30d693025b6ce77"
+      },
+      {
+        "identifier": "arXiv:astro-ph/0609593",
+        "what": "Wright 2006, section 2, the paragraph on verifying simple cases (the radiation density the calculator sets, and the two printed empty-universe cases)",
+        "pdfSha256": "04b394a0e25f8637255210409b9717ece4ad82d48c203c11e45505954681a5ae"
+      }
+    ],
+    "printedValuesUsed": "Planck: H0 67.32 (last digit 0.01), Omega_m 0.3158 (last digit 1e-4), age 13.7971 Gyr (last digit 1e-4 Gyr). Wright: Omega_r h^2 = 4.165e-5 (last digit 1e-8 of the coefficient, i.e. 0.001 in 4.165), the open case with H0 97.78 and Omega_M 0 giving 9.934 Gyr (last digit 0.001 Gyr), the open case with H0 977.8 and Omega_M 0 giving 999 Myr (last digit 1 Myr). Every one is a number in that file as transcribed; none is typed from memory here.",
+    "noDistanceTable": "No printed table of comoving or luminosity distances for a stated cosmology was found in the three papers read (Planck 2018 VI, Hogg 1999, Wright 2006); the Hogg paper holds formulas, not a table of values. Leg B6 is therefore an AGE-ONLY leg, and nothing below compares a distance with a published number."
+  },
+  "rule": "Each leg runs the kernel (js/kernels/cosmology/late, createFriedmann, age()) at the printed parameters, converts the age with the kernel's own constant, and compares it with the printed age. The leg passes when |kernel - printed| / printed is at or below the leg's tolerance. The tolerance is the sum, written below in closed form from printed numbers only, of (a) one unit of the last printed digit of the age (the committed B6's own bound), (b) the propagation of the half unit of every printed input (the kernel is run at the rounded input, the published model at the unrounded one) and (c) the stated allowance for the radiation and neutrino difference (the Planck leg only). No term is read from the kernel's result, from astropy or from any integral of the age on these inputs. A leg whose tolerance is crossed is a failed leg and stays failing; the alternative is recorded as a question for Carl.",
+  "radiation": {
+    "supplied": "Or = 4.165e-5 / h^2 with h = H0 / 100 and H0 the leg's own printed H0, in every leg (Wright's printed radiation density; the Wright legs are the calculator's own cases and use exactly the value it set).",
+    "why": "The kernel takes one caller-supplied radiation component (late/friedmann.js). Planck's Table 1 prints no radiation density, and the only radiation density printed in the data is Wright's (T0 = 2.72528 K, three massless neutrino species, with a boost of the neutrino density by under 1 percent as printed there). For the Planck leg it is the nearest printed stand-in. It is supplied with flat closure (Ode = 1 - Om - Or, curvature zero), which is what the Planck model defines.",
+    "planckDifference": "Planck's Omega_m includes one neutrino of 0.06 eV (printed in the Table 1 caption), which is non-relativistic over the epochs that matter for the age, so at those epochs Planck's radiation is the photons and the other massless neutrinos only; the supplied Or counts all three neutrino species as radiation always, and that species is also inside the printed Omega_m, so it is counted twice. The supplied radiation can therefore exceed Planck's by at most one neutrino species' share of the supplied Or. Of an Or made of photons plus three equal species the share of one species is at most one third for any neutrino-to-photon weight; the allowance fraction f is set to one half, which covers that third and the unprinted small differences (the CMB temperature, the neutrino heating, the early-time treatment) without any of them being quantified.",
+    "allowanceFraction": 0.5,
+    "boundOnAgeChange": "For flat closure F0(a) = Om a + (1 - Om) a^4 >= Om a, and the age is (1/H0) Int_0^1 a da / sqrt(F0 + Or (1 - a^4)). By convexity of x^(-1/2), two radiation densities Or and Or' give |Delta(H0 t)| <= (|Or - Or'| / 2) Int_0^1 a (Om a)^(-3/2) da = |Or - Or'| / Om^(3/2). With |Or - Or'| <= f Or the relative change of the age is at most f Or / (Om^(3/2) H0 t), H0 t taken from the printed age and H0 (below)."
+  },
+  "unitConversion": "H0 t, the age in units of 1/H0, is formed from the printed pair H0 and age with 977.8 km/s/Mpc per (1/Gyr), the pair Wright prints (H0 = 977.8 is one inverse Gyr). It is used only to size the sensitivity terms. Differences in the definitions of the year and the parsec between the printers' codes and the kernel are of order 1e-5, below the half unit of every printed H0, and are given no separate term.",
+  "legs": [
+    {
+      "id": "B6.planckBestFitAge",
+      "what": "the age of the flat Lambda-CDM universe with the Plik best-fit H0 and Omega_m, radiation supplied as above, against the printed best-fit age",
+      "kernelInputs": "H0 = 67.32, Om = 0.3158, Or = 4.165e-5 / 0.6732^2, flat (Ode = 1 - Om - Or), w = -1",
+      "printed": "age 13.7971 Gyr",
+      "toleranceTerms": {
+        "T1": "one unit of the last printed age digit / age = 1e-4 / 13.7971",
+        "T2": "half unit of printed H0 / H0 = 0.005 / 67.32 (H0 t is exactly proportional to 1/H0, so the sensitivity is 1)",
+        "T3": "half unit of printed Omega_m x the sensitivity bound = 5e-5 x 1 / (3 Om^(3/2) H0 t): with flat closure dF/dOm = a - a^4 <= a, the same convexity bound gives |d(H0 t)/dOm| <= 1 / (3 Om^(3/2)), and the relative sensitivity divides by H0 t",
+        "T4": "the allowance for the radiation and neutrino difference = f Or / (Om^(3/2) H0 t), f = 0.5"
+      },
+      "derived": {
+        "h": 0.6732,
+        "Or": 9.19023869112996e-5,
+        "H0t": 0.9499087461648599,
+        "T1": 7.2478999209978914e-6,
+        "T2": 7.427213309566251e-5,
+        "T3": 9.886638955714164e-5,
+        "T4": 2.7258171556811104e-4,
+        "tolerance": 4.529681381419131e-4,
+        "toleranceGyr": 0.00624964669875779
+      },
+      "limit": "A pass shows the kernel's age at the best-fit Planck parameters is within about 4.5e-4 (0.006 Gyr) of the printed age. That tolerance is wider than the effect of radiation on the age, so this leg cannot test the kernel's radiation or its neutrino treatment; it tests that matter, curvature-free dark energy and the unit conversion agree with the published age."
+    },
+    {
+      "id": "B6.wrightOpenH0_97_78",
+      "what": "the age of the empty open universe (Omega_M = 0, Omega_Lambda = 0, curvature 1 - Or) at the printed H0 with the printed radiation density, against the printed 9.934 Gyr",
+      "kernelInputs": "H0 = 97.78, Om = 0, Or = 4.165e-5 / 0.9778^2, Ode = 0 (so Ok = 1 - Or), w = -1",
+      "printed": "age 9.934 Gyr",
+      "toleranceTerms": {
+        "U1": "one unit of the last printed age digit / age = 0.001 / 9.934",
+        "U2": "half unit of printed H0 / H0 = 0.005 / 97.78",
+        "U3": "the radiation density's own print: with H0 t = 1/(1 + sqrt(Or)) for this model, |d ln age| <= d sqrt(Or) = (sqrt(Or)/2)(delta Or / Or); delta Or / Or = 0.0005 / 4.165 + 2 U2 (half unit of 4.165 in Wright's printed coefficient, and h^2 through the half unit of H0)",
+        "U4": "the calculator's own quadrature, printed as the mid-point rule with 1000 panels: the error is at most (h^2 / 24) times the total variation of the first derivative of the integrand a / sqrt(Or + (1 - Or) a^2), which is 1 / sqrt(Or), with panel width h = 1/1000, so U4 = 1e-6 / (24 sqrt(Or)) (the integration variable of the calculator is stated as the assumption a on [0, 1])"
+      },
+      "derived": {
+        "Or": 4.356271510201875e-5,
+        "sqrtOr": 0.006600205686341809,
+        "U1": 1.0066438494060802e-4,
+        "U2": 5.1135201472693805e-5,
+        "U3": 7.33673657036618e-7,
+        "U4": 6.312934573067916e-6,
+        "tolerance": 1.5884619464340635e-4
+      },
+      "limit": "A pass shows the kernel reproduces, to about 1.6e-4, the age a published calculator prints for an empty universe WITH its radiation; the radiation lowers that age by 0.66 percent from the 10 Gyr of the radiation-free empty universe, so this leg does depend on the radiation term."
+    },
+    {
+      "id": "B6.wrightOpenH0_977_8",
+      "what": "the same empty open universe at ten times the printed H0, against the printed 999 Myr",
+      "kernelInputs": "H0 = 977.8, Om = 0, Or = 4.165e-5 / 9.778^2, Ode = 0 (so Ok = 1 - Or), w = -1",
+      "printed": "age 999 Myr",
+      "toleranceTerms": {
+        "U1": "one unit of the last printed digit / age = 1 Myr / 999 Myr",
+        "U2": "half unit of printed H0 / H0 = 0.05 / 977.8",
+        "U3": "as in the previous leg",
+        "U4": "as in the previous leg, with sqrt(Or) of this leg"
+      },
+      "derived": {
+        "Or": 4.356271510201877e-7,
+        "sqrtOr": 0.0006600205686341811,
+        "U1": 0.001001001001001001,
+        "U2": 5.1135201472693805e-5,
+        "U3": 7.336736570366182e-8,
+        "U4": 6.312934573067916e-5,
+        "tolerance": 0.0011153389155700777
+      },
+      "limit": "The printed age has three digits (999 Myr), so one unit of its last digit is 1 Myr and that is larger than the effect of the radiation it was printed to show (0.07 percent). This leg alone cannot separate the kernel with radiation from the kernel without it; it checks the unit scale and the empty-universe age at a second H0. The previous leg carries the radiation."
+    }
+  ],
+  "reportedNotJudged": {
+    "what": "numbers shown beside each leg, never a pass criterion",
+    "perLeg": [
+      "the signed relative difference and the difference in units of the last printed digit",
+      "the literal reading of the committed B6 (thresholds.json B6.publishedTable: within one unit in the last printed digit, with none of the terms (b) and (c)): pass or fail, reported, not judged",
+      "the same leg with the radiation set to zero, to show whether the leg depends on the radiation (control, not a comparison)"
+    ],
+    "planckMarginalised": "the difference of the kernel's age from the printed marginalised mean 13.797 and its printed 68 percent error 0.023, in units of that error; reported only, since a best-fit age is the quantity the best-fit parameters give",
+    "closedForm": "for the two Wright legs, the closed form age = (1 / H0)(Gyr per 1/H0 from the kernel's constant) / (1 + sqrt(Or)), the empty-universe-with-radiation age derived above, beside the kernel's age: an internal consistency note, not a leg"
+  },
+  "gate": {
+    "b6": "pass when every leg of B6 passes; fail when any leg fails (a failed leg stays failing).",
+    "verdictFunction": "the product verdict is the committed function of thresholds.json (gate.verdictFunction) with B6 measured: when B6 passes it equals the kernel verdict, and when B6 fails it is NOT ESTABLISHED (B6 FAILED). It is stated for both forms on record: the original kernel verdict (C, rows of results.json) and the follow-up kernel verdict (A, rows of followup-results.json with A7b, B1b, B3b and F3b in place of A7, B1, B3 and F3). The original form is not replaced by the follow-up (followup-thresholds.json); both products are reported.",
+    "qualifier": "every product verdict printed by this gate carries the words 'age-only B6': the contract's B6 asked for distances and ages, and no table of distances was found.",
+    "consumersClause": "the clause (a panel, a lesson, the model-page section) is met only by a product verdict of A. This gate reports whether it is met in each form. Reporting it is not lifting the consumers rule; that is Carl's call, and nothing here builds a panel, a lesson or a viewer. Whether an age-only B6 satisfies the contract's B6 for the clause is a question for him and is recorded as one."
+  },
+  "verdictLanguage": {
+    "ifPass": "B6 passes (age-only): the kernel's ages agree with two published sources: the Planck 2018 best-fit age within a tolerance set by the printed precision and an allowance for the radiation and neutrino difference (so it does not test the radiation), and Wright's printed empty-universe ages with radiation, one of which (H0 97.78) does depend on the radiation term. It does NOT establish any distance (comoving, luminosity, angular diameter, modulus, lookback) against a published number: none was found, and distances rest on closed forms, astropy 6.0.1 and an independent quadrature. It does not establish w other than -1, curved universes with matter, closed universes, the transition redshift or the contours against published values.",
+    "ifFail": "B6 fails: the product verdict is NOT ESTABLISHED and the failing leg's difference and cause are the question for Carl; no bound is moved."
+  },
+  "amendments": [
+    {
+      "id": "AM3",
+      "step": "thresholds.json check B6.publishedTable (committed: 'a published table of distances and ages ... within the table's own printed precision (one unit in the last printed digit)')",
+      "what": "Three changes to the committed B6, made before the kernel was run on these inputs and on Carl's instruction (2026-11-06: tolerance from the printed precision and the stated radiation and neutrino difference, committed first). (1) B6 is age-only: no table of distances exists in the data. (2) The tolerance is widened from one unit of the last printed digit to that unit plus the half-unit propagation of the printed inputs plus, for the Planck leg only, the stated radiation allowance; the committed literal bound is reported beside every leg. (3) The radiation density is supplied as Wright's printed value, scaled by the leg's H0.",
+      "why": "The committed text did not foresee that the kernel takes one caller-supplied radiation component while the published model has photons, massless neutrinos and a 0.06 eV neutrino. A one-unit bound on an age printed to six digits (7e-6) is smaller than the effect of radiation on the age (of order 1e-4), so it would fail whatever the kernel does and would measure the choice of radiation density, not the kernel.",
+      "boundMoved": true,
+      "boundMovedHow": "widened, before any run on these inputs, by terms written above from printed numbers and a closed-form bound; no term is read from a result.",
+      "when": "before the kernel was run on any B6 input"
+    }
+  ]
+}

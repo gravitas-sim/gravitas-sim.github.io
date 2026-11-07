@@ -5,11 +5,12 @@
 // before any validator row was seen, both recorded, no bound moved). tools/cosmology2-validate.mjs judges the
 // kernel against them; this runs it once in a child process and holds the table against the pinned
 // results.json and failed-legs.json. A leg that crosses its bound stays in failed-legs.json; only Carl resets a
-// bound. The leg that waits for an authentic file is NOT RUN and says so.
+// bound. The leg that waited for an authentic file is NOT RUN in this pinned table; it is judged afterwards
+// by tools/cosmology2-b6.mjs under b6-thresholds.json (tests/cosmology2B6.test.js).
 // =============================================================================
 
 import { describe, test, expect } from '@jest/globals';
-import { existsSync, readFileSync } from 'node:fs';
+import { readdirSync, readFileSync } from 'node:fs';
 import { execFileSync } from 'node:child_process';
 import process from 'node:process';
 import { URL } from 'node:url';
@@ -70,15 +71,21 @@ describe('the committed legs and their pinned results', () => {
     ]);
     expect(RESULTS.rows.find(r => r.id.startsWith('D7.')).status).toBe('pass');
   });
-  test('the leg that waits for a file is not run, and nothing was fetched', () => {
+  test('the first gate pinned B6 as NOT RUN (no file had been supplied then); the published data arrived afterwards and are judged by the B6 gate, not by this table', () => {
     expect(
       RESULTS.rows.filter(r => r.status === 'not-run').map(r => r.id)
     ).toEqual(['B6.publishedTable']);
-    expect(
-      existsSync(new URL('./fixtures/cosmology2/authentic', import.meta.url))
-    ).toBe(false);
+    expect(RESULTS.rows.find(r => r.id === 'B6.publishedTable').note).toMatch(
+      /was not supplied/
+    );
     expect(RESULTS.gate.productVerdict).toMatch(/NOT ESTABLISHED/);
     expect(RESULTS.gate.consumers).toMatch(/^unmet/);
+    // the data that arrived later are the only authentic files, and are judged in tests/cosmology2B6.test.js
+    expect(
+      readdirSync(new URL('./fixtures/cosmology2/authentic', import.meta.url))
+        .sort()
+        .join(',')
+    ).toBe('SOURCES.json,published-table.json');
   });
   test('the reported leg is CPU time, which commits no bound', () => {
     expect(

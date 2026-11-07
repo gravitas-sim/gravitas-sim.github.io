@@ -1,0 +1,39 @@
+{
+  "format": "gravitas.cosmology2-authentic-sources/1",
+  "note": "Sources of tests/fixtures/cosmology2/authentic/published-table.json. The data were fetched and transcribed by Carl's session on 2026-11-06 from arXiv, outside every repository; the transcription was checked against the extracted text of each PDF in this session by searching for each printed number (no value was typed from memory). Only numbers and cited facts are recorded here; no text or table of a paper is reproduced. The PDFs and their extracted text stay outside the repository.",
+  "retrieved": "2026-11-06",
+  "dataFile": {
+    "path": "tests/fixtures/cosmology2/authentic/published-table.json",
+    "sha256": "675ce014b34b10f0e4b2a0dd5fac94804fc2aa5bca64f1fb55397ec8c49f27be"
+  },
+  "sources": [
+    {
+      "identifier": "arXiv:1807.06209",
+      "citation": "Planck Collaboration 2018 results. VI. Cosmological parameters, A&A 641, A6",
+      "pdfSha256": "8e172730faf07c9f4ff3fdcc7043f76ed67df6f76066d47df30d693025b6ce77",
+      "location": "Table 1, Plik best-fit column; the table's caption states that Omega_m includes one neutrino of 0.06 eV",
+      "used": "H0, Omega_m and age as printed (leg B6.planckBestFitAge); the marginalised age and its error as printed (reported only)",
+      "termsAsRead": "the arXiv abstract page's rights link names the arXiv non-exclusive distribution licence (version 1.0); the licence text itself was not saved, so only numbers and cited facts are recorded",
+      "absPageSha256": "a8f46f86ddaea582f60500ab7708ec801a4e8d86b3be6ca9825ce9ca139e7c4d"
+    },
+    {
+      "identifier": "arXiv:astro-ph/0609593",
+      "citation": "Wright 2006, PASP 118, 1711, A Cosmology Calculator for the World Wide Web",
+      "pdfSha256": "04b394a0e25f8637255210409b9717ece4ad82d48c203c11e45505954681a5ae",
+      "location": "Section 2, the paragraph on verifying simple cases",
+      "used": "the radiation density the calculator sets, and the two empty-universe cases it prints (legs B6.wrightOpenH0_97_78 and B6.wrightOpenH0_977_8); the calculator's integration rule (mid-point rule, 1000 panels) as stated in the same section",
+      "termsAsRead": "the arXiv abstract page's rights link names the arXiv 'assumed-1991-2003' licence; the licence text itself was not saved, so only numbers and cited facts are recorded",
+      "absPageSha256": "eb1d72aa0be0894ad9d9a6f24829c34c0cdfa64d26eb96e2cfdab08a868f0a7c"
+    },
+    {
+      "identifier": "arXiv:astro-ph/9905116",
+      "citation": "Hogg 1999, Distance measures in cosmology",
+      "pdfSha256": "8e100249e7179dc686be105f84217d48b7b8101add14e8fa85d4020e55d9957a",
+      "location": "read in full; holds formulas, not a table of values",
+      "used": "nothing (no printed table of distances for a stated cosmology was found in it)",
+      "termsAsRead": "the arXiv abstract page's rights link names the arXiv 'assumed-1991-2003' licence",
+      "absPageSha256": "bb76ae35d051ed8ced7328adabce64ca995bdada0b8d4a797653546a07d82ea3"
+    }
+  ],
+  "notFound": "No printed table of comoving or luminosity distances for a stated cosmology was found in the three papers. Leg B6 is age-only."
+}
