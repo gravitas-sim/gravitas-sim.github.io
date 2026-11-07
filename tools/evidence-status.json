@@ -1320,6 +1320,60 @@
           "text": "# The galaxy-cluster kernel: dispersion, virial mass, light and morphology (Prompt 250)"
         }
       ]
+    },
+    {
+      "id": "kernel-cosmology-late",
+      "claim": "The late-time FLRW kernel’s results match the checks its committed thresholds set for it: analytic cases, an independent oracle where one was named, and synthetic worlds whose truth is known.",
+      "scope": "js/kernels/cosmology/late/ (Prompt 255, with its follow-up legs and its leg B6), as its validators tools/cosmology2-validate.mjs, tools/cosmology2-followup.mjs and tools/cosmology2-b6.mjs and the pinned records in tests/fixtures/cosmology2/ state it; not any lesson or panel built on it.",
+      "version": "2.1.0",
+      "class": "V-internal",
+      "status": "partial",
+      "method": "tools/cosmology2-validate.mjs against the thresholds committed before the kernel, then the follow-up legs and the published-ages leg, each with thresholds committed first; the gate and the failing legs are in COSMOLOGY_II.md.",
+      "evaluator": "the project",
+      "artifact": "tools/cosmology2-validate.mjs",
+      "limitations": "Kernel verdict C by the committed function; the follow-up legs give A and the original C stays on record; the product verdict is NOT ESTABLISHED in the original form and A (age-only) in the follow-up form. Failing legs, named: A7, B1, B3, F3 (the committed text or oracle was at fault, not a disagreement of the kernel with an independent calculation); they stay failing as committed. The three published-age legs pass within their committed tolerances and test no distance. No consumer is released: the kernel is imported by no shipped module, so no lesson, panel or student-facing number rests on it. Internal validation against the project’s own committed thresholds, oracle and synthetic worlds; no outside scientist has reviewed the kernel (see external-science-review).",
+      "date": "2026-11-07",
+      "anchors": [
+        {
+          "file": "COSMOLOGY_II.md",
+          "text": "# Cosmology kernel II: late-time FLRW depth (Prompt 255)"
+        }
+      ]
+    },
+    {
+      "id": "cosmology-gates-ii",
+      "claim": "The supernova-likelihood, baryon-acoustic-oscillation, microwave-background angular-scale and structure-growth gates each returned a recorded verdict against thresholds committed before their prototypes ran.",
+      "scope": "The gate records of Prompts 256 to 259 (SN_LIKELIHOOD_GATE.md, BAO_GATE.md, CMB_SCALE_GATE.md, GROWTH_GATE.md) with their pinned fixtures and validators’ results. Their prototypes stay on spike branches that are never merged, so no code of theirs is in the tree; not any lesson, panel, viewer or contour.",
+      "version": "2.1.0",
+      "class": "V-internal",
+      "status": "UNKNOWN",
+      "method": "Each gate’s committed thresholds, an independent oracle (astropy, scipy, a second implementation), seeded coverage ensembles and, where one was supplied, a published value; the pinned results are in tests/fixtures/supernova-likelihood/, bao/, cmb-scale/ and growth/.",
+      "evaluator": "the project",
+      "artifact": "COSMOLOGY_CLOSEOUT_II.md",
+      "limitations": "Nothing is claimable about any of the four observables. Supernovae: Part A verdict A (narrow), then FC against the release’s covariance; the decided split form is inadequate as a stand-in for it. BAO: verdict C twice; E5 fails and the cited fitting formulas fail their committed rows. CMB angular scale: verdict C; B5, E1, E2, E6a and E6b fail. Structure growth: verdict C; C1 and R2 fail. Every failing leg stays failing as committed; the NOT RUN legs name the files they wait for. No consumer is released, so no student-facing statement rests on any of it. Internal validation against the project’s own committed thresholds; no outside scientist has reviewed it (see external-science-review).",
+      "date": "2026-11-07",
+      "anchors": [
+        {
+          "file": "COSMOLOGY_CLOSEOUT_II.md",
+          "text": "# Cosmology II closeout (Prompt 260)"
+        },
+        {
+          "file": "SN_LIKELIHOOD_GATE.md",
+          "text": "# The supernova likelihood gate"
+        },
+        {
+          "file": "BAO_GATE.md",
+          "text": "# The baryon acoustic oscillation gate"
+        },
+        {
+          "file": "CMB_SCALE_GATE.md",
+          "text": "# The microwave background angular-scale gate"
+        },
+        {
+          "file": "GROWTH_GATE.md",
+          "text": "# The structure-growth gate"
+        }
+      ]
     }
   ]
 }
