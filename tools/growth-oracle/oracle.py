@@ -14,6 +14,8 @@ import sys
 import time
 from decimal import Decimal, getcontext
 
+import warnings
+
 import numpy as np
 import scipy
 from scipy.integrate import quad, solve_ivp
@@ -120,7 +122,7 @@ out = {
     },
     "grid": {"a": GRID_A},
 }
-t0 = time.time()
+tstart = time.time()
 
 # --------------------------------------------------------------- growth sets
 growth = {}
@@ -209,21 +211,30 @@ def window(x):
     return 3.0 * (math.sin(x) - x * math.cos(x)) / x ** 3
 
 
+def decade_quad(f, lo, hi, nd):
+    """Integral of f(ln k) over [lo, hi], split in nd equal parts; epsabs is 1e-13 of a rough total so the
+    far oscillatory tail (negligible beside the total) is not asked for a relative accuracy of its own."""
+    with warnings.catch_warnings():
+        warnings.simplefilter("ignore")
+        rough, _ = quad(f, lo, hi, limit=4000, epsabs=0.0, epsrel=1e-6)
+    tot = 0.0
+    edges = [lo + (hi - lo) * i / nd for i in range(nd + 1)]
+    for a, b in zip(edges[:-1], edges[1:]):
+        v, _ = quad(f, a, b, limit=4000, epsabs=1e-13 * abs(rough), epsrel=1e-12)
+        tot += v
+    return tot
+
+
 def sigma2_unnorm(R, T2fun, ns, kmin=1e-5, kmax=1e4):
     """Integral of dlnk k^(3+ns) T^2 W^2, split by decade."""
     def f(lk):
         k = math.exp(lk)
         return k ** (3.0 + ns) * T2fun(k) * window(k * R) ** 2
 
-    tot = 0.0
     lo = math.log(kmin)
     hi = math.log(kmax)
     nd = int(round((hi - lo) / math.log(10.0)))
-    edges = [lo + (hi - lo) * i / nd for i in range(nd + 1)]
-    for a, b in zip(edges[:-1], edges[1:]):
-        v, _ = quad(f, a, b, limit=4000, epsabs=0.0, epsrel=1e-12)
-        tot += v
-    return tot
+    return decade_quad(f, lo, hi, nd)
 
 
 qs = [10.0 ** (-4.0 + 8.0 * i / 300.0) for i in range(301)]
@@ -244,17 +255,7 @@ for R in (1.0, 8.0, 30.0):
     A = 1.0
     closed_form = 3.0 * A / (10.0 * math.pi * R)
 
-    def g(lk, R=R):
-        k = math.exp(lk)
-        return k * window(k * R) ** 2 / (2.0 * math.pi ** 2) * k  # (A/(2 pi^2)) k^3 P W^2 / k dk -> k^3 k^-2 dlnk
-
-    tot = 0.0
-    lo, hi = math.log(1e-9), math.log(1e4)
-    nd = 13
-    edges = [lo + (hi - lo) * i / nd for i in range(nd + 1)]
-    for a, b in zip(edges[:-1], edges[1:]):
-        v, _ = quad(lambda lk: (math.exp(lk) ** 1) * window(math.exp(lk) * R) ** 2 / (2.0 * math.pi ** 2), a, b, limit=4000, epsabs=0.0, epsrel=1e-12)
-        tot += v
+    tot = decade_quad(lambda lk: math.exp(lk) * window(math.exp(lk) * R) ** 2 / (2.0 * math.pi ** 2), math.log(1e-9), math.log(1e4), 13)
     pl[repr(R)] = {"closedForm": closed_form, "truncatedQuad": tot, "relativeDifference": abs(tot / closed_form - 1.0)}
 out["sigmaPowerLaw"] = pl
 
@@ -280,14 +281,7 @@ def planck_integrand_unnorm(R):
         d2 = (4.0 / 25.0) * (2997.92458 * k) ** 4 / (om * om) * Dflat ** 2 * planck_T2(k) * As * (k / k0_h) ** (ns - 1.0)
         return d2 * window(k * R) ** 2
 
-    tot = 0.0
-    lo, hi = math.log(1e-5), math.log(1e4)
-    nd = 9
-    edges = [lo + (hi - lo) * i / nd for i in range(nd + 1)]
-    for a, b in zip(edges[:-1], edges[1:]):
-        v, _ = quad(f, a, b, limit=4000, epsabs=0.0, epsrel=1e-12)
-        tot += v
-    return tot
+    return decade_quad(f, math.log(1e-5), math.log(1e4), 9)
 
 
 out["planck"] = {
@@ -353,6 +347,6 @@ out["radiationSensitivity"] = {
     "note": "relative change of D(a)/D(1) when a radiation term is in the background (flat, Om 0.3), Meszaros initial data, DOP853",
 }
 
-out["seconds"] = time.time() - t0
+out["seconds"] = time.time() - tstart
 json.dump(out, open(out_path, "w"), indent=1)
 print("oracle done in %.1f s; self-check %s" % (out["seconds"], out["closedFormSelfCheck"]))
