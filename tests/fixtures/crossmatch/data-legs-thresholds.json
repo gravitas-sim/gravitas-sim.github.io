@@ -119,5 +119,13 @@
     "function": "These legs add to the two gates' reports and re-bound nothing. The crossmatch gate's product verdict stays FAILED LEG(S) while A6.largeShift and G2.coverage fail (the first-run record in results.json is untouched); a bound leg above that fails (D5a, D5c, D5d, B8c.sampleIdentity, B10) is listed as a new failing leg in data-legs-results.json and stays failing. The clustering gate's verdict function (clustering-thresholds.json) reads B8 and B9: B9 is NOT RUN, so the verdict stays B.",
     "consumers": "No table tool, panel, lesson or viewer is built (the consumers rule holds); no ceiling, budget, workflow or instructor material is touched."
   },
-  "amendments": []
+  "amendments": [
+    {
+      "id": "AM1",
+      "adds": "none; one wording clarification of B8c.sampleIdentity",
+      "changes": "the right ascension of the R4 rows is not rounded and the pack's is (to 1e-4 degree), so 'sorted by right ascension, ties by redshift' is read in units of the pack's storage step: both sides are sorted by round(ra / step), ties by redshift, and then compared",
+      "reason": "the first oracle run (before any validator run) sorted R4 by its unrounded right ascension and reported a step fraction of 12933636 for B8c.sampleIdentity: a tie-order artifact of the sort (two galaxies whose rounded right ascensions are equal come in redshift order in the pack and in true-ra order in R4), the sample being the same 2911 rows; the oracle's other numbers (D5, B10) were read at that run and are unchanged by this clarification; no bound moved",
+      "movesNoBound": true
+    }
+  ]
 }
