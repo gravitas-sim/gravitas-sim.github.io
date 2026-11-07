@@ -157,12 +157,25 @@ for n in (100, 300, 800):
     row(f'W1.T1-n{n}', pf(ratio is not None and ratio <= 2.0),
         dict(ratio=ratio, h68=ht, expectedBySqrtRule=math.sqrt(1580 / n)), 'at most 2.0')
 
+def q_measures(X):
+    rec = FS[X]
+    d1 = abs(rec['L1']['best'] - F['L1']['best'])
+    hx, hx95, hF95 = h(rec), h(rec, 'i95'), h(F, 'i95')
+    out = dict(bestFitDifference=d1, inUnitsOfDiagHalfWidth=None if not hD else d1 / hD,
+               ratio68=None if not (hx and hF) else hx / hF, ratio95=None if not (hx95 and hF95) else hx95 / hF95)
+    for kind in ('P1', 'P2'):
+        out[kind] = dict(bestFitDifference=[abs(rec[kind]['best'][a] - F[kind]['best'][a]) for a in (0, 1)],
+                         jaccard68=jaccard(rec[kind]['regions']['68'], F[kind]['regions']['68']),
+                         jaccard95=jaccard(rec[kind]['regions']['95'], F[kind]['regions']['95']))
+    return out
+
+
 # ---- reported and not run
 REP = OR['reported']
 for c in CT['checks']:
     if c['set'] is None and c['id'] != 'X1.fitPackage':
         row(c['id'], 'reported', REP.get(c['id']) if c['id'] in REP else dict(R9=OR['diagonalReport'],
-            R6=dict(DIAG=D['L1']), R7={k: v['forms'] for k, v in M['t1'].items()}).get(c['id'][:2]), 'REPORTED, no bound')
+            R6=dict(DIAGagainstFULL=q_measures('DIAG'), DIAG=D['L1']), R7={k: v['forms'] for k, v in M['t1'].items()}).get(c['id'][:2]), 'REPORTED, no bound')
 row('X1.fitPackage', 'notrun', 'not fetched; downloading or running code is not authorised', 'NOT RUN')
 
 # ---- verdict
@@ -228,6 +241,9 @@ counts = {k: sum(1 for r in rows if r['status'] == k) for k in ('pass', 'fail', 
 out = dict(format='gravitas.supernova-likelihood-followup-results/1',
            thresholdsSha256=hashlib.sha256(cb).hexdigest(), oracleResultsSha256=hashlib.sha256(ob).hexdigest(),
            publishedSha256=hashlib.sha256(open(PUBFILE, 'rb').read()).hexdigest(),
+           spikeCommit=(sys.argv[5] if len(sys.argv) > 5 else None),
+           oracleScriptSha256=hashlib.sha256(open(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'followup.py'), 'rb').read()).hexdigest(),
+           judgeScriptSha256=hashlib.sha256(open(os.path.abspath(__file__), 'rb').read()).hexdigest(),
            covarianceSha256=cov['sha256'], rows=rows, counts=counts, verdict=verdict, mappingGate=OR['mappingGate'])
 with open(os.path.join(OUTDIR, 'followup-results.json'), 'w') as f:
     json.dump(out, f, indent=1)
