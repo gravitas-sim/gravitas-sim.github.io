@@ -1,0 +1,203 @@
+{
+ "format": "gravitas.crossmatch-sources/1",
+ "prompt": "263 follow-up (data legs of the crossmatch and clustering gates)",
+ "authority": "Carl, 2026-11-07, genuine message recorded in DECISIONS_2026-11-07.md: public data may be downloaded by agents into scratch-data/ outside every repository; running downloaded code is not permitted and nothing downloaded was run.",
+ "location": "Everything below lives in scratch-data/crossmatch263/ (outside every repository); only derived numbers and identifiers of disagreeing rows are copied into this tree.",
+ "rightsBasisDefault": "cite-only: no row of a download is committed; derived counts, a few identifiers and the sha256 of each file are.",
+ "files": [
+  {
+   "file": "scratch-data/crossmatch263/sdss/R1-ngc2420-mjd.csv",
+   "sha256": "989ef260e579c92dc1508108e3ff5ef886be9a6bcd3d010137402a98d8440036",
+   "bytes": 229200,
+   "request": "R1",
+   "url": "https://skyserver.sdss.org/dr18/SkyServerWS/SearchTools/SqlSearch?cmd=SELECT+s.objID%2C+s.ra%2C+s.dec%2C+s.psfMag_g%2C+s.psfMagErr_g%2C+s.psfMag_r%2C+s.psfMagErr_r%2C+s.mjd+FROM+dbo.fGetNearbyObjEq%28114.602%2C21.575%2C14.1421%29+AS+nb+JOIN+Star+AS+s+ON+s.objID+%3D+nb.objID+WHERE+s.clean+%3D+1+AND+s.psfMag_g+%3C+22.5+ORDER+BY+s.objID&format=csv",
+   "retrievedUtc": "2026-11-07T17:11Z",
+   "description": "the Gaia/SDSS pack manifest query for the SDSS NGC 2420 photometry (raw[0].url of data-packs/sdss-dr18-ngc2420-photometry.json) with objID and mjd added to the select list; same FROM, JOIN, WHERE and ORDER BY; 2301 data rows",
+   "terms": "The SDSS image-use policy page (read 2026-11-07) states that all SDSS data released in its public data releases are considered public domain; the DR18 data-access page asks for the survey and the data release to be acknowledged.",
+   "rights": "public domain per SDSS; rows still not committed (only epochs and counts)"
+  },
+  {
+   "file": "scratch-data/crossmatch263/sdss/R4-slice-query.csv",
+   "sha256": "251920df19f3ed7c22c2f43b8776df08c4df80041e550eb1968f86bd5c558aad",
+   "bytes": 1163562,
+   "request": "R4",
+   "url": "https://skyserver.sdss.org/dr18/SkyServerWS/SearchTools/SqlSearch?cmd=SELECT+specObjID%2C+ra%2C+dec%2C+z%2C+zErr%2C+petroMag_r%0AFROM+SpecPhoto%0AWHERE+class%3D%27GALAXY%27+AND+zWarning%3D0+AND+survey%3D%27sdss%27+AND+sciencePrimary%3D1%0A++AND+petroMag_r%3C17.77+AND+dec+BETWEEN+0+AND+2+AND+ra+BETWEEN+120+AND+240%0A++AND+z+BETWEEN+0.01+AND+0.2%0AORDER+BY+specObjID&format=csv",
+   "retrievedUtc": "2026-11-07T17:11Z",
+   "description": "the pack manifest query of sdss-dr18-redshift-slice re-run unchanged: it already returns specObjID, ra, dec, z, zErr, petroMag_r (16247 rows); the file is byte-identical to the pack manifest raw[0] (same bytes and sha256)",
+   "terms": "The SDSS image-use policy page (read 2026-11-07) states that all SDSS data released in its public data releases are considered public domain; the DR18 data-access page asks for the survey and the data release to be acknowledged.",
+   "rights": "public domain per SDSS; not committed"
+  },
+  {
+   "file": "scratch-data/crossmatch263/gaia/R2-bestneighbour.csv",
+   "sha256": "e10ff86caeb49807a8c877ef63a5711e75f51947ca70ec870d85b30409dbe81a",
+   "bytes": 47716,
+   "request": "R2",
+   "url": "https://gea.esac.esa.int/tap-server/tap/sync (ADQL in gaia/R2-bestneighbour.adql)",
+   "retrievedUtc": "2026-11-07T17:17Z",
+   "description": "gaiadr3.sdssdr13_best_neighbour for the 993 Gaia sources of the pack (the pack WHERE clause on gaiadr3.gaia_source joined by source_id); 704 rows",
+   "terms": "ESA Gaia data licence page (read 2026-11-07): Gaia data are distributed under CC BY-NC 3.0 IGO.",
+   "rights": "CC BY-NC 3.0 IGO, cite-only: derived counts and a few identifiers only"
+  },
+  {
+   "file": "scratch-data/crossmatch263/gaia/R2-neighbourhood.csv",
+   "sha256": "a6342fc2929db95222909941a4a5f8fd3d758d25ea478597c9e534c69087b330",
+   "bytes": 57646,
+   "request": "R2",
+   "url": "https://gea.esac.esa.int/tap-server/tap/sync (ADQL in gaia/R2-neighbourhood.adql)",
+   "retrievedUtc": "2026-11-07T17:18Z",
+   "description": "gaiadr3.sdssdr13_neighbourhood (all good neighbours with scores) for the same sources; 706 rows",
+   "terms": "ESA Gaia data licence page (read 2026-11-07): Gaia data are distributed under CC BY-NC 3.0 IGO.",
+   "rights": "CC BY-NC 3.0 IGO, cite-only"
+  },
+  {
+   "file": "scratch-data/crossmatch263/gaia/R2-bestneighbour.adql",
+   "sha256": "812c8ccf164c15304113f26c79bbc88e466f53e25aa3958e59d43feb1c08b390",
+   "bytes": 312,
+   "request": "R2",
+   "description": "the ADQL of the best-neighbour query"
+  },
+  {
+   "file": "scratch-data/crossmatch263/gaia/R2-neighbourhood.adql",
+   "sha256": "6f99a5cf2fce69b8a02c8b125d78b01181bccf9d6673bd06311b7f04530da1fc",
+   "bytes": 326,
+   "request": "R2",
+   "description": "the ADQL of the neighbourhood query"
+  },
+  {
+   "file": "scratch-data/crossmatch263/gaia/columns-sdss.csv",
+   "sha256": "1fab04dc648b5460a3332768e84a99a865e4ee5b69ea7cd36f0eb79c0c4da393",
+   "bytes": 1302,
+   "request": "R2",
+   "description": "the archive TAP_SCHEMA descriptions of the sdssdr13 tables (table and column text as the archive serves it)",
+   "retrievedUtc": "2026-11-07T17:16Z"
+  },
+  {
+   "file": "scratch-data/crossmatch263/gaia/tables-sdss.csv",
+   "sha256": "d740455f464d8f68c81948365bf9c0dfa07a2fcde18b6301c600987e3d1600b3",
+   "bytes": 3327,
+   "request": "R2",
+   "description": "the archive table descriptions of gaiadr3.sdssdr13_best_neighbour, _neighbourhood and _join",
+   "retrievedUtc": "2026-11-07T17:15Z"
+  },
+  {
+   "file": "scratch-data/crossmatch263/pub/gdr3-xm-sdss.html",
+   "sha256": "6ebd9bad3e19950ac4528af8dfc063cae31ceda75e5d9c3316c0c1d3c25f24ce",
+   "bytes": 34693,
+   "request": "R2",
+   "url": "https://gea.esac.esa.int/archive/documentation/GDR3/Catalogue_consolidation/chap_crossmatch/sec_crossmatch_externalCat/ssec_crossmatch_sdss.html",
+   "retrievedUtc": "2026-11-07T17:19Z",
+   "description": "Gaia DR3 documentation, section 15.3.3 (SDSS DR13): primary objects only (PhotoPrimary); objects with a position error over 1 arcsec in either axis excluded before the cross-match",
+   "rights": "cite-only"
+  },
+  {
+   "file": "scratch-data/crossmatch263/pub/gdr3-xm-sec_crossmatch_algorithm.html",
+   "sha256": "2a9f301d452d45885920dc602a3114889d9701e6b2369942d6312d8e51551bb1",
+   "bytes": 27078,
+   "request": "R2",
+   "url": "https://gea.esac.esa.int/archive/documentation/GDR3/Catalogue_consolidation/chap_crossmatch/sec_crossmatch_algorithm/",
+   "retrievedUtc": "2026-11-07T17:19Z",
+   "description": "Gaia DR3 documentation, section 15.2 (the algorithm): Gaia objects are moved with their proper motions to the epoch of each external candidate; without proper motions the position errors are broadened",
+   "rights": "cite-only"
+  },
+  {
+   "file": "scratch-data/crossmatch263/pub/1809.00018.pdf",
+   "sha256": "d377b2df8a7e68f01a735430e12d968c7f71499a47bff68150bba3a9d7b09cdd",
+   "bytes": 3211341,
+   "request": "R3",
+   "url": "https://arxiv.org/pdf/1809.00018",
+   "retrievedUtc": "2026-11-07T17:17Z",
+   "description": "Wilson and Naylor 2018, arXiv:1809.00018, accepted for MNRAS; section 4.2.3 (Analysis of the Gaia-WISE False Match Rate): Gaia sources in a 7 by 6 degree box are moved by 10 degrees in Galactic longitude, matched against the original WISE catalogue, and the matches returned are the false-match count",
+   "rights": "cite-only; arXiv abstract page saved beside it (1809.00018.abs.html)"
+  },
+  {
+   "file": "scratch-data/crossmatch263/pub/1809.00018.abs.html",
+   "sha256": "a74b59c24ca4bc702a3cf00a12ee148cc937ec9c9b619580bcaeaa708cfdb915",
+   "bytes": 45977,
+   "request": "R3",
+   "url": "https://arxiv.org/abs/1809.00018",
+   "retrievedUtc": "2026-11-07T17:17Z",
+   "description": "the arXiv abstract page of the above",
+   "rights": "cite-only"
+  },
+  {
+   "file": "scratch-data/crossmatch263/pub/LandySzalay1993.pdf",
+   "sha256": "c3af3d8f7b9043902e5a1d2ff3a8a9842fd65d1ce7e11bb399db7be0f99a7ade",
+   "bytes": 136317,
+   "request": "R6",
+   "url": "https://articles.adsabs.harvard.edu/pdf/1993ApJ...412...64L",
+   "retrievedUtc": "2026-11-07T17:20Z",
+   "description": "Landy and Szalay 1993, ApJ 412, 64-71 (received 1992 October 9, accepted 1993 January 29; DOI 10.1086/172900), the ADS scan; page 1 read as an image: the abstract recommends the estimator (DD - 2DR + RR)/RR, whose variance is nearly Poisson",
+   "rights": "(c) AAS, provided by ADS; cite-only, not committed"
+  },
+  {
+   "file": "scratch-data/crossmatch263/pub/landyszalay-inspire.json",
+   "sha256": "fccb82711fb81e8a444fc926d5ee46591fc2de1fd52c02197da93ca34659e064",
+   "bytes": 2698,
+   "request": "R6",
+   "url": "https://inspirehep.net/api/literature/369928",
+   "retrievedUtc": "2026-11-07T17:20Z",
+   "description": "the INSPIRE record: title, authors, ApJ 412, page 64, DOI 10.1086/172900",
+   "rights": "cite-only"
+  },
+  {
+   "file": "scratch-data/crossmatch263/pub/1303.2432.pdf",
+   "sha256": "6f2c99a4aefce8ee76963ed071422603418c3f09ec229f5c58620209ce41bd4f",
+   "bytes": 3650502,
+   "request": "R5",
+   "url": "https://arxiv.org/pdf/1303.2432",
+   "retrievedUtc": "2026-11-07T17:17Z",
+   "description": "Wang, Brunner and Dolence 2013, MNRAS 432, 1961 (arXiv:1303.2432): angular correlation of SDSS DR7 PHOTOMETRIC galaxies, dereddened r-band model magnitudes 17 to 21 in four one-magnitude bins; examined and NOT used (a different sample and magnitude limit than the spectroscopic main sample at r < 17.77), so R5 is not met",
+   "rights": "cite-only"
+  },
+  {
+   "file": "scratch-data/crossmatch263/terms/www_sdss_org_collaboration_image-use-policy_.html",
+   "sha256": "80be5b9c703d773c1ed0943ae4ca10f4251a603f9488f3507d52f915eb56f124",
+   "bytes": 66897,
+   "url": "https://www.sdss.org/collaboration/image-use-policy/",
+   "retrievedUtc": "2026-11-07T17:11Z",
+   "description": "SDSS image-use policy (the public-domain statement)",
+   "rights": "cite-only"
+  },
+  {
+   "file": "scratch-data/crossmatch263/terms/www_sdss_org_dr18_data_access_.html",
+   "sha256": "a92af4b414c982811e1424044da5e0c6e5335f4aa0b2e0ec5cfb051f8897748e",
+   "bytes": 75686,
+   "url": "https://www.sdss.org/dr18/data_access/",
+   "retrievedUtc": "2026-11-07T17:11Z",
+   "description": "SDSS DR18 data access page",
+   "rights": "cite-only"
+  },
+  {
+   "file": "scratch-data/crossmatch263/terms/skyserver_sdss_org_dr18_en_help_docs_api_aspx.html",
+   "sha256": "4a13bfae09a1cb26274997a7a0f37f38ed60ec2b642056a2cfc845ea498ab088",
+   "bytes": 69336,
+   "url": "https://skyserver.sdss.org/dr18/en/help/docs/api.aspx",
+   "retrievedUtc": "2026-11-07T17:11Z",
+   "description": "SkyServer web-service documentation",
+   "rights": "cite-only"
+  },
+  {
+   "file": "scratch-data/crossmatch263/terms/www_cosmos_esa_int_web_gaia-users_license.html",
+   "sha256": "a4d01bd42a94639c9681b6cc713392fb59246f34b5118f7b6addf554d2081899",
+   "bytes": 70599,
+   "url": "https://www.cosmos.esa.int/web/gaia-users/license",
+   "retrievedUtc": "2026-11-07T17:11Z",
+   "description": "ESA Gaia data licence page",
+   "rights": "cite-only"
+  }
+ ],
+ "notFetched": [
+  {
+   "request": "R2 (CDS XMatch alternative)",
+   "why": "the Gaia archive published best-neighbour table is itself a published crossmatch output for the same tables; a CDS XMatch would need the two tables uploaded and adds no second published algorithm for the same rows, so it was not run"
+  },
+  {
+   "request": "R4 footprint",
+   "why": "SkyServer exposes 8,060,102 anonymous polygons in Region (type POLYGON, no comment) and no label for a Legacy main-sample mask; no published footprint for the strip was found in usable form"
+  },
+  {
+   "request": "R5",
+   "why": "no published angular correlation of the SDSS spectroscopic main galaxy sample at r < 17.77 with printed values was found; the nearest, Wang, Brunner and Dolence 2013, is a photometric sample in one-magnitude bins from 17 to 21"
+  }
+ ]
+}
