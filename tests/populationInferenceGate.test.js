@@ -69,7 +69,8 @@ const RULE = {
   'Q2.equivalenceObjects': x =>
     x.mismatches === 0 && x.maxRel <= TOL.equivalence,
   'Q3.continuity': x => x.maxRateRel <= 1e-6 && x.maxEndRel <= TOL.continuity,
-  'R1.countsReference': x => x.statuses && x.maxRate <= 1e-12 && x.maxEnd <= 1e-12,
+  'R1.countsReference': x =>
+    x.statuses && x.maxRate <= 1e-12 && x.maxEnd <= 1e-12,
   'R2.logLik': x => x.maxAbs <= TOL.oracleLogLik,
   'R3.mu': x => x.maxRel <= TOL.oracleMu,
   'R4.endpoints': x =>
@@ -110,16 +111,14 @@ const RULE = {
 
 describe('the contract and the files that answer it', () => {
   test('the thresholds file records its amendments and its legs', () => {
-    expect(thresholds.amendments.map(a => a.id)).toEqual([
-      'AM1',
-      'AM2',
-      'AM3',
-    ]);
+    expect(thresholds.amendments.map(a => a.id)).toEqual(['AM1', 'AM2', 'AM3']);
     expect(thresholds.amendments[0].recordedBefore).toMatch(/first run/);
     expect(thresholds.amendments[1].recordedBefore).toBe(
       'the first validator run'
     );
-    expect(thresholds.amendments[2].recordedBefore).toMatch(/AFTER the first run/);
+    expect(thresholds.amendments[2].recordedBefore).toMatch(
+      /AFTER the first run/
+    );
     expect(thresholds.checks).toHaveLength(52);
     expect(new Set(thresholds.checks.map(c => c.id)).size).toBe(52);
     expect(thresholds.committed).toMatch(/typed from memory/);
@@ -230,7 +229,9 @@ describe('the contract and the files that answer it', () => {
       })
       .map(r => r.id);
     expect(diff).toEqual(['I1.inputs', 'P2.penaltyOracle']);
-    expect(first.rows.find(r => r.id === 'P2.penaltyOracle').status).toBe('fail');
+    expect(first.rows.find(r => r.id === 'P2.penaltyOracle').status).toBe(
+      'fail'
+    );
     expect(row('P2.penaltyOracle').status).toBe('pass');
     expect(first.counts).toEqual({
       total: 52,
