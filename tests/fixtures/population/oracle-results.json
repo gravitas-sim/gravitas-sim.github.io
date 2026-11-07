@@ -1,6 +1,6 @@
 {
  "format": "gravitas.population-inference-gate-oracle-results/1",
- "thresholdsSha256": "a5e8b4129ca8df68742e1b3db9065b38405d3229be10ab54094640d96b84ddbe",
+ "thresholdsSha256": "96e9e9ff9119b181364beb81857633bdeecf88af87da157ef80200afffc557c1",
  "python": "3.9.6",
  "numpy": "1.26.4",
  "scipy": "1.13.1",
@@ -19243,5 +19243,5 @@
   "pooled": 0.9533333333333334,
   "fitsNotSuccessful": 13
  },
- "cpuSeconds": 30.266601
+ "cpuSeconds": 31.171172
 }
