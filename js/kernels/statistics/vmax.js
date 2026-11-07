@@ -44,6 +44,13 @@ export function vmaxStats(rows, { D = Infinity, volume = 'euclid', minObjects = 
 /** The volume out to D weighted by the completeness p(d); `breaks` split the integral. */
 export function effectiveVolume({ D, completeness, volume = 'euclid', breaks = [] }) {
   if (!(D > 0)) return refused('bad-distance', 'D must be positive');
+  let prevP = Infinity;
+  for (let k = 1; k <= 64; k++) {
+    const p = completeness((k * D) / 64);
+    if (!(p >= 0 && p <= 1) || p > prevP + 1e-12)
+      return refused('bad-completeness', 'completeness must lie in [0, 1] and not increase with distance');
+    prevP = p;
+  }
   const dV =
     volume === 'unit' ? d => 3 * d * d : d => 4 * Math.PI * d * d;
   const edges = [0, ...breaks.filter(b => b > 0 && b < D), D];
