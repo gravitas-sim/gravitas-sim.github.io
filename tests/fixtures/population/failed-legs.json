@@ -1,0 +1,19 @@
+{
+ "format": "gravitas.population-inference-failed-legs/1",
+ "note": "Every failing row of results.json and nothing else; left failing.",
+ "legs": [
+  {
+   "id": "D8.noZeroRule",
+   "group": "misspecified",
+   "scope": "unc",
+   "tier": "d",
+   "status": "fail",
+   "bound": ">= 0.94",
+   "measured": {
+    "zeroStatements": 114,
+    "covered": 71,
+    "share": 0.6228070175438597
+   }
+  }
+ ]
+}
