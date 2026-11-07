@@ -1458,6 +1458,13 @@
       "student": false
     },
     {
+      "file": "EXPERIMENT_ENSEMBLES.md",
+      "kind": "feature",
+      "purpose": "Experiment runner II: the experiment/2 record (named streams, fork per trial, kernel versions), ensembles, injection, bootstrap, pool client, replay to the digit, validation (Prompt 265).",
+      "owner": 265,
+      "student": false
+    },
+    {
       "file": "CROSSMATCH.md",
       "kind": "feature",
       "purpose": "The crossmatch kernel: epoch propagation, refusals on rounded positions, nearest-neighbour match, shifted-match false rate, joined-table record, populations, validation, failed legs (Prompt 263).",

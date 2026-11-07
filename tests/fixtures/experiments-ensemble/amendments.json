@@ -1,0 +1,34 @@
+{
+ "format": "gravitas.experiment-ensemble-amendments/1",
+ "rule": "Each amendment is recorded before the run it concerns, as wording or definition of a leg; no bound moves. The thresholds file is not edited: its sha256 is in oracle-results.json and in results.json.",
+ "amendments": [
+  {
+   "id": "AM1",
+   "recordedBefore": "any run of the validator and any ensemble code",
+   "concerns": "R2 and D2 (the fork rule)",
+   "text": "R2 says trial i draws from stream(id, seed, 'trial', i). A sweep keeps the legacy draws its recorded results were made with: its trial's world is built with the manifest's own seed text (the engine stream, key = that seed as given), and its distribution values from stream('experiments', that seed) (A6). So a record's fork rule is 'trial-index' for every kind except 'sweep', whose fork rule is 'legacy-sweep'; D2 therefore refuses a fork rule other than those two, and refuses 'legacy-sweep' on any other kind and 'trial-index' on a sweep that lists seeds.",
+   "weakens": false
+  },
+  {
+   "id": "AM2",
+   "recordedBefore": "any run of the validator and any ensemble code",
+   "concerns": "A8 (the regression context)",
+   "text": "A8 calls the three-body kind's trial function directly with stream('experiments', seed) for the integers 1000..1049 (key the integer, no fork), because the group's seeds are plain integers and a record's fork rule is trial-index. It is a comparison of the kind's trial with the group's drift(), not a replay of a record. The bound (1e-9 relative on the median and the 90th percentile, and inside RECORDED x margin) is unchanged.",
+   "weakens": false
+  },
+  {
+   "id": "AM3",
+   "recordedBefore": "the validator's first run and before the kind has a 'physics' option",
+   "concerns": "A8 (the regression context): a new leg A8b, and what A8 is expected to show",
+   "text": "A smoke probe of the three-body kind (default config, the scenario as the engine builds it) against long-term-regression.js distribution() was made while writing the kind, before this amendment, and is disclosed here: median 0.00578 against 0.00615 and 90th percentile 0.314 against 0.479; the third seed (a regular orbit) agrees to the digit and the chaotic ones do not. The cause is the world, not the draws: the scenario carries orbit_decay_rate 0.005 and min_interaction_distance 0, which the validation lab (js/validation/harness.js LAB_SETTINGS) sets to 0 and 1e-6. A8 is therefore expected to FAIL on its 1e-9 bound and is run once as committed and left failing. A8b is NEW: the same comparison with the kind's config option physics 'validation-lab', which applies LAB_SETTINGS and the application's G = 2 (mutual gravity on, no merging, nothing else) to the built scenario before the nudges; bound 1e-9 relative on the median and the 90th percentile, and the same committed regression bound. The option is the only thing added after the probe; the kind's default is unchanged.",
+   "weakens": false
+  },
+  {
+   "id": "AM4",
+   "recordedBefore": "the validator's second run",
+   "concerns": "the validator's execution, not any bound (A7, A8, A8b and C3)",
+   "text": "The first full run (first-run-results.json, 20 pass, 3 fail, 1 not applicable, 1 not run) exposed two defects of the validator itself, both fixed before the second run and neither a change to a bound or a definition. (1) A8 and A8b ran in the validator's own process after A7 had built binary-planet worlds in the same engine realm; the regression group's distribution() then returned a median of 4.5e-5 (recorded 6.15e-3), which is the hazard EXPERIMENTS.md names (an engine realm remembers the previous build), so those legs now run in fresh child processes, one per leg, as A5 does. The kind's own numbers in that run (A8 median 0.00578 and p90 0.314; A8b median 0.00615 and p90 0.479) are shown in the first run and are not used to choose anything. (2) C3 looked the analytic efficiency up under String(S), which is '6' and '8', while the oracle's keys are '6.0' and '8.0': the analytic value was undefined for S = 6 and 8, so those two rows were not measured (the recovered fractions 0.129 and 0.8175 are in the first run). The lookup now formats the key as the oracle wrote it. Nothing else changes.",
+   "weakens": false
+  }
+ ]
+}

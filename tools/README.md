@@ -100,6 +100,10 @@ current, and the orchestrator checks it.
 | `evidence-status.mjs` | The evidence-status record (Roadmap III, Prompt 122, rule 7.5.10) |  |
 | `exoplanet-reference.mjs` | The Exoplanet Observatory's reference run, and its answer key | `npm run guides:key` |
 | `experiment-bench.mjs` | npm run bench:experiments - how fast experiments run, and what they cost | `npm run bench:experiments` |
+| `experiment-ensemble-child.mjs` | (no header) |  |
+| `experiment-ensemble-regression-child.mjs` | (no header) |  |
+| `experiment-ensemble-validate.mjs` | (no header) | `npm run experiments:ensemble:validate` |
+| `experiment-ensemble-worker-shim.mjs` | (no header) |  |
 | `exposure-validate.mjs` | The exposure calculator against its committed thresholds (Prompt 210) | `npm run exposure:validate` |
 | `feature-inventory.mjs` | The feature-detection inventory (Prompt 111) |  |
 | `formats.mjs` | Every versioned format Gravitas reads or writes, and FORMATS.md from them |  |
