@@ -210,6 +210,7 @@
     { "id": "X1.reportedRs", "group": "reported", "what": "the sound horizon (Mpc) of the ten worlds, the prototype's and the oracle's", "bound": "REPORTED", "needs": null },
     { "id": "X2.reportedBracket", "group": "reported", "what": "r_L, r_H, u and the position of the printed r_drag", "bound": "REPORTED", "needs": "P1 extraction" },
     { "id": "X3.reportedPairs", "group": "reported", "what": "DD per bin, xi and sigma_jk per bin, the smooth fit, the S/N of the four window bins", "bound": "REPORTED", "needs": null },
+    { "id": "X5.reportedExtent", "group": "reported", "what": "AM1: the pair-count pipeline with the random catalog over the data's own RA extent; xi, sigma_jk and the window S/N", "bound": "REPORTED", "needs": null },
     { "id": "X4.reportedCombination", "group": "reported", "what": "the combination with 256's contours is OMITTED (Appendix C, 256 verdict FC); nothing is computed", "bound": "OMITTED", "needs": null }
   ],
   "verdict": {
@@ -222,7 +223,15 @@
     "consumersClause": "met iff the verdict is A or B. NOT ESTABLISHED, C and a KERNEL FAIL do not meet it. Whatever the verdict, no panel, lesson, viewer or contour is built until Carl lifts the consumers rule.",
     "partB": "after A or B, and only after Carl goes ahead; not begun in this session."
   },
-  "amendments": [],
+  "amendments": [
+    {
+      "id": "AM1",
+      "recorded": "after the oracle's first run (which wrote the pair counts on the committed randoms) and before any prototype code or validator existed",
+      "what": "A REPORTED row X5.reportedExtent is added (no bound, no leg, no part of any verdict): the same pair-count pipeline with the random catalog's RA range set to the data's own extent [min RA of the sidecar, 240] instead of the strip's 120 to 240, randoms from stream('injection', '257:bao:randoms-extent') with RA = RA_min + (240 - RA_min) u1, the other draws as committed; it reports xi, the jackknife sigma and the S/N of the four window bins.",
+      "why": "the oracle's first run showed that the sidecar's first galaxy is at RA 130.26 degrees, so the committed footprint (120 to 240) contains a 10 degree empty block; the sensitivity of the detectability number to that is worth one reported row. The committed rule (D6) is NOT changed and still decides the demonstration.",
+      "moves": "no bound and no committed leg; D6 stays on the committed footprint"
+    }
+  ],
   "decisions": [
     {
       "id": "DEC1",
