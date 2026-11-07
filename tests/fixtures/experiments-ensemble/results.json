@@ -3,7 +3,7 @@
  "thresholdsSha256": "16bae232803d947f294575ce0ec9cf4db72c38682df65f48a875472ad710ab41",
  "amendmentsSha256": "f6e62e2eaa1261819f23c4cf4af260847805109944fa2b3e7a97fc1ab1e8bd76",
  "oracleSha256": "af5d868465496a2b5b6bb1a9e007ae3cff99bad943690772dd0a0eb3129b574b",
- "node": "v24.4.0",
+ "node": "v22.23.4",
  "counts": {
   "pass": 22,
   "fail": 1,
@@ -69,7 +69,7 @@
    "status": "pass",
    "measured": {
     "differences": 0,
-    "digest": "d7156dc1a869f80b46edfc4683f1da0ae5421460500e19084afdc95cb670f4c7",
+    "digest": "c7be2a6bdb77f6e052d9f66504a301b3194bcc7158412af7ea04937a8372035d",
     "outcomes": {
      "bound": 12,
      "one-escaper": 9,
@@ -109,17 +109,17 @@
    "id": "A8.regressionContext",
    "status": "fail",
    "measured": {
-    "median": 0.005784590455417778,
-    "p90": 0.3136095898924535,
-    "groupMedian": 0.00614842170109198,
-    "groupP90": 0.479051348043822,
+    "median": 0.00578459045542643,
+    "p90": 0.3136102253170561,
+    "groupMedian": 0.0061484217010952386,
+    "groupP90": 0.4790509263528271,
     "recorded": {
      "median": 0.00615,
      "p90": 0.479
     },
     "margin": 1.25,
-    "relMedian": 0.05917473839011141,
-    "relP90": 0.3453528704739902,
+    "relMedian": 0.05917473838920287,
+    "relP90": 0.3453509677881758,
     "withinCommittedBound": true
    },
    "limit": {
@@ -132,10 +132,10 @@
    "id": "A8b.regressionContextLab",
    "status": "pass",
    "measured": {
-    "median": 0.00614842170109198,
-    "p90": 0.479051348043822,
-    "groupMedian": 0.00614842170109198,
-    "groupP90": 0.479051348043822,
+    "median": 0.0061484217010952386,
+    "p90": 0.4790509263528271,
+    "groupMedian": 0.0061484217010952386,
+    "groupP90": 0.4790509263528271,
     "recorded": {
      "median": 0.00615,
      "p90": 0.479
