@@ -266,6 +266,11 @@
       "id": "AM2",
       "recordedBefore": "the first validator run",
       "text": "Two departures from the letter of two legs, recorded before any validator run and moving no bound. (1) Hand example A2 (and the oracle's A2) has exposure 1 in each bin, which is below the floor of 5, so both are run with the floor option set to 0 so that the intervals exist; the floor itself is tested by D5 and D6. (2) Leg P1 is evaluated on S1, S3, S4, S5 and S7: S2 and S6 hold bins whose unpenalised maximum is zero, for which the log rate does not exist, so the comparison of a penalised log-rate with it is not defined there; this is a stated reduction of the leg's samples, not a pass. (3) The truth rates of scenario M are the oracle's pinned gamma (mu*_j divided by the oracle's quadrature exposure), and 'rich' is decided from the prototype's exposure times that gamma."
+    },
+    {
+      "id": "AM3",
+      "recordedBefore": "the second and later validator runs; recorded AFTER the first run, which it describes",
+      "text": "What the first validator run showed and what changed because of it. The first run (pinned as first-run-results.json, thresholds sha256 as of AM2) gave 41 pass, 2 fail (D8, P2), 6 reported, 3 not run, letter B. D8 is a failure of the leg as committed and stays failing (see the gate document). P2 is not: the validator computed P2's status with a condition that the committed bound does not contain (that every penalised fit meets the Newton gradient criterion), and R2, Q3, V1 and V2 carried the same kind of extra condition (convergence). The committed bounds are the numerical ones in the checks array; the validator is corrected so that every status is computed from the committed bound alone, and the convergence counts become measured fields. Under the committed bound P2 passes (the largest absolute difference of ln Gamma to the oracle is 9.1e-9 against 1e-4; 2 of the 6 penalised fits had stopped at the gradient criterion, 1e-10 absolute, in 1000 iterations). No other row's measured numbers change, no bound moves, no leg is added or removed, and nothing in the prototype changes. The oracle and the stream are run again against the file that carries AM3. This is a correction of the validator to the contract, made after a result, and is flagged to Carl as such."
     }
   ],
   "decisions": [
