@@ -1,0 +1,434 @@
+{
+ "format": "gravitas.supernova-likelihood-followup-thresholds/1",
+ "prompt": "Roadmap III, Prompt 256 follow-up (the legs the merged gate listed NOT RUN: X2 the published flat-case value, X3 the release's full covariance with the subset-with-block and low-rank treatments). Documentation and fixtures only; the oracle is on spike/supernova-likelihood-followup (from spike/supernova-likelihood-gate), never merged.",
+ "document": "SN_LIKELIHOOD_GATE.md, its follow-up section, written after this file",
+ "committed": "before the covariance file was opened, parsed or summed, before any fit with it, and before the paper's text beyond published-flat.json was read. The adequacy rules below are written without any number derived from the covariance.",
+ "rule": "A crossed bound is a failed leg, recorded in followup-failed-legs.json and left failing; only Carl resets one. A leg that cannot be measured (a file not supplied, a tool not installed) is NOT RUN and says why; a threshold that proves unmeasurable on supplied data fails the gate on that threshold. Amendments are recorded in this file's amendments array before any run and move no bound; a leg is added only as a NEW leg with its bound committed before its first run. The old legs, the old thresholds.json and verdict A (its narrow meaning) are untouched.",
+ "seenBeforeCommitting": [
+  "the merged gate's documents and fixtures (SN_LIKELIHOOD_GATE.md sections 1 to 9, thresholds.json, results.json, oracle-results.json), including section 4's REPORTED real-sample numbers: the decided covariance's flat-case best fit 0.3470, its 68.27 percent interval 0.3238 to 0.3710 (half-width 0.0236) and DIAG's 0.3491, 0.3304 to 0.3684 (half-width 0.0190). Consequently legs E3b and E3e and I6 restate numbers already seen and are NOT blind; E3a, E3d and every Q, U, V, W leg are.",
+  "the data directory's README.txt, retrieved.txt, readme.md and published-flat.json: the printed published flat-case Omega_M 0.334 with sigma 0.018 (published-flat.json, 'SNe alone', Brout et al. 2022, arXiv:2202.04077), the file's sha256 and size, and the terms as read. The task brief also states the printed value and sigma.",
+  "nothing of the covariance's contents (not its entries, diagonal, eigenvalues, structure or any fit), and nothing of the paper's text beyond published-flat.json."
+ ],
+ "data": {
+  "covariance": "Pantheon+SH0ES_STAT+SYS.cov, held outside every repository (never committed, never copied into one); Brout et al. 2022 and Scolnic et al. 2022 are to be cited wherever a number derived from it appears (the release page asks that papers be cited individually; the repository has no licence file; details on data release usage 'will be added upon journal acceptance': the terms as read and recorded by the fetching session). The fixtures hold derived numbers only and the file's sha256 (rights request X4: nothing stronger exists to cite).",
+  "mapping": "the covariance rows follow the raw .dat file's order (leg I4a proves it); the sample S is the merged gate's: cal = 0 and z at least 0.01, 1,580 rows, in the pack's order (sorted by z, CID, survey), each carrying its raw-file index.",
+  "published": "published-flat.json, held outside the repository, copied unchanged to tests/fixtures/supernova-likelihood/authentic/published-flat.json in the results commit with its sha256 in results; the printed value is read from it at run time and nothing typed.",
+  "sampleDifference": "the stated difference of samples and analyses: the paper's constraint uses its full systematic covariance with the SH0ES calibrators in the sample; this follow-up's FULL uses the same covariance on the 1,580 Hubble-flow rows (no calibrators, z at least 0.01) and a different fitting method (a profile over a flat-case grid with an analytic offset, not the paper's sampler). The calibrators sit at z below 0.01 where the matter density has almost no leverage, and the cut removes rows, so a small difference is expected; it is allowed for only by the width of the rule below (one printed sigma), which is the size by which two estimates from nested, overlapping samples can differ. No leg is loosened for it, and a larger difference is a failed leg whose cause this PR does not claim to know."
+ },
+ "treatments": {
+  "FULL": "the release's covariance block of the 1,580 rows, offset marginalised analytically exactly as the merged gate (chi2 = r^T C^-1 r - (1^T C^-1 r)^2 / (1^T C^-1 1))",
+  "DIAG": "the merged gate's diagonal treatment (the pack's mu_err squared, no correlation)",
+  "SPLIT": "the merged gate's decided covariance (mu_err squared on the diagonal, tau^2 = 0.02^2 between rows of one survey)",
+  "T1-n": "the subset-with-block treatment: the rows named in legs U1 to U3, their exact block of FULL, the same marginalisation; planes and levels as the gate",
+  "T2-k": "the low-rank projection with its retained variance: the symmetric eigendecomposition of C_F, the leading k eigenpairs (lambda_j, v_j), C_T2 = diag(r) + sum_j lambda_j v_j v_j^T with r_i = C_ii - sum_j lambda_j v_ij^2, so that the diagonal is exactly C_F's; k = 10, 30, 100 (the gate's sizes)"
+ },
+ "model": "the merged gate's: Prompt 255's FLRW distance modulus (astropy 6.0.1 in the oracle, Tcmb0 = 0, H0 = 70 as a reference the offset absorbs), planes L1 (flat Lambda-CDM, 201 points), P1 (Om 0 to 1 by 0.02, Ode 0 to 1.5 by 0.03, w = -1), P2 (flat constant w, Om 0 to 1, w -3 to 0 by 0.06), the same accepted-node set (AM1 included), delta levels -2 ln(1 - p) at p = erf(k / sqrt 2) (2.2957, 6.1801, 11.8292) for two parameters and k^2 for one",
+ "oracle": {
+  "script": "tools/sn-likelihood-oracle/followup.py on spike/supernova-likelihood-followup, written after this file; no Gravitas code is imported; it reads this file, the raw .dat, the covariance and published-flat.json only. It imports the merged gate's oracle module (tools/sn-likelihood-oracle/oracle.py, itself Gravitas-free) for its astropy distance and domain functions, and checks I6 against its pinned output.",
+  "software": "Python 3.9 with numpy, scipy and astropy as the merged gate's oracle (versions recorded in the results); the import-only PyYAML stand-in outside the tree; nothing installed or downloaded.",
+  "estimators": "refined best fit: scipy.optimize.minimize_scalar (bounded, xatol 1e-10) in L1 and scipy.optimize.minimize (Nelder-Mead, xatol 1e-10, fatol 1e-12) from the best grid node in P1 and P2; interval endpoints: scipy.optimize.brentq (xtol 1e-12) on chi2(theta) - chi2_min - Delta, over [0, best fit] and [best fit, 1]; an interval with no crossing inside the box is OPEN and any leg that needs its half-width fails; regions are the accepted grid nodes whose chi-square is within the level of the grid minimum; Jaccard index = |A and B| / |A or B| on those node sets (both empty counts as 1); no random numbers anywhere."
+ },
+ "decision": {
+  "question": "is the decided split form (the pack's diagonal plus a survey-coherent tau of 0.02 mag) an adequate stand-in for the release's full covariance for a browser likelihood, or must the covariance itself (T1) or its low-rank form (T2) ship?",
+  "unit": "u = h68_D, the half-width of the diagonal treatment's 68.27 percent flat-case interval on this sample: a best-fit difference smaller than a quarter of the interval a student gets from the released errors without any covariance is below what the released errors can resolve; a width ratio within [0.80, 1.25] is the 'within a quarter' reading for a scale; a Jaccard index of 0.70 is two thirds overlap of the regions; these are stated choices made before any result."
+ },
+ "checks": [
+  {
+   "id": "I1.file",
+   "set": "I",
+   "group": "integrity",
+   "what": "the covariance file read at run time has the sha256, size and shape its record states: sha256 abf806d966485e64afdb359c87bffc0ecc00d05eff0a31ced66f247385df0fdc, 33,284,960 bytes, first line 1701, then 1701 x 1701 values one per line",
+   "bound": "exact"
+  },
+  {
+   "id": "I2.symmetry",
+   "set": "I",
+   "group": "integrity",
+   "what": "the matrix is symmetric as printed",
+   "bound": "max |C_ij - C_ji| at most 1e-9 mag^2; if it fails, every later leg uses (C + C^T)/2 and the failing leg stays failing"
+  },
+  {
+   "id": "I3.positive",
+   "set": "I",
+   "group": "integrity",
+   "what": "the matrix and its 1,580-row sample block are positive definite (smallest eigenvalue, numpy eigvalsh, above 0; scipy cho_factor succeeds)",
+   "bound": "above 0"
+  },
+  {
+   "id": "I4a.rowmap",
+   "set": "I",
+   "group": "integrity",
+   "what": "the covariance rows are in the raw .dat file order: the rank (Spearman) correlation between sqrt(C_ii) and the raw file's MU_SH0ES_ERR_DIAG over the 1,701 rows is at least 0.99. If it fails every later leg is NOT RUN (the row mapping is unproven) and the PR says so",
+   "bound": "at least 0.99"
+  },
+  {
+   "id": "I4b.premise",
+   "set": "I",
+   "group": "integrity",
+   "what": "the premise of the decided split form: MU_SH0ES_ERR_DIAG is the diagonal of this covariance (the pack's own words), so keeping mu_err on the diagonal double counts nothing",
+   "bound": "max over the 1,701 rows of |sqrt(C_ii) - MU_SH0ES_ERR_DIAG| at most 1e-5 mag; if it fails the premise is recorded untrue by the measured amount, the SPLIT legs are still measured, and FA is impossible"
+  },
+  {
+   "id": "I5.solvers",
+   "set": "I",
+   "group": "integrity",
+   "what": "the FULL treatment's chi-square at 30 nodes (the accepted nodes numbered i * floor(n_accepted / 10), i = 0..9, of each of L1, P1 and P2) by scipy cho_solve equals numpy.linalg.eigh inverse, relative; and the Cholesky solve residual |C x - 1|_inf / |1|_inf at most 1e-8",
+   "bound": "relative 1e-8; residual 1e-8"
+  },
+  {
+   "id": "I6.regression",
+   "set": "I",
+   "group": "integrity",
+   "what": "this follow-up's oracle reproduces the merged gate's pinned real-sample numbers for DIAG and for the decided split covariance (oracle-results.json analyses of the real sample: L1 best fit and the 68.27 and 95.45 percent interval endpoints)",
+   "bound": "each within 1e-6 in Om; N = 1,580"
+  },
+  {
+   "id": "E3a.fullVsPublished",
+   "set": "E",
+   "group": "E",
+   "what": "FULL (the release's covariance on the 1,580 rows, offset marginalised): the flat Lambda-CDM best fit Omega_M against the printed published value",
+   "bound": "|Om_F - Om_pub| at most 1.0 x sigma_pub (Om_pub and sigma_pub as printed in published-flat.json). If it fails, FA and FB are impossible (the reference is unconfirmed) and the verdict is FC"
+  },
+  {
+   "id": "E3b.decidedVsPublished",
+   "set": "E",
+   "group": "E",
+   "what": "the decided split covariance (the old gate's cov treatment) against the printed published value: the old committed rule of X2/E3.published, carried unchanged",
+   "bound": "|Om_S - Om_pub| at most 1.0 x sigma_pub"
+  },
+  {
+   "id": "E3d.fullScale",
+   "set": "E",
+   "group": "E",
+   "what": "FULL: the half-width of the 68.27 percent flat-case interval against the printed sigma",
+   "bound": "h68_F / sigma_pub in [2/3, 3/2]"
+  },
+  {
+   "id": "E3e.decidedScale",
+   "set": "E",
+   "group": "E",
+   "what": "the decided split covariance: the same ratio",
+   "bound": "h68_S / sigma_pub in [2/3, 3/2]"
+  },
+  {
+   "id": "Q1.bestFit.SPLIT",
+   "set": "Q",
+   "group": "adequacy",
+   "what": "SPLIT: flat case: |Om_X - Om_F| at most 0.25 u, where u = h68_D, the half-width of the DIAG treatment's 68.27 percent interval on the same sample (the diagonal interval is the unit)",
+   "bound": "as stated"
+  },
+  {
+   "id": "Q2.width.SPLIT",
+   "set": "Q",
+   "group": "adequacy",
+   "what": "SPLIT: flat case: h68_X / h68_F and h95_X / h95_F, the half-widths of the 68.27 and 95.45 percent intervals, each in [0.80, 1.25]",
+   "bound": "as stated"
+  },
+  {
+   "id": "Q3.planeBestFit.SPLIT",
+   "set": "Q",
+   "group": "adequacy",
+   "what": "SPLIT: planes P1 and P2: the refined best fit of X differs from F's by at most 0.25 s on each axis, s the half-extent of the DIAG treatment's 68.27 percent region on that axis in that plane (four numbers); an undefined s (DIAG region not closed) fails the leg",
+   "bound": "as stated"
+  },
+  {
+   "id": "Q4.planeOverlap.SPLIT",
+   "set": "Q",
+   "group": "adequacy",
+   "what": "SPLIT: planes P1 and P2 at 68.27 and 95.45 percent: the Jaccard index of X's and F's accepted-node regions (nodes with chi-square within the level of the grid minimum) at least 0.70 (four numbers)",
+   "bound": "as stated"
+  },
+  {
+   "id": "Q5.beatsDiag.SPLIT",
+   "set": "Q",
+   "group": "adequacy",
+   "what": "SPLIT: X is at least as close to F as DIAG is, on two measures, both required: |ln(h68_X / h68_F)| at most |ln(h68_D / h68_F)|, and the P1 68.27 percent Jaccard of X with F at least DIAG's",
+   "bound": "as stated"
+  },
+  {
+   "id": "Q1.bestFit.T2-k10",
+   "set": "Q",
+   "group": "adequacy",
+   "what": "T2-k10: flat case: |Om_X - Om_F| at most 0.25 u, where u = h68_D, the half-width of the DIAG treatment's 68.27 percent interval on the same sample (the diagonal interval is the unit)",
+   "bound": "as stated"
+  },
+  {
+   "id": "Q2.width.T2-k10",
+   "set": "Q",
+   "group": "adequacy",
+   "what": "T2-k10: flat case: h68_X / h68_F and h95_X / h95_F, the half-widths of the 68.27 and 95.45 percent intervals, each in [0.80, 1.25]",
+   "bound": "as stated"
+  },
+  {
+   "id": "Q3.planeBestFit.T2-k10",
+   "set": "Q",
+   "group": "adequacy",
+   "what": "T2-k10: planes P1 and P2: the refined best fit of X differs from F's by at most 0.25 s on each axis, s the half-extent of the DIAG treatment's 68.27 percent region on that axis in that plane (four numbers); an undefined s (DIAG region not closed) fails the leg",
+   "bound": "as stated"
+  },
+  {
+   "id": "Q4.planeOverlap.T2-k10",
+   "set": "Q",
+   "group": "adequacy",
+   "what": "T2-k10: planes P1 and P2 at 68.27 and 95.45 percent: the Jaccard index of X's and F's accepted-node regions (nodes with chi-square within the level of the grid minimum) at least 0.70 (four numbers)",
+   "bound": "as stated"
+  },
+  {
+   "id": "Q5.beatsDiag.T2-k10",
+   "set": "Q",
+   "group": "adequacy",
+   "what": "T2-k10: X is at least as close to F as DIAG is, on two measures, both required: |ln(h68_X / h68_F)| at most |ln(h68_D / h68_F)|, and the P1 68.27 percent Jaccard of X with F at least DIAG's",
+   "bound": "as stated"
+  },
+  {
+   "id": "Q1.bestFit.T2-k30",
+   "set": "Q",
+   "group": "adequacy",
+   "what": "T2-k30: flat case: |Om_X - Om_F| at most 0.25 u, where u = h68_D, the half-width of the DIAG treatment's 68.27 percent interval on the same sample (the diagonal interval is the unit)",
+   "bound": "as stated"
+  },
+  {
+   "id": "Q2.width.T2-k30",
+   "set": "Q",
+   "group": "adequacy",
+   "what": "T2-k30: flat case: h68_X / h68_F and h95_X / h95_F, the half-widths of the 68.27 and 95.45 percent intervals, each in [0.80, 1.25]",
+   "bound": "as stated"
+  },
+  {
+   "id": "Q3.planeBestFit.T2-k30",
+   "set": "Q",
+   "group": "adequacy",
+   "what": "T2-k30: planes P1 and P2: the refined best fit of X differs from F's by at most 0.25 s on each axis, s the half-extent of the DIAG treatment's 68.27 percent region on that axis in that plane (four numbers); an undefined s (DIAG region not closed) fails the leg",
+   "bound": "as stated"
+  },
+  {
+   "id": "Q4.planeOverlap.T2-k30",
+   "set": "Q",
+   "group": "adequacy",
+   "what": "T2-k30: planes P1 and P2 at 68.27 and 95.45 percent: the Jaccard index of X's and F's accepted-node regions (nodes with chi-square within the level of the grid minimum) at least 0.70 (four numbers)",
+   "bound": "as stated"
+  },
+  {
+   "id": "Q5.beatsDiag.T2-k30",
+   "set": "Q",
+   "group": "adequacy",
+   "what": "T2-k30: X is at least as close to F as DIAG is, on two measures, both required: |ln(h68_X / h68_F)| at most |ln(h68_D / h68_F)|, and the P1 68.27 percent Jaccard of X with F at least DIAG's",
+   "bound": "as stated"
+  },
+  {
+   "id": "Q1.bestFit.T2-k100",
+   "set": "Q",
+   "group": "adequacy",
+   "what": "T2-k100: flat case: |Om_X - Om_F| at most 0.25 u, where u = h68_D, the half-width of the DIAG treatment's 68.27 percent interval on the same sample (the diagonal interval is the unit)",
+   "bound": "as stated"
+  },
+  {
+   "id": "Q2.width.T2-k100",
+   "set": "Q",
+   "group": "adequacy",
+   "what": "T2-k100: flat case: h68_X / h68_F and h95_X / h95_F, the half-widths of the 68.27 and 95.45 percent intervals, each in [0.80, 1.25]",
+   "bound": "as stated"
+  },
+  {
+   "id": "Q3.planeBestFit.T2-k100",
+   "set": "Q",
+   "group": "adequacy",
+   "what": "T2-k100: planes P1 and P2: the refined best fit of X differs from F's by at most 0.25 s on each axis, s the half-extent of the DIAG treatment's 68.27 percent region on that axis in that plane (four numbers); an undefined s (DIAG region not closed) fails the leg",
+   "bound": "as stated"
+  },
+  {
+   "id": "Q4.planeOverlap.T2-k100",
+   "set": "Q",
+   "group": "adequacy",
+   "what": "T2-k100: planes P1 and P2 at 68.27 and 95.45 percent: the Jaccard index of X's and F's accepted-node regions (nodes with chi-square within the level of the grid minimum) at least 0.70 (four numbers)",
+   "bound": "as stated"
+  },
+  {
+   "id": "Q5.beatsDiag.T2-k100",
+   "set": "Q",
+   "group": "adequacy",
+   "what": "T2-k100: X is at least as close to F as DIAG is, on two measures, both required: |ln(h68_X / h68_F)| at most |ln(h68_D / h68_F)|, and the P1 68.27 percent Jaccard of X with F at least DIAG's",
+   "bound": "as stated"
+  },
+  {
+   "id": "V0.T2-k10",
+   "set": "Q",
+   "group": "adequacy",
+   "what": "T2 rank 10: the construction is sound: the residual diagonal r_i = C_ii - sum_j lambda_j v_ij^2 is above 1e-12 for every row, diag(C_T2) equals diag(C_F) to 1e-12, and scipy cho_factor of C_T2 succeeds",
+   "bound": "as stated"
+  },
+  {
+   "id": "V0.T2-k30",
+   "set": "Q",
+   "group": "adequacy",
+   "what": "T2 rank 30: the construction is sound: the residual diagonal r_i = C_ii - sum_j lambda_j v_ij^2 is above 1e-12 for every row, diag(C_T2) equals diag(C_F) to 1e-12, and scipy cho_factor of C_T2 succeeds",
+   "bound": "as stated"
+  },
+  {
+   "id": "V0.T2-k100",
+   "set": "Q",
+   "group": "adequacy",
+   "what": "T2 rank 100: the construction is sound: the residual diagonal r_i = C_ii - sum_j lambda_j v_ij^2 is above 1e-12 for every row, diag(C_T2) equals diag(C_F) to 1e-12, and scipy cho_factor of C_T2 succeeds",
+   "bound": "as stated"
+  },
+  {
+   "id": "U1.T1-n100",
+   "set": "T",
+   "group": "subset",
+   "what": "T1-n100: the 100 rows i = floor((m + 0.5) N / 100), m = 0..99, of the sample (N = 1,580; every row on the redshift-sorted order) with their exact block of the release's covariance: the full-sample best fit Om_F lies inside the subset's own 95.45 percent flat-case interval, i.e. chi2_T1(Om_F) - chi2_T1(minimum) at most 4",
+   "bound": "at most 4"
+  },
+  {
+   "id": "U2.T1-n100",
+   "set": "T",
+   "group": "subset",
+   "what": "T1-n100: the full-sample P1 best fit lies inside the subset's own 95.45 percent P1 region: chi2_T1(theta_F) - chi2_T1(minimum) at most 6.1801 (-2 ln(1 - p) at p = erf(2 / sqrt 2))",
+   "bound": "at most Delta(p, 2)"
+  },
+  {
+   "id": "U3.T1-n100",
+   "set": "T",
+   "group": "subset",
+   "what": "T1-n100: the same for the P2 best fit",
+   "bound": "at most Delta(p, 2)"
+  },
+  {
+   "id": "W1.T1-n100",
+   "set": "T",
+   "group": "subset",
+   "what": "T1-n100: the information kept: the subset's 68.27 percent flat-case half-width is at most twice FULL's (h68_T1 / h68_F at most 2.0). By the sqrt(N / n) rule a subset that carries no more information per row than the sample's average widens the interval by 2.0, 2.3 and 4.0 for n = 800, 300 and 100, so only n = 800 can pass and a failure at the smaller sizes is the expected, stated cost, not a defect",
+   "bound": "at most 2.0"
+  },
+  {
+   "id": "U1.T1-n300",
+   "set": "T",
+   "group": "subset",
+   "what": "T1-n300: the 300 rows i = floor((m + 0.5) N / 300), m = 0..299, of the sample (N = 1,580; every row on the redshift-sorted order) with their exact block of the release's covariance: the full-sample best fit Om_F lies inside the subset's own 95.45 percent flat-case interval, i.e. chi2_T1(Om_F) - chi2_T1(minimum) at most 4",
+   "bound": "at most 4"
+  },
+  {
+   "id": "U2.T1-n300",
+   "set": "T",
+   "group": "subset",
+   "what": "T1-n300: the full-sample P1 best fit lies inside the subset's own 95.45 percent P1 region: chi2_T1(theta_F) - chi2_T1(minimum) at most 6.1801 (-2 ln(1 - p) at p = erf(2 / sqrt 2))",
+   "bound": "at most Delta(p, 2)"
+  },
+  {
+   "id": "U3.T1-n300",
+   "set": "T",
+   "group": "subset",
+   "what": "T1-n300: the same for the P2 best fit",
+   "bound": "at most Delta(p, 2)"
+  },
+  {
+   "id": "W1.T1-n300",
+   "set": "T",
+   "group": "subset",
+   "what": "T1-n300: the information kept: the subset's 68.27 percent flat-case half-width is at most twice FULL's (h68_T1 / h68_F at most 2.0). By the sqrt(N / n) rule a subset that carries no more information per row than the sample's average widens the interval by 2.0, 2.3 and 4.0 for n = 800, 300 and 100, so only n = 800 can pass and a failure at the smaller sizes is the expected, stated cost, not a defect",
+   "bound": "at most 2.0"
+  },
+  {
+   "id": "U1.T1-n800",
+   "set": "T",
+   "group": "subset",
+   "what": "T1-n800: the 800 rows i = floor((m + 0.5) N / 800), m = 0..799, of the sample (N = 1,580; every row on the redshift-sorted order) with their exact block of the release's covariance: the full-sample best fit Om_F lies inside the subset's own 95.45 percent flat-case interval, i.e. chi2_T1(Om_F) - chi2_T1(minimum) at most 4",
+   "bound": "at most 4"
+  },
+  {
+   "id": "U2.T1-n800",
+   "set": "T",
+   "group": "subset",
+   "what": "T1-n800: the full-sample P1 best fit lies inside the subset's own 95.45 percent P1 region: chi2_T1(theta_F) - chi2_T1(minimum) at most 6.1801 (-2 ln(1 - p) at p = erf(2 / sqrt 2))",
+   "bound": "at most Delta(p, 2)"
+  },
+  {
+   "id": "U3.T1-n800",
+   "set": "T",
+   "group": "subset",
+   "what": "T1-n800: the same for the P2 best fit",
+   "bound": "at most Delta(p, 2)"
+  },
+  {
+   "id": "W1.T1-n800",
+   "set": "T",
+   "group": "subset",
+   "what": "T1-n800: the information kept: the subset's 68.27 percent flat-case half-width is at most twice FULL's (h68_T1 / h68_F at most 2.0). By the sqrt(N / n) rule a subset that carries no more information per row than the sample's average widens the interval by 2.0, 2.3 and 4.0 for n = 800, 300 and 100, so only n = 800 can pass and a failure at the smaller sizes is the expected, stated cost, not a defect",
+   "bound": "at most 2.0"
+  },
+  {
+   "id": "R1.allRows",
+   "set": null,
+   "group": "reported",
+   "what": "FULL (and DIAG, SPLIT) on all 1,701 rows including the 77 calibrators, flat case: the nearest the oracle can come to the paper's sample (SH0ES calibrators included); REPORTED beside E3a with the difference",
+   "bound": "REPORTED, no bound"
+  },
+  {
+   "id": "R2.structure",
+   "set": null,
+   "group": "reported",
+   "what": "the share of the squared off-diagonal energy of C_F (sum over i != j of C_ij^2) that lies between rows of one survey, and the same by the decided split form's own matrix; the share carried by the leading eigenvectors",
+   "bound": "REPORTED, no bound"
+  },
+  {
+   "id": "R3.tauStar",
+   "set": null,
+   "group": "reported",
+   "what": "the single tau* (survey-coherent term, positive-definite range) at which the split form's flat-case h68 equals h68_F, and its best fit and the Q-set values at tau*; a measurement, never adopted here (other tau values enter as new legs of a later contract)",
+   "bound": "REPORTED, no bound"
+  },
+  {
+   "id": "R4.retained",
+   "set": null,
+   "group": "reported",
+   "what": "T2: the retained variance for k = 10, 30, 100: sum of the leading eigenvalues over the trace, and the retained share of the off-diagonal squared energy",
+   "bound": "REPORTED, no bound"
+  },
+  {
+   "id": "R5.sizes",
+   "set": null,
+   "group": "reported",
+   "what": "bytes of every alternative: T1 4 n (n + 1) / 2 for n = 100, 300, 800 and 1,580; T2 4 (k n + n) for n = 1,580; and their zlib level-9 sizes as float32; against the packs' ceilings 355,282 raw and 111,422 gzip (0 B of room, the old gate) and the deferred room of 110 B",
+   "bound": "REPORTED, no bound"
+  },
+  {
+   "id": "R6.diagBaseline",
+   "set": null,
+   "group": "reported",
+   "what": "DIAG against FULL on the Q1 to Q4 measures (the baseline every Q5 comparison uses)",
+   "bound": "REPORTED, no bound"
+  },
+  {
+   "id": "R7.subsetBlockValue",
+   "set": null,
+   "group": "reported",
+   "what": "on each T1 subset: the best fit and half-width of the exact block against the SPLIT and DIAG forms on the same rows (does the block matter at that size)",
+   "bound": "REPORTED, no bound"
+  },
+  {
+   "id": "R8.spectrum",
+   "set": null,
+   "group": "reported",
+   "what": "the eigenvalues of C_F at ranks 1, 2, 5, 10, 30, 100, 300, 1580 and its condition number",
+   "bound": "REPORTED, no bound"
+  },
+  {
+   "id": "X1.fitPackage",
+   "set": null,
+   "group": "notrun",
+   "what": "a cosmology-fitting package's contour on this sample (B10.cited of the merged gate): the package was not fetched and downloading or running code is not authorised",
+   "bound": "NOT RUN"
+  }
+ ],
+ "verdict": {
+  "rows": "a row with a set (I, E, Q, T) is passing or failing; a row without one is REPORTED or NOT RUN and never decides anything.",
+  "splitForm": "ADEQUATE: every Q row of SPLIT passes. DIAG-GRADE: Q1.SPLIT passes and some other SPLIT Q row fails (the widths or regions are not the release's although the best fit is). INADEQUATE: Q1.SPLIT fails.",
+  "FA": "I1 to I6 (I4b included) all pass, E3a and E3d pass, and every Q row of SPLIT passes: the decided split form is supported as a labelled stand-in for the release's covariance, on this sample, on these planes, at tau 0.02.",
+  "FB": "I1 to I4a, I5 and I6 pass, E3a and E3d pass, FA does not hold, and at least one alternative passes whole: a T2 rank with V0 and every Q row passing, or a T1 size with U1, U2, U3 and W1 passing. The recommended alternative is the passing one with the fewest bytes (leg R5).",
+  "FC": "everything else: the reference is unconfirmed or untrustworthy (an I leg or E3a or E3d fails), or no treatment passes whole.",
+  "recorded": "the verdict is whatever this function gives from the rows, computed by the validator and again by the test; the sentence the document writes about it is bound by section 'what the verdict permits' of the document and cannot exceed it.",
+  "partB": "not begun. Whatever the verdict, Part B may now add only a kernel and its contract (the likelihood takes a covariance as an input; FB names which compact form, if any, ships); no lesson, panel, viewer or contour until X1 (a fitting package's contour) has run and passed and Carl lifts the consumers rule; the old gate's productClause stands.",
+  "oldVerdict": "the merged gate's verdict A keeps its narrow meaning and is not touched by any result here."
+ },
+ "amendments": [],
+ "questions": []
+}
