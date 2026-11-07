@@ -266,6 +266,9 @@ export const NEVER_PRECACHED = [
   // cost is in D-R10-31). Its first adopter deletes this entry, and
   // tests/statisticsKernel.test.js fails until it is deleted.
   /^js\/kernels\/statistics\//,
+  // Prompt 263: the crossmatch kernel (epoch propagation, the nearest-neighbour match, the shifted-match false rate, the joined table, populations). No shipped
+  // module imports it (the table view's crossmatch tool, the distribution panel and 'Two catalogs, one sky' wait for Carl, D-R10-263-01), so no page can fetch one.
+  /^js\/kernels\/crossmatch\//,
   // Sky coordinates for an image (Prompt 181, ASTROMETRY.md): the WCS-lite and
   // registration kernel, the calibration record, the panel and its words,
   // fetched when a reader opens the Observatory's sky-coordinates panel on an
