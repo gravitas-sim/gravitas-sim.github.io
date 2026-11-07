@@ -1,0 +1,26 @@
+{
+  "retrieved": "2026-11-06",
+  "retrievedBy": "Carl's session, from arXiv; transcribed from the PDF text as printed, not from memory",
+  "rights": "Numbers and cited facts only are recorded. arXiv abs pages read: 1807.06209 carries the arXiv non-exclusive distribution licence; astro-ph/0609593 carries 'assumed-1991-2003'. No text or table is reproduced beyond the values and their citation.",
+  "rows": [
+    {
+      "source": "Planck Collaboration 2018 VI, A&A 641, A6: Cosmological parameters",
+      "identifier": "arXiv:1807.06209", "sha256": "8e172730faf07c9f4ff3fdcc7043f76ed67df6f76066d47df30d693025b6ce77",
+      "location": "Table 1, Plik best fit column (TT,TE,EE+lowE+lensing, base-LCDM)",
+      "parameters_as_printed": { "H0": 67.32, "Omega_m": 0.3158, "Omega_m_h2": 0.14314, "Omega_b_h2": 0.022383, "Omega_c_h2": 0.12011 },
+      "derived_as_printed": { "age_Gyr": 13.7971, "plik_marginalised_age_Gyr": "13.797 +/- 0.023" },
+      "caveat": "Omega_m includes one neutrino of 0.06 eV and the paper's radiation content; the kernel takes radiation as one caller-supplied component, so a comparison must state the radiation density it supplies. The table prints no distances."
+    },
+    {
+      "source": "Wright 2006, PASP 118, 1711: A Cosmology Calculator for the World Wide Web",
+      "identifier": "arXiv:astro-ph/0609593", "sha256": "04b394a0e25f8637255210409b9717ece4ad82d48c203c11e45505954681a5ae",
+      "location": "Section 2, the paragraph on verifying simple cases (page 5)",
+      "radiation_as_printed": "Omega_r h^2 = 4.165e-5 (T0 = 2.72528 K, three massless neutrino species)",
+      "cases_as_printed": [
+        { "H0": 97.78, "Omega_M": 0, "geometry": "open", "age_Gyr": 9.934, "printed_note": "0.7% from the expected 10 Gyr" },
+        { "H0": 977.8, "Omega_M": 0, "geometry": "open", "age": "999 Myr", "printed_note": "0.1% from the expected 1 Gyr" }
+      ]
+    }
+  ],
+  "not_found": "No printed table of comoving or luminosity distances for a stated cosmology was found in the three papers read (Planck 2018 VI, Hogg 1999 astro-ph/9905116, Wright 2006). Hogg 1999 (sha256 8e100249e7179dc686be105f84217d48b7b8101add14e8fa85d4020e55d9957a) was fetched and holds formulas, not a value table."
+}

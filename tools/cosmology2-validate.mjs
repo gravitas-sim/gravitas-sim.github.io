@@ -15,7 +15,7 @@
 // The kernel verdict is computed from the rows by the function committed in the thresholds.
 // =============================================================================
 
-import { existsSync, readFileSync, writeFileSync } from 'node:fs';
+import { readFileSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
 import process from 'node:process';
 import { fileURLToPath, pathToFileURL } from 'node:url';
@@ -32,7 +32,6 @@ const DIR = 'tests/fixtures/cosmology2';
 const read = rel => JSON.parse(readFileSync(path.join(ROOT, rel), 'utf8'));
 export const THRESHOLDS = read(`${DIR}/thresholds.json`);
 const ORACLE = read(`${DIR}/oracle-results.json`);
-const AUTH_DIR = path.join(ROOT, DIR, 'authentic');
 const W = THRESHOLDS.worlds;
 
 const lim = id => THRESHOLDS.checks.find(c => c.id.startsWith(`${id}.`)).limits;
@@ -59,7 +58,7 @@ function refusal(fn) {
 const okFinite = v => Number.isFinite(v);
 
 /** Run the legs. @returns {Promise<object[]>} rows {id, status, measured, note} */
-export async function runValidation({ only = [], authDir = AUTH_DIR } = {}) {
+export async function runValidation({ only = [] } = {}) {
   const rows = [];
   const row = (id, pass, measured, note = '') =>
     rows.push({
@@ -621,19 +620,13 @@ export async function runValidation({ only = [], authDir = AUTH_DIR } = {}) {
     });
   }
 
-  if (wanted('B6.')) {
-    if (!existsSync(path.join(authDir, 'published-table.json')))
-      notRun(
-        'B6',
-        'tests/fixtures/cosmology2/authentic/published-table.json was not supplied (COSMOLOGY_II.md, Files requested from Carl); nothing was fetched and no table was typed'
-      );
-    else
-      reported(
-        'B6',
-        { file: 'arrived' },
-        'the comparison is computed by the analysis the file names'
-      );
-  }
+  if (wanted('B6.'))
+    // This table is the first gate's, pinned as it ran (results.json): the published data arrived afterwards and
+    // leg B6 is judged by tools/cosmology2-b6.mjs under b6-thresholds.json (COSMOLOGY_II.md section 10).
+    notRun(
+      'B6',
+      'not run in this first-gate table, which stays pinned as it ran (no file had been supplied); judged by tools/cosmology2-b6.mjs under tests/fixtures/cosmology2/b6-thresholds.json'
+    );
 
   // ---- C1 and D5: the seeded ensemble ----------------------------------------------------------
 
