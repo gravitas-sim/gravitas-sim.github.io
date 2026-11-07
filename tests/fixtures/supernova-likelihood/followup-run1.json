@@ -1,0 +1,40 @@
+{
+ "format": "gravitas.supernova-likelihood-followup-oracle/1",
+ "thresholdsSha256": "c645888240d9f340432dc226e3d8d4a83d51776ef8132aaa544bd198bce913e8",
+ "software": {
+  "python": "3.9.6",
+  "numpy": "1.26.4",
+  "scipy": "1.13.1",
+  "astropy": "6.0.1"
+ },
+ "note": "derived numbers only; no covariance entry is stored; Brout et al. 2022 and Scolnic et al. 2022 are the source of the covariance",
+ "covariance": {
+  "sha256": "abf806d966485e64afdb359c87bffc0ecc00d05eff0a31ced66f247385df0fdc",
+  "bytes": 33284960,
+  "firstLine": 1701,
+  "values": 2893401,
+  "shapeOk": true,
+  "rawRows": 1701,
+  "sampleRows": 1580,
+  "maxAsymmetry": 3.0000000000038676e-08,
+  "symmetrised": true,
+  "eigMinFull": 0.0008027816532258561,
+  "eigMaxFull": 2.523706321309307,
+  "eigMinSample": 0.005195877236093138,
+  "eigMaxSample": 2.391035582205801,
+  "conditionSample": 460.1793832996059,
+  "choSampleOk": true,
+  "choFullOk": true,
+  "spearman": 0.9319605244800531,
+  "maxDiagMinusErr": 1.3382055610965662,
+  "medianRatioDiagOverErr": 0.7131250124495431,
+  "minRatioDiagOverErr": 0.11754059738430804,
+  "maxRatioDiagOverErr": 1.007519130480482
+ },
+ "published": {
+  "sha256": "45f0df9d68390cedd98e64958dd9e6759a6b8987d7b1a3fbf5d68bda0009d7fb",
+  "Omega_M": 0.334,
+  "sigma": 0.018
+ },
+ "stopped": "I4a failed or the file has the wrong shape: every later leg is NOT RUN"
+}

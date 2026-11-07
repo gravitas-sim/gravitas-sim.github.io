@@ -1,0 +1,174 @@
+{
+ "format": "gravitas.supernova-likelihood-followup-failed/1",
+ "count": 17,
+ "legs": [
+  {
+   "id": "I2.symmetry",
+   "measured": 3.0000000000038676e-08,
+   "bound": "at most 1e-9"
+  },
+  {
+   "id": "I4a.rowmap",
+   "measured": 0.9319605244800531,
+   "bound": "at least 0.99"
+  },
+  {
+   "id": "I4b.premise",
+   "measured": {
+    "maxAbsDiff": 1.3382055610965662,
+    "ratioMin": 0.11754059738430804,
+    "ratioMedian": 0.7131250124495431,
+    "ratioMax": 1.007519130480482
+   },
+   "bound": "at most 1e-5 mag"
+  },
+  {
+   "id": "I4d.surveyShare",
+   "measured": {
+    "surveys": 20,
+    "observedShare": 0.1378871817366943,
+    "permutedMean": 0.10575511155725377,
+    "permutedSd": 0.005791208860844008,
+    "permutedMax": 0.13101018685935675,
+    "z": 5.548421918728312,
+    "aboveAll": true
+   },
+   "bound": "above all 2,000 permutations and z at least 10"
+  },
+  {
+   "id": "Q1.bestFit.SPLIT",
+   "measured": {
+    "difference": 0.015389344524017357,
+    "u": 0.018991871499296542,
+    "inUnits": 0.8103121656329328
+   },
+   "bound": "at most 0.25 u"
+  },
+  {
+   "id": "Q2.width.SPLIT",
+   "measured": {
+    "ratio68": 1.294215816254849,
+    "ratio95": 1.2943907278472566
+   },
+   "bound": "each in [0.80, 1.25]"
+  },
+  {
+   "id": "Q3.planeBestFit.SPLIT",
+   "measured": {
+    "P1.a": {
+     "difference": 0.0023368243050824744,
+     "s": 0.1
+    },
+    "P1.b": {
+     "difference": 0.036657953221181705,
+     "s": 0.13499999999999998
+    },
+    "P2.a": {
+     "difference": 4.9465710608820324e-05,
+     "s": 0.13
+    },
+    "P2.b": {
+     "difference": 0.03616102402392385,
+     "s": 0.23999999999999994
+    }
+   },
+   "bound": "at most 0.25 s on each of four"
+  },
+  {
+   "id": "Q4.planeOverlap.SPLIT",
+   "measured": {
+    "P1.68": 0.5,
+    "P1.95": 0.5273972602739726,
+    "P2.68": 0.42105263157894735,
+    "P2.95": 0.5222222222222223
+   },
+   "bound": "each at least 0.70"
+  },
+  {
+   "id": "Q5.beatsDiag.SPLIT",
+   "measured": {
+    "logWidthX": 0.2579049644401366,
+    "logWidthDiag": 0.042132375528826704,
+    "jaccardP1_68": 0.5,
+    "jaccardP1_68Diag": 0.4666666666666667
+   },
+   "bound": "both"
+  },
+  {
+   "id": "Q2.width.T2-k10",
+   "measured": {
+    "ratio68": 0.7404485328122371,
+    "ratio95": 0.7403691306605473
+   },
+   "bound": "each in [0.80, 1.25]"
+  },
+  {
+   "id": "Q4.planeOverlap.T2-k10",
+   "measured": {
+    "P1.68": 0.75,
+    "P1.95": 0.65,
+    "P2.68": 0.5789473684210527,
+    "P2.95": 0.6666666666666666
+   },
+   "bound": "each at least 0.70"
+  },
+  {
+   "id": "Q5.beatsDiag.T2-k10",
+   "measured": {
+    "logWidthX": 0.30049915098179913,
+    "logWidthDiag": 0.042132375528826704,
+    "jaccardP1_68": 0.75,
+    "jaccardP1_68Diag": 0.4666666666666667
+   },
+   "bound": "both"
+  },
+  {
+   "id": "Q1.bestFit.T2-k30",
+   "measured": {
+    "difference": 0.016313382642933083,
+    "u": 0.018991871499296542,
+    "inUnits": 0.8589665659615131
+   },
+   "bound": "at most 0.25 u"
+  },
+  {
+   "id": "Q4.planeOverlap.T2-k30",
+   "measured": {
+    "P1.68": 0.4857142857142857,
+    "P1.95": 0.6179775280898876,
+    "P2.68": 0.4782608695652174,
+    "P2.95": 0.6296296296296297
+   },
+   "bound": "each at least 0.70"
+  },
+  {
+   "id": "Q5.beatsDiag.T2-k30",
+   "measured": {
+    "logWidthX": 0.12985194644432405,
+    "logWidthDiag": 0.042132375528826704,
+    "jaccardP1_68": 0.4857142857142857,
+    "jaccardP1_68Diag": 0.4666666666666667
+   },
+   "bound": "both"
+  },
+  {
+   "id": "Q5.beatsDiag.T2-k100",
+   "measured": {
+    "logWidthX": 0.06686442711150785,
+    "logWidthDiag": 0.042132375528826704,
+    "jaccardP1_68": 0.7333333333333333,
+    "jaccardP1_68Diag": 0.4666666666666667
+   },
+   "bound": "both"
+  },
+  {
+   "id": "W1.T1-n100",
+   "measured": {
+    "ratio": 2.993038012778354,
+    "h68": 0.05449819738526605,
+    "expectedBySqrtRule": 3.9749213828703582
+   },
+   "bound": "at most 2.0"
+  }
+ ]
+}

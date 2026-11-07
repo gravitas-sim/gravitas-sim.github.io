@@ -213,7 +213,7 @@ catalogue refers to it, so a change to it can reach a student.
 | [GALACTIC_CLOSEOUT.md](GALACTIC_CLOSEOUT.md) | The Galactic closeout (Prompt 238): what 233 to 237 landed, the two Gaia investigations checked, the package change, each closeout item done, not applicable or blocked, the cohesion record. | record | P238 | written | no |
 | [EXTRAGALACTIC_CLOSEOUT.md](EXTRAGALACTIC_CLOSEOUT.md) | The extragalactic and interstellar-medium closeout (Prompt 253): what 247 to 252 landed, each closeout item done or blocked, the package reading step, the cohesion record. | record | P253 | written | no |
 | [COSMOLOGY_II.md](COSMOLOGY_II.md) | The late-time FLRW kernel (radiation, constant w, closed universes, transition, refusals, degeneracy contours): equations, domain, validation table, failed legs and the file requested (Prompt 255). | feature | P255 | written | no |
-| [SN_LIKELIHOOD_GATE.md](SN_LIKELIHOOD_GATE.md) | Supernova likelihood gate: covariance decision (survey-coherent split), nuisance, planes, oracle, coverage, 58 legs, verdict A (narrow); published-contour legs not run (Prompt 256 Part A). | gate | P256 | written | no |
+| [SN_LIKELIHOOD_GATE.md](SN_LIKELIHOOD_GATE.md) | Supernova likelihood gate: split-covariance decision, planes, oracle, 58 legs, verdict A (narrow); follow-up against the release covariance and published value, verdict FC (Prompt 256). | gate | P256 | written | no |
 
 ## Authoritative sources
 
