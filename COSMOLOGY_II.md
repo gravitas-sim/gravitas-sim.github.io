@@ -1,8 +1,9 @@
 # Cosmology kernel II: late-time FLRW depth (Prompt 255)
 
-Status: kernel, contract and validation done and tested; the legs that wait for an authentic file are NOT RUN; the
-committed verdict function gives **kernel verdict C** (four legs fail and stay failing, section 6; the follow-up of section 9 gives A on its own committed legs); nothing student-facing
-is built (the consumers rule holds). The kernel it extends is [COSMOLOGY.md](COSMOLOGY.md), which is unchanged.
+Status: kernel, contract and validation done and tested; the committed verdict function gives **kernel verdict C** (four
+legs fail and stay failing, section 6; the follow-up of section 9 gives A on its own committed legs); the published-age leg
+B6 has now been run, age-only, and passes (section 10: product verdict C in the original form, A in the follow-up form, each
+with the words age-only B6); nothing student-facing is built (the consumers rule holds, and lifting it is Carl's call). The kernel it extends is [COSMOLOGY.md](COSMOLOGY.md), which is unchanged.
 
 ## 1. What this is
 
@@ -143,7 +144,7 @@ thresholds committed first).
   kernel's message, not of a bound, so the kernel's message was lengthened and the bound left alone; the first complete
   run's five failures are kept in `tests/fixtures/cosmology2/first-run.json`.
 
-## 7. Files requested from Carl (nothing fetched, nothing typed)
+## 7. Files requested from Carl (nothing fetched, nothing typed; they have since arrived, section 10)
 
 B6 (and so the product verdict) needs one file, `tests/fixtures/cosmology2/authentic/published-table.json`: a published
 table of distances and ages for a stated standard cosmology, with the printed parameters, the values as printed, the printed
@@ -184,3 +185,68 @@ astropy's age(z) was chosen knowing which rows fail, so B1b and B3b say only tha
 astropy agrees with itself, while the own quadrature, which satisfies the identity everywhere, carries the claim for the
 excluded rows (B2 of the first gate, unchanged). The first run of the follow-up validator is kept in `followup-first-run.json`:
 B3b failed because the exclusion was coded for B1b only, an implementation slip against the committed text found at once.
+
+## 10. Leg B6, the published ages (run after Carl's session fetched the data)
+
+Carl's session fetched three papers from arXiv and transcribed what they print; the transcription is in
+`tests/fixtures/cosmology2/authentic/published-table.json` (sha256 in the rule and in `authentic/SOURCES.json`, which also
+holds each paper's identifier, PDF sha256 and the terms as read; the licence text itself was not saved, so only numbers and cited
+facts are recorded). Each printed number was checked against the extracted text of its paper in this session; none is typed from
+memory. **No printed table of comoving or luminosity distances for a stated cosmology was found** (Planck 2018 VI, Hogg 1999
+and Wright 2006 were read; Hogg holds formulas, not values). B6 is therefore an **age-only** leg.
+
+**The rule, committed first** (`tests/fixtures/cosmology2/b6-thresholds.json`, commit afd2a3e0, alone, before the kernel was
+called with any of these inputs; the only arithmetic before it was plain arithmetic on the printed numbers, no kernel, no
+oracle). Three legs; each passes when the kernel's age is within the leg's tolerance of the printed age, the tolerance being
+the sum of (a) one unit of the last printed digit of the age (the committed B6's own bound), (b) the half unit of every printed
+input propagated (the kernel runs at the rounded input), (c) for Planck only, an allowance for the radiation and neutrino
+difference. The radiation supplied is the one density the data print, Wright's `Omega_r h^2 = 4.165e-5` (three massless
+neutrino species, T0 = 2.72528 K) divided by the leg's own `h^2`, because Planck's Table 1 prints none and the kernel takes
+one caller-supplied component. Planck's `Omega_m` includes one 0.06 eV neutrino (the caption says so), non-relativistic over
+the epochs that matter, so the supplied radiation exceeds Planck's by at most one neutrino species' share (at most one third
+of the supplied `Or` for any neutrino-to-photon weight); the allowance fraction is one half, covering that third and the
+unprinted small differences. A convexity bound (`|Delta(H0 t)| <= |Delta Or| / Om^(3/2)` with flat closure) turns the
+allowance into a relative age tolerance without any integral of the age. Amendment AM3 records that this widens the committed
+one-unit bound, and why: a one-unit bound on an age printed to six digits (7e-6) is smaller than the effect of radiation on the
+age, so it would measure the radiation density chosen and not the kernel. The literal one-unit reading is reported beside
+every leg.
+
+| Leg | Printed (as transcribed) | Kernel | Difference | Tolerance by the rule | Status |
+|---|---|---|---|---|---|
+| Planck 2018 VI Table 1, Plik best fit: flat, H0 and Omega_m as printed, Or = 4.165e-5 / h^2 | 13.7971 Gyr | 13.797235 Gyr | +9.8e-6 relative (1.35 units of the last digit) | 4.53e-4 (0.0062 Gyr) | **pass** |
+| Wright, open, Omega_M = 0, H0 97.78, its radiation | 9.934 Gyr | 9.934352 Gyr | +3.5e-5 (0.35 units) | 1.59e-4 | **pass** |
+| Wright, open, Omega_M = 0, H0 977.8, its radiation | 999 Myr | 999.3325 Myr | +3.3e-4 (0.33 units) | 1.12e-3 | **pass** |
+
+Reported beside, not judged. The literal committed reading (within one unit of the last printed digit) **fails for Planck** (1.35
+units: the kernel with the one supplied radiation density is 1.3e-4 Gyr above the printed value; that is inside the stated
+radiation and neutrino allowance and is consistent with a mismatch of that kind, but nothing here shows it is the cause) and passes for both Wright legs. With the radiation set to
+zero the Planck leg still passes (+4.1e-4 relative, inside 4.53e-4) and the 977.8 leg still passes, while the 97.78 leg
+fails (0.66 percent: 10.000 Gyr against 9.934): only the 97.78 leg depends on the radiation term. The kernel's age beside the
+printed marginalised Plik mean (13.797 with a printed error of 0.023) is 0.01 of that error. The empty-universe-with-radiation
+closed form `(1/H0) / (1 + sqrt(Or))` agrees with the kernel to rounding.
+
+**Verdict.** B6 passes (age-only). By the function committed in the rule: the product verdict is **C (age-only B6)** in the
+original form (kernel verdict C, section 5) and **A (age-only B6)** in the follow-up form (kernel verdict A, section 9; the
+original form is not replaced). The consumers clause is met only by a product verdict of A: **unmet in the original form, met
+on the letter in the follow-up form.** Reporting that is not lifting the consumers rule: that is Carl's call, as is whether an
+age-only B6 satisfies the contract's B6 (which asked for distances and ages). Nothing is built.
+
+What a pass does establish: the kernel's ages agree with two published sources: Planck's best-fit age within a tolerance that is
+wider than the effect of the radiation (so the leg checks matter, flat dark energy and the unit conversion, not the radiation or
+neutrino treatment), and Wright's printed empty-universe ages with radiation, the 97.78 case depending on the radiation term.
+What it does not establish: any distance (comoving, luminosity, angular diameter, modulus, lookback) against a published number;
+distances rest on the closed forms, astropy 6.0.1 and the independent quadrature only. Nor w other than -1, matter with
+curvature, closed universes, the transition redshift or the contours against any published value. Wright's calculator integrates
+by the mid-point rule with 1000 panels (printed); the rule gives that a term, assuming the integration variable is `a`.
+
+Mechanics. `npm run cosmology2:b6` (`tools/cosmology2-b6.mjs`) recomputes every tolerance term from the printed numbers, asserts
+they equal the committed ones, runs the kernel once per leg and writes `b6-results.json` and `b6-failed-legs.json` (empty);
+`tests/cosmology2B6.test.js` holds both. The first-gate validator keeps B6 NOT RUN in its pinned table (`results.json` is
+unchanged, as is every follow-up file); the first-gate test no longer asserts that the authentic directory is absent. The one
+run is the run recorded: nothing was rerun, tuned or counted out.
+
+Questions for Carl. (1) Is an age-only B6 enough for the contract's B6, so that the follow-up form's product verdict A counts?
+If not, a published table of distances for a stated cosmology is the file that would close it (none was found in the three
+papers). (2) Which form binds, the committed one (product C) or the follow-up (product A)? (3) Lift the consumers rule for the
+three lessons, the panels and the model-page section, or keep holding? This session builds none of them. (4) D-R10-255-09..12
+are DELEGATED.

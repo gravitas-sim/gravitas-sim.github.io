@@ -212,7 +212,7 @@ catalogue refers to it, so a change to it can reach a student.
 | [TIME_DOMAIN_CLOSEOUT.md](TIME_DOMAIN_CLOSEOUT.md) | The time-domain closeout (Prompt 246): what 239 to 245 landed, what a student can do today, each closeout item done, not applicable or blocked, the cohesion record. | record | P246 | written | no |
 | [GALACTIC_CLOSEOUT.md](GALACTIC_CLOSEOUT.md) | The Galactic closeout (Prompt 238): what 233 to 237 landed, the two Gaia investigations checked, the package change, each closeout item done, not applicable or blocked, the cohesion record. | record | P238 | written | no |
 | [EXTRAGALACTIC_CLOSEOUT.md](EXTRAGALACTIC_CLOSEOUT.md) | The extragalactic and interstellar-medium closeout (Prompt 253): what 247 to 252 landed, each closeout item done or blocked, the package reading step, the cohesion record. | record | P253 | written | no |
-| [COSMOLOGY_II.md](COSMOLOGY_II.md) | The late-time FLRW kernel (radiation, constant w, closed universes, transition, refusals, degeneracy contours): equations, domain, validation table, failed legs and the file requested (Prompt 255). | feature | P255 | written | no |
+| [COSMOLOGY_II.md](COSMOLOGY_II.md) | The late-time FLRW kernel (radiation, constant w, closed universes, refusals, contours): equations, domain, validation, failed legs, follow-up and the age-only published-age leg B6 (Prompt 255). | feature | P255 | written | no |
 
 ## Authoritative sources
 
