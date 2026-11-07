@@ -1435,6 +1435,13 @@
       "purpose": "Baryon acoustic oscillation gate: the observable as a form, the sound-horizon integral, 44 legs and a 19-row follow-up on the BOSS DR12 table and Eisenstein-Hu formulas, verdict C (Prompt 257).",
       "owner": 257,
       "student": false
+    },
+    {
+      "file": "CMB_SCALE_GATE.md",
+      "kind": "gate",
+      "purpose": "Microwave background angular-scale gate: r_s(z*), D_M(z*), theta*, the peak relation and claim rule, 42 legs, verdict C; spectrum, grid and cited formulas NOT RUN (Prompt 258).",
+      "owner": 258,
+      "student": false
     }
   ]
 }
