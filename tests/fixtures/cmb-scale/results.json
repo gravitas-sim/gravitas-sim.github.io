@@ -1,0 +1,794 @@
+{
+ "format": "gravitas.cmb-scale-gate-results/1",
+ "thresholdsSha256": "ace5d09b2306676687e04b802f6b73641fb4c05c52fd0069306c8c389d90a231",
+ "oracleSha256": "89ea59bf82042a9d0cf86c9c60a1a532c3051465d33f1bdee494ba3662e9fbe9",
+ "planckExtractionSha256": "32d58ab4c512f939a4307219f11e4e00dbc204a97abfa6a5e3b1cca6c733a46e",
+ "node": "v22.23.4",
+ "seconds": 2,
+ "counts": {
+  "rows": 42,
+  "pass": 25,
+  "fail": 5,
+  "not-run": 8,
+  "reported": 4
+ },
+ "rowsNotInThresholds": [],
+ "thresholdLegsWithoutRow": [],
+ "verdict": {
+  "kernel": "KERNEL FAIL",
+  "kernelFailingRows": [
+   "B5.directions",
+   "E1.coverage68",
+   "E2.coverage95"
+  ],
+  "product": "C",
+  "why": "KERNEL FAIL",
+  "consumersClause": "unmet",
+  "newLegsOutsideTheFunction": [
+   "B5b.directionOfRsWithZstar",
+   "E6a.coverage68Symmetric",
+   "E6b.coverage95Symmetric"
+  ]
+ },
+ "rows": [
+  {
+   "id": "I1.fixtures",
+   "status": "pass",
+   "measured": {
+    "thresholdsSha256": "ace5d09b2306676687e04b802f6b73641fb4c05c52fd0069306c8c389d90a231",
+    "planckSha256": "32d58ab4c512f939a4307219f11e4e00dbc204a97abfa6a5e3b1cca6c733a46e",
+    "shaMatch": true,
+    "streamFirstFiveDiff": 0,
+    "streamSumDiff": 0
+   },
+   "bound": "exact"
+  },
+  {
+   "id": "I2.surface",
+   "status": "pass",
+   "measured": {
+    "exports": [
+     "CmbDomainError",
+     "NU_FACTOR",
+     "PEAK_WINDOW",
+     "acousticScale",
+     "checkRecombination",
+     "claimViolations",
+     "comovingDistance",
+     "fitPeak",
+     "massiveNuModel",
+     "nearestNode",
+     "peakMultipole",
+     "radiation",
+     "soundHorizon",
+     "thetaFromPeak"
+    ]
+   },
+   "bound": "exact"
+  },
+  {
+   "id": "A1.edsDistance",
+   "status": "pass",
+   "measured": {
+    "maxRelative": 1.5642313698425737e-16
+   },
+   "bound": 1e-11
+  },
+  {
+   "id": "A2.soundHorizonClosedForm",
+   "status": "pass",
+   "measured": {
+    "maxRelative": 2.973500548560194e-16,
+    "sets": 5
+   },
+   "bound": 1e-10
+  },
+  {
+   "id": "A3.scaleInvariance",
+   "status": "pass",
+   "measured": {
+    "maxRelative": 3.335010989401394e-16,
+    "cases": 30
+   },
+   "bound": 1e-13
+  },
+  {
+   "id": "A4.peakRelation",
+   "status": "pass",
+   "measured": {
+    "maxRelative": 2.2144933198098526e-16,
+    "cases": 270
+   },
+   "bound": 1e-14
+  },
+  {
+   "id": "A5.curvature",
+   "status": "pass",
+   "measured": {
+    "direction": "theta_star decreases with Ok (more open)",
+    "continuityRelative": 1.3774891037997138e-9,
+    "theta100AtMinus0p05": 1.118053215098114,
+    "theta100AtPlus0p05": 0.9738656176733291
+   },
+   "bound": "strict monotone; 1e-7"
+  },
+  {
+   "id": "B1.distance",
+   "status": "pass",
+   "measured": {
+    "maxRelative": 4.326153632670916e-15,
+    "perWorld": [
+     3.2799894987809014e-15,
+     2.683109640393662e-15,
+     2.528383470432839e-15,
+     3.7517873820951e-15,
+     3.044841570708517e-15,
+     2.713504356892934e-15,
+     2.9601342627388677e-15,
+     1.986423766997861e-15,
+     2.7534061683613803e-15,
+     4.326153632670916e-15
+    ]
+   },
+   "bound": 1e-10
+  },
+  {
+   "id": "B2.soundHorizon",
+   "status": "pass",
+   "measured": {
+    "maxRelativeOwnE": 3.941156302172251e-16,
+    "maxRelativeAstropyH": 1.1322997670217478e-13
+   },
+   "bound": 1e-9
+  },
+  {
+   "id": "B3.theta",
+   "status": "pass",
+   "measured": {
+    "maxRelative": 3.641965644427525e-16
+   },
+   "bound": 1e-9
+  },
+  {
+   "id": "B4.radiation",
+   "status": "pass",
+   "measured": {
+    "maxRelative": 4.2926727979928913e-13
+   },
+   "bound": 1e-9
+  },
+  {
+   "id": "B5.directions",
+   "status": "fail",
+   "measured": {
+    "stepsOf20": {
+     "rsDecreasesWithOmegaB": 20,
+     "rsDecreasesWithOm": 20,
+     "rsIncreasesWithZstar_asCommitted": 0,
+     "DMIncreasesWithZstar": 20
+    },
+    "oracle": {
+     "rs_vs_omegaB": true,
+     "rs_vs_Om": true,
+     "rs_vs_zstar": false,
+     "DM_vs_zstar": true
+    }
+   },
+   "bound": "20 of 20 each",
+   "note": "the committed direction of r_s with z_star (increasing) is wrong physics (AM4); left failing, B5b carries the corrected direction"
+  },
+  {
+   "id": "B5b.directionOfRsWithZstar",
+   "status": "pass",
+   "measured": {
+    "prototypeStepsOf20": 20,
+    "oracle": true
+   },
+   "bound": "20 of 20",
+   "note": "NEW leg (AM4), NOT BLIND, outside the verdict function"
+  },
+  {
+   "id": "B6.errorCovers",
+   "status": "pass",
+   "measured": {
+    "covered": 10,
+    "of": 10
+   },
+   "bound": "10 of 10"
+  },
+  {
+   "id": "C1.citedCode",
+   "status": "not-run",
+   "measured": null,
+   "bound": "pinned by request X1",
+   "note": "needs a Boltzmann code run in Carl's environment: request X1"
+  },
+  {
+   "id": "E1.coverage68",
+   "status": "fail",
+   "measured": {
+    "prototype": {
+     "rate": 0.1355,
+     "covered": 271,
+     "medianSigma": 0.790847109491304,
+     "meanApexError": 2.329668638988169,
+     "codes": {
+      "ok": 2000
+     }
+    },
+    "oracle": {
+     "rate": 0.1245,
+     "covered": 249,
+     "medianSigma": 0.7806463440224698,
+     "meanApexError": 2.334691186346854,
+     "codes": {
+      "ok": 2000
+     }
+    },
+    "band": [
+     0.6514783217139116,
+     0.7139216782860883
+    ]
+   },
+   "bound": "|rate - 0.6827| <= 3 sigma binomial",
+   "note": "the quadratic apex is biased by the DESIGN peak's skew (X3): a stated systematic, not noise"
+  },
+  {
+   "id": "E2.coverage95",
+   "status": "fail",
+   "measured": {
+    "prototype": {
+     "rate": 0.2935,
+     "covered": 587,
+     "medianSigma": 0.781903189931648,
+     "meanApexError": 2.304584466829001,
+     "codes": {
+      "ok": 2000
+     }
+    },
+    "oracle": {
+     "rate": 0.3205,
+     "covered": 641,
+     "medianSigma": 0.7838816323924571,
+     "meanApexError": 2.304685755810798,
+     "codes": {
+      "ok": 2000
+     }
+    },
+    "band": [
+     0.9405202333710466,
+     0.9684797666289534
+    ]
+   },
+   "bound": "|rate - 0.9545| <= 3 sigma binomial",
+   "note": "as E1"
+  },
+  {
+   "id": "E3.pinned",
+   "status": "pass",
+   "measured": {
+    "maxAbsoluteDifference": 2.842170943040401e-14,
+    "vectors": [
+     {
+      "k": 0,
+      "apex": 234.06616476959925,
+      "sigma": 0.7556949271456214,
+      "curvatureSigma": -23.058476298955352,
+      "bins": 5,
+      "oracleApex": 234.06616476959925,
+      "diffs": [
+       0,
+       9.992007221626409e-16,
+       2.4868995751603507e-14,
+       0,
+       0
+      ]
+     },
+     {
+      "k": 1,
+      "apex": 230.96265059712368,
+      "sigma": 0.9248462064039266,
+      "curvatureSigma": -22.45976507676945,
+      "bins": 5,
+      "oracleApex": 230.96265059712368,
+      "diffs": [
+       0,
+       1.1102230246251565e-16,
+       3.552713678800501e-15,
+       0,
+       0
+      ]
+     },
+     {
+      "k": 2,
+      "apex": 232.39663048398083,
+      "sigma": 0.7036470776764889,
+      "curvatureSigma": -22.734367473531634,
+      "bins": 5,
+      "oracleApex": 232.39663048398086,
+      "diffs": [
+       2.842170943040401e-14,
+       1.4432899320127035e-15,
+       2.842170943040401e-14,
+       0,
+       0
+      ]
+     }
+    ]
+   },
+   "bound": 1e-9
+  },
+  {
+   "id": "E4.coarse",
+   "status": "pass",
+   "measured": {
+    "prototypeCodes": {
+     "too-few-bins": 500
+    },
+    "oracleCodes": {
+     "too-few-bins": 500
+    },
+    "apexOrIntervalReported": 0
+   },
+   "bound": "500 of 500"
+  },
+  {
+   "id": "E5.noPeak",
+   "status": "pass",
+   "measured": {
+    "prototypeNotConstrained": 1,
+    "oracleNotConstrained": 1,
+    "prototypeCodes": {
+     "no-curvature": 425,
+     "too-few-bins": 75
+    },
+    "oracleCodes": {
+     "no-curvature": 405,
+     "too-few-bins": 95
+    }
+   },
+   "bound": "at least 0.95 each"
+  },
+  {
+   "id": "E6a.coverage68Symmetric",
+   "status": "fail",
+   "measured": {
+    "prototype": {
+     "rate": 0.399,
+     "covered": 798,
+     "medianSigma": 0.7074567236272419,
+     "meanApexError": -0.008675696623456105,
+     "codes": {
+      "ok": 2000
+     }
+    },
+    "oracle": {
+     "rate": 0.396,
+     "covered": 792,
+     "medianSigma": 0.7066085341843036,
+     "meanApexError": -0.007155802902897008,
+     "codes": {
+      "ok": 2000
+     }
+    },
+    "band": [
+     0.6514783217139116,
+     0.7139216782860883
+    ]
+   },
+   "bound": "|rate - 0.6827| <= 3 sigma binomial",
+   "note": "NEW leg (AM4), NOT BLIND, outside the verdict function"
+  },
+  {
+   "id": "E6b.coverage95Symmetric",
+   "status": "fail",
+   "measured": {
+    "prototype": {
+     "rate": 0.7425,
+     "covered": 1485,
+     "medianSigma": 0.7050476494344777,
+     "meanApexError": 0.018094095058030602,
+     "codes": {
+      "ok": 2000
+     }
+    },
+    "oracle": {
+     "rate": 0.754,
+     "covered": 1508,
+     "medianSigma": 0.7034713992448569,
+     "meanApexError": -0.022283240687060314,
+     "codes": {
+      "ok": 2000
+     }
+    },
+    "band": [
+     0.9405202333710466,
+     0.9684797666289534
+    ]
+   },
+   "bound": "|rate - 0.9545| <= 3 sigma binomial",
+   "note": "NEW leg (AM4), NOT BLIND, outside the verdict function"
+  },
+  {
+   "id": "Z1.refusals",
+   "status": "pass",
+   "measured": {
+    "draws": 400,
+    "disagreements": 0,
+    "accepted": 7,
+    "maxRelativeOfAccepted": 6.773712639458137e-16,
+    "byCode": {
+     "not-finite": 0,
+     "bad-H0": 58,
+     "negative-density": 81,
+     "density-out-of-domain": 0,
+     "w-out-of-domain": 75,
+     "bounce": 0,
+     "no-radiation": 4,
+     "bad-baryons": 48,
+     "bad-recombination-redshift": 122,
+     "bad-offset": 5,
+     "beyond-antipode": 0,
+     "accept": 7
+    },
+    "firstDisagreements": []
+   },
+   "bound": "0 disagreements; 1e-9"
+  },
+  {
+   "id": "Z2.peakInputs",
+   "status": "pass",
+   "measured": {
+    "prototype": [
+     "not-finite",
+     "bad-sigma",
+     "not-sorted",
+     "length-mismatch",
+     "empty",
+     "bad-window"
+    ],
+    "oracle": [
+     "not-finite",
+     "bad-sigma",
+     "not-sorted",
+     "length-mismatch",
+     "empty",
+     "bad-window"
+    ],
+    "committed": [
+     "not-finite",
+     "bad-sigma",
+     "not-sorted",
+     "length-mismatch",
+     "empty",
+     "bad-window"
+    ]
+   },
+   "bound": "6 of 6"
+  },
+  {
+   "id": "K1.claimRule",
+   "status": "pass",
+   "measured": {
+    "violatingFlagged": 12,
+    "cleanFlagged": 0,
+    "agreeWithOracleOn": 24,
+    "probePairs": 323,
+    "probeMisses": 0
+   },
+   "bound": "12 of 12 each; agree on all 24"
+  },
+  {
+   "id": "K2.tree",
+   "status": "pass",
+   "measured": {
+    "filesScanned": 2820,
+    "contextSentences": 39,
+    "violations": 0,
+    "first": []
+   },
+   "bound": "0"
+  },
+  {
+   "id": "G2.linear",
+   "status": "pass",
+   "measured": {
+    "maxRelative": 3.8344724972339307e-16,
+    "outsideRefused": 6,
+    "pointsDifferFromOracleStream": 0
+   },
+   "bound": "1e-12; 6 of 6"
+  },
+  {
+   "id": "G3.nearest",
+   "status": "pass",
+   "measured": {
+    "sameNodeAsOracle": 200,
+    "of": 200,
+    "tieNodes": [
+     0,
+     1,
+     3
+    ],
+    "tiesExpected": [
+     0,
+     1,
+     3
+    ],
+    "outsideRefused": 6
+   },
+   "bound": "200 of 200"
+  },
+  {
+   "id": "G1.provenance",
+   "status": "not-run",
+   "measured": null,
+   "bound": "pinned by request G1",
+   "note": "the grid file, its generator and its rights decision: request G1 (NOT DECIDED)"
+  },
+  {
+   "id": "P1.thetaPlanck",
+   "status": "pass",
+   "measured": {
+    "theta100": 1.0410865988199902,
+    "printed": 1.041085,
+    "relativeDifference": 0.0000015357247392656823,
+    "sigmaPrintedRelative": 0.0002977619825184901
+   },
+   "bound": "5e-4 relative",
+   "note": "NOT BLIND: the printed numbers were seen before the thresholds were committed"
+  },
+  {
+   "id": "P2.rstarPlanck",
+   "status": "pass",
+   "measured": {
+    "rs": 144.3935239016331,
+    "printed": 144.43,
+    "relativeDifference": 0.000252552090056805,
+    "sigmaPrintedRelative": 0.0018001800180018
+   },
+   "bound": "1e-3 relative",
+   "note": "NOT BLIND, as P1; the columns are mixed (best-fit parameters, marginalised-mean z_star)"
+  },
+  {
+   "id": "P3.oracleAtPlanck",
+   "status": "pass",
+   "measured": {
+    "maxRelative": 2.623006129717069e-16,
+    "prototype": {
+     "rs": 144.3935239016331,
+     "DM": 13869.501736483266,
+     "theta100": 1.0410865988199902
+    },
+    "oracle": {
+     "rs": 144.39352390163307,
+     "DM": 13869.501736483262,
+     "theta100": 1.0410865988199902
+    }
+   },
+   "bound": "1e-9"
+  },
+  {
+   "id": "X2.reportedPlanckSensitivity",
+   "status": "reported",
+   "measured": {
+    "sensitivity": {
+     "zstarPlusSigma": {
+      "theta100": 1.040926314328061,
+      "relThetaVsPrinted": 0.00015242335826479798,
+      "relRsVsPrinted": 0.0004030169165368341,
+      "oracleTheta100": 1.040926314328061
+     },
+     "zstarMinusSigma": {
+      "theta100": 1.0412469370899484,
+      "relThetaVsPrinted": 0.00015554646349566362,
+      "relRsVsPrinted": 0.00010203796943996366,
+      "oracleTheta100": 1.0412469370899484
+     },
+     "Neff3.044": {
+      "theta100": 1.0411550853782665,
+      "relThetaVsPrinted": 0.00006731955437497534,
+      "relRsVsPrinted": 0.00018454467362784288,
+      "oracleTheta100": 1.0411550853782665
+     },
+     "Neff3.05": {
+      "theta100": 1.0409496753043106,
+      "relThetaVsPrinted": 0.00012998429109000966,
+      "relRsVsPrinted": 0.000388518258640033,
+      "oracleTheta100": 1.0409496753043108
+     }
+    },
+    "massless255Style": {
+     "theta100": 1.039531602605752,
+     "relativeToMassiveNu": 0.001493628115087414,
+     "relativeToPrinted": 0.001492094684149796,
+     "rs": 144.39993340207943,
+     "DM": 13890.8651781358,
+     "oracleTheta100": 1.0395316026057517
+    },
+    "y0": 357.91212096738025
+   },
+   "bound": "REPORTED"
+  },
+  {
+   "id": "F1.zstarFormula",
+   "status": "not-run",
+   "measured": null,
+   "bound": "pinned by request F1",
+   "note": "the source text of the fitting formula for z_star: request F1"
+  },
+  {
+   "id": "F2.peakOffset",
+   "status": "not-run",
+   "measured": null,
+   "bound": "pinned by request F2",
+   "note": "the source text of the peak-offset formula: request F2"
+  },
+  {
+   "id": "S1.spectrumIntegrity",
+   "status": "not-run",
+   "measured": null,
+   "bound": "pinned by request S1",
+   "note": "no binned spectrum and no rights decision (NOT DECIDED): request S1"
+  },
+  {
+   "id": "S2.peakFromSpectrum",
+   "status": "not-run",
+   "measured": null,
+   "bound": "relative 5 percent; 1e-9",
+   "note": "needs S1 and F2"
+  },
+  {
+   "id": "S3.coarseRebin",
+   "status": "not-run",
+   "measured": null,
+   "bound": "pinned by request S1",
+   "note": "needs S1"
+  },
+  {
+   "id": "S4.rights",
+   "status": "not-run",
+   "measured": null,
+   "bound": "NOT DECIDED",
+   "note": "needs S1 and G1: no rights decision is recorded and no byte is shipped"
+  },
+  {
+   "id": "X1.reportedWorlds",
+   "status": "reported",
+   "measured": [
+    {
+     "id": "W1",
+     "rs": 144.23169477574118,
+     "DM": 13864.29289043401,
+     "theta100": 1.040310500618875,
+     "ellA": 301.98605625155915,
+     "ell1": 226.48954218866936,
+     "oracleTheta100": 1.040310500618875
+    },
+    {
+     "id": "W2",
+     "rs": 150.10320353667643,
+     "DM": 14914.69684113892,
+     "theta100": 1.0064113614609294,
+     "ellA": 312.15790817677043,
+     "ell1": 234.11843113257783,
+     "oracleTheta100": 1.006411361460929
+    },
+    {
+     "id": "W3",
+     "rs": 143.74113618158077,
+     "DM": 13669.128544593219,
+     "theta100": 1.0515749830916405,
+     "ellA": 298.7511783851571,
+     "ell1": 224.06338378886784,
+     "oracleTheta100": 1.0515749830916405
+    },
+    {
+     "id": "W4",
+     "rs": 144.23253488369573,
+     "DM": 13575.317072163654,
+     "theta100": 1.0624616288296223,
+     "ellA": 295.6899871339808,
+     "ell1": 221.76749035048562,
+     "oracleTheta100": 1.0624616288296223
+    },
+    {
+     "id": "W5",
+     "rs": 144.23030832214798,
+     "DM": 14337.608270023055,
+     "theta100": 1.005957936678347,
+     "ellA": 312.29861001576955,
+     "ell1": 234.22395751182717,
+     "oracleTheta100": 1.0059579366783467
+    },
+    {
+     "id": "W6",
+     "rs": 142.49641467019447,
+     "DM": 13406.939251268965,
+     "theta100": 1.062855674957334,
+     "ellA": 295.58036218942954,
+     "ell1": 221.68527164207214,
+     "oracleTheta100": 1.062855674957334
+    },
+    {
+     "id": "W7",
+     "rs": 148.10733547411763,
+     "DM": 15362.389355464817,
+     "theta100": 0.9640904943047278,
+     "ellA": 325.86076433161105,
+     "ell1": 244.3955732487083,
+     "oracleTheta100": 0.9640904943047278
+    },
+    {
+     "id": "W8",
+     "rs": 144.23169465110266,
+     "DM": 13735.659785436494,
+     "theta100": 1.050052905387386,
+     "ellA": 299.18422562059345,
+     "ell1": 224.3881692154451,
+     "oracleTheta100": 1.050052905387386
+    },
+    {
+     "id": "W9",
+     "rs": 149.69964179974275,
+     "DM": 13873.280997694543,
+     "theta100": 1.0790500230235356,
+     "ellA": 291.14430161327846,
+     "ell1": 218.35822620995884,
+     "oracleTheta100": 1.0790500230235356
+    },
+    {
+     "id": "W10",
+     "rs": 139.22067947965834,
+     "DM": 13875.293254426855,
+     "theta100": 1.0033710778346294,
+     "ellA": 313.1037681861082,
+     "ell1": 234.82782613958116,
+     "oracleTheta100": 1.0033710778346292
+    }
+   ],
+   "bound": "REPORTED"
+  },
+  {
+   "id": "X3.reportedApexBias",
+   "status": "reported",
+   "measured": {
+    "noiseFreeApexBias": {
+     "width10": {
+      "fits": 20,
+      "minError": 1.7885236360034753,
+      "maxError": 3.0178267687658433,
+      "meanError": 2.392864086978514
+     },
+     "width30": {
+      "fits": 20,
+      "minError": 1.032174855708604,
+      "maxError": 3.5539962198261037,
+      "meanError": 2.2799707950191093
+     },
+     "width50": {
+      "fits": 0,
+      "minError": null,
+      "maxError": null,
+      "meanError": null
+     }
+    },
+    "E1MedianSigma": 0.790847109491304,
+    "E1MeanApexError": 2.329668638988169
+   },
+   "bound": "REPORTED"
+  },
+  {
+   "id": "X4.reportedCurvature",
+   "status": "reported",
+   "measured": {
+    "dLnThetaDOk": -1.377490081494237,
+    "ell1AtMinus0p05": 210.74081791228326,
+    "ell1AtZero": 226.48954218866936,
+    "ell1AtPlus0p05": 241.94246592476998,
+    "designOffset": 0.25
+   },
+   "bound": "REPORTED"
+  }
+ ]
+}
