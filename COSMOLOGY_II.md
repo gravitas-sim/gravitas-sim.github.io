@@ -1,7 +1,7 @@
 # Cosmology kernel II: late-time FLRW depth (Prompt 255)
 
 Status: kernel, contract and validation done and tested; the legs that wait for an authentic file are NOT RUN; the
-committed verdict function gives **kernel verdict C** (four legs fail and stay failing, section 6); nothing student-facing
+committed verdict function gives **kernel verdict C** (four legs fail and stay failing, section 6; the follow-up of section 9 gives A on its own committed legs); nothing student-facing
 is built (the consumers rule holds). The kernel it extends is [COSMOLOGY.md](COSMOLOGY.md), which is unchanged.
 
 ## 1. What this is
@@ -160,3 +160,27 @@ Carl chooses the source; no table, parameter or licence term was written from me
    22 passing legs and leave the four as an oracle and test-text record.
 2. The consumers rule holds: no panel, lesson or model-page section. Recommendation: keep holding until B6's file arrives.
 3. D-R10-255-01 to -05 are DELEGATED.
+
+## 9. Follow-up 255b (Carl's ruling of 2026-11-06 on section 8)
+
+Four new legs, `tests/fixtures/cosmology2/followup-thresholds.json`, committed (421a8fe8) before any code, oracle output or
+run of this follow-up and by a stated rule: no bound is read from an old measurement; each is the same numeric bound the old
+leg committed before its run, or a fraction stated in words. The old thresholds, oracle, results and failed-legs files and
+the old validator are not edited; `npm run cosmology2:followup` runs the old validator too and the old legs reproduce to
+the digit. The only kernel change is an opt-in `rule: 'richardson'` of `degeneracyDirection` (the default five-point rule
+is unchanged).
+
+| Leg | What changed | Bound | Measured | Status |
+|---|---|---|---|---|
+| A7b | the age with the corrected open form; the formulas are also checked against a new independent scipy quadrature of the age (`followup-oracle.json`), so a transcription error cannot decide the leg again | 1e-10 | D_L 3.5e-13; age 4.1e-15 against the formula, formula against quadrature 4.1e-15, kernel against quadrature 5.0e-16 | pass |
+| B1b | astropy's age(z) row is judged only where astropy satisfies age(0) = lookback + age(z) at 1e-8; everything else as B1 | 1e-8 | 14 of 70 age rows excluded (z of 100 and 1100); worst kept age(z) 3.3e-10; every other quantity 4.1e-14; the oracle's own quadrature satisfies the identity to 1.2e-11 on all rows | pass |
+| B3b | the same rule at 1e-7 | 1e-7 | 3 of 70 excluded; worst kept 2.7e-8; own identity 1.2e-11 | pass |
+| F3b | Richardson differencing, (16 g(h/2) - g(h))/15, O(h^6) | 1e-8; 1e-6 | d ln D / d ln H0 = -1 to display precision; slope 1.0e-12, gradient 9.6e-13 against the oracle | pass |
+
+Follow-up kernel verdict by the original function with the four replaced: **A**. The original verdict C stays on record (the
+committed form binds; the follow-up does not replace it). The product verdict stays NOT ESTABLISHED (B6 NOT RUN until Carl
+fetches the table) and the consumers clause stays unmet. Honest limits of what the follow-up shows: the exclusion rule for
+astropy's age(z) was chosen knowing which rows fail, so B1b and B3b say only that the kernel agrees with astropy wherever
+astropy agrees with itself, while the own quadrature, which satisfies the identity everywhere, carries the claim for the
+excluded rows (B2 of the first gate, unchanged). The first run of the follow-up validator is kept in `followup-first-run.json`:
+B3b failed because the exclusion was coded for B1b only, an implementation slip against the committed text found at once.

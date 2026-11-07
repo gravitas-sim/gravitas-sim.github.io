@@ -1,0 +1,46 @@
+{
+ "format": "gravitas.cosmology2-followup-first-run/1",
+ "note": "the follow-up validator as first written: B3b applied the exclusion rule to B1b only (an implementation slip against the committed text, found at once); a record, never read by a gate",
+ "rows": [
+  {
+   "id": "A7b.matterOnlyNotFlatCorrected",
+   "status": "pass"
+  },
+  {
+   "id": "B1b.astropyWhereAstropyIsConsistent",
+   "status": "pass"
+  },
+  {
+   "id": "B3b.oracleAgreesWhereAstropyIsConsistent",
+   "status": "fail",
+   "measured": {
+    "worstPerQuantity": {
+     "E": 1.9e-16,
+     "Dc": 4.08e-14,
+     "Dm": 4.08e-14,
+     "Dl": 4.08e-14,
+     "Da": 4.08e-14,
+     "mu": 8.53e-14,
+     "lookback": 4.72e-15,
+     "ageAtZ": 4.99e-7,
+     "age0": 1.77e-14
+    },
+    "quantitiesOverBound": [
+     "ageAtZ"
+    ],
+    "ageRowsExcludedByTheRule": 3,
+    "ageRows": 70,
+    "excluded": [
+     "S2 z=1100",
+     "S9 z=1100",
+     "S10 z=1100"
+    ],
+    "oracleOwnIdentityWorst": 1.22e-11
+   }
+  },
+  {
+   "id": "F3b.hubbleScalingRichardson",
+   "status": "pass"
+  }
+ ]
+}

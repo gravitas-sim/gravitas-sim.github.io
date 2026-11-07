@@ -1,0 +1,6 @@
+{
+ "format": "gravitas.supernova-likelihood-failed-legs/1",
+ "note": "Every failing leg of the gate stream, each labelled and left failing. Only Carl resets a bound; a corrected method may enter only as new legs with thresholds committed first.",
+ "thresholdsSha256": "5382560db3189941e071e1817451d809dcd4177e2c6d6c5c636fe70174150fee",
+ "legs": []
+}

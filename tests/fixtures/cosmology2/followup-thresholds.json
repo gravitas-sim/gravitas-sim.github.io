@@ -1,0 +1,41 @@
+{
+ "format": "gravitas.cosmology2-followup-thresholds/1",
+ "prompt": "Roadmap III, Prompt 255, follow-up 255b (Carl's ruling of 2026-11-06 on COSMOLOGY_II.md section 8: new legs A7b, B1b, B3b and F3b, thresholds committed first, the four old legs left failing and bit-identical). This file commits the four new legs, the rule that sets every bound and the follow-up verdict function.",
+ "document": "COSMOLOGY_II.md (follow-up section, written after this file)",
+ "committed": "before any follow-up oracle output, any follow-up validator run and any code of this follow-up existed. The old thresholds.json, oracle-results.json, results.json and failed-legs.json are not edited; the old validator tools/cosmology2-validate.mjs is not edited, and the old legs' measured numbers must reproduce to the digit. The only kernel change allowed by this file is an added, off-by-default option of degeneracyDirection (rule 'richardson'); the default rule stays the committed five-point rule, so every old measurement is unchanged.",
+ "ruleForBounds": "No bound of a new leg is read from a measurement of the old leg it replaces. Each is (a) the same numeric bound the old leg committed for the same quantity before its run (1e-10 for a closed form, 1e-8 against astropy, 1e-7 for the oracle's self-agreement, 1e-8 for the Hubble scaling, 1e-6 for the direction), or (b) a count or fraction stated here in words. The new legs change what is compared (the formula, the rows, the differencing rule), not how close it must be. A new leg that fails is recorded in followup-failed-legs.json and left failing.",
+ "rule": "A crossed bound is a failed check, left failing; only Carl resets one. No published number, table or licence term is typed from memory and nothing is fetched. B6 stays NOT RUN until Carl supplies the file (his ruling of 2026-11-06). Amendments are recorded before any run that could depend on them.",
+ "checks": [
+  {
+   "id": "A7b.matterOnlyNotFlatCorrected",
+   "leg": "a",
+   "what": "the A7 comparison with the age written correctly: matter only (Or = Ode = 0), not flat, Om in {0.05, 0.1, 0.3, 0.5, 0.7, 0.9, 1.2, 1.5, 2, 3}, H0 = 70. (i) Mattig's luminosity distance (2c/(H0 Om^2)) [Om z + (Om - 2)(sqrt(1 + Om z) - 1)] for z in {0.1, 0.5, 1, 2, 5, 20}; (ii) the age, H0 t0 = 1/(1 - Om) - Om/(2 (1 - Om)^(3/2)) arccosh(2/Om - 1) for Om < 1 and Om/(2 (Om - 1)^(3/2)) arccos(2/Om - 1) - 1/(Om - 1) for Om > 1 (the open form's sign is the opposite of A7's committed one); each of (i) and (ii) to a relative 1e-10; (iii) the formulas written in this leg agree with the follow-up oracle's own scipy quadrature of the age, which uses no formula for it, to a relative 1e-10 (so a mistake in a transcribed closed form cannot decide the leg again); (iv) the kernel's age equals the oracle's quadrature to a relative 1e-10",
+   "limits": { "maxRel": 1e-10, "omegaM": [0.05, 0.1, 0.3, 0.5, 0.7, 0.9, 1.2, 1.5, 2, 3], "z": [0.1, 0.5, 1, 2, 5, 20], "H0": 70 }
+  },
+  {
+   "id": "B1b.astropyWhereAstropyIsConsistent",
+   "leg": "oracle",
+   "what": "B1's comparison (the ten sets, the zGrid to z = 1100, E, the four distances, mu, lookback, age and age(z)) against astropy 6.0.1, with one stated rule about which astropy rows are judged: an astropy age(z) row is compared only if astropy itself satisfies age(0) = lookback(z) + age(z) on that row to the leg's own bound (relative 1e-8, computed from astropy's three numbers in the pinned oracle file), because a row on which the oracle contradicts itself by more than the bound measures the oracle. Every other quantity on every row is compared as in B1, to the same bounds (relative 1e-8, mu absolute 1e-7). The leg also requires that fewer than half of the age(z) rows are excluded by the rule, that the exclusion list is printed, and that on every row, excluded or not, the oracle's own quadrature satisfies the same identity to 1e-10 (so the exclusions are astropy's, not the geometry's)",
+   "limits": { "maxRel": 1e-8, "maxAbsMu": 1e-7, "identityBound": 1e-8, "ownIdentity": 1e-10, "maxExcludedFraction": 0.5 }
+  },
+  {
+   "id": "B3b.oracleAgreesWhereAstropyIsConsistent",
+   "leg": "oracle",
+   "what": "B3's comparison of the oracle's two implementations on every row and quantity, to a relative 1e-7 (mu absolute 1e-7), with the same rule applied at this leg's bound: an age(z) row of astropy is compared only if astropy satisfies age(0) = lookback(z) + age(z) on that row to 1e-7; the own quadrature's identity to 1e-10 on every row is required as in B1b",
+   "limits": { "maxRel": 1e-7, "identityBound": 1e-7, "ownIdentity": 1e-10, "maxExcludedFraction": 0.5 }
+  },
+  {
+   "id": "F3b.hubbleScalingRichardson",
+   "leg": "degeneracy",
+   "what": "the F3 comparison with a new, opt-in differencing rule of the direction tool, rule 'richardson': the five-point central difference at step h (1 percent of the parameter's scale, as in the committed default) and at h/2 combined as (16 g(h/2) - g(h))/15, whose truncation error falls from h^4 to h^6. (i) on the hubbleOm base (luminosity, z = 0.3, axes Om and H0) d ln D / d ln H0 = -1 to an absolute 1e-8, D being exactly proportional to 1/H0; (ii) on the three committed directions the Richardson gradient and slope agree with the oracle's complex-step values to a relative 1e-6 (F2's bound); (iii) the unit tangent is perpendicular to the gradient to 1e-12. The default rule is unchanged and F2 and F3 reproduce their pinned measurements to the digit",
+   "limits": { "maxAbsLogSlope": 1e-8, "maxRelSlope": 1e-6, "maxRelGradient": 1e-6, "maxAbsPerp": 1e-12 }
+  }
+ ],
+ "gate": {
+  "verdictFunction": {
+   "what": "the follow-up kernel verdict, a function of the original rows (tests/fixtures/cosmology2/results.json, unchanged) with each of A7, B1, B3 and F3 replaced by its follow-up leg (A7b, B1b, B3b, F3b), judged by the original function in thresholds.json: A when every closed-form, oracle, refusal, coverage and degeneracy leg passes; B when the closed-form, oracle and refusal-core legs pass but a coverage or degeneracy leg fails; C otherwise. The original verdict C is not replaced: it is the committed form and stays on record. The product verdict stays NOT ESTABLISHED while B6 is NOT RUN, and the consumers clause stays unmet (Carl's rulings of 2026-11-05 and 2026-11-06).",
+   "replaces": { "A7": "A7b", "B1": "B1b", "B3": "B3b", "F3": "F3b" }
+  }
+ },
+ "amendments": []
+}
