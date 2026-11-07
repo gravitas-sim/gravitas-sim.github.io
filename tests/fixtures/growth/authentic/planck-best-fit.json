@@ -1,0 +1,73 @@
+{
+  "format": "gravitas.growth-planck-best-fit/1",
+  "note": "Written by tools/growth-extract-planck.py on spike/structure-growth-gate from the saved extracted text of arXiv:1807.06209 (Carl's session, 2026-11-06), by line, after thresholds.json (authentic.X1) and before the validator was run; nothing typed by hand. Values are the printed strings; Omega_m h^2 and Omega_m include one neutrino of 0.06 eV (the table caption).",
+  "source": {
+    "identifier": "arXiv:1807.06209",
+    "savedTextSha256": "75476bdbcfeb893c3be2274cb796becf55a9a174c40b4c265a9fcc9870fa0a4d",
+    "rights": "D-R10-255-11 (same document, same use: printed numbers, no text reproduced)",
+    "column": "Plik best fit, Table 1"
+  },
+  "values": {
+    "omegaBh2": "0.022383",
+    "omegaCh2": "0.12011",
+    "lnAs1e10": "3.0448",
+    "ns": "0.96605",
+    "omegaMh2": "0.14314",
+    "H0": "67.32",
+    "Om": "0.3158",
+    "sigma8": "0.8120",
+    "k0PerMpc": "0.05"
+  },
+  "where": [
+    {
+      "key": "omegaBh2",
+      "line": 1139,
+      "text": "0.022383         0.02237 ± 0.00015              0.02229 ± 0.00015                   −0.5             0.02233 ± 0.00015",
+      "note": "the row label (Omega_b h^2) is split over the lines before this one"
+    },
+    {
+      "key": "omegaCh2",
+      "line": 1140,
+      "text": "Ωc h2 . . . . . . . . . . . . .          0.12011           0.1200 ± 0.0012                0.1197 ± 0.0012                    −0.3              0.1198 ± 0.0012"
+    },
+    {
+      "key": "lnAs1e10",
+      "line": 1144,
+      "text": "ln(1010 As ) . . . . . . . . .            3.0448            3.044 ± 0.014                   3.041 ± 0.015                    −0.3                3.043 ± 0.014"
+    },
+    {
+      "key": "ns",
+      "line": 1145,
+      "text": "ns . . . . . . . . . . . . . . .          0.96605          0.9649 ± 0.0042                0.9656 ± 0.0042                    +0.2              0.9652 ± 0.0042"
+    },
+    {
+      "key": "omegaMh2",
+      "line": 1146,
+      "text": "Ωm h2 . . . . . . . . . . . .            0.14314           0.1430 ± 0.0011                0.1426 ± 0.0011                   −0.3               0.1428 ± 0.0011"
+    },
+    {
+      "key": "H0",
+      "line": 1147,
+      "text": "H0 [ km s−1 Mpc−1 ] . . .                  67.32            67.36 ± 0.54                    67.39 ± 0.54                    +0.1                 67.37 ± 0.54"
+    },
+    {
+      "key": "Om",
+      "line": 1148,
+      "text": "Ωm . . . . . . . . . . . . . .            0.3158           0.3153 ± 0.0073                0.3142 ± 0.0074                   −0.2               0.3147 ± 0.0074"
+    },
+    {
+      "key": "sigma8",
+      "line": 1150,
+      "text": "σ8 . . . . . . . . . . . . . . .           0.8120          0.8111 ± 0.0060                0.8091 ± 0.0060                   −0.3               0.8101 ± 0.0061"
+    },
+    {
+      "key": "k0PerMpc",
+      "line": 1320,
+      "text": "trum amplitude As (which we define at the pivot scale k0 =",
+      "next": [
+        "−1",
+        "0.05 Mpc ). The sub-horizon CMB anisotropies are however"
+      ]
+    }
+  ]
+}
