@@ -6,7 +6,7 @@ merged gate's oracle module (oracle.py beside it: astropy distances, the domain 
 code, themselves Gravitas-free) and reads the contract, the raw .dat, the release's covariance (held outside every
 repository) and published-flat.json. No random numbers anywhere. It writes derived numbers only.
 
-  STUBS=<dir with the import-only yaml stand-in> python3 -I followup.py CONTRACT.json COV_FILE PUBLISHED.json OUT_DIR
+  STUBS=<dir with the import-only yaml stand-in> python3 -E followup.py CONTRACT.json COV_FILE PUBLISHED.json OUT_DIR
 """
 import hashlib
 import json
@@ -26,7 +26,7 @@ from scipy.optimize import brentq, minimize_scalar
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
 if os.environ.get('STUBS'):
-    sys.path.insert(1, os.environ['STUBS'])   # the import-only PyYAML stand-in, outside the tree (python -I ignores PYTHONPATH)
+    sys.path.insert(1, os.environ['STUBS'])   # the import-only PyYAML stand-in, outside the tree (python -E ignores PYTHONPATH)
 import oracle as O  # noqa: E402  (the merged gate's oracle; no Gravitas code)
 
 warnings.filterwarnings('ignore')
