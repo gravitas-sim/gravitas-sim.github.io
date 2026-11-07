@@ -1,0 +1,275 @@
+{
+  "format": "gravitas.censoring-truncation-gate-thresholds/1",
+  "prompt": "Roadmap III, Prompt 262 Part A, Selection functions II: censoring and truncation separated (tranche T5, authorized by Checkpoint V's recorded outcome CONTINUE AS PLANNED, DECISIONS_2026-11-06.md and register row D-R10-254-01; hard prerequisites 154, 233 and 254 are merged or recorded on v3). Documentation and fixtures only; the prototype, the oracle and the validator live on spike/censoring-truncation-gate and are never merged (7.5 rule 4).",
+  "document": "CENSORING_TRUNCATION_GATE.md (the two problems, the estimators and their domains, the legs, the measurements, the verdict and the requests), written after this file",
+  "committed": "before any prototype code, validator, oracle script or oracle output of this prompt existed, and before any product-limit estimate, risk set, log-rank statistic, V/Vmax value, effective volume, coverage or random sample of this prompt was computed. Nothing was fetched by this session and no published number, coefficient, table value, citation detail, sample or licence term was typed from memory. The hand-worked examples below were derived on paper from the definitions in this file; the identity behind A1 and A5 was checked on paper for n = 2 and n = 3.",
+  "rule": "A crossed bound is a failed leg, recorded in failed-legs.json and left failing; only Carl resets one. A leg that cannot be measured (a file not supplied, a source text not fetched, a code not installed) is NOT RUN and carries an exact request. Amendments are recorded in this file (amendments array) before any validator run and move no bound; a leg is added only as a NEW leg with its bound committed before its first run. A threshold that proves unmeasurable fails the gate on that threshold. Nothing is moved, re-read or re-defined after a result.",
+  "seenBeforeCommitting": [
+    "the roadmap sections named in the task (7 with 7.5, 12.1, 13, Appendix C, prompt 262 with its Run condition and full prompt)",
+    "CONTINUATION_CHECKPOINT_V.md and DECISIONS_2026-11-06.md (outside the repository), the register rows D-R10-254-01 and the rows of 154, STATISTICS.md and the list of exports of js/kernels/statistics/ (selection.js, special.js, intervals.js, resample.js, check.js), js/numeric/ (quadrature.js among them) and js/random/streams.js",
+    "the recorded form of the previous gates of this horizon (the growth gate's thresholds file, its validator header and its record test), read for form only",
+    "the python packages installed for /usr/bin/python3 (3.9.6 with numpy 1.26.4 and scipy 1.13.1) and that scipy.stats exposes ecdf, logrank and CensoredData; no output of any of them was computed",
+    "no paper, table, catalogue or data file of any survival-analysis, truncation or V/Vmax source was read or fetched by this session"
+  ],
+  "problems": {
+    "censoring": "An object is in the sample either way and its value is known only as an upper limit when it falls below a detection limit: row {value, censored, limit}. A detection has censored = false and value = the measurement; a non-detection has censored = true and value = its upper limit (the object's value is below it). Left censoring. 'limit' is the detection threshold that applied to the object, optional for the estimator and required for the independence check.",
+    "truncation": "An object is absent from the sample, uncounted, when its value falls outside the observable range at its own distance or epoch: row {x, u}. The object is in the sample only because x >= u, where u is the lower limit of observability that applied to it; every object with x < u is missing and nothing records how many. One-sided (lower) truncation; the upper boundary is not modelled.",
+    "vmax": "A flux-limited sample of objects with a known luminosity and a known distance: each object's accessible volume Vmax is the volume out to the distance at which it would fall to the flux limit, capped at the survey's edge."
+  },
+  "estimators": {
+    "km": {
+      "name": "Kaplan-Meier-type product-limit estimator for left-censored data (the flipped form)",
+      "definition": "M = the largest value in the sample; y = M - value; a limit becomes a right-censored observation at y (its true y is larger), a detection an event. At each distinct y of an event, n = the number of rows with y_row >= y (a right-censored row at the same y stays at risk), d = the events at that y; S(y) = product over events <= y of (1 - d/n). The estimated distribution of the value puts mass S(y-) - S(y) at the value M - y. Ties: events are processed before censorings at the same y.",
+      "mean": "The mean of y is the area under S up to tau, the largest observed y. If the largest y is an event (the smallest raw observation is a detection) the mass is complete: status 'complete', mean(value) = M - mean(y). If it is censored (the smallest raw observation is a limit), the mass S(tau) lies below the smallest raw observation: status 'bounded', tailMass = S(tau), and the value-mean lies between meanLow (that mass placed at a declared floor) and meanHigh (that mass placed at the smallest raw observation). mean is null when bounded. A declared floor is required to bound; without one the call is refused (unbounded-tail).",
+      "variance": "Greenwood-type variance of the area under S: Var = sum over event times y_i of A_i^2 d_i / (n_i (n_i - d_i)), A_i = the integral of S from y_i to tau; a term with n_i = d_i has A_i = 0 and is zero. Interval: [meanLow - z se, meanHigh + z se] (equal bounds when complete), z the normal quantile of (1 + level) / 2.",
+      "independenceCheck": "Needs 'limit' on every row. Group 1 = rows with limit <= the median of the limits, group 2 the rest; the two-sample log-rank test (Mantel-Haenszel, hypergeometric variance with the tie correction) on the flipped data, two-sided, z and p from the normal. The check FLAGS when p < alpha. A flag means the censoring depends on the value in the sense this test can see: the result then carries status 'dependent' and no interval is offered. Not run (labelled 'unchecked', result still returned, interval labelled unchecked) when a row lacks a limit, a group is empty, or a group has fewer than 5 detections. It does not and cannot prove independence.",
+      "domain": "The censoring (the limit) independent of the value, the same limit mechanism for every object, the value measured exactly when detected, at least 5 detections. No claim for a truncated sample.",
+      "citedForm": "Product-limit estimator of Kaplan and Meier; left censoring by the flip (Feigelson and Nelson's route to it in astronomy); the Greenwood form of the variance. The equations above are this gate's own statement of those forms, derived and written without a source in front of the author; their agreement with the printed forms is request X4 and NOT RUN."
+    },
+    "cm": {
+      "name": "Lynden-Bell C-minus: the product-limit estimator for a lower-truncated sample",
+      "definition": "Rows (x_i, u_i) with u_i <= x_i. For the declared 'from' (the value above which the distribution is recovered) keep rows with x_i >= from. At each distinct x_i: n = the number of rows j with u_j <= x_i <= x_j (the associated set, the object itself included), d = the rows at that x; the conditional survival S_c(t) = product over x_i <= t of (1 - d/n) estimates P(X > t | X >= from); the mass at x_i is S_c(x_i-) - S_c(x_i). Identifiability needs the truncation limit's lower end to reach below the support of the part recovered; the estimator is therefore defined only above 'from' and says so.",
+      "mean": "E[X | X >= from] = sum of mass times x (equal to from + the integral of S_c from from to the largest x).",
+      "variance": "The same Greenwood-type sum with the associated-set sizes: Var = sum A_i^2 d_i / (n_i (n_i - d_i)), A_i = the integral of S_c from x_i to the largest x; a term with n_i = d_i has A_i = 0 and is zero. Interval as for km.",
+      "domain": "A known one-sided truncation boundary u_i for every row; the truncation independent of the value in the parent population (the parents are drawn independently of the boundary and then kept only if x >= u); at least 10 rows in the associated set at 'from' (minRisk). Refused otherwise.",
+      "citedForm": "Lynden-Bell's C-minus method (1971) and the left-truncated product-limit estimator of Woodroofe and of Tsai, Jewell and Wang; stated here from the definitions, their agreement with the printed form is request X4 and NOT RUN."
+    },
+    "vmax": {
+      "name": "V/Vmax and the 1/Vmax space density with an effective volume",
+      "definition": "Vmax_i = V(min(dmax_i, D)), V the volume function (Euclidean 4 pi d^3 / 3 by default; 'unit' d^3 for the hand cases), D the survey edge. The statistic <V/Vmax> = mean of V(d_i) / Vmax_i; for a complete sample of a population uniform in volume V/Vmax is uniform on (0, 1): mean 1/2, variance 1/12, so z = (<V/Vmax> - 1/2) sqrt(12 N) is standard normal. With a completeness p(d) (a probability of inclusion at distance d for the object's luminosity), Veff_i = the integral of p(d) dV(d) from 0 to D, and the space density of a luminosity bin is rho = sum of 1 / Veff_i over the objects in the bin, with the Poisson-process variance sum of 1 / Veff_i^2.",
+      "domain": "A hard cut or a stated completeness curve; a population uniform in volume is the null of z and nothing else; at least 5 objects; a luminosity bin with no object yields an upper limit, not a number.",
+      "citedForm": "Schmidt's V/Vmax and the 1/Vmax estimator; the properties above are exact consequences of the definition; their agreement with the printed forms is request X4 and NOT RUN."
+    }
+  },
+  "constants": {
+    "level": 0.95,
+    "independenceAlpha": 0.01,
+    "minDetections": 5,
+    "minRiskAtFrom": 10,
+    "minGroupDetections": 5,
+    "vmaxMinObjects": 5,
+    "note": "These are declared defaults of the estimators, set before any measurement, not tuned to a result."
+  },
+  "tolerance": {
+    "closedForm": 1e-12,
+    "oracle": 1e-10,
+    "oracleMass": 1e-12,
+    "emAlgorithm": 1e-7,
+    "logrank": 1e-9,
+    "quadrature": 1e-8
+  },
+  "oracle": {
+    "path": "tools/censoring-oracle/oracle.py (on the spike branch)",
+    "run": "/usr/bin/python3 -E tools/censoring-oracle/oracle.py tests/fixtures/censoring/thresholds.json tests/fixtures/censoring/oracle-results.json",
+    "independence": "Reads no Gravitas code and no output of the prototype; numpy, scipy and the standard library only. Its output is pinned before the prototype is run. The samples are generated by the oracle (numpy default_rng) and pinned in oracle-results.json; the prototype reads them from there.",
+    "citedImplementations": "scipy.stats.ecdf on the flipped data (a right-censored product-limit estimate) and scipy.stats.logrank on the flipped, split data are the cited implementations of the censoring legs. No cited implementation of the truncation estimator is installed: the oracle computes it two ways, the closed-form product and an independent fixed-point (self-consistency) maximisation of the conditional likelihood, and the two must agree (O1). scipy.integrate.quad is the cited implementation of the effective volume.",
+    "pythonRuns": "python -E (no environment, no user site)"
+  },
+  "scenarios": {
+    "population": "Censoring population: X ~ Gamma(shape 2, scale 1), mean 2, floor 0 (declared). Truncation population: x ~ Normal(0, 1) with distance d from the density proportional to d^2 on (0, 1] and u = 0.5 + 2 log10(d), kept when x >= u; parents are drawn until N observed rows are kept. V/Vmax population: points uniform in volume in a sphere of radius D = 1 (Poisson, intensity lambda = 60 per unit volume), luminosity L = 10^(0.5 Z) with Z ~ N(0, 1), detection distance dmax = 0.8 sqrt(L) (a hard cut at dmax or, for the ramp, p(d) = 1 / (1 + (d / dmax)^8)).",
+    "censoringK": {
+      "K1": { "limit": "C ~ Uniform(0, 0.8)", "n": 100, "replicates": 1000, "baseSeed": 262000 },
+      "K2": { "limit": "C ~ Uniform(0, 2.5)", "n": 100, "replicates": 1000, "baseSeed": 262100 },
+      "K3": { "limit": "C ~ Uniform(0, 5)", "n": 200, "replicates": 1000, "baseSeed": 262200 },
+      "rule": "T = max(X, C); a detection when X >= C (value X, limit C) else a limit (value C, censored). Replicate r uses seed baseSeed + r. The true mean is 2."
+    },
+    "dependence": {
+      "D1": { "n": 200, "replicates": 500, "baseSeed": 262300, "rho": 0.8, "rule": "Za, Zb, Zn independent standard normals; X = -ln(Phi(Za)) - ln(Phi(Zb)) (so X ~ Gamma(2, 1)); Zc = rho (Za + Zb) / sqrt(2) + sqrt(1 - rho^2) Zn; C = 2.5 Phi(Zc). The censoring threshold depends on the value." },
+      "D1b": { "n": 200, "replicates": 500, "baseSeed": 262400, "rho": 0.5, "rule": "as D1 with rho = 0.5; reported only" },
+      "D2": { "n": 200, "replicates": 1000, "baseSeed": 262500, "rule": "K2's marginals, independent (C ~ Uniform(0, 2.5)), n = 200: the false-alarm rate of the independence check" }
+    },
+    "truncationT": {
+      "T1": { "N": 1000, "from": -0.5, "replicates": 1000, "baseSeed": 262600 },
+      "T2": { "N": 300, "from": -0.25, "replicates": 1000, "baseSeed": 262700 },
+      "T3": { "N": 1000, "from": -1.5, "replicates": 500, "baseSeed": 262800, "note": "reported only: the associated set at 'from' is expected to be refused or thin" },
+      "truth": "E[X | X >= from] for Normal(0, 1) = phi(from) / (1 - Phi(from))"
+    },
+    "vmaxV": {
+      "V1": { "replicates": 2000, "baseSeed": 262900, "null": "uniform in volume, hard cut: z of <V/Vmax> over N detected objects, 5 percent two-sided rejection rate" },
+      "V1n": { "replicates": 500, "baseSeed": 263000, "evolution": "number density proportional to d^2 times d^2 (so the points are denser outward), hard cut: the rejection rate of the null" },
+      "C4": { "replicates": 1000, "baseSeed": 263100, "bin": "Z in [-0.5, 0.5]", "completeness": "hard cut", "truth": "lambda times P(|Z| < 0.5)" },
+      "C4b": { "replicates": 1000, "baseSeed": 263200, "bin": "Z in [-0.5, 0.5]", "completeness": "ramp p(d) = 1 / (1 + (d / dmax)^8), each object kept with that probability", "truth": "lambda times P(|Z| < 0.5)" }
+    },
+    "large": {
+      "kmLarge": { "scenario": "K2's limit law", "n": 20000, "seed": 263300 },
+      "cmLarge": { "N": 20000, "from": -0.5, "seed": 263400 }
+    }
+  },
+  "referenceSamples": {
+    "note": "The oracle generates these (numpy default_rng(seed)); the prototype reads them from oracle-results.json. A design is {id, kind, n, scenario, seed, roundTo, forceSmallestLimit}. roundTo rounds every value and limit to that step (ties); forceSmallestLimit turns the row with the smallest observed value into a limit at that same value (censored = true, its limit field unchanged) so that the smallest raw observation is a limit.",
+    "censored": [
+      { "id": "S01", "n": 8, "scenario": "K1", "seed": 1, "roundTo": 0.5, "forceSmallestLimit": false },
+      { "id": "S02", "n": 12, "scenario": "K2", "seed": 2, "roundTo": null, "forceSmallestLimit": false },
+      { "id": "S03", "n": 12, "scenario": "K2", "seed": 3, "roundTo": null, "forceSmallestLimit": true },
+      { "id": "S04", "n": 25, "scenario": "K2", "seed": 4, "roundTo": 0.5, "forceSmallestLimit": false },
+      { "id": "S05", "n": 40, "scenario": "K1", "seed": 5, "roundTo": null, "forceSmallestLimit": false },
+      { "id": "S06", "n": 40, "scenario": "K2", "seed": 6, "roundTo": null, "forceSmallestLimit": true },
+      { "id": "S07", "n": 40, "scenario": "K3", "seed": 7, "roundTo": null, "forceSmallestLimit": false },
+      { "id": "S08", "n": 60, "scenario": "K2", "seed": 8, "roundTo": 0.1, "forceSmallestLimit": false },
+      { "id": "S09", "n": 100, "scenario": "K3", "seed": 9, "roundTo": 0.25, "forceSmallestLimit": true },
+      { "id": "S10", "n": 100, "scenario": "K2", "seed": 10, "roundTo": 0.1, "forceSmallestLimit": false },
+      { "id": "S11", "n": 150, "scenario": "K1", "seed": 11, "roundTo": null, "forceSmallestLimit": true },
+      { "id": "S12", "n": 200, "scenario": "K2", "seed": 12, "roundTo": null, "forceSmallestLimit": false }
+    ],
+    "truncated": [
+      { "id": "U01", "n": 8, "seed": 21, "roundTo": 0.5 },
+      { "id": "U02", "n": 12, "seed": 22, "roundTo": null },
+      { "id": "U03", "n": 25, "seed": 23, "roundTo": 0.25 },
+      { "id": "U04", "n": 40, "seed": 24, "roundTo": null },
+      { "id": "U05", "n": 60, "seed": 25, "roundTo": 0.1 },
+      { "id": "U06", "n": 100, "seed": 26, "roundTo": null },
+      { "id": "U07", "n": 200, "seed": 27, "roundTo": 0.1 },
+      { "id": "U08", "n": 300, "seed": 28, "roundTo": null }
+    ],
+    "vmax": {
+      "pairs": "20 (dmax, D) pairs with the ramp p(d) = 1 / (1 + (d / dmax)^8): dmax = 0.2, 0.3 ... 1.1 and 1.5, 2.0 (12 values) with D = 1, and dmax = 0.5, 1.0 with D = 0.25, 0.5, 2.0, 3.0 (8 values)"
+    },
+    "from": "for the truncated samples the declared 'from' is the 3rd smallest x of the sample and minRisk is 1 (the reference legs test arithmetic, not the domain guard)"
+  },
+  "handExamples": {
+    "note": "Derived on paper from the definitions above before any computation. Units are arbitrary.",
+    "A2": {
+      "estimator": "km",
+      "rows": [
+        { "value": 2, "censored": false },
+        { "value": 3, "censored": true },
+        { "value": 5, "censored": false },
+        { "value": 6, "censored": true },
+        { "value": 7, "censored": false }
+      ],
+      "derivation": "M = 7 (so y = 5, 4, 2, 1, 0 for the values 2, 3, 5, 6, 7), the flipped data (M taken as 10 in the hand calculation shifts every y by 3 and changes nothing): the survival is 1, 0.8, 0.5333..., 0",
+      "expected": { "status": "complete", "mean": 3.8, "variance": 0.9386666666666666, "masses": { "2": 0.5333333333333333, "5": 0.26666666666666666, "7": 0.2 }, "tailMass": 0 }
+    },
+    "A3": {
+      "estimator": "km",
+      "rows": [
+        { "value": 4, "censored": false },
+        { "value": 6, "censored": false },
+        { "value": 9, "censored": false },
+        { "value": 2, "censored": true }
+      ],
+      "floor": 0,
+      "expected": { "status": "bounded", "mean": null, "meanLow": 4.75, "meanHigh": 5.25, "variance": 1.671875, "tailMass": 0.25, "masses": { "4": 0.25, "6": 0.25, "9": 0.25 } }
+    },
+    "A1": {
+      "estimator": "km",
+      "rows": "the values 3, 1, 4, 1.5, 9, all detections",
+      "expected": { "status": "complete", "mean": 3.7, "variance": 1.632, "note": "the arithmetic mean and the plug-in variance sum (x - mean)^2 / n^2; the identity sum A_i^2 / (n_i (n_i - 1)) = sum (y - ybar)^2 / n^2 holds for distinct values (checked on paper for n = 2 and n = 3)" }
+    },
+    "A4": {
+      "estimator": "cm",
+      "rows": [
+        { "x": 2, "u": 1 },
+        { "x": 5, "u": 2 },
+        { "x": 4, "u": 4 },
+        { "x": 6, "u": 3 },
+        { "x": 3, "u": 3 }
+      ],
+      "options": { "from": 2, "minRisk": 1 },
+      "expected": { "associatedSets": { "2": 2, "3": 3, "4": 3, "5": 2, "6": 1 }, "masses": { "2": 0.5, "3": 0.16666666666666666, "4": 0.1111111111111111, "5": 0.1111111111111111, "6": 0.1111111111111111 }, "mean": 3.1666666666666665, "variance": 0.7793209876543209 }
+    },
+    "A5": {
+      "estimator": "cm",
+      "rows": "x = 3, 1, 4, 1.5, 9, each with u = -1e9 (no truncation)",
+      "options": { "from": 1, "minRisk": 1 },
+      "expected": { "masses": "0.2 each", "mean": 3.7, "variance": 1.632 }
+    },
+    "A6": {
+      "estimator": "vmax",
+      "rows": "d = 0.5, 1, 2 with dmax = 1, 2, 2; the 'unit' volume V(d) = d^3; D large",
+      "expected": { "meanVOverVmax": 0.4166666666666667, "z": -0.5, "sumInverseVmax": 1.25, "variance": 1.03125 }
+    },
+    "A7": {
+      "estimator": "vmax",
+      "rows": "one object, unit volume, completeness 1 out to distance 1 and 0.5 from 1 to 2, 0 beyond",
+      "expected": { "veff": 4.5, "inverseVeff": 0.2222222222222222 }
+    }
+  },
+  "refusals": {
+    "km": ["too-few-detections", "unbounded-tail", "truncated-input", "non-finite", "bad-flag", "level"],
+    "cm": ["thin-risk-set", "missing-truncation-bound", "censored-input", "bound-above-value", "non-finite", "level"],
+    "vmax": ["too-few-objects", "bad-distance", "non-finite", "bad-completeness"],
+    "rule": "A refusal is the record { status: 'refused', code, why } of statistics/check.js. A misuse that is not a refusal fails its leg."
+  },
+  "checks": [
+    { "id": "I1.inputs", "group": "integrity", "estimator": "all", "tier": "-", "statement": "oracle-results.json records the sha256 of the thresholds file it read and it equals this file's; results.json records the same and the oracle output's", "bound": "exact" },
+    { "id": "O0.kmInternal", "group": "oracle", "estimator": "km", "tier": "b", "statement": "the oracle's own product-limit (the mass at every support point) against scipy.stats.ecdf on the flipped data, on every censored reference sample", "bound": "max absolute 1e-12 (tolerance.oracleMass)" },
+    { "id": "O1.cmInternal", "group": "oracle", "estimator": "cm", "tier": "b", "statement": "the oracle's closed-form truncation product against its fixed-point maximisation of the conditional likelihood, masses at every support point, on every truncated reference sample (iterations capped at 1e6)", "bound": "max absolute 1e-7 (tolerance.emAlgorithm)" },
+    { "id": "O2.hand", "group": "oracle", "estimator": "all", "tier": "a", "statement": "the oracle reproduces the hand examples A1 to A7", "bound": "absolute or relative 1e-12 (tolerance.closedForm)" },
+    { "id": "O3.logrankInternal", "group": "oracle", "estimator": "km", "tier": "b", "statement": "the oracle's own log-rank z against scipy.stats.logrank on the flipped, split data of every censored reference sample that passes the check's guards", "bound": "relative 1e-9 (tolerance.logrank)" },
+    { "id": "A1.kmUncensored", "group": "analytic", "estimator": "km", "tier": "a", "statement": "A1: no limits: the mean is the arithmetic mean, the variance the plug-in sum, status complete", "bound": "1e-12" },
+    { "id": "A2.kmHand", "group": "analytic", "estimator": "km", "tier": "a", "statement": "A2: the hand sample: mean, variance, every mass, status complete", "bound": "1e-12" },
+    { "id": "A3.kmBounded", "group": "analytic", "estimator": "km", "tier": "a", "statement": "A3: the smallest observation is a limit: status bounded, mean null, meanLow and meanHigh, tailMass, variance; the same sample without a floor is refused unbounded-tail", "bound": "1e-12 and the refusal code" },
+    { "id": "A4.cmHand", "group": "analytic", "estimator": "cm", "tier": "a", "statement": "A4: the hand truncated sample: associated sets, masses, mean, variance", "bound": "1e-12" },
+    { "id": "A5.cmNoTruncation", "group": "analytic", "estimator": "cm", "tier": "a", "statement": "A5: with no truncation the estimator is the empirical distribution: masses 1/n, the arithmetic mean, the plug-in variance", "bound": "1e-12" },
+    { "id": "A6.vmaxHand", "group": "analytic", "estimator": "vmax", "tier": "a", "statement": "A6: <V/Vmax>, z, sum of 1/Vmax and its variance on the hand sample", "bound": "1e-12" },
+    { "id": "A7.vmaxEffective", "group": "analytic", "estimator": "vmax", "tier": "a", "statement": "A7: the effective volume of a step completeness and its inverse", "bound": "1e-12" },
+    { "id": "R1.kmReference", "group": "reference", "estimator": "km", "tier": "b", "statement": "the prototype against the pinned oracle on the 12 censored reference samples: every mass, the status, mean or meanLow and meanHigh, tailMass and the variance", "bound": "masses absolute 1e-12; mean, bounds, variance relative 1e-10; status and support exact" },
+    { "id": "R2.cmReference", "group": "reference", "estimator": "cm", "tier": "b", "statement": "the prototype against the pinned oracle's closed form on the 8 truncated reference samples: associated sets (exact), masses, mean, variance", "bound": "masses absolute 1e-12; mean, variance relative 1e-10" },
+    { "id": "R3.logrankReference", "group": "reference", "estimator": "km", "tier": "b", "statement": "the prototype's independence check (z, p, flag, group sizes) against the pinned oracle (scipy.stats.logrank) on every censored reference sample", "bound": "z relative 1e-9, p relative 1e-9 (or absolute 1e-12 below 1e-12), flag and the unchecked reason exact" },
+    { "id": "R4.veffReference", "group": "reference", "estimator": "vmax", "tier": "b", "statement": "the prototype's effective volume of the ramp completeness against scipy.integrate.quad on the 20 pinned pairs (unit volume 4 pi d^3 / 3)", "bound": "relative 1e-8 (tolerance.quadrature)" },
+    { "id": "L1.kmLarge", "group": "accuracy", "estimator": "km", "tier": "a", "statement": "one large synthetic sample (n = 20000, K2's limit law): the estimated distribution against the generating Gamma(2, 1) CDF and the mean against 2", "bound": "sup distance of the CDF <= 0.04 over the support; |mean - 2| <= 0.06" },
+    { "id": "L2.cmLarge", "group": "accuracy", "estimator": "cm", "tier": "a", "statement": "one large synthetic truncated sample (N = 20000, from = -0.5): the recovered conditional distribution against Normal(0, 1) conditioned on x >= from, and the conditional mean", "bound": "sup distance of the CDF <= 0.05 over the support; |mean - truth| <= 0.05" },
+    { "id": "C1a.kmCoverageK1", "group": "coverage", "estimator": "km", "tier": "c", "statement": "K1, n = 100, 1000 seeded replicates, rows carrying no limit field (the independence check is not run) and the floor 0 declared: the fraction of 95 percent mean intervals (bounded status included) that contain 2", "bound": "in [0.92, 0.98]" },
+    { "id": "C1b.kmCoverageK2", "group": "coverage", "estimator": "km", "tier": "c", "statement": "K2, n = 100, 1000 replicates, as C1a", "bound": "in [0.92, 0.98]" },
+    { "id": "C1c.kmCoverageK3", "group": "coverage", "estimator": "km", "tier": "c", "statement": "K3, n = 200, 1000 replicates, as C1a", "bound": "in [0.92, 0.98]" },
+    { "id": "C1o.kmCoverageOracle", "group": "coverage", "estimator": "km", "tier": "c", "statement": "the oracle's own implementation and its own numpy ensemble of K1, K2 and K3 (same n, replicates and baseSeed as seeds of default_rng): the three coverages", "bound": "each in [0.92, 0.98]" },
+    { "id": "C2a.cmCoverageT1", "group": "coverage", "estimator": "cm", "tier": "c", "statement": "T1 (N = 1000, from = -0.5), 1000 replicates: the fraction of 95 percent intervals of E[X | X >= from] that contain the truth; replicates refused for a thin risk set are counted and reported, and a refused replicate counts as not covering", "bound": "in [0.92, 0.98]" },
+    { "id": "C2b.cmCoverageT2", "group": "coverage", "estimator": "cm", "tier": "c", "statement": "T2 (N = 300, from = -0.25), 1000 replicates, as C2a", "bound": "in [0.92, 0.98]" },
+    { "id": "C2o.cmCoverageOracle", "group": "coverage", "estimator": "cm", "tier": "c", "statement": "the oracle's own implementation and ensemble of T1 and T2: the two coverages", "bound": "each in [0.92, 0.98]" },
+    { "id": "T3.cmThinRisk", "group": "reported", "estimator": "cm", "tier": "d", "statement": "T3 (from = -1.5): how many of 500 replicates the guard refuses (thin-risk-set), and the coverage of the rest", "bound": "reported, no bound" },
+    { "id": "D1.dependenceFlag", "group": "misspecified", "estimator": "km", "tier": "d", "statement": "D1 (the censoring threshold depends on the value, rho = 0.8, n = 200, 500 replicates): the fraction of replicates in which the independence check flags (p < 0.01) and the result carries status dependent and no interval", "bound": ">= 0.90" },
+    { "id": "D1b.dependenceWeak", "group": "reported", "estimator": "km", "tier": "d", "statement": "D1b (rho = 0.5): the flagged fraction", "bound": "reported, no bound" },
+    { "id": "D2.falseAlarm", "group": "misspecified", "estimator": "km", "tier": "d", "statement": "D2 (independent censoring, n = 200, 1000 replicates): the fraction flagged at p < 0.01", "bound": "<= 0.02" },
+    { "id": "D3.kmRefusals", "group": "refusals", "estimator": "km", "tier": "d", "statement": "the censoring estimator refuses, with the code, each of: fewer than 5 detections (too-few-detections), a bounded result with no floor (unbounded-tail), an input row carrying a truncation bound (truncated-input), a NaN or infinite value (non-finite), a censored flag that is not boolean (bad-flag), a level outside (0, 1) (level)", "bound": "all six exact" },
+    { "id": "D4.cmRefusals", "group": "refusals", "estimator": "cm", "tier": "d", "statement": "the truncation estimator refuses, with the code, each of: an associated set under 10 at 'from' (thin-risk-set), a row with no bound (missing-truncation-bound), a row flagged censored (censored-input), u greater than x (bound-above-value), a NaN (non-finite), a level outside (0, 1) (level); a censored sample given to it and a truncated sample given to the censoring estimator are both refused", "bound": "all exact" },
+    { "id": "D5.naiveBias", "group": "reported", "estimator": "cm", "tier": "d", "statement": "T1: the naive mean of the observed x (above from) against the truth, in units of the estimator's se, and the estimator's, over the 1000 replicates: why the problem is different from censoring", "bound": "reported, no bound" },
+    { "id": "D6.vmaxRefusals", "group": "refusals", "estimator": "vmax", "tier": "d", "statement": "the V/Vmax estimator refuses fewer than 5 objects (too-few-objects), a non-positive or NaN distance (bad-distance), a NaN (non-finite), a completeness outside [0, 1] or not non-increasing (bad-completeness); a luminosity bin with no object returns an upper limit and no density", "bound": "all exact" },
+    { "id": "V1.vmaxNull", "group": "coverage", "estimator": "vmax", "tier": "c", "statement": "V1, 2000 replicates of a population uniform in volume with a hard cut: the fraction with |z| > 1.959964 (two-sided 5 percent)", "bound": "in [0.035, 0.065]" },
+    { "id": "V1n.vmaxEvolution", "group": "misspecified", "estimator": "vmax", "tier": "d", "statement": "V1n, 500 replicates of a population denser outward (density proportional to d^2 times d^2): the fraction with |z| > 1.959964", "bound": ">= 0.95" },
+    { "id": "C4.densityCoverage", "group": "coverage", "estimator": "vmax", "tier": "c", "statement": "C4, 1000 replicates, hard cut: the fraction of 95 percent intervals (sum of 1/Veff +- z sqrt(sum of 1/Veff^2)) of the bin's space density that contain the truth", "bound": "in [0.92, 0.98]" },
+    { "id": "C4b.rampCoverage", "group": "coverage", "estimator": "vmax", "tier": "c", "statement": "C4b, 1000 replicates, ramp completeness with the object-by-object inclusion draw, as C4", "bound": "in [0.92, 0.98]" },
+    { "id": "X1.kmAuthentic", "group": "authentic", "estimator": "km", "tier": "e", "statement": "the censoring estimator on a real astronomical sample with upper limits whose published product-limit mean was not used to tune anything", "bound": "within the published value's own uncertainty and 1e-6 relative on the product-limit curve (set by the request's data)", "expected": "not-run", "request": "R1" },
+    { "id": "X2.cmAuthentic", "group": "authentic", "estimator": "cm", "tier": "e", "statement": "the truncation estimator on a real flux- or magnitude-limited sample with a known limit per object and a published recovered distribution", "bound": "as X1", "expected": "not-run", "request": "R2" },
+    { "id": "X3.vmaxAuthentic", "group": "authentic", "estimator": "vmax", "tier": "e", "statement": "V/Vmax on a real flux-limited sample with a published <V/Vmax>", "bound": "as X1", "expected": "not-run", "request": "R3" },
+    { "id": "X4.citedForms", "group": "authentic", "estimator": "all", "tier": "e", "statement": "the estimators and variances stated in this file against the printed forms of the cited sources", "bound": "the printed equation is the same function; any difference is recorded and a leg is added for it", "expected": "not-run", "request": "R4" }
+  ],
+  "verdict": {
+    "rows": "A leg of group integrity, oracle, analytic, reference, accuracy, coverage, misspecified or refusals passes or fails by its bound; a leg of group reported has no bound; a leg with expected not-run is NOT RUN until its request is met and never counts as a pass; a pass/fail leg that cannot be measured fails the gate on that threshold.",
+    "kmPass": "KM PASSES iff every leg of estimator km or all, in groups integrity, oracle, analytic, reference, accuracy, coverage, misspecified and refusals, passes.",
+    "cmPass": "CM PASSES iff every leg of estimator cm or all, in the same groups, passes. The integrity leg I1 and the oracle legs O2 count for both.",
+    "A": "KM PASSES and CM PASSES: both estimators (Part B builds both).",
+    "B": "exactly one of them passes: the named slice only. B-KM: the censoring estimator and its independence check for the upper-limit demonstration of 'The ones you could not see'; the truncation demonstration stays 154's Malmquist form. B-CM: the truncation estimator and the distribution recovered from a truncated sample; censoring stays 154's completeness correction with one-sided limits.",
+    "C": "neither passes: 154's demonstrations stand and 264 Part A's selection uses 154's object only (Appendix C's c).",
+    "vmax": "V/Vmax is a third tested group but not one of the two estimators the prompt's verdict is about: VMAX ADMITTED iff every leg of estimator vmax in groups analytic, reference, coverage, misspecified and refusals passes. It does not change the letter. If it fails the V/Vmax method and the completeness-corrected 1/Vmax are not built in Part B.",
+    "notRunLegs": "X1 to X4 NOT RUN do not change the letter and are named in every sentence that states it. A letter is therefore a verdict on the synthetic tiers a to d and the oracle, never on real data (7.5 rule 8, tier e).",
+    "consumers": "No verdict releases a panel, a lesson or a viewer: the consumers rule (Carl, 2026-11-05 and 2026-11-06) holds for kernel gates."
+  },
+  "externalRequests": [
+    { "id": "R1", "for": "X1", "request": "Save under scratch-data/censoring262/ (outside any repository): (a) the full text of the paper that introduced survival analysis (product-limit estimator with upper limits) to astronomy, Feigelson and Nelson 1985 (the exact reference to be resolved through ADS by the person fetching, not typed here), and (b) the astronomical sample with upper limits that paper tabulates, as a table of value and limit flag with units, plus its printed product-limit mean and standard error; or, equivalently, the example data file(s) distributed with the ASURV package and the printed output of its example run, if the package's terms allow. Running ASURV or any other downloaded program needs Carl's permission and is not asked here: only the files and the printed output." },
+    { "id": "R2", "for": "X2", "request": "Save under scratch-data/censoring262/: the full text of Lynden-Bell's 1971 paper introducing the C-minus method (resolve the reference through ADS) and the quasar sample it tabulates with each object's limit, and the full text of Efron and Petrosian 1992 (the test of independence under truncation) with any sample it tabulates; for every table, the printed recovered distribution or the printed statistic." },
+    { "id": "R3", "for": "X3", "request": "Save under scratch-data/censoring262/: the full text of Schmidt's 1968 V/Vmax paper (resolve through ADS) with its tabulated sample's fluxes or distances and its printed <V/Vmax>." },
+    { "id": "R4", "for": "X4", "request": "From the three papers above, the printed equation of the product-limit estimator, its variance, the C-minus estimator (the associated set), and the V/Vmax mean and variance, saved as text with the equation numbers, so that the forms stated in this file can be compared. A comparison, never a replacement of a bound." },
+    { "id": "R5", "for": "tier e", "request": "If a recent public survey with a documented per-object detection limit is preferred to the historical samples, name it; no archive was queried and no data were fetched by this session." }
+  ],
+  "scope": {
+    "inScope": "the two estimators, the independence check, V/Vmax with an effective volume, all on synthetic samples with a truth manifest and on hand examples, with an independent oracle",
+    "notInScope": "real-data applicability (tier e, NOT RUN), a panel or lesson of any kind (consumers rule), 233's parallaxes without a universal correction (Part B, after a verdict), any change to the shipped js/kernels/statistics/ authority, any byte shipped"
+  },
+  "seeds": "every ensemble replicate r of a scenario uses seed baseSeed + r (the spike's JavaScript: stream('noise', seed, scenario-label); the oracle: numpy default_rng(seed)); the two ensembles are different realizations of the same population, by design",
+  "amendments": [
+    { "id": "AM1", "recordedBefore": "the first validator run", "text": "The hand examples A6 and A7 have fewer than the 5 objects the V/Vmax domain requires (3 and 1); like A4 and A5, which run with minRisk 1, they are run with the option minObjects: 1. The domain guard itself is leg D6. No bound is moved." },
+    { "id": "AM2", "recordedBefore": "the first validator run", "text": "Measurement definitions the legs left open, fixed before any validator run: (1) L1's sup distance is the largest, over the support points v, of |c - F(v)| for c the cumulative mass just before and just after v, and the same with the tail mass added; |mean - 2| uses the midpoint of meanLow and meanHigh when the status is bounded. L2's sup distance is the same on the conditional CDF. (2) In every coverage and rate ensemble a replicate the estimator refuses (for example too few detections) counts as not covering, not flagged and not rejecting, and the number of refused replicates is reported. (3) The oracle's own ensembles (C1o, C2o) count a replicate with fewer than 5 detections or an associated set under 10 as refused in the same way. (4) The V/Vmax ensembles draw the number of parents from a Poisson distribution of mean lambda times the volume of the sphere (Knuth's multiplication method), the distance of a uniform population as U^(1/3) and of the evolving population as U^(1/5), and the completeness check of leg D6 samples the curve at 64 evenly spaced distances. No bound is moved." },
+    { "id": "AM3", "recordedBefore": "the first validator run", "text": "The oracle's pinned output is run again against the thresholds file that carries AM1 to AM3 (the numbers are unchanged; only the recorded sha256 differs), so that leg I1 compares like with like." },
+    { "id": "AM4", "recordedBefore": "the first validator run", "text": "Wording only: request R1 named the fetch directory by an absolute home path; it now names it as scratch-data/censoring262/ outside any repository, because no fixture may hold a home path. No leg, bound, definition or number is changed; the oracle's output is pinned again against the file that carries AM1 to AM4." }
+  ],
+  "decisions": [
+    { "id": "DEC1", "text": "The estimators are stated here from their definitions and checked against an independent implementation, not transcribed from a source: no text of the cited papers was available, so their printed forms are request X4 and the correspondence is NOT RUN. A verdict is therefore 'V-internal, synthetic and oracle'." },
+    { "id": "DEC2", "text": "A left-censored sample whose smallest observation is a limit has probability mass below it that the data cannot place. The estimator reports bounds from a declared floor and no point mean, rather than the convention that treats the smallest limit as a detection (a labelled convention could be added later as a new leg)." },
+    { "id": "DEC3", "text": "The independence check is a two-sample log-rank test between the lower and the upper half of the detection limits. It looks for the dependence of the value on the limit; it cannot see every dependence, and the result says so ('does not prove independence')." },
+    { "id": "DEC4", "text": "The truncation estimator is defined above a declared 'from' and refuses a thin associated set there: below the point where the truncation reaches, the data say nothing about the distribution, and the Lynden-Bell estimator's early terms are unstable." },
+    { "id": "DEC5", "text": "V/Vmax with an effective volume is tested here as a third group so that Part B does not extend tested scope; it does not enter the A, B, C letter." },
+    { "id": "DEC6", "text": "The kernel, if Part B is authorized, extends js/kernels/statistics/selection.js and special.js (the authority 154 built: the selection object, completenessCorrect, the normal and chi-square functions, the intervals) and adds no second selection-function object; delta table: existing authority selection.js, check.js, intervals.js, special.js, js/numeric/quadrature.js; missing behaviour the two estimators, the independence check and V/Vmax; adopter this gate's spike; duplication removed none." }
+  ],
+  "questions": []
+}
