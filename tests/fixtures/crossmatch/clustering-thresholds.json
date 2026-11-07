@@ -1,0 +1,157 @@
+{
+ "format": "gravitas.clustering-gate-thresholds/1",
+ "prompt": "Roadmap III, Prompt 263 Part B, the angular two-point correlation (the clustering gate), tranche T5, authorized by Checkpoint V's recorded outcome (register row D-R10-254-01, DECISIONS_2026-11-06.md); hard prerequisites 154, 181 and 254 landed on v3 0a2bdf76. A gate: thresholds are committed here before any prototype exists; the prototype lives on a spike branch that is never merged (section 7.5.4); the pull request lands this file, the oracle's pinned output, the gate stream's results, the failed legs, the gate document and a register row. Part B builds only within the verdict, and under the consumers rule nothing is built in any case ('Clustered or random?' and the link to 253's large-scale structure are NOT built).",
+ "document": "CLUSTERING_GATE.md, written after this file",
+ "committed": "in the same commit as thresholds.json, before any prototype, validator, oracle script or oracle output, and before any pair count, correlation value, interval or detection rate of this gate was computed. Any amendment is a separate commit before any run of the validator and records the reason and that no result had been seen.",
+ "rule": "As in thresholds.json: a crossed bound is a failed check and stays failing; nothing is moved after a result; a leg that cannot be measured is NOT RUN and says why; nothing is fetched by any agent; the oracle uses installed software only (python -E, numpy, scipy, astropy) and no Gravitas code; no published number or citation detail is typed from memory.",
+ "seenBeforeCommitting": "the roadmap text of Prompt 263 Part B; BAO_GATE.md and tests/fixtures/bao/thresholds.json (how Prompt 257 counted pairs and built randoms on the SDSS slice, and that the slice's declination is not stored); the metadata of the pack sdss-dr18-redshift-slice (its columns are right ascension and redshift only, the strip is right ascension 120 to 240 and declination 0 to 0.5 degrees, 2911 galaxies); WORKER_POOL.md and tools/data-budget.json (the low-end worker memory cap of 256,000,000 B at concurrency 2); the installed Python packages. No galaxy row was opened, no pair counted and no published correlation or citation detail typed from memory.",
+ "scope": {
+  "question": "Can a two-point angular correlation of a small sample be measured with a Landy-Szalay estimator against a random catalog with the survey's footprint, and at what sample size is a signal detectable, within the project's worker budget?",
+  "A": "the estimator measured on the SDSS subset (the pack sdss-dr18-redshift-slice) with a published reference reproduced",
+  "B": "the estimator validated and its detectable size measured on a synthetic clustered sample only (the SDSS subset not claimed)",
+  "C": "a reading step only (a pair count and a comparison with a random catalog read off by hand), no estimator",
+  "notBuilt": "'Clustered or random?' (the lesson, its Spanish, instructor materials) and the link to 253's large-scale structure: UI and student-facing content, held by the consumers rule in every verdict."
+ },
+ "estimator": {
+  "landySzalay": "w_k = (DD_k / N_DD - 2 DR_k / N_DR + RR_k / N_RR) / (RR_k / N_RR) with DD_k and RR_k the unordered pair counts of the data and of the randoms with angular separation in bin k, DR_k the data-random pair count, N_DD = n_D (n_D - 1) / 2, N_DR = n_D n_R and N_RR = n_R (n_R - 1) / 2 (Landy and Szalay 1993, the estimator the roadmap names; the bibliographic details are request R6). Separation by the chord on unit vectors (2 sin(theta / 2)).",
+  "error": "the Poisson estimate sigma_k = (1 + w_k) / sqrt(DD_k) for the synthetic legs; a delete-one jackknife over blocks for the authentic strip (below). Both are labelled approximations: the Poisson one underestimates the variance of clustered data, which the null and accuracy legs measure rather than assume.",
+  "statistic": "T = sum over the six bins of (w_k / sigma_k)^2, compared with the 0.99 quantile of chi-square on 6 degrees of freedom (the statistics kernel's chi2Quantile at run time). 'Detected' means T above it.",
+  "randoms": "n_R = 10 n_D uniform in the footprint, from js/random/streams.js: stream('injection', 'p263', 'B:randoms', <world index>); the footprint of the synthetic design is the tangent-plane box below; of the authentic strip, right ascension 120 to 240 degrees at the one assumed declination."
+ },
+ "worlds": {
+  "box": "the tangent plane at (150, 0) degrees, x and y in [-2, 2] degrees, gnomonic: (ra, dec) from (x, y) by the inverse gnomonic projection about the centre. Area 16 square degrees (the flat-sky error of the clustering model at this size is below 0.3 percent and is part of the tolerance).",
+  "null": "N = 1000 points uniform in the box.",
+  "thomas": "a Thomas cluster process: parents Poisson with intensity rho_p = 5 per square degree in the box extended by 0.5 degree on each side; each parent has Poisson(m) daughters displaced by N(0, sigma_c^2) per axis with sigma_c = 0.1 degree; daughters outside the box are dropped. The expected number of points is 80 m. The exact pair correlation is xi(r) = exp(-r^2 / (4 sigma_c^2)) / (4 pi rho_p sigma_c^2) (independent of m), and the bin average of a pair count is w_bin = (exp(-a^2 / (4 sigma_c^2)) - exp(-b^2 / (4 sigma_c^2))) / (pi rho_p (b^2 - a^2)) for a bin [a, b] degrees. Main design m = 12.5 (N about 1000).",
+  "bins": "angular separation bins (degrees) 0.02, 0.04, 0.08, 0.16, 0.32, 0.64, 1.28 (six bins) for the synthetic legs; 2, 3, 4.5, 7, 10, 14, 20 (six bins) for the strip.",
+  "strip": "the pack sdss-dr18-redshift-slice: 2911 galaxies, right ascension from the pack, the declination assumed constant at the strip's midpoint 0.25 degree for every galaxy AND every random (the pack stores no declination: the correlation is effectively one-dimensional, in right ascension x cos 0.25 degree, and bins start at 2 degrees so that the neglected spread of at most 0.5 degree in declination changes a separation by at most about 3 percent); randoms 10 x 2911 uniform in right ascension 120 to 240 degrees; the nominal strip, with no completeness mask (the pack has none)."
+ },
+ "checks": [
+  {
+   "id": "B1.pairCounts",
+   "kind": "bound",
+   "what": "DD per bin of the prototype (a cell-grid counter) against brute force (all pairs, chord threshold) on 300 random points of the sphere with bins of 5, 10, 20 and 40 degrees, exactly; and against the oracle's scipy cKDTree counts on the oracle's Thomas sample (N about 1000, oracle numpy seed 2632) in the six synthetic bins, and on the strip's galaxies in the six strip bins.",
+   "limits": {
+    "bruteForce": "exact",
+    "oracle": "per bin the absolute difference is at most max(2, 1e-4 x count)"
+   }
+  },
+  {
+   "id": "B2.null",
+   "kind": "bound",
+   "what": "200 null worlds (N = 1000, 10 N randoms from the stream): the fraction in which T exceeds the 0.99 quantile of chi-square(6) (a calibrated test would give 0.01).",
+   "limits": {
+    "maxFalsePositive": 0.03
+   }
+  },
+  {
+   "id": "B2b.nullBias",
+   "kind": "bound",
+   "what": "The same worlds: for every bin the mean of w_k over worlds is within three standard errors of the mean (sample standard deviation over root 200) plus 0.003 of zero.",
+   "limits": {
+    "maxAbsSigmasPlus": [
+     3,
+     0.003
+    ]
+   }
+  },
+  {
+   "id": "B3.thomas",
+   "kind": "bound",
+   "what": "100 Thomas worlds (m = 12.5): for every bin the mean of w_k over worlds against the exact bin average w_bin: its distance is at most max(0.03, 0.1 w_bin) plus three standard errors of the mean (the estimator's integral-constraint bias is of the order of the mean correlation over the box, about 0.0125, and is inside this).",
+   "limits": {
+    "maxAbsOrRelPlus": [
+     0.03,
+     0.1,
+     3
+    ]
+   }
+  },
+  {
+   "id": "B4.detectable",
+   "kind": "bound",
+   "what": "Thomas worlds at m = 1.25, 2.5, 5, 10, 20 (N about 100, 200, 400, 800, 1600), 100 worlds each: the detection rate (T above the 0.99 quantile). The detectable size is the smallest N whose rate is at least 0.9; it must be at most 800, and every smaller N is reported with its rate.",
+   "limits": {
+    "maxDetectableN": 800,
+    "minRate": 0.9
+   }
+  },
+  {
+   "id": "B5.cost",
+   "kind": "bound",
+   "what": "One complete job (DD, DR and RR in the six strip bins) on 2911 data and 29110 randoms on the strip's geometry, in Node on this machine: peak resident-memory growth during the job at most 128,000,000 B (half of the low-end aggregate worker cap of 256,000,000 B at its concurrency of 2, WORKER_POOL.md and tools/data-budget.json) and CPU time at most 20 s. The time is a record of one machine, not a promise; the memory is the bound that matters for the worker pool.",
+   "limits": {
+    "maxResidentGrowthBytes": 128000000,
+    "maxCpuSeconds": 20
+   }
+  },
+  {
+   "id": "B6.oracleLS",
+   "kind": "bound",
+   "what": "On the oracle's Thomas sample (data written by the oracle, its own randoms drawn by numpy, 10 N) against the prototype's w with the prototype's own randoms from the stream: per bin |w_prototype - w_oracle| is at most 4 sqrt(sigma_p^2 + sigma_o^2), the Poisson estimates of the two.",
+   "limits": {
+    "maxSigmas": 4
+   }
+  },
+  {
+   "id": "B7.randoms",
+   "kind": "bound",
+   "what": "The random catalog: two draws with the same key are identical to the bit; every point lies inside the footprint; the counts in an 8 x 8 grid of equal cells of the box give a chi-square p value of at least 0.001 against uniform.",
+   "limits": {
+    "minP": 0.001
+   }
+  },
+  {
+   "id": "B8.strip",
+   "kind": "reported",
+   "what": "The authentic strip (the contract in worlds.strip): w_k and delete-one jackknife sigma_k (12 blocks of 10 degrees of right ascension from 120, randoms assigned to blocks by right ascension), the pooled statistic with the jackknife sigma and whether it exceeds the 0.99 quantile of chi-square(6). Reported: the strip has no declination, no mask and no published reference here."
+  },
+  {
+   "id": "B8b.stripExtent",
+   "kind": "reported",
+   "what": "AM1: B8 again with the randoms uniform over the data's OWN right-ascension extent (the minimum to the maximum right ascension of the pack's galaxies) instead of 120 to 240 degrees. Added because the oracle's first output showed correlations of 0.1 at 2 to 3 degrees with a tiny Poisson error on the strip, which the nominal footprint can produce by itself when the sample has an empty block (the pack's first right ascension is above 130 degrees); reported, never in the function.",
+   "amendment": "AM1"
+  },
+  {
+   "id": "B9.authenticReference",
+   "kind": "notrun",
+   "what": "The estimator on the SDSS subset with its declination and the survey's footprint, against a published angular correlation of the same galaxy sample (requests R4 and R5). Required for verdict A.",
+   "needs": "R4, R5"
+  }
+ ],
+ "requests": [
+  {
+   "id": "R4",
+   "what": "The galaxies of the strip with their declination: the SkyServer query in the pack's manifest (raw[0].url of data-packs/sdss-dr18-redshift-slice.json) re-run with every column it returns (ra, dec, z) and the same cuts, the full result saved (16247 rows before the strip cut), and the survey's footprint for the strip (the Legacy sample's geometry or mask) if the archive publishes one, with the terms read and the sha256, into scratch-data/clustering263/ (outside every repository).",
+   "feeds": "B9"
+  },
+  {
+   "id": "R5",
+   "what": "A published angular correlation function of the SDSS main galaxy sample at the same apparent-magnitude limit, with the source's page read and its terms (numbers as the source prints them, never typed from memory).",
+   "feeds": "B9"
+  },
+  {
+   "id": "R6",
+   "what": "The paper that defines the Landy-Szalay estimator: the page read, to confirm the form in estimator.landySzalay and to complete its citation.",
+   "feeds": "the citation"
+  }
+ ],
+ "verdict": {
+  "function": "Let K = {B1, B2, B2b, B3, B6, B7} and S = {B4, B5}. If any check of K or S fails: C (a reading step only). Otherwise: A if B9 passes and the strip is detected in B8; otherwise B (the estimator validated and its detectable size measured on a synthetic clustered sample only). B8 (and B8b) are reported and enter the function only through the A condition. B9 is NOT RUN, so no verdict better than B is possible until it runs.",
+  "consequence": "B builds nothing and licenses a later prompt, if Carl releases the consumers, to build 'Clustered or random?' on a synthetic clustered sample with the limits of the gate document; A would license the SDSS subset; C removes the clustering inference and leaves 253's counts in cells (Appendix C)."
+ },
+ "amendments": [
+  {
+   "id": "AM1",
+   "adds": "B8b (a reported row)",
+   "reason": "the oracle's first output (commit d6953b8c) was read before this amendment: on the strip it gave w of 0.11 at 2 to 3 degrees with a Poisson sigma of about 0.004, which suggests the footprint mismatch rather than clustering; no prototype, validator run or kernel result had been seen",
+   "movesNoBound": true
+  },
+  {
+   "id": "AM2",
+   "adds": "two definitions the statistic needs and the contract left open (no new bound, no bound moved)",
+   "changes": "(i) the Poisson error is sigma_k = (1 + max(w_k, 0)) / sqrt(DD_k) (the committed form with a negative w_k floored at 0 so that sigma stays positive); (ii) a bin with fewer than 5 data pairs (DD_k < 5) contributes nothing to T, and T is compared with the 0.99 quantile of chi-square with as many degrees of freedom as bins contribute (six at the sizes of B2, B3 and B6); a world with no contributing bin is not detected. The oracle's pinned sigma used (1 + w) / sqrt(max(DD, 1)); B6 recomputes the oracle's sigma from the oracle's pinned DD and w by this amended rule, a deterministic function of numbers already pinned.",
+   "reason": "found while designing the prototype, before the prototype, the validator or any gate stream existed; the oracle's output (commit 6724fbb5) is unchanged",
+   "movesNoBound": true
+  }
+ ]
+}

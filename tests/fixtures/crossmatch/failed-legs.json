@@ -1,0 +1,28 @@
+{
+ "format": "gravitas.crossmatch-failed-legs/1",
+ "note": "the legs that crossed a committed bound; they stay failing, only Carl resets a bound",
+ "legs": [
+  {
+   "id": "A6.largeShift",
+   "measured": {
+    "over": "shift-too-large",
+    "edge": "ok",
+    "poleDec": 89.99993472222222,
+    "poleRaMoved": 0
+   },
+   "note": null
+  },
+  {
+   "id": "G2.coverage",
+   "measured": [
+    0.984,
+    0.9795,
+    0.9575,
+    0.9535,
+    0.959,
+    0.9385
+   ],
+   "note": null
+  }
+ ]
+}

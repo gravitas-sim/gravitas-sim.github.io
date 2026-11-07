@@ -1458,6 +1458,20 @@
       "student": false
     },
     {
+      "file": "CROSSMATCH.md",
+      "kind": "feature",
+      "purpose": "The crossmatch kernel: epoch propagation, refusals on rounded positions, nearest-neighbour match, shifted-match false rate, joined-table record, populations, validation, failed legs (Prompt 263).",
+      "owner": 263,
+      "student": false
+    },
+    {
+      "file": "CLUSTERING_GATE.md",
+      "kind": "gate",
+      "purpose": "Angular clustering gate: Landy-Szalay on a random catalog, detectable size, pair-count cost against the worker cap, the committed legs and the verdict (Prompt 263 Part B).",
+      "owner": 263,
+      "student": false
+    },
+    {
       "file": "CMB_SCALE_GATE.md",
       "kind": "gate",
       "purpose": "Microwave background angular-scale gate: r_s(z*), D_M(z*), theta*, the peak relation and claim rule, 42 legs, verdict C; spectrum, grid and cited formulas NOT RUN (Prompt 258).",
