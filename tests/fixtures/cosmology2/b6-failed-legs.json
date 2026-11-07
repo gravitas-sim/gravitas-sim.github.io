@@ -1,0 +1,5 @@
+{
+ "format": "gravitas.cosmology2-b6-failed-legs/1",
+ "note": "the B6 legs that crossed a committed tolerance; they stay failing, only Carl resets a bound",
+ "legs": []
+}

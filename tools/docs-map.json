@@ -1418,7 +1418,7 @@
     {
       "file": "COSMOLOGY_II.md",
       "kind": "feature",
-      "purpose": "The late-time FLRW kernel (radiation, constant w, closed universes, transition, refusals, degeneracy contours): equations, domain, validation table, failed legs and the file requested (Prompt 255).",
+      "purpose": "The late-time FLRW kernel (radiation, constant w, closed universes, refusals, contours): equations, domain, validation, failed legs, follow-up and the age-only published-age leg B6 (Prompt 255).",
       "owner": 255,
       "student": false
     },

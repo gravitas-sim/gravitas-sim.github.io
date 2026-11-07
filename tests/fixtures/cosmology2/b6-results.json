@@ -1,0 +1,150 @@
+{
+ "format": "gravitas.cosmology2-b6-results/1",
+ "rows": [
+  {
+   "id": "B6.planckBestFitAge",
+   "status": "pass",
+   "measured": {
+    "H0": 67.32,
+    "Om": 0.3158,
+    "OrSupplied": 0.0000919023869112996,
+    "flat": true,
+    "kernelAge": 13.79723489,
+    "kernelAgeError": 2.67e-14,
+    "printedAge": 13.7971,
+    "unit": 0.0001,
+    "ageUnitName": "Gyr",
+    "signedRelativeDifference": 0.0000097764,
+    "toleranceFromRule": 0.000452968,
+    "differenceInUnitsOfLastPrintedDigit": 1.3489,
+    "literalCommittedReadingOneUnit": "fail",
+    "controlRadiationZeroAge": 13.8027591,
+    "controlRadiationZeroSignedRelativeDifference": 0.00041017,
+    "controlRadiationZeroWithinTolerance": true
+   },
+   "note": "flat closure (Ode = 1 - Om - Or); Or is the printed Wright coefficient / h^2"
+  },
+  {
+   "id": "B6.wrightOpenH0_97_78",
+   "status": "pass",
+   "measured": {
+    "H0": 97.78,
+    "Om": 0,
+    "OrSupplied": 0.00004356271510201875,
+    "flat": false,
+    "kernelAge": 9.934351686,
+    "kernelAgeError": 1.95e-14,
+    "printedAge": 9.934,
+    "unit": 0.001,
+    "ageUnitName": "Gyr",
+    "signedRelativeDifference": 0.000035402,
+    "toleranceFromRule": 0.000158846,
+    "differenceInUnitsOfLastPrintedDigit": 0.35169,
+    "literalCommittedReadingOneUnit": "pass",
+    "controlRadiationZeroAge": 9.999920451,
+    "controlRadiationZeroSignedRelativeDifference": 0.0066358,
+    "controlRadiationZeroWithinTolerance": false
+   },
+   "note": "empty open universe: Om = 0, Ode = 0"
+  },
+  {
+   "id": "B6.wrightOpenH0_977_8",
+   "status": "pass",
+   "measured": {
+    "H0": 977.8,
+    "Om": 0,
+    "OrSupplied": 4.356271510201877e-7,
+    "flat": false,
+    "kernelAge": 999.3324651,
+    "kernelAgeError": 1.89e-12,
+    "printedAge": 999,
+    "unit": 1,
+    "ageUnitName": "Myr",
+    "signedRelativeDifference": 0.0003328,
+    "toleranceFromRule": 0.00111534,
+    "differenceInUnitsOfLastPrintedDigit": 0.33247,
+    "literalCommittedReadingOneUnit": "pass",
+    "controlRadiationZeroAge": 999.9920451,
+    "controlRadiationZeroSignedRelativeDifference": 0.00099304,
+    "controlRadiationZeroWithinTolerance": true
+   },
+   "note": "empty open universe: Om = 0, Ode = 0"
+  },
+  {
+   "id": "B6.reported.planckMarginalised",
+   "status": "reported",
+   "measured": {
+    "printedMarginalisedMean": 13.797,
+    "printedError": 0.023,
+    "differenceInUnitsOfThatError": 0.01021
+   },
+   "note": "reported only: a best-fit age is what the best-fit parameters give"
+  },
+  {
+   "id": "B6.reported.closedFormWright",
+   "status": "reported",
+   "measured": {
+    "H0_97_78": {
+     "kernel": 9.934351686,
+     "closedForm": 9.934351686
+    },
+    "H0_977_8": {
+     "kernel": 0.9993324651000001,
+     "closedForm": 0.9993324651
+    }
+   },
+   "note": "the empty-universe-with-radiation age (1/H0)/(1 + sqrt(Or)) beside the kernel: a consistency note, not a leg"
+  }
+ ],
+ "gate": {
+  "b6": "pass",
+  "failedLegs": [],
+  "original": {
+   "kernelVerdict": "C",
+   "productVerdict": "C (age-only B6)",
+   "consumersClause": "unmet (product verdict C; the consumers clause is met only by a product verdict of A)"
+  },
+  "followup": {
+   "kernelVerdict": "A",
+   "productVerdict": "A (age-only B6)",
+   "consumersClause": "met on the letter (product verdict A, age-only B6): the consumers rule is NOT lifted by this; lifting it, and whether an age-only B6 satisfies the contract B6, are Carl's calls"
+  }
+ },
+ "meta": {
+  "node": "v22.23.4",
+  "dataSha256": "675ce014b34b10f0e4b2a0dd5fac94804fc2aa5bca64f1fb55397ec8c49f27be",
+  "dataShaMatchesRule": true,
+  "ruleReproduces": true,
+  "terms": {
+   "planck": {
+    "h": 0.6731999999999999,
+    "Or": 0.0000919023869112996,
+    "H0t": 0.9499087461648599,
+    "T1": 0.00000724789992099789,
+    "T2": 0.00007427213309566251,
+    "T3": 0.00009886638955714163,
+    "T4": 0.00027258171556811104,
+    "tolerance": 0.00045296813814191305,
+    "toleranceGyr": 0.006249646698757789
+   },
+   "wrightA": {
+    "Or": 0.00004356271510201875,
+    "sqrtOr": 0.006600205686341809,
+    "U1": 0.00010066438494060802,
+    "U2": 0.000051135201472693805,
+    "U3": 7.33673657036618e-7,
+    "U4": 0.000006312934573067916,
+    "tolerance": 0.00015884619464340635
+   },
+   "wrightB": {
+    "Or": 4.356271510201877e-7,
+    "sqrtOr": 0.0006600205686341811,
+    "U1": 0.001001001001001001,
+    "U2": 0.000051135201472693805,
+    "U3": 7.336736570366182e-8,
+    "U4": 0.00006312934573067916,
+    "tolerance": 0.0011153389155700777
+   }
+  }
+ }
+}
