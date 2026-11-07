@@ -11,6 +11,8 @@ scheduler and the runner, and they follow MULTI_WORLD_DECISION.md exactly.
 Parallel worlds are Worker realms; the engine itself is not refactored into
 instances.
 
+> **Random experiments (Prompt 265).** Ensembles, injection campaigns and a bootstrap over trials, with a record that names its streams and re-runs to the digit, are in [EXPERIMENT_ENSEMBLES.md](EXPERIMENT_ENSEMBLES.md) (`gravitas.experiment/2`, `js/experiments/ensemble/`). This page's runner is unchanged and runs sweeps.
+
 ## The manifest: `gravitas.experiment/1`
 
 `js/experiments/experimentManifest.js` holds the rules. Every field is

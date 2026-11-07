@@ -1458,6 +1458,13 @@
       "student": false
     },
     {
+      "file": "EXPERIMENT_ENSEMBLES.md",
+      "kind": "feature",
+      "purpose": "Experiment runner II: the gravitas.experiment/2 record (named streams, the fork per trial, kernel versions), ensembles, injection campaigns, bootstrap, the pool client, replay to the digit, validation, the failed leg (Prompt 265).",
+      "owner": 265,
+      "student": false
+    },
+    {
       "file": "CROSSMATCH.md",
       "kind": "feature",
       "purpose": "The crossmatch kernel: epoch propagation, refusals on rounded positions, nearest-neighbour match, shifted-match false rate, joined-table record, populations, validation, failed legs (Prompt 263).",
