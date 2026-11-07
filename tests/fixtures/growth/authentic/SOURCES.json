@@ -1,0 +1,28 @@
+{
+  "format": "gravitas.growth-authentic-sources/1",
+  "note": "Sources of the authentic fixtures of Prompt 259 Part A. Both source texts were fetched by Carl's session (the coordinator) outside every repository before this prompt ran (EH98 on 2026-11-07, Planck 2018 VI on 2026-11-06); this session fetched nothing and no downloaded code was run. The saved texts are not in the repository; their sha256 are pinned here and the tests check the fixtures against them when they are present.",
+  "sources": [
+    {
+      "id": "EH98",
+      "identifier": "arXiv:astro-ph/9709112",
+      "citation": "Eisenstein and Hu 1998, ApJ 496, 605, Baryonic Features in the Matter Transfer Function",
+      "savedTextSha256": "3d777eee2e9d0f4495910ead9e989f1638c3b3ccd457abd3198e204e5d1de748",
+      "pdfSha256": "1d283b1a416be45c684eb18adf78983ced73b449e80ec3caed2897842e20fa59",
+      "used": "equations (26), (28) to (31), (A4) to (A7) and the printed CMB temperature, as transcribed in eh98-formulas.json",
+      "rights": "D-R10-255-11 (arXiv non-exclusive distribution licence 1.0 read by Carl's session for the same use in the 257 follow-up: numbers and cited facts, no text reproduced)"
+    },
+    {
+      "id": "Planck2018VI",
+      "identifier": "arXiv:1807.06209",
+      "citation": "Planck Collaboration 2018 VI, Cosmological parameters",
+      "savedTextSha256": "75476bdbcfeb893c3be2274cb796becf55a9a174c40b4c265a9fcc9870fa0a4d",
+      "pdfSha256": "8e172730faf07c9f4ff3fdcc7043f76ed67df6f76066d47df30d693025b6ce77",
+      "used": "the 'Plik best fit' column of Table 1 and the pivot scale of the A_s definition, read by script into planck-best-fit.json with the line of every value",
+      "rights": "D-R10-255-11 (same document, same use: printed numbers, no text reproduced)"
+    }
+  ],
+  "files": {
+    "eh98-formulas.json": {"role": "hand transcription of the cited equations, line-checked"},
+    "planck-best-fit.json": {"role": "script extraction of the printed best-fit values (written on the spike, before the validator was run)"}
+  }
+}

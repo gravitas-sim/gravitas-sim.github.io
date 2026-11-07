@@ -1,0 +1,162 @@
+{
+  "format": "gravitas.growth-eh98-formulas/1",
+  "note": "Hand transcription of the cited equations from Carl's saved extracted text of Eisenstein and Hu 1998 (arXiv:astro-ph/9709112, scratch-data/bao257/eh98.txt, fetched by his session on 2026-11-07; this session fetched nothing), after the contract thresholds.json was committed and before any code existed. The PDF pages 14, 15 and 18 were rendered and the equations compared by eye. Each token below is a string the saved text holds at the cited 1-based line after Unicode NFKC normalisation (the text uses the Ohm sign for Omega); a script checked that when this file was written, and the test re-checks it when the saved text is present. Only the coefficients and the equation structure are recorded (cited facts, no text reproduced), the rights basis of D-R10-255-11.",
+  "source": {
+    "identifier": "arXiv:astro-ph/9709112",
+    "citation": "Eisenstein and Hu 1998, ApJ 496, 605",
+    "savedTextSha256": "3d777eee2e9d0f4495910ead9e989f1638c3b3ccd457abd3198e204e5d1de748",
+    "pdfSha256": "1d283b1a416be45c684eb18adf78983ced73b449e80ec3caed2897842e20fa59",
+    "lineNumbers": "1-based lines of the pdftotext -layout output (the saved text)"
+  },
+  "readingNotes": [
+    "k s in equation (30) uses k in Mpc^-1 because s is printed in Mpc; q of equation (28) uses k in h Mpc^-1",
+    "equation (A7)'s variance and equation (A4)'s growth fit are the only places this gate uses the paper's appendix; delta_H (A1 to A3) and the COBE normalisation are NOT used"
+  ],
+  "equations": {
+    "temperature": {
+      "form": "Theta_2.7 = T_CMB/2.7 K with T_CMB = 2.728 K, the COBE value the paper prints",
+      "tokens": [
+        {
+          "token": "2.728",
+          "line": 159,
+          "means": "the printed COBE FIRAS temperature in K, so Theta_2.7 = 2.728/2.7"
+        }
+      ]
+    },
+    "26": {
+      "form": "s = 44.5 ln(9.83/(Om h^2)) / sqrt(1 + 10 (Ob h^2)^(3/4)) Mpc",
+      "tokens": [
+        {
+          "token": "44.5 ln(9.83/",
+          "line": 579,
+          "means": "numerator: 44.5 and 9.83"
+        },
+        {
+          "token": "1 + 10(",
+          "line": 581,
+          "means": "denominator: 1 + 10 (Ob h^2)^(3/4) under a square root"
+        },
+        {
+          "token": ")3/4",
+          "line": 581,
+          "means": "the exponent 3/4"
+        }
+      ]
+    },
+    "28": {
+      "form": "q = (k/(h Mpc^-1)) Theta_2.7^2 / Gamma, Gamma = Om h (zero-baryon); in the effective form Gamma is replaced by Gamma_eff(k)",
+      "tokens": [
+        {
+          "token": "Θ22.7 /Γ",
+          "line": 653,
+          "means": "Theta_2.7 squared over Gamma"
+        }
+      ]
+    },
+    "29": {
+      "form": "T0(q) = L0/(L0 + C0 q^2), L0 = ln(2e + 1.8 q), C0 = 14.2 + 731/(1 + 62.5 q)",
+      "tokens": [
+        {
+          "token": "ln(2e + 1.8q)",
+          "line": 667,
+          "means": "L0"
+        },
+        {
+          "token": "731",
+          "line": 668,
+          "means": "the fitted small-q coefficient"
+        },
+        {
+          "token": "14.2 +",
+          "line": 669,
+          "means": "C0 constant part"
+        },
+        {
+          "token": "1 + 62.5q",
+          "line": 670,
+          "means": "C0 denominator"
+        }
+      ]
+    },
+    "30": {
+      "form": "Gamma_eff(k) = Om h (alpha_Gamma + (1 - alpha_Gamma)/(1 + (0.43 k s)^4)), k in Mpc^-1, s in Mpc",
+      "tokens": [
+        {
+          "token": "1 + (0.43ks)4",
+          "line": 705,
+          "means": "denominator of the second term"
+        }
+      ]
+    },
+    "31": {
+      "form": "alpha_Gamma = 1 - 0.328 ln(431 Om h^2) (Ob/Om) + 0.38 ln(22.3 Om h^2) (Ob/Om)^2",
+      "tokens": [
+        {
+          "token": "0.328 ln(431",
+          "line": 709,
+          "means": "first correction"
+        },
+        {
+          "token": "0.38 ln(22.3",
+          "line": 709,
+          "means": "second correction"
+        }
+      ]
+    },
+    "A4": {
+      "form": "D1(z) = (1+z)^-1 (5 Omega(z)/2) { Omega(z)^(4/7) - OmegaL(z) + [1 + Omega(z)/2][1 + OmegaL(z)/70] }^-1",
+      "tokens": [
+        {
+          "token": "(z)4/7",
+          "line": 836,
+          "means": "exponent 4/7"
+        },
+        {
+          "token": "[1 + Ω(z)/2]",
+          "line": 836,
+          "means": "one bracket"
+        },
+        {
+          "token": "/70]",
+          "line": 836,
+          "means": "the other bracket's divisor"
+        }
+      ]
+    },
+    "A5": {
+      "form": "Omega(z) = Om (1+z)^3 / (OmegaL + OmegaR (1+z)^2 + Om (1+z)^3)",
+      "tokens": [
+        {
+          "token": "(1 + z)3",
+          "line": 840,
+          "means": "numerator"
+        }
+      ]
+    },
+    "A6": {
+      "form": "OmegaL(z) = OmegaL / (OmegaL + OmegaR (1+z)^2 + Om (1+z)^3), OmegaR = 1 - Om - OmegaL",
+      "tokens": [
+        {
+          "token": "(1 + z)2 + ",
+          "line": 845,
+          "means": "denominator"
+        },
+        {
+          "token": "= 1 − Ω0 − ΩΛ",
+          "line": 848,
+          "means": "curvature"
+        }
+      ]
+    },
+    "A7": {
+      "form": "sigma^2(R) = Integral_0^inf (dk/k) Delta^2(k) [3 j1(kR)/(kR)]^2, printed j1(x) = (x cos x - sin x)/x^2 (the sign is irrelevant when squared)",
+      "tokens": [
+        {
+          "token": "3j1 (kR)",
+          "line": 851,
+          "means": "the top-hat window 3 j1(kR)/(kR)"
+        }
+      ]
+    }
+  }
+}
