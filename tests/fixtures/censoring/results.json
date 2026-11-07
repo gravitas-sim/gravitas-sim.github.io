@@ -2,8 +2,8 @@
  "format": "gravitas.censoring-truncation-gate-results/1",
  "environment": {
   "node": "v22.23.4",
-  "thresholdsSha256": "9d7356ba020c528f337592a032a2b80780e8981114f6f037b96892b79ea7e3d3",
-  "oracleSha256": "380818a1b806e14b4511c625da0e6f2dbe1da449bbf2d35797bef9c470507aa7",
+  "thresholdsSha256": "d1c6d8d050a7de01166394ad4badf17a586b8a8f3a9d3439d4c0bb17678b4a6a",
+  "oracleSha256": "fb09403fb28c59cb78b0a9c05a5ffdeccabab89cde81cf0cfb9dac33d627a7bf",
   "spike": {
    "branch": "spike/censoring-truncation-gate",
    "validatorAndPrototypeCommit": "4735488a"
@@ -19,9 +19,9 @@
    "status": "pass",
    "bound": "exact",
    "measured": {
-    "thresholdsSha256": "9d7356ba020c528f337592a032a2b80780e8981114f6f037b96892b79ea7e3d3",
-    "oracleRecorded": "9d7356ba020c528f337592a032a2b80780e8981114f6f037b96892b79ea7e3d3",
-    "oracleOutputSha256": "380818a1b806e14b4511c625da0e6f2dbe1da449bbf2d35797bef9c470507aa7"
+    "thresholdsSha256": "d1c6d8d050a7de01166394ad4badf17a586b8a8f3a9d3439d4c0bb17678b4a6a",
+    "oracleRecorded": "d1c6d8d050a7de01166394ad4badf17a586b8a8f3a9d3439d4c0bb17678b4a6a",
+    "oracleOutputSha256": "fb09403fb28c59cb78b0a9c05a5ffdeccabab89cde81cf0cfb9dac33d627a7bf"
    }
   },
   {
@@ -758,5 +758,5 @@
   "letter": "B",
   "slice": "B-KM"
  },
- "cpuSeconds": 6.339619185
+ "cpuSeconds": 6.574426019
 }
