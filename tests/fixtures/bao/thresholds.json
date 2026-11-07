@@ -1,0 +1,249 @@
+{
+  "format": "gravitas.bao-gate-thresholds/1",
+  "prompt": "Roadmap III, Prompt 257 Part A, Baryon acoustic oscillations: a named observable (tranche T5, authorized by Checkpoint V's recorded outcome CONTINUE AS PLANNED, DECISIONS_2026-11-06.md). Documentation and fixtures only; the prototype, the oracle and the validator live on spike/bao-gate and are never merged (7.5 rule 4).",
+  "document": "BAO_GATE.md (the observable, the legs, the measurements, the verdict and the requests), written after this file",
+  "committed": "before any prototype code, validator, oracle script or oracle output of this prompt existed, and before any sound horizon, distance ratio, pair count, correlation function, chi-square or interval of this prompt was computed. Nothing was fetched and no published number, coefficient, covariance value, licence term or citation detail was typed from memory.",
+  "rule": "A crossed bound is a failed leg, recorded in failed-legs.json and left failing; only Carl resets one. A leg that cannot be measured (a file not supplied, a source text not fetched) is NOT RUN and carries an exact request. Amendments are recorded in this file (amendments array) before any validator run and move no bound; a leg is added only as a NEW leg with its bound committed before its first run. A threshold that proves unmeasurable fails the gate on that threshold. Nothing is moved, re-read or re-defined after a result.",
+  "seenBeforeCommitting": [
+    "The roadmap sections named by CLAUDE.md for this prompt (7, 7.5, 12.1, 13, Appendix C, section 257), DECISIONS_2026-11-05.md and DECISIONS_2026-11-06.md, the register rows of Prompts 255 and 256 and of Checkpoint V, SN_LIKELIHOOD_GATE.md (sections 1 to 10), COSMOLOGY_II.md section 1 and 2, SEEDING.md.",
+    "js/kernels/cosmology/late/friedmann.js (the API, the domain, the refusal codes, the quadrature it uses), js/numeric/quadrature.js, js/rng.js (mulberry32 and the FNV-1a seed rule), the structure of the 256 gate's thresholds file and test.",
+    "data-packs/sdss-dr18-redshift-slice.json (the pack record: 2,911 galaxies, columns ra and z only, no declination, the strip 0 to 0.5 degrees, public domain, sidecar sha256) and the sidecar's column metadata. None of the 2,911 values was decoded or looked at.",
+    "Only the COUNT of lines containing the letters 'drag' in the saved extracted text of arXiv:1807.06209 (31) and the retrieval record of Carl's session (scratch-data/cosmo255/retrieved.txt, 2026-11-06). No value of the paper was read. The register row D-R10-255-11 and tests/fixtures/cosmology2/authentic/SOURCES.json record how the same document was read for the age legs.",
+    "From memory, and used for no bound here: that the sound horizon at the drag epoch is of the order of 150 Mpc and that BAO releases quote distance ratios to about one to a few percent. No bound below is derived from either statement.",
+    "Python 3.9.6 with numpy 1.26.4, scipy 1.13.1 and astropy 6.0.1 are installed (python3 -E imports all three); mpmath is not installed. No cosmology-fitting, Boltzmann or correlation-function package (CAMB, CLASS, Corrfunc, nbodykit, treecorr, cobaya) is installed; nothing was installed or downloaded."
+  ],
+  "observable": {
+    "commitment": "The named observable of this gate is a BAO distance ratio at an effective redshift, in one of two forms the release's own table states: the anisotropic pair (D_M/r_d, D_H/r_d) with D_H = c/H(z), or the isotropic D_V/r_d with D_V = (z D_H D_M^2)^(1/3), together with the release's fiducial cosmology (the cosmology and r_d,fid under which its pipeline converted redshifts to distances) and its covariance. The release, its effective redshifts, its values and its covariance are NOT COMMITTED HERE: they are published data, none was fetched, and choosing a release by name from memory would commit numbers this session may not type. The committed form is the contract; the request (externalRequests.O1) names what Carl's session must fetch and record; every leg that needs the table (O1 to O3, F1 to F5's published comparison, the contract's item (e)) is NOT RUN until the file exists. This is a departure from the prompt's 'which release, which effective redshift' wording, recorded here before any run (decision DEC1 below).",
+    "forms": {
+      "anisotropic": "D_M(z)/r_d and D_H(z)/r_d at z_eff, a 2 x 2 block per effective redshift (or the release's full block matrix)",
+      "isotropic": "D_V(z)/r_d at z_eff",
+      "fiducialRescale": "alpha_perp = [D_M/r_d] / [D_M,fid/r_d,fid], alpha_par = [D_H,fid r_d,fid] / [D_H r_d]; alpha_iso = [D_V/r_d] / [D_V,fid/r_d,fid]. A table that quotes alphas is converted with its own fiducial values; a model is compared with the measurement only through the ratio D/r_d, never through a distance in Mpc alone."
+    },
+    "fitModel": "flat Lambda-CDM with Or = 0 in the likelihood (the redshifts are below 3, where radiation is below 1 part in 1,000 of E^2; stated), parameters (Om, theta) with theta = c / (H0 r_d) a nuisance, model = theta * b(Om) with b_DM = Int dz/E, b_DH = 1/E, b_DV = (z/E)^(1/3) (Int dz/E)^(2/3), E^2 = Om (1+z)^3 + 1 - Om. The profile over theta is analytic: theta_hat = b^T C^-1 d / (b^T C^-1 b), chi2_prof(Om) = d^T C^-1 d - (b^T C^-1 d)^2 / (b^T C^-1 b). BAO alone gives Om and H0 r_d only; it gives no H0 and no r_d separately and the gate never reads one from it.",
+    "intervals": "the set {Om in [0.02, 0.98] : chi2_prof(Om) <= min + delta}, delta = 1 (68.27 percent) or 4 (95.45 percent) for one parameter; end points by Brent's method between grid nodes (grid step 0.001); a set that reaches a grid edge is 'open' and is reported as not constrained on that side, never as a number."
+  },
+  "rightsDecision": {
+    "basis": "7.5 rule 4: per source and per intended redistribution form.",
+    "correlationData": "the pack sdss-dr18-redshift-slice (public domain, SDSS's statement read 2026-10-09, D-COSMO-04; the pack's own record). Intended form: binned pair counts and correlation values derived by this gate (derived numbers; the pack is unchanged). Already decided; no new fetch.",
+    "publishedFromPlanck": "the printed Table 1 values of arXiv:1807.06209 (Planck 2018 VI), already in Carl's saved extracted text (scratch-data/cosmo255/). The arXiv non-exclusive distribution licence (version 1.0) was read by Carl's session on 2026-11-06 for the same document and the same use (numbers and cited facts, no text reproduced), D-R10-255-11; this gate relies on that decision and adds none.",
+    "baoTable": "NOT DECIDED: the release is not chosen and nothing is fetched. A decision needs, per 7.5 rule 4, the exact product and version, the terms as read with a retrieval date, the basis accepted, the transformation and attribution, the fallback and the affected lessons; externalRequests.O1 asks for them. Until it exists no BAO table is transformed and no number of any release is committed.",
+    "fittingFormulaSource": "NOT DECIDED: externalRequests.F1."
+  },
+  "soundHorizon": {
+    "definition": "r_s(z_d) = Int_0^{a_d} c_s c da / (a^2 H(a)), c_s = 1/sqrt(3 (1 + R)), R = 3 rho_b / (4 rho_gamma) = (3 omegaB / (4 omegaGamma)) a, a^2 H = H0 sqrt(Om a + Or + Ok a^2 + Ode a^(1 - 3 w)); finite at a = 0; units Mpc. The drag redshift z_d is an INPUT of the integral. No fitting formula for z_d or r_d is implemented by this gate (coefficients are published data; externalRequests.F1).",
+    "radiation": "omegaGamma = rho_gamma / rho_crit,100 with rho_gamma = (pi^2/15) (k T)^4 / (hbar c)^3 / c^2 (SI, k, hbar, c the exact defined values; T = 2.7255 K as astropy 6.0.1's Planck18 Tcmb0, read from astropy by the oracle and pinned), rho_crit,100 = 3 (100 km/s/Mpc)^2 / (8 pi G) with G from astropy.constants (CODATA 2018, pinned in the oracle output), Mpc = 3.0856775814913673e22 m; Or h^2 = omegaGamma (1 + (7/8) (4/11)^(4/3) Neff), Neff = 3.046 unless a world says otherwise, massless neutrinos. Massive neutrinos are not modelled; their effect is bracketed in leg P1 and in no other.",
+    "domain": "design domain of the integral, stated and not a property of any fitting formula: z_d in [500, 3000]; omegaB > 0 and Ob < Om (Ob = omegaB / h^2); omegaGamma > 0 and Or > 0; the 255 kernel's own domain for H0, Om, Or, Ode, w, as in COSMOLOGY_II.md section 2. Outside it the function refuses with a code and returns no number.",
+    "refusalCodesInOrder": [
+      "not-finite",
+      "bad-H0",
+      "negative-density",
+      "density-out-of-domain",
+      "w-out-of-domain",
+      "bounce",
+      "no-radiation (Or <= 0 or omegaGamma <= 0)",
+      "bad-baryons (omegaB <= 0 or omegaB / (H0/100)^2 >= Om)",
+      "bad-drag-redshift (z_d < 500 or z_d > 3000)"
+    ],
+    "referenceCosmologies": "ten worlds in this file's worlds block: round numbers chosen for the test, claims about nothing in the sky."
+  },
+  "worlds": {
+    "note": "Ode 'flat' means Ode = 1 - Om - Or. Or is derived from T and Neff as stated above and passed to the kernel; astropy's Ogamma0 + Onu0 (massless) must agree with it (leg R1).",
+    "redshifts": [0.05, 0.2, 0.35, 0.5, 0.7, 1.0, 1.5, 2.5],
+    "list": [
+      { "id": "W1", "H0": 70, "Om": 0.3, "Ode": "flat", "w": -1, "Neff": 3.046, "omegaB": 0.0224, "zd": 1060 },
+      { "id": "W2", "H0": 60, "Om": 0.35, "Ode": "flat", "w": -1, "Neff": 3.046, "omegaB": 0.021, "zd": 1050 },
+      { "id": "W3", "H0": 75, "Om": 0.25, "Ode": "flat", "w": -1, "Neff": 3.046, "omegaB": 0.0235, "zd": 1070 },
+      { "id": "W4", "H0": 70, "Om": 0.3, "Ode": 0.6, "w": -1, "Neff": 3.046, "omegaB": 0.0224, "zd": 1060 },
+      { "id": "W5", "H0": 70, "Om": 0.3, "Ode": 0.75, "w": -1, "Neff": 3.046, "omegaB": 0.0224, "zd": 1060 },
+      { "id": "W6", "H0": 70, "Om": 0.3, "Ode": "flat", "w": -0.8, "Neff": 3.046, "omegaB": 0.0224, "zd": 1060 },
+      { "id": "W7", "H0": 70, "Om": 0.3, "Ode": "flat", "w": -1.2, "Neff": 3.046, "omegaB": 0.0224, "zd": 1060 },
+      { "id": "W8", "H0": 70, "Om": 0.3, "Ode": "flat", "w": -1, "Neff": 3.046, "omegaB": 0.018, "zd": 1000 },
+      { "id": "W9", "H0": 55, "Om": 0.45, "Ode": "flat", "w": -1, "Neff": 3.046, "omegaB": 0.0224, "zd": 1100 },
+      { "id": "W10", "H0": 70, "Om": 0.3, "Ode": "flat", "w": -1, "Neff": 2.0, "omegaB": 0.0224, "zd": 1060 }
+    ],
+    "closedFormSets": {
+      "note": "Lambda-free flat matter + radiation (Ode = 0, Om = 1 - Or) with baryon loading, H0 = 70, z_d = 1060: the integral has the closed form r_s = (c/H0) (1/sqrt(3)) (2 / sqrt(b Om)) [ ln( sqrt(b (Om a_d + Or)) + sqrt(Om (1 + b a_d)) ) - ln( sqrt(b Or) + sqrt(Om) ) ], b = 3 omegaB / (4 omegaGamma), derived in BAO_GATE.md by differentiating the logarithm (the antiderivative of 1/sqrt((b a + 1)(Om a + Or))).",
+      "list": [
+        { "id": "C1", "omegaB": 0.0224, "Neff": 3.046 },
+        { "id": "C2", "omegaB": 0.018, "Neff": 3.046 },
+        { "id": "C3", "omegaB": 0.026, "Neff": 3.046 },
+        { "id": "C4", "omegaB": 0.0224, "Neff": 2.0 },
+        { "id": "C5", "omegaB": 0.0224, "Neff": 4.0 }
+      ]
+    }
+  },
+  "standardRuler": {
+    "relation": "(D_M/r_d)(z) = theta I(z; Om, Ok, w), (D_H/r_d)(z) = theta / E(z), with theta = c/(H0 r_d); D_V = (z D_H D_M^2)^(1/3), equivalently D_V^3 = c z (1+z)^2 D_A^2 / H(z). Scaling (H0, r_d) -> (lambda H0, r_d / lambda) leaves every ratio unchanged. The ratio, never the distance, is the observable; D_M in a curved world is the transverse comoving distance of the 255 kernel.",
+    "tables": "Prompt 255's kernel (js/kernels/cosmology/late) supplies D_M and E; the gate's G legs compare its D_M, D_H and D_V with closed forms and with astropy 6.0.1."
+  },
+  "combination": {
+    "rule": "A joint constraint from independent measurements is the PRODUCT of their likelihoods on a common parameter grid, i.e. the SUM of their chi-squares, and nothing else: chi2_joint(p) = chi2_BAO(p) + chi2_other(p) with a nuisance profiled per factor only when it is not shared. The factors must be statistically independent (a stated assumption of the user of the rule); the rule never adds an uncertainty, never averages a best fit and never reads a joint contour from two marginal intervals.",
+    "with256": "OMITTED. Prompt 256's committed verdict (SN_LIKELIHOOD_GATE.md section 10.5) is FC, and Appendix C's entry for 256 C removes '257's combination' (and 260's supernova step). No supernova likelihood, no contour of 256's prototype and no split-form or diagonal covariance is used here, and neither the split form nor the pack's diagonal is ever called a stand-in for the release's covariance (section 10.6 of that document). Leg K1 tests the arithmetic of the product on a labelled synthetic factor and nothing else.",
+    "syntheticFactor": "chi2_other(Om) = ((Om - 0.28) / 0.03)^2, a labelled design factor that is NOT any survey's likelihood and has no supernova in it."
+  },
+  "syntheticEnsemble": {
+    "label": "DESIGN, not any release's: a labelled synthetic BAO data set with its truth manifest, as 7.5 rule 8 requires. A release's covariance is NOT RUN (O1).",
+    "truth": { "Om": 0.3, "theta": 29.0, "flat": true },
+    "redshifts": [0.3, 0.5, 0.7],
+    "uncertainty": "fractional sigma 2.0 percent on D_M/r_d and 4.0 percent on D_H/r_d at each redshift, correlation -0.4 between D_M/r_d and D_H/r_d at the same redshift (a design sign), zero between redshifts; sigma is a fraction of the TRUE value of the ratio.",
+    "draws": 2000,
+    "grid": { "from": 0.02, "to": 0.98, "step": 0.001 },
+    "coverageRule": "a draw covers when the true Om lies in the (possibly grid-edge-truncated) set; the rate is judged against the nominal level p by p +- 3 sqrt(p (1 - p) / draws): [0.6515, 0.7139] at 68.27 percent, [0.9406, 0.9684] at 95.45 percent",
+    "pinnedVectors": "three data vectors drawn by the oracle (numpy, seed 257) and written into its pinned output with their covariance label; the prototype computes intervals on those exact vectors (leg E3).",
+    "notConstrained": { "fractionalSigma": 1.0, "draws": 500, "bound": "an interval that reaches a grid edge ('open') on at least one side in at least 95 percent of draws; a finite two-sided number is never reported for an open set" },
+    "misspecified": { "truth": "an open matter-only universe: Om 0.3, Ode 0, Ok 0.7, the same redshifts, fractional sigma 1.0 percent on both ratios (correlation as above), theta 29.0, the data drawn in D/r_d from that world and fitted with the flat model", "draws": 500, "flag": "poor fit: chi2_min with m - 2 = 4 degrees of freedom has survival probability below 0.0027", "bound": "the flag in at least 80 percent of draws" }
+  },
+  "demonstration": {
+    "label": "Optional correlation-function demonstration on the pack's galaxies: a pair-count script, Landy-Szalay (1993) estimator, a random catalog on 149's streams, a 157 grid; whether its BAO peak is detectable at the pack's size.",
+    "sample": "tests-visible pack data-packs/sdss-dr18-redshift-slice.json and its sidecar cosmology/sdss-dr18-redshift-slice.json: 2,911 galaxies, columns ra (1e-4 degree) and z; NO declination is stored. Declination is set to the strip's midpoint, 0.25 degree, for every galaxy and every random point (stated assumption; a pair's transverse separation is wrong by at most 0.5 degree x its distance, about 3.5 Mpc at 400 Mpc), and the footprint is the strip RA 120 to 240 degrees.",
+    "fiducial": "flat Lambda-CDM Om 0.3, H0 70 (h = 0.7), the lessons' stated wedge cosmology; separations in Mpc/h = h x Mpc. The sample's comoving distance uses the 255 kernel (prototype) and astropy (oracle).",
+    "randoms": "10 x 2,911 = 29,110 points: RA = 120 + 120 u1 (degrees), z = the data's z at index floor(u2 Nd) (the shuffled-redshift method, a stated design choice: it removes the radial structure of the data from the random catalog), declination 0.25 degree; draws in pairs (u1, u2) in order from stream('injection', '257:bao:randoms') on mulberry32, seed text normalised by FNV-1a (js/rng.js). The oracle re-implements the published mulberry32 and the FNV-1a text rule and must reproduce the stream bit for bit (leg D1).",
+    "estimator": "xi(s) = (DD_n - 2 DR_n + RR_n) / RR_n with DD_n = DD / (Nd (Nd - 1) / 2), DR_n = DR / (Nd Nr), RR_n = RR / (Nr (Nr - 1) / 2), unordered pairs, 12 bins of 10 Mpc/h from 40 to 160 [lo, hi).",
+    "jackknife": "12 blocks of 10 degrees of RA from 120; delete-one; sigma^2 = (12 - 1) / 12 sum (xi_k - mean)^2; randoms assigned to blocks by RA like the data; replicates from block-pair count matrices.",
+    "detectabilityRule": "smooth model: weighted straight line xi = alpha + beta log10 s fitted with weights 1 / sigma_jk^2 to the 8 bins OUTSIDE the peak window [90, 130) Mpc/h; S/N of a window bin = (xi - smooth) / sigma_jk; the peak is DETECTABLE iff the largest S/N over the 4 window bins is at least 4 (a Bonferroni-style threshold for four trials, stated). A bin whose RR is zero or whose sigma_jk is zero or not finite makes the leg refused (fails).",
+    "nullEnsemble": "16 null data catalogs of 2,911 points built exactly like the randoms (seeds '257:bao:null:0' to '257:bao:null:15'), each measured against the SAME random catalog: no clustering by construction; per bin the mean xi over the 16 and sd / sqrt(16); the bound is |mean| <= 3 sd_mean + 0.001 in at least 11 of the 12 bins.",
+    "bigPicture": "A BAO peak is expected near the sound horizon (about 100 Mpc/h in an order-of-magnitude statement not used for any bound). The demonstration does not need r_d to be judged detectable; whether a measured peak position agrees with r_d needs F1 and is NOT RUN."
+  },
+  "oracle": {
+    "scripts": "tools/bao-oracle/oracle.py on spike/bao-gate: python3 -E, numpy, scipy, astropy 6.0.1; imports no Gravitas code and reads only this file's blocks and the pack sidecar (decoded by the oracle's own decoder of the documented quantisation: int32 little-endian, value = offset + step x int).",
+    "distances": "astropy 6.0.1 FlatLambdaCDM, LambdaCDM, FlatwCDM and wCDM with Tcmb0 = 2.7255 K, Neff, m_nu = 0 for the ten worlds: comoving_transverse_distance, H(z); D_H = c / H(z), D_V = (z D_H D_M^2)^(1/3) assembled by the oracle.",
+    "soundHorizon": "scipy.integrate.quad at epsabs 0, epsrel 1e-13, limit 500, over a in [0, a_d] in its own variable (a = a_d t^2, split at t = 0.1, 0.3, 0.6), once with its own E(a) and once with astropy's H(z); the closed form of closedFormSets; the R = 0 closed form",
+    "likelihood": "its own profile over theta and Brent root finds with scipy.optimize.brentq (xtol 1e-14) on the same grid; its own ensemble (numpy default_rng(257)); scipy.stats.chi2.sf for the goodness-of-fit probability",
+    "pairs": "scipy.spatial.cKDTree.count_neighbors at the bin edges (cumulative, differenced), self counts (N subtracted, halved), block-pair matrices for the jackknife",
+    "pinned": "tests/fixtures/bao/oracle-results.json, written before the prototype existed"
+  },
+  "tolerance": {
+    "distance": 1e-10,
+    "closedFormDistance": 1e-11,
+    "identity": 1e-12,
+    "scaling": 1e-13,
+    "soundHorizonVsQuad": 1e-9,
+    "soundHorizonVsClosedForm": 1e-10,
+    "baryonFree": 1e-6,
+    "radiation": 1e-9,
+    "interval": 1e-8,
+    "chi2": 1e-9,
+    "lowRedshift": 5e-4,
+    "pairCounts": "per bin the difference of the oracle's and the prototype's pair counts is at most max(2, 1e-4 x count)",
+    "xi": 1e-4,
+    "jackknifeSigma": 1e-3
+  },
+  "publishedComparison": {
+    "label": "Leg P1: the integral against a published full (Boltzmann-code) calculation, using ONLY what the printed table of the saved extracted text of arXiv:1807.06209 states, read after this file was committed, by a script that prints each line it used.",
+    "source": "Table 1 of the paper, the best-fit column of the first (Plik) data combination: the physical baryon density omegaB, the physical cold-dark-matter density omegaC, H0, the drag redshift z_drag and the sound horizon at the drag epoch r_drag, each with its printed digits, and the table's note on the neutrino mass. If the extraction is ambiguous for any of the five numbers, or the neutrino mass is not stated, the leg is NOT RUN (never a guess).",
+    "model": "flat (Ode = 1 - Om - Or), w = -1, T = 2.7255 K, Neff = 3.046, z_d = the printed z_drag, h = H0/100",
+    "bracket": "two cases bound the neutrino treatment this gate does not model: L: three massless species, Om = (omegaB + omegaC)/h^2, Or h^2 = omegaGamma (1 + 0.2271 x 3.046); H: one species of the stated mass as non-relativistic matter at z_d, Om = (omegaB + omegaC + omegaNu)/h^2 with omegaNu = (sum m_nu / 93.14 eV), Or h^2 = omegaGamma (1 + 0.2271 x 3.046 x 2/3). The two integrals give r_L and r_H; r_lo = min, r_hi = max.",
+    "tolerance": "u = one unit of the last printed digit of r_drag + the worst-case propagation of half a unit of the last printed digit of each of omegaB, omegaC, H0 and z_drag, by central finite differences of the integral (relative step 1e-4).",
+    "pass": "r_drag (printed) in [r_lo - u, r_hi + u].",
+    "reported": "the position of r_drag between r_lo and r_hi as a fraction, and the distance outside the interval in units of u; never a pass criterion.",
+    "limits": "The leg tests the integral given z_drag, not z_drag; the neutrino bracket is one-sided honest about what is not modelled and is not a precision claim; 93.14 eV is the conventional constant of omega_nu h^2 = sum m / 93.14 eV."
+  },
+  "refusals": {
+    "ensemble": { "draws": 400, "seed": 257, "rule": "numpy default_rng(257); each draw has H0 U(-20, 120), Om U(-0.1, 1.2), Ode 'flat' with probability 0.7 else U(0, 1.2), w U(-3.5, 0.5), Or U(-1e-5, 2e-4), omegaGamma U(-1e-6, 3e-5), omegaB U(-0.005, 0.03), zd U(-100, 12000); the oracle's brute-force decision (finite; the 255 bounds; E^2(x) > 0 on a log grid of 400,001 points for x in [1, 1e8]; the three new rules) in the order of soundHorizon.refusalCodesInOrder is the reference; the prototype must agree on accept/refuse and on the code for every draw, and on the sound horizon of every accepted draw to 1e-9 relative to the oracle's own quad." },
+    "inputs": [
+      "a data vector and covariance with only 1 datum for 2 parameters: refused 'underdetermined'",
+      "2 data for 2 parameters: refused 'underdetermined' (no degree of freedom)",
+      "a covariance that is not symmetric (relative asymmetry above 1e-9): refused 'bad-covariance'",
+      "a covariance that is not positive definite (a negative eigenvalue): refused 'bad-covariance'",
+      "a non-finite datum or a non-finite covariance entry: refused 'not-finite'",
+      "a covariance whose dimension differs from the data's: refused 'bad-argument'"
+    ],
+    "formulaDomain": "a redshift or a parameter outside a cited fitting formula's stated domain refused: NOT RUN (F4), the domain is the source's and the source is not fetched."
+  },
+  "externalRequests": {
+    "O1": "NOT RUN. A BAO release's table of distance ratios, read and transcribed by Carl's session from the release's paper (or its data release) as tests/fixtures/bao/authentic/published-release.json with a sources record: the release's citation identifiers, the effective redshift of each measurement, the measured D_M/r_d and D_H/r_d (or D_V/r_d, or the alphas with the fiducial values needed to convert them) with the digits printed, the release's covariance or its correlation matrix with the uncertainties (a file, never typed, with its sha256), the fiducial cosmology (Om, omegaB, h, Neff, the neutrino mass, r_d,fid) and the paper's printed result for the flat Lambda-CDM matter density from BAO alone with its uncertainty (read from the text), the terms as read with a retrieval date, and the rights basis proposed (7.5 rule 4). No value may be typed from memory; arXiv or the collaboration's data release are the two sources. Legs O1 to O3.",
+    "F1": "NOT RUN. The source text of the cited fitting formulas for the drag redshift z_d and for the sound horizon r_d as functions of the physical baryon and matter densities: the equations with every coefficient and exponent as printed, the stated domain of validity, the stated accuracy against the full calculation, and the terms as read, as tests/fixtures/bao/authentic/fitting-formulas.json (a transcription checked against the paper's extracted text) with the PDF's sha256. Candidate sources for Carl's session to choose and record: Eisenstein and Hu (1998), astro-ph/9709112, and a later fit to Boltzmann-code output. This session types no coefficient. Legs F1 to F5.",
+    "P2": "NOT RUN. The printed z_drag of the same table row is used as an INPUT of P1; a check of a drag-redshift formula against it needs F1.",
+    "X1": "NOT RUN, never requested of this session: a Boltzmann code or a BAO fitting package (CAMB, CLASS, cobaya) pinned as a fixture would give a second independent full calculation; downloading or running code needs Carl's separate permission."
+  },
+  "scope": {
+    "built": "on the spike only: a prototype kernel (sound-horizon integral, radiation density, distance ratios, the profile likelihood and intervals, the pair counter and Landy-Szalay estimator), its validator, and the independent oracle. In the repository (this PR): the committed thresholds, the oracle's pinned output, the gate stream's results, the failed legs, BAO_GATE.md, the register rows, the record's test, the docs-map entry.",
+    "notBuilt": "any module under js/ in the product tree, any panel, lesson, model-page section, data pack, build-time pair-count script, peak-fit kernel (through 154), combined contour plot or fitting formula: Part B is not begun in this session (the contract forbids starting the next part) and the consumers rule holds (Carl, 2026-11-05 and 2026-11-06)",
+    "consumersRule": "no lesson, panel, viewer or contour until the product verdict is A or B by the function below and Carl lifts the rule"
+  },
+  "seeds": {
+    "oracleEnsemble": 257,
+    "prototypeEnsemble": "stream('noise', '257:bao:ensemble') on mulberry32 with Box-Muller gaussians",
+    "randoms": "stream('injection', '257:bao:randoms')",
+    "null": "stream('injection', '257:bao:null:<k>'), k = 0..15",
+    "streamCheck": "the first 1,000 uniforms of the seed texts '257:bao:randoms', '257:bao:null:0' and the integer 257 agree exactly between the JavaScript stream and the oracle's re-implementation"
+  },
+  "checks": [
+    { "id": "I1.pack", "group": "integrity", "what": "the sidecar's sha256 equals the pack's recorded sidecar sha256 (60b2c7f99007a79b47c5f912f6bc25d4080b3b6402cbf2bdf335d4841419ff40 as the pack's derived block records it) and the table holds 2,911 rows", "bound": "exact", "needs": null },
+    { "id": "I2.decode", "group": "integrity", "what": "the oracle's own decode and the prototype's decode of the sidecar agree and are sane: ra in [120, 240), sorted ascending, z in [0.01, 0.12], all finite, 2,911 rows; the two decodes differ by at most 1e-12 in value", "bound": "as stated", "needs": null },
+    { "id": "G1.edsClosedForm", "group": "ruler", "what": "Einstein-de Sitter (Om 1, Or 0, Ode 0): D_M = 2 (c/H0) (1 - 1/sqrt(1+z)), D_H = (c/H0) (1+z)^(-3/2), D_V from them, at the eight redshifts, H0 = 70", "bound": "relative 1e-11", "needs": null },
+    { "id": "G2.emptyClosedForm", "group": "ruler", "what": "the empty universe (Om 0, Or 0, Ode 0, Ok 1): D_M = (c/H0) sinh(ln(1+z)), D_H = (c/H0) / (1+z), D_V from them", "bound": "relative 1e-11", "needs": null },
+    { "id": "G3.astropy", "group": "ruler", "what": "D_M, D_H and D_V of the prototype against the oracle's astropy values for the ten worlds at the eight redshifts (Or from astropy's Ogamma0 + Onu0)", "bound": "relative 1e-10", "needs": null },
+    { "id": "G4.identityDV", "group": "ruler", "what": "D_V^3 = c z (1+z)^2 D_A^2 / H(z) with D_A and H(z) from separate kernel quantities, ten worlds, eight redshifts", "bound": "relative 1e-12", "needs": null },
+    { "id": "G5.scaling", "group": "ruler", "what": "(H0, r_d) -> (lambda H0, r_d / lambda) leaves D_M/r_d, D_H/r_d and D_V/r_d unchanged, lambda in {0.5, 1.7, 3}, ten worlds, eight redshifts", "bound": "relative 1e-13", "needs": null },
+    { "id": "G6.lowRedshift", "group": "ruler", "what": "|D_V H0 / (c z) - 1| at z = 1e-4 for the ten worlds", "bound": "at most 5e-4", "needs": null },
+    { "id": "R1.radiation", "group": "ruler", "what": "omegaGamma and Or h^2 from T, Neff and the constants against astropy's Ogamma0 h^2 and (Ogamma0 + Onu0) h^2 for Neff 3.046, 2.0 and 4.0", "bound": "relative 1e-9", "needs": null },
+    { "id": "R2.closedForm", "group": "ruler", "what": "the prototype's sound horizon against the closed form for the five Lambda-free sets C1 to C5", "bound": "relative 1e-10", "needs": null },
+    { "id": "R3.quadrature", "group": "ruler", "what": "the prototype's sound horizon against the oracle's scipy quadrature (own E and astropy's H) for the ten worlds", "bound": "relative 1e-9 for each", "needs": null },
+    { "id": "R4.baryonFree", "group": "ruler", "what": "the sound horizon with omegaB = 1e-8 against the R = 0 closed form (c/H0)(1/sqrt(3))(2/Om)(sqrt(Om a_d + Or) - sqrt(Or)), the Lambda-free set C1 with Neff 3.046", "bound": "relative 1e-6", "needs": null },
+    { "id": "R5.monotone", "group": "ruler", "what": "the sound horizon decreases strictly with z_d (500 to 3000), with omegaB (0.01 to 0.04), with Om at fixed h and omegaB (0.15 to 0.6) and with Neff (1 to 6), 20 equal steps each, world W1 otherwise", "bound": "every step in every direction", "needs": null },
+    { "id": "R6.errorCover", "group": "ruler", "what": "the integral's reported error estimate covers the difference from the oracle's quadrature (|difference| <= max(estimate, 4e-16 x value)) in all ten worlds", "bound": "10 of 10", "needs": null },
+    { "id": "P1.plankRdrag", "group": "published", "what": "the printed r_drag of Planck 2018 VI Table 1 (best-fit column) lies in the neutrino-bracketed integral interval widened by u (publishedComparison)", "bound": "as publishedComparison.pass", "needs": "extraction of five printed numbers and the neutrino mass; NOT RUN if ambiguous" },
+    { "id": "P2.plankZdrag", "group": "published", "what": "a drag-redshift formula against the printed z_drag of the same row", "bound": "needs F1", "needs": "F1", "expected": "not-run" },
+    { "id": "E1.coverage68", "group": "ensemble", "what": "the prototype's 68.27 percent interval for Om covers the truth in the stated band over its own 2,000-draw ensemble; the oracle's ensemble likewise", "bound": "[0.6515, 0.7139] for each", "needs": null },
+    { "id": "E2.coverage95", "group": "ensemble", "what": "the 95.45 percent interval, both ensembles", "bound": "[0.9406, 0.9684] for each", "needs": null },
+    { "id": "E3.pinned", "group": "ensemble", "what": "on the three pinned vectors the prototype and the oracle agree on chi2_min (relative 1e-9), the best-fit Om and both interval end points at both levels (absolute 1e-8), theta_hat (relative 1e-9) and the goodness-of-fit survival probability (relative 1e-9)", "bound": "as stated", "needs": null },
+    { "id": "E4.notConstrained", "group": "ensemble", "what": "with 100 percent fractional errors the interval is open on at least one side in at least 95 percent of 500 draws, in the prototype and in the oracle, and neither reports a two-sided finite number for an open set", "bound": ">= 0.95 and no violation", "needs": null },
+    { "id": "E5.misspecified", "group": "ensemble", "what": "data drawn from the open matter-only world and fitted flat: the poor-fit flag (p < 0.0027) in at least 80 percent of 500 draws, prototype and oracle", "bound": ">= 0.80 for each", "needs": null },
+    { "id": "K1.product", "group": "combination", "what": "the product of likelihoods on the pinned vector 1 and the labelled synthetic factor: the joint chi-square equals the sum node by node (absolute 1e-12), its minimum, best-fit Om and 68.27 percent interval agree between prototype and oracle (1e-8) and the joint minimum lies between the two factors' best fits", "bound": "as stated", "needs": null },
+    { "id": "Z1.refusalEnsemble", "group": "refusals", "what": "400 seeded parameter sets: the prototype agrees with the oracle's brute-force decision on accept/refuse and on the code for every draw (zero disagreements), and on the sound horizon of every accepted draw to 1e-9", "bound": "0 disagreements", "needs": null },
+    { "id": "Z2.inputRefusals", "group": "refusals", "what": "the six listed input refusals are refused with the stated code by the prototype and by the oracle", "bound": "6 of 6 each", "needs": null },
+    { "id": "F1.zdFormula", "group": "formula", "what": "the cited drag-redshift fitting formula (z_d from omegaB, omegaM) against the published z_drag of the Planck row and the stated accuracy", "bound": "within the source's stated accuracy plus the printed digits", "needs": "F1", "expected": "not-run" },
+    { "id": "F2.rdFormulaVsIntegral", "group": "formula", "what": "the cited r_d fitting formula against this gate's integral at the SAME z_d over the formula's stated domain grid", "bound": "within the source's stated accuracy plus the bracketed neutrino difference where the formula models neutrinos", "needs": "F1", "expected": "not-run" },
+    { "id": "F3.rdFormulaVsPublished", "group": "formula", "what": "the formula against the printed r_drag", "bound": "within the stated accuracy plus the print precision", "needs": "F1", "expected": "not-run" },
+    { "id": "F4.formulaDomain", "group": "formula", "what": "a redshift or density outside the formula's stated domain is refused (twelve outside points)", "bound": "12 of 12", "needs": "F1", "expected": "not-run" },
+    { "id": "F5.statedError", "group": "formula", "what": "the formula's maximum error against the pinned oracle integral over its domain grid does not exceed the error the source states", "bound": "as stated by the source", "needs": "F1", "expected": "not-run" },
+    { "id": "O1.tableIntegrity", "group": "observable", "what": "the release's covariance file has the recorded sha256 and size, is symmetric (1e-9) and positive definite, and its dimension matches the number of measured ratios", "bound": "as stated", "needs": "O1", "expected": "not-run" },
+    { "id": "O2.printedFit", "group": "observable", "what": "the flat Lambda-CDM matter density from the table with its own covariance (profile over theta, delta 1) lies within one printed sigma of the paper's printed BAO-alone value and the half-width is within [2/3, 3/2] of the printed uncertainty", "bound": "as stated", "needs": "O1", "expected": "not-run" },
+    { "id": "O3.fiducialRescale", "group": "observable", "what": "the table's ratios converted with its fiducial cosmology through the kernel's distances reproduce the table's own alphas (where it quotes them) to the printed digits", "bound": "one unit of the last printed digit", "needs": "O1", "expected": "not-run" },
+    { "id": "D1.stream", "group": "demonstration", "what": "the first 1,000 uniforms of three seeds agree exactly between js/random/streams.js and the oracle's mulberry32 and FNV-1a", "bound": "0 differences", "needs": null },
+    { "id": "D2.counts", "group": "demonstration", "what": "DD, DR and RR per bin, oracle (cKDTree) against prototype (brute force with the same random catalog)", "bound": "tolerance.pairCounts", "needs": null },
+    { "id": "D3.estimator", "group": "demonstration", "what": "xi_LS per bin, oracle against prototype", "bound": "absolute 1e-4", "needs": null },
+    { "id": "D4.jackknife", "group": "demonstration", "what": "the jackknife sigma per bin, oracle against prototype", "bound": "relative 1e-3", "needs": null },
+    { "id": "D5.nullEnsemble", "group": "demonstration", "what": "the sixteen null catalogs: the estimator is unbiased at its stated bound in at least 11 of 12 bins, in the prototype and in the oracle", "bound": "demonstration.nullEnsemble", "needs": null },
+    { "id": "D6.detectable", "group": "demonstration", "what": "the pack's galaxies: the peak is DETECTABLE by demonstration.detectabilityRule. This leg is a measurement with two honest outcomes: pass means detectable (the demonstration may be built), fail means not detectable at this size and the demonstration is not built; a fail is never a defect of the kernel and is not counted against A or B", "bound": "max S/N >= 4", "needs": null, "role": "decides the demonstration only" },
+    { "id": "X1.reportedRs", "group": "reported", "what": "the sound horizon (Mpc) of the ten worlds, the prototype's and the oracle's", "bound": "REPORTED", "needs": null },
+    { "id": "X2.reportedBracket", "group": "reported", "what": "r_L, r_H, u and the position of the printed r_drag", "bound": "REPORTED", "needs": "P1 extraction" },
+    { "id": "X3.reportedPairs", "group": "reported", "what": "DD per bin, xi and sigma_jk per bin, the smooth fit, the S/N of the four window bins", "bound": "REPORTED", "needs": null },
+    { "id": "X4.reportedCombination", "group": "reported", "what": "the combination with 256's contours is OMITTED (Appendix C, 256 verdict FC); nothing is computed", "bound": "OMITTED", "needs": null }
+  ],
+  "verdict": {
+    "rows": "A leg with a group other than 'reported' and no 'expected: not-run' passes or fails by its bound; a leg with 'expected: not-run' is NOT RUN until its request is met; P1 is NOT RUN if its extraction is ambiguous; D6 decides only whether the demonstration is built and is never part of the ruler verdict. A pass/fail leg that cannot be measured fails the gate on that threshold.",
+    "kernel": "KERNEL PASS iff every leg of groups integrity, ruler, ensemble, combination and refusals passes, P1 passes or is NOT RUN, and the demonstration's D1 to D5 pass if the demonstration is to be built; otherwise KERNEL FAIL.",
+    "A": "KERNEL PASS and F1 to F5 pass and O1 to O3 pass: the ruler with the named observable (and the combined contours only if 256's committed verdict is not C, which today it is, so they are omitted), and the demonstration when D6 passes and D1 to D5 pass.",
+    "B": "KERNEL PASS and F1 to F5 pass, and some O leg is NOT RUN or fails: the ruler only (Appendix C's B): the standard-ruler relation and a sound horizon with its cited formula and domain; never a named observable.",
+    "C": "KERNEL FAIL, or any F leg that ran fails: a reading step; 260's The pillars omits BAO (Appendix C).",
+    "notEstablished": "KERNEL PASS and some F leg NOT RUN (and no F leg failing): the verdict is NOT ESTABLISHED. It is neither A, B nor C: the ruler's cited fitting formula and its error against a full calculation have not been tested, and a B would claim them. The kernel's integral and relation are reported as passing or failing on their own legs.",
+    "consumersClause": "met iff the verdict is A or B. NOT ESTABLISHED, C and a KERNEL FAIL do not meet it. Whatever the verdict, no panel, lesson, viewer or contour is built until Carl lifts the consumers rule.",
+    "partB": "after A or B, and only after Carl goes ahead; not begun in this session."
+  },
+  "amendments": [],
+  "decisions": [
+    {
+      "id": "DEC1",
+      "what": "The named observable is committed as a form and a request, not as a release: no release, effective redshift, value or covariance of any survey is named, because each is published data and the instruction in force is that this session neither fetches nor types published data.",
+      "consequence": "Legs O1 to O3 are NOT RUN; no B or A can be reached while they are, and B also needs F1 to F5."
+    },
+    {
+      "id": "DEC2",
+      "what": "No fitting formula for z_d or r_d is implemented: the coefficients are published numbers. The gate's ruler is the sound-horizon integral with z_d as an input; the cited formulas are legs F1 to F5, NOT RUN with an exact request (F1).",
+      "consequence": "The product verdict cannot be better than NOT ESTABLISHED in this session."
+    },
+    {
+      "id": "DEC3",
+      "what": "Combination with 256: omitted, because 256's committed verdict is FC (Appendix C: 257's combination omitted); the product-of-likelihoods rule is stated and its arithmetic tested on a labelled synthetic factor that is not a supernova likelihood.",
+      "consequence": "No joint contour with supernovae exists or is claimed."
+    },
+    {
+      "id": "DEC4",
+      "what": "The demonstration's declination is set to the strip's midpoint because the pack stores none; this is stated as a limitation of the pack, not of the estimator, and a production script would need a pack carrying declination (a data decision for Carl).",
+      "consequence": "A detectability verdict here is a verdict about THIS pack with that assumption."
+    }
+  ],
+  "questions": []
+}
