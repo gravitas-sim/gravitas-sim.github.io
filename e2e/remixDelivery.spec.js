@@ -10,7 +10,13 @@
 //     the course builder takes the item and the course home opens the link.
 // =============================================================================
 
-import { mkdirSync, mkdtempSync, readFileSync, writeFileSync } from 'node:fs';
+import {
+  mkdirSync,
+  mkdtempSync,
+  readFileSync,
+  rmSync,
+  writeFileSync,
+} from 'node:fs';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
 import AxeBuilder from '@axe-core/playwright';
@@ -78,10 +84,14 @@ async function archived(pack) {
     })
   );
   put('investigation.json', JSON.stringify(pack));
-  return archiveEntry({
-    path: path.relative(REPO, dir),
-    review: { date: '2026-10-09', checks: ['e2e'], notes: 'a fixture' },
-  });
+  try {
+    return await archiveEntry({
+      path: path.relative(REPO, dir),
+      review: { date: '2026-10-09', checks: ['e2e'], notes: 'a fixture' },
+    });
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
+  }
 }
 
 test('a remix is listed by the catalog, installed, and opened from the browser’s store', async ({

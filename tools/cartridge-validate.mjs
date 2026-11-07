@@ -30,7 +30,13 @@
 
 import { createHash } from 'node:crypto';
 import { spawnSync } from 'node:child_process';
-import { mkdirSync, mkdtempSync, readFileSync, writeFileSync } from 'node:fs';
+import {
+  mkdirSync,
+  mkdtempSync,
+  readFileSync,
+  rmSync,
+  writeFileSync,
+} from 'node:fs';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
@@ -235,4 +241,5 @@ if (write && !failed) {
   );
   console.log('recorded tests/fixtures/common-cartridge/validation.json');
 }
+rmSync(work, { recursive: true, force: true });
 process.exit(failed ? 1 : 0);
