@@ -147,7 +147,7 @@ const WT = WORLDS.map((w, i) => ({ w, a: cmb.acousticScale(worldParams(w, { phi:
   row('B5b.directionOfRsWithZstar', dec === 20 && O.directions.rs_decreases_with_zstar ? 'pass' : 'fail', { prototypeStepsOf20: dec, oracle: O.directions.rs_decreases_with_zstar }, '20 of 20', 'NEW leg (AM4), NOT BLIND, outside the verdict function');
 }
 {
-  const cover = WT.filter(({ a, o }) => Math.abs(a.rs - o.rs_own) <= a.error).length;
+  const cover = WT.filter(({ a, o, p }) => Math.abs(a.rs - o.rs_own) <= cmb.soundHorizon(p).error).length;
   row('B6.errorCovers', cover === 10 ? 'pass' : 'fail', { covered: cover, of: 10 }, '10 of 10');
 }
 row('C1.citedCode', 'not-run', null, 'pinned by request X1', 'needs a Boltzmann code run in Carl\'s environment: request X1');
