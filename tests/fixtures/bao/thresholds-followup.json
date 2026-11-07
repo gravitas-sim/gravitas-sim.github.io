@@ -1,0 +1,312 @@
+{
+ "format": "gravitas.bao-followup-thresholds/1",
+ "prompt": "Roadmap III, Prompt 257 Part A follow-up (the authentic legs): runs the committed legs O1 to O3, F1 to F5 and P2 of tests/fixtures/bao/thresholds.json now that Carl's session has fetched the two sources (the BOSS DR12 consensus BAO-only table and covariance, arXiv:1607.03155 and its data release; Eisenstein and Hu 1998, arXiv:astro-ph/9709112), and adds NEW legs, each with its bound committed here by a stated rule before any validator run, as the delegate's rulings of 2026-11-07 allow (DECISIONS_2026-11-07.md). Documentation and fixtures only; the prototype, the second oracle and the validator live on spike/bao-authentic and are never merged (7.5 rule 4).",
+ "parent": {
+  "file": "tests/fixtures/bao/thresholds.json",
+  "sha256": "ca68ea56449bd37526f7b5f9540c3e26150f61b6b804b66ce9f27f2fa530307f",
+  "document": "BAO_GATE.md at v3 4d419828 (Merge #556)",
+  "note": "the parent file, its results.json, its oracle-results.json and its failed-legs.json are NOT touched by this follow-up: their record test pins their hashes. This file only adds."
+ },
+ "committed": "after tests/fixtures/bao/authentic/ (commit 004d8844: the fixtures and SOURCES.json, which are data and carry no result) and before any second-oracle script, prototype addition, validator run, output or computed quantity of this follow-up existed. No published number, coefficient, covariance value or printed fact was typed from memory: every one is read by script from a fixture (tools/bao-extract-eh98.mjs, tools/bao-extract-alam.mjs on the spike branch, and the byte-for-byte consensus files).",
+ "rule": "The parent's rule stands word for word: a crossed bound is a failed leg, recorded in a failed-legs file and left failing; only Carl resets one; a leg that cannot be measured because a file or source was not supplied is NOT RUN with an exact request; a threshold that proves unmeasurable fails the gate on that threshold; nothing is moved, re-read or re-defined after a result. Amendments here are recorded before any run and move no committed bound. A NEW leg carries a bound set by the stated rule next to it. New legs never lift or lower the verdict of the parent's function (section verdict); a failing new leg is recorded and left failing like any other.",
+ "seenBeforeCommitting": [
+  "BAO_GATE.md, thresholds.json, results.json and failed-legs.json of the parent, DECISIONS_2026-11-07.md, and the roadmap's Prompt 257 section.",
+  "Every fixture of tests/fixtures/bao/authentic/ as written by script: the six consensus values and the 6 x 6 covariance, the printed Table 7 rounding, the printed Table 10 rows (0.317 (9) for Planck, 0.309 (6) for Planck + BAO), r_d,fid 147.78 Mpc, the fiducial Omega_m 0.31, h 0.676, Omega_b h^2 0.022, the paper's pointer for the fiducial's neutrino sector, and the Eisenstein and Hu equations (2) to (6), (26) with their stated accuracy (about 2 percent), stated range and the absence of a stated accuracy for equations (4) and (6).",
+  "The rendered PDF pages 4, 5 and 12 of Eisenstein and Hu and page 28 of Alam et al., looked at to check the transcription.",
+  "Two hand estimates made while reading, both by mental arithmetic from the printed equations and neither used to set a bound: (a) equation (26) at the Planck best-fit densities gives about 150.0 Mpc, which is 1.99 percent above the printed r_drag 147.049, so F3 was foreseeable to be a narrow pass against the source's own 2 percent; (b) the constant 31.5 of equation (5) equals 3 / (4 omega_gamma) for T = 2.7 K, which is why the equations carry Theta_2.7 = T/2.7 and the integral of F2, F5 and F6 is run at the paper's T = 2.728 K.",
+  "The parent's results: E5 failed at 0.288 (prototype) and 0.314 (oracle), P1b's r_L 147.0590, r_H 152.2345, u 0.0309 and the printed 147.049 below r_L by 0.0100. The E6 and P1c bounds below do not use these numbers as targets: E6's is the closed-form prediction at the committed misfit, P1c's is the P1b rule's u with a physically modelled neutrino, and P1c is therefore NOT blind.",
+  "By hand, the quadrature range of the O1b diagonal check for the z = 0.38 entries (24.0 to 25.3 for D_M against the file's 25.0; 2.35 to 2.48 for H against the file's 2.37), which passes by the arithmetic of the printed digits.",
+  "No sound horizon, distance, chi-square, interval, formula value or ratio of this follow-up was computed by any program before this file was committed."
+ ],
+ "inputs": {
+  "dataFiles": {
+   "results": {
+    "path": "tests/fixtures/bao/authentic/BAO_consensus_results_dM_Hz.txt",
+    "sha256": "30e784fa08e7eddb2fdd1ab09411424e67aa9b75df58f4bb330a889c9b9c478e",
+    "bytes": 203
+   },
+   "covariance": {
+    "path": "tests/fixtures/bao/authentic/BAO_consensus_covtot_dM_Hz.txt",
+    "sha256": "05c04829c8edc117870efe809494593a23de6c35547f8b66760a5250804b65cf",
+    "bytes": 288
+   },
+   "release": {
+    "path": "tests/fixtures/bao/authentic/published-release.json",
+    "sha256": "22a0e4e2e3ae8bd846a80f104f764a68c3376c868098a0e3cd9b256c18abeb55"
+   },
+   "alamPrinted": {
+    "path": "tests/fixtures/bao/authentic/alam-printed.json",
+    "sha256": "bee3a975c92e64641edb910ac3793be6cf323bf7b51b358b7dee979aa39bb296"
+   },
+   "formulas": {
+    "path": "tests/fixtures/bao/authentic/fitting-formulas.json",
+    "sha256": "722194eea6f4829dc055681be0c91a6782a44b24cbf51b7ea8b0d3b216f8359e"
+   },
+   "planck": {
+    "path": "tests/fixtures/bao/authentic/planck-table1.json",
+    "sha256": "7ff7d98b592a0432490035b6813980708432c7a7efee9cbc9bf898484f3f286f"
+   },
+   "sources": {
+    "path": "tests/fixtures/bao/authentic/SOURCES.json",
+    "sha256": "d18fb53c164f0571c7cf4033056c66725937369a975ca4d98ba5af524302ebfd"
+   }
+  },
+  "note": "the legs read only these files, the parent thresholds, and (the prototype) the 255 kernel; the second oracle reads only these files and numpy, scipy and astropy.constants (no astropy.cosmology)"
+ },
+ "conventions": {
+  "constants": {
+   "G_SI": 6.6743e-11,
+   "Tcmb0_planckRow": 2.7255,
+   "Tcmb_ehPaper": 2.728,
+   "Neff_standard": 3.046,
+   "Neff_ehPaper": 3.0,
+   "c_kms": 299792.458,
+   "note": "G is the CODATA 2018 value that astropy 6.0.1 prints and the parent oracle pinned; 2.7255 K is the parent oracle's pinned Tcmb0; 2.728 K and three massless species are the Eisenstein and Hu paper's own stated assumptions (pdf page 4). k, hbar, c, the Mpc and rho_gamma are as in the parent (soundHorizon.radiation)."
+  },
+  "paperModel": {
+   "what": "the model of the Eisenstein and Hu formulas, used by the integral wherever a leg compares the formulas with the integral (F2, F5, F6)",
+   "definition": "flat, w = -1, H0 = 100 (h = 1), Om = omega0, Ode = 1 - Om - Or, Or = omega_gamma (1 + (7/8)(4/11)^(4/3) 3) with omega_gamma from T = 2.728 K, omega_b = the node's, z_d = the drag redshift of the paper's equation (4) at the node, Theta_2.7 = 2.728/2.7. At z_d the cosmological constant and curvature are below 1 part in 1e8 of the integrand, so the integral depends only on omega0 and omega_b (stated; h = 1 is the choice that keeps Ob < Om for omega0 up to 0.5).",
+   "neutrinos": "three massless species exactly as the paper states; the integral is run with the same, so the 'bracketed neutrino difference where the formula models neutrinos' of the committed F2 bound is ZERO by construction. The neutrino bracket belongs only to comparisons with a Boltzmann-code number that includes a massive species (P1b, P1c)."
+  },
+  "formulaIdentification": {
+   "zd": "equation (4) of Eisenstein and Hu (pdf page 5), with Omega0 h^2 = omega_b + omega_c as the paper defines Omega0 (pdf page 4), no neutrino mass",
+   "rd": "equation (26) (pdf page 12): the only formula of the paper for the sound horizon as a function of Omega0 h^2 and Omega_b h^2 alone, and the only one for which the paper states an accuracy and a range. It is 'the cited r_d fitting formula' of the committed legs F2, F3 and F5.",
+   "eq6": "equation (6) with (2), (3) and (5) is the paper's analytic sound horizon (pdf pages 4 and 5); it has no stated accuracy and is tested by the NEW leg F6, not by the committed ones"
+  },
+  "statedByTheSource": {
+   "accuracyOfEq26": "about 2 percent (the paper's wording is 'to ~2%'; the bound is the number 0.02 exactly, no allowance for the tilde)",
+   "domainOfEq26": "omega_b >= 0.0125 (the paper's lower limit, 'Omega_b h^2 greater than about 0.0125'), 0.025 <= omega0 <= 0.5",
+   "upperOmegaB": "the only upper limit the paper prints for omega_b is 0.03, in the sentence on equation (4) ('For Omega_b h^2 below about 0.03 this epoch follows last scattering'); it is taken as the upper edge of the domain of the pair of formulas, a reading recorded here before any run",
+   "accuracyOfEq4": "NOT STATED",
+   "accuracyOfEq6": "NOT STATED"
+  },
+  "formulaGrid": {
+   "rule": "omega0 at 6 geometric nodes from 0.025 to 0.5 inclusive (omega0_k = 0.025 x 20^(k/5), k = 0..5) times omega_b at 4 linear nodes from 0.0125 to 0.03 inclusive, keeping only nodes with omega_b < omega0 (the integral's own domain, Ob < Om at h = 1): 23 nodes (the corner omega0 = 0.025, omega_b = 0.03 is dropped).",
+   "nodes": 23
+  },
+  "outsidePoints": {
+   "rule": "twelve points, three beyond each edge of the stated domain at factors 0.99, 0.5, 0.1 below a lower edge and 1.01, 2, 10 above an upper edge, the other coordinate at 0.14 (omega0) or 0.0224 (omega_b): omega0 in {0.02475, 0.0125, 0.0025} and {0.505, 1.0, 5.0} with omega_b 0.0224; omega_b in {0.012375, 0.00625, 0.00125} and {0.0303, 0.06, 0.3} with omega0 0.14. Codes in the committed order of checking: omega0-below-domain, omega0-above-domain, omegab-below-domain, omegab-above-domain, not-finite. Three inside points that must be ACCEPTED: (0.025, 0.0125), (0.5, 0.03) (both corners of the domain, edges inclusive) and (0.14, 0.0224).",
+   "expectedCodes": [
+    "omega0-below-domain x3",
+    "omega0-above-domain x3",
+    "omegab-below-domain x3",
+    "omegab-above-domain x3"
+   ]
+  },
+  "planckRow": "the best-fit column of Table 1 and the fifth column of Table 2 of arXiv:1807.06209 as read by tests/fixtures/bao/authentic/planck-table1.json: omegaB 0.022383, omegaC 0.12011, H0 67.32, r_drag 147.049, z_drag 1059.94 +- 0.30, one neutrino of 0.06 eV",
+  "agreement": {
+   "distanceOrIntegral": 1e-09,
+   "formulaValue": 1e-12,
+   "chi2": 1e-09,
+   "interval": 1e-08,
+   "note": "between the prototype and the second oracle; 1e-9 is the parent's soundHorizonVsQuad, 1e-9 and 1e-8 its chi2 and interval tolerances, 1e-12 for a closed-form evaluation in double precision (an elementary function difference between node and numpy is at most a few ulp)"
+  }
+ },
+ "amendments": [
+  {
+   "id": "AM3",
+   "recorded": "after the fixtures were read and before any program of this follow-up ran",
+   "what": "Instantiation of the committed legs F1 to F5 and P2, whose bounds name 'the source's stated accuracy', 'the stated domain' and 'the formula's domain grid' without numbers: the source of F1 is Eisenstein and Hu 1998; its drag-redshift fit is equation (4); its sound-horizon fit with a stated accuracy and range is equation (26); the stated accuracy is 2 percent (equation 26 only), the stated domain and the grids and the twelve outside points are the rules of conventions. The paper states NO accuracy for equation (4) (and none for equation (6)). The committed bounds of F1 and P2 are 'within the source's stated accuracy plus the printed digits': for equation (4) that threshold proves UNMEASURABLE, and the committed rule ('a threshold that proves unmeasurable fails the gate on that threshold') makes F1 and P2 FAIL. This is decided here, from reading the source, before any run; the leg still reports the measured difference. A new leg F1b measures the agreement against a design bound (below). The F3 and F5 bounds use equation (26), whose accuracy IS stated.",
+   "moves": "no committed bound; it states the number the committed words refer to and records that F1 and P2 are unmeasurable"
+  },
+  {
+   "id": "AM4",
+   "recorded": "after the fixtures were read and before any program of this follow-up ran",
+   "what": "O2 and O3 of the committed contract are NOT RUN. O2 needs 'the paper's printed flat Lambda-CDM matter density from BAO alone with its uncertainty': the paper prints none (Table 10 has Planck, Planck + BAO, Planck + BAO + FS and Planck + BAO + FS + SN rows only; pdf page 28). O3 needs 'the table's own alphas (where it quotes them)': the paper defines the alphas (equation 11, pdf page 8) but prints for the consensus only D_M r_d,fid/r_d and H r_d/r_d,fid (Table 7, pdf page 20), not alphas. Two NEW legs, O2b and O3b, are different comparisons with their bounds committed below; they do not stand in for O2 and O3 and do not change the status of the parent's A or B (which need O1 to O3 to pass, so the product verdict cannot be A in any case).",
+   "moves": "no committed bound"
+  },
+  {
+   "id": "AM5",
+   "recorded": "after the fixtures were read and before any program of this follow-up ran",
+   "what": "The delegate's rulings of 2026-11-07 (DECISIONS_2026-11-07.md): E5 stays failing and labelled (it is not rerun and not touched); a flag-calibration leg is added as NEW leg E6 and a tighter P1b as NEW leg P1c, each with its bound committed here; the optional demonstration (D6) is closed for this pack and not rerun; Part B waits; the consumers rule holds (no lesson, panel or viewer). P1c is NOT blind (the parent's numbers were seen). Seeds of E6 are new (conventions of the leg) so that the parent's E5 stream is not reused.",
+   "moves": "no committed bound; E5 and D6 are not rerun and stay as the parent recorded them"
+  },
+  {
+   "id": "AM6",
+   "recorded": "after the second oracle's FIRST run (its output was read) and before the prototype additions or the validator existed or ran; the oracle was then run again against this file",
+   "what": "Two clarifications that move no bound. (1) E6 (c) says 'lambda and p_pred of the prototype equal the oracle's to 1e-9 relative'. For the no-misfit vector lambda is zero by construction and the oracle's value is rounding noise (about -3e-11), so a relative comparison is undefined there: (c) compares the MISFIT lambda and both p_pred relative to 1e-9 as committed, and compares the no-misfit lambda in ABSOLUTE value to 1e-9 (p_pred of the no-misfit case is the closed-form 0.0027 in both, compared as committed). (2) The oracle's first run had a unit slip in the reported row X6 (it used E where the basis holds 1/E: its fit ran to the grid edge with chi-square 100); fixed in the oracle before any validator run; X6 is REPORTED, with no bound.",
+   "seen": "The first run's output was read before this amendment: the grid errors of equation (26) (a maximum above 3 percent at the low-omega0, high-baryon-fraction corner of the stated domain, so F2 and F5 are expected to FAIL their committed 2 percent), equation (4)'s z_d at the Planck row about 1020.7 against the printed 1059.94 (so F1b is expected to FAIL), equation (26) at the Planck row 149.95 (F3 a narrow pass), the P1c integral 147.0523 inside u, the E6 prediction and rates, the BAO-only fit (best Omega_m 0.366, 95 percent set 0.262 to 0.498, chi-square 1.99), and O3b's alphas inside three sigma. No bound was changed by any of these; this amendment cannot affect a status because it concerns a degenerate comparison and a reported row.",
+   "moves": "no bound"
+  }
+ ],
+ "checks": [
+  {
+   "id": "F1.zdFormula",
+   "group": "formula",
+   "what": "committed: equation (4) of Eisenstein and Hu (z_d from omega_b and omega0 = omega_b + omega_c at the Planck row) against the printed z_drag 1059.94 (Table 2, fifth column)",
+   "bound": "within the source's stated accuracy plus the printed digits (the committed bound). The paper states no accuracy for equation (4): the threshold is unmeasurable and the leg FAILS by the committed rule (AM3). The measured difference is reported with the row.",
+   "committed": true,
+   "predetermined": "fail",
+   "predeterminedBy": "AM3"
+  },
+  {
+   "id": "F2.rdFormulaVsIntegral",
+   "group": "formula",
+   "what": "committed: equation (26) against the prototype's sound-horizon integral in the paper's model at z_d from equation (4), at the 23 nodes of formulaGrid",
+   "bound": "the maximum over nodes of |s_(26) / r_integral - 1| is at most 0.02 (the stated accuracy), plus the neutrino term, which is zero (paperModel.neutrinos); an integral that refuses a node fails the leg",
+   "committed": true
+  },
+  {
+   "id": "F3.rdFormulaVsPublished",
+   "group": "formula",
+   "what": "committed: equation (26) at omega0 = 0.022383 + 0.12011 and omega_b = 0.022383 against the printed r_drag 147.049",
+   "bound": "|s_(26) / 147.049 - 1| <= 0.02 + 0.0005 / 147.049 (the stated accuracy plus half a unit of the last printed digit of r_drag as a fraction); the Planck row lies inside the stated range (0.0125 <= omega_b, 0.025 <= omega0 <= 0.5)",
+   "committed": true
+  },
+  {
+   "id": "F4.formulaDomain",
+   "group": "formula",
+   "what": "committed: the formulas' refusals outside the stated domain, twelve outside points and three inside points (outsidePoints)",
+   "bound": "12 of 12 outside points refused with the expected code and no value, 3 of 3 inside points accepted, in BOTH the prototype and the second oracle",
+   "committed": true
+  },
+  {
+   "id": "F5.statedError",
+   "group": "formula",
+   "what": "committed: the maximum error of equation (26) against the second oracle's scipy quad integral at the 23 nodes",
+   "bound": "the oracle's maximum |s_(26) / r_integral - 1| is at most 0.02; and the prototype's eq (26) values equal the oracle's to 1e-12 relative and the prototype's integrals equal the oracle's to 1e-9 relative at every node",
+   "committed": true
+  },
+  {
+   "id": "P2.plankZdrag",
+   "group": "published",
+   "what": "committed: a drag-redshift formula against the printed z_drag of the same row, as F1",
+   "bound": "as F1 (the same unmeasurable threshold): FAILS by the committed rule (AM3); the measured difference is reported",
+   "committed": true,
+   "predetermined": "fail",
+   "predeterminedBy": "AM3"
+  },
+  {
+   "id": "O1.tableIntegrity",
+   "group": "observable",
+   "what": "committed: the release's covariance and results files",
+   "bound": "sha256 and size equal the recorded ones (inputs.dataFiles); the covariance is symmetric to 1e-9 of its largest entry and positive definite (Cholesky succeeds in both implementations); its dimension 6 equals the number of measured ratios, which is 2 per effective redshift at the 3 redshifts 0.38, 0.51, 0.61 of the results file, in the order D_M, H at each redshift as the file's own labels state; prototype and oracle agree",
+   "committed": true
+  },
+  {
+   "id": "O2.printedFit",
+   "group": "observable",
+   "what": "committed: the flat Lambda-CDM matter density from the table against the paper's printed BAO-alone value",
+   "bound": "NOT RUN: the paper prints no BAO-alone value (AM4); request restated in the document",
+   "committed": true,
+   "predetermined": "not-run",
+   "predeterminedBy": "AM4"
+  },
+  {
+   "id": "O3.fiducialRescale",
+   "group": "observable",
+   "what": "committed: the table's ratios converted with its fiducial cosmology reproduce the table's own alphas",
+   "bound": "NOT RUN: the paper prints no alphas for the consensus (AM4)",
+   "committed": true,
+   "predetermined": "not-run",
+   "predeterminedBy": "AM4"
+  },
+  {
+   "id": "F1b.zdDesign",
+   "group": "formula",
+   "what": "NEW: equation (4) against the printed z_drag 1059.94 +- 0.30 at the Planck row (same inputs as F1)",
+   "bound": "|z_d / 1059.94 - 1| <= 0.02. The bound is a DESIGN bound, not a statement of the source: the one accuracy figure the paper prints for any of its scale fits (about 2 percent, equation 26) applied by choice to z_d. The deviation in units of the printed 0.30 is reported",
+   "new": true,
+   "rule": "the paper's only printed accuracy, applied by design"
+  },
+  {
+   "id": "F6.eq6VsIntegral",
+   "group": "formula",
+   "what": "NEW: equation (6) with (2), (3) and (5) (R_d, R_eq, k_eq, Theta_2.7 = 2.728/2.7, z_d from equation 4) against the prototype's integral in the paper's model at the 23 nodes",
+   "bound": "at every node |s_(6) / r_integral - 1| <= u_node with u_node = sum over c in {31.5, 2.50, 7.46} of |d ln s_(6) / d ln c| x (half a unit of the last printed digit of c) / c, by central differences at relative step 1e-4, plus 1 / z_eq at the node (the paper's R_eq and k_eq use z_eq where the exact matter-radiation result has 1 + z_eq); the printed digits are the only source of discrepancy the bound allows",
+   "new": true,
+   "rule": "printed-digit propagation, as the parent's P1b rule for u"
+  },
+  {
+   "id": "P1c.plankMassiveNu",
+   "group": "published",
+   "what": "NEW (the tighter P1b, NOT blind): the integral with the one 0.06 eV neutrino of Planck's Table 1 modelled by its Fermi-Dirac density, two massless species, against the printed r_drag 147.049, at z_drag 1059.94",
+   "bound": "|r_drag(printed) - r_P1c| <= u with u = 0.001 + sum over x in {omega_b, omega_c, H0, z_drag} of |d r_P1c / d x| x (half a unit of the last printed digit of x, plus for z_drag the printed 0.30), by central differences at relative step 1e-4; and the prototype's r_P1c equals the oracle's to 1e-9 relative",
+   "new": true,
+   "rule": "the parent's P1b rule for u (the parent's AM2), with a physical neutrino instead of the two-case bracket"
+  },
+  {
+   "id": "E6.flagCalibration",
+   "group": "calibration",
+   "what": "NEW: the calibration of the poor-fit flag (chi2_min with 4 degrees of freedom, survival below 0.0027) at the committed misfit (the open matter-only world of the parent's E5: Om 0.3, Ode 0, Ok 0.7, theta 29, redshifts 0.3, 0.5, 0.7, errors 1.0 percent of the true value on both ratios, correlation -0.4 within a redshift) and at no misfit",
+   "bound": "(a) misfit: with lambda = the profile chi-square minimum on the committed 961-node grid of the NOISELESS open-world vector and p_pred = P(noncentral chi-square(4, lambda) > q) with q the central chi-square(4) quantile of survival 0.0027, the observed flag rate over 2000 draws lies in p_pred +- 3 sqrt(p_pred (1 - p_pred) / 2000), in the prototype and in the oracle; (b) no misfit: the same machinery on the noiseless FLAT-world vector (Om 0.3, theta 29, the same redshifts, errors and correlation), 2000 draws, rate in 0.0027 +- 3 sqrt(0.0027 (1 - 0.0027) / 2000) (lower end clipped at 0); (c) lambda and p_pred of the prototype equal the oracle's to 1e-9 relative. Passes iff (a), (b) and (c) hold",
+   "new": true,
+   "rule": "the closed-form non-central chi-square prediction at the stated misfit, judged by the binomial three-sigma band the parent uses for coverage (draws 2000, so sampling noise sets the band)"
+  },
+  {
+   "id": "O1b.printedConsistency",
+   "group": "observable",
+   "what": "NEW: the files against the paper's printed Table 7 (BAO-only column)",
+   "bound": "(i) each of the six values rounded to the printed digits (D_M to the integer Mpc, H to 0.1 km/s/Mpc) equals the printed central value; (ii) each sqrt(C_ii) lies in [sqrt((s - 0.5 u_s)^2 + (t - 0.5 u_t)^2), sqrt((s + 0.5 u_s)^2 + (t + 0.5 u_t)^2)] with s and t the printed statistical and systematic errors and u_s, u_t their last-digit units (1 for D_M, 0.1 for H)",
+   "new": true,
+   "rule": "the printed digits, half a unit each"
+  },
+  {
+   "id": "O2b.bandConsistency",
+   "group": "observable",
+   "what": "NEW (not O2): the BAO-only flat Lambda-CDM matter density from the release with its own covariance, against the paper's printed combined values",
+   "bound": "data d = (D_M / r_d,fid, c / (H r_d,fid)) per redshift with r_d,fid 147.78 Mpc and the covariance propagated by the delta method at the measured values (J = diag(1 / r_d,fid for D_M, -c / (H^2 r_d,fid) for H)); profile over theta, grid step 0.001; passes iff chi2_prof(0.309) - chi2_min <= 4 and chi2_prof(0.317) - chi2_min <= 4 (the printed Planck + BAO and Planck values lie inside the 95.45 percent set), AND the poor-fit flag does not fire (survival of chi2_min with 4 degrees of freedom at least 0.0027), AND the prototype and the oracle agree (best-fit Omega_m to 1e-8, chi2_min to 1e-9 relative). A consistency check with printed combined values, not a measurement of agreement",
+   "new": true,
+   "rule": "the 95.45 percent set of the committed likelihood and the committed flag"
+  },
+  {
+   "id": "O3b.fiducialAlphas",
+   "group": "observable",
+   "what": "NEW (not O3): the six consensus values against the fiducial cosmology's prediction through the 255 kernel (flat, Om 0.31, h 0.676, massless radiation from T = 2.7255 K and Neff 3.046, the fiducial's neutrino sector not being stated in the paper)",
+   "bound": "each of the six components satisfies |value - fiducial value| <= 3 sqrt(C_ii) (D_M(z) in Mpc and H(z) in km/s/Mpc, i.e. every alpha within three of its own total sigma of 1), AND the joint chi-square of the six residuals with the full covariance has survival (6 degrees of freedom) at least 0.0027, AND the prototype's fiducial D_M and H equal the oracle's own quadrature to 1e-9 relative",
+   "new": true,
+   "rule": "the release's own total covariance, three sigma per component and the committed 0.0027 flag for the joint"
+  },
+  {
+   "id": "X6.reportedNonlinearProfile",
+   "group": "reported",
+   "what": "REPORTED (oracle only, no bound): the BAO-only fit with the Gaussian in (D_M, H) space and theta' profiled numerically (no delta method), against the delta-method fit of O2b",
+   "bound": "REPORTED",
+   "new": true
+  },
+  {
+   "id": "X7.reportedAlphaWithoutRadiation",
+   "group": "reported",
+   "what": "REPORTED (no bound): the six alphas of O3b with Or = 0 instead of the massless radiation, and the largest change",
+   "bound": "REPORTED",
+   "new": true
+  },
+  {
+   "id": "X8.reportedFormulaValues",
+   "group": "reported",
+   "what": "REPORTED (no bound): equations (4), (6) and (26) at the Planck row against the printed z_drag and r_drag, and the integral at z_d of equation (4) in the paper's model",
+   "bound": "REPORTED",
+   "new": true
+  }
+ ],
+ "verdict": {
+  "function": "the parent's function (thresholds.json, verdict block) applied to the parent's 44 rows with the statuses of F1 to F5, P2 and O1 to O3 replaced by this follow-up's; E5, D6 and every other parent row are the parent's, untouched",
+  "newLegs": "F1b, F6, P1c, E6, O1b, O2b, O3b and the reported rows never enter the function and never lift or lower a verdict; they are listed beside it. A failing new leg is recorded in failed-legs-followup.json",
+  "expected": "by the parent's function the product verdict stays C (KERNEL FAIL on E5). The follow-up also states what the function gives if E5 were reset by Carl: F1 failing by AM3 makes it C again; with F1 NOT RUN instead it would be NOT ESTABLISHED. This is a statement of the function, not a verdict",
+  "consumersClause": "unchanged: met iff A or B; no panel, lesson, viewer or contour is built; Part B is not begun"
+ },
+ "seeds": {
+  "E6": {
+   "prototype": "stream('noise', '257:bao:flagcal:misspecified') and stream('noise', '257:bao:flagcal:null') on the parent's gaussian (mulberry32, Box-Muller), data = mean + L z with L the Cholesky factor of the design covariance",
+   "oracle": "numpy default_rng([257, 7]) (misfit) and default_rng([257, 8]) (no misfit)",
+   "draws": 2000
+  }
+ },
+ "decisions": [
+  {
+   "id": "DEC5",
+   "what": "F1 and P2 are decided FAIL by the committed 'unmeasurable' rule because the source states no accuracy for its drag-redshift fit (AM3). The alternative reading, NOT RUN, would turn the conditional verdict (if E5 were reset) from C into NOT ESTABLISHED; it is a question for Carl and neither reading changes the product verdict C.",
+   "consequence": "F1b reports the agreement against a design bound"
+  },
+  {
+   "id": "DEC6",
+   "what": "The 'cited r_d formula' is equation (26), because it is the paper's only sound-horizon fit with a stated accuracy and range; equation (6) is a separate NEW leg (F6) with a bound from the printed digits.",
+   "consequence": "F2, F3, F5 test equation (26); F6 tests equation (6)"
+  },
+  {
+   "id": "DEC7",
+   "what": "The BAO-only matter density is not printed in the paper, so O2 is NOT RUN; O2b only checks consistency with the printed combined values.",
+   "consequence": "no A or B; the product verdict is C regardless"
+  }
+ ]
+}

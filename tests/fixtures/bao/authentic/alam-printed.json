@@ -1,0 +1,78 @@
+{
+ "format": "gravitas.bao-alam-printed/1",
+ "entries": {
+  "table10.planck.omegaMh2": {
+   "token": "0.1429 (14)",
+   "line": 2071,
+   "pdfPage": 28,
+   "value": 0.1429,
+   "lastDigitsOfUncertainty": 14,
+   "lineText": "ΛCDM Planck 0.1429 (14) 0.317 (9) 67.2 (7) ... ... ..."
+  },
+  "table10.planck.omegaM": {
+   "token": "0.317 (9)",
+   "line": 2071,
+   "pdfPage": 28,
+   "value": 0.317,
+   "lastDigitsOfUncertainty": 9,
+   "lineText": "ΛCDM Planck 0.1429 (14) 0.317 (9) 67.2 (7) ... ... ..."
+  },
+  "table10.planckPlusBao.omegaMh2": {
+   "token": "0.1418 (10)",
+   "line": 2072,
+   "pdfPage": 28,
+   "value": 0.1418,
+   "lastDigitsOfUncertainty": 10,
+   "lineText": "ΛCDM Planck + BAO 0.1418 (10) 0.309 (6) 67.7 (5) ... ... ..."
+  },
+  "table10.planckPlusBao.omegaM": {
+   "token": "0.309 (6)",
+   "line": 2072,
+   "pdfPage": 28,
+   "value": 0.309,
+   "lastDigitsOfUncertainty": 6,
+   "lineText": "ΛCDM Planck + BAO 0.1418 (10) 0.309 (6) 67.7 (5) ... ... ..."
+  },
+  "table10.planckPlusBao.H0": {
+   "token": "67.7 (5)",
+   "line": 2072,
+   "pdfPage": 28,
+   "value": 67.7,
+   "lastDigitsOfUncertainty": 5,
+   "lineText": "ΛCDM Planck + BAO 0.1418 (10) 0.309 (6) 67.7 (5) ... ... ..."
+  },
+  "rdFid.table7Caption": {
+   "token": "147.78",
+   "line": 1474,
+   "pdfPage": 20,
+   "value": 147.78,
+   "lineText": "rd,fid = 147.78 Mpc. The cosmological analysis presented in Section 9 is based on these values."
+  },
+  "rdFid.fiducialSentence": {
+   "token": "147.78",
+   "line": 643,
+   "pdfPage": 8,
+   "value": 147.78,
+   "lineText": "pendence of ξ(s, µ) in the linear regime and in the distant observer cial cosmological model, rd,fid = 147.78 Mpc, and convenient"
+  },
+  "neutrinoSector.chains.massEv": {
+   "token": "0.06",
+   "line": 2058,
+   "pdfPage": 27,
+   "value": 0.06,
+   "lineText": "use a minimal neutrino sector, with one species with a mass of 0.06 We begin with the standard cosmology, the ΛCDM model,"
+  }
+ },
+ "fiducialNeutrinoSector": {
+  "statedInThisPaper": false,
+  "line": 645,
+  "pdfPage": 8,
+  "note": "the paper points to Aubourg et al. 2015 for the scaling of r_d with the neutrino mass and states no Neff or neutrino mass for the fiducial cosmology; 0.06 eV is stated for the cosmological chains only"
+ },
+ "source": {
+  "identifier": "arXiv:1607.03155",
+  "pdfSha256": "47ef72af92d496266a383e8ee1275300c8bdeef92d071ec39b2d0d8bdd42c98b",
+  "layoutTextSha256": "72645c57ede79cfeb27a10572eb125bbef27ad5b2ae228d300068825c8dbd000",
+  "tool": "pdftotext -layout (poppler 26.08.0)"
+ }
+}

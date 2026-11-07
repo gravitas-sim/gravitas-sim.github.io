@@ -8,6 +8,8 @@ and against the one published full calculation this session could read; the good
 not detectable at the pack's size. Nothing is built, the consumers rule (Carl, 2026-11-05 and 2026-11-06) holds, and **Part B is not begun** (the execution contract forbids starting the next
 part). The record is decision-register rows D-R10-257-01 to D-R10-257-05.
 
+**Follow-up, 2026-11-07 (section 10).** Carl's session fetched the BOSS DR12 consensus BAO-only table and covariance and the Eisenstein and Hu 1998 formulas; the authentic legs O1 to O3, F1 to F5 and P2 were run, with new legs committed first. The product verdict by the committed function **stays C** (E5 still fails and is not touched); the numbers of sections 1 to 9 are the Part A record and are unchanged.
+
 The numbers are in `tests/fixtures/bao/` (`thresholds.json` the contract and its two amendments; `oracle-results.json` the pinned independent calculation; `authentic/planck-table1.json`
 the printed numbers AM2 names; `results.json` the gate stream; `failed-legs.json`). The prototype (`js/kernels/cosmology/bao/bao.js`), the validator (`tools/bao-validate.mjs`), the
 extraction script (`tools/bao-extract-planck.mjs`) and the oracle (`tools/bao-oracle/oracle.py`) are on `spike/bao-gate` (87655baf), never merged (rule 7.5.4): this PR is documentation and
@@ -181,3 +183,64 @@ none is possible before a release is chosen and its terms are read.
 `node tools/bao-validate.mjs thresholds.json oracle-results.json cosmology/sdss-dr18-redshift-slice.json data-packs/sdss-dr18-redshift-slice.json <outdir> authentic/planck-table1.json` on the spike branch;
 `node tools/bao-extract-planck.mjs <saved text> <out.json>` rebuilds the Planck fixture from Carl's saved text. `tests/baoGate.test.js` recomputes the verdict, the counts and the status of every row from
 the pinned files and checks the record against this document and the register.
+
+
+## 10. Follow-up: the authentic legs (2026-11-07)
+
+Prompt 257's follow-up, under the delegate's rulings of 2026-11-07 (`DECISIONS_2026-11-07.md`): E5 stays failing and labelled (not rerun, not touched); a flag-calibration leg and a tighter P1b are allowed only as NEW legs with bounds committed first; the optional demonstration (D6) is closed for this pack and not rerun; Part B waits; the consumers rule holds (no lesson, panel, viewer or contour). The supernova gate's verdict is FC and nothing here combines BAO with 256's split form or diagonal. **Nothing was fetched by this session and no downloaded code was run**; the data are the files Carl's session saved in `scratch-data/bao257/` (outside every repository).
+
+**Sources** (`tests/fixtures/bao/authentic/SOURCES.json`, retrieved 2026-11-07, sha256 of every file, locators by PDF page): Alam et al. 2017 (arXiv:1607.03155), the BAO-only consensus results (6 values) and total covariance (6 x 6), kept byte for byte (203 and 288 bytes; the 5 KB tarball is not kept) with the paper's printed Table 7 and Table 10 numbers read by script; Eisenstein and Hu 1998 (arXiv:astro-ph/9709112v1), equations (2) to (6) and (26) read by script from the layout text (every number one regular expression on one anchored line, checked against a second, raw-mode extraction), with the equation structures and pages 4, 5 and 12 checked against the rendered PDF by eye. **Terms:** the SDSS "How to Cite" page asks for citation of public data, so the basis is cite-only, derived numbers and short fixtures; **the arXiv licence page of the Eisenstein and Hu paper was not read** by anyone, so only coefficients (facts) and cited statements are kept (question 3).
+
+**Order, each before the next:** `004d8844` the fixtures (data, no result); `b7612495` `thresholds-followup.json` alone, the bounds of every new leg and the instantiation of the committed ones (AM3 to AM5); `b460e30e` AM6 (a degenerate comparison and a reported row's unit slip, both found in the second oracle's first run, which was read; no bound moved); `88b660f5` the second oracle's pinned output (Python 3.9.6, numpy 1.26.4, scipy 1.13.1, no `astropy.cosmology`); the prototype additions and the validator on `spike/bao-authentic` (`f709f958`, never merged), no run until then; the stream twice on Node 22.23.4 (12 s, rows identical); `38de950e` results. What was seen before the bounds were committed is in `seenBeforeCommitting` (the fixtures, the page images, two hand estimates: equation (26) at the Planck row about 150 Mpc and the constant 31.5 as 3/(4 omega_gamma) at 2.7 K); no gate quantity had been computed by any program.
+
+### 10.1 Results
+
+19 rows: **9 pass, 5 fail, 2 not run, 3 reported**. Failing rows, left failing: **F1, F2, F5, P2, F1b**.
+
+| Leg | Measured | Status |
+| --- | --- | --- |
+| **O1** table integrity | sha256 and bytes as recorded, symmetric to 0, Cholesky succeeds (smallest eigenvalue 1.866), 6 ratios at z 0.38, 0.51, 0.61 in the file's own order, both implementations | pass |
+| O1b (new) printed Table 7 | 6 of 6 values round to the printed digits, 6 of 6 sqrt(C_ii) inside the printed-error range | pass |
+| **O2** BAO-alone Om against the printed value | the paper prints none (Table 10 has Planck, Planck + BAO and so on, no BAO-alone row; pdf page 28) | **not run** |
+| **O3** the table's alphas | the paper defines the alphas (equation 11) but prints only D_M and H for the consensus | **not run** |
+| O2b (new) BAO-only Om against the printed combined values | best fit Omega_m 0.366, 68 percent [0.311, 0.428], 95 percent [0.262, 0.498], chi-square 1.99 for 4 degrees of freedom (p 0.737); Delta chi-square 1.08 at the printed Planck + BAO 0.309 and 0.78 at Planck's 0.317 (bound 4); prototype and oracle agree to 1e-11 | pass |
+| O3b (new) fiducial alphas | value over fiducial for D_M(0.38), H(0.38), D_M(0.51), H(0.51), D_M(0.61), H(0.61): 0.988, 0.979, 0.996, 1.014, 1.000, 1.039; residuals over sigma -0.71, -0.73, -0.24, +0.55, -0.01, +1.50, all inside 3; joint chi-square 3.87 for 6 degrees (p 0.69); kernel against the oracle's own quadrature 1.5e-16 | pass |
+| **F1** equation (4) against the printed z_drag | 1020.70 against 1059.94, -3.70 percent; **the source states no accuracy for equation (4)**: the committed threshold is unmeasurable and fails by the committed rule (AM3, decided before any run) | **fail** |
+| **P2** the same against the same row | as F1 | **fail** |
+| F1b (new) the same, design bound 2 percent | -3.70 percent | **fail** |
+| **F2** equation (26) against the integral, 23 nodes of the stated domain | maximum 3.10 percent (omega0 0.025, omega_b 0.0242); 4 of 23 nodes above the stated 2 percent: three at omega0 = 0.025 (2.22, 2.72, 3.10 percent) and (0.5, 0.0125) at 2.70 percent | **fail** |
+| **F3** equation (26) against the printed r_drag | 149.95 against 147.049: 1.9745 percent against 2.00034 percent | pass (narrow) |
+| **F4** the domain | 12 of 12 outside points refused with the expected code, 3 of 3 inside accepted, prototype and oracle | pass |
+| **F5** the oracle's maximum error of (26) | 3.10 percent (scipy quad; prototype agrees to 7e-16 in the integral, 0 in the formula) | **fail** |
+| F6 (new) equation (6) against the integral | maximum 0.109 percent, worst node 0.30 of its printed-digit allowance (0.21 to 0.43 percent), oracle identical | pass |
+| P1c (new, not blind) the tighter P1b | the integral with the 0.06 eV species by its Fermi-Dirac density: 147.0523 Mpc against the printed 147.049, 0.0033 Mpc (2.2e-5) below, 0.11 of u = 0.0303; prototype and oracle agree to 0 | pass |
+| E6 (new) calibration of the poor-fit flag | at the committed misfit lambda 9.815 and p_pred 0.3183 (closed-form non-central chi-square); observed 0.300 (prototype) and 0.316 (oracle) in [0.287, 0.350]; no misfit: 0.005 and 0.002 in [0, 0.0062]; lambda and p_pred equal to 1e-11 | pass |
+| X6, X7, X8 reported | the exact-in-(D_M, H) profile gives best Omega_m 0.365 and 95 percent [0.257, 0.496], chi-square 2.06 (the delta method of O2b is 0.001 to 0.005 away); Or = 0 changes the alphas by at most 1.3e-4; at the Planck row equation (6) gives 150.96, (26) 149.95 and the integral at (4)'s z_d 150.86, all above the printed 147.049 | |
+
+### 10.2 What the numbers say
+
+* **The release is read correctly, and flat Lambda-CDM fits it.** The files are the recorded bytes, the covariance is symmetric and positive definite, the printed digits reproduce, and the consensus agrees with the fiducial cosmology's prediction through the 255 kernel (all six components inside 3 sigma, joint p 0.69). BAO alone gives Omega_m = 0.37 with a 95 percent set of 0.26 to 0.50, so the printed Planck + BAO value 0.309 and Planck's 0.317 are inside it: consistent, not compared for agreement (the paper prints no BAO-alone value, so O2 stays NOT RUN). BAO alone gives H0 r_d (9,825 km/s at the best fit), never H0 and r_d separately.
+* **The sound-horizon integral reproduces the one published full calculation to 2e-5.** With one 0.06 eV species modelled by its Fermi-Dirac density, the integral gives 147.0523 Mpc against the printed 147.049 at the printed z_drag. The two-case bracket of P1b (3.5 percent wide) is not needed to see that; P1c is not blind (the P1b numbers had been seen).
+* **Eisenstein and Hu's formulas are not what the committed legs hoped.** Equation (6) is a faithful closed form of the integral to 0.11 percent, inside the rounding of its three-digit constants. Equation (26) holds to its stated 2 percent over most of its stated domain but not at the low-matter-density, high-baryon-fraction corner (to 3.1 percent) and at omega0 = 0.5 with omega_b = 0.0125 (2.7 percent); at the Planck row it is 1.97 percent high, barely inside. **Equation (4), the drag redshift, is 3.7 percent below Planck's printed z_drag (1020.7 against 1059.94), and the paper states no accuracy for it** (it says it reduced z_d by a factor 0.96 "on phenomenological grounds"). The integral at equation (4)'s z_d is 150.86 Mpc against 147.049, so the 2.6 percent excess comes almost entirely from the drag redshift (P1b's massless integral at the printed z_drag is 147.059), not from the integral. A z_d source with a stated accuracy is what a ruler would need (question 2).
+* **E6: the flag is calibrated; E5's 29 to 31 percent is what the arithmetic predicts.** At the committed misfit the non-centrality is 9.8, whose closed-form prediction for the flag rate is 0.318; E5 observed 0.288 and 0.314 and E6 0.300 and 0.316, all inside the binomial bands, and at no misfit the flag fires at the nominal 0.0027 within noise. The committed 80 percent bound of E5 would need a non-centrality of about 20.4 (computed with scipy, not a leg), that is a misfit about 1.4 times as large at the same errors. This is a statement about the design, not a repair: **E5 still fails and stays failing**; only Carl resets it.
+
+### 10.3 The verdict, by the function
+
+The parent's function (`thresholds.json`, `verdict`) over the parent's 44 rows with the follow-up's statuses for F1 to F5, P2 and O1 to O3: **C**, **KERNEL FAIL** on E5 alone, the consumers clause unmet. Had Carl reset E5 the function would still give **C**, because F1, F2, F5 and P2 fail (with F1 and P2 NOT RUN it would still be C, F2 and F5 failing). New legs never enter the function. O2 and O3 NOT RUN also put A out of reach. What C permits is as in section 6: a reading step about what BAO measure; nothing is built, Part B waits, the consumers rule holds. What the follow-up adds for a later decision: the release's table and covariance read and consistent, the integral validated against a published full calculation to 2e-5, and a precise statement of what the cited fitting formulas can and cannot be used for.
+
+### 10.4 Rights, size and consumers
+
+Rights: `authentic/SOURCES.json` (cite-only, derived numbers and short fixtures, no home path in any fixture); the Eisenstein and Hu licence page was not read (question 3). Size: no ceiling raised, no byte shipped, no precache tier or bundle changed; the PR is documentation, fixtures (about 76 KB in all, none shipped), one test and register rows. No lesson, panel, viewer, contour, data pack or model-page section.
+
+### 10.5 Questions for Carl
+
+1. **F1 and P2.** They FAIL because the paper states no accuracy for its drag-redshift fit and the committed rule fails an unmeasurable threshold (AM3, decided before any run). If you read that rule as "NOT RUN" instead, the product verdict is unchanged (C) but F1 and P2 would not be failing rows; F2 and F5 fail either way.
+2. **A drag-redshift source with a stated accuracy** (a later fit to Boltzmann-code output, or Planck's tabulated z_drag used as an input with the neutrino mass modelled as in P1c) is the one route to a formula leg that can pass; a fetch only your session makes.
+3. **The arXiv licence of Eisenstein and Hu 1998** was not read; only coefficients and cited statements are kept. A rights decision, or a removal of `fitting-formulas.json`, is yours.
+4. **O2 and O3** need a source that prints a BAO-alone Omega_m and alphas (another BAO paper); optional; A needs them to pass, and B or A also needs the formula legs, which fail.
+5. **E5** stays failing and labelled; E6 shows what its bound asks for (a non-centrality of about 20 rather than 10, a misfit about 1.4 times as large at the same errors). Reset or reframe is yours.
+6. **Part B** waits.
+
+### 10.6 Reproduce
+
+`python3 -E tools/bao-oracle/oracle2.py tests/fixtures/bao/authentic tests/fixtures/bao/thresholds-followup.json tests/fixtures/bao/thresholds.json oracle-followup.json` and `node tools/bao-validate-followup.mjs tests/fixtures/bao/thresholds-followup.json tests/fixtures/bao/thresholds.json tests/fixtures/bao/results.json tests/fixtures/bao/oracle-followup.json tests/fixtures/bao/authentic <outdir>` on `spike/bao-authentic` (the oracle and the validator are there, never merged); `node tools/bao-extract-eh98.mjs` and `node tools/bao-extract-alam.mjs` rebuild the two transcriptions from the saved layout texts. `tests/baoFollowup.test.js` recomputes every status from the pinned files.

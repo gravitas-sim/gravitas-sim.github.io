@@ -1,0 +1,428 @@
+{
+ "format": "gravitas.bao-followup-results/1",
+ "thresholdsFollowupSha256": "0a06ef70dd0628192feaa5ad6d0cb75632b7c7dd36df2dbed4874be0c60dd105",
+ "parentThresholdsSha256": "ca68ea56449bd37526f7b5f9540c3e26150f61b6b804b66ce9f27f2fa530307f",
+ "parentResultsSha256": "3e8abedd85be9cba490c878f48cd732946f9df04839128af78e3304c6aab5c75",
+ "oracleSha256": "0a03e1690357e48fcd0d40fca56c7f880340352310cb59d4729e1c3426513c0f",
+ "node": "v22.23.4",
+ "seconds": 12.3,
+ "counts": {
+  "rows": 19,
+  "fail": 5,
+  "pass": 9,
+  "not-run": 2,
+  "reported": 3
+ },
+ "verdict": {
+  "product": "C",
+  "kernel": "KERNEL FAIL",
+  "conditionalIfE5Reset": "C",
+  "conditionalIfE5ResetAndF1AndP2NotRun": "C",
+  "failingKernelRows": [
+   "E5.misspecified"
+  ],
+  "consumersClause": "unmet"
+ },
+ "rows": [
+  {
+   "id": "F1.zdFormula",
+   "status": "fail",
+   "measured": {
+    "zdEq4": 1020.70170831997,
+    "zdPrinted": 1059.94,
+    "relative": -0.03701935173691917,
+    "inUnitsOfPrintedSigma": -130.79430560010036,
+    "statedAccuracy": null
+   },
+   "bound": "within the source's stated accuracy plus the printed digits (the committed bound). The paper states no accuracy for equation (4): the threshold is unmeasurable and the leg FAILS by the committed rule (AM3). The measured difference is reported with the row.",
+   "note": "AM3: the source states no accuracy for equation (4); the committed threshold is unmeasurable and fails by the committed rule"
+  },
+  {
+   "id": "F2.rdFormulaVsIntegral",
+   "status": "fail",
+   "measured": {
+    "nodes": 23,
+    "refused": 0,
+    "maxRelative": 0.031034901125252645,
+    "worstNode": {
+     "omega0": 0.025,
+     "omegaB": 0.024166666666666666,
+     "zd": 1014.4811937144195
+    },
+    "nodesOver2Percent": 4,
+    "neutrinoTerm": 0
+   },
+   "bound": "<= 0.02 at every node"
+  },
+  {
+   "id": "F3.rdFormulaVsPublished",
+   "status": "pass",
+   "measured": {
+    "s26": 149.95247746422106,
+    "rdragPrinted": 147.049,
+    "relative": 0.0197449657204134,
+    "bound": 0.020003400227135173,
+    "omega0": 0.14249299999999998
+   },
+   "bound": "<= 0.020003400227135173"
+  },
+  {
+   "id": "F4.formulaDomain",
+   "status": "pass",
+   "measured": {
+    "prototype": {
+     "refusedAsExpected": 12,
+     "accepted": 3
+    },
+    "oracle": {
+     "refusedAsExpected": 12,
+     "accepted": 3
+    },
+    "codes": [
+     "omega0-below-domain",
+     "omega0-below-domain",
+     "omega0-below-domain",
+     "omega0-above-domain",
+     "omega0-above-domain",
+     "omega0-above-domain",
+     "omegab-below-domain",
+     "omegab-below-domain",
+     "omegab-below-domain",
+     "omegab-above-domain",
+     "omegab-above-domain",
+     "omegab-above-domain"
+    ]
+   },
+   "bound": "12 of 12 refused with the expected code, 3 of 3 accepted, both"
+  },
+  {
+   "id": "F5.statedError",
+   "status": "fail",
+   "measured": {
+    "oracleMaxRelative": 0.03103490112525331,
+    "prototypeMaxRelative": 0.031034901125252645,
+    "s26Agreement": 0,
+    "integralAgreement": 6.999278454950493e-16,
+    "zdAgreement": 3.3734770353088143e-16
+   },
+   "bound": "<= 0.02; 1e-12; 1e-9"
+  },
+  {
+   "id": "P2.plankZdrag",
+   "status": "fail",
+   "measured": {
+    "zdEq4": 1020.70170831997,
+    "zdPrinted": 1059.94,
+    "relative": -0.03701935173691917,
+    "statedAccuracy": null
+   },
+   "bound": "as F1 (the same unmeasurable threshold): FAILS by the committed rule (AM3); the measured difference is reported",
+   "note": "AM3: as F1"
+  },
+  {
+   "id": "O1.tableIntegrity",
+   "status": "pass",
+   "measured": {
+    "shaOk": true,
+    "bytesOk": true,
+    "asymmetry": 0,
+    "cholesky": true,
+    "minEigenvalue": 1.8661647827633132,
+    "dimension": 6,
+    "ratios": 6,
+    "redshifts": [
+     0.38,
+     0.51,
+     0.61
+    ],
+    "orderOk": true,
+    "oracle": {
+     "shaOk": true,
+     "cholesky": true,
+     "dimension": 6,
+     "orderOk": true
+    }
+   },
+   "bound": "as stated"
+  },
+  {
+   "id": "O2.printedFit",
+   "status": "not-run",
+   "measured": null,
+   "bound": "NOT RUN: the paper prints no BAO-alone value (AM4); request restated in the document",
+   "note": "AM4: the paper prints no BAO-alone flat Lambda-CDM matter density (Table 10 has no row for BAO alone)"
+  },
+  {
+   "id": "O3.fiducialRescale",
+   "status": "not-run",
+   "measured": null,
+   "bound": "NOT RUN: the paper prints no alphas for the consensus (AM4)",
+   "note": "AM4: the paper prints no alphas for the consensus, only D_M and H (Table 7)"
+  },
+  {
+   "id": "F1b.zdDesign",
+   "status": "fail",
+   "measured": {
+    "zdEq4": 1020.70170831997,
+    "zdPrinted": 1059.94,
+    "relative": -0.03701935173691917,
+    "inUnitsOfPrintedSigma": -130.79430560010036
+   },
+   "bound": "|relative| <= 0.02 (design)"
+  },
+  {
+   "id": "F6.eq6VsIntegral",
+   "status": "pass",
+   "measured": {
+    "prototypeWorstOverU": 0.3017705317007366,
+    "oracleWorstOverU": 0.3017705317007366,
+    "maxRelativeError": 0.0010852482432799349,
+    "s6Agreement": 1.3510365954727596e-15
+   },
+   "bound": "every node within u"
+  },
+  {
+   "id": "P1c.plankMassiveNu",
+   "status": "pass",
+   "measured": {
+    "rdragPrinted": 147.049,
+    "rP1c": 147.05229505949336,
+    "u": 0.030328487639840498,
+    "difference": -0.003295059493353847,
+    "differenceOverU": -0.1086456908924581,
+    "oracleRP1c": 147.05229505949336,
+    "oracleU": 0.030328487639835016,
+    "agreement": 0,
+    "notBlind": true
+   },
+   "bound": "|printed - r_P1c| <= u; agreement 1e-9"
+  },
+  {
+   "id": "E6.flagCalibration",
+   "status": "pass",
+   "measured": {
+    "draws": 2000,
+    "q": 16.251171152210592,
+    "misfit": {
+     "lambdaPrototype": 9.815478231656016,
+     "lambdaOracle": 9.81547823168512,
+     "pPredPrototype": 0.3183356977799019,
+     "pPredOracle": 0.31833569778144943,
+     "observedPrototype": 0.3,
+     "observedOracle": 0.316,
+     "bandPrototype": [
+      0.287086835947109,
+      0.3495845596126948
+     ],
+     "bandOracle": [
+      0.28708683594861606,
+      0.3495845596142828
+     ]
+    },
+    "noMisfit": {
+     "lambdaPrototype": -1.4551915228366852e-11,
+     "lambdaOracle": -2.9103830456733704e-11,
+     "observedPrototype": 0.005,
+     "observedOracle": 0.002,
+     "band": [
+      0,
+      0.006180976156195271
+     ],
+     "pPredNullPrototype": 0.0026999999999999984
+    },
+    "parts": {
+     "a": true,
+     "b": true,
+     "c": true
+    }
+   },
+   "bound": "(a), (b) and (c)"
+  },
+  {
+   "id": "O1b.printedConsistency",
+   "status": "pass",
+   "measured": {
+    "valuesMatchPrinted": [
+     true,
+     true,
+     true,
+     true,
+     true,
+     true
+    ],
+    "sigmaInRange": [
+     true,
+     true,
+     true,
+     true,
+     true,
+     true
+    ],
+    "oracle": {
+     "valuesMatchPrinted": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+     ],
+     "sigmaInRange": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+     ]
+    }
+   },
+   "bound": "as stated"
+  },
+  {
+   "id": "O2b.bandConsistency",
+   "status": "pass",
+   "measured": {
+    "bestOm": 0.36600000000000005,
+    "interval68": [
+     0.3109584971663881,
+     0.4278251983564434
+    ],
+    "interval95": [
+     0.26184306015716435,
+     0.4976718937922242
+    ],
+    "chi2min": 1.9931184486849816,
+    "p": 0.7370246704670615,
+    "theta": 30.513202855934992,
+    "H0rd_kms": 9825.007863495675,
+    "dChi2At0309": 1.0770348668211227,
+    "dChi2At0317": 0.7821590433850361,
+    "printed": {
+     "planckPlusBao": 0.309,
+     "planck": 0.317
+    },
+    "oracle": {
+     "bestOm": 0.36600000000000005,
+     "interval95": [
+      0.26184306015720094,
+      0.49767189379213195
+     ],
+     "chi2min": 1.9931184486777056,
+     "dChi2At0309": 1.0770348668247607,
+     "dChi2At0317": 0.7821590433813981,
+     "p": 0.7370246704684
+    },
+    "agreement": true
+   },
+   "bound": "as stated"
+  },
+  {
+   "id": "O3b.fiducialAlphas",
+   "status": "pass",
+   "measured": {
+    "fiducial": [
+     1530.149240799977,
+     82.92905054023743,
+     1982.4005298880993,
+     89.62289664298433,
+     2306.980101486863,
+     95.22344119398007
+    ],
+    "alpha": [
+     0.9883937851769987,
+     0.9792551520965176,
+     0.9963778611941227,
+     1.0142821020627641,
+     0.9998699158754469,
+     1.039289262802408
+    ],
+    "residualOverSigma": [
+     -0.7105362012088373,
+     -0.7264147954635151,
+     -0.2385864910379197,
+     0.54964273932203,
+     -0.008092782114849796,
+     1.4953841976391882
+    ],
+    "chi2": 3.870957642538585,
+    "p": 0.6941342439599878,
+    "componentsWithin3": [
+     true,
+     true,
+     true,
+     true,
+     true,
+     true
+    ],
+    "fiducialAgreementWithOracle": 1.4923693721856797e-16,
+    "oracleChi2": 3.8709576425385572
+   },
+   "bound": "as stated"
+  },
+  {
+   "id": "X6.reportedNonlinearProfile",
+   "status": "reported",
+   "measured": {
+    "oracleOnly": {
+     "bestOm": 0.36500000000000005,
+     "chi2min": 2.0611635592033344,
+     "phi": 4508.876974770802,
+     "lo68": 0.3082200036101853,
+     "hi68": 0.42733541689003574,
+     "lo95": 0.2567543950990747,
+     "hi95": 0.49635803265049483
+    },
+    "deltaMethodPrototype": {
+     "bestOm": 0.36600000000000005,
+     "interval68": [
+      0.3109584971663881,
+      0.4278251983564434
+     ],
+     "interval95": [
+      0.26184306015716435,
+      0.4976718937922242
+     ],
+     "chi2min": 1.9931184486849816
+    }
+   },
+   "bound": "REPORTED"
+  },
+  {
+   "id": "X7.reportedAlphaWithoutRadiation",
+   "status": "reported",
+   "measured": {
+    "alphaWithoutRadiation": [
+     0.9883569711778343,
+     0.9793334017342363,
+     0.9963277514230099,
+     1.0143930332999547,
+     0.9998097458283964,
+     1.0394264091475276
+    ],
+    "largestChange": 0.00013196166844808843,
+    "oracleLargestChange": 0.00013196166844808843
+   },
+   "bound": "REPORTED"
+  },
+  {
+   "id": "X8.reportedFormulaValues",
+   "status": "reported",
+   "measured": {
+    "zdEq4": 1020.70170831997,
+    "s26": 149.95247746422106,
+    "s6": 150.96136963106724,
+    "integralPaperModelAtEq4Zd": 150.8551897068047,
+    "rdragPrinted": 147.049,
+    "zdragPrinted": 1059.94,
+    "oracleAgreement": {
+     "zd": 0,
+     "s26": 0,
+     "s6": 1.8827140678349363e-16,
+     "integral": 0
+    }
+   },
+   "bound": "REPORTED"
+  }
+ ]
+}
