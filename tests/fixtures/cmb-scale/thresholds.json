@@ -97,7 +97,14 @@
    "E4": 500,
    "E5": 500
   },
-  "coverageRule": "a draw covers when ell0 lies in the interval of a fit that is not not-constrained; a not-constrained draw counts as NOT covering (so a fit that refuses often fails its leg); the rate is judged against the nominal 0.6827 (E1) and 0.9545 (E2) with a binomial three-sigma band sqrt(p (1 - p) / n) x 3, separately for the prototype and the oracle."
+  "coverageRule": "a draw covers when ell0 lies in the interval of a fit that is not not-constrained; a not-constrained draw counts as NOT covering (so a fit that refuses often fails its leg); the rate is judged against the nominal 0.6827 (E1) and 0.9545 (E2) with a binomial three-sigma band sqrt(p (1 - p) / n) x 3, separately for the prototype and the oracle.",
+  "symmetricTruth": {
+   "label": "DESIGN (AM4, NOT BLIND): the same peak with widthBelow = widthAbove = 60 and the same binning and noise, so that the quadratic fit's apex is not biased by a skew and the delta-method interval can be judged on its own. Max at ell0 exactly.",
+   "draws": {
+    "E6a": 2000,
+    "E6b": 2000
+   }
+  }
  },
  "pinnedVectors": {
   "rule": "three vectors without a random number: truth at width 30, grid phase u in {0, 10, 20}, with the deterministic perturbation e_i = 0.01 D_true(ell_c,i) sin(i (k + 1) + 0.3), k = 0, 1, 2 the vector's index, i the bin's index from 0, sigma = 0.015 D_true; the prototype and the oracle must agree on ell*, sigma_ell, c / sigma_c, the window's bin count and the code if not constrained.",
@@ -631,6 +638,33 @@
    "what": "d ln theta_star / d Ok at W1 and ell_1 at Ok in {-0.05, 0, +0.05}",
    "bound": "REPORTED",
    "needs": null
+  },
+  {
+   "id": "B5b.directionOfRsWithZstar",
+   "group": "oracle",
+   "what": "AM4 (NEW, NOT BLIND): r_s(z_star) DEcreases with z_star (a later epoch accumulates more of the sound horizon): 20 of 20 steps on W1 over z_star in [900, 1300], prototype and oracle",
+   "bound": "20 of 20",
+   "needs": null,
+   "new": true,
+   "notBlind": true
+  },
+  {
+   "id": "E6a.coverage68Symmetric",
+   "group": "ensemble",
+   "what": "AM4 (NEW, NOT BLIND): the 68.27 percent interval's coverage of ell0 on the symmetric truth, 2,000 draws at width 30, prototype and oracle separately (a not-constrained draw counts as not covering)",
+   "bound": "binomial 3 sigma band around 0.6827",
+   "needs": null,
+   "new": true,
+   "notBlind": true
+  },
+  {
+   "id": "E6b.coverage95Symmetric",
+   "group": "ensemble",
+   "what": "AM4 (NEW, NOT BLIND): the 95.45 percent interval, the same",
+   "bound": "binomial 3 sigma band around 0.9545",
+   "needs": null,
+   "new": true,
+   "notBlind": true
   }
  ],
  "verdict": {
@@ -640,7 +674,8 @@
   "B": "KERNEL PASS and S1 to S4, F2 RUN and pass, while G1 is NOT RUN or fails: the demonstration with the spectrum alone.",
   "C": "KERNEL FAIL, or any S leg that ran fails, or any S leg NOT RUN: the relation alone as a reading step; 260's The pillars omits the CMB (Appendix C). A C reached because an S leg is NOT RUN is a C BY ABSENCE, not by failure, and is reported as NOT ESTABLISHED for A and B.",
   "consumersClause": "met iff the verdict is A or B. Whatever the verdict, no panel, lesson, guide, viewer, grid or spectrum file is built until Carl lifts the consumers rule.",
-  "partB": "after A or B, and only after Carl goes ahead; not begun in this session; with C, there is no Part B (Appendix C: a reading step)."
+  "partB": "after A or B, and only after Carl goes ahead; not begun in this session; with C, there is no Part B (Appendix C: a reading step).",
+  "newLegs": "Legs marked new (AM4) are reported and judged by their own bounds but never enter the verdict function."
  },
  "amendments": [
   {
@@ -660,6 +695,13 @@
    "recorded": "after AM1 and AM2 (commit edd2ebf1) and before any oracle, prototype or validator run",
    "what": "Four clarifications of text that was ambiguous when written; no bound moves. (1) bad-window is the input refusal for data that hold a single bin (n = 1); data with two or more bins and fewer than 5 in the window are NOT refused but not-constrained with the code too-few-bins (so E4's coarse spectra, about four bins wide, give too-few-bins, and Z2's sixth input is a one-bin data set refused with bad-window). (2) P1's D_M(z_star) comes from the massive-neutrino model's own integral (the 255 kernel has no massive neutrino); the 255 kernel's value with massless radiation at the same inputs is REPORTED in X2 with the difference, and neither is a bound. (3) A2's five closed-form sets (H0, omegaB, Neff, z_star) are (70, 0.0224, 3.046, 1090), (60, 0.02, 3.046, 1000), (75, 0.025, 2.0, 1100), (67.4, 0.0224, 3.5, 1050), (50, 0.03, 3.046, 1200). (4) G2's six outside points are, for each axis of the synthetic grid in turn, the point one percent of the axis range below the first node and the one percent above the last, the other axes at their middle node.",
    "moves": "no bound"
+  },
+  {
+   "id": "AM4",
+   "recorded": "after the oracle's FIRST run (tools/cmb-oracle/oracle.py on the spike, run against the thresholds of commit 48f6d5c9) and before any prototype code or validator run; the first run's output was not committed and is replaced by a re-run against this file",
+   "seenInTheFirstOracleRun": "E1 coverage 0.1245 (249 of 2000) and E2 0.3205 with a mean apex error of +2.33 multipoles against a median sigma_ell of 0.78 (the skew of the DESIGN peak biases the quadratic fit by about three times its statistical error); E4 500 of 500 too-few-bins; E5 500 of 500 not constrained (405 no-curvature, 95 too-few-bins); E3's three vectors fitted (apex 234.07, 230.96, 232.40; sigma_ell 0.76, 0.92, 0.70; curvature -22 to -23 sigma); Z1 7 of 400 accepted (122 bad-recombination-redshift, 81 negative-density, 75 w-out-of-domain, 58 bad-H0, 48 bad-baryons, 5 bad-offset, 4 no-radiation, 0 beyond-antipode, 0 bounce); Z2's six codes as committed; K1 12 of 12 and 12 of 12; the oracle's B5 direction r_s versus z_star came out False; and the oracle's value at the Planck inputs (the massive-neutrino model): 100 theta_star 1.0410866 against the printed 1.041085, r_s 144.3935 against the printed 144.43, and with massless radiation at the same inputs 100 theta_star 1.03953.",
+   "what": "(1) B5 as committed says r_s INCREASES with z_star; that is wrong physics (r_s is the integral from a = 0 up to a_star, so a larger z_star, a smaller a_star, gives a smaller r_s). B5 STAYS as committed and will fail on its fourth component (the committed direction is the mistake, the kernel's is right); it is left failing and labelled, and only Carl resets it. A NEW leg B5b with the corrected direction is added. (2) E1 and E2 STAY as committed and are expected to fail (bias exceeds the statistical error at this signal to noise; X3 reports it); NEW legs E6a and E6b judge the delta-method interval alone on a symmetric truth (syntheticPeak.symmetricTruth). All three new legs are NOT BLIND (designed after the oracle's first run was read) and are never part of the verdict function. (3) The oracle is re-run against this file; its numbers for the committed legs are unchanged.",
+   "moves": "no bound; three NEW legs added"
   }
  ],
  "decisions": [
