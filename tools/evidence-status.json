@@ -1122,7 +1122,7 @@
       "method": "tools/multimessenger-validate.mjs against the thresholds committed before the kernel; the gate and the failing legs are in MULTIMESSENGER.md.",
       "evaluator": "the project",
       "artifact": "tools/multimessenger-validate.mjs",
-      "limitations": "No leg of its validator fails. NOT RUN or not measured, named: B2, B4, E1, E3. No gate verdict. No authentic data were fetched. Internal validation against the project’s own committed thresholds, oracle and synthetic worlds; no outside scientist has reviewed the kernel (see external-science-review).",
+      "limitations": "No leg of its validator fails. NOT RUN or not measured, named: E1 (the published delay is an emission onset, not a trigger), E3 (no photometry fetched). Run on supplied authentic files and passing: B2, B2b, B4, B4o, E1b. No gate verdict. Internal validation against the project’s own committed thresholds, oracle and synthetic worlds; no outside scientist has reviewed the kernel (see external-science-review).",
       "date": "2026-11-06",
       "anchors": [
         {

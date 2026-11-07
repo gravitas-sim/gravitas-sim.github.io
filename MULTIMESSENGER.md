@@ -4,8 +4,9 @@ One event, two messengers, many bands. This is the kernel part of Prompt 244 (an
 lesson, no instructor material, nothing a student sees). It adds `js/kernels/multimessenger/`, its validator
 `tools/multimessenger-validate.mjs`, an independent oracle `tools/multimessenger-oracle/`, and the fixtures under
 `tests/fixtures/multimessenger/`. The investigations ("The day the universe rang and flashed", "Finding transients") and
-the model-page section are a separate instructional pull request that waits for Carl's go-ahead and for the authentic
-files listed under "Files requested".
+the model-page section are a separate instructional pull request that waits for Carl's go-ahead (the consumers rule
+holds) and for the legs under "Authentic-data legs" to be read by him; the leap list, the published bound and the burst
+trigger have arrived and B2, B4 and E1 have been run on them (below), E3 has not.
 
 The validation contract was committed first, in `tests/fixtures/multimessenger/thresholds.json`, before any kernel, oracle
 output or result existed. This document was written after it. A crossed bound is a failed leg and stays failing; only Carl
@@ -149,16 +150,16 @@ definitions GPS needs, every later step is invented) is used only in tests.
 Thresholds are in `tests/fixtures/multimessenger/thresholds.json`; the table is `npm run multimessenger:validate` (about a
 second); the pinned rows are `tests/fixtures/multimessenger/results.json`; the oracle is
 `tools/multimessenger-oracle/oracle.py` (numpy, scipy and Fractions; no Gravitas code), run offline and pinned in
-`oracle-results.json`. **24 legs pass, none fails, 2 are reported and 4 are NOT RUN.** `failed-legs.json` is empty.
+`oracle-results.json`. **First run: 24 legs pass, none fails, 2 are reported and 4 are NOT RUN. After the authentic-data follow-up (below): 29 pass, none fails, 2 reported, 2 NOT RUN (E1, E3).** `failed-legs.json` is empty.
 
 | Leg | What it holds | Result |
 | --- | --- | --- |
 | A1 | time systems against hand-computed values (invented table), the leap second, the refusals | exact (0 s) |
 | B1 | the same against an independent Python implementation on 218 instants, round trips, delay recovery across GPS and MET | within 2.4e-7 s |
-| B2 | the kernel under the authentic leap list against astropy's table | **NOT RUN** (file not supplied) |
+| B2 | the kernel under the authentic leap list against astropy's table | pass (follow-up): 1.2e-7 s on 205 instants |
 | A2, B3 | the bound against its closed forms and against exact rational arithmetic on 40 cases | 4.3e-16 relative |
 | A3 | 1/D scaling, which assumption sets which end, linearity in tau, monotone widening, the lower-end distance rule | pass |
-| B4 | the published paper's delay, distance, interval and printed bound | **NOT RUN** (file not supplied) |
+| B4 | the published paper's delay, distance, interval and printed bound | pass (follow-up): -3e-15 and +7e-16, as printed |
 | D1 | no bound when the assumption excludes equal speeds; refusals | pass |
 | A4, D2 | timeline ordering, offsets, quadrature uncertainty, system and definition kept; a band is not a messenger | pass |
 | A5, A6 | sky areas against closed forms and Monte Carlo; counts against quadrature and scipy | 2e-16 (the 7-figure hemisphere literal: 3e-8, AM4) |
@@ -169,15 +170,15 @@ second); the pinned rows are `tests/fixtures/multimessenger/results.json`; the o
 | B5, E2 | the distance from a redshift against scipy quadrature (1.6e-16); the pack's own redshift against the pack's own distance interval | pass |
 | A8, B6, A9, D4 | photosphere closed forms; AB magnitudes in seven bands against an independent integration (1e-5 mag); colour monotone; domain refusals | pass |
 | A10, B7, C2, D5 | false alarm against scipy; detection probability against a numpy convolution; completeness coverage 48 of 48 cells (median interval width 0.056); refusals | pass |
-| E1, E3 | authentic delay and colour trend | **NOT RUN** (files not supplied) |
+| E1, E3 | authentic delay and colour trend | E1 **NOT RUN** by its committed rule (follow-up); E3 **NOT RUN** (no photometry fetched) |
 
 **What these legs can and cannot say.** The analytic and oracle legs hold the kernel to formulas written independently. C1
 and C2 hold the rule and the completeness to *self-consistency*: the ensembles are drawn from the very models the rule
 assumes, so they show that the code does what the model says, not that the model describes the sky. C1 has little power
 against some errors: dropping the mass term (0.5 dex of scatter) is not detected by it (the report in C1's row shows the
-mass-free ranking also covering all five bins); A7 holds the mass term exactly instead. Every external-reference leg (B2, B4,
-E1, E3) is NOT RUN until Carl's files arrive; until then **no real measurement of any kind has been compared with this
-kernel**, apart from E2, which compares two numbers the existing GWOSC pack already holds.
+mass-free ranking also covering all five bins); A7 holds the mass term exactly instead. The external-reference legs B2, B4 and E1
+waited for Carl's files; the follow-up below ran them. Of the four, E3 alone (the colour trend of real photometry) is still
+NOT RUN, so **no measured photometry has been compared with the kilonova model**.
 
 **Amendments** (all recorded in the thresholds file before any kernel result; none resets a bound after a result):
 AM1 first-order coefficient 0.775 (arithmetic slip), AM2 the peculiar-velocity flag redshift 0.010 not 0.03 (arithmetic slip;
@@ -185,20 +186,77 @@ E2's flag at the pack's rounded redshift 0.01 is raised by a margin of 7e-4 that
 distance reference is scipy quadrature, not astropy (astropy.cosmology cannot be imported here: PyYAML is missing), AM4 the
 hemisphere literal has seven significant figures, so its bound is 3e-7.
 
+## Authentic-data legs (follow-up, 2026-11-06)
+
+Carl's session fetched three files outside any repository (the IANA leap-second list, the paper's printed numbers and the
+Fermi GBM trigger header); this follow-up copied them byte for byte into `tests/fixtures/multimessenger/authentic/` with a
+`SOURCES.json` entry each (source, terms as read, retrieval date 2026-11-06, sha256). The legs' bounds were committed
+**before the files were copied and before any run**, in `tests/fixtures/multimessenger/authentic-thresholds.json`
+(commit ff205280), by a stated rule: every bound is inherited unchanged from `thresholds.json` or is a formula over printed
+numbers and a committed form. That file says what the session had read and computed by hand beforehand (the shape of the
+files, the paper's text, and two pieces of arithmetic: the bound's upper end sits 0.03 percent above the rounding midpoint,
+and the delay to the trigger is about 2.05 s). Amendments AM5 to AM7 were recorded before the first run on the files; no
+bound was moved after a result; one run was made and its rows are the pinned rows.
+
+**What the paper's 1.74 s is.** The published delay is the burst's emission *onset* at the geocenter after the merger time
+(the paper fits the main pulse, finds the onset 0.310 +/- 0.048 s before the instrument trigger T0GBM, corrects 3.176 ms for
+the signal reaching Fermi before geocenter and reports +1.74 +/- 0.05 s), not the trigger minus the merger. The `definition`
+text of `published-bound.json` (Carl's session's transcription) says the paper's definition is of the trigger; the paper's
+text says onset; the disagreement is recorded in `authentic-thresholds.json` (reading R1) and the file is kept as supplied.
+By E1's committed rule ("agree if and only if both are defined merger-to-trigger") **E1 is therefore NOT RUN**, with the
+difference of definitions recorded and not absorbed into a tolerance. The two printed numbers needed to compare on the
+paper's own definition (0.310 s with its uncertainty, the 3.176 ms) and the paper's own T0GW are in
+`published-bound-supplement.json`, read by this session from the supplied text by search, with locators.
+
+| Leg | What it holds | Result |
+| --- | --- | --- |
+| B2 | the kernel under the authentic list against astropy (erfa's own table) on 205 instants (up to 2024), and the list's own consistency (28 entries, first of a month, 19 s at the GPS epoch, expiry 2027-06-28) | **pass**: GPS and Fermi MET agree to 1.2e-7 s (bound 1e-6 s) |
+| B2b | the list as the validator parses it equals an independent Python parse of the same bytes (28 entries, the `#$` and `#@` numbers) | **pass** (exact) |
+| B4 | the kernel's interval for 1.74 s, 26 Mpc and emission delays of 0 and 10 s, rounded to one figure, equals the paper's printed pair | **pass**: -3e-15 and +7e-16 (kernel -3.087e-15 and +6.502e-16; the upper end is 0.03 percent above the rounding midpoint, so this passes on the paper's own rounding edge) |
+| B4o | the same interval against exact rational arithmetic (Fractions; the parsec from 648000/pi astronomical units) | **pass**: 1.3e-16 and 1.5e-16 relative (bound 1e-9); its rounding equals the printed pair |
+| E1 | merger-to-trigger delay against the published delay, if both are defined so | **NOT RUN**: the published delay is an onset (above) |
+| E1b | (i) the kernel's trigger-minus-merger delay (pack merger GPS 1187008882.4, trigger MET 524666471.474598 through the authentic list) against astropy built from the header's own reference epoch in TT; (ii) against the delay the paper's numbers imply for the trigger, 1.74 + 0.310 - 0.003176 = 2.0468 s, within 0.05 + 3 sqrt(0.05^2 + 0.048^2) = 0.258 s | **pass**: kernel 2.07460 s, astropy 2.07460 s (6e-8 s apart, bound 1e-6 s); 0.028 s from the implied 2.0468 s |
+| E3 | colour trend of real photometry | **NOT RUN**: no photometry was fetched |
+
+**What these legs can and cannot say.** B2 and B2b say the kernel's time conversion under a real leap list agrees with a
+second implementation to a tenth of a microsecond and that the list was read correctly; B4 and B4o say the bound function
+reproduces the paper's printed interval from the paper's printed inputs (the paper's own definition of the delay as the
+onset is what the 0 s emission-offset assumption is measured from); E1b says the pack's merger time and the archive's
+trigger time are consistent with the paper's delay to 0.03 s once the onset-to-trigger definition is applied, and, by its
+oracle part, that the Fermi mission-elapsed-time convention in the kernel equals the header's own reference epoch. E1b's
+tolerance (0.26 s) is wide: it sees a leap-second, epoch or GPS/TT error (seconds) and not a conversion error below about a
+quarter of a second; its expected value assumes the paper's two uncertainties are independent, which they are not known to
+be. The literal difference between the kernel's 2.0746 s and the printed 1.74 s (0.335 s) is reported beside it and is the
+onset-to-trigger offset, not an error. The pack's merger time (1187008882.4, 0.1 s precision) is 0.03 s from the paper's own
+T0GW (1187008882.430), inside E1b's tolerance. Nothing here tests the kernel against a distance, a sky area or a host.
+
+**The independent oracle** is `tools/multimessenger-oracle/oracle-published.py` (`python3 -E`, re, datetime, Fractions,
+astropy.time; no Gravitas code; sockets disabled in the script), its output pinned in `oracle-published.json` with the
+sha256 of every file it read; the validator judges a leg against it only for those exact files. `oracle-astropy-times.json`
+(B2) was pinned before the list existed.
+
+**Amendments** (all in `authentic-thresholds.json`, before any run): AM5 the printed bound ends are strings and are parsed;
+AM6 E1 stays as committed and is NOT RUN because of the onset definition; AM7 the three added legs B2b, B4o and E1b.
+
+**Verdict.** None of B2, B4 or E1b fails; E1 and E3 are NOT RUN, each with its reason. The consumers rule is unchanged: no
+lesson, panel or viewer was built, and nothing here lifts it. The synthetic path still carries the kilonova.
+
 ## Rights decisions (per source, 7.5 rule 4)
 
 | Source | Intended form | Rights basis | Status |
 | --- | --- | --- | --- |
 | GWOSC strain and catalogue row of GW170817 | already packed (`gwosc-five-events`) | CC BY 4.0, recorded by the existing pack | in tree; unchanged |
-| Burst trigger time and light curve (NASA archive) | one row of times; a binned light curve | public domain wanted; **the terms page has not been retrieved, so the basis is C** | not shipped; request below |
+| Burst trigger time and light curve (NASA archive) | one row of times; a binned light curve | the Fermi data policy page (retrieved 2026-11-06) says GBM data were never proprietary; no licence text beyond that, so only the trigger time and header keywords are kept | trigger header in `authentic/grb-trigger.json`; no light curve |
 | Counterpart photometry | a CC BY paper's table | CC BY 4.0 accepted; **no paper's page has been retrieved, so no table is shipped** | the synthetic illustrative kilonova is the shipped path, labelled; request below |
 | Galaxy catalogue subset | a subset within the localisation | none retrieved | synthetic field, labelled |
-| Leap-second list | a table | public data; **not retrieved** | no table embedded; request below |
-| Published delay, distance, interval, bound | a few numbers with citation | the paper's licence as read | not typed; request below |
+| Leap-second list | a table | the file states it is in the public domain (retrieved 2026-11-06) | `authentic/leap-seconds.list`, a test fixture; still no table embedded in the kernel |
+| Published delay, distance, interval, bound | a few numbers with citation | arXiv non-exclusive distribution licence as read on the abstract page; numbers and citation only | `authentic/published-bound.json` and the supplement |
 
 CC BY-SA is not accepted; CC BY-NC 3.0 IGO only through the existing labelled Gaia mechanism (not used here).
 
 ## Files requested from Carl
+
+(1 to 3 arrived 2026-11-06 and ran B2, B4 and E1/E1b, see "Authentic-data legs"; only 4, the optional photometry, is still wanted.)
 
 Put each under `tests/fixtures/multimessenger/authentic/` and add an entry for it to `SOURCES.json` there (source URL, the
 terms as read with the page's text or a saved copy, the retrieval date). The legs read them as they arrive; nothing else
@@ -220,8 +278,8 @@ changes.
 
 ## Inherited limits to state in claims built on this kernel
 
-Every scene, field and photometry set is synthetic; the kilonova parameters are illustrative; the authentic tier is NOT RUN
-for B2, B4, E1 and E3; the host ranking and the completeness are self-consistent with the models they assume and say nothing
+Every scene, field and photometry set is synthetic; the kilonova parameters are illustrative; the authentic tier is run for B2, B4 and
+E1b and is NOT RUN for E1 (the paper's delay is an onset) and E3 (no photometry); the host ranking and the completeness are self-consistent with the models they assume and say nothing
 about the sky beyond them; the speed bound is only ever shown with its emission-delay assumption.
 
 ## References

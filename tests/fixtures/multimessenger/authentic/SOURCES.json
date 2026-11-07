@@ -1,0 +1,36 @@
+{
+  "format": "gravitas.multimessenger-authentic-sources/1",
+  "note": "Sources of the files in this directory. Carl's session fetched them on 2026-11-06, outside every repository; this session copied them byte for byte (the sha256 of each is the one Carl's session recorded, and tests/multimessengerResults.test.js re-checks it). Only data, numbers and cited facts are recorded here; no text or table of a paper is reproduced, and the PDF, its extracted text, the FITS file and the saved policy pages stay outside the repository. Nothing in this directory was run as code.",
+  "leap-seconds.list": {
+    "source": "https://data.iana.org/time-zones/tzdb/leap-seconds.list (the IERS leap-second list as distributed with the IANA time zone database)",
+    "terms": "as read in the file itself: 'This file is in the public domain.'",
+    "retrieved": "2026-11-06",
+    "sha256": "db5a895f16853b03bfc865e8d68f9fc8710ef1740e3400c701cd46a5bbbc3433",
+    "bytes": 5065,
+    "facts": "last entry 3692217600 NTP seconds = 37 s from 1 January 2017; expiry line #@ 4023129600 (2027-06-28); update line #$ 3992312697"
+  },
+  "published-bound.json": {
+    "source": "Abbott et al. 2017 (LIGO Scientific Collaboration and Virgo Collaboration, Fermi GBM, INTEGRAL), ApJ 848, L13, arXiv:1710.05834; values transcribed as printed by Carl's session with a locator each",
+    "url": "https://arxiv.org/abs/1710.05834",
+    "terms": "arXiv non-exclusive distribution licence, read on the abstract page on 2026-11-06 (the licence text itself was not saved); numbers and citation only",
+    "retrieved": "2026-11-06",
+    "sha256": "22bca5bf78bf09c23628ce4d5a9bf257b9850e9873720b73f5ad5d51a21e47ff",
+    "paperPdfSha256": "bf06bd2ae6a23cf7f7092307677c2b681ce02abab3b5bbe37bbce76a8960140a",
+    "paperTextSha256": "7fd295d66324e299f3a9395f7cef2955f726387be93cb463748077f84a98803c",
+    "note": "the delay's free-text definition in this file reads the delay as a trigger against the GW time; the paper's own text defines the 1.74 s as the emission onset at geocenter (authentic-thresholds.json reading R1, and the supplement); the file is kept as supplied"
+  },
+  "published-bound-supplement.json": {
+    "source": "this session, from the same paper's extracted text by search, with a locator for each number",
+    "terms": "as published-bound.json: numbers and citation only",
+    "retrieved": "2026-11-06",
+    "sha256": "e9a20c312d13038521ad437b50b97b27c7dc1d57ed22f9c8418cab17008c9a72"
+  },
+  "grb-trigger.json": {
+    "source": "NASA HEASARC Fermi GBM trigger archive, glg_tcat_all_bn170817529_v03.fit (primary header), https://heasarc.gsfc.nasa.gov/FTP/fermi/data/gbm/triggers/2017/bn170817529/current/glg_tcat_all_bn170817529_v03.fit",
+    "terms": "the Fermi Science Support Center data policy page (https://fermi.gsfc.nasa.gov/ssc/data/policy/) says that GBM data were not proprietary at any time during the mission and are released as early as possible; no licence text beyond that was found, and the NASA website disclaimer page states no data licence. Basis recorded as public archive data under that policy; only the trigger time and header keywords are kept here",
+    "retrieved": "2026-11-06",
+    "sha256": "32680d1e91fd416ff379cab4517d3e87c83ce46eaf14b1a219ba0070cd267200",
+    "fitsSha256": "db49f7e685d41b11847eeabd6d58f93a2ba1892aa6ac2810dee21fa90b9550fe",
+    "note": "the header's TIMESYS is TT with MJDREF 51910 + 7.428703703703703D-4 (authentic-thresholds.json reading R3)"
+  }
+}

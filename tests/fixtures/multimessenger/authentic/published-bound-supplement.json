@@ -1,0 +1,17 @@
+{
+  "format": "gravitas.multimessenger-published-bound-supplement/1",
+  "note": "Numbers printed in the text of arXiv:1710.05834 that published-bound.json (byte for byte as supplied) does not carry as fields. They were read by this session from the supplied extracted text by searching for each printed number, with the paragraph as the locator; none was typed from memory. Only numbers and a cited fact are recorded; no text of the paper is reproduced.",
+  "source": {
+    "identifier": "arXiv:1710.05834",
+    "paperTextSha256": "7fd295d66324e299f3a9395f7cef2955f726387be93cb463748077f84a98803c",
+    "paperPdfSha256": "bf06bd2ae6a23cf7f7092307677c2b681ce02abab3b5bbe37bbce76a8960140a",
+    "terms": "arXiv non-exclusive distribution licence (the abstract page, read by Carl's session 2026-11-06); numbers and citation only"
+  },
+  "delayKind": {
+    "value": "emission-onset-minus-merger-at-geocenter",
+    "locator": "Section 2 (Observational Results), the paragraph on the fit of the main pulse in the GBM data: the start of the gamma-ray emission relative to T0GW is (+1.74 +/- 0.05) s after the 3.176 ms signal-arrival correction to geocenter; T0GBM is the time of the GBM trigger"
+  },
+  "onsetBeforeTrigger": { "value": 0.31, "sigma": 0.048, "unit": "s", "locator": "Section 2, same paragraph: emission onset 0.310 +/- 0.048 s before T0GBM" },
+  "geocenterCorrection": { "value": 0.003176, "unit": "s", "locator": "Section 2, same paragraph: the signal arrives at Fermi 3.176 ms before it arrives at geocenter" },
+  "paperMergerGps": { "value": 1187008882.43, "sigma": 0.002, "unit": "s", "locator": "Section 2.1: the GPS time of the merger of GW170817, T0GW = 1187008882.430 (+0.002, -0.002) s" }
+}

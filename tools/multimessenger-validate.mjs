@@ -17,6 +17,7 @@
 // =============================================================================
 
 import { readFileSync, writeFileSync, existsSync } from 'node:fs';
+import { createHash } from 'node:crypto';
 import path from 'node:path';
 import process from 'node:process';
 import { fileURLToPath, pathToFileURL } from 'node:url';
@@ -46,6 +47,15 @@ const lim = id => THRESHOLDS.checks.find(c => c.id === id).limits;
 const ORACLE = read(`${DIR}/oracle-results.json`);
 const ASTROPY = read(`${DIR}/oracle-astropy-times.json`);
 const ORACLE_BANDS = read(`${DIR}/oracle-bands.json`);
+// The authentic-data follow-up (authentic-thresholds.json, committed before the files were copied) and the pinned output
+// of tools/multimessenger-oracle/oracle-published.py, which records the sha256 of the files it read.
+const AUTH_THRESHOLDS = read(`${DIR}/authentic-thresholds.json`);
+const authLim = id => AUTH_THRESHOLDS.checks.find(c => c.id === id).limits;
+const PUB_ORACLE = existsSync(path.join(ROOT, DIR, 'oracle-published.json'))
+  ? read(`${DIR}/oracle-published.json`)
+  : null;
+const sha256Of = p =>
+  createHash('sha256').update(readFileSync(p)).digest('hex');
 const SEED = THRESHOLDS.seeds;
 const AUTH_DIR = path.join(ROOT, DIR, 'authentic');
 
@@ -102,6 +112,14 @@ export function runValidation({ only = [], authDir = AUTH_DIR } = {}) {
   const notRun = (id, note) =>
     rows.push({ id, status: 'not-run', measured: null, note });
   const wanted = id => !only.length || only.some(p => id.startsWith(p));
+  // The pinned oracle output is for the files as supplied: another directory (a test's synthetic files) is not judged by it.
+  const oracleUsable = (dir, names) =>
+    PUB_ORACLE !== null &&
+    names.every(
+      n =>
+        existsSync(path.join(dir, n)) &&
+        sha256Of(path.join(dir, n)) === PUB_ORACLE.inputs[n]
+    );
   const cpu0 = process.cpuUsage();
 
   const table = K.makeLeapTable(THRESHOLDS.synthetic.leapTable);
@@ -227,7 +245,7 @@ export function runValidation({ only = [], authDir = AUTH_DIR } = {}) {
 
   let authTable = null;
   let authNote = '';
-  if (wanted('B2.') || wanted('E1.')) {
+  if (wanted('B2.') || wanted('B2b.') || wanted('E1.')) {
     const L = lim('B2.timeAuthentic');
     const p = path.join(authDir, 'leap-seconds.list');
     const sources = readAuthenticJson(authDir, 'SOURCES.json');
@@ -235,6 +253,29 @@ export function runValidation({ only = [], authDir = AUTH_DIR } = {}) {
       authNote = 'authentic/leap-seconds.list was not supplied';
     else {
       const list = parseLeapSecondsList(readFileSync(p, 'utf8'));
+      if (wanted('B2b.')) {
+        // an exact equality with the independent Python parse of the same bytes
+        if (!oracleUsable(authDir, ['leap-seconds.list']))
+          notRun(
+            'B2b.leapListParse',
+            'oracle-published.json was not made from this file'
+          );
+        else {
+          const o = PUB_ORACLE.parse;
+          const mine = list.entries.map(e => [e.ntp, e.from, e.taiMinusUtc]);
+          const theirs = o.entries.map(e => [e.ntp, e.from, e.taiMinusUtc]);
+          const same =
+            JSON.stringify(mine) === JSON.stringify(theirs) &&
+            list.expiryNtp === o.expiryNtp &&
+            list.lastUpdateNtp === o.lastUpdateNtp;
+          row('B2b.leapListParse', same, {
+            entries: mine.length,
+            oracleEntries: theirs.length,
+            expiryNtp: list.expiryNtp,
+            lastUpdateNtp: list.lastUpdateNtp,
+          });
+        }
+      }
       const retrieved = sources?.['leap-seconds.list']?.retrieved ?? null;
       const problems = checkLeapList(list, retrieved);
       if (!retrieved)
@@ -273,6 +314,7 @@ export function runValidation({ only = [], authDir = AUTH_DIR } = {}) {
       }
     }
     if (!authTable && wanted('B2.')) notRun('B2.timeAuthentic', authNote);
+    if (!existsSync(p) && wanted('B2b.')) notRun('B2b.leapListParse', authNote);
   }
 
   // ---- the bound -------------------------------------------------------------------
@@ -427,7 +469,7 @@ export function runValidation({ only = [], authDir = AUTH_DIR } = {}) {
     );
   }
 
-  if (wanted('B4.') || wanted('E1.')) {
+  if (wanted('B4.') || wanted('B4o.')) {
     const pub = readAuthenticJson(authDir, 'published-bound.json');
     if (!pub) {
       if (wanted('B4.'))
@@ -435,7 +477,12 @@ export function runValidation({ only = [], authDir = AUTH_DIR } = {}) {
           'B4.boundPublished',
           'authentic/published-bound.json was not supplied'
         );
-    } else if (wanted('B4.')) {
+      if (wanted('B4o.'))
+        notRun(
+          'B4o.boundOracle',
+          'authentic/published-bound.json was not supplied'
+        );
+    } else {
       const r = K.speedBound({
         delay: pub.delay.value,
         distance: pub.distance.value,
@@ -444,17 +491,54 @@ export function runValidation({ only = [], authDir = AUTH_DIR } = {}) {
           max: pub.emissionDelay.max,
         },
       });
-      const sf = pub.bound.printedSignificantFigures;
-      const ends = r.status === 'bounded' ? [r.lower, r.upper] : [NaN, NaN];
-      const same =
-        Number(ends[0].toPrecision(sf)) === pub.bound.lower &&
-        Number(ends[1].toPrecision(sf)) === pub.bound.upper;
-      row('B4.boundPublished', same, {
-        kernel: { lower: r.lower, upper: r.upper },
-        printed: pub.bound,
-        delayDefinition: pub.delay.definition,
-        status: r.status,
-      });
+      if (wanted('B4.')) {
+        // AM5 (authentic-thresholds.json): the file prints the two ends as strings; the rule compares numbers
+        const sf = pub.bound.printedSignificantFigures;
+        const ends = r.status === 'bounded' ? [r.lower, r.upper] : [NaN, NaN];
+        const same =
+          Number(ends[0].toPrecision(sf)) === Number(pub.bound.lower) &&
+          Number(ends[1].toPrecision(sf)) === Number(pub.bound.upper);
+        row('B4.boundPublished', same, {
+          kernel: { lower: r.lower, upper: r.upper },
+          printed: pub.bound,
+          delayDefinition: pub.delay.definition,
+          status: r.status,
+        });
+      }
+      if (wanted('B4o.')) {
+        if (!oracleUsable(authDir, ['published-bound.json']))
+          notRun(
+            'B4o.boundOracle',
+            'oracle-published.json was not made from this file'
+          );
+        else {
+          const L = authLim('B4o.boundOracle');
+          const o = PUB_ORACLE.bound;
+          const sameInputs =
+            o.inputs.delayS === pub.delay.value &&
+            o.inputs.distanceMpc === pub.distance.value &&
+            o.inputs.tauMinS === pub.emissionDelay.min &&
+            o.inputs.tauMaxS === pub.emissionDelay.max;
+          const rl =
+            r.status === 'bounded' ? rel(r.lower, o.firstOrder.lower) : NaN;
+          const ru =
+            r.status === 'bounded' ? rel(r.upper, o.firstOrder.upper) : NaN;
+          row(
+            'B4o.boundOracle',
+            sameInputs &&
+              rl <= L.maxRel &&
+              ru <= L.maxRel &&
+              o.roundedEqualsPrinted === L.oracleRoundingEqualsPrinted,
+            {
+              relLower: rl,
+              relUpper: ru,
+              oracleFirstOrder: o.firstOrder,
+              oracleRounded: o.rounded,
+              printed: o.printed,
+            }
+          );
+        }
+      }
     }
   }
 
@@ -1553,36 +1637,96 @@ export function runValidation({ only = [], authDir = AUTH_DIR } = {}) {
 
   // ---- authentic -------------------------------------------------------------------
 
-  if (wanted('E1.')) {
+  if (wanted('E1.') || wanted('E1b.')) {
     const pub = readAuthenticJson(authDir, 'published-bound.json');
     const trig = readAuthenticJson(authDir, 'grb-trigger.json');
-    if (!pub || !trig)
-      notRun(
-        'E1.delayFromPacks',
-        `${!pub ? 'authentic/published-bound.json' : 'authentic/grb-trigger.json'} was not supplied`
-      );
-    else if (!authTable)
-      notRun(
-        'E1.delayFromPacks',
-        authNote || 'the leap-second list was not usable'
-      );
-    else if (pub.delay.definition !== 'trigger-minus-merger')
-      notRun(
-        'E1.delayFromPacks',
-        `the published delay is defined as '${pub.delay.definition}', not trigger minus merger: a different quantity, recorded, not absorbed into a tolerance`
-      );
-    else {
-      const d = K.delaySeconds(
-        { value: EVENTS.GW170817.gps, system: 'GPS' },
-        trig.trigger,
-        authTable
-      );
-      const tol = 0.05 + 3 * pub.delay.sigma;
-      row('E1.delayFromPacks', Math.abs(d - pub.delay.value) <= tol, {
-        packDelayS: d,
-        publishedS: pub.delay.value,
-        toleranceS: tol,
-      });
+    const sup = readAuthenticJson(authDir, 'published-bound-supplement.json');
+    const missing = !pub
+      ? 'authentic/published-bound.json'
+      : !trig
+        ? 'authentic/grb-trigger.json'
+        : null;
+    const unusable = !authTable
+      ? authNote || 'the leap-second list was not usable'
+      : null;
+    if (wanted('E1.')) {
+      if (missing) notRun('E1.delayFromPacks', `${missing} was not supplied`);
+      else if (unusable) notRun('E1.delayFromPacks', unusable);
+      else if (pub.delay.definition !== 'trigger-minus-merger')
+        notRun(
+          'E1.delayFromPacks',
+          `the published delay is defined as '${sup?.delayKind?.value ?? pub.delay.definition}', not trigger minus merger: a different quantity, recorded, not absorbed into a tolerance`
+        );
+      else {
+        const d = K.delaySeconds(
+          { value: EVENTS.GW170817.gps, system: 'GPS' },
+          trig.trigger,
+          authTable
+        );
+        const tol = 0.05 + 3 * pub.delay.sigma;
+        row('E1.delayFromPacks', Math.abs(d - pub.delay.value) <= tol, {
+          packDelayS: d,
+          publishedS: pub.delay.value,
+          toleranceS: tol,
+        });
+      }
+    }
+    if (wanted('E1b.')) {
+      const names = [
+        'published-bound.json',
+        'grb-trigger.json',
+        'leap-seconds.list',
+      ];
+      if (missing)
+        notRun('E1b.onsetDelayFromPacks', `${missing} was not supplied`);
+      else if (!sup)
+        notRun(
+          'E1b.onsetDelayFromPacks',
+          'authentic/published-bound-supplement.json was not supplied'
+        );
+      else if (unusable) notRun('E1b.onsetDelayFromPacks', unusable);
+      else if (!oracleUsable(authDir, names))
+        notRun(
+          'E1b.onsetDelayFromPacks',
+          'oracle-published.json was not made from these files'
+        );
+      else {
+        const L = authLim('E1b.onsetDelayFromPacks');
+        const d = K.delaySeconds(
+          { value: EVENTS.GW170817.gps, system: 'GPS' },
+          trig.trigger,
+          authTable
+        );
+        const o = PUB_ORACLE.delay;
+        const mergerSame =
+          EVENTS.GW170817.gps === AUTH_THRESHOLDS.packMergerGps.value &&
+          o.packMergerGps === EVENTS.GW170817.gps;
+        const oracleDiff = Math.abs(d - o.triggerMinusMergerS);
+        const expected =
+          pub.delay.value +
+          sup.onsetBeforeTrigger.value -
+          sup.geocenterCorrection.value;
+        const sigma = Math.hypot(pub.delay.sigma, sup.onsetBeforeTrigger.sigma);
+        const tol = 0.05 + 3 * sigma;
+        row(
+          'E1b.onsetDelayFromPacks',
+          mergerSame &&
+            oracleDiff <= L.oracleToleranceS &&
+            Math.abs(d - expected) <= tol,
+          {
+            kernelDelayS: d,
+            oracleDelayS: o.triggerMinusMergerS,
+            oracleDiffS: oracleDiff,
+            expectedS: expected,
+            toleranceS: tol,
+            differenceS: d - expected,
+            literalDifferenceToPrintedS: d - pub.delay.value,
+            paperMergerGps: sup.paperMergerGps.value,
+            packMergerGps: EVENTS.GW170817.gps,
+          },
+          'the published 1.74 s is an emission onset, not a trigger (E1 is NOT RUN for that reason); the literal difference is reported, not judged'
+        );
+      }
     }
   }
 

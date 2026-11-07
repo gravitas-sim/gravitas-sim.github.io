@@ -1,0 +1,198 @@
+{
+ "format": "gravitas.multimessenger-oracle-published/1",
+ "note": "independent references for B2b, B4o and E1b; pinned, never run by a test (python -E, no Gravitas code)",
+ "python": "3.9.6",
+ "inputs": {
+  "leap-seconds.list": "db5a895f16853b03bfc865e8d68f9fc8710ef1740e3400c701cd46a5bbbc3433",
+  "published-bound.json": "22bca5bf78bf09c23628ce4d5a9bf257b9850e9873720b73f5ad5d51a21e47ff",
+  "grb-trigger.json": "32680d1e91fd416ff379cab4517d3e87c83ce46eaf14b1a219ba0070cd267200",
+  "authentic-thresholds.json": "f6826e03d01c2b889e7b1c2b84e77524bcb7f9609e0d0870527384c914cd2cbf"
+ },
+ "parse": {
+  "entries": [
+   {
+    "ntp": 2272060800,
+    "from": "1972-01-01",
+    "taiMinusUtc": 10
+   },
+   {
+    "ntp": 2287785600,
+    "from": "1972-07-01",
+    "taiMinusUtc": 11
+   },
+   {
+    "ntp": 2303683200,
+    "from": "1973-01-01",
+    "taiMinusUtc": 12
+   },
+   {
+    "ntp": 2335219200,
+    "from": "1974-01-01",
+    "taiMinusUtc": 13
+   },
+   {
+    "ntp": 2366755200,
+    "from": "1975-01-01",
+    "taiMinusUtc": 14
+   },
+   {
+    "ntp": 2398291200,
+    "from": "1976-01-01",
+    "taiMinusUtc": 15
+   },
+   {
+    "ntp": 2429913600,
+    "from": "1977-01-01",
+    "taiMinusUtc": 16
+   },
+   {
+    "ntp": 2461449600,
+    "from": "1978-01-01",
+    "taiMinusUtc": 17
+   },
+   {
+    "ntp": 2492985600,
+    "from": "1979-01-01",
+    "taiMinusUtc": 18
+   },
+   {
+    "ntp": 2524521600,
+    "from": "1980-01-01",
+    "taiMinusUtc": 19
+   },
+   {
+    "ntp": 2571782400,
+    "from": "1981-07-01",
+    "taiMinusUtc": 20
+   },
+   {
+    "ntp": 2603318400,
+    "from": "1982-07-01",
+    "taiMinusUtc": 21
+   },
+   {
+    "ntp": 2634854400,
+    "from": "1983-07-01",
+    "taiMinusUtc": 22
+   },
+   {
+    "ntp": 2698012800,
+    "from": "1985-07-01",
+    "taiMinusUtc": 23
+   },
+   {
+    "ntp": 2776982400,
+    "from": "1988-01-01",
+    "taiMinusUtc": 24
+   },
+   {
+    "ntp": 2840140800,
+    "from": "1990-01-01",
+    "taiMinusUtc": 25
+   },
+   {
+    "ntp": 2871676800,
+    "from": "1991-01-01",
+    "taiMinusUtc": 26
+   },
+   {
+    "ntp": 2918937600,
+    "from": "1992-07-01",
+    "taiMinusUtc": 27
+   },
+   {
+    "ntp": 2950473600,
+    "from": "1993-07-01",
+    "taiMinusUtc": 28
+   },
+   {
+    "ntp": 2982009600,
+    "from": "1994-07-01",
+    "taiMinusUtc": 29
+   },
+   {
+    "ntp": 3029443200,
+    "from": "1996-01-01",
+    "taiMinusUtc": 30
+   },
+   {
+    "ntp": 3076704000,
+    "from": "1997-07-01",
+    "taiMinusUtc": 31
+   },
+   {
+    "ntp": 3124137600,
+    "from": "1999-01-01",
+    "taiMinusUtc": 32
+   },
+   {
+    "ntp": 3345062400,
+    "from": "2006-01-01",
+    "taiMinusUtc": 33
+   },
+   {
+    "ntp": 3439756800,
+    "from": "2009-01-01",
+    "taiMinusUtc": 34
+   },
+   {
+    "ntp": 3550089600,
+    "from": "2012-07-01",
+    "taiMinusUtc": 35
+   },
+   {
+    "ntp": 3644697600,
+    "from": "2015-07-01",
+    "taiMinusUtc": 36
+   },
+   {
+    "ntp": 3692217600,
+    "from": "2017-01-01",
+    "taiMinusUtc": 37
+   }
+  ],
+  "expiryNtp": 4023129600,
+  "lastUpdateNtp": 3992312697
+ },
+ "bound": {
+  "inputs": {
+   "delayS": 1.74,
+   "distanceMpc": 26.0,
+   "tauMinS": 0.0,
+   "tauMaxS": 10.0
+  },
+  "mpcMetres": 3.085677581491367e+22,
+  "firstOrder": {
+   "lower": -3.08657516203417e-15,
+   "upper": 6.5019864188129e-16
+  },
+  "exact": {
+   "lower": -3.0865751620341605e-15,
+   "upper": 6.501986418812905e-16
+  },
+  "printedSignificantFigures": 1,
+  "rounded": {
+   "lower": -3e-15,
+   "upper": 7e-16
+  },
+  "printed": {
+   "lower": -3e-15,
+   "upper": 7e-16
+  },
+  "roundedEqualsPrinted": true
+ },
+ "delay": {
+  "astropy": "6.0.1",
+  "referenceEpoch": {
+   "mjdrefI": 51910,
+   "mjdrefF": 0.0007428703703703703,
+   "scale": "tt",
+   "asUtc": "2001-01-01T00:00:00.000"
+  },
+  "triggerMetS": 524666471.474598,
+  "triggerGps": 1187008884.474598,
+  "triggerUtc": "2017-08-17T12:41:06.475",
+  "packMergerGps": 1187008882.4,
+  "triggerMinusMergerS": 2.0745978951538846
+ }
+}
