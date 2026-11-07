@@ -10,6 +10,9 @@ diagnostics, a comparison of two estimates that share data, the F-test with its
 refusals, and the selection function as a first-class object with the Eddington
 and Malmquist biases as measured differences.
 
+Prompt 261 adds the comparison of models within the classes where each test is
+valid (below, `modelcompare.js`).
+
 It is a small library of bounded, deterministic methods. It is not a sampler, it
 has no priors beyond a model's bounds, and it does not average models.
 D-SAMPLER-01 and D-KERNEL-01..03 stand.
@@ -51,6 +54,11 @@ D-SAMPLER-01 and D-KERNEL-01..03 stand.
 | `selection.js` | `completenessCorrect` | n / c with its sampling error for a Poisson or a fixed population; a bin with no detections has a one-sided upper limit at `level` (`upper-limit`), a bin below the completeness floor (0.1) is refused (`completeness`), a count that is not a whole number is refused (`count`) | 215, 229, 264 |
 | `selection.js` | `eddingtonShift`, `malmquistShift`, `malmquistCutShift` | The closed forms of the biases (below); the Eddington and cut shifts use the asymptotic Mills ratio deep in the tail instead of underflowing; like the special functions they return NaN outside their domain (a sigma or scale that is not positive and finite, or a non-finite observed value, slope or z), never a number, so a caller must check `Number.isNaN` | 215, 252 |
 | `selection.js` | `measuredShift`, `binnedMeanShift` | A bias as a measured difference on a synthetic population, with its standard error; a NaN is refused (`non-finite`) | 215, 252 |
+| `modelcompare.js` | `PAIR_CLASSES`, `classifyPair` | The three classes of a pair of models (nested and regular; nested with a boundary or a searched parameter; non-nested) with the method valid for each; the class from three declared flags, none defaulted (`undeclared` otherwise), naming the F-test's refusal code (`searched`, `boundary`, `not-nested`) and the methods not offered | 261 |
+| `modelcompare.js` | `CALIBRATION`, `calibrationDraws`, `pValueFromDraws`, `calibratedSignificance` | Simulation-calibrated significance of a statistic with no textbook distribution: draw i of the statistic under the simpler model (search included) comes from its own `noise` stream keyed `seed:label:i`, so a chunk on a pool equals the serial run; p = (1 + #{T* >= T}) / (1 + B), never 0 (`atFloor` says p <= 1 / (1 + B)); 999 draws by default, 20,000 at most (`budget` thrown); `too-few-draws` for a level the draws cannot reach, `non-finite-draws` for any non-finite draw (not dropped), `needs-simulation` from the dispatcher when none is given | 261 |
+| `modelcompare.js` | `CRITERIA_LIMITS`, `informationCriteria` | AIC, AICc and BIC of two to twelve models from RSS (variance counted, K = k + 1) or a log-likelihood, as differences from the smallest; `evidence: null`, `weights: null`, `disagree` flag, a caution for a searched parameter; refused below n = 20 or 5 per parameter (`sample-size`), for a bad RSS or likelihood (`input`, `zero-rss`) or a bad count (`counts`, `models`) | 261 |
+| `modelcompare.js` | `LOO_LIMITS`, `leaveOneOut` | Deterministic leave-one-out cross-validation with the caller's `fitPredict`: mean squared prediction error per model and, against the best, the paired mean extra error with a NAIVE standard error (labelled); `sample-size` below 5 rows, `budget` thrown above 500, `non-finite` for a prediction or an observation | 261 |
+| `modelcompare.js` | `compareModels` | Names the class of a pair, runs the one method valid for it (the F-test of 154, the calibrated test when given its simulation, the criteria) and lists the refused and not-offered methods with codes; optional leave-one-out | 261 |
 
 <!-- statistics-exports:end -->
 
@@ -138,8 +146,8 @@ modelled; they are the checks a real-survey code must reproduce on a population
 where the answer is known.
 
 **Not here.** A sampler, priors beyond bounds, model averaging, a joint
-confidence region, simulation-calibrated tests for searched or non-regular
-alternatives (Roadmap III's R22), Student-t or Poisson regression.
+confidence region, Student-t or Poisson regression. (Simulation-calibrated tests
+for searched or non-regular alternatives are `modelcompare.js`, Prompt 261.)
 
 ## References
 
@@ -630,6 +638,133 @@ Nothing here stores a golden of a value that passes through `log`, `exp`, `pow`,
 |  |  | c below the floor is refused, code "completeness" | 1 | = 1 | pass |
 
 <!-- statistics-validation:end -->
+
+## Model comparison II (Prompt 261)
+
+`js/kernels/statistics/modelcompare.js`, decision D-R10-261-01. "Does the model
+fit, and is the more complex one worth it" has three honest answers, and which
+applies depends on the pair of models, not on the data. The caller declares three
+flags and none defaults, because the permissive reading is the one that prints a
+confident wrong p value; a missing flag is refused (`undeclared`).
+
+| Class | Flags | Valid method | Refused or not offered |
+| --- | --- | --- | --- |
+| nested and regular | nested, no boundary, nothing searched | the F-test (154); the criteria and leave-one-out are also valid | none |
+| nested, non-regular | nested, and a null value on a boundary or a parameter found by a search | simulation-calibrated significance; leave-one-out is also valid | the F-test, code `searched` or `boundary`; the criteria are not offered (a boundary breaks their asymptotics, and a search is charged one parameter, not its trials) |
+| non-nested | not nested | AIC, AICc and BIC as penalised likelihoods; leave-one-out is also valid | the F-test, code `not-nested`; no calibrated test is offered |
+
+**Simulation-calibrated significance.** The caller supplies the observed statistic
+(the whole search included) and `simulate(u)`, which draws one data set under the
+simpler model as fitted and returns the same statistic. With B draws, p = (1 +
+#{T* >= T}) / (1 + B) (Davison and Hinkley 1997, section 4.2; North, Curtis and
+Sham 2002): never zero, exactly valid at levels that are multiples of 1 / (1 +
+B) for exchangeable draws, ties counted against the alternative. When no draw
+reaches the observed value the record says `atFloor` and the claim is p <= 1 / (1 + B), and the equivalent sigma is flagged as a bound. The Monte Carlo standard
+error sqrt(p (1 - p) / B) is reported. The p value is exact for the stated null
+and for it only: a wrong variance or noise shape calibrates a different test.
+Draws are numbered; draw i uses the stream `noise:seed:label:i` (Prompt 149), so
+a chunk of draws on a worker pool equals the same draws made serially, bit for
+bit. No pool job type is registered (no consumer yet); the draws are indexable so
+that one can be added without changing a result. The default is 999 draws (the
+default budget of `DRAW_BUDGET`, 1,000, less one) and the maximum 20,000.
+
+**Information criteria**, Gaussian errors of one variance: lnL = -(n/2)(ln(2 pi
+RSS / n) + 1), AIC = -2 lnL + 2K, AICc = AIC + 2K(K + 1) / (n - K - 1) (Hurvich
+and Tsai 1989), BIC = -2 lnL + K ln n (Schwarz 1978), K = k + 1 (the variance
+counts; differences are unaffected). Reported as differences from the smallest;
+there are no weights, no probabilities, no Bayes factor and no averaging, and a
+difference is not evidence. They are refused below n = 20 values or 5 per
+parameter (a committed rule for the asymptotics; Burnham and Anderson 2002 advise
+AICc below n / K = 40, and AICc is always reported): below that, use
+leave-one-out.
+
+**Leave-one-out.** Deterministic: each row is predicted by a fit to the others.
+The score is the mean squared prediction error; a model is compared with the best
+by the mean of the paired differences of squared errors and its naive standard
+error, which is too small because the folds share data (Bengio and Grandvalet
+2004), and is labelled so. For least squares it equals PRESS / n from the hat
+matrix, which is how it is checked.
+
+**Limits stated with the numbers.** A criterion's false-preference rate is a
+property of the penalty and the sample, not a level: with one regular extra
+parameter and n = 30 AIC prefers the larger model under the simpler truth with
+probability 0.176 and BIC 0.077 (exact, from the F distribution). The F-test of a
+searched alternative is refused because the naive test flags 0.92 of white-noise
+series on a 75-frequency grid, and AIC with the sinusoid counted as three added
+parameters prefers it in 0.96. Neither a criterion nor a leave-one-out score is
+a significance.
+
+**Validation** (`tests/fixtures/model-comparison/thresholds.json`, committed with
+every bound before any kernel code existed; `npm run modelcompare:validate`;
+the independent oracle is `tools/model-comparison-oracle/oracle.py`, python -E,
+numpy, scipy and astropy, no Gravitas code, with an empty module standing in for
+the uninstalled PyYAML that astropy imports and does not use). Verdict by the
+committed function: **FAILED LEG(S)** (F1). The panel and the investigations are
+not built (the consumers rule; see below), so no student meets a number from this
+kernel.
+
+| Leg | Kind | What | Result | Status |
+| --- | --- | --- | --- | --- |
+| A1 | analytic, oracle | F-test of a line against the constant equals the slope's t squared and scipy's p (n = 30, two data sets) | relative 1e-15 | pass |
+| A2 | analytic, oracle | constant against a sinusoid of known period (two added parameters) against numpy and scipy.stats.f | relative 5e-15 | pass |
+| A3 | analytic, oracle | AIC, AICc and BIC of a non-nested pair and a polynomial ladder against a scipy log-likelihood; a hand case | at most 3e-14 | pass |
+| A4 | analytic | all eight flag combinations and four undeclared forms | exact | pass |
+| A5 | analytic, oracle | leave-one-out equals the hat-matrix PRESS, row by row, bit-identical on repeat | 2e-14 | pass |
+| A6 | analytic | draws indexable: chunks equal serial, repeat equal, another seed differs | exact | pass |
+| A7 | analytic | the add-one estimator: floor, ties, level rule | exact; uniform case within 4 sigma | pass |
+| A8 | authentic | Anscombe I (committed by 154): R-squared 0.6665 as R prints it, F = 17.99 on 1 and 9, p = 0.00217 equal to the t form | within the printed half unit | pass |
+| B1 | oracle | the searched statistic against astropy's Lomb-Scargle power | 3e-16 | pass |
+| B2 | oracle | calibrated p (999 draws) against the oracle's own implementation (20,000 draws): 0.282 against 0.264 | 0.018 against a bound of 0.057 | pass |
+| B3 | oracle | the oracle's two ensembles agree: 0.2637 and 0.2591 | 0.0046 against 0.0176 | pass |
+| B4 | reported | astropy's analytic Baluev probability 0.270 beside the simulation 0.261 | no bound | reported |
+| C1 | ensemble | F-test false positives at 0.05, 2,000 series | 0.052 | pass |
+| C2 | ensemble | calibrated false positives of the searched test at 0.05, 800 series of 99 draws | 0.0425 against 0.05 +- 0.031 | pass |
+| C3 | ensemble | AIC and BIC false preference: 0.182 against the exact 0.176, 0.081 against 0.077 | inside 4 sigma | pass |
+| C4 | ensemble | the naive F-test 0.92 and AIC 0.96 under the search, each above 0.30 | the reason for the refusal | pass |
+| C5 | reported | leave-one-out prefers the line under the constant in 0.169; the calibrated test's power at 0.05 for a 0.8 sinusoid is 0.425 | no bound | reported |
+| D1 to D4 | negative | the refusals and codes above, the budget and sample-size rules | exact | pass |
+| E1 | reported | the calibration with a wrong (homoscedastic) null when the truth is heteroscedastic rejects at 0.0325 for a stated 0.05 (conservative in this instance; the direction depends on the departure) | no bound | reported |
+| F1 | authentic | eta Aquilae, TESS sector 81, every tenth bin (55 points), periods 1 to 20 d: the calibrated p must be at the floor, <= 0.001 | p = 0.011 (best period 7.43 d, peak power 0.28) | **fail** |
+| F2 | authentic | the same fluxes with times permuted, 20 times: at most 4 reach p <= 0.05 | 0 | pass |
+| N1 to N3 | published | a published calibrated p for a searched case; a published AIC/BIC table; a published significance for this star | not run | NOT RUN |
+
+**The failed leg.** F1 stays failing: the bound was committed before the data
+were analysed and nothing is moved. The measurement is not an error of the
+kernel: the oracle's own numpy search on the same 55 points with 20,000 draws
+gives p = 0.0136 (`diagnostic-f1.json`, `diagnostic_f1.py`), inside the Monte
+Carlo error of the kernel's 0.011. A saturated, bright Cepheid sampled every
+ten hours over about 3.7 cycles has a sinusoid that explains 28 percent of its
+variance, and against white noise that is p near 0.01, not at the floor. Using
+every point or another subsample would be a new leg with its bound committed
+first, not a reading of this one.
+
+**Files requested, nothing fetched by any agent** (into `scratch-data/modelcompare261/`
+by Carl's session, with the terms and a sha256):
+
+- N1: a published table or worked example that prints a simulated false-alarm
+  probability or p value for a periodogram peak, with the data and the noise model
+  (for example Horne and Baliunas 1986, Press and Rybicki 1989, or the astropy
+  LombScargle bootstrap documentation).
+- N2: one worked example that prints the data, the sums of squares or
+  log-likelihoods, and the AIC, AICc and BIC of two or more models (Burnham and
+  Anderson 2002, or the R documentation example).
+- N3: a published false-alarm probability for the eta Aquilae TESS period.
+
+**Not built, and why.** The "compare models" panel of the comparison instrument,
+the model page's statistics section (it would state a method no student is offered)
+and the three investigations ("Is it really a planet?" revisited, "One line or
+two?", "How many parameters?") are not built: the consumers rule (Carl, 2026-11-05
+and 2026-11-06; Checkpoint V's operating term 8) holds for kernels without a
+released consumer, one investigation rests on 247's held line tools, and a
+leg of this kernel's own contract failed. They are named, not removed.
+
+**References for this section.** Davison and Hinkley (1997), Bootstrap Methods
+and their Application, 4.2. North, Curtis and Sham (2002), Am. J. Hum. Genet. 71,
+439. Hurvich and Tsai (1989), Biometrika 76, 297. Schwarz (1978), Ann. Stat. 6,
+461. Akaike (1974), IEEE Trans. Autom. Control 19, 716. Burnham and Anderson
+(2002), Model Selection and Multimodel Inference, 2nd ed. Bengio and Grandvalet
+(2004), JMLR 5, 1089. Protassov et al. (2002), ApJ 571, 545. Zechmeister and
+Kuerster (2009), A&A 496, 577 (the periodogram the searched statistic is).
 
 ## Costs and waits
 
