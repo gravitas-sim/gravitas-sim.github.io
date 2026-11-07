@@ -369,6 +369,11 @@ res["O4"]["strip"] = {
     "DD": [int(v) for v in sdd], "oracleRandoms": int(len(sra)),
     "w": rnd(sw, 6), "sigma": rnd(ssig, 6),
 }
+# AM1 (clustering-thresholds.json): randoms over the data's own right-ascension extent
+sra2 = rng.uniform(float(sr.min()), float(sr.max()), 10 * len(sr))
+SR2 = uvec(sra2, np.full(len(sra2), 0.25))
+_, _, _, sw2, ssig2 = ls(SU, SR2, SBINS)
+res["O4"]["stripExtent"] = {"raMin": float(sr.min()), "raMax": float(sr.max()), "oracleRandoms": int(len(sra2)), "w": rnd(sw2, 6), "sigma": rnd(ssig2, 6)}
 res["inputs"]["packSha256"] = {
     "gaia/ngc2420.json": sha(f"{ROOT}/gaia/ngc2420.json"),
     "js/data/observations/sdssNgc2420Photometry.js": sha(f"{ROOT}/js/data/observations/sdssNgc2420Photometry.js"),

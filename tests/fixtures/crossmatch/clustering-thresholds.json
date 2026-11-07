@@ -35,6 +35,7 @@
   { "id": "B6.oracleLS", "kind": "bound", "what": "On the oracle's Thomas sample (data written by the oracle, its own randoms drawn by numpy, 10 N) against the prototype's w with the prototype's own randoms from the stream: per bin |w_prototype - w_oracle| is at most 4 sqrt(sigma_p^2 + sigma_o^2), the Poisson estimates of the two.", "limits": { "maxSigmas": 4 } },
   { "id": "B7.randoms", "kind": "bound", "what": "The random catalog: two draws with the same key are identical to the bit; every point lies inside the footprint; the counts in an 8 x 8 grid of equal cells of the box give a chi-square p value of at least 0.001 against uniform.", "limits": { "minP": 0.001 } },
   { "id": "B8.strip", "kind": "reported", "what": "The authentic strip (the contract in worlds.strip): w_k and delete-one jackknife sigma_k (12 blocks of 10 degrees of right ascension from 120, randoms assigned to blocks by right ascension), the pooled statistic with the jackknife sigma and whether it exceeds the 0.99 quantile of chi-square(6). Reported: the strip has no declination, no mask and no published reference here." },
+  { "id": "B8b.stripExtent", "kind": "reported", "what": "AM1: B8 again with the randoms uniform over the data's OWN right-ascension extent (the minimum to the maximum right ascension of the pack's galaxies) instead of 120 to 240 degrees. Added because the oracle's first output showed correlations of 0.1 at 2 to 3 degrees with a tiny Poisson error on the strip, which the nominal footprint can produce by itself when the sample has an empty block (the pack's first right ascension is above 130 degrees); reported, never in the function.", "amendment": "AM1" },
   { "id": "B9.authenticReference", "kind": "notrun", "what": "The estimator on the SDSS subset with its declination and the survey's footprint, against a published angular correlation of the same galaxy sample (requests R4 and R5). Required for verdict A.", "needs": "R4, R5" }
  ],
  "requests": [
@@ -43,8 +44,10 @@
   { "id": "R6", "what": "The paper that defines the Landy-Szalay estimator: the page read, to confirm the form in estimator.landySzalay and to complete its citation.", "feeds": "the citation" }
  ],
  "verdict": {
-  "function": "Let K = {B1, B2, B2b, B3, B6, B7} and S = {B4, B5}. If any check of K or S fails: C (a reading step only). Otherwise: A if B9 passes and the strip is detected in B8; otherwise B (the estimator validated and its detectable size measured on a synthetic clustered sample only). B8 is reported and enters the function only through the A condition. B9 is NOT RUN, so no verdict better than B is possible until it runs.",
+  "function": "Let K = {B1, B2, B2b, B3, B6, B7} and S = {B4, B5}. If any check of K or S fails: C (a reading step only). Otherwise: A if B9 passes and the strip is detected in B8; otherwise B (the estimator validated and its detectable size measured on a synthetic clustered sample only). B8 (and B8b) are reported and enter the function only through the A condition. B9 is NOT RUN, so no verdict better than B is possible until it runs.",
   "consequence": "B builds nothing and licenses a later prompt, if Carl releases the consumers, to build 'Clustered or random?' on a synthetic clustered sample with the limits of the gate document; A would license the SDSS subset; C removes the clustering inference and leaves 253's counts in cells (Appendix C)."
  },
- "amendments": []
+ "amendments": [
+  { "id": "AM1", "adds": "B8b (a reported row)", "reason": "the oracle's first output (commit d6953b8c) was read before this amendment: on the strip it gave w of 0.11 at 2 to 3 degrees with a Poisson sigma of about 0.004, which suggests the footprint mismatch rather than clustering; no prototype, validator run or kernel result had been seen", "movesNoBound": true }
+ ]
 }
