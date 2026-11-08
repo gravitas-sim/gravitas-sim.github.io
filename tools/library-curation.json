@@ -488,6 +488,60 @@
       },
       "courseLevel": "upper"
     },
+    "l3-elements": {
+      "mathematics": "algebra",
+      "prerequisites": [],
+      "textbook": {
+        "chapter": 3,
+        "section": "3.4"
+      },
+      "courseLevel": "majors"
+    },
+    "l3-frames": {
+      "mathematics": "algebra",
+      "prerequisites": [
+        "investigation:l3-elements"
+      ],
+      "textbook": {
+        "chapter": 3,
+        "section": "3.4"
+      },
+      "courseLevel": "majors"
+    },
+    "l3-seen": {
+      "mathematics": "algebra",
+      "prerequisites": [
+        "investigation:l3-frames"
+      ],
+      "textbook": {
+        "chapter": 3,
+        "section": "3.4"
+      },
+      "courseLevel": "majors"
+    },
+    "l3-tilts": {
+      "mathematics": "algebra",
+      "prerequisites": [
+        "investigation:l3-mutual",
+        "investigation:l3-frames"
+      ],
+      "textbook": {
+        "chapter": 3,
+        "section": "3.6"
+      },
+      "courseLevel": "majors"
+    },
+    "l3-resonant": {
+      "mathematics": "algebra",
+      "prerequisites": [
+        "investigation:l3-elements"
+      ],
+      "textbook": {
+        "chapter": 3,
+        "section": "3.6"
+      },
+      "courseLevel": "upper"
+    },
     "ml-orbit": {
       "mathematics": "algebra",
       "prerequisites": [],

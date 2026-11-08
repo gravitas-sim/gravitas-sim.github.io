@@ -548,6 +548,13 @@
       "student": false
     },
     {
+      "file": "LAB3D_CURRICULUM_II.md",
+      "kind": "feature",
+      "purpose": "The 3-D lab curriculum II: run modes, reference planes, the orbit editor and sky view, five guides and their validation (Prompt 271).",
+      "owner": 271,
+      "student": false
+    },
+    {
       "file": "LAZY_CAPABILITIES.md",
       "kind": "design",
       "purpose": "How instrument families load on demand.",
