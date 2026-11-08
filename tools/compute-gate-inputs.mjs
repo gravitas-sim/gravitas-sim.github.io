@@ -46,7 +46,10 @@ const { makeLab } = await import(
 );
 const lab = makeLab(P);
 const ics = JSON.parse(
-  readFileSync(path.join(REPO, 'tests/fixtures/dynamics/initial-conditions.json'), 'utf8')
+  readFileSync(
+    path.join(REPO, 'tests/fixtures/dynamics/initial-conditions.json'),
+    'utf8'
+  )
 );
 const run = ic => {
   const snaps = [];
@@ -73,7 +76,13 @@ const pairGrid = (id, title, sep) =>
   grid(
     id,
     title,
-    [{ name: 'snapshot', unit: 'snapshot (0.1 crossing time)', values: snapAxis }],
+    [
+      {
+        name: 'snapshot',
+        unit: 'snapshot (0.1 crossing time)',
+        values: snapAxis,
+      },
+    ],
     [{ name: 'separation', unit: 'Heggie length and velocity' }],
     sep,
     {
@@ -85,7 +94,8 @@ const pairGrid = (id, title, sep) =>
         scale: SCALE,
         dEvery: D_EVERY,
         initialConditions: 'tests/fixtures/dynamics/initial-conditions.json',
-        measure: 'Euclidean distance in the 4N-dimensional phase space, Heggie units',
+        measure:
+          'Euclidean distance in the 4N-dimensional phase space, Heggie units',
       },
     }
   );
@@ -145,19 +155,42 @@ const polyGrid = (id, title, nvals, rowsOf) =>
       { name: 'mass', unit: '' },
       { name: 'rhoRatio', unit: '' },
     ],
-    [...rowsOf.map(r => r.xi1), ...rowsOf.map(r => r.mass), ...rowsOf.map(r => r.rhoRatio)],
-    { name: 'js/kernels/stellar/polytrope.js polytropeTable()', version: '1', inputs: { indices: nvals } }
+    [
+      ...rowsOf.map(r => r.xi1),
+      ...rowsOf.map(r => r.mass),
+      ...rowsOf.map(r => r.rhoRatio),
+    ],
+    {
+      name: 'js/kernels/stellar/polytrope.js polytropeTable()',
+      version: '1',
+      inputs: { indices: nvals },
+    }
   );
 emit(
   'n08-polytrope.grid.json',
-  polyGrid('compute-gate-ii:n08-polytrope', "The stellar kernel's Lane-Emden table", ns, rows)
+  polyGrid(
+    'compute-gate-ii:n08-polytrope',
+    "The stellar kernel's Lane-Emden table",
+    ns,
+    rows
+  )
 );
 const bad = n => ({ n, xi1: 1, mass: 1, rhoRatio: 1 });
 for (const n of [5, 5.5, -0.5])
-  emit(`n08-bad-${n}.grid.json`, polyGrid(`compute-gate-ii:n08-bad-${n}`, `A table with n = ${n} (refused by the notebook)`, [n], [bad(n)]));
+  emit(
+    `n08-bad-${n}.grid.json`,
+    polyGrid(
+      `compute-gate-ii:n08-bad-${n}`,
+      `A table with n = ${n} (refused by the notebook)`,
+      [n],
+      [bad(n)]
+    )
+  );
 
 // ---- N07: the MIST pack as an observation table
-const { tableOf } = await import(pathToFileURL(path.join(REPO, 'js/tableObservation.js')));
+const { tableOf } = await import(
+  pathToFileURL(path.join(REPO, 'js/tableObservation.js'))
+);
 const pack = await import(
   pathToFileURL(path.join(REPO, 'js/data/observations/mistSdssIsochrones.js'))
 );
@@ -173,7 +206,11 @@ const obsBase = (id, title, object, columns, extra = {}) => ({
   origin: 'model',
   source: { kind: 'builtin', id, version: '1' },
   credit: 'see license',
-  license: { status: 'generated', statement: 'made by the compute gate from the values named in its title', basis: 'see the title' },
+  license: {
+    status: 'generated',
+    statement: 'made by the compute gate from the values named in its title',
+    basis: 'see the title',
+  },
   retrieved: '2026-11-07',
   citations: [],
   reductions: [],
@@ -182,12 +219,27 @@ const obsBase = (id, title, object, columns, extra = {}) => ({
   ...extra,
   columns,
 });
-const col = (id, name, unit, role, values, extra = {}) => ({ id, name, unit, role, values: Array.from(values), ...extra });
+const col = (id, name, unit, role, values, extra = {}) => ({
+  id,
+  name,
+  unit,
+  role,
+  values: Array.from(values),
+  ...extra,
+});
 const mist = obsBase(
   'compute-gate-ii:n07-mist',
   'The MIST v1.2 isochrones in the SDSS bands (the pack mist-sdss-isochrones 1.0.0), six columns, values unchanged',
   { name: 'MIST isochrones', frame: 'absolute magnitudes' },
-  t.columns.map(c => col(c.id, c.name, c.id === 'g' || c.id === 'r' ? 'mag' : c.unit, c.id === 'logAge' ? 'x' : 'value', c.values)),
+  t.columns.map(c =>
+    col(
+      c.id,
+      c.name,
+      c.id === 'g' || c.id === 'r' ? 'mag' : c.unit,
+      c.id === 'logAge' ? 'x' : 'value',
+      c.values
+    )
+  ),
   {
     axes: { x: 'logAge', y: 'r' },
     credit: pack.PACK.credit,
@@ -197,32 +249,65 @@ const mist = obsBase(
   }
 );
 emit('n07-mist.observation.json', mist);
-emit('n07-outside.observation.json', { ...mist, id: 'compute-gate-ii:n07-outside', title: mist.title + ' (the request names an age outside the table)', request: { feh: 0, logAge: 99 } });
+emit('n07-outside.observation.json', {
+  ...mist,
+  id: 'compute-gate-ii:n07-outside',
+  title: mist.title + ' (the request names an age outside the table)',
+  request: { feh: 0, logAge: 99 },
+});
 
 // ---- N10: Prompt 264's pinned objects as observation tables
-const orc = JSON.parse(readFileSync(path.join(REPO, 'tests/fixtures/population/oracle-results.json'), 'utf8'));
+const orc = JSON.parse(
+  readFileSync(
+    path.join(REPO, 'tests/fixtures/population/oracle-results.json'),
+    'utf8'
+  )
+);
 const design = (id, d, over = {}) => {
   const o = obsBase(
     `compute-gate-ii:n10-${id}`,
     `SYNTHETIC listings: Prompt 264's reference sample ${id} (numpy default_rng(${d.seed})), with its truth manifest`,
-    { name: `population sample ${id}`, frame: 'a measured value, unit bin width' },
+    {
+      name: `population sample ${id}`,
+      frame: 'a measured value, unit bin width',
+    },
     [
       col('x', 'measured value', '', 'x', d.objects.x),
-      col('sigma', 'uncertainty', '', 'uncertainty', d.objects.sigma, { of: 'x' }),
+      col('sigma', 'uncertainty', '', 'uncertainty', d.objects.sigma, {
+        of: 'x',
+      }),
     ],
     { axes: { x: 'x', y: 'x' } }
   );
-  o.design = { edges: d.edges, exposure: d.exposure, reliability: d.reliability, ...over };
-  o.truth = { muTrue: d.muTrue, seed: d.seed, generator: 'tools/population-oracle/oracle.py (Prompt 264, spike branch), numpy default_rng' };
+  o.design = {
+    edges: d.edges,
+    exposure: d.exposure,
+    reliability: d.reliability,
+    ...over,
+  };
+  o.truth = {
+    muTrue: d.muTrue,
+    seed: d.seed,
+    generator:
+      'tools/population-oracle/oracle.py (Prompt 264, spike branch), numpy default_rng',
+  };
   return o;
 };
 const S1 = orc.designs.S1;
 emit('n10-s1.observation.json', design('S1', S1));
 emit('n10-s2.observation.json', design('S2', orc.designs.S2));
-emit('n10-bad-exposure.observation.json', design('S1', S1, { exposure: [0, 100, 100, 100, 100, 100] }));
-emit('n10-bad-reliability.observation.json', design('S1', S1, { reliability: [0, 1, 1, 1, 1, 1] }));
+emit(
+  'n10-bad-exposure.observation.json',
+  design('S1', S1, { exposure: [0, 100, 100, 100, 100, 100] })
+);
+emit(
+  'n10-bad-reliability.observation.json',
+  design('S1', S1, { reliability: [0, 1, 1, 1, 1, 1] })
+);
 const neg = design('S1', S1);
-neg.columns[1].values = neg.columns[1].values.map((v, i) => (i === 0 ? -0.1 : v));
+neg.columns[1].values = neg.columns[1].values.map((v, i) =>
+  i === 0 ? -0.1 : v
+);
 emit('n10-bad-sigma.observation.json', neg);
 const none = design('S1', S1);
 none.columns.forEach(c => (c.values = []));
