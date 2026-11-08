@@ -772,6 +772,31 @@
     <priority>0.5</priority>
   </url>
   <url>
+    <loc>https://gravitas-sim.online/teaching/investigation/l3-elements/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://gravitas-sim.online/teaching/investigation/l3-frames/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://gravitas-sim.online/teaching/investigation/l3-seen/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://gravitas-sim.online/teaching/investigation/l3-tilts/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://gravitas-sim.online/teaching/investigation/l3-resonant/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
     <loc>https://gravitas-sim.online/teaching/investigation/ml-orbit/</loc>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
