@@ -1,0 +1,755 @@
+{
+  "format": "gravitas.compute-gate-ii-thresholds/1",
+  "prompt": "Roadmap III, Prompt 268, the compute page gate (tranche T6, authorized by Checkpoint VI: CONTINUE AS PLANNED, register row D-R10-267-01, merged as #568 at v3 0b5d3d0f)",
+  "document": "COMPUTE_GATE_II.md",
+  "committed": "2026-11-07, before any notebook, oracle, input file, reference script, validator or computation of this gate existed",
+  "rule": "Thresholds first, in their own commit. Amendments are recorded in this file's `amendments` before the run they affect. A leg that fails stays failing and labelled; no bound is moved after a result. A leg that is not measured is not passed (NOTEBOOK_BRIDGE_GATE.md, T5: 'a threshold not measured counts as not passed'). Only a tested notebook can ship in Prompt 269; an untested notebook is not 'the same family' as a tested one (Prompt 268's own rule).",
+  "seenBeforeCommitting": [
+    "The roadmap sections 7, 12.1, 13, Appendix C and Prompt 268 and 269's run condition; CONTINUATION_CHECKPOINT_VI's register row D-R10-267-01.",
+    "COMPUTE.md (the page, its isolation table, its seven notebooks and their stated download sizes and first-run times), NOTEBOOK_BRIDGE_GATE.md's eight thresholds and its measured times (Chromium 7.6 to 17.1 s, WebKit 5.7 to 6.1 s, Firefox 30 to 140 s for the 18.9 MB set), compute-frame/manifest.json (the pin: Pyodide 314.0.7, Python 3.14.2, numpy 2.4.6, matplotlib 3.10.8, scipy 1.18.0, astropy 7.2.0).",
+    "The shape of one notebook (compute/notebooks/integrators-compared.ipynb), the way tools/compute-answers.mjs runs cells under the machine's CPython, the schema names in sdk/schemas, the top-level exports of js/orbital.js solveKepler, js/kernels/stellar/polytrope.js, js/kernels/variables/period.js periodogram, js/kernels/statistics fTest and covarianceInterval, tools/dynamics-runs.mjs and tests/fixtures/dynamics/engine-runs.json's two grids (family S and D), and the keys (not the values) of tests/fixtures/population/oracle-results.json and its thresholds' reference-sample designs.",
+    "The installed Python: CPython 3.9.6, numpy 1.26.4, scipy 1.13.1, astropy 6.0.1, matplotlib 3.9.4 (the pinned runtime is Python 3.14.2 with other package versions, so a CPython run is a proxy and is labelled as one).",
+    "That TOOLCHAIN.md's quarterly pass (Prompt 129) has no match for 'pyodide', 'compute' or 'runtime pin' in a grep; leg G4b is written knowing that, and it is measured, not assumed.",
+    "No notebook cell of this gate, no oracle, no pinned fixture value, no reference output and no result had been written or seen. No published number was typed from memory; closed forms used as analytic checks are derived in this file."
+  ],
+  "problem": "Can the compute page carry numerical-methods notebooks an upper-level course needs, inside D-NB-04's isolation, at a maintenance cost the project can bear? Judged on merit, one notebook at a time, against seven thresholds (the roadmap's list). A notebook passes only if every verdict leg of its own and every page leg passes. Outcomes: A every candidate passes; B the passing subset, listed; C none passes (hold: Prompt 269 is not run; 270 and 274 ship without compute links).",
+  "environment": {
+    "notebooks": "Python cells run as compute-answers.mjs runs them: `python3 -I` reads {cells, input, params} on stdin, execs the cells in one namespace holding gravitas_input (the document's text) and gravitas_params (JSON text), and reads gravitas_output, a dict of JSON-text values. The answer is the sorted-keys, compact, allow_nan=False JSON of each value. A notebook that raises produces no answer: that is a refusal when the case is a negative case.",
+    "oracle": "python3 -E, numpy, scipy, astropy and the standard library only; it reads no Gravitas code and no output of a notebook; its output is pinned (sha256) before any notebook is run.",
+    "gravitasReferences": "Node 22.23.4 running the shipped modules named per candidate, written to a pinned fixture by tools/compute-gate-references.mjs on the spike before any notebook runs.",
+    "proxy": "The machine's CPython 3.9.6 is not the pinned runtime (Pyodide 314.0.7 on Python 3.14.2). Everything measured on it is labelled CPython; the legs that need the pinned runtime are NOT RUN here (requests R1 to R3).",
+    "scope": "What is tested per notebook is its numerical content, its determinism, its refusals and its supplies. The artifact envelope, the table and the figure every catalogue entry also returns are the same wrapper for every notebook (js/compute/check.js is the authority) and are Prompt 269's work; a figure's bytes are never compared across runtimes (COMPUTE.md). The gate does not test a notebook's words in either language: nothing is shipped here."
+  },
+  "tolerance": {
+    "relative": "|a - b| <= tol * max(|a|, |b|, 1e-300) unless a leg says absolute",
+    "toTheDigit": "the answer text (sorted-keys compact JSON with repr floats) is byte-identical"
+  },
+  "candidates": [
+    {
+      "id": "N01",
+      "notebook": "integration-order",
+      "title": "Integration accuracy and order",
+      "input": {
+        "kind": "gravitas.orbital-system/1",
+        "example": "compute/inputs/kepler-16.gravitas-system.json (existing)"
+      },
+      "computes": "The same Newtonian point-mass system from the file's `initial` block, integrated for one period of its tightest pair T_s (the pair of least initial separation as a circular orbit, as integrators-compared defines it) with four fixed-step schemes (explicit Euler, symplectic Euler, velocity Verlet, RK4) at n = 50, 100, 200, 400, 800 steps per T_s; the error at the end is the largest body displacement from the reference (scipy solve_ivp DOP853, rtol = atol = 1e-13, same equations); the observed order is the least-squares slope of ln(error) against ln(h) over the five steps.",
+      "settings": "none (the five n are fixed)",
+      "oracle": "tools/compute-gate-oracle.py, own integrator code written separately, with the same DOP853 reference call",
+      "legs": [
+        {
+          "id": "N01.a",
+          "what": "errors against the oracle's: every (scheme, n) relative 1e-6; the four orders absolute 1e-4",
+          "bound": "1e-6 / 1e-4 (the two codes integrate the same equations with the same arithmetic and the same reference, so they agree to rounding)",
+          "kind": "verdict",
+          "run": "here"
+        },
+        {
+          "id": "N01.b",
+          "what": "observed order against theory (1, 1, 2, 4): |p - p_theory| <= 0.1 p_theory + 0.1",
+          "bound": "0.2, 0.2, 0.3, 0.5 (a log-log fit over a factor 16 in h; 10 percent of the order plus a pre-asymptotic allowance of 0.1, fixed here before any fit)",
+          "kind": "verdict",
+          "run": "here"
+        },
+        {
+          "id": "N01.c",
+          "what": "determinism: two fresh `python3 -I` runs give the same answer text",
+          "bound": "byte-identical",
+          "kind": "verdict",
+          "run": "here"
+        },
+        {
+          "id": "N01.d",
+          "what": "negative case: the same file with the second body's initial position set equal to the first's (a collision at t = 0) is refused",
+          "bound": "the run raises and returns no answer",
+          "kind": "verdict",
+          "run": "here"
+        },
+        {
+          "id": "N01.e",
+          "what": "supplies: imports within {numpy, scipy, matplotlib, astropy, the standard library}; no file, network, subprocess or eval of input text; the example input validates as a `gravitas.orbital-system/1` through js/systemSpec.js systemFromFile and is unchanged (sha256)",
+          "bound": "all true",
+          "kind": "verdict",
+          "run": "here"
+        }
+      ]
+    },
+    {
+      "id": "N02",
+      "notebook": "adaptive-steps",
+      "title": "Adaptive steps",
+      "input": {
+        "kind": "gravitas.orbital-system/1",
+        "example": "compute/inputs/kepler-16.gravitas-system.json (existing)"
+      },
+      "computes": "The same system and span as N01 integrated with an embedded Dormand-Prince 5(4) pair written in the notebook, error per step scaled by atol + rtol|y| with atol = rtol = tol, rms norm, safety 0.9, step factor limited to [0.2, 5], tol = 1e-4, 1e-6, 1e-8, 1e-10; it reports accepted and rejected steps, function evaluations, the final error against the same DOP853 reference as N01 (divided by the widest distance from the barycenter, r_far), and the function evaluations the fixed-step RK4 of N01 needs (n doubled from 50, at most 102,400) to reach the same final error.",
+      "settings": "none (the four tolerances are fixed)",
+      "oracle": "scipy.integrate.solve_ivp method RK45 (the same coefficient set, a different controller) at rtol = atol = tol",
+      "legs": [
+        {
+          "id": "N02.a",
+          "what": "global error control: final error / r_far <= 100 tol at every tol",
+          "bound": "100 tol (global error accumulates over many steps; two orders is the customary allowance for a local control, fixed before the run)",
+          "kind": "verdict",
+          "run": "here"
+        },
+        {
+          "id": "N02.b",
+          "what": "against scipy RK45 at the same tol: the ratio of final errors in [0.2, 5] and the ratio of accepted steps in [0.5, 2]",
+          "bound": "both ratios (same scheme, different step-factor constants)",
+          "kind": "verdict",
+          "run": "here"
+        },
+        {
+          "id": "N02.c",
+          "what": "determinism",
+          "bound": "byte-identical",
+          "kind": "verdict",
+          "run": "here"
+        },
+        {
+          "id": "N02.d",
+          "what": "negative case: the file with the second body placed 1e-6 of the first pair separation from the first is refused (more than 200,000 accepted plus rejected steps, or a step below 1e-12 of the span) rather than looping",
+          "bound": "raises, and does so in at most 20 s of CPython CPU time",
+          "kind": "verdict",
+          "run": "here"
+        },
+        {
+          "id": "N02.e",
+          "what": "supplies, as N01.e",
+          "bound": "all true",
+          "kind": "verdict",
+          "run": "here"
+        },
+        {
+          "id": "N02.r",
+          "what": "reported, not a verdict: the fixed-step RK4's function evaluations divided by the adaptive scheme's at tol 1e-8",
+          "bound": "reported",
+          "kind": "reported",
+          "run": "here"
+        }
+      ]
+    },
+    {
+      "id": "N03",
+      "notebook": "orbital-chaos",
+      "title": "Orbital chaos from exported engine runs",
+      "input": {
+        "kind": "gravitas.grid/1",
+        "example": "made by the spike from the engine: tools/compute-gate-pair-runs.mjs runs family D's initial conditions (tests/fixtures/dynamics/initial-conditions.json, seed 101) twice in js/physics.js as tools/dynamics-runs.mjs runs them, the second with the x coordinate of body 0 increased by 1e-6 (Heggie length), 150 snapshots at 0.1 crossing time; one axis `snapshot` (0 to 150), the output `separation` = the Euclidean distance in the full phase space (positions, velocities, 4N numbers) between the two runs; a gravitas.grid/1 that validateGrid accepts"
+      },
+      "computes": "The exponential growth rate of the separation: S = the median of the last 20 snapshots; the window runs from the first snapshot at which separation > 3 x separation[0] to the last snapshot before separation > 0.1 S; lambda = the ordinary least-squares slope of ln(separation) against time (in crossing times, 0.1 per snapshot) over the window; also R^2 of that fit, the window's length and the Lyapunov time 1/lambda. A window of fewer than 10 snapshots, or R^2 < 0.98, is 'not constrained' and refused.",
+      "settings": "none",
+      "oracle": "tools/compute-gate-oracle.py: the same window rule and numpy.polyfit, written separately; plus three synthetic grids with a known answer",
+      "legs": [
+        {
+          "id": "N03.a",
+          "what": "analytic cases: a logistic-saturating exponential separation s(t) = S s0 e^(lambda t) / (S + s0 e^(lambda t)), S = 1, s0 = 1e-6, t = 0.1 k, k = 0 to 150, for lambda = 0.7 and 1.5 per crossing time: lambda recovered within 5 percent",
+          "bound": "5 percent (the logistic factor bends the log slope by at most 9 percent at the window's end; 5 percent is the allowance on the window average, fixed here)",
+          "kind": "verdict",
+          "run": "here"
+        },
+        {
+          "id": "N03.b",
+          "what": "against the oracle on the engine's pair: lambda, the window's two ends and R^2 agree",
+          "bound": "lambda and R^2 absolute 1e-9, window ends equal",
+          "kind": "verdict",
+          "run": "here"
+        },
+        {
+          "id": "N03.c",
+          "what": "determinism",
+          "bound": "byte-identical",
+          "kind": "verdict",
+          "run": "here"
+        },
+        {
+          "id": "N03.d",
+          "what": "negative cases (both must be refused): (i) linear growth s(t) = s0 (1 + 100 t); (ii) a pair whose separation starts at order 1 (two different clusters, seeds 101 and 102 of family D: the notebook's input is then not a pair of neighbouring runs)",
+          "bound": "both raise",
+          "kind": "verdict",
+          "run": "here"
+        },
+        {
+          "id": "N03.e",
+          "what": "supplies, as N01.e; the example input validates through js/dataKinds/contract.js validateGrid",
+          "bound": "all true",
+          "kind": "verdict",
+          "run": "here"
+        },
+        {
+          "id": "N03.r",
+          "what": "reported: lambda and the Lyapunov time of the engine's pair, in crossing times, and the saturation S",
+          "bound": "reported",
+          "kind": "reported",
+          "run": "here"
+        }
+      ]
+    },
+    {
+      "id": "N04",
+      "notebook": "kepler-root",
+      "title": "Root finding for Kepler's equation",
+      "input": {
+        "kind": "gravitas.orbital-system/1",
+        "example": "compute/inputs/kepler-16.gravitas-system.json (existing; the companions' `e` values enter the list)"
+      },
+      "computes": "E - e sin E = M for the mesh M = 2 pi k / 720 (k = 0 to 720) and also M = 1e-6, 1e-3 and 2 pi - 1e-3, for e in the file's companion eccentricities and {0.5, 0.9, 0.99, 0.999}, by Newton's method, by bisection and by Halley's method, each from the starting value E0 = M; it reports the iterations to |dE| <= 1e-14 (cap 100 for Newton and Halley, 100 for bisection) and the number of failures to converge per method and e, and the observed Newton order at e = 0.5: p = median over the mesh of ln(err_{k+2}/err_{k+1}) / ln(err_{k+1}/err_k) at the first k with err_k < 1e-2 and err_{k+2} > 1e-14.",
+      "settings": "none",
+      "oracle": "scipy.optimize.brentq on [M - e, M + e] with xtol = 1e-15, rtol = 8.9e-16 (independent bracketing method)",
+      "legs": [
+        {
+          "id": "N04.a",
+          "what": "against the oracle: every converged root of the notebook's bisection (the method that cannot fail inside the bracket) within 1e-11 rad",
+          "bound": "1e-11 (1e5 times double precision's roundoff)",
+          "kind": "verdict",
+          "run": "here"
+        },
+        {
+          "id": "N04.b",
+          "what": "against js/orbital.js solveKepler (Gravitas's own solver, pinned output over the same mesh): every root within 1e-11 rad of the notebook's bisection root",
+          "bound": "1e-11",
+          "kind": "verdict",
+          "run": "here"
+        },
+        {
+          "id": "N04.c",
+          "what": "determinism",
+          "bound": "byte-identical",
+          "kind": "verdict",
+          "run": "here"
+        },
+        {
+          "id": "N04.d",
+          "what": "negative cases: an input whose companion has e = 1.2 and one with e = -0.1 are refused (the equation's domain is 0 <= e < 1)",
+          "bound": "both raise",
+          "kind": "verdict",
+          "run": "here"
+        },
+        {
+          "id": "N04.e",
+          "what": "supplies, as N01.e",
+          "bound": "all true",
+          "kind": "verdict",
+          "run": "here"
+        },
+        {
+          "id": "N04.o",
+          "what": "observed Newton order at e = 0.5",
+          "bound": "at least 1.8 (quadratic is 2)",
+          "kind": "verdict",
+          "run": "here"
+        },
+        {
+          "id": "N04.r",
+          "what": "reported, not a verdict: which methods fail to converge from E0 = M at e = 0.99 and 0.999 (the teaching point of the notebook)",
+          "bound": "reported",
+          "kind": "reported",
+          "run": "here"
+        }
+      ]
+    },
+    {
+      "id": "N05",
+      "notebook": "least-squares",
+      "title": "Least squares from scratch against Prompt 154",
+      "input": {
+        "kind": "gravitas.observation/1 (time-series)",
+        "example": "compute/inputs/tess-hd209458-s56.observation.json (existing): the first 600 cadences, columns time, flux, flux-error"
+      },
+      "computes": "Weighted linear least squares polynomials of degree 0 to 4 in x = (t - t_mid) / half-range (so the design matrix is conditioned), weights 1/flux-error^2, solved by a QR factorization (numpy.linalg.qr; the normal equations are not used); for each degree the coefficients, their covariance (R^-1 R^-T, unscaled), chi^2, the degrees of freedom; and for each nested pair the F statistic and its p value (scipy.stats.f.sf).",
+      "settings": "none",
+      "oracle": "numpy.linalg.lstsq on the weighted, scaled problem; scipy.stats.f.sf",
+      "legs": [
+        {
+          "id": "N05.a",
+          "what": "against the oracle: coefficients relative 1e-8, covariance diagonal relative 1e-6, chi^2 relative 1e-9 (every degree)",
+          "bound": "1e-8 / 1e-6 / 1e-9",
+          "kind": "verdict",
+          "run": "here"
+        },
+        {
+          "id": "N05.b",
+          "what": "against Prompt 154's js/kernels/statistics fTest, called with the notebook's own chi^2 as the sums of squares and its n and parameter counts: F relative 1e-9; p relative 1e-8 where p > 1e-300",
+          "bound": "1e-9 / 1e-8",
+          "kind": "verdict",
+          "run": "here"
+        },
+        {
+          "id": "N05.c",
+          "what": "determinism",
+          "bound": "byte-identical",
+          "kind": "verdict",
+          "run": "here"
+        },
+        {
+          "id": "N05.d",
+          "what": "negative cases (both refused): a window with fewer points than degree 4 needs (five points are required; the test gives four), and a window whose times are all equal (a rank-deficient design)",
+          "bound": "both raise",
+          "kind": "verdict",
+          "run": "here"
+        },
+        {
+          "id": "N05.e",
+          "what": "supplies, as N01.e; the example validates through js/observatory/schema.js validateObservation",
+          "bound": "all true",
+          "kind": "verdict",
+          "run": "here"
+        }
+      ]
+    },
+    {
+      "id": "N06",
+      "notebook": "periodogram-scratch",
+      "title": "A periodogram from scratch against the existing family",
+      "input": {
+        "kind": "gravitas.observation/1 (time-series)",
+        "example": "compute/inputs/tess-hd209458-s56.observation.json (existing), all 1,882 cadences, time and flux"
+      },
+      "computes": "The Lomb-Scargle power with a floating mean (unweighted, the fraction of the variance one sinusoid and a mean explain) at 400 periods log-spaced from 0.5 to 10 d, written in numpy from the least-squares definition (a 3-by-3 normal system per period), not from astropy; the peak period; the power at the peak.",
+      "settings": "none",
+      "oracle": "astropy.timeseries.LombScargle(t, y, fit_mean=True, center_data=True).power(1/P, normalization='standard') (an independent implementation of the same quantity)",
+      "legs": [
+        {
+          "id": "N06.a",
+          "what": "power against the oracle at every period: absolute 1e-9; the peak index equal",
+          "bound": "1e-9 (both are the same quantity in double precision)",
+          "kind": "verdict",
+          "run": "here"
+        },
+        {
+          "id": "N06.b",
+          "what": "against js/kernels/variables/period.js periodogram (the existing family, pinned over the same periods): power absolute 1e-9; the peak index equal",
+          "bound": "1e-9",
+          "kind": "verdict",
+          "run": "here"
+        },
+        {
+          "id": "N06.c",
+          "what": "determinism",
+          "bound": "byte-identical",
+          "kind": "verdict",
+          "run": "here"
+        },
+        {
+          "id": "N06.d",
+          "what": "negative cases (all refused): fewer than 10 points; non-increasing times; constant flux (zero variance); a non-positive trial period",
+          "bound": "all four raise",
+          "kind": "verdict",
+          "run": "here"
+        },
+        {
+          "id": "N06.e",
+          "what": "supplies, as N01.e; the example validates through validateObservation",
+          "bound": "all true",
+          "kind": "verdict",
+          "run": "here"
+        }
+      ]
+    },
+    {
+      "id": "N07",
+      "notebook": "isochrone-interpolation",
+      "title": "Interpolation of isochrone tables",
+      "input": {
+        "kind": "gravitas.observation/1 (table)",
+        "example": "made by the spike: tools/compute-gate-iso-input.mjs writes the MIST pack's six columns (feh, logAge, phase, mass, g, r; js/data/observations/mistSdssIsochrones.js decoded through js/tableObservation.js) as one observation document of kind `table`, unchanged values"
+      },
+      "computes": "At the table's [Fe/H] nearest zero (ties to the lower), phase 0 (main sequence): for each interior age a_k (k = 1 to K-2) the held-out absolute r magnitude at each of that isochrone's phase-0 points whose initial mass lies inside the phase-0 mass range of the four nearest ages (a_{k-2}, a_{k-1}, a_{k+1}, a_{k+2}), predicted from the other ages by linear interpolation in log age (two neighbours) and by the cubic through the four (Lagrange), after each age's r(m) is interpolated linearly in mass at that mass; the RMS and the maximum of the error in magnitudes, per method; the number of held-out points.",
+      "settings": "none",
+      "oracle": "scipy.interpolate.interp1d (linear) and scipy.interpolate.BarycentricInterpolator on the four nodes",
+      "legs": [
+        {
+          "id": "N07.a",
+          "what": "predictions against the oracle: every held-out prediction, both methods, absolute 1e-9 mag",
+          "bound": "1e-9",
+          "kind": "verdict",
+          "run": "here"
+        },
+        {
+          "id": "N07.b",
+          "what": "held-out accuracy: the cubic's RMS error is no larger than the linear's, and at most 0.05 mag",
+          "bound": "both (0.05 mag is a bound chosen here before the run, about the photometric scatter of a rich cluster's main sequence; it is not derived from Gravitas's own isochrone morph)",
+          "kind": "verdict",
+          "run": "here"
+        },
+        {
+          "id": "N07.c",
+          "what": "determinism",
+          "bound": "byte-identical",
+          "kind": "verdict",
+          "run": "here"
+        },
+        {
+          "id": "N07.d",
+          "what": "negative case: a request for an age outside the table's range, or a [Fe/H] the table does not hold, is refused (nothing is extrapolated)",
+          "bound": "raises",
+          "kind": "verdict",
+          "run": "here"
+        },
+        {
+          "id": "N07.e",
+          "what": "supplies, as N01.e; the example validates through validateObservation; the pack's licence status travels with the example (no-license-stated, attributed) and is stated in the notebook's credit line",
+          "bound": "all true",
+          "kind": "verdict",
+          "run": "here"
+        }
+      ]
+    },
+    {
+      "id": "N08",
+      "notebook": "polytrope",
+      "title": "A polytrope against the stellar kernel",
+      "input": {
+        "kind": "gravitas.grid/1",
+        "example": "made by the spike: tools/compute-gate-polytrope-input.mjs writes js/kernels/stellar/polytrope.js polytropeTable() as a dense grid (axis `n` = TABLE_INDICES; outputs xi1, mass, rhoRatio), the kernel's own values"
+      },
+      "computes": "The Lane-Emden equation theta'' + 2 theta'/xi + theta^n = 0 from the series start at xi = 1e-6 with scipy solve_ivp (DOP853, rtol = 1e-12, atol = 1e-14) and a terminal event at theta = 0, for every n on the grid's axis: xi1, the dimensionless mass -xi1^2 theta'(xi1), rho_c over the mean density; each compared with the grid.",
+      "settings": "none",
+      "oracle": "closed forms n = 0 (theta = 1 - xi^2/6: xi1 = sqrt(6), mass = 2 sqrt(6)) and n = 1 (theta = sin(xi)/xi: xi1 = pi, mass = pi), derived here; for the other n an independent solve with scipy solve_ivp Radau (rtol = 1e-11, atol = 1e-13) from the series start at xi = 1e-4",
+      "legs": [
+        {
+          "id": "N08.a",
+          "what": "analytic cases n = 0 and 1: xi1 and mass relative 1e-9",
+          "bound": "1e-9",
+          "kind": "verdict",
+          "run": "here"
+        },
+        {
+          "id": "N08.b",
+          "what": "against the oracle for every other n on the axis: xi1 and mass relative 1e-8",
+          "bound": "1e-8",
+          "kind": "verdict",
+          "run": "here"
+        },
+        {
+          "id": "N08.c",
+          "what": "against the stellar kernel's table (the input): xi1, mass and rhoRatio relative 1e-6 for every n",
+          "bound": "1e-6 (the kernel integrates with RK4 at a fixed step of 5e-4: its error is far below 1e-6, so a larger difference is a defect in one of the two)",
+          "kind": "verdict",
+          "run": "here"
+        },
+        {
+          "id": "N08.d",
+          "what": "determinism",
+          "bound": "byte-identical",
+          "kind": "verdict",
+          "run": "here"
+        },
+        {
+          "id": "N08.f",
+          "what": "negative cases (all refused): an input whose axis holds n = 5 (infinite radius) or n = 5.5 (infinite mass) or n = -0.5",
+          "bound": "all raise",
+          "kind": "verdict",
+          "run": "here"
+        },
+        {
+          "id": "N08.e",
+          "what": "supplies, as N01.e; the example validates through validateGrid",
+          "bound": "all true",
+          "kind": "verdict",
+          "run": "here"
+        }
+      ]
+    },
+    {
+      "id": "N09",
+      "notebook": "barnes-hut-toy",
+      "title": "A Barnes-Hut toy against direct summation",
+      "input": {
+        "kind": "gravitas.grid/1",
+        "example": "made by the spike: a SYNTHETIC snapshot, labelled so in its title and generator, N = 1000 equal masses (1/N each), x and y drawn from independent standard normals with numpy default_rng(268009); axis `body` 0 to 999; outputs x, y, m; G = 1"
+      },
+      "computes": "Accelerations with Plummer softening eps = 0.05 by direct summation, and by a monopole quadtree (centre of mass per cell, a cell is used when its side over its distance to the body is below theta) for theta = 0, 0.3, 0.5, 0.7, 1.0; for each theta the RMS over bodies of |a_tree - a_direct| / |a_direct|, the maximum, and the number of body-cell and body-body interactions.",
+      "settings": "none",
+      "oracle": "numpy direct summation written separately; the same snapshot's pinned accelerations",
+      "legs": [
+        {
+          "id": "N09.a",
+          "what": "the notebook's direct sum against the oracle's: every component relative 1e-12 of the largest",
+          "bound": "1e-12",
+          "kind": "verdict",
+          "run": "here"
+        },
+        {
+          "id": "N09.b",
+          "what": "theta = 0 (every cell opened): the tree equals the direct sum, every component relative 1e-10 of the largest",
+          "bound": "1e-10",
+          "kind": "verdict",
+          "run": "here"
+        },
+        {
+          "id": "N09.g",
+          "what": "the RMS error is non-decreasing in theta, at most 0.05 at theta = 0.5, and the interactions at theta = 0.5 are at most 0.25 N (N - 1)",
+          "bound": "all three (0.05 is coarser than the customary monopole error at 0.5; it is a bound set before the run)",
+          "kind": "verdict",
+          "run": "here"
+        },
+        {
+          "id": "N09.c",
+          "what": "determinism",
+          "bound": "byte-identical",
+          "kind": "verdict",
+          "run": "here"
+        },
+        {
+          "id": "N09.d",
+          "what": "negative cases (both refused): eps = 0; N = 4,001 bodies (the notebook's cap)",
+          "bound": "both raise",
+          "kind": "verdict",
+          "run": "here"
+        },
+        {
+          "id": "N09.e",
+          "what": "supplies, as N01.e; the example validates through validateGrid and is labelled synthetic",
+          "bound": "all true",
+          "kind": "verdict",
+          "run": "here"
+        }
+      ]
+    },
+    {
+      "id": "N10",
+      "notebook": "synthetic-populations",
+      "title": "Synthetic populations against Prompt 264",
+      "input": {
+        "kind": "gravitas.observation/1 (table)",
+        "example": "made by the spike from the objects Prompt 264's pinned oracle wrote (tests/fixtures/population/oracle-results.json, designs S1 and S2: columns x, sigma): one observation document of kind `table` per design, with the design's edges, exposure and reliability in its settings, a synthetic table labelled with 264's truth manifest"
+      },
+      "computes": "The binned maximum-likelihood rates of 264's definition (Gaussian convolution over bins, Poisson process over the measured value, EM, 20,000 iterations at most, stop at a relative change of 1e-12 in the log-likelihood), Gamma_j = mu_j r_j / E_j, the log-likelihood, the floor (a bin with E_j < 5 is 'not constrained'); then 200 synthetic populations drawn at design S1's true expected counts mu = (30, 60, 90, 90, 60, 30) with numpy default_rng(268001 + r), each with sigma log-uniform 0.1 to 0.3 of a bin width, refitted: z_j = (mu_hat_j - mu_j) / sqrt(mu_j) over the replicates.",
+      "settings": "none",
+      "oracle": "Prompt 264's pinned independent oracle (python -E, numpy and scipy only), read as a fixture: its fit's mu for S1 and S2",
+      "legs": [
+        {
+          "id": "N10.a",
+          "what": "against 264's pinned oracle: mu_hat relative 1e-6 for S1; for S2 mu_hat relative 1e-6 where the oracle's is above 1 and absolute 1e-6 elsewhere, and the bin whose exposure is below 5 reported 'not constrained'",
+          "bound": "1e-6 (the oracle's own two algorithms agree to 1e-12; the allowance covers a different stopping rule)",
+          "kind": "verdict",
+          "run": "here"
+        },
+        {
+          "id": "N10.b",
+          "what": "synthetic recovery (a recovery of a self-generated truth: it never marks the method valid for real data): per bin |mean z| <= 0.35 and the RMS of z pooled over the bins in [0.8, 1.6]",
+          "bound": "0.35 (about 5 standard errors of a mean of 200) and [0.8, 1.6]",
+          "kind": "verdict",
+          "run": "here"
+        },
+        {
+          "id": "N10.c",
+          "what": "determinism (the seeds are fixed)",
+          "bound": "byte-identical",
+          "kind": "verdict",
+          "run": "here"
+        },
+        {
+          "id": "N10.d",
+          "what": "negative cases (all refused): an exposure of 0 or less; a reliability of 0 or less; a negative sigma; no objects",
+          "bound": "all four raise",
+          "kind": "verdict",
+          "run": "here"
+        },
+        {
+          "id": "N10.e",
+          "what": "supplies, as N01.e; each example validates through validateObservation and carries its truth manifest",
+          "bound": "all true",
+          "kind": "verdict",
+          "run": "here"
+        }
+      ]
+    }
+  ],
+  "pageLegs": [
+    {
+      "id": "G1.a",
+      "what": "isolation unchanged: the spike changes no file under compute-frame/ or js/compute/ or js/computePage.js, and `node tools/compute.mjs --check` passes",
+      "bound": "git diff against the base is empty for those paths; the check exits 0",
+      "kind": "verdict",
+      "run": "here"
+    },
+    {
+      "id": "G1.b",
+      "what": "the page's own suites pass on the spike: tests/computeFrame, computeMessages, computeCapsule, computeSession, computeCatalogue (Jest, Node 22.23.4)",
+      "bound": "all pass",
+      "kind": "verdict",
+      "run": "here"
+    },
+    {
+      "id": "G1.c",
+      "what": "the page's own no-network e2e (e2e/compute.spec.js, chromium) passes on a build of the spike",
+      "bound": "all pass",
+      "kind": "verdict",
+      "run": "here"
+    },
+    {
+      "id": "G2.a",
+      "what": "bytes the reader downloads: every candidate's package set is one of the sets the catalogue already states (numpy; numpy and matplotlib; numpy and scipy; numpy and astropy; numpy, matplotlib and scipy) so the cold download is at most the largest stated, about 23 MB",
+      "bound": "true for all ten (static)",
+      "kind": "verdict",
+      "run": "here"
+    },
+    {
+      "id": "G2.b",
+      "what": "per candidate, cold load and first run in the browser against the committed bounds: Chromium and WebKit, the page's real frame, the CDN, CPU throttled 4x on the page, Pyodide 314.0.7: frame's first message to answer at most 30 s",
+      "bound": "at most 30 s each; Firefox is reported and not a verdict leg (NOTEBOOK_BRIDGE_GATE.md measured 30 to 140 s)",
+      "kind": "verdict",
+      "run": "R1"
+    },
+    {
+      "id": "G3.b",
+      "what": "per candidate, determinism in the pinned runtime: two runs in each of two browsers (Chromium, WebKit) give the same answer text, byte for byte",
+      "bound": "identical across all four runs",
+      "kind": "verdict",
+      "run": "R2"
+    },
+    {
+      "id": "G3.c",
+      "what": "reported: the pinned runtime's digits against the machine CPython's (a different NumPy may differ in the last digits)",
+      "bound": "reported",
+      "kind": "reported",
+      "run": "R2"
+    },
+    {
+      "id": "G4.a",
+      "what": "the runtime is pinned: compute-frame/manifest.json names the Pyodide version, its lock's SHA-256 and every package version; each candidate would be admitted only with its cells' hash (the catalogue's rule)",
+      "bound": "true (static)",
+      "kind": "verdict",
+      "run": "here"
+    },
+    {
+      "id": "G4.b",
+      "what": "a recurring check exists: TOOLCHAIN.md's quarterly pass (Prompt 129) or a repository check compares the pinned runtime release with the CDN's current one and names the compute frame",
+      "bound": "present; absent is a failure",
+      "kind": "verdict",
+      "run": "here"
+    },
+    {
+      "id": "G4.c",
+      "what": "the pin's upgrade rehearsed on the spike: the frame regenerated at a newer release (a data download of its lock file) and every candidate rerun on it with the same answers within the stated tolerances of N01 to N10",
+      "bound": "all ten rerun",
+      "kind": "verdict",
+      "run": "R3"
+    },
+    {
+      "id": "G5.a",
+      "what": "nothing in the application depends on the page: no module outside js/compute/, js/computePage.js and the page's own entry imports them (tools/check-architecture.mjs and a grep)",
+      "bound": "no importer",
+      "kind": "verdict",
+      "run": "here"
+    },
+    {
+      "id": "G5.b",
+      "what": "no built-in course pack requires the page: no investigation that has a step declaring `compute:` is listed in a built-in course pack",
+      "bound": "none listed",
+      "kind": "verdict",
+      "run": "here"
+    },
+    {
+      "id": "G6.a",
+      "what": "online-only, stated and held: `compute/`, `compute-frame/`, js/compute/ and js/computePage.js are in NEVER_PRECACHED (tools/build-service-worker.mjs) and absent from the built sw-manifest precache; the page says online and opt-in in English and Spanish",
+      "bound": "true",
+      "kind": "verdict",
+      "run": "here"
+    },
+    {
+      "id": "G7.a",
+      "what": "bytes: the page's own route ceiling (tools/route-budgets.json, `compute`, sources and build) has room for ten more catalogue entries: the measured route bytes plus ten times the mean size of one existing entry in js/compute/catalogueData.js at most the ceiling, in KB and in requests",
+      "bound": "fits without a raise (a raise would need the standing approval and is not requested by this gate)",
+      "kind": "verdict",
+      "run": "here"
+    }
+  ],
+  "verdict": {
+    "function": "A candidate PASSES iff every verdict leg of its own (N**.a to N**.e and the legs lettered for it) is passed, and G2.b and G3.b are passed for it, and every page leg G1.a to G1.c, G2.a, G4.a to G4.c, G5.a, G5.b, G6.a and G7.a is passed. A leg that is not run is not passed. A reported leg decides nothing. A is every candidate passing; B is at least one but not all, and lists them; C is none. Computed by the validator from the committed bounds alone.",
+    "ifNotRun": "A verdict leg that needs a request (R1 to R3) and was not run keeps its candidate from PASSing, so with R1 to R3 not granted every candidate is NOT PASSED and the verdict is C by the function, whatever the other legs show. The report states, beside it and labelled as not a verdict, the candidates with no failed leg among the legs that could run (the 'no failure so far' list), so that Carl can see what a grant of R1 to R3 would be deciding.",
+    "reRun": "If Carl grants R1 to R3 the same function is re-evaluated on the same file in a follow-up, as the data legs of Prompts 261 and 263 were: no bound moves, and a leg that has already failed stays failed.",
+    "consequences": {
+      "A": "Prompt 269 may ship the ten.",
+      "B": "Prompt 269 ships the listed notebooks only; the rest are not 'the same family' of the tested ones.",
+      "C": "Prompt 269 is not run; Prompts 270 and 274 ship without compute links; the compute page stays at its present size (seven notebooks) with security updates only (Appendix C)."
+    }
+  },
+  "externalRequests": [
+    {
+      "id": "R1",
+      "needs": "Carl's permission to run downloaded code",
+      "what": "Run the page's pinned runtime (Pyodide 314.0.7 from cdn.jsdelivr.net, the frame already pinned by compute-frame/manifest.json, hashed lock) in Playwright Chromium and WebKit through the page's real frame, the ten prototype notebooks of the spike one at a time, CPU throttled 4x, recording the frame's first message to the answer for G2.b; about 23 MB of CDN download per browser, cached after the first."
+    },
+    {
+      "id": "R2",
+      "needs": "the same permission",
+      "what": "Two runs of each notebook in each of the two browsers, comparing answer text byte for byte (G3.b) and against the CPython answers (G3.c, reported)."
+    },
+    {
+      "id": "R3",
+      "needs": "the same permission and a data download",
+      "what": "Fetch the lock file of one newer Pyodide release as data (sha256, retrieval date, terms read), regenerate the frame on the spike with it, and run the ten notebooks on it (G4.c)."
+    }
+  ],
+  "scope": "The gate tests the ten candidates named in the roadmap and no others. A notebook that fails here is not 'rescued' by a variant; a different notebook would need its own gate. Nothing is built on the main line: the prototypes live on spike/compute-gate (never merged); this documentation PR carries the thresholds, the pinned oracle and reference outputs, the results, the record and the register rows. No lesson, panel, viewer or catalogue entry is added (the consumers rule: Carl's rulings of 2026-11-05, -06 and -07).",
+  "amendments": [
+    {
+      "id": "AM1",
+      "before": "the oracle's first run",
+      "about": "N07",
+      "text": "Definitions the contract left open, no bound moved. The ages used are k = 2 to K-3 (each has two neighbours on either side, which the cubic needs; 'interior ages k = 1 to K-2' read that way). The held-out masses are those of the held-out isochrone's phase-0 points that lie, inclusive, in the intersection of the phase-0 mass ranges of its four neighbours. At a neighbour, r(m) is the linear interpolation in mass of that age's phase-0 points sorted by mass. The linear method uses the two nearest ages (k-1 and k+1) and the cubic the Lagrange polynomial through the four, both in log age."
+    },
+    {
+      "id": "AM2",
+      "before": "the oracle's first run",
+      "about": "every negative case",
+      "text": "A negative case is made by the validator from a committed input by a stated derivation and run through the same harness: N01, N02 and N04 from the Kepler-16 file (N01: body 1's initial position set to body 0's; N02: body 1 placed 1e-6 of the pair separation from body 0 on the line joining them; N04: the first companion's e set to 1.2, and to -0.1); N05 from the TESS file (the first four cadences; and the first 600 with every time set to the first); N06 from the TESS file (the first nine cadences; times reversed; flux set to a constant; a parameter `periods` holding a non-positive trial period); N07 by the parameter `request` (feh and logAge) naming an age 99 and a [Fe/H] the table does not hold; N09 by the parameter `eps` = 0 and by the 4,001-body snapshot; N08 and N10 by the input files tools/compute-gate-inputs.mjs writes. A notebook reads a parameter only if its candidate names one here: `request` (N07), `eps` (N09, default 0.05), `periods` (N06, default the committed 400)."
+    },
+    {
+      "id": "AM3",
+      "before": "the oracle's first run",
+      "about": "N03",
+      "text": "The engine pair, the different-clusters pair and the three synthetic grids are written by tools/compute-gate-inputs.mjs under Node 22.23.4 (the engine pair's sha256 equals the Node 24 run's: checked). N03.b compares the notebook with the oracle on the engine's pair; the oracle also runs the other four grids so that the refusal and recovery legs have an independent decision, and N03.a and N03.d read the notebook's own result against the analytic truth and the refusal rule, not against each other."
+    },
+    {
+      "id": "AM4",
+      "before": "the oracle's first run (which stopped at an import error and produced no result)",
+      "about": "the oracle's environment",
+      "text": "astropy 6.0.1 cannot import here because PyYAML is not importable (astropy.table imports it for ECSV files, which N06 does not use). The oracle inserts an empty module named `yaml` into sys.modules before importing astropy.timeseries; nothing was installed and nothing was downloaded. The first invocation of the oracle failed at that import before computing anything; no number from it was seen."
+    },
+    {
+      "id": "AM5",
+      "before": "the first notebook run (the oracle's output had been seen, no notebook existed)",
+      "about": "N03.b when the oracle refuses",
+      "text": "The oracle refuses the engine's pair under the committed window rule (R^2 below 0.98). Where the oracle's decision is 'refused', N03.b passes iff the notebook also refuses, and the R^2 and the two window ends in the notebook's refusal message (repr of the numbers) equal the oracle's (R^2 to 1e-9). The notebook's refusal message therefore states `R2=`, `i0=` and `i1=` for a refusal on R^2. This is a reading of the leg for the case the oracle decides; it changes no bound and does not make N03.b easier to fail or to pass on a case where the oracle returns a rate. It is stated here because it means that, on the engine's own export, N03 produces no rate (reported: N03.r is then 'refused')."
+    },
+    {
+      "id": "AM6",
+      "before": "the validator's pinned run (a first attempt was aborted by hand after 12 minutes inside N02's negative case; no leg had been computed or written)",
+      "about": "how a notebook is run",
+      "text": "Notebooks run under `python3 -E`, not `python3 -I` as `environment.notebooks` says: -I also drops the user site where numpy and scipy are installed here, so no notebook could import them; the harness is otherwise compute-answers.mjs's. Every notebook run has a wall-clock limit, 900 s, and N02.d's negative case 60 s (its bound is 20 s of CPU; a run that has not refused by 60 s has failed the leg and is killed, and the leg records that). No bound moved."
+    },
+    {
+      "id": "AM7",
+      "before": "the second validator run",
+      "about": "a defect of the N02 notebook's own code, found by reading its failing legs of the first run (N02.a, N02.b, N02.d)",
+      "text": "The prototype's Dormand-Prince stage loop indexed the tableau one row early (stage 2 was computed with the empty row, so every stage after the first used the wrong coefficients): the scheme was not the committed one, and its errors were hundreds of times scipy's at a similar step count. The code is corrected (the stage i uses row i of the tableau, whose constants were checked against scipy's RK45 tableau as a check of the typing, not as a leg). The first run's rows stay in first-run-results.json and in the record as the first stream; the corrected notebook is the candidate N02 judged by the pinned second run. No bound moved and no other notebook's code changed."
+    },
+    {
+      "id": "AM8",
+      "before": "the second validator run",
+      "about": "a defect of the validator's execution",
+      "text": "The validator looked N09's theta rows up by String(theta), but the notebook's keys are Python's repr of a float ('1.0', '0.0'), so theta = 1.0 was read as absent and N09.g's monotone check saw a null. The lookup is corrected to the notebook's keys. No bound moved; the leg's rule is unchanged."
+    },
+    {
+      "id": "AM9",
+      "before": "the second validator run",
+      "about": "N01.a, N07.b, G4.b, G5.b, G7.a, N02.d (first-run fails that are not defects)",
+      "text": "Recorded so that no reader takes the corrections above for a rescue: N01.a (errors against the oracle within 1e-6; measured 1.7e-5 on the smallest error, which differs because the two codes' rounding differences are amplified in a reference whose own error is near 1e-12 against an RK4 error of 7e-9), N07.b (the cubic is not better than the linear), G4.b (no recurring runtime check), G5.b (a built-in course lists five investigations that have a compute step) and G7.a (no room in the route's ceiling) are failures of the legs as committed, and they stay failing and labelled. Each is reported as it stands in the second run."
+    }
+  ],
+  "decisions": [
+    "DEC1: the ten legs-per-candidate share one shape (accuracy against an independent code, agreement with the Gravitas module the roadmap names, determinism, refusals, supplies), so that a pass or fail is comparable across notebooks and none gets a gentler test.",
+    "DEC2: the machine's CPython stands in for the pinned runtime for everything that does not need the browser; every number it produces is labelled CPython and none is offered as a Pyodide result.",
+    "DEC3: a leg that needs downloaded code to run is NOT RUN with an exact request; it is not guessed and it is not waived.",
+    "DEC4: page legs are shared by all candidates because the roadmap's thresholds 1, 4, 5, 6 and 7 are about the page; a failed page leg removes every candidate (verdict C) and says which leg."
+  ],
+  "questions": [
+    "Q1: grant R1 and R2 (run the pinned runtime in Chromium and WebKit) so that G2.b and G3.b are measured? Without them the verdict is C by the function.",
+    "Q2: if G4.b fails (no recurring runtime check), is adding one to TOOLCHAIN.md's quarterly pass (129) Carl's to schedule, separate from this gate?"
+  ]
+}

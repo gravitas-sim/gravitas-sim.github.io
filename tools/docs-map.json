@@ -184,6 +184,13 @@
       "student": true
     },
     {
+      "file": "COMPUTE_GATE_II.md",
+      "kind": "gate",
+      "purpose": "Compute page gate II: ten candidate notebooks prototyped on a spike, seven page thresholds, 70 legs, verdict C (Prompt 268).",
+      "owner": 268,
+      "student": false
+    },
+    {
       "file": "CONTINUITY.md",
       "kind": "policy",
       "purpose": "How Gravitas survives its maintainer's absence.",
