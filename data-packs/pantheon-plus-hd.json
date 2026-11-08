@@ -42,7 +42,7 @@
       "name": "distance modulus error",
       "unit": "mag",
       "uncertaintyOf": "distance modulus",
-      "description": "MU_SH0ES_ERR_DIAG, the diagonal of the full covariance: for plotting only, the release's own warning"
+      "description": "MU_SH0ES_ERR_DIAG, not the covariance's diagonal (root 0.71 of it, median): for plotting only"
     },
     {
       "id": "cal",
@@ -60,7 +60,7 @@
   "masks": [],
   "reductions": [
     "All 1,701 rows of Pantheon+SH0ES.dat (commit 7fc6805), sorted by redshift, then identifier, then survey code. A supernova observed by two surveys is two rows, as the release has it. Of the 47 columns, five are kept and the identifier is not; the other 41 columns (SALT2 parameters, host properties, positions, bias corrections) are left out.",
-    "Errors are the diagonal of the full statistical-plus-systematic covariance, which the release says is for plotting only. The 33 MB covariance is not shipped, so a fit to this table is not the published fit and its Omega_m carries a larger scatter than the published error.",
+    "Errors are MU_SH0ES_ERR_DIAG (the release says: for plotting only), not its covariance's diagonal (root 0.71 of them, median). The 33 MB covariance is not shipped, so a fit to this table is not the published fit and its Omega_m carries a larger scatter than the published error.",
     "The distance moduli sit on the SH0ES-calibrated scale, so H0 is not measured by the supernovae alone: they fix the shape of the curve, not its scale. 77 rows are Cepheid calibrators.",
     "111 of the 1,701 rows have z below 0.01, where peculiar velocities dominate; the release keeps them and so does this table. Redshift is stored to 1e-5, the modulus to 1e-4 mag and its error to 1e-6, the raw file's digits: the stored table's mean redshift and mean modulus equal the raw file's to better than 1e-12 relative."
   ],
@@ -171,7 +171,7 @@
     }
   },
   "assumptions": [
-    "The errors are the covariance diagonal and treat the points as independent, which they are not (shared calibration and a common absolute-magnitude zero point); a lesson must say so.",
+    "A fit with these errors alone treats the points as independent, which they are not (shared calibration and a common absolute-magnitude zero point); a lesson must say so.",
     "The raw file is committed beside this tool (tools/data-packs/cosmology/Pantheon+SH0ES.dat, 579,283 bytes) at the commit named in its URL, so the build does not depend on a repository that may change."
   ],
   "compatible": {
@@ -181,8 +181,8 @@
   "offline": "idle",
   "derived": {
     "file": "js/data/observations/pantheonPlusHd.js",
-    "bytes": 5834,
-    "sha256": "073ef3c31169143f4a7a39d77b752888f0f14be331ae54aeb05a0c98b224b9a0",
+    "bytes": 5833,
+    "sha256": "2e3984c420ee2143df43a9aaa67689cf4a4488335f4e7f8d1f7a8b04eaf9ee91",
     "sidecar": {
       "file": "cosmology/pantheon-plus-hd.json",
       "bytes": 36613,
@@ -190,7 +190,7 @@
     }
   },
   "validation": {
-    "check": "a flat Lambda-CDM fit with the offset solved gives Omega_m within 0.08 of the published flat value 0.334 +- 0.018 (covariance diagonal only here, the full covariance there)",
+    "check": "a flat Lambda-CDM fit with the offset solved gives Omega_m within 0.08 of the published flat value 0.334 +- 0.018 (plotting errors only here, the full covariance there)",
     "against": [
       {
         "quantity": "Omega_m, flat Lambda-CDM, supernovae only",

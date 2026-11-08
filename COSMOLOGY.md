@@ -36,7 +36,7 @@ errors, H0 = 70 scale, 75 down-weighted rows kept), `sdss-dr18-redshift-slice`
 (public domain; flux-limited), `coma-cluster-quoted` (the scenario's four
 numbers; only the dispersion has a checked citation). The raw Hubble table and
 DES CSV are committed beside the tool. Loader: `js/cosmologyData.js`. Forward
-model: `hubble-diagram`. `pantheon-plus-hd` (the Pantheon+SH0ES table, 1,701 light curves, no licence stated, credited, D-RIGHTS-04; loader `loadPantheonPlus`, covariance diagonal only, so a fit to it is not the published fit). Not built: SPARC, Faber-Jackson, Coma from SDSS.
+model: `hubble-diagram`. `pantheon-plus-hd` (the Pantheon+SH0ES table, 1,701 light curves, no licence stated, credited, D-RIGHTS-04; loader `loadPantheonPlus`, the release's plotting errors only and not its covariance's diagonal (SN_LIKELIHOOD_GATE.md section 10), so a fit to it is not the published fit). Not built: SPARC, Faber-Jackson, Coma from SDSS.
 
 ## Not done
 
