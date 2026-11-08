@@ -1,6 +1,6 @@
 {
   "format": "gravitas.resonances-ii-thresholds/1",
-  "prompt": "Roadmap III, Prompt 273, Resonances and secular dynamics II, Part A (gate), tranche T6 authorized by Checkpoint VI (D-R10-267-01); hard prerequisites 148, 193 (#529-era satellite pack) and 271 (#572) landed on v3 1dff1b8c",
+  "prompt": "Roadmap III, Prompt 273, Resonances and secular dynamics II, Part A (gate), tranche T6 authorized by Checkpoint VI (D-R10-267-01); hard prerequisites 148, 193 (the satellite ephemeris pack) and 271 (#572) landed on v3 1dff1b8c",
   "document": "RESONANCES_II.md",
   "committed": "2026-11-08, before any kernel module, oracle, validator or run of this prompt existed",
   "rule": "Thresholds first, in their own commit. Amendments are recorded in `amendments` before the run they affect. A leg that fails stays failing and labelled; no bound is moved after a result. A leg not measured is NOT RUN with the request that would run it. The verdict is the function below, applied to the pinned results.",
@@ -13,7 +13,7 @@
   "units": "legs state their own units; angles are degrees unless a bound says radians",
   "tools": "Node 22.23.4 for the kernel side; python3 -E (3.9, numpy, scipy) for the oracle, which imports no Gravitas code and reads only inputs/inputs.json and the downloaded Horizons files",
   "data": {
-    "dir": "/Users/carl/Desktop/Gravitas/scratch-data/resonance273 (outside every repository, cite-only; the raw files are not committed)",
+    "dir": "scratch-data/resonance273 beside the repositories (outside every repository, cite-only; the raw files are not committed)",
     "product": "NASA/JPL Horizons API 1.2, JUP365 (Jacobson) geometric vectors of Io (501), Europa (502), Ganymede (503) about Jupiter's centre (500@599), ecliptic of J2000.0 (ICRF), km and km/s, TDB, 1 d step from 2025-11-20 00:00, 10,314 rows each, retrieved 2026-11-08 by the same request form as the satellite pack of Prompt 193 (ephemeris-packs/galilean-2025-11.json records that request and the terms as served on 2026-10-25)",
     "sha256": {
       "horizons_501.txt": "a5c3b1db0097f87e13e9d4295163309b29aefde8284d5fab75bdd52b3e3d1480",
@@ -78,5 +78,9 @@
     "function": "A: every leg of R, L, P, S, C, D passes (the model-fidelity legs L2 and P2 included). B: R1, R2, R3, L4, P3 and D1, D2, D3 pass (the argument computed from elements over a window with the integrator's error bounded and a refusal on a short window), and A does not hold: the named slice is the resonant argument displayed over the window without a fitted period or rate. C: otherwise: the existing guide stands; 274 lists the depth as a reading step.",
     "reported_not_gated": ["N1", "K1"]
   },
-  "amendments": []
+  "amendments": [
+    {"id": "AM0", "recorded": "2026-11-08, before any run", "what": "wording only, no bound: the data directory is named without a home path (the fixtures rule), and the prerequisite line names the satellite pack without a PR number it did not verify"},
+    {"id": "AM1", "recorded": "2026-11-08, before any run", "what": "the integrator steps must divide the sampling interval, so: Laplace runs h = 1/45 d (45 steps per 1 d sample; Io's period is 79.6 steps), Pluto h = 1.0 yr (20 per 20 yr sample, unchanged), secular test h = 0.1 yr (50 per 5 yr sample; the particle's period is 26 steps). The earlier 0.0221 d and 0.09 yr are replaced. No bound moves."},
+    {"id": "AM2", "recorded": "2026-11-08, before any run", "what": "frame convention stated for both sides so the longitudes can be compared and not only the argument: the equatorial frame's z is the pole (RA, Dec rotated to the ecliptic by the obliquity 23.439291111 deg, the repository's constant in js/satellites/galilean.js), its x is the unit vector along (0,0,1) x z (the equator's node on the input xy plane), y = z x x. Both sides construct it independently from the same constants."}
+  ]
 }
