@@ -722,6 +722,24 @@
       "before": "the validator's pinned run (a first attempt was aborted by hand after 12 minutes inside N02's negative case; no leg had been computed or written)",
       "about": "how a notebook is run",
       "text": "Notebooks run under `python3 -E`, not `python3 -I` as `environment.notebooks` says: -I also drops the user site where numpy and scipy are installed here, so no notebook could import them; the harness is otherwise compute-answers.mjs's. Every notebook run has a wall-clock limit, 900 s, and N02.d's negative case 60 s (its bound is 20 s of CPU; a run that has not refused by 60 s has failed the leg and is killed, and the leg records that). No bound moved."
+    },
+    {
+      "id": "AM7",
+      "before": "the second validator run",
+      "about": "a defect of the N02 notebook's own code, found by reading its failing legs of the first run (N02.a, N02.b, N02.d)",
+      "text": "The prototype's Dormand-Prince stage loop indexed the tableau one row early (stage 2 was computed with the empty row, so every stage after the first used the wrong coefficients): the scheme was not the committed one, and its errors were hundreds of times scipy's at a similar step count. The code is corrected (the stage i uses row i of the tableau, whose constants were checked against scipy's RK45 tableau as a check of the typing, not as a leg). The first run's rows stay in first-run-results.json and in the record as the first stream; the corrected notebook is the candidate N02 judged by the pinned second run. No bound moved and no other notebook's code changed."
+    },
+    {
+      "id": "AM8",
+      "before": "the second validator run",
+      "about": "a defect of the validator's execution",
+      "text": "The validator looked N09's theta rows up by String(theta), but the notebook's keys are Python's repr of a float ('1.0', '0.0'), so theta = 1.0 was read as absent and N09.g's monotone check saw a null. The lookup is corrected to the notebook's keys. No bound moved; the leg's rule is unchanged."
+    },
+    {
+      "id": "AM9",
+      "before": "the second validator run",
+      "about": "N01.a, N07.b, G4.b, G5.b, G7.a, N02.d (first-run fails that are not defects)",
+      "text": "Recorded so that no reader takes the corrections above for a rescue: N01.a (errors against the oracle within 1e-6; measured 1.7e-5 on the smallest error, which differs because the two codes' rounding differences are amplified in a reference whose own error is near 1e-12 against an RK4 error of 7e-9), N07.b (the cubic is not better than the linear), G4.b (no recurring runtime check), G5.b (a built-in course lists five investigations that have a compute step) and G7.a (no room in the route's ceiling) are failures of the legs as committed, and they stay failing and labelled. Each is reported as it stands in the second run."
     }
   ],
   "decisions": [
