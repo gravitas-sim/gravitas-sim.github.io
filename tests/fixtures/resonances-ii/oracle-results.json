@@ -6017,7 +6017,7 @@
  "_ran": {
   "python": "3.9.6",
   "numpy": "1.26.4",
-  "seconds_last_call": 648.4
+  "seconds_last_call": 863.3
  },
  "laplace": {
   "state": "libration",
@@ -6125,6 +6125,116 @@
    "amplitude": 26.35829122953713,
    "amplitudeCorrected": 26.35829122953713,
    "center": 182.61326505618285
+  }
+ ],
+ "jup365_c": {
+  "state": "libration",
+  "period": 315.921568627451,
+  "amplitude": 0.20319617831192716,
+  "amplitudeCorrected": 0.20319617831192716,
+  "center": 180.01068467142312
+ },
+ "jup365s_c": {
+  "state": "libration",
+  "period": 1976.25,
+  "amplitude": 0.03627289130662348,
+  "amplitudeCorrected": 0.05767233702204908,
+  "center": 180.00461831186294
+ },
+ "laplace_c": {
+  "state": "libration",
+  "period": 2076.285714285714,
+  "amplitude": 28.227664882059486,
+  "amplitudeCorrected": 28.227664882059486,
+  "center": 179.89533250049317
+ },
+ "pluto_c": {
+  "state": "libration",
+  "period": 21293.333333333332,
+  "amplitude": 79.96840125422713,
+  "amplitudeCorrected": 79.96840125422713,
+  "center": 179.19463857663587
+ },
+ "ensemble_c": [
+  {
+   "id": "m0",
+   "state": "libration",
+   "period": 2072.285714285714,
+   "amplitude": 29.18869788507739,
+   "amplitudeCorrected": 29.18869788507739,
+   "center": 179.82358578236563
+  },
+  {
+   "id": "m1",
+   "state": "libration",
+   "period": 2076.285714285714,
+   "amplitude": 28.252702936885427,
+   "amplitudeCorrected": 28.252702936885427,
+   "center": 180.04789071197956
+  },
+  {
+   "id": "m2",
+   "state": "libration",
+   "period": 2054.285714285714,
+   "amplitude": 28.34323122437975,
+   "amplitudeCorrected": 28.34323122437975,
+   "center": 179.86046641971672
+  },
+  {
+   "id": "m3",
+   "state": "libration",
+   "period": 2044.0,
+   "amplitude": 28.443364944453293,
+   "amplitudeCorrected": 28.443364944453293,
+   "center": 179.91849985949497
+  },
+  {
+   "id": "m4",
+   "state": "libration",
+   "period": 2084.5714285714284,
+   "amplitude": 29.301351891629253,
+   "amplitudeCorrected": 29.301351891629253,
+   "center": 179.9891041611918
+  },
+  {
+   "id": "m5",
+   "state": "libration",
+   "period": 2082.5714285714284,
+   "amplitude": 28.856320257804924,
+   "amplitudeCorrected": 28.856320257804924,
+   "center": 179.982924168616
+  },
+  {
+   "id": "m6",
+   "state": "libration",
+   "period": 2084.5714285714284,
+   "amplitude": 29.392051682942707,
+   "amplitudeCorrected": 29.392051682942707,
+   "center": 179.9868025015694
+  },
+  {
+   "id": "m7",
+   "state": "libration",
+   "period": 2082.5714285714284,
+   "amplitude": 29.057506409201466,
+   "amplitudeCorrected": 29.057506409201466,
+   "center": 180.0135477585906
+  },
+  {
+   "id": "m8",
+   "state": "libration",
+   "period": 2076.285714285714,
+   "amplitude": 28.82525096564072,
+   "amplitudeCorrected": 28.82525096564072,
+   "center": 179.86021673413597
+  },
+  {
+   "id": "m9",
+   "state": "libration",
+   "period": 2078.285714285714,
+   "amplitude": 29.13128201233424,
+   "amplitudeCorrected": 29.13128201233424,
+   "center": 179.84027427338577
   }
  ]
 }

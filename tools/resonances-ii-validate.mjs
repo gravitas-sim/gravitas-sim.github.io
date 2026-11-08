@@ -344,6 +344,37 @@ const mPm = pluMeasure(Pm.times, phiPm);
 }
 follow('', 45, 20, 50);
 follow('f', 180, 80, 250);
+// AM5: the g legs
+{
+  const nl = 180;
+  const L = integrate(inputs.laplace.bodies, 1, 1 / nl, nl, nWin);
+  const m = lapMeasure(L.times, laplaceSeries(L));
+  const o = orc.laplace_c;
+  const ok = m.state === o.state && m.period !== null && o.period !== null && rel(m.period, o.period) <= 0.02 && rel(m.amplitude, o.amplitude) <= 0.05;
+  leg('L3g', ok ? 'PASS' : 'FAIL', { kernel: brief(m), oracle: o }, 'AM5: the corrected oracle estimator');
+  let inside = 0;
+  const rows = inputs.ensemble.map((mb, k) => {
+    const r = integrate(mb.bodies, 1, 1 / nl, nl, nWin);
+    const mm = lapMeasure(r.times, laplaceSeries(r));
+    const truth = orc.ensemble_c[k].period;
+    const hit = mm.state === 'libration' && mm.period !== null && truth !== null && Math.abs(mm.period - truth) <= 2 * mm.periodSigma;
+    if (hit) inside++;
+    return { id: mb.id, kernelPeriod: mm.period, sigma: mm.periodSigma, oraclePeriod: truth, hit };
+  });
+  leg('C1g', inside >= 9 ? 'PASS' : 'FAIL', { inside, of: rows.length, rows }, 'AM5: the corrected oracle estimator');
+  const sc = inputs.secular;
+  const n = Math.sqrt(sc.G / (sc.a * sc.a * sc.a));
+  const A = secularRateFirstOrder({ n, massRatio: sc.massRatio, alpha: sc.a / sc.aJ });
+  const nS = Math.round((4 * ((2 * Math.PI) / A)) / 5) + 1;
+  const S = integrate(sc.bodies, sc.G, 5 / 1000, 1000, nS);
+  const r = secularRate({ times: S.times, angleDeg: S.vp[1] });
+  const rateRad = r.rate === null ? null : r.rate * RAD;
+  leg('S1g', r.rate !== null && rel(rateRad, A) <= 0.05 ? 'PASS' : 'FAIL', { theoryRadPerYr: A, kernelRadPerYr: rateRad, rateSigmaRad: r.rateSigma === null ? null : r.rateSigma * RAD, turns: r.turns });
+  leg('S2g', r.rate !== null && rel(rateRad, orc.secular.rateRadPerYr) <= 0.005 ? 'PASS' : 'FAIL', { kernelRadPerYr: rateRad, oracleRadPerYr: orc.secular.rateRadPerYr });
+  const half = Math.round(nS / 2);
+  const rs = secularRate({ times: S.times.slice(0, half), angleDeg: S.vp[1].slice(0, half) });
+  leg('D3g', rs.state === 'not-constrained' && rs.rate === null ? 'PASS' : 'FAIL', { state: rs.state, turns: rs.turns, rate: rs.rate });
+}
 leg('N1', 'REPORTED', { note: THR.legs.find(l => l.id === 'N1').what });
 leg('K1', 'NOT RUN', { request: THR.legs.find(l => l.id === 'K1').bound });
 
