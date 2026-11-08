@@ -290,6 +290,35 @@
         "bound": "kernel vs oracle relative <= 0.05; the sentence's number within 5 percent of the kernel's and its sign right",
         "kind": "oracle"
       }
+    },
+    {
+      "id": "AM2",
+      "recorded": "2026-11-07, after the first validator run and before any run of the legs it adds",
+      "adds": "legs E2s, E4s and E7s (group resonance)",
+      "why": "The first run measured E2, E4 and E7 as committed and they failed: the resonant argument sampled once per inner orbit carries a short-period term (the pair's synodic period is two inner orbits, and its harmonics alias onto it), so successive maxima of the sampled argument are that term's maxima, not the libration's. The kernel and the oracle agree with each other on this wrong number to the same degree they agree on everything else, which shows the defect is the measurement, not either integrator. E2, E4 and E7 stay in the results as first measured, failing and labelled. The three legs below measure the libration itself: the argument is smoothed with the weights 1/4, 1/2, 1/4 over three successive one-orbit samples, which removes any component of period two orbits or one orbit exactly, and the same smoothing is applied to the kernel's and the oracle's samples. The weights were fixed here, before any smoothed number was computed.",
+      "legs": [
+        {
+          "id": "E2s",
+          "group": "resonance",
+          "what": "libration period (mean time between successive maxima of the smoothed argument, quadratic peak fit on a 1-orbit sampling) kernel against oracle",
+          "bound": "relative <= 0.02",
+          "kind": "oracle"
+        },
+        {
+          "id": "E4s",
+          "group": "resonance",
+          "what": "the window holds at least five libration periods of the kernel's smoothed argument, and phi never leaves (-pi, pi)",
+          "bound": "periods >= 5; max |phi| < pi",
+          "kind": "property"
+        },
+        {
+          "id": "E7s",
+          "group": "resonance",
+          "what": "the guide's stated window, period and amplitude equal the validator's, as the text prints them: the period against E2s's smoothed period of the kernel, the amplitude against E3's",
+          "bound": "window exact; period within 1 inner orbit; amplitude within 0.01 rad",
+          "kind": "oracle"
+        }
+      ]
     }
   ]
 }
