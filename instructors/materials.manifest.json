@@ -1,6 +1,6 @@
 {
   "version": "November 2026",
-  "generated": "2026-11-06",
+  "generated": "2026-11-08",
   "documents": 1222,
   "inventory": {
     "documents": 1222,
@@ -24,7 +24,7 @@
     }
   },
   "sourceFiles": 306,
-  "sourceDigest": "5474693ecad6ba1f41b142e6d8e98bf241345029a5d58164eae3dd2dcd294281",
+  "sourceDigest": "57c2bedbefdcc34add191c73ba1240bf497c5348b69bea63dc54094e9fe22ce3",
   "sources": {
     "js/activities/activities.js": "39ac98cd99b8b0387c55e41d5d4530bad55a8da8758819ad056be73e7a716b01",
     "js/activities/activityBridge.js": "67a82aff98e0ed935d6b8b0f0f654c6ad4332ee929cb3604e896a7f790a6fdc1",
@@ -37,7 +37,7 @@
     "js/assignments/assignment.js": "c89ab86e79b7727f9f51c52a06cb4df878901332b29d6785e371f6f44b39a62f",
     "js/authoring/instructorSchema.js": "e53fac3d680fd804ee5341004c86652bceb01c30015bb50c347a6356b6d9e002",
     "js/constants.js": "4610b3640de5b1c28f336d251e3817ddb440b562f5f72d75051c72f6d0388240",
-    "js/course/pack.js": "a07be9f80eb4f8d6b6f479cc51a1b8a45221722cdb3f0b5462460c2ad3fa652e",
+    "js/course/pack.js": "3f204e3f4e2cece88114f22c5e5469fad70d7e81b650e0f71e8e1a115409db63",
     "js/course/review.js": "5da7fa2eeca27a09fdf40e31aaba5bf523845ac6d4cb262ae2e5f236cba2b489",
     "js/data/activities.js": "e044dc2eb8942dfc9b9c9856bc6e30de828d9bc4d6b18829314bc893711a069c",
     "js/data/activityTeaching.js": "7694fc798f8c4130e5aead5357e69bab04d6a5d386013d009430dba9a1c31008",
@@ -281,7 +281,7 @@
     "js/data/investigations/which-kind-of-variable.js": "458562eb46141873a590740f472e4adc2d40eb59b878be3926f6cf87c64f33da",
     "js/data/investigations/who-gets-counted.js": "2f5ac15637ed575e4f24914e3483dcaacfe8096a2f4893a8990c3c37277cddea",
     "js/data/investigations/why-the-bright-ones-win.js": "cfe106f9963ed8e7f41f6efe5f950d40ec886554aab6e63cc8f2bbf2bb12b0ba",
-    "js/data/lab3dAnswerKey.js": "286f34cabc8910c8bf49474daf4ca6546a5e662bca4f9d12ca0d0aaafadee7d1",
+    "js/data/lab3dAnswerKey.js": "7cf563859b4d2a60d041990f2669017e7db8ae537d83dd62d9aaa9931c57735c",
     "js/data/missionLabKey.js": "c7da9b26f5c9b6810dcbbe54f7f8efde97923a71111b69f93709a40dbf2e0091",
     "js/data/populationsAnswerKey.js": "65ed1c176cefa69dc10a59021d5309f691f235d6589f9d0f9c1ac717ec3023fe",
     "js/exoplanetGuideDocs.js": "1962b6ca3c76c9b22c58890c4c56828ba35fe6bde92075232b07e1501cdbc173",
@@ -291,7 +291,7 @@
     "js/i18n/en.exoplanet.js": "fece6ff72d20a8174c8968afba74f31745f54adb57410d53cd67fb751497b5c0",
     "js/i18n/en.guides.js": "6462bfa9a931d5901393a19fdab9d5f3a27ba0969799f2dfbd7d61e501a43252",
     "js/i18n/en.js": "31822c3ecd8edaea0bcb5031b6b63d5e500ec9819df0c2fe9d61d9821d90a110",
-    "js/i18n/en.lab3dGuides.js": "e2d4eaa678c6872969f358dffd125dad34953900f83a822de71391ba906e6bc7",
+    "js/i18n/en.lab3dGuides.js": "16c0b1b8e69ec216b5a57a361e90aa854e3fef39b86242612370c7c71aaf7520",
     "js/i18n/en.missionLabGuides.js": "6c859aefad385c14245218a4d53514fb35ce1443c1fcb3b055575137a6a6d086",
     "js/i18n/en.populations.js": "eaa01b4655a6c8bd59ee9a60da0dcbbab605f586944bb0642fab26679b557cf4",
     "js/i18n/en.teaching.js": "7ff770aa281aed33e8f7bccb0c2a1f7e3826b203afa705c337225ba753a645ce",
@@ -309,9 +309,9 @@
     "js/investigations/depthPure.js": "61ea6369eef1b8b9c39c2395f2be1a1ebaf83772180520f6ec7fbe3c8ea085f6",
     "js/investigations/progressBackup.js": "36f9c5642612fd62c91e3e483eb1083684e297157c8d1fd12b3fb3aaa0eae44d",
     "js/lab3d/elements.js": "6a951db87df0d36795285e1ea6abb6ab473c48cda372ea985279bc498a34d043",
-    "js/lab3d/guides/curriculum.js": "9dcb500adb4e652b6c16b5ffe5a36e11971179f1b122efcb683a402ae8429583",
+    "js/lab3d/guides/curriculum.js": "2a8e4407f0f378bb414bbc4dbe57bdaa3356243b2f7f8b9160788b7fc68b0dd6",
     "js/lab3d/state.js": "6518031efb99fb3aa244c61561ad331f29e3d9ce882632595d8e1f492824507c",
-    "js/lab3d/view/instruments.js": "4620af5d88769dc6c6dbd5b939da33bdb42e7c25f1475459dfc50a539cee4a81",
+    "js/lab3d/view/instruments.js": "d8d8798757a8d5ee0ad66440a4e7c8ed9a63a8a806116d43c3a2ead0222cc9f0",
     "js/lab3d/view/projection.js": "e601c656a2e61f8ef8afb475292ad253254bef5ae601eb3338041d189aa1b967",
     "js/lab3dGuideDocs.js": "c211ebe05009874616c7ec22c3ea3777c7b305e3a38e7b79bb41f7defb38d8d0",
     "js/lessonMarkup.js": "39164623fcd287b8ec035c3e647c7b336809515580bb330b83011c0564c76d25",
@@ -333,5 +333,5 @@
     "tools/instructor-freshness.mjs": "96052b2f27080f0243fdd4d5f7608927bd67f0c50808b6eac3345a65c14d1e28",
     "tools/source-closure.mjs": "961828e4d0d40d8a6f8c029fe9b9435ecaf39a74b62640efc0b4145c35c7650a"
   },
-  "contentDigest": "74895611cac4899a093cd40acca0101ac9e91b7d702801565f173dc67decf7d0"
+  "contentDigest": "5f222430b86a7ad5bad04045f6f2ddcc4094fd604f18622a4c55ceeba4a1d101"
 }

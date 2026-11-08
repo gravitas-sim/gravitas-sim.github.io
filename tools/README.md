@@ -162,6 +162,7 @@ current, and the orchestrator checks it.
 | `key-registry-free.mjs` | Which modules may import js/names.js without costing a route a request |  |
 | `key-registry-scan.mjs` | Which 'gravitas*' string literals are still loose in js/ (Prompt 107, step 2c) |  |
 | `lab3d-bench.mjs` | The 3-D kernel's throughput, desktop measured and low-end modelled |  |
+| `lab3d-curriculum-ii-validate.mjs` | The validation of the 3-D lab's curriculum II: instruments, planes, run modes |  |
 | `lab3d-guides-key.mjs` | The 3-D curriculum's answer key: a reference run of every guide | `npm run lab3d:key` |
 | `label-golden-investigations.mjs` | npm run label:golden:investigations [-- --regenerate-label-golden] | `npm run label:golden:investigations` |
 | `label-golden.mjs` | npm run label:golden [-- --regenerate-label-golden] | `npm run label:golden` |
