@@ -172,6 +172,27 @@ The thresholds are measurements, not guesses:
 - Unpowered flybys in one plane: the turn angle, the velocity change and
   the outgoing excess velocity. A periapsis below the surface is refused.
 
+## The window-and-budget workflow (Prompt 272)
+
+One mission planned end to end, in `js/mission/workflow.js`: the porkchop grid
+(`window.js`; `fillRow` in `workflow.js` computes a window in row ranges, each
+a job a Worker pool can run in any order) and the delta-v budget of the date
+chosen, as a ledger of five rows in flight order: launch (the launcher's: the
+parking orbit's circular speed plus stated losses), departure, corrections (a
+stated allowance, never computed), arrival (into the capture ellipse) and
+capture (circularising at its periapsis). The spacecraft's burns give its
+propellant by the rocket equation from the dry mass it ends with. Every row
+says what it assumes; the record carries `notFor`.
+
+It is checked by a contract committed before any output: an independent
+Python oracle that shares no code with the lab (Lambert by shooting with a
+high-order integrator), public Horizons states, three date pairs, an
+806-cell comparison grid, refusals (a degenerate geometry, a window outside the
+pack's span, impossible ledger inputs). The verdict, the failing and the
+not-run legs are in `MISSION_LAB_II.md`. No panel, guide or model-page section
+uses it yet (the consumers rule), and the rendezvous, gravity-assist and
+mission-geometry follow-ons wait for a green table.
+
 ## Not supported
 
 - **Multi-revolution Lambert transfers.** `revolutions` must be 0.
@@ -324,6 +345,7 @@ Radii are from the body's center, in km.
 | `js/mission/transfers.js` | Transfers between circular orbits, plane changes, rendezvous, phasing |
 | `js/mission/patched.js` | Spheres of influence, hyperbolic burns, flybys |
 | `js/mission/window.js` | Transfer windows, in slices |
+| `js/mission/workflow.js` | The window-and-budget workflow: the ledger and one mission end to end (Prompt 272) |
 | `js/mission/plan.js` | Budgets, timelines, the plan file |
 | `js/mission/verify.js` | The independent check by the 3-D kernel |
 | `js/mission/references.js` | The reference cases and their tolerances |
