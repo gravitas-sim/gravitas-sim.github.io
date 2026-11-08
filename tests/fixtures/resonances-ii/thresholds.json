@@ -277,6 +277,41 @@
       "kind": "negative",
       "what": "AM4 follow-up of D2 at the finer fixed step",
       "bound": "state = circulation (or inconclusive); never a libration period (unchanged)"
+    },
+    {
+      "id": "L3g",
+      "group": "libration",
+      "kind": "oracle",
+      "what": "AM5 follow-up of L3 (corrected oracle estimator for L3 and C1; finer secular step for S1, S2, D3)",
+      "bound": "|P_k - P_o| / P_o <= 2%; |A_k - A_o| / A_o <= 5%; both states equal (unchanged)"
+    },
+    {
+      "id": "C1g",
+      "group": "ensemble",
+      "kind": "ensemble",
+      "what": "AM5 follow-up of C1 (corrected oracle estimator for L3 and C1; finer secular step for S1, S2, D3)",
+      "bound": "at least 9 of 10 members inside; members for which the kernel returns no period count as misses (unchanged)"
+    },
+    {
+      "id": "S1g",
+      "group": "secular",
+      "kind": "theory",
+      "what": "AM5 follow-up of S1 (corrected oracle estimator for L3 and C1; finer secular step for S1, S2, D3)",
+      "bound": "|rate_k - A| / A <= 5%, and the stated half-window uncertainty is reported (unchanged)"
+    },
+    {
+      "id": "S2g",
+      "group": "secular",
+      "kind": "oracle",
+      "what": "AM5 follow-up of S2 (corrected oracle estimator for L3 and C1; finer secular step for S1, S2, D3)",
+      "bound": "|rate_k - rate_o| / rate_o <= 0.5% (unchanged)"
+    },
+    {
+      "id": "D3g",
+      "group": "negative",
+      "kind": "negative",
+      "what": "AM5 follow-up of D3 (corrected oracle estimator for L3 and C1; finer secular step for S1, S2, D3)",
+      "bound": "the secular rate is refused (not-constrained), no rate returned (unchanged)"
     }
   ],
   "verdict": {
@@ -296,7 +331,12 @@
       "D3f",
       "C1f",
       "D1f",
-      "D2f"
+      "D2f",
+      "L3g",
+      "C1g",
+      "S1g",
+      "S2g",
+      "D3g"
     ]
   },
   "amendments": [
@@ -326,6 +366,12 @@
       "recorded": "2026-11-08, after the first run of the committed legs (kept in results.json under `history`) and before the follow-up legs ran",
       "seen": "at the committed steps (AM1) L4, P3, S1, S2, D3, L3 and C1 failed: the Laplace energy drift was 2e-7 (bound 1e-8) and the kernel's period 2058 d against the oracle's 1940 d; the Pluto energy drift 3.7e-8 (bound 1e-8) with the argument within 0.053 deg of the oracle's; and the secular particle's apse advanced about 1 deg per year against the theory's 0.033, a spurious precession of the fixed step (h = 0.1 yr, 26 steps an orbit), which a check at h = 0.025 yr removed. Those legs stay failing as committed and stay in the verdict function.",
       "adds": "follow-up legs with a finer fixed step, each with the bound and the oracle result of its original unchanged, ids suffixed f, reported beside the originals and not in the verdict function: Laplace runs at 180 steps a day (h = 1/180 d), Pluto at 80 steps per 20 yr sample (h = 0.25 yr), the secular test at 250 steps per 5 yr sample (h = 0.02 yr): L3f, L3cf, L4f, P1f, P2f, P3f, S1f, S2f, D3f, C1f, D1f, D2f. L1s (AM3) is added to the validator the same way."
+    },
+    {
+      "id": "AM5",
+      "recorded": "2026-11-08, after the AM4 follow-up run and before the g legs ran",
+      "seen": "L3f failed 2% only because the two estimators disagreed on a run whose two integrations agree to 0.013 deg over the window (L4f passes): the kernel's period was 2076 d, the oracle's 1940 d. A diagnostic on the oracle's own series, run after the fact and recorded here as such, showed the oracle's estimator had counted the series' first sample as a turning point (a minimum at t = 0, 492 d before the first real maximum), so its mean spacing was too short; the turning points without it give 2076 d, a Fourier peak of the smoothed argument is at 2071 d and a least-squares sinusoid at 2068 d. The oracle's estimator is defective, not the kernel's; L3 and L3f stay failing as committed against the oracle's original numbers (kept). S1f and S2f failed because h = 0.02 yr still carries a numerical apsidal advance (kernel 6.13e-4 rad/yr against the oracle's 5.87e-4; the error scales as h^4 from the 1 deg per year seen at h = 0.1, so about 0.0015 deg per year at h = 0.02).",
+      "adds": "(a) the oracle's estimator drops a turning point at the first or last sample (the series' ends are not reversals); its original output is kept under the plain keys and the corrected output is written beside it under keys ending _c (laplace_c, ensemble_c, pluto_c, jup365_c, jup365s_c); (b) legs ending g, reported beside the others and not in the verdict function, with the bound of the original unchanged: L3g and C1g (the kernel at 180 steps a day against the corrected oracle), S1g, S2g and D3g (the secular test at h = 0.005 yr, 1,000 steps per 5 yr sample, where the h^4 scaling predicts an error below 0.001 deg per year)."
     }
   ]
 }

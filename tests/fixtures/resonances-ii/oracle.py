@@ -7,7 +7,9 @@ import numpy as np
 from scipy.integrate import solve_ivp, quad
 
 FIX, DATA = sys.argv[1], sys.argv[2]
-parts = sys.argv[3:]
+FIXED = any(a.startswith('c:') for a in sys.argv[3:])
+parts = [a.replace('c:', '') for a in sys.argv[3:]]
+K = '_c' if FIXED else ''
 inp = json.load(open(os.path.join(FIX, 'inputs', 'inputs.json')))
 C = inp['constants']
 RES = os.path.join(FIX, 'oracle-results.json')
@@ -129,6 +131,7 @@ def measure(t, phi, ref, floor, required=3, span=None):
     if abs(drift) >= 355:
         return {'state': 'circulation', 'period': win / (abs(drift) / 360), 'amplitude': None}
     tr = turns_of(sm, max(floor, 0.12 * rng))
+    if FIXED: tr = [k for k in tr if 0 < k[1] < len(t) - 1]
     if len(tr) >= 2:
         sp = np.diff([t[k[1]] for k in tr])
         if 2 * sp.mean() < 4 * ref: tr = []
@@ -186,15 +189,15 @@ if 'jup' in parts:
                'source': 'NASA/JPL Horizons API 1.2, JUP365 (Jacobson), retrieved 2026-11-08; see thresholds.json data', 'sha256': sha,
                'phi': [round(p, 5) for p in phi]}, open(os.path.join(FIX, 'jup365-laplace-argument.json'), 'w'))
     m = measure(range(len(phi)), phi, 3.5249, 0.002)
-    res['jup365'] = m
-    res['jup365s'] = measure(range(len(phi)), phi, 3.5249, 0.002, span=1000.0)
+    res['jup365'+K] = m
+    res['jup365s'+K] = measure(range(len(phi)), phi, 3.5249, 0.002, span=1000.0)
 if 'laplace' in parts:
     b = inp['laplace']; n = b['n']; h = 1.0
     t, X, V, m = integrate(b['bodies'], 1.0, (n - 1) * h, np.arange(n) * h, 1e-10, 1e-6)
     lam, vp = angles_series(X, V, m, 1.0)
     phi = arg_laplace(lam)
-    ser['laplace'] = {'phi': phi}
-    res['laplace'] = measure(t, phi, b['ref'], b['floor'])
+    ser['laplace'+K] = {'phi': phi}
+    res['laplace'+K] = measure(t, phi, b['ref'], b['floor'])
 if 'ensemble' in parts:
     b = inp['laplace']; n = b['n']; out = []
     for mb in inp['ensemble']:
@@ -202,14 +205,14 @@ if 'ensemble' in parts:
         lam, vp = angles_series(X, V, m, 1.0)
         out.append({'id': mb['id'], **measure(t, arg_laplace(lam), b['ref'], b['floor'])})
         print('member', mb['id'], out[-1]['period'], time.time() - tic, flush=True)
-    res['ensemble'] = out
+    res['ensemble'+K] = out
 if 'pluto' in parts:
     b = inp['pluto']; n = b['n']; h = 20.0; G = C['G_au_yr']
     t, X, V, m = integrate(b['bodies'], G, (n - 1) * h, np.arange(n) * h, 1e-11, 1e-14)
     lam, vp = angles_series(X, V, m, G)
     phi = arg_pluto(lam, vp)
-    ser['pluto'] = {'phi': phi}
-    res['pluto'] = measure(t, phi, b['ref'], b['floor'])
+    ser['pluto'+K] = {'phi': phi}
+    res['pluto'+K] = measure(t, phi, b['ref'], b['floor'])
 if 'secular' in parts:
     b = inp['secular']; G = b['G']; al = b['a'] / b['aJ']
     bcoef = (1 / math.pi) * quad(lambda p: math.cos(p) / (1 - 2 * al * math.cos(p) + al * al) ** 1.5, 0, 2 * math.pi, epsabs=1e-13, epsrel=1e-13, limit=400)[0]
