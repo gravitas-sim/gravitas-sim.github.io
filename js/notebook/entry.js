@@ -689,6 +689,22 @@ export function annotate(entry, changes = {}) {
 }
 
 /**
+ * Mark an entry for a report, or take the mark off (Prompt 275). A mark is the
+ * student's, like the prose: the snapshot is shared untouched, and the field is
+ * present only while it is set, so an entry never marked is what it was.
+ *
+ * @param {object} entry - An existing entry
+ * @param {boolean} on - Whether it is marked
+ * @returns {object} The entry, sharing its snapshot
+ */
+export function mark(entry, on) {
+  if (!entry) return entry;
+  const rest = { ...entry };
+  delete rest.marked;
+  return on ? { ...rest, marked: true } : rest;
+}
+
+/**
  * Whether a value is an entry this build can read.
  *
  * Used on restore, where the input is a file a student chose. Returns a reason
@@ -757,6 +773,7 @@ export function reviveEntry(value) {
     snapshot,
     fingerprint,
     ...(value.revisedAt ? { revisedAt: Number(value.revisedAt) || 0 } : {}),
+    ...(value.marked === true ? { marked: true } : {}),
     // Only ever true for a file that says one thing and hashes to another.
     ...(value.fingerprint && value.fingerprint !== fingerprint
       ? { tampered: true }

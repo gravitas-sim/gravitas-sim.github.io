@@ -429,6 +429,11 @@ function showMade() {
     import('./myWork/madeView.js').then(m =>
       m.show({ item, state: s, refresh })
     );
+  // The review of the evidence notebook, when it holds entries (Prompt 275).
+  if (s.model.evidence.notebook?.count)
+    import('./myWork/evidenceView.js').then(m =>
+      m.show({ state: s, refresh, surfaces: { SURFACE_ROUTE, surfaceOf } })
+    );
 }
 
 // --- Files -------------------------------------------------------------------
