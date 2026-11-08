@@ -629,7 +629,7 @@ export const NEVER_PRECACHED = [
   // Prompt 273 (RESONANCES_II.md): the resonance libration and secular kernel. No shipped module imports it (the panel and
   // the guides wait on a passing gate, D-R10-273-01), so no page can fetch it and an install has no use for it; its first
   // adopter deletes this entry.
-  /^js\/resonance\/libration\.js$/,
+  /^js\/lab3d\/libration\.js$/,
 ];
 
 const ON_DEMAND_ONLY = new Set([

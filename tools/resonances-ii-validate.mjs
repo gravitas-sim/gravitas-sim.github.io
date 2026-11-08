@@ -23,7 +23,7 @@ import {
   rotate,
   secularRate,
   secularRateFirstOrder,
-} from '../js/resonance/libration.js';
+} from '../js/lab3d/libration.js';
 
 const here = path.dirname(fileURLToPath(import.meta.url));
 const FIX = path.join(here, '..', 'tests', 'fixtures', 'resonances-ii');

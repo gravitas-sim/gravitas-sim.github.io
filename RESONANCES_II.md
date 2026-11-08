@@ -9,21 +9,21 @@ What landed is the kernel and its validation record, with no panel, guide, lesso
 Part A of Prompt 273 is a gate: the test systems, the cited libration periods, the window (a committed multiple of the
 period), the integrator's accumulated error over it, the resonant argument from elements, secular rates from a cited
 first-order theory, and an independent reference, all committed before any kernel, oracle or run existed
-(`tests/fixtures/resonances-ii/thresholds.json`, commit 7692a344). The kernel is `js/resonance/libration.js`; the
+(`tests/fixtures/resonances-ii/thresholds.json`, commit 7692a344). The kernel is `js/lab3d/libration.js`; the
 validator is `tools/resonances-ii-validate.mjs`; the independent oracle is `tests/fixtures/resonances-ii/oracle.py`
 (`python -E`, scipy DOP853, no Gravitas code); the pinned record is `results.json` and `oracle-results.json`;
 `tests/resonancesII.test.js` recomputes the verdict from them.
 
 ## 2. The kernel (what is built)
 
-`js/resonance/libration.js` adds to `js/resonance/elements.js`: the equatorial frame of a primary from its pole
+`js/lab3d/libration.js` adds to `js/resonance/elements.js`: the equatorial frame of a primary from its pole
 (`equatorialRotation`), mean longitude and longitude of periapsis from 3-D elements (`orbitalAngles`), the argument of a
 p:q resonance as a series with the coefficients-sum-to-zero refusal (`resonantArgumentSeries`), `measureLibration`
 (state, period, amplitude, centre, a period uncertainty, and `not-constrained` with no number when the window holds fewer
 than three libration periods), `secularRate` (a least-squares apsidal rate with a half-window uncertainty,
 `not-constrained` below three turns) and the first-order Laplace-Lagrange rate with its Laplace coefficient
 (`secularRateFirstOrder`). No shipped page imports it, so it is excluded from the service-worker install
-(`tools/build-service-worker.mjs`, as 272's kernel is); its first adopter deletes that entry.
+(`tools/build-service-worker.mjs`, as 272's kernel is); its first adopter deletes that entry. It lives in `js/lab3d/` because it takes element code from the 3-D kernel and the architecture check forbids a domain module (`js/resonance/`) from importing the feature layer.
 
 ## 3. The data (public, cite-only)
 

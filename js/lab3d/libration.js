@@ -12,7 +12,7 @@
 // window is a number made up by the window, not by the orbit.
 // =============================================================================
 
-import { toElements } from '../lab3d/elements.js';
+import { toElements } from './elements.js';
 import {
   ANGLE_CRITERIA,
   ANGLE_STATE,
@@ -22,7 +22,7 @@ import {
   resonantArgument,
   unwrapDegrees,
   wrap360,
-} from './elements.js';
+} from '../resonance/elements.js';
 
 /** Windows must hold this many libration periods (turns, for a rate). */
 export const REQUIRED_PERIODS = 3;

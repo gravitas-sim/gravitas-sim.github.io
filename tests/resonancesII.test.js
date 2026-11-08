@@ -1,5 +1,5 @@
 // Prompt 273: the resonance kernel's validation group (RESONANCES_II.md). The kernel is
-// js/resonance/libration.js; the committed thresholds, the pinned results and the pinned
+// js/lab3d/libration.js; the committed thresholds, the pinned results and the pinned
 // JUP365 argument are in tests/fixtures/resonances-ii/. Run `node tools/resonances-ii-validate.mjs run`
 // (with the downloaded Horizons files) to reproduce the pinned results.
 import { describe, test, expect } from '@jest/globals';
@@ -12,7 +12,7 @@ import {
   resonantArgumentSeries,
   secularRate,
   secularRateFirstOrder,
-} from '../js/resonance/libration.js';
+} from '../js/lab3d/libration.js';
 
 const here = path.dirname(fileURLToPath(import.meta.url));
 const fx = f =>

@@ -1530,7 +1530,7 @@
     {
       "id": "resonance-libration-kernel",
       "claim": "The resonance kernel measures a libration period and an apsidal rate only over a window of at least three periods (three turns), refusing shorter windows, and reproduces an independent integration's argument and a first-order theory's rate at fine fixed steps.",
-      "scope": "The gate record of Prompt 273 (RESONANCES_II.md) with its pinned fixtures in tests/fixtures/resonances-ii/ and tests/resonancesII.test.js; the kernel is js/resonance/libration.js; two model systems (the Gravitas Laplace and Pluto models) and one test particle, plus the JUP365 argument as the authentic leg; not any panel, guide or lesson depth, none of which exists.",
+      "scope": "The gate record of Prompt 273 (RESONANCES_II.md) with its pinned fixtures in tests/fixtures/resonances-ii/ and tests/resonancesII.test.js; the kernel is js/lab3d/libration.js; two model systems (the Gravitas Laplace and Pluto models) and one test particle, plus the JUP365 argument as the authentic leg; not any panel, guide or lesson depth, none of which exists.",
       "version": "2.1.0",
       "class": "V-internal",
       "status": "partial",
