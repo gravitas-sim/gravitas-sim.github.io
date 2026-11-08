@@ -1,0 +1,6 @@
+{
+ "G1.a": {"ok": true, "detail": {"filesChangedUnderCompute-frameJsComputeAndComputePage": 0, "base": "0b5d3d0f", "nodeToolsComputeMjsCheck": "exit 0: the compute files are current"}},
+ "G1.b": {"ok": true, "detail": {"suites": "computeFrame, computeMessages, computeCapsule, computeSession, computeCatalogue", "testSuites": "5 passed of 5", "tests": "94 passed", "node": "22.23.4", "exit": 0}},
+ "G1.c": {"ok": true, "detail": {"spec": "e2e/compute.spec.js", "project": "chromium", "workers": 2, "result": "23 passed", "port": 4468, "exit": 0}},
+ "routeCompute": {"sourcesKb": 181.3, "buildKb": 82.8, "from": "node tools/route-budget.mjs on a node build.js of the spike: compute 181.3 KB 20 requests (sources), 82.8 KB 2 requests (build)"}
+}
