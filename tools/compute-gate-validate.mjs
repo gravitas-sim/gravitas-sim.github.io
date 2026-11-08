@@ -747,7 +747,10 @@ const detail = {};
     const ths = Object.keys(a.theta)
       .map(Number)
       .sort((x, y) => x - y)
-      .map(k => ({ theta: k, ...a.theta[k === 0 ? '0.0' : String(k)] }));
+      .map(k => ({
+        theta: k,
+        ...a.theta[Number.isInteger(k) ? k.toFixed(1) : String(k)],
+      }));
     const mono = ths.every((x, i) => i === 0 || x.rms >= ths[i - 1].rms);
     const t5 = a.theta['0.5'];
     pass(

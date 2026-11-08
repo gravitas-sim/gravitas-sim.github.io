@@ -113,7 +113,7 @@ def integrate(tol):
         h = min(h, Ts - t)
         ks = [f0]
         for i in range(1, 7):
-            ks.append(f(0.0, y + h * sum(a * kj for a, kj in zip(A[i - 1], ks))))
+            ks.append(f(0.0, y + h * sum(a * kj for a, kj in zip(A[i], ks))))
         nfev += 6
         ynew = y + h * sum(a * kj for a, kj in zip(A[6], ks))
         err = h * sum(e * kj for e, kj in zip(EC, ks))
