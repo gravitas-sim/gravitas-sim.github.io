@@ -1308,7 +1308,7 @@ function alignmentPage(S, rows) {
     (a, b) => a - b
   );
   const one = r =>
-    `<li><a href="${html(r.url)}">${plain(r.title)}</a> (${bi(wt(CL_KEY[r.courseLevel]))}, ${r.duration ? `${minutesOf(r.duration)} ${bi(wt('minutes'))}` : ''})</li>`;
+    `<a href="${html(r.url)}">${plain(r.title)}</a> (${bi(wt(CL_KEY[r.courseLevel]))}, ${r.duration ? `${minutesOf(r.duration)} ${bi(wt('minutes'))}` : ''})`;
   const body = `<p>${bi({ en: 'The chapter is the claim; check it against the edition you teach from (the chapters were matched from the table of contents). Each link opens the investigation’s adoption page.', es: 'El capítulo es la afirmación; compruébelo con la edición que usa (los capítulos se asociaron a partir del índice). Cada enlace abre la página de adopción de la investigación.' })}</p>
 ${chapters
   .map(ch => {
