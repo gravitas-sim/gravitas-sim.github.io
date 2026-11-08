@@ -686,7 +686,26 @@
     }
   ],
   "scope": "The gate tests the ten candidates named in the roadmap and no others. A notebook that fails here is not 'rescued' by a variant; a different notebook would need its own gate. Nothing is built on the main line: the prototypes live on spike/compute-gate (never merged); this documentation PR carries the thresholds, the pinned oracle and reference outputs, the results, the record and the register rows. No lesson, panel, viewer or catalogue entry is added (the consumers rule: Carl's rulings of 2026-11-05, -06 and -07).",
-  "amendments": [],
+  "amendments": [
+    {
+      "id": "AM1",
+      "before": "the oracle's first run",
+      "about": "N07",
+      "text": "Definitions the contract left open, no bound moved. The ages used are k = 2 to K-3 (each has two neighbours on either side, which the cubic needs; 'interior ages k = 1 to K-2' read that way). The held-out masses are those of the held-out isochrone's phase-0 points that lie, inclusive, in the intersection of the phase-0 mass ranges of its four neighbours. At a neighbour, r(m) is the linear interpolation in mass of that age's phase-0 points sorted by mass. The linear method uses the two nearest ages (k-1 and k+1) and the cubic the Lagrange polynomial through the four, both in log age."
+    },
+    {
+      "id": "AM2",
+      "before": "the oracle's first run",
+      "about": "every negative case",
+      "text": "A negative case is made by the validator from a committed input by a stated derivation and run through the same harness: N01, N02 and N04 from the Kepler-16 file (N01: body 1's initial position set to body 0's; N02: body 1 placed 1e-6 of the pair separation from body 0 on the line joining them; N04: the first companion's e set to 1.2, and to -0.1); N05 from the TESS file (the first four cadences; and the first 600 with every time set to the first); N06 from the TESS file (the first nine cadences; times reversed; flux set to a constant; a parameter `periods` holding a non-positive trial period); N07 by the parameter `request` (feh and logAge) naming an age 99 and a [Fe/H] the table does not hold; N09 by the parameter `eps` = 0 and by the 4,001-body snapshot; N08 and N10 by the input files tools/compute-gate-inputs.mjs writes. A notebook reads a parameter only if its candidate names one here: `request` (N07), `eps` (N09, default 0.05), `periods` (N06, default the committed 400)."
+    },
+    {
+      "id": "AM3",
+      "before": "the oracle's first run",
+      "about": "N03",
+      "text": "The engine pair, the different-clusters pair and the three synthetic grids are written by tools/compute-gate-inputs.mjs under Node 22.23.4 (the engine pair's sha256 equals the Node 24 run's: checked). N03.b compares the notebook with the oracle on the engine's pair; the oracle also runs the other four grids so that the refusal and recovery legs have an independent decision, and N03.a and N03.d read the notebook's own result against the analytic truth and the refusal rule, not against each other."
+    }
+  ],
   "decisions": [
     "DEC1: the ten legs-per-candidate share one shape (accuracy against an independent code, agreement with the Gravitas module the roadmap names, determinism, refusals, supplies), so that a pass or fail is comparable across notebooks and none gets a gentler test.",
     "DEC2: the machine's CPython stands in for the pinned runtime for everything that does not need the browser; every number it produces is labelled CPython and none is offered as a Pyodide result.",
