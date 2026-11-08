@@ -20,13 +20,14 @@ import {
   LEDGER_ROWS,
   NOT_FOR,
   budgetLedger,
+  fillRow,
   ledgerProblems,
   missionWorkflow,
 } from '../js/mission/workflow.js';
 import { statesFrom } from '../js/mission/solar.js';
 import { ephemeris } from '../js/mission/labReferences.js';
 import { jdOfDate, JD_J2000 } from '../js/mission/ephemeris.js';
-import { computeWindow, fillRow } from '../js/mission/window.js';
+import { computeWindow } from '../js/mission/window.js';
 import { createPool } from '../js/workers/pool.js';
 import { DEFAULT_WINDOW } from '../js/mission/lab/curriculum.js';
 

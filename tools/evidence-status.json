@@ -1530,7 +1530,7 @@
     {
       "id": "mission-window-budget-workflow",
       "claim": "The mission lab's window-and-budget workflow (the porkchop grid and the delta-v ledger for an Earth to Mars transfer inside the ephemeris pack's span) matches an independent shooting oracle on Horizons states, refuses degenerate geometry, dates outside the pack's span and impossible ledger inputs, and its ledger adds up and obeys the rocket equation.",
-      "scope": "The gate record of Prompt 272 (MISSION_LAB_II.md) with its pinned fixtures in tests/fixtures/mission-lab-ii/ and tests/missionWorkflow.test.js; the kernel is js/mission/workflow.js and the row-range grid in js/mission/window.js; not any panel, guide or model-page section, none of which exists.",
+      "scope": "The gate record of Prompt 272 (MISSION_LAB_II.md) with its pinned fixtures in tests/fixtures/mission-lab-ii/ and tests/missionWorkflow.test.js; the kernel is js/mission/workflow.js, row-range grid included; not any panel, guide or model-page section, none of which exists.",
       "version": "2.1.0",
       "class": "V-internal",
       "status": "partial",

@@ -23,9 +23,10 @@
 import { BODIES, DAY } from './bodies.js';
 import { hyperbolicBurn } from './patched.js';
 import { captureBurn, propellant, G0 } from './solar.js';
-import { windowCell } from './window.js';
+import { CELL_STATUS, axisAt, windowCell } from './window.js';
 
-export const WORKFLOW_FORMAT = 'gravitas.mission-workflow';
+/** The records' kind: not a stored format (no schema, nothing saves it), so no `gravitas.` id. */
+export const WORKFLOW_KIND = 'missionWorkflow';
 export const WORKFLOW_VERSION = 1;
 export const NOT_FOR = 'operational mission design or navigation';
 /** The ledger's rows, in flight order. */
@@ -140,7 +141,7 @@ export function budgetLedger(input) {
   return {
     ok: true,
     status: 'ok',
-    kind: `${WORKFLOW_FORMAT}.ledger`,
+    kind: `${WORKFLOW_KIND}Ledger`,
     version: WORKFLOW_VERSION,
     notFor: NOT_FOR,
     rows,
@@ -202,7 +203,7 @@ export function missionWorkflow({ states, span, departDay, tofDays, ...rest }) {
   return {
     ok: true,
     status: 'ok',
-    kind: WORKFLOW_FORMAT,
+    kind: WORKFLOW_KIND,
     version: WORKFLOW_VERSION,
     notFor: NOT_FOR,
     transfer: {
@@ -239,4 +240,33 @@ export function windowMinimum(w) {
     interior:
       row > 0 && row < w.options.departSteps - 1 && col > 0 && col < nt - 1,
   };
+}
+
+/**
+ * One departure row of a window into `out` ({c3, vinf, total, status} typed
+ * arrays), the cell for column j at (row - base) * tofSteps + j, so a window can
+ * be filled whole (base 0) or in row ranges whose results are joined, each a
+ * job that needs nothing from another (the Worker pool's contract). The same
+ * cells as createWindow's loop in ./window.js: that file is installed for every
+ * reader and has no room for the shared helper, so the loop is repeated here
+ * and a test holds the two to identical bytes (D-R10-272-04).
+ * @returns {{iterations: number, max: number}}
+ */
+export function fillRow(o, row, states, out, base = 0) {
+  const nt = o.tofSteps;
+  const t = axisAt(o.departStart, o.departSpan, o.departSteps, row);
+  let iterations = 0;
+  let max = 0;
+  for (let j = 0; j < nt; j++) {
+    const tof = axisAt(o.tofMin, o.tofMax - o.tofMin, nt, j);
+    const cell = windowCell(o, t, tof, states);
+    const k = (row - base) * nt + j;
+    out.c3[k] = cell.c3;
+    out.vinf[k] = cell.vinf;
+    out.total[k] = cell.total;
+    out.status[k] = CELL_STATUS.indexOf(cell.status);
+    iterations += cell.iterations;
+    max = Math.max(max, cell.iterations);
+  }
+  return { iterations, max };
 }

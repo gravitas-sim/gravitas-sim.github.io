@@ -19,16 +19,13 @@ import { BODIES } from '../../../js/mission/bodies.js';
 import { JD_J2000, jdOfDate } from '../../../js/mission/ephemeris.js';
 import { hyperbolicBurn } from '../../../js/mission/patched.js';
 import { statesFrom } from '../../../js/mission/solar.js';
-import {
-  computeWindow,
-  fillRow,
-  windowCell,
-} from '../../../js/mission/window.js';
+import { computeWindow, windowCell } from '../../../js/mission/window.js';
 import { labWindowProblems } from '../../../js/mission/labCore.js';
 import { DEFAULT_WINDOW } from '../../../js/mission/lab/curriculum.js';
 import { ephemeris } from '../../../js/mission/labReferences.js';
 import {
   budgetLedger,
+  fillRow,
   ledgerProblems,
   missionWorkflow,
   windowMinimum,
