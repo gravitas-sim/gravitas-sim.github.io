@@ -47,7 +47,9 @@ const unit = a => {
 const mean = xs => xs.reduce((s, x) => s + x, 0) / xs.length;
 const sd = xs => {
   const m = mean(xs);
-  return Math.sqrt(xs.reduce((s, x) => s + (x - m) * (x - m), 0) / (xs.length - 1));
+  return Math.sqrt(
+    xs.reduce((s, x) => s + (x - m) * (x - m), 0) / (xs.length - 1)
+  );
 };
 
 /**
@@ -225,9 +227,15 @@ export function secularRate({
   };
   const window = times[times.length - 1] - times[0];
   const rate = slope(times, y);
-  const turns = Math.abs(rate) * window / 360;
+  const turns = (Math.abs(rate) * window) / 360;
   if (!(turns >= requiredTurns)) {
-    return { state: STATES.NOT_CONSTRAINED, rate: null, rateSigma: null, turns, window };
+    return {
+      state: STATES.NOT_CONSTRAINED,
+      rate: null,
+      rateSigma: null,
+      turns,
+      window,
+    };
   }
   const h = Math.floor(times.length / 2);
   const r1 = slope(times.slice(0, h), y.slice(0, h));
@@ -246,7 +254,9 @@ export function laplaceCoefficient(s, j, alpha, n = 4096) {
   let sum = 0;
   for (let k = 0; k < n; k++) {
     const psi = (2 * Math.PI * k) / n;
-    sum += Math.cos(j * psi) / Math.pow(1 - 2 * alpha * Math.cos(psi) + alpha * alpha, s);
+    sum +=
+      Math.cos(j * psi) /
+      Math.pow(1 - 2 * alpha * Math.cos(psi) + alpha * alpha, s);
   }
   return (2 * sum) / n;
 }
@@ -259,5 +269,7 @@ export function laplaceCoefficient(s, j, alpha, n = 4096) {
  * mean-motion resonance within the order of the expansion.
  */
 export function secularRateFirstOrder({ n, massRatio, alpha }) {
-  return 0.25 * n * massRatio * alpha * alpha * laplaceCoefficient(1.5, 1, alpha);
+  return (
+    0.25 * n * massRatio * alpha * alpha * laplaceCoefficient(1.5, 1, alpha)
+  );
 }

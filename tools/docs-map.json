@@ -891,6 +891,13 @@
       "student": true
     },
     {
+      "file": "RESONANCES_II.md",
+      "kind": "gate",
+      "purpose": "Resonances and secular dynamics II: contract committed first, independent oracle, 19 legs, verdict C by the committed function; the kernel without consumers (Prompt 273).",
+      "owner": 273,
+      "student": false
+    },
+    {
       "file": "RESONANCE_INVESTIGATION.md",
       "kind": "feature",
       "purpose": "The orbital resonance investigation.",

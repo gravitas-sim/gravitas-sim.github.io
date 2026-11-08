@@ -2,10 +2,10 @@
   "format": "gravitas.resonances-ii-results/1",
   "node": "v24.4.0",
   "ran": "2026-11-08",
-  "seconds": 22,
+  "seconds": 38,
   "verdict": "C",
   "counts": {
-    "PASS": 17,
+    "PASS": 22,
     "FAIL": 13,
     "REPORTED": 1,
     "NOT RUN": 1
@@ -614,6 +614,140 @@
       "note": ""
     },
     {
+      "id": "L3g",
+      "status": "PASS",
+      "values": {
+        "kernel": {
+          "state": "libration",
+          "reason": "reversals",
+          "period": 2076.285714285714,
+          "periodSigma": 34.23915489452326,
+          "amplitude": 28.233521028415765,
+          "center": 179.89456360207737,
+          "periodsObserved": 3.9898169808724373
+        },
+        "oracle": {
+          "state": "libration",
+          "period": 2076.285714285714,
+          "amplitude": 28.227664882059486,
+          "amplitudeCorrected": 28.227664882059486,
+          "center": 179.89533250049317
+        }
+      },
+      "note": "AM5: the corrected oracle estimator"
+    },
+    {
+      "id": "C1g",
+      "status": "PASS",
+      "values": {
+        "inside": 10,
+        "of": 10,
+        "rows": [
+          {
+            "id": "m0",
+            "kernelPeriod": 2072.285714285714,
+            "sigma": 37.67449199310823,
+            "oraclePeriod": 2072.285714285714,
+            "hit": true
+          },
+          {
+            "id": "m1",
+            "kernelPeriod": 2076.285714285714,
+            "sigma": 27.107119329935202,
+            "oraclePeriod": 2076.285714285714,
+            "hit": true
+          },
+          {
+            "id": "m2",
+            "kernelPeriod": 2054.285714285714,
+            "sigma": 28.955396146252163,
+            "oraclePeriod": 2054.285714285714,
+            "hit": true
+          },
+          {
+            "id": "m3",
+            "kernelPeriod": 2044,
+            "sigma": 38.3300205607886,
+            "oraclePeriod": 2044,
+            "hit": true
+          },
+          {
+            "id": "m4",
+            "kernelPeriod": 2084.5714285714284,
+            "sigma": 33.76942625600654,
+            "oraclePeriod": 2084.5714285714284,
+            "hit": true
+          },
+          {
+            "id": "m5",
+            "kernelPeriod": 2082.5714285714284,
+            "sigma": 32.42563443801035,
+            "oraclePeriod": 2082.5714285714284,
+            "hit": true
+          },
+          {
+            "id": "m6",
+            "kernelPeriod": 2084.5714285714284,
+            "sigma": 34.317742976384636,
+            "oraclePeriod": 2084.5714285714284,
+            "hit": true
+          },
+          {
+            "id": "m7",
+            "kernelPeriod": 2082.5714285714284,
+            "sigma": 33.157529592951924,
+            "oraclePeriod": 2082.5714285714284,
+            "hit": true
+          },
+          {
+            "id": "m8",
+            "kernelPeriod": 2076.285714285714,
+            "sigma": 37.89880905636952,
+            "oraclePeriod": 2076.285714285714,
+            "hit": true
+          },
+          {
+            "id": "m9",
+            "kernelPeriod": 2076.285714285714,
+            "sigma": 39.46711366726087,
+            "oraclePeriod": 2078.285714285714,
+            "hit": true
+          }
+        ]
+      },
+      "note": "AM5: the corrected oracle estimator"
+    },
+    {
+      "id": "S1g",
+      "status": "PASS",
+      "values": {
+        "theoryRadPerYr": 0.0005745966126701814,
+        "kernelRadPerYr": 0.0005874358384119124,
+        "rateSigmaRad": 3.040685218039153e-9,
+        "turns": 4.089397704501388
+      },
+      "note": ""
+    },
+    {
+      "id": "S2g",
+      "status": "PASS",
+      "values": {
+        "kernelRadPerYr": 0.0005874358384119124,
+        "oracleRadPerYr": 0.0005873346031986525
+      },
+      "note": ""
+    },
+    {
+      "id": "D3g",
+      "status": "PASS",
+      "values": {
+        "state": "not-constrained",
+        "turns": 2.0447172122017303,
+        "rate": null
+      },
+      "note": ""
+    },
+    {
       "id": "N1",
       "status": "REPORTED",
       "values": {
@@ -628,6 +762,40 @@
         "request": "NOT RUN; request: an independent secular (double-averaged) integration or a cited table, then a Part A addendum"
       },
       "note": ""
+    }
+  ],
+  "history": [
+    {
+      "run": "first run of the legs as committed (steps of AM1; before L1s and the follow-up legs existed)",
+      "verdict": "C",
+      "counts": {
+        "PASS": 9,
+        "FAIL": 8,
+        "REPORTED": 1,
+        "NOT RUN": 1
+      },
+      "statuses": {
+        "R1": "PASS",
+        "R2": "PASS",
+        "R3": "PASS",
+        "L1": "FAIL",
+        "L2": "PASS",
+        "L3": "FAIL",
+        "L3c": "PASS",
+        "L4": "FAIL",
+        "P1": "PASS",
+        "P2": "PASS",
+        "P3": "FAIL",
+        "S1": "FAIL",
+        "S2": "FAIL",
+        "D3": "FAIL",
+        "C1": "FAIL",
+        "D1": "PASS",
+        "D2": "PASS",
+        "N1": "REPORTED",
+        "K1": "NOT RUN"
+      },
+      "note": "its numbers are the plain-id legs of this file, which the later runs reproduce exactly (the kernel is deterministic); what the later runs added is only the suffixed legs"
     }
   ]
 }

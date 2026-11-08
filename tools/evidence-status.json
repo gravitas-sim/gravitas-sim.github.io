@@ -1526,6 +1526,19 @@
           "text": "# The population inference gate"
         }
       ]
+    },
+    {
+      "id": "resonance-libration-kernel",
+      "claim": "The resonance kernel measures a libration period and an apsidal rate only over a window of at least three periods (three turns), refusing shorter windows, and reproduces an independent integration's argument and a first-order theory's rate at fine fixed steps.",
+      "scope": "The gate record of Prompt 273 (RESONANCES_II.md) with its pinned fixtures in tests/fixtures/resonances-ii/ and tests/resonancesII.test.js; the kernel is js/resonance/libration.js; two model systems (the Gravitas Laplace and Pluto models) and one test particle, plus the JUP365 argument as the authentic leg; not any panel, guide or lesson depth, none of which exists.",
+      "version": "2.1.0",
+      "class": "V-internal",
+      "status": "partial",
+      "method": "Thresholds committed before any output; an independent oracle (scipy DOP853, python -E) on the same initial states; JPL Horizons JUP365 as the authentic reference; the test recomputes every status and the verdict from the pinned results.",
+      "evaluator": "the project",
+      "artifact": "RESONANCES_II.md",
+      "limitations": "Verdict C by the committed function: 8 of 19 committed legs fail and stay failing (L1, L3, L4, P3, S1, S2, C1, D3). The authentic Laplace argument (0.064 deg libration under larger osculating terms) is not resolved by the kernel; the committed steps were too coarse (energy drift 2e-7 and 3.7e-8 against 1e-8); one oracle estimator defect was found after the fact. Follow-ups at finer steps pass (reported, not in the verdict). Kozai-Lidov NOT RUN. The cited libration values were not re-read from their sources. Spanish none written.",
+      "date": "2026-11-08"
     }
   ]
 }

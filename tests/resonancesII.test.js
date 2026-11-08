@@ -15,21 +15,31 @@ import {
 } from '../js/resonance/libration.js';
 
 const here = path.dirname(fileURLToPath(import.meta.url));
-const fx = f => JSON.parse(fs.readFileSync(path.join(here, 'fixtures', 'resonances-ii', f), 'utf8'));
+const fx = f =>
+  JSON.parse(
+    fs.readFileSync(path.join(here, 'fixtures', 'resonances-ii', f), 'utf8')
+  );
 const thresholds = fx('thresholds.json');
 const results = fx('results.json');
 
 const sine = (periodsSeen, period = 1000, amp = 5, centre = 180, dt = 5) => {
   const n = Math.round((periodsSeen * period) / dt) + 1;
   const times = Array.from({ length: n }, (_, i) => i * dt);
-  const phi = times.map(t => centre + amp * Math.sin((2 * Math.PI * t) / period + 1));
+  const phi = times.map(
+    t => centre + amp * Math.sin((2 * Math.PI * t) / period + 1)
+  );
   return { times, phi };
 };
 
 describe('measureLibration', () => {
   test('a window of four periods measures the period with an uncertainty', () => {
     const { times, phi } = sine(4);
-    const m = measureLibration({ times, phi, referencePeriod: 20, floorDeg: 0.01 });
+    const m = measureLibration({
+      times,
+      phi,
+      referencePeriod: 20,
+      floorDeg: 0.01,
+    });
     expect(m.state).toBe('libration');
     expect(Math.abs(m.period - 1000) / 1000).toBeLessThan(0.02);
     expect(m.amplitude).toBeGreaterThan(4.5);
@@ -38,7 +48,12 @@ describe('measureLibration', () => {
   test('windows shorter than three periods return not-constrained and no number', () => {
     for (const f of [0.5, 1, 2]) {
       const { times, phi } = sine(f);
-      const m = measureLibration({ times, phi, referencePeriod: 20, floorDeg: 0.01 });
+      const m = measureLibration({
+        times,
+        phi,
+        referencePeriod: 20,
+        floorDeg: 0.01,
+      });
       expect(m.state).toBe('not-constrained');
       expect(m.period).toBeNull();
       expect(m.amplitude).toBeNull();
@@ -48,14 +63,24 @@ describe('measureLibration', () => {
   test('a circulating argument is circulation, never a libration period', () => {
     const times = Array.from({ length: 800 }, (_, i) => i * 5);
     const phi = times.map(t => (t * 0.2) % 360);
-    const m = measureLibration({ times, phi, referencePeriod: 20, floorDeg: 0.01 });
+    const m = measureLibration({
+      times,
+      phi,
+      referencePeriod: 20,
+      floorDeg: 0.01,
+    });
     expect(m.state).toBe('circulation');
   });
 });
 
 describe('the resonant argument and the secular rate', () => {
   test('coefficients that do not sum to zero are refused', () => {
-    expect(resonantArgumentSeries([{ lambda: [10], coefficient: 1 }, { lambda: [20], coefficient: -2 }])).toBeNull();
+    expect(
+      resonantArgumentSeries([
+        { lambda: [10], coefficient: 1 },
+        { lambda: [20], coefficient: -2 },
+      ])
+    ).toBeNull();
     const a = resonantArgumentSeries([
       { lambda: [10, 400], coefficient: 1 },
       { lambda: [20, 20], coefficient: -3 },
@@ -70,7 +95,10 @@ describe('the resonant argument and the secular rate', () => {
     const four = secularRate({ times, angleDeg: times.map(ang) });
     expect(four.state).toBe('measured');
     expect(four.rate).toBeCloseTo(0.36, 2);
-    const two = secularRate({ times: times.slice(0, 201), angleDeg: times.slice(0, 201).map(ang) });
+    const two = secularRate({
+      times: times.slice(0, 201),
+      angleDeg: times.slice(0, 201).map(ang),
+    });
     expect(two.state).toBe('not-constrained');
     expect(two.rate).toBeNull();
   });
@@ -88,7 +116,25 @@ describe('the pinned validation record', () => {
     expect(results.legs.map(l => l.id).sort()).toEqual(ids.slice().sort());
     const st = id => results.legs.find(l => l.id === id).status;
     const all = list => list.every(i => st(i) === 'PASS');
-    const A = all(['R1', 'R2', 'R3', 'L1', 'L2', 'L3', 'L3c', 'L4', 'P1', 'P2', 'P3', 'S1', 'S2', 'C1', 'D1', 'D2', 'D3']);
+    const A = all([
+      'R1',
+      'R2',
+      'R3',
+      'L1',
+      'L2',
+      'L3',
+      'L3c',
+      'L4',
+      'P1',
+      'P2',
+      'P3',
+      'S1',
+      'S2',
+      'C1',
+      'D1',
+      'D2',
+      'D3',
+    ]);
     const B = all(['R1', 'R2', 'R3', 'L4', 'P3', 'D1', 'D2', 'D3']);
     expect(results.verdict).toBe(A ? 'A' : B ? 'B' : 'C');
   });
@@ -114,6 +160,7 @@ describe('the pinned validation record', () => {
   test('no failing leg is unlabelled and no home path is in the record', () => {
     const text = JSON.stringify(results) + JSON.stringify(thresholds);
     expect(text).not.toMatch(/\/Users\//);
-    for (const l of results.legs) expect(['PASS', 'FAIL', 'REPORTED', 'NOT RUN']).toContain(l.status);
+    for (const l of results.legs)
+      expect(['PASS', 'FAIL', 'REPORTED', 'NOT RUN']).toContain(l.status);
   });
 });
