@@ -12,7 +12,10 @@
   "fixtures": {
     "inputs": {
       "parkingAltitudeKm": 300,
-      "captureOrbit": { "periapsisAltitudeKm": 300, "apoapsisRadiusKm": 20000 },
+      "captureOrbit": {
+        "periapsisAltitudeKm": 300,
+        "apoapsisRadiusKm": 20000
+      },
       "finalOrbitAltitudeKm": 300,
       "launchLossesKmS": 1.5,
       "correctionsKmS": 0.05,
@@ -21,9 +24,21 @@
       "note": "choices of the test, not published figures: the lab states every one of them as an input"
     },
     "datePairs": [
-      { "id": "P1", "departure": "2026-11-20", "tofDays": 220 },
-      { "id": "P2", "departure": "2026-10-15", "tofDays": 260 },
-      { "id": "P3", "departure": "2029-01-05", "tofDays": 245 }
+      {
+        "id": "P1",
+        "departure": "2026-11-20",
+        "tofDays": 220
+      },
+      {
+        "id": "P2",
+        "departure": "2026-10-15",
+        "tofDays": 260
+      },
+      {
+        "id": "P3",
+        "departure": "2029-01-05",
+        "tofDays": 245
+      }
     ],
     "pairNote": "dates are 00:00 TDB; the three were chosen for the geometry of an Earth to Mars transfer in the 2026 and 2028-29 windows, before anything was computed",
     "grid": {
@@ -42,21 +57,27 @@
       "tier": "a",
       "name": "porkchop minimum against the Hohmann estimate",
       "rule": "the minimum total delta-v of the kernel's default window (departure burn plus arrival burn, circular 300 km orbits at both planets, the kernel's own definition) is within 12 percent of the Hohmann estimate computed by the oracle with the same burns, the two radii being the osculating semi-major axes of Earth and Mars at 2026-11-15 00:00 TDB from vis-viva on the Horizons states; reason for 12 percent: Mars's eccentricity and inclination move the real optimum by under about 10 percent of the circular figure",
-      "bound": { "relative": 0.12 }
+      "bound": {
+        "relative": 0.12
+      }
     },
     {
       "id": "A2",
       "tier": "a",
       "name": "the minimum falls at the Hohmann epoch",
       "rule": "the departure date of the kernel's minimum cell is within 20 days of the date, in the window's departure range, when Mars's ecliptic longitude minus Earth's equals pi minus Mars's mean motion times the Hohmann flight time (oracle, from Horizons longitudes and the mean motion 2 pi / period of Mars's osculating semi-major axis); reason: Mars's orbital speed varies by about 20 percent, which shifts the phase by a few degrees, about 11 days at 0.46 degrees a day",
-      "bound": { "days": 20 }
+      "bound": {
+        "days": 20
+      }
     },
     {
       "id": "A3",
       "tier": "a",
       "name": "the minimum falls at the Hohmann flight time",
       "rule": "the time of flight of the kernel's minimum cell is within 25 percent of the Hohmann flight time",
-      "bound": { "relative": 0.25 }
+      "bound": {
+        "relative": 0.25
+      }
     },
     {
       "id": "A4",
@@ -80,35 +101,45 @@
       "tier": "a",
       "name": "the rocket equation",
       "rule": "for the ledger's spacecraft burns, the propellant total equals dry * (exp(sum of the burns / (Isp g0)) - 1) with g0 = 9.80665 m/s^2, and each row's propellant is its mass before minus its mass after",
-      "bound": { "relative": 1e-12 }
+      "bound": {
+        "relative": 1e-12
+      }
     },
     {
       "id": "A7",
       "tier": "a",
       "name": "the ledger adds up and says what the spacecraft carries",
       "rule": "the total is the sum of the five rows to 1e-12 of itself, the spacecraft's delta-v is the total without the launch row, and every row has a name, a delta-v, a unit and a statement of what it assumes",
-      "bound": { "relative": 1e-12 }
+      "bound": {
+        "relative": 1e-12
+      }
     },
     {
       "id": "A8",
       "tier": "a",
       "name": "the launch row",
       "rule": "the launch row is the circular speed at the parking orbit plus the stated losses, no more: sqrt(GM/r) + losses, and the ledger says that gravity, drag and steering losses are not modelled",
-      "bound": { "absoluteKmS": 1e-6 }
+      "bound": {
+        "absoluteKmS": 1e-6
+      }
     },
     {
       "id": "A9",
       "tier": "a",
       "name": "the grid in row ranges",
       "rule": "computing the window as separate row ranges and joining them gives every cell value and status identical (Object.is) to the whole window, for three splits including a one-row range, so each range is a job a pool can run in any order",
-      "bound": { "differences": 0 }
+      "bound": {
+        "differences": 0
+      }
     },
     {
       "id": "B1",
       "tier": "b",
       "name": "a cited public mission summary's departure window and delta-v",
       "rule": "the kernel's launch C3 and arrival v-infinity at the published launch and arrival dates of one named mission, against the published figures, 8 percent; the mission has to be one whose summary can be downloaded and pinned (sha256) from a public source",
-      "bound": { "relative": 0.08 },
+      "bound": {
+        "relative": 0.08
+      },
       "declaredNotRunBeforeAnyRun": "No Earth to Mars mission has a departure window inside the pack's span (2025 to 2045) with a published summary this session could download. The one candidate source found (the JPL Mars 2020 launch press kit) answered an automated download with HTTP 403; a browser-identity workaround was refused by the permission system and is not attempted; the NASA technical-reports record of a ballistic-trajectory table (20210005618) is metadata only. A mission outside the span could only be tested with injected Horizons states, and only from a file this session can pin. B1 is declared NOT RUN now, so the verdict function cannot call the tier table green."
     },
     {
@@ -116,7 +147,9 @@
       "tier": "b",
       "name": "the three date pairs, same states",
       "rule": "with the same Horizons states fed to both, the kernel's departure and arrival velocity vectors equal the oracle's shooting solution componentwise",
-      "bound": { "absoluteKmS": 2e-6 }
+      "bound": {
+        "absoluteKmS": 2e-6
+      }
     },
     {
       "id": "B2b",
@@ -124,7 +157,7 @@
       "name": "the three date pairs, the pack's states",
       "rule": "with the pack's states in the kernel and Horizons states in the oracle, the departure burn and the arrival burn (300 km orbits) agree",
       "bound": {
-        "absoluteKmS": 1e-3,
+        "absoluteKmS": 0.001,
         "reason": "the pack's velocity bound is 7.3e-5 km/s and its position bound 4.2 km; ten times the sum of their effects, rounded up"
       }
     },
@@ -144,8 +177,8 @@
       "name": "the porkchop against an independent grid",
       "rule": "on the 806-cell subgrid, the oracle's total delta-v (shooting solutions, Horizons states) and the kernel's (pack states) agree at every cell the kernel accepts; the kernel accepts a cell exactly when the oracle's 3-D sine of the transfer angle is at least 1e-3 and the oracle converges; the minima agree and fall at the same or an adjacent cell; cells where the oracle does not converge are excluded and counted, and the leg passes only if at most 2 percent are excluded",
       "bound": {
-        "cellAbsoluteKmS": 5e-3,
-        "minimumAbsoluteKmS": 1e-3,
+        "cellAbsoluteKmS": 0.005,
+        "minimumAbsoluteKmS": 0.001,
         "excludedFraction": 0.02
       }
     },
@@ -154,7 +187,9 @@
       "tier": "b",
       "name": "a pinned run of an independent astrodynamics tool",
       "rule": "the three date pairs against the pinned output of a cited package",
-      "bound": { "absoluteKmS": 2e-6 },
+      "bound": {
+        "absoluteKmS": 2e-6
+      },
       "declaredNotRunBeforeAnyRun": "Needs installing or running downloaded code; Carl's permission is not given. The independent shooting solver stands for it and is labelled as such, never as the package."
     },
     {
@@ -169,7 +204,9 @@
       "tier": "d",
       "name": "a degenerate date pair refuses",
       "rule": "at the scanned pair the oracle's sine of the transfer angle, from Horizons states, is below 1e-3; the kernel, with the pack's states and with the Horizons states, refuses it with status antipodal; the control pair solves; the refusal gives no delta-v",
-      "bound": { "sine": 1e-3 }
+      "bound": {
+        "sine": 0.001
+      }
     },
     {
       "id": "D2",
@@ -190,5 +227,12 @@
     "function": "A when every leg passes and none is NOT RUN; B when every leg of tiers a, c and d and B2a, B2b, B2c, B3 pass and only B1 and B4 are NOT RUN, which lands the kernel and the record and releases nothing else; C otherwise, in which case the dependent claims are dropped and the failing legs stay failing and labelled. A leg not run is not passed. Only A releases the follow-on parts (rendezvous phasing, a gravity-assist sequence, mission geometry) and the guides; each of those needs its own fixture row regardless.",
     "consumers": "The consumers rule (Carl, 2026-11-05 to 2026-11-07) holds whatever the verdict: no porkchop panel, no budget panel, no geometry panel, no guide and no model-page section is added by this prompt's gate; the kernel and the record only."
   },
-  "amendments": []
+  "amendments": [
+    {
+      "id": "AM1",
+      "recordedBefore": "the rerun of oracle.py that produces the pinned oracle-results.json",
+      "what": "The first oracle run flew the kernel's departure velocity from the Horizons departure position instead of the kernel's, against the rule committed for B2c ('from the kernel's departure position'). The two positions differ by up to the pack's 4.2 km bound, which entered the miss: 5.49, 5.06 and 7.65 km against the bound of 5 km. The oracle is corrected to the committed rule; the bound is not touched. The first run's three misses stay on record here, and the rest of its output (the pairs, the grid, the Hohmann figures, the degenerate pair) was identical in a second run and is unchanged by this correction.",
+      "boundMoved": false
+    }
+  ]
 }
