@@ -246,6 +246,10 @@ export const NEVER_PRECACHED = [
   // measured cost is in D-R10-30). Its first adopter deletes this entry, and
   // tests/workerPoolAdoption.test.js fails until it is deleted.
   /^js\/workers\/pool\.js$/,
+  // The mission window-and-budget workflow (Prompt 272, MISSION_LAB_II.md): the ledger and one mission end to end. No shipped module imports it (the panels and
+  // the guides wait for Carl, D-R10-272-01), so no page can fetch it and an install has no use for it; the idle tier has no room under a data-budget ceiling the
+  // standing size approval does not cover. Its first adopter deletes this entry.
+  /^js\/mission\/workflow\.js$/,
   // The ensemble runner (Prompt 265, EXPERIMENT_ENSEMBLES.md): the record, the kinds, the summary, the pool client and its Worker. No shipped
   // module imports them (the panel and the lessons wait for Carl, D-R10-265-03), so no page can fetch one and an install has no use for them.
   /^js\/experiments\/ensemble\//,
