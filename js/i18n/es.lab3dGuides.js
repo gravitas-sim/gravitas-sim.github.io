@@ -936,7 +936,7 @@ export const ES_LAB3DGUIDES = {
     'Un modelo plano tiene inclinación mutua 0 para cada par. Un par de órbitas que comparten plano no puede tener un ciclo de Kozai-Lidov y, para el modelo, un par de órbitas que difieren 31° es igual que uno que no difiere nada. Sirve para un sistema planetario cuyas órbitas son casi coplanarias, y falla para cualquiera cuyas órbitas no lo son.',
   'gd.l3-tilts.limits.title': 'Dónde se detiene el modelo',
   'gd.l3-tilts.limits.text':
-    'La inclinación mutua es el ángulo entre órbitas osculadoras en un instante; en una ejecución de N cuerpos cambia a medida que intercambian momento angular. En una ejecución solo Kepler nunca cambia, y por eso el ciclo no es una tarea solo Kepler. El triple de referencia tiene una partícula sin masa y estrellas puntuales.',
+    'La inclinación mutua es el ángulo entre órbitas osculadoras en un instante; en una ejecución de N cuerpos cambia a medida que intercambian momento angular. En una ejecución solo Kepler nunca cambia, y por eso el ciclo no se le pide a una ejecución solo Kepler. El triple de referencia tiene una partícula sin masa y estrellas puntuales.',
 
   // --- l3-resonant
   'gd.l3-resonant.title': 'Pares resonantes',

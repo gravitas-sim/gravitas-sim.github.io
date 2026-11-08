@@ -64,6 +64,9 @@ export const MODES = ['kepler', 'nbody', 'precomputed'];
 const DEG = Math.PI / 180;
 const TAU = 2 * Math.PI;
 
+/** The answer kinds a step's `unit` names (the runner's `g3.unit.*` words), not units of the registry. */
+const ANSWER_UNIT = Object.freeze({ none: 'none', starRadii: 'starRadii' });
+
 /** The eclipse systems' star and planet, in code units (a = 1). */
 export const STAR_RADIUS = 0.005;
 export const PLANET_RADIUS = 0.0005;
@@ -1425,7 +1428,7 @@ export const GUIDES = [
         id: 'period',
         kind: 'answer',
         path: 'both',
-        expect: { answer: 'period', tolerance: 0.1, unit: 'none' },
+        expect: { answer: 'period', tolerance: 0.1, unit: ANSWER_UNIT.none },
       },
       {
         id: 'ratio',
@@ -1453,7 +1456,11 @@ export const GUIDES = [
         id: 'periapsis',
         kind: 'answer',
         path: 'both',
-        expect: { answer: 'periapsisDistance', tolerance: 0.01, unit: 'none' },
+        expect: {
+          answer: 'periapsisDistance',
+          tolerance: 0.01,
+          unit: ANSWER_UNIT.none,
+        },
       },
       {
         id: 'edit-i',
@@ -1480,7 +1487,11 @@ export const GUIDES = [
         id: 'height',
         kind: 'answer',
         path: 'both',
-        expect: { answer: 'maxHeight', tolerance: 0.01, unit: 'none' },
+        expect: {
+          answer: 'maxHeight',
+          tolerance: 0.01,
+          unit: ANSWER_UNIT.none,
+        },
       },
       {
         id: 'before-node',
@@ -1577,7 +1588,11 @@ export const GUIDES = [
         id: 'distance',
         kind: 'answer',
         path: 'both',
-        expect: { answer: 'distanceKept', tolerance: 0.02, unit: 'none' },
+        expect: {
+          answer: 'distanceKept',
+          tolerance: 0.02,
+          unit: ANSWER_UNIT.none,
+        },
       },
       { id: 'flat', kind: 'read', path: 'both' },
       { id: 'limits', kind: 'read', path: 'both' },
@@ -1740,19 +1755,31 @@ export const GUIDES = [
         id: 'major',
         kind: 'answer',
         path: 'both',
-        expect: { answer: 'apparentMajor', tolerance: 0.01, unit: 'none' },
+        expect: {
+          answer: 'apparentMajor',
+          tolerance: 0.01,
+          unit: ANSWER_UNIT.none,
+        },
       },
       {
         id: 'minor',
         kind: 'answer',
         path: 'both',
-        expect: { answer: 'apparentMinor', tolerance: 0.01, unit: 'none' },
+        expect: {
+          answer: 'apparentMinor',
+          tolerance: 0.01,
+          unit: ANSWER_UNIT.none,
+        },
       },
       {
         id: 'offset',
         kind: 'answer',
         path: 'both',
-        expect: { answer: 'centerOffset', tolerance: 0.01, unit: 'none' },
+        expect: {
+          answer: 'centerOffset',
+          tolerance: 0.01,
+          unit: ANSWER_UNIT.none,
+        },
       },
       {
         id: 'centre',
@@ -1782,7 +1809,11 @@ export const GUIDES = [
         id: 'impact',
         kind: 'answer',
         path: 'both',
-        expect: { answer: 'impactStar', tolerance: 0.02, unit: 'starRadii' },
+        expect: {
+          answer: 'impactStar',
+          tolerance: 0.02,
+          unit: ANSWER_UNIT.starRadii,
+        },
       },
       {
         id: 'transits',
@@ -1816,7 +1847,11 @@ export const GUIDES = [
         id: 'impact-after',
         kind: 'answer',
         path: 'both',
-        expect: { answer: 'impactStar', tolerance: 0.02, unit: 'starRadii' },
+        expect: {
+          answer: 'impactStar',
+          tolerance: 0.02,
+          unit: ANSWER_UNIT.starRadii,
+        },
       },
       {
         id: 'outcome',
@@ -1844,7 +1879,11 @@ export const GUIDES = [
         id: 'chord',
         kind: 'answer',
         path: 'advanced',
-        expect: { answer: 'chordStar', tolerance: 0.02, unit: 'starRadii' },
+        expect: {
+          answer: 'chordStar',
+          tolerance: 0.02,
+          unit: ANSWER_UNIT.starRadii,
+        },
       },
       { id: 'flat', kind: 'read', path: 'both' },
       { id: 'limits', kind: 'read', path: 'both' },
@@ -2001,7 +2040,11 @@ export const GUIDES = [
         kind: 'answer',
         path: 'advanced',
         mode: 'nbody',
-        expect: { answer: 'ePredicted', tolerance: 0.005, unit: 'none' },
+        expect: {
+          answer: 'ePredicted',
+          tolerance: 0.005,
+          unit: ANSWER_UNIT.none,
+        },
       },
       { id: 'flat', kind: 'read', path: 'both' },
       { id: 'limits', kind: 'read', path: 'both' },
@@ -2044,7 +2087,11 @@ export const GUIDES = [
         id: 'ratio',
         kind: 'answer',
         path: 'both',
-        expect: { answer: 'periodRatio', tolerance: 0.02, unit: 'none' },
+        expect: {
+          answer: 'periodRatio',
+          tolerance: 0.02,
+          unit: ANSWER_UNIT.none,
+        },
       },
       {
         id: 'window',
@@ -2093,13 +2140,17 @@ export const GUIDES = [
         id: 'amplitude',
         kind: 'answer',
         path: 'both',
-        expect: { answer: 'phiAmplitude', tolerance: 0.05, unit: 'none' },
+        expect: {
+          answer: 'phiAmplitude',
+          tolerance: 0.05,
+          unit: ANSWER_UNIT.none,
+        },
       },
       {
         id: 'period',
         kind: 'answer',
         path: 'both',
-        expect: { answer: 'phiPeriod', tolerance: 0.5, unit: 'none' },
+        expect: { answer: 'phiPeriod', tolerance: 0.5, unit: ANSWER_UNIT.none },
       },
       {
         id: 'outcome',
@@ -2113,7 +2164,11 @@ export const GUIDES = [
         id: 'window-periods',
         kind: 'answer',
         path: 'advanced',
-        expect: { answer: 'windowPeriods', tolerance: 0.3, unit: 'none' },
+        expect: {
+          answer: 'windowPeriods',
+          tolerance: 0.3,
+          unit: ANSWER_UNIT.none,
+        },
       },
       {
         id: 'kepler-open',
@@ -2132,7 +2187,7 @@ export const GUIDES = [
         kind: 'answer',
         path: 'both',
         mode: 'kepler',
-        expect: { answer: 'phiNow', tolerance: 0.02, unit: 'none' },
+        expect: { answer: 'phiNow', tolerance: 0.02, unit: ANSWER_UNIT.none },
       },
       {
         id: 'why',

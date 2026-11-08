@@ -27,6 +27,8 @@
 // =============================================================================
 
 import { EN_LAB3DORBIT } from '../../i18n/en.lab3dOrbit.js';
+import { roundSig, withUncertainty as formatted } from '../../format.js';
+import { typedNumber } from '../../answerParse.js';
 import {
   OrbitalLayerError,
   PHYSICAL_UNITS,
@@ -82,9 +84,8 @@ const svg = (tag, attrs = {}) => {
  * significant figures of it); with none, to five significant figures.
  */
 export function withUncertainty(value, sigma) {
-  if (!(sigma > 0)) return String(Number(value.toPrecision(5)));
-  const decimals = Math.max(0, 1 - Math.floor(Math.log10(sigma)));
-  return `${value.toFixed(decimals)} ± ${sigma.toFixed(decimals)}`;
+  if (!(sigma > 0)) return String(roundSig(value, 5));
+  return formatted(value, sigma, { sig: 2, locale: 'en' });
 }
 
 /** The orbital layer's units and time scale for a system, named. */
@@ -169,8 +170,8 @@ export function createOrbitPanel(root, lab) {
     !Number.isFinite(v)
       ? '—'
       : lab.language() === 'es'
-        ? String(Number(v.toPrecision(5))).replace('.', ',')
-        : String(Number(v.toPrecision(5)));
+        ? String(roundSig(v, 5)).replace('.', ',')
+        : String(roundSig(v, 5));
   const deg = v => `${fmt(v)}°`;
 
   const ui = { body: 0, other: 0, resBody: [1, 2], loaded: false };
@@ -357,7 +358,7 @@ export function createOrbitPanel(root, lab) {
       if (!sel) return;
       sel.replaceChildren(
         ...items.map(([v, label]) =>
-          el('option', { value: String(v), text: label })
+          el('option', { value: String(v), 'data-i': String(v), text: label })
         )
       );
       if (items.some(([v]) => String(v) === String(value)))
@@ -450,7 +451,7 @@ export function createOrbitPanel(root, lab) {
   function load(e) {
     for (const k of FIELDS) {
       const input = root.querySelector(`#l3o-f-${k}`);
-      if (input) input.value = String(Number(e[k].toPrecision(10)));
+      if (input) input.value = String(roundSig(e[k], 10));
     }
   }
 
@@ -465,11 +466,11 @@ export function createOrbitPanel(root, lab) {
     const edits = {};
     for (const k of FIELDS) {
       const input = root.querySelector(`#l3o-f-${k}`);
-      const typed = Number(String(input.value).replace(',', '.'));
+      const typed = typedNumber(input.value, lab.language());
       if (input.value.trim() === '' || !Number.isFinite(typed))
         return say(tr('o.notNumber', { field: k }));
       // Only what the reader changed: a field left alone keeps its bits.
-      if (typed !== Number(o.el[k].toPrecision(10))) edits[k] = typed;
+      if (typed !== roundSig(o.el[k], 10)) edits[k] = typed;
     }
     if (!Object.keys(edits).length) return say(tr('o.unchanged'));
     const R = lab.axes();
@@ -687,7 +688,7 @@ export function createOrbitPanel(root, lab) {
     if (!f) return;
     const [i, o] = ui.resBody;
     const p = hierarchy(f).primary[i];
-    const j = Number(root.querySelector('#l3o-res-j').value) || 2;
+    const j = typedNumber(root.querySelector('#l3o-res-j').value) || 2;
     const phi =
       i !== o && p >= 0 && hierarchy(f).primary[o] === p
         ? resonantArgument(f, i, o, p, lab.G(), { j })
@@ -720,15 +721,18 @@ export function createOrbitPanel(root, lab) {
     drawResonance();
   }
 
+  /** The body index a select's chosen option carries. */
+  const chosen = sel => parseInt(sel.selectedOptions[0]?.dataset.i ?? '0', 10);
+
   function wire() {
     const $ = id => root.querySelector(`#${id}`);
     $('l3o-body').addEventListener('change', e => {
-      ui.body = Number(e.target.value);
+      ui.body = chosen(e.target);
       $('l3o-fields').replaceChildren();
       update();
     });
     $('l3o-other').addEventListener('change', e => {
-      ui.other = Number(e.target.value);
+      ui.other = chosen(e.target);
       update();
     });
     for (const [id, k] of [
@@ -736,7 +740,7 @@ export function createOrbitPanel(root, lab) {
       ['l3o-res-out', 1],
     ])
       $(id).addEventListener('change', e => {
-        ui.resBody[k] = Number(e.target.value);
+        ui.resBody[k] = chosen(e.target);
         seen.lo = Infinity;
         seen.hi = -Infinity;
         update();
