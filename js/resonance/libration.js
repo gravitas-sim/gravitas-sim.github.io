@@ -127,12 +127,19 @@ export function measureLibration({
   floorDeg = ANGLE_CRITERIA.turnFloorDeg,
   stationaryDeg = ANGLE_CRITERIA.stationaryDeg,
   samplingFloor = 0,
+  smoothSpan = referencePeriod,
 }) {
   const samples = times.map((t, i) => ({ t, phi: phi[i] }));
+  // A smoothing span other than the conjunction cycle scales the three
+  // cycle-counted floors so that their absolute values (in time) are unchanged.
+  const ratio = referencePeriod / smoothSpan;
   const c = classifyAngle(samples, {
-    referencePeriod,
+    referencePeriod: smoothSpan,
     turnFloorDeg: floorDeg,
     stationaryDeg,
+    minLibrationCycles: ANGLE_CRITERIA.minLibrationCycles * ratio,
+    minCycles: ANGLE_CRITERIA.minCycles * ratio,
+    confinedCycles: ANGLE_CRITERIA.confinedCycles * ratio,
   });
   const window = times[times.length - 1] - times[0];
   const refuse = reason => ({
@@ -172,6 +179,10 @@ export function measureLibration({
     swings.push(Math.abs(c.turns[i].value - c.turns[i - 1].value) / 2);
   }
   const k = halves.length;
+  // A boxcar of the smoothing span attenuates a sinusoid of the libration
+  // period by sin(pi s / P) / (pi s / P); the corrected amplitude undoes it.
+  const x = (Math.PI * smoothSpan) / c.period;
+  const gain = smoothSpan === referencePeriod ? 1 : Math.sin(x) / x;
   const scatter = k >= 2 ? (2 * sd(halves)) / Math.sqrt(k) : 0;
   return {
     state: STATES.LIBRATION,
@@ -179,6 +190,8 @@ export function measureLibration({
     period: c.period,
     periodSigma: Math.hypot(scatter, samplingFloor),
     amplitude: c.amplitude,
+    amplitudeCorrected: c.amplitude / gain,
+    smoothingGain: gain,
     amplitudeSigma: k >= 2 ? sd(swings) / Math.sqrt(k) : null,
     center: c.center,
     window,
