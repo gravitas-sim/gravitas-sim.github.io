@@ -82,7 +82,7 @@ When the evidence notebook holds entries, My work draws "Review and compare your
 - **For a report**: a mark, kept as `marked: true` on the notebook entry (`mark()` in `js/notebook/entry.js`; present only while set). The existing report does not read it; Part B (a report composed from marked entries) is the reader of it and has not been built.
 - **Compare**: two entries of one kind (the same `source`), one quantity of each, or one entry's two quantities. Entries of different kinds, quantities in different units, and an uncertainty that is not one standard deviation (a limit, "not constrained", a failed fit, an asymmetric interval, none) are refused in words.
 
-**The covariance rule.** The difference is A - B with Var(A - B) = Var(A) + Var(B) - 2 Cov(A, B), computed by the statistics kernel's `difference` (Prompt 154) and worded by Prompt 151's `describeComparison` (`js/compare/estimates.js`, `compareW.est.*`). The covariance is used when it is known: when both quantities are of one record and the record states a coefficient between them (`correlatedWith`), or when the student gives a correlation (or a covariance) for two records. Two different records state no coefficient of each other and nothing infers one. So:
+**The covariance rule.** The difference is A - B with Var(A - B) = Var(A) + Var(B) - 2 Cov(A, B), computed by Prompt 151's `compareEstimates` and worded by its `describeComparison` (`js/compare/estimates.js`, `compareW.est.*`). The statistics kernel's `difference` (Prompt 154) computes the same quantity; the page does not import it, because the kernel is NEVER_PRECACHED with no adopter and a first adopter would carry its nine files into the install, so `tests/evidenceReview.test.js` checks the two agree on a grid instead. The covariance is used when it is known: when both quantities are of one record and the record states a coefficient between them (`correlatedWith`), or when the student gives a correlation (or a covariance) for two records. Two different records state no coefficient of each other and nothing infers one. So:
 
 | What is known | What the page says |
 |---|---|
@@ -90,7 +90,7 @@ When the evidence notebook holds entries, My work draws "Review and compare your
 | the records share data (the same observation digest on a measurement, or one record) or calibration (the same assumed quantity), no coefficient | "Independence assumed.", then that they share their data or calibration, so the uncertainty of the difference is probably smaller than stated and the difference more significant, and that a correlation corrects it |
 | a coefficient the record states, or one the student gives | "Covariance used", with where it came from |
 
-Every statement ends with the Gaussian assumption. The page's comparison agrees with `compareEstimates` (Prompt 151) on a grid of 60 cases and with Python's `math.erfc` on three hand-computed ones (`tests/evidenceReview.test.js`).
+Every statement ends with the Gaussian assumption. The page's comparison agrees with the kernel's `difference` (Prompt 154) on a grid of 60 cases and with Python's `math.erfc` on three hand-computed ones (`tests/evidenceReview.test.js`).
 
 **Limits, said plainly.**
 - A mark is an additive field on the stored notebook entry. A 2.0.0 or 2.1.0 build reads the entry and drops the mark on its next save, as it drops any field it does not know; nothing else about the entry changes.

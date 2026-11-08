@@ -32,7 +32,7 @@ import {
   reviewRows,
   sharedBasis,
 } from '../js/myWork/evidenceReview.js';
-import { compareEstimates } from '../js/compare/estimates.js';
+import { difference } from '../js/kernels/statistics/compare.js';
 import { envelopeOf } from '../js/notebook/ledger.js';
 import { KEY_EVIDENCE_NOTEBOOK } from '../js/names.js';
 import { SURFACE_ROUTE, surfaceOf } from '../js/myWork/model.js';
@@ -240,7 +240,7 @@ describe('the comparison and its covariance rule', () => {
     );
   });
 
-  test("agrees with Prompt 151's comparison on a grid of cases", () => {
+  test("agrees with the statistics kernel's difference (Prompt 154) on a grid of cases", () => {
     const grid = [];
     for (const [a, b] of [
       [10, 9],
@@ -255,28 +255,34 @@ describe('the comparison and its covariance rule', () => {
       ])
         for (const rho of [undefined, -0.4, 0, 0.5, 0.99])
           grid.push([a, b, sa, sb, rho]);
-    for (const [a, b, sa, sb, rho] of grid) {
+    for (const [a, bb, sa, sb, rho] of grid) {
       const [ea, eb] = [
         entry({ id: 'p', quantities: [q('v', a, sa)] }),
-        entry({ id: 'r', quantities: [q('v', b, sb)] }),
+        entry({ id: 'r', quantities: [q('v', bb, sb)] }),
       ];
       const mine = compareEntries(ea, eb, rho === undefined ? {} : { rho });
-      const theirs = compareEstimates(
-        q('v', a, sa),
-        q('v', b, sb),
-        rho === undefined ? {} : { rho }
-      );
+      const cov = (rho ?? 0) * sa * sb;
+      const theirs = difference({
+        a,
+        b: bb,
+        varA: sa * sa,
+        varB: sb * sb,
+        covAB: cov,
+      });
       expect(mine.ok).toBe(true);
       expect(Math.abs(mine.sigma - theirs.sigma)).toBeLessThanOrEqual(
         1e-12 * theirs.sigma + 1e-15
       );
-      expect(Math.abs(mine.nSigma - theirs.nSigma)).toBeLessThanOrEqual(
-        1e-9 * (1 + theirs.nSigma)
+      expect(Math.abs(mine.nSigma - Math.abs(theirs.z))).toBeLessThanOrEqual(
+        1e-9 * (1 + Math.abs(theirs.z))
       );
       expect(Math.abs(mine.p - theirs.p)).toBeLessThanOrEqual(
         1e-9 * theirs.p + 1e-12
       );
-      expect(mine.assumptions).toEqual(theirs.assumptions);
+      expect(mine.assumptions).toEqual([
+        'gaussian',
+        rho === undefined ? 'independent' : 'covariance',
+      ]);
     }
   });
 

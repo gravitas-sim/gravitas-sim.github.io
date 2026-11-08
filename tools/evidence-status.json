@@ -1534,7 +1534,7 @@
       "version": "2.1.0",
       "class": "S",
       "status": "partial",
-      "method": "tests/evidenceReview.test.js: the covariance rule against three hand-computed reference cases (Python math.erfc), 60 cases against Prompt 151's comparison, refusals, and the view in jsdom; e2e/evidenceReview.spec.js in a browser with axe in both languages at 375 and 1024 px",
+      "method": "tests/evidenceReview.test.js: the covariance rule against three hand-computed reference cases (Python math.erfc), 60 cases against the statistics kernel's difference (Prompt 154), refusals, and the view in jsdom; e2e/evidenceReview.spec.js in a browser with axe in both languages at 375 and 1024 px",
       "evaluator": "the project's own tests",
       "artifact": "tests/evidenceReview.test.js",
       "limitations": "A comparison that assumes Gaussian errors; sharing is detected only from what a record says (a digest, an assumed quantity); no student has used it, and Spanish has not been read by a fluent reader (D-R10-275-01).",

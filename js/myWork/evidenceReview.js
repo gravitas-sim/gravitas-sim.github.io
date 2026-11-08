@@ -10,10 +10,13 @@
 //
 //     Var(A - B) = Var(A) + Var(B) - 2 Cov(A, B)
 //
-// from js/kernels/statistics/compare.js (Prompt 154), which says what it
-// assumed and refuses what it cannot treat; the covariance is used when it is
-// known and the statement says "independence assumed" when it is not, in the
-// words of Prompt 151's comparison (js/compare/estimates.js describeComparison).
+// from Prompt 151's comparison (js/compare/estimates.js compareEstimates and
+// describeComparison), which uses the covariance when it is known, says
+// "independence assumed" when it is not, and refuses what it cannot treat. It
+// is the statistics kernel's `difference` (Prompt 154) computed again: the
+// kernel is not imported because it is NEVER_PRECACHED with no adopter, and a
+// first adopter would carry its nine files into the install; the test checks
+// the two agree.
 // The covariance is known when
 //   - both quantities are of one record (one fit), and that record states the
 //     coefficient between them (`correlatedWith`, Prompt 150);
@@ -29,8 +32,11 @@
 // =============================================================================
 
 import { envelopeOf } from '../notebook/ledger.js';
-import { correlationBetween, sigmaOf } from '../compare/estimates.js';
-import { difference } from '../kernels/statistics/compare.js';
+import {
+  compareEstimates,
+  correlationBetween,
+  sigmaOf,
+} from '../compare/estimates.js';
 
 const DATA_SOURCES = new Set(['pipeline', 'guide']);
 const DAY = 86400000;
@@ -195,46 +201,15 @@ export function compareEntries(entryA, entryB, o = {}) {
 
   const stated = ea.id === eb.id ? correlationBetween(ea, idA, idB) : null;
   const basis = o.shared ?? sharedBasis(ea, eb);
-  let cov = 0;
-  let known = false;
+  // What is known of how the two move together: the student's own number
+  // first, then what the record states between two of its own quantities.
+  let known = {};
   let from = null;
-  if (Number.isFinite(o.covariance)) {
-    [cov, known, from] = [o.covariance, true, 'student'];
-  } else if (Number.isFinite(o.rho)) {
-    if (Math.abs(o.rho) > 1) return { ok: false, reason: 'covariance' };
-    [cov, known, from] = [o.rho * sa.sigma * sb.sigma, true, 'student'];
-  } else if (stated !== null) {
-    [cov, known, from] = [stated * sa.sigma * sb.sigma, true, 'record'];
-  }
-  const d = difference({
-    a: qa.value,
-    b: qb.value,
-    varA: sa.sigma ** 2,
-    varB: sb.sigma ** 2,
-    covAB: cov,
-  });
-  if (d.status === 'refused') return { ok: false, reason: 'covariance' };
-  const zero = d.value === 0;
-  const nSigma = d.status === 'ok' ? Math.abs(d.z) : zero ? 0 : Infinity;
-  return {
-    ok: true,
-    idA,
-    idB,
-    unit: qa.unit,
-    a: qa,
-    b: qb,
-    difference: d.value,
-    sigma: d.sigma,
-    nSigma,
-    p: d.status === 'ok' ? d.p : zero ? 1 : 0,
-    covariance: cov,
-    covarianceFrom: from,
-    independent: !known,
-    shared: basis,
-    assumptions: [
-      'gaussian',
-      known ? 'covariance' : 'independent',
-      ...(basis && !known ? ['sharedUnknown'] : []),
-    ],
-  };
+  if (Number.isFinite(o.covariance))
+    [known, from] = [{ covariance: o.covariance }, 'student'];
+  else if (Number.isFinite(o.rho)) [known, from] = [{ rho: o.rho }, 'student'];
+  else if (stated !== null) [known, from] = [{ rho: stated }, 'record'];
+  const r = compareEstimates(qa, qb, { ...known, shared: basis });
+  if (!r.ok) return r;
+  return { ...r, idA, idB, unit: qa.unit, a: qa, b: qb, covarianceFrom: from };
 }
