@@ -97,3 +97,28 @@ Every statement ends with the Gaussian assumption. The page's comparison agrees 
 - Sharing is detected only from what a record says (a digest, an assumed quantity). Records that share data without saying so are compared with independence assumed and no warning; the student can state that they share, and give a correlation.
 - The annotation fields are the notebook's own; there is no free-form note field beyond them.
 - Spanish has not been read by a fluent reader.
+
+## Progress and prerequisites (Prompt 276, part 1)
+
+The Your progress section answers "where am I and what is next" without a new
+record. It is derived, in `progressGroups` of `js/myWork/model.js`, from three
+things the page already reads: the progress records (an investigation with no
+record is not started, one with a record and fewer steps seen than it has is in
+progress, one with every step seen is done), the Library's entries and
+sequences (an entry's `rel.in` names the sequences and courses it belongs to
+and its place in each), and the resume record of Prompt 163 (its newest item is
+the "Where you left off" line). The depth reached is the progress record's
+`deepest` field, shown only when it names a depth the lesson engine knows.
+
+A Library entry's `prerequisites` that are investigations and not yet done
+appear on an investigation that is itself not done as "You may want X first",
+with a link. That is advice: nothing is locked, hidden or disabled, and every
+investigation opens from its own link. There are no points, badges or streaks.
+
+**Not built here (Prompt 276 parts 2 and 3 and the card and panel forms of
+part 1).** Prerequisites on a Library card and in the lesson panel; the
+recovery pattern (a generated minimal hint ladder from the step's check,
+"the units", "the order of magnitude", "the formula", named as generated; a
+path to the worked example; the attempts record for Prompt 173's summary and
+its compatibility-corpus row); the comparison across investigations. Spanish
+has not been read by a fluent reader.
