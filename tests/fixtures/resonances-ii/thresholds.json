@@ -1,0 +1,377 @@
+{
+  "format": "gravitas.resonances-ii-thresholds/1",
+  "prompt": "Roadmap III, Prompt 273, Resonances and secular dynamics II, Part A (gate), tranche T6 authorized by Checkpoint VI (D-R10-267-01); hard prerequisites 148, 193 (the satellite ephemeris pack) and 271 (#572) landed on v3 1dff1b8c",
+  "document": "RESONANCES_II.md",
+  "committed": "2026-11-08, before any kernel module, oracle, validator or run of this prompt existed",
+  "rule": "Thresholds first, in their own commit. Amendments are recorded in `amendments` before the run they affect. A leg that fails stays failing and labelled; no bound is moved after a result. A leg not measured is NOT RUN with the request that would run it. The verdict is the function below, applied to the pinned results.",
+  "seenBeforeCommitting": [
+    "Roadmap sections 7, 12.1, 13, Appendix C and Prompt 273's run condition and full prompt; D-R10-267-01 (T6 authorized); D-R10-271-01 (271's smoothed legs E2s/E4s/E7s and the failing unsmoothed E2/E7).",
+    "The existing resonance module (js/resonance/elements.js: resonantArgument, classifyAngle, smoothOverTime, ANGLE_CRITERIA; js/resonance/systems.js: the GALILEAN and PLUTO_NEPTUNE tables with their `published` blocks) and the lab3d kernel (js/lab3d/kernel.js, elements.js).",
+    "No output of any run of this prompt. Nothing was integrated, fitted or plotted before this file was committed.",
+    "No published number was typed in this session. The cited libration periods and amplitudes are those already committed in js/resonance/systems.js `published` blocks (Laplace argument 2071 d, 0.064 deg, centre 180 deg; Pluto-Neptune 19,670 yr, 82 deg, centre 180 deg), whose sources that file names (Murray and Dermott 1999; Cohen and Hubbard 1965; Williams and Benson 1971; Malhotra and Williams 1997). They were NOT re-read from those sources in this session; the legs that use them say so."
+  ],
+  "units": "legs state their own units; angles are degrees unless a bound says radians",
+  "tools": "Node 22.23.4 for the kernel side; python3 -E (3.9, numpy, scipy) for the oracle, which imports no Gravitas code and reads only inputs/inputs.json and the downloaded Horizons files",
+  "data": {
+    "dir": "scratch-data/resonance273 beside the repositories (outside every repository, cite-only; the raw files are not committed)",
+    "product": "NASA/JPL Horizons API 1.2, JUP365 (Jacobson) geometric vectors of Io (501), Europa (502), Ganymede (503) about Jupiter's centre (500@599), ecliptic of J2000.0 (ICRF), km and km/s, TDB, 1 d step from 2025-11-20 00:00, 10,314 rows each, retrieved 2026-11-08 by the same request form as the satellite pack of Prompt 193 (ephemeris-packs/galilean-2025-11.json records that request and the terms as served on 2026-10-25)",
+    "sha256": {
+      "horizons_501.txt": "a5c3b1db0097f87e13e9d4295163309b29aefde8284d5fab75bdd52b3e3d1480",
+      "horizons_502.txt": "2c1f9242a9ff3959323b3a35610db56025226da20c83cf82825b8fa46cc85f7e",
+      "horizons_503.txt": "a82cbc240c3980e350002679fe8eaa41625b8d8f057cb711ef985c04657697e3"
+    },
+    "rights": "cite-only: the files stay outside the repository; what is committed is a derived argument series with the digests above (the transformation: elements, then one resonant argument, rounded to 1e-5 deg), as the satellite pack's own rights record states for the same service"
+  },
+  "constants": {
+    "provenance": "shared by the kernel side and the oracle as inputs, so they are not independent between the two; each comes from the repository's own committed constants",
+    "GM_jupiter_km3_s2": "js/satellites/galilean.js GM_JUPITER",
+    "moon_masses": "js/resonance/systems.js GALILEAN.moons[].massOverJupiter (Io, Europa, Ganymede)",
+    "pole": "js/satellites/galilean.js POLE_J2000 (IAU 2018 working group), epoch rate ignored: 0.0065 deg per century over 28 years is below every bound here",
+    "jupiter_sun_mass_ratio": "js/resonance/systems.js GALILEAN.sunOverJupiter (IAU 2015 nominal), used only by the secular leg"
+  },
+  "window": {
+    "rule": "The integration or analysis window is a committed multiple of the cited libration period.",
+    "laplace_days": 8284,
+    "laplace_basis": "4 x the cited 2071 d",
+    "pluto_years": 78680,
+    "pluto_basis": "4 x the cited 19,670 yr",
+    "secular_basis": "4 turns of the precessing apse, the turns counted from the first-order theory's own rate (limit stated in leg S1)",
+    "refusal": "a window that has not seen 3 completed libration periods (a secular window that has not seen 3 turns) returns state 'not-constrained' with no period (no rate), whatever else the series looks like"
+  },
+  "methods": {
+    "argument": "For a p:q resonance the kernel builds the argument from mean longitudes and longitudes of periapsis of 3-D elements about the primary in the primary's equatorial frame (lambda = Omega + omega + M, varpi = Omega + omega); the integer coefficients sum to zero or the argument is refused.",
+    "libration_estimator": "smooth the unwrapped argument over one conjunction cycle (the Io-Europa synodic period 3.525 d for the Laplace argument; the Pluto-Neptune synodic 491.5 yr), find turning points with a prominence of 12% of the smoothed span and a floor of 0.002 deg (Laplace) or 0.5 deg (Pluto), period = twice the mean spacing of successive turning points, amplitude = half the mean max-min, with ANGLE_CRITERIA otherwise as committed in js/resonance/elements.js except stationaryDeg = 0.002 (Laplace)",
+    "period_uncertainty": "sigma_P = 2 sd(turning spacings) / sqrt(k) for k >= 2 spacings, in quadrature with a sampling floor of 1 d (Laplace) or 20 yr (Pluto); a coverage interval is +-2 sigma",
+    "secular_rate": "slope of the unwrapped apsidal longitude by least squares over the window; sigma is half the difference of the slopes of the two halves",
+    "integrator": "js/lab3d/kernel.js yoshida4, fixed step: 0.0221 d (Laplace model and pack runs), 1.0 yr (Pluto model), 0.09 yr (secular test); samples every 1 d, 20 yr, 5 yr",
+    "oracle_integrator": "scipy DOP853, rtol 1e-11 atol 1e-14 (Laplace rtol 1e-10), the same initial state, sampled on the same grid, its own elements code, its own libration estimator"
+  },
+  "systems": {
+    "L-R": "the pinned JUP365 history of the Laplace argument over 8,284 d",
+    "L-N": "a point-mass N-body run (Jupiter and the three moons, no oblateness) from the JUP365 osculating states of 2025-11-20 over 8,284 d",
+    "L-M": "the Gravitas Laplace model: the GALILEAN table's periods, eccentricities, mean longitudes lambda0 (0, 180, 0) and apsidal longitudes varpi0 (0, 180, 0) in one plane, masses from the table, mu from Jupiter's GM, over 8,284 d",
+    "P-M": "the Gravitas Pluto model: the PLUTO_NEPTUNE table (Neptune a = 30.0699 AU e = 0.00859, Pluto at the 3:2 axis with e = 0.2488, i = 17.16 deg, masses from the table, argument0 100 deg), Sun, Neptune and Pluto only, over 78,680 yr",
+    "S-T": "a planar test particle (a = 1.9 AU, e = 0.05) about a Sun of mass 1 with one circular perturber of mass 0.005 at a = 5.2 AU, G = 4 pi^2 (AU, yr); limits: first order in e, e', i; alpha = a/a' = 0.3654; second-order terms in the perturber mass (about 0.5%) and the 4:1 and 9:2 resonances (orders 3 and 5) are not modelled"
+  },
+  "legs": [
+    {
+      "id": "R1",
+      "group": "argument",
+      "kind": "analytic",
+      "what": "the resonant argument's arithmetic on 2,000 seeded (lambda, varpi) sets for the Laplace, Pluto and a generic p:q form",
+      "bound": "circular difference kernel against oracle <= 1e-9 deg; a coefficient set whose sum is not zero is refused (null)"
+    },
+    {
+      "id": "R2",
+      "group": "argument",
+      "kind": "oracle",
+      "what": "lambda and varpi of each of Io, Europa, Ganymede from the 8,285 JUP365 states of the window (equatorial frame), and the Laplace argument from them, kernel against oracle",
+      "bound": "max circular difference <= 1e-6 deg in each longitude and in the argument"
+    },
+    {
+      "id": "R3",
+      "group": "argument",
+      "kind": "pinned",
+      "what": "the kernel's Laplace-argument series from the raw states against the pinned series (the committed cited-integration history, rounded to 1e-5 deg)",
+      "bound": "max difference <= 2e-5 deg"
+    },
+    {
+      "id": "L1",
+      "group": "libration",
+      "kind": "reference",
+      "what": "the libration estimator on the pinned JUP365 argument over the 8,284 d window: state, period against the cited 2071 d, amplitude against the cited 0.064 deg, centre against the cited 180 deg",
+      "bound": "state = libration with the period resolved; |P - 2071| / 2071 <= 5%; |A - 0.064| / 0.064 <= 50%; |centre - 180| <= 1 deg; NOT a pass unless all four hold"
+    },
+    {
+      "id": "L2",
+      "group": "libration",
+      "kind": "model-fidelity",
+      "what": "L-N: the point-mass N-body run from the JUP365 osculating states: state, period against the cited 2071 d",
+      "bound": "state = libration; |P - 2071| / 2071 <= 10%. The model has no oblateness, which the repository's own GALILEAN table says contributes to the real mean motions; the leg is committed anyway because the roadmap names this system and this mode"
+    },
+    {
+      "id": "L3",
+      "group": "libration",
+      "kind": "oracle",
+      "what": "L-M: kernel against oracle, same initial state: period and amplitude of the argument",
+      "bound": "|P_k - P_o| / P_o <= 2%; |A_k - A_o| / A_o <= 5%; both states equal"
+    },
+    {
+      "id": "L3c",
+      "group": "libration",
+      "kind": "reference",
+      "what": "L-M against the cited values: period against 2071 d",
+      "bound": "state = libration; |P - 2071| / 2071 <= 10%"
+    },
+    {
+      "id": "L4",
+      "group": "libration",
+      "kind": "analytic",
+      "what": "the integrator's accumulated error over the 8,284 d window (L-M): relative energy drift (kernel's own energy) and the argument's maximum divergence from the oracle's over the window",
+      "bound": "|dE/E| <= 1e-8; max |phi_k - phi_o| <= 5% of the oracle's amplitude"
+    },
+    {
+      "id": "P1",
+      "group": "pluto",
+      "kind": "oracle",
+      "what": "P-M: kernel against oracle, same initial state: period and amplitude of 3 lambda_P - 2 lambda_N - varpi_P",
+      "bound": "|P_k - P_o| / P_o <= 2%; |A_k - A_o| / A_o <= 5%; both states equal"
+    },
+    {
+      "id": "P2",
+      "group": "pluto",
+      "kind": "model-fidelity",
+      "what": "P-M against the cited values: period 19,670 yr, amplitude 82 deg, centre 180 deg",
+      "bound": "state = libration; |P - 19,670| / 19,670 <= 15%; |A - 82| / 82 <= 25%; |centre - 180| <= 10 deg"
+    },
+    {
+      "id": "P3",
+      "group": "pluto",
+      "kind": "analytic",
+      "what": "the accumulated integrator error over the 78,680 yr window: relative energy drift and the argument's maximum divergence from the oracle's",
+      "bound": "|dE/E| <= 1e-8; max |phi_k - phi_o| <= 5% of the oracle's amplitude"
+    },
+    {
+      "id": "S1",
+      "group": "secular",
+      "kind": "theory",
+      "what": "S-T: the kernel's apsidal rate over 4 theoretical turns against the first-order Laplace-Lagrange rate A = (n/4)(m'/M) alpha^2 b^(1)_{3/2}(alpha), the Laplace coefficient by the oracle's own quadrature",
+      "bound": "|rate_k - A| / A <= 5%, and the stated half-window uncertainty is reported"
+    },
+    {
+      "id": "S2",
+      "group": "secular",
+      "kind": "oracle",
+      "what": "S-T: kernel against oracle (DOP853, same initial state) apsidal rate",
+      "bound": "|rate_k - rate_o| / rate_o <= 0.5%"
+    },
+    {
+      "id": "C1",
+      "group": "ensemble",
+      "kind": "ensemble",
+      "what": "coverage: 10 members of L-M with seeded perturbations (seed 273: Ganymede lambda0 by N(0, 2 deg), Europa e by a factor 1 + N(0, 0.05)); for each, the kernel's period with its +-2 sigma against that member's oracle period (the member's truth)",
+      "bound": "at least 9 of 10 members inside; members for which the kernel returns no period count as misses"
+    },
+    {
+      "id": "D1",
+      "group": "negative",
+      "kind": "negative",
+      "what": "windows of 0.5, 1 and 2 libration periods (L-M, the first 1,035, 2,071 and 4,142 d): the estimator",
+      "bound": "state = not-constrained and period = null on all three; no amplitude presented as measured"
+    },
+    {
+      "id": "D2",
+      "group": "negative",
+      "kind": "negative",
+      "what": "L-M with Europa's axis detuned by 1.01 (the table's own `detune`) over the window: the estimator",
+      "bound": "state = circulation (or inconclusive); never a libration period"
+    },
+    {
+      "id": "D3",
+      "group": "negative",
+      "kind": "negative",
+      "what": "S-T over 2 theoretical turns",
+      "bound": "the secular rate is refused (not-constrained), no rate returned"
+    },
+    {
+      "id": "N1",
+      "group": "authentic",
+      "kind": "authentic",
+      "what": "authentic-data applicability: L1 is the authentic leg (a real ephemeris whose published libration values were not used to tune the estimator, whose options are committed above); no other authentic dataset is available in this session",
+      "bound": "reported; the validation contract's tier (e) is met by L1 alone and is stated as such"
+    },
+    {
+      "id": "K1",
+      "group": "not-gated",
+      "kind": "not-run",
+      "what": "the Kozai-Lidov timescale and exchange: the existing 3-D guide's analytic statement; no leg is committed because no independent reference of the exchange over a window is available in this session",
+      "bound": "NOT RUN; request: an independent secular (double-averaged) integration or a cited table, then a Part A addendum"
+    },
+    {
+      "id": "L1s",
+      "group": "libration",
+      "kind": "reference",
+      "what": "AM3: L1 with a 1,000 d smoothing span and the amplitude corrected for the boxcar's gain",
+      "bound": "as AM3 states; reported beside L1, not in the verdict function"
+    },
+    {
+      "id": "L3f",
+      "group": "libration",
+      "kind": "oracle",
+      "what": "AM4 follow-up of L3 at the finer fixed step",
+      "bound": "|P_k - P_o| / P_o <= 2%; |A_k - A_o| / A_o <= 5%; both states equal (unchanged)"
+    },
+    {
+      "id": "L3cf",
+      "group": "libration",
+      "kind": "reference",
+      "what": "AM4 follow-up of L3c at the finer fixed step",
+      "bound": "state = libration; |P - 2071| / 2071 <= 10% (unchanged)"
+    },
+    {
+      "id": "L4f",
+      "group": "libration",
+      "kind": "analytic",
+      "what": "AM4 follow-up of L4 at the finer fixed step",
+      "bound": "|dE/E| <= 1e-8; max |phi_k - phi_o| <= 5% of the oracle's amplitude (unchanged)"
+    },
+    {
+      "id": "P1f",
+      "group": "pluto",
+      "kind": "oracle",
+      "what": "AM4 follow-up of P1 at the finer fixed step",
+      "bound": "|P_k - P_o| / P_o <= 2%; |A_k - A_o| / A_o <= 5%; both states equal (unchanged)"
+    },
+    {
+      "id": "P2f",
+      "group": "pluto",
+      "kind": "model-fidelity",
+      "what": "AM4 follow-up of P2 at the finer fixed step",
+      "bound": "state = libration; |P - 19,670| / 19,670 <= 15%; |A - 82| / 82 <= 25%; |centre - 180| <= 10 deg (unchanged)"
+    },
+    {
+      "id": "P3f",
+      "group": "pluto",
+      "kind": "analytic",
+      "what": "AM4 follow-up of P3 at the finer fixed step",
+      "bound": "|dE/E| <= 1e-8; max |phi_k - phi_o| <= 5% of the oracle's amplitude (unchanged)"
+    },
+    {
+      "id": "S1f",
+      "group": "secular",
+      "kind": "theory",
+      "what": "AM4 follow-up of S1 at the finer fixed step",
+      "bound": "|rate_k - A| / A <= 5%, and the stated half-window uncertainty is reported (unchanged)"
+    },
+    {
+      "id": "S2f",
+      "group": "secular",
+      "kind": "oracle",
+      "what": "AM4 follow-up of S2 at the finer fixed step",
+      "bound": "|rate_k - rate_o| / rate_o <= 0.5% (unchanged)"
+    },
+    {
+      "id": "D3f",
+      "group": "negative",
+      "kind": "negative",
+      "what": "AM4 follow-up of D3 at the finer fixed step",
+      "bound": "the secular rate is refused (not-constrained), no rate returned (unchanged)"
+    },
+    {
+      "id": "C1f",
+      "group": "ensemble",
+      "kind": "ensemble",
+      "what": "AM4 follow-up of C1 at the finer fixed step",
+      "bound": "at least 9 of 10 members inside; members for which the kernel returns no period count as misses (unchanged)"
+    },
+    {
+      "id": "D1f",
+      "group": "negative",
+      "kind": "negative",
+      "what": "AM4 follow-up of D1 at the finer fixed step",
+      "bound": "state = not-constrained and period = null on all three; no amplitude presented as measured (unchanged)"
+    },
+    {
+      "id": "D2f",
+      "group": "negative",
+      "kind": "negative",
+      "what": "AM4 follow-up of D2 at the finer fixed step",
+      "bound": "state = circulation (or inconclusive); never a libration period (unchanged)"
+    },
+    {
+      "id": "L3g",
+      "group": "libration",
+      "kind": "oracle",
+      "what": "AM5 follow-up of L3 (corrected oracle estimator for L3 and C1; finer secular step for S1, S2, D3)",
+      "bound": "|P_k - P_o| / P_o <= 2%; |A_k - A_o| / A_o <= 5%; both states equal (unchanged)"
+    },
+    {
+      "id": "C1g",
+      "group": "ensemble",
+      "kind": "ensemble",
+      "what": "AM5 follow-up of C1 (corrected oracle estimator for L3 and C1; finer secular step for S1, S2, D3)",
+      "bound": "at least 9 of 10 members inside; members for which the kernel returns no period count as misses (unchanged)"
+    },
+    {
+      "id": "S1g",
+      "group": "secular",
+      "kind": "theory",
+      "what": "AM5 follow-up of S1 (corrected oracle estimator for L3 and C1; finer secular step for S1, S2, D3)",
+      "bound": "|rate_k - A| / A <= 5%, and the stated half-window uncertainty is reported (unchanged)"
+    },
+    {
+      "id": "S2g",
+      "group": "secular",
+      "kind": "oracle",
+      "what": "AM5 follow-up of S2 (corrected oracle estimator for L3 and C1; finer secular step for S1, S2, D3)",
+      "bound": "|rate_k - rate_o| / rate_o <= 0.5% (unchanged)"
+    },
+    {
+      "id": "D3g",
+      "group": "negative",
+      "kind": "negative",
+      "what": "AM5 follow-up of D3 (corrected oracle estimator for L3 and C1; finer secular step for S1, S2, D3)",
+      "bound": "the secular rate is refused (not-constrained), no rate returned (unchanged)"
+    }
+  ],
+  "verdict": {
+    "function": "A: every leg of R, L, P, S, C, D passes (the model-fidelity legs L2 and P2 included). B: R1, R2, R3, L4, P3 and D1, D2, D3 pass (the argument computed from elements over a window with the integrator's error bounded and a refusal on a short window), and A does not hold: the named slice is the resonant argument displayed over the window without a fitted period or rate. C: otherwise: the existing guide stands; 274 lists the depth as a reading step.",
+    "reported_not_gated": [
+      "N1",
+      "K1",
+      "L1s",
+      "L3f",
+      "L3cf",
+      "L4f",
+      "P1f",
+      "P2f",
+      "P3f",
+      "S1f",
+      "S2f",
+      "D3f",
+      "C1f",
+      "D1f",
+      "D2f",
+      "L3g",
+      "C1g",
+      "S1g",
+      "S2g",
+      "D3g"
+    ]
+  },
+  "amendments": [
+    {
+      "id": "AM0",
+      "recorded": "2026-11-08, before any run",
+      "what": "wording only, no bound: the data directory is named without a home path (the fixtures rule), and the prerequisite line names the satellite pack without a PR number it did not verify"
+    },
+    {
+      "id": "AM1",
+      "recorded": "2026-11-08, before any run",
+      "what": "the integrator steps must divide the sampling interval, so: Laplace runs h = 1/45 d (45 steps per 1 d sample; Io's period is 79.6 steps), Pluto h = 1.0 yr (20 per 20 yr sample, unchanged), secular test h = 0.1 yr (50 per 5 yr sample; the particle's period is 26 steps). The earlier 0.0221 d and 0.09 yr are replaced. No bound moves."
+    },
+    {
+      "id": "AM2",
+      "recorded": "2026-11-08, before any run",
+      "what": "frame convention stated for both sides so the longitudes can be compared and not only the argument: the equatorial frame's z is the pole (RA, Dec rotated to the ecliptic by the obliquity 23.439291111 deg, the repository's constant in js/satellites/galilean.js), its x is the unit vector along (0,0,1) x z (the equator's node on the input xy plane), y = z x x. Both sides construct it independently from the same constants."
+    },
+    {
+      "id": "AM3",
+      "recorded": "2026-11-08, after the oracle's estimate of the argument of L1 on the JUP365 history was seen, and before the kernel ran on it",
+      "seen": "the oracle's estimator, with the committed 3.525 d smoothing, returned on the pinned JUP365 argument a period of about 318 d and an amplitude of about 0.21 deg: the osculating argument carries short-period terms larger than the 0.064 deg libration (the same kind of defect 271's E2 and E7 recorded). L1 is committed as written and stays as measured; no bound of it moves.",
+      "adds": "a smoothed replacement leg L1s, reported beside L1 (the verdict function is unchanged, so L1 failing keeps A out of reach exactly as committed): the same estimator with the smoothing span 1,000 d, the largest round span below half the cited libration period (1,035.5 d), and the three cycle floors scaled by the span ratio so the absolute floors (turning prominence floor 0.002 deg, minimum libration period 14.1 d, minimum window 70.5 d) are unchanged. A boxcar of span s attenuates a sinusoid of period P by sin(pi s / P)/(pi s / P); the amplitude is divided by that gain and both are reported. Bound: state = libration with the period resolved; |P - 2071| / 2071 <= 5%; |A_corrected - 0.064| / 0.064 <= 50%; |centre - 180| <= 1 deg."
+    },
+    {
+      "id": "AM4",
+      "recorded": "2026-11-08, after the first run of the committed legs (kept in results.json under `history`) and before the follow-up legs ran",
+      "seen": "at the committed steps (AM1) L4, P3, S1, S2, D3, L3 and C1 failed: the Laplace energy drift was 2e-7 (bound 1e-8) and the kernel's period 2058 d against the oracle's 1940 d; the Pluto energy drift 3.7e-8 (bound 1e-8) with the argument within 0.053 deg of the oracle's; and the secular particle's apse advanced about 1 deg per year against the theory's 0.033, a spurious precession of the fixed step (h = 0.1 yr, 26 steps an orbit), which a check at h = 0.025 yr removed. Those legs stay failing as committed and stay in the verdict function.",
+      "adds": "follow-up legs with a finer fixed step, each with the bound and the oracle result of its original unchanged, ids suffixed f, reported beside the originals and not in the verdict function: Laplace runs at 180 steps a day (h = 1/180 d), Pluto at 80 steps per 20 yr sample (h = 0.25 yr), the secular test at 250 steps per 5 yr sample (h = 0.02 yr): L3f, L3cf, L4f, P1f, P2f, P3f, S1f, S2f, D3f, C1f, D1f, D2f. L1s (AM3) is added to the validator the same way."
+    },
+    {
+      "id": "AM5",
+      "recorded": "2026-11-08, after the AM4 follow-up run and before the g legs ran",
+      "seen": "L3f failed 2% only because the two estimators disagreed on a run whose two integrations agree to 0.013 deg over the window (L4f passes): the kernel's period was 2076 d, the oracle's 1940 d. A diagnostic on the oracle's own series, run after the fact and recorded here as such, showed the oracle's estimator had counted the series' first sample as a turning point (a minimum at t = 0, 492 d before the first real maximum), so its mean spacing was too short; the turning points without it give 2076 d, a Fourier peak of the smoothed argument is at 2071 d and a least-squares sinusoid at 2068 d. The oracle's estimator is defective, not the kernel's; L3 and L3f stay failing as committed against the oracle's original numbers (kept). S1f and S2f failed because h = 0.02 yr still carries a numerical apsidal advance (kernel 6.13e-4 rad/yr against the oracle's 5.87e-4; the error scales as h^4 from the 1 deg per year seen at h = 0.1, so about 0.0015 deg per year at h = 0.02).",
+      "adds": "(a) the oracle's estimator drops a turning point at the first or last sample (the series' ends are not reversals); its original output is kept under the plain keys and the corrected output is written beside it under keys ending _c (laplace_c, ensemble_c, pluto_c, jup365_c, jup365s_c); (b) legs ending g, reported beside the others and not in the verdict function, with the bound of the original unchanged: L3g and C1g (the kernel at 180 steps a day against the corrected oracle), S1g, S2g and D3g (the secular test at h = 0.005 yr, 1,000 steps per 5 yr sample, where the h^4 scaling predicts an error below 0.001 deg per year)."
+    }
+  ]
+}
