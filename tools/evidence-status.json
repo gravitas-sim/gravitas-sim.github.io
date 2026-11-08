@@ -1528,6 +1528,25 @@
       ]
     },
     {
+      "id": "evidence-review-comparison",
+      "claim": "My work compares two entries of the evidence notebook with the covariance where a record states one or the student gives a correlation, and says independence assumed otherwise.",
+      "scope": "Part A of Prompt 275: js/myWork/evidenceReview.js and evidenceView.js on the My work page, for notebook entries of one kind with one-sigma uncertainties; not the composed report (Part B, not built), not any covariance between two different records (none is stated or inferred), not the supernova likelihood (the split form and the pack's diagonal are never a stand-in for a release covariance, SN_LIKELIHOOD_GATE.md section 10).",
+      "version": "2.1.0",
+      "class": "S",
+      "status": "partial",
+      "method": "tests/evidenceReview.test.js: the covariance rule against three hand-computed reference cases (Python math.erfc), 60 cases against the statistics kernel's difference (Prompt 154), refusals, and the view in jsdom; e2e/evidenceReview.spec.js in a browser with axe in both languages at 375 and 1024 px",
+      "evaluator": "the project's own tests",
+      "artifact": "tests/evidenceReview.test.js",
+      "limitations": "A comparison that assumes Gaussian errors; sharing is detected only from what a record says (a digest, an assumed quantity); no student has used it, and Spanish has not been read by a fluent reader (D-R10-275-01).",
+      "date": "2026-11-08",
+      "anchors": [
+        {
+          "file": "MY_WORK.md",
+          "text": "Two different records state no coefficient of each other and nothing infers one."
+        }
+      ]
+    },
+    {
       "id": "mission-window-budget-workflow",
       "claim": "The mission lab's window-and-budget workflow (the porkchop grid and the delta-v ledger for an Earth to Mars transfer inside the ephemeris pack's span) matches an independent shooting oracle on Horizons states, refuses degenerate geometry, dates outside the pack's span and impossible ledger inputs, and its ledger adds up and obeys the rocket equation.",
       "scope": "The gate record of Prompt 272 (MISSION_LAB_II.md) with its pinned fixtures in tests/fixtures/mission-lab-ii/ and tests/missionWorkflow.test.js; the kernel is js/mission/workflow.js, row-range grid included; not any panel, guide or model-page section, none of which exists.",
