@@ -252,6 +252,11 @@ const pinned = JSON.parse(fs.readFileSync(path.join(FIX, 'jup365-laplace-argumen
   const ok = m.state === 'libration' && m.period !== null && rel(m.period, 2071) <= 0.05 && rel(m.amplitude, 0.064) <= 0.5 && Math.abs(m.center - 180) <= 1;
   leg('L1', ok ? 'PASS' : 'FAIL', brief(m), 'cited 2071 d, 0.064 deg, 180 deg from js/resonance/systems.js');
 }
+{
+  const m = measureLibration({ times: pinned.phi.map((_, i) => i), phi: pinned.phi, referencePeriod: LAP.ref, floorDeg: LAP.floor, stationaryDeg: LAP.floor, samplingFloor: LAP.sampling, smoothSpan: 1000 });
+  const ok = m.state === 'libration' && m.period !== null && rel(m.period, 2071) <= 0.05 && rel(m.amplitudeCorrected, 0.064) <= 0.5 && Math.abs(m.center - 180) <= 1;
+  leg('L1s', ok ? 'PASS' : 'FAIL', { ...brief(m), amplitudeCorrected: m.amplitudeCorrected, smoothingGain: m.smoothingGain, oracle: orc.jup365s }, 'AM3: 1,000 d smoothing, amplitude corrected for the boxcar gain');
+}
 // L2 point-mass N-body from the JUP365 osculating states
 {
   const rows = raw.map(r => r[0]);
@@ -263,34 +268,35 @@ const pinned = JSON.parse(fs.readFileSync(path.join(FIX, 'jup365-laplace-argumen
   const ok = m.state === 'libration' && m.period !== null && rel(m.period, 2071) <= 0.1;
   leg('L2', ok ? 'PASS' : 'FAIL', { ...brief(m), phiMin: Math.min(...phi), phiMax: Math.max(...phi), dE: r.dE }, 'point masses, no oblateness');
 }
+function follow(sfx, nl, np, ns) {
 // L3, L3c, L4
-const Lm = integrate(inputs.laplace.bodies, 1, 1 / 45, 45, nWin);
+const Lm = integrate(inputs.laplace.bodies, 1, 1 / nl, nl, nWin);
 const phiLm = laplaceSeries(Lm);
 const mLm = lapMeasure(Lm.times, phiLm);
 {
   const o = orc.laplace;
   const ok = mLm.state === o.state && mLm.period !== null && o.period !== null && rel(mLm.period, o.period) <= 0.02 && rel(mLm.amplitude, o.amplitude) <= 0.05;
-  leg('L3', ok ? 'PASS' : 'FAIL', { kernel: brief(mLm), oracle: o });
+  leg('L3' + sfx, ok ? 'PASS' : 'FAIL', { kernel: brief(mLm), oracle: o });
   const okc = mLm.state === 'libration' && mLm.period !== null && rel(mLm.period, 2071) <= 0.1;
-  leg('L3c', okc ? 'PASS' : 'FAIL', brief(mLm), 'cited 2071 d');
+  leg('L3c' + sfx, okc ? 'PASS' : 'FAIL', brief(mLm), 'cited 2071 d');
   const div = maxCirc(phiLm, series.laplace.phi);
   const ok4 = Lm.dE <= 1e-8 && o.amplitude !== null && div <= 0.05 * o.amplitude;
-  leg('L4', ok4 ? 'PASS' : 'FAIL', { dE: Lm.dE, maxDivergenceDeg: div, oracleAmplitude: o.amplitude });
+  leg('L4' + sfx, ok4 ? 'PASS' : 'FAIL', { dE: Lm.dE, maxDivergenceDeg: div, oracleAmplitude: o.amplitude });
 }
 // P1, P2, P3
 const nP = inputs.pluto.n;
-const Pm = integrate(inputs.pluto.bodies, G_AU_YR, 1, 20, nP);
+const Pm = integrate(inputs.pluto.bodies, G_AU_YR, 20 / np, np, nP);
 const phiPm = plutoSeries(Pm);
 const mPm = pluMeasure(Pm.times, phiPm);
 {
   const o = orc.pluto;
   const ok = mPm.state === o.state && mPm.period !== null && o.period !== null && rel(mPm.period, o.period) <= 0.02 && rel(mPm.amplitude, o.amplitude) <= 0.05;
-  leg('P1', ok ? 'PASS' : 'FAIL', { kernel: brief(mPm), oracle: o });
+  leg('P1' + sfx, ok ? 'PASS' : 'FAIL', { kernel: brief(mPm), oracle: o });
   const okc = mPm.state === 'libration' && mPm.period !== null && rel(mPm.period, 19670) <= 0.15 && rel(mPm.amplitude, 82) <= 0.25 && Math.abs(mPm.center - 180) <= 10;
-  leg('P2', okc ? 'PASS' : 'FAIL', brief(mPm), 'cited 19,670 yr, 82 deg, 180 deg from js/resonance/systems.js');
+  leg('P2' + sfx, okc ? 'PASS' : 'FAIL', brief(mPm), 'cited 19,670 yr, 82 deg, 180 deg from js/resonance/systems.js');
   const div = maxCirc(phiPm, series.pluto.phi);
   const ok3 = Pm.dE <= 1e-8 && o.amplitude !== null && div <= 0.05 * o.amplitude;
-  leg('P3', ok3 ? 'PASS' : 'FAIL', { dE: Pm.dE, maxDivergenceDeg: div, oracleAmplitude: o.amplitude });
+  leg('P3' + sfx, ok3 ? 'PASS' : 'FAIL', { dE: Pm.dE, maxDivergenceDeg: div, oracleAmplitude: o.amplitude });
 }
 // S1, S2, D3
 {
@@ -299,29 +305,29 @@ const mPm = pluMeasure(Pm.times, phiPm);
   const A = secularRateFirstOrder({ n, massRatio: sc.massRatio, alpha: sc.a / sc.aJ });
   const periodTheory = (2 * Math.PI) / A; // yr
   const nS = Math.round((4 * periodTheory) / 5) + 1;
-  const S = integrate(sc.bodies, sc.G, sc.h, sc.perSample, nS);
+  const S = integrate(sc.bodies, sc.G, 5 / ns, ns, nS);
   const r = secularRate({ times: S.times, angleDeg: S.vp[1] });
   const rateRad = r.rate === null ? null : r.rate * RAD;
   const okS1 = r.rate !== null && rel(rateRad, A) <= 0.05;
-  leg('S1', okS1 ? 'PASS' : 'FAIL', { theoryRadPerYr: A, kernelRadPerYr: rateRad, rateSigmaRad: r.rateSigma === null ? null : r.rateSigma * RAD, turns: r.turns, window: S.times[S.times.length - 1], theoryPeriodYr: periodTheory }, 'first order in e, e\', i; limits in thresholds.systems');
+  leg('S1' + sfx, okS1 ? 'PASS' : 'FAIL', { theoryRadPerYr: A, kernelRadPerYr: rateRad, rateSigmaRad: r.rateSigma === null ? null : r.rateSigma * RAD, turns: r.turns, window: S.times[S.times.length - 1], theoryPeriodYr: periodTheory }, 'first order in e, e\', i; limits in thresholds.systems');
   const o = orc.secular;
-  leg('S2', r.rate !== null && rel(rateRad, o.rateRadPerYr) <= 0.005 ? 'PASS' : 'FAIL', { kernelRadPerYr: rateRad, oracleRadPerYr: o.rateRadPerYr, oracleTheoryRadPerYr: o.theoryRadPerYr, theoryAgreesWithOracleTheory: rel(A, o.theoryRadPerYr) });
+  leg('S2' + sfx, r.rate !== null && rel(rateRad, o.rateRadPerYr) <= 0.005 ? 'PASS' : 'FAIL', { kernelRadPerYr: rateRad, oracleRadPerYr: o.rateRadPerYr, oracleTheoryRadPerYr: o.theoryRadPerYr, theoryAgreesWithOracleTheory: rel(A, o.theoryRadPerYr) });
   const half = Math.round(nS / 2);
   const rs = secularRate({ times: S.times.slice(0, half), angleDeg: S.vp[1].slice(0, half) });
-  leg('D3', rs.state === 'not-constrained' && rs.rate === null ? 'PASS' : 'FAIL', { state: rs.state, turns: rs.turns, rate: rs.rate });
+  leg('D3' + sfx, rs.state === 'not-constrained' && rs.rate === null ? 'PASS' : 'FAIL', { state: rs.state, turns: rs.turns, rate: rs.rate });
 }
 // C1 ensemble
 {
   let inside = 0;
   const rows = inputs.ensemble.map((mb, k) => {
-    const r = integrate(mb.bodies, 1, 1 / 45, 45, nWin);
+    const r = integrate(mb.bodies, 1, 1 / nl, nl, nWin);
     const m = lapMeasure(r.times, laplaceSeries(r));
     const truth = orc.ensemble[k].period;
     const hit = m.state === 'libration' && m.period !== null && truth !== null && Math.abs(m.period - truth) <= 2 * m.periodSigma;
     if (hit) inside++;
     return { id: mb.id, kernelPeriod: m.period, sigma: m.periodSigma, oraclePeriod: truth, hit };
   });
-  leg('C1', inside >= 9 ? 'PASS' : 'FAIL', { inside, of: rows.length, rows });
+  leg('C1' + sfx, inside >= 9 ? 'PASS' : 'FAIL', { inside, of: rows.length, rows });
 }
 // D1, D2
 {
@@ -330,11 +336,14 @@ const mPm = pluMeasure(Pm.times, phiPm);
     const m = lapMeasure(Lm.times.slice(0, n), phiLm.slice(0, n));
     return { periods: f, ...brief(m) };
   });
-  leg('D1', out.every(o => o.state === 'not-constrained' && o.period === null && o.amplitude === null) ? 'PASS' : 'FAIL', { windows: out });
-  const det = inputs.ensemble.length ? integrate(laplaceModel({ detune: 1.01 }), 1, 1 / 45, 45, nWin) : null;
+  leg('D1' + sfx, out.every(o => o.state === 'not-constrained' && o.period === null && o.amplitude === null) ? 'PASS' : 'FAIL', { windows: out });
+  const det = inputs.ensemble.length ? integrate(laplaceModel({ detune: 1.01 }), 1, 1 / nl, nl, nWin) : null;
   const m = lapMeasure(det.times, laplaceSeries(det));
-  leg('D2', m.state !== 'libration' ? 'PASS' : 'FAIL', brief(m));
+  leg('D2' + sfx, m.state !== 'libration' ? 'PASS' : 'FAIL', brief(m));
 }
+}
+follow('', 45, 20, 50);
+follow('f', 180, 80, 250);
 leg('N1', 'REPORTED', { note: THR.legs.find(l => l.id === 'N1').what });
 leg('K1', 'NOT RUN', { request: THR.legs.find(l => l.id === 'K1').bound });
 
@@ -344,6 +353,7 @@ const all = ids => ids.every(i => st(i) === 'PASS');
 const A = all(['R1', 'R2', 'R3', 'L1', 'L2', 'L3', 'L3c', 'L4', 'P1', 'P2', 'P3', 'S1', 'S2', 'C1', 'D1', 'D2', 'D3']);
 const B = all(['R1', 'R2', 'R3', 'L4', 'P3', 'D1', 'D2', 'D3']);
 const verdict = A ? 'A' : B ? 'B' : 'C';
+const prior = fs.existsSync(path.join(FIX, 'results.json')) ? JSON.parse(fs.readFileSync(path.join(FIX, 'results.json'), 'utf8')) : null;
 const result = {
   format: 'gravitas.resonances-ii-results/1',
   node: process.version,

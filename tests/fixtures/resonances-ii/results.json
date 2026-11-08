@@ -1,0 +1,351 @@
+{
+  "format": "gravitas.resonances-ii-results/1",
+  "node": "v24.4.0",
+  "ran": "2026-11-08",
+  "seconds": 5,
+  "verdict": "C",
+  "counts": {
+    "PASS": 9,
+    "FAIL": 8,
+    "REPORTED": 1,
+    "NOT RUN": 1
+  },
+  "legs": [
+    {
+      "id": "R1",
+      "status": "PASS",
+      "values": {
+        "maxDiffDeg": 0,
+        "refusesUnbalanced": true
+      },
+      "note": ""
+    },
+    {
+      "id": "R2",
+      "status": "PASS",
+      "values": {
+        "maxLambdaDeg": 1.1368683772161603e-13,
+        "maxVarpiDeg": 2.944489096989855e-11,
+        "maxArgumentDeg": 4.547473508864641e-13
+      },
+      "note": ""
+    },
+    {
+      "id": "R3",
+      "status": "PASS",
+      "values": {
+        "maxDiffDeg": 0.000004998024792257638,
+        "digestsMatch": true
+      },
+      "note": ""
+    },
+    {
+      "id": "L1",
+      "status": "FAIL",
+      "values": {
+        "state": "not-constrained",
+        "reason": "drifting-center",
+        "period": null,
+        "periodSigma": null,
+        "amplitude": null,
+        "center": null,
+        "periodsObserved": null
+      },
+      "note": "cited 2071 d, 0.064 deg, 180 deg from js/resonance/systems.js"
+    },
+    {
+      "id": "L2",
+      "status": "PASS",
+      "values": {
+        "state": "libration",
+        "reason": "reversals",
+        "period": 2048.5714285714284,
+        "periodSigma": 134.31233272149075,
+        "amplitude": 27.92411650595153,
+        "center": 178.65257114211477,
+        "periodsObserved": 4.043793584379359,
+        "phiMin": 149.9532912284484,
+        "phiMax": 207.42576438767264,
+        "dE": 2.2694984545136858e-7
+      },
+      "note": "point masses, no oblateness"
+    },
+    {
+      "id": "L3",
+      "status": "FAIL",
+      "values": {
+        "kernel": {
+          "state": "libration",
+          "reason": "reversals",
+          "period": 2058,
+          "periodSigma": 23.459184413217205,
+          "amplitude": 29.766549379867,
+          "center": 179.915139109073,
+          "periodsObserved": 4.025267249757046
+        },
+        "oracle": {
+          "state": "libration",
+          "period": 1939.75,
+          "amplitude": 25.39443164390285,
+          "center": 182.72856573864982
+        }
+      },
+      "note": ""
+    },
+    {
+      "id": "L3c",
+      "status": "PASS",
+      "values": {
+        "state": "libration",
+        "reason": "reversals",
+        "period": 2058,
+        "periodSigma": 23.459184413217205,
+        "amplitude": 29.766549379867,
+        "center": 179.915139109073,
+        "periodsObserved": 4.025267249757046
+      },
+      "note": "cited 2071 d"
+    },
+    {
+      "id": "L4",
+      "status": "FAIL",
+      "values": {
+        "dE": 1.9802771956806372e-7,
+        "maxDivergenceDeg": 3.225136254115114,
+        "oracleAmplitude": 25.39443164390285
+      },
+      "note": ""
+    },
+    {
+      "id": "P1",
+      "status": "PASS",
+      "values": {
+        "kernel": {
+          "state": "libration",
+          "reason": "reversals",
+          "period": 21293.333333333332,
+          "periodSigma": 24.03700850309326,
+          "amplitude": 79.9679311007362,
+          "center": 179.2009513091792,
+          "periodsObserved": 3.6950532247964936
+        },
+        "oracle": {
+          "state": "libration",
+          "period": 21228.571428571428,
+          "amplitude": 79.87168091952823,
+          "amplitudeCorrected": 79.87168091952823,
+          "center": 179.29135891133478
+        }
+      },
+      "note": ""
+    },
+    {
+      "id": "P2",
+      "status": "PASS",
+      "values": {
+        "state": "libration",
+        "reason": "reversals",
+        "period": 21293.333333333332,
+        "periodSigma": 24.03700850309326,
+        "amplitude": 79.9679311007362,
+        "center": 179.2009513091792,
+        "periodsObserved": 3.6950532247964936
+      },
+      "note": "cited 19,670 yr, 82 deg, 180 deg from js/resonance/systems.js"
+    },
+    {
+      "id": "P3",
+      "status": "FAIL",
+      "values": {
+        "dE": 3.736628646816251e-8,
+        "maxDivergenceDeg": 0.05303245502568643,
+        "oracleAmplitude": 79.87168091952823
+      },
+      "note": ""
+    },
+    {
+      "id": "S1",
+      "status": "FAIL",
+      "values": {
+        "theoryRadPerYr": 0.0005745966126701814,
+        "kernelRadPerYr": 0.016229337392789155,
+        "rateSigmaRad": 4.060445033085174e-9,
+        "turns": 112.97951323343138,
+        "window": 43740,
+        "theoryPeriodYr": 10934.950134810724
+      },
+      "note": "first order in e, e', i; limits in thresholds.systems"
+    },
+    {
+      "id": "S2",
+      "status": "FAIL",
+      "values": {
+        "kernelRadPerYr": 0.016229337392789155,
+        "oracleRadPerYr": 0.0005873346031986525,
+        "oracleTheoryRadPerYr": 0.0005745966126701819,
+        "theoryAgreesWithOracleTheory": 7.547570929436272e-16
+      },
+      "note": ""
+    },
+    {
+      "id": "D3",
+      "status": "FAIL",
+      "values": {
+        "state": "measured",
+        "turns": 56.48976591647107,
+        "rate": 0.9298726899830628
+      },
+      "note": ""
+    },
+    {
+      "id": "C1",
+      "status": "FAIL",
+      "values": {
+        "inside": 0,
+        "of": 10,
+        "rows": [
+          {
+            "id": "m0",
+            "kernelPeriod": 2060,
+            "sigma": 23.353392738121634,
+            "oraclePeriod": 1945,
+            "hit": false
+          },
+          {
+            "id": "m1",
+            "kernelPeriod": 2060.285714285714,
+            "sigma": 25.962165040794304,
+            "oraclePeriod": 1925.5,
+            "hit": false
+          },
+          {
+            "id": "m2",
+            "kernelPeriod": 2050.285714285714,
+            "sigma": 28.873050777922476,
+            "oraclePeriod": 1946.75,
+            "hit": false
+          },
+          {
+            "id": "m3",
+            "kernelPeriod": 2046,
+            "sigma": 32.35590768167015,
+            "oraclePeriod": 1948.5,
+            "hit": false
+          },
+          {
+            "id": "m4",
+            "kernelPeriod": 2064.285714285714,
+            "sigma": 24.902394497330576,
+            "oraclePeriod": 1934.5,
+            "hit": false
+          },
+          {
+            "id": "m5",
+            "kernelPeriod": 2062.285714285714,
+            "sigma": 24.55190254068606,
+            "oraclePeriod": 1934.5,
+            "hit": false
+          },
+          {
+            "id": "m6",
+            "kernelPeriod": 2064.285714285714,
+            "sigma": 23.69520173018186,
+            "oraclePeriod": 1934.5,
+            "hit": false
+          },
+          {
+            "id": "m7",
+            "kernelPeriod": 2064.285714285714,
+            "sigma": 22.51212825050859,
+            "oraclePeriod": 1931,
+            "hit": false
+          },
+          {
+            "id": "m8",
+            "kernelPeriod": 2062,
+            "sigma": 22.535685985945552,
+            "oraclePeriod": 1941.5,
+            "hit": false
+          },
+          {
+            "id": "m9",
+            "kernelPeriod": 2062,
+            "sigma": 22.946106631056377,
+            "oraclePeriod": 1943.25,
+            "hit": false
+          }
+        ]
+      },
+      "note": ""
+    },
+    {
+      "id": "D1",
+      "status": "PASS",
+      "values": {
+        "windows": [
+          {
+            "periods": 0.5,
+            "state": "not-constrained",
+            "reason": "one-reversal",
+            "period": null,
+            "periodSigma": null,
+            "amplitude": null,
+            "center": null,
+            "periodsObserved": null
+          },
+          {
+            "periods": 1,
+            "state": "not-constrained",
+            "reason": "window-too-short",
+            "period": null,
+            "periodSigma": null,
+            "amplitude": null,
+            "center": null,
+            "periodsObserved": null
+          },
+          {
+            "periods": 2,
+            "state": "not-constrained",
+            "reason": "window-too-short",
+            "period": null,
+            "periodSigma": null,
+            "amplitude": null,
+            "center": null,
+            "periodsObserved": null
+          }
+        ]
+      },
+      "note": ""
+    },
+    {
+      "id": "D2",
+      "status": "PASS",
+      "values": {
+        "state": "circulation",
+        "reason": "completed-circuit",
+        "period": 81.63574985889088,
+        "periodSigma": null,
+        "amplitude": null,
+        "center": null,
+        "periodsObserved": null
+      },
+      "note": ""
+    },
+    {
+      "id": "N1",
+      "status": "REPORTED",
+      "values": {
+        "note": "authentic-data applicability: L1 is the authentic leg (a real ephemeris whose published libration values were not used to tune the estimator, whose options are committed above); no other authentic dataset is available in this session"
+      },
+      "note": ""
+    },
+    {
+      "id": "K1",
+      "status": "NOT RUN",
+      "values": {
+        "request": "NOT RUN; request: an independent secular (double-averaged) integration or a cited table, then a Part A addendum"
+      },
+      "note": ""
+    }
+  ]
+}
