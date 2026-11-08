@@ -184,4 +184,32 @@ export const EN_LAB3DLAB = {
     'The orbits of {a} and {b} are inclined to each other by {angle}.',
   'l3.read.betweenNone':
     'Both bodies must orbit something: the heaviest body has no orbit here.',
+  // --- Run mode, reference plane, orbit panel (Prompt 271)
+  'l3.mode': 'Run mode',
+  'l3.mode.nbody': 'N-body (the integrator)',
+  'l3.mode.kepler': 'Kepler-only',
+  'l3.mode.info.nbody':
+    'Run mode: N-body, {scheme}, step {step}; one tick is {tick}. Every body pulls on every other.',
+  'l3.mode.info.adaptive':
+    'Run mode: N-body, {scheme}, tolerance {tol}, sampled every tick of {tick}. Every body pulls on every other.',
+  'l3.mode.info.kepler':
+    'Run mode: Kepler-only. Each body follows its own two-body orbit about the body it orbits, so no orbit ever changes: this mode cannot show libration, precession or an exchange of tilt. One tick is {tick}.',
+  'l3.mode.info.precomputed':
+    'Run mode: a precomputed run played back ({source}). One tick is {tick}.',
+  'l3.event.keplerOnly':
+    'A Kepler-only run: the orbits are held fixed, and the conserved quantities are those of the N-body system the motion only approximates.',
+  'l3.plane': 'Reference plane',
+  'l3.plane.system': 'The system’s own axes (the ecliptic for a solar system)',
+  'l3.plane.equatorial': 'Equatorial (the ecliptic tilted by the obliquity)',
+  'l3.plane.invariable': 'Invariable plane (total angular momentum)',
+  'l3.plane.sky': 'An observer’s sky (line of sight along z)',
+  'l3.plane.refused':
+    'That plane cannot be made for this system: the equatorial plane needs a system in solar units, and the invariable plane needs angular momentum. The system’s own axes are kept.',
+  'l3.legend.plane.equatorial':
+    'Axes: equatorial, the ecliptic tilted by the obliquity about +x (J2000).',
+  'l3.legend.plane.invariable':
+    'Axes: the invariable plane, +z along the total angular momentum.',
+  'l3.legend.plane.sky':
+    'Axes: an observer’s sky, +z toward the observer, so an inclination is measured from face-on.',
+  'l3.orbit.open': 'Orbit editor and sky view',
 };

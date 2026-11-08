@@ -153,7 +153,7 @@ export function createEvidencePanel(root, lab) {
   function currentReading() {
     const r = lab.reading();
     if (r.tool === 'none') return null;
-    const env = readingEnvelope(lab.origin(), lab.exact(), r, r.frame);
+    const env = readingEnvelope(lab.origin(), lab.exactSystem(), r, r.frame);
     return env && { r, env };
   }
 

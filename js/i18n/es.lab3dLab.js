@@ -188,4 +188,34 @@ export const ES_LAB3DLAB = {
     'Las órbitas de {a} y {b} están inclinadas entre sí {angle}.',
   'l3.read.betweenNone':
     'Los dos cuerpos deben orbitar algo: aquí el cuerpo más pesado no tiene órbita.',
+  // --- Modo de ejecución, plano de referencia, panel de la órbita (Prompt 271)
+  'l3.mode': 'Modo de ejecución',
+  'l3.mode.nbody': 'N cuerpos (el integrador)',
+  'l3.mode.kepler': 'Solo Kepler',
+  'l3.mode.info.nbody':
+    'Modo: N cuerpos, {scheme}, paso {step}; un tic es {tick}. Cada cuerpo atrae a todos los demás.',
+  'l3.mode.info.adaptive':
+    'Modo: N cuerpos, {scheme}, tolerancia {tol}, muestreado en cada tic de {tick}. Cada cuerpo atrae a todos los demás.',
+  'l3.mode.info.kepler':
+    'Modo: solo Kepler. Cada cuerpo sigue su propia órbita de dos cuerpos alrededor del cuerpo que orbita, así que ninguna órbita cambia: este modo no puede mostrar libración, precesión ni intercambio de inclinación. Un tic es {tick}.',
+  'l3.mode.info.precomputed':
+    'Modo: una ejecución precalculada reproducida ({source}). Un tic es {tick}.',
+  'l3.event.keplerOnly':
+    'Una ejecución solo Kepler: las órbitas se mantienen fijas, y las cantidades conservadas son las del sistema de N cuerpos que el movimiento solo aproxima.',
+  'l3.plane': 'Plano de referencia',
+  'l3.plane.system':
+    'Los ejes propios del sistema (la eclíptica en un sistema solar)',
+  'l3.plane.equatorial':
+    'Ecuatorial (la eclíptica inclinada por la oblicuidad)',
+  'l3.plane.invariable': 'Plano invariable (momento angular total)',
+  'l3.plane.sky': 'El cielo de un observador (línea de visión a lo largo de z)',
+  'l3.plane.refused':
+    'Ese plano no se puede construir para este sistema: el plano ecuatorial necesita un sistema en unidades solares, y el plano invariable necesita momento angular. Se mantienen los ejes propios del sistema.',
+  'l3.legend.plane.equatorial':
+    'Ejes: ecuatoriales, la eclíptica inclinada por la oblicuidad alrededor de +x (J2000).',
+  'l3.legend.plane.invariable':
+    'Ejes: el plano invariable, con +z a lo largo del momento angular total.',
+  'l3.legend.plane.sky':
+    'Ejes: el cielo de un observador, con +z hacia el observador, de modo que una inclinación se mide desde la vista de frente.',
+  'l3.orbit.open': 'Editor de órbitas y vista del cielo',
 };
