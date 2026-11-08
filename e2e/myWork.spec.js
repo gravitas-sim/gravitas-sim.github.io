@@ -69,6 +69,34 @@ const exportAll = async (page, path) => {
 };
 
 test.describe('My work', () => {
+  test('progress by sequence, the depth reached, and prerequisites as advice (Prompt 276)', async ({
+    page,
+  }) => {
+    await seed(page);
+    await page.evaluate(lesson => {
+      const k = `gravitas_investigation_${lesson}`;
+      const r = JSON.parse(localStorage.getItem(k));
+      localStorage.setItem(
+        k,
+        JSON.stringify({ ...r, deepest: 'quantitative' })
+      );
+    }, LESSON);
+    await open(page);
+    const box = page.locator('#mwProgress');
+    const group = box.locator('details', { hasText: /Kepler/i }).first();
+    await expect(group).toHaveAttribute('open', '');
+    await expect(group).toContainText(/in progress, 4 of \d+ steps seen/);
+    await expect(group).toContainText(/depth: quantitative/);
+    const later = group.locator('li', { hasText: /You may want/ }).first();
+    const advice = later.getByRole('link', { name: /Kepler/ });
+    await expect(advice).toHaveAttribute('href', `/#investigation=${LESSON}`);
+    // Advice, not a lock: the investigation that carries it still opens.
+    await expect(later.getByRole('link').first()).toHaveAttribute(
+      'href',
+      /#investigation=/
+    );
+  });
+
   test('leave mid-lesson, export, import in a fresh context, resume at the same step', async ({
     page,
     browser,
