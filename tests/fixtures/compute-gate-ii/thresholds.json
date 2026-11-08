@@ -704,6 +704,12 @@
       "before": "the oracle's first run",
       "about": "N03",
       "text": "The engine pair, the different-clusters pair and the three synthetic grids are written by tools/compute-gate-inputs.mjs under Node 22.23.4 (the engine pair's sha256 equals the Node 24 run's: checked). N03.b compares the notebook with the oracle on the engine's pair; the oracle also runs the other four grids so that the refusal and recovery legs have an independent decision, and N03.a and N03.d read the notebook's own result against the analytic truth and the refusal rule, not against each other."
+    },
+    {
+      "id": "AM4",
+      "before": "the oracle's first run (which stopped at an import error and produced no result)",
+      "about": "the oracle's environment",
+      "text": "astropy 6.0.1 cannot import here because PyYAML is not importable (astropy.table imports it for ECSV files, which N06 does not use). The oracle inserts an empty module named `yaml` into sys.modules before importing astropy.timeseries; nothing was installed and nothing was downloaded. The first invocation of the oracle failed at that import before computing anything; no number from it was seen."
     }
   ],
   "decisions": [
