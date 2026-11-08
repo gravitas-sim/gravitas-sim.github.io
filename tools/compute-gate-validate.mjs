@@ -7,7 +7,7 @@
 // example input and on the derived negative inputs, twice for determinism, and computes every leg from the bounds in
 // thresholds.json alone. Legs that need downloaded code (G2.b, G3.b, G4.c) are NOT RUN. Run under Node 22.
 // =============================================================================
-import { execFileSync } from 'node:child_process';
+import { execFileSync, spawnSync } from 'node:child_process';
 import { createHash } from 'node:crypto';
 import { readFileSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
@@ -40,66 +40,49 @@ const read = rel => readFileSync(path.join(REPO, rel), 'utf8');
 const inp = name => readFileSync(path.join(INP, name), 'utf8');
 
 /** One run of a notebook under CPython; refusals are exit 1 with REFUSED on stderr. */
-function run(id, text, params = '{}') {
-  let cpu = null;
-  try {
-    const out = execFileSync(
-      '/usr/bin/time',
-      [
-        '-p',
-        'python3',
-        '-E',
-        path.join(REPO, 'tools/compute-gate-run.py'),
-        NB(id),
-        '-',
-        params,
-      ],
-      {
-        input: text,
-        maxBuffer: 1 << 29,
-        encoding: 'utf8',
-        stdio: ['pipe', 'pipe', 'pipe'],
-      }
-    );
-    return { ok: true, out, cpu };
-  } catch (e) {
-    const err = String(e.stderr || '');
-    const m = /user ([\d.]+)\nsys ([\d.]+)/.exec(err);
-    return {
-      ok: false,
-      refused: /^REFUSED:/m.test(err),
-      err: err
-        .split('\n')
-        .filter(l => !/^(real|user|sys) /.test(l))
-        .join('\n')
-        .slice(-300),
-      cpu: m ? +m[1] + +m[2] : null,
-    };
-  }
-}
-function timed(id, text, params) {
-  const t0 = process.hrtime.bigint();
-  const r = run(id, text, params);
-  r.wall = Number(process.hrtime.bigint() - t0) / 1e9;
-  return r;
-}
-/** The user+sys time of a successful run, from /usr/bin/time (it prints after the child). */
-function cpuOf(id, text, params = '{}') {
-  const r = execFileSync(
-    '/bin/bash',
+function run(id, text, params = '{}', timeoutMs = 900000) {
+  const r = spawnSync(
+    '/usr/bin/time',
     [
-      '-c',
-      `/usr/bin/time -p python3 -E "${path.join(REPO, 'tools/compute-gate-run.py')}" "${NB(id)}" - '${params}' >/dev/null 2>"$TMPF"; cat "$TMPF"`,
+      '-p',
+      'python3',
+      '-E',
+      path.join(REPO, 'tools/compute-gate-run.py'),
+      NB(id),
+      '-',
+      params,
     ],
     {
       input: text,
+      maxBuffer: 1 << 29,
       encoding: 'utf8',
-      env: { ...process.env, TMPF: path.join(INP, '.time') },
-      maxBuffer: 1 << 26,
+      timeout: timeoutMs,
+      killSignal: 'SIGKILL',
     }
   );
-  const m = /user ([\d.]+)\nsys ([\d.]+)/.exec(r);
-  return m ? +m[1] + +m[2] : null;
+  const err = String(r.stderr || '');
+  const m = /user ([\d.]+)\nsys ([\d.]+)/.exec(err);
+  const timedOut = r.error?.code === 'ETIMEDOUT';
+  const msg = err
+    .split('\n')
+    .filter(l => !/^(real|user|sys) /.test(l))
+    .join('\n')
+    .slice(-300);
+  if (r.status === 0 && !timedOut)
+    return { ok: true, out: r.stdout, cpu: m ? +m[1] + +m[2] : null };
+  return {
+    ok: false,
+    timedOut,
+    refused: !timedOut && /^REFUSED:/m.test(err),
+    err: msg,
+    cpu: m ? +m[1] + +m[2] : null,
+  };
+}
+function timed(id, text, params, timeoutMs) {
+  const t0 = process.hrtime.bigint();
+  const r = run(id, text, params, timeoutMs);
+  r.wall = Number(process.hrtime.bigint() - t0) / 1e9;
+  return r;
 }
 const clone = x => JSON.parse(JSON.stringify(x));
 const ans = r => JSON.parse(r.out);
@@ -303,23 +286,14 @@ const detail = {};
     const b = bad.initial.bodies;
     b[1].x = b[0].x + 1e-6 * (kepler.initial.bodies[1].x - b[0].x);
     b[1].y = b[0].y + 1e-6 * (kepler.initial.bodies[1].y - b[0].y);
-    const rb = timed(id, JSON.stringify(bad));
-    let cpu = null;
-    try {
-      cpu = cpuOf(id, JSON.stringify(bad));
-    } catch {
-      cpu = null;
-    }
-    pass(
-      'N02.d',
-      !rb.ok && rb.refused && (cpu === null ? rb.wall : cpu) <= 20,
-      {
-        refused: rb.refused,
-        message: rb.err,
-        cpuSeconds: cpu,
-        wallSeconds: rb.wall,
-      }
-    );
+    const rb = timed(id, JSON.stringify(bad), '{}', 60000);
+    pass('N02.d', !rb.ok && rb.refused && (rb.cpu ?? rb.wall) <= 20, {
+      refused: rb.refused,
+      timedOutAt60sWallWithoutRefusing: !!rb.timedOut,
+      message: rb.err,
+      cpuSeconds: rb.cpu,
+      wallSeconds: rb.wall,
+    });
     pass('N02.e', supOk(id, systemFromFile(kepler).ok && keplerSha), {
       ...SUP[id],
       inputValid: systemFromFile(kepler).ok,
