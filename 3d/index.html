@@ -233,6 +233,7 @@ try {
       <p>
         <button id="l3-guides" type="button" class="ui-button" data-i18n="l3.guides">Guided investigations</button>
         <button id="l3-evidence" type="button" class="ui-button" data-i18n="l3.ev.open">Evidence and observing</button>
+        <button id="l3-orbit" type="button" class="ui-button" data-i18n="l3.orbit.open">Orbit editor and sky view</button>
       </p>
 
       <div class="ui-split l3-top">
@@ -257,6 +258,7 @@ try {
         <div class="l3-panel">
           <section class="ui-card is-compact l3-guide" id="l3-guide" aria-labelledby="l3-guide-h" hidden></section>
           <section class="ui-card is-compact l3-guide" id="l3-evidence-panel" aria-labelledby="l3e-h" hidden></section>
+          <section class="ui-card is-compact l3-guide" id="l3-orbit-panel" aria-labelledby="l3o-h" hidden></section>
           <fieldset class="is-compact">
             <legend data-i18n="l3.system">System</legend>
             <div class="ui-toolbar is-fields">
@@ -279,7 +281,12 @@ try {
                 <label for="l3-speed" data-i18n="l3.speed">Speed</label>
                 <select class="ui-select" id="l3-speed"></select>
               </div>
+              <div class="ui-field">
+                <label for="l3-mode" data-i18n="l3.mode">Run mode</label>
+                <select class="ui-select" id="l3-mode"></select>
+              </div>
             </div>
+            <p class="ui-note" id="l3-mode-info" aria-live="polite"></p>
           </fieldset>
 
           <fieldset class="is-compact">
@@ -292,6 +299,12 @@ try {
               <div class="ui-field">
                 <label for="l3-preset" data-i18n="l3.preset">Look</label>
                 <select class="ui-select" id="l3-preset"></select>
+              </div>
+            </div>
+            <div class="ui-toolbar is-fields">
+              <div class="ui-field">
+                <label for="l3-plane" data-i18n="l3.plane">Reference plane</label>
+                <select class="ui-select" id="l3-plane"></select>
               </div>
             </div>
             <div class="ui-toolbar is-fields">
