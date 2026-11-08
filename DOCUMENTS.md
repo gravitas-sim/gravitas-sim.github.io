@@ -88,6 +88,7 @@ catalogue refers to it, so a change to it can reach a student.
 | [INTERIORS_GATE.md](INTERIORS_GATE.md) | Interiors gate: the two-layer inversion and the Darwin-Radau oblateness, thresholds committed first, the measured checks and the verdict C (Prompt 203 Part B). | gate | P203 | written | no |
 | [LAB3D.md](LAB3D.md) | The 3-D small-N kernel. | feature | unassigned | written | yes |
 | [LAB3D_CURRICULUM.md](LAB3D_CURRICULUM.md) | The 3-D lab curriculum. | feature | unassigned | written | no |
+| [LAB3D_CURRICULUM_II.md](LAB3D_CURRICULUM_II.md) | The 3-D lab curriculum II: run modes, reference planes, the orbit editor and sky view, five guides and their validation (Prompt 271). | feature | P271 | written | no |
 | [LAZY_CAPABILITIES.md](LAZY_CAPABILITIES.md) | How instrument families load on demand. | design | unassigned | written | no |
 | [LAZY_CAPABILITIES_GATE.md](LAZY_CAPABILITIES_GATE.md) | Lazy instrument capabilities architecture gate. | gate | unassigned | written | no |
 | [LEARNING_STUDY.md](LEARNING_STUDY.md) | Design and validation plan for a learning-outcome study (no study run). | gate | unassigned | written | yes |
