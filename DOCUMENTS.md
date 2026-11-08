@@ -100,6 +100,7 @@ catalogue refers to it, so a change to it can reach a student.
 | [MEASUREMENT_PIPELINE.md](MEASUREMENT_PIPELINE.md) | The measurement pipeline. | feature | unassigned | written | no |
 | [MISSION.md](MISSION.md) | The mission-design core. | feature | unassigned | written | yes |
 | [MISSION_LAB.md](MISSION_LAB.md) | The mission lab: to Mars in 2026. | feature | unassigned | written | yes |
+| [MISSION_LAB_II.md](MISSION_LAB_II.md) | Mission lab II, the first window-and-budget workflow: contract committed first, independent oracle, 19 legs, verdict C by the committed function, nothing student-facing (Prompt 272). | gate | P272 | written | no |
 | [MULTI_WORLD_DECISION.md](MULTI_WORLD_DECISION.md) | Why the engine is not refactored into multiple instances. | gate | unassigned | written | no |
 | [MY_WORK.md](MY_WORK.md) | The My work page. | feature | P69 | written | yes |
 | [NAVIGATION.md](NAVIGATION.md) | The navigation model: five destinations, where every surface goes, what students see, the structural checks and what they do not prove. | design | P161 | written | no |

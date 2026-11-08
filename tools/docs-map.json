@@ -632,6 +632,13 @@
       "student": true
     },
     {
+      "file": "MISSION_LAB_II.md",
+      "kind": "gate",
+      "purpose": "Mission lab II, the first window-and-budget workflow: contract committed first, independent oracle, 19 legs, verdict C by the committed function (Prompt 272).",
+      "owner": 272,
+      "student": false
+    },
+    {
       "file": "MULTI_WORLD_DECISION.md",
       "kind": "gate",
       "purpose": "Why the engine is not refactored into multiple instances.",

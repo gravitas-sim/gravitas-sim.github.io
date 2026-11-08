@@ -126,6 +126,34 @@ export function windowCell(o, t, tof, states = planetState) {
 }
 
 /**
+ * Compute one departure row of a window into `out` ({c3, vinf, total, status}
+ * typed arrays). The cell for row `row` and column j goes at index
+ * (row - base) * tofSteps + j, so a window can be filled whole (base 0) or in
+ * row ranges whose results are joined, each range a job that needs nothing
+ * from another (Prompt 272, for the Worker pool).
+ * @returns {{iterations: number, max: number}}
+ */
+export function fillRow(o, row, states, out, base = 0) {
+  const nd = o.departSteps;
+  const nt = o.tofSteps;
+  const t = axisAt(o.departStart, o.departSpan, nd, row);
+  let iterations = 0;
+  let max = 0;
+  for (let j = 0; j < nt; j++) {
+    const tof = axisAt(o.tofMin, o.tofMax - o.tofMin, nt, j);
+    const cell = windowCell(o, t, tof, states);
+    const k = (row - base) * nt + j;
+    out.c3[k] = cell.c3;
+    out.vinf[k] = cell.vinf;
+    out.total[k] = cell.total;
+    out.status[k] = CELL_STATUS.indexOf(cell.status);
+    iterations += cell.iterations;
+    if (cell.iterations > max) max = cell.iterations;
+  }
+  return { iterations, max };
+}
+
+/**
  * A window to compute in slices.
  * @returns {{advance(ms: number): boolean, cancel(): void, result(): object, fraction: number}}
  */
@@ -152,18 +180,9 @@ export function createWindow(
     advance(ms = 30) {
       const t0 = now();
       while (row < nd && !canceled) {
-        const t = axisAt(o.departStart, o.departSpan, nd, row);
-        for (let j = 0; j < nt; j++) {
-          const tof = axisAt(o.tofMin, o.tofMax - o.tofMin, nt, j);
-          const cell = windowCell(o, t, tof, states);
-          const k = row * nt + j;
-          c3[k] = cell.c3;
-          vinf[k] = cell.vinf;
-          total[k] = cell.total;
-          status[k] = CELL_STATUS.indexOf(cell.status);
-          iterations += cell.iterations;
-          if (cell.iterations > maxIterations) maxIterations = cell.iterations;
-        }
+        const used = fillRow(o, row, states, { c3, vinf, total, status });
+        iterations += used.iterations;
+        if (used.max > maxIterations) maxIterations = used.max;
         row++;
         run.fraction = row / nd;
         if (now() - t0 >= ms) break;
