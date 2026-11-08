@@ -209,9 +209,9 @@ The Observatory's image measurement train (Prompts 179 to 182, 184, 186 to 189, 
 
 **Gravitas 2.0.0.** Gravitas grows from a gravity sandbox with 22 guided
 investigations into a browser laboratory: <!--fact:scenarios-->61<!--/fact-->
-sandbox scenarios, <!--fact:libraryInvestigations-->141<!--/fact--> guided
+sandbox scenarios, <!--fact:libraryInvestigations-->146<!--/fact--> guided
 investigations (<!--fact:investigations-->124<!--/fact--> that run in the
-simulation and <!--fact:guidedInvestigations-->17<!--/fact--> in the
+simulation and <!--fact:guidedInvestigations-->22<!--/fact--> in the
 Observatory, the 3-D lab and the mission lab), a shared shell, a Library, a
 workspace for each student's own work, an instructor path from adoption page to
 gradebook file, <!--fact:instructorDocuments-->1222<!--/fact--> generated
