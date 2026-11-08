@@ -256,7 +256,6 @@ const leg = (id, measured, ok, note = '') =>
     ...(note ? { note } : {}),
   });
 const sig = (v, d = 3) => (Number.isFinite(v) ? Number(v.toPrecision(d)) : v);
-const worst = (...xs) => Math.max(...xs.map(Math.abs));
 
 const ANGLES = ['i', 'Omega', 'omega', 'M'];
 const angleErr = (a, b) => Math.abs(wrap(a - b));
@@ -307,7 +306,6 @@ const smoothed = phi =>
 
 export function judge(oracle) {
   rows.length = 0;
-  const G1 = 1;
   // --- A: the editor
   {
     const r = seeded(271002);

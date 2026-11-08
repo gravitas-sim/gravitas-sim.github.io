@@ -76,7 +76,7 @@ judges the kernel side and writes `results.json`; the test runs it again.
   (sky axes lost digits near a pole, fixed in `planeAxes`), C1 and C3 (the oracle was
   below its committed resolution), F3 (the validator did not continue a full session).
 - Not measured by the validator: G1 (the key, `tests/lab3dGuides.test.js`), G3 (axe and
-  keyboard, `e2e/`), G4 (route ceilings, `tools/route-budgets.json`), G5 (the closure).
+  keyboard, `e2e/`), G4 (route ceilings, `tools/route-budgets.json`; raised by their measured values under the standing approval, rows D-BUDGET-271-01 to 03), G5 (the closure).
 
 ## 5. Limits and what is held
 
