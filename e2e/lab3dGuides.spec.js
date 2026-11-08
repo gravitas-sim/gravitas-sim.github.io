@@ -8,6 +8,8 @@
 //   - an eclipse lost to half a degree, and a drawn size that lies;
 //   - equal inclinations that are not one plane;
 //   - a Kozai-Lidov peak kept by the reader, and the quantity that holds;
+//   - the language of orbits through the editor, a libration refused in the
+//     Kepler-only mode, the new controls by keyboard and axe in both languages;
 //   - the report is a file, the same file for the same answers;
 //   - progress survives a reload, and every step works with no WebGL;
 //   - with the service worker installed, a guide opens offline (sources);
@@ -72,7 +74,7 @@ const orbitCell = async (page, body, col) => {
 };
 
 test.describe('the 3-D lab’s guided investigations', () => {
-  test('the chooser opens from the page, and lists the four @cross-browser', async ({
+  test('the chooser opens from the page, and lists the nine @cross-browser', async ({
     page,
   }) => {
     await page.goto('/3d/?system=R1', { waitUntil: 'domcontentloaded' });
@@ -85,7 +87,7 @@ test.describe('the 3-D lab’s guided investigations', () => {
     );
     await expect(
       page.locator('#l3-guide button[data-path="intro"]')
-    ).toHaveCount(4);
+    ).toHaveCount(9);
     await page
       .locator('#l3-guide button[data-guide="l3-mutual"][data-path="advanced"]')
       .click();
@@ -295,6 +297,93 @@ test.describe('the 3-D lab’s guided investigations', () => {
     await expect(say(page)).toContainText(
       'exchanged between the orbit’s direction and its shape'
     );
+  });
+
+  test('the language of orbits: an edit through the editor, in the Kepler-only mode', async ({
+    page,
+  }) => {
+    await openGuide(page, 'l3-elements');
+    await next(page);
+    await doIt(page);
+    await expect(page.locator('#l3-mode')).toHaveValue('kepler');
+    await expect(page.locator('#l3-mode-info')).toContainText('Kepler-only');
+    await next(page);
+    await doIt(page);
+    await expect(page.locator('#l3-orbit-panel')).toBeVisible();
+    await next(page);
+    await choose(page, 'x283');
+    await expect(say(page)).toContainText('Recorded');
+    await next(page);
+    // The reader's own path: type a in the editor and press Apply.
+    await page.locator('#l3o-load').click();
+    await page.locator('#l3o-fields input').first().fill('2');
+    await page.locator('#l3o-apply').click();
+    await expect(page.locator('#l3o-say')).toContainText('Applied');
+    await next(page);
+    await answer(page, '17.77');
+    await expect(say(page)).toContainText('Right: about 17.77');
+    await next(page);
+    await choose(page, 'x283');
+    await expect(say(page)).toContainText('Right: 2^1.5');
+  });
+
+  test('a libration is refused in the Kepler-only mode, by the lab, and runs in N-body', async ({
+    page,
+  }) => {
+    await openGuide(page, 'l3-resonant');
+    await next(page);
+    await choose(page, 'librates');
+    await next(page);
+    await doIt(page);
+    await expect(page.locator('#l3-mode')).toHaveValue('nbody');
+    await expect(page.locator('#l3-mode-info')).toContainText(
+      /N-body, Yoshida|N-body, yoshida4c/i
+    );
+    // The reader switches the mode by hand: an N-body step is refused, in words.
+    await page.locator('#l3-mode').selectOption('kepler');
+    await expect(page.locator('#l3-mode-info')).toContainText(
+      'cannot show libration'
+    );
+    await page.locator('#l3-guide-next').click();
+    await page.locator('#l3-guide-next').click();
+    await page.locator('#l3-guide-next').click();
+    await expect(title(page)).toHaveText('Play the window');
+    await expect(say(page)).toContainText('N-body');
+    await page.locator('#l3-mode').selectOption('nbody');
+    await expect(page.locator('#l3-mode')).toHaveValue('nbody');
+  });
+
+  test('the new controls work from the keyboard, and pass axe in both languages', async ({
+    page,
+  }) => {
+    for (const locale of ['en', 'es']) {
+      await openGuide(page, 'l3-seen', { locale });
+      await page.locator('#l3-orbit').focus();
+      await page.keyboard.press('Enter');
+      await expect(page.locator('#l3-orbit-panel')).toBeVisible();
+      for (const id of ['l3-mode', 'l3-plane']) {
+        await page.locator(`#${id}`).focus();
+        await page.keyboard.press('ArrowDown');
+        await expect(page.locator(`#${id}`)).toBeFocused();
+      }
+      await page.locator('#l3-plane').selectOption('system');
+      await page.locator('#l3o-az').focus();
+      await page.keyboard.type('30');
+      await page.locator('#l3o-setobs').focus();
+      await page.keyboard.press('Enter');
+      await expect(page.locator('#l3o-figures')).toBeVisible();
+      const r = await new AxeBuilder({ page }).withTags(TAGS).analyze();
+      await page.evaluate(() => {
+        for (const k of Object.keys(window.localStorage))
+          if (k.startsWith('gravitas_lab3d_guide_'))
+            window.localStorage.removeItem(k);
+      });
+      expect(
+        r.violations.map(
+          v => `${locale}: ${v.id} ${v.nodes.map(n => n.target).join(' ')}`
+        )
+      ).toEqual([]);
+    }
   });
 
   test('the report is a file, the same file for the same answers, and progress survives a reload', async ({
