@@ -374,4 +374,16 @@ describe('the textbook alignment', () => {
     for (const e of investigations)
       expect(chapters[String(e.textbook.chapter)]).toBeTruthy();
   });
+
+  test('every list item is one item: none nested in another, none empty', () => {
+    for (const { file, html } of built.pages) {
+      const nested = html.match(/<li>\s*<li\b/g) ?? [];
+      const empty = html.match(/<li>\s*<\/li>/g) ?? [];
+      expect({ file, nested: nested.length, empty: empty.length }).toEqual({
+        file,
+        nested: 0,
+        empty: 0,
+      });
+    }
+  });
 });
