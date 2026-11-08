@@ -216,6 +216,7 @@ current, and the orchestrator checks it.
 | `release-check.mjs` | npm run release:check | `npm run release:check` |
 | `remnants-pin.mjs` | The cooling-table pin of the remnants validation (Prompt 222, REMNANTS.md) |  |
 | `remnants-validate.mjs` | The remnants kernel against its committed thresholds (Prompt 222) | `npm run remnants:validate` |
+| `resonances-ii-validate.mjs` | (no header) |  |
 | `reversibility-probe.mjs` | Does the engine run backwards? | `npm run probe:reversibility` |
 | `rotation-decomposition-validate.mjs` | The rotation-curve decomposition kernel against its committed thresholds (Prompt 236, Part A) | `npm run decomposition:validate` |
 | `route-budget.mjs` | What a fresh visitor downloads, route by route | `npm run budget:routes` |
