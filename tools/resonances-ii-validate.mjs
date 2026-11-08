@@ -1,7 +1,11 @@
-// Prompt 273 Part A: the validator. Thresholds are tests/fixtures/resonances-ii/thresholds.json
-// (committed first). Modes: `inputs` writes inputs.json for the Python oracle;
-// `run` reads the oracle's output and the downloaded Horizons files and writes results.json.
-// Usage: node tools/resonances-ii-validate.mjs inputs|run [--data DIR]
+#!/usr/bin/env node
+// =============================================================================
+// The validation of the resonance kernel: libration, secular rate, integrator error (Prompt 273, RESONANCES_II.md)
+// -----------------------------------------------------------------------------
+// The legs and their bounds are tests/fixtures/resonances-ii/thresholds.json (committed first).
+// Modes: `inputs` writes inputs.json for the Python oracle; `run` reads the oracle's output and the
+// downloaded Horizons files and writes results.json. Usage: node tools/resonances-ii-validate.mjs inputs|run [--data DIR]
+// =============================================================================
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';

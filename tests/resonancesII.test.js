@@ -155,7 +155,8 @@ describe('the pinned validation record', () => {
     });
     const rec = results.legs.find(l => l.id === 'L1').values;
     expect(m.state).toBe(rec.state);
-    expect(m.period).toBeCloseTo(rec.period, 6);
+    if (rec.period === null) expect(m.period).toBeNull();
+    else expect(m.period).toBeCloseTo(rec.period, 6);
   });
   test('no failing leg is unlabelled and no home path is in the record', () => {
     const text = JSON.stringify(results) + JSON.stringify(thresholds);
