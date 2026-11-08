@@ -999,8 +999,8 @@ notRun(
 {
   const budgets = J(path.join(REPO, 'tools/route-budgets.json'));
   const ceil = {
-    sources: budgets.ceilings?.sources?.compute ?? budgets.sources?.compute,
-    build: budgets.ceilings?.build?.compute ?? budgets.build?.compute,
+    sources: budgets.routes.sources.compute,
+    build: budgets.routes.build.compute,
   };
   const cat = read('js/compute/catalogueData.js');
   const entries = cat.split(/\n {2}\{\n {4}id:/).slice(1);
