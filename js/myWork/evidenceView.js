@@ -8,7 +8,9 @@
 // each entry; a mark for a report; an annotation (the student's own words, the
 // snapshot untouched); and a comparison of two entries of one kind, or of two
 // quantities of one entry, with the covariance where the record states one and
-// "independence assumed" where it does not (./evidenceReview.js).
+// "independence assumed" where it does not (./evidenceReview.js). Under it,
+// when an entry is marked or a report was made, the report composed from the
+// marked entries (./reportView.js, part B), which this loads only then.
 //
 // Nothing here is sent anywhere. A mark and an annotation are written to the
 // notebook's own record, through the student store, like an attachment is.
@@ -16,7 +18,7 @@
 // comparison's statement is Prompt 151's (js/i18n/en.compare.js).
 // =============================================================================
 
-import { KEY_EVIDENCE_NOTEBOOK } from '../names.js';
+import { KEY_EVIDENCE_NOTEBOOK, KEY_MADE_PREFIX } from '../names.js';
 import { annotate, mark } from '../notebook/entry.js';
 import {
   commonQuantities,
@@ -30,6 +32,11 @@ import {
 import { envelopeOf } from '../notebook/ledger.js';
 
 const NOTEBOOK = KEY_EVIDENCE_NOTEBOOK;
+/** The made record of the composed report (./composedReport.js COMPOSED_KEY). */
+const REPORT = `${KEY_MADE_PREFIX}composed-report`;
+/** What the report card's buttons ask of ./reportView.js (its ACTIONS). */
+const REPORT_ACTIONS =
+  'up down dropcmp addcmp make remark pdf html csv file'.split(' ');
 const es = () => document.documentElement.lang.startsWith('es');
 const L = (en, sp) => (es() ? sp : en);
 const esc = s =>
@@ -64,11 +71,19 @@ const fresh = () => ({
   noting: '',
   say: '',
   focus: '',
+  // The report: null until the student changes it, so the made one is shown.
+  order: null,
+  title: null,
+  carried: null,
+  refocus: null,
 });
 let v = fresh();
 let lastBox = null;
 let current = null;
 let tools = null;
+let reportMod = null;
+/** The comparison on screen, as the report would carry it; null when refused. */
+let cmpSpec = null;
 
 /** Where in the student's work an entry was kept, in this page's words. */
 function whereOf(r) {
@@ -194,6 +209,7 @@ ${f('claim', L('What this shows', 'Qué muestra'), entry.prose?.claim, 600)}${f(
 }
 
 async function compareBox(entries) {
+  cmpSpec = null;
   const [a, b] = v.ticked.map(id => entries.find(e => e.id === id));
   if (!a) return '';
   const second = b ?? a;
@@ -258,13 +274,48 @@ async function compareBox(entries) {
             'Covariance used, from the correlation you gave.',
             'Covarianza usada, a partir de la correlación que diste.'
           );
+  if (result.ok)
+    cmpSpec = {
+      a: a.id,
+      b: second.id,
+      idA: qa,
+      idB: qb,
+      rho: Number.isFinite(rho) ? rho : null,
+      stated: v.shared === true,
+    };
+  const carry = !result.ok
+    ? ''
+    : a.marked === true && second.marked === true
+      ? `<div class="mw-actions"><button type="button" class="ui-button is-small" data-rv="addcmp">${esc(L('Add this comparison to your report', 'Añadir esta comparación a tu informe'))}</button></div>`
+      : `<p class="ui-hint">${esc(L('Tick "For a report" on what you compare to carry this comparison into your report.', 'Marca «Para un informe» en lo que comparas para llevar esta comparación a tu informe.'))}</p>`;
   return `<div class="mw-card" role="group" aria-labelledby="rvCmpTitle"><h3 id="rvCmpTitle">${esc(L('Comparison', 'Comparación'))}</h3>
 <p>${esc(L('First', 'Primera'))}: ${esc(a.title)}. ${esc(one(a, qa))}</p>
 <p>${esc(L('Second', 'Segunda'))}: ${esc(second.title)}${second === a ? esc(L(' (the same entry)', ' (la misma entrada)')) : ''}. ${esc(one(second, qb))}</p>
 ${sel('qa', a, qa)}${sel('qb', second, qb)}
 <div class="ui-field"><label for="rv_rho">${esc(L('Correlation between the two, from -1 to 1 (leave empty if you do not know)', 'Correlación entre las dos, de -1 a 1 (déjala vacía si no la conoces)'))}</label><input id="rv_rho" class="ui-input" type="number" step="any" min="-1" max="1" inputmode="decimal" value="${esc(v.rho)}" data-rv="rho" /></div>
 <label class="ui-choice"><input type="checkbox" data-rv="shared"${shared ? ' checked' : ''}${detected ? ' disabled' : ''} /> <span>${esc(detected ? L(`The records share their ${detected === 'data' ? 'data' : 'calibration'}.`, `Los registros comparten ${detected === 'data' ? 'sus datos' : 'su calibración'}.`) : L('I know these share data or calibration.', 'Sé que estos comparten datos o calibración.'))}</span></label>
-<p class="ui-state ${result.ok ? 'is-ok' : 'is-warning'}" data-rv="result" tabindex="-1">${flag ? `<strong>${esc(flag)}</strong> ` : ''}${esc(text)}</p></div>`;
+<p class="ui-state ${result.ok ? 'is-ok' : 'is-warning'}" data-rv="result" tabindex="-1">${flag ? `<strong>${esc(flag)}</strong> ` : ''}${esc(text)}</p>${carry}</div>`;
+}
+
+/** What ./reportView.js is handed: the page, the entries and this view's words. */
+async function reportCtx(page, entries) {
+  reportMod ??= await import('./reportView.js');
+  const t = await loadTools();
+  return {
+    page,
+    entries,
+    v,
+    lang: es() ? 'es' : 'en',
+    L,
+    esc,
+    tools: t,
+    write,
+    comparison: cmpSpec,
+    kindName: k => {
+      const x = t.t(`nb.source.${k}`);
+      return x === `nb.source.${k}` ? k : x;
+    },
+  };
 }
 
 /**
@@ -298,6 +349,12 @@ export async function show(page) {
         document.activeElement.dataset.id ?? '',
       ]
     : null;
+  const comparison = await compareBox(entries);
+  const report =
+    entries.some(e => e.marked === true) ||
+    state.records.some(r => r.id === REPORT)
+      ? await reportCard(page, entries)
+      : '';
   box.querySelector('.mw-body').innerHTML =
     `<div class="mw-actions" role="group" aria-label="${esc(L('Filters', 'Filtros'))}">${menu('rvInv', L('Investigation', 'Investigación'), distinct(rows, 'investigation'), invName, v.investigation)}${menu('rvKind', L('Kind', 'Tipo'), distinct(rows, 'kind'), kindName, v.kind)}
 <div class="ui-field"><label for="rvFrom">${esc(L('From', 'Desde'))}</label><input id="rvFrom" class="ui-input" type="date" value="${esc(v.from)}" data-rv="from" /></div>
@@ -306,17 +363,26 @@ export async function show(page) {
 <p class="ui-hint" role="status" aria-live="polite" id="rvStatus">${esc(v.say || L(`${shown.length} of ${rows.length} entries shown. ${rows.filter(r => r.marked).length} marked for a report.`, `${shown.length} de ${rows.length} entradas a la vista. ${rows.filter(r => r.marked).length} marcadas para un informe.`))}${v.ticked.length ? ` <a href="#rvCompare">${esc(L('Go to the comparison', 'Ir a la comparación'))}</a>` : ''}</p>
 <ul class="mw-list">${shown.map(r => rowItem(r, t, page.surfaces)).join('')}</ul>
 ${shown.length ? '' : `<p class="ui-state is-empty">${esc(L('No entry matches these filters.', 'Ninguna entrada coincide con estos filtros.'))}</p>`}
-<p class="ui-hint">${esc(L('Compare one entry with another of the same kind, or tick one entry to compare two of its quantities. A mark is kept with the entry; your report does not read it yet.', 'Compara una entrada con otra del mismo tipo, o marca una sola para comparar dos de sus cantidades. La marca se guarda con la entrada; tu informe todavía no la lee.'))}</p>
-<div id="rvCompare">${await compareBox(entries)}</div>
-${noting ? noteForm(noting) : ''}`;
+<p class="ui-hint">${esc(L('Compare one entry with another of the same kind, or tick one entry to compare two of its quantities. A mark is kept with the entry; the marked entries make up your report, below.', 'Compara una entrada con otra del mismo tipo, o marca una sola para comparar dos de sus cantidades. La marca se guarda con la entrada; las entradas marcadas forman tu informe, abajo.'))}</p>
+<div id="rvCompare">${comparison}</div>
+${noting ? noteForm(noting) : ''}${report}`;
   if (noting && v.focus === 'note') {
     box.querySelector('#rvNoteTitle')?.focus();
+  } else if (v.refocus) {
+    control(box, ...v.refocus)?.focus({ preventScroll: true });
   } else if (had) {
     const [kind, id] = had;
     control(box, kind, id)?.focus({ preventScroll: true });
   }
   v.focus = '';
+  v.refocus = null;
   wire(box);
+}
+
+/** The report card (./reportView.js), as HTML. */
+async function reportCard(page, entries) {
+  const ctx = await reportCtx(page, entries);
+  return reportMod.card(ctx);
 }
 
 /** Write the notebook with its entries changed, through the student store. */
@@ -353,6 +419,7 @@ function wire(box) {
     else if (k === 'qb') v.qb = c.value;
     else if (k === 'rho') v.rho = c.value.trim();
     else if (k === 'shared') v.shared = c.checked;
+    else if (k === 'reptitle') v.title = c.value.trim();
     else if (k === 'compare') {
       v.ticked = c.checked
         ? [...new Set([...v.ticked, c.dataset.id])].slice(0, 2)
@@ -374,10 +441,15 @@ function wire(box) {
     } else return;
     again();
   });
-  box.addEventListener('click', e => {
+  box.addEventListener('click', async e => {
     const b = e.target.closest('button[data-rv]');
     if (!b) return;
     v.say = '';
+    if (REPORT_ACTIONS.includes(b.dataset.rv)) {
+      const ctx = await reportCtx(current, entriesOf(current.state.records));
+      await reportMod.act(b.dataset.rv, b.dataset.id ?? '', ctx);
+      return again();
+    }
     if (b.dataset.rv === 'clear') {
       v.investigation = v.kind = v.from = v.to = '';
     } else if (b.dataset.rv === 'note') {

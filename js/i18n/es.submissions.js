@@ -113,6 +113,33 @@ export const ES_SUBMISSIONS = {
   'sub.systems.col.engine': 'Motor',
   'sub.systems.col.digest': 'Resumen',
   'sub.systems.col.open': 'Abrir',
+  'sub.composed.title': 'Informes compuestos',
+  'sub.composed.note':
+    'Un estudiante puede componer un informe con entradas de varias investigaciones. Un informe declara el resumen criptográfico del informe compuesto que su autor hizo por última vez, y cuántas secciones tiene; el informe compuesto es un archivo que el estudiante entrega, cuyo nombre termina en .composed-report.json. Añade ese archivo para leerlo aquí y comprobarlo con el resumen. Que coincida indica que el archivo es aquel con el que se hizo el resumen; no indica quién lo hizo.',
+  'sub.composed.stated':
+    '{name} declara un informe compuesto de {n} secciones, resumen {digest}. Su archivo no se ha leído aquí.',
+  'sub.composed.matched':
+    '{name} declara un informe compuesto de {n} secciones, resumen {digest}: el archivo {file} coincide.',
+  'sub.composed.matchedBad':
+    '{name} declara el resumen {digest}; el archivo {file} afirma ese resumen y su contenido no lo produce.',
+  'sub.composed.summary': '{file}: {title}, {n} secciones, {state}',
+  'sub.composed.state.verified': 'coincide con un informe leído aquí',
+  'sub.composed.state.mismatch': 'no coincide con su propio resumen',
+  'sub.composed.state.unclaimed': 'ningún informe leído aquí lo declara',
+  'sub.composed.verified':
+    'El archivo produce el resumen {digest}, el que declara {names}.',
+  'sub.composed.mismatch':
+    'El archivo dice que su resumen es {digest}, y su contenido no lo produce: se cambió después de hacerlo. Léelo teniéndolo en cuenta.',
+  'sub.composed.unclaimed':
+    'El archivo produce el resumen {digest}. Ningún informe leído aquí declara ese resumen.',
+  'sub.reason.composed.newer':
+    'un informe compuesto escrito por una versión más reciente de Gravitas; recarga esta página y añádelo de nuevo',
+  'sub.reason.composed.shape':
+    'un archivo de informe compuesto dañado, o editado de una forma que esta página no puede leer',
+  'sub.reason.composed.format':
+    'no es un informe compuesto que esta página pueda leer',
+  'sub.reason.badComposed':
+    'declara un informe compuesto de una forma que esta página no puede leer',
   'sub.evidence.title': 'La evidencia detrás de las respuestas',
   'sub.evidence.note':
     'Un informe de versión 2 lleva la tabla de medidas y resultados que tenía el cuaderno del estudiante, y un resumen criptográfico de ella. La comprobación recalcula ese resumen a partir de la tabla que tienes delante. Que coincida indica que la tabla es aquella con la que se hizo el resumen; no indica quién la hizo: cualquiera puede construir un código coherente consigo mismo.',

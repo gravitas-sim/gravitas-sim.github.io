@@ -90,6 +90,21 @@ function facts(r) {
       when,
     ];
   }
+  if (r.kind === 'report') {
+    const n = r.report.sections.length;
+    return [
+      L('Composed report', 'Informe compuesto'),
+      n === 1
+        ? L('1 section', '1 sección')
+        : L(`${n} sections`, `${n} secciones`),
+      L(
+        `digest ${r.report.digest.slice(0, 16)}`,
+        `resumen ${r.report.digest.slice(0, 16)}`
+      ),
+      r.app ? L(`build ${r.app}`, `versión ${r.app}`) : '',
+      when,
+    ];
+  }
   if (r.kind === 'mission') {
     const p = r.mission.file.inputs;
     return [
@@ -195,7 +210,12 @@ async function made(page) {
                         'Open in the mission lab',
                         'Abrir en el laboratorio de misiones'
                       )
-                    : L('Open the runner', 'Abrir el ejecutor'),
+                    : r.kind === 'report'
+                      ? L(
+                          'Open the evidence review',
+                          'Abrir la revisión de evidencia'
+                        )
+                      : L('Open the runner', 'Abrir el ejecutor'),
             ids: [`${MADE_PREFIX}${r.id}`],
             extra: `<div class="mw-actions">${
               r.kind === 'scenario'
@@ -205,7 +225,7 @@ async function made(page) {
               fileOf(r)
                 ? `<button type="button" class="ui-button is-small" data-made="file" data-key="${esc(`${MADE_PREFIX}${r.id}`)}" aria-label="${esc(`${L('Download file', 'Descargar archivo')}: ${r.name}`)}">${esc(L('Download file', 'Descargar archivo'))}</button>`
                 : ''
-            }</div>${r.kind === 'system3d' || r.kind === 'mission' ? '' : attachControl(r, entries)}`,
+            }</div>${r.kind === 'system3d' || r.kind === 'mission' || r.kind === 'report' ? '' : attachControl(r, entries)}`,
           })
         )
         .join('')}</ul>`

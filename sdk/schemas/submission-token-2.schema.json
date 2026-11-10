@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://gravitas-sim.online/sdk/schemas/submission-token-2.schema.json",
   "title": "submission token/2",
-  "description": "A student's lab report as data (version 2; version 1 is the same without `ev`, and is still read): what a submission token carries once it is decoded. The token itself ($defs/token) is the letter s, the version, and the payload deflated and base64url-encoded, as a world link is; this schema is the payload: the assignment and roster ids, the locale for answers stored before each answer recorded its own, and the student's progress backup whole (gravitas.investigation.progress, every response, attempt count and step fingerprint). It proves nothing about who wrote it. js/submission/submissionToken.js readSubmissionToken() is the authority. Its check is of shape only: a version, a backup naming its lesson, a response table and a step list; this schema also states the backup as js/investigations/progressBackup.js writes and checks one, and the ids and locale as the report writes them.  Version 2 adds `sy` (optional, up to four things the student attached to the evidence) and `ev`: the digest of the evidence ledger the report printed, the ids of its envelopes and the rows of its evidence table (js/submission/ledgerDigest.js), so the review page can check the table against the digest. It says nothing of who made it. FORMATS.md lists it.",
+  "description": "A student's lab report as data (version 2; version 1 is the same without `ev`, and is still read): what a submission token carries once it is decoded. The token itself ($defs/token) is the letter s, the version, and the payload deflated and base64url-encoded, as a world link is; this schema is the payload: the assignment and roster ids, the locale for answers stored before each answer recorded its own, and the student's progress backup whole (gravitas.investigation.progress, every response, attempt count and step fingerprint). It proves nothing about who wrote it. js/submission/submissionToken.js readSubmissionToken() is the authority. Its check is of shape only: a version, a backup naming its lesson, a response table and a step list; this schema also states the backup as js/investigations/progressBackup.js writes and checks one, and the ids and locale as the report writes them.  Version 2 adds `sy` (optional, up to four things the student attached to the evidence) and `ev`: the digest of the evidence ledger the report printed, the ids of its envelopes and the rows of its evidence table (js/submission/ledgerDigest.js), so the review page can check the table against the digest. It says nothing of who made it. `cr` (optional, Prompt 275) is the digest and section count of the report composed from marked entries, when one exists. FORMATS.md lists it.",
   "type": "object",
   "required": [
     "v",
@@ -139,6 +139,24 @@
               "type": "integer"
             }
           }
+        }
+      }
+    },
+    "cr": {
+      "description": "The report the student composed from marked entries of the evidence notebook, when one was made (js/myWork/composedReport.js, gravitas.composed-report/1): d is the SHA-256 the report file states of itself, n the number of its sections. The report is handed in as a file; the review page recomputes the digest from the file and compares. Absent when no composed report exists. A build from before it reads the token and ignores this.",
+      "type": "object",
+      "required": [
+        "d",
+        "n"
+      ],
+      "properties": {
+        "d": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "n": {
+          "type": "integer",
+          "minimum": 1
         }
       }
     },

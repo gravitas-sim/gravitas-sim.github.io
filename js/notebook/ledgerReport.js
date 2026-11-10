@@ -331,6 +331,10 @@ export async function ledgerForReport() {
       )
   );
   if (systems.length) record.sy = systems;
+  // The report composed from marked entries, when one was made (Prompt 275):
+  // the token states its digest; the report itself is handed in as a file.
+  const composed = made.composedStamp();
+  if (composed) record.cr = composed;
   const meta = document.querySelector('meta[name="gravitas-revision"]');
   const engines = [
     ...new Set(
