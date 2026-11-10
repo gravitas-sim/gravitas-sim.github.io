@@ -411,7 +411,7 @@ export async function runInstruments(inputs) {
 
 // --- the legs --------------------------------------------------------------------------
 
-export function judge(js, or) {
+export function judge(js, or, firstRun = null) {
   const rows = [];
   const leg = (id, cls, pass, measured) =>
     rows.push({
@@ -495,8 +495,8 @@ export function judge(js, or) {
   });
   let g = true;
   const gWorst = { endAbs: 0, endRel: 0, sepRel: 0, ratioRel: 0, order: 0 };
-  for (const k of Object.keys(c)) {
-    const j = c[k];
+  for (const k of [...Object.keys(c), 'i2']) {
+    const j = k === 'i2' ? I1.i[1] : c[k];
     const o = or.I1[k];
     if (j.refused) {
       g = false;
@@ -506,7 +506,7 @@ export function judge(js, or) {
       [j.coarse, o.coarse],
       [j.fine, o.fine],
     ]) {
-      for (const q of ['end', 'maxAbs']) {
+      for (const q of ['end', 'maxAbs', 'maxAbsHalf']) {
         gWorst.endAbs = Math.max(gWorst.endAbs, abs(run[q], orun[q]));
         gWorst.endRel = Math.max(gWorst.endRel, rel(run[q], orun[q]));
         g &&= near(run[q], orun[q], 1e-9, 1e-6);
@@ -520,11 +520,11 @@ export function judge(js, or) {
       g &&= rel(j[q], o[q]) <= 1e-6;
     }
     gWorst.order = Math.max(gWorst.order, abs(j.orderMax, o.orderMax));
-    g &&= abs(j.orderMax, o.orderMax) <= 1e-6 && j.kind === o.kind;
+    g &&= abs(j.orderMax, o.orderMax) <= 1e-6 && j.kind === o.kind2;
     if (j.orderEnd !== null) {
-      gWorst.order = Math.max(gWorst.order, abs(j.orderEnd, o.orderEnd));
-      g &&= o.orderEnd !== null && abs(j.orderEnd, o.orderEnd) <= 1e-6;
-    } else g &&= o.orderEnd === null;
+      gWorst.order = Math.max(gWorst.order, abs(j.orderEnd, o.orderEnd2));
+      g &&= o.orderEnd2 !== null && abs(j.orderEnd, o.orderEnd2) <= 1e-6;
+    } else g &&= o.orderEnd2 === null;
   }
   leg('I1.g', 'oracle', g, gWorst);
   const bare = r =>
@@ -610,16 +610,16 @@ export function judge(js, or) {
     ok2 &&
       abs(h.accepted, o2.accepted) <= 2 &&
       abs(h.rejected, o2.rejected) <= 2 &&
-      rel(h.hMin.h, o2.hMin) <= 1e-3 &&
-      rel(h.hMax.h, o2.hMax) <= 1e-3 &&
-      abs(h.slope, o2.slope) <= 0.01 &&
+      rel(h.hMin.h, o2.v2.hMin) <= 1e-3 &&
+      rel(h.hMax.h, o2.v2.hMax) <= 1e-3 &&
+      abs(h.slope, o2.v2.slope) <= 0.01 &&
       worst(h.final, o2.final) <= 1e-7,
     {
       accepted: [h.accepted, o2.accepted],
       rejected: [h.rejected, o2.rejected],
-      hMinRel: ok2 && rel(h.hMin.h, o2.hMin),
-      hMaxRel: ok2 && rel(h.hMax.h, o2.hMax),
-      slope: [h.slope, o2.slope],
+      hMinRel: ok2 && rel(h.hMin.h, o2.v2.hMin),
+      hMaxRel: ok2 && rel(h.hMax.h, o2.v2.hMax),
+      slope: [h.slope, o2.v2.slope],
       finalAbs: ok2 && worst(h.final, o2.final),
     }
   );
@@ -1007,34 +1007,112 @@ export function judge(js, or) {
     ),
   });
 
-  const instruments = {};
+  // AM2: the successors of the three failed legs' definitions. A superseded leg is
+  // carried from the pinned first run (it is not re-judged on changed code); the
+  // row computed here on the changed instrument takes the suffix s.
+  const sep = h.separationRange;
+  const bs = ok2 && {
+    atLongest: h.hMax.r / sep.max,
+    atShortest: h.hMin.r / sep.min,
+    ratio: h.hMax.h / h.hMin.h,
+    hMin: h.hMin.h,
+    hMax: h.hMax.h,
+    oracle: [o2.v2.rAtHMax / o2.v2.rMax, o2.v2.rAtHMin / o2.v2.rMin],
+  };
+  const extra = {
+    'I2.b': {
+      id: 'I2.bs',
+      class: 'analytic',
+      pass: Boolean(
+        ok2 && bs.atLongest >= 0.9 && bs.atShortest <= 2 && bs.ratio >= 10
+      ),
+      measured: bs,
+    },
+    'I4.a': {
+      id: 'I4.as',
+      class: 'analytic',
+      pass: Boolean(
+        !I4.a.refused &&
+        abs(I4.a.fourier[7], 1) <= 1e-12 &&
+        abs(I4.a.peak.amplitude, 2) <= 1e-12 &&
+        offBins < 1e-12 &&
+        I4.a.gridMaximum === 0.125 &&
+        abs(I4.a.peak.frequency, 0.125) <= 0.1 / 63
+      ),
+      measured: {
+        gridMaximum: I4.a.gridMaximum,
+        frequency: I4.a.peak?.frequency,
+        differenceOverResolution: abs(I4.a.peak?.frequency, 0.125) * 63,
+        power: I4.a.fourier[7],
+        amplitude: I4.a.peak?.amplitude,
+        largestOtherBin: offBins,
+      },
+    },
+  };
+  const all = [];
   for (const r of rows) {
-    const k = r.id.split('.')[0];
-    instruments[k] ??= {
-      pass: true,
-      legs: 0,
-      passed: 0,
-      failed: [],
-      reported: 0,
-    };
-    if (r.pass === null) instruments[k].reported++;
-    else {
-      instruments[k].legs++;
-      if (r.pass) instruments[k].passed++;
+    if (!firstRun || !SUPERSEDED.includes(r.id)) {
+      all.push(r);
+      continue;
+    }
+    all.push({
+      ...firstRun.rows.find(q => q.id === r.id),
+      carried: 'first-run',
+      supersededBy: `${r.id}s`,
+    });
+    all.push(extra[r.id] ?? { ...r, id: `${r.id}s` });
+  }
+  const tally = keep => {
+    const instruments = {};
+    for (const r of all.filter(keep)) {
+      const k = r.id.split('.')[0];
+      instruments[k] ??= {
+        pass: true,
+        legs: 0,
+        passed: 0,
+        failed: [],
+        reported: 0,
+      };
+      if (r.pass === null) instruments[k].reported++;
       else {
-        instruments[k].pass = false;
-        instruments[k].failed.push(r.id);
+        instruments[k].legs++;
+        if (r.pass) instruments[k].passed++;
+        else {
+          instruments[k].pass = false;
+          instruments[k].failed.push(r.id);
+        }
       }
     }
-  }
-  const passing = Object.values(instruments).filter(i => i.pass).length;
+    const passing = Object.values(instruments).filter(v => v.pass).length;
+    return {
+      verdict: passing === 5 ? 'A' : passing === 0 ? 'C' : 'B',
+      instruments,
+    };
+  };
+  // The committed function over the committed legs; then the same function with
+  // each superseded leg replaced by its successor (AM2).
+  const committed = tally(r => !r.id.endsWith('s'));
   return {
     format: 'gravitas.numerics-instruments-results/1',
-    verdict: passing === 5 ? 'A' : passing === 0 ? 'C' : 'B',
-    instruments,
-    rows,
+    ...committed,
+    amended: firstRun ? tally(r => !r.supersededBy) : null,
+    rows: all,
   };
 }
+
+export const SUPERSEDED = [
+  'I1.b',
+  'I1.c',
+  'I1.d',
+  'I1.e',
+  'I1.f',
+  'I1.g',
+  'I1.i',
+  'I2.b',
+  'I2.c',
+  'I2.d',
+  'I4.a',
+];
 
 async function main() {
   const pinned = process.argv.includes('--pinned');
@@ -1063,7 +1141,10 @@ async function main() {
   }
   const results = judge(
     await runInstruments(inputs),
-    read('oracle-results.json')
+    read('oracle-results.json'),
+    existsSync(file('first-run-results.json'))
+      ? read('first-run-results.json')
+      : null
   );
   results.node = process.version;
   if (!pinned) {
@@ -1079,6 +1160,16 @@ async function main() {
   for (const r of results.rows)
     console.log(
       `${r.pass === null ? 'REPORTED' : r.pass ? 'pass' : 'FAIL'}  ${r.id}  (${r.class})`
+    );
+  if (results.amended)
+    console.log(
+      `amended (AM2) ${results.amended.verdict}: ${Object.entries(
+        results.amended.instruments
+      )
+        .map(
+          ([k, v]) => `${k} ${v.pass ? 'PASS' : 'FAIL'} ${v.passed}/${v.legs}`
+        )
+        .join(', ')}`
     );
   console.log(
     `verdict ${results.verdict}: ${Object.entries(results.instruments)

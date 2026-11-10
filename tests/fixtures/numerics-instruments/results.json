@@ -44,6 +44,48 @@
    "reported": 1
   }
  },
+ "amended": {
+  "verdict": "B",
+  "instruments": {
+   "I1": {
+    "pass": false,
+    "legs": 11,
+    "passed": 10,
+    "failed": [
+     "I1.ds"
+    ],
+    "reported": 0
+   },
+   "I2": {
+    "pass": true,
+    "legs": 8,
+    "passed": 8,
+    "failed": [],
+    "reported": 1
+   },
+   "I3": {
+    "pass": true,
+    "legs": 8,
+    "passed": 8,
+    "failed": [],
+    "reported": 1
+   },
+   "I4": {
+    "pass": true,
+    "legs": 8,
+    "passed": 8,
+    "failed": [],
+    "reported": 0
+   },
+   "I5": {
+    "pass": true,
+    "legs": 4,
+    "passed": 4,
+    "failed": [],
+    "reported": 1
+   }
+  }
+ },
  "rows": [
   {
    "id": "I1.a",
@@ -64,10 +106,37 @@
     "orderEnd": 0.9993699362875157,
     "end": 0.001951418114685725,
     "endHalf": 0.0009761352687832255
+   },
+   "carried": "first-run",
+   "supersededBy": "I1.bs"
+  },
+  {
+   "id": "I1.bs",
+   "class": "analytic",
+   "pass": true,
+   "measured": {
+    "kind": "secular",
+    "orderEnd": 0.9993699362875157,
+    "end": 0.001951418114685725,
+    "endHalf": 0.0009761352687832255
    }
   },
   {
    "id": "I1.c",
+   "class": "analytic",
+   "pass": true,
+   "measured": {
+    "kind": "oscillating",
+    "orderMax": 2.002887900859082,
+    "orderEnd": null,
+    "maxAbs": 0.002689379473407231,
+    "maxAbsHalf": 0.0006710003546402573
+   },
+   "carried": "first-run",
+   "supersededBy": "I1.cs"
+  },
+  {
+   "id": "I1.cs",
    "class": "analytic",
    "pass": true,
    "measured": {
@@ -87,10 +156,36 @@
     "orderEnd": 4.997802681625618,
     "end": -0.0000018524462834790256,
     "endHalf": -5.7977182166268904e-8
+   },
+   "carried": "first-run",
+   "supersededBy": "I1.ds"
+  },
+  {
+   "id": "I1.ds",
+   "class": "analytic",
+   "pass": false,
+   "measured": {
+    "kind": "oscillating",
+    "orderEnd": null,
+    "end": -0.0000018524462834790256,
+    "endHalf": -5.7977182166268904e-8
    }
   },
   {
    "id": "I1.e",
+   "class": "analytic",
+   "pass": true,
+   "measured": {
+    "kind": "oscillating",
+    "orderMax": 1.064339587020461,
+    "maxAbs": 0.023944642918358443,
+    "maxAbsHalf": 0.01145012488818035
+   },
+   "carried": "first-run",
+   "supersededBy": "I1.es"
+  },
+  {
+   "id": "I1.es",
    "class": "analytic",
    "pass": true,
    "measured": {
@@ -110,10 +205,38 @@
     "endHalf": 0.09644736338093818,
     "growth": 1.2045563383169948,
     "growthHalf": 1.1123216218186018
+   },
+   "carried": "first-run",
+   "supersededBy": "I1.fs"
+  },
+  {
+   "id": "I1.fs",
+   "class": "analytic",
+   "pass": true,
+   "measured": {
+    "refused": null,
+    "end": 0.16442151535489957,
+    "endHalf": 0.09644736338093818,
+    "growth": 1.2045563383169948,
+    "growthHalf": 1.1123216218186018
    }
   },
   {
    "id": "I1.g",
+   "class": "oracle",
+   "pass": true,
+   "measured": {
+    "endAbs": 0,
+    "endRel": 0,
+    "sepRel": 0,
+    "ratioRel": 0,
+    "order": 0
+   },
+   "carried": "first-run",
+   "supersededBy": "I1.gs"
+  },
+  {
+   "id": "I1.gs",
    "class": "oracle",
    "pass": true,
    "measured": {
@@ -181,6 +304,31 @@
      "end": 0.0026560860862520443,
      "endHalf": 0.0006625241209941753
     }
+   ],
+   "carried": "first-run",
+   "supersededBy": "I1.is"
+  },
+  {
+   "id": "I1.is",
+   "class": "refusal",
+   "pass": true,
+   "measured": [
+    {
+     "kind": "oscillating",
+     "orderEnd": null,
+     "reason": "end-phase",
+     "orderMax": 2.002887900859082,
+     "end": 0.0000940202118098199,
+     "endHalf": 0.0000014758324577239061
+    },
+    {
+     "kind": "oscillating",
+     "orderEnd": null,
+     "reason": "end-phase",
+     "orderMax": 2.002887900859082,
+     "end": 0.0026560860862520443,
+     "endHalf": 0.0006625241209941753
+    }
    ]
   },
   {
@@ -202,6 +350,24 @@
     "hMin": 0.0005969817004194411,
     "hMax": 0.1404602958481457,
     "ratio": 235.28408952813442
+   },
+   "carried": "first-run",
+   "supersededBy": "I2.bs"
+  },
+  {
+   "id": "I2.bs",
+   "class": "analytic",
+   "pass": true,
+   "measured": {
+    "atLongest": 0.928878860088832,
+    "atShortest": 1.0022542213758256,
+    "ratio": 113.28412151483155,
+    "hMin": 0.0012398939407386952,
+    "hMax": 0.1404602958481457,
+    "oracle": [
+     0.9288788602545975,
+     1.0022542213708419
+    ]
    }
   },
   {
@@ -210,6 +376,16 @@
    "pass": true,
    "measured": {
     "slope": 1.558097436687389
+   },
+   "carried": "first-run",
+   "supersededBy": "I2.cs"
+  },
+  {
+   "id": "I2.cs",
+   "class": "analytic",
+   "pass": true,
+   "measured": {
+    "slope": 1.5503055036493314
    }
   },
   {
@@ -230,6 +406,30 @@
     "slope": [
      1.558097436687389,
      1.5580974364816487
+    ],
+    "finalAbs": 5.89105695648906e-13
+   },
+   "carried": "first-run",
+   "supersededBy": "I2.ds"
+  },
+  {
+   "id": "I2.ds",
+   "class": "oracle",
+   "pass": true,
+   "measured": {
+    "accepted": [
+     189,
+     189
+    ],
+    "rejected": [
+     0,
+     0
+    ],
+    "hMinRel": 2.002122227183249e-9,
+    "hMaxRel": 4.5711099850880004e-10,
+    "slope": [
+     1.5503055036493314,
+     1.5503055038142024
     ],
     "finalAbs": 5.89105695648906e-13
    }
@@ -510,6 +710,21 @@
     "amplitude": 1.9999999999999991,
     "largestOtherBin": 2.439553026424704e-30,
     "frequency": 0.12520515487190353
+   },
+   "carried": "first-run",
+   "supersededBy": "I4.as"
+  },
+  {
+   "id": "I4.as",
+   "class": "analytic",
+   "pass": true,
+   "measured": {
+    "gridMaximum": 0.125,
+    "frequency": 0.12520515487190353,
+    "differenceOverResolution": 0.012924756929922676,
+    "power": 0.9999999999999991,
+    "amplitude": 1.9999999999999991,
+    "largestOtherBin": 2.439553026424704e-30
    }
   },
   {

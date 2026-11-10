@@ -2,6 +2,7 @@
  "format": "gravitas.numerics-instruments-failed-legs/1",
  "rule": "left failing; only Carl resets a bound",
  "legs": [
+  "I1.ds",
   "I1.i",
   "I2.b",
   "I4.a"
