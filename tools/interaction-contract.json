@@ -632,7 +632,7 @@
     }
   },
   "inventory": {
-    "about": "The walk inventory (Prompt 278): one row for every surface of tools/navigation-inventory.json. e2e/a11ySweep.spec.js walks each row in English and in Spanish with real key presses: Tab from the top of the page until focus comes round (no trap, every stop named and on screen, every pressable control reached), then Tab to `reach` and `press`, which must have an effect a reader can see. `spanish: false` records a page that stays in English when Spanish is the stored choice.",
+    "about": "The walk inventory (Prompt 278): one row for every surface of tools/navigation-inventory.json. e2e/a11ySweep.spec.js walks each row in English and in Spanish with real key presses: Tab from the top of the page until focus comes round (no trap, every stop named and on screen, every pressable control reached), then Tab to `reach` and `press`, which must have an effect a reader can see. `spanish: false` records a page that stays in English when Spanish is the stored choice. `states` are the same walk after the page has been taken, from the keyboard, to a state it does not open in: each `open` control is focused and pressed with Enter first.",
     "exempt": {
       "manual": "The printed manual is a PDF the browser's own viewer opens: it has no page of ours to walk."
     },
@@ -900,6 +900,35 @@
         "reach": "#settingsBtn",
         "press": "Enter",
         "spanish": false
+      }
+    ],
+    "states": [
+      {
+        "id": "sandbox.tools",
+        "surface": "sandbox",
+        "path": "/",
+        "open": ["#railTools"],
+        "task": "Open the light curve from Tools.",
+        "reach": "#toggleLightCurve",
+        "press": "Enter"
+      },
+      {
+        "id": "sandbox.state",
+        "surface": "sandbox",
+        "path": "/",
+        "open": ["#railState"],
+        "task": "Use the first control of State.",
+        "reach": "#railState ~ * button, #railState ~ * input, #railState ~ * select",
+        "press": "Enter"
+      },
+      {
+        "id": "sandbox.light-curve",
+        "surface": "sandbox",
+        "path": "/",
+        "open": ["#railTools", "#toggleLightCurve"],
+        "task": "Turn the observer with the position angle slider.",
+        "reach": "#lightCurveObserverControls [data-pa-slider]",
+        "press": "ArrowRight"
       }
     ]
   }

@@ -144,13 +144,32 @@ test.describe('the walk inventory: every surface by keyboard', () => {
   // A long page holds hundreds of stops, each a real key press.
   test.setTimeout(240_000);
 
-  for (const row of inventory.rows) {
+  // A state is its surface's row with a way in: the controls to press first.
+  const walks = [
+    ...inventory.rows.map(row => ({ ...row, name: row.surface, open: [] })),
+    ...inventory.states.map(state => ({
+      ...state,
+      name: state.id,
+      spanish: inventory.rows.find(r => r.surface === state.surface).spanish,
+    })),
+  ];
+
+  for (const row of walks) {
     for (const locale of LOCALES) {
-      test(`${row.surface} (${row.path}), ${locale.label}: Tab reaches every control, and the primary task answers the keyboard`, async ({
+      test(`${row.name} (${row.path}), ${locale.label}: Tab reaches every control, and the primary task answers the keyboard`, async ({
         page,
         browserName,
       }) => {
         await open(page, row.path, locale.id);
+        // Into the state, from the keyboard, as a reader gets there.
+        for (const selector of row.open) {
+          expect(
+            await tabTo(page, browserName, selector),
+            `Tab reaches ${selector}`
+          ).toBeGreaterThan(0);
+          await page.keyboard.press('Enter');
+          await page.waitForLoadState('networkidle').catch(() => {});
+        }
 
         // The language the page is in. A page recorded as English only stays
         // in English with Spanish stored; when it learns Spanish this fails,

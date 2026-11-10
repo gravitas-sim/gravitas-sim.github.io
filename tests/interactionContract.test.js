@@ -422,6 +422,15 @@ describe('the walk inventory covers every surface (Prompt 278)', () => {
     expect(checkContract(bad, tree()).join('\n')).toMatch(/has no reach/);
   });
 
+  test('a state belongs to a walked surface and says how it is reached', () => {
+    const bad = clone();
+    bad.inventory.states[0].surface = 'manual';
+    expect(checkContract(bad, tree()).join('\n')).toMatch(/which has no row/);
+    const none = clone();
+    none.inventory.states[0].open = [];
+    expect(checkContract(none, tree()).join('\n')).toMatch(/opens nothing/);
+  });
+
   test('no drag is left as a gap, and every drag names its surface', () => {
     expect(contract.drags.filter(d => d.status !== 'met')).toEqual([]);
     for (const d of contract.drags.filter(d => d.id !== 'lesson.picker'))

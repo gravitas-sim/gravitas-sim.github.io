@@ -196,6 +196,10 @@ presses (`e2e/walk.js`):
    must change: the address, a dialog or a status, the control's own state, or
    the page's text.
 
+`inventory.states` holds the same walk for a state a page does not open in,
+reached from the keyboard first: the sandbox with Tools open, with State open,
+and with the light curve panel out (its observer sliders among the stops).
+
 What a walk does not judge: whether the order is the meaningful one, whether a
 focus indicator can be seen, anything a screen reader says, and states a page
 reaches only after other choices. Prompt 279 takes structure, zoom and

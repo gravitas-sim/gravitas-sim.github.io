@@ -194,6 +194,22 @@ export function checkContract(contract, tree) {
     for (const id of Object.keys(inventory.exempt || {}))
       if (!tree.navSurfaces.has(id))
         bad(`inventory: exempt ${id} is not in the navigation inventory`);
+    const states = new Set();
+    for (const state of inventory.states || []) {
+      if (states.has(state.id))
+        bad(`inventory: state ${state.id} is listed twice`);
+      states.add(state.id);
+      if (!rows.has(state.surface))
+        bad(
+          `inventory: state ${state.id} names ${state.surface}, which has no row`
+        );
+      for (const field of ['path', 'task', 'reach', 'press'])
+        if (!state[field]) bad(`inventory: state ${state.id} has no ${field}`);
+      if (!state.open?.length)
+        bad(
+          `inventory: state ${state.id} opens nothing, so it is its surface's row`
+        );
+    }
     const spec = tree.read('e2e/a11ySweep.spec.js');
     if (spec === null || !spec.includes('inventory.rows'))
       bad('inventory: e2e/a11ySweep.spec.js does not walk inventory.rows');
