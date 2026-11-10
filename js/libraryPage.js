@@ -370,10 +370,7 @@ const whyText = row =>
       })
     : '';
 
-/**
- * The first investigation an entry builds on that the reader has not finished
- * (Prompt 276): advice on the card, never a lock. None once the entry is done.
- */
+/** An unfinished prerequisite (Prompt 276): advice on the card, never a lock. */
 const beforeOf = entry =>
   finished(entry.id)
     ? null

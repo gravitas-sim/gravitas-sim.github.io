@@ -38,9 +38,10 @@ import {
   withTry,
   writeProgress,
 } from '../js/investigations/progressSchema.js';
+import { hintLadder } from '../js/answerFeedback.js';
 import { libraryCardHtml } from '../js/library/card.js';
 import { beforeThis } from '../js/investigations/next.js';
-import { setLocale } from '../js/i18n/index.js';
+import { getLocale, setLocale } from '../js/i18n/index.js';
 import { KEY_INVESTIGATION_PREFIX } from '../js/names.js';
 import { BOUNDARY } from './compat/boundary.mjs';
 import { REPO, archiveOld, run } from './compat/harness.js';
@@ -102,12 +103,12 @@ describe('the generated ladder', () => {
   });
 
   test('stands aside wherever the author wrote hints', () => {
-    expect(generatedLadder(numeric({ hints: ['Think.'] }))).toEqual([]);
-    expect(
-      generatedLadder(numeric({ hints: { concept: 'What is asked?' } }))
-    ).toEqual([]);
+    const of = step => generatedLadder(step, [], hintLadder(step).length);
+    expect(of(numeric({ hints: ['Think.'] }))).toEqual([]);
+    expect(of(numeric({ hints: { concept: 'What is asked?' } }))).toEqual([]);
     // An empty ladder is no ladder: the generated one is offered.
-    expect(generatedLadder(numeric({ hints: [] })).length).toBe(2);
+    expect(of(numeric({ hints: [] })).length).toBe(2);
+    expect(of(numeric()).length).toBe(2);
   });
 
   test('every shipped numeric step has authored hints, so none is given a generated one', () => {
@@ -117,7 +118,7 @@ describe('the generated ladder', () => {
       for (const step of withAllDepths(inv).steps) {
         if (step.kind !== 'numeric') continue;
         checked++;
-        if (generatedLadder(step, inv.steps).length)
+        if (generatedLadder(step, inv.steps, hintLadder(step).length).length)
           given.push(`${inv.id}:${step.sid}`);
       }
     }
@@ -184,7 +185,7 @@ describe('the generated ladder', () => {
       .map(r => rungText(r, 'en'))
       .join(' ');
     expect(text).not.toMatch(/<(b|i|u)>/);
-    expect(text).toContain('a &lt; b');
+    expect(text).toContain('a &#60; b');
   });
 
   test('the rungs taken are read back in order, and nothing else is', () => {
@@ -278,9 +279,12 @@ describe('the slot under a wrong answer', () => {
   let responses;
   let said;
   let saves;
+  const tick = () => new Promise(r => setTimeout(r, 0));
   const ctx = (step, extra = {}) => ({
     step,
     steps: [],
+    authored: hintLadder(step).length,
+    locale: getLocale(),
     id: 'l:q',
     responses,
     save: () => saves++,
@@ -297,8 +301,8 @@ describe('the slot under a wrong answer', () => {
     saves = 0;
   });
 
-  test('offers each generated rung on request, in order, and records it', () => {
-    mountRecovery(slot, ctx(numeric()));
+  test('offers each generated rung on request, in order, and records it', async () => {
+    await mountRecovery(slot, ctx(numeric()));
     expect(slot.hidden).toBe(false);
     expect(slot.querySelectorAll('[data-gen]').length).toBe(0);
     expect(slot.textContent).toContain('Generated from this step');
@@ -307,6 +311,7 @@ describe('the slot under a wrong answer', () => {
       'Show a generated hint (1 of 2): the units'
     );
     button.click();
+    await tick();
     expect(responses['l:q:gen']).toBe('units');
     expect(saves).toBe(1);
     expect(document.activeElement).toBe(slot.querySelector('[data-gen]'));
@@ -314,23 +319,24 @@ describe('the slot under a wrong answer', () => {
     button = slot.querySelector('button[data-gen-next]');
     expect(button.textContent).toContain('(2 of 2): the order of magnitude');
     button.click();
+    await tick();
     expect(responses['l:q:gen']).toBe('units,magnitude');
     expect(slot.querySelector('button[data-gen-next]')).toBeNull();
     expect(
       [...slot.querySelectorAll('[data-gen]')].map(p => p.dataset.gen)
     ).toEqual(['units', 'magnitude']);
     // Drawn again from the record, as after a reload.
-    mountRecovery(slot, ctx(numeric()));
+    await mountRecovery(slot, ctx(numeric()));
     expect(slot.querySelectorAll('[data-gen]').length).toBe(2);
   });
 
-  test('is empty and hidden on a step with authored hints and no instrument', () => {
-    mountRecovery(slot, ctx(numeric({ hints: ['Think.'] })));
+  test('is empty and hidden on a step with authored hints and no instrument', async () => {
+    await mountRecovery(slot, ctx(numeric({ hints: ['Think.'] })));
     expect(slot.hidden).toBe(true);
     expect(slot.innerHTML).toBe('');
   });
 
-  test('opens the instrument’s explainer through the panel’s own button', () => {
+  test('opens the instrument’s explainer through the panel’s own button', async () => {
     document.body.insertAdjacentHTML(
       'beforeend',
       '<header><button id="x" aria-expanded="false">What am I looking at?</button></header>'
@@ -345,7 +351,7 @@ describe('the slot under a wrong answer', () => {
       hints: ['Think.'],
       tool: { id: 'power-law-kepler' },
     });
-    mountRecovery(slot, ctx(step, { explainButton: explain }));
+    await mountRecovery(slot, ctx(step, { explainButton: explain }));
     const button = slot.querySelector('button[data-recover-explain]');
     expect(button.textContent).toBe('Try again with the instrument explained');
     expect(slot.querySelector('[data-gen-next]')).toBeNull();
@@ -356,20 +362,21 @@ describe('the slot under a wrong answer', () => {
     expect(document.activeElement).toBe(explain);
     expect(said.at(-1)).toContain('explanation of the instrument is open');
     // No instrument on the step, or its panel hidden: no button.
-    mountRecovery(slot, ctx(numeric(), { explainButton: explain }));
+    await mountRecovery(slot, ctx(numeric(), { explainButton: explain }));
     expect(slot.querySelector('[data-recover-explain]')).toBeNull();
     explain.closest('header').hidden = true;
-    mountRecovery(slot, ctx(step, { explainButton: explain }));
+    await mountRecovery(slot, ctx(step, { explainButton: explain }));
     expect(slot.querySelector('[data-recover-explain]')).toBeNull();
   });
 
-  test('says it in Spanish', () => {
+  test('says it in Spanish', async () => {
     setLocale('es', { persist: false });
-    mountRecovery(slot, ctx(numeric()));
+    await mountRecovery(slot, ctx(numeric()));
     expect(slot.querySelector('button').textContent).toBe(
       'Mostrar una pista generada (1 de 2): las unidades'
     );
     slot.querySelector('button').click();
+    await tick();
     expect(slot.querySelector('[data-gen]').textContent).toContain(
       'La respuesta se pide en yr.'
     );

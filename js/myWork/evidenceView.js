@@ -422,6 +422,9 @@ function wire(box) {
 // one above, its covariance rule untouched. Nothing is listed otherwise.
 // -----------------------------------------------------------------------------
 
+// Imported here, beside its one use, and not in the block at the top.
+import { acrossInvestigations } from './evidenceReview.js';
+
 /**
  * Draw the list into its own box (#mwAcross, in the review's section).
  * @param {{state: {records: Array<object>}}} page - As show() is given it
@@ -430,7 +433,6 @@ export async function showAcross(page) {
   const box = document.getElementById('mwAcross');
   if (!box) return;
   const entries = entriesOf(page.state.records);
-  const { acrossInvestigations } = await import('./evidenceReview.js');
   const pairs = acrossInvestigations(entries);
   box.hidden = pairs.length === 0;
   if (!pairs.length) return void box.replaceChildren();

@@ -39,8 +39,7 @@ export function durationText(d, t) {
  * @param {boolean} [o.details] - Add the link to the item's own page
  * @param {boolean} [o.compact] - No picture or summary
  * @param {string} [o.path] - The pathway it is listed in ('seq:<id>')
- * @param {object} [o.before] - An investigation the reader may want first: a
- *   prerequisite not yet finished. Advice with a link; the card stays open.
+ * @param {object} [o.before] - A prerequisite not yet finished: advice, a link
  * @returns {string} One <li>
  */
 export function libraryCardHtml(

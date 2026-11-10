@@ -24,10 +24,11 @@
 // wrong answers under `:tries` (./progressSchema.js), both additive.
 // =============================================================================
 
-import { hintLadder } from '../answerFeedback.js';
-import { explainerKeyFor } from '../explainers.js';
-import { getLocale } from '../i18n/index.js';
-import { escapeHtml as escape } from '../lessonMarkup.js';
+// It imports nothing: what it needs of the lesson engine (the authored ladder,
+// the escape, the language) is handed to it, and the explainers are asked for
+// when a step has an instrument. A static import here would make the bundler
+// cut a shared chunk out of the lesson's own, one more request on every
+// lesson for a module most visits never load.
 
 /** The rungs a generated ladder can hold, in the order offered. */
 export const GENERATED_RUNGS = Object.freeze(['units', 'magnitude', 'formula']);
@@ -89,7 +90,6 @@ const WORDS = {
   },
 };
 
-const lang = () => (getLocale() === 'es' ? 'es' : 'en');
 const fill = (text, vars) =>
   text.replace(/\{(\w+)\}/g, (_, k) => vars[k] ?? '');
 
@@ -116,11 +116,13 @@ export function decadeOf(x) {
  *
  * @param {object} step - A step as the engine has it (a formula already bound)
  * @param {Array<object>} [steps] - The lesson's steps, to name what a formula reads
+ * @param {number} [authored] - How many hints its author wrote
+ *   (js/answerFeedback.js hintLadder)
  * @returns {Array<object>} Rungs of GENERATED_RUNGS, in order; empty for a
  *   step that is not a checked number or that has authored hints
  */
-export function generatedLadder(step, steps = []) {
-  if (step?.kind !== 'numeric' || hintLadder(step).length) return [];
+export function generatedLadder(step, steps = [], authored = 0) {
+  if (step?.kind !== 'numeric' || authored > 0) return [];
   const out = [];
   const unit =
     typeof step.unit === 'string' && step.unit.trim() ? step.unit.trim() : null;
@@ -168,6 +170,9 @@ function power(e, es) {
   return `10<sup>${e < 0 ? '−' : ''}${Math.abs(e)}</sup>`;
 }
 
+const escape = s =>
+  String(s ?? '').replace(/[&<>"']/g, c => `&#${c.charCodeAt(0)};`);
+
 /** Lesson prose may carry the four inline tags; anything else is text. */
 const plain = s =>
   escape(String(s ?? '').replace(/<\/?(strong|em|sub|sup)>/g, ''));
@@ -175,11 +180,11 @@ const plain = s =>
 /**
  * One rung's sentence, as HTML.
  * @param {object} rung - From generatedLadder
- * @param {string} [language] - 'en' or 'es'; the reader's by default
+ * @param {string} [language] - 'es', or anything else for English
  * @returns {string}
  */
-export function rungText(rung, language = lang()) {
-  const w = WORDS[language];
+export function rungText(rung, language = 'en') {
+  const w = WORDS[language === 'es' ? 'es' : 'en'];
   const es = language === 'es';
   const unit = rung.unit ? ` ${escape(rung.unit)}` : '';
   if (rung.id === 'units') return fill(w.units, { unit: escape(rung.unit) });
@@ -208,27 +213,43 @@ export function rungText(rung, language = lang()) {
  * @param {object} c
  * @param {object} c.step - The step
  * @param {Array<object>} c.steps - The lesson's steps
+ * @param {number} c.authored - How many hints the step's author wrote
+ * @param {string} c.locale - The reader's language
  * @param {string} c.id - The step's response key
  * @param {object} c.responses - The saved responses (written here)
  * @param {Function} c.save - Persist them
  * @param {Function} c.announce - Say it aloud
  * @param {?HTMLElement} c.explainButton - The instrument panel's explainer button
- * @param {?HTMLElement} [focus] - Which rung to put focus on after drawing
+ * @param {?string} [focus] - Which rung to put focus on after drawing
+ * @returns {Promise<void>}
  */
-export function mountRecovery(slot, c, focus = null) {
-  const w = WORDS[lang()];
-  const ladder = generatedLadder(c.step, c.steps);
+export async function mountRecovery(slot, c, focus = null) {
+  const language = c.locale === 'es' ? 'es' : 'en';
+  const w = WORDS[language];
+  const ladder = generatedLadder(c.step, c.steps, c.authored);
   const taken = generatedTaken(c.responses[`${c.id}:gen`]);
   const next = ladder.find(r => !taken.includes(r.id));
-  const explain =
+  // The instrument explained: only where the step has an instrument, its
+  // panel is showing and that instrument has an explainer to open.
+  let explain = false;
+  if (
+    c.step?.tool?.id &&
     c.explainButton &&
-    !c.explainButton.closest('[hidden]') &&
-    explainerKeyFor(c.step?.tool?.id);
+    !c.explainButton.closest('[hidden]')
+  ) {
+    try {
+      const m = await import('../explainers.js');
+      explain = Boolean(m.explainerKeyFor(c.step.tool.id));
+    } catch {
+      /* offline and not cached: the button is not offered */
+    }
+    if (!slot.isConnected) return;
+  }
   const parts = ladder
     .filter(r => taken.includes(r.id))
     .map(
       r =>
-        `<p class="inv-hint" data-gen="${r.id}" tabindex="-1"><strong>${escape(w.head[r.id])}</strong> ${rungText(r)}</p>`
+        `<p class="inv-hint" data-gen="${r.id}" tabindex="-1"><strong>${escape(w.head[r.id])}</strong> ${rungText(r, language)}</p>`
     );
   if (ladder.length)
     parts.push(`<p class="inv-gen-note">${escape(w.note)}</p>`);

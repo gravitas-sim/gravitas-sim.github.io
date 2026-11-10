@@ -365,8 +365,7 @@ export function stepMarkup(step, c) {
       parts.push(
         `<p class="inv-feedback is-wrong">${escape(t('inv.answer.notYet'))}${named}</p>`
       );
-      // The way back after a wrong answer (Prompt 276), filled by the lazy
-      // ./recovery.js when this is drawn: see bindStepInputs.
+      // Filled by the lazy ./recovery.js (Prompt 276): see bindStepInputs.
       parts.push('<div class="inv-recover" data-recover hidden></div>');
     }
 
@@ -1183,9 +1182,7 @@ export function bindStepInputs(h) {
     });
   }
 
-  // After a wrong answer: the generated hints of a step with none of its own,
-  // and the instrument explained (Prompt 276). The module is fetched here, the
-  // first time a wrong answer is on screen, and fills the slot when it lands.
+  // After a wrong answer (Prompt 276): fetched the first time one is on screen.
   const slot = els.body.querySelector('[data-recover]');
   if (slot) {
     import('./recovery.js').then(
@@ -1194,6 +1191,8 @@ export function bindStepInputs(h) {
         m.mountRecovery(slot, {
           step: h.currentStep(),
           steps: h.steps?.() ?? [],
+          authored: hintsFor(h.currentStep())?.ladder.length ?? 0,
+          locale: getLocale(),
           id,
           responses: h.responses(),
           save: h.save,

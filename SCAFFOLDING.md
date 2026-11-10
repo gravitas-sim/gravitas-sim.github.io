@@ -20,6 +20,51 @@ Hints are authored. `author:check` refuses a hint, a feedback text or a named
 mistake that contains a number the step would accept, or (for a choice) the
 right option's own words (`content/hint-leak`), in English and in Spanish.
 
+## After a wrong answer (Prompt 276)
+
+When a checked number is wrong, the panel leaves a slot under "Not yet" and
+fetches `js/investigations/recovery.js` (a lazy module that imports nothing,
+so the lesson's own chunk is not cut; it is not fetched before the first wrong
+answer). It offers, each by a button and never unbidden:
+
+- **A generated ladder, only on a step whose author wrote no hints.** It is
+  made from what the step's own check declares and nothing else, at most three
+  rungs in this order: *the units* (the step's `unit`: "The answer is wanted in
+  yr."), *the order of magnitude* (the power of ten the declared `answer` lies
+  in: "between 1 and 10 yr", with the sign said when it is negative), and *the
+  formula*, only where the check itself is a formula over the student's own
+  measurements (`formula.expr`, with each name it reads given as the field and
+  step it comes from). A step with no unit has no units rung, an answer of
+  zero or one not yet computable has no order of magnitude, and a step whose
+  check is not a formula has no formula rung: a question that asks for
+  reasoning is never turned into a formula nobody wrote. No rung states the
+  answer, a choice or a written answer gets none, and every ladder says
+  "Generated from this step's own check, not written by its author." Every
+  shipped numeric step has authored hints (`tests/recovery.test.js` holds
+  that), so today the generated ladder is met only on an instructor's own
+  investigation (the Composer) or a package's.
+- **Try again with the instrument explained**, where the step has an
+  instrument with an explainer: it opens that explainer through the panel's
+  own "What am I looking at?" button and moves focus there. The roadmap's
+  words were "try again with a worked example"; the button is not called
+  that, because the explainer is four answers about the picture and not a
+  worked example. The worked answer a step's author wrote (`worked`) stays
+  where it was, behind the hints.
+
+The rungs taken are kept under the step's `:gen` key (`units`, `magnitude`,
+`formula`), apart from `:help`, so the report's "Help taken" still counts the
+author's hints only. **The attempts record:** every wrong answer checked (a
+number as typed, a choice as its option number) is appended to the step's
+`:tries` key, one per line, at most eight of at most 40 characters, the same
+one not twice in a row (`withTry`, `js/investigations/progressSchema.js`).
+`attempts` still counts every check and `:first` still holds the first answer.
+Both keys are sub-keys of `responses`, so the progress record's schema stays
+2, the backup and the submission token carry them as they carry `:help`, and a
+2.0.0 build opens a record with them, keeps them and saves them again
+(`tests/compat/boundary.mjs`, `progress-attempts`; FORMATS.md, "Not carried").
+The record is kept for the class summary of Prompt 173, which does not read
+it yet. Nothing here is a score, a streak or a lock.
+
 ## Feedback by outcome class
 
 A numeric step may declare `feedback` with any of `correct`, `close`,

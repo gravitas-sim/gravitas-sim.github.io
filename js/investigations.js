@@ -2413,9 +2413,8 @@ export async function openInvestigation(id, opts = {}) {
   els.panel.hidden = false;
   els.panel.classList.add('is-open');
   wireMore(els.more, 'lesson', { ...MORE, depth, declared: assignment?.mo });
-  // "You may want X first" (Prompt 276), behind More: asked of the Library's
-  // index when the reader opens it, or now if it stands open. Advice, never a
-  // lock; an assignment is the instructor's own order and gets none.
+  // "You may want X first" (Prompt 276): asked when More opens. Advice, never
+  // a lock; an assignment is the instructor's own order and gets none.
   const before = document.getElementById('investigationBefore');
   if (before) {
     before.hidden = true;

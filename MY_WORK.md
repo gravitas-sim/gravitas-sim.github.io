@@ -115,10 +115,34 @@ appear on an investigation that is itself not done as "You may want X first",
 with a link. That is advice: nothing is locked, hidden or disabled, and every
 investigation opens from its own link. There are no points, badges or streaks.
 
-**Not built here (Prompt 276 parts 2 and 3 and the card and panel forms of
-part 1).** Prerequisites on a Library card and in the lesson panel; the
-recovery pattern (a generated minimal hint ladder from the step's check,
-"the units", "the order of magnitude", "the formula", named as generated; a
-path to the worked example; the attempts record for Prompt 173's summary and
-its compatibility-corpus row); the comparison across investigations. Spanish
-has not been read by a fluent reader.
+**On a Library card and in the lesson panel (Prompt 276, part 2).** The same
+advice is on a card of the Library's results ("You may want this first:" and a
+link to the first unfinished prerequisite that is an investigation; not on the
+compact cards of the default view, and not once the card's own investigation
+is finished) and in the lesson panel, inside More (asked of the Library's
+index when the reader opens More; an assignment is the instructor's own order
+and gets none). The card still opens and nothing is disabled.
+
+## The same quantity in two investigations (Prompt 276, part 2)
+
+Under the review, "Across your investigations" lists the comparisons that
+apply (`acrossInvestigations`, `js/myWork/evidenceReview.js`): two entries of
+one kind, kept in two different investigations, that hold a quantity in
+common which the comparison can compare as they stand (one unit, a one-sigma
+uncertainty on each); at most six, the newest first, none for an entry whose
+checksum no longer matches. Each says where the two were measured, and
+"Compare these" ticks the two and puts the reader on the comparison's
+statement. The comparison is Part A's `compareEntries` and its covariance
+rule, unchanged: two records of two investigations state no coefficient of
+each other, so the statement says "Independence assumed" unless the records
+share data or calibration or the student gives a correlation. Nothing is
+listed where no such pair exists, and no pair is inferred from titles.
+
+**The recovery pattern** (the generated hint ladder, the instrument explained
+and the attempts record) is in SCAFFOLDING.md, "After a wrong answer".
+
+**Held (Prompt 276).** The class summary of Prompt 173 does not read the
+attempts record yet. A comparison across investigations of quantities with
+different ids or units (a mass in one, a period in another) is not offered:
+it would need a statistics consumer whose gate has not passed. Spanish has not
+been read by a fluent reader.

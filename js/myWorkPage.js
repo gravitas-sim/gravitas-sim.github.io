@@ -490,7 +490,6 @@ function showMade() {
         surfaces: { SURFACE_ROUTE, surfaceOf },
       };
       await m.show(page);
-      // The same quantity in two investigations, offered for comparison (276).
       await m.showAcross(page);
     });
 }

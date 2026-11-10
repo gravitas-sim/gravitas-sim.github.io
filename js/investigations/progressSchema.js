@@ -307,32 +307,21 @@ export function writeProgress({
   };
 }
 
-// --- The attempts record (Roadmap III Prompt 276) -------------------------------
-// The wrong answers a student checked on the way, in order, kept under the
-// step's own `:tries` sub-key of `responses`: one per line, as typed (a choice
-// as its option number). Additive: `attempts` still counts every check and
-// `:first` still holds the first answer. An older build keeps a sub-key of a
-// step it knows and reads nothing from this one, so a record with it opens
-// there unchanged (tests/compat/boundary.mjs, progress-attempts). Kept for
-// the class summary of Prompt 173, which does not read it yet.
+// --- The attempts record (Prompt 276; SCAFFOLDING.md) --------------------------
+// The wrong answers checked on the way, in order, under the step's `:tries`
+// sub-key of `responses`: one per line, as typed. Additive: an older build
+// keeps the sub-key and reads nothing from it.
 
-/** How many wrong answers are kept for one step, and how much of each. */
 export const TRIES_LIMIT = 8;
 export const TRY_LENGTH = 40;
 
-/**
- * The wrong answers kept for a step.
- * @param {*} stored - The `:tries` value
- * @returns {Array<string>} In the order they were given
- */
+/** @param {*} stored - A `:tries` value @returns {Array<string>} In order */
 export const triesOf = stored =>
   typeof stored === 'string' ? stored.split('\n').filter(Boolean) : [];
 
 /**
- * The `:tries` value with one more wrong answer. An answer the same as the
- * last one kept is not kept twice, and nothing is added past the limit: the
- * first tries are the ones that say where a student started.
- *
+ * A `:tries` value with one more wrong answer: not the same one twice in a
+ * row, and none past the limit (the first tries say where a student began).
  * @param {*} stored - The value so far
  * @param {*} answer - What was checked and found wrong
  * @returns {string|undefined} The new value; undefined while there is none
