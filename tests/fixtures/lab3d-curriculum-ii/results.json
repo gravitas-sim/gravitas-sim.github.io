@@ -1,0 +1,437 @@
+{
+ "format": "gravitas.lab3d-curriculum-ii-results/1",
+ "oracle": "python3 -E, numpy 1.26.4, scipy 1.13.1",
+ "node": "v24.4.0",
+ "legs": [
+  {
+   "id": "A1",
+   "measured": {
+    "outside": 0,
+    "of": 2000,
+    "worstFractionOfBound": 0.000194
+   },
+   "pass": true,
+   "what": "elements -> state -> elements on 2,000 seeded orbits (e in [0.02, 0.9], i in [1, 179] degrees, all angles seeded)",
+   "bound": "|da|/a <= 1e-11/(1-e); |de| <= 1e-11/(1-e); every angle (i, Omega, omega, M) <= 1e-9 rad"
+  },
+  {
+   "id": "A2",
+   "measured": {
+    "differing": 0,
+    "of": 14
+   },
+   "pass": true,
+   "what": "Apply with no field edited returns the system byte-identical (JSON.stringify of the bodies), on every guide system",
+   "bound": "differing = 0"
+  },
+  {
+   "id": "A3",
+   "measured": {
+    "differingBodies": 0,
+    "elementErrors": 0,
+    "of": 1000
+   },
+   "pass": true,
+   "what": "one field edited, each of the six, on 1,000 seeded systems: every other body bit-identical; the edited body's other five elements within A1's bounds",
+   "bound": "differing bodies = 0; other-element error within A1"
+  },
+  {
+   "id": "A4",
+   "measured": {
+    "worstDifference": 1.11e-16
+   },
+   "pass": true,
+   "what": "a body with a child: the child's state relative to the edited body is unchanged by the edit",
+   "bound": "relative error <= 1e-12"
+  },
+  {
+   "id": "A5",
+   "measured": {
+    "differing": 0,
+    "of": 7
+   },
+   "pass": true,
+   "what": "the panel's typed path (orbital layer, with frame, epoch and time scale named) against the kernel's elements.js on every guide edit",
+   "bound": "differing bits = 0"
+  },
+  {
+   "id": "A6",
+   "measured": {
+    "missed": 0,
+    "of": 8,
+    "detail": []
+   },
+   "pass": true,
+   "what": "refusals: parabolic e = 1, negative a on an ellipse, i outside [0, 180], a non-finite field, an edit of a body with no primary; each refused with a code and no system changed",
+   "bound": "missed = 0"
+  },
+  {
+   "id": "B1",
+   "measured": {
+    "rows": 18,
+    "worstAngleRad": 1.4e-14,
+    "worstRel": 8.88e-16
+   },
+   "pass": true,
+   "what": "the two-planet solar guide system, elements of each planet in the equatorial, invariable and sky planes (three observers), against the independent Python rotation and elements",
+   "bound": "angles <= 1e-9 rad; |da|/a <= 1e-10; |de| <= 1e-10"
+  },
+  {
+   "id": "B2",
+   "measured": {
+    "difference": 0
+   },
+   "pass": true,
+   "what": "the obliquity used for the equatorial plane against meanObliquityDeg(J2000) of the sky kernel",
+   "bound": "|difference| <= 1e-12 degrees"
+  },
+  {
+   "id": "B3",
+   "measured": {
+    "worstFraction": 6.76e-17
+   },
+   "pass": true,
+   "what": "the invariable plane: the total angular momentum of the bodies about their barycenter, in that plane's axes, has no x or y component",
+   "bound": "<= 1e-12 of |L|"
+  },
+  {
+   "id": "B4",
+   "measured": {
+    "worstDet": 6.66e-16,
+    "worstOrthonormal": 7.77e-16
+   },
+   "pass": true,
+   "what": "every plane's axes orthonormal and right-handed, on 1,000 seeded observers",
+   "bound": "|det - 1| <= 1e-14; |R R^T - I| <= 1e-14"
+  },
+  {
+   "id": "B5",
+   "measured": {
+    "worstRelA": 2.96e-16,
+    "worstAbsEOrAngle": 3.33e-16
+   },
+   "pass": true,
+   "what": "a, e and the mutual inclination of two orbits do not depend on the plane",
+   "bound": "<= 1e-12 (relative for a, absolute for e and the angle)"
+  },
+  {
+   "id": "B6",
+   "measured": {
+    "worstRad": 8.88e-16
+   },
+   "pass": true,
+   "what": "the inclination in the sky plane equals the angle between the orbit's normal and the line of sight to the observer",
+   "bound": "<= 1e-12 rad"
+  },
+  {
+   "id": "C1",
+   "measured": {
+    "cases": 218,
+    "worstRelative": 3.06e-8
+   },
+   "pass": true,
+   "what": "apparent ellipse semi-axes of an orbit seen from an observer (the guide systems and 200 seeded orbits and observers) against a 200,000-point brute-force projection in the oracle",
+   "bound": "relative <= 1e-6"
+  },
+  {
+   "id": "C2",
+   "measured": {
+    "worst": 3.23e-15
+   },
+   "pass": true,
+   "what": "a circular orbit: minor / major = |cos i'|, i' measured in the sky plane",
+   "bound": "<= 1e-12"
+  },
+  {
+   "id": "C3",
+   "measured": {
+    "cases": 103,
+    "worstImpactStarRadii": 2.72e-10,
+    "worstChordStarRadii": 8.21e-12
+   },
+   "pass": true,
+   "what": "transit impact parameter and chord on the eclipse guide systems and 200 seeded orbits against the oracle's bisection; circular orbits against a |cos i'| / R*",
+   "bound": "impact <= 1e-8 star radii; chord half-length <= 1e-8 star radii"
+  },
+  {
+   "id": "C4",
+   "measured": {
+    "wrong": 0,
+    "of": 201,
+    "limitDeg": 0.3151
+   },
+   "pass": true,
+   "what": "an orbit that does not pass in front of the star (b > R* + Rp) reports no transit; one that does reports it, on a sweep of i' in 0.01 degree steps at the guide's a and radii",
+   "bound": "wrong = 0"
+  },
+  {
+   "id": "D1",
+   "measured": {
+    "worstFractionOfA": 3.94e-14
+   },
+   "pass": true,
+   "what": "the Kepler-only session's positions at five times (10 orbits included) against the oracle's own Kepler solution (scipy brentq on Kepler's equation, no Gravitas code)",
+   "bound": "<= 1e-10 a"
+  },
+  {
+   "id": "D2",
+   "measured": {
+    "worst": 2.89e-15
+   },
+   "pass": true,
+   "what": "the osculating elements of every body are constant over 1,000 ticks of a Kepler-only run (it cannot show libration or secular exchange)",
+   "bound": "|da|/a, |de|, every angle <= 1e-11"
+  },
+  {
+   "id": "D3",
+   "measured": {
+    "worstFractionOfA": 4.3e-8
+   },
+   "pass": true,
+   "note": "five orbits, a test mass",
+   "what": "a test mass (m = 1e-9) in a Kepler-only run against the N-body live session over 5 orbits (the restricted limit)",
+   "bound": "<= 1e-6 a"
+  },
+  {
+   "id": "D4",
+   "measured": {
+    "differing": 0
+   },
+   "pass": true,
+   "what": "the precomputed (replay) session reproduces a recorded N-body run, position and velocity bits",
+   "bound": "differing bits = 0"
+  },
+  {
+   "id": "D5",
+   "measured": {
+    "missed": 0,
+    "checked": 477
+   },
+   "pass": true,
+   "what": "run-mode enforcement: a step declared nbody refused by a Kepler-only lab, a step declared kepler refused by an N-body lab, a step with no declared mode refused by the test, in every guide step of the curriculum",
+   "bound": "missed = 0 of every step"
+  },
+  {
+   "id": "E1",
+   "measured": {
+    "worstRad": 0.00945,
+    "samples": 121
+   },
+   "pass": true,
+   "what": "the resonant argument phi = 2 lambda_c - lambda_b - varpi_b of the guide's 2:1 pair, sampled every 5 inner orbits over the 600-orbit window: the kernel (yoshida4c, h = P/4000, as the guide runs it) against scipy DOP853 (rtol 1e-12, atol 1e-14) in the oracle from the same initial numbers",
+   "bound": "max |difference| <= 0.02 rad"
+  },
+  {
+   "status": "failed, labelled",
+   "label": "a measurement defect, not a physics failure: once per inner orbit the argument carries its short-period term, so the maxima found are that term’s; E2s measures the libration (amendment AM2)",
+   "id": "E2",
+   "measured": {
+    "kernelPeriodOrbits": 15.301,
+    "oraclePeriodOrbits": 17.545,
+    "relative": 0.128
+   },
+   "pass": false,
+   "what": "libration period (time between successive maxima of phi, quadratic peak fit on a 1-orbit sampling) kernel against oracle",
+   "bound": "relative <= 0.02"
+  },
+  {
+   "id": "E3",
+   "measured": {
+    "kernel": 0.5489,
+    "oracle": 0.5493,
+    "difference": 0.000442
+   },
+   "pass": true,
+   "what": "libration amplitude (max - min)/2, kernel against oracle",
+   "bound": "<= 0.02 rad"
+  },
+  {
+   "id": "E4",
+   "measured": {
+    "periodsInWindow": 39.21,
+    "maxAbsPhi": 0.5497
+   },
+   "pass": true,
+   "what": "the window holds at least five libration periods of the kernel's run, and phi never leaves (-pi, pi) (it librates, it does not circulate)",
+   "bound": "periods >= 5; max |phi| < pi"
+  },
+  {
+   "id": "E2s",
+   "measured": {
+    "kernelPeriodOrbits": 112.38,
+    "oraclePeriodOrbits": 112.41,
+    "maxima": [
+     6,
+     6
+    ],
+    "relative": 0.000279
+   },
+   "pass": true,
+   "what": "libration period (mean time between successive maxima of the smoothed argument, quadratic peak fit on a 1-orbit sampling) kernel against oracle",
+   "bound": "relative <= 0.02"
+  },
+  {
+   "id": "E4s",
+   "measured": {
+    "periodsInWindow": 5.339,
+    "maxAbsPhi": 0.5497
+   },
+   "pass": true,
+   "what": "the window holds at least five libration periods of the kernel's smoothed argument, and phi never leaves (-pi, pi)",
+   "bound": "periods >= 5; max |phi| < pi"
+  },
+  {
+   "id": "E5",
+   "measured": {
+    "energy": 2.93e-13,
+    "angularMomentum": 3.2e-16
+   },
+   "pass": true,
+   "what": "the kernel's conservation over the window: energy and angular momentum vector",
+   "bound": "relative energy error <= 1e-9; angular momentum <= 1e-12"
+  },
+  {
+   "id": "E6",
+   "measured": {
+    "rangeRad": 1.14e-12
+   },
+   "pass": true,
+   "what": "the same pair in Kepler-only mode: the range of phi over the window",
+   "bound": "<= 1e-9 rad (no libration is possible)"
+  },
+  {
+   "status": "failed, labelled",
+   "label": "a consequence of E2: the period in the text cannot equal the short-period term’s; E7s compares it with the smoothed period (amendment AM2)",
+   "id": "E7",
+   "measured": {
+    "statedWindow": 600,
+    "statedPeriod": 112,
+    "statedAmplitude": 0.55,
+    "kernelPeriod": 15.3,
+    "kernelAmplitude": 0.549
+   },
+   "pass": false,
+   "what": "the guide's stated window, period and amplitude equal the validator's, as the text prints them",
+   "bound": "window exact; period within 1 inner orbit; amplitude within 0.01 rad"
+  },
+  {
+   "id": "E7s",
+   "measured": {
+    "statedWindow": 600,
+    "statedPeriod": 112,
+    "statedAmplitude": 0.55,
+    "kernelSmoothedPeriod": 112.4,
+    "kernelAmplitude": 0.549
+   },
+   "pass": true,
+   "what": "the guide's stated window, period and amplitude equal the validator's, as the text prints them: the period against E2s's smoothed period of the kernel, the amplitude against E3's",
+   "bound": "window exact; period within 1 inner orbit; amplitude within 0.01 rad"
+  },
+  {
+   "id": "E8",
+   "measured": {
+    "stepPOver400Period": 112.4,
+    "guideStepPeriod": 112.4,
+    "relativeChange": 0.00000173
+   },
+   "pass": null,
+   "note": "reported, no bound",
+   "what": "a step ten times coarser (h = P/400) changes the libration period: how much, reported (this is why the guide states its step)",
+   "bound": "reported, no bound"
+  },
+  {
+   "id": "F1",
+   "measured": {
+    "kernelDeg": 31.1467,
+    "oracleDeg": 31.1467,
+    "worstDifferenceRad": 1.11e-16
+   },
+   "pass": true,
+   "what": "the two-planet guide system's mutual inclination: the instrument against the spherical-trigonometry formula and the oracle",
+   "bound": "<= 1e-9 rad"
+  },
+  {
+   "id": "F2",
+   "measured": {
+    "lawRelative": 9.32e-8,
+    "sumRelative": 1.14e-8
+   },
+   "pass": true,
+   "what": "the invariable-plane law on the same system: m sqrt(a(1-e^2)) sin i' of the two planets in that plane (nodes opposite), and i'_b + i'_c = I, with the barycentric angular momentum and astrocentric orbits (the planets are light, so only to about a part in a thousand)",
+   "bound": "relative <= 5e-3"
+  },
+  {
+   "id": "F3",
+   "measured": {
+    "eccentricityPeak": 0.8398,
+    "corpusPrediction": 0.838,
+    "peakTime": 28576,
+    "statedTime": 28800,
+    "mutualAtPeakDeg": 39.4
+   },
+   "pass": true,
+   "what": "the Kozai-Lidov window of R6 as the guide states it: the first eccentricity peak time and its e and mutual inclination, from the kernel's own run, against R6's reference values in the kernel's corpus",
+   "bound": "e within 0.01 of the corpus; peak time within 3 percent of the corpus's run"
+  },
+  {
+   "id": "G2",
+   "measured": {
+    "missing": 0,
+    "spanishOnly": 0
+   },
+   "pass": true,
+   "what": "every step of the five new guides has its words in English and Spanish, and Spanish carries no key English lacks",
+   "bound": "missing = 0"
+  },
+  {
+   "id": "H1",
+   "measured": {
+    "kernelDegPer100": -1.265,
+    "oracleDegPer100": -1.265,
+    "relative": 7.78e-10,
+    "stated": -1.27
+   },
+   "pass": true,
+   "what": "the rate at which planet b's node (in the invariable plane fixed at the start) moves over 2,000 inner orbits, in degrees per 100 orbits: the kernel (yoshida4c, h = P/4000, as the guide runs it) against scipy DOP853 (rtol 1e-12, atol 1e-14) in the oracle from the same numbers, and the guide's sentence ('about 1.3 degrees per 100 orbits, backward') against both",
+   "bound": "kernel vs oracle relative <= 0.05; the sentence's number within 5 percent of the kernel's and its sign right"
+  }
+ ],
+ "history": [
+  {
+   "leg": "B4",
+   "first": "worst |R R^T - I| 3.56e-14 against 1e-14: the sky axes lost digits near a pole",
+   "done": "planeAxes builds the sky axes in closed form (js/lab3d/view/instruments.js); remeasured",
+   "now": "pass"
+  },
+  {
+   "leg": "C1",
+   "first": "worst relative 1.08e-4, then 2.9e-3: the oracle swept 20,000 points and 2,001 directions, short of the committed 200,000 points and too coarse for nearly edge-on orbits",
+   "done": "oracle brought to the committed 200,000 points, five nested zooms of the direction; the instrument was not changed",
+   "now": "pass"
+  },
+  {
+   "leg": "C3",
+   "first": "worst impact 1.18e-6 star radii against 1e-8: the oracle took the least of 2,000,000 samples to a parabola",
+   "done": "oracle refines by bounded minimisation (the committed bisection); the instrument was not changed",
+   "now": "pass"
+  },
+  {
+   "leg": "F3",
+   "first": "peak e 0.013 at t = 3,140: the validator ran the R6 session to its length cap and did not continue it as the page does",
+   "done": "validator continues from the session’s own numbers; the lab and the kernel were not changed",
+   "now": "pass"
+  },
+  {
+   "leg": "E2, E7",
+   "first": "E2 period 15.3 orbits (kernel) against 17.5 (oracle), E7 stated 103: the maxima of an unsmoothed one-orbit sampling are the short-period term’s",
+   "done": "recorded as AM2 before the smoothed legs ran; E2 and E7 stay failing, E2s, E4s and E7s added; the stated period moved from 103 to the measured 112 and the amplitude from 0.52 to 0.55",
+   "now": "E2, E7 failed (labelled); E2s, E4s, E7s pass"
+  }
+ ],
+ "notMeasuredHere": [
+  "G1",
+  "G3",
+  "G4",
+  "G5"
+ ]
+}

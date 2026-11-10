@@ -287,6 +287,19 @@ export const FORMATS = Object.freeze([
     schema: 'experiment-1.schema.json',
   },
   {
+    name: 'gravitas.experiment (with an ensemble block)',
+    fields: 'format, formatVersion',
+    version: 2,
+    const: ['js/experiments/experimentManifest.js', 'ENSEMBLE_FORMAT_VERSION'],
+    owner:
+      'js/experiments/ensemble/record.js validateEnsemble, withVersion; the shipped reader js/experiments/experimentManifest.js migrateExperiment',
+    persisted: 'download, memory',
+    older:
+      'reads v1: a manifest without an ensemble block is still written as /1',
+    newer: 'refused, in words',
+    schema: 'experiment-2.schema.json',
+  },
+  {
     name: 'gravitas.experiment-result',
     fields: 'format, formatVersion',
     version: 1,
@@ -736,6 +749,10 @@ export const COMPAT = Object.freeze({
   'gravitas.ledger': { fixture: 'ledger-entry', unknown: 'ignored' },
   'gravitas.observation': { fixture: 'observation', unknown: 'ignored' },
   'gravitas.experiment': { fixture: 'experiment', unknown: 'ignored' },
+  'gravitas.experiment (with an ensemble block)': {
+    fixture: 'experiment',
+    unknown: 'ignored',
+  },
   'experiment store': { fixture: 'experiment-store', unknown: 'ignored' },
   'gravitas.assignment': { fixture: 'assignment-link', unknown: 'n/a' },
   'world share link': { fixture: 'share-link', unknown: 'n/a' },
@@ -940,6 +957,7 @@ ${compatibilitySection(formats)}
 - **\`synthetic\` origin (Prompt 84).** A \`gravitas.observation/1\` made by a forward model has origin \`synthetic\`, source kind \`forward\` and a \`synthetic\` block holding the model, the \`gravitas.observing-setup/1\` it was run with and the truth manifest. The values are new members of two enums and the block is optional, so the format stays version 1: an older reader refuses such a file at the origin, in words, rather than opening it as if it were observed.
 - **Image marks, \`workspace.marks\` (Prompt 179).** An Observatory save of an image the reader marked carries \`workspace.marks\`, a \`gravitas.image-marks/1\` block: the frames' SHA-256 digests, the marks as placed (kind, tag, points, a known length for a reference pair) and, for a refined mark, the result and its uncertainty. It is written only when marks exist, so a save without marks is the bytes it always was, and the file stays \`gravitas.observation/1\`. The block nests eight deep, and the 2.0.0 file reader stops at six, so it refuses such a file as \`nested too deep\` (\`tests/compat/boundary.mjs\`: \`workspace-marks\`) rather than opening it without the marks; the current reader reads eight. The marks record in the ledger is a \`gravitas.artifact/1\` (notebook source \`image-marks\`), which the 2.0.0 reader opens as it opens any envelope. Reopening against a changed image is refused by the instrument, not by a reader.
 - **Sky calibration, \`workspace.calibration\` (Prompt 181).** An Observatory save of an image the reader calibrated carries \`workspace.calibration\`, a \`gravitas.image-calibration/1\` block: the frame's SHA-256 digest, the reference stars (pixel position and its uncertainty, sky position), the reference catalogue's identity and epoch, and either the solved WCS (reference pixel and position, the CD matrix, the model and its tangent point) with its residuals, covariance and verdict, or a WCS read from the image's header and marked as not solved here. It is written only when a calibration exists, so a save without one is the bytes it always was. The WCS matrix nests seven deep, and the 2.0.0 file reader stops at six, so it refuses such a file as \`nested too deep\` (\`tests/compat/boundary.mjs\`: \`workspace-calibration\`) rather than opening it without the calibration; the current reader reads eight. The calibration in the ledger is a \`gravitas.artifact/1\` (notebook source \`image-calibration\`), which the 2.0.0 reader opens as it opens any envelope. Reopening against a changed image is refused by the tool, not by a reader.
+- **The ensemble block of the experiment record (Prompt 265).** A \`gravitas.experiment\` record may carry an \`ensemble\` block: the kind (a sweep that names the legacy streams it draws from, an ensemble of one world run with different seeds, an injection campaign, or a bootstrap over the trials of a finished result), the master seed, the number of trials, the named streams as \`{id, algorithm, version, key}\`, the fork each trial draws from (\`trial-index\`: trial i draws from \`stream(id, seed, 'trial', i)\`; \`legacy-sweep\` for a sweep), the kernel versions, the kind's config, and, once it has run, \`ensemble.result\`: the trials (each a \`gravitas.artifact\` envelope), the engine fingerprint, the summary and the digest a report cites. A 2.0.0 reader accepts an unknown field and drops it silently, so a record that has the block is written as \`gravitas.experiment/2\` (\`tests/compat/boundary.mjs\`: \`ensemble-fields\`) and a 2.0.0 reader refuses it by its version; a manifest without the block is still /1, byte for byte. The shipped reader reads /2 and does not run it (the runner page runs sweeps); \`js/experiments/ensemble/\` runs and replays it (EXPERIMENT_ENSEMBLES.md).
 - **Uncertainty states, \`correlatedWith\` and \`fit\` (Prompt 150).** The artifact envelope's uncertainty \`kind\` gains \`not-constrained\`, \`failed\`, \`assumed\`, \`model-limited\` and \`limit\`; a quantity gains \`correlatedWith\`; the envelope gains \`fit\`, a fit-result record; a \`failed\` quantity may have a \`null\` value. A 2.0.0 reader refuses a quantity of a new kind in words, and silently drops \`correlatedWith\` and \`fit\`, so an envelope that has any of them is written as \`gravitas.artifact/2\` (Prompt 176; \`tests/compat/boundary.mjs\`: \`not-constrained-state\`, \`fit-result-record\`, \`correlation-reference\`) and a 2.0.0 reader refuses it by its version instead. An envelope that needs none is still /1. \`legacyView()\` gives a 2.0.0 reader the /1 envelope it can open, with the loss listed in the warnings.
 - **\`derived\` uncertainty basis and a formula on a numeric question (Prompt 100).** The artifact envelope's \`basis\` gains \`derived\`, for an uncertainty propagated from a formula's inputs, and a numeric question in an investigation pack or question bank may carry \`formula\` ({expr, of, tolerancePct}) in place of an \`answer\`. Both are optional or new members of an enum, so \`artifact/1\`, \`investigation-pack/1\` and \`question-bank/1\` stay version 1: an older reader refuses them in words as an unknown value or field.
 - **Mission links and made records (Prompt 106).** A \`gravitas.made\` record may be of kind \`mission\`, holding a \`gravitas.mission-plan/1\` file; a build from before it reports the record unreadable. The mission lab reads a plan from \`#plan1.<base64url JSON>\`; any other fragment is ignored. A course pack /2 \`guide\` item may name \`ml-orbit\`, \`ml-window\` or \`ml-cruise\`; a build from before it refuses the id in words.

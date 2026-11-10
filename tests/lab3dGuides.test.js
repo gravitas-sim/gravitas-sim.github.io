@@ -41,6 +41,11 @@ const CHECKS = [
   'tool',
   'played',
   'recorded',
+  'mode',
+  'plane',
+  'observer',
+  'panel',
+  'elements',
 ];
 const key = (guide, step) =>
   LAB3D_KEY.find(
@@ -287,6 +292,7 @@ describe('the checks', () => {
       state: { system: null, ids: [] },
       G: 1,
       now: () => null,
+      sys: () => null,
       recorded: () => null,
     };
     for (const [name, fn] of Object.entries(ANSWERS))

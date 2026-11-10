@@ -1,0 +1,195 @@
+{
+ "format": "gravitas.crossmatch-data-legs-clustering-results/1",
+ "thresholdsSha256": "a3af73486acf07e0d5fd66ded12e2f920dad6785e0e9a1745901643197e1c69a",
+ "oracleSha256": "b8f74530d894a6f7c81aabca5fa5d5980be3ca0eebd6761a5e1792907c810e06",
+ "node": "v22.23.4",
+ "inputs": {
+  "R4Sha256": "251920df19f3ed7c22c2f43b8776df08c4df80041e550eb1968f86bd5c558aad"
+ },
+ "failed": [],
+ "counts": {
+  "pass": 2,
+  "fail": 0,
+  "reported": 1,
+  "not run": 1
+ },
+ "rows": [
+  {
+   "id": "B8c.sampleIdentity",
+   "group": "authentic",
+   "status": "pass",
+   "measured": {
+    "selected": 2911,
+    "pack": 2911,
+    "maxStepFraction": 1.0000000003174137
+   },
+   "bound": {
+    "count": 2911,
+    "maxStepFraction": 1.000001
+   },
+   "note": "the oracle's value 1.0000000003174137"
+  },
+  {
+   "id": "B8c.stripWithDeclination",
+   "group": "authentic",
+   "status": "reported",
+   "measured": {
+    "n": 2911,
+    "edgesDeg": [
+     0.05,
+     0.1,
+     0.2,
+     0.5,
+     1,
+     2
+    ],
+    "extentRaDeg": [
+     130.2605,
+     239.9991
+    ],
+    "F1": {
+     "nD": 2911,
+     "nR": 29110,
+     "DD": [
+      2781,
+      8063,
+      31743,
+      45009,
+      82837
+     ],
+     "DR": [
+      30106,
+      107532,
+      492796,
+      741157,
+      1421360
+     ],
+     "RR": [
+      150342,
+      533790,
+      2446782,
+      3687092,
+      7044351
+     ],
+     "w": [
+      0.847922,
+      0.496555,
+      0.283749,
+      0.211025,
+      0.158638
+     ],
+     "sigmaPoisson": [
+      0.035042,
+      0.016667,
+      0.007205,
+      0.005708,
+      0.004026
+     ],
+     "sigmaJackknife": [
+      0.19153,
+      0.147988,
+      0.11234,
+      0.10347,
+      0.102355
+     ],
+     "T": 43.799,
+     "df": 5,
+     "quantile99": 15.0863,
+     "detected": true
+    },
+    "F2": {
+     "nD": 2911,
+     "nR": 29110,
+     "DD": [
+      2781,
+      8063,
+      31743,
+      45009,
+      82837
+     ],
+     "DR": [
+      32921,
+      117769,
+      538977,
+      812749,
+      1543069
+     ],
+     "RR": [
+      164100,
+      585717,
+      2680584,
+      4042540,
+      7693778
+     ],
+     "w": [
+      0.689137,
+      0.366417,
+      0.173948,
+      0.103307,
+      0.071471
+     ],
+     "sigmaPoisson": [
+      0.032031,
+      0.015217,
+      0.006589,
+      0.005201,
+      0.003723
+     ],
+     "sigmaJackknife": [
+      0.10509,
+      0.073873,
+      0.034949,
+      0.027371,
+      0.040477
+     ],
+     "T": 109.7401,
+     "df": 5,
+     "quantile99": 15.0863,
+     "detected": true
+    }
+   },
+   "bound": null,
+   "note": "2911 galaxies with their own declination; the box is the footprint; no mask"
+  },
+  {
+   "id": "B9.authenticReference",
+   "group": "authentic",
+   "status": "not run",
+   "measured": null,
+   "bound": null,
+   "note": "no published angular correlation of the spectroscopic main sample at r < 17.77 and no footprint of the strip was found (SOURCES.json notFetched)"
+  },
+  {
+   "id": "B10.stripOracle",
+   "group": "oracle",
+   "status": "pass",
+   "measured": {
+    "F1": {
+     "maxDDDifference": 0,
+     "sigmaDifference": [
+      0.4835502093017789,
+      1.1049257150526859,
+      1.481698234011669,
+      1.0059314991177104,
+      1.1907367192043177
+     ]
+    },
+    "F2": {
+     "maxDDDifference": 0,
+     "sigmaDifference": [
+      0.37449775294884236,
+      0.5551225298668936,
+      1.4331848044801487,
+      1.2938573592387006,
+      0.16283500262052206
+     ]
+    }
+   },
+   "bound": {
+    "maxDDDifference": 0,
+    "maxCombinedSigma": 4
+   },
+   "note": null
+  }
+ ]
+}

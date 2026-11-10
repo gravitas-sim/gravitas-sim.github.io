@@ -1,0 +1,494 @@
+{
+ "format": "gravitas.crossmatch-thresholds/1",
+ "prompt": "Roadmap III, Prompt 263 Part A, Crossmatching with epochs on precise packs (tranche T5, authorized by Checkpoint V's recorded outcome CONTINUE AS PLANNED, register row D-R10-254-01 and DECISIONS_2026-11-06.md; hard prerequisites 154 (the statistics kernel), 181 (WCS-lite and registration) and 254 landed on v3 0a2bdf76). Production prompt, validation contract of section 7.5.8. This pull request is the kernel, its validation, CROSSMATCH.md and the files it asks for; the table view's crossmatch tool, the distribution panel, the lesson 'Two catalogs, one sky' and the model page section are NOT built (consumers rule held, see scope.notBuilt). Part B (the clustering gate) has its own committed file, clustering-thresholds.json, committed in the same commit as this one.",
+ "document": "CROSSMATCH.md, written after this file",
+ "committed": "before js/kernels/crossmatch/, the validator, the oracle script and its pinned output existed, and before any pair, match count, separation, shifted count, false-match estimate, p value, interval or oracle number of Prompt 263 was computed or seen. Phase order: this file and clustering-thresholds.json ALONE (commit 1); the independent oracle and its pinned output (commit 2, before the kernel); the kernel (commit 3); the validator, tests and results, run once, with the first run kept (commit 4). Any amendment is a separate commit before any run of the validator and records the reason and that no result had been seen.",
+ "rule": "A crossed bound is a failed check, recorded in failed-legs.json and left failing; nothing is moved after a result; only Carl resets a bound. A leg that cannot be measured is NOT RUN and says why, and nothing is fetched by any agent: published values and external data enter only as files Carl's session fetches into scratch-data/ (outside every repository, terms read, sha256). The oracle may use only software installed on the machine (python -E, numpy, scipy, astropy: nothing downloaded is run) and no Gravitas code.",
+ "seenBeforeCommitting": "the roadmap sections (7, 7.5, 12.1, 13, Appendix C, the Prompt 263 text); Checkpoint V and the decisions files; STATISTICS.md and the export lists of the statistics kernel (js/kernels/statistics: poissonInterval, difference, refused), js/measure/tableOps.js (the existing crossMatch, which has no epochs), js/kernels/sky/coords.js (unitVector), js/platform/artifact.js, js/random/streams.js; the metadata of the packs gaia-dr3-ngc2420, gaia-dr3-solar-neighbourhood, sdss-dr18-ngc2420-photometry and sdss-dr18-redshift-slice (column lists, the frame strings, the reductions prose about rounding, the footprint circle); the installed Python packages (astropy 6.0.1, numpy 1.26.4, scipy 1.13.1, Python 3.9.6). No pack row was opened or decoded, no pair or separation was computed, and no published number, citation detail, terms text or tool output was typed from memory.",
+ "seeds": {
+  "oracle": "numpy default_rng: 2631 for the propagation cases, 2632 for the world W1 (the oracle writes the catalogs it drew and its own results, so the kernel is run on exactly those inputs), 2633 for the cone-search centres",
+  "kernel": "ensemble worlds draw from js/random/streams.js: stream('noise', 'p263', <leg id>, <world index>), i.e. the key 'p263:<leg id>:<index>' (for example 'p263:E4:17'); the worlds of E4 and E5 are the same 1000 worlds (leg id E4), those of E6, E7 and E8 the same 200 (leg id E6), those of G3 and G4 and G6 the same where their designs coincide (leg id G3 for the null pairs, G4 for the shifted pairs); Gaussians by streams.gaussian; no Math.random, no clock"
+ },
+ "constants": {
+  "maxRadiusArcsec": 10,
+  "maxShiftArcsec": 3600,
+  "roundingFraction": "a catalog whose largest position rounding error (half its stored step, on the sky) exceeds this fraction of the match radius is refused: 0.25",
+  "rowLimit": 20000,
+  "minSample": 30,
+  "maxChanceProbability": "a shifted-match probability above this makes the false-match estimate 'unreliable' (the radius is too large for the density): 0.2",
+  "shifts": "8 bearings 0, 45, ..., 315 degrees at a distance of 20 times the radius (a request may change both; the defaults are these)",
+  "coneMaxRadiusArcsec": 3600
+ },
+ "scope": {
+  "built": "js/kernels/crossmatch/: a cone search within a catalog through unit vectors (the sky kernel's unitVector); epoch propagation of positions with proper motions and their uncertainties to a common epoch (straight-line motion in space with the radial velocity taken as zero, refused when a catalog's epoch is absent, when a catalog without proper motions is at another epoch, or when a shift exceeds the maximum); a nearest-neighbour crossmatch within a radius no larger than the committed maximum, refused when a catalog's stored positions are rounded too coarsely for the radius or the rounding is not stated; the chance-coincidence (false-match) estimate from a shifted-match test with a Poisson interval and an optional footprint; the joined table as columns and as a gravitas.artifact/2 record with the match distance and the epoch difference per row; population distributions with Poisson intervals and a two-sample comparison of means through the statistics kernel's difference() in its valid class (independent samples, each of at least 30).",
+  "notBuilt": "the table view's crossmatch tool and distribution panel, the lesson 'Two catalogs, one sky' with its Spanish, depths and instructor materials, and the model page section: all are UI or student-facing content, and the consumers rule (Carl, 2026-11-05 and 2026-11-06) holds until its condition is met. They are named, not removed. A later prompt that Carl releases builds them on the kernel if every committed check passes, with the limits of CROSSMATCH.md."
+ },
+ "contract": {
+  "match": "Each row of A is paired with the nearest row of B within the radius (mode 'nearest': several rows of A may share one row of B, and the shared count is reported) or, in mode 'oneToOne', pairs are taken in order of increasing separation (ties by the lower index of A, then of B) and each row is used once. A row of A with another candidate within the radius is counted as ambiguous.",
+  "epoch": "positions are propagated to the epoch toEpoch (Julian years). For a source at unit vector r with tangent basis p (east) and q (north) and proper motion (mu_alpha*, mu_delta) in rad/yr: r' = normalised(r + dt (mu_alpha* p + mu_delta q)) with dt = toEpoch - epoch. That is straight-line motion with the radial velocity taken as zero (the perspective term that a radial velocity adds is neglected and stated). Position variances per axis: sigma'^2 = sigma0^2 + (sigma_mu dt)^2, position and proper motion errors taken as uncorrelated.",
+  "falseMatch": "The shifted-match test (stated from its definition; the published description is request R3): B is shifted on the sky by the distance D in each of K bearings and matched again to A within the same radius; the count C_k of rows of A with at least one shifted row of B within the radius estimates the chance coincidences, because a shift removes every physical counterpart. With a footprint circle of B, only the rows of A within (footprint radius - radius) of the shifted circle's centre are counted (E_k of them); p_hat = sum C_k / sum E_k and its interval is the exact Poisson (Garwood) interval of sum C_k, divided by sum E_k. The expected number of chance coincidences in the real match is p_hat times the number of rows of A; the false-match fraction is that over the number of matches, capped at 1. It is an UPPER BOUND on the false fraction whenever counterparts exist (a chance coincidence is a false match only if no nearer true partner exists), and equal to it for rows of A with no counterpart. Without a footprint the rate is biased low at the field's edge and says so."
+ },
+ "worlds": {
+  "W1": "oracle world (the oracle writes it, numpy seed 2632): disc of radius 300 arcsec on the sky centred at (150, +30) degrees (gnomonic: a point at tangent-plane offset (x, y) arcsec in the plane of the centre); 600 true objects uniform in the disc; 200 extra objects of A only and 200 of B only, uniform in the disc. A: epoch 2016.0, positions noise 0.03 arcsec per axis, proper motions (mu_alpha*, mu_delta) of the true objects drawn N(0, 150 mas/yr) per axis and reported with error 0.3 mas/yr (reported value = truth + N(0, 0.3)); B: epoch 2000.0, no proper motions, position = truth at 2016.0 minus 16 yr times the true proper motion, plus noise 0.1 arcsec per axis. Extra objects have proper motion N(0, 150 mas/yr) in A and none in B (B-only extras are placed anywhere). Match radius 2 arcsec. Both catalogs state a stored position step of 0.00001 degree.",
+  "W1ens": "the same design with the kernel's streams (200 worlds, 'p263:W1:<index>'), for the recovery and bound legs; the truth labels (which row is whose counterpart) are known.",
+  "W2": "unrelated fields for the false-match legs: A 1500 rows uniform in the disc of radius 540 arcsec, B 1500 rows uniform in the disc of radius 600 arcsec, same centre, both at epoch 2000.0 with no proper motions, radius 3 arcsec, shifts 8 at 60 arcsec with B's footprint (centre, 600 arcsec). Every match is false. The exact chance probability of an interior row is p_true = 1 - (1 - (3/600)^2)^1500 (B uniform in a disc of radius 600 arcsec, flat-sky; the disc of A keeps every row more than 60 arcsec from B's edge).",
+  "W3": "a crowded field for the reliability flag: as W2 with B of 20000 rows (the row limit) in the disc of radius 600 arcsec (p of about 0.4 at 3 arcsec).",
+  "packs": "the precise Gaia pack gaia-dr3-ngc2420 (A: 993 rows, epoch J2016.0 read from the pack's frame string, proper motions, positions rounded to 0.00001 degree read from its reductions) and the SDSS pack sdss-dr18-ngc2420-photometry (B: 2301 rows, epoch J2000 read from the pack's frame string as a declared nominal epoch, no proper motions, positions rounded to 0.00001 degree); toEpoch 2000.0; both sets lie in the circle of 14.1421 arcmin (848.526 arcsec) about (114.602, +21.575). The neighbourhood pack gaia-dr3-solar-neighbourhood is the rounded one (0.006 degree in right ascension and 0.004 in declination, read from its reductions).",
+  "G": "Poisson bins: expected counts 2, 5, 12, 30, 80, 150, each drawn as an independent Poisson count by inversion from the stream; two samples: Gaussian N(0,1) and N(d,1) of equal size n."
+ },
+ "checks": [
+  {
+   "id": "A1.north",
+   "group": "analytic",
+   "kind": "bound",
+   "what": "Pure northward proper motion: dec' = dec + atan(mu_delta dt) and the right ascension unchanged (the exact result of straight-line motion), at six combinations of dec in {-80, -30, 0, 30, 60, 85} degrees, mu_delta in {100, -3000, 8, 450, -20, 60} mas/yr and dt in {25, -16, 40, 3, -50, 7} yr.",
+   "limits": {
+    "maxAbsArcsec": 1e-08
+   }
+  },
+  {
+   "id": "A2.east",
+   "group": "analytic",
+   "kind": "bound",
+   "what": "Pure eastward proper motion mu_alpha* (the cos(dec)-scaled one): with s = mu_alpha* dt in radians, alpha' = alpha + atan2(s, cos dec) and sin dec' = sin dec / sqrt(1 + s^2), at the same six declinations and shifts, right ascension 10 degrees.",
+   "limits": {
+    "maxAbsArcsec": 1e-08
+   }
+  },
+  {
+   "id": "A3.zero",
+   "group": "analytic",
+   "kind": "bound",
+   "what": "dt = 0 returns every position and sigma bitwise unchanged, for rows with and without proper motions.",
+   "limits": {
+    "maxAbsArcsec": 0
+   }
+  },
+  {
+   "id": "A4.sigma",
+   "group": "analytic",
+   "kind": "bound",
+   "what": "The propagated variance per axis equals sigma0^2 + (sigma_mu dt)^2 for sigma0 in {0.001, 0.05, 1} arcsec, sigma_mu in {0.01, 0.3, 5} mas/yr, dt in {-30, 16, 50} yr (27 cases).",
+   "limits": {
+    "maxRel": 1e-12
+   }
+  },
+  {
+   "id": "A5.small",
+   "group": "analytic",
+   "kind": "bound",
+   "what": "For shifts |mu dt| of at most 1 arcsec the angular shift equals |mu dt| to a relative 1e-9 (the small-angle limit of the straight-line rule), at 50 random directions and declinations.",
+   "limits": {
+    "maxRel": 1e-09
+   }
+  },
+  {
+   "id": "A6.largeShift",
+   "group": "refusal",
+   "kind": "bound",
+   "what": "A shift of more than 3600 arcsec is refused with code 'shift-too-large' and a shift of exactly 3600 arcsec is not; a source at dec 89.9999 degrees moving north 25 yr at 5 mas/yr stays at |dec| < 90 with a right ascension that moved by 180 degrees (checked against the oracle in B1).",
+   "limits": {
+    "refused": true
+   }
+  },
+  {
+   "id": "B1.propagation",
+   "group": "oracle",
+   "kind": "bound",
+   "what": "300 sources (oracle seed 2631: dec uniform in sin dec over the whole sphere with 20 of them within 0.5 degree of a pole; proper motions N(0, 100) mas/yr per axis with 30 of them N(0, 3000); dt uniform in (-30, 30) yr): the kernel's propagated positions against astropy's SkyCoord.apply_space_motion with the radial velocity 0 and a distance of 1 kpc (erfa's straight-line space motion), separation on the sky.",
+   "limits": {
+    "maxSepArcsec": 1e-05
+   }
+  },
+  {
+   "id": "C1.pairs",
+   "group": "oracle",
+   "kind": "bound",
+   "what": "On world W1 the kernel's nearest-neighbour pairs within 2 arcsec (after propagation to epoch 2000.0) are the pairs astropy's match_to_catalog_sky gives for the same propagated positions (the oracle propagates with apply_space_motion and keeps pairs with separation at most 2 arcsec): the number of rows of A whose partner differs, or which is paired by one and not the other.",
+   "limits": {
+    "maxDifferences": 0
+   }
+  },
+  {
+   "id": "C2.distance",
+   "group": "oracle",
+   "kind": "bound",
+   "what": "The kernel's match distances of the paired rows of C1 against astropy's separations.",
+   "limits": {
+    "maxAbsArcsec": 1e-06
+   }
+  },
+  {
+   "id": "C3.cone",
+   "group": "oracle",
+   "kind": "bound",
+   "what": "A cone search of catalog B of world W1 at 20 centres (oracle seed 2633: uniform in the disc of radius 300 arcsec) with radii 5, 20 and 60 arcsec: the member rows against astropy separations from the same unit positions (no propagation: the cone search at the catalog's own epoch).",
+   "limits": {
+    "maxDifferences": 0
+   }
+  },
+  {
+   "id": "C4.oneToOne",
+   "group": "analytic",
+   "kind": "bound",
+   "what": "Three hand cases derived on paper before any run: (i) two rows of A at separations 0.3 and 0.5 arcsec from one row of B: 'nearest' pairs both and reports shared 1, 'oneToOne' pairs the 0.3 one only; (ii) a tie at exactly equal separations resolves to the lower index of A; (iii) a row of B at 2.0000 arcsec from a row of A with radius 2 is matched and one at 2.0001 is not.",
+   "limits": {
+    "exact": true
+   }
+  },
+  {
+   "id": "D1.packPairs",
+   "group": "authentic",
+   "kind": "bound",
+   "what": "Analysis contract fixed here: A is the precise Gaia pack, B the SDSS photometry pack, toEpoch 2000.0, radius 1 arcsec, mode 'nearest'. The kernel's pairs (read from the committed packs through js/tableObservation.js and the epochs and steps parsed from the packs' own record) against the oracle's, which reads the same two packs by its own decoder and uses astropy's apply_space_motion (radial velocity 0, distance 1 kpc) and match_to_catalog_sky: differing pairs.",
+   "limits": {
+    "maxDifferences": 0
+   }
+  },
+  {
+   "id": "D2.packRadii",
+   "group": "authentic",
+   "kind": "bound",
+   "what": "The same comparison at radius 0.5 and 2 arcsec.",
+   "limits": {
+    "maxDifferences": 0
+   }
+  },
+  {
+   "id": "D3.packCounts",
+   "group": "authentic",
+   "kind": "reported",
+   "what": "Pairs, unmatched rows of each pack, ambiguous rows, shared rows, the median and 95th percentile of the match distance at radius 1 and 2 arcsec, and the counts per the two packs' limits (the Gaia rows are G < 17.5, the SDSS rows g < 22.5 and not saturated: not every Gaia row is expected to match). No bound: the packs have no published crossmatch to be tuned against and none is used."
+  },
+  {
+   "id": "D4.epochSensitivity",
+   "group": "authentic",
+   "kind": "reported",
+   "what": "The pair set at radius 1 arcsec when the SDSS epoch is taken as 1992, 1996, 2000 (the declared one), 2004 and 2008 (a sensitivity band of the declared epoch plus or minus 8 yr, chosen to bracket a plausible spread and NOT the survey's published epochs): the number of pairs that differ from the declared-epoch set."
+  },
+  {
+   "id": "D5.publishedTool",
+   "group": "authentic",
+   "kind": "notrun",
+   "what": "A published crossmatch output pinned as a second oracle: the Gaia archive's own best-neighbour table to an SDSS release (if it offers one for these rows) or the CDS XMatch service's result for the two tables, with the radius and epoch rule documented (request R2); and the SDSS pack's per-object observation epoch (request R1), which the pack does not store.",
+   "needs": "R1, R2"
+  },
+  {
+   "id": "E1.shiftCounts",
+   "group": "oracle",
+   "kind": "bound",
+   "what": "On world W1 (radius 2 arcsec, 8 shifts of 40 arcsec, B's footprint the disc of radius 300 arcsec): the per-shift counts C_k and E_k of the kernel against the oracle's (astropy's directional_offset_by for the shift and search_around_sky or separations for the count).",
+   "limits": {
+    "maxAbsDifference": 0
+   }
+  },
+  {
+   "id": "E2.shiftCountsPacks",
+   "group": "authentic",
+   "kind": "bound",
+   "what": "The same comparison on the two real packs (radius 1 arcsec, shifts 8 at 20 arcsec, footprint the circle of 848.526 arcsec about (114.602, +21.575)).",
+   "limits": {
+    "maxAbsDifference": 0
+   }
+  },
+  {
+   "id": "E3.fractionRecovered",
+   "group": "ensemble",
+   "kind": "bound",
+   "what": "World W2 with its first seed: every match is false, so the estimated false-match fraction (expected chance coincidences over the number of matches) should be 1: its distance from 1.",
+   "limits": {
+    "maxAbs": 0.25
+   }
+  },
+  {
+   "id": "E4.bias",
+   "group": "ensemble",
+   "kind": "bound",
+   "what": "1000 worlds W2: the mean over worlds of p_hat / p_true minus 1.",
+   "limits": {
+    "maxAbs": 0.01
+   }
+  },
+  {
+   "id": "E5.coverage",
+   "group": "ensemble",
+   "kind": "bound",
+   "what": "The same 1000 worlds: the fraction whose 95 percent Garwood interval of p_hat covers p_true.",
+   "limits": {
+    "minCoverage": 0.92
+   }
+  },
+  {
+   "id": "E6.upperBound",
+   "group": "ensemble",
+   "kind": "bound",
+   "what": "200 worlds W1ens at radius 2 arcsec: the fraction of worlds in which the estimated false-match fraction is at least the realized false fraction of the reported matches (matches whose B row is not the A row's true counterpart, over matches). The estimate is an upper bound; its tightness (mean estimate over mean realized) is reported.",
+   "limits": {
+    "minFraction": 0.95
+   }
+  },
+  {
+   "id": "E7.recovery",
+   "group": "ensemble",
+   "kind": "bound",
+   "what": "The same 200 worlds: the mean fraction of the true pairs (600 per world) recovered as the nearest pair within the radius after epoch propagation.",
+   "limits": {
+    "minMean": 0.995
+   }
+  },
+  {
+   "id": "E8.naiveControl",
+   "group": "ensemble",
+   "kind": "bound",
+   "what": "The negative control of ignoring epochs: the same worlds matched with A's proper motions removed and A's epoch declared equal to B's (the naive match): the mean fraction of true pairs recovered must be at most 0.5, so that the propagation is shown to matter in the design.",
+   "limits": {
+    "maxMean": 0.5
+   }
+  },
+  {
+   "id": "E9.crowded",
+   "group": "refusal",
+   "kind": "bound",
+   "what": "World W3: the false-match estimate carries status 'unreliable' (p_hat above 0.2) and world W2 does not.",
+   "limits": {
+    "w3Unreliable": true,
+    "w2Unreliable": false
+   }
+  },
+  {
+   "id": "F1.epochAbsent",
+   "group": "refusal",
+   "kind": "bound",
+   "what": "A catalog with no epoch (absent, NaN or not a number) is refused with code 'epoch' before any match, for A and for B.",
+   "limits": {
+    "refused": true
+   }
+  },
+  {
+   "id": "F2.noProperMotion",
+   "group": "refusal",
+   "kind": "bound",
+   "what": "A catalog without proper motions at an epoch other than toEpoch is refused with code 'proper-motion'; the same catalog at toEpoch is accepted.",
+   "limits": {
+    "refused": true
+   }
+  },
+  {
+   "id": "F3.roundedPack",
+   "group": "refusal",
+   "kind": "bound",
+   "what": "The rounded solar-neighbourhood pack (its step read from its own reductions: 0.006 degree in right ascension and 0.004 in declination) as A, with any radius up to the maximum, is refused with code 'rounded-positions' and a reason that names the step and the radius.",
+   "limits": {
+    "refused": true
+   }
+  },
+  {
+   "id": "F4.maxRadius",
+   "group": "refusal",
+   "kind": "bound",
+   "what": "A radius of 10 arcsec is accepted; 10.0001 is refused with code 'radius'; 0, a negative radius and NaN are refused.",
+   "limits": {
+    "refused": true
+   }
+  },
+  {
+   "id": "F5.resolutionUnstated",
+   "group": "refusal",
+   "kind": "bound",
+   "what": "A catalog whose position step is not stated (no step, or a reductions text without the rounding sentence) is refused with code 'resolution'.",
+   "limits": {
+    "refused": true
+   }
+  },
+  {
+   "id": "F6.precisePackAccepted",
+   "group": "refusal",
+   "kind": "bound",
+   "what": "The precise Gaia and SDSS packs are accepted at radius 1 arcsec (the contrast with F3), and the rounding boundary is exact: a half step of exactly 0.25 times the radius is accepted, a little more is refused.",
+   "limits": {
+    "accepted": true
+   }
+  },
+  {
+   "id": "F7.badInput",
+   "group": "refusal",
+   "kind": "bound",
+   "what": "A non-finite position, columns of unequal length, an empty catalog and more than 20000 rows in either catalog are refused with code 'input'.",
+   "limits": {
+    "refused": true
+   }
+  },
+  {
+   "id": "F8.missingProperMotion",
+   "group": "refusal",
+   "kind": "bound",
+   "what": "Rows of A with a missing proper motion when the epochs differ are excluded from the match and counted in excluded.a, never matched at an unpropagated position: the count equals the number of such rows.",
+   "limits": {
+    "exact": true
+   }
+  },
+  {
+   "id": "G1.intervals",
+   "group": "population",
+   "kind": "bound",
+   "what": "The per-bin intervals of distribution() equal the statistics kernel's poissonInterval of the same count at the same level, for 40 random bins.",
+   "limits": {
+    "maxAbsDifference": 0
+   }
+  },
+  {
+   "id": "G2.coverage",
+   "group": "population",
+   "kind": "bound",
+   "what": "2000 worlds of six Poisson bins (expected 2, 5, 12, 30, 80, 150): the coverage of each bin's expected count by its 95 percent interval (the kernel's promised floor is 0.94 to 200 counts).",
+   "limits": {
+    "minCoveragePerBin": 0.94
+   }
+  },
+  {
+   "id": "G3.size",
+   "group": "population",
+   "kind": "bound",
+   "what": "Two Gaussian samples of equal size and equal mean: the rejection rate at the 5 percent level over 4000 pairs, at n = 30 and at n = 100.",
+   "limits": {
+    "n30": [
+     0.04,
+     0.07
+    ],
+    "n100": [
+     0.04,
+     0.06
+    ]
+   }
+  },
+  {
+   "id": "G4.power",
+   "group": "population",
+   "kind": "bound",
+   "what": "Mean shifted by 0.5 standard deviation, n = 100, 4000 pairs: the rejection rate at 5 percent.",
+   "limits": {
+    "minPower": 0.9
+   }
+  },
+  {
+   "id": "G5.refusal",
+   "group": "population",
+   "kind": "bound",
+   "what": "A sample of fewer than 30 values, a non-finite value and a constant sample (zero variance in both) are refused or reported degenerate, never given a p value.",
+   "limits": {
+    "refused": true
+   }
+  },
+  {
+   "id": "G6.coverage",
+   "group": "population",
+   "kind": "bound",
+   "what": "The 95 percent interval of the difference of means covers the true difference (0.5) in the 4000 pairs of G4.",
+   "limits": {
+    "minCoverage": 0.93
+   }
+  },
+  {
+   "id": "G7.skewed",
+   "group": "population",
+   "kind": "reported",
+   "what": "The rejection rate at 5 percent for two exponential samples of equal mean at n = 30 and n = 100 (outside the stated domain of a Gaussian mean: reported so a consumer can say what happens)."
+  },
+  {
+   "id": "H1.record",
+   "group": "record",
+   "kind": "bound",
+   "what": "The crossmatch record of world W1's match is a valid gravitas.artifact envelope (validateArtifact returns no problem), formatVersion 1 or 2, every unit a registry id.",
+   "limits": {
+    "problems": 0
+   }
+  },
+  {
+   "id": "H2.rows",
+   "group": "record",
+   "kind": "bound",
+   "what": "The record holds the summary quantities and two quantities per pair (distance and epoch difference); the epoch difference of every pair is the A epoch minus the B epoch (16 yr in W1) exactly, and each distance equals the match distance.",
+   "limits": {
+    "exact": true
+   }
+  },
+  {
+   "id": "H3.joined",
+   "group": "record",
+   "kind": "bound",
+   "what": "The joined table has one row per pair, the A and B indices, the distance, the epoch difference and the requested pass-through columns, each of the pair count in length and values equal to the source rows.",
+   "limits": {
+    "exact": true
+   }
+  }
+ ],
+ "requests": [
+  {
+   "id": "R1",
+   "what": "The observation epoch of the SDSS pack's rows: the same SkyServer query as the pack manifest's (raw[0].url of data-packs/sdss-dr18-ngc2420-photometry.json) with the observation date of each object added (mjd), the full result saved with the terms read and the sha256, into scratch-data/crossmatch263/ (outside every repository).",
+   "feeds": "D5, D4 (turns the sensitivity band into the survey's own spread)"
+  },
+  {
+   "id": "R2",
+   "what": "A published crossmatch output for the same two tables: the Gaia archive's best-neighbour table to an SDSS release for the 993 sources (with the documented epoch and radius rule), or the CDS XMatch service's result for the two tables with its parameters, saved with the terms read and the sha256.",
+   "feeds": "D5"
+  },
+  {
+   "id": "R3",
+   "what": "The published description of the shifted (offset) crossmatch false-rate test: a reviewed citation with the page read, for CROSSMATCH.md's citation line (the method is stated here from its definition and no citation detail is typed from memory).",
+   "feeds": "the citation of the false-match estimate"
+  }
+ ],
+ "verdict": {
+  "function": "VALIDATED (class V-internal for the kernel's own statements; authentic legs D1, D2, E2 are V-internal against an installed independent implementation, not V-external) if every committed bound check passes; otherwise FAILED LEG(S) with the failing legs named in failed-legs.json and the kernel is not offered to any consumer; there is no partial credit and nothing is re-bounded after a result. REPORTED rows (D3, D4, G7) and NOT RUN rows (D5) do not enter the function. The consumers clause: a tool, panel, lesson or viewer is not built on this kernel by this prompt in any case.",
+  "consumers": "The crossmatch tool, the distribution panel and 'Two catalogs, one sky' are not built (scope.notBuilt)."
+ },
+ "amendments": [
+  {
+   "id": "AM1",
+   "adds": "none; two wording corrections",
+   "changes": "(i) the footprint radius of the packs is 14.1421 arcmin x 60 = 848.526 arcsec, not 848.528 (an arithmetic slip in the text; the oracle used 14.1421 x 60.0 = 848.526 and its output is unchanged); (ii) world W3's B has 20000 rows, not 30000, because the kernel's committed row limit is 20000 and a 30000-row catalog is refused (p of about 0.4 still holds)",
+   "reason": "found while writing the validator, before any validator or kernel run on these legs; the oracle's output (commit cf0c153a) had been read; no bound moved",
+   "movesNoBound": true
+  },
+  {
+   "id": "AM2",
+   "adds": "followUp.checks A6b, B1b and G2e (new legs)",
+   "reason": "the first full run (f66dd0e8) failed A6 because its committed expectation was a derivation mistake, and G2 at 0.9385 for the 150-count bin, a value inside the sampling noise of 2000 worlds around the exact coverage; the failures stay failing and are not re-bounded; the new legs state the corrected closed form and the exact coverage, with bounds committed before the oracle is extended (O1b) or any of them runs",
+   "movesNoBound": true
+  }
+ ],
+ "followUp": {
+  "note": "New legs committed after the first full run (commit f66dd0e8) of this file's checks A1 to H3. They are NEW legs with their bounds committed here before the oracle is extended and before any of them runs; they do not replace, reset or re-bound A6.largeShift or G2.coverage, which stay failing as measured. They are reported beside the product verdict, which stays FAILED LEG(S) while A6 and G2 fail.",
+  "checks": [
+   {
+    "id": "A6b.poleCrossing",
+    "group": "analytic",
+    "kind": "bound",
+    "what": "A6's pole case with the closed form worked out correctly (A6 had expected a 180 degree turn from a shift of 0.125 arcsec at a source 0.36 arcsec from the pole, which does not reach it): a source at right ascension 33 degrees and dec 90 - 0.00001 degree (0.036 arcsec from the pole) moving north at 5 mas/yr for 25 yr (a shift s = 0.125 arcsec, past the pole). Straight-line motion gives horizontal component cos(dec) - s sin(dec), which is negative, so dec' = atan2(sin(dec) + s cos(dec), |cos(dec) - s sin(dec)|) and ra' = ra + 180 degrees.",
+    "limits": {
+     "maxAbsArcsec": 1e-08,
+     "maxRaErrDeg": 1e-06
+    }
+   },
+   {
+    "id": "B1b.poleCrossing",
+    "group": "oracle",
+    "kind": "bound",
+    "what": "20 sources within 0.1 arcsec of a pole (oracle seed [2631, 1]: dec = +/-(90 - u/3600) degrees with u uniform in (0.005, 0.1); proper motion toward the pole with a shift of 1.5 to 3 times the distance to the pole over dt = 10 yr, plus a small east component of N(0, 5) mas/yr) against astropy's apply_space_motion as in B1, by separation on the sky.",
+    "limits": {
+     "maxSepArcsec": 1e-05
+    }
+   },
+   {
+    "id": "G2e.exactCoverage",
+    "group": "population",
+    "kind": "bound",
+    "what": "The EXACT coverage of each design mean (2, 5, 12, 30, 80, 150) by the kernel's 95 percent interval: the sum over counts k of the Poisson probability of k at that mean, over the counts whose interval covers the mean, summed to a mass of at least 1 - 1e-12. This replaces no bound of G2 (which was measured on 2000 worlds, standard error about 0.005); it is the same quantity with no sampling error, against the statistics kernel's own promised floor of 0.94 up to 200 counts.",
+    "limits": {
+     "minCoveragePerMean": 0.94
+    }
+   }
+  ]
+ }
+}

@@ -901,6 +901,25 @@ async function buildDocPages() {
     });
   }
 
+  // The lab's orbit editor and sky view (js/lab3d/view/orbitPanel.js) and the
+  // run modes it and a guide use (js/lab3d/runModes.js: Kepler-only and
+  // precomputed sessions, Prompt 271): each a bundle of its own at the same
+  // path, loaded by URL, for the reason the guide panel is. The orbital layer
+  // rides in the panel's bundle and no reader of the lab downloads it unasked.
+  for (const lazy of ['js/lab3d/view/orbitPanel.js', 'js/lab3d/runModes.js']) {
+    if (!existsSync(lazy)) continue;
+    await esbuild.build({
+      entryPoints: [lazy],
+      bundle: true,
+      minify: true,
+      keepNames: false,
+      format: 'esm',
+      target: ['es2022'],
+      outfile: path.join(OUT, lazy),
+      legalComments: 'none',
+    });
+  }
+
   // The 3-D lab's embed (js/lab3d/embed.js, Prompt 105): by URL, only when
   // `embed=1` is asked for.
   if (existsSync('js/lab3d/embed.js')) {

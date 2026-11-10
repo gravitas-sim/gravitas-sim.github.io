@@ -74,6 +74,8 @@ current, and the orchestrator checks it.
 | `cosmology2-followup.mjs` | The late-time FLRW kernel's follow-up legs against their committed thresholds (Prompt 255b) | `npm run cosmology2:followup` |
 | `cosmology2-validate.mjs` | The late-time FLRW kernel against its committed thresholds (Prompt 255) | `npm run cosmology2:validate` |
 | `craters-validate.mjs` | Crater counting against its committed thresholds (Prompt 195) | `npm run craters:validate` |
+| `crossmatch-data-validate.mjs` | The crossmatch kernel's data legs (Prompt 263 follow-up: D5a to D5e, D4b) |  |
+| `crossmatch-validate.mjs` | The crossmatch kernel against its committed thresholds (Prompt 263, Part A) | `npm run crossmatch:validate` |
 | `csp.mjs` | A Content-Security-Policy on every page |  |
 | `data-budget.mjs` | The data plane's budget: what Gravitas stores and keeps, not just what it ships | `npm run budget:data` |
 | `data-kinds-cases.mjs` | The data kinds' cases, limits and tolerances (Prompt 157) |  |
@@ -98,6 +100,10 @@ current, and the orchestrator checks it.
 | `evidence-status.mjs` | The evidence-status record (Roadmap III, Prompt 122, rule 7.5.10) |  |
 | `exoplanet-reference.mjs` | The Exoplanet Observatory's reference run, and its answer key | `npm run guides:key` |
 | `experiment-bench.mjs` | npm run bench:experiments - how fast experiments run, and what they cost | `npm run bench:experiments` |
+| `experiment-ensemble-child.mjs` | (no header) |  |
+| `experiment-ensemble-regression-child.mjs` | (no header) |  |
+| `experiment-ensemble-validate.mjs` | (no header) | `npm run experiments:ensemble:validate` |
+| `experiment-ensemble-worker-shim.mjs` | (no header) |  |
 | `exposure-validate.mjs` | The exposure calculator against its committed thresholds (Prompt 210) | `npm run exposure:validate` |
 | `feature-inventory.mjs` | The feature-detection inventory (Prompt 111) |  |
 | `formats.mjs` | Every versioned format Gravitas reads or writes, and FORMATS.md from them |  |
@@ -156,6 +162,7 @@ current, and the orchestrator checks it.
 | `key-registry-free.mjs` | Which modules may import js/names.js without costing a route a request |  |
 | `key-registry-scan.mjs` | Which 'gravitas*' string literals are still loose in js/ (Prompt 107, step 2c) |  |
 | `lab3d-bench.mjs` | The 3-D kernel's throughput, desktop measured and low-end modelled |  |
+| `lab3d-curriculum-ii-validate.mjs` | The validation of the 3-D lab's curriculum II: instruments, planes, run modes |  |
 | `lab3d-guides-key.mjs` | The 3-D curriculum's answer key: a reference run of every guide | `npm run lab3d:key` |
 | `label-golden-investigations.mjs` | npm run label:golden:investigations [-- --regenerate-label-golden] | `npm run label:golden:investigations` |
 | `label-golden.mjs` | npm run label:golden [-- --regenerate-label-golden] | `npm run label:golden` |
@@ -171,6 +178,7 @@ current, and the orchestrator checks it.
 | `migrate-expectations.mjs` | One-off: move the instructor expectations out of instructorContent.js into |  |
 | `migrate-flow.mjs` | One-off: move the investigation flow out of instructorContent.js into |  |
 | `mission-lab-key.mjs` | The mission lab's answer key: a reference run of every guide | `npm run mission:key` |
+| `model-comparison-validate.mjs` | The model-comparison kernel against its committed thresholds (Prompt 261) | `npm run modelcompare:validate` |
 | `module-load-hook.mjs` | Write down every module Node loads |  |
 | `morphology-validate.mjs` | The galaxy-morphology kernel against its committed thresholds (Prompt 249, Part A) | `npm run morphology:validate` |
 | `multimessenger-authentic.mjs` | Readers for the authentic files of the multi-messenger kernel (Prompt 244) |  |
@@ -208,6 +216,7 @@ current, and the orchestrator checks it.
 | `release-check.mjs` | npm run release:check | `npm run release:check` |
 | `remnants-pin.mjs` | The cooling-table pin of the remnants validation (Prompt 222, REMNANTS.md) |  |
 | `remnants-validate.mjs` | The remnants kernel against its committed thresholds (Prompt 222) | `npm run remnants:validate` |
+| `resonances-ii-validate.mjs` | The validation of the resonance kernel: libration, secular rate, integrator error (Prompt 273, RESONANCES_II.md) |  |
 | `reversibility-probe.mjs` | Does the engine run backwards? | `npm run probe:reversibility` |
 | `rotation-decomposition-validate.mjs` | The rotation-curve decomposition kernel against its committed thresholds (Prompt 236, Part A) | `npm run decomposition:validate` |
 | `route-budget.mjs` | What a fresh visitor downloads, route by route | `npm run budget:routes` |

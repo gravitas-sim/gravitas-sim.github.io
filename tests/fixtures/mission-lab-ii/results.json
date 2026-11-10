@@ -1,0 +1,390 @@
+{
+ "format": "gravitas.mission-lab-ii-results",
+ "prompt": 272,
+ "window": {
+  "options": {
+   "from": "earth",
+   "to": "mars",
+   "departStart": 9739.5,
+   "departSpan": 150,
+   "departSteps": 151,
+   "tofMin": 150,
+   "tofMax": 400,
+   "tofSteps": 126
+  },
+  "minimum": {
+   "row": 61,
+   "col": 80,
+   "departDay": 9800.5,
+   "tofDays": 310,
+   "totalKmS": 5.66869975442452,
+   "interior": true
+  },
+  "counts": {
+   "ok": 19026,
+   "collinear": 0,
+   "antipodal": 0,
+   "branchAmbiguous": 0,
+   "tooFast": 0,
+   "noConvergence": 0,
+   "checkFailed": 0,
+   "input": 0
+  }
+ },
+ "legs": [
+  {
+   "id": "A1",
+   "tier": "a",
+   "name": "porkchop minimum against the Hohmann estimate",
+   "status": "pass",
+   "measured": {
+    "kernelMinimumKmS": 5.66869975442452,
+    "hohmannKmS": 5.678776084616683,
+    "relative": 0.001774384135246707
+   },
+   "bound": {
+    "relative": 0.12
+   }
+  },
+  {
+   "id": "A2",
+   "tier": "a",
+   "name": "the minimum falls at the Hohmann epoch",
+   "status": "fail",
+   "measured": {
+    "kernelMinimumJd": 2461345.5,
+    "hohmannEpochJd": 2461378.5927629233,
+    "differenceDays": 33.092762923333794
+   },
+   "bound": {
+    "days": 20
+   }
+  },
+  {
+   "id": "A3",
+   "tier": "a",
+   "name": "the minimum falls at the Hohmann flight time",
+   "status": "pass",
+   "measured": {
+    "kernelTofDays": 310,
+    "hohmannTofDays": 258.93611136594944,
+    "relative": 0.19720651694611627
+   },
+   "bound": {
+    "relative": 0.25
+   }
+  },
+  {
+   "id": "A4",
+   "tier": "a",
+   "name": "the minimum is interior",
+   "status": "pass",
+   "measured": {
+    "row": 61,
+    "col": 80
+   },
+   "bound": null
+  },
+  {
+   "id": "A5",
+   "tier": "a",
+   "name": "the hyperbolic burn against its closed form",
+   "status": "pass",
+   "measured": {
+    "maxDifferenceKmS": 9.320114591204742e-8
+   },
+   "bound": {
+    "absoluteKmS": 0.000001,
+    "note": "the lab's GM and radii are rounded values, the oracle's come from Horizons text"
+   }
+  },
+  {
+   "id": "A6",
+   "tier": "a",
+   "name": "the rocket equation",
+   "status": "pass",
+   "measured": {
+    "maxRelative": 2.2015171932541753e-16
+   },
+   "bound": {
+    "relative": 1e-12
+   }
+  },
+  {
+   "id": "A7",
+   "tier": "a",
+   "name": "the ledger adds up and says what the spacecraft carries",
+   "status": "pass",
+   "measured": {
+    "maxRelative": 1.1086791206275611e-16,
+    "rowsDescribed": true
+   },
+   "bound": {
+    "relative": 1e-12
+   }
+  },
+  {
+   "id": "A8",
+   "tier": "a",
+   "name": "the launch row",
+   "status": "pass",
+   "measured": {
+    "maxDifferenceKmS": 6.167421418012964e-8
+   },
+   "bound": {
+    "absoluteKmS": 0.000001
+   }
+  },
+  {
+   "id": "A9",
+   "tier": "a",
+   "name": "the grid in row ranges",
+   "status": "pass",
+   "measured": {
+    "differencesPerSplit": [
+     0,
+     0,
+     0
+    ]
+   },
+   "bound": {
+    "differences": 0
+   }
+  },
+  {
+   "id": "B1",
+   "tier": "b",
+   "name": "a cited public mission summary's departure window and delta-v",
+   "status": "NOT RUN",
+   "measured": null,
+   "bound": {
+    "relative": 0.08
+   },
+   "reason": "No Earth to Mars mission has a departure window inside the pack's span (2025 to 2045) with a published summary this session could download. The one candidate source found (the JPL Mars 2020 launch press kit) answered an automated download with HTTP 403; a browser-identity workaround was refused by the permission system and is not attempted; the NASA technical-reports record of a ballistic-trajectory table (20210005618) is metadata only. A mission outside the span could only be tested with injected Horizons states, and only from a file this session can pin. B1 is declared NOT RUN now, so the verdict function cannot call the tier table green."
+  },
+  {
+   "id": "B2a",
+   "tier": "b",
+   "name": "the three date pairs, same states",
+   "status": "pass",
+   "measured": {
+    "maxComponentDifferenceKmS": 3.468802134420912e-9,
+    "oracleConverged": [
+     true,
+     true,
+     true
+    ]
+   },
+   "bound": {
+    "absoluteKmS": 0.000002
+   }
+  },
+  {
+   "id": "B2b",
+   "tier": "b",
+   "name": "the three date pairs, the pack's states",
+   "status": "pass",
+   "measured": {
+    "maxBurnDifferenceKmS": 0.0000074960039331273265
+   },
+   "bound": {
+    "absoluteKmS": 0.001,
+    "reason": "the pack's velocity bound is 7.3e-5 km/s and its position bound 4.2 km; ten times the sum of their effects, rounded up"
+   }
+  },
+  {
+   "id": "B2c",
+   "tier": "b",
+   "name": "the kernel's trajectory flown by the oracle",
+   "status": "pass",
+   "measured": {
+    "oracleMissKm": [
+     0.18896825055109728,
+     0.2626175009762093,
+     0.24156707578929262
+    ],
+    "pinnedVersusLiveKmS": 0
+   },
+   "bound": {
+    "absoluteKm": 5,
+    "reason": "the kernel accepts a miss of 1e-8 of the radius, about 1.5 km"
+   }
+  },
+  {
+   "id": "B3",
+   "tier": "b",
+   "name": "the porkchop against an independent grid",
+   "status": "pass",
+   "measured": {
+    "cells": 806,
+    "comparedCells": 797,
+    "excluded": 9,
+    "acceptanceMismatches": 0,
+    "worstCellDifferenceKmS": 0.00003537548326448814,
+    "minimumDifferenceKmS": 6.811208299595251e-7,
+    "oracleMinimum": {
+     "v": 5.669548615473547,
+     "dep": 12,
+     "tofIdx": 16
+    },
+    "kernelMinimum": {
+     "v": 5.669547934352717,
+     "dep": 12,
+     "tofIdx": 16
+    }
+   },
+   "bound": {
+    "cellAbsoluteKmS": 0.005,
+    "minimumAbsoluteKmS": 0.001,
+    "excludedFraction": 0.02
+   }
+  },
+  {
+   "id": "B4",
+   "tier": "b",
+   "name": "a pinned run of an independent astrodynamics tool",
+   "status": "NOT RUN",
+   "measured": null,
+   "bound": {
+    "absoluteKmS": 0.000002
+   },
+   "reason": "Needs installing or running downloaded code; Carl's permission is not given. The independent shooting solver stands for it and is labelled as such, never as the package."
+  },
+  {
+   "id": "C",
+   "tier": "c",
+   "name": "ensemble coverage",
+   "status": "not applicable",
+   "measured": null,
+   "bound": null,
+   "reason": "not applicable: the workflow is deterministic and states no uncertainty, so there is no coverage rate to test; the pack's own error bounds are tested by E1 and E2 of the lab's validation"
+  },
+  {
+   "id": "D1",
+   "tier": "d",
+   "name": "a degenerate date pair refuses",
+   "status": "pass",
+   "measured": {
+    "oracleSine": 0.00041324318299711365,
+    "controlOracleSine": 0.026641203800831785,
+    "kernelPack": "antipodal",
+    "kernelHorizons": "antipodal",
+    "control": "ok"
+   },
+   "bound": {
+    "sine": 0.001
+   }
+  },
+  {
+   "id": "D2",
+   "tier": "d",
+   "name": "a window outside the pack's span refuses",
+   "status": "pass",
+   "measured": {
+    "atEnd": [],
+    "oneDayPast": [
+     {
+      "path": "departStart",
+      "code": "outOfRange"
+     }
+    ],
+    "beforeStart": [
+     {
+      "path": "departStart",
+      "code": "outOfRange"
+     }
+    ],
+    "workflow": [
+     {
+      "path": "departDay",
+      "code": "outOfRange"
+     }
+    ]
+   },
+   "bound": null
+  },
+  {
+   "id": "D3",
+   "tier": "d",
+   "name": "a ledger with an impossible input refuses",
+   "status": "pass",
+   "measured": {
+    "refused": [
+     {
+      "path": "dryKg",
+      "refused": true
+     },
+     {
+      "path": "dryKg",
+      "refused": true
+     },
+     {
+      "path": "ispS",
+      "refused": true
+     },
+     {
+      "path": "correctionsKmS",
+      "refused": true
+     },
+     {
+      "path": "captureOrbit.apoapsisRadiusKm",
+      "refused": true
+     },
+     {
+      "path": "parkingAltitudeKm",
+      "refused": true
+     },
+     {
+      "path": "vinfDeparture",
+      "refused": true
+     },
+     {
+      "path": "vinfArrival",
+      "refused": true
+     },
+     {
+      "path": "to",
+      "refused": true
+     },
+     {
+      "path": "to",
+      "refused": true
+     }
+    ],
+    "validAccepted": true
+   },
+   "bound": null
+  }
+ ],
+ "counts": {
+  "pass": 15,
+  "fail": 1,
+  "notRun": 2,
+  "notApplicable": 1
+ },
+ "verdict": "C",
+ "reported": {
+  "valleyAtHohmannEpoch": {
+   "row": 94,
+   "minimumInThatRowKmS": 6.3096696485254915,
+   "excessOverTheWindowMinimumKmS": 0.6409698941009712
+  },
+  "ledgerAgainstOracleAtOracleVinf": [
+   {
+    "id": "P1",
+    "maxRowDifferenceKmS": 6.733214474863303e-8,
+    "propellantRelative": 3.646834421687695e-9
+   },
+   {
+    "id": "P2",
+    "maxRowDifferenceKmS": 6.733214474863303e-8,
+    "propellantRelative": 4.406390221483227e-9
+   },
+   {
+    "id": "P3",
+    "maxRowDifferenceKmS": 6.733214474863303e-8,
+    "propellantRelative": 2.107809906024773e-9
+   }
+  ]
+ }
+}

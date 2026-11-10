@@ -49,7 +49,12 @@ import {
   onTheSky,
   elementsAbout,
   hierarchy,
+  planeAxes,
   relative,
+  reorient,
+  turnVectors,
+  DEFAULT_OBSERVER,
+  PLANES,
 } from './lab3d/view/instruments.js';
 import { formatNumber } from './format.js';
 import { chooseInterval } from './lab3d/view/tick.js';
@@ -92,6 +97,11 @@ const state = {
   playing: false,
   behind: false,
   frame: 'barycentric',
+  mode: 'nbody', // the run mode (js/lab3d/runModes.js): nbody, kepler or precomputed
+  plane: 'system', // the reference plane the numbers are shown in (instruments.js)
+  observer: { ...DEFAULT_OBSERVER }, // where the sky plane's observer is
+  axes: null, // that plane's rows, or null for the system's own axes
+  provenance: null, // a precomputed run's, for the mode line
   follow: -1,
   camera: null,
   colors: [],
@@ -170,7 +180,10 @@ function systemItems() {
   ];
 }
 
-async function open(choice, { interval } = {}) {
+async function open(
+  choice,
+  { interval, mode = state.mode === 'precomputed' ? 'nbody' : state.mode } = {}
+) {
   state.choice = choice;
   $('l3-file-row').hidden = choice !== 'file';
   let system;
@@ -191,6 +204,7 @@ async function open(choice, { interval } = {}) {
     );
   await start(system, {
     interval,
+    mode,
     closeWithin: options.closeWithin,
     escapeBeyond: options.escapeBeyond,
     crossings: options.crossings,
@@ -216,12 +230,15 @@ async function start(system, extra = {}) {
   state.follow = -1;
   state.colors = system.bodies.map((_, i) => PALETTE[i % PALETTE.length]);
   state.options = { ...extra, interval: state.interval };
-  const session = createLiveSession({ spawn }, system, state.options);
+  const session = await makeSession(system, state.options);
   state.session = session;
+  $('l3-mode').value = state.mode === 'kepler' ? 'kepler' : 'nbody';
+  modeLine();
   status(t('l3.status.starting'));
   try {
     const { snapshot } = await session.ready;
     if (session !== state.session) return;
+    refreshAxes(snapshot);
     accept(snapshot);
     state.tau = snapshot.t;
     state.t0 = snapshot.t;
@@ -247,6 +264,40 @@ async function start(system, extra = {}) {
   else play(false);
 }
 
+/**
+ * The session for a mode: the kernel's live session (N-body), or one that
+ * runs in this page (Kepler-only, a replay), loaded when first asked for.
+ */
+async function makeSession(system, options) {
+  state.mode = options.mode || 'nbody';
+  if (state.mode === 'nbody')
+    return createLiveSession({ spawn }, system, options);
+  const m = await import(new URL('./lab3d/runModes.js', import.meta.url).href);
+  state.provenance = options.run?.provenance ?? null;
+  return state.mode === 'kepler'
+    ? m.createKeplerSession(system, options)
+    : m.createReplaySession(options.run);
+}
+
+/** The reference plane's rows from a snapshot (the numbers it is made from). */
+function refreshAxes(snap) {
+  state.axes = null;
+  if (state.plane === 'system' || !snap) return;
+  const rows = planeAxes(state.plane, exactFrame(snap), {
+    units: state.system?.units,
+    observer: state.observer,
+  });
+  if (rows) state.axes = rows;
+  else {
+    state.plane = 'system';
+    $('l3-plane').value = 'system';
+    notice(t('l3.plane.refused'));
+  }
+}
+
+/** A frame with its numbers turned into the reference plane's axes. */
+const turned = f => (state.axes ? reorient(f, state.axes) : f);
+
 /** Keep a snapshot, and queue its trail rows in the display frame. */
 function accept(snap) {
   const problem = snapshotProblem(snap);
@@ -256,7 +307,20 @@ function accept(snap) {
   const n = snap.m.length;
   const k = snap.trailT.length;
   if (k) {
-    const rows = trailToFrame(snap.trail, k, snap, state.frame);
+    const R = state.axes;
+    const rows = R
+      ? trailToFrame(
+          turnVectors(snap.trail, R),
+          k,
+          {
+            m: snap.m,
+            alive: snap.alive,
+            x: turnVectors(snap.x, R),
+            v: turnVectors(snap.v, R),
+          },
+          state.frame
+        )
+      : trailToFrame(snap.trail, k, snap, state.frame);
     for (let r = 0; r < k; r++)
       state.pendingTrail.push({
         t: snap.trailT[r],
@@ -284,7 +348,7 @@ async function continueSession(last) {
   const next = restartFrom(state.system, last);
   state.session?.stop();
   state.system = next;
-  const session = createLiveSession({ spawn }, next, state.options);
+  const session = await makeSession(next, state.options);
   state.session = session;
   try {
     const { snapshot } = await session.ready;
@@ -368,7 +432,7 @@ function currentFrame() {
   let b = snaps.length - 1;
   while (b > 0 && snaps[b - 1].t >= state.tau) b--;
   const a = b > 0 ? snaps[b - 1] : null;
-  return drawnAt(a, snaps[b], state.tau);
+  return turned(drawnAt(a, snaps[b], state.tau));
 }
 
 /**
@@ -384,7 +448,7 @@ function numbersSnapshot() {
 }
 function numbersFrame() {
   const s = numbersSnapshot();
-  return s && exactFrame(s);
+  return s && turned(exactFrame(s));
 }
 
 function display(f) {
@@ -653,6 +717,17 @@ function fillStaticSelects() {
     TOOLS.map(s => [s, t(`l3.tool.${s}`)]),
     $('l3-tool').value || 'none'
   );
+  fillSelect(
+    $('l3-plane'),
+    PLANES.map(p => [p, t(`l3.plane.${p}`)]),
+    state.plane
+  );
+  fillSelect(
+    $('l3-mode'),
+    ['nbody', 'kepler'].map(m => [m, t(`l3.mode.${m}`)]),
+    state.mode === 'kepler' ? 'kepler' : 'nbody'
+  );
+  modeLine();
   syncTool();
 }
 
@@ -767,6 +842,7 @@ function viewDirection() {
 function legend() {
   const parts = [];
   parts.push(frameSentence());
+  if (state.plane !== 'system') parts.push(t(`l3.legend.plane.${state.plane}`));
   if (state.scene) {
     const cam = state.scene.readCamera();
     const bar = scaleBar(cam, $('l3-canvas').clientHeight || 400);
@@ -983,6 +1059,7 @@ function eventText(e) {
         t: at,
       });
     case 'warning':
+      if (e.code === 'keplerOnly') return t('l3.event.keplerOnly');
       return e.code === 'unresolvedEncounter'
         ? t('l3.event.unresolved', { a: names[0], b: names[1] })
         : t('l3.event.nonSymplectic', { scheme: e.scheme });
@@ -1017,6 +1094,71 @@ function notice(text, keepRunning = true, kind = 'info') {
   if (!keepRunning) play(false);
 }
 
+// --- The run mode and the reference plane --------------------------------------------
+
+/** The line under the speed control that says how this run is advanced. */
+function modeLine() {
+  const box = $('l3-mode-info');
+  if (!box) return;
+  if (!state.system) {
+    box.textContent = '';
+    return;
+  }
+  const tick = time(state.interval);
+  const it = state.system.integrator;
+  let text;
+  if (state.mode === 'kepler') text = t('l3.mode.info.kepler', { tick });
+  else if (state.mode === 'precomputed')
+    text = t('l3.mode.info.precomputed', {
+      source: state.provenance?.source ?? '',
+      tick,
+    });
+  else if (it.scheme === 'dopri5')
+    text = t('l3.mode.info.adaptive', {
+      scheme: it.scheme,
+      tol: num(it.tol),
+      tick,
+    });
+  else
+    text = t('l3.mode.info.nbody', {
+      scheme: it.scheme,
+      step: num(it.h),
+      tick,
+    });
+  if (box.textContent !== text) box.textContent = text;
+}
+
+/** Continue the system as it is now in another run mode (kepler or nbody). */
+async function setMode(mode) {
+  if (!state.system || mode === state.mode) return;
+  const snap = numbersSnapshot();
+  const system = snap ? restartFrom(state.system, snap) : state.system;
+  const keep = ['l3-frame', 'l3-follow', 'l3-a', 'l3-v', 'l3-b'].map(
+    id => $(id).value
+  );
+  const options = { ...state.options };
+  delete options.run;
+  await start(system, { ...options, mode, interval: state.interval });
+  ['l3-frame', 'l3-follow', 'l3-a', 'l3-v', 'l3-b'].forEach(
+    (id, i) => ($(id).value = keep[i])
+  );
+  if (keep[0] !== 'barycentric') changeFrame();
+  $('l3-mode').value = mode;
+  tell();
+}
+
+function changePlane() {
+  state.plane = $('l3-plane').value;
+  refreshAxes(numbersSnapshot());
+  $('l3-plane').value = state.plane;
+  state.scene?.clearTrails();
+  state.pendingTrail = [];
+  state.trailTimes = [];
+  resetView();
+  updateTables(true);
+  tell();
+}
+
 // --- What a guide may read and do ---------------------------------------------------
 //
 // The guide panel (js/lab3d/view/guidePanel.js) is loaded only when a guide
@@ -1039,6 +1181,7 @@ const CONTROLS = {
   b: 'l3-b',
   v: 'l3-v',
   speed: 'l3-speed',
+  plane: 'l3-plane',
 };
 
 const labApi = Object.freeze({
@@ -1051,6 +1194,59 @@ const labApi = Object.freeze({
     $('l3-system').value = id;
     await open(id, options);
     tell();
+  },
+  /** Open the orbit editor and sky view (js/lab3d/view/orbitPanel.js). */
+  openOrbit: () => openOrbit(),
+  /** The run mode now: nbody, kepler or precomputed (js/lab3d/runModes.js). */
+  mode: () => state.mode,
+  /** Continue as it is now in another mode (kepler or nbody). */
+  setMode,
+  /** Play a precomputed run (runModes.js) as a system of its own, with provenance. */
+  loadRun: run =>
+    start(run.system, { mode: 'precomputed', run, interval: run.interval }),
+  /** The mode, with the integrator and step a system names, as data. */
+  modeInfo: () => ({
+    mode: state.mode,
+    integrator: state.system?.integrator ?? null,
+    interval: state.interval,
+    provenance: state.provenance,
+  }),
+  /** The reference plane now, its rows (or null for the system's own) and the observer. */
+  plane: () => state.plane,
+  axes: () => state.axes && state.axes.map(r => [...r]),
+  observer: () => ({ ...state.observer }),
+  setObserver(az, el) {
+    state.observer = { az: Number(az), el: Number(el) };
+    if (state.plane === 'sky') changePlane();
+    else tell();
+  },
+  /** An edited system (instruments.js editElements), continuing at its own time. */
+  async replace(system) {
+    const keep = ['l3-frame', 'l3-follow', 'l3-a', 'l3-v', 'l3-b'].map(
+      id => $(id).value
+    );
+    const options = { ...state.options };
+    delete options.run;
+    await start(system, { ...options, interval: state.interval });
+    ['l3-frame', 'l3-follow', 'l3-a', 'l3-v', 'l3-b'].forEach(
+      (id, i) => ($(id).value = keep[i])
+    );
+    if (keep[0] !== 'barycentric') changeFrame();
+    tell();
+  },
+  /** The newest snapshot as it is, in the system's own axes (what a record cites). */
+  exactSystem() {
+    const s = numbersSnapshot();
+    const f = s && exactFrame(s);
+    return (
+      f && {
+        t: f.t,
+        m: Float64Array.from(f.m),
+        x: Float64Array.from(f.x),
+        v: Float64Array.from(f.v),
+        alive: Uint8Array.from(f.alive),
+      }
+    );
   },
   /** Set a control as a reader would, by its name in CONTROLS. */
   set(name, value) {
@@ -1068,6 +1264,8 @@ const labApi = Object.freeze({
     ...Object.fromEntries(
       Object.entries(CONTROLS).map(([k, id]) => [k, $(id).value])
     ),
+    mode: state.mode,
+    panel: !$('l3-orbit-panel').hidden,
     playing: state.playing,
     tau: state.tau,
     t0: state.t0 ?? 0,
@@ -1149,6 +1347,19 @@ async function openGuides(options = {}) {
     guidePanel = m.createGuidePanel($('l3-guide'), labApi);
   }
   await guidePanel.show(options);
+}
+
+let orbitPanel = null;
+/** Open the orbit editor and sky view, loading it the first time. */
+async function openOrbit() {
+  if (!orbitPanel) {
+    const m = await import(
+      new URL('./lab3d/view/orbitPanel.js', import.meta.url).href
+    );
+    orbitPanel = m.createOrbitPanel($('l3-orbit-panel'), labApi);
+    if (language() === 'es') await orbitPanel.loadLanguage('es');
+  }
+  orbitPanel.show();
 }
 
 // --- Setup ---------------------------------------------------------------------------
@@ -1250,6 +1461,7 @@ function retranslate() {
   $('l3-play').textContent = t(state.playing ? 'l3.pause' : 'l3.play');
   updateTables(true);
   evidencePanel?.redraw();
+  orbitPanel?.redraw();
   tell();
 }
 
@@ -1334,6 +1546,7 @@ async function init() {
     await loadLanguage(b.dataset.lang);
     await guidePanel?.loadLanguage(b.dataset.lang);
     await evidencePanel?.loadLanguage(b.dataset.lang);
+    await orbitPanel?.loadLanguage(b.dataset.lang);
     setLanguage(b.dataset.lang);
     retranslate();
   });
@@ -1359,6 +1572,8 @@ async function init() {
   $('l3-step').addEventListener('click', stepOnce);
   $('l3-restart').addEventListener('click', () => open(state.choice));
   $('l3-frame').addEventListener('change', changeFrame);
+  $('l3-plane').addEventListener('change', changePlane);
+  $('l3-mode').addEventListener('change', e => setMode(e.target.value));
   for (const id of ['l3-preset', 'l3-projection'])
     $(id).addEventListener('change', resetView);
   $('l3-follow').addEventListener('change', e => {
@@ -1390,6 +1605,7 @@ async function init() {
   $('l3-canvas').addEventListener('keydown', keyboard);
   $('l3-guides').addEventListener('click', () => openGuides());
   $('l3-evidence').addEventListener('click', () => openEvidence());
+  $('l3-orbit').addEventListener('click', () => openOrbit());
 
   // For the browser tests: what the page believes, read-only.
   window.gravitasLab3d = Object.freeze({
@@ -1404,6 +1620,12 @@ async function init() {
     },
     get lost() {
       return state.scene?.lost ?? null;
+    },
+    get mode() {
+      return state.mode;
+    },
+    get plane() {
+      return state.plane;
     },
     get webgl() {
       return Boolean(state.scene);

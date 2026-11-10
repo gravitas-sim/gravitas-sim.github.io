@@ -1,0 +1,189 @@
+{
+ "format": "gravitas.crossmatch-data-legs-results/1",
+ "thresholdsSha256": "a3af73486acf07e0d5fd66ded12e2f920dad6785e0e9a1745901643197e1c69a",
+ "oracleSha256": "b8f74530d894a6f7c81aabca5fa5d5980be3ca0eebd6761a5e1792907c810e06",
+ "node": "v22.23.4",
+ "inputs": {
+  "gaiaCsvSha256": "46587315f277a4c3a18a6ae306b07fbba8c58567225cdebaffcb92c184bcd270",
+  "R1Sha256": "989ef260e579c92dc1508108e3ff5ef886be9a6bcd3d010137402a98d8440036",
+  "R2BestNeighbourSha256": "e10ff86caeb49807a8c877ef63a5711e75f51947ca70ec870d85b30409dbe81a"
+ },
+ "failed": [],
+ "counts": {
+  "pass": 3,
+  "fail": 0,
+  "reported": 4,
+  "not run": 0
+ },
+ "rows": [
+  {
+   "id": "D4b.surveySpread",
+   "group": "authentic",
+   "status": "reported",
+   "measured": {
+    "declaredPairs": 604,
+    "perObjectPairs": 604,
+    "differ": 0,
+    "declaredOnly": 0,
+    "perObjectOnly": 0,
+    "publishedComparisonOfDeclared": {
+     "nK": 604,
+     "publishedAll": 704,
+     "publishedInPack": 603,
+     "publishedInPackWithin1Arcsec": 603,
+     "common": 603,
+     "kernelOnly": 1,
+     "publishedOnly1": 0,
+     "kernelOnlyFraction": 0.0016556291390728477,
+     "publishedOnlyFraction": 0
+    }
+   },
+   "bound": null,
+   "note": "oracle: differ 0"
+  },
+  {
+   "id": "D5a.rowIdentity",
+   "group": "authentic",
+   "status": "pass",
+   "measured": {
+    "rowCounts": {
+     "gaia": 993,
+     "sdss": 2301
+    },
+    "maxStepFraction": 1.0000000000012221,
+    "worst": {
+     "sdss.ra": 0.9997635970648843,
+     "sdss.dec": 0.9998098803976062,
+     "sdss.g": 1.0000000000012221,
+     "sdss.g_err": 0.9997599999988782,
+     "sdss.r": 1.0000000000012221,
+     "sdss.r_err": 0.9996000000009886,
+     "gaia.ra": 0.9993697602794781,
+     "gaia.dec": 0.9996395860412121,
+     "gaia.pmra": 0.9998809251410279,
+     "gaia.pmdec": 0.9972671855091875
+    }
+   },
+   "bound": {
+    "maxStepFraction": 1.000001,
+    "rowCountsEqual": true
+   },
+   "note": "oracle's maximum 1.0000000000012221; the Gaia csv equals the pack's raw file: true"
+  },
+  {
+   "id": "D5b.objectEpochs",
+   "group": "authentic",
+   "status": "reported",
+   "measured": {
+    "distinct": [
+     {
+      "mjd": 52288,
+      "epoch": 2002.035592,
+      "rows": 1633
+     },
+     {
+      "mjd": 52585,
+      "epoch": 2002.848734,
+      "rows": 414
+     },
+     {
+      "mjd": 52614,
+      "epoch": 2002.928131,
+      "rows": 254
+     }
+    ],
+    "spreadYears": 0.892539
+   },
+   "bound": null,
+   "note": "the oracle reads the same 3 epochs"
+  },
+  {
+   "id": "D5c.perObjectEpochPairs",
+   "group": "oracle",
+   "status": "pass",
+   "measured": {
+    "kernelPairs": 604,
+    "oraclePairs": 604,
+    "differing": 0,
+    "maxDistanceDifferenceArcsec": 5.842444097958754e-10
+   },
+   "bound": {
+    "maxDifferences": 0
+   },
+   "note": null
+  },
+  {
+   "id": "D5d.publishedBestNeighbour",
+   "group": "authentic",
+   "status": "pass",
+   "measured": {
+    "nK": 604,
+    "publishedAll": 704,
+    "publishedInPack": 603,
+    "publishedInPackWithin1Arcsec": 603,
+    "common": 603,
+    "kernelOnly": 1,
+    "publishedOnly1": 0,
+    "kernelOnlyFraction": 0.0016556291390728477,
+    "publishedOnlyFraction": 0,
+    "tolerance": 0.05
+   },
+   "bound": {
+    "maxKernelOnlyFraction": 0.05,
+    "maxPublishedOnlyFraction": 0.05
+   },
+   "note": "the oracle's own comparison: kernelOnly 1, publishedOnly 0"
+  },
+  {
+   "id": "D5e.publishedBreakdown",
+   "group": "authentic",
+   "status": "reported",
+   "measured": {
+    "kernelOnlySplit": {
+     "differentPackObject": 0,
+     "objectOutsidePack": 1,
+     "noPublishedRow": 0
+    },
+    "kernelOnlyIds": [
+     [
+      "865416054512271872",
+      "1237660564039532919"
+     ]
+    ],
+    "publishedOnly": [],
+    "publishedDistanceInPack": {
+     "n": 603,
+     "median": 0.018275872,
+     "p95": 0.07103433,
+     "max": 0.13911448,
+     "over1": 0
+    },
+    "commonDistanceAbsDifference": {
+     "n": 603,
+     "max": 0.03916092815804577,
+     "median": 0.009606667267232347
+    },
+    "xmFlag": {
+     "8": 84,
+     "40": 519
+    },
+    "numberOfNeighbours": {
+     "1": 603
+    }
+   },
+   "bound": null,
+   "note": "oracle: kernelOnlySplit {\"differentPackObject\":0,\"objectOutsidePack\":1,\"noPublishedRow\":0}, common distance difference max 0.039160928164332434"
+  },
+  {
+   "id": "D5f.shiftedMatchCitation",
+   "group": "citation",
+   "status": "reported",
+   "measured": {
+    "R3": "Wilson and Naylor 2018, arXiv:1809.00018, section 4.2.3",
+    "R6": "Landy and Szalay 1993, ApJ 412, 64-71, DOI 10.1086/172900"
+   },
+   "bound": null,
+   "note": "citations recorded in SOURCES.json and the documents"
+  }
+ ]
+}

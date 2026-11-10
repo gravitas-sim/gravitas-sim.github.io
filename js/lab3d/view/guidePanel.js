@@ -28,10 +28,13 @@ import {
   GUIDES,
   TARGETS,
   ANSWERS,
+  applyEdits,
   context,
   correctOption,
   evaluateCheck,
+  modeProblem,
   record,
+  stepMode,
 } from '../guides/curriculum.js';
 import {
   answerMatches,
@@ -159,7 +162,13 @@ export function createGuidePanel(root, lab) {
   const load = () => {
     try {
       const saved = readJson(key());
-      if (saved && saved.curriculum === CURRICULUM_VERSION) {
+      // A minor version only adds guides (curriculum II), so progress made
+      // under the same major version stands.
+      if (
+        saved &&
+        String(saved.curriculum).split('.')[0] ===
+          CURRICULUM_VERSION.split('.')[0]
+      ) {
         const records = {};
         for (const [k, r] of Object.entries(saved.records || {}))
           records[k] = revive(r);
@@ -267,7 +276,11 @@ export function createGuidePanel(root, lab) {
         .slice(0, at + 1)
         .reverse()
         .find(s => s.go?.open) ?? steps.find(s => s.go?.open);
-    if (opener) await lab.open(opener.go.open, TARGETS[opener.go.open]);
+    if (opener)
+      await lab.open(opener.go.open, {
+        ...TARGETS[opener.go.open],
+        mode: stepMode(guide, opener),
+      });
     draw(true);
   }
 
@@ -286,14 +299,27 @@ export function createGuidePanel(root, lab) {
   }
 
   async function go(s) {
-    if (s.go?.open && lab.read().system !== s.go.open)
-      await lab.open(s.go.open);
+    const mode = stepMode(guide, s);
+    // A system a step opens is opened in the step's run mode, in the system's
+    // own axes; a step with no system of its own is switched to its mode.
+    if (
+      s.go?.open &&
+      (lab.read().system !== s.go.open || lab.mode() !== mode)
+    ) {
+      await lab.open(s.go.open, { ...TARGETS[s.go.open], mode });
+      lab.set('plane', 'system');
+    } else if (s.kind !== 'read' && lab.mode() !== mode)
+      await lab.setMode(mode);
+    if (s.go?.panel) await lab.openOrbit();
+    if (s.go?.observer) lab.setObserver(s.go.observer.az, s.go.observer.el);
     const set = { ...(s.go?.set || {}) };
     if (set.tool) {
       apply({ tool: set.tool });
       delete set.tool;
     }
     apply(set);
+    if (s.go?.edit) await applyEdits(lab, s.go.edit);
+    if (s.go?.pause) lab.play(false);
     if (s.go?.play) lab.play(true);
     draw();
   }
@@ -349,6 +375,15 @@ export function createGuidePanel(root, lab) {
         text: words(guide, s, 'title'),
       }),
       el('p', { text: words(guide, s, 'text') }),
+      s.kind === 'read'
+        ? null
+        : el('p', {
+            class: 'ui-note',
+            id: 'l3-guide-mode',
+            text: tr('g3.modeLine', {
+              mode: tr(`g3.mode.${stepMode(guide, s)}`),
+            }),
+          }),
       stepControls(s),
       el('p', {
         class: 'ui-note',
@@ -545,6 +580,8 @@ export function createGuidePanel(root, lab) {
         save();
         return say(tr('g3.recorded'));
       }
+      const wrong = modeProblem(guide, s, lab.mode());
+      if (wrong) return say(tr(`g3.mode.${wrong}`));
       const right = correctOption(s, ctx());
       if (right === null) return say(tr('g3.missing'));
       a.passed = picked === right;
@@ -571,6 +608,11 @@ export function createGuidePanel(root, lab) {
       save();
       return say(tr('g3.notNumber'));
     }
+    const wrong = modeProblem(guide, s, lab.mode());
+    if (wrong) {
+      save();
+      return say(tr(`g3.mode.${wrong}`));
+    }
     const expected = ANSWERS[s.expect.answer](ctx());
     if (expected === null) {
       save();
@@ -589,6 +631,8 @@ export function createGuidePanel(root, lab) {
     const s = steps[at];
     if (s.kind !== 'do') return;
     const was = Boolean(progress.answers[s.id]?.passed);
+    const wrong = modeProblem(guide, s, lab.mode());
+    if (wrong) return say(tr(`g3.mode.${wrong}`));
     const ok = evaluateCheck(s.check, ctx(), s);
     if (ok && !was) {
       answerOf(s).passed = true;

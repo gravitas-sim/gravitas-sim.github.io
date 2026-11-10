@@ -89,7 +89,7 @@ Prompt 76 starts from.
 <!-- library:coverage -->
 | Kind | Entries | summary | level | duration | mathematics | calculation | subjects | prerequisites | textbook | courseLevel | thumbnail |
 |---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
-| investigation | 141 | all | all | all | all | all | all | all | all | all | 124 |
+| investigation | 146 | all | all | all | all | all | all | all | all | all | 124 |
 | activity | 6 | all | all | all | all | all | all | all | all | all | all |
 | scenario | 69 | all | all | all | all | all | all | all | **none** | **none** | 61 |
 | dataset | 16 | all | all | all | all | all | all | all | **none** | **none** | **none** |
@@ -115,6 +115,19 @@ Galaxies and the universe; Observing and measuring), each with `depths` (the dep
 and `after` (sequences worth doing first). Every investigation is in at least
 one, and every `needs` in `js/data/investigations/sequences.js` is an earlier
 item that the lesson declares as a prerequisite.
+
+A sequence can also hold **guides**, which are Library entries and not lessons.
+The Observatory's two suites order themselves (`observatory-exoplanet`,
+`observatory-populations`). The guides of the 3-D lab and the mission lab have
+no source file that orders them, so their sequence, Spaceflight and the
+three-dimensional sky (Prompt 274), is declared in
+`tools/library-curation.json` under `sequences`, with its words in both
+languages, the formats it covers and the sequence worth doing first.
+`curatedSequences` in `tools/build-library.mjs` refuses an entry that is not a
+guide of those formats, a guide named twice or left out, a guide placed before
+one it assumes, and an `after` that names no sequence
+(`tests/advancedCloseout.test.js`). The relations give each guide its pathway
+and its next entry from the order, as for any sequence.
 
 `sequenceAliases` maps a sequence id that was renamed or merged to the id that
 took it over (`SEQUENCE_ALIASES` in `js/data/sequenceAliases.js`), because a

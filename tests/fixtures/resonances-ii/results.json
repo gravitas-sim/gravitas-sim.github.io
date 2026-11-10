@@ -1,0 +1,801 @@
+{
+  "format": "gravitas.resonances-ii-results/1",
+  "node": "v24.4.0",
+  "ran": "2026-11-08",
+  "seconds": 38,
+  "verdict": "C",
+  "counts": {
+    "PASS": 22,
+    "FAIL": 13,
+    "REPORTED": 1,
+    "NOT RUN": 1
+  },
+  "legs": [
+    {
+      "id": "R1",
+      "status": "PASS",
+      "values": {
+        "maxDiffDeg": 0,
+        "refusesUnbalanced": true
+      },
+      "note": ""
+    },
+    {
+      "id": "R2",
+      "status": "PASS",
+      "values": {
+        "maxLambdaDeg": 1.1368683772161603e-13,
+        "maxVarpiDeg": 2.944489096989855e-11,
+        "maxArgumentDeg": 4.547473508864641e-13
+      },
+      "note": ""
+    },
+    {
+      "id": "R3",
+      "status": "PASS",
+      "values": {
+        "maxDiffDeg": 0.000004998024792257638,
+        "digestsMatch": true
+      },
+      "note": ""
+    },
+    {
+      "id": "L1",
+      "status": "FAIL",
+      "values": {
+        "state": "not-constrained",
+        "reason": "drifting-center",
+        "period": null,
+        "periodSigma": null,
+        "amplitude": null,
+        "center": null,
+        "periodsObserved": null
+      },
+      "note": "cited 2071 d, 0.064 deg, 180 deg from js/resonance/systems.js"
+    },
+    {
+      "id": "L1s",
+      "status": "FAIL",
+      "values": {
+        "state": "not-constrained",
+        "reason": "drifting-center",
+        "period": null,
+        "periodSigma": null,
+        "amplitude": null,
+        "center": null,
+        "periodsObserved": null,
+        "oracle": {
+          "state": "libration",
+          "period": 1796.4444444444443,
+          "amplitude": 0.06630009449713725,
+          "amplitudeCorrected": 0.11780560999772868,
+          "center": 179.97459110867243
+        }
+      },
+      "note": "AM3: 1,000 d smoothing, amplitude corrected for the boxcar gain"
+    },
+    {
+      "id": "L2",
+      "status": "PASS",
+      "values": {
+        "state": "libration",
+        "reason": "reversals",
+        "period": 2048.5714285714284,
+        "periodSigma": 134.31233272149075,
+        "amplitude": 27.92411650595153,
+        "center": 178.65257114211477,
+        "periodsObserved": 4.043793584379359,
+        "phiMin": 149.9532912284484,
+        "phiMax": 207.42576438767264,
+        "dE": 2.2694984545136858e-7
+      },
+      "note": "point masses, no oblateness"
+    },
+    {
+      "id": "L3",
+      "status": "FAIL",
+      "values": {
+        "kernel": {
+          "state": "libration",
+          "reason": "reversals",
+          "period": 2058,
+          "periodSigma": 23.459184413217205,
+          "amplitude": 29.766549379867,
+          "center": 179.915139109073,
+          "periodsObserved": 4.025267249757046
+        },
+        "oracle": {
+          "state": "libration",
+          "period": 1939.75,
+          "amplitude": 25.39443164390285,
+          "center": 182.72856573864982
+        }
+      },
+      "note": ""
+    },
+    {
+      "id": "L3c",
+      "status": "PASS",
+      "values": {
+        "state": "libration",
+        "reason": "reversals",
+        "period": 2058,
+        "periodSigma": 23.459184413217205,
+        "amplitude": 29.766549379867,
+        "center": 179.915139109073,
+        "periodsObserved": 4.025267249757046
+      },
+      "note": "cited 2071 d"
+    },
+    {
+      "id": "L4",
+      "status": "FAIL",
+      "values": {
+        "dE": 1.9802771956806372e-7,
+        "maxDivergenceDeg": 3.225136254115114,
+        "oracleAmplitude": 25.39443164390285
+      },
+      "note": ""
+    },
+    {
+      "id": "P1",
+      "status": "PASS",
+      "values": {
+        "kernel": {
+          "state": "libration",
+          "reason": "reversals",
+          "period": 21293.333333333332,
+          "periodSigma": 24.03700850309326,
+          "amplitude": 79.9679311007362,
+          "center": 179.2009513091792,
+          "periodsObserved": 3.6950532247964936
+        },
+        "oracle": {
+          "state": "libration",
+          "period": 21228.571428571428,
+          "amplitude": 79.87168091952823,
+          "amplitudeCorrected": 79.87168091952823,
+          "center": 179.29135891133478
+        }
+      },
+      "note": ""
+    },
+    {
+      "id": "P2",
+      "status": "PASS",
+      "values": {
+        "state": "libration",
+        "reason": "reversals",
+        "period": 21293.333333333332,
+        "periodSigma": 24.03700850309326,
+        "amplitude": 79.9679311007362,
+        "center": 179.2009513091792,
+        "periodsObserved": 3.6950532247964936
+      },
+      "note": "cited 19,670 yr, 82 deg, 180 deg from js/resonance/systems.js"
+    },
+    {
+      "id": "P3",
+      "status": "FAIL",
+      "values": {
+        "dE": 3.736628646816251e-8,
+        "maxDivergenceDeg": 0.05303245502568643,
+        "oracleAmplitude": 79.87168091952823
+      },
+      "note": ""
+    },
+    {
+      "id": "S1",
+      "status": "FAIL",
+      "values": {
+        "theoryRadPerYr": 0.0005745966126701814,
+        "kernelRadPerYr": 0.016229337392789155,
+        "rateSigmaRad": 4.060445033085174e-9,
+        "turns": 112.97951323343138,
+        "window": 43740,
+        "theoryPeriodYr": 10934.950134810724
+      },
+      "note": "first order in e, e', i; limits in thresholds.systems"
+    },
+    {
+      "id": "S2",
+      "status": "FAIL",
+      "values": {
+        "kernelRadPerYr": 0.016229337392789155,
+        "oracleRadPerYr": 0.0005873346031986525,
+        "oracleTheoryRadPerYr": 0.0005745966126701819,
+        "theoryAgreesWithOracleTheory": 7.547570929436272e-16
+      },
+      "note": ""
+    },
+    {
+      "id": "D3",
+      "status": "FAIL",
+      "values": {
+        "state": "measured",
+        "turns": 56.48976591647107,
+        "rate": 0.9298726899830628
+      },
+      "note": ""
+    },
+    {
+      "id": "C1",
+      "status": "FAIL",
+      "values": {
+        "inside": 0,
+        "of": 10,
+        "rows": [
+          {
+            "id": "m0",
+            "kernelPeriod": 2060,
+            "sigma": 23.353392738121634,
+            "oraclePeriod": 1945,
+            "hit": false
+          },
+          {
+            "id": "m1",
+            "kernelPeriod": 2060.285714285714,
+            "sigma": 25.962165040794304,
+            "oraclePeriod": 1925.5,
+            "hit": false
+          },
+          {
+            "id": "m2",
+            "kernelPeriod": 2050.285714285714,
+            "sigma": 28.873050777922476,
+            "oraclePeriod": 1946.75,
+            "hit": false
+          },
+          {
+            "id": "m3",
+            "kernelPeriod": 2046,
+            "sigma": 32.35590768167015,
+            "oraclePeriod": 1948.5,
+            "hit": false
+          },
+          {
+            "id": "m4",
+            "kernelPeriod": 2064.285714285714,
+            "sigma": 24.902394497330576,
+            "oraclePeriod": 1934.5,
+            "hit": false
+          },
+          {
+            "id": "m5",
+            "kernelPeriod": 2062.285714285714,
+            "sigma": 24.55190254068606,
+            "oraclePeriod": 1934.5,
+            "hit": false
+          },
+          {
+            "id": "m6",
+            "kernelPeriod": 2064.285714285714,
+            "sigma": 23.69520173018186,
+            "oraclePeriod": 1934.5,
+            "hit": false
+          },
+          {
+            "id": "m7",
+            "kernelPeriod": 2064.285714285714,
+            "sigma": 22.51212825050859,
+            "oraclePeriod": 1931,
+            "hit": false
+          },
+          {
+            "id": "m8",
+            "kernelPeriod": 2062,
+            "sigma": 22.535685985945552,
+            "oraclePeriod": 1941.5,
+            "hit": false
+          },
+          {
+            "id": "m9",
+            "kernelPeriod": 2062,
+            "sigma": 22.946106631056377,
+            "oraclePeriod": 1943.25,
+            "hit": false
+          }
+        ]
+      },
+      "note": ""
+    },
+    {
+      "id": "D1",
+      "status": "PASS",
+      "values": {
+        "windows": [
+          {
+            "periods": 0.5,
+            "state": "not-constrained",
+            "reason": "one-reversal",
+            "period": null,
+            "periodSigma": null,
+            "amplitude": null,
+            "center": null,
+            "periodsObserved": null
+          },
+          {
+            "periods": 1,
+            "state": "not-constrained",
+            "reason": "window-too-short",
+            "period": null,
+            "periodSigma": null,
+            "amplitude": null,
+            "center": null,
+            "periodsObserved": null
+          },
+          {
+            "periods": 2,
+            "state": "not-constrained",
+            "reason": "window-too-short",
+            "period": null,
+            "periodSigma": null,
+            "amplitude": null,
+            "center": null,
+            "periodsObserved": null
+          }
+        ]
+      },
+      "note": ""
+    },
+    {
+      "id": "D2",
+      "status": "PASS",
+      "values": {
+        "state": "circulation",
+        "reason": "completed-circuit",
+        "period": 81.63574985889088,
+        "periodSigma": null,
+        "amplitude": null,
+        "center": null,
+        "periodsObserved": null
+      },
+      "note": ""
+    },
+    {
+      "id": "L3f",
+      "status": "FAIL",
+      "values": {
+        "kernel": {
+          "state": "libration",
+          "reason": "reversals",
+          "period": 2076.285714285714,
+          "periodSigma": 34.23915489452326,
+          "amplitude": 28.233521028415765,
+          "center": 179.89456360207737,
+          "periodsObserved": 3.9898169808724373
+        },
+        "oracle": {
+          "state": "libration",
+          "period": 1939.75,
+          "amplitude": 25.39443164390285,
+          "center": 182.72856573864982
+        }
+      },
+      "note": ""
+    },
+    {
+      "id": "L3cf",
+      "status": "PASS",
+      "values": {
+        "state": "libration",
+        "reason": "reversals",
+        "period": 2076.285714285714,
+        "periodSigma": 34.23915489452326,
+        "amplitude": 28.233521028415765,
+        "center": 179.89456360207737,
+        "periodsObserved": 3.9898169808724373
+      },
+      "note": "cited 2071 d"
+    },
+    {
+      "id": "L4f",
+      "status": "PASS",
+      "values": {
+        "dE": 7.746228801660823e-10,
+        "maxDivergenceDeg": 0.013266094845562293,
+        "oracleAmplitude": 25.39443164390285
+      },
+      "note": ""
+    },
+    {
+      "id": "P1f",
+      "status": "PASS",
+      "values": {
+        "kernel": {
+          "state": "libration",
+          "reason": "reversals",
+          "period": 21293.333333333332,
+          "periodSigma": 24.03700850309326,
+          "amplitude": 79.96839484487674,
+          "center": 179.1946586405016,
+          "periodsObserved": 3.6950532247964936
+        },
+        "oracle": {
+          "state": "libration",
+          "period": 21228.571428571428,
+          "amplitude": 79.87168091952823,
+          "amplitudeCorrected": 79.87168091952823,
+          "center": 179.29135891133478
+        }
+      },
+      "note": ""
+    },
+    {
+      "id": "P2f",
+      "status": "PASS",
+      "values": {
+        "state": "libration",
+        "reason": "reversals",
+        "period": 21293.333333333332,
+        "periodSigma": 24.03700850309326,
+        "amplitude": 79.96839484487674,
+        "center": 179.1946586405016,
+        "periodsObserved": 3.6950532247964936
+      },
+      "note": "cited 19,670 yr, 82 deg, 180 deg from js/resonance/systems.js"
+    },
+    {
+      "id": "P3f",
+      "status": "PASS",
+      "values": {
+        "dE": 1.460408357464183e-10,
+        "maxDivergenceDeg": 0.0002289761926022038,
+        "oracleAmplitude": 79.87168091952823
+      },
+      "note": ""
+    },
+    {
+      "id": "S1f",
+      "status": "FAIL",
+      "values": {
+        "theoryRadPerYr": 0.0005745966126701814,
+        "kernelRadPerYr": 0.0006132551146542783,
+        "rateSigmaRad": 5.413047220638257e-10,
+        "turns": 4.269136974891937,
+        "window": 43740,
+        "theoryPeriodYr": 10934.950134810724
+      },
+      "note": "first order in e, e', i; limits in thresholds.systems"
+    },
+    {
+      "id": "S2f",
+      "status": "FAIL",
+      "values": {
+        "kernelRadPerYr": 0.0006132551146542783,
+        "oracleRadPerYr": 0.0005873346031986525,
+        "oracleTheoryRadPerYr": 0.0005745966126701819,
+        "theoryAgreesWithOracleTheory": 7.547570929436272e-16
+      },
+      "note": ""
+    },
+    {
+      "id": "D3f",
+      "status": "PASS",
+      "values": {
+        "state": "not-constrained",
+        "turns": 2.134588460265144,
+        "rate": null
+      },
+      "note": ""
+    },
+    {
+      "id": "C1f",
+      "status": "FAIL",
+      "values": {
+        "inside": 0,
+        "of": 10,
+        "rows": [
+          {
+            "id": "m0",
+            "kernelPeriod": 2072.285714285714,
+            "sigma": 37.67449199310823,
+            "oraclePeriod": 1945,
+            "hit": false
+          },
+          {
+            "id": "m1",
+            "kernelPeriod": 2076.285714285714,
+            "sigma": 27.107119329935202,
+            "oraclePeriod": 1925.5,
+            "hit": false
+          },
+          {
+            "id": "m2",
+            "kernelPeriod": 2054.285714285714,
+            "sigma": 28.955396146252163,
+            "oraclePeriod": 1946.75,
+            "hit": false
+          },
+          {
+            "id": "m3",
+            "kernelPeriod": 2044,
+            "sigma": 38.3300205607886,
+            "oraclePeriod": 1948.5,
+            "hit": false
+          },
+          {
+            "id": "m4",
+            "kernelPeriod": 2084.5714285714284,
+            "sigma": 33.76942625600654,
+            "oraclePeriod": 1934.5,
+            "hit": false
+          },
+          {
+            "id": "m5",
+            "kernelPeriod": 2082.5714285714284,
+            "sigma": 32.42563443801035,
+            "oraclePeriod": 1934.5,
+            "hit": false
+          },
+          {
+            "id": "m6",
+            "kernelPeriod": 2084.5714285714284,
+            "sigma": 34.317742976384636,
+            "oraclePeriod": 1934.5,
+            "hit": false
+          },
+          {
+            "id": "m7",
+            "kernelPeriod": 2082.5714285714284,
+            "sigma": 33.157529592951924,
+            "oraclePeriod": 1931,
+            "hit": false
+          },
+          {
+            "id": "m8",
+            "kernelPeriod": 2076.285714285714,
+            "sigma": 37.89880905636952,
+            "oraclePeriod": 1941.5,
+            "hit": false
+          },
+          {
+            "id": "m9",
+            "kernelPeriod": 2076.285714285714,
+            "sigma": 39.46711366726087,
+            "oraclePeriod": 1943.25,
+            "hit": false
+          }
+        ]
+      },
+      "note": ""
+    },
+    {
+      "id": "D1f",
+      "status": "PASS",
+      "values": {
+        "windows": [
+          {
+            "periods": 0.5,
+            "state": "not-constrained",
+            "reason": "one-reversal",
+            "period": null,
+            "periodSigma": null,
+            "amplitude": null,
+            "center": null,
+            "periodsObserved": null
+          },
+          {
+            "periods": 1,
+            "state": "not-constrained",
+            "reason": "window-too-short",
+            "period": null,
+            "periodSigma": null,
+            "amplitude": null,
+            "center": null,
+            "periodsObserved": null
+          },
+          {
+            "periods": 2,
+            "state": "not-constrained",
+            "reason": "window-too-short",
+            "period": null,
+            "periodSigma": null,
+            "amplitude": null,
+            "center": null,
+            "periodsObserved": null
+          }
+        ]
+      },
+      "note": ""
+    },
+    {
+      "id": "D2f",
+      "status": "PASS",
+      "values": {
+        "state": "circulation",
+        "reason": "completed-circuit",
+        "period": 81.76297052496272,
+        "periodSigma": null,
+        "amplitude": null,
+        "center": null,
+        "periodsObserved": null
+      },
+      "note": ""
+    },
+    {
+      "id": "L3g",
+      "status": "PASS",
+      "values": {
+        "kernel": {
+          "state": "libration",
+          "reason": "reversals",
+          "period": 2076.285714285714,
+          "periodSigma": 34.23915489452326,
+          "amplitude": 28.233521028415765,
+          "center": 179.89456360207737,
+          "periodsObserved": 3.9898169808724373
+        },
+        "oracle": {
+          "state": "libration",
+          "period": 2076.285714285714,
+          "amplitude": 28.227664882059486,
+          "amplitudeCorrected": 28.227664882059486,
+          "center": 179.89533250049317
+        }
+      },
+      "note": "AM5: the corrected oracle estimator"
+    },
+    {
+      "id": "C1g",
+      "status": "PASS",
+      "values": {
+        "inside": 10,
+        "of": 10,
+        "rows": [
+          {
+            "id": "m0",
+            "kernelPeriod": 2072.285714285714,
+            "sigma": 37.67449199310823,
+            "oraclePeriod": 2072.285714285714,
+            "hit": true
+          },
+          {
+            "id": "m1",
+            "kernelPeriod": 2076.285714285714,
+            "sigma": 27.107119329935202,
+            "oraclePeriod": 2076.285714285714,
+            "hit": true
+          },
+          {
+            "id": "m2",
+            "kernelPeriod": 2054.285714285714,
+            "sigma": 28.955396146252163,
+            "oraclePeriod": 2054.285714285714,
+            "hit": true
+          },
+          {
+            "id": "m3",
+            "kernelPeriod": 2044,
+            "sigma": 38.3300205607886,
+            "oraclePeriod": 2044,
+            "hit": true
+          },
+          {
+            "id": "m4",
+            "kernelPeriod": 2084.5714285714284,
+            "sigma": 33.76942625600654,
+            "oraclePeriod": 2084.5714285714284,
+            "hit": true
+          },
+          {
+            "id": "m5",
+            "kernelPeriod": 2082.5714285714284,
+            "sigma": 32.42563443801035,
+            "oraclePeriod": 2082.5714285714284,
+            "hit": true
+          },
+          {
+            "id": "m6",
+            "kernelPeriod": 2084.5714285714284,
+            "sigma": 34.317742976384636,
+            "oraclePeriod": 2084.5714285714284,
+            "hit": true
+          },
+          {
+            "id": "m7",
+            "kernelPeriod": 2082.5714285714284,
+            "sigma": 33.157529592951924,
+            "oraclePeriod": 2082.5714285714284,
+            "hit": true
+          },
+          {
+            "id": "m8",
+            "kernelPeriod": 2076.285714285714,
+            "sigma": 37.89880905636952,
+            "oraclePeriod": 2076.285714285714,
+            "hit": true
+          },
+          {
+            "id": "m9",
+            "kernelPeriod": 2076.285714285714,
+            "sigma": 39.46711366726087,
+            "oraclePeriod": 2078.285714285714,
+            "hit": true
+          }
+        ]
+      },
+      "note": "AM5: the corrected oracle estimator"
+    },
+    {
+      "id": "S1g",
+      "status": "PASS",
+      "values": {
+        "theoryRadPerYr": 0.0005745966126701814,
+        "kernelRadPerYr": 0.0005874358384119124,
+        "rateSigmaRad": 3.040685218039153e-9,
+        "turns": 4.089397704501388
+      },
+      "note": ""
+    },
+    {
+      "id": "S2g",
+      "status": "PASS",
+      "values": {
+        "kernelRadPerYr": 0.0005874358384119124,
+        "oracleRadPerYr": 0.0005873346031986525
+      },
+      "note": ""
+    },
+    {
+      "id": "D3g",
+      "status": "PASS",
+      "values": {
+        "state": "not-constrained",
+        "turns": 2.0447172122017303,
+        "rate": null
+      },
+      "note": ""
+    },
+    {
+      "id": "N1",
+      "status": "REPORTED",
+      "values": {
+        "note": "authentic-data applicability: L1 is the authentic leg (a real ephemeris whose published libration values were not used to tune the estimator, whose options are committed above); no other authentic dataset is available in this session"
+      },
+      "note": ""
+    },
+    {
+      "id": "K1",
+      "status": "NOT RUN",
+      "values": {
+        "request": "NOT RUN; request: an independent secular (double-averaged) integration or a cited table, then a Part A addendum"
+      },
+      "note": ""
+    }
+  ],
+  "history": [
+    {
+      "run": "first run of the legs as committed (steps of AM1; before L1s and the follow-up legs existed)",
+      "verdict": "C",
+      "counts": {
+        "PASS": 9,
+        "FAIL": 8,
+        "REPORTED": 1,
+        "NOT RUN": 1
+      },
+      "statuses": {
+        "R1": "PASS",
+        "R2": "PASS",
+        "R3": "PASS",
+        "L1": "FAIL",
+        "L2": "PASS",
+        "L3": "FAIL",
+        "L3c": "PASS",
+        "L4": "FAIL",
+        "P1": "PASS",
+        "P2": "PASS",
+        "P3": "FAIL",
+        "S1": "FAIL",
+        "S2": "FAIL",
+        "D3": "FAIL",
+        "C1": "FAIL",
+        "D1": "PASS",
+        "D2": "PASS",
+        "N1": "REPORTED",
+        "K1": "NOT RUN"
+      },
+      "note": "its numbers are the plain-id legs of this file, which the later runs reproduce exactly (the kernel is deterministic); what the later runs added is only the suffixed legs"
+    }
+  ]
+}

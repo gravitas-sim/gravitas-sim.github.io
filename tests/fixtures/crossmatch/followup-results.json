@@ -1,0 +1,59 @@
+{
+ "format": "gravitas.crossmatch-results/1",
+ "thresholdsSha": "38a05db486fc0f8fa42a21e1fc03d007a0fffabd347147f6461fa5f5752267d7",
+ "node": "v22.23.4",
+ "cpuSeconds": 0.1,
+ "verdict": "VALIDATED",
+ "failed": [],
+ "counts": {
+  "pass": 3,
+  "fail": 0,
+  "reported": 0,
+  "not run": 0
+ },
+ "rows": [
+  {
+   "id": "A6b.poleCrossing",
+   "group": "analytic",
+   "status": "pass",
+   "measured": {
+    "crossed": true,
+    "sepErr": 4.579998341348974e-11,
+    "raErr": 0,
+    "dec": 89.99997527777779
+   },
+   "bound": {
+    "maxAbsArcsec": 1e-8,
+    "maxRaErrDeg": 0.000001
+   },
+   "note": null
+  },
+  {
+   "id": "B1b.poleCrossing",
+   "group": "oracle",
+   "status": "pass",
+   "measured": 1.6945995436349814e-9,
+   "bound": {
+    "maxSepArcsec": 0.00001
+   },
+   "note": "20 sources"
+  },
+  {
+   "id": "G2e.exactCoverage",
+   "group": "population",
+   "status": "pass",
+   "measured": [
+    0.98344,
+    0.97957,
+    0.95838,
+    0.95602,
+    0.95606,
+    0.95007
+   ],
+   "bound": {
+    "minCoveragePerMean": 0.94
+   },
+   "note": null
+  }
+ ]
+}

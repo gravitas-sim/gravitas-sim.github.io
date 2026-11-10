@@ -1,0 +1,18 @@
+{
+ "format": "gravitas.model-comparison-failed-legs/1",
+ "note": "the legs that crossed a committed bound; they stay failing, only Carl resets a bound",
+ "legs": [
+  {
+   "id": "F1.authenticCepheid",
+   "measured": {
+    "points": 55,
+    "p": 0.011,
+    "atFloor": false,
+    "bestPeriod": 7.4346,
+    "peakPower": 0.28137,
+    "packRecordedPublishedPeriodReportedOnly": 7.1767
+   },
+   "note": null
+  }
+ ]
+}

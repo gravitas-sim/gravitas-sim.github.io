@@ -488,6 +488,60 @@
       },
       "courseLevel": "upper"
     },
+    "l3-elements": {
+      "mathematics": "algebra",
+      "prerequisites": [],
+      "textbook": {
+        "chapter": 3,
+        "section": "3.4"
+      },
+      "courseLevel": "majors"
+    },
+    "l3-frames": {
+      "mathematics": "algebra",
+      "prerequisites": [
+        "investigation:l3-elements"
+      ],
+      "textbook": {
+        "chapter": 3,
+        "section": "3.4"
+      },
+      "courseLevel": "majors"
+    },
+    "l3-seen": {
+      "mathematics": "algebra",
+      "prerequisites": [
+        "investigation:l3-frames"
+      ],
+      "textbook": {
+        "chapter": 3,
+        "section": "3.4"
+      },
+      "courseLevel": "majors"
+    },
+    "l3-tilts": {
+      "mathematics": "algebra",
+      "prerequisites": [
+        "investigation:l3-mutual",
+        "investigation:l3-frames"
+      ],
+      "textbook": {
+        "chapter": 3,
+        "section": "3.6"
+      },
+      "courseLevel": "majors"
+    },
+    "l3-resonant": {
+      "mathematics": "algebra",
+      "prerequisites": [
+        "investigation:l3-elements"
+      ],
+      "textbook": {
+        "chapter": 3,
+        "section": "3.6"
+      },
+      "courseLevel": "upper"
+    },
     "ml-orbit": {
       "mathematics": "algebra",
       "prerequisites": [],
@@ -659,6 +713,43 @@
         "gravity"
       ]
     }
+  },
+  "sequences": {
+    "note": "Sequences of guides that no source file orders. The curated sequences of lessons are js/data/investigations/sequences.js and the Observatory's suites order themselves; a sequence here holds guides of the 3-D lab and the mission lab, which are Library entries and not lessons. tools/build-library.mjs fails on an id that is not a guide in the Library, on a prerequisite placed after the guide that names it, on a guide of those two formats left out, and on an `after` that names no sequence. Nothing here is shipped but through library/library.json. The Spanish has not been read by a fluent reader (TRANSLATION.md). Prompt 274.",
+    "list": [
+      {
+        "id": "spaceflight-and-the-3d-sky",
+        "formats": [
+          "lab3d",
+          "mission"
+        ],
+        "title": {
+          "en": "Spaceflight and the three-dimensional sky",
+          "es": "El vuelo espacial y el cielo en tres dimensiones"
+        },
+        "blurb": {
+          "en": "For majors and upper-level courses, after Gravity and orbits: orbits as they lie in space, then a flight between two of them. The 3-D lab’s investigations go from one orbit’s plane and its six elements, through a change of reference plane and what an observer sees, to tilted pairs, the Kozai-Lidov cycle and a resonant pair; the mission lab’s go from a rendezvous in Earth orbit to the launch window for Mars and the cruise. Each investigation names the ones it assumes and has a second, deeper path. A window chosen over a grid of dates, a full propellant budget and a measured libration have no investigation yet.",
+          "es": "Para cursos de especialidad y de nivel superior, después de Gravedad y órbitas: las órbitas tal como están en el espacio y luego un vuelo entre dos de ellas. Las investigaciones del laboratorio 3D van del plano de una órbita y sus seis elementos, pasando por un cambio de plano de referencia y lo que ve un observador, a los pares inclinados, el ciclo de Kozai-Lidov y un par resonante; las del laboratorio de misiones van de un encuentro en órbita terrestre a la ventana de lanzamiento hacia Marte y al crucero. Cada investigación nombra las que supone y tiene un segundo recorrido, más profundo. Una ventana elegida sobre una malla de fechas, un presupuesto completo de propelente y una libración medida aún no tienen investigación."
+        },
+        "after": [
+          "gravity-and-orbits"
+        ],
+        "entries": [
+          "investigation:l3-planes",
+          "investigation:l3-elements",
+          "investigation:l3-frames",
+          "investigation:l3-seen",
+          "investigation:l3-eclipse",
+          "investigation:l3-mutual",
+          "investigation:l3-tilts",
+          "investigation:l3-kozai",
+          "investigation:l3-resonant",
+          "investigation:ml-orbit",
+          "investigation:ml-window",
+          "investigation:ml-cruise"
+        ]
+      }
+    ]
   },
   "starts": {
     "note": "Where to begin, per audience and level: two Library entries each, committed here and read by tools/build-library.mjs, which fails on an id that is not in the Library. Home's first-week list (tools/navigation-inventory.json) names entries that must also appear here. Prompt 163.",

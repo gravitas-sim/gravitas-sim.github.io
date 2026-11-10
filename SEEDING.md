@@ -109,14 +109,19 @@ algorithm, in the widgets family), `validation/groups/` (not published to a visi
 
 ## The experiment record
 
-Whether the record names its streams is held for Prompt 176. The corpus (Prompt
-134, `tests/compat`, 123 tests, green) says 2.0.0's experiment reader accepts an
-unknown field and drops it silently. That would make a field that says "this ran
-on these streams" present on some copies of a record and gone on others after one
-round trip through an older build. And the experiment's own sites (`valuesFor`,
-the engine build in `trialRunner.js`) are waits above, so a record could only name
-streams the sites do not yet draw through the API. When they move, `draw.stream`
-is the value to write.
+Prompt 265 settled what this section held for Prompt 176. The corpus (Prompt 134)
+says 2.0.0's experiment reader accepts an unknown field and drops it silently, so the
+record does not carry the streams as an unknown field: a record that names its streams
+is `gravitas.experiment/2`, which a 2.0.0 reader refuses by its version in words
+(`tests/compat/boundary.mjs`: `ensemble-fields`), and a manifest that names nothing is
+still /1, byte for byte. A trial of an ensemble draws from `stream(id, seed, 'trial', i)`
+and the record lists the stream as `draw.stream` gives it (`{id, algorithm, version,
+key}`); a sweep keeps its legacy draws (the engine stream keyed by the manifest's seed,
+and `stream('experiments', seed)` for a distribution, equal to `valuesFor`), which the
+record names with the fork rule `legacy-sweep`. The experiment's own sites
+(`valuesFor`, the engine build in `trialRunner.js`) are still the waits above, so a
+sweep record names streams its sites do not yet draw through the API; the equivalence is
+held by `tests/experimentEnsemble.test.js` and leg A6 (EXPERIMENT_ENSEMBLES.md).
 
 ## Adding a stream or moving a site
 

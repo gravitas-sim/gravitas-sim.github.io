@@ -943,6 +943,11 @@
             "l3-eclipse",
             "l3-mutual",
             "l3-kozai",
+            "l3-elements",
+            "l3-frames",
+            "l3-seen",
+            "l3-tilts",
+            "l3-resonant",
             "ml-orbit",
             "ml-window",
             "ml-cruise"

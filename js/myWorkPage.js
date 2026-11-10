@@ -16,8 +16,16 @@ import {
   drop as dropText,
   get as getText,
   put as putText,
+  readResume,
 } from './storage/local.js';
-import { SURFACE_ROUTE, describe, surfaceOf, total } from './myWork/model.js';
+import {
+  DEPTH_NAMES,
+  SURFACE_ROUTE,
+  describe,
+  progressGroups,
+  surfaceOf,
+  total,
+} from './myWork/model.js';
 import {
   INDEX_KEY,
   LAST_EXPORT_KEY,
@@ -60,6 +68,7 @@ const day = iso => {
 const s = {
   store: null,
   library: new Map(),
+  sequences: [],
   file: null,
   records: [],
   model: null,
@@ -188,9 +197,52 @@ function lessonItem(x) {
   });
 }
 
+/** Where the student stands in each sequence and course (Prompt 276). */
+function progressItems() {
+  const groups = progressGroups(s.library, s.sequences, s.model.lessons);
+  const dep = d => L(...DEPTH_NAMES[d]);
+  const state = i =>
+    i.state === 'done'
+      ? L('done', 'terminada')
+      : i.state === 'doing'
+        ? L(
+            `in progress${i.total ? `, ${i.seen} of ${i.total} steps seen` : ''}`,
+            `en curso${i.total ? `, ${i.seen} de ${i.total} pasos vistos` : ''}`
+          )
+        : L('not started', 'sin empezar');
+  const row = i =>
+    `<li><a href="${esc(i.route)}" aria-label="${esc(L('Open', 'Abrir'))}: ${esc(pick(i.title))}">${esc(pick(i.title))}</a>: ${esc(
+      state(i) +
+        (i.depth && i.state !== 'new'
+          ? `; ${L('depth', 'profundidad')}: ${dep(i.depth)}`
+          : '')
+    )}${i.prerequisites
+      .map(
+        p =>
+          ` ${esc(L('You may want', 'Quizá quieras hacer'))} <a href="${esc(p.route)}" aria-label="${esc(L('Open', 'Abrir'))}: ${esc(pick(p.title))}">${esc(pick(p.title))}</a> ${esc(L('first.', 'antes.'))}`
+      )
+      .join('')}</li>`;
+  const top = readResume()[0];
+  const lead = top
+    ? `<li class="mw-item"><div class="mw-what"><div class="mw-title">${esc(L('Where you left off', 'Donde lo dejaste'))}</div><div class="mw-facts"><span><a href="${esc(top.route)}" aria-label="${esc(L('Open', 'Abrir'))}: ${esc(pick(top.title) || top.id)}">${esc(pick(top.title) || top.id)}</a></span></div></div></li>`
+    : '';
+  return [
+    ...(lead ? [lead] : []),
+    ...groups.map(g => {
+      const c = g.counts;
+      const sum = L(
+        `${c.done} done, ${c.doing} in progress, ${c.new} not started`,
+        `${c.done} terminadas, ${c.doing} en curso, ${c.new} sin empezar`
+      );
+      return `<li class="mw-item"><div class="mw-what"><details${c.done + c.doing ? ' open' : ''}><summary><span class="mw-title">${esc(pick(g.title))}</span> <span class="mw-facts">${esc(sum)}</span></summary><ol class="mw-units">${g.items.map(row).join('')}</ol></details></div></li>`;
+    }),
+  ];
+}
+
 function sections() {
   const m = s.model;
   const out = {};
+  out.mwProgress = progressItems();
   out.mwLessons = m.lessons.map(lessonItem);
   out.mwAssignments = m.assignments.map(a =>
     item({
@@ -428,6 +480,11 @@ function showMade() {
   if (s.model.made.length)
     import('./myWork/madeView.js').then(m =>
       m.show({ item, state: s, refresh })
+    );
+  // The review of the evidence notebook, when it holds entries (Prompt 275).
+  if (s.model.evidence.notebook?.count)
+    import('./myWork/evidenceView.js').then(m =>
+      m.show({ state: s, refresh, surfaces: { SURFACE_ROUTE, surfaceOf } })
     );
 }
 
@@ -769,7 +826,11 @@ async function start() {
   $('mwSummary').tabIndex = -1;
   try {
     const r = await fetch(new URL('/library/library.json', document.baseURI));
-    if (r.ok) s.library = new Map((await r.json()).entries.map(x => [x.id, x]));
+    if (r.ok) {
+      const j = await r.json();
+      s.library = new Map(j.entries.map(x => [x.id, x]));
+      s.sequences = j.sequences ?? [];
+    }
   } catch {
     /* items list under their ids */
   }

@@ -401,7 +401,7 @@ describe('the 3-D lab in the Library (Prompt 105)', () => {
 
   test('its guides are investigations with two depths and an adoption page each', () => {
     const guides = library.entries.filter(e => e.format === 'lab3d');
-    expect(guides.length).toBe(4);
+    expect(guides.length).toBe(9);
     for (const g of guides) {
       expect([g.id, g.depths]).toEqual([g.id, 2]);
       const id = g.id.replace('investigation:', '');

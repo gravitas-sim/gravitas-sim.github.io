@@ -1,0 +1,72 @@
+{
+ "format": "gravitas.population-inference-diagnostic-d8/1",
+ "note": "A post-hoc diagnostic written after the first validator run; it is not a leg, moves no bound and changes no status.",
+ "countsPath": {
+  "draws": 200000,
+  "truthMu": 5,
+  "zeroStatements": 1383,
+  "zeroCovered": 0,
+  "conditionalCoverage": 0,
+  "unconditionalCoverage": 0.978785
+ },
+ "objectPathU3": {
+  "perBin": [
+   {
+    "zeroStatements": 8,
+    "zeroCovered": 0,
+    "statements": 1000,
+    "covered": 942
+   },
+   {
+    "zeroStatements": 0,
+    "zeroCovered": 0,
+    "statements": 1000,
+    "covered": 951
+   },
+   {
+    "zeroStatements": 0,
+    "zeroCovered": 0,
+    "statements": 1000,
+    "covered": 939
+   },
+   {
+    "zeroStatements": 0,
+    "zeroCovered": 0,
+    "statements": 1000,
+    "covered": 944
+   },
+   {
+    "zeroStatements": 0,
+    "zeroCovered": 0,
+    "statements": 1000,
+    "covered": 944
+   },
+   {
+    "zeroStatements": 53,
+    "zeroCovered": 44,
+    "statements": 1000,
+    "covered": 965
+   },
+   {
+    "zeroStatements": 37,
+    "zeroCovered": 20,
+    "statements": 1000,
+    "covered": 941
+   },
+   {
+    "zeroStatements": 16,
+    "zeroCovered": 7,
+    "statements": 1000,
+    "covered": 951
+   }
+  ],
+  "total": {
+   "zeroStatements": 114,
+   "zeroCovered": 71,
+   "statements": 8000,
+   "covered": 7577
+  },
+  "conditionalCoverage": 0.6228070175438597,
+  "unconditionalCoverage": 0.947125
+ }
+}

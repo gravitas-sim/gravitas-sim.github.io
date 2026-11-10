@@ -1,0 +1,28 @@
+{
+ "format": "gravitas.experiment-ensemble-failed-legs/1",
+ "note": "A crossed bound is a failed leg; nothing is moved after a result.",
+ "failed": [
+  {
+   "id": "A8.regressionContext",
+   "measured": {
+    "median": 0.00578459045542643,
+    "p90": 0.3136102253170561,
+    "groupMedian": 0.0061484217010952386,
+    "groupP90": 0.4790509263528271,
+    "recorded": {
+     "median": 0.00615,
+     "p90": 0.479
+    },
+    "margin": 1.25,
+    "relMedian": 0.05917473838920287,
+    "relP90": 0.3453509677881758,
+    "withinCommittedBound": true
+   },
+   "limit": {
+    "maxRelDifference": 1e-9,
+    "withinCommittedBound": true
+   },
+   "note": "amendment AM3 says this leg is expected to fail"
+  }
+ ]
+}

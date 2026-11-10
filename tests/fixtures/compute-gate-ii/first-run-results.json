@@ -1,0 +1,1302 @@
+{
+ "format": "gravitas.compute-gate-ii-results/1",
+ "thresholdsSha256": "75d576c295afb9d13fcfb5886c2989a0720fe7ef80aa5da34fd47dddd0a323cf",
+ "node": "v22.23.4",
+ "python": "Python 3.9.6",
+ "verdict": "C",
+ "passing": [],
+ "noFailureSoFar": [],
+ "counts": {
+  "fail": 9,
+  "pass": 54,
+  "reported": 3,
+  "NOT RUN": 4
+ },
+ "candidates": [
+  {
+   "id": "N01",
+   "notebook": "integration-order",
+   "passes": false,
+   "ownFailed": [
+    "N01.a"
+   ],
+   "pageFailed": [
+    "G4.b",
+    "G5.b",
+    "G7.a"
+   ],
+   "notRun": [
+    "G2.b",
+    "G3.b",
+    "G4.c"
+   ],
+   "noFailureSoFar": false
+  },
+  {
+   "id": "N02",
+   "notebook": "adaptive-steps",
+   "passes": false,
+   "ownFailed": [
+    "N02.a",
+    "N02.b",
+    "N02.d"
+   ],
+   "pageFailed": [
+    "G4.b",
+    "G5.b",
+    "G7.a"
+   ],
+   "notRun": [
+    "G2.b",
+    "G3.b",
+    "G4.c"
+   ],
+   "noFailureSoFar": false
+  },
+  {
+   "id": "N03",
+   "notebook": "orbital-chaos",
+   "passes": false,
+   "ownFailed": [],
+   "pageFailed": [
+    "G4.b",
+    "G5.b",
+    "G7.a"
+   ],
+   "notRun": [
+    "G2.b",
+    "G3.b",
+    "G4.c"
+   ],
+   "noFailureSoFar": false
+  },
+  {
+   "id": "N04",
+   "notebook": "kepler-root",
+   "passes": false,
+   "ownFailed": [],
+   "pageFailed": [
+    "G4.b",
+    "G5.b",
+    "G7.a"
+   ],
+   "notRun": [
+    "G2.b",
+    "G3.b",
+    "G4.c"
+   ],
+   "noFailureSoFar": false
+  },
+  {
+   "id": "N05",
+   "notebook": "least-squares",
+   "passes": false,
+   "ownFailed": [],
+   "pageFailed": [
+    "G4.b",
+    "G5.b",
+    "G7.a"
+   ],
+   "notRun": [
+    "G2.b",
+    "G3.b",
+    "G4.c"
+   ],
+   "noFailureSoFar": false
+  },
+  {
+   "id": "N06",
+   "notebook": "periodogram-scratch",
+   "passes": false,
+   "ownFailed": [],
+   "pageFailed": [
+    "G4.b",
+    "G5.b",
+    "G7.a"
+   ],
+   "notRun": [
+    "G2.b",
+    "G3.b",
+    "G4.c"
+   ],
+   "noFailureSoFar": false
+  },
+  {
+   "id": "N07",
+   "notebook": "isochrone-interpolation",
+   "passes": false,
+   "ownFailed": [
+    "N07.b"
+   ],
+   "pageFailed": [
+    "G4.b",
+    "G5.b",
+    "G7.a"
+   ],
+   "notRun": [
+    "G2.b",
+    "G3.b",
+    "G4.c"
+   ],
+   "noFailureSoFar": false
+  },
+  {
+   "id": "N08",
+   "notebook": "polytrope",
+   "passes": false,
+   "ownFailed": [],
+   "pageFailed": [
+    "G4.b",
+    "G5.b",
+    "G7.a"
+   ],
+   "notRun": [
+    "G2.b",
+    "G3.b",
+    "G4.c"
+   ],
+   "noFailureSoFar": false
+  },
+  {
+   "id": "N09",
+   "notebook": "barnes-hut-toy",
+   "passes": false,
+   "ownFailed": [
+    "N09.g"
+   ],
+   "pageFailed": [
+    "G4.b",
+    "G5.b",
+    "G7.a"
+   ],
+   "notRun": [
+    "G2.b",
+    "G3.b",
+    "G4.c"
+   ],
+   "noFailureSoFar": false
+  },
+  {
+   "id": "N10",
+   "notebook": "synthetic-populations",
+   "passes": false,
+   "ownFailed": [],
+   "pageFailed": [
+    "G4.b",
+    "G5.b",
+    "G7.a"
+   ],
+   "notRun": [
+    "G2.b",
+    "G3.b",
+    "G4.c"
+   ],
+   "noFailureSoFar": false
+  }
+ ],
+ "legs": [
+  {
+   "id": "N01.a",
+   "status": "fail",
+   "measured": {
+    "worstErrorRel": 0.000016686274971797724,
+    "worstOrderAbs": 0.000004956621732610245
+   },
+   "bound": "1e-6 / 1e-4 (the two codes integrate the same equations with the same arithmetic and the same reference, so they agree to rounding)"
+  },
+  {
+   "id": "N01.b",
+   "status": "pass",
+   "measured": {
+    "euler": {
+     "order": 0.8047966088181326,
+     "allowed": 0.2,
+     "dev": 0.19520339118186736
+    },
+    "symplectic": {
+     "order": 0.8475177287477409,
+     "allowed": 0.2,
+     "dev": 0.1524822712522591
+    },
+    "verlet": {
+     "order": 1.9998608304595626,
+     "allowed": 0.30000000000000004,
+     "dev": 0.00013916954043735608
+    },
+    "rk4": {
+     "order": 4.125468858825526,
+     "allowed": 0.5,
+     "dev": 0.12546885882552594
+    }
+   },
+   "bound": "0.2, 0.2, 0.3, 0.5 (a log-log fit over a factor 16 in h; 10 percent of the order plus a pre-asymptotic allowance of 0.1, fixed here before any fit)"
+  },
+  {
+   "id": "N01.c",
+   "status": "pass",
+   "measured": {
+    "identical": true
+   },
+   "bound": "byte-identical"
+  },
+  {
+   "id": "N01.d",
+   "status": "pass",
+   "measured": {
+    "refused": true,
+    "message": "REFUSED: refused: two bodies start at the same place\n"
+   },
+   "bound": "the run raises and returns no answer"
+  },
+  {
+   "id": "N01.e",
+   "status": "pass",
+   "measured": {
+    "mods": [
+     "json",
+     "numpy",
+     "scipy"
+    ],
+    "bad": [],
+    "forbidden": null,
+    "packages": [
+     "numpy",
+     "scipy"
+    ],
+    "withinStatedSet": true,
+    "inputValid": true,
+    "inputUnchanged": true
+   },
+   "bound": "all true"
+  },
+  {
+   "id": "N02.a",
+   "status": "fail",
+   "measured": {
+    "0.0001": {
+     "err_rel": 0.30048784110086285,
+     "limit": 0.01
+    },
+    "1e-06": {
+     "err_rel": 0.044791681200882234,
+     "limit": 0.00009999999999999999
+    },
+    "1e-08": {
+     "err_rel": 0.004676548414045385,
+     "limit": 0.000001
+    },
+    "1e-10": {
+     "err_rel": 0.00046948017680881486,
+     "limit": 1e-8
+    }
+   },
+   "bound": "100 tol (global error accumulates over many steps; two orders is the customary allowance for a local control, fixed before the run)"
+  },
+  {
+   "id": "N02.b",
+   "status": "fail",
+   "measured": {
+    "0.0001": {
+     "errRatio": 144.41794218398624,
+     "stepRatio": 6.888888888888889
+    },
+    "1e-06": {
+     "errRatio": 8463.006477506608,
+     "stepRatio": 30.095238095238095
+    },
+    "1e-08": {
+     "errRatio": 350147.73363322223,
+     "stepRatio": 130.14
+    },
+    "1e-10": {
+     "errRatio": 3247113.2528742612,
+     "stepRatio": 526.6774193548387
+    }
+   },
+   "bound": "both ratios (same scheme, different step-factor constants)"
+  },
+  {
+   "id": "N02.c",
+   "status": "pass",
+   "measured": {
+    "identical": true
+   },
+   "bound": "byte-identical"
+  },
+  {
+   "id": "N02.d",
+   "status": "fail",
+   "measured": {
+    "refused": false,
+    "timedOutAt60sWallWithoutRefusing": true,
+    "message": "",
+    "cpuSeconds": null,
+    "wallSeconds": 60.004172355
+   },
+   "bound": "raises, and does so in at most 20 s of CPython CPU time"
+  },
+  {
+   "id": "N02.e",
+   "status": "pass",
+   "measured": {
+    "mods": [
+     "json",
+     "numpy",
+     "scipy"
+    ],
+    "bad": [],
+    "forbidden": null,
+    "packages": [
+     "numpy",
+     "scipy"
+    ],
+    "withinStatedSet": true,
+    "inputValid": true,
+    "inputUnchanged": true
+   },
+   "bound": "all true"
+  },
+  {
+   "id": "N02.r",
+   "status": "reported",
+   "measured": {
+    "0.0001": {
+     "adaptiveNfev": 373,
+     "rk4Nfev": 200,
+     "ratio": 0.5361930294906166
+    },
+    "1e-06": {
+     "adaptiveNfev": 3793,
+     "rk4Nfev": 200,
+     "ratio": 0.052728710783021354
+    },
+    "1e-08": {
+     "adaptiveNfev": 39073,
+     "rk4Nfev": 200,
+     "ratio": 0.005118624113838201
+    },
+    "1e-10": {
+     "adaptiveNfev": 391885,
+     "rk4Nfev": 200,
+     "ratio": 0.0005103538027737729
+    }
+   },
+   "bound": "reported"
+  },
+  {
+   "id": "N03.a",
+   "status": "pass",
+   "measured": [
+    {
+     "lambda": 0.7,
+     "got": 0.6998702838197878,
+     "relErr": 0.00018530882887454351,
+     "message": null
+    },
+    {
+     "lambda": 1.5,
+     "got": 1.4928352529260978,
+     "relErr": 0.004776498049268163,
+     "message": null
+    }
+   ],
+   "bound": "5 percent (the logistic factor bends the log slope by at most 9 percent at the window's end; 5 percent is the allowance on the window average, fixed here)"
+  },
+  {
+   "id": "N03.b",
+   "status": "pass",
+   "measured": {
+    "oracle": {
+     "i0": 5,
+     "i1": 22,
+     "r2": 0.5575253970510547,
+     "status": "refused",
+     "why": "r2"
+    },
+    "notebookRefused": true,
+    "message": "REFUSED: not constrained: ln(separation) is not a straight line in time over the window (R2=0.5575253970510547 i0=5 i1=22)\n"
+   },
+   "bound": "lambda and R^2 absolute 1e-9, window ends equal"
+  },
+  {
+   "id": "N03.c",
+   "status": "pass",
+   "measured": {
+    "identical": true
+   },
+   "bound": "byte-identical"
+  },
+  {
+   "id": "N03.d",
+   "status": "pass",
+   "measured": {
+    "linear": "REFUSED: not constrained: ln(separation) is not a straight line in time over the window (R2=0.8970943577785547 i0=1 i1=13)\n",
+    "differentClusters": "REFUSED: not constrained: the growth window is 1 snapshots long (i0=58 i1=58), fewer than 10\n"
+   },
+   "bound": "both raise"
+  },
+  {
+   "id": "N03.e",
+   "status": "pass",
+   "measured": {
+    "mods": [
+     "base64",
+     "numpy"
+    ],
+    "bad": [],
+    "forbidden": null,
+    "packages": [
+     "numpy"
+    ],
+    "withinStatedSet": true,
+    "gridValid": true,
+    "problems": []
+   },
+   "bound": "all true"
+  },
+  {
+   "id": "N03.r",
+   "status": "reported",
+   "measured": {
+    "engineExport": "refused",
+    "message": "REFUSED: not constrained: ln(separation) is not a straight line in time over the window (R2=0.5575253970510547 i0=5 i1=22)\n",
+    "oracle": {
+     "i0": 5,
+     "i1": 22,
+     "r2": 0.5575253970510547,
+     "status": "refused",
+     "why": "r2"
+    },
+    "oracleSaturationMedian": null
+   },
+   "bound": "reported"
+  },
+  {
+   "id": "N04.a",
+   "status": "pass",
+   "measured": {
+    "maxAbsRad": 2.0250467969162855e-13
+   },
+   "bound": "1e-11 (1e5 times double precision's roundoff)"
+  },
+  {
+   "id": "N04.b",
+   "status": "pass",
+   "measured": {
+    "maxAbsRad": 2.0250467969162855e-13
+   },
+   "bound": "1e-11"
+  },
+  {
+   "id": "N04.c",
+   "status": "pass",
+   "measured": {
+    "identical": true
+   },
+   "bound": "byte-identical"
+  },
+  {
+   "id": "N04.d",
+   "status": "pass",
+   "measured": [
+    "REFUSED: refused: Kepler's equation as written needs 0 <= e < 1\n",
+    "REFUSED: refused: Kepler's equation as written needs 0 <= e < 1\n"
+   ],
+   "bound": "both raise"
+  },
+  {
+   "id": "N04.e",
+   "status": "pass",
+   "measured": {
+    "mods": [
+     "json",
+     "numpy"
+    ],
+    "bad": [],
+    "forbidden": null,
+    "packages": [
+     "numpy"
+    ],
+    "withinStatedSet": true,
+    "inputValid": true,
+    "inputUnchanged": true
+   },
+   "bound": "all true"
+  },
+  {
+   "id": "N04.o",
+   "status": "pass",
+   "measured": {
+    "newtonOrder": 1.999446121199926,
+    "samples": 269
+   },
+   "bound": "at least 1.8 (quadratic is 2)"
+  },
+  {
+   "id": "N04.r",
+   "status": "reported",
+   "measured": {
+    "0.99": {
+     "newtonFailures": 4,
+     "halleyFailures": 0,
+     "bisectionFailures": 0
+    },
+    "0.999": {
+     "newtonFailures": 10,
+     "halleyFailures": 0,
+     "bisectionFailures": 0
+    }
+   },
+   "bound": "reported"
+  },
+  {
+   "id": "N05.a",
+   "status": "pass",
+   "measured": {
+    "coefRel": 5.984279917922817e-12,
+    "covdiagRel": 2.012547794578709e-14,
+    "chi2Rel": 2.175513215422271e-15
+   },
+   "bound": "1e-8 / 1e-6 / 1e-9"
+  },
+  {
+   "id": "N05.b",
+   "status": "pass",
+   "measured": [
+    {
+     "status": "ok",
+     "Frel": 0,
+     "pRel": 9.193929675177071e-14
+    },
+    {
+     "status": "ok",
+     "Frel": 0,
+     "pRel": 6.109189000803806e-14
+    },
+    {
+     "status": "ok",
+     "Frel": 0,
+     "pRel": 3.771177073451241e-13
+    },
+    {
+     "status": "ok",
+     "Frel": 0,
+     "pRel": 6.243811590278776e-15
+    }
+   ],
+   "bound": "1e-9 / 1e-8"
+  },
+  {
+   "id": "N05.c",
+   "status": "pass",
+   "measured": {
+    "identical": true
+   },
+   "bound": "byte-identical"
+  },
+  {
+   "id": "N05.d",
+   "status": "pass",
+   "measured": [
+    "REFUSED: refused: the window holds 4 points and a degree-4 polynomial needs 5\n",
+    "REFUSED: refused: every time in the window is the same, the design is rank deficient\n"
+   ],
+   "bound": "both raise"
+  },
+  {
+   "id": "N05.e",
+   "status": "pass",
+   "measured": {
+    "mods": [
+     "json",
+     "numpy",
+     "scipy"
+    ],
+    "bad": [],
+    "forbidden": null,
+    "packages": [
+     "numpy",
+     "scipy"
+    ],
+    "withinStatedSet": true,
+    "inputValid": true,
+    "inputUnchanged": true
+   },
+   "bound": "all true"
+  },
+  {
+   "id": "N06.a",
+   "status": "pass",
+   "measured": {
+    "maxAbsPower": 1.7770507287906412e-14,
+    "peakIndex": 168,
+    "oraclePeak": 168
+   },
+   "bound": "1e-9 (both are the same quantity in double precision)"
+  },
+  {
+   "id": "N06.b",
+   "status": "pass",
+   "measured": {
+    "maxAbsPower": 5.127842594987442e-14,
+    "peakIndex": 168,
+    "kernelPeak": 168
+   },
+   "bound": "1e-9"
+  },
+  {
+   "id": "N06.c",
+   "status": "pass",
+   "measured": {
+    "identical": true
+   },
+   "bound": "byte-identical"
+  },
+  {
+   "id": "N06.d",
+   "status": "pass",
+   "measured": [
+    "REFUSED: refused: fewer than 10 points\n",
+    "REFUSED: refused: the times are not strictly increasing\n",
+    "REFUSED: refused: the flux is constant, there is no variance to explain\n",
+    "REFUSED: refused: a trial period is not positive\n"
+   ],
+   "bound": "all four raise"
+  },
+  {
+   "id": "N06.e",
+   "status": "pass",
+   "measured": {
+    "mods": [
+     "json",
+     "numpy"
+    ],
+    "bad": [],
+    "forbidden": null,
+    "packages": [
+     "numpy"
+    ],
+    "withinStatedSet": true,
+    "inputValid": true,
+    "inputUnchanged": true
+   },
+   "bound": "all true"
+  },
+  {
+   "id": "N07.a",
+   "status": "pass",
+   "measured": {
+    "count": 30,
+    "oracleCount": 30,
+    "maxAbsMag": 2.6645352591003757e-15
+   },
+   "bound": "1e-9"
+  },
+  {
+   "id": "N07.b",
+   "status": "fail",
+   "measured": {
+    "rms": {
+     "cubic": 0.008392975317116653,
+     "linear": 0.006986873363529185
+    },
+    "max": {
+     "cubic": 0.03005313581588709,
+     "linear": 0.029435081145147812
+    }
+   },
+   "bound": "both (0.05 mag is a bound chosen here before the run, about the photometric scatter of a rich cluster's main sequence; it is not derived from Gravitas's own isochrone morph)"
+  },
+  {
+   "id": "N07.c",
+   "status": "pass",
+   "measured": {
+    "identical": true
+   },
+   "bound": "byte-identical"
+  },
+  {
+   "id": "N07.d",
+   "status": "pass",
+   "measured": [
+    "REFUSED: refused: the age 99 is outside the table (nothing is extrapolated)\n",
+    "REFUSED: refused: the table does not hold [Fe/H] = 3\n"
+   ],
+   "bound": "raises"
+  },
+  {
+   "id": "N07.e",
+   "status": "pass",
+   "measured": {
+    "mods": [
+     "json",
+     "numpy"
+    ],
+    "bad": [],
+    "forbidden": null,
+    "packages": [
+     "numpy"
+    ],
+    "withinStatedSet": true,
+    "inputValid": true,
+    "problems": [],
+    "licence": "no-license-stated",
+    "credit": "MIST v1.2 (Dotter 2016; Choi et al. 2016), built on MESA (Paxton et al. 2011, 2013, 2015)"
+   },
+   "bound": "all true"
+  },
+  {
+   "id": "N08.a",
+   "status": "pass",
+   "measured": [
+    {
+     "n": 0,
+     "xi1": 5.438959822042071e-16,
+     "mass": 5.438959822042071e-16
+    },
+    {
+     "n": 1,
+     "xi1": 1.0912836507065933e-13,
+     "mass": 9.428577655715403e-14
+    }
+   ],
+   "bound": "1e-9"
+  },
+  {
+   "id": "N08.b",
+   "status": "pass",
+   "measured": {
+    "worstXi1": 1.6657427263781028e-12,
+    "worstMass": 7.247486004590282e-12
+   },
+   "bound": "1e-8"
+  },
+  {
+   "id": "N08.c",
+   "status": "pass",
+   "measured": {
+    "worstRelativeDifferenceFromKernelTable": 1.2309238410458143e-7,
+    "perOutput": {
+     "mass": 1.2309238410458143e-7,
+     "rhoRatio": 1.2308726070236426e-7,
+     "xi1": 1.7078256616378202e-12
+    }
+   },
+   "bound": "1e-6 (the kernel integrates with RK4 at a fixed step of 5e-4: its error is far below 1e-6, so a larger difference is a defect in one of the two)"
+  },
+  {
+   "id": "N08.d",
+   "status": "pass",
+   "measured": {
+    "identical": true
+   },
+   "bound": "byte-identical"
+  },
+  {
+   "id": "N08.f",
+   "status": "pass",
+   "measured": [
+    "REFUSED: refused: the polytropic index must satisfy 0 <= n < 5 (n = 5 has an infinite radius, n > 5 an infinite mass, n < 0 is not a star)\n",
+    "REFUSED: refused: the polytropic index must satisfy 0 <= n < 5 (n = 5 has an infinite radius, n > 5 an infinite mass, n < 0 is not a star)\n",
+    "REFUSED: refused: the polytropic index must satisfy 0 <= n < 5 (n = 5 has an infinite radius, n > 5 an infinite mass, n < 0 is not a star)\n"
+   ],
+   "bound": "all raise"
+  },
+  {
+   "id": "N08.e",
+   "status": "pass",
+   "measured": {
+    "mods": [
+     "base64",
+     "numpy",
+     "scipy"
+    ],
+    "bad": [],
+    "forbidden": null,
+    "packages": [
+     "numpy",
+     "scipy"
+    ],
+    "withinStatedSet": true,
+    "gridValid": true
+   },
+   "bound": "all true"
+  },
+  {
+   "id": "N09.a",
+   "status": "pass",
+   "measured": {
+    "maxAbsOverLargest": 2.2741134759081286e-16
+   },
+   "bound": "1e-12"
+  },
+  {
+   "id": "N09.b",
+   "status": "pass",
+   "measured": {
+    "maxAbsOverLargest": 2.8426418448851604e-15
+   },
+   "bound": "1e-10"
+  },
+  {
+   "id": "N09.g",
+   "status": "fail",
+   "measured": {
+    "monotone": false,
+    "rms": [
+     [
+      0,
+      1.626894448369797e-15
+     ],
+     [
+      0.3,
+      0.006475223385705484
+     ],
+     [
+      0.5,
+      0.023059302668984843
+     ],
+     [
+      0.7,
+      0.04518639809537135
+     ],
+     [
+      1,
+      null
+     ]
+    ],
+    "rmsAt05": 0.023059302668984843,
+    "interactionsAt05": 127006,
+    "limit": 249750
+   },
+   "bound": "all three (0.05 is coarser than the customary monopole error at 0.5; it is a bound set before the run)"
+  },
+  {
+   "id": "N09.c",
+   "status": "pass",
+   "measured": {
+    "identical": true
+   },
+   "bound": "byte-identical"
+  },
+  {
+   "id": "N09.d",
+   "status": "pass",
+   "measured": [
+    "REFUSED: refused: the softening must be positive\n",
+    "REFUSED: refused: more than 4000 bodies (the toy's cap)\n"
+   ],
+   "bound": "both raise"
+  },
+  {
+   "id": "N09.e",
+   "status": "pass",
+   "measured": {
+    "mods": [
+     "base64",
+     "numpy"
+    ],
+    "bad": [],
+    "forbidden": null,
+    "packages": [
+     "numpy"
+    ],
+    "withinStatedSet": true,
+    "gridValid": true,
+    "labelledSynthetic": true
+   },
+   "bound": "all true"
+  },
+  {
+   "id": "N10.a",
+   "status": "pass",
+   "measured": {
+    "S1maxRel": 5.562803291513212e-7,
+    "S2max": 1.7295904251090143e-10,
+    "S2status": [
+     "ok",
+     "ok",
+     "ok",
+     "ok",
+     "ok",
+     "not constrained"
+    ]
+   },
+   "bound": "1e-6 (the oracle's own two algorithms agree to 1e-12; the allowance covers a different stopping rule)"
+  },
+  {
+   "id": "N10.b",
+   "status": "pass",
+   "measured": {
+    "meanZ": [
+     0.11347091256705032,
+     0.12920868859618692,
+     0.007874080301414487,
+     0.1832794814317519,
+     -0.13372765101981163,
+     -0.08214815321094608
+    ],
+    "rmsZ": [
+     1.033072592234585,
+     1.157808195602119,
+     1.2042153318539444,
+     1.1020379278818733,
+     1.1195138807564773,
+     1.0136014461299088
+    ],
+    "pooledRmsZ": 1.1070290706356865
+   },
+   "bound": "0.35 (about 5 standard errors of a mean of 200) and [0.8, 1.6]"
+  },
+  {
+   "id": "N10.c",
+   "status": "pass",
+   "measured": {
+    "identical": true
+   },
+   "bound": "byte-identical"
+  },
+  {
+   "id": "N10.d",
+   "status": "pass",
+   "measured": [
+    "REFUSED: refused: an exposure is not positive\n",
+    "REFUSED: refused: a reliability is not positive\n",
+    "REFUSED: refused: an uncertainty is negative\n",
+    "REFUSED: refused: there are no objects\n"
+   ],
+   "bound": "all four raise"
+  },
+  {
+   "id": "N10.e",
+   "status": "pass",
+   "measured": {
+    "mods": [
+     "json",
+     "numpy",
+     "scipy"
+    ],
+    "bad": [],
+    "forbidden": null,
+    "packages": [
+     "numpy",
+     "scipy"
+    ],
+    "withinStatedSet": true,
+    "valid": [
+     true,
+     true
+    ],
+    "problems": []
+   },
+   "bound": "all true"
+  },
+  {
+   "id": "G1.a",
+   "status": "pass",
+   "measured": {
+    "filesChangedUnderCompute-frameJsComputeAndComputePage": 0,
+    "base": "0b5d3d0f",
+    "nodeToolsComputeMjsCheck": "exit 0: the compute files are current"
+   },
+   "bound": "git diff against the base is empty for those paths; the check exits 0"
+  },
+  {
+   "id": "G1.b",
+   "status": "pass",
+   "measured": {
+    "suites": "computeFrame, computeMessages, computeCapsule, computeSession, computeCatalogue",
+    "testSuites": "5 passed of 5",
+    "tests": "94 passed",
+    "node": "22.23.4",
+    "exit": 0
+   },
+   "bound": "all pass"
+  },
+  {
+   "id": "G1.c",
+   "status": "pass",
+   "measured": {
+    "spec": "e2e/compute.spec.js",
+    "project": "chromium",
+    "workers": 2,
+    "result": "23 passed",
+    "port": 4468,
+    "exit": 0
+   },
+   "bound": "all pass"
+  },
+  {
+   "id": "G2.a",
+   "status": "pass",
+   "measured": {
+    "statedSets": [
+     "numpy+matplotlib",
+     "numpy",
+     "numpy+scipy",
+     "numpy+astropy"
+    ],
+    "per": {
+     "integration-order": {
+      "packages": [
+       "numpy",
+       "scipy"
+      ],
+      "withinStatedSet": true
+     },
+     "adaptive-steps": {
+      "packages": [
+       "numpy",
+       "scipy"
+      ],
+      "withinStatedSet": true
+     },
+     "orbital-chaos": {
+      "packages": [
+       "numpy"
+      ],
+      "withinStatedSet": true
+     },
+     "kepler-root": {
+      "packages": [
+       "numpy"
+      ],
+      "withinStatedSet": true
+     },
+     "least-squares": {
+      "packages": [
+       "numpy",
+       "scipy"
+      ],
+      "withinStatedSet": true
+     },
+     "periodogram-scratch": {
+      "packages": [
+       "numpy"
+      ],
+      "withinStatedSet": true
+     },
+     "isochrone-interpolation": {
+      "packages": [
+       "numpy"
+      ],
+      "withinStatedSet": true
+     },
+     "polytrope": {
+      "packages": [
+       "numpy",
+       "scipy"
+      ],
+      "withinStatedSet": true
+     },
+     "barnes-hut-toy": {
+      "packages": [
+       "numpy"
+      ],
+      "withinStatedSet": true
+     },
+     "synthetic-populations": {
+      "packages": [
+       "numpy",
+       "scipy"
+      ],
+      "withinStatedSet": true
+     }
+    }
+   },
+   "bound": "true for all ten (static)"
+  },
+  {
+   "id": "G2.b",
+   "status": "NOT RUN",
+   "measured": "R1: needs the pinned runtime (downloaded code) in Chromium and WebKit; not run",
+   "bound": "at most 30 s each; Firefox is reported and not a verdict leg (NOTEBOOK_BRIDGE_GATE.md measured 30 to 140 s)"
+  },
+  {
+   "id": "G3.b",
+   "status": "NOT RUN",
+   "measured": "R2: needs the pinned runtime in two browsers; not run",
+   "bound": "identical across all four runs"
+  },
+  {
+   "id": "G3.c",
+   "status": "NOT RUN",
+   "measured": "R2; reported only",
+   "bound": "reported"
+  },
+  {
+   "id": "G4.a",
+   "status": "pass",
+   "measured": {
+    "version": "314.0.7",
+    "lockSha256": "5dc2fc119108bc148c7457dc86e7675b5c87e1cafd420b9c34c1eaef7b36c010",
+    "packages": {
+     "numpy": {
+      "version": "2.4.6"
+     },
+     "matplotlib": {
+      "version": "3.10.8"
+     },
+     "scipy": {
+      "version": "1.18.0"
+     },
+     "astropy": {
+      "version": "7.2.0"
+     }
+    }
+   },
+   "bound": "true (static)"
+  },
+  {
+   "id": "G4.b",
+   "status": "fail",
+   "measured": {
+    "toolchainNamesTheRuntime": false,
+    "otherToolsMentioningPyodide": []
+   },
+   "bound": "present; absent is a failure"
+  },
+  {
+   "id": "G4.c",
+   "status": "NOT RUN",
+   "measured": "R3: needs the pinned runtime and a lock file download; not run",
+   "bound": "all ten rerun"
+  },
+  {
+   "id": "G5.a",
+   "status": "pass",
+   "measured": {
+    "importersOutsideThePage": []
+   },
+   "bound": "no importer"
+  },
+  {
+   "id": "G5.b",
+   "status": "fail",
+   "measured": {
+    "investigationsWithAComputeStep": [
+     "extending-an-experiment",
+     "integrators-in-practice",
+     "refitting-a-transit",
+     "sampling-a-posterior",
+     "two-periodograms"
+    ],
+    "listedInABuiltInCourse": {
+     "extending-an-experiment": [
+      "upper-level-modules.js"
+     ],
+     "integrators-in-practice": [
+      "upper-level-modules.js"
+     ],
+     "refitting-a-transit": [
+      "upper-level-modules.js"
+     ],
+     "sampling-a-posterior": [
+      "upper-level-modules.js"
+     ],
+     "two-periodograms": [
+      "upper-level-modules.js"
+     ]
+    }
+   },
+   "bound": "none listed"
+  },
+  {
+   "id": "G6.a",
+   "status": "pass",
+   "measured": {
+    "neverPrecached": {
+     "/^js\\/compute\\//": true,
+     "/^js\\/computePage\\.js$/": true,
+     "/^compute\\//": true,
+     "/^compute-frame\\//": true
+    },
+    "pageStatesOnlineEn": true,
+    "pageStatesOnlineEs": true,
+    "precacheListMentionsThePage": false
+   },
+   "bound": "true"
+  },
+  {
+   "id": "G7.a",
+   "status": "fail",
+   "measured": {
+    "measured": {
+     "sourcesKb": 181.3,
+     "buildKb": 82.8,
+     "from": "node tools/route-budget.mjs on a node build.js of the spike: compute 181.3 KB 20 requests (sources), 82.8 KB 2 requests (build)"
+    },
+    "ceiling": {
+     "sources": {
+      "kb": 181.3,
+      "requests": 20
+     },
+     "build": {
+      "kb": 82.8,
+      "requests": 3
+     }
+    },
+    "meanEntryBytes": 5017,
+    "entries": 7,
+    "projected": {
+     "sourcesKb": 230.294140625,
+     "buildKb": 131.794140625
+    }
+   },
+   "bound": "fits without a raise (a raise would need the standing approval and is not requested by this gate)"
+  }
+ ],
+ "detail": {
+  "N01": {
+   "wall": 1.439888393,
+   "ok": true
+  },
+  "N02": {
+   "wall": 18.377858682,
+   "ok": true
+  },
+  "N03": {
+   "wall": {
+    "n03-engine-pair": 0.520760834,
+    "n03-different-clusters": 0.519125692,
+    "n03-logistic-0.7": 0.510611953,
+    "n03-logistic-1.5": 0.522906135,
+    "n03-linear": 0.521800986
+   }
+  },
+  "N04": {
+   "wall": 0.600357252,
+   "ok": true
+  },
+  "N05": {
+   "wall": 1.715647825,
+   "ok": true
+  },
+  "N06": {
+   "wall": 0.56516715,
+   "ok": true
+  },
+  "N07": {
+   "wall": 0.551629579,
+   "ok": true
+  },
+  "N08": {
+   "wall": 1.268444071,
+   "ok": true
+  },
+  "N09": {
+   "wall": 4.014590312,
+   "ok": true
+  },
+  "N10": {
+   "wall": [
+    0.919057337,
+    0.829325554
+   ],
+   "ok": [
+    true,
+    true
+   ]
+  }
+ }
+}

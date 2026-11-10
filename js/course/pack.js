@@ -73,6 +73,11 @@ export const GUIDES_3D = Object.freeze({
   'l3-eclipse': Object.freeze({ intro: 25, advanced: 35 }),
   'l3-mutual': Object.freeze({ intro: 20, advanced: 30 }),
   'l3-kozai': Object.freeze({ intro: 25, advanced: 35 }),
+  'l3-elements': Object.freeze({ intro: 30, advanced: 40 }),
+  'l3-frames': Object.freeze({ intro: 25, advanced: 35 }),
+  'l3-seen': Object.freeze({ intro: 30, advanced: 40 }),
+  'l3-tilts': Object.freeze({ intro: 30, advanced: 40 }),
+  'l3-resonant': Object.freeze({ intro: 30, advanced: 40 }),
 });
 
 // The mission lab's guided investigations, the same way (Prompt 106): the

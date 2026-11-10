@@ -128,6 +128,7 @@ describe('the modules', () => {
       'diagnostics.js',
       'index.js',
       'intervals.js',
+      'modelcompare.js',
       'resample.js',
       'selection.js',
       'special.js',
@@ -329,6 +330,6 @@ describe('the install', () => {
   });
 
   test('the kernel is at its documented size', () => {
-    expect(kernelFiles.length).toBe(8);
+    expect(kernelFiles.length).toBe(9);
   });
 });

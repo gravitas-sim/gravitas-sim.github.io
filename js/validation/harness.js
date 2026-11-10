@@ -253,6 +253,17 @@ export const LAB_SETTINGS = {
 };
 
 /**
+ * The lab's settings on an engine whose world is already built, for a headless
+ * realm that runs a built scenario under the validation lab's physics (the
+ * ensemble runner's 'validation-lab' option, Prompt 265).
+ * @param {object} P - The js/physics.js module namespace
+ * @param {object} [overrides] - Settings to set beside the lab's
+ */
+export function applyLabSettings(P, overrides = {}) {
+  P.updatePhysicsSettings({ ...LAB_SETTINGS, ...overrides });
+}
+
+/**
  * A disposable world backed by the real engine.
  * @param {object} P - The js/physics.js module namespace
  * @returns {object} reset / commit / step

@@ -184,6 +184,13 @@
       "student": true
     },
     {
+      "file": "COMPUTE_GATE_II.md",
+      "kind": "gate",
+      "purpose": "Compute page gate II: ten candidate notebooks prototyped on a spike, seven page thresholds, 70 legs, verdict C (Prompt 268).",
+      "owner": 268,
+      "student": false
+    },
+    {
       "file": "CONTINUITY.md",
       "kind": "policy",
       "purpose": "How Gravitas survives its maintainer's absence.",
@@ -541,6 +548,13 @@
       "student": false
     },
     {
+      "file": "LAB3D_CURRICULUM_II.md",
+      "kind": "feature",
+      "purpose": "The 3-D lab curriculum II: run modes, reference planes, the orbit editor and sky view, five guides and their validation (Prompt 271).",
+      "owner": 271,
+      "student": false
+    },
+    {
       "file": "LAZY_CAPABILITIES.md",
       "kind": "design",
       "purpose": "How instrument families load on demand.",
@@ -625,6 +639,13 @@
       "student": true
     },
     {
+      "file": "MISSION_LAB_II.md",
+      "kind": "gate",
+      "purpose": "Mission lab II, the first window-and-budget workflow: contract committed first, independent oracle, 19 legs, verdict C by the committed function (Prompt 272).",
+      "owner": 272,
+      "student": false
+    },
+    {
       "file": "MULTI_WORLD_DECISION.md",
       "kind": "gate",
       "purpose": "Why the engine is not refactored into multiple instances.",
@@ -664,6 +685,13 @@
       "kind": "design",
       "purpose": "How numbers are typeset on screen.",
       "owner": null,
+      "student": false
+    },
+    {
+      "file": "NUMERICAL_INVESTIGATIONS.md",
+      "kind": "record",
+      "purpose": "Numerical-methods investigations in the application: the record of what the tree has, why none was built and what a build needs (Prompt 270).",
+      "owner": 270,
       "student": false
     },
     {
@@ -868,6 +896,13 @@
       "purpose": "Remnants: white-dwarf cooling ages with a two-term interval, the initial-final mass relation and outcome odds, with validation and two failed legs left failing (Prompt 222).",
       "owner": 222,
       "student": true
+    },
+    {
+      "file": "RESONANCES_II.md",
+      "kind": "gate",
+      "purpose": "Resonances and secular dynamics II: contract committed first, independent oracle, 19 legs, verdict C by the committed function; the kernel without consumers (Prompt 273).",
+      "owner": 273,
+      "student": false
     },
     {
       "file": "RESONANCE_INVESTIGATION.md",
@@ -1409,6 +1444,13 @@
       "student": false
     },
     {
+      "file": "COSMOLOGY_CLOSEOUT_II.md",
+      "kind": "record",
+      "purpose": "The cosmology closeout (Prompt 260): what 255 to 259 landed, what a student can do today, each closeout item done, not applicable or blocked, the cohesion record.",
+      "owner": 260,
+      "student": false
+    },
+    {
       "file": "EXTRAGALACTIC_CLOSEOUT.md",
       "kind": "record",
       "purpose": "The extragalactic and interstellar-medium closeout (Prompt 253): what 247 to 252 landed, each closeout item done or blocked, the package reading step, the cohesion record.",
@@ -1451,10 +1493,52 @@
       "student": false
     },
     {
+      "file": "POPULATION_INFERENCE_GATE.md",
+      "kind": "gate",
+      "purpose": "Population inference gate: one selected-population likelihood with per-object uncertainties, the exposure from 154's selection object, a named penalty, 52 legs, verdict B (Prompt 264).",
+      "owner": 264,
+      "student": false
+    },
+    {
+      "file": "EXPERIMENT_ENSEMBLES.md",
+      "kind": "feature",
+      "purpose": "Experiment runner II: the experiment/2 record (named streams, fork per trial, kernel versions), ensembles, injection, bootstrap, pool client, replay to the digit, validation (Prompt 265).",
+      "owner": 265,
+      "student": false
+    },
+    {
+      "file": "CROSSMATCH.md",
+      "kind": "feature",
+      "purpose": "The crossmatch kernel: epoch propagation, refusals on rounded positions, nearest-neighbour match, shifted-match false rate, joined-table record, populations, validation, failed legs (Prompt 263).",
+      "owner": 263,
+      "student": false
+    },
+    {
+      "file": "CLUSTERING_GATE.md",
+      "kind": "gate",
+      "purpose": "Angular clustering gate: Landy-Szalay on a random catalog, detectable size, pair-count cost against the worker cap, the committed legs and the verdict (Prompt 263 Part B).",
+      "owner": 263,
+      "student": false
+    },
+    {
       "file": "CMB_SCALE_GATE.md",
       "kind": "gate",
       "purpose": "Microwave background angular-scale gate: r_s(z*), D_M(z*), theta*, the peak relation and claim rule, 42 legs, verdict C; spectrum, grid and cited formulas NOT RUN (Prompt 258).",
       "owner": 258,
+      "student": false
+    },
+    {
+      "file": "INFERENCE_CLOSEOUT.md",
+      "kind": "record",
+      "purpose": "The inference closeout (Prompt 266): what 261 to 265 landed, the methods sequence as it exists, each closeout item done or held, the package change, the cohesion record.",
+      "owner": 266,
+      "student": false
+    },
+    {
+      "file": "ADVANCED_CLOSEOUT.md",
+      "kind": "record",
+      "purpose": "The advanced closeout (Prompt 274): what 268 to 273 landed, the 3-D and mission guide sequence, the sequence not created, the package's reading steps, the acceptance audit, the cohesion record.",
+      "owner": 274,
       "student": false
     }
   ]

@@ -246,6 +246,13 @@ export const NEVER_PRECACHED = [
   // measured cost is in D-R10-30). Its first adopter deletes this entry, and
   // tests/workerPoolAdoption.test.js fails until it is deleted.
   /^js\/workers\/pool\.js$/,
+  // The mission window-and-budget workflow (Prompt 272, MISSION_LAB_II.md): the ledger and one mission end to end. No shipped module imports it (the panels and
+  // the guides wait for Carl, D-R10-272-01), so no page can fetch it and an install has no use for it; the idle tier has no room under a data-budget ceiling the
+  // standing size approval does not cover. Its first adopter deletes this entry.
+  /^js\/mission\/workflow\.js$/,
+  // The ensemble runner (Prompt 265, EXPERIMENT_ENSEMBLES.md): the record, the kinds, the summary, the pool client and its Worker. No shipped
+  // module imports them (the panel and the lessons wait for Carl, D-R10-265-03), so no page can fetch one and an install has no use for them.
+  /^js\/experiments\/ensemble\//,
   // The data kinds (Prompt 157, DATA_PACKS.md): the image, sequence and grid
   // contracts, the bounded local FITS reader and its Worker. The first adopter
   // is the image marks instrument (Prompt 179), which takes the contract and
@@ -266,6 +273,9 @@ export const NEVER_PRECACHED = [
   // cost is in D-R10-31). Its first adopter deletes this entry, and
   // tests/statisticsKernel.test.js fails until it is deleted.
   /^js\/kernels\/statistics\//,
+  // Prompt 263: the crossmatch kernel (epoch propagation, the nearest-neighbour match, the shifted-match false rate, the joined table, populations). No shipped
+  // module imports it (the table view's crossmatch tool, the distribution panel and 'Two catalogs, one sky' wait for Carl, D-R10-263-01), so no page can fetch one.
+  /^js\/kernels\/crossmatch\//,
   // Sky coordinates for an image (Prompt 181, ASTROMETRY.md): the WCS-lite and
   // registration kernel, the calibration record, the panel and its words,
   // fetched when a reader opens the Observatory's sky-coordinates panel on an
@@ -620,6 +630,10 @@ export const NEVER_PRECACHED = [
   // membership and the index) stay installed: the Milky Way lessons import them.
   /^js\/kernels\/(dynamics|multimessenger)\//,
   /^js\/kernels\/galactic\/(astrometry|cuts|gaia|zeropoint|zeropointTables)\.js$/,
+  // Prompt 273 (RESONANCES_II.md): the resonance libration and secular kernel. No shipped module imports it (the panel and
+  // the guides wait on a passing gate, D-R10-273-01), so no page can fetch it and an install has no use for it; its first
+  // adopter deletes this entry.
+  /^js\/lab3d\/libration\.js$/,
 ];
 
 const ON_DEMAND_ONLY = new Set([

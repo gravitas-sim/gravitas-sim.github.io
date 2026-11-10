@@ -1,0 +1,324 @@
+{
+  "format": "gravitas.lab3d-curriculum-ii-thresholds/1",
+  "prompt": "Roadmap III, Prompt 271, 3-D lab curriculum II (tranche T6, authorized by Checkpoint VI: CONTINUE AS PLANNED, register row D-R10-267-01, merged as #568; hard prerequisites 148, 160, 267 landed on v3 ce883b95)",
+  "document": "LAB3D_CURRICULUM_II.md",
+  "committed": "2026-11-07, before any instrument, guide, session, oracle or validator of this prompt existed",
+  "rule": "Thresholds first, in their own commit. Amendments are recorded in this file's `amendments` before the run they affect. A leg that fails stays failing and labelled; no bound is moved after a result. A leg not measured is not passed. The independent oracle is python3 -E with numpy and scipy only, reading no Gravitas code; it is given the guide systems as numbers (the fixture inputs) and nothing else. The 3-D kernel stays the authority for every number a guide checks; the oracle is a second implementation, not a source of expected values typed from memory.",
+  "seenBeforeCommitting": [
+    "Roadmap sections 7, 12.1, 13, Appendix C and Prompt 271's run condition and complete prompt; register row D-R10-267-01 (T6 authorized); the existing four guides (js/lab3d/guides/curriculum.js, LAB3D_CURRICULUM.md) and the lab's labApi (js/lab3dLab.js); the orbital layer (ORBITAL_LAYER.md, js/orbital/layer.js) and the 3-D kernel's element functions (js/lab3d/elements.js).",
+    "One exploratory run of the existing kernel on a 2:1 pair (equal masses 3e-4, inner e 0.05, both on +x at t = 0) to learn that the resonant argument librates about 0 with a period near 110 inner orbits and an amplitude near 0.53 rad; that run chose the design (the pair, the window of 600 inner orbits) and none of the bounds below, which are stated as agreements with an independent integrator and as properties.",
+    "No published number was typed: the J2000 obliquity is the repository's own constant (js/kernels/sky/time.js), checked by B2."
+  ],
+  "legs": [
+    {
+      "id": "A1",
+      "group": "editor",
+      "what": "elements -> state -> elements on 2,000 seeded orbits (e in [0.02, 0.9], i in [1, 179] degrees, all angles seeded)",
+      "bound": "|da|/a <= 1e-11/(1-e); |de| <= 1e-11/(1-e); every angle (i, Omega, omega, M) <= 1e-9 rad",
+      "kind": "ensemble"
+    },
+    {
+      "id": "A2",
+      "group": "editor",
+      "what": "Apply with no field edited returns the system byte-identical (JSON.stringify of the bodies), on every guide system",
+      "bound": "differing = 0",
+      "kind": "analytic"
+    },
+    {
+      "id": "A3",
+      "group": "editor",
+      "what": "one field edited, each of the six, on 1,000 seeded systems: every other body bit-identical; the edited body's other five elements within A1's bounds",
+      "bound": "differing bodies = 0; other-element error within A1",
+      "kind": "ensemble"
+    },
+    {
+      "id": "A4",
+      "group": "editor",
+      "what": "a body with a child: the child's state relative to the edited body is unchanged by the edit",
+      "bound": "relative error <= 1e-12",
+      "kind": "analytic"
+    },
+    {
+      "id": "A5",
+      "group": "editor",
+      "what": "the panel's typed path (orbital layer, with frame, epoch and time scale named) against the kernel's elements.js on every guide edit",
+      "bound": "differing bits = 0",
+      "kind": "oracle"
+    },
+    {
+      "id": "A6",
+      "group": "editor",
+      "what": "refusals: parabolic e = 1, negative a on an ellipse, i outside [0, 180], a non-finite field, an edit of a body with no primary; each refused with a code and no system changed",
+      "bound": "missed = 0",
+      "kind": "negative"
+    },
+    {
+      "id": "B1",
+      "group": "planes",
+      "what": "the two-planet solar guide system, elements of each planet in the equatorial, invariable and sky planes (three observers), against the independent Python rotation and elements",
+      "bound": "angles <= 1e-9 rad; |da|/a <= 1e-10; |de| <= 1e-10",
+      "kind": "oracle"
+    },
+    {
+      "id": "B2",
+      "group": "planes",
+      "what": "the obliquity used for the equatorial plane against meanObliquityDeg(J2000) of the sky kernel",
+      "bound": "|difference| <= 1e-12 degrees",
+      "kind": "oracle"
+    },
+    {
+      "id": "B3",
+      "group": "planes",
+      "what": "the invariable plane: the total angular momentum of the bodies about their barycenter, in that plane's axes, has no x or y component",
+      "bound": "<= 1e-12 of |L|",
+      "kind": "analytic"
+    },
+    {
+      "id": "B4",
+      "group": "planes",
+      "what": "every plane's axes orthonormal and right-handed, on 1,000 seeded observers",
+      "bound": "|det - 1| <= 1e-14; |R R^T - I| <= 1e-14",
+      "kind": "ensemble"
+    },
+    {
+      "id": "B5",
+      "group": "planes",
+      "what": "a, e and the mutual inclination of two orbits do not depend on the plane",
+      "bound": "<= 1e-12 (relative for a, absolute for e and the angle)",
+      "kind": "analytic"
+    },
+    {
+      "id": "B6",
+      "group": "planes",
+      "what": "the inclination in the sky plane equals the angle between the orbit's normal and the line of sight to the observer",
+      "bound": "<= 1e-12 rad",
+      "kind": "analytic"
+    },
+    {
+      "id": "C1",
+      "group": "projection",
+      "what": "apparent ellipse semi-axes of an orbit seen from an observer (the guide systems and 200 seeded orbits and observers) against a 200,000-point brute-force projection in the oracle",
+      "bound": "relative <= 1e-6",
+      "kind": "oracle"
+    },
+    {
+      "id": "C2",
+      "group": "projection",
+      "what": "a circular orbit: minor / major = |cos i'|, i' measured in the sky plane",
+      "bound": "<= 1e-12",
+      "kind": "analytic"
+    },
+    {
+      "id": "C3",
+      "group": "projection",
+      "what": "transit impact parameter and chord on the eclipse guide systems and 200 seeded orbits against the oracle's bisection; circular orbits against a |cos i'| / R*",
+      "bound": "impact <= 1e-8 star radii; chord half-length <= 1e-8 star radii",
+      "kind": "oracle"
+    },
+    {
+      "id": "C4",
+      "group": "projection",
+      "what": "an orbit that does not pass in front of the star (b > R* + Rp) reports no transit; one that does reports it, on a sweep of i' in 0.01 degree steps at the guide's a and radii",
+      "bound": "wrong = 0",
+      "kind": "negative"
+    },
+    {
+      "id": "D1",
+      "group": "kepler",
+      "what": "the Kepler-only session's positions at five times (10 orbits included) against the oracle's own Kepler solution (scipy brentq on Kepler's equation, no Gravitas code)",
+      "bound": "<= 1e-10 a",
+      "kind": "oracle"
+    },
+    {
+      "id": "D2",
+      "group": "kepler",
+      "what": "the osculating elements of every body are constant over 1,000 ticks of a Kepler-only run (it cannot show libration or secular exchange)",
+      "bound": "|da|/a, |de|, every angle <= 1e-11",
+      "kind": "analytic"
+    },
+    {
+      "id": "D3",
+      "group": "kepler",
+      "what": "a test mass (m = 1e-9) in a Kepler-only run against the N-body live session over 5 orbits (the restricted limit)",
+      "bound": "<= 1e-6 a",
+      "kind": "oracle"
+    },
+    {
+      "id": "D4",
+      "group": "kepler",
+      "what": "the precomputed (replay) session reproduces a recorded N-body run, position and velocity bits",
+      "bound": "differing bits = 0",
+      "kind": "analytic"
+    },
+    {
+      "id": "D5",
+      "group": "kepler",
+      "what": "run-mode enforcement: a step declared nbody refused by a Kepler-only lab, a step declared kepler refused by an N-body lab, a step with no declared mode refused by the test, in every guide step of the curriculum",
+      "bound": "missed = 0 of every step",
+      "kind": "negative"
+    },
+    {
+      "id": "E1",
+      "group": "resonance",
+      "what": "the resonant argument phi = 2 lambda_c - lambda_b - varpi_b of the guide's 2:1 pair, sampled every 5 inner orbits over the 600-orbit window: the kernel (yoshida4c, h = P/4000, as the guide runs it) against scipy DOP853 (rtol 1e-12, atol 1e-14) in the oracle from the same initial numbers",
+      "bound": "max |difference| <= 0.02 rad",
+      "kind": "oracle"
+    },
+    {
+      "id": "E2",
+      "group": "resonance",
+      "what": "libration period (time between successive maxima of phi, quadratic peak fit on a 1-orbit sampling) kernel against oracle",
+      "bound": "relative <= 0.02",
+      "kind": "oracle"
+    },
+    {
+      "id": "E3",
+      "group": "resonance",
+      "what": "libration amplitude (max - min)/2, kernel against oracle",
+      "bound": "<= 0.02 rad",
+      "kind": "oracle"
+    },
+    {
+      "id": "E4",
+      "group": "resonance",
+      "what": "the window holds at least five libration periods of the kernel's run, and phi never leaves (-pi, pi) (it librates, it does not circulate)",
+      "bound": "periods >= 5; max |phi| < pi",
+      "kind": "analytic"
+    },
+    {
+      "id": "E5",
+      "group": "resonance",
+      "what": "the kernel's conservation over the window: energy and angular momentum vector",
+      "bound": "relative energy error <= 1e-9; angular momentum <= 1e-12",
+      "kind": "analytic"
+    },
+    {
+      "id": "E6",
+      "group": "resonance",
+      "what": "the same pair in Kepler-only mode: the range of phi over the window",
+      "bound": "<= 1e-9 rad (no libration is possible)",
+      "kind": "analytic"
+    },
+    {
+      "id": "E7",
+      "group": "resonance",
+      "what": "the guide's stated window, period and amplitude equal the validator's, as the text prints them",
+      "bound": "window exact; period within 1 inner orbit; amplitude within 0.01 rad",
+      "kind": "analytic"
+    },
+    {
+      "id": "E8",
+      "group": "resonance",
+      "what": "a step ten times coarser (h = P/400) changes the libration period: how much, reported (this is why the guide states its step)",
+      "bound": "reported, no bound",
+      "kind": "reported"
+    },
+    {
+      "id": "F1",
+      "group": "mutual",
+      "what": "the two-planet guide system's mutual inclination: the instrument against the spherical-trigonometry formula and the oracle",
+      "bound": "<= 1e-9 rad",
+      "kind": "oracle"
+    },
+    {
+      "id": "F2",
+      "group": "mutual",
+      "what": "the invariable-plane law on the same system: m sqrt(a(1-e^2)) sin i' of the two planets in that plane (nodes opposite), and i'_b + i'_c = I, with the barycentric angular momentum and astrocentric orbits (the planets are light, so only to about a part in a thousand)",
+      "bound": "relative <= 5e-3",
+      "kind": "analytic"
+    },
+    {
+      "id": "F3",
+      "group": "mutual",
+      "what": "the Kozai-Lidov window of R6 as the guide states it: the first eccentricity peak time and its e and mutual inclination, from the kernel's own run, against R6's reference values in the kernel's corpus",
+      "bound": "e within 0.01 of the corpus; peak time within 3 percent of the corpus's run",
+      "kind": "analytic"
+    },
+    {
+      "id": "G1",
+      "group": "guides",
+      "what": "the committed answer key equals a reference run of every guide on both paths",
+      "bound": "differing rows = 0",
+      "kind": "analytic"
+    },
+    {
+      "id": "G2",
+      "group": "guides",
+      "what": "every step of the five new guides has its words in English and Spanish, and Spanish carries no key English lacks",
+      "bound": "missing = 0",
+      "kind": "analytic"
+    },
+    {
+      "id": "G3",
+      "group": "guides",
+      "what": "keyboard: each new instrument's control reachable and operable by keyboard in a browser; axe in both languages on the lab with each new instrument open",
+      "bound": "a violation or an unreachable control is a failure",
+      "kind": "browser"
+    },
+    {
+      "id": "G4",
+      "group": "guides",
+      "what": "route ceilings: lab3d-lab and lab3d-guide in sources and build; any raise only exactly the measured overrun rounded up to 0.1 KB under the standing approval of 2026-10-10 with a register row; a request raise is not covered and stops the prompt",
+      "bound": "within, or an itemised standing-approval raise",
+      "kind": "budget"
+    },
+    {
+      "id": "G5",
+      "group": "guides",
+      "what": "no closure file added to the instructor bundle's source closure (306 of fewer than 307)",
+      "bound": "closure = 306",
+      "kind": "budget"
+    },
+    {
+      "id": "H1",
+      "group": "frames",
+      "what": "the rate at which planet b's node (in the invariable plane fixed at the start) moves over 2,000 inner orbits, in degrees per 100 orbits: the kernel (yoshida4c, h = P/4000, as the guide runs it) against scipy DOP853 (rtol 1e-12, atol 1e-14) in the oracle from the same numbers, and the guide's sentence ('about 1.3 degrees per 100 orbits, backward') against both",
+      "bound": "kernel vs oracle relative <= 0.05; the sentence's number within 5 percent of the kernel's and its sign right",
+      "kind": "oracle"
+    }
+  ],
+  "amendments": [
+    {
+      "id": "AM1",
+      "recorded": "2026-11-07, before any validator or oracle of this prompt had been run",
+      "adds": "leg H1 (group frames)",
+      "why": "The Changing frames guide states, in its last step, that the planets' mutual pull turns the inner orbit's node and that Kepler-only mode cannot show it. A stated effect needs a measured number. One exploratory N-body run of the guide's own system, seen before this amendment, showed the inner node moving backward by about 1.3 degrees in 100 orbits of the inner planet (about 31 degrees in 2,500), measured in the invariable plane; that run chose the sentence's form and none of the bound below.",
+      "leg": {
+        "id": "H1",
+        "group": "frames",
+        "what": "the rate at which planet b's node (in the invariable plane fixed at the start) moves over 2,000 inner orbits, in degrees per 100 orbits: the kernel (yoshida4c, h = P/4000, as the guide runs it) against scipy DOP853 (rtol 1e-12, atol 1e-14) in the oracle from the same numbers, and the guide's sentence ('about 1.3 degrees per 100 orbits, backward') against both",
+        "bound": "kernel vs oracle relative <= 0.05; the sentence's number within 5 percent of the kernel's and its sign right",
+        "kind": "oracle"
+      }
+    },
+    {
+      "id": "AM2",
+      "recorded": "2026-11-07, after the first validator run and before any run of the legs it adds",
+      "adds": "legs E2s, E4s and E7s (group resonance)",
+      "why": "The first run measured E2, E4 and E7 as committed and they failed: the resonant argument sampled once per inner orbit carries a short-period term (the pair's synodic period is two inner orbits, and its harmonics alias onto it), so successive maxima of the sampled argument are that term's maxima, not the libration's. The kernel and the oracle agree with each other on this wrong number to the same degree they agree on everything else, which shows the defect is the measurement, not either integrator. E2, E4 and E7 stay in the results as first measured, failing and labelled. The three legs below measure the libration itself: the argument is smoothed with the weights 1/4, 1/2, 1/4 over three successive one-orbit samples, which removes any component of period two orbits or one orbit exactly, and the same smoothing is applied to the kernel's and the oracle's samples. The weights were fixed here, before any smoothed number was computed.",
+      "legs": [
+        {
+          "id": "E2s",
+          "group": "resonance",
+          "what": "libration period (mean time between successive maxima of the smoothed argument, quadratic peak fit on a 1-orbit sampling) kernel against oracle",
+          "bound": "relative <= 0.02",
+          "kind": "oracle"
+        },
+        {
+          "id": "E4s",
+          "group": "resonance",
+          "what": "the window holds at least five libration periods of the kernel's smoothed argument, and phi never leaves (-pi, pi)",
+          "bound": "periods >= 5; max |phi| < pi",
+          "kind": "property"
+        },
+        {
+          "id": "E7s",
+          "group": "resonance",
+          "what": "the guide's stated window, period and amplitude equal the validator's, as the text prints them: the period against E2s's smoothed period of the kernel, the amplitude against E3's",
+          "bound": "window exact; period within 1 inner orbit; amplitude within 0.01 rad",
+          "kind": "oracle"
+        }
+      ]
+    }
+  ]
+}

@@ -137,6 +137,7 @@ export function describe(records, library = new Map()) {
           ? Object.keys(value.responses).length
           : 0,
         done: Boolean(e?.steps) && seen >= e.steps,
+        ...(text(value?.deepest) ? { depth: text(value.deepest) } : {}),
         since: text(value?.startedAt) || null,
       });
     } else if (key === KEY_GUIDES && isObj(value)) {
@@ -294,3 +295,100 @@ export const total = d =>
   d.drafts.length +
   d.made.length +
   Object.values(d.evidence.groups).reduce((n, g) => n + g.length, 0);
+
+// -----------------------------------------------------------------------------
+// Progress in My work (Roadmap III Prompt 276, part 1)
+// Where a student stands in each sequence and course: done, in progress or not
+// started, with the depth reached, and which earlier investigation they may
+// want first. Derived from the records describe() groups, the Library's
+// entries and the resume record; no record is added or written; nothing is a
+// lock, a score or a streak: a prerequisite is advice. Pure (tests/
+// myWorkProgress.test.js). Kept in this module so the page gains no request.
+// -----------------------------------------------------------------------------
+
+const PREFIX = 'investigation:';
+const isLesson = e => e?.kind === 'investigation' && e.format === 'lesson';
+const bare = id => (id.startsWith(PREFIX) ? id.slice(PREFIX.length) : id);
+
+/** Depths a progress record can name, shallowest first. */
+export const DEPTH_NAMES = Object.freeze({
+  core: ['core', 'base'],
+  quantitative: ['quantitative', 'cuantitativo'],
+  advanced: ['advanced', 'avanzado'],
+});
+
+/** 'done', 'doing' (a record exists) or 'new' (none does). */
+export const stateOf = lesson =>
+  !lesson ? 'new' : lesson.done ? 'done' : 'doing';
+
+/** Lessons of the describe() model, by investigation id. */
+const byId = lessons =>
+  new Map(lessons.filter(l => l.kind === 'lesson').map(l => [l.id, l]));
+
+/**
+ * The investigations an entry's prerequisites name that are not yet done.
+ *
+ * @param {object} entry - A Library entry
+ * @param {Map<string, object>} library - Library entries by id
+ * @param {Map<string, object>} lessons - Progress by investigation id
+ * @returns {Array<{id: string, title: object, route: string}>}
+ */
+export function unmetPrerequisites(entry, library, lessons) {
+  return (entry?.prerequisites ?? [])
+    .map(id => library.get(id))
+    .filter(p => isLesson(p) && stateOf(lessons.get(bare(p.id))) !== 'done')
+    .map(p => ({ id: p.id, title: p.title, route: p.route }));
+}
+
+/**
+ * The sequences and courses with their investigations in order and each one's
+ * state. Groups with something begun come first, otherwise Library order.
+ *
+ * @param {Map<string, object>} library - Library entries by id
+ * @param {Array<object>} sequences - The Library's sequences ({id, title})
+ * @param {Array<object>} lessons - describe(...).lessons
+ * @returns {Array<{kind: string, id: string, title: object, items: Array,
+ *   counts: {done: number, doing: number, new: number}, next: ?object}>}
+ */
+export function progressGroups(library, sequences, lessons) {
+  const have = byId(lessons);
+  const groups = new Map();
+  const titleOf = (kind, id) =>
+    kind === 'seq'
+      ? (sequences.find(q => q.id === id)?.title ?? { en: id })
+      : (library.get(`course:${id}`)?.title ?? { en: id });
+  for (const e of library.values()) {
+    if (!isLesson(e)) continue;
+    const l = have.get(bare(e.id));
+    const item = {
+      id: e.id,
+      title: e.title,
+      route: e.route,
+      state: stateOf(l),
+      seen: l?.seen ?? 0,
+      total: e.steps ?? null,
+      depth: l && DEPTH_NAMES[l.depth] ? l.depth : null,
+      prerequisites:
+        stateOf(l) === 'done' ? [] : unmetPrerequisites(e, library, have),
+    };
+    for (const [kind, id, at] of e.rel?.in ?? []) {
+      if (kind !== 'seq' && kind !== 'course') continue;
+      const key = `${kind}:${id}`;
+      if (!groups.has(key))
+        groups.set(key, { kind, id, title: titleOf(kind, id), items: [] });
+      groups.get(key).items.push({ at: Number(at) || 0, ...item });
+    }
+  }
+  const out = [...groups.values()].map(g => {
+    g.items.sort((a, b) => a.at - b.at);
+    g.counts = { done: 0, doing: 0, new: 0 };
+    for (const i of g.items) g.counts[i.state] += 1;
+    g.next = g.items.find(i => i.state !== 'done') ?? null;
+    return g;
+  });
+  const begun = g => g.counts.done + g.counts.doing > 0;
+  return out
+    .map((g, i) => [g, i])
+    .sort((a, b) => Number(begun(b[0])) - Number(begun(a[0])) || a[1] - b[1])
+    .map(([g]) => g);
+}

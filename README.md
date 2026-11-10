@@ -26,10 +26,10 @@ tides, and a dense cluster relaxing over time. Each is tagged by curriculum
 concept, so the scenario gallery doubles as an index an instructor can scan for
 the week they are teaching.
 
-**<!--fact:libraryInvestigations-->141<!--/fact--> guided
+**<!--fact:libraryInvestigations-->146<!--/fact--> guided
 investigations**: <!--fact:investigations-->124<!--/fact--> that run in the
 simulation, <!--fact:investigationSteps-->1521<!--/fact--> steps between them
-(the table below), and <!--fact:guidedInvestigations-->17<!--/fact--> in the
+(the table below), and <!--fact:guidedInvestigations-->22<!--/fact--> in the
 Observatory, the 3-D lab and the mission lab (the Library lists all of them):
 
 | Investigation                    | What a student does                                                                             |
@@ -306,7 +306,7 @@ service and works offline ([MISSION_LAB.md](MISSION_LAB.md)).
 
 **Spanish.** The interface ships in <!--fact:locales-->2<!--/fact--> languages
 — <!--fact:localeNames-->English, Español<!--/fact--> — from a catalog
-of <!--fact:uiStrings-->13860<!--/fact--> strings, and
+of <!--fact:uiStrings-->14342<!--/fact--> strings, and
 all <!--fact:investigations-->124<!--/fact--> investigations are translated. A
 translation carries only words: no scenario name, no seed, no widget id and no
 numeric answer can be reached from a locale file, so a mistranslation cannot
@@ -341,7 +341,7 @@ run directly, so debugging never requires a build step.
 ### Everything else
 
 ```bash
-npm test                  # <!--fact:jestTests-->20013<!--/fact--> tests across <!--fact:jestSuites-->575<!--/fact--> suites
+npm test                  # <!--fact:jestTests-->20289<!--/fact--> tests across <!--fact:jestSuites-->591<!--/fact--> suites
 npm run validate:physics  # the physics validation table
 npm run e2e               # browser smoke tests, against the sources
 npm run lint              # eslint
@@ -486,8 +486,8 @@ npm run e2e:ui                    # the Playwright inspector
 npm run e2e:report                # open the last HTML report
 ```
 
-The suite is <!--fact:e2eTests-->3287<!--/fact--> tests
-in <!--fact:e2eFiles-->231<!--/fact--> files and takes several minutes in
+The suite is <!--fact:e2eTests-->3297<!--/fact--> tests
+in <!--fact:e2eFiles-->232<!--/fact--> files and takes several minutes in
 Chromium.
 
 Some notes on how it is put together, because two of the choices are not

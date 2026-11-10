@@ -51,6 +51,8 @@ export { STATUS, isTrialResult } from './status.js';
 
 export const FORMAT = ID_EXPERIMENT;
 export const FORMAT_VERSION = 1;
+/** A record that uses an ensemble field (js/experiments/ensemble/record.js): the runner page runs sweeps and only reads one. */
+export const ENSEMBLE_FORMAT_VERSION = 2;
 export const RESULT_FORMAT = ID_EXPERIMENT_RESULT;
 export const RESULT_VERSION = 1;
 /** The platform API these manifests are written against (js/platform). */
@@ -193,12 +195,36 @@ export function validateExperiment(m) {
   const need = (ok, path, message) => ok || out.push({ path, message });
   if (!isObject(m)) return [{ path: '', message: 'is not an object' }];
   need(m.format === FORMAT, 'format', `must be "${FORMAT}"`);
+  // An ensemble record (/2) names its streams and kernels; its inputs are checked
+  // in full by the ensemble module, which only a runner of it loads.
+  const ens =
+    m.formatVersion === ENSEMBLE_FORMAT_VERSION && isObject(m.ensemble)
+      ? m.ensemble
+      : null;
   need(
-    m.formatVersion === FORMAT_VERSION,
+    m.formatVersion === FORMAT_VERSION || ens,
     'formatVersion',
-    `must be ${FORMAT_VERSION}`
+    `must be ${FORMAT_VERSION}, or ${ENSEMBLE_FORMAT_VERSION} with an ensemble block`
   );
   need(typeof m.title === 'string' && m.title.trim(), 'title', 'is required');
+  need(
+    m.ensemble === undefined || ens,
+    'ensemble',
+    `an ensemble block needs formatVersion ${ENSEMBLE_FORMAT_VERSION}`
+  );
+  if (ens && ens.kind !== 'sweep') {
+    need(
+      typeof ens.kind === 'string' && ens.kind,
+      'ensemble.kind',
+      'is required'
+    );
+    need(
+      Array.isArray(ens.streams) && ens.streams.length,
+      'ensemble.streams',
+      'names the streams the trials draw from'
+    );
+    return out;
+  }
 
   const scenario = m.model?.scenario;
   const lab = sweepLab(scenario);
@@ -766,6 +792,17 @@ export function migrateExperiment(raw) {
             error: `${raw.format} version ${raw.version} is newer than this Gravitas reads; open it in a newer version`,
           };
     }
+    if (
+      input.formatVersion === ENSEMBLE_FORMAT_VERSION &&
+      isObject(input.ensemble)
+    )
+      return {
+        manifest: input,
+        notes: [
+          `an ensemble experiment (${input.ensemble.kind}): this page runs sweeps and does not run it`,
+        ],
+        error: null,
+      };
     if (input.formatVersion === FORMAT_VERSION)
       return input.kind === 'comparison'
         ? fromComparison(input)

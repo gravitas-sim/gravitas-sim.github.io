@@ -1,0 +1,1019 @@
+{
+ "format": "gravitas.population-inference-gate-results/1",
+ "thresholdsSha256": "96e9e9ff9119b181364beb81857633bdeecf88af87da157ef80200afffc557c1",
+ "oracleSha256": "3627313e4acf0bc83fa7265ccd8d4d2197682b21ba2bdd026ed2e230e74bcae5",
+ "node": "v22.23.4",
+ "runs": "two complete runs agree row for row except the CPU time (N6)",
+ "rows": [
+  {
+   "id": "I1.inputs",
+   "group": "integrity",
+   "scope": "all",
+   "tier": "-",
+   "status": "pass",
+   "bound": "exact",
+   "measured": {
+    "thresholdsSha256": "96e9e9ff9119b181364beb81857633bdeecf88af87da157ef80200afffc557c1",
+    "oracleRecorded": "96e9e9ff9119b181364beb81857633bdeecf88af87da157ef80200afffc557c1",
+    "oracleSha256": "3627313e4acf0bc83fa7265ccd8d4d2197682b21ba2bdd026ed2e230e74bcae5"
+   }
+  },
+  {
+   "id": "O1.twoAlgorithms",
+   "group": "oracle",
+   "scope": "all",
+   "tier": "b",
+   "status": "pass",
+   "bound": "max absolute 1e-8 (tolerance.oracleLogLik)",
+   "measured": {
+    "maxAbs": 2.2737367544323206e-13
+   }
+  },
+  {
+   "id": "O2.hand",
+   "group": "oracle",
+   "scope": "unc",
+   "tier": "b",
+   "status": "pass",
+   "bound": "max absolute 1e-9 on the total, 1e-12 on l_hat, relative 1e-9 on g*",
+   "measured": {
+    "totalErr": 0,
+    "logLikErr": 0,
+    "gstarRel": 0
+   }
+  },
+  {
+   "id": "O3.garwood",
+   "group": "oracle",
+   "scope": "base",
+   "tier": "b",
+   "status": "pass",
+   "bound": "max relative 1e-12",
+   "measured": {
+    "maxRel": 1.3423044999173407e-15
+   }
+  },
+  {
+   "id": "O4.profileEnds",
+   "group": "oracle",
+   "scope": "unc",
+   "tier": "b",
+   "status": "pass",
+   "bound": "max absolute 1e-6 of the deviance",
+   "measured": {
+    "maxAbs": 1.4433343409336885e-11
+   }
+  },
+  {
+   "id": "A1.handCounts",
+   "group": "analytic",
+   "scope": "base",
+   "tier": "a",
+   "status": "pass",
+   "bound": "rates to 1e-12 relative, the limit to 1e-12, the statuses as stated",
+   "measured": {
+    "rates": [
+     0.3,
+     null,
+     0.4
+    ],
+    "limit": 0.37446653419424875,
+    "statuses": [
+     "ok",
+     "upper-limit",
+     "ok"
+    ]
+   }
+  },
+  {
+   "id": "A2.handNonIdentified",
+   "group": "analytic",
+   "scope": "unc",
+   "tier": "a",
+   "status": "pass",
+   "bound": "total 1e-9 absolute, l_hat 1e-12 absolute, g* 1e-9 relative, lo exactly 0",
+   "measured": {
+    "totalErr": 0,
+    "logLikErr": 0,
+    "gstarRel": 2.0172027357569278e-16,
+    "lo": 0
+   }
+  },
+  {
+   "id": "A3.exposureConstant",
+   "group": "analytic",
+   "scope": "base",
+   "tier": "a",
+   "status": "pass",
+   "bound": "1e-12 relative",
+   "measured": {
+    "E": [
+     1.4800000000000002,
+     1.4800000000000002,
+     1.4800000000000002
+    ],
+    "maxRel": 1.50030138462859e-16
+   }
+  },
+  {
+   "id": "A4.exposureLogistic",
+   "group": "analytic",
+   "scope": "base",
+   "tier": "a",
+   "status": "pass",
+   "bound": "max relative tolerance.oracleExposure",
+   "measured": {
+    "maxRel": 1.5226633163075919e-05,
+    "E": [
+     141.6415649268878,
+     401.84173211772924,
+     491.55360854989425,
+     499.4973080970916,
+     499.97106758821997,
+     499.99833813224865,
+     499.99990455391094,
+     499.99999451827904
+    ]
+   }
+  },
+  {
+   "id": "A5.exposureVolume",
+   "group": "analytic",
+   "scope": "base",
+   "tier": "a",
+   "status": "pass",
+   "bound": "1e-12 relative of 4.5",
+   "measured": {
+    "E": 4.5,
+    "rel": 0
+   }
+  },
+  {
+   "id": "Q1.equivalenceCounts",
+   "group": "equivalence",
+   "scope": "base",
+   "tier": "b",
+   "status": "pass",
+   "bound": "statuses and method strings identical; max relative difference of rate, lo, hi, limit 1e-14 (tolerance.equivalence)",
+   "measured": {
+    "cells": 8000,
+    "maxRel": 2.1746899278114485e-16,
+    "mismatches": 0,
+    "kinds": {
+     "ok": 5535,
+     "upper-limit": 2065,
+     "not-constrained": 400
+    }
+   }
+  },
+  {
+   "id": "Q2.equivalenceObjects",
+   "group": "equivalence",
+   "scope": "base",
+   "tier": "b",
+   "status": "pass",
+   "bound": "as Q1",
+   "measured": {
+    "cells": 8000,
+    "maxRel": 2.1746899278114485e-16,
+    "mismatches": 0,
+    "kinds": {
+     "ok": 5535,
+     "upper-limit": 2065,
+     "not-constrained": 400
+    }
+   }
+  },
+  {
+   "id": "Q3.continuity",
+   "group": "equivalence",
+   "scope": "unc",
+   "tier": "b",
+   "status": "pass",
+   "bound": "rates relative 1e-6; ends relative tolerance.continuity",
+   "measured": {
+    "cells": 553,
+    "maxRateRel": 4.886920214589867e-16,
+    "maxEndRel": 1.1282476678537093e-11,
+    "notConverged": 0
+   }
+  },
+  {
+   "id": "R2.logLik",
+   "group": "reference",
+   "scope": "unc",
+   "tier": "b",
+   "status": "pass",
+   "bound": "max absolute tolerance.oracleLogLik",
+   "measured": {
+    "maxAbs": 1.5916157281026244e-12,
+    "notConverged": 0,
+    "per": {
+     "S1": {
+      "logLikErr": 1.1368683772161603e-12,
+      "muRel": 4.0487803926025926e-10,
+      "endRel": 1.0269517966002442e-11,
+      "iterations": 5
+     },
+     "S2": {
+      "logLikErr": 0,
+      "muRel": 9.909544494602387e-16,
+      "endRel": 2.001604590065668e-12,
+      "iterations": 6
+     },
+     "S3": {
+      "logLikErr": 4.547473508864641e-13,
+      "muRel": 5.0182278645500365e-08,
+      "endRel": 7.354792002996022e-12,
+      "iterations": 9
+     },
+     "S4": {
+      "logLikErr": 6.821210263296962e-13,
+      "muRel": 8.974498372674721e-12,
+      "endRel": 9.335894639650163e-12,
+      "iterations": 5
+     },
+     "S5": {
+      "logLikErr": 1.5916157281026244e-12,
+      "muRel": 4.934338572649542e-13,
+      "endRel": 5.155203805712049e-12,
+      "iterations": 5
+     },
+     "S6": {
+      "logLikErr": 1.1368683772161603e-13,
+      "muRel": 2.905973512383289e-16,
+      "endRel": 4.803530405236534e-12,
+      "iterations": 7
+     },
+     "S7": {
+      "logLikErr": 0,
+      "muRel": 7.084814260256596e-14,
+      "endRel": 7.452691283424496e-12,
+      "iterations": 5
+     }
+    }
+   }
+  },
+  {
+   "id": "R3.mu",
+   "group": "reference",
+   "scope": "unc",
+   "tier": "b",
+   "status": "pass",
+   "bound": "max relative tolerance.oracleMu",
+   "measured": {
+    "maxRel": 5.0182278645500365e-08
+   }
+  },
+  {
+   "id": "R4.endpoints",
+   "group": "reference",
+   "scope": "unc",
+   "tier": "b",
+   "status": "pass",
+   "bound": "max relative tolerance.oracleEndpoint (absolute 1e-6 where the oracle's end is 0)",
+   "measured": {
+    "maxRel": 1.0269517966002442e-11,
+    "maxAbsWhereOracleZero": 0,
+    "statusMismatches": 0
+   }
+  },
+  {
+   "id": "R5.zeroAndFloor",
+   "group": "reference",
+   "scope": "unc",
+   "tier": "b",
+   "status": "pass",
+   "bound": "statuses identical; limits relative tolerance.oracleEndpoint",
+   "measured": {
+    "statusesIdentical": true,
+    "maxLimitRel": 9.456537867877873e-14
+   }
+  },
+  {
+   "id": "R6.resolutionFlag",
+   "group": "reference",
+   "scope": "unc",
+   "tier": "b",
+   "status": "pass",
+   "bound": "median 1e-9 relative; flag identical",
+   "measured": {
+    "maxRel": 0,
+    "flagsIdentical": true
+   }
+  },
+  {
+   "id": "R1.countsReference",
+   "group": "reference",
+   "scope": "base",
+   "tier": "b",
+   "status": "pass",
+   "bound": "rates 1e-12 relative; ends relative 1e-12; statuses identical",
+   "measured": {
+    "maxRate": 0,
+    "maxEnd": 8.095668739153442e-15,
+    "statuses": true
+   }
+  },
+  {
+   "id": "V1.recoveryU1",
+   "group": "recovery",
+   "scope": "unc",
+   "tier": "a",
+   "status": "pass",
+   "bound": "max |Gamma_hat / Gamma - 1| <= 0.05",
+   "measured": {
+    "n": 70128,
+    "converged": true,
+    "iterations": 5,
+    "maxErr": 0.039472125808706515,
+    "errs": [
+     0.02945778260169174,
+     0.015351821411624611,
+     0.0051800483576982526,
+     0.0008061633847329386,
+     0.015487203730105703,
+     0.015648588090698246,
+     0.039472125808706515,
+     0.018744268387641094
+    ]
+   }
+  },
+  {
+   "id": "V2.recoveryM",
+   "group": "recovery",
+   "scope": "unc",
+   "tier": "a",
+   "status": "pass",
+   "bound": "max |Gamma_hat / Gamma - 1| <= 0.08",
+   "measured": {
+    "n": 151375,
+    "converged": true,
+    "iterations": 6,
+    "maxErr": 0.014116817178991381,
+    "errs": [
+     0.0033799950034731907,
+     0.0012799068207773878,
+     0.012681326914866453,
+     0.0018977882936518364,
+     0.014116817178991381,
+     0.006792635797036484,
+     0.005358786613189337,
+     0.006943677117256852,
+     0.002855856819703906,
+     0.006645191040234755
+    ]
+   }
+  },
+  {
+   "id": "C1.coverageU1",
+   "group": "coverage",
+   "scope": "unc",
+   "tier": "c",
+   "status": "pass",
+   "bound": "in [0.93, 0.97]",
+   "measured": {
+    "mean": 0.9473750000000001,
+    "perBin": [
+     0.949,
+     0.941,
+     0.949,
+     0.954,
+     0.939,
+     0.95,
+     0.947,
+     0.95
+    ],
+    "richBins": [
+     0,
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7
+    ],
+    "refused": 0
+   }
+  },
+  {
+   "id": "C1b.coverageU1PerBin",
+   "group": "coverage",
+   "scope": "unc",
+   "tier": "c",
+   "status": "pass",
+   "bound": ">= 0.91",
+   "measured": {
+    "min": 0.939
+   }
+  },
+  {
+   "id": "C2.coverageU1sigma",
+   "group": "coverage",
+   "scope": "unc",
+   "tier": "c",
+   "status": "pass",
+   "bound": "in [0.65, 0.72]",
+   "measured": {
+    "mean": 0.678875,
+    "perBin": [
+     0.689,
+     0.667,
+     0.693,
+     0.671,
+     0.656,
+     0.681,
+     0.675,
+     0.699
+    ]
+   }
+  },
+  {
+   "id": "C3.coverageU3",
+   "group": "coverage",
+   "scope": "unc",
+   "tier": "c",
+   "status": "pass",
+   "bound": "in [0.90, 0.99]",
+   "measured": {
+    "mean": 0.9471249999999999,
+    "perBin": [
+     0.942,
+     0.951,
+     0.939,
+     0.944,
+     0.944,
+     0.965,
+     0.941,
+     0.951
+    ],
+    "zeroStatements": {
+     "n": 114,
+     "covered": 71
+    }
+   }
+  },
+  {
+   "id": "C4.coverageM",
+   "group": "coverage",
+   "scope": "unc",
+   "tier": "c",
+   "status": "pass",
+   "bound": "in [0.93, 0.97]",
+   "measured": {
+    "mean": 0.9512,
+    "perBin": [
+     0.968,
+     0.952,
+     0.936,
+     0.942,
+     0.938,
+     0.95,
+     0.946,
+     0.96,
+     0.95,
+     0.97
+    ],
+    "richBins": [
+     0,
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9
+    ]
+   }
+  },
+  {
+   "id": "C4b.coverageMPerBin",
+   "group": "coverage",
+   "scope": "unc",
+   "tier": "c",
+   "status": "pass",
+   "bound": ">= 0.90",
+   "measured": {
+    "min": 0.936
+   }
+  },
+  {
+   "id": "C5.bias",
+   "group": "coverage",
+   "scope": "unc",
+   "tier": "c",
+   "status": "pass",
+   "bound": "each within 0.03 of 1",
+   "measured": {
+    "maxAbsBiasMinusOne": 0.006208605417416191,
+    "perBin": [
+     0.9954514708743251,
+     0.998287122614992,
+     0.9937913945825838,
+     0.9990128339243038,
+     1.0020436106210373,
+     0.9983608582182659,
+     1.002473009632427,
+     0.9940412006604158
+    ]
+   }
+  },
+  {
+   "id": "C6.converged",
+   "group": "coverage",
+   "scope": "unc",
+   "tier": "c",
+   "status": "pass",
+   "bound": "<= 0.005",
+   "measured": {
+    "fits": 2500,
+    "notConverged": 0,
+    "share": 0
+   }
+  },
+  {
+   "id": "C7.coverageOracle",
+   "group": "coverage",
+   "scope": "unc",
+   "tier": "c",
+   "status": "pass",
+   "bound": "in [0.92, 0.98]",
+   "measured": {
+    "pooled": 0.9533333333333334,
+    "perBin": {
+     "0": 0.9566666666666667,
+     "1": 0.93,
+     "2": 0.9566666666666667,
+     "3": 0.97,
+     "4": 0.9566666666666667,
+     "5": 0.9466666666666667,
+     "6": 0.95,
+     "7": 0.96
+    },
+    "replicates": 300
+   }
+  },
+  {
+   "id": "D1.widthWithSigma",
+   "group": "misspecified",
+   "scope": "unc",
+   "tier": "d",
+   "status": "pass",
+   "bound": ">= 1.05 (a coarser measurement must widen the interval)",
+   "measured": {
+    "ratio": 1.2561522017045321,
+    "medianTrue": 0.5184516512114714,
+    "medianDoubled": 0.65125418314664,
+    "pairs": [
+     3200,
+     3196
+    ]
+   }
+  },
+  {
+   "id": "D2.resolutionFlag",
+   "group": "misspecified",
+   "scope": "unc",
+   "tier": "d",
+   "status": "pass",
+   "bound": "U1 1.000; U2 >= 0.99",
+   "measured": {
+    "U1okShare": 1,
+    "U2notOkShare": 1
+   }
+  },
+  {
+   "id": "D3.refusalsCounts",
+   "group": "refusals",
+   "scope": "base",
+   "tier": "d",
+   "status": "pass",
+   "bound": "every code as committed",
+   "measured": {
+    "seen": {
+     "edges": [
+      "edges",
+      "edges",
+      "edges"
+     ],
+     "exposure": [
+      "exposure",
+      "exposure",
+      "exposure"
+     ],
+     "reliability": [
+      "reliability",
+      "reliability",
+      "reliability"
+     ],
+     "count": [
+      "count",
+      "count"
+     ],
+     "counts": [
+      "counts"
+     ],
+     "sample": [
+      "sample",
+      "sample"
+     ],
+     "level": [
+      "level",
+      "level"
+     ],
+     "penalty": [
+      "penalty",
+      "penalty"
+     ]
+    },
+    "neighbours": [
+     "ok",
+     "ok",
+     "ok",
+     "ok"
+    ]
+   }
+  },
+  {
+   "id": "D4.refusalsObjects",
+   "group": "refusals",
+   "scope": "unc",
+   "tier": "d",
+   "status": "pass",
+   "bound": "every code as committed",
+   "measured": {
+    "seen": {
+     "sigma": [
+      "sigma",
+      "sigma"
+     ],
+     "object": [
+      "object",
+      "object"
+     ],
+     "outside": [
+      "outside",
+      "outside"
+     ],
+     "unplaceable": [
+      "unplaceable"
+     ],
+     "penalty-gap": [
+      "penalty-gap",
+      "penalty-gap"
+     ]
+    },
+    "neighbours": [
+     "ok",
+     "ok",
+     "ok"
+    ]
+   }
+  },
+  {
+   "id": "D5.floorCounts",
+   "group": "refusals",
+   "scope": "base",
+   "tier": "d",
+   "status": "pass",
+   "bound": "as stated",
+   "measured": {
+    "statuses": [
+     "not-constrained",
+     "ok",
+     "ok"
+    ],
+    "whole": "not-constrained"
+   }
+  },
+  {
+   "id": "D6.floorObjects",
+   "group": "refusals",
+   "scope": "unc",
+   "tier": "d",
+   "status": "pass",
+   "bound": "as stated",
+   "measured": {
+    "statuses": [
+     "not-constrained",
+     "ok",
+     "ok"
+    ]
+   }
+  },
+  {
+   "id": "D7.emptySample",
+   "group": "refusals",
+   "scope": "unc",
+   "tier": "d",
+   "status": "pass",
+   "bound": "1e-9 relative",
+   "measured": {
+    "maxRel": 3.7060155022065506e-16
+   }
+  },
+  {
+   "id": "D8.noZeroRule",
+   "group": "misspecified",
+   "scope": "unc",
+   "tier": "d",
+   "status": "fail",
+   "bound": ">= 0.94",
+   "measured": {
+    "zeroStatements": 114,
+    "covered": 71,
+    "share": 0.6228070175438597
+   }
+  },
+  {
+   "id": "P1.zeroKappa",
+   "group": "penalty",
+   "scope": "penalty",
+   "tier": "a",
+   "status": "pass",
+   "bound": "max relative difference of Gamma 1e-9",
+   "measured": {
+    "maxRel": 2.0400889129342464e-16,
+    "per": {
+     "S1": 1.548468583342846e-16,
+     "S3": 1.4473057836087585e-16,
+     "S4": 0,
+     "S5": 2.0400889129342464e-16,
+     "S7": 1.5417858330989064e-16
+    },
+    "note": "S2 and S6 hold bins whose maximum is zero; their log rate does not exist and they are not compared"
+   }
+  },
+  {
+   "id": "P2.penaltyOracle",
+   "group": "penalty",
+   "scope": "penalty",
+   "tier": "b",
+   "status": "pass",
+   "bound": "max absolute difference of ln Gamma tolerance.penaltyOracle",
+   "measured": {
+    "maxAbs": 9.100869224898389e-09,
+    "per": {
+     "S1-1": 6.206168912115118e-11,
+     "S1-4": 7.289684411659891e-10,
+     "S1-16": 2.1705621744416703e-09,
+     "S3-1": 9.100869224898389e-09,
+     "S3-4": 5.577323575201021e-09,
+     "S3-16": 4.5367265499862697e-11
+    },
+    "notConverged": 2
+   }
+  },
+  {
+   "id": "P3.penaltyHelps",
+   "group": "penalty",
+   "scope": "penalty",
+   "tier": "c",
+   "status": "pass",
+   "bound": "<= 0.9",
+   "measured": {
+    "ratio": 0.25767011175611676,
+    "used": 374,
+    "dropped": 26,
+    "meanSumUnpenalised": 6.0326980448126015,
+    "meanSumPenalised": 1.55444597939777
+   }
+  },
+  {
+   "id": "P4.penaltyNamed",
+   "group": "penalty",
+   "scope": "penalty",
+   "tier": "d",
+   "status": "pass",
+   "bound": "every item holds on S1 and S3",
+   "measured": {
+    "S1": {
+     "statistic": true,
+     "kappa": true,
+     "kind": true,
+     "noInterval": true,
+     "unpenalisedBeside": true,
+     "noBannedWords": true
+    },
+    "S3": {
+     "statistic": true,
+     "kappa": true,
+     "kind": true,
+     "noInterval": true,
+     "unpenalisedBeside": true,
+     "noBannedWords": true
+    }
+   }
+  },
+  {
+   "id": "P5.penaltyGap",
+   "group": "penalty",
+   "scope": "penalty",
+   "tier": "d",
+   "status": "pass",
+   "bound": "as stated",
+   "measured": {
+    "negative": "penalty",
+    "gap": "penalty-gap"
+   }
+  },
+  {
+   "id": "N1.naiveCoverage",
+   "group": "reported",
+   "scope": "unc",
+   "tier": "c",
+   "status": "reported",
+   "bound": "reported",
+   "measured": {
+    "mean": 0.88625,
+    "perBin": [
+     0.936,
+     0.914,
+     0.94,
+     0.955,
+     0.864,
+     0.579,
+     0.962,
+     0.94
+    ],
+    "bin5": 0.579
+   }
+  },
+  {
+   "id": "N2.wrongExposure",
+   "group": "reported",
+   "scope": "unc",
+   "tier": "d",
+   "status": "reported",
+   "bound": "reported",
+   "measured": {
+    "meanRatioBins4to7": [
+     1.4277090987456638,
+     1.420500387420085,
+     1.4474162511246405,
+     1.4207430899029196
+    ],
+    "coverageBins4to7": [
+     0.065,
+     0.705,
+     0.665,
+     0.625
+    ]
+   }
+  },
+  {
+   "id": "N3.wrongSigma",
+   "group": "reported",
+   "scope": "unc",
+   "tier": "d",
+   "status": "reported",
+   "bound": "reported",
+   "measured": {
+    "perBin": [
+     0.925,
+     0.9275,
+     0.9525,
+     0.9625,
+     0.9325,
+     0.875,
+     0.935,
+     0.945
+    ],
+    "meanRich": 0.931875
+   }
+  },
+  {
+   "id": "N4.outsideDomain",
+   "group": "reported",
+   "scope": "unc",
+   "tier": "d",
+   "status": "reported",
+   "bound": "reported",
+   "measured": {
+    "unboundedShare": 0,
+    "intervalBins": 3840,
+    "medianWidthU2": 1.5613221636013868,
+    "medianWidthU1": 0.5184516512114714,
+    "widthRatio": 3.0115096749195973,
+    "coverage95Mean": 0.9625,
+    "perBin": [
+     0.946,
+     0.946,
+     0.946,
+     0.958,
+     0.97,
+     0.98,
+     0.992,
+     0.962
+    ]
+   }
+  },
+  {
+   "id": "N5.penaltyFeature",
+   "group": "reported",
+   "scope": "penalty",
+   "tier": "d",
+   "status": "reported",
+   "bound": "reported",
+   "measured": {
+    "1": {
+     "featureRatio": 0.7918046507249084,
+     "neighbourRatio": 1.6994387957707437,
+     "replicates": 357
+    },
+    "4": {
+     "featureRatio": 0.614159036684032,
+     "neighbourRatio": 2.0527163825873536,
+     "replicates": 357
+    },
+    "16": {
+     "featureRatio": 0.4689234991030858,
+     "neighbourRatio": 2.150646857064717,
+     "replicates": 372
+    }
+   }
+  },
+  {
+   "id": "X1.occurrenceAuthentic",
+   "group": "authentic",
+   "scope": "unc",
+   "tier": "e",
+   "status": "not-run",
+   "bound": "inside the published table's own uncertainty, set by the request's data",
+   "measured": {
+    "request": "R1"
+   }
+  },
+  {
+   "id": "X2.massFunctionAuthentic",
+   "group": "authentic",
+   "scope": "unc",
+   "tier": "e",
+   "status": "not-run",
+   "bound": "set by the request's data",
+   "measured": {
+    "request": "R2 (and R3)"
+   }
+  },
+  {
+   "id": "X3.citedImplementation",
+   "group": "authentic",
+   "scope": "unc",
+   "tier": "e",
+   "status": "not-run",
+   "bound": "set by the request's data",
+   "measured": {
+    "request": "R4"
+   }
+  },
+  {
+   "id": "N6.cpuTime",
+   "group": "reported",
+   "scope": "all",
+   "tier": "-",
+   "status": "reported",
+   "bound": "reported",
+   "measured": {
+    "exposureU1": 0.03,
+    "exposureM": 0.01,
+    "populationsQ": 13.63,
+    "Q1": 0.24,
+    "Q2": 0.21,
+    "Q3": 4.92,
+    "reference": 1.74,
+    "ensembleU1": 6.22,
+    "ensembleU3": 1.27,
+    "ensembleM": 10.02,
+    "ensembleU2": 297.23,
+    "recoveryU1": 0.36,
+    "recoveryM": 0.85,
+    "widthTrue": 37.94,
+    "widthDouble": 48.01,
+    "P3": 1.87,
+    "naiveU1": 0.35,
+    "wrongExposure": 1.9,
+    "wrongSigma": 2.59,
+    "total": 445.07
+   }
+  }
+ ],
+ "counts": {
+  "total": 52,
+  "pass": 42,
+  "fail": 1,
+  "reported": 6,
+  "notRun": 3
+ },
+ "verdict": {
+  "letter": "B",
+  "basePasses": true,
+  "uncPasses": false,
+  "penaltyAdmitted": true,
+  "failing": [
+   "D8.noZeroRule"
+  ]
+ }
+}

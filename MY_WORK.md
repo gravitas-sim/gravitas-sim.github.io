@@ -71,3 +71,54 @@ The A/B bench's saved comparisons keep their own keys and are listed under "Expe
 - The token is not authentication: a student can attach anything. It transports the identity; it does not vouch for it (PROVENANCE.md).
 - There is no rename; save again under another name and delete the first.
 - No Studio editing surface was added for students: a pack opened from a link is changed in the Sandbox and saved there, and the copy records what it came from.
+
+## Reviewing and comparing the evidence (Prompt 275, part A)
+
+When the evidence notebook holds entries, My work draws "Review and compare your evidence" under the Evidence list (`js/myWork/evidenceView.js`, a lazy module the page loads only then; the model is `js/myWork/evidenceReview.js`). It reads the whole ledger and offers:
+
+- **Filters** by investigation (the lesson or activity the entry was kept in, else the tool that made it), kind (the entry's source, "Inference-core fit", "Parameter sweep") and date (from and to, the reader's local days), with a count of what is shown and a Clear filters button.
+- **Open**: each entry links to the page that made it ("Open in the Observatory"). A record that carries its own replay (an image's marks) is replayed there, as before; nothing here invents a deep link a record does not carry.
+- **Annotate**: the student's own heading and three prose fields (what it shows, what supports it, what limits it), written through `annotate()`; the snapshot, its numbers and its fingerprint do not change.
+- **For a report**: a mark, kept as `marked: true` on the notebook entry (`mark()` in `js/notebook/entry.js`; present only while set). The existing report does not read it; Part B (a report composed from marked entries) is the reader of it and has not been built.
+- **Compare**: two entries of one kind (the same `source`), one quantity of each, or one entry's two quantities. Entries of different kinds, quantities in different units, and an uncertainty that is not one standard deviation (a limit, "not constrained", a failed fit, an asymmetric interval, none) are refused in words.
+
+**The covariance rule.** The difference is A - B with Var(A - B) = Var(A) + Var(B) - 2 Cov(A, B), computed by Prompt 151's `compareEstimates` and worded by its `describeComparison` (`js/compare/estimates.js`, `compareW.est.*`). The statistics kernel's `difference` (Prompt 154) computes the same quantity; the page does not import it, because the kernel is NEVER_PRECACHED with no adopter and a first adopter would carry its nine files into the install, so `tests/evidenceReview.test.js` checks the two agree on a grid instead. The covariance is used when it is known: when both quantities are of one record and the record states a coefficient between them (`correlatedWith`), or when the student gives a correlation (or a covariance) for two records. Two different records state no coefficient of each other and nothing infers one. So:
+
+| What is known | What the page says |
+|---|---|
+| nothing shared, nothing given | "Independence assumed." and the sentence that the two are treated as independent |
+| the records share data (the same observation digest on a measurement, or one record) or calibration (the same assumed quantity), no coefficient | "Independence assumed.", then that they share their data or calibration, so the uncertainty of the difference is probably smaller than stated and the difference more significant, and that a correlation corrects it |
+| a coefficient the record states, or one the student gives | "Covariance used", with where it came from |
+
+Every statement ends with the Gaussian assumption. The page's comparison agrees with the kernel's `difference` (Prompt 154) on a grid of 60 cases and with Python's `math.erfc` on three hand-computed ones (`tests/evidenceReview.test.js`).
+
+**Limits, said plainly.**
+- A mark is an additive field on the stored notebook entry. A 2.0.0 or 2.1.0 build reads the entry and drops the mark on its next save, as it drops any field it does not know; nothing else about the entry changes.
+- Sharing is detected only from what a record says (a digest, an assumed quantity). Records that share data without saying so are compared with independence assumed and no warning; the student can state that they share, and give a correlation.
+- The annotation fields are the notebook's own; there is no free-form note field beyond them.
+- Spanish has not been read by a fluent reader.
+
+## Progress and prerequisites (Prompt 276, part 1)
+
+The Your progress section answers "where am I and what is next" without a new
+record. It is derived, in `progressGroups` of `js/myWork/model.js`, from three
+things the page already reads: the progress records (an investigation with no
+record is not started, one with a record and fewer steps seen than it has is in
+progress, one with every step seen is done), the Library's entries and
+sequences (an entry's `rel.in` names the sequences and courses it belongs to
+and its place in each), and the resume record of Prompt 163 (its newest item is
+the "Where you left off" line). The depth reached is the progress record's
+`deepest` field, shown only when it names a depth the lesson engine knows.
+
+A Library entry's `prerequisites` that are investigations and not yet done
+appear on an investigation that is itself not done as "You may want X first",
+with a link. That is advice: nothing is locked, hidden or disabled, and every
+investigation opens from its own link. There are no points, badges or streaks.
+
+**Not built here (Prompt 276 parts 2 and 3 and the card and panel forms of
+part 1).** Prerequisites on a Library card and in the lesson panel; the
+recovery pattern (a generated minimal hint ladder from the step's check,
+"the units", "the order of magnitude", "the formula", named as generated; a
+path to the worked example; the attempts record for Prompt 173's summary and
+its compatibility-corpus row); the comparison across investigations. Spanish
+has not been read by a fluent reader.

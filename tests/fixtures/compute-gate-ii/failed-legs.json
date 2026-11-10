@@ -1,0 +1,127 @@
+{
+ "format": "gravitas.compute-gate-ii-failed-legs/1",
+ "legs": [
+  {
+   "id": "N01.a",
+   "status": "fail",
+   "measured": {
+    "worstErrorRel": 1.6686274971797724e-05,
+    "worstOrderAbs": 4.956621732610245e-06
+   },
+   "bound": "1e-6 / 1e-4 (the two codes integrate the same equations with the same arithmetic and the same reference, so they agree to rounding)"
+  },
+  {
+   "id": "N02.d",
+   "status": "fail",
+   "measured": {
+    "refused": false,
+    "timedOutAt60sWallWithoutRefusing": true,
+    "message": "",
+    "cpuSeconds": null,
+    "wallSeconds": 60.00239414
+   },
+   "bound": "raises, and does so in at most 20 s of CPython CPU time"
+  },
+  {
+   "id": "N07.b",
+   "status": "fail",
+   "measured": {
+    "rms": {
+     "cubic": 0.008392975317116653,
+     "linear": 0.006986873363529185
+    },
+    "max": {
+     "cubic": 0.03005313581588709,
+     "linear": 0.029435081145147812
+    }
+   },
+   "bound": "both (0.05 mag is a bound chosen here before the run, about the photometric scatter of a rich cluster's main sequence; it is not derived from Gravitas's own isochrone morph)"
+  },
+  {
+   "id": "G4.b",
+   "status": "fail",
+   "measured": {
+    "toolchainNamesTheRuntime": false,
+    "otherToolsMentioningPyodide": []
+   },
+   "bound": "present; absent is a failure"
+  },
+  {
+   "id": "G5.b",
+   "status": "fail",
+   "measured": {
+    "investigationsWithAComputeStep": [
+     "extending-an-experiment",
+     "integrators-in-practice",
+     "refitting-a-transit",
+     "sampling-a-posterior",
+     "two-periodograms"
+    ],
+    "listedInABuiltInCourse": {
+     "extending-an-experiment": [
+      "upper-level-modules.js"
+     ],
+     "integrators-in-practice": [
+      "upper-level-modules.js"
+     ],
+     "refitting-a-transit": [
+      "upper-level-modules.js"
+     ],
+     "sampling-a-posterior": [
+      "upper-level-modules.js"
+     ],
+     "two-periodograms": [
+      "upper-level-modules.js"
+     ]
+    }
+   },
+   "bound": "none listed"
+  },
+  {
+   "id": "G7.a",
+   "status": "fail",
+   "measured": {
+    "measured": {
+     "sourcesKb": 181.3,
+     "buildKb": 82.8,
+     "from": "node tools/route-budget.mjs on a node build.js of the spike: compute 181.3 KB 20 requests (sources), 82.8 KB 2 requests (build)"
+    },
+    "ceiling": {
+     "sources": {
+      "kb": 181.3,
+      "requests": 20
+     },
+     "build": {
+      "kb": 82.8,
+      "requests": 3
+     }
+    },
+    "meanEntryBytes": 5017,
+    "entries": 7,
+    "projected": {
+     "sourcesKb": 230.294140625,
+     "buildKb": 131.794140625
+    }
+   },
+   "bound": "fits without a raise (a raise would need the standing approval and is not requested by this gate)"
+  }
+ ],
+ "notRun": [
+  {
+   "id": "G2.b",
+   "why": "R1: needs the pinned runtime (downloaded code) in Chromium and WebKit; not run"
+  },
+  {
+   "id": "G3.b",
+   "why": "R2: needs the pinned runtime in two browsers; not run"
+  },
+  {
+   "id": "G3.c",
+   "why": "R2; reported only"
+  },
+  {
+   "id": "G4.c",
+   "why": "R3: needs the pinned runtime and a lock file download; not run"
+  }
+ ]
+}

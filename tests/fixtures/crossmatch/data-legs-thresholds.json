@@ -1,0 +1,131 @@
+{
+  "format": "gravitas.crossmatch-data-legs-thresholds/1",
+  "prompt": "Roadmap III, Prompt 263 follow-up (the legs of the crossmatch gate and the clustering gate that were NOT RUN for want of public data)",
+  "document": "CROSSMATCH.md section 10 and CLUSTERING_GATE.md section 8",
+  "committed": "Committed alone, before any pair was computed on the downloaded data, before any validator or oracle run on it, and before any of the legs below was measured. It does not touch thresholds.json, clustering-thresholds.json or any pinned result of them: D5.publishedTool stays NOT RUN in results.json (that file is the first-run record); D5a to D5e below are its runs, and B8c, B10 and B9 below belong to the clustering gate.",
+  "rule": "As in thresholds.json: a crossed bound is a failed leg and stays failing, nothing is moved after a result, a leg that cannot be measured is NOT RUN and says why, running downloaded code is not permitted (nothing downloaded was run), the oracle uses installed software only (python -E, numpy, scipy, astropy) and no Gravitas code, no published number or citation detail is typed from memory (every figure below that is quoted is read by a script from the saved page and listed in SOURCES.json). Every bound is set by a stated rule here, never by looking at a measured value.",
+  "authority": "Carl, 2026-11-07, genuine message recorded in DECISIONS_2026-11-07.md, which permits agents to download public data into scratch-data/ outside every repository.",
+  "data": {
+    "location": "scratch-data/crossmatch263/ (outside every repository); the sha256 of every file, its URL, its retrieval time and its terms are in tests/fixtures/crossmatch/SOURCES.json",
+    "R1": "sdss/R1-ngc2420-mjd.csv: the SDSS NGC 2420 photometry pack's SkyServer query with s.objID and s.mjd added",
+    "R2": "gaia/R2-bestneighbour.csv and gaia/R2-neighbourhood.csv: gaiadr3.sdssdr13_best_neighbour and _neighbourhood for the 993 Gaia sources of the pack",
+    "R3": "pub/1809.00018.pdf, section 4.2.3: the published description of the shifted-catalogue false-match test",
+    "R4": "sdss/R4-slice-query.csv: the redshift-slice pack's own query, which already returns dec; byte-identical to the pack manifest's raw file (same sha256)",
+    "R5": "no source meeting the request was found: see leg B9",
+    "R6": "pub/LandySzalay1993.pdf (ADS scan), page 1 read",
+    "epochRule": "A catalogue row observed on Modified Julian Date m has the Julian epoch J = 2000.0 + (m - 51544.5) / 365.25 (the definition of the Julian epoch; MJD 51544.5 is J2000.0).",
+    "gaiaRule": "The Gaia DR3 documentation (pub/gdr3-xm-sdss.html and gdr3-xm-sec_crossmatch_algorithm.html) says the cross-match moves each Gaia object with its proper motion to the epoch of the external candidate, uses only SDSS primary objects, and excludes SDSS objects with a position error over 1 arcsec in either axis; the figure of merit is not a nearest-neighbour rule."
+  },
+  "seenBeforeCommitting": "The Gaia archive's table and column descriptions of the sdssdr13 tables; sections 15.2 and 15.3.3 of the Gaia DR3 documentation (the sentences on the epoch, primary objects and the 1 arcsec error cut quoted above); Wilson and Naylor 2018 section 4.2.3 (R3) and the first page of Landy and Szalay 1993 (R6); the abstract-level text of Wang, Brunner and Dolence 2013 and its sample definition (photometric galaxies, dereddened r-band model magnitudes 17 to 21); file sizes, line counts and the first data line of each download (R1 has 2301 data rows, the pack's own count; the best-neighbour table has 704 rows for the 993 Gaia sources, one row per source and per SDSS object; the neighbourhood table 706; R4 has 16247 rows and equals the pack's raw file byte for byte). Not seen: any pair, any distance, any comparison between the kernel's pairs and the published table, any galaxy's declination or any pair count or correlation of the strip with its declination.",
+  "constants": {
+    "radiusArcsec": 1,
+    "kernelMode": "nearest",
+    "A": "the precise Gaia pack gaia-dr3-ngc2420 (993 rows, epoch J2016.0 from its frame string, proper motions), row i of the pack being row i of gaia/ngc2420.csv in scratch-data/gaia233 (same sha256 as the pack manifest's raw file), whose source_id column names it (identity checked by D5a)",
+    "B": "the SDSS pack sdss-dr18-ngc2420-photometry (2301 rows), row i of the pack being row i of R1 (identity checked by D5a)",
+    "groupedEpochRule": "the kernel takes one common epoch per run and the SDSS rows carry no proper motion, so the per-object epoch of Gaia's rule is reproduced by running the kernel once per distinct SDSS epoch: B restricted to the rows with that mjd (declared at its epoch J(m)), A moved to J(m), radius 1 arcsec, mode nearest; a row of A takes the nearest candidate over the groups (ties to the lower row of B). This is the same set as moving A to each candidate's own epoch.",
+    "tolerance": {
+      "value": 0.05,
+      "rule": "ten times the larger of the two disagreement scales this gate already measured on these packs (D4: at most 2 of 604 pairs, 0.33 percent, for a plus or minus 8 yr change of the SDSS epoch; E2: shifted-match chance coincidences 0.4 percent of the pairs), which is 4 percent, rounded up to one part in twenty. It is the tolerance for the disagreement of two different crossmatch algorithms (nearest neighbour inside a radius against a merit-based best neighbour), not a bound on either one's correctness."
+    },
+    "stripDeclinationBins": {
+      "edgesDeg": [0.05, 0.1, 0.2, 0.5, 1.0, 2.0],
+      "rule": "the lower edge is three times the SDSS fibre-collision radius of 55 arcsec (0.0153 degree), rounded to 0.05, since closer pairs are suppressed by the spectroscopic design; the upper edge is four times the strip's declination width of 0.5 degree, beyond which a strip is one-dimensional and the correlation is dominated by the integral constraint; edges are doubled or two-and-a-half-fold after that, five bins (the 5 degrees of freedom of the statistic)."
+    },
+    "stripSample": "the R4 rows with 120 <= ra <= 240, 0 <= dec <= 0.5 and z <= 0.12 (both ends inclusive, as the SQL BETWEEN of the pack's query); the pack stores 2911 of them, right ascension and redshift only",
+    "stripRandoms": {
+      "count": "10 times the data count",
+      "F1": "uniform on the sphere in right ascension 120 to 240 degrees and declination 0 to 0.5 degree (area-uniform: uniform in sin(dec)); the nominal footprint",
+      "F2": "as F1 but over the data's own right-ascension extent (the minimum to the maximum right ascension of the 2911 galaxies), as B8b",
+      "streams": "stream 'injection' keyed p263:B:randoms:strip-dec (F1) and p263:B:randoms:strip-dec-extent (F2)",
+      "footprintNote": "SkyServer's Region table holds 8,060,102 unlabelled polygons; no published footprint of the Legacy main sample for the strip in usable form was found (SOURCES.json notFetched). So the footprint is the box, and the leg says so."
+    },
+    "stripStatistic": "as B8 and B8b of clustering-thresholds.json: Landy-Szalay w_k with unordered pair counts, the delete-one jackknife over 12 blocks of 10 degrees of right ascension from 120 (randoms assigned to blocks by right ascension), T = sum (w_k / sigma_jk,k)^2 over the bins with at least 5 data pairs, detected when T exceeds the 0.99 quantile of chi-square with as many degrees of freedom as bins contribute (15.086 for 5)"
+  },
+  "checks": [
+    {
+      "id": "D5a.rowIdentity",
+      "group": "authentic",
+      "kind": "bound",
+      "what": "R1 and the Gaia csv are the packs' rows: the row counts equal (2301 and 993) and, row by row, the pack's decoded ra, dec, g, g_err, r, r_err (SDSS) and ra, dec, pmra, pmdec (Gaia; the columns the sidecar stores) differ from the downloaded value by at most half the pack's own stated storage step. The oracle reads the packs by its own decoder, the validator by the app's reader; both report the maximum of |difference| / (step / 2) over the columns.",
+      "limits": { "maxStepFraction": 1.000001, "rowCountsEqual": true }
+    },
+    {
+      "id": "D5b.objectEpochs",
+      "group": "authentic",
+      "kind": "reported",
+      "what": "The survey's own observation epochs of the 2301 SDSS rows: the distinct mjd values, their Julian epochs and the number of rows in each, the earliest and latest epoch, and the spread in years. No bound."
+    },
+    {
+      "id": "D5c.perObjectEpochPairs",
+      "group": "oracle",
+      "kind": "bound",
+      "what": "The kernel's pairs with the per-object SDSS epoch (the grouped rule in constants.groupedEpochRule, radius 1 arcsec, mode nearest) against the oracle's, which moves A with astropy's apply_space_motion to each distinct epoch and finds nearest neighbours by its own search: differing pairs, as D1.",
+      "limits": { "maxDifferences": 0 }
+    },
+    {
+      "id": "D5d.publishedBestNeighbour",
+      "group": "authentic",
+      "kind": "bound",
+      "what": "The kernel's pairs of D5c, K = {(Gaia source_id, SDSS objID)}, against the Gaia archive's published best-neighbour pairs P restricted to the SDSS objects that are rows of the pack (P_in: original_ext_source_id is an objID of R1) and, for the other direction, to the published pairs whose own angular_distance is at most 1 arcsec (P_in1). Both algorithms are positional with the Gaia epoch propagation; the published one is merit-based. Bounds: the kernel pairs absent from P_in, and the pairs of P_in1 absent from K, each at most the tolerance (constants.tolerance) times |K|.",
+      "limits": { "maxKernelOnlyFraction": 0.05, "maxPublishedOnlyFraction": 0.05 }
+    },
+    {
+      "id": "D5e.publishedBreakdown",
+      "group": "authentic",
+      "kind": "reported",
+      "what": "What D5d's disagreement is made of: |K|, the published rows (all, in the pack, within 1 arcsec), the common pairs; the kernel-only pairs split by whether the published best neighbour of that Gaia source is a different pack object, an object outside the pack, or absent; the published-only pairs with the kernel's nearest candidate (its distance, or none); the distribution of angular_distance in P_in; the difference of the published and the kernel's distance on common pairs (maximum and median of the absolute value); the xm_flag and number_of_neighbours counts. No bound."
+    },
+    {
+      "id": "D4b.surveySpread",
+      "group": "authentic",
+      "kind": "reported",
+      "what": "D4 sharpened: the pairs of the declared-epoch run of D1 (SDSS taken at J2000.0, the pack's own declaration, 604 pairs) against those of the per-object-epoch run (D5c): the number of pairs that differ, and D5d's two fractions for the declared-epoch pairs, so that the effect of the survey's own epochs on the agreement with the published table is seen. No bound."
+    },
+    {
+      "id": "D5f.shiftedMatchCitation",
+      "group": "citation",
+      "kind": "reported",
+      "what": "R3: the shifted-catalogue false-match test is described by Wilson and Naylor 2018 (arXiv:1809.00018, accepted for MNRAS) section 4.2.3: Gaia sources of a box in Galactic longitude are moved by 10 degrees, matched against the original second catalogue, and what matches is counted as the false-match level. It confirms the kernel's definition (a shifted copy has no true counterparts) and the footprint caution; the kernel's own scheme (20 radii along 8 bearings with an exact interval and the footprint correction) is not theirs, and CROSSMATCH.md says so. R6 likewise: Landy and Szalay 1993, ApJ 412, 64-71 (DOI 10.1086/172900), the abstract recommends (DD - 2DR + RR)/RR. Citations only; recorded in the documents and in SOURCES.json."
+    },
+    {
+      "id": "B8c.sampleIdentity",
+      "group": "authentic",
+      "kind": "bound",
+      "what": "The strip sample of constants.stripSample selected from R4 is the pack's strip: 2911 rows, and after sorting both by right ascension (ties by redshift) the pack's decoded ra and z differ from R4's by at most half the pack's stored step in every row.",
+      "limits": { "count": 2911, "maxStepFraction": 1.000001 }
+    },
+    {
+      "id": "B8c.stripWithDeclination",
+      "group": "authentic",
+      "kind": "reported",
+      "what": "B8 and B8b again with the galaxies' own declination, in constants.stripDeclinationBins, for randoms F1 and F2 (constants.stripRandoms): per bin w_k, the Poisson sigma (1 + max(w, 0)) / sqrt(DD), the jackknife sigma, DD, DR, RR; the statistic T, its degrees of freedom and whether it exceeds the 0.99 quantile. Reported, never in the clustering gate's verdict function (which reads B8, committed before R4 existed, as measured on an assumed declination): the verdict stays B by the committed function whatever this shows, and the document says what a detection here would and would not mean (there is no mask, no published reference, and the box is the footprint)."
+    },
+    {
+      "id": "B10.stripOracle",
+      "group": "oracle",
+      "kind": "bound",
+      "what": "The spike's pair counter and estimator on the strip with declination against the independent oracle (python -E, numpy, scipy cKDTree, its own randoms of the same count): the data-data counts DD identical in every bin, and in every bin of F1 and of F2 the difference of the two w at most 4 combined Poisson sigmas, sqrt(sigma_proto^2 + sigma_oracle^2), as B6.",
+      "limits": { "maxDDDifference": 0, "maxCombinedSigma": 4 }
+    },
+    {
+      "id": "B9.authenticReference",
+      "group": "authentic",
+      "kind": "notrun",
+      "what": "As committed in clustering-thresholds.json: the estimator on the SDSS subset with its declination and footprint against a published angular correlation of the same sample. R4 supplies the declination (B8c). Not run because R5 and the footprint were not found: the searches of 2026-11-07 (the Landy-Szalay and SDSS main-sample w(theta) literature) found no printed angular correlation of the spectroscopic main sample at r < 17.77; the nearest, Wang, Brunner and Dolence 2013, measures the photometric galaxy sample in one-magnitude bins from 17 to 21 (a different sample and limit, so a comparison would not be the committed one), and the only footprint SkyServer offers is an unlabelled set of polygons. A leg tuned to a mismatched reference would be a new leg, and none is added.",
+      "needs": "R5, a published footprint"
+    }
+  ],
+  "verdict": {
+    "function": "These legs add to the two gates' reports and re-bound nothing. The crossmatch gate's product verdict stays FAILED LEG(S) while A6.largeShift and G2.coverage fail (the first-run record in results.json is untouched); a bound leg above that fails (D5a, D5c, D5d, B8c.sampleIdentity, B10) is listed as a new failing leg in data-legs-results.json and stays failing. The clustering gate's verdict function (clustering-thresholds.json) reads B8 and B9: B9 is NOT RUN, so the verdict stays B.",
+    "consumers": "No table tool, panel, lesson or viewer is built (the consumers rule holds); no ceiling, budget, workflow or instructor material is touched."
+  },
+  "amendments": [
+    {
+      "id": "AM1",
+      "adds": "none; one wording clarification of B8c.sampleIdentity",
+      "changes": "the right ascension of the R4 rows is not rounded and the pack's is (to 1e-4 degree), so 'sorted by right ascension, ties by redshift' is read in units of the pack's storage step: both sides are sorted by round(ra / step), ties by redshift, and then compared",
+      "reason": "the first oracle run (before any validator run) sorted R4 by its unrounded right ascension and reported a step fraction of 12933636 for B8c.sampleIdentity: a tie-order artifact of the sort (two galaxies whose rounded right ascensions are equal come in redshift order in the pack and in true-ra order in R4), the sample being the same 2911 rows; the oracle's other numbers (D5, B10) were read at that run and are unchanged by this clarification; no bound moved",
+      "movesNoBound": true
+    }
+  ]
+}

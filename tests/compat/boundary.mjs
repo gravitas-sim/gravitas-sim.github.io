@@ -424,15 +424,30 @@ export const BOUNDARY = [
     prompt: 265,
     kind: 'experiment',
     plans:
-      'named streams, the stream fork per trial and the kernel versions on the experiment record',
-    mutate: doc => ({
-      ...clone(doc),
-      streams: ['a', 'b'],
-      fork: 'per-trial',
-      kernels: { stellar: '1.0.0' },
-    }),
+      'named streams, the stream fork per trial and the kernel versions on the experiment record, as an `ensemble` block (a sweep that names the legacy streams it draws from, or an ensemble, injection campaign or bootstrap), with the trials, the summary and the digest under `ensemble.result` once it has run',
+    mutate: async doc => {
+      const { ensembleManifest } =
+        await import('../../js/experiments/ensemble/record.js');
+      // A sweep record that names its streams: the 2.0.0 manifest, plus the block.
+      return {
+        ...ensembleManifest({ kind: 'sweep', sweep: clone(doc) }),
+        formatVersion: 1,
+      };
+    },
     expect: 'ignored',
-    note: 'not built: Prompt 265 writes these and carries its own boundary row when it does',
+    boundary: {
+      format: 'gravitas.experiment',
+      from: 1,
+      to: 2,
+      rule: 'a record with an ensemble field is written as /2 (js/experiments/ensemble/record.js withVersion); a manifest without one stays /1, byte for byte',
+      write: async d =>
+        (await import('../../js/experiments/ensemble/record.js')).withVersion(
+          d
+        ),
+      says: 'newer than this Gravitas reads',
+      requires: 'a reader of gravitas.experiment/2 (Gravitas 3.0.0)',
+      rollback: 'refused',
+    },
   },
   {
     id: 'course-home-link-3',

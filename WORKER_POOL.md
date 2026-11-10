@@ -13,6 +13,9 @@ adoption itself waits** because it costs the first-visit install 3,517 bytes
 over its ceiling and, as written, a request on `/experiments/` (see "The
 adoption and its cost"). Until a shipped module imports the pool, the build
 leaves it out of the install (`NEVER_PRECACHED`), and a test says so.
+Prompt 265's ensemble runner (`js/experiments/ensemble/`, also in the lazy tier) is a
+client of the pool from its first line; the sweep scheduler's adoption still waits on
+the decision below.
 
 ## The contract
 
