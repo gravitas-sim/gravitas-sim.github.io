@@ -634,6 +634,8 @@ export const NEVER_PRECACHED = [
   // the guides wait on a passing gate, D-R10-273-01), so no page can fetch it and an install has no use for it; its first
   // adopter deletes this entry.
   /^js\/lab3d\/libration\.js$/,
+  // Its addendum's step-budget rule, in the same position: only the validator and the tests import it.
+  /^js\/lab3d\/stepBudget\.js$/,
 ];
 
 const ON_DEMAND_ONLY = new Set([
