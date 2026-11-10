@@ -694,6 +694,17 @@ export const FORMATS = Object.freeze([
     newer: 'left out of the list, not overwritten',
   },
   {
+    name: 'gravitas.composed-report',
+    fields: 'format, formatVersion',
+    version: 1,
+    const: ['js/myWork/composedReport.js', 'COMPOSED_VERSION'],
+    owner: 'js/myWork/composedReport.js readComposed',
+    persisted:
+      'download (the review page reads it), My work (inside a gravitas.made record of kind report)',
+    older: 'v1 only',
+    newer: 'refused by reason code',
+  },
+  {
     name: 'resume record',
     fields: 'v, items (id, route, step, path, title, at)',
     version: 1,
@@ -763,6 +774,10 @@ export const COMPAT = Object.freeze({
   },
   'submission token': { fixture: 'submission-token', unknown: 'n/a' },
   'resume record': { fixture: 'resume-record', unknown: 'ignored' },
+  'gravitas.composed-report': {
+    fixture: 'composed-report',
+    unknown: 'ignored',
+  },
   'course terms record': { fixture: 'course-terms', unknown: 'ignored' },
   'collections record': { fixture: 'collections-record', unknown: 'ignored' },
   'gravitas.submission-results': {
@@ -960,6 +975,7 @@ ${compatibilitySection(formats)}
 - **The ensemble block of the experiment record (Prompt 265).** A \`gravitas.experiment\` record may carry an \`ensemble\` block: the kind (a sweep that names the legacy streams it draws from, an ensemble of one world run with different seeds, an injection campaign, or a bootstrap over the trials of a finished result), the master seed, the number of trials, the named streams as \`{id, algorithm, version, key}\`, the fork each trial draws from (\`trial-index\`: trial i draws from \`stream(id, seed, 'trial', i)\`; \`legacy-sweep\` for a sweep), the kernel versions, the kind's config, and, once it has run, \`ensemble.result\`: the trials (each a \`gravitas.artifact\` envelope), the engine fingerprint, the summary and the digest a report cites. A 2.0.0 reader accepts an unknown field and drops it silently, so a record that has the block is written as \`gravitas.experiment/2\` (\`tests/compat/boundary.mjs\`: \`ensemble-fields\`) and a 2.0.0 reader refuses it by its version; a manifest without the block is still /1, byte for byte. The shipped reader reads /2 and does not run it (the runner page runs sweeps); \`js/experiments/ensemble/\` runs and replays it (EXPERIMENT_ENSEMBLES.md).
 - **Uncertainty states, \`correlatedWith\` and \`fit\` (Prompt 150).** The artifact envelope's uncertainty \`kind\` gains \`not-constrained\`, \`failed\`, \`assumed\`, \`model-limited\` and \`limit\`; a quantity gains \`correlatedWith\`; the envelope gains \`fit\`, a fit-result record; a \`failed\` quantity may have a \`null\` value. A 2.0.0 reader refuses a quantity of a new kind in words, and silently drops \`correlatedWith\` and \`fit\`, so an envelope that has any of them is written as \`gravitas.artifact/2\` (Prompt 176; \`tests/compat/boundary.mjs\`: \`not-constrained-state\`, \`fit-result-record\`, \`correlation-reference\`) and a 2.0.0 reader refuses it by its version instead. An envelope that needs none is still /1. \`legacyView()\` gives a 2.0.0 reader the /1 envelope it can open, with the loss listed in the warnings.
 - **\`derived\` uncertainty basis and a formula on a numeric question (Prompt 100).** The artifact envelope's \`basis\` gains \`derived\`, for an uncertainty propagated from a formula's inputs, and a numeric question in an investigation pack or question bank may carry \`formula\` ({expr, of, tolerancePct}) in place of an \`answer\`. Both are optional or new members of an enum, so \`artifact/1\`, \`investigation-pack/1\` and \`question-bank/1\` stay version 1: an older reader refuses them in words as an unknown value or field.
+- **The composed report (Prompt 275).** A report a student composes from marked entries of the evidence notebook is a \`gravitas.composed-report/1\`: a title, when and by which build it was made, a section per entry (its kind, its envelope's source, the settings and seed its record carries, the student's words, and each number with its unit, uncertainty and origin), the comparisons carried in (the two numbers, the correlation or covariance used and where it came from, or that independence was assumed, and the result), and the SHA-256 of all of it but the digest. It holds no generated prose: a reader says it in its own language. It is written only when the student makes one, as a \`gravitas.made\` record of kind \`report\` under its own key; a build from before it leaves that record out of its list and does not overwrite it. A submission token then carries \`cr\` (the digest and the section count), an additive field a 2.0.0 reader reads past: the answers and the evidence read as they did (\`tests/compat/kinds/composed-report.mjs\`). A mark on a notebook entry (\`marked\`) is dropped by a 2.0.0 or 2.1.0 build when it saves the notebook; the report's record keeps the list of its entries, and My work restores the marks from it.
 - **Mission links and made records (Prompt 106).** A \`gravitas.made\` record may be of kind \`mission\`, holding a \`gravitas.mission-plan/1\` file; a build from before it reports the record unreadable. The mission lab reads a plan from \`#plan1.<base64url JSON>\`; any other fragment is ignored. A course pack /2 \`guide\` item may name \`ml-orbit\`, \`ml-window\` or \`ml-cruise\`; a build from before it refuses the id in words.
 - **\`system3d\` (Prompt 105).** A \`gravitas.scenario-pack/1\` may carry a \`system3d\`: a \`gravitas.system3d/1\`, validated by the lab's own checks in the SDK and by shape in the Studio. A build from before it reports \`unknownField\`. A course pack /2 item may be of kind \`guide\` (\`guide\`, \`depth\`, \`title\`), opening one of the 3-D lab's investigations; a build from before it refuses the kind in words.
 - **\`geometry\` (Prompt 108).** A \`gravitas.scenario-pack/1\` may carry a \`geometry\`: steps that make its bodies (a star, planet or gas giant with a mass and a place or an orbit round an earlier body), validated by \`validateGeometry\` and described in SCENARIO_GEOMETRY.md. It replaces the generated population, so a pack that has it has no \`system\`, \`bodies\` or \`scenario\` and its population counts are 0; a pack may not use what only a built-in's declaration may (a named rule, a body reused from the generator, a distance in drawn radii, a random, barycentric, mutual or retrograde orbit, a body built from another mass, an engine property, a recentered system; slices 2 and 3 added all but the first two, which are in the validator and not in the schema). A build from before it reports \`unknownField\`.

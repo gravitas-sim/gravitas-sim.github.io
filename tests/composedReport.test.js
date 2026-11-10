@@ -17,6 +17,7 @@ import { describe, test, expect, beforeEach } from '@jest/globals';
 // =============================================================================
 
 import { webcrypto } from 'node:crypto';
+import { readFileSync } from 'node:fs';
 import { buildEntry, mark } from '../js/notebook/entry.js';
 import { artifact } from '../js/platform/artifact.js';
 import { envelopeOf, evidenceRows } from '../js/notebook/ledger.js';
@@ -43,6 +44,7 @@ import {
   fileOf,
   hrefOf,
   readMade,
+  saveMade,
 } from '../js/myWork/made.js';
 import {
   buildSubmission,
@@ -50,6 +52,8 @@ import {
   readSubmissionToken,
   validateSubmission,
 } from '../js/submission/submissionToken.js';
+import { ledgerForReport } from '../js/notebook/ledgerReport.js';
+import { save as saveNotebook, setBackend } from '../js/notebook/store.js';
 import { createHtmlDocument } from '../js/htmlReport.js';
 import { createDocument } from '../js/pdf.js';
 import { fromCsv } from '../js/csv.js';
@@ -513,6 +517,51 @@ describe('the report written out', () => {
   });
 });
 
+describe('the committed fixture', () => {
+  // A report file as a student's browser wrote it, kept so a later reader is
+  // held to it (the compatibility corpus's composed-report kind uses the same
+  // file): tests/fixtures/composed-report/.
+  const file = JSON.parse(
+    readFileSync(
+      'tests/fixtures/composed-report/periods-and-slopes.composed-report.json',
+      'utf8'
+    )
+  );
+
+  test('is read, hashes to the digest it states, and says what it said', async () => {
+    const read = readComposed(file);
+    expect(read.ok).toBe(true);
+    expect(read.report.digest).toBe(
+      'b015ec8f0ba3181caac2875471ee1843b0aa3fff32f18b090552b647e0df01a4'
+    );
+    expect(await checkComposed(read.report)).toBe(true);
+    const text = fillReport(
+      fragment(x => String(x), 3),
+      read.report,
+      await loadSay('en')
+    ).build();
+    expect(text).toContain('<h3>Periods and slopes</h3>');
+    expect(text).toContain('Seed: k7.');
+    expect(text).toContain(
+      'Covariance used, from the correlation the author gave.'
+    );
+  });
+
+  test('the current writer still writes it, byte for byte', async () => {
+    const again = await compose(
+      [S, A, B],
+      [{ a: 'a', b: 'b', idA: 'slope', rho: 0.5 }],
+      'Periods and slopes'
+    );
+    // The fixture's entries were made without a catalog, so only what does
+    // not depend on one is compared: the numbers and the comparison.
+    expect(again.comparisons).toEqual(file.comparisons);
+    expect(again.sections.map(s => s.numbers.map(n => n.value))).toEqual(
+      file.sections.map(s => s.numbers.map(n => n.value))
+    );
+  });
+});
+
 describe('the made record, and what a submission token says of it', () => {
   const storageOf = records => {
     const keys = Object.keys(records);
@@ -594,6 +643,31 @@ describe('the made record, and what a submission token says of it', () => {
     expect(check({ d: 'short', n: 1 }).reason).toBe('badComposed');
     expect(check({ d: 'ab'.repeat(32), n: 0 }).reason).toBe('badComposed');
     expect(check({ d: 'ab'.repeat(32), n: 2 })).toEqual({ ok: true });
+  });
+
+  test("a lesson's report states the made report in its record, and nothing when there is none", async () => {
+    localStorage.clear();
+    setBackend(null);
+    expect(saveNotebook([S]).ok).toBe(true);
+    const none = await ledgerForReport();
+    expect('cr' in none.record).toBe(false);
+    const report = await compose([S]);
+    expect(saveMade(madeOf(report)).ok).toBe(true);
+    const ledger = await ledgerForReport();
+    expect(ledger.record.cr).toEqual({ d: report.digest, n: 1 });
+    // It is not a thing attached to the evidence, and the ledger's own table
+    // and digest are what they were: the lesson's report prints nothing new.
+    expect(ledger.record.sy).toBeUndefined();
+    expect(ledger.digest).toBe(none.digest);
+    expect(ledger.record.rows).toEqual(none.record.rows);
+    expect(ledger.meta).toEqual(none.meta);
+    const submission = buildSubmission({
+      backup,
+      record: ledger.record,
+      digest: ledger.digest,
+    });
+    expect(submission.cr).toEqual({ d: report.digest, n: 1 });
+    localStorage.clear();
   });
 
   test('round trip: made, stated by a token, read as a file, and found to be the one', async () => {

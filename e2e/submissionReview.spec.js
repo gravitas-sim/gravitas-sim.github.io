@@ -31,6 +31,7 @@ import {
   RESULTS_KIND,
   SUMMARY_COLUMNS,
 } from '../js/submission/results.js';
+import { ledgerDigest } from '../js/submission/ledgerDigest.js';
 import { fromCsv } from '../js/csv.js';
 import { stepKey as tabKey } from './keyboard.js';
 
@@ -475,6 +476,100 @@ test.describe('the submission review page', () => {
     expect(q('measure-the-two-orbits').response).toMatch(
       /^circ_e=0; ecc_e=0\.6; ecc_peri=0\.4; ecc_apo=1\.6; ecc_a=1(\.0+)?$/
     );
+  });
+
+  test('reads a composed report handed in with a submission, checks it against the digest, and says when a file was edited', async ({
+    page,
+  }) => {
+    // The report file as My work downloads it (the corpus's fixture), and a
+    // submission that states its digest, as a lesson's report does once a
+    // composed report was made (Prompt 275, part B).
+    const text = readFileSync(
+      'tests/fixtures/composed-report/periods-and-slopes.composed-report.json',
+      'utf8'
+    );
+    const report = JSON.parse(text);
+    const record = { ids: ['e1'], rows: [['e1', 'slope', 10]], total: 1 };
+    const stated = await encodeSubmission(
+      buildSubmission({
+        backup: backup({ name: 'Eve', responses: { 'use-the-law': '8' } }),
+        record: {
+          ...record,
+          cr: { d: report.digest, n: report.sections.length },
+        },
+        digest: await ledgerDigest(record),
+      })
+    );
+    await open(page);
+    await page
+      .locator('#picker')
+      .setInputFiles([file('eve.txt', stated.token, 'text/plain')]);
+    const box = page.locator('#evidence');
+    await expect(box).toContainText('Composed reports');
+    await expect(box).toContainText(
+      `Eve states a composed report of 3 sections, digest ${report.digest.slice(0, 16)}. Its file has not been read here.`
+    );
+
+    await page
+      .locator('#picker')
+      .setInputFiles([
+        file('eve.composed-report.json', text, 'application/json'),
+      ]);
+    await expect(box).toContainText(
+      'the file eve.composed-report.json matches it'
+    );
+    const read = box.locator('details', {
+      hasText: 'eve.composed-report.json: Periods and slopes',
+    });
+    await expect(read.locator('summary')).toContainText(
+      '3 sections, matches a report read here'
+    );
+    await read.locator('summary').click();
+    await expect(read).toContainText('the digest stated by Eve');
+    await expect(
+      read.getByRole('heading', { name: 'Periods and slopes' })
+    ).toBeVisible();
+    await expect(read.getByRole('heading', { name: 'Methods' })).toHaveCount(3);
+    await expect(read).toContainText('Seed: k7.');
+    await expect(read).toContainText(
+      'Covariance used, from the correlation the author gave.'
+    );
+    // It is not a submission: the count is still one.
+    await expect(page.locator('#count')).toHaveText('1 submission');
+
+    // The same file with one number changed still claims the digest.
+    const forged = JSON.parse(text);
+    forged.sections[1].numbers[0].value = 12;
+    await page
+      .locator('#picker')
+      .setInputFiles([
+        file('edited.composed-report.json', JSON.stringify(forged)),
+      ]);
+    const bad = box.locator('details', {
+      hasText: 'edited.composed-report.json',
+    });
+    await expect(bad).toHaveAttribute('open', '');
+    await expect(bad.getByRole('alert')).toContainText(
+      'its contents do not hash to that'
+    );
+
+    // A file in a shape this page cannot read is refused in words.
+    await page
+      .locator('#picker')
+      .setInputFiles([
+        file(
+          'broken.composed-report.json',
+          JSON.stringify({ ...report, sections: [] })
+        ),
+      ]);
+    await expect(page.locator('#refused')).toContainText(
+      'broken.composed-report.json: a composed report file that is damaged'
+    );
+
+    const results = await new AxeBuilder({ page })
+      .withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa'])
+      .analyze();
+    expect(results.violations.map(v => v.id)).toEqual([]);
   });
 
   test('passes axe with results on it', async ({ page }) => {
