@@ -38,6 +38,14 @@ export function createTable(table, hooks) {
   let state = null;
   let page = 0;
   let anchor = -1;
+  // A run without a held key or a drag (Prompt 278): once armed, a click or a
+  // tap on a row selects from the anchor to that row, as Shift-click does.
+  let run = false;
+  const setRun = on => {
+    run = Boolean(on);
+    table.toggleAttribute('data-select-run', run);
+    hooks.onRun?.(run);
+  };
 
   const L = hooks.labels;
 
@@ -78,10 +86,12 @@ export function createTable(table, hooks) {
     if (!tr || !state) return;
     const i = Number(tr.dataset.row);
     const { selection } = state;
-    if (e.shiftKey && anchor >= 0) selection.range(anchor, i, 'table');
+    const extend = (e.shiftKey || run) && anchor >= 0;
+    if (extend) selection.range(anchor, i, 'table');
     else if (e.ctrlKey || e.metaKey) selection.toggle(i, 'table');
     else selection.set([i], 'table');
-    if (!e.shiftKey) anchor = i;
+    if (!extend) anchor = i;
+    else if (run) setRun(false);
     selection.moveFocus(i, 'table');
     showRow(i, { focus: true });
   });
@@ -203,6 +213,13 @@ export function createTable(table, hooks) {
     draw,
     update,
     page: () => page,
+    /** Arm or disarm the run: the next row chosen ends it. */
+    run(on) {
+      if (on && anchor < 0 && state?.selection.focus >= 0)
+        anchor = state.selection.focus;
+      setRun(on);
+      return anchor;
+    },
     turn(delta) {
       if (!state) return;
       const max = Math.floor((state.n - 1) / PAGE);

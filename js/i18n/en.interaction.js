@@ -17,4 +17,13 @@ export const EN_INTERACTION = {
   'motion.changed.reduce': 'Interface animation is reduced.',
   'motion.changed.step':
     'Step by step: the simulation is paused. Press period to step, or play to run.',
+  // A window moved without a drag (js/windowMove.js).
+  'window.move.label': 'Move this panel',
+  'window.move.arm':
+    'Choose where the top left corner of the panel goes. The arrow keys move it too. Escape cancels.',
+  'window.move.done': 'Panel moved.',
+  'window.size.label': 'Resize this panel',
+  'window.size.arm':
+    'Choose where the top right corner of the panel goes. The arrow keys resize it too. Escape cancels.',
+  'window.size.done': 'Panel resized.',
 };

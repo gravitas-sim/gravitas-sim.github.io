@@ -508,6 +508,15 @@ const setupInspectorDragging = () => {
   }); // passive: false is required because startDragTouch calls preventDefault
   document.addEventListener('touchmove', dragTouch);
   document.addEventListener('touchend', endDrag);
+
+  // The same move for one press at a time and for the keyboard (Prompt 278).
+  import('./windowMove.js').then(m =>
+    m.movable(
+      objectInspector,
+      objectInspector.querySelector('.inspector-controls'),
+      { className: 'inspector-pin' }
+    )
+  );
 };
 
 // The inspector once had a minimize button. Nothing has referenced
@@ -982,6 +991,15 @@ const pinCurrentObject = () => {
     unpinInspector(pin)
   );
   makePinDraggable(pin);
+  import('./windowMove.js').then(m =>
+    m.movable(el, el.querySelector('.insp-pin-header'), {
+      className: 'inspector-close',
+      onMove() {
+        // As a drag does: the card leaves the automatic column.
+        pin.placed = true;
+      },
+    })
+  );
   // The main inspector's ticker stops when it closes. A pinned card has to
   // outlive that, so the cards run their own.
   if (!pinnedUpdateInterval) {

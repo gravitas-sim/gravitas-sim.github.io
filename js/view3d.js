@@ -316,7 +316,82 @@ function init3DView({ signal } = {}) {
     );
   }
 
+  // The camera's drag, wheel and two-finger pan as presses (Prompt 278).
+  document.getElementById('threeViewPad')?.addEventListener('click', e => {
+    const b = e.target.closest('button[data-cam]');
+    if (!b) return;
+    const [kind, x, y] = b.dataset.cam.split(',');
+    stepCamera(kind, Number(x), Number(y));
+  });
+
+  // The header's drag and the corner's drag are mouse drags. The same move and
+  // the same resize for one press at a time, a finger and the keyboard
+  // (Prompt 278): a Move and a Size button in the toolbar.
+  if (containerEl)
+    import('./windowMove.js').then(m =>
+      m.movable(
+        containerEl,
+        containerEl.querySelector('.three-toolbar-actions'),
+        {
+          className: 'three-toolbar-btn',
+          onMove() {
+            containerEl.dataset.userPlaced = '1';
+          },
+          onSize() {
+            containerEl.dataset.userPlaced = '1';
+            handleWindowResize();
+          },
+        }
+      )
+    );
+
   updateToggleLabel();
+}
+
+/**
+ * One step of the camera about its target, as a drag, a wheel or a pan gives.
+ *
+ * @param {'turn'|'move'|'zoom'} kind
+ * @param {number} x - Steps across, or the zoom factor
+ * @param {number} [y] - Steps up
+ */
+function stepCamera(kind, x, y = 0) {
+  if (!camera || !controls) return;
+  const target = controls.target;
+  const offset = camera.position.clone().sub(target);
+  if (kind === 'move') {
+    // A tenth of the distance, across and up as the camera sees them.
+    const across = new THREE.Vector3().setFromMatrixColumn(camera.matrix, 0);
+    const up = new THREE.Vector3().setFromMatrixColumn(camera.matrix, 1);
+    const shift = across
+      .multiplyScalar(x * 0.1 * offset.length())
+      .add(up.multiplyScalar(y * 0.1 * offset.length()));
+    target.add(shift);
+    camera.position.add(shift);
+  } else {
+    // The offset in spherical form about the vertical (y) axis, by hand: the
+    // vendored three.js is narrowed and carries no Spherical.
+    let radius = offset.length();
+    let theta = Math.atan2(offset.x, offset.z);
+    let phi = Math.acos(Math.max(-1, Math.min(1, offset.y / radius)));
+    if (kind === 'zoom')
+      radius = Math.max(
+        controls.minDistance,
+        Math.min(controls.maxDistance, radius * x)
+      );
+    else {
+      theta += x * 0.12;
+      phi = Math.max(0.02, Math.min(controls.maxPolarAngle, phi - y * 0.12));
+    }
+    offset.set(
+      radius * Math.sin(phi) * Math.sin(theta),
+      radius * Math.cos(phi),
+      radius * Math.sin(phi) * Math.cos(theta)
+    );
+    camera.position.copy(target).add(offset);
+    camera.lookAt(target);
+  }
+  controls.update();
 }
 
 /**

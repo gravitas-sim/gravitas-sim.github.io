@@ -150,6 +150,7 @@ const table = createTable($('obsTable'), {
     $('obsPrevPage').disabled = first === 0;
     $('obsNextPage').disabled = last >= n - 1;
   },
+  onRun: on => $('obsSelectRun').setAttribute('aria-pressed', String(on)),
 });
 
 /** The key that says whether two lists of changes number the rows alike. */
@@ -1073,6 +1074,11 @@ document.addEventListener('keydown', e => {
 
 $('obsPrevPage').addEventListener('click', () => table.turn(-1));
 $('obsNextPage').addEventListener('click', () => table.turn(1));
+$('obsSelectRun').addEventListener('click', e => {
+  const on = e.currentTarget.getAttribute('aria-pressed') !== 'true';
+  const from = table.run(on);
+  if (on) announce(t(from < 0 ? 'obs.table.run.first' : 'obs.table.run.last'));
+});
 
 // --- Opening ----------------------------------------------------------------------
 

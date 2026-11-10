@@ -290,6 +290,10 @@ export const EN_OBSERVATORY = {
   'obs.table.missing': 'missing',
   'obs.table.prev': 'Previous rows',
   'obs.table.next': 'Next rows',
+  'obs.table.run': 'Select a run of rows',
+  'obs.table.run.first': 'Choose the first row of the run, then the last.',
+  'obs.table.run.last':
+    'Choose the last row of the run. It starts at the row in focus.',
   'obs.export.json': 'Save as JSON (everything, with your changes)',
   'obs.export.csv': 'Save the rows as CSV',
   'specObs.title': 'Spectrograph: fit a line with the instrument model',

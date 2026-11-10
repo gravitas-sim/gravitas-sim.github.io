@@ -252,6 +252,24 @@ try {
           </div>
           <div class="l3-legend" id="l3-legend" aria-live="off"></div>
           <p class="ui-note l3-keys" id="l3-keys" data-i18n="l3.keys"></p>
+          <!-- The view pad (Prompt 278): what a drag, a second finger and a
+               wheel do to the camera, as controls for one pointer or the
+               keyboard. -->
+          <div class="ui-toolbar l3-keys" id="l3-pad" role="group" aria-labelledby="l3-pad-name">
+            <span class="visually-hidden" id="l3-pad-name" data-i18n="l3.pad"></span>
+            <label for="l3-pad-mode" data-i18n="l3.pad.mode">Arrows</label>
+            <select class="ui-select" id="l3-pad-mode">
+              <option value="turn" data-i18n="l3.pad.turn">turn the view</option>
+              <option value="move" data-i18n="l3.pad.move">move the view</option>
+            </select>
+            <button type="button" class="ui-button is-small" data-cam="-1,0"><span aria-hidden="true">&larr;</span></button>
+            <button type="button" class="ui-button is-small" data-cam="1,0"><span aria-hidden="true">&rarr;</span></button>
+            <button type="button" class="ui-button is-small" data-cam="0,1"><span aria-hidden="true">&uarr;</span></button>
+            <button type="button" class="ui-button is-small" data-cam="0,-1"><span aria-hidden="true">&darr;</span></button>
+            <button type="button" class="ui-button is-small" id="l3-pad-in" data-zoom="0.85" data-i18n-aria-label="l3.pad.in"><span aria-hidden="true">+</span></button>
+            <button type="button" class="ui-button is-small" id="l3-pad-out" data-zoom="1.1765" data-i18n-aria-label="l3.pad.out"><span aria-hidden="true">&minus;</span></button>
+          </div>
+          <p class="visually-hidden" id="l3-camera" role="status" aria-live="polite"></p>
           <p class="l3-readout" id="l3-clock" role="status" aria-live="polite"></p>
         </div>
 
