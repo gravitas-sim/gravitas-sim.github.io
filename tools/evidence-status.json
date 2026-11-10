@@ -1640,6 +1640,25 @@
           "text": "# Advanced sequences, packages and cohesion closeout (Prompt 274)"
         }
       ]
+    },
+    {
+      "id": "first-week-mode",
+      "claim": "A collection marked first week opens, by its link, as a mode of Home that shows that list in order with the place to continue and nothing else but the five destinations' names, until the list is finished or the student leaves it with one press.",
+      "scope": "Prompt 277: the collection's firstWeek and more fields (js/course/pack.js), the record the course home leaves (js/library/firstWeek.js), Home's mode (js/welcome.js, js/fragments/home.html), the gate (js/welcomeGate.js), the panels' More (js/settingsSchema.js) and the kit's editor; a list of up to seven items; not a disclosure state for a collection that is not a first week, not a first-week mode set by an activity, and nothing of Prompt 276's second part.",
+      "version": "2.1.0",
+      "class": "S",
+      "status": "partial",
+      "method": "tests/firstWeek.test.js (the fields' rules, the record, Home's reader against addresses off this site, the states, the gate, the More order) and tests/instructorCollections.test.js; e2e/firstWeek.spec.js in a browser (the instructor's link to a student's Home, every control listed, the introduction in the first item, continue, done, leave, seven items on one screen at 1280 by 800 and 390 by 844 in both languages); e2e/navigation.spec.js (the structural counts and the five destinations); axe in both languages and themes (e2e/accessibility.spec.js); the 2.0.0 reader corpus (collection-first-week, first-week-record)",
+      "evaluator": "the project's own tests",
+      "artifact": "tests/firstWeek.test.js",
+      "limitations": "Structural checks only: no student or instructor has used the mode, and whether one screen is what a first week needs is untested (the owner-led usability sessions of the roadmap's Appendix A). One screen is measured with the Library's own titles; a longer title can wrap past it. An item that is not an investigation counts as done once opened. Spanish has not been read by a fluent reader (D-R10-277-01).",
+      "date": "2026-11-10",
+      "anchors": [
+        {
+          "file": "ONBOARDING.md",
+          "text": "A mode of Home for the first week of a course: one list and nothing else."
+        }
+      ]
     }
   ]
 }

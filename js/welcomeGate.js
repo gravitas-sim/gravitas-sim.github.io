@@ -1,4 +1,8 @@
-import { KEY_ORIENTATION_SEEN_V1, KEY_WELCOME_SEEN_V1 } from './names.js';
+import {
+  KEY_FIRST_WEEK,
+  KEY_ORIENTATION_SEEN_V1,
+  KEY_WELCOME_SEEN_V1,
+} from './names.js';
 // =============================================================================
 // Whether the front door opens, without opening it
 // -----------------------------------------------------------------------------
@@ -74,6 +78,27 @@ export const markOrientationSeen = () => {
   }
 };
 
+// --- The first week (Prompt 277) ---------------------------------------------
+
+/** @returns {?string} The first-week record (js/welcome.js readWeek), as text */
+export const firstWeekText = () => {
+  try {
+    return window.localStorage.getItem(KEY_FIRST_WEEK);
+  } catch {
+    return null;
+  }
+};
+
+/** Keep a text under a key, or with none, forget it: Home's writes. */
+export const keep = (key, text) => {
+  try {
+    if (text) window.localStorage.setItem(key, text);
+    else window.localStorage.removeItem(key);
+  } catch {
+    /* no storage: nothing lasts, and nothing breaks */
+  }
+};
+
 // --- Should it open? ---------------------------------------------------------
 
 /**
@@ -93,7 +118,8 @@ export function hasDeepLinkDestination(hash) {
   // in investigations.js. Duplicated rather than imported because this runs
   // during start-up coordination, before either module is needed.
   // `#investigations` is the shell's Investigations entry: the chooser.
-  return /^#\d+[zr]./.test(h) || /^#investigation(=[\w-]+|s)$/.test(h);
+  // A lesson link may name a depth, as a course's links do.
+  return /^#\d+[zr]./.test(h) || /^#investigation(=[\w-]+(\/\w+)?|s)$/.test(h);
 }
 
 /**
@@ -102,11 +128,13 @@ export function hasDeepLinkDestination(hash) {
  * @param {Object} [opts]
  * @param {string} [opts.hash] - Fragment to test, for tests
  * @param {boolean} [opts.seen] - Override the stored preference, for tests
+ * @param {boolean} [opts.week] - Override the first-week mode, for tests
  * @returns {boolean} True to present the welcome layer automatically
  */
 export function shouldShowWelcome(opts = {}) {
   const hash = opts.hash === undefined ? undefined : opts.hash;
   if (hasDeepLinkDestination(hash)) return false;
   const seen = opts.seen === undefined ? isWelcomeSeen() : opts.seen;
-  return !seen;
+  // In the first-week mode a plain visit lands on Home.
+  return !seen || (opts.week ?? Boolean(firstWeekText()));
 }

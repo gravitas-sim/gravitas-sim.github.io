@@ -50,21 +50,18 @@
     </div>
     <div class="wel-orient-screen" data-orient="1" hidden>
       <h2 class="wel-h2" tabindex="-1" data-orient-h>
-        <span class="gs-en">Three ways in</span
-        ><span class="gs-es" lang="es">Tres maneras de entrar</span>
+        <span class="gs-en">Five places</span
+        ><span class="gs-es" lang="es">Cinco lugares</span>
       </h2>
-      <p class="wel-say">
-        <span class="gs-en"
-          >The sandbox is open play: place bodies and watch. An investigation is
-          a guided path of questions that ends in a report. The quick tour shows
-          where the controls are. You can switch between them at any time.</span
-        ><span class="gs-es" lang="es"
-          >El laboratorio es juego libre: coloca cuerpos y observa. Una
-          investigación es un camino guiado de preguntas que termina en un
-          informe. El recorrido rápido muestra dónde están los controles. Puedes
-          cambiar entre ellos cuando quieras.</span
-        >
-      </p>
+      <!-- destinations:orient -->
+<ul class="wel-orient-places">
+<li><strong><span class="gs-en">Explore</span><span class="gs-es" lang="es">Explorar</span></strong> <span><span class="gs-en">Build a system, load a scenario and change anything while it runs.</span><span class="gs-es" lang="es">Construye un sistema, carga un escenario y cambia lo que quieras mientras se ejecuta.</span></span> <a href="/" data-action="enter"><span class="gs-en">Open the sandbox</span><span class="gs-es" lang="es">Abrir la simulación libre</span></a></li>
+<li><strong><span class="gs-en">Learn</span><span class="gs-es" lang="es">Aprender</span></strong> <span><span class="gs-en">Guided investigations, sequences and courses, each ending in a report you can hand in.</span><span class="gs-es" lang="es">Investigaciones guiadas, secuencias y cursos, cada uno con un informe que puedes entregar.</span></span> <a href="/library/"><span class="gs-en">Search the Library</span><span class="gs-es" lang="es">Buscar en la Biblioteca</span></a></li>
+<li><strong><span class="gs-en">Observe</span><span class="gs-es" lang="es">Observar</span></strong> <span><span class="gs-en">Measure real and synthetic observations, and run experiments on the model.</span><span class="gs-es" lang="es">Mide observaciones reales y sintéticas, y ejecuta experimentos con el modelo.</span></span> <a href="/observatory/"><span class="gs-en">Open an observation</span><span class="gs-es" lang="es">Abrir una observación</span></a></li>
+<li><strong><span class="gs-en">My work</span><span class="gs-es" lang="es">Mi trabajo</span></strong> <span><span class="gs-en">Everything you have made, kept on this device: progress, reports and backups.</span><span class="gs-es" lang="es">Todo lo que has hecho, guardado en este dispositivo: progreso, informes y copias de seguridad.</span></span> <a href="/my-work/"><span class="gs-en">Back up your work</span><span class="gs-es" lang="es">Hacer una copia de tu trabajo</span></a></li>
+<li><strong><span class="gs-en">Teach</span><span class="gs-es" lang="es">Enseñar</span></strong> <span><span class="gs-en">Run Gravitas in a course: teaching materials, activities, answer keys and a quick start.</span><span class="gs-es" lang="es">Usa Gravitas en un curso: materiales didácticos, actividades, claves de respuestas y un inicio rápido.</span></span> <a href="/teaching/"><span class="gs-en">Start with the quick start</span><span class="gs-es" lang="es">Empezar por el inicio rápido</span></a></li>
+</ul>
+<!-- /destinations:orient -->
       <div class="wel-hero-actions">
         <button type="button" class="wel-quiet" data-orient-act="skip">
           <span class="gs-en">Skip the introduction</span
@@ -115,6 +112,91 @@
       </div>
     </div>
   </section>
+
+  <!--
+    The first-week mode (Prompt 277): one list from an
+    instructor's collection, the place to continue, and nothing else but the
+    five destinations' names. js/welcome.js fills the list from the template
+    and moves the introduction above into its first item.
+  -->
+  <section
+    class="wel-section wel-week"
+    id="welWeek"
+    aria-labelledby="welWeekTitle"
+    hidden
+  >
+    <p class="wel-eyebrow">
+      <span class="gs-en">Your first week</span
+      ><span class="gs-es" lang="es">Tu primera semana</span>
+    </p>
+    <h2 id="welWeekTitle" class="wel-h2"></h2>
+    <ol class="wel-week-list"></ol>
+    <template>
+      <li class="wel-week-item">
+        <span class="wel-week-row"
+          ><a class="wel-week-go"
+            ><span data-when="start"
+              ><span class="gs-en">Start:</span
+              ><span class="gs-es" lang="es">Empezar:</span></span
+            ><span data-when="next"
+              ><span class="gs-en">Continue:</span
+              ><span class="gs-es" lang="es">Continuar:</span></span
+            ><span data-name></span></a
+          ><span class="wel-lesson-meta" data-when="done"
+            ><span class="gs-en">Finished</span
+            ><span class="gs-es" lang="es">Terminada</span></span
+          ><span class="wel-lesson-meta" data-when="opened"
+            ><span class="gs-en">Opened</span
+            ><span class="gs-es" lang="es">Ya se abrió</span></span
+          ><button
+            type="button"
+            class="wel-quiet"
+            data-action="orient"
+            data-when="first"
+          >
+            <span class="gs-en">Show the introduction</span
+            ><span class="gs-es" lang="es">Mostrar la introducción</span>
+          </button></span
+        >
+      </li>
+    </template>
+    <nav class="wel-week-places" aria-labelledby="welWeekPlaces">
+      <span id="welWeekPlaces"
+        ><span class="gs-en">Everything else:</span
+        ><span class="gs-es" lang="es">Todo lo demás:</span></span
+      >
+      <!-- destinations:week -->
+<ul>
+<li><a href="/" data-action="enter"><span class="gs-en">Explore</span><span class="gs-es" lang="es">Explorar</span></a></li>
+<li><a href="/library/"><span class="gs-en">Learn</span><span class="gs-es" lang="es">Aprender</span></a></li>
+<li><a href="/observatory/"><span class="gs-en">Observe</span><span class="gs-es" lang="es">Observar</span></a></li>
+<li><a href="/my-work/"><span class="gs-en">My work</span><span class="gs-es" lang="es">Mi trabajo</span></a></li>
+<li><a href="/teaching/"><span class="gs-en">Teach</span><span class="gs-es" lang="es">Enseñar</span></a></li>
+</ul>
+<!-- /destinations:week -->
+    </nav>
+    <button type="button" class="wel-quiet" data-action="leave">
+      <span class="gs-en">Leave the first week: show all of Home</span
+      ><span class="gs-es" lang="es"
+        >Salir de la primera semana: mostrar todo el inicio</span
+      >
+    </button>
+  </section>
+  <p class="wel-say wel-week-note" id="welWeekDone" hidden>
+    <span class="gs-en">You finished your first-week list: </span
+    ><span class="gs-es" lang="es"
+      >Has terminado tu lista de la primera semana: </span
+    ><strong data-name></strong>
+  </p>
+  <p class="wel-say wel-week-note" id="welWeekLeft" hidden>
+    <span class="gs-en"
+      >You left the first week, and Home shows everything again. The link from
+      your instructor opens the list again.</span
+    ><span class="gs-es" lang="es"
+      >Has salido de la primera semana y el inicio vuelve a mostrarlo todo. El
+      enlace de tu docente abre la lista otra vez.</span
+    >
+  </p>
 
   <section
     class="wel-section"
