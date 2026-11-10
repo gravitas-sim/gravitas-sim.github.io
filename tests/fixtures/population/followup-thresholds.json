@@ -1,0 +1,388 @@
+{
+ "format": "gravitas.population-inference-gate-followup-thresholds/1",
+ "prompt": "Roadmap III, Prompt 264, the approved follow-up to Part A (the population inference gate, PR #563, verdict B, leg D8.noZeroRule failing and left failing): the new leg D8b, the penalty-convergence study with its new leg, and the public data of requests R1 to R4 with the authentic legs that depend on them. Documentation and fixtures only; the follow-up's oracle, sample writer and validator live on spike/population-inference-followup (cut from spike/population-inference-gate at 48d21711) and are never merged (7.5 rule 4). Part B is not begun and nothing is built.",
+ "document": "POPULATION_INFERENCE_GATE.md, a section added after this file and after the runs; the Part A text above it is kept as written",
+ "whatThisIs": {
+  "d8b": {
+   "what": "POPULATION_INFERENCE_GATE.md section 4: 'What would resolve it is a new leg, committed with its bound before its first run, in a follow-up: the coverage of the reported statement over all outcomes, in the bins of U3 where zero estimates occur (the unconditional measurement), which C3 already approximates at 0.947 for all bins.'",
+   "approved": "DECISIONS_2026-11-07.md, 264 rulings, item 1: 'Verdict B stands. D8 stays failing (design error conditioned on the outcome); follow-up D8b (unconditional coverage of the limit statement, bound committed first) is approved for the follow-up before any Part B.'"
+  },
+  "penaltyConvergence": {
+   "what": "POPULATION_INFERENCE_GATE.md section 3: 'The penalised fit did not meet its own gradient criterion (1e-10, absolute, in 1,000 Newton iterations) in 2 of the 6 fits compared with the oracle and in 26 of 400 replicates of P3 ... The cause was not diagnosed here; a criterion relative to the count is the likely repair for a Part B.' and question 3 of its section 9.",
+   "approved": "DECISIONS_2026-11-07.md, 264 rulings, item 3: 'Penalty convergence: diagnose in the follow-up (2 of 6 oracle fits, 26 of 400 P3 replicates), new leg with its bound committed first; no Part B until then.'",
+   "reading": "The ruling names two things in an order: a diagnosis, then a new leg. A leg on convergence can only pass on a stopping rule other than the one that is known to miss, so this file commits (a) the diagnostic's measurements and its classification rule, (b) the new legs and their bounds, and (c) the limits inside which the repaired stopping rule may be chosen. The repaired rule itself is recorded as an amendment after the diagnostic and before its own first run, and is judged on ensembles drawn from seeds that no run has used (decision F-DEC3). This reading is this session's and is flagged for Carl."
+  },
+  "dataLegs": {
+   "what": "POPULATION_INFERENCE_GATE.md section 7 and thresholds.json externalRequests R1 to R4: the data of one published exoplanet occurrence calculation that publishes its search completeness (R1, leg X1); a cluster's members with masses and uncertainties, the survey's completeness and the published present-day mass function (R2, leg X2); the printed form of an initial mass function (R3, for a later lesson; Part A uses none); a cited published implementation as files with its licence and printed example output (R4, leg X3).",
+   "approved": "DECISIONS_2026-11-07.md, 264 rulings, item 4: 'R1-R4: fetched by the follow-up agent under Carl's own words (2026-11-07); X3 needs running a cited implementation: stays NOT RUN.' The words are quoted in the 263 rulings of the same file, item 2: 'Let them grab any data they need to download'. The coordinator's handoff of 2026-11-08 (Standing rules) states the terms: public data into scratch-data/<gate>/ with the terms read, a sha256, the retrieval date and cite-only rights, nothing typed from memory; downloaded code is never run."
+  },
+  "relayed": "The launching session relays Carl's ruling to go with the recorded recommendation; it was not heard directly here. Every row this follow-up adds to the register is DELEGATED: evidence, not permission, until Carl ratifies it.",
+  "consumersCondition": "A consumer of this kernel (a population panel, 'The population behind the sample', 'The present-day mass function', a viewer, a model-page or STATISTICS.md extension) may be built only when all of these hold: (1) the gate's letter by Part A's committed function authorizes the scope that the consumer uses: B, the counts path, since Part A; anything that takes a per-object sigma needs UNC to stand, which by this file's function is 'A through D8b' and Carl's ratification of it (a B never authorizes the A scope); (2) for the smoothing toggle, the penalty-convergence legs of this file pass (ruling 3: no Part B until then); (3) Part B has been built, which it has not and which this follow-up does not begin; (4) Carl lifts the consumers rule for this kernel (DECISIONS_2026-11-06.md item 1: 'hold the panel, lessons and pack. No release on kernel verdict B'; thresholds.json verdict.consumers; the recorded release order is 247's line tools, then 251 Part A, then 262's censoring estimator and 265's runner, and this kernel has no place in it yet); (5) a sentence about a real survey or a real cluster additionally needs the authentic leg for that kind of data to have run and passed. This follow-up can change (1), (2) and (5) only as evidence; (3) and (4) are Carl's. It builds no panel, lesson or viewer whatever it measures, and records which parts hold at its end."
+ },
+ "committed": "before any follow-up oracle, sample writer, validator or change to the prototype existed, before any sample of this follow-up was drawn, before any file of requests R1 to R4 was fetched or read, and before any estimate, coverage, convergence count or comparison of this follow-up was computed. No number of the follow-up was estimated by simulation beforehand. One hand calculation was made while choosing D8b's bound and is recorded in seenBeforeCommitting.",
+ "rule": "As thresholds.json: a crossed bound is a failed leg, recorded in followup-failed-legs.json and left failing; only Carl resets one. No bound of Part A moves and no file of Part A is edited: D8.noZeroRule stays in failed-legs.json, failing, whatever this follow-up measures, and results.json keeps the letter B. Amendments are recorded in this file (amendments array) before the run they affect and move no bound. A leg that cannot be measured for a reason inside this follow-up fails on that leg; a leg whose data could not be fetched, or that needs a downloaded program to be run, is NOT RUN and carries its exact request. Nothing is moved, re-read or re-defined after a result.",
+ "thresholdRule": {
+  "statement": "Every bound of this file is inherited from a committed bound of thresholds.json by one rule: a new leg that measures the same quantity as a Part A leg, on other statements or other draws, carries that leg's committed bound unchanged. No bound is chosen here.",
+  "D8b": "D8b measures the quantity of C3.coverageU3 (U3, coverage at 0.95 of the reported statement, a zero-estimate bin covered when the truth is below its upper limit) restricted to the bins where zero estimates occur, so its pooled coverage carries C3's committed interval [0.90, 0.99], in the prototype and in the oracle. Its lowest single bin may not fall below the lower edge of that interval, 0.90, which is also C4b's committed bound for a lowest single bin. D8's own figure (>= 0.94) was the bound of a different, conditional quantity and is not inherited; whether the pooled unconditional coverage also reaches 0.94 is reported without a status.",
+  "penalty": "The share of penalised fits that do not meet the stopping rule carries C6's committed bound on the share of fits that do not converge (<= 0.005). Agreement of a penalised estimate with the oracle carries P2's tolerance (tolerance.penaltyOracle, 1e-4 in ln Gamma). The benefit of the penalty carries P3's bound (<= 0.9). Two routes of the prototype that must give one answer carry tolerance.continuity (1e-5). The oracle's own two algorithms must agree two decades inside the tolerance they certify (1e-6 in theta), the same ratio as O1 keeps to R2 (1e-8 held to far better than the 1e-8 it certifies is not available as a rule, so the ratio is stated here and fixed before any run).",
+  "authentic": "X1 and X2 keep the bounds thresholds.json gave them ('inside the published table's own uncertainty, set by the request's data'; 'set by the request's data'). What that is for the files actually fetched is fixed by an amendment recorded after the fetch and before any estimate from those files is computed by any program (decision F-DEC6).",
+  "exact": "A reproduction of a pinned Part A number is exact for integers and to tolerance.closedForm (1e-12, relative) for floating-point numbers."
+ },
+ "seenBeforeCommitting": [
+  "the Part A record in full: POPULATION_INFERENCE_GATE.md, thresholds.json, results.json, failed-legs.json, diagnostic-d8.json and tests/populationInferenceGate.test.js; so the Part A numbers were known, among them U3's coverage per bin (0.942, 0.951, 0.939, 0.944, 0.944, 0.965, 0.941, 0.951), the zero-estimate statements per bin (8, 0, 0, 0, 0, 53, 37, 16; 71 of 114 covered) and therefore the unconditional coverage of bins 0, 5, 6 and 7 on Part A's ensemble (3,799 of 4,000, 0.94975), P2's six differences with 2 fits not meeting the criterion, and P3's 374 used and 26 dropped. Because that number is known, D8b is judged on new draws only",
+  "the spike's code at 48d21711, read and not run: js/kernels/statistics/population.js (the fit, the profile limit, penalisedParts and penalisedFit), tools/population-validate.mjs (genObjects, trial, ensemble, the penalty legs) and tools/population-oracle/oracle.py",
+  "one hand calculation, made while choosing D8b's bound: for exact counts with a true mean of 5 listings, the likelihood-ratio interval at 0.95 covers the truth for counts 2 to 9 (the zero rule's limit of 3.0 lies below 5), which is a coverage of about 0.928; and Prompt 229's rule on the counts path (Garwood for counts of 1 and more, the limit at zero) covers for counts 1 to 10, about 0.980, the 0.979 of diagnostic-d8.json. A nominal 0.95 statement on sparse counts oscillates with the truth, which is why Part A committed [0.90, 0.99] for U3 and why that interval is the one inherited",
+  "a reading of penalisedFit, not a run: the step is accepted only when the objective does not rise, and the criterion is an absolute 1e-10 on a gradient whose terms scale with the number of listings; a stall at the rounding of the objective is a hypothesis recorded here and tested by the diagnostic, not assumed",
+  "the roadmap's section 7.5 and Prompt 264, the register rows D-R10-264-01 to -05, INFERENCE_CLOSEOUT.md where it names 264, the 264 rulings of DECISIONS_2026-11-07.md, the coordinator's handoff of 2026-11-08, and the 262 follow-up's thresholds file and record (CENSORING_TRUNCATION_GATE.md section 10 on PR #579), read for form",
+  "nothing else: no paper, table, catalogue or data file was read or fetched, no downloaded code was run, and no follow-up sample was drawn. Which survey, cluster, paper or implementation the requests will be filled from is not decided in this file; candidates are known to the session only from general knowledge and every name, number and term will come from the fetched files themselves"
+ ],
+ "implementations": {
+  "prototype": "populationRates of js/kernels/statistics/population.js as it stands on spike/population-inference-gate at 48d21711 (git blob id recorded by the validator). The follow-up may add one option to the penalised fit (the repaired stopping rule, amendment after the diagnostic); with the option absent every code path is the one of 48d21711, which leg F3 measures by reproducing Part A's pinned numbers.",
+  "oracle": "tools/population-oracle/oracle_followup.py on the follow-up spike: kernel, loglik, fit_lbfgs, fit_fixed, Profile, penalised and gen_objects copied without change from tools/population-oracle/oracle.py at 48d21711 (the program checks that each function's source text is found verbatim in that file), a second penalised algorithm written for the follow-up (a Newton iteration on the analytic gradient and Hessian from a flat start), and the data legs' own arithmetic. numpy, scipy and the standard library (astropy only to read a table format, if a fetched file needs it) under /usr/bin/python3 -E; no Gravitas code.",
+  "sameness": "F2 and F3 show that the follow-up runs the same two implementations before any new number counts."
+ },
+ "ensembles": {
+  "seedRule": "Part A used seeds 264100 to 264901 and the reference samples 264201 to 264208. The follow-up's base seeds are ten times Part A's base seed of the same scenario, so that no follow-up seed was used by Part A and no two follow-up ensembles share one: U3 2643000 (to 2647999), P3 2648000 (to 2648399), P4 2648500 (to 2648899). Replicate r uses baseSeed + r. The spike's JavaScript draws from stream('noise', seed, 'objects') and the oracle from numpy default_rng(seed): different realizations of the same population, by design, as in Part A.",
+  "partA": {
+   "U3": {
+    "replicates": 1000,
+    "baseSeed": 264300,
+    "use": "reproduction only (F3) and the diagnostic's context; nothing new is judged on it"
+   },
+   "P3": {
+    "replicates": 400,
+    "baseSeed": 264800,
+    "use": "reproduction (F3), the diagnostic (PD rows) and PC2's and PC4's comparison of the fits Part A made"
+   },
+   "P4": {
+    "replicates": 400,
+    "baseSeed": 264850,
+    "use": "the diagnostic (PD3)"
+   },
+   "referenceFits": "S1 and S3 of oracle-results.json at kappa 1, 4 and 16: reproduction (F2, F3), the diagnostic and PC1, PC2, PC4"
+  },
+  "followUp": {
+   "U3c": {
+    "scenario": "U3 of thresholds.json, unchanged (U1's edges and targets, U1's gamma divided by six, sigma log-uniform between 0.1 and 0.4 of a bin)",
+    "prototypeReplicates": 5000,
+    "oracleReplicates": 1000,
+    "baseSeed": 2643000
+   },
+   "P3c": {
+    "scenario": "P3 of thresholds.json, unchanged",
+    "replicates": 400,
+    "baseSeed": 2648000,
+    "kappa": [
+     1,
+     4,
+     16
+    ]
+   },
+   "P4c": {
+    "scenario": "P4 of thresholds.json, unchanged",
+    "replicates": 400,
+    "baseSeed": 2648500,
+    "kappa": [
+     1,
+     4,
+     16
+    ]
+   }
+  },
+  "zeroBins": {
+   "Z": [
+    0,
+    5,
+    6,
+    7
+   ],
+   "rule": "The bins of U3 where zero estimates occur are fixed from Part A's pinned record before any follow-up draw: diagnostic-d8.json objectPathU3.perBin has zero-estimate statements in bins 0, 5, 6 and 7 (8, 53, 37 and 16) and none in bins 1 to 4. The set is not re-chosen from the follow-up's draws; zero estimates outside it are counted and reported."
+  },
+  "crossFeed": "The oracle writes its numpy samples of U3c (x and sigma per replicate) to files outside the repository and pins their sha256; the stream samples of P3 (Part A's), P3c and P4c are written by a program that holds no estimator and the oracle reads them (draws only, never an estimate), so that the penalised fits of the two implementations are compared sample by sample."
+ },
+ "measurement": {
+  "statement": "As AM1 (2) of thresholds.json, unchanged: the reported statement of a bin is covered when its status is ok and D_j(Gamma_true) is at or below the chi-square threshold of 0.95 (one constrained fit at the truth); when its status is upper-limit and Gamma_true is at or below the limit (a null limit covers); a status not-constrained, refused or not converged does not cover. The zero rule is tested on the fit: mu_hat_j below 1e-6.",
+  "d8b": "coverage = covered statements / all statements of the bins of Z over every replicate, whatever the estimate (the unconditional measurement). perBin = the same for each bin of Z. The conditional share (D8's quantity: covered / zero-estimate statements) is reported beside it and judged by nothing.",
+  "stoppingRule": "A penalised fit 'meets the stopping rule' when the fit's own converged flag is true under the rule in force (the default of 48d21711 in the diagnostic and in F3; the repaired rule in PC1 to PC4).",
+  "diagnostic": "For every penalised fit of Part A's sets the validator records, through a diagnostic return that changes no arithmetic: the converged flag, the iterations, why the loop ended (criterion, no accepted step in 40 tries, or the cap of 1000), the final damping, the final largest absolute gradient component g, g divided by the number of listings, the Newton decrement d = (1/2) g' H^-1 g at the final point (the objective's expected fall from one more step), the rounding floor f = 16 x 2^-52 x max(1, |objective|), the smallest eigenvalue of the final Hessian, and the largest absolute difference of theta from the oracle's optimum on the same sample.",
+  "classification": "A fit that does not meet the default rule is 'at the optimum' iff its theta is within 1e-6 of the oracle's optimum in every bin (the PO1 tolerance), and then 'rounding floor' iff d <= f, otherwise 'stalled above the floor'; it is 'not at the optimum' otherwise. The class counts are reported rows; they decide which kind of repair the amendment may make (repairLimits) and nothing else.",
+  "repairLimits": "The repaired stopping rule, to be recorded as an amendment after the diagnostic's rows are pinned and before the first run of any fit under it: (1) is scale-free, i.e. stated relative to the number of listings or to the objective, as the gate document's recorded recommendation ('a criterion relative to the count'); (2) states every constant; (3) if every non-converged fit of the diagnostic is 'at the optimum', changes only when the iteration stops and what the converged flag says, never the objective, the start, the step or the damping; if some are 'stalled above the floor' it may also change the damping and says so; if any is 'not at the optimum' no repair is attempted in this follow-up and PC1 to PC4 fail as unmeasurable; (4) is an option of the penalised fit that is off by default, so that Part A's stream is reproducible (F3); (5) is judged on P3c and P4c, whose seeds no run has used when it is written.",
+  "penaltyAgreement": "max over bins of |theta_prototype - theta_oracle| (theta = ln Gamma), every fit counted whether or not its flag says converged.",
+  "p3": "As P3.penaltyHelps and AM1 (6): the mean over replicates of the sum over the ten bins of (Gamma_hat / Gamma - 1)^2 at kappa 4 divided by the same for the unpenalised fit; a replicate in which either fit does not meet its stopping rule is dropped from both and counted.",
+  "crossFeedAgreement": "For D8b.r2: on each of the oracle's U3c samples and each bin of Z, the prototype's status and covering flag against the oracle's; a statement whose oracle deviance at the truth lies within 1e-6 of the threshold, or whose oracle limit lies within 1e-9 (relative) of the truth, is exempt from the flag comparison and counted."
+ },
+ "checks": [
+  {
+   "id": "F1.inputs",
+   "group": "integrity",
+   "scope": "all",
+   "tier": "-",
+   "statement": "the oracle's follow-up output records the sha256 of this file, of thresholds.json, of oracle-results.json and of every sample file it wrote or read; the validator records the same for this file, for the oracle's pinned follow-up output, for every sample file it read and the git blob ids of the prototype module at 48d21711 and as run; the stream sample files the validator regenerates in process are byte for byte the files the oracle read",
+   "bound": "exact"
+  },
+  {
+   "id": "F2.oracleReproduces",
+   "group": "integrity",
+   "scope": "all",
+   "tier": "-",
+   "statement": "the follow-up's oracle, with the copied functions, on the pinned reference samples S1 and S3 of oracle-results.json: its unpenalised log-likelihood and its penalised theta at kappa 1, 4 and 16 against the pinned ones, and its U1 exposure by quadrature against the pinned one",
+   "bound": "max relative (log-likelihood, exposure) or absolute (theta) difference tolerance.closedForm (1e-12)"
+  },
+  {
+   "id": "F3.prototypeReproduces",
+   "group": "integrity",
+   "scope": "all",
+   "tier": "-",
+   "statement": "the follow-up's validator with the default stopping rule against the pinned measured values of results.json: C3 (U3's covered statements per bin and the zero-estimate statements, 114 with 71 covered), P2 (the six differences and 2 fits not converged) and P3 (374 used, 26 dropped, the ratio)",
+   "bound": "integers equal; floating-point numbers to 1e-12 relative"
+  },
+  {
+   "id": "D8b.premise",
+   "group": "misspecified",
+   "scope": "unc",
+   "tier": "d",
+   "statement": "the leg tests what it names: zero estimates occur among the statements of Z in the prototype's U3c ensemble and in the oracle's",
+   "bound": "at least 1 zero-estimate statement in each"
+  },
+  {
+   "id": "D8b.unconditionalU3",
+   "group": "misspecified",
+   "scope": "unc",
+   "tier": "d",
+   "statement": "U3c, 5000 replicates, the prototype: coverage at 0.95 of the reported statement over all outcomes in the bins of Z (20,000 statements), pooled",
+   "bound": "in [0.90, 0.99]"
+  },
+  {
+   "id": "D8b.perBin",
+   "group": "misspecified",
+   "scope": "unc",
+   "tier": "d",
+   "statement": "as D8b.unconditionalU3, the lowest single bin of Z",
+   "bound": ">= 0.90"
+  },
+  {
+   "id": "D8b.oracle",
+   "group": "misspecified",
+   "scope": "unc",
+   "tier": "d",
+   "statement": "the oracle's own implementation (L-BFGS-B, the constrained fit at the truth, the zero-bin limit by brentq) on its own numpy ensemble of U3c, 1000 replicates: the same pooled coverage over the bins of Z (4,000 statements)",
+   "bound": "in [0.90, 0.99]"
+  },
+  {
+   "id": "D8b.r1.conditional",
+   "group": "reported",
+   "scope": "unc",
+   "tier": "d",
+   "statement": "D8's quantity on U3c in both implementations (covered / zero-estimate statements, per bin of Z and pooled), the zero-estimate statements outside Z, and whether the pooled unconditional coverage also reaches D8's 0.94",
+   "bound": "reported"
+  },
+  {
+   "id": "D8b.r2.crossFeed",
+   "group": "reported",
+   "scope": "unc",
+   "tier": "b",
+   "statement": "the prototype on the oracle's 1000 numpy samples of U3c: the number of statements of Z whose status or covering flag differs from the oracle's, and the exempt statements",
+   "bound": "reported"
+  },
+  {
+   "id": "D8b.r3.countsExact",
+   "group": "reported",
+   "scope": "base",
+   "tier": "a",
+   "statement": "the exact unconditional coverage of Prompt 229's rule on the counts path (Garwood for counts of 1 and more, the 0.95 limit at zero) at the true expected listings of each bin of Z and at 5, by summing the Poisson distribution, in the prototype's counts path and in scipy.stats",
+   "bound": "reported"
+  },
+  {
+   "id": "PD1.partANotConverged",
+   "group": "reported",
+   "scope": "penalty",
+   "tier": "d",
+   "statement": "the diagnostic of every penalised fit of Part A that did not meet the default rule (2 of the 6 reference fits, 26 of P3's 400): the measurements of measurement.diagnostic for each, and the class counts by measurement.classification",
+   "bound": "reported"
+  },
+  {
+   "id": "PD2.partAConverged",
+   "group": "reported",
+   "scope": "penalty",
+   "tier": "d",
+   "statement": "the same measurements summarised over the fits of Part A that met the default rule (the largest final gradient, the largest difference from the oracle, the iterations)",
+   "bound": "reported"
+  },
+  {
+   "id": "PD3.p4",
+   "group": "reported",
+   "scope": "penalty",
+   "tier": "d",
+   "statement": "P4 (Part A's sharp-feature ensemble, 400 replicates) at kappa 1, 4 and 16 under the default rule: the fits not meeting it and their class counts (N5 recorded no count)",
+   "bound": "reported"
+  },
+  {
+   "id": "PD4.uniqueness",
+   "group": "reported",
+   "scope": "penalty",
+   "tier": "d",
+   "statement": "the oracle: the smallest eigenvalue of the penalised objective's Hessian at its optimum over every fit it makes, and the number of fits in which the Hessian of the unpenalised term alone has a negative eigenvalue there (the objective is not convex in theta in general; this says whether the optimum found is a strict local minimum)",
+   "bound": "reported"
+  },
+  {
+   "id": "PO1.oracleTwoAlgorithms",
+   "group": "oracle",
+   "scope": "penalty",
+   "tier": "b",
+   "statement": "the oracle's penalised optimum by scipy.optimize.minimize (BFGS, Part A's function, from Part A's start) against its Newton iteration on the analytic gradient and Hessian from a flat start (every theta equal, the total expected listings equal to the number of objects), on every penalised fit of the follow-up (the reference fits, P3, P3c, P4c)",
+   "bound": "max absolute difference of theta 1e-6"
+  },
+  {
+   "id": "PC1.share",
+   "group": "penalty",
+   "scope": "penalty",
+   "tier": "c",
+   "statement": "under the repaired stopping rule: the share of penalised fits that do not meet it, over the six reference fits, P3c at kappa 1, 4 and 16 (1,200 fits) and P4c at kappa 1, 4 and 16 (1,200 fits)",
+   "bound": "<= 0.005"
+  },
+  {
+   "id": "PC2.oracle",
+   "group": "penalty",
+   "scope": "penalty",
+   "tier": "b",
+   "statement": "under the repaired stopping rule: the penalised estimate against the oracle's optimum on the same sample, over the six reference fits, P3 (Part A's 400 replicates at kappa 4, the 26 included), P3c and P4c at kappa 1, 4 and 16; every fit counted whatever its flag",
+   "bound": "max absolute difference of ln Gamma tolerance.penaltyOracle (1e-4)"
+  },
+  {
+   "id": "PC3.helps",
+   "group": "penalty",
+   "scope": "penalty",
+   "tier": "c",
+   "statement": "P3's measurement on P3c under the repaired stopping rule (measurement.p3), with the dropped replicates counted",
+   "bound": "<= 0.9"
+  },
+  {
+   "id": "PC4.sameEstimate",
+   "group": "penalty",
+   "scope": "penalty",
+   "tier": "b",
+   "statement": "on every Part A fit that met the default rule (4 reference fits, 374 replicates of P3): the estimate under the repaired rule against the estimate under the default rule",
+   "bound": "max absolute difference of ln Gamma tolerance.continuity (1e-5)"
+  },
+  {
+   "id": "X1.occurrenceAuthentic",
+   "group": "authentic",
+   "scope": "unc",
+   "tier": "e",
+   "statement": "as thresholds.json: the general kernel on a real survey's planet candidates with the survey's published injection-and-recovery completeness and stated reliability, against its published occurrence table, a table whose values were not used to tune anything",
+   "bound": "inside the published table's own uncertainty, set by the request's data (amendment after the fetch)",
+   "request": "R1"
+  },
+  {
+   "id": "X2.massFunctionAuthentic",
+   "group": "authentic",
+   "scope": "unc",
+   "tier": "e",
+   "statement": "as thresholds.json: the general kernel on a real cluster's members with per-star mass uncertainty and a stated completeness, as a present-day mass function of a selected sample",
+   "bound": "set by the request's data (amendment after the fetch)",
+   "request": "R2"
+  },
+  {
+   "id": "X3.citedImplementation",
+   "group": "authentic",
+   "scope": "unc",
+   "tier": "e",
+   "statement": "as thresholds.json: agreement with a cited published implementation of the same likelihood on the same samples",
+   "bound": "set by the request's data",
+   "expected": "not-run",
+   "request": "R4",
+   "why": "running a downloaded implementation is not permitted (ruling 4); the files of R4 are fetched and recorded, the leg stays NOT RUN"
+  }
+ ],
+ "carried": {
+  "D8.noZeroRule": "fail, as recorded in failed-legs.json (0.623 against 0.94); not rerun for judgement, not reset, not removed",
+  "P2.penaltyOracle": "pass under AM3 (accepted, ruling 2); first-run-results.json stays on record"
+ },
+ "verdict": {
+  "rows": "A leg of group integrity, oracle, misspecified or penalty passes or fails by its bound; a leg of group reported has no bound and never changes an outcome; a leg of group authentic passes, fails or is NOT RUN and, as in thresholds.json (verdict.base, verdict.unc, verdict.notRunLegs), never changes the letter.",
+  "d8b": "D8b PASSES iff F1, F2, F3, D8b.premise, D8b.unconditionalU3, D8b.perBin and D8b.oracle all pass.",
+  "letter": "After the follow-up: 'A through D8b' iff D8b PASSES and Part A's results.json still shows BASE passing and every leg of scope unc or all in the judged groups other than D8.noZeroRule passing; it reads: the per-object-uncertainty set passes its committed legs, the limit of a zero estimate being carried by D8b in place of D8, which stays failing and labelled. Otherwise 'B stands' and every failing follow-up leg is written to followup-failed-legs.json and left failing.",
+  "penalty": "PENALTY CONVERGENCE PASSES iff F1, F2, F3, PO1, PC1, PC2, PC3 and PC4 all pass. Part A's admission of the toggle (PENALTY ADMITTED, with the AM3 note) is not recomputed; if the convergence legs do not pass, the recommendation recorded is that the toggle is not built in a Part B until a new leg, committed first, passes.",
+  "authentic": "Tier (e) is stated leg by leg: pass, fail or NOT RUN with its request. A failing authentic leg is written to followup-failed-legs.json and left failing; no sentence in the product about that kind of real data may rest on this gate while its leg is failing or NOT RUN.",
+  "partA": "Part A's verdict by Part A's function is B and stays what results.json records. The follow-up does not recompute it.",
+  "standing": "Every outcome is recorded as a DELEGATED register row, evidence and not permission until Carl ratifies it; none begins Part B.",
+  "consumers": "No outcome of this follow-up releases a panel, a lesson or a viewer (whatThisIs.consumersCondition). The record states which parts of the condition hold after the runs."
+ },
+ "order": [
+  "1. this file, alone, committed and pushed",
+  "2. the follow-up's oracle written (syntax checked only), then run on the pinned Part A samples and on its own numpy ensemble of U3c: F2's numbers, D8b.oracle, the U3c sample files' sha256 and the reference fits' second algorithm are pinned in a commit before any Gravitas-side code of the follow-up exists",
+  "3. the sample writer (js/random/streams.js and the validator's genObjects, no estimator) writes the stream samples of P3, P3c and P4c; the oracle's second stage reads them and its penalised optima are pinned before the prototype has run on any sample of the follow-up",
+  "4. the validator's first stage: F1, F3, the D8b legs and the penalty diagnostic (default rule only); its rows are pinned",
+  "5. the amendment that records the repaired stopping rule, then the prototype's option, then the validator's second stage (PC1 to PC4), run twice",
+  "6. the fetch of R1 to R4 (terms read, sha256, retrieval date), the amendment that fixes X1's and X2's analysis contracts before any estimate from those files, the oracle's data stage pinned, then the prototype on the same files",
+  "7. the document section, the register rows continuing D-R10-264-NN, and the record's test"
+ ],
+ "oracle": {
+  "path": "tools/population-oracle/oracle_followup.py (on the follow-up spike)",
+  "pythonRuns": "/usr/bin/python3 -E (no environment, no user site); numpy, scipy and the standard library; astropy only to read a fetched table",
+  "independence": "Reads no Gravitas code and no output of the prototype. It reads draws (sample files) and fetched public data files, never an estimate."
+ },
+ "dataRule": {
+  "where": "scratch-data/population264/ beside the roadmap, outside every repository; one new directory per source; scripts are kept elsewhere and files are passed as arguments; any Python that reads a fetched file runs with -I or -E and reads it as data.",
+  "recorded": "For every file: the URL as requested, the retrieval date, the size and sha256, the terms as read on the source's own page with their own URL and date, and the rights basis. The basis accepted here is cite-only: nothing of a fetched file is redistributed; a fixture holds counts, bin edges and derived numbers of this follow-up's own computation, identifiers only where needed to say which rows were used, and never a copied table.",
+  "never": "No published number, citation detail, catalogue identifier or licence term is typed from memory: each is read from a fetched file and the file is named. No downloaded program is run, imported or executed in any form; a source file may be read as text.",
+  "notRun": "A request that cannot be filled from public files in this session leaves its leg NOT RUN with the exact request and what was tried."
+ },
+ "amendments": [
+  {
+   "id": "AM-F1",
+   "recordedBefore": "the follow-up oracle's first run (no follow-up program had been run and no sample drawn)",
+   "text": "Definitions the contract left open, fixed before any number exists; no bound moved. (1) 'The oracle's optimum' of a penalised fit, wherever a leg or a diagnostic compares with it, is the result of the oracle's Newton iteration (flat start; a full step once the step is below 1e-7, backtracking on the objective above that; stopped when the largest step component is below 1e-12 or at 400 iterations; a Hessian whose smallest eigenvalue is not positive is shifted for the step). Part A's BFGS result is the second algorithm and PO1 bounds the distance between the two; F2 compares the BFGS result with Part A's pinned theta, which BFGS produced. (2) Per-sample output stays outside the repository beside the sample files, regenerable by seed: the oracle's U3c samples and its statement table (status, covering flag, the deviance at the truth or the limit, for the bins of Z), the stream sample files, and the oracle's penalised theta of every stream fit. A commit pins each file by its sha256 together with the counts the legs read; the validator checks every sha256 before it compares. Sample files hold every double in its shortest round-trip decimal form, so both implementations read identical numbers; the 12-digit rounding of Part A's reference samples is not applied to the follow-up's ensembles. (3) 'Copied without change' is measured as the source text of each copied function being found verbatim in tools/population-oracle/oracle.py, whose sha256 is recorded. (4) In the oracle's U3c ensemble a constrained fit or a limit is computed only for the bins of Z; for the other bins only the zero rule's status is recorded (for the count of zero estimates outside Z). (5) A sample with no object has no penalised fit in either implementation; it is counted and belongs to no leg. (6) The exact counts-path coverage of D8b.r3 sums the Poisson distribution over counts 0 to 399. (7) F2's log-likelihood comparison is made once per reference sample and kappa with the copied fit_lbfgs, which is the fit that produced the pinned value."
+  },
+  {
+   "id": "AM-F2",
+   "recordedBefore": "the oracle's stage 2b and every validator run; recorded AFTER the oracle's stages 1 and 2, which it does not change",
+   "text": "What the oracle's second stage did not read, and one plain statement about it. (1) PD3 asks for the class counts of Part A's P4 ensemble (seeds 264850 to 265249), and a class needs the oracle's optimum on the same sample; stage 2 read P3, P3c and P4c only. The sample writer gains the set P4 and the oracle a stage 2b that reads that one file and adds its own block and its own theta file, leaving the blocks and files of stages 1 and 2 as pinned (checked by sha256). PD3 is a reported row; no judged leg reads stage 2b except PO1, whose statement covers every penalised fit the oracle makes. (2) Stage 2's output shows that the oracle's Newton iteration ended at its cap of 400 iterations in at least one fit of P3 and of P3c, with a largest remaining gradient component of 5.4e-8: its backtracking compares objectives, which is the stall the diagnostic is to test in the prototype. The oracle is not changed: PO1 judges it as it ran (its two algorithms agree to 1.6e-7 against the committed 1e-6), and the accuracy of 'the oracle's optimum' in the classification is therefore about 1e-7, inside the 1e-6 the classification uses. (3) The prototype's diagnostic return is requested by penalty.diagnostic = true and adds fields to the penalty record only; the smallest eigenvalue of the final Hessian is computed in the validator by Jacobi rotations. No bound moved."
+  },
+  {
+   "id": "AM-F3",
+   "recordedBefore": "the first run of any penalised fit under the repaired stopping rule; recorded AFTER the validator's first stage (pinned as followup-first-stage-results.json), which it rests on",
+   "text": "The diagnosis, the repaired stopping rule, and three plain statements. (1) The diagnosis, from the pinned first stage: every penalised fit of Part A that did not meet the default rule (2 reference fits, 26 replicates of P3, and 114 of the 1,200 fits of P4: 43, 43 and 28 at kappa 1, 4 and 16) is of the class 'rounding floor'. Each ended at the cap of 1,000 iterations, with theta within 1.1e-7 of the oracle's optimum, a gradient of at most 1.2e-6 (1.1e-8 per listing), a Hessian that is positive definite, a damping that had grown to between 1e4 and 1e8, and a Newton decrement at most 0.77 of the floor f (0.054 in all but one fit). The fits that met the rule did so in at most 6 iterations. So the fit reaches the optimum in a few steps and then cannot stop: the default criterion is an absolute 1e-10 on a gradient that the step's own acceptance test (the objective must not rise) cannot drive lower, because a further step changes the objective by less than its rounding. No fit is 'stalled above the floor' or 'not at the optimum', so by repairLimits (3) only the stopping rule and the flag may change. (2) The repaired rule, requested by penalty.stop = 'rounding-floor' and off by default: at the top of an iteration the fit ends as converged when (a) the default criterion holds (the largest absolute gradient component is below 1e-10), or (b) both hold: the Newton decrement d = (1/2) g' H^-1 g of the undamped Hessian at the current point is finite, at least 0 and at most 64 x 2^-52 x max(1, |objective|); and the largest absolute gradient component is at most 1e-6 x max(1, n), n the number of listings. The objective, the start, the damped step, its acceptance test, the damping schedule and the cap of 1,000 are those of 48d21711. The constants: 64 is four times the factor of the classification's floor, because one Part A fit ended at 0.77 of that floor and a rule should not sit on the edge of what it detects; 1e-6 per listing is about a hundred times the largest gradient per listing among the stalled fits and guards against a small decrement far from the optimum, where the Hessian need not be positive definite. Clause (b) is relative to the objective and to the count, as repairLimits (1) asks. With the smallest Hessian eigenvalue of the diagnostic (0.13) the decrement bound allows a distance of a few 1e-6 in theta from the optimum; whether that holds is what PC2 and PC4 judge. (3) Stated plainly: repairLimits (5) says the rule is judged on seeds no run has used. By the committed order the oracle's second stage had already read the stream samples of P3c and P4c when this was written, and its aggregate rows (PO1, PD4) are known; no prototype fit has been made on them and nothing of them entered the choice of the rule or its constants. (4) After its first run the validator's cross-feed row gained three reported fields (where the largest deviance difference lies and how many exceed 1e-6 and 1e-3); every other number of the two first-stage runs is identical. What they show is recorded in followup-diagnostic-crossfeed.json: in 4 of 4,000 statements the prototype's constrained fit stops early and reports a deviance up to 0.027 too large, with no status or covering flag differing. It is a reported row and changes no leg; it is carried to the record as a finding about the prototype's profile deviance. (5) The message of commit 29ed11b9 gives P4's fits that missed the criterion as 129; the pinned file says 114, as in (1). (6) PC1 and PC3 count a penalised fit as meeting the rule from its converged flag under the repaired rule; PC2 and PC4 compare every fit whatever its flag, as committed. No bound moved."
+  },
+  {
+   "id": "AM-F4",
+   "recordedBefore": "the validator's final run; recorded AFTER the fetch, which it describes",
+   "text": "The outcome of the fetch, and one correction. (1) Requests R1 and R3 were filled in part from public e-prints (followup-sources.json: four arXiv e-prints with their sha256, licence pages and the retrieval date of 2026-11-10; cite-only). R2 and R4 were not filled. (2) No contract for X1 or X2 is fixed and no estimate was computed from any fetched file, by any program or by hand: X1's exposure needs the transit probability of the calculation's stars, whose radii and masses are in a stellar catalogue the archive did not serve (HTTP 503, under maintenance), and X2 has no file (the catalogue service did not connect). X1, X2 and X3 are therefore NOT RUN and each carries its exact requests in followup-sources.json; X3 would be NOT RUN in any case (ruling 4). What was read of the fetched files before this amendment is what F-DEC6 allows: documentation, column heads, row counts, the papers' text and the published occurrence table. One e-print was examined and set aside because its completeness and occurrence are printed only inside figures. (3) The validator gains the three authentic rows, copied from followup-sources.json with that file's sha256; no other row changes. (4) Correction to AM-F3 (1): its parenthesis says the Newton decrement was 0.054 of the floor in all but one fit; the pinned first stage says at most 0.12 in all but one (P4 at kappa 1 has 0.118), and the damping range given there is that of the 28 fits of PD1. No bound moved."
+  }
+ ],
+ "decisions": [
+  {
+   "id": "F-DEC1",
+   "text": "D8b is judged on new draws. Part A's record already gives the unconditional coverage of the bins of Z on Part A's ensemble (0.94975), so a leg on that ensemble would be a bound committed after its result. The Part A ensemble is used for reproduction only."
+  },
+  {
+   "id": "F-DEC2",
+   "text": "D8b carries C3's interval and not D8's 0.94, by the rule of thresholdRule: it is C3's quantity on a subset of C3's bins, and Part A committed [0.90, 0.99] for a nominal 0.95 on sparse counts before any number existed. Whether 0.94 is reached is reported so that the reader can apply the stricter figure; Carl may rule that it should have been the bound, which would be a reset recorded as a new row."
+  },
+  {
+   "id": "F-DEC3",
+   "text": "The repaired stopping rule is fixed after the diagnostic and before its first run, inside limits committed here, and is judged on seeds no run has used. The alternative, committing a rule now from a reading of the code alone, would turn an undiagnosed guess into the thing judged, which is what the ruling's order (diagnose, then a new leg) avoids."
+  },
+  {
+   "id": "F-DEC4",
+   "text": "The diagnostic adds a return of intermediate quantities to the penalised fit and changes no arithmetic; F3 measures that by exact reproduction."
+  },
+  {
+   "id": "F-DEC5",
+   "text": "A passing D8b is recorded as 'A through D8b' because register row D-R10-264-02 and question 1 of the gate document name the follow-up leg as what would let the per-object-uncertainty set stand; it is a recommendation to Carl in a DELEGATED row and changes nothing that is built."
+  },
+  {
+   "id": "F-DEC6",
+   "text": "The authentic legs' contracts cannot be written before the files are seen, because thresholds.json left their bounds to the request's data. They are fixed by amendment after the fetch and before any program computes an estimate from the files. What may be looked at before that amendment: the files' documentation, column names, units and row counts, the paper's text and its published table (the comparison target, necessarily read). What may not: any rate, exposure or count computed from the files by the prototype, the oracle or by hand. The contract has no free parameter chosen by its agreement with the published table."
+  },
+  {
+   "id": "F-DEC7",
+   "text": "X3 stays NOT RUN whatever is fetched under R4 (ruling 4). R3's text is fetched and recorded for a later lesson and no leg of this follow-up reads it."
+  },
+  {
+   "id": "F-DEC8",
+   "text": "The cross-feed of D8b and the exact counts-path coverage are reported rows, not judged legs: the gate document defined D8b as one measurement and the oracle's own ensemble is the independent check the gate pattern asks for. They are recorded so that a disagreement, if any, is on the page."
+  }
+ ],
+ "questions": []
+}
