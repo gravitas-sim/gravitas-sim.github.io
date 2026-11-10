@@ -15,6 +15,7 @@ import { GUIDES as MISSION } from '../js/mission/lab/curriculum.js';
 import { SEQUENCES } from '../js/data/investigations/sequences.js';
 import { BUILTIN_COURSES } from '../js/data/courses/index.js';
 import { translationState } from '../js/course/review.js';
+import { RETIRED } from '../tools/glossary.mjs';
 
 const library = JSON.parse(readFileSync('library/library.json', 'utf8'));
 const byId = new Map(library.entries.map(e => [e.id, e]));
@@ -50,6 +51,10 @@ describe('the sequence of the 3-D and mission guides', () => {
       expect(words.en.trim()).not.toBe('');
       expect(words.es.trim()).not.toBe('');
       expect(words.es).not.toBe(words.en);
+      // A student reads these: none of the retired words (D-TERM-01).
+      for (const r of RETIRED)
+        for (const lang of ['en', 'es'])
+          expect(r[lang].test(words[lang])).toBe(false);
     }
   });
 

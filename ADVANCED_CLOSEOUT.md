@@ -227,14 +227,14 @@ pass.
 
 No pack, sidecar or data file is added or changed, and nothing was downloaded. Measured on a Node 22.23.4 build of this branch over `v3`
 325f7ff5 (`npm run budget:data`, `npm run budget:check`, `npm run budget:routes`, `npm run budget:composition -- --check`): packs 355,265 of
-355,282 bytes raw and 111,422 of 111,422 gzip; first-visit precache 5,341,457 of 5,365,197 bytes (the package file grows by 2,643 bytes
+355,282 bytes raw and 111,422 of 111,422 gzip; first-visit precache 5,341,446 of 5,365,197 bytes (the package file grows by 2,653 bytes
 gzipped: its two reading steps in two languages); initial download 801.7 KB of 830.0; deferred JavaScript 3,165,272 bytes gzipped (3091.1
 of 3091.2 KB), which this work does not move, because a course package is built into the course pages' own chunks and the Library file is
 not JavaScript; every route within its ceiling with none moved (the course pages' chunks grow inside their room); start-up composition
 unchanged; indexedDB and cache 18,508,011 of 209,715,200.
 
-**One ceiling is raised:** the idle precache tier, 1,664,205 to 1,664,877 bytes (`tools/data-budget.json`), exactly the 672-byte overrun.
-`library/library.json` grows by 740 bytes gzipped (the sequence's title and blurb in two languages and each guide's pathway and next entry)
+**One ceiling is raised:** the idle precache tier, 1,664,205 to 1,664,874 bytes (`tools/data-budget.json`), exactly the 669-byte overrun.
+`library/library.json` grows by 736 bytes gzipped (the sequence's title and blurb in two languages and each guide's pathway and next entry)
 against 67 bytes of room. The raise is made under the standing approval of 2026-10-10 as it was applied to this tier by Prompts 266 and
 271, with a register row (D-R10-274-05); the queue confirms the figure on CI and lists it for Carl.
 
