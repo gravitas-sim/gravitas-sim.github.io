@@ -251,6 +251,12 @@
       "recorded": "2026-11-10, after the addendum oracle's self-check and JUP365 parts had run and four e-prints had been downloaded and read, and before the estimator, the step-budget function or the validator had run on anything",
       "seen": "The oracle's self-check (worst period error 0.6%, worst amplitude error 0.033 deg) and its harmonic estimate of the JUP365 argument: 2070.5 d by `lsq` (2071.3 d by `fft`), amplitude 0.0328 deg, centre 179.998 deg. The amplitude is about half the cited 0.064 deg, inside L1h's inherited 50% by 1.2 points; that bound is not moved. The downloaded sources (addendum-sources.json): none states 2071 d with 0.064 deg; one reports about 0.02 deg from an ephemeris; for Pluto one states 82 deg with 1.99e4 yr and one 80 to 86 deg with about 20,000 yr, neither the cited 19,670 yr.",
       "what": "X1L's and X1P's bound did not say which outcome holds when one source states a cited number and another states a different one. The stricter reading is taken: a leg is FAIL when any downloaded source states a different period or amplitude for the same quantity, whatever else agrees. No other bound is touched. K1 stays NOT RUN: no reference of the exchange was fetched and no leg is committed for it."
+    },
+    {
+      "id": "AM8",
+      "recorded": "2026-11-10, after a smoke run of stepForBudget on a two-body orbit like K-2 (energy budget only), and before the validator or any leg had run",
+      "seen": "The pilot's energy errors at h0, h0/2 and h0/4 were 8.1e-9, 2.0e-12 and 7.5e-14: a ratio of 4,000 for one halving, not 16. Read only at the ends of the inner periods, the energy error of a closed orbit is seen at the same orbital phase each time, where it has returned to almost nothing; the oscillation inside the orbit, which a run sampled at any other phase meets, was not measured.",
+      "what": "The pilot reads the energy and the budgeted angles at every step of the coarsest level (64 times an inner period, at common times of the three runs) instead of at the ends of the inner periods; the rest of the rule is unchanged. In B0b the realised energy error is read at every step of the 500-period run (the bound did not say where), the angles at the ends of the periods as committed. L4b and P3b read the energy as L4 and P3 did (every fiftieth sample). No bound moves."
     }
   ]
 }
