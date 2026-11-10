@@ -46,6 +46,7 @@ const written = (source, key) =>
  * @param {(file: string) => ?string} tree.read - A file's text, or null
  * @param {Set<string>} tree.pendingIds - Ids in tools/pending-acceptance.json
  * @param {Set<string>} tree.pointerFiles - Files that listen for pointer movement
+ * @param {Set<string>} [tree.navSurfaces] - Ids in tools/navigation-inventory.json
  * @returns {string[]} Problems, empty when the contract holds
  */
 export function checkContract(contract, tree) {
@@ -158,6 +159,45 @@ export function checkContract(contract, tree) {
         `dragSites: ${file} is neither a list of drags nor exempt with a reason`
       );
   }
+  for (const [file, ids] of Object.entries(contract.dragSites.vendored || {})) {
+    if (tree.read(file) === null)
+      bad(`dragSites.vendored: ${file} does not exist`);
+    for (const id of ids)
+      if (!dragIds.has(id))
+        bad(`dragSites.vendored: ${file} names the unregistered drag ${id}`);
+  }
+
+  // The walk inventory (Prompt 278): a row, or a reason, for every surface of
+  // the navigation inventory, and nothing that is not one.
+  const inventory = contract.inventory;
+  if (inventory && tree.navSurfaces) {
+    const rows = new Map();
+    for (const row of inventory.rows) {
+      if (rows.has(row.surface)) bad(`inventory: ${row.surface} has two rows`);
+      rows.set(row.surface, row);
+      if (!tree.navSurfaces.has(row.surface))
+        bad(`inventory: ${row.surface} is not in the navigation inventory`);
+      for (const field of ['path', 'task', 'reach', 'press'])
+        if (!row[field]) bad(`inventory: ${row.surface} has no ${field}`);
+      if (typeof row.spanish !== 'boolean')
+        bad(`inventory: ${row.surface} does not say whether it has Spanish`);
+    }
+    for (const id of tree.navSurfaces) {
+      const exempt = inventory.exempt?.[id];
+      if (rows.has(id) && exempt)
+        bad(`inventory: ${id} is both walked and exempt`);
+      if (!rows.has(id) && !exempt)
+        bad(
+          `inventory: the surface ${id} has no walk and no reason it cannot be walked`
+        );
+    }
+    for (const id of Object.keys(inventory.exempt || {}))
+      if (!tree.navSurfaces.has(id))
+        bad(`inventory: exempt ${id} is not in the navigation inventory`);
+    const spec = tree.read('e2e/a11ySweep.spec.js');
+    if (spec === null || !spec.includes('inventory.rows'))
+      bad('inventory: e2e/a11ySweep.spec.js does not walk inventory.rows');
+  }
   return problems;
 }
 
@@ -173,7 +213,10 @@ export function sharedLetters(shortcutSource, panSource) {
     [...shortcutSource.matchAll(/match:\s*'([a-z])'/g)].map(m => m[1])
   );
   const pans = [
-    ...panSource.matchAll(/e\.key\.toLowerCase\(\) === '([a-z])'/g),
+    // A letter the handler gives up while a type is armed is not shared.
+    ...panSource.matchAll(
+      /e\.key\.toLowerCase\(\) === '([a-z])'(?! && !placementArmed\(\))/g
+    ),
   ].map(m => m[1]);
   return [...new Set(pans.filter(l => shortcuts.has(l)))].sort();
 }

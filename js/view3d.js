@@ -392,6 +392,13 @@ function stepCamera(kind, x, y = 0) {
     camera.lookAt(target);
   }
   controls.update();
+  // For the browser tests: where the camera is and what it looks at, read-only.
+  canvasHost.dataset.camera = [
+    ...camera.position.toArray(),
+    ...target.toArray(),
+  ]
+    .map(v => v.toFixed(2))
+    .join(',');
 }
 
 /**

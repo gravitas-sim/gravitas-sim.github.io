@@ -1132,7 +1132,12 @@ export function initPlacement(ctx) {
     // too, so one press ran both and toggled twice. The registered one stays (it
     // resumes from a scrubbed timeline, refreshes the transport bar and is in
     // the shortcuts overlay) and calls preventDefault() before it runs.
-    if (e.key === 'ArrowLeft' || e.key.toLowerCase() === 'a')
+    // K2 (INTERACTION.md): with a type armed, A arms keyboard placement and
+    // no longer pans as well. The arrow keys always pan.
+    if (
+      e.key === 'ArrowLeft' ||
+      (e.key.toLowerCase() === 'a' && !placementArmed())
+    )
       state.pan.x += panSpeed;
     else if (e.key === 'ArrowRight' || e.key.toLowerCase() === 'd')
       state.pan.x -= panSpeed;

@@ -1,6 +1,6 @@
 {
-  "about": "The interaction contract as data (Prompt 155; INTERACTION.md is the prose). tests/interactionContract.test.js holds every registered surface to it. Prompt 161 folds the surfaces into the navigation inventory; Prompt 278 activates the pending checks.",
-  "version": 1,
+  "about": "The interaction contract as data (Prompt 155; INTERACTION.md is the prose). tests/interactionContract.test.js holds every registered surface to it. Prompt 278 activated the pending checks, registered every drag it found and added the walk inventory: one row for every surface of the navigation inventory, walked by e2e/a11ySweep.spec.js in both languages.",
+  "version": 2,
   "keys": {
     "ArrowLeft": ["nudge", "along"],
     "ArrowRight": ["nudge", "along"],
@@ -65,8 +65,8 @@
         "arms keyboard placement (shortcut)",
         "pans the view left (A, W, S, D beside the arrows)"
       ],
-      "status": "open",
-      "resolution": "One press of A did both. Measured on 2026-10-19 with a type armed: the view moved 40 px and a keyboard placement began. The rename that removes it (A no longer pans while a type is armed; the arrow keys always pan) is the visible train PR that follows this one."
+      "status": "resolved",
+      "resolution": "One press of A did both. Measured on 2026-10-19 with a type armed: the view moved 40 px and a keyboard placement began. Resolved by Prompt 278: with a type armed A arms the placement and no longer pans (js/placement.js); with nothing armed A pans as W, S and D do, and the arrow keys always pan. e2e/a11ySweep.spec.js, 'A arms a placement and does not also pan'."
     },
     {
       "id": "K3",
@@ -76,7 +76,7 @@
         "zoom out and in (3-D lab)"
       ],
       "status": "declared",
-      "resolution": "The two never share a page. The contract assigns + and - to zoom, so the sandbox, which has no keyboard zoom, has a gap (interaction.keyboard.sandbox-zoom); moving speed to another pair is a decision for Carl."
+      "resolution": "The two never share a page. The contract assigns + and - to zoom; the sandbox keeps them for speed, and since Prompt 278 its zoom is the view pad's two buttons, reached with Tab and pressed with Enter or one pointer (interaction.keyboard.sandbox-zoom). Moving speed to another pair, so that + and - could zoom in the sandbox too, is still a decision for Carl."
     }
   ],
   "surfaces": [
@@ -163,12 +163,21 @@
         "keyboard": {
           "file": "e2e/canvasInput.spec.js",
           "title": "W, A, S, D and the arrows pan"
+        },
+        "singlePointer": {
+          "file": "e2e/a11ySweep.spec.js",
+          "title": "the view pad pans and zooms the sandbox with single presses"
+        },
+        "announcement": {
+          "file": "e2e/a11ySweep.spec.js",
+          "title": "the zoom is said once, after the pressing stops"
         }
       },
-      "pending": ["interaction.keyboard.sandbox-zoom"],
-      "notApplicable": {
-        "announcement": "Panning moves a picture, not a value: nothing changes that a reader would be told."
-      }
+      "pending": [
+        "interaction.keyboard.sandbox-zoom",
+        "interaction.single-pointer.sandbox-pan"
+      ],
+      "sources": ["index.html"]
     },
     {
       "id": "plot.cursor",
@@ -288,7 +297,8 @@
           "file": "e2e/observatory.spec.js",
           "title": "a selection in the plot is the selection in the table"
         }
-      }
+      },
+      "pending": ["interaction.single-pointer.observatory-run"]
     },
     {
       "id": "observatory.marks",
@@ -388,13 +398,102 @@
           "title": "the keyboard alone plays, orbits, zooms and picks a look"
         },
         "singlePointer": {
-          "file": "e2e/interactionContract.spec.js",
-          "title": "a preset view is chosen without orbiting"
+          "file": "e2e/a11ySweep.spec.js",
+          "title": "the 3-D view pad turns, moves and zooms with single presses"
+        },
+        "announcement": {
+          "file": "e2e/a11ySweep.spec.js",
+          "title": "the 3-D camera says where it is once the pressing stops"
         }
       },
-      "pending": ["interaction.single-pointer.lab3d-orbit"],
+      "pending": ["interaction.single-pointer.lab3d-orbit"]
+    },
+    {
+      "id": "sandbox.windows",
+      "name": "The sandbox: the inspector, pinned cards and the spacetime view as windows",
+      "source": "js/windowMove.js",
+      "primaryTask": "Move a window out of the way, and size the spacetime view.",
+      "keys": [
+        {
+          "key": "ArrowLeft",
+          "action": "nudge"
+        },
+        {
+          "key": "ArrowRight",
+          "action": "nudge"
+        },
+        {
+          "key": "ArrowUp",
+          "action": "nudge"
+        },
+        {
+          "key": "ArrowDown",
+          "action": "nudge"
+        },
+        {
+          "key": "Escape",
+          "action": "cancel"
+        }
+      ],
+      "drags": ["window.move"],
+      "tests": {
+        "keyboard": {
+          "file": "e2e/a11ySweep.spec.js",
+          "title": "the arrow keys move and size a window from its Move and Size buttons"
+        },
+        "singlePointer": {
+          "file": "e2e/a11ySweep.spec.js",
+          "title": "a window goes where one press says, with no drag"
+        },
+        "announcement": {
+          "file": "e2e/a11ySweep.spec.js",
+          "title": "arming a move says what to do, and the move is said"
+        }
+      },
+      "pending": ["interaction.single-pointer.window-move"]
+    },
+    {
+      "id": "sandbox.observer",
+      "name": "The sandbox: where the observer stands",
+      "source": "js/observerControls.js",
+      "primaryTask": "Turn the observer around the system.",
+      "keys": [],
+      "drags": ["observer.handle"],
+      "tests": {
+        "keyboard": {
+          "file": "e2e/a11ySweep.spec.js",
+          "title": "the position angle slider turns the observer from the keyboard"
+        },
+        "singlePointer": {
+          "file": "e2e/a11ySweep.spec.js",
+          "title": "one press on the slider turns the observer, with no drag"
+        }
+      },
+      "pending": ["interaction.single-pointer.observer-handle"],
       "notApplicable": {
-        "announcement": "An orbit or zoom moves a picture, not a value: the state tables carry the numbers and do not change."
+        "announcement": "A native slider: the browser says its value as it changes, and the value is printed beside it."
+      }
+    },
+    {
+      "id": "sandbox.spacetime",
+      "name": "The sandbox: the spacetime view's camera",
+      "source": "js/view3d.js",
+      "sources": ["js/fragments/view3d.html"],
+      "primaryTask": "Look at the curved grid from another side.",
+      "keys": [],
+      "drags": ["spacetime.orbit"],
+      "tests": {
+        "keyboard": {
+          "file": "e2e/a11ySweep.spec.js",
+          "title": "the spacetime pad turns, moves and zooms from the keyboard"
+        },
+        "singlePointer": {
+          "file": "e2e/a11ySweep.spec.js",
+          "title": "the spacetime pad turns, moves and zooms with single presses"
+        }
+      },
+      "notApplicable": {
+        "announcement": "A turn or a zoom moves a picture of a grid; no value a reader is asked for changes."
       }
     }
   ],
@@ -413,8 +512,11 @@
       "id": "sandbox.pan",
       "surface": "sandbox.view",
       "gesture": "Drag empty space to move the view.",
-      "alternatives": ["The arrow keys and W, A, S, D pan; Home resets."],
-      "status": "gap",
+      "alternatives": [
+        "The view pad in Tools: four buttons move the view a step, two zoom it about its center.",
+        "The arrow keys and W, A, S, D pan; Home resets."
+      ],
+      "status": "met",
       "pending": "interaction.single-pointer.sandbox-pan"
     },
     {
@@ -423,10 +525,11 @@
       "gesture": "Drag across a plot to select the rows under it.",
       "alternatives": [
         "Click a row of the table to select it; Shift-click selects the run to another row.",
-        "Click the plot to focus the nearest row."
+        "Click the plot to focus the nearest row.",
+        "Select a run of rows: press the button, then the last row of the run; no key is held and nothing is dragged."
       ],
       "status": "met",
-      "note": "A run without a drag or a held modifier is not offered to a touch reader; interaction.single-pointer.observatory-run records it.",
+      "note": "The run without a drag or a held modifier is the Select a run of rows button (Prompt 278).",
       "pending": "interaction.single-pointer.observatory-run"
     },
     {
@@ -453,35 +556,50 @@
       "surface": "lab3d.camera",
       "gesture": "Drag the scene to orbit, wheel to zoom.",
       "alternatives": [
-        "The View select offers named views and the Projection select changes the projection; neither needs a drag.",
+        "The view pad under the view: four arrows that turn or move the view, and two that zoom.",
+        "The Look and Projection selects offer named views.",
         "Arrow keys orbit, Shift pans, + and - zoom."
       ],
-      "status": "gap",
+      "status": "met",
       "pending": "interaction.single-pointer.lab3d-orbit"
     },
     {
       "id": "observer.handle",
-      "surface": null,
+      "surface": "sandbox.observer",
       "gesture": "Drag the observer's handle on the sandbox canvas to change the viewing angle.",
-      "alternatives": [],
-      "status": "gap",
+      "alternatives": [
+        "The Position angle slider in every observing panel (js/observerControls.js) sets the same angle: the arrow keys step it, and one press on its track moves it."
+      ],
+      "status": "met",
       "pending": "interaction.single-pointer.observer-handle",
-      "note": "No numeric or keyboard control for the angle was found in index.html or js/lightCurve.js."
+      "note": "Prompt 155 looked in index.html and js/lightCurve.js and found no control; the slider is built by js/observerControls.js, which every observing panel mounts."
     },
     {
       "id": "window.move",
-      "surface": null,
+      "surface": "sandbox.windows",
       "gesture": "Drag the header of a pinned inspector card or the 3-D view window to move it; drag the 3-D window's corner to resize it.",
-      "alternatives": [],
-      "status": "gap",
+      "alternatives": [
+        "The Move button in the window's header: press it, then press where the top left corner goes.",
+        "With the Move button focused the arrow keys move the window (Alt a quarter of a step, Shift four).",
+        "The spacetime view's Size button does the same for the corner a drag pulls."
+      ],
+      "status": "met",
       "pending": "interaction.single-pointer.window-move"
+    },
+    {
+      "id": "spacetime.orbit",
+      "surface": "sandbox.spacetime",
+      "gesture": "Drag the spacetime view to orbit it, wheel to zoom, right-drag or two fingers to pan.",
+      "alternatives": [
+        "The pad under the view: turn, tilt, move and zoom buttons, each one press.",
+        "Reset reframes the active system."
+      ],
+      "status": "met",
+      "note": "Not found by Prompt 155: the listener is the vendored OrbitControls, which the pointer-site scan does not read. Registered by Prompt 278's walk."
     }
   ],
-  "unregistered": [
-    "Every other surface in the navigation inventory: Prompt 161 registers them and lists their failures as pending checks."
-  ],
   "dragSites": {
-    "about": "Every module under js/ that listens for pointermove, mousemove or touchmove, and what it is. A module not listed fails tests/interactionContract.test.js until it is registered here.",
+    "about": "Every module under js/ that listens for pointermove, mousemove or touchmove, and what it is. A module not listed fails tests/interactionContract.test.js until it is registered here. A drag a vendored library listens for (OrbitControls) is not seen by the scan: `vendored` names those by hand.",
     "sites": {
       "js/inspectorWindow.js": ["window.move"],
       "js/investigations.js": ["lesson.picker"],
@@ -505,7 +623,283 @@
         "exempt": "Marks the frame loop busy for a moment; not a gesture."
       },
       "js/ui.js": ["sandbox.throw", "sandbox.pan"],
-      "js/view3d.js": ["window.move"]
+      "js/view3d.js": ["window.move", "spacetime.orbit"]
+    },
+    "vendored": {
+      "js/view3d.js": ["window.move", "spacetime.orbit"],
+      "js/lab3d/view/scene.js": ["lab3d.orbit"]
     }
+  },
+  "inventory": {
+    "about": "The walk inventory (Prompt 278): one row for every surface of tools/navigation-inventory.json. e2e/a11ySweep.spec.js walks each row in English and in Spanish with real key presses: Tab from the top of the page until focus comes round (no trap, every stop named and on screen, every pressable control reached), then Tab to `reach` and `press`, which must have an effect a reader can see. `spanish: false` records a page that stays in English when Spanish is the stored choice.",
+    "exempt": {
+      "manual": "The printed manual is a PDF the browser's own viewer opens: it has no page of ours to walk."
+    },
+    "rows": [
+      {
+        "surface": "sandbox",
+        "path": "/",
+        "task": "Open the scenario browser.",
+        "reach": "#loadScenarioBtn",
+        "press": "Enter",
+        "spanish": true
+      },
+      {
+        "surface": "lab3d",
+        "path": "/3d/",
+        "task": "Play the system.",
+        "reach": "#l3-play",
+        "press": "Enter",
+        "spanish": true
+      },
+      {
+        "surface": "mission-lab",
+        "path": "/mission/lab/",
+        "task": "Compute the transfer.",
+        "reach": "#ml-go",
+        "press": "Enter",
+        "spanish": true
+      },
+      {
+        "surface": "scenario-studio",
+        "path": "/studio/",
+        "task": "Add a body to the scenario.",
+        "reach": "#st-body-add",
+        "press": "Enter",
+        "spanish": true
+      },
+      {
+        "surface": "library",
+        "path": "/library/",
+        "task": "Search the Library.",
+        "reach": "#libSearch",
+        "press": "type:kepler",
+        "spanish": true
+      },
+      {
+        "surface": "investigations",
+        "path": "/#investigations",
+        "task": "Open an investigation from the browser.",
+        "reach": "#investigationBrowserContent .inv-card",
+        "press": "Enter",
+        "spanish": true
+      },
+      {
+        "surface": "courses",
+        "path": "/course/",
+        "task": "Open the example course.",
+        "reach": "#ch-open-empty, #ch-open",
+        "press": "Enter",
+        "spanish": true
+      },
+      {
+        "surface": "observatory",
+        "path": "/observatory/",
+        "task": "Open a sample observation.",
+        "reach": "#obsOpen",
+        "press": "Enter",
+        "spanish": true
+      },
+      {
+        "surface": "experiments",
+        "path": "/experiments/",
+        "task": "Run the experiment.",
+        "reach": "#xpRun",
+        "press": "Enter",
+        "spanish": true
+      },
+      {
+        "surface": "sky-lab",
+        "path": "/sky/",
+        "task": "Choose an observing site.",
+        "reach": "#skySite",
+        "press": "ArrowDown",
+        "spanish": true
+      },
+      {
+        "surface": "compute",
+        "path": "/compute/",
+        "task": "Start the notebook.",
+        "reach": "#cpStart",
+        "press": "Enter",
+        "spanish": true
+      },
+      {
+        "surface": "catalog",
+        "path": "/catalog/",
+        "task": "Search the catalog.",
+        "reach": "#catSearch",
+        "press": "type:tess",
+        "spanish": true
+      },
+      {
+        "surface": "figure-builder",
+        "path": "/figure/",
+        "task": "Choose the figure's scenario.",
+        "reach": "#fbScenario",
+        "press": "ArrowDown",
+        "spanish": true
+      },
+      {
+        "surface": "my-work",
+        "path": "/my-work/",
+        "task": "Open the transfer to another device.",
+        "reach": "main a[href]",
+        "press": "Enter",
+        "spanish": true
+      },
+      {
+        "surface": "teaching",
+        "path": "/teaching/",
+        "task": "Follow the first section link.",
+        "reach": "main a[href]",
+        "press": "Enter",
+        "spanish": true
+      },
+      {
+        "surface": "instructors",
+        "path": "/instructors/",
+        "task": "Reach the unlock form and show the pass phrase field's text.",
+        "reach": "#togglePassword",
+        "press": "Enter",
+        "spanish": false
+      },
+      {
+        "surface": "submissions",
+        "path": "/instructors/submissions/",
+        "task": "Include written answers in the review.",
+        "reach": "#includeWritten",
+        "press": "Space",
+        "spanish": true
+      },
+      {
+        "surface": "evaluation",
+        "path": "/evaluation/",
+        "task": "Answer the first question of the record.",
+        "reach": "#setting-0",
+        "press": "Space",
+        "spanish": false
+      },
+      {
+        "surface": "composer",
+        "path": "/studio/lesson/",
+        "task": "Start a new investigation.",
+        "reach": "#cp-new",
+        "press": "Enter",
+        "spanish": true
+      },
+      {
+        "surface": "course-builder",
+        "path": "/studio/course/",
+        "task": "Load the example course.",
+        "reach": "#cb-example",
+        "press": "Enter",
+        "spanish": true
+      },
+      {
+        "surface": "course-packages",
+        "path": "/studio/course/packs/",
+        "task": "Make a package.",
+        "reach": "#pkMake",
+        "press": "Enter",
+        "spanish": true
+      },
+      {
+        "surface": "teaching-find",
+        "path": "/teaching/find/",
+        "task": "Filter by level.",
+        "reach": "#f-level",
+        "press": "ArrowDown",
+        "spanish": true
+      },
+      {
+        "surface": "teaching-adopt",
+        "path": "/teaching/adopt/",
+        "task": "Follow the first section link.",
+        "reach": "main a[href]",
+        "press": "Enter",
+        "spanish": true
+      },
+      {
+        "surface": "teaching-alignment",
+        "path": "/teaching/alignment/",
+        "task": "Open an aligned investigation.",
+        "reach": "main a[href]",
+        "press": "Enter",
+        "spanish": true
+      },
+      {
+        "surface": "teaching-kit",
+        "path": "/teaching/kit/",
+        "task": "Read a pasted link.",
+        "reach": "#kitGo",
+        "press": "Enter",
+        "spanish": true
+      },
+      {
+        "surface": "teaching-activities",
+        "path": "/teaching/activity/orbital-speed/",
+        "task": "Open the activity.",
+        "reach": "main a[href]",
+        "press": "Enter",
+        "spanish": true
+      },
+      {
+        "surface": "teaching-investigations",
+        "path": "/teaching/investigation/a-binary-stars-orbit/",
+        "task": "Open the investigation.",
+        "reach": "main a[href]",
+        "press": "Enter",
+        "spanish": true
+      },
+      {
+        "surface": "model",
+        "path": "/model/",
+        "task": "Follow the first contents link.",
+        "reach": "main a[href]",
+        "press": "Enter",
+        "spanish": false
+      },
+      {
+        "surface": "validation",
+        "path": "/validation/",
+        "task": "Run the checks in this browser.",
+        "reach": "#valRunBtn",
+        "press": "Enter",
+        "spanish": false
+      },
+      {
+        "surface": "glossary",
+        "path": "/glossary/",
+        "task": "Follow the first link.",
+        "reach": "main a[href]",
+        "press": "Enter",
+        "spanish": false
+      },
+      {
+        "surface": "kernel-diagnostics",
+        "path": "/lab3d/",
+        "task": "Run the chosen problem.",
+        "reach": "#lb-go",
+        "press": "Enter",
+        "spanish": true
+      },
+      {
+        "surface": "mission-diagnostics",
+        "path": "/mission/",
+        "task": "Compute the transfer.",
+        "reach": "#mn-transfer-go",
+        "press": "Enter",
+        "spanish": true
+      },
+      {
+        "surface": "history-original",
+        "path": "/history/original/",
+        "task": "Open the settings.",
+        "reach": "#settingsBtn",
+        "press": "Enter",
+        "spanish": false
+      }
+    ]
   }
 }

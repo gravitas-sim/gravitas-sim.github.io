@@ -64,10 +64,14 @@ export function createTable(table, hooks) {
       e.preventDefault();
       selection.toggle(f, 'table');
       anchor = f;
+      // The page tells the other views; this one marks its own rows. Without
+      // it the count said "1 selected" and no row did (Prompt 278's walk).
+      refresh();
       hooks.announce(hooks.describe(f));
       return;
     } else if (e.key === 'Escape') {
       selection.clear('table');
+      refresh();
       return;
     } else return;
     e.preventDefault();

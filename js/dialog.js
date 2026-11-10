@@ -51,6 +51,10 @@ const FOCUSABLE = [
   'input:not([disabled]):not([type="hidden"])',
   'select:not([disabled])',
   'textarea:not([disabled])',
+  // A disclosure's summary is a Tab stop of its own. Left out, a dialog that
+  // ended in one wrapped a press early and the summary was never reached
+  // (the last card of the investigation browser; found by Prompt 278's walk).
+  'details > summary:first-of-type',
   '[tabindex]:not([tabindex="-1"])',
 ].join(',');
 
