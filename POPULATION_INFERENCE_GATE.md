@@ -1,5 +1,7 @@
 # The population inference gate
 
+**Follow-up, 2026-11-10 (section 10).** The follow-up Carl approved on 2026-11-07 has run: the new leg D8b, the penalty-convergence study with its new legs, and the fetch for requests R1 to R4. Everything below this note down to section 9 is Part A as it was written and is not edited. By the follow-up's committed function the outcome is **A through D8b** and **penalty convergence passes** (22 rows: 12 pass, 0 fail, 7 reported, 3 not run); Part A's verdict by Part A's function stays **B**, D8 stays failing and labelled, X1 to X3 are still NOT RUN, and the consumers condition is **not met**. Nothing is built.
+
 Roadmap III, Prompt 264, Part A (tranche T5, authorized by Checkpoint V's recorded outcome CONTINUE AS PLANNED, register row D-R10-254-01 and `DECISIONS_2026-11-06.md`; the hard prerequisites 154 (D-R10-31), 229 (verdict A, D-R10-229-90) and 262 (verdict B, slice B-KM, #561) are merged on `v3`).
 Prompt 229 built a likelihood for planet occurrence on one grid; the general problem is a population's distribution inferred from a sample with a selection function and per-object uncertainties. This gate commits one
 likelihood for both: binned rates, an exposure built from Prompt 154's selection object, per-object Gaussian uncertainties as a convolution over bins, the maximum with profile-likelihood intervals, a floor below which a bin is
@@ -156,3 +158,90 @@ Labels: `invisible` and `documentation`.
 2. AM3 corrected my validator's P2 status to the committed bound after the first run (section 4). Confirm, or reverse it (the penalty would then not be admitted).
 3. The penalised fit missed its gradient criterion in 26 of 400 replicates; should a Part B fix the criterion (relative to the count) and state that, or is the penalty to wait for the follow-up?
 4. Requests R1 to R4: should your session fetch them, and may R4's printed output be read (running it is not asked)?
+
+## 10. The follow-up: D8b, the penalty's convergence, and the fetch (2026-11-10)
+
+Documentation and fixtures only. The contract is `tests/fixtures/population/followup-thresholds.json`; the pinned numbers are `followup-oracle-results.json`, `followup-first-stage-results.json`, `followup-results.json`, `followup-failed-legs.json` (empty), `followup-sources.json` and a labelled post-hoc diagnostic, `followup-diagnostic-crossfeed.json`. The follow-up's oracle (`tools/population-oracle/oracle_followup.py`), its sample writer, its validator and one added option of the prototype are on `spike/population-inference-followup` (cut from `spike/population-inference-gate` at 48d21711, head 1245c18b), never merged. No file of Part A was edited and no bound of Part A moved; the record's test holds Part A's six fixtures by their sha256. Node 22.23.4 (34 s of CPU); Python 3.9.6 with numpy 1.26.4 and scipy 1.13.1 under `python3 -E` (101 s). Two complete runs of the stream agree row for row except the CPU time.
+
+### 10.1 What each item is, where it was approved, and the consumers condition
+
+Stated in the contract before any run (`whatThisIs`):
+
+- **D8b** is the leg section 4 names: the coverage of the reported statement over all outcomes, in the bins of U3 where zero estimates occur. Approved in `DECISIONS_2026-11-07.md`, 264 rulings, item 1, "before any Part B".
+- **The penalty-convergence study** is the diagnosis of the penalised fits that missed their gradient criterion (2 of 6 reference fits, 26 of 400 replicates of P3; section 3) and a new leg with its bound committed first. Approved in item 3 of the same rulings: "no Part B until then".
+- **The data legs** are requests R1 to R4 of section 7 and the authentic legs X1 to X3 that depend on them. Item 4 of the same rulings: fetched by the follow-up under Carl's own words of 2026-11-07, and X3 stays NOT RUN because it needs a cited implementation to be run.
+- **The consumers condition.** A consumer of this kernel may be built only when all of these hold: (1) the letter authorizes the scope the consumer uses (B, the counts path, since Part A; anything that takes a per-object sigma needs "A through D8b" and Carl's ratification of it); (2) for the smoothing toggle, the convergence legs pass; (3) Part B has been built; (4) Carl lifts the consumers rule for this kernel, which has no place in the recorded release order yet; (5) a sentence about a real survey or a real cluster also needs its authentic leg to have run and passed.
+
+The launching session relayed Carl's ruling to go with the recorded recommendation; it was not heard directly here, so every row this follow-up adds to the register is DELEGATED.
+
+### 10.2 The order
+
+| Commit | What | Before |
+| --- | --- | --- |
+| `87bc8002` | `followup-thresholds.json`, alone: the three items and the consumers condition, 22 legs with their bounds, the rule every bound follows, the seeds, the measurement definitions, the limits of a repaired stopping rule, the outcome function, eight decisions | any follow-up code, sample, fetch or number |
+| `9af8656a` | amendment AM-F1 (which optimum a penalised comparison uses, how per-sample output is pinned, how sameness of the copied functions is measured) | the oracle's first run |
+| spike `84054ef5`; `cb287f88` | the oracle, then its first stage pinned (Part A's reference fits and its own numpy ensemble of U3c) | any Gravitas-side code of the follow-up |
+| spike `747451f9`; `94c7f8cf` | the estimator-free sample writer, then the oracle's second stage pinned (the stream samples of P3, P3c and P4c) | the prototype ran on any sample of the follow-up |
+| `a41016cd`, spike `037302bc`, `120f3f93`, `c72a25e3` | amendment AM-F2 (Part A's P4 samples for the diagnostic's classes; the oracle left as it ran), stage 2b pinned, the oracle pinned again (identical) | any validator run |
+| spike `7517f4b5`, `04611924`; `29ed11b9` | the validator's first stage (D8b and the diagnostic, default stopping rule only), run twice and pinned | the repaired rule existed |
+| `a8155526`, `df2071c3` | amendment AM-F3: the diagnosis and the repaired stopping rule with its constants; the oracle pinned again (identical) | any fit under the repaired rule |
+| spike `eab15e80`; `b8afded5` | the option and the validator's second stage, run twice; the synthetic rows pinned | the fetch |
+| `2a24ed98`, `454c8f41` | the fetch recorded (`followup-sources.json`) and amendment AM-F4: no contract fixed, nothing computed from a fetched file; the oracle pinned again (identical) | the validator's final run |
+| spike `1245c18b`; `93a3f197` | the three authentic rows; the final stream, twice | |
+
+What had been seen before the contract was committed is listed in it (`seenBeforeCommitting`): Part A's record in full, the spike's code read and not run, and one hand calculation about a nominal 0.95 on a count of 5. Because Part A's record already gives the unconditional coverage of the same bins on Part A's draws (0.94975), **D8b is judged on new seeds only**.
+
+### 10.3 The rule every bound follows
+
+No bound was chosen here. A new leg that measures the quantity of a Part A leg, on other statements or other draws, carries that leg's committed bound: D8b carries C3's interval [0.90, 0.99] (it is C3's quantity on four of C3's bins) and a lowest bin of at least 0.90; the share of penalised fits that miss the stopping rule carries C6's 0.005; agreement of a penalised estimate with the oracle carries P2's 1e-4; the penalty's benefit carries P3's 0.9; two routes of the prototype that must agree carry the continuity tolerance 1e-5. D8's own 0.94 belonged to a conditional quantity and is not inherited; whether it is reached is reported.
+
+### 10.4 Results
+
+22 rows: **12 pass, 0 fail, 7 reported, 3 not run.**
+
+| Group | Legs | Measured | Status |
+| --- | --- | --- | --- |
+| integrity | F1 every sha256 and the stream samples byte for byte; F2 the follow-up's oracle on Part A's pinned reference fits; F3 the validator with the default rule on Part A's C3, P2 and P3 | equal; 0 in every comparison; C3's eight bins and 114 zero statements with 71 covered, P2's six differences with 2 not converged, P3's 374 used, 26 dropped and its ratio, all exactly | pass |
+| D8b | premise (zero estimates occur among the statements judged); the prototype on U3c, 5,000 replicates on new seeds, bins 0, 5, 6 and 7; its lowest bin; the oracle's own implementation on its own numpy ensemble, 1,000 replicates | 534 and 105 zero statements; **18,990 of 20,000 covered, 0.9495** (bins: 0.9452, 0.9614, 0.9498, 0.9416); 0.9416; **3,814 of 4,000, 0.9535** (bins: 0.950, 0.963, 0.960, 0.941); bound [0.90, 0.99] and at least 0.90 | pass |
+| penalty, oracle | PO1 the oracle's BFGS against its Newton iteration from a flat start, on 4,006 fits | 1.6e-7 in theta (bound 1e-6) | pass |
+| penalty, repaired rule | PC1 the share of fits that miss the rule over the six reference fits, P3c and P4c at kappa 1, 4 and 16; PC2 against the oracle on 2,806 fits, every fit counted; PC3 P3's measurement on new seeds; PC4 against the default rule where that converged (378 fits) | 0 of 2,406 (at most 6 iterations); 9.5e-7 (bound 1e-4); 0.264 over all 400 replicates, none dropped (bound 0.9); 3.0e-7 (bound 1e-5) | pass |
+| reported | D8b.r1 the conditional share; D8b.r2 the cross-feed; D8b.r3 the exact counts path; PD1 to PD3 the diagnostic; PD4 uniqueness | below | reported |
+| authentic | X1, X2, X3 | requests in `followup-sources.json` | NOT RUN |
+
+**D8b, read with its reported rows.** Over all outcomes the statement of the bins where zero estimates occur covers 0.9495 in the prototype and 0.9535 in the oracle, at a nominal 0.95. The conditional share that D8 measured is again low, 0.556 (297 of 534) and 0.600 (63 of 105): a limit is built to cover over all outcomes, not among those that came out zero. No zero estimate occurred outside the four bins. Both pooled coverages and the lowest bin also reach D8's 0.94, which was not the bound. On the counts path, where the rule is Prompt 229's, the exact coverage by summing the Poisson distribution is 0.9796 at a true count of 5 and 0.9792 at 7.08, the same in the prototype and in `scipy.stats` to 7e-16. The oracle's L-BFGS-B reported an unsuccessful stop in 160 of its 1,000 unpenalised fits; its statements are compared with the prototype's one by one in the next paragraph.
+
+**A finding from the cross-feed (reported, not a leg).** Fed the oracle's 1,000 samples, the prototype gives the same status and the same covering flag in all 4,000 statements, and limits equal to 1.2e-11. In 4 statements its deviance at the truth differs from the oracle's by more than 1e-6 (3 by more than 1e-3, the largest 0.027). A third calculation (EM to a fixed point, and `scipy.optimize` trust-constr from three starts; `followup-diagnostic-crossfeed.json`) shows the oracle is right: where a bin that is zero at the maximum must rise under the constraint, the prototype starts it at 1e-9, stops on the change of the log-likelihood before it has grown, and reports a deviance that is too large. No flag changed here and the effect on a coverage of 20,000 statements is below what the ensemble resolves, but it is a defect of the prototype's profile deviance and it makes an interval slightly too narrow where it applies. It is not repaired here (it is outside the approved scope); section 10.7 recommends a leg for it before a Part B takes the per-object scope.
+
+**The diagnosis of the penalised fit.** Every penalised fit of Part A that missed its criterion is at the optimum: the 28 of PD1 (reference fits S1 at kappa 1 and S3 at kappa 16, and 26 replicates of P3) lie within 3.4e-8 of the oracle's optimum in theta, and the 114 of P4's 1,200 fits (43, 43 and 28 at kappa 1, 4 and 16; N5 had recorded no count) within 1.1e-7. Each ended at the cap of 1,000 iterations with a positive definite Hessian, a damping grown by many decades and a Newton decrement below the rounding of the objective (at most 0.77 of the committed floor, at most 0.12 in all but one fit). The fits that met the criterion did so in at most 6 iterations. The fit reaches the optimum in a few steps and then cannot stop: the criterion is an absolute 1e-10 on a gradient that the step's own acceptance test (the objective must not rise) cannot drive lower, because one more step changes the objective by less than its rounding. The oracle shows the same thing from the other side: its BFGS flags an unsuccessful stop in most fits and its Newton iteration, which also compares objectives, ran to its cap of 400 in some, while the two agree to 1.6e-7. The Hessian of the unpenalised term has a negative eigenvalue at the optimum in 24 of the 4,006 fits (the objective is not convex in the log rate in general); the full Hessian is positive definite in all of them and two algorithms from two starts reach the same point.
+
+**The repaired stopping rule (amendment AM-F3, before its first run).** Requested by `penalty.stop = 'rounding-floor'` on the spike and off by default: the fit ends as converged when the default criterion holds, or when the Newton decrement is at most 64 x 2^-52 x max(1, |objective|) and the largest gradient component is at most 1e-6 per listing. Nothing else changes (the objective, the start, the step, its acceptance, the damping, the cap). Judged on seeds the prototype had not used: no fit of 2,406 misses it, 1,809 end by the new clause and 597 by the default, the estimates are within 9.5e-7 of the oracle, and where the default rule converged the two estimates agree to 3.0e-7. P3's ratio is 0.264 over all 400 replicates with none dropped (Part A: 0.258 over the 374 that converged).
+
+### 10.5 The outcome, by the committed function
+
+- **A through D8b**: D8b passes with F1 to F3, and Part A's record still shows BASE passing and every leg of the per-object-uncertainty set other than D8 passing. It reads: the per-object-uncertainty set passes its committed legs, the limit of a zero estimate being carried by D8b in place of D8, which stays failing and labelled. It is evidence in a DELEGATED row, not permission.
+- **Penalty convergence passes** (F1 to F3, PO1, PC1 to PC4). Part A's admission of the toggle, with its AM3 note, is not recomputed.
+- **Part A's verdict by Part A's function stays B** and `results.json` and `failed-legs.json` are untouched: D8.noZeroRule fails at 0.623 against 0.94.
+- **Tier (e) is NOT RUN** on all three legs. No sentence in the product about a real survey or a real cluster may rest on this gate.
+
+**The consumers condition is not met.** Of its five parts: (1) holds for the counts path since Part A and, for the per-object scope, as unratified evidence only; (2) holds as evidence; (3) does not hold, Part B is not built and is not begun here; (4) does not hold, the consumers rule is not lifted and this kernel has no place in the release order; (5) does not hold, X1 and X2 are NOT RUN. No panel, lesson or viewer was built.
+
+### 10.6 The fetch (requests R1 to R4)
+
+Public files went to `scratch-data/population264/` outside every repository, one directory per source, each with its sha256, size, the licence page as read and the retrieval date of 2026-11-10 (`followup-sources.json`). All are arXiv e-prints under arXiv's non-exclusive licence to distribute, which grants a reader no reuse right: cite-only, read as text, nothing redistributed, nothing run. No published number is in a fixture except the descriptions of what each file holds, read from the file named.
+
+- **R1, in part.** The e-print of one occurrence calculation (arXiv 1501.01623) holds its candidates table (period and radius with errors) and its occurrence table: seven radius bins by five period bins, each cell with its errors and with the fraction of injected planets recovered in the cell. The e-print of the paper whose Table 1 that calculation names for its false-positive probability (arXiv 1301.0842) was fetched for the stated reliability. A third e-print (arXiv 1304.0460) was examined first and set aside: its completeness and occurrence are printed only inside figures.
+- **X1 is NOT RUN.** An exposure is the recovered fraction times the number of stars times the transit probability of the sample's stars. The last needs the stars' radii and masses, which the paper takes from a stellar catalogue it does not print; the archive that serves that catalogue answered HTTP 503 ("Under Maintenance") twice. A transit probability made up from the one median radius the paper states and a guessed mass would be this session's number, so no contract was written and nothing was computed from the files. The exact requests are in `followup-sources.json`: the stellar rows from the archive, the paper's electronic-edition tables, then an amendment fixing the contract before any estimate. The paper's radius bins are 0.5 Earth radii wide against radius errors of a few tenths, so the kernel's own resolution record is part of what that run must report.
+- **R2 not filled; X2 is NOT RUN.** The catalogue service did not connect. Nothing was kept and nothing read.
+- **R3 filled.** The printed multiple-part power-law form of an initial mass function with its mass ranges (arXiv astro-ph/0009005, the first two numbered equations of the e-print's source). No leg reads it; it is for a later lesson.
+- **R4 not filled; X3 is NOT RUN.** The calculation of R1 names no implementation of a binned-rate likelihood (it divides a smoothed map of the candidates by a smoothed map of the search completeness), so there was nothing to name from its documentation; and running one is not permitted in any case.
+
+### 10.7 Decisions taken, and questions for Carl with the recorded recommendation
+
+Decisions (all in the contract before the run they affect): D8b judged on new seeds; C3's interval inherited and not D8's 0.94; the repaired rule fixed after the diagnosis, inside committed limits, and judged on other seeds; the cross-feed and the exact counts coverage as reported rows; the authentic contracts by amendment after a fetch and before any estimate; four amendments, none moving a bound. Two corrections of this session's own wording are on record: a commit message gave P4's count as 129 where the pinned file says 114 (AM-F3), and AM-F3 gave the decrement as 0.054 of the floor in all but one fit where the file says at most 0.12 (AM-F4).
+
+1. **Ratify "A through D8b"?** Recommended: yes, as the standing of the per-object-uncertainty set, with question 2 attached.
+2. **The prototype's constrained fit** stops early where a zero bin must rise (4 of 4,000 statements, up to 0.027 in the deviance, no flag changed). Recommended: before a Part B takes the per-object scope, a new leg committed first: the cross-feed as a judged leg (the deviance at the truth against the oracle's on new seeds), with the constrained fit's start repaired on the spike.
+3. **D8b's bound.** It carries C3's interval by the stated rule; D8's 0.94 is also reached (0.9495, 0.9535, lowest bin 0.9416). If 0.94 should have been the bound, that is a reset for Carl to record; the leg would still pass.
+4. **The stopping rule in a Part B.** Recommended: the repaired rule as the penalised fit's only rule, stated in the kernel document.
+5. **The data legs.** Recommended: a short session when the archive and the catalogue service answer, with the requests of `followup-sources.json`; X3 stays NOT RUN unless running a cited implementation is permitted.
+6. **Part B and the consumers rule** remain Carl's. Nothing here begins either.
