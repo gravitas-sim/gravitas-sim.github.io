@@ -43,6 +43,7 @@ export const P4_G = Array.from({ length: 10 }, (_, j) => (j === 4 ? 0.6 : 0.1));
 
 export const SETS = {
   P3: { file: 'p3-stream.json', baseSeed: 264800, E: P3_E, G: P3_G },
+  P4: { file: 'p4-stream.json', baseSeed: 264850, E: P4_E, G: P4_G },
   P3c: { file: 'p3c-stream.json', baseSeed: 2648000, E: P3_E, G: P3_G },
   P4c: { file: 'p4c-stream.json', baseSeed: 2648500, E: P4_E, G: P4_G },
 };

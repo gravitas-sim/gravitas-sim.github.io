@@ -457,16 +457,19 @@ if stage == "stage1":
         "countsExactAt5": counts_exact(5.0),
         "cpuSeconds": time.process_time() - t_start,
     }
-elif stage == "stage2":
+elif stage in ("stage2", "stage2b"):
     out = json.loads(open(out_path, "rb").read())
     for k, v in head.items():
-        if k in out and out[k] != v and k != "copiedVerbatim":
+        if k in out and out[k] != v and k not in ("copiedVerbatim", "followupThresholdsSha256"):
             raise SystemExit("stage 2 does not see the inputs stage 1 pinned: %s" % k)
     sets = {
         "P3": {"file": "p3-stream.json", "E": 12.0, "kappas": [4.0]},
         "P3c": {"file": "p3c-stream.json", "E": 12.0, "kappas": KAPPAS},
         "P4c": {"file": "p4c-stream.json", "E": 60.0, "kappas": KAPPAS},
     }
+    if stage == "stage2b":
+        # amendment AM-F2: Part A's P4 ensemble, for PD3's classes; stages 1 and 2 are left as pinned
+        sets = {"P4": {"file": "p4-stream.json", "E": 60.0, "kappas": KAPPAS}}
     edges = np.arange(0.0, 11.0)
     r = np.ones(10)
     res = {}
@@ -502,8 +505,9 @@ elif stage == "stage2":
         po1 = max(po1, rec["maxAbsThetaBfgsVsNewton"])
         thetas[name] = th_all
         res[name] = rec
-    th_sha = write_json(os.path.join(scratch, "oracle-penalised-thetas.json"), thetas)
-    out["stage2"] = {"sets": res, "PO1stream": po1, "thetasFile": "oracle-penalised-thetas.json", "thetasSha256": th_sha, "cpuSeconds": time.process_time() - t_start}
+    th_name = "oracle-penalised-thetas.json" if stage == "stage2" else "oracle-penalised-thetas-p4.json"
+    th_sha = write_json(os.path.join(scratch, th_name), thetas)
+    out[stage] = {"sets": res, "PO1stream": po1, "thetasFile": th_name, "thetasSha256": th_sha, "followupThresholdsSha256": sha(fthr_bytes), "cpuSeconds": time.process_time() - t_start}
 else:
     raise SystemExit("unknown stage")
 
