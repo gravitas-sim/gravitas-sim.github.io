@@ -688,6 +688,13 @@
       "student": false
     },
     {
+      "file": "NUMERICS_INSTRUMENTS.md",
+      "kind": "gate",
+      "purpose": "The numerics instruments: five kernels the numerical-methods investigations need, their independent oracle, failed legs and verdict (follow-up to Prompt 270).",
+      "owner": 270,
+      "student": false
+    },
+    {
       "file": "NUMERICAL_INVESTIGATIONS.md",
       "kind": "record",
       "purpose": "Numerical-methods investigations in the application: the record of what the tree has, why none was built and what a build needs (Prompt 270).",

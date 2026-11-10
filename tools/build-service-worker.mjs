@@ -253,6 +253,10 @@ export const NEVER_PRECACHED = [
   // The ensemble runner (Prompt 265, EXPERIMENT_ENSEMBLES.md): the record, the kinds, the summary, the pool client and its Worker. No shipped
   // module imports them (the panel and the lessons wait for Carl, D-R10-265-03), so no page can fetch one and an install has no use for them.
   /^js\/experiments\/ensemble\//,
+  // The numerics instruments (NUMERICS_INSTRUMENTS.md, the approved follow-up to Prompt 270): the energy ledger, the step history, the ensemble divergence
+  // rate, the small-series Fourier periodogram and the held-out interpolation error. No shipped module imports them (the lessons are a later PR and wait
+  // for passed instruments), so no page can fetch one and an install has no use for them. Their first adopter deletes this entry.
+  /^js\/kernels\/numerics\//,
   // The data kinds (Prompt 157, DATA_PACKS.md): the image, sequence and grid
   // contracts, the bounded local FITS reader and its Worker. The first adopter
   // is the image marks instrument (Prompt 179), which takes the contract and
