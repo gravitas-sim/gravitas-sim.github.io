@@ -77,6 +77,7 @@ export const EN_COURSEHOME = {
     'Kept on this device. It is in the Library and in My work.',
   'courseHome.keep.dropped': 'No longer kept.',
   'courseHome.keep.failed': 'This browser did not keep that.',
+  'courseHome.week': 'Open as a first week on Home',
   'courseHome.made':
     'Version {version} of this course, made with Gravitas platform {platform}.',
   'courseHome.printNote':

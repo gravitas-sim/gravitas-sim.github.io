@@ -30,6 +30,8 @@
       .kit-handout code { word-break: break-all; }
       .kit-start { display: flex; gap: var(--space-4); align-items: center; flex-wrap: wrap; }
       .kit-start svg { width: 8rem; height: 8rem; }
+      .coll-week { margin: var(--space-4) 0; }
+      .coll-week input[type='checkbox'] { flex: none; width: 24px; height: 24px; margin: 0; }
       @media print {
         body[data-print='handout'] .kit-noprint,
         body[data-print='handout'] .gs-shell,
@@ -112,6 +114,7 @@ try {
       <section id="collections" aria-labelledby="collH">
         <h2 id="collH" data-k="coll.h">A collection of saved items</h2>
         <p class="ui-note" data-k="coll.note">Save investigations, scenarios and datasets with the Save button on a Library item page, then order them here, add a sentence to each and make one link or file. Your students can keep it, and it shows in their Library and in My work. An older build of Gravitas, such as 2.0.0, cannot open a collection.</p>
+        <p class="ui-note" data-k="coll.week">A collection of up to seven items can be a first week. Tick “First week” below and its link opens Home showing only that list, in order, with the place to continue marked, the introduction inside its first item and the five destinations’ names. A student leaves it with one press, and it ends by itself when the list is finished. For those students you can also choose whether the “More” sections of the investigation and instrument panels start open or shut; a student can always open or fold them.</p>
         <button id="kitCollOpen" type="button" class="ui-button" aria-expanded="false" aria-controls="kitCollections" data-k="coll.open">Make a link from what I saved</button>
         <div id="kitCollections" hidden></div>
       </section>

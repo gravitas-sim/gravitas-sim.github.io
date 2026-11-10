@@ -511,6 +511,7 @@
     "home": {
       "doors": 5,
       "firstWeekLinks": 4,
+      "firstWeekItems": 7,
       "countedLinks": 0
     },
     "library": {

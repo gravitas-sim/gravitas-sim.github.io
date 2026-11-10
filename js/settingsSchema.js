@@ -22,7 +22,7 @@
 
 import { INTEGRATORS } from './physics.js';
 import { setReadoutDigits, setUnitMode } from './units.js';
-import { KEY_COURSE_LEVEL, KEY_DISCLOSURE } from './names.js';
+import { KEY_COURSE_LEVEL, KEY_DISCLOSURE, KEY_FIRST_WEEK } from './names.js';
 
 /**
  * The sections, in the panel's order. An `advanced` section sits inside the
@@ -574,9 +574,24 @@ const readMore = () => {
 };
 
 /**
+ * What a first-week collection says of More, while its mode is on (Prompt
+ * 277): the `mo` of the record Home keeps (js/library/firstWeek.js). It is
+ * 167's field on a collection, so it speaks for the panels an activity's does.
+ */
+const weekMore = surface => {
+  if (surface !== 'lesson' && surface !== 'tool') return undefined;
+  try {
+    return JSON.parse(window.localStorage?.getItem(KEY_FIRST_WEEK))?.mo;
+  } catch {
+    return undefined;
+  }
+};
+
+/**
  * Whether a surface's More starts open. What the reader last chose comes
  * first, since they can always open everything or fold it again; then what an
- * activity says (`'open'` or `'shut'`); then the depth's default.
+ * activity says (`'open'` or `'shut'`), or failing that the first-week
+ * collection the reader is in; then the depth's default.
  * @param {string} surface - 'lesson', 'tool', 'plot' or 'settings'
  * @param {string} [depth] - 'core', 'quantitative' or 'advanced'
  * @param {string} [declared] - An activity's `'open'` or `'shut'`
@@ -585,7 +600,8 @@ const readMore = () => {
 export function moreOpen(surface, depth, declared) {
   const kept = readMore()[surface];
   if (kept === 0 || kept === 1) return kept === 1;
-  if (declared === 'open' || declared === 'shut') return declared === 'open';
+  const said = declared ?? weekMore(surface);
+  if (said === 'open' || said === 'shut') return said === 'open';
   return moreDefault(depth);
 }
 

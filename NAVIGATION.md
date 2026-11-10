@@ -158,6 +158,7 @@ Lowering one is the work of the prompt that earns it; raising one needs a decisi
 | `footer.links` | 3 |
 | `home.doors` | 5 |
 | `home.firstWeekLinks` | 4 |
+| `home.firstWeekItems` | 7 |
 | `home.countedLinks` | 0 |
 | `library.kinds` | 6 |
 | `library.formats` | 15 |

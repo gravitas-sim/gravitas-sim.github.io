@@ -162,6 +162,9 @@ export async function measure() {
     home: {
       doors: (homeFragment.match(/class="wel-door" data-dest=/g) ?? []).length,
       firstWeekLinks: (firstWeek.match(/<a |data-action="/g) ?? []).length,
+      // The most a first-week mode lists (Prompt 277): the format's own limit.
+      firstWeekItems: (await import('../js/course/pack.js'))
+        .MAX_FIRST_WEEK_ITEMS,
       countedLinks: (
         homeFragment.match(
           /\(\d+\)|data-slot="scenario-count"|data-lesson-count/g
@@ -443,14 +446,58 @@ export function renderHomeDestinations(inv) {
   return `<div class="wel-doors">\n${cards.join('\n')}\n</div>`;
 }
 
-/** Home's fragment with its destinations rewritten. */
+/**
+ * The introduction's second screen (Prompt 277): each destination's name, its
+ * one line and its one action, from the inventory, so the introduction and the
+ * five places below it never say two things.
+ * @param {object} inv - The inventory
+ * @returns {string} The block between the destinations:orient markers
+ */
+export function renderOrientDestinations(inv) {
+  const rows = inv.destinations.map(d => {
+    const enter = d.id === 'explore' ? ' data-action="enter"' : '';
+    return `<li><strong>${both(d)}</strong> <span>${both(d.says)}</span> <a href="${d.first.path}"${enter}>${both(d.first)}</a></li>`;
+  });
+  return `<ul class="wel-orient-places">\n${rows.join('\n')}\n</ul>`;
+}
+
+/**
+ * The first-week mode's way to everything else (Prompt 277): the five
+ * destinations' names and nothing more.
+ * @param {object} inv - The inventory
+ * @returns {string} The block between the destinations:week markers
+ */
+export function renderWeekDestinations(inv) {
+  const rows = inv.destinations.map(d => {
+    const enter = d.id === 'explore' ? ' data-action="enter"' : '';
+    return `<li><a href="${d.first.path}"${enter}>${both(d)}</a></li>`;
+  });
+  return `<ul>\n${rows.join('\n')}\n</ul>`;
+}
+
+/** The three blocks of Home that are written from the inventory. */
+export const HOME_BLOCKS = [
+  [HOME_MARKS, renderHomeDestinations],
+  [
+    ['<!-- destinations:orient -->', '<!-- /destinations:orient -->'],
+    renderOrientDestinations,
+  ],
+  [
+    ['<!-- destinations:week -->', '<!-- /destinations:week -->'],
+    renderWeekDestinations,
+  ],
+];
+
+/** Home's fragment with its destinations rewritten, in each place it names them. */
 export function withHomeDestinations(doc, inv) {
-  const [open, close] = HOME_MARKS;
-  const at = doc.indexOf(open);
-  const end = doc.indexOf(close);
-  if (at < 0 || end < at)
-    throw new Error(`${HOME} lacks the destinations markers`);
-  return `${doc.slice(0, at + open.length)}\n${renderHomeDestinations(inv)}\n${doc.slice(end)}`;
+  let out = doc;
+  for (const [[open, close], render] of HOME_BLOCKS) {
+    const at = out.indexOf(open);
+    const end = out.indexOf(close);
+    if (at < 0 || end < at) throw new Error(`${HOME} lacks ${open}`);
+    out = `${out.slice(0, at + open.length)}\n${render(inv)}\n${out.slice(end)}`;
+  }
+  return out;
 }
 
 async function main(command) {

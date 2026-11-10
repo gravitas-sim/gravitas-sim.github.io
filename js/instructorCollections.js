@@ -80,6 +80,10 @@ export async function mountMaker(host) {
     items: have ? JSON.parse(JSON.stringify(itemsOfCollection(have))) : [],
     title: { en: '', es: '' },
     summary: { en: '', es: '' },
+    // A first week (Prompt 277): Home shows this list alone, and what it says
+    // of the panels' More sections ('' leaves them to the depth).
+    week: false,
+    more: '',
     link: '',
   };
   const nameOf = item => {
@@ -129,6 +133,9 @@ export async function mountMaker(host) {
       locales: spanish ? ['en', 'es'] : ['en'],
       pinning: 'compatible',
       profile: 'collection',
+      ...(state.week
+        ? { firstWeek: true, ...(state.more ? { more: state.more } : {}) }
+        : {}),
       title: withEsOf(title) ?? { en: '' },
       ...(summary ? { summary: withEsOf(summary) } : {}),
       units: [
@@ -157,6 +164,8 @@ export async function mountMaker(host) {
       en: host.querySelector('[data-f="summary.en"]').value,
       es: host.querySelector('[data-f="summary.es"]').value,
     };
+    state.week = host.querySelector('#coll-week').checked;
+    state.more = host.querySelector('#coll-more').value;
     host.querySelectorAll('[data-item]').forEach((row, i) => {
       const it = state.items[i];
       it.note = {
@@ -318,6 +327,53 @@ export async function mountMaker(host) {
         return row;
       })
     );
+    /** The first-week choice, and what it says of More. */
+    const week = () => {
+      const box = el('input', {
+        id: 'coll-week',
+        type: 'checkbox',
+        checked: state.week,
+      });
+      const more = el(
+        'select',
+        { id: 'coll-more', className: 'ui-select', disabled: !state.week },
+        ...[
+          ['', L('As the depth sets them', 'Según la profundidad')],
+          ['open', L('Open', 'Abiertas')],
+          ['shut', L('Shut', 'Cerradas')],
+        ].map(([value, textContent]) => el('option', { value, textContent }))
+      );
+      more.value = state.more;
+      box.onchange = () => {
+        more.disabled = !box.checked;
+      };
+      return el(
+        'fieldset',
+        { className: 'coll-week' },
+        el('legend', { textContent: L('First week', 'Primera semana') }),
+        el(
+          'label',
+          { htmlFor: 'coll-week', className: 'ui-choice' },
+          box,
+          L(
+            'The link opens Home showing only this list (up to seven items)',
+            'El enlace abre el inicio mostrando solo esta lista (hasta siete elementos)'
+          )
+        ),
+        el(
+          'div',
+          { className: 'ui-field' },
+          el('label', {
+            htmlFor: 'coll-more',
+            textContent: L(
+              'Start the “More” sections of the panels',
+              'Cómo empiezan las secciones «Más» de los paneles'
+            ),
+          }),
+          more
+        )
+      );
+    };
     const status = el('p', { className: 'ui-hint' });
     status.setAttribute('role', 'status');
     status.setAttribute('aria-live', 'polite');
@@ -357,6 +413,7 @@ export async function mountMaker(host) {
         true
       ),
       list,
+      week(),
       el(
         'p',
         { className: 'coll-actions' },

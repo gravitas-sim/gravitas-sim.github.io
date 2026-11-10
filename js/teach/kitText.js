@@ -26,6 +26,8 @@ export const WORDS = {
     'coll.note':
       'Save investigations, scenarios and datasets with the Save button on a Library item page, then order them here, add a sentence to each and make one link or file. Your students can keep it, and it shows in their Library and in My work. An older build of Gravitas, such as 2.0.0, cannot open a collection.',
     'coll.open': 'Make a link from what I saved',
+    'coll.week':
+      'A collection of up to seven items can be a first week. Tick “First week” below and its link opens Home showing only that list, in order, with the place to continue marked, the introduction inside its first item and the five destinations’ names. A student leaves it with one press, and it ends by itself when the list is finished. For those students you can also choose whether the “More” sections of the investigation and instrument panels start open or shut; a student can always open or fold them.',
     'cc.h': 'A Common Cartridge for a course platform',
     'cc.note':
       'A course can go to a course platform as one file: a Thin Common Cartridge of web links, one module for each unit, each link opening an item in Gravitas. It carries nothing about students and no grades come back.',
@@ -145,6 +147,8 @@ export const WORDS = {
     'coll.note':
       'Guarde investigaciones, escenarios y conjuntos de datos con el botón Guardar de la página de un elemento de la Biblioteca; luego ordénelos aquí, añada una frase a cada uno y cree un enlace o un archivo. Sus estudiantes pueden conservarla y aparece en su Biblioteca y en Mi trabajo. Una versión anterior de Gravitas, como la 2.0.0, no puede abrir una colección.',
     'coll.open': 'Crear un enlace con lo que guardé',
+    'coll.week':
+      'Una colección de hasta siete elementos puede ser una primera semana. Marque «Primera semana» abajo y su enlace abrirá el inicio mostrando solo esa lista, en orden, con el punto por donde continuar, la introducción dentro de su primer elemento y los nombres de los cinco destinos. El estudiante sale con una sola pulsación, y termina sola cuando se completa la lista. Para esos estudiantes también puede elegir si las secciones «Más» de los paneles de la investigación y del instrumento empiezan abiertas o cerradas; el estudiante siempre puede abrirlas o plegarlas.',
     'cc.h': 'Un Common Cartridge para una plataforma de cursos',
     'cc.note':
       'Un curso puede ir a una plataforma de cursos como un solo archivo: un Thin Common Cartridge de enlaces web, un módulo por unidad, cada enlace abre un elemento en Gravitas. No lleva nada sobre los estudiantes y no se devuelven calificaciones.',

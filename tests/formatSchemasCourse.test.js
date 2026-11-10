@@ -479,8 +479,9 @@ describe('the course pack /2 schema', () => {
     const fields = src.match(
       /const PACK_FIELDS = new Set\(\[([\s\S]*?)\]\)/
     )[1];
-    // /2 is 2.0.0's form: every field but the three only /3 carries.
-    const NEW_IN_3 = ['outcomes', 'profile', 'term'];
+    // /2 is 2.0.0's form: every field but the ones only /3 carries (the three
+    // of Prompt 176, and a first week's two, which only a collection has).
+    const NEW_IN_3 = ['firstWeek', 'more', 'outcomes', 'profile', 'term'];
     expect(Object.keys(s.properties).sort()).toEqual(
       literals(fields, /'([a-zA-Z]+)'/g)
         .filter(k => !NEW_IN_3.includes(k))

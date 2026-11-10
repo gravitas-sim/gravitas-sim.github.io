@@ -86,6 +86,7 @@ const PINNED = {
   KEY_EVIDENCE_NOTEBOOK: 'gravitas_evidence_notebook',
   KEY_EXPERIMENT: 'gravitas_experiment',
   KEY_EXPERIMENT_CHECKPOINT_PREFIX: 'gravitas_experiment_checkpoint_',
+  KEY_FIRST_WEEK: 'gravitas_first_week',
   KEY_GUIDES: 'gravitas_guides',
   KEY_INSTRUCTOR_KEY: 'gravitas_instructor_key',
   KEY_LAB3D_GUIDE_PREFIX: 'gravitas_lab3d_guide_',
