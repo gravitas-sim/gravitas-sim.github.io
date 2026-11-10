@@ -393,5 +393,33 @@
   "thetasFile": "oracle-penalised-thetas.json",
   "thetasSha256": "e599b86bb938d41351b9221dffb05ad3229589a2719b3d08448f866e53a07b44",
   "cpuSeconds": 32.603911
+ },
+ "stage2b": {
+  "sets": {
+   "P4": {
+    "file": "p4-stream.json",
+    "sha256": "49dce8cb1ee64eaca0fb03e8066e6e7e5e8e88a50f05ae2593dba87df21633d1",
+    "baseSeed": 264850,
+    "replicates": 400,
+    "kappas": [
+     1.0,
+     4.0,
+     16.0
+    ],
+    "empty": 0,
+    "bfgsNotSuccessful": 1011,
+    "maxAbsThetaBfgsVsNewton": 1.1861060356110897e-07,
+    "minEig": 1.0331400655662943,
+    "negativeUnpenalisedEig": 0,
+    "maxGmaxNewton": 6.935003753483215e-07,
+    "maxNewtonIterations": 400,
+    "fits": 1200
+   }
+  },
+  "PO1stream": 1.1861060356110897e-07,
+  "thetasFile": "oracle-penalised-thetas-p4.json",
+  "thetasSha256": "fb5ee1b15bbe26c4050c1cdd1133962715c08351554b579391dcecfef535dda6",
+  "followupThresholdsSha256": "db955845dc91fac541a7e9fb3d6f775b5d71f4bed46c27d413aee7d9d5db8b0a",
+  "cpuSeconds": 13.607164000000001
  }
 }
