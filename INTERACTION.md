@@ -196,9 +196,12 @@ presses (`e2e/walk.js`):
    must change: the address, a dialog or a status, the control's own state, or
    the page's text.
 
-`inventory.states` holds the same walk for a state a page does not open in,
-reached from the keyboard first: the sandbox with Tools open, with State open,
-and with the light curve panel out (its observer sliders among the stops).
+`inventory.states` holds the same walk for a state a page does not open in:
+the sandbox with Tools open, with State open and with the light curve panel
+out (its observer sliders among the stops), each reached from the keyboard
+first; Home, Home in its first-week mode and the introduction of a first visit
+(Prompt 277's surfaces); and the teaching kit's collection form, after two
+Library entries have been saved from the keyboard.
 
 What a walk does not judge: whether the order is the meaningful one, whether a
 focus indicator can be seen, anything a screen reader says, and states a page

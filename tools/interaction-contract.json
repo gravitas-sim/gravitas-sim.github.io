@@ -632,7 +632,7 @@
     }
   },
   "inventory": {
-    "about": "The walk inventory (Prompt 278): one row for every surface of tools/navigation-inventory.json. e2e/a11ySweep.spec.js walks each row in English and in Spanish with real key presses: Tab from the top of the page until focus comes round (no trap, every stop named and on screen, every pressable control reached), then Tab to `reach` and `press`, which must have an effect a reader can see. `spanish: false` records a page that stays in English when Spanish is the stored choice. `states` are the same walk after the page has been taken, from the keyboard, to a state it does not open in: each `open` control is focused and pressed with Enter first.",
+    "about": "The walk inventory (Prompt 278): one row for every surface of tools/navigation-inventory.json. e2e/a11ySweep.spec.js walks each row in English and in Spanish with real key presses: Tab from the top of the page until focus comes round (no trap, every stop named and on screen, every pressable control reached), then Tab to `reach` and `press`, which must have an effect a reader can see. `spanish: false` records a page that stays in English when Spanish is the stored choice. `states` are the same walk after the page has been taken, from the keyboard, to a state it does not open in: each `open` control is focused and pressed with Enter first. A state may also say what the browser holds when the page opens (`firstVisit`, `oriented`, `firstWeek`: Library entries the spec makes a first-week record from; `saved`: Library entries the walk first saves, from the keyboard) and what must be on screen before the walk begins (`ready`).",
     "exempt": {
       "manual": "The printed manual is a PDF the browser's own viewer opens: it has no page of ours to walk."
     },
@@ -929,6 +929,56 @@
         "task": "Turn the observer with the position angle slider.",
         "reach": "#lightCurveObserverControls [data-pa-slider]",
         "press": "ArrowRight"
+      },
+      {
+        "id": "home",
+        "surface": "sandbox",
+        "path": "/#home",
+        "open": [],
+        "oriented": true,
+        "ready": "#welcomeSections",
+        "task": "Open the first thing Home offers.",
+        "reach": "#welcomeDialog a[href]",
+        "press": "Enter"
+      },
+      {
+        "id": "home.first-week",
+        "surface": "sandbox",
+        "path": "/",
+        "open": [],
+        "firstVisit": true,
+        "oriented": true,
+        "firstWeek": [
+          "investigation:keplers-laws",
+          "scenario:solar-system",
+          "dataset:tess-light-curve"
+        ],
+        "ready": "#welWeek",
+        "task": "Start the first item of the week.",
+        "reach": "#welWeek a[href]",
+        "press": "Enter"
+      },
+      {
+        "id": "home.introduction",
+        "surface": "sandbox",
+        "path": "/",
+        "open": [],
+        "firstVisit": true,
+        "ready": "#welcomeDialog",
+        "task": "Skip the introduction.",
+        "reach": "#welcomeDialog button:not(#welcomeClose)",
+        "press": "Enter"
+      },
+      {
+        "id": "teaching-kit.collections",
+        "surface": "teaching-kit",
+        "path": "/teaching/kit/#collections",
+        "open": [],
+        "task": "Mark the collection as a first week.",
+        "reach": "#coll-week",
+        "press": "Space",
+        "saved": ["investigation:tides", "scenario:solar-system"],
+        "ready": "#coll-week"
       }
     ]
   }

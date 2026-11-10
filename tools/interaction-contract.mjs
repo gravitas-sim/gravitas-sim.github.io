@@ -205,7 +205,13 @@ export function checkContract(contract, tree) {
         );
       for (const field of ['path', 'task', 'reach', 'press'])
         if (!state[field]) bad(`inventory: state ${state.id} has no ${field}`);
-      if (!state.open?.length)
+      const way =
+        state.open?.length ||
+        state.firstVisit ||
+        state.firstWeek ||
+        state.saved ||
+        state.path !== rows.get(state.surface)?.path;
+      if (!way)
         bad(
           `inventory: state ${state.id} opens nothing, so it is its surface's row`
         );

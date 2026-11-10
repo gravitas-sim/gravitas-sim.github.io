@@ -39,24 +39,77 @@ const LOCALES = [
   { id: 'es', label: 'Spanish' },
 ];
 
-/** Open a page in a language, past the front door, and wait until it is ready. */
-async function open(page, path, locale) {
-  await page.addInitScript(
-    ([key, id]) => {
-      try {
-        window.localStorage.setItem('gravitas_welcome_seen_v1', '1');
-        window.localStorage.setItem(key, id);
-      } catch {
-        /* storage unavailable: the page opens in English */
-      }
-    },
-    ['gravitas_locale', locale]
-  );
+const LIBRARY = JSON.parse(readFileSync('library/library.json', 'utf8'));
+
+/** A first-week record as the course home leaves one, from Library entries. */
+const weekOf = ids => ({
+  v: 1,
+  id: 'week-one',
+  t: { en: 'Week one', es: 'Semana uno' },
+  items: ids.map(id => {
+    const e = LIBRARY.entries.find(x => x.id === id);
+    const lesson = e.format === 'lesson' ? id.split(':')[1] : null;
+    return {
+      t: e.title,
+      h: e.route,
+      ...(lesson ? { l: lesson, n: e.steps } : {}),
+    };
+  }),
+});
+
+/**
+ * Open a page in a language and wait until it is ready to be walked.
+ *
+ * @param {import('@playwright/test').Page} page
+ * @param {string} path
+ * @param {string} locale - 'en' or 'es'
+ * @param {object} [o] - What the browser holds when the page opens
+ * @param {boolean} [o.firstVisit] - Leave the front door in place
+ * @param {boolean} [o.oriented] - The introduction has been seen
+ * @param {string[]} [o.firstWeek] - Library entries of a first-week record
+ * @param {string} [o.ready] - What must be on screen before the walk begins
+ */
+async function open(page, path, locale, o = {}) {
+  const storage = { gravitas_locale: locale };
+  if (!o.firstVisit) storage.gravitas_welcome_seen_v1 = '1';
+  if (o.oriented) storage.gravitas_orientation_seen_v1 = '1';
+  if (o.firstWeek)
+    storage.gravitas_first_week = JSON.stringify(weekOf(o.firstWeek));
+  await page.addInitScript(entries => {
+    try {
+      // Once: a later page of the same walk must find what this one left.
+      if (window.sessionStorage.getItem('walk-seeded')) return;
+      window.sessionStorage.setItem('walk-seeded', '1');
+      for (const [key, value] of entries)
+        window.localStorage.setItem(key, value);
+    } catch {
+      /* storage unavailable: the page opens in English */
+    }
+  }, Object.entries(storage));
   await page.goto(path, { waitUntil: 'load' });
-  if (path === '/' || path.startsWith('/#'))
+  const app = path === '/' || path.startsWith('/#');
+  if (app)
+    await page.waitForFunction(() => window.splashScreenEnded === true, null, {
+      timeout: 30_000,
+    });
+  if (o.ready) {
+    await expect(page.locator(o.ready).first()).toBeVisible({
+      timeout: 30_000,
+    });
+    // Home is a dialog: it takes focus when it has finished opening, and a
+    // walk begun before that counts the stops of a page still arranging itself.
+    if (app)
+      await page.waitForFunction(
+        () =>
+          document
+            .getElementById('welcomeDialog')
+            ?.contains(document.activeElement),
+        null,
+        { timeout: 30_000 }
+      );
+  } else if (app)
     await page.waitForFunction(
       () =>
-        window.splashScreenEnded === true &&
         document.querySelector('.ui-container')?.classList.contains('showUI'),
       null,
       { timeout: 30_000 }
@@ -149,6 +202,7 @@ test.describe('the walk inventory: every surface by keyboard', () => {
     ...inventory.rows.map(row => ({ ...row, name: row.surface, open: [] })),
     ...inventory.states.map(state => ({
       ...state,
+      open: state.open || [],
       name: state.id,
       spanish: inventory.rows.find(r => r.surface === state.surface).spanish,
     })),
@@ -160,7 +214,24 @@ test.describe('the walk inventory: every surface by keyboard', () => {
         page,
         browserName,
       }) => {
-        await open(page, row.path, locale.id);
+        // What the walk first saves, from the keyboard, in the Library.
+        for (const id of row.saved || []) {
+          await open(
+            page,
+            `/library/?item=${encodeURIComponent(id)}`,
+            locale.id
+          );
+          expect(
+            await tabTo(page, browserName, '[data-save]'),
+            'Tab reaches Save'
+          ).toBeGreaterThan(0);
+          await page.keyboard.press('Enter');
+          await expect(page.locator('[data-save]')).toHaveAttribute(
+            'aria-pressed',
+            'true'
+          );
+        }
+        await open(page, row.path, locale.id, row);
         // Into the state, from the keyboard, as a reader gets there.
         for (const selector of row.open) {
           expect(
