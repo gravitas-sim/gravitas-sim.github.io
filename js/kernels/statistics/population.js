@@ -362,12 +362,14 @@ function penalisedFit(P, fit, scale, kappa) {
   let cur = penalisedParts(P, theta, scale, kappa);
   let lambda = 1e-3;
   let converged = false;
+  let reason = 'cap';
   let it = 0;
   for (; it < 1000; it++) {
     let gmax = 0;
     for (let j = 0; j < J; j++) gmax = Math.max(gmax, Math.abs(cur.grad[j]));
     if (gmax < 1e-10) {
       converged = true;
+      reason = 'criterion';
       break;
     }
     let accepted = false;
@@ -393,9 +395,21 @@ function penalisedFit(P, fit, scale, kappa) {
       }
       lambda *= 10;
     }
-    if (!accepted) break;
+    if (!accepted) {
+      reason = 'no-accepted-step';
+      break;
+    }
   }
-  return { theta, objective: cur.obj, converged, iterations: it };
+  // the follow-up's diagnostic return (amendment AM-F2): intermediate quantities only, no arithmetic changed
+  let gmax = 0;
+  for (let j = 0; j < J; j++) gmax = Math.max(gmax, Math.abs(cur.grad[j]));
+  return {
+    theta,
+    objective: cur.obj,
+    converged,
+    iterations: it,
+    diagnostic: { reason, lambda, gmax, grad: cur.grad, H: cur.H },
+  };
 }
 
 // ---- the problem -------------------------------------------------------------------------
@@ -711,6 +725,16 @@ export function populationRates({
       note: 'a smoothing chosen by the user: the intervals above belong to the unpenalised maximum and are not recomputed for the penalised rates',
       unpenalised: bins.map(b => (b.status === 'ok' ? b.rate : null)),
     };
+    if (penalty.diagnostic === true && pf.diagnostic)
+      out.penalty.diagnostic = {
+        iterations: pf.iterations,
+        reason: pf.diagnostic.reason,
+        lambda: pf.diagnostic.lambda,
+        gmax: pf.diagnostic.gmax,
+        grad: Array.from(pf.diagnostic.grad),
+        H: Array.from(pf.diagnostic.H),
+        solve,
+      };
   }
   return out;
 }
