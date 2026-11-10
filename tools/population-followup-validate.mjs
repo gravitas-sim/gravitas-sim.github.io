@@ -35,6 +35,7 @@ const [
   scratch,
   outPath,
   failedPath,
+  sourcesPath,
 ] = process.argv.slice(2);
 const sha = b => createHash('sha256').update(b).digest('hex');
 const read = p => readFileSync(p);
@@ -781,6 +782,27 @@ if (mode === 'all') {
   });
 }
 
+// ---- the authentic legs (amendment AM-F4): copied from followup-sources.json ---------------------
+let sourcesSha = null;
+if (mode === 'all') {
+  const srcBytes = read(sourcesPath);
+  sourcesSha = sha(srcBytes);
+  const src = JSON.parse(srcBytes);
+  for (const id of [
+    'X1.occurrenceAuthentic',
+    'X2.massFunctionAuthentic',
+    'X3.citedImplementation',
+  ]) {
+    const l = src.legs[id];
+    leg(id, l.status, {
+      request: l.request,
+      filled: l.filled,
+      why: l.why,
+      requests: l.requests,
+    });
+  }
+}
+
 // ---- the output -----------------------------------------------------------------------------------
 timing.total = Number(cpuNow().toFixed(2));
 const count = s => rows.filter(r => r.status === s).length;
@@ -790,6 +812,7 @@ const out = {
   followupThresholdsSha256: sha(fthrBytes),
   thresholdsSha256: sha(thrBytes),
   followupOracleSha256: sha(forBytes),
+  followupSourcesSha256: sourcesSha,
   node: process.version,
   rows,
   counts: {
