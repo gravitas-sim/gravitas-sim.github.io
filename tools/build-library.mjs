@@ -202,6 +202,65 @@ function entry(e) {
 }
 
 /**
+ * The sequences the curation file declares: guides that no source file
+ * orders (the 3-D lab's and the mission lab's), with their words. Each is
+ * held to the Library: only guides of the formats it names, every one of
+ * them, once, and a prerequisite before the guide that names it (Roadmap III
+ * Prompt 274).
+ * @param {Array<object>} [list] - curation.sequences.list
+ * @param {Array<object>} entries - The Library's entries
+ * @param {Array<string>} known - The ids of the sequences that exist already
+ * @returns {Array<object>} Sequences in the Library's form
+ */
+export function curatedSequences(list, entries, known) {
+  const byEntry = new Map(entries.map(e => [e.id, e]));
+  const ids = [...known];
+  return (list ?? []).map(q => {
+    const at = `${CURATION}: sequences/${q.id}`;
+    if (!/^[a-z0-9]+(-[a-z0-9]+)*$/.test(q.id ?? '') || q.id.length > 64)
+      throw new Error(`${at} is not an id`);
+    if (ids.includes(q.id)) throw new Error(`${at} is already a sequence`);
+    for (const key of ['title', 'blurb'])
+      for (const lang of ['en', 'es'])
+        if (typeof q[key]?.[lang] !== 'string' || !q[key][lang].trim())
+          throw new Error(`${at} has no ${key} in "${lang}"`);
+    for (const a of q.after ?? [])
+      if (!ids.includes(a))
+        throw new Error(`${at} comes after "${a}", which is no sequence`);
+    const formats = q.formats ?? [];
+    const placed = new Set();
+    for (const id of q.entries ?? []) {
+      const e = byEntry.get(id);
+      if (!e || e.kind !== 'investigation' || !formats.includes(e.format))
+        throw new Error(`${at} names ${id}, which is not a guide of its labs`);
+      if (placed.has(id)) throw new Error(`${at} names ${id} twice`);
+      for (const p of e.prerequisites ?? [])
+        if (q.entries.includes(p) && !placed.has(p))
+          throw new Error(`${at} places ${id} before ${p}, which it assumes`);
+      placed.add(id);
+    }
+    const left = entries.filter(
+      e =>
+        e.kind === 'investigation' &&
+        formats.includes(e.format) &&
+        !placed.has(e.id)
+    );
+    if (!placed.size || left.length)
+      throw new Error(
+        `${at} leaves out ${left.map(e => e.id).join(', ') || 'everything'}`
+      );
+    ids.push(q.id);
+    return {
+      id: q.id,
+      title: both(q.title.en, q.title.es),
+      blurb: both(q.blurb.en, q.blurb.es),
+      entries: [...q.entries],
+      after: [...(q.after ?? [])],
+    };
+  });
+}
+
+/**
  * Build the Library from its sources.
  * @returns {Promise<object>} A gravitas.library/1 document
  */
@@ -760,6 +819,15 @@ export async function buildLibrary() {
       entries: guideSeries.find(g => g.file === file).ids,
     });
   }
+  // Sequences of guides that no source file orders (the 3-D lab's and the
+  // mission lab's), declared in the curation file with their words.
+  sequences.push(
+    ...curatedSequences(
+      curation.sequences?.list,
+      entries,
+      sequences.map(s => s.id)
+    )
+  );
 
   // --- What a student sees, and where to begin (Prompt 163) -------------------
   const { kinds: shown } = JSON.parse(
