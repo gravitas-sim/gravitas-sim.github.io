@@ -1583,6 +1583,25 @@
           "text": "# Resonances and secular dynamics II (Prompt 273)"
         }
       ]
+    },
+    {
+      "id": "resonance-libration-addendum",
+      "claim": "A tapered least-squares estimator resolves the libration of the authentic Laplace argument under its larger osculating ripple, and a step derived from an error budget keeps the kernel's runs inside the first gate's bounds.",
+      "scope": "The Part A addendum of Prompt 273 (RESONANCES_II.md sections 9 to 13) with its pinned fixtures in tests/fixtures/resonances-ii/ (addendum-*.json, oracle_addendum.py) and tests/resonancesIIAddendum.test.js; measureLibrationHarmonic in js/lab3d/libration.js and stepForBudget in js/lab3d/stepBudget.js; the JUP365 argument, two model systems, one test particle, a Kepler orbit and synthetic series; not any panel, guide or lesson depth, none of which exists.",
+      "version": "2.1.0",
+      "class": "V-internal",
+      "status": "partial",
+      "method": "New legs with bounds committed first by a stated rule (a re-test carries its original's bound); an independent oracle (python -E, numpy and scipy) implementing the same definition; planted synthetic truth for recovery, coverage and false positives; four downloaded e-prints for the cited values; the test recomputes the addendum verdict from the pinned results.",
+      "evaluator": "the project",
+      "artifact": "RESONANCES_II.md",
+      "limitations": "Addendum verdict B by the committed function: all 21 gated legs pass, but the cited values fail their source check (X1L: the cited 0.064 deg amplitude is about twice the 0.033 deg measured on JUP365, and no source read states the cited pair; X1P: the cited 19,670 yr is stated by neither source read). The first gate's verdict C and its 8 failed legs stand. One line only, between 3 and 8 turns in the window; the false-positive leg sits at its bound (1 of 100). Kozai-Lidov NOT RUN. Primary sources not obtained. No consumer built. Spanish none written.",
+      "date": "2026-11-10",
+      "anchors": [
+        {
+          "file": "RESONANCES_II.md",
+          "text": "## 9. The Part A addendum: what it is and what it may not do"
+        }
+      ]
     }
   ]
 }

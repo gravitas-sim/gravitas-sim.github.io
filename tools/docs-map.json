@@ -900,7 +900,7 @@
     {
       "file": "RESONANCES_II.md",
       "kind": "gate",
-      "purpose": "Resonances and secular dynamics II: contract committed first, independent oracle, 19 legs, verdict C by the committed function; the kernel without consumers (Prompt 273).",
+      "purpose": "Resonances and secular dynamics II: 19 legs, verdict C; the Part A addendum's 25 new legs, bounds first, addendum verdict B; the kernel without consumers (Prompt 273).",
       "owner": 273,
       "student": false
     },

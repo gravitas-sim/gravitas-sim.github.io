@@ -138,7 +138,7 @@ catalogue refers to it, so a change to it can reach a student.
 | [RELEASING.md](RELEASING.md) | The release procedure and its smoke list. | process | unassigned | regions (docs) | no |
 | [REMIX.md](REMIX.md) | Remixing investigations and sharing them by link. | feature | P78 | written | no |
 | [REMNANTS.md](REMNANTS.md) | Remnants: white-dwarf cooling ages with a two-term interval, the initial-final mass relation and outcome odds, with validation and two failed legs left failing (Prompt 222). | feature | P222 | written | yes |
-| [RESONANCES_II.md](RESONANCES_II.md) | Resonances and secular dynamics II: contract committed first, independent oracle, 19 legs, verdict C by the committed function; the kernel without consumers (Prompt 273). | gate | P273 | written | no |
+| [RESONANCES_II.md](RESONANCES_II.md) | Resonances and secular dynamics II: 19 legs, verdict C; the Part A addendum's 25 new legs, bounds first, addendum verdict B; the kernel without consumers (Prompt 273). | gate | P273 | written | no |
 | [RESONANCE_INVESTIGATION.md](RESONANCE_INVESTIGATION.md) | The orbital resonance investigation. | feature | unassigned | written | no |
 | [SAMPLER_GATE.md](SAMPLER_GATE.md) | Posterior-sampling gate. | gate | unassigned | written | yes |
 | [SANDBOX_INSTRUMENTS.md](SANDBOX_INSTRUMENTS.md) | Instruments in the sandbox. | feature | unassigned | regions (docs) | no |
