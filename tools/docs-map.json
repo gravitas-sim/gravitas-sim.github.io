@@ -1488,7 +1488,7 @@
     {
       "file": "CENSORING_TRUNCATION_GATE.md",
       "kind": "gate",
-      "purpose": "Censoring and truncation gate: the two problems kept apart, a product-limit estimator with an independence check, the Lynden-Bell estimator, V/Vmax, 41 legs, verdict B-KM (Prompt 262).",
+      "purpose": "Censoring and truncation gate: a product-limit estimator with an independence check, the Lynden-Bell estimator, V/Vmax; verdict B-KM, follow-up C2c passes, C2o left failing (Prompt 262).",
       "owner": 262,
       "student": false
     },
