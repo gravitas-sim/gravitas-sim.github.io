@@ -319,6 +319,91 @@
    "id": "AM1",
    "before": "the first run of any instrument, oracle or validator (the instruments and the oracle were written, none had been run)",
    "text": "Definitions the contract left open; no bound moved. (1) I1: the ledger also refuses 'non-finite' when an energy is not a finite number (a defensive refusal with no leg). (2) I1.a is evaluated with the exported explicit Euler step and the kernel's energy on one step, since the ledger refuses fewer than 8 steps. (3) The normals z of I3.b, I3.c and I4.d come from js/random/streams.js gaussian() on the named stream: for I3.b and I3.c one generator per series, drawn in time order; for I4.d from the same stream after its 60 uniforms, in time order after sorting. The series are written to inputs.json and the oracle reads them. (4) I4.f and I5.c: a row with a missing (non-finite) time, flux, mass or magnitude is dropped (I4.f: after taking every k-th row). (5) I5.c (ii): an age 'holds' a mass when the mass is inside its phase-0 mass range, ends included. (6) Module constant names (MIN_SERIES, MIN_TABLE) and extra returned fields (aliasRatio, warnings, pairs, errFixed) carry no bound."
+  },
+  {
+   "id": "AM2",
+   "before": "any change to an instrument, the oracle or the validator after the first run (pinned at 7d5ec0fa as first-run-results.json), and before any new leg ran",
+   "seen": "the first run: 38 bounded legs, 35 pass, 3 fail (I1.i, I2.b, I4.a), verdict B by the committed function (I3 and I5 pass). Measured values seen and used below: I1.i's second end time (2.25 P) was classed 'secular' (end 0.002656 of maxAbs 0.002689); I2.b's longest step was 0.164 P from apoapsis (bound 0.1 P) and its shortest step was the last one, cut to the span; I4.a's refined peak was 0.1252052 against 0.125 (bound 1e-9) with the power, the amplitude and the other Fourier frequencies inside their bounds.",
+   "rule": "No bound moves and no failed leg is re-run: I1.i, I2.b and I4.a stay failing in failed-legs.json and the verdict by the committed function stays B. What follows are new legs, each with its bound committed here, before it runs. A leg whose definition an instrument change touches is carried from the pinned first run and is not re-judged on the changed code; its successor has the suffix s. A second verdict, 'amended', is computed by the same function with each superseded leg replaced by its successor; which verdict a consumer may rely on is Carl's ruling, not this file's.",
+   "I1": {
+    "cause": "A defect of the instrument: 'kind' was read from the end of the run (|end| >= 0.5 maxAbs), so it depends on the phase the run stops at, the very thing the instrument withholds. Started at periapsis, the velocity Verlet error is near zero at each periapsis and near its largest for the rest of the orbit, so a run stopped at 2.25 P was called 'secular' and given an end-of-run order.",
+    "change": "ledger version 2: the ledger also returns maxAbsHalf, the largest |eps_k| over the first floor(steps / 2) steps. kind = 'secular' when maxAbs >= 1.5 maxAbsHalf in both runs, 'oscillating' otherwise. The 1.5 is the midpoint between an error that grows with time (the whole span holds twice the first half's, ratio 2) and one that does not grow (ratio 1); it was fixed by that argument, not from a measured ratio (none has been computed). Limit stated: an oscillating error is recognised only when the first half of the span holds at least one full oscillation, so for an orbit the span is two periods or more.",
+    "legs": [
+     {
+      "id": "I1.bs",
+      "bound": "as I1.b"
+     },
+     {
+      "id": "I1.cs",
+      "bound": "as I1.c"
+     },
+     {
+      "id": "I1.ds",
+      "bound": "as I1.d"
+     },
+     {
+      "id": "I1.es",
+      "bound": "as I1.e"
+     },
+     {
+      "id": "I1.fs",
+      "bound": "as I1.f"
+     },
+     {
+      "id": "I1.gs",
+      "bound": "as I1.g, the oracle computing maxAbsHalf and the kind by the new rule itself; maxAbsHalf absolute 1e-9 and relative 1e-6"
+     },
+     {
+      "id": "I1.is",
+      "bound": "as I1.i: 'oscillating', orderEnd null with reason 'end-phase', orderMax within 0.1 of 2, at 2 P and at 2.25 P"
+     }
+    ],
+    "superseded": [
+     "I1.b",
+     "I1.c",
+     "I1.d",
+     "I1.e",
+     "I1.f",
+     "I1.g",
+     "I1.i"
+    ]
+   },
+   "I2": {
+    "cause": "Not a defect of the integrator or of the history (the oracle's own Dormand-Prince took the same 189 steps): the bound on the time of the longest step was drawn too tight for an orbit whose separation is nearly flat around apoapsis, and the reported shortest step was the final step, which the integrator cuts to end on the span and which the controller did not choose.",
+    "change": "stepHistory version 2: hMin, hMax and the slope are taken over the accepted steps without the first (h0 is the caller's guess) and the last (cut to the span); both stay in the history, flagged. Nothing else changes.",
+    "legs": [
+     {
+      "id": "I2.bs",
+      "bound": "the separation at the longest step is at least 0.9 of the largest separation among the accepted steps; the separation at the shortest step is at most twice the smallest separation among the accepted steps; hMax / hMin at least 10. The rule: the step follows the separation (I2.c), so the extremes of the step are judged by separation, not by time. Written after the first run and with its numbers known (at 0.164 P from apoapsis the separation of this orbit is about 0.93 of its largest), so it is weaker evidence than a bound written blind and is labelled so."
+     },
+     {
+      "id": "I2.cs",
+      "bound": "as I2.c"
+     },
+     {
+      "id": "I2.ds",
+      "bound": "as I2.d, the oracle excluding its own first and last step"
+     }
+    ],
+    "superseded": [
+     "I2.b",
+     "I2.c",
+     "I2.d"
+    ]
+   },
+   "I4": {
+    "cause": "Not a defect of the instrument: the bound was wrong. A real series has a mirror term at -f; on this series it vanishes at the Fourier frequencies (so the power, the amplitude and the other bins are exact) but not between them, so the peak's two neighbours on the grid are not equal and the parabola through them is displaced. The oracle's own refinement agrees with the instrument's (I4.d).",
+    "change": "none to the instrument",
+    "legs": [
+     {
+      "id": "I4.as",
+      "bound": "the grid maximum is the grid point at f = 1/8; the refined frequency is within 0.1 of the resolution (0.1 / 63) of 0.125, the tolerance I4.e and I4.f already use for a frequency; power, amplitude and the other Fourier frequencies as I4.a"
+     }
+    ],
+    "superseded": [
+     "I4.a"
+    ]
+   }
   }
  ]
 }
