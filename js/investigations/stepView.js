@@ -48,7 +48,6 @@ import { assignmentStorageKey, shortHash } from '../assignments/assignment.js';
 import {
   classifyStorageError,
   readProgress,
-  withTry,
   writeProgress,
 } from './progressSchema.js';
 import { KEY_INVESTIGATION_PREFIX } from '../names.js';
@@ -363,10 +362,8 @@ export function stepMarkup(step, c) {
         ? `<br /><em class="${missed ? 'inv-misconception' : 'inv-class'}">${prose(said)}</em>`
         : '';
       parts.push(
-        `<p class="inv-feedback is-wrong">${escape(t('inv.answer.notYet'))}${named}</p>`
+        `<p class="inv-feedback is-wrong">${escape(t('inv.answer.notYet'))}${named}</p><div class="inv-recover" data-recover hidden></div>`
       );
-      // Filled by the lazy ./recovery.js (Prompt 276): see bindStepInputs.
-      parts.push('<div class="inv-recover" data-recover hidden></div>');
     }
 
     parts.push(hintBlock(step, id, responses));
@@ -1016,8 +1013,6 @@ export function bindStepInputs(h) {
       h.responses()[`${id}:first`] ??= choice;
       h.responses()[id] = choice;
       h.attempts()[id] = (h.attempts()[id] || 0) + 1;
-      if (checkAnswer(h.currentStep(), choice) === false)
-        noteTry(h, id, choice);
       h.save();
       h.renderStep();
       const step = h.currentStep();
@@ -1151,22 +1146,15 @@ export function bindStepInputs(h) {
   if (numeric && checkBtn) {
     const submit = () => {
       // The first thing they committed to, kept. A student who tries a number,
-      // is told it is wrong, and revises has done something a report should be
-      // able to show; overwriting it leaves only the answer they arrived at
-      // with help, which is a different fact about a different moment.
+      // is told it is wrong and revises has done something a report should show;
+      // overwriting it leaves only the answer they arrived at with help.
       if (h.responses()[`${id}:first`] === undefined && numeric.value.trim()) {
         h.responses()[`${id}:first`] = numeric.value;
       }
-      // The text and the convention it was typed under, together. Storing the
-      // text alone let a later reader - the PDF, or the same panel after a
-      // language switch - decide that "1,234" had meant something else.
+      // The text and the convention it was typed under, together: the text alone
+      // let a later reader (the PDF, a language switch) misread "1,234".
       recordAnswer(h.responses(), id, numeric.value, getLocale());
       h.attempts()[id] = (h.attempts()[id] || 0) + 1;
-      if (
-        checkAnswer(h.currentStep(), numeric.value, { locale: getLocale() }) ===
-        false
-      )
-        noteTry(h, id, numeric.value);
       h.save();
       h.renderStep();
       // What the panel now says under the box, read out: a result that only
@@ -1181,32 +1169,8 @@ export function bindStepInputs(h) {
       }
     });
   }
-
-  // After a wrong answer (Prompt 276): fetched the first time one is on screen.
-  const slot = els.body.querySelector('[data-recover]');
-  if (slot) {
-    import('./recovery.js').then(
-      m =>
-        slot.isConnected &&
-        m.mountRecovery(slot, {
-          step: h.currentStep(),
-          steps: h.steps?.() ?? [],
-          authored: hintsFor(h.currentStep())?.ladder.length ?? 0,
-          locale: getLocale(),
-          id,
-          responses: h.responses(),
-          save: h.save,
-          announce,
-          explainButton: els.toolExplain ?? null,
-        })
-    );
-  }
-}
-
-/** Keep a wrong answer with the step's tries (./progressSchema.js withTry). */
-function noteTry(h, id, answer) {
-  const tries = withTry(h.responses()[`${id}:tries`], answer);
-  if (tries) h.responses()[`${id}:tries`] = tries;
+  if (els.body.querySelector('[data-recover]'))
+    import('./recovery.js').then(m => m.fill(h, announce, getLocale, hintsFor));
 }
 
 // --- Measured values ----------------------------------------------------------

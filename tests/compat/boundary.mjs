@@ -626,12 +626,11 @@ export const BOUNDARY = [
     prompt: 276,
     kind: 'progress-store',
     plans:
-      'the wrong answers a student checked on the way (`:tries`, one per line, at most eight) and the generated hints taken (`:gen`), as sub-keys of a step in the progress record’s `responses`, written only after a wrong answer',
+      'the wrong numbers a student checked on the way (`:tries`, one per line, at most eight) and the generated hints taken (`:gen`), as sub-keys of a step in the progress record’s `responses`, written only after a wrong answer',
     // A record as the lesson panel saves it after two wrong numbers and two
-    // generated hints (js/investigations/progressSchema.js withTry).
+    // generated hints (js/investigations/recovery.js withTry).
     mutate: async fx => {
-      const { withTry } =
-        await import('../../js/investigations/progressSchema.js');
+      const { withTry } = await import('../../js/investigations/recovery.js');
       const doc = clone(fx);
       doc.responses['tides:guess:tries'] = withTry(
         withTry(undefined, '120'),

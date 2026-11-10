@@ -1018,8 +1018,7 @@ function renderStep() {
   // Both classes are set before the panels are filled, not after: a widget
   // sizes its canvas from the space it is about to be given, and reads these
   // classes to know what that is. Toggling them afterwards left every
-  // measurement screen drawing at full height and pushing its own controls out
-  // of view.
+  // measurement screen drawing at full height, its own controls out of view.
   //
   // investigation-aux: a second panel is docked beside the lesson. The light
   // curve gives up height to it when both are on screen.
@@ -2374,16 +2373,14 @@ export async function openInvestigation(id, opts = {}) {
     fullSteps = 0;
     active = inv;
   }
-  // In an authoring preview the saved progress is not read at all: an author is
-  // shown a clean lesson rather than somebody's half-finished one, and reading
-  // it would also mean the position they asked for could be silently overridden.
+  // An authoring preview reads no saved progress: an author is shown a clean
+  // lesson, and the position they asked for cannot be silently overridden.
   const saved = authoring ? null : load(id, active);
   responses = saved?.responses || {};
   if (assignment && saved?.responses) {
     // A step rewritten under its own id since this assignment was made is a
-    // different question, and a stored answer to the old one is not an answer
-    // to it. Held back rather than shown, which is the whole point of
-    // carrying fingerprints in the payload.
+    // different question: a stored answer to the old one is held back, not
+    // shown, which is the point of carrying fingerprints in the payload.
     const filtered = filterResponses(
       assignmentBinding,
       saved.responses,
@@ -2396,10 +2393,9 @@ export async function openInvestigation(id, opts = {}) {
   startedAt = saved?.startedAt || new Date().toISOString();
   spent = saved?.spent || 0;
   lastTick = Date.now();
-  // Resolved against `active`, which for an assignment is the SUBSET: against
-  // the whole lesson, a student resuming an eight-step assignment was sent to
-  // the position that sid holds in the lesson, past its end. A sid not in the
-  // subset means the assignment was recut: start at the beginning.
+  // Resolved against `active`, the SUBSET for an assignment: against the whole
+  // lesson a student resuming an eight-step assignment was sent past its end.
+  // A sid not in the subset means the assignment was recut: start again.
   stepIndex = saved?.stepSid
     ? Math.max(0, indexOfSid(active, saved.stepSid))
     : 0;
@@ -2413,25 +2409,12 @@ export async function openInvestigation(id, opts = {}) {
   els.panel.hidden = false;
   els.panel.classList.add('is-open');
   wireMore(els.more, 'lesson', { ...MORE, depth, declared: assignment?.mo });
-  // "You may want X first" (Prompt 276): asked when More opens. Advice, never
-  // a lock; an assignment is the instructor's own order and gets none.
-  const before = document.getElementById('investigationBefore');
-  if (before) {
-    before.hidden = true;
-    delete before.dataset.asked;
-    els.more.ontoggle = () => {
-      if (!els.more.open || before.dataset.asked || assignment || authoring)
-        return;
-      before.dataset.asked = '1';
-      import('./investigations/next.js').then(
-        m => active?.id === inv.id && m.beforeThis(before, inv.id)
-      );
-    };
-    els.more.ontoggle();
-  }
+  els.more.ontoggle = () =>
+    els.more.open &&
+    import('./investigations/next.js').then(m => m.before(active, assignment));
+  els.more.ontoggle(); // "You may want X first" (Prompt 276), behind More
   els.title.textContent = assignment?.t || inv.title;
-  // The lesson it was cut from stays visible: a student should be able to see
-  // that this is eight steps of Tides rather than a thing called Week 3.
+  // The lesson it was cut from stays visible: eight steps of Tides, not Week 3.
   els.subtitle.textContent = assignment
     ? t('assign.subtitle', {
         lesson: inv.title,

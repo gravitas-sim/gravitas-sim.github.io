@@ -12,23 +12,23 @@
         "requests": 109
       },
       "kepler": {
-        "kb": 3424.3,
+        "kb": 3421.3,
         "requests": 148
       },
       "transit": {
-        "kb": 3436.2,
+        "kb": 3433.2,
         "requests": 148,
         "toolKb": 3562.9,
         "toolRequests": 153
       },
       "power-law": {
-        "kb": 3401.5,
+        "kb": 3398.5,
         "requests": 148,
-        "toolKb": 3454.7,
+        "toolKb": 3451.8,
         "toolRequests": 151
       },
       "largest-lesson": {
-        "kb": 3533.7,
+        "kb": 3530.7,
         "requests": 150
       },
       "teaching": {
@@ -72,7 +72,7 @@
         "requests": 49
       },
       "composer": {
-        "kb": 545.2,
+        "kb": 544.1,
         "requests": 31
       },
       "course-builder": {
@@ -198,7 +198,7 @@
         "requests": 4
       },
       "composer": {
-        "kb": 291.0,
+        "kb": 290.8,
         "requests": 16
       },
       "course-builder": {

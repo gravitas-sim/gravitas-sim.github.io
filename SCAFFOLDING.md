@@ -25,7 +25,9 @@ right option's own words (`content/hint-leak`), in English and in Spanish.
 When a checked number is wrong, the panel leaves a slot under "Not yet" and
 fetches `js/investigations/recovery.js` (a lazy module that imports nothing,
 so the lesson's own chunk is not cut; it is not fetched before the first wrong
-answer). It offers, each by a button and never unbidden:
+answer; the two lines that fetch it and the four that ask the Library when
+More opens are all the lesson engine gained, with comments cut by as many
+lines, so `js/investigations.js` and `stepView.js` keep their line ceilings). It offers, each by a button and never unbidden:
 
 - **A generated ladder, only on a step whose author wrote no hints.** It is
   made from what the step's own check declares and nothing else, at most three
@@ -53,10 +55,12 @@ answer). It offers, each by a button and never unbidden:
 
 The rungs taken are kept under the step's `:gen` key (`units`, `magnitude`,
 `formula`), apart from `:help`, so the report's "Help taken" still counts the
-author's hints only. **The attempts record:** every wrong answer checked (a
-number as typed, a choice as its option number) is appended to the step's
-`:tries` key, one per line, at most eight of at most 40 characters, the same
-one not twice in a row (`withTry`, `js/investigations/progressSchema.js`).
+author's hints only. **The attempts record:** every wrong number checked is
+appended, as typed, to the step's `:tries` key when the slot is filled: one
+per line, at most eight of at most 40 characters, the same one not twice in a
+row (`withTry`, `js/investigations/recovery.js`). A number the step cannot
+read, and a choice, are not kept there (a choice keeps its first and its last
+answer, as before).
 `attempts` still counts every check and `:first` still holds the first answer.
 Both keys are sub-keys of `responses`, so the progress record's schema stays
 2, the backup and the submission token carry them as they carry `:help`, and a

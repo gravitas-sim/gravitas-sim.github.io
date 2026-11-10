@@ -307,36 +307,6 @@ export function writeProgress({
   };
 }
 
-// --- The attempts record (Prompt 276; SCAFFOLDING.md) --------------------------
-// The wrong answers checked on the way, in order, under the step's `:tries`
-// sub-key of `responses`: one per line, as typed. Additive: an older build
-// keeps the sub-key and reads nothing from it.
-
-export const TRIES_LIMIT = 8;
-export const TRY_LENGTH = 40;
-
-/** @param {*} stored - A `:tries` value @returns {Array<string>} In order */
-export const triesOf = stored =>
-  typeof stored === 'string' ? stored.split('\n').filter(Boolean) : [];
-
-/**
- * A `:tries` value with one more wrong answer: not the same one twice in a
- * row, and none past the limit (the first tries say where a student began).
- * @param {*} stored - The value so far
- * @param {*} answer - What was checked and found wrong
- * @returns {string|undefined} The new value; undefined while there is none
- */
-export function withTry(stored, answer) {
-  const tries = triesOf(stored);
-  const text = String(answer ?? '')
-    .replace(/\s+/g, ' ')
-    .trim()
-    .slice(0, TRY_LENGTH);
-  if (text && tries.at(-1) !== text && tries.length < TRIES_LIMIT)
-    tries.push(text);
-  return tries.length ? tries.join('\n') : undefined;
-}
-
 // --- What persistence needs that is not the engine's -----------------------------
 // Moved from js/investigations.js with Prompt 139 part C: how a failed write is
 // told apart from a refused one, and the student's saved name. Both describe

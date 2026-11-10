@@ -20,8 +20,14 @@
 //
 // A step with authored hints keeps them as they are (stepView.js hintBlock);
 // the worked explanation stays behind them. Nothing here is a score, a streak
-// or a lock. The rungs taken are kept under the step's `:gen` sub-key and the
-// wrong answers under `:tries` (./progressSchema.js), both additive.
+// or a lock.
+//
+// The attempts record: the wrong number on screen is appended to the step's
+// `:tries` sub-key of `responses` when the slot is filled (one per line, as
+// typed, not the same one twice in a row, at most eight: the first tries say
+// where a student began). The rungs taken are kept under `:gen`. Both are
+// additive: `attempts` still counts every check, `:first` still holds the
+// first answer, and an older build keeps a sub-key and reads nothing from it.
 // =============================================================================
 
 // It imports nothing: what it needs of the lesson engine (the authored ladder,
@@ -29,6 +35,14 @@
 // when a step has an instrument. A static import here would make the bundler
 // cut a shared chunk out of the lesson's own, one more request on every
 // lesson for a module most visits never load.
+
+/** How many wrong answers are kept for one step, and how much of each. */
+export const TRIES_LIMIT = 8;
+export const TRY_LENGTH = 40;
+
+/** @param {*} stored - A `:tries` value @returns {Array<string>} In order */
+export const triesOf = stored =>
+  typeof stored === 'string' ? stored.split('\n').filter(Boolean) : [];
 
 /** The rungs a generated ladder can hold, in the order offered. */
 export const GENERATED_RUNGS = Object.freeze(['units', 'magnitude', 'formula']);
@@ -90,7 +104,7 @@ const WORDS = {
   },
 };
 
-const fill = (text, vars) =>
+const fill$ = (text, vars) =>
   text.replace(/\{(\w+)\}/g, (_, k) => vars[k] ?? '');
 
 /**
@@ -187,59 +201,78 @@ export function rungText(rung, language = 'en') {
   const w = WORDS[language === 'es' ? 'es' : 'en'];
   const es = language === 'es';
   const unit = rung.unit ? ` ${escape(rung.unit)}` : '';
-  if (rung.id === 'units') return fill(w.units, { unit: escape(rung.unit) });
+  if (rung.id === 'units') return fill$(w.units, { unit: escape(rung.unit) });
   if (rung.id === 'magnitude')
-    return fill(rung.negative ? w.negative : w.magnitude, {
+    return fill$(rung.negative ? w.negative : w.magnitude, {
       lo: power(rung.exponent, es),
       hi: power(rung.exponent + 1, es),
       unit,
     });
   const where = rung.of
     .map(o =>
-      fill(w.where, {
+      fill$(w.where, {
         name: escape(o.name),
         label: plain(o.label),
         title: plain(o.title),
       })
     )
     .join('; ');
-  return `${fill(w.formula, { expr: `<code>${escape(rung.expr)}</code>` })}${where ? `. ${where}.` : '.'}`;
+  return `${fill$(w.formula, { expr: `<code>${escape(rung.expr)}</code>` })}${where ? `. ${where}.` : '.'}`;
+}
+
+/** The `:tries` value with one more wrong answer (see the header). */
+export function withTry(stored, answer) {
+  const tries = triesOf(stored);
+  const text = String(answer ?? '')
+    .replace(/\s+/g, ' ')
+    .trim()
+    .slice(0, TRY_LENGTH);
+  if (text && tries.at(-1) !== text && tries.length < TRIES_LIMIT)
+    tries.push(text);
+  return tries.length ? tries.join('\n') : undefined;
 }
 
 /**
- * Fill the slot under a wrong answer.
+ * Fill the slot under a wrong answer, and keep that answer with the tries.
  *
- * @param {HTMLElement} slot - The element stepView.js left ([data-recover])
- * @param {object} c
- * @param {object} c.step - The step
- * @param {Array<object>} c.steps - The lesson's steps
- * @param {number} c.authored - How many hints the step's author wrote
- * @param {string} c.locale - The reader's language
- * @param {string} c.id - The step's response key
- * @param {object} c.responses - The saved responses (written here)
- * @param {Function} c.save - Persist them
- * @param {Function} c.announce - Say it aloud
- * @param {?HTMLElement} c.explainButton - The instrument panel's explainer button
+ * @param {object} h - The step view's host (js/investigations/stepView.js
+ *   bindStepInputs): els, responses, stepId, currentStep, steps, save
+ * @param {Function} announce - Say it aloud
+ * @param {Function} getLocale - The reader's language
+ * @param {Function} hintsFor - The step's authored hints (js/answerFeedback.js)
  * @param {?string} [focus] - Which rung to put focus on after drawing
  * @returns {Promise<void>}
  */
-export async function mountRecovery(slot, c, focus = null) {
-  const language = c.locale === 'es' ? 'es' : 'en';
+export async function fill(h, announce, getLocale, hintsFor, focus = null) {
+  const els = h.els();
+  const slot = els.body.querySelector('[data-recover]');
+  if (!slot) return;
+  const step = h.currentStep();
+  const id = h.stepId();
+  const responses = h.responses();
+  // The attempts record: the wrong answer on screen, once.
+  const tries = withTry(responses[`${id}:tries`], responses[id]);
+  if (tries && tries !== responses[`${id}:tries`]) {
+    responses[`${id}:tries`] = tries;
+    h.save();
+  }
+  const language = getLocale() === 'es' ? 'es' : 'en';
   const w = WORDS[language];
-  const ladder = generatedLadder(c.step, c.steps, c.authored);
-  const taken = generatedTaken(c.responses[`${c.id}:gen`]);
+  const ladder = generatedLadder(
+    step,
+    h.steps?.() ?? [],
+    hintsFor(step)?.ladder.length ?? 0
+  );
+  const taken = generatedTaken(responses[`${id}:gen`]);
   const next = ladder.find(r => !taken.includes(r.id));
   // The instrument explained: only where the step has an instrument, its
   // panel is showing and that instrument has an explainer to open.
+  const button = els.toolExplain;
   let explain = false;
-  if (
-    c.step?.tool?.id &&
-    c.explainButton &&
-    !c.explainButton.closest('[hidden]')
-  ) {
+  if (step?.tool?.id && button && !button.closest('[hidden]')) {
     try {
       const m = await import('../explainers.js');
-      explain = Boolean(m.explainerKeyFor(c.step.tool.id));
+      explain = Boolean(m.explainerKeyFor(step.tool.id));
     } catch {
       /* offline and not cached: the button is not offered */
     }
@@ -256,7 +289,7 @@ export async function mountRecovery(slot, c, focus = null) {
   const buttons = [
     next
       ? `<button type="button" class="ui-button subtle inv-hint-btn" data-gen-next="${next.id}">${escape(
-          fill(w.ask, {
+          fill$(w.ask, {
             n: ladder.indexOf(next) + 1,
             total: ladder.length,
             name: w.name[next.id],
@@ -270,23 +303,25 @@ export async function mountRecovery(slot, c, focus = null) {
   slot.innerHTML = `${parts.join('')}${buttons ? `<div class="inv-hint-row">${buttons}</div>` : ''}`;
   slot.hidden = !slot.innerHTML;
 
-  slot.querySelector('[data-gen-next]')?.addEventListener('click', e => {
-    const id = e.currentTarget.dataset.genNext;
-    c.responses[`${c.id}:gen`] = [...taken, id].join(',');
-    c.save();
-    mountRecovery(slot, c, id);
-  });
-  slot
-    .querySelector('[data-recover-explain]')
-    ?.addEventListener('click', () => {
-      if (c.explainButton.getAttribute('aria-expanded') !== 'true')
-        c.explainButton.click();
-      c.explainButton.focus();
-      c.announce(w.explained);
-    });
+  // The buttons are made again with the slot, so a handler set on one goes
+  // with it: nothing is left listening.
+  const more = slot.querySelector('[data-gen-next]');
+  if (more)
+    more.onclick = () => {
+      responses[`${id}:gen`] = [...taken, more.dataset.genNext].join(',');
+      h.save();
+      fill(h, announce, getLocale, hintsFor, more.dataset.genNext);
+    };
+  const explained = slot.querySelector('[data-recover-explain]');
+  if (explained)
+    explained.onclick = () => {
+      if (button.getAttribute('aria-expanded') !== 'true') button.click();
+      button.focus();
+      announce(w.explained);
+    };
   if (focus) {
     const shown = slot.querySelector(`[data-gen="${focus}"]`);
     shown?.focus();
-    c.announce(`${w.shown} ${shown?.textContent ?? ''}`);
+    announce(`${w.shown} ${shown?.textContent ?? ''}`);
   }
 }

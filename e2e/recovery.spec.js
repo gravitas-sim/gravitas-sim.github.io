@@ -195,6 +195,7 @@ test.describe('after a wrong answer on a shipped step', () => {
     await body.locator('[data-numeric]').fill('6');
     await body.locator('[data-check-numeric]').click();
     await expect(body.locator('.inv-feedback')).toHaveClass(/is-wrong/);
+    await expect(explain).toBeVisible();
     await body.locator('[data-numeric]').fill('1.95');
     await body.locator('[data-check-numeric]').click();
     await expect(body.locator('.inv-feedback')).toHaveClass(/is-right/);

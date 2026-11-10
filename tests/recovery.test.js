@@ -24,23 +24,23 @@ import { INVESTIGATIONS } from '../js/data/investigations.js';
 import { withAllDepths } from '../js/investigations/depthAll.js';
 import {
   GENERATED_RUNGS,
-  decadeOf,
-  generatedLadder,
-  generatedTaken,
-  mountRecovery,
-  rungText,
-} from '../js/investigations/recovery.js';
-import {
   TRIES_LIMIT,
   TRY_LENGTH,
-  readProgress,
+  decadeOf,
+  fill,
+  generatedLadder,
+  generatedTaken,
+  rungText,
   triesOf,
   withTry,
+} from '../js/investigations/recovery.js';
+import {
+  readProgress,
   writeProgress,
 } from '../js/investigations/progressSchema.js';
-import { hintLadder } from '../js/answerFeedback.js';
+import { hintLadder, hintsFor } from '../js/answerFeedback.js';
 import { libraryCardHtml } from '../js/library/card.js';
-import { beforeThis } from '../js/investigations/next.js';
+import { before } from '../js/investigations/next.js';
 import { getLocale, setLocale } from '../js/i18n/index.js';
 import { KEY_INVESTIGATION_PREFIX } from '../js/names.js';
 import { BOUNDARY } from './compat/boundary.mjs';
@@ -275,65 +275,89 @@ describe('the attempts record and the 2.0.0 readers', () => {
 });
 
 describe('the slot under a wrong answer', () => {
-  let slot;
   let responses;
   let said;
   let saves;
+  let step;
+  let explainButton;
   const tick = () => new Promise(r => setTimeout(r, 0));
-  const ctx = (step, extra = {}) => ({
-    step,
-    steps: [],
-    authored: hintLadder(step).length,
-    locale: getLocale(),
-    id: 'l:q',
-    responses,
+  const slot = () => document.querySelector('[data-recover]');
+  const host = () => ({
+    els: () => ({
+      body: document.getElementById('body'),
+      toolExplain: explainButton,
+    }),
+    responses: () => responses,
+    stepId: () => 'l:q',
+    currentStep: () => step,
+    steps: () => [],
     save: () => saves++,
-    announce: text => said.push(text),
-    explainButton: null,
-    ...extra,
   });
+  const draw = () => fill(host(), text => said.push(text), getLocale, hintsFor);
   beforeEach(() => {
     setLocale('en', { persist: false });
-    document.body.innerHTML = '<div data-recover hidden></div>';
-    slot = document.querySelector('[data-recover]');
-    responses = {};
+    document.body.innerHTML =
+      '<div id="body"><div data-recover hidden></div></div>';
+    responses = { 'l:q': '80' };
     said = [];
     saves = 0;
+    step = numeric();
+    explainButton = null;
   });
 
   test('offers each generated rung on request, in order, and records it', async () => {
-    await mountRecovery(slot, ctx(numeric()));
-    expect(slot.hidden).toBe(false);
-    expect(slot.querySelectorAll('[data-gen]').length).toBe(0);
-    expect(slot.textContent).toContain('Generated from this step');
-    let button = slot.querySelector('button[data-gen-next]');
+    await draw();
+    expect(slot().hidden).toBe(false);
+    expect(slot().querySelectorAll('[data-gen]').length).toBe(0);
+    expect(slot().textContent).toContain('Generated from this step');
+    let button = slot().querySelector('button[data-gen-next]');
     expect(button.textContent).toBe(
       'Show a generated hint (1 of 2): the units'
     );
     button.click();
     await tick();
     expect(responses['l:q:gen']).toBe('units');
-    expect(saves).toBe(1);
-    expect(document.activeElement).toBe(slot.querySelector('[data-gen]'));
+    expect(document.activeElement).toBe(slot().querySelector('[data-gen]'));
     expect(said[0]).toMatch(/^Generated hint shown\. The units\./);
-    button = slot.querySelector('button[data-gen-next]');
+    button = slot().querySelector('button[data-gen-next]');
     expect(button.textContent).toContain('(2 of 2): the order of magnitude');
     button.click();
     await tick();
     expect(responses['l:q:gen']).toBe('units,magnitude');
-    expect(slot.querySelector('button[data-gen-next]')).toBeNull();
+    expect(slot().querySelector('button[data-gen-next]')).toBeNull();
     expect(
-      [...slot.querySelectorAll('[data-gen]')].map(p => p.dataset.gen)
+      [...slot().querySelectorAll('[data-gen]')].map(p => p.dataset.gen)
     ).toEqual(['units', 'magnitude']);
     // Drawn again from the record, as after a reload.
-    await mountRecovery(slot, ctx(numeric()));
-    expect(slot.querySelectorAll('[data-gen]').length).toBe(2);
+    await draw();
+    expect(slot().querySelectorAll('[data-gen]').length).toBe(2);
+  });
+
+  test('keeps the wrong answer on screen with the tries, once', async () => {
+    await draw();
+    expect(responses['l:q:tries']).toBe('80');
+    expect(saves).toBe(1);
+    // Drawn again with the same answer (a reload, a hint): not kept twice.
+    await draw();
+    expect(responses['l:q:tries']).toBe('80');
+    expect(saves).toBe(1);
+    responses['l:q'] = '0,8';
+    await draw();
+    expect(triesOf(responses['l:q:tries'])).toEqual(['80', '0,8']);
+    // No slot, nothing kept: a right answer draws none.
+    document.getElementById('body').innerHTML = '';
+    responses['l:q'] = '8';
+    await draw();
+    expect(triesOf(responses['l:q:tries'])).toEqual(['80', '0,8']);
   });
 
   test('is empty and hidden on a step with authored hints and no instrument', async () => {
-    await mountRecovery(slot, ctx(numeric({ hints: ['Think.'] })));
-    expect(slot.hidden).toBe(true);
-    expect(slot.innerHTML).toBe('');
+    step = numeric({ hints: ['Think.'] });
+    await draw();
+    expect(slot().hidden).toBe(true);
+    expect(slot().innerHTML).toBe('');
+    // The wrong answer is kept all the same.
+    expect(responses['l:q:tries']).toBe('80');
   });
 
   test('opens the instrument’s explainer through the panel’s own button', async () => {
@@ -341,43 +365,42 @@ describe('the slot under a wrong answer', () => {
       'beforeend',
       '<header><button id="x" aria-expanded="false">What am I looking at?</button></header>'
     );
-    const explain = document.getElementById('x');
+    explainButton = document.getElementById('x');
     let presses = 0;
-    explain.addEventListener('click', () => {
+    explainButton.addEventListener('click', () => {
       presses++;
-      explain.setAttribute('aria-expanded', 'true');
+      explainButton.setAttribute('aria-expanded', 'true');
     });
-    const step = numeric({
-      hints: ['Think.'],
-      tool: { id: 'power-law-kepler' },
-    });
-    await mountRecovery(slot, ctx(step, { explainButton: explain }));
-    const button = slot.querySelector('button[data-recover-explain]');
+    step = numeric({ hints: ['Think.'], tool: { id: 'power-law-kepler' } });
+    await draw();
+    const button = slot().querySelector('button[data-recover-explain]');
     expect(button.textContent).toBe('Try again with the instrument explained');
-    expect(slot.querySelector('[data-gen-next]')).toBeNull();
+    expect(slot().querySelector('[data-gen-next]')).toBeNull();
     button.click();
     button.click();
     // Pressed again while open, it does not close what the reader asked for.
     expect(presses).toBe(1);
-    expect(document.activeElement).toBe(explain);
+    expect(document.activeElement).toBe(explainButton);
     expect(said.at(-1)).toContain('explanation of the instrument is open');
     // No instrument on the step, or its panel hidden: no button.
-    await mountRecovery(slot, ctx(numeric(), { explainButton: explain }));
-    expect(slot.querySelector('[data-recover-explain]')).toBeNull();
-    explain.closest('header').hidden = true;
-    await mountRecovery(slot, ctx(step, { explainButton: explain }));
-    expect(slot.querySelector('[data-recover-explain]')).toBeNull();
+    step = numeric();
+    await draw();
+    expect(slot().querySelector('[data-recover-explain]')).toBeNull();
+    step = numeric({ hints: ['Think.'], tool: { id: 'power-law-kepler' } });
+    explainButton.closest('header').hidden = true;
+    await draw();
+    expect(slot().querySelector('[data-recover-explain]')).toBeNull();
   });
 
   test('says it in Spanish', async () => {
     setLocale('es', { persist: false });
-    await mountRecovery(slot, ctx(numeric()));
-    expect(slot.querySelector('button').textContent).toBe(
+    await draw();
+    expect(slot().querySelector('button').textContent).toBe(
       'Mostrar una pista generada (1 de 2): las unidades'
     );
-    slot.querySelector('button').click();
+    slot().querySelector('button').click();
     await tick();
-    expect(slot.querySelector('[data-gen]').textContent).toContain(
+    expect(slot().querySelector('[data-gen]').textContent).toContain(
       'La respuesta se pide en yr.'
     );
     setLocale('en', { persist: false });
@@ -437,13 +460,13 @@ describe('prerequisites as advice', () => {
     });
 
     test('names the unfinished prerequisite with a link', async () => {
-      await beforeThis(el(), 'orbital-energy');
+      await before({ id: 'orbital-energy' }, null, el());
       expect(fetched).toEqual(['/library/library.json']);
       expect(el().hidden).toBe(false);
       expect(el().textContent).toBe('You may want this first: Kepler & <Laws>');
       expect(el().querySelector('a').getAttribute('href')).toBe(first.route);
       setLocale('es', { persist: false });
-      await beforeThis(el(), 'orbital-energy');
+      await before({ id: 'orbital-energy' }, null, el());
       expect(el().textContent).toBe(
         'Quizá quieras hacer antes: Leyes de Kepler'
       );
@@ -454,26 +477,33 @@ describe('prerequisites as advice', () => {
         `${KEY_INVESTIGATION_PREFIX}keplers-laws`,
         JSON.stringify({ visited: ['a', 'b'] })
       );
-      await beforeThis(el(), 'orbital-energy');
+      await before({ id: 'orbital-energy' }, null, el());
       expect(el().hidden).toBe(true);
       localStorage.clear();
       localStorage.setItem(
         `${KEY_INVESTIGATION_PREFIX}orbital-energy`,
         JSON.stringify({ visited: ['a', 'b', 'c'] })
       );
-      await beforeThis(el(), 'orbital-energy');
+      await before({ id: 'orbital-energy' }, null, el());
       expect(el().hidden).toBe(true);
     });
 
-    test('stays hidden for an investigation with none, an unknown one, and offline', async () => {
-      await beforeThis(el(), 'keplers-laws');
+    test('an assignment gets none, and no lesson asks nothing of the Library', async () => {
+      await before({ id: 'orbital-energy' }, { t: 'Week 3' }, el());
+      await before(null, null, el());
       expect(el().hidden).toBe(true);
-      await beforeThis(el(), 'nothing-by-this-name');
+      expect(fetched).toEqual([]);
+    });
+
+    test('stays hidden for an investigation with none, an unknown one, and offline', async () => {
+      await before({ id: 'keplers-laws' }, null, el());
+      expect(el().hidden).toBe(true);
+      await before({ id: 'nothing-by-this-name' }, null, el());
       expect(el().hidden).toBe(true);
       globalThis.fetch = async () => {
         throw new Error('offline');
       };
-      await beforeThis(el(), 'orbital-energy');
+      await before({ id: 'orbital-energy' }, null, el());
       expect(el().hidden).toBe(true);
     });
   });
