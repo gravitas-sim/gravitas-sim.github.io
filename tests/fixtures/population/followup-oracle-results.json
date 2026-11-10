@@ -1,0 +1,334 @@
+{
+ "format": "gravitas.population-inference-gate-followup-oracle-results/1",
+ "followupThresholdsSha256": "c920e99d86fc69e34ce85ca8fb7a29186764a9ee081d259c73a1bbe62b1c376a",
+ "thresholdsSha256": "96e9e9ff9119b181364beb81857633bdeecf88af87da157ef80200afffc557c1",
+ "partAOracleResultsSha256": "3627313e4acf0bc83fa7265ccd8d4d2197682b21ba2bdd026ed2e230e74bcae5",
+ "partAOracleSourceSha256": "2d9f0d07bf4e3788da56e74d934147214307267aa83dc4befda55453b4cf4f97",
+ "python": "3.9.6",
+ "numpy": "1.26.4",
+ "scipy": "1.13.1",
+ "copiedVerbatim": {
+  "kernel": true,
+  "loglik": true,
+  "fit_lbfgs": true,
+  "fit_fixed": true,
+  "Profile": true,
+  "penalised": true,
+  "gen_objects": true
+ },
+ "stage1": {
+  "F2": {
+   "maxRelLogLik": 0.0,
+   "maxAbsTheta": 0.0,
+   "per": {
+    "S1-1": 0.0,
+    "S1-4": 0.0,
+    "S1-16": 0.0,
+    "S3-1": 0.0,
+    "S3-4": 0.0,
+    "S3-16": 0.0
+   },
+   "maxRelExposureU1": 0.0
+  },
+  "referenceFits": {
+   "S1-1": {
+    "thetaNewton": [
+     -1.6419955281277598,
+     -0.3758132519419732,
+     -0.14785689919905093,
+     -0.052300607968772804,
+     -0.4594519247576319,
+     -0.8064316879240924
+    ],
+    "thetaBfgs": [
+     -1.6419955281136511,
+     -0.3758132519434025,
+     -0.1478568991985258,
+     -0.052300607966710405,
+     -0.4594519247558257,
+     -0.8064316879248048
+    ],
+    "bfgsSuccess": false,
+    "newtonIterations": 7,
+    "newtonLastStep": 1.3267065580090642e-15,
+    "gmaxNewton": 1.1290968160437842e-13,
+    "minEig": 17.018504613825623,
+    "minEigUnpenalised": 15.776829227458194,
+    "maxAbsThetaBfgsVsNewton": 1.410871419693649e-11,
+    "objects": 377
+   },
+   "S1-4": {
+    "thetaNewton": [
+     -1.5165545273440142,
+     -0.4444153753714352,
+     -0.11705094248783016,
+     -0.07496415868286721,
+     -0.4370228541478416,
+     -0.8072997068031185
+    ],
+    "thetaBfgs": [
+     -1.5165545280726769,
+     -0.4444153753389428,
+     -0.11705094241635328,
+     -0.07496415882456052,
+     -0.43702285417876224,
+     -0.8072997067900263
+    ],
+    "bfgsSuccess": false,
+    "newtonIterations": 7,
+    "newtonLastStep": 7.837669222514967e-16,
+    "gmaxNewton": 5.5067062021407764e-14,
+    "minEig": 21.94494123651298,
+    "minEigUnpenalised": 18.186434162579797,
+    "maxAbsThetaBfgsVsNewton": 7.286626857450074e-10,
+    "objects": 377
+   },
+   "S1-16": {
+    "thetaNewton": [
+     -1.3240181568808014,
+     -0.5157437303883394,
+     -0.12810651754327568,
+     -0.10056359309046622,
+     -0.40641428366533144,
+     -0.7836013359332447
+    ],
+    "thetaBfgs": [
+     -1.3240181547102396,
+     -0.5157437302836646,
+     -0.12810651826659397,
+     -0.10056359375829253,
+     -0.406414283662777,
+     -0.783601335478868
+    ],
+    "bfgsSuccess": false,
+    "newtonIterations": 6,
+    "newtonLastStep": 5.009869217812518e-16,
+    "gmaxNewton": 4.973799150320701e-14,
+    "minEig": 30.341074015226283,
+    "minEigUnpenalised": 22.499552338328574,
+    "maxAbsThetaBfgsVsNewton": 2.1705617303524605e-09,
+    "objects": 377
+   },
+   "S3-1": {
+    "thetaNewton": [
+     -0.5189085032257299,
+     -0.287824512075949,
+     -0.21870364810008122,
+     -0.1933329952877276,
+     -1.3350597369405388,
+     -1.8913052732497249,
+     -2.0648398749183525,
+     -1.7354892936878314
+    ],
+    "thetaBfgs": [
+     -0.5189085000643459,
+     -0.2878245108029058,
+     -0.21870365140495415,
+     -0.19333298618719552,
+     -1.3350597372683726,
+     -1.89130527195248,
+     -2.06483987164043,
+     -1.7354892918465012
+    ],
+    "bfgsSuccess": false,
+    "newtonIterations": 7,
+    "newtonLastStep": 5.190473501311841e-14,
+    "gmaxNewton": 2.273792265583552e-12,
+    "minEig": 10.472289195926422,
+    "minEigUnpenalised": 3.6115353188935444,
+    "maxAbsThetaBfgsVsNewton": 9.100532077921386e-09,
+    "objects": 369
+   },
+   "S3-4": {
+    "thetaNewton": [
+     -0.5126184070616652,
+     -0.29270606372773705,
+     -0.17024332726393768,
+     -0.3026635805157466,
+     -1.1977417108998485,
+     -1.8163954497013692,
+     -1.9949972396619635,
+     -1.8199981558455398
+    ],
+    "thetaBfgs": [
+     -0.5126184056114544,
+     -0.2927060647453764,
+     -0.1702433328412611,
+     -0.30266358097378704,
+     -1.1977417090252942,
+     -1.816395450966886,
+     -1.9949972389043915,
+     -1.8199981579022082
+    ],
+    "bfgsSuccess": false,
+    "newtonIterations": 7,
+    "newtonLastStep": 7.457494916195688e-16,
+    "gmaxNewton": 5.551115123125783e-14,
+    "minEig": 14.85174053983024,
+    "minEigUnpenalised": 4.413046779087341,
+    "maxAbsThetaBfgsVsNewton": 5.577323436423143e-09,
+    "objects": 369
+   },
+   "S3-16": {
+    "thetaNewton": [
+     -0.4833130575931803,
+     -0.275042524810168,
+     -0.1889159061057824,
+     -0.41794017531650507,
+     -1.068963599551947,
+     -1.6186537842905222,
+     -1.9005294148178231,
+     -1.9918206646392926
+    ],
+    "thetaBfgs": [
+     -0.48331305759540905,
+     -0.2750425247931283,
+     -0.18891590608773257,
+     -0.4179401753108201,
+     -1.0689635995580635,
+     -1.618653784286656,
+     -1.9005294148014347,
+     -1.9918206646311323
+    ],
+    "bfgsSuccess": false,
+    "newtonIterations": 7,
+    "newtonLastStep": 3.491959802962088e-16,
+    "gmaxNewton": 4.973799150320701e-14,
+    "minEig": 13.9137074451803,
+    "minEigUnpenalised": 5.299066503502422,
+    "maxAbsThetaBfgsVsNewton": 1.80498394009021e-11,
+    "objects": 369
+   }
+  },
+  "PO1reference": 9.100532077921386e-09,
+  "exposureU1": [
+   141.64372168387774,
+   401.83916908255605,
+   491.552981034684,
+   499.4972666334693,
+   499.9710651865195,
+   499.9983379942449,
+   499.9999045459845,
+   499.9999945178236
+  ],
+  "D8b": {
+   "replicates": 1000,
+   "baseSeed": 2643000,
+   "Z": [
+    0,
+    5,
+    6,
+    7
+   ],
+   "muTrue": [
+    7.082186084193887,
+    20.091958454127802,
+    24.5776490517342,
+    24.97486333167346,
+    24.998553259325973,
+    4.9999833799424485,
+    4.9999990454598455,
+    4.999999945178236
+   ],
+   "perBin": {
+    "0": {
+     "statements": 1000,
+     "covered": 950,
+     "coverage": 0.95,
+     "zeroStatements": 9,
+     "zeroCovered": 2,
+     "muTrue": 7.082186084193887
+    },
+    "5": {
+     "statements": 1000,
+     "covered": 963,
+     "coverage": 0.963,
+     "zeroStatements": 47,
+     "zeroCovered": 37,
+     "muTrue": 4.9999833799424485
+    },
+    "6": {
+     "statements": 1000,
+     "covered": 960,
+     "coverage": 0.96,
+     "zeroStatements": 35,
+     "zeroCovered": 23,
+     "muTrue": 4.9999990454598455
+    },
+    "7": {
+     "statements": 1000,
+     "covered": 941,
+     "coverage": 0.941,
+     "zeroStatements": 14,
+     "zeroCovered": 1,
+     "muTrue": 4.999999945178236
+    }
+   },
+   "statements": 4000,
+   "covered": 3814,
+   "pooled": 0.9535,
+   "zeroStatements": 105,
+   "zeroCovered": 63,
+   "conditionalShare": 0.6,
+   "zeroStatementsOutsideZ": 0,
+   "fitsNotSuccessful": 160,
+   "samplesFile": "u3c-numpy-samples.json",
+   "samplesSha256": "009933b007960f5be3c73ffe543433e6366412fed18c6c36a806c0cba75fd004",
+   "statementsFile": "u3c-numpy-statements.json",
+   "statementsSha256": "4e983115adbff7fe16bb19e57b3861a9d4c274c0c64ff0f3222ab291460aaea4"
+  },
+  "countsExact": {
+   "0": {
+    "muTrue": 7.082186084193887,
+    "coverage": 0.979192319650055,
+    "coveringCounts": [
+     2,
+     13
+    ],
+    "zeroCovers": false,
+    "probabilityOfZero": 0.0008399349713409727
+   },
+   "5": {
+    "muTrue": 4.9999833799424485,
+    "coverage": 0.9795669737820217,
+    "coveringCounts": [
+     1,
+     10
+    ],
+    "zeroCovers": false,
+    "probabilityOfZero": 0.006738058985082975
+   },
+   "6": {
+    "muTrue": 4.9999990454598455,
+    "coverage": 0.9795667952793548,
+    "coveringCounts": [
+     1,
+     10
+    ],
+    "zeroCovers": false,
+    "probabilityOfZero": 0.006737953430729506
+   },
+   "7": {
+    "muTrue": 4.999999945178236,
+    "coverage": 0.9795667850272168,
+    "coveringCounts": [
+     1,
+     10
+    ],
+    "zeroCovers": false,
+    "probabilityOfZero": 0.006737947368471617
+   }
+  },
+  "countsExactAt5": {
+   "muTrue": 5.0,
+   "coverage": 0.9795667844025311,
+   "coveringCounts": [
+    1,
+    10
+   ],
+   "zeroCovers": false,
+   "probabilityOfZero": 0.006737946999085467
+  },
+  "cpuSeconds": 16.611586
+ }
+}
