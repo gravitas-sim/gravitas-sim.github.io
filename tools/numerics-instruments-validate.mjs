@@ -182,7 +182,8 @@ const flat = d => Array.from({ length: 201 }, (_, i) => ({ t: i * 0.5, d }));
 const many = (n, f) => Array.from({ length: n }, (_, k) => f(k));
 const slim = r => {
   if (!r || typeof r !== 'object') return r;
-  const { grid, points, steps, pairs, ...rest } = r;
+  const rest = { ...r };
+  for (const k of ['grid', 'points', 'steps', 'pairs']) delete rest[k];
   return rest;
 };
 
