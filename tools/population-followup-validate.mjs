@@ -331,12 +331,13 @@ const diagP3 = [];
       per[`${id}-${kappa}`] = Math.max(
         ...o.map((t, j) => Math.abs(r.penalty.theta[j] - t))
       );
-      diagRef.push(
-        diagnose(r, orc.stage1.referenceFits[`${id}-${kappa}`].thetaNewton, {
+      diagRef.push({
+        ...diagnose(r, orc.stage1.referenceFits[`${id}-${kappa}`].thetaNewton, {
           fit: `${id}-${kappa}`,
           kappa,
-        })
-      );
+        }),
+        theta: r.penalty.theta,
+      });
     }
   const p2ok =
     notConv === p2.notConverged &&

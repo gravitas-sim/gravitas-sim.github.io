@@ -354,8 +354,10 @@ function penalisedParts(P, theta, scale, kappa) {
   return { obj: -ll + 0.5 * kappa * pen, grad, H };
 }
 
-function penalisedFit(P, fit, scale, kappa) {
+function penalisedFit(P, fit, scale, kappa, stop) {
   const { J } = P;
+  let listings = 0;
+  for (let i = 0; i < P.N; i++) listings += P.wt[i];
   const theta = new Float64Array(J);
   for (let j = 0; j < J; j++)
     theta[j] = Math.log(Math.max(fit.mu[j], 0.5) / scale[j]);
@@ -371,6 +373,24 @@ function penalisedFit(P, fit, scale, kappa) {
       converged = true;
       reason = 'criterion';
       break;
+    }
+    if (stop === 'rounding-floor') {
+      // amendment AM-F3 of the follow-up: one more step cannot lower the objective by more than its rounding
+      const st = solve(cur.H, cur.grad, J);
+      if (st) {
+        let d = 0;
+        for (let j = 0; j < J; j++) d += 0.5 * cur.grad[j] * st[j];
+        if (
+          Number.isFinite(d) &&
+          d >= 0 &&
+          d <= 64 * 2 ** -52 * Math.max(1, Math.abs(cur.obj)) &&
+          gmax <= 1e-6 * Math.max(1, listings)
+        ) {
+          converged = true;
+          reason = 'rounding-floor';
+          break;
+        }
+      }
     }
     let accepted = false;
     for (let tries = 0; tries < 40; tries++) {
@@ -706,7 +726,7 @@ export function populationRates({
   if (penalty) {
     const pf =
       kappa > 0
-        ? penalisedFit(P, fit, scale, kappa)
+        ? penalisedFit(P, fit, scale, kappa, penalty.stop)
         : {
             theta: Float64Array.from(fit.mu, (m, j) => Math.log(m / scale[j])),
             objective: -ll,
