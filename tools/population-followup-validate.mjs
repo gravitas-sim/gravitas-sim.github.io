@@ -529,6 +529,9 @@ timed('crossFeed', () => {
   let compared = 0;
   let maxDevDiff = 0;
   let maxLimitRel = 0;
+  let devAbove1e6 = 0;
+  let devAbove1e3 = 0;
+  let maxDevAt = null;
   const differing = [];
   smp.replicates.forEach((s, q) => {
     const res = populationRates({
@@ -568,7 +571,21 @@ timed('crossFeed', () => {
         });
         return;
       }
-      if (ps === 0) maxDevDiff = Math.max(maxDevDiff, Math.abs(pv - ov));
+      if (ps === 0) {
+        const dd = Math.abs(pv - ov);
+        if (dd > 1e-6) devAbove1e6++;
+        if (dd > 1e-3) devAbove1e3++;
+        if (dd > maxDevDiff) {
+          maxDevDiff = dd;
+          maxDevAt = {
+            replicate: q,
+            bin: j,
+            prototype: pv,
+            oracle: ov,
+            muHatOracle: st.muHat[q][k],
+          };
+        }
+      }
       if (ps === 1 && pv !== null && ov >= 0)
         maxLimitRel = Math.max(maxLimitRel, rel(pv, ov));
       const isExempt =
@@ -600,6 +617,9 @@ timed('crossFeed', () => {
     flagDiffers: flagDiff,
     exempt,
     maxDevianceDifference: maxDevDiff,
+    maxDevianceDifferenceAt: maxDevAt,
+    devianceDifferencesAbove1e6: devAbove1e6,
+    devianceDifferencesAbove1e3: devAbove1e3,
     maxLimitRelativeDifference: maxLimitRel,
     differing: differing.slice(0, 40),
   });
