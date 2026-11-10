@@ -397,6 +397,9 @@ function weekNote(id, title) {
 function showWeek() {
   const box = els.body?.querySelector('#welWeek');
   if (!box) return;
+  // A line said when a first week ended is said once.
+  for (const id of ['#welWeekDone', '#welWeekLeft'])
+    els.body.querySelector(id).hidden = true;
   const week = readWeek();
   const { on, states } = week ? weekStates(week) : { on: false };
   // Finished, or not a record Home can show: the mode is over.
@@ -415,8 +418,6 @@ function showWeek() {
     list.replaceChildren();
     return;
   }
-  for (const id of ['#welWeekDone', '#welWeekLeft'])
-    els.body.querySelector(id).hidden = true;
   words(box.querySelector('#welWeekTitle'), week.t);
   const item = box.querySelector('template').content.firstElementChild;
   list.replaceChildren(
@@ -555,7 +556,8 @@ function wireBody() {
       // A link, followed as one: the address opens the item on this page or
       // another, and Home closes behind it.
       followWeek(Number(item.dataset.week));
-      closeWelcome();
+      // Opened in another tab or window, Home stays where it is.
+      if (!(e.ctrlKey || e.metaKey || e.shiftKey)) closeWelcome();
       return;
     }
     const lesson = e.target.closest('[data-lesson]');
