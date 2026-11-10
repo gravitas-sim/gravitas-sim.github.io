@@ -328,7 +328,13 @@
   "never": "No published number, citation detail, catalogue identifier or licence term is typed from memory: each is read from a fetched file and the file is named. No downloaded program is run, imported or executed in any form; a source file may be read as text.",
   "notRun": "A request that cannot be filled from public files in this session leaves its leg NOT RUN with the exact request and what was tried."
  },
- "amendments": [],
+ "amendments": [
+  {
+   "id": "AM-F1",
+   "recordedBefore": "the follow-up oracle's first run (no follow-up program had been run and no sample drawn)",
+   "text": "Definitions the contract left open, fixed before any number exists; no bound moved. (1) 'The oracle's optimum' of a penalised fit, wherever a leg or a diagnostic compares with it, is the result of the oracle's Newton iteration (flat start; a full step once the step is below 1e-7, backtracking on the objective above that; stopped when the largest step component is below 1e-12 or at 400 iterations; a Hessian whose smallest eigenvalue is not positive is shifted for the step). Part A's BFGS result is the second algorithm and PO1 bounds the distance between the two; F2 compares the BFGS result with Part A's pinned theta, which BFGS produced. (2) Per-sample output stays outside the repository beside the sample files, regenerable by seed: the oracle's U3c samples and its statement table (status, covering flag, the deviance at the truth or the limit, for the bins of Z), the stream sample files, and the oracle's penalised theta of every stream fit. A commit pins each file by its sha256 together with the counts the legs read; the validator checks every sha256 before it compares. Sample files hold every double in its shortest round-trip decimal form, so both implementations read identical numbers; the 12-digit rounding of Part A's reference samples is not applied to the follow-up's ensembles. (3) 'Copied without change' is measured as the source text of each copied function being found verbatim in tools/population-oracle/oracle.py, whose sha256 is recorded. (4) In the oracle's U3c ensemble a constrained fit or a limit is computed only for the bins of Z; for the other bins only the zero rule's status is recorded (for the count of zero estimates outside Z). (5) A sample with no object has no penalised fit in either implementation; it is counted and belongs to no leg. (6) The exact counts-path coverage of D8b.r3 sums the Poisson distribution over counts 0 to 399. (7) F2's log-likelihood comparison is made once per reference sample and kappa with the copied fit_lbfgs, which is the fit that produced the pinned value."
+  }
+ ],
  "decisions": [
   {
    "id": "F-DEC1",
