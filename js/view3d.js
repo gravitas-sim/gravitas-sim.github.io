@@ -397,7 +397,7 @@ function stepCamera(kind, x, y = 0) {
     ...camera.position.toArray(),
     ...target.toArray(),
   ]
-    .map(v => v.toFixed(2))
+    .map(v => Math.round(v * 100) / 100)
     .join(',');
 }
 

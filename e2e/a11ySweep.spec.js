@@ -374,10 +374,14 @@ test.describe('sandbox.view: the view pad', () => {
       // Nothing yet: three presses are one change, said when they stop.
       expect(await said(page)).not.toMatch(/Zoom/);
       const { zoom } = await view(page);
+      // Three significant figures, with the language's decimal mark.
+      const digits = String(Number(zoom.toPrecision(3))).replace('.', '[.,]');
       await expect(page.locator('#srStatus')).toHaveText(
-        locale.id === 'es'
-          ? `Zoom de ${zoom.toFixed(2)} aumentos`
-          : `Zoom ${zoom.toFixed(2)} times`,
+        new RegExp(
+          locale.id === 'es'
+            ? `^Zoom de ${digits} aumentos$`
+            : `^Zoom ${digits} times$`
+        ),
         { timeout: 5_000 }
       );
       // And the pad's buttons are named in the page's language.

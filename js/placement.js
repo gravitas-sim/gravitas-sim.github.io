@@ -39,6 +39,7 @@ import {
 } from './physics.js';
 import { SETTINGS, state, current_scenario_name } from './appState.js';
 import { announce } from './notify.js';
+import { formatNumber } from './format.js';
 import { t, onLocaleChange } from './i18n/index.js';
 import { registerShortcut, nudgeScale } from './shortcuts.js';
 import { glyphMarkup } from './inspectorView.js';
@@ -1106,7 +1107,13 @@ export function initPlacement(ctx) {
       );
       clearTimeout(zoomSaid);
       zoomSaid = setTimeout(
-        () => announce(words.textContent.replace('{x}', state.zoom.toFixed(2))),
+        () =>
+          announce(
+            words.textContent.replace(
+              '{x}',
+              formatNumber(state.zoom, { sig: 3 })
+            )
+          ),
         700
       );
     } else {
