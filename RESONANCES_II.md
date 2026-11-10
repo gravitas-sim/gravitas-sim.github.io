@@ -4,6 +4,12 @@ Verdict **C** by the committed function: the existing guide stands, and Prompt 2
 What landed is the kernel and its validation record, with no panel, guide, lesson depth or model-page section
 (section 6). Nothing student-facing changed; no Spanish was written; labels invisible and documentation.
 
+**Addendum (2026-11-10, sections 9 to 13): verdict B by its own committed function.** The first verdict is not
+re-judged and stays C. All 21 gated addendum legs pass on their first run (a ripple-free estimator resolves the authentic
+argument: 2070.5 d against the cited 2071 d; steps derived from an error budget meet every original bound), but the
+check of the cited values against downloaded sources fails twice, which keeps A out of reach. B's named slice is the
+argument displayed over the window without a fitted period or rate. No consumer is built in the addendum's PR.
+
 ## 1. What this document is
 
 Part A of Prompt 273 is a gate: the test systems, the cited libration periods, the window (a committed multiple of the
@@ -112,3 +118,119 @@ would adopt; the verdict by the committed function is still C.
 tests/fixtures/resonances-ii <data dir> r1 jup laplace pluto secular ensemble` and the same with `c:` before each of
 `jup laplace pluto ensemble`, then `node tools/resonances-ii-validate.mjs run --data <data dir>` (about 40 s; the oracle
 about 25 min). The Horizons files are not in the repository.
+
+## 9. The Part A addendum: what it is and what it may not do
+
+Carl approved the recommendation of section 7 (questions 1, 2 and 4) as an addendum, not a new verdict on the old legs.
+Its contract is `tests/fixtures/resonances-ii/addendum-thresholds.json`, committed alone and first (d1313eb9) before any
+of its code existed. The rule: the 19 legs above and their follow-ups stay exactly as recorded (the 8 failed legs fail,
+L1s, L3f, S1f and S2f fail, no bound moves, `results.json` and its history are not rewritten, the first verdict stays
+C); every improvement is a new leg whose bound is fixed by a stated rule before any run (a leg that re-tests an original
+carries that leg's bound unchanged; a budget is the original bound of the quantity it protects; coverage is 90% at
++-2 sigma; a false-positive rate is 1%). Three amendments were recorded before the runs they affect: AM6 (the oracle's
+estimators), AM7 (after the oracle's first parts and the downloaded sources were read, before any kernel run: where
+sources disagree the stricter reading holds), AM8 (after a smoke run showed the pilot read the energy at one orbital
+phase only: it now reads every step). `tests/resonancesIIAddendum.test.js` recomputes the addendum verdict from the
+pinned record and fails if the first record moves.
+
+## 10. What was built
+
+**A ripple-free estimator**, `measureLibrationHarmonic` in `js/lab3d/libration.js`. The model is
+phi(t) = c0 + c1 (t - tm) + a cos w (t - tm) + b sin w (t - tm) on the unwrapped argument, fitted by weighted least
+squares with Hann weights over the window; w minimises the weighted residual, scanned from half a cycle to 8 cycles per
+window and refined by a golden-section search. Under the taper a term a few cycles per window away barely reaches the
+line, so the ripple need not be removed first. It returns circulation on a net drift of 355 deg, and `not-constrained`
+with no number when the minimising period is longer than a third of the window, when the amplitude is below 5 formal
+sigma, when the centre drifts by more than twice the amplitude, or when the first and the last two thirds of the window
+disagree (periods apart by more than 25%, or an amplitude outside half to twice the whole window's). The uncertainty is
+a sandwich covariance scaled by a noise floor read from the residual's periodogram above the line (the median of 24
+ordinates), in quadrature with half the difference of the two sub-window fits and the sampling floor. Limits: one line;
+a libration completing more than 8 turns in the window is not looked for (the turning-point estimator is for that); a
+term within two cycles per window of the line is not separated from it; the floor does not see slower terms.
+
+**A step from an error budget**, `stepForBudget` in `js/lab3d/stepBudget.js` (new; excluded from the service-worker
+install like the kernel, imported by no page). A pilot of 50 inner periods at 64, 128 and 256 steps a period measures
+the energy error and, for each budgeted angle, the difference between the runs; a fourth-power scaling in the step and
+a linear growth of an angle's error over the window give the prediction; the step is the largest one dividing the
+sampling interval whose predictions are a tenth of each budget. A budget needing more than 4,096 steps a period is
+refused. The budgets are the original bounds: energy 1e-8, the Laplace and Pluto arguments within 1 deg (below 5% of
+their amplitudes), the particle's apse within 0.5% of four turns.
+
+**An amended oracle**, `tests/fixtures/resonances-ii/oracle_addendum.py` (`python3 -E`, numpy and scipy, no Gravitas
+code; `oracle.py` and its output are untouched). Its turning-point estimator drops a turning point at the first or last
+sample (the defect of section 5.2); its harmonic estimator implements the same definition independently (a zero-padded
+FFT peak, then `scipy.optimize.least_squares`), checked on 200 planted series of its own (leg O1).
+
+## 11. The addendum legs (25: 21 pass, 2 fail, 1 reported, 1 not run)
+
+| Leg | Result | What was measured |
+|---|---|---|
+| O1 oracle estimator on its own planted truth | PASS | worst period error 0.6%, worst amplitude error 0.033 deg of 1 |
+| T1h kernel estimator, 400 planted series under ripple three times the line | PASS | none refused; worst period error 0.55%, amplitude 0.041 deg, centre 0.028 deg; the planted period inside +-2 sigma for 396 of 400 |
+| T2h ripple and noise, no line, 100 series | PASS | 1 false libration (the bound is at most 1) |
+| L1h the authentic JUP365 argument (inherits L1) | PASS | libration, 2070.5 +- 22.6 d against the cited 2071 d (0.02%), centre 180.00 deg, amplitude 0.0328 deg against the cited 0.064 (48.8% low, inside the inherited 50% by 1.2 points: see section 12) |
+| L1o the same against the oracle | PASS | 2070.505 d and 0.032751 deg on both sides |
+| L3h Laplace model against the oracle (inherits L3) | PASS | 2067.8 +- 1.1 d and 28.10 deg against 2067.9 d and 28.09 deg |
+| L3ch against the cited 2071 d (inherits L3c) | PASS | -0.15% |
+| C1h coverage, 10 members (inherits C1) | PASS | 10 of 10 |
+| P1h Pluto model against the oracle (inherits P1) | PASS | 21,291 +- 21 yr and 79.32 deg on both sides |
+| P2h against the cited values (inherits P2) | PASS | +8.2% on the period, -3.3% on the amplitude, centre 179.3 deg |
+| D1h windows of 0.5, 1, 2 periods (inherits D1) | PASS | `not-constrained` (window-too-short), no number, on all three |
+| D2h detuned Europa (inherits D2) | PASS | circulation |
+| L3a turning-point estimator against the amended oracle (inherits L3) | PASS | 2076.3 d and 28.23 deg on both sides |
+| C1a its coverage (inherits C1) | PASS | 10 of 10 |
+| B0b the budget rule on a Kepler orbit | PASS | 1,383 steps a period; energy error 1.0e-10 (budget 1e-9), angle error 2.7e-4 deg (budget 0.01) over 500 periods |
+| B2b an energy budget of 1e-20 | PASS | refused, no step |
+| L4b Laplace model at the budget step (inherits L4) | PASS | h = 1/231 d (409 steps per Io period); energy drift 2.9e-10 (bound 1e-8); argument within 0.005 deg of the oracle's (bound 1.41 deg) |
+| P3b Pluto model at the budget step (inherits P3) | PASS | h = 0.4 yr; energy drift 9.6e-10; argument within 0.0014 deg |
+| S1b secular rate against first-order theory (inherits S1) | PASS | h = 5/777 yr; 5.876e-4 against 5.746e-4 rad/yr (+2.3%, the theory's own limit) |
+| S2b against the oracle (inherits S2) | PASS | 0.047% (bound 0.5%) |
+| D3b two turns (inherits D3) | PASS | refused, no rate |
+| X1L the cited 2071 d and 0.064 deg against downloaded sources | **FAIL** | no source states the pair; one reports about 0.02 deg from an ephemeris (section 12) |
+| X1P the cited 19,670 yr and 82 deg | **FAIL** | 82 deg and 180 deg confirmed; the period is stated as 19,900 yr and as about 20,000 yr, not 19,670 |
+| N1h authentic-data applicability | REPORTED | L1h is the authentic leg, and it passes |
+| K1 Kozai-Lidov | NOT RUN | no reference of the exchange was fetched; the request is in `addendum-sources.json` |
+
+Addendum verdict function (committed): A needs the standing legs R1 to R3, all 21 gated legs, and neither X leg failing;
+B needs R1 to R3 with B0b, B2b, L4b, P3b, D1h, D2h and D3b; C otherwise. X1L and X1P fail, so **B**: the resonant
+argument displayed over the window without a fitted period or rate.
+
+## 12. What the source check found
+
+Four e-prints were downloaded from arXiv on 2026-11-10 into `scratch-data/resonance273/sources/` (digests, references
+and what each states are in `tests/fixtures/resonances-ii/addendum-sources.json`; arXiv's API terms and licence page
+were read as served that day; the files are cite-only, read as text, never run, and not committed).
+
+- **Laplace.** Paita, Celletti and Pucacco (arXiv:1807.02516) filter an ephemeris history of the argument and report a
+  libration a little beyond 2,000 d with an amplitude of about 0.02 deg, which they say is lower than Lieske (1977) and
+  Musotto et al. (2002) report. Peale and Lee (arXiv:astro-ph/0210589) give no number. This session's own measurement
+  on JUP365 is 2070.5 d and 0.0328 deg by the kernel and by the oracle. So the cited period is supported, and the cited
+  amplitude 0.064 deg is about twice what the current ephemeris shows. The cited value was not changed.
+- **Pluto.** Yu and Tremaine (arXiv:astro-ph/9904424) state 82 deg about 180 deg with a period of 19,900 yr; Malhotra
+  and Ito (arXiv:2204.04121) state 80 to 86 deg and about 20,000 yr. The cited 19,670 yr is 1.2% below the first and is
+  stated by neither. The Gravitas model's 21,291 yr is a three-body model's, 8% above the cited value (P2h).
+
+The primary sources (Lieske 1998; Musotto et al. 2002; Cohen and Hubbard 1965; Williams and Benson 1971; Murray and
+Dermott 1999) were not obtained; the exact requests are in `addendum-sources.json`.
+
+## 13. Consumers, and questions for Carl
+
+The consumers condition is the prompt's own (Part B runs after A or B). Addendum B makes one consumer eligible: the
+resonance panel's argument-over-time plot with no fitted period or rate. It is **not built here**: a panel in two
+surfaces and two languages with its tests and budgets is not small (the deferred budget has about 100 B of room), so it
+is the next session's. The fitted libration and secular readouts, the upper depth of "When Orbits Lock", "The slow
+dance" and "Kozai-Lidov, measured" stay held: the first three until the addendum reaches A, the last until K1 runs.
+The estimator and the step rule are imported by nothing shipped.
+
+1. The cited Laplace amplitude: keep 0.064 deg with its named source, or cite the ephemeris value (0.033 deg, JUP365)
+   beside it? Recommendation: keep the citation, add the measured value with its source, after a person reads Lieske
+   (1998) for whether 0.064 is a half-range. Until then X1L fails and A is out of reach.
+2. The cited Pluto period: 19,670 yr (Cohen and Hubbard, as `js/resonance/systems.js` names) or 19,900 yr (Yu and
+   Tremaine)? Recommendation: confirm the first from its source; if it cannot be, cite the second.
+3. Build the B slice (the argument plot, no fitted number) as the next session? Recommendation: yes.
+4. K1: fetch the Horizons histories the request lists and commit a leg, or leave Kozai-Lidov at the existing guide?
+   Recommendation: leave it until a consumer needs it.
+
+Reproduce the addendum: `python3 -E tests/fixtures/resonances-ii/oracle_addendum.py tests/fixtures/resonances-ii
+<data dir> selfcheck jup laplace pluto ensemble` (about 10 min), then `node tools/resonances-ii-addendum.mjs run --data
+<data dir>` (about 45 s).
