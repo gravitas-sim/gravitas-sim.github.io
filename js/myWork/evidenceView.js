@@ -426,7 +426,7 @@ function wire(box) {
 import { acrossInvestigations } from './evidenceReview.js';
 
 /**
- * Draw the list into its own box (#mwAcross, in the review's section).
+ * Draw the list into its own section (#mwAcross, after the review's).
  * @param {{state: {records: Array<object>}}} page - As show() is given it
  */
 export async function showAcross(page) {
@@ -448,8 +448,8 @@ export async function showAcross(page) {
 <div class="mw-facts"><span>${esc(L(`You measured it in ${whereOf(a)} (${a.title}) and in ${whereOf(b)} (${b.title}).`, `Lo mediste en ${whereOf(a)} (${a.title}) y en ${whereOf(b)} (${b.title}).`))}</span></div></div>
 <div class="mw-actions"><button type="button" class="ui-button is-small" data-across="${esc(p.id)}" data-a="${esc(p.a)}" data-b="${esc(p.b)}" aria-label="${esc(`${L('Compare these', 'Comparar estas')}: ${what}, ${a.title}, ${b.title}`)}">${esc(L('Compare these', 'Comparar estas'))}</button></div></li>`;
   };
-  box.innerHTML = `<h3 id="mwAcrossTitle">${esc(L('Across your investigations', 'Entre tus investigaciones'))}</h3>
-<p class="ui-hint">${esc(L('The same quantity, measured in two different investigations. Comparing them uses the comparison above, with the same rule for what they share.', 'La misma cantidad, medida en dos investigaciones distintas. Compararlas usa la comparación de arriba, con la misma regla para lo que comparten.'))}</p>
+  box.innerHTML = `<h2 id="mwAcrossTitle">${esc(L('Across your investigations', 'Entre tus investigaciones'))}</h2>
+<p class="ui-hint">${esc(L('The same quantity, measured in two different investigations. Comparing them uses the comparison of the review above, with the same rule for what they share.', 'La misma cantidad, medida en dos investigaciones distintas. Compararlas usa la comparación de la revisión de arriba, con la misma regla para lo que comparten.'))}</p>
 <ul class="mw-list" aria-labelledby="mwAcrossTitle">${pairs.map(item).join('')}</ul>`;
   box.onclick = async e => {
     const b = e.target.closest('button[data-across]');

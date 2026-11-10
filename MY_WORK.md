@@ -125,7 +125,7 @@ and gets none). The card still opens and nothing is disabled.
 
 ## The same quantity in two investigations (Prompt 276, part 2)
 
-Under the review, "Across your investigations" lists the comparisons that
+After the review, a section "Across your investigations" lists the comparisons that
 apply (`acrossInvestigations`, `js/myWork/evidenceReview.js`): two entries of
 one kind, kept in two different investigations, that hold a quantity in
 common which the comparison can compare as they stand (one unit, a one-sigma

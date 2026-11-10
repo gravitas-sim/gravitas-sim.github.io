@@ -155,7 +155,7 @@ describe('drawn on My work', () => {
     for (const lang of ['en', 'es']) {
       document.documentElement.lang = lang;
       document.body.innerHTML =
-        '<section id="mwReview" hidden><div class="mw-body"></div><div id="mwAcross" hidden></div></section>';
+        '<section id="mwReview" hidden><div class="mw-body"></div></section><section id="mwAcross" hidden></section>';
       const page = {
         surfaces: { SURFACE_ROUTE, surfaceOf },
         state: {
@@ -175,7 +175,7 @@ describe('drawn on My work', () => {
       await settle();
       const box = document.getElementById('mwAcross');
       expect(box.hidden).toBe(false);
-      expect(box.querySelector('h3').textContent).toBe(
+      expect(box.querySelector('h2').textContent).toBe(
         lang === 'es'
           ? 'Entre tus investigaciones'
           : 'Across your investigations'
@@ -209,7 +209,7 @@ describe('drawn on My work', () => {
     const view = await import('../js/myWork/evidenceView.js');
     document.documentElement.lang = 'en';
     document.body.innerHTML =
-      '<section id="mwReview" hidden><div class="mw-body"></div><div id="mwAcross"></div></section>';
+      '<section id="mwReview" hidden><div class="mw-body"></div></section><section id="mwAcross"></section>';
     const page = {
       surfaces: { SURFACE_ROUTE, surfaceOf },
       state: {
