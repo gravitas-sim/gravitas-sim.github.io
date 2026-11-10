@@ -147,6 +147,7 @@ export const EN_LIBRARY = {
   'lib.why.objectives': 'the objectives',
   'lib.why.facts': 'its details',
   'lib.card.details': 'Related and next',
+  'lib.card.before': 'You may want this first:',
   'lib.topic.sequences': 'Sequences',
   'lib.topic.courses': 'Courses',
   'lib.topic.investigations': 'Investigations',

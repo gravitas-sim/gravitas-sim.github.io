@@ -370,6 +370,17 @@ const whyText = row =>
       })
     : '';
 
+/**
+ * The first investigation an entry builds on that the reader has not finished
+ * (Prompt 276): advice on the card, never a lock. None once the entry is done.
+ */
+const beforeOf = entry =>
+  finished(entry.id)
+    ? null
+    : (entry.prerequisites ?? [])
+        .map(id => byId.get(id))
+        .find(p => p?.format === 'lesson' && !finished(p.id));
+
 const cards = (rows, extra = {}) =>
   rows
     .map(row =>
@@ -380,6 +391,7 @@ const cards = (rows, extra = {}) =>
         progress: row.progress,
         why: whyText(row),
         details: true,
+        before: beforeOf(byId.get(row.entry.id)),
         ...extra,
       })
     )

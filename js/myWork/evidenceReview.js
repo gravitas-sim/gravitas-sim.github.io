@@ -213,3 +213,48 @@ export function compareEntries(entryA, entryB, o = {}) {
   if (!r.ok) return r;
   return { ...r, idA, idB, unit: qa.unit, a: qa, b: qb, covarianceFrom: from };
 }
+
+/**
+ * The comparisons that apply across investigations (Prompt 276): pairs of
+ * entries of one kind, kept in two different investigations (investigationOf),
+ * that hold a quantity in common which compareEntries can compare as they
+ * stand: one unit and a one-sigma uncertainty on each. An entry whose checksum
+ * no longer matches is left out. The newest pairs first.
+ *
+ * Nothing is inferred: a pair is listed because the two records say they hold
+ * the same quantity, and the comparison itself is compareEntries, with its
+ * covariance rule unchanged.
+ *
+ * @param {Array<object>} entries - The notebook's entries
+ * @param {number} [limit] - The most pairs listed
+ * @returns {Array<{a: string, b: string, id: string, unit: ?string}>} Entry
+ *   ids and the quantity to compare
+ */
+export function acrossInvestigations(entries, limit = 6) {
+  const rows = reviewRows(entries)
+    .filter(r => !r.tampered)
+    .map(r => ({ ...r, env: envelopeOf(r.entry) }));
+  const out = [];
+  for (let i = 0; i < rows.length; i++) {
+    for (let j = i + 1; j < rows.length; j++) {
+      const [a, b] = [rows[i], rows[j]];
+      if (a.entry.source !== b.entry.source) continue;
+      if (a.investigation === b.investigation) continue;
+      const q = commonQuantities(a.env, b.env).find(
+        x => compareEntries(a.entry, b.entry, { idA: x.id }).ok
+      );
+      if (q)
+        out.push({
+          a: a.id,
+          b: b.id,
+          id: q.id,
+          unit: q.unit ?? null,
+          when: Math.max(a.when, b.when),
+        });
+    }
+  }
+  return out
+    .sort((x, y) => y.when - x.when)
+    .slice(0, limit)
+    .map(({ when: _when, ...pair }) => pair);
+}

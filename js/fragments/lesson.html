@@ -278,6 +278,17 @@
       <span class="gs-en">More</span><span class="gs-es" lang="es">Más</span>
     </summary>
     <div class="more-body">
+      <!-- "You may want X first" (Prompt 276): the investigations the Library
+           says this one builds on that this browser has not finished. Advice
+           with a link, never a lock; filled when More is opened
+           (js/investigations/next.js beforeThis). -->
+      <p
+        id="investigationBefore"
+        class="inv-before"
+        hidden=""
+        data-say-en="You may want this first:"
+        data-say-es="Quizá quieras hacer antes:"
+      ></p>
       <button
         id="investigationHelp"
         class="ui-button subtle"

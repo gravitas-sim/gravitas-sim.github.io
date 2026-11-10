@@ -307,6 +307,47 @@ export function writeProgress({
   };
 }
 
+// --- The attempts record (Roadmap III Prompt 276) -------------------------------
+// The wrong answers a student checked on the way, in order, kept under the
+// step's own `:tries` sub-key of `responses`: one per line, as typed (a choice
+// as its option number). Additive: `attempts` still counts every check and
+// `:first` still holds the first answer. An older build keeps a sub-key of a
+// step it knows and reads nothing from this one, so a record with it opens
+// there unchanged (tests/compat/boundary.mjs, progress-attempts). Kept for
+// the class summary of Prompt 173, which does not read it yet.
+
+/** How many wrong answers are kept for one step, and how much of each. */
+export const TRIES_LIMIT = 8;
+export const TRY_LENGTH = 40;
+
+/**
+ * The wrong answers kept for a step.
+ * @param {*} stored - The `:tries` value
+ * @returns {Array<string>} In the order they were given
+ */
+export const triesOf = stored =>
+  typeof stored === 'string' ? stored.split('\n').filter(Boolean) : [];
+
+/**
+ * The `:tries` value with one more wrong answer. An answer the same as the
+ * last one kept is not kept twice, and nothing is added past the limit: the
+ * first tries are the ones that say where a student started.
+ *
+ * @param {*} stored - The value so far
+ * @param {*} answer - What was checked and found wrong
+ * @returns {string|undefined} The new value; undefined while there is none
+ */
+export function withTry(stored, answer) {
+  const tries = triesOf(stored);
+  const text = String(answer ?? '')
+    .replace(/\s+/g, ' ')
+    .trim()
+    .slice(0, TRY_LENGTH);
+  if (text && tries.at(-1) !== text && tries.length < TRIES_LIMIT)
+    tries.push(text);
+  return tries.length ? tries.join('\n') : undefined;
+}
+
 // --- What persistence needs that is not the engine's -----------------------------
 // Moved from js/investigations.js with Prompt 139 part C: how a failed write is
 // told apart from a refused one, and the student's saved name. Both describe

@@ -15,7 +15,7 @@
 
 import { noteResume, put } from '../storage/local.js';
 import { getLocale } from '../i18n/index.js';
-import { KEY_NEXT_CONTEXT } from '../names.js';
+import { KEY_INVESTIGATION_PREFIX, KEY_NEXT_CONTEXT } from '../names.js';
 
 export const CONTEXT_KEY = KEY_NEXT_CONTEXT;
 
@@ -136,4 +136,57 @@ export async function whatNext(list, { id, deeper, onDeeper }) {
     /* offline and not cached: the rest of the list stands */
   }
   list.replaceChildren(...out);
+}
+
+/**
+ * "You may want X first" (Prompt 276): the investigations the Library says
+ * this one builds on that this browser has not finished, each a link. Advice,
+ * inside the panel's More: nothing is locked, and an investigation that is
+ * itself finished gets none. Left hidden when there is nothing to say or the
+ * Library's index cannot be read (offline and not cached).
+ *
+ * @param {HTMLElement} el - The paragraph the words ride on (data-say-en, -es)
+ * @param {string} id - The investigation that is open
+ */
+export async function beforeThis(el, id) {
+  el.hidden = true;
+  let lib;
+  try {
+    lib = await (await fetch('/library/library.json')).json();
+  } catch {
+    return;
+  }
+  const es = getLocale() === 'es';
+  const entry = x => lib.entries.find(e => e.id === x);
+  // Finished as the Library counts it: every step of the lesson seen.
+  const done = e => {
+    try {
+      const saved = JSON.parse(
+        localStorage.getItem(
+          KEY_INVESTIGATION_PREFIX + e.id.replace(/^[a-z]+:/, '')
+        )
+      );
+      return Array.isArray(saved?.visited) && saved.visited.length >= e.steps;
+    } catch {
+      return false;
+    }
+  };
+  const here = entry(`investigation:${id}`);
+  if (!here || done(here)) return;
+  const need = (here.prerequisites ?? [])
+    .map(entry)
+    .filter(e => e?.format === 'lesson' && !done(e));
+  if (!need.length) return;
+  const parts = [el.dataset[es ? 'sayEs' : 'sayEn']];
+  need.forEach((e, i) => {
+    const a = document.createElement('a');
+    a.href = e.route;
+    a.textContent = (es && e.title.es) || e.title.en;
+    a.addEventListener('click', () =>
+      noteResume({ id: e.id, route: e.route, title: e.title })
+    );
+    parts.push(i ? ', ' : ' ', a);
+  });
+  el.replaceChildren(...parts);
+  el.hidden = false;
 }

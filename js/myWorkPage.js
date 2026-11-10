@@ -483,9 +483,16 @@ function showMade() {
     );
   // The review of the evidence notebook, when it holds entries (Prompt 275).
   if (s.model.evidence.notebook?.count)
-    import('./myWork/evidenceView.js').then(m =>
-      m.show({ state: s, refresh, surfaces: { SURFACE_ROUTE, surfaceOf } })
-    );
+    import('./myWork/evidenceView.js').then(async m => {
+      const page = {
+        state: s,
+        refresh,
+        surfaces: { SURFACE_ROUTE, surfaceOf },
+      };
+      await m.show(page);
+      // The same quantity in two investigations, offered for comparison (276).
+      await m.showAcross(page);
+    });
 }
 
 // --- Files -------------------------------------------------------------------

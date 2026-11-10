@@ -145,6 +145,7 @@ export const ES_LIBRARY = {
   'lib.why.objectives': 'los objetivos',
   'lib.why.facts': 'sus datos',
   'lib.card.details': 'Relacionados y siguientes',
+  'lib.card.before': 'Quizá quieras hacer antes:',
   'lib.topic.sequences': 'Secuencias',
   'lib.topic.courses': 'Cursos',
   'lib.topic.investigations': 'Investigaciones',

@@ -39,11 +39,13 @@ export function durationText(d, t) {
  * @param {boolean} [o.details] - Add the link to the item's own page
  * @param {boolean} [o.compact] - No picture or summary
  * @param {string} [o.path] - The pathway it is listed in ('seq:<id>')
+ * @param {object} [o.before] - An investigation the reader may want first: a
+ *   prerequisite not yet finished. Advice with a link; the card stays open.
  * @returns {string} One <li>
  */
 export function libraryCardHtml(
   entry,
-  { t, pick, progress, shown, why, details, compact, path }
+  { t, pick, progress, shown, why, details, compact, path, before }
 ) {
   const facts = [
     durationText(entry.duration, t),
@@ -70,5 +72,5 @@ export function libraryCardHtml(
 ${entry.summary && !compact ? `<span class="lib-summary">${escape(pick(entry.summary))}</span>` : ''}
 ${why ? `<span class="lib-why">${escape(why)}</span>` : ''}
 ${facts.length ? `<span class="lib-facts">${facts.map(f => `<span>${escape(f)}</span>`).join('')}</span>` : ''}
-</span></a>${details ? `<a class="lib-details" href="?item=${escape(entry.id)}${path ? `&amp;path=${escape(path)}` : ''}">${escape(t('lib.card.details'))}</a>` : ''}</li>`;
+</span></a>${before ? `<span class="lib-before">${escape(t('lib.card.before'))} <a href="${escape(before.route)}">${escape(pick(before.title))}</a></span>` : ''}${details ? `<a class="lib-details" href="?item=${escape(entry.id)}${path ? `&amp;path=${escape(path)}` : ''}">${escape(t('lib.card.details'))}</a>` : ''}</li>`;
 }

@@ -48,6 +48,7 @@ import { assignmentStorageKey, shortHash } from '../assignments/assignment.js';
 import {
   classifyStorageError,
   readProgress,
+  withTry,
   writeProgress,
 } from './progressSchema.js';
 import { KEY_INVESTIGATION_PREFIX } from '../names.js';
@@ -364,6 +365,9 @@ export function stepMarkup(step, c) {
       parts.push(
         `<p class="inv-feedback is-wrong">${escape(t('inv.answer.notYet'))}${named}</p>`
       );
+      // The way back after a wrong answer (Prompt 276), filled by the lazy
+      // ./recovery.js when this is drawn: see bindStepInputs.
+      parts.push('<div class="inv-recover" data-recover hidden></div>');
     }
 
     parts.push(hintBlock(step, id, responses));
@@ -1013,6 +1017,8 @@ export function bindStepInputs(h) {
       h.responses()[`${id}:first`] ??= choice;
       h.responses()[id] = choice;
       h.attempts()[id] = (h.attempts()[id] || 0) + 1;
+      if (checkAnswer(h.currentStep(), choice) === false)
+        noteTry(h, id, choice);
       h.save();
       h.renderStep();
       const step = h.currentStep();
@@ -1157,6 +1163,11 @@ export function bindStepInputs(h) {
       // language switch - decide that "1,234" had meant something else.
       recordAnswer(h.responses(), id, numeric.value, getLocale());
       h.attempts()[id] = (h.attempts()[id] || 0) + 1;
+      if (
+        checkAnswer(h.currentStep(), numeric.value, { locale: getLocale() }) ===
+        false
+      )
+        noteTry(h, id, numeric.value);
       h.save();
       h.renderStep();
       // What the panel now says under the box, read out: a result that only
@@ -1171,6 +1182,32 @@ export function bindStepInputs(h) {
       }
     });
   }
+
+  // After a wrong answer: the generated hints of a step with none of its own,
+  // and the instrument explained (Prompt 276). The module is fetched here, the
+  // first time a wrong answer is on screen, and fills the slot when it lands.
+  const slot = els.body.querySelector('[data-recover]');
+  if (slot) {
+    import('./recovery.js').then(
+      m =>
+        slot.isConnected &&
+        m.mountRecovery(slot, {
+          step: h.currentStep(),
+          steps: h.steps?.() ?? [],
+          id,
+          responses: h.responses(),
+          save: h.save,
+          announce,
+          explainButton: els.toolExplain ?? null,
+        })
+    );
+  }
+}
+
+/** Keep a wrong answer with the step's tries (./progressSchema.js withTry). */
+function noteTry(h, id, answer) {
+  const tries = withTry(h.responses()[`${id}:tries`], answer);
+  if (tries) h.responses()[`${id}:tries`] = tries;
 }
 
 // --- Measured values ----------------------------------------------------------

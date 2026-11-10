@@ -1049,6 +1049,7 @@ function renderStep() {
     attempts: () => attempts,
     stepId: () => stepId(stepIndex),
     currentStep,
+    steps: () => active?.steps ?? [],
     save,
     renderStep,
     refreshMeasurements,
@@ -2412,6 +2413,23 @@ export async function openInvestigation(id, opts = {}) {
   els.panel.hidden = false;
   els.panel.classList.add('is-open');
   wireMore(els.more, 'lesson', { ...MORE, depth, declared: assignment?.mo });
+  // "You may want X first" (Prompt 276), behind More: asked of the Library's
+  // index when the reader opens it, or now if it stands open. Advice, never a
+  // lock; an assignment is the instructor's own order and gets none.
+  const before = document.getElementById('investigationBefore');
+  if (before) {
+    before.hidden = true;
+    delete before.dataset.asked;
+    els.more.ontoggle = () => {
+      if (!els.more.open || before.dataset.asked || assignment || authoring)
+        return;
+      before.dataset.asked = '1';
+      import('./investigations/next.js').then(
+        m => active?.id === inv.id && m.beforeThis(before, inv.id)
+      );
+    };
+    els.more.ontoggle();
+  }
   els.title.textContent = assignment?.t || inv.title;
   // The lesson it was cut from stays visible: a student should be able to see
   // that this is eight steps of Tides rather than a thing called Week 3.

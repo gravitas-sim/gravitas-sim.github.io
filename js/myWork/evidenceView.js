@@ -412,3 +412,59 @@ function wire(box) {
     control(box, 'note', id)?.focus();
   });
 }
+
+// -----------------------------------------------------------------------------
+// Across your investigations (Roadmap III Prompt 276)
+// Where two entries of one kind, kept in two different investigations, hold a
+// quantity the comparison above can compare, this says so and offers it: one
+// press ticks the two and puts the reader on the comparison's statement. The
+// pairs are ./evidenceReview.js acrossInvestigations; the comparison is the
+// one above, its covariance rule untouched. Nothing is listed otherwise.
+// -----------------------------------------------------------------------------
+
+/**
+ * Draw the list into its own box (#mwAcross, in the review's section).
+ * @param {{state: {records: Array<object>}}} page - As show() is given it
+ */
+export async function showAcross(page) {
+  const box = document.getElementById('mwAcross');
+  if (!box) return;
+  const entries = entriesOf(page.state.records);
+  const { acrossInvestigations } = await import('./evidenceReview.js');
+  const pairs = acrossInvestigations(entries);
+  box.hidden = pairs.length === 0;
+  if (!pairs.length) return void box.replaceChildren();
+  const { t, locale, led } = await loadTools();
+  const loc = locale();
+  const by = new Map(reviewRows(entries).map(r => [r.id, r]));
+  const label = (r, id) =>
+    led.evidenceRows([r.entry], t, loc).find(x => x.id === id)?.label ?? id;
+  const item = p => {
+    const [a, b] = [by.get(p.a), by.get(p.b)];
+    const what = label(a, p.id);
+    return `<li class="mw-item"><div class="mw-what"><div class="mw-title">${esc(what)}</div>
+<div class="mw-facts"><span>${esc(L(`You measured it in ${whereOf(a)} (${a.title}) and in ${whereOf(b)} (${b.title}).`, `Lo mediste en ${whereOf(a)} (${a.title}) y en ${whereOf(b)} (${b.title}).`))}</span></div></div>
+<div class="mw-actions"><button type="button" class="ui-button is-small" data-across="${esc(p.id)}" data-a="${esc(p.a)}" data-b="${esc(p.b)}" aria-label="${esc(`${L('Compare these', 'Comparar estas')}: ${what}, ${a.title}, ${b.title}`)}">${esc(L('Compare these', 'Comparar estas'))}</button></div></li>`;
+  };
+  box.innerHTML = `<h3 id="mwAcrossTitle">${esc(L('Across your investigations', 'Entre tus investigaciones'))}</h3>
+<p class="ui-hint">${esc(L('The same quantity, measured in two different investigations. Comparing them uses the comparison above, with the same rule for what they share.', 'La misma cantidad, medida en dos investigaciones distintas. Compararlas usa la comparación de arriba, con la misma regla para lo que comparten.'))}</p>
+<ul class="mw-list" aria-labelledby="mwAcrossTitle">${pairs.map(item).join('')}</ul>`;
+  box.onclick = async e => {
+    const b = e.target.closest('button[data-across]');
+    if (!b) return;
+    Object.assign(v, {
+      investigation: '',
+      kind: '',
+      from: '',
+      to: '',
+      ticked: [b.dataset.a, b.dataset.b],
+      qa: b.dataset.across,
+      qb: b.dataset.across,
+      rho: '',
+      shared: false,
+      say: '',
+    });
+    await show(current ?? page);
+    lastBox?.querySelector('[data-rv="result"]')?.focus();
+  };
+}
