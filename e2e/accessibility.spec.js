@@ -51,6 +51,29 @@ const COLLECTIONS_RECORD = JSON.stringify({
   ),
   received: [{ at: 1, pack: KEPT }],
 });
+// A first week as the course home leaves it for Home (Prompt 277): the most
+// items a first week holds, from the Library's own entries.
+const FIRST_WEEK_RECORD = JSON.stringify({
+  v: 1,
+  id: 'week-one',
+  t: { en: 'Week one', es: 'Semana uno' },
+  items: LIBRARY_INDEX.entries
+    .filter(e => ['lesson', 'sandbox', 'observation'].includes(e.format))
+    .slice(0, 7)
+    .map(e => ({
+      t: e.title,
+      h: e.route,
+      ...(e.format === 'lesson' ? { l: e.id.split(':')[1], n: e.steps } : {}),
+    })),
+});
+/** Home in its first-week mode, over the running sandbox. */
+const openFirstWeek = async page => {
+  await page.evaluate(r => {
+    window.localStorage.setItem('gravitas_first_week', r);
+    window.location.hash = '#home';
+  }, FIRST_WEEK_RECORD);
+  await expect(page.locator('#welWeek .wel-week-item')).toHaveCount(7);
+};
 const withCollections = page =>
   page.addInitScript(
     r => window.localStorage.setItem('gravitas_collections', r),
@@ -98,6 +121,20 @@ const SURFACES = [
     name: 'front door',
     open: async ({ app }) => app.boot({ firstVisit: true }),
     expect: '#welcomeScreen',
+  },
+  {
+    name: 'front door, first-week mode',
+    open: async ({ page }) => openFirstWeek(page),
+    expect: '#welWeek .wel-week-go',
+  },
+  {
+    name: 'front door, the introduction in a first week, five places',
+    open: async ({ page }) => {
+      await openFirstWeek(page);
+      await page.locator('#welWeek [data-action="orient"]').click();
+      await page.locator('[data-orient="0"] [data-orient-act="next"]').click();
+    },
+    expect: '#welWeek .wel-orient-places a',
   },
   {
     name: 'sandbox',

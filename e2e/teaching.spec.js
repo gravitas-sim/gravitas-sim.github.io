@@ -93,8 +93,10 @@ test.describe('the showcase page', () => {
     app,
   }) => {
     await app.boot({ firstVisit: true });
+    // Teach, among Home's five places (the introduction and the first-week
+    // mode name it as well, Prompt 277).
     await expect(
-      page.locator('#welcomeScreen a[href="/teaching/"]')
+      page.locator('#welcomeScreen .wel-door a[href="/teaching/"]')
     ).toHaveCount(1);
 
     await page.goto('/instructors/', { waitUntil: 'domcontentloaded' });

@@ -83,6 +83,34 @@ const inLocale = (page, locale) =>
 
 const pathOf = href => href.replace(/[#?].*$/, '') || '/';
 
+/**
+ * A first-week record as the course home leaves one (js/library/firstWeek.js),
+ * from the Library's own entries: as many items as a first week may hold.
+ */
+const WEEK = {
+  v: 1,
+  id: 'week-one',
+  t: { en: 'Week one', es: 'Semana uno' },
+  items: library.entries
+    .filter(e => e.format === 'lesson')
+    .slice(0, inventory.ceilings.home.firstWeekItems)
+    .map(e => ({
+      t: e.title,
+      h: e.route,
+      l: e.id.split(':')[1],
+      n: e.steps,
+    })),
+};
+const inFirstWeek = page =>
+  page.addInitScript(week => {
+    try {
+      localStorage.setItem('gravitas_first_week', JSON.stringify(week));
+      localStorage.setItem('gravitas_orientation_seen_v1', '1');
+    } catch {
+      /* storage unavailable: Home is itself, and the test says so */
+    }
+  }, WEEK);
+
 // --- The default view ---------------------------------------------------------
 
 /**
@@ -94,6 +122,15 @@ const VIEWS = {
   'home-first-visit': async ({ app, page }) => {
     await app.boot({ firstVisit: true });
     await expect(page.locator('#welcomeScreen')).toBeVisible();
+  },
+  // Home's first-week mode (Prompt 277) at its fullest: seven items.
+  'home-first-week': async ({ page }) => {
+    await inFirstWeek(page);
+    await page.goto('/', { waitUntil: 'domcontentloaded' });
+    await expect(page.locator('#welWeek')).toBeVisible({ timeout: 30_000 });
+    await expect(page.locator('#welWeek .wel-week-item')).toHaveCount(
+      inventory.ceilings.home.firstWeekItems
+    );
   },
   home: async ({ app, page }) => {
     await app.boot();
@@ -256,7 +293,12 @@ test.describe('the reachability walk', () => {
       const response = await page.request.get(pathOf(href));
       expect(response.status(), `Home's link ${href}`).toBe(200);
     }
-    await page.locator('#welcomeScreen [data-action="enter"]').first().click();
+    // The first one shown: the introduction and the first-week mode, both
+    // hidden here, name the sandbox too (Prompt 277).
+    await page
+      .locator('#welcomeScreen [data-action="enter"]:visible')
+      .first()
+      .click();
     await expect(page.locator('#welcomeScreen')).toBeHidden();
     await expect(page.locator('#simulationCanvas')).toBeVisible();
   });
@@ -292,6 +334,42 @@ test.describe('the reachability walk', () => {
       }
     });
   }
+
+  for (const [width, size] of [
+    ['desktop', DESKTOP],
+    ['phone', PHONE],
+  ])
+    test(`Home's first-week mode names the five destinations once, and each lands on its first action, at ${width} width`, async ({
+      page,
+    }) => {
+      await page.setViewportSize(size);
+      await inFirstWeek(page);
+      // In the bar where it shows them; where it folds them, in Home.
+      const names = page.locator(
+        '.gs-nav a[data-dest]:visible, .wel-week-places a:visible'
+      );
+      for (const [n, destination] of inventory.destinations.entries()) {
+        await page.goto('/', { waitUntil: 'domcontentloaded' });
+        await expect(page.locator('#welWeek')).toBeVisible({
+          timeout: 30_000,
+        });
+        await expect(names).toHaveCount(inventory.destinations.length);
+        await expect(names.nth(n)).toHaveText(destination.en, {
+          useInnerText: true,
+        });
+        await names.nth(n).click();
+        if (destination.first.path === '/')
+          await expect(page.locator('#welcomeScreen')).toBeHidden();
+        else
+          await expect(page).toHaveURL(
+            new RegExp(`${destination.first.path.replace(/\//g, '\\/')}$`)
+          );
+        await expect(
+          page.locator(destination.first.selector).first(),
+          `${destination.id}: ${destination.first.en}`
+        ).toBeVisible();
+      }
+    });
 
   test('every global-navigation entry carries the shell words and opens its page', async ({
     page,

@@ -226,6 +226,7 @@ describe('the ceilings', () => {
       [
         'home',
         'home-first-visit',
+        'home-first-week',
         'library',
         'my-work',
         'observatory',

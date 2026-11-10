@@ -348,6 +348,10 @@ title, the term and a time; no link, answer or name.
 
 When a whole course is more than an instructor needs, they save lessons, scenarios and datasets with the Library's Save button, open the distribution kit at `/teaching/kit/#collections`, put the items in order, write a sentence for each, pick a depth where an item has one, name the set and make a link or a file. It is a course package with `profile: "collection"` (COURSE_PACKS.md), so it travels as a course does and needs no server. A student who opens the link sees it on the course home and can keep it; it then shows in their Library and in My work. The order, notes and depths are kept on the instructor's saved collection as they change; the title and summary are written for the one being shared. Texts are the instructor's own words: once any text has Spanish, every text needs it, and the kit says which one is missing instead of translating. The kit's panel is a lazy instructor module (`js/instructorCollections.js`) and an older build of Gravitas, such as 2.0.0, cannot open the result.
 
+### A first week (Prompt 277)
+
+A collection of up to seven items can be handed out as a first week. In the kit's collection editor the instructor ticks "First week" and, if they wish, chooses how the "More" sections of the investigation and instrument panels start for those students (as the depth sets them, open, or shut; the activity's choice of Prompt 167, on a collection). The link is the same course home link; a student who opens it lands on Home showing only that list, in order, with the place to continue marked, the introduction inside the first item and the five destinations' names. The student leaves it with one press, and it ends by itself when the list is finished (ONBOARDING.md, "The first-week mode"). The package gains `firstWeek: true` and, when chosen, `more` (COURSE_PACKS.md); a collection that is not marked is the bytes it was. The kit explains it in one paragraph above the editor. Nothing is sent anywhere: the list is in the link, and what a student has done stays in their browser.
+
 ## Budgets
 
 The kit is a new route (`teach-kit`, measured, added by hand: D-BIND-07): 36.7 KB

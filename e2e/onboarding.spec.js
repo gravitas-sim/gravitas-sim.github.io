@@ -37,7 +37,14 @@ test.describe('first run', () => {
     await page.keyboard.press('Tab');
     await page.keyboard.press('Enter');
     await expect(page.locator('[data-orient="1"]')).toBeVisible();
-    await expect(page.locator('#srStatus')).toContainText('Three ways in');
+    await expect(page.locator('#srStatus')).toContainText('Five places');
+    // Each destination, its one line and its one action (Prompt 277).
+    await expect(
+      page.locator('[data-orient="1"] .wel-orient-places li')
+    ).toHaveCount(5);
+    await expect(
+      page.locator('[data-orient="1"] .wel-orient-places a')
+    ).toHaveCount(5);
     // Arrow keys move between screens from inside one.
     await page.keyboard.press('ArrowRight');
     await expect(page.locator('[data-orient="2"]')).toBeVisible();

@@ -179,7 +179,11 @@ export const library =
   (input, full) =>
   async ({ page }) => {
     await goHome(page);
-    const lib = page.locator('#welcomeScreen a[href="/library/"]').first();
+    // The one shown: the introduction and the first-week mode name it too.
+    const lib = page
+      .locator('#welcomeScreen a[href="/library/"]')
+      .filter({ visible: true })
+      .first();
     const open = async () => {
       await expect(page.locator('html')).toHaveAttribute('data-ready', 'true', {
         timeout: 30_000,

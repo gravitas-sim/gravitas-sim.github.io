@@ -72,6 +72,7 @@ banner (`#previewBanner`), in the reader's language.
 | `gravitas_lecture_sequence` | Lecture mode's sequence | `js/lecture.js` |
 | `gravitas_welcome_seen_v1` | That the welcome was seen | `js/welcomeGate.js` |
 | `gravitas_orientation_seen_v1` | That the first-run introduction on Home was shown (once, however it ended) | `js/welcomeGate.js` |
+| `gravitas_first_week` | Home's first-week mode (Prompt 277): the list a collection marked "first week" named, as the course home resolved it (titles, addresses on this site, each lesson's id, depth and step count, which other items were opened, and what the collection says of More). Kept until the list is finished or the student leaves the mode; a record Home cannot show is dropped | `js/welcomeGate.js` (Home, `js/welcome.js`, reads and checks it; the course home writes it through `js/storage/local.js`) |
 | `mobile_instructions_shown` | That the phone instructions were shown | `js/main.js` |
 | `gravitasDebug` | Developer logging | `js/utils.js` |
 
