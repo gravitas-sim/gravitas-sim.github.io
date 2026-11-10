@@ -512,6 +512,8 @@ test.describe('sandbox.spacetime: the camera without a drag', () => {
     app,
     browserName,
   }) => {
+    // Some eighty key presses beside a running simulation and a WebGL view.
+    test.setTimeout(240_000);
     await app.boot();
     expect(await tabTo(page, browserName, '#railTools')).toBeGreaterThan(0);
     await page.keyboard.press('Enter');
@@ -533,8 +535,12 @@ test.describe('sandbox.spacetime: the camera without a drag', () => {
           s => document.activeElement?.matches(s) === true,
           selector
         );
-      for (const key of ['Tab', 'Shift+Tab'])
-        for (let i = 0; i < 12 && !(await there()); i++)
+      // Ten forward covers the pad; coming back passes it again to the start.
+      for (const [key, presses] of [
+        ['Tab', 10],
+        ['Shift+Tab', 22],
+      ])
+        for (let i = 0; i < presses && !(await there()); i++)
           await page.keyboard.press(key);
       expect(await there(), `the keyboard reaches ${what}`).toBe(true);
       await page.keyboard.press('Enter');
