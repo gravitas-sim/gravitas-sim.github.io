@@ -1,6 +1,6 @@
 {
  "format": "gravitas.population-inference-gate-followup-oracle-results/1",
- "followupThresholdsSha256": "15e21a8a591c125dd7dce577cd848e86db23c618552f18f14caa529c48e89dea",
+ "followupThresholdsSha256": "724e0864873d24eebdf008212e8d4d6ea076316a969c37dc33515a7a39b1cf25",
  "thresholdsSha256": "96e9e9ff9119b181364beb81857633bdeecf88af87da157ef80200afffc557c1",
  "partAOracleResultsSha256": "3627313e4acf0bc83fa7265ccd8d4d2197682b21ba2bdd026ed2e230e74bcae5",
  "partAOracleSourceSha256": "2d9f0d07bf4e3788da56e74d934147214307267aa83dc4befda55453b4cf4f97",
@@ -329,7 +329,7 @@
    "zeroCovers": false,
    "probabilityOfZero": 0.006737946999085467
   },
-  "cpuSeconds": 18.43651
+  "cpuSeconds": 28.601105999999998
  },
  "stage2": {
   "sets": {
@@ -392,8 +392,8 @@
   "PO1stream": 1.5619830850965855e-07,
   "thetasFile": "oracle-penalised-thetas.json",
   "thetasSha256": "e599b86bb938d41351b9221dffb05ad3229589a2719b3d08448f866e53a07b44",
-  "followupThresholdsSha256": "15e21a8a591c125dd7dce577cd848e86db23c618552f18f14caa529c48e89dea",
-  "cpuSeconds": 35.184694
+  "followupThresholdsSha256": "724e0864873d24eebdf008212e8d4d6ea076316a969c37dc33515a7a39b1cf25",
+  "cpuSeconds": 51.285853
  },
  "stage2b": {
   "sets": {
@@ -420,7 +420,7 @@
   "PO1stream": 1.1861060356110897e-07,
   "thetasFile": "oracle-penalised-thetas-p4.json",
   "thetasSha256": "fb5ee1b15bbe26c4050c1cdd1133962715c08351554b579391dcecfef535dda6",
-  "followupThresholdsSha256": "15e21a8a591c125dd7dce577cd848e86db23c618552f18f14caa529c48e89dea",
-  "cpuSeconds": 13.612886000000001
+  "followupThresholdsSha256": "724e0864873d24eebdf008212e8d4d6ea076316a969c37dc33515a7a39b1cf25",
+  "cpuSeconds": 21.379463
  }
 }
