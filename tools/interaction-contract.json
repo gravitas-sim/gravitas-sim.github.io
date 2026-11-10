@@ -358,7 +358,7 @@
     {
       "id": "lab3d.camera",
       "name": "The 3-D lab: the camera",
-      "source": "js/lab3dLab.js",
+      "source": "js/lab3d/view/cameraPad.js",
       "primaryTask": "Look at the system from another side.",
       "keys": [
         {
@@ -406,7 +406,8 @@
           "title": "the 3-D camera says where it is once the pressing stops"
         }
       },
-      "pending": ["interaction.single-pointer.lab3d-orbit"]
+      "pending": ["interaction.single-pointer.lab3d-orbit"],
+      "sources": ["js/lab3dLab.js", "3d/index.html"]
     },
     {
       "id": "sandbox.windows",

@@ -757,8 +757,11 @@ test.describe('observatory.selection: a run without a held key', () => {
         'data-select-run',
         ''
       );
-      await expect(page.locator('#obsStatus')).toContainText(
-        locale.id === 'es' ? 'última fila' : 'last row'
+      // What to do is the button's description, in the page's language.
+      await expect(page.locator('#obsSelectRun')).toHaveAccessibleDescription(
+        locale.id === 'es'
+          ? 'Elige la primera fila del tramo, pulsa este botón y después elige la última fila.'
+          : 'Choose the first row of the run, press this, then choose the last row.'
       );
       await pressAt(page, row(7));
       // Rows 3 to 8, as Shift-click selects them, and the run is over.

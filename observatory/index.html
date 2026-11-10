@@ -754,9 +754,12 @@ try {
           <button id="obsNextPage" class="ui-button is-small" type="button" data-i18n="obs.table.next">
             Next rows
           </button>
-          <button id="obsSelectRun" class="ui-button is-small" type="button" aria-pressed="false" data-i18n="obs.table.run">
+          <button id="obsSelectRun" class="ui-button is-small" type="button" aria-pressed="false" aria-describedby="obsRunHint" data-run-for="obsTable" data-i18n="obs.table.run">
             Select a run of rows
           </button>
+          <span id="obsRunHint" class="visually-hidden" data-i18n="obs.table.run.hint">
+            Choose the first row of the run, press this, then choose the last row.
+          </span>
         </div>
 
         <div class="ui-toolbar">

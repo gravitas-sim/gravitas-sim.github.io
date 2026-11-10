@@ -30,6 +30,7 @@ import {
 } from '../tools/interaction-contract.mjs';
 import { runPending, readRegistry } from '../tools/pending-acceptance.mjs';
 import { movable, moveTo, sizeTo, STEP } from '../js/windowMove.js';
+import { cameraNumbers, TURN, MOVE } from '../js/lab3d/view/cameraPad.js';
 import { NUDGE, nudgeSize, nudgeScale } from '../js/shortcuts.js';
 import { moveFocus, returnFocus, settledAnnouncer } from '../js/interaction.js';
 import {
@@ -436,6 +437,59 @@ describe('the walk inventory covers every surface (Prompt 278)', () => {
   });
 });
 
+describe('the 3-D camera in numbers (js/lab3d/view/cameraPad.js)', () => {
+  const cam = (eye, more = {}) => ({
+    eye,
+    target: [0, 0, 0],
+    mode: 'perspective',
+    fov: 90,
+    ...more,
+  });
+
+  test('straight down onto the plane is 90 degrees above it', () => {
+    expect(cameraNumbers(cam([0, 0, 5]), 1).above).toBeCloseTo(90, 9);
+    expect(cameraNumbers(cam([0, 0, -5]), 1).above).toBeCloseTo(-90, 9);
+  });
+
+  test('in the plane, the angle around it runs from +x through +y', () => {
+    expect(cameraNumbers(cam([3, 0, 0]), 1)).toMatchObject({
+      above: 0,
+      around: 0,
+    });
+    expect(cameraNumbers(cam([0, 3, 0]), 1).around).toBeCloseTo(90, 9);
+    expect(cameraNumbers(cam([0, -3, 0]), 1).around).toBeCloseTo(270, 9);
+  });
+
+  test('the height above the plane is asin(z / distance)', () => {
+    const n = cameraNumbers(cam([1, 1, Math.SQRT2]), 1);
+    expect(n.above).toBeCloseTo(45, 9);
+    expect(n.around).toBeCloseTo(45, 9);
+  });
+
+  test("the size is the view's height over the system's diameter", () => {
+    // A 90 degree field at distance 4 is 8 tall; a system of extent 2 is 4 across.
+    expect(cameraNumbers(cam([4, 0, 0]), 2).size).toBeCloseTo(2, 9);
+    // An orthographic view states its height.
+    expect(
+      cameraNumbers(cam([4, 0, 0], { mode: 'orthographic', height: 6 }), 2).size
+    ).toBeCloseTo(1.5, 9);
+  });
+
+  test('the target is where the angles are measured from', () => {
+    const n = cameraNumbers(
+      { eye: [10, 10, 1], target: [10, 9, 1], mode: 'perspective', fov: 45 },
+      1
+    );
+    expect(n.around).toBeCloseTo(90, 9);
+    expect(n.above).toBeCloseTo(0, 9);
+  });
+
+  test('one turn and one move are the steps the keys always had', () => {
+    expect(TURN).toBe(0.08);
+    expect(MOVE).toBe(0.05);
+  });
+});
+
 describe('a window is moved without a drag (js/windowMove.js)', () => {
   const panelAt = (left, top, width = 200, height = 100) => {
     document.body.innerHTML =
@@ -587,10 +641,8 @@ describe('what Prompt 155 found missing is built, and stays built', () => {
     },
     'interaction.single-pointer.lab3d-orbit': () => {
       has('3d/index.html', /id="l3-pad"[\s\S]*data-cam="-1,0"/);
-      has(
-        'js/lab3dLab.js',
-        /\$\('l3-pad'\)\.addEventListener\('click', padPressed\)/
-      );
+      has('js/lab3d/view/cameraPad.js', /pad\.addEventListener\('click'/);
+      has('js/lab3dLab.js', /cameraControls\(\{/);
     },
     'interaction.single-pointer.observer-handle': () =>
       has('js/observerControls.js', /type="range"[\s\S]{0,120}data-pa-slider/),
@@ -604,7 +656,7 @@ describe('what Prompt 155 found missing is built, and stays built', () => {
     },
     'interaction.single-pointer.observatory-run': () => {
       has('js/plot/table.js', /data-select-run/);
-      has('observatory/index.html', /id="obsSelectRun"/);
+      has('observatory/index.html', /data-run-for="obsTable"/);
     },
   };
 

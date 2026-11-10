@@ -41,11 +41,22 @@ export function createTable(table, hooks) {
   // A run without a held key or a drag (Prompt 278): once armed, a click or a
   // tap on a row selects from the anchor to that row, as Shift-click does.
   let run = false;
+  // Its button is found by the table's id (`data-run-for`), so a page gets the
+  // run by adding the button and nothing else.
+  const runButton = table.ownerDocument.querySelector(
+    `[data-run-for="${table.id}"]`
+  );
   const setRun = on => {
     run = Boolean(on);
     table.toggleAttribute('data-select-run', run);
-    hooks.onRun?.(run);
+    runButton?.setAttribute('aria-pressed', String(run));
   };
+  runButton?.addEventListener('click', () => {
+    // The run starts at the row last chosen, or the row in focus.
+    if (!run && anchor < 0 && state?.selection.focus >= 0)
+      anchor = state.selection.focus;
+    setRun(!run);
+  });
 
   const L = hooks.labels;
 
@@ -217,13 +228,6 @@ export function createTable(table, hooks) {
     draw,
     update,
     page: () => page,
-    /** Arm or disarm the run: the next row chosen ends it. */
-    run(on) {
-      if (on && anchor < 0 && state?.selection.focus >= 0)
-        anchor = state.selection.focus;
-      setRun(on);
-      return anchor;
-    },
     turn(delta) {
       if (!state) return;
       const max = Math.floor((state.n - 1) / PAGE);

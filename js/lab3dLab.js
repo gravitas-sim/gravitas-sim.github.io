@@ -59,6 +59,7 @@ import {
 import { formatNumber } from './format.js';
 import { chooseInterval } from './lab3d/view/tick.js';
 import { createScene, PALETTE } from './lab3d/view/scene.js';
+import { cameraControls } from './lab3d/view/cameraPad.js';
 
 // The banner of a preview as a student (Prompt 175).
 if (globalThis.location?.search.includes('preview=student'))
@@ -1391,100 +1392,8 @@ function setupScene() {
   size();
 }
 
-// ---------------------------------------------------------------------------
-// The camera by keyboard and by one pointer (Prompt 278). The keys and the
-// view pad call the same three moves, and the result is said once the
-// pressing stops: where the view is from, and how much of the system it holds.
-// ---------------------------------------------------------------------------
-
-const TURN = 0.08;
-const MOVE = 0.05;
-let cameraSaid = null;
-
-/** The camera in words, relative to the reference plane (z = 0). */
-function describeCamera() {
-  const c = state.scene?.readCamera();
-  if (!c) return '';
-  const p = c.eye.map((v, i) => v - c.target[i]);
-  const dist = Math.hypot(...p) || 1;
-  const above = (Math.asin(p[2] / dist) * 180) / Math.PI;
-  const around = ((Math.atan2(p[1], p[0]) * 180) / Math.PI + 360) % 360;
-  const tall =
-    c.mode === 'orthographic'
-      ? c.height
-      : 2 * dist * Math.tan((c.fov * Math.PI) / 360);
-  return t(above < 0 ? 'l3.cam.below' : 'l3.cam.above', {
-    above: String(Math.round(Math.abs(above))),
-    around: String(Math.round(around) % 360),
-    size: formatNumber(tall / (2 * (state.reach || 1)), { sig: 2 }),
-  });
-}
-
-/** Say where the camera is, after the last of a run of moves. */
-function sayCamera() {
-  clearTimeout(cameraSaid);
-  cameraSaid = setTimeout(() => {
-    $('l3-camera').textContent = describeCamera();
-  }, 700);
-}
-
-/**
- * One camera move.
- * @param {'turn'|'move'|'zoom'} kind
- * @param {number} dx - Steps across (or the zoom factor)
- * @param {number} [dy] - Steps up
- */
-function moveCamera(kind, dx, dy = 0) {
-  if (!state.scene) return;
-  if (kind === 'zoom') state.scene.zoom(dx);
-  else if (kind === 'move') state.scene.pan(dx * MOVE, dy * MOVE);
-  else state.scene.orbit(dx * TURN, dy * TURN);
-  sayCamera();
-}
-
-function keyboard(e) {
-  if (!state.scene) return;
-  const kind = e.shiftKey ? 'move' : 'turn';
-  const keys = {
-    ArrowLeft: () => moveCamera(kind, -1, 0),
-    ArrowRight: () => moveCamera(kind, 1, 0),
-    ArrowUp: () => moveCamera(kind, 0, 1),
-    ArrowDown: () => moveCamera(kind, 0, -1),
-    '+': () => moveCamera('zoom', 0.85),
-    '=': () => moveCamera('zoom', 0.85),
-    '-': () => moveCamera('zoom', 1 / 0.85),
-    ' ': () => play(!state.playing),
-    0: () => resetView(),
-  };
-  PRESETS.forEach((p, i) => {
-    keys[String(i + 1)] = () => {
-      $('l3-preset').value = p;
-      resetView();
-    };
-  });
-  const fn = keys[e.key];
-  if (!fn) return;
-  e.preventDefault();
-  fn();
-}
-
-/** Name the pad's four arrows for what they do now: turn or move. */
-function labelPad() {
-  const mode = $('l3-pad-mode').value;
-  for (const b of $('l3-pad').querySelectorAll('[data-cam]')) {
-    const [dx, dy] = b.dataset.cam.split(',').map(Number);
-    const way = dx < 0 ? 'left' : dx > 0 ? 'right' : dy > 0 ? 'up' : 'down';
-    b.setAttribute('aria-label', t(`l3.pad.${mode}.${way}`));
-  }
-}
-
-function padPressed(e) {
-  const b = e.target.closest('button');
-  if (!b) return;
-  if (b.dataset.zoom) return moveCamera('zoom', Number(b.dataset.zoom));
-  const [dx, dy] = b.dataset.cam.split(',').map(Number);
-  moveCamera($('l3-pad-mode').value, dx, dy);
-}
+// The camera's keys, its view pad and what is said of it: ./lab3d/view/cameraPad.js.
+let labelPad = () => {};
 
 function languageSwitch() {
   const box = $('langSwitch');
@@ -1668,10 +1577,21 @@ async function init() {
     state.scene?.setReduced?.(reduced())
   );
   $('l3-refresh').addEventListener('click', () => updateTables(true));
-  $('l3-canvas').addEventListener('keydown', keyboard);
-  $('l3-pad').addEventListener('click', padPressed);
-  $('l3-pad-mode').addEventListener('change', labelPad);
-  labelPad();
+  labelPad = cameraControls({
+    scene: () => state.scene,
+    reach: () => state.reach,
+    t,
+    also: () => ({
+      ' ': () => play(!state.playing),
+      0: resetView,
+      ...Object.fromEntries(
+        PRESETS.map((p, i) => [
+          i + 1,
+          () => (($('l3-preset').value = p), resetView()),
+        ])
+      ),
+    }),
+  });
   $('l3-guides').addEventListener('click', () => openGuides());
   $('l3-evidence').addEventListener('click', () => openEvidence());
   $('l3-orbit').addEventListener('click', () => openOrbit());

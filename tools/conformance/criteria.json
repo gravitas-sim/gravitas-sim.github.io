@@ -247,9 +247,9 @@
     "since": "2.0",
     "name": "Keyboard",
     "status": "Partially supports",
-    "methods": ["parity", "manual", "static"],
+    "methods": ["parity", "manual", "static", "walk"],
     "axeRules": [],
-    "remarks": "Every control reachable by pointer on the evaluated surfaces is reachable by keyboard, and placement has a keyboard form. Dragging to feel a throw has no keyboard equivalent, by design; the typed form gives the number instead.",
+    "remarks": "Every control a pointer can press on a page of the walk inventory, in the state the page opens in, is reached by Tab, and each page's primary control answers its key (e2e/a11ySweep.spec.js, both languages). Placement has a keyboard form; the sandbox's zoom and pan, the 3-D lab's and the spacetime view's cameras, the observer's angle, a window's position and size and a run of rows in the Observatory each have a control the keyboard operates. Panels and dialogs a page opens later are covered where a named spec opens them, not everywhere. Dragging to feel a throw has no keyboard equivalent, by design; the typed form gives the number instead.",
     "gaps": ["drag-feel"]
   },
   {
@@ -258,9 +258,9 @@
     "since": "2.0",
     "name": "No Keyboard Trap",
     "status": "Partially supports",
-    "methods": ["manual", "static"],
+    "methods": ["manual", "static", "walk"],
     "axeRules": [],
-    "remarks": "Every modal opens through one module that traps focus within it, restores focus on close and answers Escape (tests/dialogInventory.test.js fails on one that does not). Escape and Tab are checked on the surfaces the manual spec opens. Embedded and third-party frames were not tested.",
+    "remarks": "Every modal opens through one module that traps focus within it, restores focus on close and answers Escape (tests/dialogInventory.test.js fails on one that does not). The walk Tabs once round every page of the walk inventory and finds no trap; it found that a dialog ending in a disclosure never gave the disclosure focus, which is fixed. The figure builder's embedded frame gives focus back. Third-party frames were not tested.",
     "gaps": []
   },
   {
@@ -335,9 +335,9 @@
     "since": "2.0",
     "name": "Focus Order",
     "status": "Partially supports",
-    "methods": ["manual"],
+    "methods": ["manual", "walk"],
     "axeRules": [],
-    "remarks": "Focus order, traps and restoration are asserted on the listed surfaces. Not every page was walked.",
+    "remarks": "Focus order, traps and restoration are asserted on the surfaces the manual spec lists. The walk makes one full round of every page of the walk inventory and shows that the round is complete and returns; whether the order is the meaningful one is judged only where the manual spec asserts it.",
     "gaps": []
   },
   {
@@ -390,9 +390,9 @@
     "since": "2.2",
     "name": "Focus Not Obscured (Minimum)",
     "status": "Partially supports",
-    "methods": ["manual"],
+    "methods": ["manual", "walk"],
     "axeRules": [],
-    "remarks": "Dialogs isolate the page behind them and the sticky shell was checked on the surfaces opened; focused controls scroll into view. Not every page was tested for sticky elements covering focus.",
+    "remarks": "Dialogs isolate the page behind them and the sticky shell was checked on the surfaces opened. The walk asserts that every Tab stop of every page of the walk inventory has its box inside the viewport while it has focus. It does not test whether another element lies over that box.",
     "gaps": []
   },
   {
@@ -401,9 +401,9 @@
     "since": "2.1",
     "name": "Pointer Gestures",
     "status": "Partially supports",
-    "methods": ["parity"],
+    "methods": ["parity", "walk"],
     "axeRules": [],
-    "remarks": "Pinch zooms the canvas and drag pans or aims; the rail's controls and the keyboard give single-pointer and keyboard alternatives for placement and view changes. The throw-velocity drag has none by design.",
+    "remarks": "Pinch zooms the canvas and drag pans or aims. Since Prompt 278 the sandbox's view pad pans and zooms with single presses, as do the pads of the 3-D lab and the spacetime view; the rail's controls and the keyboard give the alternatives for placement. The throw-velocity drag has none by design.",
     "gaps": ["drag-feel"]
   },
   {
@@ -445,9 +445,9 @@
     "since": "2.2",
     "name": "Dragging Movements",
     "status": "Partially supports",
-    "methods": ["parity"],
+    "methods": ["parity", "walk"],
     "axeRules": [],
-    "remarks": "Placing a body, a body's velocity and the system builder have a typed form that reaches the same state as dragging (e2e/accessibilityParity.spec.js). Dragging a throw to feel its speed has no non-dragging equivalent beyond the number.",
+    "remarks": "Every drag the interaction contract registers has an alternative that needs one pointer and no path, each walked in e2e/a11ySweep.spec.js or the spec the contract names: placing a body and its velocity (a typed form that reaches the same state, e2e/accessibilityParity.spec.js), panning and zooming the sandbox, orbiting the 3-D lab and the spacetime view, the observer's angle, moving and sizing a window, and selecting rows, a run of rows and pixels in the Observatory. Dragging a throw to feel its speed has no non-dragging equivalent beyond the number.",
     "gaps": ["drag-feel"]
   },
   {
@@ -642,9 +642,9 @@
     "since": "2.1",
     "name": "Status Messages",
     "status": "Partially supports",
-    "methods": ["manual"],
+    "methods": ["manual", "walk"],
     "axeRules": [],
-    "remarks": "Status changes are announced through the polite live region #srStatus on the simulation page, and the manual specs assert announcements where they check a feature. Not every message in every tool was verified, and none with a screen reader.",
+    "remarks": "Status changes are announced through the polite live region #srStatus on the simulation page, and the manual specs assert announcements where they check a feature. The sandbox's zoom, the 3-D lab's camera, a window move and an armed run of rows are each said once, when the pressing stops, in both languages (e2e/a11ySweep.spec.js). Not every message in every tool was verified, and none with a screen reader.",
     "gaps": []
   }
 ]
