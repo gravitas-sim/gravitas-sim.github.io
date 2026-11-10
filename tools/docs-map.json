@@ -1533,6 +1533,13 @@
       "purpose": "The inference closeout (Prompt 266): what 261 to 265 landed, the methods sequence as it exists, each closeout item done or held, the package change, the cohesion record.",
       "owner": 266,
       "student": false
+    },
+    {
+      "file": "ADVANCED_CLOSEOUT.md",
+      "kind": "record",
+      "purpose": "The advanced closeout (Prompt 274): what 268 to 273 landed, the 3-D and mission guide sequence, the sequence not created, the package's reading steps, the acceptance audit, the cohesion record.",
+      "owner": 274,
+      "student": false
     }
   ]
 }

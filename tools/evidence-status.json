@@ -1585,6 +1585,63 @@
       ]
     },
     {
+      "id": "compute-page-gate-ii",
+      "claim": "The second gate on the compute page returned a recorded verdict against thresholds committed before any candidate notebook was run.",
+      "scope": "The gate record of Prompt 268 (COMPUTE_GATE_II.md) with its pinned fixtures in tests/fixtures/compute-gate-ii/ and tests/computeGateII.test.js. Its prototype stays on a spike branch that is never merged; not the compute page as shipped, which is unchanged, and not any notebook beyond the present ones.",
+      "version": "2.1.0",
+      "class": "V-internal",
+      "status": "UNKNOWN",
+      "method": "Thresholds committed first; the candidate notebooks run against an independent oracle (python -E, numpy, scipy, astropy) and pinned references; page legs read from the tree; the test recomputes every status and the verdict from the pinned results.",
+      "evaluator": "the project",
+      "artifact": "COMPUTE_GATE_II.md",
+      "limitations": "Verdict C by the committed function: no candidate passes, because three page legs fail for every candidate (G4.b, G5.b, G7.a); N01.a, N02.d and N07.b fail as well, and the legs that need the pinned runtime in a browser were not run (downloaded code is not run without permission). Every failing leg stays failing as committed. Prompt 269 was not run, no notebook was added, and nothing new links to the page (ADVANCED_CLOSEOUT.md). Internal validation against the project’s own committed thresholds; no outside reviewer has read it (see external-science-review).",
+      "date": "2026-11-10",
+      "anchors": [
+        {
+          "file": "COMPUTE_GATE_II.md",
+          "text": "# The compute page gate, second edition"
+        }
+      ]
+    },
+    {
+      "id": "lab3d-curriculum-ii-recomputed",
+      "claim": "The 3-D lab’s run modes, reference planes, orbit editor and sky view, and the numbers its five newer guides ask for, are recomputed against an independent oracle within bounds committed before the first run.",
+      "scope": "The record of Prompt 271 (LAB3D_CURRICULUM_II.md) with its pinned fixtures in tests/fixtures/lab3d-curriculum-ii/: the guides The language of orbits, Changing frames, Seen from here, Mutual inclinations and Resonant pairs, in the English text; the Spanish follows the English step for step by a machine check. Not the four guides of the first 3-D curriculum, which have their own record (LAB3D_CURRICULUM.md), and not the resonance kernel (see resonance-libration-kernel).",
+      "version": "2.1.0",
+      "class": "V-internal",
+      "status": "partial",
+      "method": "Thresholds committed first; an independent oracle (python3 -E) for the elements, the frames, the sky projection, the mutual inclination and the resonant argument; amendments recorded before the legs they add ran; the validator recomputes every leg from the pinned oracle output.",
+      "evaluator": "the project",
+      "artifact": "LAB3D_CURRICULUM_II.md",
+      "limitations": "Two committed legs fail and stay failing and labelled: E2 and E7, where the once-per-orbit sampled resonant argument carries a short-period term; the smoothed legs an amendment added before they ran pass. Synthetic systems only; a run mode states what it cannot show. The content acceptance audit of ADVANCED_CLOSEOUT.md finds no written reflection step and no uncertainty on a measured value in these guides. Internal validation against the project’s own committed thresholds and an independent implementation; no outside scientist has reviewed it (see external-science-review), no class has used the guides (see outside-adoption) and no learning is measured (see learning-gain).",
+      "date": "2026-11-10",
+      "anchors": [
+        {
+          "file": "LAB3D_CURRICULUM_II.md",
+          "text": "# The 3-D lab curriculum II (Prompt 271)"
+        }
+      ]
+    },
+    {
+      "id": "guide-sequence-placement",
+      "claim": "Every guide of the 3-D lab and of the mission lab is in one Library sequence, after the guides it assumes, with the pathway it is in and a next entry on its item page, and the upper-level package states what has no investigation.",
+      "scope": "The Library sequence Spaceflight and the three-dimensional sky (tools/library-curation.json, library/library.json) and the two reading steps of the upper-level package (js/data/courses/upper-level-modules.js), as Prompt 274 left them (ADVANCED_CLOSEOUT.md). Structure only: order, membership, relations and the presence of both languages.",
+      "version": "2.1.0",
+      "class": "S",
+      "status": "established",
+      "method": "tests/advancedCloseout.test.js holds the sequence to the guide sources and the Library’s relations, the builder’s refusals to synthetic cases, and the package’s reading steps and its untouched computation unit; the Library builder fails on a sequence that breaks a rule.",
+      "evaluator": "the project",
+      "artifact": "tests/advancedCloseout.test.js",
+      "limitations": "It proves structure, not comprehension: nobody outside the project has followed the sequence. A sequence Computational astrophysics was not created, and the launch-window, budget, rendezvous, gravity-assist, resonance-depth and numerical-methods investigations do not exist; the package names them as reading. The package is UNVALIDATED as a course. The Spanish is unreviewed by a fluent reader (see spanish-review).",
+      "date": "2026-11-10",
+      "anchors": [
+        {
+          "file": "ADVANCED_CLOSEOUT.md",
+          "text": "# Advanced sequences, packages and cohesion closeout (Prompt 274)"
+        }
+      ]
+    },
+    {
       "id": "resonance-libration-addendum",
       "claim": "A tapered least-squares estimator resolves the libration of the authentic Laplace argument under its larger osculating ripple, and a step derived from an error budget keeps the kernel's runs inside the first gate's bounds.",
       "scope": "The Part A addendum of Prompt 273 (RESONANCES_II.md sections 9 to 13) with its pinned fixtures in tests/fixtures/resonances-ii/ (addendum-*.json, oracle_addendum.py) and tests/resonancesIIAddendum.test.js; measureLibrationHarmonic in js/lab3d/libration.js and stepForBudget in js/lab3d/stepBudget.js; the JUP365 argument, two model systems, one test particle, a Kepler orbit and synthetic series; not any panel, guide or lesson depth, none of which exists.",
