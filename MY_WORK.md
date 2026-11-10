@@ -79,7 +79,7 @@ When the evidence notebook holds entries, My work draws "Review and compare your
 - **Filters** by investigation (the lesson or activity the entry was kept in, else the tool that made it), kind (the entry's source, "Inference-core fit", "Parameter sweep") and date (from and to, the reader's local days), with a count of what is shown and a Clear filters button.
 - **Open**: each entry links to the page that made it ("Open in the Observatory"). A record that carries its own replay (an image's marks) is replayed there, as before; nothing here invents a deep link a record does not carry.
 - **Annotate**: the student's own heading and three prose fields (what it shows, what supports it, what limits it), written through `annotate()`; the snapshot, its numbers and its fingerprint do not change.
-- **For a report**: a mark, kept as `marked: true` on the notebook entry (`mark()` in `js/notebook/entry.js`; present only while set). The existing report does not read it; Part B (a report composed from marked entries) is the reader of it and has not been built.
+- **For a report**: a mark, kept as `marked: true` on the notebook entry (`mark()` in `js/notebook/entry.js`; present only while set). The report of one investigation does not read it; the marked entries make up the composed report (the next section).
 - **Compare**: two entries of one kind (the same `source`), one quantity of each, or one entry's two quantities. Entries of different kinds, quantities in different units, and an uncertainty that is not one standard deviation (a limit, "not constrained", a failed fit, an asymmetric interval, none) are refused in words.
 
 **The covariance rule.** The difference is A - B with Var(A - B) = Var(A) + Var(B) - 2 Cov(A, B), computed by Prompt 151's `compareEstimates` and worded by its `describeComparison` (`js/compare/estimates.js`, `compareW.est.*`). The statistics kernel's `difference` (Prompt 154) computes the same quantity; the page does not import it, because the kernel is NEVER_PRECACHED with no adopter and a first adopter would carry its nine files into the install, so `tests/evidenceReview.test.js` checks the two agree on a grid instead. The covariance is used when it is known: when both quantities are of one record and the record states a coefficient between them (`correlatedWith`), or when the student gives a correlation (or a covariance) for two records. Two different records state no coefficient of each other and nothing infers one. So:
@@ -93,9 +93,41 @@ When the evidence notebook holds entries, My work draws "Review and compare your
 Every statement ends with the Gaussian assumption. The page's comparison agrees with the kernel's `difference` (Prompt 154) on a grid of 60 cases and with Python's `math.erfc` on three hand-computed ones (`tests/evidenceReview.test.js`).
 
 **Limits, said plainly.**
-- A mark is an additive field on the stored notebook entry. A 2.0.0 or 2.1.0 build reads the entry and drops the mark on its next save, as it drops any field it does not know; nothing else about the entry changes.
+- A mark is an additive field on the stored notebook entry. A 2.0.0 or 2.1.0 build reads the entry and drops the mark on its next save, as it drops any field it does not know; nothing else about the entry changes. A made report keeps the list of its entries under its own key, which those builds do not rewrite, and My work offers to mark them again from it (the next section).
 - Sharing is detected only from what a record says (a digest, an assumed quantity). Records that share data without saying so are compared with independence assumed and no warning; the student can state that they share, and give a correlation.
 - The annotation fields are the notebook's own; there is no free-form note field beyond them.
+- Spanish has not been read by a fluent reader.
+
+## The report composed from marked entries (Prompt 275, part B)
+
+When an entry is marked "For a report", or a composed report was made before, the review draws "Your report" under the comparison (`js/myWork/reportView.js`, a lazy module the review loads only then; the format, its reader and its words are `js/myWork/composedReport.js`). It is a report across investigations. The report of one investigation (`js/labReport.js`) and the notebook's own report (`js/notebook/report.js`) are unchanged, and nothing here prints into them.
+
+- **Sections, in the student's order.** The marked entries, each with Move up and Move down (buttons, so the keyboard and one finger do the same thing; nothing is dragged). The focus stays with the entry that moved, and the status line says its new place.
+- **A title**, the student's.
+- **Comparisons carried in.** "Add this comparison to your report" under the comparison above puts it in, when what it compares is marked. The report keeps the two numbers, the correlation the student gave or that the record states, what the records share, and the result; it is computed again from the records when the report is made.
+- **Make the report.** Writes one record among the things made (`gravitas_made_composed-report`, a `gravitas.made/1` of kind `report`, listed under "Scenarios and experiments you made" as a composed report). The record holds a `gravitas.composed-report/1`. Nothing is written before this, and making it does not touch the notebook.
+- **Downloads**, all of the report as it was made: a tagged PDF, the accessible HTML (`js/htmlReport.js`: one h1, headings in order, tables, no script), the numbers as CSV (a row per number, then a row per comparison; numbers as JavaScript writes them in either language), and the report file for the instructor (`<title>.composed-report.json`).
+- **Stale.** If the marks, their order or the annotations change afterwards, the card says so and the downloads stay those of the made report until it is made again.
+
+**What a section says.** The entry's title, kind, the day it was recorded and its checksum; the student's claim; a table of its numbers; a methods paragraph; its sources (credit, licence, retrieval date, citations) when the record carries them; the student's evidence and limitations, with the record's own warnings; and, in the PDF and the HTML, the entry's figure with the numbers it draws as a table.
+
+**The uncertainty statement.** Every number is printed in Prompt 151's one pattern, by the same function the notebook's report uses (`describeUncertain`, `js/platform/uncertain.js`): "X ± Y (method)", an asymmetric interval, a limit, "not constrained", a failed fit; a number with no uncertainty stated is printed alone.
+
+**The methods paragraph** is generated from the record and is the same sentence every time, in English and in Spanish (`methodsText`). It names the instrument (the entry's kind and its envelope's source, with a version when one is recorded), then only what the record carries: scenario, integrator and step, reference frame, seed, viewing geometry, schedule, the tool's settings, the digest of the data or the starting state, the engine fingerprint, the build, and where the entry was kept. A field the record does not carry is not printed. The one absence that is said is the seed of a simulation ("The record carries no seed."), because a reading without one cannot be made again.
+
+**The covariance statement** of a carried comparison is the one the comparison was made under: "Independence assumed.", "Covariance used, as the record states it." or "Covariance used, from the correlation the author gave.", followed by Prompt 151's sentence (the difference with its uncertainty, how many sigma, how often chance alone would do it, and every assumption, the shared data or calibration among them). The rule is Part A's and is not relaxed: nothing infers a covariance between two records.
+
+**The file** (`gravitas.composed-report/1`, FORMATS.md) holds numbers, ids and the student's own words, and no generated prose: the page that made it and the review page each say it in their own language from the same record. Its `digest` is the SHA-256 of its canonical JSON without the digest. It does not hold figures.
+
+**Handing in.** Once a report was made, the next submission token a lesson writes carries `cr`: the report's digest and its number of sections (`composedStamp` in `js/myWork/made.js`, read by `ledgerForReport`; `submission-token-2.schema.json`). The lesson's printed report is unchanged. The student hands in the report file; the review page (`/instructors/submissions/`) takes it like any other file, says which submission states its digest, recomputes the digest from the file, and writes the report out in the instructor's language. A file whose contents do not hash to the digest it states is shown open with an alert.
+
+**Limits, said plainly.**
+- The digest says the file is the one the digest was made from. It does not say who made it: a file edited and digested again, with a token edited to match, passes (PROVENANCE.md).
+- One composed report is kept at a time; making another replaces it. A token states the report that exists when the token is made.
+- The review page's results file and its archive do not carry the composed report or `cr`; the report is read again by adding its file.
+- The report file carries no figure. The PDF and the HTML draw the notebook's figure at download time.
+- An image entry is not replayed from the report: "Open in" goes to the page that made the entry, as in Part A, and nothing invents a deep link a record does not carry.
+- A 2.0.0 or 2.1.0 build lists the made record without reading it (it leaves a kind it does not know out of its list and does not overwrite it), reads a token that carries `cr` and does not show the field, and drops marks when it saves the notebook. "Mark them again" on the card restores the marks from the made report.
 - Spanish has not been read by a fluent reader.
 
 ## Progress and prerequisites (Prompt 276, part 1)
