@@ -22,7 +22,15 @@
 // =============================================================================
 
 import { announce } from './notify.js';
-import { nudgeScale } from './shortcuts.js';
+
+/**
+ * The contract's three nudge sizes (INTERACTION.md): Alt a quarter of a step,
+ * no modifier one, Shift four. The same numbers as NUDGE in js/shortcuts.js,
+ * which tests/interactionContract.test.js holds this to; not imported, because
+ * a lazy module that reaches a start-up module splits the start-up bundle and
+ * costs every page a request.
+ */
+const scaleOf = e => (e.altKey ? 0.25 : e.shiftKey ? 4 : 1);
 
 /** One step of an arrow key, in CSS pixels, before the modifier's scale. */
 export const STEP = 16;
@@ -148,7 +156,7 @@ function armButton(host, { kind, glyph, className, press, nudge }) {
     }
     const way = ARROWS[e.key];
     if (!way || e.metaKey || e.ctrlKey) return;
-    const step = STEP * nudgeScale(e);
+    const step = STEP * scaleOf(e);
     nudge(way[0] * step, way[1] * step);
     e.preventDefault();
     e.stopPropagation();

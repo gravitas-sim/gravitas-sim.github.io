@@ -577,6 +577,8 @@ describe('a window is moved without a drag (js/windowMove.js)', () => {
     key(move, 'ArrowLeft', { altKey: true });
     expect(panel.style.left).toBe(`${100 + STEP - STEP / 4}px`);
     expect(moved).toBe(3);
+    // The same three numbers as every other nudge.
+    expect([NUDGE.fine, NUDGE.normal, NUDGE.coarse]).toEqual([0.25, 1, 4]);
   });
 
   test('a press on the veil places the window, ends the placement and is said', async () => {
