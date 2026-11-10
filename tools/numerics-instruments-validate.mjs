@@ -300,6 +300,8 @@ export async function runInstruments(inputs) {
   out.I4 = {
     a: {
       ...slim(a),
+      gridMaximum:
+        a.grid.freqs[a.grid.power.indexOf(Math.max(...a.grid.power))],
       fourier: Array.from({ length: 31 }, (_, k) => a.grid.power[4 * k]),
     },
     c: slim(

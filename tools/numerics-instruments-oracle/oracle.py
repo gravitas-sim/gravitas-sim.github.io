@@ -86,18 +86,25 @@ def ledger(e, scheme, h, span):
     s0 = sep(x)
     end = 0.0
     worst = 0.0
-    for _ in range(n):
+    worst_half = 0.0
+    for k in range(1, n + 1):
         x, v = STEPS[scheme](x, v, h)
         end = (energy(x, v) - e0) / abs(e0)
         worst = max(worst, abs(end))
-    return {"steps": n, "end": end, "maxAbs": worst, "sepRatio": sep(x) / s0}
+        if k == n // 2:
+            worst_half = worst
+    return {"steps": n, "end": end, "maxAbs": worst, "maxAbsHalf": worst_half, "sepRatio": sep(x) / s0}
 
 
 def two_step(e, scheme, h, span):
     c = ledger(e, scheme, h, span)
     f = ledger(e, scheme, h / 2, span)
     secular = abs(c["end"]) >= 0.5 * c["maxAbs"] and abs(f["end"]) >= 0.5 * f["maxAbs"]
+    # AM2: the kind from the first half of the span against the whole.
+    grows = c["maxAbs"] >= 1.5 * c["maxAbsHalf"] and f["maxAbs"] >= 1.5 * f["maxAbsHalf"]
     return {"coarse": c, "fine": f, "kind": "secular" if secular else "oscillating",
+            "kind2": "secular" if grows else "oscillating",
+            "orderEnd2": math.log2(abs(c["end"] / f["end"])) if grows else None,
             "ratioEnd": c["end"] / f["end"], "ratioMax": c["maxAbs"] / f["maxAbs"],
             "orderEnd": math.log2(abs(c["end"] / f["end"])) if secular else None,
             "orderMax": math.log2(c["maxAbs"] / f["maxAbs"])}
@@ -110,6 +117,7 @@ def i1():
         "d": (0.5, "rk4", P / 200, 2 * P),
         "e": (0.5, "symplectic-euler", P / 400, 2 * P),
         "f": (0.0, "explicit-euler", P / 1000, 3 * P),
+        "i2": (0.5, "velocity-verlet", P / 200, 2.25 * P),
     }
     return {k: two_step(*c) for k, c in cases.items()}
 
@@ -192,7 +200,12 @@ def i2():
         if err <= err_ad:
             fixed = {"fixedSteps": n, "errFixed": err}
             break
-    return {"accepted": a, "rejected": r, "hMin": float(hs[lo]), "tAtHMin": hist[lo][0],
+    # AM2: without the first step (the caller's guess) and the last (cut to the span).
+    h2, r2 = hs[1:-1], rs[1:-1]
+    lo2, hi2 = int(np.argmin(h2)), int(np.argmax(h2))
+    v2 = {"hMin": float(h2[lo2]), "rAtHMin": float(r2[lo2]), "hMax": float(h2[hi2]), "rAtHMax": float(r2[hi2]),
+          "slope": float(np.polyfit(np.log(r2), np.log(h2), 1)[0]), "rMin": float(rs.min()), "rMax": float(rs.max())}
+    return {"v2": v2, "accepted": a, "rejected": r, "hMin": float(hs[lo]), "tAtHMin": hist[lo][0],
             "hMax": float(hs[hi]), "tAtHMax": hist[hi][0], "slope": slope,
             "final": y[:6].tolist(), "dop853": ref.y[:6, -1].tolist(),
             "rk45": {"steps": int(len(rk45.t) - 1), "nfev": int(rk45.nfev)},

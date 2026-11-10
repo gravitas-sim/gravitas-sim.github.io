@@ -17,6 +17,8 @@ import { separation } from './ledger.js';
 
 const { Math, Number } = globalThis;
 
+/** 2: the first step (the caller's guess) and the last (cut to the span) are not the controller's, and are left out of hMin, hMax and the slope (AM2). */
+export const STEP_HISTORY_VERSION = 2;
 /** A step shorter than this fraction of the span is a collapse. */
 export const COLLAPSE = 1e-12;
 /** Accepted plus rejected steps allowed. */
@@ -75,13 +77,23 @@ export function stepHistory(bodies, span, { tol, h0 = 1e-3, G = 1 } = {}) {
       ...base,
     };
   }
-  let lo = steps[0];
-  let hi = steps[0];
+  steps[0].first = true;
+  steps[steps.length - 1].last = true;
+  let rMin = Infinity;
+  let rMax = 0;
+  for (const p of steps) {
+    rMin = Math.min(rMin, p.r);
+    rMax = Math.max(rMax, p.r);
+  }
+  const chosen = steps.slice(1, -1);
+  if (chosen.length < 2) return { refused: 'too-few-steps', at: null, ...base };
+  let lo = chosen[0];
+  let hi = chosen[0];
   let sx = 0;
   let sy = 0;
   let sxx = 0;
   let sxy = 0;
-  for (const p of steps) {
+  for (const p of chosen) {
     if (p.h < lo.h) lo = p;
     if (p.h > hi.h) hi = p;
     const x = Math.log(p.r);
@@ -91,13 +103,14 @@ export function stepHistory(bodies, span, { tol, h0 = 1e-3, G = 1 } = {}) {
     sxx += x * x;
     sxy += x * y;
   }
-  const n = steps.length;
+  const n = chosen.length;
   const denom = n * sxx - sx * sx;
   return {
     ...base,
     hMin: { ...lo },
     hMax: { ...hi },
     slope: denom > 0 ? (n * sxy - sx * sy) / denom : null,
+    separationRange: { min: rMin, max: rMax },
     final: Array.from(s.x),
   };
 }

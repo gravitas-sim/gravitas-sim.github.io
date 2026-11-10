@@ -9,7 +9,9 @@
 // implies. It refuses the three numbers that look like a result and are not:
 // an order read at the rounding floor, an order for an orbit the scheme has
 // unbound, and the end-of-run error of a scheme whose error oscillates (that
-// number is the phase the run happened to stop at).
+// number is the phase the run happened to stop at). Whether an error
+// oscillates is read from the first half of the span against the whole, so
+// the span must hold two oscillations or more (two periods of an orbit).
 //
 // State and forces are the 3-D kernel's (js/lab3d/kernel.js), so the units are
 // its units: G = 1 unless a state says otherwise. Two schemes are added here
@@ -31,6 +33,10 @@ import {
 
 const { Math, Number, Float64Array } = globalThis;
 
+/** 2: `kind` is read from the first half of the span against the whole, not from the end (AM2). */
+export const LEDGER_VERSION = 2;
+/** An error whose largest value over the whole span is this many times its largest over the first half accumulates. */
+export const GROWTH = 1.5;
 /** Below this relative energy error the finer run is rounding, and no ratio is read. */
 export const FLOOR = 1e-13;
 /** Fewer steps than this is not a run. */
@@ -123,6 +129,8 @@ export function ledger(bodies, scheme, { h, span, G = 1 } = {}) {
   const start = separation(s);
   let end = 0;
   let maxAbs = 0;
+  let maxAbsHalf = 0;
+  const half = Math.floor(steps / 2);
   let taken = 0;
   for (let k = 1; k <= steps; k++) {
     step(s, h);
@@ -132,6 +140,7 @@ export function ledger(bodies, scheme, { h, span, G = 1 } = {}) {
       return { refused: 'non-finite', scheme, h, steps, at: k };
     end = (E - E0) / scale;
     if (Math.abs(end) > maxAbs) maxAbs = Math.abs(end);
+    if (k === half) maxAbsHalf = maxAbs;
     if (E0 < 0 && E >= 0)
       return { refused: 'unbound', scheme, h, steps, at: k, end, maxAbs };
   }
@@ -141,6 +150,7 @@ export function ledger(bodies, scheme, { h, span, G = 1 } = {}) {
     steps: taken,
     end,
     maxAbs,
+    maxAbsHalf,
     separation: { start, end: separation(s) },
   };
 }
@@ -161,9 +171,11 @@ export function twoStep(bodies, scheme, { h, span, G = 1 } = {}) {
     if (coarse.refused === reason || fine.refused === reason)
       return { refused: reason, coarse, fine };
   if (fine.maxAbs < FLOOR) return { refused: 'rounding-floor', coarse, fine };
+  // Not from the end of the run, which is a phase: an error that accumulates is
+  // larger over the whole span than over its first half, a bounded one is not.
   const secular =
-    Math.abs(coarse.end) >= 0.5 * coarse.maxAbs &&
-    Math.abs(fine.end) >= 0.5 * fine.maxAbs;
+    coarse.maxAbs >= GROWTH * coarse.maxAbsHalf &&
+    fine.maxAbs >= GROWTH * fine.maxAbsHalf;
   const ratioEnd = fine.end === 0 ? null : coarse.end / fine.end;
   const ratioMax = coarse.maxAbs / fine.maxAbs;
   return {
