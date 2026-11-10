@@ -191,6 +191,11 @@ FFT peak, then `scipy.optimize.least_squares`), checked on 200 planted series of
 | N1h authentic-data applicability | REPORTED | L1h is the authentic leg, and it passes |
 | K1 Kozai-Lidov | NOT RUN | no reference of the exchange was fetched; the request is in `addendum-sources.json` |
 
+What the passes do not show. C1h's truth is the oracle's estimate by the same definition on its own integration, so it
+tests the integration and the code, not the definition: on the Laplace model the three definitions differ by up to 9 d
+(turning points 2076.3 d, FFT peak 2068.7 d, tapered line 2067.9 d), which the tapered line's 1.1 d sigma does not
+cover. T2h sits at its bound. L1h's amplitude is inside its inherited bound by 1.2 points only.
+
 Addendum verdict function (committed): A needs the standing legs R1 to R3, all 21 gated legs, and neither X leg failing;
 B needs R1 to R3 with B0b, B2b, L4b, P3b, D1h, D2h and D3b; C otherwise. X1L and X1P fail, so **B**: the resonant
 argument displayed over the window without a fitted period or rate.
