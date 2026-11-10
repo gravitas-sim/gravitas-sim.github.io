@@ -409,7 +409,9 @@ numerical accuracy and performance), and the lesson plot's options.
   coarse pointer, with the panel's focus ring.
 - **When it starts open** (`moreOpen`, `js/settingsSchema.js`): what the
   student last chose for that surface comes first, then an activity's
-  `'open'` or `'shut'`, then the depth's default: shut at the core and
+  `'open'` or `'shut'`, then (on the lesson and instrument panels) what the
+  first-week collection the student is in says (Prompt 277), then the depth's
+  default: shut at the core and
   quantitative depths and the survey course level, open at the advanced depth.
   The student can always open everything and can always fold it again.
 - **Remembered per surface** in `gravitas_disclosure` (a preference: a map of

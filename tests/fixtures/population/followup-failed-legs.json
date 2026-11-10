@@ -1,0 +1,5 @@
+{
+ "format": "gravitas.population-inference-gate-followup-failed-legs/1",
+ "note": "Every failing row of followup-results.json and nothing else; left failing.",
+ "legs": []
+}

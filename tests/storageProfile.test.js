@@ -61,9 +61,12 @@ describe('the profile holds everything a 2.0.0 student could have', () => {
     // gravitas_resume (Prompt 163, the one resume record), gravitas_disclosure
     // (Prompt 167, which More sections the reader left open),
     // gravitas_terms (Prompt 168, the courses opened that name a term),
-    // gravitas_collections (Prompt 164, saved items and kept collections).
+    // gravitas_collections (Prompt 164, saved items and kept collections),
+    // gravitas_first_week (Prompt 277, the list Home shows in its first-week
+    // mode).
     const SINCE_2_0_0 = [
       'gravitas_collections',
+      'gravitas_first_week',
       'gravitas_motion',
       'gravitas_resume',
       'gravitas_disclosure',

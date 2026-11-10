@@ -117,6 +117,13 @@
       "corpus": "collections-record"
     },
     {
+      "prefix": "gravitas_first_week",
+      "name": "The first-week list Home shows alone, until it is finished or left",
+      "owner": "js/welcomeGate.js",
+      "migration": "none; a record Home cannot show reads as no first week and is dropped",
+      "corpus": "first-week-record"
+    },
+    {
       "prefix": "gravitas_course_",
       "name": "Course builder drafts and the last open",
       "owner": "js/coursePage.js",

@@ -158,6 +158,7 @@ Lowering one is the work of the prompt that earns it; raising one needs a decisi
 | `footer.links` | 3 |
 | `home.doors` | 5 |
 | `home.firstWeekLinks` | 4 |
+| `home.firstWeekItems` | 7 |
 | `home.countedLinks` | 0 |
 | `library.kinds` | 6 |
 | `library.formats` | 15 |
@@ -168,6 +169,8 @@ Lowering one is the work of the prompt that earns it; raising one needs a decisi
 | `reach.pagesWithoutALinkFromHome` | 1 |
 | `defaultView.home-first-visit.desktop` | 12 |
 | `defaultView.home-first-visit.phone` | 6 |
+| `defaultView.home-first-week.desktop` | 20 |
+| `defaultView.home-first-week.phone` | 19 |
 | `defaultView.home.desktop` | 14 |
 | `defaultView.home.phone` | 7 |
 | `defaultView.library.desktop` | 24 |
@@ -203,8 +206,19 @@ What a visitor sees, since Prompt 162 (the table of what changed is in the pull 
 - **The global navigation is the five destinations**, one link each, in the model's order and in both languages, the same on every page: Explore (the sandbox), Learn (the Library), Observe (the Observatory), My work and Teach. It is a flat list: no dropdown holds anything. The destination a page belongs to is marked (`aria-current="true"`, and `"page"` on the destination's own page); the marking comes from the inventory's rows, so a page that moves is one edit.
 - **Everything that was a menu entry is reached from its destination.** A destination's page carries a "places" block (Learn on the Library, Observe on the Observatory, Teach on the Teaching page, the last with the documents), stamped by `tools/shell.mjs` from `PLACES`; Explore's page is the sandbox, so its three places (the 3-D lab, the mission lab, the Scenario Studio) are in Home's Explore entry. No capability was removed: only its menu entry moved.
 - **A breadcrumb on every page but the sandbox** (the destination, then the page; Gravitas first only where a page has no destination, since the brand link already goes Home), also stamped from the inventory. The sandbox's fixed bar is one row over the canvas: it marks Explore, and Learn while a lesson is open (`js/shell.js` watches the `investigation-open` class the lesson already sets).
-- **Home answers three questions and offers one list.** What this is (one paragraph, in both languages); what to do first (`firstWeek` in the inventory: a first investigation, a first observation, the sandbox and a course for an instructor, each a Library entry read by `tools/build-library.mjs` or an action); where was I (the lessons started and not finished, shown only when there are some; Prompt 163's resume record replaces it); and the five destinations with their one line each, generated from the inventory. The three-screen introduction is kept, shown first on a first visit and reachable from Home's foot ("Show the introduction again", beside the quick tour). Home shows no count of content, no scenario cards, no list of investigations and no feature list.
+- **Home answers three questions and offers one list.** What this is (one paragraph, in both languages); what to do first (`firstWeek` in the inventory: a first investigation, a first observation, the sandbox and a course for an instructor, each a Library entry read by `tools/build-library.mjs` or an action); where was I (the lessons started and not finished, shown only when there are some; Prompt 163's resume record replaces it); and the five destinations with their one line each, generated from the inventory. The three-screen introduction is kept, shown first on a first visit and reachable from Home's foot ("Show the introduction again", beside the quick tour); since Prompt 277 its second screen is the five destinations. Home shows no count of content, no scenario cards, no list of investigations and no feature list.
 - **What 162 did not do:** add a destination, rename a surface's route, or touch a lesson. The Library's own kinds, facet and default view are Prompt 163's (next section).
+
+## Home's first-week mode (Prompt 277)
+
+Home has one more state, and no new surface: a collection marked "first week" opens, by its link, as Home showing that collection's items in order and nothing else but the five destinations' names (ONBOARDING.md has the flow, the record and the screen inventory). It adds no destination, no menu entry, no kind and no route: the course home link is the way in, and the row for Home in the table above is unchanged. What the structural checks hold of it:
+
+- **The count.** A first week lists at most 7 items (`home.firstWeekItems`, the course package's own limit, `MAX_FIRST_WEEK_ITEMS`; the two are held equal).
+- **The default view.** With seven items the mode shows 18 choices at 1280 by 800 and 17 at 390 by 844 (Chromium on macOS, 2026-11-10; ceilings 20 and 19, with the usual slack). At the desktop width they are the bar (the brand, the five destinations, language and theme), the close button, the seven items, the introduction on request and the way out; at the phone width the bar is the brand and Menu, and the five names are under the list.
+- **The five destinations.** They are named once at either width (the bar, or the list's foot where the bar folds them), in the model's order, and each lands on its destination with its first action in view (`e2e/navigation.spec.js`).
+- **Nothing else.** `e2e/firstWeek.spec.js` lists every control Home shows in the mode and holds it to that list.
+
+The introduction's second screen now names the five destinations, each with its one line and its one action, generated from the inventory like Home's five places.
 
 ## The Library (Prompt 163)
 

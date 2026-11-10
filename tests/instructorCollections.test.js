@@ -187,3 +187,86 @@ describe('with items saved', () => {
     );
   });
 });
+
+describe('a first week (Prompt 277)', () => {
+  const tick = (host, on = true) => {
+    const box = host.querySelector('#coll-week');
+    box.checked = on;
+    box.dispatchEvent(new Event('change', { bubbles: true }));
+  };
+  const choose = (host, value) => {
+    const more = host.querySelector('#coll-more');
+    more.value = value;
+    more.dispatchEvent(new Event('change', { bubbles: true }));
+  };
+
+  test('is off until ticked, and a collection made without it carries neither field', async () => {
+    const host = await open(SET);
+    expect(host.querySelector('#coll-week').checked).toBe(false);
+    expect(host.querySelector('#coll-more').disabled).toBe(true);
+    type(host, '[data-f="title.en"]', 'Tides');
+    const made = await readCourseFragment((await makeLink(host)).split('#')[1]);
+    expect('firstWeek' in made).toBe(false);
+    expect('more' in made).toBe(false);
+  });
+
+  test('ticked, the collection is marked; More is written only when chosen', async () => {
+    const host = await open(SET);
+    type(host, '[data-f="title.en"]', 'Week one');
+    tick(host);
+    expect(host.querySelector('#coll-more').disabled).toBe(false);
+    let made = await readCourseFragment((await makeLink(host)).split('#')[1]);
+    expect(validateCoursePack(made, courseApi())).toEqual([]);
+    expect(made.firstWeek).toBe(true);
+    expect('more' in made).toBe(false);
+
+    choose(host, 'shut');
+    // A change clears the link that was made before it.
+    expect(host.querySelector('#coll-link').value).toBe('');
+    made = await readCourseFragment((await makeLink(host)).split('#')[1]);
+    expect(validateCoursePack(made, courseApi())).toEqual([]);
+    expect(made).toMatchObject({ firstWeek: true, more: 'shut' });
+  });
+
+  test('unticked again, the choice for More goes with it', async () => {
+    const host = await open(SET);
+    type(host, '[data-f="title.en"]', 'Week one');
+    tick(host);
+    choose(host, 'open');
+    tick(host, false);
+    const made = await readCourseFragment((await makeLink(host)).split('#')[1]);
+    expect('firstWeek' in made).toBe(false);
+    expect('more' in made).toBe(false);
+  });
+
+  test('keeps the tick when the list is redrawn, and both controls have a label', async () => {
+    const host = await open(SET);
+    tick(host);
+    choose(host, 'open');
+    await press(host, '[data-item="lesson-tides"] [data-act="down"]');
+    expect(host.querySelector('#coll-week').checked).toBe(true);
+    expect(host.querySelector('#coll-more').value).toBe('open');
+    for (const id of ['coll-week', 'coll-more'])
+      expect(
+        host.querySelector(`label[for="${id}"]`).textContent.trim().length
+      ).toBeGreaterThan(0);
+    expect(host.querySelector('.coll-week legend').textContent).toBe(
+      'First week'
+    );
+  });
+
+  test('more than seven items is refused in words, not made', async () => {
+    const lessons = library.entries
+      .filter(e => e.format === 'lesson')
+      .slice(0, 8)
+      .map(e => e.id);
+    const host = await open(lessons);
+    type(host, '[data-f="title.en"]', 'Too long a week');
+    tick(host);
+    await press(host, '#coll-link-make');
+    expect(host.querySelector('[data-role="status"]').textContent).toMatch(
+      /a first week holds up to 7 items/
+    );
+    expect(host.querySelector('#coll-link').value).toBe('');
+  });
+});

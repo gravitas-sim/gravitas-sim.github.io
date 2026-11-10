@@ -129,6 +129,10 @@ export const ACCESS = Object.freeze(['open', 'library', 'print']);
  * refuses the field in its own words (tests/compat/boundary.mjs).
  */
 export const PROFILES = Object.freeze(['collection']);
+/** The most items a first week holds (Prompt 277): Home shows them on one screen. */
+export const MAX_FIRST_WEEK_ITEMS = 7;
+/** What a first week may say of the panels' More (167's field). */
+export const MORE_STATES = Object.freeze(['open', 'shut']);
 
 export const MAX_UNITS = 20;
 export const MAX_ITEMS = 120;
@@ -171,6 +175,8 @@ const PACK_FIELDS = new Set([
   'courseLevel',
   'term',
   'profile',
+  'firstWeek',
+  'more',
   'title',
   'summary',
   'audience',
@@ -403,6 +409,22 @@ export function validateCoursePack(c, api) {
         { field: k }
       );
 
+  // A first week (Prompt 277): a collection Home shows alone, in order.
+  if (c.firstWeek !== undefined)
+    need(
+      collection && c.firstWeek === true,
+      'firstWeek',
+      'firstWeek',
+      'true on a collection, or left out'
+    );
+  if (c.more !== undefined)
+    need(
+      c.firstWeek === true && MORE_STATES.includes(c.more),
+      'more',
+      'more',
+      '"open" or "shut" on a first week, or left out'
+    );
+
   text(c.title, 'title', true, 120);
   text(c.summary, 'summary', false);
   text(c.audience, 'audience', false, 300);
@@ -537,6 +559,16 @@ export function validateCoursePack(c, api) {
     'units',
     'collectionUnits',
     'a collection has exactly one unit'
+  );
+  need(
+    c.firstWeek !== true ||
+      !Array.isArray(units[0]?.items) ||
+      (units[0].items.length <= MAX_FIRST_WEEK_ITEMS &&
+        units[0].items.every(i => i?.kind !== 'reading')),
+    'units',
+    'firstWeekItems',
+    `a first week holds up to ${MAX_FIRST_WEEK_ITEMS} items, and no reading`,
+    { max: MAX_FIRST_WEEK_ITEMS }
   );
   const unitIds = new Set();
   units.forEach((u, i) => {

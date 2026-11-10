@@ -1,0 +1,144 @@
+{
+ "format": "gravitas.population-inference-gate-followup-sources/1",
+ "retrieved": "2026-11-10",
+ "where": "scratch-data/population264/ beside the roadmap, outside every repository; one directory per source; nothing of a fetched file is in this repository beyond the descriptions below",
+ "rights": "cite-only for every file: read as text, never redistributed, never run. The numbers quoted under 'holds' were read from the named file.",
+ "client": "curl with a generic user agent, one request at a time, three seconds apart for arXiv",
+ "sources": [
+  {
+   "id": "R1-a",
+   "request": "R1",
+   "dir": "r1-arxiv-1501.01623",
+   "url": "https://arxiv.org/e-print/1501.01623",
+   "abs": "https://arxiv.org/abs/1501.01623",
+   "bytes": 663035,
+   "sha256": "264e84222ada5cd920efc05f555342a637edd1a3d29293d356d9710554e1176c",
+   "absSha256": "682b6e8d210e0213c21df49e974b6444b96e86fdaa882f33b832a4be1a31a6a5",
+   "title": "The Occurrence of Potentially Habitable Planets Orbiting M Dwarfs Estimated from the Full Kepler Dataset and an Empirical Measurement of the Detection Sensitivity",
+   "authors": "Dressing, Courtney D.; Charbonneau, David (as on the abstract page)",
+   "terms": "arXiv non-exclusive licence to distribute (the licence link on the abstract page, fetched as terms/arxiv-nonexclusive-distrib-1.0.html: the submitter grants arXiv.org a perpetual, non-exclusive licence to distribute; no reuse right is granted to a reader)",
+   "holds": "ms.tex (sha256 4c417baf0b7b847ad102f8d6ec11da3adfe13cf20e754565a412f5488333b33f): the table 'Candidates Accepted By Our Pipeline' (period and planet radius, each with a lower and an upper error); the table 'Number of Planets Per Star Versus Orbital Period (In Percentage)' (seven radius bins from 0.5 to 4.0 Earth radii by five period bins from 0.5 to 200 days, each cell with its errors or a one-sigma upper limit and, in parentheses, the fraction of injected planets recovered in the cell; two sets of entries for two choices of stellar radii); the text of the calculation (2543 stars; the mean geometric transit probability over the sample's stars times 1.08; each candidate weighted by one minus a radius-dependent false-positive probability taken from Table 1 of the false-positive paper; a median stellar radius of 0.47 solar radii and no stellar mass stated); the table 'Injected Planets' as ten rows, published in its entirety only in the journal's electronic edition",
+   "verdict": "fills R1 (a), (c) and the per-cell part of (b); does not hold what an exposure needs beside the recovered fraction: the transit probability of the sample's stars (their radii and masses)"
+  },
+  {
+   "id": "R1-b",
+   "request": "R1",
+   "dir": "r1-arxiv-1301.0842",
+   "url": "https://arxiv.org/e-print/1301.0842",
+   "abs": "https://arxiv.org/abs/1301.0842",
+   "bytes": 2042255,
+   "sha256": "971e8c5b6cb3573715e50dcd93083bc10621fa05dd244372a33d1f2d00f7137c",
+   "absSha256": "43de2847a5e1b3f502af64047b0209c7f55fdbeb6f857eac9bbc86dfe66a2744",
+   "title": "The false positive rate of Kepler and the occurrence of planets",
+   "authors": "Fressin, Francois; Torres, Guillermo; Charbonneau, David; and others (as on the abstract page)",
+   "terms": "arXiv non-exclusive licence to distribute (the licence link on the abstract page, fetched as terms/arxiv-nonexclusive-distrib-1.0.html: the submitter grants arXiv.org a perpetual, non-exclusive licence to distribute; no reuse right is granted to a reader)",
+   "holds": "ms2.tex (sha256 7bb32ffc845ab4d943b785fc98b18b31055c247b3c86d9e14c733dae884ab1a8), the paper whose Table 1 the calculation of R1-a names for its false-positive probability; fetched for the stated reliability, its table not yet read",
+   "verdict": "kept for the reliability of X1 when it runs"
+  },
+  {
+   "id": "R1-c",
+   "request": "R1",
+   "dir": "r1-arxiv-1304.0460",
+   "url": "https://arxiv.org/e-print/1304.0460",
+   "abs": "https://arxiv.org/abs/1304.0460",
+   "bytes": 7514790,
+   "sha256": "d5f8cc172009ea031a3b75a474949fc5884bdb7d9c9defa4557fd1b2652b3b25",
+   "absSha256": "cc51a042f66d403460ffd1d30593e6f90f0392a5becfa87824d06ffc1acce0e3",
+   "title": "A Plateau in the Planet Population Below Twice the Size of Earth",
+   "authors": "Petigura, Erik A.; Marcy, Geoffrey W.; Howard, Andrew W. (as on the abstract page)",
+   "terms": "arXiv non-exclusive licence to distribute (the licence link on the abstract page, fetched as terms/arxiv-nonexclusive-distrib-1.0.html: the submitter grants arXiv.org a perpetual, non-exclusive licence to distribute; no reuse right is granted to a reader)",
+   "holds": "ms.tex (sha256 0969bc72132ecae88d73e965b113c2d9fa41968b15995a029a40259c53f1f6a9) and tab1.tex (128 rows of planet candidates with period, planet radius and its uncertainty); the text of an occurrence calculation from 10,000 injection and recovery experiments on 12,000 stars",
+   "verdict": "examined first and set aside: its completeness and its occurrence per cell are printed only as annotations inside figures, not as a table, so R1 (b) and (c) are not met as files"
+  },
+  {
+   "id": "R3-a",
+   "request": "R3",
+   "dir": "r3-arxiv-astro-ph-0009005",
+   "url": "https://arxiv.org/e-print/astro-ph/0009005",
+   "abs": "https://arxiv.org/abs/astro-ph/0009005",
+   "bytes": 122477,
+   "sha256": "b649373779a202d8d442c5db995b0af74b25311ce63156c8302f6138646d9659",
+   "absSha256": "3e35b01cad70c5b007f69780cc6b82d6cb44de774cf7c8ed84d55bdf7946d963",
+   "title": "On the variation of the Initial Mass Function",
+   "authors": "Kroupa, Pavel (as on the abstract page)",
+   "terms": "arXiv assumed non-exclusive licence to distribute for submissions before 2004 (the licence link on the abstract page, fetched as terms/arxiv-assumed-1991-2003.html); no reuse right is granted to a reader",
+   "holds": "imfvar_pap.tex (sha256 9f20d746e744b6a945316c3f9cb2148256234425824fcf40a536bdaa83e25af2): the multiple-part power-law form of the initial mass function with its four mass ranges and their uncertainties, the first two numbered equations of the e-print's source (labels eq:xi and eq:imf, lines 518 to 531), and the sentence that states what the function counts",
+   "verdict": "fills R3 as text; no leg of this follow-up reads it (F-DEC7). The equation numbers are those of the e-print's source; the journal's numbering was not checked"
+  }
+ ],
+ "terms": [
+  {
+   "file": "terms/arxiv-api-terms.html",
+   "url": "https://info.arxiv.org/help/api/tou.html",
+   "bytes": 84988,
+   "sha256": "2fe6f8d90802452678a0cd97d9416b9f04fa21faace271773a5aa170ba72e6fd"
+  },
+  {
+   "file": "terms/arxiv-nonexclusive-distrib-1.0.html",
+   "url": "https://arxiv.org/licenses/nonexclusive-distrib/1.0/license.html",
+   "bytes": 1415,
+   "sha256": "1991765e2079370736d4dedf217375799ad19aab6700ebdf42ae3dd84690067a"
+  },
+  {
+   "file": "terms/arxiv-assumed-1991-2003.html",
+   "url": "https://arxiv.org/licenses/assumed-1991-2003/license.html",
+   "bytes": 1988,
+   "sha256": "dfe5bdbd72f269aaf1cbbb2fcae418267571b6df6fe6c9e139dc73918b37fe13"
+  }
+ ],
+ "notFetched": [
+  {
+   "url": "https://exoplanetarchive.ipac.caltech.edu/TAP/sync (query: select kepid,teff,logg,radius,mass from q1_q16_stellar where teff<4000 and logg>3; format csv)",
+   "result": "HTTP 503 twice, the page titled 'NASA ExoPlanet Archive | Under Maintenance'; set aside, not data"
+  },
+  {
+   "url": "https://exoplanetarchive.ipac.caltech.edu/docs/acknowledge.html",
+   "result": "HTTP 503; set aside"
+  },
+  {
+   "url": "https://cdsarc.cds.unistra.fr/ (a catalogue ReadMe) and https://tapvizier.cds.unistra.fr/TAPVizieR/tap/availability",
+   "result": "no connection (timeouts of 75 s and 25 s)"
+  },
+  {
+   "url": "https://cds.unistra.fr/vizier-org/licences_vizier.html",
+   "result": "HTTP 404; set aside"
+  }
+ ],
+ "legs": {
+  "X1.occurrenceAuthentic": {
+   "status": "not-run",
+   "request": "R1",
+   "filled": [
+    "R1-a",
+    "R1-b"
+   ],
+   "why": "An exposure is the recovered fraction times the number of stars times the transit probability of the sample's stars. The fetched files hold the first two for every cell; the third needs the stars' radii and masses, which the paper takes from a stellar catalogue it does not print, and the archive that serves that catalogue was under maintenance. A transit probability made up from one median radius and a guessed mass would be a number of this session's, so no contract was written and nothing was computed from the files.",
+   "requests": [
+    "From the NASA Exoplanet Archive (TAP, table q1_q16_stellar): kepid, teff, logg, radius, mass for teff < 4000 and logg > 3, the parent sample the paper names (it gives 4915 stars), with the archive's terms page and the retrieval date",
+    "From the journal's page of the article of R1-a, with its terms: the table 'Injected Planets' in its entirety and, if it is published there, the list of the 2543 selected stars",
+    "Then, before any estimate: an amendment fixing the contract (the first set of entries of the occurrence table as the target; one problem per period bin over the seven radius bins; the candidates of the candidates table with the larger of the two radius errors; the reliability from Table 1 of R1-b; the exposure from the recovered fraction, 2543 stars and the mean transit probability times 1.08 over the fetched stars; the bound: each compared cell inside the published errors), and the kernel's own resolution record for these bins, which are 0.5 Earth radii wide"
+   ]
+  },
+  "X2.massFunctionAuthentic": {
+   "status": "not-run",
+   "request": "R2 (and R3)",
+   "filled": [
+    "R3-a"
+   ],
+   "why": "No file of R2 was fetched: the catalogue service (CDS, Strasbourg) did not connect on 2026-11-10; a mirror answered one availability probe, of which nothing was kept and nothing read.",
+   "requests": [
+    "R2 of thresholds.json as written: a cluster's member list with each member's mass (or a luminosity and the relation that gives one) and its stated uncertainty, the survey's completeness as a function of magnitude, and the cluster's published present-day mass function as a table with the paper's text and the terms; the catalogue is for the person fetching to name from its own ReadMe",
+    "Then, before any estimate: an amendment fixing the contract (bins of the published function, the exposure from the stated completeness, the bound)"
+   ]
+  },
+  "X3.citedImplementation": {
+   "status": "not-run",
+   "request": "R4",
+   "filled": [],
+   "why": "Running a downloaded implementation is not permitted (DECISIONS_2026-11-07.md, 264 rulings, item 4). Nothing of R4 was fetched: the text of R1-a's calculation names no implementation of a binned-rate likelihood (it divides a smoothed map of the candidates by a smoothed map of the search completeness), so there was no implementation to name from the documentation of R1's calculation, as R4 asks.",
+   "requests": [
+    "R4 of thresholds.json as written, once a calculation is chosen whose documentation names such an implementation; and Carl's permission to run it"
+   ]
+  }
+ }
+}

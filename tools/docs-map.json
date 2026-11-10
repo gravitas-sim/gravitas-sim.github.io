@@ -688,6 +688,13 @@
       "student": false
     },
     {
+      "file": "NUMERICS_INSTRUMENTS.md",
+      "kind": "gate",
+      "purpose": "The numerics instruments: five kernels the numerical-methods investigations need, their independent oracle, failed legs and verdict (follow-up to Prompt 270).",
+      "owner": 270,
+      "student": false
+    },
+    {
       "file": "NUMERICAL_INVESTIGATIONS.md",
       "kind": "record",
       "purpose": "Numerical-methods investigations in the application: the record of what the tree has, why none was built and what a build needs (Prompt 270).",
@@ -1488,14 +1495,14 @@
     {
       "file": "CENSORING_TRUNCATION_GATE.md",
       "kind": "gate",
-      "purpose": "Censoring and truncation gate: the two problems kept apart, a product-limit estimator with an independence check, the Lynden-Bell estimator, V/Vmax, 41 legs, verdict B-KM (Prompt 262).",
+      "purpose": "Censoring and truncation gate: a product-limit estimator with an independence check, the Lynden-Bell estimator, V/Vmax; verdict B-KM, follow-up C2c passes, C2o left failing (Prompt 262).",
       "owner": 262,
       "student": false
     },
     {
       "file": "POPULATION_INFERENCE_GATE.md",
       "kind": "gate",
-      "purpose": "Population inference gate: one selected-population likelihood with per-object uncertainties, the exposure from 154's selection object, a named penalty, 52 legs, verdict B (Prompt 264).",
+      "purpose": "Population inference gate: one selected-population likelihood, 52 legs, verdict B (Prompt 264); its follow-up (D8b, penalty convergence) passes 12 of 12 judged legs, real-data legs not run.",
       "owner": 264,
       "student": false
     },

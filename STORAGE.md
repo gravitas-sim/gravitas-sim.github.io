@@ -72,6 +72,7 @@ banner (`#previewBanner`), in the reader's language.
 | `gravitas_lecture_sequence` | Lecture mode's sequence | `js/lecture.js` |
 | `gravitas_welcome_seen_v1` | That the welcome was seen | `js/welcomeGate.js` |
 | `gravitas_orientation_seen_v1` | That the first-run introduction on Home was shown (once, however it ended) | `js/welcomeGate.js` |
+| `gravitas_first_week` | Home's first-week mode (Prompt 277): the list a collection marked "first week" named, as the course home resolved it (titles, addresses on this site, each lesson's id, depth and step count, which other items were opened, and what the collection says of More). Kept until the list is finished or the student leaves the mode; a record Home cannot show is dropped | `js/welcomeGate.js` (Home, `js/welcome.js`, reads and checks it; the course home writes it through `js/storage/local.js`) |
 | `mobile_instructions_shown` | That the phone instructions were shown | `js/main.js` |
 | `gravitasDebug` | Developer logging | `js/utils.js` |
 
@@ -109,6 +110,7 @@ Every record a student's browser holds, its owner, how it migrates, whether a ba
 | `gravitas_resume` | Where a reader was: the items opened last, with pathway and step | preferences | `js/investigations/stepView.js` | `js/storage/local.js` | none; a record that is not v1 reads as empty | preference: in a backup file only when ticked | `resume-record` |
 | `gravitas_terms` | The courses opened that name a term, with the term and when | preferences | `js/instructorCourseTerms.js` | `js/storage/local.js` | none; a record that is not v1 reads as empty | preference: in a backup file only when ticked | `course-terms` |
 | `gravitas_collections` | The student's saved items and the collections they kept, each a course package with profile collection | courses | `js/library/collections.js` | direct | none; a record that is not v1, or a package that does not read as a collection, reads as empty | durable: in a backup file | `collections-record` |
+| `gravitas_first_week` | The first-week list Home shows alone, until it is finished or left | preferences | `js/welcomeGate.js` | direct | none; a record Home cannot show reads as no first week and is dropped | preference: in a backup file only when ticked | `first-week-record` |
 | `gravitas_course_…` | Course builder drafts and the last open | courses | `js/coursePage.js` | direct | reads course pack 1 | durable: in a backup file | `course-pack` |
 | `gravitas_composer_preview` | The lesson handed to the Composer preview | — | `js/composerPage.js` | direct | none | transient: handed from one page to another | `investigation-pack` |
 | `gravitas_composer_…` | Composer drafts and the last open | drafts | `js/composerPage.js` | direct | none | durable: in a backup file | `investigation-pack` |

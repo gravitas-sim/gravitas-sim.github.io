@@ -179,7 +179,8 @@ describe('Home (Prompt 162): what it says, where to start, and the five places',
     const ids = [...home.matchAll(/<section[^>]*?\bid="(wel\w+)"/g)].map(
       m => m[1]
     );
-    expect(ids).toEqual(['welOrient', 'welContinue']);
+    // welWeek is the first-week mode (Prompt 277): hidden unless a list is kept.
+    expect(ids).toEqual(['welOrient', 'welWeek', 'welContinue']);
     expect(home).toContain('id="welStart"');
     expect(home).toContain('id="welPlaces"');
   });

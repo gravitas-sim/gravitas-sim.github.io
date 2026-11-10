@@ -725,6 +725,18 @@ export const FORMATS = Object.freeze([
     newer: 'reads as no collections; the next write replaces it',
   },
   {
+    name: 'first-week record',
+    fields:
+      'v, id, t (the title), mo (open or shut), items (t, h, l, d, n, o: a title, an address on this site, the lesson, its depth and step count, whether it was opened)',
+    version: 1,
+    const: ['js/library/firstWeek.js', 'FIRST_WEEK_VERSION'],
+    owner: 'js/welcome.js readWeek',
+    persisted: 'localStorage, inside gravitas.student-data (preferences)',
+    older: 'v1 only',
+    newer:
+      'reads as no first week and is dropped: Home opens as itself, and the link opens the list again',
+  },
+  {
     name: 'gravitas.evaluation',
     fields: 'kind, schema',
     version: 1,
@@ -765,6 +777,7 @@ export const COMPAT = Object.freeze({
   'resume record': { fixture: 'resume-record', unknown: 'ignored' },
   'course terms record': { fixture: 'course-terms', unknown: 'ignored' },
   'collections record': { fixture: 'collections-record', unknown: 'ignored' },
+  'first-week record': { fixture: 'first-week-record', unknown: 'ignored' },
   'gravitas.submission-results': {
     fixture: 'submission-results',
     unknown: 'ignored',
@@ -953,6 +966,7 @@ ${compatibilitySection(formats)}
 
 - **\`term\` on a course pack (Prompt 168).** A course pack may carry \`term\`, a short plain label such as \`Spring 2027\` (at most 40 characters), written only when an instructor names a term for a copy of the course. A pack that has it is written as \`gravitas.course-pack/3\` (the 3.0.0 boundary, above); a 2.0.0 build refuses it as made by a newer version (\`tests/compat/boundary.mjs\` \`course-term\`). Two records came with it: \`gravitas.submission-archive/1\`, an export the review page reads again (a 2.0.0 page refuses it in words, as a progress backup), and the \`course terms record\`, a sidecar key the 2.0.0 reader never looks at (\`tests/compat/kinds/course-terms.mjs\`).
 - **\`outcomes\` on a course pack and on its objectives (Prompt 174).** A course pack may carry \`outcomes\`, up to 12 of the instructor's own outcomes (an id and a text in the file's languages), and an objective may carry \`outcomes\`, the ids of the ones it is mapped to. Both are written only when an instructor enters outcomes. They are the instructor's own statement of what the course intends and are not evidence that any student attained anything. A pack that has either is written as \`gravitas.course-pack/3\`, as is a collection (\`profile\`, Prompt 164) and a pack with a term; a 2.0.0 build refuses it as made by a newer version (\`tests/compat/boundary.mjs\` \`course-outcomes\`).
+- **\`firstWeek\` and \`more\` on a collection (Prompt 277).** A collection (\`profile: "collection"\`) may carry \`firstWeek: true\`, and with it \`more\` (\`"open"\` or \`"shut"\`, the activity's disclosure field of Prompt 167 on a collection). Both are written only when an instructor marks the collection a first week in the distribution kit; a first week holds at most 7 items and no reading. Its course home link opens Home showing that list alone (ONBOARDING.md). A collection is already \`gravitas.course-pack/3\`, so a 2.0.0 build refuses it as made by a newer version (\`tests/compat/boundary.mjs\` \`collection-first-week\`); a 2.1.0 build, which reads /3, refuses each field in words (\`"firstWeek" is not a field here\`; run against the \`v2.1.0\` reader on 2026-11-10, not held by a test), so neither opens it with the mark dropped. A collection that is not marked is the bytes it was. The record Home keeps while the mode is on is the \`first-week record\`, a sidecar key the 2.0.0 reader never looks at (\`tests/compat/kinds/first-week-record.mjs\`).
 - **\`rubricCriteria\` (Prompt 79).** A written answer in an investigation pack or a question bank may carry one to six criteria beside its \`rubric\`, each a name and two to five levels (a label, what it looks like, optionally its points), best first, every text in the file's locales. It is optional, so \`investigation-pack/1\` and \`question-bank/1\` stayed version 1 in 2.0.0; a criterion's \`kind\`, \`depth\` and \`weight\` (Prompt 172) are \`investigation-pack/2\` and \`question-bank/2\`, written only when one is set. The compile lays it on the lesson step and its Spanish shadow, a remix carries it (\`REMIX.md\`), the answer key prints it and the review page shows it.
 - **\`synthetic\` origin (Prompt 84).** A \`gravitas.observation/1\` made by a forward model has origin \`synthetic\`, source kind \`forward\` and a \`synthetic\` block holding the model, the \`gravitas.observing-setup/1\` it was run with and the truth manifest. The values are new members of two enums and the block is optional, so the format stays version 1: an older reader refuses such a file at the origin, in words, rather than opening it as if it were observed.
 - **Image marks, \`workspace.marks\` (Prompt 179).** An Observatory save of an image the reader marked carries \`workspace.marks\`, a \`gravitas.image-marks/1\` block: the frames' SHA-256 digests, the marks as placed (kind, tag, points, a known length for a reference pair) and, for a refined mark, the result and its uncertainty. It is written only when marks exist, so a save without marks is the bytes it always was, and the file stays \`gravitas.observation/1\`. The block nests eight deep, and the 2.0.0 file reader stops at six, so it refuses such a file as \`nested too deep\` (\`tests/compat/boundary.mjs\`: \`workspace-marks\`) rather than opening it without the marks; the current reader reads eight. The marks record in the ledger is a \`gravitas.artifact/1\` (notebook source \`image-marks\`), which the 2.0.0 reader opens as it opens any envelope. Reopening against a changed image is refused by the instrument, not by a reader.

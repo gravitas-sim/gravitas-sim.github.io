@@ -5192,6 +5192,159 @@
     text-align: center;
   }
 
+  /* Its second screen: each destination's name, its line and its one action. */
+  .wel-orient-places {
+    display: grid;
+    gap: var(--space-2);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    text-align: start;
+  }
+
+  .wel-orient-places li {
+    display: grid;
+    grid-template-columns: 5.5rem 1fr auto;
+    align-items: center;
+    gap: var(--space-1) var(--space-4);
+    font-size: var(--text-sm);
+    line-height: 1.5;
+    color: var(--text-secondary);
+  }
+
+  .wel-orient-places strong {
+    font-size: var(--text-base);
+    color: var(--text-primary);
+  }
+
+  .wel-orient-places a,
+  .wel-week-places a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+  }
+
+  /* --- The first week (Prompt 277): one list, and nothing else ------------- */
+
+  .wel-week-on .wel-hero > :not(.wel-wordmark),
+  .wel-week-on #welcomeSections > :not(.wel-week) {
+    display: none;
+  }
+
+  /* It is one screen: seven items, the five names and the way out, with no
+     scroll at 1280 by 800 or 390 by 844 (e2e/firstWeek.spec.js). */
+  .wel-week-on .welcome-dialog {
+    padding-block: var(--space-6)
+      calc(var(--space-4) + env(safe-area-inset-bottom, 0px));
+  }
+
+  .wel-week-on .wel-hero {
+    padding-block: 0 var(--space-2);
+  }
+
+  .wel-week-on .wel-wordmark {
+    font-size: clamp(1.75rem, 5vw, 2.5rem);
+  }
+
+  .wel-week {
+    max-width: 40rem;
+    margin-inline: auto;
+    padding-block: 0;
+    border-top: 0;
+  }
+
+  .wel-week .wel-eyebrow {
+    margin-bottom: var(--space-2);
+  }
+
+  .wel-week-list {
+    display: grid;
+    gap: 6px;
+    margin: 0 0 var(--space-3);
+    padding: 0;
+    list-style: none;
+    counter-reset: week;
+  }
+
+  .wel-week-item {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 0 var(--space-3);
+    /* Tight on purpose: the list must leave room for the five names to wrap
+       onto a second line under another platform's font rendering. */
+    padding: 2px var(--space-4);
+    background: color-mix(in srgb, var(--surface-1) 60%, transparent);
+    border-left: 2px solid var(--accent-line);
+    border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+    counter-increment: week;
+  }
+
+  .wel-week-item::before {
+    content: counter(week) '.';
+    font-family: var(--font-mono);
+    font-size: var(--text-sm);
+    line-height: 44px;
+    color: var(--text-muted);
+  }
+
+  .wel-week-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0 var(--space-3);
+  }
+
+  .wel-week-go {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    font-weight: var(--weight-semibold);
+    color: var(--accent);
+  }
+
+  .wel-week-go.ui-button {
+    padding-block: var(--space-2);
+    text-decoration: none;
+  }
+
+  /* The introduction, folded into the first item, stands in for its link. */
+  .wel-week-item > .wel-orient {
+    grid-column: 1 / -1;
+    padding: var(--space-2) 0 var(--space-4);
+    border-top: 0;
+  }
+
+  .wel-week-item.is-orienting > .wel-week-row,
+  .wel-week-item.is-orienting::before {
+    display: none;
+  }
+
+  /* The five names are in the shell's bar; where the bar folds them behind
+     Menu (css/shell.css, 1200 px), they are here. */
+  .wel-week-places {
+    display: none;
+  }
+
+  .wel-week-places ul {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0 var(--space-3);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  @media (max-width: 1200px) {
+    .wel-week-places {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 0 var(--space-4);
+      font-size: var(--text-sm);
+      color: var(--text-muted);
+    }
+  }
+
   .wel-hero {
     padding: clamp(var(--space-6), 6vh, var(--space-10)) 0
       clamp(var(--space-8), 7vh, var(--space-10));
@@ -5488,6 +5641,15 @@
     .wel-hero-actions .ui-button {
       flex: 1 1 100%;
       justify-content: center;
+    }
+
+    .wel-orient-places li {
+      grid-template-columns: 1fr auto;
+    }
+
+    .wel-orient-places li > span {
+      grid-column: 1 / -1;
+      grid-row: 2;
     }
 
     .welcome-close {
