@@ -208,6 +208,11 @@ pressing stops, in the page's language. A pan says nothing: a picture moved.
   original-version page). Five of them carry Spanish text and a language
   switch that stores the choice but is not read when the page opens. Recorded
   in the walk inventory (`spanish: false`) for Prompt 282.
+- On a phone the rail is a menu that closes after any press inside it
+  (`js/ui.js`), so each press of the sandbox's view pad means opening the menu
+  and Tools again. One press works; a run of them is slow. Seen on a 393 px
+  viewport and not changed here: exempting the pad, as the object picker's
+  button is exempt, belongs to Prompt 283 (the touch pattern).
 - WebKit and Firefox: the walks ran in Chromium. On macOS, WebKit's Tab skips
   buttons and links unless Option is held (`e2e/keyboard.js`), which the walk
   helper allows for; it was not run there in this sweep.
