@@ -134,6 +134,8 @@ export const EN_SUBMISSIONS = {
     'a composed report written by a newer version of Gravitas; reload this page and add it again',
   'sub.reason.composed.shape':
     'a composed report file that is damaged, or was edited into a shape this page cannot read',
+  'sub.reason.composed.load':
+    'a composed report, and the part of this page that reads one has not been downloaded yet; reload with a connection and add it again',
   'sub.reason.composed.format': 'not a composed report this page can read',
   'sub.reason.badComposed':
     'states a composed report in a form this page cannot read',

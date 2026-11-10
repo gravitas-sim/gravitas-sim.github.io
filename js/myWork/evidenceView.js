@@ -304,7 +304,13 @@ ${sel('qa', a, qa)}${sel('qb', second, qb)}
 
 /** What ./reportView.js is handed: the page, the entries and this view's words. */
 async function reportCtx(page, entries) {
-  reportMod ??= await import('./reportView.js');
+  // The report's modules arrive with the idle install, not the first visit:
+  // offline before then, the import fails and the card says why.
+  try {
+    reportMod ??= await import('./reportView.js');
+  } catch {
+    return null;
+  }
   const t = await loadTools();
   return {
     page,
@@ -387,7 +393,9 @@ ${noting ? noteForm(noting) : ''}${report}`;
 /** The report card (./reportView.js), as HTML. */
 async function reportCard(page, entries) {
   const ctx = await reportCtx(page, entries);
-  return reportMod.card(ctx);
+  return ctx
+    ? reportMod.card(ctx)
+    : `<p class="ui-state is-warning" id="rvReport">${esc(L('Your report could not be loaded. It needs a connection the first time; reload this page when you have one.', 'No se pudo cargar tu informe. Necesita conexión la primera vez; recarga esta página cuando la tengas.'))}</p>`;
 }
 
 /** Write the notebook with its entries changed, through the student store. */
@@ -452,7 +460,7 @@ function wire(box) {
     v.say = '';
     if (REPORT_ACTIONS.includes(b.dataset.rv)) {
       const ctx = await reportCtx(current, entriesOf(current.state.records));
-      await reportMod.act(b.dataset.rv, b.dataset.id ?? '', ctx);
+      if (ctx) await reportMod.act(b.dataset.rv, b.dataset.id ?? '', ctx);
       return again();
     }
     if (b.dataset.rv === 'clear') {

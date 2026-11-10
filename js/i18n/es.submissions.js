@@ -136,6 +136,8 @@ export const ES_SUBMISSIONS = {
     'un informe compuesto escrito por una versión más reciente de Gravitas; recarga esta página y añádelo de nuevo',
   'sub.reason.composed.shape':
     'un archivo de informe compuesto dañado, o editado de una forma que esta página no puede leer',
+  'sub.reason.composed.load':
+    'un informe compuesto, y la parte de esta página que lo lee aún no se ha descargado; recarga con conexión y añádelo de nuevo',
   'sub.reason.composed.format':
     'no es un informe compuesto que esta página pueda leer',
   'sub.reason.badComposed':

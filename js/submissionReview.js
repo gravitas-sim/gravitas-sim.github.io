@@ -401,7 +401,9 @@ async function takeFile(file) {
  * @returns {Promise<void>}
  */
 async function takeComposed(label, parsed) {
-  const m = await import('./myWork/composedReport.js');
+  // The reader arrives with the idle install: offline before then, say so.
+  const m = await import('./myWork/composedReport.js').catch(() => null);
+  if (!m) return refuse(label, 'composed.load');
   const read = m.readComposed(parsed);
   if (!read.ok) return refuse(label, `composed.${read.reason}`);
   composedFiles.push({
