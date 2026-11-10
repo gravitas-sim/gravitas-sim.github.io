@@ -118,6 +118,11 @@ async function loadTools() {
     import('../platform/uncertain.js'),
     import('../format.js'),
   ]);
+  // This page says its own strings from the document's language and never set
+  // the catalog's, so a Spanish page named kinds and methods in English. Set
+  // for this visit only: nothing is stored.
+  const lang = es() ? 'es' : 'en';
+  if (i18n.getLocale() !== lang) await i18n.setLocale(lang, { persist: false });
   await deferred.ensureDeferredMessages();
   // A value in the one pattern a number is printed in ("X ± Y (method)"), as
   // the report prints it (js/notebook/ledgerReport.js rowValue, which this does

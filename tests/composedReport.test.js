@@ -929,5 +929,11 @@ describe('the report card drawn on My work', () => {
     expect(html).toContain('<html lang="es">');
     expect(html).toContain('Métodos');
     expect(html).toContain('Semilla: k7.');
+    // The catalog's words are Spanish too: the origin and the method.
+    expect(html).toContain('<td>medido</td>');
+    expect(html).toContain('<td>ajustado</td>');
+    expect(html).toMatch(/\(datos\)/);
+    // A unit and a note column with nothing in them are left out.
+    expect(html).not.toContain('<th scope="col">Unidad</th>');
   });
 });

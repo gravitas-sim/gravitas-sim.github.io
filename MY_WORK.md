@@ -125,7 +125,9 @@ When an entry is marked "For a report", or a composed report was made before, th
 - The digest says the file is the one the digest was made from. It does not say who made it: a file edited and digested again, with a token edited to match, passes (PROVENANCE.md).
 - One composed report is kept at a time; making another replaces it. A token states the report that exists when the token is made.
 - The review page's results file and its archive do not carry the composed report or `cr`; the report is read again by adding its file.
-- The report file carries no figure. The PDF and the HTML draw the notebook's figure at download time.
+- The report file carries no figure. The PDF and the HTML draw the notebook's figure at download time. In the HTML, the sentence under a drawing ("y against x. The data it draws:") is the shared HTML builder's and is English in a Spanish report.
+- My work says its own strings from the page's language; the report's catalog words (the names of kinds, origins and uncertainty methods) are read in that language too, which the review sets for the visit without storing anything.
+- A number's table leaves out the unit column and the note column when no number of the section has one.
 - An image entry is not replayed from the report: "Open in" goes to the page that made the entry, as in Part A, and nothing invents a deep link a record does not carry.
 - A 2.0.0 or 2.1.0 build lists the made record without reading it (it leaves a kind it does not know out of its list and does not overwrite it), reads a token that carries `cr` and does not show the field, and drops marks when it saves the notebook. "Mark them again" on the card restores the marks from the made report.
 - Spanish has not been read by a fluent reader.

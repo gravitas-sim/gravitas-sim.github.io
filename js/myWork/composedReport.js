@@ -619,16 +619,24 @@ const dateText = iso => {
  */
 export async function loadSay(lang, extra = {}) {
   const es = lang === 'es';
-  const [i18n, deferred, unc, est, cat] = await Promise.all([
+  const [i18n, deferred, unc, est, cat, rep] = await Promise.all([
     import('../i18n/index.js'),
     import('../i18n/deferredMessages.js'),
     import('../platform/uncertain.js'),
     import('../compare/estimates.js'),
     es ? import('../i18n/es.compare.js') : import('../i18n/en.compare.js'),
+    es ? import('../i18n/es.report.js') : import('../i18n/en.report.js'),
   ]);
+  // My work says its own strings from the page's language and never set the
+  // catalog's: the names below are the catalog's, so it is set here, for this
+  // visit only (nothing is stored).
+  if (i18n.getLocale() !== (es ? 'es' : 'en'))
+    await i18n.setLocale(es ? 'es' : 'en', { persist: false });
   await deferred.ensureDeferredMessages();
   const { t } = i18n;
   const catalog = es ? cat.ES_COMPARE : cat.EN_COMPARE;
+  // The ledger's words (the origins) are the lab report's catalog fragment.
+  const ledger = es ? rep.ES_REPORT : rep.EN_REPORT;
   const tt = (id, vars = {}) =>
     String(catalog[id] ?? id).replace(/\{(\w+)\}/g, (_, k) => vars[k] ?? '');
   const or = (id, raw) => {
@@ -650,7 +658,7 @@ export async function loadSay(lang, extra = {}) {
               { locale }
             ).line,
     kindName: k => or(`nb.source.${k}`, k),
-    origin: o => or(ORIGIN_WORD[o], o),
+    origin: o => ledger[ORIGIN_WORD[o]] ?? or(ORIGIN_WORD[o], o),
     flag: f => or(`nb.flag.${f}`, f),
     scenario: k => or(`scenario.${k}.title`, k),
     compare: c =>
@@ -696,17 +704,21 @@ export function fillReport(doc, report, say) {
     }
     if (sec.numbers.length) {
       doc.heading(w.numbers, { size: 10, spaceBefore: 8 });
+      // A unit or a note column that would be empty is left out: five
+      // columns do not fit a phone, and three usually do.
+      const cols = [
+        [w.quantity, q => q.label, 0.27, true],
+        [w.value, q => say.line(q), 0.28, true],
+        [w.unit, q => q.unit, 0.1, false],
+        [w.origin, q => say.origin(q.origin), 0.12, true],
+        [w.note, q => q.note ?? '', 0.23, false],
+      ].filter(c => c[3] || sec.numbers.some(q => c[1](q)));
+      const total = cols.reduce((sum, c) => sum + c[2], 0);
       doc.table({
         caption: `${w.numbers}: ${sec.title}`,
-        columns: [w.quantity, w.value, w.unit, w.origin, w.note],
-        widths: [0.27, 0.28, 0.1, 0.12, 0.23],
-        rows: sec.numbers.map(q => [
-          q.label,
-          say.line(q),
-          q.unit,
-          say.origin(q.origin),
-          q.note ?? '',
-        ]),
+        columns: cols.map(c => c[0]),
+        widths: cols.map(c => c[2] / total),
+        rows: sec.numbers.map(q => cols.map(c => c[1](q))),
       });
     }
     doc.heading(w.methods, { size: 10, spaceBefore: 8 });
@@ -748,18 +760,21 @@ export function fillReport(doc, report, say) {
           yLabel: f.yLabel,
           logX: f.logX,
         });
+      // The numbers the figure draws: the HTML builder writes them itself,
+      // under the drawing; a page of the PDF is given them here.
       const first = f.series[0];
       const every = Math.ceil(first.points.length / 12);
-      doc.table({
-        caption: `${f.title || w.figure}: ${sec.title}`,
-        columns: [f.xLabel || 'x', f.yLabel || 'y'],
-        rows: first.points
-          .filter((_, k) => k % every === 0)
-          .map(([x, y]) => [
-            formatNumber(x, { sig: 5, locale: say.lang }),
-            formatNumber(y, { sig: 5, locale: say.lang }),
-          ]),
-      });
+      if (Number.isFinite(doc.remaining?.()))
+        doc.table({
+          caption: `${f.title || w.figure}: ${sec.title}`,
+          columns: [f.xLabel || 'x', f.yLabel || 'y'],
+          rows: first.points
+            .filter((_, k) => k % every === 0)
+            .map(([x, y]) => [
+              formatNumber(x, { sig: 5, locale: say.lang }),
+              formatNumber(y, { sig: 5, locale: say.lang }),
+            ]),
+        });
     }
   });
 
