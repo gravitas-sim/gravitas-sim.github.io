@@ -46,11 +46,16 @@ import { DATASETS } from './course/datasets.js';
 import { progressOf } from './library/progress.js';
 import { BUILTIN_COURSES } from './data/courses/index.js';
 import { PLATFORM_API } from './platform/catalog.generated.js';
-import { ID_COURSE_PACK, KEY_COLLECTIONS, KEY_NEXT_CONTEXT } from './names.js';
+import {
+  ID_COURSE_PACK,
+  KEY_COLLECTIONS,
+  KEY_FIRST_WEEK,
+  KEY_NEXT_CONTEXT,
+} from './names.js';
 
 // The banner of a preview as a student (Prompt 175).
-if (globalThis.location?.search.includes('preview=student'))
-  import('./storage/banner.js');
+const PREVIEW = globalThis.location?.search.includes('preview=student');
+if (PREVIEW) import('./storage/banner.js');
 
 const MAX_FILE = 512 * 1024;
 
@@ -154,8 +159,44 @@ function accept(raw, from) {
       .then(m => m.noteTerm({ id: p.id, term: p.term, title: p.title }))
       .catch(() => {});
   document.documentElement.dataset.source = from;
-  render();
+  // A first week's link goes to Home (Prompt 277); the page is drawn here
+  // when this browser cannot keep the list, and in a preview.
+  if (p.firstWeek && from === 'link' && !PREVIEW)
+    startWeek().then(went => went || render());
+  else render();
   return true;
+}
+
+/**
+ * Leave the first-week list for Home (js/library/firstWeek.js) and go there.
+ * @returns {Promise<boolean>} False when the browser did not keep it
+ */
+async function startWeek() {
+  try {
+    const [{ readJson, writeJson }, { weekRecord }, library] =
+      await Promise.all([
+        import('./storage/local.js'),
+        import('./library/firstWeek.js'),
+        fetch(`${ROOT}library/library.json`).then(r => r.json()),
+      ]);
+    const record = await weekRecord(pack, {
+      entries: library.entries,
+      nameOf: titleOf,
+      had: readJson(KEY_FIRST_WEEK, null),
+      linkOf: async item => {
+        const link = await itemLink(item, { root: ROOT, locale: language() });
+        return link && link.kind !== 'external'
+          ? link.href.slice(ROOT.length - 1)
+          : null;
+      },
+    });
+    if (!record || !writeJson(KEY_FIRST_WEEK, record, 'preferences'))
+      return false;
+    location.replace(`${ROOT}#home`);
+    return true;
+  } catch {
+    return false;
+  }
 }
 
 async function openFromAddress() {
@@ -281,6 +322,28 @@ function render() {
     progress,
     pack.profile === 'collection'
       ? el('p', { className: 'ch-keep', id: 'ch-keep' })
+      : null,
+    // From a file, or where the link could not go to Home.
+    pack.firstWeek
+      ? el(
+          'p',
+          { className: 'ch-keep' },
+          Object.assign(
+            el('button', {
+              type: 'button',
+              className: 'ui-button',
+              id: 'ch-week',
+              text: t('courseHome.week'),
+            }),
+            {
+              onclick: async e => {
+                if (!(await startWeek()))
+                  e.target.nextSibling.textContent = ` ${t('courseHome.keep.failed')}`;
+              },
+            }
+          ),
+          el('span', { role: 'status' })
+        )
       : null,
     pack.summary ? el('p', { text: words(pack.summary) }) : null,
     pack.audience

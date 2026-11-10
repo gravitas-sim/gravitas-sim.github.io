@@ -75,6 +75,17 @@
         "collection"
       ]
     },
+    "firstWeek": {
+      "description": "A first week (Prompt 277), written only when set and only on a collection: its course home link opens Home showing this list alone, in order, with the place to continue, until the list is finished or the student leaves it. The reader holds the rest: up to 7 items, none of them a reading.",
+      "const": true
+    },
+    "more": {
+      "description": "How the More sections of the investigation and instrument panels start for a first week's students (Prompt 277; the activity's field of Prompt 167, on a collection): open or shut. Written only when set, and only with firstWeek; a student's own choice always comes first.",
+      "enum": [
+        "open",
+        "shut"
+      ]
+    },
     "title": {
       "$ref": "#/$defs/text120"
     },

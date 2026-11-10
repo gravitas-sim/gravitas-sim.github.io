@@ -12,6 +12,9 @@
 //   every visit after  splash -> sandbox
 //   shared/deep link   splash -> the linked thing, welcome skipped and NOT
 //                      marked seen, so an ordinary visit later still gets it
+//   first-week mode    splash -> Home showing one list and nothing else, on
+//                      every plain visit until the list is finished or left
+//                      (Prompt 277; ONBOARDING.md)
 //
 // Nothing here reimplements anything. A recommended start opens the real
 // investigation or page, the tour button opens the real tour in tutorial.js,
@@ -26,6 +29,8 @@
 // have always looked for them.
 export {
   WELCOME_SEEN_KEY,
+  firstWeekText,
+  keep,
   isWelcomeSeen,
   markWelcomeSeen,
   resetWelcomePreference,
@@ -34,12 +39,14 @@ export {
 } from './welcomeGate.js';
 
 import {
+  firstWeekText,
   isOrientationSeen,
+  keep,
   markOrientationSeen,
   markWelcomeSeen,
   resetWelcomePreference,
 } from './welcomeGate.js';
-import { t } from './i18n/index.js';
+import { getLocale, t } from './i18n/index.js';
 import { announce } from './notify.js';
 
 // This module's prose lives in the deferred half of the catalog - see the
@@ -51,7 +58,12 @@ import {
   loadFragment,
   mountFragment,
 } from './i18n/deferredMessages.js';
-import { EV_ESCAPE, KEY_RESUME } from './names.js';
+import {
+  EV_ESCAPE,
+  KEY_FIRST_WEEK,
+  KEY_NEXT_CONTEXT,
+  KEY_RESUME,
+} from './names.js';
 
 ensureDeferredMessages().catch(() => {});
 
@@ -247,6 +259,8 @@ function showOrient(i) {
     s.hidden = Number(s.dataset.orient) !== i;
   });
   box.querySelectorAll('[data-n]').forEach(n => (n.textContent = i + 1));
+  // In the first-week mode it sits in the first item, in place of its link.
+  box.parentElement.classList.add('is-orienting');
   const h = box.querySelector(`[data-orient="${i}"] [data-orient-h]`);
   h?.focus();
   announce(`${box.querySelector('#welOrientCount').innerText}. ${h.innerText}`);
@@ -259,9 +273,193 @@ function endOrient(focus) {
   markOrientationSeen();
   document.body.classList.remove('wel-orienting');
   const box = orientEl();
-  if (box) box.hidden = true;
+  if (box) {
+    box.hidden = true;
+    box.parentElement.classList.remove('is-orienting');
+  }
   if (focus)
-    els.body?.querySelector('.wel-start [data-action="enter"]')?.focus();
+    els.body
+      ?.querySelector(
+        weekOn() ? '.wel-week-go' : '.wel-start [data-action="enter"]'
+      )
+      ?.focus();
+}
+
+// --- The first week (Prompt 277) ---------------------------------------------
+//
+// A mode of Home: one list, in order, with the place to continue marked, and
+// nothing else on the page but the five destinations' names. The list is the
+// record the course home left when a collection marked "first week" was opened
+// by its link (js/library/firstWeek.js writes it; this reads and checks it,
+// since stored text is never trusted). The mode lasts until every item is done
+// or the reader leaves it, which is one press.
+
+const short = (v, max) =>
+  typeof v === 'string' && v.length > 0 && v.length <= max;
+/** The most items a first week holds (js/course/pack.js MAX_FIRST_WEEK_ITEMS). */
+const WEEK_MAX = 7;
+
+/**
+ * The first-week record, or null unless every part of it is what Home can show:
+ * a title, one to seven items, each with a title and an address on this site.
+ *
+ * @param {?string} [text] - The stored text
+ * @returns {?{v: 1, t: {en: string, es?: string}, mo?: string, items: Array<{t: {en: string, es?: string}, h: string, l?: string, d?: string, n?: number, o?: 1}>}}
+ */
+export function readWeek(text = firstWeekText()) {
+  let r = null;
+  try {
+    r = JSON.parse(text);
+  } catch {
+    return null;
+  }
+  const ok =
+    r?.v === 1 &&
+    short(r.t?.en, 120) &&
+    Array.isArray(r.items) &&
+    r.items.length > 0 &&
+    r.items.length <= WEEK_MAX &&
+    r.items.every(
+      i =>
+        short(i?.t?.en, 200) &&
+        short(i.h, 4000) &&
+        // On this site: one leading slash, no backslash, no space.
+        /^\/(?!\/)[^\\\s]*$/.test(i.h) &&
+        (i.l === undefined || /^[\w-]+$/.test(i.l)) &&
+        (i.d === undefined || /^\w+$/.test(i.d))
+    );
+  return ok ? r : null;
+}
+
+/** A lesson is done when every step was seen; anything else once it was opened. */
+const weekDone = (i, read = savedProgress) =>
+  i.l ? i.n > 0 && (read(i.l)?.seen ?? 0) >= i.n : i.o === 1;
+
+/**
+ * Where a first week stands: each item's state, in order. The first item not
+ * done is the one to start or continue; `on` is false once all are done.
+ *
+ * @param {object} week - From readWeek
+ * @param {(id: string) => ?{seen: number}} [read] - Saved lesson progress
+ * @returns {{on: boolean, states: string[]}} 'start', 'next', 'done', 'opened' or ''
+ */
+export function weekStates(week, read = savedProgress) {
+  const at = week.items.findIndex(i => !weekDone(i, read));
+  return {
+    on: at >= 0,
+    states: week.items.map((i, n) =>
+      n === at
+        ? n === 0 && !(i.l && read(i.l))
+          ? 'start'
+          : 'next'
+        : weekDone(i, read)
+          ? i.l
+            ? 'done'
+            : 'opened'
+          : ''
+    ),
+  };
+}
+
+const weekOn = () => document.body.classList.contains('wel-week-on');
+
+/** Two languages as two spans, or the one there is, written as text. */
+function words(node, { en, es }) {
+  node.replaceChildren(
+    ...(short(es, 200)
+      ? [
+          Object.assign(document.createElement('span'), {
+            className: 'gs-en',
+            textContent: en,
+          }),
+          Object.assign(document.createElement('span'), {
+            className: 'gs-es',
+            lang: 'es',
+            textContent: es,
+          }),
+        ]
+      : [en])
+  );
+}
+
+/** Show a line Home keeps for the moment a first week ends, and say it. */
+function weekNote(id, title) {
+  const note = els.body?.querySelector(id);
+  if (!note) return;
+  if (title) words(note.querySelector('[data-name]'), title);
+  note.hidden = false;
+  announce(note.innerText);
+}
+
+/**
+ * Draw Home as the first week, or as itself. Called when the sections arrive
+ * and on every open, since a lesson may have been finished in between.
+ */
+function showWeek() {
+  const box = els.body?.querySelector('#welWeek');
+  if (!box) return;
+  // A line said when a first week ended is said once.
+  for (const id of ['#welWeekDone', '#welWeekLeft'])
+    els.body.querySelector(id).hidden = true;
+  const week = readWeek();
+  const { on, states } = week ? weekStates(week) : { on: false };
+  // Finished, or not a record Home can show: the mode is over.
+  if (!on && firstWeekText()) {
+    keep(KEY_FIRST_WEEK, null);
+    if (week) weekNote('#welWeekDone', week.t);
+  }
+  document.body.classList.toggle('wel-week-on', on);
+  box.hidden = !on;
+  const orient = orientEl();
+  const list = box.querySelector('ol');
+  if (!on) {
+    // The introduction goes back to the head of Home.
+    if (orient && list.contains(orient))
+      els.body.querySelector('#welcomeSections').prepend(orient);
+    list.replaceChildren();
+    return;
+  }
+  words(box.querySelector('#welWeekTitle'), week.t);
+  const item = box.querySelector('template').content.firstElementChild;
+  list.replaceChildren(
+    ...week.items.map((it, n) => {
+      const li = item.cloneNode(true);
+      const state = n ? states[n] : `${states[n]} first`;
+      for (const part of li.querySelectorAll('[data-when]'))
+        if (!state.split(' ').includes(part.dataset.when)) part.remove();
+      const go = li.querySelector('.wel-week-go');
+      go.href = it.h;
+      go.dataset.week = n;
+      words(go.querySelector('[data-name]'), it.t);
+      if (/start|next/.test(state)) {
+        go.classList.add('ui-button', 'wel-primary');
+        li.setAttribute('aria-current', 'step');
+      }
+      return li;
+    })
+  );
+  // The introduction is folded into the first item.
+  if (orient) list.firstElementChild.append(orient);
+}
+
+/** An item was followed: note it, and leave the lesson's finish panel its way on. */
+function followWeek(n) {
+  const week = readWeek();
+  const it = week?.items[n];
+  if (!it) return;
+  if (!it.l) it.o = 1;
+  keep(KEY_FIRST_WEEK, JSON.stringify(week));
+  const say = x => (getLocale() === 'es' && x.es) || x.en;
+  keep(
+    KEY_NEXT_CONTEXT,
+    JSON.stringify({
+      k: 'course',
+      home: '/#home',
+      t: say(week.t),
+      i: n,
+      items: week.items.map(x => [x.l || '', x.d || '', say(x.t)]),
+    })
+  );
 }
 
 /** Put the sections in place and fill them. Runs once, after build(). */
@@ -271,6 +469,7 @@ async function fillSections() {
   if (!node || !els.body) return;
   els.body.append(node);
   syncReset();
+  showWeek();
   if (orienting) showOrient(0);
   fillContinue();
 }
@@ -323,8 +522,17 @@ async function runAction(action, key) {
     case 'orient':
       // The introduction again, on request: it is never forced a second time.
       orienting = true;
-      document.body.classList.add('wel-orienting');
+      document.body.classList.toggle('wel-orienting', !weekOn());
       showOrient(0);
+      break;
+
+    case 'leave':
+      // One press, and Home is all of itself again; the link opens the mode anew.
+      endOrient(false);
+      keep(KEY_FIRST_WEEK, null);
+      showWeek();
+      weekNote('#welWeekLeft');
+      els.dialog?.focus();
       break;
 
     case 'reset': {
@@ -344,6 +552,15 @@ async function runAction(action, key) {
 
 function wireBody() {
   els.body.addEventListener('click', e => {
+    const item = e.target.closest('[data-week]');
+    if (item) {
+      // A link, followed as one: the address opens the item on this page or
+      // another, and Home closes behind it.
+      followWeek(Number(item.dataset.week));
+      // Opened in another tab or window, Home stays where it is.
+      if (!(e.ctrlKey || e.metaKey || e.shiftKey)) closeWelcome();
+      return;
+    }
     const lesson = e.target.closest('[data-lesson]');
     if (lesson) {
       // A link into the lesson (its address is the fallback) or a button.
@@ -365,7 +582,10 @@ function wireBody() {
       // Explore is a link to the sandbox, which Home already stands over.
       e.preventDefault();
       runAction(action.dataset.action);
+      return;
     }
+    // A destination followed from the introduction ends it, as leaving Home does.
+    if (e.target.closest('[data-orient] a')) endOrient(false);
   });
   els.body.addEventListener('keydown', e => {
     const s = e.target.closest?.('[data-orient]');
@@ -482,7 +702,14 @@ export function openWelcome(opts = {}) {
   // Only a first, automatic Home carries it; the page then shows nothing else
   // until it ends (css: .wel-orienting).
   orienting = auto && !isOrientationSeen();
-  document.body.classList.toggle('wel-orienting', orienting);
+  // The first week keeps its list on the page; the introduction is in its
+  // first item, not in place of Home.
+  const week = readWeek();
+  document.body.classList.toggle(
+    'wel-orienting',
+    orienting && !(week && weekStates(week).on)
+  );
+  if (built) showWeek();
   build();
   els.screen.hidden = false;
   // The class carries two jobs: it lets the scenario card in ui.js know not to
