@@ -51,16 +51,16 @@ Measured from the committed `sw-manifest.js` and the files it lists, by
 <!--fact-block:precache-->
 | | Files | Raw |
 | --- | ---: | ---: |
-| JavaScript | 968 | 16.0 MB |
+| JavaScript | 971 | 16.0 MB |
 | Images | 121 | 870 KB |
 | Stylesheets | 10 | 500 KB |
 | Fonts | 9 | 140 KB |
 | Panel markup | 10 | 60 KB |
 | Pages | 12 | 320 KB |
 | Other | 16 | 900 KB |
-| **Total** | **1146** | **18.7 MB** |
+| **Total** | **1149** | **18.8 MB** |
 
-Of those, 815 are core (the install fails without them), 129 optional (installed with them; a missing one is reported and costs nothing) and 202 idle (installed after activation, when the browser is idle; a missing one costs that page its offline copy and is fetched again on the next open). The first-visit install is the core and the optional files: 944 files.
+Of those, 815 are core (the install fails without them), 129 optional (installed with them; a missing one is reported and costs nothing) and 205 idle (installed after activation, when the browser is idle; a missing one costs that page its offline copy and is fetched again on the next open). The first-visit install is the core and the optional files: 944 files.
 
 Gzipped, as Pages serves it, the whole is about 6 MB.
 
@@ -102,11 +102,12 @@ The idle tier, by surface (gzip level 6, to the nearest 10 KB: Node versions dif
 | 3-D lab | 42 | ~190 KB |
 | data tables | 33 | ~260 KB |
 | activity builder | 6 | ~20 KB |
-| instructor modules | 36 | ~350 KB |
+| instructor modules | 37 | ~350 KB |
 | mission lab | 40 | ~230 KB |
 | Sky Lab | 22 | ~170 KB |
 | image measurement | 9 | ~40 KB |
 | Library | 12 | ~120 KB |
+| composed report | 2 | ~20 KB |
 | three.js | 2 | ~240 KB |
 <!--/fact-block-->
 
