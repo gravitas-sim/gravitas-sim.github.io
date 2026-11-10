@@ -271,6 +271,12 @@ export const EN_COURSE = {
   'course.error.collectionField': 'A collection has no “{field}”.',
   'course.error.collectionItem':
     'A collection holds items in order: no activities, no optional paths, no “needs”.',
+  'course.error.firstWeek':
+    '“firstWeek” is true on a collection, or the field is left out.',
+  'course.error.more':
+    '“more” is “open” or “shut” on a first-week collection, or the field is left out.',
+  'course.error.firstWeekItems':
+    'A first week holds up to {max} items, and no reading.',
   'course.error.term':
     'A short label such as Spring 2027: up to 40 characters, no markup.',
   'course.error.tooMany': 'At most {max} items.',
