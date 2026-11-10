@@ -245,6 +245,12 @@
       "id": "AM6",
       "recorded": "2026-11-10, with this file, before the addendum oracle was written",
       "what": "the oracle's estimators for the addendum are the two stated in `oracle.amendment`; the defective first estimator's numbers stay in oracle-results.json under their plain keys"
+    },
+    {
+      "id": "AM7",
+      "recorded": "2026-11-10, after the addendum oracle's self-check and JUP365 parts had run and four e-prints had been downloaded and read, and before the estimator, the step-budget function or the validator had run on anything",
+      "seen": "The oracle's self-check (worst period error 0.6%, worst amplitude error 0.033 deg) and its harmonic estimate of the JUP365 argument: 2070.5 d by `lsq` (2071.3 d by `fft`), amplitude 0.0328 deg, centre 179.998 deg. The amplitude is about half the cited 0.064 deg, inside L1h's inherited 50% by 1.2 points; that bound is not moved. The downloaded sources (addendum-sources.json): none states 2071 d with 0.064 deg; one reports about 0.02 deg from an ephemeris; for Pluto one states 82 deg with 1.99e4 yr and one 80 to 86 deg with about 20,000 yr, neither the cited 19,670 yr.",
+      "what": "X1L's and X1P's bound did not say which outcome holds when one source states a cited number and another states a different one. The stricter reading is taken: a leg is FAIL when any downloaded source states a different period or amplitude for the same quantity, whatever else agrees. No other bound is touched. K1 stays NOT RUN: no reference of the exchange was fetched and no leg is committed for it."
     }
   ]
 }
