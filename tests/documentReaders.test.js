@@ -71,13 +71,18 @@ const PARSES = {
   'js/lecture.js': [1, 'none', OWN],
   'js/world.js': [1, 'none', OWN],
   'js/settingsPanel.js': [1, 'none', OWN],
-  'js/settingsSchema.js': [1, 'none', OWN],
-  'js/controls.js': [1, 'none', OWN],
-  'js/welcome.js': [
+  'js/settingsSchema.js': [
     2,
     'none',
     OWN +
-      "; the second is the resume record, read inline and held equal to the storage module's reader",
+      '; the second is the first-week record, of which one word is read and held to two values',
+  ],
+  'js/controls.js': [1, 'none', OWN],
+  'js/welcome.js': [
+    3,
+    'none',
+    OWN +
+      "; the second is the resume record, read inline and held equal to the storage module's reader; the third is the first-week record, which readWeek checks part by part",
   ],
   'js/evaluationKit.js': [1, 'none', OWN],
   'js/investigations/next.js': [1, 'none', OWN],

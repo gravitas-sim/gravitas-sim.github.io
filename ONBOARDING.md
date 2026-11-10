@@ -115,7 +115,7 @@ title can still wrap past that.
 **Done, and continue.** An investigation is done when every step was seen (its
 own progress record, read and never written here); a scenario, a dataset or a
 3-D or mission investigation is done once it was opened from the list, and is
-labelled "Opened", not "Finished". Following an item also leaves the
+labeled "Opened", not "Finished". Following an item also leaves the
 finish panel its way on (`gravitas_next_context`, as the course home does), so
 "What next" offers the next item and the way back to the list.
 
