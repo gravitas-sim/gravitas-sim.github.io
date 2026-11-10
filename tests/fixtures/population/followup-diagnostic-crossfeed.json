@@ -1,0 +1,40 @@
+{
+ "format": "gravitas.population-inference-followup-diagnostic-crossfeed/1",
+ "note": "A post-hoc diagnostic written after the validator's first stage; it is not a leg, moves no bound and changes no status. It asks which implementation is right in the statement of D8b.r2 with the largest deviance difference.",
+ "statement": {
+  "ensemble": "the oracle's numpy ensemble of U3c",
+  "replicate": 465,
+  "bin": 6,
+  "muTrue": 4.999999,
+  "prototypeDeviance": 2.33711575466225,
+  "oracleDeviance": 2.3103372084275406
+ },
+ "independent": {
+  "method": "numpy only: EM to a fixed point (steps below 1e-15) for the unconstrained and the constrained maximum, and scipy.optimize trust-constr from three starts for the constrained maximum",
+  "logLikMaximum": 265.413845447744,
+  "logLikConstrained": 264.25867684353,
+  "deviance": 2.310337208,
+  "devianceTrustConstr": 2.310337208
+ },
+ "muHat": [
+  11.612975,
+  19.183131,
+  23.510932,
+  36.194747,
+  30.48903,
+  0.0,
+  9.024314,
+  3.984872
+ ],
+ "muConstrained": [
+  11.612766,
+  19.184687,
+  23.500933,
+  36.271937,
+  30.11911,
+  0.490987,
+  4.999999,
+  4.445727
+ ],
+ "reading": "The oracle's deviance is the right one. Bin 5 is zero at the unconstrained maximum and 0.49 listings at the constrained one; the prototype starts its constrained fit from the maximum with a zero bin raised to 1e-9 and stops on the change of the log-likelihood, so it stops before that bin has grown, underestimates the constrained maximum and reports a deviance 0.027 too large. 4 of the 4,000 cross-fed statements differ by more than 1e-6 and 3 by more than 1e-3; no status and no covering flag differs."
+}
