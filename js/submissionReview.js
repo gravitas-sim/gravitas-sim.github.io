@@ -208,10 +208,13 @@ const marks = marksIndex();
  * steps from it (misconceptions, criteria); `lessons` holds the raw lesson.
  */
 const gradedAgainst = new Map();
-/** What each report states of a composed report (its token's `cr`), by fingerprint. */
-const composedOf = new Map();
-/** The composed report files read: {label, report, verified, html by language}. */
-const composedFiles = [];
+/**
+ * The composed reports (Prompt 275): ./instructorComposed.js, loaded when a
+ * report states one or a report file is added, so the page starts without it.
+ */
+let composed = null;
+const composedPart = async () =>
+  (composed ??= await import('./instructorComposed.js').catch(() => null));
 /**
  * What was handed in, as it was, for the archive (Prompt 168): the token or
  * backup of each report kept, and the text that named the activities. Never
@@ -312,7 +315,8 @@ async function accept(label, thing, kind) {
   const evidence = await checkEvidence(submission.ev);
   const record = gradeSubmission(submission, lesson, { kind, label, evidence });
   // The composed report the token states (Prompt 275), kept beside the record.
-  if (submission.cr) composedOf.set(record.fingerprint, submission.cr);
+  if (submission.cr)
+    (await composedPart())?.state(record.fingerprint, submission.cr);
   graded.push(record);
   kept.push({ label, kind, thing });
   gradedAgainst.set(record.fingerprint, lesson);
@@ -387,47 +391,15 @@ async function takeFile(file) {
   } catch {
     return refuse(name, 'notJson');
   }
-  if (parsed?.format === 'gravitas.composed-report')
-    return takeComposed(name, parsed);
-  return accept(name, parsed, 'backup');
-}
-
-/**
- * Read a composed report a student handed in as a file (Prompt 275,
- * js/myWork/composedReport.js): its shape, and whether it hashes to the digest
- * it states. Which submission states that digest is said when it is shown.
- * @param {string} label - The file's name
- * @param {object} parsed - The parsed file
- * @returns {Promise<void>}
- */
-async function takeComposed(label, parsed) {
-  // The reader arrives with the idle install: offline before then, say so.
-  const m = await import('./myWork/composedReport.js').catch(() => null);
-  if (!m) return refuse(label, 'composed.load');
-  const read = m.readComposed(parsed);
-  if (!read.ok) return refuse(label, `composed.${read.reason}`);
-  composedFiles.push({
-    label,
-    report: read.report,
-    verified: await m.checkComposed(read.report),
-    html: new Map(),
-  });
-  await sayComposed();
-  render();
-}
-
-/** Each composed report read here, written out in the page's language. */
-async function sayComposed() {
-  const lang = language();
-  if (composedFiles.every(f => f.html.has(lang))) return;
-  const m = await import('./myWork/composedReport.js');
-  const say = await m.loadSay(lang);
-  for (const f of composedFiles) {
-    if (f.html.has(lang)) continue;
-    const doc = m.fragment(esc, 3);
-    m.fillReport(doc, f.report, say);
-    f.html.set(lang, doc.build());
+  // A composed report a student handed in as a file: it has sections and
+  // states a digest, which no backup does. Its own reader checks the rest.
+  if (Array.isArray(parsed?.sections) && typeof parsed.digest === 'string') {
+    const why = (await composedPart())
+      ? await composed.take(name, parsed, language(), esc)
+      : 'load';
+    return why ? refuse(name, `composed.${why}`) : render();
   }
+  return accept(name, parsed, 'backup');
 }
 
 /**
@@ -688,67 +660,6 @@ function systemSections(records) {
         .join('')}</tr></thead><tbody>${rows}</tbody></table></div>`;
     })
     .join('')}`;
-}
-
-/**
- * The composed reports: what each submission states of one (a digest and a
- * section count, which is all a token carries), and each report file read
- * here, checked against the digest it states and matched to the submissions
- * that state it, then written out. A file whose contents do not hash to its
- * digest is open and says so.
- *
- * @param {Array<object>} records - Annotated records
- * @returns {string} The section, or '' when nothing states or holds a report
- */
-function composedSections(records) {
-  const stated = records.filter(r => composedOf.has(r.fingerprint));
-  if (!stated.length && !composedFiles.length) return '';
-  const nameOf = r => r.nameAsTyped || t('sub.read.noName');
-  const short = d => String(d).slice(0, 16);
-  const lines = stated.map(r => {
-    const cr = composedOf.get(r.fingerprint);
-    const file = composedFiles.find(f => f.report.digest === cr.d);
-    return `<li>${esc(
-      t(
-        !file
-          ? 'sub.composed.stated'
-          : file.verified
-            ? 'sub.composed.matched'
-            : 'sub.composed.matchedBad',
-        { name: nameOf(r), n: cr.n, digest: short(cr.d), file: file?.label }
-      )
-    )}</li>`;
-  });
-  const files = composedFiles.map(f => {
-    const who = stated
-      .filter(r => composedOf.get(r.fingerprint).d === f.report.digest)
-      .map(nameOf);
-    const state = !f.verified
-      ? 'mismatch'
-      : who.length
-        ? 'verified'
-        : 'unclaimed';
-    return `<details class="ui-disclosure sr-evidence"${
-      state === 'mismatch' ? ' open' : ''
-    }><summary>${esc(
-      t('sub.composed.summary', {
-        file: f.label,
-        title: f.report.title,
-        n: f.report.sections.length,
-        state: t(`sub.composed.state.${state}`),
-      })
-    )}</summary><p${
-      state === 'mismatch' ? ' class="ui-state is-error" role="alert"' : ''
-    }>${esc(
-      t(`sub.composed.${state}`, {
-        digest: short(f.report.digest),
-        names: who.join(', '),
-      })
-    )}</p>${f.html.get(language()) ?? ''}</details>`;
-  });
-  return `<h2>${esc(t('sub.composed.title'))}</h2><p class="ui-note">${esc(
-    t('sub.composed.note')
-  )}</p>${lines.length ? `<ul class="ui-note">${lines.join('')}</ul>` : ''}${files.join('')}`;
 }
 
 /** Announce something to a screen reader and show it. */
@@ -1116,7 +1027,7 @@ function render() {
   $('evidence').innerHTML =
     evidenceSections(records) +
     systemSections(records) +
-    composedSections(records);
+    (composed?.sections(records, { t, esc, lang: language() }) ?? '');
   $('context').innerHTML = contextList();
   $('byActivity').innerHTML = byActivity(records);
   renderSummary(records);
@@ -1427,8 +1338,7 @@ function clearAll() {
   keptNames.length = 0;
   marks.clear();
   gradedAgainst.clear();
-  composedOf.clear();
-  composedFiles.length = 0;
+  composed?.clear();
   judging = false;
   say('');
   render();
@@ -1439,7 +1349,7 @@ function applyLanguage() {
   applyTranslations();
   render();
   // A composed report read before the change is said again, then shown.
-  if (composedFiles.length) sayComposed().then(render);
+  composed?.say(language(), esc).then(render);
 }
 
 function wire() {

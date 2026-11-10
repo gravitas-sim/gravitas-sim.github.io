@@ -28,7 +28,7 @@
 // =============================================================================
 
 import { canonicalJsonExact, sha256Hex } from '../hash.js';
-import { formatNumber } from '../format.js';
+import { formatNumber, roundSig } from '../format.js';
 import { toCsv } from '../csv.js';
 import { KEY_MADE_PREFIX } from '../names.js';
 
@@ -40,6 +40,8 @@ export const COMPOSED_KEY = `${KEY_MADE_PREFIX}${COMPOSED_ID}`;
 export const MAX_SECTIONS = 60;
 export const MAX_NUMBERS = 60;
 export const MAX_COMPARISONS = 20;
+/** The type its CSV is downloaded as. */
+export const CSV_TYPE = 'text/csv;charset=utf-8';
 
 const isObj = v => !!v && typeof v === 'object' && !Array.isArray(v);
 const text = (v, max) =>
@@ -372,7 +374,7 @@ const WORDS = {
     numbers: 'Numbers',
     quantity: 'Quantity',
     value: 'Value and uncertainty',
-    unit: 'Unit',
+    unitHead: 'Unit',
     origin: 'Origin',
     note: 'Note',
     noValue: 'no value',
@@ -462,7 +464,7 @@ const WORDS = {
     numbers: 'Números',
     quantity: 'Cantidad',
     value: 'Valor e incertidumbre',
-    unit: 'Unidad',
+    unitHead: 'Unidad',
     origin: 'Origen',
     note: 'Nota',
     noValue: 'sin valor',
@@ -553,7 +555,7 @@ export function methodsText(sec, lang, say = {}) {
   // A setting as it was set: six figures at most, no padding, and the decimal
   // mark of the language.
   const n = v => {
-    const text = String(Number(v.toPrecision(6)));
+    const text = String(roundSig(v, 6));
     return lang === 'es' ? text.replace('.', ',') : text;
   };
   const s = sec.settings ?? {};
@@ -709,7 +711,7 @@ export function fillReport(doc, report, say) {
       const cols = [
         [w.quantity, q => q.label, 0.27, true],
         [w.value, q => say.line(q), 0.28, true],
-        [w.unit, q => q.unit, 0.1, false],
+        [w.unitHead, q => q.unit, 0.1, false],
         [w.origin, q => say.origin(q.origin), 0.12, true],
         [w.note, q => q.note ?? '', 0.23, false],
       ].filter(c => c[3] || sec.numbers.some(q => c[1](q)));

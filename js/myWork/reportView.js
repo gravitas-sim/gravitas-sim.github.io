@@ -28,6 +28,7 @@ import {
 import {
   COMPOSED_ID,
   COMPOSED_KEY,
+  CSV_TYPE,
   comparisonOf,
   composeReport,
   fillReport,
@@ -361,8 +362,7 @@ export async function act(kind, id, ctx) {
       footer: wordsOf(ctx.lang).footer,
       lang: ctx.lang === 'es' ? 'es-ES' : 'en-US',
     };
-    if (kind === 'csv')
-      save(reportCsv(report, say), `${name}.csv`, 'text/csv;charset=utf-8');
+    if (kind === 'csv') save(reportCsv(report, say), `${name}.csv`, CSV_TYPE);
     else if (kind === 'html') {
       const { createHtmlDocument } = await import('../htmlReport.js');
       save(

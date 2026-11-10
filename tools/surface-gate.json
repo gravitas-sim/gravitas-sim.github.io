@@ -1844,6 +1844,39 @@
       "support": null
     },
     {
+      "id": "format-gravitas-composed-report",
+      "name": "gravitas.composed-report",
+      "kind": "stored-format",
+      "unique": "yes",
+      "replacement": null,
+      "why": "download (the review page reads it), My work (inside a gravitas.made record of kind report); owner js/myWork/composedReport.js readComposed.",
+      "exposure": {
+        "links": [],
+        "records": ["gravitas.composed-report"],
+        "stateLinks": []
+      },
+      "persisted": "download, localStorage",
+      "measure": {
+        "ownerFiles": ["js/myWork/composedReport.js"],
+        "testNames": ["gravitas.composed-report"]
+      },
+      "consequence": "Keep; a schema in Prompt 290.",
+      "cost": {
+        "lines": 0,
+        "testFiles": 1,
+        "generated": 0,
+        "strings": 0,
+        "precacheKb": 0,
+        "axeRows": 0
+      },
+      "use": { "shippedLinks": 1, "libraryEntries": 0 },
+      "cited": [],
+      "referrer": "UNKNOWN",
+      "verdict": "KEEP",
+      "rule": "R3b",
+      "support": null
+    },
+    {
       "id": "format-course-terms-record",
       "name": "course terms record",
       "kind": "stored-format",
