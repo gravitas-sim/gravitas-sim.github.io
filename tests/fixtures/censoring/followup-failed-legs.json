@@ -1,0 +1,5 @@
+{
+ "format": "gravitas.censoring-truncation-followup-failed-legs/1",
+ "note": "Every failing row of followup-results.json and nothing else; left failing. C2o.cmCoverageOracle of Part A stays in failed-legs.json, failing.",
+ "legs": []
+}
