@@ -61,35 +61,39 @@ async function courseHomeLinkOf(pack) {
   return { hash: link.url.split('#')[1] };
 }
 
+/**
+ * A collection as the current writer makes one: the first unit alone, no
+ * objectives, prerequisites, level or term, no needs and no optional path.
+ */
+function asCollection(doc) {
+  const {
+    objectives: _o,
+    prerequisites: _p,
+    courseLevel: _l,
+    ...rest
+  } = clone(doc);
+  const unit = rest.units[0];
+  return {
+    ...rest,
+    profile: 'collection',
+    units: [
+      {
+        ...unit,
+        items: unit.items
+          .filter(i => i.kind === 'lesson' && (i.path ?? 'core') === 'core')
+          .map(({ needs: _n, objectives: _i, ...i }) => i),
+      },
+    ],
+  };
+}
+
 export const BOUNDARY = [
   {
     id: 'collection-profile',
     prompt: 164,
     kind: 'course-pack',
     plans: 'an additive `profile: "collection"` on the course package',
-    // A collection as the current writer makes one: the first unit alone, no
-    // objectives, prerequisites, level or term, no needs and no optional path.
-    mutate: doc => {
-      const {
-        objectives: _o,
-        prerequisites: _p,
-        courseLevel: _l,
-        ...rest
-      } = clone(doc);
-      const unit = rest.units[0];
-      return {
-        ...rest,
-        profile: 'collection',
-        units: [
-          {
-            ...unit,
-            items: unit.items
-              .filter(i => i.kind === 'lesson' && (i.path ?? 'core') === 'core')
-              .map(({ needs: _n, objectives: _i, ...i }) => i),
-          },
-        ],
-      };
-    },
+    mutate: asCollection,
     expect: 'refused',
     boundary: {
       format: 'gravitas.course-pack',
@@ -99,6 +103,28 @@ export const BOUNDARY = [
       write: coursePack,
       says: 'formatVersion formatVersion',
       requires: 'a reader of gravitas.course-pack/3 (Gravitas 3.0.0)',
+      rollback: 'refused',
+    },
+  },
+  {
+    id: 'collection-first-week',
+    prompt: 277,
+    kind: 'course-pack',
+    plans:
+      'an additive `firstWeek: true` on a collection, with an optional `more` ("open" or "shut"), written only when an instructor marks the collection a first week',
+    // A first week as the kit makes one: a collection, the mark and the
+    // panels' More state (167's field, on a collection).
+    mutate: doc => ({ ...asCollection(doc), firstWeek: true, more: 'shut' }),
+    expect: 'refused',
+    boundary: {
+      format: 'gravitas.course-pack',
+      from: 2,
+      to: 3,
+      rule: 'a first week is a collection, so it is written as /3; a collection that is not marked is the bytes it was',
+      write: coursePack,
+      says: 'formatVersion formatVersion',
+      requires:
+        'a reader of gravitas.course-pack/3 that knows `firstWeek` and `more` (Gravitas 3.0.0)',
       rollback: 'refused',
     },
   },

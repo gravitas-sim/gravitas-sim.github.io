@@ -80,7 +80,7 @@
     }
   ],
   "firstWeek": {
-    "note": "Home's recommended start per audience (Prompt 162): a committed list, validated by tests/navigationChecks.test.js against library/library.json, rendered into js/fragments/home.html by tools/build-library.mjs (the first-week:home block). An entry is a Library entry id (its title and route are read, never restated) or an action. Prompt 277 refines this list; it does not invent a second one.",
+    "note": "Home's recommended start per audience (Prompt 162): a committed list, validated by tests/navigationChecks.test.js against library/library.json, rendered into js/fragments/home.html by tools/build-library.mjs (the first-week:home block). An entry is a Library entry id (its title and route are read, never restated) or an action. Prompt 277's first-week mode shows an instructor's collection in place of this list (ONBOARDING.md); it commits no second list.",
     "starts": [
       {
         "id": "student",
@@ -511,6 +511,7 @@
     "home": {
       "doors": 5,
       "firstWeekLinks": 4,
+      "firstWeekItems": 7,
       "countedLinks": 0
     },
     "library": {
@@ -528,6 +529,10 @@
       "home-first-visit": {
         "desktop": 12,
         "phone": 6
+      },
+      "home-first-week": {
+        "desktop": 20,
+        "phone": 19
       },
       "home": {
         "desktop": 14,

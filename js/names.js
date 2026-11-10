@@ -68,6 +68,7 @@ export const KEY_EVIDENCE_NOTEBOOK = 'gravitas_evidence_notebook';
 export const KEY_EXPERIMENT = 'gravitas_experiment';
 export const KEY_EXPERIMENT_CHECKPOINT_PREFIX =
   'gravitas_experiment_checkpoint_';
+export const KEY_FIRST_WEEK = 'gravitas_first_week';
 export const KEY_GUIDES = 'gravitas_guides';
 export const KEY_INSTRUCTOR_KEY = 'gravitas_instructor_key';
 export const KEY_LAB3D_GUIDE_PREFIX = 'gravitas_lab3d_guide_';
