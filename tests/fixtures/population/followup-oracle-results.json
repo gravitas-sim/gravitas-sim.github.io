@@ -330,5 +330,68 @@
    "probabilityOfZero": 0.006737946999085467
   },
   "cpuSeconds": 16.611586
+ },
+ "stage2": {
+  "sets": {
+   "P3": {
+    "file": "p3-stream.json",
+    "sha256": "c323bd4fb0806bdbf6ce5879a286370f1004c44b4e724276652ed783e795ab7d",
+    "baseSeed": 264800,
+    "replicates": 400,
+    "kappas": [
+     4.0
+    ],
+    "empty": 0,
+    "bfgsNotSuccessful": 271,
+    "maxAbsThetaBfgsVsNewton": 1.4780533685865294e-07,
+    "minEig": 0.12835429606319135,
+    "negativeUnpenalisedEig": 10,
+    "maxGmaxNewton": 5.3781293835042376e-08,
+    "maxNewtonIterations": 400,
+    "fits": 400
+   },
+   "P3c": {
+    "file": "p3c-stream.json",
+    "sha256": "7d3e6e47a1203ea3b0416831f9892829c96875093eb1f3064e0cb896255eb551",
+    "baseSeed": 2648000,
+    "replicates": 400,
+    "kappas": [
+     1.0,
+     4.0,
+     16.0
+    ],
+    "empty": 0,
+    "bfgsNotSuccessful": 801,
+    "maxAbsThetaBfgsVsNewton": 1.5619830850965855e-07,
+    "minEig": 0.06209155346596539,
+    "negativeUnpenalisedEig": 14,
+    "maxGmaxNewton": 2.2226886053910988e-08,
+    "maxNewtonIterations": 400,
+    "fits": 1200
+   },
+   "P4c": {
+    "file": "p4c-stream.json",
+    "sha256": "c1d376c0246d178457f0d164c1a2f65ed0ac003261391f6985a5f8b10e894ec2",
+    "baseSeed": 2648500,
+    "replicates": 400,
+    "kappas": [
+     1.0,
+     4.0,
+     16.0
+    ],
+    "empty": 0,
+    "bfgsNotSuccessful": 1000,
+    "maxAbsThetaBfgsVsNewton": 1.3020779965344786e-07,
+    "minEig": 1.2273543157549285,
+    "negativeUnpenalisedEig": 0,
+    "maxGmaxNewton": 3.3303138025075896e-11,
+    "maxNewtonIterations": 8,
+    "fits": 1200
+   }
+  },
+  "PO1stream": 1.5619830850965855e-07,
+  "thetasFile": "oracle-penalised-thetas.json",
+  "thetasSha256": "e599b86bb938d41351b9221dffb05ad3229589a2719b3d08448f866e53a07b44",
+  "cpuSeconds": 32.603911
  }
 }
