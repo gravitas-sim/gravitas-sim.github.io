@@ -14,7 +14,9 @@ const repo = path.resolve(
 );
 const imp = p => import(pathToFileURL(path.join(repo, p)));
 const { stream } = await imp('js/random/streams.js');
-const { threeBodyTrial } = await imp('js/experiments/ensemble/kinds.js');
+const { threeBodyTrial, THREE_BODY } = await imp(
+  'js/experiments/ensemble/kinds.js'
+);
 const { loadRealm } = await imp('js/experiments/ensemble/trial.js');
 const { buildScenario } = await imp('js/experiments/trialRunner.js');
 const { applyLabSettings } = await imp('js/validation/harness.js');
@@ -26,7 +28,13 @@ const pairDrift = [];
 let positions = null;
 let settings = null;
 for (let k = 0; k < 50; k++) {
-  const p = threeBodyPair(realm, buildScenario, applyLabSettings, 1000 + k);
+  const p = threeBodyPair(
+    realm,
+    buildScenario,
+    applyLabSettings,
+    THREE_BODY,
+    1000 + k
+  );
   series.push(p.series);
   if (k === 0) {
     positions = { a: p.a, b: p.b };

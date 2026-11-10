@@ -109,6 +109,7 @@ catalogue refers to it, so a change to it can reach a student.
 | [NOTEBOOK_STORAGE.md](NOTEBOOK_STORAGE.md) | The price of moving the notebook off localStorage (nothing built). | gate | unassigned | written | no |
 | [NUMBER_TYPOGRAPHY.md](NUMBER_TYPOGRAPHY.md) | How numbers are typeset on screen. | design | unassigned | written | no |
 | [NUMERICAL_INVESTIGATIONS.md](NUMERICAL_INVESTIGATIONS.md) | Numerical-methods investigations in the application: the record of what the tree has, why none was built and what a build needs (Prompt 270). | record | P270 | written | no |
+| [NUMERICS_INSTRUMENTS.md](NUMERICS_INSTRUMENTS.md) | The numerics instruments: five kernels the numerical-methods investigations need (energy ledger, step history, ensemble divergence rate, Fourier periodogram, held-out interpolation error), their oracle and verdict (follow-up to Prompt 270). | gate | P270 | written | no |
 | [NUMERICS.md](NUMERICS.md) | Numerical routines: roots, quadrature, interpolation, small linear algebra and a polynomial fit, each with a contract and a consumer. | feature | P152 | written | no |
 | [OBJECT_INSPECTOR.md](OBJECT_INSPECTOR.md) | The object inspector. | feature | unassigned | written | no |
 | [OBSERVATION_DATA_PACK_GATE.md](OBSERVATION_DATA_PACK_GATE.md) | Authentic observation data packs gate. | gate | P10 | written | no |

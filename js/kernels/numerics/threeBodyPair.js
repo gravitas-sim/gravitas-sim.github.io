@@ -12,17 +12,16 @@
 //
 // The step is the kind's own (THREE_BODY.dt), never the frame rate. The realm
 // (the engine's modules), buildScenario and applyLabSettings are handed in, as
-// they are to threeBodyTrial; this module imports no engine. Imported by no
-// shipped module.
+// they are to threeBodyTrial, and so is the kind's configuration (THREE_BODY of
+// js/experiments/ensemble/kinds.js): this module imports no engine and nothing
+// of the ensemble runner. Imported by no shipped module.
 // =============================================================================
-import { THREE_BODY } from '../../experiments/ensemble/kinds.js';
 import { stream } from '../../random/streams.js';
 import { separationOf } from './divergenceRate.js';
 
 const { Math } = globalThis;
 
-function run(m, buildScenario, applyLab, seed, shift, every) {
-  const c = THREE_BODY;
+function run(m, buildScenario, applyLab, c, seed, shift, every) {
   buildScenario(m, { scenario: c.scenario, seed: 'ensemble' });
   const { physics } = m;
   applyLab(physics, {
@@ -74,6 +73,7 @@ function run(m, buildScenario, applyLab, seed, shift, every) {
  * @param {object} m - The realm's modules (js/experiments/ensemble/trial.js loadRealm)
  * @param {Function} buildScenario - js/experiments/trialRunner.js
  * @param {Function} applyLab - js/validation/harness.js applyLabSettings
+ * @param {object} c - THREE_BODY of js/experiments/ensemble/kinds.js (scenario, perturbation, steps, dt, radius)
  * @param {number} seed - The trial's seed in the 'experiments' stream
  * @param {{delta?: number, every?: number}} [opts] - The second run's shift of
  *   star 0 in x, as a fraction of the triangle's radius; a sample every so many steps
@@ -84,12 +84,12 @@ export function threeBodyPair(
   m,
   buildScenario,
   applyLab,
+  c,
   seed,
   { delta = 1e-8, every = 10 } = {}
 ) {
-  const c = THREE_BODY;
-  const A = run(m, buildScenario, applyLab, seed, 0, every);
-  const B = run(m, buildScenario, applyLab, seed, delta * c.radius, every);
+  const A = run(m, buildScenario, applyLab, c, seed, 0, every);
+  const B = run(m, buildScenario, applyLab, c, seed, delta * c.radius, every);
   if (A.count !== 3 || B.count !== 3)
     throw new Error('a star merged or was removed; the pair has no separation');
   const series = A.positions.map((p, i) => ({
