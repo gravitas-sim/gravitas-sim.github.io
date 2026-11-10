@@ -573,11 +573,7 @@ const readMore = () => {
   }
 };
 
-/**
- * What a first-week collection says of More, while its mode is on (Prompt
- * 277): the `mo` of the record Home keeps (js/library/firstWeek.js). It is
- * 167's field on a collection, so it speaks for the panels an activity's does.
- */
+/** What the first-week collection a reader is in says of More (Prompt 277). */
 const weekMore = surface => {
   if (surface !== 'lesson' && surface !== 'tool') return undefined;
   try {
@@ -590,8 +586,8 @@ const weekMore = surface => {
 /**
  * Whether a surface's More starts open. What the reader last chose comes
  * first, since they can always open everything or fold it again; then what an
- * activity says (`'open'` or `'shut'`), or failing that the first-week
- * collection the reader is in; then the depth's default.
+ * activity says (`'open'` or `'shut'`), or else a first-week collection; then
+ * the depth's default.
  * @param {string} surface - 'lesson', 'tool', 'plot' or 'settings'
  * @param {string} [depth] - 'core', 'quantitative' or 'advanced'
  * @param {string} [declared] - An activity's `'open'` or `'shut'`

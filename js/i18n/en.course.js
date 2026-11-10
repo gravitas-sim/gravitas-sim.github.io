@@ -276,7 +276,7 @@ export const EN_COURSE = {
   'course.error.more':
     '“more” is “open” or “shut” on a first-week collection, or the field is left out.',
   'course.error.firstWeekItems':
-    'A first week holds up to {max} items that open in Gravitas: no readings.',
+    'A first week holds up to {max} items, and no reading.',
   'course.error.term':
     'A short label such as Spring 2027: up to 40 characters, no markup.',
   'course.error.tooMany': 'At most {max} items.',

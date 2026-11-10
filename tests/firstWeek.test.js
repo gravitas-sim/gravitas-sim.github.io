@@ -336,6 +336,10 @@ describe('Home’s reader trusts nothing it is handed', () => {
     expect(readWeek(JSON.stringify(withItem({ t: { en: '' } })))).toBeNull();
     expect(readWeek(JSON.stringify(withItem({ t: 'Tides' })))).toBeNull();
     expect(readWeek(JSON.stringify(withItem({ l: 'a/b' })))).toBeNull();
+    expect(readWeek(JSON.stringify(withItem({ d: 'core/x' })))).toBeNull();
+    expect(
+      readWeek(JSON.stringify(withItem({ d: 'quantitative' })))
+    ).not.toBeNull();
     expect(readWeek(JSON.stringify({ ...good, items: [] }))).toBeNull();
     expect(readWeek(JSON.stringify({ ...good, items: {} }))).toBeNull();
     const many = n => ({

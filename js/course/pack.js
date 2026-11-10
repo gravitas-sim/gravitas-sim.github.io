@@ -129,12 +129,9 @@ export const ACCESS = Object.freeze(['open', 'library', 'print']);
  * refuses the field in its own words (tests/compat/boundary.mjs).
  */
 export const PROFILES = Object.freeze(['collection']);
-/**
- * The most items a first-week collection holds (Prompt 277): Home shows them
- * all on one screen, with nothing else.
- */
+/** The most items a first week holds (Prompt 277): Home shows them on one screen. */
 export const MAX_FIRST_WEEK_ITEMS = 7;
-/** What a first-week collection may say of More: 167's field, on a collection. */
+/** What a first week may say of the panels' More (167's field). */
 export const MORE_STATES = Object.freeze(['open', 'shut']);
 
 export const MAX_UNITS = 20;
@@ -412,21 +409,20 @@ export function validateCoursePack(c, api) {
         { field: k }
       );
 
-  // A first week (Prompt 277): a collection Home shows alone, in order, and
-  // what it says of More for its students. Written only when set.
+  // A first week (Prompt 277): a collection Home shows alone, in order.
   if (c.firstWeek !== undefined)
     need(
       collection && c.firstWeek === true,
       'firstWeek',
       'firstWeek',
-      '"firstWeek" is true on a collection, or the field is left out'
+      'true on a collection, or left out'
     );
   if (c.more !== undefined)
     need(
       c.firstWeek === true && MORE_STATES.includes(c.more),
       'more',
       'more',
-      '"more" is "open" or "shut" on a first-week collection, or the field is left out'
+      '"open" or "shut" on a first week, or left out'
     );
 
   text(c.title, 'title', true, 120);
@@ -571,7 +567,7 @@ export function validateCoursePack(c, api) {
         units[0].items.every(i => i?.kind !== 'reading')),
     'units',
     'firstWeekItems',
-    `a first week holds up to ${MAX_FIRST_WEEK_ITEMS} items that open in Gravitas: no readings`,
+    `a first week holds up to ${MAX_FIRST_WEEK_ITEMS} items, and no reading`,
     { max: MAX_FIRST_WEEK_ITEMS }
   );
   const unitIds = new Set();

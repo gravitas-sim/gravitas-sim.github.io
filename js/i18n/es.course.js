@@ -280,7 +280,7 @@ export const ES_COURSE = {
   'course.error.more':
     '«more» es «open» o «shut» en una colección de primera semana, o se omite el campo.',
   'course.error.firstWeekItems':
-    'Una primera semana contiene hasta {max} elementos que se abren en Gravitas: sin lecturas.',
+    'Una primera semana contiene hasta {max} elementos, y ninguna lectura.',
   'course.error.term':
     'Una etiqueta corta como Primavera 2027: hasta 40 caracteres, sin marcado.',
   'course.error.tooMany': 'Como mucho {max} elementos.',

@@ -325,7 +325,8 @@ export function readWeek(text = firstWeekText()) {
         short(i.h, 4000) &&
         // On this site: one leading slash, no backslash, no space.
         /^\/(?!\/)[^\\\s]*$/.test(i.h) &&
-        (i.l === undefined || /^[\w-]+$/.test(i.l))
+        (i.l === undefined || /^[\w-]+$/.test(i.l)) &&
+        (i.d === undefined || /^\w+$/.test(i.d))
     );
   return ok ? r : null;
 }
