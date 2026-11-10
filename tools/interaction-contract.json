@@ -689,7 +689,7 @@
         "surface": "courses",
         "path": "/course/",
         "task": "Open the example course.",
-        "reach": "#ch-open-empty, #ch-open",
+        "reach": "main a[href]",
         "press": "Enter",
         "spanish": true
       },
@@ -712,9 +712,9 @@
       {
         "surface": "sky-lab",
         "path": "/sky/",
-        "task": "Choose an observing site.",
-        "reach": "#skySite",
-        "press": "ArrowDown",
+        "task": "Move the sky forward an hour.",
+        "reach": "#skyFwd1h",
+        "press": "Enter",
         "spanish": true
       },
       {
@@ -736,16 +736,16 @@
       {
         "surface": "figure-builder",
         "path": "/figure/",
-        "task": "Choose the figure's scenario.",
-        "reach": "#fbScenario",
-        "press": "ArrowDown",
+        "task": "Show or hide the figure's controls.",
+        "reach": "#fbControls",
+        "press": "Space",
         "spanish": true
       },
       {
         "surface": "my-work",
         "path": "/my-work/",
-        "task": "Open the transfer to another device.",
-        "reach": "main a[href]",
+        "task": "Open Move to another device.",
+        "reach": "main summary",
         "press": "Enter",
         "spanish": true
       },
@@ -808,9 +808,9 @@
       {
         "surface": "teaching-find",
         "path": "/teaching/find/",
-        "task": "Filter by level.",
-        "reach": "#f-level",
-        "press": "ArrowDown",
+        "task": "Open a found investigation.",
+        "reach": "main a[href]",
+        "press": "Enter",
         "spanish": true
       },
       {
@@ -832,8 +832,8 @@
       {
         "surface": "teaching-kit",
         "path": "/teaching/kit/",
-        "task": "Read a pasted link.",
-        "reach": "#kitGo",
+        "task": "Make a link from what is saved here.",
+        "reach": "#kitCollOpen",
         "press": "Enter",
         "spanish": true
       },
@@ -872,8 +872,8 @@
       {
         "surface": "glossary",
         "path": "/glossary/",
-        "task": "Follow the first link.",
-        "reach": "main a[href]",
+        "task": "Read the page and follow a link from its end.",
+        "reach": ".gs-foot a[href]",
         "press": "Enter",
         "spanish": false
       },
