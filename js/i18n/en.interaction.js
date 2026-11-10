@@ -20,10 +20,10 @@ export const EN_INTERACTION = {
   // A window moved without a drag (js/windowMove.js).
   'window.move.label': 'Move this panel',
   'window.move.arm':
-    'Choose where the top left corner of the panel goes. The arrow keys move it too. Escape cancels.',
+    'Choose where its top left corner goes. The arrow keys move it too. Escape cancels.',
   'window.move.done': 'Panel moved.',
   'window.size.label': 'Resize this panel',
   'window.size.arm':
-    'Choose where the top right corner of the panel goes. The arrow keys resize it too. Escape cancels.',
+    'Choose where its top right corner goes. The arrow keys resize it too. Escape cancels.',
   'window.size.done': 'Panel resized.',
 };

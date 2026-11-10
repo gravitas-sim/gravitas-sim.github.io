@@ -18,10 +18,10 @@ export const ES_INTERACTION = {
   // Una ventana movida sin arrastrar (js/windowMove.js).
   'window.move.label': 'Mover este panel',
   'window.move.arm':
-    'Elige dónde va la esquina superior izquierda del panel. Las flechas también lo mueven. Escape cancela.',
+    'Elige dónde va su esquina superior izquierda. Las flechas también lo mueven. Escape cancela.',
   'window.move.done': 'Panel movido.',
   'window.size.label': 'Cambiar el tamaño de este panel',
   'window.size.arm':
-    'Elige dónde va la esquina superior derecha del panel. Las flechas también cambian su tamaño. Escape cancela.',
+    'Elige dónde va su esquina superior derecha. Las flechas también cambian su tamaño. Escape cancela.',
   'window.size.done': 'Tamaño del panel cambiado.',
 };

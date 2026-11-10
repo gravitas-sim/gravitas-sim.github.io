@@ -105,8 +105,10 @@ export function createTable(table, hooks) {
     if (extend) selection.range(anchor, i, 'table');
     else if (e.ctrlKey || e.metaKey) selection.toggle(i, 'table');
     else selection.set([i], 'table');
-    if (!extend) anchor = i;
-    else if (run) setRun(false);
+    // The anchor moves as it always did: on any press without Shift that is
+    // not the end of a run.
+    if (!e.shiftKey && !extend) anchor = i;
+    if (extend && run) setRun(false);
     selection.moveFocus(i, 'table');
     showRow(i, { focus: true });
   });

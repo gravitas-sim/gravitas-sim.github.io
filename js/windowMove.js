@@ -122,9 +122,18 @@ function armButton(host, { kind, glyph, className, press, nudge }) {
   else loadWords().then(name);
 
   let veil = null;
+  // Escape disarms wherever focus is: a browser that does not focus a button
+  // when it is pressed (Safari) would otherwise leave the veil up.
+  const escape = e => {
+    if (e.key !== 'Escape') return;
+    disarm();
+    e.preventDefault();
+    e.stopPropagation();
+  };
   const disarm = () => {
     veil?.remove();
     veil = null;
+    document.removeEventListener('keydown', escape, true);
     button.setAttribute('aria-pressed', 'false');
   };
   const arm = () => {
@@ -139,6 +148,7 @@ function armButton(host, { kind, glyph, className, press, nudge }) {
       announce(words[`window.${kind}.done`]);
     });
     document.body.append(veil);
+    document.addEventListener('keydown', escape, true);
     button.setAttribute('aria-pressed', 'true');
     announce(words[`window.${kind}.arm`]);
   };
@@ -148,12 +158,6 @@ function armButton(host, { kind, glyph, className, press, nudge }) {
     else loadWords().then(arm);
   });
   button.addEventListener('keydown', e => {
-    if (e.key === 'Escape' && veil) {
-      disarm();
-      e.preventDefault();
-      e.stopPropagation();
-      return;
-    }
     const way = ARROWS[e.key];
     if (!way || e.metaKey || e.ctrlKey) return;
     const step = STEP * scaleOf(e);
