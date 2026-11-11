@@ -65,14 +65,22 @@ async function openState(page, controls) {
 /** A frame of settled layout: the transport bar and the sheets stand on a measurement. */
 const settle = async page => {
   // A dialog that is still opening is measured at a scale it will not keep:
-  // wait for every animation that ends (one that repeats for ever never does).
+  // wait for every running animation that ends (one that repeats for ever
+  // never does, and a paused one would never finish), for at most 3 s.
   await page.evaluate(() =>
-    Promise.all(
-      document
-        .getAnimations({ subtree: true })
-        .filter(a => a.effect?.getComputedTiming().endTime !== Infinity)
-        .map(a => a.finished.catch(() => {}))
-    )
+    Promise.race([
+      Promise.all(
+        document
+          .getAnimations()
+          .filter(
+            a =>
+              a.playState === 'running' &&
+              a.effect?.getComputedTiming().endTime !== Infinity
+          )
+          .map(a => a.finished.catch(() => {}))
+      ),
+      new Promise(r => setTimeout(r, 3000)),
+    ])
   );
   await page.evaluate(
     () =>
