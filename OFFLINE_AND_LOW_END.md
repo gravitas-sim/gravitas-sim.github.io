@@ -781,8 +781,8 @@ cap it is measured in that spec and bounded.
   (Prompt 163) are in localStorage; the Library's "Continue" link and Home's
   offer read the same record offline.
 - The Observatory's open Gaia archive observation: when one opens, the page
-  notes its source, band and object in sessionStorage
-  (`gravitas_observatory_open`: this tab, no data), and a reload reads the
+  notes its source, band and object in the history entry's state (`obsOpen`:
+  it survives a reload and goes with the entry; no storage key, no data), and a reload reads the
   answer back from the archive store, never from the network, even when the
   copy is old, and says so ("Reopened after the reload from the copy kept on
   this device"). What returns is the observation as it was opened, not the

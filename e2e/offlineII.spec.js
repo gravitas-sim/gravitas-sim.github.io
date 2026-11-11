@@ -19,7 +19,7 @@ import { readFileSync } from 'node:fs';
 import { devices } from '@playwright/test';
 import { test, expect } from './fixtures.js';
 
-/* global navigator, sessionStorage */
+/* global navigator, history */
 
 test.skip(
   process.env.GRAVITAS_E2E_TARGET === 'dist',
@@ -333,18 +333,14 @@ test.describe('an offline reload restores the open work', () => {
       timeout: 30_000,
     });
     await page.evaluate(() =>
-      sessionStorage.setItem(
-        'gravitas_observatory_open',
-        JSON.stringify({ v: 1, source: '1', band: 'G', object: null })
+      history.replaceState(
+        { obsOpen: { v: 1, source: '1', band: 'G', object: null } },
+        ''
       )
     );
     await page.locator('#obsOpen').click();
     await expect(page.locator('html')).toHaveAttribute('data-opens', '1');
-    expect(
-      await page.evaluate(() =>
-        sessionStorage.getItem('gravitas_observatory_open')
-      )
-    ).toBeNull();
+    expect(await page.evaluate(() => history.state?.obsOpen)).toBeUndefined();
   });
 });
 

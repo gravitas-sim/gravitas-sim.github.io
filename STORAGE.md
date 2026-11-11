@@ -82,7 +82,6 @@ banner (`#previewBanner`), in the reader's language.
 |---|---|---|
 | `gravitas_capability_versions` | The version of each capability package loaded, so a changed one is noticed | `js/platform/resolver.js` |
 | sessionStorage `gravitas_instructor_key` | The instructor materials' key, for the session only | `js/instructorPortal.js` |
-| sessionStorage `gravitas_observatory_open` | Which Gaia archive observation the Observatory has open (source id, band, object), for this tab only, so a reload (offline too) reads it back from the archive store below; no data, and dropped when another observation opens (Prompt 284) | `js/observatoryPage.js`, read by `js/observatory/archivePanel.js` |
 | IndexedDB `gravitas-catalog` | Installed catalog extensions: their archives' files | `js/catalog/store.js` |
 | IndexedDB `gravitas-archive` | The archive import's cached answers | `js/archive/cache.js` |
 | IndexedDB `gravitas-store` | The storage module's collections (Prompt 65): one object store, `records`, keyed by collection and name. Nothing writes to it yet: the keys above keep their own formats and the writers go through `js/storage/local.js` (below) | `js/storage/index.js` |
@@ -139,7 +138,6 @@ Every record a student's browser holds, its owner, how it migrates, whether a ba
 | localStorage gravitas_store:<collection>:<name> | The same records when IndexedDB is unavailable | — | `js/storage/index.js` | `js/storage/index.js` | none | durable: in a backup file | nothing writes it yet |
 | Cache Storage gravitas-<build> | The service worker's precache | — | `sw.js` | its own | an older build's cache is deleted when a new one activates | evictable: regenerated or cached, not in a backup file | generated from the build, never student work |
 | sessionStorage gravitas_instructor_key | The instructor materials' key, for the session | — | `js/instructorPortal.js` | its own | none | session: gone when the tab closes | gone when the tab closes; never exported |
-| sessionStorage gravitas_observatory_open | The Gaia archive observation open in the Observatory (source, band, object), so a reload reads it back from the archive store | — | `js/observatoryPage.js` | its own | none; a record that is not version 1 is ignored and dropped | session: gone when the tab closes | gone when the tab closes; never exported; names an answer in the archive store and holds no data |
 <!-- storage:records:end -->
 
 ## The round-trip fixture (Prompt 146)

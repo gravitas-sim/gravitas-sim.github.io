@@ -16,7 +16,6 @@ import {
   translatePage,
 } from './observatory/i18n.js';
 import { mountShell } from './shell.js';
-import { KEY_OBSERVATORY_OPEN } from './names.js';
 import {
   FIXTURES,
   lightCurveObservation,
@@ -1079,18 +1078,20 @@ $('obsNextPage').addEventListener('click', () => table.turn(1));
 
 function open(o, changes = []) {
   if (marks.take?.(o)) return; // the overlay panel's second frame
-  // An archive observation is remembered for this visit, so a reload (offline
-  // too) can read it back from the device's copy; any other clears it.
+  // An archive observation is remembered in this history entry, so a reload
+  // (offline too) can read it back from the device's copy; any other opening
+  // clears it. history.state survives a reload and goes with the entry.
   try {
     const m = /^import:gaia-dr3-(\d+)-(G|BP|RP)@/.exec(o.id);
-    if (m)
-      sessionStorage.setItem(
-        KEY_OBSERVATORY_OPEN,
-        JSON.stringify({ v: 1, source: m[1], band: m[2], object: o.object })
-      );
-    else sessionStorage.removeItem(KEY_OBSERVATORY_OPEN);
+    history.replaceState(
+      {
+        ...history.state,
+        obsOpen: m && { v: 1, source: m[1], band: m[2], object: o.object },
+      },
+      ''
+    );
   } catch {
-    /* no session storage: nothing is remembered */
+    /* no history to write to: nothing is remembered */
   }
   state.source = o;
   state.history.reset(changes);
@@ -1515,13 +1516,7 @@ loadLanguage(opening).then(
   () => begin('en')
 );
 
-const remembered = () => {
-  try {
-    return Boolean(sessionStorage.getItem(KEY_OBSERVATORY_OPEN));
-  } catch {
-    return false;
-  }
-};
+const remembered = () => Boolean(history.state?.obsOpen);
 
 function begin(lang) {
   setLanguage(lang);
