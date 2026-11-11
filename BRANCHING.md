@@ -57,7 +57,7 @@ The table is written from `tools/generate-graph.mjs`, the list that
 <!--fact-block:generatedArtifacts-->
 | File | Made by | Notes |
 | --- | --- | --- |
-| `js/widgets.js` (regions), `js/platform/builtins.js` (regions), `js/data/investigations/registry.js` (regions) | `node tools/capability-registries.mjs` | Regions between `// <generated:NAME>` and `// </generated:NAME>`; the rest of each file is hand-written. A conflict inside one is resolved by regenerating, never by taking a side. |
+| `js/widgets.js` (regions), `js/platform/builtins.js` (regions), `js/data/investigations/registry.js` (regions), `js/explainers.js` (regions) | `node tools/capability-registries.mjs` | Regions between `// <generated:NAME>` and `// </generated:NAME>`; the rest of each file is hand-written. A conflict inside one is resolved by regenerating, never by taking a side. |
 | `js/platform/catalog.generated.js`, `docs/capabilities.md` | `node tools/capabilities.mjs generate` |  |
 | `catalog/catalog.json` | `node tools/catalog.mjs generate` |  |
 | `js/data/investigations/manifest.js`, `js/data/investigations/manifest.es.js`, `js/data/investigations/browseData.js` | `node tools/build-investigation-manifest.js` |  |
@@ -69,6 +69,7 @@ The table is written from `tools/generate-graph.mjs`, the list that
 | `images/scenarios` | `node tools/generate-scenario-thumbnails.mjs` |  |
 | `docs/lesson-scene-catalog.json`, `docs/lesson-scene-record.md`, `js/data/investigations/provenance.js` | `node tools/lesson-scene-audit.mjs --write` |  |
 | `js/data/instruments.js` | `node tools/build-instruments.mjs` | The facilities table in INSTRUMENTS.md sits between `<!-- instruments:begin -->` and `<!-- instruments:end -->`; a conflict inside it is resolved by regenerating. |
+| `js/explain/terms.en.js`, `js/explain/terms.es.js` | `node tools/glossary.mjs --write` | The page body sits between `<!-- glossary:start -->` and `<!-- glossary:end -->`; a conflict inside it is resolved by regenerating. |
 | `js/data/irreversible.js` | `node tools/build-irreversibility-audit.mjs` |  |
 | `validation/data.json` | `node tools/build-validation-data.mjs` | The physics suite's own output; the `/validation/` page paints from it. |
 | `tools/README.md` | `node tools/build-tools-index.mjs` |  |
