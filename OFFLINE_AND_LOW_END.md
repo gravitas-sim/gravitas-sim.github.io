@@ -60,7 +60,7 @@ Measured from the committed `sw-manifest.js` and the files it lists, by
 | Other | 16 | 900 KB |
 | **Total** | **1163** | **18.9 MB** |
 
-Of those, 823 are core (the install fails without them), 129 optional (installed with them; a missing one is reported and costs nothing) and 211 idle (installed after activation, when the browser is idle; a missing one costs that page its offline copy and is fetched again on the next open). The first-visit install is the core and the optional files: 952 files.
+Of those, 824 are core (the install fails without them), 129 optional (installed with them; a missing one is reported and costs nothing) and 210 idle (installed after activation, when the browser is idle; a missing one costs that page its offline copy and is fetched again on the next open). The first-visit install is the core and the optional files: 953 files.
 
 Gzipped, as Pages serves it, the whole is about 6 MB.
 
@@ -106,7 +106,7 @@ The idle tier, by surface (gzip level 6, to the nearest 10 KB: Node versions dif
 | mission lab | 41 | ~230 KB |
 | Sky Lab | 22 | ~170 KB |
 | image measurement | 9 | ~40 KB |
-| Library | 13 | ~120 KB |
+| Library | 12 | ~120 KB |
 | composed report | 2 | ~20 KB |
 | three.js | 2 | ~240 KB |
 <!--/fact-block-->
@@ -692,8 +692,8 @@ head of this prompt, level 6 gzip):
 
 | Tier | Files | Gzip | 147's ceiling | Ceiling now |
 | --- | ---: | ---: | ---: | ---: |
-| First visit (core and optional) | 952 | 5,391,226 B | 5,175,296 B | 5,391,226 B |
-| Idle | 211 | 1,696,067 B | 1,517,568 B | 1,696,781 B |
+| First visit (core and optional) | 953 | 5,391,226 B | 5,175,296 B | 5,391,226 B |
+| Idle | 210 | 1,696,067 B | 1,517,568 B | 1,696,781 B |
 
 Both ceilings have been raised since by later prompts, each by its measured
 overrun and a register row; the first visit is 4.2% and the idle tier 11.8% over
