@@ -684,6 +684,25 @@ The tiers of Prompt 147 were measured when the site had a third of the content.
 This section is what the same tools say now, what the tour found, and what was
 added to meet the larger site.
 
+### The tiers, re-measured
+
+Prompt 147 committed the first-visit tier at 5,175,296 B gzip and the idle tier
+at 1,517,568 B. With the content as it is now (measured under Node 22 at the
+head of this prompt, level 6 gzip):
+
+| Tier | Files | Gzip | 147's ceiling | Ceiling now |
+| --- | ---: | ---: | ---: | ---: |
+| First visit (core and optional) | 952 | 5,391,322 B | 5,175,296 B | 5,391,322 B |
+| Idle | 211 | 1,696,067 B | 1,517,568 B | 1,696,781 B |
+
+Both ceilings have been raised since by later prompts, each by its measured
+overrun and a register row; the first visit is 4.2% and the idle tier 11.8% over
+what 147 committed. This prompt moved 1.1 KB from the idle tier into the first
+visit (`js/library/progress.js`) and made the offline note a little longer on
+the pages the first visit holds, 4,325 B in all (D-R10-284-02). The install is
+still the shell, the modules the application and its labs need, and the pages
+that are worth having on a first visit: about 5.4 MB, 17 s at 3 Mbps.
+
 ### Every page, measured
 
 `node tools/offline-pages.mjs` opens every HTML page of the tree (178) in
@@ -759,9 +778,9 @@ started: it is named in `skipped`, and the smaller ones already stored stay.
 ### The footprint ceiling and eviction
 
 `indexedDbAndCacheBytes` in `tools/data-budget.json` is 200 MiB. The precache is
-stored uncompressed in Cache Storage (19.4 MB raw), the archive's cached answers
+stored uncompressed in Cache Storage (19.9 MB raw, 18.9 MiB), the archive's cached answers
 are held to 64 MiB or 400 answers (`js/archive/cache.js`, least recently used
-first), and that leaves 116 MiB for the reader's parts and the Catalog's
+first), and that leaves 117 MiB for the reader's parts and the Catalog's
 installed extensions (each at most 16 MiB unpacked, `js/catalog/archive.js`), which the application does not
 prune: the worker keeps the parts cache across versions and the reader removes
 it. `tests/offlineFootprint.test.js` holds that arithmetic (the room left is at
@@ -772,8 +791,10 @@ eviction reaches (the archive database, the catalog database, Cache Storage) is
 evictable and no durable record is. `e2e/offlineII.spec.js` does it in a
 browser on the real IndexedDB with the largest answer the page accepts (512 kB),
 leaves student work in localStorage byte for byte, and records the time. The
-eviction reads every row on each write, so its cost grows with the cap; at the
-cap it is measured in that spec and bounded.
+eviction reads every row on each write, so its cost grows with the cap: measured in that spec at the cap with the
+largest answer the page accepts (512 kB) it is about 0.1 s a write (headless
+Chromium on a loaded Mac), against an archive request that takes seconds, and
+the spec fails above 0.5 s.
 
 ### What comes back after an offline reload
 
@@ -803,10 +824,12 @@ before the import is applied the preview says how much it would store and how
 much this browser can still give, from the storage module's estimate (a phone's
 quota can be small); with too little room Import stays off, and a browser that
 does not say says so. Emulated in `e2e/offlineII.spec.js` on a Pixel 7 and an
-iPhone 14 profile. Emulation is a proxy: whether a real share sheet takes the
-file, or a real picker offers it, is not established (an UNKNOWN row in
-`tools/evidence-status.json`; the real-device protocol above is the way to
-settle it).
+iPhone 14 profile. Emulation is a proxy, and the claim stays open:
+
+No real iOS or Android device has been used for the backup's share sheet or file picker.
+
+The row is UNKNOWN in `tools/evidence-status.json`; the real-device protocol
+above is the way to settle it.
 
 ## Running the tests
 
