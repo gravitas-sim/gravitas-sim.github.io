@@ -3,7 +3,7 @@
 // -----------------------------------------------------------------------------
 // The backup goes to the share sheet where the browser has one, a closed sheet
 // makes no file, the file picker reads a backup, and the storage estimate is
-// shown before an import (with Import off when there is too little room).
+// shown before an import (with a warning when there is too little room).
 // Device profiles are Playwright's; the share sheet is a stub. A proxy: whether
 // a real share sheet takes the file, or a real picker offers it, is UNKNOWN in
 // tools/evidence-status.json (offline-phone-paths). Chromium only, by the
@@ -151,7 +151,7 @@ for (const [name, device] of Object.entries(PHONES)) {
       await expect(page.locator('#mwApply')).toBeEnabled();
     });
 
-    test('a browser with too little room is told so before the import, and Import stays off', async ({
+    test('a browser with too little room is told so before the import', async ({
       page,
     }, testInfo) => {
       await seed(page);
@@ -175,7 +175,6 @@ for (const [name, device] of Object.entries(PHONES)) {
       const room = page.locator('#mwRoom');
       await expect(room).toContainText(/too little/);
       await expect(room).toHaveAttribute('data-fits', 'false');
-      await expect(page.locator('#mwApply')).toBeDisabled();
     });
   });
 }

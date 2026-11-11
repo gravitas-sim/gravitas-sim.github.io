@@ -641,8 +641,9 @@ async function preview() {
 /**
  * Before an import: what it would store and what this browser can still give,
  * as the storage module's estimate says (a phone's quota can be small). When
- * the estimate says it would not fit before the reserve, Import stays off;
- * when the browser does not say, the line says so (Prompt 284).
+ * the estimate says it would not fit before the reserve, the line says so (the
+ * import is then refused record by record, as it always was); when the browser
+ * does not say, the line says so (Prompt 284).
  */
 async function room(prepared, plan) {
   const need = JSON.stringify(
@@ -667,11 +668,10 @@ async function room(prepared, plan) {
           `Esta importación guardaría unos ${size(need)}; aquí se pueden usar todavía unos ${size(e.available)}.`
         )
       : L(
-          `This import would store about ${size(need)}, and only about ${size(e.available)} can still be used here: too little. Free some space, then import again.`,
-          `Esta importación guardaría unos ${size(need)} y aquí solo se pueden usar unos ${size(e.available)}: muy poco. Libera espacio e importa de nuevo.`
+          `This import would store about ${size(need)}, and only about ${size(e.available)} can still be used here: too little. An import that does not fit is refused and changes nothing; free some space first.`,
+          `Esta importación guardaría unos ${size(need)} y aquí solo se pueden usar unos ${size(e.available)}: muy poco. Una importación que no cabe se rechaza y no cambia nada; libera espacio antes.`
         );
     line.dataset.fits = String(fits);
-    if (!fits) $('mwApply').disabled = true;
   }
   $('mwPreviewBody').prepend(line);
 }

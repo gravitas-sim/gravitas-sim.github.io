@@ -30,8 +30,8 @@ the release rather than in the tag.
   Gaia archive observation that was open, from the copy kept on the device and
   without asking the archive. My work on a phone offers the backup to the share
   sheet where the browser has one, and shows what an import would store and how
-  much room the browser reports before it is applied (Import stays off when
-  there is too little). Larger datasets' offline parts are fetched smallest
+  much room the browser reports before it is applied (a warning when there is too
+  little). Larger datasets' offline parts are fetched smallest
   first and a part that would not fit is not started. The first-visit precache
   grew by 4.2 KB. The share sheet and file picker have been tried only in
   emulation: no real device.

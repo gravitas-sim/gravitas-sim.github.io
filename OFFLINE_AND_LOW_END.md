@@ -692,14 +692,14 @@ head of this prompt, level 6 gzip):
 
 | Tier | Files | Gzip | 147's ceiling | Ceiling now |
 | --- | ---: | ---: | ---: | ---: |
-| First visit (core and optional) | 953 | 5,391,226 B | 5,175,296 B | 5,391,226 B |
+| First visit (core and optional) | 953 | 5,391,288 B | 5,175,296 B | 5,391,288 B |
 | Idle | 210 | 1,696,067 B | 1,517,568 B | 1,696,781 B |
 
 Both ceilings have been raised since by later prompts, each by its measured
 overrun and a register row; the first visit is 4.2% and the idle tier 11.8% over
 what 147 committed. This prompt moved 1.1 KB from the idle tier into the first
 visit (`js/library/progress.js`) and made the offline note a little longer on
-the pages the first visit holds, 4,229 B in all (D-R10-284-02). The install is
+the pages the first visit holds, 4,291 B in all (D-R10-284-02). The install is
 still the shell, the modules the application and its labs need, and the pages
 that are worth having on a first visit: about 5.4 MB, 17 s at 3 Mbps.
 
@@ -822,8 +822,8 @@ sheet makes no file and does not count as a backup, so it cannot unlock a
 deletion. Import: the file picker takes `application/json` and `.json`, and
 before the import is applied the preview says how much it would store and how
 much this browser can still give, from the storage module's estimate (a phone's
-quota can be small); with too little room Import stays off, and a browser that
-does not say says so. Emulated in `e2e/offlineII.spec.js` on a Pixel 7 and an
+quota can be small); with too little room the line says so (the import is then refused
+record by record, as it always was), and a browser that does not say says so. Emulated in `e2e/offlineII.spec.js` on a Pixel 7 and an
 iPhone 14 profile. Emulation is a proxy, and the claim stays open:
 
 No real iOS or Android device has been used for the backup's share sheet or file picker.
