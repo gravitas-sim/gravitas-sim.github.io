@@ -21,6 +21,7 @@
 // =============================================================================
 
 import { columnOf, maskedRows, rowCount, uncertaintyOf } from './schema.js';
+import { createLoupe } from './loupe.js';
 
 /** Distinct, color-blind-safe colors for categories (Okabe and Ito). */
 export const CATEGORY_COLORS = [
@@ -47,6 +48,11 @@ export function createImageView(canvas, hooks) {
   let state = null;
   let drag = null;
   let anchor = null;
+  // A finger hides the pixel it points at: it gets the loupe (touch only).
+  const host = canvas.parentElement;
+  if (host && getComputedStyle(host).position === 'static')
+    host.style.position = 'relative';
+  const loupe = host ? createLoupe(host, canvas, canvas) : null;
 
   const indexOf = (x, y) => (y - 1) * state.width + (x - 1);
   const pixelAt = e => {
@@ -78,13 +84,16 @@ export function createImageView(canvas, hooks) {
     canvas.focus({ preventScroll: true });
     canvas.setPointerCapture?.(e.pointerId);
     drag = { from: pixelAt(e), to: pixelAt(e) };
+    if (e.pointerType === 'touch') loupe?.show(e);
   });
   canvas.addEventListener('pointermove', e => {
     if (!drag) return;
     drag.to = pixelAt(e);
     paint(rectangle(drag.from, drag.to));
+    if (e.pointerType === 'touch') loupe?.show(e);
   });
   canvas.addEventListener('pointerup', e => {
+    loupe?.hide();
     if (!drag) return;
     drag.to = pixelAt(e);
     const { from, to } = drag;

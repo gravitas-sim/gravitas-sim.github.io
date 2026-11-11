@@ -113,6 +113,13 @@ Prompt 179 and every later instrument to use: place then nudge, the loupe, the
 handle sizes and the spacing and inline exceptions, and the larger dedicated
 handles for precise tasks.
 
+Prompt 283 measured the whole at a phone and a tablet with touch emulation
+(`e2e/mobileSweep.spec.js`, `tools/touch-targets.json`): the size, spacing and
+inline rules over every shown control, the precision of the marks panel by
+finger, the loupe on every image task, a photometry ring chosen by its handle,
+the plot cursor by touch, and fifteen workflows. Emulation is not a device:
+OFFLINE_AND_LOW_END.md says what it covers.
+
 ## 3. Focus and announcements
 
 - **Dialogs** open and close through `js/dialog.js`, which traps focus, makes the

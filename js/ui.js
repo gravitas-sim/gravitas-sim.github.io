@@ -769,11 +769,14 @@ if (mobileMenuToggle && uiRail) {
   //
   // A section's heading is the other: it opens a section of this menu, and
   // the menu closing under it left a phone reader unable to open any section
-  // at all.
+  // at all. The view pad is the third (Prompt 283): it moves and zooms the
+  // view by a press at a time, so the menu closing after each press made a
+  // reader open it again for every step.
   uiRail.addEventListener('click', e => {
     if (!uiRail.classList.contains('is-open')) return;
     if (!e.target.closest('button')) return;
-    if (e.target.closest('#objectTypeBtn, .rail-section-toggle')) return;
+    if (e.target.closest('#objectTypeBtn, .rail-section-toggle, #viewPad'))
+      return;
     closeRail();
   });
 

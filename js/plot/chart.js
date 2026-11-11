@@ -154,7 +154,7 @@ const color = c => (typeof c === 'function' ? c() : c);
  * @param {{mode?: 'index'|'nearest', title?: Function, format?: Function}}
  *   [opts.tooltip] - mode picks every series at the pointer or the one
  *   nearest; title(x) and format({label, x, y, i, id}) write the words
- * @param {{role?: string, legend?: string, toggled?: Function}} [opts.labels]
+ * @param {{role?: string, legend?: string, toggled?: Function, prev?: string, next?: string}} [opts.labels]
  *   - the translated words: the roledescription, the legend's name, and
  *   toggled(label, shown) for what is spoken when a series is shown or hidden
  */
@@ -185,6 +185,8 @@ export function createChart(host, opts = {}) {
     display: 'block',
     width: '100%',
     maxWidth: '100%',
+    // A finger along the plot scrubs the cursor; a finger down the page scrolls.
+    touchAction: 'pan-y',
   });
   Object.assign(tip.style, {
     position: 'absolute',
@@ -878,7 +880,52 @@ export function createChart(host, opts = {}) {
     return [px, py];
   }
 
+  // A finger sets the cursor where it lands and scrubs it along (Prompt 283):
+  // the readout stays when the finger lifts, is said as the keyboard's is, and
+  // the two step buttons move it one point at a time, so no value needs a drag
+  // or a path. The steps are made on the first touch, and only when the page
+  // supplied their words.
+  let steps = null;
+  const stepBy = n =>
+    onKey({ key: n > 0 ? 'ArrowRight' : 'ArrowLeft', preventDefault() {} });
+  function showSteps() {
+    if (!L.prev || !L.next) return;
+    if (!steps) {
+      steps = document.createElement('div');
+      Object.assign(steps.style, {
+        display: 'flex',
+        justifyContent: 'center',
+        gap: '8px',
+        margin: '4px 0 0',
+      });
+      for (const [n, word] of [
+        [-1, L.prev],
+        [1, L.next],
+      ]) {
+        const b = document.createElement('button');
+        b.type = 'button';
+        b.className = 'ui-button';
+        b.textContent = word;
+        b.addEventListener('click', () => stepBy(n));
+        steps.append(b);
+      }
+      steps.addEventListener('focusout', e => {
+        if (!wrap.contains(e.relatedTarget)) clearCursor();
+      });
+      wrap.append(steps);
+    }
+    steps.hidden = false;
+  }
+  function touchCursor(e) {
+    const p = where(e);
+    const hits = p ? hitsAt(p[0], p[1]) : [];
+    if (!hits.length) return;
+    cursor = { id: hits[0].id, i: hits[0].i };
+    show(cursorHits(hits[0], hits[0].i), true);
+    showSteps();
+  }
   const onMove = e => {
+    if (e.pointerType === 'touch') return e.buttons ? touchCursor(e) : null;
     if (cursor) return;
     const p = where(e);
     if (p) show(hitsAt(p[0], p[1]), false);
@@ -914,6 +961,7 @@ export function createChart(host, opts = {}) {
   }
   function clearCursor() {
     cursor = null;
+    if (steps) steps.hidden = true;
     hideTip();
   }
 
@@ -961,10 +1009,15 @@ export function createChart(host, opts = {}) {
     show(cursorHits(d, cursor.i), true);
   };
 
+  svg.addEventListener('pointerdown', e => {
+    if (e.pointerType === 'touch') touchCursor(e);
+  });
   svg.addEventListener('pointermove', onMove);
   svg.addEventListener('pointerleave', onLeave);
   svg.addEventListener('keydown', onKey);
-  svg.addEventListener('blur', clearCursor);
+  svg.addEventListener('blur', e => {
+    if (!steps?.contains(e.relatedTarget)) clearCursor();
+  });
 
   // --- Size, theme and the end -----------------------------------------------
   let ro = null;

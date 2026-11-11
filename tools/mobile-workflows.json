@@ -1,0 +1,20 @@
+{
+  "about": "The workflows e2e/mobileSweep.spec.js walks by touch (Prompt 283), at a phone (375 x 812) and a tablet (768 x 1024), in English and in Spanish: the ten student workflows of ACCESSIBILITY_CONFORMANCE.md and five instrument workflows. Each is a few real taps, an observable result and no sideways scroll. tests/touchTargets.test.js holds this list to the spec's. `sizes` lists where a long computation runs: the cluster fit runs at the phone in English and at the tablet in Spanish, so both sizes and both languages are covered without four fits.",
+  "workflows": [
+    { "id": "S1", "name": "Start from the front door and open an investigation", "surface": "/#investigations" },
+    { "id": "S2", "name": "Run and change a sandbox scenario: open the scenario browser", "surface": "/" },
+    { "id": "S3", "name": "Work through an investigation: read and go on", "surface": "/?author=tides&step=1" },
+    { "id": "S4", "name": "Measure in an observation and read a plot: a tap on the plot selects", "surface": "/observatory/" },
+    { "id": "S5", "name": "Open an observation in the Observatory", "surface": "/observatory/" },
+    { "id": "S6", "name": "Use the Sky Lab to plan an observation", "surface": "/sky/" },
+    { "id": "S7", "name": "Run an experiment and read its results", "surface": "/experiments/" },
+    { "id": "S8", "name": "Finish and export one's own work: My work", "surface": "/my-work/" },
+    { "id": "S9", "name": "Save an item for later from the Library", "surface": "/library/" },
+    { "id": "S10", "name": "Share a scenario by link", "surface": "/" },
+    { "id": "N1", "name": "An image measurement: place a mark by touch", "surface": "/observatory/" },
+    { "id": "N2", "name": "A photometry batch: measure all marks", "surface": "/observatory/" },
+    { "id": "N3", "name": "A spectrum line measurement: fit H-beta for a velocity", "surface": "/observatory/" },
+    { "id": "N4", "name": "A porkchop choice: compute the window and choose a cell", "surface": "/mission/" },
+    { "id": "N5", "name": "A cluster fit: fit NGC 2420", "surface": "/observatory/?open=ngc2420-segue", "sizes": ["phone:en", "tablet:es"] }
+  ]
+}

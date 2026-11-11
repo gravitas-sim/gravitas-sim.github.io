@@ -635,6 +635,28 @@ keyboard keep what they have; this is the pattern a touch reader gets.
 - **No drag is required, and no second finger.** Pinch and rotate have buttons;
   the nudge pad is the keyboard's arrow keys on a screen.
 
+Where the pattern is built and measured (Prompt 283, `e2e/mobileSweep.spec.js`,
+at a phone of 375 x 812 and a tablet of 768 x 1024, touch emulation, Chromium):
+
+- **The loupe** is one module, `js/observatory/loupe.js`, used by every image
+  task that takes a finger: the marks panel, the photometry stamp and the
+  Observatory's pixel image. It is for touch only.
+- **Handles.** The photometry stamp draws a dot of the true size at the east
+  side of each of its three rings; a tap within 28 CSS px of a handle (a 56 px
+  target) chooses that ring, and a tap anywhere else sets the chosen ring's
+  radius, which the three step sizes then nudge. A tap that would be nearer a
+  handle than the ring it means to set chooses the handle: tap off the east
+  axis to set a radius.
+- **The plot cursor.** On a series chart (`js/plot/chart.js`) a finger puts the
+  readout on the nearest point and scrubs it along; the readout stays when the
+  finger lifts, is said as the keyboard's is, and two buttons, Previous point
+  and Next point, move it one point at a time (made on the first touch).
+- **Measured.** `e2e/touchTargets.js` applies this section's size, spacing and
+  inline rules to every shown control; `tools/touch-targets.json` records the
+  rule and what each page measured. The inline exception is read as a link in a
+  block that is not a flex or grid row and has at least eight letters or digits
+  of other text; a browser-drawn picker is the user-agent exception.
+
 ## Token proposals
 
 `css/tokens.css` is not edited by component work. What the components above
