@@ -28,6 +28,7 @@ export const ES_LAB3DLAB = {
   'l3.pad.move.down': 'Mover la vista hacia abajo',
   'l3.pad.in': 'Acercar',
   'l3.pad.out': 'Alejar',
+  'l3.describe': 'Describir la vista',
   'l3.cam.above':
     'Vista desde {above}° por encima del plano de referencia, a {around}° alrededor. La vista es {size} veces tan alta como el sistema.',
   'l3.cam.below':

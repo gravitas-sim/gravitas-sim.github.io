@@ -18,6 +18,7 @@
 import { readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import path from 'node:path';
+import { uncoveredRoutes } from '../tools/a11y-shard.mjs';
 
 const REPO = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const read = rel => readFileSync(path.join(REPO, rel), 'utf8');
@@ -59,21 +60,16 @@ describe('ACCESSIBILITY.md against the axe matrix', () => {
   });
 
   test('the marked counts agree with the array', () => {
-    const themes = fact(doc, 'axeThemes');
     const allThemes = fact(doc, 'axeAllThemes');
     const locales = fact(doc, 'locales');
-    // The standalone pages carry the shared shell, and run in every theme.
+    // Every surface runs in every theme (Prompt 281), and the pages of the
+    // navigation inventory no surface names run once each, by themselves.
     const spec = read('e2e/accessibility.spec.js');
-    const start = spec.indexOf('const SURFACES = [');
-    const body = spec.slice(start, spec.indexOf('\n];', start));
-    const shell = (body.match(/^ {4}standalone: true,/gm) || []).length;
-    expect(shell).toBeGreaterThan(0);
-    expect(allThemes).toBeGreaterThan(themes);
-    expect(fact(doc, 'axeSurfaces')).toBe(names.length);
-    expect(fact(doc, 'axeShellSurfaces')).toBe(shell);
-    expect(fact(doc, 'axeRuns')).toBe(
-      ((names.length - shell) * themes + shell * allThemes) * locales
-    );
+    expect(spec).toMatch(/for \(const theme of ALL_THEMES\)/);
+    const total = names.length + uncoveredRoutes().length;
+    expect(allThemes).toBe(4);
+    expect(fact(doc, 'axeSurfaces')).toBe(total);
+    expect(fact(doc, 'axeRuns')).toBe(total * allThemes * locales);
   });
 
   // The count beside the command is the one that went stale before, because a

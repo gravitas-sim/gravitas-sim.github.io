@@ -496,6 +496,85 @@
       "notApplicable": {
         "announcement": "A turn or a zoom moves a picture of a grid; no value a reader is asked for changes."
       }
+    },
+    {
+      "id": "lab3d.describe",
+      "name": "The 3-D lab: describe the view",
+      "source": "js/lab3d/view/describe.js",
+      "primaryTask": "Hear the view as a few sentences: the run mode, the setup, the camera and the orbits.",
+      "keys": [],
+      "drags": [],
+      "tests": {
+        "keyboard": {
+          "file": "e2e/a11y3dMission.spec.js",
+          "title": "Describe the view is reached by Tab and said in en"
+        },
+        "singlePointer": {
+          "file": "e2e/a11y3dMission.spec.js",
+          "title": "a single press on Describe the view says the view"
+        },
+        "announcement": {
+          "file": "e2e/a11y3dMission.spec.js",
+          "title": "the description is withheld while a guide step asks for a measurement"
+        }
+      },
+      "sources": ["js/lab3d/view/cameraPad.js", "3d/index.html"]
+    },
+    {
+      "id": "mission.window.grid",
+      "name": "The mission page: the transfer window as a table",
+      "source": "js/mission/windowGrid.js",
+      "primaryTask": "Walk the porkchop's cells by departure date and flight time and hear each cell's total delta-v.",
+      "keys": [
+        {
+          "key": "ArrowLeft",
+          "action": "along"
+        },
+        {
+          "key": "ArrowRight",
+          "action": "along"
+        },
+        {
+          "key": "ArrowUp",
+          "action": "across"
+        },
+        {
+          "key": "ArrowDown",
+          "action": "across"
+        },
+        {
+          "key": "PageUp",
+          "action": "page"
+        },
+        {
+          "key": "PageDown",
+          "action": "page"
+        },
+        {
+          "key": "Home",
+          "action": "first"
+        },
+        {
+          "key": "End",
+          "action": "last"
+        }
+      ],
+      "drags": [],
+      "tests": {
+        "keyboard": {
+          "file": "e2e/a11y3dMission.spec.js",
+          "title": "the grid is walked by arrows and announced in en"
+        },
+        "singlePointer": {
+          "file": "e2e/a11y3dMission.spec.js",
+          "title": "a press on a cell of the grid moves the cursor"
+        },
+        "announcement": {
+          "file": "e2e/a11y3dMission.spec.js",
+          "title": "the grid is walked by arrows and announced in es"
+        }
+      },
+      "sources": ["js/missionPage.js", "mission/index.html"]
     }
   ],
   "drags": [

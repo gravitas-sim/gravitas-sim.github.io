@@ -119,6 +119,13 @@ export const ES_MISSION = {
   'mission.window.tof1': 'Vuelo más corto (días)',
   'mission.window.tof2': 'Vuelo más largo (días)',
   'mission.window.steps': 'Pasos en cada eje',
+  'mission.window.browse': 'Mostrar la malla como tabla',
+  'mission.window.gridCaption':
+    'Delta-v total por fecha de salida (filas) y tiempo de vuelo (columnas). Las flechas mueven una celda, Re Pág y Av Pág diez salidas, Inicio y Fin al primer y al último tiempo de vuelo.',
+  'mission.window.gridCorner': 'Salida',
+  'mission.window.gridBest': 'Llevar el cursor a la celda más barata',
+  'mission.window.cellOk': 'Salida {date}, vuelo {tof}: total {dv}.',
+  'mission.window.cellRefused': 'Salida {date}, vuelo {tof}: {why}.',
   'mission.window.csv': 'Guardar la malla como CSV',
   'mission.window.running': 'Calculando: {percent} %',
   'mission.window.ok': 'Terminado: {n} celdas en {s} s.',

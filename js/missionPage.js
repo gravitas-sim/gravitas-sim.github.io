@@ -499,6 +499,9 @@ function colour(f) {
   return `rgb(${a.map((c, k) => Math.round(c + (b[k] - c) * u)).join(',')})`;
 }
 
+/** Where the table's cursor is, to mark on the picture; null when it is closed. */
+let gridCursor = null;
+
 function drawWindow(r) {
   const o = r.options;
   const nd = o.departSteps;
@@ -540,6 +543,19 @@ function drawWindow(r) {
     );
     ctx.stroke();
   }
+  if (gridCursor) {
+    // The table's cursor: a white square with a dark edge, 3:1 on every cell.
+    const x = xs(gridCursor.i);
+    const y = ys(gridCursor.j + 1);
+    const w = xs(gridCursor.i + 1) - x;
+    const h = ys(gridCursor.j) - y;
+    ctx.lineWidth = 4;
+    ctx.strokeStyle = '#000000';
+    ctx.strokeRect(x - 1, y - 1, w + 2, h + 2);
+    ctx.lineWidth = 2;
+    ctx.strokeStyle = '#ffffff';
+    ctx.strokeRect(x - 1, y - 1, w + 2, h + 2);
+  }
   canvas.setAttribute(
     'aria-label',
     t('mission.window.alt', {
@@ -574,6 +590,45 @@ function drawWindow(r) {
     el('span', { text: t('mission.window.axes') })
   );
   $('mn-window-plot').hidden = false;
+}
+
+/** Open or close the grid as a table (js/mission/windowGrid.js, loaded here). */
+async function browseGrid(open, focus) {
+  const host = $('mn-window-grid');
+  const r = windowResult;
+  $('mn-window-browse').setAttribute('aria-expanded', String(open));
+  host.hidden = !open;
+  if (!open || !r) {
+    gridCursor = null;
+    if (r) drawWindow(r);
+    return;
+  }
+  const { createGrid } = await import('./mission/windowGrid.js');
+  const cell = c => t(`mission.cell.${cellName(c)}`);
+  const grid = createGrid({
+    host,
+    result: r,
+    say: {
+      label: w =>
+        w.ok
+          ? t('mission.window.cellOk', w)
+          : t('mission.window.cellRefused', w),
+      date: dateOf,
+      flight: d => t('mission.unit.d', { v: num(d, 4) }),
+      value: kms,
+      refused: cell,
+      caption: t('mission.window.gridCaption'),
+      corner: t('mission.window.gridCorner'),
+      best: t('mission.window.gridBest'),
+    },
+    onMove: c => {
+      gridCursor = c;
+      drawWindow(r);
+    },
+  });
+  gridCursor = grid.cursor();
+  drawWindow(r);
+  if (focus) grid.focus();
 }
 
 function windowTables(r) {
@@ -627,6 +682,10 @@ async function windowSection() {
   $(`${sid}-cancel`).disabled = false;
   $(`${sid}-export`).disabled = true;
   $('mn-window-csv').disabled = true;
+  $('mn-window-browse').disabled = true;
+  gridCursor = null;
+  $('mn-window-grid').hidden = true;
+  $('mn-window-browse').setAttribute('aria-expanded', 'false');
   $('mn-window-progress').value = 0;
   delete plans[sid];
   windowResult = null;
@@ -644,6 +703,8 @@ async function windowSection() {
     const seconds = (performance.now() - started) / 1000;
     shown[sid] = () => {
       drawWindow(r);
+      // A table that is open is drawn again in the language now in force.
+      if (!$('mn-window-grid').hidden) browseGrid(true, false);
       $(`${sid}-out`).replaceChildren(...windowTables(r));
       say(
         sid,
@@ -656,6 +717,7 @@ async function windowSection() {
     shown[sid]();
     $('mn-window-progress').value = 1;
     $('mn-window-csv').disabled = false;
+    $('mn-window-browse').disabled = false;
     // The plan keeps the summary; the grid itself is the CSV.
     const summary = { ...r };
     for (const k of ['c3', 'vinf', 'total', 'cellStatus']) delete summary[k];
@@ -933,6 +995,9 @@ $('mn-planets-go').addEventListener('click', planets);
 $('mn-window-go').addEventListener('click', windowSection);
 $('mn-window-cancel').addEventListener('click', () => windowRun?.cancel());
 $('mn-window-csv').addEventListener('click', windowCsv);
+$('mn-window-browse').addEventListener('click', () =>
+  browseGrid($('mn-window-grid').hidden, true)
+);
 $('mn-flyby-go').addEventListener('click', flybySection);
 $('mn-check-go').addEventListener('click', check);
 for (const sid of [

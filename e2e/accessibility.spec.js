@@ -36,6 +36,7 @@ import { readFileSync } from 'node:fs';
 import { Buffer } from 'node:buffer';
 import { INTRO_ASTRONOMY } from '../js/data/courses/intro-astronomy.js';
 import { courseLink } from '../js/course/links.js';
+import { axeExempt, uncoveredRoutes } from '../tools/a11y-shard.mjs';
 import { itemOfEntry, savedPack } from '../js/library/collections.js';
 import '../js/library/collectionsDeps.js'; // binds what collections.js needs
 
@@ -97,7 +98,9 @@ const TAGS = [
 ];
 
 /**
- * Rules disabled: none.
+ * Rules disabled: none for any surface, with one recorded exception since
+ * Prompt 281: `region` on the preserved original-version page, kept as it was
+ * (tools/a11y-shard.json `axeExempt`, which names the reason).
  *
  * There were two candidates while this pass was in progress and neither
  * survived it - each turned out to be a real defect with a real fix, which is
@@ -138,6 +141,7 @@ const SURFACES = [
   },
   {
     name: 'sandbox',
+    covers: 'sandbox',
     open: async ({ app }) => app.boot(),
     expect: '#simulationCanvas',
   },
@@ -171,6 +175,7 @@ const SURFACES = [
   },
   {
     name: 'investigations browser',
+    covers: 'investigations',
     open: async ({ page, app }) => {
       await app.boot();
       await page.evaluate(() =>
@@ -261,6 +266,7 @@ const SURFACES = [
   },
   {
     name: 'model page',
+    covers: 'model',
     open: async ({ page }) => {
       await page.goto('/model/', { waitUntil: 'domcontentloaded' });
     },
@@ -269,6 +275,7 @@ const SURFACES = [
   },
   {
     name: 'instructor portal',
+    covers: 'instructors',
     open: async ({ page }) => {
       await page.goto('/instructors/', { waitUntil: 'domcontentloaded' });
     },
@@ -280,6 +287,7 @@ const SURFACES = [
     // continuous integration. That sentence is only true while this entry
     // exists, which is the reason it is here rather than a nice-to-have.
     name: 'teaching page',
+    covers: 'teaching',
     open: async ({ page }) => {
       await page.goto('/teaching/', { waitUntil: 'domcontentloaded' });
     },
@@ -290,6 +298,7 @@ const SURFACES = [
   },
   {
     name: 'figure builder',
+    covers: 'figure-builder',
     open: async ({ page }) => {
       await page.goto('/figure/', { waitUntil: 'domcontentloaded' });
     },
@@ -302,6 +311,7 @@ const SURFACES = [
   },
   {
     name: 'glossary',
+    covers: 'glossary',
     open: async ({ page }) => {
       await page.goto('/glossary/', { waitUntil: 'domcontentloaded' });
     },
@@ -310,6 +320,7 @@ const SURFACES = [
   },
   {
     name: 'evaluation kit',
+    covers: 'evaluation',
     open: async ({ page }) => {
       await page.goto('/evaluation/', { waitUntil: 'domcontentloaded' });
     },
@@ -320,6 +331,7 @@ const SURFACES = [
     // Painted by js/validationPage.js from validation/data.json: a check row,
     // not the empty shell.
     name: 'validation report',
+    covers: 'validation',
     open: async ({ page }) => {
       await page.goto('/validation/', { waitUntil: 'domcontentloaded' });
     },
@@ -331,6 +343,7 @@ const SURFACES = [
   // Each waits for the page's own content, not the shell.
   {
     name: 'observatory',
+    covers: 'observatory',
     open: async ({ page }) => {
       await page.goto('/observatory/', { waitUntil: 'domcontentloaded' });
     },
@@ -339,6 +352,7 @@ const SURFACES = [
   },
   {
     name: 'catalog',
+    covers: 'catalog',
     open: async ({ page }) => {
       await page.goto('/catalog/', { waitUntil: 'domcontentloaded' });
     },
@@ -348,6 +362,7 @@ const SURFACES = [
   {
     // Its cards, grouped by sequence too, so the headings are checked.
     name: 'library',
+    covers: 'library',
     open: async ({ page }) => {
       await page.goto('/library/', { waitUntil: 'domcontentloaded' });
     },
@@ -356,6 +371,7 @@ const SURFACES = [
   },
   {
     name: 'my work',
+    covers: 'my-work',
     open: async ({ page }) => {
       await page.goto('/my-work/', { waitUntil: 'domcontentloaded' });
     },
@@ -438,6 +454,7 @@ const SURFACES = [
   },
   {
     name: 'experiment runner',
+    covers: 'experiments',
     open: async ({ page }) => {
       await page.goto('/experiments/', { waitUntil: 'domcontentloaded' });
     },
@@ -446,6 +463,7 @@ const SURFACES = [
   },
   {
     name: 'scenario studio',
+    covers: 'scenario-studio',
     open: async ({ page }) => {
       await page.goto('/studio/', { waitUntil: 'domcontentloaded' });
     },
@@ -454,6 +472,7 @@ const SURFACES = [
   },
   {
     name: 'investigation composer',
+    covers: 'composer',
     open: async ({ page }) => {
       await page.goto('/studio/lesson/', { waitUntil: 'domcontentloaded' });
     },
@@ -462,6 +481,7 @@ const SURFACES = [
   },
   {
     name: 'course builder',
+    covers: 'course-builder',
     open: async ({ page }) => {
       await page.goto('/studio/course/', { waitUntil: 'domcontentloaded' });
     },
@@ -470,6 +490,7 @@ const SURFACES = [
   },
   {
     name: 'investigations in a course',
+    covers: 'course-packages',
     open: async ({ page }) => {
       await page.goto('/studio/course/packs/', {
         waitUntil: 'domcontentloaded',
@@ -480,6 +501,7 @@ const SURFACES = [
   },
   {
     name: 'course home',
+    covers: 'courses',
     open: async ({ page }) => {
       await page.goto('/course/?course=intro-astronomy', {
         waitUntil: 'domcontentloaded',
@@ -490,6 +512,7 @@ const SURFACES = [
   },
   {
     name: '3-D kernel diagnostics',
+    covers: 'kernel-diagnostics',
     open: async ({ page }) => {
       await page.goto('/lab3d/', { waitUntil: 'domcontentloaded' });
     },
@@ -498,6 +521,7 @@ const SURFACES = [
   },
   {
     name: '3-D lab',
+    covers: 'lab3d',
     open: async ({ page }) => {
       await page.goto('/3d/?system=R3', { waitUntil: 'domcontentloaded' });
     },
@@ -515,7 +539,17 @@ const SURFACES = [
     standalone: true,
   },
   {
+    name: '3-D lab, the view described (Prompt 281)',
+    open: async ({ page }) => {
+      await page.goto('/3d/?system=R3', { waitUntil: 'domcontentloaded' });
+      await page.locator('#l3-describe').click();
+    },
+    expect: '#l3-description:not(:empty)',
+    standalone: true,
+  },
+  {
     name: 'mission diagnostics',
+    covers: 'mission-diagnostics',
     open: async ({ page }) => {
       await page.goto('/mission/', { waitUntil: 'domcontentloaded' });
     },
@@ -523,7 +557,22 @@ const SURFACES = [
     standalone: true,
   },
   {
+    name: 'mission diagnostics, the window as a table (Prompt 281)',
+    open: async ({ page }) => {
+      await page.goto('/mission/', { waitUntil: 'domcontentloaded' });
+      await page.locator('#mn-window-steps').fill('21');
+      await page.locator('#mn-window-go').click();
+      await expect(page.locator('#mn-window-browse')).toBeEnabled({
+        timeout: 60_000,
+      });
+      await page.locator('#mn-window-browse').click();
+    },
+    expect: '#mn-window-grid [role="grid"]',
+    standalone: true,
+  },
+  {
     name: 'mission lab',
+    covers: 'mission-lab',
     open: async ({ page }) => {
       await page.goto('/mission/lab/', { waitUntil: 'domcontentloaded' });
     },
@@ -532,6 +581,7 @@ const SURFACES = [
   },
   {
     name: 'submission review',
+    covers: 'submissions',
     open: async ({ page }) => {
       await page.goto('/instructors/submissions/', {
         waitUntil: 'domcontentloaded',
@@ -588,6 +638,7 @@ const SURFACES = [
   },
   {
     name: 'distribution kit, the Common Cartridge panel (Prompt 169)',
+    covers: 'teaching-kit',
     open: async ({ page }) => {
       await page.goto('/teaching/kit/', { waitUntil: 'domcontentloaded' });
       await page.locator('#kitFile').setInputFiles(COURSE_FILE);
@@ -637,6 +688,24 @@ const SURFACES = [
     standalone: true,
   },
 ];
+
+/**
+ * Every page of the navigation inventory no surface above names, with a run of
+ * its own (Prompt 281): the inventory is the list of pages, so a page added to
+ * it is checked without anyone adding it here. tests/a11yNet.test.js fails if
+ * a page is in neither. tools/a11y-shard.mjs decides which these are.
+ */
+const ROUTES = uncoveredRoutes().map(r => ({
+  name: `page ${r.id}`,
+  covers: r.id,
+  off: axeExempt()[r.id]?.rules,
+  open: async ({ page }) => {
+    await page.goto(r.path, { waitUntil: 'load' });
+  },
+  // The original-version page keeps its own markup and has no <main>.
+  expect: 'body > *',
+  standalone: true,
+}));
 
 /** The two extremes of the palette. Midnight is the default. */
 const THEMES = [
@@ -700,13 +769,15 @@ async function waitForStableStyles(page) {
     .catch(() => {});
 }
 
-async function analyze(page, context, exclude = []) {
+async function analyze(page, context, exclude = [], off = []) {
   await waitForStableStyles(page);
   let builder = new AxeBuilder({ page }).withTags(TAGS);
   for (const selector of exclude) builder = builder.exclude(selector);
   for (const [rule, on] of Object.entries(OFF)) {
     if (!on) builder = builder.disableRules(rule);
   }
+  // A page with a recorded exemption (tools/a11y-shard.json `axeExempt`).
+  for (const rule of off) builder = builder.disableRules(rule);
   const results = await builder.analyze();
   return results.violations.map(v => ({
     id: v.id,
@@ -768,10 +839,10 @@ async function assertConfigured(page, locale, theme) {
     .toEqual({ theme: theme.id, lang: locale.id });
 }
 
-for (const surface of SURFACES) {
+for (const surface of [...SURFACES, ...ROUTES]) {
   test.describe(`axe: ${surface.name}`, () => {
     for (const locale of LOCALES) {
-      for (const theme of surface.standalone ? ALL_THEMES : THEMES) {
+      for (const theme of ALL_THEMES) {
         test(`${locale.label}, ${theme.label} theme`, async ({
           page,
           app,
@@ -800,7 +871,8 @@ for (const surface of SURFACES) {
           const violations = await analyze(
             page,
             `${surface.name} / ${locale.label} / ${theme.label}`,
-            surface.exclude
+            surface.exclude,
+            surface.off
           );
 
           expect(

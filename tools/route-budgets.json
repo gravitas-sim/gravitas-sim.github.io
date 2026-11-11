@@ -88,11 +88,11 @@
         "requests": 11
       },
       "lab3d-lab": {
-        "kb": 809.2,
+        "kb": 809.7,
         "requests": 36
       },
       "lab3d-guide": {
-        "kb": 987.6,
+        "kb": 988.2,
         "requests": 41
       },
       "mission": {
@@ -218,7 +218,7 @@
         "requests": 3
       },
       "lab3d-guide": {
-        "kb": 789.6,
+        "kb": 789.9,
         "requests": 5
       },
       "mission": {

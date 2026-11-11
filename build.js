@@ -906,7 +906,11 @@ async function buildDocPages() {
   // precomputed sessions, Prompt 271): each a bundle of its own at the same
   // path, loaded by URL, for the reason the guide panel is. The orbital layer
   // rides in the panel's bundle and no reader of the lab downloads it unasked.
-  for (const lazy of ['js/lab3d/view/orbitPanel.js', 'js/lab3d/runModes.js']) {
+  for (const lazy of [
+    'js/lab3d/view/orbitPanel.js',
+    'js/lab3d/runModes.js',
+    'js/lab3d/view/describe.js',
+  ]) {
     if (!existsSync(lazy)) continue;
     await esbuild.build({
       entryPoints: [lazy],

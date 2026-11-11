@@ -56,9 +56,10 @@ export function cameraNumbers(cam, reach) {
  * @param {() => number} o.reach - The system's extent
  * @param {(id: string, vars?: object) => string} o.t - The lab's translator
  * @param {() => object} o.also - The page's own keys, by `event.key`
+ * @param {() => object} o.lab - The lab's API, for "Describe the view"
  * @returns {() => void} Name the pad again, after the language changes
  */
-export function cameraControls({ scene, reach, t, also }) {
+export function cameraControls({ scene, reach, t, also, lab }) {
   const $ = id => document.getElementById(id);
   const pad = $('l3-pad');
   const mode = $('l3-pad-mode');
@@ -108,6 +109,18 @@ export function cameraControls({ scene, reach, t, also }) {
     if (!fn) return;
     e.preventDefault();
     fn();
+  });
+
+  // "Describe the view": the scene in a few sentences (./describe.js, loaded
+  // by URL on the first press; a bundle of its own in dist/, build.js).
+  $('l3-describe').addEventListener('click', async () => {
+    const m = await import(new URL('./describe.js', import.meta.url).href);
+    const cam = scene()?.readCamera();
+    const { text } = await m.describeView(
+      lab(),
+      cam && cameraNumbers(cam, reach())
+    );
+    $('l3-description').textContent = text.join(' ');
   });
 
   pad.addEventListener('click', e => {

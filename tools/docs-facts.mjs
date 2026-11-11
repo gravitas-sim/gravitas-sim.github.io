@@ -81,6 +81,7 @@ import {
   gzipMB,
 } from './precache-inventory.mjs';
 import { CHECKS } from './checks.mjs';
+import { uncoveredRoutes } from './a11y-shard.mjs';
 import {
   catalogLayout,
   completeCatalogs,
@@ -251,7 +252,7 @@ const ATTRIBUTE_FACTS = [
   {
     file: 'paper.md',
     key: 'axeRuns',
-    pattern: /(themes and the rest in two — )(\d+)( runs)/,
+    pattern: /(themes — )(\d+)( runs — with no rule disabled)/,
   },
   {
     file: 'validation/index.html',
@@ -403,17 +404,20 @@ function axeMatrix() {
     return (body.match(new RegExp(`^\\s{2,4}\\{?\\s*${key}: `, 'gm')) || [])
       .length;
   };
-  const surfaces = lengthOf('SURFACES', 'name');
+  // The surfaces the spec names, and the pages of the navigation inventory it
+  // gives a run of their own (Prompt 281: tools/a11y-shard.mjs). Every one runs
+  // in every theme, the application's own surfaces included: its theme switch
+  // offers all four.
+  const routes = uncoveredRoutes().length;
+  const surfaces = lengthOf('SURFACES', 'name') + routes;
   const locales = lengthOf('LOCALES', 'id');
   const themes = lengthOf('THEMES', 'id');
-  // The standalone pages carry the shared shell and its theme switch, so
-  // they run in every theme: THEMES plus the ones ALL_THEMES adds to it.
   const start = text.indexOf('const SURFACES = [');
   const body = text.slice(start, text.indexOf('\n];', start));
-  const shellSurfaces = (body.match(/^\s+standalone: true,/gm) || []).length;
+  const shellSurfaces =
+    (body.match(/^\s+standalone: true,/gm) || []).length + routes;
   const allThemes = themes + lengthOf('ALL_THEMES', 'id');
-  const runs =
-    ((surfaces - shellSurfaces) * themes + shellSurfaces * allThemes) * locales;
+  const runs = surfaces * allThemes * locales;
   return { surfaces, locales, themes, shellSurfaces, allThemes, runs };
 }
 

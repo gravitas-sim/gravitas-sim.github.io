@@ -1,0 +1,87 @@
+{
+  "format": "gravitas.a11y-shard/1",
+  "about": "The accessibility shard, as configuration (Prompt 281): which specs and tests hold the site's accessibility, what each covers, and which of them `npm run a11y` runs. tools/a11y-shard.mjs reads this to (1) write the table 'What is checked, on every run' in ACCESSIBILITY.md, and (2) fail tests/a11yNet.test.js when a spec named a11y* or accessibility* is not listed, when `npm run a11y` and this file disagree, when a page of tools/navigation-inventory.json has no axe run, no walk or no outline record, or when a registered interaction surface names a test outside the shard. `covers` may carry docs:sync fact markers; the numbers inside them are not compared. `where` says which CI job runs it: the accessibility job (axe and the manual checks), the sharded browser suite (everything else under e2e/), or the Jest job.",
+  "axeExempt": {
+    "history-original": {
+      "rules": [
+        "region"
+      ],
+      "reason": "The first version, kept as it was: one file with no shell and no landmarks, which tools/page-outlines.json also exempts. Whether the page is kept at all is Prompt 165's and 166's decision (the surface-retirement gate), not a sweep's. Every other rule runs on it, in every theme and both languages."
+    }
+  },
+  "specs": [
+    {
+      "file": "e2e/accessibility.spec.js",
+      "where": "the accessibility job",
+      "script": "a11y:axe",
+      "inAll": true,
+      "covers": "axe-core over every page of the navigation inventory and the application's own surfaces and states: <!--fact:axeSurfaces-->50<!--/fact--> surfaces × <!--fact:locales-->2<!--/fact--> languages × <!--fact:axeAllThemes-->4<!--/fact--> themes (Midnight, Deep space, Observatory red, Daylight) — <!--fact:axeRuns-->344<!--/fact--> runs; a page added to the inventory with no named surface gets a run of its own"
+    },
+    {
+      "file": "e2e/accessibilityManual.spec.js",
+      "where": "the accessibility job",
+      "script": "a11y:manual",
+      "inAll": true,
+      "covers": "Focus order, focus traps, Escape, focus restoration, heading order, landmarks, reflow, reduced motion, and the canvas description"
+    },
+    {
+      "file": "e2e/a11ySweep.spec.js",
+      "where": "the sharded browser suite",
+      "script": "a11y:sweep1",
+      "inAll": true,
+      "covers": "Sweep I (Prompt 278): every surface of the walk inventory by keyboard and by single presses, in both languages (no trap, every stop named and on screen, every pressable control reached, the primary task done by its key); the view pads, the windows moved and sized without a drag, the observer's angle, a run of rows in the Observatory"
+    },
+    {
+      "file": "e2e/a11ySweepII.spec.js",
+      "where": "the sharded browser suite",
+      "script": "a11y:sweep2",
+      "inAll": true,
+      "covers": "Sweep II (Prompt 279): every page's outline against a record, in both languages; one test for each focus pattern; every page at rest with reduced motion, by the system and by the reader's own setting; every page at 320 CSS pixels; every page under forced colors; no checkbox or radio under 24 px"
+    },
+    {
+      "file": "e2e/chartDescription.spec.js",
+      "where": "the sharded browser suite",
+      "script": null,
+      "inAll": false,
+      "covers": "Descriptions of series charts (Prompt 280): a bounded description for each chart, held answers kept out of it, the keyboard-triggered sound and its stop"
+    },
+    {
+      "file": "e2e/a11y3dMission.spec.js",
+      "where": "the sharded browser suite",
+      "script": "a11y:3d",
+      "inAll": true,
+      "covers": "The 3-D lab and the mission page by keyboard (Prompt 281): Describe the view by Tab and by one press, in both languages and withheld while a guide step asks for a measurement; the camera's announcements; the transfer window as a grid walked by arrows, announced by each cell's label, marked on the picture, and moved by one press"
+    },
+    {
+      "file": "e2e/accessibilityParity.spec.js",
+      "where": "the sharded browser suite",
+      "script": null,
+      "inAll": false,
+      "covers": "The text equivalents: what the visual simulation shows is also in the page as text, against the built tree"
+    }
+  ],
+  "tests": [
+    {
+      "files": [
+        "tests/motionInventory.test.js",
+        "tests/designRatchet.test.js"
+      ],
+      "covers": "Every keyframes and every scheduler in the sources is in the motion inventory with what it does under reduced motion; the contrast of every token pair in each of the four themes, which may only rise"
+    },
+    {
+      "files": [
+        "tests/a11yNet.test.js",
+        "tests/interactionContract.test.js"
+      ],
+      "covers": "The net: every page of the navigation inventory has an axe run in every theme and both languages, a walk and an outline; every spec named a11y* or accessibility* is in this shard; every registered interaction surface keeps its walks in a spec of the shard"
+    },
+    {
+      "files": [
+        "tests/lab3dDescribe.test.js",
+        "tests/missionWindowGrid.test.js",
+        "tests/plotDescribe.test.js"
+      ],
+      "covers": "The descriptions and the grid as pure functions: the 3-D scene's bounded description and its held rule, the transfer window's cursor, a chart's description and its coverage"
+    }
+  ]
+}

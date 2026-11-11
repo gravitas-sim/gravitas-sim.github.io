@@ -1392,7 +1392,6 @@ function setupScene() {
   size();
 }
 
-// The camera's keys, its view pad and what is said of it: ./lab3d/view/cameraPad.js.
 let labelPad = () => {};
 
 function languageSwitch() {
@@ -1581,6 +1580,7 @@ async function init() {
     scene: () => state.scene,
     reach: () => state.reach,
     t,
+    lab: () => labApi,
     also: () => ({
       ' ': () => play(!state.playing),
       0: resetView,

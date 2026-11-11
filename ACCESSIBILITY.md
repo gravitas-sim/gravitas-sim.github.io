@@ -8,15 +8,30 @@ The scoped conformance report, a status for each WCAG 2.1 and 2.2 A and AA crite
 
 ## What is checked, on every run
 
+<!-- a11y-shard:table -->
 | Check | Covers |
 | --- | --- |
-| `e2e/accessibility.spec.js` | axe-core over <!--fact:axeSurfaces-->50<!--/fact--> surfaces × <!--fact:locales-->2<!--/fact--> languages: the <!--fact:axeShellSurfaces-->36<!--/fact--> pages with the shared shell in all <!--fact:axeAllThemes-->4<!--/fact--> themes, the application's surfaces in <!--fact:axeThemes-->2<!--/fact--> — <!--fact:axeRuns-->344<!--/fact--> runs |
+| `e2e/accessibility.spec.js` | axe-core over every page of the navigation inventory and the application's own surfaces and states: <!--fact:axeSurfaces-->60<!--/fact--> surfaces × <!--fact:locales-->2<!--/fact--> languages × <!--fact:axeAllThemes-->4<!--/fact--> themes (Midnight, Deep space, Observatory red, Daylight) — <!--fact:axeRuns-->480<!--/fact--> runs; a page added to the inventory with no named surface gets a run of its own |
 | `e2e/accessibilityManual.spec.js` | Focus order, focus traps, Escape, focus restoration, heading order, landmarks, reflow, reduced motion, and the canvas description |
+| `e2e/a11ySweep.spec.js` | Sweep I (Prompt 278): every surface of the walk inventory by keyboard and by single presses, in both languages (no trap, every stop named and on screen, every pressable control reached, the primary task done by its key); the view pads, the windows moved and sized without a drag, the observer's angle, a run of rows in the Observatory |
 | `e2e/a11ySweepII.spec.js` | Sweep II (Prompt 279): every page's outline against a record, in both languages; one test for each focus pattern; every page at rest with reduced motion, by the system and by the reader's own setting; every page at 320 CSS pixels; every page under forced colors; no checkbox or radio under 24 px |
+| `e2e/chartDescription.spec.js` | Descriptions of series charts (Prompt 280): a bounded description for each chart, held answers kept out of it, the keyboard-triggered sound and its stop |
+| `e2e/a11y3dMission.spec.js` | The 3-D lab and the mission page by keyboard (Prompt 281): Describe the view by Tab and by one press, in both languages and withheld while a guide step asks for a measurement; the camera's announcements; the transfer window as a grid walked by arrows, announced by each cell's label, marked on the picture, and moved by one press |
+| `e2e/accessibilityParity.spec.js` | The text equivalents: what the visual simulation shows is also in the page as text, against the built tree |
 | `tests/motionInventory.test.js`, `tests/designRatchet.test.js` | Every keyframes and every scheduler in the sources is in the motion inventory with what it does under reduced motion; the contrast of every token pair in each of the four themes, which may only rise |
+| `tests/a11yNet.test.js`, `tests/interactionContract.test.js` | The net: every page of the navigation inventory has an axe run in every theme and both languages, a walk and an outline; every spec named a11y* or accessibility* is in this shard; every registered interaction surface keeps its walks in a spec of the shard |
+| `tests/lab3dDescribe.test.js`, `tests/missionWindowGrid.test.js`, `tests/plotDescribe.test.js` | The descriptions and the grid as pure functions: the 3-D scene's bounded description and its held rule, the transfer window's cursor, a chart's description and its coverage |
+<!-- /a11y-shard:table -->
 
-Both run in CI. The axe run uses the `wcag2a`, `wcag2aa`, `wcag21a`, `wcag21aa`,
-`wcag22aa` and `best-practice` rule sets, and **disables no rules**. There were
+The table above is written from `tools/a11y-shard.json` (`node tools/a11y-shard.mjs write`), and
+`tests/a11yNet.test.js` fails when it is stale. The first two run in the CI accessibility job, the
+rest in the sharded browser suite and the Jest job. The axe run uses the `wcag2a`, `wcag2aa`, `wcag21a`, `wcag21aa`,
+`wcag22aa` and `best-practice` rule sets, and **disables no rules** on any page of the
+site but one: `region` (content inside landmarks) is switched off for the preserved
+original-version page (`history-original`), which is kept as it was, with no shell
+and no landmarks, until the surface-retirement decision says whether it is kept
+(`tools/a11y-shard.json`, `axeExempt`, names the reason; every other rule runs on
+it). There were
 two candidates for exemption during the pass and neither survived it: each was
 a real defect with a real fix.
 
@@ -26,8 +41,8 @@ investigation, lesson measurement screen, share dialog, A/B bench, observing
 panels, lecture mode, model page, instructor portal, teaching page, figure
 builder, evaluation kit, glossary, validation report, observatory, catalog, library,
 library by sequence, library browse, all filters, library topic, library item, my work, experiment runner, scenario studio, investigation composer, course builder,
-investigations in a course, course home, 3-D kernel diagnostics, 3-D lab, 3-D lab guide, mission
-diagnostics, mission lab, submission review, the two term surfaces of Prompt 168:
+investigations in a course, course home, 3-D kernel diagnostics, 3-D lab, 3-D lab, the view described (Prompt 281), 3-D lab guide, mission
+diagnostics, mission diagnostics, the window as a table (Prompt 281), mission lab, submission review, the two term surfaces of Prompt 168:
 course builder, a course as it comes (Prompt 168), distribution kit, a new term (Prompt 168), and the three
 surfaces of Prompt 164: library, your collections; kit, the collection editor; course home, a collection, and the two Common Cartridge panels of Prompt 169: course builder, the Common Cartridge panel (Prompt 169), distribution kit, the Common Cartridge panel (Prompt 169), and the two activity list panels of Prompt 174: course builder, the activity list panel with its outcomes (Prompt 174), distribution kit, the activity list panel (Prompt 174), and the two first-week surfaces of Prompt 277: front door, first-week mode; front door, the introduction in a first week, five places. (The figure builder is checked
 without its live preview, which is the application in a frame and is
@@ -553,6 +568,89 @@ accessibility practitioner and at least one blind or low-vision screen-reader
 user (Roadmap III, Appendix A), working from the description, the table and the
 sound on three charts.
 
+## The 3-D lab, the mission page and the net under them (Prompt 281)
+
+**The 3-D lab.** The lab's semantic scene was already there: the list of who
+orbits whom, the table of positions and speeds, the table of orbital elements
+(a, e, i, node, periapsis, period), the frame sentence, the run-mode line with
+its integrator, step or tolerance, and the camera sentence said once the
+pressing stops. This adds one action, **Describe the view** (a button in "What
+is in the view", `js/lab3d/view/describe.js`, a bundle of its own loaded on the
+first press). It says, in at most a dozen sentences: the run mode with its
+numbers (Kepler-only, N-body with its scheme and step or tolerance, or a
+precomputed run with its source, and the tick), the clock, how many bodies are
+live and the names of the first six, the frame, reference plane and projection
+as the page words them, where the camera looks from, the body farthest from the
+center of mass, the first four orbits (a, e, i about their primary) and the
+mutual inclination of the first three pairs of orbits that share a primary,
+then "and N more" with the table named for the rest. It reads the numbers the
+tables read (`labApi.exact()`), never pixels. It states and never interprets.
+**While a guide step is asking for a typed measurement** (the guide panel's
+Reveal control is on screen) the orbit numbers and the inclinations are left
+out and the description says so: the numbers would settle the step before the
+reader's instrument did. That is Prompt 280's held rule applied to the one panel
+of the lab that holds an answer. There is no new key: the button is reached by
+Tab and pressed with Enter or Space, or by one press.
+
+**The mission page.** The porkchop is a picture; its text said only the best
+cell. **Show the grid as a table** (`js/mission/windowGrid.js`, loaded on first
+use) opens the same grid as an ARIA grid: one row for each departure date, one
+column for each flight time, the total delta-v in each cell, or the reason the
+solver refused it. One Tab stop; the arrows move a cursor one cell, Page Up and
+Page Down ten departures, Home and End to the first and last flight time,
+Control with Home or End to the first and last cell; a press on a cell moves it
+there; a button returns it to the cheapest cell, where it starts. Each cell's
+label is its whole meaning ("Departure 2024-08-12, flight 210 days: total 5.43
+km/s"), so the cursor is announced by the cell it lands on and the same
+sentence is written under the table; the picture marks the cell with a white
+square with a dark edge. A window can hold 40,000 cells, so the table draws
+only seven rows and seven columns around the cursor and says how many there are
+(`aria-rowcount`, `aria-colcount`, `aria-rowindex`, `aria-colindex`).
+
+**What was not built, and why.** Prompt 272's gate returned C: it delivered the
+window-and-budget kernel and its validation record and no panel, because the
+consumers rule (no panel until its gate passes) held the porkchop panel, the
+budget panel and the geometry panel back. So there is no budget ledger table
+and no geometry panel text to make accessible, and none was built here. The
+transfer-window grid that exists (the mission page's own, from Prompt 38) is
+what got its table. When a budget panel or a geometry panel lands, it adds a
+`states` entry to the walk inventory, an axe surface and a row of the table
+below, and `tests/a11yNet.test.js` is what notices if it does not.
+
+**The net.** Four lists have to agree about the pages of the site, and
+`tests/a11yNet.test.js` holds them together through `tools/a11y-shard.mjs`:
+the navigation inventory, the axe spec, the walk inventory and the outline
+record. Every page of the inventory has an axe run in every theme (Midnight,
+Deep space, Observatory red, Daylight) and both languages: the spec names the
+pages it opens in a state of their own (`covers`), and **gives every other page
+of the inventory a run of its own**, so a page added to the inventory is
+checked without anyone adding it to the spec, and a page with no walk row or
+no outline fails a test. (Before this, the application's own surfaces ran in
+two themes and eight pages of the inventory had no run.) A spec named
+`a11y*` or `accessibility*` that `tools/a11y-shard.json` does not list fails;
+so does `npm run a11y` disagreeing with the file, a registered interaction
+surface with no keyboard walk, and the table "What is checked" above going
+stale: it is written from the configuration (`node tools/a11y-shard.mjs
+write`). The CI accessibility job runs the axe and manual specs; the walks,
+sweeps and descriptions run in the sharded browser suite, whose shards
+`tools/e2e-shards.mjs` plans by measured duration (a test it has not timed is
+planned at its file's median).
+
+| Task | By keyboard | Said by | Axe state |
+| --- | --- | --- | --- |
+| Hear the 3-D lab's view | Tab to Describe the view, Enter (`e2e/a11y3dMission.spec.js`) | a polite live region, bounded, withheld orbit numbers while a guide step asks | `3-D lab, the view described (Prompt 281)` |
+| Look from another side | the camera's arrows, + and - (278) | the camera sentence, once the pressing stops | `3-D lab` |
+| Walk the porkchop | Tab to Show the grid as a table, the arrows, Page Up and Page Down, Home and End | each cell's label, and the line under the table | `mission diagnostics, the window as a table (Prompt 281)` |
+| Read the budget or the geometry | not built (Prompt 272 returned C) | | |
+
+**What is not established.** No blind or low-vision user, and no assistive
+technology other than the browser's own accessibility tree (Playwright's role
+and label reads), has used any of this. The grid is an ARIA grid: how a screen
+reader announces a virtualized grid, and whether the cell label repeats what
+the row and column headers say, is what a person with a screen reader would
+find out. Spanish is unreviewed by a fluent reader. The evidence-status record
+is unchanged.
+
 ## Honest limitations
 
 These are real and are not going to be fixed by more ARIA.
@@ -633,7 +731,7 @@ listed there and run as pending acceptance checks.
 links in a sentence, which WCAG 2.5.8 explicitly exempts. Enlarging them would
 mean changing a line of running text into a row of buttons.
 
-**Automated checks are a floor, not a ceiling.** <!--fact:axeRuns-->344<!--/fact--> clean axe runs mean no
+**Automated checks are a floor, not a ceiling.** <!--fact:axeRuns-->480<!--/fact--> clean axe runs mean no
 machine-detectable violation on those surfaces in those states. They do not
 mean the application is pleasant to use with a screen reader, and nothing here
 substitutes for testing with one. Nothing in this pass was made to pass by
@@ -681,7 +779,7 @@ only route to the material.
 
 ```bash
 npm run a11y            # all of them
-npm run a11y:axe        # axe only, all <!--fact:axeRuns-->344<!--/fact--> combinations
+npm run a11y:axe        # axe only, all <!--fact:axeRuns-->480<!--/fact--> combinations
 npm run a11y:manual     # keyboard, focus, reflow, reduced motion, the canvas
 npm run a11y:sweep2     # outlines, focus patterns, motion, 320 px reflow, forced colors, target size
 node tools/design-ratchet.mjs   # contrast in the four themes (and the colour, !important counts)
