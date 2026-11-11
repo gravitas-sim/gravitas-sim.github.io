@@ -1,0 +1,35 @@
+{
+  "about": "Pointer-target measurement over the built pages (Prompt 283): the rule, the exceptions it allows and what each page measured at a phone (375 px) and a tablet (768 px) with touch emulation. e2e/mobileSweep.spec.js holds every page to the rule; GRAVITAS_TARGETS_WRITE=1 rewrites `measured` (read the diff). tests/touchTargets.test.js holds the record to the walk inventory.",
+  "rule": "A target is at least 24 x 24 CSS px (WCAG 2.5.8; a slider is judged by its height), or it meets an exception below. under44 counts the targets that are not inline and are under 44 x 44 on a touch screen: it is recorded, not required; the controls the layout spec names are held to 44 by e2e/responsiveLayout.spec.js.",
+  "exceptions": {
+    "spacing": "A target under 24 px passes if a 24 px circle centred on it meets no other target and no other undersized target's circle (2.5.8, Spacing).",
+    "inline": "A link in a sentence of other words (at least eight letters or digits of text around it, in a block that is not a flex or grid row) is exempt and not enlarged (2.5.8, Inline).",
+    "control": "A control the browser draws and the page cannot resize: a file picker, a colour, date or time input (2.5.8, User agent control)."
+  },
+  "measured": {
+    "tablet:home": {
+      "targets": 18,
+      "atSize": 12,
+      "spacing": 6,
+      "inline": 0,
+      "control": 0,
+      "under44": 16
+    },
+    "tablet:home.first-week": {
+      "targets": 13,
+      "atSize": 13,
+      "spacing": 0,
+      "inline": 0,
+      "control": 0,
+      "under44": 5
+    },
+    "tablet:home.introduction": {
+      "targets": 5,
+      "atSize": 5,
+      "spacing": 0,
+      "inline": 0,
+      "control": 0,
+      "under44": 3
+    }
+  }
+}
