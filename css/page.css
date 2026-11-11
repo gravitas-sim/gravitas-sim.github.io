@@ -250,7 +250,11 @@
   }
 
   /* --- Tables ------------------------------------------------------------ */
+  /* position: relative makes the wrapper the containing block of anything
+     placed absolutely inside the table (a visually hidden label, a bar), so
+     that it scrolls with the table and never widens the page behind it. */
   .doc-table-wrap {
+    position: relative;
     margin: var(--space-4) 0 var(--space-6);
     overflow-x: auto;
     border: 1px solid var(--border-subtle);
@@ -837,7 +841,8 @@
     font-weight: 600;
     color: var(--accent-contrast);
     background: var(--accent);
-    border: 0;
+    /* Transparent, not none: forced-colors draws it (Prompt 279). */
+    border: 1px solid transparent;
     border-radius: var(--radius-md);
     cursor: pointer;
   }
@@ -2410,6 +2415,13 @@
       border-color: CanvasText;
     }
     .ui-swatch {
+      forced-color-adjust: none;
+    }
+    /* A plot is a drawing: its series are told apart by color, so the system
+       palette must not collapse them. It keeps its own palette, light marks on
+       the dark sky (the object hues on it are measured at 3:1 or better,
+       tools/design-ratchet.mjs), and its data is a table beside it. */
+    .ow-plot {
       forced-color-adjust: none;
     }
   }

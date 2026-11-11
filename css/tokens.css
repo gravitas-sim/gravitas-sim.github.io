@@ -237,6 +237,8 @@
     --surface-3: #212741;
     --text-primary: #e9edf7;
     --text-secondary: #9ba6bf;
+    /* The default's #828ca8 is 4.38:1 on this theme's --surface-3. */
+    --text-muted: #8993b0;
     --accent: #38bdf8;
     --accent-strong: #0ea5e9;
     --accent-soft: rgba(56, 189, 248, 0.14);
@@ -290,8 +292,10 @@
     /* Darkened from #0284c7, which put white text on it at 4.10:1 - the
        Apply button in the settings panel and the active filter chip in the
        gallery, both of which are white-on-accent. 5.23:1 now, and still 4.66:1
-       or better when the accent itself is used as text on the light surfaces. */
-    --accent: #0272ad;
+       or better when the accent itself is used as text on the light surfaces.
+       Darkened again from #0272ad, which was 4.29:1 on --surface-3 (Prompt
+       279, tools/design-ratchet.mjs): 4.88:1 now on every surface. */
+    --accent: #02699f;
     --accent-strong: #0369a1;
     --accent-deep: #075985;
     --accent-soft: rgba(2, 132, 199, 0.1);
@@ -322,7 +326,8 @@
        in isolation is not the same as the pixels passing. */
     --success: #046445;
     --success-strong: #065f46;
-    --warning: #b45309;
+    /* Was #b45309: 4.47:1 on --surface-0 and 4.11:1 on --surface-3. */
+    --warning: #a64d08;
     --danger: #b91c1c;
     --danger-strong: #991b1b;
 

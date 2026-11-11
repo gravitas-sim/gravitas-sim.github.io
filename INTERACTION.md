@@ -145,9 +145,17 @@ One policy, `prefersReducedMotion()` in `js/quality.js` and, for CSS,
   presses play. The content is unchanged. A scenario the reader chooses starts
   as it always does; that is their act.
 
+- an animated lesson instrument opens still: a step's tool starts by itself only
+  when the step allows it and motion is not reduced (`autoruns`, `js/widgets.js`),
+  and Run starts it. Two families of instruments (resonances, exoplanets) have no
+  Run control yet; `tools/motion-inventory.json` names them.
+
 Applies to the sandbox. The other pages follow the system setting and have
-their own controls (the 3-D lab's Reduced box); carrying the override to the
-shared shell is Prompt 161's.
+their own controls (the 3-D lab's Reduced box). The reader's own choice does not
+reach them: Prompt 279 recorded that (`override` in the motion inventory, held
+exact by `e2e/a11ySweepII.spec.js`) and proposed carrying it to the shell's head
+script. `tools/motion-inventory.json` lists every keyframes and scheduler and
+what each does, and `tests/motionInventory.test.js` keeps the list true.
 
 ## 5. Tests as a contract
 

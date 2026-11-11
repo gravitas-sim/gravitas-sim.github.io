@@ -14,13 +14,19 @@ import { fileURLToPath } from 'node:url';
 import { describe, test, expect } from '@jest/globals';
 
 import {
+  CONTRAST_PAIRS,
+  THEMES,
   TOOL_PAGES,
   check,
+  checkContrast,
+  contrastRatio,
   countBareControls,
   countColors,
   countEmoji,
   countImportant,
+  loadTokens,
   measure,
+  measureContrast,
   nativeControls,
 } from '../tools/design-ratchet.mjs';
 
@@ -101,5 +107,51 @@ describe('what is counted', () => {
     expect(check({ colors: { 'a.css': 1 } }, record)).toEqual([
       expect.stringContaining('under its 2. Lower it'),
     ]);
+  });
+});
+
+describe('contrast in every theme (Prompt 279)', () => {
+  const grounds = CONTRAST_PAIRS.reduce((n, p) => n + p.grounds.length, 0);
+
+  test('every pair is measured in every one of the four themes', () => {
+    expect(THEMES).toEqual(['midnight', 'deep', 'observatory', 'daylight']);
+    const now = measureContrast();
+    for (const theme of THEMES)
+      expect(Object.keys(now[theme])).toHaveLength(grounds);
+    // The tokens are really read: the four themes are four sets of values.
+    const blocks = loadTokens();
+    expect(Object.keys(blocks).sort()).toEqual([...THEMES].sort());
+    expect(blocks.daylight['--surface-1']).toBe('#ffffff');
+    expect(now.midnight['--text-primary|--surface-0']).toBeGreaterThan(15);
+  });
+
+  test('no theme paints a pair under the minimum it is held to', () => {
+    const now = measureContrast();
+    for (const theme of THEMES)
+      for (const [key, ratio] of Object.entries(now[theme])) {
+        const min = CONTRAST_PAIRS.find(p => p.fg === key.split('|')[0]).min;
+        expect([theme, key, ratio >= min]).toEqual([theme, key, true]);
+      }
+  });
+
+  test("WCAG's ratio, to two places, floored", () => {
+    expect(
+      contrastRatio({ r: 255, g: 255, b: 255 }, { r: 0, g: 0, b: 0 })
+    ).toBeCloseTo(21, 5);
+    // The Midnight default's muted text on its raised surface.
+    expect(measureContrast().midnight['--text-muted|--surface-2']).toBe(5.62);
+  });
+
+  test('a ratio under its minimum, one that fell and one that rose are reported', () => {
+    const key = '--text-muted|--surface-0';
+    const record = { midnight: { [key]: 6.23 } };
+    expect(checkContrast({ midnight: { [key]: 4.4 } }, record)).toEqual([
+      expect.stringContaining('under the 4.5:1'),
+      expect.stringContaining('fell from 6.23:1 to 4.4:1'),
+    ]);
+    expect(checkContrast({ midnight: { [key]: 6.3 } }, record)).toEqual([
+      expect.stringContaining('rose from 6.23:1 to 6.3:1'),
+    ]);
+    expect(checkContrast({ midnight: { [key]: 6.23 } }, record)).toEqual([]);
   });
 });

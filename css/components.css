@@ -473,6 +473,17 @@
     border-color: var(--border-strong);
   }
 
+  /* The design system's checkbox and radio (DESIGN_SYSTEM.md): a 24px box in
+     the accent, WCAG 2.2's minimum target (2.5.8), for every bare one on every
+     page. A browser draws them 13-15px. :where keeps the rule's weight at
+     nothing, so a layout that sizes one for itself still wins. */
+  :where(input[type='checkbox'], input[type='radio']) {
+    flex: none;
+    width: 24px;
+    height: 24px;
+    accent-color: var(--accent);
+  }
+
   /* The track used to be a 4px bar of --surface-3, which against the Midnight
      panel background is very nearly the same color: the control was easy to
      miss entirely, and there was no indication of where in its range the value
@@ -1966,6 +1977,20 @@
     button,
     .toggle-button {
       border: 1px solid ButtonText;
+    }
+
+    /* A pressed, selected or current control is drawn by color in the themes,
+       and the system palette removes color. Each keeps a mark that survives:
+       the system's selection color on the edge, and an underline on the words,
+       which the palette never touches. */
+    :is(
+        [aria-pressed='true'],
+        [aria-selected='true'],
+        [aria-checked='true'],
+        [aria-current]:not([aria-current='false'])
+      ):is(button, a, [role='tab'], [role='option'], [role='menuitem']) {
+      border-color: Highlight;
+      text-decoration: underline;
     }
   }
 }
@@ -3477,11 +3502,14 @@
   /* --- Narrow screens -------------------------------------------------------- */
 
   @media (max-width: 767px) {
+    /* minmax(0, 1fr), not 1fr: a bare 1fr is minmax(auto, 1fr), so a card whose
+       text is long (a Spanish subtitle, the time chip) made its column wider
+       than the panel and the card was clipped at the panel's edge at 320 px. */
     .inv-grid {
-      grid-template-columns: 1fr;
+      grid-template-columns: minmax(0, 1fr);
     }
     .inv-seq-list {
-      grid-template-columns: 1fr;
+      grid-template-columns: minmax(0, 1fr);
     }
     /* Two menus per row rather than four squeezed into one: below this width
        an 11rem menu and a Spanish option label do not fit side by side. */
@@ -3492,6 +3520,11 @@
        row is just a gap above the title. */
     .inv-card-flags.is-empty {
       display: none;
+    }
+    /* A flag that names its sequence is longer than the card in Spanish, and
+       nowrap pushed it past the card's edge at 320 px. It wraps now. */
+    .inv-flag {
+      white-space: normal;
     }
   }
 

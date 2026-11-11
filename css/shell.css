@@ -81,6 +81,14 @@ html:lang(es) .gs-en {
 .gs-nav [aria-current='page'] {
   background: var(--surface-3);
 }
+
+/* Forced colors drop the edge's color and the ground: keep a mark. */
+@media (forced-colors: active) {
+  .gs-nav [aria-current] {
+    border-color: Highlight;
+    text-decoration: underline;
+  }
+}
 .gs-crumbs,
 .gs-places {
   font-family: var(--font-sans);

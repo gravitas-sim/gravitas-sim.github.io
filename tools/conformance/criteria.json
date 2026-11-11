@@ -78,7 +78,7 @@
     "since": "2.0",
     "name": "Info and Relationships",
     "status": "Partially supports",
-    "methods": ["axe", "manual", "pdf"],
+    "methods": ["axe", "manual", "pdf", "sweep2"],
     "axeRules": [
       "aria-allowed-attr",
       "aria-required-children",
@@ -95,7 +95,7 @@
       "region",
       "heading-order"
     ],
-    "remarks": "Pages use landmarks, ordered headings, real lists and tables with header cells, and the scripted manual checks confirm landmark and heading order on the surfaces they open. axe judges only the relationships it can detect. The instructor PDFs are untagged, so they declare no structure; the student reports are tagged but unvalidated.",
+    "remarks": "Pages use landmarks, ordered headings, real lists and tables with header cells, and the scripted manual checks confirm landmark and heading order on the surfaces they open. Since Prompt 279 every page of the walk inventory has a recorded outline (one h1, no skipped level, one main, every navigation and region named) that a test holds it to in both languages. axe judges only the relationships it can detect. The instructor PDFs are untagged, so they declare no structure; the student reports are tagged but unvalidated.",
     "gaps": ["curve-narration", "automated-floor"]
   },
   {
@@ -148,9 +148,9 @@
     "since": "2.0",
     "name": "Use of Color",
     "status": "Partially supports",
-    "methods": ["axe", "pdf"],
+    "methods": ["axe", "pdf", "sweep2"],
     "axeRules": ["link-in-text-block"],
-    "remarks": "Links in text are distinguishable without color, and the reports print what kind a number is as a word beside it. Colors in the simulation canvas that distinguish bodies were not evaluated against this criterion.",
+    "remarks": "Links in text are distinguishable without color, and the reports print what kind a number is as a word beside it. Colors in the simulation canvas that distinguish bodies were not evaluated against this criterion. Under forced colors a pressed, selected or current button, link or tab keeps a mark that is not a color (tests assert it on every page of the walk inventory).",
     "gaps": []
   },
   {
@@ -170,9 +170,9 @@
     "since": "2.0",
     "name": "Contrast (Minimum)",
     "status": "Partially supports",
-    "methods": ["axe", "manual"],
+    "methods": ["axe", "manual", "ratchet"],
     "axeRules": ["color-contrast"],
-    "remarks": "axe measures text contrast on every listed surface, in both languages and in all four themes on the shell pages, with no rule disabled. It reports as incomplete, and cannot judge, text over the canvas, images and gradients; the canvas labels are measured by a separate harness (e2e/canvasLegibility.spec.js) for the scenes it covers.",
+    "remarks": "axe measures text contrast on every listed surface, in both languages and in all four themes on the shell pages, with no rule disabled. It reports as incomplete, and cannot judge, text over the canvas, images and gradients; the canvas labels are measured by a separate harness (e2e/canvasLegibility.spec.js) for the scenes it covers. The design ratchet holds the text tokens, the accent, the status colors and a label on its button's face to 4.5:1 on every surface of each of the four themes, and records the ratios so they only rise; it found and fixed three pairs (Deep's muted text, Daylight's accent and warning).",
     "gaps": ["automated-floor"]
   },
   {
@@ -203,9 +203,9 @@
     "since": "2.1",
     "name": "Reflow",
     "status": "Partially supports",
-    "methods": ["axe", "manual", "layout"],
+    "methods": ["axe", "manual", "layout", "sweep2"],
     "axeRules": ["meta-viewport"],
-    "remarks": "The scripted check loads the listed surfaces at 320 and 640 CSS pixels and asserts no horizontal scrolling for content other than the canvas, tables with their own scroll region and the instructor documents. Not every page is opened.",
+    "remarks": "The scripted check loads the listed surfaces at 320 and 640 CSS pixels and asserts no horizontal scrolling for content other than the canvas, tables with their own scroll region and the instructor documents. Since Prompt 279 every page of the walk inventory but the original-version page is loaded at 320 px in both languages, the Observatory with an observation open and a lesson open beside the sandbox as well, and nothing may lie beyond the viewport outside a scroll container of the page's own; it found and fixed two. 400% zoom is the 320 px width, not a browser's zoom, and text spacing was not tested.",
     "gaps": []
   },
   {
@@ -214,9 +214,9 @@
     "since": "2.1",
     "name": "Non-text Contrast",
     "status": "Partially supports",
-    "methods": ["axe"],
+    "methods": ["axe", "ratchet", "sweep2"],
     "axeRules": [],
-    "remarks": "Control and focus-indicator contrast is checked where axe can reach it (its color-contrast rule covers text, not the borders and icons this criterion names). The drawn bodies and plot marks were not measured against 3:1.",
+    "remarks": "Control and focus-indicator contrast is checked where axe can reach it (its color-contrast rule covers text, not the borders and icons this criterion names). The design ratchet holds the focus ring's color and the object hues on the sky to 3:1 in all four themes. A control's border is not held to 3:1, and the drawn bodies and plot marks were not measured against the criterion. Under forced colors every control keeps an edge and a plot keeps its own palette.",
     "gaps": []
   },
   {
@@ -291,9 +291,9 @@
     "since": "2.0",
     "name": "Pause, Stop, Hide",
     "status": "Partially supports",
-    "methods": ["manual"],
+    "methods": ["manual", "sweep2"],
     "axeRules": [],
-    "remarks": "Decorative animation stops with prefers-reduced-motion and the simulation can be paused from the transport bar or the space bar. The orbital motion itself does not stop for the media query because it is the content.",
+    "remarks": "Decorative animation stops with prefers-reduced-motion and the simulation can be paused from the transport bar or the space bar. The orbital motion itself does not stop for the media query because it is the content. Every keyframes and scheduler in the sources is in tools/motion-inventory.json, and no page has a running animation or transition with reduced motion; four families of lesson instruments now start still under it. Six instruments (the resonance and exoplanet ones) start by themselves with no pause control, and the reader's own Motion setting reaches only the application page.",
     "gaps": ["motion-is-content"]
   },
   {
@@ -335,9 +335,9 @@
     "since": "2.0",
     "name": "Focus Order",
     "status": "Partially supports",
-    "methods": ["manual", "walk"],
+    "methods": ["manual", "walk", "sweep2"],
     "axeRules": [],
-    "remarks": "Focus order, traps and restoration are asserted on the surfaces the manual spec lists. The walk makes one full round of every page of the walk inventory and shows that the round is complete and returns; whether the order is the meaningful one is judged only where the manual spec asserts it.",
+    "remarks": "Focus order, traps and restoration are asserted on the surfaces the manual spec lists. The walk makes one full round of every page of the walk inventory and shows that the round is complete and returns; whether the order is the meaningful one is judged only where the manual spec asserts it. One test for each focus pattern (a dialog, a lesson's opening and its step change, an observation opening, a disclosure, a rail panel) shows focus going somewhere that exists and being given back.",
     "gaps": []
   },
   {
@@ -379,9 +379,9 @@
     "since": "2.0",
     "name": "Focus Visible",
     "status": "Partially supports",
-    "methods": ["manual"],
+    "methods": ["manual", "sweep2"],
     "axeRules": [],
-    "remarks": "Keyboard focus is visible on the controls the manual specs exercise. Not every control state was captured.",
+    "remarks": "Keyboard focus is visible on the controls the manual specs exercise. Not every control state was captured. Under forced colors the first six Tab stops of three pages draw a focus ring (Prompt 279).",
     "gaps": []
   },
   {
@@ -456,9 +456,9 @@
     "since": "2.2",
     "name": "Target Size (Minimum)",
     "status": "Partially supports",
-    "methods": ["axe", "layout", "manual"],
+    "methods": ["axe", "layout", "manual", "sweep2"],
     "axeRules": ["target-size"],
-    "remarks": "Controls are at least 24 by 24 CSS pixels, and 44 on a coarse pointer, as measured on the phone and tablet projects. The footer attribution links in running text are smaller and rely on the inline exception.",
+    "remarks": "Controls are at least 24 by 24 CSS pixels, and 44 on a coarse pointer, as measured on the phone and tablet projects. Every checkbox and radio on every page of the walk inventory, and in the lesson panel and the settings dialog, is 24 px or more (the 13 px boxes recorded as Z-1 are gone). The footer attribution links in running text are smaller and rely on the inline exception.",
     "gaps": ["footer-links"]
   },
   {

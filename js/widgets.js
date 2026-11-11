@@ -743,6 +743,18 @@ export async function whenWidgetsReady() {
 }
 
 /**
+ * Whether an animated instrument starts running when its step opens: the
+ * step's own say (`autorun: false` sits still until Run) and the reader's
+ * motion setting. With reduced motion, or Step by step, it sits still until
+ * the reader presses Run (INTERACTION.md, "Reduced motion").
+ *
+ * @param {{autorun?: boolean}} spec - The step's tool spec
+ * @returns {boolean}
+ */
+export const autoruns = spec =>
+  spec.autorun !== false && !prefersReducedMotion();
+
+/**
  * Starting values for a widget's controls, with a step's overrides applied.
  * @param {Object} widget - A widget definition
  * @param {Object} [overrides] - Values from the lesson step

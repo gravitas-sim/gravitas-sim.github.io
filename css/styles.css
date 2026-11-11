@@ -1269,13 +1269,15 @@
 
   .scenario-info-close {
     background: none !important;
-    border: none !important;
+    /* Transparent, not none: under forced-colors the system palette draws a
+       transparent border, and the bare X gets an edge (Prompt 279). */
+    border: 1px solid transparent !important;
     color: var(--text-color) !important;
     font-size: 18px !important;
     cursor: pointer !important;
     padding: 4px 8px !important;
     border-radius: 4px !important;
-    transition: all 0.2s ease !important;
+    transition: all var(--duration) ease !important;
     box-shadow: none !important;
     transform: none !important;
     text-shadow: none;
