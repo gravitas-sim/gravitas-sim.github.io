@@ -761,7 +761,7 @@ test.describe('forced colors: edges, marks and focus under the system palette', 
     }
   });
 
-  test('a plot and a canvas keep their content: the Observatory plot is drawn in its own palette and its data is a table', async ({
+  test('a plot keeps its content: it is drawn in its own palette, not the system one', async ({
     page,
   }) => {
     await page.emulateMedia({ forcedColors: 'active' });
@@ -770,18 +770,19 @@ test.describe('forced colors: edges, marks and focus under the system palette', 
     await expect(page.locator('#obsTitle')).toBeVisible({ timeout: 20_000 });
     const plot = page.locator('.ow-plot').first();
     await expect(plot).toBeVisible();
-    // A canvas is a bitmap: the palette cannot recolor what it holds, so the
-    // marks stay as drawn (light on the plot's own dark ground).
-    expect(await plot.evaluate(el => el.tagName)).toBe('CANVAS');
-    const coloured = await plot.evaluate(el => {
-      const ctx = el.getContext('2d');
-      const { data } = ctx.getImageData(0, 0, el.width, el.height);
-      const seen = new Set();
-      for (let i = 0; i < data.length; i += 4 * 97)
-        seen.add(`${data[i] >> 4},${data[i + 1] >> 4},${data[i + 2] >> 4}`);
-      return seen.size;
+    const drawn = await plot.evaluate(el => {
+      const colors = new Set();
+      for (const mark of el.querySelectorAll('*')) {
+        const cs = getComputedStyle(mark);
+        for (const c of [cs.fill, cs.stroke]) if (c !== 'none') colors.add(c);
+      }
+      return {
+        adjust: getComputedStyle(el).forcedColorAdjust,
+        colors: colors.size,
+      };
     });
-    expect(coloured, 'distinct colors in the drawing').toBeGreaterThan(2);
+    expect(drawn.adjust, 'the palette does not recolor the plot').toBe('none');
+    expect(drawn.colors, 'distinct colors in the drawing').toBeGreaterThan(2);
   });
 });
 

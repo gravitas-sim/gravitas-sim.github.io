@@ -164,9 +164,7 @@
       "scope": "dialog",
       "h1": "",
       "headings": "3 4 5+ 4",
-      "landmarks": [
-        "region"
-      ]
+      "landmarks": ["region"]
     },
     "kernel-diagnostics": {
       "path": "/lab3d/",

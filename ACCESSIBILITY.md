@@ -12,6 +12,8 @@ The scoped conformance report, a status for each WCAG 2.1 and 2.2 A and AA crite
 | --- | --- |
 | `e2e/accessibility.spec.js` | axe-core over <!--fact:axeSurfaces-->50<!--/fact--> surfaces × <!--fact:locales-->2<!--/fact--> languages: the <!--fact:axeShellSurfaces-->36<!--/fact--> pages with the shared shell in all <!--fact:axeAllThemes-->4<!--/fact--> themes, the application's surfaces in <!--fact:axeThemes-->2<!--/fact--> — <!--fact:axeRuns-->344<!--/fact--> runs |
 | `e2e/accessibilityManual.spec.js` | Focus order, focus traps, Escape, focus restoration, heading order, landmarks, reflow, reduced motion, and the canvas description |
+| `e2e/a11ySweepII.spec.js` | Sweep II (Prompt 279): every page's outline against a record, in both languages; one test for each focus pattern; every page at rest with reduced motion, by the system and by the reader's own setting; every page at 320 CSS pixels; every page under forced colors; no checkbox or radio under 24 px |
+| `tests/motionInventory.test.js`, `tests/designRatchet.test.js` | Every keyframes and every scheduler in the sources is in the motion inventory with what it does under reduced motion; the contrast of every token pair in each of the four themes, which may only rise |
 
 Both run in CI. The axe run uses the `wcag2a`, `wcag2aa`, `wcag21a`, `wcag21aa`,
 `wcag22aa` and `best-practice` rule sets, and **disables no rules**. There were
@@ -218,6 +220,126 @@ pressing stops, in the page's language. A pan says nothing: a picture moved.
   helper allows for; it was not run there in this sweep.
 - The Spanish strings added here are unreviewed by a fluent reader.
 
+## Sweep II: structure, focus, motion, reflow, forced colors, contrast (Prompt 279)
+
+Sweep I asked whether every control can be reached and pressed. This one asks
+the five questions the conformance report still answered "partially": is each
+page's structure sound, does focus go somewhere that exists, does motion stop
+when a reader asks, does a page survive 400% zoom, and does it survive the
+system palette. The checks are tests (`e2e/a11ySweepII.spec.js`,
+`tests/motionInventory.test.js`, `tools/design-ratchet.mjs`) and stay. They
+judge the 32 pages of the walk inventory (the original-version page is
+exempt, with its reason in `tools/page-outlines.json`), in English and in
+Spanish where a language matters, in Chromium.
+
+**Structure.** Each page's outline (its one h1, its headings as a sequence of
+levels, its landmarks in order, with the name of every navigation, search and
+form) is a record, `tools/page-outlines.json`, and the page is held to it. It
+records structure, not wording, so a new section does not move it and a new
+level or a renamed navigation does. Held on every page, in both languages: one
+h1 (a dialog holds none), no heading that skips a level, no empty heading, one
+main, every navigation, region, complementary and search named, no name used
+twice, and Spanish has English's levels and landmark roles in the same order.
+*The audit found nothing to fix.* The two things worth knowing: the
+instructor portal places an h2 ("Start here") before its h1, which breaks no
+level and which this sweep does not reorder, because changing a page's order is
+what it was told not to do; and four forms (the experiment runner's, the
+figure builder's, the feedback form's on the teaching page, the portal's login)
+have no accessible name, which makes them forms and not landmarks and is
+recorded, not changed.
+
+**Focus.** One test for each pattern: a dialog takes focus inside it and gives
+it back to its trigger (the settings; the investigations browser), opening a
+lesson puts focus on its title and a step change leaves it on a control that is
+still there (never on the body), opening an observation puts it on the
+observation's title, a disclosure keeps it on its summary, a rail panel keeps
+it on the control that opened it. *No defect.* The helper of Prompt 155 does
+what INTERACTION.md says it does everywhere the tests look; they look at the
+patterns, not at every instance of one, and `tests/dialogInventory.test.js`
+holds the dialogs.
+
+**Motion.** `tools/motion-inventory.json` lists every source of time-based
+change in the sources: the 16 keyframes, all stopped by the two blanket rules
+under `prefers-reduced-motion` and under the reader's `data-motion`; and 33
+scripts, each with what it does when motion is reduced (`content`, with its
+pause control; `follows`; `opt-in`; or one that moves nothing). A Jest test
+fails on a keyframes or a scheduler that is not listed, on one listed that is
+gone, on one that says it follows the setting and does not read it. The pages
+are run with reduced motion, by the system and by the reader's choice:
+none has a running animation or a transition.
+*Found and fixed.* Two literals beat the blanket rules: a transition written
+`!important` on the scenario card's close button, and the settings tooltips'
+inline styles; both are on the motion tokens now. Four families of lesson
+instruments (the launch, the binary orbits, the habitable-zone orbit, the
+galaxy flyby) started running by themselves whatever the setting; a step now
+opens them still under reduced motion and Step by step, and Run starts them
+(`autoruns`, `js/widgets.js`). *Found and not fixed:* six instruments (the four
+resonance instruments and the two exoplanet instruments) advance a phase on
+every frame with no Run control and no check of the setting; giving them one
+changes the instruments, which a content prompt may, and the inventory names
+them with a proposal. And the reader's own Settings, Motion choice reaches the
+application and no other page (`override` in the inventory); the other pages
+follow the system setting only, which they all honour. The proposal is three
+lines in the shell's head script, which re-stamps 178 pages and their CSP
+hashes, so it is recorded for a stamping PR (D-R10-279-04).
+
+**Zoom and reflow.** A 1280 pixel window at 400% is 320 CSS pixels. Every page,
+in both languages, and the Observatory with an observation open and a lesson
+open beside the sandbox, is loaded at 320 px and must put nothing beyond the
+viewport except inside a scroll container of its own (a table's wrapper), a
+canvas or an svg. Found and fixed: the validation page's document measured
+1,121 px wide, because parts placed absolutely inside its tables (a hidden
+label, the bars) were not contained by the wrapper that scrolls the table, so
+the wrapper is now their containing block; and the investigations browser's
+cards in Spanish were 49 px wider than the panel, with the time chip clipped, a
+grid column that could not shrink below its content and a nowrap flag longer
+than the card. The lesson panel and the Observatory were already one column.
+
+**Forced colors.** Every page is loaded under `forced-colors: active`.
+Every button, select, textarea and text field has an edge unless it reads as a
+link, a disclosure, a file picker's button or a column's sort control (their
+words carry the meaning); every pressed, selected, checked or current button,
+link or tab has a mark that is not a color (the system's selection color on its
+edge and an underline); and the first six Tab stops of the Library, the
+Observatory and the sandbox draw a focus ring. Found and fixed: the close
+button of the scenario card and the validation page's Run button had no edge
+(`border: none` where a transparent border is drawn by the system palette); and
+the current place in the shell's navigation was marked by a color alone. A
+plot (an svg) keeps its palette (`forced-color-adjust: none`): its series are
+told apart by color, the palette would collapse them to one, and each plot's
+data is a table. The roadmap's "high-contrast palette toggle" was not built
+(D-R10-279-03): a plot is light marks on a dark ground, the object hues on that
+ground are measured at 3:1 or better in every theme, and a toggle is a setting,
+a catalog string in both languages and bytes on every route for a reader the
+system palette already serves.
+
+**Contrast.** The design ratchet measures 216 foreground and ground pairs in
+each of the four themes (text on the four surfaces; the accent, status colors
+and focus ring; a label on its button's face; the object hues on the sky) and
+holds each to its WCAG minimum, 4.5:1 for text and 3:1 for the focus ring and
+a graphic, and to the figure recorded: a ratio may fall nowhere and rise only by
+re-recording. *Found and fixed:* Deep's muted text on its raised surface
+(4.38:1, now 4.80), Daylight's accent on its raised surface (4.29:1, now 4.88),
+Daylight's warning on its page and raised surfaces (4.47:1 and 4.11:1, now 5.07
+and 4.67). The measure is of tokens; what is drawn over a canvas is the canvas
+harness's (`e2e/canvasLegibility.spec.js`), and axe's contrast run covers the
+text of every page in every theme.
+
+**Target size.** The design system's checkbox and radio is 24 CSS pixels, for
+every one on every page (`css/components.css`; `DESIGN_SYSTEM.md`). The 13 px
+boxes the instructor checkpoint recorded as Z-1 (the builders, the review, the
+figure builder, the 3-D and mission labs, the evaluation kit's 161) are
+gone, and the test fails on any under 24 px, on every page and in the lesson
+panel and the settings dialog.
+
+**What this sweep did not do.** It ran in Chromium: forced-colors emulation and
+the transparent-border behaviour are Chromium's, and Firefox on Windows is the
+engine that most needs it. No assistive technology was used and no person took
+part. 400% zoom is the 320 px width, not a browser's zoom with its text
+scaling; text spacing (1.4.12) and a window 256 px high were not tested.
+Whether an order or a name is the right one is not judged. The Spanish strings
+this sweep added: none.
+
 ## Startup: one splash per genuine startup (Prompt 124)
 
 The splash is a startup event, not a page event. Six outcomes, then the
@@ -380,7 +502,10 @@ transport bar or the space bar — a real control rather than a media query.
 Settings has a Motion choice for a reader who wants more: Reduced applies the
 same stop on a device that did not ask for it, and Step by step also starts the
 simulation paused, so nothing moves until the reader steps it or presses play
-(INTERACTION.md, "Reduced motion").
+(INTERACTION.md, "Reduced motion"). Two things are not yet true of that choice:
+it reaches the application and no other page, and six lesson instruments (the
+four resonance ones and the two exoplanet ones) start moving by themselves with
+no Run control; both are in `tools/motion-inventory.json` with their proposals.
 
 **The shape of a curve is not narrated.** The light curve, the radial-velocity
 trace, the energy chart and the bench's two charts are one component
@@ -488,7 +613,9 @@ only route to the material.
 ## Running the checks
 
 ```bash
-npm run a11y            # both suites
+npm run a11y            # all of them
 npm run a11y:axe        # axe only, all <!--fact:axeRuns-->344<!--/fact--> combinations
 npm run a11y:manual     # keyboard, focus, reflow, reduced motion, the canvas
+npm run a11y:sweep2     # outlines, focus patterns, motion, 320 px reflow, forced colors, target size
+node tools/design-ratchet.mjs   # contrast in the four themes (and the colour, !important counts)
 ```

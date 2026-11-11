@@ -2417,6 +2417,13 @@
     .ui-swatch {
       forced-color-adjust: none;
     }
+    /* A plot is a drawing: its series are told apart by color, so the system
+       palette must not collapse them. It keeps its own palette, light marks on
+       the dark sky (the object hues on it are measured at 3:1 or better,
+       tools/design-ratchet.mjs), and its data is a table beside it. */
+    .ow-plot {
+      forced-color-adjust: none;
+    }
   }
 }
 

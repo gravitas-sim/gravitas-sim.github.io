@@ -270,20 +270,31 @@ give it `role="group"` and an `aria-label`.
 </span>
 ```
 
-## Checkbox: `.ui-checkbox`
+## Checkbox and radio
 
-In `css/components.css`. A 24px box in `--accent`; the label beside it is part
-of the same target.
+In `css/components.css`, on the element, so no class is needed and none can be
+forgotten: every `input[type='checkbox']` and `input[type='radio']` is a 24px
+box in `--accent` (WCAG 2.2, 2.5.8), which a browser draws at 13-15px. The
+rule's weight is nothing (`:where`), so a layout that sizes one for itself
+still wins. The label beside it is part of the same target. `e2e/a11ySweepII.spec.js`
+fails on any under 24px on any page. (The `.ui-checkbox` class this section once
+described was removed as dead by Prompt 51's sweep; nothing used it.)
 
 ```html
-<label><input class="ui-checkbox" type="checkbox" /> Trails</label>
+<label class="ui-choice"><input type="checkbox" /> Trails</label>
 ```
 
 ## Windows high contrast
 
 Under `forced-colors: active` the system palette draws every edge, and an
 invalid control keeps a 2px border so its state survives without the danger
-color.
+color. A button that has no border of its own takes `border: 1px solid
+transparent`, which the system palette draws (`none` is not drawn). A pressed,
+selected, checked or current button, link or tab keeps the selection color on its
+edge and an underline on its words, and the shell's current place the same, so
+none of them rests on a color alone. A plot (an svg) is `forced-color-adjust:
+none`: its series are told apart by color and the palette would collapse them to
+one. `e2e/a11ySweepII.spec.js` holds all of it on every page.
 
 ## Page: `.ui-page`
 

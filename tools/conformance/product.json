@@ -127,6 +127,18 @@
       "name": "Inspection of the generated documents",
       "detail": "tests/instructorMaterials.test.js holds the instructor PDFs to their stated untagged state; tests/evidenceLedger.test.js and tests/htmlReport.test.js check the tagged student report and the web-page report. No PDF/UA validator has been run.",
       "canJudgeWhole": false
+    },
+    {
+      "id": "sweep2",
+      "name": "The structure, motion, reflow, forced-colors and target-size sweep",
+      "detail": "e2e/a11ySweepII.spec.js (Prompt 279) and tests/motionInventory.test.js, in Chromium. Over the 32 pages of the walk inventory (the original-version page is exempt, with its reason): each page's outline against tools/page-outlines.json in English and in Spanish; one test for each focus pattern; the pages at rest with reduced motion, by the system and by the reader's setting; every page at 320 CSS pixels, and the Observatory and a lesson open; every page under forced colors; no checkbox or radio under 24 px. A scripted check judges what its assertions state on the pages and states it opens; it uses no assistive technology.",
+      "canJudgeWhole": false
+    },
+    {
+      "id": "ratchet",
+      "name": "The design ratchet's contrast record",
+      "detail": "tools/design-ratchet.mjs measures the WCAG contrast ratio of 216 foreground and ground pairs of the design tokens in each of the four themes (text on the four surfaces; the accent, status colors and focus ring; a label on its button's face; the object hues on the sky), holds each to its minimum and to the recorded figure, so a ratio may only rise. It measures tokens, not what is drawn over a canvas, an image or a gradient.",
+      "canJudgeWhole": false
     }
   ],
   "gaps": [
