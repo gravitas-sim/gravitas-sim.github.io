@@ -111,6 +111,34 @@ export const EN_SUBMISSIONS = {
   'sub.systems.col.engine': 'Engine',
   'sub.systems.col.digest': 'Digest',
   'sub.systems.col.open': 'Open',
+  'sub.composed.title': 'Composed reports',
+  'sub.composed.note':
+    'A student can compose one report from entries of several investigations. A report states the digest of the composed report its author last made, and how many sections it has; the composed report itself is a file the student hands in, whose name ends in .composed-report.json. Add that file to read it here and to check it against the digest. A match says the file is the one the digest was made from; it does not say who made it.',
+  'sub.composed.stated':
+    '{name} states a composed report of {n} sections, digest {digest}. Its file has not been read here.',
+  'sub.composed.matched':
+    '{name} states a composed report of {n} sections, digest {digest}: the file {file} matches it.',
+  'sub.composed.matchedBad':
+    '{name} states digest {digest}; the file {file} claims that digest and does not hash to it.',
+  'sub.composed.summary': '{file}: {title}, {n} sections, {state}',
+  'sub.composed.state.verified': 'matches a report read here',
+  'sub.composed.state.mismatch': 'does not match its own digest',
+  'sub.composed.state.unclaimed': 'no report read here states it',
+  'sub.composed.verified':
+    'The file hashes to {digest}, the digest stated by {names}.',
+  'sub.composed.mismatch':
+    'The file says its digest is {digest}, and its contents do not hash to that: it was changed after it was made. Read it with that in mind.',
+  'sub.composed.unclaimed':
+    'The file hashes to {digest}. No report read here states that digest.',
+  'sub.reason.composed.newer':
+    'a composed report written by a newer version of Gravitas; reload this page and add it again',
+  'sub.reason.composed.shape':
+    'a composed report file that is damaged, or was edited into a shape this page cannot read',
+  'sub.reason.composed.load':
+    'a composed report, and the part of this page that reads one has not been downloaded yet; reload with a connection and add it again',
+  'sub.reason.composed.format': 'not a composed report this page can read',
+  'sub.reason.badComposed':
+    'states a composed report in a form this page cannot read',
   'sub.evidence.title': 'Evidence behind the answers',
   'sub.evidence.note':
     'A version 2 report carries the table of measurements and results the student’s notebook held, and a digest of it. The check below recomputes the digest from the table in front of you. A match says the table is the one the digest was made from. It does not say who made it: anyone can build a token that agrees with itself.',

@@ -1,0 +1,180 @@
+{
+  "format": "gravitas.composed-report",
+  "formatVersion": 1,
+  "title": "Periods and slopes",
+  "madeAt": "2026-05-01T08:00:00.000Z",
+  "app": "fixture",
+  "sections": [
+    {
+      "id": "s",
+      "title": "Reading s",
+      "kind": "measurement",
+      "at": "2026-04-02T09:00:00.000Z",
+      "fingerprint": "1LZY56K",
+      "source": {
+        "kind": "simulation",
+        "id": "binary"
+      },
+      "settings": {
+        "scenario": "binary",
+        "integrator": "Velocity Verlet",
+        "step": 0.0125,
+        "frame": "barycentric",
+        "seed": "k7"
+      },
+      "where": {
+        "page": "sandbox"
+      },
+      "cite": {},
+      "prose": {
+        "claim": "The period is three and a quarter.",
+        "evidence": "Ten orbits timed.",
+        "limitations": "Timed by eye."
+      },
+      "warnings": [],
+      "numbers": [
+        {
+          "id": "q1",
+          "label": "Period",
+          "value": 3.25,
+          "unit": "",
+          "uncertainty": {
+            "kind": "sigma",
+            "sigma": 0.05,
+            "basis": "data"
+          },
+          "origin": "measured"
+        },
+        {
+          "id": "q2",
+          "label": "Radius",
+          "value": 1.5,
+          "unit": "",
+          "uncertainty": {
+            "kind": "none"
+          },
+          "origin": "measured"
+        }
+      ]
+    },
+    {
+      "id": "a",
+      "title": "Fit a",
+      "kind": "inference-fit",
+      "at": "2026-03-10T12:00:00.000Z",
+      "fingerprint": "006YV53",
+      "source": {
+        "kind": "pipeline",
+        "id": "tool",
+        "digest": "abcdef0123456789"
+      },
+      "settings": {},
+      "where": {
+        "lesson": "kepler",
+        "step": "2"
+      },
+      "cite": {},
+      "prose": {
+        "claim": "",
+        "evidence": "",
+        "limitations": ""
+      },
+      "warnings": [],
+      "numbers": [
+        {
+          "id": "slope",
+          "label": "slope",
+          "value": 10,
+          "unit": "",
+          "uncertainty": {
+            "kind": "sigma",
+            "sigma": 0.3,
+            "basis": "data"
+          },
+          "origin": "fitted"
+        }
+      ]
+    },
+    {
+      "id": "b",
+      "title": "Fit b",
+      "kind": "inference-fit",
+      "at": "2026-03-10T12:00:00.000Z",
+      "fingerprint": "14AGXM1",
+      "source": {
+        "kind": "pipeline",
+        "id": "tool",
+        "digest": "abcdef0123456789"
+      },
+      "settings": {},
+      "where": {
+        "lesson": "kepler",
+        "step": "2"
+      },
+      "cite": {},
+      "prose": {
+        "claim": "",
+        "evidence": "",
+        "limitations": ""
+      },
+      "warnings": [],
+      "numbers": [
+        {
+          "id": "slope",
+          "label": "slope",
+          "value": 9,
+          "unit": "",
+          "uncertainty": {
+            "kind": "sigma",
+            "sigma": 0.4,
+            "basis": "data"
+          },
+          "origin": "fitted"
+        }
+      ]
+    }
+  ],
+  "comparisons": [
+    {
+      "a": {
+        "entry": "a",
+        "id": "slope",
+        "title": "Fit a",
+        "label": "slope",
+        "value": 10,
+        "uncertainty": {
+          "kind": "sigma",
+          "sigma": 0.3,
+          "basis": "data"
+        }
+      },
+      "b": {
+        "entry": "b",
+        "id": "slope",
+        "title": "Fit b",
+        "label": "slope",
+        "value": 9,
+        "uncertainty": {
+          "kind": "sigma",
+          "sigma": 0.4,
+          "basis": "data"
+        }
+      },
+      "unit": "",
+      "difference": 1,
+      "sigma": 0.36055512754639896,
+      "nSigma": 2.7735009811261455,
+      "p": 0.005545667315243974,
+      "covariance": 0.06,
+      "independent": false,
+      "from": "student",
+      "shared": "data",
+      "rho": 0.5,
+      "assumptions": [
+        "gaussian",
+        "covariance"
+      ]
+    }
+  ],
+  "digest": "b015ec8f0ba3181caac2875471ee1843b0aa3fff32f18b090552b647e0df01a4"
+}

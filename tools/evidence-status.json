@@ -1530,7 +1530,7 @@
     {
       "id": "evidence-review-comparison",
       "claim": "My work compares two entries of the evidence notebook with the covariance where a record states one or the student gives a correlation, and says independence assumed otherwise.",
-      "scope": "Part A of Prompt 275: js/myWork/evidenceReview.js and evidenceView.js on the My work page, for notebook entries of one kind with one-sigma uncertainties; not the composed report (Part B, not built), not any covariance between two different records (none is stated or inferred), not the supernova likelihood (the split form and the pack's diagonal are never a stand-in for a release covariance, SN_LIKELIHOOD_GATE.md section 10).",
+      "scope": "Part A of Prompt 275: js/myWork/evidenceReview.js and evidenceView.js on the My work page, for notebook entries of one kind with one-sigma uncertainties; not the composed report (Part B, the row composed-evidence-report), not any covariance between two different records (none is stated or inferred), not the supernova likelihood (the split form and the pack's diagonal are never a stand-in for a release covariance, SN_LIKELIHOOD_GATE.md section 10).",
       "version": "2.1.0",
       "class": "S",
       "status": "partial",
@@ -1543,6 +1543,25 @@
         {
           "file": "MY_WORK.md",
           "text": "Two different records state no coefficient of each other and nothing infers one."
+        }
+      ]
+    },
+    {
+      "id": "composed-evidence-report",
+      "claim": "My work composes one report from the evidence entries a student marked, across investigations and in the student's order, with a methods paragraph generated from each record, every number in the one uncertainty pattern, and the comparisons carried in with the covariance statement they were made under; a submission token states its digest and the review page checks the report file against it.",
+      "scope": "Part B of Prompt 275: js/myWork/composedReport.js and reportView.js on the My work page, the made record of kind report, `cr` in the submission token and the review page's reader; not the report of one investigation (unchanged), not the review page's results file or archive (neither carries it), not figures in the report file, and not any statement of who made a report.",
+      "version": "2.1.0",
+      "class": "S",
+      "status": "partial",
+      "method": "tests/composedReport.test.js: the order, the record and its digest, the reader's refusals, the methods paragraph in both languages and what it must not say, the covariance rule of a carried comparison against the same reference cases as Part A (Python math.erfc), the PDF, HTML and CSV, the made record, the token and a round trip, the committed fixture, and the card in jsdom; tests/compat/kinds/composed-report.mjs against the 2.0.0 readers; e2e/evidenceReview.spec.js and e2e/submissionReview.spec.js in a browser with axe in both languages at 375 and 1024 px",
+      "evaluator": "the project's own tests",
+      "artifact": "tests/composedReport.test.js",
+      "limitations": "The digest ties a file to a token, not to a person: both can be edited to agree. One report is kept at a time. No student or instructor has used it, and Spanish has not been read by a fluent reader (D-R10-275-03).",
+      "date": "2026-11-10",
+      "anchors": [
+        {
+          "file": "MY_WORK.md",
+          "text": "A field the record does not carry is not printed."
         }
       ]
     },

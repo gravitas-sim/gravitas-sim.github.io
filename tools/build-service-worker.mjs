@@ -711,6 +711,17 @@ export const IDLE_TIER = [
     /^(js\/dataKinds\/(contract|limits)\.js|js\/measure\/(marks|refine|scale|imageRecord)\.js|js\/observatory\/imageMarks\.js|js\/i18n\/(en|es)\.imageMarks\.js)$/,
   ],
   [
+    // The report composed from marked evidence (Prompt 275, MY_WORK.md): the
+    // format with its reader and words, and My work's card. Loaded only when
+    // a student has marked an entry or made a report, or when an instructor
+    // adds a report file to the review page, so no first visit needs them.
+    // Both imports are guarded: until the idle install finishes, an offline
+    // My work says the report needs a connection once, and the review page
+    // refuses the file in words.
+    'composed report',
+    /^js\/myWork\/(composedReport|reportView)\.js$/,
+  ],
+  [
     'data tables',
     /^((cosmology|gaia|variables)\/.*\.json$|js\/data\/(observations|radiation)\/)/,
   ],

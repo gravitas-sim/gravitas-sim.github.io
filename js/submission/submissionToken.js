@@ -114,6 +114,9 @@ export function buildSubmission({
       : {}),
     // Scenarios and experiments attached to the evidence (js/myWork/made.js).
     ...(record?.sy?.length ? { sy: record.sy.slice(0, 4) } : {}),
+    // The digest of the report composed from marked entries, and how many
+    // sections it has (js/myWork/composedReport.js); only when one was made.
+    ...(record?.cr ? { cr: { d: record.cr.d, n: record.cr.n } } : {}),
     a: assignmentId ? String(assignmentId).slice(0, 120) : null,
     r: rosterId ? String(rosterId).slice(0, 120) : null,
     fl: String(fallbackLocale || 'en'),
@@ -262,6 +265,18 @@ export function validateSubmission(payload) {
     )
   )
     return { ok: false, reason: 'badSystems' };
+  const cr = payload.cr;
+  if (
+    cr !== undefined &&
+    !(
+      cr &&
+      typeof cr === 'object' &&
+      /^[0-9a-f]{64}$/.test(cr.d ?? '') &&
+      Number.isInteger(cr.n) &&
+      cr.n > 0
+    )
+  )
+    return { ok: false, reason: 'badComposed' };
   return { ok: true };
 }
 

@@ -291,6 +291,22 @@ export function readMade(v) {
       },
     };
   }
+  if (v.kind === 'report') {
+    // A report composed from marked evidence (./composedReport.js, Prompt 275).
+    // It is checked by shape here and read by its own reader where it is used.
+    const r = v.report;
+    if (
+      !isObj(r) ||
+      typeof r.digest !== 'string' ||
+      !Array.isArray(r.sections) ||
+      !r.sections.length
+    )
+      return { ok: false, reason: 'report' };
+    return {
+      ok: true,
+      record: { ...base, attachedTo: [], kind: 'report', report: r },
+    };
+  }
   return { ok: false, reason: 'kind' };
 }
 
@@ -370,7 +386,9 @@ export const hrefOf = r =>
       ? `/3d/?open=${r.id}`
       : r.kind === 'mission'
         ? `/mission/lab/?open=${r.id}`
-        : '/experiments/';
+        : r.kind === 'report'
+          ? '/my-work/#mwReview'
+          : '/experiments/';
 
 /** The file a record stands for: the builder's system file, or the result. */
 export function fileOf(r) {
@@ -389,6 +407,8 @@ export function fileOf(r) {
     return { name: `${slug}.system3d.json`, json: r.system3d.system };
   if (r.kind === 'mission')
     return { name: `${slug}.mission-plan.json`, json: r.mission.file };
+  if (r.kind === 'report')
+    return { name: `${slug}.composed-report.json`, json: r.report };
   return r.scenario.system
     ? { name: `${slug}.gravitas-system.json`, json: r.scenario.system }
     : null;
@@ -403,4 +423,15 @@ export function fileOf(r) {
 export function attachedTo(entryIds, storage) {
   const want = new Set(entryIds);
   return listMade(storage).filter(r => r.attachedTo.some(id => want.has(id)));
+}
+
+/**
+ * What a submission token says of the composed report the student last made:
+ * its digest and how many sections it has. Null when there is none.
+ * @param {Storage} [storage]
+ * @returns {?{d: string, n: number}}
+ */
+export function composedStamp(storage) {
+  const r = listMade(storage).find(x => x.kind === 'report');
+  return r ? { d: r.report.digest, n: r.report.sections.length } : null;
 }

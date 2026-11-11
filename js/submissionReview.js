@@ -209,6 +209,13 @@ const marks = marksIndex();
  */
 const gradedAgainst = new Map();
 /**
+ * The composed reports (Prompt 275): ./instructorComposed.js, loaded when a
+ * report states one or a report file is added, so the page starts without it.
+ */
+let composed = null;
+const composedPart = async () =>
+  (composed ??= await import('./instructorComposed.js').catch(() => null));
+/**
  * What was handed in, as it was, for the archive (Prompt 168): the token or
  * backup of each report kept, and the text that named the activities. Never
  * persisted; the archive file is how a term is kept.
@@ -307,6 +314,9 @@ async function accept(label, thing, kind) {
   // table in front of the instructor is recomputed, not taken as stated.
   const evidence = await checkEvidence(submission.ev);
   const record = gradeSubmission(submission, lesson, { kind, label, evidence });
+  // The composed report the token states (Prompt 275), kept beside the record.
+  if (submission.cr)
+    (await composedPart())?.state(record.fingerprint, submission.cr);
   graded.push(record);
   kept.push({ label, kind, thing });
   gradedAgainst.set(record.fingerprint, lesson);
@@ -380,6 +390,14 @@ async function takeFile(file) {
     parsed = parseDocument(text);
   } catch {
     return refuse(name, 'notJson');
+  }
+  // A composed report a student handed in as a file: it has sections and
+  // states a digest, which no backup does. Its own reader checks the rest.
+  if (Array.isArray(parsed?.sections) && typeof parsed.digest === 'string') {
+    const why = (await composedPart())
+      ? await composed.take(name, parsed, language(), esc)
+      : 'load';
+    return why ? refuse(name, `composed.${why}`) : render();
   }
   return accept(name, parsed, 'backup');
 }
@@ -1006,7 +1024,10 @@ function render() {
         .join('')}</ol>`
     : '';
 
-  $('evidence').innerHTML = evidenceSections(records) + systemSections(records);
+  $('evidence').innerHTML =
+    evidenceSections(records) +
+    systemSections(records) +
+    (composed?.sections(records, { t, esc, lang: language() }) ?? '');
   $('context').innerHTML = contextList();
   $('byActivity').innerHTML = byActivity(records);
   renderSummary(records);
@@ -1317,6 +1338,7 @@ function clearAll() {
   keptNames.length = 0;
   marks.clear();
   gradedAgainst.clear();
+  composed?.clear();
   judging = false;
   say('');
   render();
@@ -1326,6 +1348,8 @@ function applyLanguage() {
   document.title = t('sub.doc.title');
   applyTranslations();
   render();
+  // A composed report read before the change is said again, then shown.
+  composed?.say(language(), esc).then(render);
 }
 
 function wire() {

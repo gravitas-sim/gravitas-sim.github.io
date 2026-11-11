@@ -133,12 +133,12 @@ Counts first, then every surface. "Links / Library / cited" are the shipped inve
 <!-- surface-gate:summary -->
 | Verdict | Surfaces |
 | --- | ---: |
-| KEEP | 69 |
+| KEEP | 70 |
 | FREEZE | 1 |
 | GROUP | 0 |
 | CONSOLIDATE | 0 |
 | RETIRE | 2 |
-| Total judged | 72 |
+| Total judged | 73 |
 | Of these, owner rulings over the function | 1 |
 <!-- /surface-gate:summary -->
 
@@ -220,6 +220,7 @@ Counts first, then every surface. "Links / Library / cited" are the shipped inve
 | `notebook entry snapshot` | localStorage, download | yes | 19 | record | **KEEP** (R3b) | Keep; a schema in Prompt 290. |
 | `gravitas.ledger` | inside a submission token (ev), never alone | yes | 2 | record | **KEEP** (R3b) | Keep; a schema in Prompt 290. |
 | `course home link` | link | yes | 5 | link | **KEEP** (R3b) | Keep; a schema in Prompt 290. |
+| `gravitas.composed-report` | download, localStorage | yes | 1 | record | **KEEP** (R3b) | Keep; a schema in Prompt 290. |
 | `course terms record` | localStorage | yes | 1 | record | **KEEP** (R3b) | Keep; a schema in Prompt 290. |
 | `collections record` | localStorage | yes | 5 | record | **KEEP** (R3b) | Keep; a schema in Prompt 290. |
 | `first-week record` | localStorage | yes | 1 | record | **KEEP** (R3b) | Keep; a schema in Prompt 290. |

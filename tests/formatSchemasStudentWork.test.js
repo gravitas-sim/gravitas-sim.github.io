@@ -320,7 +320,14 @@ describe('the submission token schema', () => {
     // Every field the code writes, the evidence included, and nothing else.
     const withEvidence = ST.buildSubmission({
       backup: written,
-      record: { ids: ['e1'], rows: [], total: 0, sy: [{ k: 'sc', n: 'x' }] },
+      record: {
+        ids: ['e1'],
+        rows: [],
+        total: 0,
+        sy: [{ k: 'sc', n: 'x' }],
+        // The composed report's digest and section count (Prompt 275).
+        cr: { d: 'b'.repeat(64), n: 2 },
+      },
       digest: 'a'.repeat(64),
       depth: 'quantitative',
     });
@@ -329,7 +336,7 @@ describe('the submission token schema', () => {
     );
     expect(Object.keys(report()).sort()).toEqual(
       Object.keys(withEvidence)
-        .filter(k => !['ev', 'dp', 'sy'].includes(k))
+        .filter(k => !['ev', 'dp', 'sy', 'cr'].includes(k))
         .sort()
     );
   });

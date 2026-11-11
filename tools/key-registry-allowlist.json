@@ -52,6 +52,9 @@
     "js/effectsField.js": {
       "gravitas.image": 1
     },
+    "js/myWork/composedReport.js": {
+      "gravitas.composed-report": 1
+    },
     "js/telescopeField.js": {
       "gravitas.image": 1
     },

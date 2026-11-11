@@ -741,6 +741,8 @@ describe('every CSV the application writes', () => {
       'text from js/csv.js toCsv, imported when the table is downloaded',
     'js/missionPage.js':
       'numbers, a date and a fixed set of status names; nothing a student types',
+    'js/myWork/composedReport.js':
+      'imports csv.js: reportCsv writes every field through toCsv, the titles and labels a student typed among them',
   };
   const walk = dir =>
     readdirSync(dir, { withFileTypes: true }).flatMap(e =>

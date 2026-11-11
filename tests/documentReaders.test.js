@@ -87,6 +87,11 @@ const PARSES = {
   'js/evaluationKit.js': [1, 'none', OWN],
   'js/investigations/next.js': [1, 'none', OWN],
   'js/myWork/made.js': [1, 'none', OWN + '; readMade checks it'],
+  'js/myWork/composedReport.js': [
+    1,
+    'none',
+    'not a document: the report being composed, through JSON once so what is hashed is what a file of it holds',
+  ],
   'js/mission/link.js': [1, 'none', OWN + '; readPlan checks its shape'],
   'js/mission/lab/address.js': [
     1,
@@ -245,6 +250,8 @@ const OWN_REFUSAL = {
   'js/investigations/progressBackup.js':
     'route room (every lesson); v1 is read as it is, which needs a migration entry',
   'js/myWork/made.js': 'a record with version 0 is still read',
+  'js/myWork/composedReport.js':
+    'three reason codes (format, newer, shape) that My work and the review page each say in words; a version below 1 or not an integer is format',
   'js/instructorArchive.js':
     'route room (review page); a newer archive is refused in words by readArchive',
   'js/investigations/progressSchema.js':
