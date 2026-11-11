@@ -20,7 +20,6 @@ import { state, SETTINGS, current_scenario_name } from './appState.js';
 import { resetFollowCamera } from './followCamera.js';
 import { ensurePauseAtEvent, renderEventMarker } from './pauseAtEventBridge.js';
 import { toast, announce, loadFailed } from './notify.js';
-import { armHelpKey } from './helpKey.js';
 export { toast, announce };
 import {
   tickTimeline,
@@ -587,15 +586,16 @@ function setupShortcuts() {
     shift: true,
     run: toggleShortcutHelp,
   });
-  // Handled by js/helpKey.js, which presses the explain button of the panel
-  // focus is in; listed here so the sheet says so.
+  // Presses the explain button of the panel focus is in (js/explainers.js,
+  // fetched on the first press); js/plot/plot.js leaves the key to this list.
+  document.documentElement.dataset.helpKey = 'list';
   registerShortcut({
     keys: 'H',
     match: 'h',
     group: 'Help',
     label: t('shortcut.explainHere'),
+    run: async () => (await import('./explainers.js')).pressHere(),
   });
-  armHelpKey();
   registerShortcut({
     keys: 'Esc',
     match: 'escape',

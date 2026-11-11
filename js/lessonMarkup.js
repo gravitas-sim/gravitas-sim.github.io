@@ -31,7 +31,7 @@ export const unmark = text =>
 export function setProse(el, html) {
   el.innerHTML = html;
   if (html.includes('[['))
-    import('./glossaryTerms.js').then(m => m.markTerms(el));
+    import('./glossaryTerms.js').then(m => m.markTerms(el)).catch(() => {});
 }
 
 /**

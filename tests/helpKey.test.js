@@ -1,22 +1,12 @@
 import { describe, test, expect, beforeEach, jest } from '@jest/globals';
-import { armHelpKey, explainButtonFor } from '../js/helpKey.js';
+import { explainButtonFor, pressHere } from '../js/explainers.js';
+import { createPlot } from '../js/plot/plot.js';
 import { provenanceLines, problemNote } from '../js/investigations/guidance.js';
 
 // =============================================================================
 // Contextual help (Roadmap III, Prompt 286): H presses the explain button of the
 // panel focus is in; the problem note carries where the record came from.
 // =============================================================================
-
-const press = (target, key = 'h', init = {}) => {
-  const e = new KeyboardEvent('keydown', {
-    key,
-    bubbles: true,
-    cancelable: true,
-    ...init,
-  });
-  target.dispatchEvent(e);
-  return e;
-};
 
 /** jsdom has no layout: say a button is shown. */
 const show = root =>
@@ -30,10 +20,8 @@ describe('H explains the panel in front of you', () => {
   beforeEach(() => {
     document.body.innerHTML = `
       <section id="a"><button class="plot-help" id="ha">What am I looking at?</button><input id="fa" /><button id="xa">x</button></section>
-      <section id="b"><button class="plot-help" id="hb">What am I looking at?</button><button id="xb">x</button></section>
-      <div id="modal" aria-modal="true"><button id="xm">x</button></div>`;
+      <section id="b"><button class="plot-help" id="hb">What am I looking at?</button><button id="xb">x</button></section>`;
     show(document.body);
-    armHelpKey();
   });
 
   test('the button is the one of the panel focus is in, else the first on the page', () => {
@@ -44,29 +32,52 @@ describe('H explains the panel in front of you', () => {
     expect(explainButtonFor(document.getElementById('xb')).id).toBe('ha');
   });
 
-  test('a press clicks it and leaves focus on it, so a second press closes it', () => {
+  test('pressing clicks it and leaves focus on it, so a second press closes it', async () => {
     const hb = document.getElementById('hb');
     const clicked = jest.fn();
     hb.addEventListener('click', clicked);
     document.getElementById('xb').focus();
-    const e = press(document.getElementById('xb'));
-    expect(e.defaultPrevented).toBe(true);
+    expect(await pressHere()).toBe(true);
     expect(clicked).toHaveBeenCalledTimes(1);
     expect(document.activeElement).toBe(hb);
-    press(hb);
+    await pressHere();
     expect(clicked).toHaveBeenCalledTimes(2);
   });
 
-  test('it leaves alone typing, modifiers and a modal dialog', () => {
-    const ha = document.getElementById('ha');
-    const clicked = jest.fn();
-    ha.addEventListener('click', clicked);
-    press(document.getElementById('fa'));
-    press(document.getElementById('xa'), 'h', { ctrlKey: true });
-    press(document.getElementById('xa'), 'h', { shiftKey: true });
-    press(document.getElementById('xm'));
-    press(document.getElementById('xa'), 'j');
-    expect(clicked).not.toHaveBeenCalled();
+  test('with no panel on screen it says so, in the page’s language', async () => {
+    document.body.innerHTML = '<div id="srStatus" aria-live="polite"></div>';
+    expect(await pressHere()).toBe(false);
+  });
+
+  test('a page with no shortcut list gets the key from its first plot', async () => {
+    delete document.documentElement.dataset.helpKey;
+    const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    document.body.innerHTML = '';
+    document.body.append(svg);
+    createPlot(svg, {
+      number: v => String(v),
+      labels: {},
+      explain: 'plot-measure',
+    });
+    show(document.body);
+    const help = document.querySelector('.plot-help');
+    expect(help).not.toBeNull();
+    document.body.dispatchEvent(
+      new KeyboardEvent('keydown', { key: 'h', bubbles: true })
+    );
+    for (let i = 0; i < 50 && !document.querySelector('.explainer'); i++)
+      await new Promise(r => setTimeout(r, 20));
+    expect(document.querySelector('.explainer')).not.toBeNull();
+    expect(help.getAttribute('aria-expanded')).toBe('true');
+    // Typing into a field is not a request for help.
+    document.body.insertAdjacentHTML('beforeend', '<input id="t" />');
+    help.click();
+    await new Promise(r => setTimeout(r, 50));
+    document
+      .getElementById('t')
+      .dispatchEvent(new KeyboardEvent('keydown', { key: 'h', bubbles: true }));
+    await new Promise(r => setTimeout(r, 50));
+    expect(document.querySelector('.explainer')).toBeNull();
   });
 });
 

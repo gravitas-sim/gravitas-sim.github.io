@@ -21,7 +21,7 @@ import {
   plain,
   termsIn,
 } from '../js/glossaryTerms.js';
-import { unmark, decodeEntities } from '../js/lessonMarkup.js';
+import { unmark, decodeEntities, prose, setProse } from '../js/lessonMarkup.js';
 
 // =============================================================================
 // Glossary II (Roadmap III, Prompt 286)
@@ -104,6 +104,18 @@ describe('what is written is what the table says', () => {
   });
 });
 
+describe('the model page links to the glossary', () => {
+  test('every link goes to a term the glossary defines', () => {
+    const links = [
+      ...read('model/index.html').matchAll(
+        /href="\/glossary\/#t-([a-z0-9-]+)"/g
+      ),
+    ].map(m => m[1]);
+    expect(links.length).toBeGreaterThanOrEqual(20);
+    for (const id of links) expect(DEFINITIONS[id]).toBeDefined();
+  });
+});
+
 describe('the markup', () => {
   beforeEach(() => {
     document.documentElement.lang = 'en';
@@ -154,6 +166,22 @@ describe('the markup', () => {
     expect(p.querySelector('.gl-term').textContent).toBe('Límite de Roche');
     expect(document.getElementById('b').querySelector('button')).toBeNull();
     expect(document.getElementById('b').textContent).toBe('Paralaje');
+  });
+
+  test('the lesson engine sets prose, and a mark in a step becomes a term', async () => {
+    document.body.innerHTML = '<div id="b"></div>';
+    const b = document.getElementById('b');
+    setProse(
+      b,
+      `<p>${prose('Read the [[parallax|parallax]] and <em>then</em> go on.')}</p>`
+    );
+    for (let i = 0; i < 50 && !b.querySelector('.gl-term'); i++)
+      await new Promise(r => setTimeout(r, 20));
+    expect(b.querySelector('button.gl-term').textContent).toBe('parallax');
+    expect(b.querySelector('em').textContent).toBe('then');
+    // Prose with no mark never fetches the module.
+    setProse(b, '<p>no marks</p>');
+    expect(b.querySelector('.gl-term')).toBeNull();
   });
 
   test('only text is read: markup in a mark is never interpreted', async () => {

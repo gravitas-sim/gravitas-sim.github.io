@@ -57,6 +57,9 @@ export const plain = (text, names = {}) =>
 /** Where a term cannot become a button of its own. */
 const INSIDE = 'button, a, label, summary, textarea, [role="button"]';
 
+/** NodeFilter.SHOW_TEXT: only the text nodes of a tree. */
+const SHOW_TEXT = 4;
+
 const tables = {};
 let counter = 0;
 
@@ -117,13 +120,14 @@ function toggle(button, row, lang) {
  */
 export async function markTerms(root, locale = getLocale()) {
   const lang = locale === 'es' ? 'es' : 'en';
-  const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT);
+  const walker = document.createTreeWalker(root, SHOW_TEXT);
   const nodes = [];
   for (let n = walker.nextNode(); n; n = walker.nextNode())
     if (hasTerms(n.data) && !n.parentElement?.closest('.gl-term, .gl-def'))
       nodes.push(n);
   if (!nodes.length) return 0;
-  const table = await definitions(lang);
+  // Definitions that cannot be fetched leave every mark as its words.
+  const table = await definitions(lang).catch(() => ({}));
   let made = 0;
   for (const node of nodes) {
     const out = document.createDocumentFragment();

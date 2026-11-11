@@ -422,7 +422,7 @@ function render(data, live = false) {
   paintGroups(data.checks);
   paintFilters(data.checks);
   // The table is painted after the page loads, so a link to one area waits.
-  if (location.hash) $(location.hash.slice(1))?.scrollIntoView();
+  if (!live && location.hash) $(location.hash.slice(1))?.scrollIntoView();
 }
 
 // --- The live run ------------------------------------------------------------
