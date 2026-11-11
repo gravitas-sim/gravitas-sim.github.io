@@ -2,7 +2,7 @@
 
 # Formats
 
-Every versioned format Gravitas reads or writes: 68 of them. 37 have a JSON Schema in `sdk/schemas`, and 15 read their previous version rather than only their own.
+Every versioned format Gravitas reads or writes: 69 of them. 37 have a JSON Schema in `sdk/schemas`, and 15 read their previous version rather than only their own.
 
 Roadmap II Prompt 61 puts each under one rule:
 - a JSON Schema;

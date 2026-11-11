@@ -133,12 +133,12 @@ Counts first, then every surface. "Links / Library / cited" are the shipped inve
 <!-- surface-gate:summary -->
 | Verdict | Surfaces |
 | --- | ---: |
-| KEEP | 69 |
+| KEEP | 70 |
 | FREEZE | 1 |
 | GROUP | 0 |
 | CONSOLIDATE | 0 |
 | RETIRE | 2 |
-| Total judged | 72 |
+| Total judged | 73 |
 | Of these, owner rulings over the function | 1 |
 <!-- /surface-gate:summary -->
 
