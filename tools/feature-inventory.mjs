@@ -256,6 +256,11 @@ export const FEATURES = [
         detect: /reason: 'unsupported'/,
         note: 'reports the sound as unsupported',
       },
+      {
+        file: 'js/plot/access.js',
+        detect: /words\.unsupported/,
+        note: 'says the browser cannot play sound',
+      },
     ],
   },
   {

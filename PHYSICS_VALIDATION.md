@@ -12,7 +12,7 @@ reason for every tolerance.
 npm run validate:physics
 ```
 
-That is <!--fact:physicsChecks-->439<!--/fact--> checks, about two minutes, and a
+That is <!--fact:physicsChecks-->442<!--/fact--> checks, about two minutes, and a
 PASS/FAIL table with measured error against stated tolerance. Add `--verbose` to print the rationale for each tolerance,
 `--json` for machine-readable output, or `--group "Conservation"` to run one
 section. Exit status is 0 only if everything passes, so it works in CI unchanged.
@@ -59,7 +59,7 @@ are two front ends onto it.
 | Orbital resonance | 35 | 1 analytic, 34 integrated |
 | Planets in binary stars | 15 | 1 analytic, 10 integrated, 4 published |
 | Gravity assist | 10 | 1 analytic, 9 integrated |
-| Sonification law | 5 | 5 analytic |
+| Sonification law | 8 | 8 analytic |
 | Observing windows | 38 | 17 analytic, 17 published, 4 approximation |
 | Radiation and photometry | 18 | 5 analytic, 1 integrated, 11 published, 1 approximation |
 | Barnes-Hut gravity | 7 | 2 analytic, 2 integrated, 3 approximation |
@@ -82,7 +82,7 @@ are two front ends onto it.
 | Galaxy clusters: membership, dispersion and virial mass | 6 | 6 analytic |
 | Active galactic nuclei: the Eddington bound and the size bound | 5 | 5 analytic |
 | Cosmology II: late-time FLRW depth | 8 | 8 analytic |
-| **Total** | **439** | 220 analytic, 125 integrated, 67 published, 24 approximation, 1 empirical, 2 recovery |
+| **Total** | **442** | 223 analytic, 125 integrated, 67 published, 24 approximation, 1 empirical, 2 recovery |
 <!--/fact-block-->
 
 Nothing here reads a pixel. Every check is a deterministic number-in,

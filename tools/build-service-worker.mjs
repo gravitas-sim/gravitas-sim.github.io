@@ -234,12 +234,13 @@ export const NEVER_PRECACHED = [
   /^compute-frame\//,
   // The numerical routines no shipped module imports yet (Prompt 152,
   // NUMERICS.md): no page can fetch one, so an install has no use for it, and
-  // the first-visit tier has little room. quadrature.js (flrw.js) and linalg.js
-  // (fit.js) are imported and so installed. Each of these three is deleted from
+  // the first-visit tier has little room. quadrature.js (flrw.js), linalg.js
+  // (fit.js) and polyfit.js (js/plot/describe.js, Prompt 280) are imported and
+  // so installed. Each of these two is deleted from
   // this list by its first adopter, and tests/numericRoutines.test.js fails
   // until it is: a module a page imports is installed, and its bytes are that
   // change's to find.
-  /^js\/numeric\/(roots|interp|polyfit)\.js$/,
+  /^js\/numeric\/(roots|interp)\.js$/,
   // The Worker pool (Prompt 153, WORKER_POOL.md): no shipped module imports it
   // yet, so no page can fetch it and an install has no use for it, and the
   // first-visit tier has 49 bytes of room (the adoption is a wait: its

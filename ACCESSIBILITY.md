@@ -484,44 +484,6 @@ checks establish "nothing about the audible sound, which is quantized and
 lossy" — and the one sentence written to be quoted outside the project was the
 one that blurred it.
 
-## Honest limitations
-
-These are real and are not going to be fixed by more ARIA.
-
-**A sentence is not a simulation.** "Four planets on elliptical orbits" is not
-equivalent to watching them move, and no textual description makes it so. What
-the description can do — and does — is make the *state* legible, which is what
-almost every control in the interface acts on. A reader who cannot see the
-canvas can still load a scenario, pause it, select a body, read its measured
-properties as text in the inspector, and work through an investigation.
-
-**The orbital motion itself does not stop for `prefers-reduced-motion`.** It is
-the content, not decoration; a planetarium that will not move is a picture.
-Every decorative animation stops, and the simulation can be paused from the
-transport bar or the space bar — a real control rather than a media query.
-Settings has a Motion choice for a reader who wants more: Reduced applies the
-same stop on a device that did not ask for it, and Step by step also starts the
-simulation paused, so nothing moves until the reader steps it or presses play
-(INTERACTION.md, "Reduced motion"). Two things are not yet true of that choice:
-it reaches the application and no other page, and six lesson instruments (the
-four resonance ones and the two exoplanet ones) start moving by themselves with
-no Run control; both are in `tools/motion-inventory.json` with their proposals.
-
-**The shape of a curve is described by a template, and nobody has checked that
-the description serves them.** The light curve, the radial-velocity trace, the
-energy chart and the bench's two charts are one component
-(`js/plot/chart.js`): a named, focusable group with the values by arrow keys,
-a legend of real buttons and a text alternative. The rotation curve is still
-drawn to a canvas. Their numbers are available as a table: the export dialog
-offers each series as a table — proper column headings with units, the
-independent variable as a row header, reachable and scrollable from a keyboard
-— beside the CSV download that was already there. Every table is rendered from
-the bytes the exporter writes, so the table, the file and the plot cannot be
-three derivations that disagree, and a long series is evenly sampled with the
-sampling stated in the caption rather than silently truncated. Since Prompt 280
-every series chart also carries a description of its shapes, and can be played
-as a sound; the next section says what that is and is not.
-
 ## Descriptions of a chart and the series sound (Prompt 280)
 
 **What it is.** `js/plot/describe.js` computes a description from a chart's own
@@ -590,6 +552,43 @@ nothing here upgrades it on the strength of a test. What would count: a named
 accessibility practitioner and at least one blind or low-vision screen-reader
 user (Roadmap III, Appendix A), working from the description, the table and the
 sound on three charts.
+
+## Honest limitations
+
+These are real and are not going to be fixed by more ARIA.
+
+**A sentence is not a simulation.** "Four planets on elliptical orbits" is not
+equivalent to watching them move, and no textual description makes it so. What
+the description can do — and does — is make the *state* legible, which is what
+almost every control in the interface acts on. A reader who cannot see the
+canvas can still load a scenario, pause it, select a body, read its measured
+properties as text in the inspector, and work through an investigation.
+
+**The orbital motion itself does not stop for `prefers-reduced-motion`.** It is
+the content, not decoration; a planetarium that will not move is a picture.
+Every decorative animation stops, and the simulation can be paused from the
+transport bar or the space bar — a real control rather than a media query.
+Settings has a Motion choice for a reader who wants more: Reduced applies the
+same stop on a device that did not ask for it, and Step by step also starts the
+simulation paused, so nothing moves until the reader steps it or presses play
+(INTERACTION.md, "Reduced motion"). Two things are not yet true of that choice:
+it reaches the application and no other page, and six lesson instruments (the
+four resonance ones and the two exoplanet ones) start moving by themselves with
+no Run control; both are in `tools/motion-inventory.json` with their proposals.
+
+**The shape of a curve is described by a template that no blind or low-vision reader has validated.** The light curve, the radial-velocity trace, the
+energy chart and the bench's two charts are one component
+(`js/plot/chart.js`): a named, focusable group with the values by arrow keys,
+a legend of real buttons and a text alternative. The rotation curve is still
+drawn to a canvas. Their numbers are available as a table: the export dialog
+offers each series as a table — proper column headings with units, the
+independent variable as a row header, reachable and scrollable from a keyboard
+— beside the CSV download that was already there. Every table is rendered from
+the bytes the exporter writes, so the table, the file and the plot cannot be
+three derivations that disagree, and a long series is evenly sampled with the
+sampling stated in the caption rather than silently truncated. Since Prompt 280
+every series chart also carries a description of its shapes, and can be played
+as a sound; the section above says what that is and is not.
 
 **Direct manipulation has a keyboard equivalent, but not a pointer's.** Two
 different things were wrong here and only one has been fixed. Placing a body

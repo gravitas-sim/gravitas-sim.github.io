@@ -328,10 +328,10 @@ differs by a few hundred bytes of gzip over an install this size).
 
 - **The routines in the install.** The five modules are about 8.2 KB gzipped
   (roots 1.6, quadrature 1.45, interpolation 1.5, linear algebra 1.9,
-  polynomial fit 1.7). `quadrature.js` and `linalg.js` are imported by
-  `flrw.js` and `fit.js` and are installed. A module no page imports is not
-  needed offline, so the build does not install `roots.js`, `interp.js` and
-  `polyfit.js` (per-file `NEVER_PRECACHED` entries in
+  polynomial fit 1.7). `quadrature.js`, `linalg.js` and `polyfit.js` are imported by
+  `flrw.js`, `fit.js` and `js/plot/describe.js` (Prompt 280) and are installed. A module no page imports is not
+  needed offline, so the build does not install `roots.js` and `interp.js`
+  (per-file `NEVER_PRECACHED` entries in
   `tools/build-service-worker.mjs`, about 4.8 KB gzipped); the first adopter of
   each deletes its entry, and `tests/numericRoutines.test.js` fails until it
   does.

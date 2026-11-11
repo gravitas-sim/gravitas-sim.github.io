@@ -52,7 +52,6 @@ import {
   writeProgress,
 } from './progressSchema.js';
 import { KEY_INVESTIGATION_PREFIX } from '../names.js';
-
 const getAreaSweepWedges = command('getAreaSweepWedges');
 
 /** Escape for use inside a double-quoted attribute. */

@@ -181,7 +181,7 @@ From [ACCESSIBILITY.md](ACCESSIBILITY.md), "Honest limitations". Each is a limit
 |---|---|
 | A sentence is not a simulation. | 1.1.1, 1.3.3 |
 | The orbital motion itself does not stop for `prefers-reduced-motion`. | 2.2.2 |
-| A curve's description is a template that no blind or low-vision reader has validated. | 1.1.1, 1.3.1 |
+| The shape of a curve is described by a template that no blind or low-vision reader has validated. | 1.1.1, 1.3.1 |
 | Direct manipulation has a keyboard equivalent, but not a pointer's. | 2.5.1, 2.5.7 |
 | The attribution links in the footer are under 24×24. | 2.5.8 |
 | Automated checks are a floor, not a ceiling. | 1.3.1, 1.4.3, 4.1.2 |
