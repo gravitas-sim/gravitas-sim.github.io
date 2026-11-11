@@ -1,5 +1,6 @@
 import { describe, test, expect, beforeEach } from '@jest/globals';
 import { readFileSync } from 'node:fs';
+import { URL } from 'node:url';
 
 import {
   COMPUTE_TIERS,

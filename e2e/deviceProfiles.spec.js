@@ -16,7 +16,7 @@
 // profiles in the file stay empty and the claim stays UNKNOWN in
 // tools/evidence-status.json.
 //
-// The budgets are the measured value times 4, rounded up to 100 ms, because a
+// The time budgets are the measured value times 3, rounded up to 100 ms and never under 4 s, because a
 // shared CI runner has its own load and a budget a runner can fail by being
 // busy would be a report on the runner. A budget is never loosened to pass; it
 // is only ever set from a measurement, and the measurement is rerun with
@@ -86,6 +86,9 @@ const withQuery = (path, profile) => {
   return path.includes('?') ? `${path}&${q}` : `${path}?${q}`;
 };
 
+/** How long the current workflow may take before its own wait gives up: its budget and a margin. */
+const LIMIT = { usable: 120_000, interact: 120_000 };
+
 const WELCOME = ['gravitas_welcome_seen_v1', '1'];
 const seed = async page =>
   page.addInitScript(([k, v]) => {
@@ -111,15 +114,17 @@ const WORKFLOWS = {
             .querySelector('.ui-container')
             ?.classList.contains('showUI') === true,
         null,
-        { timeout: 120_000 }
+        { timeout: LIMIT.usable }
       );
     },
     async interact(page) {
-      const menu = page.locator('#mobileMenuToggle');
-      if (await menu.isVisible()) await menu.click();
-      await page.locator('#loadScenarioBtn').click();
+      const target = page.locator('#loadScenarioBtn');
+      // On a phone the rail is behind the menu button.
+      if (page.viewportSize().width < 600)
+        await page.locator('#mobileMenuToggle').click();
+      await target.click();
       await expect(page.locator('#scenarioListModal')).toBeVisible({
-        timeout: 60_000,
+        timeout: LIMIT.interact,
       });
     },
   },
@@ -129,7 +134,7 @@ const WORKFLOWS = {
         waitUntil: 'domcontentloaded',
       });
       await expect(page.locator('#investigationNext')).toBeVisible({
-        timeout: 120_000,
+        timeout: LIMIT.usable,
       });
     },
     async interact(page) {
@@ -137,7 +142,7 @@ const WORKFLOWS = {
       await page.locator('#investigationNext').click();
       await expect
         .poll(() => page.locator('#investigationPanel').innerText(), {
-          timeout: 60_000,
+          timeout: LIMIT.interact,
         })
         .not.toBe(before);
     },
@@ -148,11 +153,11 @@ const WORKFLOWS = {
         waitUntil: 'domcontentloaded',
       });
       await expect(page.locator('html')).toHaveAttribute('data-ready', 'true', {
-        timeout: 120_000,
+        timeout: LIMIT.usable,
       });
       await page.locator('#obsFile').setInputFiles(asFile(frameObservation()));
       await expect(page.locator('#obsMarksPanel')).toBeVisible({
-        timeout: 120_000,
+        timeout: LIMIT.usable,
       });
     },
     async interact(page) {
@@ -163,7 +168,7 @@ const WORKFLOWS = {
       const box = await over.boundingBox();
       await page.mouse.click(box.x + box.width * 0.3, box.y + box.height * 0.3);
       await expect(page.locator('#obsMarksBody tbody tr')).toHaveCount(1, {
-        timeout: 60_000,
+        timeout: LIMIT.interact,
       });
     },
   },
@@ -173,20 +178,22 @@ const WORKFLOWS = {
         waitUntil: 'domcontentloaded',
       });
       await expect(page.locator('html')).toHaveAttribute('data-ready', 'true', {
-        timeout: 120_000,
+        timeout: LIMIT.usable,
       });
       await page.locator('#obsFixture').selectOption('tess-light-curve');
       await page.locator('#obsOpen').click();
       await expect(page.locator('#obsTable tbody tr').first()).toBeVisible({
-        timeout: 120_000,
+        timeout: LIMIT.usable,
       });
       await page.locator('#obsFitPanel summary').click();
-      await expect(page.locator('#fitRun')).toBeVisible({ timeout: 120_000 });
+      await expect(page.locator('#fitRun')).toBeVisible({
+        timeout: LIMIT.usable,
+      });
     },
     async interact(page) {
       await page.locator('#fitRun').click();
       await expect(page.locator('#fitStatus')).toContainText(/Fitted in/, {
-        timeout: 240_000,
+        timeout: LIMIT.interact,
       });
     },
   },
@@ -196,14 +203,14 @@ const WORKFLOWS = {
         waitUntil: 'domcontentloaded',
       });
       await expect(page.locator('html')).toHaveAttribute('data-ready', 'true', {
-        timeout: 120_000,
+        timeout: LIMIT.usable,
       });
       await page.locator('#lb-problem').selectOption('R5');
     },
     async interact(page) {
       await page.locator('#lb-go').click();
       await expect(page.locator('#lb-status')).toHaveText(/^Finished/, {
-        timeout: 240_000,
+        timeout: LIMIT.interact,
       });
     },
   },
@@ -239,6 +246,10 @@ for (const [profileId, profile] of Object.entries(DEVICE.profiles)) {
 
     for (const workflowId of DEVICE.workflows) {
       test(`${workflowId}`, async ({ baseURL }) => {
+        const b = DEVICE.budgets[profileId]?.[workflowId];
+        LIMIT.usable = (b?.timeToUsableMs ?? 120_000) + 30_000;
+        LIMIT.interact = (b?.interactionMs ?? 120_000) + 30_000;
+        test.setTimeout(LIMIT.usable + LIMIT.interact + 60_000);
         await inProfile(baseURL, profile, async page => {
           await seed(page);
           await throttle(page, profile);
@@ -345,6 +356,7 @@ for (const [profileId, profile] of Object.entries(DEVICE.profiles)) {
             { message: 'the image panel releases its canvases off screen' }
           )
           .toBe(0);
+        await cdp.send('Performance.enable');
         await cdp.send('HeapProfiler.enable');
         await cdp.send('HeapProfiler.collectGarbage');
         const { metrics } = await cdp.send('Performance.getMetrics');
