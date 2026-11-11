@@ -6,6 +6,7 @@
 // walks. This test needs no browser: a surface added to the inventory with no
 // measurement, a workflow named and not walked, or a walk with no name, fails.
 
+import { describe, test, expect } from '@jest/globals';
 import { readFileSync } from 'node:fs';
 
 const read = p => JSON.parse(readFileSync(p, 'utf8'));
@@ -28,15 +29,16 @@ describe('the pointer-target record', () => {
       ...inventory.states.map(s => ({ surface: s.id })),
     ].map(r => r.surface);
     for (const size of ['phone', 'tablet'])
-      for (const id of want)
-        expect(measured).toContain(`${size}:${id}`);
+      for (const id of want) expect(measured).toContain(`${size}:${id}`);
   });
 
   test('every surface the spec opens beyond the inventory is measured too', () => {
     for (const id of ['lesson-panel-measure', 'observatory-image-open'])
       expect(surfaceIds).toContain(id);
     for (const size of ['phone', 'tablet'])
-      for (const id of surfaceIds.filter(i => !i.startsWith('S') && !i.startsWith('N')))
+      for (const id of surfaceIds.filter(
+        i => !i.startsWith('S') && !i.startsWith('N')
+      ))
         expect(measured).toContain(`${size}:${id}`);
   });
 
@@ -68,7 +70,9 @@ describe('the workflows', () => {
   });
 
   test('every workflow named is walked by the spec, and every walk is named', () => {
-    const walked = [...spec.matchAll(/^\s{4}id: '([SN]\d+)',$/gm)].map(m => m[1]);
+    const walked = [...spec.matchAll(/^\s{4}id: '([SN]\d+)',$/gm)].map(
+      m => m[1]
+    );
     expect(walked.sort()).toEqual(workflows.map(w => w.id).sort());
   });
 
