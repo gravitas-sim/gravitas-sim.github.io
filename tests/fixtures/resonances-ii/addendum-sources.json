@@ -1,0 +1,64 @@
+{
+  "format": "gravitas.resonances-ii-addendum-sources/1",
+  "what": "The data check of the cited libration values (legs X1L, X1P) and the Kozai-Lidov request (K1). Every file was downloaded in this session into scratch-data/resonance273/sources/ beside the repositories, read as text (pdftotext) and never run. None is committed: what is committed is the reference, the digest and the numbers each file states, restated here, not quoted.",
+  "retrieved": "2026-11-10",
+  "terms": {
+    "service": "arXiv, e-prints by https://export.arxiv.org/pdf/<id>, one request every three seconds on one connection",
+    "read": "Terms of Use for arXiv APIs (https://info.arxiv.org/help/api/tou.html, sha256 2fe6f8d90802452678a0cd97d9416b9f04fa21faace271773a5aa170ba72e6fd) and arXiv License Information (https://info.arxiv.org/help/license/index.html, sha256 1313b975dfedaa773f87a7330d8ee20f5ebcc4411a6a9398f5cc1a94dcc0c450), both as served on 2026-11-10: e-prints are not to be stored and served from other servers without the copyright holder's permission or a permitting licence; most are under arXiv's non-exclusive licence to distribute.",
+    "rights": "cite-only: the e-prints stay outside the repository and are not redistributed; no figure, table or passage of them is reproduced"
+  },
+  "files": {
+    "arxiv_1807.02516.pdf": {
+      "reference": "F. Paita, A. Celletti and G. Pucacco, Element history of the Laplace resonance: a dynamical approach, arXiv:1807.02516 (manuscript dated 2018-07-10)",
+      "sha256": "8f4984a8cb121989e23b6e7ba2b02196d0f1eb74cfb1182ce5e7f0fefcbdf43f"
+    },
+    "arxiv_astro-ph_0210589.pdf": {
+      "reference": "S. J. Peale and M. H. Lee, A primordial origin of the Laplace relation among the Galilean satellites, arXiv:astro-ph/0210589",
+      "sha256": "cded61856f8d29d3015d89c0300d5f657d09d7e2316e331cb28ad2d6111727db"
+    },
+    "arxiv_astro-ph_9904424.pdf": {
+      "reference": "Q. Yu and S. Tremaine, The dynamics of Plutinos, arXiv:astro-ph/9904424",
+      "sha256": "b54d0deb33bc9a62d12606f2f7f3214c501dd7b6008893bf77931c1ab19038d5"
+    },
+    "arxiv_2204.04121.pdf": {
+      "reference": "R. Malhotra and T. Ito, Pluto near the edge of chaos, arXiv:2204.04121 (manuscript compiled 2022-02-18)",
+      "sha256": "4af7167e5f7a3196d312cb0c115fe89ad08580bf5f3fe70dbe80f50ea6dfa23d"
+    }
+  },
+  "X1L": {
+    "status": "FAIL",
+    "cited": { "periodDays": 2071, "amplitudeDeg": 0.064, "centreDeg": 180 },
+    "found": [
+      {
+        "file": "arxiv_1807.02516.pdf",
+        "states": "From an ephemeris history of the Laplace argument (NASA SPICE), low-pass filtered at 1,000 d: the libration sits a little beyond 2,000 d and its largest amplitude is about 0.02 deg, which the authors say is lower than Lieske (1977) and Musotto et al. (2002) report. It does not state 2071 d or 0.064 deg."
+      },
+      {
+        "file": "arxiv_astro-ph_0210589.pdf",
+        "states": "The Laplace argument is near 180 deg with a small libration amplitude; no number for the period or the amplitude."
+      }
+    ],
+    "reading": "No downloaded source states the cited pair. One states a different amplitude for the same quantity (about 0.02 deg against the cited 0.064), so the leg is FAIL by its committed bound (AM7). The period is supported in kind (a little beyond 2,000 d). This session's own measurement on JUP365 is in legs L1h and L1o.",
+    "request": "For a person with the references: Lieske (1998), Galilean satellite ephemerides E5, Astron. Astrophys. Suppl. 129, 205 (DOI 10.1051/aas:1998182); Musotto, Varadi, Moore and Schubert (2002), Icarus 159, 500; Murray and Dermott (1999), Solar System Dynamics, the section on the Laplace resonance: the stated period and amplitude of the libration of io - 3 europa + 2 ganymede, and whether the amplitude is a half-range or a full range."
+  },
+  "X1P": {
+    "status": "FAIL",
+    "cited": { "periodYears": 19670, "amplitudeDeg": 82, "centreDeg": 180 },
+    "found": [
+      {
+        "file": "arxiv_astro-ph_9904424.pdf",
+        "states": "The argument 3 pluto - 2 neptune - varpi_pluto librates about 180 deg with a period of 1.99e4 yr and an amplitude of 82 deg (introduction, citing Cohen and Hubbard 1965 for the resonance)."
+      },
+      {
+        "file": "arxiv_2204.04121.pdf",
+        "states": "The same argument librates about 180 deg with an amplitude of 80 to 86 deg and a period of about 20,000 yr."
+      }
+    ],
+    "reading": "The amplitude 82 deg and the centre 180 deg are stated as cited. The period is stated as 19,900 yr and as about 20,000 yr, not as the cited 19,670 yr (1.2% below the first): a different number for the same quantity, so the leg is FAIL by its committed bound (AM7).",
+    "request": "For a person with the references: Cohen and Hubbard (1965), Astron. J. 70, 10, and Williams and Benson (1971), Astron. J. 76, 167: the libration period each states; Malhotra and Williams (1997), Pluto's heliocentric orbit, in Pluto and Charon (University of Arizona Press)."
+  },
+  "K1": {
+    "status": "NOT RUN",
+    "request": "A public reference of the Kozai-Lidov exchange as data, then a leg committed by amendment before any run: (a) JPL Horizons API 1.2 vectors (EPHEM_TYPE=VECTORS, CENTER=500@599, REF_PLANE=ECLIPTIC, 10 d step, each ephemeris file's full span) of Jupiter's irregular satellites and of the Sun (10) about Jupiter, from which an eccentricity and inclination history over several exchange cycles is derived; or (b) a table of the maximum eccentricity against the initial inclination from an open paper. Not fetched in this session: the kernel has no Kozai-Lidov function yet and no addendum leg covers one."
+  }
+}

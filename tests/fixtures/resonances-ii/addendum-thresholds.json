@@ -1,0 +1,262 @@
+{
+  "format": "gravitas.resonances-ii-addendum-thresholds/1",
+  "prompt": "Roadmap III, Prompt 273, Part A addendum (approved by Carl as the recommendation of RESONANCES_II.md section 7, questions 1, 2 and 4): a ripple-free libration estimator, steps chosen by a stated error budget, an amended oracle estimator, and a data check of the cited libration values. It is an addendum, not a new verdict on the old legs.",
+  "document": "RESONANCES_II.md (section 9 onward)",
+  "committed": "2026-11-10, alone and first on branch feat/resonances-ii-addendum (from v3 325f7ff5), before the estimator, the step-budget function, the addendum oracle, the addendum validator or any run of them existed",
+  "rule": "The 19 legs of thresholds.json and their follow-ups stay exactly as recorded: the 8 failed legs (L1, L3, L4, P3, S1, S2, C1, D3) stay failing and labelled, the failed follow-ups (L1s, S1f, S2f, L3f) stay failed, no bound of theirs moves, results.json and its history are not rewritten, and the verdict by the first function stays C. Every improvement is a NEW leg below. Its bound is fixed here by the bound rule before any run. Amendments are recorded in `amendments` before the run they affect. A new leg that fails stays failing. A leg not measured is NOT RUN with the request that would run it.",
+  "boundRule": "A new leg that re-tests an original leg carries that leg's bound unchanged (named in `inherits`). A leg with no original takes its bound from the budget or rate it tests, stated in the leg: an error budget is the original bound of the quantity it protects; a coverage bound is 90% of members at +-2 sigma (the original C1's 9 of 10); a false-positive bound is 1% of members.",
+  "seenBeforeCommitting": [
+    "Everything the first gate recorded: thresholds.json with AM0-AM5, results.json with its history, oracle-results.json, RESONANCES_II.md, js/lab3d/libration.js, tools/resonances-ii-validate.mjs, oracle.py. In particular: the Laplace model's libration (kernel 2076 d, amplitude about 28 deg; a Fourier peak 2071 d and a least-squares sinusoid 2068 d on the oracle's series), the JUP365 argument's estimates under boxcar smoothing (3.525 d: about 318 d and 0.21 deg; 1,000 d: 1976 d, 0.058 deg corrected, centre 180.005 deg, by the oracle's turning points), the energy drifts at the committed steps (2.0e-7 at 1/45 d, 3.7e-8 at 1 yr) and their fourth-power scaling with the step, the passing follow-ups at 1/180 d, 0.25 yr and 0.005 yr, and the Pluto model's 21,293 yr and 80 deg.",
+    "No output of the estimator, the step-budget function, the addendum oracle or the addendum validator: none of them existed. No spectrum, sinusoid fit or tapered fit of the JUP365 argument was computed before this file was committed.",
+    "No published number was typed in this session. The cited values are still the ones committed in js/resonance/systems.js; legs X1L and X1P are the first time they are compared with a downloaded source."
+  ],
+  "tools": "Node 22 for the kernel side; python3 -E (3.9, numpy, scipy) for the addendum oracle, which imports no Gravitas code and reads only inputs/inputs.json and the downloaded Horizons files",
+  "estimator": {
+    "name": "measureLibrationHarmonic (js/lab3d/libration.js)",
+    "why": "The first gate's estimator counts turning points of a smoothed argument. On the authentic argument the osculating ripple is larger than the libration, and no smoothing span made the turning points repeatable (L1, L1s). A tapered least-squares line does not need the ripple removed: terms far from the line in frequency are suppressed by the taper.",
+    "model": "phi(t) = c0 + c1 (t - tm) + a cos w (t - tm) + b sin w (t - tm) on the unwrapped argument, tm the middle of the window, by weighted least squares with Hann weights over the window. w is the minimum of the weighted residual sum of squares, scanned at frequencies from 0.5 / W to maxPeriods / W in steps of 1 / (8 W) (W the window) and refined by a golden-section search between the neighbouring scan points.",
+    "options": "requiredPeriods = 3 (unchanged from the first gate); maxPeriods = 8 (the line sought completes between 3 and 8 turns in the window; a faster line is ripple to this estimator and belongs to the turning-point estimator); significance = 5; repeatability: sub-windows of the first and the last two thirds of the window.",
+    "refusals": "circulation when the net change of the unwrapped argument, smoothed over the conjunction cycle, is 355 deg or more (the first gate's rule). not-constrained, with no period, amplitude or centre: (window-too-short) the minimising period is longer than W / requiredPeriods; (no-line) the amplitude is below `significance` times its formal sigma; (drifting-center) |c1| W exceeds twice the amplitude; (not-repeatable) the two sub-window fits, each a golden-section minimum within 25% of the full-window frequency, differ from each other by more than 25% of the period, or either amplitude is outside half to twice the full-window amplitude.",
+    "values": "period 2 pi / w; amplitude hypot(a, b); centre c0 wrapped to [0, 360).",
+    "uncertainty": "Formal covariance: the sandwich (J'WJ)^-1 (J'W^2 J) (J'WJ)^-1 (S0 / dt) with J the Jacobian of the model in (c0, c1, a, b, w), W the Hann weights, dt the mean sample spacing and S0 the noise floor near the line: the median, divided by ln 2, of the Hann periodogram ordinates dt |sum w r exp(-2 pi i f t)|^2 / sum w^2 of the residual r at the 24 frequencies f0 + m / W, m = 3..26 (those below the Nyquist frequency). sigma_P = hypot(P^2 sigma_w / (2 pi), half the difference of the two sub-window periods, the sampling floor); sigma_A = hypot(formal, half the difference of the two sub-window amplitudes). A coverage interval is +-2 sigma.",
+    "limits": "One line. A libration faster than W / maxPeriods is not looked for. Lines closer than two cycles per window to the fitted one are not separated from it (for the JUP365 window: periods between 1,381 d and 4,142 d). The noise floor is read above the line in frequency and so does not see slower terms."
+  },
+  "stepBudget": {
+    "name": "stepForBudget (js/lab3d/stepBudget.js)",
+    "why": "The first gate committed fixed steps (AM1) that turned out too coarse; AM4 and AM5 then found finer ones by trial. A step is now derived from the error the measurement can afford.",
+    "rule": "Pilot: the system is advanced from its initial state for pilotPeriods = 50 periods of the innermost body with the kernel's yoshida4 at h0 = innerPeriod / 64, at h0 / 2 and at h0 / 4. Energy error at h0: the largest of E(h0), 16 E(h0/2), 256 E(h0/4), E the largest |dE/E| seen at the ends of the inner periods. Angle error rate of each budgeted angle at h0: (16/15) max(d1, 16 d2) / Tpilot, d1 the largest circular difference between the h0 and h0/2 runs at the ends of the inner periods and d2 the same between h0/2 and h0/4. Prediction at step h over the window: energy E(h0) (h/h0)^4; angle sum_i weight_i rate_i window (h/h0)^4. The step is the largest h <= h0 that divides the sampling interval and whose predictions are at most safety = 0.1 of each budget. If that needs more than 4,096 steps per inner period the budget is refused (not-attainable, no step).",
+    "budgets": {
+      "laplace": "energy 1e-8 (L4's bound); argument io - 3 europa + 2 ganymede within 1 deg over the 8,284 d window (below L4's 5% of the 28 deg amplitude), weights 1, 3, 2 on the three mean longitudes; sampling 1 d; inner period Io's",
+      "pluto": "energy 1e-8 (P3's bound); argument 3 pluto - 2 neptune - varpi_pluto within 1 deg over 78,680 yr (below P3's 5% of the 80 deg amplitude), weights 3, 2, 1; sampling 20 yr; inner period Neptune's",
+      "secular": "energy 1e-8; apsidal longitude of the particle within 7.2 deg over the window of four theoretical turns (S2's 0.5% of 1,440 deg); sampling 5 yr; inner period the particle's",
+      "twoBody": "energy 1e-9; mean longitude and longitude of periapsis within 0.01 deg in total over 500 periods; sampling one period"
+    }
+  },
+  "oracle": {
+    "file": "tests/fixtures/resonances-ii/oracle_addendum.py (new; oracle.py and oracle-results.json are not edited)",
+    "amendment": "AM6 below. The first oracle's turning-point estimator counted the first sample as a turning point (AM5 found it after the fact). The addendum oracle's committed estimators are: (turning) the first oracle's with turning points at the first or last sample dropped, as AM5's `_c` keys; (harmonic) the definition in `estimator.model`, implemented independently: the unwrapped argument less its least-squares line, Hann-tapered and zero-padded 64 times, the largest FFT ordinate between W/8 and W/3 with a parabolic refinement (reported as `fft`), then scipy.optimize.least_squares on (c0, c1, a, b, w) with Hann weights started there (reported as `lsq`). Legs compare with `lsq`; `fft` is reported beside it.",
+    "selfCheck": "leg O1"
+  },
+  "systems": {
+    "unchanged": "L-R (the pinned JUP365 argument), L-M, P-M, S-T and the ensemble of thresholds.json, from the same inputs/inputs.json; windows unchanged (8,284 d, 78,680 yr, four theoretical turns).",
+    "T-S": "synthetic truth, generated by the validator from seed 27310 (mulberry32, Box-Muller): 4,001 samples at unit spacing (W = 4,000); a planted line of amplitude 1 deg about 180 deg with period W / u, u uniform in [3.5, 5.5], and uniform phase; ripple of three lines with periods W / 37.3, W / 91.7 and W / 411.3, amplitudes 3, 2 and 3 deg, uniform phases; white Gaussian noise of standard deviation 0.5 deg. The conjunction cycle is W / 411.3. 400 members.",
+    "T-N": "the same without the planted line, seed 27311, 100 members.",
+    "K-2": "two bodies, G = 1, masses 1 and 0.001, a = 1, e = 0.1, started at periapsis on the x axis; 500 periods."
+  },
+  "legs": [
+    {
+      "id": "O1",
+      "group": "oracle",
+      "kind": "analytic",
+      "what": "the addendum oracle's harmonic estimator on its own planted truth (numpy seed 27312: 200 series as T-S)",
+      "bound": "|P_lsq - P0| / P0 <= 2% and |A_lsq - 1| <= 10% on every series"
+    },
+    {
+      "id": "T1h",
+      "group": "estimator",
+      "kind": "analytic",
+      "what": "T-S: the kernel's harmonic estimator against the planted period, amplitude and centre, and the coverage of the planted period by +-2 sigma_P",
+      "bound": "every member: state = libration, |P - P0| / P0 <= 2% (L3's period bound), |A - 1| <= 10% (twice L3's amplitude bound, the noise being half the amplitude), |centre - 180| <= 0.1 deg; coverage: P0 inside +-2 sigma_P for at least 360 of 400"
+    },
+    {
+      "id": "T2h",
+      "group": "estimator",
+      "kind": "negative",
+      "what": "T-N: ripple and noise with no line",
+      "bound": "at most 1 of 100 members returns a libration"
+    },
+    {
+      "id": "L1h",
+      "group": "estimator",
+      "kind": "reference",
+      "inherits": "L1",
+      "what": "the harmonic estimator on the pinned JUP365 argument over the 8,284 d window (referencePeriod 3.5249 d, sampling floor 1 d, options as committed above): state, period against the cited 2071 d, amplitude against the cited 0.064 deg, centre against the cited 180 deg",
+      "bound": "state = libration with the period resolved; |P - 2071| / 2071 <= 5%; |A - 0.064| / 0.064 <= 50%; |centre - 180| <= 1 deg; NOT a pass unless all four hold"
+    },
+    {
+      "id": "L1o",
+      "group": "estimator",
+      "kind": "oracle",
+      "what": "the same series: kernel harmonic estimate against the addendum oracle's `lsq` on the argument the oracle derives from the raw Horizons files",
+      "bound": "|P_k - P_o| / P_o <= 2%; |A_k - A_o| / A_o <= 5% (L3's bounds); reported when the kernel refuses"
+    },
+    {
+      "id": "L3h",
+      "group": "estimator",
+      "kind": "oracle",
+      "inherits": "L3",
+      "what": "L-M at the budget step: kernel harmonic estimate against the addendum oracle's `lsq` on its own integration",
+      "bound": "|P_k - P_o| / P_o <= 2%; |A_k - A_o| / A_o <= 5%; both libration"
+    },
+    {
+      "id": "L3ch",
+      "group": "estimator",
+      "kind": "reference",
+      "inherits": "L3c",
+      "what": "L-M at the budget step against the cited 2071 d, harmonic estimate",
+      "bound": "state = libration; |P - 2071| / 2071 <= 10%"
+    },
+    {
+      "id": "C1h",
+      "group": "estimator",
+      "kind": "ensemble",
+      "inherits": "C1",
+      "what": "the 10 ensemble members at the budget step: the kernel's harmonic period with its +-2 sigma against that member's oracle `lsq` period",
+      "bound": "at least 9 of 10 members inside; members for which the kernel returns no period count as misses"
+    },
+    {
+      "id": "P1h",
+      "group": "estimator",
+      "kind": "oracle",
+      "inherits": "P1",
+      "what": "P-M at the budget step: kernel harmonic estimate against the addendum oracle's `lsq`",
+      "bound": "|P_k - P_o| / P_o <= 2%; |A_k - A_o| / A_o <= 5%; both libration"
+    },
+    {
+      "id": "P2h",
+      "group": "estimator",
+      "kind": "model-fidelity",
+      "inherits": "P2",
+      "what": "P-M at the budget step against the cited 19,670 yr, 82 deg, 180 deg, harmonic estimate",
+      "bound": "state = libration; |P - 19,670| / 19,670 <= 15%; |A - 82| / 82 <= 25%; |centre - 180| <= 10 deg"
+    },
+    {
+      "id": "D1h",
+      "group": "negative",
+      "kind": "negative",
+      "inherits": "D1",
+      "what": "windows of 0.5, 1 and 2 libration periods (L-M at the budget step, the first 1,035, 2,071 and 4,142 d): the harmonic estimator",
+      "bound": "state = not-constrained and period = null on all three; no amplitude presented as measured"
+    },
+    {
+      "id": "D2h",
+      "group": "negative",
+      "kind": "negative",
+      "inherits": "D2",
+      "what": "L-M with Europa's axis detuned by 1.01 at the budget step: the harmonic estimator",
+      "bound": "state = circulation (or not-constrained); never a libration period"
+    },
+    {
+      "id": "L3a",
+      "group": "oracle-amended",
+      "kind": "oracle",
+      "inherits": "L3",
+      "what": "L-M at the budget step: the first gate's turning-point estimator (measureLibration, unchanged) against the addendum oracle's amended turning-point estimator",
+      "bound": "|P_k - P_o| / P_o <= 2%; |A_k - A_o| / A_o <= 5%; both states equal"
+    },
+    {
+      "id": "C1a",
+      "group": "oracle-amended",
+      "kind": "ensemble",
+      "inherits": "C1",
+      "what": "the 10 ensemble members at the budget step: the turning-point estimator's period with its +-2 sigma against that member's amended oracle turning-point period",
+      "bound": "at least 9 of 10 members inside; members for which the kernel returns no period count as misses"
+    },
+    {
+      "id": "B0b",
+      "group": "budget",
+      "kind": "analytic",
+      "what": "K-2: the step chosen for the twoBody budget, then 500 periods at that step against the Kepler solution (mean longitude advancing at n, periapsis fixed)",
+      "bound": "a step is returned; the largest |dE/E| <= 1e-9; the largest |lambda - lambda_Kepler| + |varpi - varpi_0| at the ends of the periods <= 0.01 deg"
+    },
+    {
+      "id": "B2b",
+      "group": "budget",
+      "kind": "negative",
+      "what": "K-2 with an energy budget of 1e-20",
+      "bound": "state = not-attainable and no step returned"
+    },
+    {
+      "id": "L4b",
+      "group": "budget",
+      "kind": "analytic",
+      "inherits": "L4",
+      "what": "L-M at the step chosen for the laplace budget: relative energy drift and the argument's largest divergence from the addendum oracle's over the 8,284 d window",
+      "bound": "|dE/E| <= 1e-8; max |phi_k - phi_o| <= 5% of the oracle's turning-point amplitude"
+    },
+    {
+      "id": "P3b",
+      "group": "budget",
+      "kind": "analytic",
+      "inherits": "P3",
+      "what": "P-M at the step chosen for the pluto budget: relative energy drift and the argument's largest divergence from the addendum oracle's over 78,680 yr",
+      "bound": "|dE/E| <= 1e-8; max |phi_k - phi_o| <= 5% of the oracle's turning-point amplitude"
+    },
+    {
+      "id": "S1b",
+      "group": "budget",
+      "kind": "theory",
+      "inherits": "S1",
+      "what": "S-T at the step chosen for the secular budget: the kernel's apsidal rate over 4 theoretical turns against the first-order rate",
+      "bound": "|rate_k - A| / A <= 5%, and the stated half-window uncertainty is reported"
+    },
+    {
+      "id": "S2b",
+      "group": "budget",
+      "kind": "oracle",
+      "inherits": "S2",
+      "what": "S-T at the same step against the first oracle's DOP853 rate (oracle-results.json `secular`, which stands: no defect was found in it)",
+      "bound": "|rate_k - rate_o| / rate_o <= 0.5%"
+    },
+    {
+      "id": "D3b",
+      "group": "budget",
+      "kind": "negative",
+      "inherits": "D3",
+      "what": "S-T over 2 theoretical turns at the same step",
+      "bound": "the secular rate is refused (not-constrained), no rate returned"
+    },
+    {
+      "id": "X1L",
+      "group": "source",
+      "kind": "data-check",
+      "what": "the cited Laplace libration period 2071 d and amplitude 0.064 deg (js/resonance/systems.js) against a public source downloaded in this session into scratch-data/resonance273/sources/ (terms read, sha256, retrieval date, cite-only, never run)",
+      "bound": "PASS: a downloaded source states both numbers as cited. FAIL: a downloaded source states a different period or amplitude for the same quantity (both are recorded; the cited value is not changed here). NOT RUN: nothing that states them could be fetched; the exact request is listed."
+    },
+    {
+      "id": "X1P",
+      "group": "source",
+      "kind": "data-check",
+      "what": "the cited Pluto-Neptune libration period 19,670 yr and amplitude 82 deg, the same way",
+      "bound": "as X1L"
+    },
+    {
+      "id": "N1h",
+      "group": "authentic",
+      "kind": "authentic",
+      "what": "authentic-data applicability: L1h is the authentic leg (the JUP365 ephemeris; the estimator's options were committed above without a fit of that series)",
+      "bound": "reported; tier (e) is met by L1h alone, or not met"
+    },
+    {
+      "id": "K1",
+      "group": "not-gated",
+      "kind": "not-run",
+      "what": "the Kozai-Lidov timescale and exchange",
+      "bound": "runs only if a public reference of the exchange can be fetched as data and a leg is committed for it, by an amendment, before any run; otherwise NOT RUN with the exact request"
+    }
+  ],
+  "verdict": {
+    "function": "The addendum verdict, separate from the first verdict (which stays C). Standing legs: R1, R2 and R3 of the first gate, which passed and are not re-run. A: the standing legs, and every leg of the groups oracle, estimator, negative, oracle-amended and budget passes (O1, T1h, T2h, L1h, L1o, L3h, L3ch, C1h, P1h, P2h, D1h, D2h, L3a, C1a, B0b, B2b, L4b, P3b, S1b, S2b, D3b), and neither X1L nor X1P is FAIL. B: the standing legs and B0b, B2b, L4b, P3b, D1h, D2h and D3b pass (the argument computed from elements over a window with the integrator's error bounded by a budgeted step and a refusal on a short window), and A does not hold: the named slice is the resonant argument displayed over the window without a fitted period or rate. C: otherwise: the existing guide stands.",
+    "reported_not_gated": ["N1h", "K1"],
+    "consumers": "The consumers condition is Prompt 273's own: Part B runs after A or B. Addendum A: the Part B consumers become eligible (the resonance panel with a fitted libration and a secular rate, the upper depth of When Orbits Lock, The slow dance), each in its own later PR with both languages and the instructor rebuild; Kozai-Lidov, measured stays held while K1 is NOT RUN. Addendum B: only the panel's argument-over-time plot, with no fitted period or rate, is eligible. Addendum C: every consumer stays held. A consumer is built in the addendum's own PR only if it is small; a panel in two surfaces and two languages is not."
+  },
+  "amendments": [
+    {
+      "id": "AM6",
+      "recorded": "2026-11-10, with this file, before the addendum oracle was written",
+      "what": "the oracle's estimators for the addendum are the two stated in `oracle.amendment`; the defective first estimator's numbers stay in oracle-results.json under their plain keys"
+    },
+    {
+      "id": "AM7",
+      "recorded": "2026-11-10, after the addendum oracle's self-check and JUP365 parts had run and four e-prints had been downloaded and read, and before the estimator, the step-budget function or the validator had run on anything",
+      "seen": "The oracle's self-check (worst period error 0.6%, worst amplitude error 0.033 deg) and its harmonic estimate of the JUP365 argument: 2070.5 d by `lsq` (2071.3 d by `fft`), amplitude 0.0328 deg, centre 179.998 deg. The amplitude is about half the cited 0.064 deg, inside L1h's inherited 50% by 1.2 points; that bound is not moved. The downloaded sources (addendum-sources.json): none states 2071 d with 0.064 deg; one reports about 0.02 deg from an ephemeris; for Pluto one states 82 deg with 1.99e4 yr and one 80 to 86 deg with about 20,000 yr, neither the cited 19,670 yr.",
+      "what": "X1L's and X1P's bound did not say which outcome holds when one source states a cited number and another states a different one. The stricter reading is taken: a leg is FAIL when any downloaded source states a different period or amplitude for the same quantity, whatever else agrees. No other bound is touched. K1 stays NOT RUN: no reference of the exchange was fetched and no leg is committed for it."
+    },
+    {
+      "id": "AM8",
+      "recorded": "2026-11-10, after a smoke run of stepForBudget on a two-body orbit like K-2 (energy budget only), and before the validator or any leg had run",
+      "seen": "The pilot's energy errors at h0, h0/2 and h0/4 were 8.1e-9, 2.0e-12 and 7.5e-14: a ratio of 4,000 for one halving, not 16. Read only at the ends of the inner periods, the energy error of a closed orbit is seen at the same orbital phase each time, where it has returned to almost nothing; the oscillation inside the orbit, which a run sampled at any other phase meets, was not measured.",
+      "what": "The pilot reads the energy and the budgeted angles at every step of the coarsest level (64 times an inner period, at common times of the three runs) instead of at the ends of the inner periods; the rest of the rule is unchanged. In B0b the realised energy error is read at every step of the 500-period run (the bound did not say where), the angles at the ends of the periods as committed. L4b and P3b read the energy as L4 and P3 did (every fiftieth sample). No bound moves."
+    }
+  ]
+}
