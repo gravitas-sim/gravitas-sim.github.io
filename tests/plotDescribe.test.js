@@ -9,6 +9,7 @@ import {
 } from '../js/plot/describe.js';
 import { holdsAnswer, heldAttribute } from '../js/lesson/held.js';
 import { INVESTIGATIONS } from '../js/data/investigations.js';
+import { stepMarkup } from '../js/investigations/stepView.js';
 
 // =============================================================================
 // Bounded descriptions of a chart's series (Prompt 280)
@@ -361,5 +362,38 @@ describe('a held prediction is never described', () => {
       false
     );
     expect(heldAttribute(inv.steps, { not: 'in it' }, new Set())).toBe('');
+  });
+
+  test("the lesson panel's step body carries the mark, as the step view writes it", () => {
+    const render = (inv, step, visited) =>
+      stepMarkup(step, {
+        id: `${inv.id}:${step.sid}`,
+        saved: undefined,
+        active: inv,
+        responses: {},
+        visited,
+        shown: () => inv.steps,
+        predictionAnsweredHere: () => false,
+        recomputeFields: () => {},
+      })
+        .join('')
+        .match(/<div class="inv-step-body"[^>]*>/)[0];
+    for (const { inv, step, i } of held.slice(0, 40)) {
+      const at = inv.steps.findIndex(s => s.sid === step.reveal);
+      const visited = new Set(inv.steps.slice(0, i + 1).map(s => s.sid));
+      visited.delete(step.reveal);
+      expect(render(inv, step, visited)).toBe(
+        '<div class="inv-step-body" data-answer-held>'
+      );
+      visited.add(step.reveal);
+      const later = inv.steps.some(
+        (s, k) => k <= at && s.reveal && !visited.has(s.reveal)
+      );
+      expect(render(inv, inv.steps[at], visited)).toBe(
+        later
+          ? '<div class="inv-step-body" data-answer-held>'
+          : '<div class="inv-step-body">'
+      );
+    }
   });
 });

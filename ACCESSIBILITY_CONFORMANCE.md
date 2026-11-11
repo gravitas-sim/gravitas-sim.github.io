@@ -62,7 +62,7 @@ No method here is a test with assistive-technology users. **Assistive-technology
 
 | Criterion | Status | Evaluated by | Remarks |
 |---|---|---|---|
-| **1.1.1** Non-text Content (WCAG 2.0) | Partially supports | axe-core automated rules; Scripted manual checks; Inspection of the generated documents. axe rules: `image-alt`, `input-image-alt`, `role-img-alt`, `svg-img-alt`, `area-alt`, `object-alt` | Images, icons and the web-page report's figures have text alternatives that axe and tests confirm. The simulation canvas has a generated text description and each plotted series is available as a table in the export dialog and the web-page report. A curve's shape is not narrated, and a description is not equivalent to watching the simulation. The instructor PDFs carry no alternative text. |
+| **1.1.1** Non-text Content (WCAG 2.0) | Partially supports | axe-core automated rules; Scripted manual checks; Inspection of the generated documents. axe rules: `image-alt`, `input-image-alt`, `role-img-alt`, `svg-img-alt`, `area-alt`, `object-alt` | Images, icons and the web-page report's figures have text alternatives that axe and tests confirm. The simulation canvas has a generated text description and each plotted series is available as a table in the export dialog and the web-page report. Since Prompt 280 each series chart carries a deterministic description of its shapes and numbers, which names no interpretation and gives no held prediction away; no blind or low-vision reader has validated it, and a description is not equivalent to watching the simulation. The instructor PDFs carry no alternative text. |
 | **1.2.1** Audio-only and Video-only (Prerecorded) (WCAG 2.0) | Not applicable | none | The application plays no prerecorded audio or video. It synthesizes sound only on request (the gravitational-wave audio and the sonification), each with a text equivalent. |
 | **1.2.2** Captions (Prerecorded) (WCAG 2.0) | Not applicable | none | The application plays no prerecorded audio or video. It synthesizes sound only on request (the gravitational-wave audio and the sonification), each with a text equivalent. |
 | **1.2.3** Audio Description or Media Alternative (Prerecorded) (WCAG 2.0) | Not applicable | none | The application plays no prerecorded audio or video. It synthesizes sound only on request (the gravitational-wave audio and the sonification), each with a text equivalent. |
@@ -181,7 +181,7 @@ From [ACCESSIBILITY.md](ACCESSIBILITY.md), "Honest limitations". Each is a limit
 |---|---|
 | A sentence is not a simulation. | 1.1.1, 1.3.3 |
 | The orbital motion itself does not stop for `prefers-reduced-motion`. | 2.2.2 |
-| The shape of a curve is not narrated. | 1.1.1, 1.3.1 |
+| A curve's description is a template that no blind or low-vision reader has validated. | 1.1.1, 1.3.1 |
 | Direct manipulation has a keyboard equivalent, but not a pointer's. | 2.5.1, 2.5.7 |
 | The attribution links in the footer are under 24×24. | 2.5.8 |
 | Automated checks are a floor, not a ceiling. | 1.3.1, 1.4.3, 4.1.2 |

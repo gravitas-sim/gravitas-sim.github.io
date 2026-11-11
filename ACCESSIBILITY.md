@@ -449,7 +449,7 @@ What is actually established, and the limit of each:
 
 | claim | evidence | what it does not show |
 | --- | --- | --- |
-| The period-to-pitch encoding preserves the quantity | 5 checks in `js/validation/groups/sonification-law.js`, "Sonification law" | Nothing about the audible sound, which is quantized and lossy |
+| The period-to-pitch encoding preserves the quantity | 8 checks in `js/validation/groups/sonification-law.js`, "Sonification law" | Nothing about the audible sound, which is quantized and lossy |
 | A non-audio path to the same facts exists | `e2e/sonifyTextEquivalent.spec.js` | Nothing about whether it is findable, readable or useful |
 | The panel has no machine-detectable violation | axe-core, no rules disabled | Nothing about whether a screen reader user can operate it |
 
@@ -507,21 +507,89 @@ it reaches the application and no other page, and six lesson instruments (the
 four resonance ones and the two exoplanet ones) start moving by themselves with
 no Run control; both are in `tools/motion-inventory.json` with their proposals.
 
-**The shape of a curve is not narrated.** The light curve, the radial-velocity
-trace, the energy chart and the bench's two charts are one component
+**The shape of a curve is described by a template, and nobody has checked that
+the description serves them.** The light curve, the radial-velocity trace, the
+energy chart and the bench's two charts are one component
 (`js/plot/chart.js`): a named, focusable group with the values by arrow keys,
 a legend of real buttons and a text alternative. The rotation curve is still
-drawn to a canvas. Their numbers are no longer only available by reading the
-picture: the export dialog offers each series as a
-table — proper column headings with units, the independent variable as a row
-header, reachable and scrollable from a keyboard — beside the CSV download that
-was already there. Every table is rendered from the bytes the exporter writes,
-so the table, the file and the plot cannot be three derivations that disagree,
-and a long series is evenly sampled with the sampling stated in the caption
-rather than silently truncated. What is still missing is *narration*: nothing
-says "the curve is flat out to 8 AU and then falls". That is a judgment about a
-shape, this project will not have a heuristic guess at it, and the tables are
-what a reader has instead.
+drawn to a canvas. Their numbers are available as a table: the export dialog
+offers each series as a table — proper column headings with units, the
+independent variable as a row header, reachable and scrollable from a keyboard
+— beside the CSV download that was already there. Every table is rendered from
+the bytes the exporter writes, so the table, the file and the plot cannot be
+three derivations that disagree, and a long series is evenly sampled with the
+sampling stated in the caption rather than silently truncated. Since Prompt 280
+every series chart also carries a description of its shapes, and can be played
+as a sound; the next section says what that is and is not.
+
+## Descriptions of a chart and the series sound (Prompt 280)
+
+**What it is.** `js/plot/describe.js` computes a description from a chart's own
+arrays and writes it from templates in English and Spanish. It names a shape
+and its numbers: a straight trend (slope with its uncertainty and R squared), a
+step (where, how big), a pattern that repeats (period, middle value,
+semi-amplitude, repeats in view), a dip or a rise (depth, duration, and, when
+three or more come at even spacings, their period), a constant, or none of
+those; a scatter's correlation (Pearson r with a Fisher interval) and its
+straight-line slope; the highest and lowest value and where they are. Every
+threshold is a named constant (`LIMITS`). Numbers with an uncertainty are
+written in the style of Prompts 150 and 151, "X ± Y (from the scatter of the
+points)", an asymmetric interval as "X +U −L". The Spanish is unreviewed by a
+fluent speaker.
+
+**What it never does.** It never says what a shape means: a dip is "a dip", not
+a transit; a pattern that repeats is "a pattern that repeats", not an orbit.
+The vocabulary has no such word, and a test reads every template in both
+languages against a list of the words the lessons use as their answers. It
+never gives away a held prediction. A lesson step that has not yet revealed
+its result is marked (`data-answer-held`, from `js/lesson/held.js`, which is
+also what the test uses): while it is, the chart's description is the number of
+points and the range of x, which the axes already print, and the sound is
+refused, because a pitch contour tells the shape as surely as a sentence does.
+A test goes through every one of the 195 predictions the 124 shipped
+investigations hold and checks that the mark is on from the prediction's step to
+the step before its reveal, and that the held description is the same whatever
+the data do.
+
+**Where it is.** Every series chart carries its description as its accessible
+description (`aria-describedby`), computed when the chart takes focus and a
+moment after its last draw (a series that grows fifteen times a second is
+described when somebody asks, not fifteen times a second). When a chart is
+first focused a disclosure appears under it: the description as text, a button
+to play the series as sound and the mapping written out. `S` on a focused chart
+plays, `Escape` stops. The code is a lazy chunk, fetched once a chart that is
+on a screen has drawn; `access: false` keeps it from a chart.
+
+**The sound.** `js/sonify/series.js` is one deterministic mapping for any time
+series or spectrum: time is x (6 seconds across the range, in at most 48
+equal slices, 24 at the low quality tier), pitch is the mean value of a slice,
+linear in cents from 220 Hz at the lowest to 880 Hz at the highest, so equal
+steps in value are equal musical intervals, and a slice with no data is a
+short tick, never a held note. The text beside the sound states the range, and
+says that values closer than the value spanning `DISTINGUISHABLE_CENTS` (10
+cents, a working figure of `js/sonify/law.js`, not a measurement of any listener)
+are not assumed to sound different. The same arrays give the same samples, to
+the bit; `js/sonify/buffer.js` is the buffer and the stop the gravitational-wave
+audio shares with it (its mapping is unchanged, and so are its tests). There was
+no spectrum sonification in the application to move: a spectrum is this map with
+wavelength as x.
+
+**What is established, and what is not.**
+
+| claim | evidence | what it does not show |
+| --- | --- | --- |
+| The description is a function of the data, computed the same way every time | `tests/plotDescribe.test.js`: synthetic series with known truth, input order, both languages | Nothing about whether a description is useful |
+| Its stated uncertainties cover the truth at about the stated rate | the same suite, 200 seeded draws per shape: one sigma covers at least 55% and two sigma at least 90% | The data of a lesson are not these draws |
+| It names no interpretation and gives no held answer away | the vocabulary test; the test over 195 held predictions | That no other path leaks an answer |
+| The sound is the stated mapping, deterministic, and its pitches read back from the samples | `tests/sonifySeries.test.js`; three checks added to "Sonification law" | Nothing about the audible sound |
+| The controls work from a keyboard | `tests/plotAccess.test.js`, `e2e/chartDescription.spec.js` | Nothing about whether a screen reader user can find or use them |
+
+No blind or low-vision user has validated the descriptions or the series sound.
+The evidence-status record says UNKNOWN (`chart-descriptions-sonification`), and
+nothing here upgrades it on the strength of a test. What would count: a named
+accessibility practitioner and at least one blind or low-vision screen-reader
+user (Roadmap III, Appendix A), working from the description, the table and the
+sound on three charts.
 
 **Direct manipulation has a keyboard equivalent, but not a pointer's.** Two
 different things were wrong here and only one has been fixed. Placing a body
