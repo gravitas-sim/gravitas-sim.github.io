@@ -130,8 +130,10 @@ describe('raw arrays, no registered units', () => {
     expect(src.match(/^import\s.*$/gm)).toEqual([
       "import { EV_THEME_CHANGED } from '../names.js';",
     ]);
-    // The one thing it fetches, and only when asked: the PNG.
+    // What it fetches, and only when wanted: the description and the sound
+    // (Prompt 280) once a chart on a screen has drawn, and the PNG when asked.
     expect(src.match(/import\(['"][^'"]+['"]\)/g)).toEqual([
+      "import('./access.js')",
       "import('./export.js')",
     ]);
     expect(readFileSync('js/plot/export.js', 'utf8')).not.toMatch(/^import\s/m);

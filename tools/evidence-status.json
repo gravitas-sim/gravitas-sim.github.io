@@ -273,6 +273,25 @@
       ]
     },
     {
+      "id": "chart-descriptions-sonification",
+      "claim": "A blind or low-vision reader has validated the chart descriptions and the series sound.",
+      "scope": "the plot component's descriptions and sound",
+      "version": "3.0",
+      "class": "V-external",
+      "status": "UNKNOWN",
+      "method": "none run; owner-led (Roadmap III Appendix A)",
+      "evaluator": "none",
+      "artifact": "ACCESSIBILITY.md",
+      "limitations": "Deterministic and tested (the description suite, the held-prediction test, the sonification law); no listener or screen-reader user has used them.",
+      "date": "2026-11-11",
+      "anchors": [
+        {
+          "file": "ACCESSIBILITY.md",
+          "text": "No blind or low-vision user has validated the descriptions or the series sound."
+        }
+      ]
+    },
+    {
       "id": "static-local-first",
       "claim": "Gravitas runs entirely in the browser with no account, no server and no analytics.",
       "scope": "the public site",

@@ -37,7 +37,7 @@
  *
  * @param {object} ctx - The loaded modules, `add` and `lab` (physicsChecks.js)
  */
-export default async function run({ sonifyLaw, add }) {
+export default async function run({ sonifyLaw, sonifySeries, add }) {
   const octave = sonifyLaw.periodToCents(2, 1);
 
   add({
@@ -121,5 +121,68 @@ export default async function run({ sonifyLaw, add }) {
     tolerance: 0,
     toleranceKind: 'bound',
     why: 'A 1.98:1 ratio lands at 1182.60 cents, 17.40 cents below the octave, and the resolution floor the module publishes is 10 cents - so the floor is 0.57 of the gap and the distinction survives the encoding. Written as a ratio because the suite scores one-sided claims as "measured at or below expected" and the claim here is a floor. The 10 cents is a deliberately conservative working figure, roughly twice the few-cent pure-tone difference limen, and is NOT a measurement of any listener: what passes here is that the map did not collapse the distinction, not that anybody heard it. The second thing has no machine gate and this check must not be cited as one.',
+  });
+
+  // The series map (Prompt 280, js/sonify/series.js) puts the same law to work
+  // on the values of a chart: pitch is value, linear in cents, over a stated
+  // range. A ramp with an equal number of points in each slice must therefore
+  // sound as a run of equal musical steps, and the top of the range must be
+  // exactly the stated two octaves above the bottom.
+  const X = Array.from({ length: 120 }, (_, i) => i / 10);
+  const map = sonifySeries.mapSeries(
+    X,
+    X.map(x => 3 + x),
+    { count: 40 }
+  );
+  const cents = map.notes.map(n =>
+    sonifyLaw.periodToCents(n.hz, sonifySeries.LOW_HZ)
+  );
+  const steps = cents.slice(1).map((c, i) => c - cents[i]);
+  const mean = steps.reduce((a, b) => a + b, 0) / steps.length;
+
+  add({
+    group: 'Sonification law',
+    kind: 'analytic',
+    name: 'A ramp is heard as equal musical steps',
+    measured: Math.max(...steps.map(s => Math.abs(s - mean))),
+    expected: 1e-9,
+    unit: 'cents, worst deviation from the mean step over a 40-note ramp',
+    tolerance: 0,
+    toleranceKind: 'bound',
+    why: 'Pitch is placed linearly in cents from the value (js/sonify/series.js), so equal steps in value are equal intervals; a ramp with three points in each of forty slices has equal slice means and the notes must therefore be an arithmetic run in cents. Implementation deviation is a few 1e-13 cents, the rounding of log2 and pow; the bound is 1e-9 so that a gamma curve, a scale or a rounding of the pitch (each of which moves this to a cent or more) fails at once. It checks the encoding, not that anyone heard the steps.',
+  });
+
+  add({
+    group: 'Sonification law',
+    kind: 'analytic',
+    name: 'The stated range is exactly two octaves',
+    measured: sonifyLaw.periodToCents(map.notes.at(-1).hz, map.notes[0].hz),
+    expected: 2400,
+    unit: 'cents, highest note over lowest',
+    tolerance: 1e-9,
+    toleranceKind: 'absolute',
+    why: 'The map states its range (220 Hz at the lowest slice mean, 880 Hz at the highest) and prints it beside every sound. That statement is only honest if the notes reach it: the highest over the lowest must be 2 * 1200 cents, by the definition of the cent, to the arithmetic of log2 and pow.',
+    source:
+      'The cent is 1/1200 of an octave - Ellis, appendix XX to Helmholtz, On the Sensations of Tone (2nd English edition, 1885).',
+  });
+
+  const a = sonifySeries.renderSeries(map, 8000);
+  const b = sonifySeries.renderSeries(
+    sonifySeries.mapSeries(
+      X,
+      X.map(x => 3 + x),
+      { count: 40 }
+    ),
+    8000
+  );
+  add({
+    group: 'Sonification law',
+    kind: 'analytic',
+    name: 'The same data give the same samples',
+    measured: a.reduce((n, v, i) => n + (v === b[i] ? 0 : 1), 0),
+    expected: 0,
+    unit: 'samples that differ between two renders of 48,000',
+    tolerance: 0,
+    why: 'The mapping is deterministic: no clock, no random stream and no state is read, so two renders of the same arrays are identical to the bit. A count of differing samples is the plainest way to hold that, and it is exact rather than approximate because nothing here is allowed to vary.',
   });
 }

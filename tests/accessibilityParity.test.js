@@ -426,12 +426,18 @@ describe('ACCESSIBILITY.md narrowed only what was fixed', () => {
     expect(read('js/exportDialog.js')).toMatch(/buildSeriesTable/);
   });
 
-  test('it still says the curve shape is not narrated', () => {
-    // The limitation that was NOT solved, and must not quietly disappear the
-    // next time somebody tidies this section. There is no narration and there
-    // is not going to be a heuristic one.
-    expect(doc).toMatch(/shape of a curve is not narrated/i);
-    expect(doc).toMatch(/heuristic guess/);
+  test('it says the curve shape is described by a template nobody has validated', () => {
+    // Prompt 280 narrowed this limitation: a curve is now described, from its
+    // data, by templates that never say what a shape means. What must not
+    // quietly disappear is that no blind or low-vision reader has validated
+    // them.
+    expect(doc).toMatch(/shape of a curve is described by a template/i);
+    expect(doc).toMatch(
+      /No blind or low-vision user has validated the descriptions/
+    );
+    expect(doc).toMatch(
+      /never says what a shape means|It never says what a shape\s+means/
+    );
   });
 
   test('it still says the drag gesture has no equivalent', () => {

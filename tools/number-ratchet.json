@@ -150,6 +150,7 @@
     "js/mission/lab/curriculum.js": 2,
     "js/observingWidgets.js": 1,
     "js/place/preciseFields.js": 8,
+    "js/sonify/series.js": 2,
     "js/telescopeField.js": 2,
     "js/transitWidgets.js": 1,
     "js/validation/groups/absorption.js": 8,
@@ -177,7 +178,7 @@
     "js/validation/groups/real-systems.js": 3,
     "js/validation/groups/reference-frames-2.js": 3,
     "js/validation/groups/reference-frames.js": 1,
-    "js/validation/groups/sonification-law.js": 5,
+    "js/validation/groups/sonification-law.js": 8,
     "js/validation/groups/three-body-sensitivity.js": 8,
     "js/validation/groups/unit-system.js": 4
   },

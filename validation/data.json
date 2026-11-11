@@ -1,9 +1,9 @@
 {
- "generatedAt": "2026-11-06",
+ "generatedAt": "2026-11-11",
  "version": "2.1.0",
- "passed": 439,
+ "passed": 442,
  "failed": 0,
- "elapsedMs": 107468,
+ "elapsedMs": 106085,
  "checks": [
   {
    "group": "Unit system",
@@ -3211,6 +3211,46 @@
    "tolerance": 0,
    "toleranceKind": "bound",
    "why": "A 1.98:1 ratio lands at 1182.60 cents, 17.40 cents below the octave, and the resolution floor the module publishes is 10 cents - so the floor is 0.57 of the gap and the distinction survives the encoding. Written as a ratio because the suite scores one-sided claims as \"measured at or below expected\" and the claim here is a floor. The 10 cents is a deliberately conservative working figure, roughly twice the few-cent pure-tone difference limen, and is NOT a measurement of any listener: what passes here is that the map did not collapse the distinction, not that anybody heard it. The second thing has no machine gate and this check must not be cited as one.",
+   "error": 0,
+   "pass": true
+  },
+  {
+   "group": "Sonification law",
+   "kind": "analytic",
+   "name": "A ramp is heard as equal musical steps",
+   "measured": 5.613287612504791e-13,
+   "expected": 1e-9,
+   "unit": "cents, worst deviation from the mean step over a 40-note ramp",
+   "tolerance": 0,
+   "toleranceKind": "bound",
+   "why": "Pitch is placed linearly in cents from the value (js/sonify/series.js), so equal steps in value are equal intervals; a ramp with three points in each of forty slices has equal slice means and the notes must therefore be an arithmetic run in cents. Implementation deviation is a few 1e-13 cents, the rounding of log2 and pow; the bound is 1e-9 so that a gamma curve, a scale or a rounding of the pitch (each of which moves this to a cent or more) fails at once. It checks the encoding, not that anyone heard the steps.",
+   "error": 0,
+   "pass": true
+  },
+  {
+   "group": "Sonification law",
+   "kind": "analytic",
+   "name": "The stated range is exactly two octaves",
+   "measured": 2400,
+   "expected": 2400,
+   "unit": "cents, highest note over lowest",
+   "tolerance": 1e-9,
+   "toleranceKind": "absolute",
+   "why": "The map states its range (220 Hz at the lowest slice mean, 880 Hz at the highest) and prints it beside every sound. That statement is only honest if the notes reach it: the highest over the lowest must be 2 * 1200 cents, by the definition of the cent, to the arithmetic of log2 and pow.",
+   "source": "The cent is 1/1200 of an octave - Ellis, appendix XX to Helmholtz, On the Sensations of Tone (2nd English edition, 1885).",
+   "error": 0,
+   "pass": true
+  },
+  {
+   "group": "Sonification law",
+   "kind": "analytic",
+   "name": "The same data give the same samples",
+   "measured": 0,
+   "expected": 0,
+   "unit": "samples that differ between two renders of 48,000",
+   "tolerance": 0,
+   "why": "The mapping is deterministic: no clock, no random stream and no state is read, so two renders of the same arrays are identical to the bit. A count of differing samples is the plainest way to hold that, and it is exact rather than approximate because nothing here is allowed to vary.",
+   "toleranceKind": "relative",
    "error": 0,
    "pass": true
   },

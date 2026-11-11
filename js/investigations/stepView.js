@@ -17,6 +17,7 @@
 import { fixed, formatNumber, tickLabel } from '../format.js';
 import { evidenceFrom } from '../data/investigations/provenance.js';
 import { getLocale, t } from '../i18n/index.js';
+import { markHeld } from '../lesson/held.js';
 import {
   decodeEntities,
   escapeHtml as escape,
@@ -51,7 +52,6 @@ import {
   writeProgress,
 } from './progressSchema.js';
 import { KEY_INVESTIGATION_PREFIX } from '../names.js';
-
 const getAreaSweepWedges = command('getAreaSweepWedges');
 
 /** Escape for use inside a double-quoted attribute. */
@@ -100,7 +100,7 @@ export function stepMarkup(step, c) {
       })
     )}
        <span class="inv-step-kind">${escape(t(`inv.step.kind.${step.type}`))}</span></p>`,
-    `<h3 class="inv-step-title">${escape(step.title)}</h3>`,
+    `<h3 class="inv-step-title">${markHeld(active?.steps, step, visited)}${escape(step.title)}</h3>`,
     `<div class="inv-step-body"><p>${prose(step.body)}</p></div>`,
   ];
 

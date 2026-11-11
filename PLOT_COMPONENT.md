@@ -1190,3 +1190,22 @@ module, file or dependency names the library.
 - **Initial download** 791.8 KB; every route is unchanged. No ceiling was
   raised or lowered; the working deferred headroom is the ceiling's 2044.4 KB
   less the current figure, about 58 KB on CI's number, until 133 lands.
+
+### Descriptions and the series sound (Prompt 280)
+
+The series chart gains an accessibility layer, `js/plot/access.js`, fetched by
+`js/plot/chart.js` once a chart that is on a screen has drawn (a timer of 1.5 s
+and a dynamic import; `access: false` opts out; a page that shows no chart
+pays nothing). It adds the chart's description (`js/plot/describe.js`, as the
+`<svg>`'s `aria-describedby`), a disclosure under the chart that appears at the
+chart's first focus (the description as text, a button, the mapping of the
+sound written out) and the sound (`js/sonify/series.js`, started by `S` or the
+button, stopped by `Escape`, a hidden tab or any other signal audio). The
+description names shapes and numbers and never what they mean; a lesson step
+that holds an answer (`data-answer-held` on `#investigationPanel`, written by the step view through `markHeld` of `js/lesson/held.js` and read only while the panel is open)
+reduces it to the axes and refuses the sound. `parts()` now also carries each
+series' `sigma` and `cap` (its `maxPoints`), which the layer reads. The table
+plot (`js/plot/plot.js`) is not changed: its table is its text alternative, and
+describing a table is a separate question (D-R10-280-05). ACCESSIBILITY.md
+("Descriptions of a chart and the series sound") states what is tested and what
+no listener has checked.

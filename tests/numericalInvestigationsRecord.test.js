@@ -90,7 +90,7 @@ describe('the substrate the record describes', () => {
 
   test("152's interpolation is not yet installed by the service worker", () => {
     expect(read('tools/build-service-worker.mjs')).toMatch(
-      /\^js\\\/numeric\\\/\(roots\|interp\|polyfit\)\\\.js\$/
+      /\^js\\\/numeric\\\/\(roots\|interp\)\\\.js\$/
     );
   });
 

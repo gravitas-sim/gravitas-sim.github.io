@@ -123,13 +123,13 @@ describe('NUMERICS.md', () => {
 });
 
 describe('the install', () => {
-  // quadrature.js (js/kernels/cosmology/flrw.js) and linalg.js
-  // (js/inference/fit.js) are imported by a shipped module, so they are
-  // installed; the other three are not, and each stays out of the install
+  // quadrature.js (js/kernels/cosmology/flrw.js), linalg.js
+  // (js/inference/fit.js) and polyfit.js (js/plot/describe.js, Prompt 280) are
+  // imported by a shipped module, so they are installed; the other two are not, and each stays out of the install
   // until its first adopter deletes its NEVER_PRECACHED entry (and its name
   // here).
-  const adopted = ['quadrature', 'linalg'];
-  const waiting = ['roots', 'interp', 'polyfit'];
+  const adopted = ['quadrature', 'linalg', 'polyfit'];
+  const waiting = ['roots', 'interp'];
   const file = n => `js/numeric/${n}.js`;
   // Modules a page can fetch. js/compute/ and js/validation/ are never
   // installed either, so they may import a routine without making one needed.

@@ -142,6 +142,7 @@ export async function runChecks() {
     binaryStability,
     gravityAssist,
     sonifyLaw,
+    sonifySeries,
     sky,
   ] = await Promise.all([
     import('../constants.js'),
@@ -168,6 +169,7 @@ export async function runChecks() {
     import('../binaryStability.js'),
     import('../gravityAssist.js'),
     import('../sonify/law.js'),
+    import('../sonify/series.js'),
     import('../observingWindow.js'),
   ]);
 
@@ -199,6 +201,7 @@ export async function runChecks() {
     binaryStability,
     gravityAssist,
     sonifyLaw,
+    sonifySeries,
     sky,
     add,
     lab,
