@@ -13,6 +13,8 @@ export const EN_CHART = {
   'chart.legend': 'Series',
   'chart.shown': '{label} shown',
   'chart.hidden': '{label} hidden',
+  'chart.prev': 'Previous point',
+  'chart.next': 'Next point',
   'energyChart.label':
     'Energy against time: kinetic, potential and total. Arrow keys read the values.',
   'lightCurve.chartLabel':

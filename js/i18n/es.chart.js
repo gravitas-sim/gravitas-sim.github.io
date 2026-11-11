@@ -10,6 +10,8 @@ export const ES_CHART = {
   'chart.legend': 'Series',
   'chart.shown': 'Se muestra: {label}',
   'chart.hidden': 'Se oculta: {label}',
+  'chart.prev': 'Punto anterior',
+  'chart.next': 'Punto siguiente',
   'energyChart.label':
     'Energía frente al tiempo: cinética, potencial y total. Las flechas leen los valores.',
   'lightCurve.chartLabel':
