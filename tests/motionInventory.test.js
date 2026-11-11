@@ -95,6 +95,18 @@ describe('the motion inventory against the sources', () => {
   });
 });
 
+test('no script writes a transition or an animation with a literal duration into a style', () => {
+  // An inline style outranks the reader's own Settings, Motion override (an
+  // unlayered rule that is not important); a token does not, because the
+  // override collapses the tokens. This is how the settings tooltips kept a
+  // 0.3 s transition under "Reduced" until this sweep.
+  const literal = /(?:transition|animation)\s*:[^;`'"]*\d(?:\.\d+)?m?s\b/;
+  const found = sources().filter(rel =>
+    literal.test(withoutComments(read(rel)))
+  );
+  expect(found).toEqual([]);
+});
+
 describe('what each entry promises', () => {
   const treatments = new Set(inventory.treatments);
 

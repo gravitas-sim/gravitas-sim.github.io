@@ -3502,11 +3502,14 @@
   /* --- Narrow screens -------------------------------------------------------- */
 
   @media (max-width: 767px) {
+    /* minmax(0, 1fr), not 1fr: a bare 1fr is minmax(auto, 1fr), so a card whose
+       text is long (a Spanish subtitle, the time chip) made its column wider
+       than the panel and the card was clipped at the panel's edge at 320 px. */
     .inv-grid {
-      grid-template-columns: 1fr;
+      grid-template-columns: minmax(0, 1fr);
     }
     .inv-seq-list {
-      grid-template-columns: 1fr;
+      grid-template-columns: minmax(0, 1fr);
     }
     /* Two menus per row rather than four squeezed into one: below this width
        an 11rem menu and a Spanish option label do not fit side by side. */
@@ -3517,6 +3520,11 @@
        row is just a gap above the title. */
     .inv-card-flags.is-empty {
       display: none;
+    }
+    /* A flag that names its sequence is longer than the card in Spanish, and
+       nowrap pushed it past the card's edge at 320 px. It wraps now. */
+    .inv-flag {
+      white-space: normal;
     }
   }
 

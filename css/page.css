@@ -841,7 +841,8 @@
     font-weight: 600;
     color: var(--accent-contrast);
     background: var(--accent);
-    border: 0;
+    /* Transparent, not none: forced-colors draws it (Prompt 279). */
+    border: 1px solid transparent;
     border-radius: var(--radius-md);
     cursor: pointer;
   }

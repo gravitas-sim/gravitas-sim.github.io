@@ -81,6 +81,16 @@ html:lang(es) .gs-en {
 .gs-nav [aria-current='page'] {
   background: var(--surface-3);
 }
+
+/* The current place is marked by an accent edge and a lighter ground; the
+   system palette removes both, so it keeps a mark that survives it: the
+   selection color on the edge and an underline on the words. */
+@media (forced-colors: active) {
+  .gs-nav [aria-current] {
+    border-color: Highlight;
+    text-decoration: underline;
+  }
+}
 .gs-crumbs,
 .gs-places {
   font-family: var(--font-sans);

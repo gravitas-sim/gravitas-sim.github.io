@@ -1,0 +1,460 @@
+{
+  "about": "The outline of every page of the walk inventory (Prompt 279), as e2e/a11ySweepII.spec.js reads it in English: the page's h1, its headings as a sequence of levels (a run of one level is `3+`), and its landmarks in order (a navigation, a search and a form with the name it is given; a run of regions is `region+`). A page is held to it and to the same shape in Spanish. It records structure, not wording, so a new section or a changed sentence does not move it; a new level, a new landmark or a renamed navigation does, and the diff is read. Regenerate with GRAVITAS_OUTLINE_WRITE=1 (see the spec's header). `exempt` is a page the sweep does not judge, with the reason. `reflowExempt` is a box allowed beyond a 320 px viewport, per page, with the reason.",
+  "exempt": {
+    "history-original": "The first version, kept as it was: one file with no shell, no landmarks and no h1, whose Settings footer is 4 px wider than a 320 px window. Whether the page is kept at all is Prompt 165's and 166's decision (the surface-retirement gate), not a sweep's; changing its content or its order is what this prompt is told not to do."
+  },
+  "reflowExempt": {},
+  "pages": {
+    "catalog": {
+      "path": "/catalog/",
+      "scope": "page",
+      "h1": "Catalog",
+      "headings": "1 2+",
+      "landmarks": [
+        "banner",
+        "navigation:Gravitas",
+        "navigation:Breadcrumb",
+        "main",
+        "region",
+        "contentinfo"
+      ]
+    },
+    "composer": {
+      "path": "/studio/lesson/",
+      "scope": "page",
+      "h1": "Investigation Composer",
+      "headings": "1 2+",
+      "landmarks": [
+        "banner",
+        "navigation:Gravitas",
+        "navigation:Breadcrumb",
+        "main",
+        "region+",
+        "contentinfo"
+      ]
+    },
+    "compute": {
+      "path": "/compute/",
+      "scope": "page",
+      "h1": "Compute page",
+      "headings": "1 2+",
+      "landmarks": [
+        "banner",
+        "navigation:Gravitas",
+        "navigation:Breadcrumb",
+        "main",
+        "region+",
+        "contentinfo"
+      ]
+    },
+    "course-builder": {
+      "path": "/studio/course/",
+      "scope": "page",
+      "h1": "Course-package builder",
+      "headings": "1 2+",
+      "landmarks": [
+        "banner",
+        "navigation:Gravitas",
+        "navigation:Breadcrumb",
+        "main",
+        "region+",
+        "contentinfo"
+      ]
+    },
+    "course-packages": {
+      "path": "/studio/course/packs/",
+      "scope": "page",
+      "h1": "Investigations in a course",
+      "headings": "1 2+",
+      "landmarks": [
+        "banner",
+        "navigation:Gravitas",
+        "navigation:Breadcrumb",
+        "main",
+        "region+",
+        "contentinfo"
+      ]
+    },
+    "courses": {
+      "path": "/course/",
+      "scope": "page",
+      "h1": "No course is open",
+      "headings": "1",
+      "landmarks": [
+        "banner",
+        "navigation:Gravitas",
+        "navigation:Breadcrumb",
+        "main",
+        "region",
+        "contentinfo"
+      ]
+    },
+    "evaluation": {
+      "path": "/evaluation/",
+      "scope": "page",
+      "h1": "Classroom evidence kit",
+      "headings": "1 2+",
+      "landmarks": [
+        "banner",
+        "navigation:Gravitas",
+        "navigation:Breadcrumb",
+        "main",
+        "region",
+        "contentinfo"
+      ]
+    },
+    "experiments": {
+      "path": "/experiments/",
+      "scope": "page",
+      "h1": "Run an experiment",
+      "headings": "1 2",
+      "landmarks": [
+        "banner",
+        "navigation:Gravitas",
+        "navigation:Breadcrumb",
+        "main",
+        "region",
+        "contentinfo"
+      ]
+    },
+    "figure-builder": {
+      "path": "/figure/",
+      "scope": "page",
+      "h1": "Make an interactive figure",
+      "headings": "1 2+",
+      "landmarks": [
+        "banner",
+        "navigation:Gravitas",
+        "navigation:Breadcrumb",
+        "main",
+        "region",
+        "contentinfo"
+      ]
+    },
+    "glossary": {
+      "path": "/glossary/",
+      "scope": "page",
+      "h1": "The words Gravitas uses",
+      "headings": "1 2+",
+      "landmarks": [
+        "banner",
+        "navigation:Gravitas",
+        "navigation:Breadcrumb",
+        "main",
+        "region+",
+        "contentinfo"
+      ]
+    },
+    "instructors": {
+      "path": "/instructors/",
+      "scope": "page",
+      "h1": "Instructor Resources",
+      "headings": "2 1 2",
+      "landmarks": [
+        "banner",
+        "navigation:Gravitas",
+        "navigation:Breadcrumb",
+        "main",
+        "region+",
+        "contentinfo"
+      ]
+    },
+    "investigations": {
+      "path": "/#investigations",
+      "scope": "dialog",
+      "h1": "",
+      "headings": "3 4 5+ 4",
+      "landmarks": [
+        "region"
+      ]
+    },
+    "kernel-diagnostics": {
+      "path": "/lab3d/",
+      "scope": "page",
+      "h1": "3-D dynamics diagnostics",
+      "headings": "1 2+ 3+ 2+",
+      "landmarks": [
+        "banner",
+        "navigation:Gravitas",
+        "navigation:Breadcrumb",
+        "main",
+        "region+",
+        "contentinfo"
+      ]
+    },
+    "lab3d": {
+      "path": "/3d/",
+      "scope": "page",
+      "h1": "The 3-D lab",
+      "headings": "1 2+",
+      "landmarks": [
+        "banner",
+        "navigation:Gravitas",
+        "navigation:Breadcrumb",
+        "main",
+        "region+",
+        "contentinfo"
+      ]
+    },
+    "library": {
+      "path": "/library/",
+      "scope": "page",
+      "h1": "Library",
+      "headings": "1 2+ 3+ 2+",
+      "landmarks": [
+        "banner",
+        "navigation:Gravitas",
+        "navigation:Breadcrumb",
+        "main",
+        "region+",
+        "navigation:Also in Learn",
+        "contentinfo"
+      ]
+    },
+    "mission-diagnostics": {
+      "path": "/mission/",
+      "scope": "page",
+      "h1": "Mission design diagnostics",
+      "headings": "1 2+ 3+",
+      "landmarks": [
+        "banner",
+        "navigation:Gravitas",
+        "navigation:Breadcrumb",
+        "main",
+        "region+",
+        "contentinfo"
+      ]
+    },
+    "mission-lab": {
+      "path": "/mission/lab/",
+      "scope": "page",
+      "h1": "Mission lab: to Mars in 2026",
+      "headings": "1 2+ 3",
+      "landmarks": [
+        "banner",
+        "navigation:Gravitas",
+        "navigation:Breadcrumb",
+        "main",
+        "region+",
+        "complementary",
+        "contentinfo"
+      ]
+    },
+    "model": {
+      "path": "/model/",
+      "scope": "page",
+      "h1": "How Gravitas Models the Universe",
+      "headings": "1 2+ 3 2 3 2 3+ 2 3 2 3+ 2+ 3+ 2 3+ 2+ 3+ 2+ 3+ 2 3+ 2 3+ 2 3+ 2 3+ 2 3+ 2 3+ 2 3+ 2 3+ 2 3+ 2 3 2 3+ 2 3+ 2 3+ 2 3+ 2 3+ 2 3+ 2 3+ 2 3+ 2 3+ 2 3+ 2 3+ 2+ 3+ 2 3 2+",
+      "landmarks": [
+        "banner",
+        "navigation:Gravitas",
+        "navigation:Breadcrumb",
+        "main",
+        "navigation:Contents",
+        "region+",
+        "contentinfo"
+      ]
+    },
+    "my-work": {
+      "path": "/my-work/",
+      "scope": "page",
+      "h1": "My work",
+      "headings": "1 2+",
+      "landmarks": [
+        "banner",
+        "navigation:Gravitas",
+        "navigation:Breadcrumb",
+        "main",
+        "region+",
+        "contentinfo"
+      ]
+    },
+    "observatory": {
+      "path": "/observatory/",
+      "scope": "page",
+      "h1": "Observatory",
+      "headings": "1 2+",
+      "landmarks": [
+        "banner",
+        "navigation:Gravitas",
+        "navigation:Breadcrumb",
+        "main",
+        "region",
+        "navigation:Also in Observe",
+        "contentinfo"
+      ]
+    },
+    "sandbox": {
+      "path": "/",
+      "scope": "page",
+      "h1": "Gravitas: interactive astrophysics sandbox",
+      "headings": "1 2",
+      "landmarks": [
+        "banner",
+        "navigation:Gravitas",
+        "main",
+        "region+",
+        "contentinfo"
+      ]
+    },
+    "scenario-studio": {
+      "path": "/studio/",
+      "scope": "page",
+      "h1": "Scenario Studio",
+      "headings": "1 2+ 3+ 2+",
+      "landmarks": [
+        "banner",
+        "navigation:Gravitas",
+        "navigation:Breadcrumb",
+        "main",
+        "region+",
+        "contentinfo"
+      ]
+    },
+    "sky-lab": {
+      "path": "/sky/",
+      "scope": "page",
+      "h1": "Sky Lab",
+      "headings": "1 2+",
+      "landmarks": [
+        "banner",
+        "navigation:Gravitas",
+        "navigation:Breadcrumb",
+        "main",
+        "region+",
+        "contentinfo"
+      ]
+    },
+    "submissions": {
+      "path": "/instructors/submissions/",
+      "scope": "page",
+      "h1": "Submission review",
+      "headings": "1 2+ 3 2",
+      "landmarks": [
+        "banner",
+        "navigation:Gravitas",
+        "navigation:Breadcrumb",
+        "main",
+        "region+",
+        "contentinfo"
+      ]
+    },
+    "teaching": {
+      "path": "/teaching/",
+      "scope": "page",
+      "h1": "Teaching with Gravitas",
+      "headings": "1 2+ 3+ 2 3+ 2 3+ 2 3+ 2 3+ 2+ 3 4 3 4+ 3 4 3 4 3 4 3 4 2 3 2 3+ 4 3 4 3 4 3 2+ 3+ 2+ 3+ 2 3+ 2 3+ 2 3",
+      "landmarks": [
+        "banner",
+        "navigation:Gravitas",
+        "navigation:Breadcrumb",
+        "main",
+        "navigation:On this page",
+        "region+",
+        "navigation:Also in Teach",
+        "contentinfo"
+      ]
+    },
+    "teaching-activities": {
+      "path": "/teaching/activity/orbital-speed/",
+      "scope": "page",
+      "h1": "Orbital motion: why do planets change speed?",
+      "headings": "1 2+",
+      "landmarks": [
+        "banner",
+        "navigation:Gravitas",
+        "navigation:Breadcrumb",
+        "main",
+        "region+",
+        "contentinfo"
+      ]
+    },
+    "teaching-adopt": {
+      "path": "/teaching/adopt/",
+      "scope": "page",
+      "h1": "Adopter’s guide",
+      "headings": "1 2+",
+      "landmarks": [
+        "banner",
+        "navigation:Gravitas",
+        "navigation:Breadcrumb",
+        "main",
+        "navigation:On this page",
+        "region+",
+        "contentinfo"
+      ]
+    },
+    "teaching-alignment": {
+      "path": "/teaching/alignment/",
+      "scope": "page",
+      "h1": "Textbook alignment",
+      "headings": "1 2+",
+      "landmarks": [
+        "banner",
+        "navigation:Gravitas",
+        "navigation:Breadcrumb",
+        "main",
+        "region+",
+        "contentinfo"
+      ]
+    },
+    "teaching-find": {
+      "path": "/teaching/find/",
+      "scope": "page",
+      "h1": "Find content to teach",
+      "headings": "1 2",
+      "landmarks": [
+        "banner",
+        "navigation:Gravitas",
+        "navigation:Breadcrumb",
+        "main",
+        "region",
+        "search:Find something to teach",
+        "contentinfo"
+      ]
+    },
+    "teaching-investigations": {
+      "path": "/teaching/investigation/a-binary-stars-orbit/",
+      "scope": "page",
+      "h1": "A Binary Star’s Orbit",
+      "headings": "1 2+ 3+ 2+",
+      "landmarks": [
+        "banner",
+        "navigation:Gravitas",
+        "navigation:Breadcrumb",
+        "main",
+        "region+",
+        "contentinfo"
+      ]
+    },
+    "teaching-kit": {
+      "path": "/teaching/kit/",
+      "scope": "page",
+      "h1": "Distribution kit",
+      "headings": "1 2+",
+      "landmarks": [
+        "banner",
+        "navigation:Gravitas",
+        "navigation:Breadcrumb",
+        "main",
+        "region+",
+        "contentinfo"
+      ]
+    },
+    "validation": {
+      "path": "/validation/",
+      "scope": "page",
+      "h1": "What Gravitas Has Been Checked Against",
+      "headings": "1 2+ 3+ 2+ 3+ 2",
+      "landmarks": [
+        "banner",
+        "navigation:Gravitas",
+        "navigation:Breadcrumb",
+        "main",
+        "region+",
+        "navigation:Contents",
+        "contentinfo"
+      ]
+    }
+  }
+}

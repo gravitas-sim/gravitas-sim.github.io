@@ -102,7 +102,7 @@ class TooltipManager {
       z-index: 10000;
       opacity: 0;
       visibility: hidden;
-      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      transition: all var(--duration-slow) var(--ease);
       pointer-events: none;
       max-width: 280px;
       word-wrap: break-word;
@@ -128,7 +128,7 @@ class TooltipManager {
       cursor: pointer;
       padding: 2px 6px;
       border-radius: 4px;
-      transition: all 0.2s ease;
+      transition: all var(--duration) ease;
       line-height: 1;
       width: 20px;
       height: 20px;
@@ -207,7 +207,7 @@ class TooltipManager {
       cursor: pointer;
       padding: 2px 6px;
       border-radius: 4px;
-      transition: all 0.2s ease;
+      transition: all var(--duration) ease;
       line-height: 1;
       width: 20px;
       height: 20px;

@@ -371,5 +371,10 @@
       "what": "One frame's wait before the tutorial step scrolls into place",
       "reason": "A single deferred callback, not a loop."
     }
-  ]
+  ],
+  "override": {
+    "about": "Where the reader's own Settings, Motion choice (Follow my device, Reduced, Step by step; `gravitas_motion`) takes effect. It is read by js/quality.js, which only the application page loads, so it reaches the application (the sandbox and the lessons in it) and nowhere else. Every other page follows the system setting alone, which the blanket rules honour on all of them. e2e/a11ySweepII.spec.js holds the list exact: a page that learns the choice fails there until its row is corrected.",
+    "reaches": ["investigations", "sandbox"],
+    "proposal": "Apply it where the theme is applied: in the script the shell stamps into every page's head (tools/shell.mjs, HEAD), three lines that set data-motion from the stored value before the first paint. It costs no JavaScript budget, and it re-stamps the 178 pages that carry the shell and their CSP hashes, which is why this sweep records it rather than doing it among the fixes."
+  }
 }
