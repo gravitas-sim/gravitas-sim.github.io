@@ -341,7 +341,7 @@ run directly, so debugging never requires a build step.
 ### Everything else
 
 ```bash
-npm test                  # <!--fact:jestTests-->20480<!--/fact--> tests across <!--fact:jestSuites-->597<!--/fact--> suites
+npm test                  # <!--fact:jestTests-->20495<!--/fact--> tests across <!--fact:jestSuites-->598<!--/fact--> suites
 npm run validate:physics  # the physics validation table
 npm run e2e               # browser smoke tests, against the sources
 npm run lint              # eslint
@@ -365,10 +365,10 @@ reports what the browser downloads at start-up separately from what is deferred:
 
 | What                   | Size                                                   | Files / chunks                                |
 | ---------------------- | ------------------------------------------------------ | --------------------------------------------- |
-| CSS                    | <!--fact:buildCss-->211<!--/fact--> KB                 | 1                                             |
+| CSS                    | <!--fact:buildCss-->212<!--/fact--> KB                 | 1                                             |
 | JavaScript at start-up | <!--fact:buildStartupJs-->594<!--/fact--> KB           | <!--fact:buildStartupFiles-->53<!--/fact-->   |
 | JavaScript on demand   | <!--fact:buildDeferredJs-->8641<!--/fact--> KB         | <!--fact:buildDeferredChunks-->804<!--/fact--> |
-| **Initial download**   | **<!--fact:buildInitialDownload-->805<!--/fact--> KB** |                                               |
+| **Initial download**   | **<!--fact:buildInitialDownload-->806<!--/fact--> KB** |                                               |
 
 Those figures are the last build's, to the nearest kilobyte, and are written
 into the page by `npm run docs:sync` from `dist/build-summary.json` rather than
@@ -486,8 +486,8 @@ npm run e2e:ui                    # the Playwright inspector
 npm run e2e:report                # open the last HTML report
 ```
 
-The suite is <!--fact:e2eTests-->3429<!--/fact--> tests
-in <!--fact:e2eFiles-->235<!--/fact--> files and takes several minutes in
+The suite is <!--fact:e2eTests-->3666<!--/fact--> tests
+in <!--fact:e2eFiles-->236<!--/fact--> files and takes several minutes in
 Chromium.
 
 Some notes on how it is put together, because two of the choices are not

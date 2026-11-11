@@ -562,6 +562,17 @@ test.describe('focus: each pattern puts it somewhere that exists, and gives it b
   });
 });
 
+/** Two frames on, so what a page starts at load has started and stopped. */
+const settle = page =>
+  page.evaluate(
+    () =>
+      new Promise(done =>
+        window.requestAnimationFrame(() =>
+          window.requestAnimationFrame(() => done())
+        )
+      )
+  );
+
 // -----------------------------------------------------------------------------
 // 3. Reduced motion
 // -----------------------------------------------------------------------------
@@ -593,7 +604,7 @@ test.describe('reduced motion: a page at rest moves nothing', () => {
     }) => {
       await page.emulateMedia({ reducedMotion: 'reduce' });
       await open(page, row.path, 'en');
-      await page.waitForTimeout(600);
+      await settle(page);
       const now = await page.evaluate(movingNow);
       expect(now.animations, 'running animations').toEqual([]);
       expect(now.transitions, 'transitions that would run').toEqual([]);
@@ -611,7 +622,7 @@ test.describe('reduced motion: a page at rest moves nothing', () => {
         }
       });
       await open(page, row.path, 'en');
-      await page.waitForTimeout(600);
+      await settle(page);
       const reaches = motion.override.reaches.includes(row.surface);
       // The choice reaches the application and no other page (the inventory's
       // `override`): the list is exact, so a page that learns it fails here

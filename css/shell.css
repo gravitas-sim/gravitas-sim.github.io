@@ -82,9 +82,7 @@ html:lang(es) .gs-en {
   background: var(--surface-3);
 }
 
-/* The current place is marked by an accent edge and a lighter ground; the
-   system palette removes both, so it keeps a mark that survives it: the
-   selection color on the edge and an underline on the words. */
+/* Forced colors drop the edge's color and the ground: keep a mark. */
 @media (forced-colors: active) {
   .gs-nav [aria-current] {
     border-color: Highlight;
