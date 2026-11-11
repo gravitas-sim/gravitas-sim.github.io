@@ -35,9 +35,13 @@ const LABELS = {
 const TITLE = { en: 'What am I looking at?', es: '¿Qué estoy viendo?' };
 
 /**
- * The instruments each family owns, by the ids a step names (the registry's
- * LAZY_FAMILIES in js/widgets.js, which tests/explainers.test.js holds this to).
+ * The instruments each family owns, by the ids a step names. Written by
+ * tools/capability-registries.mjs from the families' own modules (the same
+ * source as LAZY_FAMILIES in js/widgets.js), so a family with no explainer
+ * cannot be added: `node tools/capability-registries.mjs --check` fails on it,
+ * and so does `node tools/generate.mjs --check --only registries`.
  */
+// <generated:explainer-families>
 export const FAMILY_IDS = Object.freeze({
   energy: ['launch', 'live-energy', 'escape-compare', 'shapes'],
   binary: ['binary', 'binary-compare', 'balance', 'visual-binary'],
@@ -108,45 +112,13 @@ export const FAMILY_IDS = Object.freeze({
   ],
   gw: ['gw-lab', 'gw-real'],
   light: ['blackbody', 'spectrum-viewer', 'kirchhoff'],
-  galactic: ['solar-motion', 'rotating-disk', 'cluster-members'],
-  gaia: ['gaia-distance', 'gaia-sample'],
   interiors: ['polytrope', 'wd-mass-radius', 'ms-scaling'],
   variables: ['variable-fold', 'leavitt-law', 'variable-class'],
   lensing: ['light-bending', 'lens-plane', 'lens-passing'],
+  galactic: ['solar-motion', 'rotating-disk', 'cluster-members'],
   survey: ['survey-counts', 'malmquist', 'completeness-lf'],
   cosmology: ['hubble-law', 'hubble-diagram', 'redshift-wedge'],
   detector: ['ccd-frames', 'ccd-snr', 'diff-photometry'],
-  exposure: ['exposure-planner'],
-  strategy: ['strategy-window', 'strategy-plan'],
-  eclipse: ['eclipse-curve', 'eclipse-fit'],
-  vetting: ['vetting-checklist'],
-  directImaging: ['imaging-contrast', 'imaging-architectures'],
-  joint: ['joint-fit', 'mass-radius'],
-  occurrence: ['occurrence-efficiency', 'occurrence-grid'],
-  clusterFit: ['cluster-fit'],
-  masses: ['masses-minimum', 'masses-solve', 'masses-diagram', 'masses-visual'],
-  activity: [
-    'activity-spots',
-    'activity-period',
-    'activity-flares',
-    'activity-ffd',
-  ],
-  remnants: ['remnant-cooling', 'remnant-outcome'],
-  variablesII: ['plz-metallicity', 'variable-features', 'variable-ambiguity'],
-  ttv: ['ttv-transit', 'ttv-timing'],
-  spectrograph: [
-    'spectrograph-lines',
-    'spectrograph-arc',
-    'spectrograph-trade',
-  ],
-  telescope: ['telescope'],
-  effects: ['detector-effects'],
-  photcal: ['photometric-calibration'],
-  surveyDesign: [
-    'survey-design-tradeoff',
-    'survey-design-plan',
-    'survey-design-compare',
-  ],
   sky: [
     'sky-turning',
     'sky-seasons',
@@ -177,8 +149,41 @@ export const FAMILY_IDS = Object.freeze({
   sun: ['sun-frames', 'sun-rotation', 'sun-power'],
   smallBodies: ['belt-gaps', 'spin-curve'],
   tides: ['tides-roche', 'tides-resonance', 'tides-moon', 'tides-heating'],
+  activity: [
+    'activity-spots',
+    'activity-period',
+    'activity-flares',
+    'activity-ffd',
+  ],
+  clusterFit: ['cluster-fit'],
+  directImaging: ['imaging-contrast', 'imaging-architectures'],
+  eclipse: ['eclipse-curve', 'eclipse-fit'],
+  effects: ['detector-effects'],
+  exposure: ['exposure-planner'],
+  gaia: ['gaia-distance', 'gaia-sample'],
   habitabilityLimits: ['hz-limits', 'hz-locking', 'hz-ages'],
+  joint: ['joint-fit', 'mass-radius'],
+  masses: ['masses-minimum', 'masses-solve', 'masses-diagram', 'masses-visual'],
+  occurrence: ['occurrence-efficiency', 'occurrence-grid'],
+  photcal: ['photometric-calibration'],
+  remnants: ['remnant-cooling', 'remnant-outcome'],
+  spectrograph: [
+    'spectrograph-lines',
+    'spectrograph-arc',
+    'spectrograph-trade',
+  ],
+  strategy: ['strategy-window', 'strategy-plan'],
+  surveyDesign: [
+    'survey-design-tradeoff',
+    'survey-design-plan',
+    'survey-design-compare',
+  ],
+  telescope: ['telescope'],
+  ttv: ['ttv-transit', 'ttv-timing'],
+  variablesII: ['plz-metallicity', 'variable-features', 'variable-ambiguity'],
+  vetting: ['vetting-checklist'],
 });
+// </generated:explainer-families>
 
 /**
  * The explainer an instrument id belongs to: its family's.
@@ -246,8 +251,12 @@ export async function toggleExplainer(button, key, host = button) {
     list.append(dt, dd);
   });
   region.append(list);
+  const where = (await import('./explain/where.js')).whereChecked(key, lang);
+  if (where) region.append(where);
   host.after(region);
   button.setAttribute('aria-expanded', 'true');
   button.setAttribute('aria-controls', region.id);
+  if (words.some(w => w.includes('[[')))
+    await (await import('./glossaryTerms.js')).markTerms(region, lang);
   return true;
 }

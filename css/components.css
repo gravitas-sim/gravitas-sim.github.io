@@ -7540,6 +7540,36 @@
     margin: 0;
   }
 
+  /* A glossary term in prose (js/glossaryTerms.js): a button that reads as the
+     word it is, marked by a dotted underline, and the definition it opens. */
+  .gl-term {
+    background: none;
+    border: 0;
+    border-bottom: 1px dotted currentcolor;
+    color: inherit;
+    cursor: help;
+    font: inherit;
+    padding: 0;
+  }
+
+  .gl-term:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+  }
+
+  .gl-def {
+    border-left: 3px solid var(--accent);
+    display: block;
+    font-size: 0.8rem;
+    line-height: 1.45;
+    margin: 0.3rem 0;
+    padding: 0.2rem 0 0.2rem 0.6rem;
+  }
+
+  .explainer .where-checked {
+    margin: 0.4rem 0 0;
+  }
+
   .inv-reflect-note {
     color: var(--text-dim, var(--c2));
     font-size: 0.8rem;

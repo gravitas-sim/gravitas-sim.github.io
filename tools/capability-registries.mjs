@@ -39,7 +39,7 @@
 
 import { existsSync, readFileSync, readdirSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { fileURLToPath, pathToFileURL } from 'node:url';
 import * as acorn from 'acorn';
 // Namespace import: the package's API is named exports, and the default binding
 // is absent under the test runner's ESM interop.
@@ -51,6 +51,7 @@ export const FILES = Object.freeze({
   families: 'js/widgets.js',
   builtins: 'js/platform/builtins.js',
   lessons: 'js/data/investigations/registry.js',
+  explainers: 'js/explainers.js',
 });
 
 /** The families' catalog order, as it was written when they were hand-listed. */
@@ -442,6 +443,17 @@ const renderFamilies = families =>
     '});',
   ].join('\n');
 
+/**
+ * The explainers' registry (js/explainers.js, Prompt 286): each family and the
+ * instrument ids it owns, from the same reading as LAZY_FAMILIES.
+ */
+const renderExplainerFamilies = families =>
+  [
+    'export const FAMILY_IDS = Object.freeze({',
+    ...families.map(f => `${key(f.key)}: [${f.ids.map(str).join(', ')}],`),
+    '});',
+  ].join('\n');
+
 /** A path from js/platform/ (where builtins.js is) to a repository path. */
 const fromPlatform = p => path.posix.relative('js/platform', p);
 
@@ -486,6 +498,11 @@ export async function renderRegions(root = REPO) {
   return {
     [FILES.families]: {
       'lazy-families': renderFamilies(familyEntries(manifests, root)),
+    },
+    [FILES.explainers]: {
+      'explainer-families': renderExplainerFamilies(
+        familyEntries(manifests, root)
+      ),
     },
     [FILES.builtins]: { builtins: renderBuiltins(builtinEntries(manifests)) },
     [FILES.lessons]: {
@@ -565,8 +582,45 @@ export async function staleRegions(root = REPO) {
   return out;
 }
 
+/**
+ * The families that have no explainer in one of the two languages: a family is
+ * an instrument a student can open, and an instrument with no "What am I
+ * looking at?" is a gap Prompt 286 does not allow.
+ *
+ * @param {string} [root] - The repository
+ * @returns {Promise<string[]>} One line per missing explainer
+ */
+export async function explainerGaps(root = REPO) {
+  const keys = familyEntries(readManifests(root), root).map(f => f.key);
+  const tables = {};
+  for (const lang of ['en', 'es'])
+    tables[lang] = (
+      await import(
+        `${pathToFileURL(path.join(root, 'js/explain', `${lang}.js`)).href}`
+      )
+    ).default;
+  return explainerGapsIn(keys, tables);
+}
+
+/**
+ * The same check on tables in hand.
+ * @param {string[]} keys - The families
+ * @param {{en: object, es: object}} tables - The two languages' explainers
+ * @returns {string[]} One line per missing explainer
+ */
+export function explainerGapsIn(keys, tables) {
+  const out = [];
+  for (const lang of ['en', 'es'])
+    for (const k of keys)
+      if (!Array.isArray(tables[lang][k]) || tables[lang][k].length !== 4)
+        out.push(`${lang}: the ${k} family has no four-answer explainer`);
+  return out;
+}
+
 async function main(argv) {
   if (argv.includes('--check')) {
+    const gaps = await explainerGaps();
+    for (const g of gaps) console.error(`  js/explain/${g}`);
     const stale = await staleFiles();
     if (stale.length) {
       for (const f of stale)
@@ -574,6 +628,7 @@ async function main(argv) {
       console.error('Run `node tools/capability-registries.mjs`.');
       return 1;
     }
+    if (gaps.length) return 1;
     console.log('Lazy registries are what the manifests and modules say.');
     return 0;
   }

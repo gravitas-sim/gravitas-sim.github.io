@@ -9,6 +9,32 @@
 // =============================================================================
 
 /**
+ * A glossary mark, `[[term|words]]`, as the words alone: what paper, a PDF and
+ * a copied note show where the screen shows a button that opens the
+ * definition (js/glossaryTerms.js). Lesson prose always gives the words.
+ * @param {string} text - Prose that may carry marks
+ * @returns {string} The prose with each mark replaced by its words
+ */
+export const unmark = text =>
+  String(text ?? '').replace(
+    /\[\[([a-z0-9-]+)(?:\|([^\]]*))?\]\]/g,
+    (whole, id, words) => words || id.replace(/-/g, ' ')
+  );
+
+/**
+ * Set rendered prose into an element. A mark in it becomes a term button; the
+ * module that does that is fetched only when there is one.
+ * @param {Element} el - Where the prose goes
+ * @param {string} html - What prose() returned
+ * @returns {void}
+ */
+export function setProse(el, html) {
+  el.innerHTML = html;
+  if (html.includes('[['))
+    import('./glossaryTerms.js').then(m => m.markTerms(el));
+}
+
+/**
  * The entities lessons use, as the characters HTML gives them. Short on
  * purpose: an unlisted one stays visible, and the test names its lesson.
  */
@@ -37,7 +63,7 @@ export const ENTITIES = Object.freeze({
  * @returns {string} The text with every known entity resolved
  */
 export const decodeEntities = text =>
-  String(text ?? '').replace(
+  unmark(text).replace(
     /&(?:([a-z][a-z\d]{1,31})|#(\d{1,7})|#x([\da-f]{1,6}));/gi,
     (whole, name, dec, hex) => {
       if (name) return Object.hasOwn(ENTITIES, name) ? ENTITIES[name] : whole;

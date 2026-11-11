@@ -66,6 +66,13 @@ const $ = id => document.getElementById(id);
  * @param {*} v - Any value
  * @returns {string} HTML-safe text
  */
+/** An area's anchor: js/explain/where.js writes the same links to it. */
+const slug = name =>
+  name
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-|-$/g, '');
+
 const esc = v =>
   String(v ?? '')
     .replace(/&/g, '&amp;')
@@ -320,7 +327,7 @@ function paintGroups(checks) {
         })
         .join('');
       return `
-        <section class="val-group" data-group="${esc(g.name)}">
+        <section class="val-group" id="g-${esc(slug(g.name))}" data-group="${esc(g.name)}">
           <h3>
             ${esc(g.name)}
             <span class="val-group-count">${g.rows.length} checks${failed ? `, ${failed} failing` : ''}</span>
@@ -414,6 +421,8 @@ function render(data, live = false) {
   paintExact(data.checks);
   paintGroups(data.checks);
   paintFilters(data.checks);
+  // The table is painted after the page loads, so a link to one area waits.
+  if (location.hash) $(location.hash.slice(1))?.scrollIntoView();
 }
 
 // --- The live run ------------------------------------------------------------

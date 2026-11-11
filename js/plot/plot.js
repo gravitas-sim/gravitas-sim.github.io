@@ -20,6 +20,7 @@
 //   page says so; a plot without bars is not a claim of precision.
 // =============================================================================
 
+import { armHelpKey } from '../helpKey.js';
 import { formatUnit, parseUnit } from '../observatory/units.js';
 import { columnOf, maskedRows, uncertaintyOf } from '../observatory/schema.js';
 
@@ -181,6 +182,7 @@ export function createPlot(svg, hooks) {
       (await import('../explainers.js')).toggleExplainer(help, key);
     });
     svg.after(help);
+    armHelpKey();
   }
   let sx;
   let sy;

@@ -43,6 +43,7 @@ import {
   decodeEntities,
   escapeHtml as escape,
   prose,
+  setProse,
 } from './lessonMarkup.js';
 import { SCENARIO_IDS, scenarioId } from './scenarios.js';
 // The registry, not the barrel. ../data/investigations.js pulls all ten lessons
@@ -1014,13 +1015,12 @@ function renderStep() {
     recomputeFields,
   });
 
-  els.body.innerHTML = parts.join('');
+  setProse(els.body, parts.join(''));
 
   // Both classes are set before the panels are filled, not after: a widget
   // sizes its canvas from the space it is about to be given, and reads these
   // classes to know what that is. Toggling them afterwards left every
   // measurement screen drawing at full height, its own controls out of view.
-  //
   // investigation-aux: a second panel is docked beside the lesson. The light
   // curve gives up height to it when both are on screen.
   document.body.classList.toggle(

@@ -43,6 +43,7 @@ export const GRAPH = Object.freeze([
       'js/widgets.js',
       'js/platform/builtins.js',
       'js/data/investigations/registry.js',
+      'js/explainers.js',
     ],
     after: [],
     notes:
@@ -231,6 +232,25 @@ export const GRAPH = Object.freeze([
       'The facilities table in INSTRUMENTS.md sits between `<!-- instruments:begin -->` and `<!-- instruments:end -->`; a conflict inside it is resolved by regenerating.',
   },
   {
+    // Roadmap III Prompt 286: the glossary page's body and the two lazy modules
+    // of definitions that `[[term]]` marks open, from one table (the names in
+    // LABELS, the meanings and topics in glossary-science.mjs).
+    id: 'glossary',
+    generate: 'node tools/glossary.mjs --write',
+    check: 'node tools/glossary.mjs',
+    inputs: [
+      'tools/glossary.mjs',
+      'tools/glossary-science.mjs',
+      'js/i18n/en.deferred.js',
+      'js/i18n/es.deferred.js',
+    ],
+    outputs: ['js/explain/terms.en.js', 'js/explain/terms.es.js'],
+    regions: ['glossary/index.html'],
+    after: [],
+    notes:
+      'The page body sits between `<!-- glossary:start -->` and `<!-- glossary:end -->`; a conflict inside it is resolved by regenerating.',
+  },
+  {
     id: 'irreversible',
     generate: 'node tools/build-irreversibility-audit.mjs',
     check: 'node tools/build-irreversibility-audit.mjs --check',
@@ -297,6 +317,7 @@ export const GRAPH = Object.freeze([
       'scene',
       'irreversible',
       'validation-data',
+      'glossary',
     ],
     notes: 'Precache list and version hash.',
   },

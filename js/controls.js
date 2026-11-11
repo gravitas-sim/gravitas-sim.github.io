@@ -20,6 +20,7 @@ import { state, SETTINGS, current_scenario_name } from './appState.js';
 import { resetFollowCamera } from './followCamera.js';
 import { ensurePauseAtEvent, renderEventMarker } from './pauseAtEventBridge.js';
 import { toast, announce, loadFailed } from './notify.js';
+import { armHelpKey } from './helpKey.js';
 export { toast, announce };
 import {
   tickTimeline,
@@ -586,6 +587,15 @@ function setupShortcuts() {
     shift: true,
     run: toggleShortcutHelp,
   });
+  // Handled by js/helpKey.js, which presses the explain button of the panel
+  // focus is in; listed here so the sheet says so.
+  registerShortcut({
+    keys: 'H',
+    match: 'h',
+    group: 'Help',
+    label: t('shortcut.explainHere'),
+  });
+  armHelpKey();
   registerShortcut({
     keys: 'Esc',
     match: 'escape',
