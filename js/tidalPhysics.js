@@ -37,7 +37,7 @@ import {
   AU_METERS,
   C_SI,
 } from './constants.js';
-import { scientific, withUnit } from './format.js';
+import { grouped, scientific, withUnit } from './format.js';
 import { t } from './i18n/index.js';
 
 // This module's prose lives in the deferred half of the catalog - see the
@@ -506,7 +506,7 @@ export function distanceLabel(m) {
   // of notation, and the whole lesson is about distances.
   if (m >= 0.1 * AU_METERS) return withUnit((m / AU_METERS).toFixed(2), 'AU');
   if (m >= 1e6) {
-    return withUnit(Math.round(m / 1000).toLocaleString('en-US'), 'km');
+    return withUnit(grouped(Math.round(m / 1000)), 'km');
   }
   if (m >= 1000) return withUnit((m / 1000).toFixed(1), 'km');
   return withUnit(m.toFixed(0), 'm');

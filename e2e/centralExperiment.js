@@ -259,7 +259,16 @@ export const readout = async page => {
  * @returns {Array<number>} The numbers in it
  */
 export function numbersIn(value) {
-  const text = String(value)
+  // Spanish (Prompt 282): a decimal comma, and a narrow space between the
+  // thousands. A spec that reads a Spanish page sets readingLocale.current.
+  const spanish = readingLocale.current === 'es';
+  const text = (
+    spanish
+      ? String(value)
+          .replace(/(\d)[\u202f\u00a0 ](?=\d{3}(\D|$))/g, '$1')
+          .replace(/(\d),(?=\d)/g, '$1.')
+      : String(value)
+  )
     .replace(/\u2212/g, '-')
     .replace(/(\d),(?=\d{3}(\D|$))/g, '$1');
   return [...text.matchAll(/-?\d+(?:\.\d+)?(?:[eE][+-]?\d+)?/g)].map(m =>
@@ -276,6 +285,9 @@ export function row(rows, match) {
   ).toBeTruthy();
   return { label: key, text: String(rows[key]), numbers: numbersIn(rows[key]) };
 }
+
+/** The language the readouts being read are in; 'en' unless a spec says. */
+export const readingLocale = { current: 'en' };
 
 /**
  * The nth number in a readout row whose label matches.

@@ -143,7 +143,7 @@ export const ES_MASSES = {
   'masW.vb.control.system': 'Sistema',
   'masW.vb.control.view': 'Lo que se ve',
   'masW.vb.control.arc': 'Arco observado (periodos)',
-  'masW.vb.control.snr': 'Señal a ruido del paralaje',
+  'masW.vb.control.snr': 'Señal a ruido de la paralaje',
   'masW.vb.system.0': 'A, compañero débil',
   'masW.vb.system.1': 'B, casi iguales',
   'masW.vb.system.2': 'C, poca masa',
@@ -169,7 +169,7 @@ export const ES_MASSES = {
   'masW.vb.row.sum': 'Suma de masas',
   'masW.vb.v.sum':
     '{v} masas solares; 68 por ciento entre {lo} y {hi}, 95 por ciento entre {lo2} y {hi2}',
-  'masW.vb.row.frame': 'Referencia del paralaje',
+  'masW.vb.row.frame': 'Referencia de la paralaje',
   'masW.vb.row.fraction': 'Fracción de masa de la estrella 2',
   'masW.vb.v.fraction':
     'B = {v} ± {s}; las elipses propias de las estrellas están en la razón {r} : 1',

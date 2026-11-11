@@ -82,6 +82,9 @@ const text = value =>
  * @param {string} [opts.caption] - Text under the figure
  * @param {{href: string, text: string}} [opts.fallback] - A link to the same
  *   figure, for a reader whose platform will not show the frame
+ * @param {string} [opts.lang] - The language the title, the caption's link and
+ *   the words around the frame are written in (`en`, `es`), so the pasted
+ *   markup says so to a screen reader (Prompt 282)
  * @returns {string} Markup, ready to paste
  */
 export function figureMarkup({
@@ -91,12 +94,14 @@ export function figureMarkup({
   height = 480,
   caption = '',
   fallback = null,
+  lang = '',
 }) {
   const pad = ((aspect.h / aspect.w) * 100).toFixed(4);
+  const said = /^[a-z]{2}$/.test(lang) ? ` lang="${lang}"` : '';
   const frame = [
     `<div style="position:relative;width:100%;padding-top:${pad}%;">`,
     `  <iframe src="${attr(src)}"`,
-    `    title="${attr(title)}"`,
+    `    title="${attr(title)}"${said}`,
     `    style="position:absolute;top:0;left:0;width:100%;height:100%;border:0;"`,
     `    width="800" height="${Math.round(height)}"`,
     `    loading="lazy" allowfullscreen></iframe>`,
@@ -112,7 +117,7 @@ export function figureMarkup({
     );
   }
   return [
-    '<figure style="margin:0;">',
+    `<figure style="margin:0;"${said}>`,
     ...frame.map(line => `  ${line}`),
     `  <figcaption>${parts.join(' ')}</figcaption>`,
     '</figure>',

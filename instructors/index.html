@@ -4,7 +4,7 @@
     <meta charset="utf-8" />
     <meta
       http-equiv="Content-Security-Policy"
-      content="default-src 'self'; script-src 'self' 'sha256-WGSiPeg0IKdUHjXOqO3l/MP3FGi7B2daRSzMyDfaQCs=' 'sha256-9P//VPHjK7eCO1upMGt7xt6BYKiUapBYcl8TZk2op2Q='; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data: blob:; media-src 'self' blob:; connect-src 'self' blob:; worker-src 'self' blob:; frame-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'"
+      content="default-src 'self'; script-src 'self' 'sha256-WGSiPeg0IKdUHjXOqO3l/MP3FGi7B2daRSzMyDfaQCs=' 'sha256-wT+Xkt4LVJSQg6ZyM1zr2uqFMfTgwxEDqODrw3Ai6qg='; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data: blob:; media-src 'self' blob:; connect-src 'self' blob:; worker-src 'self' blob:; frame-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'"
     />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Instructor Resources | Gravitas</title>
@@ -283,6 +283,17 @@ try {
 
     <script type="module">
       import { initInstructorPortal } from '/js/instructorPortal.js';
+      // The language choice is read as the page opens; the shell's switch is
+      // not mounted here (the route has no room for it), so the choice is made
+      // on any other page.
+      try {
+        if ((localStorage.getItem('gravitas_locale') || '').startsWith('es')) {
+          document.documentElement.lang = 'es';
+          document.title = 'Recursos para docentes | Gravitas';
+        }
+      } catch {
+        /* storage blocked: English */
+      }
       initInstructorPortal();
     </script>
   </body>

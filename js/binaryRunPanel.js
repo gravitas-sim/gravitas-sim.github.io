@@ -42,7 +42,7 @@ import {
   layoutObservationPanels,
   noteObservationPanelUsed,
 } from './observationLayout.js';
-import { formatNumber } from './format.js';
+import { formatNumber, grouped } from './format.js';
 import { MONO } from './widgetCanvas.js';
 import { captureToNotebook, snapshot } from './notebookBridge.js';
 import { t, onLocaleChange } from './i18n/index.js';
@@ -292,7 +292,7 @@ function render() {
     e.progress.textContent = t('binaryRun.progress.value', {
       done: formatNumber(run.periodsDone, { sig: 3 }),
       asked: run.periodsAsked,
-      steps: run.steps.toLocaleString(),
+      steps: grouped(run.steps),
     });
   }
   if (e.drift) {

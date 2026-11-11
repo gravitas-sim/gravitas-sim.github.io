@@ -22,6 +22,7 @@
 import { G_SI, C_SI, SOLAR_MASS_KG, EARTH_RADIUS_M } from './constants.js';
 import {
   superscript as formatSuperscript,
+  grouped,
   scientific,
   withUnit,
 } from './format.js';
@@ -192,11 +193,7 @@ export function sci(v, digits = 1) {
  * @param {number} [digits] - Decimal places
  * @returns {string} e.g. '1,000,000'
  */
-export const commas = (v, digits = 0) =>
-  Number(v).toLocaleString('en-US', {
-    minimumFractionDigits: digits,
-    maximumFractionDigits: digits,
-  });
+export const commas = (v, digits = 0) => grouped(v, undefined, digits);
 
 /**
  * A mass in solar masses, written the way it would be said out loud. Small
