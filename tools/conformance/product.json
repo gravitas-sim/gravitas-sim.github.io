@@ -105,6 +105,12 @@
       "canJudgeWhole": false
     },
     {
+      "id": "walk",
+      "name": "The keyboard and single-pointer walks",
+      "detail": "e2e/a11ySweep.spec.js (Prompt 278) presses real keys and makes single presses with no drag in a browser. It walks every page of the walk inventory (tools/interaction-contract.json, one row for each surface of the navigation inventory but the printed manual) in English and in Spanish: Tab from the top until focus comes round, then the page's primary control by its key. It also walks each control that replaces a drag. A walk judges the state a page opens in and the states it opens itself; it does not judge whether an order is meaningful, whether a focus indicator can be seen, or anything a screen reader says.",
+      "canJudgeWhole": false
+    },
+    {
       "id": "layout",
       "name": "Responsive layout and target size",
       "detail": "e2e/responsiveLayout.spec.js measures controls on phone and tablet projects, including the 44 px minimum on coarse pointers.",

@@ -14,6 +14,24 @@ export const EN_LAB3DLAB = {
   'l3.docs': 'How it works (LAB3D.md)',
   'l3.keys':
     'With the view focused: arrow keys orbit, Shift and an arrow pans, + and − zoom, 1 to 5 choose a look, 0 frames everything, and Space plays or pauses.',
+  'l3.pad': 'Turn, move and zoom the view without dragging',
+  'l3.pad.mode': 'Arrows',
+  'l3.pad.turn': 'turn the view',
+  'l3.pad.move': 'move the view',
+  'l3.pad.turn.left': 'Turn the view left',
+  'l3.pad.turn.right': 'Turn the view right',
+  'l3.pad.turn.up': 'Turn the view up',
+  'l3.pad.turn.down': 'Turn the view down',
+  'l3.pad.move.left': 'Move the view left',
+  'l3.pad.move.right': 'Move the view right',
+  'l3.pad.move.up': 'Move the view up',
+  'l3.pad.move.down': 'Move the view down',
+  'l3.pad.in': 'Zoom in',
+  'l3.pad.out': 'Zoom out',
+  'l3.cam.above':
+    'Looking from {above}° above the reference plane, {around}° around it. The view is {size} times as tall as the system.',
+  'l3.cam.below':
+    'Looking from {above}° below the reference plane, {around}° around it. The view is {size} times as tall as the system.',
 
   'l3.system': 'System',
   'l3.system.choose': 'Open',

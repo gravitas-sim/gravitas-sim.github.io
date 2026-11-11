@@ -29,6 +29,8 @@ import {
   sharedLetters,
 } from '../tools/interaction-contract.mjs';
 import { runPending, readRegistry } from '../tools/pending-acceptance.mjs';
+import { movable, moveTo, sizeTo, STEP } from '../js/windowMove.js';
+import { cameraNumbers, TURN, MOVE } from '../js/lab3d/view/cameraPad.js';
 import { NUDGE, nudgeSize, nudgeScale } from '../js/shortcuts.js';
 import { moveFocus, returnFocus, settledAnnouncer } from '../js/interaction.js';
 import {
@@ -68,10 +70,16 @@ function pointerFiles() {
   return found;
 }
 
+const navSurfaces = () =>
+  new Set(
+    JSON.parse(read('tools/navigation-inventory.json')).surfaces.map(s => s.id)
+  );
+
 const tree = () => ({
   read,
   pendingIds: new Set(readRegistry().map(c => c.id)),
   pointerFiles: pointerFiles(),
+  navSurfaces: navSurfaces(),
 });
 const clone = () => JSON.parse(JSON.stringify(contract));
 
@@ -139,12 +147,13 @@ describe('every registered surface keeps the contract', () => {
   test('a drag with no alternative is a gap that names a registered pending check', () => {
     const bad = clone();
     const d = bad.drags.find(x => x.id === 'sandbox.pan');
+    d.status = 'gap';
     d.pending = 'interaction.single-pointer.made-up';
     expect(checkContract(bad, tree()).join('\n')).toMatch(
       /must name a registered pending check/
     );
     const lie = clone();
-    lie.drags.find(x => x.id === 'observer.handle').status = 'met';
+    lie.drags.find(x => x.id === 'observer.handle').alternatives = [];
     expect(checkContract(lie, tree()).join('\n')).toMatch(
       /met, with no alternative/
     );
@@ -152,7 +161,7 @@ describe('every registered surface keeps the contract', () => {
 
   test('a surface with no announcement test needs a reason', () => {
     const bad = clone();
-    delete bad.surfaces.find(x => x.id === 'sandbox.view').notApplicable;
+    delete bad.surfaces.find(x => x.id === 'sandbox.spacetime').notApplicable;
     expect(checkContract(bad, tree()).join('\n')).toMatch(
       /no announcement test/
     );
@@ -382,27 +391,284 @@ describe("reduced motion, with the reader's own override", () => {
   });
 });
 
-describe('what the surfaces do not yet do is reported, not forgotten', () => {
+describe('the walk inventory covers every surface (Prompt 278)', () => {
+  test('every surface of the navigation inventory is walked or says why not', () => {
+    const rows = new Set(contract.inventory.rows.map(r => r.surface));
+    const exempt = new Set(Object.keys(contract.inventory.exempt));
+    for (const id of navSurfaces())
+      expect(rows.has(id) || exempt.has(id)).toBe(true);
+    expect(rows.size + exempt.size).toBe(navSurfaces().size);
+  });
+
+  test('a surface nobody walks is refused', () => {
+    const bad = clone();
+    bad.inventory.rows = bad.inventory.rows.filter(r => r.surface !== 'model');
+    expect(checkContract(bad, tree()).join('\n')).toMatch(
+      /the surface model has no walk and no reason/
+    );
+  });
+
+  test('a row for a surface the navigation inventory does not hold is refused', () => {
+    const bad = clone();
+    bad.inventory.rows.push({ ...bad.inventory.rows[0], surface: 'made-up' });
+    expect(checkContract(bad, tree()).join('\n')).toMatch(
+      /made-up is not in the navigation inventory/
+    );
+  });
+
+  test('a row without its primary task or its control is refused', () => {
+    const bad = clone();
+    delete bad.inventory.rows[0].reach;
+    expect(checkContract(bad, tree()).join('\n')).toMatch(/has no reach/);
+  });
+
+  test('a state belongs to a walked surface and says how it is reached', () => {
+    const bad = clone();
+    bad.inventory.states[0].surface = 'manual';
+    expect(checkContract(bad, tree()).join('\n')).toMatch(/which has no row/);
+    const none = clone();
+    none.inventory.states[0].open = [];
+    expect(checkContract(none, tree()).join('\n')).toMatch(/opens nothing/);
+  });
+
+  test('no drag is left as a gap, and every drag names its surface', () => {
+    expect(contract.drags.filter(d => d.status !== 'met')).toEqual([]);
+    for (const d of contract.drags.filter(d => d.id !== 'lesson.picker'))
+      expect(contract.surfaces.map(s => s.id)).toContain(d.surface);
+  });
+
+  test('a drag a vendored library listens for is registered by hand', () => {
+    const bad = clone();
+    bad.dragSites.vendored['js/view3d.js'].push('made.up');
+    expect(checkContract(bad, tree()).join('\n')).toMatch(
+      /names the unregistered drag made.up/
+    );
+  });
+});
+
+describe('the 3-D camera in numbers (js/lab3d/view/cameraPad.js)', () => {
+  const cam = (eye, more = {}) => ({
+    eye,
+    target: [0, 0, 0],
+    mode: 'perspective',
+    fov: 90,
+    ...more,
+  });
+
+  test('straight down onto the plane is 90 degrees above it', () => {
+    expect(cameraNumbers(cam([0, 0, 5]), 1).above).toBeCloseTo(90, 9);
+    expect(cameraNumbers(cam([0, 0, -5]), 1).above).toBeCloseTo(-90, 9);
+  });
+
+  test('in the plane, the angle around it runs from +x through +y', () => {
+    expect(cameraNumbers(cam([3, 0, 0]), 1)).toMatchObject({
+      above: 0,
+      around: 0,
+    });
+    expect(cameraNumbers(cam([0, 3, 0]), 1).around).toBeCloseTo(90, 9);
+    expect(cameraNumbers(cam([0, -3, 0]), 1).around).toBeCloseTo(270, 9);
+  });
+
+  test('the height above the plane is asin(z / distance)', () => {
+    const n = cameraNumbers(cam([1, 1, Math.SQRT2]), 1);
+    expect(n.above).toBeCloseTo(45, 9);
+    expect(n.around).toBeCloseTo(45, 9);
+  });
+
+  test("the size is the view's height over the system's diameter", () => {
+    // A 90 degree field at distance 4 is 8 tall; a system of extent 2 is 4 across.
+    expect(cameraNumbers(cam([4, 0, 0]), 2).size).toBeCloseTo(2, 9);
+    // An orthographic view states its height.
+    expect(
+      cameraNumbers(cam([4, 0, 0], { mode: 'orthographic', height: 6 }), 2).size
+    ).toBeCloseTo(1.5, 9);
+  });
+
+  test('the target is where the angles are measured from', () => {
+    const n = cameraNumbers(
+      { eye: [10, 10, 1], target: [10, 9, 1], mode: 'perspective', fov: 45 },
+      1
+    );
+    expect(n.around).toBeCloseTo(90, 9);
+    expect(n.above).toBeCloseTo(0, 9);
+  });
+
+  test('one turn and one move are the steps the keys always had', () => {
+    expect(TURN).toBe(0.08);
+    expect(MOVE).toBe(0.05);
+  });
+});
+
+describe('a window is moved without a drag (js/windowMove.js)', () => {
+  const panelAt = (left, top, width = 200, height = 100) => {
+    document.body.innerHTML =
+      '<div id="srStatus" aria-live="polite"></div>' +
+      '<div id="panel"><div id="head"><button id="close">x</button></div></div>';
+    const panel = document.getElementById('panel');
+    panel.getBoundingClientRect = () => {
+      const l = parseFloat(panel.style.left) || left;
+      const t = parseFloat(panel.style.top) || top;
+      const w = parseFloat(panel.style.width) || width;
+      const h = parseFloat(panel.style.height) || height;
+      return {
+        left: l,
+        top: t,
+        width: w,
+        height: h,
+        right: l + w,
+        bottom: t + h,
+      };
+    };
+    return panel;
+  };
+  const key = (el, k, more = {}) =>
+    el.dispatchEvent(
+      new window.KeyboardEvent('keydown', { key: k, bubbles: true, ...more })
+    );
+  const settle = () => new Promise(resolve => setTimeout(resolve, 20));
+
+  test('moveTo keeps the window inside the viewport and drops the other anchors', () => {
+    const panel = panelAt(50, 50);
+    moveTo(panel, -40, 90);
+    expect(panel.style.left).toBe('0px');
+    expect(panel.style.top).toBe('90px');
+    expect(panel.style.right).toBe('auto');
+    moveTo(panel, 1e6, 1e6);
+    expect(parseFloat(panel.style.left)).toBe(window.innerWidth - 200);
+    expect(parseFloat(panel.style.top)).toBe(window.innerHeight - 40);
+  });
+
+  test('sizeTo keeps the bottom left corner where it is and honours the minimum', () => {
+    const panel = panelAt(100, 300, 320, 240);
+    sizeTo(panel, 400, 300);
+    expect(panel.style.width).toBe('400px');
+    expect(panel.style.height).toBe('300px');
+    expect(panel.style.top).toBe('240px'); // bottom stayed at 540
+    sizeTo(panel, 10, 10);
+    expect(panel.style.width).toBe('300px');
+    expect(panel.style.height).toBe('240px');
+  });
+
+  test("the Move button goes before the header's own buttons, once, with its name", async () => {
+    const panel = panelAt(50, 50);
+    const head = document.getElementById('head');
+    movable(panel, head);
+    movable(panel, head);
+    await settle();
+    const buttons = [...head.querySelectorAll('button')];
+    expect(buttons.map(b => b.dataset.window || b.id)).toEqual([
+      'move',
+      'close',
+    ]);
+    expect(buttons[0].getAttribute('aria-label')).toBe('Move this panel');
+    expect(buttons[0].getAttribute('aria-pressed')).toBe('false');
+  });
+
+  test("the arrow keys move it by the contract's three sizes", async () => {
+    const panel = panelAt(100, 100);
+    let moved = 0;
+    movable(panel, document.getElementById('head'), { onMove: () => moved++ });
+    await settle();
+    const move = document.querySelector('[data-window="move"]');
+    key(move, 'ArrowRight');
+    expect(panel.style.left).toBe(`${100 + STEP}px`);
+    key(move, 'ArrowDown', { shiftKey: true });
+    expect(panel.style.top).toBe(`${100 + 4 * STEP}px`);
+    key(move, 'ArrowLeft', { altKey: true });
+    expect(panel.style.left).toBe(`${100 + STEP - STEP / 4}px`);
+    expect(moved).toBe(3);
+    // The same three numbers as every other nudge.
+    expect([NUDGE.fine, NUDGE.normal, NUDGE.coarse]).toEqual([0.25, 1, 4]);
+  });
+
+  test('a press on the veil places the window, ends the placement and is said', async () => {
+    const panel = panelAt(100, 100);
+    movable(panel, document.getElementById('head'));
+    await settle();
+    const move = document.querySelector('[data-window="move"]');
+    move.click();
+    expect(move.getAttribute('aria-pressed')).toBe('true');
+    expect(document.getElementById('srStatus').textContent).toMatch(
+      /top left corner/
+    );
+    const veil = document.querySelector('[data-window-veil]');
+    veil.dispatchEvent(
+      new window.MouseEvent('click', {
+        clientX: 300,
+        clientY: 220,
+        bubbles: true,
+      })
+    );
+    expect(panel.style.left).toBe('300px');
+    expect(panel.style.top).toBe('220px');
+    expect(document.querySelector('[data-window-veil]')).toBeNull();
+    expect(move.getAttribute('aria-pressed')).toBe('false');
+    expect(document.activeElement).toBe(move);
+    expect(document.getElementById('srStatus').textContent).toMatch(/moved/);
+  });
+
+  test('Escape disarms without moving anything', async () => {
+    const panel = panelAt(100, 100);
+    movable(panel, document.getElementById('head'));
+    await settle();
+    const move = document.querySelector('[data-window="move"]');
+    move.click();
+    key(move, 'Escape');
+    expect(document.querySelector('[data-window-veil]')).toBeNull();
+    expect(panel.style.left).toBe('');
+  });
+
+  test('a window sized by a drag gets a Size button too', async () => {
+    const panel = panelAt(100, 300, 320, 240);
+    let sized = 0;
+    movable(panel, document.getElementById('head'), { onSize: () => sized++ });
+    await settle();
+    const size = document.querySelector('[data-window="size"]');
+    expect(size.getAttribute('aria-label')).toBe('Resize this panel');
+    key(size, 'ArrowRight');
+    expect(panel.style.width).toBe(`${320 + STEP}px`);
+    key(size, 'ArrowUp');
+    expect(panel.style.height).toBe(`${240 + STEP}px`);
+    expect(sized).toBe(2);
+  });
+});
+
+describe('what Prompt 155 found missing is built, and stays built', () => {
   const has = (file, pattern) => {
     const text = read(file);
     if (text === null || !pattern.test(text))
       throw new Error(`${file} has nothing matching ${pattern}`);
   };
+  // Each is the control the walk in e2e/a11ySweep.spec.js presses: the probe
+  // holds the markup and the handler, the walk holds what they do.
   const checks = {
-    'interaction.keyboard.sandbox-zoom': () =>
-      has('js/placement.js', /e\.key === '[+=]'[\s\S]{0,200}state\.zoom/),
-    'interaction.single-pointer.sandbox-pan': () =>
-      has('index.html', /id="pan[A-Z][A-Za-z]*"|data-pan=/),
-    'interaction.single-pointer.lab3d-orbit': () =>
-      has('3d/index.html', /id="l3-orbit/),
-    'interaction.single-pointer.observer-handle': () =>
-      has('js/lightCurve.js', /'keydown'/),
-    'interaction.single-pointer.window-move': () => {
-      has('js/view3d.js', /'keydown'/);
-      has('js/inspectorWindow.js', /'keydown'/);
+    'interaction.keyboard.sandbox-zoom': () => {
+      has('index.html', /id="viewZoomIn"[^>]*data-view=",,1\.25"/);
+      has('js/placement.js', /zoomAbout\(\s*\{ x: canvas\.width \/ 2/);
     },
-    'interaction.single-pointer.observatory-run': () =>
-      has('js/plot/table.js', /data-select-run/),
+    'interaction.single-pointer.sandbox-pan': () => {
+      has('index.html', /id="panLeft"[^>]*data-view="1,0"/);
+      has('js/placement.js', /getElementById\('viewPad'\)/);
+    },
+    'interaction.single-pointer.lab3d-orbit': () => {
+      has('3d/index.html', /id="l3-pad"[\s\S]*data-cam="-1,0"/);
+      has('js/lab3d/view/cameraPad.js', /pad\.addEventListener\('click'/);
+      has('js/lab3dLab.js', /cameraControls\(\{/);
+    },
+    'interaction.single-pointer.observer-handle': () =>
+      has('js/observerControls.js', /type="range"[\s\S]{0,120}data-pa-slider/),
+    'interaction.single-pointer.window-move': () => {
+      has('js/view3d.js', /import\('\.\/windowMove\.js'\)/);
+      has(
+        'js/inspectorWindow.js',
+        /import\('\.\/windowMove\.js'\)[\s\S]*import\('\.\/windowMove\.js'\)/
+      );
+      has('js/windowMove.js', /'keydown'/);
+    },
+    'interaction.single-pointer.observatory-run': () => {
+      has('js/plot/table.js', /data-select-run/);
+      has('observatory/index.html', /data-run-for="obsTable"/);
+    },
   };
 
   test('every pending check of this contract is written here', () => {
@@ -414,8 +680,9 @@ describe('what the surfaces do not yet do is reported, not forgotten', () => {
 
   for (const [id, body] of Object.entries(checks))
     test(`${id}`, async () => {
+      // Activated by Prompt 278: a failure here is a failure.
+      expect(readRegistry().find(c => c.id === id).activated).toBe(true);
       const result = await runPending(id, body);
-      // Pending is not a failure; a check that has begun to pass says so.
-      expect(['met', 'pending']).toContain(result.status);
+      expect(result.status).toBe('met');
     });
 });

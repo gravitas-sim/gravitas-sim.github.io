@@ -51,16 +51,16 @@ Measured from the committed `sw-manifest.js` and the files it lists, by
 <!--fact-block:precache-->
 | | Files | Raw |
 | --- | ---: | ---: |
-| JavaScript | 969 | 16.0 MB |
+| JavaScript | 971 | 16.0 MB |
 | Images | 121 | 870 KB |
 | Stylesheets | 10 | 500 KB |
 | Fonts | 9 | 140 KB |
 | Panel markup | 10 | 70 KB |
-| Pages | 12 | 320 KB |
+| Pages | 12 | 330 KB |
 | Other | 16 | 900 KB |
-| **Total** | **1147** | **18.7 MB** |
+| **Total** | **1149** | **18.8 MB** |
 
-Of those, 815 are core (the install fails without them), 129 optional (installed with them; a missing one is reported and costs nothing) and 203 idle (installed after activation, when the browser is idle; a missing one costs that page its offline copy and is fetched again on the next open). The first-visit install is the core and the optional files: 944 files.
+Of those, 816 are core (the install fails without them), 129 optional (installed with them; a missing one is reported and costs nothing) and 204 idle (installed after activation, when the browser is idle; a missing one costs that page its offline copy and is fetched again on the next open). The first-visit install is the core and the optional files: 945 files.
 
 Gzipped, as Pages serves it, the whole is about 6 MB.
 
@@ -99,7 +99,7 @@ The idle tier, by surface (gzip level 6, to the nearest 10 KB: Node versions dif
 
 | Surface | Files | Gzip |
 | --- | ---: | ---: |
-| 3-D lab | 42 | ~190 KB |
+| 3-D lab | 43 | ~190 KB |
 | data tables | 33 | ~260 KB |
 | activity builder | 6 | ~20 KB |
 | instructor modules | 36 | ~350 KB |

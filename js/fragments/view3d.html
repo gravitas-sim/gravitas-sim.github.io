@@ -39,5 +39,71 @@
   <div class="three-view-hint">
     Drag to orbit • Scroll to zoom • Right-click or two-finger drag to pan
   </div>
+  <!-- The camera without a drag, a wheel or a second finger (Prompt 278):
+       data-cam is "turn" or "move" with steps across and up, or "zoom" with a
+       factor. -->
+  <div
+    id="threeViewPad"
+    class="three-view-hint"
+    role="group"
+    aria-labelledby="threeViewPadName"
+  >
+    <span id="threeViewPadName" class="visually-hidden"
+      ><span class="gs-en">Turn, move and zoom the spacetime view</span
+      ><span class="gs-es" lang="es"
+        >Girar, mover y ampliar la vista del espaciotiempo</span
+      ></span
+    >
+    <button type="button" class="three-toolbar-btn" data-cam="turn,-1,0">
+      <span aria-hidden="true">&#x21B6;</span
+      ><span class="visually-hidden gs-en">Turn left</span
+      ><span class="visually-hidden gs-es" lang="es">Girar a la izquierda</span>
+    </button>
+    <button type="button" class="three-toolbar-btn" data-cam="turn,1,0">
+      <span aria-hidden="true">&#x21B7;</span
+      ><span class="visually-hidden gs-en">Turn right</span
+      ><span class="visually-hidden gs-es" lang="es">Girar a la derecha</span>
+    </button>
+    <button type="button" class="three-toolbar-btn" data-cam="turn,0,1">
+      <span aria-hidden="true">&#x2912;</span
+      ><span class="visually-hidden gs-en">Tilt up</span
+      ><span class="visually-hidden gs-es" lang="es">Inclinar hacia arriba</span>
+    </button>
+    <button type="button" class="three-toolbar-btn" data-cam="turn,0,-1">
+      <span aria-hidden="true">&#x2913;</span
+      ><span class="visually-hidden gs-en">Tilt down</span
+      ><span class="visually-hidden gs-es" lang="es">Inclinar hacia abajo</span>
+    </button>
+    <button type="button" class="three-toolbar-btn" data-cam="move,-1,0">
+      <span aria-hidden="true">&larr;</span
+      ><span class="visually-hidden gs-en">Move left</span
+      ><span class="visually-hidden gs-es" lang="es">Mover a la izquierda</span>
+    </button>
+    <button type="button" class="three-toolbar-btn" data-cam="move,1,0">
+      <span aria-hidden="true">&rarr;</span
+      ><span class="visually-hidden gs-en">Move right</span
+      ><span class="visually-hidden gs-es" lang="es">Mover a la derecha</span>
+    </button>
+    <button type="button" class="three-toolbar-btn" data-cam="move,0,1">
+      <span aria-hidden="true">&uarr;</span
+      ><span class="visually-hidden gs-en">Move up</span
+      ><span class="visually-hidden gs-es" lang="es">Mover hacia arriba</span>
+    </button>
+    <button type="button" class="three-toolbar-btn" data-cam="move,0,-1">
+      <span aria-hidden="true">&darr;</span
+      ><span class="visually-hidden gs-en">Move down</span
+      ><span class="visually-hidden gs-es" lang="es">Mover hacia abajo</span>
+    </button>
+    <button type="button" class="three-toolbar-btn" data-cam="zoom,0.8">
+      <span aria-hidden="true">+</span
+      ><span class="visually-hidden gs-en">Zoom in</span
+      ><span class="visually-hidden gs-es" lang="es">Acercar</span>
+    </button>
+    <button type="button" class="three-toolbar-btn" data-cam="zoom,1.25">
+      <span aria-hidden="true">&minus;</span
+      ><span class="visually-hidden gs-en">Zoom out</span
+      ><span class="visually-hidden gs-es" lang="es">Alejar</span>
+    </button>
+  </div>
   <div id="threeViewResizeHandle" class="three-view-resize-handle"></div>
 </div>

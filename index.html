@@ -1865,6 +1865,54 @@ try {
               Shortcuts
             </button>
           </div>
+          <!-- The view pad (Prompt 278): the pan a drag gives and the zoom a
+               wheel or a pinch gives, as buttons for one pointer or the
+               keyboard. data-view is "dx,dy" in pan steps or ",,factor". -->
+          <div
+            id="viewPad"
+            class="rail-grid view-pad"
+            role="group"
+            aria-labelledby="viewPadName"
+          >
+            <span id="viewPadName" class="visually-hidden"
+              ><span class="gs-en">Move and zoom the view</span
+              ><span class="gs-es" lang="es">Mover y ampliar la vista</span></span
+            >
+            <span id="viewPadZoom" hidden
+              ><span class="gs-en">Zoom {x} times</span
+              ><span class="gs-es" lang="es">Zoom de {x} aumentos</span></span
+            >
+            <button id="viewZoomOut" class="ui-button" type="button" data-view=",,0.8">
+              <span aria-hidden="true">&minus;</span
+              ><span class="visually-hidden gs-en">Zoom out</span
+              ><span class="visually-hidden gs-es" lang="es">Alejar</span>
+            </button>
+            <button id="viewZoomIn" class="ui-button" type="button" data-view=",,1.25">
+              <span aria-hidden="true">+</span
+              ><span class="visually-hidden gs-en">Zoom in</span
+              ><span class="visually-hidden gs-es" lang="es">Acercar</span>
+            </button>
+            <button id="panLeft" class="ui-button" type="button" data-view="1,0">
+              <span aria-hidden="true">&larr;</span
+              ><span class="visually-hidden gs-en">Move the view left</span
+              ><span class="visually-hidden gs-es" lang="es">Mover la vista a la izquierda</span>
+            </button>
+            <button id="panRight" class="ui-button" type="button" data-view="-1,0">
+              <span aria-hidden="true">&rarr;</span
+              ><span class="visually-hidden gs-en">Move the view right</span
+              ><span class="visually-hidden gs-es" lang="es">Mover la vista a la derecha</span>
+            </button>
+            <button id="panUp" class="ui-button" type="button" data-view="0,1">
+              <span aria-hidden="true">&uarr;</span
+              ><span class="visually-hidden gs-en">Move the view up</span
+              ><span class="visually-hidden gs-es" lang="es">Mover la vista hacia arriba</span>
+            </button>
+            <button id="panDown" class="ui-button" type="button" data-view="0,-1">
+              <span aria-hidden="true">&darr;</span
+              ><span class="visually-hidden gs-en">Move the view down</span
+              ><span class="visually-hidden gs-es" lang="es">Mover la vista hacia abajo</span>
+            </button>
+          </div>
         </div>
       </div>
 

@@ -142,6 +142,82 @@ only if opened before, and goes when the connection returns. Its Dismiss button
 and Escape close it. `e2e/offlineStates.spec.js` and `e2e/emptyStates.spec.js`
 induce each state; `e2e/accessibility.spec.js` covers the touched pages.
 
+## Sweep I: every surface by keyboard and by one pointer (Prompt 278)
+
+The interaction contract ([INTERACTION.md](INTERACTION.md)) registered four
+surfaces and six gaps. This sweep walked the rest: every surface of the
+navigation inventory, in both languages, with real key presses and single
+presses in a browser (`e2e/a11ySweep.spec.js`, `e2e/walk.js`). The walks are
+tests, so they stay.
+
+**What a walk is.** Tab from the top of the page until focus comes round:
+focus is never trapped, every stop has a name, every stop's box is inside the
+viewport while it has focus, and every control a pointer can press is one of
+the stops. Then Tab to the page's primary control and press its key; something
+a reader can notice must change. 33 pages, each in English and in Spanish; the
+printed manual is a PDF and is not walked.
+
+**What the walks found, and what changed.**
+
+- **A dialog that ended in a disclosure never gave it focus.** `js/dialog.js`
+  listed what Tab may land on without `summary`, so in the investigation
+  browser the last card's "Learning objectives" was skipped: Tab wrapped one
+  press early, and Shift+Tab from the top went past it. The list now holds a
+  disclosure's summary.
+- **A row selected from the keyboard did not say so.** In the Observatory's
+  table Space selected the row and the count read "1 selected", but no row was
+  marked (`aria-selected`, the highlight) until something else redrew the
+  table; Escape cleared the selection the same way. The table now marks its
+  own rows.
+- **A pressed A both armed a placement and panned** (conflict K2). With a type
+  armed it now arms the placement only; the arrows always pan.
+- **The spacetime view's camera had only a drag.** Its orbit, zoom and pan are
+  the vendored OrbitControls, which Prompt 155's scan of pointer listeners
+  could not see. It has a pad now (turn, tilt, move, zoom), and the contract
+  names such sites by hand.
+- **The spacetime view's header and corner answered a mouse and nothing
+  else**: no touch, no key. Its Move and Size buttons do both.
+
+**What was built for the six gaps Prompt 155 recorded** (all activated; a
+failure is a failure now):
+
+| Gap | What a reader has now |
+| --- | --- |
+| Keyboard zoom in the sandbox | The view pad in Tools: zoom in and out, about the center of the view, with Tab and Enter. `-` and `=` stay the simulation's speed |
+| Pan with one pointer | The same pad: four buttons, each one step of what the arrow keys do |
+| The 3-D lab's free orbit | A pad under the view: four arrows that turn or move the view (a select says which) and two that zoom |
+| The observer's handle | Nothing was missing: the Position angle slider every observing panel carries sets the same angle. Prompt 155 looked in two files that do not build it. Walked now |
+| Moving a window | A Move button in the header of the inspector, of a pinned card and of the spacetime view: press it, then press where the corner goes; or the arrow keys, in the three nudge sizes. The spacetime view also has Size |
+| A run of rows without a held key | **Select a run of rows** under the Observatory's table: press it, then the last row |
+
+**What is said.** The sandbox's zoom ("Zoom 2.34 times"), the 3-D camera
+("Looking from 21° above the reference plane, 306° around it. The view is 1.2
+times as tall as the system.") and a window move are each said once, when the
+pressing stops, in the page's language. A pan says nothing: a picture moved.
+
+**What the sweep did not do.**
+
+- It judges the state a page opens in, and the states the walks open
+  themselves. A panel or dialog reached only after other choices is covered
+  where a named spec opens it.
+- It does not judge whether a focus indicator can be seen, whether the order
+  is the meaningful one, or anything a screen reader says. No assistive
+  technology was used and no person took part.
+- Six pages stay in English with Spanish chosen (the instructor portal, the
+  evaluation kit, the model, validation and glossary pages, and the
+  original-version page). Five of them carry Spanish text and a language
+  switch that stores the choice but is not read when the page opens. Recorded
+  in the walk inventory (`spanish: false`) for Prompt 282.
+- On a phone the rail is a menu that closes after any press inside it
+  (`js/ui.js`), so each press of the sandbox's view pad means opening the menu
+  and Tools again. One press works; a run of them is slow. Seen on a 393 px
+  viewport and not changed here: exempting the pad, as the object picker's
+  button is exempt, belongs to Prompt 283 (the touch pattern).
+- WebKit and Firefox: the walks ran in Chromium. On macOS, WebKit's Tab skips
+  buttons and links unless Option is held (`e2e/keyboard.js`), which the walk
+  helper allows for; it was not run there in this sweep.
+- The Spanish strings added here are unreviewed by a fluent reader.
+
 ## Startup: one splash per genuine startup (Prompt 124)
 
 The splash is a startup event, not a page event. Six outcomes, then the
