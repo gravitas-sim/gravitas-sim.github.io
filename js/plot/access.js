@@ -98,11 +98,12 @@ let count = 0;
 
 /**
  * @param {{element: SVGElement, parts: Function, setAccess?: Function}} chart
- * @param {HTMLElement} host - The chart's host; the disclosure follows it
+ * @param {HTMLElement} host - The chart's host; the disclosure is its last child
+ * @param {boolean} [fill] - The chart fills a fixed-height host
  * @returns {{touch: Function, refresh: Function, play: Function, stop: Function,
  *   destroy: Function, description: Function}}
  */
-export function attach(chart, host) {
+export function attach(chart, host, fill = false) {
   const svg = chart.element;
   const id = `ocDesc${++count}`;
   const desc = document.createElement('p');
@@ -127,7 +128,11 @@ export function attach(chart, host) {
   button.className = 'ui-button subtle';
   const note = document.createElement('p');
   box.append(summary, text, button, note);
-  host.after(box);
+  // Inside the host, so a chart that is replaced or destroyed takes its
+  // disclosure with it (a panel that is only hidden would otherwise keep one
+  // per open). A chart that fills a fixed-height host has no room for it: it
+  // keeps the description and the keys, and the disclosure stays hidden.
+  host.append(box);
 
   let last = '';
   let lastHeld = null;
@@ -228,14 +233,15 @@ export function attach(chart, host) {
     say(words.playing(d.sound.mapping.seconds));
   }
 
+  // Four listeners a chart, no more: the leak census of the panels allows a
+  // chart's lazily loaded layer four (e2e/lessonPerformance.spec.js).
   const toggle = () => (playing ? stop() : play());
   button.addEventListener('click', toggle);
   const reveal = () => {
-    box.hidden = false;
+    box.hidden = fill;
     refresh();
   };
   svg.addEventListener('focusin', reveal);
-  box.addEventListener('focusin', reveal);
   box.addEventListener('toggle', refresh);
   svg.addEventListener('keydown', e => {
     if (e.altKey || e.ctrlKey || e.metaKey) return;

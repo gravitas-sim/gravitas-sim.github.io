@@ -331,7 +331,8 @@ export function createChart(host, opts = {}) {
         if (dead || !wrap.clientWidth) return;
         import('./access.js')
           .then(m => {
-            if (!dead && !access) access = m.attach(api, host);
+            if (!dead && !access)
+              access = m.attach(api, host, opts.height === 'fill');
           })
           .catch(() => {});
       }, 1500);

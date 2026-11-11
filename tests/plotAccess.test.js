@@ -82,7 +82,7 @@ function make(opts = {}) {
     series: [{ id: 'a', label: 'Star A', x: X, y: DIP }],
   });
   const access = attach(chart, host);
-  const box = host.nextElementSibling;
+  const box = host.querySelector('.plot-access');
   return { host, chart, svg: chart.element, access, box };
 }
 
