@@ -688,6 +688,13 @@
       "student": false
     },
     {
+      "file": "NUMERICS_INSTRUMENTS.md",
+      "kind": "gate",
+      "purpose": "The numerics instruments: five kernels the numerical-methods investigations need, their independent oracle, failed legs and verdict (follow-up to Prompt 270).",
+      "owner": 270,
+      "student": false
+    },
+    {
       "file": "NUMERICAL_INVESTIGATIONS.md",
       "kind": "record",
       "purpose": "Numerical-methods investigations in the application: the record of what the tree has, why none was built and what a build needs (Prompt 270).",
@@ -900,7 +907,7 @@
     {
       "file": "RESONANCES_II.md",
       "kind": "gate",
-      "purpose": "Resonances and secular dynamics II: contract committed first, independent oracle, 19 legs, verdict C by the committed function; the kernel without consumers (Prompt 273).",
+      "purpose": "Resonances and secular dynamics II: 19 legs, verdict C; the Part A addendum's 25 new legs, bounds first, addendum verdict B; the kernel without consumers (Prompt 273).",
       "owner": 273,
       "student": false
     },

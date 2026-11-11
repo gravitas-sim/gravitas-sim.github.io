@@ -1,0 +1,786 @@
+{
+ "format": "gravitas.numerics-instruments-results/1",
+ "verdict": "B",
+ "instruments": {
+  "I1": {
+   "pass": false,
+   "legs": 11,
+   "passed": 10,
+   "failed": [
+    "I1.i"
+   ],
+   "reported": 0
+  },
+  "I2": {
+   "pass": false,
+   "legs": 8,
+   "passed": 7,
+   "failed": [
+    "I2.b"
+   ],
+   "reported": 1
+  },
+  "I3": {
+   "pass": true,
+   "legs": 8,
+   "passed": 8,
+   "failed": [],
+   "reported": 1
+  },
+  "I4": {
+   "pass": false,
+   "legs": 8,
+   "passed": 7,
+   "failed": [
+    "I4.a"
+   ],
+   "reported": 0
+  },
+  "I5": {
+   "pass": true,
+   "legs": 4,
+   "passed": 4,
+   "failed": [],
+   "reported": 1
+  }
+ },
+ "rows": [
+  {
+   "id": "I1.a",
+   "class": "analytic",
+   "pass": true,
+   "measured": {
+    "eps1": 0.00019999250062478305,
+    "closed": 0.00019999250062485707,
+    "diff": 7.402390332644782e-17
+   }
+  },
+  {
+   "id": "I1.b",
+   "class": "analytic",
+   "pass": true,
+   "measured": {
+    "kind": "secular",
+    "orderEnd": 0.9993699362875157,
+    "end": 0.001951418114685725,
+    "endHalf": 0.0009761352687832255
+   }
+  },
+  {
+   "id": "I1.c",
+   "class": "analytic",
+   "pass": true,
+   "measured": {
+    "kind": "oscillating",
+    "orderMax": 2.002887900859082,
+    "orderEnd": null,
+    "maxAbs": 0.002689379473407231,
+    "maxAbsHalf": 0.0006710003546402573
+   }
+  },
+  {
+   "id": "I1.d",
+   "class": "analytic",
+   "pass": true,
+   "measured": {
+    "kind": "secular",
+    "orderEnd": 4.997802681625618,
+    "end": -0.0000018524462834790256,
+    "endHalf": -5.7977182166268904e-8
+   }
+  },
+  {
+   "id": "I1.e",
+   "class": "analytic",
+   "pass": true,
+   "measured": {
+    "kind": "oscillating",
+    "orderMax": 1.064339587020461,
+    "maxAbs": 0.023944642918358443,
+    "maxAbsHalf": 0.01145012488818035
+   }
+  },
+  {
+   "id": "I1.f",
+   "class": "analytic",
+   "pass": true,
+   "measured": {
+    "refused": null,
+    "end": 0.16442151535489957,
+    "endHalf": 0.09644736338093818,
+    "growth": 1.2045563383169948,
+    "growthHalf": 1.1123216218186018
+   }
+  },
+  {
+   "id": "I1.g",
+   "class": "oracle",
+   "pass": true,
+   "measured": {
+    "endAbs": 0,
+    "endRel": 0,
+    "sepRel": 0,
+    "ratioRel": 0,
+    "order": 0
+   }
+  },
+  {
+   "id": "I1.h1",
+   "class": "refusal",
+   "pass": true,
+   "measured": {
+    "refused": "rounding-floor",
+    "maxAbsHalf": 1.0362081563168128e-15
+   }
+  },
+  {
+   "id": "I1.h2",
+   "class": "refusal",
+   "pass": true,
+   "measured": {
+    "refused": "unbound",
+    "at": 1
+   }
+  },
+  {
+   "id": "I1.h3",
+   "class": "refusal",
+   "pass": true,
+   "measured": {
+    "few": [
+     "too-few-steps",
+     "too-few-steps",
+     "too-few-steps",
+     "too-few-steps"
+    ],
+    "fewLedger": "too-few-steps",
+    "zero": true,
+    "nan": true,
+    "span": true,
+    "scheme": true
+   }
+  },
+  {
+   "id": "I1.i",
+   "class": "refusal",
+   "pass": false,
+   "measured": [
+    {
+     "kind": "oscillating",
+     "orderEnd": null,
+     "reason": "end-phase",
+     "orderMax": 2.002887900859082,
+     "end": 0.0000940202118098199,
+     "endHalf": 0.0000014758324577239061
+    },
+    {
+     "kind": "secular",
+     "orderEnd": 2.0032570206755276,
+     "reason": "",
+     "orderMax": 2.002887900859082,
+     "end": 0.0026560860862520443,
+     "endHalf": 0.0006625241209941753
+    }
+   ]
+  },
+  {
+   "id": "I2.a",
+   "class": "analytic",
+   "pass": true,
+   "measured": {
+    "refused": null,
+    "distance": 5.005736970535269e-7
+   }
+  },
+  {
+   "id": "I2.b",
+   "class": "analytic",
+   "pass": false,
+   "measured": {
+    "hMinPhase": 0,
+    "hMaxPhase": 0.16408154079741757,
+    "hMin": 0.0005969817004194411,
+    "hMax": 0.1404602958481457,
+    "ratio": 235.28408952813442
+   }
+  },
+  {
+   "id": "I2.c",
+   "class": "analytic",
+   "pass": true,
+   "measured": {
+    "slope": 1.558097436687389
+   }
+  },
+  {
+   "id": "I2.d",
+   "class": "oracle",
+   "pass": true,
+   "measured": {
+    "accepted": [
+     189,
+     189
+    ],
+    "rejected": [
+     0,
+     0
+    ],
+    "hMinRel": 4.887660040055639e-8,
+    "hMaxRel": 4.5711099850880004e-10,
+    "slope": [
+     1.558097436687389,
+     1.5580974364816487
+    ],
+    "finalAbs": 5.89105695648906e-13
+   }
+  },
+  {
+   "id": "I2.e",
+   "class": "oracle",
+   "pass": true,
+   "measured": {
+    "finalAbs": 3.7537910790093765e-7
+   }
+  },
+  {
+   "id": "I2.f",
+   "class": "oracle",
+   "pass": true,
+   "measured": {
+    "instrument": {
+     "errAdaptive": 3.752509341371733e-7,
+     "errFixed": 1.1036099980172464e-7,
+     "fixedSteps": 16384,
+     "fixedEvaluations": 65536,
+     "adaptiveEvaluations": 1135,
+     "ratio": 57.7409691629956
+    },
+    "oracle": {
+     "errAdaptive": 3.752512500864359e-7,
+     "adaptiveEvaluations": 1135,
+     "fixedSteps": 16384,
+     "errFixed": 1.1036009474676639e-7
+    }
+   }
+  },
+  {
+   "id": "I2.g",
+   "class": "refusal",
+   "pass": true,
+   "measured": {
+    "refused": "step-collapse",
+    "at": {
+     "t": 1.1107207342988747,
+     "h": 1.8998055479116327e-12,
+     "r": 1.3942833727116661e-7
+    },
+    "collision": 1.1107207345395915,
+    "accepted": 328,
+    "rejected": 0
+   }
+  },
+  {
+   "id": "I2.h",
+   "class": "refusal",
+   "pass": true,
+   "measured": {
+    "tol0": true,
+    "tolNaN": true,
+    "span0": true,
+    "oneBody": true
+   }
+  },
+  {
+   "id": "I2.r",
+   "class": "reported",
+   "pass": null,
+   "measured": {
+    "instrument": {
+     "accepted": 189,
+     "rejected": 0,
+     "evaluations": 1135
+    },
+    "scipyRK45": {
+     "steps": 154,
+     "nfev": 932
+    }
+   }
+  },
+  {
+   "id": "I3.a",
+   "class": "analytic",
+   "pass": true,
+   "measured": {
+    "refused": null,
+    "median": 0.6999999999999991,
+    "lo": 0.6999999999999986,
+    "hi": 0.7000000000000007,
+    "exponential": 12
+   }
+  },
+  {
+   "id": "I3.b",
+   "class": "oracle",
+   "pass": true,
+   "measured": {
+    "behaviours": true,
+    "rate": 2.6645352591003757e-15,
+    "r2": 0,
+    "window": true,
+    "summary": 4.440892098500626e-16,
+    "kind": true,
+    "pass": true,
+    "counts": {
+     "identical": 0,
+     "bounded": 0,
+     "linear": 0,
+     "exponential": 24,
+     "saturated": 0,
+     "insufficient": 0
+    },
+    "median": 0.7306662911070982,
+    "lo": 0.5226396810924896,
+    "hi": 0.9385500604692706
+   }
+  },
+  {
+   "id": "I3.c",
+   "class": "coverage",
+   "pass": true,
+   "measured": {
+    "ensembles": 200,
+    "estimates": 200,
+    "covered": 200,
+    "fraction": 1
+   }
+  },
+  {
+   "id": "I3.d1",
+   "class": "refusal",
+   "pass": true,
+   "measured": {
+    "refused": "not-exponential",
+    "behavior": "linear",
+    "counts": {
+     "identical": 0,
+     "bounded": 0,
+     "linear": 12,
+     "exponential": 0,
+     "saturated": 0,
+     "insufficient": 0
+    }
+   }
+  },
+  {
+   "id": "I3.d2",
+   "class": "refusal",
+   "pass": true,
+   "measured": [
+    {
+     "refused": "not-exponential",
+     "behavior": "bounded",
+     "counts": {
+      "identical": 0,
+      "bounded": 12,
+      "linear": 0,
+      "exponential": 0,
+      "saturated": 0,
+      "insufficient": 0
+     }
+    },
+    {
+     "refused": "not-exponential",
+     "behavior": "identical",
+     "counts": {
+      "identical": 12,
+      "bounded": 0,
+      "linear": 0,
+      "exponential": 0,
+      "saturated": 0,
+      "insufficient": 0
+     }
+    },
+    {
+     "refused": "too-few-pairs",
+     "behavior": null,
+     "counts": {
+      "identical": 0,
+      "bounded": 0,
+      "linear": 0,
+      "exponential": 9,
+      "saturated": 0,
+      "insufficient": 0
+     }
+    },
+    {
+     "refused": "not-exponential",
+     "behavior": "linear",
+     "counts": {
+      "identical": 0,
+      "bounded": 0,
+      "linear": 14,
+      "exponential": 6,
+      "saturated": 0,
+      "insufficient": 0
+     }
+    }
+   ]
+  },
+  {
+   "id": "I3.e0",
+   "class": "analytic",
+   "pass": true,
+   "measured": {
+    "pair": [
+     0.9491221717293463,
+     2.5098471448700113,
+     0.003808809155821217
+    ],
+    "kind": [
+     0.9491221717293463,
+     2.5098471448700113,
+     0.003808809155821217
+    ],
+    "diff": [
+     0,
+     0,
+     0
+    ]
+   }
+  },
+  {
+   "id": "I3.e",
+   "class": "oracle",
+   "pass": true,
+   "measured": {
+    "behaviours": true,
+    "rate": 2.9698465908722937e-15,
+    "r2": 1.1102230246251565e-16,
+    "window": true,
+    "summary": 7.771561172376096e-16,
+    "kind": true,
+    "pass": true,
+    "refused": null,
+    "behavior": null
+   }
+  },
+  {
+   "id": "I3.e1",
+   "class": "oracle",
+   "pass": true,
+   "measured": {
+    "worst": 0,
+    "largest": 0.46830569369414426,
+    "bound": 4.683056936941443e-13
+   }
+  },
+  {
+   "id": "I3.r",
+   "class": "reported",
+   "pass": null,
+   "measured": {
+    "counts": {
+     "identical": 0,
+     "bounded": 0,
+     "linear": 0,
+     "exponential": 26,
+     "saturated": 0,
+     "insufficient": 24
+    },
+    "largestGrowth": 155174102.07412347,
+    "refused": null,
+    "behavior": null,
+    "median": 0.12615562571642852,
+    "lo": 0.12119388143954639,
+    "hi": 0.14819023738960574,
+    "window": {
+     "from": 4.5,
+     "to": 33.75
+    },
+    "firstSeparation": 4.999999987376214e-7,
+    "lastSeparation": 0.46830569369414426
+   }
+  },
+  {
+   "id": "I4.a",
+   "class": "analytic",
+   "pass": false,
+   "measured": {
+    "power": 0.9999999999999991,
+    "amplitude": 1.9999999999999991,
+    "largestOtherBin": 2.439553026424704e-30,
+    "frequency": 0.12520515487190353
+   }
+  },
+  {
+   "id": "I4.b",
+   "class": "oracle",
+   "pass": true,
+   "measured": {
+    "worst": 1.1102230246251565e-15
+   }
+  },
+  {
+   "id": "I4.c",
+   "class": "analytic",
+   "pass": true,
+   "measured": {
+    "fwhmTimesN": 0.8859371020085192,
+    "resolution": 0.00392156862745098,
+    "oracleFwhmTimesN": 0.8859371020085334
+   }
+  },
+  {
+   "id": "I4.d",
+   "class": "oracle",
+   "pass": true,
+   "measured": {
+    "power": 2.220446049250313e-15,
+    "frequency": 4.483649624085484e-16,
+    "amplitude": 6.306006761410217e-16,
+    "fwhm": 1.6768444920740915e-15,
+    "second": 0,
+    "refused": null,
+    "peak": {
+     "frequency": 0.37142387933076,
+     "period": 2.692341703505501,
+     "power": 0.879448164225966,
+     "amplitude": 1.408464109387508
+    },
+    "aliasRatio": 0.3407634376024826
+   }
+  },
+  {
+   "id": "I4.e",
+   "class": "family",
+   "pass": true,
+   "measured": {
+    "frequency": 0.37142387933076,
+    "glsFrequency": 0.37129369525204753,
+    "differenceTimesT": 0.0037309008276951404,
+    "scipyLombScarglePeak": 0.3716666666666667
+   }
+  },
+  {
+   "id": "I4.f",
+   "class": "authentic",
+   "pass": true,
+   "measured": {
+    "refused": null,
+    "points": 78,
+    "baseline": 26.58329999999978,
+    "period": 7.502622635547257,
+    "glsPeriod": 7.464030450345082,
+    "differenceTimesT": 0.018319843411967546,
+    "power": 1.3115897257165443e-13,
+    "frequency": 3.62336921185029e-14,
+    "aliasRatio": 0.585561523272096,
+    "candidates": null
+   }
+  },
+  {
+   "id": "I4.g",
+   "class": "refusal",
+   "pass": true,
+   "measured": {
+    "refused": "alias",
+    "candidates": [
+     {
+      "frequency": 0.700193754091897,
+      "power": 1.0000000000000013
+     },
+     {
+      "frequency": 0.29999999999999993,
+      "power": 0.9999999999999994
+     }
+    ],
+    "aliasRatio": 0.9999999999999981
+   }
+  },
+  {
+   "id": "I4.h",
+   "class": "refusal",
+   "pass": true,
+   "measured": {
+    "few": "too-few",
+    "constant": "no-variation",
+    "nan": true,
+    "band": true,
+    "work": true
+   }
+  },
+  {
+   "id": "I5.a",
+   "class": "analytic",
+   "pass": true,
+   "measured": {
+    "lineLargestError": 1.7763568394002505e-15,
+    "closer": "tie",
+    "squareWorstFromQuarter": 0
+   }
+  },
+  {
+   "id": "I5.b",
+   "class": "oracle",
+   "pass": true,
+   "measured": {
+    "sin": {
+     "points": 2.220446049250313e-16,
+     "summary": 1.1102230246251565e-16,
+     "closer": [
+      "spline",
+      "spline"
+     ],
+     "rmsLinear": 0.05754166475917504,
+     "rmsSpline": 0.0013102263618944014,
+     "n": 9,
+     "pass": true
+    },
+    "runge": {
+     "points": 3.3306690738754696e-16,
+     "summary": 3.3306690738754696e-16,
+     "closer": [
+      "spline",
+      "spline"
+     ],
+     "rmsLinear": 0.18010698212375173,
+     "rmsSpline": 0.16307723876502334,
+     "n": 11,
+     "pass": true
+    },
+    "exp": {
+     "points": 1.7763568394002505e-15,
+     "summary": 1.7763568394002505e-15,
+     "closer": [
+      "spline",
+      "spline"
+     ],
+     "rmsLinear": 1.129931506844504,
+     "rmsSpline": 0.46117623777894867,
+     "n": 8,
+     "pass": true
+    }
+   }
+  },
+  {
+   "id": "I5.c",
+   "class": "authentic",
+   "pass": true,
+   "measured": {
+    "mass": {
+     "logAge": 9.3,
+     "points": 1.7763568394002505e-15,
+     "summary": 4.440892098500626e-16,
+     "closer": [
+      "linear",
+      "linear"
+     ],
+     "rmsLinear": 0.04997119236770487,
+     "rmsSpline": 0.36428599025319897,
+     "n": 21,
+     "pass": true
+    },
+    "age": {
+     "1": {
+      "points": 1.7763568394002505e-15,
+      "summary": 8.881784197001252e-16,
+      "closer": [
+       "spline",
+       "spline"
+      ],
+      "rmsLinear": 0.007126859130886918,
+      "rmsSpline": 0.004508231145042843,
+      "n": 7,
+      "pass": true
+     },
+     "0.6": {
+      "points": 8.881784197001252e-16,
+      "summary": 1.625761157642014e-16,
+      "closer": [
+       "spline",
+       "spline"
+      ],
+      "rmsLinear": 0.001546803003454618,
+      "rmsSpline": 0.000451663090815176,
+      "n": 7,
+      "pass": true
+     },
+     "0.8": {
+      "points": 8.881784197001252e-16,
+      "summary": 8.881784197001252e-16,
+      "closer": [
+       "spline",
+       "spline"
+      ],
+      "rmsLinear": 0.00285205308925394,
+      "rmsSpline": 0.0011754494614611454,
+      "n": 7,
+      "pass": true
+     }
+    }
+   }
+  },
+  {
+   "id": "I5.d",
+   "class": "refusal",
+   "pass": true,
+   "measured": {
+    "coarse": {
+     "refused": "too-coarse",
+     "limit": 0.05,
+     "n": 5,
+     "linear": {
+      "rms": 2,
+      "max": 2
+     },
+     "spline": {
+      "rms": 2.771781755852974,
+      "max": 2.782608695652174
+     }
+    },
+    "few": "too-few",
+    "order": true,
+    "nan": true,
+    "limit": true
+   }
+  },
+  {
+   "id": "I5.r",
+   "class": "reported",
+   "pass": null,
+   "measured": {
+    "mass": {
+     "logAge": 9.3,
+     "n": 21,
+     "closer": "linear",
+     "rmsLinear": 0.04997119236770487,
+     "rmsSpline": 0.36428599025319897
+    },
+    "age": {
+     "1": {
+      "ages": 7,
+      "refused": null,
+      "closer": "spline",
+      "rmsLinear": 0.007126859130886918,
+      "rmsSpline": 0.004508231145042843
+     },
+     "0.6": {
+      "ages": 7,
+      "refused": null,
+      "closer": "spline",
+      "rmsLinear": 0.001546803003454618,
+      "rmsSpline": 0.000451663090815176
+     },
+     "0.8": {
+      "ages": 7,
+      "refused": null,
+      "closer": "spline",
+      "rmsLinear": 0.00285205308925394,
+      "rmsSpline": 0.0011754494614611454
+     }
+    }
+   }
+  }
+ ],
+ "node": "v22.23.4"
+}
