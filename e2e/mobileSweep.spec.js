@@ -600,6 +600,264 @@ test.describe('a plot cursor by touch', () => {
   }
 });
 
+// -----------------------------------------------------------------------------
+// 3. The workflows, by finger, at both sizes and in both languages
+// -----------------------------------------------------------------------------
+// tools/mobile-workflows.json names them: the ten student workflows of
+// ACCESSIBILITY_CONFORMANCE.md (S1 to S10) and five instrument workflows
+// (N1 to N5). Each is a few real taps, an observable result, and no sideways
+// scroll. A walk that needs a long computation runs at one size in each
+// language, so that both sizes and both languages are still covered.
+
+const LOCALES = ['en', 'es'];
+const main = page =>
+  page.evaluate(
+    () => (document.querySelector('main') || document.body).innerText.length
+  );
+const fixture = async (page, id) => {
+  await open(page, '/observatory/', page.__locale);
+  await page.locator('#obsFixture').selectOption(id);
+  await page.locator('#obsOpen').tap();
+};
+
+/** A tap at a fraction of an element, measured where the element is now. */
+async function tapAt(page, locator, fx, fy) {
+  await locator.scrollIntoViewIfNeeded();
+  const box = await locator.boundingBox();
+  await page.touchscreen.tap(box.x + box.width * fx, box.y + box.height * fy);
+}
+
+const WORKFLOWS = [
+  {
+    id: 'S1',
+    async run(page) {
+      await open(page, '/#investigations', page.__locale);
+      await page
+        .locator('#investigationBrowserContent .inv-card')
+        .first()
+        .tap();
+      await expect(page.locator('#investigationPanel')).toBeVisible({
+        timeout: 25_000,
+      });
+    },
+  },
+  {
+    id: 'S2',
+    async run(page) {
+      await open(page, '/', page.__locale);
+      await openState(page, ['#loadScenarioBtn']);
+      await expect(page.locator('#scenarioListModal')).toBeVisible();
+    },
+  },
+  {
+    id: 'S3',
+    async run(page) {
+      await open(page, '/?author=tides&step=1', page.__locale);
+      await expect(page.locator('#investigationNext')).toBeVisible({
+        timeout: 25_000,
+      });
+      const before = await page.locator('#investigationPanel').innerText();
+      await page.locator('#investigationNext').tap();
+      await expect
+        .poll(() => page.locator('#investigationPanel').innerText())
+        .not.toBe(before);
+    },
+  },
+  {
+    id: 'S4',
+    async run(page) {
+      await fixture(page, 'tess-light-curve');
+      const plot = page.locator('#obsPlot');
+      await expect(plot).toBeVisible({ timeout: 30_000 });
+      // A tap is a click: the nearest row takes the focus and is said.
+      await tapAt(page, plot, 0.5, 0.5);
+      await expect(page.locator('#obsPlot')).toBeFocused();
+      await expect(page.locator('#obsStatus')).not.toBeEmpty();
+    },
+  },
+  {
+    id: 'S5',
+    async run(page) {
+      await open(page, '/observatory/', page.__locale);
+      await page.locator('#obsOpen').tap();
+      await expect(page.locator('#obsPlot')).toBeVisible({ timeout: 30_000 });
+      await expect(page.locator('#obsTitle')).not.toBeEmpty();
+    },
+  },
+  {
+    id: 'S6',
+    async run(page) {
+      await open(page, '/sky/', page.__locale);
+      await page.locator('#skySite').selectOption('syd');
+      await expect(page.locator('#skyLat')).toHaveValue('-33.87');
+      const before = await page.evaluate(
+        () => window.skyLab.state.model.sun.altDeg
+      );
+      await page.locator('#skyFwd1h').tap();
+      await page.locator('#skyFwd1h').tap();
+      await expect
+        .poll(() => page.evaluate(() => window.skyLab.state.model.sun.altDeg))
+        .not.toBe(before);
+    },
+  },
+  {
+    id: 'S7',
+    async run(page) {
+      await open(page, '/experiments/', page.__locale);
+      const before = await main(page);
+      await page.locator('#xpRun').tap();
+      await expect.poll(() => main(page), { timeout: 60_000 }).not.toBe(before);
+    },
+  },
+  {
+    id: 'S8',
+    async run(page) {
+      await open(page, '/my-work/', page.__locale);
+      const summary = page.locator('main summary').first();
+      await summary.tap();
+      await expect(page.locator('main details[open]').first()).toBeVisible();
+    },
+  },
+  {
+    id: 'S9',
+    async run(page) {
+      await open(page, '/library/?item=investigation:tides', page.__locale);
+      await page.locator('[data-save]').tap();
+      await expect(page.locator('[data-save]')).toHaveAttribute(
+        'aria-pressed',
+        'true'
+      );
+    },
+  },
+  {
+    id: 'S10',
+    async run(page, app) {
+      await page.addInitScript(l => {
+        try {
+          localStorage.setItem('gravitas_locale', l);
+        } catch {
+          /* none */
+        }
+      }, page.__locale);
+      await app.boot();
+      await app.loadScenario('binary-pair');
+      await app.waitForFrames(10);
+      const menu = page.locator('#mobileMenuToggle');
+      if (await menu.isVisible()) await menu.tap();
+      await app.railControl('shareBtn');
+      await page.locator('#shareBtn').tap();
+      await expect(page.locator('#shareModal')).toBeVisible();
+      await expect
+        .poll(
+          async () => (await page.locator('#shareUrl').inputValue()).length,
+          {
+            timeout: 15_000,
+          }
+        )
+        .toBeGreaterThan(20);
+    },
+  },
+  {
+    id: 'N1',
+    async run(page) {
+      await openPanel(page, 'obsMarks');
+      await page.locator('#obsMarksBody button[data-tool="point"]').tap();
+      await tapAt(page, page.locator('#obsMarksBody .im-over'), 0.3, 0.3);
+      await page.locator('#obsMarksBody button[data-act="place"]').tap();
+      await expect(page.locator('#obsMarksBody tbody tr')).toHaveCount(1);
+    },
+  },
+  {
+    id: 'N2',
+    async run(page) {
+      await openPanel(page, 'obsMarks');
+      await page.locator('#obsMarksBody button[data-tool="point"]').tap();
+      await tapAt(page, page.locator('#obsMarksBody .im-over'), 0.3, 0.3);
+      await page.locator('#obsMarksBody button[data-act="place"]').tap();
+      await page.locator('#obsPhotoPanel > summary').tap();
+      await page
+        .getByRole('button', {
+          name: /Measure all marks|Medir todas las marcas/,
+        })
+        .tap();
+      await expect(
+        page.locator('#obsPhotoBody table tbody tr').first()
+      ).toBeVisible({
+        timeout: 30_000,
+      });
+    },
+  },
+  {
+    id: 'N3',
+    async run(page) {
+      await fixture(page, 'sdss-a');
+      await expect(page.locator('#obsSpecPanel')).toBeVisible({
+        timeout: 30_000,
+      });
+      await page.locator('#obsSpecPanel summary').tap();
+      await page.locator('#obsSpecLine').selectOption('h-beta');
+      await page.locator('#obsSpecR').fill('1200');
+      await page.locator('#obsSpecFit').tap();
+      const out = page.locator('#obsSpecOut');
+      await expect(out).toContainText(/km\/s/, { timeout: 30_000 });
+      await expect(out).not.toContainText(/NaN|undefined/);
+    },
+  },
+  {
+    id: 'N4',
+    async run(page) {
+      await open(page, '/mission/', page.__locale, { ready: '#mn-window-go' });
+      await page.locator('#mn-window-steps').fill('21');
+      await page.locator('#mn-window-go').tap();
+      await expect(page.locator('#mn-window-browse')).toBeEnabled({
+        timeout: 60_000,
+      });
+      await page.locator('#mn-window-browse').tap();
+      const cell = page.locator(
+        '#mn-window-grid [role="gridcell"][data-i="10"][data-j="10"]'
+      );
+      await cell.scrollIntoViewIfNeeded();
+      await cell.tap();
+      const label = await cell.getAttribute('aria-label');
+      await expect(page.locator('.mn-grid-cursor')).toHaveText(label);
+    },
+  },
+  {
+    id: 'N5',
+    heavy: true,
+    async run(page) {
+      await open(page, '/observatory/?open=ngc2420-segue', page.__locale);
+      await page.locator('#obsClusterPanel > summary').tap();
+      await page.locator('#obsClFit').tap();
+      await expect(page.locator('#obsClTable')).toBeVisible({
+        timeout: 120_000,
+      });
+    },
+  },
+];
+
+for (const size of SIZES) {
+  test.describe(`the workflows at ${size.id} width`, () => {
+    test.use({
+      viewport: { width: size.width, height: size.height },
+      hasTouch: true,
+      isMobile: true,
+    });
+    test.setTimeout(240_000);
+
+    for (const w of WORKFLOWS)
+      for (const locale of LOCALES) {
+        // The cluster fit is a long computation: one size per language.
+        if (w.heavy && (size.id === 'phone') !== (locale === 'en')) continue;
+        test(`${w.id}, ${locale}`, async ({ page, app }) => {
+          page.__locale = locale;
+          await w.run(page, app);
+          expect(await noSidewaysScroll(page)).toBeLessThanOrEqual(2);
+        });
+      }
+  });
+}
+
 test.afterAll(() => {
   if (!WRITE || !Object.keys(written).length) return;
   const rec = JSON.parse(readFileSync(RECORD, 'utf8'));

@@ -9,6 +9,7 @@
 // =============================================================================
 
 import { mulberry32 } from '../js/rng.js';
+import { sidecar } from '../tools/photometry-validate.mjs';
 
 export const SIZE = 256;
 export const STARS = [
@@ -51,7 +52,7 @@ export function frameObservation(id = 'mobile-sweep') {
         (1 + Math.exp((Math.hypot(i - DISC.x, j - DISC.y) - DISC.r) / 0.8));
       v[k] = Math.round((s + NOISE * gauss()) * 100) / 100;
     }
-  return {
+  const o = {
     format: 'gravitas.observation',
     formatVersion: 1,
     kind: 'image',
@@ -76,6 +77,10 @@ export function frameObservation(id = 'mobile-sweep') {
     masks: [],
     annotations: [],
   };
+  // The pixel contract (gain, linearity, noise) photometry needs; the marks
+  // panel does not read it.
+  o.image.sidecar = sidecar({ width: SIZE, height: SIZE });
+  return o;
 }
 
 export const asFile = (o, name = 'frame.json') => ({
