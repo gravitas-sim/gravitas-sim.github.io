@@ -732,7 +732,7 @@ head of this prompt, level 6 gzip):
 
 | Tier | Files | Gzip | 147's ceiling | Ceiling now |
 | --- | ---: | ---: | ---: | ---: |
-| First visit (core and optional) | 953 | 5,393,276 B | 5,175,296 B | 5,393,276 B |
+| First visit (core and optional) | 953 | 5,393,276 B | 5,175,296 B | 5,395,174 B (Prompt 285) |
 | Idle | 210 | 1,696,067 B | 1,517,568 B | 1,696,781 B |
 
 Both ceilings have been raised since by later prompts, each by its measured
