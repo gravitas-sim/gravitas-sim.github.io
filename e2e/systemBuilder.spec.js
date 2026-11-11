@@ -295,7 +295,7 @@ test.describe('the Orbital System Builder', () => {
     await useTemplate(page, 'kepler16');
     await expect(
       page.locator('#systemBuilderTableBody tr').nth(0)
-    ).toContainText('41.1 días');
+    ).toContainText('41,1 días');
     await expect(page.locator('#systemBuilderBuild')).toHaveText(
       'Construir este sistema'
     );

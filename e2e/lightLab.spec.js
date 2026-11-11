@@ -17,6 +17,7 @@ import {
   setControl,
   walkToSid,
   reading,
+  readingLocale,
   controlOf,
   declared,
 } from './centralExperiment.js';
@@ -43,12 +44,16 @@ async function toThreeColors(page, app, locale) {
 }
 
 test.describe('the blackbody explorer', () => {
+  test.afterEach(() => {
+    readingLocale.current = 'en';
+  });
   for (const locale of ['en', 'es']) {
     test(`reads like a thermometer and passes axe (${locale})`, async ({
       page,
       app,
     }) => {
       test.slow();
+      readingLocale.current = locale;
       await toThreeColors(page, app, locale === 'es' ? 'es' : null);
       const { control } = controlOf(declared(ID));
       const readout = page.locator('#investigationToolReadout');
