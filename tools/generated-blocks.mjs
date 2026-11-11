@@ -687,6 +687,7 @@ export function generatedBlocks({
   graph = null,
   precache = null,
   promises = null,
+  pagePromises = null,
   dataPacks = null,
   realSystems = null,
   moduleSizes = null,
@@ -721,6 +722,7 @@ export function generatedBlocks({
     // OFFLINE_AND_LOW_END.md's table, from the committed sw-manifest.js.
     ...(precache ? { precache } : {}),
     ...(promises ? { promises } : {}),
+    ...(pagePromises ? { pagePromises } : {}),
     citation: citationBlock(),
     ...(irreversible
       ? {

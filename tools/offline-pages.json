@@ -1,0 +1,2695 @@
+{
+  "format": "gravitas.offline-pages/1",
+  "note": "Written by tools/offline-pages.mjs from a headless Chromium tour with service workers blocked: every same-origin request each page made after it loaded and was scrolled, set against sw-manifest.js. Not edited by hand; tests/offlinePages.test.js holds it to the manifest.",
+  "pages": [
+    {
+      "page": "/3d/",
+      "html": "idle",
+      "requests": 32,
+      "core": 10,
+      "optional": 0,
+      "idle": 22,
+      "never": 0,
+      "runtime": 0,
+      "outside": [
+        {
+          "path": "/js/i18n/en.lab3dLab.js",
+          "tier": "idle"
+        },
+        {
+          "path": "/js/lab3d/api.js",
+          "tier": "idle"
+        },
+        {
+          "path": "/js/lab3d/elements.js",
+          "tier": "idle"
+        },
+        {
+          "path": "/js/lab3d/engine.js",
+          "tier": "idle"
+        },
+        {
+          "path": "/js/lab3d/experiment.js",
+          "tier": "idle"
+        },
+        {
+          "path": "/js/lab3d/kernel.js",
+          "tier": "idle"
+        },
+        {
+          "path": "/js/lab3d/live.js",
+          "tier": "idle"
+        },
+        {
+          "path": "/js/lab3d/liveClient.js",
+          "tier": "idle"
+        },
+        {
+          "path": "/js/lab3d/references.js",
+          "tier": "idle"
+        },
+        {
+          "path": "/js/lab3d/snapshot.js",
+          "tier": "idle"
+        },
+        {
+          "path": "/js/lab3d/state.js",
+          "tier": "idle"
+        },
+        {
+          "path": "/js/lab3d/view/cameraPad.js",
+          "tier": "idle"
+        },
+        {
+          "path": "/js/lab3d/view/frames.js",
+          "tier": "idle"
+        },
+        {
+          "path": "/js/lab3d/view/i18n.js",
+          "tier": "idle"
+        },
+        {
+          "path": "/js/lab3d/view/instruments.js",
+          "tier": "idle"
+        },
+        {
+          "path": "/js/lab3d/view/projection.js",
+          "tier": "idle"
+        },
+        {
+          "path": "/js/lab3d/view/scene.js",
+          "tier": "idle"
+        },
+        {
+          "path": "/js/lab3d/view/tick.js",
+          "tier": "idle"
+        },
+        {
+          "path": "/js/lab3d/worker.js",
+          "tier": "idle"
+        },
+        {
+          "path": "/js/lab3d/workerCore.js",
+          "tier": "idle"
+        },
+        {
+          "path": "/js/lab3dLab.js",
+          "tier": "idle"
+        },
+        {
+          "path": "/vendor/three/lab3d.module.js",
+          "tier": "idle"
+        }
+      ],
+      "promise": "after it settles"
+    },
+    {
+      "page": "/catalog/",
+      "html": "optional",
+      "requests": 18,
+      "core": 17,
+      "optional": 1,
+      "idle": 0,
+      "never": 0,
+      "runtime": 0,
+      "outside": [],
+      "promise": "first visit"
+    },
+    {
+      "page": "/compute/",
+      "html": "never",
+      "requests": 25,
+      "core": 12,
+      "optional": 0,
+      "idle": 0,
+      "never": 13,
+      "runtime": 0,
+      "outside": [
+        {
+          "path": "/js/compute/capsule.js",
+          "tier": "never"
+        },
+        {
+          "path": "/js/compute/catalogue.js",
+          "tier": "never"
+        },
+        {
+          "path": "/js/compute/catalogueData.js",
+          "tier": "never"
+        },
+        {
+          "path": "/js/compute/catalogueHashes.js",
+          "tier": "never"
+        },
+        {
+          "path": "/js/compute/check.js",
+          "tier": "never"
+        },
+        {
+          "path": "/js/compute/framePin.js",
+          "tier": "never"
+        },
+        {
+          "path": "/js/compute/messages.js",
+          "tier": "never"
+        },
+        {
+          "path": "/js/compute/origin.js",
+          "tier": "never"
+        },
+        {
+          "path": "/js/compute/prepare.js",
+          "tier": "never"
+        },
+        {
+          "path": "/js/compute/runtime.js",
+          "tier": "never"
+        },
+        {
+          "path": "/js/compute/session.js",
+          "tier": "never"
+        },
+        {
+          "path": "/js/compute/transport.js",
+          "tier": "never"
+        },
+        {
+          "path": "/js/computePage.js",
+          "tier": "never"
+        }
+      ],
+      "promise": "needs a connection"
+    },
+    {
+      "page": "/course/",
+      "html": "optional",
+      "requests": 24,
+      "core": 24,
+      "optional": 0,
+      "idle": 0,
+      "never": 0,
+      "runtime": 0,
+      "outside": [],
+      "promise": "first visit"
+    },
+    {
+      "page": "/evaluation/",
+      "html": "runtime",
+      "requests": 10,
+      "core": 10,
+      "optional": 0,
+      "idle": 0,
+      "never": 0,
+      "runtime": 0,
+      "outside": [],
+      "promise": "needs a connection"
+    },
+    {
+      "page": "/experiments/",
+      "html": "runtime",
+      "requests": 60,
+      "core": 60,
+      "optional": 0,
+      "idle": 0,
+      "never": 0,
+      "runtime": 0,
+      "outside": [],
+      "promise": "needs a connection"
+    },
+    {
+      "page": "/figure/",
+      "html": "runtime",
+      "requests": 134,
+      "core": 131,
+      "optional": 0,
+      "idle": 3,
+      "never": 0,
+      "runtime": 0,
+      "outside": [
+        {
+          "path": "/js/lab3d/link.js",
+          "tier": "idle"
+        },
+        {
+          "path": "/js/mission/lab/defaults.js",
+          "tier": "idle"
+        },
+        {
+          "path": "/js/mission/link.js",
+          "tier": "idle"
+        }
+      ],
+      "promise": "needs a connection"
+    },
+    {
+      "page": "/glossary/",
+      "html": "runtime",
+      "requests": 7,
+      "core": 7,
+      "optional": 0,
+      "idle": 0,
+      "never": 0,
+      "runtime": 0,
+      "outside": [],
+      "promise": "needs a connection"
+    },
+    {
+      "page": "/",
+      "html": "core",
+      "requests": 124,
+      "core": 124,
+      "optional": 0,
+      "idle": 0,
+      "never": 0,
+      "runtime": 0,
+      "outside": [],
+      "promise": "first visit"
+    },
+    {
+      "page": "/instructors/",
+      "html": "runtime",
+      "requests": 46,
+      "core": 18,
+      "optional": 0,
+      "idle": 2,
+      "never": 26,
+      "runtime": 0,
+      "outside": [
+        {
+          "path": "/js/data/instructorContent.js",
+          "tier": "idle"
+        },
+        {
+          "path": "/js/data/investigations/binaries-sequence.js",
+          "tier": "never"
+        },
+        {
+          "path": "/js/data/investigations/binary-masses-sequence.js",
+          "tier": "never"
+        },
+        {
+          "path": "/js/data/investigations/cluster-sequence.js",
+          "tier": "never"
+        },
+        {
+          "path": "/js/data/investigations/depth/atmosphere-sequence.js",
+          "tier": "never"
+        },
+        {
+          "path": "/js/data/investigations/depth/measurement-sequence.js",
+          "tier": "never"
+        },
+        {
+          "path": "/js/data/investigations/depth/satellite-sequence.js",
+          "tier": "never"
+        },
+        {
+          "path": "/js/data/investigations/exoplanet-sequence.js",
+          "tier": "never"
+        },
+        {
+          "path": "/js/data/investigations/exposure-sequence.js",
+          "tier": "never"
+        },
+        {
+          "path": "/js/data/investigations/gaia-sequence.js",
+          "tier": "never"
+        },
+        {
+          "path": "/js/data/investigations/imaging-sequence.js",
+          "tier": "never"
+        },
+        {
+          "path": "/js/data/investigations/joint-sequence.js",
+          "tier": "never"
+        },
+        {
+          "path": "/js/data/investigations/observing-sequence.js",
+          "tier": "never"
+        },
+        {
+          "path": "/js/data/investigations/occurrence-sequence.js",
+          "tier": "never"
+        },
+        {
+          "path": "/js/data/investigations/photometric-calibration-sequence.js",
+          "tier": "never"
+        },
+        {
+          "path": "/js/data/investigations/planets-sequence.js",
+          "tier": "never"
+        },
+        {
+          "path": "/js/data/investigations/remnants-sequence.js",
+          "tier": "never"
+        },
+        {
+          "path": "/js/data/investigations/saturated-star-sequence.js",
+          "tier": "never"
+        },
+        {
+          "path": "/js/data/investigations/spectrograph-sequence.js",
+          "tier": "never"
+        },
+        {
+          "path": "/js/data/investigations/stellar-activity-sequence.js",
+          "tier": "never"
+        },
+        {
+          "path": "/js/data/investigations/stellar-sequence.js",
+          "tier": "never"
+        },
+        {
+          "path": "/js/data/investigations/strategy-sequence.js",
+          "tier": "never"
+        },
+        {
+          "path": "/js/data/investigations/survey-sequence.js",
+          "tier": "never"
+        },
+        {
+          "path": "/js/data/investigations/telescope-sequence.js",
+          "tier": "never"
+        },
+        {
+          "path": "/js/data/investigations/ttv-sequence.js",
+          "tier": "never"
+        },
+        {
+          "path": "/js/data/investigations/variables-ii-sequence.js",
+          "tier": "never"
+        },
+        {
+          "path": "/js/data/investigations/vetting-sequence.js",
+          "tier": "never"
+        },
+        {
+          "path": "/js/instructorPortal.js",
+          "tier": "idle"
+        }
+      ],
+      "promise": "needs a connection"
+    },
+    {
+      "page": "/instructors/submissions/",
+      "html": "runtime",
+      "requests": 47,
+      "core": 40,
+      "optional": 0,
+      "idle": 7,
+      "never": 0,
+      "runtime": 0,
+      "outside": [
+        {
+          "path": "/js/i18n/en.classSummary.js",
+          "tier": "idle"
+        },
+        {
+          "path": "/js/i18n/es.classSummary.js",
+          "tier": "idle"
+        },
+        {
+          "path": "/js/instructorArchive.js",
+          "tier": "idle"
+        },
+        {
+          "path": "/js/instructorRubric.js",
+          "tier": "idle"
+        },
+        {
+          "path": "/js/instructorSummary.js",
+          "tier": "idle"
+        },
+        {
+          "path": "/js/instructorSummaryView.js",
+          "tier": "idle"
+        },
+        {
+          "path": "/js/submissionReview.js",
+          "tier": "idle"
+        }
+      ],
+      "promise": "needs a connection"
+    },
+    {
+      "page": "/lab3d/",
+      "html": "runtime",
+      "requests": 15,
+      "core": 8,
+      "optional": 0,
+      "idle": 7,
+      "never": 0,
+      "runtime": 0,
+      "outside": [
+        {
+          "path": "/js/i18n/en.lab3d.js",
+          "tier": "idle"
+        },
+        {
+          "path": "/js/lab3d/api.js",
+          "tier": "idle"
+        },
+        {
+          "path": "/js/lab3d/elements.js",
+          "tier": "idle"
+        },
+        {
+          "path": "/js/lab3d/i18n.js",
+          "tier": "idle"
+        },
+        {
+          "path": "/js/lab3d/references.js",
+          "tier": "idle"
+        },
+        {
+          "path": "/js/lab3d/state.js",
+          "tier": "idle"
+        },
+        {
+          "path": "/js/lab3dPage.js",
+          "tier": "idle"
+        }
+      ],
+      "promise": "needs a connection"
+    },
+    {
+      "page": "/library/",
+      "html": "idle",
+      "requests": 18,
+      "core": 13,
+      "optional": 0,
+      "idle": 5,
+      "never": 0,
+      "runtime": 0,
+      "outside": [
+        {
+          "path": "/js/library/card.js",
+          "tier": "idle"
+        },
+        {
+          "path": "/js/library/format.js",
+          "tier": "idle"
+        },
+        {
+          "path": "/js/library/i18n.js",
+          "tier": "idle"
+        },
+        {
+          "path": "/js/libraryPage.js",
+          "tier": "idle"
+        },
+        {
+          "path": "/library/library.json",
+          "tier": "idle"
+        }
+      ],
+      "promise": "after it settles"
+    },
+    {
+      "page": "/mission/",
+      "html": "runtime",
+      "requests": 12,
+      "core": 6,
+      "optional": 0,
+      "idle": 6,
+      "never": 0,
+      "runtime": 0,
+      "outside": [
+        {
+          "path": "/js/i18n/en.mission.js",
+          "tier": "idle"
+        },
+        {
+          "path": "/js/mission/api.js",
+          "tier": "idle"
+        },
+        {
+          "path": "/js/mission/bodies.js",
+          "tier": "idle"
+        },
+        {
+          "path": "/js/mission/i18n.js",
+          "tier": "idle"
+        },
+        {
+          "path": "/js/mission/plan.js",
+          "tier": "idle"
+        },
+        {
+          "path": "/js/missionPage.js",
+          "tier": "idle"
+        }
+      ],
+      "promise": "needs a connection"
+    },
+    {
+      "page": "/mission/lab/",
+      "html": "idle",
+      "requests": 34,
+      "core": 7,
+      "optional": 0,
+      "idle": 27,
+      "never": 0,
+      "runtime": 0,
+      "outside": [
+        {
+          "path": "/js/data/ephemeris/solarSystem2025.js",
+          "tier": "idle"
+        },
+        {
+          "path": "/js/data/ephemeris/solarSystem2025Check.js",
+          "tier": "idle"
+        },
+        {
+          "path": "/js/i18n/en.missionLab.js",
+          "tier": "idle"
+        },
+        {
+          "path": "/js/i18n/en.missionLabGuides.js",
+          "tier": "idle"
+        },
+        {
+          "path": "/js/lab3d/elements.js",
+          "tier": "idle"
+        },
+        {
+          "path": "/js/lab3d/kernel.js",
+          "tier": "idle"
+        },
+        {
+          "path": "/js/mission/api.js",
+          "tier": "idle"
+        },
+        {
+          "path": "/js/mission/bodies.js",
+          "tier": "idle"
+        },
+        {
+          "path": "/js/mission/ephemeris.js",
+          "tier": "idle"
+        },
+        {
+          "path": "/js/mission/lab/curriculum.js",
+          "tier": "idle"
+        },
+        {
+          "path": "/js/mission/lab/defaults.js",
+          "tier": "idle"
+        },
+        {
+          "path": "/js/mission/lab/guidePanel.js",
+          "tier": "idle"
+        },
+        {
+          "path": "/js/mission/lab/i18n.js",
+          "tier": "idle"
+        },
+        {
+          "path": "/js/mission/labCore.js",
+          "tier": "idle"
+        },
+        {
+          "path": "/js/mission/labReferences.js",
+          "tier": "idle"
+        },
+        {
+          "path": "/js/mission/labWorker.js",
+          "tier": "idle"
+        },
+        {
+          "path": "/js/mission/lambert.js",
+          "tier": "idle"
+        },
+        {
+          "path": "/js/mission/patched.js",
+          "tier": "idle"
+        },
+        {
+          "path": "/js/mission/plan.js",
+          "tier": "idle"
+        },
+        {
+          "path": "/js/mission/references.js",
+          "tier": "idle"
+        },
+        {
+          "path": "/js/mission/solar.js",
+          "tier": "idle"
+        },
+        {
+          "path": "/js/mission/transfers.js",
+          "tier": "idle"
+        },
+        {
+          "path": "/js/mission/twobody.js",
+          "tier": "idle"
+        },
+        {
+          "path": "/js/mission/verify.js",
+          "tier": "idle"
+        },
+        {
+          "path": "/js/mission/window.js",
+          "tier": "idle"
+        },
+        {
+          "path": "/js/mission/workerCore.js",
+          "tier": "idle"
+        },
+        {
+          "path": "/js/missionLabPage.js",
+          "tier": "idle"
+        }
+      ],
+      "promise": "after it settles"
+    },
+    {
+      "page": "/model/",
+      "html": "runtime",
+      "requests": 7,
+      "core": 7,
+      "optional": 0,
+      "idle": 0,
+      "never": 0,
+      "runtime": 0,
+      "outside": [],
+      "promise": "needs a connection"
+    },
+    {
+      "page": "/my-work/",
+      "html": "optional",
+      "requests": 16,
+      "core": 15,
+      "optional": 0,
+      "idle": 1,
+      "never": 0,
+      "runtime": 0,
+      "outside": [
+        {
+          "path": "/library/library.json",
+          "tier": "idle"
+        }
+      ],
+      "promise": "after it settles"
+    },
+    {
+      "page": "/observatory/",
+      "html": "optional",
+      "requests": 22,
+      "core": 22,
+      "optional": 0,
+      "idle": 0,
+      "never": 0,
+      "runtime": 0,
+      "outside": [],
+      "promise": "first visit"
+    },
+    {
+      "page": "/sky/",
+      "html": "idle",
+      "requests": 21,
+      "core": 7,
+      "optional": 0,
+      "idle": 14,
+      "never": 0,
+      "runtime": 0,
+      "outside": [
+        {
+          "path": "/js/data/sky/constellations.js",
+          "tier": "idle"
+        },
+        {
+          "path": "/js/kernels/sky/coords.js",
+          "tier": "idle"
+        },
+        {
+          "path": "/js/kernels/sky/moon.js",
+          "tier": "idle"
+        },
+        {
+          "path": "/js/kernels/sky/packs.js",
+          "tier": "idle"
+        },
+        {
+          "path": "/js/kernels/sky/planets.js",
+          "tier": "idle"
+        },
+        {
+          "path": "/js/kernels/sky/sky.js",
+          "tier": "idle"
+        },
+        {
+          "path": "/js/kernels/sky/solar.js",
+          "tier": "idle"
+        },
+        {
+          "path": "/js/kernels/sky/stars.js",
+          "tier": "idle"
+        },
+        {
+          "path": "/js/kernels/sky/time.js",
+          "tier": "idle"
+        },
+        {
+          "path": "/js/mission/ephemeris.js",
+          "tier": "idle"
+        },
+        {
+          "path": "/js/sky/view.js",
+          "tier": "idle"
+        },
+        {
+          "path": "/js/skyPage.js",
+          "tier": "idle"
+        },
+        {
+          "path": "/sky/bright-stars.json",
+          "tier": "idle"
+        },
+        {
+          "path": "/sky/ephemeris.json",
+          "tier": "idle"
+        }
+      ],
+      "promise": "after it settles"
+    },
+    {
+      "page": "/studio/course/",
+      "html": "optional",
+      "requests": 53,
+      "core": 52,
+      "optional": 1,
+      "idle": 0,
+      "never": 0,
+      "runtime": 0,
+      "outside": [],
+      "promise": "first visit"
+    },
+    {
+      "page": "/studio/course/packs/",
+      "html": "runtime",
+      "requests": 50,
+      "core": 50,
+      "optional": 0,
+      "idle": 0,
+      "never": 0,
+      "runtime": 0,
+      "outside": [],
+      "promise": "needs a connection"
+    },
+    {
+      "page": "/studio/",
+      "html": "optional",
+      "requests": 54,
+      "core": 54,
+      "optional": 0,
+      "idle": 0,
+      "never": 0,
+      "runtime": 0,
+      "outside": [],
+      "promise": "first visit"
+    },
+    {
+      "page": "/studio/lesson/",
+      "html": "optional",
+      "requests": 36,
+      "core": 36,
+      "optional": 0,
+      "idle": 0,
+      "never": 0,
+      "runtime": 0,
+      "outside": [],
+      "promise": "first visit"
+    },
+    {
+      "page": "/teaching/activity/binary-planets/",
+      "html": "runtime",
+      "requests": 7,
+      "core": 7,
+      "optional": 0,
+      "idle": 0,
+      "never": 0,
+      "runtime": 0,
+      "outside": [],
+      "promise": "needs a connection"
+    },
+    {
+      "page": "/teaching/activity/orbital-speed/",
+      "html": "runtime",
+      "requests": 7,
+      "core": 7,
+      "optional": 0,
+      "idle": 0,
+      "never": 0,
+      "runtime": 0,
+      "outside": [],
+      "promise": "needs a connection"
+    },
+    {
+      "page": "/teaching/activity/star-sizes/",
+      "html": "runtime",
+      "requests": 7,
+      "core": 7,
+      "optional": 0,
+      "idle": 0,
+      "never": 0,
+      "runtime": 0,
+      "outside": [],
+      "promise": "needs a connection"
+    },
+    {
+      "page": "/teaching/adopt/",
+      "html": "runtime",
+      "requests": 7,
+      "core": 7,
+      "optional": 0,
+      "idle": 0,
+      "never": 0,
+      "runtime": 0,
+      "outside": [],
+      "promise": "needs a connection"
+    },
+    {
+      "page": "/teaching/alignment/",
+      "html": "runtime",
+      "requests": 7,
+      "core": 7,
+      "optional": 0,
+      "idle": 0,
+      "never": 0,
+      "runtime": 0,
+      "outside": [],
+      "promise": "needs a connection"
+    },
+    {
+      "page": "/teaching/find/",
+      "html": "runtime",
+      "requests": 8,
+      "core": 8,
+      "optional": 0,
+      "idle": 0,
+      "never": 0,
+      "runtime": 0,
+      "outside": [],
+      "promise": "needs a connection"
+    },
+    {
+      "page": "/teaching/",
+      "html": "runtime",
+      "requests": 23,
+      "core": 22,
+      "optional": 0,
+      "idle": 0,
+      "never": 0,
+      "runtime": 1,
+      "outside": [
+        {
+          "path": "/validation/data.json",
+          "tier": "runtime"
+        }
+      ],
+      "promise": "needs a connection"
+    },
+    {
+      "page": "/teaching/investigation/a-binary-stars-orbit/",
+      "html": "runtime",
+      "requests": 7,
+      "core": 7,
+      "optional": 0,
+      "idle": 0,
+      "never": 0,
+      "runtime": 0,
+      "outside": [],
+      "promise": "needs a connection"
+    },
+    {
+      "page": "/teaching/investigation/a-lens-passing-by/",
+      "html": "runtime",
+      "requests": 7,
+      "core": 7,
+      "optional": 0,
+      "idle": 0,
+      "never": 0,
+      "runtime": 0,
+      "outside": [],
+      "promise": "needs a connection"
+    },
+    {
+      "page": "/teaching/investigation/a-night-at-the-telescope/",
+      "html": "runtime",
+      "requests": 7,
+      "core": 7,
+      "optional": 0,
+      "idle": 0,
+      "never": 0,
+      "runtime": 0,
+      "outside": [],
+      "promise": "needs a connection"
+    },
+    {
+      "page": "/teaching/investigation/a-stars-life-in-numbers/",
+      "html": "runtime",
+      "requests": 7,
+      "core": 7,
+      "optional": 0,
+      "idle": 0,
+      "never": 0,
+      "runtime": 0,
+      "outside": [],
+      "promise": "needs a connection"
+    },
+    {
+      "page": "/teaching/investigation/a-universe-of-stars/",
+      "html": "runtime",
+      "requests": 7,
+      "core": 7,
+      "optional": 0,
+      "idle": 0,
+      "never": 0,
+      "runtime": 0,
+      "outside": [],
+      "promise": "needs a connection"
+    },
+    {
+      "page": "/teaching/investigation/a-variable-star-from-frames/",
+      "html": "runtime",
+      "requests": 7,
+      "core": 7,
+      "optional": 0,
+      "idle": 0,
+      "never": 0,
+      "runtime": 0,
+      "outside": [],
+      "promise": "needs a connection"
+    },
+    {
+      "page": "/teaching/investigation/architectures/",
+      "html": "runtime",
+      "requests": 7,
+      "core": 7,
+      "optional": 0,
+      "idle": 0,
+      "never": 0,
+      "runtime": 0,
+      "outside": [],
+      "promise": "needs a connection"
+    },
+    {
+      "page": "/teaching/investigation/bending-light/",
+      "html": "runtime",
+      "requests": 7,
+      "core": 7,
+      "optional": 0,
+      "idle": 0,
+      "never": 0,
+      "runtime": 0,
+      "outside": [],
+      "promise": "needs a connection"
+    },
+    {
+      "page": "/teaching/investigation/binary-star-planets/",
+      "html": "runtime",
+      "requests": 7,
+      "core": 7,
+      "optional": 0,
+      "idle": 0,
+      "never": 0,
+      "runtime": 0,
+      "outside": [],
+      "promise": "needs a connection"
+    },
+    {
+      "page": "/teaching/investigation/black-holes/",
+      "html": "runtime",
+      "requests": 7,
+      "core": 7,
+      "optional": 0,
+      "idle": 0,
+      "never": 0,
+      "runtime": 0,
+      "outside": [],
+      "promise": "needs a connection"
+    },
+    {
+      "page": "/teaching/investigation/butterfly-effect/",
+      "html": "runtime",
+      "requests": 7,
+      "core": 7,
+      "optional": 0,
+      "idle": 0,
+      "never": 0,
+      "runtime": 0,
+      "outside": [],
+      "promise": "needs a connection"
+    },
+    {
+      "page": "/teaching/investigation/cluster-membership/",
+      "html": "runtime",
+      "requests": 7,
+      "core": 7,
+      "optional": 0,
+      "idle": 0,
+      "never": 0,
+      "runtime": 0,
+      "outside": [],
+      "promise": "needs a connection"
+    },
+    {
+      "page": "/teaching/investigation/color-and-temperature/",
+      "html": "runtime",
+      "requests": 7,
+      "core": 7,
+      "optional": 0,
+      "idle": 0,
+      "never": 0,
+      "runtime": 0,
+      "outside": [],
+      "promise": "needs a connection"
+    },
+    {
+      "page": "/teaching/investigation/comets-and-the-sun/",
+      "html": "runtime",
+      "requests": 7,
+      "core": 7,
+      "optional": 0,
+      "idle": 0,
+      "never": 0,
+      "runtime": 0,
+      "outside": [],
+      "promise": "needs a connection"
+    },
+    {
+      "page": "/teaching/investigation/coordinates-and-time/",
+      "html": "runtime",
+      "requests": 7,
+      "core": 7,
+      "optional": 0,
+      "idle": 0,
+      "never": 0,
+      "runtime": 0,
+      "outside": [],
+      "promise": "needs a connection"
+    },
+    {
+      "page": "/teaching/investigation/counts-to-magnitudes/",
+      "html": "runtime",
+      "requests": 7,
+      "core": 7,
+      "optional": 0,
+      "idle": 0,
+      "never": 0,
+      "runtime": 0,
+      "outside": [],
+      "promise": "needs a connection"
+    },
+    {
+      "page": "/teaching/investigation/craters-by-size/",
+      "html": "runtime",
+      "requests": 7,
+      "core": 7,
+      "optional": 0,
+      "idle": 0,
+      "never": 0,
+      "runtime": 0,
+      "outside": [],
+      "promise": "needs a connection"
+    },
+    {
+      "page": "/teaching/investigation/deep-or-wide/",
+      "html": "runtime",
+      "requests": 7,
+      "core": 7,
+      "optional": 0,
+      "idle": 0,
+      "never": 0,
+      "runtime": 0,
+      "outside": [],
+      "promise": "needs a connection"
+    },
+    {
+      "page": "/teaching/investigation/design-the-schedule/",
+      "html": "runtime",
+      "requests": 7,
+      "core": 7,
+      "optional": 0,
+      "idle": 0,
+      "never": 0,
+      "runtime": 0,
+      "outside": [],
+      "promise": "needs a connection"
+    },
+    {
+      "page": "/teaching/investigation/detect-this-planet/",
+      "html": "runtime",
+      "requests": 7,
+      "core": 7,
+      "optional": 0,
+      "idle": 0,
+      "never": 0,
+      "runtime": 0,
+      "outside": [],
+      "promise": "needs a connection"
+    },
+    {
+      "page": "/teaching/investigation/einstein-rings-and-arcs/",
+      "html": "runtime",
+      "requests": 7,
+      "core": 7,
+      "optional": 0,
+      "idle": 0,
+      "never": 0,
+      "runtime": 0,
+      "outside": [],
+      "promise": "needs a connection"
+    },
+    {
+      "page": "/teaching/investigation/exo-dilution/",
+      "html": "runtime",
+      "requests": 7,
+      "core": 7,
+      "optional": 0,
+      "idle": 0,
+      "never": 0,
+      "runtime": 0,
+      "outside": [],
+      "promise": "needs a connection"
+    },
+    {
+      "page": "/teaching/investigation/exo-find/",
+      "html": "runtime",
+      "requests": 7,
+      "core": 7,
+      "optional": 0,
+      "idle": 0,
+      "never": 0,
+      "runtime": 0,
+      "outside": [],
+      "promise": "needs a connection"
+    },
+    {
+      "page": "/teaching/investigation/exo-fit/",
+      "html": "runtime",
+      "requests": 7,
+      "core": 7,
+      "optional": 0,
+      "idle": 0,
+      "never": 0,
+      "runtime": 0,
+      "outside": [],
+      "promise": "needs a connection"
+    },
+    {
+      "page": "/teaching/investigation/exo-planet/",
+      "html": "runtime",
+      "requests": 7,
+      "core": 7,
+      "optional": 0,
+      "idle": 0,
+      "never": 0,
+      "runtime": 0,
+      "outside": [],
+      "promise": "needs a connection"
+    },
+    {
+      "page": "/teaching/investigation/exo-star/",
+      "html": "runtime",
+      "requests": 7,
+      "core": 7,
+      "optional": 0,
+      "idle": 0,
+      "never": 0,
+      "runtime": 0,
+      "outside": [],
+      "promise": "needs a connection"
+    },
+    {
+      "page": "/teaching/investigation/extending-an-experiment/",
+      "html": "runtime",
+      "requests": 7,
+      "core": 7,
+      "optional": 0,
+      "idle": 0,
+      "never": 0,
+      "runtime": 0,
+      "outside": [],
+      "promise": "needs a connection"
+    },
+    {
+      "page": "/teaching/investigation/flares/",
+      "html": "runtime",
+      "requests": 7,
+      "core": 7,
+      "optional": 0,
+      "idle": 0,
+      "never": 0,
+      "runtime": 0,
+      "outside": [],
+      "promise": "needs a connection"
+    },
+    {
+      "page": "/teaching/investigation/from-photons-to-a-number/",
+      "html": "runtime",
+      "requests": 7,
+      "core": 7,
+      "optional": 0,
+      "idle": 0,
+      "never": 0,
+      "runtime": 0,
+      "outside": [],
+      "promise": "needs a connection"
+    },
+    {
+      "page": "/teaching/investigation/from-star-to-remnant/",
+      "html": "runtime",
+      "requests": 7,
+      "core": 7,
+      "optional": 0,
+      "idle": 0,
+      "never": 0,
+      "runtime": 0,
+      "outside": [],
+      "promise": "needs a connection"
+    },
+    {
+      "page": "/teaching/investigation/goldilocks-question/",
+      "html": "runtime",
+      "requests": 7,
+      "core": 7,
+      "optional": 0,
+      "idle": 0,
+      "never": 0,
+      "runtime": 0,
+      "outside": [],
+      "promise": "needs a connection"
+    },
+    {
+      "page": "/teaching/investigation/gravity-assist/",
+      "html": "runtime",
+      "requests": 7,
+      "core": 7,
+      "optional": 0,
+      "idle": 0,
+      "never": 0,
+      "runtime": 0,
+      "outside": [],
+      "promise": "needs a connection"
+    },
+    {
+      "page": "/teaching/investigation/hohmann-transfer/",
+      "html": "runtime",
+      "requests": 7,
+      "core": 7,
+      "optional": 0,
+      "idle": 0,
+      "never": 0,
+      "runtime": 0,
+      "outside": [],
+      "promise": "needs a connection"
+    },
+    {
+      "page": "/teaching/investigation/how-far-and-how-sure/",
+      "html": "runtime",
+      "requests": 7,
+      "core": 7,
+      "optional": 0,
+      "idle": 0,
+      "never": 0,
+      "runtime": 0,
+      "outside": [],
+      "promise": "needs a connection"
+    },
+    {
+      "page": "/teaching/investigation/how-far-is-that-star/",
+      "html": "runtime",
+      "requests": 7,
+      "core": 7,
+      "optional": 0,
+      "idle": 0,
+      "never": 0,
+      "runtime": 0,
+      "outside": [],
+      "promise": "needs a connection"
+    },
+    {
+      "page": "/teaching/investigation/how-fast-does-it-spin/",
+      "html": "runtime",
+      "requests": 7,
+      "core": 7,
+      "optional": 0,
+      "idle": 0,
+      "never": 0,
+      "runtime": 0,
+      "outside": [],
+      "promise": "needs a connection"
+    },
+    {
+      "page": "/teaching/investigation/how-fast-does-the-star-spin/",
+      "html": "runtime",
+      "requests": 7,
+      "core": 7,
+      "optional": 0,
+      "idle": 0,
+      "never": 0,
+      "runtime": 0,
+      "outside": [],
+      "promise": "needs a connection"
+    },
+    {
+      "page": "/teaching/investigation/how-hot-is-the-day-side/",
+      "html": "runtime",
+      "requests": 7,
+      "core": 7,
+      "optional": 0,
+      "idle": 0,
+      "never": 0,
+      "runtime": 0,
+      "outside": [],
+      "promise": "needs a connection"
+    },
+    {
+      "page": "/teaching/investigation/how-many-earths/",
+      "html": "runtime",
+      "requests": 7,
+      "core": 7,
+      "optional": 0,
+      "idle": 0,
+      "never": 0,
+      "runtime": 0,
+      "outside": [],
+      "promise": "needs a connection"
+    },
+    {
+      "page": "/teaching/investigation/how-old-is-this-white-dwarf/",
+      "html": "runtime",
+      "requests": 7,
+      "core": 7,
+      "optional": 0,
+      "idle": 0,
+      "never": 0,
+      "runtime": 0,
+      "outside": [],
+      "promise": "needs a connection"
+    },
+    {
+      "page": "/teaching/investigation/inside-a-star/",
+      "html": "runtime",
+      "requests": 7,
+      "core": 7,
+      "optional": 0,
+      "idle": 0,
+      "never": 0,
+      "runtime": 0,
+      "outside": [],
+      "promise": "needs a connection"
+    },
+    {
+      "page": "/teaching/investigation/integrators-in-practice/",
+      "html": "runtime",
+      "requests": 7,
+      "core": 7,
+      "optional": 0,
+      "idle": 0,
+      "never": 0,
+      "runtime": 0,
+      "outside": [],
+      "promise": "needs a connection"
+    },
+    {
+      "page": "/teaching/investigation/ios-fire/",
+      "html": "runtime",
+      "requests": 7,
+      "core": 7,
+      "optional": 0,
+      "idle": 0,
+      "never": 0,
+      "runtime": 0,
+      "outside": [],
+      "promise": "needs a connection"
+    },
+    {
+      "page": "/teaching/investigation/keplers-laws/",
+      "html": "runtime",
+      "requests": 7,
+      "core": 7,
+      "optional": 0,
+      "idle": 0,
+      "never": 0,
+      "runtime": 0,
+      "outside": [],
+      "promise": "needs a connection"
+    },
+    {
+      "page": "/teaching/investigation/l3-eclipse/",
+      "html": "runtime",
+      "requests": 7,
+      "core": 7,
+      "optional": 0,
+      "idle": 0,
+      "never": 0,
+      "runtime": 0,
+      "outside": [],
+      "promise": "needs a connection"
+    },
+    {
+      "page": "/teaching/investigation/l3-elements/",
+      "html": "runtime",
+      "requests": 7,
+      "core": 7,
+      "optional": 0,
+      "idle": 0,
+      "never": 0,
+      "runtime": 0,
+      "outside": [],
+      "promise": "needs a connection"
+    },
+    {
+      "page": "/teaching/investigation/l3-frames/",
+      "html": "runtime",
+      "requests": 7,
+      "core": 7,
+      "optional": 0,
+      "idle": 0,
+      "never": 0,
+      "runtime": 0,
+      "outside": [],
+      "promise": "needs a connection"
+    },
+    {
+      "page": "/teaching/investigation/l3-kozai/",
+      "html": "runtime",
+      "requests": 7,
+      "core": 7,
+      "optional": 0,
+      "idle": 0,
+      "never": 0,
+      "runtime": 0,
+      "outside": [],
+      "promise": "needs a connection"
+    },
+    {
+      "page": "/teaching/investigation/l3-mutual/",
+      "html": "runtime",
+      "requests": 7,
+      "core": 7,
+      "optional": 0,
+      "idle": 0,
+      "never": 0,
+      "runtime": 0,
+      "outside": [],
+      "promise": "needs a connection"
+    },
+    {
+      "page": "/teaching/investigation/l3-planes/",
+      "html": "runtime",
+      "requests": 7,
+      "core": 7,
+      "optional": 0,
+      "idle": 0,
+      "never": 0,
+      "runtime": 0,
+      "outside": [],
+      "promise": "needs a connection"
+    },
+    {
+      "page": "/teaching/investigation/l3-resonant/",
+      "html": "runtime",
+      "requests": 7,
+      "core": 7,
+      "optional": 0,
+      "idle": 0,
+      "never": 0,
+      "runtime": 0,
+      "outside": [],
+      "promise": "needs a connection"
+    },
+    {
+      "page": "/teaching/investigation/l3-seen/",
+      "html": "runtime",
+      "requests": 7,
+      "core": 7,
+      "optional": 0,
+      "idle": 0,
+      "never": 0,
+      "runtime": 0,
+      "outside": [],
+      "promise": "needs a connection"
+    },
+    {
+      "page": "/teaching/investigation/l3-tilts/",
+      "html": "runtime",
+      "requests": 7,
+      "core": 7,
+      "optional": 0,
+      "idle": 0,
+      "never": 0,
+      "runtime": 0,
+      "outside": [],
+      "promise": "needs a connection"
+    },
+    {
+      "page": "/teaching/investigation/lagrange-points/",
+      "html": "runtime",
+      "requests": 7,
+      "core": 7,
+      "optional": 0,
+      "idle": 0,
+      "never": 0,
+      "runtime": 0,
+      "outside": [],
+      "promise": "needs a connection"
+    },
+    {
+      "page": "/teaching/investigation/leavitts-law/",
+      "html": "runtime",
+      "requests": 7,
+      "core": 7,
+      "optional": 0,
+      "idle": 0,
+      "never": 0,
+      "runtime": 0,
+      "outside": [],
+      "promise": "needs a connection"
+    },
+    {
+      "page": "/teaching/investigation/lines-and-motion/",
+      "html": "runtime",
+      "requests": 7,
+      "core": 7,
+      "optional": 0,
+      "idle": 0,
+      "never": 0,
+      "runtime": 0,
+      "outside": [],
+      "promise": "needs a connection"
+    },
+    {
+      "page": "/teaching/investigation/listening-to-spacetime/",
+      "html": "runtime",
+      "requests": 7,
+      "core": 7,
+      "optional": 0,
+      "idle": 0,
+      "never": 0,
+      "runtime": 0,
+      "outside": [],
+      "promise": "needs a connection"
+    },
+    {
+      "page": "/teaching/investigation/lives-of-stars/",
+      "html": "runtime",
+      "requests": 7,
+      "core": 7,
+      "optional": 0,
+      "idle": 0,
+      "never": 0,
+      "runtime": 0,
+      "outside": [],
+      "promise": "needs a connection"
+    },
+    {
+      "page": "/teaching/investigation/measuring-the-moon/",
+      "html": "runtime",
+      "requests": 7,
+      "core": 7,
+      "optional": 0,
+      "idle": 0,
+      "never": 0,
+      "runtime": 0,
+      "outside": [],
+      "promise": "needs a connection"
+    },
+    {
+      "page": "/teaching/investigation/missing-mass/",
+      "html": "runtime",
+      "requests": 7,
+      "core": 7,
+      "optional": 0,
+      "idle": 0,
+      "never": 0,
+      "runtime": 0,
+      "outside": [],
+      "promise": "needs a connection"
+    },
+    {
+      "page": "/teaching/investigation/ml-cruise/",
+      "html": "runtime",
+      "requests": 7,
+      "core": 7,
+      "optional": 0,
+      "idle": 0,
+      "never": 0,
+      "runtime": 0,
+      "outside": [],
+      "promise": "needs a connection"
+    },
+    {
+      "page": "/teaching/investigation/ml-orbit/",
+      "html": "runtime",
+      "requests": 7,
+      "core": 7,
+      "optional": 0,
+      "idle": 0,
+      "never": 0,
+      "runtime": 0,
+      "outside": [],
+      "promise": "needs a connection"
+    },
+    {
+      "page": "/teaching/investigation/ml-window/",
+      "html": "runtime",
+      "requests": 7,
+      "core": 7,
+      "optional": 0,
+      "idle": 0,
+      "never": 0,
+      "runtime": 0,
+      "outside": [],
+      "promise": "needs a connection"
+    },
+    {
+      "page": "/teaching/investigation/moons-of-the-giants/",
+      "html": "runtime",
+      "requests": 7,
+      "core": 7,
+      "optional": 0,
+      "idle": 0,
+      "never": 0,
+      "runtime": 0,
+      "outside": [],
+      "promise": "needs a connection"
+    },
+    {
+      "page": "/teaching/investigation/one-planet-every-method/",
+      "html": "runtime",
+      "requests": 7,
+      "core": 7,
+      "optional": 0,
+      "idle": 0,
+      "never": 0,
+      "runtime": 0,
+      "outside": [],
+      "promise": "needs a connection"
+    },
+    {
+      "page": "/teaching/investigation/orbital-energy/",
+      "html": "runtime",
+      "requests": 7,
+      "core": 7,
+      "optional": 0,
+      "idle": 0,
+      "never": 0,
+      "runtime": 0,
+      "outside": [],
+      "promise": "needs a connection"
+    },
+    {
+      "page": "/teaching/investigation/phases-and-albedo/",
+      "html": "runtime",
+      "requests": 7,
+      "core": 7,
+      "optional": 0,
+      "idle": 0,
+      "never": 0,
+      "runtime": 0,
+      "outside": [],
+      "promise": "needs a connection"
+    },
+    {
+      "page": "/teaching/investigation/phases-and-eclipses/",
+      "html": "runtime",
+      "requests": 7,
+      "core": 7,
+      "optional": 0,
+      "idle": 0,
+      "never": 0,
+      "runtime": 0,
+      "outside": [],
+      "promise": "needs a connection"
+    },
+    {
+      "page": "/teaching/investigation/plan-a-night/",
+      "html": "runtime",
+      "requests": 7,
+      "core": 7,
+      "optional": 0,
+      "idle": 0,
+      "never": 0,
+      "runtime": 0,
+      "outside": [],
+      "promise": "needs a connection"
+    },
+    {
+      "page": "/teaching/investigation/plan-an-exposure/",
+      "html": "runtime",
+      "requests": 7,
+      "core": 7,
+      "optional": 0,
+      "idle": 0,
+      "never": 0,
+      "runtime": 0,
+      "outside": [],
+      "promise": "needs a connection"
+    },
+    {
+      "page": "/teaching/investigation/planet-or-not/",
+      "html": "runtime",
+      "requests": 7,
+      "core": 7,
+      "optional": 0,
+      "idle": 0,
+      "never": 0,
+      "runtime": 0,
+      "outside": [],
+      "promise": "needs a connection"
+    },
+    {
+      "page": "/teaching/investigation/planning-a-transit-campaign/",
+      "html": "runtime",
+      "requests": 7,
+      "core": 7,
+      "optional": 0,
+      "idle": 0,
+      "never": 0,
+      "runtime": 0,
+      "outside": [],
+      "promise": "needs a connection"
+    },
+    {
+      "page": "/teaching/investigation/pop-age/",
+      "html": "runtime",
+      "requests": 7,
+      "core": 7,
+      "optional": 0,
+      "idle": 0,
+      "never": 0,
+      "runtime": 0,
+      "outside": [],
+      "promise": "needs a connection"
+    },
+    {
+      "page": "/teaching/investigation/pop-cmd/",
+      "html": "runtime",
+      "requests": 7,
+      "core": 7,
+      "optional": 0,
+      "idle": 0,
+      "never": 0,
+      "runtime": 0,
+      "outside": [],
+      "promise": "needs a connection"
+    },
+    {
+      "page": "/teaching/investigation/pop-members/",
+      "html": "runtime",
+      "requests": 7,
+      "core": 7,
+      "optional": 0,
+      "idle": 0,
+      "never": 0,
+      "runtime": 0,
+      "outside": [],
+      "promise": "needs a connection"
+    },
+    {
+      "page": "/teaching/investigation/pop-spectra/",
+      "html": "runtime",
+      "requests": 7,
+      "core": 7,
+      "optional": 0,
+      "idle": 0,
+      "never": 0,
+      "runtime": 0,
+      "outside": [],
+      "promise": "needs a connection"
+    },
+    {
+      "page": "/teaching/investigation/pop-variable/",
+      "html": "runtime",
+      "requests": 7,
+      "core": 7,
+      "optional": 0,
+      "idle": 0,
+      "never": 0,
+      "runtime": 0,
+      "outside": [],
+      "promise": "needs a connection"
+    },
+    {
+      "page": "/teaching/investigation/populations-i-and-ii/",
+      "html": "runtime",
+      "requests": 7,
+      "core": 7,
+      "optional": 0,
+      "idle": 0,
+      "never": 0,
+      "runtime": 0,
+      "outside": [],
+      "promise": "needs a connection"
+    },
+    {
+      "page": "/teaching/investigation/power-law-gravity/",
+      "html": "runtime",
+      "requests": 7,
+      "core": 7,
+      "optional": 0,
+      "idle": 0,
+      "never": 0,
+      "runtime": 0,
+      "outside": [],
+      "promise": "needs a connection"
+    },
+    {
+      "page": "/teaching/investigation/propose-an-observation/",
+      "html": "runtime",
+      "requests": 7,
+      "core": 7,
+      "optional": 0,
+      "idle": 0,
+      "never": 0,
+      "runtime": 0,
+      "outside": [],
+      "promise": "needs a connection"
+    },
+    {
+      "page": "/teaching/investigation/radial-velocity/",
+      "html": "runtime",
+      "requests": 7,
+      "core": 7,
+      "optional": 0,
+      "idle": 0,
+      "never": 0,
+      "runtime": 0,
+      "outside": [],
+      "promise": "needs a connection"
+    },
+    {
+      "page": "/teaching/investigation/reading-the-hr-diagram/",
+      "html": "runtime",
+      "requests": 7,
+      "core": 7,
+      "optional": 0,
+      "idle": 0,
+      "never": 0,
+      "runtime": 0,
+      "outside": [],
+      "promise": "needs a connection"
+    },
+    {
+      "page": "/teaching/investigation/refitting-a-transit/",
+      "html": "runtime",
+      "requests": 7,
+      "core": 7,
+      "optional": 0,
+      "idle": 0,
+      "never": 0,
+      "runtime": 0,
+      "outside": [],
+      "promise": "needs a connection"
+    },
+    {
+      "page": "/teaching/investigation/retrograde-motion/",
+      "html": "runtime",
+      "requests": 7,
+      "core": 7,
+      "optional": 0,
+      "idle": 0,
+      "never": 0,
+      "runtime": 0,
+      "outside": [],
+      "promise": "needs a connection"
+    },
+    {
+      "page": "/teaching/investigation/sampling-a-posterior/",
+      "html": "runtime",
+      "requests": 7,
+      "core": 7,
+      "optional": 0,
+      "idle": 0,
+      "never": 0,
+      "runtime": 0,
+      "outside": [],
+      "promise": "needs a connection"
+    },
+    {
+      "page": "/teaching/investigation/scaling-the-main-sequence/",
+      "html": "runtime",
+      "requests": 7,
+      "core": 7,
+      "optional": 0,
+      "idle": 0,
+      "never": 0,
+      "runtime": 0,
+      "outside": [],
+      "promise": "needs a connection"
+    },
+    {
+      "page": "/teaching/investigation/signal-noise-and-exposure/",
+      "html": "runtime",
+      "requests": 7,
+      "core": 7,
+      "optional": 0,
+      "idle": 0,
+      "never": 0,
+      "runtime": 0,
+      "outside": [],
+      "promise": "needs a connection"
+    },
+    {
+      "page": "/teaching/investigation/spectra-tell-temperature-and-gravity/",
+      "html": "runtime",
+      "requests": 7,
+      "core": 7,
+      "optional": 0,
+      "idle": 0,
+      "never": 0,
+      "runtime": 0,
+      "outside": [],
+      "promise": "needs a connection"
+    },
+    {
+      "page": "/teaching/investigation/standard-candles/",
+      "html": "runtime",
+      "requests": 7,
+      "core": 7,
+      "optional": 0,
+      "idle": 0,
+      "never": 0,
+      "runtime": 0,
+      "outside": [],
+      "promise": "needs a connection"
+    },
+    {
+      "page": "/teaching/investigation/the-beat-of-a-star/",
+      "html": "runtime",
+      "requests": 7,
+      "core": 7,
+      "optional": 0,
+      "idle": 0,
+      "never": 0,
+      "runtime": 0,
+      "outside": [],
+      "promise": "needs a connection"
+    },
+    {
+      "page": "/teaching/investigation/the-clock-that-drifts/",
+      "html": "runtime",
+      "requests": 7,
+      "core": 7,
+      "optional": 0,
+      "idle": 0,
+      "never": 0,
+      "runtime": 0,
+      "outside": [],
+      "promise": "needs a connection"
+    },
+    {
+      "page": "/teaching/investigation/the-completeness-curve/",
+      "html": "runtime",
+      "requests": 7,
+      "core": 7,
+      "optional": 0,
+      "idle": 0,
+      "never": 0,
+      "runtime": 0,
+      "outside": [],
+      "promise": "needs a connection"
+    },
+    {
+      "page": "/teaching/investigation/the-expanding-universe/",
+      "html": "runtime",
+      "requests": 7,
+      "core": 7,
+      "optional": 0,
+      "idle": 0,
+      "never": 0,
+      "runtime": 0,
+      "outside": [],
+      "promise": "needs a connection"
+    },
+    {
+      "page": "/teaching/investigation/the-first-rung/",
+      "html": "runtime",
+      "requests": 7,
+      "core": 7,
+      "optional": 0,
+      "idle": 0,
+      "never": 0,
+      "runtime": 0,
+      "outside": [],
+      "promise": "needs a connection"
+    },
+    {
+      "page": "/teaching/investigation/the-gaps-in-the-belt/",
+      "html": "runtime",
+      "requests": 7,
+      "core": 7,
+      "optional": 0,
+      "idle": 0,
+      "never": 0,
+      "runtime": 0,
+      "outside": [],
+      "promise": "needs a connection"
+    },
+    {
+      "page": "/teaching/investigation/the-limit/",
+      "html": "runtime",
+      "requests": 7,
+      "core": 7,
+      "optional": 0,
+      "idle": 0,
+      "never": 0,
+      "runtime": 0,
+      "outside": [],
+      "promise": "needs a connection"
+    },
+    {
+      "page": "/teaching/investigation/the-metallicity-term/",
+      "html": "runtime",
+      "requests": 7,
+      "core": 7,
+      "optional": 0,
+      "idle": 0,
+      "never": 0,
+      "runtime": 0,
+      "outside": [],
+      "promise": "needs a connection"
+    },
+    {
+      "page": "/teaching/investigation/the-rotating-disk/",
+      "html": "runtime",
+      "requests": 7,
+      "core": 7,
+      "optional": 0,
+      "idle": 0,
+      "never": 0,
+      "runtime": 0,
+      "outside": [],
+      "promise": "needs a connection"
+    },
+    {
+      "page": "/teaching/investigation/the-saturated-star/",
+      "html": "runtime",
+      "requests": 7,
+      "core": 7,
+      "optional": 0,
+      "idle": 0,
+      "never": 0,
+      "runtime": 0,
+      "outside": [],
+      "promise": "needs a connection"
+    },
+    {
+      "page": "/teaching/investigation/the-scale-of-the-solar-system/",
+      "html": "runtime",
+      "requests": 7,
+      "core": 7,
+      "optional": 0,
+      "idle": 0,
+      "never": 0,
+      "runtime": 0,
+      "outside": [],
+      "promise": "needs a connection"
+    },
+    {
+      "page": "/teaching/investigation/the-shape-of-expansion/",
+      "html": "runtime",
+      "requests": 7,
+      "core": 7,
+      "optional": 0,
+      "idle": 0,
+      "never": 0,
+      "runtime": 0,
+      "outside": [],
+      "promise": "needs a connection"
+    },
+    {
+      "page": "/teaching/investigation/the-sky-background/",
+      "html": "runtime",
+      "requests": 7,
+      "core": 7,
+      "optional": 0,
+      "idle": 0,
+      "never": 0,
+      "runtime": 0,
+      "outside": [],
+      "promise": "needs a connection"
+    },
+    {
+      "page": "/teaching/investigation/the-sun-through-the-year/",
+      "html": "runtime",
+      "requests": 7,
+      "core": 7,
+      "optional": 0,
+      "idle": 0,
+      "never": 0,
+      "runtime": 0,
+      "outside": [],
+      "promise": "needs a connection"
+    },
+    {
+      "page": "/teaching/investigation/the-suns-motion/",
+      "html": "runtime",
+      "requests": 7,
+      "core": 7,
+      "optional": 0,
+      "idle": 0,
+      "never": 0,
+      "runtime": 0,
+      "outside": [],
+      "promise": "needs a connection"
+    },
+    {
+      "page": "/teaching/investigation/the-suns-power/",
+      "html": "runtime",
+      "requests": 7,
+      "core": 7,
+      "optional": 0,
+      "idle": 0,
+      "never": 0,
+      "runtime": 0,
+      "outside": [],
+      "promise": "needs a connection"
+    },
+    {
+      "page": "/teaching/investigation/the-transit-that-was-a-star/",
+      "html": "runtime",
+      "requests": 7,
+      "core": 7,
+      "optional": 0,
+      "idle": 0,
+      "never": 0,
+      "runtime": 0,
+      "outside": [],
+      "promise": "needs a connection"
+    },
+    {
+      "page": "/teaching/investigation/the-turning-sky/",
+      "html": "runtime",
+      "requests": 7,
+      "core": 7,
+      "optional": 0,
+      "idle": 0,
+      "never": 0,
+      "runtime": 0,
+      "outside": [],
+      "promise": "needs a connection"
+    },
+    {
+      "page": "/teaching/investigation/the-turning-sun/",
+      "html": "runtime",
+      "requests": 7,
+      "core": 7,
+      "optional": 0,
+      "idle": 0,
+      "never": 0,
+      "runtime": 0,
+      "outside": [],
+      "promise": "needs a connection"
+    },
+    {
+      "page": "/teaching/investigation/tides-that-move-the-moon/",
+      "html": "runtime",
+      "requests": 7,
+      "core": 7,
+      "optional": 0,
+      "idle": 0,
+      "never": 0,
+      "runtime": 0,
+      "outside": [],
+      "promise": "needs a connection"
+    },
+    {
+      "page": "/teaching/investigation/tides/",
+      "html": "runtime",
+      "requests": 7,
+      "core": 7,
+      "optional": 0,
+      "idle": 0,
+      "never": 0,
+      "runtime": 0,
+      "outside": [],
+      "promise": "needs a connection"
+    },
+    {
+      "page": "/teaching/investigation/transit-photometry/",
+      "html": "runtime",
+      "requests": 7,
+      "core": 7,
+      "optional": 0,
+      "idle": 0,
+      "never": 0,
+      "runtime": 0,
+      "outside": [],
+      "promise": "needs a connection"
+    },
+    {
+      "page": "/teaching/investigation/twelve-nights/",
+      "html": "runtime",
+      "requests": 7,
+      "core": 7,
+      "optional": 0,
+      "idle": 0,
+      "never": 0,
+      "runtime": 0,
+      "outside": [],
+      "promise": "needs a connection"
+    },
+    {
+      "page": "/teaching/investigation/two-clusters-two-ages/",
+      "html": "runtime",
+      "requests": 7,
+      "core": 7,
+      "optional": 0,
+      "idle": 0,
+      "never": 0,
+      "runtime": 0,
+      "outside": [],
+      "promise": "needs a connection"
+    },
+    {
+      "page": "/teaching/investigation/two-greenhouse-models/",
+      "html": "runtime",
+      "requests": 7,
+      "core": 7,
+      "optional": 0,
+      "idle": 0,
+      "never": 0,
+      "runtime": 0,
+      "outside": [],
+      "promise": "needs a connection"
+    },
+    {
+      "page": "/teaching/investigation/two-periodograms/",
+      "html": "runtime",
+      "requests": 7,
+      "core": 7,
+      "optional": 0,
+      "idle": 0,
+      "never": 0,
+      "runtime": 0,
+      "outside": [],
+      "promise": "needs a connection"
+    },
+    {
+      "page": "/teaching/investigation/two-stars-eclipsing/",
+      "html": "runtime",
+      "requests": 7,
+      "core": 7,
+      "optional": 0,
+      "idle": 0,
+      "never": 0,
+      "runtime": 0,
+      "outside": [],
+      "promise": "needs a connection"
+    },
+    {
+      "page": "/teaching/investigation/two-telescopes-one-question/",
+      "html": "runtime",
+      "requests": 7,
+      "core": 7,
+      "optional": 0,
+      "idle": 0,
+      "never": 0,
+      "runtime": 0,
+      "outside": [],
+      "promise": "needs a connection"
+    },
+    {
+      "page": "/teaching/investigation/wanderers-on-the-sky/",
+      "html": "runtime",
+      "requests": 7,
+      "core": 7,
+      "optional": 0,
+      "idle": 0,
+      "never": 0,
+      "runtime": 0,
+      "outside": [],
+      "promise": "needs a connection"
+    },
+    {
+      "page": "/teaching/investigation/weighing-jupiter/",
+      "html": "runtime",
+      "requests": 7,
+      "core": 7,
+      "optional": 0,
+      "idle": 0,
+      "never": 0,
+      "runtime": 0,
+      "outside": [],
+      "promise": "needs a connection"
+    },
+    {
+      "page": "/teaching/investigation/weighing-stars/",
+      "html": "runtime",
+      "requests": 7,
+      "core": 7,
+      "optional": 0,
+      "idle": 0,
+      "never": 0,
+      "runtime": 0,
+      "outside": [],
+      "promise": "needs a connection"
+    },
+    {
+      "page": "/teaching/investigation/weighing-the-stars-for-real/",
+      "html": "runtime",
+      "requests": 7,
+      "core": 7,
+      "optional": 0,
+      "idle": 0,
+      "never": 0,
+      "runtime": 0,
+      "outside": [],
+      "promise": "needs a connection"
+    },
+    {
+      "page": "/teaching/investigation/what-a-ccd-records/",
+      "html": "runtime",
+      "requests": 7,
+      "core": 7,
+      "optional": 0,
+      "idle": 0,
+      "never": 0,
+      "runtime": 0,
+      "outside": [],
+      "promise": "needs a connection"
+    },
+    {
+      "page": "/teaching/investigation/what-a-crater-diameter-is-worth/",
+      "html": "runtime",
+      "requests": 7,
+      "core": 7,
+      "optional": 0,
+      "idle": 0,
+      "never": 0,
+      "runtime": 0,
+      "outside": [],
+      "promise": "needs a connection"
+    },
+    {
+      "page": "/teaching/investigation/what-a-spectrum-is-made-of/",
+      "html": "runtime",
+      "requests": 7,
+      "core": 7,
+      "optional": 0,
+      "idle": 0,
+      "never": 0,
+      "runtime": 0,
+      "outside": [],
+      "promise": "needs a connection"
+    },
+    {
+      "page": "/teaching/investigation/what-a-telescope-resolves/",
+      "html": "runtime",
+      "requests": 7,
+      "core": 7,
+      "optional": 0,
+      "idle": 0,
+      "never": 0,
+      "runtime": 0,
+      "outside": [],
+      "promise": "needs a connection"
+    },
+    {
+      "page": "/teaching/investigation/what-does-plus-minus-claim/",
+      "html": "runtime",
+      "requests": 7,
+      "core": 7,
+      "optional": 0,
+      "idle": 0,
+      "never": 0,
+      "runtime": 0,
+      "outside": [],
+      "promise": "needs a connection"
+    },
+    {
+      "page": "/teaching/investigation/what-gaia-does-not-see/",
+      "html": "runtime",
+      "requests": 7,
+      "core": 7,
+      "optional": 0,
+      "idle": 0,
+      "never": 0,
+      "runtime": 0,
+      "outside": [],
+      "promise": "needs a connection"
+    },
+    {
+      "page": "/teaching/investigation/what-is-a-gravitational-wave/",
+      "html": "runtime",
+      "requests": 7,
+      "core": 7,
+      "optional": 0,
+      "idle": 0,
+      "never": 0,
+      "runtime": 0,
+      "outside": [],
+      "promise": "needs a connection"
+    },
+    {
+      "page": "/teaching/investigation/what-is-a-measurement/",
+      "html": "runtime",
+      "requests": 7,
+      "core": 7,
+      "optional": 0,
+      "idle": 0,
+      "never": 0,
+      "runtime": 0,
+      "outside": [],
+      "promise": "needs a connection"
+    },
+    {
+      "page": "/teaching/investigation/what-is-in-this-field/",
+      "html": "runtime",
+      "requests": 7,
+      "core": 7,
+      "optional": 0,
+      "idle": 0,
+      "never": 0,
+      "runtime": 0,
+      "outside": [],
+      "promise": "needs a connection"
+    },
+    {
+      "page": "/teaching/investigation/what-is-it-made-of/",
+      "html": "runtime",
+      "requests": 7,
+      "core": 7,
+      "optional": 0,
+      "idle": 0,
+      "never": 0,
+      "runtime": 0,
+      "outside": [],
+      "promise": "needs a connection"
+    },
+    {
+      "page": "/teaching/investigation/what-kinds-of-planets-exist/",
+      "html": "runtime",
+      "requests": 7,
+      "core": 7,
+      "optional": 0,
+      "idle": 0,
+      "never": 0,
+      "runtime": 0,
+      "outside": [],
+      "promise": "needs a connection"
+    },
+    {
+      "page": "/teaching/investigation/when-a-star-explodes/",
+      "html": "runtime",
+      "requests": 7,
+      "core": 7,
+      "optional": 0,
+      "idle": 0,
+      "never": 0,
+      "runtime": 0,
+      "outside": [],
+      "promise": "needs a connection"
+    },
+    {
+      "page": "/teaching/investigation/when-orbits-lock/",
+      "html": "runtime",
+      "requests": 7,
+      "core": 7,
+      "optional": 0,
+      "idle": 0,
+      "never": 0,
+      "runtime": 0,
+      "outside": [],
+      "promise": "needs a connection"
+    },
+    {
+      "page": "/teaching/investigation/when-the-method-must-refuse/",
+      "html": "runtime",
+      "requests": 7,
+      "core": 7,
+      "optional": 0,
+      "idle": 0,
+      "never": 0,
+      "runtime": 0,
+      "outside": [],
+      "promise": "needs a connection"
+    },
+    {
+      "page": "/teaching/investigation/where-galaxies-live/",
+      "html": "runtime",
+      "requests": 7,
+      "core": 7,
+      "optional": 0,
+      "idle": 0,
+      "never": 0,
+      "runtime": 0,
+      "outside": [],
+      "promise": "needs a connection"
+    },
+    {
+      "page": "/teaching/investigation/which-instrument-for-which-question/",
+      "html": "runtime",
+      "requests": 7,
+      "core": 7,
+      "optional": 0,
+      "idle": 0,
+      "never": 0,
+      "runtime": 0,
+      "outside": [],
+      "promise": "needs a connection"
+    },
+    {
+      "page": "/teaching/investigation/which-kind-of-variable/",
+      "html": "runtime",
+      "requests": 7,
+      "core": 7,
+      "optional": 0,
+      "idle": 0,
+      "never": 0,
+      "runtime": 0,
+      "outside": [],
+      "promise": "needs a connection"
+    },
+    {
+      "page": "/teaching/investigation/which-surface-is-older/",
+      "html": "runtime",
+      "requests": 7,
+      "core": 7,
+      "optional": 0,
+      "idle": 0,
+      "never": 0,
+      "runtime": 0,
+      "outside": [],
+      "promise": "needs a connection"
+    },
+    {
+      "page": "/teaching/investigation/who-gets-counted/",
+      "html": "runtime",
+      "requests": 7,
+      "core": 7,
+      "optional": 0,
+      "idle": 0,
+      "never": 0,
+      "runtime": 0,
+      "outside": [],
+      "promise": "needs a connection"
+    },
+    {
+      "page": "/teaching/investigation/why-rings/",
+      "html": "runtime",
+      "requests": 7,
+      "core": 7,
+      "optional": 0,
+      "idle": 0,
+      "never": 0,
+      "runtime": 0,
+      "outside": [],
+      "promise": "needs a connection"
+    },
+    {
+      "page": "/teaching/investigation/why-the-bright-ones-win/",
+      "html": "runtime",
+      "requests": 7,
+      "core": 7,
+      "optional": 0,
+      "idle": 0,
+      "never": 0,
+      "runtime": 0,
+      "outside": [],
+      "promise": "needs a connection"
+    },
+    {
+      "page": "/teaching/investigation/why-the-period-is-wrong/",
+      "html": "runtime",
+      "requests": 7,
+      "core": 7,
+      "optional": 0,
+      "idle": 0,
+      "never": 0,
+      "runtime": 0,
+      "outside": [],
+      "promise": "needs a connection"
+    },
+    {
+      "page": "/teaching/investigation/why-two-lines-become-one/",
+      "html": "runtime",
+      "requests": 7,
+      "core": 7,
+      "optional": 0,
+      "idle": 0,
+      "never": 0,
+      "runtime": 0,
+      "outside": [],
+      "promise": "needs a connection"
+    },
+    {
+      "page": "/teaching/investigation/why-venus-is-hot/",
+      "html": "runtime",
+      "requests": 7,
+      "core": 7,
+      "optional": 0,
+      "idle": 0,
+      "never": 0,
+      "runtime": 0,
+      "outside": [],
+      "promise": "needs a connection"
+    },
+    {
+      "page": "/teaching/investigation/why-we-cannot-see-earth/",
+      "html": "runtime",
+      "requests": 7,
+      "core": 7,
+      "optional": 0,
+      "idle": 0,
+      "never": 0,
+      "runtime": 0,
+      "outside": [],
+      "promise": "needs a connection"
+    },
+    {
+      "page": "/teaching/kit/",
+      "html": "runtime",
+      "requests": 11,
+      "core": 11,
+      "optional": 0,
+      "idle": 0,
+      "never": 0,
+      "runtime": 0,
+      "outside": [],
+      "promise": "needs a connection"
+    },
+    {
+      "page": "/validation/",
+      "html": "runtime",
+      "requests": 10,
+      "core": 9,
+      "optional": 0,
+      "idle": 0,
+      "never": 0,
+      "runtime": 1,
+      "outside": [
+        {
+          "path": "/validation/data.json",
+          "tier": "runtime"
+        }
+      ],
+      "promise": "needs a connection"
+    }
+  ]
+}

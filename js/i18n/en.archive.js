@@ -36,6 +36,8 @@ export const EN_ARCHIVE = {
     'From this device: retrieved {days} days ago, and not asked for again.',
   'obs.arc.cache.stale':
     'From this device, {days} days old: CDS could not be reached ({why}).',
+  'obs.arc.restored':
+    'Reopened after the reload from the copy kept on this device, retrieved {days} days ago. The archive was not asked.',
   'obs.arc.cache.changed':
     'VizieR’s answer has changed since it was last kept here. This is a different observation from the one saved before.',
   'obs.arc.overflow':

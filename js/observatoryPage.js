@@ -1078,6 +1078,8 @@ $('obsNextPage').addEventListener('click', () => table.turn(1));
 
 function open(o, changes = []) {
   if (marks.take?.(o)) return; // the overlay panel's second frame
+  if (history.state?.obsOpen)
+    history.replaceState({ ...history.state, obsOpen: null }, '');
   state.source = o;
   state.history.reset(changes);
   state.selection = null;
@@ -1492,9 +1494,8 @@ function translateAll() {
   if (state.view) renderAll();
 }
 
-// A reader who arrives in another language waits for its catalog, and one it
-// cannot be fetched for opens in English; a reader in English waits for
-// nothing.
+// A reader in another language waits for its catalog (English if it cannot be
+// fetched); a reader in English waits for nothing.
 const opening = preferred();
 loadLanguage(opening).then(
   () => begin(opening),
@@ -1504,7 +1505,6 @@ loadLanguage(opening).then(
 function begin(lang) {
   setLanguage(lang);
   translateAll();
-  // A catalog that cannot be fetched leaves the page as it was.
   mountShell({
     onLanguage: id =>
       loadLanguage(id).then(
@@ -1516,8 +1516,7 @@ function begin(lang) {
       ),
   });
   document.documentElement.dataset.ready = 'true';
-  // Opened from the catalog with ?installed=<package id>: js/catalog/installed.js
-  // opens the pack, so a visitor who installs nothing never loads it.
+  // ?installed=<package id> (from the catalog): js/catalog/installed.js opens the pack.
   const installedId = new URLSearchParams(location.search).get('installed');
   if (new URLSearchParams(location.search).has('guide')) {
     $('obsGuidePanel').open = true;
@@ -1531,12 +1530,13 @@ function begin(lang) {
         lightCurveObservation
       )
     );
-  // ?open=<fixture id>: a built-in observation by name, the link a course
-  // pack gives a dataset (js/course/links.js). The same as choosing it and
-  // pressing Open; an id the page does not have is ignored.
+  // ?open=<fixture id> (js/course/links.js): as choosing it and pressing Open; an unknown id is ignored.
   const fixtureId = new URLSearchParams(location.search).get('open');
   if (!installedId && FIXTURES.some(f => f.id === fixtureId)) {
     $('obsFixture').value = fixtureId;
     $('obsOpen').click();
-  }
+  } else if (!installedId && history.state?.obsOpen)
+    import('./observatory/archivePanel.js').then(m =>
+      m.restoreOpen({ ...lent, open, status })
+    );
 }

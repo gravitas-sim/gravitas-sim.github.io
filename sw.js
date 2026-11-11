@@ -297,10 +297,15 @@ self.addEventListener('fetch', event => {
         try {
           return await fetch(request);
         } catch {
-          // Offline, and not a page this worker holds. The shell is a working
-          // application rather than a browser error page, which is the better
-          // of the two answers available.
-          return (await shell()) || Response.error();
+          // Offline, and not a page this worker holds. The application is a
+          // better answer than a browser error page, but its shell cannot be
+          // served at another page's address: its relative paths would
+          // resolve under that address and nothing would load, which is what
+          // this did until Prompt 284 measured it. So the reader is sent to
+          // the application, at the scope's root.
+          return (await shell())
+            ? Response.redirect(new URL(root, request.url).href, 302)
+            : Response.error();
         }
       })()
     );

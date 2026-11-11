@@ -15,6 +15,27 @@ the release rather than in the tag.
 
 ### Changed
 
+- Offline at scale (Prompt 284). Every page of the site was opened in a tour
+  and set against what the service worker saves (`tools/offline-pages.mjs`,
+  `tools/offline-pages.json`, the table in `OFFLINE_AND_LOW_END.md`): 7 pages
+  open offline from the first visit, 5 more once the first visit has finished
+  installing, and 166 need a connection. The offline note on every page now
+  says which: the pages the first visit holds are saved, the 3-D lab, the
+  mission lab, the Sky Lab and the Library follow once the install has finished
+  (and not on a save-data connection), and any other page needs a connection.
+  Offline, a page the worker does not hold now takes the reader to the
+  application; it used to show the application's shell at that page's address,
+  unstyled, with nothing loading. The course home no longer waits for the idle
+  tier. After a reload, with or without a network, the Observatory reopens the
+  Gaia archive observation that was open, from the copy kept on the device and
+  without asking the archive. My work on a phone offers the backup to the share
+  sheet where the browser has one, and shows what an import would store and how
+  much room the browser reports before it is applied (a warning when there is too
+  little). Larger datasets' offline parts are fetched smallest
+  first and a part that would not fit is not started. The first-visit precache
+  grew by 4.2 KB. The share sheet and file picker have been tried only in
+  emulation: no real device.
+
 - Spanish shows the decimal comma and the narrow-space thousands separator
   (Prompt 282; a visible change, taken as the recommendation under Carl's
   "go with the recommendation" rule, register row D-R10-282-01): a number in a
