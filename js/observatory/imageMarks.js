@@ -37,6 +37,7 @@ import {
   refine,
   remove,
 } from '../measure/marks.js';
+import { createLoupe } from './loupe.js';
 import { scaleOf, sizeOf, timeOf } from '../measure/scale.js';
 import { marksBlock, replay, writeRecord } from '../measure/imageRecord.js';
 
@@ -240,13 +241,8 @@ export function mountMarks(root, ctx) {
     'ariaLabel'
   );
   over.setAttribute('aria-describedby', 'obsMarksHelp');
-  const loupe = el('canvas', {
-    className: 'im-loupe',
-    width: 96,
-    height: 96,
-    hidden: true,
-  });
-  stage.append(img, over, loupe);
+  stage.append(img, over);
+  const loupe = createLoupe(stage, img, over);
   const help = word(
     el('p', { id: 'obsMarksHelp', className: 'ui-hint' }),
     'obs.im.help'
@@ -881,37 +877,20 @@ export function mountMarks(root, ctx) {
       y: fr().height + 0.5 - ((e.clientY - r.top) / r.height) * plan.height * k,
     };
   };
-  const showLoupe = e => {
-    const r = stage.getBoundingClientRect();
-    const lc = loupe.getContext('2d');
-    const oc = over.getBoundingClientRect();
-    const sx = ((e.clientX - oc.left) / oc.width) * plan.width;
-    const sy = ((e.clientY - oc.top) / oc.height) * plan.height;
-    lc.clearRect(0, 0, 96, 96);
-    lc.imageSmoothingEnabled = false;
-    lc.drawImage(img, sx - 16, sy - 16, 32, 32, 0, 0, 96, 96);
-    lc.strokeStyle = '#fff';
-    lc.strokeRect(46, 46, 4, 4);
-    loupe.hidden = false;
-    const y = e.clientY - r.top;
-    const top = y < 168 ? y + 72 : y - 168;
-    loupe.style.left = `${Math.min(r.width - 96, Math.max(0, e.clientX - r.left - 48))}px`;
-    loupe.style.top = `${top}px`;
-  };
   over.addEventListener('pointerdown', e => {
     if (!frames.length) return;
     over.focus();
     ui.aim = toImage(e);
-    if (e.pointerType === 'touch') showLoupe(e);
+    if (e.pointerType === 'touch') loupe.show(e);
   });
   over.addEventListener('pointermove', e => {
     if (e.pointerType === 'touch' && e.buttons) {
       ui.aim = toImage(e);
-      showLoupe(e);
+      loupe.show(e);
     }
   });
   over.addEventListener('pointerup', e => {
-    loupe.hidden = true;
+    loupe.hide();
     if (!frames.length) return;
     ui.aim = toImage(e);
     ui.sel = null;

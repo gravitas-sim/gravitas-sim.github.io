@@ -347,6 +347,16 @@ figure builder, the 3-D and mission labs, the evaluation kit's 161) are
 gone, and the test fails on any under 24 px, on every page and in the lesson
 panel and the settings dialog.
 
+**Target size, measured on every control (Prompt 283).**
+`e2e/mobileSweep.spec.js` measures every shown pointer target of the 32 pages,
+the 7 states and six more surfaces at a phone and a tablet with touch emulation
+and holds each to 24 CSS pixels, or to the spacing, inline or user-agent
+exception of 2.5.8, as `tools/touch-targets.json` records. It found the
+attribution links at 15 pixels beside the open rail and made them 24. The 44
+pixel touch size is recorded (`under44`), not required, outside the regions
+`e2e/responsiveLayout.spec.js` holds to it. Chromium only, emulated; no real
+touch screen was used.
+
 **What this sweep did not do.** It ran in Chromium: forced-colors emulation and
 the transparent-border behaviour are Chromium's, and Firefox on Windows is the
 engine that most needs it. No assistive technology was used and no person took

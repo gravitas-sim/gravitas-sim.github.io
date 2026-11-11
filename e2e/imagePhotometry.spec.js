@@ -257,9 +257,11 @@ test.describe('photometry: single pointer alone', () => {
     await field(page, 'Resize the').selectOption('outer');
     const pic = box(page).locator('canvas.ph-pic');
     const bb = await pic.boundingBox();
-    // A tap a little to the right of the centre sets the outer radius there.
+    // A tap above the centre sets the outer radius there. (Not along the
+    // east axis: each ring's handle is a 56 px target there, and a tap in
+    // one chooses that ring instead, Prompt 283.)
     await pic.click({
-      position: { x: bb.width / 2 + bb.width * 0.3, y: bb.height / 2 },
+      position: { x: bb.width / 2, y: bb.height / 2 - bb.height * 0.3 },
     });
     const outer = Number(await field(page, 'Sky ring, outer').inputValue());
     expect(outer).toBeGreaterThan(0.25);

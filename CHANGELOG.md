@@ -13,6 +13,17 @@ the release rather than in the tag.
 
 ## [Unreleased]
 
+### Added
+
+- Help II (Prompt 286; register rows D-R10-286-01 to 05): H opens the explainer
+  of the panel you are in, every explainer ends with where its physics is
+  checked, the glossary defines 81 terms by topic in both languages and a term
+  marked in text opens its definition in place, the Teach page's "Where to check
+  the physics" opens a table of every kernel with its document, model-page
+  section and validation group, and the problem note says where the record came
+  from. A family of instruments without an explainer now fails
+  `generate --check`.
+
 ### Changed
 
 - Spanish shows the decimal comma and the narrow-space thousands separator
@@ -39,6 +50,22 @@ the release rather than in the tag.
   back when typed.
 
 ### Added
+
+- The touch pattern is held to a measurement on a phone and a tablet (Prompt
+  283). Every pointer target of the walk inventory, its states, the lesson
+  panel, the Observatory with an image open, the 3-D lab and the mission lab is
+  measured at 375 x 812 and 768 x 1024 with touch emulation: 24 CSS pixels, or
+  WCAG 2.5.8's spacing, inline or user-agent exception, recorded in
+  `tools/touch-targets.json`. The attribution links were 15 pixels tall beside
+  the rail and are 24. The marks panel's precision is repeated by finger (a tap,
+  the pad, Place, Refine); the loupe is one module for the marks, the
+  photometry stamp and the Observatory's pixel image; a photometry ring is
+  chosen by a 56 px handle; a series chart's readout is put on a point by a tap
+  or a finger along it, and Previous point and Next point move it by one. The
+  ten student workflows and five instrument workflows are walked by touch in
+  both languages at both sizes. No real device was measured.
+- On a phone the rail's menu stays open under the view pad's buttons, so a
+  reader can press a run of them.
 
 - The 3-D lab can describe its view (Prompt 281): a button, Describe the view,
   says in a few bounded sentences the run mode with its numbers, the clock, the

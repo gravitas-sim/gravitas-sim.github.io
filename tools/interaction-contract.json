@@ -694,9 +694,12 @@
       "js/observatory/imageMarks.js": {
         "exempt": "A touch held on the picture shows the loupe and aims a draft; nothing is committed by it, and a tap, the nudge pad and Place do the same with no path."
       },
+      "js/observatory/imagePhotometry.js": {
+        "exempt": "A touch held on the stamp shows the loupe; nothing is committed by it, and a tap sets the chosen ring's radius, a tap near a handle chooses its ring, and the pad's steps nudge, with no path."
+      },
       "js/placement.js": ["sandbox.throw", "sandbox.pan"],
       "js/plot/chart.js": {
-        "exempt": "The hover readout; the pointer only points."
+        "exempt": "The readout; the pointer only points. A finger along the plot scrubs the cursor, and a tap on it and the Previous point and Next point buttons reach every point with no path."
       },
       "js/plot/select.js": ["observatory.brush"],
       "js/render.js": {

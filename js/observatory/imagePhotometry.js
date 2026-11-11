@@ -29,6 +29,7 @@ import {
   reductionOf,
 } from '../measure/photometry.js';
 import { toCsv } from '../csv.js';
+import { createLoupe } from './loupe.js';
 import { roundSig } from '../format.js';
 import { sha256Hex } from '../hash.js';
 
@@ -195,6 +196,10 @@ export async function mountPhotometry(box, ctx) {
   );
   word(pic, 'obs.ph.picture', 'ariaLabel');
   pic.setAttribute('role', 'img');
+  const stamp = el('div', {}, pic);
+  stamp.style.position = 'relative';
+  stamp.style.maxWidth = '360px';
+  const loupe = createLoupe(stamp, pic, pic);
   box.replaceChildren(
     live,
     help,
@@ -203,7 +208,7 @@ export async function mountPhotometry(box, ctx) {
     sizes,
     modes,
     resize,
-    pic,
+    stamp,
     actions,
     floor,
     out,
@@ -320,6 +325,7 @@ export async function mountPhotometry(box, ctx) {
     const at = (x, y) => [(x - i0 + 0.5) * k, (n - 1 - (y - j0) + 0.5) * k];
     const [cx, cy] = at(g.x, g.y);
     ctx2.lineWidth = 2;
+    const handles = {};
     RINGS.forEach((name, i) => {
       const r = [rIn, sIn, oIn][i].valueAsNumber;
       ctx2.strokeStyle =
@@ -328,7 +334,17 @@ export async function mountPhotometry(box, ctx) {
       ctx2.beginPath();
       ctx2.arc(cx, cy, r * k, 0, 2 * Math.PI);
       ctx2.stroke();
+      // The ring's handle: a dot of the true size on its east side, inside a
+      // 56 px target (DESIGN_SYSTEM.md, Touch measurement). A tap near it
+      // chooses the ring; a tap elsewhere sets the chosen ring's radius.
+      ctx2.fillStyle = ctx2.strokeStyle;
+      ctx2.beginPath();
+      ctx2.arc(cx + r * k, cy, 4, 0, 2 * Math.PI);
+      ctx2.fill();
+      handles[name] = [cx + r * k, cy];
     });
+    // Where the handles are, in the stamp's pixels, for the walks that tap them.
+    pic.dataset.handles = JSON.stringify(handles);
     ctx2.setLineDash([]);
     ctx2.strokeStyle = '#ffffff';
     ctx2.beginPath();
@@ -359,6 +375,19 @@ export async function mountPhotometry(box, ctx) {
   const ringBox = () => ({ aperture: rIn, inner: sIn, outer: oIn })[ring.value];
   const bump = d =>
     setRing(ring.value, ringBox().valueAsNumber + d * STEPS[step.value]);
+  /** The ring whose handle is nearest a tap, within 28 CSS px (a 56 px target). */
+  const handleAt = (g, px, py, scale) => {
+    const cx = (g.x - g.i0 + 0.5) * g.k;
+    const cy = (g.n - 1 - (g.y - g.j0) + 0.5) * g.k;
+    let best = null;
+    let bestD = 28;
+    RINGS.forEach((name, i) => {
+      const r = [rIn, sIn, oIn][i].valueAsNumber;
+      const d = Math.hypot(px - (cx + r * g.k), py - cy) * scale;
+      if (d <= bestD) [best, bestD] = [name, d];
+    });
+    return best;
+  };
   pic.addEventListener('click', e => {
     const g = geom();
     if (!g) return;
@@ -367,8 +396,30 @@ export async function mountPhotometry(box, ctx) {
     const py = ((e.clientY - r.top) / r.height) * pic.height;
     const cx = (g.x - g.i0 + 0.5) * g.k;
     const cy = (g.n - 1 - (g.y - g.j0) + 0.5) * g.k;
+    const h = handleAt(g, px, py, r.width / pic.width);
+    if (h && h !== ring.value) {
+      ring.value = h;
+      draw();
+      const box = ringBox();
+      return say(
+        t('obs.ph.said.radius', {
+          ring: t(`obs.ph.ring.${h}`),
+          r: fmt(box.valueAsNumber),
+        })
+      );
+    }
     setRing(ring.value, Math.hypot(px - cx, py - cy) / g.k);
   });
+  // A finger on the stamp gets the loupe, as on every image task.
+  pic.addEventListener('pointerdown', e => {
+    if (e.pointerType === 'touch') loupe.show(e);
+  });
+  pic.addEventListener('pointermove', e => {
+    if (e.pointerType === 'touch' && e.buttons) loupe.show(e);
+  });
+  for (const type of ['pointerup', 'pointercancel']) {
+    pic.addEventListener(type, () => loupe.hide());
+  }
   fwhm.onchange = () => {
     const a = apertureFor(fwhm.valueAsNumber);
     if (!(a.r > 0)) return;
