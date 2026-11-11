@@ -30,7 +30,7 @@
 // has validated it (ACCESSIBILITY.md; the evidence-status record says UNKNOWN).
 // =============================================================================
 
-import { formatNumber } from '../format.js';
+import { formatNumber, NBSP } from '../format.js';
 import { formatUncertain } from '../platform/uncertain.js';
 import { polyfit } from '../numeric/polyfit.js';
 
@@ -587,13 +587,22 @@ export function sentence(
   const w = WORDS[lang] ?? WORDS.en;
   const locale = lang;
   const num = v => formatNumber(v, { sig: 3, locale });
+  // formatUncertain writes the decimals the uncertainty sets, and toFixed
+  // throws past 100. Data on a tiny scale (1e-200) needs more than the 20 a
+  // fixed notation may print, so that case is written in scientific notation.
   const q = (value, sigma, how = w.basis) =>
-    sigma > 0
+    sigma > 0 && sigma < Infinity
       ? {
-          text: formatUncertain(
-            { value, uncertainty: { kind: 'sigma', sigma, basis: 'data' } },
-            { locale }
-          ),
+          text:
+            Math.floor(Math.log10(sigma)) >= -19
+              ? formatUncertain(
+                  {
+                    value,
+                    uncertainty: { kind: 'sigma', sigma, basis: 'data' },
+                  },
+                  { locale }
+                )
+              : `${num(value)}${NBSP}±${NBSP}${formatNumber(sigma, { sig: 2, locale })}`,
           basis: ` (${how})`,
         }
       : { text: num(value), basis: '' };
