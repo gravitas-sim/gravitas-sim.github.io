@@ -2107,6 +2107,11 @@
   }
 
   .attribution a {
+    /* 24 px tall, the floor of WCAG 2.5.8 (Prompt 283): with the rail open
+       these links sit within a fingertip of its buttons. */
+    display: inline-flex;
+    align-items: center;
+    min-height: 24px;
     color: var(--accent);
     text-decoration: none;
     border-bottom: 1px solid transparent;

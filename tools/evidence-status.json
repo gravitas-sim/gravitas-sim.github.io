@@ -1735,6 +1735,25 @@
           "text": "## 9. The Part A addendum: what it is and what it may not do"
         }
       ]
+    },
+    {
+      "id": "touch-real-device",
+      "claim": "The touch instruments (place then nudge, the loupe, handles, the plot cursor) work on a real phone or tablet.",
+      "scope": "the marks, photometry and pixel images of the Observatory, the series charts and the pad controls, on a touch screen",
+      "version": "3.0",
+      "class": "S",
+      "status": "UNKNOWN",
+      "method": "emulation only: Chromium at 375 x 812 and 768 x 1024 with touch events and a coarse pointer (e2e/mobileSweep.spec.js); no device run",
+      "evaluator": "none",
+      "artifact": "OFFLINE_AND_LOW_END.md",
+      "limitations": "No real device was measured. Emulation does not cover a fingertip's contact area, a device's pixel density, the on-screen keyboard, the browser's own gestures, touch latency, iOS Safari or Firefox on Android. The 8 CSS pixel tap error in the precision trials is an assumption.",
+      "date": "2026-11-11",
+      "anchors": [
+        {
+          "file": "OFFLINE_AND_LOW_END.md",
+          "text": "**No real device was measured.** What it did measure:"
+        }
+      ]
     }
   ]
 }

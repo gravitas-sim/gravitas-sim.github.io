@@ -130,6 +130,13 @@ export async function mountChart(host, options = {}) {
       get legend() {
         return t('chart.legend');
       },
+      // The touch cursor's two steps (js/plot/chart.js).
+      get prev() {
+        return t('chart.prev');
+      },
+      get next() {
+        return t('chart.next');
+      },
       toggled: (label, shown) =>
         t(shown ? 'chart.shown' : 'chart.hidden', { label }),
     },
