@@ -214,7 +214,7 @@ describe('the sound', () => {
     key(svg, 'S');
     await flush();
     expect(
-      svg.parentElement.querySelector('[role=status]').textContent
+      [...svg.parentElement.querySelectorAll('[role=status]')].pop().textContent
     ).toMatch(/Reproduciendo el gráfico como sonido, 6 segundos/);
   });
 
@@ -235,9 +235,9 @@ describe('the sound', () => {
     const { svg } = make();
     key(svg, 's');
     await flush();
-    expect(svg.parentElement.querySelector('[role=status]').textContent).toBe(
-      'This browser cannot play sound.'
-    );
+    expect(
+      [...svg.parentElement.querySelectorAll('[role=status]')].pop().textContent
+    ).toBe('This browser cannot play sound.');
     window.AudioContext = FakeAudio;
     const host = document.createElement('div');
     document.body.append(host);
@@ -247,7 +247,8 @@ describe('the sound', () => {
     key(chart.element, 's');
     await flush();
     expect(
-      chart.element.parentElement.querySelector('[role=status]').textContent
+      [...chart.element.parentElement.querySelectorAll('[role=status]')].pop()
+        .textContent
     ).toMatch(/no series of at least two points/);
   });
 });
@@ -290,7 +291,7 @@ describe('a held prediction', () => {
     expect(FakeAudio.made).toBe(0);
     expect(sources).toHaveLength(0);
     expect(
-      svg.parentElement.querySelector('[role=status]').textContent
+      [...svg.parentElement.querySelectorAll('[role=status]')].pop().textContent
     ).toMatch(/not available until the result/);
     step.remove();
   });

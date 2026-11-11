@@ -111,7 +111,9 @@ export function attach(chart, host) {
   const live = document.createElement('p');
   live.setAttribute('role', 'status');
   Object.assign(live.style, HIDDEN);
-  svg.after(desc, live);
+  // After the chart's own nodes (the tooltip follows the svg, and the chart's
+  // parity test reads it there).
+  svg.parentNode.append(desc, live);
   svg.setAttribute('aria-describedby', id);
   svg.setAttribute('aria-keyshortcuts', 'S');
 
@@ -186,6 +188,10 @@ export function attach(chart, host) {
   }
 
   function stop(announce = true) {
+    // The listeners exist only while a sound does: a chart that is never
+    // destroyed (a panel that is only hidden) must hold none.
+    window.removeEventListener(EV_STOP_SIGNAL_AUDIO, onStop);
+    document.removeEventListener('visibilitychange', onHide);
     if (playing) {
       endSource(playing);
       playing = null;
@@ -212,6 +218,8 @@ export function attach(chart, host) {
       renderSeries(d.sound, ctx.sampleRate)
     );
     playing = made.source;
+    window.addEventListener(EV_STOP_SIGNAL_AUDIO, onStop);
+    document.addEventListener('visibilitychange', onHide);
     playing.onended = () => {
       if (playing === made.source) stop();
     };
@@ -241,8 +249,6 @@ export function attach(chart, host) {
   const onHide = () => {
     if (document.visibilityState !== 'visible') stop(false);
   };
-  window.addEventListener(EV_STOP_SIGNAL_AUDIO, onStop);
-  document.addEventListener('visibilitychange', onHide);
 
   // The first description is carried before anyone asks for it.
   refresh();
@@ -260,8 +266,6 @@ export function attach(chart, host) {
     destroy() {
       clearTimeout(timer);
       stop(false);
-      window.removeEventListener(EV_STOP_SIGNAL_AUDIO, onStop);
-      document.removeEventListener('visibilitychange', onHide);
       box.remove();
       ctx?.close?.().catch?.(() => {});
     },

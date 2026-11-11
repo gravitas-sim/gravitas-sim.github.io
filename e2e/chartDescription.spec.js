@@ -108,7 +108,7 @@ test.describe('a chart describes itself', () => {
     await mount(page);
     await page.locator('#before').focus();
     await page.keyboard.press('Tab');
-    const status = page.locator('#host [role=status]').first();
+    const status = page.locator('#host [role=status]').last();
     await page.keyboard.press('s');
     await expect(status).toHaveText(/Playing the chart as sound, 6 seconds/);
     await expect(page.locator('.plot-access button')).toHaveText(
@@ -132,7 +132,7 @@ test.describe('a chart describes itself', () => {
     await page.locator('#before').focus();
     await page.keyboard.press('Tab');
     await page.keyboard.press('s');
-    await expect(page.locator('#host [role=status]').first()).toHaveText(
+    await expect(page.locator('#host [role=status]').last()).toHaveText(
       /not available until the result/
     );
     await expect(page.locator('.plot-access button')).toBeDisabled();
