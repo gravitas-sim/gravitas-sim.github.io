@@ -50,16 +50,6 @@ const SUITE = join(ROOT, 'e2e');
  */
 export const ALLOWED_SKIPS = [
   {
-    file: 'e2e/offlineII.spec.js',
-    match: "browserName !== 'chromium'",
-    capability: 'phone device emulation (isMobile) outside Chromium',
-    why:
-      "Playwright's Firefox cannot emulate a mobile device (isMobile), and " +
-      'the My work phone paths (Prompt 284) are a proxy for a device in any ' +
-      'engine; they run in Chromium, where the profile and the share-sheet ' +
-      'stub behave as a phone does.',
-  },
-  {
     file: 'e2e/capture.spec.js',
     match: '!capability.canRecord',
     capability: 'MediaRecorder',

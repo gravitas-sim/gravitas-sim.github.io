@@ -274,6 +274,8 @@ const ADOPTION_SPEC = /adoption\.spec\.js|instructorFlow\.spec\.js/;
 // The desktop half (twoActivationNav.spec.js) runs in the desktop projects, the
 // touch half in the phone project; each defines one cell per pull request; the whole matrix
 // when GRAVITAS_E2E_NAV_FULL is set (the weekly job and `npm run e2e:release`).
+// The phone paths of My work (Prompt 284) emulate a mobile device, which Firefox cannot.
+const OFFLINE_PHONE_SPEC = /offlinePhone\.spec\.js/;
 const TABLET_WALK = Boolean(process.env.GRAVITAS_E2E_TABLET_WALK);
 
 /**
@@ -306,7 +308,11 @@ const DEVICE_FOR = {
 
 const desktop = engines.map(name => ({
   name,
-  testIgnore: [MOBILE_SPEC, NAV_TOUCH_SPEC],
+  testIgnore: [
+    MOBILE_SPEC,
+    NAV_TOUCH_SPEC,
+    ...(name === 'chromium' ? [] : [OFFLINE_PHONE_SPEC]),
+  ],
   use: { ...devices[DEVICE_FOR[name]], viewport: DESKTOP_VIEWPORT },
 }));
 
