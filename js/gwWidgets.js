@@ -26,7 +26,6 @@
 // of the page, which is the only honest way to show a transverse deformation
 // without implying that LIGO is parked next to two black holes.
 // =============================================================================
-
 import { grouped } from './format.js';
 import { t } from './i18n/index.js';
 import { ensureDeferredMessages } from './i18n/deferredMessages.js';
