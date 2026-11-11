@@ -1,0 +1,375 @@
+{
+  "about": "The motion inventory (Prompt 279). Every source of time-based change in the sources, and what each does when the reader asks for reduced motion (the system setting, or Settings, Motion). tests/motionInventory.test.js scans css/ and js/ and fails on a keyframes or a scheduler that is not here, on a listed one that no longer exists, on a source marked `follows` that does not read the setting, and on a gap without its reason. e2e/a11ySweepII.spec.js reads it for the pages it runs with reduced motion. Treatments: `content` is the motion the page exists to show, with a pause control and its reduced-motion behaviour; `follows` honours the setting in code; `gap` starts by itself, has no pause and does not read the setting; `opt-in` does not start by itself; `timer`, `workload`, `once` and `capture` move nothing on screen.",
+  "treatments": [
+    "content",
+    "follows",
+    "gap",
+    "opt-in",
+    "timer",
+    "workload",
+    "once",
+    "capture"
+  ],
+  "css": {
+    "about": "All sixteen are covered by the blanket rules: under prefers-reduced-motion and under the reader's data-motion override every animation runs once in 0.01 ms and every transition is 0.01 ms (css/components.css, css/styles.css, and the unlayered :root[data-motion] rule). Two stop outright.",
+    "blanket": ["css/components.css", "css/styles.css"],
+    "keyframes": [
+      {
+        "name": "recordingPulse",
+        "file": "css/chrome.css",
+        "what": "The recording indicator's dot while a capture runs",
+        "treatment": "follows"
+      },
+      {
+        "name": "ui-state-sweep",
+        "file": "css/page.css",
+        "what": "The busy bar of a tool page's status line (an explicit animation: none under reduced motion)",
+        "treatment": "follows"
+      },
+      {
+        "name": "val-sweep",
+        "file": "css/page.css",
+        "what": "The validation page's run bar (an explicit animation: none under reduced motion)",
+        "treatment": "follows"
+      },
+      {
+        "name": "logoFadeIn",
+        "file": "css/styles.css",
+        "what": "The splash's logo",
+        "treatment": "follows"
+      },
+      {
+        "name": "splashFadeIn",
+        "file": "css/styles.css",
+        "what": "The splash",
+        "treatment": "follows"
+      },
+      {
+        "name": "splashFadeOut",
+        "file": "css/styles.css",
+        "what": "The splash leaving (js/welcome.js skips the splash under reduced motion as well)",
+        "treatment": "follows"
+      },
+      {
+        "name": "scenarioMenuFadeIn",
+        "file": "css/styles.css",
+        "what": "The scenario list opening",
+        "treatment": "follows"
+      },
+      {
+        "name": "scenarioInfoSlideIn",
+        "file": "css/styles.css",
+        "what": "The scenario card arriving",
+        "treatment": "follows"
+      },
+      {
+        "name": "sparkle",
+        "file": "css/styles.css",
+        "what": "A decorative glint",
+        "treatment": "follows"
+      },
+      {
+        "name": "pulse",
+        "file": "css/styles.css",
+        "what": "A decorative pulse",
+        "treatment": "follows"
+      },
+      {
+        "name": "spin",
+        "file": "css/styles.css",
+        "what": "A loading spinner",
+        "treatment": "follows"
+      },
+      {
+        "name": "fadeInSimulation",
+        "file": "css/styles.css",
+        "what": "The simulation area fading in at start-up",
+        "treatment": "follows"
+      },
+      {
+        "name": "fadeInOverlay",
+        "file": "css/styles.css",
+        "what": "The readout fading in at start-up",
+        "treatment": "follows"
+      },
+      {
+        "name": "fadeInScenarioInfo",
+        "file": "css/styles.css",
+        "what": "The scenario card fading in at start-up",
+        "treatment": "follows"
+      },
+      {
+        "name": "fadeInUI",
+        "file": "css/styles.css",
+        "what": "The controls fading in at start-up",
+        "treatment": "follows"
+      },
+      {
+        "name": "demoPulse",
+        "file": "css/styles.css",
+        "what": "The demo button's pulse",
+        "treatment": "follows"
+      }
+    ]
+  },
+  "js": [
+    {
+      "file": "js/assistPanel.js",
+      "kind": "interval",
+      "treatment": "timer",
+      "what": "The assistant's progress text, redrawn every 200 ms",
+      "reason": "Text or a readout updates on a timer; nothing on the page moves."
+    },
+    {
+      "file": "js/binaryRunPanel.js",
+      "kind": "interval",
+      "treatment": "timer",
+      "what": "The binary run's progress text, redrawn every 200 ms",
+      "reason": "Text or a readout updates on a timer; nothing on the page moves."
+    },
+    {
+      "file": "js/binaryWidgets.js",
+      "kind": "animated-widget",
+      "treatment": "follows",
+      "what": "The binary's orbit and the comparison pair",
+      "pause": "A Run and Pause button in the instrument",
+      "reduced": "Starts still under reduced motion and Step by step, through the step's autorun (js/widgets.js, autoruns); Run starts it",
+      "test": "tests/motionInventory.test.js"
+    },
+    {
+      "file": "js/capture.js",
+      "kind": "raf",
+      "treatment": "capture",
+      "what": "The recorder's frame copy while a video is made",
+      "reason": "It copies the canvas to the recording; the reader asked for the recording, and nothing extra moves on screen."
+    },
+    {
+      "file": "js/captureMeasure.js",
+      "kind": "interval",
+      "treatment": "opt-in",
+      "what": "The demonstration mode that changes the scenario every 20 seconds, and two single-frame measurements",
+      "reason": "The demonstration mode is not started by anything that runs on its own: nothing calls it from a page load, and any press stops it."
+    },
+    {
+      "file": "js/cr3bpPanel.js",
+      "kind": "raf",
+      "treatment": "workload",
+      "what": "The restricted three-body pair sampler",
+      "reason": "A measurement or a computation scheduled on the frame clock; it draws nothing that moves."
+    },
+    {
+      "file": "js/darkMatterWidgets.js",
+      "kind": "animated-widget",
+      "treatment": "follows",
+      "what": "The flyby of two galaxies",
+      "pause": "A Run and Pause button in the instrument",
+      "reduced": "Starts still under reduced motion and Step by step, through the step's autorun (js/widgets.js, autoruns); Run starts it",
+      "test": "tests/motionInventory.test.js"
+    },
+    {
+      "file": "js/dialog.js",
+      "kind": "raf",
+      "treatment": "follows",
+      "what": "One frame of waiting before a dialog opens",
+      "reduced": "A dialog opens without waiting a frame and closes without its fade",
+      "test": "e2e/settingsDialog.spec.js"
+    },
+    {
+      "file": "js/embedBridge.js",
+      "kind": "interval",
+      "treatment": "timer",
+      "what": "The embedded figure's handshake, until the parent answers",
+      "reason": "Text or a readout updates on a timer; nothing on the page moves."
+    },
+    {
+      "file": "js/energyWidgets.js",
+      "kind": "animated-widget",
+      "treatment": "follows",
+      "what": "The launch trajectory and the live energy plot",
+      "pause": "A Run and Pause button in the instrument",
+      "reduced": "Starts still under reduced motion and Step by step, through the step's autorun (js/widgets.js, autoruns); Run starts it",
+      "test": "tests/motionInventory.test.js"
+    },
+    {
+      "file": "js/exoplanetWidgets.js",
+      "kind": "animated-widget",
+      "treatment": "gap",
+      "what": "Two instruments that advance a planet's phase every frame",
+      "reason": "They start by themselves and advance a phase on every frame with no Run control and no check of the motion setting.",
+      "proposed": "The same as the resonance instruments"
+    },
+    {
+      "file": "js/experiments/bench.js",
+      "kind": "raf",
+      "treatment": "workload",
+      "what": "The bench's sampling clock",
+      "reason": "A measurement or a computation scheduled on the frame clock; it draws nothing that moves."
+    },
+    {
+      "file": "js/experiments/frameRate.js",
+      "kind": "raf",
+      "treatment": "workload",
+      "what": "The frame-rate meter",
+      "reason": "A measurement or a computation scheduled on the frame clock; it draws nothing that moves."
+    },
+    {
+      "file": "js/experiments/panel.js",
+      "kind": "interval",
+      "treatment": "timer",
+      "what": "The experiment runner's elapsed-time status and its run ticker",
+      "reason": "Text or a readout updates on a timer; nothing on the page moves."
+    },
+    {
+      "file": "js/gwWidgets.js",
+      "kind": "animated-widget",
+      "treatment": "follows",
+      "what": "The inspiral and the chirp playback",
+      "pause": "A play control in the instrument",
+      "reduced": "Checks prefersReducedMotion itself: it starts still and draws a still frame",
+      "test": "e2e/gwLesson.spec.js"
+    },
+    {
+      "file": "js/habitabilityWidgets.js",
+      "kind": "animated-widget",
+      "treatment": "follows",
+      "what": "The habitable-zone orbit",
+      "pause": "A Run and Pause button in the instrument",
+      "reduced": "Starts still under reduced motion and Step by step, through the step's autorun (js/widgets.js, autoruns); Run starts it",
+      "test": "tests/motionInventory.test.js"
+    },
+    {
+      "file": "js/inference/rvMonteCarlo.js",
+      "kind": "raf",
+      "treatment": "workload",
+      "what": "A yield between chunks of a Monte Carlo run",
+      "reason": "A measurement or a computation scheduled on the frame clock; it draws nothing that moves."
+    },
+    {
+      "file": "js/inspectorPanel.js",
+      "kind": "interval",
+      "treatment": "timer",
+      "what": "The inspector's readout refresh, and a one-frame chart resize",
+      "reason": "Text or a readout updates on a timer; nothing on the page moves."
+    },
+    {
+      "file": "js/inspectorWindow.js",
+      "kind": "interval",
+      "treatment": "timer",
+      "what": "The inspector readouts refresh ten times a second",
+      "reason": "Text or a readout updates on a timer; nothing on the page moves."
+    },
+    {
+      "file": "js/investigations.js",
+      "kind": "raf",
+      "treatment": "follows",
+      "what": "The loop that repaints a lesson's animated instrument",
+      "pause": "The instrument's Run button, where it has one",
+      "reduced": "An instrument that honours autorun starts still (js/widgets.js, autoruns); the six instruments named below do not",
+      "test": "tests/motionInventory.test.js"
+    },
+    {
+      "file": "js/lab3d/embed.js",
+      "kind": "interval",
+      "treatment": "timer",
+      "what": "The embedded 3-D lab's handshake",
+      "reason": "Text or a readout updates on a timer; nothing on the page moves."
+    },
+    {
+      "file": "js/lab3d/view/evidencePanel.js",
+      "kind": "interval",
+      "treatment": "timer",
+      "what": "The evidence panel's refresh while the lab runs",
+      "reason": "Text or a readout updates on a timer; nothing on the page moves."
+    },
+    {
+      "file": "js/lab3dLab.js",
+      "kind": "raf",
+      "treatment": "content",
+      "what": "The 3-D lab's integration and its camera",
+      "pause": "The lab's Play and Pause button",
+      "reduced": "A Reduced box, checked when the system asks for it: the lab does not start playing by itself and the camera is not eased after a drag",
+      "test": "e2e/lab3dView.spec.js"
+    },
+    {
+      "file": "js/main.js",
+      "kind": "raf",
+      "treatment": "content",
+      "what": "The animation loop of the simulation",
+      "pause": "The transport bar's pause, and the space bar",
+      "reduced": "Step by step starts the world paused; the starfield stops twinkling (js/render.js); the orbital motion is the content and keeps its pause",
+      "test": "e2e/starfield.spec.js"
+    },
+    {
+      "file": "js/mission/lab/address.js",
+      "kind": "interval",
+      "treatment": "timer",
+      "what": "The mission lab's address-bar sync",
+      "reason": "Text or a readout updates on a timer; nothing on the page moves."
+    },
+    {
+      "file": "js/observationLayout.js",
+      "kind": "raf",
+      "treatment": "once",
+      "what": "One frame's wait before measuring the layout",
+      "reason": "A single deferred callback, not a loop."
+    },
+    {
+      "file": "js/observatory/imageOverlay.js",
+      "kind": "interval",
+      "treatment": "follows",
+      "what": "The blink between two frames (Prompt 182)",
+      "pause": "Stop on the blink, and the blink starts only when the reader presses Start",
+      "reduced": "The blink's Start and its rate are hidden and a note says so; the plan is built with reducedMotion",
+      "test": "e2e/imageOverlay.spec.js"
+    },
+    {
+      "file": "js/observatoryPage.js",
+      "kind": "raf",
+      "treatment": "once",
+      "what": "One frame's wait before the status text is set",
+      "reason": "A single deferred callback, not a loop."
+    },
+    {
+      "file": "js/render.js",
+      "kind": "raf",
+      "treatment": "content",
+      "what": "The canvas drawing: the bodies, the trails and the sky",
+      "pause": "The transport bar's pause, and the space bar",
+      "reduced": "The starfield's twinkling stops and its layers are built without it; the orbital motion is the content and keeps its pause",
+      "test": "e2e/starfield.spec.js"
+    },
+    {
+      "file": "js/resonanceWidgets.js",
+      "kind": "animated-widget",
+      "treatment": "gap",
+      "what": "Four instruments (the periods, the resonant angle, the conjunctions, the frame) that advance a phase every frame",
+      "reason": "They start by themselves, advance a phase on every frame and have neither a Run control nor a check of the motion setting. The motion is the picture of the resonance, and the step's sliders set the quantities it shows.",
+      "proposed": "Give each a Run and Pause control and read autoruns (a change to the instrument's controls and its tests, which this sweep's rule 'do not change a page's content' leaves to a content prompt)"
+    },
+    {
+      "file": "js/skyPage.js",
+      "kind": "raf",
+      "treatment": "follows",
+      "what": "The Sky Lab's time-lapse (Play)",
+      "pause": "Play and Pause, aria-pressed",
+      "reduced": "Play is disabled and a note says why when the system asks for reduced motion; the sky moves only by the reader's step buttons",
+      "test": "e2e/sky.spec.js"
+    },
+    {
+      "file": "js/stellarEvolutionWidgets.js",
+      "kind": "animated-widget",
+      "treatment": "follows",
+      "what": "The playback of a star's evolution",
+      "pause": "A play control in the instrument",
+      "reduced": "Checks prefersReducedMotion itself: it starts still and draws a still frame",
+      "test": "e2e/livesOfStars.spec.js"
+    },
+    {
+      "file": "js/tutorial.js",
+      "kind": "raf",
+      "treatment": "once",
+      "what": "One frame's wait before the tutorial step scrolls into place",
+      "reason": "A single deferred callback, not a loop."
+    }
+  ]
+}

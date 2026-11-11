@@ -91,6 +91,7 @@ import {
   SIM_UNITS_PER_AU,
 } from './units.js';
 import {
+  autoruns,
   ensureWidget,
   getWidget,
   needsLoading,
@@ -1388,10 +1389,9 @@ function syncToolPanel(step) {
     });
   });
 
-  // A step can ask for the instrument to sit still until the student presses
-  // Run, which is what a prediction step needs: showing them the answer while
-  // asking them to predict it defeats the point of asking.
-  widget.reset?.(toolValues, { autorun: spec.autorun !== false, spec });
+  // A step can ask the instrument to sit still until Run (a prediction step
+  // must not show the answer it asks for); so does reduced motion (autoruns).
+  widget.reset?.(toolValues, { autorun: autoruns(spec), spec });
   paintTool();
   if (widget.animated) startToolLoop(widget, spec);
 }
