@@ -8,14 +8,24 @@ The scoped conformance report, a status for each WCAG 2.1 and 2.2 A and AA crite
 
 ## What is checked, on every run
 
+<!-- a11y-shard:table -->
 | Check | Covers |
 | --- | --- |
-| `e2e/accessibility.spec.js` | axe-core over <!--fact:axeSurfaces-->50<!--/fact--> surfaces × <!--fact:locales-->2<!--/fact--> languages: the <!--fact:axeShellSurfaces-->36<!--/fact--> pages with the shared shell in all <!--fact:axeAllThemes-->4<!--/fact--> themes, the application's surfaces in <!--fact:axeThemes-->2<!--/fact--> — <!--fact:axeRuns-->344<!--/fact--> runs |
+| `e2e/accessibility.spec.js` | axe-core over every page of the navigation inventory and the application's own surfaces and states: <!--fact:axeSurfaces-->60<!--/fact--> surfaces × <!--fact:locales-->2<!--/fact--> languages × <!--fact:axeAllThemes-->4<!--/fact--> themes (Midnight, Deep space, Observatory red, Daylight) — <!--fact:axeRuns-->480<!--/fact--> runs; a page added to the inventory with no named surface gets a run of its own |
 | `e2e/accessibilityManual.spec.js` | Focus order, focus traps, Escape, focus restoration, heading order, landmarks, reflow, reduced motion, and the canvas description |
+| `e2e/a11ySweep.spec.js` | Sweep I (Prompt 278): every surface of the walk inventory by keyboard and by single presses, in both languages (no trap, every stop named and on screen, every pressable control reached, the primary task done by its key); the view pads, the windows moved and sized without a drag, the observer's angle, a run of rows in the Observatory |
 | `e2e/a11ySweepII.spec.js` | Sweep II (Prompt 279): every page's outline against a record, in both languages; one test for each focus pattern; every page at rest with reduced motion, by the system and by the reader's own setting; every page at 320 CSS pixels; every page under forced colors; no checkbox or radio under 24 px |
+| `e2e/chartDescription.spec.js` | Descriptions of series charts (Prompt 280): a bounded description for each chart, held answers kept out of it, the keyboard-triggered sound and its stop |
+| `e2e/a11y3dMission.spec.js` | The 3-D lab and the mission page by keyboard (Prompt 281): Describe the view by Tab and by one press, in both languages and withheld while a guide step asks for a measurement; the camera's announcements; the transfer window as a grid walked by arrows, announced by each cell's label, marked on the picture, and moved by one press |
+| `e2e/accessibilityParity.spec.js` | The text equivalents: what the visual simulation shows is also in the page as text, against the built tree |
 | `tests/motionInventory.test.js`, `tests/designRatchet.test.js` | Every keyframes and every scheduler in the sources is in the motion inventory with what it does under reduced motion; the contrast of every token pair in each of the four themes, which may only rise |
+| `tests/a11yNet.test.js`, `tests/interactionContract.test.js` | The net: every page of the navigation inventory has an axe run in every theme and both languages, a walk and an outline; every spec named a11y* or accessibility* is in this shard; every registered interaction surface keeps its walks in a spec of the shard |
+| `tests/lab3dDescribe.test.js`, `tests/missionWindowGrid.test.js`, `tests/plotDescribe.test.js` | The descriptions and the grid as pure functions: the 3-D scene's bounded description and its held rule, the transfer window's cursor, a chart's description and its coverage |
+<!-- /a11y-shard:table -->
 
-Both run in CI. The axe run uses the `wcag2a`, `wcag2aa`, `wcag21a`, `wcag21aa`,
+The table above is written from `tools/a11y-shard.json` (`node tools/a11y-shard.mjs write`), and
+`tests/a11yNet.test.js` fails when it is stale. The first two run in the CI accessibility job, the
+rest in the sharded browser suite and the Jest job. The axe run uses the `wcag2a`, `wcag2aa`, `wcag21a`, `wcag21aa`,
 `wcag22aa` and `best-practice` rule sets, and **disables no rules**. There were
 two candidates for exemption during the pass and neither survived it: each was
 a real defect with a real fix.
@@ -26,8 +36,8 @@ investigation, lesson measurement screen, share dialog, A/B bench, observing
 panels, lecture mode, model page, instructor portal, teaching page, figure
 builder, evaluation kit, glossary, validation report, observatory, catalog, library,
 library by sequence, library browse, all filters, library topic, library item, my work, experiment runner, scenario studio, investigation composer, course builder,
-investigations in a course, course home, 3-D kernel diagnostics, 3-D lab, 3-D lab guide, mission
-diagnostics, mission lab, submission review, the two term surfaces of Prompt 168:
+investigations in a course, course home, 3-D kernel diagnostics, 3-D lab, 3-D lab, the view described (Prompt 281), 3-D lab guide, mission
+diagnostics, mission diagnostics, the window as a table (Prompt 281), mission lab, submission review, the two term surfaces of Prompt 168:
 course builder, a course as it comes (Prompt 168), distribution kit, a new term (Prompt 168), and the three
 surfaces of Prompt 164: library, your collections; kit, the collection editor; course home, a collection, and the two Common Cartridge panels of Prompt 169: course builder, the Common Cartridge panel (Prompt 169), distribution kit, the Common Cartridge panel (Prompt 169), and the two activity list panels of Prompt 174: course builder, the activity list panel with its outcomes (Prompt 174), distribution kit, the activity list panel (Prompt 174), and the two first-week surfaces of Prompt 277: front door, first-week mode; front door, the introduction in a first week, five places. (The figure builder is checked
 without its live preview, which is the application in a frame and is
@@ -633,7 +643,7 @@ listed there and run as pending acceptance checks.
 links in a sentence, which WCAG 2.5.8 explicitly exempts. Enlarging them would
 mean changing a line of running text into a row of buttons.
 
-**Automated checks are a floor, not a ceiling.** <!--fact:axeRuns-->344<!--/fact--> clean axe runs mean no
+**Automated checks are a floor, not a ceiling.** <!--fact:axeRuns-->480<!--/fact--> clean axe runs mean no
 machine-detectable violation on those surfaces in those states. They do not
 mean the application is pleasant to use with a screen reader, and nothing here
 substitutes for testing with one. Nothing in this pass was made to pass by
@@ -681,7 +691,7 @@ only route to the material.
 
 ```bash
 npm run a11y            # all of them
-npm run a11y:axe        # axe only, all <!--fact:axeRuns-->344<!--/fact--> combinations
+npm run a11y:axe        # axe only, all <!--fact:axeRuns-->480<!--/fact--> combinations
 npm run a11y:manual     # keyboard, focus, reflow, reduced motion, the canvas
 npm run a11y:sweep2     # outlines, focus patterns, motion, 320 px reflow, forced colors, target size
 node tools/design-ratchet.mjs   # contrast in the four themes (and the colour, !important counts)

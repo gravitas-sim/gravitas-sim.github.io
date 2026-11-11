@@ -22,6 +22,19 @@ import { test, expect } from './fixtures.js';
 import { tabTo } from './walk.js';
 import { open } from './sweepOpen.js';
 
+// The titles the interaction contract cites, written out (a title is looked
+// for as text, so a template would not be found).
+const TITLE = {
+  describe: {
+    en: 'Describe the view is reached by Tab and said in en',
+    es: 'Describe the view is reached by Tab and said in es',
+  },
+  grid: {
+    en: 'the grid is walked by arrows and announced in en',
+    es: 'the grid is walked by arrows and announced in es',
+  },
+};
+
 const LOCALES = [
   {
     id: 'en',
@@ -43,10 +56,7 @@ const LOCALES = [
 
 test.describe('the 3-D lab, by keyboard', () => {
   for (const L of LOCALES) {
-    test(`Describe the view is reached by Tab and said in ${L.id}`, async ({
-      page,
-      browserName,
-    }) => {
+    test(TITLE.describe[L.id], async ({ page, browserName }) => {
       await open(page, '/3d/?system=R3', L.id, { ready: '#l3-describe' });
       await page.evaluate(() => window.gravitasLab3d.tau !== undefined);
       expect(await tabTo(page, browserName, '#l3-describe')).toBeGreaterThan(0);
@@ -82,6 +92,14 @@ test.describe('the 3-D lab, by keyboard', () => {
     });
   }
 
+  test('a single press on Describe the view says the view', async ({
+    page,
+  }) => {
+    await open(page, '/3d/?system=R3', 'en', { ready: '#l3-describe' });
+    await page.locator('#l3-describe').click();
+    await expect(page.locator('#l3-description')).toContainText('live bodies');
+  });
+
   test('the description is withheld while a guide step asks for a measurement', async ({
     page,
   }) => {
@@ -110,10 +128,7 @@ test.describe('the 3-D lab, by keyboard', () => {
 
 test.describe('the mission page: the window as a table, by keyboard', () => {
   for (const L of LOCALES) {
-    test(`the grid is walked by arrows and announced in ${L.id}`, async ({
-      page,
-      browserName,
-    }) => {
+    test(TITLE.grid[L.id], async ({ page, browserName }) => {
       await open(page, '/mission/', L.id, { ready: '#mn-window-go' });
       await expect(page.locator('html')).toHaveAttribute('data-ready', 'true');
       await page.locator('#mn-window-steps').fill('21');
@@ -205,6 +220,27 @@ test.describe('the mission page: the window as a table, by keyboard', () => {
       ).toBeNull();
     });
   }
+
+  test('a press on a cell of the grid moves the cursor', async ({ page }) => {
+    await open(page, '/mission/', 'en', { ready: '#mn-window-go' });
+    await page.locator('#mn-window-steps').fill('21');
+    await page.locator('#mn-window-go').click();
+    await expect(page.locator('#mn-window-browse')).toBeEnabled({
+      timeout: 60_000,
+    });
+    await page.locator('#mn-window-browse').click();
+    const cells = page.locator('#mn-window-grid td[role="gridcell"]');
+    await expect(cells.first()).toBeVisible();
+    const target = cells.nth(3);
+    const label = await target.getAttribute('aria-label');
+    await target.click();
+    await expect(page.locator('.mn-grid-cursor')).toHaveText(label);
+    await expect(
+      page.locator('#mn-window-grid td[tabindex="0"]')
+    ).toHaveAttribute('aria-label', label);
+    await page.locator('#mn-window-grid button').click();
+    await expect(page.locator('.mn-grid-cursor')).not.toHaveText(label);
+  });
 
   test('closing the table removes the cursor from the picture', async ({
     page,

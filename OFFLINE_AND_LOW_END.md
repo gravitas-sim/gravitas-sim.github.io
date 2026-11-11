@@ -99,7 +99,7 @@ The idle tier, by surface (gzip level 6, to the nearest 10 KB: Node versions dif
 
 | Surface | Files | Gzip |
 | --- | ---: | ---: |
-| 3-D lab | 43 | ~190 KB |
+| 3-D lab | 43 | ~200 KB |
 | data tables | 33 | ~260 KB |
 | activity builder | 6 | ~20 KB |
 | instructor modules | 37 | ~350 KB |

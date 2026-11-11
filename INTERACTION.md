@@ -87,7 +87,9 @@ launch equals a recorded drag in the sandbox
 | `lesson.picker` | lessons | A click sets the value; the arrows step it | met |
 | `lab3d.orbit` | `lab3d.camera` | The view pad under the view (arrows that turn or move, two that zoom); the Look and Projection selects; arrows, Shift pans, + and - zoom | met (`interaction.single-pointer.lab3d-orbit`) |
 | `observer.handle` | `sandbox.observer` | The Position angle slider in every observing panel | met (`interaction.single-pointer.observer-handle`) |
-| `window.move` | `sandbox.windows` | The Move button in the window's header (press it, then press where the corner goes; or the arrow keys); the spacetime view's Size button | met (`interaction.single-pointer.window-move`) |
+| `window.move` | `lab3d.describe` | `e2e/a11y3dMission.spec.js` (Tab to Describe the view and Enter) | `e2e/a11y3dMission.spec.js` (one press) | `e2e/a11y3dMission.spec.js` (the description is said in a polite live region; the orbit numbers are withheld while a guide step asks for a measurement) |
+| `mission.window.grid` | `e2e/a11y3dMission.spec.js` (the arrows, Page Up and Page Down, Home and End, in English and in Spanish) | `e2e/a11y3dMission.spec.js` (a press on a cell) | `e2e/a11y3dMission.spec.js` (each cell's label is the announcement; the same sentence is under the table) |
+| `sandbox.windows` | The Move button in the window's header (press it, then press where the corner goes; or the arrow keys); the spacetime view's Size button | met (`interaction.single-pointer.window-move`) |
 | `spacetime.orbit` | `sandbox.spacetime` | The pad under the spacetime view: turn, tilt, move and zoom | met |
 
 No drag is a gap. The six that Prompt 155 recorded as pending acceptance checks
