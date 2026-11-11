@@ -7519,9 +7519,18 @@
     gap: 0.6rem;
   }
 
-  .inv-hint-tally {
+  .inv-hint-tally,
+  .inv-gen-note {
     color: var(--text-dim, var(--c2));
     font-size: 0.75rem;
+  }
+
+  .inv-gen-note {
+    margin: 0 0 0.4rem;
+  }
+
+  .inv-recover .inv-hint-row {
+    flex-wrap: wrap;
   }
 }
 
@@ -7807,6 +7816,11 @@
   }
   .inv-more {
     border-top: 1px solid var(--border-subtle);
+  }
+  .inv-before {
+    flex: 1 0 100%;
+    margin: 0;
+    font-size: var(--text-sm);
   }
   .inv-more .inv-depth {
     padding: 0;

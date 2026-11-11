@@ -60,11 +60,11 @@
         "requests": 13
       },
       "library": {
-        "kb": 99.2,
+        "kb": 99.8,
         "requests": 12
       },
       "my-work": {
-        "kb": 101.8,
+        "kb": 101.9,
         "requests": 10
       },
       "studio": {
@@ -186,7 +186,7 @@
         "requests": 2
       },
       "library": {
-        "kb": 37.0,
+        "kb": 37.3,
         "requests": 2
       },
       "my-work": {

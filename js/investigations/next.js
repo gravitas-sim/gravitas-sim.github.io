@@ -15,13 +15,13 @@
 
 import { noteResume, put } from '../storage/local.js';
 import { getLocale } from '../i18n/index.js';
-import { KEY_NEXT_CONTEXT } from '../names.js';
+import { KEY_INVESTIGATION_PREFIX, KEY_NEXT_CONTEXT } from '../names.js';
 
 export const CONTEXT_KEY = KEY_NEXT_CONTEXT;
 
-const read = () => {
+const read = (key = CONTEXT_KEY) => {
   try {
-    return JSON.parse(localStorage.getItem(CONTEXT_KEY));
+    return JSON.parse(localStorage.getItem(key));
   } catch {
     return null;
   }
@@ -136,4 +136,60 @@ export async function whatNext(list, { id, deeper, onDeeper }) {
     /* offline and not cached: the rest of the list stands */
   }
   list.replaceChildren(...out);
+}
+
+/**
+ * "You may want X first" (Prompt 276): the investigations the Library says
+ * this one builds on that this browser has not finished, each a link. Advice,
+ * inside the panel's More: nothing is locked, an investigation that is itself
+ * finished gets none, and neither does an assignment (the instructor's own
+ * order). Called when More opens; left hidden when there is nothing to say or
+ * the Library's index cannot be read (offline and not cached).
+ *
+ * @param {?object} lesson - The investigation that is open
+ * @param {?object} [assignment] - The assignment it was opened as, if any
+ * @param {HTMLElement} [el] - The paragraph the words ride on (data-say-en, -es)
+ */
+export async function before(
+  lesson,
+  assignment,
+  el = document.getElementById('investigationBefore')
+) {
+  if (!el) return;
+  el.hidden = true;
+  const id = lesson?.id;
+  el.dataset.asked = id ?? '';
+  if (!id || assignment) return;
+  let lib;
+  try {
+    lib = await (await fetch('/library/library.json')).json();
+  } catch {
+    return;
+  }
+  // Another investigation was opened while the index was on its way.
+  if (el.dataset.asked !== id) return;
+  const es = getLocale() === 'es';
+  const entry = x => lib.entries.find(e => e.id === x);
+  // Finished as the Library counts it: every step of the lesson seen.
+  const done = e =>
+    read(KEY_INVESTIGATION_PREFIX + e.id.replace(/^[a-z]+:/, ''))?.visited
+      ?.length >= e.steps;
+  const here = entry(`investigation:${id}`);
+  if (!here || done(here)) return;
+  const need = (here.prerequisites ?? [])
+    .map(entry)
+    .filter(e => e?.format === 'lesson' && !done(e));
+  if (!need.length) return;
+  const parts = [el.dataset[es ? 'sayEs' : 'sayEn']];
+  need.forEach((e, i) => {
+    const a = document.createElement('a');
+    a.href = e.route;
+    a.textContent = (es && e.title.es) || e.title.en;
+    a.addEventListener('click', () =>
+      noteResume({ id: e.id, route: e.route, title: e.title })
+    );
+    parts.push(i ? ', ' : ' ', a);
+  });
+  el.replaceChildren(...parts);
+  el.hidden = false;
 }

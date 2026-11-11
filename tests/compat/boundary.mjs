@@ -621,6 +621,28 @@ export const BOUNDARY = [
       rollback: 'opens-without',
     },
   },
+  {
+    id: 'progress-attempts',
+    prompt: 276,
+    kind: 'progress-store',
+    plans:
+      'the wrong numbers a student checked on the way (`:tries`, one per line, at most eight) and the generated hints taken (`:gen`), as sub-keys of a step in the progress record’s `responses`, written only after a wrong answer',
+    // A record as the lesson panel saves it after two wrong numbers and two
+    // generated hints (js/investigations/recovery.js withTry).
+    mutate: async fx => {
+      const { withTry } = await import('../../js/investigations/recovery.js');
+      const doc = clone(fx);
+      doc.responses['tides:guess:tries'] = withTry(
+        withTry(undefined, '120'),
+        '1.2'
+      );
+      doc.responses['tides:guess:gen'] = 'units,magnitude';
+      return doc;
+    },
+    // 2.0.0 opens the record; it keeps the sub-keys and reads nothing from them.
+    expect: 'ignored',
+    note: 'not a boundary: 2.0.0 keeps every sub-key of a step it knows (readProgress), so a record with them opens there and is saved again with them, and nothing there reads them. The schema stays 2; the progress backup and the submission token carry `responses` whole, so they carry these too, as strings their checks already allow.',
+  },
 ];
 
 /**

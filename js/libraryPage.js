@@ -370,6 +370,14 @@ const whyText = row =>
       })
     : '';
 
+/** An unfinished prerequisite (Prompt 276): advice on the card, never a lock. */
+const beforeOf = entry =>
+  finished(entry.id)
+    ? null
+    : (entry.prerequisites ?? [])
+        .map(id => byId.get(id))
+        .find(p => p?.format === 'lesson' && !finished(p.id));
+
 const cards = (rows, extra = {}) =>
   rows
     .map(row =>
@@ -380,6 +388,7 @@ const cards = (rows, extra = {}) =>
         progress: row.progress,
         why: whyText(row),
         details: true,
+        before: beforeOf(byId.get(row.entry.id)),
         ...extra,
       })
     )

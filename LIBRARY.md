@@ -309,3 +309,12 @@ Recorded in [DECISION_REGISTER.md](DECISION_REGISTER.md), D-LIB-01.
 - **My work.** Home cannot link it: it does not exist until Prompt 69.
 - **The teaching page's activity list and the scenario gallery** stay their
   own lists (PLATFORM_MODEL.md names them as Library filters later).
+
+## Prerequisites on a card (Prompt 276)
+
+A card of the results carries "You may want this first:" and a link when the
+entry's `prerequisites` name an investigation the reader has not finished (the
+first such, by the progress the browser holds), unless the card's own
+investigation is finished. It is advice: the card's link is unchanged and
+nothing is locked or disabled. The compact cards of the default view carry
+none. The "ready" facet and the item page's "Before this" are as they were.
