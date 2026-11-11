@@ -121,6 +121,14 @@ export function netProblems(i) {
     );
   if (i.perSurfaceThemes)
     out.push('a surface of the axe spec runs in fewer than every theme');
+  for (const [id, x] of Object.entries(i.config.axeExempt || {})) {
+    if (!ids.has(id))
+      out.push(
+        `${id}: an axe exemption for a page the navigation inventory does not hold`
+      );
+    if (!x.rules?.length || !x.reason)
+      out.push(`${id}: an axe exemption must name its rules and say why`);
+  }
   const listed = new Set(i.config.specs.map(s => s.file));
   for (const f of i.specFiles)
     if (/^e2e\/(a11y|accessibility)/.test(f) && !listed.has(f))
@@ -149,6 +157,9 @@ export function netProblems(i) {
   }
   return out;
 }
+
+/** Rules switched off for one page of ours, with the reason. */
+export const axeExempt = () => json(CONFIG_FILE).axeExempt || {};
 
 /** The tree's own inputs. */
 export function inputs() {

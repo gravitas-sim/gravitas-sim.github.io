@@ -15,6 +15,23 @@ the release rather than in the tag.
 
 ### Added
 
+- The 3-D lab can describe its view (Prompt 281): a button, Describe the view,
+  says in a few bounded sentences the run mode with its numbers, the clock, the
+  bodies, the frame, plane and projection, where the camera looks from, the
+  farthest body, the first orbits and the mutual inclination of orbits that
+  share a primary (`js/lab3d/view/describe.js`, in English and Spanish). While a
+  guide step is asking for a typed measurement the orbit numbers are left out.
+  The mission page's transfer window can be opened as a table with a cursor
+  (Show the grid as a table): one row for each departure date, one column for
+  each flight time, a cell that says its date, flight time and total delta-v or
+  why it was refused, walked by the arrows, Page Up and Page Down, Home and End
+  (`js/mission/windowGrid.js`). The Spanish is unreviewed. No blind or
+  low-vision reader has used either.
+- Every page of the navigation inventory has an axe run in every theme and both
+  languages, and a test fails when a page is added to the inventory without one
+  (or without a walk or an outline); the accessibility shard is configured in
+  `tools/a11y-shard.json`, and the table "What is checked" in
+  `ACCESSIBILITY.md` is written from it.
 - Every series chart carries a description of what its curve does (Prompt 280):
   a trend, a step, a pattern that repeats, a dip or a rise, a scatter's
   correlation, and the highest and lowest values, with their uncertainties in

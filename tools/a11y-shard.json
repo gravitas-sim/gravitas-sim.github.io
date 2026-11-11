@@ -1,6 +1,14 @@
 {
   "format": "gravitas.a11y-shard/1",
   "about": "The accessibility shard, as configuration (Prompt 281): which specs and tests hold the site's accessibility, what each covers, and which of them `npm run a11y` runs. tools/a11y-shard.mjs reads this to (1) write the table 'What is checked, on every run' in ACCESSIBILITY.md, and (2) fail tests/a11yNet.test.js when a spec named a11y* or accessibility* is not listed, when `npm run a11y` and this file disagree, when a page of tools/navigation-inventory.json has no axe run, no walk or no outline record, or when a registered interaction surface names a test outside the shard. `covers` may carry docs:sync fact markers; the numbers inside them are not compared. `where` says which CI job runs it: the accessibility job (axe and the manual checks), the sharded browser suite (everything else under e2e/), or the Jest job.",
+  "axeExempt": {
+    "history-original": {
+      "rules": [
+        "region"
+      ],
+      "reason": "The first version, kept as it was: one file with no shell and no landmarks, which tools/page-outlines.json also exempts. Whether the page is kept at all is Prompt 165's and 166's decision (the surface-retirement gate), not a sweep's. Every other rule runs on it, in every theme and both languages."
+    }
+  },
   "specs": [
     {
       "file": "e2e/accessibility.spec.js",
@@ -54,11 +62,17 @@
   ],
   "tests": [
     {
-      "files": ["tests/motionInventory.test.js", "tests/designRatchet.test.js"],
+      "files": [
+        "tests/motionInventory.test.js",
+        "tests/designRatchet.test.js"
+      ],
       "covers": "Every keyframes and every scheduler in the sources is in the motion inventory with what it does under reduced motion; the contrast of every token pair in each of the four themes, which may only rise"
     },
     {
-      "files": ["tests/a11yNet.test.js", "tests/interactionContract.test.js"],
+      "files": [
+        "tests/a11yNet.test.js",
+        "tests/interactionContract.test.js"
+      ],
       "covers": "The net: every page of the navigation inventory has an axe run in every theme and both languages, a walk and an outline; every spec named a11y* or accessibility* is in this shard; every registered interaction surface keeps its walks in a spec of the shard"
     },
     {

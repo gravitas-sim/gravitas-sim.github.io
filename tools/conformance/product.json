@@ -89,7 +89,7 @@
     {
       "id": "axe",
       "name": "axe-core automated rules",
-      "detail": "e2e/accessibility.spec.js runs axe-core with the wcag2a, wcag2aa, wcag21a, wcag21aa, wcag22aa and best-practice rule sets and no rules disabled, over every surface the spec lists, in both languages, and in all four themes on the pages that carry the shared shell. axe judges a subset of most criteria, reports some checks as incomplete (contrast over images, canvas and gradients), and cannot judge meaning, order or operation.",
+      "detail": "e2e/accessibility.spec.js runs axe-core with the wcag2a, wcag2aa, wcag21a, wcag21aa, wcag22aa and best-practice rule sets and no rules disabled (one exception: `region`, on the preserved original-version page, kept as it was), over every page of the navigation inventory and the application's own surfaces and states, in both languages and in all four themes (Prompt 281: a page added to the inventory with no named surface gets a run of its own, and tests/a11yNet.test.js fails if one has none). axe judges a subset of most criteria, reports some checks as incomplete (contrast over images, canvas and gradients), and cannot judge meaning, order or operation.",
       "canJudgeWhole": false
     },
     {
@@ -107,7 +107,7 @@
     {
       "id": "walk",
       "name": "The keyboard and single-pointer walks",
-      "detail": "e2e/a11ySweep.spec.js (Prompt 278) presses real keys and makes single presses with no drag in a browser. It walks every page of the walk inventory (tools/interaction-contract.json, one row for each surface of the navigation inventory but the printed manual) in English and in Spanish: Tab from the top until focus comes round, then the page's primary control by its key. It also walks each control that replaces a drag. A walk judges the state a page opens in and the states it opens itself; it does not judge whether an order is meaningful, whether a focus indicator can be seen, or anything a screen reader says.",
+      "detail": "e2e/a11ySweep.spec.js (Prompt 278) and e2e/a11y3dMission.spec.js (Prompt 281, the 3-D lab's Describe the view and the mission page's transfer window as a table: Tab and arrows, in both languages, with what is said read back) press real keys and makes single presses with no drag in a browser. It walks every page of the walk inventory (tools/interaction-contract.json, one row for each surface of the navigation inventory but the printed manual) in English and in Spanish: Tab from the top until focus comes round, then the page's primary control by its key. It also walks each control that replaces a drag. A walk judges the state a page opens in and the states it opens itself; it does not judge whether an order is meaningful, whether a focus indicator can be seen, or anything a screen reader says.",
       "canJudgeWhole": false
     },
     {

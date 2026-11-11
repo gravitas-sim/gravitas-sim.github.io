@@ -99,6 +99,19 @@ describe('the shard is what ACCESSIBILITY.md and npm say it is', () => {
     expect(strip(doc.slice(a + 25, b))).toBe(strip(tableOf(inputs().config)));
   });
 
+  test('every rule switched off for a page is named, with its reason, in the document', () => {
+    const doc = read('ACCESSIBILITY.md').replace(/\s+/g, ' ');
+    const exempt = inputs().config.axeExempt;
+    expect(Object.keys(exempt)).toEqual(['history-original']);
+    for (const [id, x] of Object.entries(exempt)) {
+      expect(doc).toContain(id);
+      for (const rule of x.rules) expect(doc).toContain(rule);
+      expect(x.reason.length).toBeGreaterThan(40);
+    }
+    // And the spec switches off nothing else.
+    expect(read('e2e/accessibility.spec.js')).toMatch(/const OFF = \{\};/);
+  });
+
   test('every test file the configuration names exists', () => {
     const { config } = inputs();
     for (const t of config.tests)

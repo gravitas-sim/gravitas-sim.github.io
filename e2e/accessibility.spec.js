@@ -36,7 +36,7 @@ import { readFileSync } from 'node:fs';
 import { Buffer } from 'node:buffer';
 import { INTRO_ASTRONOMY } from '../js/data/courses/intro-astronomy.js';
 import { courseLink } from '../js/course/links.js';
-import { uncoveredRoutes } from '../tools/a11y-shard.mjs';
+import { axeExempt, uncoveredRoutes } from '../tools/a11y-shard.mjs';
 import { itemOfEntry, savedPack } from '../js/library/collections.js';
 import '../js/library/collectionsDeps.js'; // binds what collections.js needs
 
@@ -98,7 +98,9 @@ const TAGS = [
 ];
 
 /**
- * Rules disabled: none.
+ * Rules disabled: none for any surface, with one recorded exception since
+ * Prompt 281: `region` on the preserved original-version page, kept as it was
+ * (tools/a11y-shard.json `axeExempt`, which names the reason).
  *
  * There were two candidates while this pass was in progress and neither
  * survived it - each turned out to be a real defect with a real fix, which is
@@ -696,10 +698,12 @@ const SURFACES = [
 const ROUTES = uncoveredRoutes().map(r => ({
   name: `page ${r.id}`,
   covers: r.id,
+  off: axeExempt()[r.id]?.rules,
   open: async ({ page }) => {
     await page.goto(r.path, { waitUntil: 'load' });
   },
-  expect: 'main',
+  // The original-version page keeps its own markup and has no <main>.
+  expect: 'body > *',
   standalone: true,
 }));
 
@@ -765,13 +769,15 @@ async function waitForStableStyles(page) {
     .catch(() => {});
 }
 
-async function analyze(page, context, exclude = []) {
+async function analyze(page, context, exclude = [], off = []) {
   await waitForStableStyles(page);
   let builder = new AxeBuilder({ page }).withTags(TAGS);
   for (const selector of exclude) builder = builder.exclude(selector);
   for (const [rule, on] of Object.entries(OFF)) {
     if (!on) builder = builder.disableRules(rule);
   }
+  // A page with a recorded exemption (tools/a11y-shard.json `axeExempt`).
+  for (const rule of off) builder = builder.disableRules(rule);
   const results = await builder.analyze();
   return results.violations.map(v => ({
     id: v.id,
@@ -865,7 +871,8 @@ for (const surface of [...SURFACES, ...ROUTES]) {
           const violations = await analyze(
             page,
             `${surface.name} / ${locale.label} / ${theme.label}`,
-            surface.exclude
+            surface.exclude,
+            surface.off
           );
 
           expect(
