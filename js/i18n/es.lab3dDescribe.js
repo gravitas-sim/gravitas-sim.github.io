@@ -22,7 +22,8 @@ export const ES_LAB3DDESCRIBE = {
     'La cámara mira desde {above}° {side} el plano de referencia, a {around}° alrededor de él, y la vista es {size} veces más alta que el sistema.',
   'd.above': 'sobre',
   'd.below': 'bajo',
-  'd.reach': 'El cuerpo más alejado del centro de masa es {name}, a {distance}.',
+  'd.reach':
+    'El cuerpo más alejado del centro de masa es {name}, a {distance}.',
   'd.orbit': '{name} alrededor de {primary}: a = {a}, e = {e}, i = {i}°.',
   'd.orbit.unbound':
     '{name} alrededor de {primary}: no ligado, e = {e}, i = {i}°.',

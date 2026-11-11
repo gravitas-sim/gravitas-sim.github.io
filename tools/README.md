@@ -6,6 +6,7 @@ current, and the orchestrator checks it.
 
 | Tool | What it is for | Run by |
 | --- | --- | --- |
+| `a11y-shard.mjs` | The accessibility shard: its configuration, its coverage and its table |  |
 | `acceptance-bindings.mjs` | What it takes for a test to accept a central experiment |  |
 | `add-step-ids.mjs` | One-time: give every lesson step a stable id |  |
 | `agn-followup-validate.mjs` | The follow-up validation legs of Prompt 252 (252b): A7b, B3b, C1b, C1c, D2b (AGN.md "Follow-up (252b)") | `npm run agn:followup` |
