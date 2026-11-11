@@ -33,7 +33,7 @@ the release rather than in the tag.
   much room the browser reports before it is applied (Import stays off when
   there is too little). Larger datasets' offline parts are fetched smallest
   first and a part that would not fit is not started. The first-visit precache
-  grew by 4.3 KB. The share sheet and file picker have been tried only in
+  grew by 4.2 KB. The share sheet and file picker have been tried only in
   emulation: no real device.
 
 - Spanish shows the decimal comma and the narrow-space thousands separator

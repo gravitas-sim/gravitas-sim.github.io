@@ -692,14 +692,14 @@ head of this prompt, level 6 gzip):
 
 | Tier | Files | Gzip | 147's ceiling | Ceiling now |
 | --- | ---: | ---: | ---: | ---: |
-| First visit (core and optional) | 952 | 5,391,322 B | 5,175,296 B | 5,391,322 B |
+| First visit (core and optional) | 952 | 5,391,226 B | 5,175,296 B | 5,391,226 B |
 | Idle | 211 | 1,696,067 B | 1,517,568 B | 1,696,781 B |
 
 Both ceilings have been raised since by later prompts, each by its measured
 overrun and a register row; the first visit is 4.2% and the idle tier 11.8% over
 what 147 committed. This prompt moved 1.1 KB from the idle tier into the first
 visit (`js/library/progress.js`) and made the offline note a little longer on
-the pages the first visit holds, 4,325 B in all (D-R10-284-02). The install is
+the pages the first visit holds, 4,229 B in all (D-R10-284-02). The install is
 still the shell, the modules the application and its labs need, and the pages
 that are worth having on a first visit: about 5.4 MB, 17 s at 3 Mbps.
 

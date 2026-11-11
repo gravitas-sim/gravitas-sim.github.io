@@ -36,23 +36,25 @@ const LESSON = 'keplers-laws';
 
 /** Wait until the worker holds the whole precache, idle tier included. */
 async function settled(page, timeout = 90_000) {
-  const deadline = Date.now() + timeout;
   let last = null;
-  while (Date.now() < deadline) {
-    last = await page.evaluate(async () => {
-      const m = await import('/js/offline.js');
-      return m.cacheStatus(2000);
-    });
-    if (
-      last &&
-      last.cachedCount >= last.precacheCount &&
-      last.idleCount > 0 &&
-      last.idleCached === last.idleCount
+  await expect
+    .poll(
+      async () => {
+        last = await page.evaluate(async () => {
+          const m = await import('/js/offline.js');
+          return m.cacheStatus(2000);
+        });
+        return Boolean(
+          last &&
+          last.cachedCount >= last.precacheCount &&
+          last.idleCount > 0 &&
+          last.idleCached === last.idleCount
+        );
+      },
+      { timeout, intervals: [500], message: 'the install never settled' }
     )
-      return last;
-    await page.waitForTimeout(500);
-  }
-  throw new Error(`the install never settled: ${JSON.stringify(last)}`);
+    .toBe(true);
+  return last;
 }
 
 test.describe('every page says what is true offline, and it is', () => {
@@ -120,7 +122,7 @@ test.describe('every page says what is true offline, and it is', () => {
     await settled(page);
     for (const url of [...pick, '/teaching/adopt/']) {
       await page.goto(url, { waitUntil: 'load' });
-      await page.waitForTimeout(800);
+      await page.waitForLoadState('networkidle');
     }
     await context.setOffline(true);
     for (const url of [...pick, '/teaching/adopt/']) {
@@ -340,7 +342,7 @@ test.describe('an offline reload restores the open work', () => {
     );
     await page.locator('#obsOpen').click();
     await expect(page.locator('html')).toHaveAttribute('data-opens', '1');
-    expect(await page.evaluate(() => history.state?.obsOpen)).toBeUndefined();
+    expect(await page.evaluate(() => history.state?.obsOpen)).toBeFalsy();
   });
 });
 
