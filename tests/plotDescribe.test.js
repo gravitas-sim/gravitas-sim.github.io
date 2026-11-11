@@ -398,3 +398,56 @@ describe('a held prediction is never described', () => {
     }
   });
 });
+
+// A series on a tiny or huge scale must describe, not throw. The digit count
+// follows the uncertainty (toFixed throws past 100), so a scale of 1e-200 once
+// raised a RangeError on a phone-sized chart (authorWalk, how-far-and-how-sure).
+describe('a description on an extreme scale', () => {
+  const scales = [1e-300, 1e-200, 1e-100, 1e-30, 1, 1e30, 1e200];
+  const kinds = {
+    line: i => 2 * i + 1,
+    wave: i => Math.sin(i / 2),
+    step: i => (i < 15 ? 0 : 1),
+  };
+
+  test('never throws, in either language, and keeps its numbers finite text', () => {
+    for (const sx of scales)
+      for (const sy of scales)
+        for (const [name, f] of Object.entries(kinds))
+          for (const lang of ['en', 'es']) {
+            const x = Array.from({ length: 30 }, (_, i) => sx * (i + 1));
+            const y = x.map((_, i) => sy * f(i));
+            const out = describeChart([{ x, y, mode: 'points' }], { lang });
+            expect(out.text).not.toMatch(/NaN|Infinity|undefined/);
+            expect(name.length).toBeGreaterThan(0);
+          }
+  });
+
+  test('an uncertainty needing over 20 decimals is written in scientific notation', () => {
+    const facts = {
+      n: 5,
+      x0: 0,
+      x1: 4,
+      shape: 'trend',
+      slope: 3e-200,
+      slopeSigma: 2e-205,
+      r2: 0.99,
+    };
+    const text = sentence(facts, { lang: 'en' });
+    expect(text).toMatch(/±/);
+    expect(text).toMatch(/10[⁻-]/);
+  });
+
+  test('a non-finite uncertainty is written as the bare number', () => {
+    const f = {
+      n: 5,
+      x0: 0,
+      x1: 4,
+      shape: 'trend',
+      slope: 2,
+      slopeSigma: Infinity,
+    };
+    expect(() => sentence(f, { lang: 'en' })).not.toThrow();
+    expect(sentence(f, { lang: 'en' })).not.toMatch(/NaN|Infinity/);
+  });
+});
