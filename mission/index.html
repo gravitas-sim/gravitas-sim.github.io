@@ -25,6 +25,17 @@
       .mn-wrap section {
         margin: var(--space-6) 0;
       }
+      .mn-grid td[tabindex] {
+        cursor: pointer;
+        text-align: right;
+      }
+      .mn-grid td[tabindex]:focus-visible {
+        outline: var(--focus-ring);
+        outline-offset: -2px;
+      }
+      .mn-grid td.is-refused {
+        opacity: 0.8;
+      }
       .mn-window {
         display: grid;
         gap: var(--space-2);
@@ -261,6 +272,8 @@ try {
           <div class="ui-legend" id="mn-window-legend"></div>
         </div>
         <div id="mn-window-out" class="ui-table-wrap"></div>
+        <button id="mn-window-browse" type="button" class="ui-button" aria-expanded="false" aria-controls="mn-window-grid" data-i18n="mission.window.browse" disabled></button>
+        <div id="mn-window-grid" class="ui-table-wrap" hidden></div>
         <button id="mn-window-csv" type="button" class="ui-button" data-i18n="mission.window.csv" disabled></button>
         <button id="mn-window-export" type="button" class="ui-button" data-i18n="mission.export" disabled></button>
       </section>

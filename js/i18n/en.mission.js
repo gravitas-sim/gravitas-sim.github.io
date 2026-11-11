@@ -116,6 +116,13 @@ export const EN_MISSION = {
   'mission.window.tof1': 'Shortest flight (days)',
   'mission.window.tof2': 'Longest flight (days)',
   'mission.window.steps': 'Steps along each axis',
+  'mission.window.browse': 'Show the grid as a table',
+  'mission.window.gridCaption':
+    'Total delta-v by departure date (rows) and flight time (columns). Arrow keys move one cell, Page Up and Page Down ten departures, Home and End to the first and last flight time.',
+  'mission.window.gridCorner': 'Departure',
+  'mission.window.gridBest': 'Move the cursor to the cheapest cell',
+  'mission.window.cellOk': 'Departure {date}, flight {tof}: total {dv}.',
+  'mission.window.cellRefused': 'Departure {date}, flight {tof}: {why}.',
   'mission.window.csv': 'Save the grid as CSV',
   'mission.window.running': 'Working: {percent}%',
   'mission.window.ok': 'Finished: {n} cells in {s} s.',
