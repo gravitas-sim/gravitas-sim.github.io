@@ -294,6 +294,9 @@ export const ES_OBSERVATORY = {
   'obs.table.missing': 'falta',
   'obs.table.prev': 'Filas anteriores',
   'obs.table.next': 'Filas siguientes',
+  'obs.table.run': 'Seleccionar un tramo de filas',
+  'obs.table.run.hint':
+    'Elige la primera fila del tramo, pulsa este botón y después elige la última fila.',
   'obs.export.json': 'Guardar como JSON (todo, con tus cambios)',
   'obs.export.csv': 'Guardar las filas como CSV',
   'specObs.title':

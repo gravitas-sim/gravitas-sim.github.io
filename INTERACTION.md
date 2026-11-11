@@ -4,13 +4,16 @@ The rules every widget obeys, and the tests that hold it to them (Prompt 155,
 Roadmap III). The rules are here; the same rules as data are in
 [`tools/interaction-contract.json`](tools/interaction-contract.json), which
 `tests/interactionContract.test.js` reads against the source. The walks of the
-surfaces are in `e2e/interactionContract.spec.js` and the specs it names.
+surfaces are in `e2e/interactionContract.spec.js`, `e2e/a11ySweep.spec.js`
+(Prompt 278: every surface of the navigation inventory, and every control that
+replaces a drag) and the specs they name.
 [ACCESSIBILITY.md](ACCESSIBILITY.md) says what was found and fixed;
 [DESIGN_SYSTEM.md](DESIGN_SYSTEM.md) holds the touch-measurement pattern.
 
 ```bash
 npx jest tests/interactionContract.test.js
 GRAVITAS_E2E_PORT=4391 npx playwright test e2e/interactionContract.spec.js
+GRAVITAS_E2E_PORT=4391 npx playwright test e2e/a11ySweep.spec.js --project=chromium --workers=2
 ```
 
 ## 1. One keyboard model
@@ -47,14 +50,18 @@ a module that listens for pointer movement must be registered.
   coarse step, and the 3-D camera keeps Shift to pan. A rename of the camera's
   pan (to Ctrl) is proposed, not made: it changes a binding people may have been
   taught.
-- **K2, A.** One press arms keyboard placement and pans the view left. Measured
-  on 2026-10-19 with a type armed: the view moved 40 px and a placement began.
-  The rename that removes it, visible and on its own train PR, is that A no
-  longer pans while a type is armed (the arrows always pan). Status: open in
-  this PR.
+- **K2, A.** One press armed keyboard placement and panned the view left
+  (measured on 2026-10-19 with a type armed: the view moved 40 px and a
+  placement began). Resolved by Prompt 278: with a type armed, A arms the
+  placement and no longer pans; with nothing armed it pans as W, S and D do, and
+  the arrows always pan (`e2e/a11ySweep.spec.js`, "A arms a placement and does
+  not also pan").
 - **K3, - and =.** Simulation speed in the sandbox, zoom in the 3-D lab. The two
-  never share a page. The contract gives + and - to zoom, so the sandbox, which
-  has no keyboard zoom, has a gap (`interaction.keyboard.sandbox-zoom`).
+  never share a page. The contract gives + and - to zoom; the sandbox keeps them
+  for speed, and its zoom is the view pad's two buttons, reached with Tab and
+  pressed with Enter (`interaction.keyboard.sandbox-zoom`, built by Prompt 278).
+  Moving speed to another pair, so that + and - could zoom in the sandbox too,
+  is still a decision for Carl.
 
 ### The binding test
 
@@ -74,18 +81,28 @@ launch equals a recorded drag in the sandbox
 | Drag | Surface | Alternative | Status |
 | --- | --- | --- | --- |
 | `sandbox.throw` | `sandbox.placement` | Precise placement form; keyboard aim | met |
-| `sandbox.pan` | `sandbox.view` | Arrow keys and W, A, S, D | gap: `interaction.single-pointer.sandbox-pan` |
-| `observatory.brush` | `observatory.selection` | Click a table row; Shift-click a run; click the plot for the nearest row | met for a pointer; a run without a modifier is `interaction.single-pointer.observatory-run` |
+| `sandbox.pan` | `sandbox.view` | The view pad in Tools (four buttons move the view, two zoom it); arrow keys and W, A, S, D | met (`interaction.single-pointer.sandbox-pan`, `interaction.keyboard.sandbox-zoom`) |
+| `observatory.brush` | `observatory.selection` | Click a table row; click the plot for the nearest row; **Select a run of rows**, then the last row, with no key held | met (`interaction.single-pointer.observatory-run`) |
 | `observatory.image-box` | `observatory.selection` | Click a pixel; the table lists every pixel | met |
 | `lesson.picker` | lessons | A click sets the value; the arrows step it | met |
-| `lab3d.orbit` | `lab3d.camera` | The View and Projection selects; arrows, Shift pans, + and - zoom | gap: `interaction.single-pointer.lab3d-orbit` |
-| `observer.handle` | the sandbox canvas | none found | gap: `interaction.single-pointer.observer-handle` |
-| `window.move` | pinned inspector cards, the 3-D view window | none | gap: `interaction.single-pointer.window-move` |
+| `lab3d.orbit` | `lab3d.camera` | The view pad under the view (arrows that turn or move, two that zoom); the Look and Projection selects; arrows, Shift pans, + and - zoom | met (`interaction.single-pointer.lab3d-orbit`) |
+| `observer.handle` | `sandbox.observer` | The Position angle slider in every observing panel | met (`interaction.single-pointer.observer-handle`) |
+| `window.move` | `sandbox.windows` | The Move button in the window's header (press it, then press where the corner goes; or the arrow keys); the spacetime view's Size button | met (`interaction.single-pointer.window-move`) |
+| `spacetime.orbit` | `sandbox.spacetime` | The pad under the spacetime view: turn, tilt, move and zoom | met |
 
-A gap is a pending acceptance check (`tools/pending-acceptance.json`), run and
-reported on every run and not a failure until Prompt 278 activates it and
-builds the control. Its probe in `tests/interactionContract.test.js` is a
-placeholder for the design that prompt chooses.
+No drag is a gap. The six that Prompt 155 recorded as pending acceptance checks
+(`tools/pending-acceptance.json`) were built and activated by Prompt 278: each
+is an ordinary test now, in `tests/interactionContract.test.js` (the control
+exists and is wired) and in `e2e/a11ySweep.spec.js` (what it does, by keyboard
+and by single presses). `spacetime.orbit` was not on Prompt 155's list: the
+listener is the vendored OrbitControls, which the scan of pointer listeners
+does not read, so the contract names such sites by hand
+(`dragSites.vendored`).
+
+A window moved without a drag is `js/windowMove.js`: the Move button arms a
+placement, the next press lands on a veil over the page (so it cannot also
+place a body or press a control) and puts the window's top left corner there;
+the arrow keys move it by the three nudge sizes; Escape disarms.
 
 ### Touch measurement
 
@@ -151,15 +168,49 @@ as pending acceptance; Prompt 278 activates them.
 | Surface | Keyboard walk | Single-pointer walk | Announcement |
 | --- | --- | --- | --- |
 | `sandbox.placement` | `e2e/bodyPlacement.spec.js` | `e2e/interactionContract.spec.js` | `e2e/bodyPlacement.spec.js` |
-| `sandbox.view` | `e2e/canvasInput.spec.js` | gap (`sandbox.pan`) | not applicable: a picture moves, no value changes |
+| `sandbox.view` | `e2e/canvasInput.spec.js`; the view pad in `e2e/a11ySweep.spec.js` | `e2e/a11ySweep.spec.js` (the view pad) | `e2e/a11ySweep.spec.js` (the zoom, once the pressing stops; a pan moves a picture and says nothing) |
 | `plot.cursor` | `e2e/plotChart.spec.js` | `e2e/interactionContract.spec.js` | `e2e/interactionContract.spec.js` |
-| `observatory.selection` | `e2e/observatory.spec.js` | `e2e/interactionContract.spec.js` | `e2e/observatory.spec.js` |
+| `observatory.selection` | `e2e/observatory.spec.js` | `e2e/interactionContract.spec.js`; the run in `e2e/a11ySweep.spec.js` | `e2e/observatory.spec.js` |
 | `observatory.marks` | `e2e/imageMarks.spec.js` | `e2e/imageMarks.spec.js` (place, then nudge with the pad; no drag) | `e2e/imageMarks.spec.js` (one message per commit) |
-| `lab3d.camera` | `e2e/lab3dView.spec.js` | `e2e/interactionContract.spec.js` (presets); orbit is a gap | not applicable: a picture moves, the tables do not change |
+| `lab3d.camera` | `e2e/lab3dView.spec.js` | `e2e/interactionContract.spec.js` (presets); `e2e/a11ySweep.spec.js` (the view pad) | `e2e/a11ySweep.spec.js` (where the view is from and how much it holds, once the pressing stops) |
+| `sandbox.windows` | `e2e/a11ySweep.spec.js` | `e2e/a11ySweep.spec.js` (the spacetime view, the inspector and a pinned card) | `e2e/a11ySweep.spec.js` |
+| `sandbox.observer` | `e2e/a11ySweep.spec.js` | `e2e/a11ySweep.spec.js` | not applicable: a native slider says its own value |
+| `sandbox.spacetime` | `e2e/a11ySweep.spec.js` | `e2e/a11ySweep.spec.js` | not applicable: a picture of a grid moves |
 
-What the registered surfaces do not yet do is listed in the pending checks:
-`interaction.keyboard.sandbox-zoom`, `interaction.single-pointer.sandbox-pan`,
-`interaction.single-pointer.lab3d-orbit`,
-`interaction.single-pointer.observer-handle`,
-`interaction.single-pointer.window-move` and
-`interaction.single-pointer.observatory-run`.
+### The walk inventory
+
+`tools/interaction-contract.json` holds, under `inventory`, one row for every
+surface of the navigation inventory (`tools/navigation-inventory.json`): its
+page, its primary task, the control that task begins with and the key that
+operates it. The checker refuses a surface with no row and no reason; the one
+reason today is the printed manual, a PDF with no page of ours to walk.
+
+`e2e/a11ySweep.spec.js` walks every row in English and in Spanish with real key
+presses (`e2e/walk.js`):
+
+1. Tab from the top of the page until focus comes round again. Focus is never
+   trapped; every stop has an accessible name; every stop's box is inside the
+   viewport while it has focus (a box, because `toBeVisible()` passes below the
+   fold); and every control a pointer can press is among the stops.
+2. Tab to the row's control and press its key. Something a reader can notice
+   must change: the address, a dialog or a status, the control's own state, or
+   the page's text.
+
+`inventory.states` holds the same walk for a state a page does not open in:
+the sandbox with Tools open, with State open and with the light curve panel
+out (its observer sliders among the stops), each reached from the keyboard
+first; Home, Home in its first-week mode and the introduction of a first visit
+(Prompt 277's surfaces); and the teaching kit's collection form, after two
+Library entries have been saved from the keyboard.
+
+What a walk does not judge: whether the order is the meaningful one, whether a
+focus indicator can be seen, anything a screen reader says, and states a page
+reaches only after other choices. Prompt 279 takes structure, zoom and
+contrast; Prompt 281 the 3-D and mission labs' semantic scenes.
+
+Six rows say `spanish: false`: the instructor portal, the evaluation kit, the
+model, validation and glossary pages and the original-version page stay in
+English when Spanish is the stored choice. The first five carry Spanish text
+and a language switch that stores the choice; their pages do not read it when
+they open. That is recorded, not repaired, here: it is Prompt 282's
+(Localization II).

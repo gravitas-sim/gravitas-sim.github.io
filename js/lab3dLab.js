@@ -59,6 +59,7 @@ import {
 import { formatNumber } from './format.js';
 import { chooseInterval } from './lab3d/view/tick.js';
 import { createScene, PALETTE } from './lab3d/view/scene.js';
+import { cameraControls } from './lab3d/view/cameraPad.js';
 
 // The banner of a preview as a student (Prompt 175).
 if (globalThis.location?.search.includes('preview=student'))
@@ -1391,35 +1392,8 @@ function setupScene() {
   size();
 }
 
-function keyboard(e) {
-  if (!state.scene) return;
-  const step = e.shiftKey ? 0.05 : 0.08;
-  const keys = {
-    ArrowLeft: () =>
-      e.shiftKey ? state.scene.pan(-step, 0) : state.scene.orbit(-0.08, 0),
-    ArrowRight: () =>
-      e.shiftKey ? state.scene.pan(step, 0) : state.scene.orbit(0.08, 0),
-    ArrowUp: () =>
-      e.shiftKey ? state.scene.pan(0, step) : state.scene.orbit(0, 0.08),
-    ArrowDown: () =>
-      e.shiftKey ? state.scene.pan(0, -step) : state.scene.orbit(0, -0.08),
-    '+': () => state.scene.zoom(0.85),
-    '=': () => state.scene.zoom(0.85),
-    '-': () => state.scene.zoom(1 / 0.85),
-    ' ': () => play(!state.playing),
-    0: () => resetView(),
-  };
-  PRESETS.forEach((p, i) => {
-    keys[String(i + 1)] = () => {
-      $('l3-preset').value = p;
-      resetView();
-    };
-  });
-  const fn = keys[e.key];
-  if (!fn) return;
-  e.preventDefault();
-  fn();
-}
+// The camera's keys, its view pad and what is said of it: ./lab3d/view/cameraPad.js.
+let labelPad = () => {};
 
 function languageSwitch() {
   const box = $('langSwitch');
@@ -1441,6 +1415,7 @@ function retranslate() {
   translatePage();
   languageSwitch();
   fillStaticSelects();
+  labelPad();
   if (state.system) {
     const keep = [
       $('l3-frame').value,
@@ -1602,7 +1577,21 @@ async function init() {
     state.scene?.setReduced?.(reduced())
   );
   $('l3-refresh').addEventListener('click', () => updateTables(true));
-  $('l3-canvas').addEventListener('keydown', keyboard);
+  labelPad = cameraControls({
+    scene: () => state.scene,
+    reach: () => state.reach,
+    t,
+    also: () => ({
+      ' ': () => play(!state.playing),
+      0: resetView,
+      ...Object.fromEntries(
+        PRESETS.map((p, i) => [
+          i + 1,
+          () => (($('l3-preset').value = p), resetView()),
+        ])
+      ),
+    }),
+  });
   $('l3-guides').addEventListener('click', () => openGuides());
   $('l3-evidence').addEventListener('click', () => openEvidence());
   $('l3-orbit').addEventListener('click', () => openOrbit());

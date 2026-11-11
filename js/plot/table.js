@@ -38,6 +38,25 @@ export function createTable(table, hooks) {
   let state = null;
   let page = 0;
   let anchor = -1;
+  // A run without a held key or a drag (Prompt 278): once armed, a click or a
+  // tap on a row selects from the anchor to that row, as Shift-click does.
+  let run = false;
+  // Its button is found by the table's id (`data-run-for`), so a page gets the
+  // run by adding the button and nothing else.
+  const runButton = table.ownerDocument.querySelector(
+    `[data-run-for="${table.id}"]`
+  );
+  const setRun = on => {
+    run = Boolean(on);
+    table.toggleAttribute('data-select-run', run);
+    runButton?.setAttribute('aria-pressed', String(run));
+  };
+  runButton?.addEventListener('click', () => {
+    // The run starts at the row last chosen, or the row in focus.
+    if (!run && anchor < 0 && state?.selection.focus >= 0)
+      anchor = state.selection.focus;
+    setRun(!run);
+  });
 
   const L = hooks.labels;
 
@@ -56,10 +75,14 @@ export function createTable(table, hooks) {
       e.preventDefault();
       selection.toggle(f, 'table');
       anchor = f;
+      // The page tells the other views; this one marks its own rows. Without
+      // it the count said "1 selected" and no row did (Prompt 278's walk).
+      refresh();
       hooks.announce(hooks.describe(f));
       return;
     } else if (e.key === 'Escape') {
       selection.clear('table');
+      refresh();
       return;
     } else return;
     e.preventDefault();
@@ -78,10 +101,14 @@ export function createTable(table, hooks) {
     if (!tr || !state) return;
     const i = Number(tr.dataset.row);
     const { selection } = state;
-    if (e.shiftKey && anchor >= 0) selection.range(anchor, i, 'table');
+    const extend = (e.shiftKey || run) && anchor >= 0;
+    if (extend) selection.range(anchor, i, 'table');
     else if (e.ctrlKey || e.metaKey) selection.toggle(i, 'table');
     else selection.set([i], 'table');
-    if (!e.shiftKey) anchor = i;
+    // The anchor moves as it always did: on any press without Shift that is
+    // not the end of a run.
+    if (!e.shiftKey && !extend) anchor = i;
+    if (extend && run) setRun(false);
     selection.moveFocus(i, 'table');
     showRow(i, { focus: true });
   });

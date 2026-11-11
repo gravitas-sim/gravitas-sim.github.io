@@ -14,6 +14,24 @@ export const ES_LAB3DLAB = {
   'l3.docs': 'Cómo funciona (LAB3D.md)',
   'l3.keys':
     'Con la vista enfocada: las flechas giran, Mayús y una flecha desplazan, + y − acercan y alejan, del 1 al 5 eligen una vista, 0 encuadra todo y Espacio reproduce o pausa.',
+  'l3.pad': 'Girar, mover y ampliar la vista sin arrastrar',
+  'l3.pad.mode': 'Flechas',
+  'l3.pad.turn': 'giran la vista',
+  'l3.pad.move': 'mueven la vista',
+  'l3.pad.turn.left': 'Girar la vista a la izquierda',
+  'l3.pad.turn.right': 'Girar la vista a la derecha',
+  'l3.pad.turn.up': 'Girar la vista hacia arriba',
+  'l3.pad.turn.down': 'Girar la vista hacia abajo',
+  'l3.pad.move.left': 'Mover la vista a la izquierda',
+  'l3.pad.move.right': 'Mover la vista a la derecha',
+  'l3.pad.move.up': 'Mover la vista hacia arriba',
+  'l3.pad.move.down': 'Mover la vista hacia abajo',
+  'l3.pad.in': 'Acercar',
+  'l3.pad.out': 'Alejar',
+  'l3.cam.above':
+    'Vista desde {above}° por encima del plano de referencia, a {around}° alrededor. La vista es {size} veces tan alta como el sistema.',
+  'l3.cam.below':
+    'Vista desde {above}° por debajo del plano de referencia, a {around}° alrededor. La vista es {size} veces tan alta como el sistema.',
 
   'l3.system': 'Sistema',
   'l3.system.choose': 'Abrir',
