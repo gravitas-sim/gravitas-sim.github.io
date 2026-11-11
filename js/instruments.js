@@ -24,6 +24,7 @@
 // =============================================================================
 
 import { AU_METERS } from './constants.js';
+import { grouped } from './format.js';
 
 /** The monospaced face the instruments label themselves in. */
 export const INSTRUMENT_MONO =
@@ -43,7 +44,7 @@ export function niceLength(target) {
 }
 
 /** Thousands separators, for a scale bar's label. */
-const commas = n => n.toLocaleString('en-US');
+const commas = n => grouped(n);
 
 /**
  * Choose the unit a length is best written in, and say how many of them.

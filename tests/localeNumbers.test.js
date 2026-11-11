@@ -14,6 +14,7 @@ import {
   decimal,
   fixed,
   formatNumber,
+  grouped,
   parseFormatted,
   plural,
   scientific,
@@ -44,9 +45,9 @@ describe('a page in Spanish', () => {
   test('a caller that names no locale writes the comma', () => {
     expect(formatNumber(0.914, { sig: 2 })).toBe('0,91');
     expect(decimal(12345.678, 7)).toBe(`12${NNBSP}345,68`);
-    expect(scientific(1.99e30)).toBe(`1,99 × 10³⁰`);
+    expect(scientific(1.99e30)).toBe(`1,99\u00a0×\u00a010³⁰`);
     expect(fixed(-0.914, 2)).toBe('−0,91');
-    expect(withUncertainty(1.2341, 0.0123)).toBe('1,234 ± 0,012');
+    expect(withUncertainty(1.2341, 0.0123)).toBe('1,234\u00a0±\u00a00,012');
   });
 
   test('four digits are not grouped, five are (the SI and the RAE)', () => {
@@ -72,6 +73,21 @@ describe('a page in Spanish', () => {
         12 - Math.max(0, Math.floor(Math.log10(Math.abs(v))))
       );
     }
+  });
+});
+
+describe('a count grouped the way the language groups it', () => {
+  test('English commas, Spanish narrow spaces from five digits', () => {
+    expect(grouped(1234567, 'en')).toBe('1,234,567');
+    expect(grouped(1234567, 'es')).toBe(`1${NNBSP}234${NNBSP}567`);
+    expect(grouped(1234, 'es')).toBe('1234');
+    expect(grouped(1234.5, 'es', 2)).toBe('1234,50');
+  });
+
+  test('with no locale it follows the page', () => {
+    expect(grouped(12345)).toBe('12,345');
+    setLang('es');
+    expect(grouped(12345)).toBe(`12${NNBSP}345`);
   });
 });
 

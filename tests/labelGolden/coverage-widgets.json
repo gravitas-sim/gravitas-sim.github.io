@@ -5,12 +5,12 @@
  "unreached": [
   "js/binaryWidgets.js:1106:52",
   "js/binaryWidgets.js:1106:79",
-  "js/gwWidgets.js:1913:67",
-  "js/gwWidgets.js:561:27",
-  "js/gwWidgets.js:964:25",
-  "js/gwWidgets.js:965:31",
-  "js/gwWidgets.js:968:29",
-  "js/gwWidgets.js:969:37",
+  "js/gwWidgets.js:1914:67",
+  "js/gwWidgets.js:562:27",
+  "js/gwWidgets.js:965:25",
+  "js/gwWidgets.js:966:31",
+  "js/gwWidgets.js:969:29",
+  "js/gwWidgets.js:970:37",
   "js/resonanceWidgets.js:1202:32",
   "js/resonanceWidgets.js:1203:32",
   "js/resonanceWidgets.js:419:29",
@@ -38,7 +38,7 @@
   "js/resonanceWidgets.js:915:34",
   "js/resonanceWidgets.js:916:41",
   "js/stellarEvolutionWidgets.js:112:39",
-  "js/stellarWidgets.js:162:29"
+  "js/stellarWidgets.js:161:29"
  ],
  "threw": [
   "atmosphere-balance",

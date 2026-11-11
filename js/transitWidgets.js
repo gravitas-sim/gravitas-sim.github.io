@@ -13,7 +13,7 @@
 // time: that is what the geometry does, not an animation of what it looks like.
 // =============================================================================
 
-import { fixed, withUnit } from './format.js';
+import { fixed, grouped, withUnit } from './format.js';
 import { token, surface } from './widgetCanvas.js';
 import { t } from './i18n/index.js';
 
@@ -170,7 +170,7 @@ function drawCurve(ctx, o) {
 }
 
 const pct = v => `${fixed(v * 100, 3)}%`;
-const ppm = v => `${Math.round(v * 1e6).toLocaleString()} ppm`;
+const ppm = v => `${grouped(Math.round(v * 1e6))} ppm`;
 
 // --- 1. Depth and size --------------------------------------------------------
 
@@ -832,7 +832,7 @@ const SPECTRUM = {
       ctx.lineTo(padL + pw, y);
       ctx.stroke();
       ctx.fillStyle = muted;
-      ctx.fillText(Math.round(d * 1e6).toLocaleString(), padL - 6, y);
+      ctx.fillText(grouped(Math.round(d * 1e6)), padL - 6, y);
     }
 
     // The flat, atmosphere-free level

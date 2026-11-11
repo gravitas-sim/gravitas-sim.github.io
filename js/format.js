@@ -207,6 +207,25 @@ export function fixed(value, decimals, locale) {
 }
 
 /**
+ * An integer, or a count, with its thousands grouped the way the reader's
+ * language groups them: `12,345` in English, `12 345` (a narrow no-break space)
+ * in Spanish, `1234` from four digits down. The replacement for
+ * `n.toLocaleString()` and `n.toLocaleString('en-US')`, whose English commas
+ * beside a Spanish decimal comma read as a different number.
+ * @param {number} value
+ * @param {string} [locale] - The page's language when omitted
+ * @param {number} [decimals] - Exactly this many, where the count is the point
+ * @returns {string}
+ */
+export function grouped(value, locale, decimals) {
+  const opts =
+    decimals === undefined
+      ? undefined
+      : { minimumFractionDigits: decimals, maximumFractionDigits: decimals };
+  return inLocale(Number(value).toLocaleString('en-US', opts), locale);
+}
+
+/**
  * A number rounded to significant figures, as a number: the value a field or a
  * starting bound should hold, where `decimal()` would return grouped text.
  * @param {number} value
