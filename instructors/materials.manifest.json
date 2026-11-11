@@ -24,7 +24,7 @@
     }
   },
   "sourceFiles": 306,
-  "sourceDigest": "ffd81584a2b4d70dc68cd6c49cd06dec8c19da48b414ced1651a9298e3746509",
+  "sourceDigest": "7dcdd21900d905997c075d26c6d53022b6760bcd1f281aad81124117e9107136",
   "sources": {
     "js/activities/activities.js": "39ac98cd99b8b0387c55e41d5d4530bad55a8da8758819ad056be73e7a716b01",
     "js/activities/activityBridge.js": "67a82aff98e0ed935d6b8b0f0f654c6ad4332ee929cb3604e896a7f790a6fdc1",
@@ -285,7 +285,7 @@
     "js/data/missionLabKey.js": "c7da9b26f5c9b6810dcbbe54f7f8efde97923a71111b69f93709a40dbf2e0091",
     "js/data/populationsAnswerKey.js": "65ed1c176cefa69dc10a59021d5309f691f235d6589f9d0f9c1ac717ec3023fe",
     "js/exoplanetGuideDocs.js": "1962b6ca3c76c9b22c58890c4c56828ba35fe6bde92075232b07e1501cdbc173",
-    "js/format.js": "3097674eb75de36c51d1031fa36b811e8aa0900918907b7822c0f05a52b10c5d",
+    "js/format.js": "75a49f71e02518166ff60c425ccc5360f698997e3c2b29474bad2c81e773faa4",
     "js/guideDocs.js": "42e7d3a67604184660e98fd6f72072371a58d911abcff70c806f63a3ee7c7f5e",
     "js/i18n/en.activities.js": "f20cf171d13a956aed5e7f15319f7ef93a918ccbc803fd441e5b08394488d5d5",
     "js/i18n/en.exoplanet.js": "fece6ff72d20a8174c8968afba74f31745f54adb57410d53cd67fb751497b5c0",
