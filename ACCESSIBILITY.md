@@ -154,8 +154,10 @@ when its results file cannot be read, and the teaching notes export. They are
 place, not announced. The offline note is one block the shell stamps into every
 page: when the connection drops it is inserted once into a `role="status"`
 region (so a screen reader hears it once), it lists the pages the service worker
-precaches (read from `sw-manifest.js`, not hand-written), says other pages work
-only if opened before, and goes when the connection returns. Its Dismiss button
+precaches (read from `sw-manifest.js`, not hand-written, with the idle-tier
+pages named separately as arriving once the first visit has installed), says any
+other page needs a connection and offline takes the reader to the application,
+and goes when the connection returns. Its Dismiss button
 and Escape close it. `e2e/offlineStates.spec.js` and `e2e/emptyStates.spec.js`
 induce each state; `e2e/accessibility.spec.js` covers the touched pages.
 

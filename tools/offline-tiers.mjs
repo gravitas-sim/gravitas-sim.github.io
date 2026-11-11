@@ -37,12 +37,22 @@ export function tierReader(root = ROOT) {
   };
 }
 
-/** @returns {'first visit'|'after it settles'|'one online visit'} */
+/**
+ * What a page can promise offline, from the tour's row for it.
+ * - first visit: the page and everything it fetched are in the install;
+ * - after it settles: the page or a file it fetches is in the idle tier;
+ * - after one online visit: the page is held, but a file it fetched is in no
+ *   tier, which the worker keeps once it has been fetched;
+ * - needs a connection: the page itself is in no tier. The worker never
+ *   stores a document it was not given (sw.js: a navigation is answered from
+ *   the precache or the network, so that no build's shell mixes with another's),
+ *   so offline it sends the reader to the application.
+ * @returns {'first visit'|'after it settles'|'after one online visit'|'needs a connection'}
+ */
 export function promiseOf(row) {
-  // A page, or anything it fetches, that no tier holds is kept by the worker
-  // only once it has been fetched: one online visit.
-  if (row.html === 'runtime' || row.html === 'never') return 'one online visit';
-  if (row.outside.some(o => o.tier !== 'idle')) return 'one online visit';
+  if (row.html === 'runtime' || row.html === 'never')
+    return 'needs a connection';
+  if (row.outside.some(o => o.tier !== 'idle')) return 'after one online visit';
   if (row.html === 'idle' || row.outside.length) return 'after it settles';
   return 'first visit';
 }

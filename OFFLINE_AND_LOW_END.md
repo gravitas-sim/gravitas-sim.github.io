@@ -132,7 +132,8 @@ class is *protected*, not time before the application is usable.
 **Out**: the user manual PDF and the notebooks (downloads, not the shell); the
 document pages other than the application itself, the Observatory, the
 catalog, the course home and the two labs (`model/`, `instructors/`,
-`validation/` and the rest are runtime-cached); the physics validation suite
+`validation/` and the rest are in no tier, and a document is never stored when
+visited: offline the reader is sent to the application, Prompt 284); the physics validation suite
 the `/validation/` page runs on demand; and `social-card.png` (only ever
 fetched by a link unfurler).
 
@@ -159,9 +160,9 @@ Spanish, not from when it opens a lesson.
 
 | Request | Strategy | Why |
 | --- | --- | --- |
-| Navigation | Network first, cached shell as fallback | A reload on a working network must get the current build; on a dead one it must still get the application |
+| Navigation | The precache for the application's route and the pages in it, otherwise the network; offline, a redirect to the application | A document the worker was not given is never stored, so no build's shell mixes with another's; offline a reader reaches the application, not an error page (and not its shell at another page's address, which loaded nothing: Prompt 284) |
 | Precached asset | Cache first | Versioned by the cache name, so a hit is known-current |
-| Anything else | Stale-while-revalidate | Spanish shadows, document pages, anything added later |
+| Anything else | Stale-while-revalidate | Spanish shadows, the data a page fetches, anything added later (a document page is a navigation, above) |
 
 Only same-origin GETs. No opaque responses, no range requests.
 
@@ -650,10 +651,10 @@ dark-matter modules.
 What a first offline visit needs is therefore the shell, the stylesheets, the
 fonts, the module graph of the page being used and the data that page opens;
 nothing the tours fetched fell outside the precache. The document pages other
-than the application (the Studio, the Composer, the course page, and the rest)
-not in the list (the Studio, the Composer, the course builder, the model page and
-others) are runtime-cached, so a first offline visit to the Studio or the
-Composer that was never opened online fails even though its modules are core.
+than the application not in the list are not stored when visited (see
+"Offline at scale" below: this paragraph said they were runtime-cached, and
+the worker never did that for a document). A first offline visit to the Studio
+or the Composer worked only because they became optional entries.
 
 **Decision: no change to the precache in this pass.** The tiers stay as they
 are (core, optional, locale-warmed, never) and are the ones documented above.
@@ -700,9 +701,8 @@ from the record.
 | --- | --- | --- |
 | From the first visit | `/catalog/`, `/course/`, `/`, `/observatory/`, `/studio/course/`, `/studio/`, `/studio/lesson/` | The page and every file the tour saw it fetch are in the first-visit install: it opens with no network as soon as the install has finished. |
 | After the first visit settles | `/3d/`, `/library/`, `/mission/lab/`, `/my-work/`, `/sky/` | The page, or a file it fetches, is in the idle tier, which arrives after the install, on idle, and not on a save-data connection. The offline note says so. |
-| After one online visit, with files no tier holds | `/compute/`, `/figure/`, `/instructors/`, `/instructors/submissions/`, `/lab3d/`, `/mission/`, `/validation/` | The worker keeps what the page fetched once it has been fetched; a part opened later must have been opened. |
-| After one online visit | 5 pages: `/evaluation/`, `/experiments/`, `/glossary/`, `/model/`, `/studio/course/packs/` | The page is in no tier and fetches nothing outside the install; the worker keeps it once visited. |
-| After one online visit (teaching and adoption pages) | 154 pages under `/teaching/` | The same, one page at a time. |
+| Needs a connection | 12 pages: `/compute/`, `/evaluation/`, `/experiments/`, `/figure/`, `/glossary/`, `/instructors/`, `/instructors/submissions/`, `/lab3d/`, `/mission/`, `/model/`, `/studio/course/packs/`, `/validation/` | The page is in no tier. The worker never stores a document it was not given, so offline it sends the reader to the application. |
+| Needs a connection (teaching and adoption pages) | 154 pages under `/teaching/` | The same, one page at a time. |
 <!--/fact-block-->
 
 What the tour found, and what was done about it:
@@ -727,13 +727,23 @@ What the tour found, and what was done about it:
   page lists items under their ids. `tests/offlinePages.test.js` names this as
   the one exception and `e2e/offlineII.spec.js` opens the page without the
   index.
-- **Nothing else contradicted a promise.** Every page whose requests are all in
-  the install promises offline from the first visit; the adoption and teaching
-  pages, the model, validation, evaluation and similar pages are in no tier and
-  open offline after one online visit, which is what the page and this document
-  already said. Pages that fetch a file no tier holds (the instructors' portal's
-  sequences, the compute page's modules, the validation data) work offline after
-  a visit that loaded them, and a part opened later must have been opened.
+- **A visited page was never kept.** This document, the offline note and the
+  accessibility notes all said a page outside the list "works only if you have
+  opened it before", and that the document pages were runtime-cached. The worker
+  has never done that for a document: a navigation is answered from the
+  precache or the network (so that no build's shell mixes with another's), and
+  only the files a page fetches are kept as they are fetched. Measured: the
+  model page, visited and then reloaded with no network, was the application's
+  shell at the model page's address, unstyled, with nothing loading, because
+  the shell's relative paths resolved under `/model/`. Two repairs. The worker
+  now redirects such a navigation to the application at the scope's root
+  (`sw.js`), where it opens whole, and the offline note says "Any other page
+  needs a connection, and offline you are taken to the application instead".
+  The 166 pages in no tier (the adoption and teaching pages, the model,
+  validation, evaluation, instructors and compute pages, and others) promise
+  nothing offline, and say so. Making them offline-capable is a different
+  decision: it would store a document from one build beside the modules of
+  another, which is what the worker's navigation rule exists to prevent.
 
 ### Parts, and the room they need
 

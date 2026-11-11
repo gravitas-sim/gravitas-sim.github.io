@@ -178,7 +178,7 @@
           "tier": "never"
         }
       ],
-      "promise": "one online visit"
+      "promise": "needs a connection"
     },
     {
       "page": "/course/",
@@ -202,7 +202,7 @@
       "never": 0,
       "runtime": 0,
       "outside": [],
-      "promise": "one online visit"
+      "promise": "needs a connection"
     },
     {
       "page": "/experiments/",
@@ -214,7 +214,7 @@
       "never": 0,
       "runtime": 0,
       "outside": [],
-      "promise": "one online visit"
+      "promise": "needs a connection"
     },
     {
       "page": "/figure/",
@@ -239,7 +239,7 @@
           "tier": "idle"
         }
       ],
-      "promise": "one online visit"
+      "promise": "needs a connection"
     },
     {
       "page": "/glossary/",
@@ -251,7 +251,7 @@
       "never": 0,
       "runtime": 0,
       "outside": [],
-      "promise": "one online visit"
+      "promise": "needs a connection"
     },
     {
       "page": "/",
@@ -388,7 +388,7 @@
           "tier": "idle"
         }
       ],
-      "promise": "one online visit"
+      "promise": "needs a connection"
     },
     {
       "page": "/instructors/submissions/",
@@ -429,7 +429,7 @@
           "tier": "idle"
         }
       ],
-      "promise": "one online visit"
+      "promise": "needs a connection"
     },
     {
       "page": "/lab3d/",
@@ -470,7 +470,7 @@
           "tier": "idle"
         }
       ],
-      "promise": "one online visit"
+      "promise": "needs a connection"
     },
     {
       "page": "/library/",
@@ -540,7 +540,7 @@
           "tier": "idle"
         }
       ],
-      "promise": "one online visit"
+      "promise": "needs a connection"
     },
     {
       "page": "/mission/lab/",
@@ -673,7 +673,7 @@
       "never": 0,
       "runtime": 0,
       "outside": [],
-      "promise": "one online visit"
+      "promise": "needs a connection"
     },
     {
       "page": "/my-work/",
@@ -795,7 +795,7 @@
       "never": 0,
       "runtime": 0,
       "outside": [],
-      "promise": "one online visit"
+      "promise": "needs a connection"
     },
     {
       "page": "/studio/",
@@ -831,7 +831,7 @@
       "never": 0,
       "runtime": 0,
       "outside": [],
-      "promise": "one online visit"
+      "promise": "needs a connection"
     },
     {
       "page": "/teaching/activity/orbital-speed/",
@@ -843,7 +843,7 @@
       "never": 0,
       "runtime": 0,
       "outside": [],
-      "promise": "one online visit"
+      "promise": "needs a connection"
     },
     {
       "page": "/teaching/activity/star-sizes/",
@@ -855,7 +855,7 @@
       "never": 0,
       "runtime": 0,
       "outside": [],
-      "promise": "one online visit"
+      "promise": "needs a connection"
     },
     {
       "page": "/teaching/adopt/",
@@ -867,7 +867,7 @@
       "never": 0,
       "runtime": 0,
       "outside": [],
-      "promise": "one online visit"
+      "promise": "needs a connection"
     },
     {
       "page": "/teaching/alignment/",
@@ -879,7 +879,7 @@
       "never": 0,
       "runtime": 0,
       "outside": [],
-      "promise": "one online visit"
+      "promise": "needs a connection"
     },
     {
       "page": "/teaching/find/",
@@ -891,7 +891,7 @@
       "never": 0,
       "runtime": 0,
       "outside": [],
-      "promise": "one online visit"
+      "promise": "needs a connection"
     },
     {
       "page": "/teaching/",
@@ -908,7 +908,7 @@
           "tier": "runtime"
         }
       ],
-      "promise": "one online visit"
+      "promise": "needs a connection"
     },
     {
       "page": "/teaching/investigation/a-binary-stars-orbit/",
@@ -920,7 +920,7 @@
       "never": 0,
       "runtime": 0,
       "outside": [],
-      "promise": "one online visit"
+      "promise": "needs a connection"
     },
     {
       "page": "/teaching/investigation/a-lens-passing-by/",
@@ -932,7 +932,7 @@
       "never": 0,
       "runtime": 0,
       "outside": [],
-      "promise": "one online visit"
+      "promise": "needs a connection"
     },
     {
       "page": "/teaching/investigation/a-night-at-the-telescope/",
@@ -944,7 +944,7 @@
       "never": 0,
       "runtime": 0,
       "outside": [],
-      "promise": "one online visit"
+      "promise": "needs a connection"
     },
     {
       "page": "/teaching/investigation/a-stars-life-in-numbers/",
@@ -956,7 +956,7 @@
       "never": 0,
       "runtime": 0,
       "outside": [],
-      "promise": "one online visit"
+      "promise": "needs a connection"
     },
     {
       "page": "/teaching/investigation/a-universe-of-stars/",
@@ -968,7 +968,7 @@
       "never": 0,
       "runtime": 0,
       "outside": [],
-      "promise": "one online visit"
+      "promise": "needs a connection"
     },
     {
       "page": "/teaching/investigation/a-variable-star-from-frames/",
@@ -980,7 +980,7 @@
       "never": 0,
       "runtime": 0,
       "outside": [],
-      "promise": "one online visit"
+      "promise": "needs a connection"
     },
     {
       "page": "/teaching/investigation/architectures/",
@@ -992,7 +992,7 @@
       "never": 0,
       "runtime": 0,
       "outside": [],
-      "promise": "one online visit"
+      "promise": "needs a connection"
     },
     {
       "page": "/teaching/investigation/bending-light/",
@@ -1004,7 +1004,7 @@
       "never": 0,
       "runtime": 0,
       "outside": [],
-      "promise": "one online visit"
+      "promise": "needs a connection"
     },
     {
       "page": "/teaching/investigation/binary-star-planets/",
@@ -1016,7 +1016,7 @@
       "never": 0,
       "runtime": 0,
       "outside": [],
-      "promise": "one online visit"
+      "promise": "needs a connection"
     },
     {
       "page": "/teaching/investigation/black-holes/",
@@ -1028,7 +1028,7 @@
       "never": 0,
       "runtime": 0,
       "outside": [],
-      "promise": "one online visit"
+      "promise": "needs a connection"
     },
     {
       "page": "/teaching/investigation/butterfly-effect/",
@@ -1040,7 +1040,7 @@
       "never": 0,
       "runtime": 0,
       "outside": [],
-      "promise": "one online visit"
+      "promise": "needs a connection"
     },
     {
       "page": "/teaching/investigation/cluster-membership/",
@@ -1052,7 +1052,7 @@
       "never": 0,
       "runtime": 0,
       "outside": [],
-      "promise": "one online visit"
+      "promise": "needs a connection"
     },
     {
       "page": "/teaching/investigation/color-and-temperature/",
@@ -1064,7 +1064,7 @@
       "never": 0,
       "runtime": 0,
       "outside": [],
-      "promise": "one online visit"
+      "promise": "needs a connection"
     },
     {
       "page": "/teaching/investigation/comets-and-the-sun/",
@@ -1076,7 +1076,7 @@
       "never": 0,
       "runtime": 0,
       "outside": [],
-      "promise": "one online visit"
+      "promise": "needs a connection"
     },
     {
       "page": "/teaching/investigation/coordinates-and-time/",
@@ -1088,7 +1088,7 @@
       "never": 0,
       "runtime": 0,
       "outside": [],
-      "promise": "one online visit"
+      "promise": "needs a connection"
     },
     {
       "page": "/teaching/investigation/counts-to-magnitudes/",
@@ -1100,7 +1100,7 @@
       "never": 0,
       "runtime": 0,
       "outside": [],
-      "promise": "one online visit"
+      "promise": "needs a connection"
     },
     {
       "page": "/teaching/investigation/craters-by-size/",
@@ -1112,7 +1112,7 @@
       "never": 0,
       "runtime": 0,
       "outside": [],
-      "promise": "one online visit"
+      "promise": "needs a connection"
     },
     {
       "page": "/teaching/investigation/deep-or-wide/",
@@ -1124,7 +1124,7 @@
       "never": 0,
       "runtime": 0,
       "outside": [],
-      "promise": "one online visit"
+      "promise": "needs a connection"
     },
     {
       "page": "/teaching/investigation/design-the-schedule/",
@@ -1136,7 +1136,7 @@
       "never": 0,
       "runtime": 0,
       "outside": [],
-      "promise": "one online visit"
+      "promise": "needs a connection"
     },
     {
       "page": "/teaching/investigation/detect-this-planet/",
@@ -1148,7 +1148,7 @@
       "never": 0,
       "runtime": 0,
       "outside": [],
-      "promise": "one online visit"
+      "promise": "needs a connection"
     },
     {
       "page": "/teaching/investigation/einstein-rings-and-arcs/",
@@ -1160,7 +1160,7 @@
       "never": 0,
       "runtime": 0,
       "outside": [],
-      "promise": "one online visit"
+      "promise": "needs a connection"
     },
     {
       "page": "/teaching/investigation/exo-dilution/",
@@ -1172,7 +1172,7 @@
       "never": 0,
       "runtime": 0,
       "outside": [],
-      "promise": "one online visit"
+      "promise": "needs a connection"
     },
     {
       "page": "/teaching/investigation/exo-find/",
@@ -1184,7 +1184,7 @@
       "never": 0,
       "runtime": 0,
       "outside": [],
-      "promise": "one online visit"
+      "promise": "needs a connection"
     },
     {
       "page": "/teaching/investigation/exo-fit/",
@@ -1196,7 +1196,7 @@
       "never": 0,
       "runtime": 0,
       "outside": [],
-      "promise": "one online visit"
+      "promise": "needs a connection"
     },
     {
       "page": "/teaching/investigation/exo-planet/",
@@ -1208,7 +1208,7 @@
       "never": 0,
       "runtime": 0,
       "outside": [],
-      "promise": "one online visit"
+      "promise": "needs a connection"
     },
     {
       "page": "/teaching/investigation/exo-star/",
@@ -1220,7 +1220,7 @@
       "never": 0,
       "runtime": 0,
       "outside": [],
-      "promise": "one online visit"
+      "promise": "needs a connection"
     },
     {
       "page": "/teaching/investigation/extending-an-experiment/",
@@ -1232,7 +1232,7 @@
       "never": 0,
       "runtime": 0,
       "outside": [],
-      "promise": "one online visit"
+      "promise": "needs a connection"
     },
     {
       "page": "/teaching/investigation/flares/",
@@ -1244,7 +1244,7 @@
       "never": 0,
       "runtime": 0,
       "outside": [],
-      "promise": "one online visit"
+      "promise": "needs a connection"
     },
     {
       "page": "/teaching/investigation/from-photons-to-a-number/",
@@ -1256,7 +1256,7 @@
       "never": 0,
       "runtime": 0,
       "outside": [],
-      "promise": "one online visit"
+      "promise": "needs a connection"
     },
     {
       "page": "/teaching/investigation/from-star-to-remnant/",
@@ -1268,7 +1268,7 @@
       "never": 0,
       "runtime": 0,
       "outside": [],
-      "promise": "one online visit"
+      "promise": "needs a connection"
     },
     {
       "page": "/teaching/investigation/goldilocks-question/",
@@ -1280,7 +1280,7 @@
       "never": 0,
       "runtime": 0,
       "outside": [],
-      "promise": "one online visit"
+      "promise": "needs a connection"
     },
     {
       "page": "/teaching/investigation/gravity-assist/",
@@ -1292,7 +1292,7 @@
       "never": 0,
       "runtime": 0,
       "outside": [],
-      "promise": "one online visit"
+      "promise": "needs a connection"
     },
     {
       "page": "/teaching/investigation/hohmann-transfer/",
@@ -1304,7 +1304,7 @@
       "never": 0,
       "runtime": 0,
       "outside": [],
-      "promise": "one online visit"
+      "promise": "needs a connection"
     },
     {
       "page": "/teaching/investigation/how-far-and-how-sure/",
@@ -1316,7 +1316,7 @@
       "never": 0,
       "runtime": 0,
       "outside": [],
-      "promise": "one online visit"
+      "promise": "needs a connection"
     },
     {
       "page": "/teaching/investigation/how-far-is-that-star/",
@@ -1328,7 +1328,7 @@
       "never": 0,
       "runtime": 0,
       "outside": [],
-      "promise": "one online visit"
+      "promise": "needs a connection"
     },
     {
       "page": "/teaching/investigation/how-fast-does-it-spin/",
@@ -1340,7 +1340,7 @@
       "never": 0,
       "runtime": 0,
       "outside": [],
-      "promise": "one online visit"
+      "promise": "needs a connection"
     },
     {
       "page": "/teaching/investigation/how-fast-does-the-star-spin/",
@@ -1352,7 +1352,7 @@
       "never": 0,
       "runtime": 0,
       "outside": [],
-      "promise": "one online visit"
+      "promise": "needs a connection"
     },
     {
       "page": "/teaching/investigation/how-hot-is-the-day-side/",
@@ -1364,7 +1364,7 @@
       "never": 0,
       "runtime": 0,
       "outside": [],
-      "promise": "one online visit"
+      "promise": "needs a connection"
     },
     {
       "page": "/teaching/investigation/how-many-earths/",
@@ -1376,7 +1376,7 @@
       "never": 0,
       "runtime": 0,
       "outside": [],
-      "promise": "one online visit"
+      "promise": "needs a connection"
     },
     {
       "page": "/teaching/investigation/how-old-is-this-white-dwarf/",
@@ -1388,7 +1388,7 @@
       "never": 0,
       "runtime": 0,
       "outside": [],
-      "promise": "one online visit"
+      "promise": "needs a connection"
     },
     {
       "page": "/teaching/investigation/inside-a-star/",
@@ -1400,7 +1400,7 @@
       "never": 0,
       "runtime": 0,
       "outside": [],
-      "promise": "one online visit"
+      "promise": "needs a connection"
     },
     {
       "page": "/teaching/investigation/integrators-in-practice/",
@@ -1412,7 +1412,7 @@
       "never": 0,
       "runtime": 0,
       "outside": [],
-      "promise": "one online visit"
+      "promise": "needs a connection"
     },
     {
       "page": "/teaching/investigation/ios-fire/",
@@ -1424,7 +1424,7 @@
       "never": 0,
       "runtime": 0,
       "outside": [],
-      "promise": "one online visit"
+      "promise": "needs a connection"
     },
     {
       "page": "/teaching/investigation/keplers-laws/",
@@ -1436,7 +1436,7 @@
       "never": 0,
       "runtime": 0,
       "outside": [],
-      "promise": "one online visit"
+      "promise": "needs a connection"
     },
     {
       "page": "/teaching/investigation/l3-eclipse/",
@@ -1448,7 +1448,7 @@
       "never": 0,
       "runtime": 0,
       "outside": [],
-      "promise": "one online visit"
+      "promise": "needs a connection"
     },
     {
       "page": "/teaching/investigation/l3-elements/",
@@ -1460,7 +1460,7 @@
       "never": 0,
       "runtime": 0,
       "outside": [],
-      "promise": "one online visit"
+      "promise": "needs a connection"
     },
     {
       "page": "/teaching/investigation/l3-frames/",
@@ -1472,7 +1472,7 @@
       "never": 0,
       "runtime": 0,
       "outside": [],
-      "promise": "one online visit"
+      "promise": "needs a connection"
     },
     {
       "page": "/teaching/investigation/l3-kozai/",
@@ -1484,7 +1484,7 @@
       "never": 0,
       "runtime": 0,
       "outside": [],
-      "promise": "one online visit"
+      "promise": "needs a connection"
     },
     {
       "page": "/teaching/investigation/l3-mutual/",
@@ -1496,7 +1496,7 @@
       "never": 0,
       "runtime": 0,
       "outside": [],
-      "promise": "one online visit"
+      "promise": "needs a connection"
     },
     {
       "page": "/teaching/investigation/l3-planes/",
@@ -1508,7 +1508,7 @@
       "never": 0,
       "runtime": 0,
       "outside": [],
-      "promise": "one online visit"
+      "promise": "needs a connection"
     },
     {
       "page": "/teaching/investigation/l3-resonant/",
@@ -1520,7 +1520,7 @@
       "never": 0,
       "runtime": 0,
       "outside": [],
-      "promise": "one online visit"
+      "promise": "needs a connection"
     },
     {
       "page": "/teaching/investigation/l3-seen/",
@@ -1532,7 +1532,7 @@
       "never": 0,
       "runtime": 0,
       "outside": [],
-      "promise": "one online visit"
+      "promise": "needs a connection"
     },
     {
       "page": "/teaching/investigation/l3-tilts/",
@@ -1544,7 +1544,7 @@
       "never": 0,
       "runtime": 0,
       "outside": [],
-      "promise": "one online visit"
+      "promise": "needs a connection"
     },
     {
       "page": "/teaching/investigation/lagrange-points/",
@@ -1556,7 +1556,7 @@
       "never": 0,
       "runtime": 0,
       "outside": [],
-      "promise": "one online visit"
+      "promise": "needs a connection"
     },
     {
       "page": "/teaching/investigation/leavitts-law/",
@@ -1568,7 +1568,7 @@
       "never": 0,
       "runtime": 0,
       "outside": [],
-      "promise": "one online visit"
+      "promise": "needs a connection"
     },
     {
       "page": "/teaching/investigation/lines-and-motion/",
@@ -1580,7 +1580,7 @@
       "never": 0,
       "runtime": 0,
       "outside": [],
-      "promise": "one online visit"
+      "promise": "needs a connection"
     },
     {
       "page": "/teaching/investigation/listening-to-spacetime/",
@@ -1592,7 +1592,7 @@
       "never": 0,
       "runtime": 0,
       "outside": [],
-      "promise": "one online visit"
+      "promise": "needs a connection"
     },
     {
       "page": "/teaching/investigation/lives-of-stars/",
@@ -1604,7 +1604,7 @@
       "never": 0,
       "runtime": 0,
       "outside": [],
-      "promise": "one online visit"
+      "promise": "needs a connection"
     },
     {
       "page": "/teaching/investigation/measuring-the-moon/",
@@ -1616,7 +1616,7 @@
       "never": 0,
       "runtime": 0,
       "outside": [],
-      "promise": "one online visit"
+      "promise": "needs a connection"
     },
     {
       "page": "/teaching/investigation/missing-mass/",
@@ -1628,7 +1628,7 @@
       "never": 0,
       "runtime": 0,
       "outside": [],
-      "promise": "one online visit"
+      "promise": "needs a connection"
     },
     {
       "page": "/teaching/investigation/ml-cruise/",
@@ -1640,7 +1640,7 @@
       "never": 0,
       "runtime": 0,
       "outside": [],
-      "promise": "one online visit"
+      "promise": "needs a connection"
     },
     {
       "page": "/teaching/investigation/ml-orbit/",
@@ -1652,7 +1652,7 @@
       "never": 0,
       "runtime": 0,
       "outside": [],
-      "promise": "one online visit"
+      "promise": "needs a connection"
     },
     {
       "page": "/teaching/investigation/ml-window/",
@@ -1664,7 +1664,7 @@
       "never": 0,
       "runtime": 0,
       "outside": [],
-      "promise": "one online visit"
+      "promise": "needs a connection"
     },
     {
       "page": "/teaching/investigation/moons-of-the-giants/",
@@ -1676,7 +1676,7 @@
       "never": 0,
       "runtime": 0,
       "outside": [],
-      "promise": "one online visit"
+      "promise": "needs a connection"
     },
     {
       "page": "/teaching/investigation/one-planet-every-method/",
@@ -1688,7 +1688,7 @@
       "never": 0,
       "runtime": 0,
       "outside": [],
-      "promise": "one online visit"
+      "promise": "needs a connection"
     },
     {
       "page": "/teaching/investigation/orbital-energy/",
@@ -1700,7 +1700,7 @@
       "never": 0,
       "runtime": 0,
       "outside": [],
-      "promise": "one online visit"
+      "promise": "needs a connection"
     },
     {
       "page": "/teaching/investigation/phases-and-albedo/",
@@ -1712,7 +1712,7 @@
       "never": 0,
       "runtime": 0,
       "outside": [],
-      "promise": "one online visit"
+      "promise": "needs a connection"
     },
     {
       "page": "/teaching/investigation/phases-and-eclipses/",
@@ -1724,7 +1724,7 @@
       "never": 0,
       "runtime": 0,
       "outside": [],
-      "promise": "one online visit"
+      "promise": "needs a connection"
     },
     {
       "page": "/teaching/investigation/plan-a-night/",
@@ -1736,7 +1736,7 @@
       "never": 0,
       "runtime": 0,
       "outside": [],
-      "promise": "one online visit"
+      "promise": "needs a connection"
     },
     {
       "page": "/teaching/investigation/plan-an-exposure/",
@@ -1748,7 +1748,7 @@
       "never": 0,
       "runtime": 0,
       "outside": [],
-      "promise": "one online visit"
+      "promise": "needs a connection"
     },
     {
       "page": "/teaching/investigation/planet-or-not/",
@@ -1760,7 +1760,7 @@
       "never": 0,
       "runtime": 0,
       "outside": [],
-      "promise": "one online visit"
+      "promise": "needs a connection"
     },
     {
       "page": "/teaching/investigation/planning-a-transit-campaign/",
@@ -1772,7 +1772,7 @@
       "never": 0,
       "runtime": 0,
       "outside": [],
-      "promise": "one online visit"
+      "promise": "needs a connection"
     },
     {
       "page": "/teaching/investigation/pop-age/",
@@ -1784,7 +1784,7 @@
       "never": 0,
       "runtime": 0,
       "outside": [],
-      "promise": "one online visit"
+      "promise": "needs a connection"
     },
     {
       "page": "/teaching/investigation/pop-cmd/",
@@ -1796,7 +1796,7 @@
       "never": 0,
       "runtime": 0,
       "outside": [],
-      "promise": "one online visit"
+      "promise": "needs a connection"
     },
     {
       "page": "/teaching/investigation/pop-members/",
@@ -1808,7 +1808,7 @@
       "never": 0,
       "runtime": 0,
       "outside": [],
-      "promise": "one online visit"
+      "promise": "needs a connection"
     },
     {
       "page": "/teaching/investigation/pop-spectra/",
@@ -1820,7 +1820,7 @@
       "never": 0,
       "runtime": 0,
       "outside": [],
-      "promise": "one online visit"
+      "promise": "needs a connection"
     },
     {
       "page": "/teaching/investigation/pop-variable/",
@@ -1832,7 +1832,7 @@
       "never": 0,
       "runtime": 0,
       "outside": [],
-      "promise": "one online visit"
+      "promise": "needs a connection"
     },
     {
       "page": "/teaching/investigation/populations-i-and-ii/",
@@ -1844,7 +1844,7 @@
       "never": 0,
       "runtime": 0,
       "outside": [],
-      "promise": "one online visit"
+      "promise": "needs a connection"
     },
     {
       "page": "/teaching/investigation/power-law-gravity/",
@@ -1856,7 +1856,7 @@
       "never": 0,
       "runtime": 0,
       "outside": [],
-      "promise": "one online visit"
+      "promise": "needs a connection"
     },
     {
       "page": "/teaching/investigation/propose-an-observation/",
@@ -1868,7 +1868,7 @@
       "never": 0,
       "runtime": 0,
       "outside": [],
-      "promise": "one online visit"
+      "promise": "needs a connection"
     },
     {
       "page": "/teaching/investigation/radial-velocity/",
@@ -1880,7 +1880,7 @@
       "never": 0,
       "runtime": 0,
       "outside": [],
-      "promise": "one online visit"
+      "promise": "needs a connection"
     },
     {
       "page": "/teaching/investigation/reading-the-hr-diagram/",
@@ -1892,7 +1892,7 @@
       "never": 0,
       "runtime": 0,
       "outside": [],
-      "promise": "one online visit"
+      "promise": "needs a connection"
     },
     {
       "page": "/teaching/investigation/refitting-a-transit/",
@@ -1904,7 +1904,7 @@
       "never": 0,
       "runtime": 0,
       "outside": [],
-      "promise": "one online visit"
+      "promise": "needs a connection"
     },
     {
       "page": "/teaching/investigation/retrograde-motion/",
@@ -1916,7 +1916,7 @@
       "never": 0,
       "runtime": 0,
       "outside": [],
-      "promise": "one online visit"
+      "promise": "needs a connection"
     },
     {
       "page": "/teaching/investigation/sampling-a-posterior/",
@@ -1928,7 +1928,7 @@
       "never": 0,
       "runtime": 0,
       "outside": [],
-      "promise": "one online visit"
+      "promise": "needs a connection"
     },
     {
       "page": "/teaching/investigation/scaling-the-main-sequence/",
@@ -1940,7 +1940,7 @@
       "never": 0,
       "runtime": 0,
       "outside": [],
-      "promise": "one online visit"
+      "promise": "needs a connection"
     },
     {
       "page": "/teaching/investigation/signal-noise-and-exposure/",
@@ -1952,7 +1952,7 @@
       "never": 0,
       "runtime": 0,
       "outside": [],
-      "promise": "one online visit"
+      "promise": "needs a connection"
     },
     {
       "page": "/teaching/investigation/spectra-tell-temperature-and-gravity/",
@@ -1964,7 +1964,7 @@
       "never": 0,
       "runtime": 0,
       "outside": [],
-      "promise": "one online visit"
+      "promise": "needs a connection"
     },
     {
       "page": "/teaching/investigation/standard-candles/",
@@ -1976,7 +1976,7 @@
       "never": 0,
       "runtime": 0,
       "outside": [],
-      "promise": "one online visit"
+      "promise": "needs a connection"
     },
     {
       "page": "/teaching/investigation/the-beat-of-a-star/",
@@ -1988,7 +1988,7 @@
       "never": 0,
       "runtime": 0,
       "outside": [],
-      "promise": "one online visit"
+      "promise": "needs a connection"
     },
     {
       "page": "/teaching/investigation/the-clock-that-drifts/",
@@ -2000,7 +2000,7 @@
       "never": 0,
       "runtime": 0,
       "outside": [],
-      "promise": "one online visit"
+      "promise": "needs a connection"
     },
     {
       "page": "/teaching/investigation/the-completeness-curve/",
@@ -2012,7 +2012,7 @@
       "never": 0,
       "runtime": 0,
       "outside": [],
-      "promise": "one online visit"
+      "promise": "needs a connection"
     },
     {
       "page": "/teaching/investigation/the-expanding-universe/",
@@ -2024,7 +2024,7 @@
       "never": 0,
       "runtime": 0,
       "outside": [],
-      "promise": "one online visit"
+      "promise": "needs a connection"
     },
     {
       "page": "/teaching/investigation/the-first-rung/",
@@ -2036,7 +2036,7 @@
       "never": 0,
       "runtime": 0,
       "outside": [],
-      "promise": "one online visit"
+      "promise": "needs a connection"
     },
     {
       "page": "/teaching/investigation/the-gaps-in-the-belt/",
@@ -2048,7 +2048,7 @@
       "never": 0,
       "runtime": 0,
       "outside": [],
-      "promise": "one online visit"
+      "promise": "needs a connection"
     },
     {
       "page": "/teaching/investigation/the-limit/",
@@ -2060,7 +2060,7 @@
       "never": 0,
       "runtime": 0,
       "outside": [],
-      "promise": "one online visit"
+      "promise": "needs a connection"
     },
     {
       "page": "/teaching/investigation/the-metallicity-term/",
@@ -2072,7 +2072,7 @@
       "never": 0,
       "runtime": 0,
       "outside": [],
-      "promise": "one online visit"
+      "promise": "needs a connection"
     },
     {
       "page": "/teaching/investigation/the-rotating-disk/",
@@ -2084,7 +2084,7 @@
       "never": 0,
       "runtime": 0,
       "outside": [],
-      "promise": "one online visit"
+      "promise": "needs a connection"
     },
     {
       "page": "/teaching/investigation/the-saturated-star/",
@@ -2096,7 +2096,7 @@
       "never": 0,
       "runtime": 0,
       "outside": [],
-      "promise": "one online visit"
+      "promise": "needs a connection"
     },
     {
       "page": "/teaching/investigation/the-scale-of-the-solar-system/",
@@ -2108,7 +2108,7 @@
       "never": 0,
       "runtime": 0,
       "outside": [],
-      "promise": "one online visit"
+      "promise": "needs a connection"
     },
     {
       "page": "/teaching/investigation/the-shape-of-expansion/",
@@ -2120,7 +2120,7 @@
       "never": 0,
       "runtime": 0,
       "outside": [],
-      "promise": "one online visit"
+      "promise": "needs a connection"
     },
     {
       "page": "/teaching/investigation/the-sky-background/",
@@ -2132,7 +2132,7 @@
       "never": 0,
       "runtime": 0,
       "outside": [],
-      "promise": "one online visit"
+      "promise": "needs a connection"
     },
     {
       "page": "/teaching/investigation/the-sun-through-the-year/",
@@ -2144,7 +2144,7 @@
       "never": 0,
       "runtime": 0,
       "outside": [],
-      "promise": "one online visit"
+      "promise": "needs a connection"
     },
     {
       "page": "/teaching/investigation/the-suns-motion/",
@@ -2156,7 +2156,7 @@
       "never": 0,
       "runtime": 0,
       "outside": [],
-      "promise": "one online visit"
+      "promise": "needs a connection"
     },
     {
       "page": "/teaching/investigation/the-suns-power/",
@@ -2168,7 +2168,7 @@
       "never": 0,
       "runtime": 0,
       "outside": [],
-      "promise": "one online visit"
+      "promise": "needs a connection"
     },
     {
       "page": "/teaching/investigation/the-transit-that-was-a-star/",
@@ -2180,7 +2180,7 @@
       "never": 0,
       "runtime": 0,
       "outside": [],
-      "promise": "one online visit"
+      "promise": "needs a connection"
     },
     {
       "page": "/teaching/investigation/the-turning-sky/",
@@ -2192,7 +2192,7 @@
       "never": 0,
       "runtime": 0,
       "outside": [],
-      "promise": "one online visit"
+      "promise": "needs a connection"
     },
     {
       "page": "/teaching/investigation/the-turning-sun/",
@@ -2204,7 +2204,7 @@
       "never": 0,
       "runtime": 0,
       "outside": [],
-      "promise": "one online visit"
+      "promise": "needs a connection"
     },
     {
       "page": "/teaching/investigation/tides-that-move-the-moon/",
@@ -2216,7 +2216,7 @@
       "never": 0,
       "runtime": 0,
       "outside": [],
-      "promise": "one online visit"
+      "promise": "needs a connection"
     },
     {
       "page": "/teaching/investigation/tides/",
@@ -2228,7 +2228,7 @@
       "never": 0,
       "runtime": 0,
       "outside": [],
-      "promise": "one online visit"
+      "promise": "needs a connection"
     },
     {
       "page": "/teaching/investigation/transit-photometry/",
@@ -2240,7 +2240,7 @@
       "never": 0,
       "runtime": 0,
       "outside": [],
-      "promise": "one online visit"
+      "promise": "needs a connection"
     },
     {
       "page": "/teaching/investigation/twelve-nights/",
@@ -2252,7 +2252,7 @@
       "never": 0,
       "runtime": 0,
       "outside": [],
-      "promise": "one online visit"
+      "promise": "needs a connection"
     },
     {
       "page": "/teaching/investigation/two-clusters-two-ages/",
@@ -2264,7 +2264,7 @@
       "never": 0,
       "runtime": 0,
       "outside": [],
-      "promise": "one online visit"
+      "promise": "needs a connection"
     },
     {
       "page": "/teaching/investigation/two-greenhouse-models/",
@@ -2276,7 +2276,7 @@
       "never": 0,
       "runtime": 0,
       "outside": [],
-      "promise": "one online visit"
+      "promise": "needs a connection"
     },
     {
       "page": "/teaching/investigation/two-periodograms/",
@@ -2288,7 +2288,7 @@
       "never": 0,
       "runtime": 0,
       "outside": [],
-      "promise": "one online visit"
+      "promise": "needs a connection"
     },
     {
       "page": "/teaching/investigation/two-stars-eclipsing/",
@@ -2300,7 +2300,7 @@
       "never": 0,
       "runtime": 0,
       "outside": [],
-      "promise": "one online visit"
+      "promise": "needs a connection"
     },
     {
       "page": "/teaching/investigation/two-telescopes-one-question/",
@@ -2312,7 +2312,7 @@
       "never": 0,
       "runtime": 0,
       "outside": [],
-      "promise": "one online visit"
+      "promise": "needs a connection"
     },
     {
       "page": "/teaching/investigation/wanderers-on-the-sky/",
@@ -2324,7 +2324,7 @@
       "never": 0,
       "runtime": 0,
       "outside": [],
-      "promise": "one online visit"
+      "promise": "needs a connection"
     },
     {
       "page": "/teaching/investigation/weighing-jupiter/",
@@ -2336,7 +2336,7 @@
       "never": 0,
       "runtime": 0,
       "outside": [],
-      "promise": "one online visit"
+      "promise": "needs a connection"
     },
     {
       "page": "/teaching/investigation/weighing-stars/",
@@ -2348,7 +2348,7 @@
       "never": 0,
       "runtime": 0,
       "outside": [],
-      "promise": "one online visit"
+      "promise": "needs a connection"
     },
     {
       "page": "/teaching/investigation/weighing-the-stars-for-real/",
@@ -2360,7 +2360,7 @@
       "never": 0,
       "runtime": 0,
       "outside": [],
-      "promise": "one online visit"
+      "promise": "needs a connection"
     },
     {
       "page": "/teaching/investigation/what-a-ccd-records/",
@@ -2372,7 +2372,7 @@
       "never": 0,
       "runtime": 0,
       "outside": [],
-      "promise": "one online visit"
+      "promise": "needs a connection"
     },
     {
       "page": "/teaching/investigation/what-a-crater-diameter-is-worth/",
@@ -2384,7 +2384,7 @@
       "never": 0,
       "runtime": 0,
       "outside": [],
-      "promise": "one online visit"
+      "promise": "needs a connection"
     },
     {
       "page": "/teaching/investigation/what-a-spectrum-is-made-of/",
@@ -2396,7 +2396,7 @@
       "never": 0,
       "runtime": 0,
       "outside": [],
-      "promise": "one online visit"
+      "promise": "needs a connection"
     },
     {
       "page": "/teaching/investigation/what-a-telescope-resolves/",
@@ -2408,7 +2408,7 @@
       "never": 0,
       "runtime": 0,
       "outside": [],
-      "promise": "one online visit"
+      "promise": "needs a connection"
     },
     {
       "page": "/teaching/investigation/what-does-plus-minus-claim/",
@@ -2420,7 +2420,7 @@
       "never": 0,
       "runtime": 0,
       "outside": [],
-      "promise": "one online visit"
+      "promise": "needs a connection"
     },
     {
       "page": "/teaching/investigation/what-gaia-does-not-see/",
@@ -2432,7 +2432,7 @@
       "never": 0,
       "runtime": 0,
       "outside": [],
-      "promise": "one online visit"
+      "promise": "needs a connection"
     },
     {
       "page": "/teaching/investigation/what-is-a-gravitational-wave/",
@@ -2444,7 +2444,7 @@
       "never": 0,
       "runtime": 0,
       "outside": [],
-      "promise": "one online visit"
+      "promise": "needs a connection"
     },
     {
       "page": "/teaching/investigation/what-is-a-measurement/",
@@ -2456,7 +2456,7 @@
       "never": 0,
       "runtime": 0,
       "outside": [],
-      "promise": "one online visit"
+      "promise": "needs a connection"
     },
     {
       "page": "/teaching/investigation/what-is-in-this-field/",
@@ -2468,7 +2468,7 @@
       "never": 0,
       "runtime": 0,
       "outside": [],
-      "promise": "one online visit"
+      "promise": "needs a connection"
     },
     {
       "page": "/teaching/investigation/what-is-it-made-of/",
@@ -2480,7 +2480,7 @@
       "never": 0,
       "runtime": 0,
       "outside": [],
-      "promise": "one online visit"
+      "promise": "needs a connection"
     },
     {
       "page": "/teaching/investigation/what-kinds-of-planets-exist/",
@@ -2492,7 +2492,7 @@
       "never": 0,
       "runtime": 0,
       "outside": [],
-      "promise": "one online visit"
+      "promise": "needs a connection"
     },
     {
       "page": "/teaching/investigation/when-a-star-explodes/",
@@ -2504,7 +2504,7 @@
       "never": 0,
       "runtime": 0,
       "outside": [],
-      "promise": "one online visit"
+      "promise": "needs a connection"
     },
     {
       "page": "/teaching/investigation/when-orbits-lock/",
@@ -2516,7 +2516,7 @@
       "never": 0,
       "runtime": 0,
       "outside": [],
-      "promise": "one online visit"
+      "promise": "needs a connection"
     },
     {
       "page": "/teaching/investigation/when-the-method-must-refuse/",
@@ -2528,7 +2528,7 @@
       "never": 0,
       "runtime": 0,
       "outside": [],
-      "promise": "one online visit"
+      "promise": "needs a connection"
     },
     {
       "page": "/teaching/investigation/where-galaxies-live/",
@@ -2540,7 +2540,7 @@
       "never": 0,
       "runtime": 0,
       "outside": [],
-      "promise": "one online visit"
+      "promise": "needs a connection"
     },
     {
       "page": "/teaching/investigation/which-instrument-for-which-question/",
@@ -2552,7 +2552,7 @@
       "never": 0,
       "runtime": 0,
       "outside": [],
-      "promise": "one online visit"
+      "promise": "needs a connection"
     },
     {
       "page": "/teaching/investigation/which-kind-of-variable/",
@@ -2564,7 +2564,7 @@
       "never": 0,
       "runtime": 0,
       "outside": [],
-      "promise": "one online visit"
+      "promise": "needs a connection"
     },
     {
       "page": "/teaching/investigation/which-surface-is-older/",
@@ -2576,7 +2576,7 @@
       "never": 0,
       "runtime": 0,
       "outside": [],
-      "promise": "one online visit"
+      "promise": "needs a connection"
     },
     {
       "page": "/teaching/investigation/who-gets-counted/",
@@ -2588,7 +2588,7 @@
       "never": 0,
       "runtime": 0,
       "outside": [],
-      "promise": "one online visit"
+      "promise": "needs a connection"
     },
     {
       "page": "/teaching/investigation/why-rings/",
@@ -2600,7 +2600,7 @@
       "never": 0,
       "runtime": 0,
       "outside": [],
-      "promise": "one online visit"
+      "promise": "needs a connection"
     },
     {
       "page": "/teaching/investigation/why-the-bright-ones-win/",
@@ -2612,7 +2612,7 @@
       "never": 0,
       "runtime": 0,
       "outside": [],
-      "promise": "one online visit"
+      "promise": "needs a connection"
     },
     {
       "page": "/teaching/investigation/why-the-period-is-wrong/",
@@ -2624,7 +2624,7 @@
       "never": 0,
       "runtime": 0,
       "outside": [],
-      "promise": "one online visit"
+      "promise": "needs a connection"
     },
     {
       "page": "/teaching/investigation/why-two-lines-become-one/",
@@ -2636,7 +2636,7 @@
       "never": 0,
       "runtime": 0,
       "outside": [],
-      "promise": "one online visit"
+      "promise": "needs a connection"
     },
     {
       "page": "/teaching/investigation/why-venus-is-hot/",
@@ -2648,7 +2648,7 @@
       "never": 0,
       "runtime": 0,
       "outside": [],
-      "promise": "one online visit"
+      "promise": "needs a connection"
     },
     {
       "page": "/teaching/investigation/why-we-cannot-see-earth/",
@@ -2660,7 +2660,7 @@
       "never": 0,
       "runtime": 0,
       "outside": [],
-      "promise": "one online visit"
+      "promise": "needs a connection"
     },
     {
       "page": "/teaching/kit/",
@@ -2672,7 +2672,7 @@
       "never": 0,
       "runtime": 0,
       "outside": [],
-      "promise": "one online visit"
+      "promise": "needs a connection"
     },
     {
       "page": "/validation/",
@@ -2689,7 +2689,7 @@
           "tier": "runtime"
         }
       ],
-      "promise": "one online visit"
+      "promise": "needs a connection"
     }
   ]
 }

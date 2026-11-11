@@ -99,40 +99,50 @@ test.describe('every page says what is true offline, and it is', () => {
     }
   });
 
-  test('a page the worker does not hold opens offline after one online visit, and fails no request', async ({
+  test('a page the worker does not hold, even once visited, sends the reader to the application offline', async ({
     page,
     context,
     app,
   }, testInfo) => {
     testInfo.setTimeout(420_000);
-    // The pages with something the worker holds in no tier, and two without.
-    const visit = RECORD.pages.filter(
-      p => p.promise === 'one online visit' && p.outside.length
-    );
-    expect(visit.length).toBeGreaterThanOrEqual(5);
-    const rows = [
-      ...visit,
-      ...RECORD.pages
-        .filter(p => p.promise === 'one online visit' && !p.outside.length)
-        .slice(0, 2),
-    ];
+    // The pages that need a connection: one that fetches something no tier
+    // holds, the model page, a teaching page and the compute page, whose
+    // relative paths used to leave the shell unstyled at its address.
+    const need = RECORD.pages.filter(p => p.promise === 'needs a connection');
+    const pick = ['/compute/', '/model/', '/instructors/', '/validation/'];
+    for (const p of pick)
+      expect(
+        need.map(n => n.page),
+        p
+      ).toContain(p);
+    expect(need.some(n => n.page.startsWith('/teaching/'))).toBe(true);
     await app.boot();
     await settled(page);
-    for (const row of rows) {
-      await page.goto(row.page, { waitUntil: 'load' });
-      // The runtime cache fills as the page's own requests are answered.
-      await page.waitForTimeout(1200);
+    for (const url of [...pick, '/teaching/adopt/']) {
+      await page.goto(url, { waitUntil: 'load' });
+      await page.waitForTimeout(800);
     }
     await context.setOffline(true);
-    for (const row of rows) {
+    for (const url of [...pick, '/teaching/adopt/']) {
       const failed = [];
       const onFail = r => failed.push(new URL(r.url()).pathname);
       page.on('requestfailed', onFail);
-      const res = await page.goto(row.page, { waitUntil: 'load' });
+      await page.goto(url, { waitUntil: 'load' });
+      await page.waitForFunction(
+        () => window.splashScreenEnded === true,
+        null,
+        {
+          timeout: 60_000,
+        }
+      );
       page.off('requestfailed', onFail);
-      expect([row.page, res?.ok()]).toEqual([row.page, true]);
-      await expect(page.locator('h1').first()).toBeVisible();
-      expect([row.page, failed]).toEqual([row.page, []]);
+      // The application, at its own address, whole: not its shell at another
+      // page's address with nothing loading.
+      expect([url, new URL(page.url()).pathname]).toEqual([url, '/']);
+      expect([url, failed]).toEqual([url, []]);
+      expect(
+        await page.evaluate(() => document.styleSheets.length)
+      ).toBeGreaterThanOrEqual(6);
     }
   });
 });
@@ -145,7 +155,10 @@ test.describe('a page in the install that reads an idle file does without it', (
 
   test('My work lists a saved lesson under its id when the Library index is missing', async ({
     page,
+    errors,
   }) => {
+    // The refused request is logged by the browser, as it should be.
+    const gone = /Failed to load resource|net::ERR_FAILED/i;
     await page.route('**/library/library.json', route => route.abort());
     await page.goto('/model/', { waitUntil: 'domcontentloaded' });
     await page.evaluate(lesson => {
@@ -168,6 +181,8 @@ test.describe('a page in the install that reads an idle file does without it', (
       timeout: 30_000,
     });
     await expect(page.locator('#mwLessons .mw-item')).toHaveCount(1);
+    for (let i = errors.consoleErrors.length - 1; i >= 0; i--)
+      if (gone.test(errors.consoleErrors[i])) errors.consoleErrors.splice(i, 1);
   });
 });
 
@@ -472,7 +487,7 @@ for (const [name, device] of Object.entries(PHONES)) {
       await seed(page);
       await open(page);
       await page.locator('#mwExport').tap();
-      await expect(page.locator('#mwSummary, #mwStatus, body')).toContainText(
+      await expect(page.locator('#mwSummary')).toContainText(
         /backup file was made/i,
         { timeout: 15_000 }
       );

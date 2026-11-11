@@ -110,9 +110,10 @@ export const WORDS = {
   ],
 
   elsewhere: [
-    'Any other page works only if you have opened it before, and whatever needs the network, such as catalog downloads, waits until you are back online.',
-    'Cualquier otra página funciona solo si ya la abriste, y lo que necesita la red, como las descargas del catálogo, espera hasta que vuelvas a conectarte.',
+    'Any other page needs a connection, and offline you are taken to the application instead. Whatever needs the network, such as catalog downloads, waits until you are back online.',
+    'Cualquier otra página necesita conexión, y sin ella se te lleva a la aplicación. Lo que necesita la red, como las descargas del catálogo, espera hasta que vuelvas a conectarte.',
   ],
+
   dismiss: ['Dismiss', 'Cerrar'],
 };
 

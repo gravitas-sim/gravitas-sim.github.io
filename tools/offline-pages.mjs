@@ -12,13 +12,13 @@
 //   - its requests: how many fall in each tier, and every one that is not in
 //     the first-visit install, by name.
 //
-// From that it states a promise per page (what is true offline, and when):
-//   first visit     the page and everything it fetched is in the install
-//   after it settles  the page or something it fetches is in the idle tier
-//   one online visit  the page, or a file it fetches, is in no tier: the worker
-//                   keeps it once it has been fetched (stale-while-revalidate),
-//                   so the page opens offline after a visit that loaded it,
-//                   and a part it opens later only if that part was opened
+// From that it states a promise per page (promiseOf, tools/offline-tiers.mjs):
+//   first visit          the page and everything it fetched are in the install
+//   after it settles     the page or something it fetches is in the idle tier
+//   after one online visit  the page is held, a file it fetched is in no tier
+//   needs a connection   the page is in no tier: the worker never stores a
+//                        document it was not given, so offline it sends the
+//                        reader to the application (sw.js)
 //
 // The result is tools/offline-pages.json, committed; OFFLINE_AND_LOW_END.md's
 // per-page table is rendered from it (tools/precache-inventory.mjs), and
