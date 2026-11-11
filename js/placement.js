@@ -39,6 +39,7 @@ import {
 } from './physics.js';
 import { SETTINGS, state, current_scenario_name } from './appState.js';
 import { announce } from './notify.js';
+import { formatNumber } from './format.js';
 import { t, onLocaleChange } from './i18n/index.js';
 import { registerShortcut, nudgeScale } from './shortcuts.js';
 import { glyphMarkup } from './inspectorView.js';
@@ -814,6 +815,26 @@ const buildObjectPicker = () => {
   objectPicker.appendChild(stop);
 };
 /**
+ * Zoom the view about a point of the canvas, keeping the world position under
+ * it where it is. The wheel passes the pointer; the view pad the center.
+ *
+ * @param {{x: number, y: number}} anchor - Canvas pixels
+ * @param {number} zoom - The zoom wanted, clamped to 0.01 to 100
+ */
+function zoomAbout(anchor, zoom) {
+  // The world position at the anchor, with the current zoom and pan.
+  const worldPos = screen_to_world(anchor);
+  state.zoom = Math.max(0.01, Math.min(zoom, 100));
+  state.cameraTouchedAt = Date.now();
+  // Where that position is drawn now. Both in canvas pixels: mixing the
+  // world-to-screen result with a raw clientX here would anchor the zoom to
+  // the wrong point at the low tier.
+  const moved = worldToScreen(worldPos, state, canvas);
+  state.pan.x -= moved.x - anchor.x;
+  state.pan.y -= moved.y - anchor.y;
+}
+
+/**
  * Register the pointer, wheel and key listeners and the keyboard-placement
  * shortcut. Called once by ui.js, where its own start-up code ran them.
  *
@@ -1057,31 +1078,51 @@ export function initPlacement(ctx) {
 
       // Use a smaller zoom factor for smoother zooming
       const zoomFactor = 1.05; // Reduced from 1.1
-      const oldZoom = state.zoom;
-      let newZoom = e.deltaY < 0 ? oldZoom * zoomFactor : oldZoom / zoomFactor;
-      newZoom = Math.max(0.01, Math.min(newZoom, 100));
-
-      // Get the world position at the mouse cursor (using current zoom and pan)
-      const anchor = canvasPoint(e);
-      const worldPos = screen_to_world(anchor);
-
-      // Update zoom
-      state.zoom = newZoom;
-      state.cameraTouchedAt = Date.now();
-
-      // Calculate where that world position should be on screen with the new zoom
-      const newScreenPos = worldToScreen(worldPos, state, canvas);
-
-      // Both in canvas pixels. Mixing the world-to-screen result with a raw
-      // clientX here would anchor the zoom to the wrong point at the low tier.
-      const deltaX = newScreenPos.x - anchor.x;
-      const deltaY = newScreenPos.y - anchor.y;
-
-      state.pan.x -= deltaX;
-      state.pan.y -= deltaY;
+      zoomAbout(
+        canvasPoint(e),
+        e.deltaY < 0 ? state.zoom * zoomFactor : state.zoom / zoomFactor
+      );
     },
     { passive: false }
   );
+
+  // The view pad (Prompt 278): what a drag, a wheel and a pinch do to the view,
+  // as buttons one pointer or the keyboard can press. A pan moves a picture and
+  // says nothing; the zoom is a number, said once the pressing stops (the
+  // rule of js/interaction.js's settledAnnouncer, kept here as one timer so
+  // the sandbox does not fetch another module to say one sentence).
+  let zoomSaid = null;
+  const pad = document.getElementById('viewPad');
+  pad?.addEventListener('click', e => {
+    const button = e.target.closest('button[data-view]');
+    if (!button) return;
+    const [dx, dy, factor] = button.dataset.view.split(',').map(Number);
+    if (factor) {
+      zoomAbout(
+        { x: canvas.width / 2, y: canvas.height / 2 },
+        state.zoom * factor
+      );
+      const words = pad.querySelector(
+        `#viewPadZoom .gs-${document.documentElement.lang === 'es' ? 'es' : 'en'}`
+      );
+      clearTimeout(zoomSaid);
+      zoomSaid = setTimeout(
+        () =>
+          announce(
+            words.textContent.replace(
+              '{x}',
+              formatNumber(state.zoom, { sig: 3 })
+            )
+          ),
+        700
+      );
+    } else {
+      const step = 40 / state.zoom;
+      state.pan.x += dx * step;
+      state.pan.y += dy * step;
+      state.cameraTouchedAt = Date.now();
+    }
+  });
 
   window.addEventListener('keydown', e => {
     // Typing into a field must not also drive the simulation. This handler binds
@@ -1098,7 +1139,12 @@ export function initPlacement(ctx) {
     // too, so one press ran both and toggled twice. The registered one stays (it
     // resumes from a scrubbed timeline, refreshes the transport bar and is in
     // the shortcuts overlay) and calls preventDefault() before it runs.
-    if (e.key === 'ArrowLeft' || e.key.toLowerCase() === 'a')
+    // K2 (INTERACTION.md): with a type armed, A arms keyboard placement and
+    // no longer pans as well. The arrow keys always pan.
+    if (
+      e.key === 'ArrowLeft' ||
+      (e.key.toLowerCase() === 'a' && !placementArmed())
+    )
       state.pan.x += panSpeed;
     else if (e.key === 'ArrowRight' || e.key.toLowerCase() === 'd')
       state.pan.x -= panSpeed;

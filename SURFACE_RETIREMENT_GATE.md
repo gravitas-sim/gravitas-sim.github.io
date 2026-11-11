@@ -223,6 +223,7 @@ Counts first, then every surface. "Links / Library / cited" are the shipped inve
 | `gravitas.composed-report` | download, localStorage | yes | 1 | record | **KEEP** (R3b) | Keep; a schema in Prompt 290. |
 | `course terms record` | localStorage | yes | 1 | record | **KEEP** (R3b) | Keep; a schema in Prompt 290. |
 | `collections record` | localStorage | yes | 5 | record | **KEEP** (R3b) | Keep; a schema in Prompt 290. |
+| `first-week record` | localStorage | yes | 1 | record | **KEEP** (R3b) | Keep; a schema in Prompt 290. |
 | `gravitas.submission-archive` | file | yes | 2 | record | **KEEP** (R3b) | Keep; a schema in Prompt 290. |
 | `investigation link` | link | yes | 3 | link | **KEEP** (R3b) | Keep; a schema in Prompt 290. |
 | `gravitas.course-manifest` | download | yes | 1 | record | **KEEP** (R3b) | Keep. Written for a person to read; Prompt 290 gives it a schema or says in words that it has none. |

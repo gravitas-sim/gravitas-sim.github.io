@@ -10,7 +10,7 @@ The scoped conformance report, a status for each WCAG 2.1 and 2.2 A and AA crite
 
 | Check | Covers |
 | --- | --- |
-| `e2e/accessibility.spec.js` | axe-core over <!--fact:axeSurfaces-->48<!--/fact--> surfaces × <!--fact:locales-->2<!--/fact--> languages: the <!--fact:axeShellSurfaces-->36<!--/fact--> pages with the shared shell in all <!--fact:axeAllThemes-->4<!--/fact--> themes, the application's surfaces in <!--fact:axeThemes-->2<!--/fact--> — <!--fact:axeRuns-->336<!--/fact--> runs |
+| `e2e/accessibility.spec.js` | axe-core over <!--fact:axeSurfaces-->50<!--/fact--> surfaces × <!--fact:locales-->2<!--/fact--> languages: the <!--fact:axeShellSurfaces-->36<!--/fact--> pages with the shared shell in all <!--fact:axeAllThemes-->4<!--/fact--> themes, the application's surfaces in <!--fact:axeThemes-->2<!--/fact--> — <!--fact:axeRuns-->344<!--/fact--> runs |
 | `e2e/accessibilityManual.spec.js` | Focus order, focus traps, Escape, focus restoration, heading order, landmarks, reflow, reduced motion, and the canvas description |
 
 Both run in CI. The axe run uses the `wcag2a`, `wcag2aa`, `wcag21a`, `wcag21aa`,
@@ -27,7 +27,7 @@ library by sequence, library browse, all filters, library topic, library item, m
 investigations in a course, course home, 3-D kernel diagnostics, 3-D lab, 3-D lab guide, mission
 diagnostics, mission lab, submission review, the two term surfaces of Prompt 168:
 course builder, a course as it comes (Prompt 168), distribution kit, a new term (Prompt 168), and the three
-surfaces of Prompt 164: library, your collections; kit, the collection editor; course home, a collection, and the two Common Cartridge panels of Prompt 169: course builder, the Common Cartridge panel (Prompt 169), distribution kit, the Common Cartridge panel (Prompt 169), and the two activity list panels of Prompt 174: course builder, the activity list panel with its outcomes (Prompt 174), distribution kit, the activity list panel (Prompt 174). (The figure builder is checked
+surfaces of Prompt 164: library, your collections; kit, the collection editor; course home, a collection, and the two Common Cartridge panels of Prompt 169: course builder, the Common Cartridge panel (Prompt 169), distribution kit, the Common Cartridge panel (Prompt 169), and the two activity list panels of Prompt 174: course builder, the activity list panel with its outcomes (Prompt 174), distribution kit, the activity list panel (Prompt 174), and the two first-week surfaces of Prompt 277: front door, first-week mode; front door, the introduction in a first week, five places. (The figure builder is checked
 without its live preview, which is the application in a frame and is
 checked as the surfaces above.) That list
 and the count above both come from the `SURFACES` array in the spec — the count through `npm run docs:sync`, the names by hand,
@@ -141,6 +141,82 @@ precaches (read from `sw-manifest.js`, not hand-written), says other pages work
 only if opened before, and goes when the connection returns. Its Dismiss button
 and Escape close it. `e2e/offlineStates.spec.js` and `e2e/emptyStates.spec.js`
 induce each state; `e2e/accessibility.spec.js` covers the touched pages.
+
+## Sweep I: every surface by keyboard and by one pointer (Prompt 278)
+
+The interaction contract ([INTERACTION.md](INTERACTION.md)) registered four
+surfaces and six gaps. This sweep walked the rest: every surface of the
+navigation inventory, in both languages, with real key presses and single
+presses in a browser (`e2e/a11ySweep.spec.js`, `e2e/walk.js`). The walks are
+tests, so they stay.
+
+**What a walk is.** Tab from the top of the page until focus comes round:
+focus is never trapped, every stop has a name, every stop's box is inside the
+viewport while it has focus, and every control a pointer can press is one of
+the stops. Then Tab to the page's primary control and press its key; something
+a reader can notice must change. 33 pages, each in English and in Spanish; the
+printed manual is a PDF and is not walked.
+
+**What the walks found, and what changed.**
+
+- **A dialog that ended in a disclosure never gave it focus.** `js/dialog.js`
+  listed what Tab may land on without `summary`, so in the investigation
+  browser the last card's "Learning objectives" was skipped: Tab wrapped one
+  press early, and Shift+Tab from the top went past it. The list now holds a
+  disclosure's summary.
+- **A row selected from the keyboard did not say so.** In the Observatory's
+  table Space selected the row and the count read "1 selected", but no row was
+  marked (`aria-selected`, the highlight) until something else redrew the
+  table; Escape cleared the selection the same way. The table now marks its
+  own rows.
+- **A pressed A both armed a placement and panned** (conflict K2). With a type
+  armed it now arms the placement only; the arrows always pan.
+- **The spacetime view's camera had only a drag.** Its orbit, zoom and pan are
+  the vendored OrbitControls, which Prompt 155's scan of pointer listeners
+  could not see. It has a pad now (turn, tilt, move, zoom), and the contract
+  names such sites by hand.
+- **The spacetime view's header and corner answered a mouse and nothing
+  else**: no touch, no key. Its Move and Size buttons do both.
+
+**What was built for the six gaps Prompt 155 recorded** (all activated; a
+failure is a failure now):
+
+| Gap | What a reader has now |
+| --- | --- |
+| Keyboard zoom in the sandbox | The view pad in Tools: zoom in and out, about the center of the view, with Tab and Enter. `-` and `=` stay the simulation's speed |
+| Pan with one pointer | The same pad: four buttons, each one step of what the arrow keys do |
+| The 3-D lab's free orbit | A pad under the view: four arrows that turn or move the view (a select says which) and two that zoom |
+| The observer's handle | Nothing was missing: the Position angle slider every observing panel carries sets the same angle. Prompt 155 looked in two files that do not build it. Walked now |
+| Moving a window | A Move button in the header of the inspector, of a pinned card and of the spacetime view: press it, then press where the corner goes; or the arrow keys, in the three nudge sizes. The spacetime view also has Size |
+| A run of rows without a held key | **Select a run of rows** under the Observatory's table: press it, then the last row |
+
+**What is said.** The sandbox's zoom ("Zoom 2.34 times"), the 3-D camera
+("Looking from 21° above the reference plane, 306° around it. The view is 1.2
+times as tall as the system.") and a window move are each said once, when the
+pressing stops, in the page's language. A pan says nothing: a picture moved.
+
+**What the sweep did not do.**
+
+- It judges the state a page opens in, and the states the walks open
+  themselves. A panel or dialog reached only after other choices is covered
+  where a named spec opens it.
+- It does not judge whether a focus indicator can be seen, whether the order
+  is the meaningful one, or anything a screen reader says. No assistive
+  technology was used and no person took part.
+- Six pages stay in English with Spanish chosen (the instructor portal, the
+  evaluation kit, the model, validation and glossary pages, and the
+  original-version page). Five of them carry Spanish text and a language
+  switch that stores the choice but is not read when the page opens. Recorded
+  in the walk inventory (`spanish: false`) for Prompt 282.
+- On a phone the rail is a menu that closes after any press inside it
+  (`js/ui.js`), so each press of the sandbox's view pad means opening the menu
+  and Tools again. One press works; a run of them is slow. Seen on a 393 px
+  viewport and not changed here: exempting the pad, as the object picker's
+  button is exempt, belongs to Prompt 283 (the touch pattern).
+- WebKit and Firefox: the walks ran in Chromium. On macOS, WebKit's Tab skips
+  buttons and links unless Option is held (`e2e/keyboard.js`), which the walk
+  helper allows for; it was not run there in this sweep.
+- The Spanish strings added here are unreviewed by a fluent reader.
 
 ## Startup: one splash per genuine startup (Prompt 124)
 
@@ -365,7 +441,7 @@ listed there and run as pending acceptance checks.
 links in a sentence, which WCAG 2.5.8 explicitly exempts. Enlarging them would
 mean changing a line of running text into a row of buttons.
 
-**Automated checks are a floor, not a ceiling.** <!--fact:axeRuns-->336<!--/fact--> clean axe runs mean no
+**Automated checks are a floor, not a ceiling.** <!--fact:axeRuns-->344<!--/fact--> clean axe runs mean no
 machine-detectable violation on those surfaces in those states. They do not
 mean the application is pleasant to use with a screen reader, and nothing here
 substitutes for testing with one. Nothing in this pass was made to pass by
@@ -413,6 +489,6 @@ only route to the material.
 
 ```bash
 npm run a11y            # both suites
-npm run a11y:axe        # axe only, all <!--fact:axeRuns-->336<!--/fact--> combinations
+npm run a11y:axe        # axe only, all <!--fact:axeRuns-->344<!--/fact--> combinations
 npm run a11y:manual     # keyboard, focus, reflow, reduced motion, the canvas
 ```

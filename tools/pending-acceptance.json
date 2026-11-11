@@ -4,32 +4,32 @@
     {
       "id": "interaction.keyboard.sandbox-zoom",
       "prompt": "278",
-      "activated": false
+      "activated": true
     },
     {
       "id": "interaction.single-pointer.sandbox-pan",
       "prompt": "278",
-      "activated": false
+      "activated": true
     },
     {
       "id": "interaction.single-pointer.lab3d-orbit",
       "prompt": "278",
-      "activated": false
+      "activated": true
     },
     {
       "id": "interaction.single-pointer.observer-handle",
       "prompt": "278",
-      "activated": false
+      "activated": true
     },
     {
       "id": "interaction.single-pointer.window-move",
       "prompt": "278",
-      "activated": false
+      "activated": true
     },
     {
       "id": "interaction.single-pointer.observatory-run",
       "prompt": "278",
-      "activated": false
+      "activated": true
     },
     {
       "id": "navigation.global.five-destinations",

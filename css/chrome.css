@@ -468,6 +468,12 @@
     text-align: center;
   }
 
+  /* The view pad (zoom and pan as buttons): six in one row, because Tools has
+     to fit the rail without scrolling and three rows of two did not. */
+  .ui-container .view-pad {
+    grid-template-columns: repeat(6, 1fr);
+  }
+
   /* A sub-heading inside a section. Smaller and quieter than the section
      header, because the section header is the thing that opens and shuts and
      these are only signposts within it. */

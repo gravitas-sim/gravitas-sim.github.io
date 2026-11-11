@@ -80,6 +80,7 @@ export const ES_COURSEHOME = {
     'Conservada en este dispositivo. Está en la Biblioteca y en Mi trabajo.',
   'courseHome.keep.dropped': 'Ya no se conserva.',
   'courseHome.keep.failed': 'Este navegador no la guardó.',
+  'courseHome.week': 'Abrir como primera semana en el inicio',
   'courseHome.made':
     'Versión {version} de este curso, hecha con la plataforma {platform} de Gravitas.',
   'courseHome.printNote':

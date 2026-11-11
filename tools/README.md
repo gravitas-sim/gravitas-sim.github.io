@@ -188,6 +188,8 @@ current, and the orchestrator checks it.
 | `number-ratchet.mjs` | Three migrations that may only go one way: numbers through the formatter, |  |
 | `numeric-cases.mjs` | The numerical routines' validation group (Prompt 152) |  |
 | `numeric-validate.mjs` | npm run validate:numeric - the numerical routines' validation group | `npm run validate:numeric` |
+| `numerics-instruments-engine-child.mjs` | (no header) |  |
+| `numerics-instruments-validate.mjs` | (no header) | `npm run numerics:instruments:validate` |
 | `observatory-bench.mjs` | npm run bench:observatory - what the observatory costs a reader | `npm run bench:observatory` |
 | `occurrence-validate.mjs` | The occurrence kernel against its committed thresholds (Prompt 229) | `npm run occurrence:validate` |
 | `orbit-fit-synth.mjs` | Synthetic visual-binary series with a truth manifest (Prompt 187, ORBIT_FIT_GATE.md) |  |
@@ -216,6 +218,7 @@ current, and the orchestrator checks it.
 | `release-check.mjs` | npm run release:check | `npm run release:check` |
 | `remnants-pin.mjs` | The cooling-table pin of the remnants validation (Prompt 222, REMNANTS.md) |  |
 | `remnants-validate.mjs` | The remnants kernel against its committed thresholds (Prompt 222) | `npm run remnants:validate` |
+| `resonances-ii-addendum.mjs` | The Part A addendum of the resonance gate: a ripple-free libration estimator and steps from an error budget (Prompt 273, RESONANCES_II.md section 9) |  |
 | `resonances-ii-validate.mjs` | The validation of the resonance kernel: libration, secular rate, integrator error (Prompt 273, RESONANCES_II.md) |  |
 | `reversibility-probe.mjs` | Does the engine run backwards? | `npm run probe:reversibility` |
 | `rotation-decomposition-validate.mjs` | The rotation-curve decomposition kernel against its committed thresholds (Prompt 236, Part A) | `npm run decomposition:validate` |

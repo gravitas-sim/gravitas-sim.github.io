@@ -1943,6 +1943,39 @@
       "support": null
     },
     {
+      "id": "format-first-week-record",
+      "name": "first-week record",
+      "kind": "stored-format",
+      "unique": "yes",
+      "replacement": null,
+      "why": "localStorage; owner js/welcome.js readWeek.",
+      "exposure": {
+        "links": [],
+        "records": ["first-week record"],
+        "stateLinks": []
+      },
+      "persisted": "localStorage",
+      "measure": {
+        "ownerFiles": ["js/library/firstWeek.js"],
+        "testNames": ["first-week record"]
+      },
+      "consequence": "Keep; a schema in Prompt 290.",
+      "cost": {
+        "lines": 0,
+        "testFiles": 1,
+        "generated": 0,
+        "strings": 0,
+        "precacheKb": 0,
+        "axeRows": 0
+      },
+      "use": { "shippedLinks": 1, "libraryEntries": 0 },
+      "cited": [],
+      "referrer": "UNKNOWN",
+      "verdict": "KEEP",
+      "rule": "R3b",
+      "support": null
+    },
+    {
       "id": "format-gravitas-submission-archive",
       "name": "gravitas.submission-archive",
       "kind": "stored-format",

@@ -55,12 +55,12 @@ Measured from the committed `sw-manifest.js` and the files it lists, by
 | Images | 121 | 870 KB |
 | Stylesheets | 10 | 500 KB |
 | Fonts | 9 | 140 KB |
-| Panel markup | 10 | 60 KB |
-| Pages | 12 | 320 KB |
+| Panel markup | 10 | 70 KB |
+| Pages | 12 | 330 KB |
 | Other | 16 | 900 KB |
 | **Total** | **1149** | **18.8 MB** |
 
-Of those, 815 are core (the install fails without them), 129 optional (installed with them; a missing one is reported and costs nothing) and 205 idle (installed after activation, when the browser is idle; a missing one costs that page its offline copy and is fetched again on the next open). The first-visit install is the core and the optional files: 944 files.
+Of those, 816 are core (the install fails without them), 129 optional (installed with them; a missing one is reported and costs nothing) and 204 idle (installed after activation, when the browser is idle; a missing one costs that page its offline copy and is fetched again on the next open). The first-visit install is the core and the optional files: 945 files.
 
 Gzipped, as Pages serves it, the whole is about 6 MB.
 
@@ -79,7 +79,7 @@ decides whether a version activates; it has a committed ceiling in
 budget-policy mode. The idle install has one too (`precacheIdleGzipBytes`, 1,550,336 B, raised for the activity builder group, D-R10-49, for the activity list, D-R10-55, and for the three Library entries of the measurement investigations, D-R10-67): both are CI's figures, measured under Node 22, so on a Mac under Node 24, whose gzip reads a few KB larger, the idle-tier tests can fail by design (2,644 B at the time of writing) and pass in CI. The **idle install** is fetched after activation, when the
 page has gone idle, by an `install-idle` message to the worker: the instructor
 modules, three.js, the 3-D lab, the mission lab, the Sky Lab, the Library, the
-activity builder, the data tables and the composed report (`js/myWork/composedReport.js` and `reportView.js`, Prompt 275: loaded only when a student has marked evidence for a report or an instructor adds a report file; offline before the idle install finishes, My work says the report needs a connection once and the review page refuses the file in words). It fetches only what the cache lacks, so a run cut short is
+activity builder and the data tables. It fetches only what the cache lacks, so a run cut short is
 finished by the next open, and a device that asked for less data (Save-Data) is
 not given it unasked. Until it finishes, those surfaces need the network; that
 is the trade D-PERF-02 accepted for a smaller install. The submission review page's own module (`js/submissionReview.js`) is in the idle tier with the instructor modules (Prompt 172, D-R10-38): it arrives with the idle install, not at the first visit, and its page, like the other `instructors/` pages, is runtime-cached once visited. The activity builder (`js/assignments/assignmentBuilder.js`) and the adaptation it checks, with the report of what changed under an activity and their words, are an idle group of their own (Prompt 175, D-R10-49): until the idle install finishes, an offline first visit asks for a reload when the builder is opened and shows an adapted link without its notes, due line and report, and the activity itself opens as ever. **Parts** are on-demand:
@@ -99,15 +99,14 @@ The idle tier, by surface (gzip level 6, to the nearest 10 KB: Node versions dif
 
 | Surface | Files | Gzip |
 | --- | ---: | ---: |
-| 3-D lab | 42 | ~190 KB |
+| 3-D lab | 43 | ~190 KB |
 | data tables | 33 | ~260 KB |
 | activity builder | 6 | ~20 KB |
-| instructor modules | 37 | ~350 KB |
+| instructor modules | 36 | ~350 KB |
 | mission lab | 40 | ~230 KB |
 | Sky Lab | 22 | ~170 KB |
 | image measurement | 9 | ~40 KB |
-| Library | 12 | ~120 KB |
-| composed report | 2 | ~20 KB |
+| Library | 13 | ~120 KB |
 | three.js | 2 | ~240 KB |
 <!--/fact-block-->
 

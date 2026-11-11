@@ -15,4 +15,13 @@ export const ES_INTERACTION = {
   'motion.changed.reduce': 'La animación de la interfaz está reducida.',
   'motion.changed.step':
     'Paso a paso: la simulación está en pausa. Pulsa el punto para avanzar, o reproducir para ejecutarla.',
+  // Una ventana movida sin arrastrar (js/windowMove.js).
+  'window.move.label': 'Mover este panel',
+  'window.move.arm':
+    'Elige dónde va su esquina superior izquierda. Las flechas también lo mueven. Escape cancela.',
+  'window.move.done': 'Panel movido.',
+  'window.size.label': 'Cambiar el tamaño de este panel',
+  'window.size.arm':
+    'Elige dónde va su esquina superior derecha. Las flechas también cambian su tamaño. Escape cancela.',
+  'window.size.done': 'Tamaño del panel cambiado.',
 };
