@@ -27,6 +27,7 @@ import {
   setSignalAudioActive,
 } from './audio.js';
 import { renderAudio } from './gw/audioRender.js';
+import { endSource, makeSource } from './sonify/buffer.js';
 import { setSignalAudio } from './widgetRuntime.js';
 import { EV_SIGNAL_AUDIO, EV_STOP_SIGNAL_AUDIO } from './names.js';
 
@@ -89,17 +90,7 @@ export const currentMapping = () => mapping;
  */
 export function stop() {
   if (source) {
-    try {
-      source.onended = null;
-      source.stop();
-    } catch {
-      // Already stopped, or never started.
-    }
-    try {
-      source.disconnect();
-    } catch {
-      // Already disconnected.
-    }
+    endSource(source);
     source = null;
   }
   nowPlaying = null;
@@ -144,14 +135,11 @@ export function play(timeline, opts = {}) {
   });
   if (!rendered.samples.length) return { ok: false, reason: 'empty' };
 
-  const buffer = ctx.createBuffer(1, rendered.samples.length, ctx.sampleRate);
-  buffer.copyToChannel
-    ? buffer.copyToChannel(rendered.samples, 0)
-    : buffer.getChannelData(0).set(rendered.samples);
-
-  source = ctx.createBufferSource();
-  source.buffer = buffer;
-  source.connect(bus);
+  // The buffer and its source are js/sonify/buffer.js's, which the plot
+  // component's series sound shares.
+  const made = makeSource(ctx, bus, rendered.samples);
+  const { buffer } = made;
+  source = made.source;
   source.onended = () => {
     // Only if this is still the current one: a new play() replaces it, and the
     // old node's ended event must not turn the new one off.

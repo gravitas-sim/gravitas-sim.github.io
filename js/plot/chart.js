@@ -30,7 +30,9 @@
 //   set as presentation attributes, so they follow a theme without a draw and
 //   without a stylesheet: nothing here depends on page.css.
 //
-// ./export.js is the PNG, fetched when it is asked for.
+// ./export.js is the PNG, fetched when it is asked for; ./access.js, the
+// chart's description and its sound, is fetched once a chart on a screen has
+// drawn (Prompt 280).
 // =============================================================================
 
 import { EV_THEME_CHANGED } from '../names.js';
@@ -144,6 +146,8 @@ const color = c => (typeof c === 'function' ? c() : c);
  * @param {number} [opts.maxPoints] - Draw only the newest n of each series
  * @param {number} [opts.legendMinHeight] - Pixels: the legend toggles' least height (default none)
  * @param {boolean} [opts.theme] - Repaint on the page's theme change
+ * @param {boolean} [opts.access] - false keeps the description and the sound
+ *   (./access.js) from loading for this chart
  * @param {number} [opts.capPx] - Error-bar caps, in screen pixels per side
  * @param {number} [opts.maxTicks] - Most ticks drawn along either axis (by
  *   default the size decides: up to about nine along x, seven along y)
@@ -254,6 +258,9 @@ export function createChart(host, opts = {}) {
   let legendSig = '';
   let cursor = null;
   let dead = false;
+  /** The accessibility layer, once it has loaded, and the timer that loads it. */
+  let access = null;
+  let soon = 0;
   /** id -> hidden, the reader's choice or the spec's last word. */
   const hidden = new Map();
   const specHidden = new Map();
@@ -315,6 +322,20 @@ export function createChart(host, opts = {}) {
       if (s.hidden !== undefined) specHidden.set(id, s.hidden);
     });
     render();
+    // The description and the sound (./access.js), fetched once a chart that
+    // is on a screen has stopped drawing for a moment; `access: false` opts out.
+    if (access) access.touch();
+    else if (!soon && opts.access !== false) {
+      soon = setTimeout(() => {
+        soon = 0;
+        if (dead || !wrap.clientWidth) return;
+        import('./access.js')
+          .then(m => {
+            if (!dead && !access) access = m.attach(api, host);
+          })
+          .catch(() => {});
+      }, 1500);
+    }
   }
 
   function render() {
@@ -959,7 +980,7 @@ export function createChart(host, opts = {}) {
   const themed = () => render();
   if (opts.theme !== false) window.addEventListener(EV_THEME_CHANGED, themed);
 
-  return {
+  const api = {
     draw,
     /** Read the colors again, as a theme change does. */
     repaint: render,
@@ -1007,6 +1028,8 @@ export function createChart(host, opts = {}) {
         radius: s.radius ?? 3,
         order: s.order ?? 0,
         hidden: isHidden(s, k),
+        sigma: s.sigma ?? null,
+        cap: s.maxPoints ?? opts.maxPoints ?? Infinity,
       })),
     }),
     /** The chart as a PNG (a Blob), through ./export.js. */
@@ -1015,10 +1038,13 @@ export function createChart(host, opts = {}) {
     },
     destroy() {
       dead = true;
+      clearTimeout(soon);
+      access?.destroy();
       ro?.disconnect();
       window.removeEventListener(EV_THEME_CHANGED, themed);
       host.replaceChildren();
     },
   };
+  return api;
 }
 createChart.count = 0;
