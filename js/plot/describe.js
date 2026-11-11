@@ -61,6 +61,8 @@ export const LIMITS = Object.freeze({
   series: 6,
 });
 
+// Read once: under Jest every free `Math` is a lookup through the VM's global.
+const { Math, Number, Float64Array, Int32Array } = globalThis;
 const finite = Number.isFinite;
 const sorted = a => Float64Array.from(a).sort();
 const median = a => {
@@ -164,12 +166,17 @@ function sinusoid(xs, ys, trend) {
   if (!(span > 0) || !(dx > 0)) return null;
   const yy = py.reduce((a, v) => a + v * v, 0);
   if (!(yy > 0)) return null;
+  // The three-parameter least squares of a sine, a cosine and an offset: the
+  // offset keeps a part of a cycle left at the ends from pulling the period.
   const at = f => {
     let S = 0;
     let C = 0;
     let SC = 0;
+    let Ss = 0;
+    let Cc = 0;
     let Ys = 0;
     let Yc = 0;
+    let Y1 = 0;
     for (let i = 0; i < n; i++) {
       const w = 2 * Math.PI * f * px[i];
       const s = Math.sin(w);
@@ -177,14 +184,21 @@ function sinusoid(xs, ys, trend) {
       S += s * s;
       C += c * c;
       SC += s * c;
+      Ss += s;
+      Cc += c;
       Ys += py[i] * s;
       Yc += py[i] * c;
+      Y1 += py[i];
     }
-    const det = S * C - SC * SC;
-    if (!(det > 1e-12 * n * n)) return { gain: 0 };
-    const a = (Ys * C - Yc * SC) / det;
-    const b = (Yc * S - Ys * SC) / det;
-    return { gain: a * Ys + b * Yc, a, b };
+    // Cramer's rule on [[S, SC, Ss], [SC, C, Cc], [Ss, Cc, n]].
+    const det3 = (a, b, c, d, e, g, h, i, j) =>
+      a * (e * j - g * i) - b * (d * j - g * h) + c * (d * i - e * h);
+    const det = det3(S, SC, Ss, SC, C, Cc, Ss, Cc, n);
+    if (!(Math.abs(det) > 1e-12 * n * n * n)) return { gain: 0 };
+    const a = det3(Ys, SC, Ss, Yc, C, Cc, Y1, Cc, n) / det;
+    const b = det3(S, Ys, Ss, SC, Yc, Cc, Ss, Y1, n) / det;
+    const c = det3(S, SC, Ys, SC, C, Yc, Ss, Cc, Y1) / det;
+    return { gain: a * Ys + b * Yc + c * Y1, a, b };
   };
   const fLow = LIMITS.cyclesMin / span;
   const fHigh = 0.5 / dx;
@@ -198,16 +212,21 @@ function sinusoid(xs, ys, trend) {
       bestF = f;
     }
   }
-  const centre = bestF;
-  for (let k = -25; k <= 25; k++) {
-    const f = centre + (k * df) / 25;
-    if (f < fLow || f > fHigh) continue;
-    const r = at(f);
-    if (r.gain > best.gain) {
-      best = r;
-      bestF = f;
-    }
+  // Refine between the neighbours of the best grid frequency by golden-section
+  // search, to far below the frequency's own uncertainty: a coarse grid would
+  // set a floor on the period's error that the stated uncertainty does not have.
+  let lo = Math.max(fLow, bestF - df);
+  let hi = Math.min(fHigh, bestF + df);
+  const phi = (Math.sqrt(5) - 1) / 2;
+  for (let k = 0; k < 40; k++) {
+    const f1 = hi - phi * (hi - lo);
+    const f2 = lo + phi * (hi - lo);
+    if (at(f1).gain < at(f2).gain) lo = f1;
+    else hi = f2;
   }
+  bestF = (lo + hi) / 2;
+  const refined = at(bestF);
+  if (refined.gain >= best.gain) best = refined;
   if (!(best.gain > 0)) return null;
   const amplitude = Math.hypot(best.a, best.b);
   const sigmaRes = Math.sqrt(
@@ -242,6 +261,15 @@ function runs(ys, test, minLength) {
     }
   }
   return out;
+}
+
+/** How many points a series has and where x begins and ends: what the axes print. */
+export function span(x, y) {
+  const { xs } = points(x, y, null);
+  const n = xs.length;
+  return n
+    ? { n, shape: 'few', x0: xs[0], x1: xs[n - 1] }
+    : { n, shape: 'few' };
 }
 
 /**
@@ -536,6 +564,9 @@ const WORDS = {
   },
 };
 
+/** The templates themselves, for a test of their parity and their vocabulary. */
+export const TEMPLATES = WORDS;
+
 /** Every word the templates can write, for a test of what they never say. */
 export const TEMPLATE_TEXT = Object.freeze(
   Object.fromEntries(
@@ -684,10 +715,10 @@ export function describe(
   const w = WORDS[lang] ?? WORDS.en;
   const shown = series.filter(s => !s.hidden);
   const list = shown.slice(0, LIMITS.series).map(s => {
-    const facts = analyse(s.x, s.y, {
-      sigma: s.sigma,
-      scatter: s.mode === 'points',
-    });
+    // A held answer is never analysed: what is not computed cannot leak.
+    const facts = held
+      ? span(s.x, s.y)
+      : analyse(s.x, s.y, { sigma: s.sigma, scatter: s.mode === 'points' });
     return {
       label: shown.length > 1 ? String(s.label ?? '') : '',
       facts,

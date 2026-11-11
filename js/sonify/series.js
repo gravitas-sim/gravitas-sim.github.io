@@ -65,6 +65,8 @@ export function mapSeries(
     if (Number.isFinite(x[i]) && Number.isFinite(y[i])) pts.push([x[i], y[i]]);
   }
   if (pts.length < 2) return null;
+  // In x order, so that the sums (and so the notes) do not depend on the order given.
+  pts.sort((a, b) => a[0] - b[0] || a[1] - b[1]);
   let x0 = Infinity;
   let x1 = -Infinity;
   for (const [px] of pts) {
@@ -159,10 +161,10 @@ const WORDS = {
   en: {
     sweep: 'Time is x',
     sweepSpectrum: 'Time is x, read left to right',
-    pitch: 'Pitch is the value',
+    pitch: 'Pitch is the value, the mean of each slice',
     gaps: n =>
       ` ${n} empty ${n === 1 ? 'slice is a tick' : 'slices are ticks'}, never a held note.`,
-    low: (hz, v) => `the lowest value, ${v}, is ${hz} Hz`,
+    low: (hz, v) => `the lowest mean, ${v}, is ${hz} Hz`,
     high: (hz, v) => `the highest, ${v}, is ${hz} Hz`,
     flat: v => `every value is ${v}, so every note is the middle pitch`,
     res: v =>
@@ -175,11 +177,11 @@ const WORDS = {
   es: {
     sweep: 'El tiempo es x',
     sweepSpectrum: 'El tiempo es x, leído de izquierda a derecha',
-    pitch: 'El tono es el valor',
+    pitch: 'El tono es el valor, la media de cada intervalo',
     gaps: n =>
       ` ${n} ${n === 1 ? 'intervalo vacío suena como un chasquido' : 'intervalos vacíos suenan como chasquidos'}, nunca como una nota sostenida.`,
-    low: (hz, v) => `el valor más bajo, ${v}, es ${hz} Hz`,
-    high: (hz, v) => `el más alto, ${v}, es ${hz} Hz`,
+    low: (hz, v) => `la media más baja, ${v}, es ${hz} Hz`,
+    high: (hz, v) => `la más alta, ${v}, es ${hz} Hz`,
     flat: v =>
       `todos los valores son ${v}, así que todas las notas tienen el tono medio`,
     res: v =>
