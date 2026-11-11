@@ -1275,7 +1275,7 @@
     cursor: pointer !important;
     padding: 4px 8px !important;
     border-radius: 4px !important;
-    transition: all 0.2s ease !important;
+    transition: all var(--duration) ease !important;
     box-shadow: none !important;
     transform: none !important;
     text-shadow: none;

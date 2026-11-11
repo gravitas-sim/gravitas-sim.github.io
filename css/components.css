@@ -473,6 +473,17 @@
     border-color: var(--border-strong);
   }
 
+  /* The design system's checkbox and radio (DESIGN_SYSTEM.md): a 24px box in
+     the accent, WCAG 2.2's minimum target (2.5.8), for every bare one on every
+     page. A browser draws them 13-15px. :where keeps the rule's weight at
+     nothing, so a layout that sizes one for itself still wins. */
+  :where(input[type='checkbox'], input[type='radio']) {
+    flex: none;
+    width: 24px;
+    height: 24px;
+    accent-color: var(--accent);
+  }
+
   /* The track used to be a 4px bar of --surface-3, which against the Midnight
      panel background is very nearly the same color: the control was easy to
      miss entirely, and there was no indication of where in its range the value
@@ -1966,6 +1977,20 @@
     button,
     .toggle-button {
       border: 1px solid ButtonText;
+    }
+
+    /* A pressed, selected or current control is drawn by color in the themes,
+       and the system palette removes color. Each keeps a mark that survives:
+       the system's selection color on the edge, and an underline on the words,
+       which the palette never touches. */
+    :is(
+        [aria-pressed='true'],
+        [aria-selected='true'],
+        [aria-checked='true'],
+        [aria-current]:not([aria-current='false'])
+      ):is(button, a, [role='tab'], [role='option'], [role='menuitem']) {
+      border-color: Highlight;
+      text-decoration: underline;
     }
   }
 }

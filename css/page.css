@@ -250,7 +250,11 @@
   }
 
   /* --- Tables ------------------------------------------------------------ */
+  /* position: relative makes the wrapper the containing block of anything
+     placed absolutely inside the table (a visually hidden label, a bar), so
+     that it scrolls with the table and never widens the page behind it. */
   .doc-table-wrap {
+    position: relative;
     margin: var(--space-4) 0 var(--space-6);
     overflow-x: auto;
     border: 1px solid var(--border-subtle);
