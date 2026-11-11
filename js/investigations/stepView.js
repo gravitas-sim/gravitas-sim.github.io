@@ -362,7 +362,7 @@ export function stepMarkup(step, c) {
         ? `<br /><em class="${missed ? 'inv-misconception' : 'inv-class'}">${prose(said)}</em>`
         : '';
       parts.push(
-        `<p class="inv-feedback is-wrong">${escape(t('inv.answer.notYet'))}${named}</p>`
+        `<p class="inv-feedback is-wrong">${escape(t('inv.answer.notYet'))}${named}</p><div class="inv-recover" data-recover hidden></div>`
       );
     }
 
@@ -1146,15 +1146,13 @@ export function bindStepInputs(h) {
   if (numeric && checkBtn) {
     const submit = () => {
       // The first thing they committed to, kept. A student who tries a number,
-      // is told it is wrong, and revises has done something a report should be
-      // able to show; overwriting it leaves only the answer they arrived at
-      // with help, which is a different fact about a different moment.
+      // is told it is wrong and revises has done something a report should show;
+      // overwriting it leaves only the answer they arrived at with help.
       if (h.responses()[`${id}:first`] === undefined && numeric.value.trim()) {
         h.responses()[`${id}:first`] = numeric.value;
       }
-      // The text and the convention it was typed under, together. Storing the
-      // text alone let a later reader - the PDF, or the same panel after a
-      // language switch - decide that "1,234" had meant something else.
+      // The text and the convention it was typed under, together: the text alone
+      // let a later reader (the PDF, a language switch) misread "1,234".
       recordAnswer(h.responses(), id, numeric.value, getLocale());
       h.attempts()[id] = (h.attempts()[id] || 0) + 1;
       h.save();
@@ -1171,6 +1169,8 @@ export function bindStepInputs(h) {
       }
     });
   }
+  if (els.body.querySelector('[data-recover]'))
+    import('./recovery.js').then(m => m.fill(h, announce, getLocale, hintsFor));
 }
 
 // --- Measured values ----------------------------------------------------------
