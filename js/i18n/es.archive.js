@@ -38,6 +38,8 @@ export const ES_ARCHIVE = {
     'De este dispositivo: obtenidas hace {days} días, y no se han vuelto a pedir.',
   'obs.arc.cache.stale':
     'De este dispositivo, con {days} días de antigüedad: no se pudo contactar con el CDS ({why}).',
+  'obs.arc.restored':
+    'Reabierta tras recargar, desde la copia guardada en este dispositivo, obtenida hace {days} días. No se consultó el archivo.',
   'obs.arc.cache.changed':
     'La respuesta de VizieR ha cambiado desde la última vez que se guardó aquí. Es una observación distinta de la que se guardó antes.',
   'obs.arc.overflow':

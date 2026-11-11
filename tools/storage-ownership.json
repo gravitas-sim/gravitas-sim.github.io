@@ -354,6 +354,15 @@
       "export": "session",
       "corpus": null,
       "corpusWhy": "gone when the tab closes; never exported"
+    },
+    {
+      "where": "sessionStorage gravitas_observatory_open",
+      "name": "The Gaia archive observation open in the Observatory (source, band, object), so a reload reads it back from the archive store",
+      "owner": "js/observatoryPage.js",
+      "migration": "none; a record that is not version 1 is ignored and dropped",
+      "export": "session",
+      "corpus": null,
+      "corpusWhy": "gone when the tab closes; never exported; names an answer in the archive store and holds no data"
     }
   ],
   "writers": [

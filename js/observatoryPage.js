@@ -16,6 +16,7 @@ import {
   translatePage,
 } from './observatory/i18n.js';
 import { mountShell } from './shell.js';
+import { KEY_OBSERVATORY_OPEN } from './names.js';
 import {
   FIXTURES,
   lightCurveObservation,
@@ -1078,6 +1079,19 @@ $('obsNextPage').addEventListener('click', () => table.turn(1));
 
 function open(o, changes = []) {
   if (marks.take?.(o)) return; // the overlay panel's second frame
+  // An archive observation is remembered for this visit, so a reload (offline
+  // too) can read it back from the device's copy; any other clears it.
+  try {
+    const m = /^import:gaia-dr3-(\d+)-(G|BP|RP)@/.exec(o.id);
+    if (m)
+      sessionStorage.setItem(
+        KEY_OBSERVATORY_OPEN,
+        JSON.stringify({ v: 1, source: m[1], band: m[2], object: o.object })
+      );
+    else sessionStorage.removeItem(KEY_OBSERVATORY_OPEN);
+  } catch {
+    /* no session storage: nothing is remembered */
+  }
   state.source = o;
   state.history.reset(changes);
   state.selection = null;
@@ -1501,6 +1515,14 @@ loadLanguage(opening).then(
   () => begin('en')
 );
 
+const remembered = () => {
+  try {
+    return Boolean(sessionStorage.getItem(KEY_OBSERVATORY_OPEN));
+  } catch {
+    return false;
+  }
+};
+
 function begin(lang) {
   setLanguage(lang);
   translateAll();
@@ -1538,5 +1560,8 @@ function begin(lang) {
   if (!installedId && FIXTURES.some(f => f.id === fixtureId)) {
     $('obsFixture').value = fixtureId;
     $('obsOpen').click();
-  }
+  } else if (!installedId && remembered())
+    import('./observatory/archivePanel.js').then(m =>
+      m.restoreOpen({ ...lent, open, status })
+    );
 }

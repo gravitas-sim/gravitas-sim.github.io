@@ -179,3 +179,38 @@ export function promisesTable(root, inv) {
     '',
   ].join('\n');
 }
+
+/**
+ * Every page's offline promise, from tools/offline-pages.json (Prompt 284): the
+ * record a headless tour wrote, set against the manifest by
+ * tests/offlinePages.test.js. The adoption and teaching pages are one row each
+ * by kind, since they promise the same thing.
+ * @param {string} root - The repository
+ * @returns {string} Markdown, for a fact block
+ */
+export function pagesTable(root) {
+  const record = JSON.parse(
+    readFileSync(path.join(root, 'tools/offline-pages.json'), 'utf8')
+  );
+  const names = list => list.map(p => `\`${p.page}\``).join(', ');
+  const by = k => record.pages.filter(p => p.promise === k);
+  const visit = by('one online visit');
+  const teaching = visit.filter(p => p.page.startsWith('/teaching/'));
+  const parts = visit.filter(
+    p => !p.page.startsWith('/teaching/') && p.outside.length
+  );
+  const rest = visit.filter(
+    p => !p.page.startsWith('/teaching/') && !p.outside.length
+  );
+  return [
+    '',
+    '| Promise | Pages | What it means |',
+    '| --- | --- | --- |',
+    `| From the first visit | ${names(by('first visit'))} | The page and every file the tour saw it fetch are in the first-visit install: it opens with no network as soon as the install has finished. |`,
+    `| After the first visit settles | ${names(by('after it settles'))} | The page, or a file it fetches, is in the idle tier, which arrives after the install, on idle, and not on a save-data connection. The offline note says so. |`,
+    `| After one online visit, with files no tier holds | ${names(parts)} | The worker keeps what the page fetched once it has been fetched; a part opened later must have been opened. |`,
+    `| After one online visit | ${rest.length} pages: ${names(rest)} | The page is in no tier and fetches nothing outside the install; the worker keeps it once visited. |`,
+    `| After one online visit (teaching and adoption pages) | ${teaching.length} pages under \`/teaching/\` | The same, one page at a time. |`,
+    '',
+  ].join('\n');
+}

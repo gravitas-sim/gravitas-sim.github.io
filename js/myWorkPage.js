@@ -496,10 +496,30 @@ function showMade() {
 
 // --- Files -------------------------------------------------------------------
 
-function download(file, name) {
+/**
+ * Hand the backup to the device. A phone that can share a file (iOS and Android
+ * browsers, a touch screen) gets the share sheet, which is where "Save to
+ * Files" and a drive's app are; everything else gets a download. Resolves to
+ * whether a file was made: a sheet the reader closed made none, and no deletion
+ * may count it as a backup (Prompt 284).
+ * @returns {Promise<boolean>}
+ */
+async function download(file, name) {
   const blob = new Blob([JSON.stringify(file, null, 2)], {
     type: 'application/json',
   });
+  try {
+    if (matchMedia('(pointer: coarse)').matches && navigator.share) {
+      const f = new window.File([blob], name, { type: 'application/json' });
+      if (navigator.canShare?.({ files: [f] })) {
+        await navigator.share({ files: [f], title: name });
+        return true;
+      }
+    }
+  } catch (e) {
+    // Closing the sheet is a refusal; any other failure falls to the download.
+    if (e?.name === 'AbortError') return false;
+  }
   const a = document.createElement('a');
   a.href = URL.createObjectURL(blob);
   a.download = name;
@@ -507,6 +527,7 @@ function download(file, name) {
   a.click();
   a.remove();
   setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+  return true;
 }
 
 /** Make a backup file: everything, or the keys of one thing. */
@@ -520,7 +541,14 @@ async function exportFile(ids, sub, label) {
   }
   const n = Object.values(file.collections).reduce((a, l) => a + l.length, 0);
   if (!n) return false;
-  download(file, fileName(label || 'everything'));
+  if (!(await download(file, fileName(label || 'everything')))) {
+    s.say = L(
+      'No file was made: the share sheet was closed. Nothing was deleted.',
+      'No se creó ningún archivo: se cerró la hoja de compartir. No se borró nada.'
+    );
+    render();
+    return false;
+  }
   if (!ids) everything = true;
   for (const k of ids ?? []) s.exported.add(sub ? `${k}#${sub}` : k);
   try {
@@ -607,6 +635,45 @@ async function preview() {
     )
     .join('')}</tbody></table>`;
   $('mwApply').disabled = t.add + t.replace === 0;
+  await room(prepared, res.plan);
+}
+
+/**
+ * Before an import: what it would store and what this browser can still give,
+ * as the storage module's estimate says (a phone's quota can be small). When
+ * the estimate says it would not fit before the reserve, Import stays off;
+ * when the browser does not say, the line says so (Prompt 284).
+ */
+async function room(prepared, plan) {
+  const need = JSON.stringify(
+    flatten(prepared).filter(r =>
+      plan.some(p => p.id === r.id && ['add', 'replace'].includes(p.action))
+    )
+  ).length;
+  const e = await s.store.estimate();
+  const line = document.createElement('p');
+  line.id = 'mwRoom';
+  line.className = 'ui-hint';
+  if (!e?.known) {
+    line.textContent = L(
+      `This import would store about ${size(need)}. This browser does not say how much room is left.`,
+      `Esta importación guardaría unos ${size(need)}. Este navegador no indica cuánto espacio queda.`
+    );
+  } else {
+    const fits = need <= e.available;
+    line.textContent = fits
+      ? L(
+          `This import would store about ${size(need)}; about ${size(e.available)} can still be used here.`,
+          `Esta importación guardaría unos ${size(need)}; aquí se pueden usar todavía unos ${size(e.available)}.`
+        )
+      : L(
+          `This import would store about ${size(need)}, and only about ${size(e.available)} can still be used here: too little. Free some space, then import again.`,
+          `Esta importación guardaría unos ${size(need)} y aquí solo se pueden usar unos ${size(e.available)}: muy poco. Libera espacio e importa de nuevo.`
+        );
+    line.dataset.fits = String(fits);
+    if (!fits) $('mwApply').disabled = true;
+  }
+  $('mwPreviewBody').prepend(line);
 }
 
 async function readFile(file) {

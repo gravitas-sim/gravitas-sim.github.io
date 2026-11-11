@@ -677,6 +677,127 @@ settled enough to ship without a decision:
 Both were proposed as D-PERF-02. Carl approved them on 2026-10-14, to be
 implemented later with the offline specs green; neither is implemented yet.
 
+## Offline at scale (Prompt 284)
+
+The tiers of Prompt 147 were measured when the site had a third of the content.
+This section is what the same tools say now, what the tour found, and what was
+added to meet the larger site.
+
+### Every page, measured
+
+`node tools/offline-pages.mjs` opens every HTML page of the tree (178) in
+headless Chromium with service workers blocked, scrolls it once so the lazy
+pictures load, waits for it to go quiet, and sets every same-origin request it
+made against `sw-manifest.js`. It writes `tools/offline-pages.json`;
+`tests/offlinePages.test.js` holds that record to the manifest (a page or a
+request in another tier than the record says, or a page with no row, fails), and
+`e2e/offlineII.spec.js` opens each page that promises offline with the network
+gone and fails on any request that does not come back. The table is generated
+from the record.
+
+<!--fact-block:pagePromises-->
+| Promise | Pages | What it means |
+| --- | --- | --- |
+| From the first visit | `/catalog/`, `/course/`, `/`, `/observatory/`, `/studio/course/`, `/studio/`, `/studio/lesson/` | The page and every file the tour saw it fetch are in the first-visit install: it opens with no network as soon as the install has finished. |
+| After the first visit settles | `/3d/`, `/library/`, `/mission/lab/`, `/my-work/`, `/sky/` | The page, or a file it fetches, is in the idle tier, which arrives after the install, on idle, and not on a save-data connection. The offline note says so. |
+| After one online visit, with files no tier holds | `/compute/`, `/figure/`, `/instructors/`, `/instructors/submissions/`, `/lab3d/`, `/mission/`, `/validation/` | The worker keeps what the page fetched once it has been fetched; a part opened later must have been opened. |
+| After one online visit | 5 pages: `/evaluation/`, `/experiments/`, `/glossary/`, `/model/`, `/studio/course/packs/` | The page is in no tier and fetches nothing outside the install; the worker keeps it once visited. |
+| After one online visit (teaching and adoption pages) | 154 pages under `/teaching/` | The same, one page at a time. |
+<!--/fact-block-->
+
+What the tour found, and what was done about it:
+
+- **The course home asked for an idle file.** `courseHome.js`, in the
+  first-visit install, imports `js/library/progress.js`, which sat in the
+  Library's idle group, so the course home failed offline until the idle tier
+  finished, and the offline note called it saved. The file now leaves the idle
+  group (`tools/build-service-worker.mjs`): about 1.1 KB gzip moves from the idle
+  tier to the first visit (D-R10-284-02).
+- **The offline note named idle pages as saved.** The 3-D lab, the mission lab,
+  the Sky Lab and the Library are in the idle tier, which arrives after the
+  install, on idle, and not on a connection set to save data, so "These pages
+  are saved on this device" was untrue for them for the first minute, and for
+  good under Save-Data. The note now lists the first-visit pages as saved and the
+  idle pages after "These follow once the first visit has finished installing".
+  That is a visible change on every page (the note is in each page's shell,
+  which `node tools/shell.mjs --write` stamps), in both languages.
+- **My work reads an idle file and does without it.** It is in the install
+  and opens from the first visit; the Library index it reads for titles and
+  sequence progress (`library/library.json`) is idle, and until it arrives the
+  page lists items under their ids. `tests/offlinePages.test.js` names this as
+  the one exception and `e2e/offlineII.spec.js` opens the page without the
+  index.
+- **Nothing else contradicted a promise.** Every page whose requests are all in
+  the install promises offline from the first visit; the adoption and teaching
+  pages, the model, validation, evaluation and similar pages are in no tier and
+  open offline after one online visit, which is what the page and this document
+  already said. Pages that fetch a file no tier holds (the instructors' portal's
+  sequences, the compute page's modules, the validation data) work offline after
+  a visit that loaded them, and a part opened later must have been opened.
+
+### Parts, and the room they need
+
+`js/offlineParts.js` has no adopter yet, so no reader sees a "make available
+offline" control; the contract is what the first dataset large enough to need it
+adopts, and it meets the larger site's numbers. The parts of one dataset are
+fetched smallest first (`fetchOrder`), so a connection or a disk that gives out
+leaves the most whole parts; before any part of 8 MiB or more (`LARGE_PART_BYTES`)
+the browser's estimate is read again and a part that would leave less than the
+storage module's reserve (5 MiB or a tenth of the quota, `reserveBytes`) is not
+started: it is named in `skipped`, and the smaller ones already stored stay.
+
+### The footprint ceiling and eviction
+
+`indexedDbAndCacheBytes` in `tools/data-budget.json` is 200 MiB. The precache is
+stored uncompressed in Cache Storage (19.4 MB raw), the archive's cached answers
+are held to 64 MiB or 400 answers (`js/archive/cache.js`, least recently used
+first), and that leaves 116 MiB for the reader's parts and the Catalog's
+installed extensions (each at most 16 MiB unpacked, `js/catalog/archive.js`), which the application does not
+prune: the worker keeps the parts cache across versions and the reader removes
+it. `tests/offlineFootprint.test.js` holds that arithmetic (the room left is at
+least two large parts), offers the archive store the ceiling's worth of answers
+(200 MiB in 1 MiB answers) and checks that it holds to its cap and keeps the
+newest, and checks from STORAGE.md's matrix that every record in a store the
+eviction reaches (the archive database, the catalog database, Cache Storage) is
+evictable and no durable record is. `e2e/offlineII.spec.js` does it in a
+browser on the real IndexedDB with the largest answer the page accepts (512 kB),
+leaves student work in localStorage byte for byte, and records the time. The
+eviction reads every row on each write, so its cost grows with the cap; at the
+cap it is measured in that spec and bounded.
+
+### What comes back after an offline reload
+
+- A lesson reopens at its step, because progress and the one resume record
+  (Prompt 163) are in localStorage; the Library's "Continue" link and Home's
+  offer read the same record offline.
+- The Observatory's open Gaia archive observation: when one opens, the page
+  notes its source, band and object in sessionStorage
+  (`gravitas_observatory_open`: this tab, no data), and a reload reads the
+  answer back from the archive store, never from the network, even when the
+  copy is old, and says so ("Reopened after the reload from the copy kept on
+  this device"). What returns is the observation as it was opened, not the
+  changes made to it since. Opening any other observation drops the note; a
+  store that no longer holds the answer leaves the page as it opened.
+- The update chip (`js/offline.js`) is unchanged: a waiting version never
+  swaps under the page, and `tests/buildIntegrity.test.js` and
+  `e2e/serviceWorkerUpdate.spec.js` still hold it with the tiers as they are.
+
+### My work on a phone
+
+Export: on a touch device whose browser can share a file
+(`navigator.canShare({files})`), the backup goes to the share sheet (where
+"Save to Files" and a drive's app are); elsewhere it is a download. A closed
+sheet makes no file and does not count as a backup, so it cannot unlock a
+deletion. Import: the file picker takes `application/json` and `.json`, and
+before the import is applied the preview says how much it would store and how
+much this browser can still give, from the storage module's estimate (a phone's
+quota can be small); with too little room Import stays off, and a browser that
+does not say says so. Emulated in `e2e/offlineII.spec.js` on a Pixel 7 and an
+iPhone 14 profile. Emulation is a proxy: whether a real share sheet takes the
+file, or a real picker offers it, is not established (an UNKNOWN row in
+`tools/evidence-status.json`; the real-device protocol above is the way to
+settle it).
+
 ## Running the tests
 
 ```bash
@@ -687,6 +808,9 @@ npm test -- tests/perfTrace.test.js        # the trace buckets and the recorded 
 npm run perf -- --trace --tier low --cpu 4 # frame times with raster and composite apart from script
 node tools/longtask-census.mjs --cpu 4     # main-thread work above the budgets
 node tools/precache-tour.mjs               # what a visit fetches against the precache
+node tools/offline-pages.mjs               # every page against the manifest, writes tools/offline-pages.json
+npm test -- tests/offlinePages.test.js tests/offlineFootprint.test.js tests/offlineParts.test.js
+npx playwright test offlineII --project=chromium   # every page offline, restoration, eviction, the phone paths
 ```
 
 The offline spec opts back in to service workers; the rest of the suite blocks

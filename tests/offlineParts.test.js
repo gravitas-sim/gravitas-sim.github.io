@@ -184,6 +184,89 @@ describe('fetching parts', () => {
   });
 });
 
+describe('parts at scale (Prompt 284)', () => {
+  const MiB = 1048576;
+  const big = (id, bytes) => ({ id, bytes });
+
+  test('parts are fetched smallest first, the same way on every open', () => {
+    const order = parts
+      .fetchOrder([big('c', 9 * MiB), big('b', 10), big('a', 10), big('d', 3)])
+      .map(p => p.id);
+    expect(order).toEqual(['d', 'a', 'b', 'c']);
+  });
+
+  test('the reserve is 5 MiB or a tenth of the quota, whichever is more', () => {
+    expect(parts.reserveBytes(10 * MiB)).toBe(5 * MiB);
+    expect(parts.reserveBytes(100 * MiB)).toBe(10 * MiB);
+  });
+
+  test('a download that would leave less than the reserve does not fit', () => {
+    const q = { quota: 100 * MiB, usage: 50 * MiB };
+    expect(parts.fits(40 * MiB, q)).toBe(true);
+    expect(parts.fits(40 * MiB + 1, q)).toBe(false);
+    expect(parts.fits(1, { quota: null, usage: 1 })).toBeNull();
+  });
+
+  test('the small parts land first; a large part that will not fit is skipped by name, not started', async () => {
+    const small = part('small', 'ten bytes!');
+    const huge = {
+      ...part('huge', 'x'),
+      bytes: parts.LARGE_PART_BYTES,
+    };
+    const caches = fakeCaches();
+    const log = [];
+    const storage = {
+      estimate: async () => ({ quota: 100 * MiB, usage: 95 * MiB }),
+    };
+    const out = await parts.makeAvailableOffline('set', [huge, small], {
+      caches,
+      storage,
+      fetch: server({ [small.url]: 'ten bytes!' }, log),
+    });
+    expect(out.done).toEqual(['small']);
+    expect(out.skipped).toEqual(['huge']);
+    expect(out.failed).toEqual([]);
+    expect(log).toEqual([small.url]);
+  });
+
+  test('a large part that fits is fetched, and an unknown estimate does not refuse it', async () => {
+    const huge = { ...part('huge', 'x'), bytes: parts.LARGE_PART_BYTES };
+    for (const storage of [
+      { estimate: async () => ({ quota: 1000 * MiB, usage: 1 * MiB }) },
+      {},
+    ]) {
+      const log = [];
+      const out = await parts.makeAvailableOffline('set', [huge], {
+        caches: fakeCaches(),
+        storage,
+        fetch: server({ [huge.url]: 'x' }, log),
+      });
+      // The stand-in file is one byte, not 8 MiB: it is the estimate that is
+      // under test, so the fetch is made and then refused as short.
+      expect(log).toEqual([huge.url]);
+      expect(out.skipped).toEqual([]);
+      expect(out.failed.map(f => f.id)).toEqual(['huge']);
+    }
+  });
+
+  test('a part already stored is not asked about the estimate again', async () => {
+    const huge = { ...part('huge', 'x'), bytes: parts.LARGE_PART_BYTES };
+    const caches = fakeCaches();
+    (await caches.open(parts.PARTS_CACHE)).m.set(
+      new URL(huge.url, globalThis.location?.href ?? 'http://x/').href,
+      {}
+    );
+    const out = await parts.makeAvailableOffline('set', [huge], {
+      caches,
+      storage: {
+        estimate: async () => ({ quota: 100 * MiB, usage: 99 * MiB }),
+      },
+      fetch: server({}),
+    });
+    expect(out).toMatchObject({ done: ['huge'], skipped: [], failed: [] });
+  });
+});
+
 describe('the worker and the parts cache', () => {
   function worker(caches, networkOffline = true) {
     const listeners = {};

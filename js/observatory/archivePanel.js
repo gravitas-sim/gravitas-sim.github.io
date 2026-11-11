@@ -21,6 +21,7 @@ import { resolveName, gaiaSourcesAt, gaiaEpochs } from '../archive/cds.js';
 import { idbStore } from '../archive/cache.js';
 import { fixed } from '../format.js';
 import { BANDS, toObservation } from '../archive/gaiaEpochs.js';
+import { KEY_OBSERVATORY_OPEN as OPEN_KEY } from '../names.js';
 import { EN_ARCHIVE } from '../i18n/en.archive.js';
 import { ES_ARCHIVE } from '../i18n/es.archive.js';
 
@@ -94,6 +95,51 @@ export function aladinLink({ ra, dec }) {
   const sign = dec < 0 ? '-' : '+';
   const target = `${ra.toFixed(5)} ${sign}${Math.abs(dec).toFixed(5)}`;
   return `https://aladin.cds.unistra.fr/AladinLite/?target=${encodeURIComponent(target)}&fov=0.2`;
+}
+
+/**
+ * After a reload, the archive observation that was open, read back from this
+ * device's copy of the answer and never from the network, so it comes back
+ * offline as it does online (Prompt 284). The page writes `OPEN_KEY` when an
+ * archive observation opens (sessionStorage: it is gone when the tab closes,
+ * so it is a memory of this visit and not a record). What returns is the
+ * observation as it was opened, not the changes made to it since.
+ * @param {{t: Function, open: (o: object) => void, status: (text: string) => void,
+ *   store?: object}} ctx
+ * @returns {Promise<boolean>} Whether an observation was reopened
+ */
+export async function restoreOpen(ctx) {
+  let rec = null;
+  try {
+    rec = JSON.parse(sessionStorage.getItem(OPEN_KEY));
+  } catch {
+    return false;
+  }
+  if (
+    rec?.v !== 1 ||
+    !/^\d{1,25}$/.test(rec.source) ||
+    !BANDS.includes(rec.band)
+  )
+    return false;
+  ctx.registerMessages?.({ en: EN_ARCHIVE, es: ES_ARCHIVE });
+  try {
+    const { answer, cache } = await gaiaEpochs(rec.source, {
+      store: ctx.store ?? idbStore(),
+      fetchImpl: () => Promise.reject(new Error('restoring from the copy')),
+    });
+    ctx.open(toObservation(answer, rec));
+    ctx.status(ctx.t('obs.arc.restored', { days: days(cache.ageMs) }));
+    return true;
+  } catch {
+    // No copy kept (a cleared store, a refused database): the page stays as it
+    // opened, and the memory of it is dropped so it is not tried again.
+    try {
+      sessionStorage.removeItem(OPEN_KEY);
+    } catch {
+      /* nothing to drop */
+    }
+    return false;
+  }
 }
 
 /**
