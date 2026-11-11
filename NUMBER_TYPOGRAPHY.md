@@ -39,6 +39,29 @@ re-find the decimal point on every update. Widget readouts and the speed display
 already had this; the object inspector, the live HUD and the energy panel did
 not.
 
+## Spanish: the decimal comma (Prompt 282)
+
+Spanish writes a decimal comma and, from five digits, groups with a narrow
+no-break space (`12 345,6`, but `1234,5`: the SI and the RAE). `formatNumber`,
+`decimal`, `scientific`, `fixed`, `withUncertainty` and `plural` take a
+`locale`. A caller that names none follows the page's own `lang`, which every
+page sets from the stored choice, so a page in Spanish prints the comma at every
+one of the formatter's call sites without each learning to ask; a script with no
+page (Node, a worker, the generators) is English unless its caller says
+otherwise. An interval is `[1,222; 1,246]` in Spanish because its comma is taken.
+
+What the comma does not reach: a CSV, a saved record, a link and a JSON export
+never come through this module and keep the point; the 440 or so `toFixed` and
+`toPrecision` calls the number ratchet still counts print a point in Spanish
+until they move (the ratchet only falls); the instructor bundle's Spanish text
+is generated with an explicit locale or none, as its build has no page.
+What a student types is read by `js/answerParse.js` in both marks, with the
+locale recorded beside the answer: `0,910` is 0.91 where the answer was typed in
+Spanish and 910 where it was typed in English, which is why the ambiguous
+`1.234` is refused rather than guessed. `parseFormatted(text, locale)` reads the
+comma back for a test. The decision and its evidence are register row
+D-R10-282-01.
+
 ## Where the threshold sits
 
 Scientific notation is used outside the range `1e-3` to `1e5`. The lower bound is
