@@ -472,6 +472,46 @@ purpose.
 
 ---
 
+## Mobile: what the emulation covers (Prompt 283)
+
+`e2e/mobileSweep.spec.js` runs the whole touch pattern (DESIGN_SYSTEM.md,
+Touch measurement) at a phone, 375 x 812 CSS pixels, and a tablet, 768 x 1024,
+in Chromium with touch emulation: touch events, a coarse pointer, the viewport
+and a phone's user agent. **No real device was measured.** What it did measure:
+
+- **Targets.** 45 screens at each size (the 32 pages and 7 states of the walk
+  inventory, the lesson panel at two steps, the Observatory with an image open,
+  the 3-D lab running, the mission lab computed, the settings dialog): 3,015
+  targets at the phone and 3,271 at the tablet, none under 24 CSS pixels that
+  no exception covers. At the phone 2,148 are at size, 631 pass 2.5.8's spacing
+  exception (a 24 pixel circle on them meets no other target), 236 are links in
+  a sentence (the inline exception) and none is a browser-drawn control; the
+  rule and the counts are in `tools/touch-targets.json`. 1,286 targets at the
+  phone are under 44 pixels (links in lists and the Teach pages' contents
+  rows): that size is held only where `e2e/responsiveLayout.spec.js` names the
+  region.
+- **Precision by finger.** Eight point sources and a disc on a seeded
+  256-pixel frame, the tap landing up to 8 CSS pixels from where it was aimed:
+  the pad brought the draft within 1 image pixel (worst 0.98 px, 19 presses in
+  all) and Refine put every source within 0.03 px of the truth and the disc's
+  radius within 0.1 percent; Prompt 178's bounds are 0.5 px and 2 percent. The
+  frame has 0.75 image pixels to the CSS pixel; a frame four times larger, as
+  the gate's was, has 3 and would lean on the pad harder.
+- **Workflows.** The ten student workflows and five instrument workflows
+  (`tools/mobile-workflows.json`) by touch, in both languages, at both sizes.
+
+What emulation does not cover: a real fingertip's contact area and the error
+of a real thumb, so the 8 pixel miss above is an assumption and not a
+measurement; a device's pixel density and the glare, grip and motion of use;
+the on-screen keyboard's change to the visual viewport; the browser's own
+chrome and its back gesture; the touch latency and scroll physics of a device;
+iOS Safari and Firefox on Android, which were not run (WebKit and Gecko lay out
+touch differently); and the CPU and memory of a phone, which the throttled
+proxies above only approximate. **No real device was measured: the claim that
+the touch instruments work on a real phone or tablet is UNKNOWN in
+`tools/evidence-status.json`** (a person with a device is owner-led work,
+Roadmap III Appendix A).
+
 ## Where a frame goes: raster and composite apart from script
 
 `npm run perf -- --trace` (Prompt 112, part 3) records a Chromium trace with

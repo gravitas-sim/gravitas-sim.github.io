@@ -7,6 +7,446 @@
     "control": "A control the browser draws and the page cannot resize: a file picker, a colour, date or time input (2.5.8, User agent control)."
   },
   "measured": {
+    "phone:catalog": {
+      "targets": 31,
+      "atSize": 27,
+      "spacing": 4,
+      "inline": 0,
+      "control": 0,
+      "under44": 13
+    },
+    "phone:composer": {
+      "targets": 24,
+      "atSize": 20,
+      "spacing": 4,
+      "inline": 0,
+      "control": 0,
+      "under44": 4
+    },
+    "phone:compute": {
+      "targets": 12,
+      "atSize": 8,
+      "spacing": 4,
+      "inline": 0,
+      "control": 0,
+      "under44": 4
+    },
+    "phone:course-builder": {
+      "targets": 66,
+      "atSize": 62,
+      "spacing": 4,
+      "inline": 0,
+      "control": 0,
+      "under44": 28
+    },
+    "phone:course-packages": {
+      "targets": 12,
+      "atSize": 8,
+      "spacing": 4,
+      "inline": 0,
+      "control": 0,
+      "under44": 4
+    },
+    "phone:courses": {
+      "targets": 20,
+      "atSize": 15,
+      "spacing": 5,
+      "inline": 0,
+      "control": 0,
+      "under44": 7
+    },
+    "phone:evaluation": {
+      "targets": 191,
+      "atSize": 184,
+      "spacing": 4,
+      "inline": 3,
+      "control": 0,
+      "under44": 170
+    },
+    "phone:experiments": {
+      "targets": 22,
+      "atSize": 18,
+      "spacing": 4,
+      "inline": 0,
+      "control": 0,
+      "under44": 4
+    },
+    "phone:figure-builder": {
+      "targets": 28,
+      "atSize": 23,
+      "spacing": 5,
+      "inline": 0,
+      "control": 0,
+      "under44": 11
+    },
+    "phone:glossary": {
+      "targets": 7,
+      "atSize": 3,
+      "spacing": 4,
+      "inline": 0,
+      "control": 0,
+      "under44": 4
+    },
+    "phone:home": {
+      "targets": 18,
+      "atSize": 15,
+      "spacing": 3,
+      "inline": 0,
+      "control": 0,
+      "under44": 12
+    },
+    "phone:home.first-week": {
+      "targets": 13,
+      "atSize": 13,
+      "spacing": 0,
+      "inline": 0,
+      "control": 0,
+      "under44": 5
+    },
+    "phone:home.introduction": {
+      "targets": 5,
+      "atSize": 5,
+      "spacing": 0,
+      "inline": 0,
+      "control": 0,
+      "under44": 3
+    },
+    "phone:instructors": {
+      "targets": 23,
+      "atSize": 14,
+      "spacing": 5,
+      "inline": 4,
+      "control": 0,
+      "under44": 8
+    },
+    "phone:investigations": {
+      "targets": 449,
+      "atSize": 321,
+      "spacing": 128,
+      "inline": 0,
+      "control": 0,
+      "under44": 319
+    },
+    "phone:kernel-diagnostics": {
+      "targets": 19,
+      "atSize": 14,
+      "spacing": 5,
+      "inline": 0,
+      "control": 0,
+      "under44": 5
+    },
+    "phone:lab3d": {
+      "targets": 52,
+      "atSize": 47,
+      "spacing": 5,
+      "inline": 0,
+      "control": 0,
+      "under44": 20
+    },
+    "phone:lab3d-running": {
+      "targets": 52,
+      "atSize": 47,
+      "spacing": 5,
+      "inline": 0,
+      "control": 0,
+      "under44": 20
+    },
+    "phone:lesson-panel-measure": {
+      "targets": 30,
+      "atSize": 29,
+      "spacing": 1,
+      "inline": 0,
+      "control": 0,
+      "under44": 2
+    },
+    "phone:lesson-panel-read": {
+      "targets": 18,
+      "atSize": 17,
+      "spacing": 1,
+      "inline": 0,
+      "control": 0,
+      "under44": 2
+    },
+    "phone:library": {
+      "targets": 52,
+      "atSize": 47,
+      "spacing": 5,
+      "inline": 0,
+      "control": 0,
+      "under44": 22
+    },
+    "phone:mission-diagnostics": {
+      "targets": 52,
+      "atSize": 47,
+      "spacing": 5,
+      "inline": 0,
+      "control": 0,
+      "under44": 6
+    },
+    "phone:mission-lab": {
+      "targets": 54,
+      "atSize": 49,
+      "spacing": 5,
+      "inline": 0,
+      "control": 0,
+      "under44": 20
+    },
+    "phone:mission-lab-computed": {
+      "targets": 53,
+      "atSize": 48,
+      "spacing": 5,
+      "inline": 0,
+      "control": 0,
+      "under44": 20
+    },
+    "phone:model": {
+      "targets": 137,
+      "atSize": 74,
+      "spacing": 27,
+      "inline": 36,
+      "control": 0,
+      "under44": 38
+    },
+    "phone:my-work": {
+      "targets": 24,
+      "atSize": 21,
+      "spacing": 3,
+      "inline": 0,
+      "control": 0,
+      "under44": 3
+    },
+    "phone:observatory": {
+      "targets": 17,
+      "atSize": 9,
+      "spacing": 8,
+      "inline": 0,
+      "control": 0,
+      "under44": 8
+    },
+    "phone:observatory-image-open": {
+      "targets": 61,
+      "atSize": 53,
+      "spacing": 8,
+      "inline": 0,
+      "control": 0,
+      "under44": 11
+    },
+    "phone:sandbox": {
+      "targets": 15,
+      "atSize": 15,
+      "spacing": 0,
+      "inline": 0,
+      "control": 0,
+      "under44": 4
+    },
+    "phone:sandbox.light-curve": {
+      "targets": 52,
+      "atSize": 52,
+      "spacing": 0,
+      "inline": 0,
+      "control": 0,
+      "under44": 17
+    },
+    "phone:sandbox.state": {
+      "targets": 24,
+      "atSize": 24,
+      "spacing": 0,
+      "inline": 0,
+      "control": 0,
+      "under44": 4
+    },
+    "phone:sandbox.tools": {
+      "targets": 46,
+      "atSize": 46,
+      "spacing": 0,
+      "inline": 0,
+      "control": 0,
+      "under44": 13
+    },
+    "phone:scenario-studio": {
+      "targets": 19,
+      "atSize": 15,
+      "spacing": 4,
+      "inline": 0,
+      "control": 0,
+      "under44": 4
+    },
+    "phone:settings-dialog": {
+      "targets": 94,
+      "atSize": 94,
+      "spacing": 0,
+      "inline": 0,
+      "control": 0,
+      "under44": 60
+    },
+    "phone:sky-lab": {
+      "targets": 34,
+      "atSize": 30,
+      "spacing": 4,
+      "inline": 0,
+      "control": 0,
+      "under44": 7
+    },
+    "phone:submissions": {
+      "targets": 20,
+      "atSize": 16,
+      "spacing": 4,
+      "inline": 0,
+      "control": 0,
+      "under44": 5
+    },
+    "phone:teaching": {
+      "targets": 242,
+      "atSize": 63,
+      "spacing": 171,
+      "inline": 8,
+      "control": 0,
+      "under44": 174
+    },
+    "phone:teaching-activities": {
+      "targets": 15,
+      "atSize": 7,
+      "spacing": 8,
+      "inline": 0,
+      "control": 0,
+      "under44": 8
+    },
+    "phone:teaching-adopt": {
+      "targets": 39,
+      "atSize": 9,
+      "spacing": 15,
+      "inline": 15,
+      "control": 0,
+      "under44": 15
+    },
+    "phone:teaching-alignment": {
+      "targets": 173,
+      "atSize": 11,
+      "spacing": 7,
+      "inline": 155,
+      "control": 0,
+      "under44": 7
+    },
+    "phone:teaching-find": {
+      "targets": 179,
+      "atSize": 35,
+      "spacing": 133,
+      "inline": 11,
+      "control": 0,
+      "under44": 153
+    },
+    "phone:teaching-investigations": {
+      "targets": 19,
+      "atSize": 10,
+      "spacing": 8,
+      "inline": 1,
+      "control": 0,
+      "under44": 8
+    },
+    "phone:teaching-kit": {
+      "targets": 11,
+      "atSize": 7,
+      "spacing": 4,
+      "inline": 0,
+      "control": 0,
+      "under44": 4
+    },
+    "phone:teaching-kit.collections": {
+      "targets": 28,
+      "atSize": 24,
+      "spacing": 4,
+      "inline": 0,
+      "control": 0,
+      "under44": 5
+    },
+    "phone:validation": {
+      "targets": 463,
+      "atSize": 452,
+      "spacing": 8,
+      "inline": 3,
+      "control": 0,
+      "under44": 25
+    },
+    "tablet:catalog": {
+      "targets": 31,
+      "atSize": 18,
+      "spacing": 13,
+      "inline": 0,
+      "control": 0,
+      "under44": 16
+    },
+    "tablet:composer": {
+      "targets": 76,
+      "atSize": 72,
+      "spacing": 4,
+      "inline": 0,
+      "control": 0,
+      "under44": 4
+    },
+    "tablet:compute": {
+      "targets": 18,
+      "atSize": 14,
+      "spacing": 4,
+      "inline": 0,
+      "control": 0,
+      "under44": 4
+    },
+    "tablet:course-builder": {
+      "targets": 127,
+      "atSize": 123,
+      "spacing": 4,
+      "inline": 0,
+      "control": 0,
+      "under44": 29
+    },
+    "tablet:course-packages": {
+      "targets": 18,
+      "atSize": 14,
+      "spacing": 4,
+      "inline": 0,
+      "control": 0,
+      "under44": 4
+    },
+    "tablet:courses": {
+      "targets": 20,
+      "atSize": 14,
+      "spacing": 6,
+      "inline": 0,
+      "control": 0,
+      "under44": 7
+    },
+    "tablet:evaluation": {
+      "targets": 191,
+      "atSize": 183,
+      "spacing": 4,
+      "inline": 4,
+      "control": 0,
+      "under44": 173
+    },
+    "tablet:experiments": {
+      "targets": 28,
+      "atSize": 24,
+      "spacing": 4,
+      "inline": 0,
+      "control": 0,
+      "under44": 4
+    },
+    "tablet:figure-builder": {
+      "targets": 34,
+      "atSize": 29,
+      "spacing": 5,
+      "inline": 0,
+      "control": 0,
+      "under44": 11
+    },
+    "tablet:glossary": {
+      "targets": 13,
+      "atSize": 9,
+      "spacing": 4,
+      "inline": 0,
+      "control": 0,
+      "under44": 4
+    },
     "tablet:home": {
       "targets": 18,
       "atSize": 12,
@@ -30,6 +470,262 @@
       "inline": 0,
       "control": 0,
       "under44": 3
+    },
+    "tablet:instructors": {
+      "targets": 23,
+      "atSize": 11,
+      "spacing": 8,
+      "inline": 4,
+      "control": 0,
+      "under44": 8
+    },
+    "tablet:investigations": {
+      "targets": 449,
+      "atSize": 321,
+      "spacing": 128,
+      "inline": 0,
+      "control": 0,
+      "under44": 325
+    },
+    "tablet:kernel-diagnostics": {
+      "targets": 19,
+      "atSize": 14,
+      "spacing": 5,
+      "inline": 0,
+      "control": 0,
+      "under44": 5
+    },
+    "tablet:lab3d": {
+      "targets": 52,
+      "atSize": 46,
+      "spacing": 6,
+      "inline": 0,
+      "control": 0,
+      "under44": 20
+    },
+    "tablet:lab3d-running": {
+      "targets": 52,
+      "atSize": 46,
+      "spacing": 6,
+      "inline": 0,
+      "control": 0,
+      "under44": 20
+    },
+    "tablet:lesson-panel-measure": {
+      "targets": 35,
+      "atSize": 34,
+      "spacing": 1,
+      "inline": 0,
+      "control": 0,
+      "under44": 5
+    },
+    "tablet:lesson-panel-read": {
+      "targets": 23,
+      "atSize": 22,
+      "spacing": 1,
+      "inline": 0,
+      "control": 0,
+      "under44": 5
+    },
+    "tablet:library": {
+      "targets": 58,
+      "atSize": 53,
+      "spacing": 5,
+      "inline": 0,
+      "control": 0,
+      "under44": 26
+    },
+    "tablet:mission-diagnostics": {
+      "targets": 52,
+      "atSize": 46,
+      "spacing": 6,
+      "inline": 0,
+      "control": 0,
+      "under44": 6
+    },
+    "tablet:mission-lab": {
+      "targets": 54,
+      "atSize": 48,
+      "spacing": 6,
+      "inline": 0,
+      "control": 0,
+      "under44": 20
+    },
+    "tablet:mission-lab-computed": {
+      "targets": 53,
+      "atSize": 47,
+      "spacing": 6,
+      "inline": 0,
+      "control": 0,
+      "under44": 20
+    },
+    "tablet:model": {
+      "targets": 143,
+      "atSize": 34,
+      "spacing": 27,
+      "inline": 82,
+      "control": 0,
+      "under44": 40
+    },
+    "tablet:my-work": {
+      "targets": 30,
+      "atSize": 27,
+      "spacing": 3,
+      "inline": 0,
+      "control": 0,
+      "under44": 3
+    },
+    "tablet:observatory": {
+      "targets": 23,
+      "atSize": 15,
+      "spacing": 8,
+      "inline": 0,
+      "control": 0,
+      "under44": 8
+    },
+    "tablet:observatory-image-open": {
+      "targets": 67,
+      "atSize": 59,
+      "spacing": 8,
+      "inline": 0,
+      "control": 0,
+      "under44": 11
+    },
+    "tablet:sandbox": {
+      "targets": 15,
+      "atSize": 15,
+      "spacing": 0,
+      "inline": 0,
+      "control": 0,
+      "under44": 4
+    },
+    "tablet:sandbox.light-curve": {
+      "targets": 52,
+      "atSize": 52,
+      "spacing": 0,
+      "inline": 0,
+      "control": 0,
+      "under44": 18
+    },
+    "tablet:sandbox.state": {
+      "targets": 24,
+      "atSize": 24,
+      "spacing": 0,
+      "inline": 0,
+      "control": 0,
+      "under44": 4
+    },
+    "tablet:sandbox.tools": {
+      "targets": 46,
+      "atSize": 46,
+      "spacing": 0,
+      "inline": 0,
+      "control": 0,
+      "under44": 14
+    },
+    "tablet:scenario-studio": {
+      "targets": 93,
+      "atSize": 89,
+      "spacing": 4,
+      "inline": 0,
+      "control": 0,
+      "under44": 28
+    },
+    "tablet:settings-dialog": {
+      "targets": 27,
+      "atSize": 27,
+      "spacing": 0,
+      "inline": 0,
+      "control": 0,
+      "under44": 4
+    },
+    "tablet:sky-lab": {
+      "targets": 40,
+      "atSize": 36,
+      "spacing": 4,
+      "inline": 0,
+      "control": 0,
+      "under44": 7
+    },
+    "tablet:submissions": {
+      "targets": 26,
+      "atSize": 22,
+      "spacing": 4,
+      "inline": 0,
+      "control": 0,
+      "under44": 5
+    },
+    "tablet:teaching": {
+      "targets": 248,
+      "atSize": 77,
+      "spacing": 162,
+      "inline": 9,
+      "control": 0,
+      "under44": 175
+    },
+    "tablet:teaching-activities": {
+      "targets": 21,
+      "atSize": 13,
+      "spacing": 8,
+      "inline": 0,
+      "control": 0,
+      "under44": 8
+    },
+    "tablet:teaching-adopt": {
+      "targets": 45,
+      "atSize": 13,
+      "spacing": 15,
+      "inline": 17,
+      "control": 0,
+      "under44": 15
+    },
+    "tablet:teaching-alignment": {
+      "targets": 179,
+      "atSize": 9,
+      "spacing": 7,
+      "inline": 163,
+      "control": 0,
+      "under44": 7
+    },
+    "tablet:teaching-find": {
+      "targets": 185,
+      "atSize": 30,
+      "spacing": 141,
+      "inline": 14,
+      "control": 0,
+      "under44": 153
+    },
+    "tablet:teaching-investigations": {
+      "targets": 25,
+      "atSize": 15,
+      "spacing": 8,
+      "inline": 2,
+      "control": 0,
+      "under44": 8
+    },
+    "tablet:teaching-kit": {
+      "targets": 17,
+      "atSize": 13,
+      "spacing": 4,
+      "inline": 0,
+      "control": 0,
+      "under44": 4
+    },
+    "tablet:teaching-kit.collections": {
+      "targets": 34,
+      "atSize": 30,
+      "spacing": 4,
+      "inline": 0,
+      "control": 0,
+      "under44": 5
+    },
+    "tablet:validation": {
+      "targets": 469,
+      "atSize": 458,
+      "spacing": 8,
+      "inline": 3,
+      "control": 0,
+      "under44": 27
     }
   }
 }
