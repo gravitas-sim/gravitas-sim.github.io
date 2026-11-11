@@ -24,7 +24,7 @@
     }
   },
   "sourceFiles": 306,
-  "sourceDigest": "7dcdd21900d905997c075d26c6d53022b6760bcd1f281aad81124117e9107136",
+  "sourceDigest": "f2b0e7d2c614c35611ac9509716229b6bace200ded34ae4a92381a698187e38c",
   "sources": {
     "js/activities/activities.js": "39ac98cd99b8b0387c55e41d5d4530bad55a8da8758819ad056be73e7a716b01",
     "js/activities/activityBridge.js": "67a82aff98e0ed935d6b8b0f0f654c6ad4332ee929cb3604e896a7f790a6fdc1",
@@ -290,7 +290,7 @@
     "js/i18n/en.activities.js": "f20cf171d13a956aed5e7f15319f7ef93a918ccbc803fd441e5b08394488d5d5",
     "js/i18n/en.exoplanet.js": "fece6ff72d20a8174c8968afba74f31745f54adb57410d53cd67fb751497b5c0",
     "js/i18n/en.guides.js": "6462bfa9a931d5901393a19fdab9d5f3a27ba0969799f2dfbd7d61e501a43252",
-    "js/i18n/en.js": "10f78d0ddd31d328e7a55407676bc6ce08b7924fe1e8297449d61d992e6fd737",
+    "js/i18n/en.js": "a36f0d40e2e1afffa14d51f513ba4f7a92f5faa10dc9650e92ae967a694d9887",
     "js/i18n/en.lab3dGuides.js": "16c0b1b8e69ec216b5a57a361e90aa854e3fef39b86242612370c7c71aaf7520",
     "js/i18n/en.missionLabGuides.js": "6c859aefad385c14245218a4d53514fb35ce1443c1fcb3b055575137a6a6d086",
     "js/i18n/en.populations.js": "eaa01b4655a6c8bd59ee9a60da0dcbbab605f586944bb0642fab26679b557cf4",
@@ -314,7 +314,7 @@
     "js/lab3d/view/instruments.js": "d8d8798757a8d5ee0ad66440a4e7c8ed9a63a8a806116d43c3a2ead0222cc9f0",
     "js/lab3d/view/projection.js": "e601c656a2e61f8ef8afb475292ad253254bef5ae601eb3338041d189aa1b967",
     "js/lab3dGuideDocs.js": "c211ebe05009874616c7ec22c3ea3777c7b305e3a38e7b79bb41f7defb38d8d0",
-    "js/lessonMarkup.js": "39164623fcd287b8ec035c3e647c7b336809515580bb330b83011c0564c76d25",
+    "js/lessonMarkup.js": "9e2bd5efae1a8d9c646691a9020572a847c55f10b9fae154a39286b5f93a3f3a",
     "js/measure/describe.js": "5d0010da20cc8c4c58292833cf30a148c8ef7cbf949d7ccca7a488cc03453152",
     "js/measure/spectrumLine.js": "3c3524d7b0946c6766f65c7fa2c24f49c3c6938b63fcb665b1edbdade318e9a4",
     "js/measure/tableOps.js": "613e474e791d3e80f966fda0b3180f688513c89fd4c02a17c0933d559ea9ecb8",
