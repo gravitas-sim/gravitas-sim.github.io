@@ -283,6 +283,20 @@ try {
 
     <script type="module">
       import { initInstructorPortal } from '/js/instructorPortal.js';
+      import { mountShell } from '/js/shell.js';
+      try {
+        if ((localStorage.getItem('gravitas_locale') || '').startsWith('es'))
+          document.documentElement.lang = 'es';
+      } catch {
+        /* storage blocked: English */
+      }
+      const titles = { en: "Instructor Resources | Gravitas", es: "Recursos para docentes | Gravitas" };
+      const retitle = () => {
+        document.title =
+          titles[document.documentElement.lang === 'es' ? 'es' : 'en'];
+      };
+      retitle();
+      mountShell({ onLanguage: retitle });
       initInstructorPortal();
     </script>
   </body>

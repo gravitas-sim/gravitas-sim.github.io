@@ -281,7 +281,19 @@ try {
     <script type="module" src="/js/validationPage.js"></script>
     <script type="module">
       import { mountShell } from '/js/shell.js';
-      mountShell();
+      try {
+        if ((localStorage.getItem('gravitas_locale') || '').startsWith('es'))
+          document.documentElement.lang = 'es';
+      } catch {
+        /* storage blocked: English */
+      }
+      const titles = { en: "What Gravitas Has Been Checked Against", es: "Contra qué se ha comprobado Gravitas" };
+      const retitle = () => {
+        document.title =
+          titles[document.documentElement.lang === 'es' ? 'es' : 'en'];
+      };
+      retitle();
+      mountShell({ onLanguage: retitle });
     </script>
   </body>
 </html>

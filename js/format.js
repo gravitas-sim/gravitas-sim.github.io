@@ -79,6 +79,17 @@ function typesetMinus(s) {
 }
 
 /**
+ * The language the page is in, for a caller that names none: the page's own
+ * `lang`, which every page sets from the stored choice. A script with no page
+ * (a worker, Node, the generators) is English, so what a generator writes is
+ * its caller's to say with `locale`.
+ * @returns {string}
+ */
+function pageLocale() {
+  return typeof document === 'undefined' ? '' : document.documentElement.lang;
+}
+
+/**
  * English digits in a locale's convention. Spanish writes a decimal comma and,
  * as the SI and the RAE do, groups with a narrow no-break space from five
  * digits up: 12 345,6 but 1234,5. Derived here rather than asked of Intl,
@@ -87,7 +98,7 @@ function typesetMinus(s) {
  * @param {string} [locale] - 'en', 'es', …
  * @returns {string}
  */
-function inLocale(text, locale) {
+function inLocale(text, locale = pageLocale()) {
   if (!String(locale || '').startsWith('es')) return text;
   const [whole, frac] = text.split('.');
   const digits = whole.replace(/\D/g, '').length;
@@ -280,10 +291,16 @@ export function withUnit(value, symbol, options) {
  * rather than inventing its own regular expression.
  *
  * @param {string} text - A string produced by this module
+ * @param {string} [locale] - The locale it was written in; the decimal comma
+ *   of Spanish is read back as a point
  * @returns {number} The value, or NaN
  */
-export function parseFormatted(text) {
+export function parseFormatted(text, locale = pageLocale()) {
   if (typeof text !== 'string') return NaN;
+  if (String(locale || '').startsWith('es')) {
+    // Grouping is a space and the only comma is the decimal one.
+    text = text.replace(/[\s\u00a0\u202f]/g, '').replace(',', '.');
+  }
   const superToDigit = Object.fromEntries(
     Object.entries(SUPERSCRIPTS).map(([k, v]) => [v, k])
   );
@@ -315,5 +332,5 @@ export function parseFormatted(text) {
  */
 export function plural(n, one, many = `${one}s`) {
   const count = Number.isFinite(n) ? n : 0;
-  return `${count.toLocaleString('en-US')} ${count === 1 ? one : many}`;
+  return `${inLocale(count.toLocaleString('en-US'))} ${count === 1 ? one : many}`;
 }

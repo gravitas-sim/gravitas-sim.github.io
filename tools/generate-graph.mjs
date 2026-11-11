@@ -360,7 +360,17 @@ export const GRAPH = Object.freeze([
     generate: null,
     needs: 'the instructor passphrase (npm run build:instructors)',
     check: 'node tools/build-instructor-materials.js --check',
-    inputs: ['js/data', 'tools/build-instructor-materials.js'],
+    // Prompt 282: the Spanish structured notes (Prompt 170's `<id>-notes-es`) are written from the lessons'
+    // structured fields and their Spanish shadows, so the notes' own module, the locale reader, the facts
+    // reader and the catalogs are inputs: a change to any of them makes this node stale and the notes owed.
+    inputs: [
+      'js/data',
+      'js/instructorNotes.js',
+      'js/instructorLocale.js',
+      'js/instructorFacts.js',
+      'js/i18n',
+      'tools/build-instructor-materials.js',
+    ],
     outputs: [
       'instructors/materials.enc.json',
       'instructors/materials.manifest.json',

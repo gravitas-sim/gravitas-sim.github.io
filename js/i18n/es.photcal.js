@@ -64,7 +64,7 @@ export const ES_PHOTCAL = {
   'pcW.row.nested': '¿Hay más en los datos?',
   'pcW.v.nested':
     'añadir una extinción que dependa del color baja el chi cuadrado en {d} (p = {p})',
-  'pcW.row.target': 'Estrella problema',
+  'pcW.row.target': 'Estrella objetivo',
   'pcW.v.target':
     'magnitud instrumental {m}; magnitud calibrada {M} ± {s}; intervalo del 95 por ciento de {lo} a {hi}',
   'pcW.row.truth': 'Verdad de la noche sintética',

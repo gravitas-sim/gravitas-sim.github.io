@@ -24,7 +24,7 @@ export const ES_TTV = {
   'ttvW.t.noise.2': 'Alto (1600 ppm)',
   'ttvW.t.control.view': 'Mostrar',
   'ttvW.t.view.0': 'Curva de luz',
-  'ttvW.t.view.1': 'Chi cuadrada',
+  'ttvW.t.view.1': 'Chi cuadrado',
   'ttvW.axis.minPredicted':
     'Tiempo desde el centro previsto del tránsito (minutos)',
   'ttvW.axis.minFit': 'Instante menos el mejor ajuste (minutos)',
@@ -32,7 +32,7 @@ export const ES_TTV = {
   'ttvW.axis.dchi2': 'Chi cuadrada sobre su mínimo',
   'ttvW.legend.flux': 'Flujo medido',
   'ttvW.legend.fit': 'Plantilla en el instante ajustado',
-  'ttvW.legend.profile': 'Chi cuadrada',
+  'ttvW.legend.profile': 'Chi cuadrado',
   'ttvW.legend.one': 'Uno sobre el mínimo: una sigma',
   'ttvW.t.row.which': 'Tránsito',
   'ttvW.t.row.noise': 'Ruido',

@@ -54,7 +54,7 @@ export const ES_DETECTOR = {
     'La ecuación del CCD para una estrella en una abertura redonda: la luz de la estrella frente a su propio ruido de fotones y al del cielo, la corriente oscura y el ruido de lectura. La curva azul es lo que dan; la línea de trazos es el ideal con solo el ruido de la propia estrella. Más brillante es una V menor.',
   'detW.s.control.mag': 'Brillo de la estrella',
   'detW.s.control.exposure': 'Exposición',
-  'detW.s.control.radius': 'Radio de la abertura',
+  'detW.s.control.radius': 'Radio de la apertura',
   'detW.s.control.sky': 'Cielo',
   'detW.s.control.target': 'Señal a ruido objetivo',
   'detW.s.sky.dark': 'un sitio oscuro (V 21,5 por segundo de arco cuadrado)',

@@ -766,5 +766,21 @@ try {
 </footer>
 <!-- /shell:footer -->
     <script type="module" src="/js/evaluationKit.js"></script>
+    <script type="module">
+      import { mountShell } from '/js/shell.js';
+      try {
+        if ((localStorage.getItem('gravitas_locale') || '').startsWith('es'))
+          document.documentElement.lang = 'es';
+      } catch {
+        /* storage blocked: English */
+      }
+      const titles = { en: "Classroom evidence kit | Gravitas", es: "Kit de evidencia para el aula | Gravitas" };
+      const retitle = () => {
+        document.title =
+          titles[document.documentElement.lang === 'es' ? 'es' : 'en'];
+      };
+      retitle();
+      mountShell({ onLanguage: retitle });
+    </script>
   </body>
 </html>
