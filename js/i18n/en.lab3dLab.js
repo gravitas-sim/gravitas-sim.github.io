@@ -28,6 +28,7 @@ export const EN_LAB3DLAB = {
   'l3.pad.move.down': 'Move the view down',
   'l3.pad.in': 'Zoom in',
   'l3.pad.out': 'Zoom out',
+  'l3.describe': 'Describe the view',
   'l3.cam.above':
     'Looking from {above}° above the reference plane, {around}° around it. The view is {size} times as tall as the system.',
   'l3.cam.below':
