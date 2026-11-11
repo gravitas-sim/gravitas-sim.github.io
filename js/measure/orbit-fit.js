@@ -1082,8 +1082,9 @@ export const FRAME_STATEMENT = Object.freeze({
  * a^3 / P^2 a log-normal from its covariance), and the frame statement attached.
  * @param {object} fit - a fit from fitOrbit
  * @param {{value: number, sigma: number, unit?: 'mas'|'arcsec', frame: 'relative'|'absolute', source?: string}} parallax
+ * @param {{draws?: number}} [options] - The Monte Carlo's size; RULES.massDraws unless the caller is on a reduced tier (js/quality.js), and the result's `method` states the number used
  */
-export function massSum(fit, parallax) {
+export function massSum(fit, parallax, { draws: size = RULES.massDraws } = {}) {
   if (!fit?.ok)
     return refuse('no-orbit', 'there is no orbit to give a mass sum', {});
   const unit = parallax?.unit ?? 'mas';
@@ -1121,7 +1122,7 @@ export function massSum(fit, parallax) {
   const sL = fit.gradients.sigmaLnK3;
   const g = gaussian(stream('noise', 'orbit-fit-mass-sum'));
   const draws = [];
-  for (let i = 0; i < RULES.massDraws; i++) {
+  for (let i = 0; i < size; i++) {
     let plx;
     do plx = p0 + sp * g();
     while (!(plx > 0));
@@ -1149,7 +1150,8 @@ export function massSum(fit, parallax) {
       snr,
     },
     frameStatement: FRAME_STATEMENT[parallax.frame],
-    method: 'seeded Monte Carlo, 20,000 draws',
+    method: `seeded Monte Carlo, ${size.toLocaleString('en-US')} draws`,
+    ...(size === RULES.massDraws ? {} : { draws: size }),
     K: KEPLER_K,
   };
 }

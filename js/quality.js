@@ -106,6 +106,8 @@ let tier = 'full';
 let auto = true;
 let aboveSince = 0;
 let listeners = [];
+/** Whether the classifier has ever reached a verdict (see qualityReport). */
+let decided = false;
 
 /** @returns {string} The tier currently in force */
 export const currentTier = () => tier;
@@ -130,6 +132,11 @@ export function qualityReport() {
     fps: measuredFps(),
     samples: intervals.length,
     framesSeen: seen,
+    // False until the measurement has had enough frames to judge: a page that
+    // never renders the simulation (the Observatory, a report) never decides,
+    // and the tier it reports is then the default, not a finding about the
+    // machine (Prompt 285, "the classifier never ran").
+    decided,
   };
 }
 
@@ -186,6 +193,7 @@ export function resetSamples() {
   last = 0;
   first = 0;
   aboveSince = 0;
+  decided = false;
 }
 
 /**
@@ -229,6 +237,7 @@ export function sampleFrame(timestamp) {
 
   const fps = measuredFps();
   if (fps === null) return;
+  decided = true;
 
   if (tier !== 'low' && fps < DEMOTE_FPS) {
     tier = 'low';
@@ -380,6 +389,93 @@ export function renderOverrides() {
     // purpose would compound into an almost empty sky.
     trail_length: 8,
   };
+}
+
+// --- What the tier does to computation (Prompt 285) -----------------------------
+//
+// The tier has always been about drawing. The kernels and the image tools made
+// the machine's other cost a computation: a bootstrap, a Monte Carlo, a profile
+// grid, a decoded frame. The low tier gives those smaller sizes, and states
+// that it did.
+//
+// The values live in tools/perf-thresholds.json ("computation"), beside the
+// frame-time thresholds, and are mirrored here because a static page cannot read
+// tools/; tests/computeTier.test.js holds the two equal. A kernel never reads
+// this file: a kernel takes its size as an argument and gives the same numbers
+// on both tiers for the same argument. It is the caller, a panel or a record,
+// that asks here for the argument, so the validators run at both tiers by
+// passing both sets of values (tests/computeTier.test.js).
+//
+// Every key has an adopter that reads it, and a result that used a reduced
+// value says so (computeNote). The reader can force the full tier: the setting
+// quality_tier on the simulation page, ?quality=full on the others
+// (applyTierRequest), or the button that sits beside a reduced result.
+
+/** The sizes a tier computes at, by key. Held equal to tools/perf-thresholds.json. */
+export const COMPUTE_TIERS = Object.freeze({
+  full: Object.freeze({
+    bootstrapDraws: 1000,
+    monteCarloDraws: 20000,
+    profilePoints: 11,
+    displaySide: 1024,
+    workerConcurrency: 8,
+    workerMemoryBytes: 1000000000,
+  }),
+  low: Object.freeze({
+    bootstrapDraws: 300,
+    monteCarloDraws: 5000,
+    profilePoints: 7,
+    displaySide: 512,
+    workerConcurrency: 2,
+    workerMemoryBytes: 256000000,
+  }),
+});
+
+/** The computation tier: 'low' while the quality tier is low, otherwise 'full'. */
+export const computeTier = () => (tier === 'low' ? 'low' : 'full');
+
+/**
+ * The size a computation should use now.
+ *
+ * @param {string} key - A key of COMPUTE_TIERS
+ * @returns {number}
+ */
+export const computeValue = key => COMPUTE_TIERS[computeTier()][key];
+
+/**
+ * What a result computed at the low tier says about itself, for its provenance
+ * and its report; null at the full tier, so a full-tier result is unchanged
+ * byte for byte.
+ *
+ * @param {string[]} keys - The keys the computation read
+ * @returns {?{tier: 'low', reduced: Object<string, {used: number, full: number}>}}
+ */
+export function computeNote(keys) {
+  if (computeTier() !== 'low') return null;
+  const reduced = {};
+  for (const key of keys)
+    reduced[key] = {
+      used: COMPUTE_TIERS.low[key],
+      full: COMPUTE_TIERS.full[key],
+    };
+  return { tier: 'low', reduced };
+}
+
+/**
+ * Honour ?quality=low or ?quality=full on a page that does not render the
+ * simulation, and so never measures the machine. It forces for this page only
+ * and stores nothing; anything else leaves the tier alone.
+ *
+ * @param {string} [search] - A query string; the page's own by default
+ * @returns {?string} The tier it forced, or null
+ */
+export function applyTierRequest(
+  search = typeof location !== 'undefined' ? location.search : ''
+) {
+  const want = new URLSearchParams(search).get('quality');
+  if (want !== 'low' && want !== 'full') return null;
+  setTier(want);
+  return want;
 }
 
 // -----------------------------------------------------------------------------

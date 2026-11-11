@@ -20,6 +20,7 @@
 
 import { columnOf } from './schema.js';
 import { displayPlan, downsampleMean } from '../dataKinds/limits.js';
+import { applyTierRequest, computeValue } from '../quality.js';
 import { permits } from '../dataKinds/contract.js';
 // The photometry tool (imagePhotometry.js) takes the contract's check from here,
 // by import(), so that no chunk is shared between the two.
@@ -355,7 +356,7 @@ export function mountMarks(root, ctx) {
   // ---- the picture ----------------------------------------------------------------
   function drawFrame() {
     const f = fr();
-    plan = displayPlan(f.width, f.height);
+    plan = displayPlan(f.width, f.height, computeValue('displaySide'));
     k = plan.factor;
     const values =
       k > 1 ? downsampleMean(f.data, f.width, f.height, k).values : f.data;
@@ -1031,10 +1032,31 @@ export function mountMarks(root, ctx) {
   if (sum) labelled.push([sum, 'obs.im.title', 'textContent']);
   label();
 
+  /**
+   * Let go of the pixels while another kind of observation is on show (Prompt
+   * 285): a frame is a Float64 plane, up to 32 MiB, and the page's decoded-image
+   * budget (tools/data-budget.json) is 64 MiB. The marks, the frame count and
+   * the sidecar stay, so the same image shown again is the same image with its
+   * marks (`load`'s `same`); what is dropped is the panel's own hold on the
+   * planes (a copy where the column was not already a Float64Array, which is
+   * the case that costs memory) and the two drawn canvases' backing stores.
+   */
+  function release() {
+    for (const f of frames) {
+      f.data = EMPTY_PLANE;
+      if (f.variance) f.variance = EMPTY_PLANE;
+    }
+    for (const c of [img, over]) {
+      c.width = 0;
+      c.height = 0;
+    }
+  }
+
   return {
     get store() {
       return store;
     },
+    release,
     update,
     load,
     restore,
@@ -1043,7 +1065,20 @@ export function mountMarks(root, ctx) {
   };
 }
 
+/** What a frame's plane is while the panel is not showing it. */
+const EMPTY_PLANE = new Float64Array(0);
+
 const panels = new WeakMap();
+
+/**
+ * Release the pixels the panel on `box` holds, if it was ever built; the page
+ * calls this when it shows something that is not an image.
+ * @param {HTMLDetailsElement} box
+ */
+export async function release(box) {
+  (await panels.get(box))?.api.release();
+}
+
 /**
  * The page's one call, made each time it shows an image observation: the first
  * fetches the words and builds the panel (a pending `ctx.marks.saved` block
@@ -1060,6 +1095,7 @@ export async function mount(box, ctx) {
   let ready = panels.get(box);
   const fresh = !ready;
   if (fresh) {
+    applyTierRequest();
     ready = words(ctx).then(() => {
       const p = {
         cur: o,

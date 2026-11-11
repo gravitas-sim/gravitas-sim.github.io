@@ -42,6 +42,7 @@ import {
 } from '../dataKinds/contract.js';
 import { sniff, unknownFormat } from '../dataKinds/raster.js';
 import { createPool, ledger as book } from '../workers/pool.js';
+import { computeValue } from '../quality.js';
 import { readFitsOnPool } from '../dataKinds/fitsJob.js';
 import { readRasterOnPool } from '../dataKinds/rasterJob.js';
 import { sha256Hex } from '../hash.js';
@@ -427,8 +428,16 @@ export function buildObservation(
 // ---- the pool: the page's ledger, one pool, for the page's life -----------------
 
 let pool = null;
-const poolFor = ctx =>
-  (pool ??= createPool({
+const poolFor = ctx => {
+  // The aggregate cap is the tier's (js/quality.js, tools/perf-thresholds.json):
+  // 256 MB across the page's Workers and two of them at the low tier, the
+  // desktop profile's figures otherwise. Said again at each use, so a tier that
+  // changed since the pool was made is the one in force.
+  book.configure({
+    memoryBytes: computeValue('workerMemoryBytes'),
+    realms: computeValue('workerConcurrency'),
+  });
+  return (pool ??= createPool({
     book,
     concurrency: 1,
     // The page's ledger, so the cap holds across every Worker it has; this
@@ -441,6 +450,7 @@ const poolFor = ctx =>
           type: 'module',
         })),
   }));
+};
 
 /** What the page's import holds in Workers now (the memory probe and the specs read it). */
 export const ledgerSnapshot = () => book.snapshot();

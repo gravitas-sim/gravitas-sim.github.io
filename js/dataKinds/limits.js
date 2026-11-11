@@ -106,14 +106,12 @@ export function residentFrames(width, height, planes = { data: true }) {
 
 /**
  * How a frame is drawn: the whole-number factor that brings its longer side to
- * at most 1,024 pixels. The drawn copy is for the eye only: marks, apertures
- * and every measurement keep full-resolution coordinates (`toFull`).
+ * at most 1,024 pixels (`side`; the low tier asks for 512, js/quality.js). The
+ * drawn copy is for the eye only: marks, apertures and every measurement keep
+ * full-resolution coordinates (`toFull`), so the side changes no number.
  */
-export function displayPlan(width, height) {
-  const factor = Math.max(
-    1,
-    Math.ceil(Math.max(width, height) / LIMITS.maxDisplaySide)
-  );
+export function displayPlan(width, height, side = LIMITS.maxDisplaySide) {
+  const factor = Math.max(1, Math.ceil(Math.max(width, height) / side));
   const w = Math.ceil(width / factor);
   const h = Math.ceil(height / factor);
   return { factor, width: w, height: h, rgbaBytes: 4 * w * h };

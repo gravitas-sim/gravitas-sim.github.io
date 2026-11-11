@@ -51,6 +51,12 @@ import {
   dataKey,
 } from '../analysis/modelCompare.js';
 import { ID_ANALYSIS } from '../names.js';
+import {
+  applyTierRequest,
+  computeNote,
+  computeValue,
+  setTier,
+} from '../quality.js';
 
 // Nothing from the page's own modules - its plot, selection, units and
 // translator - is imported here: they arrive in `ctx`. esbuild puts a module
@@ -304,6 +310,28 @@ export function mountFitPanel(root, ctx) {
     role: 'status',
     'aria-live': 'polite',
   });
+  // At the low tier the profile grid is coarser (js/quality.js, Prompt 285): the
+  // result says so, and one press computes it again at the full size.
+  const tierLine = el('p', { id: 'fitTier', class: 'ui-hint' });
+  const tierFull = el('button', {
+    id: 'fitTierFull',
+    class: 'ui-button',
+    type: 'button',
+    text: t('obs.fit.lowTier.full'),
+  });
+  tierLine.hidden = true;
+  const showTier = () => {
+    const note = computeNote(['profilePoints']);
+    tierLine.hidden = !note;
+    if (!note) return;
+    tierLine.replaceChildren(
+      `${t('obs.fit.lowTier', {
+        used: note.reduced.profilePoints.used,
+        full: note.reduced.profilePoints.full,
+      })} `,
+      tierFull
+    );
+  };
   const refusals = el('ul', { id: 'fitRefusals', class: 'ui-alert is-error' });
   const cost = el('p', { id: 'fitEstimate', class: 'ui-hint' });
   const results = el('div', { id: 'fitResults' });
@@ -402,8 +430,11 @@ export function mountFitPanel(root, ctx) {
     el('div', { class: 'ui-toolbar' }, run, cancel, exportBtn, keepBtn),
     progress,
     status,
+    tierLine,
     results
   );
+  applyTierRequest();
+  showTier();
 
   function data() {
     const d = dataFrom(o);
@@ -577,7 +608,7 @@ export function mountFitPanel(root, ctx) {
       model: { id },
       parameters,
       settings,
-      algorithm: { profile: { points: 11 } },
+      algorithm: { profile: { points: computeValue('profilePoints') } },
     };
   }
 
@@ -657,6 +688,7 @@ export function mountFitPanel(root, ctx) {
   });
 
   listen(run, 'click', () => {
+    showTier();
     const { m, reasons } = price();
     if (reasons.length) return;
     const d = data();
@@ -741,6 +773,11 @@ export function mountFitPanel(root, ctx) {
   });
 
   listen(cancel, 'click', () => job?.cancel(t('obs.fit.canceled')));
+  listen(tierFull, 'click', () => {
+    setTier('full');
+    showTier();
+    run.click();
+  });
 
   // --- Comparing the fits ------------------------------------------------------------
   const compare = el('section', {
@@ -992,8 +1029,10 @@ export function mountFitPanel(root, ctx) {
     const { manifest: m, out } = last;
     // The residuals are as long as the data and the model curve is for the
     // plot; the export keeps what reproduces and states the result.
+    const computation = computeNote(['profilePoints']);
     return {
       ...m,
+      ...(computation ? { computation } : {}),
       results: {
         fit: {
           ...omit(out.fit, ['residuals', 'fit', 'rows']),

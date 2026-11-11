@@ -147,5 +147,104 @@
       "enforced": false,
       "scenarios": {}
     }
+  },
+  "computation": {
+    "note": "Prompt 285. What the quality tier does to computation: the size each heavy computation takes at each tier. js/quality.js mirrors these values (a static page cannot read tools/) and tests/computeTier.test.js holds the two equal. A kernel never reads them: a kernel takes its size as an argument and gives the same numbers on both tiers for the same argument; the caller (a panel, a record) asks js/quality.js for the argument and says so in the result's provenance when it was reduced. `tolerance` is what the low tier's result may differ from the full tier's, stated before the validators ran; `adopters` names the one file each key is read in.",
+    "tiers": {
+      "full": {
+        "bootstrapDraws": 1000,
+        "monteCarloDraws": 20000,
+        "profilePoints": 11,
+        "displaySide": 1024,
+        "workerConcurrency": 8,
+        "workerMemoryBytes": 1000000000
+      },
+      "low": {
+        "bootstrapDraws": 300,
+        "monteCarloDraws": 5000,
+        "profilePoints": 7,
+        "displaySide": 512,
+        "workerConcurrency": 2,
+        "workerMemoryBytes": 256000000
+      }
+    },
+    "tolerance": {
+      "bootstrapDraws": "the bootstrap standard error is within 15 percent of the full tier's (its own sampling error is 1/sqrt(2(B-1)): 4.1 percent at 300 draws, 2.2 at 1000, so 15 percent is 3 times the combined error)",
+      "monteCarloDraws": "each end of the mass sum's 68 and 95 percent intervals is within 3 percent of the interval's width of the full tier's",
+      "profilePoints": "each end of a profile interval is within 5 percent of the interval's half-width of the full tier's",
+      "displaySide": "none: the drawn copy is for the eye, every measurement reads the full-resolution array",
+      "workerConcurrency": "none: a cap on realms at once changes the time, never a number",
+      "workerMemoryBytes": "none: a cap on bytes held changes what waits, never a number"
+    },
+    "adopters": {
+      "bootstrapDraws": "js/experiments/ensemble/record.js",
+      "monteCarloDraws": "js/imagingWidgets.js",
+      "profilePoints": "js/observatory/fitPanel.js",
+      "displaySide": "js/observatory/imageMarks.js",
+      "workerConcurrency": "js/observatory/imageImport.js",
+      "workerMemoryBytes": "js/observatory/imageImport.js"
+    }
+  },
+  "deviceProfiles": {
+    "note": "Prompt 285. Three automated profiles, ENFORCED by e2e/deviceProfiles.spec.js in CI (the older `profiles` above stay advisory). PROXIES: a CPU throttle on the main thread only (a Worker, the compositor and the GPU run at the host's speed), a V8 heap ceiling (it bounds JavaScript memory, not decoded images, canvases or GPU memory) and a network shape (a rate and a delay, not a radio). Not one of them is a device: the real-device profiles below stay empty and every real-device claim stays UNKNOWN in tools/evidence-status.json. A budget is the measured value times 4, rounded up to 100 ms, because a shared runner has its own load; it is set from a measurement and never loosened to pass.",
+    "workflows": [
+      "boot",
+      "lesson",
+      "image",
+      "fit",
+      "run3d"
+    ],
+    "workflowNotes": {
+      "boot": "the application starts (splash ended, controls shown); interaction: Load scenario opens its list",
+      "lesson": "/?author=tides&step=1; interaction: Next changes the panel",
+      "image": "a seeded 256 x 256 frame is opened in the Observatory; interaction: one point mark placed",
+      "fit": "the TESS light curve with the fit panel open; interaction: Run, with profile intervals, to 'Fitted in'",
+      "run3d": "/lab3d/ with reference problem R5; interaction: Run to 'Finished'"
+    },
+    "profiles": {
+      "throttled-desktop": {
+        "description": "The desktop as it has always been run here: CPU 4x, no network shape, the tier measured.",
+        "width": 1440,
+        "height": 900,
+        "dpr": 1,
+        "touch": false,
+        "cpu": 4,
+        "network": null,
+        "heapLimitMB": 1024,
+        "quality": "auto"
+      },
+      "low-end-laptop": {
+        "description": "A 2019-class Chromebook or Celeron laptop: CPU 6x, a 10 Mbps and 40 ms link, a 512 MB heap ceiling, the low tier.",
+        "width": 1366,
+        "height": 768,
+        "dpr": 1,
+        "touch": false,
+        "cpu": 6,
+        "network": {
+          "downKbps": 10000,
+          "upKbps": 3000,
+          "latencyMs": 40
+        },
+        "heapLimitMB": 512,
+        "quality": "low"
+      },
+      "mid-range-phone": {
+        "description": "A mid-range phone: 412 x 915 at density 2.625, touch, CPU 6x, Lighthouse's slow-4G link (1.6 Mbps down, 150 ms), a 384 MB heap ceiling, the low tier.",
+        "width": 412,
+        "height": 915,
+        "dpr": 2.625,
+        "touch": true,
+        "cpu": 6,
+        "network": {
+          "downKbps": 1600,
+          "upKbps": 750,
+          "latencyMs": 150
+        },
+        "heapLimitMB": 384,
+        "quality": "low"
+      }
+    },
+    "budgets": {},
+    "memory": {}
   }
 }
