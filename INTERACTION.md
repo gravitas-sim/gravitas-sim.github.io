@@ -275,7 +275,7 @@ check the physics" opens that table.
 | Kernels with neither | `imaging`, `statistics`, `sun`: their documents hold the validation table |
 | Glossary terms defined, in both languages | 81 in seven topics, 20 pointing to a model-page section |
 | Terms marked in the explainers | 55 marks, 33 distinct terms |
-| Links from the model page to the glossary | 26, in the English and the Spanish text |
+| Links from the model page to the glossary | 22, in the English and the Spanish text |
 
 Owed, as sections of the model page: 15 kernels have a kernel document and no
 section (`agn`, `atmospheres`, `cosmology`, `galactic`, `galaxy`,
