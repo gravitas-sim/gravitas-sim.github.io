@@ -81,9 +81,10 @@ const HIDDEN = {
 export const pageLanguage = () =>
   document.documentElement.lang === 'es' ? 'es' : 'en';
 
-/** Whether the step on screen holds an answer. */
+/** Whether the open lesson's step on screen holds an answer. */
 export const heldNow = () =>
-  Boolean(document.querySelector(`[${HELD_ATTRIBUTE}]`));
+  document.body.classList.contains('investigation-open') &&
+  Boolean(document.querySelector(`#investigationPanel[${HELD_ATTRIBUTE}]`));
 
 /** The newest `cap` points of a series, as the chart draws them. */
 const drawnPart = s => {

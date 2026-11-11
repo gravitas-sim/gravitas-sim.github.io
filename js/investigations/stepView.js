@@ -17,7 +17,7 @@
 import { fixed, formatNumber, tickLabel } from '../format.js';
 import { evidenceFrom } from '../data/investigations/provenance.js';
 import { getLocale, t } from '../i18n/index.js';
-import { heldAttribute } from '../lesson/held.js';
+import { markHeld } from '../lesson/held.js';
 import {
   decodeEntities,
   escapeHtml as escape,
@@ -100,8 +100,8 @@ export function stepMarkup(step, c) {
       })
     )}
        <span class="inv-step-kind">${escape(t(`inv.step.kind.${step.type}`))}</span></p>`,
-    `<h3 class="inv-step-title">${escape(step.title)}</h3>`,
-    `<div class="inv-step-body"${heldAttribute(active?.steps, step, visited)}><p>${prose(step.body)}</p></div>`,
+    `<h3 class="inv-step-title">${markHeld(active?.steps, step, visited)}${escape(step.title)}</h3>`,
+    `<div class="inv-step-body"><p>${prose(step.body)}</p></div>`,
   ];
 
   if (step.type === 'wedges') {

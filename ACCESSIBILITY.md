@@ -504,7 +504,7 @@ a transit; a pattern that repeats is "a pattern that repeats", not an orbit.
 The vocabulary has no such word, and a test reads every template in both
 languages against a list of the words the lessons use as their answers. It
 never gives away a held prediction. A lesson step that has not yet revealed
-its result is marked (`data-answer-held`, from `js/lesson/held.js`, which is
+its result is marked (`data-answer-held` on the lesson panel, from `js/lesson/held.js`, which is
 also what the test uses): while it is, the chart's description is the number of
 points and the range of x, which the axes already print, and the sound is
 refused, because a pitch contour tells the shape as surely as a sentence does.

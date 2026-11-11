@@ -15,7 +15,7 @@
 // the screen would answer it for them.
 // =============================================================================
 
-/** The attribute the lesson's step body carries while an answer is held. */
+/** The attribute the lesson panel carries while an answer is held. */
 export const HELD_ATTRIBUTE = 'data-answer-held';
 
 /**
@@ -35,6 +35,19 @@ export function holdsAnswer(steps, step, visited) {
   return false;
 }
 
-/** The step body's attribute text: ' data-answer-held' while held, else ''. */
-export const heldAttribute = (steps, step, visited) =>
-  holdsAnswer(steps, step, visited) ? ` ${HELD_ATTRIBUTE}` : '';
+/**
+ * Mark the lesson panel as holding an answer, or not, as the step on screen
+ * does. Called while a step's markup is written; returns '' so that it can sit
+ * in a template without changing the markup, which is what the lesson golden
+ * records. The panel is the one element of the lesson that is not part of a
+ * step's body.
+ * @returns {string} Always ''
+ */
+export function markHeld(steps, step, visited) {
+  if (typeof document !== 'undefined') {
+    document
+      .getElementById('investigationPanel')
+      ?.toggleAttribute(HELD_ATTRIBUTE, holdsAnswer(steps, step, visited));
+  }
+  return '';
+}

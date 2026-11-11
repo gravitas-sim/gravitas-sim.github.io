@@ -30,12 +30,13 @@ async function mount(page, { lang = 'en', held = false } = {}) {
   await page.evaluate(
     async ({ lang, held }) => {
       document.documentElement.lang = lang;
+      if (held) document.body.classList.add('investigation-open');
       const { createChart } = await import('/js/plot/chart.js');
       document.body.insertAdjacentHTML(
         'afterbegin',
         `<section id="plotSpec" aria-label="Chart">
            <button id="before">before</button>
-           ${held ? '<div class="inv-step-body" data-answer-held><p>A held step</p></div>' : ''}
+           ${held ? '<div id="investigationPanel" data-answer-held><p>A held step</p></div>' : ''}
            <div id="host" style="width:100%;max-width:560px"></div>
            <button id="after">after</button>
          </section>`

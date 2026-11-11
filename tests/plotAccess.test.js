@@ -255,8 +255,15 @@ describe('the sound', () => {
 describe('a held prediction', () => {
   const hold = () => {
     const step = document.createElement('div');
+    step.id = 'investigationPanel';
     step.setAttribute('data-answer-held', '');
+    document.body.classList.add('investigation-open');
     document.body.append(step);
+    const remove = step.remove.bind(step);
+    step.remove = () => {
+      document.body.classList.remove('investigation-open');
+      remove();
+    };
     return step;
   };
 

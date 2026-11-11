@@ -1202,7 +1202,7 @@ chart's first focus (the description as text, a button, the mapping of the
 sound written out) and the sound (`js/sonify/series.js`, started by `S` or the
 button, stopped by `Escape`, a hidden tab or any other signal audio). The
 description names shapes and numbers and never what they mean; a lesson step
-that holds an answer (`data-answer-held` on the step body, `js/lesson/held.js`)
+that holds an answer (`data-answer-held` on `#investigationPanel`, written by the step view through `markHeld` of `js/lesson/held.js` and read only while the panel is open)
 reduces it to the axes and refuses the sound. `parts()` now also carries each
 series' `sigma` and `cap` (its `maxPoints`), which the layer reads. The table
 plot (`js/plot/plot.js`) is not changed: its table is its text alternative, and

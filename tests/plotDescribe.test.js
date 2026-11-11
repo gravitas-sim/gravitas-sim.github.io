@@ -1,4 +1,4 @@
-import { describe, test, expect } from '@jest/globals';
+import { describe, test, expect, jest } from '@jest/globals';
 import {
   analyse,
   describe as describeChart,
@@ -7,7 +7,7 @@ import {
   TEMPLATES,
   TEMPLATE_TEXT,
 } from '../js/plot/describe.js';
-import { holdsAnswer, heldAttribute } from '../js/lesson/held.js';
+import { holdsAnswer } from '../js/lesson/held.js';
 import { INVESTIGATIONS } from '../js/data/investigations.js';
 import { stepMarkup } from '../js/investigations/stepView.js';
 
@@ -336,9 +336,6 @@ describe('a held prediction is never described', () => {
       for (let k = i; k < at; k++) {
         visited.add(inv.steps[k].sid);
         expect(holdsAnswer(inv.steps, inv.steps[k], visited)).toBe(true);
-        expect(heldAttribute(inv.steps, inv.steps[k], visited)).toBe(
-          ' data-answer-held'
-        );
         // And what the chart then says is the held description.
         const d = describeChart([{ x: T, y: CASES.dips }], {
           held: holdsAnswer(inv.steps, inv.steps[k], visited),
@@ -361,39 +358,43 @@ describe('a held prediction is never described', () => {
     expect(holdsAnswer(inv.steps, { not: 'in the lesson' }, new Set())).toBe(
       false
     );
-    expect(heldAttribute(inv.steps, { not: 'in it' }, new Set())).toBe('');
   });
 
-  test("the lesson panel's step body carries the mark, as the step view writes it", () => {
-    const render = (inv, step, visited) =>
-      stepMarkup(step, {
-        id: `${inv.id}:${step.sid}`,
-        saved: undefined,
-        active: inv,
-        responses: {},
-        visited,
-        shown: () => inv.steps,
-        predictionAnsweredHere: () => false,
-        recomputeFields: () => {},
-      })
-        .join('')
-        .match(/<div class="inv-step-body"[^>]*>/)[0];
-    for (const { inv, step, i } of held.slice(0, 40)) {
-      const at = inv.steps.findIndex(s => s.sid === step.reveal);
-      const visited = new Set(inv.steps.slice(0, i + 1).map(s => s.sid));
-      visited.delete(step.reveal);
-      expect(render(inv, step, visited)).toBe(
-        '<div class="inv-step-body" data-answer-held>'
-      );
-      visited.add(step.reveal);
-      const later = inv.steps.some(
-        (s, k) => k <= at && s.reveal && !visited.has(s.reveal)
-      );
-      expect(render(inv, inv.steps[at], visited)).toBe(
-        later
-          ? '<div class="inv-step-body" data-answer-held>'
-          : '<div class="inv-step-body">'
-      );
+  test("the step view marks the lesson panel, and leaves the step's markup as it was", () => {
+    const panel = { held: null, toggleAttribute: (n, on) => (panel.held = on) };
+    const spy = jest
+      .spyOn(document, 'getElementById')
+      .mockImplementation(() => panel);
+    try {
+      const render = (inv, step, visited) => {
+        const html = stepMarkup(step, {
+          id: `${inv.id}:${step.sid}`,
+          saved: undefined,
+          active: inv,
+          responses: {},
+          visited,
+          shown: () => inv.steps,
+          predictionAnsweredHere: () => false,
+          recomputeFields: () => {},
+        }).join('');
+        // The mark is not in the markup: the lesson golden records the body.
+        expect(html).not.toMatch(/data-answer-held/);
+        expect(html).toMatch(/<div class="inv-step-body"><p>/);
+        return panel.held;
+      };
+      for (const { inv, step, i } of held.slice(0, 40)) {
+        const at = inv.steps.findIndex(s => s.sid === step.reveal);
+        const visited = new Set(inv.steps.slice(0, i + 1).map(s => s.sid));
+        visited.delete(step.reveal);
+        expect(render(inv, step, visited)).toBe(true);
+        visited.add(step.reveal);
+        const later = inv.steps.some(
+          (s, k) => k <= at && s.reveal && !visited.has(s.reveal)
+        );
+        expect(render(inv, inv.steps[at], visited)).toBe(later);
+      }
+    } finally {
+      spy.mockRestore();
     }
   });
 });
