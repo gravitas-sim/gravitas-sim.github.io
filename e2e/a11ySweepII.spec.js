@@ -260,7 +260,13 @@ function beyond(exempt) {
 function movingNow() {
   const animations = document
     .getAnimations()
-    .filter(a => a.playState === 'running')
+    // A 0.01 ms transition is still "running" for the instant it takes, on a
+    // slow machine a sampled one: only what lasts long enough to be seen counts.
+    .filter(
+      a =>
+        a.playState === 'running' &&
+        (a.effect?.getComputedTiming?.().duration ?? 0) > 50
+    )
     .map(a => {
       const target = a.effect?.target;
       return `${a.animationName || a.transitionProperty || 'animation'} on ${
