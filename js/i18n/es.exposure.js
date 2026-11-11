@@ -7,7 +7,7 @@ export const ES_EXPOSURE = {
   'expW.control.setup': 'Instalación y banda',
   'expW.control.kind': 'Objetivo',
   'expW.control.mag': 'Brillo',
-  'expW.control.aperture': 'Radio de la abertura',
+  'expW.control.aperture': 'Radio de la apertura',
   'expW.control.patch': 'Radio de la mancha',
   'expW.control.exposures': 'Exposiciones',
   'expW.control.target': 'Señal a ruido objetivo',

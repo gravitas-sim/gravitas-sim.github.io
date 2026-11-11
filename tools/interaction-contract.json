@@ -845,7 +845,7 @@
         "task": "Reach the unlock form and show the pass phrase field's text.",
         "reach": "#togglePassword",
         "press": "Enter",
-        "spanish": false
+        "spanish": true
       },
       {
         "surface": "submissions",
@@ -861,7 +861,7 @@
         "task": "Answer the first question of the record.",
         "reach": "#setting-0",
         "press": "Space",
-        "spanish": false
+        "spanish": true
       },
       {
         "surface": "composer",
@@ -941,7 +941,7 @@
         "task": "Follow the first contents link.",
         "reach": "main a[href]",
         "press": "Enter",
-        "spanish": false
+        "spanish": true
       },
       {
         "surface": "validation",
@@ -949,7 +949,7 @@
         "task": "Run the checks in this browser.",
         "reach": "#valRunBtn",
         "press": "Enter",
-        "spanish": false
+        "spanish": true
       },
       {
         "surface": "glossary",
@@ -957,7 +957,7 @@
         "task": "Read the page and follow a link from its end.",
         "reach": ".gs-foot a[href]",
         "press": "Enter",
-        "spanish": false
+        "spanish": true
       },
       {
         "surface": "kernel-diagnostics",

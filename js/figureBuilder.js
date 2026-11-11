@@ -303,6 +303,7 @@ async function update() {
     fallback: els.fallback.checked
       ? { href: plain, text: t('fig.words.fallback.text') }
       : null,
+    lang: language(),
   });
   els.url.value = plain;
   showPreview(src, { w, h }, title);

@@ -79,7 +79,7 @@ export const ES_LIGHT = {
     'Corrimiento respecto de la longitud de onda en reposo',
   'lightW.sp.row.v':
     'Velocidad, c × corrimiento ÷ reposo (positiva es alejándose)',
-  'lightW.sp.row.ew': 'Ancho equivalente',
+  'lightW.sp.row.ew': 'Anchura equivalente',
   'lightW.sp.row.depth': 'Profundidad bajo el continuo',
   'lightW.sp.row.cont': 'Ajuste del continuo',
   'lightW.sp.value.cont':

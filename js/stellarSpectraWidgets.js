@@ -39,6 +39,7 @@
 // smoothing, no continuum fit, no shift. The committed data is untouched.
 // =============================================================================
 
+import { grouped } from './format.js';
 import { t } from './i18n/index.js';
 import { loadBuiltin } from './platform/resolver.js';
 import { ensureDeferredMessages } from './i18n/deferredMessages.js';
@@ -149,7 +150,7 @@ function sampleRange(from, to) {
 }
 
 /** A wavelength range as a reader will type it into a table: 3,927-3,940. */
-const span = w => `${w[0].toLocaleString()}\u2013${w[1].toLocaleString()}`;
+const span = w => `${grouped(w[0])}\u2013${grouped(w[1])}`;
 
 /**
  * Where a depth was measured, in words.
@@ -634,7 +635,7 @@ const SPECTRA_IDENTIFY = {
         label: t(`specW.feature.${f.id}`),
         value: `${t('specW.value.depth', {
           depth: pct(bandDepth(s, f)),
-          at: Math.round(f.centerAir).toLocaleString(),
+          at: grouped(Math.round(f.centerAir)),
         })}; ${whereMeasured(f)}`,
         emphasis: win.feature === f.id,
       });

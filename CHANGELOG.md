@@ -13,6 +13,31 @@ the release rather than in the tag.
 
 ## [Unreleased]
 
+### Changed
+
+- Spanish shows the decimal comma and the narrow-space thousands separator
+  (Prompt 282; a visible change, taken as the recommendation under Carl's
+  "go with the recommendation" rule, register row D-R10-282-01): a number in a
+  readout, a chart axis, a table or a description on a page in Spanish is
+  written `0,91` and `12 345,6`, whichever call site wrote it, because the
+  formatter follows the page's language when the caller names none. What a
+  student types is read in both marks; a CSV, a saved record and a link keep the
+  point. The lesson and widget label records (`tests/labelGolden/`) were
+  regenerated for it. The Spanish is unreviewed.
+- Five pages that stored the language choice and never read it now open in it:
+  the instructor portal, the classroom evidence kit, the model page, the
+  validation page and the glossary (the portal's and the kit's switch is not
+  mounted there; the choice is made on any other page). The portal's computed
+  button labels, and the validation page's computed messages, stay English.
+- The glossary holds 34 science terms of the investigations built since Prompt
+  156, and twenty-four Spanish catalog entries that disagreed or lacked an accent mark with them were brought
+  to one word (chi cuadrado, anchura equivalente, apertura, parámetro de impacto,
+  sistema de referencia, estrella objetivo). The Spanish is unreviewed.
+- A figure pasted from the figure builder names the language of its title and
+  link text (`lang` on the figure and the frame). The Spanish unit symbols the
+  interface prints (`ua/año`, `mas/año`, `Ma`, `Ga`, `al`, `cuentas`) are read
+  back when typed.
+
 ### Added
 
 - The touch pattern is held to a measurement on a phone and a tablet (Prompt

@@ -43,7 +43,7 @@ import {
   analyzeDivergence,
   refinementVerdict,
 } from './chaos/divergence.js';
-import { fixed } from './format.js';
+import { fixed, grouped } from './format.js';
 
 /**
  * Pull the two recorded runs out of the bench, in the shape the analysis wants.
@@ -376,7 +376,7 @@ function units(d) {
 function formatKm(km) {
   const a = Math.abs(km);
   if (a >= 1e6) return `${(km / 1e6).toPrecision(3)} million km`;
-  if (a >= 1) return `${Math.round(km).toLocaleString()} km`;
+  if (a >= 1) return `${grouped(Math.round(km))} km`;
   return `${km.toPrecision(2)} km`;
 }
 

@@ -109,10 +109,12 @@ test.describe('the shell', () => {
           'daylight'
         );
         await expect(page.locator('[data-gs-theme]')).toHaveValue('daylight');
-        // English-only pages: the choice is kept, and shown, but the page and
-        // its shell stay in the language the page is written in.
+        // The model and validation pages read the stored choice as they open
+        // (Prompt 282), so the page and its shell follow it.
         await expect(page.locator('[data-gs-lang]')).toHaveValue('es');
-        await expect(dest(page, 'explore').locator('.gs-en')).toBeVisible();
+        await expect(page.locator('html')).toHaveAttribute('lang', 'es');
+        await expect(dest(page, 'explore').locator('.gs-es')).toBeVisible();
+        await expect(dest(page, 'explore').locator('.gs-en')).toBeHidden();
       }
 
       await page.goto('/teaching/', { waitUntil: 'load' });

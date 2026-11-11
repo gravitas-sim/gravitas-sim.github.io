@@ -144,13 +144,28 @@ Declared today: the sandboxed compute frame; the general instructor documents
 activity guides and worksheets); the printed user manual; the SDK documentation;
 the repository's Markdown documents (except a `.es.md` twin); and the messages
 the validation groups compute. The model and validation pages are not declared:
-they carry their Spanish in pairs and the pair check applies.
+they carry their Spanish in pairs and the pair check applies. Since Prompt 282
+every page that carries its Spanish also reads the stored language choice as it
+opens (the instructor portal, the evidence kit, the model, the validation page
+and the glossary did not), and `tools/interaction-contract.json` records which
+pages the walks run in Spanish: all but the preserved original-version page.
 
 To declare a new one, add an entry to `tools/i18n-surfaces.json` with its `id`,
 `kind` (`page`, `document` or `code`), `path`, `reason` and `decided` (the
 document or register row where the decision is written), and add a decision row
 if it is a decision. A new page with no Spanish and no declaration fails
 `npm run i18n:check`, which is the point.
+
+## The numbers
+
+Spanish shows the decimal comma and, from five digits, a narrow no-break space
+between thousands; `js/format.js` follows the page's `lang` when a caller names
+no locale (NUMBER_TYPOGRAPHY.md, register row D-R10-282-01). The science terms
+of the later investigations are in `LABELS` with kind `science`, and the
+translations of the glossary page and the label check cover them. The generated Spanish
+notes' sources (`js/instructorNotes.js`, `js/instructorLocale.js`,
+the catalogs) are inputs of the `instructors` node of the generate graph, so a
+change to one makes the notes owed at the next instructor build.
 
 ## New vocabulary
 
@@ -165,7 +180,8 @@ never invented.
 - **Flow table.** `js/data/instructorFlow.es.js` is empty and is keyed by step id
   rather than by index; it is not read until it holds something.
 - **Unit names in `js/units/registry.js`** (`es: 'año'`) are held by their own
-  tests, not by `LABELS`.
+  tests, not by `LABELS`; `tests/localization2.test.js` holds that every Spanish
+  symbol is read back when typed.
 - **Fluency.** A digest says the Spanish was written against this English. It
   does not say the Spanish is good.
 - **Edits to `js/i18n` or the lesson shadows.** Fixing a recorded divergence, a

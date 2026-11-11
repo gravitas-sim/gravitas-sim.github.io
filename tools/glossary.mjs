@@ -238,7 +238,8 @@ export const STAY = [
  *
  * kind: navigation (a page, a panel, a tab), library (a kind or badge in the
  * Library), instrument (a tool the reader uses), quantity (a measured
- * quantity's name), unit (a unit's name or symbol).
+ * quantity's name), unit (a unit's name or symbol), science (a term of the
+ * investigations of Roadmap III, Prompt 282).
  */
 export const LABELS = [
   // --- navigation: the pages and the rail
@@ -500,9 +501,8 @@ export const LABELS = [
     en: 'Speed',
     es: 'Rapidez',
     ids: ['inspector.stat.speed'],
-    // Speed is rapidez and velocity is velocidad. The 3-D lab's column header
-    // says Velocidad for the scalar. Fix: es.lab3d.js (a bundle source).
-    known: { 'l3.speed': 'Velocidad' },
+    // Speed is rapidez and velocity is velocidad (the 3-D lab's column header
+    // said Velocidad for the scalar until Prompt 282).
   },
   {
     id: 'velocity',
@@ -539,9 +539,6 @@ export const LABELS = [
     en: 'Inclination',
     es: 'Inclinación',
     ids: ['exoW.inclination'],
-    // A missing accent mark. Fix: the Spanish catalog fragment that holds nb.gw.inclination
-    // (a bundle source); the audit's accent report lists the others.
-    known: { 'nb.gw.inclination': 'Inclinacion' },
   },
   {
     id: 'semi-major-axis',
@@ -601,6 +598,249 @@ export const LABELS = [
     ids: ['builder.mass.jupiters', 'place.precise.mass.jupiters'],
   },
   { id: 'unit-au', kind: 'unit', en: 'AU', es: 'UA', ids: ['l3.unit.au'] },
+  // --- science terms of the investigations built since Prompt 156 (Prompt 282):
+  // one word per concept, in both languages. A catalog entry whose English is
+  // exactly one of these must carry this Spanish, so a second word for the
+  // same concept fails i18n:check instead of waiting for a reader.
+  {
+    id: 'airmass',
+    kind: 'science',
+    en: 'Airmass',
+    es: 'Masa de aire',
+    ids: ['expW.control.airmass'],
+  },
+  {
+    id: 'aperture-radius',
+    kind: 'science',
+    en: 'Aperture radius',
+    es: 'Radio de la apertura',
+    ids: ['detW.s.control.radius', 'expW.control.aperture'],
+  },
+  {
+    id: 'parallax',
+    kind: 'science',
+    en: 'Parallax',
+    es: 'Paralaje',
+    ids: ['obs.ser.q.parallax'],
+  },
+  {
+    id: 'proper-motion',
+    kind: 'science',
+    en: 'Proper motion',
+    es: 'Movimiento propio',
+    ids: [],
+  },
+  {
+    id: 'radial-velocity',
+    kind: 'science',
+    en: 'Radial velocity',
+    es: 'Velocidad radial',
+    ids: [],
+  },
+  {
+    id: 'signal-to-noise',
+    kind: 'science',
+    en: 'Signal-to-noise',
+    es: 'Señal a ruido',
+    ids: ['detW.s.row.snr'],
+  },
+  {
+    id: 'zero-point',
+    kind: 'science',
+    en: 'Zero point',
+    es: 'Punto cero',
+    ids: ['gaiaW.s.row.zeroPoint'],
+  },
+  {
+    id: 'photometry',
+    kind: 'science',
+    en: 'Photometry',
+    es: 'Fotometría',
+    ids: [],
+  },
+  {
+    id: 'pixel',
+    kind: 'science',
+    en: 'Pixel',
+    es: 'Píxel',
+    ids: [],
+  },
+  {
+    id: 'noise',
+    kind: 'science',
+    en: 'Noise',
+    es: 'Ruido',
+    ids: [],
+  },
+  {
+    id: 'epoch',
+    kind: 'science',
+    en: 'Epoch',
+    es: 'Época',
+    ids: [],
+  },
+  {
+    id: 'transit',
+    kind: 'science',
+    en: 'Transit',
+    es: 'Tránsito',
+    ids: [],
+  },
+  {
+    id: 'eclipsing-binary',
+    kind: 'science',
+    en: 'Eclipsing binary',
+    es: 'Binaria eclipsante',
+    ids: [],
+  },
+  {
+    id: 'impact-parameter',
+    kind: 'science',
+    en: 'Impact parameter',
+    es: 'Parámetro de impacto',
+    ids: ['obs.fit.param.b', 'assist.sweep.col.b'],
+  },
+  {
+    id: 'closest-approach',
+    kind: 'science',
+    en: 'Closest approach',
+    es: 'Máximo acercamiento',
+    ids: ['assist.closest', 'lensW.b.row.impact'],
+  },
+  {
+    id: 'chi-square',
+    kind: 'science',
+    en: 'Chi-square',
+    es: 'Chi cuadrado',
+    ids: ['claimW.p.row.chi2', 'ttvW.t.view.1'],
+  },
+  {
+    id: 'reduced-chi-square',
+    kind: 'science',
+    en: 'Reduced chi-square',
+    es: 'Chi cuadrado reducido',
+    ids: ['claimW.p.row.reduced', 'nb.rv.chi2'],
+  },
+  {
+    id: 'degrees-of-freedom',
+    kind: 'science',
+    en: 'Degrees of freedom',
+    es: 'Grados de libertad',
+    ids: [],
+  },
+  {
+    id: 'likelihood',
+    kind: 'science',
+    en: 'Likelihood',
+    es: 'Verosimilitud',
+    ids: [],
+  },
+  {
+    id: 'posterior',
+    kind: 'science',
+    en: 'Posterior',
+    es: 'Posterior',
+    ids: [],
+  },
+  {
+    id: 'residual',
+    kind: 'science',
+    en: 'Residual',
+    es: 'Residuo',
+    ids: ['obs.cmp.col.residual'],
+  },
+  {
+    id: 'residuals',
+    kind: 'science',
+    en: 'Residuals',
+    es: 'Residuos',
+    ids: ['obs.orb.resid'],
+  },
+  {
+    id: 'false-positive',
+    kind: 'science',
+    en: 'False positive',
+    es: 'Falso positivo',
+    ids: [],
+  },
+  {
+    id: 'completeness',
+    kind: 'science',
+    en: 'Completeness',
+    es: 'Completitud',
+    ids: [],
+  },
+  {
+    id: 'baseline-flux',
+    kind: 'science',
+    en: 'Baseline flux',
+    es: 'Flujo de la línea base',
+    ids: ['obs.fit.eb.f0', 'obs.cmp.el.baselineFlux'],
+  },
+  {
+    id: 'equivalent-width',
+    kind: 'science',
+    en: 'Equivalent width',
+    es: 'Anchura equivalente',
+    ids: ['lightW.sp.row.ew', 'obs.ms.q.ew'],
+  },
+  {
+    id: 'equilibrium-temperature',
+    kind: 'science',
+    en: 'Equilibrium temperature',
+    es: 'Temperatura de equilibrio',
+    ids: [],
+  },
+  {
+    id: 'scale-height',
+    kind: 'science',
+    en: 'Scale height',
+    es: 'Altura de escala',
+    ids: [],
+  },
+  {
+    id: 'reference-frame',
+    kind: 'science',
+    en: 'Reference frame',
+    es: 'Sistema de referencia',
+    ids: ['imgW.p.row.frame', 'nb.prov.frame'],
+  },
+  {
+    id: 'target-star',
+    kind: 'science',
+    en: 'Target star',
+    es: 'Estrella objetivo',
+    ids: ['pcW.row.target', 'vetW.legend.target'],
+  },
+  {
+    id: 'white-dwarf',
+    kind: 'science',
+    en: 'White dwarf',
+    es: 'Enana blanca',
+    ids: [],
+  },
+  {
+    id: 'neutron-star',
+    kind: 'science',
+    en: 'Neutron star',
+    es: 'Estrella de neutrones',
+    ids: [],
+  },
+  {
+    id: 'cepheid',
+    kind: 'science',
+    en: 'Cepheid',
+    es: 'Cefeida',
+    allow: ['cefeida'],
+    ids: [],
+  },
+  {
+    id: 'parameter',
+    kind: 'science',
+    en: 'Parameter',
+    es: 'Parámetro',
+    ids: ['sweep.parameter', 'obs.fit.col.parameter'],
+  },
 ];
 
 /**

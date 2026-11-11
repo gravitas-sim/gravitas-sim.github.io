@@ -4,7 +4,7 @@
     <meta charset="utf-8" />
     <meta
       http-equiv="Content-Security-Policy"
-      content="default-src 'self'; script-src 'self' 'sha256-WGSiPeg0IKdUHjXOqO3l/MP3FGi7B2daRSzMyDfaQCs=' 'sha256-obuQMKcsFo4nGkw9dHqOhN5PotGrvXwXB54lJw4Ga5c='; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data: blob:; media-src 'self' blob:; connect-src 'self' blob:; worker-src 'self' blob:; frame-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'"
+      content="default-src 'self'; script-src 'self' 'sha256-WGSiPeg0IKdUHjXOqO3l/MP3FGi7B2daRSzMyDfaQCs=' 'sha256-likP0kMJU9n7Jt/XvfLmwy0UyPIAK6EMlW/nYeC8BWc='; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data: blob:; media-src 'self' blob:; connect-src 'self' blob:; worker-src 'self' blob:; frame-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'"
     />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>How Gravitas Models the Universe</title>
@@ -4356,7 +4356,19 @@ try {
 <!-- /shell:footer -->
     <script type="module">
       import { mountShell } from '/js/shell.js';
-      mountShell();
+      try {
+        if ((localStorage.getItem('gravitas_locale') || '').startsWith('es'))
+          document.documentElement.lang = 'es';
+      } catch {
+        /* storage blocked: English */
+      }
+      const titles = { en: "How Gravitas Models the Universe", es: "Cómo modela Gravitas el universo" };
+      const retitle = () => {
+        document.title =
+          titles[document.documentElement.lang === 'es' ? 'es' : 'en'];
+      };
+      retitle();
+      mountShell({ onLanguage: retitle });
     </script>
   </body>
 </html>
