@@ -63,13 +63,24 @@ async function openState(page, controls) {
 }
 
 /** A frame of settled layout: the transport bar and the sheets stand on a measurement. */
-const settle = page =>
-  page.evaluate(
+const settle = async page => {
+  // A dialog that is still opening is measured at a scale it will not keep:
+  // wait for every animation that ends (one that repeats for ever never does).
+  await page.evaluate(() =>
+    Promise.all(
+      document
+        .getAnimations({ subtree: true })
+        .filter(a => a.effect?.getComputedTiming().endTime !== Infinity)
+        .map(a => a.finished.catch(() => {}))
+    )
+  );
+  await page.evaluate(
     () =>
       new Promise(r =>
         window.requestAnimationFrame(() => window.requestAnimationFrame(r))
       )
   );
+};
 
 /** What a write run collects: one worker, so one process holds it all. */
 const written = {};
@@ -553,7 +564,9 @@ test.describe('a plot cursor by touch', () => {
       const status = page
         .locator('#lightCurveChart svg ~ [role=status]')
         .first();
-      const steps = page.locator('#lightCurveChart button');
+      const steps = page.locator('#lightCurveChart button', {
+        hasText: /Previous point|Next point|Punto anterior|Punto siguiente/,
+      });
       await expect(steps).toHaveCount(0);
       await page.touchscreen.tap(
         box.x + box.width * 0.4,
