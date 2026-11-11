@@ -179,3 +179,38 @@ export function promisesTable(root, inv) {
     '',
   ].join('\n');
 }
+
+/**
+ * Every page's offline promise, from tools/offline-pages.json (Prompt 284): the
+ * record a headless tour wrote, set against the manifest by
+ * tests/offlinePages.test.js. The adoption and teaching pages are one row each
+ * by kind, since they promise the same thing.
+ * @param {string} root - The repository
+ * @returns {string} Markdown, for a fact block
+ */
+export function pagesTable(root) {
+  const record = JSON.parse(
+    readFileSync(path.join(root, 'tools/offline-pages.json'), 'utf8')
+  );
+  const names = list => list.map(p => `\`${p.page}\``).join(', ');
+  const by = k => record.pages.filter(p => p.promise === k);
+  const need = by('needs a connection');
+  const teaching = need.filter(p => p.page.startsWith('/teaching/'));
+  const others = need.filter(p => !p.page.startsWith('/teaching/'));
+  const visit = by('after one online visit');
+  return [
+    '',
+    '| Promise | Pages | What it means |',
+    '| --- | --- | --- |',
+    `| From the first visit | ${names(by('first visit'))} | The page and every file the tour saw it fetch are in the first-visit install: it opens with no network as soon as the install has finished. |`,
+    `| After the first visit settles | ${names(by('after it settles'))} | The page, or a file it fetches, is in the idle tier, which arrives after the install, on idle, and not on a save-data connection. The offline note says so. |`,
+    ...(visit.length
+      ? [
+          `| After one online visit | ${names(visit)} | The page is held; a file it fetched is in no tier, and the worker keeps it once it has been fetched. |`,
+        ]
+      : []),
+    `| Needs a connection | ${others.length} pages: ${names(others)} | The page is in no tier. The worker never stores a document it was not given, so offline it sends the reader to the application. |`,
+    `| Needs a connection (teaching and adoption pages) | ${teaching.length} pages under \`/teaching/\` | The same, one page at a time. |`,
+    '',
+  ].join('\n');
+}

@@ -493,7 +493,9 @@ function build(root, ctx, initialName) {
     }
     band.addEventListener('change', convert);
     openBtn.addEventListener('click', () => {
-      if (current) ctx.open(current);
+      if (!current) return;
+      ctx.open(current);
+      rememberOpen(current);
     });
     box.append(
       title,
@@ -521,4 +523,68 @@ function build(root, ctx, initialName) {
       body.remove();
     },
   };
+}
+
+/**
+ * Note the open archive observation in the history entry's state (`obsOpen`),
+ * for `restoreOpen` after a reload. The page's own opening clears the note
+ * first, so this is written after it.
+ * @param {object} o - A gravitas.observation/1 made by toObservation
+ */
+function rememberOpen(o) {
+  const m = /^import:gaia-dr3-(\d+)-(G|BP|RP)@/.exec(o.id);
+  if (!m) return;
+  try {
+    history.replaceState(
+      {
+        ...history.state,
+        obsOpen: { v: 1, source: m[1], band: m[2], object: o.object },
+      },
+      ''
+    );
+  } catch {
+    /* no history to write to: nothing is remembered */
+  }
+}
+
+/**
+ * After a reload, the archive observation that was open, read back from this
+ * device's copy of the answer and never from the network, so it comes back
+ * offline as it does online (Prompt 284). `obsOpen` is in the history entry's
+ * state (it survives a reload and goes with the entry, so it is a memory of
+ * this visit and not a stored record). What returns is the observation as it was opened, not the
+ * changes made to it since.
+ * @param {{t: Function, open: (o: object) => void, status: (text: string) => void,
+ *   store?: object}} ctx
+ * @returns {Promise<boolean>} Whether an observation was reopened
+ */
+export async function restoreOpen(ctx) {
+  const rec = history.state?.obsOpen;
+  if (
+    rec?.v !== 1 ||
+    !/^\d{1,25}$/.test(rec.source) ||
+    !BANDS.includes(rec.band)
+  )
+    return false;
+  ctx.registerMessages?.({ en: EN_ARCHIVE, es: ES_ARCHIVE });
+  try {
+    const { answer, cache } = await gaiaEpochs(rec.source, {
+      store: ctx.store ?? idbStore(),
+      fetchImpl: () => Promise.reject(new Error('restoring from the copy')),
+    });
+    const o = toObservation(answer, rec);
+    ctx.open(o);
+    rememberOpen(o);
+    ctx.status(ctx.t('obs.arc.restored', { days: days(cache.ageMs) }));
+    return true;
+  } catch {
+    // No copy kept (a cleared store, a refused database): the page stays as it
+    // opened, and the memory of it is dropped so it is not tried again.
+    try {
+      history.replaceState({ ...history.state, obsOpen: undefined }, '');
+    } catch {
+      /* nothing to drop */
+    }
+    return false;
+  }
 }

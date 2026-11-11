@@ -690,7 +690,13 @@ export const IDLE_TIER = [
     'Sky Lab',
     /^(js\/kernels\/sky\/|js\/sky\/|js\/sky[A-Za-z]*\.js$|js\/data\/sky\/|sky\/)/,
   ],
-  ['Library', /^(js\/library\/|js\/libraryPage\.js$|library\/)/],
+  [
+    'Library',
+    // js/library/progress.js is the exception (Prompt 284): the course home,
+    // which is in the first-visit install, imports it, so a page that promises
+    // offline from the first visit would have failed until the idle tier came.
+    /^(js\/library\/(?!progress\.js$)|js\/libraryPage\.js$|library\/)/,
+  ],
   [
     'activity builder',
     // The instructor's half of an assignment (Prompt 175): the builder, the

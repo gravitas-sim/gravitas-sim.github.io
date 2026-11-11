@@ -292,6 +292,25 @@
       ]
     },
     {
+      "id": "offline-phone-paths",
+      "claim": "The My work backup can be saved through the share sheet and read through the file picker on real iOS and Android devices.",
+      "scope": "My work export and import on phones",
+      "version": "3.0",
+      "class": "S",
+      "status": "UNKNOWN",
+      "method": "Playwright device emulation with a stubbed share sheet and the browser's file chooser (e2e/offlineII.spec.js): a proxy for the code paths, not for a device; owner-led (Roadmap III Appendix A)",
+      "evaluator": "none",
+      "artifact": "OFFLINE_AND_LOW_END.md",
+      "limitations": "Emulation cannot show what a real share sheet or file picker offers or does, eviction under real storage pressure, or a phone's real quota.",
+      "date": "2026-11-11",
+      "anchors": [
+        {
+          "file": "OFFLINE_AND_LOW_END.md",
+          "text": "No real iOS or Android device has been used for the backup's share sheet or file picker."
+        }
+      ]
+    },
+    {
       "id": "static-local-first",
       "claim": "Gravitas runs entirely in the browser with no account, no server and no analytics.",
       "scope": "the public site",

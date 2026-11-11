@@ -19,6 +19,11 @@
 //     the same cache, no new stored record), and `recover` finishes it on the
 //     next open. A part already verified is not fetched again.
 //   - The reader sees the size and the room left before anything is fetched.
+//   - At scale (Prompt 284) the parts of one dataset are fetched smallest
+//     first, so a connection or a disk that gives out leaves the most whole
+//     parts behind, and before each large part the estimate is read again:
+//     a part that would leave less than the storage module's reserve is
+//     skipped by name, not started and abandoned.
 //   - Parts live in their own cache, which the worker's activation keeps
 //     (sw.js): a version update replaces the pages, not the reader's parts.
 //
@@ -31,6 +36,29 @@ import { CACHE_PARTS } from './names.js';
 
 export const PARTS_CACHE = CACHE_PARTS;
 const WANTED = '/__wanted/';
+
+/** A part at or above this is checked against the estimate just before it is fetched. */
+export const LARGE_PART_BYTES = 8 * 1024 * 1024;
+
+/**
+ * What a download leaves free, as js/storage/index.js states it for a write:
+ * 5 MiB or a tenth of the origin's quota, whichever is more.
+ * @param {number} quota
+ */
+export const reserveBytes = quota => Math.max(5 * 1024 * 1024, quota / 10);
+
+/** The order parts are fetched in: smallest first, then by id, so the order is the same on every open. */
+export const fetchOrder = parts =>
+  [...parts].sort((a, b) => a.bytes - b.bytes || (a.id < b.id ? -1 : 1));
+
+/**
+ * Whether `bytes` fit beside what the origin holds, keeping the reserve.
+ * @returns {?boolean} null when the browser does not say
+ */
+export function fits(bytes, { quota, usage }) {
+  if (quota == null || usage == null) return null;
+  return usage + bytes + reserveBytes(quota) <= quota;
+}
 
 /** @param {object} part @returns {string[]} What is wrong with a declaration */
 export function partProblems(part) {
@@ -89,7 +117,7 @@ export async function estimate(
     missing,
     quota,
     usage,
-    fits: quota == null || usage == null ? null : usage + bytes <= quota,
+    fits: quota == null || usage == null ? null : fits(bytes, { quota, usage }),
   };
 }
 
@@ -120,10 +148,12 @@ export async function ensurePart(
 
 /**
  * The reader's "make available offline": remember the request, then fetch each
- * part, one at a time (a failure does not stop the rest).
+ * part, one at a time, smallest first (a failure does not stop the rest). A
+ * part of LARGE_PART_BYTES or more is not started when the estimate, read just
+ * before it, says it would not fit; it is reported in `skipped`.
  * @param {string} id - The dataset or investigation
  * @param {object[]} parts
- * @returns {Promise<{id: string, done: string[], failed: Array<{id: string, error: string}>}>}
+ * @returns {Promise<{id: string, done: string[], failed: Array<{id: string, error: string}>, skipped: string[]}>}
  */
 export async function makeAvailableOffline(id, parts, env = {}) {
   const caches = env.caches ?? globalThis.caches;
@@ -134,15 +164,23 @@ export async function makeAvailableOffline(id, parts, env = {}) {
   );
   const done = [];
   const failed = [];
-  for (const p of parts) {
+  const skipped = [];
+  for (const p of fetchOrder(parts)) {
     try {
+      if (p.bytes >= LARGE_PART_BYTES && !(await has(cache, p))) {
+        const room = await estimate([p], { ...env, caches });
+        if (room.fits === false) {
+          skipped.push(p.id);
+          continue;
+        }
+      }
       await ensurePart(p, { ...env, caches });
       done.push(p.id);
     } catch (e) {
       failed.push({ id: p.id, error: e.message });
     }
   }
-  return { id, done, failed };
+  return { id, done, failed, skipped };
 }
 
 /**

@@ -104,10 +104,16 @@ export const WORDS = {
     'These pages are saved on this device:',
     'Estas páginas están guardadas en este dispositivo:',
   ],
-  elsewhere: [
-    'Any other page works only if you have opened it before, and whatever needs the network, such as catalog downloads, waits until you are back online.',
-    'Cualquier otra página funciona solo si ya la abriste, y lo que necesita la red, como las descargas del catálogo, espera hasta que vuelvas a conectarte.',
+  later: [
+    'These follow once the first visit has finished installing (not on a save-data connection):',
+    'Estas llegan cuando la primera visita termina de instalarse (no con ahorro de datos):',
   ],
+
+  elsewhere: [
+    'Any other page needs a connection, and offline you are taken to the application instead. Whatever needs the network, such as catalog downloads, waits until you are back online.',
+    'Cualquier otra página necesita conexión, y sin ella se te lleva a la aplicación. Lo que necesita la red, como las descargas del catálogo, espera hasta que vuelvas a conectarte.',
+  ],
+
   dismiss: ['Dismiss', 'Cerrar'],
 };
 
@@ -259,11 +265,31 @@ const say = key => {
  * a page does not change it, so the two generated files do not chase each other.
  */
 export function precachedPages() {
+  const { now, later } = precachedTiers();
+  return new Set([...now, ...later]);
+}
+
+/**
+ * The same pages split by when the worker has them (Prompt 284): `now` are in
+ * the first-visit install (core and optional), `later` only in the idle tier,
+ * which arrives after the install, on idle, and not on a connection set to
+ * save data. The note must not say a `later` page is saved before it is.
+ */
+export function precachedTiers() {
   const file = path.join(ROOT, 'sw-manifest.js');
   const text = existsSync(file) ? readFileSync(file, 'utf8') : '';
-  return new Set(
-    [...text.matchAll(/'\.\/(.*?)index\.html'/g)].map(m => '/' + m[1])
-  );
+  const pages = name => {
+    const m = new RegExp(
+      `__GRAVITAS_PRECACHE_${name} = \\[([\\s\\S]*?)\\];`
+    ).exec(text);
+    return [...(m?.[1] ?? '').matchAll(/'\.\/(.*?)index\.html'/g)].map(
+      x => '/' + x[1]
+    );
+  };
+  return {
+    now: new Set([...pages('CORE'), ...pages('OPTIONAL')]),
+    later: new Set(pages('IDLE')),
+  };
 }
 
 /**
@@ -277,19 +303,22 @@ const titleScript = es =>
 
 /** The offline note: inert until the head script shows it, once, when offline. */
 function offlineNote() {
-  const saved = precachedPages();
-  const links = [
+  const { now, later } = precachedTiers();
+  const all = [
     ...DESTINATIONS.map(([key, href]) => [key, href]),
     ...Object.values(PLACES).flatMap(([, blocks]) =>
       blocks.flatMap(([, items]) => items)
     ),
-  ]
-    .filter(([, href]) => saved.has(href))
-    .map(([key, href]) => `<a href="${href}">${say(key)}</a>`)
-    .join(', ');
+  ];
+  const list = tier =>
+    all
+      .filter(([, href]) => tier.has(href))
+      .map(([key, href]) => `<a href="${href}">${say(key)}</a>`)
+      .join(', ');
+  const after = list(later);
   return [
     `<div class="gs-offline" role="status"><template><div class="gs-offline-box">`,
-    `<p><strong>${say('offline')}</strong> ${say('saved')} ${links}. ${say('elsewhere')}</p>`,
+    `<p><strong>${say('offline')}</strong> ${say('saved')} ${list(now)}.${after ? ` ${say('later')} ${after}.` : ''} ${say('elsewhere')}</p>`,
     `<button type="button" class="ui-button">${say('dismiss')}</button>`,
     `</div></template></div>`,
   ].join('\n');
