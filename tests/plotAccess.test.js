@@ -12,7 +12,7 @@ import {
 } from '@jest/globals';
 import { JSDOM } from 'jsdom';
 
-/* global document, window -- jsdom's, installed below */
+/* global document, window, setTimeout -- jsdom's, installed below */
 
 // =============================================================================
 // js/plot/access.js: the series chart's description and sound (Prompt 280)
