@@ -85,8 +85,8 @@ describe('describe the view', () => {
     expect(text).toContain('Mutual inclination of Inner and Outer: 20.0°');
   });
 
-  test('says which body is farthest from the centre of mass', () => {
-    expect(text).toMatch(/farthest body from the centre of mass is Outer/);
+  test('says which body is farthest from the center of mass', () => {
+    expect(text).toMatch(/farthest body from the center of mass is Outer/);
   });
 
   test('does not interpret', () => {

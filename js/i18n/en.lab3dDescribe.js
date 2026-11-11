@@ -24,13 +24,13 @@ export const EN_LAB3DDESCRIBE = {
   'd.above': 'above',
   'd.below': 'below',
   'd.reach':
-    'The farthest body from the centre of mass is {name}, at {distance}.',
+    'The farthest body from the center of mass is {name}, at {distance}.',
   'd.orbit': '{name} about {primary}: a = {a}, e = {e}, i = {i}°.',
   'd.orbit.unbound': '{name} about {primary}: unbound, e = {e}, i = {i}°.',
   'd.orbits.more': 'And {more} more orbits are in the orbits table.',
   'd.mutual': 'Mutual inclination of {a} and {b}: {angle}°.',
   'd.held':
-    'A guide step is asking for a measurement, so the orbit numbers are left out. Check the answer, or reveal it, to have them.',
+    'A step of the investigation is asking for a measurement, so the orbit numbers are left out. Check the answer, or show it, to have them.',
   'd.unit.au': 'AU',
   'd.unit.day': 'd',
   'd.unit.length': 'length units',

@@ -29,7 +29,7 @@ export const ES_LAB3DDESCRIBE = {
   'd.orbits.more': 'Y {more} órbitas más están en la tabla de órbitas.',
   'd.mutual': 'Inclinación mutua de {a} y {b}: {angle}°.',
   'd.held':
-    'Un paso de la guía pide una medición, así que se omiten los números de las órbitas. Comprueba la respuesta, o muéstrala, para tenerlos.',
+    'Un paso de la investigación pide una medición, así que se omiten los números de las órbitas. Comprueba la respuesta, o muéstrala, para tenerlos.',
   'd.unit.au': 'UA',
   'd.unit.day': 'd',
   'd.unit.length': 'unidades de longitud',

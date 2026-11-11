@@ -581,7 +581,7 @@ numbers (Kepler-only, N-body with its scheme and step or tolerance, or a
 precomputed run with its source, and the tick), the clock, how many bodies are
 live and the names of the first six, the frame, reference plane and projection
 as the page words them, where the camera looks from, the body farthest from the
-centre of mass, the first four orbits (a, e, i about their primary) and the
+center of mass, the first four orbits (a, e, i about their primary) and the
 mutual inclination of the first three pairs of orbits that share a primary,
 then "and N more" with the table named for the rest. It reads the numbers the
 tables read (`labApi.exact()`), never pixels. It states and never interprets.
