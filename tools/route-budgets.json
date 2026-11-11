@@ -4,31 +4,31 @@
   "routes": {
     "sources": {
       "front-door": {
-        "kb": 2132.0,
+        "kb": 2133.5,
         "requests": 109
       },
       "sandbox": {
-        "kb": 2132.0,
+        "kb": 2133.5,
         "requests": 109
       },
       "kepler": {
-        "kb": 3426.2,
+        "kb": 3427.7,
         "requests": 149
       },
       "transit": {
-        "kb": 3438.1,
+        "kb": 3439.6,
         "requests": 149,
         "toolKb": 3562.9,
         "toolRequests": 154
       },
       "power-law": {
-        "kb": 3403.4,
+        "kb": 3404.9,
         "requests": 149,
-        "toolKb": 3456.7,
+        "toolKb": 3458.2,
         "toolRequests": 152
       },
       "largest-lesson": {
-        "kb": 3535.6,
+        "kb": 3537.1,
         "requests": 151
       },
       "teaching": {
@@ -44,7 +44,7 @@
         "requests": 41
       },
       "figure": {
-        "kb": 2408.0,
+        "kb": 2409.8,
         "requests": 129
       },
       "experiments": {
@@ -52,7 +52,7 @@
         "requests": 59
       },
       "observatory": {
-        "kb": 196.8,
+        "kb": 197.0,
         "requests": 17
       },
       "catalog": {
@@ -76,7 +76,7 @@
         "requests": 31
       },
       "course-builder": {
-        "kb": 1146.4,
+        "kb": 1146.7,
         "requests": 47
       },
       "course-home": {
@@ -88,11 +88,11 @@
         "requests": 11
       },
       "lab3d-lab": {
-        "kb": 809.7,
+        "kb": 811.2,
         "requests": 36
       },
       "lab3d-guide": {
-        "kb": 988.2,
+        "kb": 989.7,
         "requests": 41
       },
       "mission": {
@@ -124,7 +124,7 @@
         "requests": 14
       },
       "compute": {
-        "kb": 181.3,
+        "kb": 181.5,
         "requests": 20
       }
     },
@@ -178,7 +178,7 @@
         "requests": 4
       },
       "observatory": {
-        "kb": 94.4,
+        "kb": 94.5,
         "requests": 5
       },
       "catalog": {
@@ -250,7 +250,7 @@
         "requests": 4
       },
       "compute": {
-        "kb": 82.8,
+        "kb": 82.9,
         "requests": 3
       }
     }

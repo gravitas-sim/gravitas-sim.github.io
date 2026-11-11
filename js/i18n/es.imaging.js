@@ -84,7 +84,7 @@ export const ES_IMAGING = {
   'imgW.p.row.interval68': 'Distancia, intervalo del 68 por ciento',
   'imgW.p.row.interval95': 'Distancia, intervalo del 95 por ciento',
   'imgW.p.row.signif': 'Paralaje sobre su incertidumbre',
-  'imgW.p.row.frame': 'Marco de referencia',
+  'imgW.p.row.frame': 'Sistema de referencia',
   'imgW.p.value.relative':
     'El paralaje es relativo a las estrellas de referencia, así que es menor que el absoluto en su paralaje medio y la distancia nunca es menor que la verdadera',
   'imgW.p.value.corrected':
@@ -131,7 +131,7 @@ export const ES_IMAGING = {
   'imgW.o.row.plx': 'Paralaje usado',
   'imgW.o.value.plx':
     '{value} mas ± {sigma}, relativo a estrellas de referencia',
-  'imgW.o.row.frame': 'Marco de referencia',
+  'imgW.o.row.frame': 'Sistema de referencia',
   'imgW.o.value.frame':
     'El paralaje es relativo: la distancia y la suma de masas salen altas en el paralaje medio de las estrellas de referencia',
   'imgW.o.row.nodeNote': 'El nodo',

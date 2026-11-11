@@ -16,27 +16,27 @@
     "deferredCoreKb": 1985.8,
     "routes": {
       "front-door": {
-        "kb": 2132.0,
+        "kb": 2133.5,
         "requests": 109
       },
       "sandbox": {
-        "kb": 2132.0,
+        "kb": 2133.5,
         "requests": 109
       },
       "kepler": {
-        "kb": 3426.2,
+        "kb": 3427.7,
         "requests": 149
       },
       "transit": {
-        "kb": 3438.1,
+        "kb": 3439.6,
         "requests": 149
       },
       "power-law": {
-        "kb": 3403.4,
+        "kb": 3404.9,
         "requests": 149
       },
       "largest-lesson": {
-        "kb": 3535.6,
+        "kb": 3537.1,
         "requests": 151
       },
       "observatory": "the Observatory with one observation open: read from tools/route-budgets.json"

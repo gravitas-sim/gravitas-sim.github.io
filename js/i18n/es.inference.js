@@ -282,7 +282,7 @@ export const ES_INFERENCE = {
   'obs.cmp.el.inclinationDeg': 'Inclinación (grados)',
   'obs.cmp.el.starMassSun': 'Masa de la estrella (masas solares)',
   'obs.cmp.el.starRadiusSun': 'Radio de la estrella (radios solares)',
-  'obs.cmp.el.baselineFlux': 'Flujo de referencia',
+  'obs.cmp.el.baselineFlux': 'Flujo de la línea base',
   'obs.cmp.el.systemicKmS': 'Velocidad sistémica (km/s)',
   'obs.cmp.plotLabel': 'Los datos con el modelo encima: {n} puntos.',
   'obs.cmp.resLabel': 'Residuos, los datos menos el modelo: {n} puntos.',

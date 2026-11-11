@@ -245,6 +245,13 @@ export const ALIASES = new Map(
     'e-/s': 'electron/s',
     'electrons/s': 'electron/s',
     counts: 'count',
+    // What the Spanish interface prints, read back as typed (Prompt 282).
+    cuentas: 'count',
+    ma: 'Myr',
+    ga: 'Gyr',
+    al: 'ly',
+    'ua/año': 'AU/yr',
+    'mas/año': 'mas/yr',
     pixel: 'pix',
     pixels: 'pix',
   })

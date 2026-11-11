@@ -26,7 +26,7 @@
 // of the page, which is the only honest way to show a transverse deformation
 // without implying that LIGO is parked next to two black holes.
 // =============================================================================
-
+import { grouped } from './format.js';
 import { t } from './i18n/index.js';
 import { ensureDeferredMessages } from './i18n/deferredMessages.js';
 
@@ -1432,7 +1432,7 @@ const GW_LAB = {
       step: 1,
       value: 2,
       decimals: 0,
-      format: value => `×${AMPLIFY_STEPS[Math.round(value)].toLocaleString()}`,
+      format: value => `×${grouped(AMPLIFY_STEPS[Math.round(value)])}`,
     },
     {
       id: 'cursor',
@@ -1692,7 +1692,7 @@ const GW_LAB = {
       rows.push({
         label: t('gwW.row.amplify'),
         value: t('gwW.value.amplify', {
-          n: AMPLIFY_STEPS[Math.round(v.amplify ?? 2)].toLocaleString(),
+          n: grouped(AMPLIFY_STEPS[Math.round(v.amplify ?? 2)]),
         }),
       });
     }
@@ -1797,14 +1797,14 @@ const GW_LAB = {
       value: f.excerpted
         ? t('gwW.value.windowExcerpt', {
             window: secs(f.windowActualSeconds),
-            cycles: Math.round(f.cyclesInWindow).toLocaleString(),
+            cycles: grouped(Math.round(f.cyclesInWindow)),
             from: hz(f.fStartHz),
             full: secs(f.fullBandSeconds),
-            fullCycles: Math.round(f.fullBandCycles).toLocaleString(),
+            fullCycles: grouped(Math.round(f.fullBandCycles)),
           })
         : t('gwW.value.windowWhole', {
             window: secs(f.windowActualSeconds),
-            cycles: Math.round(f.cyclesInWindow).toLocaleString(),
+            cycles: grouped(Math.round(f.cyclesInWindow)),
           }),
     });
     // The two legends belong in the readout as well as on the canvas: on a
@@ -1831,8 +1831,8 @@ const GW_LAB = {
     rows.push({
       label: t('gwW.row.effectiveDistance'),
       value: t('gwW.value.effectiveDistance', {
-        d: Math.round(f.distanceMpc).toLocaleString(),
-        eff: Math.round(f.effectiveDistanceMpc).toLocaleString(),
+        d: grouped(Math.round(f.distanceMpc)),
+        eff: grouped(Math.round(f.effectiveDistanceMpc)),
       }),
     });
     if (state.noiseOn) {

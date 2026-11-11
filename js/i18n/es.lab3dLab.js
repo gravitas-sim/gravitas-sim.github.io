@@ -50,7 +50,7 @@ export const ES_LAB3DLAB = {
   'l3.pause': 'Pausar',
   'l3.step': 'Paso',
   'l3.restart': 'Reiniciar',
-  'l3.speed': 'Velocidad',
+  'l3.speed': 'Rapidez',
   'l3.speed.x': '×{x}',
 
   'l3.view': 'Vista',

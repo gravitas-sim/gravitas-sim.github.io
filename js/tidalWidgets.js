@@ -68,7 +68,7 @@ import {
   MIMAS_DISTANCE_M,
   MOON_RADIUS_M,
 } from './tidalPhysics.js';
-import { fixed } from './format.js';
+import { fixed, grouped } from './format.js';
 
 // The same fixed dark palette the black hole panels use, and for the same
 // reason: these are pictures of space, and theme-colored ink over them was
@@ -1459,7 +1459,7 @@ const DISRUPT = {
         const m = Math.pow(10, x);
         return m >= 1e6
           ? `${fixed(m / 1e6, m / 1e6 < 10 ? 1 : 0)} million M☉`
-          : `${m < 100 ? fixed(m, 0) : Math.round(m).toLocaleString('en-US')} M☉`;
+          : `${m < 100 ? fixed(m, 0) : grouped(Math.round(m))} M☉`;
       },
     },
   ],
@@ -1509,7 +1509,7 @@ const DISRUPT = {
         value:
           f.massSuns >= 1e6
             ? `${(f.massSuns / 1e6).toPrecision(3)} million M☉`
-            : `${Math.round(f.massSuns).toLocaleString('en-US')} M☉`,
+            : `${grouped(Math.round(f.massSuns))} M☉`,
       },
       {
         get label() {

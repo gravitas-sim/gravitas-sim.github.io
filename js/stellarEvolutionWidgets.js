@@ -38,6 +38,7 @@
 
 // Reaches start-up modules; so reaches all of them (js/instrumentStartup.js).
 import './instrumentStartup.js';
+import { grouped } from './format.js';
 import { t } from './i18n/index.js';
 import { ensureDeferredMessages } from './i18n/deferredMessages.js';
 import {
@@ -94,15 +95,14 @@ const NEXT_PACE = Object.freeze({
 // Formatting
 // -----------------------------------------------------------------------------
 
-const kelvin = k =>
-  Number.isFinite(k) ? `${Math.round(k).toLocaleString()} K` : '—';
+const kelvin = k => (Number.isFinite(k) ? `${grouped(Math.round(k))} K` : '—');
 
 const solar = (v, unit) => {
   if (!Number.isFinite(v)) return '—';
   if (v === 0) return `0 ${unit}`;
   const a = Math.abs(v);
   if (a >= 1e5 || a < 1e-3) return `${v.toExponential(2)} ${unit}`;
-  if (a >= 100) return `${Math.round(v).toLocaleString()} ${unit}`;
+  if (a >= 100) return `${grouped(Math.round(v))} ${unit}`;
   return `${v.toPrecision(3)} ${unit}`;
 };
 

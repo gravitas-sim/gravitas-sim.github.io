@@ -25,7 +25,7 @@
 // Reaches start-up modules; so reaches all of them (js/instrumentStartup.js).
 import './instrumentStartup.js';
 import { t } from './i18n/index.js';
-import { formatNumber } from './format.js';
+import { formatNumber, grouped } from './format.js';
 import { ensureDeferredMessages } from './i18n/deferredMessages.js';
 
 ensureDeferredMessages().catch(() => {});
@@ -95,13 +95,12 @@ import {
 // -----------------------------------------------------------------------------
 
 /** A temperature, to the precision a reader can act on. */
-const kelvin = k =>
-  Number.isFinite(k) ? `${Math.round(k).toLocaleString()} K` : '—';
+const kelvin = k => (Number.isFinite(k) ? `${grouped(Math.round(k))} K` : '—');
 
 /** A luminosity or a radius in solar units, over eleven decades. */
 const solar = (v, unit) => {
   if (!Number.isFinite(v)) return '—';
-  if (v >= 1000) return `${Math.round(v).toLocaleString()} ${unit}`;
+  if (v >= 1000) return `${grouped(Math.round(v))} ${unit}`;
   if (v >= 10) return `${v.toFixed(1)} ${unit}`;
   if (v >= 0.1) return `${v.toFixed(3)} ${unit}`;
   return `${v.toExponential(2)} ${unit}`;
@@ -113,7 +112,7 @@ const years = y => {
   if (y >= 1e9) return `${(y / 1e9).toPrecision(3)} Gyr`;
   if (y >= 1e6) return `${(y / 1e6).toPrecision(3)} Myr`;
   if (y >= 1e3) return `${(y / 1e3).toPrecision(3)} kyr`;
-  return `${Math.round(y).toLocaleString()} yr`;
+  return `${grouped(Math.round(y))} yr`;
 };
 
 /**
@@ -158,7 +157,7 @@ function interiorText(sel) {
 /** A ratio, as a multiplier. */
 const times = r => {
   if (!Number.isFinite(r)) return '—';
-  if (r >= 1000) return `×${Math.round(r).toLocaleString()}`;
+  if (r >= 1000) return `×${grouped(Math.round(r))}`;
   if (r >= 10) return `×${r.toFixed(0)}`;
   return `×${r.toFixed(2)}`;
 };

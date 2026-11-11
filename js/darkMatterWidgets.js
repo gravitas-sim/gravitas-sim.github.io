@@ -51,7 +51,7 @@ import {
   POINTS as NGC3198_POINTS,
 } from './data/ngc3198Synthetic.js';
 import { surface, responsiveHeight, MONO } from './widgetCanvas.js';
-import { decimal, fixed, scientific, withUnit } from './format.js';
+import { decimal, fixed, grouped, scientific, withUnit } from './format.js';
 import { t } from './i18n/index.js';
 import {
   G_GALACTIC,
@@ -314,7 +314,7 @@ function massLabel(solar) {
   // "543 billion" reads, and "5.43 × 10² billion" does not.
   if (solar >= 1e9) return withUnit(decimal(solar / 1e9, 3), 'billion M☉');
   if (solar >= 1e6) return withUnit(decimal(solar / 1e6, 3), 'million M☉');
-  return withUnit(Math.round(solar).toLocaleString('en-US'), 'M☉');
+  return withUnit(grouped(Math.round(solar)), 'M☉');
 }
 
 /**
