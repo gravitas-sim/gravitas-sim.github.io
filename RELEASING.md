@@ -153,9 +153,9 @@ nothing new is the bytes 2.0.0 wrote), a refusal a 2.0.0 build gives in words
 that name the version, link prefixes that follow the pack (`c3`, `i2`), and a
 rollback rehearsal recorded per record in [FORMATS.md](FORMATS.md) (the section
 "The 3.0.0 boundary", whose last list is the compatibility paragraph for the
-release notes). This does not set the version: Carl still edits `RELEASE` in
-`tools/project-metadata.mjs` at the release, and a later change that needs no
-new refusal does not move it. Had the corpus found nothing, the next release
+release notes). The release edit sets it to 3.0.0 in `RELEASE` in
+`tools/project-metadata.mjs` (see "What was released" below), and a later change
+that needs no new refusal does not move it. Had the corpus found nothing, the next release
 would have been 2.2.0 and this paragraph would say so.
 
 **What was released.** The promotion of `v3` at `e0f4df4b` on 2026-10-24 was
@@ -163,6 +163,20 @@ released as **2.1.0**, on Carl's direction (chat, 2026-10-24: "Make it the new
 v2.1"), although the boundary above asks for 3.0.0. The mismatch is recorded
 here, in the changelog's 2.1.0 section and in the release pull request; no
 format changed because of it, and the refusals the boundary lists are the same.
+2.1.0 is a git tag only: no GitHub release, no Zenodo archive and no version DOI
+(maintainer decision, 2026-10-24: wait for 3.0 to mint one).
+
+**3.0.0.** The release edit for 3.0.0 (2026-11-12) sets `RELEASE.version` to
+`3.0.0`, `RELEASE.dateReleased` to `2026-11-12` and `RELEASE.doi` to null in
+`tools/project-metadata.mjs`, with `package.json` and `package-lock.json`, the
+generated `CITATION.cff`, `.zenodo.json`, `manual/facts.tex`, the README
+citation block and `ACCESSIBILITY_CONFORMANCE.md`, and `validation/data.json`
+regenerated, and `CHANGELOG.md`'s `[Unreleased]` entries cut into `[3.0.0]`.
+The version fields are semantic (`3.0.0`): npm and `release:check` compare them
+as strings, and `release:check` looks for a tag named `v3.0.0` or `3.0.0`, so
+with the tag named `v3.0` it prints a note that no matching tag exists and does
+not fail. The release is called v3.0 in prose and its tag is `v3.0`. If the release date slips, change
+`RELEASE.dateReleased` and regenerate before tagging.
 
 **The changelog.** `CHANGELOG.md`'s `[Unreleased]` section collects entries as
 pull requests land. It is cut into a dated, versioned section **by the release,
@@ -351,13 +365,17 @@ DOI, so the newest Zenodo archive (2.0.0) is not this tree. To recover it:
 2. Then follow the section above, and CONTINUITY.md for hosting and for a
    department's own instructor bundle.
 
-The tree declares itself as version 2.1.0, not 3.0.0: `package.json`,
-`CITATION.cff` (released 2026-10-24), `.zenodo.json` and `RELEASE` in
-`tools/project-metadata.mjs` were not changed for the tag, and `CHANGELOG.md`
-still has its `[Unreleased]` section. If a GitHub release is made from the tag,
-Zenodo reads `.zenodo.json` from the archive and would record 2.1.0 and that
-date; the record's metadata would then need correcting by hand. Setting `RELEASE`
-is the owner's release edit (above) and is not done by this document.
+The tag, as first made at `f9277ff8`, has a tree that declares itself as
+version 2.1.0, not 3.0.0: `package.json`, `CITATION.cff` (released 2026-10-24),
+`.zenodo.json` and `RELEASE` in `tools/project-metadata.mjs` were not changed for
+it, and `CHANGELOG.md` still has its `[Unreleased]` section. A GitHub release
+made from that commit would have Zenodo read `.zenodo.json` from the archive and
+record 2.1.0 and 2026-10-24. The release edit for 3.0.0 (the paragraph "3.0.0"
+under "What was released" above) was therefore made on a later commit of `main`,
+and the tag is moved, once, to the `main` commit that carries it (maintainer
+decision, 2026-11-12), so the tag's tree declares 3.0.0. Anyone who unpacked
+`v3.0` before the move has the 2.1.0-declaring tree at `f9277ff8`; "What 3.0
+produced" below, once written, records the commit the tag finally names.
 
 ## What 2.0.0 produced
 

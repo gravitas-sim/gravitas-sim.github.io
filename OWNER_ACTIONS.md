@@ -257,9 +257,14 @@ records it cites the date.
       the concept DOI. State on 2026-11-12 (Prompt 291, read from the public
       API): the 2.0.0 record lists one owner by numeric user id and nothing
       else; which login that is, and whether anyone else can administer the
-      record, is **UNKNOWN** until you confirm it. `v3.0` has no GitHub release
-      and no record; whether it will get one is **UNKNOWN** (yours to decide),
-      and the tag's tree still declares 2.1.0 (D-R10-291-03).
+      record, is **UNKNOWN** until you confirm it. The repository's webhook list
+      (read 2026-11-12 with the owner's GitHub login, no Zenodo credential
+      used) holds one active webhook to Zenodo's GitHub receiver for `release`
+      events, which is what archives a GitHub release (Workflow A). `v3.0` has
+      no GitHub release and no record, and the tag as first made declares 2.1.0
+      (D-R10-291-03); the 3.0.0 release metadata is on a later commit of
+      `main`, and the tag is moved once to the commit that carries it; creating
+      the GitHub release from that tag is yours.
 - [ ] **ORCID and the citation identity.** The ORCID in `CITATION.cff` and
       `.zenodo.json` is yours; note who could correct a record if it needed
       correcting. **Recorded: UNKNOWN.**

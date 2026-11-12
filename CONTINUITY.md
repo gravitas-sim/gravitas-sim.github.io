@@ -23,8 +23,11 @@ usually".
   The archive holds the full source tree, the teaching material and the
   vendored libraries, under their licenses. As of 2026-11-12 the latest archived
   release is 2.0.0 (tagged 2026-10-16). Release 2.1.0 (tagged 2026-10-24) and
-  `v3.0` (annotated, tagged 2026-11-12, commit `f9277ff8`) are plain git tags
-  with no GitHub release and no version DOI, so neither is in the archive;
+  `v3.0` (annotated, first tagged 2026-11-12 at commit `f9277ff8`, whose tree
+  still declared 2.1.0; the tag is moved once to the `main` commit that carries
+  the 3.0.0 release metadata) are plain git tags with no GitHub release and no
+  version DOI, so neither is in the archive; the 3.0 release, once published,
+  will be;
   the work since 2.0.0 is in the repository only. If the site and the repository
   both vanished, the latest archived release, 2.0.0, rebuilds the project as it
   was then, not as it is. Anyone who still has a clone or GitHub's tag zipball

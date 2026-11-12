@@ -77,22 +77,22 @@ export const COPYRIGHT = { year: 2025, holder: 'Carl Ziegler' };
  */
 export const RELEASE = {
   // Set by RELEASING.md when a tag is cut. `null` means unreleased.
-  version: '2.1.0',
+  version: '3.0.0',
   // ISO date of the GitHub release, not the day the file was edited. If the
   // tag slips past this date, change this and regenerate before tagging: a
   // citation that names the wrong day is a citation nobody can check against
   // the archive.
-  dateReleased: '2026-10-24',
+  dateReleased: '2026-11-12',
   // Minted by Zenodo when the release is archived, and copied from the record
   // rather than composed by hand. It cannot be inside the tag: with the
   // GitHub-Zenodo workflow the identifier does not exist until the release is
   // published, so it is recorded afterwards and the archive does not contain
   // it. That is expected - see RELEASING.md.
   //
-  // Null until Zenodo mints the 2.1.0 version DOI, so no generated file claims
-  // the 2.0.0 version DOI (10.5281/zenodo.23425533) for 2.1.0. That DOI and the
+  // Null until Zenodo mints the 3.0.0 version DOI, so no generated file claims
+  // the 2.0.0 version DOI (10.5281/zenodo.23425533) for 3.0.0. That DOI and the
   // 1.0.0 one (10.5281/zenodo.22800610) are recorded in RELEASING.md as what
-  // those releases produced.
+  // those releases produced. 2.1.0 was never archived and has none.
   doi: null,
   // The concept DOI, which is stable across versions: it resolves to whichever
   // release is newest. Right for a badge or a "cite the software" link, wrong

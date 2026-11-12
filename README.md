@@ -712,7 +712,7 @@ If you use Gravitas in teaching or research, please cite it. Every release is
 archived on Zenodo.
 
 <!--fact-block:citation-->
-Version 2.1.0 has no version DOI yet. Zenodo mints it when the release is published,
+Version 3.0.0 has no version DOI yet. Zenodo mints it when the release is published,
 and it is recorded here afterwards (see [RELEASING.md](RELEASING.md)). Until then,
 cite the concept DOI and name the version you used.
 
