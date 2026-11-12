@@ -231,3 +231,5 @@ A C would have removed Appendix C's list above and a B only the slice it names. 
 2. The lunar leg ran on one downloaded NASA/JPL/USGS frame (permitted 2026-10-22, recorded in `tests/fixtures/lunar/provenance.json`). If a sunspot or a photographed Moon with sky around it is wanted as the authentic leg, name it (source and licence); the Clementine mosaic fills its frame and is not a single exposure.
 3. The idle group "image measurement" (D-R10-36 recommended it): Prompt 179 adds the one `IDLE_TIER` entry; the first-visit tier stays at 18 B of room.
 4. Whether the 25.0 KiB first slice, which A uses to 94%, is to be raised for 179 now or when it overruns (a ceiling increase is Carl's).
+
+<!-- Listed in DOCUMENTS.md. -->
