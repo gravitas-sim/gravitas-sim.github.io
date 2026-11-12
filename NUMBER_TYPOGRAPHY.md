@@ -126,3 +126,5 @@ would break both.
 **`commas()` in `js/blackHolePhysics.js` stays.** It asks for an exact number of
 decimal places rather than significant figures, which is what a few prose labels
 want.
+
+<!-- Listed in DOCUMENTS.md. -->
