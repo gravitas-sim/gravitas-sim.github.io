@@ -164,3 +164,5 @@ under its band; no state classification, mass or distance is built or implied.
 Garwood, F. 1936, Biometrika 28, 437 (the exact Poisson interval, as `js/kernels/statistics/intervals.js` cites it). Clopper, C.
 J. and Pearson, E. S. 1934, Biometrika 26, 404 (the exact binomial interval). Zechmeister, M. and Kuerster, M. 2009, A&A 496,
 577 (the generalized Lomb-Scargle, as `js/measure/periodogram.js` cites it).
+
+<!-- Listed in DOCUMENTS.md. -->
