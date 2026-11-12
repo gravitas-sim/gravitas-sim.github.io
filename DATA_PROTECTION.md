@@ -68,3 +68,5 @@ The statement is plain text on a web page and in the repository. The scoped acce
 ## Questions and changes
 
 Contact the maintainer, Carl Ziegler, at <Carl.Ziegler@sfasu.edu>. A security report should follow [SECURITY.md](SECURITY.md). If a release adds anything that stores more or sends anything, this statement changes in the same release, and the change is listed in [CHANGELOG.md](CHANGELOG.md).
+
+<!-- Listed in DOCUMENTS.md. -->

@@ -310,3 +310,5 @@ rest:
 4. Instructor guidance split per lesson into each lesson package.
 5. Scenarios last: they need a stable id and an alias map before a package can
    own one, because today their id is the display name stored in share links.
+
+<!-- Listed in DOCUMENTS.md. -->

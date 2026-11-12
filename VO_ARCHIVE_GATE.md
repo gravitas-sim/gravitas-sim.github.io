@@ -507,3 +507,5 @@ repository root; then open `spike/vo/probe.html` or `demo.html`, or run
 `node spike/vo/measure/csp-engines.mjs` and
 `node spike/vo/measure/live-engines.mjs`. `spike/vo/README.md` lists every
 file.
+
+<!-- Listed in DOCUMENTS.md. -->

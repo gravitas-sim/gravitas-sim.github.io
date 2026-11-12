@@ -119,3 +119,5 @@ show; no FFT added to js/numeric/"; Part B runs after a verdict of A or B only):
   transform, refuses an envelope at the edges of the band and states an interval that does not over-cover. The
   real-star legs here already pass, and the pinned reference spectrum, the oracle and the ensemble generator in
   `spike/seismology-gate` are reusable by it.
+
+<!-- Listed in DOCUMENTS.md. -->

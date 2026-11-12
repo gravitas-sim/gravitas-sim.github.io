@@ -255,3 +255,5 @@ number matched. The file as supplied omitted the solar motion each paper states 
 fixes each rule's frame, and it did not note that Bensby prints 89 stars in between in the text and 88 in a caption
 (the paper's text counts sum to 715 for a 714-star sample). Both are recorded in the file's `verification` block with
 their locations, as additions and not changes to any transcribed value.
+
+<!-- Listed in DOCUMENTS.md. -->

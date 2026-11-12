@@ -135,3 +135,5 @@ Chandrasekhar 1942 (Principles of Stellar Dynamics) and 1943 (ApJ 97, 255); Spit
 Hart 1971 (ApJ 164, 399), Spitzer 1987 (Dynamical Evolution of Globular Clusters); Giersz and Heggie 1994 (MNRAS 268,
 257) and 1996 (MNRAS 279, 1037); Binney and Tremaine 2008 (Galactic Dynamics); Aarseth, Henon and Wielen 1974 (A&A
 37, 183) for the Plummer sampling; Makino and Aarseth 1992 (PASJ 44, 141) for the reference code's scheme.
+
+<!-- Listed in DOCUMENTS.md. -->

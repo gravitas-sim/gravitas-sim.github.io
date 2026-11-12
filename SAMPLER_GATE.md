@@ -163,3 +163,5 @@ values:
 `node spike/sampler/check-words.mjs`, and `python3 spike/sampler/reference.py`
 (emcee 3.1.6, numpy 1.26.4), on the spike branch. Set `STEPS_FACTOR=3` for the longer
 informational runs. The outputs are in `spike/sampler/results/`.
+
+<!-- Listed in DOCUMENTS.md. -->

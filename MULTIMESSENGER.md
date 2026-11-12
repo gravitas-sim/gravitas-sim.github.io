@@ -287,3 +287,5 @@ about the sky beyond them; the speed bound is only ever shown with its emission-
 Li, L.-X. and Paczynski, B. 1998, ApJ 507, L59 (the kilonova signal). Clopper, C. J. and Pearson, E. S. 1934, Biometrika 26,
 404 (the exact binomial interval). The paper that published the bound is the external reference of B4 and is cited from the
 supplied file, not from this document.
+
+<!-- Listed in DOCUMENTS.md. -->

@@ -328,3 +328,5 @@ export default [
     },
   },
 ];
+
+// End of the linter configuration.

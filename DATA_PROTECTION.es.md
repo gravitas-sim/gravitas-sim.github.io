@@ -70,3 +70,5 @@ La declaración es texto plano en una página web y en el repositorio. El inform
 ## Preguntas y cambios
 
 Escriba al responsable del proyecto, Carl Ziegler, a <Carl.Ziegler@sfasu.edu>. Un informe de seguridad debe seguir [SECURITY.md](SECURITY.md). Si una versión añade algo que guarde más o envíe algo, esta declaración cambia en la misma versión y el cambio se anota en [CHANGELOG.md](CHANGELOG.md).
+
+<!-- Listed in DOCUMENTS.md. -->

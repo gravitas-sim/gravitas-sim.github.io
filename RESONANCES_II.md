@@ -239,3 +239,5 @@ The estimator and the step rule are imported by nothing shipped.
 Reproduce the addendum: `python3 -E tests/fixtures/resonances-ii/oracle_addendum.py tests/fixtures/resonances-ii
 <data dir> selfcheck jup laplace pluto ensemble` (about 10 min), then `node tools/resonances-ii-addendum.mjs run --data
 <data dir>` (about 45 s).
+
+<!-- Listed in DOCUMENTS.md. -->

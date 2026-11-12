@@ -68,3 +68,5 @@ a reading step that states why):
 - **Reversal:** Carl's ruling on the reading of G3 (B), or a third calibration set that brings the relations
   within 0.1 dex over the domain (for example a cluster-calibrated relation with a published covariance of its
   coefficients), which would reopen A.
+
+<!-- Listed in DOCUMENTS.md. -->

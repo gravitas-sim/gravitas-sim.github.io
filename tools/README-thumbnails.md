@@ -76,3 +76,5 @@ Both `zoom` and `boost` turn automatic framing off. Use them only where measurin
 gets it wrong, and say why in a comment: `Blended Binary`'s companion really is
 300 AU away and cannot share a frame with the transit, and the Solar System's
 comets reach past Neptune.
+
+<!-- End of this guide. -->

@@ -419,3 +419,5 @@ is cheap, so that the next proposal starts from the right one.
   and fixing it belongs with the settings panel rather than here.
 - **The vector overlay draws for one selected body.** Showing them for every body
   at once would be a different feature and a different performance question.
+
+<!-- Listed in DOCUMENTS.md. -->

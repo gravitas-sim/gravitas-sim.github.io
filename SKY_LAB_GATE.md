@@ -187,3 +187,5 @@ and Moon series are called with TT (UT as TT adds 0.011 degree to the Moon).
 
 `spike/sky/README.md` on the spike branch. Strings of the prototype for
 translation: 37 in a catalogue in both locales (not translated by the gate).
+
+<!-- Listed in DOCUMENTS.md. -->

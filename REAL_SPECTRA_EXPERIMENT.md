@@ -419,3 +419,5 @@ authorised for. The owner approved **4080 KB** on 2026-09-22, and the raise is
 recorded, with this arithmetic and the audit behind it, in the `deferred`
 entry of `tools/bundle-budget.mjs`. The initial-download ceiling of 830 KB was
 not touched.
+
+<!-- Listed in DOCUMENTS.md. -->

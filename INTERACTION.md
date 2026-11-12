@@ -283,3 +283,5 @@ section (`agn`, `atmospheres`, `cosmology`, `galactic`, `galaxy`,
 `sun`, `xray`, `imaging`); the Teach table says "No section yet" for each.
 Terms in the lessons' own prose, and in the instructor notes, wait for a pass
 that edits the lessons (closure files and the Spanish ledger).
+
+<!-- Listed in DOCUMENTS.md. -->

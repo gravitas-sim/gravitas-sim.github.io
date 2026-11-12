@@ -85,3 +85,5 @@ with its own row in the decision register, not an update.
 
 The monthly Dependabot pull requests are the input to step 3 and nothing more:
 they are read at the checkpoint, not merged as they arrive.
+
+<!-- Listed in DOCUMENTS.md. -->

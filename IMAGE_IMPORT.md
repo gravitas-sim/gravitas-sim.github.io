@@ -125,3 +125,5 @@ See D-R10-59 in `DECISION_REGISTER.md`.
 lazy; `js/i18n/{en,es}.imageImport.js`, lazy; the Observatory page opens it with
 one `import()`. The shared chunks are in `NEVER_PRECACHED`: a first visit
 downloads none of it. The Spanish is unread by a fluent reader.
+
+<!-- Listed in DOCUMENTS.md. -->

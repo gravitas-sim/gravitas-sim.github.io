@@ -206,3 +206,5 @@ Two investigations use them, appended to the atmosphere module and its three sib
 - **Sequence rows** for the two lessons: a row needs a message id in two catalogs (`js/i18n/{en,es}.deferred.js`) that sit at their line ceilings (3,834 and 4,081), and the two ids cost 4 lines each; no ceiling was raised. The lessons are reachable from the library and the lesson list.
 - **A published eclipse-depth table and a Solar System phase-function table** (rights decisions and downloads are Carl's); the investigations use synthetic data and say so.
 
+
+<!-- Listed in DOCUMENTS.md. -->

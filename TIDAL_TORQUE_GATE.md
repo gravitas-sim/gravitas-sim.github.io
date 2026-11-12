@@ -100,3 +100,5 @@ run forward the Earth and the Moon (k2 0.30, Q 12) meet corotation at 15.4 Gyr a
 back, the constant-Q table reaches contact 1.58 Gyr ago, which the geological record contradicts and which is stated as
 the model's limit. `tests/tides.test.js` holds the table against the oracle's integration. The displays that would
 draw it (the investigation "Tides that move the Moon" and a prescribed pair of bodies) are not built in this PR.
+
+<!-- Listed in DOCUMENTS.md. -->

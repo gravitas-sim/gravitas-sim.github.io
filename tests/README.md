@@ -107,3 +107,5 @@ When adding new physics functions or modifying existing ones:
 - Jest: Testing framework
 - @jest/globals: ES modules support
 - jest-environment-jsdom: DOM environment simulation
+
+<!-- End of this guide. -->

@@ -594,3 +594,5 @@ rights are confirmed and recorded in the manifest.
 | A radial-velocity pack | The gate gave the HARPS HD 75289 series a B. It still needs ESO programme IDs in its credit and a confirmed time scale. It is not the TESS star, so it can't pair with this pack. It waits for a lesson that needs it. |
 | Student files as packs | A reader's CSV or JSON opens in the observatory, through a preview and a mapping in which every unit is chosen, as `origin: imported`. It is not a pack, and nothing turns one into one. |
 | Live archive queries | No lesson depends on an archive being up. Raw products are fetched only by `npm run packs:data`. |
+
+<!-- Listed in DOCUMENTS.md. -->

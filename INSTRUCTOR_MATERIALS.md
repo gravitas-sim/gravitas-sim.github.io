@@ -274,3 +274,5 @@ means, stated plainly:
 
 The decision is `D-R10-43` in DECISION_REGISTER.md. Nothing in this section
 changes how the bundle is encrypted or keyed: that is unchanged.
+
+<!-- Listed in DOCUMENTS.md. -->

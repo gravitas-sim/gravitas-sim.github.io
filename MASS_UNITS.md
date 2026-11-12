@@ -194,3 +194,5 @@ the Kuiper Belt, and that is the scenario the correction most improves.
   body in it — thirty-one of them at the time of the fix. `node
   tools/small-body-sweep.mjs` re-runs it against the catalog as it stands.
 - **The full physics validation suite**, unchanged.
+
+<!-- Listed in DOCUMENTS.md. -->

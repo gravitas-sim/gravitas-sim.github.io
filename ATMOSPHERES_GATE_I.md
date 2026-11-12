@@ -226,3 +226,5 @@ check was run twice for a different answer.
 - No physics claim here has been reviewed by an external reader; the Eddington and Milne comparison, the
   Cowan and Agol redistribution factor and the Jeans flux are textbook forms I implemented, checked against
   independent numerical code, not against a published table.
+
+<!-- Listed in DOCUMENTS.md. -->

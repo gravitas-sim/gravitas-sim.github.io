@@ -366,3 +366,5 @@ Radii are from the body's center, in km.
 - E. M. Standish, "Keplerian Elements for Approximate Positions of the Major
   Planets" (JPL Solar System Dynamics).
 - IAU 2012 Resolution B2, on the astronomical unit.
+
+<!-- Listed in DOCUMENTS.md. -->

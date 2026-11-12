@@ -58,3 +58,5 @@ the enforcement section in particular describes what one person can actually do,
 rather than the committee process the Covenant assumes.
 
 [cc]: https://www.contributor-covenant.org/version/2/1/code_of_conduct/
+
+<!-- Listed in DOCUMENTS.md. -->

@@ -192,3 +192,5 @@ The four manifests are the whole of the data plane's growth: 321,298 of 325,632
 raw bytes and 101,008 of 101,376 gzip bytes in `data-budget.json` (left
 untouched). The synthetic packs the roadmap names do not fit those ceilings; a
 decision to raise `packGzipBytes` is Carl's.
+
+<!-- Listed in DOCUMENTS.md. -->

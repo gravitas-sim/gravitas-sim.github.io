@@ -57,3 +57,5 @@ Applying CC BY 4.0 by reference to that text is the method Creative Commons
 itself recommends for marking a work, and is what this repository does.
 
 [deed]: https://creativecommons.org/licenses/by/4.0/
+
+<!-- Listed in DOCUMENTS.md. -->

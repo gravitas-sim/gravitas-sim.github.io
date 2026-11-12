@@ -244,3 +244,5 @@ Rights: `authentic/SOURCES.json` (cite-only, derived numbers and short fixtures,
 ### 10.6 Reproduce
 
 `python3 -E tools/bao-oracle/oracle2.py tests/fixtures/bao/authentic tests/fixtures/bao/thresholds-followup.json tests/fixtures/bao/thresholds.json oracle-followup.json` and `node tools/bao-validate-followup.mjs tests/fixtures/bao/thresholds-followup.json tests/fixtures/bao/thresholds.json tests/fixtures/bao/results.json tests/fixtures/bao/oracle-followup.json tests/fixtures/bao/authentic <outdir>` on `spike/bao-authentic` (the oracle and the validator are there, never merged); `node tools/bao-extract-eh98.mjs` and `node tools/bao-extract-alam.mjs` rebuild the two transcriptions from the saved layout texts. `tests/baoFollowup.test.js` recomputes every status from the pinned files.
+
+<!-- Listed in DOCUMENTS.md. -->

@@ -203,3 +203,5 @@ Earth, Mars and Jupiter before the oracle finished (to see it work), after the t
 2. If A: a reader's check of the typed layer and moment values against PREM, Staehler et al. 2021, Konopliv et al. 2016 and the Juno-era
    papers (single values; facts with citation; no download needed if Carl reads them), and of the uncompressed-density table.
 3. A ruling on the declared 200 kg/m3 spread of the uncompressed-density correction (Part A), or a source that states one.
+
+<!-- Listed in DOCUMENTS.md. -->

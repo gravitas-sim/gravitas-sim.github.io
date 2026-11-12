@@ -484,3 +484,5 @@ The test file has 25 tests. The 2 that rebuild from the raw cache skip
 without `P11_CACHE`. With the cache all 25 pass, including byte-identical
 rebuilds of both derivatives and the TESS tool's refusal of a raw file with
 one changed byte.
+
+<!-- Listed in DOCUMENTS.md. -->

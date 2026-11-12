@@ -198,3 +198,5 @@ obeys), and held by `tests/embedContract.test.js`,
 `e2e/embedContract.spec.js` (a parent page at another origin, a page that is
 not the parent, an opaque parent, a resized frame, offline) and
 `e2e/figureBuilder.spec.js`.
+
+<!-- Listed in DOCUMENTS.md. -->

@@ -1,3 +1,5 @@
 instructors/materials.enc.json
 dist/
 coverage/
+
+# Generated or measured output: the formatter leaves these files alone.

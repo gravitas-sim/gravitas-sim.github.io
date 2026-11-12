@@ -643,3 +643,5 @@ Third-party material you did not write cannot be added under either. If a change
 needs something with its own license, it goes in `vendor/` with that license
 beside it and an entry in [`NOTICE`](NOTICE) — `npm run vendor:check` enforces
 the first half of that.
+
+<!-- Listed in DOCUMENTS.md. -->

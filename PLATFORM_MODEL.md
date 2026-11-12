@@ -336,3 +336,5 @@ In every arrangement the lesson's panels, the shell bar and the transport bar le
   focus order, `aria-current` and the theme cascade. An HTML include needs a
   server the site does not have.
 - **One header per template.** That is the four shells there are today.
+
+<!-- Listed in DOCUMENTS.md. -->

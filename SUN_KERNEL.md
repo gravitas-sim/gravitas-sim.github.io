@@ -276,3 +276,5 @@ no light-time turn of the surface, which is about 0.08 degree and was not measur
 `tests/fixtures/sun/{thresholds,thresholds-2,oracle-results,failed-legs}.json`, `tests/sun.test.js`.
 The kernel is listed in `NEVER_PRECACHED` (`tools/build-service-worker.mjs`) though no page
 imports it yet, so a later panel that imports it installs nothing. Register row D-R10-79.
+
+<!-- Listed in DOCUMENTS.md. -->

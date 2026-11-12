@@ -48,3 +48,5 @@ survey could hardly see, under these stated limits: the search is the matched fi
 completeness is optimistic), the interval carries counting error only, the rich bins number four (the coverage
 evidence there is thin; the sparse bins carry the rest), the authentic leg is not run, and nothing here says anything
 about a real survey. Part B builds the workbench panels and the lessons within this verdict.
+
+<!-- Listed in DOCUMENTS.md. -->

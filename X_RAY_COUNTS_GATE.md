@@ -178,3 +178,5 @@ session; the legs read what arrives.
    are therefore total-count only. A different interval (an exact conditional or a Bayesian one) would be a new decision.
 4. The files above; and a go-ahead for a synthetic, labelled hardness-and-outburst lesson, which the consumers rule permits
    today and which I have not built.
+
+<!-- Listed in DOCUMENTS.md. -->

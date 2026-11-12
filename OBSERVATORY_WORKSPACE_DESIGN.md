@@ -355,3 +355,5 @@ offline copy yet.
 9. **Offline follows the site's worker**, which the application installs. A
    document page that installed an 11 MB precache on its own would be a
    product decision, not this one.
+
+<!-- Listed in DOCUMENTS.md. -->

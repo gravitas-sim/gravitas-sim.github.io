@@ -245,3 +245,5 @@ Decisions (all in the contract before the run they affect): D8b judged on new se
 4. **The stopping rule in a Part B.** Recommended: the repaired rule as the penalised fit's only rule, stated in the kernel document.
 5. **The data legs.** Recommended: a short session when the archive and the catalogue service answer, with the requests of `followup-sources.json`; X3 stays NOT RUN unless running a cited implementation is permitted.
 6. **Part B and the consumers rule** remain Carl's. Nothing here begins either.
+
+<!-- Listed in DOCUMENTS.md. -->

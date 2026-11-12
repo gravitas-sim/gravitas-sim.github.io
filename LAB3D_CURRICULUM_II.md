@@ -86,3 +86,5 @@ judges the kernel side and writes `results.json`; the test runs it again.
 - The element editor has no fit to draw uncertainties from in these systems.
 - A precomputed run is an in-memory replay; opening one from a file is not defined.
 - No closure file was added to the instructor bundle's source closure.
+
+<!-- Listed in DOCUMENTS.md. -->

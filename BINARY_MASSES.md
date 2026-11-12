@@ -196,3 +196,5 @@ visual pair adds common-mode errors of the frame, a parallax that is relative or
 fraction depends on the band and on the detector; the mass fraction is as good as the regression's model (a constant offset and a proper motion for
 the barycentre) and the sum as good as the cube of the parallax. **The authentic leg is only an arithmetic check (AM3):** alpha Cen AB's published elements (Akeson et al. 2021, arXiv:2104.10086, Table 8, numbers read by hand, credited; the paper is not stored) give the published mass sum, but the paper's parallax is its own orbital parallax, so the agreement is circular and says nothing about the regression for `B` or the photocentre route (no absolute component positions or unresolved orbit were read). A real independent leg needs positions or a Gaia two-body orbit with independent masses; see `VISUAL_BINARY_GATE.md`.
 
+
+<!-- Listed in DOCUMENTS.md. -->

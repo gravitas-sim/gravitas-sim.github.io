@@ -18,3 +18,5 @@ export default {
   coverageDirectory: 'coverage',
   coverageReporters: ['text', 'lcov', 'html'],
 };
+
+// End of the test runner configuration.

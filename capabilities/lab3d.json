@@ -3,8 +3,8 @@
   "formatVersion": 1,
   "id": "gravitas.lab3d",
   "version": "1.3.0",
-  "kind": "built-in",
   "gravitas": "^1.0.0",
+  "kind": "built-in",
   "title": {
     "en": "The 3-D small-N dynamics kernel",
     "es": "El núcleo de dinámica de pocos cuerpos en 3-D"

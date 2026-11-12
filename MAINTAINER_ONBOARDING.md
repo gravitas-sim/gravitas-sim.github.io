@@ -210,3 +210,5 @@ that is what a repository reader should rely on.
 
 If an instruction here and the repository disagree, the repository wins and this
 file is the defect: fix it in the same change.
+
+<!-- Listed in DOCUMENTS.md. -->

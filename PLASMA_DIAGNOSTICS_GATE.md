@@ -46,3 +46,5 @@ is unmeasurable, the inputs are absent, which is why the legs are NOT RUN and no
 Nothing runs until the three arrive. When they do: a session reads this file, measures G1 to G6 against the committed
 thresholds, records the verdict and its register row, and builds only what the verdict allows (A: both diagnostics behind the
 disclosure with their intervals and domains; B: the one; C: the reading step). No bound moves in the meantime.
+
+<!-- Listed in DOCUMENTS.md. -->

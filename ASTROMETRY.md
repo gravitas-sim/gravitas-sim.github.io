@@ -753,3 +753,5 @@ epochs and about 2 percent noise, other designs are not covered; a relative
 parallax makes the mass sum read high by the reference stars' mean parallax (the
 statement is always printed); a track is a rate and an angle and not an orbit.
 The Spanish words are unread by a fluent reader.
+
+<!-- Listed in DOCUMENTS.md. -->

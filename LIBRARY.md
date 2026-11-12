@@ -336,3 +336,5 @@ first such, by the progress the browser holds), unless the card's own
 investigation is finished. It is advice: the card's link is unchanged and
 nothing is locked or disabled. The compact cards of the default view carry
 none. The "ready" facet and the item page's "Before this" are as they were.
+
+<!-- Listed in DOCUMENTS.md. -->

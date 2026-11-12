@@ -1209,3 +1209,5 @@ plot (`js/plot/plot.js`) is not changed: its table is its text alternative, and
 describing a table is a separate question (D-R10-280-05). ACCESSIBILITY.md
 ("Descriptions of a chart and the series sound") states what is tested and what
 no listener has checked.
+
+<!-- Listed in DOCUMENTS.md. -->

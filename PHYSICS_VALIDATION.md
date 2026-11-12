@@ -932,3 +932,5 @@ those assumptions broke, and the honest responses are to fix the physics or to
 change the documented claim — not to widen the window. Where the model uses an
 educational approximation, validate it against the equation it claims to use and
 label it `approximation`, so the table keeps saying which is which.
+
+<!-- Listed in DOCUMENTS.md. -->

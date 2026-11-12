@@ -197,3 +197,5 @@ The order follows the prerequisites, not importance.
 - No instructor materials, no instructor bundle rebuild (the queue owns it), no passphrase, no Spanish catalog string beyond the package's
   own texts.
 - No ceiling raised beyond the idle precache tier's measured 32 bytes, no `.github` edit, no bound moved, no failed leg re-labelled, no data fetched, no published number typed.
+
+<!-- Listed in DOCUMENTS.md. -->

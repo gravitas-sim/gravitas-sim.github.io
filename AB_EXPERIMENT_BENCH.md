@@ -246,3 +246,5 @@ wrap.
 Everything except the bridge and `canonicalState.js` is lazy: the bridge is a
 button, and `canonicalState.js` is in the start-up path only because
 `applyShareState()` needs it to restore an experiment's extras from a link.
+
+<!-- Listed in DOCUMENTS.md. -->

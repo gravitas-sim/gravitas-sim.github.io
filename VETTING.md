@@ -145,3 +145,5 @@ the file's `amendments` list with their reason; the original bound stays failing
 No cited vetting package (exovetter, lightkurve, TRICERATOPS) is installed and none was
 downloaded: the oracle is an independent implementation of the stated contract, so what it
 checks is the code, not the choice of tests. Its limits are stated with its results.
+
+<!-- Listed in DOCUMENTS.md. -->

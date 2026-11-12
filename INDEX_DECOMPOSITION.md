@@ -169,3 +169,5 @@ start-up, as HTML.
   spelling, public counts, the tour, the scenario catalog, voice readout,
   accessibility claims) now read the assembled page, so nothing they checked
   has dropped out of their view.
+
+<!-- Listed in DOCUMENTS.md. -->

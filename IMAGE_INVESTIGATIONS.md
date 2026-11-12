@@ -151,3 +151,5 @@ INJECTION.md leg g) are not part of this lesson and stay NOT RUN.
   the deeper steps carry their expected values in the lesson's own `because` and `worked` fields.
 - The binary lesson's circle and ellipse choice is limited by what `fitOrbit` refuses; the node
   note ("the node is ambiguous without a radial velocity") is a statement, not a measurement.
+
+<!-- Listed in DOCUMENTS.md. -->

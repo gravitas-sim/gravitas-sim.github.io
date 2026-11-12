@@ -160,3 +160,5 @@ A checkpoint that returns READY says the lane is ready. It does not say the proj
 ## Hotfixes
 
 A defect on the live site goes to `main` by pull request labelled `hotfix`, as any change to `main` does, and reaches an open train by merging `main` into it.
+
+<!-- Listed in DOCUMENTS.md. -->

@@ -95,3 +95,5 @@ The three mission investigations (`ml-orbit`, `ml-window`, `ml-cruise`) declare 
 The instructor materials bundle (`instructors/materials.enc.json`) is encrypted
 with a passphrase this work does not have, so the committed bundle is stale until
 the owner rebuilds it; its source digest sees the deeper steps.
+
+<!-- Listed in DOCUMENTS.md. -->

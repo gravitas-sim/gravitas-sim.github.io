@@ -41,3 +41,5 @@ Residuals table (first 200 rows), a text summary of the overlay, native range in
 ## Not done in this prompt
 
 The exoplanet Observatory guides do not open the panel: their `show` mechanism and their text are read by the instructor documents, and a guide edit would stale the instructor bundle, which cannot be rebuilt here. A guide step that names the panel is the next piece. A separate `compare` step *type* was not added: a step that docks an instrument through `tool` is already the engine's one mechanism, and the declared data and model live in the case.
+
+<!-- Listed in DOCUMENTS.md. -->

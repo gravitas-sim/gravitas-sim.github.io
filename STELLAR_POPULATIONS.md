@@ -296,3 +296,5 @@ is checked against their own measurements, not against the key.
   from a link, a color, a distance and a count made in the page, the
   isochrone comparison drawn over the members, the column summary's median,
   and Spanish and axe.
+
+<!-- Listed in DOCUMENTS.md. -->

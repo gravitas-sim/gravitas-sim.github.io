@@ -132,3 +132,5 @@ One straight line in airmass and in colour; constant extinction through the nigh
 errors are shared among a star's measurements); no aperture or flat-field error; synthetic nights with a stated truth. The
 authentic leg is one cluster in two catalogs, not a calibration of a real night of an instrument; no authentic night of
 standard-star frames was measured, and one is requested, not claimed.
+
+<!-- Listed in DOCUMENTS.md. -->

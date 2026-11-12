@@ -1205,3 +1205,5 @@ if (watch) {
 } else {
   await run();
 }
+
+// End of the site build script.

@@ -292,3 +292,5 @@ Tests:
   variants, translation, the estimate's fit, module export and the words.
 - `e2e/composer.spec.js`: the page, against the sources and dist, in all three
   engines.
+
+<!-- Listed in DOCUMENTS.md. -->

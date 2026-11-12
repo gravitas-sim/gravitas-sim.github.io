@@ -214,3 +214,5 @@ topocentric observer (the sky kernel's sidereal time and the station vector), th
 UTC to TDB, stellar aberration and the Moon's offset of the Earth from the Earth-Moon barycentre. Mercury, Saturn, Uranus
 and Neptune are absent from the pack, so `E` is a lower bound within a few percent. Laplace's method is run and reported,
 not judged. Part B (the kernel, the packs, the validation tiers, the investigations, the model page section) is not built.
+
+<!-- Listed in DOCUMENTS.md. -->

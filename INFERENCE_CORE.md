@@ -643,3 +643,5 @@ Made under Carl's standing instruction, for review.
     through it.
 12. **No new dependency.** The linear algebra is Cholesky on matrices of at
     most seven rows, and a package for it would cost more than it saves.
+
+<!-- Listed in DOCUMENTS.md. -->

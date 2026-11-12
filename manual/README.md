@@ -73,3 +73,5 @@ forward, adding
 as the first line is the change, and `manual:check` should then also assert
 `/StructTreeRoot`. Until then the limitation is stated in the manual's own
 Accessibility section rather than left for a reader to discover.
+
+<!-- End of this guide. -->

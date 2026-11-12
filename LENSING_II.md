@@ -154,3 +154,5 @@ been analysed by this kernel.
 
 Schneider, Ehlers and Falco, *Gravitational Lenses* (1992), for the lens equation, the critical density, the SIS and the point lens; Narayan and Bartelmann, *Lectures on gravitational lensing*
 (1996), for the Einstein-radius mass and the SIS dispersion relation; Refsdal (1964) and Falco, Gorenstein and Shapiro (1985) for the delay and the mass-sheet degeneracy (the gate document).
+
+<!-- Listed in DOCUMENTS.md. -->

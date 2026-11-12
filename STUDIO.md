@@ -286,3 +286,5 @@ A scenario file may carry a `system3d` block: a `gravitas.system3d/1`, the 3-D l
   differences and every key the page names in both languages;
   `tests/scenarioPack.test.js` covers the format, the compiler, the cautions,
   the built-ins and the SDK round trip; `e2e/studio.spec.js` covers the page.
+
+<!-- Listed in DOCUMENTS.md. -->

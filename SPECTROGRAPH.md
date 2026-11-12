@@ -131,3 +131,5 @@ All 27 rows of `tests/fixtures/spectrograph/thresholds.json` pass; `tests/fixtur
 ## Not built (stated)
 
 The clickable arc-line marking in the Observatory (the Observatory has no pixel-axis spectrum, so the arc exercise stays in the lesson's panel, where lines are marked by count in a spread-out order), echelle orders, a constant-R instrument, flat fields, telluric lines and sky. The Observatory panel fits one line of a spectrum that already has wavelengths; it does not calibrate.
+
+<!-- Listed in DOCUMENTS.md. -->

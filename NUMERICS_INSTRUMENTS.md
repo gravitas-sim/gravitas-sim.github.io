@@ -113,3 +113,5 @@ Remaining, in order:
 ## 8. Reproducing
 
 `npm run numerics:instruments:validate` (Node 22; needs `/usr/bin/python3` with numpy and scipy) runs the instruments, the engine child, the oracle and the judgement and rewrites `inputs.json`, `oracle-results.json`, `results.json` and `failed-legs.json`; `first-run-results.json` is never rewritten. `node tools/numerics-instruments-validate.mjs --pinned` judges against the pinned files without Python or the engine, which is what `tests/numericsInstruments.test.js` does.
+
+<!-- Listed in DOCUMENTS.md. -->

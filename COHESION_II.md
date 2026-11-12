@@ -67,3 +67,5 @@ Two size ceilings moved, each by exactly its measured overrun under the standing
 ## What this does not prove
 
 It proves counts, overlaps, lengths, ranks and verdicts. It does not prove that the Library is easier to use, that the starts are the right ones for a given student, or that the search finds what a reader means. The query set is what the project could think of to type; the real set is what readers type, and nothing here records it, by design.
+
+<!-- Listed in DOCUMENTS.md. -->

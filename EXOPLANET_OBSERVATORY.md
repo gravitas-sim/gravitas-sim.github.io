@@ -245,3 +245,5 @@ Measured when the suite landed (#76). The current ceilings are in
   the notebook entry; Spanish; no axe violations in either language.
 - **tests/catalog.test.js:** the Kepler-13 SAP pack's 1865 bins and its
   crowding record.
+
+<!-- Listed in DOCUMENTS.md. -->

@@ -158,3 +158,5 @@ node tools/data-packs/sky/pin.mjs      # only when the pins must be redone
 node tools/build-data-packs.mjs        # the pack, its sidecar and its manifest
 npm test -- tests/skyKernel.test.js tests/skyData.test.js
 ```
+
+<!-- Listed in DOCUMENTS.md. -->

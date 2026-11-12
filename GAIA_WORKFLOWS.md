@@ -173,3 +173,5 @@ Lindegren et al. (2021), A&A 649, A4 (parallax bias; the coefficient tables were
 Astraatmadja and Bailer-Jones (2016), ApJ 833, 119; Bailer-Jones (2015), PASP 127, 994; Lutz and Kelker (1973), PASP 85, 573;
 Gaia Collaboration, Vallenari et al. (2023), A&A 674, A1; Richer et al. (2000, astro-ph/0006033); Anthony-Twarog et al. (2006,
 astro-ph/0510047); arXiv 2404.12523; arXiv 2101.07122. Gaia data: ESA/Gaia/DPAC, CC BY-NC 3.0 IGO.
+
+<!-- Listed in DOCUMENTS.md. -->

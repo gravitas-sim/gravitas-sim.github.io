@@ -150,3 +150,5 @@ energy: the gate verdict is C, and one reading step in each says why.
 A sunspot-number series and a link through data to Prompt 194's Sun (194's authentic leg e1.authentic.G2 fails, 12.4 against
 13.9 deg/day, and no series ships): the spin investigation names The Turning Sun in prose and lets the model star turn
 differentially, nothing more. No age from the spin and no flare energy (Part B, verdict C).
+
+<!-- Listed in DOCUMENTS.md. -->

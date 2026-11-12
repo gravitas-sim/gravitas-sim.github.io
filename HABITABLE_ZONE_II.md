@@ -148,3 +148,5 @@ approved (below 284). Size figures and what is open are in D-R10-205-04 to D-R10
 The panel extension and the lesson's upper depth are Part B (above). The escape bar is dropped by verdict B. A majors
 investigation, "A planet's climate over time", is deferred, not built: it would resume only with a vetted
 evolving-climate model (D-R10-205-01).
+
+<!-- Listed in DOCUMENTS.md. -->

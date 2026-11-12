@@ -354,3 +354,5 @@ fitted and the offset solved, using the core as it is.
 | FJ and Coma C | a procedure fixed in advance meets the published number within its uncertainty |
 | Open matter-only B | Carl adopts the restated identity |
 | Kernel A | a grid point is found where the kernel is outside 1e-9 of quadrature |
+
+<!-- Listed in DOCUMENTS.md. -->

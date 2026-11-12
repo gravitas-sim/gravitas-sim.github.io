@@ -250,3 +250,5 @@ The record is a section of the checkpoint report. It adds no field to `tools/evi
 ## Changing this document
 
 The model, the mapping, the ceilings and the pending list live in `tools/navigation-inventory.json`; this document owns the prose and carries the generated tables. A change that adds a destination, a kind, a menu entry or a filter, or raises a ceiling, needs a register row. The inventory and this document are shared files that serialize merges (roadmap section 13).
+
+<!-- Listed in DOCUMENTS.md. -->

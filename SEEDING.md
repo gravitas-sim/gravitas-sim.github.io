@@ -135,3 +135,5 @@ gzipped in the first-visit precache; the sites it replaced gave
 back 831 (a copy of the generator in `light/model.js`, three copies of the normal
 generator, the module `kernels/lensing/noise.js`), which leaves 95 bytes of the
 ceiling on a Mac with Node 24 (see `D-R10-27`).
+
+<!-- Listed in DOCUMENTS.md. -->

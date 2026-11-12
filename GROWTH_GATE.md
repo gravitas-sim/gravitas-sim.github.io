@@ -139,3 +139,5 @@ is touched. Labels: `invisible` and `documentation`.
 2. Do you want the radiation cost of the a = 0.01 edge (1.85 percent) to move the committed domain to a from 0.1 in Part B?
 3. Requests C2, C3 and P6: should your session fetch one published growth table and run one cited code, and may the code be run (it is a download and an execution)?
 4. Imagery: any simulation release you would accept (request S1), or keep the growth curve alone?
+
+<!-- Listed in DOCUMENTS.md. -->

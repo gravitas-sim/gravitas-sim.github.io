@@ -270,3 +270,5 @@ node webrtc.mjs 4444 --default
 ```
 
 Each prints JSON with its verdicts. The recorded outputs are in `results/`.
+
+<!-- Listed in DOCUMENTS.md. -->

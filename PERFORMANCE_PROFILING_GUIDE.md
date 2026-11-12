@@ -185,3 +185,4 @@ if (performance.memory) {
 5. Iterate based on user feedback
 
 This guide provides a systematic approach to identifying and fixing performance bottlenecks in the Gravitas simulation. 
+<!-- Listed in DOCUMENTS.md. -->

@@ -198,3 +198,5 @@ The order follows the prerequisites, not importance.
 - No investigation, lesson, panel, viewer mode, pack, Library entry, sequence, topic page, alignment row, course item or reading step.
 - No instructor materials, no Spanish strings, no instructor bundle rebuild (the queue owns it), no passphrase.
 - No ceiling change, no `.github` edit, no bound moved, no failed leg re-labelled, no data fetched, no code run, no published number typed.
+
+<!-- Listed in DOCUMENTS.md. -->

@@ -249,3 +249,5 @@ directly in log wavelength with the uncertainty derived from the profile chi-squ
 law is Cardelli, Clayton and Mathis 1989 as `js/kernels/radiation/extinction.js` cites it; the rest wavelengths are the NIST Atomic
 Spectra Database as the line pack records; the SDSS spectra are DR18 (Almeida et al. 2023) as the pack records. The break
 definitions are not cited here because their edges are the caller's. `DECISION_REGISTER.md` D-R10-248-01 to -05 and, for the follow-up, -06 to -09.
+
+<!-- Listed in DOCUMENTS.md. -->

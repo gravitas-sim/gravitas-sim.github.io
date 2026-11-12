@@ -336,3 +336,5 @@ Failing rows (17), all left failing: I2, I4a, I4b, I4d, Q1 to Q5 of SPLIT, Q2, Q
 `python3 -E tools/sn-likelihood-oracle/followup_judge.py followup-thresholds.json <outdir>/followup-oracle-results.json published-flat.json <outdir> <spike commit>` on the spike branch, with the covariance
 file from the release at the pack's commit (sha256 in the contract). The judge's rules are re-implemented in JavaScript by `tests/supernovaLikelihoodFollowup.test.js`, which recomputes every status and both
 verdicts from the pinned oracle numbers.
+
+<!-- Listed in DOCUMENTS.md. -->

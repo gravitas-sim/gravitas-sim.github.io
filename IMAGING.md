@@ -127,3 +127,5 @@ Lambert-sphere phase function and phase integral: Russell 1916, as cited by the 
 Cowan and Agol 2011 (ApJ 729, 54) for the redistribution factor. NASA Exoplanet Archive: https://exoplanetarchive.ipac.caltech.edu/ (credit requested; terms
 page not read here). The diffraction scale and the Rayleigh angle are those of TELESCOPES.md (Prompt 208). No
 published coronagraph specification and no published contrast for an imaged planet is used.
+
+<!-- Listed in DOCUMENTS.md. -->

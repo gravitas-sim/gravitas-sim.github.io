@@ -332,3 +332,5 @@ then `node tools/moving-cluster-validate.mjs --form=committed|amended --oracle F
 The convergent-point and moving-cluster methods (Jones 1971; de Bruijne 1999) are named from memory for the fetcher and have not been
 read for this prompt. Gaia DR3 (CC BY-NC 3.0 IGO, D-GAIA-01) through the file Carl fetched; the zero point of Lindegren et al. (2021) through
 233's `zeropoint.js`; 233's `clusterParallax`; 219's `CLUSTER_FITTING.md` for the isochrone grid. No published Hyades value is used.
+
+<!-- Listed in DOCUMENTS.md. -->

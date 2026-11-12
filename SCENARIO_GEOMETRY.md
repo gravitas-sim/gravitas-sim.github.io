@@ -207,3 +207,5 @@ The Scenario Studio's group of thirty-five scenarios (the thirty-one engine-only
 ## If the move continues
 
 The move is complete; a later pass would take the first row of the table above. Branch `refactor/declarative-geometry-<n>` from the integration branch. Read this file, `SCENARIO_GEOMETRY`, `ENGINE_GEOMETRY` and `expandGeometry` first; add a construct or a rule only with its schema entry, its validator branch and its test; capture the fixture from the code before changing it (`tests/scenarioDigest.js` run over the scenarios at the seven seeds, in a worktree at the commit before the change, is all it takes; also capture the share-link cases, including every layout, and run `tools/geometry-fuzz.mjs` in the base and the head); and regenerate the golden never. If the golden moves, the stop rule applies. Every module over 1,500 lines has a line ceiling (`tools/module-size-ceilings.json`); the rule schemas are written compactly for that reason.
+
+<!-- Listed in DOCUMENTS.md. -->

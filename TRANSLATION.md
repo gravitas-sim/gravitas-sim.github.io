@@ -187,3 +187,5 @@ never invented.
 - **Edits to `js/i18n` or the lesson shadows.** Fixing a recorded divergence, a
   missing accent mark or a stale entry is a change to a bundle source, and the
   owner rebuilds the instructor bundle afterwards.
+
+<!-- Listed in DOCUMENTS.md. -->

@@ -96,3 +96,5 @@ provenance (numpy 1.26.4, scipy 1.13.1, emcee 3.1.6; MATCH, BASE-9 and ASteCA we
 Choi et al. (2016), ApJ 823, 102 (MIST); Dotter (2016), ApJS 222, 8; Kroupa (2001), MNRAS 322, 231; Schlafly and Finkbeiner (2011),
 ApJ 737, 103; Foreman-Mackey et al. (2013), PASP 125, 306 (emcee, used by the oracle); Lee et al. (2008) and Souto et al. (2016) for the
 published values of NGC 2420's metallicity and Cantat-Gaudin et al. (2018) for its age and distance.
+
+<!-- Listed in DOCUMENTS.md. -->

@@ -218,3 +218,5 @@ and es, axe in light and dark, 24 pixel targets at 1280 and 390, the keyboard
 alone, reduced motion). `tools/overlay-validate.mjs` and `tools/overlay-oracle/`
 hold the validator and the oracle script, with their fixtures in
 `tests/fixtures/overlay/`.
+
+<!-- Listed in DOCUMENTS.md. -->

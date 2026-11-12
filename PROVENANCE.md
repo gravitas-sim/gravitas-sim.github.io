@@ -124,3 +124,5 @@ Prompt 60's audit found ten places where provenance was dropped. Each row says w
 | The report composed from marked entries | `cr` in a submission token: the SHA-256 the report file states of itself and its number of sections, present only when a composed report was made (MY_WORK.md, "The report composed from marked entries"). The review page recomputes the digest from the file it is handed and says which submission states it. It ties a file to a token, not to a person. | `tests/composedReport.test.js` |
 
 Closed by Prompt 70: the CSV hop (the pipeline results CSV above, and the review page's evidence CSV). Still open: the answer key for the guides (`js/data/exoplanetAnswerKey.js`, generated) names no pack, version or digest, and an observation's id still differs by how it arrived (`pack:`, `installed:`, `builtin:`, `import:`). The digest agrees across the pack paths; an imported file differs by its source, as it should, and has the same `contentDigest()`.
+
+<!-- Listed in DOCUMENTS.md. -->

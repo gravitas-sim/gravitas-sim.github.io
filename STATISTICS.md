@@ -782,3 +782,5 @@ Node 24), and a request ceiling does not rise under the standing approval.
 
 Both are waits for Carl (the whole kernel is 19.8 KB gzip): a first-visit ceiling raise (tools/data-budget.json,
 which a session may not edit) and a request decision for those routes.
+
+<!-- Listed in DOCUMENTS.md. -->

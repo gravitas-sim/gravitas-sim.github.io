@@ -165,3 +165,5 @@ record and the DOI steps.
 
 The ranked docket of proposals is a published artifact rather than a file in
 this repository. Each item names its own branch.
+
+<!-- Listed in DOCUMENTS.md. -->

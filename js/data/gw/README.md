@@ -187,3 +187,5 @@ bundled excerpt needed are `js/gw/psd.js`, `js/gw/match.js` and
 holds: the chirp is not measurable pixel by pixel in whitened strain, and the
 lesson is built on exactly that. The lab's neutron-star preset is still a
 model, and says so.
+
+<!-- End of this guide. -->

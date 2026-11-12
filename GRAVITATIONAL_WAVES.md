@@ -341,3 +341,5 @@ Placed in the lesson, not only here.
 - The catalogs the values come from: GWTC-1, PRX 9, 031040 (2019),
   <https://arxiv.org/abs/1811.12907>, and GWTC-2.1, PRD 109, 022001 (2024),
   <https://arxiv.org/abs/2108.01045>
+
+<!-- Listed in DOCUMENTS.md. -->

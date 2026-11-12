@@ -118,3 +118,5 @@ phase-separation delay, cooling that depends on core composition, mergers and
 binary products, the thresholds' dependence on metallicity and rotation, fallback
 and the mass gap between neutron stars and black holes, and any age beyond the
 validated luminosity range. Spanish text has not been read by a fluent reader.
+
+<!-- Listed in DOCUMENTS.md. -->

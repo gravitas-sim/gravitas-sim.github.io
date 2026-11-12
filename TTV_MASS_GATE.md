@@ -65,3 +65,5 @@ eccentricity above the declared one, 30 percent of the intervals miss.
 
 Three or more planets, a third body, light-travel time, TTVs inside the resonance width, a mass from
 a real system (Part A's leg E1 was not run: no published times were supplied).
+
+<!-- Listed in DOCUMENTS.md. -->

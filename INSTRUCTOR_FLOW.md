@@ -380,3 +380,5 @@ are modules of their own, fetched when a button is pressed. No ceiling was raise
 - Platform notes and gradebook layouts verified on live platforms.
 - A scan test with a real phone camera (the encoder is read back by a separate
   decoder in `tests/qrCode.test.js`).
+
+<!-- Listed in DOCUMENTS.md. -->

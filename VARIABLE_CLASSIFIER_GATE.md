@@ -85,3 +85,5 @@ A larger, randomly drawn labelled set (the first rows by source id are not), an
 independent literature label, the same set in the same band, or a classifier trained on
 labelled real variables would each be a new gate with its own committed thresholds. The
 verdict is about this classifier on this set.
+
+<!-- Listed in DOCUMENTS.md. -->

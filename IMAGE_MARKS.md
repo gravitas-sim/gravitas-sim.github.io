@@ -74,3 +74,5 @@ The code is `js/measure/` (`refine.js`, `marks.js`, `scale.js`,
 `imageRecord.js`) and `js/observatory/imageMarks.js`; the words are
 `js/i18n/en.imageMarks.js` and `js/i18n/es.imageMarks.js`. The Spanish has not
 been read by a fluent speaker.
+
+<!-- Listed in DOCUMENTS.md. -->

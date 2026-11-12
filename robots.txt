@@ -10,3 +10,5 @@ Disallow: /dist/
 Disallow: /instructors/
 
 Sitemap: https://gravitas-sim.online/sitemap.xml
+
+# Crawler rules for gravitas-sim.online.

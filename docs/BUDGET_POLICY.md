@@ -79,3 +79,5 @@ file would say the same thing in two places.
 | --- | --- | --- |
 | T1A | for 160 to set | 0 KB |
 | T1B | for 160 to set | 0 KB |
+
+<!-- End of this guide. -->

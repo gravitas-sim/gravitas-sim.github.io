@@ -169,3 +169,5 @@ outer).
 (generated), `js/data/investigations/ttv-sequence.js` and its one-line loader files,
 `tools/ttv-validate.mjs`, `tools/ttv-pack.mjs`, `tools/ttv-oracle/oracle.py`, `tests/ttv.test.js`,
 `tests/ttvLessons.test.js`, `tests/fixtures/ttv/`, `e2e/ttvLesson.spec.js`.
+
+<!-- Listed in DOCUMENTS.md. -->

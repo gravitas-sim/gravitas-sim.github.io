@@ -430,3 +430,5 @@ export default defineConfig({
     stderr: 'pipe',
   },
 });
+
+// End of the browser test configuration.

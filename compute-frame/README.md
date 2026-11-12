@@ -1,6 +1,6 @@
 # Gravitas compute frame
 
-This repository is published verbatim from the Gravitas application repository
+This repository is a verbatim copy of the Gravitas application repository
 (gravitas-sim/gravitas-sim.github.io, directory `compute-frame/`). Do not edit
 it here: `node tools/compute.mjs` in that repository writes every file, and a
 test there fails if they differ.

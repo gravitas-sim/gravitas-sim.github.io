@@ -39,3 +39,5 @@ The decision rule: A when G1 to G4 pass; otherwise B when H1 to H3 pass; otherwi
 ## Consequence
 
 Part A stands unchanged: its panel, guide steps and record state that metallicity is a stated assumption, and the populations guide's advanced path asks the student whether the interval includes it (it does not). A four-parameter fit would need a better-behaved profile and a likelihood that covers on its own synthetic data before it is a feature.
+
+<!-- Listed in DOCUMENTS.md. -->

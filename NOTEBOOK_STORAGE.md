@@ -162,3 +162,5 @@ Stage 2 can wait for evidence that the cap is binding.
 
 Stage 1: about a day. Stage 2: the rest of the table above, whenever there is a
 reason.
+
+<!-- Listed in DOCUMENTS.md. -->

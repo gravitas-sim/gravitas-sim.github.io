@@ -364,3 +364,5 @@ differs by a few hundred bytes of gzip over an install this size).
 Nothing in this prompt is a closure file of the instructor bundle's sources,
 and none was edited; `js/lab3d/elements.js` (`solveKepler`) is one, and is not a
 candidate.
+
+<!-- Listed in DOCUMENTS.md. -->

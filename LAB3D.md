@@ -538,3 +538,5 @@ References:
 - Chenciner, A. and Montgomery, R. 2000, Ann. Math. 152, 881;
 - Danby, J. M. A. 1988, *Fundamentals of Celestial Mechanics* (the Kepler
   solver's starting value).
+
+<!-- Listed in DOCUMENTS.md. -->

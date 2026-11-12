@@ -336,3 +336,5 @@ changed to meet a case.
   whose `Background2D`, `detect_sources`, `SourceCatalog` and `psf.fit_fwhm` are the
   oracle.
 - `PHOTOMETRY.md` (Prompt 180): the aperture, the contract, the crowding rule.
+
+<!-- Listed in DOCUMENTS.md. -->

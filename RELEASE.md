@@ -268,3 +268,5 @@ step is behind the supersession check, that it uploads the root rather than
 `dist/`, and that it runs no build. Those are properties an ordinary review would
 miss: adding `always()` to a job's `if` is a small, plausible-looking edit that
 would restore exactly the behavior of the `521e64f` incident.
+
+<!-- Listed in DOCUMENTS.md. -->

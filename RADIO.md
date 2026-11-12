@@ -209,3 +209,5 @@ of the Galaxy's mass.
 Schonrich, R., Binney, J. and Dehnen, W. 2010, MNRAS 403, 1829 (the Sun's motion; as `js/galactic/model.js` cites it).
 The tangent-point method is textbook geometry and is derived here from the line-of-sight velocity. `DECISION_REGISTER.md`
 D-GAIA-03 (the two LSR values), D-R10-239-xx (`RADIO_DATA_GATE.md`) and D-R10-241-01 to -03.
+
+<!-- Listed in DOCUMENTS.md. -->

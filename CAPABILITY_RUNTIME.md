@@ -195,3 +195,5 @@ the last thirteen families on demand and left the deferred total at 4152.6 of
 4180 KB (LAZY_CAPABILITIES.md). A family that is already lazy is expected to
 cost its catalog entries and its builtin line when it is packaged, not another
 chunk; that is to be measured when one is.
+
+<!-- Listed in DOCUMENTS.md. -->

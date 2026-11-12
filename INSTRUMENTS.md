@@ -175,3 +175,5 @@ Nothing in a running copy of Gravitas reads such a pack yet.
    `npm test -- tests/instrumentLibrary.test.js`. A failing cross-check is a
    finding about the table or the reading of its source: record it, do not widen
    the bound.
+
+<!-- Listed in DOCUMENTS.md. -->

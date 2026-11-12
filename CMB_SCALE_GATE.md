@@ -170,3 +170,5 @@ The printed Planck numbers rest on D-R10-255-11 (same document, same use). The b
 `node tools/cmb-validate.mjs thresholds.json oracle-results.json authentic/planck-cmb.json <tree to scan> <outdir>` on `spike/cmb-scale-gate`;
 `node tools/cmb-extract-planck.mjs <saved text> <out.json>` rebuilds the Planck fixture from Carl's saved text. `tests/cmbScaleGate.test.js` recomputes every status from the pinned files and checks
 the record against this document and the register.
+
+<!-- Listed in DOCUMENTS.md. -->

@@ -2,8 +2,8 @@
   "format": "gravitas.observation-data-pack",
   "formatVersion": 1,
   "id": "ngc3198-synthetic-curve",
-  "version": "1.0.0",
   "title": "NGC 3198: a synthetic rotation curve",
+  "version": "1.0.0",
   "object": {
     "name": "NGC 3198",
     "identifiers": [
@@ -14,8 +14,8 @@
     "observatory": "none: synthetic, made by Gravitas",
     "pipeline": "js/darkMatter.js galaxyCurveAt, with written-out scatter"
   },
-  "dataType": "rotation-curve",
   "origin": "synthetic",
+  "dataType": "rotation-curve",
   "credit": "Synthetic: built by Gravitas to resemble NGC 3198 (van Albada et al. 1985). Not a measurement.",
   "license": {
     "status": "cc-by-4.0",

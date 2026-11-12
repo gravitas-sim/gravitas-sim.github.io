@@ -54,7 +54,7 @@ catalogue refers to it, so a change to it can reach a student.
 | [DEPTH.md](DEPTH.md) | Progressive depth in investigations. | feature | P72 | 2026-10-08 | written | yes |
 | [DESIGN_SYSTEM.md](DESIGN_SYSTEM.md) | The component language for controls. | design | unassigned | 2026-09-30 | written | no |
 | [DETECTION.md](DETECTION.md) | Source detection and the point-spread function over the photometry adapter: the algorithm, the limits, the oracle and the validation (Prompt 183). | feature | P183 | 2026-10-23 | written | no |
-| [DOCUMENTS.md](DOCUMENTS.md) | The map of every root document and every generated artifact. | front-door | P128 | 2026-10-17 | generated (docs-map) | no |
+| [DOCUMENTS.md](DOCUMENTS.md) | The map of every root document and every generated file. | front-door | P128 | 2026-10-17 | generated (docs-map) | no |
 | [EMBEDDING.md](EMBEDDING.md) | The gravitas-embed/1 contract for embedding figures. | reference | unassigned | 2026-09-24 | written | yes |
 | [EXOPLANET_OBSERVATORY.md](EXOPLANET_OBSERVATORY.md) | The Exoplanet Observatory guides: five investigations on real TESS data and how they are built. | feature | unassigned | 2026-09-27 | written | no |
 | [EXOPLANET_OBSERVING.md](EXOPLANET_OBSERVING.md) | The exoplanet observing system: observer geometry, windows and the observing-session record. | feature | unassigned | 2026-09-01 | written | no |

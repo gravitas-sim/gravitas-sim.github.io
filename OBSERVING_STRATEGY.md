@@ -106,3 +106,5 @@ Run with `npm run strategy:validate` (`--json` for the figures). Measured on the
   uses the library's Cerro Tololo and McDonald sites. The constraint is unchanged.
 - **AM3** (kernel existed): B3 compares against every local maximum of the window, not those of height 0.1 or more (an unstated choice of the harness); the leg passes at 0.237
   of 0.25 on the random pattern. See finding 1.
+
+<!-- Listed in DOCUMENTS.md. -->
