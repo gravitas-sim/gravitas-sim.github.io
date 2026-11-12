@@ -177,3 +177,5 @@ fails its bias bound. No classification rule is held, and no published error rat
 The Petrosian radius, the concentration index and the rotational asymmetry are the standard definitions of the galaxy-morphology literature (Petrosian 1976;
 Bershady, Jangren and Conselice 2000; Conselice 2003; from memory, not checked here: the kernel takes definitions, not numbers, from them, and holds none of their
 boundaries). The Sersic profile is Sersic 1963 with b_n defined by the incomplete gamma function. `DECISION_REGISTER.md` D-R10-249-01 to -05.
+
+<!-- Listed in DOCUMENTS.md. -->
