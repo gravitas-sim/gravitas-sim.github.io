@@ -53,3 +53,5 @@ radius and masses stay unsourced teaching values.
 component, closed universes, the deceleration parameter and transition redshift, a stated domain with refusals and the
 degeneracy contours beside this kernel without changing it. Its committed validation gives kernel verdict C (four legs
 fail as committed, none a disagreement with the independent oracle); no panel, lesson or model-page section is built.
+
+<!-- Listed in DOCUMENTS.md. -->
