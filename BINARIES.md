@@ -120,3 +120,5 @@ misspecification and fails the residual test, and a real star may have several e
 property of its geometry, not of this fitter; another code would report the same degeneracy. The frame branch of the prompt (photometry
 from frames) needs Prompt 185's pipeline and is **not built**: the archive light-curve branch is what ships. No visual-orbit or mass
 branch (Prompt 218).
+
+<!-- Listed in DOCUMENTS.md. -->
