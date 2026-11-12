@@ -224,13 +224,13 @@ describe('the document and the register', () => {
     expect(doc).toMatch(/Nothing was fetched and\s+no published number/);
   });
 
-  test('the register has the five rows, each DELEGATED, with a source and sha', () => {
+  test('the register has the five rows, each DELEGATED or RATIFIED, with a source and sha', () => {
     for (const id of ['01', '02', '03', '04', '05']) {
       const line = register
         .split('\n')
         .find(l => l.startsWith(`| D-R10-256-${id} `));
       expect(line).toBeTruthy();
-      expect(line).toMatch(/\*\*DELEGATED\*\*/);
+      expect(line).toMatch(/\*\*(DELEGATED|RATIFIED)\*\*/);
       expect(line).toMatch(/\(([0-9a-f]{8})\)/);
     }
   });

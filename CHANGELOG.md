@@ -43,6 +43,12 @@ the release rather than in the tag.
 
 ### Changed
 
+- The ratification pass of 2026-11-12 (register row D-RATIFY-01; invisible,
+  documentation). On Carl's chat instruction "go with your recommendation on
+  all", 673 of the 674 DELEGATED rows of `DECISION_REGISTER.md` became
+  RATIFIED, each keeping its old delegation text after "was DELEGATED:"; one
+  row, D-R10-264-05, stays DELEGATED because its validator correction came after
+  a result. No ceiling, threshold, verdict or workflow changed.
 - Documentation map II and stale-document retirement (Prompt 289; register rows
   D-R10-289-01 to 05; invisible, documentation). Four historical records
   (`UI_PERFORMANCE_AUDIT.md`, `PERFORMANCE_OPTIMIZATIONS_SUMMARY.md`,

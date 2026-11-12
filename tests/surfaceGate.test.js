@@ -371,7 +371,7 @@ describe('the recorded evidence is judged by the function and nothing else', () 
       .slice(1, -1)
       .map(c => c.trim());
     expect(cells).toHaveLength(8);
-    expect(cells[4]).toBe('**DELEGATED**');
+    expect(cells[4]).toMatch(/^\*\*(DELEGATED|RATIFIED)\*\*$/);
     expect(cells[7]).toBe('165');
   });
 });
