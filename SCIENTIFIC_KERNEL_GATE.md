@@ -568,3 +568,5 @@ gate reverses a verdict.
   GLS's. This gate's evidence says to write it as tight JavaScript in a
   Worker first, and to measure any kernel against that, not against today's
   code, on more than one processor.
+
+<!-- Listed in DOCUMENTS.md. -->
