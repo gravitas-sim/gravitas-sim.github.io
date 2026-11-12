@@ -230,3 +230,5 @@ node build.js && node spike/lazy-capabilities/route-probe.mjs dist 4401 7
 git archive HEAD | tar -x -C /tmp/pages && node spike/lazy-capabilities/route-probe.mjs /tmp/pages 4403 7 --no-sw
 node spike/lazy-capabilities/prototype-checks.mjs /tmp/pages 4405   # M9, M7
 ```
+
+<!-- Listed in DOCUMENTS.md. -->
