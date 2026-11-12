@@ -99,3 +99,5 @@ This spike does not run in CI. The properties it established are held by:
   still fires when a window does exist
 - `e2e/workerRealm.spec.js` — a real browser Worker builds a real scenario
 - `tests/spikeNotShipped.test.js` — this directory is not deployed
+
+<!-- End of this guide. -->
