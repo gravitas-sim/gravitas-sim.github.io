@@ -216,3 +216,5 @@ by the consistency test for `e` of 0.4 or more at this noise, not for smaller
 eccentricities, where it returns a circular orbit that fits). The exactly regular
 cadence aliases the period and is handled by Part B's `period-ambiguous` rule,
 which is not part of the verdict.
+
+<!-- Listed in DOCUMENTS.md. -->
