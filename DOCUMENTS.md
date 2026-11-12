@@ -231,7 +231,7 @@ catalogue refers to it, so a change to it can reach a student.
 | [CMB_SCALE_GATE.md](CMB_SCALE_GATE.md) | Microwave background angular-scale gate: r_s(z*), D_M(z*), theta*, the peak relation and claim rule, 42 legs, verdict C; spectrum, grid and cited formulas NOT RUN (Prompt 258). | gate | P258 | written | no |
 | [INFERENCE_CLOSEOUT.md](INFERENCE_CLOSEOUT.md) | The inference closeout (Prompt 266): what 261 to 265 landed, the methods sequence as it exists, each closeout item done or held, the package change, the cohesion record. | record | P266 | written | no |
 | [ADVANCED_CLOSEOUT.md](ADVANCED_CLOSEOUT.md) | The advanced closeout (Prompt 274): what 268 to 273 landed, the 3-D and mission guide sequence, the sequence not created, the package's reading steps, the acceptance audit, the cohesion record. | record | P274 | written | no |
-| [COHESION_II.md](COHESION_II.md) | The second cohesion pass (Prompt 287): the before and after inventory of discovery at scale, the sequence folded into another, the topic pages divided, the search tuned against a committed query set, the ledger of what was added since 2.0.0, and the internal review. | record | P287 | written | no |
+| [COHESION_II.md](COHESION_II.md) | The second cohesion pass (Prompt 287): before and after inventory, the folded sequence, divided topic pages, tuned search, the ledger of additions since 2.0.0 and the internal review. | record | P287 | written | no |
 
 ## Authoritative sources
 

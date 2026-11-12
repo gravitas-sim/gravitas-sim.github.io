@@ -1551,7 +1551,7 @@
     {
       "file": "COHESION_II.md",
       "kind": "record",
-      "purpose": "The second cohesion pass (Prompt 287): the before and after inventory of discovery at scale, the sequence folded into another, the topic pages divided, the search tuned against a committed query set, the ledger of what was added since 2.0.0, and the internal review.",
+      "purpose": "The second cohesion pass (Prompt 287): before and after inventory, the folded sequence, divided topic pages, tuned search, the ledger of additions since 2.0.0 and the internal review.",
       "owner": 287,
       "student": false
     }
