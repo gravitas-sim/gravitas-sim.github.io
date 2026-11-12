@@ -237,8 +237,9 @@ cannot recover the passphrase.
    a scratch copy of the tree, put that file at `instructors/materials.enc.json`,
    serve the copy and open `/instructors/`: your passphrase opens it and any other
    does not.
-4. Build for real: `npm run build:instructors`. It renders every document, which
-   takes minutes, and writes `instructors/materials.enc.json` and
+4. Build for real: `npm run build:instructors`. It renders every document (7
+   seconds on one laptop in the 2026-11-12 rehearsal; allow minutes on a slow
+   machine), and writes `instructors/materials.enc.json` and
    `instructors/materials.manifest.json` encrypted under your passphrase.
 5. Serve the tree as static files, open `/instructors/`, and check that your
    passphrase opens the dashboard and a wrong one is refused with an error.

@@ -15,6 +15,12 @@ the release rather than in the tag.
 
 ### Added
 
+- Recovery rehearsal II (Prompt 291; register rows D-R10-291-01 to 03): the
+  tag `v3.0` rebuilt from GitHub's zipball and the 2.0.0 Zenodo archive rebuilt
+  by checksum, both outside any checkout. The documents now say what the first
+  rehearsal got wrong (an archive needs no `git init` any more), how to recover
+  `v3.0`, that it declares version 2.1.0, what a department's copy loses
+  without the domain (the Compute page) and what is UNKNOWN.
 - Test runtime II and the cost artifact (Prompt 292; register rows D-R10-292-01
   to 08): each CI run leaves a `ci-observability` record (job durations,
   runner-minutes, shard balance, Jest and Playwright counts, the flake ledger,
