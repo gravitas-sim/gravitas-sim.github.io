@@ -406,3 +406,5 @@ Both are generated from `tools/project-metadata.mjs`, and
 - **Choosing the version number.** Semantic versioning is a claim about
   compatibility, which only a person can make.
 - **The release date.** It is a fact about the world, not about the repository.
+
+<!-- Listed in DOCUMENTS.md. -->
