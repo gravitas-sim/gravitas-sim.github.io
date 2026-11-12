@@ -1,0 +1,35 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://gravitas-sim.online/sdk/schemas/course-home-link-3.schema.json",
+  "title": "course home link/3",
+  "description": "The payload a course home link carries (#c2 or #c3 and then the deflated or raw base64url JSON; c1, which a 2.0.0 course home wrote, is read by migrating it): a course package, at the lowest version that carries it, so c3 only for a package that needs /3 (a collection, a term or outcomes) and c2 for every other course. The prefix is the package's version and is not in the payload. js/course/links.js readCourseFragment() returns the payload and refuses a wrong kind, a newer prefix (`newerVersion`) and a corrupt one; the package is then validated by the course validator, which gravitas.course-pack/2 and /3 describe in full, so only the part that makes a payload a course package is stated here. FORMATS.md lists it.",
+  "type": "object",
+  "required": [
+    "format",
+    "formatVersion",
+    "id",
+    "units"
+  ],
+  "properties": {
+    "format": {
+      "const": "gravitas.course-pack"
+    },
+    "formatVersion": {
+      "enum": [
+        1,
+        2,
+        3
+      ]
+    },
+    "id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "units": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    }
+  }
+}

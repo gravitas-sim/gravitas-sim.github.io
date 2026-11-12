@@ -1,0 +1,299 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://gravitas-sim.online/sdk/schemas/image-calibration-1.schema.json",
+  "title": "gravitas.image-calibration/1",
+  "description": "The sky calibration of an image: the frame (its id, size and SHA-256 digest), the reference catalogue (its source, name and epoch), the reference stars (pixel position and its uncertainty, sky position, the catalogue position uncertainty) and the solution, either a world coordinate system read from the file header or one fitted to the stars (an affine or similarity model, its tangent point, the fitted parameters, their covariance, the verdict, the fit statistics and the per-star residuals). It is `workspace.calibration` of a gravitas.observation/1. js/measure/calibrationRecord.js validateCalibration() is the authority; it also needs the coordinate system to be a readable TAN solution with a non-singular matrix (a CD matrix, or PC and CDELT), a fitted result to count as many stars and residuals as there are stars, and a header solution to have a null result. FORMATS.md lists it.",
+  "type": "object",
+  "required": [
+    "format",
+    "formatVersion",
+    "frame",
+    "catalog",
+    "stars",
+    "solution",
+    "result"
+  ],
+  "properties": {
+    "format": {
+      "const": "gravitas.image-calibration"
+    },
+    "formatVersion": {
+      "const": 1
+    },
+    "frame": {
+      "type": "object",
+      "required": [
+        "id",
+        "width",
+        "height",
+        "digest"
+      ],
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "width": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "height": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "digest": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        }
+      }
+    },
+    "catalog": {
+      "type": "object",
+      "required": [
+        "source",
+        "name",
+        "epoch"
+      ],
+      "properties": {
+        "source": {
+          "enum": [
+            "typed",
+            "sky-bright-stars"
+          ]
+        },
+        "name": {
+          "type": "string"
+        },
+        "epoch": {
+          "type": "string"
+        }
+      }
+    },
+    "stars": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "x",
+          "y",
+          "ra",
+          "dec",
+          "sigma"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "x": {
+            "type": "number"
+          },
+          "y": {
+            "type": "number"
+          },
+          "ra": {
+            "type": "number"
+          },
+          "dec": {
+            "type": "number",
+            "minimum": -90,
+            "maximum": 90
+          },
+          "sigma": {
+            "type": "number",
+            "exclusiveMinimum": 0
+          },
+          "catalogSigma": {
+            "type": "number",
+            "minimum": 0
+          }
+        }
+      },
+      "maxItems": 500
+    },
+    "solution": {
+      "type": "object",
+      "required": [
+        "origin",
+        "wcs"
+      ],
+      "properties": {
+        "origin": {
+          "enum": [
+            "fit",
+            "header"
+          ]
+        },
+        "model": {
+          "enum": [
+            "affine",
+            "similarity"
+          ]
+        },
+        "tangent": {
+          "type": "array",
+          "items": {
+            "type": "number"
+          },
+          "minItems": 2,
+          "maxItems": 2
+        },
+        "wcs": {
+          "type": "object",
+          "required": [
+            "ctype",
+            "crpix",
+            "crval"
+          ],
+          "properties": {
+            "ctype": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "minItems": 2,
+              "maxItems": 2
+            },
+            "crpix": {
+              "type": "array",
+              "items": {
+                "type": "number"
+              },
+              "minItems": 2,
+              "maxItems": 2
+            },
+            "crval": {
+              "type": "array",
+              "items": {
+                "type": "number"
+              },
+              "minItems": 2,
+              "maxItems": 2
+            },
+            "cd": {
+              "type": "array",
+              "items": {
+                "type": "array",
+                "items": {
+                  "type": "number"
+                },
+                "minItems": 2,
+                "maxItems": 2
+              },
+              "minItems": 2,
+              "maxItems": 2
+            },
+            "cdelt": {
+              "type": "array",
+              "items": {
+                "type": "number"
+              },
+              "minItems": 2,
+              "maxItems": 2
+            },
+            "pc": {
+              "type": "array",
+              "items": {
+                "type": "array",
+                "items": {
+                  "type": "number"
+                },
+                "minItems": 2,
+                "maxItems": 2
+              },
+              "minItems": 2,
+              "maxItems": 2
+            },
+            "radesys": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "result": {
+      "anyOf": [
+        {
+          "type": "null"
+        },
+        {
+          "type": "object",
+          "required": [
+            "params",
+            "covariance",
+            "verdict",
+            "stats",
+            "residuals"
+          ],
+          "properties": {
+            "params": {
+              "type": "array",
+              "items": {
+                "type": "number"
+              },
+              "minItems": 6,
+              "maxItems": 6
+            },
+            "covariance": {
+              "type": "array",
+              "items": {
+                "type": "array",
+                "items": {
+                  "type": "number"
+                },
+                "minItems": 6,
+                "maxItems": 6
+              },
+              "minItems": 6,
+              "maxItems": 6
+            },
+            "verdict": {
+              "enum": [
+                "consistent",
+                "inconsistent",
+                "exact"
+              ]
+            },
+            "stats": {
+              "type": "object",
+              "required": [
+                "n",
+                "dof",
+                "chi2"
+              ],
+              "properties": {
+                "n": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "dof": {
+                  "type": "integer"
+                },
+                "chi2": {
+                  "type": "number"
+                }
+              }
+            },
+            "residuals": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": [
+                  "dx",
+                  "dy"
+                ],
+                "properties": {
+                  "dx": {
+                    "type": "number"
+                  },
+                  "dy": {
+                    "type": "number"
+                  }
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+}

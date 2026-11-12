@@ -2,7 +2,7 @@
 
 # Formats
 
-Every versioned format Gravitas reads or writes: 69 of them. 37 have a JSON Schema in `sdk/schemas`, and 15 read their previous version rather than only their own.
+Every versioned format Gravitas reads or writes: 69 of them. 69 have a JSON Schema in `sdk/schemas`, and 15 read their previous version rather than only their own.
 
 Roadmap II Prompt 61 puts each under one rule:
 - a JSON Schema;
@@ -20,73 +20,73 @@ The columns:
 | Format | Identified by | Version | Owner | Persisted | Previous | Newer | Schema |
 |---|---|---|---|---|---|---|---|
 | gravitas.observation | format, formatVersion | 1 | js/observatory/schema.js validateObservation | download | v1 only | refused: "reads /1" | [yes](sdk/schemas/observation-1.schema.json) |
-| gravitas.image-marks | format, formatVersion | 1 | js/measure/imageRecord.js validateMarks | download, inside a workspace (`workspace.marks`), only when marks exist | v1 only | refused in words, by a nesting limit | no |
-| gravitas.image-calibration | format, formatVersion | 1 | js/measure/calibrationRecord.js validateCalibration | download, inside a workspace (`workspace.calibration`), only when an image was calibrated | v1 only | refused in words, by a nesting limit | no |
+| gravitas.image-marks | format, formatVersion | 1 | js/measure/imageRecord.js validateMarks | download, inside a workspace (`workspace.marks`), only when marks exist | v1 only | refused in words, by a nesting limit | [yes](sdk/schemas/image-marks-1.schema.json) |
+| gravitas.image-calibration | format, formatVersion | 1 | js/measure/calibrationRecord.js validateCalibration | download, inside a workspace (`workspace.calibration`), only when an image was calibrated | v1 only | refused in words, by a nesting limit | [yes](sdk/schemas/image-calibration-1.schema.json) |
 | gravitas.observing-setup | format, formatVersion | 1 | js/forward/setup.js readSetup | download, inside a synthetic observation | reads the radial-velocity survey configuration (no format) as version 0 | refused, in words | [yes](sdk/schemas/observing-setup-1.schema.json) |
 | gravitas.pipeline | format, formatVersion | 1 | js/measure/pipeline.js readPipeline | download | v1 only | refused, in words | [yes](sdk/schemas/pipeline-1.schema.json) |
 | gravitas.inference | format, formatVersion | 1 | js/inference/manifest.js validateInference | download | v1 only | a validation problem | [yes](sdk/schemas/inference-1.schema.json) |
 | gravitas.analysis | format, formatVersion, kind | 1 | js/analysis/seams.js readAnalysis (the analysis lab) | download | v1 only | refused, in words | [yes](sdk/schemas/analysis-1.schema.json) |
 | gravitas.artifact | format, formatVersion | 1 | js/platform/artifact.js validateArtifact | memory | v1 only | a validation problem: a /2 envelope is "not 1" | [yes](sdk/schemas/artifact-1.schema.json) |
 | gravitas.artifact (with the extended uncertainty states, a correlation or a fit) | format, formatVersion | 2 | js/platform/artifact.js validateArtifact, artifactVersion, legacyView | memory | reads v1 as it is; written only when /1 cannot say it | a validation problem | [yes](sdk/schemas/artifact-2.schema.json) |
-| gravitas.observed | format, formatVersion | 1 | js/notebook/observed.js (inside a notebook entry) | localStorage | v1 only | not checked | no |
+| gravitas.observed | format, formatVersion | 1 | js/notebook/observed.js (inside a notebook entry) | localStorage | v1 only | not checked | [yes](sdk/schemas/observed-1.schema.json) |
 | gravitas.observation-data-pack | format, formatVersion | 1 | tools/data-packs/schema.mjs validateDataPack | repository, extension archive | v1 only | a validation problem | [yes](sdk/schemas/observation-data-pack-1.schema.json) |
 | gravitas.image | format, formatVersion | 1 | js/dataKinds/contract.js validateImage | repository, extension archive | v1 only | a validation problem | [yes](sdk/schemas/image-1.schema.json) |
 | gravitas.image-sequence | format, formatVersion | 1 | js/dataKinds/contract.js validateImageSequence | repository, extension archive | v1 only | a validation problem | [yes](sdk/schemas/image-sequence-1.schema.json) |
-| gravitas.image-pack-planes | format, formatVersion | 1 | js/observatory/imagePacks.js readFrames | repository (frames/), fetched when an image pack is opened | v1 only | refused: "not the frames of" the pack | no |
+| gravitas.image-pack-planes | format, formatVersion | 1 | js/observatory/imagePacks.js readFrames | repository (frames/), fetched when an image pack is opened | v1 only | refused: "not the frames of" the pack | [yes](sdk/schemas/image-pack-planes-1.schema.json) |
 | gravitas.grid | format, formatVersion | 1 | js/dataKinds/contract.js validateGrid | repository, extension archive | v1 only | a validation problem | [yes](sdk/schemas/grid-1.schema.json) |
 | gravitas.instrument | format, formatVersion | 1 | js/instruments/validate.js validatePack | repository, extension archive | v1 only | a validation problem | [yes](sdk/schemas/instrument-1.schema.json) |
-| world share link | v (link prefix 2) | 2 | js/shareState.js decodePayload | link | reads v1, whose scenario is an English name, by id | refused, in words | no |
+| world share link | v (link prefix 2) | 2 | js/shareState.js decodePayload | link | reads v1, whose scenario is an English name, by id | refused, in words | [yes](sdk/schemas/world-link-2.schema.json) |
 | built-in scenario id | a public id (SCENARIO_INFO key) | 1 | js/scenarios.js scenarioId, js/data/scenarioInfo.js scenarioId | link, lesson, course pack, investigation pack, experiment, notebook entry | reads the English name it was keyed by before ids | refused: a link in words, a pack by its validator | [yes](sdk/schemas/scenario-id-1.schema.json) |
-| experiment link block (xp) | v | 1 | js/experiments/shareExperiment.js readExperimentBlock | link | v1 only | reported, not checked | no |
-| link extras (x) | v | 1 | js/experiments/canonicalState.js readExtras | link | v1 only | reported, not checked | no |
+| experiment link block (xp) | v | 1 | js/experiments/shareExperiment.js readExperimentBlock | link | v1 only | reported, not checked | [yes](sdk/schemas/experiment-link-block-1.schema.json) |
+| link extras (x) | v | 1 | js/experiments/canonicalState.js readExtras | link | v1 only | reported, not checked | [yes](sdk/schemas/link-extras-1.schema.json) |
 | gravitas.orbital-system | format, version | 1 | js/systemSpec.js systemFromFile | download | v1 only | refused, in words | [yes](sdk/schemas/orbital-system-1.schema.json) |
-| gravitas.system3d | format, formatVersion | 1 | js/lab3d/state.js migrateSystem | file, repository | v1 only; reads orbital-system/1 | refused, in words | no |
-| gravitas.lab3d.snapshot | format, formatVersion | 1 | js/lab3d/snapshot.js snapshotProblem | memory | v1 only | refused | no |
+| gravitas.system3d | format, formatVersion | 1 | js/lab3d/state.js migrateSystem | file, repository | v1 only; reads orbital-system/1 | refused, in words | [yes](sdk/schemas/system3d-1.schema.json) |
+| gravitas.lab3d.snapshot | format, formatVersion | 1 | js/lab3d/snapshot.js snapshotProblem | memory | v1 only | refused | [yes](sdk/schemas/lab3d-snapshot-1.schema.json) |
 | gravitas.experiment | format, formatVersion | 1 | js/experiments/experimentManifest.js migrateExperiment | download (the runner’s manifest, and the bench’s comparison), memory, inside results | converts an unversioned sweep spec; the retired id gravitas-experiment is version 0 | refused, in words | [yes](sdk/schemas/experiment-1.schema.json) |
 | gravitas.experiment (with an ensemble block) | format, formatVersion | 2 | js/experiments/ensemble/record.js validateEnsemble, withVersion; the shipped reader js/experiments/experimentManifest.js migrateExperiment | download, memory | reads v1: a manifest without an ensemble block is still written as /1 | refused, in words | [yes](sdk/schemas/experiment-2.schema.json) |
 | gravitas.experiment-result | format, formatVersion | 1 | js/experiments/experimentManifest.js reproducibility; the bench’s records, js/experiments/store.js migrate | download, localStorage (the bench’s saved comparisons and reliability checks) | the store’s v1 to v3 and the retired gravitas-reliability-check are version 0 | refused; the analysis panel does not check | [yes](sdk/schemas/experiment-result-1.schema.json) |
-| experiment store | v, beside format and formatVersion | 3 | js/experiments/store.js migrate | localStorage | migrates v1 and v2; a record without a format is read by v | refused by reason code | no |
-| gravitas.mission-plan | format, formatVersion | 1 | js/mission/link.js readPlan | download, My work | v1 only | fields it does not know are dropped; a plan with a wrong field is refused, in words | no |
-| gravitas.ephemeris-pack | format, formatVersion | 1 | js/mission/ephemeris.js createEphemeris | repository | v1 only | refused | no |
+| experiment store | v, beside format and formatVersion | 3 | js/experiments/store.js migrate | localStorage | migrates v1 and v2; a record without a format is read by v | refused by reason code | [yes](sdk/schemas/experiment-store-3.schema.json) |
+| gravitas.mission-plan | format, formatVersion | 1 | js/mission/link.js readPlan | download, My work | v1 only | fields it does not know are dropped; a plan with a wrong field is refused, in words | [yes](sdk/schemas/mission-plan-1.schema.json) |
+| gravitas.ephemeris-pack | format, formatVersion | 1 | js/mission/ephemeris.js createEphemeris | repository | v1 only | refused | [yes](sdk/schemas/ephemeris-pack-1.schema.json) |
 | gravitas.investigation-pack | format, formatVersion | 1 | js/platform/investigation.js migrateInvestigationPack | download, localStorage, repository | v1 only | refused, in words: a /2 file is "newer" | [yes](sdk/schemas/investigation-pack-1.schema.json) |
 | gravitas.investigation-pack (with criterion kinds, depths or weights) | format, formatVersion | 2 | js/platform/investigation.js validateInvestigationPack, packVersion | download, localStorage, repository | reads v1 as it is; written only when /1 cannot say it | refused, in words | [yes](sdk/schemas/investigation-pack-2.schema.json) |
 | gravitas.question-bank | format, formatVersion | 1 | js/platform/questionBank.js validateQuestionBankWith | download | v1 only | a validation problem: a /2 file must be 1 | [yes](sdk/schemas/question-bank-1.schema.json) |
 | gravitas.question-bank (with criterion kinds, depths or weights) | format, formatVersion | 2 | js/platform/questionBank.js validateQuestionBankWith, bankVersion | download | reads v1 as it is; written only when /1 cannot say it | a validation problem | [yes](sdk/schemas/question-bank-2.schema.json) |
 | gravitas.assignment | k, v (link prefix a) | 2 | js/assignments/assignment.js validateAssignment | link, download | reads v1 as it is | refused, in words | [yes](sdk/schemas/assignment-2.schema.json) |
-| investigation progress | schema | 2 | js/investigations/progressSchema.js readProgress | localStorage | migrates v1 (migrateFromV1) | kept and not overwritten, in words | no |
-| gravitas.investigation.progress | kind, version | 2 | js/investigations/progressBackup.js restoreProgress | download | migrates v1 | refused, in words | no |
+| investigation progress | schema | 2 | js/investigations/progressSchema.js readProgress | localStorage | migrates v1 (migrateFromV1) | kept and not overwritten, in words | [yes](sdk/schemas/progress-2.schema.json) |
+| gravitas.investigation.progress | kind, version | 2 | js/investigations/progressBackup.js restoreProgress | download | migrates v1 | refused, in words | [yes](sdk/schemas/investigation-progress-backup-2.schema.json) |
 | submission token | v (link prefix s) | 2 | js/submission/submissionToken.js readSubmissionToken | pasted text | reads v1 | refused, in words | [yes](sdk/schemas/submission-token-2.schema.json) |
 | gravitas.submission-results | kind, version | 2 | js/submission/results.js readResults | download | migrates v1 | refused by reason code | [yes](sdk/schemas/submission-results-2.schema.json) |
-| gravitas.submission-archive | format, formatVersion | 1 | js/instructorArchive.js readArchive | download (the review page opens it again) | v1 only | refused by reason code | no |
-| gravitas.lab3d-guide-report | format, formatVersion | 1 | none: written, never read | download | v1 only | nothing reads it | no |
-| gravitas.mission-lab-report | format, formatVersion | 1 | none: written, never read | download | v1 only | nothing reads it | no |
-| notebook store | v | 1 | js/notebook/store.js load | localStorage | v1 only | kept and not overwritten, in words | no |
-| notebook entry snapshot | snapshot.v | 1 | js/notebook/entry.js validateEntry | localStorage, download | v1 only | refused by reason code | no |
+| gravitas.submission-archive | format, formatVersion | 1 | js/instructorArchive.js readArchive | download (the review page opens it again) | v1 only | refused by reason code | [yes](sdk/schemas/submission-archive-1.schema.json) |
+| gravitas.lab3d-guide-report | format, formatVersion | 1 | none: written, never read | download | v1 only | nothing reads it | [yes](sdk/schemas/lab3d-guide-report-1.schema.json) |
+| gravitas.mission-lab-report | format, formatVersion | 1 | none: written, never read | download | v1 only | nothing reads it | [yes](sdk/schemas/mission-lab-report-1.schema.json) |
+| notebook store | v | 1 | js/notebook/store.js load | localStorage | v1 only | kept and not overwritten, in words | [yes](sdk/schemas/notebook-store-1.schema.json) |
+| notebook entry snapshot | snapshot.v | 1 | js/notebook/entry.js validateEntry | localStorage, download | v1 only | refused by reason code | [yes](sdk/schemas/notebook-entry-1.schema.json) |
 | gravitas.evidence.notebook | kind, version | 1 | js/notebook/notebook.js validateBackup | download | v1 only | refused, in words | [yes](sdk/schemas/evidence-notebook-1.schema.json) |
-| gravitas.ledger | LEDGER_FORMAT (a record, not a file) | 1 | js/submission/ledgerDigest.js checkEvidence | inside a submission token (ev), never alone | v1 only | checked as a mismatch, in words | no |
+| gravitas.ledger | LEDGER_FORMAT (a record, not a file) | 1 | js/submission/ledgerDigest.js checkEvidence | inside a submission token (ev), never alone | v1 only | checked as a mismatch, in words | [yes](sdk/schemas/ledger-1.schema.json) |
 | gravitas.course-pack (extension form) | format, formatVersion | 1 | js/platform/course.js validateCoursePack | repository, extension archive, IndexedDB | v1 only | a validation problem, which /2 gets too | [yes](sdk/schemas/course-pack-1.schema.json) |
 | gravitas.course-pack (builder form) | format, formatVersion | 2 | js/course/pack.js migrateCoursePack | download, localStorage, repository, extension archive | migrates v1 | refused, in words: a /3 file is "made by a newer version" | [yes](sdk/schemas/course-pack-2.schema.json) |
 | gravitas.course-pack (builder form, with a profile, a term or outcomes) | format, formatVersion | 3 | js/course/pack.js validateCoursePack, packVersion | download, localStorage, repository, extension archive | migrates v1 and reads v2 as it is; written only when /2 cannot say it | refused, in words | [yes](sdk/schemas/course-pack-3.schema.json) |
-| course home link | link prefix c | 3 | js/course/links.js readCourseFragment | link | migrates c1 and reads c2 as it is; c3 only for a pack that needs /3 | refused by reason code | no |
-| investigation link | link prefix i | 1 | js/composer/packLink.js readPackFragment | link | v1 only | refused by reason code | no |
-| gravitas.course-manifest | format, formatVersion | 1 | none: written, never read | download | v1 only | nothing reads it | no |
+| course home link | link prefix c | 3 | js/course/links.js readCourseFragment | link | migrates c1 and reads c2 as it is; c3 only for a pack that needs /3 | refused by reason code | [yes](sdk/schemas/course-home-link-3.schema.json) |
+| investigation link | link prefix i | 1 | js/composer/packLink.js readPackFragment | link | v1 only | refused by reason code | [yes](sdk/schemas/investigation-link-1.schema.json) |
+| gravitas.course-manifest | format, formatVersion | 1 | none: written, never read | download | v1 only | nothing reads it | [yes](sdk/schemas/course-manifest-1.schema.json) |
 | gravitas.capability-package | format, formatVersion | 1 | js/platform/manifest.js validateManifest | repository, IndexedDB | v1 only | refused, in words | [yes](sdk/schemas/capability-package-1.schema.json) |
 | gravitas.scenario-pack | format, formatVersion | 1 | js/platform/scenario.js migrateScenarioPack | download, localStorage, link | v1 only; reads orbital-system/1 | refused, in words | [yes](sdk/schemas/scenario-pack-1.schema.json) |
 | gravitas.catalog | format, formatVersion | 1 | js/catalogPage.js load | repository | v1 only | refused | [yes](sdk/schemas/catalog-1.schema.json) |
 | gravitas.library | format, formatVersion | 1 | js/library/format.js checkLibrary | repository | v1 only | refused | [yes](sdk/schemas/library-1.schema.json) |
 | gravitas.catalog-curation | format, formatVersion | 1 | tools/catalog.mjs readCuration | repository | not checked | not checked | [yes](sdk/schemas/catalog-curation-1.schema.json) |
-| gravitas.extension-archive | none (the archive structure) | 1 | sdk/lib/archive.mjs, js/catalog/archive.js | repository, download | structure checked, not version | structure checked, not version | no |
+| gravitas.extension-archive | none (the archive structure) | 1 | sdk/lib/archive.mjs, js/catalog/archive.js | repository, download | structure checked, not version | structure checked, not version | [yes](sdk/schemas/extension-archive-1.schema.json) |
 | gravitas-embed messages | protocol, version | 1 | js/embedMessages.js readMessage | memory | v1 only | refused by error code | [yes](sdk/schemas/embed-messages-1.schema.json) |
 | gravitas-compute messages | protocol, version | 1 | js/compute/messages.js readMessage | memory | v1 only | refused by error code (unsupported-version) | [yes](sdk/schemas/compute-messages-1.schema.json) |
 | gravitas.compute-capsule | format, formatVersion | 1 | js/compute/capsule.js readCapsule, verifyCapsule | download, My work (the envelope it holds, as a notebook entry) | v1 only | refused: "reads /1" | [yes](sdk/schemas/compute-capsule-1.schema.json) |
-| embed options | query ev | 1 | js/embedOptions.js readEmbedOptions | link | v1 only | ignored: opens as a plain embed | no |
-| gravitas.student-data | format, formatVersion | 1 | js/storage/index.js Store.importAll | download | v1 only | refused, with a reason | no |
-| gravitas.made | format, formatVersion, kind | 1 | js/myWork/made.js readMade | localStorage, inside gravitas.student-data | v1 only | left out of the list, not overwritten | no |
-| gravitas.composed-report | format, formatVersion | 1 | js/myWork/composedReport.js readComposed | download (the review page reads it), My work (inside a gravitas.made record of kind report) | v1 only | refused by reason code | no |
-| resume record | v, items (id, route, step, path, title, at) | 1 | js/storage/local.js readResume | localStorage, inside gravitas.student-data (preferences) | v1 only | reads as nothing to resume; the next write replaces it | no |
-| course terms record | v, courses (id, term, title, at) | 1 | js/instructorCourseTerms.js readTerms | localStorage, inside gravitas.student-data (preferences) | v1 only | reads as no courses; the next write replaces it | no |
-| collections record | v, saved (a course package with profile collection), received (at, pack) | 1 | js/library/collections.js readCollections | localStorage, inside gravitas.student-data (courses) | v1 only | reads as no collections; the next write replaces it | no |
-| first-week record | v, id, t (the title), mo (open or shut), items (t, h, l, d, n, o: a title, an address on this site, the lesson, its depth and step count, whether it was opened) | 1 | js/welcome.js readWeek | localStorage, inside gravitas.student-data (preferences) | v1 only | reads as no first week and is dropped: Home opens as itself, and the link opens the list again | no |
+| embed options | query ev | 1 | js/embedOptions.js readEmbedOptions | link | v1 only | ignored: opens as a plain embed | [yes](sdk/schemas/embed-options-1.schema.json) |
+| gravitas.student-data | format, formatVersion | 1 | js/storage/index.js Store.importAll | download | v1 only | refused, with a reason | [yes](sdk/schemas/student-data-1.schema.json) |
+| gravitas.made | format, formatVersion, kind | 1 | js/myWork/made.js readMade | localStorage, inside gravitas.student-data | v1 only | left out of the list, not overwritten | [yes](sdk/schemas/made-1.schema.json) |
+| gravitas.composed-report | format, formatVersion | 1 | js/myWork/composedReport.js readComposed | download (the review page reads it), My work (inside a gravitas.made record of kind report) | v1 only | refused by reason code | [yes](sdk/schemas/composed-report-1.schema.json) |
+| resume record | v, items (id, route, step, path, title, at) | 1 | js/storage/local.js readResume | localStorage, inside gravitas.student-data (preferences) | v1 only | reads as nothing to resume; the next write replaces it | [yes](sdk/schemas/resume-record-1.schema.json) |
+| course terms record | v, courses (id, term, title, at) | 1 | js/instructorCourseTerms.js readTerms | localStorage, inside gravitas.student-data (preferences) | v1 only | reads as no courses; the next write replaces it | [yes](sdk/schemas/course-terms-1.schema.json) |
+| collections record | v, saved (a course package with profile collection), received (at, pack) | 1 | js/library/collections.js readCollections | localStorage, inside gravitas.student-data (courses) | v1 only | reads as no collections; the next write replaces it | [yes](sdk/schemas/collections-record-1.schema.json) |
+| first-week record | v, id, t (the title), mo (open or shut), items (t, h, l, d, n, o: a title, an address on this site, the lesson, its depth and step count, whether it was opened) | 1 | js/welcome.js readWeek | localStorage, inside gravitas.student-data (preferences) | v1 only | reads as no first week and is dropped: Home opens as itself, and the link opens the list again | [yes](sdk/schemas/first-week-record-1.schema.json) |
 | gravitas.evaluation | kind, schema | 1 | tools/evaluation-summary.mjs | download, localStorage draft | v1 only | skipped, in words | [yes](sdk/schemas/evaluation-1.schema.json) |
 
 ## What the table shows

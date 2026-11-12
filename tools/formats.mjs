@@ -49,6 +49,7 @@ export const FORMATS = Object.freeze([
       'download, inside a workspace (`workspace.marks`), only when marks exist',
     older: 'v1 only',
     newer: 'refused in words, by a nesting limit',
+    schema: 'image-marks-1.schema.json',
   },
   {
     name: 'gravitas.image-calibration',
@@ -60,6 +61,7 @@ export const FORMATS = Object.freeze([
       'download, inside a workspace (`workspace.calibration`), only when an image was calibrated',
     older: 'v1 only',
     newer: 'refused in words, by a nesting limit',
+    schema: 'image-calibration-1.schema.json',
   },
   {
     name: 'gravitas.observing-setup',
@@ -137,6 +139,7 @@ export const FORMATS = Object.freeze([
     persisted: 'localStorage',
     older: 'v1 only',
     newer: 'not checked',
+    schema: 'observed-1.schema.json',
   },
   {
     name: 'gravitas.observation-data-pack',
@@ -180,6 +183,7 @@ export const FORMATS = Object.freeze([
     persisted: 'repository (frames/), fetched when an image pack is opened',
     older: 'v1 only',
     newer: 'refused: "not the frames of" the pack',
+    schema: 'image-pack-planes-1.schema.json',
   },
   {
     name: 'gravitas.grid',
@@ -213,6 +217,7 @@ export const FORMATS = Object.freeze([
     persisted: 'link',
     older: 'reads v1, whose scenario is an English name, by id',
     newer: 'refused, in words',
+    schema: 'world-link-2.schema.json',
   },
   {
     name: 'built-in scenario id',
@@ -233,6 +238,7 @@ export const FORMATS = Object.freeze([
     persisted: 'link',
     older: 'v1 only',
     newer: 'reported, not checked',
+    schema: 'experiment-link-block-1.schema.json',
   },
   {
     name: 'link extras (x)',
@@ -242,6 +248,7 @@ export const FORMATS = Object.freeze([
     persisted: 'link',
     older: 'v1 only',
     newer: 'reported, not checked',
+    schema: 'link-extras-1.schema.json',
   },
   {
     name: 'gravitas.orbital-system',
@@ -263,6 +270,7 @@ export const FORMATS = Object.freeze([
     persisted: 'file, repository',
     older: 'v1 only; reads orbital-system/1',
     newer: 'refused, in words',
+    schema: 'system3d-1.schema.json',
   },
   {
     name: 'gravitas.lab3d.snapshot',
@@ -272,6 +280,7 @@ export const FORMATS = Object.freeze([
     persisted: 'memory',
     older: 'v1 only',
     newer: 'refused',
+    schema: 'lab3d-snapshot-1.schema.json',
   },
   {
     name: 'gravitas.experiment',
@@ -320,6 +329,7 @@ export const FORMATS = Object.freeze([
     persisted: 'localStorage',
     older: 'migrates v1 and v2; a record without a format is read by v',
     newer: 'refused by reason code',
+    schema: 'experiment-store-3.schema.json',
   },
   {
     name: 'gravitas.mission-plan',
@@ -330,6 +340,7 @@ export const FORMATS = Object.freeze([
     older: 'v1 only',
     newer:
       'fields it does not know are dropped; a plan with a wrong field is refused, in words',
+    schema: 'mission-plan-1.schema.json',
   },
   {
     name: 'gravitas.ephemeris-pack',
@@ -339,6 +350,7 @@ export const FORMATS = Object.freeze([
     persisted: 'repository',
     older: 'v1 only',
     newer: 'refused',
+    schema: 'ephemeris-pack-1.schema.json',
   },
   // --- Lessons, assignments and student work ---
   {
@@ -405,6 +417,7 @@ export const FORMATS = Object.freeze([
     persisted: 'localStorage',
     older: 'migrates v1 (migrateFromV1)',
     newer: 'kept and not overwritten, in words',
+    schema: 'progress-2.schema.json',
   },
   {
     name: 'gravitas.investigation.progress',
@@ -414,6 +427,7 @@ export const FORMATS = Object.freeze([
     persisted: 'download',
     older: 'migrates v1',
     newer: 'refused, in words',
+    schema: 'investigation-progress-backup-2.schema.json',
   },
   {
     name: 'submission token',
@@ -446,6 +460,7 @@ export const FORMATS = Object.freeze([
     persisted: 'download (the review page opens it again)',
     older: 'v1 only',
     newer: 'refused by reason code',
+    schema: 'submission-archive-1.schema.json',
   },
   {
     name: 'gravitas.lab3d-guide-report',
@@ -455,6 +470,7 @@ export const FORMATS = Object.freeze([
     persisted: 'download',
     older: 'v1 only',
     newer: 'nothing reads it',
+    schema: 'lab3d-guide-report-1.schema.json',
   },
   {
     name: 'gravitas.mission-lab-report',
@@ -464,6 +480,7 @@ export const FORMATS = Object.freeze([
     persisted: 'download',
     older: 'v1 only',
     newer: 'nothing reads it',
+    schema: 'mission-lab-report-1.schema.json',
   },
   // --- The notebook ---
   {
@@ -474,6 +491,7 @@ export const FORMATS = Object.freeze([
     persisted: 'localStorage',
     older: 'v1 only',
     newer: 'kept and not overwritten, in words',
+    schema: 'notebook-store-1.schema.json',
   },
   {
     name: 'notebook entry snapshot',
@@ -483,6 +501,7 @@ export const FORMATS = Object.freeze([
     persisted: 'localStorage, download',
     older: 'v1 only',
     newer: 'refused by reason code',
+    schema: 'notebook-entry-1.schema.json',
   },
   {
     name: 'gravitas.evidence.notebook',
@@ -503,6 +522,7 @@ export const FORMATS = Object.freeze([
     persisted: 'inside a submission token (ev), never alone',
     older: 'v1 only',
     newer: 'checked as a mismatch, in words',
+    schema: 'ledger-1.schema.json',
   },
   // --- Courses, packages and the catalog ---
   {
@@ -548,6 +568,7 @@ export const FORMATS = Object.freeze([
     older:
       'migrates c1 and reads c2 as it is; c3 only for a pack that needs /3',
     newer: 'refused by reason code',
+    schema: 'course-home-link-3.schema.json',
   },
   {
     name: 'investigation link',
@@ -557,6 +578,7 @@ export const FORMATS = Object.freeze([
     persisted: 'link',
     older: 'v1 only',
     newer: 'refused by reason code',
+    schema: 'investigation-link-1.schema.json',
   },
   {
     name: 'gravitas.course-manifest',
@@ -567,6 +589,7 @@ export const FORMATS = Object.freeze([
     persisted: 'download',
     older: 'v1 only',
     newer: 'nothing reads it',
+    schema: 'course-manifest-1.schema.json',
   },
   {
     name: 'gravitas.capability-package',
@@ -629,6 +652,7 @@ export const FORMATS = Object.freeze([
     persisted: 'repository, download',
     older: 'structure checked, not version',
     newer: 'structure checked, not version',
+    schema: 'extension-archive-1.schema.json',
   },
   // --- The embed and the evaluation kit ---
   {
@@ -672,6 +696,7 @@ export const FORMATS = Object.freeze([
     persisted: 'link',
     older: 'v1 only',
     newer: 'ignored: opens as a plain embed',
+    schema: 'embed-options-1.schema.json',
   },
   {
     name: 'gravitas.student-data',
@@ -682,6 +707,7 @@ export const FORMATS = Object.freeze([
     persisted: 'download',
     older: 'v1 only',
     newer: 'refused, with a reason',
+    schema: 'student-data-1.schema.json',
   },
   {
     name: 'gravitas.made',
@@ -692,6 +718,7 @@ export const FORMATS = Object.freeze([
     persisted: 'localStorage, inside gravitas.student-data',
     older: 'v1 only',
     newer: 'left out of the list, not overwritten',
+    schema: 'made-1.schema.json',
   },
   {
     name: 'gravitas.composed-report',
@@ -703,6 +730,7 @@ export const FORMATS = Object.freeze([
       'download (the review page reads it), My work (inside a gravitas.made record of kind report)',
     older: 'v1 only',
     newer: 'refused by reason code',
+    schema: 'composed-report-1.schema.json',
   },
   {
     name: 'resume record',
@@ -713,6 +741,7 @@ export const FORMATS = Object.freeze([
     persisted: 'localStorage, inside gravitas.student-data (preferences)',
     older: 'v1 only',
     newer: 'reads as nothing to resume; the next write replaces it',
+    schema: 'resume-record-1.schema.json',
   },
   {
     name: 'course terms record',
@@ -723,6 +752,7 @@ export const FORMATS = Object.freeze([
     persisted: 'localStorage, inside gravitas.student-data (preferences)',
     older: 'v1 only',
     newer: 'reads as no courses; the next write replaces it',
+    schema: 'course-terms-1.schema.json',
   },
   {
     name: 'collections record',
@@ -734,6 +764,7 @@ export const FORMATS = Object.freeze([
     persisted: 'localStorage, inside gravitas.student-data (courses)',
     older: 'v1 only',
     newer: 'reads as no collections; the next write replaces it',
+    schema: 'collections-record-1.schema.json',
   },
   {
     name: 'first-week record',
@@ -746,6 +777,7 @@ export const FORMATS = Object.freeze([
     older: 'v1 only',
     newer:
       'reads as no first week and is dropped: Home opens as itself, and the link opens the list again',
+    schema: 'first-week-record-1.schema.json',
   },
   {
     name: 'gravitas.evaluation',

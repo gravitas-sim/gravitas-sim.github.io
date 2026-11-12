@@ -1,0 +1,23 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://gravitas-sim.online/sdk/schemas/notebook-store-1.schema.json",
+  "title": "notebook store/1",
+  "description": "The evidence notebook as the browser keeps it (one localStorage key): its schema number and the entries in order. js/notebook/store.js load() is the authority and checks the schema number only (a record from a newer version is kept and not overwritten, in words: `from-a-newer-version`), a value that is not JSON is `unreadable`, and an entry is checked when it is revived (notebook entry snapshot/1). The entries are open objects here for that reason. FORMATS.md lists it.",
+  "type": "object",
+  "required": [
+    "v",
+    "entries"
+  ],
+  "properties": {
+    "v": {
+      "const": 1
+    },
+    "entries": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      },
+      "maxItems": 200
+    }
+  }
+}

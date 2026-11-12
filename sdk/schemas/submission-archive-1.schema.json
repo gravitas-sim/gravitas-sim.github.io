@@ -1,0 +1,99 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://gravitas-sim.online/sdk/schemas/submission-archive-1.schema.json",
+  "title": "gravitas.submission-archive/1",
+  "description": "What the review page saves of a class's submissions so a later term can open it again: when it was saved, the term, up to 2,000 reports (each a label of at most 200 characters and a submission token, a PDF record's token, or a progress backup), up to 40 named texts and the marks as text. js/instructorArchive.js readArchive() is the authority; it refuses a file that is not JSON, not this format, from a newer version (`newer`), with no reports array or a member of the wrong shape (`shape`) and with too many reports (`tooMany`), and it cuts a label to 200 characters and ignores named texts past the fortieth. FORMATS.md lists it.",
+  "type": "object",
+  "required": [
+    "format",
+    "formatVersion",
+    "reports"
+  ],
+  "properties": {
+    "format": {
+      "const": "gravitas.submission-archive"
+    },
+    "formatVersion": {
+      "const": 1
+    },
+    "savedAt": {
+      "type": "string"
+    },
+    "term": {
+      "type": "string"
+    },
+    "reports": {
+      "type": "array",
+      "items": {
+        "anyOf": [
+          {
+            "type": "object",
+            "required": [
+              "label",
+              "kind",
+              "backup"
+            ],
+            "properties": {
+              "label": {
+                "type": "string",
+                "maxLength": 200
+              },
+              "kind": {
+                "const": "backup"
+              },
+              "backup": {
+                "type": "object"
+              }
+            }
+          },
+          {
+            "type": "object",
+            "required": [
+              "label",
+              "kind",
+              "token"
+            ],
+            "properties": {
+              "label": {
+                "type": "string",
+                "maxLength": 200
+              },
+              "kind": {
+                "enum": [
+                  "token",
+                  "pdf"
+                ]
+              },
+              "token": {
+                "type": "string"
+              }
+            }
+          }
+        ]
+      },
+      "maxItems": 2000
+    },
+    "named": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "text"
+        ],
+        "properties": {
+          "label": {
+            "type": "string",
+            "maxLength": 200
+          },
+          "text": {
+            "type": "string"
+          }
+        }
+      },
+      "maxItems": 40
+    },
+    "marks": {
+      "type": "string"
+    }
+  }
+}

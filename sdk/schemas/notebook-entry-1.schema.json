@@ -1,0 +1,117 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://gravitas-sim.online/sdk/schemas/notebook-entry-1.schema.json",
+  "title": "notebook entry snapshot/1",
+  "description": "One entry of the evidence notebook, in localStorage and in a download: an id, the instrument it came from, a title, the student's claim, evidence and limitations, a frozen snapshot (its version `snapshot.v`, when it was captured, up to 40 quantities each with a label and a kind of measured, analytic or truth, the figure with its series, the provenance, an observed group for real data, the artifact envelope and where in the student's work it was kept) and a fingerprint, the checksum of the snapshot, which is recomputed on reading and says when the numbers changed. js/notebook/entry.js validateEntry() is the authority; it refuses a newer snapshot version by reason code, and needs an id, a snapshot, a quantities array of at most 40 with a label each, a kind from the three where one is given, and a figure with a series array where there is a figure. A snapshot with no `v` reads as version 1. FORMATS.md lists it.",
+  "type": "object",
+  "required": [
+    "id",
+    "source",
+    "title",
+    "prose",
+    "snapshot",
+    "fingerprint"
+  ],
+  "properties": {
+    "id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "source": {
+      "type": "string"
+    },
+    "title": {
+      "type": "string"
+    },
+    "prose": {
+      "type": "object",
+      "properties": {
+        "claim": {
+          "type": "string"
+        },
+        "evidence": {
+          "type": "string"
+        },
+        "limitations": {
+          "type": "string"
+        }
+      }
+    },
+    "snapshot": {
+      "type": "object",
+      "required": [
+        "v",
+        "capturedAt",
+        "quantities",
+        "provenance",
+        "artifact"
+      ],
+      "properties": {
+        "v": {
+          "const": 1
+        },
+        "capturedAt": {
+          "type": "number"
+        },
+        "quantities": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "label"
+            ],
+            "properties": {
+              "label": {
+                "type": "string"
+              },
+              "kind": {
+                "enum": [
+                  "measured",
+                  "analytic",
+                  "truth"
+                ]
+              }
+            }
+          },
+          "maxItems": 40
+        },
+        "figure": {
+          "anyOf": [
+            {
+              "type": "null"
+            },
+            {
+              "type": "object",
+              "required": [
+                "series"
+              ],
+              "properties": {
+                "series": {
+                  "type": "array",
+                  "items": {
+                    "type": "object"
+                  }
+                }
+              }
+            }
+          ]
+        },
+        "provenance": {
+          "type": "object"
+        },
+        "observed": {
+          "type": "object"
+        },
+        "artifact": {
+          "type": "object"
+        },
+        "context": {
+          "type": "object"
+        }
+      }
+    },
+    "fingerprint": {
+      "type": "string"
+    }
+  }
+}

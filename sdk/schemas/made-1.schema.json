@@ -1,0 +1,259 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://gravitas-sim.online/sdk/schemas/made-1.schema.json",
+  "title": "gravitas.made/1",
+  "description": "Something a student made and kept in My work, one record each (a localStorage key per record, and a record of the made collection in gravitas.student-data/1), of one of five kinds: a scenario (a world as a link, its seed and settings), an experiment (the result of an A/B or ensemble run with its manifest, its hash and the engine that made it), a 3-D system (a gravitas.system3d/1), a mission plan (a gravitas.mission-plan/1 file from the lab) or a composed report (a gravitas.composed-report/1). js/myWork/made.js readMade() is the authority; it refuses another format, a newer version, an id that is not 3 to 40 lower-case letters, digits and hyphens, and a block of the kind that is missing or of the wrong shape; a record that fails is left out of the list and not overwritten. Strings are cut to their limits on reading. FORMATS.md lists it.",
+  "type": "object",
+  "required": [
+    "format",
+    "formatVersion",
+    "id",
+    "kind"
+  ],
+  "properties": {
+    "format": {
+      "const": "gravitas.made"
+    },
+    "formatVersion": {
+      "const": 1
+    },
+    "id": {
+      "type": "string",
+      "pattern": "^[a-z0-9-]{3,40}$"
+    },
+    "kind": {
+      "enum": [
+        "scenario",
+        "experiment",
+        "system3d",
+        "mission",
+        "report"
+      ]
+    },
+    "from": {
+      "type": "string",
+      "maxLength": 20
+    },
+    "name": {
+      "type": "string",
+      "maxLength": 120
+    },
+    "savedAt": {
+      "type": "string",
+      "maxLength": 40
+    },
+    "app": {
+      "type": "string",
+      "maxLength": 40
+    },
+    "attachedTo": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "maxItems": 60
+    }
+  },
+  "anyOf": [
+    {
+      "type": "object",
+      "required": [
+        "kind",
+        "scenario"
+      ],
+      "properties": {
+        "kind": {
+          "const": "scenario"
+        },
+        "scenario": {
+          "type": "object",
+          "required": [
+            "link"
+          ],
+          "properties": {
+            "id": {},
+            "seed": {},
+            "settings": {
+              "type": "object"
+            },
+            "bodies": {
+              "type": [
+                "integer",
+                "null"
+              ]
+            },
+            "link": {
+              "type": "string",
+              "pattern": "^[0-9][A-Za-z0-9_-]*$"
+            },
+            "derivedFrom": {},
+            "system": {
+              "type": "object"
+            }
+          }
+        }
+      }
+    },
+    {
+      "type": "object",
+      "required": [
+        "kind",
+        "experiment"
+      ],
+      "properties": {
+        "kind": {
+          "const": "experiment"
+        },
+        "experiment": {
+          "type": "object",
+          "required": [
+            "result"
+          ],
+          "properties": {
+            "hash": {
+              "type": "string"
+            },
+            "engine": {},
+            "result": {
+              "type": "object",
+              "required": [
+                "manifest"
+              ],
+              "properties": {
+                "manifest": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "type": "object",
+      "required": [
+        "kind",
+        "system3d"
+      ],
+      "properties": {
+        "kind": {
+          "const": "system3d"
+        },
+        "system3d": {
+          "type": "object",
+          "required": [
+            "system"
+          ],
+          "properties": {
+            "from": {
+              "enum": [
+                "now",
+                "start"
+              ]
+            },
+            "units": {
+              "type": "string"
+            },
+            "bodies": {
+              "type": "integer"
+            },
+            "system": {
+              "type": "object",
+              "required": [
+                "format",
+                "formatVersion",
+                "bodies"
+              ],
+              "properties": {
+                "format": {
+                  "const": "gravitas.system3d"
+                },
+                "formatVersion": {
+                  "const": 1
+                },
+                "bodies": {
+                  "type": "array",
+                  "items": {
+                    "type": "object"
+                  },
+                  "minItems": 2,
+                  "maxItems": 50
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "type": "object",
+      "required": [
+        "kind",
+        "mission"
+      ],
+      "properties": {
+        "kind": {
+          "const": "mission"
+        },
+        "mission": {
+          "type": "object",
+          "required": [
+            "file"
+          ],
+          "properties": {
+            "file": {
+              "type": "object",
+              "required": [
+                "format",
+                "kind",
+                "inputs"
+              ],
+              "properties": {
+                "format": {
+                  "const": "gravitas.mission-plan"
+                },
+                "kind": {
+                  "const": "missionLab"
+                },
+                "inputs": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "type": "object",
+      "required": [
+        "kind",
+        "report"
+      ],
+      "properties": {
+        "kind": {
+          "const": "report"
+        },
+        "report": {
+          "type": "object",
+          "required": [
+            "digest",
+            "sections"
+          ],
+          "properties": {
+            "digest": {
+              "type": "string"
+            },
+            "sections": {
+              "type": "array",
+              "items": {
+                "type": "object"
+              },
+              "minItems": 1
+            }
+          }
+        }
+      }
+    }
+  ]
+}
