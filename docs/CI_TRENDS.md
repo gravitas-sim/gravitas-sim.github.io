@@ -10,12 +10,13 @@ Aggregate CI at or under 15 minutes (run created to last job completed) over 10 
 
 | Measure | Value |
 | --- | --- |
-| Green runs counted (newest) | 10 of 10 |
-| Median wall time | 39.9 min |
-| Slowest wall time | 221.5 min |
-| Median runner-minutes | 389 |
-| Jest tests, first record with counts to latest | 20677 to 20677 |
-| Verdict | MISSED (the median of 10 is 39.9 min, the slowest 221.5 min) |
+| Green runs counted, since the 17-shard matrix | 0 of 10 |
+| Median wall time | n/a |
+| Slowest wall time | n/a |
+| Median runner-minutes | n/a |
+| Baseline: the 10 green runs before it | median 39.9 min wall (slowest 221.5), 389 runner-minutes |
+| Jest tests, first record with counts to latest | not recorded |
+| Verdict | NOT YET MEASURED (no green run since the matrix changed; the baseline median was 39.9 min) |
 
 ## The latest run
 

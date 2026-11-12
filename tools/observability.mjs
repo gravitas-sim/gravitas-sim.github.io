@@ -48,6 +48,8 @@ export const TARGET_WALL_MINUTES = 15;
 export const SHARD_SPREAD_LIMIT = 1.15;
 /** Newest records the page keeps. */
 export const KEEP = 40;
+/** The first run of the 17-shard matrix: runs from here on are counted (Prompt 292). */
+export const TARGET_FROM = '2026-11-12T01:40:00Z';
 /** How many recent green runs the target is judged over (Prompt 292). */
 export const TARGET_RUNS = 10;
 
@@ -303,23 +305,38 @@ const median = xs => {
 };
 
 /**
- * The target over the newest TARGET_RUNS green runs: the median wall time (a
- * queue stall is one run's, not the suite's) against the 15 minutes of D-R10-01, and the test counts against the earliest record
- * that has them (the baseline).
+ * The target over the newest TARGET_RUNS green runs since `since` (the first
+ * run of the 17-shard matrix, D-R10-292-04): the median wall time (a queue
+ * stall is one run's, not the suite's) against the 15 minutes of D-R10-01. The
+ * runs before `since` are the baseline it is measured against, and the Jest
+ * counts are held to the earliest record that has them.
  */
-export function targetVerdict(history) {
-  const greens = history.filter(green).slice(-TARGET_RUNS);
-  if (!greens.length) return { runs: 0, met: null };
-  const walls = greens.map(r => r.cost.wallSeconds / 60);
-  const worst = Math.max(...walls);
+export function targetVerdict(history, since = TARGET_FROM) {
+  const med = rs => ({
+    runs: rs.length,
+    medianWallMinutes: rs.length
+      ? round(median(rs.map(r => r.cost.wallSeconds / 60)), 1)
+      : null,
+    worstWallMinutes: rs.length
+      ? round(Math.max(...rs.map(r => r.cost.wallSeconds / 60)), 1)
+      : null,
+    medianRunnerMinutes: rs.length
+      ? median(rs.map(r => r.cost.runnerMinutes))
+      : null,
+  });
+  const before = history.filter(r => green(r) && r.run.createdAt < since);
+  const after = history.filter(r => green(r) && r.run.createdAt >= since);
+  const counted = after.slice(-TARGET_RUNS);
+  const now = med(counted);
   const base = history.find(r => r.counts?.jest)?.counts.jest;
-  const last = [...greens].reverse().find(r => r.counts?.jest)?.counts.jest;
+  const last = [...counted].reverse().find(r => r.counts?.jest)?.counts.jest;
   return {
-    runs: greens.length,
-    medianWallMinutes: round(median(walls), 1),
-    worstWallMinutes: round(worst, 1),
-    medianRunnerMinutes: median(greens.map(r => r.cost.runnerMinutes)),
-    met: greens.length >= TARGET_RUNS && median(walls) <= TARGET_WALL_MINUTES,
+    ...now,
+    baseline: med(before.slice(-TARGET_RUNS)),
+    met: counted.length
+      ? counted.length >= TARGET_RUNS &&
+        now.medianWallMinutes <= TARGET_WALL_MINUTES
+      : null,
     jestTests:
       base && last ? { baseline: base.tests, latest: last.tests } : null,
   };
@@ -350,12 +367,21 @@ export function renderMarkdown(history, { charts = true } = {}) {
       '',
       row(['Measure', 'Value']),
       row(['---', '---']),
-      row(['Green runs counted (newest)', `${v.runs} of ${TARGET_RUNS}`]),
+      row([
+        'Green runs counted, since the 17-shard matrix',
+        `${v.runs} of ${TARGET_RUNS}`,
+      ]),
       row(['Median wall time', v.runs ? `${v.medianWallMinutes} min` : 'n/a']),
       row(['Slowest wall time', v.runs ? `${v.worstWallMinutes} min` : 'n/a']),
       row([
         'Median runner-minutes',
         v.runs ? String(v.medianRunnerMinutes) : 'n/a',
+      ]),
+      row([
+        `Baseline: the ${v.baseline.runs} green runs before it`,
+        v.baseline.runs
+          ? `median ${v.baseline.medianWallMinutes} min wall (slowest ${v.baseline.worstWallMinutes}), ${v.baseline.medianRunnerMinutes} runner-minutes`
+          : 'none recorded',
       ]),
       row([
         'Jest tests, first record with counts to latest',
@@ -366,7 +392,7 @@ export function renderMarkdown(history, { charts = true } = {}) {
       row([
         'Verdict',
         v.met === null
-          ? 'no green run'
+          ? `NOT YET MEASURED (no green run since the matrix changed; the baseline median was ${v.baseline.medianWallMinutes} min)`
           : v.met
             ? 'MET'
             : v.runs < TARGET_RUNS

@@ -251,22 +251,33 @@ describe('the history', () => {
     const history = Array.from({ length: TARGET_RUNS }, (_, i) =>
       rec(i + 1, i + 1, 14)
     );
-    expect(targetVerdict(history).met).toBe(true);
+    expect(targetVerdict(history, '2026-11-01').met).toBe(true);
     // One stalled run does not move a median.
     history[3] = rec(4, 4, 200);
-    const v = targetVerdict(history);
+    const v = targetVerdict(history, '2026-11-01');
     expect(v.met).toBe(true);
     expect(v.worstWallMinutes).toBe(200);
     // Fewer than ten is not yet a verdict; slow is a miss.
-    expect(targetVerdict(history.slice(0, 5)).met).toBe(false);
-    expect(targetVerdict(history.map(r => rec(r.run.id, 1, 35))).met).toBe(
-      false
-    );
+    expect(targetVerdict(history.slice(0, 5), '2026-11-01').met).toBe(false);
+    expect(
+      targetVerdict(
+        history.map(r => rec(r.run.id, 1, 35)),
+        '2026-11-01'
+      ).met
+    ).toBe(false);
+    // Runs before the matrix changed are the baseline, not the count.
+    const split = targetVerdict(history, '2026-11-05');
+    expect(split.baseline.runs).toBe(4);
+    expect(split.runs).toBe(6);
+    expect(split.met).toBe(false);
+    expect(targetVerdict(history, '2027-01-01').met).toBeNull();
     // A failed run is not one of the ten.
     const red = rec(99, 28, 1, {});
     red.run.conclusion = 'failure';
-    expect(targetVerdict([...history, red]).runs).toBe(TARGET_RUNS);
-    expect(targetVerdict([]).met).toBeNull();
+    expect(targetVerdict([...history, red], '2026-11-01').runs).toBe(
+      TARGET_RUNS
+    );
+    expect(targetVerdict([], '2026-11-01').met).toBeNull();
   });
 
   test('a chart with nothing to draw is left out, and a point-free series with it', () => {
