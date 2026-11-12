@@ -356,7 +356,7 @@
     {
       "file": "DOCUMENTS.md",
       "kind": "front-door",
-      "purpose": "The map of every root document and every generated artifact.",
+      "purpose": "The map of every root document and every generated file.",
       "owner": 128,
       "added": "2026-10-17",
       "student": false
