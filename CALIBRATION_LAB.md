@@ -43,3 +43,5 @@ The reduction nodes are now `TOOLS` of the measurement pipeline for a whole sequ
 ## Not done
 
 Wiring the instruments into the Observatory menu; authentic frames (D-CALIB-01).
+
+<!-- Listed in DOCUMENTS.md. -->
