@@ -79,3 +79,5 @@ Every investigation would also carry the reflection, the generated key and rubri
 ## 10. The follow-up (2026-11-10)
 
 Carl's rulings on section 8 (`DECISIONS_2026-11-07.md`): the record is accepted; the build is two PRs, instruments first; A8b is the only ensemble statement; the Euler investigation stays separate. The first PR is `NUMERICS_INSTRUMENTS.md`: the five instruments of section 5 item 2 as kernels in `js/kernels/numerics/`, imported by nothing shipped, with their verdict. Sections 1 to 9 above are the record as written on 2026-11-07 and are not edited; the investigations are still not built.
+
+<!-- Listed in DOCUMENTS.md. -->
