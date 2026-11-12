@@ -276,3 +276,5 @@ neither the curation file, the Library file nor a course package is a closure so
 - No instructor materials and no instructor bundle rebuild (the queue owns it), no passphrase, no edit under `.github`.
 - No bound moved, no failed leg re-labelled, no data fetched, no published number typed, and no count typed where a generator writes one
   (every leg count above is read from a committed results file).
+
+<!-- Listed in DOCUMENTS.md. -->
