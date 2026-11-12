@@ -217,3 +217,5 @@ Applying a perturbation now restores into it.
 - Chenciner, A. & Montgomery, R. (2000). _Annals of Mathematics_ **152**, 881.
 - Boekholt, T. C. N., Portegies Zwart, S. F. & Valtonen, M. (2020). _MNRAS_ **493**, 3932.
 - Laskar, J. & Gastineau, M. (2009). _Nature_ **459**, 817.
+
+<!-- Listed in DOCUMENTS.md. -->
