@@ -183,3 +183,5 @@ restoring a scenario or resetting all return to the world frame.
 
 **There is no frame indicator on the canvas itself.** The rail says which frame
 is active; a screenshot of the canvas alone does not.
+
+<!-- Listed in DOCUMENTS.md. -->
