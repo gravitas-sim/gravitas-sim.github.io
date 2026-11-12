@@ -532,6 +532,21 @@ jobs:
     # The caps: about ten minutes expected, one retry of the longest test adds
     # at most eight, so the step stops at 24 and the job at 30. Neither the
     # per-test timeout nor any assertion changes.
+    #
+    # 2026-11-12: twenty goes to seventeen (Prompt 292, D-R10-292-04; Carl's
+    # ruling of 2026-11-11 authorizes this prompt's edits to this file). The
+    # runner pool runs twenty jobs at once. On a push this workflow has about
+    # twenty-six long jobs, so with twenty shards the last six waited for a slot
+    # and the run took 34 to 45 minutes though its longest job took 20: the
+    # wall time was the queue, not any test. The tests cost the same on seventeen
+    # runners as on twenty (about 310 minutes of test time; 15.5 minutes a shard
+    # at twenty, 18.2 at seventeen, the "about 18 minutes each, 6 minutes of
+    # margin" of D-CI-05), a list scheduler over this run's own job durations
+    # reproduces the observed 35 minutes for twenty shards and gives about 21 to
+    # 25 for seventeen, and three fewer jobs set up three fewer runners. The
+    # 24-minute step stop and the 30-minute job limit stay as they are; the
+    # planner now has the timings of every listed test (the refresh in the same
+    # commit), so the shards are predicted equal.
     timeout-minutes: 30
     strategy:
       # One shard failing must not cancel the others. A canceled shard tells
@@ -539,7 +554,7 @@ jobs:
       # splitting the suite is to find out what is broken in one run.
       fail-fast: false
       matrix:
-        shard: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20]
+        shard: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17]
     steps:
       - uses: actions/checkout@v7
 
