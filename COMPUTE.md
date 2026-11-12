@@ -91,3 +91,5 @@ Every one has words in both languages, a block with `role="alert"` and a way for
 ## Not done
 
 Notebooks over `gravitas.inference/1` and `gravitas.analysis/1` (Prompt 102's notebooks read an observation, an orbital system or an experiment result instead; emcee is not in the frame); a phone measurement (T5 of the gate stays unmeasured); self-hosting the runtime; a link to the page from the menu.
+
+<!-- Listed in DOCUMENTS.md. -->
