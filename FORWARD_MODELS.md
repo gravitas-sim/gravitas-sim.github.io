@@ -39,3 +39,5 @@ A lesson step's answer may be a measurement of a forward-modelled system. The de
 ## Not done in this prompt
 
 Opening synthetic observations from a menu in the Observatory (they open as files; the label and the compare-with-truth table appear in the page); wiring the radial-velocity panel's live run to the setup module (the migration and equivalence are tested; the panel's code path is unchanged).
+
+<!-- Listed in DOCUMENTS.md. -->
