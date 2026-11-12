@@ -151,3 +151,5 @@ unchanged: nothing visible is built before Carl confirms.
 6. **Follow-up: B1b's third sub-check.** It compares two routes to a 6.6e-5 quantity at 1e-12 relative, which is below the
    arithmetic of double precision (1.2e-12 measured). It stays failing. Judging that sub-check by the absolute difference in
    magnitude (1e-15) would pass it and make the follow-up verdict B; I did not move it.
+
+<!-- Listed in DOCUMENTS.md. -->
