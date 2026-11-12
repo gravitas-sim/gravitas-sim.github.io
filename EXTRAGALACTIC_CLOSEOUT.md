@@ -227,3 +227,5 @@ The order follows the prerequisites, not importance.
   package's own texts.
 - No ceiling raised, no `.github` edit, no bound moved, no failed leg re-labelled, no data fetched, no published number typed, no count
   typed (every leg count above is read from a committed results file).
+
+<!-- Listed in DOCUMENTS.md. -->
