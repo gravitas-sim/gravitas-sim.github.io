@@ -1547,6 +1547,13 @@
       "purpose": "The advanced closeout (Prompt 274): what 268 to 273 landed, the 3-D and mission guide sequence, the sequence not created, the package's reading steps, the acceptance audit, the cohesion record.",
       "owner": 274,
       "student": false
+    },
+    {
+      "file": "COHESION_II.md",
+      "kind": "record",
+      "purpose": "The second cohesion pass (Prompt 287): the before and after inventory of discovery at scale, the sequence folded into another, the topic pages divided, the search tuned against a committed query set, the ledger of what was added since 2.0.0, and the internal review.",
+      "owner": 287,
+      "student": false
     }
   ]
 }

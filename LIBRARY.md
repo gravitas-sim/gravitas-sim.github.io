@@ -111,10 +111,21 @@ What is left unstated, and why:
 
 `sequences` carries named orders over the investigations (The sky; Gravity
 and orbits; Light and stars; Planets and exoplanets; Planets and the Sun;
-Galaxies and the universe; Observing and measuring), each with `depths` (the depth each entry is read at)
+Galaxies and the universe; Observing and measuring; Observing and instruments), each with `depths` (the depth each entry is read at)
 and `after` (sequences worth doing first). Every investigation is in at least
 one, and every `needs` in `js/data/investigations/sequences.js` is an earlier
 item that the lesson declares as a prerequisite.
+
+A sequence may have a **second tier** (Prompt 287): a row of
+`sequences.js` that ends with a tier name starts it, `library.json` carries
+`tiers` (`[{ "id": "deeper", "at": 13 }]`, the index of its first entry), and the
+sequence view shows the entries from there under their own heading, in the same
+order (`lib.tier.deeper`, "In depth"). Light and stars is the one sequence that has
+one: Stars, in depth was folded into it because twelve of the thirteen lessons of
+the smaller were in the larger, and its old id resolves through
+`sequenceAliases`. No two sequences may share more than 75 percent of the
+smaller one's entries (`ceilings.scale`, `tests/cohesionDiscovery.test.js`); the
+pairs over half are judged, with a reason, in `tools/cohesion-ledger.json`.
 
 A sequence can also hold **guides**, which are Library entries and not lessons.
 The Observatory's two suites order themselves (`observatory-exoplanet`,
@@ -171,7 +182,7 @@ instead of listing things. It has four views, one page, no new destination:
   (`starts` in `tools/library-curation.json`, validated against the entries
   and against Home's first-week list; where a start's entries can all be items
   of a package, the start is also a collection and is drawn from it, below);
-  the sequences and courses as pathways; the subjects as topics, with generated
+  the sequences and the built-in courses as pathways (an installed course package is found under Browse and on its topics); the subjects as topics, with generated
   counts; and, when there is one, "Your collections". No grid of everything.
 - **Browse everything** (a button, or any filter or search). The whole catalog,
   with four facets (subject, level, time, kind as a student sees it) and, behind
@@ -182,6 +193,9 @@ instead of listing things. It has four views, one page, no new destination:
 - **Topic** (`?topic=<subject>`). The subject's paragraph, its sequences, its
   courses, its investigations by level, its datasets and its scenarios
   (`js/library/views.js`, loaded when asked for). The alignment table links back.
+  A list longer than 30 rows (`MAX_TOPIC_ROWS`) is divided inside the page, one
+  heading per sequence in the sequences' order with the number of rows (Prompt 287;
+  five subjects today).
 - **Item** (`?item=<id>`). What comes before, what comes next, what goes with
   it, its instructor page, the pathways it is in (a sequence and a course say
   which is which), and, when nothing comes after it, why. The breadcrumb names
@@ -189,9 +203,13 @@ instead of listing things. It has four views, one page, no new destination:
 
 The search (`js/library/search.js`, fetched on the first query with
 `library/search-index.json`) needs every word to match, ranks a word in the
-title above the id and subject, those above the summary and the lesson's
+title above the id and subject, those above where it runs (what its card says:
+"In the mission lab"), those above the summary and the lesson's
 objectives, and those above its details, and each result names the fields that
-matched. It runs in the browser: no query leaves it.
+matched. Since Prompt 287 the words together in order score the weight of the
+field that holds them, and a plural finds its singular; `tools/library-queries.json`
+is the committed query set (English and Spanish, the rank each answer must
+reach), run by `tests/librarySearchQueries.test.js`. It runs in the browser: no query leaves it.
 
 The filters are kept in the address (`?q=`, `?kind=`, `?subject=`, `?group=`,
 `?browse=1`, ...), so a link can open the Library already narrowed. Every kind
