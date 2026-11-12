@@ -14,8 +14,8 @@
     "observatory": "none: synthetic, made by Gravitas",
     "pipeline": "js/darkMatter.js galaxyCurveAt, with written-out scatter"
   },
-  "dataType": "rotation-curve",
   "origin": "synthetic",
+  "dataType": "rotation-curve",
   "credit": "Synthetic: built by Gravitas to resemble NGC 3198 (van Albada et al. 1985). Not a measurement.",
   "license": {
     "status": "cc-by-4.0",
