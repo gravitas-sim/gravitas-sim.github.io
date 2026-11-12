@@ -175,3 +175,5 @@ what-is-a-gravitational-wave have them on four to five; the others none), and
 the 149 instructor misconception records in `js/data/instructorContent.js` have
 not been given shared ids with a step binding yet; the step side
 (`misconceptions[].id`, `option`) is in place for that retrofit.
+
+<!-- Listed in DOCUMENTS.md. -->
