@@ -119,3 +119,5 @@ scenarios would need the numbers copied out, not the card kept.
 **The minimize control is gone rather than reimplemented.** The panel is now
 small enough that minimizing it saves little, and the dead code behind the old
 button had already stopped being reachable.
+
+<!-- Listed in DOCUMENTS.md. -->
