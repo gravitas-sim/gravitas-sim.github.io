@@ -250,3 +250,5 @@ If not, a published table of distances for a stated cosmology is the file that w
 papers). (2) Which form binds, the committed one (product C) or the follow-up (product A)? (3) Lift the consumers rule for the
 three lessons, the panels and the model-page section, or keep holding? This session builds none of them. (4) D-R10-255-09..12
 are DELEGATED.
+
+<!-- Listed in DOCUMENTS.md. -->
