@@ -215,3 +215,5 @@ Labels: `invisible` and `documentation`.
 1. Ratify the outcome A through C2c (D-R10-262-07)? If so, does Part B, when a consumer is released, build both estimators as the roadmap's A names, or stay with the censoring estimator as ruled on 2026-11-07? Recommendation: ratify, and both in one Part B after the release, the truncation interval stated as about 94 percent.
 2. The authentic legs X1 to X4 are still NOT RUN. Agents may fetch public data since 2026-11-07; a data-legs follow-up on requests R1 to R4 (their bounds are already committed in `thresholds.json`) would be the next step before any sentence about a real sample. Recommendation: yes, as its own session; running ASURV stays unasked.
 3. The consumers rule: unchanged here. The censoring estimator is third in the release order and has passed since Part A.
+
+<!-- Listed in DOCUMENTS.md. -->
