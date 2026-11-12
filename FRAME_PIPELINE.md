@@ -219,3 +219,5 @@ answer is the pipeline's period for the panel's default seed in hours (row
 Kernel and lab: `CALIBRATION_LAB.md`; registration and sky coordinates
 `ASTROMETRY.md`; photometry `PHOTOMETRY.md`; detection `DETECTION.md`; the oracle's packages are cited in
 `oracle-provenance.json`.
+
+<!-- Listed in DOCUMENTS.md. -->
