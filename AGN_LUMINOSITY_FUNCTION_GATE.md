@@ -44,3 +44,5 @@ and G7 with any of G3 to G6 failing; **C** (a reading step) when G1 or G2 fails.
    terms read, and the conversion to the kernel's cosmology recorded.
 
 Nothing in this document is a published number: the catalogue's name above is from memory and unverified.
+
+<!-- Listed in DOCUMENTS.md. -->
