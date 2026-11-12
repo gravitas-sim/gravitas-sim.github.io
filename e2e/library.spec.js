@@ -66,7 +66,7 @@ test.describe('the default view', () => {
     ).toHaveCount(sequences.length);
     await expect(
       page.locator('#libStart .lib-pathways .lib-pathway-course')
-    ).toHaveCount(ofKind('course').length);
+    ).toHaveCount(ofKind('course').filter(e => e.format === 'course').length);
     const topics = page.locator('#libStart .lib-topics li');
     await expect(topics).toHaveCount(LIBRARY.subjects.length);
     const exo = LIBRARY.subjects.find(s => s.id === 'exoplanets');

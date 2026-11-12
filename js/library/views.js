@@ -53,6 +53,35 @@ export function rowHtml(entry, c) {
 const list = (rows, c, ordered = false) =>
   `<${ordered ? 'ol' : 'ul'} class="lib-rows">${rows.map(e => rowHtml(e, c)).join('')}</${ordered ? 'ol' : 'ul'}>`;
 
+/**
+ * The most rows one list of a topic page shows undivided (Prompt 287). A longer
+ * list of investigations is divided into sub-topics, one heading per sequence,
+ * in the sequences' own order, inside the same page: no page is added.
+ */
+export const MAX_TOPIC_ROWS = 30;
+
+/**
+ * Investigations grouped by the first sequence that holds each, in sequence
+ * order, when there are more than MAX_TOPIC_ROWS; otherwise one list.
+ */
+function divided(rows, c, sequences) {
+  if (rows.length <= MAX_TOPIC_ROWS) return list(rows, c);
+  const at = e => sequences.findIndex(q => q.entries.includes(e.id));
+  const place = e => sequences[at(e)]?.entries.indexOf(e.id) ?? 0;
+  const groups = new Map();
+  for (const e of [...rows].sort(
+    (a, b) =>
+      (at(a) < 0 ? 99 : at(a)) - (at(b) < 0 ? 99 : at(b)) || place(a) - place(b)
+  ))
+    groups.set(at(e), [...(groups.get(at(e)) ?? []), e]);
+  return [...groups]
+    .map(
+      ([i, g]) =>
+        `<h5>${escape(i < 0 ? c.t('lib.topic.other') : c.pick(sequences[i].title))} <span class="lib-row-meta">${g.length}</span></h5>${list(g, c)}`
+    )
+    .join('');
+}
+
 const section = (title, body) =>
   body
     ? `<section class="lib-group"><h3>${escape(title)}</h3>${body}</section>`
@@ -82,7 +111,7 @@ export function topicView(lib, id, c) {
       e => shown(e) === 'investigation' && e.level === level
     );
     return rows.length
-      ? `<h4>${escape(c.t(`lib.level.${level}`))}</h4>${list(rows, c)}`
+      ? `<h4>${escape(c.t(`lib.level.${level}`))}</h4>${divided(rows, c, lib.sequences)}`
       : '';
   }).join('');
   const of = kind =>

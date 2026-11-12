@@ -165,6 +165,8 @@ Lowering one is the work of the prompt that earns it; raising one needs a decisi
 | `library.filters` | 4 |
 | `library.moreFilters` | 7 |
 | `library.startCards` | 7 |
+| `library.pathwaySequences` | 9 |
+| `library.pathwayCourses` | 6 |
 | `reach.maxClicksFromHome` | 3 |
 | `reach.pagesWithoutALinkFromHome` | 1 |
 | `defaultView.home-first-visit.desktop` | 12 |
@@ -173,14 +175,20 @@ Lowering one is the work of the prompt that earns it; raising one needs a decisi
 | `defaultView.home-first-week.phone` | 19 |
 | `defaultView.home.desktop` | 14 |
 | `defaultView.home.phone` | 7 |
-| `defaultView.library.desktop` | 24 |
+| `defaultView.library.desktop` | 23 |
 | `defaultView.library.phone` | 11 |
 | `defaultView.my-work.desktop` | 9 |
 | `defaultView.my-work.phone` | 3 |
 | `defaultView.observatory.desktop` | 16 |
-| `defaultView.observatory.phone` | 9 |
-| `defaultView.teaching.desktop` | 21 |
+| `defaultView.observatory.phone` | 8 |
+| `defaultView.teaching.desktop` | 20 |
 | `defaultView.teaching.phone` | 3 |
+| `scale.topicRowsUndivided` | 30 |
+| `scale.subtopicRows` | 30 |
+| `scale.sequenceOverlapPercent` | 75 |
+| `scale.libraryJsonKb` | 410 |
+| `scale.searchIndexKb` | 121 |
+| `scale.startMinutes` | 50 |
 <!-- /navigation:ceilings -->
 
 ## What these checks do not prove
