@@ -193,3 +193,5 @@ a /1 record with an ensemble block is refused); `js/validation/harness.js` (`app
    wanted.
 4. The sweep scheduler's adoption of the pool (`WORKER_POOL.md`), which costs a request
    and first-visit bytes and is a data-budget decision.
+
+<!-- Listed in DOCUMENTS.md. -->
