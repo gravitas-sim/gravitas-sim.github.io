@@ -799,6 +799,25 @@ function renderEvidence() {
   }
 }
 
+/**
+ * The kernel map under "Where to check the physics": a table of every kernel,
+ * its model-page section, its validation table and its document, built from the
+ * lazy js/explain/where.js the first time the disclosure opens.
+ */
+function renderKernels() {
+  const box = $('teachKernels');
+  const host = $('teachKernelTable');
+  if (!box || !host) return;
+  clear(host);
+  const fill = async () => {
+    if (!box.open || host.firstChild) return;
+    const { kernelTable } = await import('./explain/where.js');
+    host.append(kernelTable(language() === 'es' ? 'es' : 'en'));
+  };
+  box.ontoggle = fill;
+  fill();
+}
+
 // --- The language switch ------------------------------------------------------
 
 // --- Assembly -----------------------------------------------------------------
@@ -1031,6 +1050,7 @@ function renderAll() {
   renderActivities();
   renderPatterns();
   renderEvidence();
+  renderKernels();
   renderEvaluation();
   renderFeedbackRoutes();
   renderFeedbackForm();

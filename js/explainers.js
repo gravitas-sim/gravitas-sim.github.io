@@ -35,9 +35,13 @@ const LABELS = {
 const TITLE = { en: 'What am I looking at?', es: '¿Qué estoy viendo?' };
 
 /**
- * The instruments each family owns, by the ids a step names (the registry's
- * LAZY_FAMILIES in js/widgets.js, which tests/explainers.test.js holds this to).
+ * The instruments each family owns, by the ids a step names. Written by
+ * tools/capability-registries.mjs from the families' own modules (the same
+ * source as LAZY_FAMILIES in js/widgets.js), so a family with no explainer
+ * cannot be added: `node tools/capability-registries.mjs --check` fails on it,
+ * and so does `node tools/generate.mjs --check --only registries`.
  */
+// <generated:explainer-families>
 export const FAMILY_IDS = Object.freeze({
   energy: ['launch', 'live-energy', 'escape-compare', 'shapes'],
   binary: ['binary', 'binary-compare', 'balance', 'visual-binary'],
@@ -108,45 +112,13 @@ export const FAMILY_IDS = Object.freeze({
   ],
   gw: ['gw-lab', 'gw-real'],
   light: ['blackbody', 'spectrum-viewer', 'kirchhoff'],
-  galactic: ['solar-motion', 'rotating-disk', 'cluster-members'],
-  gaia: ['gaia-distance', 'gaia-sample'],
   interiors: ['polytrope', 'wd-mass-radius', 'ms-scaling'],
   variables: ['variable-fold', 'leavitt-law', 'variable-class'],
   lensing: ['light-bending', 'lens-plane', 'lens-passing'],
+  galactic: ['solar-motion', 'rotating-disk', 'cluster-members'],
   survey: ['survey-counts', 'malmquist', 'completeness-lf'],
   cosmology: ['hubble-law', 'hubble-diagram', 'redshift-wedge'],
   detector: ['ccd-frames', 'ccd-snr', 'diff-photometry'],
-  exposure: ['exposure-planner'],
-  strategy: ['strategy-window', 'strategy-plan'],
-  eclipse: ['eclipse-curve', 'eclipse-fit'],
-  vetting: ['vetting-checklist'],
-  directImaging: ['imaging-contrast', 'imaging-architectures'],
-  joint: ['joint-fit', 'mass-radius'],
-  occurrence: ['occurrence-efficiency', 'occurrence-grid'],
-  clusterFit: ['cluster-fit'],
-  masses: ['masses-minimum', 'masses-solve', 'masses-diagram', 'masses-visual'],
-  activity: [
-    'activity-spots',
-    'activity-period',
-    'activity-flares',
-    'activity-ffd',
-  ],
-  remnants: ['remnant-cooling', 'remnant-outcome'],
-  variablesII: ['plz-metallicity', 'variable-features', 'variable-ambiguity'],
-  ttv: ['ttv-transit', 'ttv-timing'],
-  spectrograph: [
-    'spectrograph-lines',
-    'spectrograph-arc',
-    'spectrograph-trade',
-  ],
-  telescope: ['telescope'],
-  effects: ['detector-effects'],
-  photcal: ['photometric-calibration'],
-  surveyDesign: [
-    'survey-design-tradeoff',
-    'survey-design-plan',
-    'survey-design-compare',
-  ],
   sky: [
     'sky-turning',
     'sky-seasons',
@@ -177,8 +149,41 @@ export const FAMILY_IDS = Object.freeze({
   sun: ['sun-frames', 'sun-rotation', 'sun-power'],
   smallBodies: ['belt-gaps', 'spin-curve'],
   tides: ['tides-roche', 'tides-resonance', 'tides-moon', 'tides-heating'],
+  activity: [
+    'activity-spots',
+    'activity-period',
+    'activity-flares',
+    'activity-ffd',
+  ],
+  clusterFit: ['cluster-fit'],
+  directImaging: ['imaging-contrast', 'imaging-architectures'],
+  eclipse: ['eclipse-curve', 'eclipse-fit'],
+  effects: ['detector-effects'],
+  exposure: ['exposure-planner'],
+  gaia: ['gaia-distance', 'gaia-sample'],
   habitabilityLimits: ['hz-limits', 'hz-locking', 'hz-ages'],
+  joint: ['joint-fit', 'mass-radius'],
+  masses: ['masses-minimum', 'masses-solve', 'masses-diagram', 'masses-visual'],
+  occurrence: ['occurrence-efficiency', 'occurrence-grid'],
+  photcal: ['photometric-calibration'],
+  remnants: ['remnant-cooling', 'remnant-outcome'],
+  spectrograph: [
+    'spectrograph-lines',
+    'spectrograph-arc',
+    'spectrograph-trade',
+  ],
+  strategy: ['strategy-window', 'strategy-plan'],
+  surveyDesign: [
+    'survey-design-tradeoff',
+    'survey-design-plan',
+    'survey-design-compare',
+  ],
+  telescope: ['telescope'],
+  ttv: ['ttv-transit', 'ttv-timing'],
+  variablesII: ['plz-metallicity', 'variable-features', 'variable-ambiguity'],
+  vetting: ['vetting-checklist'],
 });
+// </generated:explainer-families>
 
 /**
  * The explainer an instrument id belongs to: its family's.
@@ -246,8 +251,69 @@ export async function toggleExplainer(button, key, host = button) {
     list.append(dt, dd);
   });
   region.append(list);
+  // A line of links that cannot be fetched (a network that failed, an install
+  // that predates it) leaves the four answers, which are what was asked for.
+  const where = await import('./explain/where.js').then(
+    m => m.whereChecked(key, lang),
+    () => null
+  );
+  if (where) region.append(where);
   host.after(region);
   button.setAttribute('aria-expanded', 'true');
   button.setAttribute('aria-controls', region.id);
+  if (words.some(w => w.includes('[[')))
+    await import('./glossaryTerms.js').then(
+      m => m.markTerms(region, lang),
+      () => 0
+    );
+  return true;
+}
+
+/** The buttons that open an explainer. */
+const BUTTONS =
+  '#investigationToolExplain, #investigationPlotExplain, #investigationEllipseExplain, .plot-help';
+
+/** The words said when no panel on screen has an explainer. */
+const NONE = {
+  en: 'There is nothing here to explain. Open an instrument or a plot first.',
+  es: 'No hay nada que explicar aquí. Abre primero un instrumento o una gráfica.',
+};
+
+/** Whether the reader can reach and see a button. */
+const shown = b => b.offsetParent !== null && !b.closest('[hidden], [inert]');
+
+/**
+ * The explain button of the panel focus is in: the first one under the nearest
+ * enclosing element that has one on screen, else the first on the page.
+ * @param {?Element} from - Where focus is
+ * @returns {?HTMLElement} The button, or null
+ */
+export function explainButtonFor(from) {
+  for (let node = from; node; node = node.parentElement) {
+    const found = [...node.querySelectorAll(BUTTONS)].find(shown);
+    if (found) return found;
+  }
+  return null;
+}
+
+/**
+ * H: press the explain button of the panel the reader is in and leave focus on
+ * it, so a second press closes the answer and the answer is read where it
+ * opens. With no such panel on screen, say so. The application's shortcut list
+ * (js/controls.js) calls this; on the pages that have no list, the first plot
+ * with a button arms a listener that does (js/plot/plot.js).
+ *
+ * @returns {Promise<boolean>} Whether a button was pressed
+ */
+export async function pressHere() {
+  const button = explainButtonFor(document.activeElement);
+  if (!button) {
+    (await import('./notify.js')).announce(
+      NONE[document.documentElement.lang === 'es' ? 'es' : 'en']
+    );
+    return false;
+  }
+  button.focus();
+  button.click();
   return true;
 }

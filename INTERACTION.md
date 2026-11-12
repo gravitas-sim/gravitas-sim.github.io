@@ -33,6 +33,7 @@ needs and no others, and names a conflict for any it uses differently.
 | zoom | + or =, - | Where a surface has a camera |
 | open the table | the surface's Table control | No bare key: T is the theme everywhere |
 | open the disclosure | Enter or Space on its summary | The browser provides it |
+| explain the panel | H | Presses the "What am I looking at?" button of the panel focus is in and leaves focus on it, so a second press closes it (Prompt 286: `pressHere` in `js/explainers.js`; the sandbox lists it in the `?` sheet, a page without the sheet gets it from its first plot, `js/plot/plot.js`). Ignored in a text field, with a modifier or inside a modal |
 
 Existing bindings stay wherever they are consistent. The help overlay is built
 from the registry in `js/shortcuts.js`, so a global key shown there and the
@@ -231,3 +232,54 @@ English when Spanish is the stored choice. The first five carry Spanish text
 and a language switch that stores the choice; their pages do not read it when
 they open. That is recorded, not repaired, here: it is Prompt 282's
 (Localization II).
+
+## 6. Help II: help where the question is (Prompt 286)
+
+One key and one button open the explainer of the panel the reader is in: H (the
+table in section 1) or the panel's own "What am I looking at?" button. An
+explainer ends with where its physics is checked (the model page, the
+validation table, the kernel document) and may carry glossary terms.
+
+**Terms.** A term is defined once, in `tools/glossary-science.mjs` (the meaning
+and the topic) beside its name in `LABELS` (`tools/glossary.mjs`, the table the
+label check holds the catalogs to). `node tools/glossary.mjs --write` writes the
+glossary page, grouped by topic, and the two lazy modules
+`js/explain/terms.en.js` and `terms.es.js`; the generate graph has the node
+`glossary`. Prose marks a term `[[roche-limit]]` or `[[roche-limit|the Roche
+limit]]`: `js/glossaryTerms.js` turns the mark into a button that opens the
+definition in place (Enter or Space, closed by a second press), `setProse` in
+`js/lessonMarkup.js` does it for a lesson step, `toggleExplainer` for an
+explainer, and `unmark` gives paper and PDFs the words. Inside a control, or
+with the definitions not fetched, a mark stays its words. The model page links
+the first use of a term to its glossary entry (a plain link: the page runs no
+script of its own). Lesson prose carries no mark yet.
+
+**Registry.** `FAMILY_IDS` in `js/explainers.js` is written by
+`tools/capability-registries.mjs` from the instrument families themselves, and
+`node tools/generate.mjs --check --only registries` fails on a family without a
+four-answer explainer in both languages. `js/explain/where.js` holds the areas:
+each directory of `js/kernels` and the other models, with the kernel document,
+the model-page section where one exists and the validation groups;
+`tests/where.test.js` holds it to the repository. The Teach page's "Where to
+check the physics" opens that table.
+
+### Coverage
+
+| What | Covered |
+| --- | --- |
+| Instrument ids with an explainer | 170 of 170, in 55 families (72 explainers with the plots and the Observatory instruments) |
+| Families that lead to a place their physics is checked | 53 of 55 (`claim` and `jovian` are not a model of physics) |
+| Kernels (`js/kernels`) in the Teach table | 35 of 35, each with its document |
+| Kernels with a model-page section | 20 of 35 |
+| Kernels with a validation group on the validation page | 21 of 35 (9 have both) |
+| Kernels with neither | `imaging`, `statistics`, `sun`: their documents hold the validation table |
+| Glossary terms defined, in both languages | 81 in seven topics, 20 pointing to a model-page section |
+| Terms marked in the explainers | 55 marks, 33 distinct terms |
+| Links from the model page to the glossary | 22, in the English and the Spanish text |
+
+Owed, as sections of the model page: 15 kernels have a kernel document and no
+section (`agn`, `atmospheres`, `cosmology`, `galactic`, `galaxy`,
+`habitablezone`, `ism`, `multimessenger`, `radio`, `sed`, `sky`, `statistics`,
+`sun`, `xray`, `imaging`); the Teach table says "No section yet" for each.
+Terms in the lessons' own prose, and in the instructor notes, wait for a pass
+that edits the lessons (closure files and the Spanish ledger).

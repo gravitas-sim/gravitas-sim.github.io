@@ -1149,6 +1149,7 @@ export const ES = {
   'shortcut.lecture': 'Modo presentación (proyección)',
   'shortcut.pauseAtEvent': 'Pausar en un evento',
   'shortcut.showList': 'Mostrar esta lista',
+  'shortcut.explainHere': 'Explicar el panel donde estás',
   'shortcut.closePanel': 'Cerrar el panel abierto',
   'chart.autoRefresh':
     'Actualización automática activa: pulsa para actualizar ahora',

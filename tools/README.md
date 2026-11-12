@@ -121,6 +121,7 @@ current, and the orchestrator checks it.
 | `generated-blocks.mjs` | Generated files and generated regions |  |
 | `generated-tripwire.mjs` | A merge must not drop what one side wrote into a file with generated regions |  |
 | `geometry-fuzz.mjs` | Base-versus-head fuzz of every scenario's world (Roadmap II Prompt 108) |  |
+| `glossary-science.mjs` | The glossary's definitions, by topic (Roadmap III, Prompt 286) |  |
 | `glossary.mjs` | The glossary, and the words it retires |  |
 | `gw-shots.mjs` | Captures of the gravitational-wave lab |  |
 | `habitable-zone-validate.mjs` | The habitable-zone kernel against its committed thresholds (Prompt 205) | `npm run habitablezone:validate` |

@@ -21,6 +21,10 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { EN_DEFERRED } from '../js/i18n/en.deferred.js';
 import { ES_DEFERRED } from '../js/i18n/es.deferred.js';
+import { DEFINITIONS, EXTRA, TOPICS } from './glossary-science.mjs';
+// Namespace import: the package's API is named exports, and the default
+// binding is absent under the test runner's ESM interop.
+import * as prettier from 'prettier';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 export const PAGE = 'glossary/index.html';
@@ -841,6 +845,8 @@ export const LABELS = [
     es: 'Parámetro',
     ids: ['sweep.parameter', 'obs.fit.col.parameter'],
   },
+  // --- the terms Prompt 286 added, named in glossary-science.mjs
+  ...EXTRA,
 ];
 
 /**
@@ -912,6 +918,73 @@ const esc = s =>
 const both = (en, es, tag = 'span') =>
   `<${tag} class="gs-en">${esc(en)}</${tag}><${tag} class="gs-es" lang="es">${esc(es)}</${tag}>`;
 
+/**
+ * The terms that have a definition, by topic, each topic's terms in the order
+ * of their English names. The names are LABELS', so a word the label check
+ * holds the catalogs to is the word the definition appears under.
+ */
+export function termsByTopic() {
+  const byId = new Map(LABELS.map(l => [l.id, l]));
+  return TOPICS.map(topic => ({
+    ...topic,
+    terms: Object.entries(DEFINITIONS)
+      .filter(([, def]) => def.topic === topic.id)
+      .map(([id, def]) => ({ id, label: byId.get(id), ...def }))
+      .sort((a, b) =>
+        (a.label?.en ?? a.id).localeCompare(b.label?.en ?? b.id, 'en')
+      ),
+  }));
+}
+
+/** The anchor of a term on the glossary page. */
+export const termAnchor = id => `t-${id}`;
+
+/**
+ * The two lazy modules of definitions, as source (js/explain/terms.en.js and
+ * terms.es.js): id -> [name, definition, model section or '']. They are what
+ * the `[[term]]` markup (js/glossaryTerms.js) shows, so the page and the
+ * disclosures say the same words.
+ *
+ * @param {'en'|'es'} lang - The language
+ * @returns {string} Source text, before Prettier
+ */
+export function termsSource(lang) {
+  const key = k => (/^[A-Za-z_$][\w$]*$/.test(k) ? k : `'${k}'`);
+  const q = s => `'${s.replace(/\\/g, '\\\\').replace(/'/g, "\\'")}'`;
+  const rows = [];
+  for (const t of termsByTopic().flatMap(x => x.terms))
+    rows.push(
+      `${key(t.id)}: [${q(t.label[lang])}, ${q(t[lang])}, ${q(t.model ?? '')}],`
+    );
+  rows.sort();
+  return [
+    '// =============================================================================',
+    `// GENERATED FILE. Do not edit. The glossary's definitions in ${lang === 'es' ? 'Spanish' : 'English'}, written by`,
+    '// tools/glossary.mjs (node tools/glossary.mjs --write) from tools/glossary-science.mjs',
+    '// and the names in its LABELS table. Fetched the first time a reader opens a term',
+    '// (js/glossaryTerms.js).',
+    '// =============================================================================',
+    '',
+    `export default {`,
+    ...rows,
+    '};',
+    '',
+  ].join('\n');
+}
+
+/** The runtime modules, by path. */
+export const TERM_FILES = {
+  en: 'js/explain/terms.en.js',
+  es: 'js/explain/terms.es.js',
+};
+
+/** @returns {Promise<string>} The module's text as Prettier writes it */
+export async function termsModule(lang) {
+  const file = path.join(ROOT, TERM_FILES[lang]);
+  const options = (await prettier.resolveConfig(file)) || {};
+  return prettier.format(termsSource(lang), { ...options, filepath: file });
+}
+
 /** The page body between the markers. */
 export function render() {
   const out = [];
@@ -949,6 +1022,35 @@ export function render() {
     out.push('</div>');
   }
   out.push('</dl>');
+  out.push('</section>');
+  out.push(`<section id="terms" aria-labelledby="terms-h">`);
+  out.push(
+    `<h2 id="terms-h">${both('Terms of the science, by topic', 'Términos de la ciencia, por tema')}</h2>`
+  );
+  out.push(
+    `<p>${both(
+      'Each term below is defined once, here. Wherever a page, an explainer or a note uses one, it opens this same definition.',
+      'Cada término de abajo se define una sola vez, aquí. Dondequiera que una página, una explicación o una nota use uno, se abre esta misma definición.'
+    )}</p>`
+  );
+  const topics = termsByTopic();
+  out.push('<ul class="gl-topics">');
+  for (const t of topics)
+    out.push(`<li><a href="#terms-${t.id}">${both(t.en, t.es)}</a></li>`);
+  out.push('</ul>');
+  for (const t of topics) {
+    out.push(`<h3 id="terms-${t.id}">${both(t.en, t.es)}</h3>`);
+    out.push('<dl class="gl-terms">');
+    for (const term of t.terms) {
+      const more = term.model
+        ? ` <a class="gl-model" href="/model/#${term.model}">${both('Assumptions on the model page', 'Supuestos en la página del modelo')}</a>`
+        : '';
+      out.push(
+        `<div id="${termAnchor(term.id)}"><dt>${both(term.label.en, term.label.es)}</dt><dd>${both(term.en, term.es)}${more}</dd></div>`
+      );
+    }
+    out.push('</dl>');
+  }
   out.push('</section>');
   out.push(`<section id="uncertainty" aria-labelledby="uncertainty-h">`);
   out.push(
@@ -1026,13 +1128,36 @@ if (
     console.error(`${PAGE} has no ${START} ... ${END} markers`);
     process.exit(1);
   }
-  if (process.argv.includes('--write')) {
-    if (next !== html) writeFileSync(file, next);
-    console.log(next === html ? `${PAGE} is current` : `wrote ${PAGE}`);
-  } else if (next !== html) {
-    console.error(`${PAGE} is stale. Run node tools/glossary.mjs --write`);
+  const write = process.argv.includes('--write');
+  const stale = [];
+  if (next !== html) {
+    if (write) writeFileSync(file, next);
+    stale.push(PAGE);
+  }
+  for (const lang of ['en', 'es']) {
+    const target = path.join(ROOT, TERM_FILES[lang]);
+    const want = await termsModule(lang);
+    let have = null;
+    try {
+      have = readFileSync(target, 'utf8');
+    } catch {
+      /* not written yet */
+    }
+    if (have !== want) {
+      if (write) writeFileSync(target, want);
+      stale.push(TERM_FILES[lang]);
+    }
+  }
+  if (write) {
+    console.log(
+      stale.length ? `wrote ${stale.join(', ')}` : 'glossary is current'
+    );
+  } else if (stale.length) {
+    console.error(
+      `${stale.join(', ')} stale. Run node tools/glossary.mjs --write`
+    );
     process.exit(1);
   } else {
-    console.log(`${PAGE} is current`);
+    console.log('glossary is current');
   }
 }
