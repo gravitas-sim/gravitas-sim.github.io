@@ -23,44 +23,59 @@ import Sequencer from '@jest/test-sequencer';
 import path from 'node:path';
 
 /**
- * Longest first, from the CI run of 2026-10-24 (b4656619, per-suite seconds in
- * brackets, three workers). detection.test.js was missing from this list and
- * started at about 270 s of a 650 s run, so the longest suite of all finished
- * last; it is first now.
+ * Longest first, from a full local run on Node 22 at 614 suites (Prompt 292,
+ * per-suite seconds in brackets). The list is a measurement, and it had gone
+ * stale: tidesScenarios.test.js (124 s) was not on it and started wherever Jest
+ * put it, and the label-golden parts had grown from about 45 s to about 100-160 s.
+ * Order only; with four workers the makespan of this order is the work divided
+ * by the workers (785 s of 3,139 s), so no suite needs splitting.
  */
 export const SLOWEST_FIRST = [
-  'detection.test.js', // 383
-  // Four child processes of about 130 s each locally (tools/frame-pipeline-validate.mjs).
-  'framePipeline.test.js', // 355
-  'physicsValidation.test.js', // 155
-  // The instrument-widget label golden, in parts of about 30 s each locally.
-  'labelGoldenWidgetsPowerLaw.test.js', // 70
-  'labelGoldenWidgetsEngineMath.test.js', // 66
-  'labelGoldenWidgetsStellar.test.js', // 56
-  'injection.test.js', // 52
-  // One child process of about 55 s locally (tools/orbit-fit-validate.mjs).
-  'orbitFit.test.js', // 55
-  'statisticsKernel.test.js', // 50
-  'labelGoldenWidgetsGw.test.js', // 47
-  'labelGoldenWidgetsSurvey.test.js', // 45
-  'labelGoldenWidgetsDetector.test.js', // 44
-  'shardInventory.test.js', // 43
-  'calibrationKernel.test.js', // 38
-  'labelGoldenWidgetsRest.test.js', // 33
-  'imageMeasure.test.js', // 31
-  'i18nFreshness.test.js', // 30
-  'docsFactsScope.test.js', // 30
-  'lab3dGuides.test.js', // 26
-  'effectsRealm.test.js', // 26
-  'powerLawGravity.test.js', // 23
+  'detection.test.js', // 332
+  'framePipeline.test.js', // 168
+  'labelGoldenWidgetsDetector.test.js', // 158
+  'physicsValidation.test.js', // 142
+  'tidesScenarios.test.js', // 124
+  'labelGoldenWidgetsSurvey.test.js', // 114
+  'labelGoldenWidgetsRest.test.js', // 102
+  'lab3dGuides.test.js', // 85
+  'labelGoldenWidgetsEngineMath.test.js', // 61
+  'labelGoldenWidgetsPowerLaw.test.js', // 58
+  'orbitFit.test.js', // 56
+  'deployRehearsal.test.js', // 53
+  'labelGoldenWidgetsStellar.test.js', // 51
+  'shardInventory.test.js', // 41
+  'injection.test.js', // 41
+  'labelGoldenWidgetsGw.test.js', // 40
+  'statisticsKernel.test.js', // 38
+  'xrayResults.test.js', // 37
+  'instructorFixture.test.js', // 37
+  'i18nFreshness.test.js', // 36
+  'calibrationKernel.test.js', // 31
+  'docsFactsScope.test.js', // 28
+  'matrix.test.js', // 28
+  'clustersFollowup.test.js', // 28
+  'clustersResults.test.js', // 25
+  'imageMeasure.test.js', // 24
+  'smallBodies.test.js', // 23
+  'effectsRealm.test.js', // 20
   'irreversibility.test.js', // 20
-  'matrix.test.js', // 19
-  'imageMeasureGate.test.js', // 19
-  'missionEvidence.test.js', // 19
-  'gwAudio.test.js', // 19
-  'instructorFixture.test.js', // 18
-  'deployRehearsal.test.js',
-  'rvMonteCarlo.test.js',
+  'spectrograph.test.js', // 19
+  'labelGoldenInvestigations.test.js', // 18
+  'lab3dCurriculumII.test.js', // 18
+  'sedFollowupResults.test.js', // 18
+  'instructorMaterials.test.js', // 18
+  'pulsarResults.test.js', // 17
+  'transitDelta.test.js', // 17
+  'rvMonteCarlo.test.js', // 17
+  'powerLawGravity.test.js', // 16
+  'gwAudio.test.js', // 16
+  'galileanMoons.test.js', // 15
+  'imageMeasureGate.test.js', // 14
+  'sedKernel.test.js', // 14
+  'exoplanetGuides.test.js', // 14
+  'inference.test.js', // 13
+  'seedingEquivalence.test.js', // 13
 ];
 
 export default class SlowestFirstSequencer extends Sequencer {

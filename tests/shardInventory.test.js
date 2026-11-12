@@ -164,6 +164,26 @@ describe('the planned shards cover the suite exactly once', () => {
     expect(Math.max(...spans)).toBeLessThanOrEqual(mean * 1.15);
   });
 
+  test("a predicted shard leaves its step's limit four minutes of margin (Prompt 292)", () => {
+    // Fewer, longer shards queue less on a pool that runs twenty jobs at once
+    // (D-R10-292-04), and the step's stop is a hang guard, not a budget: a
+    // shard predicted past limit - 4 is one slow runner from a false failure,
+    // which is why the count had gone up twice before. Add a shard, or take
+    // tests out, when this fails; never raise the limit to make it pass.
+    const workflow = yaml.load(
+      readFileSync('.github/workflows/ci.yml', 'utf8')
+    );
+    const step = workflow.jobs.e2e.steps.find(st =>
+      (st.run || '').includes('--test-list')
+    );
+    const spans = plan.shards.map(shard =>
+      shardSpan(withDurations(shard, timings), serial)
+    );
+    expect(Math.max(...spans) / 60).toBeLessThanOrEqual(
+      step['timeout-minutes'] - 4
+    );
+  });
+
   test('the timings still describe most of the suite', () => {
     // Not a correctness condition - an unknown test is planned at its file's
     // median - but a plan built mostly on guesses is not balanced any more,

@@ -1,6 +1,8 @@
 # Duplicate-coverage inventory (Prompt 145)
 
-Nothing is deleted here. Prompt 292 acts on it.
+Nothing was deleted by Prompt 145, which wrote this. Prompt 292 acted on it: the
+decisions are in the last section. No test is the only test of its fact after
+them (each dropped dist copy has its sources twin, which still runs).
 
 The browser suite runs 29 spec files against both the sources and `dist/`
 (`BOTH_TARGETS` in `playwright.config.js`), plus `production.spec.js` against
@@ -65,3 +67,44 @@ On run 39055774449 (the `v3` push for #344) the dist job is one of 21 jobs
 and does not set the wall time: the sources shards do (see
 `tools/e2e-timings.json`). Removing dist duplicates therefore saves
 runner-minutes, not wall minutes. `tools/ci-cost.mjs` records both.
+
+## Decisions (Prompt 292, D-R10-292-02)
+
+One row per spec of the table above. A dropped dist copy is a `test.skip(DIST, ...)` of the build-target category that `npm run test:policy` allows; the sources run still executes the test, so the fact keeps one test. 15 tests are dropped in dist (about 160 s of sources time; measured in dist, the four specs run in 68 s at two workers with 18 skipped, 28 passed).
+
+| Spec | Decision | Which tests, and why |
+| --- | --- | --- |
+| selfContained | KEPT BOTH | Each target resolves assets by its own paths. |
+| accessibilityParity | KEPT BOTH | The claims in ACCESSIBILITY.md are made of the published build. |
+| sonifyTextEquivalent | KEPT BOTH |  |
+| lazyInstruments | KEPT BOTH | It asserts the difference between the builds itself. |
+| capabilityPackages | KEPT BOTH | Revisit once the sources run adds no signal. |
+| embedContract | KEPT BOTH |  |
+| figureBuilder | KEPT BOTH |  |
+| experimentRunner | KEPT BOTH | Starting the Worker bundle is the assertion; it also stands behind the analysis lab walks dropped in dist. |
+| observatory | KEPT BOTH | Opening every chunk is the assertion. |
+| inference | KEPT BOTH |  |
+| catalog | KEPT BOTH |  |
+| catalogGovernance | KEPT BOTH | Read: 4 tests, 11 s, the install runs through the lazy chunk in both; no saving worth a skip. |
+| archive | KEPT BOTH | The CSP must hold in the page that is served. |
+| measure | DIST COPY DROPPED, 2 tests | An undo behind a result makes it stale; the measurements have their own undo and redo. History logic, not a chunk; the sources twins assert both. The load, transit search, notebook, save and axe tests stay in dist. |
+| historyOriginal | KEPT BOTH | It asserts the build path. |
+| analysisLab | DIST COPY DROPPED, 6 tests | Seeds change nothing; plot and table are one selection; a second run is the numerical uncertainty; a grid; a random sample; a cancel. Analysis logic over the runner, whose Worker bundle experimentRunner starts in dist. The load test, the save and read-back round trip and axe stay in dist. |
+| modelCompare | KEPT BOTH |  |
+| exoplanetGuides | KEPT BOTH | Read: 5 tests, 12 s, each opens a chunk in the page; no saving worth a skip. |
+| populationsGuides | KEPT BOTH | Read: 4 tests, 17 s; same. |
+| systemBuilder | DIST COPY DROPPED, 4 tests | A bad value is explained; a black hole among stars is refused; a newer version is refused; in Spanish. Validation and text. The open and build, the file round trip, the share link, axe and the phone tests stay in dist. |
+| studio | KEPT BOTH | Read: 19 tests, 57 s, most 1 to 3 s; the link round trips are the build difference and the rest costs too little to be worth a skip. |
+| composer | KEPT BOTH | Same reading as studio (16 tests, 39 s). |
+| course | KEPT BOTH | Same reading (19 tests, 48 s, 21 s of it the offline walk that already skips in dist). |
+| lab3d | KEPT BOTH | The Worker is a bundle of its own. |
+| lab3dView | KEPT BOTH |  |
+| lab3dGuides | DIST COPY DROPPED, 3 tests | An eclipse lost to half a degree; equal inclinations that are not one plane; a Kozai-Lidov peak kept by the reader. Guide logic read in the page, about 83 s of the file's 120 s. The chooser, the orbit plane walk, the Kepler-only refusal and the N-body libration (the Worker run), the report, no-WebGL, Spanish and axe stay in dist. |
+| mission | KEPT BOTH | The Worker is a bundle. |
+| missionLab | KEPT BOTH | The Worker carries the ephemeris pack. |
+| shell | KEPT BOTH | Read: the viewport tests ("nothing the application draws starts under the bar") look at CSS the bundle may order differently; no skip taken. |
+| production (dist only) | NOT A DUPLICATE |  |
+
+## Moved to Jest (Prompt 292, D-R10-292-03)
+
+A browser test moves when the fact is not about a browser: it reads what `initialize_simulation` leaves in `js/physics.js` for a fixed seed, which is the same function in Node. Two tests of `e2e/robustness.spec.js` moved to `tests/scenarioWorldFacts.test.js` (the same sweep over every scenario in the catalog and the same predicates, plus a test of the predicate itself): no scenario places two bodies at exactly the same point (22.8 s of a shard), and a scenario that promises a population builds one (4.9 s). In Jest the sweep takes 1.5 s. The scan that looked for more (tests with an `import('/js/...')` evaluate and no interaction with the page, 199 of them) found the rest to be driven walks (`centralExperiments`, `lessonPairs`, `stellarSharedSelection`, `gwLesson`, `sweep`, `reliability`), whose steps read the running page; they stay, and the next candidate to read is `rvSchedule.spec.js`'s "what it could not read is reported", whose parse half `tests/rvSchedule.test.js` may already hold.
