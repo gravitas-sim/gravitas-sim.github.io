@@ -93,3 +93,5 @@ are unchanged. No new survey data ships with Part A.
 Not built here. Its own gate (`docs/variable-classifier-gate`) commits its thresholds
 on an independently labelled example set before any classifier is measured; see
 `DECISION_REGISTER.md` (D-R10-223-*) for where it stands.
+
+<!-- Listed in DOCUMENTS.md. -->
