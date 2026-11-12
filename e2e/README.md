@@ -638,3 +638,5 @@ close button on an emulated phone did not close it - marked `test.fail()` so
 that a fix would turn the run red rather than go unnoticed. That is exactly how
 it ended: the run went red with "Expected to fail, but passed", and the marker
 came off. The comment on that test records both causes.
+
+<!-- End of this guide. -->
