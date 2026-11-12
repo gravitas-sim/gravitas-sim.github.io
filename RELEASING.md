@@ -300,27 +300,64 @@ DOIs section for the reason and for the form of the citation.
   manifest stale.
 - **The instructor ciphertext conflicts on every merge, by design.** A fresh salt
   and IV each build; take either side and have the passphrase holder rebuild.
+
 ## Rehearsing recovery from an archive
 
 To prove a release can be rebuilt without the repository: read the file's size and
 md5 from the Zenodo API for the version's record, download it, check the md5,
 unpack it, serve it, walk the smoke list above, then `npm ci`, `node build.js`,
 `npm run budget:check`, `npm run budget:routes` and `npm run release:check -- --fast`.
+A tag that has no Zenodo record is taken as in "Recovering from `v3.0`" below.
 Three things differ from a checkout, and none is a defect in the archive:
 
-- An archive is not a git repository. The merge tripwire cannot run `git` and
-  fails; `git init`, `git add -A` and one commit make it say there is no merge to
-  check.
-- Only CI's Node version (22) is authoritative for the gzip budgets. On a later
-  Node the deferred-JavaScript check can report an overrun of a kilobyte or two
-  that is the gzip difference alone.
+- An archive is not a git repository. On the `v3.0` tree the merge tripwire says
+  "Not a git checkout; there is no merge to check." and passes, so nothing needs
+  `git init` (rehearsed 2026-11-12: 41 passed, 0 failed, 23 skipped, with and
+  without git). The 2.0.0 archive's own tool throws there; that archive also
+  fails the dependency audit today, because two advisories were published
+  after it was cut.
+- Only CI's Node version (22) is authoritative for the gzip budgets. On Node 24.4
+  the `v3.0` deferred figure was 3124.5 KB against 3124.6 on Node 22 and a
+  ceiling of 3125.5, so it passed; with under a kilobyte of headroom, a later
+  Node can still report an overrun that is the gzip difference alone.
 - `npm run build:instructors` needs a passphrase; for a rehearsal, set
   `GRAVITAS_INSTRUCTOR_PASSWORD` to a throwaway one for that command only. Never
-  use the real one.
+  use the real one. `node tools/build-instructor-materials.js --rehearse` takes a
+  second and is enough to prove the portal opens under a passphrase of your own.
 
-The first rehearsal (2026-10-17, the original agent alone, on one machine) is
-recorded outside the repository; it is not evidence that someone else could do
-this unaided.
+Also met on a fresh machine: `release:check --fast` includes a check that needs a
+Playwright browser and reports "unable to launch" until `npx playwright install
+chromium` has run (11 seconds, 600 MB); and `npm run build` leaves the tracked
+`social-card.png` and the two instructor files modified, which is expected and is
+not committed.
+
+The two rehearsals (2026-10-17 and 2026-11-12, both the original agent alone, on
+one machine) are recorded outside the repository; they are not evidence that
+someone else could do this unaided. The second is Prompt 291's.
+
+## Recovering from `v3.0`
+
+`v3.0` is an annotated tag (object `af32ab21bc89738e5b34eef08418c583b8dea8a8`) on
+commit `f9277ff8ed92efe1bc41d3d6c2fcf224f6989a70` of `main`, tagged by the owner
+on 2026-11-12. As of that date it has no GitHub release, no Zenodo record and no
+DOI, so the newest Zenodo archive (2.0.0) is not this tree. To recover it:
+
+1. Take GitHub's zipball of the tag,
+   `https://github.com/gravitas-sim/gravitas-sim.github.io/archive/refs/tags/v3.0.zip`
+   (about 49 MB; the folder inside is `gravitas-sim.github.io-3.0`), or clone and
+   `git archive v3.0`. No checksum is recorded for the zipball, because GitHub
+   does not promise its bytes are stable; the check is that the tree equals
+   `git archive v3.0` from a clone (`diff -r` finds nothing: true on 2026-11-12).
+2. Then follow the section above, and CONTINUITY.md for hosting and for a
+   department's own instructor bundle.
+
+The tree declares itself as version 2.1.0, not 3.0.0: `package.json`,
+`CITATION.cff` (released 2026-10-24), `.zenodo.json` and `RELEASE` in
+`tools/project-metadata.mjs` were not changed for the tag, and `CHANGELOG.md`
+still has its `[Unreleased]` section. If a GitHub release is made from the tag,
+Zenodo reads `.zenodo.json` from the archive and would record 2.1.0 and that
+date; the record's metadata would then need correcting by hand. Setting `RELEASE`
+is the owner's release edit (above) and is not done by this document.
 
 ## What 2.0.0 produced
 

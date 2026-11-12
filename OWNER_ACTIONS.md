@@ -208,7 +208,11 @@ exists, not when it is planned.
 - [ ] **Zenodo.** The account that holds the integration and the record's
       ownership, and a second person added as an owner of the record if
       Zenodo's settings allow. Without it nobody else can publish a version to
-      the concept DOI.
+      the concept DOI. State on 2026-11-12 (Prompt 291, read from the public
+      API): the 2.0.0 record lists one owner by numeric user id and nothing
+      else; which login that is, and whether anyone else can administer the
+      record, is **UNKNOWN** until you confirm it. `v3.0` has no GitHub release
+      and no record.
 - [ ] **ORCID and the citation identity.** The ORCID in `CITATION.cff` and
       `.zenodo.json` is yours; note who could correct a record if it needed
       correcting.
