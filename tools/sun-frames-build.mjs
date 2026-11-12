@@ -479,7 +479,7 @@ export function build(src, { copy }) {
     title:
       'The Sun, 4 to 17 May 2024: HMI continuum pictures, the geometry of each and a daily irradiance series',
     displayOnly:
-      'Each picture is an SDO HMI continuum BROWSE picture, a 1,024 pixel display picture; its source says browse products are not intended for science analysis. Heliographic positions read from it are an instructional measurement, labeled not astrometry (delegated ruling D-R10-92): they carry the placement uncertainty and the foreshortening and say nothing about the picture’s photometry or its own world coordinates, which it does not have.',
+      'Each picture is an SDO HMI continuum BROWSE picture, a 1,024 pixel display picture; its source says browse products are not intended for science analysis. Heliographic positions read from it are an instructional measurement, labeled not astrometry (ruling D-R10-92): they carry the placement uncertainty and the foreshortening and say nothing about the picture’s photometry or its own world coordinates, which it does not have.',
     northUp:
       'The pictures have solar north up and east left: pImageDeg is 0 for the pixel to heliographic conversion. pSkyDeg is Horizons’ NP.ang (the pole against celestial north) and is not used for it.',
     sources: {

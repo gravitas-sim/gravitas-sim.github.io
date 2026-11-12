@@ -488,7 +488,7 @@ const bandsPack = {
         statement:
           'Response functions are measured, tabulated instrument properties published by their teams or archives (BM12 Table 1; the SDSS, TESS and 2MASS archives), shipped here resampled to a uniform grid with the AB - Vega offsets computed from the public-domain CALSPEC Vega spectrum. The TESS and 2MASS archives and the SDSS publish them for use with acknowledgement; no licence text accompanies the BM12 table or the SVO copy of the 2MASS curves.',
         basis:
-          "A numerical table of measured response functions (about 700 values, none of them prose), cited to its paper or archive band by band, with the offsets computed here. If Carl prefers no reproduction of the BM12 table, the UBVRI bands can be rebuilt from SVO's Bessell 1990 curves (record in RADIATION.md).",
+          "A numerical table of measured response functions (about 700 values, none of them prose), cited to its paper or archive band by band, with the offsets computed here. If no reproduction of the BM12 table is wanted, the UBVRI bands can be rebuilt from SVO's Bessell 1990 curves (record in RADIATION.md).",
       },
       retrieved: '2026-10-09',
       columns: [
@@ -788,7 +788,7 @@ const linesPack = {
         record: {},
       },
       assumptions: [
-        'The selection of lines is editorial: the lines Prompt 82 names. The wavelengths are not. TiO band heads are not here: no retrievable, citable table was found (RADIATION.md).',
+        'The selection of lines is editorial. The wavelengths are not. TiO band heads are not here: no retrievable, citable table was found (RADIATION.md).',
         'The air wavelength is "standard air" as NIST defines it for wavelengths between 200 nm and 2000 nm.',
         'A line is a laboratory (rest) wavelength: it is the centroid of the multiplet components NIST lists at that wavelength, not a stellar line profile.',
       ],
@@ -1435,7 +1435,7 @@ const gaiaPack = {
         status: 'cc-by-nc-3.0-igo',
         statement: `ESA's Gaia data licence page (${GAIA_LICENCE_URL}, read 2026-10-09) says: "Gaia data are distributed under the CC BY-NC 3.0 IGO license." and refers to ESA's Terms and Conditions for the use of data in the ESA space science archives for commercial use. ESA's page for these passbands (${GAIA_PAGE_URL}, read 2026-10-09) credits the table to "ESA/Gaia/DPAC" and states no terms of its own; the CDS record J/A+A/649/A3 (read 2026-10-09) carries no licence text. This pack and its derived file are therefore offered under CC BY-NC 3.0 IGO: attribute ESA/Gaia/DPAC, do not use commercially, and say that the data were rescaled (each curve is normalised to a peak of 1 and rounded to 1/100000 of it).`,
         basis:
-          'CC BY-NC 3.0 IGO permits copying, redistribution and adaptation with attribution for non-commercial purposes, and Gravitas is a free educational tool, so shipping the table with its licence and credit is permitted. It is the one pack under non-commercial terms, shipped by the project owner\'s explicit instruction ("ship the gaia passbands but note their license"; "add the NC license to the data pack schema", 2026-10-09; DECISION_REGISTER.md). The terms are those ESA states for "Gaia data"; reading them as covering this DPAC table is the project\'s inference, since neither ESA\'s passband page nor the CDS record repeats them. The pack is separate so that no other band is covered by the NC licence, and it must not be bundled into a commercial redistribution of Gravitas (DATA_PACKS.md).',
+          'CC BY-NC 3.0 IGO permits copying, redistribution and adaptation with attribution for non-commercial purposes, and Gravitas is a free educational tool, so shipping the table with its licence and credit is permitted. It is the one pack under non-commercial terms, shipped by explicit decision of the project maintainer (2026-10-09; DECISION_REGISTER.md). The terms are those ESA states for "Gaia data"; reading them as covering this DPAC table is the project\'s inference, since neither ESA\'s passband page nor the CDS record repeats them. The pack is separate so that no other band is covered by the NC licence, and it must not be bundled into a commercial redistribution of Gravitas (DATA_PACKS.md).',
         nonCommercial: true,
       },
       retrieved: '2026-10-09',

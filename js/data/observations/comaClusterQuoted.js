@@ -69,7 +69,7 @@ export const PACK = {
   masks: [],
   reductions: [
     'One row, four values, exactly as js/darkMatterWidgets.js quotes them (tests/cosmologyData.test.js holds the two to each other).',
-    'The dispersion, 1000 km/s, sits inside Colless & Dunn 1996 (ApJ 458, 435), who print 1038 +- 60 km/s for the Coma cluster; the Prompt 90 gate measured 972.6 km/s from SDSS members, which missed the published value by more than its bar and is not used.',
+    'The dispersion, 1000 km/s, sits inside Colless & Dunn 1996 (ApJ 458, 435), who print 1038 +- 60 km/s for the Coma cluster; the gate measured 972.6 km/s from SDSS members, which missed the published value by more than its bar and is not used.',
     'Approximate, unsourced to a table in this repository: the radius (1.4 Mpc), the stellar mass (3e13 Msun) and the gas mass (1.2e14 Msun) are round teaching values. They are not given a citation they do not have.',
   ],
   citations: [

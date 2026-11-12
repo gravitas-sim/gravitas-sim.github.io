@@ -334,7 +334,7 @@ export const DES_SN5YR = {
         statement:
           "The Zenodo record's metadata gives CC BY 4.0, whose Share clause permits reproducing the material with attribution (read 2026-10-09). Cite Sanchez et al. 2024 (arXiv:2406.05046) and DES Collaboration 2024, ApJL 973, L14.",
         basis:
-          'COSMOLOGY_GATE.md section 1: the license as read from the record, kept with its legal code; D-COSMO-02 (delegated).',
+          'COSMOLOGY_GATE.md section 1: the license as read from the record, kept with its legal code; D-COSMO-02.',
       },
       retrieved: RETRIEVED,
       columns: described(this.columns),
@@ -414,7 +414,7 @@ export const DES_SN5YR = {
   },
 };
 
-// --- Pantheon+ (Prompt 90's item 4, released by Carl's instruction of 2026-10-11) --
+// --- Pantheon+ (Prompt 90's item 4, released by decision of the maintainer on 2026-10-11) --
 
 const PPLUS_ID = 'pantheon-plus-hd';
 const PPLUS_COMMIT = '7fc680548d1ea9fe6ee983a89d8b5635bb5784a8';
@@ -550,7 +550,7 @@ export const PANTHEON_PLUS = {
         statement:
           'The release page (https://pantheonplussh0es.github.io/, read 2026-10-11) states no licence and says only "Please cite papers individually when referencing them." and that "Details on data release usage will be added upon journal acceptance"; the data repository (https://github.com/PantheonPlusSH0ES/DataRelease, commit 7fc6805) carries no LICENSE file and its READMEs state no terms of use. The table is public.',
         basis:
-          'Shipped on the data-pack "no licence stated, credited" basis with the citations the release page requests, by Carl\'s instruction of 2026-10-11 (DECISION_REGISTER.md D-RIGHTS-04), the basis of D-SKY-02.',
+          'Shipped on the data-pack "no licence stated, credited" basis with the citations the release page requests, by decision of the maintainer on 2026-10-11 (DECISION_REGISTER.md D-RIGHTS-04), the basis of D-SKY-02.',
       },
       retrieved: '2026-10-11',
       columns: described(this.columns),
@@ -904,7 +904,7 @@ export const COMA_QUOTED = {
       masks: [],
       reductions: [
         'One row, four values, exactly as js/darkMatterWidgets.js quotes them (tests/cosmologyData.test.js holds the two to each other).',
-        'The dispersion, 1000 km/s, sits inside Colless & Dunn 1996 (ApJ 458, 435), who print 1038 +- 60 km/s for the Coma cluster; the Prompt 90 gate measured 972.6 km/s from SDSS members, which missed the published value by more than its bar and is not used.',
+        'The dispersion, 1000 km/s, sits inside Colless & Dunn 1996 (ApJ 458, 435), who print 1038 +- 60 km/s for the Coma cluster; the gate measured 972.6 km/s from SDSS members, which missed the published value by more than its bar and is not used.',
         `Approximate, unsourced to a table in this repository: the radius (${COMA_VALUES.radius} Mpc), the stellar mass (3e13 Msun) and the gas mass (1.2e14 Msun) are round teaching values. They are not given a citation they do not have.`,
       ],
     };

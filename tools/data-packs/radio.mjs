@@ -498,7 +498,7 @@ export const NANOGRAV_15YR = {
       assumptions: [
         "The units are the par-file convention (spin frequency in Hz, dispersion measure in pc cm^-3); the archive's files do not state them.",
         "The narrowband models are the data set's primary timing models (its README); the wideband models are a second fit of the same pulsars and are used only for dm_wb.",
-        "A pulsar's dispersion measure is not constant: the pack states a mean over the epochs and its spread, and a distance from it (the crude electron-density estimate Prompt 242 teaches) inherits that spread and the model of the Galaxy's electron density, which is not in this pack.",
+        "A pulsar's dispersion measure is not constant: the pack states a mean over the epochs and its spread, and a distance from it (the crude electron-density estimate used in teaching) inherits that spread and the model of the Galaxy's electron density, which is not in this pack.",
         "Every pulsar is a millisecond pulsar timed for years with a model that includes red noise; the periods are those of that model, not a single epoch's measurement.",
       ],
       compatible: { widgets: [], investigations: [] },

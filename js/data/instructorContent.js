@@ -344,7 +344,7 @@ export const INSTRUCTOR_CONTENT = {
       },
       {
         name: 'The sampler',
-        text: "Written in NumPy alone and held to Prompt 103's analytic cases (a correlated Gaussian, a banana, a conjugate line fit) by tests/computeSampler.test.js, with the refusal rules that gate fixed. There is no sampler in the application: sampling lives on the compute page.",
+        text: "Written in NumPy alone and held to its gate's analytic cases (a correlated Gaussian, a banana, a conjugate line fit) by tests/computeSampler.test.js, with the refusal rules that gate fixed. There is no sampler in the application: sampling lives on the compute page.",
       },
       {
         name: 'The answer key',
@@ -4950,11 +4950,11 @@ export const INSTRUCTOR_CONTENT = {
       },
     ],
     teachingNotes: [
-      'OPEN SCIENCE ITEM (Carl): the Sun’s V against the LSR is not chosen by Gravitas. Strömberg’s correction from this sample gives 3.77 km/s at 100 pc (the old Dehnen and Binney 1998 value was 5.2); Schönrich et al. 2010 give 12.24. The third frame in the instrument adopts 12.24 and says so on screen. The core measurement accepts 3.77 within 0.5 and 12.24 within 0.3.',
+      'OPEN SCIENCE ITEM (maintainer): the Sun’s V against the LSR is not chosen by Gravitas. Strömberg’s correction from this sample gives 3.77 km/s at 100 pc (the old Dehnen and Binney 1998 value was 5.2); Schönrich et al. 2010 give 12.24. The third frame in the instrument adopts 12.24 and says so on screen. The core measurement accepts 3.77 within 0.5 and 12.24 within 0.3.',
       'The core measurement accepts U = 10.5 within 1.5, V = 21.9 within 2 and W = 9.1 within 1.5 (Schönrich et al. U = 11.1 and W = 7.25 are inside the sample’s own uncertainty plus the package check’s 3 km/s).',
       'The solar sample is not volume-complete (Gaia radial velocities exist for bright stars) and its near stratum is over-sampled on purpose; the investigation never uses its star counts, only the means and scatter. GALACTIC_DYNAMICS.md lists the limits.',
       'The advanced step about color-bin fits quotes GALACTIC_DYNAMICS.md (12.3 ± 6.7 km/s for one choice of bins, an error about as large as the 8 km/s between the two values); it is a recorded result and is not shown in the instrument, and the drift fit has not been shown to be stable against the choice of bins.',
-      'The Gaia data are CC BY-NC 3.0 IGO: not for commercial use (D-GAIA-01, ratified by Carl).',
+      'The Gaia data are CC BY-NC 3.0 IGO: not for commercial use (D-GAIA-01, ratified by the maintainer).',
     ],
     discussion: [
       'Why can a measurement relative to nearby stars not be quoted as the Sun’s speed in the Galaxy?',
@@ -5038,7 +5038,7 @@ export const INSTRUCTOR_CONTENT = {
     teachingNotes: [
       'The rotation curve is the R0 = 8.3 kpc, V0 = 244 km/s set of Bhattacharjee et al. 2014 Table 2, disk-region points from 2 to 25 kpc, with errors floored at 3 km/s. The data package carries two other sets; the instrument uses one and says so (D-GAIA-02: cited by region, not by point).',
       'The Sun’s distance 8.3 kpc is an assumption in the circular speed from the Oort constants, stated on screen.',
-      'The unweighted Oort fit is shown on purpose: A about −1.9 ± 13.2, B about −7.9 ± 9.3. It is a investigation in why a fit needs the right weights, not a second result. The fit carries the factor cos b (the in-plane distance over the distance): the velocity along l of a rotating disk is d cos b (A cos 2l + B). Earlier editions left it out and read A 13.5, B −13.7 and a circular speed of 226 km/s: low by about the sample’s mean cos b (0.85) for a noise-free disk, and on these stars A by 7 percent, B by 10 percent and the speed by 8 percent; the corrected values are 14.5, −15.2 and 247 km/s (found by Prompt 235’s kinematics gate).',
+      'The unweighted Oort fit is shown on purpose: A about −1.9 ± 13.2, B about −7.9 ± 9.3. It is a investigation in why a fit needs the right weights, not a second result. The fit carries the factor cos b (the in-plane distance over the distance): the velocity along l of a rotating disk is d cos b (A cos 2l + B). Earlier editions left it out and read A 13.5, B −13.7 and a circular speed of 226 km/s: low by about the sample’s mean cos b (0.85) for a noise-free disk, and on these stars A by 7 percent, B by 10 percent and the speed by 8 percent; the corrected values are 14.5, −15.2 and 247 km/s (found by the kinematics gate).',
       'The model fit is Nelder-Mead with several starts in the galactic kernel; the best-fit values the investigation quotes are deterministic.',
     ],
     discussion: [
@@ -5123,7 +5123,7 @@ export const INSTRUCTOR_CONTENT = {
       },
     ],
     teachingNotes: [
-      'OPEN ITEM (Carl): the measured distance of 2.324 kpc has not been validated against a published catalog distance for NGC 2420: leg E1 of GAIA_WORKFLOWS.md is NOT RUN until the CDS table of Hunt and Reffert 2023 can be fetched. The instrument’s 1 over parallax reading (0.385 mas, 2.6 kpc) has no zero point and is stated as an uncorrected reading.',
+      'OPEN ITEM (maintainer): the measured distance of 2.324 kpc has not been validated against a published catalog distance for NGC 2420: leg E1 of GAIA_WORKFLOWS.md is NOT RUN until the CDS table of Hunt and Reffert 2023 can be fetched. The instrument’s 1 over parallax reading (0.385 mas, 2.6 kpc) has no zero point and is stated as an uncorrected reading.',
       'The core measurement accepts the proper motion within 0.05 mas/yr of (−1.227, −2.041), the member count 506 within 8, 497 and 509 at the two thresholds within 6, and the mean parallax within 0.02.',
       'The fit starts from fixed values (cluster at (−1, −2) mas/yr and 0.3 mas, field broad) so a result is reproducible; the number of uncertain stars is 4 with parallax and 8 without.',
       'Gaia data are CC BY-NC 3.0 IGO: not for commercial use (D-GAIA-01).',
@@ -5823,7 +5823,7 @@ export const INSTRUCTOR_CONTENT = {
       },
       {
         name: 'No observed white dwarfs',
-        text: 'The instrument draws no observed dwarfs: a public compilation’s terms could not be confirmed in this session (D-INTERIOR-01). The model’s radius is a few percent larger than the best published relations.',
+        text: 'The instrument draws no observed dwarfs: a public compilation’s terms could not be confirmed (D-INTERIOR-01). The model’s radius is a few percent larger than the best published relations.',
       },
     ],
     misconceptions: [

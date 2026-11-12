@@ -38,7 +38,7 @@ export const PACK = {
     statement:
       'The release page (https://pantheonplussh0es.github.io/, read 2026-10-11) states no licence and says only "Please cite papers individually when referencing them." and that "Details on data release usage will be added upon journal acceptance"; the data repository (https://github.com/PantheonPlusSH0ES/DataRelease, commit 7fc6805) carries no LICENSE file and its READMEs state no terms of use. The table is public.',
     basis:
-      'Shipped on the data-pack "no licence stated, credited" basis with the citations the release page requests, by Carl\'s instruction of 2026-10-11 (DECISION_REGISTER.md D-RIGHTS-04), the basis of D-SKY-02.',
+      'Shipped on the data-pack "no licence stated, credited" basis with the citations the release page requests, by decision of the maintainer on 2026-10-11 (DECISION_REGISTER.md D-RIGHTS-04), the basis of D-SKY-02.',
   },
   retrieved: '2026-10-11',
   columns: [

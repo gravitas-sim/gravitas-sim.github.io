@@ -250,7 +250,7 @@
     "record": {}
   },
   "assumptions": [
-    "The selection of lines is editorial: the lines Prompt 82 names. The wavelengths are not. TiO band heads are not here: no retrievable, citable table was found (RADIATION.md).",
+    "The selection of lines is editorial. The wavelengths are not. TiO band heads are not here: no retrievable, citable table was found (RADIATION.md).",
     "The air wavelength is \"standard air\" as NIST defines it for wavelengths between 200 nm and 2000 nm.",
     "A line is a laboratory (rest) wavelength: it is the centroid of the multiplet components NIST lists at that wavelength, not a stellar line profile."
   ],

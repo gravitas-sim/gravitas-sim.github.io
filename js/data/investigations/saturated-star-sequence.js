@@ -945,7 +945,7 @@ const CONTENT = {
     difficulty:
       'Introductory (a share and a magnitude); majors (a response curve and the limit on a pixel); advanced (sampling and what it costs the peak pixel and the photometry)',
     placement:
-      'In a survey course after the unit on detectors and before photometry; in a majors course beside the investigations of the CCD and of exposure planning. It supports OpenStax Astronomy 2e chapter 6 (astronomical instruments). It is the investigation behind the refusals of Prompt 180’s photometry.',
+      'In a survey course after the unit on detectors and before photometry; in a majors course beside the investigations of the CCD and of exposure planning. It supports OpenStax Astronomy 2e chapter 6 (astronomical instruments). It is the investigation behind the refusals of the photometry.',
     overview:
       'Students predict what the photometry tool would read for the brightest star in a synthetic frame, read it (30 percent of the true flux), turn it into a magnitude error (1.3 mag), say why, then see what charge bleeding does to the stars on the bright star’s column (two of three refused) and what a cosmic-ray track does. At the quantitative depth they read the linear limit and the plateau of a stated nonlinear response, find the brightest star still measured and estimate it from the largest peak share; at the advanced depth they read how the peak pixel and the aperture flux depend on the star’s place in its pixel for an undersampled profile.',
     priorKnowledge: [

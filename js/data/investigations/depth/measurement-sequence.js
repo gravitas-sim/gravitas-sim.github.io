@@ -1772,7 +1772,7 @@ const CRATER_CONTENT = {
       'The circle is the reader’s, a rim point and a center; the catalog’s circles are another measurement of other data and are not the truth.',
       'The sigma of the view’s cos E comes from a one-pixel allowance on the disc, a stated input; the Moon is treated as a sphere of 1,737.4 km and the picture as orthographic about the center of the disc.',
       'A crater under 8 pixels across is below what a person can place: the comparison of counts refuses it.',
-      'No absolute age is computed anywhere in Gravitas yet (Prompt 196 decides whether any can be).',
+      'No absolute age is computed anywhere in Gravitas yet.',
     ],
     discussion: [
       'Who decides where a rim is, and what would two people’s disagreement cost a density ratio?',

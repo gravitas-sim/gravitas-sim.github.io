@@ -2769,7 +2769,7 @@ const GUIDE = (
   features: [
     {
       name: 'The panels (exposure planner, night planner, turning sky, calibration and strategy panels)',
-      text: 'The instruments of Prompts 208 to 215 and the survey sky investigations, set to a prepared plan: every number a step states is the instrument’s own, over the instrument library’s cited table (Prompt 209) with a supplied throughput and dark current the planner labels as supplied.',
+      text: 'The instruments of the instrument library and the survey sky investigations, set to a prepared plan: every number a step states is the instrument’s own, over the instrument library’s cited table with a supplied throughput and dark current the planner labels as supplied.',
     },
     {
       name: 'Depth',

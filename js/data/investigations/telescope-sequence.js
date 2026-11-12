@@ -736,7 +736,7 @@ const CONTENT = {
     ],
     teachingNotes: [
       'The frame is a synthetic model: an Airy pattern for the aperture convolved with a Moffat seeing profile (beta 4.765), drawn through the detector kernel’s frame model with Poisson and read noise, and measured with the same PSF tool the Observatory ships. TELESCOPES.md holds the validation: the analytic checks, the independent FFT oracle at two apertures, the coverage ensemble (0.675 against a band of 0.60 to 0.76) and the refusals. The authentic-data check is not measured.',
-      'The dip is the model’s (the kernel’s), not read from the noisy frame; the dots in the plot are the frame’s own row. The faint star is “listed” when Prompt 183’s detector finds it at 4 sigma near its true position, which in this field happens at a CCD-equation signal to noise near 7; the row shows both.',
+      'The dip is the model’s (the kernel’s), not read from the noisy frame; the dots in the plot are the frame’s own row. The faint star is “listed” when the detector finds it at 4 sigma near its true position, which in this field happens at a CCD-equation signal to noise near 7; the row shows both.',
       'The measured FWHM is a Moffat fit to three reference stars. When the profile is mostly diffraction (space, large aperture, small pixels) the fit is flagged a model fit and its number is below the pattern’s FWHM; say so.',
       'Inherited limits: one wavelength, a Moffat seeing independent of wavelength and aperture, no adaptive optics, aberrations or spider; the stars’ brightness is V whatever the wavelength.',
     ],

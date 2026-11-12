@@ -10,7 +10,7 @@
 // What this does not do, and says plainly: it imports nothing into a learning
 // platform (none is available to this project), so a green run says the file is
 // well made, not that Canvas, Moodle, D2L or Blackboard reads it. The four
-// platforms are VERIFIED on the owner's report alone (Carl, in chat, 2026-10-22;
+// platforms are VERIFIED on the maintainer's report alone (2026-10-22;
 // no versions, cartridge or result supplied), and the panel and Teach say just
 // that; this spec holds them to the one table.
 // =============================================================================
