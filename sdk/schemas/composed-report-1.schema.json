@@ -1,0 +1,244 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://gravitas-sim.online/sdk/schemas/composed-report-1.schema.json",
+  "title": "gravitas.composed-report/1",
+  "description": "A report a student composes from marked entries of the evidence notebook: a title, when it was made and by which build, a section per entry (up to 60, in the order the student chose: its kind, its envelope's source, the settings and seed its record carries, the student's words, the warnings and up to 60 numbers each with its unit and uncertainty and how that was found), the comparisons carried in (up to 20: the two numbers, their difference, its sigma, the p value, whether the two were assumed independent and the assumptions) and a digest, the SHA-256 of the canonical JSON without the digest itself. It holds numbers, ids and the student's own words and no generated prose. js/myWork/composedReport.js readComposed() is the authority; it refuses another format, a newer version (`newer`) and a wrong shape (`shape`); recomputing the digest is the review page's. FORMATS.md lists it.",
+  "type": "object",
+  "required": [
+    "format",
+    "formatVersion",
+    "title",
+    "madeAt",
+    "digest",
+    "sections",
+    "comparisons"
+  ],
+  "properties": {
+    "format": {
+      "const": "gravitas.composed-report"
+    },
+    "formatVersion": {
+      "const": 1
+    },
+    "title": {
+      "type": "string"
+    },
+    "madeAt": {
+      "type": "string"
+    },
+    "build": {},
+    "digest": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "sections": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "title",
+          "kind",
+          "source",
+          "settings",
+          "cite",
+          "prose",
+          "warnings",
+          "numbers"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "kind": {
+            "type": "string"
+          },
+          "source": {
+            "type": "object",
+            "required": [
+              "kind",
+              "id"
+            ],
+            "properties": {
+              "kind": {
+                "type": "string"
+              },
+              "id": {
+                "type": "string"
+              }
+            }
+          },
+          "settings": {
+            "type": "object"
+          },
+          "cite": {
+            "type": "object"
+          },
+          "prose": {
+            "type": "object"
+          },
+          "warnings": {
+            "type": "array",
+            "items": {}
+          },
+          "numbers": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": [
+                "id",
+                "label",
+                "value",
+                "unit",
+                "uncertainty"
+              ],
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "label": {
+                  "type": "string"
+                },
+                "value": {
+                  "type": [
+                    "number",
+                    "null"
+                  ]
+                },
+                "unit": {
+                  "type": "string"
+                },
+                "uncertainty": {
+                  "type": "object",
+                  "required": [
+                    "kind"
+                  ],
+                  "properties": {
+                    "kind": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            },
+            "maxItems": 60
+          }
+        }
+      },
+      "minItems": 1,
+      "maxItems": 60
+    },
+    "comparisons": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "a",
+          "b",
+          "unit",
+          "difference",
+          "sigma",
+          "nSigma",
+          "p",
+          "independent",
+          "assumptions"
+        ],
+        "properties": {
+          "a": {
+            "type": "object",
+            "required": [
+              "entry",
+              "id",
+              "title",
+              "label",
+              "value",
+              "uncertainty"
+            ],
+            "properties": {
+              "entry": {
+                "type": "string"
+              },
+              "id": {
+                "type": "string"
+              },
+              "title": {
+                "type": "string"
+              },
+              "label": {
+                "type": "string"
+              },
+              "value": {
+                "type": "number"
+              },
+              "uncertainty": {
+                "type": "object"
+              }
+            }
+          },
+          "b": {
+            "type": "object",
+            "required": [
+              "entry",
+              "id",
+              "title",
+              "label",
+              "value",
+              "uncertainty"
+            ],
+            "properties": {
+              "entry": {
+                "type": "string"
+              },
+              "id": {
+                "type": "string"
+              },
+              "title": {
+                "type": "string"
+              },
+              "label": {
+                "type": "string"
+              },
+              "value": {
+                "type": "number"
+              },
+              "uncertainty": {
+                "type": "object"
+              }
+            }
+          },
+          "unit": {
+            "type": "string"
+          },
+          "difference": {
+            "type": "number"
+          },
+          "sigma": {
+            "type": "number"
+          },
+          "nSigma": {
+            "type": [
+              "number",
+              "null"
+            ]
+          },
+          "p": {
+            "type": "number"
+          },
+          "independent": {
+            "type": "boolean"
+          },
+          "assumptions": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "maxItems": 20
+    }
+  }
+}

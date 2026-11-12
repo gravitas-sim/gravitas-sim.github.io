@@ -192,6 +192,7 @@ current, and the orchestrator checks it.
 | `numeric-validate.mjs` | npm run validate:numeric - the numerical routines' validation group | `npm run validate:numeric` |
 | `numerics-instruments-engine-child.mjs` | (no header) |  |
 | `numerics-instruments-validate.mjs` | (no header) | `npm run numerics:instruments:validate` |
+| `observability.mjs` | What CI costs run by run, and the trend page that charts it (Prompt 292) |  |
 | `observatory-bench.mjs` | npm run bench:observatory - what the observatory costs a reader | `npm run bench:observatory` |
 | `occurrence-validate.mjs` | The occurrence kernel against its committed thresholds (Prompt 229) | `npm run occurrence:validate` |
 | `offline-pages.mjs` | What every page of the site needs, against what the worker saves (Prompt 284) |  |

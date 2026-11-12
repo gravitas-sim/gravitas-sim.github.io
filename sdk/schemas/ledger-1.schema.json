@@ -1,0 +1,38 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://gravitas-sim.online/sdk/schemas/ledger-1.schema.json",
+  "title": "gravitas.ledger/1",
+  "description": "The evidence ledger a submission token carries as `ev` (a record, never a file by itself): the SHA-256 digest of the ledger (`d`), the ids of the envelopes it was made from (`i`), how many rows the ledger has (`n`) and the rows of the evidence table (`r`, cut to the token's limit), each row nine columns (envelope id, quantity id, value, unit, uncertainty, origin, source kind, source id, a 16-digit data digest) and a tenth, the uncertainty's code, when one is stated. js/submission/ledgerDigest.js checkEvidence() is the authority: it recomputes the digest from the ids and rows and says verified, partial (`n` beyond the rows carried) or mismatch; it verifies structure, not who made the table. A reader of nine columns reads every row it ever did. FORMATS.md lists it.",
+  "type": "object",
+  "required": [
+    "d",
+    "i",
+    "n",
+    "r"
+  ],
+  "properties": {
+    "d": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "i": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "n": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "r": {
+      "type": "array",
+      "items": {
+        "type": "array",
+        "items": {},
+        "minItems": 9,
+        "maxItems": 10
+      }
+    }
+  }
+}

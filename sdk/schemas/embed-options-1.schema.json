@@ -1,0 +1,58 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://gravitas-sim.online/sdk/schemas/embed-options-1.schema.json",
+  "title": "embed options/1",
+  "description": "The options an embed link asks for, as the query parameters of the page address (so every value is a string): `embed=1` and `ev=1` (the version of the options; a plain `?embed=1` is version 0 and opens as a plain embed), then any of lang (en or es), theme (midnight, deep, observatory or daylight), controls (transport or none), motion (reduced), quality (low or full), reset (authored or scenario) and parent (the one page origin whose messages are obeyed: https, or plain http only on this machine, no path, query, fragment or credentials). js/embedOptions.js readEmbedOptions() is the authority: it ignores a value that is not one of these, by name, and opens with the default; a later `ev` is ignored and opens as a plain embed. The origin's rule against an opaque or credentialed origin is the reader's. FORMATS.md lists it.",
+  "type": "object",
+  "required": [
+    "ev"
+  ],
+  "properties": {
+    "embed": {
+      "const": "1"
+    },
+    "ev": {
+      "const": "1"
+    },
+    "lang": {
+      "enum": [
+        "en",
+        "es"
+      ]
+    },
+    "theme": {
+      "enum": [
+        "midnight",
+        "deep",
+        "observatory",
+        "daylight"
+      ]
+    },
+    "controls": {
+      "enum": [
+        "transport",
+        "none"
+      ]
+    },
+    "motion": {
+      "const": "reduced"
+    },
+    "quality": {
+      "enum": [
+        "low",
+        "full"
+      ]
+    },
+    "reset": {
+      "enum": [
+        "authored",
+        "scenario"
+      ]
+    },
+    "parent": {
+      "type": "string",
+      "pattern": "^https?://[^/?#@\\s]+$",
+      "maxLength": 200
+    }
+  }
+}

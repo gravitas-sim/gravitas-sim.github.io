@@ -148,6 +148,10 @@ test.describe('the 3-D lab’s guided investigations', () => {
   test('an eclipse lost to half a degree, and a drawn size that lies', async ({
     page,
   }) => {
+    test.skip(
+      DIST,
+      'sources keep this fact; docs/DUPLICATE_COVERAGE.md (D-R10-292-02)'
+    );
     await openGuide(page, 'l3-eclipse', { path: 'advanced' });
     await next(page);
     await doIt(page);
@@ -191,6 +195,10 @@ test.describe('the 3-D lab’s guided investigations', () => {
   });
 
   test('equal inclinations that are not one plane', async ({ page }) => {
+    test.skip(
+      DIST,
+      'sources keep this fact; docs/DUPLICATE_COVERAGE.md (D-R10-292-02)'
+    );
     await openGuide(page, 'l3-mutual');
     await next(page);
     await doIt(page);
@@ -222,6 +230,10 @@ test.describe('the 3-D lab’s guided investigations', () => {
   test('a Kozai-Lidov peak kept by the reader, and the quantity that holds', async ({
     page,
   }) => {
+    test.skip(
+      DIST,
+      'sources keep this fact; docs/DUPLICATE_COVERAGE.md (D-R10-292-02)'
+    );
     test.setTimeout(180_000);
     await openGuide(page, 'l3-kozai');
     await next(page);

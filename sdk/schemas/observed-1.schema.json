@@ -1,0 +1,135 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://gravitas-sim.online/sdk/schemas/observed-1.schema.json",
+  "title": "gravitas.observed/1",
+  "description": "What a notebook entry says of a measurement on real data, as `snapshot.observed`: the observation it was made on (id, title, source, digest, licence, credit, and, since the first release, when it was retrieved and its citations), the tool that made it (id, version, parameters and the number of workspace changes it saw), those changes, the values it took as given, what it warned of, as codes, and where a guide stood. Nothing in it is a sentence. js/notebook/observed.js writes it; no reader checks its version (an entry with it is read from the fields), so this states what the writer writes and a reader that finds more reads what it knows. FORMATS.md lists it.",
+  "type": "object",
+  "required": [
+    "format",
+    "formatVersion",
+    "observation",
+    "tool",
+    "changes",
+    "assumptions"
+  ],
+  "properties": {
+    "format": {
+      "const": "gravitas.observed"
+    },
+    "formatVersion": {
+      "const": 1
+    },
+    "observation": {
+      "type": "object",
+      "required": [
+        "id",
+        "license",
+        "credit"
+      ],
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "title": {},
+        "source": {},
+        "digest": {},
+        "license": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "credit": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "retrieved": {
+          "type": "string"
+        },
+        "citations": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "text"
+            ],
+            "properties": {
+              "text": {
+                "type": "string"
+              },
+              "url": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "tool": {
+      "type": "object",
+      "required": [
+        "id",
+        "at"
+      ],
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "version": {},
+        "params": {},
+        "at": {
+          "type": "integer",
+          "minimum": 0
+        }
+      }
+    },
+    "changes": {
+      "type": "array",
+      "items": {}
+    },
+    "assumptions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "value": {},
+          "unit": {
+            "type": "string"
+          },
+          "cite": {}
+        }
+      }
+    },
+    "warnings": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "code"
+        ],
+        "properties": {
+          "code": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "steps": {
+      "type": "array",
+      "items": {
+        "type": "array",
+        "items": {},
+        "minItems": 2,
+        "maxItems": 2
+      }
+    }
+  }
+}

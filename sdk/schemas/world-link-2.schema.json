@@ -1,0 +1,53 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://gravitas-sim.online/sdk/schemas/world-link-2.schema.json",
+  "title": "world share link/2",
+  "description": "The payload a world share link carries, after js/shareState.js decodePayload() has read the fragment (#2z or #2r, then base64url of the, deflated or raw, JSON): the scenario by id (version 1 names it by its English name, which every reader still accepts and resolves), the seed that generated the world, the settings at generation (`d`) and the changes after it (`a`), the camera, the bodies of a full link, whether to open paused, the experiment extras (`x`, link-extras/1) and an A/B setup (`xp`, experiment-link-block/1). The reader refuses a fragment that is not a link, one from a newer version, one that is cut short, one that holds data it will not read, and a payload with no scenario or one this build does not have; unknown keys are ignored, which is what keeps an older build able to open a newer link. A scenario is checked against the built-in ids by the reader, not here. FORMATS.md lists it.",
+  "type": "object",
+  "required": [
+    "v",
+    "s"
+  ],
+  "properties": {
+    "v": {
+      "enum": [
+        1,
+        2
+      ]
+    },
+    "s": {
+      "type": "string",
+      "minLength": 1
+    },
+    "seed": {
+      "type": "string"
+    },
+    "d": {
+      "type": "object"
+    },
+    "a": {
+      "type": "object"
+    },
+    "c": {
+      "type": "array",
+      "items": {
+        "type": "number"
+      },
+      "minItems": 3,
+      "maxItems": 3
+    },
+    "b": {
+      "type": "array",
+      "items": {}
+    },
+    "p": {
+      "const": 1
+    },
+    "x": {
+      "type": "object"
+    },
+    "xp": {
+      "type": "object"
+    }
+  }
+}

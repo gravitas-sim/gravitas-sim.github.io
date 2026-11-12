@@ -15,6 +15,16 @@ the release rather than in the tag.
 
 ### Added
 
+- Test runtime II and the cost artifact (Prompt 292; register rows D-R10-292-01
+  to 08): each CI run leaves a `ci-observability` record (job durations,
+  runner-minutes, shard balance, Jest and Playwright counts, the flake ledger,
+  the budget lines and precache sizes), `docs/CI_TRENDS.md` charts the trend
+  with the plot component's static export, the source browser suite runs on 17
+  shards instead of 20 (the runner pool runs 20 jobs at once, so the extra
+  shards only queued) from refreshed timings, fifteen production-build copies
+  of logic tests are dropped where the sources run keeps the fact, and two
+  scenario-data tests moved from the browser suite to Jest. The 15-minute target
+  is recorded as a structural miss with its next step.
 - Help II (Prompt 286; register rows D-R10-286-01 to 05): H opens the explainer
   of the panel you are in, every explainer ends with where its physics is
   checked, the glossary defines 81 terms by topic in both languages and a term
@@ -35,6 +45,14 @@ the release rather than in the tag.
   the archive; the accessibility conformance report is a node of the generation
   graph; the map section of `MAINTAINER_ONBOARDING.md` is written by the tool;
   `CONTINUITY.md` says what is archived and what has not been rehearsed again.
+- Format audit and the freeze (Prompt 290; register rows D-R10-290-01 to 06):
+  every format Gravitas reads or writes now has a JSON Schema in `sdk/schemas`
+  (36 new ones, written from the readers and held to them case by case; no reader
+  changed), four formats the first inventory had missed have rows, the
+  investigation link row says version 2 as the writer does, and
+  `tests/formats.test.js` fails a format id that has no row, schema and version
+  or that is added after the freeze without a register row saying why it is new.
+  Nothing a student sees changed and no page loads a schema.
 - Low-end II (Prompt 285). The low quality tier now also reduces computation:
   a bootstrap takes 300 draws instead of 1000, the orbit tool's mass sum 5000
   instead of 20,000 and a fit's profile intervals 7 grid points instead of 11; the

@@ -1,0 +1,148 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://gravitas-sim.online/sdk/schemas/mission-lab-report-1.schema.json",
+  "title": "gravitas.mission-lab-report/1",
+  "description": "The file a reader downloads from the mission lab's guided investigations: what it is not for, the language, the reader's name, every guide on the path with its non-reading steps (the id, kind, what was typed, whether it passed or was shown), the reader's plan and, where the plan is a mission, the numbers it came to (departure and capture delta-v, C3, arrival excess speed, the miss of a direct flight, the correction, the total and the propellant). It has no clock in it. Nothing reads it back, so the schema states what the writer writes, in js/mission/lab/guidePanel.js. FORMATS.md lists it.",
+  "type": "object",
+  "required": [
+    "format",
+    "formatVersion",
+    "notFor",
+    "language",
+    "name",
+    "guides",
+    "plan",
+    "results"
+  ],
+  "properties": {
+    "format": {
+      "const": "gravitas.mission-lab-report"
+    },
+    "formatVersion": {
+      "const": 1
+    },
+    "notFor": {
+      "type": "string",
+      "minLength": 1
+    },
+    "language": {
+      "enum": [
+        "en",
+        "es"
+      ]
+    },
+    "name": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "guides": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "guide",
+          "path",
+          "steps"
+        ],
+        "properties": {
+          "guide": {
+            "type": "string"
+          },
+          "path": {
+            "type": "string"
+          },
+          "steps": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": [
+                "step",
+                "kind",
+                "passed",
+                "shown"
+              ],
+              "properties": {
+                "step": {
+                  "type": "string"
+                },
+                "kind": {
+                  "type": "string"
+                },
+                "input": {},
+                "passed": {
+                  "type": "boolean"
+                },
+                "shown": {
+                  "type": "boolean"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "plan": {},
+    "results": {
+      "anyOf": [
+        {
+          "type": "null"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "departDvKmS": {
+              "type": [
+                "number",
+                "null"
+              ]
+            },
+            "captureDvKmS": {
+              "type": [
+                "number",
+                "null"
+              ]
+            },
+            "c3": {
+              "type": [
+                "number",
+                "null"
+              ]
+            },
+            "vinfArrKmS": {
+              "type": [
+                "number",
+                "null"
+              ]
+            },
+            "directMissKm": {
+              "type": [
+                "number",
+                "null"
+              ]
+            },
+            "correctionDvKmS": {
+              "type": [
+                "number",
+                "null"
+              ]
+            },
+            "totalDvKmS": {
+              "type": [
+                "number",
+                "null"
+              ]
+            },
+            "depotPropellantKg": {
+              "type": [
+                "number",
+                "null"
+              ]
+            }
+          }
+        }
+      ]
+    }
+  }
+}

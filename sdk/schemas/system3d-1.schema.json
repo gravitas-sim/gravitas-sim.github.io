@@ -1,0 +1,125 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://gravitas-sim.online/sdk/schemas/system3d-1.schema.json",
+  "title": "gravitas.system3d/1",
+  "description": "A system for the 3-D lab (/3d/): units (code or solar), an integrator (a scheme and its step, or for the adaptive scheme its tolerance), a start time, where it came from in words, and 2 to 50 bodies as numbers (id, name, mass, drawn size, position and velocity in three components). js/lab3d/state.js validateSystem() is the authority; it also refuses overlapping bodies, a duplicate id, an integrator step of zero, a tolerance outside 1e-14 to 1e-6 and a system with no massive body. migrateSystem() also reads gravitas.orbital-system/1 (plane z = 0, masses times the file G); the schema states the current form. The same shape is carried by gravitas.scenario-pack/1's `system3d`. FORMATS.md lists it.",
+  "type": "object",
+  "required": [
+    "format",
+    "formatVersion",
+    "units",
+    "integrator",
+    "bodies"
+  ],
+  "properties": {
+    "format": {
+      "const": "gravitas.system3d"
+    },
+    "formatVersion": {
+      "const": 1
+    },
+    "units": {
+      "enum": [
+        "code",
+        "solar"
+      ]
+    },
+    "integrator": {
+      "type": "object",
+      "required": [
+        "scheme"
+      ],
+      "properties": {
+        "scheme": {
+          "enum": [
+            "leapfrog",
+            "yoshida4",
+            "yoshida4c",
+            "rk4",
+            "dopri5"
+          ]
+        },
+        "h": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "tol": {
+          "type": "number",
+          "minimum": 1e-14,
+          "maximum": 0.000001
+        }
+      },
+      "additionalProperties": false
+    },
+    "t": {
+      "type": "number"
+    },
+    "provenance": {
+      "type": "object",
+      "required": [
+        "from"
+      ],
+      "properties": {
+        "from": {
+          "type": "string",
+          "maxLength": 120
+        },
+        "note": {
+          "type": "string",
+          "maxLength": 300
+        }
+      },
+      "additionalProperties": false
+    },
+    "bodies": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "m",
+          "radius",
+          "x",
+          "v"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$"
+          },
+          "name": {
+            "type": "string"
+          },
+          "m": {
+            "type": "number",
+            "minimum": 0
+          },
+          "radius": {
+            "type": "number",
+            "minimum": 0
+          },
+          "x": {
+            "type": "array",
+            "items": {
+              "type": "number"
+            },
+            "minItems": 3,
+            "maxItems": 3
+          },
+          "v": {
+            "type": "array",
+            "items": {
+              "type": "number"
+            },
+            "minItems": 3,
+            "maxItems": 3
+          }
+        },
+        "additionalProperties": false
+      },
+      "minItems": 2,
+      "maxItems": 50
+    }
+  },
+  "additionalProperties": false
+}

@@ -14,6 +14,8 @@ import AxeBuilder from '@axe-core/playwright';
 import { readFileSync } from 'node:fs';
 import { test, expect } from './fixtures.js';
 
+const DIST = process.env.GRAVITAS_E2E_TARGET === 'dist';
+
 const TAGS = [
   'wcag2a',
   'wcag2aa',
@@ -81,6 +83,10 @@ test.describe('the analysis laboratory', () => {
   test('says the seeds changed nothing, and puts no interval on nothing', async ({
     page,
   }) => {
+    test.skip(
+      DIST,
+      'sources keep this fact; docs/DUPLICATE_COVERAGE.md (D-R10-292-02)'
+    );
     await openRunner(page);
     await runExperiment(page);
     await openLab(page);
@@ -103,6 +109,10 @@ test.describe('the analysis laboratory', () => {
   test('its plot and table are one selection, and the summary follows it', async ({
     page,
   }) => {
+    test.skip(
+      DIST,
+      'sources keep this fact; docs/DUPLICATE_COVERAGE.md (D-R10-292-02)'
+    );
     await openRunner(page);
     await runExperiment(page);
     await openLab(page);
@@ -143,6 +153,10 @@ test.describe('the analysis laboratory', () => {
   test('a second run at another step becomes the numerical uncertainty', async ({
     page,
   }) => {
+    test.skip(
+      DIST,
+      'sources keep this fact; docs/DUPLICATE_COVERAGE.md (D-R10-292-02)'
+    );
     await openRunner(page);
     await runExperiment(page);
     await openLab(page);
@@ -180,6 +194,10 @@ test.describe('the analysis laboratory', () => {
   test('a grid of two settings splits its variation between them', async ({
     page,
   }) => {
+    test.skip(
+      DIST,
+      'sources keep this fact; docs/DUPLICATE_COVERAGE.md (D-R10-292-02)'
+    );
     await openRunner(page);
     await page.locator('#xpScenario').selectOption('gravity-assist-lab');
     await page.locator('#xpParam2').selectOption({ index: 1 });
@@ -201,6 +219,10 @@ test.describe('the analysis laboratory', () => {
   test('a random sample of a setting reads its trend by rank', async ({
     page,
   }) => {
+    test.skip(
+      DIST,
+      'sources keep this fact; docs/DUPLICATE_COVERAGE.md (D-R10-292-02)'
+    );
     await openRunner(page);
     await page.locator('#xpSpacing').selectOption('random');
     await expect(page.locator('#xpSecond')).toBeHidden();
@@ -290,6 +312,10 @@ test.describe('the analysis laboratory', () => {
   });
 
   test('an analysis can be canceled, and leaves nothing', async ({ page }) => {
+    test.skip(
+      DIST,
+      'sources keep this fact; docs/DUPLICATE_COVERAGE.md (D-R10-292-02)'
+    );
     await openRunner(page);
     await runExperiment(page);
     await openLab(page);

@@ -1,0 +1,117 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://gravitas-sim.online/sdk/schemas/ephemeris-pack-1.schema.json",
+  "title": "gravitas.ephemeris-pack/1",
+  "description": "A pack of Chebyshev ephemeris segments for the mission lab, a file under ephemeris-packs/ with its binary sibling: the pack's id and version, its source and licence as served, the frame, the time scale (TDB), the units, the range as dates and Julian dates, how it was requested and encoded and, for each body, its Horizons identity, the segment length in days, the polynomial degree, the number of segments and the bytes of its table, with the digests of the rows it was fitted to. js/mission/ephemeris.js createEphemeris() is the authority; it refuses another format or version and a body whose table is not the declared size or segment count, and does not read the descriptive members. FORMATS.md lists it.",
+  "type": "object",
+  "required": [
+    "format",
+    "formatVersion",
+    "id",
+    "range",
+    "bodies"
+  ],
+  "properties": {
+    "format": {
+      "const": "gravitas.ephemeris-pack"
+    },
+    "formatVersion": {
+      "const": 1
+    },
+    "id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "version": {
+      "type": "string"
+    },
+    "title": {},
+    "source": {
+      "type": "object"
+    },
+    "license": {
+      "type": "object"
+    },
+    "credit": {
+      "type": "string"
+    },
+    "retrieved": {
+      "type": "string"
+    },
+    "frame": {
+      "type": "object"
+    },
+    "timeScale": {
+      "type": "string"
+    },
+    "units": {
+      "type": "object"
+    },
+    "range": {
+      "type": "object",
+      "required": [
+        "startJd",
+        "stopJd"
+      ],
+      "properties": {
+        "start": {
+          "type": "string"
+        },
+        "stop": {
+          "type": "string"
+        },
+        "startJd": {
+          "type": "number"
+        },
+        "stopJd": {
+          "type": "number"
+        }
+      }
+    },
+    "request": {
+      "type": "object"
+    },
+    "encoding": {
+      "type": "object"
+    },
+    "bodies": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "segmentDays",
+          "degree",
+          "segments",
+          "bytes"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "segmentDays": {
+            "type": "number",
+            "exclusiveMinimum": 0
+          },
+          "degree": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "segments": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "bytes": {
+            "type": "integer",
+            "minimum": 1
+          }
+        }
+      },
+      "minItems": 1
+    },
+    "output": {
+      "type": "object"
+    }
+  }
+}
