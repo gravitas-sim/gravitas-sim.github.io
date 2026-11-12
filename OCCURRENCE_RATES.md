@@ -53,3 +53,5 @@ own batman light curves, its own quadrature of the completeness, its own planets
 deviance intervals; its results are pinned in `oracle-results.json` before any row was judged. The harness is
 `npm run occurrence:validate`; the pinned table is `tests/fixtures/occurrence/results.json`, the legs that crossed a
 bound are in `failed-legs.json` and stay failing. Leg E1 (an authentic survey) is NOT RUN: none was supplied.
+
+<!-- Listed in DOCUMENTS.md. -->
