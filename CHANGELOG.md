@@ -15,6 +15,16 @@ the release rather than in the tag.
 
 ### Added
 
+- Test runtime II and the cost artifact (Prompt 292; register rows D-R10-292-01
+  to 08): each CI run leaves a `ci-observability` record (job durations,
+  runner-minutes, shard balance, Jest and Playwright counts, the flake ledger,
+  the budget lines and precache sizes), `docs/CI_TRENDS.md` charts the trend
+  with the plot component's static export, the source browser suite runs on 17
+  shards instead of 20 (the runner pool runs 20 jobs at once, so the extra
+  shards only queued) from refreshed timings, fifteen production-build copies
+  of logic tests are dropped where the sources run keeps the fact, and two
+  scenario-data tests moved from the browser suite to Jest. The 15-minute target
+  is recorded as a structural miss with its next step.
 - Help II (Prompt 286; register rows D-R10-286-01 to 05): H opens the explainer
   of the panel you are in, every explainer ends with where its physics is
   checked, the glossary defines 81 terms by topic in both languages and a term
