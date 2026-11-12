@@ -133,3 +133,5 @@ Library page itself, a progress-free preview in the three labs, Spanish for the
 instructor notes the pages quote, and a menu entry (index.html has 18 bytes
 under its ceiling), so the index is reached from Teach and from the instructor
 resources.
+
+<!-- Listed in DOCUMENTS.md. -->
