@@ -393,3 +393,5 @@ No source was fetched or read by this session beyond the saved files; no licence
 data, header or body was examined, so no scientific fact of a source is verified; nothing was packed or shipped; no
 basis was carried from one source to another (row 16's CC BY 4.0 is its own record's, and no CDS-table or
 D-SKY-02 reasoning was used anywhere). The rows are DELEGATED, pending Carl's ratification.
+
+<!-- Listed in DOCUMENTS.md. -->
