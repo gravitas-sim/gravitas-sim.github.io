@@ -190,3 +190,5 @@ IndexedDB `gravitas-catalog` and `gravitas-archive`, `js/library/progress.js` an
 ## Names that look like keys and are not
 
 `gravitas_input`, `gravitas_params` and `gravitas_output` are Python names a compute notebook sees (`js/compute/frame/worker.js`); nothing is stored under them.
+
+<!-- Listed in DOCUMENTS.md. -->
