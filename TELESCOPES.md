@@ -122,3 +122,5 @@ matching nothing. The Spanish has not been read by a fluent reader.
 `js/kernels/detector/telescope.js` (config, photon rates through `lab.js`, the profile table `frame.js` draws with, the scenes),
 `js/telescopeField.js` (the matching and measuring half: Prompt 183's tools), `tools/telescopes-validate.mjs`,
 `tools/telescopes-oracle/oracle.py`, `tests/telescopes.test.js`.
+
+<!-- Listed in DOCUMENTS.md. -->
