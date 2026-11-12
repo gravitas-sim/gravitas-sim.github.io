@@ -66,3 +66,5 @@ The kernel, its validation and the gate are here. Not built: the ring scenarios 
 change (English and Spanish, instructor materials, Library and adoption entries, scene audit, the lazy instrument
 family) of the size of prompts 190 and 191, and they should land as their own pull requests on this kernel. No data
 is needed beyond the cited values the kernel already carries.
+
+<!-- Listed in DOCUMENTS.md. -->
