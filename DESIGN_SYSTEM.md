@@ -674,3 +674,5 @@ wanted and did not have, for whoever next changes the tokens:
   is night-vision safe too. Today they are theme-invariant by design.
 - `--focus-ring-inset` for a ring drawn inside a row or a view, now written as
   `calc(-1 * var(--focus-ring-width))`.
+
+<!-- Listed in DOCUMENTS.md. -->
