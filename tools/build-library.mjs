@@ -795,6 +795,14 @@ export async function buildLibrary() {
     entries: s.lessons.map(l => `investigation:${l.id}`),
     depths: s.lessons.map(l => l.depth),
     after: s.after,
+    // Prompt 287: where a second tier starts (a row's tier name in sequences.js).
+    ...(s.lessons.some(l => l.tier)
+      ? {
+          tiers: s.lessons
+            .map((l, at) => (l.tier ? { id: l.tier, at } : null))
+            .filter(Boolean),
+        }
+      : {}),
   }));
   // The Observatory's suites are sequences too: each says to work through
   // its guides in order.

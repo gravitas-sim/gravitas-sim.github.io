@@ -134,6 +134,7 @@ export const EN_LIBRARY = {
     'A sequence is a short run of investigations in a good order. A course is a term of work, in units.',
   'lib.pathway.seq': 'Sequence of {n}',
   'lib.pathway.course': 'Course',
+  'lib.tier.deeper': 'In depth',
   'lib.topics.title': 'Topics',
   'lib.topics.note':
     'Each subject has a page of its own: its sequences, courses and the rest.',
@@ -146,6 +147,7 @@ export const EN_LIBRARY = {
   'lib.why.summary': 'the summary',
   'lib.why.objectives': 'the objectives',
   'lib.why.facts': 'its details',
+  'lib.why.where': 'where it runs',
   'lib.card.details': 'Related and next',
   'lib.card.before': 'You may want this first:',
   'lib.topic.sequences': 'Sequences',
@@ -153,6 +155,7 @@ export const EN_LIBRARY = {
   'lib.topic.investigations': 'Investigations',
   'lib.topic.datasets': 'Datasets',
   'lib.topic.scenarios': 'Scenarios',
+  'lib.topic.other': 'Not in a sequence',
   'lib.topic.all': 'Everything on this topic, with filters',
   'lib.topic.align': 'How this fits a textbook: the alignment table',
   'lib.topic.empty': 'Nothing is filed under this topic yet.',

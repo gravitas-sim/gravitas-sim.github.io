@@ -519,7 +519,9 @@
       "formats": 15,
       "filters": 4,
       "moreFilters": 7,
-      "startCards": 7
+      "startCards": 7,
+      "pathwaySequences": 9,
+      "pathwayCourses": 6
     },
     "reach": {
       "maxClicksFromHome": 3,
@@ -539,7 +541,7 @@
         "phone": 7
       },
       "library": {
-        "desktop": 24,
+        "desktop": 23,
         "phone": 11
       },
       "my-work": {
@@ -548,12 +550,20 @@
       },
       "observatory": {
         "desktop": 16,
-        "phone": 9
+        "phone": 8
       },
       "teaching": {
-        "desktop": 21,
+        "desktop": 20,
         "phone": 3
       }
+    },
+    "scale": {
+      "topicRowsUndivided": 30,
+      "subtopicRows": 30,
+      "sequenceOverlapPercent": 75,
+      "libraryJsonKb": 410,
+      "searchIndexKb": 121,
+      "startMinutes": 50
     }
   },
   "futureAcceptance": [],

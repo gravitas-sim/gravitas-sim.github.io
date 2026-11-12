@@ -187,6 +187,14 @@ export async function measure() {
       ).length,
       // What the default view lists: the committed starting points.
       startCards: library.starts.reduce((n, g) => n + g.entries.length, 0),
+      // The pathways listed on the start view (Prompt 287): the curated
+      // sequences and the built-in courses.
+      pathwaySequences: library.sequences.filter(
+        s => !s.id.startsWith('observatory-')
+      ).length,
+      pathwayCourses: library.entries.filter(
+        e => e.kind === 'course' && e.format === 'course'
+      ).length,
       entries: library.entries.length,
     },
   };
