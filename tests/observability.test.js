@@ -369,3 +369,31 @@ describe('the workflow step that writes the record', () => {
     expect(steps[i + 1]['continue-on-error']).toBe(true);
   });
 });
+
+describe('the accessibility job in two parts (Prompt 292 follow-up)', () => {
+  const workflow = yaml.load(readFileSync('.github/workflows/ci.yml', 'utf8'));
+  const job = workflow.jobs.accessibility;
+
+  test('is one job id with a two-part matrix the gate still waits for, and its limit did not move', () => {
+    expect(job.strategy.matrix.part).toEqual([1, 2]);
+    expect(job.strategy['fail-fast']).toBe(false);
+    expect(job['timeout-minutes']).toBe(25);
+    expect(workflow.jobs.ci.needs).toContain('accessibility');
+  });
+
+  test('every axe test runs once between the parts, and the other specs run in exactly one', () => {
+    const run = n => job.steps.find(s => (s.name || '').startsWith(n));
+    const axe = run('axe-core');
+    expect(axe.run).toBe(
+      'npm run a11y:axe -- --shard=${{ matrix.part }}/${{ strategy.job-total }}'
+    );
+    expect(axe.if).toBeUndefined();
+    expect(run('Lesson cards').if).toBe('${{ matrix.part == 1 }}');
+    expect(run('Keyboard, focus').if).toBe('${{ matrix.part == 2 }}');
+    // Each part uploads under its own name, or one overwrites the other.
+    const upload = job.steps.find(s =>
+      (s.uses || '').includes('upload-artifact')
+    );
+    expect(upload.with.name).toContain('${{ matrix.part }}');
+  });
+});

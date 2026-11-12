@@ -755,6 +755,9 @@ export const CHECKS = [
     command: ['npm', 'run', 'cards:check'],
     tier: 'quick',
     ci: 'accessibility',
+    // Part 1 of the two accessibility parts (Prompt 292 follow-up); the gate
+    // runs it unconditionally.
+    ciCondition: '${{ matrix.part == 1 }}',
     group: 'generated',
   },
   // The scene catalog and the record beside it are generated from the lesson
@@ -1032,6 +1035,10 @@ export const CI_EQUIVALENTS = {
   // warnings. See the `author` entry for why the two differ.
   'npm run author:check': 'author',
   'npm run a11y:axe': 'e2e-sources',
+  // The same spec in two parts in CI (Prompt 292 follow-up): Playwright's own
+  // --shard over the axe spec, every test once between the parts.
+  'npm run a11y:axe -- --shard=${{ matrix.part }}/${{ strategy.job-total }}':
+    'e2e-sources',
   'npm run a11y:manual': 'e2e-sources',
   // Sharded in CI, whole in the gate. Each shard plans its part of the suite
   // and runs it (tools/e2e-shards.mjs), and the coverage job checks the parts

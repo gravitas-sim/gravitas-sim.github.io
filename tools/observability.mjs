@@ -533,6 +533,14 @@ export function renderMarkdown(history, { charts = true } = {}) {
       ''
     );
   }
+  out.push(
+    '## What the wall time is made of',
+    '',
+    'Measured on the first run of the 17-shard matrix on v3 (run 43169241344, push, 59d82585; Prompt 292 follow-up, D-R10-292-10): **29.7 minutes** from the run being created to the last job finishing (28.9 by the cost record, which stops at the last gated job), against the 15-minute target and the 21 to 25 the planner predicted. The chain, by job start and end in minutes: the longest source shard 9/17 ran 0.1 to 21.1 (shards 14.8 to 21.0, all under the 24-minute step stop, longest over mean 1.18 against the 1.15 bound); the accessibility job 0.0 to 18.6; Jest 14.0; the production-build job 14.1 to 24.9. The two jobs that gate the shards (the coverage check and the report, 25 seconds each) were created at 21.0 and **started at 28.3: seven minutes waiting for a runner**, because another run on the same pool (a pull request created 40 seconds after this push) held the 20 slots. So 21.1 minutes of tests, 7.2 minutes of runner queue, and about 1.4 for the gate and the cost record. The queue is not a property of this workflow: the pool is shared by every run on the repository. On the same push a first attempt of the accessibility job was cancelled at its 25-minute limit with no failing test (it ran 18.6 to 23.7 minutes on other heads), which is why that job is now two parts.',
+    '',
+    '**Floor.** The runner-minutes (376 to 408 a run) divided by the 20 slots is 19 to 20.4 minutes before any queueing behind another run. A 15-minute pull-request wall time is not reachable by planning. **The recommendation is to reset the pull-request target to 22 minutes** (D-R10-292-06) and to judge it on runs that did not overlap another: read the gap between a gate job being created and started in the run before blaming the suite.',
+    ''
+  );
   out.push(`${MARK}`, ...history.map(r => JSON.stringify(r)), `${END}`, '');
   return out.join('\n');
 }

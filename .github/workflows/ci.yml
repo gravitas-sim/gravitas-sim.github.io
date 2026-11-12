@@ -693,9 +693,23 @@ jobs:
           if-no-files-found: error
 
   accessibility:
-    name: Accessibility (axe + keyboard)
+    name: Accessibility (axe + keyboard) ${{ matrix.part }}/${{ strategy.job-total }}
     runs-on: ubuntu-24.04
     timeout-minutes: 25
+    # 2026-11-12: two parts (Prompt 292 follow-up, D-R10-292-09; Carl's ruling of
+    # 2026-11-11 authorizes this prompt's edits to this file). One job ran the
+    # whole axe spec (480 combinations, about 17 minutes) and then the keyboard
+    # specs: 18.6 to 23.7 minutes against the 25-minute limit, and one attempt
+    # was cancelled at it with no failing test. Playwright's own --shard splits
+    # the axe spec's tests evenly (each test is its own unit of work, as in the
+    # source shards); part 1 adds the lesson-card check and part 2 the keyboard
+    # specs. The limit is unchanged and no test is dropped: the two parts run
+    # exactly the tests the one job ran. The job id and the gate's `needs` are
+    # unchanged; the matrix rolls up to one result.
+    strategy:
+      fail-fast: false
+      matrix:
+        part: [1, 2]
     # Its own job rather than a line inside the browser suite. An accessibility
     # regression should be legible as one on the pull request rather than as
     # "e2e failed", and this runs in parallel so it costs no wall-clock. The
@@ -720,24 +734,26 @@ jobs:
           browser: chromium
 
       - name: axe-core over every surface, both languages, both themes
-        run: npm run a11y:axe
+        run: npm run a11y:axe -- --shard=${{ matrix.part }}/${{ strategy.job-total }}
 
       # The lesson cards are drawn in Chromium and compared with what is
       # committed, so this is the job that has a browser for them.
       - name: Lesson cards are current
+        if: ${{ matrix.part == 1 }}
         run: npm run cards:check
 
       # Focus order, focus traps, Escape, focus restoration, heading order,
       # landmarks, reflow at 200% and 400%, reduced motion, and the textual
       # description of the canvas. The half axe cannot see.
       - name: Keyboard, focus and the canvas description
+        if: ${{ matrix.part == 2 }}
         run: npm run a11y:manual
 
       - name: Upload the report
         if: ${{ !cancelled() }}
         uses: actions/upload-artifact@v7
         with:
-          name: playwright-report-accessibility
+          name: playwright-report-accessibility-${{ matrix.part }}
           path: |
             playwright-report
             test-results
