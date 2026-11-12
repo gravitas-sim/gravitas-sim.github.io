@@ -1,0 +1,45 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://gravitas-sim.online/sdk/schemas/investigation-link-2.schema.json",
+  "title": "investigation link/2",
+  "description": "The payload an investigation link carries (#i1 or #i2, then the deflated or raw base64url JSON): exactly one of a pack (`p`, a gravitas.investigation-pack, at the lowest version that carries it: i2 only for a pack with a criterion kind, depth or weight), a delta (`d`, the change to a pack held in the page) or the key of a package installed in this browser (`k`, which opens nothing on another machine and says so). js/composer/packLink.js readPackFragment() returns each of the three and refuses anything else as `notPack`, and a wrong kind, a newer prefix or a corrupt fragment by reason code. FORMATS.md lists it.",
+  "anyOf": [
+    {
+      "type": "object",
+      "required": [
+        "p"
+      ],
+      "properties": {
+        "p": {
+          "type": "object"
+        }
+      },
+      "additionalProperties": false
+    },
+    {
+      "type": "object",
+      "required": [
+        "d"
+      ],
+      "properties": {
+        "d": {
+          "type": "object"
+        }
+      },
+      "additionalProperties": false
+    },
+    {
+      "type": "object",
+      "required": [
+        "k"
+      ],
+      "properties": {
+        "k": {
+          "type": "string",
+          "pattern": "^[a-z0-9]+(\\.[a-z0-9]+(-[a-z0-9]+)*)+$"
+        }
+      },
+      "additionalProperties": false
+    }
+  ]
+}

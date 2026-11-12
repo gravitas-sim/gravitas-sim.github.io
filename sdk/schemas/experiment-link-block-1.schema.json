@@ -1,0 +1,51 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://gravitas-sim.online/sdk/schemas/experiment-link-block-1.schema.json",
+  "title": "experiment link block/1",
+  "description": "The A/B setup a world share link carries as `xp` of its payload: a name (at most 80 characters), the metric ids, the object ids, the primary object, the one variable changed between the runs as [key, from, to] and whether a second variable was confirmed. The recorded samples never travel in a link. js/experiments/shareExperiment.js readExperimentBlock() is the authority and is lenient: it keeps what it can use and drops a member that is not the right kind, so the schema, which states what the writer writes, refuses what the reader drops. FORMATS.md lists it.",
+  "type": "object",
+  "required": [
+    "v"
+  ],
+  "properties": {
+    "v": {
+      "const": 1
+    },
+    "n": {
+      "type": "string",
+      "maxLength": 80
+    },
+    "m": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "o": {
+      "type": "array",
+      "items": {
+        "type": "number"
+      }
+    },
+    "pr": {
+      "type": "number"
+    },
+    "dv": {
+      "type": "array",
+      "items": {
+        "type": "array",
+        "items": {},
+        "minItems": 3,
+        "maxItems": 3,
+        "prefixItems": [
+          {
+            "type": "string"
+          }
+        ]
+      }
+    },
+    "mv": {
+      "const": 1
+    }
+  }
+}

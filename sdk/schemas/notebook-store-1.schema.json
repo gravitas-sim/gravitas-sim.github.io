@@ -1,0 +1,23 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://gravitas-sim.online/sdk/schemas/notebook-store-1.schema.json",
+  "title": "notebook store/1",
+  "description": "The evidence notebook as the browser keeps it (one localStorage key): its schema number and the entries in order. js/notebook/store.js load() is the authority and checks the schema number only (a record from a newer version is kept and not overwritten, in words: `from-a-newer-version`), a value that is not JSON is `unreadable`, and an entry is checked when it is revived (notebook entry snapshot/1). The entries are open objects here for that reason. The store writes at most 60 entries and refuses a write past that (and an entry past its own size) before it touches what is kept, so the notebook on disk is never half-written; a reader of a larger one, which only another tool could make, still reads what is there. FORMATS.md lists it.",
+  "type": "object",
+  "required": [
+    "v",
+    "entries"
+  ],
+  "properties": {
+    "v": {
+      "const": 1
+    },
+    "entries": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      },
+      "maxItems": 60
+    }
+  }
+}

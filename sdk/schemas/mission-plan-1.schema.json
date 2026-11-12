@@ -1,0 +1,99 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://gravitas-sim.online/sdk/schemas/mission-plan-1.schema.json",
+  "title": "gravitas.mission-plan/1",
+  "description": "The plan file the mission core and the mission lab write for one result: what it is not for (`notFor`, written into every file), the kind of result, the units, the inputs (what the reader chose, in the units named), the model (the constants taken for each body and the approximations the result rests on, by id), what was derived (the solver's answer and its report) and, for a result with burns, the budget and the timeline. It has no clock in it, so the same plan makes the same bytes. js/mission/plan.js planFile() writes it and js/myWork/made.js checks one by shape when it is kept (a lab plan needs `inputs`); a plan a link carries (#plan1.) is the lab's own plan, the file's `inputs`, read by js/mission/link.js readPlan(), which drops a field it does not know and refuses a wrong one. Nothing in a file is verified against the solver here. FORMATS.md lists it.",
+  "type": "object",
+  "required": [
+    "format",
+    "formatVersion",
+    "notFor",
+    "kind",
+    "units",
+    "inputs",
+    "model",
+    "derived",
+    "timeline"
+  ],
+  "properties": {
+    "format": {
+      "const": "gravitas.mission-plan"
+    },
+    "formatVersion": {
+      "const": 1
+    },
+    "generator": {
+      "type": "string"
+    },
+    "notFor": {
+      "type": "string",
+      "minLength": 1
+    },
+    "kind": {
+      "type": "string",
+      "minLength": 1
+    },
+    "units": {
+      "type": "object",
+      "properties": {
+        "length": {
+          "type": "string"
+        },
+        "time": {
+          "type": "string"
+        },
+        "speed": {
+          "type": "string"
+        },
+        "angle": {
+          "type": "string"
+        },
+        "date": {
+          "type": "string"
+        }
+      }
+    },
+    "inputs": {
+      "type": "object"
+    },
+    "model": {
+      "type": "object",
+      "required": [
+        "bodies",
+        "approximations"
+      ],
+      "properties": {
+        "bodies": {
+          "type": "object"
+        },
+        "approximations": {
+          "type": "array",
+          "items": {
+            "enum": [
+              "impulsive",
+              "pointMass",
+              "twoBody",
+              "circularOrbits",
+              "coplanarPlanets",
+              "patchedConic",
+              "zeroRevolution",
+              "planarFlyby",
+              "ephemerisPack",
+              "namedPullers"
+            ]
+          }
+        }
+      }
+    },
+    "derived": {
+      "type": "object"
+    },
+    "budget": {
+      "type": "object"
+    },
+    "timeline": {
+      "type": "array",
+      "items": {}
+    }
+  }
+}

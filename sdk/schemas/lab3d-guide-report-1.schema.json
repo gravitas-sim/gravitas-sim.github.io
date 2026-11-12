@@ -1,0 +1,86 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://gravitas-sim.online/sdk/schemas/lab3d-guide-report-1.schema.json",
+  "title": "gravitas.lab3d-guide-report/1",
+  "description": "The file a reader downloads from one of the 3-D lab's guided investigations: the curriculum version, the guide and path, the language, the reader's name and one row per step (an answer step with what was typed, whether it passed or was shown and, once either, the expected answer; a choice step with the choice and whether it was a prediction; a do step with whether it passed and, where the step records one, the recorded system and time). It has no clock in it. Nothing reads it back (a student's file cannot be opened again), so the schema states what the writer writes, in js/lab3d/view/guidePanel.js reportOf(). FORMATS.md lists it.",
+  "type": "object",
+  "required": [
+    "format",
+    "formatVersion",
+    "curriculum",
+    "guide",
+    "path",
+    "locale",
+    "name",
+    "steps"
+  ],
+  "properties": {
+    "format": {
+      "const": "gravitas.lab3d-guide-report"
+    },
+    "formatVersion": {
+      "const": 1
+    },
+    "curriculum": {
+      "type": "string"
+    },
+    "guide": {
+      "type": "string",
+      "minLength": 1
+    },
+    "path": {
+      "type": "string"
+    },
+    "locale": {
+      "enum": [
+        "en",
+        "es"
+      ]
+    },
+    "name": {
+      "type": "string"
+    },
+    "steps": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "step",
+          "kind"
+        ],
+        "properties": {
+          "step": {
+            "type": "string"
+          },
+          "kind": {
+            "enum": [
+              "read",
+              "answer",
+              "choose",
+              "do"
+            ]
+          },
+          "typed": {},
+          "passed": {
+            "type": "boolean"
+          },
+          "shown": {
+            "type": "boolean"
+          },
+          "expected": {},
+          "choice": {},
+          "prediction": {
+            "type": "boolean"
+          },
+          "recorded": {
+            "type": "object",
+            "properties": {
+              "system": {},
+              "t": {}
+            }
+          }
+        }
+      }
+    }
+  }
+}

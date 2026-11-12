@@ -1,0 +1,116 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://gravitas-sim.online/sdk/schemas/course-manifest-1.schema.json",
+  "title": "gravitas.course-manifest/1",
+  "description": "What an instructor downloads of a course's makeup: the course (id, version, title, languages, pinning, the Gravitas version it needs and its home address), the platform facts, the minutes by path, one row per item (its kind, path, what it opens, minutes, objectives, needs, pin, status, offline behaviour, licence, languages and links), the dependency graph and what is left to do or decide. It is written from the course package by js/course/manifest.js and nothing reads it back (a file in it cannot be opened again), so the schema states what the writer writes. FORMATS.md lists it.",
+  "type": "object",
+  "required": [
+    "format",
+    "formatVersion",
+    "course",
+    "platform",
+    "minutes",
+    "items",
+    "dependencies",
+    "remaining"
+  ],
+  "properties": {
+    "format": {
+      "const": "gravitas.course-manifest"
+    },
+    "formatVersion": {
+      "const": 1
+    },
+    "course": {
+      "type": "object",
+      "required": [
+        "id",
+        "version",
+        "locales"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "version": {
+          "type": "string"
+        },
+        "title": {},
+        "locales": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "pinning": {
+          "type": "string"
+        },
+        "gravitas": {
+          "type": "string"
+        },
+        "home": {}
+      }
+    },
+    "platform": {
+      "type": "object"
+    },
+    "minutes": {
+      "type": "object"
+    },
+    "items": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "kind"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "kind": {
+            "type": "string"
+          },
+          "path": {
+            "type": "string"
+          },
+          "minutes": {},
+          "status": {},
+          "offline": {},
+          "license": {},
+          "locales": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "links": {
+            "type": "object"
+          }
+        }
+      }
+    },
+    "dependencies": {},
+    "remaining": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "level",
+          "code"
+        ],
+        "properties": {
+          "level": {
+            "type": "string"
+          },
+          "code": {
+            "type": "string"
+          },
+          "path": {}
+        }
+      }
+    }
+  }
+}

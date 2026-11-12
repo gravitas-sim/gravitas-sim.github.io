@@ -1,0 +1,71 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://gravitas-sim.online/sdk/schemas/progress-2.schema.json",
+  "title": "investigation progress/2",
+  "description": "A student's saved place in one lesson, in localStorage (key per lesson): the lesson id, the sid of the step they were on, their answers by step key (`<lesson>:<step sid>`, with sub-keys such as `:tries` for the wrong numbers checked), the attempts by step key, the sids visited, when they started and, where chosen, the depth they work at, the deepest they reached and the seconds spent. js/investigations/progressSchema.js readProgress() is the authority and is lenient by design: it keeps the keys of steps the lesson still has and reports the rest as notes, reads version 1 (keyed by index) by migrating it, and a newer version is kept and not overwritten, in words (`schemaTooNew`). The schema states what the writer writes. FORMATS.md lists it.",
+  "type": "object",
+  "required": [
+    "schema",
+    "lesson",
+    "stepSid",
+    "responses",
+    "attempts",
+    "visited",
+    "startedAt"
+  ],
+  "properties": {
+    "schema": {
+      "const": 2
+    },
+    "lesson": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "stepSid": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "responses": {
+      "type": "object"
+    },
+    "attempts": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "number"
+      }
+    },
+    "visited": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "startedAt": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "depth": {
+      "enum": [
+        "core",
+        "quantitative",
+        "advanced"
+      ]
+    },
+    "deepest": {
+      "enum": [
+        "quantitative",
+        "advanced"
+      ]
+    },
+    "spent": {
+      "type": "integer",
+      "minimum": 1
+    }
+  }
+}

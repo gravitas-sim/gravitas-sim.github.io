@@ -437,6 +437,12 @@ The JSON formats have JSON Schemas (draft 2020-12) in [`schemas/`](schemas/)
 for editors. The schemas describe structure. The validators are the
 authority, because some rules span fields, and the contract suite checks
 that the two agree.
+Every format Gravitas reads or writes has one (FORMATS.md lists them, 73 rows):
+the pack and package formats above, and also the records a student keeps, the
+files and links they hand on and the data files the application ships. A
+schema is for an editor and a test; no page loads one. The ones for records
+the SDK does not validate say, in their descriptions, which reader is the
+authority and where it is wider than the schema.
 
 `tests/sdkContract.test.js` is the contract suite. It drives only the command
 line and this API, and it fails if an example or the suite itself imports

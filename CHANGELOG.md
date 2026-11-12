@@ -36,6 +36,14 @@ the release rather than in the tag.
 
 ### Changed
 
+- Format audit and the freeze (Prompt 290; register rows D-R10-290-01 to 06):
+  every format Gravitas reads or writes now has a JSON Schema in `sdk/schemas`
+  (36 new ones, written from the readers and held to them case by case; no reader
+  changed), four formats the first inventory had missed have rows, the
+  investigation link row says version 2 as the writer does, and
+  `tests/formats.test.js` fails a format id that has no row, schema and version
+  or that is added after the freeze without a register row saying why it is new.
+  Nothing a student sees changed and no page loads a schema.
 - Low-end II (Prompt 285). The low quality tier now also reduces computation:
   a bootstrap takes 300 draws instead of 1000, the orbit tool's mass sum 5000
   instead of 20,000 and a fit's profile intervals 7 grid points instead of 11; the

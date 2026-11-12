@@ -1,0 +1,68 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://gravitas-sim.online/sdk/schemas/experiment-store-3.schema.json",
+  "title": "experiment store/3",
+  "description": "The record the A/B bench keeps in localStorage for a saved comparison (a gravitas.experiment-result/1 of kind comparison, with the store's own schema number `v` beside format and formatVersion): an id, a name, the scenario, the two runs by label with their samples, the unit each metric was sampled in, and the saved comparison and reliability check where there are any. Version 3 withdrew the two drifts earlier versions recorded wrongly. js/experiments/store.js migrate() reads version 1 (the runs as runA and runB, no units block) and version 2, and a record with no `v` as version 1; the schema states the current form. A record from a newer version is refused by reason code (`from-a-newer-version`). FORMATS.md lists it.",
+  "type": "object",
+  "required": [
+    "v",
+    "format",
+    "formatVersion",
+    "id",
+    "runs",
+    "units"
+  ],
+  "properties": {
+    "v": {
+      "const": 3
+    },
+    "format": {
+      "const": "gravitas.experiment-result"
+    },
+    "formatVersion": {
+      "const": 1
+    },
+    "kind": {
+      "const": "comparison"
+    },
+    "id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "name": {
+      "type": "string"
+    },
+    "scenario": {
+      "type": "string"
+    },
+    "runs": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "required": [
+          "samples"
+        ],
+        "properties": {
+          "samples": {
+            "type": "array",
+            "items": {
+              "type": "object"
+            }
+          },
+          "recordedAt": {
+            "type": "number"
+          }
+        }
+      }
+    },
+    "units": {
+      "type": "object"
+    },
+    "savedAt": {
+      "type": "number"
+    },
+    "updatedAt": {
+      "type": "number"
+    }
+  }
+}

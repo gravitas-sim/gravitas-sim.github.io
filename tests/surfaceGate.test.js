@@ -251,13 +251,19 @@ describe('the recorded evidence is judged by the function and nothing else', () 
     expect(problems(evidence)).toEqual([]);
   });
 
-  test('every format without a schema has a record, and no record names a format that has one', async () => {
-    const names = await schemaLessFormats();
+  test('every format the gate judged without a schema is still a row of the table, and none is without one now', async () => {
+    // Prompt 165 recorded the 32 formats that had no schema. Prompt 290 gave
+    // each one, so the set of formats without one is empty and the records
+    // are the gate's history: each still names a row of FORMATS.md.
+    const { FORMATS } = await import('../tools/formats.mjs');
+    const rows = new Set(FORMATS.map(f => f.name));
     const recorded = evidence.surfaces
       .filter(r => r.kind === 'stored-format')
       .map(r => r.name);
-    expect(recorded.sort()).toEqual([...names].sort());
-    expect(names).toHaveLength(32);
+    expect(recorded).toHaveLength(32);
+    for (const name of recorded)
+      expect({ name, row: rows.has(name) }).toEqual({ name, row: true });
+    expect(await schemaLessFormats()).toEqual([]);
   });
 
   test('the surfaces the roadmap named are all judged', () => {

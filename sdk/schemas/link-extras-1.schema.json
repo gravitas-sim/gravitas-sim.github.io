@@ -1,0 +1,62 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://gravitas-sim.online/sdk/schemas/link-extras-1.schema.json",
+  "title": "link extras/1",
+  "description": "The experiment extras a world share link carries as `x` of its payload, each written only when it differs from the default a link without it means: the clock in simulated seconds, the reference frame (mode and object id), the observer's position angle and inclination, the active measurement tools, the star the observing panels point at, the distance in parsecs the angular scale uses and the scenario pack the world was built from. js/experiments/canonicalState.js readExtras() is the authority and is lenient: a member of the wrong kind reads as its default. FORMATS.md lists it.",
+  "type": "object",
+  "required": [
+    "v"
+  ],
+  "properties": {
+    "v": {
+      "const": 1
+    },
+    "clock": {
+      "type": "number"
+    },
+    "frame": {
+      "type": "object",
+      "required": [
+        "m"
+      ],
+      "properties": {
+        "m": {
+          "type": "string"
+        },
+        "o": {}
+      }
+    },
+    "pa": {
+      "type": "number"
+    },
+    "inc": {
+      "type": "number"
+    },
+    "tools": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "star": {},
+    "dpc": {
+      "type": "number",
+      "exclusiveMinimum": 0
+    },
+    "pack": {
+      "type": "object",
+      "required": [
+        "id",
+        "version"
+      ],
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "version": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}
