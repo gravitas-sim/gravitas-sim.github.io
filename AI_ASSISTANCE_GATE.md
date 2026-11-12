@@ -175,3 +175,5 @@ with the one exclusion pattern and one `import()` line, then
 `node tools/build-service-worker.mjs` and
 `node tools/route-budget.mjs --report --config=sources`, and discarding that
 change. The results are in `spike/ai/results-*.json`.
+
+<!-- Listed in DOCUMENTS.md. -->
