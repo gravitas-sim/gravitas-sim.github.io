@@ -692,3 +692,5 @@ reason, not a gap waiting for a date.
 12. **A data pack cannot bring its own scientific check.** The SDK runs
     `folded-depth` and `harmonic-period`; another kind of variable needs a
     check added to the SDK, which is a core change and a minor version.
+
+<!-- End of this guide. -->
