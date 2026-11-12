@@ -11,6 +11,9 @@ export default {
   // A developer machine keeps Jest's default; --maxWorkers still overrides.
   ...(process.env.CI ? { maxWorkers: '100%' } : {}),
   setupFilesAfterEnv: ['<rootDir>/tests/setup.js'],
+  // A TMPDIR of the run's own, removed when it ends: see tools/jest-tmpdir.mjs.
+  globalSetup: '<rootDir>/tools/jest-global-setup.mjs',
+  globalTeardown: '<rootDir>/tools/jest-global-teardown.mjs',
   collectCoverageFrom: [
     'js/**/*.js',
     '!js/main.js', // Exclude main.js as it's primarily UI initialization

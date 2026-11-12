@@ -61,7 +61,7 @@
 // =============================================================================
 
 import { readFile, writeFile } from 'node:fs/promises';
-import { existsSync, readFileSync, readdirSync } from 'node:fs';
+import { existsSync, readFileSync, readdirSync, rmSync } from 'node:fs';
 import { execFileSync } from 'node:child_process';
 import { join, resolve, dirname, relative } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -642,6 +642,7 @@ function testFacts(report, physics) {
       env: { ...process.env, NODE_OPTIONS: '--experimental-vm-modules' },
     });
     if (existsSync(out)) jestJson = readFileSync(out, 'utf8');
+    rmSync(out, { force: true });
   }
   if (jestJson) {
     const jest = JSON.parse(jestJson);
