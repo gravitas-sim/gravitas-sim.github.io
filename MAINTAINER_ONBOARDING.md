@@ -48,10 +48,12 @@ npm run release:check -- --fast
   whether the documentation counts still match. Never fix generated output by
   hand; fix the source and regenerate.
 
-From a Zenodo archive rather than a checkout, `release:check` needs a git
-repository: run `git init`, `git add -A` and one commit first. The deferred
-budget can read a kilobyte high on a Node later than CI's 22; see
-[`RELEASING.md`](RELEASING.md), "Rehearsing recovery from an archive".
+From an unpacked tag or archive rather than a checkout, `release:check` runs
+without git on the current tree (the merge tripwire says there is no merge to
+check; the 2.0.0 archive's older tool fails there). It also needs a Playwright
+browser (`npx playwright install chromium`). The deferred budget is
+authoritative only on CI's Node 22; see [`RELEASING.md`](RELEASING.md),
+"Rehearsing recovery from an archive".
 
 The browser suite is `npm run e2e`, on a private port you choose through
 `GRAVITAS_E2E_PORT`, never the shared default. CI shards it.

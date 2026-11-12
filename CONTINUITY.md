@@ -21,13 +21,15 @@ usually".
   archived on Zenodo, with a version DOI for the exact release and a concept
   DOI for the whole project (`CITATION.cff`, [`RELEASING.md`](RELEASING.md)).
   The archive holds the full source tree, the teaching material and the
-  vendored libraries, under their licenses. As of 2026-11-11 the latest archived
-  release is 2.0.0 (tagged 2026-10-16). Release 2.1.0 (tagged 2026-10-24) is a
-  plain git tag with no GitHub release and no version DOI, on the owner's
-  direction (`CHANGELOG.md`, the 2.1.0 section), so it is not in the archive;
-  the work since is in the repository only. If the site and the repository
+  vendored libraries, under their licenses. As of 2026-11-12 the latest archived
+  release is 2.0.0 (tagged 2026-10-16). Release 2.1.0 (tagged 2026-10-24) and
+  `v3.0` (annotated, tagged 2026-11-12, commit `f9277ff8`) are plain git tags
+  with no GitHub release and no version DOI, so neither is in the archive;
+  the work since 2.0.0 is in the repository only. If the site and the repository
   both vanished, the latest archived release, 2.0.0, rebuilds the project as it
-  was then, not as it is.
+  was then, not as it is. Anyone who still has a clone or GitHub's tag zipball
+  of `v3.0` has the current tree; [`RELEASING.md`](RELEASING.md), "Recovering
+  from `v3.0`", says how to take and check it.
 - **The site needs no service.** It is static files on GitHub Pages: no server
   to run, no database, no account, no tracking. The simulations, the lessons
   and the validation page run from the files alone, offline once loaded
@@ -47,7 +49,8 @@ The site is the committed tree, published as it is, so a copy is a checkout.
 Nothing below needs the maintainer, an account on any service, or a build.
 
 1. Take a release from the archive (the Zenodo record) or a tag of the
-   repository, and unpack it.
+   repository, and unpack it. The newest Zenodo archive is 2.0.0; for the
+   current tree take the tag `v3.0` (RELEASING.md, "Recovering from `v3.0`").
 2. Serve the folder as static files from any host. With Node installed,
    `node tools/static-server.mjs --root . --port 8003` serves it for a trial;
    a department's web server or a file share behind one does the same job.
@@ -57,7 +60,9 @@ Nothing below needs the maintainer, an account on any service, or a build.
    copy; the decision to publish the tree and not `dist/` is in
    [`DEPLOY_MODEL_GATE.md`](DEPLOY_MODEL_GATE.md). `npm run build` also builds
    the instructor bundle and so needs the passphrase; `node build.js` alone
-   builds `dist/` without it.
+   builds `dist/` without it. A build also rewrites the tracked
+   `social-card.png` (its bytes depend on the Node version's zlib); do not
+   commit that.
 4. **A department's own instructor bundle.** Put a passphrase of its own in a
    file named `.instructor-password` (git-ignored) or in
    `GRAVITAS_INSTRUCTOR_PASSWORD`, run `npm run build:instructors`, and serve
@@ -69,19 +74,54 @@ Nothing below needs the maintainer, an account on any service, or a build.
 5. Read [`SUPPORT.md`](SUPPORT.md) for the browsers that are tested and the
    features that degrade.
 
-**What has been shown.** On 2026-10-17 the original agent rebuilt Gravitas from
-the 2.0.0 Zenodo archive (checksum checked, served, `npm ci`, `node build.js`, the
-budgets, `release:check --fast`, an instructor bundle under a throwaway
-passphrase opened in the portal) in about twelve minutes, alone, on one machine.
-The steps and the stumbles it found are in [`RELEASING.md`](RELEASING.md),
-"Rehearsing recovery from an archive". It is not independent evidence: nobody
-else has done it. It has not been repeated: no rehearsal has been run against
-2.1.0 (which has no archive) or against a later tree, and a second one is
-Prompt 291's work, not yet done. Who besides the owner can administer the Zenodo record is not
-known to the repository. The instructor passphrase has no second holder: Carl
+**What has been shown.** The original agent has rehearsed recovery twice,
+alone, on one machine, and neither run is independent evidence: nobody else has
+done it. On 2026-10-17 it rebuilt Gravitas from the 2.0.0 Zenodo archive
+(checksum checked, served, `npm ci`, `node build.js`, the budgets,
+`release:check --fast`, an instructor bundle under a throwaway passphrase
+opened in the portal) in about twelve minutes. On 2026-11-12 (Prompt 291) it
+repeated that for the 2.0.0 archive and for the `v3.0` tag, the tree as it is:
+the tag's zipball is identical to `git archive v3.0`; it unpacks, serves,
+works offline after a visit, passes the budgets on Node 22 and 24, passes
+`release:check --fast` (41 passed, 0 failed, 23 skipped, with or without a git
+repository) and builds an instructor bundle under a throwaway passphrase that
+opens the portal and that the committed bundle refuses; Spanish, an
+Observatory observation, a FITS image, a composed report and a 3.x-format
+record opened in a browser (as scripted tests). The steps, timings and
+stumbles are in [`RELEASING.md`](RELEASING.md), "Rehearsing recovery from an
+archive". Not shown: anything on a second person's machine, in Firefox or
+WebKit, or on the live host beyond reading it. Who besides the owner can
+administer the Zenodo record is not known to the repository (UNKNOWN until
+Carl confirms it). The instructor passphrase has no second holder: Carl
 decided that on 2026-10-21 (INSTRUCTOR_MATERIALS.md, "The second holder"), so if
 he is unavailable nobody can issue or rotate it, the deployed bundle keeps
 opening for current holders, and a department builds its own (step 4 above).
+
+### If the domain goes away
+
+Read on 2026-11-12, not exercised (doing it would change the live site):
+
+1. The site is published by the Pages workflow, and its custom domain
+   (`gravitas-sim.online`) is a repository setting. A `CNAME` file is ignored
+   by a workflow deployment (GitHub's Pages documentation), so removing the
+   domain is Settings, Pages, Custom domain, Remove, by the repository owner;
+   the tree's `CNAME` file can then be deleted in a pull request.
+2. The repository is an organization site, so the site then serves at the root
+   of `https://gravitas-sim.github.io/`, and the pages' root-absolute paths
+   work there. (Today that address answers 301 to the domain.)
+3. A department hosting its own copy at any host name follows "Hosting a copy"
+   above and sets nothing else. The domain's registrar and DNS holder are not
+   known to the repository (UNKNOWN until Carl records them).
+4. What still names `gravitas-sim.online` in a copy: the canonical and Open
+   Graph tags, `sitemap.xml` and `robots.txt`, the links printed in the
+   instructor documents (`SITE` in `js/instructorDocs.js`), the default of
+   `activityLaunchUrl` and one placeholder string. A fork changes them with
+   its host name.
+5. **The Compute page does not work on another host.** Its sandboxed frame
+   answers a page only of `https://gravitas-sim.online` or a loopback address
+   (`js/compute/origin.js`, `compute-frame/index.html`, COMPUTE.md, "Who the
+   frame answers"). Everything else runs from the files alone. A department
+   that wants Compute needs its own frame and a change to both lists.
 
 ## Adding a co-maintainer
 
