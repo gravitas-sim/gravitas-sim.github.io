@@ -108,3 +108,5 @@ python3 -E tests/fixtures/mission-lab-ii/oracle.py > tests/fixtures/mission-lab-
 node tests/fixtures/mission-lab-ii/legs.mjs --write      # the table, results.json
 npm test -- tests/missionWorkflow.test.js
 ```
+
+<!-- Listed in DOCUMENTS.md. -->
