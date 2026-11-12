@@ -104,6 +104,29 @@
               ]
             }
           },
+          "tiers": {
+            "description": "Where a second tier of the sequence starts, as the index of its first entry (Prompt 287). The entries before the first tier are the path; each tier's entries are shown under the tier's own heading, in the order given. Absent where a sequence has one tier.",
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": [
+                "id",
+                "at"
+              ],
+              "additionalProperties": false,
+              "properties": {
+                "id": {
+                  "enum": [
+                    "deeper"
+                  ]
+                },
+                "at": {
+                  "type": "integer",
+                  "minimum": 1
+                }
+              }
+            }
+          },
           "after": {
             "description": "Sequences worth working through before this one.",
             "type": "array",

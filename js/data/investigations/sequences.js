@@ -107,18 +107,21 @@ export const SEQUENCE_DEPTHS = ['core', 'quantitative', 'advanced'];
  *
  * `depth` is the depth the sequence assumes the lesson is read at (a lesson
  * that offers one depth is `core`); `after` names the sequences it is better
- * to have worked through first.
+ * to have worked through first. A row may end with a tier name (Prompt 287):
+ * the rows from that one on are a second tier of the same sequence, shown
+ * under their own heading, in the order given.
  */
 const sequence = (id, key, after, rows) => ({
   id,
   titleId: `inv.seq.${key}.title`,
   blurbId: `inv.seq.${key}.blurb`,
   after,
-  lessons: rows.map(([lesson, depth, needs]) => ({
+  lessons: rows.map(([lesson, depth, needs, tier]) => ({
     id: lesson,
     whyId: `inv.seq.${key}.${lesson}`,
     depth,
     ...(needs ? { needs } : {}),
+    ...(tier ? { tier } : {}),
   })),
 });
 
@@ -132,7 +135,7 @@ const sequence = (id, key, after, rows) => ({
  *
  * Message ids rather than prose, because the browser is translated and these
  * lines are read by students. They live with the rest of the inv.* family in
- * the deferred catalog. Six sequences (Roadmap II, Prompt 97), a seventh, Planets and the Sun (Prompt 206), an eighth, Observing and instruments (Prompt 216), and a ninth, Stars, in depth (Prompt 224), each ordered (Observing and measuring gained What a Telescope Resolves in Prompt 208 and The Saturated Star in Prompt 211); a
+ * the deferred catalog. Six sequences (Roadmap II, Prompt 97), a seventh, Planets and the Sun (Prompt 206), an eighth, Observing and instruments (Prompt 216), and a ninth, Stars, in depth (Prompt 224; Prompt 287 folded it into Light and stars as that sequence's second tier, because twelve of the thirteen lessons of the one were in the other), each ordered (Observing and measuring gained What a Telescope Resolves in Prompt 208 and The Saturated Star in Prompt 211); a
  * lesson that belongs to two (Transit Photometry, Lines and Motion) is in
  * both, with its own reason in each. tests/investigationRegistry.test.js holds
  * every `needs` to an earlier item, every depth to what the lesson offers, and
@@ -194,6 +197,23 @@ export const SEQUENCES = [
       ['from-star-to-remnant', 'core', ['the-limit', 'lives-of-stars']],
       ['cluster-membership', 'quantitative', ['lives-of-stars']],
       ['two-clusters-two-ages', 'core', ['lives-of-stars']],
+      [
+        'spectra-tell-temperature-and-gravity',
+        'quantitative',
+        ['what-a-spectrum-is-made-of'],
+        'deeper',
+      ],
+      ['reading-the-hr-diagram', 'core', ['a-universe-of-stars']],
+      ['a-stars-life-in-numbers', 'quantitative', ['lives-of-stars']],
+      ['two-stars-eclipsing', 'core'],
+      ['weighing-the-stars-for-real', 'core'],
+      ['populations-i-and-ii', 'quantitative', ['two-clusters-two-ages']],
+      ['how-fast-does-the-star-spin', 'core'],
+      ['flares', 'core'],
+      ['when-a-star-explodes', 'quantitative', ['from-star-to-remnant']],
+      ['leavitts-law', 'core'],
+      ['the-metallicity-term', 'advanced', ['leavitts-law']],
+      ['which-kind-of-variable', 'core'],
     ]
   ),
   sequence(
@@ -379,41 +399,6 @@ export const SEQUENCES = [
         'quantitative',
         ['a-night-at-the-telescope'],
       ],
-    ]
-  ),
-  sequence(
-    'stars-in-depth',
-    'stars',
-    ['light-and-stars'],
-    [
-      ['color-and-temperature', 'core'],
-      ['what-a-spectrum-is-made-of', 'core'],
-      [
-        'spectra-tell-temperature-and-gravity',
-        'quantitative',
-        ['what-a-spectrum-is-made-of'],
-      ],
-      ['a-universe-of-stars', 'core'],
-      ['reading-the-hr-diagram', 'core', ['a-universe-of-stars']],
-      ['lives-of-stars', 'core'],
-      ['a-stars-life-in-numbers', 'quantitative', ['lives-of-stars']],
-      ['inside-a-star', 'core', ['lives-of-stars']],
-      ['scaling-the-main-sequence', 'quantitative', ['inside-a-star']],
-      ['weighing-stars', 'quantitative'],
-      ['two-stars-eclipsing', 'core'],
-      ['weighing-the-stars-for-real', 'core'],
-      ['cluster-membership', 'quantitative', ['lives-of-stars']],
-      ['two-clusters-two-ages', 'core', ['lives-of-stars']],
-      ['populations-i-and-ii', 'quantitative', ['two-clusters-two-ages']],
-      ['how-fast-does-the-star-spin', 'core'],
-      ['flares', 'core'],
-      ['the-limit', 'core', ['inside-a-star']],
-      ['how-old-is-this-white-dwarf', 'core', ['the-limit']],
-      ['from-star-to-remnant', 'core', ['the-limit', 'lives-of-stars']],
-      ['when-a-star-explodes', 'quantitative', ['from-star-to-remnant']],
-      ['leavitts-law', 'core'],
-      ['the-metallicity-term', 'advanced', ['leavitts-law']],
-      ['which-kind-of-variable', 'core'],
     ]
   ),
 ];

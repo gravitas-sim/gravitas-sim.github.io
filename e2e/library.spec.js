@@ -66,7 +66,7 @@ test.describe('the default view', () => {
     ).toHaveCount(sequences.length);
     await expect(
       page.locator('#libStart .lib-pathways .lib-pathway-course')
-    ).toHaveCount(ofKind('course').length);
+    ).toHaveCount(ofKind('course').filter(e => e.format === 'course').length);
     const topics = page.locator('#libStart .lib-topics li');
     await expect(topics).toHaveCount(LIBRARY.subjects.length);
     const exo = LIBRARY.subjects.find(s => s.id === 'exoplanets');
@@ -102,6 +102,31 @@ test.describe('the default view', () => {
     await expect(crumbs.last()).toHaveAttribute('aria-current', 'page');
     await expect(crumbs.last()).toHaveText('Exoplanets');
     await expect(page.locator('#libFind')).toBeHidden();
+  });
+
+  test('Prompt 287: a long topic is divided into sub-topics inside the page, and a folded sequence opens under its new id', async ({
+    page,
+  }) => {
+    await openLibrary(page, '?topic=observing');
+    const topic = page.locator('#libDetail .lib-topic');
+    // Ninety investigations: one heading per sequence, none longer than 30 rows.
+    const subs = topic.locator('h5');
+    expect(await subs.count()).toBeGreaterThan(4);
+    const longest = await topic
+      .locator('h5 + ul.lib-rows')
+      .evaluateAll(lists => Math.max(...lists.map(l => l.children.length)));
+    expect(longest).toBeLessThanOrEqual(INV.ceilings.scale.subtopicRows);
+    await expect(topic.locator('a.lib-link').first()).toBeVisible();
+    // A topic that is not long has no sub-topic headings.
+    await openLibrary(page, '?topic=resonance');
+    await expect(page.locator('#libDetail .lib-topic h5')).toHaveCount(0);
+    // The old id of Stars, in depth opens Light and stars, with its second tier.
+    await openLibrary(page, '?sequence=stars-in-depth&group=sequence');
+    const light = page.locator('#libResults .lib-group').first();
+    await expect(light.locator('h2')).toHaveText('Light and stars');
+    await expect(light.locator('h3')).toHaveText('In depth');
+    await expect(light.locator('.lib-card')).toHaveCount(25);
+    await expect(page.locator('#libSequence')).toHaveValue('light-and-stars');
   });
 
   test('"what takes about a class period": the time facet, with the count on each option', async ({

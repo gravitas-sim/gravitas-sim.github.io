@@ -14,4 +14,6 @@ export const SEQUENCE_ALIASES = {
   'gravity-beyond-two-bodies': 'gravity-and-orbits',
   'gravitational-waves': 'gravity-and-orbits',
   'exoplanet-detection': 'planets-and-exoplanets',
+  // Prompt 287: folded into Light and stars as its second tier.
+  'stars-in-depth': 'light-and-stars',
 };

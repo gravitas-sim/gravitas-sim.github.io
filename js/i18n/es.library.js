@@ -132,6 +132,7 @@ export const ES_LIBRARY = {
     'Una secuencia es una serie corta de investigaciones en buen orden. Un curso es el trabajo de un período, en unidades.',
   'lib.pathway.seq': 'Secuencia de {n}',
   'lib.pathway.course': 'Curso',
+  'lib.tier.deeper': 'En profundidad',
   'lib.topics.title': 'Temas',
   'lib.topics.note':
     'Cada materia tiene su propia página: sus secuencias, cursos y el resto.',
@@ -144,6 +145,7 @@ export const ES_LIBRARY = {
   'lib.why.summary': 'el resumen',
   'lib.why.objectives': 'los objetivos',
   'lib.why.facts': 'sus datos',
+  'lib.why.where': 'dónde se usa',
   'lib.card.details': 'Relacionados y siguientes',
   'lib.card.before': 'Quizá quieras hacer antes:',
   'lib.topic.sequences': 'Secuencias',
@@ -151,6 +153,7 @@ export const ES_LIBRARY = {
   'lib.topic.investigations': 'Investigaciones',
   'lib.topic.datasets': 'Conjuntos de datos',
   'lib.topic.scenarios': 'Escenarios',
+  'lib.topic.other': 'Fuera de una secuencia',
   'lib.topic.all': 'Todo sobre este tema, con filtros',
   'lib.topic.align':
     'Cómo encaja con un libro de texto: la tabla de correspondencias',

@@ -394,15 +394,32 @@ const cards = (rows, extra = {}) =>
     )
     .join('');
 
-/** A titled list of cards; `ordered` for a sequence, whose order means something. */
-function section(title, blurb, rows, ordered = false, seq = '') {
+/**
+ * A titled list of cards; `ordered` for a sequence, whose order means something.
+ * A sequence with a second tier (`tier`: {at, id}, library.json) shows that
+ * tier's entries under a heading of their own, in the same order.
+ */
+function section(title, blurb, rows, ordered = false, seq = '', tier = null) {
   const tag = ordered ? 'ol' : 'ul';
+  const part = list =>
+    list.length
+      ? `<${tag} class="lib-list"${seq ? ` data-seq="${escape(seq)}"` : ''}>${cards(
+          list,
+          seq ? { path: `seq:${seq}` } : {}
+        )}</${tag}>`
+      : '';
+  const order =
+    seq && tier ? state.library.sequences.find(q => q.id === seq).entries : [];
+  const cut = tier
+    ? rows.findIndex(r => order.indexOf(r.entry.id) >= tier.at)
+    : -1;
+  const body =
+    cut < 0
+      ? part(rows)
+      : `${part(rows.slice(0, cut))}<h3>${escape(t(`lib.tier.${tier.id}`))}</h3>${part(rows.slice(cut))}`;
   return `<section class="lib-group"><h2>${escape(title)}</h2>${
     blurb ? `<p class="ui-note">${escape(blurb)}</p>` : ''
-  }<${tag} class="lib-list"${seq ? ` data-seq="${escape(seq)}"` : ''}>${cards(
-    rows,
-    seq ? { path: `seq:${seq}` } : {}
-  )}</${tag}></section>`;
+  }${body}</section>`;
 }
 
 function grouped(rows) {
@@ -433,7 +450,7 @@ function grouped(rows) {
       .map(s => [s, s.entries.map(id => shownRows.get(id)).filter(Boolean)])
       .filter(([, list]) => list.length)
       .map(([s, list]) =>
-        section(pick(s.title), pick(s.blurb), list, true, s.id)
+        section(pick(s.title), pick(s.blurb), list, true, s.id, s.tiers?.[0])
       );
     return out.length
       ? out.join('')
@@ -567,8 +584,10 @@ function startHtml() {
       s =>
         `<li><a href="?sequence=${escape(s.id)}&amp;group=sequence">${escape(pick(s.title))}</a> <span class="ui-note">${escape(t('lib.pathway.seq', { n: s.entries.length }))}</span></li>`
     );
+  // The built-in courses; a course package someone installed is found under
+  // Browse and on its topics, not in this short list (Prompt 287).
   const courses = lib.entries
-    .filter(e => e.kind === 'course')
+    .filter(e => e.kind === 'course' && e.format === 'course')
     .map(
       e =>
         `<li class="lib-pathway-course" data-entry="${escape(e.id)}"><a class="lib-link" href="${escape(e.route)}">${escape(pick(e.title))}</a> <span class="ui-note">${escape(t('lib.pathway.course'))}</span></li>`
@@ -770,6 +789,7 @@ async function refreshHits() {
         e.mathematics && t(`lib.mathematics.${e.mathematics}`),
         e.data && t(`lib.data.${e.data}`),
       ].filter(Boolean),
+    where: e => [t(`lib.format.${e.format}`)],
     objectives: id => (objectives[id]?.[lang] ?? []).join(' '),
   });
 }
@@ -898,6 +918,15 @@ async function start() {
   $('main').removeAttribute('aria-busy');
   byId = new Map(state.library.entries.map(e => [e.id, e]));
   shown = state.library.kindShown ?? {};
+  // A link that names a sequence by an id it has since been folded into
+  // (sequenceAliases) opens the sequence that took it over.
+  const moved = state.library.sequenceAliases ?? {};
+  state.filters.sequence =
+    moved[state.filters.sequence] ?? state.filters.sequence;
+  state.path = state.path.replace(
+    /^seq:(.+)$/,
+    (m, id) => `seq:${moved[id] ?? id}`
+  );
   inSequences = new Map();
   for (const sq of state.library.sequences)
     for (const id of sq.entries)

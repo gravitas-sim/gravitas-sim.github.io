@@ -165,6 +165,8 @@ Lowering one is the work of the prompt that earns it; raising one needs a decisi
 | `library.filters` | 4 |
 | `library.moreFilters` | 7 |
 | `library.startCards` | 7 |
+| `library.pathwaySequences` | 9 |
+| `library.pathwayCourses` | 6 |
 | `reach.maxClicksFromHome` | 3 |
 | `reach.pagesWithoutALinkFromHome` | 1 |
 | `defaultView.home-first-visit.desktop` | 12 |
@@ -173,14 +175,20 @@ Lowering one is the work of the prompt that earns it; raising one needs a decisi
 | `defaultView.home-first-week.phone` | 19 |
 | `defaultView.home.desktop` | 14 |
 | `defaultView.home.phone` | 7 |
-| `defaultView.library.desktop` | 24 |
+| `defaultView.library.desktop` | 23 |
 | `defaultView.library.phone` | 11 |
 | `defaultView.my-work.desktop` | 9 |
 | `defaultView.my-work.phone` | 3 |
 | `defaultView.observatory.desktop` | 16 |
-| `defaultView.observatory.phone` | 9 |
-| `defaultView.teaching.desktop` | 21 |
+| `defaultView.observatory.phone` | 8 |
+| `defaultView.teaching.desktop` | 20 |
 | `defaultView.teaching.phone` | 3 |
+| `scale.topicRowsUndivided` | 30 |
+| `scale.subtopicRows` | 30 |
+| `scale.sequenceOverlapPercent` | 75 |
+| `scale.libraryJsonKb` | 410 |
+| `scale.searchIndexKb` | 121 |
+| `scale.startMinutes` | 50 |
 <!-- /navigation:ceilings -->
 
 ## What these checks do not prove
@@ -223,6 +231,8 @@ The introduction's second screen now names the five destinations, each with its 
 ## The Library (Prompt 163)
 
 The Library answers questions instead of listing things (LIBRARY.md has the detail): its default view is where you left off, where to start (seven committed entries for four audiences), the sequences and courses as pathways and the subjects as topics, with counts that are generated; "Browse everything" is one click away, with four facets and the rest behind "More filters"; a search names why each result matched; a topic page and an item page live in the Library's route (`?topic=`, `?item=`), so no destination was added. The default view's choices at 1280 by 800 are 21 (they were 21) and at 390 by 844 are 9 (they were 12), with no ceiling raised: the phone ceiling is lowered from 14 to 11, and the static counts are four facets by default (they were seven selects), seven behind "More filters", and seven committed start cards. Home's "where was I" reads the one resume record that the Library's links and the lesson's save write.
+
+Prompt 287 (Cohesion II, `COHESION_II.md`) re-measured all of this with the 248 entries of the catalog after the science phases: the pathways list is nine sequences (Stars, in depth became the second tier of Light and stars) and six built-in courses, a topic page divides a list over 30 rows into sub-topics inside the same page, and the search is held by a committed query set. The Library's ceilings under `scale` below are new, each at what is measured; three default-view ceilings were lowered (Library desktop 24 to 23, Observatory phone 9 to 8, Teaching desktop 21 to 20) and none was raised. Every card, link, filter and control added since 2.0.0 is judged in `tools/cohesion-ledger.json`.
 
 ## The internal review protocol
 
