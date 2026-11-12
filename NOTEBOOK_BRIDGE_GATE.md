@@ -399,3 +399,5 @@ On the spike branch, `npm ci`, then serve the repository on port 4634
 (`python3 -m http.server 4634 --bind 127.0.0.1`) and run the commands in
 [`spike/notebook/README.md`](https://github.com/gravitas-sim/gravitas-sim.github.io/tree/550bf5d/spike/notebook/README.md).
 Each prints one JSON line.
+
+<!-- Listed in DOCUMENTS.md. -->
