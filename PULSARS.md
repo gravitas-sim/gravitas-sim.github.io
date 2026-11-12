@@ -222,3 +222,5 @@ matched-filter arrival phase is Taylor's frequency-domain template matching (J. 
 not in the tree and was not verified, so none is given), re-derived here with the template's own noise included and not copied from a code. The Lomb-Scargle power is Lomb 1976 and
 Scargle 1982 (as `js/kernels/variables/period.js` cites them). `DECISION_REGISTER.md` D-R10-239-xx (`RADIO_DATA_GATE.md`),
 D-R10-240-xx (the NANOGrav pack, `DATA_PACKS.md`) and D-R10-242-01 to -05.
+
+<!-- Listed in DOCUMENTS.md. -->
