@@ -78,3 +78,5 @@ membership by motion) with their bilingual lessons, depth variants, instructor m
 the authentic Milky Way option in The Missing Mass (a depth step), and the Observatory's proper-motion
 vector plots and Galactic-coordinate projections (`js/observatory/skyPanel.js`) landed in #246. The
 synthetic NGC 3198 curve stays in The Missing Mass, labelled.
+
+<!-- Listed in DOCUMENTS.md. -->
