@@ -337,3 +337,5 @@ re-exports, `tests/smallBodiesLessons.test.js`, `e2e/smallBodyLessons.spec.js`. 
 packs, the family, the lesson paths and the thumbnails are listed in `NEVER_PRECACHED`
 (`tools/build-service-worker.mjs`). Register rows D-R10-198-01 to -03 (parts 1 and 2) and -04 to
 -06 (part 3).
+
+<!-- Listed in DOCUMENTS.md. -->
