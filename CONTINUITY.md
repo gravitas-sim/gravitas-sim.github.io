@@ -106,9 +106,11 @@ Read on 2026-11-12, not exercised (doing it would change the live site):
    by a workflow deployment (GitHub's Pages documentation), so removing the
    domain is Settings, Pages, Custom domain, Remove, by the repository owner;
    the tree's `CNAME` file can then be deleted in a pull request.
-2. The repository is an organization site, so the site then serves at the root
-   of `https://gravitas-sim.github.io/`, and the pages' root-absolute paths
-   work there. (Today that address answers 301 to the domain.)
+2. The repository is named `gravitas-sim.github.io`, so GitHub serves it at
+   the root of `https://gravitas-sim.github.io/`, and the pages' root-absolute
+   paths work there. (Today that address answers 301 to the domain. The owner
+   `gravitas-sim` is a personal account, not an organization; an earlier
+   version of this file said otherwise.)
 3. A department hosting its own copy at any host name follows "Hosting a copy"
    above and sets nothing else. The domain's registrar and DNS holder are not
    known to the repository (UNKNOWN until Carl records them).
@@ -141,10 +143,35 @@ The project would be better with a second person. The way it happens:
    every change. Nobody merges their own pull request, the maintainer included
    (BRANCHING.md, INTEGRATION.md). Settings, secrets and the release stay with
    the owner until the owner hands them over, one item at a time, from the
-   checklist in [`OWNER_ACTIONS.md`](OWNER_ACTIONS.md).
-4. **If there is no maintainer.** Anyone may fork under the licenses below.
+   checklist in [`OWNER_ACTIONS.md`](OWNER_ACTIONS.md). The repository belongs
+   to a personal GitHub account, and a personal account's repository, as
+   third-party summaries of GitHub's rules put it, has an owner and
+   collaborators and nothing in between; if that holds, a co-maintainer can
+   push and merge but cannot hold settings, so handing those over means a
+   decision first (a successor arrangement, or moving the repository to an
+   organization). That decision is the owner's, has not been made, and has not
+   been checked against GitHub's own documentation.
+4. **Their first day, as rehearsed.** On 2026-11-12 (Prompt 293) the original
+   agent performed it alone from an empty directory on one machine, with
+   nothing but the public repository and no passphrase: clone, `npm ci`,
+   `npm test`, `npm run release:check -- --fast`, and reading
+   [`MAINTAINER_ONBOARDING.md`](MAINTAINER_ONBOARDING.md), which has the
+   timings and every stumble. They then (a) read this file, that one and
+   `DOCUMENTS.md`; (b) read `INTEGRATION.md` and the last page of the
+   register; (c) open `OWNER_ACTIONS.md` and learn which items are still the
+   owner's; (d) take one small documentation or test change through the queue
+   protocol (branch from the train's tip, a labelled pull request, no merge by
+   its author). The rehearsal is **not** evidence that a second person can do
+   it: nobody else has.
+5. **If there is no maintainer.** Anyone may fork under the licenses below.
    There is no reserved right to the project's continuation; the archive and
    this file are what make a fork's start fast.
+
+**Where it stands (2026-11-12).** No second maintainer exists, none has been
+invited, and no arrangement for one is recorded beyond the passphrase decision
+below. The next step needs a person (Roadmap III, Appendix A, "Second
+maintainer"). The table in `OWNER_ACTIONS.md` records, for each thing only the
+owner holds, whether it is owner-confirmed or UNKNOWN.
 
 ## What a fork must keep
 
@@ -167,9 +194,14 @@ The project would be better with a second person. The way it happens:
 
 ## The bus-factor review
 
-Some things only the current maintainer holds: the owner account of the GitHub
-organization, the domain and its DNS, the Zenodo integration, the instructor
+Some things only the current maintainer holds: the personal GitHub account that owns
+the repository (and the `gravitas-compute` organization that serves the Compute
+frame), the domain and its DNS, the Zenodo integration, the instructor
 passphrase, the maintainer's email, which is where support and the passphrase
 requests go. The review of each, what would go wrong without it and what to
 do about it, is a checklist in [`OWNER_ACTIONS.md`](OWNER_ACTIONS.md). It names
-what exists and who can reach it, and never contains a secret.
+what exists and who can reach it, and never contains a secret. Each line is
+either owner-confirmed, in Carl's words with a date, or UNKNOWN; as of
+2026-11-12 one arrangement is confirmed (there is no second passphrase holder)
+and the rest are UNKNOWN. The repository does not infer an arrangement from
+what an account page or an API happens to show.
