@@ -28,15 +28,28 @@ deleted, with a header naming the date and what superseded it:
 - [`SCENARIO_GALLERY.md`](docs/archive/SCENARIO_GALLERY.md), archived 2026-11-11 (P289); superseded by README.md, CONTRIBUTING.md, js/scenarioBrowser.js and npm run thumbnails:check.
 <!-- docs-map:end -->
 
-## 2. The three commands
+## 2. Setup from nothing, and the three commands
 
-Run these from a clean checkout, in this order, before and after any change:
+What a clean machine needs: **git**, **Node 22** (`.nvmrc` says 22, `package.json`
+asks for 22 or later, and CI runs 22; the byte budgets are authoritative only on
+22, see below), a network connection, about 1 GB of disk for the clone and its
+`node_modules`, and another 600 MB if a browser is installed. No account, no
+token and no passphrase. Then, in an empty directory:
 
 ```bash
+git clone --branch v3 https://github.com/gravitas-sim/gravitas-sim.github.io.git gravitas
+cd gravitas
 npm ci
+npx playwright install chromium
 npm test
 npm run release:check -- --fast
 ```
+
+The three commands are `npm ci`, `npm test` and `npm run release:check -- --fast`,
+in that order, before and after any change. `git clone` is the prelude (use the
+branch `INTEGRATION.md` names as the open train; `v3` was it on 2026-11-12) and
+`npx playwright install chromium` is a prerequisite of the third command, not
+a fourth step: without a browser `release:check` stops on its lesson-card check.
 
 - `npm test` is the Jest suite: physics, data, number formatting, i18n parity,
   the documentation counts and the decision register.
@@ -48,10 +61,53 @@ npm run release:check -- --fast
   whether the documentation counts still match. Never fix generated output by
   hand; fix the source and regenerate.
 
+**Rehearsed on 2026-11-12 (Prompt 293).** The original agent, alone, on the
+same Mac as the first two rehearsals, from an empty directory with a cold npm
+cache and a cold browser path, no passphrase, Node 22.23.4, `v3` at fa0f64ad.
+This is not a second person's first day; a second person will find stumbles this
+run could not.
+
+| Step | Wall time | Result |
+| --- | --- | --- |
+| `git clone --branch v3` (full history, 5,087 tracked files; the clone's `.git` is 723 MB) | 35 s | ok |
+| `npm ci` | 5 s | ok (the clone is 1.0 GB with `node_modules`) |
+| `npm test -- --maxWorkers=2` | 1,426 s (23.8 min) | 619 suites, 20,887 tests, all passed, exit 0 |
+| `npm run release:check -- --fast`, no browser installed | 135 s | **exit 1**: 40 passed, 0 failed, 23 skipped, 1 unable to launch (lesson cards) |
+| `npx playwright install chromium` | 9 s | ok (104 MiB headless shell; 601 MB in all) |
+| `npm run release:check -- --fast`, again | 139 s | exit 0: **41 passed, 0 failed, 23 skipped**; working tree clean afterwards |
+
+About 29 minutes of command time end to end, nearly all of it Jest. The Jest
+run was capped at two workers to keep the machine usable while other work ran;
+the documented `npm test` takes Jest's default of one fewer than the cores, so
+an ordinary laptop should be faster (not measured). Every stumble:
+
+1. **The browser.** The first `release:check` without a Playwright browser
+   exits 1 and prints both "0 failed" and "1 check(s) failed", because an
+   unlaunchable browser is its own outcome (the check says nothing was tested
+   either way). The `npx playwright install chromium` line above is the fix; it
+   was missing from the older version of this section.
+2. **A green Jest run looks alarming.** The log of a passing `npm test`
+   contains a `TypeError: Cannot read properties of undefined (reading
+   'documentElement')` trace (its stack names `js/sunWidgets.js`) and a block
+   saying "27 documentation problem(s) ... Run `npm run docs:sync`". The run
+   still ended with every suite and test passing and exit 0; the verdict is the
+   exit code and the `Tests:` line at the end. Where those lines come from was
+   not investigated. Do not run `docs:sync` because of them.
+3. **Twenty-four minutes with no progress line.** The Jest reporter printed no
+   per-suite line while it ran. A silent terminal is not a hang.
+4. **Node.** Only Node 22 was used here. A build under another major version
+   can move the deferred budget by a kilobyte (see RELEASING.md, "Rehearsing
+   recovery from an archive"); judge a budget failure on Node 22.
+
+Not exercised, and so not claimed: a shallow clone (the merge tripwire reads
+history), Windows, a machine without Node 22 and a version manager, the browser
+suites (`npm run e2e`), the slow half of `release:check` and a pull request. The
+recovery-from-an-archive path, with no git at all, is in
+[`RELEASING.md`](RELEASING.md) and was rehearsed twice.
+
 From an unpacked tag or archive rather than a checkout, `release:check` runs
 without git on the current tree (the merge tripwire says there is no merge to
-check; the 2.0.0 archive's older tool fails there). It also needs a Playwright
-browser (`npx playwright install chromium`). The deferred budget is
+check; the 2.0.0 archive's older tool fails there). The deferred budget is
 authoritative only on CI's Node 22; see [`RELEASING.md`](RELEASING.md),
 "Rehearsing recovery from an archive".
 
@@ -84,19 +140,33 @@ against its base, and runs the full suite on the merged tip.
   and `tools/route-budgets.json` (per page). `npm run budget:check` runs them,
   and only on the CI Node version is the number authoritative (gzip differs
   between Node versions by a byte or two). A raise needs a register row.
+  **The policy in force** is the one in `tools/budget-policy.json`, which says
+  `"mode": "exact"`: the ceilings are the numbers in `tools/bundle-budget.mjs`
+  and `tools/route-budgets.json` as they stand. The richer policy in
+  [`docs/BUDGET_POLICY.md`](docs/BUDGET_POLICY.md) (workflow ceilings, an
+  optional-growth allowance the owner grants per release, a ledger) is
+  proposed and **switched off** until the owner adopts it in writing. Never
+  raise a ceiling to make a check pass without the register row the owner has
+  asked for; ask.
 - **The decision register.** `DECISION_REGISTER.md` is the one list of
   decisions later work may rely on. A row names the decision, its source at a
   commit, its status, who authorized it, what would reopen it and the prompt
   that made it. A gate verdict in it is binding; an unratified one is evidence,
   not permission.
 - **Owner-only actions.** `OWNER_ACTIONS.md` lists what only the owner can do:
-  accounts, credentials, the instructor passphrase and external reviews.
+  accounts, credentials, the instructor passphrase and external reviews. Its
+  bus-factor table records, for each thing only the owner holds, whether the
+  arrangement is owner-confirmed or UNKNOWN. On 2026-11-12 one is confirmed
+  (there is no second passphrase holder) and the rest are UNKNOWN; treat
+  UNKNOWN as "ask", never as "someone has it".
 
 ## 5. The trains
 
 A train is a long-lived branch that stages one roadmap's work. Its state is one
 of `open`, `frozen`, `promoted` and `deleted`, recorded in `INTEGRATION.md`.
-Promotion into `main` is a release and is the owner's decision.
+Promotion into `main` is a release and is the owner's decision. On 2026-11-12
+`v3` is the open train, the `v3.0` tag exists, and it has no GitHub release or
+Zenodo record.
 
 ## 6. What never to do
 
@@ -122,14 +192,19 @@ stale and gets treated as authority. They are named
 `Gravitas_Master_Implementation_Roadmap_II_Claude_Ready.md` (44 to 121) and
 `Gravitas_Master_Implementation_Roadmap_III_Claude_Ready.md` (122 to 295), and
 sit side by side in the maintainer's planning directory, which the maintainer's
-own project instructions name. A prompt number means its numbered section in
-the matching file. The decisions the roadmaps led to are in the register, and
+own project instructions name. The pattern is
+`<planning directory>/Gravitas_Master_Implementation_Roadmap_<edition>_Claude_Ready.md`
+(the first has no edition; the others say II and III), and the directory is
+deliberately not in this repository or in any checkout, so a second maintainer
+asks the owner for it. A prompt number means its numbered section in the
+matching file. The decisions the roadmaps led to are in the register, and
 that is what a repository reader should rely on.
 
 ## 8. The first hour
 
 1. Read `CONTINUITY.md`, then this file, then `DOCUMENTS.md`.
-2. Run the three commands in section 2 and read what fails, if anything.
+2. Run the commands in section 2 and read what fails, if anything; budget a
+   half hour, most of it the test suite.
 3. Read `INTEGRATION.md` and `DECISION_REGISTER.md`'s last page.
 4. Open `OWNER_ACTIONS.md` and confirm which items are yours to hold.
 
