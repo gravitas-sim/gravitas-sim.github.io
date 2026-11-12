@@ -28,6 +28,7 @@ import {
 import { ID_EXPERIMENT } from '../../names.js';
 import { artifact } from '../../platform/artifact.js';
 import { DRAW_BUDGET } from '../../kernels/statistics/resample.js';
+import { computeValue } from '../../quality.js';
 import {
   FORMAT_VERSION as SWEEP_VERSION,
   planTrials,
@@ -103,7 +104,14 @@ export function ensembleManifest({
     trials: kind === 'sweep' ? trialCount(sweep) : trials,
     fork: kind === 'sweep' ? FORKS.legacy : FORKS.trial,
     config,
-    summary: { level: 0.95, draws: DRAW_BUDGET.default, ...summary },
+    // The draws are the record's own statement of what it computed: DRAW_BUDGET's
+    // default on the full tier, the low tier's smaller count otherwise (js/quality.js,
+    // Prompt 285), and either way what the verifier reads back.
+    summary: {
+      level: 0.95,
+      draws: computeValue('bootstrapDraws'),
+      ...summary,
+    },
     ...(limits ? { limits } : {}),
   };
   if (kind === 'sweep') {
