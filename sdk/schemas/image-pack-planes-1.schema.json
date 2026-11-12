@@ -1,0 +1,106 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://gravitas-sim.online/sdk/schemas/image-pack-planes-1.schema.json",
+  "title": "gravitas.image-pack-planes/1",
+  "description": "The pixel planes of an image pack, a file under frames/: the pack it belongs to (id), the image size, and each plane as base64 bytes with its encoding (`uint8`, or `float32-le`, little-endian 32-bit floats), one value per pixel. `data` and `variance` are the measurement planes the Observatory reads (js/observatory/imagePacks.js readFrames(), which checks the file against the pack's own size, bytes and SHA-256 and the plane lengths against the size); `display` is a picture plane some packs carry alone. The reader needs `data`; a file with only a display plane is the repository's own and the schema states it. FORMATS.md lists it.",
+  "type": "object",
+  "required": [
+    "format",
+    "formatVersion",
+    "id",
+    "width",
+    "height",
+    "planes"
+  ],
+  "properties": {
+    "format": {
+      "const": "gravitas.image-pack-planes"
+    },
+    "formatVersion": {
+      "const": 1
+    },
+    "id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "width": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "height": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "planes": {
+      "type": "object",
+      "properties": {
+        "data": {
+          "type": "object",
+          "required": [
+            "encoding",
+            "base64"
+          ],
+          "properties": {
+            "encoding": {
+              "enum": [
+                "uint8",
+                "float32-le"
+              ]
+            },
+            "base64": {
+              "type": "string"
+            }
+          }
+        },
+        "variance": {
+          "type": "object",
+          "required": [
+            "encoding",
+            "base64"
+          ],
+          "properties": {
+            "encoding": {
+              "enum": [
+                "uint8",
+                "float32-le"
+              ]
+            },
+            "base64": {
+              "type": "string"
+            }
+          }
+        },
+        "display": {
+          "type": "object",
+          "required": [
+            "encoding",
+            "base64"
+          ],
+          "properties": {
+            "encoding": {
+              "enum": [
+                "uint8",
+                "float32-le"
+              ]
+            },
+            "base64": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "anyOf": [
+        {
+          "required": [
+            "data"
+          ]
+        },
+        {
+          "required": [
+            "display"
+          ]
+        }
+      ]
+    }
+  }
+}

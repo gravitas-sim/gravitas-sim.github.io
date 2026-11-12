@@ -49,6 +49,7 @@ export const FORMATS = Object.freeze([
       'download, inside a workspace (`workspace.marks`), only when marks exist',
     older: 'v1 only',
     newer: 'refused in words, by a nesting limit',
+    schema: 'image-marks-1.schema.json',
   },
   {
     name: 'gravitas.image-calibration',
@@ -60,6 +61,7 @@ export const FORMATS = Object.freeze([
       'download, inside a workspace (`workspace.calibration`), only when an image was calibrated',
     older: 'v1 only',
     newer: 'refused in words, by a nesting limit',
+    schema: 'image-calibration-1.schema.json',
   },
   {
     name: 'gravitas.observing-setup',
@@ -137,6 +139,7 @@ export const FORMATS = Object.freeze([
     persisted: 'localStorage',
     older: 'v1 only',
     newer: 'not checked',
+    schema: 'observed-1.schema.json',
   },
   {
     name: 'gravitas.observation-data-pack',
@@ -180,6 +183,7 @@ export const FORMATS = Object.freeze([
     persisted: 'repository (frames/), fetched when an image pack is opened',
     older: 'v1 only',
     newer: 'refused: "not the frames of" the pack',
+    schema: 'image-pack-planes-1.schema.json',
   },
   {
     name: 'gravitas.grid',
@@ -213,6 +217,7 @@ export const FORMATS = Object.freeze([
     persisted: 'link',
     older: 'reads v1, whose scenario is an English name, by id',
     newer: 'refused, in words',
+    schema: 'world-link-2.schema.json',
   },
   {
     name: 'built-in scenario id',
@@ -233,6 +238,7 @@ export const FORMATS = Object.freeze([
     persisted: 'link',
     older: 'v1 only',
     newer: 'reported, not checked',
+    schema: 'experiment-link-block-1.schema.json',
   },
   {
     name: 'link extras (x)',
@@ -242,6 +248,7 @@ export const FORMATS = Object.freeze([
     persisted: 'link',
     older: 'v1 only',
     newer: 'reported, not checked',
+    schema: 'link-extras-1.schema.json',
   },
   {
     name: 'gravitas.orbital-system',
@@ -263,6 +270,7 @@ export const FORMATS = Object.freeze([
     persisted: 'file, repository',
     older: 'v1 only; reads orbital-system/1',
     newer: 'refused, in words',
+    schema: 'system3d-1.schema.json',
   },
   {
     name: 'gravitas.lab3d.snapshot',
@@ -272,6 +280,7 @@ export const FORMATS = Object.freeze([
     persisted: 'memory',
     older: 'v1 only',
     newer: 'refused',
+    schema: 'lab3d-snapshot-1.schema.json',
   },
   {
     name: 'gravitas.experiment',
@@ -320,6 +329,7 @@ export const FORMATS = Object.freeze([
     persisted: 'localStorage',
     older: 'migrates v1 and v2; a record without a format is read by v',
     newer: 'refused by reason code',
+    schema: 'experiment-store-3.schema.json',
   },
   {
     name: 'gravitas.mission-plan',
@@ -330,6 +340,7 @@ export const FORMATS = Object.freeze([
     older: 'v1 only',
     newer:
       'fields it does not know are dropped; a plan with a wrong field is refused, in words',
+    schema: 'mission-plan-1.schema.json',
   },
   {
     name: 'gravitas.ephemeris-pack',
@@ -339,6 +350,7 @@ export const FORMATS = Object.freeze([
     persisted: 'repository',
     older: 'v1 only',
     newer: 'refused',
+    schema: 'ephemeris-pack-1.schema.json',
   },
   // --- Lessons, assignments and student work ---
   {
@@ -405,6 +417,7 @@ export const FORMATS = Object.freeze([
     persisted: 'localStorage',
     older: 'migrates v1 (migrateFromV1)',
     newer: 'kept and not overwritten, in words',
+    schema: 'progress-2.schema.json',
   },
   {
     name: 'gravitas.investigation.progress',
@@ -414,6 +427,7 @@ export const FORMATS = Object.freeze([
     persisted: 'download',
     older: 'migrates v1',
     newer: 'refused, in words',
+    schema: 'investigation-progress-backup-2.schema.json',
   },
   {
     name: 'submission token',
@@ -446,6 +460,7 @@ export const FORMATS = Object.freeze([
     persisted: 'download (the review page opens it again)',
     older: 'v1 only',
     newer: 'refused by reason code',
+    schema: 'submission-archive-1.schema.json',
   },
   {
     name: 'gravitas.lab3d-guide-report',
@@ -455,6 +470,7 @@ export const FORMATS = Object.freeze([
     persisted: 'download',
     older: 'v1 only',
     newer: 'nothing reads it',
+    schema: 'lab3d-guide-report-1.schema.json',
   },
   {
     name: 'gravitas.mission-lab-report',
@@ -464,6 +480,7 @@ export const FORMATS = Object.freeze([
     persisted: 'download',
     older: 'v1 only',
     newer: 'nothing reads it',
+    schema: 'mission-lab-report-1.schema.json',
   },
   // --- The notebook ---
   {
@@ -474,6 +491,7 @@ export const FORMATS = Object.freeze([
     persisted: 'localStorage',
     older: 'v1 only',
     newer: 'kept and not overwritten, in words',
+    schema: 'notebook-store-1.schema.json',
   },
   {
     name: 'notebook entry snapshot',
@@ -483,6 +501,7 @@ export const FORMATS = Object.freeze([
     persisted: 'localStorage, download',
     older: 'v1 only',
     newer: 'refused by reason code',
+    schema: 'notebook-entry-1.schema.json',
   },
   {
     name: 'gravitas.evidence.notebook',
@@ -503,6 +522,7 @@ export const FORMATS = Object.freeze([
     persisted: 'inside a submission token (ev), never alone',
     older: 'v1 only',
     newer: 'checked as a mismatch, in words',
+    schema: 'ledger-1.schema.json',
   },
   // --- Courses, packages and the catalog ---
   {
@@ -548,15 +568,18 @@ export const FORMATS = Object.freeze([
     older:
       'migrates c1 and reads c2 as it is; c3 only for a pack that needs /3',
     newer: 'refused by reason code',
+    schema: 'course-home-link-3.schema.json',
   },
   {
     name: 'investigation link',
     fields: 'link prefix i',
-    version: 1,
+    version: 2,
+    const: ['js/composer/packLink.js', 'PACK_LINK_VERSION'],
     owner: 'js/composer/packLink.js readPackFragment',
     persisted: 'link',
-    older: 'v1 only',
+    older: 'reads v1 (i1) as it is; i2 only for a pack that needs /2',
     newer: 'refused by reason code',
+    schema: 'investigation-link-2.schema.json',
   },
   {
     name: 'gravitas.course-manifest',
@@ -567,6 +590,7 @@ export const FORMATS = Object.freeze([
     persisted: 'download',
     older: 'v1 only',
     newer: 'nothing reads it',
+    schema: 'course-manifest-1.schema.json',
   },
   {
     name: 'gravitas.capability-package',
@@ -622,6 +646,48 @@ export const FORMATS = Object.freeze([
     schema: 'catalog-curation-1.schema.json',
   },
   {
+    name: 'gravitas.instructor-expectations',
+    fields: 'format, formatVersion',
+    version: 2,
+    owner: 'js/instructorExpectations.js readExpectations',
+    persisted: 'repository (js/data/instructorExpectations.js)',
+    older:
+      'migrates v1: the text keyed by step number is keyed by sid, and a step that is gone is dropped with a note',
+    newer: 'refused, in words',
+    schema: 'instructor-expectations-2.schema.json',
+  },
+  {
+    name: 'gravitas.instructor-flow',
+    fields: 'format, formatVersion',
+    version: 2,
+    owner: 'js/instructorFlow.js readFlow',
+    persisted: 'repository (js/data/instructorFlow.js)',
+    older:
+      'migrates v1: the blocks named by step numbers are named by sid, and a block whose steps are gone is dropped with a note',
+    newer: 'refused, in words',
+    schema: 'instructor-flow-2.schema.json',
+  },
+  {
+    name: 'gravitas.library-search',
+    fields: 'format, formatVersion',
+    version: 1,
+    owner: 'js/libraryPage.js, js/library/search.js',
+    persisted: 'repository (library/search-index.json, generated)',
+    older: 'v1 only',
+    newer: 'not checked',
+    schema: 'library-search-1.schema.json',
+  },
+  {
+    name: 'gravitas.sun-frames',
+    fields: 'format, formatVersion',
+    version: 1,
+    owner: 'js/sunWidgets.js, js/kernels/sun/sequence.js',
+    persisted: 'repository (frames/sun-2024-05.json, generated)',
+    older: 'v1 only',
+    newer: 'not checked',
+    schema: 'sun-frames-1.schema.json',
+  },
+  {
     name: 'gravitas.extension-archive',
     fields: 'none (the archive structure)',
     version: 1,
@@ -629,6 +695,7 @@ export const FORMATS = Object.freeze([
     persisted: 'repository, download',
     older: 'structure checked, not version',
     newer: 'structure checked, not version',
+    schema: 'extension-archive-1.schema.json',
   },
   // --- The embed and the evaluation kit ---
   {
@@ -672,6 +739,7 @@ export const FORMATS = Object.freeze([
     persisted: 'link',
     older: 'v1 only',
     newer: 'ignored: opens as a plain embed',
+    schema: 'embed-options-1.schema.json',
   },
   {
     name: 'gravitas.student-data',
@@ -682,6 +750,7 @@ export const FORMATS = Object.freeze([
     persisted: 'download',
     older: 'v1 only',
     newer: 'refused, with a reason',
+    schema: 'student-data-1.schema.json',
   },
   {
     name: 'gravitas.made',
@@ -692,6 +761,7 @@ export const FORMATS = Object.freeze([
     persisted: 'localStorage, inside gravitas.student-data',
     older: 'v1 only',
     newer: 'left out of the list, not overwritten',
+    schema: 'made-1.schema.json',
   },
   {
     name: 'gravitas.composed-report',
@@ -703,6 +773,7 @@ export const FORMATS = Object.freeze([
       'download (the review page reads it), My work (inside a gravitas.made record of kind report)',
     older: 'v1 only',
     newer: 'refused by reason code',
+    schema: 'composed-report-1.schema.json',
   },
   {
     name: 'resume record',
@@ -713,6 +784,7 @@ export const FORMATS = Object.freeze([
     persisted: 'localStorage, inside gravitas.student-data (preferences)',
     older: 'v1 only',
     newer: 'reads as nothing to resume; the next write replaces it',
+    schema: 'resume-record-1.schema.json',
   },
   {
     name: 'course terms record',
@@ -723,6 +795,7 @@ export const FORMATS = Object.freeze([
     persisted: 'localStorage, inside gravitas.student-data (preferences)',
     older: 'v1 only',
     newer: 'reads as no courses; the next write replaces it',
+    schema: 'course-terms-1.schema.json',
   },
   {
     name: 'collections record',
@@ -734,6 +807,7 @@ export const FORMATS = Object.freeze([
     persisted: 'localStorage, inside gravitas.student-data (courses)',
     older: 'v1 only',
     newer: 'reads as no collections; the next write replaces it',
+    schema: 'collections-record-1.schema.json',
   },
   {
     name: 'first-week record',
@@ -746,6 +820,7 @@ export const FORMATS = Object.freeze([
     older: 'v1 only',
     newer:
       'reads as no first week and is dropped: Home opens as itself, and the link opens the list again',
+    schema: 'first-week-record-1.schema.json',
   },
   {
     name: 'gravitas.evaluation',
@@ -765,6 +840,98 @@ export const FORMATS = Object.freeze([
 // field it does not know (refused, ignored, or n/a for an encoded fragment).
 // tests/compat/inventory.test.js holds both to the corpus. A format with no
 // fixture has not been exercised against its old reader: that is a gap, stated.
+// --- The freeze (Roadmap III Prompt 290) -------------------------------------
+// The formats the project has, as of the audit, by id (a row with a form in
+// brackets, such as the course package's builder form, is its id's). A format
+// id the sources write that is not here is a new format, and
+// tests/formats.test.js fails until it has a row above, a schema, a version
+// and, in `additions`, the register row (DECISION_REGISTER.md) that says why it
+// is a new format and not an extension of one of these.
+export const FREEZE = Object.freeze({
+  frozenAt: 'Prompt 290',
+  formats: Object.freeze([
+    'gravitas.observation',
+    'gravitas.image-marks',
+    'gravitas.image-calibration',
+    'gravitas.observing-setup',
+    'gravitas.pipeline',
+    'gravitas.inference',
+    'gravitas.analysis',
+    'gravitas.artifact',
+    'gravitas.observed',
+    'gravitas.observation-data-pack',
+    'gravitas.image',
+    'gravitas.image-sequence',
+    'gravitas.image-pack-planes',
+    'gravitas.grid',
+    'gravitas.instrument',
+    'world share link',
+    'built-in scenario id',
+    'experiment link block',
+    'link extras',
+    'gravitas.orbital-system',
+    'gravitas.system3d',
+    'gravitas.lab3d.snapshot',
+    'gravitas.experiment',
+    'gravitas.experiment-result',
+    'experiment store',
+    'gravitas.mission-plan',
+    'gravitas.ephemeris-pack',
+    'gravitas.investigation-pack',
+    'gravitas.question-bank',
+    'gravitas.assignment',
+    'investigation progress',
+    'gravitas.investigation.progress',
+    'submission token',
+    'gravitas.submission-results',
+    'gravitas.submission-archive',
+    'gravitas.lab3d-guide-report',
+    'gravitas.mission-lab-report',
+    'notebook store',
+    'notebook entry snapshot',
+    'gravitas.evidence.notebook',
+    'gravitas.ledger',
+    'gravitas.course-pack',
+    'course home link',
+    'investigation link',
+    'gravitas.course-manifest',
+    'gravitas.capability-package',
+    'gravitas.scenario-pack',
+    'gravitas.catalog',
+    'gravitas.library',
+    'gravitas.catalog-curation',
+    'gravitas.instructor-expectations',
+    'gravitas.instructor-flow',
+    'gravitas.library-search',
+    'gravitas.sun-frames',
+    'gravitas.extension-archive',
+    'gravitas-embed messages',
+    'gravitas-compute messages',
+    'gravitas.compute-capsule',
+    'embed options',
+    'gravitas.student-data',
+    'gravitas.made',
+    'gravitas.composed-report',
+    'resume record',
+    'course terms record',
+    'collections record',
+    'first-week record',
+    'gravitas.evaluation',
+  ]),
+  // A new format: its id, and the register row naming why it exists rather
+  // than being a field of an existing format. Empty at the freeze.
+  additions: Object.freeze({}),
+  // Ids the sources write under a `format` key that are not formats anyone
+  // reads or writes: a build tool's own sample, and a deliberately wrong id a
+  // test hands a reader.
+  notFormats: Object.freeze({
+    'gravitas.variables-sample':
+      'tools/variables-sample.mjs prints a sample of the variable-star classifier for its author; no page, file or link carries it',
+    'gravitas.something':
+      'tools/data-kinds-cases.mjs hands the data-kind readers a format id that is wrong on purpose, to see them refuse it',
+  }),
+});
+
 export const COMPAT = Object.freeze({
   'gravitas.artifact': { fixture: 'artifact', unknown: 'ignored' },
   'gravitas.artifact (with the extended uncertainty states, a correlation or a fit)':
@@ -977,6 +1144,21 @@ ${rows.join('\n')}
 - **Newer versions:** they are refused in words in some readers, by a bare reason code in others (spelled \`newer\`, \`newerVersion\`, \`tooNew\`, \`schemaTooNew\` and \`from-a-newer-version\`), and not at all in the link blocks, \`gravitas.observed\` and the catalog curation.
 
 ${compatibilitySection(formats)}
+## The freeze (Prompt 290)
+
+Every format in the table has a JSON Schema, a \`format\` and a version, and a row here: ${formats.length} rows, ${FREEZE.formats.length} ids. The audit that froze the table found four formats the first inventory had missed (\`gravitas.instructor-expectations\`, \`gravitas.instructor-flow\`, \`gravitas.library-search\`, \`gravitas.sun-frames\`: files in the repository with a version and, for the first two, a reader of their previous version) and gave them rows and schemas; it added no format.
+
+- **No new format without a reason.** A format id the sources write under a \`format\` key, or as a \`*_FORMAT\` constant, that is not in the freeze fails \`tests/formats.test.js\`. A new format needs a row above, a schema, a version and a row in \`DECISION_REGISTER.md\`, named in \`FREEZE.additions\` in \`tools/formats.mjs\`, that says why it is a new format and not a field of an existing one. A field an older build cannot ignore is a new version of the format that has it (the 3.0.0 boundary, above), not a new format.
+- **No row without a schema.** \`tests/formats.test.js\` fails a row with no schema file, no version or a schema whose title is not its row, and a file in \`sdk/schemas\` that no row lists.
+- **A schema is held to its reader.** \`tests/formatSchemasAudit.test.js\` runs a corpus of changes to a good document past each reader and each schema the audit added and says, case by case, which refuses it: both; the reader alone, for a reason no schema can state (a rule across fields, a count, a reference, a digest); or the schema alone, where the reader is the older, wider door and the schema states the format as written. A reader that accepts what a schema cannot express keeps accepting it; no reader's behaviour was changed. The three reports and the observed group that nothing reads back are held to what their writers write.
+- **Not formats.** The sources write these ids under a \`format\` key, and nothing reads or writes them as a format: ${Object.entries(
+    FREEZE.notFormats
+  )
+    .map(([k]) => `\`${k}\``)
+    .join(', ')}.
+- **Schemas cost no bytes in the browser.** No page loads a schema: they are read by the tests, the SDK and an editor. The validation a page does is its reader's, as it was.
+- **Previous versions.** A format that reads a previous version has a fixture of that version in \`tests/compat/previous.mjs\`, read by the current reader (\`tests/compat/previous.test.js\`). A surface the gate retired (Prompt 165) holds nothing: the two it retired are class L, and the support period above is the policy's committed one (\`PERIODS.R\` in \`tools/surface-gate.mjs\`: twelve months deprecated, twelve read-only).
+
 ## Fields added inside a version
 
 - **\`term\` on a course pack (Prompt 168).** A course pack may carry \`term\`, a short plain label such as \`Spring 2027\` (at most 40 characters), written only when an instructor names a term for a copy of the course. A pack that has it is written as \`gravitas.course-pack/3\` (the 3.0.0 boundary, above); a 2.0.0 build refuses it as made by a newer version (\`tests/compat/boundary.mjs\` \`course-term\`). Two records came with it: \`gravitas.submission-archive/1\`, an export the review page reads again (a 2.0.0 page refuses it in words, as a progress backup), and the \`course terms record\`, a sidecar key the 2.0.0 reader never looks at (\`tests/compat/kinds/course-terms.mjs\`).

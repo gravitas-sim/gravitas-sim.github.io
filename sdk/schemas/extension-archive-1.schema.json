@@ -1,0 +1,59 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://gravitas-sim.online/sdk/schemas/extension-archive-1.schema.json",
+  "title": "gravitas.extension-archive/1",
+  "description": "The .gxp archive of an extension is not JSON: a POSIX ustar archive, gzip-compressed, deterministic (entries sorted by path, every mtime 0, mode 0644), whose first entry is the manifest `gravitas-extension.json`, whose last is `CHECKSUMS` (one \"sha256  path\" line per other entry) and which holds no directory, link, device, absolute or `..` path, no duplicate and at most 64 entries (4 MiB packed, 16 MiB unpacked). It carries no version of its own; its structure is checked (sdk/lib/archive.mjs read(), js/catalog/archive.js readTar(), which refuse alike), and the manifest it holds is gravitas.capability-package/1. The schema states the archive's listing, the entries of the unpacked archive with their sizes, which is what a reader checks and a tool can print as JSON. What gzip and tar bytes make of a corrupt file (a bad header, a truncated entry, a gzip bomb) is the reader's. FORMATS.md lists it.",
+  "type": "object",
+  "required": [
+    "entries"
+  ],
+  "properties": {
+    "entries": {
+      "type": "array",
+      "minItems": 2,
+      "maxItems": 65,
+      "prefixItems": [
+        {
+          "type": "object",
+          "required": [
+            "path"
+          ],
+          "properties": {
+            "path": {
+              "const": "gravitas-extension.json"
+            }
+          }
+        }
+      ],
+      "contains": {
+        "type": "object",
+        "required": [
+          "path"
+        ],
+        "properties": {
+          "path": {
+            "const": "CHECKSUMS"
+          }
+        }
+      },
+      "items": {
+        "type": "object",
+        "required": [
+          "path",
+          "size"
+        ],
+        "properties": {
+          "path": {
+            "type": "string",
+            "pattern": "^(?!/)(?!.*(^|/)\\.\\.(/|$))[A-Za-z0-9._\\-/]+$",
+            "maxLength": 100
+          },
+          "size": {
+            "type": "integer",
+            "minimum": 0
+          }
+        }
+      }
+    }
+  }
+}

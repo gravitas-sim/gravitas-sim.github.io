@@ -1,0 +1,114 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://gravitas-sim.online/sdk/schemas/lab3d-snapshot-1.schema.json",
+  "title": "gravitas.lab3d.snapshot/1",
+  "description": "The message the 3-D kernel's Worker hands a page, a versioned copy of the bodies at one simulation time: a sequence number, the time, the body ids and, per body, mass, drawn size, position and velocity (three each) and whether it is still there, the trail rows since the last snapshot with their times, what the run reported, the conservation errors against the session start and a status. It lives in memory only (never saved or linked), and its arrays are typed arrays (Float64Array, and Uint8Array for `alive`); the schema states their JSON form, an array of numbers, which is what a snapshot becomes if it is ever written out. js/lab3d/snapshot.js snapshotProblem() is the authority; it also checks that the arrays are typed arrays and that their lengths agree (3n positions, n masses, a trail of 3n numbers per time). FORMATS.md lists it.",
+  "type": "object",
+  "required": [
+    "format",
+    "formatVersion",
+    "seq",
+    "t",
+    "ids",
+    "m",
+    "radius",
+    "x",
+    "v",
+    "alive",
+    "trail",
+    "trailT"
+  ],
+  "properties": {
+    "format": {
+      "const": "gravitas.lab3d.snapshot"
+    },
+    "formatVersion": {
+      "const": 1
+    },
+    "seq": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "t": {
+      "type": "number"
+    },
+    "ids": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "m": {
+      "type": "array",
+      "items": {
+        "type": "number"
+      }
+    },
+    "radius": {
+      "type": "array",
+      "items": {
+        "type": "number"
+      }
+    },
+    "x": {
+      "type": "array",
+      "items": {
+        "type": "number"
+      }
+    },
+    "v": {
+      "type": "array",
+      "items": {
+        "type": "number"
+      }
+    },
+    "alive": {
+      "type": "array",
+      "items": {
+        "type": "integer",
+        "minimum": 0,
+        "maximum": 1
+      }
+    },
+    "trail": {
+      "type": "array",
+      "items": {
+        "type": "number"
+      }
+    },
+    "trailT": {
+      "type": "array",
+      "items": {
+        "type": "number"
+      }
+    },
+    "events": {
+      "type": "array",
+      "items": {}
+    },
+    "warnings": {
+      "type": "array",
+      "items": {}
+    },
+    "errors": {
+      "type": "object",
+      "properties": {
+        "energy": {
+          "type": "number"
+        },
+        "angularMomentum": {
+          "type": "number"
+        },
+        "momentum": {
+          "type": "number"
+        }
+      }
+    },
+    "status": {
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  }
+}

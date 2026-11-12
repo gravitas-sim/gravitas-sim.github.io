@@ -1,0 +1,29 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://gravitas-sim.online/sdk/schemas/instructor-expectations-2.schema.json",
+  "title": "gravitas.instructor-expectations/2",
+  "description": "What an author checks a lesson's expected answers against, in js/data/instructorExpectations.js: for each lesson id, the expected-answer text of each step, keyed by the step's sid. Version 1 keyed the text by step number; js/instructorExpectations.js readExpectations() reads it by looking the number up in the lesson's steps and drops, with a note, a step that is gone. A record of a newer version is refused in words (readVersioned). Not imported by any route: the answer-key PDF and the author check read it. FORMATS.md lists it.",
+  "type": "object",
+  "required": [
+    "format",
+    "formatVersion",
+    "lessons"
+  ],
+  "properties": {
+    "format": {
+      "const": "gravitas.instructor-expectations"
+    },
+    "formatVersion": {
+      "const": 2
+    },
+    "lessons": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "additionalProperties": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}

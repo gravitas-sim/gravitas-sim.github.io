@@ -1,0 +1,43 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://gravitas-sim.online/sdk/schemas/library-search-1.schema.json",
+  "title": "gravitas.library-search/1",
+  "description": "The Library's search index, the file library/search-index.json that tools/build-library.mjs writes and js/library/search.js fetches on the first query: for each Library entry id, the entry's learning objectives in English and Spanish. It is generated, never edited; the reader (js/libraryPage.js) does not check its version, so this states what the generator writes. FORMATS.md lists it.",
+  "type": "object",
+  "required": [
+    "format",
+    "formatVersion",
+    "objectives"
+  ],
+  "properties": {
+    "format": {
+      "const": "gravitas.library-search"
+    },
+    "formatVersion": {
+      "const": 1
+    },
+    "objectives": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "required": [
+          "en"
+        ],
+        "properties": {
+          "en": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "es": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    }
+  }
+}

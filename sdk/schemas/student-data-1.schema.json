@@ -1,0 +1,270 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://gravitas-sim.online/sdk/schemas/student-data-1.schema.json",
+  "title": "gravitas.student-data/1",
+  "description": "Everything a student keeps in the browser, as one download for a backup or a move to another browser: when it was exported and, for each of the ten collections (progress, evidence, experiments, drafts, assignments, courses, made, installs, settings, preferences), its records as an id, a version, when it was saved and the value. js/storage/index.js Store.importAll() is the authority: it refuses a file of another format or a newer version, with a reason, and one with no collections object, skips a record with no id or version as malformed and a collection it does not know as `unknownCollection`, and leaves a record identical to what is stored alone. A collection this build does not know is skipped by the reader and so passes here. FORMATS.md lists it.",
+  "type": "object",
+  "required": [
+    "format",
+    "formatVersion",
+    "collections"
+  ],
+  "properties": {
+    "format": {
+      "const": "gravitas.student-data"
+    },
+    "formatVersion": {
+      "const": 1
+    },
+    "exported": {
+      "type": "string"
+    },
+    "collections": {
+      "type": "object",
+      "properties": {
+        "progress": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "id",
+              "version"
+            ],
+            "properties": {
+              "id": {
+                "type": "string",
+                "minLength": 1
+              },
+              "version": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "saved": {},
+              "value": {}
+            }
+          }
+        },
+        "evidence": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "id",
+              "version"
+            ],
+            "properties": {
+              "id": {
+                "type": "string",
+                "minLength": 1
+              },
+              "version": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "saved": {},
+              "value": {}
+            }
+          }
+        },
+        "experiments": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "id",
+              "version"
+            ],
+            "properties": {
+              "id": {
+                "type": "string",
+                "minLength": 1
+              },
+              "version": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "saved": {},
+              "value": {}
+            }
+          }
+        },
+        "drafts": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "id",
+              "version"
+            ],
+            "properties": {
+              "id": {
+                "type": "string",
+                "minLength": 1
+              },
+              "version": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "saved": {},
+              "value": {}
+            }
+          }
+        },
+        "assignments": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "id",
+              "version"
+            ],
+            "properties": {
+              "id": {
+                "type": "string",
+                "minLength": 1
+              },
+              "version": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "saved": {},
+              "value": {}
+            }
+          }
+        },
+        "courses": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "id",
+              "version"
+            ],
+            "properties": {
+              "id": {
+                "type": "string",
+                "minLength": 1
+              },
+              "version": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "saved": {},
+              "value": {}
+            }
+          }
+        },
+        "made": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "id",
+              "version"
+            ],
+            "properties": {
+              "id": {
+                "type": "string",
+                "minLength": 1
+              },
+              "version": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "saved": {},
+              "value": {}
+            }
+          }
+        },
+        "installs": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "id",
+              "version"
+            ],
+            "properties": {
+              "id": {
+                "type": "string",
+                "minLength": 1
+              },
+              "version": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "saved": {},
+              "value": {}
+            }
+          }
+        },
+        "settings": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "id",
+              "version"
+            ],
+            "properties": {
+              "id": {
+                "type": "string",
+                "minLength": 1
+              },
+              "version": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "saved": {},
+              "value": {}
+            }
+          }
+        },
+        "preferences": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "id",
+              "version"
+            ],
+            "properties": {
+              "id": {
+                "type": "string",
+                "minLength": 1
+              },
+              "version": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "saved": {},
+              "value": {}
+            }
+          }
+        }
+      },
+      "additionalProperties": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "required": [
+            "id",
+            "version"
+          ],
+          "properties": {
+            "id": {
+              "type": "string",
+              "minLength": 1
+            },
+            "version": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "saved": {},
+            "value": {}
+          }
+        }
+      }
+    }
+  }
+}

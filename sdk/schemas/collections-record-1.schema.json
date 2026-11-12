@@ -1,0 +1,159 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://gravitas-sim.online/sdk/schemas/collections-record-1.schema.json",
+  "title": "collections record/1",
+  "description": "What a student keeps in the Library, in a localStorage key of its own: its version `v`, their own collection (`saved`, a course package of profile collection, one unit of the items they saved) and up to six collections received (kept from a link or a course home), each the time and the package. js/library/collections.js readCollections() is the authority and is lenient: it reads nothing from a record of another version, drops a collection that does not read as one (the course package validator decides: this schema states only what makes a package a collection), keeps the first of an id that repeats and the first six. FORMATS.md lists it.",
+  "type": "object",
+  "required": [
+    "v",
+    "received"
+  ],
+  "properties": {
+    "v": {
+      "const": 1
+    },
+    "saved": {
+      "type": "object",
+      "required": [
+        "format",
+        "formatVersion",
+        "id",
+        "profile",
+        "title",
+        "units"
+      ],
+      "properties": {
+        "format": {
+          "const": "gravitas.course-pack"
+        },
+        "formatVersion": {
+          "enum": [
+            2,
+            3
+          ]
+        },
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "profile": {
+          "const": "collection"
+        },
+        "title": {
+          "type": "object"
+        },
+        "units": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "items"
+            ],
+            "properties": {
+              "items": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "required": [
+                    "id",
+                    "kind"
+                  ],
+                  "properties": {
+                    "id": {
+                      "type": "string"
+                    },
+                    "kind": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "minItems": 1
+              }
+            }
+          },
+          "minItems": 1,
+          "maxItems": 1
+        }
+      }
+    },
+    "received": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "pack"
+        ],
+        "properties": {
+          "at": {
+            "type": "number"
+          },
+          "pack": {
+            "type": "object",
+            "required": [
+              "format",
+              "formatVersion",
+              "id",
+              "profile",
+              "title",
+              "units"
+            ],
+            "properties": {
+              "format": {
+                "const": "gravitas.course-pack"
+              },
+              "formatVersion": {
+                "enum": [
+                  2,
+                  3
+                ]
+              },
+              "id": {
+                "type": "string",
+                "minLength": 1
+              },
+              "profile": {
+                "const": "collection"
+              },
+              "title": {
+                "type": "object"
+              },
+              "units": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "required": [
+                    "items"
+                  ],
+                  "properties": {
+                    "items": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "required": [
+                          "id",
+                          "kind"
+                        ],
+                        "properties": {
+                          "id": {
+                            "type": "string"
+                          },
+                          "kind": {
+                            "type": "string"
+                          }
+                        }
+                      },
+                      "minItems": 1
+                    }
+                  }
+                },
+                "minItems": 1,
+                "maxItems": 1
+              }
+            }
+          }
+        }
+      },
+      "maxItems": 6
+    }
+  }
+}

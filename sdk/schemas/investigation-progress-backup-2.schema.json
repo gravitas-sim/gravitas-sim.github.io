@@ -1,0 +1,119 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://gravitas-sim.online/sdk/schemas/investigation-progress-backup-2.schema.json",
+  "title": "gravitas.investigation.progress/2",
+  "description": "The file a student downloads as a backup of one lesson's progress: `kind` and `version` (not format and formatVersion, which the other formats use), when it was saved, the lesson (id, title, step count, pack), the student's name where they gave one, their place, answers, attempts and visits, and one row per step (index, sid, a fingerprint of the step, the option count) so a restore can tell a step that moved from one that was rewritten. js/investigations/progressBackup.js validateBackup() is the authority; version 1, keyed by index and without sids, is read by position, with the fingerprints used to check it. A newer version is refused (`tooNew`). FORMATS.md lists it.",
+  "type": "object",
+  "required": [
+    "kind",
+    "version",
+    "lesson",
+    "progress"
+  ],
+  "properties": {
+    "kind": {
+      "const": "gravitas.investigation.progress"
+    },
+    "version": {
+      "const": 2
+    },
+    "savedAt": {
+      "type": "string"
+    },
+    "lesson": {
+      "type": "object",
+      "required": [
+        "id"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "title": {},
+        "stepCount": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "pack": {}
+      }
+    },
+    "student": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "progress": {
+      "type": "object",
+      "required": [
+        "responses",
+        "attempts"
+      ],
+      "properties": {
+        "stepSid": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "startedAt": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "visited": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "responses": {
+          "type": "object",
+          "additionalProperties": {
+            "type": [
+              "string",
+              "number",
+              "boolean",
+              "null"
+            ]
+          }
+        },
+        "attempts": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "number"
+          }
+        }
+      }
+    },
+    "steps": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "index": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "sid": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "fingerprint": {
+            "type": "string"
+          },
+          "optionCount": {
+            "type": [
+              "integer",
+              "null"
+            ]
+          }
+        }
+      }
+    }
+  }
+}

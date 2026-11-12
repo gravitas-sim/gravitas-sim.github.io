@@ -1,0 +1,87 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://gravitas-sim.online/sdk/schemas/resume-record-1.schema.json",
+  "title": "resume record/1",
+  "description": "Where a student left off, in a localStorage key of its own beside the progress records: its version `v` and up to six items, newest first, each the id of what was open (letters, digits and . : / - _, at most 120), the route on this site (it starts with one slash, at most 240 characters), the time, and where given the step (at most 60 characters), the pathway it was reached by (a sequence or a course, by id) and a title in English and Spanish. js/storage/local.js readResume() is the authority and is lenient: it reads nothing from a record of another version, drops an item that is not the right shape and keeps the first of an id that repeats and the first six. The schema refuses what the reader drops. FORMATS.md lists it.",
+  "type": "object",
+  "required": [
+    "v",
+    "items"
+  ],
+  "properties": {
+    "v": {
+      "const": 1
+    },
+    "items": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "route",
+          "at"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[\\w.:/-]+$",
+            "minLength": 1,
+            "maxLength": 120
+          },
+          "route": {
+            "type": "string",
+            "pattern": "^/(?!/)",
+            "maxLength": 240
+          },
+          "at": {
+            "type": "number"
+          },
+          "step": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 60
+          },
+          "path": {
+            "type": "object",
+            "required": [
+              "k",
+              "id"
+            ],
+            "properties": {
+              "k": {
+                "enum": [
+                  "seq",
+                  "course"
+                ]
+              },
+              "id": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 120
+              }
+            }
+          },
+          "title": {
+            "type": "object",
+            "required": [
+              "en"
+            ],
+            "properties": {
+              "en": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 160
+              },
+              "es": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 160
+              }
+            }
+          }
+        }
+      },
+      "maxItems": 6
+    }
+  }
+}
