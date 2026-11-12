@@ -55,6 +55,9 @@ export const EN_INFERENCE = {
   'obs.fit.nb.failed': 'It could not be kept in the notebook: {why}.',
   'obs.fit.running': 'Fitting…',
   'obs.fit.done': 'Fitted in {seconds} s.',
+  'obs.fit.lowTier':
+    'Computed at the low tier: {used} profile points where the full tier uses {full}. The intervals come from a coarser grid; the fit itself is unchanged.',
+  'obs.fit.lowTier.full': 'Compute at the full tier',
   'obs.fit.failed': 'The fit did not finish ({status}). {why}',
   'obs.fit.canceled': 'canceled by the reader',
   'obs.fit.refuse.fewRows':

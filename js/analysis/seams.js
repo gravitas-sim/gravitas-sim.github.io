@@ -698,6 +698,11 @@ export function fitArtifact(doc, o = {}) {
       digest: o.digest,
     },
     quantities,
+    // A fit computed at the low tier says so (js/quality.js, Prompt 285); at the
+    // full tier the key is absent and the envelope is unchanged.
+    ...(doc.computation
+      ? { provenance: { computation: doc.computation } }
+      : {}),
     ...(o.extended
       ? {
           fit: fitRecord(

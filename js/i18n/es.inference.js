@@ -52,6 +52,9 @@ export const ES_INFERENCE = {
   'obs.fit.nb.failed': 'No se pudo guardar en el cuaderno: {why}.',
   'obs.fit.running': 'Ajustando…',
   'obs.fit.done': 'Ajustado en {seconds} s.',
+  'obs.fit.lowTier':
+    'Calculado en el nivel bajo: {used} puntos de perfil donde el nivel completo usa {full}. Los intervalos salen de una rejilla más gruesa; el ajuste en sí no cambia.',
+  'obs.fit.lowTier.full': 'Calcular en el nivel completo',
   'obs.fit.failed': 'El ajuste no terminó ({status}). {why}',
   'obs.fit.canceled': 'cancelado por el lector',
   'obs.fit.refuse.fewRows':
