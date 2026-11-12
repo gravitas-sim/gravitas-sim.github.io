@@ -535,9 +535,9 @@ describe('the words', () => {
 
 describe('what the cartridge says it has been imported into', () => {
   const BASIS =
-    'verified by Carl, reported in chat 2026-10-22; LMS versions, the cartridge imported and what imported were not supplied';
+    'verified by the maintainer, reported 2026-10-22; LMS versions, the cartridge imported and what imported were not recorded';
 
-  test('is exactly what the owner reported, and nothing is invented: four platforms, one basis, no date of import, version or screenshot', () => {
+  test('is exactly what the maintainer reported, and nothing is invented: four platforms, one basis, no date of import, version or screenshot', () => {
     expect(IMPORT_STATUS.map(r => r.lms)).toEqual([
       'Canvas',
       'Moodle',
@@ -557,7 +557,7 @@ describe('what the cartridge says it has been imported into', () => {
     // The panel's own words say the same basis in English, and the Spanish names the same facts.
     expect(WORDS.en['p.basis']).toBe(BASIS);
     expect(WORDS.es['p.basis']).toMatch(
-      /Carl.*2026-10-22.*no se proporcionaron/
+      /responsable del proyecto.*2026-10-22.*no se registraron/
     );
     expect(Object.keys(IMPORT_STATUS[0]).sort()).toEqual(
       ['basis', 'date', 'lms', 'reported', 'seen', 'status'].sort()
@@ -600,10 +600,10 @@ describe('what the cartridge says it has been imported into', () => {
       'exporta un Thin Common Cartridge; importaciones verificadas en: Canvas, Moodle, D2L, Blackboard (Canvas: VERIFICADO, informado el 2026-10-22; Moodle: VERIFICADO, informado el 2026-10-22; D2L: VERIFICADO, informado el 2026-10-22; Blackboard: VERIFICADO, informado el 2026-10-22)'
     );
     expect(reportCaveat('en')).toBe(
-      'Reported by Carl in chat on 2026-10-22; the LMS versions, the cartridge imported and what imported were not supplied.'
+      'Maintainer-reported, 2026-10-22; the LMS versions, the cartridge imported and what imported were not recorded.'
     );
     expect(reportCaveat('es')).toBe(
-      'Informado por Carl en el chat el 2026-10-22; no se proporcionaron las versiones de cada plataforma, el cartucho importado ni lo que se importó.'
+      'Informado por el responsable del proyecto el 2026-10-22; no se registraron las versiones de cada plataforma, el cartucho importado ni lo que se importó.'
     );
   });
 
@@ -628,10 +628,10 @@ describe('what the cartridge says it has been imported into', () => {
     const ev = JSON.parse(read('tools/evidence-status.json')).claims.find(
       c => c.id === 'cartridge-lms-import'
     );
-    // The owner's report, not a recorded import: partial, never established.
+    // The maintainer's report, not a recorded import: partial, never established.
     expect(ev).toMatchObject({ class: 'A', status: 'partial' });
     expect(ev.limitations).toContain(
-      'each verified by Carl, reported in chat 2026-10-22; LMS versions, the cartridge imported and what imported were not supplied'
+      'each verified by the maintainer, reported 2026-10-22; LMS versions, the cartridge imported and what imported were not recorded'
     );
     expect(ev.limitations).toContain(
       'Canvas: VERIFIED; Moodle: VERIFIED; D2L: VERIFIED; Blackboard: VERIFIED'

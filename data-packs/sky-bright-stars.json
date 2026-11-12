@@ -20,7 +20,7 @@
   "license": {
     "status": "no-license-stated",
     "statement": "The ReadMe of CDS catalogue V/50 (pinned here), the Yale/Harvard catalogue pages and HEASARC's page state no licence and no permission to redistribute. CDS's terms (cds.unistra.fr/vizier-org/licences_vizier.html, read 2026-10-09) say VizieR data are free for scientific use with the original authors cited and that commercial use depends on the origin, so use with citation is confirmed and redistribution of a derived subset is not.",
-    "basis": "A reduced derivative for teaching (904 of 9,110 entries, the facts of position, brightness, colour and name, no remarks text), credited in full, with the checksum of every raw file recorded so the original can be fetched again and compared; shipped on the data-pack \"no licence stated, credited\" basis with citation, by Carl's instruction of 2026-10-09 (DECISION_REGISTER.md D-SKY-02). Hipparcos and Tycho are CC BY-NC 3.0 IGO and are not used."
+    "basis": "A reduced derivative for teaching (904 of 9,110 entries, the facts of position, brightness, colour and name, no remarks text), credited in full, with the checksum of every raw file recorded so the original can be fetched again and compared; shipped on the data-pack \"no licence stated, credited\" basis with citation, by decision of the maintainer on 2026-10-09 (DECISION_REGISTER.md D-SKY-02). Hipparcos and Tycho are CC BY-NC 3.0 IGO and are not used."
   },
   "retrieved": "2026-10-09",
   "columns": [
@@ -133,12 +133,12 @@
   "offline": "idle",
   "derived": {
     "file": "js/data/sky/brightStars.js",
-    "bytes": 4163,
-    "sha256": "b8247e2e8d5521fea605ab16d4c38855951080083ebec54cbc9a6367473d4ed0",
+    "bytes": 4170,
+    "sha256": "92ff295c2bda36e67e93098f0c380859b34af87e8b3bda8609b19ec7c98bbcfe",
     "sidecar": {
       "file": "sky/bright-stars.json",
-      "bytes": 62075,
-      "sha256": "da12c3290b40c6fce365666084a7232f7db6d4efc4e1e3f6509cf1164611f577"
+      "bytes": 62083,
+      "sha256": "253bc321375df0c9df6174f4af950f263ab0ffc54d1c43a753d3daa2a9208f36"
     }
   },
   "validation": {

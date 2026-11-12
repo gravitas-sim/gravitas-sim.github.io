@@ -37,7 +37,7 @@ export const PACK = {
     statement:
       "The Zenodo record's metadata gives CC BY 4.0, whose Share clause permits reproducing the material with attribution (read 2026-10-09). Cite Sanchez et al. 2024 (arXiv:2406.05046) and DES Collaboration 2024, ApJL 973, L14.",
     basis:
-      'COSMOLOGY_GATE.md section 1: the license as read from the record, kept with its legal code; D-COSMO-02 (delegated).',
+      'COSMOLOGY_GATE.md section 1: the license as read from the record, kept with its legal code; D-COSMO-02.',
   },
   retrieved: '2026-10-10',
   columns: [

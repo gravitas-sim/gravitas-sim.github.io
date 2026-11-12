@@ -37,7 +37,7 @@ export const HI_LINE = Object.freeze({
   restFrequencyHz: 1420405751.768,
   spinFlipRateS: 2.8843e-15,
   status:
-    'no source file in the tree; not verified by a fetch; a question for Carl (RADIO.md)',
+    'no source file in the tree; not verified by a fetch; the source is still to be supplied (RADIO.md)',
 });
 
 /** A refusal: a code the callers and tests switch on, and a reason in words. */

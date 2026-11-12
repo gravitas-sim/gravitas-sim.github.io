@@ -196,7 +196,7 @@ export const ES_MASSES = {
   'masW.vb.row.refused': 'Rechazado',
   'masW.vb.row.companion': 'Compañero',
   'masW.vb.a':
-    'El ajuste de órbita aparente de la Prompt 187 a los desplazamientos relativos (o al fotocentro en torno al baricentro); un paralaje con su declaración de referencia; un desplazamiento constante y un movimiento propio ajustados junto con la fracción de masa. No se modelan los errores comunes del marco, un tercer cuerpo ni el acoplamiento con las velocidades radiales; los datos son sintéticos',
+    'El ajuste de órbita aparente a los desplazamientos relativos (o al fotocentro en torno al baricentro); un paralaje con su declaración de referencia; un desplazamiento constante y un movimiento propio ajustados junto con la fracción de masa. No se modelan los errores comunes del marco, un tercer cuerpo ni el acoplamiento con las velocidades radiales; los datos son sintéticos',
   'masW.vb.frame.absolute': 'absoluto',
   'masW.vb.frame.absolute.long':
     'el paralaje es absoluto (corregido a la fuente declarada); la corrección y su incertidumbre están en el paralaje dado',

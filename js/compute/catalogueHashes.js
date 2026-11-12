@@ -83,7 +83,7 @@ export const HASHES = Object.freeze({
     cellsSha256:
       '803c68a102453377c1a6025f7eba3bacf3762c69ea889a6a5238464ff6c38020',
     fileSha256:
-      '72a486120845f6d2b7314f61044c980287286e4f313550509af213cc868a5ada',
+      'e5a2714e07d9532a229eafedb3b2fcbdc76d1dcff40f13f05d199c292ffd9224',
     cells: 6,
     example: {
       sha256:

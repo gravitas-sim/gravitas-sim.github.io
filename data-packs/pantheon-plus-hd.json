@@ -21,7 +21,7 @@
   "license": {
     "status": "no-license-stated",
     "statement": "The release page (https://pantheonplussh0es.github.io/, read 2026-10-11) states no licence and says only \"Please cite papers individually when referencing them.\" and that \"Details on data release usage will be added upon journal acceptance\"; the data repository (https://github.com/PantheonPlusSH0ES/DataRelease, commit 7fc6805) carries no LICENSE file and its READMEs state no terms of use. The table is public.",
-    "basis": "Shipped on the data-pack \"no licence stated, credited\" basis with the citations the release page requests, by Carl's instruction of 2026-10-11 (DECISION_REGISTER.md D-RIGHTS-04), the basis of D-SKY-02."
+    "basis": "Shipped on the data-pack \"no licence stated, credited\" basis with the citations the release page requests, by decision of the maintainer on 2026-10-11 (DECISION_REGISTER.md D-RIGHTS-04), the basis of D-SKY-02."
   },
   "retrieved": "2026-10-11",
   "columns": [
@@ -181,8 +181,8 @@
   "offline": "idle",
   "derived": {
     "file": "js/data/observations/pantheonPlusHd.js",
-    "bytes": 5833,
-    "sha256": "2e3984c420ee2143df43a9aaa67689cf4a4488335f4e7f8d1f7a8b04eaf9ee91",
+    "bytes": 5840,
+    "sha256": "90dd022633e570c2512f2f0c12298e1a81d187b01c121e617efe219f8b6be607",
     "sidecar": {
       "file": "cosmology/pantheon-plus-hd.json",
       "bytes": 36613,

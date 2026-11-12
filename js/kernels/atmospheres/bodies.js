@@ -15,9 +15,9 @@ import { AU_M } from './constants.js';
 import { fluxAt, equilibriumTemperature } from './equilibrium.js';
 
 const FACT = 'NASA Planetary Fact Sheets (NSSDCA)';
-const REVIEWER = 'Carl, chat 2026-10-25';
+const REVIEWER = 'the maintainer, 2026-10-25';
 const REVIEW_NOTE =
-  'reviewed by Carl, chat 2026-10-25: looks correct (a reader, not a check against the source)';
+  'reviewed by the maintainer, 2026-10-25: looks correct (a reader, not a check against the source)';
 
 export const PACK_PROVENANCE = Object.freeze({
   source: FACT,

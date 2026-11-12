@@ -625,7 +625,7 @@ const CONTENT = {
       },
     ],
     teachingNotes: [
-      'The plan is Prompt 210’s extension of js/kernels/detector/snr.js: the CCD equation with several exposures, a Gaussian point-spread function, extinction by airmass, and a closed-form limiting magnitude. The frame is the detector kernel’s forward model of exactly the plan, measured with the Observatory’s aperture photometry; the prediction for it uses the pixels the photometry used.',
+      'The plan is the extension of js/kernels/detector/snr.js: the CCD equation with several exposures, a Gaussian point-spread function, extinction by airmass, and a closed-form limiting magnitude. The frame is the detector kernel’s forward model of exactly the plan, measured with the Observatory’s aperture photometry; the prediction for it uses the pixels the photometry used.',
       'The published Rubin depth model agrees with the kernel in r, i, z and y; in u and g, where the read noise matters, the CCD equation with the library’s inputs predicts a larger read-noise loss than the paper states, and the validation record keeps those legs as failed and labeled (EXPOSURE_PLANNING.md).',
       'Inherited limits: the throughput, dark current and (Las Cumbres) extinction are teaching values; the sky is an input, not a moon model; a Gaussian point-spread function; no flat-field error.',
       'The frame is one draw of the noise: a measured signal-to-noise within about 3 of the prediction is agreement, and a class that pools its frames sees the scatter close in on the prediction (the validation record holds the coverage of the interval, 0.95 on 1600 frames).',

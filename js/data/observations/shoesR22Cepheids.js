@@ -37,7 +37,7 @@ export const PACK = {
     statement:
       "The paper's publisher page and Crossref record say original content may be used under CC BY 4.0 (read 2026-10-10); the repository copy of the table has no licence of its own, so the pack relies on the paper's. Attribute Riess et al. 2022, ApJ 934, L7.",
     basis:
-      'A published table from a CC BY 4.0 article, reduced to periods and Wesenheit magnitudes with the paper cited and credited; the same finding as the cosmology gate (COSMOLOGY_GATE.md, D-COSMO-07), made again here because the pack does not depend on that delegated verdict (D-LADDER-01).',
+      'A published table from a CC BY 4.0 article, reduced to periods and Wesenheit magnitudes with the paper cited and credited; the same finding as the cosmology gate (COSMOLOGY_GATE.md, D-COSMO-07), made again here because the pack does not depend on that verdict (D-LADDER-01).',
   },
   retrieved: '2026-10-10',
   columns: [

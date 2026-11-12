@@ -24,7 +24,7 @@
   "license": {
     "status": "cc-by-nc-3.0-igo",
     "statement": "ESA's Gaia data licence page (https://www.cosmos.esa.int/web/gaia-users/license, read 2026-10-10) says: \"Gaia data are distributed under the CC BY-NC 3.0 IGO license.\" and refers to ESA's Terms and Conditions for the use of data in the ESA space science archives for commercial use. This pack is a compact subset of Gaia DR3, offered under CC BY-NC 3.0 IGO: attribute ESA/Gaia/DPAC and the Gaia DR3 papers, do not use it commercially, and say that it is a selected and rounded subset of the archive (the selection is the query in the manifest and each column's rounding is stated).",
-    "basis": "CC BY-NC 3.0 IGO permits copying, redistribution and adaptation, which includes a derived subset of the catalogue, with attribution and for non-commercial purposes; Gravitas is a free educational tool. It is the same licence, and so the same mechanism, as radiation-gaia-bandpasses (D-RAD-01), which the project owner shipped by explicit instruction; extending it to these Gaia samples is a delegated decision awaiting his review (DECISION_REGISTER.md D-GAIA-01), not a standing licence. Each sample is a pack of its own so that no other data is covered by the NC terms, and none may be bundled into a commercial redistribution of Gravitas (DATA_PACKS.md); removing the pack is removing its module, manifest and service-worker entry.",
+    "basis": "CC BY-NC 3.0 IGO permits copying, redistribution and adaptation, which includes a derived subset of the catalogue, with attribution and for non-commercial purposes; Gravitas is a free educational tool. It is the same licence, and so the same mechanism, as radiation-gaia-bandpasses (D-RAD-01), which the project maintainer shipped by explicit decision; extending it to these Gaia samples is a decision awaiting review by the maintainer (DECISION_REGISTER.md D-GAIA-01), not a standing licence. Each sample is a pack of its own so that no other data is covered by the NC terms, and none may be bundled into a commercial redistribution of Gravitas (DATA_PACKS.md); removing the pack is removing its module, manifest and service-worker entry.",
     "nonCommercial": true
   },
   "retrieved": "2026-11-03",
@@ -154,7 +154,7 @@
     "Gaia is not blind in the cluster's core, as SDSS is: its crowding limit is far higher, so the core is in this table.",
     "Positions are rounded to 0.00001 degree (0.04 arcsec), parallaxes, proper motions, errors and magnitudes to 0.001.",
     "The Gaia source ids are left out (a 64-bit id does not fit the table encoding); the query in the pack's manifest returns them, and the rows are in its order.",
-    "Version 1.1.0 (Prompt 233) adds eight columns to the same 993 rows, all stored to the step shown: the three error correlations, RUWE, the solution type, the effective wavenumber or pseudocolour (each empty for the other solution type), and the ecliptic latitude. Every earlier column is identical to version 1.0.0 (tests/fixtures/gaia-workflows/alignment.json holds its checksum)."
+    "Version 1.1.0 adds eight columns to the same 993 rows, all stored to the step shown: the three error correlations, RUWE, the solution type, the effective wavenumber or pseudocolour (each empty for the other solution type), and the ecliptic latitude. Every earlier column is identical to version 1.0.0 (tests/fixtures/gaia-workflows/alignment.json holds its checksum)."
   ],
   "source": {
     "archive": "ESA Gaia archive, Gaia DR3",
@@ -433,8 +433,8 @@
   "offline": "idle",
   "derived": {
     "file": "js/data/observations/gaiaNgc2420.js",
-    "bytes": 8651,
-    "sha256": "61fbe20689cef79b925e5422be39b53c8050ef2399847f699886e9fc485bd04b",
+    "bytes": 8644,
+    "sha256": "bc1775ecbe6661007251508bdfea996da31bac47b05abc0281ad694be9605320",
     "sidecar": {
       "file": "gaia/ngc2420.json",
       "bytes": 54011,

@@ -26,7 +26,7 @@
  * `p.basis` in WORDS.en must equal REPORT_BASIS (the test holds them together).
  */
 export const REPORT_BASIS =
-  'verified by Carl, reported in chat 2026-10-22; LMS versions, the cartridge imported and what imported were not supplied';
+  'verified by the maintainer, reported 2026-10-22; LMS versions, the cartridge imported and what imported were not recorded';
 
 /**
  * One row per learning platform. `status` is 'VERIFIED' or 'NOT VERIFIED'.
@@ -72,8 +72,8 @@ export function reportCaveat(locale = 'en', rows = IMPORT_STATUS) {
   const r = rows.find(x => x.status === 'VERIFIED' && !x.date && x.reported);
   if (!r) return '';
   return locale === 'es'
-    ? `Informado por Carl en el chat el ${r.reported}; no se proporcionaron las versiones de cada plataforma, el cartucho importado ni lo que se importó.`
-    : `Reported by Carl in chat on ${r.reported}; the LMS versions, the cartridge imported and what imported were not supplied.`;
+    ? `Informado por el responsable del proyecto el ${r.reported}; no se registraron las versiones de cada plataforma, el cartucho importado ni lo que se importó.`
+    : `Maintainer-reported, ${r.reported}; the LMS versions, the cartridge imported and what imported were not recorded.`;
 }
 
 /**
@@ -149,7 +149,7 @@ export const WORDS = {
     'p.status': 'Gravitas {statement}.',
     'p.table.h': 'Where an import has been checked',
     'p.table.note':
-      'These rows rest on the owner’s report, not on an import this project recorded or can show. {caveat} The file is also checked against the specification’s schema and rules, which is not an import.',
+      'These rows rest on the maintainer’s report, not on an import this project recorded or can show. {caveat} The file is also checked against the specification’s schema and rules, which is not an import.',
     'p.table.lms': 'Platform',
     'p.table.status': 'Import',
     'p.table.seen': 'Basis',
@@ -208,12 +208,12 @@ export const WORDS = {
     'p.status': 'Gravitas {statement}.',
     'p.table.h': 'Dónde se ha comprobado una importación',
     'p.table.note':
-      'Estas filas se apoyan en el informe del propietario, no en una importación que este proyecto registrara o pueda mostrar. {caveat} El archivo también se comprueba contra el esquema y las reglas de la especificación, lo cual no es una importación.',
+      'Estas filas se apoyan en el informe del responsable del proyecto, no en una importación que este proyecto registrara o pueda mostrar. {caveat} El archivo también se comprueba contra el esquema y las reglas de la especificación, lo cual no es una importación.',
     'p.table.lms': 'Plataforma',
     'p.table.status': 'Importación',
     'p.table.seen': 'Fundamento',
     'p.basis':
-      'verificado por Carl, informado en el chat el 2026-10-22; no se proporcionaron las versiones de cada plataforma, el cartucho importado ni lo que se importó',
+      'verificado por el responsable del proyecto, informado el 2026-10-22; no se registraron las versiones de cada plataforma, el cartucho importado ni lo que se importó',
     'p.empty': '—',
   },
 };

@@ -640,7 +640,7 @@ export const WHAT_KINDS_OF_PLANETS_EXIST = {
              does not answer it. A low density says the planet <em>has</em> a thick envelope; whether a small, hot world
              can <em>hold on to</em> one is a balance between how fast gas moves at its temperature and how fast it takes
              to leave, and it depends on the star&rsquo;s light over time, which no diagram of mass and radius carries.
-             \n\nThe calculation of the escape of a gas from a world was gated out of this project (Prompt 199 judged that
+             \n\nThe calculation of the escape of a gas from a world was gated out of this project (it was judged that
              the models could not support it at the standard the rest of the unit keeps), so this is a reading step and not
              an investigation. The honest statement from this diagram is the one in the box: a bulk density, with its
              uncertainty, and nothing about what a planet keeps.`,
@@ -1626,7 +1626,7 @@ export const WHAT_KINDS_OF_PLANETS_EXIST_ES = {
     {
       title: '¿Podría tener una atmósfera?',
       body: `Una pregunta natural es si un planeta de una masa y un radio dados conserva un gas, y el diagrama no la responde. Una densidad baja dice que el planeta <em>tiene</em> una envoltura gruesa; si un mundo pequeño y caliente puede <em>retener</em> una es un equilibrio entre lo rápido que se mueve el gas a su temperatura y lo que tarda en escapar, y depende de la luz de la estrella a lo largo del tiempo, que ningún diagrama de masa y radio lleva.
-             \n\nEl cálculo del escape de un gas de un mundo quedó fuera de este proyecto (el Prompt 199 juzgó que los modelos no podían sostenerlo al nivel que mantiene el resto de la unidad), así que este es un paso de lectura y no una investigación. La afirmación honesta de este diagrama es la de la caja: una densidad media, con su incertidumbre, y nada sobre lo que un planeta conserva.`,
+             \n\nEl cálculo del escape de un gas de un mundo quedó fuera de este proyecto (se juzgó que los modelos no podían sostenerlo al nivel que mantiene el resto de la unidad), así que este es un paso de lectura y no una investigación. La afirmación honesta de este diagrama es la de la caja: una densidad media, con su incertidumbre, y nada sobre lo que un planeta conserva.`,
     },
     {
       title: 'Tipos, y lo que oculta cada diagrama',
@@ -2172,8 +2172,8 @@ const CONTENT = {
     ],
     [
       'The survey is synthetic (2000 stars with a known truth); the mass-radius diagram’s Solar System table is typed from published values and not rechecked (D-R10-203); the hot Jupiter is the synthetic planet of the joint fit.',
-      'A public catalog subset (the roadmap’s first choice for the diagrams) is not shipped: no rights decision was made and nothing was fetched, so the investigation uses what the suite holds.',
-      'The reading step on atmospheres replaces an investigation that was gated out (Prompt 199, verdict B: the escape panel was not built); it makes no retention statement.',
+      'A public catalog subset (the first choice for the diagrams) is not shipped: no rights decision was made and nothing was fetched, so the investigation uses what the suite holds.',
+      'The reading step on atmospheres replaces an investigation that was gated out (gate verdict B: the escape panel was not built); it makes no retention statement.',
       'The rate of a bin is the panel’s (a count over the completeness with a stated reliability); the first seed and the stated reliability are the opening values.',
     ],
     [

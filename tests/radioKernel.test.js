@@ -31,9 +31,9 @@ const run = (s, o = {}) =>
   });
 
 describe('the 21-cm line and the Doppler scale', () => {
-  test('the two atomic constants carry their status: unverified, a question for Carl', () => {
+  test('the two atomic constants carry their status: unverified, the source still to be supplied', () => {
     expect(K.HI_LINE.status).toMatch(/not verified/);
-    expect(K.HI_LINE.status).toMatch(/Carl/);
+    expect(K.HI_LINE.status).toMatch(/still to be supplied/);
     expect(Object.isFrozen(K.HI_LINE)).toBe(true);
   });
   test('three conventions agree to first order and round-trip', () => {

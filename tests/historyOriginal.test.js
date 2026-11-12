@@ -61,8 +61,8 @@ const SOURCE_BLOB = 'fe77fdc0afc47d0d3f24e93a690043bb4dee950e';
 /** The original without the two lines below: the file before the notice and the removal of the font import. */
 const SERVED_BLOB = '959822c4e570db8317f00072b26121c4f2568d46';
 /** The file as served: SERVED_BLOB plus the notice's two regions, less the font import. */
-const FREEZE_BLOB = '763c2f86a9345492346159648581c7eadc12fb4f';
-const FREEZE_BYTES = 68805;
+const FREEZE_BLOB = 'c873aa5640f0fab6c95c2cac91117fcef255a32e';
+const FREEZE_BYTES = 68788;
 /** The line removed, and the line it followed. */
 const FONT_IMPORT =
   "        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&family=Roboto+Mono:wght@400;700&display=swap');\n";

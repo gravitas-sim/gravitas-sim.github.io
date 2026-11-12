@@ -193,7 +193,7 @@ export const EN_MASSES = {
   'masW.vb.row.refused': 'Refused',
   'masW.vb.row.companion': 'Companion',
   'masW.vb.a':
-    'Prompt 187’s apparent-orbit fit of the relative offsets (or of the photocenter about the barycenter); a parallax with its frame statement; a constant offset and a proper motion fitted with the mass fraction. Common-mode frame errors, a third body and radial-velocity coupling are not modeled; the data are synthetic',
+    'The apparent-orbit fit of the relative offsets (or of the photocenter about the barycenter); a parallax with its frame statement; a constant offset and a proper motion fitted with the mass fraction. Common-mode frame errors, a third body and radial-velocity coupling are not modeled; the data are synthetic',
   'masW.vb.frame.absolute': 'absolute',
   'masW.vb.frame.absolute.long':
     'the parallax is absolute (corrected to the stated source); the correction and its uncertainty are in the parallax given',
