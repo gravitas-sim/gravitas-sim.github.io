@@ -1,6 +1,6 @@
 # Cohesion II: discovery at scale after the expansion (Prompt 287)
 
-The science phases tripled the content under Prompt 161's navigation model. This is the second discovery pass: it re-measures the navigation inventory, the Library's default view, the topic pages, the sequences and courses, the recommended starts and the search against the real catalog (248 entries), folds what duplicated, tightens the search, judges every card, link, filter and control added since 2.0.0 with Prompt 165's decision function, and runs the structural checks over the whole. It adds no destination, no kind, no filter, no card and no control, removes no capability and shortens no support period. Every decision is a row of `DECISION_REGISTER.md` (D-R10-287-01 to -32, delegated).
+The science phases tripled the content under Prompt 161's navigation model. This is the second discovery pass: it re-measures the navigation inventory, the Library's default view, the topic pages, the sequences and courses, the recommended starts and the search against the real catalog (248 entries), folds what duplicated, tightens the search, judges every card, link, filter and control added since 2.0.0 with Prompt 165's decision function, and runs the structural checks over the whole. It adds no destination, no kind, no filter, no card and no control, removes no capability and shortens no support period. Every decision is a row of `DECISION_REGISTER.md` (D-R10-287-01 to -33, delegated).
 
 Everything below is a count from the tree or an inspection by the project. None of it is a user study, and none of it says a first-time visitor understands anything (see "What this does not prove").
 
@@ -62,7 +62,7 @@ What a first-time visitor sees now: a Home with a paragraph, four recommended st
 
 ## Ceilings
 
-Only one size ceiling moved, under the standing approval of 2026-10-10: the Library route in the sources configuration, 99.8 to 100.8 KB (the measured overrun, from the topic division, the tier heading and the search's new field), in `tools/route-budgets.json`. The deferred, initial, first-visit, idle-precache and build-route ceilings held. The queue re-measures after the next merge of `v3`.
+Two size ceilings moved, each by exactly its measured overrun under the standing approval of 2026-10-10 (D-R10-287-33): the Library route in the sources configuration, 99.8 to 100.8 KB (`tools/route-budgets.json`), and the idle precache tier, 1,696,781 to 1,697,016 B (`tools/data-budget.json`, 235 B). The cause is the topic division, the tier heading and alias handling, the search's ranking and the new Library words. The deferred, initial, first-visit and build-route ceilings held. The figures are local, on Node 22.23.4; CI is the gate, and the queue re-measures after the next merge of `v3`.
 
 ## What this does not prove
 
