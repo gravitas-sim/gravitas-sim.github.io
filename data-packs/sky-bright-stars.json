@@ -134,7 +134,7 @@
   "derived": {
     "file": "js/data/sky/brightStars.js",
     "bytes": 4170,
-    "sha256": "813e592859da16ed907e30ca462bc72e43708d3c6cb67c8bdf719a0f56c4d25c",
+    "sha256": "92ff295c2bda36e67e93098f0c380859b34af87e8b3bda8609b19ec7c98bbcfe",
     "sidecar": {
       "file": "sky/bright-stars.json",
       "bytes": 62083,

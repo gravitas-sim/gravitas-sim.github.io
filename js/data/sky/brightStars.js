@@ -84,7 +84,7 @@ export const PACK = {
 /** The sidecar: where the rows are, and what they must be. */
 export const SIDECAR = {
   file: 'sky/bright-stars.json',
-  bytes: 62075,
+  bytes: 62083,
   sha256: '253bc321375df0c9df6174f4af950f263ab0ffc54d1c43a753d3daa2a9208f36',
   count: 904,
 };
