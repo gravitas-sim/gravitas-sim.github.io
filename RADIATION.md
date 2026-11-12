@@ -281,3 +281,5 @@ own prompt.
    here against Vega at 0.03 and labelled as such. TESS magnitudes are defined by
    an electron rate at T = 10 (TESS Instrument Handbook), which this kernel does
    not model.
+
+<!-- Listed in DOCUMENTS.md. -->
