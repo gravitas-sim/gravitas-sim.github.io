@@ -63,3 +63,5 @@ published mass function, or the orbital elements and masses of a nearby resolved
 alpha Centauri AB, Akeson et al. 2021, arXiv:2104.10086, title and authors verified on the arXiv API on 2026-11-03; the table of elements in that
 paper was not read, and its licence has to be read before any number is used). Numbers only, as for V505 Persei in Part A. The build under this
 verdict is on `feat/visual-binary`: the panel `masses-visual` and three advanced steps in Weighing the Stars, for Real.
+
+<!-- Listed in DOCUMENTS.md. -->
