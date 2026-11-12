@@ -110,3 +110,5 @@ No astrometry on authentic frames, no authentic moving object, and the half-year
 inherited limits; nothing here claims them. The frames' seeing is an assumed 0.03 Jupiter radii per mark.
 The planetary pack's Jupiter is the system's barycentre, which differs from the planet's centre by less than
 0.01 Jupiter radii. The pack covers 40 days; a request outside it is refused by `js/mission/ephemeris.js`.
+
+<!-- Listed in DOCUMENTS.md. -->
