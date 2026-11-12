@@ -317,3 +317,5 @@ formulation, no cluster-scale test, and no attempt at the acoustic peaks, which
 are the places MOND is known to struggle and where a toy implementation would
 teach the wrong lesson. The control is disabled outside the three galaxy
 scenarios and says why.
+
+<!-- Listed in DOCUMENTS.md. -->
