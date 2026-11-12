@@ -11,9 +11,22 @@ feature's document and has nothing to do with this one.)
 kind, the prompt that keeps it current, whether it is written or generated, and
 whether a student can meet its content. Below that it lists every generated
 artifact, the command that writes it and whether that command depends on a
-secret. Start there; `npm run docs-map:check` keeps it honest. Documents the code
-no longer matches are in `docs/archive/`, each with a header naming the date and
-what superseded it.
+secret. Start there; `npm run docs-map:check` keeps it honest. The block below
+is written by `node tools/docs-map.mjs` from the same table; never edit it by
+hand.
+
+<!-- docs-map:begin (written by node tools/docs-map.mjs; do not edit) -->
+218 root documents (4 front-door, 10 policy, 2 legal, 10 process, 5 guide, 9 design, 10 reference, 105 feature, 54 gate, 9 record) and 6 archived.
+A document the code no longer matches is moved to `docs/archive/`, never
+deleted, with a header naming the date and what superseded it:
+
+- [`ENERGY_TAB_FEATURE.md`](docs/archive/ENERGY_TAB_FEATURE.md), archived 2026-10-17 (P128); superseded by OBJECT_INSPECTOR.md.
+- [`IMPLEMENTATION_CHECKLIST.md`](docs/archive/IMPLEMENTATION_CHECKLIST.md), archived 2026-10-17 (P128); superseded by the shipped investigations Listening to Spacetime, A Universe of Stars and Lives of Stars.
+- [`PERFORMANCE_OPTIMIZATIONS_SUMMARY.md`](docs/archive/PERFORMANCE_OPTIMIZATIONS_SUMMARY.md), archived 2026-11-11 (P289); superseded by PERFORMANCE_PROFILING_GUIDE.md, npm run perf and tools/perf-thresholds.json.
+- [`UI_PERFORMANCE_AUDIT.md`](docs/archive/UI_PERFORMANCE_AUDIT.md), archived 2026-11-11 (P289); superseded by npm run perf, npm run budget:check, tools/route-budgets.json and ACCESSIBILITY.md.
+- [`SCENARIO_FIXES.md`](docs/archive/SCENARIO_FIXES.md), archived 2026-11-11 (P289); superseded by npm run validate:scenarios and the scenario section of CONTRIBUTING.md.
+- [`SCENARIO_GALLERY.md`](docs/archive/SCENARIO_GALLERY.md), archived 2026-11-11 (P289); superseded by README.md, CONTRIBUTING.md, js/scenarioBrowser.js and npm run thumbnails:check.
+<!-- docs-map:end -->
 
 ## 2. The three commands
 

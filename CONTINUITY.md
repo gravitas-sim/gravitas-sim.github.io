@@ -17,12 +17,17 @@ usually".
 
 ## What does not depend on the maintainer
 
-- **The archive.** Every release is archived on Zenodo through the GitHub–Zenodo
-  integration, with a version DOI for the exact release and a concept DOI for
-  the whole project (`CITATION.cff`, [`RELEASING.md`](RELEASING.md)). The
-  archive holds the full source tree, the teaching material and the
-  vendored libraries, under their licenses. If the site and the repository
-  both vanished, the latest archived release rebuilds the project.
+- **The archive.** A release made through the GitHub–Zenodo integration is
+  archived on Zenodo, with a version DOI for the exact release and a concept
+  DOI for the whole project (`CITATION.cff`, [`RELEASING.md`](RELEASING.md)).
+  The archive holds the full source tree, the teaching material and the
+  vendored libraries, under their licenses. As of 2026-11-11 the latest archived
+  release is 2.0.0 (tagged 2026-10-16). Release 2.1.0 (tagged 2026-10-24) is a
+  plain git tag with no GitHub release and no version DOI, on the owner's
+  direction (`CHANGELOG.md`, the 2.1.0 section), so it is not in the archive;
+  the work since is in the repository only. If the site and the repository
+  both vanished, the latest archived release, 2.0.0, rebuilds the project as it
+  was then, not as it is.
 - **The site needs no service.** It is static files on GitHub Pages: no server
   to run, no database, no account, no tracking. The simulations, the lessons
   and the validation page run from the files alone, offline once loaded
@@ -70,7 +75,9 @@ budgets, `release:check --fast`, an instructor bundle under a throwaway
 passphrase opened in the portal) in about twelve minutes, alone, on one machine.
 The steps and the stumbles it found are in [`RELEASING.md`](RELEASING.md),
 "Rehearsing recovery from an archive". It is not independent evidence: nobody
-else has done it. Who besides the owner can administer the Zenodo record is not
+else has done it. It has not been repeated: no rehearsal has been run against
+2.1.0 (which has no archive) or against a later tree, and a second one is
+Prompt 291's work, not yet done. Who besides the owner can administer the Zenodo record is not
 known to the repository. The instructor passphrase has no second holder: Carl
 decided that on 2026-10-21 (INSTRUCTOR_MATERIALS.md, "The second holder"), so if
 he is unavailable nobody can issue or rotate it, the deployed bundle keeps

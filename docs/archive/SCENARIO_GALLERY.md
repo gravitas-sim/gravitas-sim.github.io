@@ -1,5 +1,7 @@
 # Scenario gallery: what changed
 
+> **Archived 2026-11-11** (Prompt 289). Superseded by [`README.md`](../../README.md) and [`CONTRIBUTING.md`](../../CONTRIBUTING.md), which describe `js/data/scenarioInfo.js` as the one catalog, and by `js/scenarioBrowser.js` and `npm run thumbnails:check`, which hold the gallery. Kept for the record, unchanged below except that its relative links now point from this folder; links into it from the repository root were checked and moved with it.
+
 > **Historical record.** This describes one change, made when the catalog held
 > 43 scenarios and 12 concept tags. The counts in the narrative below are the
 > counts at that time and are left as they were written; the catalog now holds

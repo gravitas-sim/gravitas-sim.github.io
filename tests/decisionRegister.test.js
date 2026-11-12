@@ -98,16 +98,22 @@ describe('the decision register', () => {
     }
   });
 
-  test('every gate and RFC document has a row naming it', () => {
+  test('every gate and RFC document has a row naming it, at the root or in docs/archive/', () => {
+    // An archived gate (Prompt 289) keeps its row: the row names the file by its
+    // path at the commit it cites, and an archived verdict is still a verdict.
     const docs = git('ls-files')
       .split('\n')
-      .filter(f => /^[^/]+_(GATE|RFC)\.md$/.test(f));
+      .filter(f => /^(docs\/archive\/)?[^/]+_(GATE|RFC)\.md$/.test(f));
     expect(docs.length).toBeGreaterThan(5);
-    for (const f of docs)
-      expect([f, all.some(r => r.source.includes(`\`${f}\``))]).toEqual([
+    for (const f of docs) {
+      const name = f.replace(/^docs\/archive\//, '');
+      expect([
         f,
-        true,
-      ]);
+        all.some(
+          r => r.source.includes(`\`${f}\``) || r.source.includes(`\`${name}\``)
+        ),
+      ]).toEqual([f, true]);
+    }
   });
 
   test('every source is a file in the repository or the roadmap, at a commit in history', () => {

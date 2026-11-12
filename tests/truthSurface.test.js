@@ -21,7 +21,7 @@
 //                         page is right and the setting reads as though it is
 //                         wrong, which is how two other branches of this work
 //                         came to state the opposite.
-//   Barnes-Hut adoption   PERFORMANCE_OPTIMIZATIONS_SUMMARY.md said physics is
+//   Barnes-Hut adoption   docs/archive/PERFORMANCE_OPTIMIZATIONS_SUMMARY.md said physics is
 //                         handed to the worker "when the body count justifies
 //                         it". Nothing does that. It is an opt-in checkbox.
 //   the demonstrations    the teaching page and the paper both say "six", as a
@@ -100,7 +100,7 @@ describe('what the performance summary claims is adopted', () => {
     expect(active).toBeTruthy();
     expect(active).toContain('use_barnes_hut === true');
     expect(active).not.toMatch(/length|count|>=|>\s*\d/);
-    const summary = read('PERFORMANCE_OPTIMIZATIONS_SUMMARY.md');
+    const summary = read('docs/archive/PERFORMANCE_OPTIMIZATIONS_SUMMARY.md');
     expect(summary).toContain('There is\n   no body-count heuristic');
     expect(summary).toContain('_built,\n   not adopted_');
     // The old wording survives in that entry, quoted as the thing that was

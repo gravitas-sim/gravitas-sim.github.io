@@ -36,6 +36,15 @@ the release rather than in the tag.
 
 ### Changed
 
+- Documentation map II and stale-document retirement (Prompt 289; register rows
+  D-R10-289-01 to 05; invisible, documentation). Four historical records
+  (`UI_PERFORMANCE_AUDIT.md`, `PERFORMANCE_OPTIMIZATIONS_SUMMARY.md`,
+  `SCENARIO_FIXES.md`, `SCENARIO_GALLERY.md`) moved to `docs/archive/`, each
+  headed with its date and what superseded it; the map table now dates every
+  document, requires an owner prompt for any added after Prompt 128 and lists
+  the archive; the accessibility conformance report is a node of the generation
+  graph; the map section of `MAINTAINER_ONBOARDING.md` is written by the tool;
+  `CONTINUITY.md` says what is archived and what has not been rehearsed again.
 - Format audit and the freeze (Prompt 290; register rows D-R10-290-01 to 06):
   every format Gravitas reads or writes now has a JSON Schema in `sdk/schemas`
   (36 new ones, written from the readers and held to them case by case; no reader
