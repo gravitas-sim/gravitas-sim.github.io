@@ -300,3 +300,5 @@ A verdict is not a retirement. Nothing on the site changed in Prompt 165. Prompt
 ## Re-running the gate
 
 `node tools/surface-gate.mjs measure` then `write` re-measures the tree and rewrites the tables; a changed verdict shows in the diff. Evidence that would change a verdict: real referrer data (for a surface judged only on counts), a named adopter who uses a surface, a Library entry or investigation that starts to link a surface, a new durable record that points at one, or a changed threshold (a register row). A new surface needs a record in `tools/surface-gate.json` (a test fails without one), and a new menu entry, kind or filter needs the register row `NAVIGATION.md` already asks for.
+
+<!-- Listed in DOCUMENTS.md. -->
