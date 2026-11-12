@@ -62,7 +62,7 @@ What a first-time visitor sees now: a Home with a paragraph, four recommended st
 
 ## Ceilings
 
-Two size ceilings moved, each by exactly its measured overrun under the standing approval of 2026-10-10 (D-R10-287-33): the Library route in the sources configuration, 99.8 to 100.8 KB (`tools/route-budgets.json`), and the idle precache tier, 1,696,781 to 1,697,016 B (`tools/data-budget.json`, 235 B). The cause is the topic division, the tier heading and alias handling, the search's ranking and the new Library words. The deferred, initial, first-visit and build-route ceilings held. The figures are local, on Node 22.23.4; CI is the gate, and the queue re-measures after the next merge of `v3`.
+Two size ceilings moved, each by exactly its measured overrun under the standing approval of 2026-10-10 (D-R10-287-33): the Library route in the sources configuration, 99.8 to 100.8 KB (`tools/route-budgets.json`), and the idle precache tier, 1,696,781 to 1,697,439 B (`tools/data-budget.json`, 658 B, re-measured on the merge of v3 d3fedad0). The cause is the topic division, the tier heading and alias handling, the search's ranking and the new Library words. The deferred, initial, first-visit and build-route ceilings held. The figures are local, on Node 22.23.4; CI is the gate, and the queue re-measures after the next merge of `v3`.
 
 ## What this does not prove
 
