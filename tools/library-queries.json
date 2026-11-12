@@ -1,0 +1,254 @@
+{
+  "format": "gravitas.library-queries/1",
+  "note": "The committed query set for the Library's search (Prompt 287): what a student or an instructor types, in both languages, and where the entry that answers it has to be among the results. `expect` is a list of Library ids any one of which answers the query; `within` is the rank it must reach. tests/librarySearchQueries.test.js runs every row against library/library.json and library/search-index.json in both languages through js/library/search.js. A row is added when a query a reader would type fails, and `within` is only ever lowered after a change of ranking that earns it. `refuse` rows are queries that must find nothing: the search is not fuzzy.",
+  "queries": [
+    {
+      "en": "kepler's laws",
+      "es": "leyes de kepler",
+      "expect": ["investigation:keplers-laws"],
+      "within": 3
+    },
+    {
+      "en": "black hole",
+      "es": "agujero negro",
+      "expect": ["investigation:black-holes", "scenario:black-hole-lab"],
+      "within": 3
+    },
+    {
+      "en": "light curve",
+      "es": "curva de luz",
+      "expect": ["dataset:tess-light-curve"],
+      "within": 1
+    },
+    {
+      "en": "transit",
+      "es": "tránsito",
+      "expect": ["scenario:transit-lab", "investigation:transit-photometry"],
+      "within": 8
+    },
+    {
+      "en": "parallax",
+      "es": "paralaje",
+      "expect": ["dataset:gaia-ngc2420", "investigation:how-far-is-that-star"],
+      "within": 5
+    },
+    {
+      "en": "dark matter",
+      "es": "materia oscura",
+      "expect": ["investigation:missing-mass"],
+      "within": 1
+    },
+    {
+      "en": "tides",
+      "es": "mareas",
+      "expect": [
+        "investigation:tides",
+        "investigation:tides-that-move-the-moon"
+      ],
+      "within": 3
+    },
+    {
+      "en": "white dwarf",
+      "es": "enana blanca",
+      "expect": [
+        "investigation:how-old-is-this-white-dwarf",
+        "scenario:white-dwarf-binary"
+      ],
+      "within": 3
+    },
+    {
+      "en": "gravitational waves",
+      "es": "ondas gravitacionales",
+      "expect": [
+        "investigation:what-is-a-gravitational-wave",
+        "dataset:gwosc-events"
+      ],
+      "within": 3
+    },
+    {
+      "en": "hr diagram",
+      "es": "diagrama hr",
+      "expect": ["investigation:reading-the-hr-diagram"],
+      "within": 1
+    },
+    {
+      "en": "mission lab",
+      "es": "laboratorio de misiones",
+      "expect": ["investigation:ml-window", "investigation:ml-orbit"],
+      "within": 3
+    },
+    {
+      "en": "3-d lab",
+      "es": "laboratorio 3-d",
+      "expect": ["investigation:l3-planes"],
+      "within": 5
+    },
+    {
+      "en": "craters",
+      "es": "cráteres",
+      "expect": ["investigation:craters-by-size"],
+      "within": 3
+    },
+    {
+      "en": "eclipse",
+      "es": "eclipse",
+      "expect": ["investigation:phases-and-eclipses"],
+      "within": 1
+    },
+    {
+      "en": "periodogram",
+      "es": "periodograma",
+      "expect": ["investigation:two-periodograms"],
+      "within": 1
+    },
+    {
+      "en": "spectrum",
+      "es": "espectro",
+      "expect": ["investigation:what-a-spectrum-is-made-of"],
+      "within": 3
+    },
+    {
+      "en": "telescope",
+      "es": "telescopio",
+      "expect": [
+        "investigation:what-a-telescope-resolves",
+        "investigation:plan-a-night"
+      ],
+      "within": 5
+    },
+    {
+      "en": "resonance",
+      "es": "resonancia",
+      "expect": ["scenario:galilean-resonance"],
+      "within": 3
+    },
+    {
+      "en": "exoplanet",
+      "es": "exoplaneta",
+      "expect": ["scenario:exoplanet-lab"],
+      "within": 3
+    },
+    {
+      "en": "neutron star",
+      "es": "estrella de neutrones",
+      "expect": ["scenario:neutron-star-collision"],
+      "within": 1
+    },
+    {
+      "en": "pulsar",
+      "es": "púlsar",
+      "expect": ["scenario:pulsar-system"],
+      "within": 1
+    },
+    {
+      "en": "greenhouse",
+      "es": "invernadero",
+      "expect": ["investigation:two-greenhouse-models"],
+      "within": 1
+    },
+    {
+      "en": "expanding universe",
+      "es": "universo en expansión",
+      "expect": ["investigation:the-expanding-universe"],
+      "within": 1
+    },
+    {
+      "en": "cluster age",
+      "es": "edad cúmulo",
+      "expect": ["investigation:two-clusters-two-ages"],
+      "within": 3
+    },
+    {
+      "en": "gravity assist",
+      "es": "asistencia gravitatoria",
+      "expect": [
+        "scenario:gravity-assist-lab",
+        "scenario:gravity-assist-heliocentric",
+        "investigation:gravity-assist"
+      ],
+      "within": 3
+    },
+    {
+      "en": "moons",
+      "es": "lunas",
+      "expect": ["investigation:moons-of-the-giants"],
+      "within": 5
+    },
+    {
+      "en": "hohmann transfer",
+      "es": "transferencia hohmann",
+      "expect": ["investigation:hohmann-transfer"],
+      "within": 1
+    },
+    {
+      "en": "asteroids",
+      "es": "asteroides",
+      "expect": ["investigation:the-gaps-in-the-belt"],
+      "within": 5
+    },
+    {
+      "en": "supernova",
+      "es": "supernova",
+      "expect": [
+        "scenario:supernova-remnant",
+        "investigation:when-a-star-explodes"
+      ],
+      "within": 3
+    },
+    {
+      "en": "seasons",
+      "es": "estaciones",
+      "expect": ["investigation:the-sun-through-the-year"],
+      "within": 3
+    },
+    {
+      "en": "phases",
+      "es": "fases",
+      "expect": [
+        "investigation:phases-and-eclipses",
+        "investigation:phases-and-albedo"
+      ],
+      "within": 3
+    },
+    {
+      "en": "limb darkening",
+      "es": "oscurecimiento limbo",
+      "expect": [
+        "investigation:transit-photometry",
+        "investigation:refitting-a-transit"
+      ],
+      "within": 3
+    },
+    {
+      "en": "hubble",
+      "es": "hubble",
+      "expect": ["investigation:the-expanding-universe"],
+      "within": 5
+    },
+    {
+      "en": "plan a night",
+      "es": "planifica noche",
+      "expect": ["investigation:plan-a-night"],
+      "within": 1
+    },
+    {
+      "en": "binary star",
+      "es": "estrella binaria",
+      "expect": [
+        "investigation:a-binary-stars-orbit",
+        "scenario:binary-star-system"
+      ],
+      "within": 5
+    },
+    {
+      "en": "sandbox",
+      "es": "simulación libre",
+      "expect": ["scenario:solar-system"],
+      "within": 5
+    }
+  ],
+  "refuse": {
+    "en": ["xqzv", "transi5"],
+    "es": ["xqzv", "tránsi5"]
+  }
+}
