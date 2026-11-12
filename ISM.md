@@ -194,3 +194,5 @@ The CCM89 law is Cardelli, Clayton and Mathis 1989 (ApJ 345, 245) as `js/kernels
 pack cite it; the rest wavelengths are the NIST Atomic Spectra Database as the line pack records; the air-to-vacuum conversion is
 Morton 2000 as `js/kernels/radiation/doppler.js` cites it; the SDSS spectra are DR18 (Almeida et al. 2023) as the pack
 records. The curve of growth is textbook; the constants are derived. `DECISION_REGISTER.md` D-R10-247-01 to -05.
+
+<!-- Listed in DOCUMENTS.md. -->
