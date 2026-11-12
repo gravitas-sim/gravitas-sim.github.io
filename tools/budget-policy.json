@@ -28,15 +28,15 @@
         "requests": 149
       },
       "transit": {
-        "kb": 3443.6,
+        "kb": 3443.5,
         "requests": 149
       },
       "power-law": {
-        "kb": 3408.9,
+        "kb": 3408.8,
         "requests": 149
       },
       "largest-lesson": {
-        "kb": 3541.1,
+        "kb": 3541.0,
         "requests": 151
       },
       "observatory": "the Observatory with one observation open: read from tools/route-budgets.json"

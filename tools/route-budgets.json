@@ -16,19 +16,19 @@
         "requests": 149
       },
       "transit": {
-        "kb": 3443.6,
+        "kb": 3443.5,
         "requests": 149,
         "toolKb": 3562.9,
         "toolRequests": 154
       },
       "power-law": {
-        "kb": 3408.9,
+        "kb": 3408.8,
         "requests": 149,
         "toolKb": 3462.1,
         "toolRequests": 152
       },
       "largest-lesson": {
-        "kb": 3541.1,
+        "kb": 3541.0,
         "requests": 151
       },
       "teaching": {
@@ -52,7 +52,7 @@
         "requests": 59
       },
       "observatory": {
-        "kb": 199.9,
+        "kb": 199.7,
         "requests": 18
       },
       "catalog": {
