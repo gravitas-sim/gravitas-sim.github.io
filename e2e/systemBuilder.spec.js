@@ -154,6 +154,10 @@ test.describe('the Orbital System Builder', () => {
     page,
     app,
   }) => {
+    test.skip(
+      DIST,
+      'sources keep this fact; docs/DUPLICATE_COVERAGE.md (D-R10-292-02)'
+    );
     await openBuilder(page, app);
     await useTemplate(page, 'starPlanet');
     const e = field(page, 2, 'e');
@@ -182,6 +186,10 @@ test.describe('the Orbital System Builder', () => {
     page,
     app,
   }) => {
+    test.skip(
+      DIST,
+      'sources keep this fact; docs/DUPLICATE_COVERAGE.md (D-R10-292-02)'
+    );
     // The question is whether anything was built, so the world behind the
     // dialog is held still while it is asked. Left running, the default world
     // is a random one with black holes in it, and now and then one swallows a
@@ -246,6 +254,10 @@ test.describe('the Orbital System Builder', () => {
     page,
     app,
   }) => {
+    test.skip(
+      DIST,
+      'sources keep this fact; docs/DUPLICATE_COVERAGE.md (D-R10-292-02)'
+    );
     await openBuilder(page, app);
     await page.locator('#systemBuilderFile').setInputFiles({
       name: 'future.gravitas-system.json',
@@ -288,6 +300,10 @@ test.describe('the Orbital System Builder', () => {
   });
 
   test('in Spanish', async ({ page, app }) => {
+    test.skip(
+      DIST,
+      'sources keep this fact; docs/DUPLICATE_COVERAGE.md (D-R10-292-02)'
+    );
     await openBuilder(page, app, { locale: 'es' });
     await expect(page.locator('#systemBuilderTitle')).toHaveText(
       'Constructor de sistemas orbitales'

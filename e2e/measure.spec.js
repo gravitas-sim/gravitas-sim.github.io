@@ -125,6 +125,10 @@ test.describe('the measurement pipeline', () => {
   test('an undo behind a result makes it stale, and recomputing makes it current', async ({
     page,
   }) => {
+    test.skip(
+      DIST,
+      'sources keep this fact; docs/DUPLICATE_COVERAGE.md (D-R10-292-02)'
+    );
     await openFixture(page, 'tess-light-curve');
     await page.locator('details:has(#obsNormGo) > summary').click();
     await page.locator('#obsNormGo').click();
@@ -249,6 +253,10 @@ test.describe('the measurement pipeline', () => {
   });
 
   test('the measurements have their own undo and redo', async ({ page }) => {
+    test.skip(
+      DIST,
+      'sources keep this fact; docs/DUPLICATE_COVERAGE.md (D-R10-292-02)'
+    );
     await openFixture(page, 'gwosc-events');
     await openPanel(page);
     await page.locator('#msTool').selectOption('filter');
