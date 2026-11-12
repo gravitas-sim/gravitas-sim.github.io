@@ -162,3 +162,5 @@ Not verified: Node 20 (CI), Firefox and WebKit (the probe uses a Chromium
 protocol; the pool is plain JavaScript), a persistent realm, a real Worker
 receiving a transferred buffer in a browser (the unit test uses Node's
 `MessageChannel`, which has the same structured-clone transfer semantics).
+
+<!-- Listed in DOCUMENTS.md. -->
