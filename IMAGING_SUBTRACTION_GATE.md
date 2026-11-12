@@ -152,3 +152,5 @@ Synthetic frames and invented orbits throughout; a clean detector; one profile; 
 the oracle shares the contract's definitions (the scale, the residual and the fit are the contract's), so B1 to
 B4 hold the code against an independent implementation of the stated method and not the method against a real
 instrument; the amendments set parameters on a development stream.
+
+<!-- Listed in DOCUMENTS.md. -->
