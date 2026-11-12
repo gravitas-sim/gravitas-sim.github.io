@@ -153,3 +153,5 @@ submitted anywhere, and it claims no review, adopter or endorsement.
   English only" (D-ADOPT-01). Prompt 170 added generated Spanish structured
   notes for every investigation (INSTRUCTOR_MATERIALS.md); they are not that
   prose, and the guide's languages row says what is and is not in Spanish.
+
+<!-- Listed in DOCUMENTS.md. -->
