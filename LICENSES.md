@@ -173,3 +173,5 @@ normally shared in, and it is what the Journal of Open Source Education expects.
 
 Both licenses are permissive and neither is viral, so combining them costs an
 adopter one attribution line rather than a decision.
+
+<!-- Listed in DOCUMENTS.md. -->
