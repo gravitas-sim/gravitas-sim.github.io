@@ -154,3 +154,5 @@ result.
 The applicability leg needs one real calibrated exposure of a star of known magnitude with its exposure time, filter, airmass,
 sky level and read noise recorded. Nothing was downloaded and nothing is typed from memory. The decision is Carl's (the
 product, its version, its terms and the rights basis).
+
+<!-- Listed in DOCUMENTS.md. -->
