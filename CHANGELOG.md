@@ -24,7 +24,8 @@ the release rather than in the tag.
   shards only queued) from refreshed timings, fifteen production-build copies
   of logic tests are dropped where the sources run keeps the fact, and two
   scenario-data tests moved from the browser suite to Jest. The 15-minute target
-  is recorded as a structural miss with its next step.
+  is recorded as a structural miss with its next step, and Carl reset it to 22
+  minutes for pull requests (D-R10-292-11).
 - Help II (Prompt 286; register rows D-R10-286-01 to 05): H opens the explainer
   of the panel you are in, every explainer ends with where its physics is
   checked, the glossary defines 81 terms by topic in both languages and a term
