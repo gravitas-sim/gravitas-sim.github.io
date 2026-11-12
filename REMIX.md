@@ -157,3 +157,5 @@ or the scenario catalog, or a static import, splits chunks a lesson loads, and
 the route budgets count them. Measured: the lesson routes and the composer
 stay inside their ceilings (no ceiling raised); the deferred JavaScript budget
 goes from 4116 to about 4171 of 4180 KB (4107 after budget recovery 5 and the work below). The delivery stage adds one route, /studio/course/packs/ (its row was measured and added by hand), and no ceiling was raised.
+
+<!-- Listed in DOCUMENTS.md. -->
