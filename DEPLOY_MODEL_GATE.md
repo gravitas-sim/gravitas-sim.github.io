@@ -354,3 +354,5 @@ transfer (gzip) sizes; the full dist suite beyond the 28 specs named; the
 plain hybrid bundle through route-budget (its size was taken from the file);
 tests of the hybrid with the validation groups and tests repointed (not an
 option the slices allow).
+
+<!-- Listed in DOCUMENTS.md. -->
