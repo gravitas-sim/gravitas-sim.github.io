@@ -523,13 +523,13 @@ describe('the second oracle and the document and the register', () => {
     );
   });
 
-  test('the register has D-R10-257-06 to -10, all DELEGATED, each citing one file and a commit, and the missing D-R10-254-01', () => {
+  test('the register has D-R10-257-06 to -10, all DELEGATED or RATIFIED, each citing one file and a commit, and the missing D-R10-254-01', () => {
     for (const n of ['06', '07', '08', '09', '10']) {
       const row = register
         .split('\n')
         .find(l => l.startsWith(`| D-R10-257-${n} |`));
       expect(row).toBeTruthy();
-      expect(row).toMatch(/\*\*DELEGATED\*\*/);
+      expect(row).toMatch(/\*\*(DELEGATED|RATIFIED)\*\*/);
       expect(row).toMatch(/\| `[^`]+` \([0-9a-f]{8}\) \|/);
     }
     expect(register).toMatch(
@@ -540,7 +540,7 @@ describe('the second oracle and the document and the register', () => {
       .find(l => l.startsWith('| D-R10-254-01 |'));
     expect(r254).toBeTruthy();
     expect(r254).toMatch(/CONTINUE AS PLANNED/);
-    expect(r254).toMatch(/\*\*DELEGATED\*\*/);
+    expect(r254).toMatch(/\*\*(DELEGATED|RATIFIED)\*\*/);
     expect(integration).toMatch(
       /Recorded outcome of continuation checkpoint V \(Prompt 254, 2026-11-06, register row D-R10-254-01/
     );

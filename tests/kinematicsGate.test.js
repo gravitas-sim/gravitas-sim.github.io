@@ -223,13 +223,13 @@ describe('the document and the register', () => {
       expect(doc).toMatch(new RegExp(`\\*\\*${a}\\.\\*\\*`));
   });
 
-  test('the register has its six rows, all DELEGATED', () => {
+  test('the register has its six rows, all DELEGATED or RATIFIED', () => {
     for (const id of ['01', '02', '03', '04', '90', '91']) {
       const line = register
         .split('\n')
         .find(l => l.startsWith(`| D-R10-235-${id} |`));
       expect([id, !!line]).toEqual([id, true]);
-      expect(line).toMatch(/\*\*DELEGATED\*\*/);
+      expect(line).toMatch(/\*\*(DELEGATED|RATIFIED)\*\*/);
       expect(line).toMatch(/`KINEMATICS_GATE.md`/);
     }
   });

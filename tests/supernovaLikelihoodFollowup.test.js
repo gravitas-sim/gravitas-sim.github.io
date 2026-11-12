@@ -450,13 +450,13 @@ describe('the document and the register', () => {
     );
   });
 
-  test('the register has the follow-up rows, each DELEGATED, with a source and sha', () => {
+  test('the register has the follow-up rows, each DELEGATED or RATIFIED, with a source and sha', () => {
     const rows = register
       .split('\n')
       .filter(l => /^\| D-R10-256-(0[6-9]|1\d) /.test(l));
     expect(rows.length).toBeGreaterThanOrEqual(3);
     for (const line of rows) {
-      expect(line).toMatch(/\*\*DELEGATED\*\*/);
+      expect(line).toMatch(/\*\*(DELEGATED|RATIFIED)\*\*/);
       expect(line).toMatch(/\(([0-9a-f]{8})\)/);
     }
   });

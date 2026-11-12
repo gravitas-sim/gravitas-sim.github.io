@@ -417,14 +417,14 @@ describe('the document and the register', () => {
     expect(doc).toMatch(/## 8\. Questions for Carl/);
   });
 
-  test('the register has D-R10-257-01 to -05, all DELEGATED, sourced from this document', () => {
+  test('the register has D-R10-257-01 to -05, all DELEGATED or RATIFIED, sourced from this document', () => {
     for (const n of ['01', '02', '03', '04', '05']) {
       const row = register
         .split('\n')
         .find(l => l.startsWith(`| D-R10-257-${n} |`));
       expect(row).toBeTruthy();
       expect(row).toMatch(/BAO_GATE\.md/);
-      expect(row).toMatch(/\*\*DELEGATED\*\*/);
+      expect(row).toMatch(/\*\*(DELEGATED|RATIFIED)\*\*/);
     }
     expect(register).toMatch(
       /D-R10-257-02 \| Prompt 257 Part A, the verdict[^|]*27 pass, 2 fail, 4 reported, 10 not run, 1 omitted/

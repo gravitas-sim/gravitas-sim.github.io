@@ -12,7 +12,7 @@
 //     not installed by the service worker (no page adopter yet);
 //   - the two nearest lessons still say they run on the compute page;
 //   - the instructor closure is under its cap and the file the record names has a line ceiling;
-//   - the document names the five titles, the rows D-R10-270-01 to -03 exist and are DELEGATED,
+//   - the document names the five titles, the rows D-R10-270-01 to -03 exist and are DELEGATED or RATIFIED,
 //     and nothing in the document holds a home path.
 // A build that lands the investigations updates this file in the same PR.
 // =============================================================================
@@ -123,11 +123,11 @@ describe('the record and the register', () => {
     );
   });
 
-  test('the rows D-R10-270-01 to -03 exist, are DELEGATED, and cite the record', () => {
+  test('the rows D-R10-270-01 to -03 exist, are DELEGATED or RATIFIED, and cite the record', () => {
     for (const id of ['D-R10-270-01', 'D-R10-270-02', 'D-R10-270-03']) {
       const line = register.split('\n').find(l => l.startsWith(`| ${id} |`));
       expect(line).toBeDefined();
-      expect(line).toContain('**DELEGATED**');
+      expect(line).toMatch(/\*\*(DELEGATED|RATIFIED)\*\*/);
       expect(line).toContain('NUMERICAL_INVESTIGATIONS.md');
       expect(line.trim().endsWith('| 270 |')).toBe(true);
     }

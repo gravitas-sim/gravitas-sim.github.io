@@ -311,7 +311,7 @@ describe('the document and the register state what the files hold', () => {
       .split('\n')
       .filter(l => /^\| D-R10-264-0[1-5] \|/.test(l));
     expect(rows).toHaveLength(5);
-    for (const r of rows) expect(r).toContain('**DELEGATED**');
+    for (const r of rows) expect(r).toMatch(/\*\*(DELEGATED|RATIFIED)\*\*/);
     expect(rows[1]).toContain('verdict B');
   });
 });
@@ -643,12 +643,12 @@ describe('the follow-up: the document and the register state what the files hold
     expect(doc).toContain('X1 is NOT RUN');
   });
 
-  test('the register holds the five DELEGATED rows of the follow-up', () => {
+  test('the register holds the five DELEGATED or RATIFIED rows of the follow-up', () => {
     const rows = register
       .split('\n')
       .filter(l => /^\| D-R10-264-(0[6-9]|10) \|/.test(l));
     expect(rows).toHaveLength(5);
-    for (const r of rows) expect(r).toContain('**DELEGATED**');
+    for (const r of rows) expect(r).toMatch(/\*\*(DELEGATED|RATIFIED)\*\*/);
     expect(rows[1]).toContain('**A through D8b**');
     expect(rows[1]).toContain('D8.noZeroRule stays failing');
     expect(rows[3]).toContain('**The consumers condition is not met**');
