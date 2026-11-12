@@ -473,14 +473,14 @@ describe('the document and the register', () => {
     expect(doc).toMatch(/## 8\. Questions for Carl/);
   });
 
-  test('the register has D-R10-258-01 to -05, all DELEGATED, sourced from this document', () => {
+  test('the register has D-R10-258-01 to -05, all DELEGATED or RATIFIED, sourced from this document', () => {
     for (const n of ['01', '02', '03', '04', '05']) {
       const row = register
         .split('\n')
         .find(l => l.startsWith(`| D-R10-258-${n} |`));
       expect(row).toBeTruthy();
       expect(row).toMatch(/CMB_SCALE_GATE\.md|thresholds\.json/);
-      expect(row).toMatch(/\*\*DELEGATED\*\*/);
+      expect(row).toMatch(/\*\*(DELEGATED|RATIFIED)\*\*/);
     }
     expect(register).toMatch(
       /D-R10-258-02 \| Prompt 258 Part A, the verdict[^|]*42 rows, 25 pass, 5 fail, 4 reported, 8 not run/

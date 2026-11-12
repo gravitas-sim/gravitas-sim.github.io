@@ -298,7 +298,7 @@ describe('the document and the register state what the files hold', () => {
       .split('\n')
       .filter(l => /^\| D-R10-262-0[1-5] \|/.test(l));
     expect(rows).toHaveLength(5);
-    for (const r of rows) expect(r).toContain('**DELEGATED**');
+    for (const r of rows) expect(r).toMatch(/\*\*(DELEGATED|RATIFIED)\*\*/);
     expect(rows[1]).toContain('B-KM');
   });
 });
@@ -568,7 +568,7 @@ describe('the follow-up: C2c and the cross-feed', () => {
       .split('\n')
       .filter(l => /^\| D-R10-262-0[6-8] \|/.test(l));
     expect(rows).toHaveLength(3);
-    for (const r of rows) expect(r).toContain('**DELEGATED**');
+    for (const r of rows) expect(r).toMatch(/\*\*(DELEGATED|RATIFIED)\*\*/);
     expect(rows[1]).toContain('A through C2c');
     expect(rows[1]).toContain('C2o');
     expect(rows[2]).toContain('not met');

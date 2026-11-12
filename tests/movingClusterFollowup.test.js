@@ -258,13 +258,13 @@ describe('the document and the register', () => {
     expect(doc).toMatch(/That pass rests on the floor/);
   });
 
-  test('the register has the four follow-up rows, each DELEGATED, with a source and sha', () => {
+  test('the register has the four follow-up rows, each DELEGATED or RATIFIED, with a source and sha', () => {
     for (const id of ['05', '06', '07', '91']) {
       const line = register
         .split('\n')
         .find(l => l.startsWith(`| D-R10-234-${id} `));
       expect(line).toBeTruthy();
-      expect(line).toMatch(/\*\*DELEGATED\*\*/);
+      expect(line).toMatch(/\*\*(DELEGATED|RATIFIED)\*\*/);
       expect(line).toMatch(/\(([0-9a-f]{8})\)/);
     }
   });

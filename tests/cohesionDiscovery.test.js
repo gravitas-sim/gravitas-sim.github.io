@@ -195,7 +195,7 @@ describe('the ledger of what was added since 2.0.0', () => {
       expect([i.row, Boolean(row)]).toEqual([i.row, true]);
       const fields = row.split('|');
       expect(fields).toHaveLength(10);
-      expect(fields[5]).toContain('DELEGATED');
+      expect(fields[5].trim()).toMatch(/^\*\*(DELEGATED|RATIFIED)\*\*$/);
       expect(fields[2]).toContain(`**${i.verdict}**`);
     }
   });
