@@ -162,3 +162,5 @@ O2 (no person has marked craters on the frames) and I1 (the completeness correct
 measured on crater-like features and a person or detector to recover them) are NOT RUN, and their methods are the
 contract above. No count on any frame is made by anyone, and none is simulated. Part B is not built: it is authorized
 only by a verdict of A or B, and the verdict is C.
+
+<!-- Listed in DOCUMENTS.md. -->
