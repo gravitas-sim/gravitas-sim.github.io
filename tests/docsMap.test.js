@@ -1,4 +1,5 @@
 // The documents map holds every root document, and the table cannot drift.
+import { describe, test, expect } from '@jest/globals';
 import { existsSync, readFileSync, readdirSync } from 'node:fs';
 import {
   MAP_BUILT,

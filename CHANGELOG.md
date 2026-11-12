@@ -26,6 +26,15 @@ the release rather than in the tag.
 
 ### Changed
 
+- Documentation map II and stale-document retirement (Prompt 289; register rows
+  D-R10-289-01 to 05; invisible, documentation). Four historical records
+  (`UI_PERFORMANCE_AUDIT.md`, `PERFORMANCE_OPTIMIZATIONS_SUMMARY.md`,
+  `SCENARIO_FIXES.md`, `SCENARIO_GALLERY.md`) moved to `docs/archive/`, each
+  headed with its date and what superseded it; the map table now dates every
+  document, requires an owner prompt for any added after Prompt 128 and lists
+  the archive; the accessibility conformance report is a node of the generation
+  graph; the map section of `MAINTAINER_ONBOARDING.md` is written by the tool;
+  `CONTINUITY.md` says what is archived and what has not been rehearsed again.
 - Low-end II (Prompt 285). The low quality tier now also reduces computation:
   a bootstrap takes 300 draws instead of 1000, the orbit tool's mass sum 5000
   instead of 20,000 and a fit's profile intervals 7 grid points instead of 11; the
