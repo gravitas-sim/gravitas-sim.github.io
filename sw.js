@@ -443,3 +443,5 @@ self.addEventListener('message', event => {
     })();
   }
 });
+
+// End of the service worker.
