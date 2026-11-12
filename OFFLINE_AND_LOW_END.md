@@ -892,7 +892,6 @@ tiers. The caller asks for the size, and a result computed at the low tier says 
 | `bootstrapDraws` | 1000 | 300 | ensemble record (`js/experiments/ensemble/record.js`) | bootstrap standard error within 15 percent of the full tier's; measured worst of 12 seeds 8.6 percent |
 | `monteCarloDraws` | 20,000 | 5000 | the orbit widget's mass sum (`massSum` option `draws`) | interval ends within 3 percent of the interval's width; measured worst 2.7 percent |
 | `profilePoints` | 11 | 7 | the Observatory fit panel's profile grid | interval ends within 5 percent of the half-width; measured worst 3.3 percent (the 11-point grid already refines its crossings) |
-| `displaySide` | 1024 | 512 | image marks panel (`displayPlan`) | none: the drawn copy is for the eye; measurements read the full array |
 | `workerConcurrency` | 8 | 2 | the page ledger (`imageImport.js`) | none: changes time, never a number |
 | `workerMemoryBytes` | 1 GB | 256 MB | the page ledger (`imageImport.js`) | none: changes what waits, never a number |
 
@@ -932,13 +931,17 @@ classifier decides at all three profiles:
 
 ### Memory
 
-The image panel lets go of its planes and canvases when another kind of
-observation is shown (`release` in `js/observatory/imageMarks.js`); the marks stay,
+The image panel lets go of its planes and canvases when the page hides it for
+another kind of observation (`release` in `js/observatory/imageMarks.js`, on the
+panel's `hidden` attribute); the marks stay,
 and the same image shown again is the same image with its marks. What is dropped is
 the panel's own hold on the planes (a copy where the column was not already a
 Float64Array) and the canvases' backing stores: the observation object keeps its
 columns, so this is small, and it is the case that costs memory. The page's
-Workers are held to the tier's aggregate cap on the page ledger. The archive's
+Workers are held to the tier's aggregate cap on the page ledger. A smaller drawn
+frame (512 pixels) for the low tier was not adopted: the marks module's size gate
+(`tests/imageMeasureBudget.test.js`, 25,600 B) leaves no room for the tier's import,
+and the drawn copy costs the eye, not a number (D-R10-285-05). The archive's
 eviction is Prompt 284's. The spec opens the largest table (NGC 2420 photometry),
 the largest picture (HiRISE Cerberus Fossae, 640 x 480), then the table again, and
 holds the used JavaScript heap after a forced collection to a budget on each profile:

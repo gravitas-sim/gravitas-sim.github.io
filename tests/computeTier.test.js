@@ -18,7 +18,6 @@ import { fitOrbit, massSum } from '../js/measure/orbit-fit.js';
 import { fitOnce, profileTask } from '../js/inference/infer.js';
 import { syntheticTransit, tessLikeTimes } from '../js/inference/synthetic.js';
 import { ensembleManifest } from '../js/experiments/ensemble/record.js';
-import { displayPlan } from '../js/dataKinds/limits.js';
 import { createLedger } from '../js/workers/pool.js';
 import { jitteredYears, makeOrbitSeries } from '../tools/orbit-fit-synth.mjs';
 import { stream } from '../js/random/streams.js';
@@ -303,15 +302,6 @@ describe('the adopters read the tier', () => {
     expect(made().ensemble.summary.draws).toBe(1000);
     setTier('low');
     expect(made().ensemble.summary.draws).toBe(300);
-  });
-
-  test('the drawn frame is at most the tier’s side; the factor is a whole number', () => {
-    const at = side => displayPlan(2048, 1536, side);
-    expect(at(COMPUTE_TIERS.full.displaySide).factor).toBe(2);
-    expect(at(COMPUTE_TIERS.low.displaySide).factor).toBe(4);
-    expect(at(COMPUTE_TIERS.low.displaySide).width).toBe(512);
-    // The default is unchanged.
-    expect(displayPlan(2048, 1536)).toEqual(at(1024));
   });
 
   test('the page ledger can be given the tier’s caps, and then refuses past them', () => {

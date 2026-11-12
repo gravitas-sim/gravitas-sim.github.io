@@ -8860,6 +8860,8 @@
     "obs.fit.keep": "02b71745:16fe2d73",
     "obs.fit.ld1": "49602144:c99d09b1",
     "obs.fit.ld2": "ce1261bd:820b0c6e",
+    "obs.fit.lowTier": "ef6b861f:9fc37c9d",
+    "obs.fit.lowTier.full": "90e9a7cf:db5c2d37",
     "obs.fit.modeOf": "120ed2da:640cc987",
     "obs.fit.model": "8285e8fa:0dcd228f",
     "obs.fit.model.poly-1": "85696b93:49eca98d",

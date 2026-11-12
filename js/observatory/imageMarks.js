@@ -20,7 +20,6 @@
 
 import { columnOf } from './schema.js';
 import { displayPlan, downsampleMean } from '../dataKinds/limits.js';
-import { applyTierRequest, computeValue } from '../quality.js';
 import { permits } from '../dataKinds/contract.js';
 // The photometry tool (imagePhotometry.js) takes the contract's check from here,
 // by import(), so that no chunk is shared between the two.
@@ -356,7 +355,7 @@ export function mountMarks(root, ctx) {
   // ---- the picture ----------------------------------------------------------------
   function drawFrame() {
     const f = fr();
-    plan = displayPlan(f.width, f.height, computeValue('displaySide'));
+    plan = displayPlan(f.width, f.height);
     k = plan.factor;
     const values =
       k > 1 ? downsampleMean(f.data, f.width, f.height, k).values : f.data;
@@ -1071,15 +1070,6 @@ const EMPTY_PLANE = new Float64Array(0);
 const panels = new WeakMap();
 
 /**
- * Release the pixels the panel on `box` holds, if it was ever built; the page
- * calls this when it shows something that is not an image.
- * @param {HTMLDetailsElement} box
- */
-export async function release(box) {
-  (await panels.get(box))?.api.release();
-}
-
-/**
  * The page's one call, made each time it shows an image observation: the first
  * fetches the words and builds the panel (a pending `ctx.marks.saved` block
  * restores into it), later ones show the new image. `ctx.marks` is the page's
@@ -1095,13 +1085,17 @@ export async function mount(box, ctx) {
   let ready = panels.get(box);
   const fresh = !ready;
   if (fresh) {
-    applyTierRequest();
     ready = words(ctx).then(() => {
       const p = {
         cur: o,
         api: mountMarks(box.querySelector('div'), { ...ctx, saved }),
       };
       box.addEventListener('toggle', () => box.open && p.api.update(p.cur));
+      // The page hides the panel when something that is not an image is shown.
+      new MutationObserver(() => box.hidden && p.api.release()).observe(box, {
+        attributes: true,
+        attributeFilter: ['hidden'],
+      });
       marks.block = view => (view?.id === p.cur?.id ? p.api.block() : null);
       marks.state = () => p.api.store.state;
       marks.add = (list, tag) => {

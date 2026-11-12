@@ -155,7 +155,6 @@
         "bootstrapDraws": 1000,
         "monteCarloDraws": 20000,
         "profilePoints": 11,
-        "displaySide": 1024,
         "workerConcurrency": 8,
         "workerMemoryBytes": 1000000000
       },
@@ -163,7 +162,6 @@
         "bootstrapDraws": 300,
         "monteCarloDraws": 5000,
         "profilePoints": 7,
-        "displaySide": 512,
         "workerConcurrency": 2,
         "workerMemoryBytes": 256000000
       }
@@ -172,7 +170,6 @@
       "bootstrapDraws": "the bootstrap standard error is within 15 percent of the full tier's (its own sampling error is 1/sqrt(2(B-1)): 4.1 percent at 300 draws, 2.2 at 1000, so 15 percent is 3 times the combined error)",
       "monteCarloDraws": "each end of the mass sum's 68 and 95 percent intervals is within 3 percent of the interval's width of the full tier's",
       "profilePoints": "each end of a profile interval is within 5 percent of the interval's half-width of the full tier's",
-      "displaySide": "none: the drawn copy is for the eye, every measurement reads the full-resolution array",
       "workerConcurrency": "none: a cap on realms at once changes the time, never a number",
       "workerMemoryBytes": "none: a cap on bytes held changes what waits, never a number"
     },
@@ -180,7 +177,6 @@
       "bootstrapDraws": "js/experiments/ensemble/record.js",
       "monteCarloDraws": "js/imagingWidgets.js",
       "profilePoints": "js/observatory/fitPanel.js",
-      "displaySide": "js/observatory/imageMarks.js",
       "workerConcurrency": "js/observatory/imageImport.js",
       "workerMemoryBytes": "js/observatory/imageImport.js"
     }

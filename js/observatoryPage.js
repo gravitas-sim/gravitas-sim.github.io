@@ -277,8 +277,6 @@ const exporter = () => (exporting ??= import('./observatory/export.js'));
 
 // The measurement pipeline (MEASUREMENT_PIPELINE.md): loaded when first opened.
 let measure = null;
-/** The image marks module once the page has loaded it (see release). */
-let marksPanel = null;
 const measurePanel = () =>
   (measure ??= Promise.all([
     import('./observatory/measurePanel.js'),
@@ -456,13 +454,10 @@ function renderAll() {
   if (isImage) {
     const { legend } = image.draw(o, { selection: state.selection });
     renderLegend(legend);
-    import('./observatory/imageMarks.js').then(m => {
-      marksPanel = m;
-      return m.mount($('obsMarksPanel'), { ...lent, observation: o, marks });
-    });
+    import('./observatory/imageMarks.js').then(m =>
+      m.mount($('obsMarksPanel'), { ...lent, observation: o, marks })
+    );
   } else {
-    // The image panel's pixels are not shown now: let them go (Prompt 285).
-    marksPanel?.release($('obsMarksPanel'));
     // Curves a measurement drew, where the axes are the ones it drew them on.
     const overlays = state.overlays.filter(
       v => v.x === state.x && v.y === state.y && v.observation === o.id

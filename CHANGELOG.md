@@ -17,10 +17,8 @@ the release rather than in the tag.
 
 - Low-end II (Prompt 285). The low quality tier now also reduces computation:
   a bootstrap takes 300 draws instead of 1000, the orbit tool's mass sum 5000
-  instead of 20,000, a fit's profile intervals 7 grid points instead of 11, and
-  the Observatory's picture is drawn at 512 pixels instead of 1024 (the
-  measurement still reads the full array); the page's Workers are held to 256 MB
-  and two at a time. A fit computed at the low tier says so, beside the result
+  instead of 20,000 and a fit's profile intervals 7 grid points instead of 11; the
+  page's Workers are held to 256 MB and two at a time. A fit computed at the low tier says so, beside the result
   and in its saved record, and a button computes it again at the full tier;
   `?quality=full` or `?quality=low` forces a page that does not draw the
   simulation. Each reduced result is within a stated tolerance of the full one.
