@@ -1031,10 +1031,31 @@ export function mountMarks(root, ctx) {
   if (sum) labelled.push([sum, 'obs.im.title', 'textContent']);
   label();
 
+  /**
+   * Let go of the pixels while another kind of observation is on show (Prompt
+   * 285): a frame is a Float64 plane, up to 32 MiB, and the page's decoded-image
+   * budget (tools/data-budget.json) is 64 MiB. The marks, the frame count and
+   * the sidecar stay, so the same image shown again is the same image with its
+   * marks (`load`'s `same`); what is dropped is the panel's own hold on the
+   * planes (a copy where the column was not already a Float64Array, which is
+   * the case that costs memory) and the two drawn canvases' backing stores.
+   */
+  function release() {
+    for (const f of frames) {
+      f.data = EMPTY_PLANE;
+      if (f.variance) f.variance = EMPTY_PLANE;
+    }
+    for (const c of [img, over]) {
+      c.width = 0;
+      c.height = 0;
+    }
+  }
+
   return {
     get store() {
       return store;
     },
+    release,
     update,
     load,
     restore,
@@ -1043,7 +1064,11 @@ export function mountMarks(root, ctx) {
   };
 }
 
+/** What a frame's plane is while the panel is not showing it. */
+const EMPTY_PLANE = new Float64Array(0);
+
 const panels = new WeakMap();
+
 /**
  * The page's one call, made each time it shows an image observation: the first
  * fetches the words and builds the panel (a pending `ctx.marks.saved` block
@@ -1066,6 +1091,11 @@ export async function mount(box, ctx) {
         api: mountMarks(box.querySelector('div'), { ...ctx, saved }),
       };
       box.addEventListener('toggle', () => box.open && p.api.update(p.cur));
+      // The page hides the panel when something that is not an image is shown.
+      new MutationObserver(() => box.hidden && p.api.release()).observe(box, {
+        attributes: true,
+        attributeFilter: ['hidden'],
+      });
       marks.block = view => (view?.id === p.cur?.id ? p.api.block() : null);
       marks.state = () => p.api.store.state;
       marks.add = (list, tag) => {

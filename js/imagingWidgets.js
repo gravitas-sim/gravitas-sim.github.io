@@ -48,6 +48,7 @@ import { t, registerMessages } from './i18n/index.js';
 import { EN_IMAGING } from './i18n/en.imaging.js';
 import { ES_IMAGING } from './i18n/es.imaging.js';
 import { fixed, withUnit } from './format.js';
+import { computeValue } from './quality.js';
 import {
   surface,
   responsiveHeight,
@@ -771,12 +772,16 @@ export function orbitView(v) {
   const plx = Math.max(1, v.plx ?? 100);
   const fit = fitOrbit(binarySeries(n), { depth });
   const mass = fit.ok
-    ? massSum(fit, {
-        value: plx,
-        sigma: BINARY.parallaxSigmaMas,
-        unit: 'mas',
-        frame: 'relative',
-      })
+    ? massSum(
+        fit,
+        {
+          value: plx,
+          sigma: BINARY.parallaxSigmaMas,
+          unit: 'mas',
+          frame: 'relative',
+        },
+        { draws: computeValue('monteCarloDraws') }
+      )
     : null;
   return {
     n,

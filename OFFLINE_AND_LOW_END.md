@@ -732,7 +732,7 @@ head of this prompt, level 6 gzip):
 
 | Tier | Files | Gzip | 147's ceiling | Ceiling now |
 | --- | ---: | ---: | ---: | ---: |
-| First visit (core and optional) | 953 | 5,393,276 B | 5,175,296 B | 5,393,276 B |
+| First visit (core and optional) | 953 | 5,393,276 B | 5,175,296 B | 5,395,174 B (Prompt 285) |
 | Idle | 210 | 1,696,067 B | 1,517,568 B | 1,696,781 B |
 
 Both ceilings have been raised since by later prompts, each by its measured
@@ -871,6 +871,121 @@ No real iOS or Android device has been used for the backup's share sheet or file
 The row is UNKNOWN in `tools/evidence-status.json`; the real-device protocol
 above is the way to settle it.
 
+## Reduced computation and automated profiles (Prompt 285)
+
+The low tier used to reduce drawing. It now also reduces computation, and three
+automated profiles hold the workflows to time and memory budgets in CI. All of it
+is proxy evidence; the real-device tables remain empty and the claim is UNKNOWN
+(`low-end-profiles` in `tools/evidence-status.json`).
+
+### What the low tier computes
+
+`computation` in `tools/perf-thresholds.json` is the one table; `js/quality.js`
+(`COMPUTE_TIERS`, `computeValue`, `computeNote`) mirrors it because a static page
+cannot read `tools/`, and `tests/computeTier.test.js` holds the two equal and holds
+every key to the one file that reads it. A kernel never reads the tier: it takes its
+size as an argument and gives the same numbers for the same argument on both
+tiers. The caller asks for the size, and a result computed at the low tier says so.
+
+| Key | Full | Low | Read in | Low tier's tolerance (stated before the validators ran) |
+| --- | ---: | ---: | --- | --- |
+| `bootstrapDraws` | 1000 | 300 | ensemble record (`js/experiments/ensemble/record.js`) | bootstrap standard error within 15 percent of the full tier's; measured worst of 12 seeds 8.6 percent |
+| `monteCarloDraws` | 20,000 | 5000 | the orbit widget's mass sum (`massSum` option `draws`) | interval ends within 3 percent of the interval's width; measured worst 2.7 percent |
+| `profilePoints` | 11 | 7 | the Observatory fit panel's profile grid | interval ends within 5 percent of the half-width; measured worst 3.3 percent (the 11-point grid already refines its crossings) |
+| `workerConcurrency` | 8 | 2 | the page ledger (`imageImport.js`) | none: changes time, never a number |
+| `workerMemoryBytes` | 1 GB | 256 MB | the page ledger (`imageImport.js`) | none: changes what waits, never a number |
+
+The worker caps are the experiment profiles' figures (and `tools/data-budget.json`
+holds the low-end ones; a test holds them equal). A fit computed at the low tier
+says so in three places: the panel's line ("Computed at the low tier: 7 profile
+points where the full tier uses 11", with the button "Compute at the full tier"),
+the exported document (`computation`), and the envelope's `provenance.computation`
+(absent at the full tier, so a full-tier envelope is byte for byte what it was; the
+fit record's settings already name the point count). An ensemble record states its
+`draws`; the orbit tool's `method` string names the draws it used.
+
+A reader can force the full tier: the setting `quality_tier` on the simulation page,
+`?quality=full` (or `low`) on a page that does not render the simulation, and the
+button beside a reduced fit. Nothing is stored.
+
+**The classifier and the pages that never run it.** The classifier measures frame
+intervals, and only the simulation's render loop feeds it. The Observatory, the
+3-D lab and the reports never decide: `qualityReport().decided` is false, the tier is
+the default (full), and no computation is reduced unless `?quality=low` is given. This
+was found, not fixed: an idle page's frame rate says nothing about the machine
+(compositing alone holds 60 fps on a slow laptop), so a frame classifier on those
+pages would be a guess, and a stored verdict from the simulation page needs a
+registered storage key and a decision about it (D-R10-285-03). Tests hold the edge:
+a page with no frames reports `decided: false` and computes at the full tier;
+frames inside the warm-up decide nothing; a 150 fps machine is still judged.
+
+**Re-measured on the new workloads.** The thresholds (below 32 fps to demote, above
+48 for eight seconds to promote) were not changed. On the heaviest scene the
+classifier decides at all three profiles:
+
+| Profile | Star Cluster, median rate at the verdict (full tier) | Verdict |
+| --- | ---: | --- |
+| throttled-desktop | 10.0 fps | low |
+| low-end-laptop | 4.6 fps | low |
+| mid-range-phone | 7.5 fps | low |
+
+### Memory
+
+The image panel lets go of its planes and canvases when the page hides it for
+another kind of observation (`release` in `js/observatory/imageMarks.js`, on the
+panel's `hidden` attribute); the marks stay,
+and the same image shown again is the same image with its marks. What is dropped is
+the panel's own hold on the planes (a copy where the column was not already a
+Float64Array) and the canvases' backing stores: the observation object keeps its
+columns, so this is small, and it is the case that costs memory. The page's
+Workers are held to the tier's aggregate cap on the page ledger. A smaller drawn
+frame (512 pixels) for the low tier was not adopted: the marks module's size gate
+(`tests/imageMeasureBudget.test.js`, 25,600 B) leaves no room for the tier's import,
+and the drawn copy costs the eye, not a number (D-R10-285-05). The archive's
+eviction is Prompt 284's. The spec opens the largest table (NGC 2420 photometry),
+the largest picture (HiRISE Cerberus Fossae, 640 x 480), then the table again, and
+holds the used JavaScript heap after a forced collection to a budget on each profile:
+
+| Profile | Heap after a forced collection | Budget |
+| --- | ---: | ---: |
+| throttled-desktop | 3.5 MB | 8 MB |
+| low-end-laptop | 4.1 MB | 9 MB |
+| mid-range-phone | 4 MB | 8 MB |
+
+The heap is small because the Observatory's data is small. The budget is there to
+catch a regression that keeps frames and tables it should have let go. The ledger
+is held inside the data budget's decoded-image and worker ceilings.
+
+### The three profiles
+
+`e2e/deviceProfiles.spec.js` runs five workflows (the start of the application, a
+lesson step, an image mark, a fit, a 3-D run) under three profiles
+(`deviceProfiles` in `tools/perf-thresholds.json`): the throttled desktop as it has
+always been run here (CPU 4x), a low-end laptop (CPU 6x, 10 Mbps and 40 ms, a
+512 MB heap ceiling, low tier) and a mid-range phone (412 x 915 at 2.625, touch, CPU
+6x, 1.6 Mbps and 150 ms, a 384 MB heap ceiling, low tier). Each is a Chromium
+launched with the heap flag and throttled over the DevTools protocol. Times in
+seconds, time to usable then interaction, with the budget (three times the measured
+value, at least 4 s) in brackets; measured 2026-11-11 on the planning Mac:
+
+| Workflow | throttled-desktop usable / interaction (budget) | low-end-laptop usable / interaction (budget) | mid-range-phone usable / interaction (budget) |
+| --- | ---: | ---: | ---: |
+| Start | 4.6 s / 3.7 s (13.8 / 11.1) | 6.1 s / 4.5 s (18.5 / 13.5) | 21.9 s / 3.3 s (65.9 / 9.9) |
+| Lesson step | 23.1 s / 1.7 s (69.4 / 5.2) | 37.0 s / 1.4 s (111.0 / 4.1) | 81.8 s / 0.8 s (245.4 / 4.0) |
+| Image mark | 1.8 s / 1.0 s (5.3 / 4.0) | 3.0 s / 1.3 s (9.2 / 4.0) | 6.3 s / 2.3 s (18.9 / 6.8) |
+| Fit | 2.3 s / 11.9 s (6.8 / 35.8) | 3.9 s / 9.1 s (11.7 / 27.5) | 9.5 s / 19.2 s (28.6 / 57.5) |
+| 3-D run | 0.5 s / 0.4 s (4.0 / 4.0) | 1.1 s / 1.1 s (4.0 / 4.0) | 3.4 s / 2.1 s (10.3 / 6.3) |
+
+**These are proxies.** The CPU throttle slows the page's main thread and nothing
+else, so the fit and the 3-D run, which are Workers, run at the host's speed; the
+heap flag bounds JavaScript memory and not decoded images, canvases or GPU memory;
+the network shape is a rate and a delay, not a radio. The lesson on the phone profile
+(82 s to usable) is the network and the code size at 1.6 Mbps and CPU 6x, and is the
+largest figure here. **The real-device profiles (`real-chromebook`, `real-phone`)
+stay empty and the claim stays UNKNOWN: no laptop or phone was measured.** A
+repeated run varied by up to a factor of two with the machine's load, which is why a
+budget has room; CI is the gate for them.
+
 ## Running the tests
 
 ```bash
@@ -878,6 +993,8 @@ npm test -- tests/quality.test.js          # the classifier, 24 tests
 npm test -- tests/buildIntegrity.test.js   # the precache manifest is current
 npx playwright test offline --project=chromium   # offline and throttled, 7 tests
 npm test -- tests/perfTrace.test.js        # the trace buckets and the recorded thresholds
+npm test -- tests/computeTier.test.js      # the tier's computation sizes, the kernels at both tiers, the classifier edge
+npx playwright test deviceProfiles --project=chromium   # the three device profiles, their budgets and the memory budget
 npm run perf -- --trace --tier low --cpu 4 # frame times with raster and composite apart from script
 node tools/longtask-census.mjs --cpu 4     # main-thread work above the budgets
 node tools/precache-tour.mjs               # what a visit fetches against the precache
