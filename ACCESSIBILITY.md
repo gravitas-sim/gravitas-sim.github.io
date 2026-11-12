@@ -796,3 +796,5 @@ npm run a11y:manual     # keyboard, focus, reflow, reduced motion, the canvas
 npm run a11y:sweep2     # outlines, focus patterns, motion, 320 px reflow, forced colors, target size
 node tools/design-ratchet.mjs   # contrast in the four themes (and the colour, !important counts)
 ```
+
+<!-- Listed in DOCUMENTS.md. -->
