@@ -163,3 +163,5 @@ It is not part of the gate, because the network is not a test dependency.
 `tests/archive.test.js` and `e2e/archive.spec.js` hold every contract against
 the saved answers in `tests/fixtures/archive/`. Run it when something looks
 wrong, and before relying on the import for a class.
+
+<!-- Listed in DOCUMENTS.md. -->
