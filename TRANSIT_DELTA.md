@@ -171,3 +171,5 @@ measurements. What each says:
 
 Reproduce: `python3 tools/transit-delta-oracle/oracle.py > oracle-results.json` (about
 ten minutes), then `npm run transit-delta:validate` (about two).
+
+<!-- Listed in DOCUMENTS.md. -->
