@@ -55,3 +55,5 @@ raised from 270 to 274 under D-R10-67, 273 in use). So the three investigations 
 files, one per kind (`measurement-sequence.js` under `js/data/investigations/`, `es/`, `depth/` and
 `depth/es/`), and twelve one-line re-exports give the per-id paths that the loaders and tools build
 from a lesson id. The re-exports are not imported by any closure file and stay outside the closure.
+
+<!-- Listed in DOCUMENTS.md. -->
