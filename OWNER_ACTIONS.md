@@ -378,3 +378,5 @@ last. If the check says stale after a change that moved no instructional
 content, `npm run instructors:restamp` re-states the record without the
 passphrase and without touching the ciphertext - it proves the documents are
 unchanged first, and refuses if they are not.
+
+<!-- Listed in DOCUMENTS.md. -->
