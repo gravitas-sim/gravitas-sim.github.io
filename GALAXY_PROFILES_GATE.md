@@ -68,3 +68,5 @@ width-bearing data it would take, and how to supply it, are in the request below
 ## Rights
 
 Nothing was fetched and no licence term was typed. The SDSS image terms are not confirmed (D-R10-249-02).
+
+<!-- Listed in DOCUMENTS.md. -->
