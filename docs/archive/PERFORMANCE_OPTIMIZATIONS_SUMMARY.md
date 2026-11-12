@@ -1,10 +1,12 @@
 # Performance Optimizations Summary
 
+> **Archived 2026-11-11** (Prompt 289). Superseded by [`PERFORMANCE_PROFILING_GUIDE.md`](../../PERFORMANCE_PROFILING_GUIDE.md), `npm run perf` (the frame-time instrument) and `tools/perf-thresholds.json`, which measure what this note estimated. Kept for the record, unchanged below except that its relative links now point from this folder; links into it from the repository root were checked and moved with it.
+
 > **Historical record.** This documents a round of rendering and memory work,
 > with the measurements taken at that time. It is not a description of the
 > application as it stands, and its numbers are not updated; the current
 > profile comes from `npm run perf`, and
-> [`PERFORMANCE_PROFILING_GUIDE.md`](PERFORMANCE_PROFILING_GUIDE.md) says how
+> [`PERFORMANCE_PROFILING_GUIDE.md`](../../PERFORMANCE_PROFILING_GUIDE.md) says how
 > to take one. Items in "Future Optimizations" that have since been done are
 > marked there.
 

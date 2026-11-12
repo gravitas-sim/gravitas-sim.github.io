@@ -1,11 +1,12 @@
 {
-  "version": 1,
+  "version": 2,
   "documents": [
     {
       "file": "AB_EXPERIMENT_BENCH.md",
       "kind": "feature",
-      "purpose": "The A/B experiment bench.",
+      "purpose": "The A/B experiment bench: two arms of one scenario run side by side, and what a restore must and must not change.",
       "owner": null,
+      "added": "2026-09-03",
       "student": false
     },
     {
@@ -13,13 +14,15 @@
       "kind": "policy",
       "purpose": "Accessibility target, what has been done and what has not.",
       "owner": 127,
+      "added": "2026-09-05",
       "student": true
     },
     {
       "file": "ACCESSIBILITY_CONFORMANCE.md",
       "kind": "policy",
-      "purpose": "The accessibility conformance report against WCAG 2.2, written by tools/conformance.mjs from tools/conformance/*.json (not yet a node of the generation graph; Prompt 289 decides).",
+      "purpose": "The accessibility conformance report against WCAG 2.2, written by tools/conformance.mjs from tools/conformance/*.json (a node of the generation graph, `conformance`).",
       "owner": 127,
+      "added": "2026-10-17",
       "student": true
     },
     {
@@ -27,6 +30,7 @@
       "kind": "gate",
       "purpose": "Activity ages gate: the committed relations, domain and bounds for gyrochronology ages and flare energies in erg, the measured legs and the verdict (Prompt 220 Part B).",
       "owner": 220,
+      "added": "2026-10-30",
       "student": true
     },
     {
@@ -34,6 +38,7 @@
       "kind": "guide",
       "purpose": "The instructor adopter's guide and the newcomer docs test.",
       "owner": 114,
+      "added": "2026-10-11",
       "student": false
     },
     {
@@ -41,6 +46,7 @@
       "kind": "guide",
       "purpose": "The instructor path and the adoption pages.",
       "owner": 76,
+      "added": "2026-10-08",
       "student": true
     },
     {
@@ -48,6 +54,7 @@
       "kind": "feature",
       "purpose": "The AGN kernel: broad-line redshift, luminosity, the Eddington bound, the variability size bound and BPT classes, validation and files requested (Prompt 252).",
       "owner": 252,
+      "added": "2026-11-05",
       "student": false
     },
     {
@@ -55,27 +62,31 @@
       "kind": "feature",
       "purpose": "The AGN luminosity-function gate (Prompt 252 Part B): committed thresholds, no verdict, the files requested.",
       "owner": 252,
+      "added": "2026-11-05",
       "student": false
     },
     {
       "file": "AI_ASSISTANCE_GATE.md",
       "kind": "gate",
       "purpose": "Instructor-side AI assistance gate.",
-      "owner": null,
+      "owner": 120,
+      "added": "2026-10-11",
       "student": false
     },
     {
       "file": "ANALYSIS_LAB.md",
       "kind": "feature",
-      "purpose": "The analysis laboratory.",
-      "owner": null,
+      "purpose": "The analysis laboratory: sensitivity sweeps, uncertainty and model comparison on a running simulation (Prompt 23).",
+      "owner": 23,
+      "added": "2026-09-26",
       "student": false
     },
     {
       "file": "ARCHIVE_IMPORT.md",
       "kind": "feature",
-      "purpose": "Importing from an archive.",
-      "owner": null,
+      "purpose": "Importing a star's Gaia DR3 epoch photometry from CDS by name: the allowed services, the refusals and the conversion (Prompt 19).",
+      "owner": 19,
+      "added": "2026-09-26",
       "student": false
     },
     {
@@ -83,6 +94,7 @@
       "kind": "feature",
       "purpose": "Sky coordinates for an image (Prompt 181), astrometric time series (Prompt 186) and orbit fitting with a moving-object track (Prompt 187), with their validation.",
       "owner": 181,
+      "added": "2026-10-23",
       "student": true
     },
     {
@@ -90,6 +102,7 @@
       "kind": "feature",
       "purpose": "Atmospheres I: equilibrium temperature, the one-layer and grey greenhouse models, the scale height and the planet pack, with their validation (Prompt 200).",
       "owner": 200,
+      "added": "2026-10-25",
       "student": true
     },
     {
@@ -97,6 +110,7 @@
       "kind": "gate",
       "purpose": "Atmospheres gate I: the family and its limits, thresholds committed first, the rights rule, the measured checks and the verdict (Prompt 199).",
       "owner": 199,
+      "added": "2026-10-25",
       "student": false
     },
     {
@@ -104,6 +118,7 @@
       "kind": "gate",
       "purpose": "Atmospheres gate II: the committed regime, oracle and bounds for transmission, emission and phase curves, the measured legs and the verdict (Prompt 201).",
       "owner": 201,
+      "added": "2026-10-27",
       "student": false
     },
     {
@@ -111,13 +126,15 @@
       "kind": "process",
       "purpose": "Branches, the publish rule and the table of generated artifacts.",
       "owner": null,
+      "added": "2026-09-19",
       "student": false
     },
     {
       "file": "CALIBRATION_LAB.md",
       "kind": "feature",
-      "purpose": "The calibration lab.",
+      "purpose": "The calibration lab: synthetic CCD frames, their reduction and the uncertainty of the result (Prompt 86).",
       "owner": 86,
+      "added": "2026-10-11",
       "student": true
     },
     {
@@ -125,20 +142,23 @@
       "kind": "design",
       "purpose": "The capability runtime, the first slice of the platform package.",
       "owner": null,
+      "added": "2026-09-23",
       "student": false
     },
     {
       "file": "CATALOG.md",
       "kind": "feature",
-      "purpose": "The curated catalog page.",
+      "purpose": "The curated catalog page: what it lists, how a data pack or course is installed from it, and what it will never run.",
       "owner": null,
+      "added": "2026-09-25",
       "student": false
     },
     {
       "file": "CHANGELOG.md",
       "kind": "process",
-      "purpose": "Notable changes per release.",
+      "purpose": "Notable changes per release and per merged pull request, newest first.",
       "owner": null,
+      "added": "2026-09-05",
       "student": false
     },
     {
@@ -146,6 +166,7 @@
       "kind": "feature",
       "purpose": "The Butterfly Effect in Space investigation.",
       "owner": null,
+      "added": "2026-09-03",
       "student": false
     },
     {
@@ -153,13 +174,15 @@
       "kind": "gate",
       "purpose": "Classroom services: product, privacy and service-boundary gate.",
       "owner": null,
+      "added": "2026-09-29",
       "student": false
     },
     {
       "file": "CODE_OF_CONDUCT.md",
       "kind": "policy",
-      "purpose": "Community conduct.",
+      "purpose": "The community code of conduct and where to report a concern.",
       "owner": null,
+      "added": "2026-09-16",
       "student": false
     },
     {
@@ -167,13 +190,15 @@
       "kind": "feature",
       "purpose": "The model-versus-data comparison instrument.",
       "owner": 85,
+      "added": "2026-10-09",
       "student": false
     },
     {
       "file": "COMPOSER.md",
       "kind": "feature",
-      "purpose": "The Investigation Composer.",
+      "purpose": "The Investigation Composer: the package and bank formats, variants, remediation, translation and its limits.",
       "owner": null,
+      "added": "2026-09-28",
       "student": false
     },
     {
@@ -181,6 +206,7 @@
       "kind": "feature",
       "purpose": "The compute page and reviewed notebooks.",
       "owner": 101,
+      "added": "2026-10-11",
       "student": true
     },
     {
@@ -188,6 +214,7 @@
       "kind": "gate",
       "purpose": "Compute page gate II: ten candidate notebooks prototyped on a spike, seven page thresholds, 70 legs, verdict C (Prompt 268).",
       "owner": 268,
+      "added": "2026-11-07",
       "student": false
     },
     {
@@ -195,6 +222,7 @@
       "kind": "policy",
       "purpose": "How Gravitas survives its maintainer's absence.",
       "owner": 128,
+      "added": "2026-10-06",
       "student": false
     },
     {
@@ -202,6 +230,7 @@
       "kind": "process",
       "purpose": "How to contribute code, the checks and the conventions.",
       "owner": null,
+      "added": "2026-09-03",
       "student": false
     },
     {
@@ -209,6 +238,7 @@
       "kind": "process",
       "purpose": "How an outside instructor or researcher contributes content.",
       "owner": null,
+      "added": "2026-10-09",
       "student": true
     },
     {
@@ -216,20 +246,23 @@
       "kind": "feature",
       "purpose": "The cosmology kernel and Hubble-diagram data.",
       "owner": 91,
+      "added": "2026-10-10",
       "student": true
     },
     {
       "file": "COSMOLOGY_GATE.md",
       "kind": "gate",
       "purpose": "Cosmology and extragalactic data gate.",
-      "owner": null,
+      "owner": 90,
+      "added": "2026-10-09",
       "student": true
     },
     {
       "file": "COURSE_PACKS.md",
       "kind": "feature",
-      "purpose": "Course packs: a course as a file.",
+      "purpose": "Course packs: a course as a file, its pins and reviewed upgrade, its checks and the course home.",
       "owner": null,
+      "added": "2026-09-28",
       "student": true
     },
     {
@@ -237,6 +270,7 @@
       "kind": "gate",
       "purpose": "The crater-chronology gate: whether Gravitas may state an absolute surface age with its interval, the committed functions and bounds, the measured legs and the verdict (Prompt 196, part A).",
       "owner": 196,
+      "added": "2026-10-27",
       "student": false
     },
     {
@@ -244,6 +278,7 @@
       "kind": "feature",
       "purpose": "Crater counting: diameters with an uncertainty budget, the cumulative size-frequency distribution, relative ages as density ratios and the cumulative index, with their validation (Prompt 195).",
       "owner": 195,
+      "added": "2026-10-25",
       "student": true
     },
     {
@@ -251,13 +286,15 @@
       "kind": "feature",
       "purpose": "Rotation curves and the missing mass.",
       "owner": null,
+      "added": "2026-09-01",
       "student": false
     },
     {
       "file": "DATA_PACKS.md",
       "kind": "feature",
-      "purpose": "Observation data packs.",
+      "purpose": "Observation data packs: the format, the builders, the provenance each carries and the packs Gravitas ships.",
       "owner": null,
+      "added": "2026-09-24",
       "student": true
     },
     {
@@ -265,6 +302,7 @@
       "kind": "policy",
       "purpose": "What data Gravitas keeps, shares and never collects (Spanish).",
       "owner": 127,
+      "added": "2026-10-17",
       "student": true
     },
     {
@@ -272,6 +310,7 @@
       "kind": "policy",
       "purpose": "What data Gravitas keeps, shares and never collects (English).",
       "owner": 127,
+      "added": "2026-10-17",
       "student": true
     },
     {
@@ -279,6 +318,7 @@
       "kind": "process",
       "purpose": "The single list of decisions later work may rely on.",
       "owner": 122,
+      "added": "2026-09-29",
       "student": true
     },
     {
@@ -286,6 +326,7 @@
       "kind": "gate",
       "purpose": "Deploy-model gate: publish the tree or a build.",
       "owner": 109,
+      "added": "2026-09-29",
       "student": false
     },
     {
@@ -293,6 +334,7 @@
       "kind": "feature",
       "purpose": "Progressive depth in investigations.",
       "owner": 72,
+      "added": "2026-10-08",
       "student": true
     },
     {
@@ -300,6 +342,7 @@
       "kind": "design",
       "purpose": "The component language for controls.",
       "owner": null,
+      "added": "2026-09-30",
       "student": false
     },
     {
@@ -307,6 +350,7 @@
       "kind": "feature",
       "purpose": "Source detection and the point-spread function over the photometry adapter: the algorithm, the limits, the oracle and the validation (Prompt 183).",
       "owner": 183,
+      "added": "2026-10-23",
       "student": false
     },
     {
@@ -314,6 +358,7 @@
       "kind": "front-door",
       "purpose": "The map of every root document and every generated artifact.",
       "owner": 128,
+      "added": "2026-10-17",
       "student": false
     },
     {
@@ -321,27 +366,31 @@
       "kind": "reference",
       "purpose": "The gravitas-embed/1 contract for embedding figures.",
       "owner": null,
+      "added": "2026-09-24",
       "student": true
     },
     {
       "file": "EXOPLANET_OBSERVATORY.md",
       "kind": "feature",
-      "purpose": "The Exoplanet Observatory guides.",
+      "purpose": "The Exoplanet Observatory guides: five investigations on real TESS data and how they are built.",
       "owner": null,
+      "added": "2026-09-27",
       "student": false
     },
     {
       "file": "EXOPLANET_OBSERVING.md",
       "kind": "feature",
-      "purpose": "The exoplanet observing system.",
+      "purpose": "The exoplanet observing system: observer geometry, windows and the observing-session record.",
       "owner": null,
+      "added": "2026-09-01",
       "student": false
     },
     {
       "file": "EXPERIMENTS.md",
       "kind": "feature",
-      "purpose": "Experiments in Worker realms.",
+      "purpose": "Experiments in Worker realms: the manifest, the scheduler and the runner that keep an experiment off the main world.",
       "owner": null,
+      "added": "2026-09-25",
       "student": false
     },
     {
@@ -349,20 +398,23 @@
       "kind": "reference",
       "purpose": "Every versioned format Gravitas reads or writes.",
       "owner": 61,
+      "added": "2026-09-30",
       "student": false
     },
     {
       "file": "FORMULA_LANGUAGE.md",
       "kind": "reference",
       "purpose": "The closed formula language for derived columns.",
-      "owner": null,
+      "owner": 100,
+      "added": "2026-10-11",
       "student": false
     },
     {
       "file": "FORWARD_MODELS.md",
       "kind": "feature",
-      "purpose": "The forward-model loop.",
+      "purpose": "The forward-model loop: a model state and an observing setup in, a synthetic observation out (Prompt 84).",
       "owner": 84,
+      "added": "2026-10-09",
       "student": false
     },
     {
@@ -370,13 +422,15 @@
       "kind": "feature",
       "purpose": "The frame pipeline from a stack of frames to a light curve over the calibration lab, registration, detection and photometry: the algorithm, the limits, the oracle and the validation (Prompt 185).",
       "owner": 185,
+      "added": "2026-10-23",
       "student": false
     },
     {
       "file": "GALACTIC_DYNAMICS.md",
       "kind": "feature",
-      "purpose": "Galactic dynamics with Gaia.",
+      "purpose": "Galactic dynamics with Gaia: the kernel, the data packs, the investigations and what is not built (Prompt 92).",
       "owner": 92,
+      "added": "2026-10-10",
       "student": true
     },
     {
@@ -384,6 +438,7 @@
       "kind": "feature",
       "purpose": "The galaxy-cluster kernel: membership, velocity dispersion, virial mass, light, morphology-density, validation, failed legs and the requested table (Prompt 250).",
       "owner": 250,
+      "added": "2026-11-05",
       "student": false
     },
     {
@@ -391,6 +446,7 @@
       "kind": "feature",
       "purpose": "The galaxy-morphology kernel: isophotes, profile, half-light radius, magnitude, concentration, asymmetry, validation, failed legs and requested files (Prompt 249, Part A).",
       "owner": 249,
+      "added": "2026-11-05",
       "student": false
     },
     {
@@ -398,6 +454,7 @@
       "kind": "gate",
       "purpose": "The galaxy-profiles gate: committed fit, two-component and Tully-Fisher thresholds and verdict function, nothing measured, Tully-Fisher data unmet (Prompt 249, Part B).",
       "owner": 249,
+      "added": "2026-11-05",
       "student": false
     },
     {
@@ -405,13 +462,15 @@
       "kind": "feature",
       "purpose": "The galaxy-spectra kernel: redshift by lines and by correlation, the 4000-angstrom break and its limits, validation and the files requested (Prompt 248).",
       "owner": 248,
+      "added": "2026-11-05",
       "student": false
     },
     {
       "file": "GRAVITATIONAL_LENSING.md",
       "kind": "feature",
-      "purpose": "Gravitational lensing.",
+      "purpose": "Gravitational lensing: the deflection and microlensing kernel, three instruments and three investigations (Prompt 94).",
       "owner": 94,
+      "added": "2026-10-10",
       "student": true
     },
     {
@@ -419,6 +478,7 @@
       "kind": "feature",
       "purpose": "What the application computes for gravitational waves.",
       "owner": null,
+      "added": "2026-09-09",
       "student": false
     },
     {
@@ -426,6 +486,7 @@
       "kind": "feature",
       "purpose": "Habitable zone II: the threshold limits, the zone along a MIST track, the locking radius and the eccentric-orbit flux (Prompt 205, part A).",
       "owner": 205,
+      "added": "2026-10-27",
       "student": true
     },
     {
@@ -433,6 +494,7 @@
       "kind": "feature",
       "purpose": "Bringing a FITS frame, a PNG or a JPEG into the Observatory: bounds, refusals, what the reader states and what is saved (Prompt 188).",
       "owner": 188,
+      "added": "2026-10-23",
       "student": false
     },
     {
@@ -440,6 +502,7 @@
       "kind": "feature",
       "purpose": "The image investigations (Moon, parallax, binary orbit): what each claims, what is real and synthetic, the acceptance sheet, evidence status, data ledger and what was not built (Prompt 191).",
       "owner": 191,
+      "added": "2026-10-25",
       "student": true
     },
     {
@@ -447,6 +510,7 @@
       "kind": "feature",
       "purpose": "The image marks instrument: marks, scale, time and the ledger (Prompt 179).",
       "owner": 179,
+      "added": "2026-10-22",
       "student": false
     },
     {
@@ -454,6 +518,7 @@
       "kind": "gate",
       "purpose": "The image-measurement gate: the thresholds, the predefined slices and the consumers each serves, and the measured verdict on one marks-and-scale instrument.",
       "owner": 178,
+      "added": "2026-10-22",
       "student": false
     },
     {
@@ -461,6 +526,7 @@
       "kind": "feature",
       "purpose": "The four image packs of the first slice: rights decision per source, contracts, the authentic-frame legs and what was not run (Prompt 189).",
       "owner": 189,
+      "added": "2026-10-24",
       "student": true
     },
     {
@@ -468,13 +534,15 @@
       "kind": "design",
       "purpose": "How index.html was decomposed into fragments.",
       "owner": 53,
+      "added": "2026-10-01",
       "student": true
     },
     {
       "file": "INFERENCE_CORE.md",
       "kind": "feature",
-      "purpose": "The deterministic fitting core.",
+      "purpose": "The deterministic fitting core for transits and radial-velocity orbits: the API, the numerics and the validation.",
       "owner": null,
+      "added": "2026-09-25",
       "student": true
     },
     {
@@ -482,6 +550,7 @@
       "kind": "feature",
       "purpose": "Completeness by injection: synthetic sources added to a copy of a frame and found again, the curve with exact intervals, the selection function, the oracle and the validation (Prompt 184).",
       "owner": 184,
+      "added": "2026-10-23",
       "student": false
     },
     {
@@ -489,6 +558,7 @@
       "kind": "guide",
       "purpose": "Activity, course, kit and review for instructors.",
       "owner": 77,
+      "added": "2026-10-08",
       "student": true
     },
     {
@@ -496,6 +566,7 @@
       "kind": "guide",
       "purpose": "The generated guides and answer keys.",
       "owner": 79,
+      "added": "2026-10-09",
       "student": false
     },
     {
@@ -503,6 +574,7 @@
       "kind": "feature",
       "purpose": "The instrument library: a few real facilities with every value cited, typical entries labelled, the cross-checks, the adopters and the course pack kind (Prompt 209).",
       "owner": 209,
+      "added": "2026-10-28",
       "student": true
     },
     {
@@ -510,6 +582,7 @@
       "kind": "process",
       "purpose": "Branch, train and merge protocol and the current integration status.",
       "owner": 122,
+      "added": "2026-09-29",
       "student": false
     },
     {
@@ -517,6 +590,7 @@
       "kind": "policy",
       "purpose": "The interaction contract: keyboard model, single-pointer rule, focus, announcements and reduced motion.",
       "owner": 155,
+      "added": "2026-10-19",
       "student": false
     },
     {
@@ -524,6 +598,7 @@
       "kind": "feature",
       "purpose": "Interiors I: density, gravity, escape speed, equilibrium temperature, density classes and compression correction of the planets, with uncertainties and validation (Prompt 203 Part A).",
       "owner": 203,
+      "added": "2026-10-27",
       "student": false
     },
     {
@@ -531,20 +606,23 @@
       "kind": "gate",
       "purpose": "Interiors gate: the two-layer inversion and the Darwin-Radau oblateness, thresholds committed first, the measured checks and the verdict C (Prompt 203 Part B).",
       "owner": 203,
+      "added": "2026-10-27",
       "student": false
     },
     {
       "file": "LAB3D.md",
       "kind": "feature",
-      "purpose": "The 3-D small-N kernel.",
+      "purpose": "The 3-D small-N kernel: its state format, integrators, runs, API, experiments, validation and limits.",
       "owner": null,
+      "added": "2026-09-28",
       "student": true
     },
     {
       "file": "LAB3D_CURRICULUM.md",
       "kind": "feature",
-      "purpose": "The 3-D lab curriculum.",
+      "purpose": "The 3-D lab curriculum: the investigations, their concept map, the physics that checks them and the model limits.",
       "owner": null,
+      "added": "2026-09-29",
       "student": false
     },
     {
@@ -552,6 +630,7 @@
       "kind": "feature",
       "purpose": "The 3-D lab curriculum II: run modes, reference planes, the orbit editor and sky view, five guides and their validation (Prompt 271).",
       "owner": 271,
+      "added": "2026-11-07",
       "student": false
     },
     {
@@ -559,6 +638,7 @@
       "kind": "design",
       "purpose": "How instrument families load on demand.",
       "owner": null,
+      "added": "2026-09-23",
       "student": false
     },
     {
@@ -566,13 +646,15 @@
       "kind": "gate",
       "purpose": "Lazy instrument capabilities architecture gate.",
       "owner": null,
+      "added": "2026-09-23",
       "student": false
     },
     {
       "file": "LEARNING_STUDY.md",
       "kind": "gate",
       "purpose": "Design and validation plan for a learning-outcome study (no study run).",
-      "owner": null,
+      "owner": 118,
+      "added": "2026-10-11",
       "student": true
     },
     {
@@ -580,6 +662,7 @@
       "kind": "feature",
       "purpose": "The Library: one index of everything.",
       "owner": 54,
+      "added": "2026-10-01",
       "student": true
     },
     {
@@ -587,6 +670,7 @@
       "kind": "legal",
       "purpose": "The CC BY 4.0 text for the educational material.",
       "owner": null,
+      "added": "2026-09-16",
       "student": false
     },
     {
@@ -594,6 +678,7 @@
       "kind": "legal",
       "purpose": "The two licenses and what carries which.",
       "owner": null,
+      "added": "2026-09-16",
       "student": true
     },
     {
@@ -601,6 +686,7 @@
       "kind": "front-door",
       "purpose": "The entry point for a second maintainer.",
       "owner": 128,
+      "added": "2026-10-17",
       "student": false
     },
     {
@@ -608,6 +694,7 @@
       "kind": "reference",
       "purpose": "The mass scale: 1000 simulation units is a solar mass.",
       "owner": null,
+      "added": "2026-09-01",
       "student": false
     },
     {
@@ -615,27 +702,31 @@
       "kind": "feature",
       "purpose": "The measurement, uncertainty and claim-limits investigations: what each claims on synthetic truth, where it stops, and where the files live (Prompt 190).",
       "owner": 190,
+      "added": "2026-10-24",
       "student": true
     },
     {
       "file": "MEASUREMENT_PIPELINE.md",
       "kind": "feature",
-      "purpose": "The measurement pipeline.",
-      "owner": null,
+      "purpose": "The measurement pipeline in the Observatory: observations, marks and the provenance envelope they write (Prompt 20).",
+      "owner": 20,
+      "added": "2026-09-26",
       "student": false
     },
     {
       "file": "MISSION.md",
       "kind": "feature",
-      "purpose": "The mission-design core.",
-      "owner": null,
+      "purpose": "The mission-design core: transfers, Lambert, patched conics, windows and flybys, and the independent check (Prompt 38).",
+      "owner": 38,
+      "added": "2026-09-29",
       "student": true
     },
     {
       "file": "MISSION_LAB.md",
       "kind": "feature",
-      "purpose": "The mission lab: to Mars in 2026.",
-      "owner": null,
+      "purpose": "The mission lab: a mission to Mars on JPL DE441 in three guided parts (Prompt 39).",
+      "owner": 39,
+      "added": "2026-09-29",
       "student": true
     },
     {
@@ -643,6 +734,7 @@
       "kind": "gate",
       "purpose": "Mission lab II, the first window-and-budget workflow: contract committed first, independent oracle, 19 legs, verdict C by the committed function (Prompt 272).",
       "owner": 272,
+      "added": "2026-11-07",
       "student": false
     },
     {
@@ -650,13 +742,15 @@
       "kind": "gate",
       "purpose": "Why the engine is not refactored into multiple instances.",
       "owner": null,
+      "added": "2026-09-20",
       "student": false
     },
     {
       "file": "MY_WORK.md",
       "kind": "feature",
-      "purpose": "The My work page.",
+      "purpose": "The My work page: what a student has made in Gravitas, read from this browser and sent nowhere (Prompt 69).",
       "owner": 69,
+      "added": "2026-10-08",
       "student": true
     },
     {
@@ -664,6 +758,7 @@
       "kind": "design",
       "purpose": "The navigation model: five destinations, where every surface goes, what students see, the structural checks and what they do not prove.",
       "owner": 161,
+      "added": "2026-10-21",
       "student": false
     },
     {
@@ -671,6 +766,7 @@
       "kind": "gate",
       "purpose": "Browser notebook bridge and compute capsules gate.",
       "owner": null,
+      "added": "2026-09-28",
       "student": false
     },
     {
@@ -678,13 +774,15 @@
       "kind": "gate",
       "purpose": "The price of moving the notebook off localStorage (nothing built).",
       "owner": null,
+      "added": "2026-09-20",
       "student": false
     },
     {
       "file": "NUMBER_TYPOGRAPHY.md",
       "kind": "design",
-      "purpose": "How numbers are typeset on screen.",
+      "purpose": "How numbers are typeset on screen: the formats, units and the reasons for them.",
       "owner": null,
+      "added": "2026-08-30",
       "student": false
     },
     {
@@ -692,6 +790,7 @@
       "kind": "gate",
       "purpose": "The numerics instruments: five kernels the numerical-methods investigations need, their independent oracle, failed legs and verdict (follow-up to Prompt 270).",
       "owner": 270,
+      "added": "2026-11-10",
       "student": false
     },
     {
@@ -699,6 +798,7 @@
       "kind": "record",
       "purpose": "Numerical-methods investigations in the application: the record of what the tree has, why none was built and what a build needs (Prompt 270).",
       "owner": 270,
+      "added": "2026-11-07",
       "student": false
     },
     {
@@ -706,13 +806,15 @@
       "kind": "feature",
       "purpose": "Numerical routines: roots, quadrature, interpolation, small linear algebra and a polynomial fit, each with a contract and a consumer.",
       "owner": 152,
+      "added": "2026-10-20",
       "student": false
     },
     {
       "file": "OBJECT_INSPECTOR.md",
       "kind": "feature",
-      "purpose": "The object inspector.",
+      "purpose": "The object inspector: the per-body readout, its orbital elements and its tabs.",
       "owner": null,
+      "added": "2026-09-01",
       "student": false
     },
     {
@@ -720,20 +822,23 @@
       "kind": "gate",
       "purpose": "Authentic observation data packs gate.",
       "owner": 10,
+      "added": "2026-09-24",
       "student": false
     },
     {
       "file": "OBSERVATORY_WORKSPACE_DESIGN.md",
       "kind": "design",
-      "purpose": "The observation workspace design.",
+      "purpose": "The observation workspace design: one observation shape, linked views and honest changes.",
       "owner": null,
+      "added": "2026-09-25",
       "student": false
     },
     {
       "file": "OFFLINE_AND_LOW_END.md",
       "kind": "reference",
-      "purpose": "Offline use and slow machines.",
+      "purpose": "Offline use and slow machines: what is precached and why, and what a low-end device gets.",
       "owner": null,
+      "added": "2026-09-05",
       "student": false
     },
     {
@@ -741,6 +846,7 @@
       "kind": "feature",
       "purpose": "The student first-run path and what-next guidance.",
       "owner": 73,
+      "added": "2026-10-08",
       "student": false
     },
     {
@@ -748,13 +854,15 @@
       "kind": "feature",
       "purpose": "The orbital layer: elements and state vectors with units, frames and time scales named.",
       "owner": 148,
+      "added": "2026-10-20",
       "student": false
     },
     {
       "file": "ORBITAL_SYSTEM_BUILDER.md",
       "kind": "feature",
-      "purpose": "The Orbital System Builder.",
+      "purpose": "The Orbital System Builder: building a hierarchical system from orbital elements, its checks and the file it saves.",
       "owner": null,
+      "added": "2026-09-27",
       "student": false
     },
     {
@@ -762,6 +870,7 @@
       "kind": "gate",
       "purpose": "The orbit-determination gate: what an orbit from three observations may claim, with the committed conditioning threshold, tolerance and bounds, the measured legs and the verdict (Prompt 197, part A).",
       "owner": 197,
+      "added": "2026-10-27",
       "student": false
     },
     {
@@ -769,6 +878,7 @@
       "kind": "gate",
       "purpose": "The orbit-fit gate: the identifiability criterion and test set, committed before any fit was run, and the verdict (Prompt 187).",
       "owner": 187,
+      "added": "2026-10-24",
       "student": false
     },
     {
@@ -776,6 +886,7 @@
       "kind": "feature",
       "purpose": "Catalogue overlays, blink and compare on an image: what is drawn where, how a second frame is tied to the first, when the two may be subtracted, the oracle and the validation (Prompt 182).",
       "owner": 182,
+      "added": "2026-10-23",
       "student": false
     },
     {
@@ -783,20 +894,15 @@
       "kind": "process",
       "purpose": "Decisions, credentials and accounts only the owner can supply.",
       "owner": 122,
-      "student": false
-    },
-    {
-      "file": "PERFORMANCE_OPTIMIZATIONS_SUMMARY.md",
-      "kind": "record",
-      "purpose": "Historical record of a rendering and memory round.",
-      "owner": null,
+      "added": "2026-09-16",
       "student": false
     },
     {
       "file": "PERFORMANCE_PROFILING_GUIDE.md",
       "kind": "guide",
-      "purpose": "How to profile the simulation.",
+      "purpose": "How to profile the simulation in a browser and read the result; `npm run perf` is the instrument.",
       "owner": null,
+      "added": "2025-07-12",
       "student": false
     },
     {
@@ -804,6 +910,7 @@
       "kind": "feature",
       "purpose": "Photometric calibration: zero point, atmospheric extinction and color term from standard stars, with the oracle, the validation and the failed legs (Prompt 212).",
       "owner": 212,
+      "added": "2026-10-29",
       "student": true
     },
     {
@@ -811,6 +918,7 @@
       "kind": "feature",
       "purpose": "Photometry on an image over the existing reduction: the equations, the contract, the limits, the oracle and the validation (Prompt 180).",
       "owner": 180,
+      "added": "2026-10-23",
       "student": false
     },
     {
@@ -818,6 +926,7 @@
       "kind": "reference",
       "purpose": "What the physics model has been checked against.",
       "owner": null,
+      "added": "2026-09-01",
       "student": true
     },
     {
@@ -825,13 +934,15 @@
       "kind": "design",
       "purpose": "The platform model: one shell, one taxonomy.",
       "owner": 49,
+      "added": "2026-09-29",
       "student": false
     },
     {
       "file": "PLATFORM_PACKAGE_RFC.md",
       "kind": "gate",
-      "purpose": "Platform package RFC and gate.",
+      "purpose": "The platform package RFC and gate: which capability classes become package boundaries (verdict B, staged).",
       "owner": 9,
+      "added": "2026-09-23",
       "student": false
     },
     {
@@ -839,6 +950,7 @@
       "kind": "design",
       "purpose": "The one plotting component and its parity thresholds.",
       "owner": 64,
+      "added": "2026-10-01",
       "student": true
     },
     {
@@ -846,6 +958,7 @@
       "kind": "reference",
       "purpose": "What kind of number a result is (the artifact envelope).",
       "owner": null,
+      "added": "2026-09-29",
       "student": false
     },
     {
@@ -853,6 +966,7 @@
       "kind": "feature",
       "purpose": "The radiation and photometry kernel.",
       "owner": 82,
+      "added": "2026-10-09",
       "student": true
     },
     {
@@ -860,6 +974,7 @@
       "kind": "front-door",
       "purpose": "The project front page: what Gravitas is, how to run, check and cite it.",
       "owner": null,
+      "added": "2025-07-09",
       "student": false
     },
     {
@@ -867,6 +982,7 @@
       "kind": "record",
       "purpose": "Four real spectra: experiment and integration record.",
       "owner": null,
+      "added": "2026-09-22",
       "student": false
     },
     {
@@ -874,6 +990,7 @@
       "kind": "reference",
       "purpose": "The frame the physics integrates in.",
       "owner": null,
+      "added": "2026-09-01",
       "student": false
     },
     {
@@ -881,6 +998,7 @@
       "kind": "process",
       "purpose": "Release and instructor-materials passphrase procedure.",
       "owner": null,
+      "added": "2026-09-06",
       "student": false
     },
     {
@@ -888,6 +1006,7 @@
       "kind": "process",
       "purpose": "The release procedure and its smoke list.",
       "owner": null,
+      "added": "2026-09-05",
       "student": false
     },
     {
@@ -895,6 +1014,7 @@
       "kind": "feature",
       "purpose": "Remixing investigations and sharing them by link.",
       "owner": 78,
+      "added": "2026-10-09",
       "student": false
     },
     {
@@ -902,6 +1022,7 @@
       "kind": "feature",
       "purpose": "Remnants: white-dwarf cooling ages with a two-term interval, the initial-final mass relation and outcome odds, with validation and two failed legs left failing (Prompt 222).",
       "owner": 222,
+      "added": "2026-10-30",
       "student": true
     },
     {
@@ -909,6 +1030,7 @@
       "kind": "gate",
       "purpose": "Resonances and secular dynamics II: 19 legs, verdict C; the Part A addendum's 25 new legs, bounds first, addendum verdict B; the kernel without consumers (Prompt 273).",
       "owner": 273,
+      "added": "2026-11-08",
       "student": false
     },
     {
@@ -916,20 +1038,23 @@
       "kind": "feature",
       "purpose": "The orbital resonance investigation.",
       "owner": null,
+      "added": "2026-09-04",
       "student": false
     },
     {
       "file": "SAMPLER_GATE.md",
       "kind": "gate",
-      "purpose": "Posterior-sampling gate.",
-      "owner": null,
+      "purpose": "The posterior-sampling gate: verdict C, no sampler in the inference core, with its thresholds and register rows.",
+      "owner": 103,
+      "added": "2026-10-11",
       "student": true
     },
     {
       "file": "SANDBOX_INSTRUMENTS.md",
       "kind": "feature",
-      "purpose": "Instruments in the sandbox.",
+      "purpose": "Instruments in the sandbox: the measurement tools, their readouts and how they are registered.",
       "owner": null,
+      "added": "2026-09-02",
       "student": false
     },
     {
@@ -937,41 +1062,31 @@
       "kind": "feature",
       "purpose": "Jupiter's moons from Horizons: the pack, the cadence, the weighing and the validation table.",
       "owner": 193,
+      "added": "2026-10-25",
       "student": true
     },
     {
       "file": "SCAFFOLDING.md",
       "kind": "feature",
-      "purpose": "Hints, explainers and feedback.",
+      "purpose": "Hints, explainers and feedback: the rules that scaffold a student step, and the attempts record.",
       "owner": 71,
-      "student": false
-    },
-    {
-      "file": "SCENARIO_FIXES.md",
-      "kind": "record",
-      "purpose": "Historical record of a scenario fixing pass.",
-      "owner": null,
-      "student": false
-    },
-    {
-      "file": "SCENARIO_GALLERY.md",
-      "kind": "record",
-      "purpose": "Historical record of a scenario-gallery change.",
-      "owner": null,
+      "added": "2026-10-08",
       "student": false
     },
     {
       "file": "SCENARIO_GEOMETRY.md",
       "kind": "reference",
-      "purpose": "Scenario geometry as data.",
+      "purpose": "Scenario geometry as data: how a scenario's starting positions are described, built and checked.",
       "owner": 108,
+      "added": "2026-10-11",
       "student": false
     },
     {
       "file": "SCIENTIFIC_KERNEL_GATE.md",
       "kind": "gate",
       "purpose": "Scientific numerical kernel and WebAssembly gate.",
-      "owner": null,
+      "owner": 21,
+      "added": "2026-09-26",
       "student": false
     },
     {
@@ -979,6 +1094,7 @@
       "kind": "policy",
       "purpose": "Security posture and how to report a vulnerability.",
       "owner": 127,
+      "added": "2026-09-16",
       "student": true
     },
     {
@@ -986,6 +1102,7 @@
       "kind": "feature",
       "purpose": "Seeding: named random streams that keep every old sequence.",
       "owner": 149,
+      "added": "2026-10-20",
       "student": false
     },
     {
@@ -993,13 +1110,15 @@
       "kind": "gate",
       "purpose": "Asteroseismology gate: the committed spectrum, background, numax, delta nu and scaling-relation methods and bounds, the measured legs and the verdict (Prompt 221 Part A).",
       "owner": 221,
+      "added": "2026-10-30",
       "student": true
     },
     {
       "file": "SKY_LAB.md",
       "kind": "feature",
-      "purpose": "The Sky Lab.",
+      "purpose": "The Sky Lab: a pure sky kernel, the bright-star pack and the /sky/ page with five instruments (Prompt 88).",
       "owner": 88,
+      "added": "2026-10-09",
       "student": true
     },
     {
@@ -1007,6 +1126,7 @@
       "kind": "gate",
       "purpose": "Sky Lab gate: sky, time and coordinates.",
       "owner": 87,
+      "added": "2026-10-09",
       "student": false
     },
     {
@@ -1014,6 +1134,7 @@
       "kind": "feature",
       "purpose": "The belts from a catalog and the spin from a light curve: gaps as measured depletions, class counts, the survey's selection and a bounded ellipsoid light-curve model, validated (Prompt 198).",
       "owner": 198,
+      "added": "2026-10-27",
       "student": true
     },
     {
@@ -1021,6 +1142,7 @@
       "kind": "feature",
       "purpose": "The statistics kernel: labelled intervals, resampling, residual diagnostics, comparison of estimates, the F-test and the selection function, with their limits and validation.",
       "owner": 154,
+      "added": "2026-10-21",
       "student": false
     },
     {
@@ -1028,6 +1150,7 @@
       "kind": "feature",
       "purpose": "Stellar rotation and flares: the spot model, the period with its factor-two alias, flare detection, equivalent durations and the slope, with validation (Prompt 220).",
       "owner": 220,
+      "added": "2026-10-30",
       "student": true
     },
     {
@@ -1035,6 +1158,7 @@
       "kind": "feature",
       "purpose": "Stellar populations guides in the Observatory.",
       "owner": null,
+      "added": "2026-09-27",
       "student": false
     },
     {
@@ -1042,6 +1166,7 @@
       "kind": "feature",
       "purpose": "Stellar structure kernel and investigations.",
       "owner": 95,
+      "added": "2026-10-10",
       "student": true
     },
     {
@@ -1049,13 +1174,15 @@
       "kind": "reference",
       "purpose": "What Gravitas keeps in the browser.",
       "owner": 65,
+      "added": "2026-09-30",
       "student": false
     },
     {
       "file": "STUDIO.md",
       "kind": "feature",
-      "purpose": "The Scenario Studio.",
+      "purpose": "The Scenario Studio: what a scenario file holds, its checks and cautions, and how it opens.",
       "owner": null,
+      "added": "2026-09-28",
       "student": false
     },
     {
@@ -1063,6 +1190,7 @@
       "kind": "gate",
       "purpose": "Studio round-trip architecture gate.",
       "owner": null,
+      "added": "2026-09-27",
       "student": false
     },
     {
@@ -1070,6 +1198,7 @@
       "kind": "feature",
       "purpose": "The Sun as a measurement: disc geometry, rotation from tracked spots bounded by a reference law, and the solar constant to luminosity and temperature, with their validation (Prompt 194).",
       "owner": 194,
+      "added": "2026-10-25",
       "student": true
     },
     {
@@ -1077,6 +1206,7 @@
       "kind": "policy",
       "purpose": "How to get help, and the supported browsers and versions.",
       "owner": 129,
+      "added": "2026-09-16",
       "student": true
     },
     {
@@ -1084,6 +1214,7 @@
       "kind": "gate",
       "purpose": "The surface-retirement and consolidation gate: the decision function, the link-support policy and the verdict on every surface.",
       "owner": 165,
+      "added": "2026-10-21",
       "student": false
     },
     {
@@ -1091,6 +1222,7 @@
       "kind": "feature",
       "purpose": "Eclipsing binaries: the detached two-sphere model, what the eclipses fix (e cos w) and leave open (grazing, e sin w), its validation and failed legs (Prompt 217).",
       "owner": 217,
+      "added": "2026-10-29",
       "student": true
     },
     {
@@ -1098,6 +1230,7 @@
       "kind": "feature",
       "purpose": "Binary masses and radii: the double-lined orbit, the joint eclipse and velocity solution, its validation and failed legs (Prompt 218, Part A).",
       "owner": 218,
+      "added": "2026-10-29",
       "student": true
     },
     {
@@ -1105,6 +1238,7 @@
       "kind": "feature",
       "purpose": "The transit model delta: a four-coefficient limb-darkening law, the star's density, the covariance ellipse, two checks, and the validation with its failed legs (Prompt 225).",
       "owner": 225,
+      "added": "2026-10-30",
       "student": true
     },
     {
@@ -1112,6 +1246,7 @@
       "kind": "feature",
       "purpose": "Gaia parallax workflows: distance by likelihood, a stated prior and zero point, velocity, the cuts, packs 1.1.0, validation and NGC 2420's NOT RUN leg (Prompt 233).",
       "owner": 233,
+      "added": "2026-11-03",
       "student": true
     },
     {
@@ -1119,6 +1254,7 @@
       "kind": "feature",
       "purpose": "Transit timing variations: the O-C diagram, the super-period and amplitude relations and their domain, the validation with its failed legs, and why only a circular mass ships (Prompt 226).",
       "owner": 226,
+      "added": "2026-10-30",
       "student": true
     },
     {
@@ -1126,6 +1262,7 @@
       "kind": "gate",
       "purpose": "TTV mass gate: whether a transit-timing amplitude gives a planet mass, the degeneracy with eccentricity, the committed bounds, the measured legs and the verdict (Prompt 226 Part B).",
       "owner": 226,
+      "added": "2026-10-30",
       "student": true
     },
     {
@@ -1133,6 +1270,7 @@
       "kind": "gate",
       "purpose": "Subtraction and orbit gate: reference-star subtraction, its throughput by injection and an imaged planet's orbit; the committed bounds, the measured and failed legs, verdict C (Prompt 230 Part B).",
       "owner": 230,
+      "added": "2026-11-03",
       "student": false
     },
     {
@@ -1140,6 +1278,7 @@
       "kind": "gate",
       "purpose": "Moving-cluster gate: Hyades convergent point and bounds, failed legs; verdict C (amended B); follow-up corrected-estimator and published-value legs (verdict C); no distance (Prompt 234).",
       "owner": 234,
+      "added": "2026-11-06",
       "student": false
     },
     {
@@ -1147,6 +1286,7 @@
       "kind": "gate",
       "purpose": "Galactic kinematics gate: four methods on the Gaia and SEGUE packs with the selection stated, the committed bounds, the failed legs, verdict C for all four (Prompt 235 Part A).",
       "owner": 235,
+      "added": "2026-11-04",
       "student": false
     },
     {
@@ -1154,6 +1294,7 @@
       "kind": "feature",
       "purpose": "Cluster fitting: an isochrone fit of age and distance at a stated metallicity and reddening, its likelihood, intervals and valley, its validation and failed legs (Prompt 219).",
       "owner": 219,
+      "added": "2026-10-29",
       "student": true
     },
     {
@@ -1161,6 +1302,7 @@
       "kind": "gate",
       "purpose": "The four-parameter cluster-fit gate (Prompt 219 Part B): its committed models and bounds, the measured legs, the verdict C and the spike run-1 defect.",
       "owner": 219,
+      "added": "2026-10-30",
       "student": true
     },
     {
@@ -1168,6 +1310,7 @@
       "kind": "feature",
       "purpose": "Observing strategy: the window function of a cadence, aliases and the verdict, phase coverage, a multi-night plan with its cost in hours, weather as a seeded loss, validation (Prompt 214).",
       "owner": 214,
+      "added": "2026-10-29",
       "student": true
     },
     {
@@ -1175,6 +1318,7 @@
       "kind": "feature",
       "purpose": "Exposure planning: the CCD equation with several exposures, extended sources, the limiting magnitude and the plan, the facility adapter, the planner, validation and failed legs (Prompt 210).",
       "owner": 210,
+      "added": "2026-10-28",
       "student": true
     },
     {
@@ -1182,6 +1326,7 @@
       "kind": "feature",
       "purpose": "Survey design: depth, area, counts, completeness, contamination and the depth-against-area trade-off, the validation contract and its failed legs (Prompt 215).",
       "owner": 215,
+      "added": "2026-10-29",
       "student": true
     },
     {
@@ -1189,6 +1334,7 @@
       "kind": "feature",
       "purpose": "Detector effects over the frame model: saturation, a stated nonlinearity, cosmic-ray tracks, charge bleeding and sampling, each flagged in the sidecar; validation and the failed legs (Prompt 211).",
       "owner": 211,
+      "added": "2026-10-28",
       "student": true
     },
     {
@@ -1196,6 +1342,7 @@
       "kind": "feature",
       "purpose": "Cluster dynamics: crossing, relaxation, segregation and evaporation times, dynamical friction and the virial mass, with the validation contract and the failed legs (Prompt 237).",
       "owner": 237,
+      "added": "2026-11-03",
       "student": true
     },
     {
@@ -1203,6 +1350,7 @@
       "kind": "feature",
       "purpose": "The multi-messenger kernel: time systems, the speed bound with its assumption, host rule, kilonova model, detection rule, validation, authentic-data legs B2, B4, E1 (Prompt 244).",
       "owner": 244,
+      "added": "2026-11-04",
       "student": false
     },
     {
@@ -1210,6 +1358,7 @@
       "kind": "feature",
       "purpose": "The HI spectroscopy kernel: Doppler scale, LSR options, the fixed mask, tangent-point circular speed, column density, synthetic spectra, validation and failed legs (Prompt 241).",
       "owner": 241,
+      "added": "2026-11-04",
       "student": false
     },
     {
@@ -1217,6 +1366,7 @@
       "kind": "feature",
       "purpose": "The X-ray counts kernel: Poisson rates, hardness, binning, outbursts, the period search with simulated significance, validation and failed legs (Prompt 243).",
       "owner": 243,
+      "added": "2026-11-04",
       "student": false
     },
     {
@@ -1224,6 +1374,7 @@
       "kind": "gate",
       "purpose": "The X-ray counts contract and gate: the committed rules, the verdict function, what was measured and the files requested from Carl (Prompt 243, Part A).",
       "owner": 243,
+      "added": "2026-11-04",
       "student": false
     },
     {
@@ -1231,6 +1382,7 @@
       "kind": "feature",
       "purpose": "The SED kernel: flux-density conventions, the point contract, the blackbody fit, nonsimultaneity, the integrated SED and luminosity, validation and failed legs (Prompt 245).",
       "owner": 245,
+      "added": "2026-11-05",
       "student": false
     },
     {
@@ -1238,6 +1390,7 @@
       "kind": "gate",
       "purpose": "The SED contract and gate: the committed rules, the amendments, the verdict function, what was measured and the files requested from Carl (Prompt 245, Part A).",
       "owner": 245,
+      "added": "2026-11-05",
       "student": false
     },
     {
@@ -1245,6 +1398,7 @@
       "kind": "feature",
       "purpose": "The pulsar kernel: dispersion constant, de-dispersion, folding, period and DM with intervals, the labelled DM distance, synthetic series, validation and failed legs (Prompt 242).",
       "owner": 242,
+      "added": "2026-11-04",
       "student": false
     },
     {
@@ -1252,6 +1406,7 @@
       "kind": "feature",
       "purpose": "The interstellar-medium kernel: line identification, equivalent widths, velocities, the linear column density, the Balmer decrement, validation and the files requested (Prompt 247).",
       "owner": 247,
+      "added": "2026-11-05",
       "student": false
     },
     {
@@ -1259,6 +1414,7 @@
       "kind": "gate",
       "purpose": "Plasma diagnostics gate: committed thresholds for the [O III] temperature and [S II] density, every leg NOT RUN, and the fetch request (Prompt 247 Part B).",
       "owner": 247,
+      "added": "2026-11-05",
       "student": false
     },
     {
@@ -1266,6 +1422,7 @@
       "kind": "gate",
       "purpose": "Dynamics reference gate: the committed tolerances, the independent reference runs, the engine's precomputed runs and the verdict (Prompt 237 Part B).",
       "owner": 237,
+      "added": "2026-11-03",
       "student": false
     },
     {
@@ -1273,6 +1430,7 @@
       "kind": "feature",
       "purpose": "Rotation-curve decomposition: bulge, thin disk and halo, the fit with its covariance and the disk-halo degeneracy, the validation contract with its failed legs, Part B deferred (Prompt 236).",
       "owner": 236,
+      "added": "2026-11-04",
       "student": false
     },
     {
@@ -1280,6 +1438,7 @@
       "kind": "feature",
       "purpose": "The spectrograph model: the line-spread function, an arc-lamp wavelength solution with its uncertainty, a velocity with its medium, the slit trade, validation (Prompt 213).",
       "owner": 213,
+      "added": "2026-10-29",
       "student": true
     },
     {
@@ -1287,6 +1446,7 @@
       "kind": "feature",
       "purpose": "Telescopes over the existing PSF: the annular Airy pattern, Moffat seeing, the Rayleigh angle against the measured width, light gathering, validation (Prompt 208).",
       "owner": 208,
+      "added": "2026-10-28",
       "student": true
     },
     {
@@ -1294,6 +1454,7 @@
       "kind": "feature",
       "purpose": "Rings, Roche limits and analytic tides: the constant-Q kernel, its equations, limits and validation (Prompt 204, part A).",
       "owner": 204,
+      "added": "2026-10-25",
       "student": true
     },
     {
@@ -1301,6 +1462,7 @@
       "kind": "gate",
       "purpose": "The tidal-torque gate: whether an engine scenario may apply a tidal torque as an extra force (Prompt 204, part B).",
       "owner": 204,
+      "added": "2026-10-25",
       "student": true
     },
     {
@@ -1308,6 +1470,7 @@
       "kind": "feature",
       "purpose": "Time-domain astronomy and the first distance-ladder rung.",
       "owner": 96,
+      "added": "2026-10-10",
       "student": true
     },
     {
@@ -1315,6 +1478,7 @@
       "kind": "process",
       "purpose": "How versions of the build, test and runtime tools are picked and moved.",
       "owner": 126,
+      "added": "2026-10-06",
       "student": false
     },
     {
@@ -1322,13 +1486,7 @@
       "kind": "policy",
       "purpose": "Translation freshness (the ledger and the packs' esOf), the glossary's labels, the English-only surfaces and the rule for new vocabulary.",
       "owner": 156,
-      "student": false
-    },
-    {
-      "file": "UI_PERFORMANCE_AUDIT.md",
-      "kind": "record",
-      "purpose": "Historical UI, performance and quality audit.",
-      "owner": null,
+      "added": "2026-10-21",
       "student": false
     },
     {
@@ -1336,6 +1494,7 @@
       "kind": "gate",
       "purpose": "Validated 3-D lab specification and feasibility gate.",
       "owner": null,
+      "added": "2026-09-28",
       "student": false
     },
     {
@@ -1343,6 +1502,7 @@
       "kind": "gate",
       "purpose": "Variable-star classifier gate: the labelled Gaia set, the committed bounds, the measured confusion matrix, two failed legs left failing and the verdict B (Prompt 223 Part B).",
       "owner": 223,
+      "added": "2026-10-30",
       "student": false
     },
     {
@@ -1350,6 +1510,7 @@
       "kind": "feature",
       "purpose": "Joint transit and velocity fit with the star inside: mass, radius and density with the star's uncertainty carried through, the validation contract, two failed legs, data not supplied (Prompt 227).",
       "owner": 227,
+      "added": "2026-10-31",
       "student": true
     },
     {
@@ -1357,6 +1518,7 @@
       "kind": "gate",
       "purpose": "Occurrence rates gate: committed thresholds, the independent oracle, the verdict, the failed legs D4 and D4b and the data not supplied (Prompt 229 Part A).",
       "owner": 229,
+      "added": "2026-10-31",
       "student": false
     },
     {
@@ -1364,6 +1526,7 @@
       "kind": "gate",
       "purpose": "Radio data-rights gate: accepted bases, per-source decision rules, candidates, fallbacks and verdicts for HI spectra, pulse series and pulsar catalogs (Prompt 239).",
       "owner": 239,
+      "added": "2026-11-03",
       "student": false
     },
     {
@@ -1371,6 +1534,7 @@
       "kind": "gate",
       "purpose": "Visual-binary gate: the photocentre contract, committed thresholds, the independent oracle, the verdict A and the circular real-star check (Prompt 218 Part B).",
       "owner": 218,
+      "added": "2026-11-03",
       "student": false
     },
     {
@@ -1378,6 +1542,7 @@
       "kind": "feature",
       "purpose": "Occurrence rates on a searched population: completeness by injection, the Poisson likelihood, limits, the validation contract, two failed legs (Prompt 229).",
       "owner": 229,
+      "added": "2026-10-31",
       "student": true
     },
     {
@@ -1385,6 +1550,7 @@
       "kind": "feature",
       "purpose": "Direct imaging, Part A: contrast, angular separation, lambda/D against an inner working angle, an observability verdict, the imaged planets' table; Part B was gated, verdict C (Prompt 230).",
       "owner": 230,
+      "added": "2026-10-31",
       "student": true
     },
     {
@@ -1392,6 +1558,7 @@
       "kind": "feature",
       "purpose": "Candidate vetting: odd-even depths, secondary-eclipse search, difference-image centroid test, the validation contract, what a pass does not mean.",
       "owner": 228,
+      "added": "2026-10-30",
       "student": true
     },
     {
@@ -1399,6 +1566,7 @@
       "kind": "feature",
       "purpose": "Variables II: light-curve features with errors, the Cepheid PL relation with a cited metallicity term, a classifier that can decline; 20 validation legs (Prompt 223).",
       "owner": 223,
+      "added": "2026-10-30",
       "student": true
     },
     {
@@ -1406,6 +1574,7 @@
       "kind": "gate",
       "purpose": "Astronomy archives and the Virtual Observatory gate.",
       "owner": null,
+      "added": "2026-09-26",
       "student": false
     },
     {
@@ -1413,13 +1582,15 @@
       "kind": "feature",
       "purpose": "The Worker pool contract: typed jobs, generations, memory and concurrency caps, transfer, deterministic scheduling and per-job random streams.",
       "owner": 153,
+      "added": "2026-10-20",
       "student": false
     },
     {
       "file": "paper.md",
       "kind": "front-door",
-      "purpose": "The JOSS-style summary paper.",
+      "purpose": "The JOSS-style summary paper that describes the software for citation.",
       "owner": null,
+      "added": "2026-09-16",
       "student": false
     },
     {
@@ -1427,6 +1598,7 @@
       "kind": "gate",
       "purpose": "The lensing time-delay and finite-source gate: delay model, mass-sheet degeneracy, committed thresholds, the spike's result (verdict C; G3, G7, G8 fail), G6 and G9 not run (Prompt 251, Part B).",
       "owner": 251,
+      "added": "2026-11-05",
       "student": false
     },
     {
@@ -1434,6 +1606,7 @@
       "kind": "feature",
       "purpose": "The enclosed-mass lensing extension: distances, the mass inside an Einstein radius, image inversions, the arc-radius fit, validation and requested files (Prompt 251, Part A).",
       "owner": 251,
+      "added": "2026-11-05",
       "student": false
     },
     {
@@ -1441,6 +1614,7 @@
       "kind": "record",
       "purpose": "The time-domain closeout (Prompt 246): what 239 to 245 landed, what a student can do today, each closeout item done, not applicable or blocked, the cohesion record.",
       "owner": 246,
+      "added": "2026-11-05",
       "student": false
     },
     {
@@ -1448,6 +1622,7 @@
       "kind": "record",
       "purpose": "The Galactic closeout (Prompt 238): what 233 to 237 landed, the two Gaia investigations checked, the package change, each closeout item done, not applicable or blocked, the cohesion record.",
       "owner": 238,
+      "added": "2026-11-05",
       "student": false
     },
     {
@@ -1455,6 +1630,7 @@
       "kind": "record",
       "purpose": "The cosmology closeout (Prompt 260): what 255 to 259 landed, what a student can do today, each closeout item done, not applicable or blocked, the cohesion record.",
       "owner": 260,
+      "added": "2026-11-07",
       "student": false
     },
     {
@@ -1462,6 +1638,7 @@
       "kind": "record",
       "purpose": "The extragalactic and interstellar-medium closeout (Prompt 253): what 247 to 252 landed, each closeout item done or blocked, the package reading step, the cohesion record.",
       "owner": 253,
+      "added": "2026-11-06",
       "student": false
     },
     {
@@ -1469,6 +1646,7 @@
       "kind": "feature",
       "purpose": "The late-time FLRW kernel (radiation, constant w, closed universes, refusals, contours): equations, domain, validation, failed legs, follow-up and the age-only published-age leg B6 (Prompt 255).",
       "owner": 255,
+      "added": "2026-11-06",
       "student": false
     },
     {
@@ -1476,6 +1654,7 @@
       "kind": "gate",
       "purpose": "Supernova likelihood gate: split-covariance decision, planes, oracle, 58 legs, verdict A (narrow); follow-up against the release covariance and published value, verdict FC (Prompt 256).",
       "owner": 256,
+      "added": "2026-11-06",
       "student": false
     },
     {
@@ -1483,6 +1662,7 @@
       "kind": "gate",
       "purpose": "Baryon acoustic oscillation gate: the observable as a form, the sound-horizon integral, 44 legs and a 19-row follow-up on the BOSS DR12 table and Eisenstein-Hu formulas, verdict C (Prompt 257).",
       "owner": 257,
+      "added": "2026-11-06",
       "student": false
     },
     {
@@ -1490,6 +1670,7 @@
       "kind": "gate",
       "purpose": "Structure-growth gate: the growth equation and its domain, shape, variance and Jeans criterion, 31 legs, oracle, verdict C by the committed function; no imagery (Prompt 259).",
       "owner": 259,
+      "added": "2026-11-07",
       "student": false
     },
     {
@@ -1497,6 +1678,7 @@
       "kind": "gate",
       "purpose": "Censoring and truncation gate: a product-limit estimator with an independence check, the Lynden-Bell estimator, V/Vmax; verdict B-KM, follow-up C2c passes, C2o left failing (Prompt 262).",
       "owner": 262,
+      "added": "2026-11-07",
       "student": false
     },
     {
@@ -1504,6 +1686,7 @@
       "kind": "gate",
       "purpose": "Population inference gate: one selected-population likelihood, 52 legs, verdict B (Prompt 264); its follow-up (D8b, penalty convergence) passes 12 of 12 judged legs, real-data legs not run.",
       "owner": 264,
+      "added": "2026-11-07",
       "student": false
     },
     {
@@ -1511,6 +1694,7 @@
       "kind": "feature",
       "purpose": "Experiment runner II: the experiment/2 record (named streams, fork per trial, kernel versions), ensembles, injection, bootstrap, pool client, replay to the digit, validation (Prompt 265).",
       "owner": 265,
+      "added": "2026-11-07",
       "student": false
     },
     {
@@ -1518,6 +1702,7 @@
       "kind": "feature",
       "purpose": "The crossmatch kernel: epoch propagation, refusals on rounded positions, nearest-neighbour match, shifted-match false rate, joined-table record, populations, validation, failed legs (Prompt 263).",
       "owner": 263,
+      "added": "2026-11-07",
       "student": false
     },
     {
@@ -1525,6 +1710,7 @@
       "kind": "gate",
       "purpose": "Angular clustering gate: Landy-Szalay on a random catalog, detectable size, pair-count cost against the worker cap, the committed legs and the verdict (Prompt 263 Part B).",
       "owner": 263,
+      "added": "2026-11-07",
       "student": false
     },
     {
@@ -1532,6 +1718,7 @@
       "kind": "gate",
       "purpose": "Microwave background angular-scale gate: r_s(z*), D_M(z*), theta*, the peak relation and claim rule, 42 legs, verdict C; spectrum, grid and cited formulas NOT RUN (Prompt 258).",
       "owner": 258,
+      "added": "2026-11-07",
       "student": false
     },
     {
@@ -1539,6 +1726,7 @@
       "kind": "record",
       "purpose": "The inference closeout (Prompt 266): what 261 to 265 landed, the methods sequence as it exists, each closeout item done or held, the package change, the cohesion record.",
       "owner": 266,
+      "added": "2026-11-07",
       "student": false
     },
     {
@@ -1546,6 +1734,7 @@
       "kind": "record",
       "purpose": "The advanced closeout (Prompt 274): what 268 to 273 landed, the 3-D and mission guide sequence, the sequence not created, the package's reading steps, the acceptance audit, the cohesion record.",
       "owner": 274,
+      "added": "2026-11-10",
       "student": false
     },
     {
@@ -1553,7 +1742,52 @@
       "kind": "record",
       "purpose": "The second cohesion pass (Prompt 287): before and after inventory, the folded sequence, divided topic pages, tuned search, the ledger of additions since 2.0.0 and the internal review.",
       "owner": 287,
+      "added": "2026-11-11",
       "student": false
+    }
+  ],
+  "archive": [
+    {
+      "file": "ENERGY_TAB_FEATURE.md",
+      "archived": "2026-10-17",
+      "prompt": 128,
+      "supersededBy": "OBJECT_INSPECTOR.md",
+      "reason": "the note written when the energy tab was added; the inspector has its own document"
+    },
+    {
+      "file": "IMPLEMENTATION_CHECKLIST.md",
+      "archived": "2026-10-17",
+      "prompt": 128,
+      "supersededBy": "the shipped investigations Listening to Spacetime, A Universe of Stars and Lives of Stars",
+      "reason": "a working file whose two work packages both shipped"
+    },
+    {
+      "file": "PERFORMANCE_OPTIMIZATIONS_SUMMARY.md",
+      "archived": "2026-11-11",
+      "prompt": 289,
+      "supersededBy": "PERFORMANCE_PROFILING_GUIDE.md, npm run perf and tools/perf-thresholds.json",
+      "reason": "a historical record of one rendering and memory round; its numbers are the record and are not updated"
+    },
+    {
+      "file": "UI_PERFORMANCE_AUDIT.md",
+      "archived": "2026-11-11",
+      "prompt": 289,
+      "supersededBy": "npm run perf, npm run budget:check, tools/route-budgets.json and ACCESSIBILITY.md",
+      "reason": "the report of one audit with its measurements; the instruments now hold what it measured by hand"
+    },
+    {
+      "file": "SCENARIO_FIXES.md",
+      "archived": "2026-11-11",
+      "prompt": 289,
+      "supersededBy": "npm run validate:scenarios and the scenario section of CONTRIBUTING.md",
+      "reason": "the report of one fixing pass made when the catalog held 43 scenarios"
+    },
+    {
+      "file": "SCENARIO_GALLERY.md",
+      "archived": "2026-11-11",
+      "prompt": 289,
+      "supersededBy": "README.md, CONTRIBUTING.md, js/scenarioBrowser.js and npm run thumbnails:check",
+      "reason": "the description of one change made when the catalog held 43 scenarios; the filtering rule moved to README.md"
     }
   ]
 }

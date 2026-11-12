@@ -1,5 +1,7 @@
 # Fixing the scenarios the audit caught
 
+> **Archived 2026-11-11** (Prompt 289). Superseded by `npm run validate:scenarios` (the conservation audit, which runs every scenario) and by the scenario section of [`CONTRIBUTING.md`](../../CONTRIBUTING.md). Kept for the record, unchanged below except that its relative links now point from this folder; links into it from the repository root were checked and moved with it.
+
 > **Historical record.** This is the report of one fixing pass, made when the
 > catalog held 43 scenarios, with the before-and-after measurements taken then.
 > Its counts are the counts of that moment and are deliberately not updated;
