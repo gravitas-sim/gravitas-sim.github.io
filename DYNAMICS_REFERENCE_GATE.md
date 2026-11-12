@@ -164,3 +164,5 @@ fixtures with their generators, labelled, shipped nowhere.
 4. Replace family S's starting point with an equilibrium (a distribution function sampled in the plane) so that a
    later run measures relaxation, not violent relaxation?
 5. Fetch the Harris table (leg B1) and verify the cited coefficients.
+
+<!-- Listed in DOCUMENTS.md. -->
