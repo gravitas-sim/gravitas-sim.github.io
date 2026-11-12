@@ -275,3 +275,5 @@ list ([GALAXY_SPECTRA.md](GALAXY_SPECTRA.md)) applies to the correlation.
 All unverified (from memory, for Carl to read before any lesson cites them): Baldwin, Phillips and Terlevich (1981) for the
 two-ratio diagram; Kauffmann et al. (2003) and Kewley et al. (2001) for dividing curves of the form used here; Eddington (1926)
 for the limit. The kernel's equations are standard and derived above; no number is taken from any of them.
+
+<!-- Listed in DOCUMENTS.md. -->
