@@ -833,3 +833,5 @@ One row per item; the kit prints a blank copy (section 7 of
 
 Scale: 1 = not aligned or unclear, 2 = weakly, 3 = mostly, 4 = fully. After
 the twelve rows: the objectives the set should assess and does not.
+
+<!-- Listed in DOCUMENTS.md. -->
