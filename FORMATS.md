@@ -2,7 +2,7 @@
 
 # Formats
 
-Every versioned format Gravitas reads or writes: 73 of them. 73 have a JSON Schema in `sdk/schemas`, and 17 read their previous version rather than only their own.
+Every versioned format Gravitas reads or writes: 73 of them. 73 have a JSON Schema in `sdk/schemas`, and 18 read their previous version rather than only their own.
 
 Roadmap II Prompt 61 puts each under one rule:
 - a JSON Schema;
@@ -68,7 +68,7 @@ The columns:
 | gravitas.course-pack (builder form) | format, formatVersion | 2 | js/course/pack.js migrateCoursePack | download, localStorage, repository, extension archive | migrates v1 | refused, in words: a /3 file is "made by a newer version" | [yes](sdk/schemas/course-pack-2.schema.json) |
 | gravitas.course-pack (builder form, with a profile, a term or outcomes) | format, formatVersion | 3 | js/course/pack.js validateCoursePack, packVersion | download, localStorage, repository, extension archive | migrates v1 and reads v2 as it is; written only when /2 cannot say it | refused, in words | [yes](sdk/schemas/course-pack-3.schema.json) |
 | course home link | link prefix c | 3 | js/course/links.js readCourseFragment | link | migrates c1 and reads c2 as it is; c3 only for a pack that needs /3 | refused by reason code | [yes](sdk/schemas/course-home-link-3.schema.json) |
-| investigation link | link prefix i | 1 | js/composer/packLink.js readPackFragment | link | v1 only | refused by reason code | [yes](sdk/schemas/investigation-link-1.schema.json) |
+| investigation link | link prefix i | 2 | js/composer/packLink.js readPackFragment | link | reads v1 (i1) as it is; i2 only for a pack that needs /2 | refused by reason code | [yes](sdk/schemas/investigation-link-2.schema.json) |
 | gravitas.course-manifest | format, formatVersion | 1 | none: written, never read | download | v1 only | nothing reads it | [yes](sdk/schemas/course-manifest-1.schema.json) |
 | gravitas.capability-package | format, formatVersion | 1 | js/platform/manifest.js validateManifest | repository, IndexedDB | v1 only | refused, in words | [yes](sdk/schemas/capability-package-1.schema.json) |
 | gravitas.scenario-pack | format, formatVersion | 1 | js/platform/scenario.js migrateScenarioPack | download, localStorage, link | v1 only; reads orbital-system/1 | refused, in words | [yes](sdk/schemas/scenario-pack-1.schema.json) |

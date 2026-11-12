@@ -989,9 +989,9 @@ add(
 );
 
 add(
-  'investigation-link-1',
+  'investigation-link-2',
   'investigation link',
-  1,
+  2,
   { p: { format: 'gravitas.investigation-pack', formatVersion: 1 } },
   async d => {
     try {

@@ -573,12 +573,13 @@ export const FORMATS = Object.freeze([
   {
     name: 'investigation link',
     fields: 'link prefix i',
-    version: 1,
+    version: 2,
+    const: ['js/composer/packLink.js', 'PACK_LINK_VERSION'],
     owner: 'js/composer/packLink.js readPackFragment',
     persisted: 'link',
-    older: 'v1 only',
+    older: 'reads v1 (i1) as it is; i2 only for a pack that needs /2',
     newer: 'refused by reason code',
-    schema: 'investigation-link-1.schema.json',
+    schema: 'investigation-link-2.schema.json',
   },
   {
     name: 'gravitas.course-manifest',
