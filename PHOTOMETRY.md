@@ -246,3 +246,5 @@ equation); Howell, S. B. 2006, Handbook of CCD Astronomy, 2nd ed. (aperture
 photometry and sky annulus); Bradley, L. et al., photutils (Zenodo);
 Astropy Collaboration 2022, ApJ 935, 167; Harris, C. R. et al. 2020, Nature 585,
 357; Virtanen, P. et al. 2020, Nature Methods 17, 261.
+
+<!-- Listed in DOCUMENTS.md. -->
