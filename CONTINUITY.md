@@ -205,3 +205,5 @@ either owner-confirmed, in Carl's words with a date, or UNKNOWN; as of
 2026-11-12 one arrangement is confirmed (there is no second passphrase holder)
 and the rest are UNKNOWN. The repository does not infer an arrangement from
 what an account page or an API happens to show.
+
+<!-- Listed in DOCUMENTS.md. -->
