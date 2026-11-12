@@ -118,3 +118,5 @@ So on these two packs the kernel's nearest-neighbour pairs inside 1 arcsec with 
 **The citation of the shifted-match test (R3).** Wilson and Naylor 2018, section 4.2.3, estimate the false-match level of a Gaia to WISE match by moving the Gaia sources of a Galactic box by 10 degrees in longitude, matching them to the original WISE catalogue, and counting what matches (about 0.6 percent of the WISE catalogue with their probability-based match against 4 percent expected from a nearest-neighbour match). That is the same idea as the kernel's: a shifted copy has no true counterparts, so what matches is chance. The kernel's own scheme (20 radii along 8 bearings, an exact Poisson interval, the footprint correction) is not theirs, and their match is not a nearest-neighbour match; the citation supports the definition, not the numbers.
 
 **Not run.** The CDS XMatch result (above). `D5.publishedTool` as a row of `results.json` (that file is the first-run record and is untouched).
+
+<!-- Listed in DOCUMENTS.md. -->
