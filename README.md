@@ -453,7 +453,10 @@ overrides`. Component rules win on layer order alone, which is why they need
   hex value.
 - **One source of truth per fact.** Scenario titles, summaries, concept tags and
   thumbnails all live in `js/data/scenarioInfo.js` and every surface reads from
-  it. The same goes for investigation content and the habitable-zone model. Tests
+  it. The gallery filters by one concept and free text together, as an
+  intersection; search covers a scenario's key, title and summary and both the
+  ids and display names of its tags, and an unknown tag id returns nothing
+  rather than everything. The same goes for investigation content and the habitable-zone model. Tests
   enforce this in several places, and the counts in this file are written by
   `npm run docs:sync` from the catalog rather than typed.
 - **User-visible text is a message id.** Interface strings live in
@@ -653,15 +656,16 @@ part was built:
 | [`MASS_UNITS.md`](MASS_UNITS.md)                                   | How masses are stored, displayed and converted                                                                                                 |
 | [`DESIGN_SYSTEM.md`](DESIGN_SYSTEM.md)                             | The shared controls: field, input, select, textarea, file, range, toolbar, buttons; their states, tokens and accessibility                     |
 | [`NUMBER_TYPOGRAPHY.md`](NUMBER_TYPOGRAPHY.md)                     | How numbers are formatted, and why                                                                                                             |
-| [`SCENARIO_GALLERY.md`](SCENARIO_GALLERY.md)                       | The gallery, its concept tags and its thumbnails                                                                                               |
 | [`OFFLINE_AND_LOW_END.md`](OFFLINE_AND_LOW_END.md)                 | Offline support and the low-end quality tier: what is precached and why, which of the <!--fact:investigations-->124<!--/fact--> investigations, and what a 2019 Chromebook actually gets |
 | [`PERFORMANCE_PROFILING_GUIDE.md`](PERFORMANCE_PROFILING_GUIDE.md) | How to profile a change                                                                                                                        |
 
-Three documents are records of finished work rather than descriptions of the
-application, and are labeled as such at the top:
-[`UI_PERFORMANCE_AUDIT.md`](UI_PERFORMANCE_AUDIT.md),
-[`PERFORMANCE_OPTIMIZATIONS_SUMMARY.md`](PERFORMANCE_OPTIMIZATIONS_SUMMARY.md)
-and [`SCENARIO_FIXES.md`](SCENARIO_FIXES.md).
+Four documents that were records of finished work, not descriptions of the
+application, are kept in [`docs/archive/`](docs/archive/), each headed with the
+date it was archived and what superseded it:
+[`UI_PERFORMANCE_AUDIT.md`](docs/archive/UI_PERFORMANCE_AUDIT.md),
+[`PERFORMANCE_OPTIMIZATIONS_SUMMARY.md`](docs/archive/PERFORMANCE_OPTIMIZATIONS_SUMMARY.md),
+[`SCENARIO_FIXES.md`](docs/archive/SCENARIO_FIXES.md) and
+[`SCENARIO_GALLERY.md`](docs/archive/SCENARIO_GALLERY.md).
 
 ---
 

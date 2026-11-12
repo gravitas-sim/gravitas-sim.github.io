@@ -286,9 +286,29 @@ export const GRAPH = Object.freeze([
       'tools/generate-graph.mjs',
     ],
     outputs: ['DOCUMENTS.md'],
+    // The archive list and the map section of MAINTAINER_ONBOARDING.md are
+    // written by the same tool, between its own markers (Prompt 289).
+    regions: ['MAINTAINER_ONBOARDING.md'],
     after: [],
     notes:
-      'The table is hand-written (tools/docs-map.json); DOCUMENTS.md is written from it and from the tree. A new root document needs a row; `node tools/docs-map.mjs --seed` fills its student flag.',
+      'The table is hand-written (tools/docs-map.json); DOCUMENTS.md is written from it and from the tree, and so is the marked block in MAINTAINER_ONBOARDING.md. A new root document needs a row; `node tools/docs-map.mjs --seed` fills its student flag.',
+  },
+  {
+    // Prompt 289 decided what Prompt 127 left open: the conformance report is a
+    // plain function of two JSON files and the package version, so it is a node.
+    id: 'conformance',
+    generate: 'node tools/conformance.mjs --write',
+    check: 'node tools/conformance.mjs --check',
+    inputs: [
+      'tools/conformance/product.json',
+      'tools/conformance/criteria.json',
+      'tools/conformance.mjs',
+      'package.json',
+    ],
+    outputs: ['ACCESSIBILITY_CONFORMANCE.md'],
+    after: [],
+    notes:
+      'The statuses and remarks are human judgments kept as data in tools/conformance/*.json; the tool only lays them out. Never edit the report by hand.',
   },
   {
     // After everything that rewrites a precached file: the manifest hashes

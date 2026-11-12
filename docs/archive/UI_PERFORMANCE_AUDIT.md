@@ -1,5 +1,7 @@
 # Gravitas: UI, performance and quality audit
 
+> **Archived 2026-11-11** (Prompt 289). Superseded by the instruments that now hold what it measured by hand: `npm run perf`, `npm run budget:check` and `tools/route-budgets.json`, and the accessibility record in [`ACCESSIBILITY.md`](../../ACCESSIBILITY.md). Kept for the record, unchanged below except that its relative links now point from this folder; links into it from the repository root were checked and moved with it.
+
 > **Historical record.** This is the report of one audit, with the measurements
 > taken at that time on that machine. The numbers are the record and are not
 > updated as the application changes; for what the build produces today, run
@@ -277,11 +279,11 @@ whether it happened are both part of the record._
   `scenario-browser` rules remain in the stylesheets.
 - ~~**Extract the object inspector from `ui.js`**, once the energy-chart and drag
   couplings are understood.~~ **Done.** It is `js/inspectorPanel.js`; see
-  [`OBJECT_INSPECTOR.md`](OBJECT_INSPECTOR.md).
+  [`OBJECT_INSPECTOR.md`](../../OBJECT_INSPECTOR.md).
 - ~~**Measure the compositor**, not just the main thread.~~ **Done** (Prompt 112).
   `npm run perf -- --trace` separates script, layout, paint and commit from the
   compositor, raster and GPU-process time and reports how busy each thread was;
   what it can and cannot show is in
-  [`OFFLINE_AND_LOW_END.md`](OFFLINE_AND_LOW_END.md). It could not tell the
+  [`OFFLINE_AND_LOW_END.md`](../../OFFLINE_AND_LOW_END.md). It could not tell the
   page-filter removal above from a saving in script then, and the removal is
   still reported as dead-code removal, since the measurement was made after it.

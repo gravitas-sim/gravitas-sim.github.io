@@ -596,12 +596,15 @@ lines around it, which splits the paragraph in three on the rendered page.
 committed as `Gravitas_User_Manual.pdf`. Its counts come from the same
 generator, as `manual/facts.tex`.
 
-**Three documents are history, not description.**
-`UI_PERFORMANCE_AUDIT.md`, `PERFORMANCE_OPTIMIZATIONS_SUMMARY.md` and
-`SCENARIO_FIXES.md` record work that was done at a point in time, with the
-measurements taken then. Do not update their numbers to match the present — the
-numbers are the record. If a recommendation in one of them has since been
-carried out, mark it as superseded and say where the work landed.
+**Historical records are archived, not maintained.** A document that records
+work done at a point in time, with the measurements taken then, moves to
+`docs/archive/` with a header naming the date and what superseded it; its
+numbers are the record, so do not update them to match the present. Four have
+moved so far (`UI_PERFORMANCE_AUDIT.md`, `PERFORMANCE_OPTIMIZATIONS_SUMMARY.md`,
+`SCENARIO_FIXES.md`, `SCENARIO_GALLERY.md`). The archive is listed in
+`tools/docs-map.json` and `DOCUMENTS.md`, and `npm run docs-map:check` fails on
+an archived file the list does not name. A gate document stays at the root
+while a register row cites it.
 
 ---
 
