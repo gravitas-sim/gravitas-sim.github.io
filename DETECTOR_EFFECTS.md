@@ -143,3 +143,5 @@ peak share and the aperture variation), `frame.js` (the `effects` field), `js/ef
 `js/i18n/en.effects.js` and `es.effects.js`, `tools/detector-effects-validate.mjs`, `tools/detector-effects-oracle/oracle.py`,
 `tests/detectorEffects.test.js`, `tests/saturatedStarLessons.test.js`, `e2e/saturatedStarLesson.spec.js`, the register rows
 D-R10-211-01 onward.
+
+<!-- Listed in DOCUMENTS.md. -->
