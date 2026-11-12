@@ -13,6 +13,39 @@ the release rather than in the tag.
 
 ## [Unreleased]
 
+## [3.0.0] - 2026-11-12
+
+**Gravitas 3.0.0** is the release of the `v3` staging branch as it stood on
+2026-11-12, with `main` and `v3` at the same commit. It is the first release
+since 2.0.0 that is archived on Zenodo: 2.1.0 (2026-10-24) is a git tag only,
+with no GitHub release, so it has no archive and no version DOI.
+
+**Version number.** 3.0.0 is the version the format boundary asks for
+([RELEASING.md](RELEASING.md), [FORMATS.md](FORMATS.md)): a 2.0.0 build refuses
+some of what this version writes. A course, a lesson pack, a question bank, a
+result envelope, a link or a workspace file that needs nothing new opens in
+2.0.0 and in 3.0.0 alike. A 2.0.0 build refuses, by their version number,
+`gravitas.course-pack/2` to `/3`, `gravitas.artifact/1` to `/2`,
+`gravitas.investigation-pack/1` to `/2`, `gravitas.experiment/1` to `/2`,
+course home link `c2` to `c3`, investigation link `i1` to `i2` and
+`gravitas.question-bank/1` to `/2`, and it refuses an Observatory workspace
+with image marks as nested too deep. To hand a file to someone still on
+2.0.0, leave out what needs 3.0.0 and it is written in the older form. Every
+format keeps its reader; no support period has started. Nothing is converted
+in place. The entries below are this release's notes.
+
+**The tag.** The release is tagged `v3.0`. That annotated tag was first made at
+commit `f9277ff8`, whose tree still declared version 2.1.0 in `package.json`,
+`CITATION.cff`, `.zenodo.json` and `tools/project-metadata.mjs`; it is moved,
+once, to the `main` commit that carries this section and those files, so the
+tagged tree declares 3.0.0. RELEASING.md, "Recovering from `v3.0`", says what
+that means for anyone who unpacked the tag before it moved.
+
+**The DOI.** `RELEASE.doi` is null until Zenodo mints the 3.0.0 version DOI,
+so `CITATION.cff` and `.zenodo.json` claim none for this version and the
+README citation block names the concept DOI. A follow-up change records it
+after the release exists, as for 2.0.0.
+
 ### Added
 
 - Handover readiness (Prompt 293; register rows D-R10-293-01 to 03): the
@@ -2197,7 +2230,8 @@ listed here because this is the release that first carries it.
 - `aria-hidden="true"` from the 3-D viewport, which had been hiding two
   focusable buttons from assistive technology.
 
-[Unreleased]: https://github.com/gravitas-sim/gravitas-sim.github.io/compare/v2.1.0...HEAD
+[Unreleased]: https://github.com/gravitas-sim/gravitas-sim.github.io/compare/v3.0...HEAD
+[3.0.0]: https://github.com/gravitas-sim/gravitas-sim.github.io/compare/v2.1.0...v3.0
 [2.1.0]: https://github.com/gravitas-sim/gravitas-sim.github.io/compare/v2.0.0...v2.1.0
 [2.0.0]: https://github.com/gravitas-sim/gravitas-sim.github.io/compare/v1.0.0...v2.0.0
 [1.0.0]: https://github.com/gravitas-sim/gravitas-sim.github.io/releases/tag/v1.0.0

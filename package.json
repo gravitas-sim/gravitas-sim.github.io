@@ -1,6 +1,6 @@
 {
   "name": "gravitas-sim.github.io",
-  "version": "2.1.0",
+  "version": "3.0.0",
   "main": "index.js",
   "description": "An interactive astrophysics sandbox and astronomy teaching tool that runs entirely in the browser.",
   "scripts": {
