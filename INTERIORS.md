@@ -79,3 +79,5 @@ against its source.
 - The kernel is imported by no page; nothing about its use in a lesson, a plot or a browser was exercised.
 - Equilibrium temperatures carry no uncertainty: the Prompt 200 albedo table states none.
 - Part B is not built (INTERIORS_GATE.md, verdict C as committed).
+
+<!-- Listed in DOCUMENTS.md. -->
