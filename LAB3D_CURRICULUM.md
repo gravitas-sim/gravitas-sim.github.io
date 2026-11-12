@@ -115,3 +115,5 @@ to the hand-worked physics above.
 | `js/data/lab3dAnswerKey.js`, `tools/lab3d-guides-key.mjs` | The key and the reference run that writes it |
 | `js/lab3dGuideDocs.js` | The instructor guide and answer key |
 | `tests/lab3dGuides.test.js`, `e2e/lab3dGuides.spec.js` | Rules, words, key, physics; the walks in a browser |
+
+<!-- Listed in DOCUMENTS.md. -->
