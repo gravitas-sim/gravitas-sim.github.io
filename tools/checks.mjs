@@ -988,6 +988,10 @@ export const CI_SETUP_STEPS = [
   // decided (D-R10-01). It checks nothing, and tools/ci-cost.mjs has its own
   // tests.
   'Write the record',
+  // Prompt 292: the fuller record, and the Jest counts it reads. They check
+  // nothing; tests/observability.test.js pins the job's shape.
+  'Write the observability record',
+  'Keep the Jest counts for the cost record',
 ];
 
 /** And the commands that are setup wherever they appear. */
