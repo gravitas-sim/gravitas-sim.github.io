@@ -338,3 +338,5 @@ GRAVITAS_E2E_PORT=4199 npx playwright test e2e/resonance.spec.js
 - Murray & Dermott, *Solar System Dynamics* (1999), chapters 3, 8 and 9.
 - JPL Solar System Dynamics, planetary satellite mean elements and physical
   parameters; NASA planetary fact sheets.
+
+<!-- Listed in DOCUMENTS.md. -->
