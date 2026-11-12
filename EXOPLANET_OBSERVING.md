@@ -239,3 +239,5 @@ than chosen - `SOLAR_MASS_UNIT / JUPITER_MASSES_PER_SOLAR_MASS` in
 `js/physics.js`, from the ratio in `js/constants.js` - and the physics validation
 suite checks that it reproduces the solar-mass anchor. [MASS_UNITS.md](MASS_UNITS.md)
 records it, along with the Earth unit that had the same kind of error.
+
+<!-- Listed in DOCUMENTS.md. -->
