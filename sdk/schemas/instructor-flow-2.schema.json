@@ -1,0 +1,47 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://gravitas-sim.online/sdk/schemas/instructor-flow-2.schema.json",
+  "title": "gravitas.instructor-flow/2",
+  "description": "The flow of a lesson an instructor reads in the answer key, in js/data/instructorFlow.js: for each lesson id, a list of blocks, each from one step sid to another and the text for that run of steps. Version 1 named the run by step numbers (`steps`, such as \"18-22\"); js/instructorFlow.js readFlow() reads it by looking the numbers up in the lesson and drops, with a note, a block whose steps are not there. A record of a newer version is refused in words (readVersioned). FORMATS.md lists it.",
+  "type": "object",
+  "required": [
+    "format",
+    "formatVersion",
+    "lessons"
+  ],
+  "properties": {
+    "format": {
+      "const": "gravitas.instructor-flow"
+    },
+    "formatVersion": {
+      "const": 2
+    },
+    "lessons": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "required": [
+            "from",
+            "to",
+            "text"
+          ],
+          "properties": {
+            "from": {
+              "type": "string",
+              "minLength": 1
+            },
+            "to": {
+              "type": "string",
+              "minLength": 1
+            },
+            "text": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    }
+  }
+}

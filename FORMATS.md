@@ -2,7 +2,7 @@
 
 # Formats
 
-Every versioned format Gravitas reads or writes: 69 of them. 69 have a JSON Schema in `sdk/schemas`, and 15 read their previous version rather than only their own.
+Every versioned format Gravitas reads or writes: 73 of them. 73 have a JSON Schema in `sdk/schemas`, and 17 read their previous version rather than only their own.
 
 Roadmap II Prompt 61 puts each under one rule:
 - a JSON Schema;
@@ -75,6 +75,10 @@ The columns:
 | gravitas.catalog | format, formatVersion | 1 | js/catalogPage.js load | repository | v1 only | refused | [yes](sdk/schemas/catalog-1.schema.json) |
 | gravitas.library | format, formatVersion | 1 | js/library/format.js checkLibrary | repository | v1 only | refused | [yes](sdk/schemas/library-1.schema.json) |
 | gravitas.catalog-curation | format, formatVersion | 1 | tools/catalog.mjs readCuration | repository | not checked | not checked | [yes](sdk/schemas/catalog-curation-1.schema.json) |
+| gravitas.instructor-expectations | format, formatVersion | 2 | js/instructorExpectations.js readExpectations | repository (js/data/instructorExpectations.js) | migrates v1: the text keyed by step number is keyed by sid, and a step that is gone is dropped with a note | refused, in words | [yes](sdk/schemas/instructor-expectations-2.schema.json) |
+| gravitas.instructor-flow | format, formatVersion | 2 | js/instructorFlow.js readFlow | repository (js/data/instructorFlow.js) | migrates v1: the blocks named by step numbers are named by sid, and a block whose steps are gone is dropped with a note | refused, in words | [yes](sdk/schemas/instructor-flow-2.schema.json) |
+| gravitas.library-search | format, formatVersion | 1 | js/libraryPage.js, js/library/search.js | repository (library/search-index.json, generated) | v1 only | not checked | [yes](sdk/schemas/library-search-1.schema.json) |
+| gravitas.sun-frames | format, formatVersion | 1 | js/sunWidgets.js, js/kernels/sun/sequence.js | repository (frames/sun-2024-05.json, generated) | v1 only | not checked | [yes](sdk/schemas/sun-frames-1.schema.json) |
 | gravitas.extension-archive | none (the archive structure) | 1 | sdk/lib/archive.mjs, js/catalog/archive.js | repository, download | structure checked, not version | structure checked, not version | [yes](sdk/schemas/extension-archive-1.schema.json) |
 | gravitas-embed messages | protocol, version | 1 | js/embedMessages.js readMessage | memory | v1 only | refused by error code | [yes](sdk/schemas/embed-messages-1.schema.json) |
 | gravitas-compute messages | protocol, version | 1 | js/compute/messages.js readMessage | memory | v1 only | refused by error code (unsupported-version) | [yes](sdk/schemas/compute-messages-1.schema.json) |
@@ -175,6 +179,10 @@ An older build is a real reader: a browser still running 2.0.0's cached code, a 
 | gravitas.catalog | none yet | not yet exercised | policy (above) |
 | gravitas.library | none yet | not yet exercised | policy (above) |
 | gravitas.catalog-curation | none yet | not yet exercised | policy (above) |
+| gravitas.instructor-expectations | none yet | not yet exercised | policy (above) |
+| gravitas.instructor-flow | none yet | not yet exercised | policy (above) |
+| gravitas.library-search | none yet | not yet exercised | policy (above) |
+| gravitas.sun-frames | none yet | not yet exercised | policy (above) |
 | gravitas.extension-archive | none yet | not yet exercised | policy (above) |
 | gravitas-embed messages | none yet | not yet exercised | policy (above) |
 | gravitas-compute messages | none yet | not yet exercised | policy (above) |
@@ -234,6 +242,17 @@ A change an older build refuses or misreads is a major version, and this is the 
 - The Observatory workspace with image marks is refused by a 2.0.0 build as nested too deep.
 - To hand a file to someone still on 2.0.0, leave out what needs 3.0.0, and it is written in the older form.
 - Every format keeps its reader; no support period has started.
+
+## The freeze (Prompt 290)
+
+Every format in the table has a JSON Schema, a `format` and a version, and a row here: 73 rows, 67 ids. The audit that froze the table found four formats the first inventory had missed (`gravitas.instructor-expectations`, `gravitas.instructor-flow`, `gravitas.library-search`, `gravitas.sun-frames`: files in the repository with a version and, for the first two, a reader of their previous version) and gave them rows and schemas; it added no format.
+
+- **No new format without a reason.** A format id the sources write under a `format` key, or as a `*_FORMAT` constant, that is not in the freeze fails `tests/formats.test.js`. A new format needs a row above, a schema, a version and a row in `DECISION_REGISTER.md`, named in `FREEZE.additions` in `tools/formats.mjs`, that says why it is a new format and not a field of an existing one. A field an older build cannot ignore is a new version of the format that has it (the 3.0.0 boundary, above), not a new format.
+- **No row without a schema.** `tests/formats.test.js` fails a row with no schema file, no version or a schema whose title is not its row, and a file in `sdk/schemas` that no row lists.
+- **A schema is held to its reader.** `tests/formatSchemasAudit.test.js` runs a corpus of changes to a good document past each reader and each schema the audit added and says, case by case, which refuses it: both; the reader alone, for a reason no schema can state (a rule across fields, a count, a reference, a digest); or the schema alone, where the reader is the older, wider door and the schema states the format as written. A reader that accepts what a schema cannot express keeps accepting it; no reader's behaviour was changed. The three reports and the observed group that nothing reads back are held to what their writers write.
+- **Not formats.** The sources write these ids under a `format` key, and nothing reads or writes them as a format: `gravitas.variables-sample`, `gravitas.something`.
+- **Schemas cost no bytes in the browser.** No page loads a schema: they are read by the tests, the SDK and an editor. The validation a page does is its reader's, as it was.
+- **Previous versions.** A format that reads a previous version has a fixture of that version in `tests/compat/previous.mjs`, read by the current reader (`tests/compat/previous.test.js`). A surface the gate retired (Prompt 165) holds nothing: the two it retired are class L, and the support period above is the policy's committed one (`PERIODS.R` in `tools/surface-gate.mjs`: twelve months deprecated, twelve read-only).
 
 ## Fields added inside a version
 

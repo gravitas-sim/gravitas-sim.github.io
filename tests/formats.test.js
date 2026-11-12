@@ -12,7 +12,7 @@ import { execFileSync } from 'node:child_process';
 import { readdirSync, readFileSync } from 'node:fs';
 import path from 'node:path';
 
-import { DOC, FORMATS, render } from '../tools/formats.mjs';
+import { DOC, FORMATS, FREEZE, render } from '../tools/formats.mjs';
 import * as registry from '../js/names.js';
 
 const id = f => f.name.replace(/\s*\(.*\)$/, '');
@@ -79,4 +79,105 @@ test('every format past version 1 reads its previous version', () => {
       format: f.name,
       previous: expect.stringMatching(/^(migrates|reads v1)/),
     });
+});
+
+// --- The freeze (Roadmap III Prompt 290) ------------------------------------
+// The audit gave every format a schema and a version, and the table stops
+// growing without a reason: a format id the sources write that the freeze does
+// not hold needs a row, a schema, a version and a register row that says why
+// it is a format of its own and not a field of one that is there.
+
+const ids = FORMATS.map(id);
+
+test('every row has a version and a schema that is a file', () => {
+  for (const f of FORMATS) {
+    expect({
+      format: f.name,
+      version: Number.isInteger(f.version) && f.version >= 1,
+    }).toEqual({
+      format: f.name,
+      version: true,
+    });
+    expect({ format: f.name, schema: typeof f.schema === 'string' }).toEqual({
+      format: f.name,
+      schema: true,
+    });
+    expect({
+      format: f.name,
+      there: readdirSync('sdk/schemas').includes(f.schema),
+    }).toEqual({
+      format: f.name,
+      there: true,
+    });
+  }
+});
+
+test('the freeze holds every format, and a format cannot leave it without a trace', () => {
+  const frozen = new Set(FREEZE.formats);
+  expect(FREEZE.formats.length).toBe(
+    new Set(ids).size - Object.keys(FREEZE.additions).length
+  );
+  for (const name of FREEZE.formats)
+    expect({ name, row: ids.includes(name) }).toEqual({ name, row: true });
+  for (const name of new Set(ids))
+    expect({
+      name,
+      accounted: frozen.has(name) || name in FREEZE.additions,
+    }).toEqual({
+      name,
+      accounted: true,
+    });
+});
+
+test('a format added after the freeze has a register row that says why it is new', () => {
+  const register = readFileSync('DECISION_REGISTER.md', 'utf8');
+  for (const [name, row] of Object.entries(FREEZE.additions)) {
+    const line = register.split('\n').find(l => l.startsWith(`| ${row} |`));
+    expect({ name, row, there: !!line }).toEqual({ name, row, there: true });
+    expect({
+      name,
+      row,
+      says: line.includes(name) && /rather than an extension of/.test(line),
+    }).toEqual({
+      name,
+      row,
+      says: true,
+    });
+  }
+});
+
+test('every format id a source writes under a format key is a row, or a recorded non-format', () => {
+  const out = execFileSync(
+    'git',
+    [
+      'grep',
+      '-hoE',
+      "\\bformat\\s*(:|===|!==)\\s*'gravitas[.-][a-z0-9.-]+'",
+      '--',
+      'js',
+      'tools',
+      'sdk',
+    ],
+    { encoding: 'utf8' }
+  );
+  const found = [
+    ...new Set(
+      [...out.matchAll(/'(gravitas[.-][a-z0-9.-]+)'/g)].map(m => m[1])
+    ),
+  ];
+  // A search that matched nothing would pass everything.
+  expect(found.length).toBeGreaterThan(20);
+  const known = new Set(ids);
+  for (const name of found)
+    expect({
+      name,
+      accounted: known.has(name) || name in FREEZE.notFormats,
+    }).toEqual({
+      name,
+      accounted: true,
+    });
+  for (const [name, why] of Object.entries(FREEZE.notFormats)) {
+    expect({ name, row: known.has(name) }).toEqual({ name, row: false });
+    expect(why.length).toBeGreaterThan(30);
+  }
 });

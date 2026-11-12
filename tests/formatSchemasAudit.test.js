@@ -25,6 +25,7 @@
 // =============================================================================
 
 import { describe, test, expect, beforeEach } from '@jest/globals';
+import { Buffer } from 'node:buffer';
 import { webcrypto } from 'node:crypto';
 import { readFileSync, readdirSync } from 'node:fs';
 import { createHash } from 'node:crypto';
@@ -62,6 +63,10 @@ import { validateEntry } from '../js/notebook/entry.js';
 import { checkEvidence, ledgerDigest } from '../js/submission/ledgerDigest.js';
 import { readCourseFragment } from '../js/course/links.js';
 import { encodeTagged } from '../js/shareState.js';
+import { readExpectations } from '../js/instructorExpectations.js';
+import { readFlow } from '../js/instructorFlow.js';
+import EXPECTATIONS from '../js/data/instructorExpectations.js';
+import FLOW from '../js/data/instructorFlow.js';
 import { readPackFragment } from '../js/composer/packLink.js';
 import { readEmbedOptions } from '../js/embedOptions.js';
 import { Store, memoryBackend } from '../js/storage/index.js';
@@ -71,7 +76,7 @@ import { readResume } from '../js/storage/local.js';
 import { readTerms } from '../js/instructorCourseTerms.js';
 import * as collections from '../js/library/collections.js';
 import { readWeek } from '../js/welcome.js';
-import { KEY_RESUME, KEY_TERMS, KEY_FIRST_WEEK } from '../js/names.js';
+import { KEY_RESUME, KEY_TERMS } from '../js/names.js';
 import { INTRO_ASTRONOMY } from '../js/data/courses/intro-astronomy.js';
 import { pack as packArchive } from '../sdk/lib/archive.mjs';
 import { readTar } from '../js/catalog/archive.js';
@@ -450,9 +455,9 @@ const week = {
   ],
 };
 
-/** A record in a localStorage key, read back by `read`: true when nothing was dropped. */
+/** A record in a globalThis.localStorage key, read back by `read`: true when nothing was dropped. */
 const kept = (key, read, count) => doc => {
-  localStorage.setItem(key, JSON.stringify(doc));
+  globalThis.localStorage.setItem(key, JSON.stringify(doc));
   return read().length === count(doc);
 };
 
@@ -859,7 +864,7 @@ add(
   1,
   { v: 1, entries: [entry] },
   d => {
-    localStorage.setItem(NOTEBOOK_KEY, JSON.stringify(d));
+    globalThis.localStorage.setItem(NOTEBOOK_KEY, JSON.stringify(d));
     const r = loadNotebook();
     return (
       r.ok &&
@@ -1023,7 +1028,7 @@ add(
     parent: 'https://example.org',
   },
   d => {
-    const r = readEmbedOptions(new URLSearchParams(d));
+    const r = readEmbedOptions(new globalThis.URLSearchParams(d));
     return r.version === 1 && r.ignored.length === 0;
   },
   [
@@ -1087,7 +1092,7 @@ add('made-1', 'gravitas.made', 1, madeScenario, d => readMade(d).ok, [
   [
     'fine',
     'an experiment',
-    d =>
+    () =>
       as(
         made('experiment', {
           experiment: { hash: 'h', result: { manifest: {} } },
@@ -1587,7 +1592,7 @@ add(
   planes,
   async d => {
     const text = JSON.stringify(d);
-    const bytes = new TextEncoder().encode(text);
+    const bytes = new globalThis.TextEncoder().encode(text);
     try {
       await readFrames(
         bytes.buffer,
@@ -1663,11 +1668,117 @@ add('extension-archive-1', 'gravitas.extension-archive', 1, listing, null, [
   bad('a size below zero', d => (d.entries[1].size = -1)),
 ]);
 
+// --- Formats the audit found the first inventory had missed -------------------
+
+const steps = () => [{ sid: 'guess' }, { sid: 'check' }];
+add(
+  'instructor-expectations-2',
+  'gravitas.instructor-expectations',
+  2,
+  {
+    format: 'gravitas.instructor-expectations',
+    formatVersion: 2,
+    lessons: { tides: { guess: 'About 12 hours', check: 'Twice a day' } },
+  },
+  d => readExpectations(d, steps).ok,
+  [
+    ['fine', 'no lessons', d => (d.lessons = {})],
+    ['both', 'another format', d => (d.format = 'gravitas.instructor-flow')],
+    ['both', 'a later version', d => (d.formatVersion = 3)],
+    [
+      'lenient',
+      'version 1, keyed by step number',
+      d => (
+        (d.formatVersion = 1),
+        (d.lessons = { tides: { 1: 'About 12 hours' } })
+      ),
+    ],
+    [
+      'lenient',
+      'a lesson that is not a record of texts: the reader leaves the shape to the author check',
+      d => (d.lessons.tides = 'text'),
+    ],
+  ]
+);
+add(
+  'instructor-flow-2',
+  'gravitas.instructor-flow',
+  2,
+  {
+    format: 'gravitas.instructor-flow',
+    formatVersion: 2,
+    lessons: {
+      tides: [{ from: 'guess', to: 'check', text: 'Predict, then check.' }],
+    },
+  },
+  d => readFlow(d, steps).ok,
+  [
+    ['fine', 'no lessons', d => (d.lessons = {})],
+    [
+      'both',
+      'another format',
+      d => (d.format = 'gravitas.instructor-expectations'),
+    ],
+    ['both', 'a later version', d => (d.formatVersion = 3)],
+    [
+      'lenient',
+      'version 1, a block named by step numbers',
+      d => (
+        (d.formatVersion = 1),
+        (d.lessons = {
+          tides: [{ steps: '1-2', text: 'Predict, then check.' }],
+        })
+      ),
+    ],
+    [
+      'lenient',
+      'a block with no end step: the reader leaves the shape to the author check',
+      d => delete d.lessons.tides[0].to,
+    ],
+  ]
+);
+const searchIndex = JSON.parse(
+  readFileSync('library/search-index.json', 'utf8')
+);
+add(
+  'library-search-1',
+  'gravitas.library-search',
+  1,
+  {
+    format: 'gravitas.library-search',
+    formatVersion: 1,
+    objectives: {
+      'investigation:tides': {
+        en: ['Explain the tides'],
+        es: ['Explicar las mareas'],
+      },
+    },
+  },
+  null,
+  [
+    ['fine', 'no Spanish', d => delete d.objectives['investigation:tides'].es],
+    bad('another format', d => (d.format = 'gravitas.library')),
+    bad(
+      'objectives that are not text',
+      d => (d.objectives['investigation:tides'].en = [3])
+    ),
+    bad('no objectives', d => delete d.objectives),
+  ]
+);
+const sun = JSON.parse(readFileSync('frames/sun-2024-05.json', 'utf8'));
+add('sun-frames-1', 'gravitas.sun-frames', 1, sun, null, [
+  bad('another format', d => (d.format = 'gravitas.image')),
+  bad('a day with no picture digest', d => delete d.days[0].sha256),
+  bad('a day with a date that is not one', d => (d.days[0].date = 'May 4')),
+  bad('a mark on no day', d => delete d.marks.G1.marks[0].day),
+  bad('no days', d => (d.days = [])),
+]);
+
 describe('the schemas the format audit added', () => {
-  test('there are thirty-two, and each is a row of FORMATS.md without a schema before Prompt 290', () => {
-    expect(T.length).toBe(32);
+  test('there are thirty-six, and each is a row of FORMATS.md that had no schema before Prompt 290', () => {
+    expect(T.length).toBe(36);
     const rows = FORMATS.filter(f => T.some(t => t.rowName === f.name));
-    expect(rows.length).toBe(32);
+    expect(rows.length).toBe(36);
     for (const f of rows)
       expect(T.find(t => t.rowName === f.name).file + '.schema.json').toBe(
         f.schema
@@ -1699,6 +1810,15 @@ describe('the schemas the format audit added', () => {
     }
   });
 
+  test('the repository data fits the schemas of the formats the first inventory missed', () => {
+    expect(valid(schemaOf('instructor-expectations-2'), EXPECTATIONS)).toBe(
+      true
+    );
+    expect(valid(schemaOf('instructor-flow-2'), FLOW)).toBe(true);
+    expect(valid(schemaOf('library-search-1'), searchIndex)).toBe(true);
+    expect(valid(schemaOf('sun-frames-1'), sun)).toBe(true);
+  });
+
   test('both ephemeris packs the repository holds fit the ephemeris schema', () => {
     const s = schemaOf('ephemeris-pack-1');
     for (const f of readdirSync('ephemeris-packs').filter(f =>
@@ -1723,5 +1843,5 @@ describe('the schemas the format audit added', () => {
       ).toThrow();
   });
 
-  beforeEach(() => localStorage.clear());
+  beforeEach(() => globalThis.localStorage.clear());
 });
