@@ -1005,3 +1005,5 @@ npx playwright test offlineII --project=chromium   # every page offline, restora
 
 The offline spec opts back in to service workers; the rest of the suite blocks
 them, because a cache is a variable and only these tests want one.
+
+<!-- Listed in DOCUMENTS.md. -->
