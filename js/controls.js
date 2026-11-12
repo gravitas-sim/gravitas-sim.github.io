@@ -586,6 +586,16 @@ function setupShortcuts() {
     shift: true,
     run: toggleShortcutHelp,
   });
+  // Presses the explain button of the panel focus is in (js/explainers.js,
+  // fetched on the first press); js/plot/plot.js leaves the key to this list.
+  document.documentElement.dataset.helpKey = 'list';
+  registerShortcut({
+    keys: 'H',
+    match: 'h',
+    group: 'Help',
+    label: t('shortcut.explainHere'),
+    run: async () => (await import('./explainers.js')).pressHere(),
+  });
   registerShortcut({
     keys: 'Esc',
     match: 'escape',

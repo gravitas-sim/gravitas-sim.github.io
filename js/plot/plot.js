@@ -150,6 +150,28 @@ export function axes(s, { sx, sy }, number, xTitle, yTitle, yTicks = ticks) {
 
 // Each plot's clip region needs an id of its own: two plots, one page.
 let plots = 0;
+let helpKeyArmed = false;
+
+/**
+ * H presses the explain button of the panel focus is in (js/explainers.js). The
+ * application has the key in its shortcut list; a page without one gets this
+ * listener, armed by the first plot that has a button.
+ */
+function armHelpKey() {
+  if (helpKeyArmed || document.documentElement.dataset.helpKey) return;
+  helpKeyArmed = true;
+  document.addEventListener('keydown', e => {
+    if (e.key !== 'h' || e.ctrlKey || e.metaKey || e.altKey || e.shiftKey)
+      return;
+    if (
+      e.target.closest?.(
+        'input, textarea, select, [contenteditable], [aria-modal]'
+      )
+    )
+      return;
+    import('../explainers.js').then(m => m.pressHere());
+  });
+}
 
 /**
  * @param {SVGSVGElement} svg
@@ -181,6 +203,7 @@ export function createPlot(svg, hooks) {
       (await import('../explainers.js')).toggleExplainer(help, key);
     });
     svg.after(help);
+    armHelpKey();
   }
   let sx;
   let sy;

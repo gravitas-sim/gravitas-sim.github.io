@@ -9,6 +9,7 @@
 
 import { PLATFORM_API } from '../platform/catalog.generated.js';
 import { KEY_DASHED_PREFIX } from '../names.js';
+import { explainerKeyFor } from '../explainers.js';
 
 const $ = id => document.getElementById(id);
 
@@ -41,6 +42,38 @@ function fillTools() {
   $('investigationHelpNone').hidden = list.children.length > 0;
 }
 
+/**
+ * Where the record on screen came from: the instrument and its explainer, the
+ * data it names, and the scenario and seed that built the world. What a person
+ * who reads the note needs to open the same record, and nothing the reader
+ * typed.
+ *
+ * @param {object} step - The step on screen
+ * @returns {string[]} Lines of the note
+ */
+export function provenanceLines(step) {
+  const lines = [];
+  const tool = step?.tool;
+  if (tool?.id) {
+    const family = explainerKeyFor(tool.id);
+    lines.push(
+      `Instrument: ${tool.id}${family ? ` (explainer family: ${family})` : ''}`
+    );
+    const data = Object.entries(tool)
+      .filter(([k, v]) => /pack|data|source/i.test(k) && typeof v === 'string')
+      .map(([k, v]) => `${k} ${v}`);
+    if (data.length) lines.push(`Data: ${data.join('; ')}`);
+  }
+  const setup = step?.setup;
+  if (setup?.scenario) {
+    const changed = Object.keys(setup.settings ?? {});
+    lines.push(
+      `Scenario: ${setup.scenario}, seed ${setup.seed ?? 'the scenario’s own'}${changed.length ? `, settings changed: ${changed.join(', ')}` : ''}`
+    );
+  }
+  return lines;
+}
+
 /** The note, as plain text: what SUPPORT.md says a report needs. */
 export async function problemNote({ lesson, n, total, depth, link, spent }) {
   let build = 'not installed (no service worker)';
@@ -63,6 +96,7 @@ export async function problemNote({ lesson, n, total, depth, link, spent }) {
     `Browser: ${nav?.userAgent ?? 'unknown'}`,
     `Language: ${nav?.language ?? '?'}; page ${document.documentElement.lang || 'en'}`,
     `Screen: ${window.innerWidth}x${window.innerHeight} at ${window.devicePixelRatio}x, touch ${nav?.maxTouchPoints ?? 0}`,
+    ...provenanceLines(step),
     'What I expected instead: ',
   ];
   return lines.join('\n');

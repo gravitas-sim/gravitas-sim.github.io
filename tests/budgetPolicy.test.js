@@ -277,6 +277,7 @@ describe('the re-baseline command refuses', () => {
       ['ca', 0.1],
       ['cb', 0.2],
       ['cc', 0.1],
+      ['cd', 17.3],
     ])
       s = rebaseline(s, request({ kb, release }), clean);
     expect(() =>

@@ -1,5 +1,10 @@
 import { describe, test, expect } from '@jest/globals';
 import { RETIRED } from '../tools/glossary.mjs';
+import {
+  explainerGaps,
+  explainerGapsIn,
+  staleRegions,
+} from '../tools/capability-registries.mjs';
 import { LAZY_FAMILIES } from '../js/widgets.js';
 import en from '../js/explain/en.js';
 import es from '../js/explain/es.js';
@@ -109,5 +114,26 @@ describe('the control opens and closes a labelled region', () => {
     expect(await toggleExplainer(b, 'transit', host)).toBe(false);
     expect(host.nextElementSibling).toBeNull();
     expect(b.getAttribute('aria-expanded')).toBe('false');
+  });
+});
+
+describe('the generator holds the registry to the explainers (Prompt 286)', () => {
+  test('FAMILY_IDS is written from the families, and no family lacks an explainer', async () => {
+    expect(
+      (await staleRegions()).filter(r => r.includes('explainers.js'))
+    ).toEqual([]);
+    expect(await explainerGaps()).toEqual([]);
+  });
+
+  test('a family with no explainer, or one that is short, fails the check', () => {
+    expect(
+      explainerGapsIn(['a', 'b'], {
+        en: { a: ['1', '2', '3', '4'] },
+        es: { a: ['1', '2', '3'], b: ['1', '2', '3', '4'] },
+      })
+    ).toEqual([
+      'en: the b family has no four-answer explainer',
+      'es: the a family has no four-answer explainer',
+    ]);
   });
 });

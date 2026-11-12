@@ -1170,6 +1170,7 @@ export const EN = {
   'shortcut.lecture': 'Lecture Mode (projection)',
   'shortcut.pauseAtEvent': 'Pause at event',
   'shortcut.showList': 'Show this list',
+  'shortcut.explainHere': 'Explain the panel you are in',
   'shortcut.closePanel': 'Close the open panel',
   'chart.autoRefresh': 'Auto-refresh active - Click to refresh now',
   'chart.refresh': 'Refresh Chart Data',

@@ -13,6 +13,17 @@ the release rather than in the tag.
 
 ## [Unreleased]
 
+### Added
+
+- Help II (Prompt 286; register rows D-R10-286-01 to 05): H opens the explainer
+  of the panel you are in, every explainer ends with where its physics is
+  checked, the glossary defines 81 terms by topic in both languages and a term
+  marked in text opens its definition in place, the Teach page's "Where to check
+  the physics" opens a table of every kernel with its document, model-page
+  section and validation group, and the problem note says where the record came
+  from. A family of instruments without an explainer now fails
+  `generate --check`.
+
 ### Changed
 
 - Offline at scale (Prompt 284). Every page of the site was opened in a tour
