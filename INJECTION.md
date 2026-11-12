@@ -316,3 +316,5 @@ more for the broader star.
 - `DETECTION.md` (Prompt 183): the detector, the PSF and its pixel-integrated models.
 - `PHOTOMETRY.md` (Prompt 180): the instrumental magnitude and the pixel contract.
 - `STATISTICS.md` (Prompt 154): the selection function and the completeness correction.
+
+<!-- Listed in DOCUMENTS.md. -->
