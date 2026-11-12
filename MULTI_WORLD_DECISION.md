@@ -158,3 +158,5 @@ it, and `tests/spikeNotShipped.test.js` asserts that.
 Worker compatibility is regression-tested by `tests/workerCompatibility.test.js`
 (the modules load with no DOM, and the reset event still fires when there is
 one) and `e2e/workerRealm.spec.js` (a real Worker builds a real scenario).
+
+<!-- Listed in DOCUMENTS.md. -->
