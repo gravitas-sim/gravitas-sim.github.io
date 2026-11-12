@@ -1754,6 +1754,25 @@
           "text": "**No real device was measured.** What it did measure:"
         }
       ]
+    },
+    {
+      "id": "low-end-profiles",
+      "claim": "The reduced computation modes keep Gravitas usable on a low-end laptop and a mid-range phone.",
+      "scope": "the low tier's smaller computations (bootstrap and Monte Carlo draws, profile grid, drawn frame side, worker caps) and the three automated device profiles",
+      "version": "3.0",
+      "class": "S",
+      "status": "UNKNOWN",
+      "method": "three automated Chromium profiles (CPU throttle on the main thread, a heap ceiling, a network shape) over five committed workflows with time and memory budgets (e2e/deviceProfiles.spec.js, tools/perf-thresholds.json); the low tier's kernel results held to stated tolerances (tests/computeTier.test.js): proxies, not devices",
+      "evaluator": "none",
+      "artifact": "OFFLINE_AND_LOW_END.md",
+      "limitations": "No real laptop or phone was measured. The CPU throttle slows the main thread only (Workers, the compositor and the GPU run at the host's speed), the heap ceiling bounds JavaScript memory and not decoded images or GPU memory, and the network shape is a rate and a delay. The classifier measures frames on the simulation page only: a page that never renders it does not decide, and runs at the full tier unless ?quality=low is given.",
+      "date": "2026-11-11",
+      "anchors": [
+        {
+          "file": "OFFLINE_AND_LOW_END.md",
+          "text": "stay empty and the claim stays UNKNOWN: no laptop or phone was measured."
+        }
+      ]
     }
   ]
 }

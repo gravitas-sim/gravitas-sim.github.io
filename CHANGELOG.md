@@ -26,6 +26,17 @@ the release rather than in the tag.
 
 ### Changed
 
+- Low-end II (Prompt 285). The low quality tier now also reduces computation:
+  a bootstrap takes 300 draws instead of 1000, the orbit tool's mass sum 5000
+  instead of 20,000 and a fit's profile intervals 7 grid points instead of 11; the
+  page's Workers are held to 256 MB and two at a time. A fit computed at the low tier says so, beside the result
+  and in its saved record, and a button computes it again at the full tier;
+  `?quality=full` or `?quality=low` forces a page that does not draw the
+  simulation. Each reduced result is within a stated tolerance of the full one.
+  Three automated device profiles (a throttled desktop, a low-end laptop, a
+  mid-range phone: CPU, heap and network proxies, not devices) hold five
+  workflows to time and memory budgets in the browser suite. No real device has
+  been measured; that claim stays UNKNOWN.
 - Offline at scale (Prompt 284). Every page of the site was opened in a tour
   and set against what the service worker saves (`tools/offline-pages.mjs`,
   `tools/offline-pages.json`, the table in `OFFLINE_AND_LOW_END.md`): 7 pages
