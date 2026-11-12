@@ -268,3 +268,5 @@ the check is robust, and the light curve's sharp rise needs many terms.
   retired it), a contributed package listed with its badge, installing it, a withdrawn one shown to a reader
   who holds it (whose course still opens) and hidden from one who does not.
 - **`npm run catalog:check`,** in CI.
+
+<!-- Listed in DOCUMENTS.md. -->
