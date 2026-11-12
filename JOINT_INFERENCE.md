@@ -166,3 +166,5 @@ the intervals that carry the star are slightly conservative here.
 ## References
 
 Winn 2010, "Transits and Occultations" (the eccentric duration scaling, and the argument of periastron of the planet that batman and rv.js share); Kreidberg 2015, PASP 127, 1161 (batman, the oracle's light curves); IAU 2015 Resolution B3 (the nominal GMs); the statistics kernel of Prompt 154 (`propagate`, `percentileInterval`). No reference was typed from memory beyond these four, each already cited in the code of this repository.
+
+<!-- Listed in DOCUMENTS.md. -->
