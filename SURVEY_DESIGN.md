@@ -116,3 +116,5 @@ Amendments AM1 to AM6 (each with `boundMoved` false) are recorded in `tests/fixt
 A plan renders a synthetic patch of the sky as a **catalog** (the sources a class puts in the patch, each kept with its completeness),
 not a rendered frame: the pixel render with the R13 detection tool was not built for this prompt, and the student's measurement of the
 plan is the panel's own detections and false positives. The Spanish text has not been read by a fluent reader.
+
+<!-- Listed in DOCUMENTS.md. -->
