@@ -108,3 +108,5 @@ Three of the failing legs are cheap to repair outside a gate (N02's guard, one l
 ## 10. Reproducing it
 
 On the spike: `node tools/compute-gate-inputs.mjs <dir>` and `python3 -E tools/compute-gate-snapshot.py <dir>` (the inputs; their hashes are in `oracle-results.json`), `python3 -E tools/compute-gate-oracle.py <dir> <repo> <out>`, `node tools/compute-gate-references.mjs <out>`, `python3 -E tools/compute-gate-mknb.py` (the notebooks), then `node tools/compute-gate-validate.mjs --inputs <dir> --fixtures tests/fixtures/compute-gate-ii --page tests/fixtures/compute-gate-ii/page-legs.json --out <out>` under Node 22.23.4. The page legs G1.a to G1.c and the route measurement were run by hand as commands and recorded in `page-legs.json`.
+
+<!-- Listed in DOCUMENTS.md. -->
