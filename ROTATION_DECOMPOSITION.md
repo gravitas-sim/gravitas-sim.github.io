@@ -246,3 +246,5 @@ sections 9.7 and 9.8 (the Bessel functions' asymptotic series and polynomial app
 and IAU 2012 Resolution B2 (GM of the Sun, the astronomical unit); Bhattacharjee, Chaudhury and Kundu (2014), ApJ
 785, 63, through the pack `milky-way-rotation-curve` (D-GAIA-02); Leonard and Tremaine (1990), ApJ 353, 495 (Part B's
 tail estimator, named for the fetcher). Nothing was fetched for this prompt.
+
+<!-- Listed in DOCUMENTS.md. -->
