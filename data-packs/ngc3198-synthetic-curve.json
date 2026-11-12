@@ -2,8 +2,8 @@
   "format": "gravitas.observation-data-pack",
   "formatVersion": 1,
   "id": "ngc3198-synthetic-curve",
-  "version": "1.0.0",
   "title": "NGC 3198: a synthetic rotation curve",
+  "version": "1.0.0",
   "object": {
     "name": "NGC 3198",
     "identifiers": [
