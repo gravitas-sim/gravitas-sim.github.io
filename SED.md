@@ -223,3 +223,5 @@ See `SED_GATE.md`, "Questions for Carl".
 Oke and Gunn 1983, ApJ 266, 713 (AB); Bessell and Murphy 2012, PASP 124, 140 (photon-counting bands, the
 photon-weighted mean); Bohlin 2014, AJ 147, 127 (CALSPEC Vega, the pack's offsets); Fukugita et al. 1996, AJ 111, 1748
 (SDSS).
+
+<!-- Listed in DOCUMENTS.md. -->
