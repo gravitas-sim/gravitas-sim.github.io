@@ -65,3 +65,5 @@ Measured by `node tools/formula-size.mjs` (esbuild, minified, gzipped, the share
 - A formula over a bank item's variants, and over more than the six fields a question reads.
 - Correlated inputs (a covariance), and a derived column's evidence record as its own notebook entry (the notebook's form covers numbers; the column records its formula and inputs in the saved observation).
 - Pairwise `min(a; b)`: `min`, `max` and `mean` take a column.
+
+<!-- Listed in DOCUMENTS.md. -->
