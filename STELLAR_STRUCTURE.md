@@ -35,3 +35,5 @@ None ships. A public compilation of white-dwarf masses and radii was not downloa
 ## Not done
 
 A comparison of the model curve with observed white dwarfs (needs the data); radiation pressure in the polytrope's temperature; the mass-radius relation with Coulomb or finite-temperature corrections; convection or a nuclear network (the prompt's model-page section says what these would add).
+
+<!-- Listed in DOCUMENTS.md. -->
