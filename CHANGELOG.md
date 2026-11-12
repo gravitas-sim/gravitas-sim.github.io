@@ -15,6 +15,15 @@ the release rather than in the tag.
 
 ### Added
 
+- Handover readiness (Prompt 293; register rows D-R10-293-01 to 03): the
+  maintainer entry point rehearsed from an empty directory (clone, `npm ci`,
+  `npm test`, `release:check --fast`: about 29 minutes, 41 passed, with the
+  browser install and every stumble written down), the bus-factor checklist
+  rewritten so each arrangement is owner-confirmed (one: no second passphrase
+  holder) or UNKNOWN (the rest, never inferred), a correction (the owner is a
+  personal GitHub account, not an organization), and the co-maintainer steps
+  in CONTINUITY.md updated. The next step needs a person (Roadmap III,
+  Appendix A, "Second maintainer").
 - Recovery rehearsal II (Prompt 291; register rows D-R10-291-01 to 03): the
   tag `v3.0` rebuilt from GitHub's zipball and the 2.0.0 Zenodo archive rebuilt
   by checksum, both outside any checkout. The documents now say what the first

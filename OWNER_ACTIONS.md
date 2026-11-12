@@ -185,26 +185,72 @@ For [`CONTINUITY.md`](CONTINUITY.md). A checklist, documentation only: each
 line names a thing and what to arrange, **never the thing itself**. No
 password, passphrase, recovery code or token belongs in this file, in the
 repository, or in a session's conversation. Tick a box when the arrangement
-exists, not when it is planned.
+exists and Carl has confirmed it, not when it is planned and not because a
+read of an API suggests it.
 
-- [ ] **Organization owner.** The GitHub organization `gravitas-sim` has one
-      account that can change anything. Add a second owner who is trusted with
-      that (a colleague or the co-maintainer), or write down who would be asked.
+**State as of 2026-11-12 (Prompt 293, register rows D-R10-293-01 to 03).** Each
+item below is recorded as exactly one of two things. **Owner-confirmed** means
+Carl said it, in the words quoted. **UNKNOWN** means Carl has not said, and
+nothing here is inferred from what the repository, the public Zenodo record or
+the GitHub API happens to show; where such a fact was read, it is labelled
+*observed* and is evidence, not confirmation. What is recorded is who could act
+and what would be handed over first, never what the credential is. Carl
+updates a line by saying so in chat or in a pull request; the session that
+records it cites the date.
+
+| Item | Recorded state | Basis |
+| --- | --- | --- |
+| Repository owner account | UNKNOWN who besides the owner could act | observed: the owner `gravitas-sim` is a personal account, not an organization |
+| GitHub account recovery | UNKNOWN | never stated |
+| Domain `gravitas-sim.online` (registrar, DNS, renewal) | UNKNOWN | never stated |
+| Instructor passphrase, second holder | **Owner-confirmed: none, Carl is the only holder** | Carl, chat 2026-10-21, D-R10-43 |
+| Instructor passphrase, where it is kept; the support email | UNKNOWN | never stated |
+| Zenodo login that owns record 23425533 and its integration | UNKNOWN | public record lists one owner by numeric id; which login, and whether anyone else can administer it, not stated |
+| GitHub release and Zenodo archive of `v3.0` | UNKNOWN (Carl's decision) | none exists today |
+| ORCID and who could correct a record | UNKNOWN | never stated |
+| Repository secrets | UNKNOWN (none observed) | observed: 0 Actions secrets by the API, 2026-11-12; not owner-confirmed |
+| `gravitas-compute` organization (the Compute frame's origin) | UNKNOWN who besides the owner could act | observed: one member and one admin, `gravitas-sim` |
+| A named contact | UNKNOWN: nobody is recorded as told this file exists | never stated |
+
+- [ ] **Repository owner account.** The repository
+      `gravitas-sim/gravitas-sim.github.io` belongs to a **personal** GitHub
+      account named `gravitas-sim` (the API says type `User`, not
+      `Organization`; read 2026-11-12), and that account is the repository's
+      only collaborator, with admin rights. Earlier versions of this file and
+      of CONTINUITY.md said "the GitHub organization `gravitas-sim`"; that was
+      wrong. Consequence, stated from third-party summaries of GitHub's rules
+      and **not verified against GitHub's own pages**: a personal account's
+      repository has an owner and collaborators, and a collaborator pushes and
+      merges but does not hold the repository's settings. If that is right,
+      "add a second owner" is not possible on this repository as it is; the
+      options are a successor arrangement on the personal account (check
+      whether GitHub offers one and on what terms) or moving the repository
+      to an organization with two owners (a transfer; its effect on Pages, the
+      custom domain, the Zenodo integration and every link has not been
+      examined). Neither is decided or tried. **Recorded: UNKNOWN who besides
+      the owner could act today.**
 - [ ] **GitHub account recovery.** The owner account's two-factor recovery
       codes and a recovery email that is not only the work address (the
       university can close it). Store them where a named person can reach them
       if you cannot (a password manager's emergency access, or a sealed copy).
+      **Recorded: UNKNOWN.**
 - [ ] **The domain `gravitas-sim.online`.** The registrar account, its renewal
       date and whether auto-renew is on, and who holds the DNS. If the domain
       lapses the site still serves at `gravitas-sim.github.io` once the
       `CNAME` is removed, and every link that uses the domain breaks: renewal is
-      the single date that hurts most.
-- [ ] **The instructor passphrase.** Where it is kept (the git-ignored
-      `.instructor-password` file on one machine, and whatever else), and who can
-      get it. It is also what [`SUPPORT.md`](SUPPORT.md) says to email you for:
-      the email address is part of this item. A second holder, or an emergency
-      copy, was the point; Carl decided on 2026-10-21 that there is none (see the
-      Instructor materials section: what that means if he is unavailable).
+      the single date that hurts most. It is also the one origin the Compute
+      page's frame answers (CONTINUITY.md, "If the domain goes away").
+      **Recorded: UNKNOWN** (registrar, DNS holder, renewal date, auto-renew).
+- [x] **The instructor passphrase.** Owner-confirmed on 2026-10-21 (D-R10-43),
+      in Carl's words, "my decision is having no second passphrase holder":
+      **the arrangement is that there is none, and Carl is the only holder.**
+      The box is ticked because that arrangement is confirmed, not because the
+      risk is covered: if Carl is unavailable nobody can issue or rotate the
+      passphrase, and a department builds a bundle under its own
+      (INSTRUCTOR_MATERIALS.md, "The second holder"). Where the passphrase is
+      kept (the git-ignored `.instructor-password` file on one machine, and
+      whatever else) and what happens to the maintainer's email, which is where
+      [`SUPPORT.md`](SUPPORT.md) sends passphrase requests, are **UNKNOWN**.
 - [ ] **Zenodo.** The account that holds the integration and the record's
       ownership, and a second person added as an owner of the record if
       Zenodo's settings allow. Without it nobody else can publish a version to
@@ -212,15 +258,30 @@ exists, not when it is planned.
       API): the 2.0.0 record lists one owner by numeric user id and nothing
       else; which login that is, and whether anyone else can administer the
       record, is **UNKNOWN** until you confirm it. `v3.0` has no GitHub release
-      and no record.
+      and no record; whether it will get one is **UNKNOWN** (yours to decide),
+      and the tag's tree still declares 2.1.0 (D-R10-291-03).
 - [ ] **ORCID and the citation identity.** The ORCID in `CITATION.cff` and
       `.zenodo.json` is yours; note who could correct a record if it needed
-      correcting.
-- [ ] **Repository secrets.** None are stored today (the list above was read
-      by name only). If one is ever added, add it here by name, with what it is
-      for and where the value can be regenerated.
+      correcting. **Recorded: UNKNOWN.**
+- [ ] **Repository secrets.** None are stored today (the Actions secrets
+      endpoint reported a total of 0 on 2026-11-12, read by count only). If one
+      is ever added, add it here by name, with what it is for and where the
+      value can be regenerated. Nothing to arrange now; **recorded: UNKNOWN**
+      and left unticked because the count is an observation, not a
+      confirmation.
+- [ ] **The `gravitas-compute` organization.** The Compute page's sandboxed
+      frame is served from `https://gravitas-compute.github.io/`, the
+      repository of an organization of that name (D-COMPUTE-ORIGIN-01). On
+      2026-11-12 the API showed one member, who is also its one admin
+      (`gravitas-sim`), and no organization-wide two-factor requirement. This
+      item was missing from the checklist. **Recorded: UNKNOWN** who else
+      could act. If the organization were lost, the Compute page would lose its
+      frame; nothing else depends on it.
 - [ ] **A named contact.** One person who is told this file exists and what it
       is for. Everything above is only useful if someone knows to look.
+      **Recorded: UNKNOWN**; nobody is recorded as having been told. This is
+      the first thing the second-maintainer opportunity (Roadmap III, Appendix
+      A) would settle, and it needs a person the project does not yet have.
 
 ## Contributed content (Prompt 80)
 
