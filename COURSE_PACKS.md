@@ -456,3 +456,5 @@ Tests:
 - `e2e/course.spec.js`: both pages, against the sources and dist, in all
   three engines, and the course home offline.
 - `tests/commonCartridge.test.js`, `e2e/commonCartridge.spec.js`: the export, as above.
+
+<!-- Listed in DOCUMENTS.md. -->
