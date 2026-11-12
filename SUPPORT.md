@@ -145,3 +145,5 @@ new use of one of these APIs with no row, fails the build.
 | BroadcastChannel | Telling other tabs that saved work changed. | `js/storage/index.js` | Other open tabs do not hear about a change until they reload; nothing is lost. |
 | Web Crypto (a secure context) | The instructor portal’s decryption and the SHA-256 digests that check downloaded files. | `js/instructorPortal.js`, `js/hash.js`, `js/archive/net.js`, `js/catalog/archive.js`, `js/lab3d/kernel.js`, `js/compute/frame/runner.js`, `js/measure/calibrationRecord.js`, `js/sunWidgets.js` | No fallback is implemented: it needs https or localhost. The student-facing simulations do not depend on it. |
 <!-- feature-inventory:end -->
+
+<!-- Listed in DOCUMENTS.md. -->
