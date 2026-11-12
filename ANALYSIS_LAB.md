@@ -330,3 +330,5 @@ imports nothing the page loads at start: the page's own modules reach it
 through its context, as they reach the Observatory's panels. On the
 Observatory, the comparison and the correlations live inside the fit panel's
 own chunk.
+
+<!-- Listed in DOCUMENTS.md. -->
