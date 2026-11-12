@@ -351,3 +351,5 @@ last step.
 | `mission/lab/index.html`, `js/missionLabPage.js` | The page |
 | `js/missionLabDocs.js`, `tools/mission-lab-key.mjs`, `js/data/missionLabKey.js` | The instructor documents and the key |
 | `tests/missionLab.test.js`, `e2e/missionLab.spec.js` | The pack, the model, the guides; the lab in a browser |
+
+<!-- Listed in DOCUMENTS.md. -->
