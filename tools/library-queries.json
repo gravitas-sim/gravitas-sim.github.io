@@ -41,7 +41,10 @@
     {
       "en": "tides",
       "es": "mareas",
-      "expect": ["investigation:tides", "investigation:tides-that-move-the-moon"],
+      "expect": [
+        "investigation:tides",
+        "investigation:tides-that-move-the-moon"
+      ],
       "within": 3
     },
     {
