@@ -33,3 +33,5 @@ None ships. The OGLE and MOA public event light curves were not downloaded and t
 ## Not done
 
 A published-fit comparison for a named event (needs the data); an Observatory entry for the microlensing synthetic observation beyond the generic forward-model path; an SIS time delay; binary lenses and parallax.
+
+<!-- Listed in DOCUMENTS.md. -->
