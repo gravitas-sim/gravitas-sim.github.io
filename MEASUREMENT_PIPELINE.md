@@ -198,3 +198,5 @@ Two more facts the tests hold:
 - **Model fits as nodes the pipeline recomputes.** A fit is recorded as the
   fit panel exported it. Recomputing one is the fit panel's job
   (`INFERENCE_CORE.md`).
+
+<!-- Listed in DOCUMENTS.md. -->
