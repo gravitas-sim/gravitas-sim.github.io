@@ -171,3 +171,5 @@ Each is cited by author and year only and is **unverified**: Carl verifies the p
 - Danese, De Zotti and di Tullio (1980), the rest-frame velocity convention.
 - Clopper and Pearson (1934), the exact binomial interval.
 - Dressler (1980), the morphology-density relation.
+
+<!-- Listed in DOCUMENTS.md. -->
