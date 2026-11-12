@@ -109,3 +109,5 @@ Nothing was fetched and no published delay, covariance, event or licence term wa
 
 Nothing is bundled and nothing was fetched. D-LENS-01 (no authentic microlensing event: terms not confirmed) and D-RIGHTS-02 (the survey archives are linked with their citation text) stand
 unchanged; a lensing-cluster image has no recorded basis (D-R10-251-03).
+
+<!-- Listed in DOCUMENTS.md. -->
