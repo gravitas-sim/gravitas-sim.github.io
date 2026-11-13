@@ -10,23 +10,32 @@ const window = { name: 'w', from: '2026-12-15', to: '2026-12-20' };
 const run = (args, m = withTrain) => classify({ model: m, ...args });
 
 describe('the pull-request class check', () => {
-  test('INTEGRATION.md names main, the open v3 train and no window', () => {
+  test('INTEGRATION.md names main, the promoted v3 train, the open v4 train and no window', () => {
     expect(model.integrationBranch).toBe('main');
     expect(model.trains.map(t => [t.branch, t.state])).toEqual([
-      ['v3', 'open'],
+      ['v3', 'promoted'],
+      ['v4', 'open'],
     ]);
     expect(model.windows).toEqual([]);
   });
 
-  test('a pull request into the v3 train is allowed in any class', () => {
+  test('a pull request into the open v4 train is allowed in any class, and one into the promoted v3 train is refused', () => {
     for (const labels of [
       ['invisible'],
       ['visible'],
       ['visible', 'instructional'],
     ])
       expect(
-        classify({ labels, base: 'v3', checksResult: 'failure', model }).ok
+        classify({ labels, base: 'v4', checksResult: 'failure', model }).ok
       ).toBe(true);
+    expect(
+      classify({
+        labels: ['invisible'],
+        base: 'v3',
+        checksResult: 'success',
+        model,
+      }).ok
+    ).toBe(false);
   });
 
   test('a pull request needs exactly one class label', () => {
