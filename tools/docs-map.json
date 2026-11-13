@@ -1178,6 +1178,14 @@
       "student": false
     },
     {
+      "file": "STUDENT_ROUTE_BASELINE.md",
+      "kind": "reference",
+      "purpose": "The measured baseline of the pages a student opens, cold, warm and offline, and the walk from a lesson link to its first accepted reading; a proxy, not a phone.",
+      "owner": 298,
+      "added": "2026-11-13",
+      "student": false
+    },
+    {
       "file": "STUDIO.md",
       "kind": "feature",
       "purpose": "The Scenario Studio: what a scenario file holds, its checks and cautions, and how it opens.",

@@ -958,20 +958,22 @@ is held inside the data budget's decoded-image and worker ceilings.
 
 ### The three profiles
 
-`e2e/deviceProfiles.spec.js` runs five workflows (the start of the application, a
-lesson step, an image mark, a fit, a 3-D run) under three profiles
+`e2e/deviceProfiles.spec.js` runs six workflows (the start of the application, the
+author's preview of a lesson, the page a student opens from a lesson link, an image
+mark, a fit, a 3-D run) under three profiles
 (`deviceProfiles` in `tools/perf-thresholds.json`): the throttled desktop as it has
 always been run here (CPU 4x), a low-end laptop (CPU 6x, 10 Mbps and 40 ms, a
 512 MB heap ceiling, low tier) and a mid-range phone (412 x 915 at 2.625, touch, CPU
 6x, 1.6 Mbps and 150 ms, a 384 MB heap ceiling, low tier). Each is a Chromium
 launched with the heap flag and throttled over the DevTools protocol. Times in
 seconds, time to usable then interaction, with the budget (three times the measured
-value, at least 4 s) in brackets; measured 2026-11-11 on the planning Mac:
+value, at least 4 s) in brackets; measured 2026-11-11 on the planning Mac (the student-link row is the median of three runs, 2026-11-13):
 
 | Workflow | throttled-desktop usable / interaction (budget) | low-end-laptop usable / interaction (budget) | mid-range-phone usable / interaction (budget) |
 | --- | ---: | ---: | ---: |
 | Start | 4.6 s / 3.7 s (13.8 / 11.1) | 6.1 s / 4.5 s (18.5 / 13.5) | 21.9 s / 3.3 s (65.9 / 9.9) |
-| Lesson step | 23.1 s / 1.7 s (69.4 / 5.2) | 37.0 s / 1.4 s (111.0 / 4.1) | 81.8 s / 0.8 s (245.4 / 4.0) |
+| Author lesson preview (`/?author=tides&step=1`, plain server) | 23.1 s / 1.7 s (69.4 / 5.2) | 37.0 s / 1.4 s (111.0 / 4.1) | 81.8 s / 0.8 s (245.4 / 4.0) |
+| Student lesson link (`/#investigation=keplers-laws`, compressed server) | 3.4 s / 1.6 s (10.3 / 5.0) | 6.4 s / 1.7 s (19.3 / 5.2) | 15.2 s / 0.8 s (45.8 / 4.0) |
 | Image mark | 1.8 s / 1.0 s (5.3 / 4.0) | 3.0 s / 1.3 s (9.2 / 4.0) | 6.3 s / 2.3 s (18.9 / 6.8) |
 | Fit | 2.3 s / 11.9 s (6.8 / 35.8) | 3.9 s / 9.1 s (11.7 / 27.5) | 9.5 s / 19.2 s (28.6 / 57.5) |
 | 3-D run | 0.5 s / 0.4 s (4.0 / 4.0) | 1.1 s / 1.1 s (4.0 / 4.0) | 3.4 s / 2.1 s (10.3 / 6.3) |
@@ -979,9 +981,11 @@ value, at least 4 s) in brackets; measured 2026-11-11 on the planning Mac:
 **These are proxies.** The CPU throttle slows the page's main thread and nothing
 else, so the fit and the 3-D run, which are Workers, run at the host's speed; the
 heap flag bounds JavaScript memory and not decoded images, canvases or GPU memory;
-the network shape is a rate and a delay, not a radio. The lesson on the phone profile
-(82 s to usable) is the network and the code size at 1.6 Mbps and CPU 6x, and is the
-largest figure here. **The real-device profiles (`real-chromebook`, `real-phone`)
+the network shape is a rate and a delay, not a radio. The author's preview on the
+phone profile (82 s to usable) is the largest figure here, and it is the author's
+route over an uncompressed server; the route a student opens, over compressed
+transport, is a fraction of it (the `studentLesson` row, and `STUDENT_ROUTE_BASELINE.md`
+for every route, cold, warm and offline). **The real-device profiles (`real-chromebook`, `real-phone`)
 stay empty and the claim stays UNKNOWN: no laptop or phone was measured.** A
 repeated run varied by up to a factor of two with the machine's load, which is why a
 budget has room; CI is the gate for them.
@@ -995,6 +999,8 @@ npx playwright test offline --project=chromium   # offline and throttled, 7 test
 npm test -- tests/perfTrace.test.js        # the trace buckets and the recorded thresholds
 npm test -- tests/computeTier.test.js      # the tier's computation sizes, the kernels at both tiers, the classifier edge
 npx playwright test deviceProfiles --project=chromium   # the three device profiles, their budgets and the memory budget
+npm run perf:routes                        # the student's routes cold, first visit, warm and offline (STUDENT_ROUTE_BASELINE.md)
+npm run perf:walks                         # a lesson link to its first accepted reading, six lessons, two profiles
 npm run perf -- --trace --tier low --cpu 4 # frame times with raster and composite apart from script
 node tools/longtask-census.mjs --cpu 4     # main-thread work above the budgets
 node tools/precache-tour.mjs               # what a visit fetches against the precache
