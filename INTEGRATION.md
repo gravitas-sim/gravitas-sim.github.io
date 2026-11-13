@@ -1,5 +1,22 @@
 # Integration
 
+**Status, 2026-11-13: `v3` is promoted and `v4` is the open train.** `v3` and `main` held the same commit when 3.0 was tagged, and `main` has since taken the later documentation and wording commits (`main` = `v3` = `71a5ecfc`, deployed, CI green on both). A promoted train takes no new work, so Roadmap IV (prompts 296 to 498, outside the repository) lands on `v4`, created by the merge-queue session from the `main` tip `71a5ecfc`. Outcome A of that roadmap's section 7.3, with the name `v4` named and approved by the maintainer on 2026-11-13; the rules below apply to `v4` as they did to `v3`. `on.push` in `ci.yml` still lists `main` and `v3`; adding `v4` is a maintainer approval and not part of this change. Every pull request into `v4` gets the pull-request CI, and the queue dispatches a full run on the head before each merge. A pull request still open against `v3` (#538) must be retargeted or closed by its owner; the class check now refuses it.
+
+**Roadmap IV tranches.** Tranche T1 is authorized by this change and nothing later is. Each later tranche is authorized by exactly one recorded continuation checkpoint.
+
+| Tranche | Prompts | Closing checkpoint |
+|---|---|---|
+| T1 | 296 to 340 and 445 to 457 | 340 (I) |
+| T2 | 341 to 374, 458 to 468, 475 to 478, 481, 482, 496, 498 | 374 (II) |
+| T3 | 375 to 393, 469 to 474, 479, 480, 483 to 488 | 393 (III) |
+| T4 | 394 to 412, 489 to 495 | 412 (IV) |
+| T5 | 413 to 429 and 497 | 429 (V) |
+| T6 | 430 to 444 | 443 and 444 |
+
+T1 authorized by this change. Prompt numbers are identifiers, not an order; the dependency graph is the order, and a prompt numbered 445 or higher may run before a lower number.
+
+**Release closeout that is not Roadmap IV's, and stays the maintainer's:** the ratification of register rows D-R10-264-05, D-R10-291-01 to 03, D-R10-293-01 to 03 and the other DELEGATED rows (ten at this commit); the owner facts listed in `OWNER_ACTIONS.md`; the repository ownership and successor decision; the cause of the Zenodo webhook's 500 answer (needs a token scope the project does not use); cleanup of merged branches and worktrees; branch protection on `main`; `on.push` for `v4`; the next release's version fields, notes and DOI, which follow RELEASING.md.
+
 **Status, 2026-11-12: `v3` was released as 3.0** (tag `v3.0` on commit `ce1d59561963338645b880aecb20e89ed899c396`, where `main` and `v3` held the same commit; GitHub release and Zenodo archive, version DOI 10.5281/zenodo.24181005). "What 3.0 produced" in [`RELEASING.md`](RELEASING.md) has the rest. The branch rules below are unchanged by it.
 
 **Status, 2026-10-16.** `v2` was released as 2.0.0 (merge commit `a71f73f50f30ec6a81d398d2cd54f474e87ddd85` on `main`, tag `v2.0.0`) and has been deleted. `main` is the integration branch for invisible work and deploys on every merge. Visible and instructional work goes to the active train, when there is one. This file is what a session reads first to find where its work goes; it changes only by a reviewed pull request. It is row D-INT-02 of the [decision register](DECISION_REGISTER.md), which supersedes D-INT-01.
@@ -14,6 +31,13 @@ The model is machine-readable, and `tools/pr-class.mjs` (the CI job `Pull-reques
       "name": "v3",
       "branch": "v3",
       "base": "092a121dc6244eccc54e2548b88a41edd847762a",
+      "owner": "the merge-queue session",
+      "state": "promoted"
+    },
+    {
+      "name": "v4",
+      "branch": "v4",
+      "base": "71a5ecfca364044acf76fab330d45e5bf4eb9c14",
       "owner": "the merge-queue session",
       "state": "open"
     }

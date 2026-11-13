@@ -1773,6 +1773,63 @@
           "text": "stay empty and the claim stays UNKNOWN: no laptop or phone was measured."
         }
       ]
+    },
+    {
+      "id": "r4-sandbox-reference-cases",
+      "claim": "The sandbox reproduces its stated reference cases within tolerances fixed before any run, independent of frame rate and camera.",
+      "scope": "the 61 sandbox scenarios and the reference cases Roadmap IV Prompt 445 fixes",
+      "version": "4.0 candidate",
+      "class": "V-internal",
+      "status": "UNKNOWN",
+      "method": "planned: reference cases and tolerances committed first, then headless runs at three frame rates; nothing run yet",
+      "evaluator": "none",
+      "artifact": "INTEGRATION.md",
+      "limitations": "Internal reference cases only; no external reviewer or published benchmark comparison is run.",
+      "date": "2026-11-13",
+      "anchors": [
+        {
+          "file": "INTEGRATION.md",
+          "text": "**Status, 2026-11-13: `v3` is promoted and `v4` is the open train.**"
+        }
+      ]
+    },
+    {
+      "id": "r4-sandbox-handling",
+      "claim": "Selecting, editing, placing, measuring, saving and recovering in the sandbox work with a mouse, a finger or a keyboard.",
+      "scope": "the main sandbox workspace",
+      "version": "4.0 candidate",
+      "class": "S",
+      "status": "UNKNOWN",
+      "method": "planned: automated browser specs at desktop and phone width; nothing run yet",
+      "evaluator": "none",
+      "artifact": "INTEGRATION.md",
+      "limitations": "Emulation only; no real device and no observed student session.",
+      "date": "2026-11-13",
+      "anchors": [
+        {
+          "file": "INTEGRATION.md",
+          "text": "**Roadmap IV tranches.** Tranche T1 is authorized by this change"
+        }
+      ]
+    },
+    {
+      "id": "r4-page-redesign",
+      "claim": "Every published page family is redesigned for its job and measured against stated length and composition criteria.",
+      "scope": "the 178 stamped pages and the surfaces inside the application",
+      "version": "4.0 candidate",
+      "class": "S",
+      "status": "UNKNOWN",
+      "method": "planned: surface ledger, matched before-and-after captures, the page-design criteria of the roadmap; nothing run yet",
+      "evaluator": "none",
+      "artifact": "INTEGRATION.md",
+      "limitations": "Automated and author-read captures only; no learner or instructor has used the redesigned pages.",
+      "date": "2026-11-13",
+      "anchors": [
+        {
+          "file": "INTEGRATION.md",
+          "text": "Prompt numbers are identifiers, not an order"
+        }
+      ]
     }
   ]
 }
