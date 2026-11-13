@@ -5,6 +5,8 @@ project owner has. None of it can be done by a script or by a contributor, which
 is why it is a separate file from [`RELEASING.md`](RELEASING.md) — that one is
 the procedure, this one is the set of things the procedure waits on.
 
+**v3.0 is released** (2026-11-12): tag `v3.0` on commit `ce1d59561963338645b880aecb20e89ed899c396`, GitHub release <https://github.com/gravitas-sim/gravitas-sim.github.io/releases/tag/v3.0>, Zenodo record <https://zenodo.org/records/24181005> (version `3.0.0`), version DOI [10.5281/zenodo.24181005](https://doi.org/10.5281/zenodo.24181005), under the same concept DOI. "What 3.0 produced" in [`RELEASING.md`](RELEASING.md) has the rest, including a webhook delivery that returned `500`.
+
 **v2.0.0 is released** (2026-10-16): tag `v2.0.0` on commit `a71f73f50f30ec6a81d398d2cd54f474e87ddd85`, version DOI [10.5281/zenodo.23425533](https://doi.org/10.5281/zenodo.23425533), under the same concept DOI. "What 2.0.0 produced" in [`RELEASING.md`](RELEASING.md) has the rest.
 
 **v1.0.0 is released.** Tagged, published and archived on 2026-09-16:
@@ -205,8 +207,8 @@ records it cites the date.
 | Domain `gravitas-sim.online` (registrar, DNS, renewal) | UNKNOWN | never stated |
 | Instructor passphrase, second holder | **Owner-confirmed: none, Carl is the only holder** | Carl, chat 2026-10-21, D-R10-43 |
 | Instructor passphrase, where it is kept; the support email | UNKNOWN | never stated |
-| Zenodo login that owns record 23425533 and its integration | UNKNOWN | public record lists one owner by numeric id; which login, and whether anyone else can administer it, not stated |
-| GitHub release and Zenodo archive of `v3.0` | UNKNOWN (Carl's decision) | none exists today |
+| Zenodo login that owns records 23425533 and 24181005 and the integration | UNKNOWN | observed 2026-11-12: both public records list the same single owner by numeric id; which login, and whether anyone else can administer them, not stated |
+| GitHub release and Zenodo archive of `v3.0` | **Published 2026-11-12** | observed: the GitHub release and Zenodo record 24181005 exist (maintainer decision, 2026-11-12) |
 | ORCID and who could correct a record | UNKNOWN | never stated |
 | Repository secrets | UNKNOWN (none observed) | observed: 0 Actions secrets by the API, 2026-11-12; not owner-confirmed |
 | `gravitas-compute` organization (the Compute frame's origin) | UNKNOWN who besides the owner could act | observed: one member and one admin, `gravitas-sim` |
@@ -256,15 +258,17 @@ records it cites the date.
       Zenodo's settings allow. Without it nobody else can publish a version to
       the concept DOI. State on 2026-11-12 (Prompt 291, read from the public
       API): the 2.0.0 record lists one owner by numeric user id and nothing
-      else; which login that is, and whether anyone else can administer the
-      record, is **UNKNOWN** until you confirm it. The repository's webhook list
+      else, and on 2026-11-12 the 3.0.0 record lists the same id; which login
+      that is, and whether anyone else can administer the records, is
+      **UNKNOWN** until you confirm it. The repository's webhook list
       (read 2026-11-12 with the owner's GitHub login, no Zenodo credential
       used) holds one active webhook to Zenodo's GitHub receiver for `release`
-      events, which is what archives a GitHub release (Workflow A). `v3.0` has
-      no GitHub release and no record, and the tag as first made declares 2.1.0
-      (D-R10-291-03); the 3.0.0 release metadata is on a later commit of
-      `main`, and the tag is moved once to the commit that carries it; creating
-      the GitHub release from that tag is yours.
+      events, which is what archives a GitHub release (Workflow A). `v3.0` was
+      published on 2026-11-12 from the tag at the `main` commit that carries
+      the 3.0.0 release metadata (the first tag declared 2.1.0 and was moved
+      once; D-R10-291-03), and Zenodo archived it as record 24181005. Its
+      webhook deliveries on that day were `202`, `409` and `500`; the record
+      exists regardless ("What 3.0 produced" in `RELEASING.md`).
 - [ ] **ORCID and the citation identity.** The ORCID in `CITATION.cff` and
       `.zenodo.json` is yours; note who could correct a record if it needed
       correcting. **Recorded: UNKNOWN.**

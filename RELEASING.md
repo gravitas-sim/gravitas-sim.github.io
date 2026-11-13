@@ -5,10 +5,11 @@ serves, and every merge is live. A *release* is a different thing — a tagged,
 archived, citable point in that history — and this is the checklist for making
 one.
 
-**There have been two releases, `v1.0.0`** (2026-09-16) **and `v2.0.0`**
-(2026-10-16): each a tag, a GitHub release and a Zenodo archive with its version
-DOI, under one concept DOI. "What 1.0.0 produced" and "What 2.0.0 produced"
-below have every identifier. `CITATION.cff` and `.zenodo.json` name the newest
+**There have been three archived releases, `v1.0.0`** (2026-09-16)**,
+`v2.0.0`** (2026-10-16) **and `v3.0`** (2026-11-12): each a tag, a GitHub release
+and a Zenodo archive with its version DOI, under one concept DOI. "What 1.0.0
+produced", "What 2.0.0 produced" and "What 3.0 produced" below have every
+identifier. (2.1.0 is a git tag only and has no archive.) `CITATION.cff` and `.zenodo.json` name the newest
 version, because it is the one a reader can check out.
 
 **The second, `v2.0.0`,** was the release of `v2`, the integration branch of the next major
@@ -96,7 +97,9 @@ Zenodo watches the repository and archives each GitHub release automatically.
 holds contains `doi: null`. This is not a mistake and it is not fixable within
 this workflow — it is the consequence of letting Zenodo mint the identifier from
 the release. The repository will say what the DOI is; the archive of v1.0.0 will
-not. Anyone comparing the two should know why.
+not. Anyone comparing the two should know why. The same holds for every later
+release: the 3.0 archive holds `doi: null` in `RELEASE`, by design, and the DOI
+is recorded in the repository by a later commit.
 
 Chosen anyway because it is the workflow with the fewest manual steps and the
 fewest ways to publish the wrong bytes, and because the archive's *content* is
@@ -351,10 +354,12 @@ someone else could do this unaided. The second is Prompt 291's.
 
 ## Recovering from `v3.0`
 
-`v3.0` is an annotated tag (object `af32ab21bc89738e5b34eef08418c583b8dea8a8`) on
-commit `f9277ff8ed92efe1bc41d3d6c2fcf224f6989a70` of `main`, tagged by the owner
-on 2026-11-12. As of that date it has no GitHub release, no Zenodo record and no
-DOI, so the newest Zenodo archive (2.0.0) is not this tree. To recover it:
+`v3.0` is an annotated tag on commit `ce1d59561963338645b880aecb20e89ed899c396`
+of `main` (tag object `f622234e39eed643baeefde682a7340be0c7254e`; "What 3.0
+produced" says how it came to replace the first tag, `af32ab21` on `f9277ff8`).
+It has a GitHub release and a Zenodo archive, version DOI 10.5281/zenodo.24181005,
+so the newest Zenodo archive is this release's. To recover it, from the
+archive or from the tag:
 
 1. Take GitHub's zipball of the tag,
    `https://github.com/gravitas-sim/gravitas-sim.github.io/archive/refs/tags/v3.0.zip`
@@ -375,7 +380,40 @@ under "What was released" above) was therefore made on a later commit of `main`,
 and the tag is moved, once, to the `main` commit that carries it (maintainer
 decision, 2026-11-12), so the tag's tree declares 3.0.0. Anyone who unpacked
 `v3.0` before the move has the 2.1.0-declaring tree at `f9277ff8`; "What 3.0
-produced" below, once written, records the commit the tag finally names.
+produced" below records the commit the tag finally names.
+
+## What 3.0 produced
+
+| | |
+| --- | --- |
+| Tag | `v3.0`, annotated (tag object `f622234e39eed643baeefde682a7340be0c7254e`), on commit `ce1d59561963338645b880aecb20e89ed899c396`, the merge commit of the release-metadata pull request on `main`; it replaced the first tag, which named `f9277ff8` (maintainer decision, 2026-11-12) |
+| GitHub release | <https://github.com/gravitas-sim/gravitas-sim.github.io/releases/tag/v3.0>, "Gravitas 3.0", published 2026-11-12 (23:49:58 UTC), no attached assets |
+| Zenodo record | <https://zenodo.org/records/24181005>, version `3.0.0`, publication date 2026-11-12, creator *Ziegler, Carl* |
+| Version DOI | 10.5281/zenodo.24181005 |
+| Concept DOI | 10.5281/zenodo.22800609 (unchanged) |
+| Archived file | `gravitas-sim/gravitas-sim.github.io-v3.0.zip`, 49,355,798 bytes, md5 `b4a2998cb7f3b37143cfc05c6d696347` (from the Zenodo API, 2026-11-12) |
+
+The archive holds `doi: null` in `RELEASE`, by design: the DOI did not exist
+when the tag was made, so it is recorded in the repository by the commit that
+follows the release (this section is part of it) and is not inside the archived
+`v3.0`.
+
+The record's metadata agrees with `.zenodo.json`: title, version, publication
+date, creator with ORCID and affiliation, keywords, notes and related
+identifiers are identical. Two differences are Zenodo's own handling and not
+drift: it shows the licence as `mit-license` where `.zenodo.json` says `mit`, and
+it stores the apostrophe in "adopter's guide" as a plain `'` where
+`.zenodo.json` has `’`.
+
+One anomaly, for the next release. GitHub's delivery list for the Zenodo webhook
+(read 2026-11-12, status and action only) shows three `release` deliveries for
+this one release: `created`, `202`; `released`, `409`; `published`, `500`.
+Version 1.0.0's pair ended `202` then `409`, and the second of the pair was the
+expected deduplication. Here the `published` delivery was answered `500`, not
+`409`. The record exists and is correct regardless, so the `202` was the one that
+mattered. The cause on Zenodo's side is not known from the repository; if a
+future release shows no record after a `500`, redeliver from the webhook's page
+before assuming the release failed.
 
 ## What 2.0.0 produced
 

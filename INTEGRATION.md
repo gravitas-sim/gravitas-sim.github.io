@@ -1,5 +1,7 @@
 # Integration
 
+**Status, 2026-11-12: `v3` was released as 3.0** (tag `v3.0` on commit `ce1d59561963338645b880aecb20e89ed899c396`, where `main` and `v3` held the same commit; GitHub release and Zenodo archive, version DOI 10.5281/zenodo.24181005). "What 3.0 produced" in [`RELEASING.md`](RELEASING.md) has the rest. The branch rules below are unchanged by it.
+
 **Status, 2026-10-16.** `v2` was released as 2.0.0 (merge commit `a71f73f50f30ec6a81d398d2cd54f474e87ddd85` on `main`, tag `v2.0.0`) and has been deleted. `main` is the integration branch for invisible work and deploys on every merge. Visible and instructional work goes to the active train, when there is one. This file is what a session reads first to find where its work goes; it changes only by a reviewed pull request. It is row D-INT-02 of the [decision register](DECISION_REGISTER.md), which supersedes D-INT-01.
 
 The model is machine-readable, and `tools/pr-class.mjs` (the CI job `Pull-request class`) reads it:

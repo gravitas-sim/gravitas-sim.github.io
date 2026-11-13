@@ -58,3 +58,7 @@ license:
   - CC-BY-4.0
 version: "3.0.0"
 date-released: "2026-11-12"
+identifiers:
+  - type: doi
+    value: "10.5281/zenodo.24181005"
+    description: "The DOI of this version."
