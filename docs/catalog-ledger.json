@@ -1130,7 +1130,13 @@
         ],
         "register": ["D-R10-212-01"]
       },
-      "open_items": [],
+      "open_items": [
+        {
+          "ref": "D-R4-302-02",
+          "owner": 409,
+          "note": "narrow-night asks the airmass range and the color term only; the extinction the earlier prediction sets up is not measured by any field. Reworded, not revised; a field for it is a revised step under 7.8"
+        }
+      ],
       "questions": { "Q1": "", "Q2": "", "Q3": "", "Q4": "", "Q5": "" },
       "leak": { "L1": "", "L2": "", "L3": "", "L4": "", "L5": "" },
       "task_rule_items": [],
@@ -3531,7 +3537,13 @@
       "audit": "FOCUSED",
       "scene_class": "portrait or backdrop",
       "limits": null,
-      "open_items": [],
+      "open_items": [
+        {
+          "ref": "D-R4-302-02",
+          "owner": 410,
+          "note": "facility field is typed 1 to 3 (counted from 1, saved answers depend on it) while the panel slider's raw value is 0 to 2; a 0-based field is a revised step after the task-change contract lands"
+        }
+      ],
       "questions": { "Q1": "", "Q2": "", "Q3": "", "Q4": "", "Q5": "" },
       "leak": { "L1": "", "L2": "", "L3": "", "L4": "", "L5": "" },
       "task_rule_items": [],
