@@ -1180,7 +1180,7 @@
     {
       "file": "STUDENT_ROUTE_BASELINE.md",
       "kind": "reference",
-      "purpose": "The measured baseline of the pages a student opens (Home, two lessons, an Observatory guide, the 3-D lab), cold, warm and offline over compressed transport, with the walk from a lesson link to its first accepted reading; a proxy, not a phone.",
+      "purpose": "The measured baseline of the pages a student opens, cold, warm and offline, and the walk from a lesson link to its first accepted reading; a proxy, not a phone.",
       "owner": 298,
       "added": "2026-11-13",
       "student": false

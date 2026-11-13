@@ -163,10 +163,10 @@ describe('the harness arithmetic', () => {
 
   test('every route names a usable condition, a first action and a drag target', () => {
     for (const [id, route] of Object.entries(ROUTES)) {
-      expect(route.usable.kind, id).toBeTruthy();
-      expect(typeof route.act, id).toBe('function');
-      expect(route.drag.selector, id).toBeTruthy();
-      expect(route.path.startsWith('/'), id).toBe(true);
+      expect([id, !!route.usable.kind]).toEqual([id, true]);
+      expect([id, typeof route.act]).toEqual([id, 'function']);
+      expect([id, !!route.drag.selector]).toEqual([id, true]);
+      expect([id, route.path.startsWith('/')]).toEqual([id, true]);
     }
     // The author route is kept apart from the student's.
     expect(ROUTES['author-lesson'].path).toMatch(/author=/);

@@ -157,7 +157,7 @@ catalogue refers to it, so a change to it can reach a student.
 | [STELLAR_POPULATIONS.md](STELLAR_POPULATIONS.md) | Stellar populations guides in the Observatory. | feature | unassigned | 2026-09-27 | written | no |
 | [STELLAR_STRUCTURE.md](STELLAR_STRUCTURE.md) | Stellar structure kernel and investigations. | feature | P95 | 2026-10-10 | written | yes |
 | [STORAGE.md](STORAGE.md) | What Gravitas keeps in the browser. | reference | P65 | 2026-09-30 | written | no |
-| [STUDENT_ROUTE_BASELINE.md](STUDENT_ROUTE_BASELINE.md) | The measured baseline of the pages a student opens (Home, two lessons, an Observatory guide, the 3-D lab), cold, warm and offline over compressed transport, with the walk from a lesson link to its first accepted reading; a proxy, not a phone. | reference | P298 | 2026-11-13 | written | no |
+| [STUDENT_ROUTE_BASELINE.md](STUDENT_ROUTE_BASELINE.md) | The measured baseline of the pages a student opens, cold, warm and offline, and the walk from a lesson link to its first accepted reading; a proxy, not a phone. | reference | P298 | 2026-11-13 | written | no |
 | [STUDIO.md](STUDIO.md) | The Scenario Studio: what a scenario file holds, its checks and cautions, and how it opens. | feature | unassigned | 2026-09-28 | written | no |
 | [STUDIO_ROUNDTRIP_GATE.md](STUDIO_ROUNDTRIP_GATE.md) | Studio round-trip architecture gate. | gate | unassigned | 2026-09-27 | written | no |
 | [SUN_KERNEL.md](SUN_KERNEL.md) | The Sun as a measurement: disc geometry, rotation from tracked spots bounded by a reference law, and the solar constant to luminosity and temperature, with their validation (Prompt 194). | feature | P194 | 2026-10-25 | written | yes |
