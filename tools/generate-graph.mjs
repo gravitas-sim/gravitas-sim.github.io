@@ -251,6 +251,26 @@ export const GRAPH = Object.freeze([
       'The page body sits between `<!-- glossary:start -->` and `<!-- glossary:end -->`; a conflict inside it is resolved by regenerating.',
   },
   {
+    // Roadmap IV Prompt 297: the catalog ledger, one row per shipped activity
+    // and a sheet of the 69 scenarios. Derived columns are rewritten from the
+    // Library and the lesson sources; the columns a person writes (status,
+    // answers, hash, pull request) are kept. Never loaded by the application.
+    id: 'ledger',
+    generate: 'node tools/catalog-ledger.mjs --write',
+    check: 'node tools/catalog-ledger.mjs --check',
+    inputs: [
+      'library/library.json',
+      'js/data/investigations',
+      'js/widgets.js',
+      'tools/catalog-ledger.mjs',
+      'tools/catalog-ledger-seed.json',
+    ],
+    outputs: ['docs/catalog-ledger.json', 'docs/catalog-ledger.md'],
+    after: ['manifest', 'registries', 'library'],
+    notes:
+      "The status columns are hand-written inside the JSON and kept on regenerate: resolve a conflict by taking both sides' status fields and regenerating, never by taking a side of the derived ones. A closed row's hash is re-recorded with `node tools/catalog-ledger.mjs --record <row id>`.",
+  },
+  {
     id: 'irreversible',
     generate: 'node tools/build-irreversibility-audit.mjs',
     check: 'node tools/build-irreversibility-audit.mjs --check',
