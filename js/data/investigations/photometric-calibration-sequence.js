@@ -456,9 +456,9 @@ export const COUNTS_TO_MAGNITUDES_DEEPER = {
       depth: 'quantitative',
       type: 'measure',
       title: 'The night that cannot say',
-      body: `Read the <em>Night</em> row for the airmass range, then the extinction and
-             zero point rows. The color term is still fixed (the standards span a wide
-             range of color). Give the airmass range, and the color term.`,
+      body: `Read the <em>Night</em> row for the airmass range, then the <em>Color term,
+             c</em> row. The color term is still fixed (the standards span a wide range
+             of color). Give the airmass range, and the color term.`,
       fields: [
         { id: 'lo', label: 'Lowest airmass', unit: '', hint: '1.30' },
         { id: 'hi', label: 'Highest airmass', unit: '', hint: '1.42' },
@@ -956,7 +956,7 @@ export const COUNTS_TO_MAGNITUDES_DEEPER_ES = {
     },
     {
       title: 'La noche que no puede decirlo',
-      body: 'Lee la fila <em>Noche</em> para el intervalo de masa de aire y después las filas de la extinción y del punto cero. El término de color sigue fijado (los patrones cubren un amplio intervalo de color). Da el intervalo de masa de aire y el término de color.',
+      body: 'Lee la fila <em>Noche</em> para el intervalo de masa de aire y después la fila <em>Término de color, c</em>. El término de color sigue fijado (los patrones cubren un amplio intervalo de color). Da el intervalo de masa de aire y el término de color.',
       fields: [
         { label: 'Masa de aire más baja' },
         { label: 'Masa de aire más alta' },
