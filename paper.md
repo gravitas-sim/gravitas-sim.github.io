@@ -241,8 +241,9 @@ own licenses, recorded in `NOTICE`.
 Releases are archived on Zenodo: all versions share one DOI,
 <https://doi.org/10.5281/zenodo.22800609>, and each release has its own.
 Version 1.0.0 is archived at <https://doi.org/10.5281/zenodo.22800610> and
-version 2.0.0 at <https://doi.org/10.5281/zenodo.23425533>. The counts in this
-paper are those of 1.0.0, not of 2.0.0.
+version 2.0.0 at <https://doi.org/10.5281/zenodo.23425533>, and version 3.0.0 at
+<https://doi.org/10.5281/zenodo.24181005>. The counts in this paper are those
+of 1.0.0, not of the later releases.
 
 # References
 

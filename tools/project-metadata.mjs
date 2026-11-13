@@ -89,11 +89,13 @@ export const RELEASE = {
   // published, so it is recorded afterwards and the archive does not contain
   // it. That is expected - see RELEASING.md.
   //
-  // Null until Zenodo mints the 3.0.0 version DOI, so no generated file claims
-  // the 2.0.0 version DOI (10.5281/zenodo.23425533) for 3.0.0. That DOI and the
-  // 1.0.0 one (10.5281/zenodo.22800610) are recorded in RELEASING.md as what
-  // those releases produced. 2.1.0 was never archived and has none.
-  doi: null,
+  // The 3.0.0 version DOI, copied from the Zenodo record
+  // (https://zenodo.org/records/24181005). The 2.0.0 version DOI
+  // (10.5281/zenodo.23425533) and the 1.0.0 one (10.5281/zenodo.22800610) are
+  // not this release's and stay out of every file generated from this
+  // constant; RELEASING.md records them as what those releases produced. 2.1.0
+  // was never archived and has none.
+  doi: '10.5281/zenodo.24181005',
   // The concept DOI, which is stable across versions: it resolves to whichever
   // release is newest. Right for a badge or a "cite the software" link, wrong
   // for citing the version somebody actually ran.

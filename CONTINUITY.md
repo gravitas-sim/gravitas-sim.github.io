@@ -22,17 +22,15 @@ usually".
   DOI for the whole project (`CITATION.cff`, [`RELEASING.md`](RELEASING.md)).
   The archive holds the full source tree, the teaching material and the
   vendored libraries, under their licenses. As of 2026-11-12 the latest archived
-  release is 2.0.0 (tagged 2026-10-16). Release 2.1.0 (tagged 2026-10-24) and
-  `v3.0` (annotated, first tagged 2026-11-12 at commit `f9277ff8`, whose tree
-  still declared 2.1.0; the tag is moved once to the `main` commit that carries
-  the 3.0.0 release metadata) are plain git tags with no GitHub release and no
-  version DOI, so neither is in the archive; the 3.0 release, once published,
-  will be;
-  the work since 2.0.0 is in the repository only. If the site and the repository
-  both vanished, the latest archived release, 2.0.0, rebuilds the project as it
-  was then, not as it is. Anyone who still has a clone or GitHub's tag zipball
-  of `v3.0` has the current tree; [`RELEASING.md`](RELEASING.md), "Recovering
-  from `v3.0`", says how to take and check it.
+  release is 3.0.0 (the `v3.0` tag, published 2026-11-12, version DOI
+  10.5281/zenodo.24181005; `RELEASING.md`, "What 3.0 produced"). Release 2.1.0
+  (tagged 2026-10-24) is a plain git tag with no GitHub release and no version
+  DOI, so it is not in the archive; its work is in 3.0.0. If the site and the
+  repository both vanished, the latest archived release, 3.0.0, rebuilds the
+  project as it was at that release, not as it is later. Anyone who has a clone
+  or GitHub's tag zipball of `v3.0` has the 3.0.0 tree;
+  [`RELEASING.md`](RELEASING.md), "Recovering from `v3.0`", says how to take and
+  check it.
 - **The site needs no service.** It is static files on GitHub Pages: no server
   to run, no database, no account, no tracking. The simulations, the lessons
   and the validation page run from the files alone, offline once loaded
@@ -52,8 +50,8 @@ The site is the committed tree, published as it is, so a copy is a checkout.
 Nothing below needs the maintainer, an account on any service, or a build.
 
 1. Take a release from the archive (the Zenodo record) or a tag of the
-   repository, and unpack it. The newest Zenodo archive is 2.0.0; for the
-   current tree take the tag `v3.0` (RELEASING.md, "Recovering from `v3.0`").
+   repository, and unpack it. The newest Zenodo archive is 3.0.0, the
+   same release as the tag `v3.0` (RELEASING.md, "Recovering from `v3.0`").
 2. Serve the folder as static files from any host. With Node installed,
    `node tools/static-server.mjs --root . --port 8003` serves it for a trial;
    a department's web server or a file share behind one does the same job.
