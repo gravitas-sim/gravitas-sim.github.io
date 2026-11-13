@@ -21,6 +21,16 @@ the release rather than in the tag.
   prompt and audit disposition, and `npm run ledger:check`, which fails when
   the ledger and the shipped inventory disagree. Nothing changes on screen.
 
+### Changed
+
+- The monthly provenance run (Prompt 304; register rows D-R4-304-01 to 04): a
+  download from a pinned archive that fails on the network now names its URL
+  and the reason, so a failed run says which archive was at fault. The
+  extinction data pack's manifest is regenerated from its builder (only the
+  description of the check changes). The causes of the run's two failed legs
+  are recorded, and the evidence row for the datasets' provenance is current.
+  Nothing changes on screen and no data value changes.
+
 ## [3.0.0] - 2026-11-12
 
 **Gravitas 3.0.0** is the release of the `v3` staging branch as it stood on
