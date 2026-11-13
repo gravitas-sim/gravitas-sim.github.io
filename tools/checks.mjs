@@ -772,6 +772,21 @@ export const CHECKS = [
     ci: 'checks',
     group: 'generated',
   },
+  // Every shipped investigation, activity, bench lab, course, sequence and
+  // scenario has a row in the catalog ledger, a closed row's files still match
+  // its recorded hash, and each scenario has exactly one owner among the
+  // prompts that review them.
+  {
+    id: 'ledger',
+    label: 'the catalog ledger covers every activity and scenario',
+    command: ['npm', 'run', 'ledger:check'],
+    tier: 'quick',
+    ci: null,
+    why:
+      'CI runs the same facts in tests/catalogLedger.test.js (the committed ' +
+      'ledger against the shipped inventory, and the failure shapes).',
+    group: 'generated',
+  },
   // The list of engine operations that destroy information is scanned out of
   // js/physics.js, not remembered. This is the check that makes that worth
   // anything: add a cull or a new merge path and the committed list is stale

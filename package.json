@@ -146,6 +146,8 @@
     "archive:live": "node tools/archive-live-check.mjs",
     "catalog:review": "node tools/catalog-review.mjs",
     "catalog:check": "node tools/generate.mjs --check --only catalog",
+    "ledger": "node tools/catalog-ledger.mjs --write",
+    "ledger:check": "node tools/generate.mjs --check --only ledger",
     "sw:manifest": "node tools/build-service-worker.mjs",
     "generate": "node tools/generate.mjs",
     "generate:check": "node tools/generate.mjs --check",

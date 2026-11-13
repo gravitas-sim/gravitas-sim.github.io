@@ -13,6 +13,14 @@ the release rather than in the tag.
 
 ## [Unreleased]
 
+### Added
+
+- The catalog ledger (Prompt 297; register row D-R4-297-01): a generated
+  record with one row per investigation, activity, bench lab, built-in course
+  and sequence and a sheet of the 69 scenarios, seeded with each row's owning
+  prompt and audit disposition, and `npm run ledger:check`, which fails when
+  the ledger and the shipped inventory disagree. Nothing changes on screen.
+
 ## [3.0.0] - 2026-11-12
 
 **Gravitas 3.0.0** is the release of the `v3` staging branch as it stood on

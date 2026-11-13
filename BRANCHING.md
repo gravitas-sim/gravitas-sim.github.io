@@ -70,6 +70,7 @@ The table is written from `tools/generate-graph.mjs`, the list that
 | `docs/lesson-scene-catalog.json`, `docs/lesson-scene-record.md`, `js/data/investigations/provenance.js` | `node tools/lesson-scene-audit.mjs --write` |  |
 | `js/data/instruments.js` | `node tools/build-instruments.mjs` | The facilities table in INSTRUMENTS.md sits between `<!-- instruments:begin -->` and `<!-- instruments:end -->`; a conflict inside it is resolved by regenerating. |
 | `js/explain/terms.en.js`, `js/explain/terms.es.js` | `node tools/glossary.mjs --write` | The page body sits between `<!-- glossary:start -->` and `<!-- glossary:end -->`; a conflict inside it is resolved by regenerating. |
+| `docs/catalog-ledger.json`, `docs/catalog-ledger.md` | `node tools/catalog-ledger.mjs --write` | The status columns are hand-written inside the JSON and kept on regenerate: resolve a conflict by taking both sides' status fields and regenerating, never by taking a side of the derived ones. A closed row's hash is re-recorded with `node tools/catalog-ledger.mjs --record <row id>`. |
 | `js/data/irreversible.js` | `node tools/build-irreversibility-audit.mjs` |  |
 | `validation/data.json` | `node tools/build-validation-data.mjs` | The physics suite's own output; the `/validation/` page paints from it. |
 | `tools/README.md` | `node tools/build-tools-index.mjs` |  |

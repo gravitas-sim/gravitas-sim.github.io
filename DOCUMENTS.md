@@ -266,6 +266,7 @@ out.
 | scene | `node tools/lesson-scene-audit.mjs --write` | `docs/lesson-scene-catalog.json`, `docs/lesson-scene-record.md`, `js/data/investigations/provenance.js` | deterministic |
 | instruments | `node tools/build-instruments.mjs` | `js/data/instruments.js`, `INSTRUMENTS.md` | deterministic |
 | glossary | `node tools/glossary.mjs --write` | `js/explain/terms.en.js`, `js/explain/terms.es.js`, `glossary/index.html` | deterministic |
+| ledger | `node tools/catalog-ledger.mjs --write` | `docs/catalog-ledger.json`, `docs/catalog-ledger.md` | deterministic |
 | irreversible | `node tools/build-irreversibility-audit.mjs` | `js/data/irreversible.js` | deterministic |
 | validation-data | `node tools/build-validation-data.mjs` | `validation/data.json` | deterministic |
 | tools-index | `node tools/build-tools-index.mjs` | `tools/README.md` | deterministic |

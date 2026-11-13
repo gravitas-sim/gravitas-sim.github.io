@@ -927,6 +927,8 @@ export const FREEZE = Object.freeze({
   notFormats: Object.freeze({
     'gravitas.variables-sample':
       'tools/variables-sample.mjs prints a sample of the variable-star classifier for its author; no page, file or link carries it',
+    'gravitas.catalog-ledger':
+      "docs/catalog-ledger.json is the maintainers' record of what was reviewed, written and read only by tools/catalog-ledger.mjs; the application never loads it and no file, page or link carries it",
     'gravitas.something':
       'tools/data-kinds-cases.mjs hands the data-kind readers a format id that is wrong on purpose, to see them refuse it',
   }),
