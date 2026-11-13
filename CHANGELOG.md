@@ -15,6 +15,8 @@ the release rather than in the tag.
 
 ### Added
 
+- A measurement harness for the pages a student opens (`npm run perf:routes`, `npm run perf:walks`; `STUDENT_ROUTE_BASELINE.md`): Home, two lessons, an Observatory guide and the 3-D lab, cold, warm and offline over compressed transport, and the walk from a lesson link to its first accepted reading. The test server gains an opt-in gzip and cache-header mode. Nothing a visitor sees changes.
+
 - The catalog ledger (Prompt 297; register row D-R4-297-01): a generated
   record with one row per investigation, activity, bench lab, built-in course
   and sequence and a sheet of the 69 scenarios, seeded with each row's owning

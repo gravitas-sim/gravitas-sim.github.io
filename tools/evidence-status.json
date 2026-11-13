@@ -1762,7 +1762,7 @@
       "version": "3.0",
       "class": "S",
       "status": "UNKNOWN",
-      "method": "three automated Chromium profiles (CPU throttle on the main thread, a heap ceiling, a network shape) over five committed workflows with time and memory budgets (e2e/deviceProfiles.spec.js, tools/perf-thresholds.json); the low tier's kernel results held to stated tolerances (tests/computeTier.test.js): proxies, not devices",
+      "method": "three automated Chromium profiles (CPU throttle on the main thread, a heap ceiling, a network shape) over six committed workflows with time and memory budgets (e2e/deviceProfiles.spec.js, tools/perf-thresholds.json); the low tier's kernel results held to stated tolerances (tests/computeTier.test.js): proxies, not devices",
       "evaluator": "none",
       "artifact": "OFFLINE_AND_LOW_END.md",
       "limitations": "No real laptop or phone was measured. The CPU throttle slows the main thread only (Workers, the compositor and the GPU run at the host's speed), the heap ceiling bounds JavaScript memory and not decoded images or GPU memory, and the network shape is a rate and a delay. The classifier measures frames on the simulation page only: a page that never renders it does not decide, and runs at the full tier unless ?quality=low is given.",

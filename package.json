@@ -69,6 +69,8 @@
     "thumbnails": "node tools/generate-scenario-thumbnails.mjs",
     "thumbnails:check": "node tools/generate.mjs --check --only thumbnails",
     "perf": "node tools/perf-probe.mjs",
+    "perf:routes": "node tools/route-harness.mjs",
+    "perf:walks": "node tools/route-walks.mjs",
     "bench:experiments": "node tools/experiment-bench.mjs",
     "bench:observatory": "node tools/observatory-bench.mjs",
     "bench:inference": "node tools/inference-bench.mjs",
