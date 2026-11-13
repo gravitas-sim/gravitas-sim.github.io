@@ -16,7 +16,7 @@ is written by `node tools/docs-map.mjs` from the same table; never edit it by
 hand.
 
 <!-- docs-map:begin (written by node tools/docs-map.mjs; do not edit) -->
-218 root documents (4 front-door, 10 policy, 2 legal, 10 process, 5 guide, 9 design, 10 reference, 105 feature, 54 gate, 9 record) and 6 archived.
+219 root documents (4 front-door, 10 policy, 2 legal, 10 process, 5 guide, 9 design, 11 reference, 105 feature, 54 gate, 9 record) and 6 archived.
 A document the code no longer matches is moved to `docs/archive/`, never
 deleted, with a header naming the date and what superseded it:
 

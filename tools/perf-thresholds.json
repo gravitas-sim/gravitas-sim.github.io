@@ -185,14 +185,16 @@
     "note": "Prompt 285. Three automated profiles, ENFORCED by e2e/deviceProfiles.spec.js in CI (the older `profiles` above stay advisory). PROXIES: a CPU throttle on the main thread only (a Worker, the compositor and the GPU run at the host's speed), a V8 heap ceiling (it bounds JavaScript memory, not decoded images, canvases or GPU memory) and a network shape (a rate and a delay, not a radio). Not one of them is a device: the real-device profiles below stay empty and every real-device claim stays UNKNOWN in tools/evidence-status.json. A time budget is the measured value times 3, rounded up to 100 ms, and never under 4000 ms; a heap budget is the measured used heap after a forced collection times 2, rounded up to 1 MB, and never under 8 MB: a shared runner has its own load, and a budget it can fail by being busy would be a report on the runner. Each is set from a measurement and never loosened to pass. The heap figure is small because the Observatory's data is small; the budget is for a regression that holds frames and tables it should have let go.",
     "workflows": [
       "boot",
-      "lesson",
+      "authorLesson",
+      "studentLesson",
       "image",
       "fit",
       "run3d"
     ],
     "workflowNotes": {
       "boot": "the application starts (splash ended, controls shown); interaction: Load scenario opens its list",
-      "lesson": "/?author=tides&step=1; interaction: Next changes the panel",
+      "authorLesson": "the author's preview, /?author=tides&step=1, over the plain (uncompressed) test server, as these budgets have always judged it; interaction: Next changes the panel",
+      "studentLesson": "the page a student opens from a lesson link, /#investigation=keplers-laws, over the compressed test server (tools/static-server.mjs --gzip, the host's cache headers); usable is the Next button visible, as for authorLesson; interaction: Next changes the step counter. The routes are measured at length by tools/route-harness.mjs (STUDENT_ROUTE_BASELINE.md)",
       "image": "a seeded 256 x 256 frame is opened in the Observatory; interaction: one point mark placed",
       "fit": "the TESS light curve with the fit panel open; interaction: Run, with profile intervals, to 'Fitted in'",
       "run3d": "/lab3d/ with reference problem R5; interaction: Run to 'Finished'"
@@ -246,9 +248,13 @@
           "timeToUsableMs": 13800,
           "interactionMs": 11100
         },
-        "lesson": {
+        "authorLesson": {
           "timeToUsableMs": 69400,
           "interactionMs": 5200
+        },
+        "studentLesson": {
+          "timeToUsableMs": 10300,
+          "interactionMs": 5000
         },
         "image": {
           "timeToUsableMs": 5300,
@@ -268,9 +274,13 @@
           "timeToUsableMs": 18500,
           "interactionMs": 13500
         },
-        "lesson": {
+        "authorLesson": {
           "timeToUsableMs": 111000,
           "interactionMs": 4100
+        },
+        "studentLesson": {
+          "timeToUsableMs": 19300,
+          "interactionMs": 5200
         },
         "image": {
           "timeToUsableMs": 9200,
@@ -290,8 +300,12 @@
           "timeToUsableMs": 65900,
           "interactionMs": 9900
         },
-        "lesson": {
+        "authorLesson": {
           "timeToUsableMs": 245400,
+          "interactionMs": 4000
+        },
+        "studentLesson": {
+          "timeToUsableMs": 45800,
           "interactionMs": 4000
         },
         "image": {
@@ -325,16 +339,20 @@
     "measured": {
       "date": "2026-11-11",
       "machine": "Apple Mac (Darwin 25.6), headless Chromium via Playwright, Node 22.23.4, one worker, other jobs running at times",
-      "note": "The most recent run of each workflow; a repeated run varied by up to 2x with the machine's load (boot's interaction on the throttled desktop read 1753 and 3674 ms).",
+      "note": "The most recent run of each workflow; a repeated run varied by up to 2x with the machine's load (boot's interaction on the throttled desktop read 1753 and 3674 ms). studentLesson (added 2026-11-13, Prompt 298) is the median of three runs of e2e/deviceProfiles.spec.js on the same machine, the budget being three times that median.",
       "values": {
         "throttled-desktop": {
           "boot": {
             "timeToUsableMs": 4591,
             "interactionMs": 3674
           },
-          "lesson": {
+          "authorLesson": {
             "timeToUsableMs": 23132,
             "interactionMs": 1720
+          },
+          "studentLesson": {
+            "timeToUsableMs": 3431,
+            "interactionMs": 1648
           },
           "image": {
             "timeToUsableMs": 1766,
@@ -363,9 +381,13 @@
             "timeToUsableMs": 6141,
             "interactionMs": 4483
           },
-          "lesson": {
+          "authorLesson": {
             "timeToUsableMs": 36980,
             "interactionMs": 1351
+          },
+          "studentLesson": {
+            "timeToUsableMs": 6413,
+            "interactionMs": 1713
           },
           "image": {
             "timeToUsableMs": 3037,
@@ -394,9 +416,13 @@
             "timeToUsableMs": 21936,
             "interactionMs": 3294
           },
-          "lesson": {
+          "authorLesson": {
             "timeToUsableMs": 81794,
             "interactionMs": 818
+          },
+          "studentLesson": {
+            "timeToUsableMs": 15240,
+            "interactionMs": 836
           },
           "image": {
             "timeToUsableMs": 6282,

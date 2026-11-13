@@ -27,6 +27,8 @@ import { readFileSync, writeFileSync, existsSync } from 'node:fs';
 import { chromium } from '@playwright/test';
 import { test, expect } from './fixtures.js';
 import { frameObservation, asFile } from './mobileFrames.js';
+import { throttle, withQuality } from '../tools/route-harness.mjs';
+import { serveStatic } from '../tools/static-server.mjs';
 
 const FILE = JSON.parse(readFileSync('tools/perf-thresholds.json', 'utf8'));
 const DEVICE = FILE.deviceProfiles;
@@ -38,22 +40,6 @@ const measured = existsSync(RECORD ?? '/nonexistent')
 
 const MB = 1024 * 1024;
 const ceiling = key => DATA.ceilings.find(c => c.key === key).ceiling;
-
-/** Slow the page down as a profile says; before the first navigation. */
-async function throttle(page, profile) {
-  const cdp = await page.context().newCDPSession(page);
-  await cdp.send('Emulation.setCPUThrottlingRate', { rate: profile.cpu });
-  if (profile.network) {
-    await cdp.send('Network.enable');
-    await cdp.send('Network.emulateNetworkConditions', {
-      offline: false,
-      latency: profile.network.latencyMs,
-      downloadThroughput: (profile.network.downKbps * 1000) / 8,
-      uploadThroughput: (profile.network.upKbps * 1000) / 8,
-    });
-  }
-  return cdp;
-}
 
 /** Record or check one workflow's two times against its budgets. */
 function judge(profileId, workflowId, times) {
@@ -78,13 +64,8 @@ function judge(profileId, workflowId, times) {
   ).toBeLessThanOrEqual(budget.interactionMs);
 }
 
-const quality = profile =>
-  profile.quality === 'auto' ? '' : `quality=${profile.quality}`;
-const withQuery = (path, profile) => {
-  const q = quality(profile);
-  if (!q) return path;
-  return path.includes('?') ? `${path}&${q}` : `${path}?${q}`;
-};
+// A hash comes last: the tier goes before it (tools/route-harness.mjs).
+const withQuery = withQuality;
 
 /** How long the current workflow may take before its own wait gives up: its budget and a margin. */
 const LIMIT = { usable: 120_000, interact: 120_000 };
@@ -128,7 +109,9 @@ const WORKFLOWS = {
       });
     },
   },
-  lesson: {
+  // The author's preview of a lesson, over the uncompressed test server: the
+  // route these budgets judged until Prompt 298, kept as it was.
+  authorLesson: {
     async usable(page, profile) {
       await page.goto(withQuery('/?author=tides&step=1', profile), {
         waitUntil: 'domcontentloaded',
@@ -145,6 +128,25 @@ const WORKFLOWS = {
           timeout: LIMIT.interact,
         })
         .not.toBe(before);
+    },
+  },
+  // The page a student opens from a link, over the compressed transport the
+  // host uses (tools/static-server.mjs --gzip). Same definition of usable.
+  studentLesson: {
+    transport: 'gzip',
+    async usable(page, profile) {
+      await page.goto(withQuery('/#investigation=keplers-laws', profile), {
+        waitUntil: 'domcontentloaded',
+      });
+      await expect(page.locator('#investigationNext')).toBeVisible({
+        timeout: LIMIT.usable,
+      });
+    },
+    async interact(page) {
+      await page.locator('#investigationNext').click();
+      await expect(page.locator('.inv-step-count')).toContainText(/Step 2\b/, {
+        timeout: LIMIT.interact,
+      });
     },
   },
   image: {
@@ -250,18 +252,30 @@ for (const [profileId, profile] of Object.entries(DEVICE.profiles)) {
         LIMIT.usable = (b?.timeToUsableMs ?? 120_000) + 30_000;
         LIMIT.interact = (b?.interactionMs ?? 120_000) + 30_000;
         test.setTimeout(LIMIT.usable + LIMIT.interact + 60_000);
-        await inProfile(baseURL, profile, async page => {
-          await seed(page);
-          await throttle(page, profile);
-          const w = WORKFLOWS[workflowId];
-          const t0 = Date.now();
-          await w.usable(page, profile);
-          const timeToUsableMs = Date.now() - t0;
-          const t1 = Date.now();
-          await w.interact(page);
-          const interactionMs = Date.now() - t1;
-          judge(profileId, workflowId, { timeToUsableMs, interactionMs });
-        });
+        const w = WORKFLOWS[workflowId];
+        const host =
+          w.transport === 'gzip'
+            ? await serveStatic({
+                root: process.env.GRAVITAS_E2E_TARGET === 'dist' ? 'dist' : '.',
+                gzip: true,
+                cacheHeaders: true,
+              })
+            : null;
+        try {
+          await inProfile(host?.url ?? baseURL, profile, async page => {
+            await seed(page);
+            await throttle(page, profile);
+            const t0 = Date.now();
+            await w.usable(page, profile);
+            const timeToUsableMs = Date.now() - t0;
+            const t1 = Date.now();
+            await w.interact(page);
+            const interactionMs = Date.now() - t1;
+            judge(profileId, workflowId, { timeToUsableMs, interactionMs });
+          });
+        } finally {
+          host?.close();
+        }
       });
     }
 
