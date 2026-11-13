@@ -22,6 +22,8 @@
 #   `npm run vendor` and a review of the regenerated bundles. `npm run
 #   vendor:check` fails CI if the two ever drift, which is what makes ignoring
 #   them here safe rather than negligent.
+#
+# The CI workflow that tests these pull requests is .github/workflows/ci.yml.
 # =============================================================================
 
 version: 2
