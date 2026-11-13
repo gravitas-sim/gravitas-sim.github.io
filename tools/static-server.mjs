@@ -21,6 +21,25 @@
 //
 //   node tools/static-server.mjs                     serve the repo root on 8080
 //   node tools/static-server.mjs --root dist --port 4173
+//   node tools/static-server.mjs --gzip --cache-headers    as the host serves
+//
+// Two optional modes exist for measuring what a student's browser downloads
+// (tools/route-harness.mjs). They are off by default, so the end-to-end suite
+// keeps its uncompressed, never-cached server:
+//
+//   gzip           text responses go out gzip-compressed (level 6, compressed
+//                  once and held in memory so the compression work is not in
+//                  the measurement) with Content-Encoding and Vary, when the
+//                  request's Accept-Encoding allows it. This reproduces the
+//                  byte count and the request sizes of a compressing host. It
+//                  does not reproduce the host's HTTP/2 multiplexing, its
+//                  latency, its choice of Brotli where a browser offers it, or
+//                  a radio; the network shape is the harness's own throttle.
+//   cacheHeaders   Cache-Control: public, max-age=600 and a strong ETag with
+//                  If-None-Match answered 304, which is what GitHub Pages sends
+//                  for static files. It reproduces how the browser's HTTP cache
+//                  treats a second visit; it does not reproduce the host's
+//                  edge cache or the real age of a response.
 //
 // Or programmatically, which is how the probes use it:
 //
@@ -31,6 +50,8 @@
 // =============================================================================
 
 import { createServer } from 'node:http';
+import { createHash } from 'node:crypto';
+import { gzipSync } from 'node:zlib';
 import { readFile, stat } from 'node:fs/promises';
 import { extname, join, resolve, sep, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -60,6 +81,24 @@ const MIME = {
   '.ipynb': 'application/json; charset=utf-8',
 };
 
+/** Types worth compressing; images, fonts and PDFs are already compressed. */
+const COMPRESSIBLE = new Set([
+  '.html',
+  '.js',
+  '.mjs',
+  '.css',
+  '.json',
+  '.map',
+  '.svg',
+  '.txt',
+  '.xml',
+  '.csv',
+  '.ipynb',
+]);
+
+/** Below this a gzip header costs more than it saves. */
+const GZIP_MIN_BYTES = 150;
+
 /**
  * Start a static server.
  *
@@ -67,11 +106,24 @@ const MIME = {
  * @param {string} options.root - Directory to serve
  * @param {number} [options.port] - Port; 0 asks the OS for a free one
  * @param {boolean} [options.quiet] - Suppress the request log
- * @returns {Promise<import('node:http').Server & {port: number, url: string}>}
- *   The listening server, with the port it actually got
+ * @param {boolean} [options.gzip] - Compress text responses (see the header)
+ * @param {boolean} [options.cacheHeaders] - Send the host's cache headers
+ * @returns {Promise<import('node:http').Server & {port: number, url: string, stats: {requests: number, bodyBytes: number}}>}
+ *   The listening server, with the port it actually got and a running count of
+ *   the requests it answered and the body bytes it sent (the harness resets
+ *   it between page loads)
  */
-export function serveStatic({ root, port = 0, quiet = true }) {
+export function serveStatic({
+  root,
+  port = 0,
+  quiet = true,
+  gzip = false,
+  cacheHeaders = false,
+}) {
   const base = resolve(root);
+  const stats = { requests: 0, bodyBytes: 0 };
+  /** file path -> {size, mtimeMs, plain, gz, etag}; the compression is paid once. */
+  const held = new Map();
 
   const server = createServer(async (req, res) => {
     let status = 200;
@@ -98,15 +150,52 @@ export function serveStatic({ root, port = 0, quiet = true }) {
         /* fall through to the read, which reports the miss */
       }
 
-      const body = await readFile(file);
-      res.writeHead(200, {
-        'Content-Type':
-          MIME[extname(file).toLowerCase()] || 'application/octet-stream',
-        'Content-Length': body.length,
-        // Never cache. A probe that read yesterday's bundle would report on
-        // code nobody is running.
-        'Cache-Control': 'no-store, must-revalidate',
-      });
+      const ext = extname(file).toLowerCase();
+      const headers = {
+        'Content-Type': MIME[ext] || 'application/octet-stream',
+        // Never cache, unless asked to behave like the host. A probe that read
+        // yesterday's bundle would report on code nobody is running.
+        'Cache-Control': cacheHeaders
+          ? 'public, max-age=600'
+          : 'no-store, must-revalidate',
+      };
+      let body;
+      if (!gzip && !cacheHeaders) {
+        body = await readFile(file);
+      } else {
+        const info = await stat(file);
+        let entry = held.get(file);
+        if (!entry || entry.mtimeMs !== info.mtimeMs) {
+          const plain = await readFile(file);
+          const compress =
+            COMPRESSIBLE.has(ext) && plain.length >= GZIP_MIN_BYTES;
+          entry = {
+            mtimeMs: info.mtimeMs,
+            plain,
+            gz: gzip && compress ? gzipSync(plain, { level: 6 }) : null,
+            etag: `"${createHash('sha1').update(plain).digest('hex').slice(0, 16)}"`,
+          };
+          held.set(file, entry);
+        }
+        if (cacheHeaders) {
+          headers.ETag = entry.etag;
+          if (req.headers['if-none-match'] === entry.etag) {
+            status = 304;
+            stats.requests += 1;
+            res.writeHead(304, headers).end();
+            return;
+          }
+        }
+        const wantsGzip =
+          entry.gz && /\bgzip\b/.test(req.headers['accept-encoding'] || '');
+        if (entry.gz) headers.Vary = 'Accept-Encoding';
+        if (wantsGzip) headers['Content-Encoding'] = 'gzip';
+        body = wantsGzip ? entry.gz : entry.plain;
+      }
+      headers['Content-Length'] = body.length;
+      stats.requests += 1;
+      stats.bodyBytes += body.length;
+      res.writeHead(200, headers);
       res.end(body);
     } catch {
       status = 404;
@@ -122,6 +211,7 @@ export function serveStatic({ root, port = 0, quiet = true }) {
     server.listen(port, '127.0.0.1', () => {
       const actual = server.address().port;
       server.port = actual;
+      server.stats = stats;
       server.url = `http://127.0.0.1:${actual}`;
       ok(server);
     });
@@ -148,6 +238,8 @@ if (invokedDirectly) {
     root,
     port,
     quiet: !argv.includes('--verbose'),
+    gzip: argv.includes('--gzip'),
+    cacheHeaders: argv.includes('--cache-headers'),
   });
   console.log(`Serving ${root}\n  ${server.url}`);
 

@@ -228,6 +228,8 @@ current, and the orchestrator checks it.
 | `reversibility-probe.mjs` | Does the engine run backwards? | `npm run probe:reversibility` |
 | `rotation-decomposition-validate.mjs` | The rotation-curve decomposition kernel against its committed thresholds (Prompt 236, Part A) | `npm run decomposition:validate` |
 | `route-budget.mjs` | What a fresh visitor downloads, route by route | `npm run budget:routes` |
+| `route-harness.mjs` | Student-route harness | `npm run perf:routes` |
+| `route-walks.mjs` | The walk from a lesson link to its first accepted reading | `npm run perf:walks` |
 | `scenario-stability.mjs` | Scenario stability probe | `npm run validate:scenarios` |
 | `sed-followup-validate.mjs` | The SED kernel's follow-up legs against their committed thresholds (Prompt 245, follow-up) | `npm run sed:followup` |
 | `sed-scenes.mjs` | The committed scenes of the SED kernel's validation (Prompt 245) |  |

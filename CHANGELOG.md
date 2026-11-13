@@ -13,6 +13,10 @@ the release rather than in the tag.
 
 ## [Unreleased]
 
+### Added
+
+- A measurement harness for the pages a student opens (`npm run perf:routes`, `npm run perf:walks`; `STUDENT_ROUTE_BASELINE.md`): Home, two lessons, an Observatory guide and the 3-D lab, cold, warm and offline over compressed transport, and the walk from a lesson link to its first accepted reading. The test server gains an opt-in gzip and cache-header mode. Nothing a visitor sees changes.
+
 ## [3.0.0] - 2026-11-12
 
 **Gravitas 3.0.0** is the release of the `v3` staging branch as it stood on
