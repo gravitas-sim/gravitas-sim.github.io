@@ -628,6 +628,27 @@ describe('a raw product is used only when it is the pinned one', () => {
       bytes
     );
   });
+
+  test('a download that fails on the network names its archive and the reason', async () => {
+    const empty = realpathSync(
+      mkdtempSync(path.join(tmpdir(), 'gravitas-pin-'))
+    );
+    // Node's fetch says only "fetch failed" and keeps the reason on `cause`.
+    const down = async () => {
+      throw new TypeError('fetch failed', {
+        cause: Object.assign(new Error('connect timeout'), {
+          code: 'UND_ERR_CONNECT_TIMEOUT',
+        }),
+      });
+    };
+    await expect(
+      pinnedBytes(pin, { cache: empty, offline: false, fetchImpl: down })
+    ).rejects.toThrow(`${pin.url}: fetch failed (UND_ERR_CONNECT_TIMEOUT)`);
+    const refused = async () => ({ ok: false, status: 403 });
+    await expect(
+      pinnedBytes(pin, { cache: empty, offline: false, fetchImpl: refused })
+    ).rejects.toThrow(/HTTP 403/);
+  });
 });
 
 // --- The reader and the transform, on files built by hand ----------------------

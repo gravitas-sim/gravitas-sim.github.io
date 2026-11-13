@@ -107,10 +107,23 @@ export async function pinnedBytes(
       ...(headers ?? {}),
       ...(pin.range ? { Range: `bytes=${pin.range}` } : {}),
     };
-    const res = await fetchImpl(pin.url, {
-      signal: globalThis.AbortSignal.timeout(timeoutMs),
-      ...(Object.keys(ask).length ? { headers: ask } : {}),
-    });
+    // Node's fetch reports every network failure as "fetch failed" and keeps
+    // the reason (a refused connection, a name that does not resolve, a
+    // timeout) on `cause`. Say which archive and why, so that a failed
+    // scheduled run names its source without a second dry run.
+    let res;
+    try {
+      res = await fetchImpl(pin.url, {
+        signal: globalThis.AbortSignal.timeout(timeoutMs),
+        ...(Object.keys(ask).length ? { headers: ask } : {}),
+      });
+    } catch (err) {
+      const why = err?.cause?.code ?? err?.cause?.message ?? err?.name;
+      throw new Error(
+        `${pin.url}: ${err?.message ?? err}${why ? ` (${why})` : ''}`,
+        { cause: err }
+      );
+    }
     if (!res.ok) throw new Error(`${pin.url}: HTTP ${res.status}`);
     bytes = Buffer.from(await res.arrayBuffer());
     // Checked before it is cached: a truncated or substituted download never
