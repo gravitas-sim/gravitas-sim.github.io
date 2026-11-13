@@ -547,6 +547,7 @@ describe("the extensions' raw files", () => {
     const down = await fetchSources(undefined, {
       cache,
       fetchImpl: async () => ({ ok: false, status: 503 }),
+      retryDelayMs: 0,
     });
     for (const p of down.problems) expect(p).toMatch(/HTTP 503/);
     expect(readdirSync(cache)).toEqual([]);
