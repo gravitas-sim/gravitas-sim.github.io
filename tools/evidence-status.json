@@ -1779,7 +1779,7 @@
       "claim": "The sandbox reproduces its stated reference cases within tolerances fixed before any run, independent of frame rate and camera.",
       "scope": "the 61 sandbox scenarios and the reference cases Roadmap IV Prompt 445 fixes",
       "version": "4.0 candidate",
-      "class": "V",
+      "class": "V-internal",
       "status": "UNKNOWN",
       "method": "planned: reference cases and tolerances committed first, then headless runs at three frame rates; nothing run yet",
       "evaluator": "none",
