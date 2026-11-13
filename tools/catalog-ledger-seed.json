@@ -1,0 +1,1672 @@
+{
+  "format": "gravitas.catalog-ledger-seed",
+  "formatVersion": 1,
+  "provenance": {
+    "baseline": "f9277ff8",
+    "note": "Seed values for rows created fresh. Dispositions and owners come from the Roadmap IV planning audit (investigation and scenario ledgers), the scene classes from its scene-classes planning file, scenario families from its scenarios file, limits and open items from the tree and DECISION_REGISTER.md. Read once, kept here as data; the files are outside every checkout and are never read by a check.",
+    "sceneClasses": "scratch-data/r4/v3/scene-classes.tsv",
+    "scenarios": "scratch-data/r4/v3/scenarios.tsv"
+  },
+  "investigations": {
+    "a-binary-stars-orbit": {
+      "audit": "FOCUSED",
+      "owner": 404,
+      "scene_class": "portrait or backdrop"
+    },
+    "a-lens-passing-by": {
+      "audit": "FOCUSED",
+      "owner": 400,
+      "scene_class": "portrait or backdrop"
+    },
+    "a-night-at-the-telescope": {
+      "audit": "FOCUSED",
+      "owner": 408,
+      "scene_class": "portrait or backdrop"
+    },
+    "a-stars-life-in-numbers": {
+      "audit": "FOCUSED",
+      "owner": 382,
+      "scene_class": "portrait or backdrop"
+    },
+    "a-universe-of-stars": {
+      "audit": "STRONG",
+      "owner": 359,
+      "scene_class": "portrait or backdrop"
+    },
+    "a-variable-star-from-frames": {
+      "audit": "STRONG",
+      "owner": 406,
+      "scene_class": "portrait or backdrop",
+      "limits": {
+        "labels": ["synthetic frames"],
+        "failed_legs": [],
+        "register": ["D-R10-63", "D-R10-72"]
+      }
+    },
+    "architectures": {
+      "audit": "FOCUSED",
+      "owner": 395,
+      "scene_class": "portrait or backdrop"
+    },
+    "bending-light": {
+      "audit": "FOCUSED",
+      "owner": 400,
+      "scene_class": "portrait or backdrop"
+    },
+    "binary-star-planets": {
+      "audit": "STRONG",
+      "owner": 357,
+      "scene_class": "setup scenario",
+      "open_items": [
+        {
+          "ref": "D-R10-24",
+          "owner": 300,
+          "note": "Answer printed to more places than its tolerance resolves; reword the displayed precision only"
+        }
+      ]
+    },
+    "black-holes": {
+      "audit": "FOCUSED",
+      "owner": 352,
+      "scene_class": "engine-integrated stage"
+    },
+    "butterfly-effect": {
+      "audit": "STRONG",
+      "owner": 350,
+      "scene_class": "setup scenario"
+    },
+    "cluster-membership": {
+      "audit": "STRONG",
+      "owner": 381,
+      "scene_class": "portrait or backdrop",
+      "limits": {
+        "labels": [
+          "leg E1 NOT RUN",
+          "not validated against a published catalogue"
+        ],
+        "failed_legs": [],
+        "register": ["D-R10-233-10"]
+      }
+    },
+    "color-and-temperature": {
+      "audit": "FOCUSED",
+      "owner": 378,
+      "scene_class": "portrait or backdrop",
+      "open_items": [
+        {
+          "ref": "D-R10-24",
+          "owner": 300,
+          "note": "Answer printed to more places than its tolerance resolves; reword the displayed precision only"
+        }
+      ]
+    },
+    "comets-and-the-sun": {
+      "audit": "REDESIGN",
+      "owner": 361,
+      "scene_class": "setup scenario"
+    },
+    "coordinates-and-time": {
+      "audit": "REDESIGN",
+      "owner": 408,
+      "scene_class": "portrait or backdrop"
+    },
+    "counts-to-magnitudes": {
+      "audit": "FOCUSED",
+      "owner": 409,
+      "scene_class": "portrait or backdrop",
+      "limits": {
+        "labels": [
+          "synthetic nights",
+          "kernel legs failing or not measured (see the fixture)"
+        ],
+        "failed_legs": [
+          {
+            "fixture": "tests/fixtures/photometric-calibration/failed-legs.json",
+            "legs": [
+              "failed:B4b.firstOrder.lackOfFit",
+              "failed:P3.physical.limit",
+              "failed:C2.coverage.underestimated",
+              "failed:E1.authentic"
+            ]
+          }
+        ],
+        "register": ["D-R10-212-01"]
+      }
+    },
+    "craters-by-size": {
+      "audit": "FOCUSED",
+      "owner": 392,
+      "scene_class": "portrait or backdrop"
+    },
+    "deep-or-wide": {
+      "audit": "FOCUSED",
+      "owner": 410,
+      "scene_class": "portrait or backdrop"
+    },
+    "design-the-schedule": {
+      "audit": "STRONG",
+      "owner": 355,
+      "scene_class": "setup scenario"
+    },
+    "detect-this-planet": {
+      "audit": "STRONG",
+      "owner": 355,
+      "scene_class": "setup scenario"
+    },
+    "einstein-rings-and-arcs": {
+      "audit": "FOCUSED",
+      "owner": 400,
+      "scene_class": "portrait or backdrop"
+    },
+    "exo-dilution": {
+      "audit": "STRONG",
+      "owner": 414
+    },
+    "exo-find": {
+      "audit": "FOCUSED",
+      "owner": 413
+    },
+    "exo-fit": {
+      "audit": "STRONG",
+      "owner": 330
+    },
+    "exo-planet": {
+      "audit": "FOCUSED",
+      "owner": 414
+    },
+    "exo-star": {
+      "audit": "FOCUSED",
+      "owner": 413
+    },
+    "extending-an-experiment": {
+      "audit": "FOCUSED",
+      "owner": 362,
+      "scene_class": "setup scenario"
+    },
+    "flares": {
+      "audit": "FOCUSED",
+      "owner": 384,
+      "scene_class": "portrait or backdrop",
+      "limits": {
+        "labels": ["kernel legs failing and labelled", "synthetic data"],
+        "failed_legs": [
+          {
+            "fixture": "tests/fixtures/stellar-activity/failed-legs.json",
+            "legs": ["failed:B4.periodOracle", "failed:D4.doubleDipUnequal"]
+          }
+        ],
+        "register": ["D-R10-220-02", "D-R10-220-04", "D-R10-220-07"]
+      },
+      "open_items": [
+        {
+          "ref": "D-R10-220-04",
+          "owner": 384,
+          "note": "Maintainer to rule on the alternative G3 reading of the stellar-activity gate"
+        }
+      ]
+    },
+    "from-photons-to-a-number": {
+      "audit": "REDESIGN",
+      "owner": 408,
+      "scene_class": "portrait or backdrop"
+    },
+    "from-star-to-remnant": {
+      "audit": "FOCUSED",
+      "owner": 380,
+      "scene_class": "portrait or backdrop"
+    },
+    "goldilocks-question": {
+      "audit": "FOCUSED",
+      "owner": 356,
+      "scene_class": "setup scenario",
+      "open_items": [
+        {
+          "ref": "D-R10-205-01",
+          "owner": 356,
+          "note": "The tool clamps where the kernel refuses; the model-star label"
+        }
+      ]
+    },
+    "gravity-assist": {
+      "audit": "STRONG",
+      "owner": 351,
+      "scene_class": "setup scenario",
+      "open_items": [
+        {
+          "ref": "D-R10-24",
+          "owner": 300,
+          "note": "Answer printed to more places than its tolerance resolves; reword the displayed precision only"
+        }
+      ]
+    },
+    "hohmann-transfer": {
+      "audit": "FOCUSED",
+      "owner": 351,
+      "scene_class": "setup scenario",
+      "open_items": [
+        {
+          "ref": "D-R10-24",
+          "owner": 300,
+          "note": "Three answers printed to more places than their tolerance resolves; reword the displayed precision only"
+        }
+      ]
+    },
+    "how-far-and-how-sure": {
+      "audit": "STRONG",
+      "owner": 399,
+      "scene_class": "portrait or backdrop"
+    },
+    "how-far-is-that-star": {
+      "audit": "STRONG",
+      "owner": 404,
+      "scene_class": "portrait or backdrop",
+      "limits": {
+        "labels": ["synthetic star"],
+        "failed_legs": [],
+        "register": ["D-R10-72"]
+      }
+    },
+    "how-fast-does-it-spin": {
+      "audit": "STRONG",
+      "owner": 391,
+      "scene_class": "portrait or backdrop"
+    },
+    "how-fast-does-the-star-spin": {
+      "audit": "FOCUSED",
+      "owner": 384,
+      "scene_class": "portrait or backdrop",
+      "limits": {
+        "labels": ["kernel legs failing and labelled", "synthetic data"],
+        "failed_legs": [
+          {
+            "fixture": "tests/fixtures/stellar-activity/failed-legs.json",
+            "legs": ["failed:B4.periodOracle", "failed:D4.doubleDipUnequal"]
+          }
+        ],
+        "register": ["D-R10-220-02", "D-R10-220-07"]
+      }
+    },
+    "how-hot-is-the-day-side": {
+      "audit": "FOCUSED",
+      "owner": 389,
+      "scene_class": "portrait or backdrop",
+      "limits": {
+        "labels": ["one authentic leg not measured"],
+        "failed_legs": [],
+        "register": ["D-R10-202-01", "D-R10-207-01"]
+      }
+    },
+    "how-many-earths": {
+      "audit": "STRONG",
+      "owner": 397,
+      "scene_class": "portrait or backdrop",
+      "limits": {
+        "labels": [
+          "stored synthetic survey",
+          "kernel legs failing or not measured (see the fixture)"
+        ],
+        "failed_legs": [
+          {
+            "fixture": "tests/fixtures/occurrence/failed-legs.json",
+            "legs": ["failed:D4", "failed:D4b"]
+          }
+        ],
+        "register": ["D-R10-229-01"]
+      }
+    },
+    "how-old-is-this-white-dwarf": {
+      "audit": "STRONG",
+      "owner": 380,
+      "scene_class": "portrait or backdrop"
+    },
+    "inside-a-star": {
+      "audit": "FOCUSED",
+      "owner": 379,
+      "scene_class": "portrait or backdrop"
+    },
+    "integrators-in-practice": {
+      "audit": "REDESIGN",
+      "owner": 362,
+      "scene_class": "setup scenario",
+      "limits": {
+        "labels": ["leg A8 left failing"],
+        "failed_legs": [],
+        "register": ["D-R10-270-03"]
+      }
+    },
+    "ios-fire": {
+      "audit": "REDESIGN",
+      "owner": 331,
+      "scene_class": "portrait or backdrop"
+    },
+    "keplers-laws": {
+      "audit": "STRONG",
+      "owner": 328,
+      "scene_class": "setup scenario"
+    },
+    "l3-eclipse": {
+      "audit": "STRONG",
+      "owner": 418,
+      "open_items": [
+        {
+          "ref": "D-R10-274-04",
+          "owner": 418,
+          "note": "Written reflection step missing in eleven of the twelve 3-D and mission guides; no uncertainty asked on a measured value"
+        }
+      ]
+    },
+    "l3-elements": {
+      "audit": "FOCUSED",
+      "owner": 417,
+      "open_items": [
+        {
+          "ref": "D-R10-274-04",
+          "owner": 417,
+          "note": "Written reflection step missing in eleven of the twelve 3-D and mission guides; no uncertainty asked on a measured value"
+        }
+      ]
+    },
+    "l3-frames": {
+      "audit": "FOCUSED",
+      "owner": 417,
+      "open_items": [
+        {
+          "ref": "D-R10-274-04",
+          "owner": 417,
+          "note": "Written reflection step missing in eleven of the twelve 3-D and mission guides; no uncertainty asked on a measured value"
+        }
+      ]
+    },
+    "l3-kozai": {
+      "audit": "STRONG",
+      "owner": 419,
+      "open_items": [
+        {
+          "ref": "D-R10-274-04",
+          "owner": 419,
+          "note": "Written reflection step missing in eleven of the twelve 3-D and mission guides; no uncertainty asked on a measured value"
+        }
+      ]
+    },
+    "l3-mutual": {
+      "audit": "FOCUSED",
+      "owner": 418,
+      "open_items": [
+        {
+          "ref": "D-R10-274-04",
+          "owner": 418,
+          "note": "Written reflection step missing in eleven of the twelve 3-D and mission guides; no uncertainty asked on a measured value"
+        }
+      ]
+    },
+    "l3-planes": {
+      "audit": "FOCUSED",
+      "owner": 417,
+      "open_items": [
+        {
+          "ref": "D-R10-274-04",
+          "owner": 417,
+          "note": "Written reflection step missing in eleven of the twelve 3-D and mission guides; no uncertainty asked on a measured value"
+        }
+      ]
+    },
+    "l3-resonant": {
+      "audit": "STRONG",
+      "owner": 419,
+      "open_items": [
+        {
+          "ref": "D-R10-274-04",
+          "owner": 419,
+          "note": "Written reflection step missing in eleven of the twelve 3-D and mission guides; no uncertainty asked on a measured value"
+        }
+      ]
+    },
+    "l3-seen": {
+      "audit": "FOCUSED",
+      "owner": 418,
+      "open_items": [
+        {
+          "ref": "D-R10-274-04",
+          "owner": 418,
+          "note": "Written reflection step missing in eleven of the twelve 3-D and mission guides; no uncertainty asked on a measured value"
+        }
+      ]
+    },
+    "l3-tilts": {
+      "audit": "FOCUSED",
+      "owner": 419,
+      "open_items": [
+        {
+          "ref": "D-R10-274-04",
+          "owner": 419,
+          "note": "Written reflection step missing in eleven of the twelve 3-D and mission guides; no uncertainty asked on a measured value"
+        }
+      ]
+    },
+    "lagrange-points": {
+      "audit": "FOCUSED",
+      "owner": 350,
+      "scene_class": "setup scenario"
+    },
+    "leavitts-law": {
+      "audit": "FOCUSED",
+      "owner": 385,
+      "scene_class": "portrait or backdrop"
+    },
+    "lines-and-motion": {
+      "audit": "STRONG",
+      "owner": 378,
+      "scene_class": "portrait or backdrop"
+    },
+    "listening-to-spacetime": {
+      "audit": "STRONG",
+      "owner": 353,
+      "scene_class": "model-owned stage"
+    },
+    "lives-of-stars": {
+      "audit": "FOCUSED",
+      "owner": 360,
+      "scene_class": "portrait or backdrop"
+    },
+    "measuring-the-moon": {
+      "audit": "STRONG",
+      "owner": 330,
+      "scene_class": "portrait or backdrop"
+    },
+    "missing-mass": {
+      "audit": "FOCUSED",
+      "owner": 358,
+      "scene_class": "setup scenario"
+    },
+    "ml-cruise": {
+      "audit": "STRONG",
+      "owner": 420,
+      "open_items": [
+        {
+          "ref": "D-R10-274-04",
+          "owner": 420,
+          "note": "Written reflection step missing in eleven of the twelve 3-D and mission guides; no uncertainty asked on a measured value"
+        }
+      ]
+    },
+    "ml-orbit": {
+      "audit": "FOCUSED",
+      "owner": 420,
+      "open_items": [
+        {
+          "ref": "D-R10-274-04",
+          "owner": 420,
+          "note": "Written reflection step missing in eleven of the twelve 3-D and mission guides; no uncertainty asked on a measured value"
+        }
+      ]
+    },
+    "ml-window": {
+      "audit": "FOCUSED",
+      "owner": 420,
+      "open_items": [
+        {
+          "ref": "D-R10-274-04",
+          "owner": 420,
+          "note": "Written reflection step missing in eleven of the twelve 3-D and mission guides; no uncertainty asked on a measured value"
+        }
+      ]
+    },
+    "moons-of-the-giants": {
+      "audit": "FOCUSED",
+      "owner": 361,
+      "scene_class": "portrait or backdrop"
+    },
+    "one-planet-every-method": {
+      "audit": "REDESIGN",
+      "owner": 396,
+      "scene_class": "portrait or backdrop",
+      "limits": {
+        "labels": ["synthetic survey"],
+        "failed_legs": [],
+        "register": ["D-R10-231-02"]
+      }
+    },
+    "orbital-energy": {
+      "audit": "FOCUSED",
+      "owner": 347,
+      "scene_class": "setup scenario",
+      "open_items": [
+        {
+          "ref": "D-R10-38",
+          "owner": 427,
+          "note": "The only lesson with a criteria table in the catalog"
+        }
+      ]
+    },
+    "phases-and-albedo": {
+      "audit": "FOCUSED",
+      "owner": 389,
+      "scene_class": "portrait or backdrop",
+      "limits": {
+        "labels": ["one authentic leg not measured"],
+        "failed_legs": [],
+        "register": ["D-R10-202-01", "D-R10-207-01"]
+      }
+    },
+    "phases-and-eclipses": {
+      "audit": "FOCUSED",
+      "owner": 377,
+      "scene_class": "portrait or backdrop"
+    },
+    "plan-a-night": {
+      "audit": "STRONG",
+      "owner": 376,
+      "scene_class": "portrait or backdrop"
+    },
+    "plan-an-exposure": {
+      "audit": "FOCUSED",
+      "owner": 407,
+      "scene_class": "portrait or backdrop",
+      "limits": {
+        "labels": [
+          "synthetic frame",
+          "kernel legs failing or not measured (see the fixture)"
+        ],
+        "failed_legs": [
+          {
+            "fixture": "tests/fixtures/exposure/failed-legs.json",
+            "legs": [
+              "failed:B2.readNoiseLoss",
+              "failed:B3.doubling",
+              "failed:B4.offFiducial",
+              "notMeasured:E1.authentic"
+            ]
+          }
+        ],
+        "register": ["D-R10-210-01"]
+      }
+    },
+    "planet-or-not": {
+      "audit": "FOCUSED",
+      "owner": 394,
+      "scene_class": "portrait or backdrop",
+      "limits": {
+        "labels": ["synthetic light curve"],
+        "failed_legs": [],
+        "register": ["D-R10-228-01"]
+      }
+    },
+    "planning-a-transit-campaign": {
+      "audit": "FOCUSED",
+      "owner": 397,
+      "scene_class": "portrait or backdrop"
+    },
+    "pop-age": {
+      "audit": "FOCUSED",
+      "owner": 416
+    },
+    "pop-cmd": {
+      "audit": "STRONG",
+      "owner": 415
+    },
+    "pop-members": {
+      "audit": "STRONG",
+      "owner": 415
+    },
+    "pop-spectra": {
+      "audit": "FOCUSED",
+      "owner": 415
+    },
+    "pop-variable": {
+      "audit": "STRONG",
+      "owner": 416
+    },
+    "populations-i-and-ii": {
+      "audit": "REDESIGN",
+      "owner": 381,
+      "scene_class": "portrait or backdrop"
+    },
+    "power-law-gravity": {
+      "audit": "STRONG",
+      "owner": 347,
+      "scene_class": "setup scenario"
+    },
+    "propose-an-observation": {
+      "audit": "FOCUSED",
+      "owner": 410,
+      "scene_class": "portrait or backdrop"
+    },
+    "radial-velocity": {
+      "audit": "FOCUSED",
+      "owner": 354,
+      "scene_class": "setup scenario",
+      "limits": {
+        "labels": ["authentic leg E1 NOT RUN"],
+        "failed_legs": [
+          {
+            "fixture": "tests/fixtures/joint-inference/failed-legs.json",
+            "legs": ["failed:C4", "failed:D6"]
+          }
+        ],
+        "register": ["D-R10-227-08"]
+      },
+      "open_items": [
+        {
+          "ref": "D-R10-279-04",
+          "owner": 354,
+          "note": "Two exoplanet instruments are among the six that start by themselves"
+        }
+      ]
+    },
+    "reading-the-hr-diagram": {
+      "audit": "REDESIGN",
+      "owner": 382,
+      "scene_class": "portrait or backdrop"
+    },
+    "refitting-a-transit": {
+      "audit": "FOCUSED",
+      "owner": 362,
+      "scene_class": "setup scenario"
+    },
+    "retrograde-motion": {
+      "audit": "FOCUSED",
+      "owner": 346,
+      "scene_class": "setup scenario"
+    },
+    "sampling-a-posterior": {
+      "audit": "FOCUSED",
+      "owner": 362,
+      "scene_class": "setup scenario"
+    },
+    "scaling-the-main-sequence": {
+      "audit": "FOCUSED",
+      "owner": 379,
+      "scene_class": "portrait or backdrop"
+    },
+    "signal-noise-and-exposure": {
+      "audit": "FOCUSED",
+      "owner": 406,
+      "scene_class": "portrait or backdrop",
+      "limits": {
+        "labels": [
+          "synthetic frame",
+          "kernel legs failing or not measured (see the fixture)"
+        ],
+        "failed_legs": [
+          {
+            "fixture": "tests/fixtures/exposure/failed-legs.json",
+            "legs": [
+              "failed:B2.readNoiseLoss",
+              "failed:B3.doubling",
+              "failed:B4.offFiducial",
+              "notMeasured:E1.authentic"
+            ]
+          }
+        ],
+        "register": ["D-R10-210-01"]
+      }
+    },
+    "spectra-tell-temperature-and-gravity": {
+      "audit": "REDESIGN",
+      "owner": 382,
+      "scene_class": "portrait or backdrop"
+    },
+    "standard-candles": {
+      "audit": "FOCUSED",
+      "owner": 401,
+      "scene_class": "portrait or backdrop"
+    },
+    "the-beat-of-a-star": {
+      "audit": "FOCUSED",
+      "owner": 385,
+      "scene_class": "portrait or backdrop"
+    },
+    "the-clock-that-drifts": {
+      "audit": "STRONG",
+      "owner": 397,
+      "scene_class": "portrait or backdrop",
+      "open_items": [
+        {
+          "ref": "D-R10-253-04",
+          "owner": 397,
+          "note": "Aligned to a textbook chapter that looks off by one"
+        }
+      ]
+    },
+    "the-completeness-curve": {
+      "audit": "FOCUSED",
+      "owner": 411,
+      "scene_class": "portrait or backdrop"
+    },
+    "the-expanding-universe": {
+      "audit": "FOCUSED",
+      "owner": 401,
+      "scene_class": "portrait or backdrop"
+    },
+    "the-first-rung": {
+      "audit": "FOCUSED",
+      "owner": 385,
+      "scene_class": "portrait or backdrop"
+    },
+    "the-gaps-in-the-belt": {
+      "audit": "STRONG",
+      "owner": 391,
+      "scene_class": "portrait or backdrop"
+    },
+    "the-limit": {
+      "audit": "FOCUSED",
+      "owner": 379,
+      "scene_class": "portrait or backdrop"
+    },
+    "the-metallicity-term": {
+      "audit": "STRONG",
+      "owner": 386,
+      "scene_class": "portrait or backdrop"
+    },
+    "the-rotating-disk": {
+      "audit": "FOCUSED",
+      "owner": 398,
+      "scene_class": "portrait or backdrop",
+      "open_items": [
+        {
+          "ref": "D-R10-235-06",
+          "owner": 398,
+          "note": "Asymmetric-drift limitation of the Oort fit is stated nowhere a student reads"
+        }
+      ]
+    },
+    "the-saturated-star": {
+      "audit": "FOCUSED",
+      "owner": 405,
+      "scene_class": "portrait or backdrop"
+    },
+    "the-scale-of-the-solar-system": {
+      "audit": "FOCUSED",
+      "owner": 361,
+      "scene_class": "setup scenario"
+    },
+    "the-shape-of-expansion": {
+      "audit": "FOCUSED",
+      "owner": 402,
+      "scene_class": "portrait or backdrop"
+    },
+    "the-sky-background": {
+      "audit": "FOCUSED",
+      "owner": 407,
+      "scene_class": "portrait or backdrop"
+    },
+    "the-sun-through-the-year": {
+      "audit": "FOCUSED",
+      "owner": 376,
+      "scene_class": "portrait or backdrop"
+    },
+    "the-suns-motion": {
+      "audit": "FOCUSED",
+      "owner": 398,
+      "scene_class": "portrait or backdrop"
+    },
+    "the-suns-power": {
+      "audit": "FOCUSED",
+      "owner": 388,
+      "scene_class": "portrait or backdrop"
+    },
+    "the-transit-that-was-a-star": {
+      "audit": "REDESIGN",
+      "owner": 394,
+      "scene_class": "portrait or backdrop"
+    },
+    "the-turning-sky": {
+      "audit": "FOCUSED",
+      "owner": 376,
+      "scene_class": "portrait or backdrop"
+    },
+    "the-turning-sun": {
+      "audit": "STRONG",
+      "owner": 388,
+      "scene_class": "portrait or backdrop",
+      "open_items": [
+        {
+          "ref": "D-R10-93",
+          "owner": 388,
+          "note": "Six measured days of fourteen are stated only in alternative text"
+        }
+      ]
+    },
+    "tides": {
+      "audit": "FOCUSED",
+      "owner": 348,
+      "scene_class": "setup scenario"
+    },
+    "tides-that-move-the-moon": {
+      "audit": "FOCUSED",
+      "owner": 331,
+      "scene_class": "portrait or backdrop"
+    },
+    "transit-photometry": {
+      "audit": "FOCUSED",
+      "owner": 329,
+      "scene_class": "setup scenario"
+    },
+    "twelve-nights": {
+      "audit": "STRONG",
+      "owner": 355,
+      "scene_class": "setup scenario"
+    },
+    "two-clusters-two-ages": {
+      "audit": "FOCUSED",
+      "owner": 381,
+      "scene_class": "portrait or backdrop",
+      "limits": {
+        "labels": [
+          "synthetic clusters",
+          "kernel legs failing or not measured (see the fixture)"
+        ],
+        "failed_legs": [
+          {
+            "fixture": "tests/fixtures/cluster-fit/failed-legs.json",
+            "legs": ["failed:D6.edge", "failed:E1.ngc2420"]
+          }
+        ],
+        "register": ["D-R10-219-01"]
+      }
+    },
+    "two-greenhouse-models": {
+      "audit": "FOCUSED",
+      "owner": 387,
+      "scene_class": "portrait or backdrop"
+    },
+    "two-periodograms": {
+      "audit": "FOCUSED",
+      "owner": 362,
+      "scene_class": "setup scenario"
+    },
+    "two-stars-eclipsing": {
+      "audit": "FOCUSED",
+      "owner": 383,
+      "scene_class": "portrait or backdrop"
+    },
+    "two-telescopes-one-question": {
+      "audit": "REDESIGN",
+      "owner": 410,
+      "scene_class": "portrait or backdrop"
+    },
+    "wanderers-on-the-sky": {
+      "audit": "FOCUSED",
+      "owner": 377,
+      "scene_class": "portrait or backdrop"
+    },
+    "weighing-jupiter": {
+      "audit": "STRONG",
+      "owner": 390,
+      "scene_class": "portrait or backdrop",
+      "limits": {
+        "labels": ["synthetic frame sequence"],
+        "failed_legs": [],
+        "register": ["D-R10-74"]
+      }
+    },
+    "weighing-stars": {
+      "audit": "FOCUSED",
+      "owner": 332,
+      "scene_class": "engine-integrated stage"
+    },
+    "weighing-the-stars-for-real": {
+      "audit": "STRONG",
+      "owner": 383,
+      "scene_class": "portrait or backdrop",
+      "limits": {
+        "labels": [
+          "synthetic data",
+          "kernel legs failing or not measured (see the fixture)"
+        ],
+        "failed_legs": [
+          {
+            "fixture": "tests/fixtures/binary-masses/failed-legs.json",
+            "legs": [
+              "failed:C1.coverageSb2",
+              "failed:D4.grazing",
+              "failed:E1.authentic"
+            ]
+          }
+        ],
+        "register": ["D-R10-218-01"]
+      }
+    },
+    "what-a-ccd-records": {
+      "audit": "FOCUSED",
+      "owner": 405,
+      "scene_class": "portrait or backdrop"
+    },
+    "what-a-crater-diameter-is-worth": {
+      "audit": "FOCUSED",
+      "owner": 392,
+      "scene_class": "portrait or backdrop"
+    },
+    "what-a-spectrum-is-made-of": {
+      "audit": "STRONG",
+      "owner": 378,
+      "scene_class": "portrait or backdrop"
+    },
+    "what-a-telescope-resolves": {
+      "audit": "STRONG",
+      "owner": 409,
+      "scene_class": "portrait or backdrop",
+      "limits": {
+        "labels": [
+          "synthetic double star or field",
+          "kernel legs failing or not measured (see the fixture)"
+        ],
+        "failed_legs": [
+          {
+            "fixture": "tests/fixtures/telescopes/failed-legs.json",
+            "legs": ["notMeasured:A1.authentic"]
+          }
+        ],
+        "register": ["D-R10-208-01"]
+      }
+    },
+    "what-does-plus-minus-claim": {
+      "audit": "STRONG",
+      "owner": 403,
+      "scene_class": "portrait or backdrop",
+      "limits": {
+        "labels": ["synthetic data with known truth"],
+        "failed_legs": [],
+        "register": ["D-R10-67"]
+      },
+      "open_items": [
+        {
+          "ref": "D-R10-67",
+          "owner": 403,
+          "note": "Misconception feedback lost; validate messages in English only"
+        }
+      ]
+    },
+    "what-gaia-does-not-see": {
+      "audit": "FOCUSED",
+      "owner": 399,
+      "scene_class": "portrait or backdrop"
+    },
+    "what-is-a-gravitational-wave": {
+      "audit": "FOCUSED",
+      "owner": 353,
+      "scene_class": "model-owned stage"
+    },
+    "what-is-a-measurement": {
+      "audit": "FOCUSED",
+      "owner": 403,
+      "scene_class": "portrait or backdrop",
+      "limits": {
+        "labels": ["synthetic data with known truth"],
+        "failed_legs": [],
+        "register": ["D-R10-67"]
+      },
+      "open_items": [
+        {
+          "ref": "D-R10-67",
+          "owner": 403,
+          "note": "Misconception feedback lost; validate messages in English only"
+        }
+      ]
+    },
+    "what-is-in-this-field": {
+      "audit": "STRONG",
+      "owner": 404,
+      "scene_class": "portrait or backdrop",
+      "limits": {
+        "labels": ["one synthetic frame"],
+        "failed_legs": [],
+        "register": ["D-R10-96"]
+      },
+      "open_items": [
+        {
+          "ref": "D-R10-96",
+          "owner": 404,
+          "note": "Spanish text not read by a fluent reader"
+        }
+      ]
+    },
+    "what-is-it-made-of": {
+      "audit": "FOCUSED",
+      "owner": 396,
+      "scene_class": "portrait or backdrop",
+      "limits": {
+        "labels": [
+          "synthetic data",
+          "kernel legs failing or not measured (see the fixture)"
+        ],
+        "failed_legs": [
+          {
+            "fixture": "tests/fixtures/joint-inference/failed-legs.json",
+            "legs": ["failed:C4", "failed:D6"]
+          }
+        ],
+        "register": ["D-R10-227-01"]
+      }
+    },
+    "what-kinds-of-planets-exist": {
+      "audit": "REDESIGN",
+      "owner": 396,
+      "scene_class": "portrait or backdrop",
+      "limits": {
+        "labels": ["synthetic survey"],
+        "failed_legs": [],
+        "register": ["D-R10-231-02"]
+      }
+    },
+    "when-a-star-explodes": {
+      "audit": "FOCUSED",
+      "owner": 380,
+      "scene_class": "portrait or backdrop"
+    },
+    "when-orbits-lock": {
+      "audit": "FOCUSED",
+      "owner": 349,
+      "scene_class": "setup scenario",
+      "open_items": [
+        {
+          "ref": "D-R10-279-04",
+          "owner": 349,
+          "note": "The four resonance instruments start by themselves and have no Run control"
+        },
+        {
+          "ref": "D-R10-273-07",
+          "owner": 349,
+          "note": "Cited libration values fail their data check; a maintainer ruling of 2026-11-10 governs the wording"
+        }
+      ]
+    },
+    "when-the-method-must-refuse": {
+      "audit": "STRONG",
+      "owner": 403,
+      "scene_class": "portrait or backdrop",
+      "limits": {
+        "labels": ["synthetic data with known truth"],
+        "failed_legs": [],
+        "register": ["D-R10-67"]
+      },
+      "open_items": [
+        {
+          "ref": "D-R10-67",
+          "owner": 403,
+          "note": "Misconception feedback lost; validate messages in English only"
+        }
+      ]
+    },
+    "where-galaxies-live": {
+      "audit": "REDESIGN",
+      "owner": 402,
+      "scene_class": "portrait or backdrop",
+      "open_items": [
+        {
+          "ref": "D-R10-253-01",
+          "owner": 402,
+          "note": "No interval on the clustering ratio; maintainer left it as it is on 2026-11-07"
+        }
+      ]
+    },
+    "which-instrument-for-which-question": {
+      "audit": "FOCUSED",
+      "owner": 407,
+      "scene_class": "portrait or backdrop"
+    },
+    "which-kind-of-variable": {
+      "audit": "STRONG",
+      "owner": 386,
+      "scene_class": "portrait or backdrop"
+    },
+    "which-surface-is-older": {
+      "audit": "STRONG",
+      "owner": 392,
+      "scene_class": "portrait or backdrop"
+    },
+    "who-gets-counted": {
+      "audit": "FOCUSED",
+      "owner": 411,
+      "scene_class": "portrait or backdrop",
+      "limits": {
+        "labels": [
+          "stored synthetic survey",
+          "kernel legs failing or not measured (see the fixture)"
+        ],
+        "failed_legs": [
+          {
+            "fixture": "tests/fixtures/occurrence/failed-legs.json",
+            "legs": ["failed:D4", "failed:D4b"]
+          }
+        ],
+        "register": ["D-R10-229-01"]
+      }
+    },
+    "why-rings": {
+      "audit": "FOCUSED",
+      "owner": 390,
+      "scene_class": "setup scenario"
+    },
+    "why-the-bright-ones-win": {
+      "audit": "FOCUSED",
+      "owner": 411,
+      "scene_class": "portrait or backdrop"
+    },
+    "why-the-period-is-wrong": {
+      "audit": "STRONG",
+      "owner": 410,
+      "scene_class": "portrait or backdrop"
+    },
+    "why-two-lines-become-one": {
+      "audit": "STRONG",
+      "owner": 409,
+      "scene_class": "portrait or backdrop"
+    },
+    "why-venus-is-hot": {
+      "audit": "FOCUSED",
+      "owner": 387,
+      "scene_class": "portrait or backdrop"
+    },
+    "why-we-cannot-see-earth": {
+      "audit": "FOCUSED",
+      "owner": 395,
+      "scene_class": "portrait or backdrop"
+    }
+  },
+  "activities": {
+    "orbital-speed/demonstration": {
+      "owner": 421
+    },
+    "orbital-speed/route": {
+      "owner": 421
+    },
+    "orbital-speed/guided": {
+      "owner": 421
+    },
+    "orbital-speed/lab": {
+      "owner": 421
+    },
+    "binary-planets/route": {
+      "owner": 421
+    },
+    "star-sizes/route": {
+      "owner": 421
+    }
+  },
+  "experiments": {
+    "binary-planet-lab": {
+      "owner": 422
+    },
+    "circumbinary-planet-lab": {
+      "owner": 422
+    },
+    "gravity-assist-lab": {
+      "owner": 422
+    },
+    "gravity-assist-heliocentric": {
+      "owner": 422
+    }
+  },
+  "courses": {
+    "intro-astronomy": {
+      "owner": 424
+    },
+    "astronomy-semester": {
+      "owner": 424
+    },
+    "solar-system-and-the-sun": {
+      "owner": 424
+    },
+    "stellar-astrophysics": {
+      "owner": 425
+    },
+    "observing-lab": {
+      "owner": 425
+    },
+    "upper-level-modules": {
+      "owner": 425
+    }
+  },
+  "sequences": {
+    "the-sky": {
+      "owner": 426
+    },
+    "gravity-and-orbits": {
+      "owner": 426
+    },
+    "light-and-stars": {
+      "owner": 426
+    },
+    "planets-and-exoplanets": {
+      "owner": 426
+    },
+    "planets-and-the-sun": {
+      "owner": 426
+    },
+    "galaxies-and-the-universe": {
+      "owner": 426
+    },
+    "observing-and-measuring": {
+      "owner": 426
+    },
+    "observing-and-instruments": {
+      "owner": 426
+    },
+    "observatory-exoplanet": {
+      "owner": 426
+    },
+    "observatory-populations": {
+      "owner": 426
+    },
+    "spaceflight-and-the-3d-sky": {
+      "owner": 426
+    }
+  },
+  "scenarios": [
+    {
+      "id": "solar-system",
+      "family": "hand-placed single-star systems",
+      "planning": "REVIEW",
+      "owner": 462
+    },
+    {
+      "id": "retrograde-mars",
+      "family": "hand-placed single-star systems",
+      "planning": "KEEP",
+      "owner": 462
+    },
+    {
+      "id": "earth-moon-system",
+      "family": "moons, rings, resonances",
+      "planning": "REVIEW",
+      "owner": 464
+    },
+    {
+      "id": "trappist-1-system",
+      "family": "hand-placed single-star systems",
+      "planning": "KEEP",
+      "owner": 462
+    },
+    {
+      "id": "three-body-sensitivity-lab",
+      "family": "binaries, circumbinary, three-body",
+      "planning": "REVIEW",
+      "owner": 463
+    },
+    {
+      "id": "galilean-resonance",
+      "family": "moons, rings, resonances",
+      "planning": "KEEP",
+      "owner": 464
+    },
+    {
+      "id": "broken-laplace-resonance",
+      "family": "moons, rings, resonances",
+      "planning": "KEEP",
+      "owner": 464
+    },
+    {
+      "id": "pluto-and-neptune",
+      "family": "moons, rings, resonances",
+      "planning": "KEEP",
+      "owner": 464
+    },
+    {
+      "id": "jupiter-trojans",
+      "family": "moons, rings, resonances",
+      "planning": "REVIEW",
+      "owner": 464
+    },
+    {
+      "id": "binary-pair",
+      "family": "binaries, circumbinary, three-body",
+      "planning": "KEEP",
+      "owner": 463
+    },
+    {
+      "id": "interstellar-visitor",
+      "family": "hand-placed single-star systems",
+      "planning": "KEEP",
+      "owner": 462
+    },
+    {
+      "id": "transit-lab",
+      "family": "exoplanet detection",
+      "planning": "KEEP",
+      "owner": 462
+    },
+    {
+      "id": "spiral-galaxy",
+      "family": "galaxies, clusters, star swarms",
+      "planning": "REVIEW",
+      "owner": 466
+    },
+    {
+      "id": "milky-way-rotation",
+      "family": "galaxies, clusters, star swarms",
+      "planning": "REVIEW",
+      "owner": 466
+    },
+    {
+      "id": "coma-cluster",
+      "family": "galaxies, clusters, star swarms",
+      "planning": "REVIEW",
+      "owner": 466
+    },
+    {
+      "id": "exoplanet-characterization-lab",
+      "family": "exoplanet detection",
+      "planning": "KEEP",
+      "owner": 462
+    },
+    {
+      "id": "blended-binary",
+      "family": "exoplanet detection",
+      "planning": "REVIEW",
+      "owner": 462
+    },
+    {
+      "id": "gravity-assist-lab",
+      "family": "flybys and assists",
+      "planning": "REVIEW",
+      "owner": 463
+    },
+    {
+      "id": "gravity-assist-heliocentric",
+      "family": "flybys and assists",
+      "planning": "REVIEW",
+      "owner": 463
+    },
+    {
+      "id": "lagrange-point-lab",
+      "family": "binaries, circumbinary, three-body",
+      "planning": "KEEP",
+      "owner": 463
+    },
+    {
+      "id": "orbital-transfer-lab",
+      "family": "hand-placed single-star systems",
+      "planning": "REVIEW",
+      "owner": 462
+    },
+    {
+      "id": "binary-planet-lab",
+      "family": "binaries, circumbinary, three-body",
+      "planning": "KEEP",
+      "owner": 463
+    },
+    {
+      "id": "circumbinary-planet-lab",
+      "family": "binaries, circumbinary, three-body",
+      "planning": "KEEP",
+      "owner": 463
+    },
+    {
+      "id": "black-hole-lab",
+      "family": "black hole with hand-placed orbiters",
+      "planning": "REVIEW",
+      "owner": 465
+    },
+    {
+      "id": "habitable-zone-lab",
+      "family": "hand-placed single-star systems",
+      "planning": "REVIEW",
+      "owner": 462
+    },
+    {
+      "id": "keplers-2nd-law",
+      "family": "hand-placed single-star systems",
+      "planning": "REVIEW",
+      "owner": 462
+    },
+    {
+      "id": "gw150914",
+      "family": "compact-object pairs and systems",
+      "planning": "REVIEW",
+      "owner": 465
+    },
+    {
+      "id": "binary-bh",
+      "family": "compact-object pairs and systems",
+      "planning": "REVIEW",
+      "owner": 465
+    },
+    {
+      "id": "triple-bh-system",
+      "family": "compact-object pairs and systems",
+      "planning": "REVIEW",
+      "owner": 465
+    },
+    {
+      "id": "supermassive-bh",
+      "family": "generated populations around one dominant mass",
+      "planning": "REVIEW",
+      "owner": 482
+    },
+    {
+      "id": "star-cluster",
+      "family": "galaxies, clusters, star swarms",
+      "planning": "REVIEW",
+      "owner": 466
+    },
+    {
+      "id": "kuiper-belt",
+      "family": "hand-placed single-star systems",
+      "planning": "CORRECT",
+      "owner": 462
+    },
+    {
+      "id": "ring-gap",
+      "family": "moons, rings, resonances",
+      "planning": "REVIEW",
+      "owner": 464
+    },
+    {
+      "id": "roche-pass",
+      "family": "moons, rings, resonances",
+      "planning": "REVIEW",
+      "owner": 464
+    },
+    {
+      "id": "sagittarius-a",
+      "family": "generated populations around one dominant mass",
+      "planning": "CORRECT",
+      "owner": 482
+    },
+    {
+      "id": "binary-star-system",
+      "family": "binaries, circumbinary, three-body",
+      "planning": "REVIEW",
+      "owner": 463
+    },
+    {
+      "id": "slingshot",
+      "family": "flybys and assists",
+      "planning": "REVIEW",
+      "owner": 463
+    },
+    {
+      "id": "rogue-encounter",
+      "family": "flybys and assists",
+      "planning": "REVIEW",
+      "owner": 463
+    },
+    {
+      "id": "neutron-star-collision",
+      "family": "compact-object pairs and systems",
+      "planning": "CORRECT",
+      "owner": 465
+    },
+    {
+      "id": "pulsar-system",
+      "family": "compact-object pairs and systems",
+      "planning": "CORRECT",
+      "owner": 465
+    },
+    {
+      "id": "white-dwarf-binary",
+      "family": "compact-object pairs and systems",
+      "planning": "CORRECT",
+      "owner": 465
+    },
+    {
+      "id": "stellar-graveyard",
+      "family": "generated populations around one dominant mass",
+      "planning": "REVIEW",
+      "owner": 482
+    },
+    {
+      "id": "galactic-center",
+      "family": "generated populations around one dominant mass",
+      "planning": "REVIEW",
+      "owner": 482
+    },
+    {
+      "id": "supernova-remnant",
+      "family": "generated populations around one dominant mass",
+      "planning": "REVIEW",
+      "owner": 482
+    },
+    {
+      "id": "compact-object-zoo",
+      "family": "generated populations around one dominant mass",
+      "planning": "REVIEW",
+      "owner": 482
+    },
+    {
+      "id": "millisecond-pulsar",
+      "family": "compact-object pairs and systems",
+      "planning": "REVIEW",
+      "owner": 465
+    },
+    {
+      "id": "tidal-disruption-event",
+      "family": "black hole with hand-placed orbiters",
+      "planning": "CORRECT",
+      "owner": 465
+    },
+    {
+      "id": "intermediate-mass-bh",
+      "family": "generated populations around one dominant mass",
+      "planning": "REVIEW",
+      "owner": 482
+    },
+    {
+      "id": "galactic-collision",
+      "family": "galaxies, clusters, star swarms",
+      "planning": "REVIEW",
+      "owner": 466
+    },
+    {
+      "id": "micro-bh-swarm",
+      "family": "generated populations around one dominant mass",
+      "planning": "REVIEW",
+      "owner": 482
+    },
+    {
+      "id": "exoplanet-lab",
+      "family": "generated populations around one dominant mass",
+      "planning": "REVIEW",
+      "owner": 482
+    },
+    {
+      "id": "quasar-cannon",
+      "family": "generated populations around one dominant mass",
+      "planning": "REVIEW",
+      "owner": 482
+    },
+    {
+      "id": "the-pinwheel-galaxy-core",
+      "family": "galaxies, clusters, star swarms",
+      "planning": "REVIEW",
+      "owner": 466
+    },
+    {
+      "id": "star-frisbee",
+      "family": "galaxies, clusters, star swarms",
+      "planning": "CORRECT",
+      "owner": 466
+    },
+    {
+      "id": "kessler-cascade",
+      "family": "galaxies, clusters, star swarms",
+      "planning": "REVIEW",
+      "owner": 466
+    },
+    {
+      "id": "alien-dyson-swarm-collapse",
+      "family": "galaxies, clusters, star swarms",
+      "planning": "CORRECT",
+      "owner": 466
+    },
+    {
+      "id": "tidal-arm-tango",
+      "family": "galaxies, clusters, star swarms",
+      "planning": "CORRECT",
+      "owner": 466
+    },
+    {
+      "id": "hungry-hungry-holes",
+      "family": "generated populations around one dominant mass",
+      "planning": "CORRECT",
+      "owner": 482
+    },
+    {
+      "id": "slingshot-gauntlet",
+      "family": "flybys and assists",
+      "planning": "REVIEW",
+      "owner": 463
+    },
+    {
+      "id": "black-hole-billiards",
+      "family": "generated populations around one dominant mass",
+      "planning": "CORRECT",
+      "owner": 482
+    },
+    {
+      "id": "stellar-nursery",
+      "family": "galaxies, clusters, star swarms",
+      "planning": "CORRECT",
+      "owner": 466
+    },
+    {
+      "id": "3d-r1",
+      "family": "3-D lab reference systems (separate engine, js/lab3d)",
+      "planning": "REVIEW",
+      "owner": 494
+    },
+    {
+      "id": "3d-r2",
+      "family": "3-D lab reference systems (separate engine, js/lab3d)",
+      "planning": "REVIEW",
+      "owner": 494
+    },
+    {
+      "id": "3d-r3",
+      "family": "3-D lab reference systems (separate engine, js/lab3d)",
+      "planning": "REVIEW",
+      "owner": 494
+    },
+    {
+      "id": "3d-r4",
+      "family": "3-D lab reference systems (separate engine, js/lab3d)",
+      "planning": "REVIEW",
+      "owner": 494
+    },
+    {
+      "id": "3d-r5",
+      "family": "3-D lab reference systems (separate engine, js/lab3d)",
+      "planning": "REVIEW",
+      "owner": 494
+    },
+    {
+      "id": "3d-r6",
+      "family": "3-D lab reference systems (separate engine, js/lab3d)",
+      "planning": "REVIEW",
+      "owner": 494
+    },
+    {
+      "id": "3d-r7",
+      "family": "3-D lab reference systems (separate engine, js/lab3d)",
+      "planning": "REVIEW",
+      "owner": 494
+    },
+    {
+      "id": "3d-r8",
+      "family": "3-D lab reference systems (separate engine, js/lab3d)",
+      "planning": "REVIEW",
+      "owner": 494
+    }
+  ]
+}
