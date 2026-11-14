@@ -989,4 +989,33 @@ are in `tests/fixtures/reference-cases/record.json`, and
 count printed in several files do not move: these cases are a separate record,
 not a group of `npm run validate:physics`.
 
+### The scene record
+
+A change to what the sandbox canvas looks like is judged against a photograph
+of the same moment. `gravitas.scene-record/1`
+(`tools/scene-record.mjs`, records in `tests/fixtures/scene-records/`) pins the
+scenario and how it was loaded (`preset_scenario`, then
+`initialize_simulation({seed})`), the seed, the physics clock to stop at and the
+fixed frame step the capture drives the loop with, the camera (zoom, pan in
+screen pixels, `frameOffset`, and the world point at the canvas centre, derived
+with the arithmetic of `screenToWorld`), the follow mode and frame, the theme,
+the viewport and pixel ratio, the pinned `quality_tier`, the `show_*` switches,
+the trail length, style and colour mode, whether the clock is stopped and the
+scenario card is up, and the commit. `tools/scene-capture.mjs` loads a record in
+headless Chromium, drives the real render loop with `setFixedStep`, pauses
+before a frame can overshoot, and takes one last `updatePhysics(remaining)` so
+the clock equals the target to 1e-9; it writes the canvas and the viewport as
+images outside the repository, and a sidecar with what the page reported.
+Reduced motion is emulated so the starfield does not twinkle; `--repeat`
+captures twice and measures any pixel that still differs, so the layer is named
+and not hidden. `npm run perf -- --scene <record>` profiles the same state for
+frame time; the advisory profile of the reference scenes is in
+`tools/perf-thresholds.json`.
+
+The sixteen records are the sandbox captures taken before the visual work began
+(the Solar System in both themes, the circumbinary lab, the Galilean resonance
+at 2.8 and at 28 times, a star cluster and the black-hole lab, each at 1366 by
+800 and 375 by 812), converted from their sidecars; the images are not in the
+repository.
+
 <!-- Listed in DOCUMENTS.md. -->
