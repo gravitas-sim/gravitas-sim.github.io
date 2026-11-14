@@ -14,16 +14,15 @@
 // one answer onto the other's question and reported nothing moved. Steps 2, 6
 // and 9 collide the same way, as do 4 and 10, and 12 and 14.
 //
-// So identity is now an explicit `sid` written into the lesson and never
-// changed: minted by tools/add-step-ids.mjs, enforced by author:check, and
-// listed in STRUCTURAL so a translation cannot supply one. It survives
-// reordering, rewording and translation, because it is derived from none of
-// them.
+// Identity is now an explicit `sid` written into the lesson and never changed:
+// minted by tools/add-step-ids.mjs, enforced by author:check, and listed in
+// STRUCTURAL so a translation cannot supply one. It survives reordering,
+// rewording and translation. A step whose task changes gets a new sid and the
+// old one is retired (earlierAnswers below).
 //
 // This module owns the stored shape and the migration into it. It is pure and
-// DOM-free so the migration can be tested directly, which matters more here
-// than usual: a migration bug is not a broken screen, it is a student's work
-// quietly attached to the wrong questions.
+// DOM-free: a migration bug is a student's work quietly attached to the wrong
+// questions.
 // =============================================================================
 
 import { get, put } from '../storage/local.js';
@@ -230,7 +229,10 @@ export function readProgress(data, lesson) {
   const keep = (source, into, kind) => {
     let setAside = 0;
     for (const [key, value] of Object.entries(source || {})) {
-      if (!key.startsWith(prefix)) continue;
+      if (!key.startsWith(prefix)) {
+        setAside++; // not this lesson's: left out, and counted in the notice
+        continue;
+      }
       const rest = key.slice(prefix.length);
       const cut = rest.indexOf(':');
       const sid = cut === -1 ? rest : rest.slice(0, cut);
@@ -354,3 +356,36 @@ export function setStudentName(name) {
     /* ignore */
   }
 }
+
+export const wasIn = (was, locale = 'en') =>
+  (typeof was === 'string' ? was : was?.[locale] || was?.en) || '';
+
+const str = v =>
+  v == null ? '' : typeof v === 'object' ? JSON.stringify(v) : `${v}`.trim();
+const NOT_AN_ANSWER = /^(shown|locale|tool:|help|hint)|:locale$/;
+
+// Answers under step ids the lesson lacks: [{id, text, r}], r its `retired` entry.
+export function earlierAnswers(lesson, table) {
+  const live = new Set((lesson?.steps || []).map(s => s?.sid));
+  const by = new Map();
+  for (const [k, v] of Object.entries(table || {})) {
+    if (!k.startsWith(`${lesson?.id}:`)) continue;
+    const [sid, ...sub] = k.slice(lesson.id.length + 1).split(':');
+    if (!live.has(sid))
+      by.set(sid, [...(by.get(sid) || []), [sub.join(':'), v]]);
+  }
+  return [...by].flatMap(([id, kv]) => {
+    const text =
+      str(kv.find(([k]) => !k)?.[1]) ||
+      kv
+        .filter(([k, v]) => k && !NOT_AN_ANSWER.test(k) && str(v))
+        .map(([k, v]) => `${k}=${str(v)}`)
+        .join('; ');
+    return text ? [{ id, text, r: lesson.retired?.[id] }] : [];
+  });
+}
+
+export const earlierLine = ({ text, r }, locale) => {
+  const was = wasIn(r?.was, locale);
+  return `${was ? `"${was}": ` : ''}${text}${r ? ` (${r.release})` : ''}`;
+};

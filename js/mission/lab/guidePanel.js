@@ -290,24 +290,7 @@ export function createGuidePanel({ els, t, lab }) {
     const guides = GUIDES.map(g => {
       let p = readJson(STORE(g.id, path), {});
       if (g.id === guide.id) p = progress;
-      // Answers to steps the guide no longer has stay in the file as from an
-      // earlier version (a progress record keeps every key it was given).
-      const live = new Set(g.steps.map(s => s.id));
-      const earlier = Object.entries(p)
-        .filter(
-          ([k, v]) => k !== 'at' && !live.has(k) && v?.constructor === Object
-        )
-        .map(([id, a]) => ({
-          step: id,
-          input: a.input ?? null,
-          passed: !!a.passed,
-          shown: !!a.shown,
-          release: g.retired?.[id]?.release ?? null,
-          replacedBy: g.retired?.[id]?.to ?? null,
-          was: g.retired?.[id]?.was?.[lab.language()] ?? null,
-        }));
       return {
-        ...(earlier.length ? { earlier } : {}),
         guide: g.id,
         path,
         steps: stepsOn(g, path)

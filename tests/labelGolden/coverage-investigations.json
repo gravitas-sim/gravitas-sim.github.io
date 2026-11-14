@@ -4,18 +4,18 @@
  "reached": 8,
  "unreached": [
   "js/observatory/fitPanel.js:745:62",
-  "js/observatory/guidePanel.js:330:53",
+  "js/observatory/guidePanel.js:332:53",
   "js/observatory/measurePanel.js:491:29",
   "js/observatoryPage.js:542:50"
  ],
  "hazards": {
-  "js/investigations/stepView.js:1193:13": [
+  "js/investigations/stepView.js:1188:13": [
    "hyphen"
   ],
-  "js/investigations/stepView.js:643:11": [
+  "js/investigations/stepView.js:641:11": [
    "hyphen"
   ],
-  "js/investigations/stepView.js:801:35": [
+  "js/investigations/stepView.js:799:35": [
    "hyphen"
   ],
   "js/observatory/guides/core.js:320:27": [

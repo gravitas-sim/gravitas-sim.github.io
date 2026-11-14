@@ -26,6 +26,7 @@ import {
   assignmentIdFor,
   shortHash,
   stepBindings,
+  swapRetired,
 } from '../assignments/assignment.js';
 import { readCourseFragment, assignmentPayload } from '../course/links.js';
 import {
@@ -186,15 +187,10 @@ export function reuseCheck(
   now = new Date()
 ) {
   const r = stepBindings(activity, lesson, fingerprint);
-  // A retired step becomes its successor in place; one with none is dropped.
   const byId = new Map((lesson?.steps || []).map(s => [s.sid, s]));
-  const keep = [
-    ...new Set(
-      (activity.s || []).map(sid =>
-        byId.has(sid) ? sid : lesson?.retired?.[sid]?.to
-      )
-    ),
-  ].filter(sid => byId.has(sid));
+  const keep = swapRetired(lesson, activity.s || []).filter(sid =>
+    byId.has(sid)
+  );
   const reissued = keep.length
     ? {
         ...activity,

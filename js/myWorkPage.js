@@ -109,19 +109,7 @@ const SURFACES = {
 async function refresh() {
   s.file = await s.store.exportAll();
   s.records = flatten(s.file);
-  // The retired record, read only for a lesson the Library lacks.
-  if (
-    s.records.some(
-      r =>
-        r.id.startsWith('gravitas_investigation_') &&
-        !r.id.endsWith(':v1') &&
-        !s.library.has(`investigation:${r.id.slice(23)}`)
-    )
-  )
-    s.retired ??= (
-      await import('./data/retiredInvestigations.js')
-    ).RETIRED_INVESTIGATIONS;
-  s.model = describe(s.records, s.library, s.retired);
+  s.model = describe(s.records, s.library);
   s.estimate = await s.store.estimate();
   render();
 }
@@ -198,12 +186,6 @@ function lessonItem(x) {
             )
         : '',
       since(x.since),
-      x.earlier
-        ? L(
-            `earlier version (${x.earlier.release})`,
-            `versión anterior (${x.earlier.release})`
-          )
-        : '',
     ],
     href: x.href,
     open: x.done ? L('Open', 'Abrir') : L('Resume', 'Continuar'),

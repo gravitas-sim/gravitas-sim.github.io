@@ -131,19 +131,20 @@ id, so an id is a promise that the task is the same. Four edits, and only these:
   question. A retired id is never reused.
 - **Insert, reorder or remove**: allowed (the Spanish follows by sid). A removal
   is a retirement with `to: null`.
-- **Merge or retire a whole investigation**: only by the consolidation gate; its
-  decision adds a row to `js/data/retiredInvestigations.js`
-  (`old-id: { to, release, reason }`, `to` a real investigation or `null`).
+- **Merge or retire a whole investigation**: only by the consolidation gate. No
+  investigation has been retired, so there is no record of one and no reader for
+  it yet (a link to an old id, a course item and My work); the gate that retires
+  the first adds the record `{old-id: {to, release}}` and those readers with it.
 
 What a reader does: saved answers under a retired id stay readable and are shown
 as "answered in an earlier version", never marked against the new step (lesson
-panel, My work, the lab report, the submission results); an assignment, an
-activity format or a course pin that names the retired step reports it in words
-and offers the successor (re-pin, reviewed course upgrade); `#investigation=<old
-id>` opens the successor with a notice.
+panel, the submission results); an assignment, an
+activity format or a course pin that names the retired step offers the successor
+(re-pin, reviewed course upgrade).
 
 The same `retired` map sits on a guide of the 3-D lab, the mission lab or the
-Observatory, and a guide's report lists the old answer marked with its release.
+Observatory (the 3-D lab's report lists the old answer marked with its release;
+the other two keep it in the saved record).
 Other families: **bench labs** use the store version (`SCHEMA_VERSION`): a
 changed built-in setup is a version bump whose `migrate()` step keeps the old
 runs and says what it withdrew, as version 3 did; **activities** resolve a

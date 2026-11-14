@@ -43,7 +43,7 @@ beforeAll(async () => {
 const UNREACHED = {
   'js/observatory/fitPanel.js:745':
     'the seconds a fit took, read from the clock when the run ends',
-  'js/observatory/guidePanel.js:330':
+  'js/observatory/guidePanel.js:332':
     'a rounding inside the guide panel, which needs a mounted observation',
   'js/observatory/measurePanel.js:491':
     'a rounding inside the measure panel, which needs a mounted pipeline',
@@ -218,9 +218,9 @@ describe('what the recording can tell apart', () => {
     // (js/format.js is not loaded by /observatory/ at start).
     const at = site => all.hazards[site] ?? { hyphen: false, nonFinite: false };
     for (const site of [
-      'js/investigations/stepView.js:643:11',
-      'js/investigations/stepView.js:801:35',
-      'js/investigations/stepView.js:1193:13',
+      'js/investigations/stepView.js:641:11',
+      'js/investigations/stepView.js:799:35',
+      'js/investigations/stepView.js:1188:13',
       'js/observatory/guides/core.js:320:27',
     ])
       expect(at(site).hyphen).toBe(true);

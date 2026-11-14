@@ -89,7 +89,6 @@ export const WARNINGS = Object.freeze([
   'changedSteps',
   'staleAnswers',
   'evidenceMismatch',
-  'earlierVersion',
 ]);
 
 /** One row per accepted submission. */
@@ -481,7 +480,6 @@ export function gradeSubmission(
       ? backup.lesson.stepCount
       : null,
     changedSteps: changed.size,
-    earlierSteps: questions.filter(q => q.earlier).length,
     submissionSchema: kind === 'backup' ? null : submission.v,
     backupVersion: backup.version ?? null,
     savedAt: backup.savedAt || null,
@@ -583,7 +581,6 @@ export function annotate(records) {
     if (r.attemptGroup !== null) w.push('repeatedAttempt');
     if (r.changedSteps > 0) w.push('changedSteps');
     if (r.stale > 0) w.push('staleAnswers');
-    if (r.earlierSteps > 0) w.push('earlierVersion');
     if (r.evidence?.state === 'mismatch') w.push('evidenceMismatch');
     r.warnings = w;
   }

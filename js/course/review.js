@@ -14,7 +14,7 @@
 // Against the lesson as it is now, an item is: same; changed (the steps are not
 // the ones pinned); compatible (the package moved within its major version);
 // major; moved (another package, or none); unpinned (a /1 pack, migrated);
-// missing (Gravitas no longer has it; a retired lesson says where it went); or
+// missing (Gravitas no longer has it); or
 // unchecked (an investigation pack no page here has opened).
 //
 // Whether an instructor has to look depends on the pack's pinning: an exact
@@ -29,7 +29,7 @@
 // the course home and the tests read the verdicts.
 // =============================================================================
 
-import { shortHash } from '../assignments/assignment.js';
+import { shortHash, swapRetired } from '../assignments/assignment.js';
 import { GUIDES, itemsOf, lessonKeyOf, PATHS } from './pack.js';
 
 export { shortHash };
@@ -114,11 +114,7 @@ export function reviewItem(item, facts, pinning) {
   const lesson = facts.lessons.get(lessonKeyOf(item));
   if (!lesson && facts.unchecked?.has(lessonKeyOf(item)))
     return verdict(STATUS.UNCHECKED);
-  if (!lesson) {
-    // Retired on purpose: where it went (./retired.js, via courseFacts()).
-    const gone = facts.retired?.get(lessonKeyOf(item));
-    return verdict(STATUS.MISSING, gone ? { retiredLesson: gone } : {});
-  }
+  if (!lesson) return verdict(STATUS.MISSING);
   const steps = item.kind === 'assignment' ? stepStates(item, lesson) : [];
   const detail = {
     // Missing steps the lesson retired, and what replaced each.
@@ -195,29 +191,14 @@ export function upgradeCoursePack(pack, facts, accepted, opts) {
     const v = reviewItem(item, facts, out.pinning);
     const lesson = facts.lessons.get(lessonKeyOf(item));
     if (!lesson) {
-      // A lesson item follows its replaced investigation once reviewed.
-      const to = v.detail.retiredLesson?.to;
-      const next = to && item.kind === 'lesson' && facts.lessons.get(to);
-      if (!next) {
-        refused.push(item.id);
-        continue;
-      }
-      item.lesson = to;
-      item.pin = pinFor(item, next);
-      upgraded.push(item.id);
-      breaking = true;
+      refused.push(item.id);
       continue;
     }
     if (v.status === STATUS.SAME && !v.needsReview) continue;
     if (item.kind === 'assignment') {
-      // A retired step is replaced by its successor, in its place.
-      const kept = [
-        ...new Set(
-          item.steps.map(sid =>
-            lesson.hashes.has(sid) ? sid : lesson.retired?.[sid]?.to
-          )
-        ),
-      ].filter(sid => lesson.hashes.has(sid));
+      const kept = swapRetired(lesson, item.steps).filter(sid =>
+        lesson.hashes.has(sid)
+      );
       if (!kept.length) {
         refused.push(item.id);
         continue;

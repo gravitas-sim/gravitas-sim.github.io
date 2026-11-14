@@ -48,6 +48,8 @@ import { investigationMeta } from '../data/investigations/registry.js';
 import { assignmentStorageKey, shortHash } from '../assignments/assignment.js';
 import {
   classifyStorageError,
+  earlierAnswers,
+  earlierLine,
   readProgress,
   writeProgress,
 } from './progressSchema.js';
@@ -410,10 +412,8 @@ export function stepMarkup(step, c) {
 /**
  * Draw an ellipse with its anatomy labeled, at a chosen eccentricity.
  *
- * Kepler's first law is a statement about a shape, and the shape is the part a
- * student has no intuition for: "the Sun is at a focus" means nothing until you
- * have watched the focus slide out of the center as e grows. The slider is the
- * explanation.
+ * "The Sun is at a focus" means nothing until the focus is watched sliding
+ * out of the center as e grows; the slider is the explanation.
  */
 export function drawEllipse(canvas, e) {
   if (!canvas) return;
@@ -570,9 +570,8 @@ const tick = v => tickLabel(v);
 /**
  * Least-squares fit through the origin.
  *
- * Forced through zero because the relation being tested has no constant term:
- * a planet with no orbit takes no time. Fitting an intercept would let a bad
- * data set look straight by sliding the line sideways.
+ * Forced through zero: the relation has no constant term, and an intercept
+ * would let a bad data set look straight by sliding the line sideways.
  *
  * @param {Array} pts - [{x, y}]
  * @returns {number|null} Slope, or null when it is not determined
@@ -610,9 +609,8 @@ export function logSlope(pts) {
 /**
  * Draw the step's scatter plot.
  *
- * The point of the toggle is that a power law is hard to judge by eye as a
- * curve and trivial to judge as a straight line, which is exactly the move
- * that turns four measurements into evidence for Kepler's third law.
+ * A power law is hard to judge by eye as a curve and trivial as a straight
+ * line; the log toggle is that move.
  */
 /**
  * The plot's points, as a table.
@@ -839,12 +837,9 @@ export function drawPlot(step, vals, { canvas, els, transformed, log }) {
 /**
  * Whether a written answer is a written answer.
  *
- * Deliberately weak. This is not marking: a reader who writes something short
- * and wrong has answered, and telling them their phrasing is unscientific is
- * not this function's business. What it refuses is the null response - an empty
- * box, a space, a full stop, "..." - because the step is a prompt to say
- * something and those say nothing, and recording them as an answer puts an
- * empty field into a report a teacher will read.
+ * Deliberately weak, and not marking: something short and wrong has answered.
+ * It refuses the null response (an empty box, a space, a full stop, "...")
+ * so no empty field reaches a report a teacher will read.
  *
  * @param {string} value - What the reader typed
  * @returns {boolean} True when there is something there
@@ -1332,10 +1327,9 @@ export function save() {
  * while typing an answer is worse than silence.
  */
 /**
- * Say what reading the saved progress turned up, once, when the lesson opens:
- * a migration from the pre-sid format (done by position); answers for steps the
- * lesson no longer has, which are kept and listed as from an earlier version
- * (./earlierView.js); and a payload from a newer build, which was not read.
+ * Say what reading the saved progress turned up, once, on opening: a migration
+ * by position, answers kept for steps the lesson no longer has (listed, not
+ * marked), and a payload from a newer build, which was not read.
  */
 export function renderProgressNotice() {
   const el = host.els()?.progressNotice;
@@ -1353,12 +1347,17 @@ export function renderProgressNotice() {
   }
 
   el.textContent = lines.join(' ');
-  el.hidden = lines.length === 0;
   const { active } = host.state();
-  if (earlierKept.get(active?.id))
-    import('./earlierView.js').then(m =>
-      m.showEarlier(el, active, earlierKept.get(active.id))
+  const rows = earlierAnswers(active, earlierKept.get(active?.id)?.responses);
+  if (rows.length)
+    el.appendChild(document.createElement('ul')).append(
+      ...rows.map(e =>
+        Object.assign(document.createElement('li'), {
+          textContent: earlierLine(e, getLocale()),
+        })
+      )
     );
+  el.hidden = lines.length === 0 && rows.length === 0;
 }
 
 /**
@@ -1411,7 +1410,7 @@ export function renderSaveStatus() {
  */
 export const sessionProgress = new Map();
 
-/** Per lesson: the answers to steps it no longer has, written back with every save. */
+/** Per lesson: answers to steps it no longer has, written back on save. */
 const earlierKept = new Map();
 export const earlierFor = id => earlierKept.get(id);
 

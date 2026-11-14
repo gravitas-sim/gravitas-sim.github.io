@@ -1354,11 +1354,6 @@ function renderReview(r, d) {
           list: rv.map(r => `${r.sid} -> ${r.to ?? '-'}`).join(', '),
         })
       );
-    const gone = x.detail?.retiredLesson;
-    if (gone)
-      detail.push(
-        t('course.review.retiredLesson', { ...gone, to: gone.to ?? '-' })
-      );
     if (x.detail?.pinnedPackage || x.detail?.currentPackage)
       detail.push(
         t('course.review.package', {
@@ -1367,8 +1362,7 @@ function renderReview(r, d) {
         })
       );
     const id = `cb-reviewed-${x.id}`;
-    const canUpgrade =
-      x.status !== STATUS.MISSING || x.detail?.retiredLesson?.to;
+    const canUpgrade = x.status !== STATUS.MISSING;
     list.append(
       el(
         'li',

@@ -25,6 +25,7 @@
 import {
   buildAssignment,
   resolveSelection,
+  swapRetired,
 } from '../assignments/assignment.js';
 import { stepFingerprint } from '../investigations/progressBackup.js';
 import { activityById, formatById } from '../data/activities.js';
@@ -46,7 +47,7 @@ export const LAUNCH = Object.freeze({
  * @param {string} [title] - The activity's title in the reader's language
  * @param {string} [intro] - The format's own opening, in the same
  * @returns {{ok: boolean, reason?: string, assignment?: object,
- *   added?: Array<object>, unknown?: Array<string>, revised?: Array<object>}}
+ *   added?: Array<object>, unknown?: Array<string>}}
  *   The payload, or why not
  */
 export function assignmentForFormat(
@@ -63,11 +64,7 @@ export function assignmentForFormat(
     return { ok: false, reason: LAUNCH.NO_LESSON };
   }
 
-  // A retired step is its successor, or left out (noted in `revised`).
-  const gone = sid => lesson.retired?.[sid];
-  const ids = [
-    ...new Set(format.steps.map(s => (gone(s) ? gone(s).to : s))),
-  ].filter(Boolean);
+  const ids = swapRetired(lesson, format.steps);
   const resolved = resolveSelection(lesson, ids);
   if (!resolved.sids.length) return { ok: false, reason: LAUNCH.NO_STEPS };
 
@@ -103,7 +100,6 @@ export function assignmentForFormat(
     // them.
     added: resolved.added,
     unknown: resolved.unknown,
-    revised: format.steps.filter(gone).map(sid => ({ sid, ...gone(sid) })),
   };
 }
 
@@ -119,11 +115,7 @@ export function assignmentForFormat(
  * @returns {{sids: Array<string>, added: Array<object>, unknown: Array<string>}}
  */
 export function resolvedSteps(lesson, format) {
-  const gone = sid => lesson?.retired?.[sid];
-  const ids = (format?.steps || []).map(sid =>
-    gone(sid) ? gone(sid).to : sid
-  );
-  return resolveSelection(lesson, [...new Set(ids)].filter(Boolean));
+  return resolveSelection(lesson, swapRetired(lesson, format?.steps || []));
 }
 
 /**

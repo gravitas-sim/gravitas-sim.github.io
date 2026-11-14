@@ -23,6 +23,7 @@ import {
   bindStepInputs,
   formatFieldNumber,
   keyForAssignment,
+  earlierFor,
   load,
   parseFieldNumber,
   progressFor,
@@ -2725,6 +2726,7 @@ const finishHost = () => ({
     depth,
   }),
   elements: () => els,
+  earlier: earlierFor,
   payloadFromSetup,
   plotData: plotAnywhere,
   stepId,
@@ -2846,16 +2848,13 @@ function investigationFromHash() {
 
 /**
  * Open the lesson the URL names, at start-up and on every hash change, so a
- * link handed out lands the student on the right lesson. An id that does not
- * resolve may be one retired on purpose (./investigations/earlierView.js).
+ * link handed out lands the student on the right lesson.
  */
 function openInvestigationFromHash() {
   const [id, depth] = investigationFromHash();
   if (!id) return;
   if (!hasInvestigation(id)) {
-    import('./investigations/earlierView.js').then(m =>
-      m.openRetired(id, depth, openInvestigation)
-    );
+    toast(t('inv.link.unknown'));
     return;
   }
   if (active?.id === id) return;

@@ -143,14 +143,6 @@ export async function courseFacts(
     lessons.set(id, known.get(id));
   }
 
-  // A lesson that left Gravitas on purpose says where it went (lazy).
-  const retired =
-    ids.size > lessons.size
-      ? await (
-          await import('./retired.js')
-        ).retiredFacts(ids, have, lessons, known, load, lessonFacts)
-      : new Map();
-
   // An investigation pack travels in its item as a link. Opening one needs
   // the lesson engine's checks (./packItems.js), which the builder's route has
   // no room for: a page that has them hands `openPack` in, and a pack nobody
@@ -178,7 +170,6 @@ export async function courseFacts(
     platform: PLATFORM_API,
     locales: [...LOCALES],
     lessons,
-    retired,
     unchecked,
     scenarios: new Map(Object.keys(SCENARIO_INFO).map(k => [k, {}])),
     scenarioId,

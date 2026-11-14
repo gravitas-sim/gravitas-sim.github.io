@@ -1,13 +1,10 @@
 import { describe, expect, test } from '@jest/globals';
 import {
+  earlierAnswers,
   readProgress,
+  wasIn,
   writeProgress,
 } from '../js/investigations/progressSchema.js';
-import { earlierAnswers, wasIn } from '../js/investigations/revisions.js';
-import {
-  retiredInvestigation,
-  RETIRED_INVESTIGATIONS,
-} from '../js/data/retiredInvestigations.js';
 import { EDITS, editedLesson, lesson } from './compat/kinds/_lesson.mjs';
 
 // The task-change contract: a shipped step is reworded in place, or revised
@@ -54,10 +51,10 @@ describe('the retired map', () => {
       'o:gone': 3,
       'o:mystery': 4,
     });
-    expect(rows.map(r => [r.id, r.to, r.known])).toEqual([
-      ['a', 'z', true],
-      ['gone', null, true],
-      ['mystery', null, false],
+    expect(rows.map(r => [r.id, r.r?.to])).toEqual([
+      ['a', 'z'],
+      ['gone', null],
+      ['mystery', undefined],
     ]);
   });
 });
@@ -87,14 +84,9 @@ describe('progress load: reword, revise, insert and remove', () => {
     expect(r.earlier.responses['tides:guess']).toBe(0);
     expect(r.earlier.attempts['tides:guess']).toBe(1);
     const [e] = earlierAnswers(l, r.earlier.responses);
-    expect(e).toMatchObject({
-      id: 'guess',
-      text: '0',
-      to: 'guess-2',
-      release: '3.1',
-      known: true,
-    });
-    expect(wasIn(e.was, 'es')).toMatch(/mayor/);
+    expect(e).toMatchObject({ id: 'guess', text: '0' });
+    expect(e.r).toMatchObject({ to: 'guess-2', release: '3.1' });
+    expect(wasIn(e.r.was, 'es')).toMatch(/mayor/);
   });
 
   test('a removed step is retired with no successor and its field answers stay readable', () => {
@@ -102,7 +94,8 @@ describe('progress load: reword, revise, insert and remove', () => {
     const r = readProgress(SAVED, l);
     expect(r.responses['tides:measure:d']).toBeUndefined();
     const [e] = earlierAnswers(l, r.earlier.responses);
-    expect(e).toMatchObject({ id: 'measure', text: 'd=4.2', to: null });
+    expect(e).toMatchObject({ id: 'measure', text: 'd=4.2' });
+    expect(e.r.to).toBeNull();
     expect(r.notes.find(n => n.code === 'removedSteps').dropped).toBe(2);
   });
 
@@ -134,45 +127,11 @@ describe('progress load: reword, revise, insert and remove', () => {
   });
 });
 
-describe('the retired-investigation record', () => {
-  const record = {
-    old: { to: 'mid', release: '3.1', reason: 'merged' },
-    mid: { to: 'new', release: '3.2', reason: 'merged again' },
-    gone: { to: null, release: '3.1', reason: 'retired' },
-    ring: { to: 'ring', release: '3.1', reason: 'broken' },
-  };
-  const live = new Set(['new']);
-
-  test('resolves through a later retirement', () => {
-    expect(retiredInvestigation('old', live, record)).toMatchObject({
-      to: 'new',
-      release: '3.1',
-    });
-  });
-
-  test('a retirement with no successor, a cycle and an id never retired', () => {
-    expect(retiredInvestigation('gone', live, record).to).toBeNull();
-    expect(retiredInvestigation('ring', live, record).to).toBeNull();
-    expect(retiredInvestigation('toString', live, record)).toBeNull();
-    expect(retiredInvestigation('new', live, record)).toBeNull();
-  });
-
-  test('the shipped record holds only real successors', async () => {
-    const { investigationIds } =
-      await import('../js/data/investigations/registry.js');
-    const live2 = new Set(investigationIds());
-    for (const [id, e] of Object.entries(RETIRED_INVESTIGATIONS)) {
-      expect(live2.has(id)).toBe(false);
-      if (e.to) expect(live2.has(e.to)).toBe(true);
-    }
-  });
-});
-
 describe('the other readers', () => {
   const revised = editedLesson('revise');
   const removed = editedLesson('remove');
 
-  test('an activity format names a retired step: its successor, or left out with a note', async () => {
+  test('an activity format names a retired step: its successor, or left out', async () => {
     const { assignmentForFormat } =
       await import('../js/activities/activities.js');
     const act = { id: 'a', markingNote: false };
@@ -181,7 +140,6 @@ describe('the other readers', () => {
     const r = run(revised, ['guess', 'ask']);
     expect(r.assignment.s).toContain('guess-2');
     expect(r.assignment.s).not.toContain('guess');
-    expect(r.revised.map(n => n.sid)).toEqual(['guess']);
     const gone = run(removed, ['measure', 'ask']);
     expect(gone.assignment.s).toEqual(expect.arrayContaining(['ask']));
     expect(gone.assignment.s).not.toContain('measure');
@@ -202,10 +160,7 @@ describe('the other readers', () => {
       provider: null,
     });
     const res = stepBindings(a, revised, stepFingerprint);
-    const said = whatChanged(a, revised, res, null);
-    expect(said.revised.map(r => [r.sid, r.to])).toEqual([
-      ['guess', 'guess-2'],
-    ]);
+    expect(whatChanged(a, revised, res, null).missing).toHaveLength(1);
     const fresh = repin(a, revised, stepFingerprint, null);
     expect(fresh.s).toContain('guess-2');
     expect(fresh.s).not.toContain('guess');
@@ -228,19 +183,6 @@ describe('the other readers', () => {
             guide: false,
           },
         ],
-        [
-          'tides2',
-          {
-            fp: 'y',
-            n: 1,
-            hashes: new Map([['a', 'h']]),
-            sids: ['a'],
-            retired: null,
-          },
-        ],
-      ]),
-      retired: new Map([
-        ['old-lesson', { id: 'old-lesson', to: 'tides2', release: '3.1' }],
       ]),
       scenarios: new Map(),
     };
@@ -254,41 +196,18 @@ describe('the other readers', () => {
     expect(reviewItem(item, facts, 'compatible').detail.revisedSteps).toEqual([
       expect.objectContaining({ sid: 'guess', to: 'guess-2', release: '3.1' }),
     ]);
-    const gone = reviewItem(
-      { id: 'i2', kind: 'lesson', lesson: 'old-lesson' },
-      facts,
-      'compatible'
-    );
-    expect(gone.status).toBe('missing');
-    expect(gone.detail.retiredLesson.to).toBe('tides2');
     const pack = {
       version: '1.0.0',
       pinning: 'compatible',
-      units: [
-        { items: [item, { id: 'i2', kind: 'lesson', lesson: 'old-lesson' }] },
-      ],
+      units: [{ items: [item] }],
     };
-    const up = upgradeCoursePack(pack, facts, ['i1', 'i2'], {
+    const up = upgradeCoursePack(pack, facts, ['i1'], {
       today: '2026-01-01',
       newAssignmentId: () => 'new',
     });
     const items = up.pack.units[0].items;
     expect(items[0].steps).toEqual(['guess-2']);
-    expect(items[1].lesson).toBe('tides2');
     expect(up.refused).toEqual([]);
-  });
-
-  test('my work lists progress under a retired investigation as an earlier version', async () => {
-    const { describe: describeWork } = await import('../js/myWork/model.js');
-    const rec = {
-      id: 'gravitas_investigation_old-lesson',
-      value: { visited: ['a'], responses: { 'old-lesson:a': 1 } },
-    };
-    const m = describeWork([rec], new Map(), {
-      'old-lesson': { to: 'tides', release: '3.1' },
-    });
-    expect(m.lessons[0].earlier).toEqual({ to: 'tides', release: '3.1' });
-    expect(describeWork([rec], new Map()).lessons[0].earlier).toBeNull();
   });
 
   test('a 3-D guide report lists a retired step answer, marked with its release and successor', async () => {

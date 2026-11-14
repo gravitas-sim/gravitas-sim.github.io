@@ -1,5 +1,5 @@
 // =============================================================================
-// The rule id/retired: a lesson's `retired` map (js/investigations/revisions.js)
+// The rule id/retired: a lesson's `retired` map (js/investigations/progressSchema.js)
 // -----------------------------------------------------------------------------
 // Node-side, handed in through tools/authoring/inputs.mjs like cueRules.mjs; the
 // Composer route carries none of it. Each entry is a step revised under the

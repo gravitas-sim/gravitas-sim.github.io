@@ -124,8 +124,6 @@ const plain = text =>
  * @param {Function} [opts.createDoc] - The document builder: js/pdf.js
  *   createDocument (the default) or js/htmlReport.js createHtmlDocument, which
  *   has the same interface and makes the accessible HTML report
- * @param {Array<string>} [opts.earlier] - Sentences for the answers to steps
- *   the lesson no longer has (js/investigations/earlierView.js earlierLine)
  * @param {(doc: object) => void} [opts.evidence] - Prints the evidence ledger's
  *   sections (js/notebook/report.js evidenceSections()) after the summary
  * @returns {Uint8Array|string} PDF bytes, or the HTML document as a string
@@ -150,7 +148,6 @@ export function buildLabReport({
   locale = 'en',
   meta = [],
   evidence = null,
-  earlier = [],
   helpFor = () => null,
   createDoc = createDocument,
 }) {
@@ -422,16 +419,6 @@ export function buildLabReport({
       yLabel: plot.yLabel,
       slope: plot.slope,
     });
-  }
-
-  // --- Answers to steps the lesson no longer has -----------------------------
-  // Listed as answered in an earlier version, never marked, and left out of the
-  // completion code below: they are not answers to this lesson's questions.
-  if (earlier.length) {
-    doc.heading(t('rev.heading', { n: earlier.length }), { size: 12 });
-    for (const line of earlier) {
-      doc.paragraph(lessonPlain(line), { size: 9.5, gap: 4 });
-    }
   }
 
   // --- Summary ---------------------------------------------------------------
