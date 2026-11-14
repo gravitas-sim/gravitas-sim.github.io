@@ -373,8 +373,9 @@
     }
   ],
   "override": {
-    "about": "Where the reader's own Settings, Motion choice (Follow my device, Reduced, Step by step; `gravitas_motion`) takes effect. It is read by js/quality.js, which only the application page loads, so it reaches the application (the sandbox and the lessons in it) and nowhere else. Every other page follows the system setting alone, which the blanket rules honour on all of them. e2e/a11ySweepII.spec.js holds the list exact: a page that learns the choice fails there until its row is corrected.",
-    "reaches": ["investigations", "sandbox"],
-    "proposal": "Apply it where the theme is applied: in the script the shell stamps into every page's head (tools/shell.mjs, HEAD), three lines that set data-motion from the stored value before the first paint. It costs no JavaScript budget, and it re-stamps the 178 pages that carry the shell and their CSP hashes, which is why this sweep records it rather than doing it among the fixes."
+    "about": "Where the reader's own Settings, Motion choice (Follow my device, Reduced, Step by step; `gravitas_motion`) takes effect. The script the shell stamps into every page's head (tools/shell.mjs, HEAD) sets data-motion from the stored value before the first paint, so every page that carries the shell's head honours it, and js/quality.js applies it again on the application page, where Step by step also starts the world paused. Under Step by step every other page behaves as under Reduced. The blanket rules in css/components.css and the tokens in css/tokens.css answer to the attribute exactly as they answer to the system setting. e2e/a11ySweepII.spec.js holds the list exact: a surface listed in `unstamped` must not carry the shell's head, and every other surface must.",
+    "reaches": "every page that carries the shell's head",
+    "unstamped": [],
+    "reason": "D-R10-279-04 part 1, as recommended: three lines in the stamped head, before the first paint, with no import and a try/catch around storage."
   }
 }
