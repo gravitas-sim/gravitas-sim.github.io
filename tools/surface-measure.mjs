@@ -343,14 +343,16 @@ async function main(argv) {
   try {
     for (const viewport of VIEWPORTS) {
       for (const locale of LOCALES) {
-        const context = await browser.newContext({
-          viewport: { width: viewport.width, height: viewport.height },
-          hasTouch: viewport.touch,
-          isMobile: viewport.touch,
-          deviceScaleFactor: 1,
-          serviceWorkers: 'block',
-        });
         for (const state of states) {
+          // A context of its own for each state: storage carries over between
+          // the pages of one origin, and a state declares exactly what it holds.
+          const context = await browser.newContext({
+            viewport: { width: viewport.width, height: viewport.height },
+            hasTouch: viewport.touch,
+            isMobile: viewport.touch,
+            deviceScaleFactor: 1,
+            serviceWorkers: 'block',
+          });
           const r = await measureOne(
             context,
             base,
@@ -359,12 +361,12 @@ async function main(argv) {
             locale,
             library
           );
+          await context.close();
           rows.push(r);
           process.stderr.write(
             `${r.error ? 'x' : '.'} ${r.id} ${viewport.id} ${locale}${r.error ? `  ${r.error}` : ''}\n`
           );
         }
-        await context.close();
       }
     }
   } finally {
