@@ -59,7 +59,7 @@ const CMP = (values = {}) => ({
 const PLAN_FIELDS = [
   {
     id: 'facility',
-    label: 'Facility: 1 LCO 0.35 m, 2 LCO 1.0 m, 3 Rubin 8.4 m',
+    label: 'Facility, counted from 1: 1 LCO 0.35 m, 2 LCO 1.0 m, 3 Rubin 8.4 m',
     hint: '2',
   },
   { id: 'exposure', label: 'Exposure per visit', unit: 's', hint: '100' },
@@ -970,7 +970,10 @@ export const PROPOSE_AN_OBSERVATION_ES = {
       title: 'Propón un plan',
       body: 'Introduce tu plan: la instalación, la exposición, las visitas apiladas, las noches (como máximo 10) y el umbral de detección. Después di qué alcanza: la profundidad (la magnitud a la que se encuentra la mitad de las fuentes) y el número de fuentes encontradas por grado cuadrado. Ambas son predicciones que puedes comprobar en el panel.',
       fields: [
-        { label: 'Instalación: 1 LCO 0,35 m, 2 LCO 1,0 m, 3 Rubin 8,4 m' },
+        {
+          label:
+            'Instalación, contada desde 1: 1 LCO 0,35 m, 2 LCO 1,0 m, 3 Rubin 8,4 m',
+        },
         { label: 'Exposición por visita' },
         { label: 'Visitas apiladas' },
         { label: 'Noches' },
@@ -1054,7 +1057,10 @@ export const PROPOSE_AN_OBSERVATION_DEEPER_ES = {
       title: 'Un segundo plan',
       body: 'Propón ahora un segundo plan que también cumpla el objetivo, en una instalación distinta de la primera.',
       fields: [
-        { label: 'Instalación: 1 LCO 0,35 m, 2 LCO 1,0 m, 3 Rubin 8,4 m' },
+        {
+          label:
+            'Instalación, contada desde 1: 1 LCO 0,35 m, 2 LCO 1,0 m, 3 Rubin 8,4 m',
+        },
         { label: 'Exposición por visita' },
         { label: 'Visitas apiladas' },
         { label: 'Noches' },

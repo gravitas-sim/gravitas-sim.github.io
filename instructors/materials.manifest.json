@@ -1,6 +1,6 @@
 {
   "version": "November 2026",
-  "generated": "2026-11-12",
+  "generated": "2026-11-14",
   "documents": 1222,
   "inventory": {
     "documents": 1222,
@@ -24,7 +24,7 @@
     }
   },
   "sourceFiles": 306,
-  "sourceDigest": "062ed39af12e003ac64586b358ee8107891c39fcf35baa8aac5e4a0b2f922ae4",
+  "sourceDigest": "d97dac4baa1cf9476a1be40864432e00b3f2fc87ad7c8b7886bd63ae71c0112b",
   "sources": {
     "js/activities/activities.js": "39ac98cd99b8b0387c55e41d5d4530bad55a8da8758819ad056be73e7a716b01",
     "js/activities/activityBridge.js": "67a82aff98e0ed935d6b8b0f0f654c6ad4332ee929cb3604e896a7f790a6fdc1",
@@ -233,7 +233,7 @@
     "js/data/investigations/occurrence-sequence.js": "107a06ac6c3091485185e5570771c204842f5a9cbdf6909e3683ecd2f8cecba2",
     "js/data/investigations/orbital-energy.js": "db045b8aa91bec380d347bb05d3ca60f7239337d2ab02abf6e3b59ea81f6932c",
     "js/data/investigations/phases-and-eclipses.js": "bd5582a234a90ae8a7da5417b105fc7534c6212ddcb4c48194b12f5c5a336cb5",
-    "js/data/investigations/photometric-calibration-sequence.js": "dabefee723b3f63cd7cf2091e25d4f8506783018049ef1cc4f116ecb3e4c960d",
+    "js/data/investigations/photometric-calibration-sequence.js": "1b78847939d20dc8cb6c530dc61d36037e0677b59dd05973ce44a54fd883134e",
     "js/data/investigations/plan-a-night.js": "fc4eeb1f8dea6a1997ef2a03568658c567accc79da32fb2a08e7f841b0f43e65",
     "js/data/investigations/planets-sequence.js": "3e2fe39151144021a641601160033dd9ca0d3b7384355c07e9d34a597cc946e0",
     "js/data/investigations/power-law-gravity.js": "f635c19e964a1b847b0c196d46d6ed389eb017e494e9031dd5fd31fd2bd876c0",
@@ -252,7 +252,7 @@
     "js/data/investigations/stellar-sequence.js": "fe46a181992da2ff1822e8732dd031bfa42d717fb07a6b62e4ab46a058fc8bd6",
     "js/data/investigations/strategy-sequence.js": "f48f527890aeceb0308c643683afa3e80e3017c65f85476bd995305e076c5af5",
     "js/data/investigations/summaries.js": "d7f58880ade6c3e4998753d77920b3ca4e06941e5326820206e4e622ec1599ba",
-    "js/data/investigations/survey-sequence.js": "c80b75253eec2cd98bb540d5c68fcdadc52e161aa3c393637adfbb61aaf1924a",
+    "js/data/investigations/survey-sequence.js": "597c14b166610a6886d81ab0b3cd4bb589dca83f82f3a5d7158c36d03d945111",
     "js/data/investigations/telescope-sequence.js": "8476d20ffb8fc05881d6f3757c9ef2a3c586430d9a73316b6184ac6cfa0a19ca",
     "js/data/investigations/the-beat-of-a-star.js": "4005037e9b5c1a37777bf8e90f4c657a667aff3c6aae3e46633a3f4e3da9a3e4",
     "js/data/investigations/the-completeness-curve.js": "6a81cabc545758ae5de1e2f04644409c1e0d7152809253d9d33ab8cad3abf6c5",
@@ -333,5 +333,5 @@
     "tools/instructor-freshness.mjs": "96052b2f27080f0243fdd4d5f7608927bd67f0c50808b6eac3345a65c14d1e28",
     "tools/source-closure.mjs": "961828e4d0d40d8a6f8c029fe9b9435ecaf39a74b62640efc0b4145c35c7650a"
   },
-  "contentDigest": "0d35d4d5322de31b8f8c6e7c95aca48ca202525a04e49ce4af7445ea313d1010"
+  "contentDigest": "95894ef0b383b2f3b24a0a8bd3d244bae2fc4bb6c2cd9787c0f0e9ef5160c602"
 }

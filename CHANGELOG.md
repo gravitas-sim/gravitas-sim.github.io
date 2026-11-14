@@ -33,6 +33,18 @@ the release rather than in the tag.
   are recorded, and the evidence row for the datasets' provenance is current.
   Nothing changes on screen and no data value changes.
 
+### Fixed
+
+- Instrument choices that failed when picked (Prompt 302; register rows
+  D-R4-302-01 to D-R4-302-03): the exposure planner's Rubin g and Rubin i
+  setups read a seeing from the instrument table (0.77 and 0.71 arcsec,
+  Ivezić et al. 2019, Table 2, delivered median zenith seeing; the r value and
+  every lesson number are unchanged); the habitable-zone locking instrument
+  says why it reads nothing at Q = 10 and 30 instead of failing; the
+  `narrow-night` step of Counts to Magnitudes names the rows its fields read;
+  and the facility field of the two survey-plan steps says it counts from 1.
+  A new test reads every choice of all 170 instruments.
+
 ## [3.0.0] - 2026-11-12
 
 **Gravitas 3.0.0** is the release of the `v3` staging branch as it stood on

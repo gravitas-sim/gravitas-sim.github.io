@@ -220,6 +220,14 @@ export const SITES = {
     },
     elevation: { v: 2652, u: 'm', s: 'ivezic2019' },
     seeing: {
+      g: {
+        v: 0.77,
+        u: 'arcsec',
+        s: 'ivezic2019',
+        at: 'Table 2, row theta, footnote b',
+        q: 'median',
+        n: 'expected delivered median zenith seeing (FWHM) in the g band; a delivered value, which is not the free-air value of the r row below (the table gives 0.73 for r on this footing), so the three bands are not on one footing',
+      },
       r: {
         v: 0.65,
         u: 'arcsec',
@@ -227,6 +235,14 @@ export const SITES = {
         at: 'Sec. II.1.5, item 2',
         q: 'median',
         n: 'median free-air seeing in the r band',
+      },
+      i: {
+        v: 0.71,
+        u: 'arcsec',
+        s: 'ivezic2019',
+        at: 'Table 2, row theta, footnote b',
+        q: 'median',
+        n: 'expected delivered median zenith seeing (FWHM) in the i band; a delivered value, which is not the free-air value of the r row above (the table gives 0.73 for r on this footing), so the three bands are not on one footing',
       },
     },
     skyBrightness: {
