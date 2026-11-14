@@ -1,6 +1,7 @@
+// Fases y eclipses, más a fondo: palabras en español, paso a paso con ../phases-and-eclipses.js.
 export default {
-  steps: {
-    'eclipse-year': {
+  steps: [
+    {
       title: 'El año de los eclipses',
       body: 'La línea de los nodos gira hacia el oeste, una vuelta en 18,6 años (6.798,4 días), así que el Sol encuentra un nodo algo antes de cada año. El intervalo entre regresos, el año de los eclipses E, cumple 1/E = 1/365,2422 + 1/6798,4 por día.',
       prompt:
@@ -14,7 +15,7 @@ export default {
         off: 'E = 1 ÷ (1/365,2422 + 1/6798,4); las temporadas están separadas E ÷ 2.',
       },
     },
-    saros: {
+    {
       title: 'Una coincidencia de meses',
       body: 'Un mes sinódico, de luna nueva a luna nueva, dura 29,530589&nbsp;días. Un mes dracónico, de nodo a nodo, dura 27,212221&nbsp;días. Tras 223 meses sinódicos la Luna ha completado también casi exactamente 242 meses dracónicos: el saros, tras el cual se repite un eclipse.',
       prompt: '¿En cuántos días difieren 223 meses sinódicos y 242 dracónicos?',
@@ -31,5 +32,5 @@ export default {
         off: 'Diferencia = 242 × 27,212221 − 223 × 29,530589.',
       },
     },
-  },
+  ],
 };

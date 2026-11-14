@@ -1,6 +1,7 @@
+// El universo en expansión, más a fondo: las palabras en español, paso a paso con ../the-expanding-universe.js.
 export default {
-  steps: {
-    'the-hubble-time': {
+  steps: [
+    {
       title: 'El tiempo de Hubble',
       body: `Si las galaxias se hubieran movido siempre a sus velocidades actuales, una galaxia a distancia d habría partido hace d ÷ v = 1 ÷ H<sub>0</sub>. Con H<sub>0</sub> en kilómetros por segundo por megapársec, 1 ÷ H<sub>0</sub> son 977,8 ÷ H<sub>0</sub> miles de millones de años. Usa la pendiente de Hubble de 424.`,
       prompt:
@@ -15,7 +16,7 @@ export default {
         off: '977,8 ÷ la pendiente en km/s/Mpc.',
       },
     },
-    'a-velocity-from-a-distance': {
+    {
       title: 'Una velocidad a partir de una distancia',
       body: `La recta por el origen dice v = H<sub>0</sub> d. Usa la pendiente de las supernovas hasta z = 0,1, 66,33, para una galaxia a una distancia de 100 megapársecs.`,
       prompt: 'La velocidad a 100 megapársecs, en kilómetros por segundo',
@@ -29,7 +30,7 @@ export default {
         off: 'pendiente × distancia.',
       },
     },
-    'the-slopes-error': {
+    {
       title: 'El error como parte de la pendiente',
       body: `Una pendiente de 66,33 ± 0,24 km/s/Mpc. El error relativo es el error sobre la pendiente. Usa el 0,245 sin redondear del instrumento.`,
       prompt: 'El error de la pendiente, en porcentaje',
@@ -43,7 +44,7 @@ export default {
         off: '100 × error ÷ pendiente.',
       },
     },
-    'how-many-errors-apart': {
+    {
       title: 'A cuántos errores',
       body: `La muestra cercana da 66,33 ± 0,245 y la lejana 59,35 ± 0,196. Para dos estimaciones independientes, la diferencia sobre la raíz cuadrada de la suma de los errores al cuadrado es el número de desviaciones típicas entre ellas.`,
       prompt: 'El número de desviaciones típicas entre las dos pendientes',
@@ -60,5 +61,5 @@ export default {
         off: '(66,33 − 59,35) ÷ sqrt(0,245² + 0,196²).',
       },
     },
-  },
+  ],
 };

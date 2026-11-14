@@ -216,19 +216,18 @@ describe('the lessons', () => {
   });
   test('the Spanish has the same step structure', () => {
     const pair = (en, es) => {
-      expect(Object.keys(es.steps).length).toBe(en.steps.length);
+      expect(es.steps.length).toBe(en.steps.length);
       en.steps.forEach((s, i) => {
         if (s.options)
-          expect(es.steps[s.sid].options.length).toBe(s.options.length);
-        if (s.hints) expect(es.steps[s.sid].hints.length).toBe(s.hints.length);
-        if (s.fields)
-          expect(es.steps[s.sid].fields.length).toBe(s.fields.length);
+          expect(es.steps[i].options.length).toBe(s.options.length);
+        if (s.hints) expect(es.steps[i].hints.length).toBe(s.hints.length);
+        if (s.fields) expect(es.steps[i].fields.length).toBe(s.fields.length);
         if (s.rubricCriteria)
-          expect(es.steps[s.sid].rubricCriteria.length).toBe(
+          expect(es.steps[i].rubricCriteria.length).toBe(
             s.rubricCriteria.length
           );
         if (s.misconceptions)
-          expect(es.steps[s.sid].misconceptions.length).toBe(
+          expect(es.steps[i].misconceptions.length).toBe(
             s.misconceptions.length
           );
       });

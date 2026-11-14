@@ -1,6 +1,7 @@
+// De qué está hecho un espectro, más a fondo: las palabras en español, paso a paso con ../what-a-spectrum-is-made-of.js.
 export default {
-  steps: {
-    'planck-floor': {
+  steps: [
+    {
       title: '¿Cuánto puede oscurecerse una línea?',
       body: 'Una nube espesa quita toda la luz de la fuente en el centro de una línea y solo devuelve allí su propio brillo. Así, el centro de una línea espesa queda en el brillo del cuerpo negro de la propia nube, como fracción del de la fuente: B(T<sub>n</sub>) ÷ B(T<sub>f</sub>). Para la ley de Planck a la longitud de onda λ esto es (e<sup>x ÷ T<sub>f</sub></sup> − 1) ÷ (e<sup>x ÷ T<sub>n</sub></sup> − 1), donde x = hc ÷ (λk) = 21.917&nbsp;K en H-alfa, 6.564,6&nbsp;Å.',
       prompt:
@@ -19,7 +20,7 @@ export default {
         off: 'Fracción = (e^(x ÷ T_f) − 1) ÷ (e^(x ÷ T_n) − 1), con x = 21.917 K, por 100.',
       },
     },
-    'equivalent-width': {
+    {
       title: 'Cuánta luz quita la línea',
       body: 'El <strong>ancho equivalente</strong> de una línea es el ancho de un rectángulo tan alto como el continuo que tiene la misma área que la línea: la luz que quita la línea, en Å. El demostrador lo mide con el mismo nodo que el visor de espectros. Pon una fuente de 6.000&nbsp;K vista a través de una nube de 4.000&nbsp;K con gas 3, acércate a H-alfa y léelo.',
       prompt: 'El ancho equivalente de H-alfa',
@@ -32,7 +33,7 @@ export default {
         off: 'Lee la fila «Ancho equivalente de H-alfa» con la fuente vista a través de la nube.',
       },
     },
-    'ew-zero': {
+    {
       title: 'Dónde cruza el ancho por cero',
       body: 'Deja la fuente en 6.000&nbsp;K y el gas en 3, y sube la temperatura de la nube por pasos de 4.000 a 8.000&nbsp;K, leyendo cada vez el ancho equivalente. Baja desde 14&nbsp;Å, pasa por cero y se vuelve negativo (una línea brillante añade luz).',
       prompt: '¿A qué temperatura de la nube es cero el ancho equivalente?',
@@ -53,7 +54,7 @@ export default {
       because:
         'A 6.000 K, la temperatura de la fuente. En este modelo el ancho es (1 − B(T_n) ÷ B(T_f)) por una cantidad que depende solo de cuánto gas hay, así que se anula cuando los dos cuerpos negros coinciden y cambia de signo más allá.',
     },
-    'boltzmann-ratio': {
+    {
       title: '¿Cuántos átomos pueden absorber?',
       body: 'Las líneas de Balmer vienen de átomos de hidrógeno en el segundo nivel, n = 2. El factor de Boltzmann dice cuántos hay allí, frente al estado fundamental: 4 e<sup>−10,2 eV ÷ kT</sup>, donde el 4 cuenta los estados de cada nivel. <em>Esto es un modelo</em>: cuenta solo la excitación y deja fuera la ionización, que arranca los átomos del todo cuando hace calor. El demostrador lo lista para la temperatura de la nube. Léelo a 6.000&nbsp;K y a 10.000&nbsp;K.',
       prompt:
@@ -71,7 +72,7 @@ export default {
         off: 'Cociente = (n2 ÷ n1 a 10.000 K) ÷ (n2 ÷ n1 a 6.000 K), leído de la lista.',
       },
     },
-    'same-patch': {
+    {
       title: 'La parte que no cambia de signo',
       body: 'Para una nube delante de una fuente, el ancho equivalente es W<sub>eq</sub> = (1 − B(T<sub>n</sub>) ÷ B(T<sub>f</sub>)) × A, donde A, en Å, depende solo del gas (su profundidad óptica y el ancho de sus líneas) y no de ninguna de las temperaturas. Usa una fuente de 6.000&nbsp;K, gas 3 y la nube a 4.000&nbsp;K. Lee en la lista el ancho equivalente y el cociente de brillos.',
       prompt: 'A, a partir de W<sub>eq</sub> ÷ (1 − el cociente)',
@@ -87,7 +88,7 @@ export default {
         off: 'A = W_eq ÷ (1 − cociente), con el cociente como fracción.',
       },
     },
-    'real-balmer-ratio': {
+    {
       title: 'El modelo frente a dos estrellas reales',
       body: 'La estrella A está cerca de 9.500&nbsp;K y la G cerca de 5.800&nbsp;K, valores típicos de sus tipos espectrales. El modelo de Boltzmann del último paso cuantitativo dice que las estrellas A deberían tener unas 2.800 veces más átomos en n = 2. En el visor de espectros, acércate a H-alfa y lee su ancho equivalente en cada estrella.',
       prompt:
@@ -102,7 +103,7 @@ export default {
         off: 'Divide el ancho equivalente de H-alfa de la estrella A entre el de la G.',
       },
     },
-    'model-misses': {
+    {
       title: 'Por qué el modelo se pasa',
       body: 'El factor de Boltzmann predice un cociente cercano a 2.800. Las estrellas dan 2,3. El modelo no es un error; está incompleto.',
       prompt: '¿Qué dos cosas deja fuera el factor de Boltzmann por sí solo?',
@@ -118,5 +119,5 @@ export default {
       because:
         'La ionización y la saturación. En una estrella caliente muchos átomos de hidrógeno han perdido su electrón y no pueden absorber, por eso las líneas de Balmer reales son más fuertes cerca de 10.000 K y luego se debilitan. Y una línea no puede quitar más que toda la luz, así que su ancho crece mucho más despacio que el número de átomos que absorben. Un modelo que conserva un solo efecto sirve hasta que lo comparas con datos.',
     },
-  },
+  ],
 };

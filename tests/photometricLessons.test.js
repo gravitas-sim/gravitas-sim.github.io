@@ -228,11 +228,11 @@ describe('the lesson’s structure', () => {
     }
   });
   test('the Spanish parallels the English step for step and field for field', () => {
-    expect(Object.keys(ES.steps).length).toBe(EN.steps.length);
-    expect(Object.keys(DEEP_ES.steps).length).toBe(DEEP.steps.length);
+    expect(ES.steps.length).toBe(EN.steps.length);
+    expect(DEEP_ES.steps.length).toBe(DEEP.steps.length);
     const pairs = [
-      ...EN.steps.map((s, i) => [s, ES.steps[s.sid]]),
-      ...DEEP.steps.map((s, i) => [s, DEEP_ES.steps[s.sid]]),
+      ...EN.steps.map((s, i) => [s, ES.steps[i]]),
+      ...DEEP.steps.map((s, i) => [s, DEEP_ES.steps[i]]),
     ];
     for (const [en, es] of pairs) {
       expect(es.title).toBeTruthy();
@@ -286,7 +286,7 @@ describe('the distinction: atmospheric extinction is not interstellar extinction
   test('the lesson asks whether k is the dust and answers that it is not, in both languages', () => {
     expect(step('not-the-dust').answer).toBe(0);
     expect(step('not-the-dust').options[0]).toMatch(/^No: it is the Earth/);
-    expect(ES.steps['not-the-dust'].options[0]).toMatch(/^No: es la atmósfera/);
+    expect(ES.steps[4].options[0]).toMatch(/^No: es la atmósfera/);
     expect(step('what-a-calibration-does').body).toMatch(/not the dust/);
     expect(step('the-limits').body).toMatch(/dust between the stars/);
   });

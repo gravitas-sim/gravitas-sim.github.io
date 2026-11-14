@@ -10,12 +10,12 @@ export default {
     'Añadir un halo, leer cuánto mejora el ajuste y decir qué muestra y qué no muestra ese ajuste',
     'Declarar los supuestos del modelo: las cotas del disco y la distancia y la rapidez del Sol',
   ],
-  steps: {
-    'a-wave-in-the-proper-motions': {
+  steps: [
+    {
       title: 'La rotación de la Galaxia, en estrellas cercanas',
       body: 'El Sol y las estrellas cercanas giran alrededor del centro galáctico, pero no a una rapidez común: las estrellas más próximas al centro dan la vuelta más deprisa. Vistas desde el Sol, eso hace que las estrellas cercanas se desplacen por el cielo según un patrón que depende de la <strong>longitud galáctica</strong>. Dos números, las <strong>constantes de Oort A y B</strong>, lo describen.\n\nLa imagen muestra el movimiento de 1.570 estrellas de Gaia a lo largo del plano galáctico según la longitud, en km/s por kiloparsec, agrupado en 12 intervalos, sin el movimiento propio del Sol. Las estrellas fuera del plano se corrigen con cos&nbsp;b, la distancia en el plano dividida entre la distancia. La curva es el ajuste. Los valores están en la lista.',
     },
-    'predict-the-shape': {
+    {
       title: '¿Qué forma?',
       body: 'Dando una vuelta al plano de la Galaxia, de la longitud 0° a 360°, todavía no cambies el instrumento.',
       prompt:
@@ -32,12 +32,12 @@ export default {
       because:
         'Una onda doble. La rotación diferencial produce un patrón en que las longitudes separadas 180° coinciden (las estrellas en l y l + 180° se mueven en el mismo sentido a lo largo del plano), así que la curva se repite dos veces en una vuelta: A cos 2l más una constante B.',
     },
-    'measure-a-and-b': {
+    {
       title: 'Mide A y B',
       body: 'El ajuste es la curva de la imagen: <strong>A</strong> fija la altura de la onda doble y <strong>B</strong> dónde está centrada. Con las estrellas ponderadas por la distancia (lo predeterminado), lee <strong>A de Oort</strong> y <strong>B de Oort</strong>.',
       fields: [{ label: 'A de Oort' }, { label: 'B de Oort' }],
     },
-    'why-weight-by-distance': {
+    {
       title: '¿Por qué ponderar las estrellas?',
       body: 'Cambia el ajuste a ponderar <strong>todas las estrellas por igual</strong> y lee otra vez A y B. Cambian por completo, y sus incertidumbres son cinco veces mayores.',
       prompt: '¿Por qué falla un ajuste sin ponderar?',
@@ -53,16 +53,16 @@ export default {
       because:
         'Las unidades son km/s por kpc, rapidez ÷ distancia. Una rapidez aleatoria dada (unos pocos km/s) se vuelve un número mayor cuanto más cerca está la estrella, así que las cercanas se dispersan más en esta cantidad. Ponderar por 1 ÷ paralaje² da a cada estrella el peso que merece su dispersión.',
     },
-    'speed-at-the-sun': {
+    {
       title: 'La rapidez circular del Sol',
       body: 'A − B es la velocidad angular de una órbita circular en el Sol, en km/s por kpc. Multiplicada por la distancia del Sol al centro, 8,3 kpc (un supuesto: no se mide aquí), es una rapidez. Con el ajuste ponderado, lee la fila de la rapidez circular en el Sol.',
       fields: [{ label: 'Rapidez circular en el Sol' }],
     },
-    'the-rotation-curve': {
+    {
       title: 'La curva entera',
       body: 'Las constantes de Oort dicen cómo gira la Galaxia aquí. ¿Cómo gira en todas partes? Los puntos son la <strong>rapidez circular</strong> de la Vía Láctea de 2 a 25 kpc del centro, de Bhattacharjee, Chaudhury y Kundu (2014), que combinaron muchos trazadores. Supone que el Sol está a 8,3 kpc y se mueve a 244 km/s (su artículo tabula otros dos conjuntos). Las curvas son un modelo: un bulbo y un disco (rayas verdes), un halo (puntos naranja) y su total (azul). Los deslizadores empiezan en una conjetura, que ajusta mal.',
     },
-    'predict-stars-alone': {
+    {
       title: 'Estrellas y gas solos',
       body: 'Deja que el instrumento halle el mejor ajuste usando solo un bulbo y un disco, sin halo, con la masa del disco acotada por lo que pueden ser razonablemente las estrellas de la Galaxia (8 × 10<sup>10</sup> masas solares como máximo). Todavía no lo ejecutes.',
       prompt: 'Pasados unos 10 kpc, la mejor curva solo con estrellas&hellip;',
@@ -78,7 +78,7 @@ export default {
       because:
         'Cae. Más allá de donde está la mayor parte de las estrellas y el gas, la rapidez que sostiene su masa baja con la distancia, como en el Sistema Solar. Los puntos medidos siguen planos, que es lo que cuantifican los dos pasos siguientes.',
     },
-    'fit-stars-only': {
+    {
       title: 'Mejor ajuste, solo estrellas',
       body: 'Pon <strong>Parámetros del modelo</strong> en <strong>mejor ajuste, solo estrellas (sin halo)</strong>. Lee el χ² reducido (χ² por grado de libertad: cerca de 1 es un ajuste tan bueno como los errores) y la masa del disco.',
       fields: [
@@ -86,12 +86,12 @@ export default {
         { label: 'Masa del disco, en 10¹⁰ masas solares' },
       ],
     },
-    'fit-with-a-halo': {
+    {
       title: 'Añade un halo',
       body: 'Ahora elige <strong>mejor ajuste, con halo</strong>. Lee el χ² reducido y la rapidez del halo lejos.',
       fields: [{ label: 'χ² reducido' }, { label: 'Rapidez del halo, lejos' }],
     },
-    'where-the-halo-matters': {
+    {
       title: 'Dónde importa el halo',
       body: 'Con el ajuste con halo, lee la fila de la rapidez a 8,3 kpc (el Sol): reparte la rapidez entre estrellas y gas, y halo. Compárala con la gráfica lejos, a 20 kpc.',
       prompt: '¿Qué enunciado concuerda con el modelo?',
@@ -112,15 +112,15 @@ export default {
       because:
         'A 8,3 kpc las estrellas y el gas dan unos 203 km/s frente a los 178 del halo, la parte mayor pero no toda. A 20 kpc el disco ha caído y el halo es el mayor. La materia oscura es una parte pequeña de la fuerza aquí y la mayor parte lejos.',
     },
-    'say-what-it-assumes': {
+    {
       title: 'Lo que supone el ajuste',
       body: 'El χ² reducido bajó de 50 a 4,8. Eso es una comparación de modelos, no una medición de un halo.',
       prompt:
         'Nombra dos supuestos de la comparación entre solo estrellas y halo y di qué depende de cada uno.',
     },
-    'what-you-worked-out': {
+    {
       title: 'Lo que has deducido',
       body: 'Los movimientos propios de las estrellas cercanas hacen una onda doble en la longitud, cuya altura y centro son las constantes de Oort: A cerca de 14,5 y B cerca de −15,2&nbsp;km/s/kpc, así que la rapidez circular del Sol es cerca de 247&nbsp;km/s. La curva de rotación medida se mantiene plana hasta 25&nbsp;kpc; un bulbo y un disco, acotados en masa, la ajustan mal (χ² reducido de 50) y añadir un halo la ajusta diez veces mejor (4,8). Eso muestra que un halo basta dentro de un modelo simple con supuestos declarados: la cota del disco, la distancia y la rapidez del Sol.',
     },
-  },
+  ],
 };

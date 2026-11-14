@@ -1471,12 +1471,12 @@ export const HOW_FAR_AND_HOW_SURE_ES = {
     'Decir qué significa una paralaje negativa y por qué se conserva en vez de tirarse',
     'Decir qué añade una distribución previa, qué supone sobre la muestra y qué hace el punto cero a una distancia',
   ],
-  steps: {
-    'a-parallax-is-not-a-distance': {
+  steps: [
+    {
       title: 'Una paralaje no es una distancia',
       body: `Mientras la Tierra gira alrededor del Sol, una estrella cercana parece desplazarse contra las estrellas del fondo. La mitad de ese desplazamiento es su <strong>paralaje</strong>, y en milisegundos de arco es uno dividido entre la distancia en kiloparsecs. Una estrella a 2,5 kpc tiene una paralaje de 0,4 mas.\n\nPero Gaia mide la paralaje, no la distancia, y la mide con un <strong>error</strong>. Lo que se conoce es entonces una verosimilitud: cuánto concuerda cada distancia posible con el número medido. El panel dibuja esa verosimilitud para una paralaje y un error que fijas tú (son datos de entrada, no una estrella de Gaia). Su punto más alto es uno dividido entre la paralaje; su anchura es el error llevado a través de la división.`,
     },
-    'commit-to-a-distance': {
+    {
       title: 'Compromete una distancia',
       body: `La paralaje de una estrella se mide como 0,40 mas, con un error de 0,05 mas. Antes de leer el panel, di dónde debería alcanzar su máximo la verosimilitud de su distancia.`,
       prompt: '¿Dónde alcanza su máximo la verosimilitud de la distancia?',
@@ -1492,7 +1492,7 @@ export const HOW_FAR_AND_HOW_SURE_ES = {
       because:
         'En 2,5 kpc. Una paralaje es la inversa de una distancia, así que la distancia que mejor concuerda con 0,40 mas es uno dividido entre 0,40. El error no mueve el máximo; fija lo ancha que es la verosimilitud.',
     },
-    'read-the-distance': {
+    {
       title: 'Lee la distancia y su intervalo',
       body: `Pon el panel en una paralaje de 0,40 mas y un error de 0,05 mas, sin distribución previa y sin punto cero. Lee la distancia según la verosimilitud y los dos extremos de su intervalo del 68 por ciento.`,
       fields: [
@@ -1501,7 +1501,7 @@ export const HOW_FAR_AND_HOW_SURE_ES = {
         { label: 'Extremo superior del intervalo' },
       ],
     },
-    'why-the-interval-leans': {
+    {
       title: 'Un intervalo que se inclina',
       body: `El intervalo va de 2,22 a 2,86 kpc alrededor de 2,5: llega 0,28 kpc por debajo y 0,36 por encima. El error de la paralaje es del mismo tamaño a ambos lados.`,
       prompt: '¿Por qué el intervalo es más largo en el lado lejano?',
@@ -1522,7 +1522,7 @@ export const HOW_FAR_AND_HOW_SURE_ES = {
         },
       ],
     },
-    'try-the-controls': {
+    {
       title: 'Empeora la paralaje',
       body: `Sube el error de la paralaje y mira la verosimilitud. Luego prueba los botones «Señal baja» y «Paralaje negativa». Fíjate dónde tiene un máximo la verosimilitud, si cae a nada en el lado lejano y qué dicen las líneas de la derecha que respalda una paralaje.`,
       checklist: [
@@ -1531,7 +1531,7 @@ export const HOW_FAR_AND_HOW_SURE_ES = {
         'Con «Paralaje negativa» hay una verosimilitud y ninguna distancia',
       ],
     },
-    'when-it-is-too-faint': {
+    {
       title: 'Una paralaje tan grande como su error',
       body: `Pulsa «Señal baja»: una paralaje de 0,10 mas con un error de 0,10 mas, una paralaje corregida igual a su error. El panel dice qué respalda esto, y el intervalo no tiene extremo lejano.`,
       prompt: '¿Qué se puede decir de la distancia de esta estrella?',
@@ -1555,7 +1555,7 @@ export const HOW_FAR_AND_HOW_SURE_ES = {
         },
       ],
     },
-    'a-negative-parallax': {
+    {
       title: 'Una paralaje negativa',
       body: `Pulsa «Paralaje negativa»: una paralaje medida de −0,10 mas con un error de 0,05 mas. Un catálogo puede contener un número así, porque una medición con ruido puede salir por debajo de cero para una estrella lejana.`,
       prompt: '¿Qué da el panel para esta estrella, y por qué?',
@@ -1577,21 +1577,21 @@ export const HOW_FAR_AND_HOW_SURE_ES = {
         },
       ],
     },
-    'what-you-worked-out': {
+    {
       title: 'Lo que averiguaste',
       body: `Una paralaje es uno sobre una distancia, medida con un error. Lo que respalda es una verosimilitud: un máximo en uno dividido entre la paralaje corregida, un intervalo que se inclina hacia el lado lejano, un límite inferior cuando la paralaje no es mayor que su error, y nada más que la verosimilitud cuando no es positiva. Una distancia puntual necesita una paralaje corregida de al menos cinco veces su error. Aquí no se corrigió nada más allá de los números que fijaste.`,
     },
-  },
+  ],
 };
 
 export const HOW_FAR_AND_HOW_SURE_DEEPER_ES = {
-  steps: {
-    'the-relative-error': {
+  steps: [
+    {
       title: 'El error de la distancia',
       body: `Para la paralaje de 0,40 mas con un error de 0,05 mas, el panel dice que la paralaje corregida es un número de veces su error. El error relativo de la distancia es igual al error relativo de la paralaje. Dalo en porcentaje.`,
       fields: [{ label: 'Error de la paralaje como parte de la paralaje' }],
     },
-    'where-the-threshold-falls': {
+    {
       title: 'Dónde cae el umbral',
       body: `Una distancia puntual necesita una paralaje corregida de al menos cinco veces su error. Deja la paralaje en 0,40 mas y sube el error paso a paso (el deslizador avanza de 0,01 en 0,01 mas), y lee qué dice el panel que respalda.`,
       prompt:
@@ -1606,7 +1606,7 @@ export const HOW_FAR_AND_HOW_SURE_DEEPER_ES = {
       because:
         'Por encima de 0,08 mas: 0,40 dividido entre 0,08 es 5, y con 0,09 el cociente es 4,4 y el panel dice señal baja. El umbral de cinco es una elección declarada, no una ley de la naturaleza; por debajo, la distancia es el máximo de una verosimilitud ancha y no una medición.',
     },
-    'an-interval-with-no-far-end': {
+    {
       title: 'Un intervalo sin extremo lejano',
       body: `Pulsa «Señal baja» (0,10 mas, error 0,10 mas) y lee el extremo inferior del intervalo del 68 por ciento. Luego sube la paralaje a 0,15 mas y lee ambos extremos.`,
       fields: [
@@ -1614,7 +1614,7 @@ export const HOW_FAR_AND_HOW_SURE_DEEPER_ES = {
         { label: 'Extremo superior con 0,15 mas' },
       ],
     },
-    'from-parallax-to-speed': {
+    {
       title: 'De una paralaje a una velocidad',
       body: `El movimiento propio de una estrella es de 5 mas/año. A una distancia, ese ángulo por año es una velocidad a través del cielo: 4,74 km/s por cada mas/año a 1 kpc. Pon la paralaje en 0,40 mas con un error de 0,05 mas y el movimiento propio en 5,0 mas/año, y lee la velocidad tangencial y su intervalo.`,
       fields: [
@@ -1623,7 +1623,7 @@ export const HOW_FAR_AND_HOW_SURE_DEEPER_ES = {
         { label: 'Extremo superior del intervalo' },
       ],
     },
-    'why-one-over-p-is-biased': {
+    {
       title: 'Promediar uno entre la paralaje',
       body: `La validación sorteó muchas paralajes con ruido de estrellas a una misma distancia verdadera y promedió uno entre cada una. Con una paralaje cinco veces su error la media salió 1,043 veces la distancia verdadera; con diez veces, 1,010; con veinte, 1,003. La mediana de uno entre la paralaje, con veinte veces, fue 1,00007 de la distancia verdadera (tramo A1 de GAIA_WORKFLOWS.md).`,
       prompt: '¿Qué dice esto?',
@@ -1647,7 +1647,7 @@ export const HOW_FAR_AND_HOW_SURE_DEEPER_ES = {
         },
       ],
     },
-    'justify-a-report': {
+    {
       title: 'Informa una distancia',
       body: `Un catálogo lista una estrella con una paralaje de 0,10 mas y un error de 0,10 mas, y un estudiante escribe «la estrella está a 10 kpc».`,
       prompt:
@@ -1701,7 +1701,7 @@ export const HOW_FAR_AND_HOW_SURE_DEEPER_ES = {
         },
       ],
     },
-    'add-a-prior': {
+    {
       title: 'Añade una distribución previa',
       body: `Pulsa «Señal baja» y activa la distribución previa, con una longitud de escala de 1 kpc. La previa dice cómo se reparten las estrellas a lo largo de la línea de visión: aquí una densidad espacial que decrece como exp(−r ÷ L). Lee la mediana de la posterior y su intervalo del 68 por ciento.`,
       fields: [
@@ -1710,7 +1710,7 @@ export const HOW_FAR_AND_HOW_SURE_DEEPER_ES = {
         { label: 'Extremo superior' },
       ],
     },
-    'double-the-scale-length': {
+    {
       title: 'Cambia lo que dice la previa',
       body: `Ahora cambia la longitud de escala de 1 a 2 kpc y vuelve a leer el intervalo: su extremo superior pasa de 6,93 a 10,81 kpc. La validación midió lo mismo: con una paralaje corregida igual a su error, duplicar la longitud de escala movió el extremo superior en un factor de 1,56 (tramo D3).`,
       prompt:
@@ -1730,7 +1730,7 @@ export const HOW_FAR_AND_HOW_SURE_DEEPER_ES = {
         },
       ],
     },
-    'when-the-data-win': {
+    {
       title: 'Cuando ganan los datos',
       body: `Pulsa «Bien medida» (0,40 mas, error 0,02 mas, una paralaje corregida veinte veces su error) y activa la distribución previa. Cambia la longitud de escala entre 1 y 2 kpc y mira la mediana.`,
       prompt: '¿Qué le pasa a la mediana posterior?',
@@ -1746,7 +1746,7 @@ export const HOW_FAR_AND_HOW_SURE_DEEPER_ES = {
       because:
         'La mediana pasa de 2,509 a 2,517 kpc, un tercio de uno por ciento. Una verosimilitud estrecha cae donde la previa es casi plana, así que cualquier longitud de escala razonable da casi la misma respuesta. Una previa importa en proporción a lo poco que dice la paralaje, por eso una distancia puntual necesita cinco veces el error.',
     },
-    'what-the-prior-assumes': {
+    {
       title: 'Qué supone la previa',
       body: `La previa se declara junto a la verosimilitud: las estrellas muestreadas tienen una densidad espacial que decrece como exp(−r ÷ L), y la muestra es completa en las distancias dibujadas. Un estudiante la aplica a estrellas elegidas porque su paralaje sobre error supera 5. En la validación, una previa con la escala equivocada (1 kpc para estrellas que en realidad decrecen en 3) dio intervalos del 68 por ciento que cubrieron entre el 22 y el 42 por ciento de las estrellas (tramo C4, registrado sin aprobado ni suspenso).`,
       prompt: '¿Qué falla al aplicar la previa a esa muestra?',
@@ -1767,12 +1767,12 @@ export const HOW_FAR_AND_HOW_SURE_DEEPER_ES = {
         },
       ],
     },
-    'the-zero-point': {
+    {
       title: 'El punto cero',
       body: `Las paralajes de Gaia tienen un pequeño desfase, el <strong>punto cero</strong>, que depende de la magnitud, el color y la posición en el cielo de una estrella; es negativo, así que la paralaje del catálogo es demasiado pequeña. Pulsa «Bien medida», pon el desfase del punto cero en −0,040 mas (un valor cercano al que necesitan las estrellas de NGC 2420, más abajo) y lee la nueva distancia.`,
       fields: [{ label: 'Distancia con el punto cero' }],
     },
-    'the-cluster-and-the-zero-point': {
+    {
       title: 'Un cúmulo, con y sin',
       body: `El segundo panel contiene las 993 estrellas de Gaia del cúmulo abierto NGC 2420. Sus miembros (estrellas cuyo movimiento propio por sí solo las pone en el cúmulo con probabilidad 0,9 o más) tienen una paralaje media y, con el punto cero de cada estrella aplicado, una distancia. Lee la distancia con el punto cero activado, luego desactiva el punto cero por estrella y léela otra vez.`,
       fields: [
@@ -1780,7 +1780,7 @@ export const HOW_FAR_AND_HOW_SURE_DEEPER_ES = {
         { label: 'Distancia sin él' },
       ],
     },
-    'what-the-interval-leaves-out': {
+    {
       title: 'Di qué es la distancia',
       body: `La distancia corregida del cúmulo es 2,324 kpc con un intervalo estadístico de 2,316 a 2,332 kpc. Ese intervalo no tiene suelo sistemático. El tramo de la validación que comprobaría la distancia con la de un catálogo publicado basado en Gaia (E1) no se ejecutó: la tabla que necesita, Hunt y Reffert 2023, no pudo obtenerse. Los valores de la literatura en la validación van de 2,48 kpc (fotometría, convertida de un módulo de distancia) a 2,59 (Gaia DR2); una paralaje de DR3 tal como se imprimió, sin punto cero, da 2,78 kpc.`,
       prompt:
@@ -1834,7 +1834,7 @@ export const HOW_FAR_AND_HOW_SURE_DEEPER_ES = {
         },
       ],
     },
-  },
+  ],
 };
 
 export const WHAT_GAIA_DOES_NOT_SEE_ES = {
@@ -1847,12 +1847,12 @@ export const WHAT_GAIA_DOES_NOT_SEE_ES = {
     'Decir que un corte en la paralaje mueve la distancia tomada de las estrellas que quedan, y que el intervalo no contiene ese movimiento',
     'Decir qué hace un corte a los supuestos de una previa, y qué no son los cortes del panel: la selección real de Gaia',
   ],
-  steps: {
-    'a-sample-is-what-passed': {
+  steps: [
+    {
       title: 'Una muestra es lo que pasó sus cortes',
       body: `Ningún catálogo contiene todas las estrellas. NGC 2420 es un cúmulo abierto viejo, y el paquete contiene 993 estrellas de Gaia en su campo: estrellas más brillantes que G = 17,5 cuya solución astrométrica fue lo bastante buena (RUWE menor que 1,4; esa consulta descartó otras 55 antes de que vieras nada). Luego cada estudio añade cortes propios, y las estrellas que quedan son la muestra.\n\nEl panel te deja añadir tres cortes: un límite de magnitud, un mínimo de paralaje sobre su error y un límite de RUWE. El diagrama muestra las estrellas conservadas (miembros en azul, otras en gris) y las quitadas (naranja); las líneas de la derecha dicen qué quitó cada corte y qué queda.`,
     },
-    'commit-to-a-cut': {
+    {
       title: 'Compromete un corte',
       body: `Antes de mover un deslizador: pon el límite de magnitud en G menor que 16, un corte que conserva solo las estrellas más brillantes que la magnitud 16. La mayoría de las estrellas del paquete son débiles, porque las estrellas más débiles son más numerosas.`,
       prompt: '¿Cuánto del paquete quita G menor que 16, más o menos?',
@@ -1868,7 +1868,7 @@ export const WHAT_GAIA_DOES_NOT_SEE_ES = {
       because:
         'La mitad: 526 de 993. Las estrellas aumentan en número hacia las magnitudes más débiles, así que un corte en 16 quita la mitad débil del paquete aunque esté 1,5 magnitudes por encima del límite con el que se hizo.',
     },
-    'read-what-is-left': {
+    {
       title: 'Lee lo que queda',
       body: `Aprieta el límite de magnitud a G menor que 15. Lee cuántas estrellas quita el corte del paquete y cuántas quedan.`,
       fields: [
@@ -1876,7 +1876,7 @@ export const WHAT_GAIA_DOES_NOT_SEE_ES = {
         { label: 'Estrellas que quedan' },
       ],
     },
-    'which-stars-go': {
+    {
       title: 'Qué estrellas se van',
       body: `Mira el diagrama con G menor que 15. Los puntos naranja son las estrellas que quitó el corte.`,
       prompt: '¿Qué parte del diagrama del cúmulo quita un límite de magnitud?',
@@ -1897,7 +1897,7 @@ export const WHAT_GAIA_DOES_NOT_SEE_ES = {
         },
       ],
     },
-    'a-cut-on-parallax-over-error': {
+    {
       title: 'Un corte en paralaje sobre error',
       body: `Restablece el límite de magnitud y conserva solo las estrellas cuya paralaje es al menos diez veces su error. El panel dice que se quitan 513 de 993 estrellas. Su magnitud media es 16,7 y la de las conservadas, 14,9.`,
       prompt:
@@ -1919,7 +1919,7 @@ export const WHAT_GAIA_DOES_NOT_SEE_ES = {
         },
       ],
     },
-    'the-distance-moves': {
+    {
       title: 'La distancia se mueve',
       body: `Con todos los cortes desactivados la distancia del cúmulo es 2,324 kpc, con un intervalo estadístico de 2,316 a 2,332 kpc. Ahora conserva solo las estrellas cuya paralaje es al menos diez veces su error: la distancia es 2,299 kpc, intervalo de 2,291 a 2,308 kpc.`,
       prompt: '¿Qué dicen los dos intervalos?',
@@ -1943,7 +1943,7 @@ export const WHAT_GAIA_DOES_NOT_SEE_ES = {
         },
       ],
     },
-    'not-gaias-selection': {
+    {
       title: 'Lo que no son los cortes del panel',
       body: `Los cortes del panel son los tres que llevan las filas de una tabla de Gaia: una magnitud, una paralaje sobre error y el RUWE. Se aplican aquí a un paquete que ya tenía dos cortes propios.`,
       prompt: '¿Qué no te dicen estos cortes?',
@@ -1957,16 +1957,16 @@ export const WHAT_GAIA_DOES_NOT_SEE_ES = {
       because:
         'La completitud del propio Gaia. El panel cuenta lo que sus tres cortes quitan de las estrellas del paquete; no es un modelo de cómo selecciona Gaia las estrellas (aglomeración, patrón de barrido, la magnitud a la que el catálogo se vuelve ralo). Las estrellas del paquete son solo las que Gaia midió, y estudiar lo que Gaia no vio necesita esa selección, que aquí no está construida.',
     },
-    'what-you-worked-out': {
+    {
       title: 'Lo que averiguaste',
       body: `Una muestra son las estrellas que pasaron sus cortes. Un límite de magnitud quita el extremo débil del diagrama; un corte en paralaje sobre error quita también sobre todo estrellas débiles, pero además las de paralaje medida baja, así que la distancia tomada de lo que queda se mueve más que su estadística. Los cortes de aquí son tres que llevan las filas de una tabla, no un modelo de la completitud propia de Gaia.`,
     },
-  },
+  ],
 };
 
 export const WHAT_GAIA_DOES_NOT_SEE_DEEPER_ES = {
-  steps: {
-    'cuts-overlap': {
+  steps: [
+    {
       title: 'Los cortes se solapan',
       body: `Activa los tres cortes: G menor que 16, paralaje sobre error de al menos 5 y RUWE menor que 1,1. El panel dice qué quita cada uno por sí solo y qué quita de las estrellas que dejaron los cortes anteriores. Lee los dos números del corte de paralaje sobre error.`,
       fields: [
@@ -1974,7 +1974,7 @@ export const WHAT_GAIA_DOES_NOT_SEE_DEEPER_ES = {
         { label: 'Quitadas tras el límite de magnitud' },
       ],
     },
-    'which-way-it-pushes': {
+    {
       title: 'En qué sentido empuja un corte',
       body: `La paralaje media de los miembros es 0,4303 mas con todos los cortes desactivados y 0,4349 mas con paralaje sobre error de al menos 10. La distancia baja de 2,324 a 2,299 kpc.`,
       prompt: '¿Por qué el corte sube la paralaje media?',
@@ -1995,17 +1995,17 @@ export const WHAT_GAIA_DOES_NOT_SEE_DEEPER_ES = {
         },
       ],
     },
-    'the-zero-point-under-cuts': {
+    {
       title: 'El punto cero depende de las estrellas que se conservan',
       body: `El punto cero es función de la magnitud, el color y la latitud de una estrella, así que su media sobre las estrellas conservadas depende de cuáles sean. Con todos los cortes desactivados el panel lee un punto cero medio de −0,0368 mas. Conserva solo las estrellas con paralaje sobre error de al menos 10 y léelo otra vez.`,
       fields: [{ label: 'Punto cero medio de las estrellas usadas' }],
     },
-    'the-velocity-scatter': {
+    {
       title: 'Velocidades a la distancia del cúmulo',
       body: `Cambia la imagen a velocidades. A la distancia del cúmulo el movimiento propio de cada miembro es una velocidad a través del cielo, 4,74 km/s por mas/año a 1 kpc. Con todos los cortes desactivados, lee la dispersión de las velocidades de los miembros según la ascensión recta. Incluye los errores de medida, así que es un límite superior de la rapidez con que se mueven las estrellas entre sí.`,
       fields: [{ label: 'Dispersión según la ascensión recta' }],
     },
-    'answer-a-colleague': {
+    {
       title: 'El consejo de un colega',
       body: `Un colega dice: «usa solo las estrellas con paralaje sobre error de al menos 10, las limpias, para la distancia del cúmulo».`,
       prompt:
@@ -2062,7 +2062,7 @@ export const WHAT_GAIA_DOES_NOT_SEE_DEEPER_ES = {
         },
       ],
     },
-    'far-stars-need-to-be-bright': {
+    {
       title: 'Las estrellas lejanas deben ser brillantes',
       body: `Un límite de magnitud deja pasar una estrella por su brillo aparente. En la validación, una muestra sintética de estrellas idénticas repartidas uniformemente en el espacio y recortadas en un límite de magnitud dio recuentos cuyo logaritmo crece con el límite con una pendiente de 0,600 por magnitud, el valor euclídeo de 0,6 (tramo S1).`,
       prompt:
@@ -2079,7 +2079,7 @@ export const WHAT_GAIA_DOES_NOT_SEE_DEEPER_ES = {
       because:
         'Solo las luminosas. A mayor distancia una estrella de cierta luminosidad es más débil, así que pasada cierta distancia solo pasan el límite las estrellas bastante brillantes y la muestra se vuelve rala por distancia y luminosidad a la vez. Una previa que supone que la muestra es completa en un intervalo de distancias, como la de la primera investigación, no la describe.',
     },
-    'the-diagram-changes-shape': {
+    {
       title: 'El diagrama cambia de forma',
       body: `Pulsa «Solo estrellas brillantes» (G menor que 15). El diagrama conserva el desvío, las gigantes y la parte alta de la secuencia principal. Un estudiante cuenta estrellas por intervalos de magnitud en este diagrama para hallar la función de luminosidad del cúmulo.`,
       prompt: '¿Qué falla en eso?',
@@ -2095,7 +2095,7 @@ export const WHAT_GAIA_DOES_NOT_SEE_DEEPER_ES = {
       because:
         'El extremo débil falta por el corte: se han ido 755 de 993 estrellas. Una función de luminosidad sacada de este diagrama cae a cero en el límite y no dice nada de estrellas más débiles. La forma de un diagrama es una propiedad de la muestra y de su selección tanto como del cúmulo.',
     },
-    'what-the-pack-already-cut': {
+    {
       title: 'Un corte hecho antes de ver los datos',
       body: `La consulta del propio paquete tenía 1.048 estrellas más brillantes que G = 17,5 en el campo y conservó las 993 con RUWE menor que 1,4: ya había descartado 55. El deslizador de RUWE del panel empieza en 1,4, así que ahí no hace nada; llevarlo a 1,1 quita 168 más.`,
       prompt: '¿Qué te dice eso de una muestra de un catálogo?',
@@ -2111,7 +2111,7 @@ export const WHAT_GAIA_DOES_NOT_SEE_DEEPER_ES = {
       because:
         'El primer corte se hizo al construir el paquete. Un estudio trabaja con estrellas que ya pasaron varios cortes, y el panel puede añadir cortes pero nunca quitar uno: las 55 con RUWE de 1,4 o más no están en la tabla. Decir qué es una muestra supone enumerar todos los cortes, incluidos los hechos antes de que los datos llegaran a ti.',
     },
-    'a-pack-that-gives-no-distance': {
+    {
       title: 'Un paquete que no da distancia',
       body: `Gravitas tiene una segunda muestra de Gaia, estrellas cercanas al Sol con velocidades radiales, pero sus paralajes están redondeadas a 0,02 mas. En la validación, el 80 por ciento de sus 1.570 estrellas se redondeó en más de una décima de su error de paralaje (el mayor redondeo fue 0,00999 mas; tramo E3). El panel no la usa.`,
       prompt: '¿Por qué no se toma ninguna distancia de ella?',
@@ -2127,7 +2127,7 @@ export const WHAT_GAIA_DOES_NOT_SEE_DEEPER_ES = {
       because:
         'El redondeo es un error de hasta 0,01 mas del que el error de paralaje citado no sabe nada. Para el 80 por ciento de esas estrellas supera una décima del error, así que una distancia tomada del valor redondeado llevaría un error que el intervalo no podría declarar. El paquete del cúmulo es preciso; este es para velocidades.',
     },
-    'say-what-the-sample-is': {
+    {
       title: 'Di qué es la muestra',
       body: `Escribe la frase de métodos para una distancia a NGC 2420 tomada de estrellas con paralaje sobre error de al menos 10: qué son las estrellas y cada corte que pasaron, el punto cero y qué incluye y qué no incluye el intervalo.`,
       prompt:
@@ -2181,7 +2181,7 @@ export const WHAT_GAIA_DOES_NOT_SEE_DEEPER_ES = {
         },
       ],
     },
-  },
+  ],
 };
 
 // ---------------------------------------------------------------------------

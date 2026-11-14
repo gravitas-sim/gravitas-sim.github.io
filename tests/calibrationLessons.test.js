@@ -321,10 +321,10 @@ describe('the two languages agree', () => {
     (id, i) => {
       const en = lesson(id);
       const es = ES[i];
-      expect(Object.keys(es.steps)).toHaveLength(en.steps.length);
+      expect(es.steps).toHaveLength(en.steps.length);
       expect(es.objectives).toHaveLength(en.objectives.length);
       en.steps.forEach((s, k) => {
-        const e = es.steps[s.sid];
+        const e = es.steps[k];
         expect(e.title?.length).toBeGreaterThan(0);
         expect(e.body?.length).toBeGreaterThan(0);
         if (s.options) expect(e.options).toHaveLength(s.options.length);
@@ -333,10 +333,8 @@ describe('the two languages agree', () => {
         if (s.misconceptions)
           expect(e.misconceptions).toHaveLength(s.misconceptions.length);
       });
-      expect(Object.keys(ESD[i].steps)).toHaveLength(EN_DEEP[i].steps.length);
-      Object.values(ESD[i].steps).forEach(s =>
-        expect(s.worked?.length).toBeGreaterThan(0)
-      );
+      expect(ESD[i].steps).toHaveLength(EN_DEEP[i].steps.length);
+      ESD[i].steps.forEach(s => expect(s.worked?.length).toBeGreaterThan(0));
     }
   );
   test('depth steps do not give the answer away in their feedback', () => {

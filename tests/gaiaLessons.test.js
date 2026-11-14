@@ -406,15 +406,15 @@ describe('the published numbers come from a file', () => {
 
 describe('the Spanish', () => {
   test('carries the same step structure as the English', () => {
-    expect(Object.keys(FAR_ES.steps).length).toBe(FAR.steps.length);
-    expect(Object.keys(FAR_DEEP_ES.steps).length).toBe(FAR_DEEP.steps.length);
-    expect(Object.keys(SEE_ES.steps).length).toBe(SEE.steps.length);
-    expect(Object.keys(SEE_DEEP_ES.steps).length).toBe(SEE_DEEP.steps.length);
+    expect(FAR_ES.steps.length).toBe(FAR.steps.length);
+    expect(FAR_DEEP_ES.steps.length).toBe(FAR_DEEP.steps.length);
+    expect(SEE_ES.steps.length).toBe(SEE.steps.length);
+    expect(SEE_DEEP_ES.steps.length).toBe(SEE_DEEP.steps.length);
     const pairs = [
-      ...FAR.steps.map((s, i) => [s, FAR_ES.steps[s.sid]]),
-      ...FAR_DEEP.steps.map((s, i) => [s, FAR_DEEP_ES.steps[s.sid]]),
-      ...SEE.steps.map((s, i) => [s, SEE_ES.steps[s.sid]]),
-      ...SEE_DEEP.steps.map((s, i) => [s, SEE_DEEP_ES.steps[s.sid]]),
+      ...FAR.steps.map((s, i) => [s, FAR_ES.steps[i]]),
+      ...FAR_DEEP.steps.map((s, i) => [s, FAR_DEEP_ES.steps[i]]),
+      ...SEE.steps.map((s, i) => [s, SEE_ES.steps[i]]),
+      ...SEE_DEEP.steps.map((s, i) => [s, SEE_DEEP_ES.steps[i]]),
     ];
     for (const [en, es] of pairs) {
       expect(es.title).toBeTruthy();

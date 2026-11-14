@@ -1,6 +1,7 @@
+// Señal, ruido y exposición, más a fondo: las palabras en español, paso a paso con ../signal-noise-and-exposure.js.
 export default {
-  steps: {
-    'only-the-stars-photons': {
+  steps: [
+    {
       title: 'La medida ideal',
       body: `Si los fotones de la propia estrella fueran el único ruido, el ruido sería la raíz cuadrada de los electrones de la estrella. La estrella dio 33.631 electrones en la abertura.`,
       prompt: 'La señal a ruido con solo el ruido de la propia estrella',
@@ -14,7 +15,7 @@ export default {
         off: 'La raíz cuadrada de los electrones de la estrella.',
       },
     },
-    'the-read-noise-share-bright': {
+    {
       title: 'La parte del ruido de lectura, una estrella brillante',
       body: `A los 60 segundos el ruido total es de 220,6 electrones, así que el ruido al cuadrado es la suma de los cuatro términos, cerca de 48.660. El ruido de lectura al cuadrado es 6.223.`,
       prompt:
@@ -32,7 +33,7 @@ export default {
         off: '100 × lectura² ÷ ruido².',
       },
     },
-    'the-read-noise-share-faint': {
+    {
       title: 'La parte del ruido de lectura, una estrella débil',
       body: `En V = 19 y 10 segundos el ruido total es de 51,07 electrones, y el ruido de lectura al cuadrado es 2.001.`,
       prompt:
@@ -49,7 +50,7 @@ export default {
         off: '100 × lectura² ÷ ruido².',
       },
     },
-    'what-the-moon-costs': {
+    {
       title: 'Lo que cuesta la Luna',
       body: `Lee la exposición que alcanza una señal a ruido de 100 para esta estrella en un sitio oscuro (la primera elección de cielo) y bajo una Luna brillante, 89,4 segundos.`,
       prompt:
@@ -67,7 +68,7 @@ export default {
         off: 'exposición con Luna ÷ exposición en sitio oscuro.',
       },
     },
-    'the-square-root-promise': {
+    {
       title: 'Lo que promete la ley de la raíz cuadrada',
       body: `Si los fotones de la propia estrella fueran el único ruido, cuatro veces la exposición darían el doble de señal a ruido, y la estrella más débil alcanzada sería más débil en la diferencia de magnitud de un factor dos en brillo, 2,5 veces el logaritmo decimal de 2.`,
       prompt:
@@ -82,7 +83,7 @@ export default {
         off: '2,5 × log10(2).',
       },
     },
-    'budget-bright-dark': {
+    {
       title: 'El presupuesto, una estrella brillante en un sitio oscuro',
       body: `Pon V = 15, 60 segundos, un radio de 5 píxeles y un sitio oscuro. La tabla da los cuatro términos del ruido al cuadrado y el ruido total.`,
       prompt:
@@ -99,7 +100,7 @@ export default {
         off: 'El mayor de los cuatro términos, como porcentaje del ruido al cuadrado.',
       },
     },
-    'budget-faint-short': {
+    {
       title: 'El presupuesto, una estrella débil en una exposición corta',
       body: `Pon V = 19, 10 segundos, un radio de 3 píxeles y un sitio oscuro.`,
       prompt:
@@ -116,7 +117,7 @@ export default {
         off: 'El mayor de los cuatro términos, como porcentaje del ruido al cuadrado.',
       },
     },
-    'budget-faint-moon': {
+    {
       title: 'El presupuesto, la misma estrella bajo una Luna brillante',
       body: `Deja V = 19 y el radio de 3 píxeles, alarga la exposición a 300 segundos y elige la Luna brillante.`,
       prompt:
@@ -133,7 +134,7 @@ export default {
         off: 'El mayor de los cuatro términos, como porcentaje del ruido al cuadrado.',
       },
     },
-    'read-noise-crossover': {
+    {
       title: 'Donde el cielo releva a la cámara',
       body: `El ruido de lectura al cuadrado se paga una vez por exposición; el ruido al cuadrado del cielo y de la corriente oscura crece con la exposición. En un sitio oscuro el cielo da 1,41 electrones por segundo en cada píxel y la corriente oscura 0,10; el ruido de lectura es de 8 electrones.`,
       prompt:
@@ -149,5 +150,5 @@ export default {
         off: '8² ÷ (1,41 + 0,10).',
       },
     },
-  },
+  ],
 };

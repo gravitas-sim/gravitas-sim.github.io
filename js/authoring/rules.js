@@ -37,8 +37,6 @@ import {
   STANDARD_MISCONCEPTIONS,
 } from '../answerFeedback.js';
 import {
-  alignShadow,
-  checkShadowSteps,
   mergeTranslation,
   translationCoverage,
 } from '../data/investigations/i18n.js';
@@ -141,7 +139,6 @@ export const RULE_INDEX = {
     'A remediation step follows an earlier graded step every student reaches',
   'interaction/animated': 'An animated widget can be rewound',
   'i18n/shape': 'A translation matches the shape of its lesson',
-  'i18n/steps': 'A translation has one step, under its sid, for each step',
   'i18n/machinery': 'A translation never replaces machinery',
   'i18n/coverage': 'A translation is complete enough to ship',
   'instructor/present': 'Every lesson has instructor guidance',
@@ -1302,11 +1299,12 @@ export function checkCatalog(inputs, { skip = [] } = {}) {
         );
         continue;
       }
-      const said = rule => (level, message, step) =>
-        add(level, rule, id, step, message);
-      checkTranslationShape(inv, data, `${locale}`, said('i18n/shape'));
-      checkTranslationMachinery(inv, data, said('i18n/machinery'));
-      checkShadowSteps(inv.steps, data?.steps, said('i18n/steps'));
+      checkTranslationShape(inv, data, `${locale}`, (level, message, step) =>
+        add(level, 'i18n/shape', id, step, message)
+      );
+      checkTranslationMachinery(inv, data, (level, message, step) =>
+        add(level, 'i18n/machinery', id, step, message)
+      );
 
       // What a Spanish reader sees must not give the answer away either.
       const merged = mergeTranslation(inv, data);
@@ -1527,8 +1525,12 @@ export function checkLesson(inv, refs) {
 }
 
 /**
- * A translation must be a shadow of its lesson. mergeTranslation silently
- * drops any key the English lacks, so a typo is invisible work.
+ * A translation must be a shadow of its lesson, not a document of its own.
+ *
+ * mergeTranslation silently drops any key the English does not have, so a typo
+ * in a shadow is invisible: the work is done, the file is committed, and the
+ * string never appears. That is the single most likely way for translated
+ * content to be lost, and nothing else notices it.
  */
 function checkTranslationShape(
   base,
@@ -1540,8 +1542,7 @@ function checkTranslationShape(
 ) {
   if (overlay === undefined || overlay === null) return;
   if (Array.isArray(base)) {
-    const aligned = alignShadow(base, overlay);
-    if (!aligned) {
+    if (!Array.isArray(overlay)) {
       report(
         'error',
         `${locale}: ${path.join('.') || 'root'} should be a list`,
@@ -1549,7 +1550,7 @@ function checkTranslationShape(
       );
       return;
     }
-    if (Array.isArray(overlay) && overlay.length > base.length) {
+    if (overlay.length > base.length) {
       report(
         'error',
         `${locale}: ${path.join('.')} has ${overlay.length} entries for ${base.length} in English; the extras are dropped`,
@@ -1557,11 +1558,11 @@ function checkTranslationShape(
       );
     }
     base.forEach((item, i) => {
-      if (aligned[i] === undefined) return;
+      if (i >= overlay.length) return;
       const nextStep = path.length === 1 && path[0] === 'steps' ? i : stepIndex;
       checkTranslationShape(
         item,
-        aligned[i],
+        overlay[i],
         locale,
         report,
         [...path, String(i)],
@@ -1637,14 +1638,13 @@ function checkTranslationMachinery(
     );
     return;
   }
-  const aligned = Array.isArray(base) && alignShadow(base, overlay);
-  if (aligned) {
+  if (Array.isArray(base) && Array.isArray(overlay)) {
     base.forEach((item, i) => {
-      if (aligned[i] === undefined) return;
+      if (i >= overlay.length) return;
       const nextStep = path.length === 1 && path[0] === 'steps' ? i : stepIndex;
       checkTranslationMachinery(
         item,
-        aligned[i],
+        overlay[i],
         report,
         [...path, String(i)],
         nextStep

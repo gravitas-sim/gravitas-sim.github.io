@@ -1,6 +1,7 @@
+// Qué registra un CCD, más a fondo: las palabras en español, paso a paso con ../what-a-ccd-records.js.
 export default {
-  steps: {
-    'the-bias-in-electrons': {
+  steps: [
+    {
       title: 'El desfase en electrones',
       body: `El convertidor da cuentas, y cada cuenta representa un número de electrones, la <strong>ganancia</strong> que acabas de leer. Multiplicar una cuenta por la ganancia da electrones. El nivel del sesgo es de 500,4 cuentas.`,
       prompt: 'El nivel del sesgo, en electrones',
@@ -16,7 +17,7 @@ export default {
         off: 'cuentas × ganancia.',
       },
     },
-    'dark-matches-read': {
+    {
       title: 'Cuándo importa la corriente oscura',
       body: `La corriente oscura de un píxel también añade ruido: los electrones que reúne en un tiempo t tienen una varianza igual a su número, 0,1 × t. El ruido de lectura añade una varianza que es su cuadrado, una vez por lectura. Usa un ruido de lectura de 8,05 electrones y una corriente oscura de 0,100 electrones por segundo.`,
       prompt:
@@ -32,7 +33,7 @@ export default {
         off: 'ruido de lectura al cuadrado ÷ corriente oscura.',
       },
     },
-    'the-flats-correction': {
+    {
       title: 'Cuán grande es la corrección',
       body: `La estrella B leía 47.296 electrones en bruto y 54.083 tras el campo plano.`,
       prompt:
@@ -47,7 +48,7 @@ export default {
         off: 'calibrada ÷ en bruto.',
       },
     },
-    'the-lost-share': {
+    {
       title: 'Cuánto de la estrella D se pierde',
       body: `La luz calibrada de la estrella D es de 1.097.121 electrones y la verdad de la tabla es de 1.799.605.`,
       prompt:
@@ -63,7 +64,7 @@ export default {
         off: '100 × (verdad − medida) ÷ verdad.',
       },
     },
-    'the-bars-that-do-not-see': {
+    {
       title: 'A cuántas barras de error equivale',
       body: `El error de la tabla para la estrella D es de 1.060 electrones: solo ruido de fotones y de lectura. La diferencia es la verdad, 1.799.605, menos la luz medida, 1.097.121.`,
       prompt: 'La diferencia, en unidades de la barra de error',
@@ -79,5 +80,5 @@ export default {
         off: '(verdad − medida) ÷ error.',
       },
     },
-  },
+  ],
 };

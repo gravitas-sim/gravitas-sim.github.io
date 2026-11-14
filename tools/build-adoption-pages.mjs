@@ -43,7 +43,6 @@ import path from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 
 import { previewRoute } from '../js/library/format.js';
-import { alignShadow } from '../js/data/investigations/i18n.js';
 import {
   reportCaveat,
   statusStatement,
@@ -633,7 +632,7 @@ async function sources() {
       const df = `js/data/investigations/depth/es/${l.id}.js`;
       const words = existsSync(path.join(ROOT, df))
         ? (await load(df)).default.steps
-        : {};
+        : [];
       depthOf.set(l.id, { steps, words });
     }
   }
@@ -674,10 +673,9 @@ const lib = (S, key) => ({ en: S.EN_LIBRARY[key], es: S.ES_LIBRARY[key] });
 /** The step list of a lesson at every depth: [{title, type, depth}]. */
 function lessonOutline(S, lesson) {
   const es = S.spanish.get(lesson.id);
-  const said = es ? alignShadow(lesson.steps, es.steps) : null;
   const base = lesson.steps.map((s, i) => ({
     sid: s.sid,
-    title: { en: s.title, es: said?.[i]?.title ?? s.title },
+    title: { en: s.title, es: es?.steps?.[i]?.title ?? s.title },
     type: s.type,
     kind: s.kind,
     depth: s.depth ?? 'core',
@@ -686,8 +684,9 @@ function lessonOutline(S, lesson) {
   const deep = S.depthOf.get(lesson.id);
   if (!deep) return base;
   const laid = S.layDepth({ ...lesson, steps: lesson.steps }, deep.steps);
-  const spoken = alignShadow(deep.steps, deep.words);
-  const words = new Map(deep.steps.map((s, i) => [s.sid, spoken?.[i]?.title]));
+  const words = new Map(
+    deep.steps.map((s, i) => [s.sid, deep.words[i]?.title])
+  );
   return laid.steps.map(s => {
     const orig = base.find(b => b.sid === s.sid);
     return (

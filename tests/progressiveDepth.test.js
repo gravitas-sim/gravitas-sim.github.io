@@ -130,30 +130,6 @@ describe('the rules refuse what would change the science', () => {
     const found = checkDepth(c, layDepth(c, DEEPER[id]), DEEPER[id], null);
     expect(found.map(f => f.rule)).toContain('depth/refs');
   });
-  test('a Spanish deeper step under a sid no deeper step has', async () => {
-    const c = core(id);
-    const es = clone(await words(id));
-    es.steps['no-such-step'] = { title: 'Un paso que no existe' };
-    const found = checkDepth(c, layDepth(c, DEEPER[id]), DEEPER[id], es);
-    expect(
-      found.filter(f => f.rule === 'depth/translation').map(f => f.message)
-    ).toEqual(['steps.no-such-step names no step of the lesson']);
-  });
-  test('a deeper step with no Spanish step', async () => {
-    const c = core(id);
-    const es = clone(await words(id));
-    delete es.steps[DEEPER[id][1].sid];
-    const found = checkDepth(c, layDepth(c, DEEPER[id]), DEEPER[id], es);
-    expect(
-      found.filter(f => f.rule === 'depth/translation').map(f => f.step)
-    ).toEqual([DEEPER[id][1].sid]);
-  });
-  test('Spanish deeper steps given as a list, which carries no sid to match by', async () => {
-    const c = core(id);
-    const es = { steps: Object.values((await words(id)).steps) };
-    const found = checkDepth(c, layDepth(c, DEEPER[id]), DEEPER[id], es);
-    expect(found.map(f => f.rule)).toContain('depth/translation');
-  });
   test('an uncertainty answer needs a tolerance', () => {
     expect(run(d => (d[2].tolerance = 0))).toContain('depth/uncertainty');
   });

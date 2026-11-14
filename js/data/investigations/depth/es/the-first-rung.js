@@ -1,6 +1,7 @@
+// El primer peldaño, más a fondo: las palabras en español, paso a paso con ../the-first-rung.js.
 export default {
-  steps: {
-    'from-modulus-to-distance': {
+  steps: [
+    {
       title: 'Del módulo a la distancia',
       body: 'El módulo de distancia es μ = 5 log₁₀(d ÷ 10 pc), así que d = 10<sup>(μ+5)/5</sup> pársecs, que son 10<sup>(μ−25)/5</sup> megapársecs. Usa el μ = 29,403 de NGC 4258 para hallar su distancia y comprobar la cifra del instrumento.',
       prompt: 'La distancia de NGC 4258, en megapársecs',
@@ -14,7 +15,7 @@ export default {
         off: '10^((29,403 − 25) ÷ 5).',
       },
     },
-    'the-budget-in-quadrature': {
+    {
       title: 'El presupuesto en cuadratura',
       body: 'Los errores independientes se suman como la raíz cuadrada de la suma de sus cuadrados. Toma los cuatro términos de NGC 4258: 0,043, 0,0048, 0,00015 y 0,026 magnitudes. Súmalos en cuadratura.',
       prompt: 'El error total, en magnitudes',
@@ -31,7 +32,7 @@ export default {
         off: 'raíz(0,043² + 0,0048² + 0,00015² + 0,026²).',
       },
     },
-    'the-error-in-percent': {
+    {
       title: 'El error como parte de la distancia',
       body: 'Un error pequeño en el módulo es una fracción de la distancia: Δd ÷ d = (ln 10 ÷ 5) Δμ = 0,4605 Δμ. Toma el error total de NGC 4258, 0,051 magnitudes, y da el error de la distancia en porcentaje.',
       prompt: 'El error en la distancia, en porcentaje',
@@ -45,7 +46,7 @@ export default {
         off: '100 × 0,4605 × 0,051.',
       },
     },
-    'ten-hosts': {
+    {
       title: 'Diez galaxias',
       body: 'Supón que diez galaxias como NGC 4258 se calibraran con la misma Nube. Sus términos de dispersión son independientes, así que el término de galaxia de su media baja a 0,043 ÷ √10. Pero la dispersión de la calibración (0,0048) y la distancia de la Nube (0,026) las comparten todas, y el término de la pendiente es despreciable. Suma los tres en cuadratura para hallar el error del módulo medio.',
       prompt: 'El error del módulo medio de diez galaxias, en magnitudes',
@@ -62,7 +63,7 @@ export default {
         off: 'raíz((0,043 ÷ √10)² + 0,0048² + 0,026²).',
       },
     },
-    'from-the-rung-to-the-hubble-constant': {
+    {
       title: 'Del peldaño a la constante de Hubble',
       body: 'Una constante de Hubble es una velocidad sobre una distancia, así que una escala de distancias equivocada en una fracción lo está en la misma fracción en la constante. Supón que las supernovas calibradas con NGC 4258 dan H<sub>0</sub> = 70 km/s/Mpc, y que el único error es el de 0,051 magnitudes de este peldaño, un 2,35 por ciento en distancia (el paso anterior). <em>Candelas estándar</em> muestra la misma aritmética con las supernovas.',
       prompt: 'El error que este peldaño transmite a H₀, en km/s/Mpc',
@@ -76,5 +77,5 @@ export default {
         off: '70 × (0,4605 × 0,051).',
       },
     },
-  },
+  ],
 };

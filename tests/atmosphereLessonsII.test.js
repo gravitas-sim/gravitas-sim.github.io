@@ -85,8 +85,8 @@ describe('both lessons are registered whole', () => {
       const full = lesson(id);
       expect(full.steps.some(s => s.depth === 'quantitative')).toBe(true);
       expect(full.steps.some(s => s.depth === 'advanced')).toBe(true);
-      expect(Object.keys(ES_LESSONS[id].steps)).toHaveLength(l.steps.length);
-      expect(Object.keys(ES_DEEP[id].steps)).toHaveLength(
+      expect(ES_LESSONS[id].steps).toHaveLength(l.steps.length);
+      expect(ES_DEEP[id].steps).toHaveLength(
         full.steps.filter(s => s.depth).length
       );
       expect(l.steps[0].body).toMatch(/synthetic/);
@@ -94,7 +94,7 @@ describe('both lessons are registered whole', () => {
       expect(l.steps.at(-1).body.replace(/\s+/g, ' ')).toMatch(
         /no published table was compared/
       );
-      expect(Object.values(ES_LESSONS[id].steps)[0].body).toMatch(
+      expect(ES_LESSONS[id].steps[0].body).toMatch(
         /No se comparó ninguna tabla publicada/
       );
       const sids = full.steps.map(s => s.sid);

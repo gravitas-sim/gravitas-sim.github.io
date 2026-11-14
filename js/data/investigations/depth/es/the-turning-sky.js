@@ -1,6 +1,7 @@
+// El cielo que gira, más a fondo: las palabras en español, paso a paso con ../the-turning-sky.js.
 export default {
-  steps: {
-    'sidereal-day': {
+  steps: [
+    {
       title: 'Los cuatro minutos a partir del año',
       body: 'En un año de 365,2422 días la Tierra da 366,2422 vueltas respecto de las estrellas: una vuelta más que el número de amaneceres. Un día solar tiene 1.440 minutos.',
       prompt: '¿Cuántos minutos más corto que un día solar es un día sidéreo?',
@@ -18,7 +19,7 @@ export default {
         off: 'Más corto en 1.440 ÷ 366,2422 minutos.',
       },
     },
-    'time-above-the-horizon': {
+    {
       title: 'Cuánto tiempo se queda arriba',
       body: 'Con Arcturus seleccionada a latitud 40°, halla con las horas de salida y de puesta cuánto tiempo está sobre el horizonte. El ángulo horario al que se pone una estrella cumple cos H = −tan&nbsp;latitud × tan&nbsp;declinación, así que el tiempo arriba es 2H en horas de tiempo sidéreo. El instrumento también tiene en cuenta la refracción y el lugar aparente de la estrella.',
       prompt: 'Tiempo que Arcturus está sobre el horizonte a latitud 40°',
@@ -36,5 +37,5 @@ export default {
         off: 'Tiempo arriba = (hora de puesta − hora de salida) ÷ 60, en horas.',
       },
     },
-  },
+  ],
 };

@@ -84,16 +84,16 @@ describe('the lessons are registered whole', () => {
       const full = lesson(id);
       expect(full.steps.some(s => s.depth === 'quantitative')).toBe(true);
       expect(full.steps.some(s => s.depth === 'advanced')).toBe(true);
-      expect(Object.keys(ES_LESSONS[id].steps)).toHaveLength(l.steps.length);
-      expect(Object.keys(ES_DEEP[id].steps)).toHaveLength(
+      expect(ES_LESSONS[id].steps).toHaveLength(l.steps.length);
+      expect(ES_DEEP[id].steps).toHaveLength(
         full.steps.filter(s => s.depth).length
       );
       // The Spanish shadow carries a misconception for each the English has, in step.
       l.steps.forEach((s, i) => {
-        expect(ES_LESSONS[id].steps[s.sid].misconceptions?.length ?? 0).toBe(
+        expect(ES_LESSONS[id].steps[i].misconceptions?.length ?? 0).toBe(
           s.misconceptions?.length ?? 0
         );
-        expect((ES_LESSONS[id].steps[s.sid].fields ?? []).length).toBe(
+        expect((ES_LESSONS[id].steps[i].fields ?? []).length).toBe(
           (s.fields ?? []).length
         );
       });

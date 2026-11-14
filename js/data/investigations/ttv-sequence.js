@@ -519,12 +519,12 @@ export const THE_CLOCK_THAT_DRIFTS_ES = {
     'Leer el superperiodo y la amplitud de una onda, y decir qué fija el periodo (el par) y por qué un registro puede ser demasiado corto para uno',
     'Decir qué da y qué no da una amplitud: una masa solo si se suponen órbitas circulares',
   ],
-  steps: {
-    'a-clock-that-ticks': {
+  steps: [
+    {
       title: 'Un reloj que marca el tiempo',
       body: 'Un planeta que cruza su estrella cada diez días es un reloj: el tránsito número n ocurre en un instante T0 más n veces el periodo. Para usarlo hace falta el instante de cada tránsito, y ese instante no se lee en una esfera. Se mide: se tiene la luz de la estrella durante unas horas alrededor del descenso, con ruido en cada punto, y se desliza una plantilla del descenso a lo largo del eje del tiempo hasta que ajusta lo mejor posible. El panel lo hace con un tránsito de un planeta de un sistema inventado y dice con qué seguridad. Los sistemas son sintéticos, hechos por el motor con el ruido añadido, de modo que el instante verdadero se conoce y la medida puede comprobarse.',
     },
-    'one-transit-time': {
+    {
       title: 'El instante de un tránsito',
       body: 'El panel muestra el tránsito número 40 del planeta interior, con poco ruido (100 partes por millón por punto). Lee el <strong>instante central respecto de la previsión</strong> en minutos y la <strong>barra de error</strong> (una sigma) en minutos.',
       fields: [
@@ -532,7 +532,7 @@ export const THE_CLOCK_THAT_DRIFTS_ES = {
         { label: 'Barra de error (una sigma)' },
       ],
     },
-    'a-bigger-error-bar': {
+    {
       title: 'Una barra de error mayor',
       body: 'Pon el <strong>ruido por punto</strong> en Típico, cuatro veces mayor. El mismo tránsito, medido de nuevo con luz más ruidosa. Lee la barra de error y la línea de debajo, que dice si la barra puede leerse como una.',
       prompt: '¿Qué le pasa a la barra de error del instante?',
@@ -553,11 +553,11 @@ export const THE_CLOCK_THAT_DRIFTS_ES = {
         },
       ],
     },
-    'a-steady-clock': {
+    {
       title: 'Un reloj constante',
       body: 'Ahora el registro entero. Para cada tránsito el panel toma el instante medido y le resta el que daría un reloj perfectamente constante, la recta ajustada a todos. Lo que queda es <strong>O menos C</strong>, observado menos calculado, en minutos, con su barra de error. Este es un par de planetas muy distintos en periodo (diez y veintisiete días), con el interior medido en unos cien tránsitos. Los puntos se dispersan en torno a medio minuto, que es lo que dicen las barras de error, y el panel indica que no hay señal sobre el ruido: este planeta tiene un reloj constante.',
     },
-    'a-wave': {
+    {
       title: 'Un segundo planeta tira',
       body: 'Ahora un par cercano a una resonancia: el planeta exterior tarda casi el doble que el interior, veinte días y medio frente a diez. Cada vez que pasan, el exterior tira un poco del interior hacia delante o hacia atrás en su órbita, y los tránsitos llegan un poco pronto o tarde. El par no está exactamente en dos a uno, así que la geometría del tirón va cambiando.',
       prompt: 'El diagrama O-C del planeta interior…',
@@ -573,12 +573,12 @@ export const THE_CLOCK_THAT_DRIFTS_ES = {
       because:
         'Una onda lenta. Un cambio constante del periodo es una recta en los instantes y el reloj de línea recta lo absorbe; lo que no puede absorber es un empujón que crece y se apaga a medida que gira la geometría del par, y eso es una onda cuya longitud es el tiempo que tarda el par en volver a la misma disposición.',
     },
-    'read-the-wave': {
+    {
       title: 'Lee la onda',
       body: 'El panel muestra el planeta interior del par cercano a dos a uno. Lee el <strong>superperiodo</strong>, la longitud de la onda en días, y su <strong>amplitud</strong>, la mitad de la oscilación de cresta a valle, en minutos.',
       fields: [{ label: 'Superperiodo' }, { label: 'Amplitud' }],
     },
-    'the-pair-sets-it': {
+    {
       title: 'Lo fija el par',
       body: 'Pon el sistema en <strong>Lejos de la resonancia</strong>: diez y veintisiete días, con las mismas masas y el mismo ruido. Lee el veredicto.',
       prompt: '¿Qué dice el panel, y por qué?',
@@ -599,16 +599,16 @@ export const THE_CLOCK_THAT_DRIFTS_ES = {
         },
       ],
     },
-    'what-the-wave-says': {
+    {
       title: 'Lo que dice la onda',
       body: 'Los instantes de tránsito de un planeta son un reloj, y el reloj se mide: cada instante tiene una barra de error, y la barra puede leerse como tal solo cuando es bastante menor que la separación entre puntos. El diagrama O-C son esos instantes menos el mejor reloj de línea recta. Plano significa que el planeta guarda su hora; una onda lenta significa que algo tira de él, y la longitud de la onda es el superperiodo del par, que ninguno de los planetas tiene por sí solo. En esta investigación los sistemas los hace el motor con ruido añadido, y nada de lo que se ve es una estrella observada.',
     },
-  },
+  ],
 };
 
 export const THE_CLOCK_THAT_DRIFTS_DEEPER_ES = {
-  steps: {
-    'the-beat': {
+  steps: [
+    {
       title: 'El pulso de dos relojes',
       body: 'El superperiodo no es un parámetro del ajuste, es aritmética con los periodos de los dos planetas. El par vuelve a la misma disposición cada <strong>1 / |2 / P<sub>exterior</sub> &minus; 1 / P<sub>interior</sub>|</strong> días (la resonancia dos a uno tiene j = 2). Lee el reloj del planeta interior en el panel, cambia al exterior y lee su reloj, y calcula el superperiodo.',
       fields: [
@@ -617,7 +617,7 @@ export const THE_CLOCK_THAT_DRIFTS_DEEPER_ES = {
         { label: 'Superperiodo' },
       ],
     },
-    'a-different-pair': {
+    {
       title: 'Otro par',
       body: 'Cambia al par cercano a tres a dos (diez y quince días y medio, j = 3), planeta interior. Lee el superperiodo que halla el ajuste y el que da la relación con los dos periodos.',
       fields: [
@@ -625,7 +625,7 @@ export const THE_CLOCK_THAT_DRIFTS_DEEPER_ES = {
         { label: 'Según los periodos' },
       ],
     },
-    'which-swings-more': {
+    {
       title: 'Cuál oscila más',
       body: 'En el par cercano a dos a uno la onda del planeta interior tiene una amplitud de unos 4,7 minutos. Cambia al exterior: su onda es de unos 1,6 minutos. El interior tiene 10 masas terrestres y el exterior 15.',
       prompt: '¿Por qué oscila más el planeta más ligero?',
@@ -646,7 +646,7 @@ export const THE_CLOCK_THAT_DRIFTS_DEEPER_ES = {
         },
       ],
     },
-    'too-short-a-record': {
+    {
       title: 'Un registro demasiado corto',
       body: 'Vuelve al planeta interior del par cercano a dos a uno y pon la <strong>parte del registro</strong> en el 40 por ciento: los primeros 44 tránsitos, 430 días. La onda dura 345 días.',
       prompt: '¿Qué dice el panel, y por qué?',
@@ -667,7 +667,7 @@ export const THE_CLOCK_THAT_DRIFTS_DEEPER_ES = {
         },
       ],
     },
-    'a-mass-if-circular': {
+    {
       title: 'Una masa, si las órbitas son circulares',
       body: 'Muestra <strong>qué dice la amplitud sobre la masa</strong>, para el planeta interior del par cercano a dos a uno. La amplitud de su onda es proporcional a la masa del planeta <strong>exterior</strong>, así que el panel convierte la amplitud medida en esa masa, <strong>si ambas órbitas son circulares</strong>, para una estrella de una masa solar, con un intervalo que recoge la medida y la exactitud de la relación. Lee la masa y los extremos del intervalo.',
       fields: [
@@ -676,7 +676,7 @@ export const THE_CLOCK_THAT_DRIFTS_DEEPER_ES = {
         { label: 'Extremo superior' },
       ],
     },
-    'what-an-eccentricity-does': {
+    {
       title: 'Qué hace una excentricidad',
       body: 'La masa anterior suponía órbitas circulares. La amplitud depende también de las excentricidades de los planetas, a través de una combinación que el panel llama |Z|, que la amplitud no puede dar. El control está en 0,010. Las dos curvas del panel muestran, para las <em>mismas masas</em>, la amplitud mayor y la menor que podría dar cualquier dirección de esa excentricidad; lee a qué distancia están del valor circular.',
       prompt:
@@ -698,7 +698,7 @@ export const THE_CLOCK_THAT_DRIFTS_DEEPER_ES = {
         },
       ],
     },
-    'the-other-planet': {
+    {
       title: 'El otro planeta',
       body: 'Cambia al planeta <strong>exterior</strong>, cuya onda da la masa del <em>interior</em>, con el mismo |Z| de 0,010. La dispersión es ahora de aproximadamente &minus;73 a +127 por ciento.',
       prompt: '¿Por qué es mucho peor aquí la misma excentricidad?',
@@ -719,11 +719,11 @@ export const THE_CLOCK_THAT_DRIFTS_DEEPER_ES = {
         },
       ],
     },
-    'what-an-amplitude-cannot-say': {
+    {
       title: 'Lo que una amplitud no puede decir',
       body: 'Una amplitud da una masa solo junto con una suposición sobre la excentricidad. Con la suposición de que las órbitas son circulares el panel da la masa con su intervalo y lo dice; no da como cota un intervalo que admita la excentricidad desconocida, y no da la excentricidad. Las ondas de los dos planetas juntas llevan más (también sus fases), y eso es lo que usan los análisis publicados. Los sistemas son sintéticos, dos planetas en un plano, fuera de la anchura de la resonancia.',
     },
-  },
+  ],
 };
 
 // ---- instructor content ------------------------------------------------------------------

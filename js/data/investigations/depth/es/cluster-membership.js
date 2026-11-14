@@ -1,6 +1,7 @@
+// Pertenencia a un cúmulo por movimiento, más a fondo: las palabras en español, paso a paso con ../cluster-membership.js.
 export default {
-  steps: {
-    'distance-by-hand': {
+  steps: [
+    {
       title: 'El inverso a mano',
       body: 'Una estrella cuyo paralaje es p milisegundos de arco está a 1 ÷ p kiloparsecs. El paralaje medio de los miembros es 0,385&nbsp;mas, y la lectura del instrumento es su inverso, sin corregir por el punto cero.',
       prompt: 'El inverso',
@@ -14,7 +15,7 @@ export default {
         off: 'Distancia = 1 ÷ paralaje, con el paralaje en mas y la respuesta en kpc.',
       },
     },
-    'internal-velocity': {
+    {
       title: 'Qué rápido se mueven los miembros entre sí',
       body: 'La fila «Dispersión del cúmulo en movimiento propio» dice cuánto difieren los miembros entre sí: 0,081&nbsp;mas/año, antes de los errores. Un movimiento propio μ en mas/año a una distancia d en kpc es una rapidez de 4,74 × μ × d en km/s. Usa d = 2,6&nbsp;kpc, la lectura sin corregir.',
       prompt: 'La dispersión de rapidez de los miembros a través del cielo',
@@ -26,7 +27,7 @@ export default {
         off: 'Rapidez = 4,74 × μ × d, con μ = 0,081 mas/año y d = 2,6 kpc.',
       },
     },
-    'expected-field': {
+    {
       title: 'Cuántas estrellas del campo espera el ajuste',
       body: 'La fila «Miembros esperados» suma la probabilidad de cada estrella. La tabla tiene 993 estrellas, y el ajuste espera 505,9 de ellas en el cúmulo (movimiento propio y paralaje).',
       prompt: 'El número de estrellas del campo que espera el ajuste',
@@ -38,7 +39,7 @@ export default {
         off: 'Campo = total − miembros esperados, con 993 estrellas y 505,9 esperados.',
       },
     },
-    'what-parallax-adds': {
+    {
       title: 'Qué añade el paralaje',
       body: 'Cambia el ajuste a <strong>solo movimiento propio</strong> y compáralo con movimiento propio y paralaje: el número de miembros apenas se mueve (505 contra 506), pero las estrellas con probabilidad entre 0,1 y 0,9 pasan de 8 a 4.',
       prompt: '¿Qué muestra eso?',
@@ -52,5 +53,5 @@ export default {
       because:
         'Resuelve estrellas dudosas. Una tercera medición independiente separa unas pocas estrellas que el movimiento solo deja ambiguas, así que la cuenta de inciertas baja de 8 a 4 mientras la de miembros queda a una estrella o dos.',
     },
-  },
+  ],
 };

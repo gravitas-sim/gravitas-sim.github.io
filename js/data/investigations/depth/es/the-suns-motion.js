@@ -1,6 +1,7 @@
+// El movimiento del Sol, más a fondo: las palabras en español, paso a paso con ../the-suns-motion.js.
 export default {
-  steps: {
-    'speed-from-components': {
+  steps: [
+    {
       title: 'La rapidez a partir de las componentes',
       body: 'Las tres componentes son perpendiculares, así que la rapidez del Sol es la raíz cuadrada de la suma de sus cuadrados: √(U² + V² + W²). Usa los tres valores que mediste (10,5, 21,9 y 9,1&nbsp;km/s, o los tuyos).',
       prompt: 'La rapidez del Sol respecto de estas estrellas',
@@ -15,7 +16,7 @@ export default {
         off: 'Rapidez = √(U² + V² + W²), en km/s.',
       },
     },
-    'lag-arithmetic': {
+    {
       title: 'El retraso de Strömberg a mano',
       body: 'Lee σ<sub>U</sub>, la dispersión de velocidades de las estrellas en U, de la lista a 100&nbsp;pc: 38,1&nbsp;km/s. La relación de Strömberg dice que las estrellas se retrasan respecto del sistema local en reposo en σ<sub>U</sub>² ÷ 80&nbsp;km/s.',
       prompt: 'El retraso',
@@ -27,7 +28,7 @@ export default {
         off: 'Retraso = σ_U² ÷ 80 km/s, con σ_U = 38,1 km/s.',
       },
     },
-    'error-of-the-mean': {
+    {
       title: 'De dónde viene la incertidumbre',
       body: 'La incertidumbre de la U del Sol es la dispersión de las estrellas dividida entre la raíz cuadrada de cuántas hay. Dentro de 1.000&nbsp;pc hay 1.570 estrellas y σ<sub>U</sub> es 41,0&nbsp;km/s.',
       prompt: 'La incertidumbre de U',
@@ -40,7 +41,7 @@ export default {
         off: 'Incertidumbre = σ ÷ √N, con σ = 41,0 km/s y N = 1.570.',
       },
     },
-    'speed-two-frames': {
+    {
       title: 'Lo que cuesta el supuesto',
       body: 'A 100&nbsp;pc, lee la <strong>rapidez</strong> del Sol en el sistema de Strömberg (14,4&nbsp;km/s) y en el de Schönrich (18,5&nbsp;km/s). U y W son iguales en los dos; solo V es diferente.',
       prompt: 'La diferencia de la rapidez del Sol entre los dos sistemas',
@@ -52,7 +53,7 @@ export default {
         off: 'Diferencia de las dos filas Rapidez, a 100 pc.',
       },
     },
-    'what-would-settle-it': {
+    {
       title: '¿Qué lo resolvería?',
       body: 'La corrección de Strömberg trata el retraso como fijado solo por la dispersión. Schönrich y sus colegas hallaron que depende también de la metalicidad. Ajustar el retraso por intervalos de color de esta muestra es la prueba obvia. Las notas del proyecto (GALACTIC_DYNAMICS.md) registran que da 12,3 ± 6,7&nbsp;km/s para una elección de intervalos: un error casi tan grande como los 8&nbsp;km/s entre los dos valores, así que no puede resolverlos. Es un resultado registrado, no algo que muestre el instrumento.',
       prompt: '¿Qué permitiría a una muestra decidir entre los dos valores?',
@@ -73,5 +74,5 @@ export default {
       because:
         'Muchas más estrellas con metalicidad, separadas por ambas. Las dos correcciones difieren en de qué depende el retraso, así que solo una muestra lo bastante grande para separar las dependencias puede elegir. Hasta entonces el valor es un supuesto, que se declara con el resultado.',
     },
-  },
+  ],
 };

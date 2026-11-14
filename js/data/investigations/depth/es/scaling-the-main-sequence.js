@@ -1,6 +1,7 @@
+// Escalar la secuencia principal, más a fondo: las palabras en español, paso a paso con ../scaling-the-main-sequence.js.
 export default {
-  steps: {
-    'the-ratio-by-hand': {
+  steps: [
+    {
       title: 'Duplicar la masa, según los modelos',
       body: 'La escala dice que L ∝ M³, así que duplicar la masa multiplica la luminosidad por 2³ = 8. Elige el modelo de 20 masas solares y lee su luminosidad, luego el de 40 masas solares, y divide la segunda entre la primera.',
       prompt:
@@ -17,7 +18,7 @@ export default {
         off: 'Lee la luminosidad de cada modelo de 20 y 40 masas solares y divide la segunda entre la primera.',
       },
     },
-    'the-effective-exponent': {
+    {
       title: 'El exponente entre dos modelos',
       body: 'Una ley de potencias por dos puntos tiene exponente log(L₂ ÷ L₁) ÷ log(M₂ ÷ M₁). Usa los dos modelos más masivos, de 20 y 40 masas solares, cuyas luminosidades puedes leer en el instrumento.',
       prompt: 'El exponente efectivo de la luminosidad de 20 a 40 M☉',
@@ -33,5 +34,5 @@ export default {
         off: 'Exponente = log(5,29) ÷ log(2).',
       },
     },
-  },
+  ],
 };

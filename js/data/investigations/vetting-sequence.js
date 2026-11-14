@@ -600,12 +600,12 @@ export const PLANET_OR_NOT_ES = {
     'Decir que un candidato que pasa todas las pruebas no está validado, y qué no pudieron ver las pruebas',
     'Decidir un candidato a partir de su lista y justificar la decisión, incluso cuando la decisión correcta es que los datos no pueden decidir',
   ],
-  steps: {
-    'a-dip-is-a-candidate': {
+  steps: [
+    {
       title: 'Una caída es un candidato',
       body: `Una estrella se atenúa un poco, cada pocos días, durante unas horas. Podría ser un planeta que pasa por delante. También podría ser una estrella que pasa por delante de otra, con la luz de una tercera mezclada para que la caída parezca pequeña, o una pareja eclipsante junto al objetivo que los mismos píxeles también recogen. Una caída es solo un <strong>candidato</strong>. Verificar es el trabajo de intentar rechazarlo.\n\nEl panel verifica un candidato sintético con tres pruebas: si los tránsitos impares y pares tienen la misma profundidad, si hay un segundo eclipse media órbita después y, en imágenes de la estrella y de su vecina, si la luz que baja está en la posición del objetivo. Todos los candidatos de aquí los hizo un modelo, y el panel puede mostrar qué lo hizo.`,
     },
-    'read-the-checklist': {
+    {
       title: 'Un candidato limpio',
       body: `Candidato A: los tránsitos impares y pares coinciden, no hay segundo eclipse, y la caída está en la posición del objetivo. Todas las pruebas dicen <strong>aprobada</strong>. El resumen del panel dice a qué equivale eso.`,
       prompt: '¿A qué equivale?',
@@ -630,7 +630,7 @@ export const PLANET_OR_NOT_ES = {
         },
       ],
     },
-    'which-test-catches': {
+    {
       title: 'Caídas profundas y someras',
       body: `El candidato B alterna: sus caídas impares son profundas y las pares someras. Su luz viene de una pareja de estrellas desiguales junto al objetivo, cuyo período real es el doble del que muestra el candidato.`,
       prompt: '¿Qué prueba debería atraparlo?',
@@ -646,7 +646,7 @@ export const PLANET_OR_NOT_ES = {
       because:
         'Las profundidades impares y pares. Una pareja de estrellas desiguales tiene un eclipse profundo y uno somero. Tomadas a la mitad de su período real, una de cada dos caídas es profunda y las demás someras, y los tránsitos de un planeta no alternan. La prueba compara las dos profundidades con sus incertidumbres.',
     },
-    'deep-and-shallow': {
+    {
       title: 'Rechazado dos veces',
       body: `Lee la lista del candidato B. Las profundidades impares y pares difieren mucho más que su incertidumbre, y la segunda prueba no encuentra segundo eclipse media órbita después. Las imágenes dicen que la luz que baja está a 1,5 píxeles del objetivo.`,
       prompt: '¿Qué pruebas lo rechazan?',
@@ -667,7 +667,7 @@ export const PLANET_OR_NOT_ES = {
         },
       ],
     },
-    'a-dip-on-the-target': {
+    {
       title: 'Una binaria en el objetivo',
       body: `Candidato C: las profundidades impares y pares coinciden, y las imágenes ponen la caída justo en el objetivo. Pero media órbita después de cada caída hay una segunda, más somera, con la mitad de profundidad que la primera.`,
       prompt: '¿Qué es C?',
@@ -688,7 +688,7 @@ export const PLANET_OR_NOT_ES = {
         },
       ],
     },
-    'no-frames': {
+    {
       title: 'Uno limpio sin imágenes',
       body: `El candidato D pasa las dos primeras pruebas, y no se tomaron imágenes, así que la tercera prueba no se hizo. El resumen dice <em>no rechazado</em>. Muestra qué lo hizo con <strong>Mostrar qué lo hizo</strong>.`,
       prompt: '¿Qué significa aquí no rechazado?',
@@ -709,7 +709,7 @@ export const PLANET_OR_NOT_ES = {
         },
       ],
     },
-    'inconclusive-is-an-answer': {
+    {
       title: 'No concluyente es una respuesta',
       body: `El candidato F es una caída débil en datos ruidosos, con imágenes débiles. Todas las pruebas dicen <strong>no concluyente</strong>, y dan un motivo: los datos son demasiado ruidosos para excluir lo que busca la prueba.`,
       prompt: '¿Qué deberías concluir sobre F?',
@@ -730,16 +730,16 @@ export const PLANET_OR_NOT_ES = {
         },
       ],
     },
-    'what-the-checklist-says': {
+    {
       title: 'Lo que dice la lista',
       body: `Un candidato a tránsito se verifica con pruebas que buscan cada una un falso positivo: las profundidades impares y pares para estrellas desiguales con el doble del período, un segundo eclipse para una binaria en el objetivo, y el lugar donde baja la luz para la binaria de una vecina. Una prueba responde aprobada, suspendida o <strong>no concluyente</strong>; solo se aprueba cuando podía haber visto lo que busca. Un candidato que ninguna prueba rechaza no está validado, y algunos candidatos no se pueden decidir con los datos disponibles. Los datos de aquí son sintéticos: la verificación real añade el ruido propio del detector, sistemáticos y más de una vecina.`,
     },
-  },
+  ],
 };
 
 export const PLANET_OR_NOT_DEEPER_ES = {
-  steps: {
-    'decide-e': {
+  steps: [
+    {
       title: 'Decide E',
       body: `El candidato E es la misma mezcla de estrellas iguales que D, con imágenes. Lee la lista. Decídelo.`,
       prompt: '¿Cuál es tu decisión sobre E?',
@@ -760,7 +760,7 @@ export const PLANET_OR_NOT_DEEPER_ES = {
         },
       ],
     },
-    'decide-g': {
+    {
       title: 'Decide G',
       body: `El candidato G pasa las tres pruebas, también las imágenes: la caída está a 0,17 píxeles del objetivo, dentro del radio de exclusión de 0,30 píxeles que declara el panel. Muestra qué lo hizo.`,
       prompt: '¿Cuál es tu decisión sobre G?',
@@ -784,7 +784,7 @@ export const PLANET_OR_NOT_DEEPER_ES = {
         },
       ],
     },
-    'decide-h': {
+    {
       title: 'Decide H',
       body: `El candidato H es un planeta cuyos tránsitos impares y pares sí difieren un 20 por ciento, en datos ruidosos. Las profundidades impares y pares dicen <strong>aprobada</strong>, el segundo eclipse dice <strong>no concluyente</strong> y las imágenes se aprueban.`,
       prompt: '¿Cuál es tu decisión sobre H?',
@@ -805,12 +805,12 @@ export const PLANET_OR_NOT_DEEPER_ES = {
         },
       ],
     },
-    'read-the-power': {
+    {
       title: 'Lo que la prueba podía ver',
       body: `Para el candidato H, lee la línea impar-par: la menor diferencia entre las profundidades impares y pares que la prueba podía haber visto, como porcentaje de la profundidad. Luego di si una diferencia del 20 por ciento estaba a su alcance.`,
       fields: [{ label: 'Menor diferencia que podía ver' }],
     },
-    'justify-the-set': {
+    {
       title: 'Justifica el conjunto',
       body: `Has decidido E, F, G y H. Una decisión sin sus razones no es un informe de verificación.`,
       prompt:
@@ -873,7 +873,7 @@ export const PLANET_OR_NOT_DEEPER_ES = {
         },
       ],
     },
-    'the-exclusion-radius': {
+    {
       title: 'Cuán cerca es demasiado cerca',
       body: `Elige el candidato G. Lee, en la tercera línea, a qué distancia del objetivo está la caída y el radio de exclusión: a qué distancia tendría que estar una vecina para que las imágenes la hubieran visto.`,
       fields: [
@@ -881,7 +881,7 @@ export const PLANET_OR_NOT_DEEPER_ES = {
         { label: 'Radio de exclusión' },
       ],
     },
-    'what-a-pass-leaves': {
+    {
       title: 'Lo que deja una aprobación',
       body: `Lee la línea <em>Qué hacen los umbrales</em>: en conjuntos sintéticos con semilla dice con qué frecuencia los umbrales fijados rechazan un planeta real y con qué frecuencia pasa un falso positivo. Los umbrales se fijaron antes de que existiera el núcleo, y ningún conjunto incluye una vecina más cerca de lo que las imágenes pueden separar ni una binaria excéntrica cuyo segundo eclipse no esté a media órbita.`,
       prompt:
@@ -930,7 +930,7 @@ export const PLANET_OR_NOT_DEEPER_ES = {
         },
       ],
     },
-  },
+  ],
 };
 
 const CONTENT = {

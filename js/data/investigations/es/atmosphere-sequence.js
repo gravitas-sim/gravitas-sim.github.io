@@ -12,12 +12,12 @@ export const WHY_VENUS_IS_HOT = {
     'Ver que Venus, con la temperatura de equilibrio más baja, tiene la superficie más caliente',
     'Hallar el único número que necesita una atmósfera gris para dar a Venus su temperatura superficial, y ver por qué una sola capa no puede',
   ],
-  steps: {
-    'two-temperatures': {
+  steps: [
+    {
       title: 'Dos temperaturas para un planeta',
       body: 'La superficie de Venus está a 737 K, unos 464 &deg;C, más caliente que la de Mercurio, que está mucho más cerca del Sol. Esta investigación pregunta qué daría la luz del Sol por sí sola a cada planeta y qué queda de más.\n\nLa <strong>temperatura de equilibrio</strong> es la de un cuerpo negro que irradia exactamente la luz solar que el planeta absorbe. Depende de la distancia al Sol y del <strong>albedo de Bond</strong>, la fracción de la luz solar que un planeta refleja. No es la temperatura del suelo: es lo que el planeta irradiaría al espacio si la luz del Sol fuera todo lo que hay. Usa el instrumento para compararla con la temperatura medida en la superficie. Los modelos de aquí dejan fuera la convección, las nubes y cualquier calor interior del planeta, y el instrumento lo dice.',
     },
-    'earth-sunlight-alone': {
+    {
       title: 'La Tierra: solo la luz solar',
       body: 'Empieza por casa. Con el planeta en <strong>Tierra</strong> y su propio albedo, lee la <strong>temperatura de equilibrio</strong> de la Tierra y la diferencia <strong>medida menos de equilibrio</strong>.',
       fields: [
@@ -25,7 +25,7 @@ export const WHY_VENUS_IS_HOT = {
         { label: 'Temperatura medida en la superficie menos de equilibrio' },
       ],
     },
-    'venus-predict': {
+    {
       title: 'Venus: ¿más cerca, así que más caliente?',
       body: 'Venus está más cerca del Sol que la Tierra, así que recibe casi el doble de luz solar en lo alto de su atmósfera. Sus nubes además reflejan la mayor parte: su albedo de Bond es 0,76, frente al 0,306 de la Tierra.',
       prompt:
@@ -42,7 +42,7 @@ export const WHY_VENUS_IS_HOT = {
       because:
         'Venus absorbe solo una cuarta parte de la luz solar que le llega, y eso fija su temperatura de equilibrio cerca de 229 K, más fría que los 254 K de la Tierra. El paso siguiente la lee en el instrumento.',
     },
-    'venus-sunlight-alone': {
+    {
       title: 'Venus: solo la luz solar',
       body: 'Pon el planeta en <strong>Venus</strong> y lee su temperatura de equilibrio, y la diferencia entre la temperatura medida en la superficie y ella.',
       fields: [
@@ -50,7 +50,7 @@ export const WHY_VENUS_IS_HOT = {
         { label: 'Temperatura medida en la superficie menos de equilibrio' },
       ],
     },
-    'what-the-gap-says': {
+    {
       title: '¿Qué dice la diferencia?',
       body: 'La superficie de Venus está 508 K más caliente de lo que puede dejarla la luz solar sola.',
       prompt: '¿Cuál es la lectura más razonable de esa diferencia?',
@@ -74,7 +74,7 @@ export const WHY_VENUS_IS_HOT = {
       because:
         'El planeta en conjunto irradia lo que absorbe, a 229 K, desde lo alto de la atmósfera. El suelo está mucho más caliente porque una atmósfera espesa que absorbe radiación infrarroja lleva el calentamiento desde el suelo hacia arriba a través de muchas capas: un efecto invernadero.',
     },
-    'six-bodies': {
+    {
       title: '¿La diferencia es siempre un efecto invernadero?',
       body: 'Recorre los demás cuerpos. Lee la diferencia de <strong>Marte</strong> (una atmósfera fina de dióxido de carbono) y la de <strong>Júpiter</strong>. Júpiter no tiene superficie: su fila compara el modelo con la temperatura del nivel de 1 bar, y Júpiter además emite calor propio.',
       fields: [
@@ -82,7 +82,7 @@ export const WHY_VENUS_IS_HOT = {
         { label: 'Júpiter: medida (1 bar) menos de equilibrio' },
       ],
     },
-    'one-layer-for-venus': {
+    {
       title: '¿Una capa para Venus?',
       body: 'El efecto invernadero más sencillo es <strong>una capa</strong> que deja pasar la luz solar y absorbe una fracción del infrarrojo, la <em>emisividad</em>. El suelo que puede calentar es como mucho 2<sup>1/4</sup> = 1,19 veces la temperatura de equilibrio, por espesa que sea la capa. Pon el planeta en <strong>Venus</strong> y la emisividad en 1, lo máximo que puede hacer la capa, y lee la temperatura del suelo que da el modelo de una capa.',
       fields: [
@@ -92,7 +92,7 @@ export const WHY_VENUS_IS_HOT = {
         },
       ],
     },
-    'gray-depth-for-venus': {
+    {
       title: 'Una profundidad óptica para Venus',
       body: 'Una <strong>atmósfera gris</strong> es otro modelo: la opacidad es la misma en todas las longitudes de onda y la atmósfera tiene una <strong>profundidad óptica</strong>, una medida de lo opaca que es toda la columna. Una columna lo bastante gruesa puede calentar el suelo sin límite. Con el planeta en <strong>Venus</strong>, lee la profundidad óptica que da la temperatura superficial medida.',
       fields: [
@@ -102,11 +102,11 @@ export const WHY_VENUS_IS_HOT = {
         },
       ],
     },
-    'what-you-worked-out': {
+    {
       title: 'Lo que has deducido',
       body: 'La luz solar sola da a la Tierra 254 K y a Venus 229 K, y las superficies están a 288 K y 737 K: diferencias de 34 K y 508 K. Venus refleja la mayor parte de su luz solar, así que tiene la temperatura de equilibrio más fría y la superficie más caliente. La diferencia de Marte es una fracción de kelvin, y la de Júpiter no es en absoluto una diferencia de efecto invernadero. Una sola capa absorbente no puede dar a Venus más de 272 K; una atmósfera gris con una profundidad óptica de unos 142 sí puede. Son modelos de enseñanza: dejan fuera la convección, las nubes y la dependencia con la longitud de onda de la opacidad real, y el único número ajustado para Venus no es una medida de su atmósfera.',
     },
-  },
+  ],
 };
 
 // Dos modelos de efecto invernadero: paso a paso con el inglés.
@@ -120,22 +120,22 @@ export const TWO_GREENHOUSE_MODELS = {
     'Ver qué modelo puede alcanzar la temperatura superficial de Venus y cuál no',
     'Leer el perfil de temperatura de una atmósfera gris y el error de la aproximación de Eddington',
   ],
-  steps: {
-    'two-models': {
+  steps: [
+    {
       title: 'Dos maneras de modelar un efecto invernadero',
       body: 'Los dos modelos parten del mismo planeta: la luz solar llega, el planeta está en equilibrio de energía y la temperatura de equilibrio es aquella a la que irradia. Difieren en cómo la atmósfera absorbe el calor del suelo.\n\nEl modelo de <strong>una capa</strong> es una sola lámina con una <em>emisividad</em> entre 0 y 1. El modelo <strong>gris</strong> es una columna con una <em>profundidad óptica</em> de arriba abajo y la misma opacidad en todas las longitudes de onda, resuelto aquí con la aproximación de Eddington. Cada uno tiene un número libre y ninguno es el otro con otro nombre. Ajustarás los dos a la Tierra, Marte y Venus.',
     },
-    'earth-one-layer': {
+    {
       title: 'La Tierra en el modelo de una capa',
       body: 'Con el planeta en <strong>Tierra</strong>, lee la <strong>emisividad de una capa</strong> que da la temperatura superficial medida de la Tierra, 288 K.',
       fields: [{ label: 'Emisividad que da 288 K' }],
     },
-    'earth-gray': {
+    {
       title: 'La Tierra en el modelo gris',
       body: 'Ahora el modelo gris. Lee la <strong>profundidad óptica</strong> que da la temperatura superficial de la Tierra.',
       fields: [{ label: 'Profundidad óptica que da 288 K' }],
     },
-    'same-planet-different-numbers': {
+    {
       title: 'El mismo planeta, números distintos',
       body: 'La Tierra necesita una emisividad de 0,79 en un modelo y una profundidad óptica de 0,87 en el otro.',
       prompt: '¿Por qué son distintos los dos números?',
@@ -154,7 +154,7 @@ export const TWO_GREENHOUSE_MODELS = {
       because:
         'Los dos reproducen 288 K, y los dos se ajustan a la única medida. Lo que afirman de la atmósfera es distinto, y ninguno se ha medido: un número ajustado a una temperatura superficial no es una observación de la atmósfera.',
     },
-    'venus-both': {
+    {
       title: 'Venus en los dos modelos',
       body: 'La superficie de Venus está a 737 K y su temperatura de equilibrio es 229 K.',
       prompt: '¿Qué modelo puede dar la temperatura superficial de Venus?',
@@ -170,7 +170,7 @@ export const TWO_GREENHOUSE_MODELS = {
       because:
         'Solo el modelo gris. Una capa no puede pasar de 2^(1/4) = 1,19 veces la temperatura de equilibrio, 272 K para Venus, mientras que la temperatura del suelo de una atmósfera gris sigue subiendo con su profundidad óptica.',
     },
-    'venus-both-try': {
+    {
       title: 'Venus: el techo y la profundidad',
       body: 'Pon el planeta en <strong>Venus</strong>. Lee la temperatura del suelo más alta que le puede dar una capa (emisividad 1) y la profundidad óptica que necesita el modelo gris.',
       fields: [
@@ -184,11 +184,11 @@ export const TWO_GREENHOUSE_MODELS = {
         },
       ],
     },
-    'what-you-worked-out': {
+    {
       title: 'Lo que has deducido',
       body: 'La Tierra necesita una emisividad de 0,79 en el modelo de una capa y una profundidad óptica de 0,87 en el modelo gris: dos números para un planeta, porque son dos magnitudes distintas. Venus necesita una profundidad óptica cercana a 142 en el modelo gris y no tiene solución en el de una capa, cuyo suelo no puede pasar de 1,19 veces la temperatura de equilibrio. Cada número se ajusta a una sola temperatura superficial; ninguno es una medida de la atmósfera. Los pasos más profundos miran Marte, el perfil dentro de una atmósfera gris y dónde la opacidad gris deja de ser una buena descripción.',
     },
-  },
+  ],
 };
 
 // El Sol que gira (Prompt 194, parte 2): paso a paso con el inglés.
@@ -202,12 +202,12 @@ export const THE_TURNING_SUN = {
     'Decir qué es una mancha solar y por qué las manchas a distintas latitudes giran a distinta velocidad',
     'Decir qué pueden y qué no pueden mostrar dos grupos sobre cómo gira el Sol, y por qué dos latitudes no pueden fijar tres coeficientes',
   ],
-  steps: {
-    'fourteen-days': {
+  steps: [
+    {
       title: 'Catorce imágenes del Sol',
       body: 'El 4 de mayo de 2024 el Sol mostraba un puñado de <strong>manchas</strong> oscuras. Durante los trece días siguientes cruzaron su cara. Las imágenes de aquí son una por día, a las 12:00 UT, del Observatorio de Dinámica Solar (crédito SDO/NASA y el equipo científico de HMI). Son <strong>imágenes de vista previa</strong>, hechas para mirarlas: su fuente dice que no son para análisis científico, así que lo que leas de ellas es una lectura didáctica con una incertidumbre, no astrometría. Los dos círculos, G1 y G3, son dos grupos marcados por el autor con una regla declarada; nadie más ha marcado estas imágenes.\n\nPon el día en 1 y luego en 5 y observa G1, una mancha pequeña cerca del centro del disco.',
     },
-    'which-way': {
+    {
       title: '¿Hacia dónde van las manchas?',
       body: 'En estas imágenes el norte está arriba y el este a la izquierda. Avanza el día de 1 a 6 y sigue a G1.',
       prompt: 'A través de la cara, las manchas se mueven&hellip;',
@@ -226,7 +226,7 @@ export const THE_TURNING_SUN = {
       because:
         'Desde la izquierda, el este, hacia la derecha, el oeste. El Sol gira en el mismo sentido en que los planetas lo rodean, así que las manchas entran por el borde este y salen por el oeste.',
     },
-    'read-a-position': {
+    {
       title: '¿Dónde está G1 en el Sol?',
       body: 'Una imagen muestra el Sol plano; lo que quieres es dónde está una mancha en la esfera. El instrumento hace la geometría, a partir de la inclinación del polo del Sol hacia nosotros y la longitud de Carrington del meridiano central, ambas de JPL Horizons. La cruz empieza sobre G1 el día 1. Lee su <strong>latitud</strong> y su <strong>longitud desde el meridiano central</strong>, en grados. El este es negativo.',
       fields: [
@@ -234,7 +234,7 @@ export const THE_TURNING_SUN = {
         { label: 'Longitud de G1 desde el meridiano central el día 1' },
       ],
     },
-    'how-far-in-three-days': {
+    {
       title: '¿Cuánto gira en tres días?',
       body: 'Pon el día en <strong>4</strong> y lee la longitud de G1 en la fila de la <strong>marca del autor</strong>. Luego divide lo que se movió, desde el día 1, entre los tres días transcurridos.',
       fields: [
@@ -242,7 +242,7 @@ export const THE_TURNING_SUN = {
         { label: 'Cuánto giró cada día, del día 1 al día 4 (grados por día)' },
       ],
     },
-    'track-the-group': {
+    {
       title: 'El seguimiento completo',
       body: 'El segundo instrumento toma todas las marcas de G1 que no están demasiado cerca del borde (seis días) y ajusta una recta a la longitud frente al tiempo. Lee la <strong>velocidad sinódica</strong>, la velocidad vista desde la Tierra, con su incertidumbre, y el <strong>período sinódico</strong>: lo que tarda una vuelta de 360 grados a esa velocidad.',
       fields: [
@@ -250,7 +250,7 @@ export const THE_TURNING_SUN = {
         { label: 'El período sinódico' },
       ],
     },
-    'longer-or-shorter': {
+    {
       title: 'El período propio del Sol',
       body: 'Mientras la mancha giraba, la Tierra también se movía, alrededor del Sol y en el mismo sentido. Los 27,3 días se miden desde un lugar en movimiento.',
       prompt:
@@ -266,7 +266,7 @@ export const THE_TURNING_SUN = {
       because:
         'Menor. La mancha tiene que girar 360 grados más el ángulo que ha recorrido la Tierra mientras tanto antes de volver a mirarnos. El paso siguiente quita el movimiento de la Tierra de la velocidad.',
     },
-    'the-sidereal-period': {
+    {
       title: 'Respecto de las estrellas',
       body: 'Suma el movimiento propio de la Tierra, unos 0,96 grados al día a lo largo del ecuador del Sol, a la velocidad sinódica. Lee la <strong>velocidad sideral</strong> y el <strong>período sideral</strong>.',
       fields: [
@@ -274,7 +274,7 @@ export const THE_TURNING_SUN = {
         { label: 'El período sideral' },
       ],
     },
-    'what-is-a-spot': {
+    {
       title: '¿Qué es una mancha solar?',
       body: 'Has seguido una durante una semana. Se quedó a una latitud, y por eso pudiste seguirla, y giró con el Sol.',
       prompt: 'Una mancha solar es&hellip;',
@@ -296,11 +296,11 @@ export const THE_TURNING_SUN = {
       because:
         'Una zona más fría donde campos magnéticos intensos retienen el calor de abajo. Es oscura solo por contraste y pertenece al Sol, así que seguirla es seguir el giro del propio Sol.',
     },
-    'what-you-worked-out': {
+    {
       title: 'Lo que has deducido',
       body: 'Has leído el lugar de una mancha en el Sol a partir de una imagen plana, con una incertidumbre, has seguido a G1 durante seis días hasta 13,17 &plusmn; 0,06 grados al día vista desde la Tierra, y lo has corregido por el movimiento de la Tierra hasta 14,13 &plusmn; 0,06 respecto de las estrellas, un período de 25,5 días. Una mancha es una zona más fría de la superficie y pertenece a ella. Dos límites que conviene recordar: las imágenes son de vista previa, así que estas son lecturas didácticas y no astrometría, y G1 es un grupo pequeño, así que esto es una sola latitud. Los pasos más profundos siguen a un segundo grupo a otra latitud y preguntan qué pueden y qué no pueden mostrar dos grupos.',
     },
-  },
+  ],
 };
 
 // El poder del Sol (Prompt 194, parte 2): paso a paso con el inglés.
@@ -314,12 +314,12 @@ export const THE_SUNS_POWER = {
     'Decir qué incluye y qué no incluye el intervalo de una media de valores diarios',
     'Leer los valores de relleno de un archivo como datos que faltan, no como medidas de cero',
   ],
-  steps: {
-    'a-flux-above-the-air': {
+  steps: [
+    {
       title: 'Luz solar medida sobre el aire',
       body: 'El instrumento <strong>TSIS-1 TIM</strong> mide la irradiancia total del Sol, toda la luz solar por un metro cuadrado de cara al Sol, sobre la atmósfera. Los valores diarios de aquí son de LASP (crédito LASP/equipo TSIS-1 TIM): los seis días del 4 al 9 de mayo de 2024, los mismos días que las imágenes de El Sol que gira. El archivo tiene siete días más después de ellos, pero valen 0,0 con una incertidumbre de 0,0: son valores de relleno, no medidas (un paso posterior). El instrumento da la irradiancia <strong>en la Tierra</strong>, y la Tierra no siempre está a la misma distancia del Sol.',
     },
-    'flux-at-one-au': {
+    {
       title: 'Llévalo a una unidad astronómica',
       body: 'La luz solar se reparte sobre una esfera, así que el flujo cae con el cuadrado de la distancia. El 4 de mayo la Tierra estaba a 1,00844 UA del Sol. Lee el flujo en la Tierra y el flujo llevado a <strong>1 UA</strong>: el flujo por la distancia en UA, al cuadrado.',
       fields: [
@@ -327,7 +327,7 @@ export const THE_SUNS_POWER = {
         { label: 'El flujo a 1 UA (W/m²)' },
       ],
     },
-    'power-predict': {
+    {
       title: '¿Cuánta potencia en total?',
       body: 'El Sol envía unos 1361 W por cada metro cuadrado a 1 UA, en todas las direcciones. El área de una esfera de radio 1 UA es de unos 2,8 &times; 10<sup>23</sup> metros cuadrados.',
       prompt: 'La potencia total del Sol, su luminosidad, será de unos&hellip;',
@@ -341,7 +341,7 @@ export const THE_SUNS_POWER = {
       because:
         'Unos 4 × 10²⁶ W, 400 billones de billones de vatios: 1361 W por metro cuadrado por 2,8 × 10²³ metros cuadrados. El paso siguiente lo lee en el instrumento con todos los días medidos.',
     },
-    luminosity: {
+    {
       title: 'La luminosidad y la temperatura del Sol',
       body: 'Usa los seis días. El instrumento lleva cada uno a 1 UA, toma la media y multiplica por el área de la esfera. La temperatura es la que necesitaría una superficie negra del tamaño del Sol para irradiar esa potencia. Lee la <strong>luminosidad</strong> en unidades de 10<sup>26</sup> W y la <strong>temperatura efectiva</strong>.',
       fields: [
@@ -349,7 +349,7 @@ export const THE_SUNS_POWER = {
         { label: 'La temperatura efectiva' },
       ],
     },
-    'forget-the-au': {
+    {
       title: '¿Y si se omite la corrección?',
       body: 'Desactiva la corrección. La luminosidad sale más baja. La Tierra estaba entre 1,0084 y 1,0096 UA del Sol esos días.',
       prompt: '¿Por qué sale más baja, y cuánto?',
@@ -373,11 +373,11 @@ export const THE_SUNS_POWER = {
       because:
         'La Tierra estaba entre un 0,8 y un 1 por ciento más lejos que 1 UA, así que cada flujo es de un 1,7 a un 1,9 por ciento menor que a 1 UA. Omitir la corrección da una luminosidad un 1,8 por ciento demasiado baja y una temperatura de 5746 K en vez de 5772 K.',
     },
-    'what-you-worked-out': {
+    {
       title: 'Lo que has deducido',
       body: 'Un flujo medido en la Tierra se lleva a 1 UA con la distancia, y seis días dan 1361,2 W/m<sup>2</sup> a 1 UA. Multiplicado por el área de una esfera es una luminosidad de 3,828 &times; 10<sup>26</sup> W, y una superficie del tamaño del Sol tendría que estar a 5772 K para irradiarla. La corrección importa: omitirla da una luminosidad un 1,8 por ciento demasiado baja. Los pasos más profundos miran qué muestran los seis días, cuán segura es la media y qué deja fuera.',
     },
-  },
+  ],
 };
 
 // ¿Qué tan caliente está el lado diurno?: paso a paso con el inglés (Prompt 202).
@@ -391,17 +391,17 @@ export const HOW_HOT_IS_THE_DAY_SIDE = {
     'Ver por qué cuatro profundidades con ruido dan cuatro temperaturas dispersas y un solo ajuste de cuerpo negro',
     'Ver por qué la conversión se niega cuando la luz reflejada podría importar, y qué puede y qué no puede decir una banda que marca menos',
   ],
-  steps: {
-    'a-planet-behind-its-star': {
+  steps: [
+    {
       title: 'Un planeta detrás de su estrella',
       body: 'Cuando un planeta pasa detrás de su estrella, la luz baja en la parte que le corresponde al planeta. Esa bajada es la <strong>profundidad del eclipse secundario</strong>. Un júpiter caliente está tan cerca de su estrella que esa parte es de unos pocos miles de partes por millón (ppm). El modelo trata al planeta como un cuerpo negro uniforme a una sola temperatura y halla la profundidad en una banda como la radiancia del planeta entre la de la estrella, por el cuadrado de la razón de radios. Al revés, una profundidad da una <strong>temperatura de brillo</strong>: la temperatura del cuerpo negro que daría esa profundidad en esa banda.\n\nLas profundidades de esta investigación son <strong>sintéticas</strong>: generadas con el modelo y con ruido, con la temperatura verdadera anotada en un manifiesto que puedes leer al final. No se comparó ninguna tabla publicada.',
     },
-    'one-band': {
+    {
       title: 'El planeta X: una banda',
       body: 'El planeta X tiene una razón de radios de 0,12 y una estrella a 6000 K. Con la luz reflejada en <strong>suponer que no hay</strong>, lee la <strong>temperatura de brillo</strong> de la <strong>banda C</strong>.',
       fields: [{ label: 'Temperatura de brillo, banda C' }],
     },
-    'four-bands': {
+    {
       title: 'Cuatro bandas, cuatro temperaturas',
       body: 'El planeta X es un solo cuerpo negro, pero las cuatro bandas no dan un solo número. Lee la <strong>más alta</strong> y la <strong>más baja</strong> de las cuatro temperaturas de brillo.',
       fields: [
@@ -409,7 +409,7 @@ export const HOW_HOT_IS_THE_DAY_SIDE = {
         { label: 'La más baja de las cuatro' },
       ],
     },
-    'why-the-scatter': {
+    {
       title: '¿Por qué no coinciden las cuatro?',
       body: 'Las cuatro temperaturas de brillo del planeta X van de 2067 K a 2171 K.',
       prompt: '¿Cuál es la lectura más razonable de esa dispersión?',
@@ -433,7 +433,7 @@ export const HOW_HOT_IS_THE_DAY_SIDE = {
       because:
         'Una profundidad de unos cientos a unos miles de ppm con 40 ppm de ruido da una temperatura incierta en decenas de kelvin, así que cuatro lecturas de un cuerpo negro se dispersan en esa medida. El paso siguiente ajusta una sola temperatura a las cuatro.',
     },
-    'match-by-hand': {
+    {
       title: 'Ajusta a mano las cuatro profundidades',
       body: 'Mueve <strong>Mi temperatura de cuerpo negro</strong> hasta que la curva pase por los cuatro puntos. El instrumento da un <strong>chi cuadrado</strong>: cuánto se alejan las cuatro profundidades de tu curva, en unidades de su ruido. Es de 4 o menos cuando un modelo ajusta bien cuatro profundidades. Anota tu temperatura y su chi cuadrado.',
       fields: [
@@ -441,12 +441,12 @@ export const HOW_HOT_IS_THE_DAY_SIDE = {
         { label: 'Su chi cuadrado' },
       ],
     },
-    'reflected-light': {
+    {
       title: '¿Y si parte de esa luz es reflejada?',
       body: 'Un planeta a 8 radios de su estrella también refleja luz estelar, como máximo cerca de 0,3 de la que le llega. Pon <strong>Luz reflejada</strong> en <strong>tenerla en cuenta</strong> y cuenta cuántas de las cuatro bandas convierte aún el modelo en temperatura.',
       fields: [{ label: 'Bandas convertidas en temperatura' }],
     },
-    'planet-y-predict': {
+    {
       title: 'El planeta Y: una banda absorbe',
       body: 'El planeta Y es el planeta X con un solo cambio: una piel más fría que es opaca en la banda C y transparente en las otras tres.',
       prompt:
@@ -463,14 +463,14 @@ export const HOW_HOT_IS_THE_DAY_SIDE = {
       because:
         'La piel es más fría que el planeta, así que la banda que la ve marca menos. El paso siguiente lee cuánto.',
     },
-    'planet-y': {
+    {
       title: 'El planeta Y: una banda marca menos',
       body: 'El planeta Y tiene la misma estrella y la misma razón de radios. Pon el planeta en <strong>Planeta Y</strong> y la luz reflejada de nuevo en <strong>suponer que no hay</strong>. Lee la temperatura de brillo de la banda C y di cuántos kelvin menos que los 2094 K del planeta X.',
       fields: [
         { label: 'Banda C del planeta Y, más fría que la del planeta X en' },
       ],
     },
-    'what-a-dip-says': {
+    {
       title: '¿Qué dice la caída?',
       body: 'Una banda del planeta Y marca 314 K menos que las otras.',
       prompt: '¿Cuál es la lectura más razonable?',
@@ -495,11 +495,11 @@ export const HOW_HOT_IS_THE_DAY_SIDE = {
       because:
         'El modelo pone una piel isoterma sobre el planeta. Donde la piel es opaca, la banda muestra la temperatura más baja de la piel. Eso reproduce la caída, y otras cosas también podrían; los datos son una profundidad en una banda y no dicen nada de qué es el absorbente.',
     },
-    'what-you-worked-out': {
+    {
       title: 'Lo que has deducido',
       body: 'La profundidad de un eclipse es una parte de la luz, unos pocos miles de ppm para un júpiter caliente. En una banda se convierte en una temperatura de brillo, la temperatura de un cuerpo negro que da esa profundidad, solo si dices que la luz reflejada es pequeña: a 8 radios planetarios el instrumento no convierte sin eso. Cuatro profundidades con ruido se dispersan unos 100 K alrededor de un cuerpo negro a 2090 K. Una banda que marca menos es coherente con una capa más fría en esa banda bajo un modelo de una piel; no nombra el absorbente. Las profundidades eran sintéticas, generadas de un planeta a 2100 K con un ruido anotado, y no se comparó ninguna tabla publicada.',
     },
-  },
+  ],
 };
 
 // Fases y albedo: paso a paso con el inglés (Prompt 202).
@@ -513,12 +513,12 @@ export const PHASES_AND_ALBEDO = {
     'Hallar el albedo que ajusta a mano y por chi cuadrado',
     'Ver una curva que una esfera de Lambert no describe y decir por qué el modelo no da albedo para ella',
   ],
-  steps: {
-    'reflected-light-has-phases': {
+  steps: [
+    {
       title: 'Luz que sigue la fase',
       body: 'Un planeta brilla por luz estelar reflejada, así que lo que vemos cambia con su fase, como la de la Luna en Fases y eclipses. Con <strong>ángulo de fase 0</strong> el planeta está lleno, detrás de su estrella; a 90 grados está iluminado a medias; a 180 grados es nuevo. Para una <strong>esfera de Lambert</strong>, que dispersa la luz por igual en todas las direcciones, la curva tiene una sola forma, y su altura es el <strong>albedo geométrico</strong>.\n\nLas curvas de aquí son <strong>sintéticas</strong>: generadas con un modelo y con ruido, con la verdad anotada en un manifiesto. No se comparó ninguna tabla publicada.',
     },
-    'full-phase-albedo': {
+    {
       title: 'El planeta P: el albedo que ajusta',
       body: 'El planeta P está a 10 radios planetarios de su estrella. El instrumento ajusta una esfera de Lambert a sus 24 puntos. Lee el <strong>albedo geométrico que ajusta</strong> y el <strong>albedo de Bond</strong> de esa esfera.',
       fields: [
@@ -526,7 +526,7 @@ export const PHASES_AND_ALBEDO = {
         { label: 'Albedo de Bond de esa esfera' },
       ],
     },
-    'why-three-halves': {
+    {
       title: '¿Por qué es mayor el albedo de Bond?',
       body: 'Para el planeta P el albedo de Bond es 0,52 y el geométrico 0,35.',
       prompt: '¿Por qué son distintos?',
@@ -553,12 +553,12 @@ export const PHASES_AND_ALBEDO = {
       because:
         'El albedo de Bond es el albedo geométrico por la integral de fase, 3/2 para una esfera de Lambert. Descansa en el supuesto de que la superficie dispersa como una de ellas.',
     },
-    'match-by-hand': {
+    {
       title: 'Ajusta la curva a mano',
       body: 'Mueve <strong>Mi albedo geométrico</strong> hasta que la curva pase por los puntos. El instrumento da un chi cuadrado para tu albedo: para 24 puntos es cercano a 23 cuando un modelo ajusta. Anota tu albedo y su chi cuadrado.',
       fields: [{ label: 'Mi albedo geométrico' }, { label: 'Su chi cuadrado' }],
     },
-    'planet-q-predict': {
+    {
       title: 'El planeta Q se ve igual',
       body: 'El planeta Q está a la misma distancia y su curva sube y baja casi igual. Su ruido es el mismo que el del planeta P.',
       prompt: '¿Describirá una esfera de Lambert la curva del planeta Q?',
@@ -574,7 +574,7 @@ export const PHASES_AND_ALBEDO = {
       because:
         'La forma de la curva del planeta Q es la de otro tipo de esfera, y los 24 puntos son lo bastante precisos para mostrarlo. El paso siguiente lee el chi cuadrado.',
     },
-    'planet-q': {
+    {
       title: 'El planeta Q: ningún albedo',
       body: 'Pon el planeta en <strong>Planeta Q</strong>. Lee el chi cuadrado del mejor ajuste de Lambert y los grados de libertad, y mira qué devuelve el instrumento para el albedo.',
       fields: [
@@ -582,11 +582,11 @@ export const PHASES_AND_ALBEDO = {
         { label: 'Grados de libertad' },
       ],
     },
-    'what-you-worked-out': {
+    {
       title: 'Lo que has deducido',
       body: 'La luz reflejada sigue la fase. Una esfera de Lambert da una curva de una sola forma cuya altura es el albedo geométrico, 0,35 para el planeta P, y el albedo de Bond es 3/2 de él, 0,52. El albedo que se obtiene es el de una esfera de Lambert: donde una curva no es lambertiana, como la del planeta Q, el modelo no da albedo y lo dice. Los dos planetas eran sintéticos, con la verdad anotada, y no se comparó ninguna tabla publicada.',
     },
-  },
+  ],
 };
 
 export default {

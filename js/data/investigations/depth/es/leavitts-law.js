@@ -1,6 +1,7 @@
+// La ley de Leavitt, más a fondo: las palabras en español, paso a paso con ../leavitts-law.js.
 export default {
-  steps: {
-    'a-cepheid-at-thirty-days': {
+  steps: [
+    {
       title: 'Una cefeida de treinta días',
       body: 'La recta es m = a + b (log₁₀ P − 1), con a la magnitud a los 10 días (12,60 aquí) y b la pendiente (−3,29). Una cefeida de la nube tiene un periodo de 30 días. Calcula la magnitud de Wesenheit que le da la recta.',
       prompt: 'La magnitud de Wesenheit de la recta a los 30 días',
@@ -16,7 +17,7 @@ export default {
         off: '12,60 − 3,29 × (log₁₀ 30 − 1).',
       },
     },
-    'one-star-in-distance': {
+    {
       title: 'El error de una estrella en distancia',
       body: 'Supón que mides una cefeida de una galaxia lejana y usas la relación para hallar el módulo de distancia. La estrella queda unas 0,089 magnitudes fuera de la recta, una dispersión. Un cambio Δμ en el módulo cambia la distancia en la fracción (ln 10 ÷ 5) Δμ, o 0,4605 Δμ. Da el error en la distancia, en porcentaje.',
       prompt:
@@ -31,7 +32,7 @@ export default {
         off: '100 × 0,4605 × 0,0894.',
       },
     },
-    'the-brightness-ratio': {
+    {
       title: 'La razón de brillos',
       body: 'Cinco magnitudes son un factor 100 en brillo, así que una diferencia de Δm magnitudes es un factor 10<sup>0,4 Δm</sup>. Usa la pendiente para hallar cuántas veces más brillante es la cefeida de 100 días que la de 10.',
       prompt: 'La razón de brillos de las dos cefeidas',
@@ -45,7 +46,7 @@ export default {
         off: '10^(0,4 × 3,29).',
       },
     },
-    'many-stars': {
+    {
       title: 'Lo que compran 339 estrellas',
       body: 'El punto cero de un ajuste se conoce aproximadamente con la dispersión dividida por √N para N estrellas independientes. Calcúlalo para 339 estrellas con una dispersión de 0,0894 magnitudes, y compáralo con el error que da el instrumento para la magnitud a los 10 días.',
       prompt: 'El error del punto cero, en magnitudes',
@@ -60,5 +61,5 @@ export default {
         off: '0,0894 ÷ √339.',
       },
     },
-  },
+  ],
 };

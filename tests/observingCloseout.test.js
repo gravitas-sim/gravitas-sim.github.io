@@ -93,14 +93,12 @@ describe('the five investigations', () => {
       const es = SHADOWS[l.id];
       expect(es.title).toBeTruthy();
       expect(es.objectives).toHaveLength(l.objectives.length);
-      expect(Object.keys(es.steps)).toHaveLength(l.steps.length);
+      expect(es.steps).toHaveLength(l.steps.length);
       const pairs = [
-        ...l.steps.map((s, i) => [s, es.steps[s.sid]]),
-        ...DEPTH[l.id].steps.map((s, i) => [s, DEPTH_ES[l.id].steps[s.sid]]),
+        ...l.steps.map((s, i) => [s, es.steps[i]]),
+        ...DEPTH[l.id].steps.map((s, i) => [s, DEPTH_ES[l.id].steps[i]]),
       ];
-      expect(Object.keys(DEPTH_ES[l.id].steps)).toHaveLength(
-        DEPTH[l.id].steps.length
-      );
+      expect(DEPTH_ES[l.id].steps).toHaveLength(DEPTH[l.id].steps.length);
       for (const [s, t] of pairs) {
         expect(t.title).toBeTruthy();
         if (s.fields) expect(t.fields).toHaveLength(s.fields.length);

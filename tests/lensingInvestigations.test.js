@@ -171,10 +171,10 @@ describe('the two languages agree', () => {
     ['a-lens-passing-by', ES_PASSING],
   ])('%s: the Spanish shadow follows the English step by step', (id, es) => {
     const en = lesson(id);
-    expect(Object.keys(es.steps)).toHaveLength(en.steps.length);
+    expect(es.steps).toHaveLength(en.steps.length);
     expect(es.objectives).toHaveLength(en.objectives.length);
     en.steps.forEach((s, i) => {
-      const e = es.steps[s.sid];
+      const e = es.steps[i];
       expect(e.title?.length).toBeGreaterThan(0);
       expect(e.body?.length).toBeGreaterThan(0);
       if (s.options) expect(e.options).toHaveLength(s.options.length);
@@ -187,10 +187,10 @@ describe('the two languages agree', () => {
     [RINGS_DEEP, ES_RINGS_DEEP],
     [PASSING_DEEP, ES_PASSING_DEEP],
   ])('the depth steps of %# follow the English in Spanish', (en, es) => {
-    expect(Object.keys(es.steps)).toHaveLength(en.steps.length);
+    expect(es.steps).toHaveLength(en.steps.length);
     en.steps.forEach((s, i) => {
-      expect(es.steps[s.sid].title?.length).toBeGreaterThan(0);
-      expect(es.steps[s.sid].worked?.length).toBeGreaterThan(0);
+      expect(es.steps[i].title?.length).toBeGreaterThan(0);
+      expect(es.steps[i].worked?.length).toBeGreaterThan(0);
     });
   });
 });

@@ -1,6 +1,7 @@
+// Una estrella variable a partir de imágenes, más a fondo: las palabras en español, paso a paso con ../a-variable-star-from-frames.js.
 export default {
-  steps: {
-    'magnitudes-to-percent': {
+  steps: [
+    {
       title: 'Una dispersión como parte de la luz',
       body: `Un cambio de 0,0088 magnitudes es un cambio de brillo del factor 10<sup>0,4 × 0,0088</sup>. Para un cambio pequeño, una magnitud es el 92,1 por ciento de la luz, porque 0,4 veces el logaritmo natural de 10 es 0,921.`,
       prompt:
@@ -15,7 +16,7 @@ export default {
         off: 'magnitudes × 92,1 = porcentaje.',
       },
     },
-    'the-period-in-hours': {
+    {
       title: 'El periodo en horas',
       body: `El mejor seno tiene un periodo de 0,1223 días.`,
       prompt: 'El periodo, en horas',
@@ -29,7 +30,7 @@ export default {
         off: 'días × 24.',
       },
     },
-    'how-many-errors': {
+    {
       title: 'La amplitud en errores',
       body: `La amplitud del mejor seno es de 0,0417 magnitudes con un error de 0,0018, según la tabla.`,
       prompt: 'Cuántos errores es la amplitud',
@@ -43,7 +44,7 @@ export default {
         off: 'amplitud ÷ error.',
       },
     },
-    'the-uncalibrated-night': {
+    {
       title: 'Una noche sin calibrar frente a la verdad',
       body: `Elige «ninguna: las imágenes crudas» para la calibración, muestra el manifiesto de la verdad, y mira la media de la variable frente a la de comparación y la verdad a su lado. Las dos son diferencias de magnitud.`,
       prompt: 'A cuánto está la media sin calibrar de la verdad, en magnitudes',
@@ -57,7 +58,7 @@ export default {
         off: 'verdad − media sin calibrar.',
       },
     },
-    'the-whole-pipeline': {
+    {
       title: 'Todo el proceso, desde las imágenes',
       body: `Esta investigación ha usado la reducción del laboratorio en una noche ordenada. El panel «De imágenes a una curva de luz» del Observatorio hace cada paso desde las imágenes en bruto de una secuencia inventada: calibra, marca las estrellas una sola vez, alinea cada imagen con la primera (el telescopio se mueve), mide todas las estrellas, elige las estrellas de comparación por su brillo y su constancia, y hace la curva de luz con sus errores. Ábrelo, deja la semilla en 1 y cada ajuste como está, pulsa «Ejecutar el proceso» y avanza hasta la curva de luz.`,
       prompt: 'El periodo que encuentra el proceso para la semilla 1, en horas',
@@ -74,5 +75,5 @@ export default {
         off: 'días × 24.',
       },
     },
-  },
+  ],
 };

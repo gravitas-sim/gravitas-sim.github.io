@@ -1,6 +1,7 @@
+// Candelas estándar, más a fondo: las palabras en español, paso a paso con ../standard-candles.js.
 export default {
-  steps: {
-    'the-distance-factor': {
+  steps: [
+    {
       title: 'El factor de distancia',
       body: `Un error de módulo de distancia Δμ multiplica toda distancia por 10<sup>Δμ/5</sup>. Si cada supernova es 0,1 magnitudes más débil de lo supuesto, cada una está más lejos en ese factor.`,
       prompt: 'El aumento de toda distancia, en porcentaje',
@@ -14,7 +15,7 @@ export default {
         off: '(10^(0,1 ÷ 5) − 1) × 100.',
       },
     },
-    'and-the-hubble-constant': {
+    {
       title: 'Y la constante de Hubble',
       body: `La constante de Hubble es una velocidad sobre una distancia, así que cuando toda distancia es mayor en 1,0471 baja a 1 ÷ 1,0471 de su valor. Halla la bajada como porcentaje de los 70 de que partía.`,
       prompt: 'La bajada de la constante de Hubble, en porcentaje',
@@ -28,7 +29,7 @@ export default {
         off: '100 × (1 − 1 ÷ 1,0471).',
       },
     },
-    'the-calibration-for-one-percent': {
+    {
       title: 'La calibración para un uno por ciento',
       body: `Supón que quieres la constante de Hubble a un 1 por ciento. Un cambio fraccionario f en una distancia es un cambio de 5 log<sub>10</sub>(1 + f) magnitudes.`,
       prompt:
@@ -43,7 +44,7 @@ export default {
         off: '5 × log₁₀(1,01).',
       },
     },
-    'a-five-percent-gap': {
+    {
       title: 'Una diferencia del cinco por ciento',
       body: `Dos maneras de hallar la constante de Hubble discrepan un 5 por ciento. Si toda la discrepancia fuera una diferencia en la calibración de las supernovas, ¿cuántas magnitudes sería?`,
       prompt:
@@ -58,5 +59,5 @@ export default {
         off: '5 × log₁₀(1 + 0,05).',
       },
     },
-  },
+  ],
 };

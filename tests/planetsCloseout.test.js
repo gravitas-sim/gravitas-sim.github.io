@@ -59,9 +59,9 @@ describe('the three investigations', () => {
       const es = SHADOWS[l.id];
       expect(es.title).toBeTruthy();
       expect(es.objectives).toHaveLength(l.objectives.length);
-      expect(Object.keys(es.steps)).toHaveLength(l.steps.length);
+      expect(es.steps).toHaveLength(l.steps.length);
       l.steps.forEach((s, i) => {
-        const t = es.steps[s.sid];
+        const t = es.steps[i];
         expect(t.title).toBeTruthy();
         expect(t.body || s.body === undefined).toBeTruthy();
         if (s.fields) expect(t.fields).toHaveLength(s.fields.length);

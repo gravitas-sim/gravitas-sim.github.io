@@ -407,7 +407,7 @@ describe('it catches an interaction that cannot be completed', () => {
 });
 
 describe('it catches a translation that has come adrift', () => {
-  function findingsAfterTranslation(lessonId, mutate) {
+  function withTranslation(lessonId, mutate) {
     const copy = { ...inputs, translations: { ...inputs.translations } };
     copy.translations.es = { ...inputs.translations.es };
     const draft = clone(inputs.translations.es[lessonId].data);
@@ -416,11 +416,8 @@ describe('it catches a translation that has come adrift', () => {
       ...inputs.translations.es[lessonId],
       data: draft,
     };
-    return checkCatalog(copy);
+    return rulesFired(checkCatalog(copy));
   }
-
-  const withTranslation = (lessonId, mutate) =>
-    rulesFired(findingsAfterTranslation(lessonId, mutate));
 
   test('a key the English lesson does not have, which is silently dropped', () => {
     const rules = withTranslation('tides', t => {
@@ -431,70 +428,25 @@ describe('it catches a translation that has come adrift', () => {
 
   test('a mistyped key inside a step', () => {
     const rules = withTranslation('tides', t => {
-      t.steps[Object.keys(t.steps)[0]].titel = 'Título';
+      t.steps[0].titel = 'Título';
     });
     expect(rules).toContain('i18n/shape');
   });
 
   test('more options than the English has', () => {
     const rules = withTranslation('tides', t => {
-      const sid = Object.keys(t.steps).find(k => t.steps[k]?.options);
-      t.steps[sid].options.push('una opción de más');
+      const i = t.steps.findIndex(s => s?.options);
+      t.steps[i].options.push('una opción de más');
     });
     expect(rules).toContain('i18n/shape');
   });
 
   test('a translation that moves an answer', () => {
     const rules = withTranslation('tides', t => {
-      const sid = Object.keys(t.steps).find(k => t.steps[k]?.options);
-      t.steps[sid].answer = 0;
+      const i = t.steps.findIndex(s => s?.options);
+      t.steps[i].answer = 0;
     });
     expect(rules).toContain('i18n/machinery');
-  });
-
-  test('a Spanish step whose sid is not a step of the lesson', () => {
-    const findings = findingsAfterTranslation('tides', t => {
-      t.steps['a-step-that-is-not-there'] = { title: 'Un paso que no existe' };
-    });
-    expect(
-      findings.filter(
-        f =>
-          f.rule === 'i18n/steps' && /a-step-that-is-not-there/.test(f.message)
-      )
-    ).toHaveLength(1);
-  });
-
-  test('a Spanish step renamed so that the English step has none', () => {
-    const findings = findingsAfterTranslation('tides', t => {
-      const [first] = Object.keys(t.steps);
-      t.steps['renamed-' + first] = t.steps[first];
-      delete t.steps[first];
-    });
-    const messages = findings
-      .filter(f => f.rule === 'i18n/steps')
-      .map(f => f.message);
-    expect(messages.some(m => /has no Spanish step/.test(m))).toBe(true);
-    expect(messages.some(m => /names no step of the lesson/.test(m))).toBe(
-      true
-    );
-  });
-
-  test('an English step with no Spanish step, as after an insert', () => {
-    const findings = findingsAfterTranslation('tides', t => {
-      delete t.steps[Object.keys(t.steps)[2]];
-    });
-    expect(
-      findings.filter(
-        f => f.rule === 'i18n/steps' && /has no Spanish step/.test(f.message)
-      )
-    ).toHaveLength(1);
-  });
-
-  test('steps given as a list, which carries no sid to match by', () => {
-    const rules = withTranslation('tides', t => {
-      t.steps = Object.values(t.steps);
-    });
-    expect(rules).toContain('i18n/steps');
   });
 });
 

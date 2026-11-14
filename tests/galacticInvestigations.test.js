@@ -48,18 +48,18 @@ describe('the lessons', () => {
   test.each(LESSONS.map(l => [l[0].id, ...l]))(
     '%s: Spanish and depth files follow the English step for step',
     (_id, en, es, deep, deepEs) => {
-      expect(Object.keys(es.steps)).toHaveLength(en.steps.length);
+      expect(es.steps).toHaveLength(en.steps.length);
       en.steps.forEach((s, i) => {
-        const t = es.steps[s.sid];
+        const t = es.steps[i];
         expect(t.title).toBeTruthy();
         if (s.options) expect(t.options).toHaveLength(s.options.length);
         if (s.fields) expect(t.fields).toHaveLength(s.fields.length);
         if (s.hints) expect(t.hints).toHaveLength(s.hints.length);
       });
-      expect(Object.keys(deepEs.steps)).toHaveLength(deep.steps.length);
+      expect(deepEs.steps).toHaveLength(deep.steps.length);
       deep.steps.forEach((s, i) => {
         if (s.options)
-          expect(deepEs.steps[s.sid].options).toHaveLength(s.options.length);
+          expect(deepEs.steps[i].options).toHaveLength(s.options.length);
       });
       expect(new Set(en.steps.map(s => s.sid)).size).toBe(en.steps.length);
     }

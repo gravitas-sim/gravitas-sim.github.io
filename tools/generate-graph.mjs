@@ -72,6 +72,45 @@ export const GRAPH = Object.freeze([
     after: ['capabilities'],
   },
   {
+    // Spanish lesson text is edited keyed by step id under lesson-text/ and written, index-aligned and byte for
+    // byte as the app loads it, into the shadows under js/data/investigations. The keyed sources are never
+    // imported, so they cost the app nothing; the check fails on a stale output, a Spanish step with no
+    // English sid, or an English step with no Spanish step.
+    id: 'lesson-text',
+    generate: 'node tools/lesson-text.mjs --write',
+    check: 'node tools/lesson-text.mjs --check',
+    inputs: ['lesson-text', 'js/data/investigations', 'tools/lesson-text.mjs'],
+    outputs: ['js/data/investigations/es', 'js/data/investigations/depth/es'],
+    regions: [
+      'js/data/investigations/binaries-sequence.js',
+      'js/data/investigations/binary-masses-sequence.js',
+      'js/data/investigations/cluster-sequence.js',
+      'js/data/investigations/exoplanet-sequence.js',
+      'js/data/investigations/exposure-sequence.js',
+      'js/data/investigations/gaia-sequence.js',
+      'js/data/investigations/imaging-sequence.js',
+      'js/data/investigations/joint-sequence.js',
+      'js/data/investigations/observing-sequence.js',
+      'js/data/investigations/occurrence-sequence.js',
+      'js/data/investigations/photometric-calibration-sequence.js',
+      'js/data/investigations/planets-sequence.js',
+      'js/data/investigations/remnants-sequence.js',
+      'js/data/investigations/saturated-star-sequence.js',
+      'js/data/investigations/spectrograph-sequence.js',
+      'js/data/investigations/stellar-activity-sequence.js',
+      'js/data/investigations/stellar-sequence.js',
+      'js/data/investigations/strategy-sequence.js',
+      'js/data/investigations/survey-sequence.js',
+      'js/data/investigations/telescope-sequence.js',
+      'js/data/investigations/ttv-sequence.js',
+      'js/data/investigations/variables-ii-sequence.js',
+      'js/data/investigations/vetting-sequence.js',
+    ],
+    after: ['registries'],
+    notes:
+      'Edit the keyed text in lesson-text/, never the shadow it writes. A conflict in a generated shadow is resolved by regenerating, never by taking a side.',
+  },
+  {
     id: 'manifest',
     generate: 'node tools/build-investigation-manifest.js',
     check: null,
@@ -82,7 +121,7 @@ export const GRAPH = Object.freeze([
       'js/data/investigations/manifest.es.js',
       'js/data/investigations/browseData.js',
     ],
-    after: [],
+    after: ['lesson-text'],
   },
   {
     id: 'cards',

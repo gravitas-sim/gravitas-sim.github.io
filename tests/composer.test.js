@@ -57,7 +57,7 @@ describe('the example compiles to a lesson the lesson checker passes', () => {
     expect(r.compiled.shadow).not.toBeNull();
   });
 
-  test('whose Spanish is filed under its English steps, step by step', () => {
+  test('whose Spanish lines up with its English, step by step', () => {
     const { lesson, shadow } = compile(clone(EXAMPLE_INVESTIGATION));
     const merged = mergeTranslation(lesson, shadow);
     EXAMPLE_INVESTIGATION.steps.forEach((s, i) => {
@@ -68,9 +68,9 @@ describe('the example compiles to a lesson the lesson checker passes', () => {
     const guess = EXAMPLE_INVESTIGATION.steps.find(s => s.sid === 'guess');
     expect(merged.steps[1].options).toEqual(guess.options.map(o => o.es));
     // Machinery is never in the shadow: the answer, the reveal, the condition.
-    expect(shadow.steps[lesson.steps[1].sid].answer).toBeUndefined();
-    expect(shadow.steps[lesson.steps[1].sid].reveal).toBeUndefined();
-    expect(shadow.steps[lesson.steps[5].sid].when).toBeUndefined();
+    expect(shadow.steps[1].answer).toBeUndefined();
+    expect(shadow.steps[1].reveal).toBeUndefined();
+    expect(shadow.steps[5].when).toBeUndefined();
     expect(lesson.steps[5].when).toEqual({ sid: 'period', is: 'incorrect' });
   });
 

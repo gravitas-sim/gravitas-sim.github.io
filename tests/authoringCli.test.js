@@ -26,6 +26,7 @@ import {
   readFile,
   realpath,
   rm,
+  symlink,
   writeFile,
 } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
@@ -90,9 +91,16 @@ describe('npm run author:check', () => {
       'js',
       'tools/author-check.mjs',
       'tools/authoring',
+      'tools/lesson-text.mjs',
+      'lesson-text',
     ]) {
       await cp(path.join(REPO, rel), path.join(dir, rel), { recursive: true });
     }
+    // The Spanish-text rule reads its sources with acorn.
+    await symlink(
+      path.join(REPO, 'node_modules'),
+      path.join(dir, 'node_modules')
+    );
     return dir;
   }
 

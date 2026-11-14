@@ -1,6 +1,7 @@
+// Por qué ganan las brillantes, más a fondo: las palabras en español, paso a paso con ../why-the-bright-ones-win.js.
 export default {
-  steps: {
-    'formula-by-hand': {
+  steps: [
+    {
       title: 'La forma cerrada a mano',
       body: 'Para estrellas de igual densidad numérica, cortadas en una magnitud aparente fija, la magnitud absoluta media de una función de luminosidad gaussiana se desplaza −(3 ln 10 ÷ 5) σ² = −1,3816 σ². Las candelas estándar tienen σ = 0,7&nbsp;magnitudes.',
       prompt: 'El tamaño del desplazamiento',
@@ -14,7 +15,7 @@ export default {
         off: 'Desplazamiento = 1,3816 × σ², con σ = 0,7.',
       },
     },
-    'formula-doubled': {
+    {
       title: 'Una dispersión mayor',
       body: 'Ahora la dispersión es el doble, σ = 1,4&nbsp;magnitudes.',
       prompt: 'El tamaño del desplazamiento',
@@ -26,7 +27,7 @@ export default {
         off: 'Desplazamiento = 1,3816 × 1,96.',
       },
     },
-    'luminosity-error': {
+    {
       title: 'Qué hace el sesgo de paralaje a una luminosidad',
       body: 'Con un corte de paralaje de 3 y límite 18, las magnitudes absolutas salen 0,25 magnitudes demasiado débiles. Una luminosidad es L ∝ 10<sup>−0,4 M</sup>.',
       prompt: '¿En qué porcentaje se subestima la luminosidad?',
@@ -40,7 +41,7 @@ export default {
         off: 'Subestimación = 1 − 10^(−0,4 × 0,25).',
       },
     },
-    'real-sample-malmquist': {
+    {
       title: 'Un catálogo real también lo hace',
       body: 'En el paquete del entorno solar (estrellas reales de Gaia), la magnitud absoluta media baja de 8,80 a menos de 100&nbsp;pc a 6,68 entre 100 y 250, 5,35 entre 250 y 500 y 4,23 entre 500 y 1.000&nbsp;pc. Esa muestra se seleccionó por una velocidad radial, que Gaia mide solo para estrellas más brillantes que la magnitud 14 o 15.',
       prompt:
@@ -62,5 +63,5 @@ export default {
       because:
         'No. Las estrellas sintéticas son iguales en cada capa y el sondeo deriva exactamente así. Para decir algo de las estrellas reales se necesita la función de selección del sondeo, que es lo que construye la tercera investigación.',
     },
-  },
+  ],
 };

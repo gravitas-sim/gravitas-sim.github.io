@@ -9,12 +9,12 @@ export default {
     'Hallar la altura de una estrella en el meridiano a partir de su declinación y la latitud',
     'Decir qué estrellas no se ponen nunca desde una latitud dada',
   ],
-  steps: {
-    'a-sky-that-turns': {
+  steps: [
+    {
       title: 'Un cielo que gira',
       body: 'Quédate una hora al aire libre y verás las estrellas girar sobre ti. Dos maneras de decir dónde está una estrella ayudan a no confundirse. Sus <strong>coordenadas horizontales</strong>, la altura sobre el horizonte y el acimut alrededor de él, cambian toda la noche y son distintas para cada persona. Sus <strong>coordenadas ecuatoriales</strong>, ascensión recta y declinación, están fijas en el cielo como la latitud y la longitud en la Tierra, y una estrella las conserva de una noche a otra.\n\nEl instrumento de abajo es un modelo calculado del cielo (el núcleo del Laboratorio del Cielo), no una observación. Sigue una estrella durante una noche desde un lugar en el meridiano de Greenwich, así que la hora del reloj es el Tiempo Universal. La curva es la altura de la estrella a lo largo del día; el punto es el momento en que sale.',
     },
-    'predict-tomorrow': {
+    {
       title: 'Predice la noche de mañana',
       body: 'Una estrella sale a cierta hora esta noche. Todavía no muevas los controles.',
       prompt: 'Mañana por la noche la misma estrella saldrá&hellip;',
@@ -30,7 +30,7 @@ export default {
       because:
         'Unos cuatro minutos antes. Las estrellas van un poco por delante del reloj cada noche. El paso siguiente mide cuánto.',
     },
-    'rise-shift': {
+    {
       title: 'Mide el adelanto',
       body: 'Está seleccionada Arcturus, a latitud 40°. Lee la hora a la que sale, en minutos después del mediodía, en la noche&nbsp;0, y luego pasa a la noche&nbsp;30 y léela otra vez. (Una noche empieza al mediodía, así que la hora de salida nunca da la vuelta por la medianoche.)',
       fields: [
@@ -39,7 +39,7 @@ export default {
         { label: 'Antes cada noche' },
       ],
     },
-    'a-month-on': {
+    {
       title: 'Un mes después',
       body: 'Una estrella sale a las 21:30 el 1&nbsp;de marzo. Usa el adelanto que mediste.',
       prompt: '¿Cuántos minutos antes sale el 1 de abril, 31 noches después?',
@@ -57,7 +57,7 @@ export default {
         off: 'Adelanto total = adelanto por noche × número de noches.',
       },
     },
-    'why-four-minutes': {
+    {
       title: 'Por qué cuatro minutos',
       body: 'El adelanto es igual para todas las estrellas, así que no tiene que ver con las estrellas. Tiene que ver con el reloj.',
       prompt: '¿Por qué las estrellas salen antes según el reloj cada noche?',
@@ -79,7 +79,7 @@ export default {
       because:
         'La Tierra gira una vez respecto de las estrellas en un día sidéreo, de 23 h 56 min. El Sol se queda un poco atrás, porque la Tierra también ha avanzado cerca de un grado en su órbita; hacen falta unos cuatro minutos más de giro para devolver el Sol al meridiano. El reloj sigue al Sol.',
     },
-    'sidereal-clock': {
+    {
       title: 'Un reloj que sigue a las estrellas',
       body: 'El <strong>tiempo sidéreo</strong> cuenta el giro de la Tierra respecto de las estrellas: es la ascensión recta que está ahora en el meridiano. Lee el tiempo sidéreo a medianoche en la noche&nbsp;0 y en la noche&nbsp;30.',
       fields: [
@@ -88,7 +88,7 @@ export default {
         { label: 'Avance en 30 noches' },
       ],
     },
-    'height-at-the-meridian': {
+    {
       title: 'A qué altura llega',
       body: 'Arcturus está a declinación +19,2°. Una estrella cruza el meridiano a una altura de 90° menos la latitud más su declinación, desde un lugar del hemisferio norte. Úsalo para la latitud 40° y luego comprueba la altura en el meridiano que da el instrumento.',
       prompt: 'Altura de Arcturus en el meridiano, latitud 40°',
@@ -104,7 +104,7 @@ export default {
         off: 'Altura en el meridiano = 90° − latitud + declinación.',
       },
     },
-    'never-sets': {
+    {
       title: 'Una estrella que no se pone',
       body: 'Selecciona Vega, a declinación +38,8°, y pon la latitud en 60°. Lee lo que dice el instrumento sobre ella.',
       prompt: 'Desde la latitud 60° norte, Vega&hellip;',
@@ -120,15 +120,15 @@ export default {
       because:
         'A latitud 60° toda estrella al norte de la declinación +30° no se pone nunca. Vega está a +38,8°, así que da vueltas al polo sobre el horizonte toda la noche, todas las noches.',
     },
-    'one-sentence': {
+    {
       title: 'Con tus palabras',
       body: 'Las tardes de invierno y las de verano muestran constelaciones distintas.',
       prompt:
         'Explica por qué, usando lo que mediste sobre la hora de salida de una estrella.',
     },
-    'what-you-worked-out': {
+    {
       title: 'Lo que has deducido',
       body: 'Una estrella conserva sus coordenadas ecuatoriales y cambia las horizontales a medida que la Tierra gira. Sale unos cuatro minutos antes cada noche, porque la Tierra tiene que girar algo más de una vuelta para devolver el Sol al mismo sitio: el día sidéreo es unos cuatro minutos más corto que el día solar. A qué altura llega una estrella, y si llega a ponerse, depende solo de su declinación y de tu latitud. La investigación siguiente usa el mismo instrumento para seguir al Sol a lo largo del año.',
     },
-  },
+  ],
 };

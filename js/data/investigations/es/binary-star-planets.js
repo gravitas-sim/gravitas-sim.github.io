@@ -6,8 +6,8 @@
 // keeps its English and nothing here can reach the lesson's machinery: no
 // scenario name, no seed, no widget id, no numeric answer, no probe.
 //
-// `steps` is keyed by step sid; other arrays line up by index. `null` means
-// "not translated": that entry keeps its English.
+// Arrays line up by index with the English. `null` means "not translated";
+// that entry keeps its English.
 //
 // One deliberate choice throughout. The English is careful never to call a
 // configuration stable, and Spanish has to be careful in the same place:
@@ -27,8 +27,8 @@ export default {
     'Decir qué puede y qué no puede establecer una integración finita sobre el destino a largo plazo de una órbita',
     'Usar una frontera de estabilidad empírica publicada dentro de sus supuestos y su rango declarados, y decir qué es lo que no cubre',
   ],
-  steps: {
-    'two-suns': {
+  steps: [
+    {
       title: 'Dos soles',
       body: `Bastante más de la mitad de las estrellas parecidas al Sol de la
              galaxia tienen al menos una compañera. Los planetas de esos
@@ -43,7 +43,7 @@ export default {
              <strong>¿dónde puede estar aquí un planeta y quedarse?</strong>`,
       tip: 'Alfa Centauri A y B son una versión real de esto: 1,13 y 0,97 masas solares, separadas 23,5 AU, excentricidad 0,52.',
     },
-    'nothing-here-is-random': {
+    {
       title: 'Aquí no hay nada al azar',
       body: `El escenario que está al lado de este en la galería —"Sistema
              estelar binario"— construye sus estrellas con un generador de
@@ -62,7 +62,7 @@ export default {
              una anécdota.`,
       tip: 'Carga el escenario dos veces y los tres cuerpos caen en posiciones y velocidades idénticas, hasta el último bit. Aquí nada lleva semilla, porque aquí nada se muestrea.',
     },
-    'before-you-run-anything': {
+    {
       title: 'Antes de ejecutar nada',
       body: `Las estrellas están separadas diez AU de media y llegan a estar a
              seis AU la una de la otra en su máximo acercamiento. Un planeta que
@@ -82,7 +82,7 @@ export default {
                 parece disponible, que es la primera sorpresa de esta investigación y
                 no la última.`,
     },
-    'what-survived-will-mean': {
+    {
       title: 'Lo que va a significar "sobrevivió"',
       body: `Una cuestión de vocabulario antes de medir nada, porque decide lo
              que te está permitido decir al final.
@@ -99,7 +99,7 @@ export default {
              estudio con el que compararás más adelante integró diez mil.`,
       tip: 'Esto es un hábito general más que un hecho sobre binarias. "La simulación no explotó en el tiempo que la ejecuté" es una afirmación mucho más débil que "esto es estable", y se confunden con facilidad.',
     },
-    'run-the-default': {
+    {
       title: 'Ejecútalo tal como está',
       body: `Abre <strong>Ejecución en binaria</strong> en la lista de
              Herramientas de la derecha. Viene con la configuración que hay en
@@ -120,7 +120,7 @@ export default {
       ],
       tip: 'Baja la velocidad con los controles de reproducción si quieres ver una órbita concreta en lugar de la banda.',
     },
-    'what-the-quiet-run-did': {
+    {
       title: 'Qué hizo la ejecución tranquila',
       body: `Con la ejecución terminada, lee cuatro números del panel.`,
       fields: [
@@ -146,7 +146,7 @@ export default {
         },
       ],
     },
-    'why-so-quiet': {
+    {
       title: '¿Por qué fue tan tranquilo?',
       body: `El planeta se mantuvo dentro de unas 0,62 separaciones del baricentro
              y nunca llegó a un cuarto de separación de la Estrella B.`,
@@ -172,7 +172,7 @@ export default {
                 acaba. Acuérdate de esto cuando más adelante salga la palabra
                 "estable".`,
     },
-    'move-it-out': {
+    {
       title: 'Aléjalo',
       body: `Ahora duplica el radio inicial del planeta, hasta 0,30 de la
              separación —3 AU—. Eso sigue siendo menos de la mitad de lo más
@@ -190,7 +190,7 @@ export default {
                 a 0,30 es la diferencia entre una órbita imperturbada y ninguna
                 órbita en absoluto.`,
     },
-    'run-it-at-030': {
+    {
       title: 'Ejecútalo a 0,30',
       body: `Pon <strong>Inicio del planeta</strong> en <strong>0,30</strong> y
              pulsa Ejecutar. El mundo se reconstruye desde cero —las mismas dos
@@ -204,7 +204,7 @@ export default {
       ],
       tip: 'La ejecución se detiene sola en cuanto el planeta está desligado y a más de diez separaciones. Integrar un planeta que se marcha durante otros dieciocho periodos no diría nada.',
     },
-    'when-did-it-leave': {
+    {
       title: '¿Cuándo se marchó?',
       body: `Lee la ejecución en el panel.`,
       fields: [
@@ -220,7 +220,7 @@ export default {
         },
       ],
     },
-    'ejected-means-what': {
+    {
       title: '¿Qué significa aquí "expulsado"?',
       body: `El panel ha llamado a eso una expulsión. Tiene dos condiciones para
              usar la palabra y necesita las dos: el planeta debe tener energía
@@ -239,7 +239,7 @@ export default {
                 Exigir también la distancia hace que "expulsado" describa algo
                 que de verdad se ha ido.`,
     },
-    'work-out-the-boundary': {
+    {
       title: 'Alguien lo ha hecho bien',
       body: `Tienes dos puntos: 0,15 sobrevive, 0,30 no. La frontera está en
              algún sitio entre medias, y encontrarla con precisión llevaría
@@ -274,7 +274,7 @@ export default {
                 están sin discusión.`,
       tip: 'Holman, M. J. y Wiegert, P. A. 1999, The Astronomical Journal, 117, 621: "Long-Term Stability of Planets in Binary Systems".',
     },
-    'what-the-fit-assumes': {
+    {
       title: 'Lo que el ajuste supone',
       body: `El panel enumera los supuestos que hay detrás de esa fórmula. Uno de
              ellos importa más que los demás a quien quiera usarla en un sistema
@@ -297,7 +297,7 @@ export default {
                 miraste no es una propiedad del sistema.`,
       tip: 'Vale la pena probar antes de seguir: ejecuta 0,20, justo fuera de la frontera. El artículo describe islas de inestabilidad dentro de la línea ajustada e islas de estabilidad fuera, y el panel se niega a predecir nada a menos de 0,02 separaciones de ella. Un ajuste a dónde está la transición la mayor parte de las veces no es un muro.',
     },
-    'predict-the-sweep': {
+    {
       title: 'Cinco radios de una vez',
       body: 'Has ejecutado dos configuraciones a mano y has leido cuatro numeros del panel cada vez. Hacerlo tres veces mas no te va a ensenar nada que no te ensenaran las dos primeras, asi que lo hara el panel.\n\nAbre <strong>Barrer el radio inicial</strong> al final del panel de Ejecucion Planeta Binario. Ejecuta el mismo experimento de veinte periodos en <strong>0,12, 0,15, 0,18, 0,22 y 0,30</strong> separaciones, con las masas, la excentricidad, la semilla, el integrador y el paso exactamente como estan ahora. Lo unico que cambia entre ensayos es donde empieza el planeta.\n\nLa frontera publicada esta en 0,177. Comprometete antes de ejecutarlo.',
       prompt: '¿Cual de estas cosas esperas que muestren los cinco ensayos?',
@@ -311,12 +311,12 @@ export default {
         'La segunda. El ajuste describe donde suele estar la transicion en una rejilla de sistemas, no un muro en este. El propio articulo informa de islas de inestabilidad dentro de la linea y de islas de estabilidad fuera, y veinte periodos son pocos para que una inestabilidad lenta haya terminado de ocurrir. Lo que cabe esperar es un cambio de resultado cerca de 0,177, sin garantia de donde exactamente.',
       tip: 'Una prediccion escrita es lo que convierte el resultado en prueba y no en demostracion.',
     },
-    'run-the-sweep': {
+    {
       title: 'Ejecuta el barrido',
       body: 'Pulsa <strong>Ejecutar el barrido</strong> y dejalo. Cinco ensayos de veinte periodos binarios tardan entre <strong>cuatro y siete minutos</strong> segun la maquina, mas o menos lo que te habrian costado a mano las cinco ejecuciones, menos escribir y copiar.\n\nFijate en lo que informa mientras avanza. Cada ensayo termina con un <em>resultado</em>, no con una puntuacion: seguia ahi al final, salio del sistema, choco con una estrella, o no establecio nada. Eso ultimo es un resultado de verdad, y por eso la tabla tiene una columna de periodos hechos frente a periodos pedidos.',
       tip: 'Parar esta ahi si lo necesitas. Un barrido detenido conserva los ensayos que termino y dice que radios no alcanzo, en vez de presentar cuatro puntos como cinco.',
     },
-    'read-the-sweep': {
+    {
       title: 'Lee los cinco ensayos',
       body: 'Lee esto de la tabla. Todos los ensayos corrieron los mismos veinte periodos, asi que los resultados son comparables entre si y con las dos ejecuciones que hiciste a mano.',
       fields: [
@@ -325,7 +325,7 @@ export default {
         { label: 'Menor radio inicial que no' },
       ],
     },
-    'what-the-sweep-shows': {
+    {
       title: 'Que sostienen cinco puntos',
       body: 'El grafico coloca cada ensayo en su propio radio inicial, en la fila de lo que le paso. No traza ninguna linea entre ellos, y eso es deliberado.',
       prompt: '¿Por que no unirlos?',
@@ -339,12 +339,12 @@ export default {
         'Una linea entre 0,22 y 0,30 diria que todo lo intermedio sobrevive hasta cierto cruce y es expulsado despues. Holman y Wiegert encontraron islas de ambas cosas a los dos lados de su linea ajustada: la transicion no es nitida ni monotona en el radio. Cinco muestras de un sistema asi son cinco hechos sobre cinco radios.',
       tip: 'La tercera opcion no es la razon: un resultado es una categoria, y las categorias se grafican perfectamente. Lo que no admiten es interpolacion.',
     },
-    'resolve-the-edge': {
+    {
       title: '¿El borde es real o es la aritmetica?',
       body: 'Elige el ensayo donde cambia el resultado — el selector lo marca — y pulsa <strong>Comprobarlo</strong>. Eso repite ese unico radio con <strong>la mitad del paso</strong>, con todo lo demas identico, y compara los dos resultados.\n\nEs la misma prueba que hiciste a mano en 0,25, aplicada al unico valor del barrido donde importa. Una configuracion cuyo destino cambia al reducir el paso a la mitad no ha sido medida con ninguno de los dos pasos.',
       tip: 'Repite un ensayo y no todo el barrido, y ese es el punto: la comprobacion va donde la respuesta esta en duda.',
     },
-    'is-it-resolved': {
+    {
       title: 'Que zanja la comprobacion',
       body: 'Supon que los dos pasos coinciden: el planeta es expulsado a ese radio tanto con el paso del barrido como con la mitad.',
       prompt: '¿Que ha quedado establecido?',
@@ -358,7 +358,7 @@ export default {
         'La segunda, y solo la segunda. Que dos tamanos de paso coincidan descarta la aritmetica como causa de lo que viste. No dice nada de lo que pasa despues del periodo veinte, nada de los radios que no comprobaste y nada del ajuste publicado, que se construyo con diez mil periodos en una rejilla de sistemas y no con veinte en este.',
       tip: 'El panel dice lo mismo con sus propias palabras bajo la tabla, y la entrada del cuaderno lo lleva a todo lo que exportes.',
     },
-    'a-harder-question': {
+    {
       title: 'Una pregunta más difícil que "qué pasó"',
       body: `Todo lo anterior se ha creído a la simulación. Es hora de dejar de
              hacerlo.
@@ -373,7 +373,7 @@ export default {
              cosas parecen física desde fuera.</strong>`,
       tip: 'El panel muestra el paso con el que realmente integró, que no siempre es el que pediste: si la máquina va justa, el bucle de dibujado da pasos más grandes para no quedarse atrás.',
     },
-    'energy-drift-as-a-screen': {
+    {
       title: 'La primera comprobación, y sus límites',
       body: `La guarda evidente es la energía. Los tres cuerpos forman un sistema
              cerrado, así que su energía total no puede cambiar; si el número que
@@ -398,7 +398,7 @@ export default {
       ],
       tip: 'Una décima de por ciento no es una constante natural. Se midió: en estas configuraciones, toda ejecución que derivó más que eso dio un resultado que cambiaba al reducir el paso a la mitad. Fíjate también en cuál resultó ser la respuesta: una colisión, no una expulsión. Dos de las cuatro cosas que le pueden pasar al planeta aquí se parecen de lejos y las distingue el panel, no el ojo.',
     },
-    'the-case-that-matters': {
+    {
       title: 'Ahora el caso que importa',
       body: `Pon el planeta en <strong>0,25</strong> separaciones, deja el paso en
              <strong>1,0</strong> y ejecuta los veinte periodos completos.
@@ -416,7 +416,7 @@ export default {
       ],
       tip: 'Cada reducción a la mitad duplica el tiempo real. La última tarda un par de minutos; es la ejecución más importante de la investigación.',
     },
-    'the-drift-was-tiny': {
+    {
       title: 'Tres ejecuciones de la misma configuración',
       body: `Anota lo que dijeron las tres ejecuciones. La gracia del ejercicio
              está en el desacuerdo, así que anótalo aunque —sobre todo si—
@@ -439,7 +439,7 @@ export default {
         },
       ],
     },
-    'which-answer-is-right': {
+    {
       title: '¿Cuál de las respuestas es la buena?',
       body: `Con paso 1,0 el planeta sobrevivió veinte periodos, con decenas de
              encuentros cercanos por el camino. Con paso 0,25 fue expulsado. La
@@ -467,7 +467,7 @@ export default {
                 integración con estos pasos— y eso es un resultado de verdad, no
                 un fracaso.`,
     },
-    'convergence-is-the-test': {
+    {
       title: 'La convergencia es la prueba',
       body: `Así que la regla que de verdad se aplica, y no es la de la energía:
              \n\n<strong>Un resultado cuenta cuando reducir el paso a la mitad lo
@@ -484,7 +484,7 @@ export default {
              <em>si</em> se marchó.`,
       tip: 'Esto es práctica habitual más que algo propio de las binarias. Un resultado de N cuerpos publicado lleva un estudio de convergencia, y quien lo revisa lo pide si no lo encuentra.',
     },
-    'report-it': {
+    {
       title: 'Escribe la frase',
       body: `Imagina que tuvieras que entregarle estas tres ejecuciones a otra
              persona.`,
@@ -523,7 +523,7 @@ export default {
                qué tiene de distinto.`,
       tip: 'Decir lo que no sabes no es una debilidad en un resultado. Es la mayor parte de lo que lo hace utilizable por otra persona.',
     },
-    'around-both': {
+    {
       title: 'Alrededor de las dos a la vez',
       body: `El otro sitio donde puede vivir un planeta en una binaria es fuera de
              las dos estrellas, girando alrededor del par como si fuera un solo
@@ -538,7 +538,7 @@ export default {
              kepleriana normal. La cuestión es cuánto es "lo bastante lejos".`,
       tip: 'Kepler-16b tarda unos 229 días en rodear un par que se orbita en 41. Está lo bastante lejos para verlas como una sola estrella, y justo lo bastante.',
     },
-    'which-way-round': {
+    {
       title: '¿Hacia dónde está el peligro?',
       body: `Para un planeta alrededor de una estrella, la regla era "cerca es
              seguro, lejos es peligroso". Piensa qué le pasa a un planeta
@@ -557,7 +557,7 @@ export default {
                 giran— y ese tirón cambiante bombea su órbita. Aquí la frontera
                 es un suelo y no un techo.`,
     },
-    'run-the-circumbinary': {
+    {
       title: 'Cuatro separaciones, y luego dos',
       body: `Cuarenta periodos binarios esta vez, porque un planeta circumbinario
              es lento: a 40 AU tarda unos cinco periodos binarios y medio en dar
@@ -578,7 +578,7 @@ export default {
       ],
       tip: 'En la segunda ejecución nada se acercó a nada. Esta es una forma de perder un planeta distinta de la que viste en la primera mitad de la investigación.',
     },
-    'no-encounter-at-all': {
+    {
       title: 'Se marchó sin tocar nada',
       body: `Lee la ejecución.`,
       fields: [
@@ -599,7 +599,7 @@ export default {
         },
       ],
     },
-    'how-without-a-pass': {
+    {
       title: '¿Cómo, sin ninguna pasada cercana?',
       body: `Al planeta a 0,30 separaciones de la primera mitad lo lanzó fuera un
              único encuentro cercano. Este nunca estuvo a menos de dos
@@ -621,7 +621,7 @@ export default {
                 millón descarta la primera opción, que es justo para lo que el
                 panel la muestra.`,
     },
-    'circumbinary-boundary': {
+    {
       title: 'La frontera circumbinaria',
       body: `El mismo artículo da una segunda fórmula, para planetas alrededor de
              las dos estrellas:
@@ -652,12 +652,12 @@ export default {
         },
       ],
     },
-    'sweep-the-circumbinary': {
+    {
       title: 'Opcional: el mismo barrido, aqui fuera',
       body: '<strong>Opcional, y tarda entre ocho y doce minutos.</strong> Saltatelo si la sesion es corta; nada de lo que viene despues depende de ello.\n\nEl barrido tambien funciona aqui fuera, con su propio rango y su propia ventana: <strong>2,0, 2,5, 3,0, 3,5 y 4,0</strong> separaciones, cuarenta periodos binarios cada uno, porque un planeta circumbinario es lento y veinte periodos de la pareja son solo tres o cuatro orbitas suyas.\n\nLa frontera publicada para esta configuracion es 3,61. Predice que haran los cinco antes de pulsar, como hiciste dentro, y espera el desacuerdo del que acabas de leer en vez de una linea limpia.',
       tip: 'Ventana mas larga, mismo argumento: un resultado habla de la ventana en la que se observo, y cuarenta periodos aqui fuera es una mirada mas corta que veinte ahi dentro.',
     },
-    'where-the-fit-disagrees': {
+    {
       title: 'Donde el ajuste y la simulación no se ponen de acuerdo',
       body: `El ajuste dice 3,61. Así que un planeta a <strong>3,0</strong>
              separaciones debería desestabilizarse, y uno a <strong>2,5</strong>
@@ -673,7 +673,7 @@ export default {
       ],
       tip: 'Las dos informarán de que el planeta sobrevivió a la integración. Fíjate en lo lejos que llegó antes de volver.',
     },
-    'who-is-wrong': {
+    {
       title: 'Entonces, ¿quién se equivoca?',
       body: `Los dos planetas sobrevivieron cuarenta periodos binarios, y el
              ajuste dice que los dos deberían haberse desestabilizado. Pero el que
@@ -694,7 +694,7 @@ export default {
                 a esta integración" y "es estable" son afirmaciones distintas, y
                 esta es la pantalla donde la diferencia muerde.`,
     },
-    'the-strongest-claim': {
+    {
       title: 'La afirmación más fuerte',
       body: `Un colega te pregunta qué has averiguado sobre el planeta a 0,15
              separaciones.`,
@@ -715,7 +715,7 @@ export default {
                 de acuerdo con la literatura, vale algo, aunque no lo valga todo.`,
       tip: 'Ninguno de los límites anteriores hace inútil el ejercicio. Lo convierten en un modelo, que es lo que es toda simulación, y saber qué partes del tuyo aguantan el peso es la diferencia entre usar uno y que te use a ti.',
     },
-    'what-you-can-say': {
+    {
       title: 'Lo que puedes decir, y lo que el modelo deja fuera',
       body: `Has medido bastante:
              \n\n· Un planeta a 0,15 separaciones alrededor de una estrella
@@ -753,5 +753,5 @@ export default {
              simulación colisiona con lo que dibuja.`,
       tip: 'La distancia entre "mi integración dice X" y "la naturaleza hace X" es donde vive la mayor parte del trabajo en astrofísica computacional.',
     },
-  },
+  ],
 };

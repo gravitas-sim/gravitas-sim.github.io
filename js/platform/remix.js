@@ -775,16 +775,6 @@ function checkAdded(s, at, need) {
   );
 }
 
-/** A shadow's entry for each English step: by sid, or by index in an older list. */
-const alignShadow = (steps, words) =>
-  steps.map((s, i) =>
-    Array.isArray(words)
-      ? words[i]
-      : words && Object.hasOwn(words, s.sid)
-        ? words[s.sid]
-        : undefined
-  );
-
 const show = v => (v === undefined ? 'nothing' : JSON.stringify(v));
 
 // ---------------------------------------------------------------------------
@@ -873,15 +863,13 @@ export function compileRemix(pack, original, originalEs, api) {
       if (w !== undefined) shadow[k] = w;
     }
   shadow.duration = pack.duration;
-  shadow.steps = {};
-  const packWords = alignShadow(base.lesson.steps, base.shadow?.steps);
-  const originalWords = alignShadow(original.steps, es.steps);
+  shadow.steps = [];
 
   lesson.steps = base.lesson.steps.map((compiled, i) => {
     const at = byOriginal.get(compiled.sid);
-    const words = packWords?.[i] || {};
+    const words = base.shadow?.steps?.[i] || {};
     if (at === undefined) {
-      shadow.steps[compiled.sid] = words;
+      shadow.steps.push(words);
       return compiled;
     }
     const o = original.steps[at];
@@ -949,7 +937,7 @@ export function compileRemix(pack, original, originalEs, api) {
     if (compiled.depth === undefined) delete step.depth;
     if (compiled.requires === undefined) delete step.requires;
     if (compiled.when === undefined) delete step.when;
-    const spanish = spanishWords(o, originalWords?.[at]) || {};
+    const spanish = spanishWords(o, es.steps?.[at]) || {};
     const sw = { ...spanish, ...words };
     // A text the pack has no Spanish for falls back to the original's.
     for (const k of Object.keys(words))
@@ -972,13 +960,13 @@ export function compileRemix(pack, original, originalEs, api) {
           ? { say: words.misconceptions[j].say }
           : {}),
       }));
-    shadow.steps[compiled.sid] = sw;
+    shadow.steps.push(sw);
     return step;
   });
   const hasSpanish =
     Boolean(originalEs) ||
     base.shadow !== null ||
-    Object.values(shadow.steps).some(w => Object.keys(w).length);
+    shadow.steps.some(w => Object.keys(w).length);
   return {
     lesson,
     shadow: hasSpanish ? shadow : null,

@@ -323,22 +323,19 @@ describe('the structure, the Spanish and the instructor content', () => {
   });
   test('every lesson has the Spanish structure of its English, core and deeper', () => {
     for (const [l, es, d, desEs] of LESSONS) {
-      expect(Object.keys(es.steps)).toHaveLength(l.steps.length);
-      expect(Object.keys(desEs.steps)).toHaveLength(d.steps.length);
+      expect(es.steps).toHaveLength(l.steps.length);
+      expect(desEs.steps).toHaveLength(d.steps.length);
       expect(es.objectives).toHaveLength(l.objectives.length);
       for (const [en, sp] of [
         [l.steps, es.steps],
         [d.steps, desEs.steps],
       ])
         en.forEach((s, i) => {
-          if (s.options)
-            expect(sp[s.sid].options).toHaveLength(s.options.length);
-          if (s.fields) expect(sp[s.sid].fields).toHaveLength(s.fields.length);
-          if (s.hints) expect(sp[s.sid].hints).toHaveLength(s.hints.length);
+          if (s.options) expect(sp[i].options).toHaveLength(s.options.length);
+          if (s.fields) expect(sp[i].fields).toHaveLength(s.fields.length);
+          if (s.hints) expect(sp[i].hints).toHaveLength(s.hints.length);
           if (s.misconceptions)
-            expect(sp[s.sid].misconceptions).toHaveLength(
-              s.misconceptions.length
-            );
+            expect(sp[i].misconceptions).toHaveLength(s.misconceptions.length);
         });
     }
   });

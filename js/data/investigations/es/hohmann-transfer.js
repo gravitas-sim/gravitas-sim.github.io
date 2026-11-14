@@ -10,8 +10,8 @@
 // the answer parser matches against, not prose, and a translated copy of them
 // would stop the parser recognising what a student typed.
 //
-// `steps` is keyed by step sid; other arrays line up by index. `null` means
-// "not translated": that entry keeps its English.
+// Arrays line up by index with the English. `null` means "not translated";
+// that entry keeps its English.
 // =============================================================================
 
 export default {
@@ -27,8 +27,8 @@ export default {
     'Explicar por qué el segundo impulso es necesario y qué pasa sin él',
     'Enunciar en qué condiciones la solución cerrada es la respuesta correcta',
   ],
-  steps: {
-    'the-problem': {
+  steps: [
+    {
       title: 'Una nave, una estación y nada de combustible que desperdiciar',
       body: `Una nave está en órbita circular a una unidad astronómica de una
              estrella de tipo solar, dando una vuelta al año a algo menos de
@@ -43,7 +43,7 @@ export default {
              exactamente cuál de tus respuestas dependía de ello.`,
       tip: 'Selecciona la nave y mira el inspector: el botón ▲ junto al alfiler abre el planificador de maniobras.',
     },
-    'predict-point-at-it': {
+    {
       title: '¿Apuntar y empujar?',
       body: `La estación está justo hacia fuera desde la estrella, más lejos que
              tú. Lo evidente es apuntar en dirección contraria a la estrella y
@@ -59,7 +59,7 @@ export default {
       because:
         'Deja la órbita desigual sin agrandarla apenas. Un empuje radial no ejerce par respecto de la estrella, así que el momento angular no cambia, pero sí añade energía, y dónde da la vuelta una órbita depende de las dos cosas. Con el momento angular fijo, añadir energía sube el lado lejano y baja el cercano casi otro tanto: obtienes excentricidad, no tamaño. Un empuje transversal del mismo tamaño sube mucho más el lado lejano, porque gasta el Δv en la dirección en la que ya te mueves, que es donde más energía compra, y de paso aumenta el momento angular. Cuidado con el atajo de que el momento angular por sí solo decide hasta dónde llega una órbita: un impulso radial sí sube el apoastro, solo que de forma ineficiente, y deja el momento angular exactamente donde estaba.',
     },
-    'try-radial': {
+    {
       title: 'Pruébalo',
       body: `Abre el planificador de maniobras sobre la <strong>nave</strong> y
              pon una Δv radial de <strong>0,5</strong> en la casilla. No la
@@ -74,7 +74,7 @@ export default {
       ],
       tip: 'El planificador hace la previsión sin cambiar nada. No le pasa nada al mundo hasta que pulsas Aplicar.',
     },
-    'transverse-is-the-lever': {
+    {
       title: 'La palanca va de lado',
       body: `Un impulso <strong>transversal</strong> —en el sentido del
              movimiento, perpendicular a la línea que va a la estrella— es el
@@ -93,7 +93,7 @@ export default {
              aprender en vez de adivinar: <strong>empujas aquí y la órbita
              cambia allí</strong>.`,
     },
-    'measure-the-orbits': {
+    {
       title: 'Mide con qué empiezas',
       body: `Selecciona la <strong>nave</strong>, luego la <strong>estación
              objetivo</strong>, y lee sus velocidades orbitales en el
@@ -104,7 +104,7 @@ export default {
       ],
       tip: 'El inspector da la velocidad en km/s cuando el selector de unidades está en unidades físicas.',
     },
-    'why-slower-further-out': {
+    {
       title: 'La estación va más despacio',
       body: `La nave, más cerca, va a unos 29,8 km/s. La estación, dos veces y
              media más lejos, va a unos 18,8 km/s.`,
@@ -119,7 +119,7 @@ export default {
       because:
         'La velocidad orbital circular es sqrt(GM/r): disminuye al crecer el radio. Una gravedad más débil necesita menos aceleración centrípeta para equilibrarse, y menos aceleración a mayor radio significa menos velocidad. La órbita exterior es más lenta *y* más larga, y por eso su periodo crece más deprisa que su radio.',
     },
-    'the-transfer-ellipse': {
+    {
       title: 'El camino más barato es una elipse que toca las dos',
       body: `Esta es la idea, y se debe a Walter Hohmann, que la publicó en 1925,
              una década antes de que nadie tuviera un cohete capaz de despegar.
@@ -132,7 +132,7 @@ export default {
              que cualquier otra ruta gasta combustible en cambiar algo que no
              hacía falta cambiar.`,
     },
-    'transfer-semi-major': {
+    {
       title: '¿Cómo de grande es esa elipse?',
       body: `El semieje mayor de una elipse es la mitad de su dimensión más
              larga. Esta elipse va desde 1 UA a un lado de la estrella hasta
@@ -153,7 +153,7 @@ export default {
         off: 'El eje largo va de una órbita, pasando por la estrella, hasta la otra. El semieje mayor es su mitad.',
       },
     },
-    'vis-viva-departure': {
+    {
       title: '¿A qué velocidad tienes que ir?',
       body: `La ecuación vis-viva da la velocidad en cualquier punto de
              cualquier órbita:
@@ -177,7 +177,7 @@ export default {
         off: 'Revisa qué distancia va dónde: r es donde estás ahora y a es el semieje mayor de la elipse de transferencia.',
       },
     },
-    'first-burn-size': {
+    {
       title: 'Entonces, ¿de cuánto es el primer impulso?',
       body: `Vas a 29,787 km/s y necesitas ir a 35,60 km/s, en la misma
              dirección.`,
@@ -196,7 +196,7 @@ export default {
         off: 'Resta la velocidad circular de partida a la que necesita la transferencia, ambas en km/s.',
       },
     },
-    'apply-the-first-burn': {
+    {
       title: 'Hazlo',
       body: `En el planificador, vuelve a poner la Δv radial a
              <strong>0</strong> y mete tu respuesta en la casilla
@@ -213,7 +213,7 @@ export default {
       ],
       tip: 'Si te equivocas al teclear, Deshacer devuelve el mundo exactamente a como estaba: el mundo entero, no solo la velocidad.',
     },
-    'where-the-change-appeared': {
+    {
       title: '¿Dónde cambió la órbita?',
       body: `Compara el periastro y el apoastro del planificador antes y después
              del impulso.`,
@@ -227,7 +227,7 @@ export default {
       because:
         'Hiciste el impulso a 1 UA y sigues a 1 UA, así que la órbita nueva pasa por 1 UA: ese punto es ahora su periastro, sin cambios. Toda la energía que añadiste fue a parar a lo lejos que llega la órbita por el lado opuesto, que subió de 1 UA a 2,5 UA. Empujas aquí, cambias allí.',
     },
-    'transfer-time': {
+    {
       title: '¿Cuánto dura la travesía?',
       body: `Estás en media elipse: de su punto más cercano al más lejano. La
              tercera ley de Kepler da el periodo de una órbita completa a partir
@@ -251,7 +251,7 @@ export default {
         off: 'La tercera ley de Kepler da el periodo completo de la elipse de transferencia a partir de su semieje mayor; la travesía es la mitad.',
       },
     },
-    'predict-do-nothing': {
+    {
       title: '¿Y si no haces nada?',
       body: `El primer impulso está hecho y la nave sube. En unos catorce
              meses llegará a lo alto del arco, al radio orbital de la estación,
@@ -269,7 +269,7 @@ export default {
       because:
         'La elipse de transferencia es una órbita cerrada y la nave está en su apoastro, no en reposo. Su periastro sigue a 1 UA, así que cae de vuelta y regresa exactamente a donde empezó, una vez cada 2,3 años, para siempre. Llegar a un sitio y quedarse en él son logros distintos.',
     },
-    'watch-the-coast': {
+    {
       title: 'La travesía',
       body: `Déjalo correr. La nave se aleja de la estrella, frenando todo el
              camino, y unos catorce meses después llega a lo alto del arco, a
@@ -284,7 +284,7 @@ export default {
         'Anota la velocidad al llegar a 2,5 UA',
       ],
     },
-    'read-the-arc': {
+    {
       title: 'Lee el arco en el que estás',
       body: `La simulación se ha detenido en lo alto del arco. La lectura de
              abajo da lo alto y lo bajo de la órbita en la que va la nave
@@ -297,7 +297,7 @@ export default {
       ],
       tip: 'Un impulso te compra una visita. Quedarte es una segunda compra.',
     },
-    'second-burn-size': {
+    {
       title: 'El impulso que todo el mundo olvida',
       body: `Para quedarte a 2,5 UA tienes que estar en la órbita circular de
              2,5 UA, lo que significa ir a la velocidad circular de allí:
@@ -318,7 +318,7 @@ export default {
         off: 'Resta tu velocidad de llegada en la elipse de transferencia a la velocidad circular de la órbita exterior.',
       },
     },
-    'apply-the-second-burn': {
+    {
       title: 'Circularizar',
       body: `Cuando la nave esté en lo alto de su arco —el apoastro, donde el
              planificador muestra que la distancia ya no crece— aplica una Δv
@@ -333,7 +333,7 @@ export default {
       ],
       tip: 'El momento importa: el mismo impulso hecho en cualquier otro punto de la elipse da otra órbita, porque un impulso cambia el lado opuesto y el lado opuesto depende de dónde estés.',
     },
-    'total-cost': {
+    {
       title: '¿Cuánto costó?',
       body: `Suma los dos impulsos.`,
       prompt: 'La Δv total de la transferencia, en km/s',
@@ -352,7 +352,7 @@ export default {
         off: 'El coste total es la suma de ambos impulsos, cada uno contado como un cambio de velocidad.',
       },
     },
-    'both-burns-forward': {
+    {
       title: 'Los dos impulsos fueron aceleraciones',
       body: `Los dos impulsos aceleraron la nave, y la nave acabó moviéndose más
              despacio que al principio: 18,8 km/s frente a 29,8.`,
@@ -366,7 +366,7 @@ export default {
       because:
         'Los dos impulsos añadieron energía orbital, y una órbita mayor tiene más energía. Pero casi toda esa energía es potencial: subir de 1 UA a 2,5 UA cuesta muchísima velocidad y compra altura. La nave acaba más arriba, con más energía total, y más despacio. Alejarse significa ir más despacio una vez allí, y acelerar dos veces para conseguirlo.',
     },
-    'say-why-sideways': {
+    {
       title: 'Por qu\u00e9 el impulso que funciona apunta de lado',
       body: `Empujaste hacia fuera en l\u00ednea recta y no llegaste a nada \u00fatil.
              Empujaste en la direcci\u00f3n del movimiento y el lado opuesto de la
@@ -376,7 +376,7 @@ export default {
       rubric:
         'Un impulso cambia la energ\u00eda de la \u00f3rbita con la m\u00e1xima eficacia cuando va a lo largo de la velocidad, porque el trabajo es fuerza por velocidad; a\u00f1adir energ\u00eda eleva el semieje mayor, y como el punto del impulso sigue en la nueva \u00f3rbita se convierte en su punto bajo, as\u00ed que la subida aparece media \u00f3rbita despu\u00e9s en el lado opuesto. Llegar no es quedarse porque la elipse de transferencia es una \u00f3rbita cerrada: en lo alto del arco la nave est\u00e1 en el apoastro con su periastro todav\u00eda en el radio de partida \u2014 que es lo que mediste \u2014 as\u00ed que sin el segundo impulso cae de vuelta.',
     },
-    'when-this-is-true': {
+    {
       title: 'De qué dependía esta respuesta',
       body: `Todos los números que calculaste eran correctos, con un error de una
              parte entre mil, por cómo está construido este sistema: dos órbitas
@@ -397,5 +397,5 @@ export default {
              meses y no cuando a alguien le apetezca.`,
       tip: 'Una transferencia de Hohmann deja de ser la opción más barata cuando la órbita exterior supera unas 11,9 veces la interior. A partir de ahí, una transferencia bielíptica de tres impulsos cuesta menos, y tarda muchísimo más.',
     },
-  },
+  ],
 };

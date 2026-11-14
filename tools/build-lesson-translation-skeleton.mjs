@@ -13,6 +13,9 @@
 // a lesson that then loads no scenario at all. The shape comes off the lesson
 // itself, so none of those are possible.
 //
+// Spanish is written keyed by step id under lesson-text/es (the generated
+// shadow under js/data/investigations/es is `npm run lesson-text`'s).
+//
 // It is a starting point, not a build step. Once a translation exists this
 // script is not run over it again - that would throw the Spanish away. It
 // prints to stdout unless told otherwise, and refuses to overwrite.
@@ -23,10 +26,11 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import * as prettier from 'prettier';
 import { INVESTIGATIONS } from '../js/data/investigations.js';
-import { STRUCTURAL, isStepList } from '../js/data/investigations/i18n.js';
+import { STRUCTURAL } from '../js/data/investigations/i18n.js';
 
 const HERE = path.dirname(fileURLToPath(import.meta.url));
 const DIR = path.join(HERE, '..', 'js', 'data', 'investigations');
+const KEYED = path.join(HERE, '..', 'lesson-text');
 
 /**
  * The translatable half of a value.
@@ -43,11 +47,6 @@ function wordsOf(v, key = '') {
   if (typeof v === 'string') {
     if (STRUCTURAL.has(key)) return undefined;
     return v;
-  }
-  // A lesson's steps are keyed by sid, one entry for each, so a step added,
-  // moved or removed in the English never moves another step's Spanish.
-  if (isStepList(v)) {
-    return Object.fromEntries(v.map(step => [step.sid, wordsOf(step) ?? {}]));
   }
   if (Array.isArray(v)) {
     const out = v.map(x => wordsOf(x, key));
@@ -75,10 +74,8 @@ const HEADER = (
 // English and nothing here can reach the lesson's machinery: no scenario name,
 // no seed, no widget id, no numeric answer, no probe.
 //
-// \`steps\` is an object keyed by each step's sid: a step is matched to its
-// English step by that id, wherever either one stands in its list. Other
-// arrays line up by index with the English; \`null\` means "not translated"
-// and that entry keeps its English.
+// Arrays line up by index with the English. \`null\` means "not translated";
+// that entry keeps its English.
 // =============================================================================
 `;
 
@@ -90,6 +87,12 @@ const HEADER = (
  */
 async function render(inv, locale) {
   const words = wordsOf(inv) || {};
+  // The Spanish is written keyed by step id (tools/lesson-text.mjs writes the
+  // shadow the app loads from it): each step's words under its sid.
+  if (locale === 'es' && Array.isArray(words.steps))
+    words.steps = Object.fromEntries(
+      words.steps.map((w, i) => [inv.steps[i].sid, w ?? {}])
+    );
   const raw = `${HEADER(inv.id, locale)}\nexport default ${JSON.stringify(words, null, 2)};\n`;
   const options = (await prettier.resolveConfig(path.join(DIR, 'x.js'))) || {};
   return prettier.format(raw, { ...options, filepath: path.join(DIR, 'x.js') });
@@ -107,7 +110,10 @@ const ids = rest.includes('--all')
   ? INVESTIGATIONS.map(i => i.id)
   : rest.filter(a => !a.startsWith('--'));
 
-const outDir = path.join(DIR, locale);
+// Spanish goes to lesson-text/es, keyed by step id; run `npm run lesson-text`
+// afterwards to write the shadow the app loads.
+const outDir =
+  locale === 'es' ? path.join(KEYED, 'es') : path.join(DIR, locale);
 if (!toStdout) mkdirSync(outDir, { recursive: true });
 
 for (const id of ids) {
@@ -128,4 +134,5 @@ for (const id of ids) {
   }
   writeFileSync(file, text);
   console.log(`wrote ${path.relative(process.cwd(), file)}`);
+  if (locale === 'es') console.log('then: npm run lesson-text');
 }

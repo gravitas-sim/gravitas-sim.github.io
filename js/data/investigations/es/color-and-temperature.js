@@ -9,12 +9,12 @@ export default {
     'Recuperar una temperatura a partir de un índice de color',
     'Decir en qué se aparta una estrella real de un cuerpo negro',
   ],
-  steps: {
-    'everything-glows': {
+  steps: [
+    {
       title: 'Todo brilla',
       body: 'El aro caliente de una cocina se pone rojo opaco, luego naranja y luego blanco amarillento. La luz que da depende de su temperatura y de casi nada más. Un objeto que lo absorbe todo y emite luz solo por su temperatura es un <strong>cuerpo negro</strong>, y una estrella se parece lo bastante a uno como para estudiarla así.\n\nEl instrumento dibuja la luz de un cuerpo negro frente a la longitud de onda. Es una curva calculada (ley de Planck), no la medición de una estrella. Las tres estrellas del lienzo son hipotéticas, de 3.000, 5.772 y 10.000 K.',
     },
-    'predict-the-peak': {
+    {
       title: 'Predice el máximo',
       body: 'Toda curva de cuerpo negro tiene un máximo: la longitud de onda en que da más luz por unidad de longitud de onda. Todavía no muevas el control.',
       prompt:
@@ -31,7 +31,7 @@ export default {
       because:
         'Se reduce a la mitad. La longitud de onda del máximo es inversamente proporcional a la temperatura (ley de Wien): al doble de temperatura, la mitad de longitud de onda. El paso siguiente lo mide.',
     },
-    'three-peaks': {
+    {
       title: 'Mide tres máximos',
       body: 'Pon cada temperatura de abajo y lee la longitud de onda del máximo en la lista bajo la gráfica.',
       fields: [
@@ -41,7 +41,7 @@ export default {
         { label: 'Máximo × temperatura a 6.000 K' },
       ],
     },
-    'peak-of-4000': {
+    {
       title: 'Usa la regla',
       body: 'Máximo × temperatura es una constante, unos 2,898 millones de nm·K. Úsala antes de comprobarla con el instrumento.',
       prompt: 'Longitud de onda del máximo de un cuerpo negro de 4.000 K',
@@ -58,7 +58,7 @@ export default {
         off: 'La ley de Wien da longitud de onda = constante ÷ temperatura.',
       },
     },
-    'temperature-from-peak': {
+    {
       title: 'Al revés',
       body: 'El espectro de una estrella tiene su máximo en 380&nbsp;nm, en el borde violeta del visible. La ley de Wien sirve en los dos sentidos.',
       prompt:
@@ -76,7 +76,7 @@ export default {
         off: 'Temperatura = constante ÷ longitud de onda, con la longitud de onda en nm.',
       },
     },
-    'why-not-green': {
+    {
       title: 'El máximo del Sol es verde',
       body: 'Pon la temperatura del Sol. Su máximo está en unos 502&nbsp;nm, que es verde. El Sol no se ve verde.',
       prompt: '¿Por qué no?',
@@ -97,7 +97,7 @@ export default {
       because:
         'La curva es ancha: el Sol da mucha luz en todo el rango visible y el ojo la mezcla en un blanco casi neutro. La longitud de onda del máximo dice dónde hay más luz, no de qué color se ve algo.',
     },
-    'three-colors': {
+    {
       title: 'Mide un índice de color',
       body: 'Los astrónomos miden el color como una diferencia de magnitudes con dos filtros. Con las bandas en <strong>B &minus; V</strong>, lee el índice de color a cada temperatura. Un número mayor es más rojo. La muestra enseña más o menos cómo se ve el cuerpo negro.',
       fields: [
@@ -106,7 +106,7 @@ export default {
         { label: 'B − V a 10.000 K' },
       ],
     },
-    'temperature-from-color': {
+    {
       title: 'Halla la temperatura a partir del color',
       body: 'Una estrella tiene B &minus; V = 0,82. Mueve la temperatura hasta que el explorador dé ese índice de color.',
       prompt: 'Temperatura del cuerpo negro con B − V = 0,82',
@@ -123,7 +123,7 @@ export default {
         off: 'Más frío es más rojo es mayor. Si tu índice es demasiado grande, sube la temperatura.',
       },
     },
-    'real-stars-differ': {
+    {
       title: 'Dónde se acaba el modelo',
       body: 'Una estrella real no es un cuerpo negro perfecto. Su atmósfera absorbe en muchas longitudes de onda (las líneas de la siguiente investigación) y su color se mide con filtros reales.',
       prompt:
@@ -138,15 +138,15 @@ export default {
       because:
         'Es la temperatura del cuerpo negro que coincide con el color. Está cerca de la temperatura de la superficie (efectiva) en muchas estrellas y se diferencia de ella por el efecto de las líneas y los saltos del espectro real.',
     },
-    'one-sentence': {
+    {
       title: 'Con tus palabras',
       body: 'Han aparecido dos formas de sacar una temperatura de la luz: la longitud de onda del máximo y un índice de color.',
       prompt:
         '¿Cuál preferirías usar con una estrella tenue, y por qué? Di qué necesita cada una de la observación.',
     },
-    'what-you-worked-out': {
+    {
       title: 'Lo que has averiguado',
       body: 'La longitud de onda del máximo de un cuerpo negro es la constante de 2,898 millones de nm·K dividida entre su temperatura. Su índice de color también baja de forma constante con la temperatura, y es más fácil de medir en una estrella tenue. Ninguno cuenta toda la historia: un espectro real tiene líneas, y la siguiente investigación las lee.',
     },
-  },
+  ],
 };

@@ -9,14 +9,14 @@ export default {
     'Explicar por qué fijar parámetros estrecha un intervalo sin hacer que se conozcan',
     'Decir por qué un muestreador que se niega a dar un intervalo de una ejecución corta funciona bien',
   ],
-  steps: {
-    'what-a-sampler-does': {
+  steps: [
+    {
       title: 'Qué hace un muestreador',
       body: `Un ajuste pregunta qué valores hacen más probables los datos, y cuán ancho es ese valle de chi cuadrado. Una <strong>posterior</strong> hace otra pregunta: dados los datos y lo que se creía antes de ellos (una <strong>a priori</strong>), ¿cuán probable es cada valor? Se responde sacando muchas muestras de esa distribución y leyendo los intervalos de las muestras.
              \n\nEl cuaderno muestrea el tamaño del planeta, Rp/R*, y el parámetro de impacto del tránsito de HD 209458 con un <strong>muestreador de conjunto afín-invariante</strong>, escrito solo en NumPy: cuatro grupos independientes de ocho caminantes, cada uno proponiendo un paso a lo largo de la recta hacia otro caminante de su grupo, aceptado según el cociente de la posterior. La época, el período, a/R* y el oscurecimiento del limbo se mantienen fijos, en los valores que halló el panel de ajuste del Observatorio. La a priori es uniforme. El cuaderno también calcula la posterior exacta en una rejilla, para comprobar el muestreador, y el intervalo de perfil del mismo problema de dos parámetros, para comparar.
              \n\nAbre la página de cálculo en <strong>/compute/</strong> de este sitio. Solo funciona con conexión y la primera vez descarga unos 9 MB de Python, cuando pulsas el botón. Elige el cuaderno <strong>Muestrear la posterior de un tránsito</strong>, deja su entrada de ejemplo y sus ajustes. La ejecución tarda aproximadamente un minuto. Todavía no pulses Ejecutar.`,
     },
-    'how-wide': {
+    {
       title: 'Qué anchura tendrá',
       body: `El panel de ajuste, con la época, el período, a/R*, el oscurecimiento del limbo y la línea de base también libres, halló Rp/R* = 0,1193 con una incertidumbre de 0,0016.`,
       prompt:
@@ -30,7 +30,7 @@ export default {
       because:
         'Rp/R* está correlacionado con los números que aquí se mantienen fijos, y un ajuste que los libera lleva su incertidumbre a la de Rp/R*. Fijarlos la elimina, y el intervalo se reduce a una doceava parte aproximadamente.',
     },
-    'the-draws': {
+    {
       title: 'Ejecútalo: las muestras',
       body: `Pulsa <strong>Iniciar el entorno</strong>, espera, y luego <strong>Ejecutar el cuaderno</strong>. Lee las cantidades que devuelve e introdúcelas aquí: la mediana de las muestras de Rp/R* y la anchura de su intervalo del 68 por ciento (extremo superior menos extremo inferior), y lo mismo para el parámetro de impacto.`,
       fields: [
@@ -40,7 +40,7 @@ export default {
         { label: 'Parámetro de impacto, anchura del intervalo' },
       ],
     },
-    'did-it-converge': {
+    {
       title: 'Si convergió',
       body: `Las muestras de un muestreador significan algo solo si la cadena ha corrido lo bastante para olvidar de dónde partió. El cuaderno informa del mayor <strong>R-hat dividido</strong> (debe ser menor que 1,05: los cuatro conjuntos independientes coinciden entre sí), del menor <strong>tamaño de muestra efectivo</strong> (al menos 400 muestras de información independiente) y de la <strong>fracción de aceptación</strong> de las propuestas (entre 0,1 y 0,9). Introduce los tres.`,
       fields: [
@@ -49,7 +49,7 @@ export default {
         { label: 'Fracción de aceptación' },
       ],
     },
-    'profile-and-posterior': {
+    {
       title: 'Posterior y perfil',
       body: `La tabla también da el intervalo de perfil de cada parámetro, el rango de valores cuyo chi cuadrado está a una unidad del mejor, hallado en la rejilla, y el cociente de la anchura del intervalo de las muestras entre él. Los cocientes son 0,99 para los dos.`,
       prompt: '¿Qué dice esa coincidencia?',
@@ -76,7 +76,7 @@ export default {
       because:
         'Una posterior gaussiana tiene un intervalo central del 68 por ciento de más o menos una desviación típica, y el rango de chi cuadrado más uno del perfil tiene la misma anchura. Difieren cuando la posterior es asimétrica o choca con un límite, que es donde un muestreador se gana su coste.',
     },
-    'why-narrower': {
+    {
       title: 'Por qué tanto más estrecho',
       body: `La incertidumbre del panel de ajuste para Rp/R* es 0,0016. El intervalo de este cuaderno es más o menos 0,00013, doce veces menor, con la misma curva de luz.`,
       prompt: '¿Por qué?',
@@ -100,7 +100,7 @@ export default {
       because:
         'Un intervalo está condicionado a lo que se mantiene fijo. Fijar la época, el período, a/R* y el oscurecimiento del limbo en sus mejores valores hace el intervalo de Rp/R* doce veces más estrecho, y ninguno se conoce tan bien. Estrecho no es lo mismo que conocido.',
     },
-    'refuse-a-short-run': {
+    {
       title: 'Una ejecución demasiado corta',
       body: `Pon los <strong>pasos</strong> del cuaderno en <strong>1000</strong>, deja el resto, y ejecútalo de nuevo. Tarda aproximadamente quince segundos.`,
       prompt: '¿Qué hace?',
@@ -124,10 +124,10 @@ export default {
       because:
         'El cuaderno somete cada ejecución a límites: los conjuntos deben coincidir (R-hat menor que 1,05), debe haber al menos 400 muestras efectivas, y la cadena tras su calentamiento debe tener al menos 50 tiempos de autocorrelación. Una ejecución de 1000 pasos incumple el último y a menudo el primero, así que el cuaderno devuelve los diagnósticos y ningún intervalo, porque un intervalo de una cadena que no ha convergido es un número sin nada detrás.',
     },
-    'what-you-worked-out': {
+    {
       title: 'Lo que has deducido',
       body: `Un muestreador sacó 128.000 valores de Rp/R* y del parámetro de impacto, e informó de 0,1193 &plusmn; 0,0001 y 0,430 &plusmn; 0,003, las mismas anchuras que los intervalos de perfil del mismo problema, porque el problema es casi gaussiano en estos dos números. Las muestras coinciden con una rejilla de la posterior exacta, y el muestreador se ha comprobado con problemas de respuesta exacta.
              \n\nLo que el intervalo no es: está condicionado a la época, el período, a/R* y el oscurecimiento del limbo, que se mantuvieron fijos, y es doce veces más estrecho que el del panel de ajuste por eso. Y un muestreador que no corre lo bastante lo dice y no da nada, que es el comportamiento que vale la pena pedir a cualquiera. La ejecución es tuya para conservarla: su cápsula registra el hash del cuaderno y el de la curva de luz, así que un informe puede citarla.`,
     },
-  },
+  ],
 };

@@ -201,11 +201,11 @@ describe('the steps', () => {
 
 describe('the Spanish', () => {
   test('carries the same step structure as the English', () => {
-    expect(Object.keys(LESSON_ES.steps).length).toBe(LESSON.steps.length);
-    expect(Object.keys(DEEP_ES.steps).length).toBe(DEEP.steps.length);
+    expect(LESSON_ES.steps.length).toBe(LESSON.steps.length);
+    expect(DEEP_ES.steps.length).toBe(DEEP.steps.length);
     for (const [en, es] of [
-      ...LESSON.steps.map((s, i) => [s, LESSON_ES.steps[s.sid]]),
-      ...DEEP.steps.map((s, i) => [s, DEEP_ES.steps[s.sid]]),
+      ...LESSON.steps.map((s, i) => [s, LESSON_ES.steps[i]]),
+      ...DEEP.steps.map((s, i) => [s, DEEP_ES.steps[i]]),
     ]) {
       expect(es.title).toBeTruthy();
       expect(es.body).toBeTruthy();
@@ -240,8 +240,8 @@ describe('the Spanish', () => {
       const i = [...LESSON.steps, ...DEEP.steps].findIndex(s => s.sid === sid);
       const stepEn = step(sid);
       const stepEs = sid.startsWith('decide')
-        ? DEEP_ES.steps[sid]
-        : LESSON_ES.steps[sid];
+        ? DEEP_ES.steps[DEEP.steps.findIndex(s => s.sid === sid)]
+        : LESSON_ES.steps[LESSON.steps.findIndex(s => s.sid === sid)];
       expect(stepEn.options[stepEn.answer].startsWith(en)).toBe(true);
       expect(stepEs.options[stepEn.answer].startsWith(es)).toBe(true);
       void i;

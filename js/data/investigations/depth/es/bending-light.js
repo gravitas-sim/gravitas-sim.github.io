@@ -1,6 +1,7 @@
+// La luz que se curva, más a fondo: las palabras en español, paso a paso con ../bending-light.js.
 export default {
-  steps: {
-    'the-bending-by-hand': {
+  steps: [
+    {
       title: 'La desviación a mano',
       body: 'Para el Sol, GM ÷ c² es 1,477 km y el radio es 695.700 km. La desviación de un rayo que roza el limbo es 4GM ÷ (c²R) radianes, y un segundo de arco son 4,848 × 10<sup>−6</sup> radianes.',
       prompt: 'La desviación de un rayo en el limbo del Sol',
@@ -16,7 +17,7 @@ export default {
         off: 'α = 4 × (GM ÷ c²) ÷ R, y luego divide entre 4,848 × 10⁻⁶ para tener segundos de arco.',
       },
     },
-    'where-the-rays-cross': {
+    {
       title: 'Dónde se cruzan los rayos',
       body: 'Los rayos que rozan el Sol se desvían todos hacia él 1,75 segundos de arco, así que cruzan la recta que pasa por su centro a una distancia <em>d</em> = R ÷ α del Sol, donde R es el radio y α está en radianes. Un telescopio colocado ahí vería enfocada toda la luz del limbo del Sol. La unidad astronómica son 1,496 × 10<sup>8</sup> km.',
       prompt: 'La distancia a la que se cruzan los rayos del limbo',
@@ -33,5 +34,5 @@ export default {
         off: 'd = R ÷ α con α = 8,49 × 10⁻⁶ rad, en unidades astronómicas.',
       },
     },
-  },
+  ],
 };

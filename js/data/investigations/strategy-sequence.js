@@ -761,12 +761,12 @@ export const WHY_THE_PERIOD_IS_WRONG_ES = {
     'Decir qué cambios de la cadencia deshacen el empate (tiempos irregulares) y cuáles no (más noches a la misma hora)',
     'Decir que un período citado de una búsqueda lleva la cadencia que lo produjo',
   ],
-  steps: {
-    'a-star-seen-once-a-night': {
+  steps: [
+    {
       title: 'Una estrella vista una vez por noche',
       body: 'Una estrella se aviva y se apaga cada <strong>0,8 días</strong>, unas 19 horas. Puedes mirarla desde un observatorio, una vez por noche, durante cuarenta noches, a la misma hora cada noche. El panel de abajo es la vista de la búsqueda de períodos de ese plan: la curva azul es lo que devuelve la búsqueda para una señal <em>perfecta</em> en la frecuencia verdadera cuando se muestrea en tus épocas. El pico verdadero vale 1; cualquier otro pico es un <strong>alias</strong>, una frecuencia que tu cadencia no distingue de la verdadera. \n\nTodas las series son <strong>sintéticas</strong>: las hace el modelo, con el período fijado en 0,8 días. Nadie las observó.',
     },
-    'predict-the-period': {
+    {
       title: '¿Qué dirá la búsqueda?',
       body: 'Cuarenta visitas, una por noche, siempre a la misma hora. El período verdadero es 0,8 días. Una búsqueda de períodos busca el período que mejor ajusta los puntos.',
       prompt: 'La búsqueda devolverá&hellip;',
@@ -782,7 +782,7 @@ export const WHY_THE_PERIOD_IS_WRONG_ES = {
       because:
         'Los datos no los distinguen: una visita por noche a la misma hora se repite una vez por día sidéreo, así que una estrella que pulsa cada 0,8 días y otra que pulsa cada 4,04 días dan exactamente los mismos cuarenta puntos. La curva llega a 1 en el alias igual que en la verdad.',
     },
-    'the-aliases': {
+    {
       title: 'Lee los alias',
       body: 'En el panel (<em>nocturna, hora fija</em>, período verdadero 0,8 días) lee las tres filas de alias. Una está cerca de 4 días. Escribe su período y la <em>preferencia en chi cuadrado</em> que dan los datos al período verdadero sobre él: cuántas veces peor que la verdad es un ajuste en el alias, en unidades del estadístico. Nueve o más es una preferencia clara.',
       fields: [
@@ -790,7 +790,7 @@ export const WHY_THE_PERIOD_IS_WRONG_ES = {
         { label: 'Preferencia en chi cuadrado por la verdad' },
       ],
     },
-    'why-the-comb': {
+    {
       title: 'De dónde salen los alias',
       body: 'Los períodos de los alias son 4,04, 0,444 y 0,307 días, ninguno múltiplo ni fracción simple de 0,8. Pero una visita por noche los pone todos en la lista.',
       prompt: '¿Por qué los produce una cadencia de una visita por noche?',
@@ -817,7 +817,7 @@ export const WHY_THE_PERIOD_IS_WRONG_ES = {
       because:
         'Entre dos visitas separadas un día la estrella avanza 1,25 pulsos, un cuarto más que un número entero. Una estrella que pulsara 0,25 veces al día avanzaría lo mismo, 0,25, así que en las visitas las dos se ven idénticas. Desplazar una frecuencia un ciclo por día, la tasa de visitas, no cambia nada de lo que las visitas pueden ver.',
     },
-    'break-the-tie': {
+    {
       title: 'Deshaz el empate',
       body: 'Cambia la cadencia a <em>tres por noche</em>: las mismas cuarenta noches, pero cada noche tres visitas a horas distintas. Lee la fila del alias más fuerte: cuánto sube su pico, en por ciento del pico verdadero, y la preferencia en chi cuadrado que ahora dan los datos a la verdad.',
       fields: [
@@ -825,7 +825,7 @@ export const WHY_THE_PERIOD_IS_WRONG_ES = {
         { label: 'Preferencia en chi cuadrado por la verdad' },
       ],
     },
-    'what-breaks-it': {
+    {
       title: 'Qué deshace el empate',
       body: 'Podrías cambiar el plan de varias maneras.',
       prompt: '¿Cuál deshace el empate entre el período y su alias?',
@@ -852,7 +852,7 @@ export const WHY_THE_PERIOD_IS_WRONG_ES = {
       because:
         'Los alias vienen de los tiempos. Solo una cadencia cuyas visitas no caen todas en un mismo peine baja el alias por debajo de la verdad; el ruido, la exposición y la apertura no intervienen.',
     },
-    'the-wrong-answer': {
+    {
       title: 'La búsqueda que sonaba segura',
       body: 'Vuelve a <em>nocturna, hora fija</em> y activa <strong>Buscar en una serie</strong>. El panel hace la serie que daría el plan (0,8 días, con ruido) y ejecuta en ella la búsqueda de períodos. Devuelve unos <strong>0,266 días</strong>.',
       prompt: '¿Qué te dice ese resultado?',
@@ -874,16 +874,16 @@ export const WHY_THE_PERIOD_IS_WRONG_ES = {
       because:
         'El veredicto era ambiguo antes de la búsqueda. Con un peine perfecto el período verdadero y sus alias son iguales, así que una búsqueda devuelve el que favorezca el ruido. Un período de una búsqueda vale lo que la cadencia que lo produjo.',
     },
-    'the-cadence-comes-first': {
+    {
       title: 'Primero la cadencia',
       body: 'Los alias eran previsibles antes de la primera noche. La función ventana de las épocas dice qué períodos no distingue el plan, y el veredicto del panel dice si el ruido te deja escoger el verdadero. Un período que publiques debe llevar la cadencia que lo produjo, para que un lector pueda calcular también los alias. Los pasos más profundos diseñan una cadencia que deshace el empate, la comprueban en una serie, y miden la ventana, la cobertura de fase y el coste de un plan.',
     },
-  },
+  ],
 };
 
 export const WHY_THE_PERIOD_IS_WRONG_DEEPER_ES = {
-  steps: {
-    'design-a-cadence': {
+  steps: [
+    {
       title: 'Diseña una cadencia',
       body: 'Tres visitas por noche funcionaron, pero cuestan el triple de tiempo de telescopio. Prueba <em>nocturna, hora varía</em>: una visita cada noche, pero su hora se mueve hasta 3,6 horas a un lado y a otro. Lee la fila del alias más fuerte.',
       fields: [
@@ -891,17 +891,17 @@ export const WHY_THE_PERIOD_IS_WRONG_DEEPER_ES = {
         { label: 'Preferencia en chi cuadrado por la verdad' },
       ],
     },
-    'how-many-resolve': {
+    {
       title: '¿Qué cadencias lo resuelven?',
       body: 'Recorre las cinco cadencias con 0,8 días, cuarenta noches y una amplitud cinco veces el ruido. Cuenta las que tienen el veredicto <em>resuelto</em>.',
       fields: [{ label: 'Cadencias que resuelven el período' }],
     },
-    'verify-on-a-series': {
+    {
       title: 'Compruébalo en una serie',
       body: 'Toma <em>tres por noche</em> y activa <strong>Buscar en una serie</strong>. Lee el período que halla la búsqueda y su incertidumbre, de la cota de Cramér-Rao para las épocas y el ruido.',
       fields: [{ label: 'Período hallado' }, { label: 'Su incertidumbre' }],
     },
-    'is-it-consistent': {
+    {
       title: '¿Es compatible con 0,8 días?',
       body: 'La búsqueda dice 0,8004 &plusmn; 0,0002 días. El período verdadero del modelo es exactamente 0,8.',
       prompt: '¿Es la medida compatible con la verdad?',
@@ -923,7 +923,7 @@ export const WHY_THE_PERIOD_IS_WRONG_DEEPER_ES = {
       because:
         'La diferencia es 0,0004 días, 1,6 veces la incertidumbre. Un intervalo del 95 por ciento correcto contiene la verdad unas 95 veces de cada 100, y la validación del panel cuenta justo eso en 300 series (alrededor del 94 por ciento).',
     },
-    'window-width': {
+    {
       title: 'El ancho de un pico',
       body: 'Lee la base de las cuarenta noches en la fila <em>Épocas</em> (el intervalo desde la primera visita hasta la última, en días). Un pico de la ventana tiene unos <strong>uno sobre la base</strong> de ancho, en ciclos por día: lo finamente que el plan puede distinguir dos frecuencias.',
       fields: [
@@ -931,7 +931,7 @@ export const WHY_THE_PERIOD_IS_WRONG_DEEPER_ES = {
         { label: 'Ancho del pico en ciclos por día, uno sobre la base' },
       ],
     },
-    'phase-coverage': {
+    {
       title: 'Cuánto del ciclo ves',
       body: 'Pliega las visitas sobre el período: cada una cae en una fase entre 0 y 1 de un pulso. Con la cadencia <em>nocturna, hora fija</em>, lee la fila <em>Cobertura de fase</em> con un período verdadero de <strong>0,8 días</strong> y luego de <strong>1,0 días</strong>: cuántas de las veinte casillas de fase tienen un punto, y el arco vacío más largo.',
       fields: [
@@ -941,7 +941,7 @@ export const WHY_THE_PERIOD_IS_WRONG_DEEPER_ES = {
         { label: 'Arco vacío más largo con 1,0 d, en ciclos' },
       ],
     },
-    'what-a-plan-costs': {
+    {
       title: 'Lo que cuesta un plan',
       body: 'El panel del plan pide a una instalación las noches en que un objetivo es útil: Cerro Tololo, un objetivo en declinación &minus;30, 14 noches, tres visitas por noche de 300 segundos más 60 de tiempo muerto. El tiempo es un sorteo con semilla (sorteo 3, 60 por ciento de noches despejadas, persistencia 0,5): pierde noches enteras. Lee la fila <em>Coste</em>: las horas pedidas y las ejecutadas.',
       fields: [
@@ -950,7 +950,7 @@ export const WHY_THE_PERIOD_IS_WRONG_DEEPER_ES = {
         { label: 'Horas perdidas por el tiempo' },
       ],
     },
-    'the-plan-and-the-verdict': {
+    {
       title: '¿Distingue el plan el período?',
       body: 'Activa <strong>Buscar en la serie</strong> en el panel del plan y lee la fila <em>¿Distingue el plan el período?</em> con <em>tres visitas por noche</em>, y luego con <em>una visita por noche</em> (la visita va en el centro de la ventana cada noche, así que es otra vez el peine). Escribe la preferencia en chi cuadrado de cada una.',
       fields: [
@@ -958,7 +958,7 @@ export const WHY_THE_PERIOD_IS_WRONG_DEEPER_ES = {
         { label: 'Preferencia con una visita por noche' },
       ],
     },
-    'when-the-verdict-is-wrong': {
+    {
       title: 'Cuando el veredicto no se aplica',
       body: 'El veredicto compara una sinusoide en el período verdadero con una sinusoide en cada alias, en ruido blanco. Un objetivo real puede ser una binaria eclipsante con caídas bruscas, o una estrella con manchas que cambian.',
       prompt: '¿Qué le hace eso al veredicto?',
@@ -980,12 +980,12 @@ export const WHY_THE_PERIOD_IS_WRONG_DEEPER_ES = {
       because:
         'La ventana es exacta para los tiempos; el veredicto añade una suposición sobre la señal (una sinusoide en ruido blanco). Di lo que supusiste junto al período que publiques.',
     },
-  },
+  ],
 };
 
 export const DESIGN_THE_SCHEDULE_DEEPER_ES = {
-  steps: {
-    'the-site-sets-the-comb': {
+  steps: [
+    {
       title: 'El peine que impone el sitio',
       body: 'La ventana que leíste para tus ocho noches tiene dientes porque el sitio impone un peine: una visita por noche se repite una vez por día sidéreo. Usa el panel de estrategia para el planeta de esta investigación (un período de 3,5 días, el ajuste más cercano) con <em>nocturna, hora fija</em> durante 24 noches. Lee el veredicto y el período del alias cerca de 1,4 días.',
       fields: [
@@ -993,7 +993,7 @@ export const DESIGN_THE_SCHEDULE_DEEPER_ES = {
         { label: 'Preferencia en chi cuadrado por la verdad' },
       ],
     },
-    'an-irregular-night-costs-nothing': {
+    {
       title: 'Lo que compran los tiempos irregulares, en números',
       body: 'Cambia la cadencia a <em>tres por noche</em> durante las mismas 24 noches con 3,5 días. Lee la fila del alias más fuerte: cuánto sube y la preferencia que dan los datos al período verdadero.',
       fields: [
@@ -1001,7 +1001,7 @@ export const DESIGN_THE_SCHEDULE_DEEPER_ES = {
         { label: 'Preferencia en chi cuadrado por la verdad' },
       ],
     },
-    'what-the-verdict-assumes': {
+    {
       title: 'Lo que supone el veredicto',
       body: 'El panel de estrategia llama resuelta a una cadencia cuando el alias más cercano queda descartado por una preferencia en chi cuadrado de nueve o más para una sinusoide en ruido blanco.',
       prompt: '¿Qué debe acompañar a un período hallado en un horario así?',
@@ -1023,7 +1023,7 @@ export const DESIGN_THE_SCHEDULE_DEEPER_ES = {
       because:
         'Los alias se calculan de las épocas; que importen o no depende de la amplitud, el ruido y la forma de la señal. Las tres cosas van con el número.',
     },
-  },
+  ],
 };
 
 const CONTENT = {

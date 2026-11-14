@@ -8,7 +8,6 @@
 
 import { DEPTHS, inDepth } from '../investigations/progressSchema.js';
 import { toleranceFor } from '../answerCheck.js';
-import { alignShadow, checkShadowSteps } from '../data/investigations/i18n.js';
 
 /** Rule ids and what they say, for `author:check --rules`. */
 export const DEPTH_RULES = {
@@ -34,7 +33,7 @@ export const DEPTH_RULES = {
  * The findings for one lesson's deeper steps.
  * @param {object} core - The lesson as the registry has it
  * @param {object} laid - The same lesson with every depth laid in
- * @param {{steps: object}} words - The Spanish shadow of the deeper steps
+ * @param {{steps: object[]}} words - The Spanish shadow of the deeper steps
  * @param {Array<object>} deeper - The deeper steps, as written
  * @returns {Array<{level: string, rule: string, lesson: string, step: ?number, message: string}>}
  */
@@ -45,11 +44,6 @@ export function checkDepth(core, laid, deeper, words) {
     out.push({ level: 'error', rule, lesson: L, step: sid, message });
   const at = sid => laid.steps.findIndex(s => s.sid === sid);
   const offered = core.depths || [];
-  const spoken = words ? alignShadow(deeper, words.steps) : null;
-  if (words)
-    checkShadowSteps(deeper, words.steps, (_, message, n) =>
-      err('depth/translation', n == null ? null : deeper[n].sid, message)
-    );
 
   if (offered[0] !== 'core' || offered.some(d => !DEPTHS.includes(d)))
     err('depth/offered', null, `depths must start with core: ${offered}`);
@@ -58,7 +52,7 @@ export function checkDepth(core, laid, deeper, words) {
       err('depth/offered', null, `offers ${d} and has no step at it`);
 
   const coreSids = new Set(core.steps.map(s => s.sid));
-  deeper.forEach(s => {
+  deeper.forEach((s, n) => {
     const w = s.sid;
     if (!offered.includes(s.depth) || s.depth === 'core')
       err(
@@ -157,6 +151,8 @@ export function checkDepth(core, laid, deeper, words) {
           `expects ${s.answer}; "${g.sid}:${g.id}" computes ${value}`
         );
     }
+    const sp = words?.steps?.[n];
+    if (words && !sp) err('depth/translation', w, 'has no Spanish');
   });
 
   if (laid.steps.at(-1)?.sid !== core.steps.at(-1)?.sid)
@@ -169,7 +165,7 @@ export function checkDepth(core, laid, deeper, words) {
   // The words a reader sees, step for step: the title and body, and every
   // other text and list the English step has.
   deeper.forEach((s, n) => {
-    const sp = spoken?.[n];
+    const sp = words?.steps?.[n];
     if (!sp) return;
     const need = (key, ok) =>
       s[key] !== undefined &&

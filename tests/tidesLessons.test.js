@@ -57,8 +57,8 @@ describe('the lessons are registered whole', () => {
       const full = lesson(id);
       expect(full.steps.some(s => s.depth === 'quantitative')).toBe(true);
       expect(full.steps.some(s => s.depth === 'advanced')).toBe(true);
-      expect(Object.keys(ES_LESSONS[id].steps)).toHaveLength(l.steps.length);
-      expect(Object.keys(ES_DEEP[id].steps)).toHaveLength(
+      expect(ES_LESSONS[id].steps).toHaveLength(l.steps.length);
+      expect(ES_DEEP[id].steps).toHaveLength(
         full.steps.filter(s => s.depth).length
       );
     }

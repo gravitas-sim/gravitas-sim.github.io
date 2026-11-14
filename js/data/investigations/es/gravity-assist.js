@@ -10,8 +10,8 @@
 // the answer parser matches against, not prose, and a translated copy of them
 // would stop the parser recognising what a student typed.
 //
-// `steps` is keyed by step sid; other arrays line up by index. `null` means
-// "not translated": that entry keeps its English.
+// Arrays line up by index with the English. `null` means "not translated";
+// that entry keeps its English.
 // =============================================================================
 
 export default {
@@ -28,8 +28,8 @@ export default {
     'Decir por qué el sistema del planeta es exactamente inercial sin estrella y solo aproximadamente con una',
     'Distinguir una rapidez que depende del sistema de referencia de las magnitudes que el conjunto conserva en todos ellos',
   ],
-  steps: {
-    'voyager-left-faster': {
+  steps: [
+    {
       title: 'La Voyager se marchó más rápido de lo que llegó',
       body: `En julio de 1979 la Voyager 2 pasó junto a Júpiter. Se acercó a unos
              diez kilómetros por segundo respecto del Sol y se marchó a unos
@@ -43,7 +43,7 @@ export default {
              un truco. <strong>¿De dónde salió la velocidad?</strong>`,
       tip: 'La Voyager 2 sigue alejándose a unos 15 km/s, casi todo prestado por Júpiter, Saturno, Urano y Neptuno, uno tras otro.',
     },
-    'the-simplest-possible-flyby': {
+    {
       title: 'El sobrevuelo más simple posible',
       body: `En pantalla está la versión menos recargada de esa maniobra que
              podría construirse. Un planeta de cinco masas de Júpiter, a la
@@ -61,7 +61,7 @@ export default {
              correcto y no casi correcto.`,
       tip: 'Se cree que los planetas errantes, a la deriva entre las estrellas sin sol propio, son abundantes. Este es un recurso didáctico, pero no es un objeto imposible.',
     },
-    'which-side-gains': {
+    {
       title: '¿Por qué lado?',
       body: `La nave puede pasar por cualquiera de los dos lados del planeta: por
              delante, en la dirección hacia la que este se dirige, o por detrás,
@@ -81,7 +81,7 @@ export default {
                 <em>atrás</em> respecto del movimiento de este. Al pasar por
                 detrás, se la arrastra en la dirección en que el planeta va.`,
     },
-    'fly-the-gaining-pass': {
+    {
       title: 'Lánzala',
       body: `El panel de <strong>asistencia gravitatoria</strong> ya está
              abierto. Está fijado en un parámetro de impacto de
@@ -99,7 +99,7 @@ export default {
       ],
       tip: 'El botón de sistema de referencia reexpresa toda la imagen, estelas incluidas, en el sistema del planeta. Ahí el planeta se queda quieto y la nave pasa barriendo una hipérbola.',
     },
-    'write-down-both-columns': {
+    {
       title: 'Las dos columnas',
       body: `Con el sobrevuelo terminado, lee cuatro velocidades del panel. Están
              en kilómetros por segundo.`,
@@ -118,7 +118,7 @@ export default {
         },
       ],
     },
-    'how-can-both-be-true': {
+    {
       title: '¿Cómo pueden ser ciertas las dos cosas?',
       body: `Respecto del planeta: 4,343 km/s antes y 4,343 km/s después; el
              panel da el cambio como tres partes en cien mil millones, que es
@@ -140,7 +140,7 @@ export default {
                 estrella presente los dos números son exactos- y no apareció
                 energía de ninguna parte. La pantalla siguiente es la aritmética.`,
     },
-    'the-vector-addition': {
+    {
       title: 'Es un vector, rotado',
       body: `Aquí está todo el mecanismo, y no es un empujón.
              \n\nEn el sistema del planeta, el encuentro solo puede hacerle una
@@ -158,7 +158,7 @@ export default {
              ángulo entre ellas, otro total. Nadie empujó nada.`,
       tip: 'Por eso la maniobra se explica a veces como hacer rebotar una pelota de tenis en un tren en marcha. La pelota se marcha del tren a la velocidad con la que llegó, en el sistema del tren; en el de la estación se marcha mucho más rápido.',
     },
-    'the-other-side': {
+    {
       title: 'Ahora el otro lado, los dos a la vez',
       body: `Si la ganancia viene de sumar un vector rotado, entonces rotarlo
              hacia el otro lado debería restar en vez de sumar.
@@ -181,7 +181,7 @@ export default {
       ],
       tip: 'La desviación es idéntica por los dos lados: 58,63 grados. Solo cambia su sentido, y la tabla muestra los dos.',
     },
-    'read-the-comparison': {
+    {
       title: 'Dos pasos, tres números',
       body: `Lee esto en la tabla de comparación. La fila de <em>cambio de
              rapidez</em> lleva signo: una columna ganó y la otra perdió. La
@@ -200,7 +200,7 @@ export default {
       ],
       tip: 'La advertencia bajo la tabla dice con qué precisión coinciden los dos cambios de velocidad. En el laboratorio aislado son unas pocas partes en 10¹³, que es el integrador y no la física.',
     },
-    'why-not-mirror-image': {
+    {
       title: '¿Por qué la pérdida es menor que la ganancia?',
       body: `Las dos columnas siguen en pantalla, que es para lo que sirve
              ejecutarlas juntas. Pasando por detrás, la nave fue de 3,32 a 5,89
@@ -228,7 +228,7 @@ export default {
                 de máxima aproximación: es de 0,234 AU en los dos pasos, y la
                 tabla dice con qué precisión.`,
     },
-    'the-ceiling': {
+    {
       feedback: {
         close:
           'Cerca. Una inversión completa da la vuelta a la dirección de la velocidad relativa: ¿de qué tamaño es el cambio de un giro así?',
@@ -262,7 +262,7 @@ export default {
                 que pasa despacio junto a Júpiter tiene poca velocidad de
                 aproximación y un giro grande- y tan poco en Mercurio.`,
     },
-    'who-paid': {
+    {
       title: 'Alguien pagó eso',
       body: `Vuelve a lanzar el paso ganador con el parámetro de impacto otra vez
              en <strong>+40</strong>, y esta vez lee la parte de abajo del panel:
@@ -282,7 +282,7 @@ export default {
         },
       ],
     },
-    'where-the-energy-came-from': {
+    {
       title: 'Entonces, ¿de dónde salió la energía?',
       body: `La energía cinética de la nave se multiplicó por tres. El planeta se
              frenó unos cuatro milímetros por segundo -una parte en un millón de
@@ -309,7 +309,7 @@ export default {
                 La tuya no será la misma que la de tu vecino, y las dos
                 descartan la cuarta opción.`,
     },
-    'the-planets-frame-is-two-frames': {
+    {
       title: '¿El sistema de quién, exactamente?',
       body: `Un cabo suelto, y del tipo interesante.
              \n\nToda la investigación se apoya en la columna izquierda: la rapidez
@@ -344,7 +344,7 @@ export default {
                 que es la fila que el panel llama el balance.`,
       tip: 'El panel lo comprueba en vez de afirmarlo: el cambio de velocidad del planeta dividido por el de la nave debería ser igual a la razón de masas, y la advertencia dice si lo es.',
     },
-    'sweep-the-impact-parameter': {
+    {
       title: 'Opcional: ¿cuánto compra pasar más cerca?',
       body: `<strong>Opcional, y lleva unos tres minutos.</strong> Sáltalo si la
              sesión es corta; nada de lo que sigue depende de esto.
@@ -366,7 +366,7 @@ export default {
       ],
       tip: 'Detener está ahí si lo necesitas. Un barrido detenido conserva los pasos que voló y marca los que nunca alcanzó, en lugar de presentar cuatro puntos como cinco.',
     },
-    'read-the-sweep': {
+    {
       title: 'Opcional: lee los cinco',
       body: `Dos filas de la tabla y una resta que necesitarás en la pantalla
              siguiente.`,
@@ -376,7 +376,7 @@ export default {
         { label: 'Cambio de rapidez en b = 30', hint: 'km/s' },
       ],
     },
-    'strongest-turn-biggest-gain': {
+    {
       title: 'Opcional: ¿gana siempre el giro mayor?',
       body: `En tus cinco pasos, el más cercano giró más y ganó más. La
              conclusión evidente es que un giro mayor siempre significa una
@@ -407,7 +407,7 @@ export default {
                 sobre los sobrevuelos.`,
       tip: 'La advertencia bajo la gráfica dice lo mismo, y lo dice salgan como salgan tus cinco.',
     },
-    'explain-the-sweep': {
+    {
       title: 'Opcional: dilo con tus propios números',
       body: `Tu tabla tiene cinco giros y cinco cambios de rapidez. Calcula
              aproximadamente cuánta rapidez compró cada grado extra de giro,
@@ -432,7 +432,7 @@ export default {
                retorno como un artefacto numérico y no como geometría: reducir
                el paso a la mitad no lo movería.`,
     },
-    'now-with-a-sun': {
+    {
       title: 'Ahora vuelve a poner una estrella',
       body: `Todo lo anterior era exacto y algo irreal: los planetas de verdad no
              van a la deriva solos por el espacio vacío, sino orbitando
@@ -448,7 +448,7 @@ export default {
              exactamente igual. Fíjate en cuán cerca lo está.`,
       tip: 'El Júpiter real se frena unos 10⁻²⁵ metros por segundo por cada Voyager. En toda la edad del sistema solar, todas las naves lanzadas juntas no han alterado su órbita de forma medible.',
     },
-    'fly-it-heliocentric': {
+    {
       title: 'Lánzala y vigila el residuo',
       body: `Pulsa <strong>Lanzarla</strong>. Este encuentro es mucho más rápido:
              la nave solo se sigue mientras está lo bastante cerca del planeta
@@ -463,7 +463,7 @@ export default {
       ],
       tip: 'Déjalo correr después de tomar las lecturas y mira cómo la nave se aleja por una órbita mucho más ancha que aquella con la que llegó.',
     },
-    'what-the-residual-means': {
+    {
       title: '¿Qué te está diciendo el residuo?',
       body: `Respecto de la estrella, la nave pasó de unos 13,7 a unos 19,8 km/s:
              una ganancia real del 45 por ciento, y el objetivo de toda la
@@ -488,7 +488,7 @@ export default {
                 un apaño. Reducir el paso de integración a la mitad no lo
                 encogería, porque no es un problema del paso.`,
     },
-    'what-this-leaves-out': {
+    {
       title: 'Lo que has medido y lo que deja fuera',
       body: `Has medido una asistencia gravitatoria dos veces.
              \n\n· Pasando por detrás de un planeta, una nave gana velocidad
@@ -518,5 +518,5 @@ export default {
              radiación que estuvo a punto de acabar con la Galileo.`,
       tip: 'La sonda Parker Solar Probe es la misma idea al revés: siete sobrevuelos de Venus por el lado de delante, cada uno quitando velocidad a propósito para poder caer más cerca del Sol.',
     },
-  },
+  ],
 };

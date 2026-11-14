@@ -3,8 +3,8 @@
 
 // Por qué Venus es caliente, pasos más profundos: paso a paso con el inglés.
 export const WHY_VENUS_IS_HOT_DEEPER = {
-  steps: {
-    'earth-without-clouds': {
+  steps: [
+    {
       title: 'La Tierra sin albedo',
       body: 'El albedo de Bond fija cuánta luz solar absorbe un planeta. Pon el planeta en <strong>Tierra</strong>, cambia el albedo a <strong>la mía</strong> y ponlo en <strong>0</strong>: un planeta que lo absorbe todo. Lee la nueva temperatura de equilibrio y cuánto más cálida es que con el propio albedo de la Tierra, 254 K.',
       fields: [
@@ -12,7 +12,7 @@ export const WHY_VENUS_IS_HOT_DEEPER = {
         { label: 'Cuánto más cálida que con su propio albedo' },
       ],
     },
-    'how-thick-is-venus': {
+    {
       title: '¿Con qué rapidez se enrarece el aire?',
       body: 'En una atmósfera isoterma la presión baja en el mismo factor, 1/e o un 37 por ciento, en cada <strong>altura de escala</strong> <em>H</em> = <em>kT</em>/(<em>μm</em><sub>u</sub><em>g</em>). No es el grosor de la atmósfera: no hay un tope. Lee la altura de escala de <strong>Venus</strong> a su temperatura superficial, y la de la <strong>Tierra</strong>.',
       fields: [
@@ -20,13 +20,13 @@ export const WHY_VENUS_IS_HOT_DEEPER = {
         { label: 'Altura de escala de la Tierra' },
       ],
     },
-  },
+  ],
 };
 
 // Dos modelos de efecto invernadero, pasos más profundos: paso a paso con el inglés.
 export const TWO_GREENHOUSE_MODELS_DEEPER = {
-  steps: {
-    'mars-barely-a-greenhouse': {
+  steps: [
+    {
       title: 'Marte en los dos modelos',
       body: 'Marte tiene una atmósfera fina. Pon el planeta en <strong>Marte</strong> y lee la emisividad de una capa y la profundidad óptica que dan su temperatura superficial medida, 210 K.',
       fields: [
@@ -34,7 +34,7 @@ export const TWO_GREENHOUSE_MODELS_DEEPER = {
         { label: 'Profundidad óptica que da 210 K' },
       ],
     },
-    'one-unit-two-models': {
+    {
       title: 'Una unidad en cada modelo',
       body: 'Pon el planeta en <strong>Tierra</strong>. Da al modelo de una capa una emisividad de <strong>1</strong> (una capa que absorbe todo el infrarrojo) y al modelo gris una profundidad óptica de <strong>1</strong>. Lee la temperatura del suelo que da cada uno.',
       fields: [
@@ -44,18 +44,18 @@ export const TWO_GREENHOUSE_MODELS_DEEPER = {
         { label: 'Temperatura del suelo, una capa con emisividad 1' },
       ],
     },
-    'limits-of-gray': {
+    {
       title: 'Dónde se detiene el modelo gris',
       body: 'El perfil gris es la solución de Eddington. Existe una solución gris numéricamente exacta y el instrumento la dibuja discontinua. Mira lo alto de la atmósfera, con profundidad óptica 0, y lee cuánto más cálida es la curva de Eddington que la gris exacta, como porcentaje.\n\nEsa diferencia es el error de la aproximación. Un límite mayor es la palabra <em>gris</em>: la opacidad real depende de la longitud de onda, y la luz solar y el infrarrojo del planeta se absorben de maneras muy distintas, algo que este modelo no puede representar.',
       fields: [{ label: 'Eddington frente al gris exacto, arriba' }],
     },
-  },
+  ],
 };
 
 // El Sol que gira, pasos más profundos: paso a paso con el inglés (Prompt 194, parte 2).
 export const THE_TURNING_SUN_DEEPER = {
-  steps: {
-    'a-southern-group': {
+  steps: [
+    {
       title: 'Un segundo grupo, en el sur',
       body: 'G3 es el grupo más grande de las imágenes, a 20 grados al sur. Elige <strong>G3</strong> con los mismos días (1 a 9) y lee su <strong>velocidad sideral</strong> y la incertidumbre de esa velocidad.',
       fields: [
@@ -63,7 +63,7 @@ export const THE_TURNING_SUN_DEEPER = {
         { label: 'La incertidumbre de esa velocidad (grados por día)' },
       ],
     },
-    'the-law-at-two-latitudes': {
+    {
       title: 'Lo que dice la ley de referencia en cada uno',
       body: 'La ley de referencia, Howard, Harvey y Forgach (1990), da la velocidad a cualquier latitud con una forma fija, <em>A</em> + <em>B</em> sen<sup>2</sup>(latitud) + <em>C</em> sen<sup>4</sup>(latitud). Se midió sobre rasgos magnéticos, no sobre manchas, y se copió del artículo sin volver a leerlo aquí. Lee lo que predice a la latitud de G1 y a la de G3: cambia entre los dos grupos.',
       fields: [
@@ -77,7 +77,7 @@ export const THE_TURNING_SUN_DEEPER = {
         },
       ],
     },
-    'solid-or-not': {
+    {
       title: '¿Es el Sol una bola sólida?',
       body: 'Si el Sol girara como una bola sólida, todas las manchas tendrían la misma velocidad sideral. G1 gira a 14,13 &plusmn; 0,06 grados al día y G3 a 13,48 &plusmn; 0,06, que difieren en 0,66.',
       prompt: '¿Qué dicen estos dos grupos?',
@@ -104,7 +104,7 @@ export const THE_TURNING_SUN_DEEPER = {
       because:
         'El sentido es el correcto y el tamaño no lo deciden dos grupos: 0,66 frente a unos 0,43 una vez contada la dispersión entre grupos. Que la superficie del Sol gira más deprisa en el ecuador se estableció siguiendo muchísimos grupos y rasgos durante un siglo; dos grupos son dos puntos.',
     },
-    'near-the-limb': {
+    {
       title: 'Una marca cerca del borde',
       body: 'G1 sigue en el disco el día 7, cerca del borde. Pon el día en <strong>7</strong> y lee el <strong>mu</strong> de G1, el coseno del ángulo desde el centro del disco visto desde el Sol (1 en el centro, 0 en el borde), y la incertidumbre de su longitud.',
       fields: [
@@ -112,7 +112,7 @@ export const THE_TURNING_SUN_DEEPER = {
         { label: 'La incertidumbre de su longitud' },
       ],
     },
-    'fit-the-equatorial-term': {
+    {
       title: 'Ajustar el único coeficiente que los grupos pueden fijar',
       body: 'Dos grupos, a dos latitudes, dan dos números. La ley tiene tres coeficientes. Así que ajusta solo el <strong>término ecuatorial A</strong> y mantén los otros dos en los valores de la ley. Elige el modo <strong>Ajustar el término ecuatorial</strong> y lee A, su incertidumbre y el chi cuadrado.',
       fields: [
@@ -120,7 +120,7 @@ export const THE_TURNING_SUN_DEEPER = {
         { label: 'La incertidumbre de A (grados por día)' },
       ],
     },
-    'three-from-two': {
+    {
       title: '¿Por qué no ajustar los tres?',
       body: 'Elige el modo <strong>Ajustar los tres coeficientes</strong>. El instrumento lo rechaza.',
       prompt: '¿Por qué lo rechaza?',
@@ -142,18 +142,18 @@ export const THE_TURNING_SUN_DEEPER = {
       because:
         'Dos latitudes dan dos números, y una curva con tres coeficientes libres tiene toda una familia de ajustes por ellos. El instrumento dice cuántas latitudes necesita en vez de devolver coeficientes que parecen exactos y no significan nada.',
     },
-    'why-the-scatter': {
+    {
       title: '¿Están las marcas de G3 sobre una recta?',
       body: 'Elige <strong>Seguir un grupo</strong> y G3 otra vez. Lee el chi cuadrado por grado de libertad: cerca de 1 cuando las marcas caen sobre la recta hasta donde dicen sus incertidumbres, mayor cuando no.',
       fields: [{ label: 'Chi cuadrado por grado de libertad de G3' }],
     },
-  },
+  ],
 };
 
 // El poder del Sol, pasos más profundos: paso a paso con el inglés (Prompt 194, parte 2).
 export const THE_SUNS_POWER_DEEPER = {
-  steps: {
-    'the-fall-and-its-cause': {
+  steps: [
+    {
       title: 'El flujo cae a lo largo de los seis días',
       body: 'Con los seis días y la corrección activada, lee cuánto cayó el flujo en la Tierra del primer día al último, y cuánto cayó el flujo a 1 UA.',
       fields: [
@@ -161,7 +161,7 @@ export const THE_SUNS_POWER_DEEPER = {
         { label: 'La caída a 1 UA (W/m²)' },
       ],
     },
-    'how-sure-is-the-mean': {
+    {
       title: '¿Cuán segura es la media?',
       body: 'La media de los seis días corregidos tiene una incertidumbre dada por la dispersión de los días dividida entre la raíz de seis. Léela, y la incertidumbre que da a la luminosidad.',
       fields: [
@@ -169,7 +169,7 @@ export const THE_SUNS_POWER_DEEPER = {
         { label: 'La incertidumbre de la luminosidad (× 10²² W)' },
       ],
     },
-    'zeros-are-not-data': {
+    {
       title: 'Siete filas de cero',
       body: 'El archivo tiene siete filas más, del 10 al 16 de mayo, con una irradiancia de 0,0 y una incertidumbre de 0,0.',
       prompt: '¿Qué significan, y qué debe hacerse con ellas?',
@@ -193,7 +193,7 @@ export const THE_SUNS_POWER_DEEPER = {
       because:
         'Los valores de relleno marcan datos que faltan. El paquete lo dice y no lleva irradiancia del 10 al 17 de mayo; la media y la luminosidad de arriba usan solo los seis días medidos. Los ceros silenciosos en una serie son una de las formas más comunes de que una media salga mal sin parecerlo.',
     },
-    'the-quoted-uncertainty': {
+    {
       title: '¿Qué incertidumbre es mayor?',
       body: 'El archivo cita una incertidumbre de medida de 0,27 a 0,32 W/m² para cada día. La media de los seis días tiene una incertidumbre de 0,15 W/m² por su dispersión.',
       prompt: '¿Qué relación hay entre las dos, y qué dice sobre el 0,15?',
@@ -214,7 +214,7 @@ export const THE_SUNS_POWER_DEEPER = {
       because:
         'El doble. La dispersión de seis días dice cuán bien concuerdan entre sí; la incertidumbre citada del instrumento cubre además lo que comparten. Una afirmación justa de la potencia del Sol con estos días lleva la mayor, cerca de un 0,02 por ciento, y ninguna incluye el cambio real del Sol a lo largo de los días.',
     },
-    'compare-with-the-nominal': {
+    {
       title: 'Frente al Sol nominal',
       body: 'La luminosidad solar nominal de la Unión Astronómica Internacional es 3,828 &times; 10<sup>26</sup> W y su temperatura efectiva nominal 5772 K. Lee cuánto se aparta tu luminosidad de la nominal, en porcentaje, y tu temperatura, en kelvin.',
       fields: [
@@ -222,28 +222,28 @@ export const THE_SUNS_POWER_DEEPER = {
         { label: 'La temperatura frente a 5772 K' },
       ],
     },
-  },
+  ],
 };
 
 // ¿Qué tan caliente está el lado diurno? y Fases y albedo, pasos más profundos: paso a paso con el inglés (Prompt 202).
 export const HOW_HOT_IS_THE_DAY_SIDE_DEEPER = {
-  steps: {
-    'planet-y-misfit': {
+  steps: [
+    {
       title: '¿Puede un cuerpo negro ajustar al planeta Y?',
       body: 'Quédate con el <strong>Planeta Y</strong> y mueve <strong>Mi temperatura de cuerpo negro</strong> para hallar el chi cuadrado más bajo que da una sola temperatura a las cuatro profundidades. Anota ese chi cuadrado. El mejor del planeta X fue 6,5.',
       fields: [{ label: 'El chi cuadrado más bajo del planeta Y' }],
     },
-    'the-manifest': {
+    {
       title: 'Compara las lecturas con el manifiesto',
       body: 'El manifiesto de verdad del planeta X dice que su cuerpo negro está a <strong>2100 K</strong>. Con la luz reflejada en <strong>suponer que no hay</strong>, cuenta cuántos de los cuatro intervalos del 95 por ciento contienen 2100 K.',
       fields: [{ label: 'Intervalos que contienen 2100 K' }],
     },
-  },
+  ],
 };
 
 export const PHASES_AND_ALBEDO_DEEPER = {
-  steps: {
-    'the-interval': {
+  steps: [
+    {
       title: '¿Qué tan bien fija la curva el albedo?',
       body: 'El ajuste del planeta P viene con un intervalo del 95 por ciento. Lee sus extremos <strong>inferior</strong> y <strong>superior</strong>.',
       fields: [
@@ -251,11 +251,11 @@ export const PHASES_AND_ALBEDO_DEEPER = {
         { label: 'Extremo superior del intervalo' },
       ],
     },
-    'another-sphere': {
+    {
       title: 'Otra esfera, otro factor',
       body: 'La curva del planeta Q se hizo con una esfera de <strong>Lommel-Seeliger</strong>, una superficie distinta que se oscurece hacia el borde del disco de otra manera. Su integral de fase, la integral de su curva sobre todos los ángulos, es 1,64 y no el 3/2 de una esfera de Lambert. Para el mismo brillo a fase llena su albedo de Bond sería cerca de un 9 por ciento mayor, 1,64 frente a 1,5 veces el albedo geométrico. Así que el factor entre los dos albedos es una propiedad de la superficie, y el instrumento no da albedo para el planeta Q en lugar del albedo de la esfera equivocada.',
     },
-  },
+  ],
 };
 
 export default {

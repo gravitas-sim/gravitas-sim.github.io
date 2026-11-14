@@ -1,6 +1,7 @@
+// El disco que gira, más a fondo: las palabras en español, paso a paso con ../the-rotating-disk.js.
 export default {
-  steps: {
-    'v0-by-hand': {
+  steps: [
+    {
       title: 'La rapidez a mano',
       body: 'Una órbita circular tiene rapidez V = R × Ω, con R la distancia al centro y Ω la velocidad angular. A − B de Oort es Ω en el Sol: 29,71&nbsp;km/s/kpc. Usa R = 8,3&nbsp;kpc.',
       prompt: 'La rapidez circular en el Sol',
@@ -14,7 +15,7 @@ export default {
         off: 'V = (A − B) × R, con A − B = 29,71 km/s/kpc y R = 8,3 kpc.',
       },
     },
-    'enclosed-mass': {
+    {
       title: 'La masa dentro de la órbita del Sol',
       body: 'La gravedad debe suministrar el movimiento circular: M = v² r ÷ G. En unidades de kiloparsecs, km/s y masas solares, G = 4,30 × 10<sup>−6</sup>. Toma v = 244&nbsp;km/s en r = 8,3&nbsp;kpc, los valores de la curva de rotación. Esto supone que la masa es esférica, lo que un disco no es: tómalo como una estimación.',
       prompt: 'La masa dentro de 8,3 kpc, en 10¹⁰ masas solares',
@@ -29,7 +30,7 @@ export default {
         off: 'M = v² × r ÷ G, con v = 244, r = 8,3 y G = 4,30 × 10⁻⁶; divide la respuesta entre 10¹⁰.',
       },
     },
-    'halo-share': {
+    {
       title: 'La parte del halo en el Sol',
       body: 'Las rapideces de componentes distintos se suman en cuadratura, así que la parte de la fuerza de un componente es su rapidez al cuadrado sobre la rapidez total al cuadrado. En el ajuste con halo, la fila de 8,3&nbsp;kpc da la rapidez del halo (178,3) y la total (270,3).',
       prompt: 'La parte del halo de v² a 8,3 kpc',
@@ -42,7 +43,7 @@ export default {
         off: '(halo ÷ total)² × 100, con halo = 178,3 y total = 270,3 km/s.',
       },
     },
-    'why-bound-the-disk': {
+    {
       title: 'Por qué se acota el disco',
       body: 'Los ajustes acotan el disco en 8 × 10<sup>10</sup> masas solares. Sin cota, un disco puede hacerse lo bastante masivo para ajustar la curva sin halo, y el ajuste no diría nada de un halo.',
       prompt:
@@ -62,5 +63,5 @@ export default {
       because:
         'La pregunta es si bastan las estrellas y el gas que podemos contar. Un disco sin cota respondería otra pregunta (¿podría algún disco hacerlo?) y la respuesta no informaría. La cota declara la pregunta; otra cota es otro supuesto, declarado.',
     },
-  },
+  ],
 };

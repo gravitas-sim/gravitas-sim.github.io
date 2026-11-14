@@ -780,7 +780,7 @@ describe('the lesson steps', () => {
 
   test('the Spanish lesson lines up with the English across the insertion', () => {
     const merged = mergeTranslation(LISTENING, LISTENING_ES);
-    expect(Object.keys(LISTENING_ES.steps)).toHaveLength(steps.length);
+    expect(LISTENING_ES.steps).toHaveLength(steps.length);
     const title = sid => merged.steps[at(sid)].title;
     expect(title('model-against-measurement')).toBe(
       'La medida, el modelo y lo que queda'

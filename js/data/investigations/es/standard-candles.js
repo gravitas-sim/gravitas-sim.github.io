@@ -9,13 +9,13 @@ export default {
     'Decir por qué las supernovas solas no pueden dar la constante de Hubble, y qué aportan los peldaños de debajo',
     'Comparar el error de un peldaño con el tamaño del error que transmite',
   ],
-  steps: {
-    'a-candle-and-its-distance': {
+  steps: [
+    {
       title: 'Una candela y su distancia',
       body: `Una <strong>candela estándar</strong> es un objeto cuyo brillo verdadero puedes conocer sin conocer su distancia. Una supernova de tipo Ia, una enana blanca empujada más allá de su límite, es casi una: todas alcanzan más o menos la misma luminosidad en el máximo, tras una pequeña corrección por la rapidez con que se apagan. Compara lo brillante que parece una con lo brillante que es, y la diferencia en magnitudes es su <strong>módulo de distancia</strong>.
              \n\nEl diagrama representa los módulos de 1.829 supernovas del Dark Energy Survey frente a sus corrimientos al rojo. Son <strong>auténticas</strong>, con solo errores estadísticos. La curva cálida es un universo plano con la densidad de materia y la constante de Hubble que fijes. Una supernova a la izquierda está cerca y una a la derecha está lejos, y nada aquí dice lo brillante que es de verdad cada una: eso viene de las cefeidas y los otros peldaños de la escalera, más abajo.`,
     },
-    'the-sample': {
+    {
       title: 'La muestra',
       body: `Lee el <strong>número de supernovas</strong> y el <strong>chi cuadrado</strong> del mejor ajuste, el primer número del par.`,
       fields: [
@@ -23,7 +23,7 @@ export default {
         { label: 'Chi cuadrado del mejor ajuste' },
       ],
     },
-    'predict-a-calibration-error': {
+    {
       title: 'Una candela que no es lo que creías',
       body: `Supón que cada supernova es en verdad 0,1 magnitudes más débil de lo que dice la calibración. Cada una está entonces más lejos de lo que se pensaba, así que todas las distancias son demasiado pequeñas en la misma fracción. Todavía no cambies el instrumento.`,
       prompt: 'La constante de Hubble que implican las supernovas&hellip;',
@@ -39,7 +39,7 @@ export default {
       because:
         'Baja, en torno a un 4,5 por ciento. Una candela más débil con el mismo brillo observado está más lejos, así que las distancias corregidas son mayores y, para las mismas velocidades de recesión, la pendiente es menor. Los corrimientos al rojo no cambiaron, pero una constante de Hubble es una velocidad dividida por una distancia, y la distancia sí.',
     },
-    'a-calibration-error': {
+    {
       title: '0,1 magnitudes de error',
       body: `Lleva el <strong>error en la magnitud absoluta de las supernovas</strong> a <strong>0,10</strong> magnitudes. Lee la <strong>constante de Hubble implícita</strong> y el <strong>cambio en H<sub>0</sub> por 0,1 mag</strong>.`,
       fields: [
@@ -47,7 +47,7 @@ export default {
         { label: 'Cambio en H₀ por 0,1 mag' },
       ],
     },
-    'the-degeneracy': {
+    {
       title: 'Por qué las supernovas solas no pueden decirlo',
       body: `Mover el error en la magnitud absoluta cambia la constante de Hubble que implica el instrumento, y deja el chi cuadrado de la curva donde estaba. Lo mismo vale para la constante de Hubble de la propia curva: el chi cuadrado para 50, 70 y 90 se diferencia en unos 10<sup>−12</sup>.`,
       prompt: '¿Qué te dice eso?',
@@ -71,7 +71,7 @@ export default {
       because:
         'La curva del módulo de distancia frente al corrimiento al rojo tiene una forma y una posición vertical. Las supernovas fijan la forma; la posición vertical es la constante de Hubble y la calibración, juntas. Para fijarla necesitas la distancia a unas pocas galaxias anfitrionas de supernovas por otra vía, como las cefeidas, y eso es la escalera.',
     },
-    'the-rung-below': {
+    {
       title: 'Un error transmitido',
       body: `La investigación <em>El primer peldaño</em> halla un módulo de distancia por cefeidas bueno a 0,051 magnitudes. Un error de módulo Δμ es un error de distancia de Δd ÷ d = 0,4605 Δμ, y una constante de Hubble lleva el mismo error fraccionario que la distancia por la que se divide.`,
       prompt:
@@ -94,10 +94,10 @@ export default {
       because:
         '0,4605 × 0,051 = 0,0235: un 2,4 por ciento, más o menos, de este solo peldaño, antes de usar una sola supernova. Los peldaños de arriba añaden sus propios términos, y un resultado bueno a uno o dos por ciento pide cada peldaño bueno a unas centésimas de magnitud.',
     },
-    'what-you-worked-out': {
+    {
       title: 'Lo que has deducido',
       body: `Una candela estándar convierte brillo en distancia solo tan bien como se conoce su brillo verdadero. Una décima de magnitud de error de calibración es un 4,5 por ciento en la constante de Hubble, y el chi cuadrado de las supernovas no puede verlo, porque las supernovas fijan la forma del diagrama y no su escala. La escala se transmite desde los peldaños de debajo, y un error en un peldaño es un error en todos los que se apoyan en él.
              \n\nNo se hace aquí: las correcciones dependientes del corrimiento al rojo de un análisis real de supernovas, los errores que comparten dos supernovas, y la dependencia del brillo máximo respecto de la galaxia anfitriona. Los módulos de distancia de la tabla están en la escala propia del sondeo; el «error en la magnitud absoluta» del instrumento sustituye a lo que cambiaría la calibración verdadera.`,
     },
-  },
+  ],
 };

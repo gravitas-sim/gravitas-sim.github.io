@@ -216,10 +216,6 @@ function toolIds(lesson) {
   );
 }
 
-/** Steps in a Spanish shadow: keyed by sid (an object) or, in a pack, listed. */
-const spanishSteps = steps =>
-  Array.isArray(steps) ? steps.length : Object.keys(steps ?? {}).length;
-
 const countBy = (steps, key) => {
   const out = {};
   for (const s of steps)
@@ -325,9 +321,9 @@ export async function readInventory(root = ROOT) {
         advanced: deepCounts.advanced || 0,
       };
       row.spanish_steps = {
-        core: spanishSteps((await load(es)).default.steps),
+        core: (await load(es)).default.steps?.length ?? 0,
         deeper: existsSync(path.join(root, depthEs))
-          ? spanishSteps((await load(depthEs)).default.steps)
+          ? ((await load(depthEs)).default.steps?.length ?? 0)
           : 0,
       };
     } else if (e.kind === 'investigation') {

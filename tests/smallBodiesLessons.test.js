@@ -91,18 +91,18 @@ describe('the lessons are registered whole', () => {
       const full = lesson(id);
       expect(full.steps.some(s => s.depth === 'quantitative')).toBe(true);
       expect(full.steps.some(s => s.depth === 'advanced')).toBe(true);
-      expect(Object.keys(ES_LESSONS[id].steps)).toHaveLength(l.steps.length);
-      expect(Object.keys(ES_DEEP[id].steps)).toHaveLength(
+      expect(ES_LESSONS[id].steps).toHaveLength(l.steps.length);
+      expect(ES_DEEP[id].steps).toHaveLength(
         full.steps.filter(s => s.depth).length
       );
       for (const [i, s] of l.steps.entries()) {
-        const es = ES_LESSONS[id].steps[s.sid];
+        const es = ES_LESSONS[id].steps[i];
         expect((es.options ?? []).length).toBe((s.options ?? []).length);
         expect((es.fields ?? []).length).toBe((s.fields ?? []).length);
       }
       const deeper = full.steps.filter(s => s.depth);
       for (const [i, s] of deeper.entries()) {
-        const es = ES_DEEP[id].steps[s.sid];
+        const es = ES_DEEP[id].steps[i];
         expect((es.options ?? []).length).toBe((s.options ?? []).length);
         expect((es.fields ?? []).length).toBe((s.fields ?? []).length);
       }

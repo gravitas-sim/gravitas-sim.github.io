@@ -29,8 +29,8 @@ export default {
     'Explicar por qué cambiar la constante de gravitación desplaza esa recta sin inclinarla',
     'Identificar qué leyes de conservación dependen de la forma inversa del cuadrado y cuáles se siguen de que la fuerza sea central y por pares',
   ],
-  steps: {
-    'the-exactly': {
+  steps: [
+    {
       title: 'La palabra «exactamente»',
       body: `La ley de gravitación de Newton dice que la atracción entre dos
              masas decae como uno partido por el cuadrado de la distancia que
@@ -48,7 +48,7 @@ export default {
              integrador— se mantiene fijo. Luego mides qué ha cambiado.`,
       tip: 'La simulación está en pausa. No se moverá nada hasta que la dejes correr.',
     },
-    'why-there-is-a-reference-distance': {
+    {
       title: 'Por qué el experimento necesita un anclaje',
       body: `Hay una trampa en la forma obvia de hacer esto, y esquivarla es la
              razón de que esta investigación tenga un número más de lo que parecería
@@ -76,7 +76,7 @@ export default {
              versión de esta pregunta que merece la pena plantear.`,
       tip: 'r₀ = 1 UA es fijo durante toda la investigación. Todos los instrumentos lo muestran.',
     },
-    'predict-does-small-matter': {
+    {
       title: '¿Importa un cambio pequeño?',
       body: `Vas a poner un planeta en una órbita ligeramente elíptica y a
              cambiar el exponente de 2 a 2,05: un cambio del dos y medio por
@@ -97,7 +97,7 @@ export default {
                 retenerlo.`,
       tip: 'Decide antes de ejecutarlo. Lo valioso de predecir es el compromiso, no el acierto.',
     },
-    'first-look-at-the-orbit': {
+    {
       title: '¿Se cierra la elipse?',
       body: `Aquí está la órbita. Empieza con el ajuste <strong>n = 2</strong> y
              observa qué hace la trayectoria: el planeta recorre una elipse y
@@ -124,7 +124,7 @@ export default {
       ],
       tip: 'Una precesión negativa significa que la elipse gira hacia atrás, en contra del sentido de la órbita.',
     },
-    'record-the-precession': {
+    {
       title: 'Anota lo que hace el eje',
       body: `Lee la <strong>precesión medida</strong> en el instrumento para
              cada uno de estos cuatro exponentes y anótala.`,
@@ -140,7 +140,7 @@ export default {
       ],
       tip: 'Conserva el signo. Hacia atrás es una respuesta distinta, no una más pequeña.',
     },
-    'what-closes-an-orbit': {
+    {
       title: 'Qué cierra una órbita',
       body: `Con n = 2 la elipse se cierra exactamente. Con cualquier otro
              exponente que hayas probado —más empinado o menos— no lo hace.`,
@@ -162,7 +162,7 @@ export default {
                 centrales; es un hecho sobre este exponente concreto, y acabas
                 de medir qué ocurre sin él.`,
     },
-    'predict-is-it-the-computer': {
+    {
       title: '¿O es cosa del ordenador?',
       body: `Una objeción legítima. Las simulaciones avanzan a pasos discretos, y
              recorrer una curva a pasos introduce error. Quizá el giro que acabas
@@ -185,7 +185,7 @@ export default {
                 número se hubiera movido al mover el paso temporal, te estaría
                 hablando de tu aritmética y no de la gravedad.`,
     },
-    'refine-the-timestep': {
+    {
       title: 'Refina el paso temporal',
       body: `Este instrumento ejecuta la misma órbita cuatro veces, con cuatro
              pasos temporales que abarcan un factor de ocho, y da la precesión
@@ -204,7 +204,7 @@ export default {
       ],
       tip: 'Compara los dos números que acabas de anotar. ¿Cómo de grande es el desacuerdo entre pasos temporales frente al efecto mismo?',
     },
-    'the-refinement-verdict': {
+    {
       title: 'Qué demuestra el refinamiento',
       body: `Con n = 2,2 las cuatro ejecuciones coinciden hasta unos cinco
              decimales mientras el paso temporal cambia en un factor de ocho. Con
@@ -225,7 +225,7 @@ export default {
                 control con n = 2 marque cero con todos los pasos dice que la
                 medida no es simplemente insensible a todo.`,
     },
-    'predict-period-and-distance': {
+    {
       title: 'Periodo frente a distancia',
       body: `La tercera ley de Kepler dice que el cuadrado del periodo orbital es
              proporcional al cubo del radio orbital: P² ∝ r³. Representada con
@@ -249,7 +249,7 @@ export default {
                 Cambia la ley de fuerza y la relación sobrevive como ley de
                 potencias; lo único que se mueve es su exponente.`,
     },
-    'measure-the-slope': {
+    {
       title: 'Mide la pendiente',
       body: `Este instrumento coloca seis planetas en órbitas circulares que
              abarcan un factor de siete y medio en radio, cronometra lo que tarda
@@ -281,7 +281,7 @@ export default {
       },
       tip: 'Tus cuatro puntos caen sobre una recta. Averigua qué recta antes de continuar.',
     },
-    'predict-the-slope': {
+    {
       hints: [
         'Tus lecturas muestran que la pendiente cambia en una cantidad fija por cada paso de n.',
         'Extiende el patrón desde una de tus lecturas hasta el nuevo n, al ritmo que muestran tus lecturas.',
@@ -314,7 +314,7 @@ export default {
                 verdad: una pendiente medida a partir de órbitas reales te dice
                 el exponente de la fuerza que las produjo.`,
     },
-    'why-the-slope-and-not-something-else': {
+    {
       title: 'Por qué esta medida en concreto',
       body: `Supón que no cambiaras el exponente en absoluto, sino que hicieras
              la gravedad un diez por ciento más débil bajando G. Las órbitas se
@@ -336,7 +336,7 @@ export default {
                 a nada más, y por eso una pendiente medida es prueba sobre la
                 forma de la ley y no sobre su intensidad.`,
     },
-    'predict-what-breaks': {
+    {
       title: '¿Qué más se rompe?',
       body: `Acabas de romper la primera y la tercera leyes de Kepler moviendo un
              solo número. Sería razonable esperar que el resto de la mecánica se
@@ -356,7 +356,7 @@ export default {
                 menciona la distancia, así que ninguno se entera de que la ley de
                 distancias ha cambiado.`,
     },
-    'measure-conservation': {
+    {
       title: 'Comprueba las leyes de conservación',
       body: `Tres estrellas de masas distintas, todas libres de moverse y todas
              atrayéndose entre sí bajo la ley que esté seleccionada. El
@@ -376,7 +376,7 @@ export default {
       ],
       tip: 'Están escritas en notación científica. 5e-15 son cinco milésimas de billonésima.',
     },
-    'why-they-survive': {
+    {
       title: 'Por qué sobrevivieron esas dos',
       body: `El momento lineal y el angular se conservan con unos quince
              decimales, y el exponente no le hace ninguna diferencia a ninguno
@@ -403,7 +403,7 @@ export default {
                 <em>por pares</em> y <em>central</em>, que es lo que no
                 cambiaste.`,
     },
-    'and-energy': {
+    {
       title: 'Y la energía, con una salvedad',
       body: `La energía también se conserva, pero aquí hay una trampa de verdad, y
              vale la pena verla porque es la clase de error que sobrevive a una
@@ -427,7 +427,7 @@ export default {
              célebremente pulcra.`,
       tip: 'Una ley de conservación que parece fallar suele ser una medida hecha con la definición equivocada.',
     },
-    'two-lists': {
+    {
       title: 'Dos listas',
       body: `Todo lo que has medido se ordena en dos montones, y esa ordenación es
              el objetivo de la investigación.
@@ -454,7 +454,7 @@ export default {
              fuerza, y a dos resultados orbitales famosos apenas les importa otra
              cosa.`,
     },
-    'near-three': {
+    {
       title: 'Dónde se detiene el instrumento',
       body: `El deslizador del exponente se detiene en 2,9, y la razón es un
              resultado real y no un límite del programa.
@@ -473,7 +473,7 @@ export default {
              nombra en su lugar.`,
       tip: 'Una gravedad más empinada que la inversa del cubo no tiene ninguna órbita circular estable.',
     },
-    'closing-question': {
+    {
       title: 'Una última clasificación',
       body: `Un estudiante te cuenta que ha simulado un sistema planetario y que
              las órbitas precesan de forma apreciable.`,
@@ -492,7 +492,7 @@ export default {
                 prueba en esta investigación, y es la costumbre que más vale la pena
                 llevarse de ella.`,
     },
-    'the-honest-caveat': {
+    {
       title: 'Qué ha sido esto y qué no',
       body: `Una última puntualización, porque sería fácil marcharse con una
              conclusión mayor de la que sostienen las pruebas.
@@ -516,5 +516,5 @@ export default {
              no; y cuando una simulación te diga algo sorprendente, cambia el paso
              temporal antes de creértelo.`,
     },
-  },
+  ],
 };

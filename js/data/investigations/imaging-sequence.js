@@ -665,12 +665,12 @@ export const WHY_NOT_EARTH_ES = {
     'Leer un veredicto de no observable con este instrumento y decir cuál de los dos problemas lo causó',
     'Decir por qué un gigante joven se puede fotografiar y un planeta como la Tierra no, y qué supone el panel de cada uno',
   ],
-  steps: {
-    'two-problems': {
+  steps: [
+    {
       title: 'Dos problemas, no uno',
       body: `Un planeta junto a su estrella es difícil de ver por dos razones distintas. Tiene que estar lo bastante lejos de la estrella en el cielo para distinguirse de su luz: eso es un <strong>ángulo</strong>. Y tiene que ser lo bastante brillante frente al resplandor de la estrella: eso es un <strong>contraste</strong>, la luz del planeta dividida entre la de la estrella.\n\nEl panel pone a la Tierra alrededor de una estrella como el Sol, a diez pársecs, y deja cambiar el planeta, la distancia, el instrumento y la longitud de onda. Los cuatro instrumentos son <strong>ejemplos didácticos</strong>: sus ángulos de trabajo y sus pisos de contraste no son las especificaciones de ningún instrumento real.`,
     },
-    'how-far-apart': {
+    {
       title: '¿A qué distancia de su estrella está la Tierra?',
       body: `Un observador a diez pársecs mira al Sol, y la Tierra está en su mayor separación de él, un cuarto de órbita a cada lado del Sol. Una unidad astronómica vista desde un pársec es un segundo de arco.`,
       prompt: '¿A qué distancia del Sol, en el cielo, está la Tierra?',
@@ -686,7 +686,7 @@ export const WHY_NOT_EARTH_ES = {
       because:
         'Unos 0,1 segundos de arco. Una UA vista desde un pársec subtiende un segundo de arco, por la definición del pársec, y el ángulo cae en proporción a la distancia, así que a diez pársecs es una décima de segundo de arco. El panel lee 0,100 segundos de arco con un ángulo de fase de 90 grados.',
     },
-    'the-angle': {
+    {
       title: '¿Cuál es el problema difícil?',
       body: `El panel está en un telescopio espacial de 6 m a 0,55 micrómetros. Su escala de difracción λ/D es 0,019 segundos de arco, y la Tierra está a 0,100 segundos de arco de su estrella: 5,3 veces λ/D. La línea de contraste dice cuánto más débil que su estrella es el planeta.`,
       prompt:
@@ -709,7 +709,7 @@ export const WHY_NOT_EARTH_ES = {
         },
       ],
     },
-    'two-numbers': {
+    {
       title: 'Dos ángulos, por separado',
       body: `El panel está ahora en un telescopio espacial de 2,4 m a 0,55 micrómetros. λ/D es 0,047 segundos de arco y la Tierra está a 2,1 λ/D de su estrella. El instrumento de ejemplo tiene un ángulo de trabajo interno de 3 λ/D: un número elegido para este ejemplo didáctico, no una especificación citada.`,
       prompt: '¿Qué dice el panel, y qué muestra sobre los dos ángulos?',
@@ -730,7 +730,7 @@ export const WHY_NOT_EARTH_ES = {
         },
       ],
     },
-    'the-infrared': {
+    {
       title: 'Pasemos al infrarrojo',
       body: `La Tierra también brilla con su propio calor, y un planeta a unos 254 kelvin irradia más cerca de 11 micrómetros. Pon la longitud de onda en 10 micrómetros para el telescopio de 6 m y mira el gráfico: la curva térmica sube por encima de la reflejada. La escala de difracción crece en proporción a la longitud de onda.`,
       prompt: '¿Qué hace pasar de 0,55 a 10 micrómetros?',
@@ -746,21 +746,21 @@ export const WHY_NOT_EARTH_ES = {
       because:
         'Cambia un problema por el otro. A 10 micrómetros el calor propio del planeta lo hace solo unos doce millones de veces más débil que su estrella en lugar de unos 8500 millones, pero λ/D es 18 veces mayor, 0,34 segundos de arco, así que la Tierra queda a 0,3 λ/D, muy dentro de cualquier ángulo de trabajo. Elegir una longitud de onda es elegir qué problema tener.',
     },
-    'what-it-would-take': {
+    {
       title: 'Lo que haría falta',
       body: `De los cuatro ejemplos solo el instrumento de 6 m en luz visible ve la Tierra, y solo porque su piso de contraste de 10⁻¹⁰ se eligió justo por debajo de los 1,2 × 10⁻¹⁰ de la Tierra: es un experimento mental sobre lo que tendría que hacer un telescopio, no una afirmación sobre ninguna misión. Ver un planeta como la Tierra exige un ángulo de trabajo menor de 0,1 segundos de arco a una longitud de onda dada y una supresión de la luz de la estrella que llegue al contraste del planeta.\n\nEl panel no modela la supresión misma: ni coronógrafo, ni ruido de moteado, ni tiempo de exposición. Lo que dice es una condición necesaria.`,
     },
-  },
+  ],
 };
 
 export const WHY_NOT_EARTH_DEEPER_ES = {
-  steps: {
-    'read-the-contrast': {
+  steps: [
+    {
       title: 'El contraste de la Tierra',
       body: `Con la Tierra a un ángulo de fase de 90 grados y el instrumento de 6 m en luz visible, lee la línea de contraste: la luz reflejada como fracción de la de la estrella. Dala como múltiplo de 10⁻¹⁰.`,
       fields: [{ label: 'Contraste reflejado, en unidades de 10⁻¹⁰' }],
     },
-    'phase-trade': {
+    {
       title: 'La mejor fase no es el mejor lugar',
       body: `Mueve el ángulo de fase entre 0 y 180 grados. La separación en el cielo es el radio de la órbita por el seno del ángulo de fase, y la luz reflejada sigue la función de fase de Lambert, que es mayor con ángulo de fase 0.`,
       prompt:
@@ -775,12 +775,12 @@ export const WHY_NOT_EARTH_DEEPER_ES = {
       because:
         'Más brillante con ángulo de fase 0, más lejos a 90 grados. Con ángulo de fase 0 el planeta está totalmente iluminado y es 3,7 × 10⁻¹⁰ de la luz de la estrella, pero está detrás de la estrella y su separación es cero; a 90 grados está tan lejos de la estrella como puede estar, 0,100 segundos de arco, y la función de fase de Lambert ha caído a 1/π, así que es unas 3,1 veces más débil. Un observador toma un compromiso entre ambos.',
     },
-    'young-giant-angle': {
+    {
       title: 'Un planeta que se puede ver',
       body: `Elige el gigante joven, 10 pársecs, un ángulo de fase de 90 grados y el instrumento de 8 m en infrarrojo cercano. El gigante joven es un sustituto a 30 UA de una estrella fría. Lee a cuántas escalas de difracción λ/D está de su estrella.`,
       fields: [{ label: 'Separación en λ/D' }],
     },
-    'own-heat': {
+    {
       title: 'Su propio calor',
       body: `Lee la línea de temperatura del gigante joven. La luz de la estrella sola lo calentaría solo a 25 kelvin, porque está a 30 UA de una estrella fría, pero el panel lo dibuja a 1500 kelvin, la temperatura indicada para él. El contraste es un cuerpo negro a esa temperatura.`,
       prompt:
@@ -829,7 +829,7 @@ export const WHY_NOT_EARTH_DEEPER_ES = {
         },
       ],
     },
-  },
+  ],
 };
 
 export const ARCHITECTURES_ES = {
@@ -842,12 +842,12 @@ export const ARCHITECTURES_ES = {
     'Calcular con un panel cuántos planetas quedan fuera del ángulo de trabajo interno de un instrumento de ejemplo',
     'Decir qué no muestra el diagrama sobre los planetas que existen, y nombrar lo que haría falta para una afirmación sobre poblaciones',
   ],
-  steps: {
-    'two-kinds-of-system': {
+  steps: [
+    {
       title: 'Nosotros y los planetas con imagen directa',
       body: `El diagrama pone los ocho planetas del sistema solar y los planetas del Archivo de Exoplanetas de la NASA que se hallaron por imagen directa en una escala logarítmica: a qué distancia orbita cada uno y cuánta masa tiene. Una escala logarítmica da el mismo espacio a un factor de diez donde sea, así que Mercurio y un planeta a 500 UA pueden compartir la página.\n\nLos planetas con imagen directa se listan como los tiene el archivo: una distancia al Sol, un semieje mayor y, para la mayoría, una masa. Lee cómo se colocan los dos grupos.`,
     },
-    'where-do-they-sit': {
+    {
       title: '¿Dónde se colocarán?',
       body: `Mira los planetas del sistema solar en el diagrama, de Mercurio a Neptuno a 30 UA, y de la Tierra, con cerca de un tercio de uno por ciento de la masa de Júpiter, a Júpiter mismo.`,
       prompt:
@@ -864,7 +864,7 @@ export const ARCHITECTURES_ES = {
       because:
         'En su mayoría más lejos que Neptuno y más pesados que Júpiter: 70 de los 94 planetas con imagen directa que tienen semieje y masa están más allá de los 30 UA de Neptuno, y 93 son más pesados que Júpiter. Quedan arriba y a la derecha del sistema solar.',
     },
-    'the-median-planet': {
+    {
       title: 'El planeta típico con imagen directa',
       body: `Lee la línea de los planetas con imagen directa: el semieje mayor mediano y la masa mediana.`,
       prompt: '¿Cómo es el planeta mediano con imagen directa?',
@@ -878,7 +878,7 @@ export const ARCHITECTURES_ES = {
       because:
         'A unos 170 UA y con unas 12 masas de Júpiter: un planeta mucho más lejano que Neptuno y más masivo que Júpiter, cerca del límite entre planetas y enanas marrones. Nada así hay en el sistema solar.',
     },
-    'why-so-wide': {
+    {
       title: '¿Por qué todos son lejanos y pesados?',
       body: `Cambia el gráfico a ángulo y masa. La línea verde es el ángulo de trabajo interno del instrumento de ejemplo. Los planetas con imagen directa se colocan en el ángulo que dan su semieje y su distancia.`,
       prompt:
@@ -900,7 +900,7 @@ export const ARCHITECTURES_ES = {
         },
       ],
     },
-    'our-system-from-afar': {
+    {
       title: 'Nuestro sistema, visto desde diez pársecs',
       body: `Pon el instrumento en el ejemplo de 2,4 m en luz visible, visto desde 10 pársecs. Su ángulo de trabajo interno es 0,142 segundos de arco. El panel dice cuántos de los planetas del sistema solar quedan fuera. Aquí solo juzga la separación, no el contraste.`,
       prompt:
@@ -912,28 +912,28 @@ export const ARCHITECTURES_ES = {
       because:
         'Cinco de los ocho. Mercurio, Venus y la Tierra están a 0,039, 0,072 y 0,100 segundos de arco, dentro de 0,142; Marte y los cuatro gigantes están fuera. Incluso con un ángulo tan grande, los tres planetas interiores no podrían separarse de la estrella, y el contraste aún no se ha juzgado.',
     },
-    'what-the-diagram-says': {
+    {
       title: 'Lo que dice el diagrama',
       body: `Los planetas con imagen directa son lejanos, masivos y jóvenes, porque esos son los que un telescopio puede distinguir del resplandor de la estrella. El sistema solar no es raro por ser distinto de ellos; ellos son distintos por cómo se hallaron. Una afirmación sobre cuán comunes son los planetas necesita un sondeo que cuente las estrellas que buscó y los planetas que podría haber visto, con una tasa y su incertidumbre.\n\nLas próximas investigaciones toman los planetas de un método a la vez. Esta dibujó los planetas de un método.`,
     },
-  },
+  ],
 };
 
 export const ARCHITECTURES_DEEPER_ES = {
-  steps: {
-    'count-the-seen': {
+  steps: [
+    {
       title: '¿Cuántos quedan fuera?',
       body: `Elige el gráfico de ángulo y masa y el ejemplo de 0,25 m en luz visible. Su ángulo de trabajo interno es 1,36 segundos de arco. Lee cuántos de los planetas con imagen directa que tienen distancia quedan fuera.`,
       fields: [
         { label: 'Planetas con imagen directa fuera del ángulo de trabajo' },
       ],
     },
-    'median-orbit-and-mass': {
+    {
       title: 'El planeta mediano con imagen directa',
       body: `Lee las medianas de los planetas con imagen directa que tienen semieje y masa: el semieje mayor en UA y la masa en masas de Júpiter.`,
       fields: [{ label: 'Semieje mayor mediano' }, { label: 'Masa mediana' }],
     },
-    'is-ours-unusual': {
+    {
       title: '¿Es raro el sistema solar?',
       body: `Alguien lee el diagrama y dice: el sistema solar no tiene ningún planeta a 170 UA y 12 masas de Júpiter, así que es raro. Lee la línea de la fuente: la tabla es la lista del archivo de planetas hallados por imagen directa, sin las referencias de cada planeta.`,
       prompt:
@@ -982,7 +982,7 @@ export const ARCHITECTURES_DEEPER_ES = {
         },
       ],
     },
-  },
+  ],
 };
 
 // ---- Instructor content -----------------------------------------------------------------------

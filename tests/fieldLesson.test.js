@@ -60,14 +60,14 @@ describe('the lesson exists and is wired', () => {
   });
 
   test('the Spanish is step for step with the English, in the core and the deeper path', () => {
-    expect(Object.keys(ES.WHAT_IS_IN_THIS_FIELD.steps)).toHaveLength(
+    expect(ES.WHAT_IS_IN_THIS_FIELD.steps).toHaveLength(
       EN.WHAT_IS_IN_THIS_FIELD.steps.length
     );
-    expect(
-      Object.keys(DEEP_ES.WHAT_IS_IN_THIS_FIELD_DEEPER.steps)
-    ).toHaveLength(DEEP.WHAT_IS_IN_THIS_FIELD_DEEPER.steps.length);
+    expect(DEEP_ES.WHAT_IS_IN_THIS_FIELD_DEEPER.steps).toHaveLength(
+      DEEP.WHAT_IS_IN_THIS_FIELD_DEEPER.steps.length
+    );
     EN.WHAT_IS_IN_THIS_FIELD.steps.forEach((s, i) => {
-      const es = ES.WHAT_IS_IN_THIS_FIELD.steps[s.sid];
+      const es = ES.WHAT_IS_IN_THIS_FIELD.steps[i];
       expect(Boolean(es.options)).toBe(Boolean(s.options));
       expect(es.options?.length).toBe(s.options?.length);
       expect(es.fields?.length).toBe(s.fields?.length);

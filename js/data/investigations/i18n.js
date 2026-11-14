@@ -1,68 +1,36 @@
 // =============================================================================
 // Translating a lesson
 // -----------------------------------------------------------------------------
-// A lesson mixes prose with machinery (probes, widget ids, scenario names,
-// numeric answers), and only the prose is translatable. So a translation is a
-// *shadow*: an object of the same shape carrying only the words, laid over the
-// English by one function (es/keplers-laws.js over keplers-laws.js). Whatever
-// it omits keeps its English, so a translation may be incomplete and never
-// changes when the machinery does.
+// A lesson is a mixture of prose and machinery: a step carries a title and a
+// body, and it also carries a probe closure, a widget id, a scenario name and a
+// numeric answer with a tolerance. Only the first kind is translatable, and the
+// second kind must come through a translation completely untouched - a lesson
+// whose `setup.scenario` had been translated would fail to load a scenario, and
+// one whose probe had been replaced by a string would fail to draw.
 //
-// Arrays line up by index (the third Spanish option translates the third
-// English one), except a lesson's steps: the shadow's `steps` is an object keyed
-// by each step's `sid`, so a Spanish step belongs to its English step wherever
-// either stands. An inserted, moved or removed step moves no other Spanish; an
-// entry whose sid the lesson lacks is dropped (the authoring check says so). A
-// shadow that still lists `steps` is read by index: a pack made before steps
-// were keyed has no sids.
+// So a translation is a *shadow* of a lesson rather than a copy of one: an
+// object with the same shape, carrying only the fields that are words. This one
+// function lays it over the English:
+//
+//   js/data/investigations/keplers-laws.js       the lesson, in English
+//   js/data/investigations/es/keplers-laws.js    the Spanish words for it
+//
+// Everything absent from the shadow keeps its English, which means a
+// translation can be incomplete and still be worth shipping: the lesson runs,
+// and the parts nobody has reached yet are simply still in English rather than
+// missing. It also means the shadow never has to be updated when the machinery
+// changes - only when the words do.
+//
+// Arrays line up by index, because that is what an options list or a checklist
+// is: the third Spanish option is the translation of the third English one, and
+// a shadow whose array is shorter translates a prefix.
 // =============================================================================
 
-/** A list of steps: every entry carries a sid. Other arrays stay positional. */
-export const isStepList = base =>
-  Array.isArray(base) &&
-  base.length > 0 &&
-  base.every(item => typeof item?.sid === 'string');
-
 /**
- * The shadow's entries laid against an English array, one per element (or
- * undefined): by sid for a list of steps, by index otherwise. The one rule for
- * which Spanish step is which, shared by the merge, the coverage count, the
- * checks and the audit. Null when the shadow has nothing usable for it.
+ * Lay a translation over a lesson.
  *
- * @param {Array} base - An array of the English lesson
- * @param {*} overlay - The shadow's value: an object keyed by sid, or an array
- * @returns {Array|null} Entries aligned with `base`
- */
-export function alignShadow(base, overlay) {
-  if (Array.isArray(overlay)) return base.map((_, i) => overlay[i]);
-  if (!isStepList(base) || typeof overlay !== 'object' || !overlay) return null;
-  return base.map(({ sid }) =>
-    Object.hasOwn(overlay, sid) ? overlay[sid] : undefined
-  );
-}
-
-/**
- * A translation's steps are an object keyed by sid: one entry for each step of
- * the lesson (core or deeper) and none for a step it does not have.
- * @param {Array<{sid: string}>} steps - The English steps
- * @param {*} shadow - The translation's `steps`
- * @param {(level: string, message: string, index: ?number) => void} report - Findings
- */
-export function checkShadowSteps(steps, shadow, report) {
-  if (!shadow || typeof shadow !== 'object' || Array.isArray(shadow))
-    return report('error', 'steps must be an object keyed by step sid', null);
-  for (const key of Object.keys(shadow))
-    if (!steps.some(s => s.sid === key))
-      report('error', `steps.${key} names no step of the lesson`, null);
-  steps.forEach((s, i) => {
-    if (!Object.hasOwn(shadow, s.sid))
-      report('error', `step "${s.sid}" has no Spanish step`, i);
-  });
-}
-
-/**
- * Lay a translation over a lesson. Pure: the result shares every untranslated
- * value, functions included, with the original by reference.
+ * Pure: neither argument is modified, and the result shares every untranslated
+ * value - including every function - with the original by reference.
  *
  * @param {*} base - The English lesson, or any part of it
  * @param {*} overlay - The translation, or the matching part of it
@@ -72,7 +40,9 @@ export function mergeTranslation(base, overlay) {
   // Nothing said about this branch: the English stands.
   if (overlay === undefined || overlay === null) return base;
 
-  // A function is machinery, never translated: a replaced probe is a broken lesson.
+  // A function is machinery and is never translated. Guarded explicitly rather
+  // than left to the object branch below, because typeof null and typeof
+  // function both need care and a silently replaced probe is a broken lesson.
   if (typeof base === 'function') return base;
 
   if (typeof base === 'string') {
@@ -80,21 +50,28 @@ export function mergeTranslation(base, overlay) {
   }
 
   if (Array.isArray(base)) {
-    // Never longer than the English: extra entries would add steps or options
-    // the lesson's logic (answer indices, field ids, graded counts) lacks.
-    const aligned = alignShadow(base, overlay);
-    if (!aligned) return base;
-    return base.map((item, i) => mergeTranslation(item, aligned[i]));
+    if (!Array.isArray(overlay)) return base;
+    // Index by index, and never longer than the English: a shadow with extra
+    // entries would add steps or options that the lesson's own logic - answer
+    // indices, field ids, graded counts - knows nothing about.
+    return base.map((item, i) => mergeTranslation(item, overlay[i]));
   }
 
   if (base && typeof base === 'object') {
     if (Array.isArray(overlay) || typeof overlay !== 'object') return base;
     const out = { ...base };
     for (const key of Object.keys(overlay)) {
-      // Only keys the lesson has, so a typo cannot become a property the engine
-      // reads, and never machinery: a translated `role` or `track` breaks the
-      // lesson's bindings silently, both sides being strings.
-      if (!Object.hasOwn(base, key) || STRUCTURAL.has(key)) continue;
+      // Only keys the lesson already has. A shadow cannot introduce a field,
+      // which is what keeps a typo in a translation from becoming a property
+      // the engine then reads.
+      if (!Object.hasOwn(base, key)) continue;
+      // And never a key that is machinery. The file header has always said a
+      // shadow cannot reach the lesson's workings; this is what makes that
+      // true rather than a convention. A translated `role` or `track` is not a
+      // Spanish lesson, it is a lesson whose bindings resolve to nothing, and
+      // it would have failed silently - both sides are strings, so nothing
+      // downstream could tell.
+      if (STRUCTURAL.has(key)) continue;
       out[key] = mergeTranslation(base[key], overlay[key]);
     }
     return out;
@@ -105,8 +82,10 @@ export function mergeTranslation(base, overlay) {
 }
 
 /**
- * Which of a lesson's words a translation has supplied (counted in strings,
- * for the audit and the tests).
+ * Which of a lesson's words a translation has supplied, and which it has not.
+ *
+ * Used by the audit and by the tests. Counts strings, since a string is the
+ * unit a translator works in.
  *
  * @param {*} base - The English lesson
  * @param {*} overlay - The translation
@@ -128,9 +107,8 @@ export function translationCoverage(base, overlay, skip = STRUCTURAL) {
       return;
     }
     if (Array.isArray(b)) {
-      const aligned = alignShadow(b, o);
       b.forEach((item, i) =>
-        walk(item, aligned ? aligned[i] : undefined, `${path}.${i}`, key)
+        walk(item, Array.isArray(o) ? o[i] : undefined, `${path}.${i}`, key)
       );
       return;
     }
@@ -147,23 +125,29 @@ export function translationCoverage(base, overlay, skip = STRUCTURAL) {
 }
 
 /**
- * Keys whose string values are machinery rather than words: a scenario name is
- * looked up, a seed reproduces a world, a widget or field id selects a
- * component or keys a saved answer, a path points at an image. Translating one
- * breaks the lesson, so they are not counted as words to translate, and the
+ * Keys whose string values are machinery rather than words.
+ *
+ * A scenario name is looked up in the scenario registry; a seed reproduces a
+ * world; a widget id selects a component; a field id keys the student's saved
+ * answer; a path points at an image. Translating any of them breaks the lesson,
+ * so they are excluded from the count of what there is to translate - and the
  * tests assert that no translation supplies one.
  */
 export const STRUCTURAL = new Set([
   'id',
-  // A step's identity, never translated: progress is keyed by it.
+  // A step's stable identity, minted once and never translated: it is what
+  // student progress is keyed by, so a Spanish shadow supplying one would
+  // orphan every answer the moment the language changed.
   'sid',
-  // The sid where a held prediction is marked, and a remediation step's
-  // condition (the graded sid it follows; wrong or right).
+  // The sid of the step where a held prediction is marked. A translated one
+  // would point at nothing, and the prediction would stay unmarked forever.
   'reveal',
   'after',
   'depth',
   'depths',
   'restates',
+  // A remediation step's condition: the sid of the graded step it follows and
+  // whether it is for a wrong or a right answer. Machinery, never words.
   'when',
   'type',
   'kind',
@@ -181,19 +165,30 @@ export const STRUCTURAL = new Set([
   'rows',
   'importGroups',
   'widget',
-  // Where a lesson's stars stand and what the instrument does with them: each
-  // an identifier the lesson's logic reads (`role` is what a binding resolves,
-  // `track` and `at` a place on a MIST track). `name` is deliberately NOT here:
-  // a star's name is read out on the canvas and the comparison card.
+  // Where a lesson's stars stand and what the instrument is doing with them.
+  // Every one of these is an identifier the lesson's own logic reads: `role`
+  // is what a binding resolves, `track` and `at` are where on a MIST track a
+  // star is, and `pace`, `mode` and `bind` configure the instrument. A shadow
+  // that translated any of them would not produce a Spanish lesson, it would
+  // produce a broken one - and until they were listed here they also inflated
+  // every coverage figure, because they counted as strings nobody had got
+  // round to translating. `name` is deliberately NOT here: a star's name is
+  // read out on the canvas, in the object list and on the comparison card, and
+  // it does need translating.
   'role',
   'track',
   'at',
   'pace',
   'mode',
   'bind',
-  // Identifiers, not words: the phase of a track a step parks on, the view a
-  // widget opens, the kinds a stage stands, the source mode, the audio control.
+  // Which phase of a track a step parks the playback on. An identifier from
+  // js/stellar/evolution.js, not a word for a reader - translating it parks
+  // the playhead nowhere and the step opens on a cloud.
   'phase',
+  // Which of a widget's views a step opens, which kinds of body a stage
+  // stands, which source mode it selects, and whether the audio control is
+  // offered. Identifiers every one - a translated 'view' opens no view and a
+  // translated 'bh' stages nothing.
   'view',
   'kinds',
   'mode',
@@ -202,7 +197,8 @@ export const STRUCTURAL = new Set([
   'preset',
   'pinStaged',
   'tags',
-  // Symbols (K, R(sun), L(sun), M(sun), the multiplication sign), the same in
-  // every language: translated, a units bug.
+  // Symbols, not words. K, R(sun), L(sun), M(sun) and the multiplication sign
+  // are the same in every language this ships in, and a translated one would
+  // be a units bug rather than a translation.
   'unit',
 ]);
