@@ -413,33 +413,33 @@ const TIDES = {
              what the panel says. Your points land on the graph as you type, so
              nothing has to be remembered from one row to the next.`,
       fields: [
-        { id: 'd1', label: 'Distance 1', unit: '× Moon’s', hint: '2' },
+        { id: 'd1', label: 'Distance 1', unit: '× Moon’s', want: '2' },
         {
           id: 't1',
           label: 'Tidal stretch there',
           unit: '× lunar tide',
-          hint: '0.13',
+          want: '0.13',
         },
-        { id: 'd2', label: 'Distance 2', unit: '× Moon’s', hint: '1' },
+        { id: 'd2', label: 'Distance 2', unit: '× Moon’s', want: '1' },
         {
           id: 't2',
           label: 'Tidal stretch there',
           unit: '× lunar tide',
-          hint: '1',
+          want: '1',
         },
-        { id: 'd3', label: 'Distance 3', unit: '× Moon’s', hint: '0.5' },
+        { id: 'd3', label: 'Distance 3', unit: '× Moon’s', want: '0.5' },
         {
           id: 't3',
           label: 'Tidal stretch there',
           unit: '× lunar tide',
-          hint: '8',
+          want: '8',
         },
-        { id: 'd4', label: 'Distance 4', unit: '× Moon’s', hint: '0.25' },
+        { id: 'd4', label: 'Distance 4', unit: '× Moon’s', want: '0.25' },
         {
           id: 't4',
           label: 'Tidal stretch there',
           unit: '× lunar tide',
-          hint: '64',
+          want: '64',
         },
       ],
       validate: v => {
@@ -604,26 +604,26 @@ const TIDES = {
              \n\nThree points are plenty here, because you are looking for a
              straight line and three points either make one or do not.`,
       fields: [
-        { id: 'm1', label: 'Mass 1', unit: '× Moon’s', hint: '1' },
+        { id: 'm1', label: 'Mass 1', unit: '× Moon’s', want: '1' },
         {
           id: 's1',
           label: 'Tidal stretch there',
           unit: '× lunar tide',
-          hint: '1',
+          want: '1',
         },
-        { id: 'm2', label: 'Mass 2', unit: '× Moon’s', hint: '2' },
+        { id: 'm2', label: 'Mass 2', unit: '× Moon’s', want: '2' },
         {
           id: 's2',
           label: 'Tidal stretch there',
           unit: '× lunar tide',
-          hint: '2',
+          want: '2',
         },
-        { id: 'm3', label: 'Mass 3', unit: '× Moon’s', hint: '4' },
+        { id: 'm3', label: 'Mass 3', unit: '× Moon’s', want: '4' },
         {
           id: 's3',
           label: 'Tidal stretch there',
           unit: '× lunar tide',
-          hint: '4',
+          want: '4',
         },
       ],
       validate: v => {

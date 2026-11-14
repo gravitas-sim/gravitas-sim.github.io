@@ -81,8 +81,8 @@ const THE_BEAT_OF_A_STAR = {
              and the <strong>width of that peak</strong> at half its height. The
              width says how well the run can tell one period from a nearby one.`,
       fields: [
-        { id: 'peak', label: 'Highest peak', unit: 'd', hint: '0.6604' },
-        { id: 'width', label: 'Width of the peak', unit: 'd', hint: '0.0167' },
+        { id: 'peak', label: 'Highest peak', unit: 'd', want: '0.6604' },
+        { id: 'width', label: 'Width of the peak', unit: 'd', want: '0.0167' },
       ],
       validate: v => {
         if (![v.peak, v.width].every(Number.isFinite)) return null;
@@ -117,9 +117,9 @@ const THE_BEAT_OF_A_STAR = {
              and the star’s <strong>amplitude</strong>, the full height of the
              folded curve in magnitudes.`,
       fields: [
-        { id: 'period', label: 'Period', unit: 'd', hint: '0.66041' },
-        { id: 'error', label: 'Period error', unit: 'd', hint: '0.00015' },
-        { id: 'amp', label: 'Amplitude', unit: 'mag', hint: '0.712' },
+        { id: 'period', label: 'Period', unit: 'd', want: '0.66041' },
+        { id: 'error', label: 'Period error', unit: 'd', want: '0.00015' },
+        { id: 'amp', label: 'Amplitude', unit: 'mag', want: '0.712' },
       ],
       validate: v => {
         if (![v.period, v.error, v.amp].every(Number.isFinite)) return null;
@@ -178,7 +178,7 @@ const THE_BEAT_OF_A_STAR = {
           id: 'fold',
           label: 'Period the fold uses',
           unit: 'd',
-          hint: '1.3208',
+          want: '1.3208',
         },
       ],
       validate: v => {
@@ -211,7 +211,7 @@ const THE_BEAT_OF_A_STAR = {
           id: 'fold',
           label: 'Period the fold uses',
           unit: 'd',
-          hint: '0.6736',
+          want: '0.6736',
         },
       ],
       validate: v => {
@@ -241,9 +241,9 @@ const THE_BEAT_OF_A_STAR = {
              the <strong>error</strong> on it, and the <strong>number of
              cycles</strong> the run covers.`,
       fields: [
-        { id: 'period', label: 'Period', unit: 'd', hint: '7.226' },
-        { id: 'error', label: 'Period error', unit: 'd', hint: '0.030' },
-        { id: 'cycles', label: 'Cycles in the run', unit: '', hint: '3.68' },
+        { id: 'period', label: 'Period', unit: 'd', want: '7.226' },
+        { id: 'error', label: 'Period error', unit: 'd', want: '0.030' },
+        { id: 'cycles', label: 'Cycles in the run', unit: '', want: '3.68' },
       ],
       validate: v => {
         if (![v.period, v.error, v.cycles].every(Number.isFinite)) return null;
@@ -335,8 +335,8 @@ const THE_BEAT_OF_A_STAR = {
              Read the <strong>period at the highest peak</strong> and the
              <strong>width of that peak</strong>.`,
       fields: [
-        { id: 'peak', label: 'Highest peak', unit: 'd', hint: '1.972' },
-        { id: 'width', label: 'Width of the peak', unit: 'd', hint: '0.212' },
+        { id: 'peak', label: 'Highest peak', unit: 'd', want: '1.972' },
+        { id: 'width', label: 'Width of the peak', unit: 'd', want: '0.212' },
       ],
       validate: v => {
         if (![v.peak, v.width].every(Number.isFinite)) return null;
@@ -369,8 +369,8 @@ const THE_BEAT_OF_A_STAR = {
              confuse with it, one per day longer in frequency and one per day
              shorter.`,
       fields: [
-        { id: 'a1', label: 'First alias', unit: 'd', hint: '1.945' },
-        { id: 'a2', label: 'Second alias', unit: 'd', hint: '0.3977' },
+        { id: 'a1', label: 'First alias', unit: 'd', want: '1.945' },
+        { id: 'a2', label: 'Second alias', unit: 'd', want: '0.3977' },
       ],
       validate: v => {
         if (![v.a1, v.a2].every(Number.isFinite)) return null;

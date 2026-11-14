@@ -381,7 +381,7 @@ export const PLANET_OR_NOT_DEEPER = {
           id: 'a',
           label: 'Smallest difference it could see',
           unit: 'percent',
-          hint: '37',
+          want: '37',
         },
       ],
       validate: v => {
@@ -499,9 +499,9 @@ export const PLANET_OR_NOT_DEEPER = {
           id: 'a',
           label: 'Distance of the dip from the target',
           unit: 'pixels',
-          hint: '0.17',
+          want: '0.17',
         },
-        { id: 'b', label: 'Exclusion radius', unit: 'pixels', hint: '0.30' },
+        { id: 'b', label: 'Exclusion radius', unit: 'pixels', want: '0.30' },
       ],
       validate: v => {
         if (![v.a, v.b].every(Number.isFinite)) return null;

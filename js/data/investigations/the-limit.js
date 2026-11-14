@@ -80,8 +80,8 @@ const THE_LIMIT = {
              <strong>radius in kilometers</strong>. For comparison, the Earth is
              6,371 km in radius.`,
       fields: [
-        { id: 'm', label: 'Mass', unit: 'M☉', hint: '0.60' },
-        { id: 'r', label: 'Radius', unit: 'km', hint: '8860' },
+        { id: 'm', label: 'Mass', unit: 'M☉', want: '0.60' },
+        { id: 'r', label: 'Radius', unit: 'km', want: '8860' },
       ],
       validate: v => {
         if (![v.m, v.r].every(Number.isFinite)) return null;
@@ -132,8 +132,8 @@ const THE_LIMIT = {
       body: `Set the central density to <strong>10⁹</strong> g/cm³ and read the
              mass and the radius in kilometers.`,
       fields: [
-        { id: 'm', label: 'Mass', unit: 'M☉', hint: '1.37' },
-        { id: 'r', label: 'Radius', unit: 'km', hint: '2470' },
+        { id: 'm', label: 'Mass', unit: 'M☉', want: '1.37' },
+        { id: 'r', label: 'Radius', unit: 'km', want: '2470' },
       ],
       validate: v => {
         if (![v.m, v.r].every(Number.isFinite)) return null;
@@ -162,8 +162,8 @@ const THE_LIMIT = {
              and the <strong>limiting mass</strong> the instrument lists for this
              composition, which is where the curve is heading.`,
       fields: [
-        { id: 'm', label: 'Mass', unit: 'M☉', hint: '1.45' },
-        { id: 'limit', label: 'Limiting mass', unit: 'M☉', hint: '1.456' },
+        { id: 'm', label: 'Mass', unit: 'M☉', want: '1.45' },
+        { id: 'limit', label: 'Limiting mass', unit: 'M☉', want: '1.456' },
       ],
       validate: v => {
         if (![v.m, v.limit].every(Number.isFinite)) return null;
@@ -231,7 +231,7 @@ const THE_LIMIT = {
              μₑ: 2 for carbon, oxygen and helium, 1 for hydrogen. Load “A
              hypothetical hydrogen star, μₑ = 1” and read the limiting mass.`,
       fields: [
-        { id: 'limit', label: 'Limiting mass', unit: 'M☉', hint: '5.82' },
+        { id: 'limit', label: 'Limiting mass', unit: 'M☉', want: '5.82' },
       ],
       validate: v => {
         if (!Number.isFinite(v.limit)) return null;
@@ -260,7 +260,7 @@ const THE_LIMIT = {
              <strong>2.15</strong> and read the limiting mass, which is why such
              a core collapses a little below the white-dwarf limit.`,
       fields: [
-        { id: 'limit', label: 'Limiting mass', unit: 'M☉', hint: '1.26' },
+        { id: 'limit', label: 'Limiting mass', unit: 'M☉', want: '1.26' },
       ],
       validate: v => {
         if (!Number.isFinite(v.limit)) return null;

@@ -106,7 +106,8 @@ export const RULE_INDEX = {
   'content/step': 'Every step has a title and a body',
   'content/completion': 'A lesson ends on a step that closes it',
   'content/prompt': 'A step that asks for something says what',
-  'content/placeholder': 'A placeholder does not give away the expected value',
+  'content/placeholder':
+    'A cue in an empty box says what form the answer takes: no numeral, and never a value the step accepts',
   'content/hints':
     'Staged hints are ordered and the reveal has something to reveal',
   'content/hint-leak':
@@ -308,12 +309,13 @@ function emptyProbeContext() {
 /** The context members the engine actually supplies, for the staleness test. */
 export const PROBE_CONTEXT_KEYS = Object.keys(emptyProbeContext());
 
-/** The hint values an author wrote against their own response fields. */
+/** The expected values an author wrote against their own response fields (`want`; `hint` before the split). */
 function hintValues(step) {
   const out = {};
   for (const f of step.fields || []) {
-    if (f.hint === undefined || f.hint === null) continue;
-    const n = Number(String(f.hint).replace(/[^0-9eE+\-.]/g, ''));
+    const want = f.want ?? f.hint;
+    if (want === undefined || want === null) continue;
+    const n = Number(String(want).replace(/[^0-9eE+\-.]/g, ''));
     if (Number.isFinite(n)) out[f.id] = n;
   }
   return out;
@@ -366,6 +368,7 @@ export function checkCatalog(inputs, { skip = [] } = {}) {
     translations,
     sources,
     gradedSteps,
+    cueFindings,
   } = inputs;
 
   const widgetById = new Map(widgets.map(w => [w.id, w]));
@@ -491,35 +494,15 @@ export function checkCatalog(inputs, { skip = [] } = {}) {
       if (!isNonEmptyString(step.body)) E('content/step', 'step has no body');
 
       // --- Placeholders and staged help --------------------------------------
-      // A placeholder is visible before the student has thought about the
-      // question. One that shows the expected measurement hands over the answer
-      // to the first digit, which is not a hint - it is the answer, given
-      // unbidden, to everyone.
-      if (step.kind === 'numeric' && isNonEmptyString(step.placeholder)) {
-        const read = parseNumber(step.placeholder);
-        const tol = Math.abs(toleranceFor(step) ?? 0);
-        if (
-          read.ok &&
-          Number.isFinite(step.answer) &&
-          Math.abs(read.value - step.answer) <= tol
-        ) {
-          E(
-            'content/placeholder',
-            `the placeholder "${step.placeholder}" is the expected answer; say what form the answer takes, not what it is`
-          );
-        }
-      }
-      for (const field of step.fields || []) {
-        if (!isNonEmptyString(field.placeholder)) continue;
-        const read = parseNumber(field.placeholder);
-        const expected = parseNumber(String(field.hint ?? ''));
-        if (read.ok && expected.ok && read.value === expected.value) {
-          E(
-            'content/placeholder',
-            `field "${field.id}" has the expected measurement as its placeholder`
-          );
-        }
-      }
+      // A cue in an empty box is visible before the student has thought about
+      // the question; it may name a form and never a value (js/authoring/cueRules.js,
+      // handed in through the inputs: the Composer route carries no such rule).
+      for (const c of cueFindings?.(
+        step,
+        hintValues(step),
+        emptyProbeContext()
+      ) ?? [])
+        add(c.level, 'content/placeholder', L, i, c.message);
 
       // Staged hints only make sense in order: a method hint with no concept
       // before it is fine, but a worked explanation is the last resort and a
@@ -1328,6 +1311,15 @@ export function checkCatalog(inputs, { skip = [] } = {}) {
       merged.steps?.forEach((st, si) => {
         for (const f of scaffoldProblems(st, false))
           add(f.level, f.rule, id, si, `${locale}: ${f.message}`);
+        const models = hintValues(inv.steps[si]);
+        for (const c of cueFindings?.(st, models, emptyProbeContext()) ?? [])
+          add(
+            c.level,
+            'content/placeholder',
+            id,
+            si,
+            `${locale}: ${c.message}`
+          );
       });
 
       const cov = translationCoverage(inv, data);

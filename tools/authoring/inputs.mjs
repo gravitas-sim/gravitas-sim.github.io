@@ -26,6 +26,7 @@ import { allWidgets, whenWidgetsReady } from '../../js/widgets.js';
 import { expectationsFor } from '../../js/instructorExpectations.js';
 import { flowFor } from '../../js/instructorFlow.js';
 import { gradedSteps } from '../../js/data/investigations/catalog.js';
+import { cueFindings } from '../../js/authoring/cueRules.js';
 
 export const LESSON_DIR = 'js/data/investigations';
 export const LOCALES = ['es'];
@@ -83,6 +84,7 @@ export async function loadAuthoringInputs() {
     translations,
     sources,
     gradedSteps,
+    cueFindings,
   };
 }
 

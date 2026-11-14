@@ -100,9 +100,9 @@ const COLOR_AND_TEMPERATURE = {
       body: `Set the temperature to each value below and read the peak
              wavelength from the list under the plot.`,
       fields: [
-        { id: 'p3', label: 'Peak at 3,000 K', unit: 'nm', hint: '965.9' },
-        { id: 'p6', label: 'Peak at 6,000 K', unit: 'nm', hint: '483' },
-        { id: 'p12', label: 'Peak at 12,000 K', unit: 'nm', hint: '241.5' },
+        { id: 'p3', label: 'Peak at 3,000 K', unit: 'nm', want: '965.9' },
+        { id: 'p6', label: 'Peak at 6,000 K', unit: 'nm', want: '483' },
+        { id: 'p12', label: 'Peak at 12,000 K', unit: 'nm', want: '241.5' },
         {
           id: 'prod',
           label: 'Peak × temperature at 6,000 K (nm·K)',
@@ -219,9 +219,9 @@ const COLOR_AND_TEMPERATURE = {
              the color index at each temperature. A larger number is redder.
              The swatch shows roughly how the blackbody looks.`,
       fields: [
-        { id: 'c3', label: 'B − V at 3,000 K', unit: '', hint: '1.69' },
-        { id: 'c6', label: 'B − V at 6,000 K', unit: '', hint: '0.6' },
-        { id: 'c10', label: 'B − V at 10,000 K', unit: '', hint: '0.15' },
+        { id: 'c3', label: 'B − V at 3,000 K', unit: '', want: '1.69' },
+        { id: 'c6', label: 'B − V at 6,000 K', unit: '', want: '0.6' },
+        { id: 'c10', label: 'B − V at 10,000 K', unit: '', want: '0.15' },
       ],
       validate: v => {
         if (![v.c3, v.c6, v.c10].every(Number.isFinite)) return null;

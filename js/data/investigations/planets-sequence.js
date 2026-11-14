@@ -126,9 +126,9 @@ export const MOONS_OF_THE_GIANTS = {
              four decimals the instrument gives: the arithmetic that follows is
              sensitive to them.`,
       fields: [
-        { id: 'p1', label: 'Io’s period', unit: 'd', hint: '1.7682' },
-        { id: 'p2', label: 'Europa’s period', unit: 'd', hint: '3.5480' },
-        { id: 'p3', label: 'Ganymede’s period', unit: 'd', hint: '7.1413' },
+        { id: 'p1', label: 'Io’s period', unit: 'd', want: '1.7682' },
+        { id: 'p2', label: 'Europa’s period', unit: 'd', want: '3.5480' },
+        { id: 'p3', label: 'Ganymede’s period', unit: 'd', want: '7.1413' },
       ],
       validate: v => {
         if (![v.p1, v.p2, v.p3].every(Number.isFinite)) return null;
@@ -159,9 +159,9 @@ export const MOONS_OF_THE_GIANTS = {
       body: `Type the three periods again and the instrument will divide them: Europa&rsquo;s
              by Io&rsquo;s, and Ganymede&rsquo;s by Europa&rsquo;s.`,
       fields: [
-        { id: 'p1', label: 'Io’s period', unit: 'd', hint: '1.7682' },
-        { id: 'p2', label: 'Europa’s period', unit: 'd', hint: '3.5480' },
-        { id: 'p3', label: 'Ganymede’s period', unit: 'd', hint: '7.1413' },
+        { id: 'p1', label: 'Io’s period', unit: 'd', want: '1.7682' },
+        { id: 'p2', label: 'Europa’s period', unit: 'd', want: '3.5480' },
+        { id: 'p3', label: 'Ganymede’s period', unit: 'd', want: '7.1413' },
         {
           id: 'r12',
           label: 'Europa’s period over Io’s',
@@ -269,9 +269,9 @@ export const MOONS_OF_THE_GIANTS = {
              twice Ganymede&rsquo;s. For scale: the three fits&rsquo; uncertainties
              combine to about <strong>&plusmn;0.025</strong> degrees a day.`,
       fields: [
-        { id: 'p1', label: 'Io’s period', unit: 'd', hint: '1.7682' },
-        { id: 'p2', label: 'Europa’s period', unit: 'd', hint: '3.5480' },
-        { id: 'p3', label: 'Ganymede’s period', unit: 'd', hint: '7.1413' },
+        { id: 'p1', label: 'Io’s period', unit: 'd', want: '1.7682' },
+        { id: 'p2', label: 'Europa’s period', unit: 'd', want: '3.5480' },
+        { id: 'p3', label: 'Ganymede’s period', unit: 'd', want: '7.1413' },
         {
           id: 'n1',
           label: 'Io’s motion, degrees a day',
@@ -361,7 +361,7 @@ export const MOONS_OF_THE_GIANTS = {
              <strong>moon 4</strong> and read its period. Then divide it by
              Ganymede&rsquo;s, 7.1413 days.`,
       fields: [
-        { id: 'p4', label: 'Callisto’s period', unit: 'd', hint: '16.624' },
+        { id: 'p4', label: 'Callisto’s period', unit: 'd', want: '16.624' },
         {
           id: 'r34',
           label: 'Callisto’s period over Ganymede’s',
@@ -487,19 +487,19 @@ export const THE_SCALE_OF_THE_SOLAR_SYSTEM = {
           id: 'earth',
           label: 'Earth’s distance from the Sun',
           unit: 'AU',
-          hint: '1.00',
+          want: '1.00',
         },
         {
           id: 'jupiter',
           label: 'Jupiter’s distance from the Sun',
           unit: 'AU',
-          hint: '5.20',
+          want: '5.20',
         },
         {
           id: 'neptune',
           label: 'Neptune’s distance from the Sun',
           unit: 'AU',
-          hint: '30.07',
+          want: '30.07',
         },
       ],
       probe: distanceRows,
@@ -565,7 +565,7 @@ export const THE_SCALE_OF_THE_SOLAR_SYSTEM = {
           id: 'neptune',
           label: 'Neptune’s distance from the Sun',
           unit: 'AU',
-          hint: '30.07',
+          want: '30.07',
         },
         {
           id: 'hours',
@@ -627,7 +627,7 @@ export const THE_SCALE_OF_THE_SOLAR_SYSTEM = {
           id: 'neptune',
           label: 'Neptune’s distance from the Sun',
           unit: 'AU',
-          hint: '30.07',
+          want: '30.07',
         },
         {
           id: 'earth_m',
@@ -865,13 +865,13 @@ export const COMETS_AND_THE_SUN = {
           id: 'peri',
           label: 'Closest approach to the Sun',
           unit: 'AU',
-          hint: '5.79',
+          want: '5.79',
         },
         {
           id: 'apo',
           label: 'Furthest distance from the Sun',
           unit: 'AU',
-          hint: '17.84',
+          want: '17.84',
         },
       ],
       probe: cometRows,
@@ -911,13 +911,13 @@ export const COMETS_AND_THE_SUN = {
           id: 'peri',
           label: 'Closest approach to the Sun',
           unit: 'AU',
-          hint: '5.79',
+          want: '5.79',
         },
         {
           id: 'apo',
           label: 'Furthest distance from the Sun',
           unit: 'AU',
-          hint: '17.84',
+          want: '17.84',
         },
         {
           id: 't_peri',
@@ -969,7 +969,7 @@ export const COMETS_AND_THE_SUN = {
           id: 'q',
           label: 'The real Halley’s closest approach',
           unit: 'AU',
-          hint: '0.586',
+          want: '0.586',
         },
         {
           id: 't_q',

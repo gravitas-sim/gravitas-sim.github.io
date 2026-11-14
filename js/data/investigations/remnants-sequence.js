@@ -120,13 +120,13 @@ export const HOW_OLD_IS_THIS_WHITE_DWARF = {
           id: 'a',
           label: 'Age at a ten-thousandth',
           unit: 'Gyr',
-          hint: '4.09',
+          want: '4.09',
         },
         {
           id: 'b',
           label: 'Age at a thousandth',
           unit: 'Gyr',
-          hint: '0.79',
+          want: '0.79',
         },
       ],
       validate: v => {
@@ -277,14 +277,14 @@ export const HOW_OLD_IS_THIS_WHITE_DWARF_DEEPER = {
              <strong>age</strong>, the part of the uncertainty that comes from the measurements, and the part that
              comes from the law, as percentages.`,
       fields: [
-        { id: 'a', label: 'Cooling age', unit: 'Gyr', hint: '2.60' },
+        { id: 'a', label: 'Cooling age', unit: 'Gyr', want: '2.60' },
         {
           id: 'b',
           label: 'From the measurements',
           unit: 'percent',
-          hint: '14',
+          want: '14',
         },
-        { id: 'c', label: 'From the law', unit: 'percent', hint: '19' },
+        { id: 'c', label: 'From the law', unit: 'percent', want: '19' },
       ],
       validate: v => {
         if (![v.a, v.b, v.c].every(Number.isFinite)) return null;
@@ -344,8 +344,8 @@ export const HOW_OLD_IS_THIS_WHITE_DWARF_DEEPER = {
              is 0.79 billion years. Read the two ends of the 95 percent interval: they are what is left when the
              measurements are perfect.`,
       fields: [
-        { id: 'a', label: 'Lower end', unit: 'Gyr', hint: '0.66' },
-        { id: 'b', label: 'Upper end', unit: 'Gyr', hint: '0.95' },
+        { id: 'a', label: 'Lower end', unit: 'Gyr', want: '0.66' },
+        { id: 'b', label: 'Upper end', unit: 'Gyr', want: '0.95' },
       ],
       validate: v => {
         if (![v.a, v.b].every(Number.isFinite)) return null;
@@ -501,8 +501,8 @@ export const FROM_STAR_TO_REMNANT = {
       body: `The panel is set to a star of 3 solar masses and the relation of the MIST stellar models. Read the
              <strong>final mass</strong> and the <strong>mass lost</strong> as a percentage of the initial mass.`,
       fields: [
-        { id: 'a', label: 'Final mass', unit: 'M☉', hint: '0.745' },
-        { id: 'b', label: 'Mass lost', unit: 'percent', hint: '75' },
+        { id: 'a', label: 'Final mass', unit: 'M☉', want: '0.745' },
+        { id: 'b', label: 'Mass lost', unit: 'percent', want: '75' },
       ],
       validate: v => {
         if (![v.a, v.b].every(Number.isFinite)) return null;
@@ -558,8 +558,8 @@ export const FROM_STAR_TO_REMNANT = {
       body: `Set the initial mass to 25 solar masses, still showing probabilities. Read the probability of a
              <strong>neutron star</strong> and of a <strong>black hole</strong>, as percentages.`,
       fields: [
-        { id: 'a', label: 'Neutron star', unit: 'percent', hint: '75' },
-        { id: 'b', label: 'Black hole', unit: 'percent', hint: '25' },
+        { id: 'a', label: 'Neutron star', unit: 'percent', want: '75' },
+        { id: 'b', label: 'Black hole', unit: 'percent', want: '25' },
       ],
       validate: v => {
         if (![v.a, v.b].every(Number.isFinite)) return null;
@@ -636,8 +636,8 @@ export const FROM_STAR_TO_REMNANT_DEEPER = {
       body: `Show the <strong>final mass</strong> again. Read the final mass of a star born with
              <strong>1.0</strong> solar mass, then of one born with <strong>6.0</strong>.`,
       fields: [
-        { id: 'a', label: 'At 1.0 M☉', unit: 'M☉', hint: '0.569' },
-        { id: 'b', label: 'At 6.0 M☉', unit: 'M☉', hint: '1.113' },
+        { id: 'a', label: 'At 1.0 M☉', unit: 'M☉', want: '0.569' },
+        { id: 'b', label: 'At 6.0 M☉', unit: 'M☉', want: '1.113' },
       ],
       validate: v => {
         if (![v.a, v.b].every(Number.isFinite)) return null;

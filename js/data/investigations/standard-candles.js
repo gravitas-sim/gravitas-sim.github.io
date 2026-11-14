@@ -81,8 +81,8 @@ const STANDARD_CANDLES = {
              <strong>chi-square</strong> of the best fit, the first number of the
              pair.`,
       fields: [
-        { id: 'n', label: 'Supernovae', hint: '1829' },
-        { id: 'chi2', label: 'Chi-square of the best fit', hint: '1688' },
+        { id: 'n', label: 'Supernovae', want: '1829' },
+        { id: 'chi2', label: 'Chi-square of the best fit', want: '1688' },
       ],
       validate: v => {
         if (![v.n, v.chi2].every(Number.isFinite)) return null;
@@ -140,13 +140,13 @@ const STANDARD_CANDLES = {
           id: 'implied',
           label: 'Implied Hubble constant',
           unit: 'km/s/Mpc',
-          hint: '66.85',
+          want: '66.85',
         },
         {
           id: 'pct',
           label: 'Change in H₀ for 0.1 mag',
           unit: '%',
-          hint: '4.5',
+          want: '4.5',
         },
       ],
       validate: v => {

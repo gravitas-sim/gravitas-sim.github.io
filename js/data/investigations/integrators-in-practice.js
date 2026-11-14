@@ -102,26 +102,26 @@ const INTEGRATORS_IN_PRACTICE = {
              enter them here. The page shows them in percent; the last is how many
              steps each method took.`,
       fields: [
-        { id: 'euler', label: 'Explicit Euler', unit: '%', hint: '49.75' },
+        { id: 'euler', label: 'Explicit Euler', unit: '%', want: '49.75' },
         {
           id: 'symplectic',
           label: 'Symplectic Euler',
           unit: '%',
-          hint: '-0.002317',
+          want: '-0.002317',
         },
         {
           id: 'verlet',
           label: 'Velocity Verlet',
           unit: '%',
-          hint: '0.001768',
+          want: '0.001768',
         },
         {
           id: 'rk4',
           label: 'Runge-Kutta 4',
           unit: '%',
-          hint: '-6.47e-8',
+          want: '-6.47e-8',
         },
-        { id: 'steps', label: 'Steps taken', unit: '', hint: '10722' },
+        { id: 'steps', label: 'Steps taken', unit: '', want: '10722' },
       ],
       validate: v => {
         if (
@@ -207,25 +207,25 @@ const INTEGRATORS_IN_PRACTICE = {
           id: 'verlet',
           label: 'Velocity Verlet, 1000 steps',
           unit: '%',
-          hint: '0.000442',
+          want: '0.000442',
         },
         {
           id: 'rk4',
           label: 'Runge-Kutta 4, 1000 steps',
           unit: '%',
-          hint: '-2.44e-9',
+          want: '-2.44e-9',
         },
         {
           id: 'ratioVerlet',
           label: 'Verlet: improvement',
           unit: '',
-          hint: '4.0',
+          want: '4.0',
         },
         {
           id: 'ratioRk4',
           label: 'Runge-Kutta 4: improvement',
           unit: '',
-          hint: '26.5',
+          want: '26.5',
         },
       ],
       validate: v => {
@@ -271,19 +271,19 @@ const INTEGRATORS_IN_PRACTICE = {
           id: 'verlet',
           label: 'Velocity Verlet, 438 steps',
           unit: '%',
-          hint: '0.002304',
+          want: '0.002304',
         },
         {
           id: 'rk4',
           label: 'Runge-Kutta 4, 438 steps',
           unit: '%',
-          hint: '-1.22e-7',
+          want: '-1.22e-7',
         },
         {
           id: 'symplectic',
           label: 'Symplectic Euler, 438 steps',
           unit: '%',
-          hint: '-0.0001646',
+          want: '-0.0001646',
         },
       ],
       validate: v => {

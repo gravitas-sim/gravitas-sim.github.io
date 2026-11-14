@@ -122,12 +122,12 @@ export const HOW_FAST_DOES_THE_STAR_SPIN = {
       body: `The periodogram looks for the period that fits the light best. Read the <strong>period found</strong>
              and the <strong>dimming from the spots</strong>, from peak to trough.`,
       fields: [
-        { id: 'a', label: 'Period found', unit: 'days', hint: '4.00' },
+        { id: 'a', label: 'Period found', unit: 'days', want: '4.00' },
         {
           id: 'b',
           label: 'Dimming from the spots',
           unit: 'percent',
-          hint: '2.7',
+          want: '2.7',
         },
       ],
       validate: v => {
@@ -193,12 +193,12 @@ export const HOW_FAST_DOES_THE_STAR_SPIN = {
              27 days. This is its periodogram. Read the <strong>rotation period</strong> and the
              <strong>other period it could be</strong>, in days.`,
       fields: [
-        { id: 'a', label: 'Rotation period', unit: 'days', hint: '4.86' },
+        { id: 'a', label: 'Rotation period', unit: 'days', want: '4.86' },
         {
           id: 'b',
           label: 'Other period it could be',
           unit: 'days',
-          hint: '9.71',
+          want: '9.71',
         },
       ],
       validate: v => {
@@ -228,12 +228,12 @@ export const HOW_FAST_DOES_THE_STAR_SPIN = {
              model star: put the spot at <strong>60&deg;</strong> and the differential rotation at
              <strong>0.20</strong>, and read the period of the spot&rsquo;s latitude next to the equator&rsquo;s.`,
       fields: [
-        { id: 'a', label: 'Period at the equator', unit: 'days', hint: '4.00' },
+        { id: 'a', label: 'Period at the equator', unit: 'days', want: '4.00' },
         {
           id: 'b',
           label: 'Period of the spot’s latitude',
           unit: 'days',
-          hint: '4.71',
+          want: '4.71',
         },
       ],
       validate: v => {
@@ -284,18 +284,18 @@ export const HOW_FAST_DOES_THE_STAR_SPIN_DEEPER = {
       body: `EK Draconis is a young Sun-like star, watched for 27 days by TESS. Read its
              <strong>rotation period</strong> and the two ends of its <strong>95 percent interval</strong>.`,
       fields: [
-        { id: 'a', label: 'Rotation period', unit: 'days', hint: '2.555' },
+        { id: 'a', label: 'Rotation period', unit: 'days', want: '2.555' },
         {
           id: 'b',
           label: 'Lower end of the interval',
           unit: 'days',
-          hint: '2.532',
+          want: '2.532',
         },
         {
           id: 'c',
           label: 'Upper end of the interval',
           unit: 'days',
-          hint: '2.579',
+          want: '2.579',
         },
       ],
       validate: v => {
@@ -511,18 +511,18 @@ export const FLARES = {
              <strong>equivalent duration</strong> in seconds, its <strong>peak above the quiet level</strong> in
              percent and its <strong>width at half the peak</strong> in minutes.`,
       fields: [
-        { id: 'a', label: 'Equivalent duration', unit: 's', hint: '118' },
+        { id: 'a', label: 'Equivalent duration', unit: 's', want: '118' },
         {
           id: 'b',
           label: 'Peak above the quiet level',
           unit: 'percent',
-          hint: '3.5',
+          want: '3.5',
         },
         {
           id: 'c',
           label: 'Width at half the peak',
           unit: 'minutes',
-          hint: '29',
+          want: '29',
         },
       ],
       validate: v => {
@@ -584,8 +584,8 @@ export const FLARES = {
       body: `The second panel counts the flares of AU Microscopii by size. Read the <strong>number of flares
              found</strong> and work out how many there are <strong>a day</strong> on average.`,
       fields: [
-        { id: 'a', label: 'Flares found', unit: '', hint: '76' },
-        { id: 'b', label: 'Flares a day', unit: '', hint: '3.1' },
+        { id: 'a', label: 'Flares found', unit: '', want: '76' },
+        { id: 'b', label: 'Flares a day', unit: '', want: '3.1' },
       ],
       validate: v => {
         if (![v.a, v.b].every(Number.isFinite)) return null;
@@ -634,10 +634,10 @@ export const FLARES_DEEPER = {
              size the telescope finds completely. Read α, its 95 percent interval, and the number of flares
              above the floor.`,
       fields: [
-        { id: 'a', label: 'Slope α', unit: '', hint: '1.92' },
-        { id: 'b', label: 'Lower end of the interval', unit: '', hint: '1.62' },
-        { id: 'c', label: 'Upper end of the interval', unit: '', hint: '2.28' },
-        { id: 'n', label: 'Flares above the floor', unit: '', hint: '29' },
+        { id: 'a', label: 'Slope α', unit: '', want: '1.92' },
+        { id: 'b', label: 'Lower end of the interval', unit: '', want: '1.62' },
+        { id: 'c', label: 'Upper end of the interval', unit: '', want: '2.28' },
+        { id: 'n', label: 'Flares above the floor', unit: '', want: '29' },
       ],
       validate: v => {
         if (![v.a, v.b, v.c, v.n].every(Number.isFinite)) return null;

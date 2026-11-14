@@ -224,10 +224,12 @@ const ${constName} = {
       type: 'measure',
       title: 'Write down what you measured',
       body: \`Ask for numbers. Every field needs an id, a label and a unit; a
-             \\\`hint\\\` is the value you expect, and \\\`npm run author:check\\\` feeds
-             the hints through \\\`validate\\\` to prove it accepts your own answer.\`,
+             \\\`want\\\` is the value you expect (never shown to a student), and
+             \\\`npm run author:check\\\` feeds the wanted values through \\\`validate\\\` to
+             prove it accepts your own answer. A \\\`hint\\\` is a few words of
+             text for the empty box and holds no number.\`,
       fields: [
-        { id: 'value', label: 'The thing measured', unit: 'AU', hint: '1' },
+        { id: 'value', label: 'The thing measured', unit: 'AU', want: '1' },
       ],
       validate: v => {
         if (!Number.isFinite(v.value)) return null;

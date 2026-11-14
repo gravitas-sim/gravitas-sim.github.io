@@ -60,12 +60,12 @@ const PLAN_FIELDS = [
   {
     id: 'facility',
     label: 'Facility: 1 LCO 0.35 m, 2 LCO 1.0 m, 3 Rubin 8.4 m',
-    hint: '2',
+    want: '2',
   },
-  { id: 'exposure', label: 'Exposure per visit', unit: 's', hint: '100' },
-  { id: 'visits', label: 'Visits stacked', hint: '1' },
-  { id: 'nights', label: 'Nights', hint: '10' },
-  { id: 'threshold', label: 'Detection threshold (in sigma)', hint: '5' },
+  { id: 'exposure', label: 'Exposure per visit', unit: 's', want: '100' },
+  { id: 'visits', label: 'Visits stacked', want: '1' },
+  { id: 'nights', label: 'Nights', want: '10' },
+  { id: 'threshold', label: 'Detection threshold (in sigma)', want: '5' },
   { id: 'depth', label: 'Depth your plan reaches (half found)', unit: 'mag' },
   { id: 'n', label: 'Sources your plan finds per square degree' },
 ];
@@ -149,7 +149,7 @@ export const DEEP_OR_WIDE = {
           id: 'e',
           label: 'The exposure that finds most sources',
           unit: 's',
-          hint: '335',
+          want: '335',
         },
       ],
       validate: v => {
@@ -182,7 +182,7 @@ export const DEEP_OR_WIDE = {
           id: 'e',
           label: 'The exposure that finds most sources',
           unit: 's',
-          hint: '3162',
+          want: '3162',
         },
       ],
       validate: v => {
@@ -277,8 +277,8 @@ export const DEEP_OR_WIDE_DEEPER = {
              most sources and the sky-limited rule&rsquo;s estimate, 1.25 times the slope over
              one minus it, times the overhead. Read both.`,
       fields: [
-        { id: 'b', label: 'Best exposure found', unit: 's', hint: '84' },
-        { id: 'r', label: 'The sky-limited rule gives', unit: 's', hint: '33' },
+        { id: 'b', label: 'Best exposure found', unit: 's', want: '84' },
+        { id: 'r', label: 'The sky-limited rule gives', unit: 's', want: '33' },
       ],
       validate: v => {
         if (![v.b, v.r].every(Number.isFinite)) return null;
@@ -312,13 +312,13 @@ export const DEEP_OR_WIDE_DEEPER = {
           id: 'd',
           label: 'Depth at the threshold',
           unit: 'mag',
-          hint: '22.59',
+          want: '22.59',
         },
         {
           id: 'r',
           label: 'Reliability, the real share of the detections',
           unit: '%',
-          hint: '90.5',
+          want: '90.5',
         },
       ],
       validate: v => {
@@ -441,12 +441,12 @@ export const TWO_TELESCOPES = {
           id: 'h',
           label: 'Hours for the one-meter telescope',
           unit: 'h',
-          hint: '3.84',
+          want: '3.84',
         },
         {
           id: 'r',
           label: 'The second takes this many times as long',
-          hint: '0.0155',
+          want: '0.0155',
         },
       ],
       validate: v => {

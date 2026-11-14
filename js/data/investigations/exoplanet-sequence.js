@@ -229,13 +229,13 @@ export const ONE_PLANET_EVERY_METHOD = {
           id: 'rho',
           label: 'Bulk density',
           unit: 'g/cm³',
-          hint: '0.365',
+          want: '0.365',
         },
         {
           id: 'sigma',
           label: 'Its one-sigma uncertainty (plus or minus)',
           unit: 'g/cm³',
-          hint: '0.050',
+          want: '0.050',
         },
       ],
       validate: v => {
@@ -605,13 +605,13 @@ export const WHAT_KINDS_OF_PLANETS_EXIST = {
           id: 'listed',
           label: 'Planets listed in the bin',
           unit: '',
-          hint: '3',
+          want: '3',
         },
         {
           id: 'rate',
           label: 'The rate, in planets per star',
           unit: '',
-          hint: '0.35',
+          want: '0.35',
         },
       ],
       validate: v => {
@@ -914,7 +914,7 @@ export const THE_TRANSIT_THAT_WAS_A_STAR = {
           id: 'offset',
           label: 'Offset of the light that dips',
           unit: 'pixels',
-          hint: '1.8',
+          want: '1.8',
         },
       ],
       validate: v => {
@@ -1152,7 +1152,7 @@ export const PLANNING_A_TRANSIT_CAMPAIGN = {
           id: 'nights',
           label: 'Nights with a whole transit and baseline',
           unit: '',
-          hint: '5',
+          want: '5',
         },
       ],
       validate: v => {
@@ -1184,7 +1184,7 @@ export const PLANNING_A_TRANSIT_CAMPAIGN = {
           id: 'observed',
           label: 'Of those nights, clear',
           unit: '',
-          hint: '2',
+          want: '2',
         },
       ],
       validate: v => {

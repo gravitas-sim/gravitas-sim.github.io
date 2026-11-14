@@ -29,12 +29,12 @@ export const WEIGHING_JUPITER_DEEPER = {
              (3) and read its <strong>period</strong> and its <strong>orbit radius</strong>, the
              amplitude, in Jupiter radii. One Jupiter radius is 71,492 km.`,
       fields: [
-        { id: 'period', label: 'Ganymede’s period', unit: 'd', hint: '7.14' },
+        { id: 'period', label: 'Ganymede’s period', unit: 'd', want: '7.14' },
         {
           id: 'radius',
           label: 'Ganymede’s orbit radius',
           unit: 'RJup',
-          hint: '15.0',
+          want: '15.0',
         },
       ],
       validate: v => {
@@ -89,7 +89,7 @@ export const WEIGHING_JUPITER_DEEPER = {
       type: 'question',
       kind: 'numeric',
       uncertainty: true,
-      placeholder: 'e.g. 1.5 ± 0.05',
+      placeholder: 'a value, then ± its uncertainty',
       title: 'Jupiter’s mass, with its uncertainty',
       body: `Divide GM by the gravitational constant, G = 6.674 &times; 10&minus;&sup1;&sup1;
              m&sup3;/(kg s&sup2;), and Ganymede gives Jupiter&rsquo;s mass. The instrument
@@ -190,13 +190,13 @@ export const WEIGHING_JUPITER_DEEPER = {
           id: 'gm',
           label: 'Weighted mean GM, corrected (millions of km³/s²)',
           unit: '',
-          hint: '126.9',
+          want: '126.9',
         },
         {
           id: 'chi2',
           label: 'Chi-square of the four, corrected',
           unit: '',
-          hint: '6.1',
+          want: '6.1',
         },
       ],
       validate: v => {
@@ -511,12 +511,12 @@ export const THE_GAPS_IN_THE_BELT_DEEPER = {
       body: `Set the 3:1 window&rsquo;s width to 2, twice as wide (0.05 AU either side). Read how many objects it holds and
              the depletion.`,
       fields: [
-        { id: 'found', label: 'Found in the window', unit: '', hint: '170' },
+        { id: 'found', label: 'Found in the window', unit: '', want: '170' },
         {
           id: 'dep',
           label: 'The depletion (percent)',
           unit: '',
-          hint: '62.4',
+          want: '62.4',
         },
       ],
       validate: v => {
@@ -545,18 +545,18 @@ export const THE_GAPS_IN_THE_BELT_DEEPER = {
       body: `Set the width back to 1 and the H limit to 11: only the 2,537 brightest objects in the catalog, 1,118 of them in
              the range of the picture. Read the 3:1 window&rsquo;s count, its depletion and the low end of the interval.`,
       fields: [
-        { id: 'found', label: 'Found in the window', unit: '', hint: '7' },
+        { id: 'found', label: 'Found in the window', unit: '', want: '7' },
         {
           id: 'dep',
           label: 'The depletion (percent)',
           unit: '',
-          hint: '83.8',
+          want: '83.8',
         },
         {
           id: 'lo',
           label: 'Low end of the 95 percent interval (percent)',
           unit: '',
-          hint: '69.4',
+          want: '69.4',
         },
       ],
       validate: v => {
@@ -636,8 +636,8 @@ export const THE_GAPS_IN_THE_BELT_DEEPER = {
              Trojans (at 5.20 AU, the 1:1) are counted by a box in semi-major axis, eccentricity and inclination: a class
              rule, not a test that the orbit is in resonance. Read both counts.`,
       fields: [
-        { id: 'hilda', label: 'Hildas', unit: '', hint: '183' },
-        { id: 'trojan', label: 'Jupiter Trojans', unit: '', hint: '1555' },
+        { id: 'hilda', label: 'Hildas', unit: '', want: '183' },
+        { id: 'trojan', label: 'Jupiter Trojans', unit: '', want: '1555' },
       ],
       validate: v => {
         if (![v.hilda, v.trojan].every(Number.isFinite)) return null;
@@ -671,13 +671,13 @@ export const THE_GAPS_IN_THE_BELT_DEEPER = {
           id: 'ratio',
           label: 'Found at 2.0 AU against 3.5 AU',
           unit: '',
-          hint: '40.0',
+          want: '40.0',
         },
         {
           id: 'mean',
           label: 'The mean a of what is found (AU)',
           unit: '',
-          hint: '2.35',
+          want: '2.35',
         },
       ],
       validate: v => {
@@ -710,13 +710,13 @@ export const THE_GAPS_IN_THE_BELT_DEEPER = {
           id: 'd3',
           label: 'The depletion at degree 3 (percent)',
           unit: '',
-          hint: '83.7',
+          want: '83.7',
         },
         {
           id: 'd6',
           label: 'The depletion at degree 6 (percent)',
           unit: '',
-          hint: '88.5',
+          want: '88.5',
         },
       ],
       validate: v => {
@@ -838,9 +838,9 @@ export const HOW_FAST_DOES_IT_SPIN_DEEPER = {
           id: 'p',
           label: 'The rotation period (hours)',
           unit: '',
-          hint: '6.268',
+          want: '6.268',
         },
-        { id: 's', label: 'Its uncertainty (hours)', unit: '', hint: '0.036' },
+        { id: 's', label: 'Its uncertainty (hours)', unit: '', want: '0.036' },
       ],
       validate: v => {
         if (![v.p, v.s].every(Number.isFinite)) return null;
@@ -877,9 +877,9 @@ export const HOW_FAST_DOES_IT_SPIN_DEEPER = {
           id: 'p',
           label: 'The rotation period (hours)',
           unit: '',
-          hint: '11.388',
+          want: '11.388',
         },
-        { id: 's', label: 'Its uncertainty (hours)', unit: '', hint: '0.005' },
+        { id: 's', label: 'Its uncertainty (hours)', unit: '', want: '0.005' },
       ],
       validate: v => {
         if (![v.p, v.s].every(Number.isFinite)) return null;
@@ -906,8 +906,8 @@ export const HOW_FAST_DOES_IT_SPIN_DEEPER = {
       title: 'A nearly round body',
       body: `Target B is nearly round. Read its amplitude and the bound on a/b it gives.`,
       fields: [
-        { id: 'amp', label: 'The amplitude (mag)', unit: '', hint: '0.106' },
-        { id: 'bound', label: 'a/b is at least', unit: '', hint: '1.10' },
+        { id: 'amp', label: 'The amplitude (mag)', unit: '', want: '0.106' },
+        { id: 'bound', label: 'a/b is at least', unit: '', want: '1.10' },
       ],
       validate: v => {
         if (![v.amp, v.bound].every(Number.isFinite)) return null;
@@ -979,12 +979,12 @@ export const HOW_FAST_DOES_IT_SPIN_DEEPER = {
       body: `Set the sampling to one point a night: 40 nights, a little different time each night. Read the two competing
              periods the instrument lists.`,
       fields: [
-        { id: 'p1', label: 'The first period (hours)', unit: '', hint: '5.49' },
+        { id: 'p1', label: 'The first period (hours)', unit: '', want: '5.49' },
         {
           id: 'p2',
           label: 'The second period (hours)',
           unit: '',
-          hint: '6.20',
+          want: '6.20',
         },
       ],
       validate: v => {

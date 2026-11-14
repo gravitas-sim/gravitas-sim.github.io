@@ -50,19 +50,19 @@ export default {
           id: 'sig',
           label: 'Scatter of one exposure',
           unit: '',
-          hint: '0.0003',
+          want: '0.0003',
         },
         {
           id: 'n_in',
           label: 'Exposures inside the transit',
           unit: '',
-          hint: '90',
+          want: '90',
         },
         {
           id: 'n_out',
           label: 'Exposures in the baseline',
           unit: '',
-          hint: '450',
+          want: '450',
         },
         {
           id: 'depth_in',
@@ -117,7 +117,7 @@ export default {
  than twice that range's half-width.`,
       prompt: 'Planet radius in R_Jupiter, with its uncertainty',
       unit: '',
-      placeholder: 'e.g. 1.37 ± 0.01',
+      placeholder: 'a value, then ± its uncertainty',
       answer: 1.37,
       tolerance: 0.1,
       agrees: [
@@ -154,7 +154,7 @@ export default {
  in quadrature.`,
       prompt: 'Predicted depth, with its uncertainty',
       unit: '',
-      placeholder: 'e.g. 0.0183 ± 0.0007',
+      placeholder: 'a value, then ± its uncertainty',
       answer: 0.0183,
       tolerance: 0.0008,
       hints: {

@@ -121,13 +121,13 @@ export const THE_METALLICITY_TERM = {
           id: 'a',
           label: 'Modulus, term left out',
           unit: 'mag',
-          hint: '29.40',
+          want: '29.40',
         },
         {
           id: 'b',
           label: 'Modulus, term included',
           unit: 'mag',
-          hint: '29.44',
+          want: '29.44',
         },
       ],
       validate: v => {
