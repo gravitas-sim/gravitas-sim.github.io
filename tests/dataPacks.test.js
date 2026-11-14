@@ -4,6 +4,7 @@ import process from 'node:process';
 import { execFileSync } from 'node:child_process';
 import {
   cpSync,
+  existsSync,
   mkdtempSync,
   readFileSync,
   realpathSync,
@@ -627,6 +628,103 @@ describe('a raw product is used only when it is the pinned one', () => {
     expect(Buffer.from(await pinnedBytes(pin, { cache: empty }))).toEqual(
       bytes
     );
+  });
+
+  test('a download that fails on the network names its archive and the reason', async () => {
+    const empty = realpathSync(
+      mkdtempSync(path.join(tmpdir(), 'gravitas-pin-'))
+    );
+    // Node's fetch says only "fetch failed" and keeps the reason on `cause`.
+    const down = async () => {
+      throw new TypeError('fetch failed', {
+        cause: Object.assign(new Error('connect timeout'), {
+          code: 'UND_ERR_CONNECT_TIMEOUT',
+        }),
+      });
+    };
+    await expect(
+      pinnedBytes(pin, {
+        cache: empty,
+        offline: false,
+        fetchImpl: down,
+        retryDelayMs: 0,
+      })
+    ).rejects.toThrow(`${pin.url}: fetch failed (UND_ERR_CONNECT_TIMEOUT)`);
+    const refused = async () => ({ ok: false, status: 403 });
+    await expect(
+      pinnedBytes(pin, { cache: empty, offline: false, fetchImpl: refused })
+    ).rejects.toThrow(/HTTP 403/);
+  });
+
+  test('an archive that errs transiently is asked again, and only the pin decides what is kept', async () => {
+    // A fresh cache for each call: a success is cached, and a cached file is
+    // never fetched again.
+    let empty;
+    const go = fetchImpl => {
+      empty = realpathSync(mkdtempSync(path.join(tmpdir(), 'gravitas-pin-')));
+      return pinnedBytes(pin, {
+        cache: empty,
+        offline: false,
+        fetchImpl,
+        retryDelayMs: 0,
+      });
+    };
+    // HTTP 500, then a connect timeout, then the file: three asks, one result.
+    let asked = 0;
+    const flaky = async () => {
+      asked++;
+      if (asked === 1) return { ok: false, status: 500 };
+      if (asked === 2)
+        throw new TypeError('fetch failed', {
+          cause: Object.assign(new Error('t'), {
+            code: 'UND_ERR_CONNECT_TIMEOUT',
+          }),
+        });
+      return { ok: true, arrayBuffer: async () => bytes };
+    };
+    expect(Buffer.from(await go(flaky))).toEqual(bytes);
+    expect(asked).toBe(3);
+
+    // An archive that keeps failing is given up on after the third ask.
+    let down = 0;
+    await expect(
+      go(async () => {
+        down++;
+        return { ok: false, status: 503 };
+      })
+    ).rejects.toThrow(/HTTP 503/);
+    expect(down).toBe(3);
+
+    // A refusal, a missing page and a download that outran its own timeout
+    // are not retried; a retried success with the wrong bytes is still refused.
+    for (const status of [403, 404]) {
+      let n = 0;
+      await expect(
+        go(async () => {
+          n++;
+          return { ok: false, status };
+        })
+      ).rejects.toThrow(`HTTP ${status}`);
+      expect(n).toBe(1);
+    }
+    let slow = 0;
+    await expect(
+      go(async () => {
+        slow++;
+        throw Object.assign(new Error('timed out'), { name: 'TimeoutError' });
+      })
+    ).rejects.toThrow(/timed out/);
+    expect(slow).toBe(1);
+    let wrong = 0;
+    await expect(
+      go(async () => {
+        wrong++;
+        return wrong === 1
+          ? { ok: false, status: 500 }
+          : { ok: true, arrayBuffer: async () => Buffer.from('other') };
+      })
+    ).rejects.toThrow(/served different bytes/);
+    expect(existsSync(path.join(empty, pin.file))).toBe(false);
   });
 });
 
