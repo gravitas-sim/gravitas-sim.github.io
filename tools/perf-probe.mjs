@@ -149,7 +149,7 @@ async function main() {
   }
   const trace = args.includes('--trace');
   const valueIndexes = new Set(
-    [si, ti, ji, di, ci, vi, ...sceneIndexes]
+    [si, ti, ji, di, ci, vi, args.indexOf('--policy'), args.indexOf('--fixed-step'), ...sceneIndexes]
       .filter(i => i >= 0)
       .map(i => i + 1)
   );
@@ -270,6 +270,22 @@ async function main() {
         },
         { key, tier }
       );
+    if (!sceneRecords.length) {
+      const policyArg = args.indexOf('--policy');
+      const fixedArg = args.indexOf('--fixed-step');
+      await page.evaluate(
+        async ({ policy, fixed }) => {
+          const ts = await import('/js/timestep.js');
+          ts.setStepPolicy(policy);
+          const render = await import('/js/render.js');
+          render.setFixedStep(fixed);
+        },
+        {
+          policy: policyArg >= 0 ? String(args[policyArg + 1]) : 'S0',
+          fixed: fixedArg >= 0 ? Number(args[fixedArg + 1]) : 0,
+        }
+      );
+    }
     // Observers go in after the build, so the entries are the sample's.
     await page.evaluate(() => {
       window.__loaf = [];
