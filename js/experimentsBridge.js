@@ -60,7 +60,7 @@ export function ensureBench() {
         // Bound to the engine's own DT so the bench never has to know it.
         frameAdvance: (seconds, simSpeed) =>
           timestep.frameAdvance(seconds, simSpeed, physics.DT),
-        substepPlan: timestep.substepPlan,
+        substepPlan: timestep.livePlan,
         maxSubsteps: timestep.MAX_SUBSTEPS,
       });
       panel.setShareHandler(() => share.openShareDialog());

@@ -85,7 +85,9 @@ async function loadEngine() {
   const physics = await import('../js/physics.js');
   const { build } = await import('./tides-scenarios.mjs');
   const { engine } = await import('../js/random/streams.js');
-  const { frameAdvance, substepPlan } = await import('../js/timestep.js');
+  const { frameAdvance, substepPlan, planFrame } = await import(
+    '../js/timestep.js'
+  );
   const { setTier } = await import('../js/quality.js');
   const ref = await import('./reference-physics.mjs');
   const { resetPresetMemory } = await import('../js/scenarios.js');
@@ -95,6 +97,7 @@ async function loadEngine() {
     engine,
     frameAdvance,
     substepPlan,
+    planFrame,
     setTier,
     ref,
     resetPresetMemory,
@@ -107,9 +110,10 @@ async function runLeg(spec) {
   if (spec.kind === 'case' || spec.kind === 'study') {
     const mode =
       spec.kind === 'case'
-        ? { rate: spec.rate }
+        ? { rate: spec.rate, policy: spec.policy }
         : { step: STEPS[spec.stepIndex], label: STEP_LABELS[spec.stepIndex] };
-    return { spec, ...(await CASES[spec.id](E, mode)) };
+    const res = await CASES[spec.id](E, mode);
+    return { spec, ...res, stats: globalThis.__lastDrv?.state };
   }
   if (spec.kind === 'tiers') return { spec, ...(await tierLeg(E)) };
   if (spec.kind === 'camera')
@@ -131,6 +135,27 @@ function driver(E, settings, mode) {
   if (mode.rate !== undefined) {
     const seconds = COND.rates[mode.rate].frameSeconds;
     const dtSim = frameAdvance(seconds, settings.sim_speed, physics.DT);
+    if (mode.policy && mode.policy !== 'S0') {
+      const state = { carry: 0, sign: 0, frames: 0, bound: 0, maxCarryOverH: 0 };
+      const first = E.planFrame(dtSim, settings.max_timestep, mode.policy, {
+        ...state,
+      });
+      return (globalThis.__lastDrv = {
+        mode,
+        step: Math.abs(first.step),
+        substeps: first.substeps,
+        capped: first.capped,
+        state,
+        frame(onStep) {
+          const p = E.planFrame(dtSim, settings.max_timestep, mode.policy, state);
+          for (let i = 0; i < p.substeps; i++) {
+            physics.updatePhysics(p.step);
+            if (onStep() === 'stop') return true;
+          }
+          return false;
+        },
+      });
+    }
     const plan = substepPlan(dtSim, settings.max_timestep);
     return {
       mode,
@@ -993,7 +1018,8 @@ async function main() {
   const specs = [];
   for (const id of CASE_IDS)
     if (wanted.has(id))
-      for (const rate of RATES) specs.push({ kind: 'case', id, rate });
+      for (const rate of RATES)
+        specs.push({ kind: 'case', id, rate, policy: arg('--policy') });
   if (wanted.has('R6'))
     for (const rate of RATES) specs.push({ kind: 'camera', rate });
   if (wanted.has('tiers')) specs.push({ kind: 'tiers' });
@@ -1024,6 +1050,15 @@ async function main() {
       );
   }
 
+  if (arg('--policy')) {
+    const o = arg('--out');
+    if (o)
+      writeFileSync(
+        o,
+        `${JSON.stringify({ policy: arg('--policy'), rows: out.rows, steps: out.steps, reported: out.reported, stats: results.filter(r => r.stats).map(r => ({ spec: r.spec, ...r.stats })) }, null, 1)}\n`
+      );
+    return 0;
+  }
   const recordUrl = new URL(RECORD_FILE, ROOT);
   const prior = existsSync(recordUrl)
     ? JSON.parse(readFileSync(recordUrl, 'utf8'))

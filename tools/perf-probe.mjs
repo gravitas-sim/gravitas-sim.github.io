@@ -235,11 +235,23 @@ async function main() {
       const record = sceneRecords[results.length];
       const scene = tier === 'auto' ? record : { ...record, qualityTier: tier };
       await applyScene(page, scene);
-      await page.evaluate(async () => {
-        const ui = await import('/js/ui.js');
-        ui.state.paused = false;
-        ui.SETTINGS.paused = false;
-      });
+      const policyArg = args.indexOf('--policy');
+      const fixedArg = args.indexOf('--fixed-step');
+      await page.evaluate(
+        async ({ policy, fixed }) => {
+          const ui = await import('/js/ui.js');
+          ui.state.paused = false;
+          ui.SETTINGS.paused = false;
+          const ts = await import('/js/timestep.js');
+          ts.setStepPolicy(policy);
+          const render = await import('/js/render.js');
+          render.setFixedStep(fixed);
+        },
+        {
+          policy: policyArg >= 0 ? String(args[policyArg + 1]) : 'S0',
+          fixed: fixedArg >= 0 ? Number(args[fixedArg + 1]) : 0,
+        }
+      );
     } else
       await page.evaluate(
         async ({ key, tier }) => {

@@ -280,7 +280,7 @@ import { updateRadialVelocity } from './radialVelocity.js';
 import { updateAstrometry } from './astrometry.js';
 import { updateRotationCurve } from './rotationCurve.js';
 import { tickTimeline } from './timeline.js';
-import { MAX_SUBSTEPS, substepPlan, frameAdvance } from './timestep.js';
+import { MAX_SUBSTEPS, substepPlan, frameAdvance, planFrame } from './timestep.js';
 import { drawOverlays } from './overlays.js';
 import { readToken, onThemeChange } from './theme.js';
 import { auToSim, formatTime } from './units.js';
@@ -2804,7 +2804,7 @@ const gameLoop = timestamp => {
     // and a half, and at 16 substeps it was getting 225 steps per orbit, which
     // symplectic Euler turns into unbound orbits after a few hundred circuits.
     // Only scenarios that opt in pay for this, and those are small ones.
-    const { substeps, step } = substepPlan(dt_sim, SETTINGS.max_timestep);
+    const { substeps, step } = planFrame(dt_sim, SETTINGS.max_timestep);
     for (let i = 0; i < substeps; i++) updatePhysics(step);
     // The stopwatch runs on simulated time, so it is advanced by what was
     // actually integrated: a paused frame or a scrubbed one advances it by
