@@ -381,10 +381,9 @@ export const EN = {
   // --- transport -------------------------------------------------------------
   'transport.timelinePlay.hint': 'Pause (Space)',
   'transport.timelineStepBack.hint': 'Step back (,)',
-  'transport.timelineStepFwd.hint':
-    'Step forward (.): one step when paused, one frame when looking back',
+  'transport.timelineStepFwd.hint': 'Step forward (.)',
   'transport.timelineScrubber.hint':
-    'Drag to look back. The world holds on the frame you land on; Return to live puts it back. Trails restart; particles and ripples are not recorded.',
+    'Drag to look back; Return to live restores it. Trails restart; particles and ripples are not recorded.',
   'transport.timelineLive.hint': 'Return to live (L)',
   'transport.timelineBar.label': 'Playback and timeline',
   'transport.timelinePlay.playLabel': 'Play simulation',
@@ -395,13 +394,12 @@ export const EN = {
   'transport.timelineScrubber.label':
     'Scrub through recorded simulation history',
   'transport.timelineLive': '● LIVE',
-  'transport.timelineStepSize': '1 step = {size}',
-  'transport.timelineReplay': 'Replay',
-  'transport.timelineRewind': 'Rewind to here',
-  'transport.timelineRewind.hint': 'Later history is dropped.',
-  'transport.timelineScrubber.valueText':
-    '{behind} before live, frame {n} of {total}',
-  'transport.timelineScrubber.valueLive': 'Live',
+  'transport.stepSize': '1 step = {size}',
+  'transport.replay': 'Replay',
+  'transport.rewind': 'Rewind to here',
+  'transport.rewind.hint': 'Drops later history.',
+  'transport.scrubAt': '{behind} before live, frame {n} of {total}',
+  'transport.scrubLive': 'Live',
 
   // --- welcome ---------------------------------------------------------------
   'welcome.welcomeClose.hint': 'Close and enter the sandbox',
@@ -424,8 +422,6 @@ export const EN = {
   'toast.undo.removed': 'Removed last placed object',
   'toast.undo.nothing': 'Nothing to undo',
   'toast.timeline.live': 'Back to live',
-  'toast.timeline.rewound':
-    'This moment is now the world. Later history dropped',
   'toast.view.reset': 'View reset',
   'toast.units.showing': 'Showing {units}',
   'toast.theme.changed': 'Theme: {theme}',

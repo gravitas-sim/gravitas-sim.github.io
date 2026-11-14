@@ -288,10 +288,9 @@ export const ES = {
   // --- Transport bar ---------------------------------------------------------
   'transport.timelinePlay.hint': 'Pausar (espacio)',
   'transport.timelineStepBack.hint': 'Retroceder un fotograma (,)',
-  'transport.timelineStepFwd.hint':
-    'Avanzar (.): un paso en pausa, un fotograma al mirar atrás',
+  'transport.timelineStepFwd.hint': 'Avanzar (.)',
   'transport.timelineScrubber.hint':
-    'Arrastra para mirar atrás. El mundo se queda en el fotograma elegido y «Volver al directo» lo repone. Las estelas empiezan de nuevo; las partículas y las ondas no se graban.',
+    'Arrastra para mirar atrás; «Volver al directo» lo repone. Las estelas empiezan de nuevo; las partículas y las ondas no se graban.',
   'transport.timelineLive.hint': 'Volver al directo (L)',
   'transport.timelineBar.label': 'Reproducción y línea de tiempo',
   'transport.timelinePlay.playLabel': 'Reanudar la simulación',
@@ -302,13 +301,12 @@ export const ES = {
   'transport.timelineScrubber.label':
     'Recorrer el historial grabado de la simulación',
   'transport.timelineLive': '● DIRECTO',
-  'transport.timelineStepSize': '1 paso = {size}',
-  'transport.timelineReplay': 'Repetir',
-  'transport.timelineRewind': 'Retroceder hasta aquí',
-  'transport.timelineRewind.hint': 'Se descarta el historial posterior.',
-  'transport.timelineScrubber.valueText':
-    '{behind} antes del directo, fotograma {n} de {total}',
-  'transport.timelineScrubber.valueLive': 'En directo',
+  'transport.stepSize': '1 paso = {size}',
+  'transport.replay': 'Repetir',
+  'transport.rewind': 'Retroceder hasta aquí',
+  'transport.rewind.hint': 'Descarta el historial posterior.',
+  'transport.scrubAt': '{behind} antes del directo, fotograma {n} de {total}',
+  'transport.scrubLive': 'En directo',
 
   // --- Front door ------------------------------------------------------------
   'welcome.welcomeClose.hint': 'Cerrar y entrar en el laboratorio',
@@ -855,8 +853,6 @@ export const ES = {
   'toast.undo.removed': 'Se quitó el último objeto colocado',
   'toast.undo.nothing': 'No hay nada que deshacer',
   'toast.timeline.live': 'De vuelta al directo',
-  'toast.timeline.rewound':
-    'Este momento es ahora el mundo. Historial posterior descartado',
   'toast.view.reset': 'Vista restablecida',
   'toast.units.showing': 'Mostrando {units}',
   'toast.theme.changed': 'Tema: {theme}',

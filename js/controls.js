@@ -193,7 +193,7 @@ function setupTransport() {
   replayBtn?.addEventListener('click', startReplay);
   rewindBtn?.addEventListener('click', () => {
     rewindToHere();
-    toast(t('toast.timeline.rewound'));
+    toast(t('transport.rewind.hint'));
     refreshTransport();
   });
   document
@@ -226,7 +226,7 @@ function paintClock(simClock) {
 function paintStepSize() {
   if (!stepSizeEl) return;
   const size = formatTime(frameAdvance(STEP_SECONDS, SETTINGS.sim_speed, DT));
-  stepSizeEl.textContent = t('transport.timelineStepSize', { size });
+  stepSizeEl.textContent = t('transport.stepSize', { size });
 }
 
 function onTimelineChange({ frameCount, offset, scrubbing, simClock, behind }) {
@@ -240,12 +240,12 @@ function onTimelineChange({ frameCount, offset, scrubbing, simClock, behind }) {
   scrubberEl.setAttribute(
     'aria-valuetext',
     scrubbing
-      ? t('transport.timelineScrubber.valueText', {
+      ? t('transport.scrubAt', {
           behind: formatTime(behind),
           n: frameCount - offset,
           total: frameCount,
         })
-      : t('transport.timelineScrubber.valueLive')
+      : t('transport.scrubLive')
   );
 
   const bar = document.getElementById('timelineBar');
@@ -302,18 +302,8 @@ function refreshTransport() {
 
 const RAIL_SECTIONS_KEY = KEY_RAIL_SECTIONS;
 
-// The rail is an accordion: one section open at a time.
-//
-// Four groups of controls, thirty-odd controls between them, and with all four
-// expanded the rail was taller than a laptop screen before the user had done
-// anything. It scrolled, so it worked, but a column you have to scroll to reach
-// the end of is a column whose end nobody reads - and the answer is not to keep
-// shortening the labels.
-//
-// So opening one shuts the others. The rail is then four headings and one
-// section, which fits any screen the application runs on, and every group is
-// one click away with its name permanently in view. The choice persists, so a
-// user who lives in Tools opens Tools once.
+// The rail is an accordion: one section open at a time, so it is four headings
+// and one section and fits any screen. The choice persists.
 const RAIL_SECTIONS = ['railScenario', 'railState', 'railTools'];
 
 /** The one open on a first visit: loading something is where everyone starts. */
@@ -754,13 +744,9 @@ export function collapseReadoutOnSmallScreens() {
 }
 
 /**
- * Keep every range input's filled portion in step with its value.
- *
- * The fill is a CSS gradient stop rather than a native progress element,
- * because the sliders set -webkit-appearance: none and so lose the platform's
- * own filled track. Delegated from the document and re-run on demand, so it
- * covers sliders that are created long after load, like the inspector's mass
- * control and the lesson panels.
+ * Keep every range input's filled portion in step with its value (a CSS
+ * gradient stop, since the sliders lose the native filled track). Delegated
+ * from the document, so late-created sliders are covered too.
  *
  * @param {HTMLInputElement} el - The range input
  */
@@ -825,7 +811,7 @@ export function initControls() {
     // would put back a world that never had it.
     if (isScrubbing()) {
       rewindToHere();
-      toast(t('toast.timeline.rewound'));
+      toast(t('transport.rewind.hint'));
       refreshTransport();
     }
   });
