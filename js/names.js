@@ -4,6 +4,7 @@
 
 export const KEY_UNITS = 'gravitas_units';
 export const KEY_MOTION = 'gravitas_motion';
+export const KEY_QUALITY_VERDICT = 'gravitas_quality_verdict';
 export const CACHE_PARTS = 'gravitas-parts';
 export const EV_SIMULATION_RESET = 'gravitasSimulationReset';
 export const EV_UNITS_CHANGED = 'gravitasUnitsChanged';

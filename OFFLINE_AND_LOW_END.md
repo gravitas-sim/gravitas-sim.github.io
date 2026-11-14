@@ -909,15 +909,23 @@ A reader can force the full tier: the setting `quality_tier` on the simulation p
 button beside a reduced fit. Nothing is stored.
 
 **The classifier and the pages that never run it.** The classifier measures frame
-intervals, and only the simulation's render loop feeds it. The Observatory, the
-3-D lab and the reports never decide: `qualityReport().decided` is false, the tier is
-the default (full), and no computation is reduced unless `?quality=low` is given. This
-was found, not fixed: an idle page's frame rate says nothing about the machine
-(compositing alone holds 60 fps on a slow laptop), so a frame classifier on those
-pages would be a guess, and a stored verdict from the simulation page needs a
-registered storage key and a decision about it (D-R10-285-03). Tests hold the edge:
-a page with no frames reports `decided: false` and computes at the full tier;
-frames inside the warm-up decide nothing; a 150 fps machine is still judged.
+intervals, and only the simulation's render loop feeds it. The Observatory and
+the other pages that compute without drawing the simulation never decide:
+`qualityReport().decided` is false there, because an idle page's frame rate says
+nothing about the machine (compositing alone holds 60 fps on a slow laptop), so a
+frame classifier on those pages would be a guess. What they do instead (D-R4-303-02,
+which closes D-R10-285-03): the application page writes the tier it decided to one
+sessionStorage key, `gravitas_quality_verdict` (`{tier, at}`, STORAGE.md), and a page
+that does not render the simulation reads it once, at the first question about the
+tier, and never exceeds it: a stored `low` makes it compute at the low tier (and its
+results say so), a stored `full` changes nothing. An entry that is not a known tier,
+is older than an hour or is dated in the future is ignored, as is blocked storage; with
+no entry the page behaves as it did before and computes at the full tier unless
+`?quality=low` is given. `?quality=full` on the address still wins on that page.
+Nothing leaves the browser, and the key goes with the tab. Tests hold the edge
+(`tests/qualityVerdict.test.js`): blocked, present, stale and malformed storage; the
+application page ignoring the key; a page with no frames reporting `decided: false`;
+frames inside the warm-up deciding nothing; a 150 fps machine still judged.
 
 **Re-measured on the new workloads.** The thresholds (below 32 fps to demote, above
 48 for eight seconds to promote) were not changed. On the heaviest scene the

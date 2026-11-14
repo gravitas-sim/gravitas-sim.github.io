@@ -25,6 +25,15 @@ the release rather than in the tag.
 
 ### Changed
 
+- The Motion choice in Settings now applies on every page (Prompt 303; register
+  rows D-R4-303-01 and 02): the script the shell stamps into each page's head
+  sets it before the first paint, so Reduced and Step by step reach the
+  Observatory, the 3-D lab, the reports and Home itself, not only the
+  application. The 178 stamped pages and their policies were re-stamped. A page
+  that computes without drawing the simulation (the Observatory) now uses the
+  quality tier the application page decided, carried in one session-only key,
+  and never exceeds it; with no key, or storage blocked, it behaves as before.
+
 - The monthly provenance run (Prompt 304; register rows D-R4-304-01 to 04): a
   download from a pinned archive that fails on the network now names its URL
   and the reason, so a failed run says which archive was at fault. The

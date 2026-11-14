@@ -50,6 +50,13 @@ const LOCALES = [
   { id: 'es', label: 'Spanish' },
 ];
 
+/** Whether the page at a route carries the shell's stamped head. */
+function carriesShellHead(route) {
+  const clean = route.split('#')[0].split('?')[0];
+  const file = clean === '/' ? 'index.html' : `${clean.slice(1)}index.html`;
+  return readFileSync(file, 'utf8').includes('<!-- shell:head -->');
+}
+
 /** The surfaces judged: every row of the walk inventory but the exempt. */
 const pages = inventory.rows.filter(r => !record.exempt[r.surface]);
 
@@ -629,20 +636,97 @@ test.describe('reduced motion: a page at rest moves nothing', () => {
       });
       await open(page, row.path, 'en');
       await settle(page);
-      const reaches = motion.override.reaches.includes(row.surface);
-      // The choice reaches the application and no other page (the inventory's
-      // `override`): the list is exact, so a page that learns it fails here
-      // until its row is corrected.
+      // The choice reaches every page that carries the shell's head, which
+      // sets it before the first paint (tools/shell.mjs); the inventory's
+      // `override.unstamped` names the surfaces that do not carry it, and the
+      // list is exact, so a page that gains or loses the head fails here until
+      // its row is corrected.
+      const stamped = carriesShellHead(row.path);
+      expect(
+        motion.override.unstamped.includes(row.surface),
+        'the inventory lists exactly the pages without the shell head'
+      ).toBe(!stamped);
       expect(
         await page.evaluate(() => document.documentElement.dataset.motion),
-        reaches ? 'the choice is applied' : 'the choice is not read here'
-      ).toBe(reaches ? 'reduce' : undefined);
-      if (!reaches) return;
+        stamped ? 'the choice is applied' : 'the choice is not read here'
+      ).toBe(stamped ? 'reduce' : undefined);
+      if (!stamped) return;
       const now = await page.evaluate(movingNow);
       expect(now.animations, 'running animations').toEqual([]);
       expect(now.transitions, 'transitions that would run').toEqual([]);
     });
   }
+});
+
+test.describe("the reader's Motion choice is set before any script runs", () => {
+  // The head script alone: every script the page loads is served empty, so what
+  // the page shows of the choice is what the stamped head did before the first
+  // paint. Home, the Observatory, the 3-D lab, the kernel diagnostics and the submission review.
+  const probes = [
+    'sandbox',
+    'observatory',
+    'lab3d',
+    'kernel-diagnostics',
+    'submissions',
+  ];
+  for (const surface of probes) {
+    for (const choice of ['reduce', 'step']) {
+      test(`${surface}: ${choice}`, async ({ page }) => {
+        const row = pages.find(r => r.surface === surface);
+        await page.route('**/*.js', route =>
+          route.fulfill({ contentType: 'text/javascript', body: '' })
+        );
+        await page.addInitScript(c => {
+          try {
+            window.localStorage.setItem('gravitas_motion', c);
+          } catch {
+            /* storage unavailable */
+          }
+        }, choice);
+        const errors = [];
+        page.on('console', m => {
+          if (/Content Security Policy|Refused to/.test(m.text()))
+            errors.push(m.text());
+        });
+        await page.goto(row.path.split('#')[0], { waitUntil: 'commit' });
+        await page.waitForLoadState('domcontentloaded');
+        expect(
+          await page.evaluate(() => document.documentElement.dataset.motion)
+        ).toBe(choice);
+        expect(errors).toEqual([]);
+      });
+    }
+  }
+
+  test('a stored value that is not a choice, or blocked storage, leaves the system setting alone', async ({
+    page,
+  }) => {
+    await page.route('**/*.js', route =>
+      route.fulfill({ contentType: 'text/javascript', body: '' })
+    );
+    await page.addInitScript(() => {
+      try {
+        window.localStorage.setItem('gravitas_motion', 'system');
+      } catch {
+        /* storage unavailable */
+      }
+    });
+    await page.goto('/observatory/', { waitUntil: 'domcontentloaded' });
+    expect(
+      await page.evaluate(() => document.documentElement.dataset.motion)
+    ).toBeUndefined();
+    await page.addInitScript(() => {
+      Object.defineProperty(window, 'localStorage', {
+        get() {
+          throw new DOMException('blocked', 'SecurityError');
+        },
+      });
+    });
+    await page.goto('/3d/', { waitUntil: 'domcontentloaded' });
+    expect(
+      await page.evaluate(() => document.documentElement.dataset.motion)
+    ).toBeUndefined();
+  });
 });
 
 // -----------------------------------------------------------------------------

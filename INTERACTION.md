@@ -143,7 +143,10 @@ One policy, `prefersReducedMotion()` in `js/quality.js` and, for CSS,
 
 - the system setting is honoured everywhere;
 - **Settings, Motion**: Follow my device, Reduced, or Step by step. It is kept on
-  this device (`gravitas_motion`, STORAGE.md) and never travels in a share link;
+  this device (`gravitas_motion`, STORAGE.md) and never travels in a share link.
+  It is applied on every page, before the first paint, by the script the shell
+  stamps into each page's head; under Step by step a page that has no simulation
+  behaves as under Reduced;
 - an override only adds reduction, as an embed's does: a system that asks for
   reduced motion keeps it whatever is chosen;
 - the shell's transitions and every animation stop (`css/tokens.css` durations,

@@ -436,9 +436,11 @@ export function shellFor(page, { main }) {
 }
 
 /**
- * What the shell puts in <head>: its stylesheet, and the stored theme applied
- * before the first paint, so no page flashes Midnight first. The ids and the
- * attribute are js/theme.js's; tools/csp.mjs hashes the script.
+ * What the shell puts in <head>: its stylesheet, the stored theme applied
+ * before the first paint, so no page flashes Midnight first, and the reader's
+ * Settings, Motion choice (data-motion, js/quality.js's attribute and key), so
+ * every page honours it as the application does. The ids and the attributes are
+ * js/theme.js's and js/quality.js's; tools/csp.mjs hashes the script.
  */
 export const HEAD = [
   `<link rel="stylesheet" href="/css/shell.css" />`,
@@ -450,8 +452,11 @@ export const HEAD = [
   `    document.documentElement.style.colorScheme =`,
   `      t === 'daylight' ? 'light' : 'dark';`,
   `  }`,
+  `  const m = localStorage.getItem('gravitas_motion');`,
+  `  if (m === 'reduce' || m === 'step')`,
+  `    document.documentElement.setAttribute('data-motion', m);`,
   `} catch {`,
-  `  /* storage unavailable: the default theme is correct */`,
+  `  /* storage unavailable: the default theme and the system's motion setting are correct */`,
   `}`,
   `/* The offline note (shellFor): shown once when the connection drops, gone when it returns, dismissed by its button or Escape. */`,
   `(() => {`,

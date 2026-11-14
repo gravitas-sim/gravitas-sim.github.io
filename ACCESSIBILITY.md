@@ -294,11 +294,10 @@ opens them still under reduced motion and Step by step, and Run starts them
 resonance instruments and the two exoplanet instruments) advance a phase on
 every frame with no Run control and no check of the setting; giving them one
 changes the instruments, which a content prompt may, and the inventory names
-them with a proposal. And the reader's own Settings, Motion choice reaches the
-application and no other page (`override` in the inventory); the other pages
-follow the system setting only, which they all honour. The proposal is three
-lines in the shell's head script, which re-stamps 178 pages and their CSP
-hashes, so it is recorded for a stamping PR (D-R10-279-04).
+them with a proposal. The reader's own Settings, Motion choice now reaches every page that carries the
+shell's head: three lines in the script the shell stamps into the head set
+`data-motion` from the stored value before the first paint (`override` in the
+inventory; D-R4-303-01, which closes the first finding of D-R10-279-04).
 
 **Zoom and reflow.** A 1280 pixel window at 400% is 320 CSS pixels. Every page,
 in both languages, and the Observatory with an observation open and a lesson
@@ -681,10 +680,11 @@ transport bar or the space bar — a real control rather than a media query.
 Settings has a Motion choice for a reader who wants more: Reduced applies the
 same stop on a device that did not ask for it, and Step by step also starts the
 simulation paused, so nothing moves until the reader steps it or presses play
-(INTERACTION.md, "Reduced motion"). Two things are not yet true of that choice:
-it reaches the application and no other page, and six lesson instruments (the
-four resonance ones and the two exoplanet ones) start moving by themselves with
-no Run control; both are in `tools/motion-inventory.json` with their proposals.
+(INTERACTION.md, "Reduced motion"). The choice is applied
+on every page, before the first paint. One thing is not yet true of it: six
+lesson instruments (the four resonance ones and the two exoplanet ones) start
+moving by themselves with no Run control; it is in `tools/motion-inventory.json`
+with its proposal.
 
 **The shape of a curve is described by a template that no blind or low-vision reader has validated.** The light curve, the radial-velocity trace, the
 energy chart and the bench's two charts are one component
