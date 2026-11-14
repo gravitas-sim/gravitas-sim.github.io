@@ -14,6 +14,12 @@
 //   npm run perf -- --viewport 375x812   another window size (default 1440x900)
 //   npm run perf -- --json out.json  also write the numbers, for a comparison
 //   npm run perf -- --trace          separate raster and composite from script
+//   npm run perf -- --scene tests/fixtures/scene-records/solar-system-midnight-1366.json
+//                                    profile a scene record instead of a scenario: the
+//                                    world, camera, theme and tier of the record at its
+//                                    simulated time (tools/scene-capture.mjs), then run
+//                                    live; the viewport is the record's unless --viewport
+//                                    is given, and --tier overrides the record's tier
 //
 // --trace (Prompt 112) records a Chromium trace and the Performance API's
 // long-animation-frame entries over each sample and reports, in milliseconds
@@ -52,6 +58,8 @@ import { writeFile } from 'node:fs/promises';
 import { resolve, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { serveStatic } from './static-server.mjs';
+import { loadRecord } from './scene-record.mjs';
+import { applyScene } from './scene-capture.mjs';
 import {
   MAX_TRACE_BYTES,
   TRACE_CATEGORIES,
@@ -126,7 +134,14 @@ async function main() {
   if (!(cpu >= 1))
     throw new Error(`--cpu ${args[ci + 1]} is not a number >= 1`);
   const vi = args.indexOf('--viewport');
-  const [width, height] = (vi >= 0 ? String(args[vi + 1]) : '1440x900')
+  // --scene may repeat; each takes the next argument as a scene record.
+  const sceneIndexes = args.flatMap((a, i) => (a === '--scene' ? [i] : []));
+  const sceneRecords = sceneIndexes.map(i => loadRecord(args[i + 1]));
+  // A scene record brings its own window; an explicit --viewport still wins.
+  const defaultViewport = sceneRecords.length
+    ? `${sceneRecords[0].viewport.width}x${sceneRecords[0].viewport.height}`
+    : '1440x900';
+  const [width, height] = (vi >= 0 ? String(args[vi + 1]) : defaultViewport)
     .split('x')
     .map(Number);
   if (!(width > 0 && height > 0)) {
@@ -134,12 +149,18 @@ async function main() {
   }
   const trace = args.includes('--trace');
   const valueIndexes = new Set(
-    [si, ti, ji, di, ci, vi].filter(i => i >= 0).map(i => i + 1)
+    [si, ti, ji, di, ci, vi, ...sceneIndexes]
+      .filter(i => i >= 0)
+      .map(i => i + 1)
   );
   const wanted = args.filter(
     (a, i) => !a.startsWith('--') && !valueIndexes.has(i)
   );
-  const scenarios = wanted.length ? wanted : DEFAULT_SCENARIOS;
+  const scenarios = sceneRecords.length
+    ? sceneRecords.map(r => r.id)
+    : wanted.length
+      ? wanted
+      : DEFAULT_SCENARIOS;
 
   const server = await serveStatic({ root: ROOT, port: PORT });
   // Headless Chromium rasterises the canvas in software by default, which caps
@@ -197,7 +218,7 @@ async function main() {
   });
 
   console.log(
-    `\nFrame-time probe: ${seconds}s per scenario at 1440x900, headless ` +
+    `\nFrame-time probe: ${seconds}s per scenario at ${width}x${height}, headless ` +
       `Chromium, quality tier ${tier}\n`
   );
   console.log(
@@ -208,23 +229,35 @@ async function main() {
   const results = [];
   for (const key of scenarios) {
     const heapBefore = await heapMB(true);
-    await page.evaluate(
-      async ({ key, tier }) => {
+    if (sceneRecords.length) {
+      // The record's state at its simulated time, then live: the frame time of
+      // the scene as it is recorded. --tier overrides the record's pinned tier.
+      const record = sceneRecords[results.length];
+      const scene = tier === 'auto' ? record : { ...record, qualityTier: tier };
+      await applyScene(page, scene);
+      await page.evaluate(async () => {
         const ui = await import('/js/ui.js');
-        const quality = await import('/js/quality.js');
-
-        ui.SETTINGS.preset_scenario = key;
-        ui.initialize_simulation({ seed: 'perf-probe' });
         ui.state.paused = false;
-        // After the build, because apply_preset resets the settings. 'auto'
-        // is the reader's own default and is left to the sampler.
-        if (tier !== 'auto') {
-          ui.SETTINGS.quality_tier = tier;
-          quality.setTier(tier);
-        }
-      },
-      { key, tier }
-    );
+        ui.SETTINGS.paused = false;
+      });
+    } else
+      await page.evaluate(
+        async ({ key, tier }) => {
+          const ui = await import('/js/ui.js');
+          const quality = await import('/js/quality.js');
+
+          ui.SETTINGS.preset_scenario = key;
+          ui.initialize_simulation({ seed: 'perf-probe' });
+          ui.state.paused = false;
+          // After the build, because apply_preset resets the settings. 'auto'
+          // is the reader's own default and is left to the sampler.
+          if (tier !== 'auto') {
+            ui.SETTINGS.quality_tier = tier;
+            quality.setTier(tier);
+          }
+        },
+        { key, tier }
+      );
     // Observers go in after the build, so the entries are the sample's.
     await page.evaluate(() => {
       window.__loaf = [];

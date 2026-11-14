@@ -933,4 +933,92 @@ change the documented claim — not to widen the window. Where the model uses an
 educational approximation, validate it against the equation it claims to use and
 label it `approximation`, so the table keeps saying which is which.
 
+## Reference cases
+
+The 442 checks above build their own worlds and step them at one fixed step.
+None loads a scenario a visitor can open and steps it the way the page does.
+The page takes its step from the frame: `frameAdvance` (`js/timestep.js`) turns
+the frame's seconds, clamped to 0.05 s, into simulated time scaled by
+`sim_speed * 50 * DT`, and only a scenario with `max_timestep` above zero is
+split by `substepPlan` into at most 64 equal substeps. In 35 of 61 scenarios the
+cap is zero, so the step is the frame. The reference cases below are the
+answers the sandbox must give at the rates real screens run at: 120, 60 and 30
+frames a second, and the clamp (a frame of 0.05 s or longer). Each run states
+its step.
+
+The bounds, and the reason for each, are in
+`tests/fixtures/reference-cases/thresholds.json`. They were committed before
+the runner (`tools/reference-cases.mjs`, `npm run validate:reference`) or its
+record (`tests/fixtures/reference-cases/record.json`) existed, and they are
+never moved after a result: a case that fails stays failing, with its numbers,
+until a change that fixes it flips its own row. References are written in the
+runner (exact Kepler propagation, and a fourth-order Runge-Kutta of the
+engine's own softened force law), never taken from the engine's `orbitalElements`
+or energy readouts.
+
+**The scheme sets the form of the bound.** The default integrator is symplectic
+Euler, kick then drift (`PhysicsObject.apply_step`): first-order accurate,
+conjugate to velocity Verlet, so its period and phase errors are second order.
+The energy it holds is a shadow Hamiltonian that differs from the energy by
+`(dt/2) v.a` at first order. That term vanishes on a circular orbit, so R1 and
+R3 (circular starts) are bound by a second-order form, `2 (omega dt)^2`, while
+R2 (eccentric) and the encounter R4x are first order. R4 runs velocity Verlet,
+second order.
+
+| Case | Scenario | Quantity judged and bound |
+|---|---|---|
+| R1 | `solar-system`, Earth, 100 orbits | energy `<= 2 (omega dt)^2`; late/early peak `<= 1.5`; `dL/L <= 1e-12`; sidereal period within `2 (omega dt)^2` |
+| R2 | `keplers-2nd-law`, Eccentric Orbiter, 30 orbits | energy `<= 2 dt max(a abs(rdot)/r^2)`; apsides within `2 dt v_p/r_p`; anomalistic period within `2 (dt v_p/r_p)^2`; `L` as R1 |
+| R3 | `binary-pair`, 50 orbits | as R1; momentum `<= 1e-12` of `sum m abs(v)`; barycentre `<= 1e-9` of the separation |
+| R4 | `gravity-assist-heliocentric`, to t = 1200, against RK4 at h = 1e-3 | energy `<= 1e-6`; craft velocity change within 1 percent; momentum and `L <= 1e-11` |
+| R4x | `three-body-sensitivity-lab`, Beta moved 1 unit | energy `<= 2` percent before any pair is closer than 0.3 of the side |
+| R5 | `tidal-disruption-event` | position at first periapsis within 1 percent of the periapsis distance (exact Kepler); star mass fraction after leaving the threshold: spread `<= 5` percent over rates; fragments created: spread `<= 20` percent |
+| R6 | `solar-system`, 600 frames, three canvas sizes, zoom 0.25 and 3, pan 0 and 200 AU | bodies deleted against the cull switched off: zero |
+
+Quality tiers (`low`, `full`, `ultra`) are built for every case's scenario: a
+hand-placed world is exempt from the population caps, so the body counts and the
+t = 0 state must be equal to the full tier exactly. Trajectories are not rerun
+per tier. A step study, reported and not judged, runs R1 to R5 and R4x at fixed
+steps of 1/24, 1/48, 1/96 and 1/192 whatever the frame rate, each error beside
+its bound, with the observed order and each scenario's integrator named; a
+later decision about the step takes its candidate steps from that table.
+
+The recorded results, the failing cases with their numbers, and the step study
+are in `tests/fixtures/reference-cases/record.json`, and
+`tests/referenceCases.test.js` requires each as recorded. The 442 checks and the
+count printed in several files do not move: these cases are a separate record,
+not a group of `npm run validate:physics`.
+
+### The scene record
+
+A change to what the sandbox canvas looks like is judged against a photograph
+of the same moment. `gravitas.scene-record/1`
+(`tools/scene-record.mjs`, records in `tests/fixtures/scene-records/`) pins the
+scenario and how it was loaded (`preset_scenario`, then
+`initialize_simulation({seed})`), the seed, the physics clock to stop at and the
+fixed frame step the capture drives the loop with, the camera (zoom, pan in
+screen pixels, `frameOffset`, and the world point at the canvas centre, derived
+with the arithmetic of `screenToWorld`), the follow mode and frame, the theme,
+the viewport and pixel ratio, the pinned `quality_tier`, the `show_*` switches,
+the trail length, style and colour mode, whether the clock is stopped and the
+scenario card is up, and the commit. `tools/scene-capture.mjs` loads a record in
+headless Chromium, drives the real render loop with `setFixedStep`, pauses
+before a frame can overshoot, and takes one last `updatePhysics(remaining)` so
+the clock equals the target to 1e-9; it writes the canvas and the viewport as
+images outside the repository, and a sidecar with what the page reported.
+Reduced motion is emulated so the starfield does not twinkle, the frames run on
+Playwright's fake clock so that the page's wall-clock layers (the playback bar,
+the paused redraw) stand still between them, and the run's random draws come
+from a stream seeded by the record; `--repeat` captures twice and measures any
+pixel that still differs, so a layer that is not pinned is named and not hidden
+(six records captured twice came out byte for byte the same). `npm run perf -- --scene <record>` profiles the same state for
+frame time; the advisory profile of the reference scenes is in
+`tools/perf-thresholds.json`.
+
+The sixteen records are the sandbox captures taken before the visual work began
+(the Solar System in both themes, the circumbinary lab, the Galilean resonance
+at 2.8 and at 28 times, a star cluster and the black-hole lab, each at 1366 by
+800 and 375 by 812), converted from their sidecars; the images are not in the
+repository.
+
 <!-- Listed in DOCUMENTS.md. -->
