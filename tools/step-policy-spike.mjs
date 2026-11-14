@@ -134,6 +134,56 @@ async function legT8(spec) {
   };
 }
 
+
+async function legT6(spec) {
+  const { physics, build, engine, ts } = await load();
+  const { orbitalElements } = await import('../js/orbital.js');
+  const settings = build('solar-system', 1);
+  const G = settings.gravitational_constant;
+  const sun = physics.stars[0];
+  const names = ['Mercury','Venus','Earth','Mars','Jupiter','Saturn','Uranus','Neptune'];
+  const all = [...physics.planets, ...physics.gas_giants];
+  const planets = names.map(n => all.find(b => b.name === n)).filter(Boolean);
+  const comet = physics.comets.find(c => { const e = orbitalElements(c, sun, G); return e && e.bound; });
+  const el0 = new Map();
+  for (const b of [...planets, comet]) if (b) el0.set(b, orbitalElements(b, sun, G));
+  const earth = planets.find(b => b.name === 'Earth');
+  const yearT = el0.get(earth).period;
+  const dtSim = ts.frameAdvance(RATES[spec.rate], settings.sim_speed, physics.DT);
+  const state = { carry: 0, sign: 0, frames: 0, bound: 0, maxCarryOverH: 0 };
+  const dev = { a: 0, P: 0, k: 0, peri: 0, apo: 0, dist: 0 };
+  const total = 5 * yearT;
+  const sample = yearT / 20;
+  let next = 0;
+  engine(1, () => {
+    while (physics.getSimulationTime() < total) {
+      const p = ts.planFrame(dtSim, settings.max_timestep, spec.policy, state);
+      for (let i = 0; i < p.substeps; i++) physics.updatePhysics(p.step);
+      if (physics.getSimulationTime() >= next) {
+        next += sample;
+        for (const b of planets) {
+          const e = orbitalElements(b, sun, G);
+          const e0 = el0.get(b);
+          dev.a = Math.max(dev.a, Math.abs(e.a / e0.a - 1));
+          dev.P = Math.max(dev.P, Math.abs(e.period / e0.period - 1));
+          dev.k = Math.max(dev.k, Math.abs((e.period ** 2 / e.a ** 3) / (e0.period ** 2 / e0.a ** 3) - 1));
+          // the distance from the Sun read for the scale step, against its own start
+          if (['Earth', 'Jupiter', 'Neptune'].includes(b.name)) dev.dist = Math.max(dev.dist, Math.abs(e.r / e0.r - 1));
+        }
+        if (comet) {
+          const e = orbitalElements(comet, sun, G);
+          const e0 = el0.get(comet);
+          if (e.bound) {
+            dev.peri = Math.max(dev.peri, Math.abs(e.periapsis / e0.periapsis - 1));
+            dev.apo = Math.max(dev.apo, Math.abs(e.apoapsis / e0.apoapsis - 1));
+          } else dev.apo = Infinity;
+        }
+      }
+    }
+  });
+  return { spec, dev, cometName: comet?.name ?? null, years: physics.getSimulationTime() / yearT };
+}
+
 function runChild(spec) {
   return new Promise((resolve, reject) => {
     const child = spawn(
@@ -203,7 +253,11 @@ async function main() {
   }
   let specs;
   if (mode === 'b2') specs = uncapped.map(id => ({ kind: 'b2', id }));
-  else if (mode === 't8') {
+  else if (mode === 't6') {
+    specs = [];
+    for (const policy of ['S0', 'S1', 'S2', 'S3', 'S4'])
+      for (const rate of Object.keys(RATES)) specs.push({ kind: 't6', rate, policy });
+  } else if (mode === 't8') {
     specs = [];
     for (const id of all)
       for (const rate of Object.keys(RATES)) specs.push({ kind: 't8', id, rate, policy: 'S0' });
@@ -221,7 +275,7 @@ async function main() {
 
 if (mode === 'leg') {
   const spec = JSON.parse(argv[1]);
-  const run = spec.kind === 'b2' ? legB2 : legT8;
+  const run = spec.kind === 'b2' ? legB2 : spec.kind === 't6' ? legT6 : legT8;
   run(spec).then(
     out => process.stdout.write(`LEG ${JSON.stringify(out)}\n`, () => process.exit(0)),
     e => {

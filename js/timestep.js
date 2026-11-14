@@ -115,10 +115,10 @@ export const stepPolicyStats = () => ({ policy, ...carryState });
  * substepPlan; S1 is the unchanged substepPlan with a cap of 1/24 where there
  * is none; S2 to S4 take pieces of exactly h and carry the remainder.
  */
-export function planFrame(dtSim, maxStep, id = policy, state = carryState) {
+export function planFrame(dtSim, maxStep, id = policy, state = carryState, hOverride = 0) {
   if (maxStep > 0 || id === 'S0') return substepPlan(dtSim, maxStep);
-  if (id === 'S1') return substepPlan(dtSim, 1 / 24);
-  const h = H[id];
+  if (id === 'S1' && !hOverride) return substepPlan(dtSim, 1 / 24);
+  const h = hOverride || H[id];
   const sign = dtSim < 0 ? -1 : 1;
   if (state.sign !== 0 && state.sign !== sign) state.carry = 0;
   state.sign = sign;
