@@ -136,7 +136,11 @@ function inPage(primarySelector) {
 
   let primary = null;
   if (primarySelector) {
-    const el = document.querySelector(primarySelector);
+    // The first match that is on the page: a selector may also match a control
+    // in a closed section, and the one a reader meets is the first drawn.
+    const all = [...document.querySelectorAll(primarySelector)];
+    const el = all.find(rendered) || all[0];
+    if (el) el.setAttribute('data-surface-primary', '');
     if (!el) primary = { error: 'the control is absent' };
     else if (!rendered(el)) primary = { error: 'the control is not rendered' };
     else {
@@ -257,7 +261,7 @@ async function measureOne(context, base, state, viewport, locale, library) {
             (document.activeElement === el ||
               el.contains(document.activeElement))
           );
-        }, state.primary.selector);
+        }, '[data-surface-primary]');
         if (there) {
           tabs = i;
           break;
@@ -278,7 +282,7 @@ async function measureOne(context, base, state, viewport, locale, library) {
         }
         window.scrollTo(0, 0);
         return n;
-      }, state.primary.selector);
+      }, '[data-surface-primary]');
     }
     Object.assign(out, {
       height_viewports: got.height_viewports,

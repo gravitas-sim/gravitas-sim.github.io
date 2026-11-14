@@ -868,7 +868,7 @@
           "id": "page",
           "path": "/history/original/",
           "seeds": [],
-          "ready": "main",
+          "ready": "#settingsBtn",
           "primary": { "selector": "#settingsBtn" }
         }
       ]
@@ -1516,7 +1516,7 @@
           "id": "embed",
           "path": "/?embed=1",
           "seeds": ["welcome", "orientation"],
-          "ready": null,
+          "ready": "#embedOpenFull",
           "primary": null
         }
       ]
