@@ -470,6 +470,18 @@ keeps, and unless the sources name that table's paper for that field. The
 manifest records each value, the row and column it was found in, and what the
 table said.
 
+The SIMBAD product (TRAPPIST-1's parallax and spectral type, 137 bytes) is
+pinned to SIMBAD's TAP service at the CfA (Harvard) mirror, not to
+`simbad.cds.unistra.fr`, since 2026-11-13: CDS's Strasbourg servers have been
+degraded by a security incident, and CDS's own notice names the mirror. The
+mirror answers with the same 137 bytes, so the pin's size and SHA-256 did not
+change and the pack's module and values are identical; the manifest's two URLs
+are the only change. The mirror's data run to 2026-10-14, so a later SIMBAD
+update would arrive as a different answer, which the pin refuses (maintainer
+decision, 2026-11-13). The three packs that read other CDS hosts
+(`radiation-gaia-bandpasses` and `sky-bright-stars` from `cdsarc`,
+`milky-way-rotation-curve` from `tapvizier`) keep their Strasbourg pins.
+
 A value no cited table gives is marked `approximate, unsourced` rather than
 given a source it does not have: three in the Sun-Jupiter comparison (the
 Sun's spectral type, Jupiter's 5.2028 AU, which is JPL's 5.20288700 cut short,

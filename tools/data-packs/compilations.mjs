@@ -62,9 +62,15 @@ const RAW = {
     bytes: 8448,
     sha256: '8e066be6da176d2285333312ff13d941b5ed3875a03a1e3df5f37465c9ebd6e7',
   },
+  // SIMBAD's TAP service at the CfA (Harvard) mirror, which CDS names for use
+  // while its Strasbourg servers are degraded (maintainer decision,
+  // 2026-11-13). The answer is the same 137 bytes the Strasbourg service gave
+  // on 2026-10-01, and the pin below (size and SHA-256) is unchanged: a
+  // different answer would be refused. The original host was
+  // simbad.cds.unistra.fr.
   simbad: {
     file: 'simbad-trappist1.csv',
-    url: `https://simbad.cds.unistra.fr/simbad/sim-tap/sync?${new URLSearchParams(
+    url: `https://simbad.cfa.harvard.edu/simbad/sim-tap/sync?${new URLSearchParams(
       {
         request: 'doQuery',
         lang: 'adql',
