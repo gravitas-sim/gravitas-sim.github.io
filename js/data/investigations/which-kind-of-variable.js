@@ -84,12 +84,12 @@ const WHICH_KIND_OF_VARIABLE = {
              <strong>share classified correctly</strong>, and the
              <strong>share found</strong> of the eclipsing binaries.`,
       fields: [
-        { id: 'acc', label: 'Classified correctly', unit: '%', hint: '83.3' },
+        { id: 'acc', label: 'Classified correctly', unit: '%', want: '83.3' },
         {
           id: 'ecl',
           label: 'Eclipsing binaries found',
           unit: '%',
-          hint: '29.2',
+          want: '29.2',
         },
       ],
       validate: v => {
@@ -124,13 +124,13 @@ const WHICH_KIND_OF_VARIABLE = {
           id: 'rrab',
           label: 'Eclipsing binaries called RRab',
           unit: '',
-          hint: '6',
+          want: '6',
         },
         {
           id: 'right',
           label: 'Eclipsing binaries called eclipsing',
           unit: '',
-          hint: '7',
+          want: '7',
         },
       ],
       validate: v => {
@@ -217,12 +217,12 @@ const WHICH_KIND_OF_VARIABLE = {
       body: `Choose “the period and the amplitude”. Read the share classified
              correctly and the share found of the eclipsing binaries.`,
       fields: [
-        { id: 'acc', label: 'Classified correctly', unit: '%', hint: '90.8' },
+        { id: 'acc', label: 'Classified correctly', unit: '%', want: '90.8' },
         {
           id: 'ecl',
           label: 'Eclipsing binaries found',
           unit: '%',
-          hint: '54.2',
+          want: '54.2',
         },
       ],
       validate: v => {
@@ -251,12 +251,12 @@ const WHICH_KIND_OF_VARIABLE = {
              picture to “Shape (R21) against period”. Read the share classified
              correctly and the share found of the eclipsing binaries.`,
       fields: [
-        { id: 'acc', label: 'Classified correctly', unit: '%', hint: '99.2' },
+        { id: 'acc', label: 'Classified correctly', unit: '%', want: '99.2' },
         {
           id: 'ecl',
           label: 'Eclipsing binaries found',
           unit: '%',
-          hint: '100',
+          want: '100',
         },
       ],
       validate: v => {

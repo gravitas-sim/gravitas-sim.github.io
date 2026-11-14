@@ -578,19 +578,19 @@ Watch what it reports as it goes. Each trial ends with an
           id: 'sweep_survived',
           label: 'Trials still there at the end',
           unit: '',
-          hint: '4',
+          want: '4',
         },
         {
           id: 'sweep_last_survivor',
           label: 'Largest starting radius that survived',
           unit: 'separations',
-          hint: '0.22',
+          want: '0.22',
         },
         {
           id: 'sweep_first_loss',
           label: 'Smallest starting radius that did not',
           unit: 'separations',
-          hint: '0.30',
+          want: '0.30',
         },
       ],
       validate: v => {
@@ -784,7 +784,7 @@ This is the same test you did by hand at 0.25, applied to the
           id: 'agree',
           label: 'Number of the three runs that agreed on the outcome',
           unit: '',
-          hint: 'of 3',
+          want: 'of 3',
         },
       ],
       validate: v => {

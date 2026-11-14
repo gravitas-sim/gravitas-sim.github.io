@@ -15,14 +15,8 @@
     ["steps.eight-epochs.unit",""]
    ],
    "numbered": [
-    ["steps.the-elliptical-fit.fields.0.hint","14.13"],
-    ["steps.the-elliptical-fit.fields.1.hint","0.908"],
-    ["steps.the-elliptical-fit.fields.2.hint","0.443"],
-    ["steps.the-mass-sum.fields.0.hint","3.76"],
     ["steps.the-mass-sum.fields.1.label","Mass sum, low end of the 68 percent interval"],
-    ["steps.the-mass-sum.fields.1.hint","3.33"],
-    ["steps.the-mass-sum.fields.2.label","Mass sum, high end of the 68 percent interval"],
-    ["steps.the-mass-sum.fields.2.hint","4.25"]
+    ["steps.the-mass-sum.fields.2.label","Mass sum, high end of the 68 percent interval"]
    ]
   },
   "es": {

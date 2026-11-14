@@ -108,9 +108,9 @@ export const WHAT_A_TELESCOPE_RESOLVES = {
              pair</em> row, in percent: how far the light midway between them falls below
              the light at a star.`,
       fields: [
-        { id: 'd10', label: 'Dip at 10 cm', unit: '%', hint: '0' },
-        { id: 'd20', label: 'Dip at 20 cm', unit: '%', hint: '27' },
-        { id: 'd40', label: 'Dip at 40 cm', unit: '%', hint: '50' },
+        { id: 'd10', label: 'Dip at 10 cm', unit: '%', want: '0' },
+        { id: 'd20', label: 'Dip at 20 cm', unit: '%', want: '27' },
+        { id: 'd40', label: 'Dip at 40 cm', unit: '%', want: '50' },
       ],
       validate: v => {
         if (![v.d10, v.d20, v.d40].every(Number.isFinite)) return null;
@@ -166,19 +166,19 @@ export const WHAT_A_TELESCOPE_RESOLVES = {
           id: 't10',
           label: 'Shortest exposure at 10 cm',
           unit: 's',
-          hint: '600',
+          want: '600',
         },
         {
           id: 't20',
           label: 'Shortest exposure at 20 cm',
           unit: 's',
-          hint: '120',
+          want: '120',
         },
         {
           id: 't40',
           label: 'Shortest exposure at 40 cm',
           unit: 's',
-          hint: '60',
+          want: '60',
         },
       ],
       validate: v => {
@@ -272,9 +272,9 @@ export const WHAT_A_TELESCOPE_RESOLVES_DEEPER = {
           id: 'w',
           label: 'Measured FWHM at 20 cm',
           unit: 'arcsec',
-          hint: '0.77',
+          want: '0.77',
         },
-        { id: 's', label: 'Its uncertainty', unit: 'arcsec', hint: '0.003' },
+        { id: 's', label: 'Its uncertainty', unit: 'arcsec', want: '0.003' },
       ],
       validate: v => {
         if (![v.w, v.s].every(Number.isFinite)) return null;
@@ -303,8 +303,8 @@ export const WHAT_A_TELESCOPE_RESOLVES_DEEPER = {
              over the diameter, in radians, times 206,265 to get arcseconds. Type the aperture
              and the wavelength and the instrument does the arithmetic.`,
       fields: [
-        { id: 'd', label: 'Aperture', unit: 'cm', hint: '20' },
-        { id: 'wl', label: 'Wavelength', unit: 'nm', hint: '550' },
+        { id: 'd', label: 'Aperture', unit: 'cm', want: '20' },
+        { id: 'wl', label: 'Wavelength', unit: 'nm', want: '550' },
         {
           id: 'r',
           label: 'Rayleigh separation',
@@ -382,19 +382,19 @@ export const WHAT_A_TELESCOPE_RESOLVES_DEEPER = {
           id: 'w20',
           label: 'Combined FWHM at 20 cm',
           unit: 'arcsec',
-          hint: '1.19',
+          want: '1.19',
         },
         {
           id: 'w100',
           label: 'Combined FWHM at 1 m',
           unit: 'arcsec',
-          hint: '1.03',
+          want: '1.03',
         },
         {
           id: 'w400',
           label: 'Combined FWHM at 4 m',
           unit: 'arcsec',
-          hint: '1.01',
+          want: '1.01',
         },
       ],
       validate: v => {
@@ -432,13 +432,13 @@ export const WHAT_A_TELESCOPE_RESOLVES_DEEPER = {
           id: 'a100',
           label: 'Pattern FWHM at 1 m',
           unit: 'arcsec',
-          hint: '0.117',
+          want: '0.117',
         },
         {
           id: 'a400',
           label: 'Pattern FWHM at 4 m',
           unit: 'arcsec',
-          hint: '0.029',
+          want: '0.029',
         },
       ],
       validate: v => {
@@ -469,8 +469,8 @@ export const WHAT_A_TELESCOPE_RESOLVES_DEEPER = {
              than that, a ground telescope gains light and little else. Type the seeing and
              the wavelength and the instrument gives the aperture, in centimeters.`,
       fields: [
-        { id: 'see', label: 'Seeing', unit: 'arcsec', hint: '1.0' },
-        { id: 'wl', label: 'Wavelength', unit: 'nm', hint: '550' },
+        { id: 'see', label: 'Seeing', unit: 'arcsec', want: '1.0' },
+        { id: 'wl', label: 'Wavelength', unit: 'nm', want: '550' },
         {
           id: 'dc',
           label: 'Crossover aperture',

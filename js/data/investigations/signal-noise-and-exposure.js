@@ -83,10 +83,10 @@ const SIGNAL_NOISE_AND_EXPOSURE = {
           id: 'signal',
           label: 'Star’s electrons',
           unit: 'count',
-          hint: '33630',
+          want: '33630',
         },
-        { id: 'noise', label: 'Total noise', unit: 'count', hint: '220.6' },
-        { id: 'snr', label: 'Signal-to-noise', unit: '', hint: '152.5' },
+        { id: 'noise', label: 'Total noise', unit: 'count', want: '220.6' },
+        { id: 'snr', label: 'Signal-to-noise', unit: '', want: '152.5' },
       ],
       validate: v => {
         if (![v.signal, v.noise, v.snr].every(Number.isFinite)) return null;
@@ -181,9 +181,9 @@ const SIGNAL_NOISE_AND_EXPOSURE = {
           id: 'snr',
           label: 'Signal-to-noise at 240 s',
           unit: '',
-          hint: '320.7',
+          want: '320.7',
         },
-        { id: 'ratio', label: 'Ratio to the first', unit: '', hint: '2.10' },
+        { id: 'ratio', label: 'Ratio to the first', unit: '', want: '2.10' },
       ],
       validate: v => {
         if (![v.snr, v.ratio].every(Number.isFinite)) return null;
@@ -215,13 +215,13 @@ const SIGNAL_NOISE_AND_EXPOSURE = {
           id: 'short',
           label: 'Signal-to-noise at 10 s',
           unit: '',
-          hint: '2.64',
+          want: '2.64',
         },
         {
           id: 'long',
           label: 'Signal-to-noise at 40 s',
           unit: '',
-          hint: '8.11',
+          want: '8.11',
         },
       ],
       validate: v => {
@@ -288,12 +288,12 @@ const SIGNAL_NOISE_AND_EXPOSURE = {
              brighter), set the target to 100 and read the <strong>exposure for
              the target</strong>. Then choose “a bright moon” and read it again.`,
       fields: [
-        { id: 'suburb', label: 'Exposure, a suburb', unit: 's', hint: '40.4' },
+        { id: 'suburb', label: 'Exposure, a suburb', unit: 's', want: '40.4' },
         {
           id: 'moon',
           label: 'Exposure, a bright moon',
           unit: 's',
-          hint: '89.4',
+          want: '89.4',
         },
       ],
       validate: v => {
@@ -327,13 +327,13 @@ const SIGNAL_NOISE_AND_EXPOSURE = {
           id: 'limit',
           label: 'Faintest star, 60 s',
           unit: 'mag',
-          hint: '19.33',
+          want: '19.33',
         },
         {
           id: 'gain',
           label: 'Gain, 240 s over 60 s',
           unit: 'mag',
-          hint: '0.96',
+          want: '0.96',
         },
       ],
       validate: v => {

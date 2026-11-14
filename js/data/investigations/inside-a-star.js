@@ -104,12 +104,12 @@ const INSIDE_A_STAR = {
              temperature</strong>. The instrument gives the temperature in
              kelvin; enter it in millions of kelvin.`,
       fields: [
-        { id: 'rho', label: 'Central density', unit: 'g/cm³', hint: '76.4' },
+        { id: 'rho', label: 'Central density', unit: 'g/cm³', want: '76.4' },
         {
           id: 'tc',
           label: 'Central temperature, millions of K',
           unit: '',
-          hint: '11.8',
+          want: '11.8',
         },
       ],
       validate: v => {
@@ -142,13 +142,13 @@ const INSIDE_A_STAR = {
           id: 'half',
           label: 'Radius holding half the mass',
           unit: '',
-          hint: '0.28',
+          want: '0.28',
         },
         {
           id: 'ratio',
           label: 'Central density ÷ mean density',
           unit: '',
-          hint: '54.2',
+          want: '54.2',
         },
       ],
       validate: v => {
@@ -181,12 +181,12 @@ const INSIDE_A_STAR = {
              central temperature (in millions of kelvin). Compare each with the
              values for one solar mass.`,
       fields: [
-        { id: 'rho', label: 'Central density', unit: 'g/cm³', hint: '153' },
+        { id: 'rho', label: 'Central density', unit: 'g/cm³', want: '153' },
         {
           id: 'tc',
           label: 'Central temperature, millions of K',
           unit: '',
-          hint: '23.5',
+          want: '23.5',
         },
       ],
       validate: v => {
@@ -252,13 +252,13 @@ const INSIDE_A_STAR = {
           id: 'tc',
           label: 'Central temperature, millions of K',
           unit: '',
-          hint: '6.74',
+          want: '6.74',
         },
         {
           id: 'ratio',
           label: 'Central density ÷ mean density',
           unit: '',
-          hint: '5.99',
+          want: '5.99',
         },
       ],
       validate: v => {
@@ -292,13 +292,13 @@ const INSIDE_A_STAR = {
           id: 'ratio',
           label: 'Central density ÷ mean density',
           unit: '',
-          hint: '1',
+          want: '1',
         },
         {
           id: 'half',
           label: 'Radius holding half the mass',
           unit: '',
-          hint: '0.79',
+          want: '0.79',
         },
       ],
       validate: v => {

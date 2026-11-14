@@ -7,11 +7,7 @@
     ["steps.median-orbit-and-mass.fields.0.unit","AU"],
     ["steps.median-orbit-and-mass.fields.1.unit","M_Jup"]
    ],
-   "numbered": [
-    ["steps.count-the-seen.fields.0.hint","49"],
-    ["steps.median-orbit-and-mass.fields.0.hint","170"],
-    ["steps.median-orbit-and-mass.fields.1.hint","12"]
-   ]
+   "numbered": []
   },
   "es": {
    "units": [],

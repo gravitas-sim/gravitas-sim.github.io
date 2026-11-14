@@ -16,17 +16,11 @@
    ],
    "numbered": [
     ["steps.four-phases.fields.0.label","Lit at 3.7 days"],
-    ["steps.four-phases.fields.0.hint","0.17"],
     ["steps.four-phases.fields.1.label","Lit at 7.4 days"],
-    ["steps.four-phases.fields.1.hint","0.57"],
     ["steps.four-phases.fields.2.label","Lit at 11.1 days"],
-    ["steps.four-phases.fields.2.hint","0.91"],
     ["steps.four-phases.fields.3.label","Lit at 14.8 days"],
-    ["steps.four-phases.fields.3.hint","0.99"],
     ["steps.eclipse-table.fields.0.label","Possible eclipses, January to June 2025"],
-    ["steps.eclipse-table.fields.0.hint","2"],
-    ["steps.eclipse-table.fields.1.label","Possible eclipses, July to December 2025"],
-    ["steps.eclipse-table.fields.1.hint","2"]
+    ["steps.eclipse-table.fields.1.label","Possible eclipses, July to December 2025"]
    ]
   },
   "es": {

@@ -353,9 +353,9 @@ describe('it catches a broken answer', () => {
 });
 
 describe('it catches an interaction that cannot be completed', () => {
-  test("a validator that rejects the author's own hint values", () => {
+  test("a validator that rejects the author's own expected values", () => {
     const rules = rulesAfter('tides', l => {
-      const s = l.steps.find(s => s.validate && s.fields?.some(f => f.hint));
+      const s = l.steps.find(s => s.validate && s.fields?.some(f => f.want));
       s.validate = () => ({ level: 'error', message: 'never right' });
     });
     expect(rules).toContain('interaction/validate');
@@ -371,7 +371,7 @@ describe('it catches an interaction that cannot be completed', () => {
 
   test('a computed field that throws on the values the step suggests', () => {
     const rules = rulesAfter('tides', l => {
-      const s = l.steps.find(s => s.fields?.some(f => f.hint));
+      const s = l.steps.find(s => s.fields?.some(f => f.want));
       s.fields.push({
         id: 'boom',
         label: 'Boom',

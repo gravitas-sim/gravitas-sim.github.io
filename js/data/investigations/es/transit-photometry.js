@@ -109,7 +109,7 @@ export default {
         {
           label: 'Brillo fuera del tránsito',
           unit: '',
-          hint: 'p. ej. 1,000065',
+          want: 'p. ej. 1,000065',
         },
         { label: 'Brillo en el fondo de la caída', unit: '' },
         { label: 'Profundidad del tránsito δ = base − fondo', unit: '' },
@@ -143,7 +143,7 @@ export default {
         {
           label: 'Radio de la estrella R<sub>★</sub>',
           unit: 'R☉',
-          hint: '1,155',
+          want: '1,155',
         },
         { label: 'Cociente corregido √(δ / 1,215)', unit: '' },
         { label: 'Radio del planeta', unit: 'R_Júpiter' },
@@ -228,9 +228,9 @@ export default {
       importLabel: 'Registrar el último tránsito',
       fields: [
         { label: 'Instante central del primer tránsito', unit: 'días' },
-        { label: 'qué tránsito era', unit: '', hint: 'p. ej. 2' },
+        { label: 'qué tránsito era', unit: '', want: 'p. ej. 2' },
         { label: 'Instante central de un tránsito posterior', unit: 'días' },
-        { label: 'qué tránsito era', unit: '', hint: 'p. ej. 5' },
+        { label: 'qué tránsito era', unit: '', want: 'p. ej. 5' },
         {
           label: 'Órbitas entre los dos',
           unit: '',
@@ -248,7 +248,7 @@ export default {
         {
           label: 'Masa de la estrella M<sub>★</sub>',
           unit: 'M☉',
-          hint: '1,148',
+          want: '1,148',
         },
         { label: 'Periodo en años', unit: 'a' },
         { label: 'Semieje mayor a = (P² M)^⅓', unit: 'UA' },
@@ -338,7 +338,7 @@ export default {
         {
           label: 'Profundidad que mediste antes, sin mezclar',
           unit: '',
-          hint: 'del paso 8',
+          want: 'del paso 8',
         },
         { label: 'Radio que implica la curva mezclada', unit: 'R⊕' },
         { label: 'Cociente de profundidades = 1 + F₂/F₁', unit: '' },

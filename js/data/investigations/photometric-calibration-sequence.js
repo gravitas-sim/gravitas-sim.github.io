@@ -124,7 +124,7 @@ export const COUNTS_TO_MAGNITUDES = {
           id: 'k',
           label: 'Extinction of the air, k',
           unit: 'mag/airmass',
-          hint: '0.21',
+          want: '0.21',
         },
         {
           id: 'dm',
@@ -266,9 +266,9 @@ export const COUNTS_TO_MAGNITUDES_DEEPER = {
           id: 'z',
           label: 'Zero point at airmass 1, Z1',
           unit: 'mag',
-          hint: '24.80',
+          want: '24.80',
         },
-        { id: 'k', label: 'Extinction, k', unit: 'mag/airmass', hint: '0.21' },
+        { id: 'k', label: 'Extinction, k', unit: 'mag/airmass', want: '0.21' },
         {
           id: 'z0',
           label: 'Zero point outside the atmosphere',
@@ -305,8 +305,8 @@ export const COUNTS_TO_MAGNITUDES_DEEPER = {
              and the uncertainty. Then turn on <em>Show the truth</em> and compare with the
              magnitude the model gave it.`,
       fields: [
-        { id: 'M', label: 'Calibrated magnitude', unit: 'mag', hint: '13.20' },
-        { id: 's', label: 'Its uncertainty', unit: 'mag', hint: '0.008' },
+        { id: 'M', label: 'Calibrated magnitude', unit: 'mag', want: '13.20' },
+        { id: 's', label: 'Its uncertainty', unit: 'mag', want: '0.008' },
         {
           id: 'iv',
           label: 'Half-width of the 95 percent interval',
@@ -350,8 +350,8 @@ export const COUNTS_TO_MAGNITUDES_DEEPER = {
              in airmass is no longer trusted. The tool leaves them out and flags them. Read
              how many measurements it left out, and the extinction it then finds.`,
       fields: [
-        { id: 'n', label: 'Measurements left out', unit: '', hint: '6' },
-        { id: 'k', label: 'Extinction, k', unit: 'mag/airmass', hint: '0.21' },
+        { id: 'n', label: 'Measurements left out', unit: '', want: '6' },
+        { id: 'k', label: 'Extinction, k', unit: 'mag/airmass', want: '0.21' },
       ],
       validate: v => {
         if (![v.n, v.k].every(Number.isFinite)) return null;
@@ -460,8 +460,8 @@ export const COUNTS_TO_MAGNITUDES_DEEPER = {
              c</em> row. The color term is still fixed (the standards span a wide range
              of color). Give the airmass range, and the color term.`,
       fields: [
-        { id: 'lo', label: 'Lowest airmass', unit: '', hint: '1.30' },
-        { id: 'hi', label: 'Highest airmass', unit: '', hint: '1.42' },
+        { id: 'lo', label: 'Lowest airmass', unit: '', want: '1.30' },
+        { id: 'hi', label: 'Highest airmass', unit: '', want: '1.42' },
         {
           id: 'span',
           label: 'Range',
@@ -469,7 +469,7 @@ export const COUNTS_TO_MAGNITUDES_DEEPER = {
           compute: v => v.hi - v.lo,
           decimals: 2,
         },
-        { id: 'c', label: 'Color term, c', unit: '', hint: '0.079' },
+        { id: 'c', label: 'Color term, c', unit: '', want: '0.079' },
       ],
       validate: v => {
         if (![v.lo, v.hi, v.c].every(Number.isFinite)) return null;
@@ -511,8 +511,8 @@ export const COUNTS_TO_MAGNITUDES_DEEPER = {
              magnitudes per airmass, because the table states none. The night can then
              calibrate the target. Read its calibrated magnitude and uncertainty.`,
       fields: [
-        { id: 'M', label: 'Calibrated magnitude', unit: 'mag', hint: '13.22' },
-        { id: 's', label: 'Its uncertainty', unit: 'mag', hint: '0.012' },
+        { id: 'M', label: 'Calibrated magnitude', unit: 'mag', want: '13.22' },
+        { id: 's', label: 'Its uncertainty', unit: 'mag', want: '0.012' },
         {
           id: 'off',
           label: 'Distance from the true 13.200',
@@ -559,13 +559,13 @@ export const COUNTS_TO_MAGNITUDES_DEEPER = {
           id: 's2',
           label: 'Uncertainty with 2 standards',
           unit: 'mag',
-          hint: '0.081',
+          want: '0.081',
         },
         {
           id: 's3',
           label: 'Uncertainty with 3 standards',
           unit: 'mag',
-          hint: '0.0088',
+          want: '0.0088',
         },
         {
           id: 'ratio',
@@ -624,12 +624,12 @@ export const COUNTS_TO_MAGNITUDES_DEEPER = {
              color-dependent extinction lowers chi-square. Then switch the model to
              <em>with color-dependent extinction</em> and read the new term, <em>k2</em>.`,
       fields: [
-        { id: 'dchi', label: 'Drop in chi-square', unit: '', hint: '67.8' },
+        { id: 'dchi', label: 'Drop in chi-square', unit: '', want: '67.8' },
         {
           id: 'k2',
           label: 'Color-dependent extinction, k2',
           unit: 'mag/airmass/color',
-          hint: '-0.047',
+          want: '-0.047',
         },
       ],
       validate: v => {
@@ -670,13 +670,13 @@ export const COUNTS_TO_MAGNITUDES_DEEPER = {
           id: 'm1',
           label: 'Calibrated, first order',
           unit: 'mag',
-          hint: '13.215',
+          want: '13.215',
         },
         {
           id: 'm2',
           label: 'Calibrated, second order',
           unit: 'mag',
-          hint: '13.202',
+          want: '13.202',
         },
         {
           id: 'd',

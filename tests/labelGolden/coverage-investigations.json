@@ -9,7 +9,7 @@
   "js/observatoryPage.js:542:50"
  ],
  "hazards": {
-  "js/investigations/stepView.js:1194:13": [
+  "js/investigations/stepView.js:1193:13": [
    "hyphen"
   ],
   "js/investigations/stepView.js:643:11": [

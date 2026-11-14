@@ -13,6 +13,10 @@ the release rather than in the tag.
 
 ## [Unreleased]
 
+### Changed
+
+- A measuring step no longer shows the expected number in grey inside the empty box (Prompt 299; register row D-R4-299-01; visible and instructional). A measure field's expected value moves from `hint` to a new `want` property in 897 fields of 113 lessons and their Spanish shadows; no page reads `want` except the authoring checks and the instructor key, which prints the same text as before. The lesson panel renders a field's `hint` or a numeric step's `placeholder` only when it holds no numeral, the rule `content/placeholder` now reads the numbers inside a cue ("e.g. 8.0 ± 0.1") and checks core and deeper steps, and the ten error-bar steps read "a value, then ± its uncertainty" (and its Spanish). The instructor bundle needs the owner's rebuild; the keys it prints do not change.
+
 ### Added
 
 - A measurement harness for the pages a student opens (`npm run perf:routes`, `npm run perf:walks`; `STUDENT_ROUTE_BASELINE.md`): Home, two lessons, an Observatory guide and the 3-D lab, cold, warm and offline over compressed transport, and the walk from a lesson link to its first accepted reading. The test server gains an opt-in gzip and cache-header mode. Nothing a visitor sees changes.

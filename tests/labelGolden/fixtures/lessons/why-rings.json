@@ -13,13 +13,7 @@
     ["steps.mimas-3-to-1.unit",""]
    ],
    "numbered": [
-    ["steps.sl9-limits.fields.0.hint","1.64"],
-    ["steps.sl9-limits.fields.1.hint","3.18"],
-    ["steps.phobos-where.fields.0.hint","5466"],
-    ["steps.phobos-where.fields.1.hint","10585"],
-    ["steps.where-the-gap-falls.fields.0.label","Radius of the 2:1 resonance"],
-    ["steps.where-the-gap-falls.fields.0.hint","116883"],
-    ["steps.where-the-gap-falls.fields.1.hint","0.59"]
+    ["steps.where-the-gap-falls.fields.0.label","Radius of the 2:1 resonance"]
    ]
   },
   "es": {

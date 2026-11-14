@@ -15,16 +15,7 @@
     ["steps.the-average-star.fields.1.unit","mag"],
     ["steps.real-drift.unit","mag"]
    ],
-   "numbered": [
-    ["steps.count-a-shallow-survey.fields.0.hint","167"],
-    ["steps.count-a-shallow-survey.fields.1.hint","6.3"],
-    ["steps.count-a-deep-survey.fields.0.hint","1289"],
-    ["steps.count-a-deep-survey.fields.1.hint","49"],
-    ["steps.how-far-can-it-see.fields.0.hint","711"],
-    ["steps.how-far-can-it-see.fields.1.hint","63"],
-    ["steps.the-average-star.fields.0.hint","8.3"],
-    ["steps.the-average-star.fields.1.hint","3.8"]
-   ]
+   "numbered": []
   },
   "es": {
    "units": [],

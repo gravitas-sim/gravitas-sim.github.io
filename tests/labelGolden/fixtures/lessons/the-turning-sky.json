@@ -16,13 +16,9 @@
    ],
    "numbered": [
     ["steps.rise-shift.fields.0.label","Rises on night 0 (minutes after noon)"],
-    ["steps.rise-shift.fields.0.hint","738.5"],
     ["steps.rise-shift.fields.1.label","Rises on night 30 (minutes after noon)"],
-    ["steps.rise-shift.fields.1.hint","620.6"],
     ["steps.sidereal-clock.fields.0.label","Sidereal time at midnight, night 0"],
-    ["steps.sidereal-clock.fields.0.hint","6.79"],
     ["steps.sidereal-clock.fields.1.label","Sidereal time at midnight, night 30"],
-    ["steps.sidereal-clock.fields.1.hint","8.76"],
     ["steps.sidereal-clock.fields.2.label","Advance over 30 nights"]
    ]
   },

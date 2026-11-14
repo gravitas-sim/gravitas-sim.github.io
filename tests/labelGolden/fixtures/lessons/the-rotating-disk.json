@@ -15,14 +15,7 @@
     ["steps.halo-share.unit","%"]
    ],
    "numbered": [
-    ["steps.measure-a-and-b.fields.0.hint","14"],
-    ["steps.measure-a-and-b.fields.1.hint","-15"],
-    ["steps.speed-at-the-sun.fields.0.hint","247"],
-    ["steps.fit-stars-only.fields.0.hint","50"],
-    ["steps.fit-stars-only.fields.1.label","Disk mass, in 10¹⁰ solar masses"],
-    ["steps.fit-stars-only.fields.1.hint","8"],
-    ["steps.fit-with-a-halo.fields.0.hint","4.8"],
-    ["steps.fit-with-a-halo.fields.1.hint","250"]
+    ["steps.fit-stars-only.fields.1.label","Disk mass, in 10¹⁰ solar masses"]
    ]
   },
   "es": {

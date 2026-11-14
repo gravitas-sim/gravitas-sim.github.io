@@ -129,8 +129,8 @@ export const TWO_STARS_ECLIPSING = {
              the primary and of the secondary eclipse, in percent of the light of the
              pair. The panel also says whether each bottom is flat or curved.`,
       fields: [
-        { id: 'p', label: 'Primary eclipse depth', unit: '%', hint: '48.3' },
-        { id: 's', label: 'Secondary eclipse depth', unit: '%', hint: '23.0' },
+        { id: 'p', label: 'Primary eclipse depth', unit: '%', want: '48.3' },
+        { id: 's', label: 'Secondary eclipse depth', unit: '%', want: '23.0' },
       ],
       validate: v => {
         if (![v.p, v.s].every(Number.isFinite)) return null;
@@ -244,12 +244,12 @@ export const TWO_STARS_ECLIPSING_DEEPER = {
              fractional radii of the two stars, R1/a and R2/a, and the uncertainty of
              R2/a, in units of 0.0001.`,
       fields: [
-        { id: 'a', label: 'R1/a', hint: '0.1085' },
-        { id: 'b', label: 'R2/a', hint: '0.0814' },
+        { id: 'a', label: 'R1/a', want: '0.1085' },
+        { id: 'b', label: 'R2/a', want: '0.0814' },
         {
           id: 'u',
           label: 'Uncertainty of R2/a (in units of 1e-4)',
-          hint: '1.6',
+          want: '1.6',
         },
       ],
       validate: v => {
@@ -319,8 +319,8 @@ export const TWO_STARS_ECLIPSING_DEEPER = {
              model does not have. Read the reduced chi-square and the correlated-noise
              factor the fit reports.`,
       fields: [
-        { id: 'c', label: 'Reduced chi-square', hint: '25.6' },
-        { id: 'b', label: 'Correlated-noise factor', hint: '1.80' },
+        { id: 'c', label: 'Reduced chi-square', want: '25.6' },
+        { id: 'b', label: 'Correlated-noise factor', want: '1.80' },
       ],
       validate: v => {
         if (![v.c, v.b].every(Number.isFinite)) return null;
@@ -387,8 +387,8 @@ export const TWO_STARS_ECLIPSING_DEEPER = {
              eclipse, then compute e cos w from it to first order:
              <strong>(pi/2) (phase &minus; 0.5)</strong>.`,
       fields: [
-        { id: 'p', label: 'Phase of the secondary', hint: '0.5893' },
-        { id: 'e', label: 'e cos w, first order', hint: '0.1402' },
+        { id: 'p', label: 'Phase of the secondary', want: '0.5893' },
+        { id: 'e', label: 'e cos w, first order', want: '0.1402' },
       ],
       validate: v => {
         if (![v.p, v.e].every(Number.isFinite)) return null;
@@ -454,8 +454,8 @@ export const TWO_STARS_ECLIPSING_DEEPER = {
              a thin lens of light. Read the radius ratio the fit returns and the
              lower end of its profile interval, and see what the panel says.`,
       fields: [
-        { id: 'k', label: 'Radius ratio from the fit', hint: '0.162' },
-        { id: 'l', label: 'Profile interval, lower end', hint: '0.129' },
+        { id: 'k', label: 'Radius ratio from the fit', want: '0.162' },
+        { id: 'l', label: 'Profile interval, lower end', want: '0.129' },
       ],
       validate: v => {
         if (![v.k, v.l].every(Number.isFinite)) return null;

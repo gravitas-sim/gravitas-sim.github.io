@@ -17,17 +17,8 @@
     ["steps.a-zero-point.fields.1.unit","pc"]
    ],
    "numbered": [
-    ["steps.the-shift.fields.0.hint","549"],
-    ["steps.the-shift.fields.1.hint","0.287"],
-    ["steps.a-straight-line-fails.fields.0.hint","1576"],
-    ["steps.a-straight-line-fails.fields.1.hint","24"],
-    ["steps.the-parallax.fields.0.hint","60.3"],
-    ["steps.the-parallax.fields.1.hint","1.5"],
     ["steps.the-parallax.fields.2.label","Distance, 1 over the parallax"],
-    ["steps.the-parallax.fields.2.hint","16.6"],
-    ["steps.a-zero-point.fields.0.hint","61.3"],
-    ["steps.a-zero-point.fields.1.label","Distance, 1 over the parallax"],
-    ["steps.a-zero-point.fields.1.hint","16.3"]
+    ["steps.a-zero-point.fields.1.label","Distance, 1 over the parallax"]
    ]
   },
   "es": {

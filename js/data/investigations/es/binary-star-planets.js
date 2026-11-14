@@ -435,7 +435,7 @@ export default {
         {
           label: 'Cuántas de las tres ejecuciones coincidieron en el resultado',
           unit: '',
-          hint: 'de 3',
+          want: 'de 3',
         },
       ],
     },

@@ -18,7 +18,7 @@ export default {
       title: 'Dalo con barra de error',
       body: 'Da el radio del planeta como un resultado: el valor, ±, y la incertidumbre del paso anterior. Cuenta como correcto cuando el rango que das se solapa con el que respalda la medición y no es más ancho que el doble de la semianchura de ese rango.',
       prompt: 'Radio del planeta en R_Jupiter, con su incertidumbre',
-      placeholder: 'p. ej. 1,37 ± 0,01',
+      placeholder: 'un valor y, luego, ± su incertidumbre',
       hints: {
         concept: 'Un resultado es un valor y lo bien que se conoce.',
         method:
@@ -31,7 +31,7 @@ export default {
       title: 'Hazlo hacia delante',
       body: 'Ve en sentido contrario: de un planeta a la caída que haría. Un modelo directo toma los radios y predice la profundidad, para poder contrastarla con lo medido.\n\nSupón que el radio del planeta se conoce en 1,38 R<sub>Júpiter</sub> con un 1,5 %, y el de la estrella en 1,155 R<sub>☉</sub> con un 1,2 %. Para un tránsito por el centro de la estrella, la profundidad es δ = k²·1,2146 con k = R<sub>p</sub>/R<sub>★</sub>. Como δ va como k², su incertidumbre fraccionaria es el doble de la de k, y las de los dos radios se suman en cuadratura.',
       prompt: 'Profundidad prevista, con su incertidumbre',
-      placeholder: 'p. ej. 0,0183 ± 0,0007',
+      placeholder: 'un valor y, luego, ± su incertidumbre',
       hints: {
         concept: 'El modelo es la relación de la profundidad usada al revés.',
         method:
