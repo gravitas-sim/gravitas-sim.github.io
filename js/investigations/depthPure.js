@@ -1,12 +1,24 @@
 // =============================================================================
 // Laying deeper steps into a lesson: the pure half of ./depth.js
 // -----------------------------------------------------------------------------
-// No imports but the depth names and the Spanish matching rule (loaded with
-// every lesson), so the answer-key build, the author checks and the tests can
-// lay a lesson out synchronously. See DEPTH.md.
+// No imports, so the answer-key build, the author checks and the tests can lay
+// a lesson out synchronously. See DEPTH.md.
 // =============================================================================
 
-import { alignShadow } from '../data/investigations/i18n.js';
+// Duplicates alignShadow (data/investigations/i18n.js) on purpose: importing it
+// would split a shared chunk, a request on every lesson route. A test holds
+// the two equal.
+const alignShadow = (base, over) =>
+  Array.isArray(over)
+    ? base.map((_, i) => over[i])
+    : over &&
+        typeof over === 'object' &&
+        base.length &&
+        base.every(s => typeof s?.sid === 'string')
+      ? base.map(({ sid }) =>
+          Object.hasOwn(over, sid) ? over[sid] : undefined
+        )
+      : null;
 
 // Duplicates ./progressSchema.js's names on purpose: a shared module would be a
 // request on every lesson route (tests/progressiveDepth.test.js holds them equal).

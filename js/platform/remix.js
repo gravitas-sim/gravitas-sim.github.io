@@ -30,7 +30,6 @@ import { shortHash } from '../assignments/assignment.js';
 import { stepFingerprint } from '../investigations/progressBackup.js';
 import { ID_INVESTIGATION_PACK } from '../names.js';
 import { withVersion } from './investigation.js';
-import { alignShadow } from '../data/investigations/i18n.js';
 
 const isObject = v => v !== null && typeof v === 'object' && !Array.isArray(v);
 
@@ -775,6 +774,16 @@ function checkAdded(s, at, need) {
     'an added step docks no instrument'
   );
 }
+
+/** A shadow's entry for each English step: by sid, or by index in an older list. */
+const alignShadow = (steps, words) =>
+  steps.map((s, i) =>
+    Array.isArray(words)
+      ? words[i]
+      : words && Object.hasOwn(words, s.sid)
+        ? words[s.sid]
+        : undefined
+  );
 
 const show = v => (v === undefined ? 'nothing' : JSON.stringify(v));
 

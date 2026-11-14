@@ -31,7 +31,6 @@ import { checkAnswer, toleranceFor } from '../answerCheck.js';
 import { verifyKey } from '../answerKey.js';
 import { isValidSid } from '../investigations/progressSchema.js';
 import { parseNumber } from '../answerParse.js';
-import { checkShadowSteps } from './depthRules.js';
 import {
   FEEDBACK_CLASSES,
   HINT_LIMIT,
@@ -39,6 +38,7 @@ import {
 } from '../answerFeedback.js';
 import {
   alignShadow,
+  checkShadowSteps,
   mergeTranslation,
   translationCoverage,
 } from '../data/investigations/i18n.js';

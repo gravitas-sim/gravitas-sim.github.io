@@ -8,7 +8,7 @@
 
 import { DEPTHS, inDepth } from '../investigations/progressSchema.js';
 import { toleranceFor } from '../answerCheck.js';
-import { alignShadow } from '../data/investigations/i18n.js';
+import { alignShadow, checkShadowSteps } from '../data/investigations/i18n.js';
 
 /** Rule ids and what they say, for `author:check --rules`. */
 export const DEPTH_RULES = {
@@ -29,25 +29,6 @@ export const DEPTH_RULES = {
     'A deeper step that restates a core expectation agrees with it',
   'depth/translation': 'Every deeper step is translated, word for word',
 };
-
-/**
- * A translation's steps are an object keyed by sid: one entry for each step of
- * the lesson (core or deeper) and none for a step it does not have.
- * @param {Array<{sid: string}>} steps - The English steps
- * @param {*} shadow - The translation's `steps`
- * @param {(level: string, message: string, index: ?number) => void} report - Findings
- */
-export function checkShadowSteps(steps, shadow, report) {
-  if (!shadow || typeof shadow !== 'object' || Array.isArray(shadow))
-    return report('error', 'steps must be an object keyed by step sid', null);
-  for (const key of Object.keys(shadow))
-    if (!steps.some(s => s.sid === key))
-      report('error', `steps.${key} names no step of the lesson`, null);
-  steps.forEach((s, i) => {
-    if (!Object.hasOwn(shadow, s.sid))
-      report('error', `step "${s.sid}" has no Spanish step`, i);
-  });
-}
 
 /**
  * The findings for one lesson's deeper steps.

@@ -110,6 +110,19 @@ describe('a Spanish step is matched to its English step by sid', () => {
     }
   });
 
+  test('the deeper-step overlay matches steps the way mergeTranslation does', () => {
+    const steps = lesson().steps;
+    for (const words of [
+      SHADOW.steps,
+      [{ title: 'Uno' }, null, { title: 'Tres' }],
+      'nonsense',
+      { ghost: { title: 'Fantasma' } },
+    ])
+      expect(overlay(steps, words)).toEqual(
+        mergeTranslation({ steps }, { steps: words }).steps
+      );
+  });
+
   test('a step inserted in the English has no Spanish yet and moves no other', () => {
     const english = lesson();
     english.steps.splice(1, 0, step('inserted'));

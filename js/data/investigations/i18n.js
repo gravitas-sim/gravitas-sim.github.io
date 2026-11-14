@@ -42,6 +42,25 @@ export function alignShadow(base, overlay) {
 }
 
 /**
+ * A translation's steps are an object keyed by sid: one entry for each step of
+ * the lesson (core or deeper) and none for a step it does not have.
+ * @param {Array<{sid: string}>} steps - The English steps
+ * @param {*} shadow - The translation's `steps`
+ * @param {(level: string, message: string, index: ?number) => void} report - Findings
+ */
+export function checkShadowSteps(steps, shadow, report) {
+  if (!shadow || typeof shadow !== 'object' || Array.isArray(shadow))
+    return report('error', 'steps must be an object keyed by step sid', null);
+  for (const key of Object.keys(shadow))
+    if (!steps.some(s => s.sid === key))
+      report('error', `steps.${key} names no step of the lesson`, null);
+  steps.forEach((s, i) => {
+    if (!Object.hasOwn(shadow, s.sid))
+      report('error', `step "${s.sid}" has no Spanish step`, i);
+  });
+}
+
+/**
  * Lay a translation over a lesson. Pure: the result shares every untranslated
  * value, functions included, with the original by reference.
  *
