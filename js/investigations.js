@@ -2847,13 +2847,13 @@ function investigationFromHash() {
 /**
  * Open the lesson the URL names, at start-up and on every hash change, so a
  * link handed out lands the student on the right lesson. An id that does not
- * resolve may be one retired on purpose (./investigations/retiredLink.js).
+ * resolve may be one retired on purpose (./investigations/earlierView.js).
  */
 function openInvestigationFromHash() {
   const [id, depth] = investigationFromHash();
   if (!id) return;
   if (!hasInvestigation(id)) {
-    import('./investigations/retiredLink.js').then(m =>
+    import('./investigations/earlierView.js').then(m =>
       m.openRetired(id, depth, openInvestigation)
     );
     return;

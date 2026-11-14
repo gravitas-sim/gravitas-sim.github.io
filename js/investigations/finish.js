@@ -232,7 +232,7 @@ async function report(host, format) {
       : undefined;
     const kept = earlierFor(active.id);
     const earlier = kept
-      ? await (await import('./earlierView.js')).earlierLines(active, kept)
+      ? (await import('./earlierView.js')).earlierLines(active, kept)
       : [];
     const bytes = buildLabReport({
       earlier,

@@ -114,8 +114,7 @@ async function report(assignment, lesson) {
     );
   // In words, what replaced a missing step; the re-pin below puts it in place.
   if (changes.revised.length) {
-    const m = await import('../investigations/revisionText.js');
-    await m.ensureRevisionMessages();
+    const m = await import('../investigations/earlierView.js');
     for (const r of changes.revised)
       box.append(para(m.revisionLine(r, lesson)));
   }

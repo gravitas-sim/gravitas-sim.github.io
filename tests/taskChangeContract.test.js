@@ -3,13 +3,7 @@ import {
   readProgress,
   writeProgress,
 } from '../js/investigations/progressSchema.js';
-import {
-  earlierAnswers,
-  earlierOf,
-  liveSids,
-  successorOf,
-  wasIn,
-} from '../js/investigations/revisions.js';
+import { earlierAnswers, wasIn } from '../js/investigations/revisions.js';
 import {
   retiredInvestigation,
   RETIRED_INVESTIGATIONS,
@@ -38,51 +32,31 @@ const SAVED = {
 
 describe('the retired map', () => {
   const owner = {
+    id: 'o',
+    steps: [{ sid: 'z' }],
     retired: {
-      a: { to: 'b', release: '3.1', was: { en: 'A?', es: 'A?es' } },
-      b: { to: 'c', release: '3.2', was: { en: 'B?' } },
+      a: { to: 'z', release: '3.1', was: { en: 'A?', es: 'A?es' } },
       gone: { to: null, release: '3.1', was: 'Gone?' },
-      loop1: { to: 'loop2', release: '3.1' },
-      loop2: { to: 'loop1', release: '3.1' },
-      lost: { to: 'nowhere', release: '3.1' },
     },
   };
-  const live = new Set(['c', 'z']);
-
-  test('follows a successor that was itself retired later', () => {
-    expect(successorOf(owner, 'a', live)).toMatchObject({
-      to: 'c',
-      release: '3.1',
-    });
-  });
-
-  test('says nothing for an id that was never retired', () => {
-    expect(successorOf(owner, 'z', live)).toBeNull();
-    expect(successorOf({}, 'a', live)).toBeNull();
-    expect(successorOf(null, 'a')).toBeNull();
-  });
-
-  test('a removed step, a cycle and a successor that is not live end at no step', () => {
-    expect(successorOf(owner, 'gone', live).to).toBeNull();
-    expect(successorOf(owner, 'loop1', live).to).toBeNull();
-    expect(successorOf(owner, 'lost', live).to).toBeNull();
-  });
 
   test('what a step asked is read in the reader language, English as the fallback', () => {
     expect(wasIn(owner.retired.a.was, 'es')).toBe('A?es');
-    expect(wasIn(owner.retired.b.was, 'es')).toBe('B?');
+    expect(wasIn({ en: 'B?' }, 'es')).toBe('B?');
     expect(wasIn('Gone?', 'es')).toBe('Gone?');
     expect(wasIn(null)).toBe('');
   });
 
-  test('saved answers under ids the owner lacks come back with where they went', () => {
-    const rows = earlierOf(owner, live, [
-      ['a', 1],
-      ['z', 2],
-      ['mystery', 3],
-    ]);
+  test('saved answers under ids the lesson lacks come back with where they went, unknown ones too', () => {
+    const rows = earlierAnswers(owner, {
+      'o:a': 1,
+      'o:z': 2,
+      'o:gone': 3,
+      'o:mystery': 4,
+    });
     expect(rows.map(r => [r.id, r.to, r.known])).toEqual([
-      ['a', 'c', true],
+      ['a', 'z', true],
+      ['gone', null, true],
       ['mystery', null, false],
     ]);
   });
@@ -146,7 +120,7 @@ describe('progress load: reword, revise, insert and remove', () => {
   test('an answer is never read against the successor step', () => {
     const l = editedLesson('revise');
     const r = readProgress(SAVED, l);
-    for (const sid of liveSids(l)) {
+    for (const { sid } of l.steps) {
       expect(r.responses[`tides:${sid}`]).toBe(sid === 'ask' ? 2 : undefined);
     }
   });
