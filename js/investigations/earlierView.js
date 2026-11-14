@@ -9,6 +9,7 @@
 // =============================================================================
 
 import { getLocale, t } from '../i18n/index.js';
+import { ensureRevisionMessages } from './revisionText.js';
 import { earlierAnswers, wasIn } from './revisions.js';
 
 /**
@@ -21,32 +22,32 @@ import { earlierAnswers, wasIn } from './revisions.js';
 export function earlierLine(e, lesson) {
   const was = wasIn(e.was, getLocale());
   const head = was
-    ? t('rev.earlier.item', {
+    ? t('rev.item', {
         was,
         text: e.text,
         release: e.release,
       })
-    : t('rev.earlier.unknown', { text: e.text });
+    : t('rev.unknown', { text: e.text });
   if (!e.known) return head;
   const next = lesson?.steps?.find(s => s.sid === e.to);
-  return `${head} ${next ? t('rev.earlier.now', { title: next.title }) : t('rev.earlier.gone')}`;
+  return `${head} ${next ? t('rev.now', { title: next.title }) : t('rev.gone')}`;
 }
 
 /**
- * List the earlier answers under the lesson's progress notice.
+ * List earlier answers under the lesson's progress notice.
  *
  * @param {HTMLElement} host - The notice element
- * @param {object} lesson - The merged lesson
- * @param {{responses: object}} earlier - What readProgress set aside
+ * @param {?object} lesson - The merged lesson, for a successor's title
+ * @param {Array<object>} rows - From earlierAnswers() or retiredAnswers()
  */
-export function showEarlier(host, lesson, earlier) {
+export async function listEarlier(host, lesson, rows) {
+  if (!host || !rows.length) return;
+  await ensureRevisionMessages();
   host.querySelector('details.earlier-answers')?.remove();
-  const rows = earlierAnswers(lesson, earlier.responses);
-  if (!rows.length) return;
   const box = document.createElement('details');
   box.className = 'earlier-answers';
   const head = document.createElement('summary');
-  head.textContent = t('rev.earlier.heading', { n: rows.length });
+  head.textContent = t('rev.heading', { n: rows.length });
   const list = document.createElement('ul');
   for (const e of rows) {
     const li = document.createElement('li');
@@ -56,4 +57,28 @@ export function showEarlier(host, lesson, earlier) {
   box.append(head, list);
   host.append(box);
   host.hidden = false;
+}
+
+/**
+ * The answers a lesson holds to steps it no longer has.
+ *
+ * @param {HTMLElement} host - The notice element
+ * @param {object} lesson - The merged lesson
+ * @param {{responses: object}} earlier - What readProgress set aside
+ */
+export const showEarlier = (host, lesson, earlier) =>
+  listEarlier(host, lesson, earlierAnswers(lesson, earlier.responses));
+
+/**
+ * The earlier answers as sentences, for the report. Loads the words first.
+ *
+ * @param {object} lesson - The merged lesson
+ * @param {{responses: object}} earlier - What readProgress set aside
+ * @returns {Promise<Array<string>>} One sentence per answer
+ */
+export async function earlierLines(lesson, earlier) {
+  await ensureRevisionMessages();
+  return earlierAnswers(lesson, earlier.responses).map(e =>
+    earlierLine(e, lesson)
+  );
 }

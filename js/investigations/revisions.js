@@ -180,3 +180,63 @@ export function earlierAnswers(lesson, table) {
     .map(({ value, ...rest }) => ({ ...rest, text: answerText(value) }))
     .filter(e => e.text);
 }
+
+/**
+ * Answers saved under an investigation that was retired, as earlier answers.
+ *
+ * The old lesson is gone, so each row has the step id and what was typed, no
+ * question: they are shown as from an earlier version and never marked.
+ *
+ * @param {string} oldId - The retired investigation's id
+ * @param {object} responses - Its stored responses
+ * @param {{release: string}} entry - Its row in the retired record
+ * @returns {Array<{id: string, text: string, to: null, release: string,
+ *   was: null, known: false}>} One per step with an answer
+ */
+export const retiredAnswers = (oldId, responses, entry) =>
+  [...responsesBySid(oldId, responses)]
+    .map(([id, e]) => ({
+      id,
+      text: answerText(e),
+      to: null,
+      release: entry?.release ?? '',
+      was: null,
+      known: false,
+    }))
+    .filter(r => r.text);
+
+/**
+ * A guide's saved tables, split into what its steps own now and what they do
+ * not: each table is `{step id: saved value}` (answers, records).
+ *
+ * `keepAll` false (the saved version's major differs from the build's) puts
+ * every entry on the earlier side, to be shown and never read as an answer. A
+ * guide used to start afresh then; nothing is dropped.
+ *
+ * @param {Set<string>} live - The ids the guide has now
+ * @param {Record<string, object>} tables - By table name
+ * @param {boolean} [keepAll] - Whether the saved version is this build's major
+ * @returns {{kept: Record<string, object>, earlier: Record<string, object>}}
+ */
+export function splitSaved(live, tables, keepAll = true) {
+  const kept = {};
+  const earlier = {};
+  for (const [name, table] of Object.entries(tables)) {
+    kept[name] = {};
+    earlier[name] = {};
+    for (const [id, value] of Object.entries(table || {}))
+      (keepAll && live.has(id) ? kept : earlier)[name][id] = value;
+  }
+  return { kept, earlier };
+}
+
+/** Two sets of earlier tables, the second written over the first. */
+export const mergeEarlier = (a, b) => {
+  const out = {};
+  for (const name of new Set([
+    ...Object.keys(a || {}),
+    ...Object.keys(b || {}),
+  ]))
+    out[name] = { ...a?.[name], ...b?.[name] };
+  return out;
+};

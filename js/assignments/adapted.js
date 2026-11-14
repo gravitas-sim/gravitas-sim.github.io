@@ -26,6 +26,10 @@
 import { getLocale, t } from '../i18n/index.js';
 import { loadInvestigation } from '../data/investigations/registry.js';
 import { stepFingerprint } from '../investigations/progressBackup.js';
+import {
+  ensureRevisionMessages,
+  revisionLine,
+} from '../investigations/revisionText.js';
 import { stepBindings } from './assignment.js';
 import { assignmentLink } from './assignmentLink.js';
 import { noteFor, readAdaptation, repin, whatChanged } from './adapt.js';
@@ -112,6 +116,12 @@ async function report(assignment, lesson) {
     box.append(
       para(t('adapt.report.removed', { steps: changes.missingSids.join('; ') }))
     );
+  // In words, why a step is gone and what replaced it. The re-pin below puts
+  // the successor in its place.
+  if (changes.revised.length) {
+    await ensureRevisionMessages();
+    for (const r of changes.revised) box.append(para(revisionLine(r, lesson)));
+  }
   if (pin.status === 'major' || pin.status === 'moved')
     box.append(
       para(

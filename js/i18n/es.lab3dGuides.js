@@ -14,6 +14,9 @@ export const ES_LAB3DGUIDES = {
   'g3.path.intro': 'recorrido introductorio',
   'g3.path.advanced': 'recorrido avanzado',
   'g3.progress': 'Pasos',
+  'g3.earlier': 'Respuestas de una versión anterior ({n})',
+  'g3.earlierItem':
+    '"{was}" - tu respuesta: {text}. Respondida en una versión anterior (antes de la {release}); no se corrige.',
   'g3.stepsDone': 'Pasos: {done} de {of} hechos',
   'g3.status.open': 'sin hacer',
   'g3.status.passed': 'hecho',

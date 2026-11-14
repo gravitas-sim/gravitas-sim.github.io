@@ -412,7 +412,11 @@ export function stepBindings(assignment, lesson, fingerprint) {
   const bindings = (assignment.s || []).map((sid, i) => {
     const step = byId.get(sid);
     if (!step) {
-      return { sid, status: BINDING.MISSING, step: null, index: i };
+      // `retired` is the lesson's own record of why the id is gone and what
+      // replaced it (js/investigations/revisions.js): null for an id that was
+      // never recorded, which stays missing without a reason.
+      const retired = lesson?.retired?.[sid] ?? null;
+      return { sid, status: BINDING.MISSING, step: null, index: i, retired };
     }
     const want = assignment.f?.[i];
     const have = shortHash(fingerprint(step));

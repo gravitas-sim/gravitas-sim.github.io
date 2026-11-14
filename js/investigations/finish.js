@@ -16,6 +16,7 @@
 // and the bundler would split them into a shared chunk every lesson route then
 // has to request.
 import { buildLabReport, downloadPdf, reportMessages } from '../labReport.js';
+import { earlierFor } from './stepView.js';
 
 /**
  * What the module needs of the engine.
@@ -75,7 +76,7 @@ export async function makeSubmissionToken(host, name) {
       tokenMod.buildSubmission({
         backup: backupMod.buildBackup({
           lesson: active,
-          responses,
+          responses: { ...earlierFor(active.id)?.responses, ...responses },
           attempts,
           visited,
           stepSid: active.steps[stepIndex]?.sid ?? null,
@@ -229,7 +230,12 @@ async function report(host, format) {
     const createDoc = html
       ? (await import('../htmlReport.js')).createHtmlDocument
       : undefined;
+    const kept = earlierFor(active.id);
+    const earlier = kept
+      ? await (await import('./earlierView.js')).earlierLines(active, kept)
+      : [];
     const bytes = buildLabReport({
+      earlier,
       createDoc,
       helpFor: id => helpTaken(helpStages(responses[`${id}:help`])),
       investigation: active,
@@ -292,7 +298,7 @@ export async function downloadBackup(host) {
   const backup = await import('./progressBackup.js');
   const payload = backup.buildBackup({
     lesson: active,
-    responses,
+    responses: { ...earlierFor(active.id)?.responses, ...responses },
     attempts,
     visited,
     stepSid: active.steps[stepIndex]?.sid ?? null,

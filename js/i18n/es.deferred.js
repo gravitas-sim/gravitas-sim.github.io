@@ -2176,14 +2176,6 @@ export const ES_DEFERRED = {
     'Se apartaron {n} respuestas guardadas de pasos que esta investigación ya no tiene. Se conservan y se listan abajo como respuestas de una versión anterior.',
   'inv.progress.foreign':
     'Tu progreso guardado de esta investigación lo escribió una versión más reciente de Gravitas y no se ha podido leer. Se ha dejado tal cual en lugar de sobrescribirlo.',
-  'rev.earlier': 'respondida en una versión anterior',
-  'rev.earlier.heading': 'Respuestas de una versión anterior ({n})',
-  'rev.earlier.item':
-    '"{was}" - tu respuesta: {text}. Respondida en una versión anterior (antes de la {release}); no se corrige.',
-  'rev.earlier.unknown':
-    'Un paso que esta investigación ya no tiene - tu respuesta: {text}. Respondida en una versión anterior; no se corrige.',
-  'rev.earlier.now': 'El paso es ahora: {title}.',
-  'rev.earlier.gone': 'Ningún paso lo sustituye.',
   'inv.backup.downloaded': 'Copia del progreso descargada.',
   'inv.backup.restored': 'Progreso restaurado.',
   'inv.backup.restoredMoved':

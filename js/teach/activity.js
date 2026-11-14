@@ -23,7 +23,6 @@ import {
 } from '../assignments/assignmentLink.js';
 import {
   ASSIGNMENT_KIND,
-  BINDING,
   assignmentIdFor,
   shortHash,
   stepBindings,
@@ -36,6 +35,7 @@ import {
   validateCoursePack,
 } from '../course/pack.js';
 import { PLATFORM_API } from '../platform/catalog.generated.js';
+import { liveSids, resolveIds } from '../investigations/revisions.js';
 
 /** The largest file or pasted text read: a course pack is well under this. */
 export const MAX_SOURCE = 512 * 1024;
@@ -177,7 +177,7 @@ export function activitiesOf(source, locale = 'en') {
  * @param {?{id: string, version: string}} provider - lessonProvider(lesson.id)
  * @param {Date} [now] - For the new id and date
  * @returns {{present: number, changed: number, missing: number, clean: boolean,
- *   bindings: Array<object>, reissued: ?object}}
+ *   revised: Array<object>, bindings: Array<object>, reissued: ?object}}
  */
 export function reuseCheck(
   activity,
@@ -187,16 +187,20 @@ export function reuseCheck(
   now = new Date()
 ) {
   const r = stepBindings(activity, lesson, fingerprint);
-  const keep = r.bindings.filter(b => b.status !== BINDING.MISSING);
+  // A retired step is replaced by its successor, in its place; a step with no
+  // successor is dropped. `revised` says which, for the instructor in words.
+  const byId = new Map((lesson?.steps || []).map(s => [s.sid, s]));
+  const swapped = resolveIds(lesson, activity.s || [], liveSids(lesson));
+  const keep = swapped.ids.filter(sid => byId.has(sid));
   const reissued = keep.length
     ? {
         ...activity,
         i: assignmentIdFor(
-          { lesson: lesson.id, sids: keep.map(b => b.sid), title: activity.t },
+          { lesson: lesson.id, sids: keep, title: activity.t },
           now
         ),
-        s: keep.map(b => b.sid),
-        f: keep.map(b => shortHash(fingerprint(b.step))),
+        s: keep,
+        f: keep.map(sid => shortHash(fingerprint(byId.get(sid)))),
         c: now.toISOString().slice(0, 10),
         v: provider || (activity.d && activity.d !== 'core') ? 2 : 1,
       }
@@ -210,6 +214,7 @@ export function reuseCheck(
     changed: r.changed,
     missing: r.missing,
     clean: r.changed === 0 && r.missing === 0,
+    revised: swapped.notes,
     bindings: r.bindings,
     reissued,
   };

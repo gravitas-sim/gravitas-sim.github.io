@@ -93,6 +93,9 @@ export const WORDS = {
       '{present} steps unchanged, {changed} rewritten, {missing} removed.',
     'reuse.reissued':
       'A new link has been made with the steps as they are now and a new code, so answers saved under the old one do not attach to rewritten steps.',
+    'reuse.revised': 'Revised since the activity was made: {steps}.',
+    'reuse.replacedBy': '{was} (now: {title})',
+    'reuse.removedIn': '{was} (removed in {release}; no step replaces it)',
     'reuse.course':
       'A course keeps its own record of every pin. Open the course file in the course builder to see what changed and to upgrade it.',
     'reuse.use': 'Use the new link',
@@ -215,6 +218,10 @@ export const WORDS = {
       '{present} pasos sin cambios, {changed} reescritos, {missing} quitados.',
     'reuse.reissued':
       'Se hizo un enlace nuevo con los pasos como están ahora y un código nuevo, para que las respuestas guardadas con el anterior no se asocien a pasos reescritos.',
+    'reuse.revised': 'Revisado desde que se hizo la actividad: {steps}.',
+    'reuse.replacedBy': '{was} (ahora: {title})',
+    'reuse.removedIn':
+      '{was} (quitado en la {release}; ningún paso lo sustituye)',
     'reuse.course':
       'Un curso guarda su propio registro de cada versión fijada. Abra el archivo del curso en el creador de cursos para ver qué cambió y actualizarlo.',
     'reuse.use': 'Usar el enlace nuevo',

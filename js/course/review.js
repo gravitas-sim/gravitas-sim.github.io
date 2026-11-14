@@ -40,6 +40,7 @@
 // =============================================================================
 
 import { shortHash } from '../assignments/assignment.js';
+import { resolveIds, successorOf } from '../investigations/revisions.js';
 import { GUIDES, itemsOf, lessonKeyOf, PATHS } from './pack.js';
 
 export { shortHash };
@@ -124,9 +125,22 @@ export function reviewItem(item, facts, pinning) {
   const lesson = facts.lessons.get(lessonKeyOf(item));
   if (!lesson && facts.unchecked?.has(lessonKeyOf(item)))
     return verdict(STATUS.UNCHECKED);
-  if (!lesson) return verdict(STATUS.MISSING);
+  if (!lesson) {
+    // A lesson that left Gravitas on purpose says where it went
+    // (js/data/retiredInvestigations.js, read by ./api.js courseFacts()).
+    const gone = facts.retired?.get(lessonKeyOf(item));
+    return verdict(STATUS.MISSING, gone ? { retiredLesson: gone } : {});
+  }
   const steps = item.kind === 'assignment' ? stepStates(item, lesson) : [];
+  const live = new Set(lesson.sids);
   const detail = {
+    // Missing steps the lesson recorded as retired, and what replaced each.
+    revisedSteps: steps
+      .filter(s => s.state === 'missing' && lesson.retired?.[s.sid])
+      .map(s => ({
+        sid: s.sid,
+        ...successorOf({ retired: lesson.retired }, s.sid, live),
+      })),
     stepsThen: item.pin?.n ?? null,
     stepsNow: lesson.n,
     missingSteps: steps.filter(s => s.state === 'missing').map(s => s.sid),
@@ -147,6 +161,10 @@ export function reviewItem(item, facts, pinning) {
   }
   return verdict(pin.fp === lesson.fp ? STATUS.SAME : STATUS.CHANGED, detail);
 }
+
+/** Retired steps and where each went, as one line: `old -> new`, `old -> -` when none. */
+export const revisedList = detail =>
+  (detail.revisedSteps || []).map(r => `${r.sid} -> ${r.to ?? '-'}`).join(', ');
 
 /** Whether an instructor has to look before students are sent to it. */
 export function needsReview(status, pinning, detail = {}) {
@@ -201,12 +219,28 @@ export function upgradeCoursePack(pack, facts, accepted, opts) {
     const v = reviewItem(item, facts, out.pinning);
     const lesson = facts.lessons.get(lessonKeyOf(item));
     if (!lesson) {
-      refused.push(item.id);
+      // A lesson item whose investigation was replaced follows it, once the
+      // instructor has accepted the review; anything else is theirs to redo.
+      const to = v.detail.retiredLesson?.to;
+      const next = to && item.kind === 'lesson' && facts.lessons.get(to);
+      if (!next) {
+        refused.push(item.id);
+        continue;
+      }
+      item.lesson = to;
+      item.pin = pinFor(item, next);
+      upgraded.push(item.id);
+      breaking = true;
       continue;
     }
     if (v.status === STATUS.SAME && !v.needsReview) continue;
     if (item.kind === 'assignment') {
-      const kept = item.steps.filter(sid => lesson.hashes.has(sid));
+      // A retired step is replaced by its successor, in its place.
+      const kept = resolveIds(
+        { retired: lesson.retired },
+        item.steps,
+        new Set(lesson.sids)
+      ).ids.filter(sid => lesson.hashes.has(sid));
       if (!kept.length) {
         refused.push(item.id);
         continue;

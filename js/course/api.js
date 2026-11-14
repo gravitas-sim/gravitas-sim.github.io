@@ -74,6 +74,16 @@ export function datasetsOf(catalog) {
   return out;
 }
 
+/** courseApi() with the investigation ids retired on purpose (read on demand). */
+export async function courseApiNow(catalog) {
+  const { RETIRED_INVESTIGATIONS } =
+    await import('../data/retiredInvestigations.js');
+  return {
+    ...courseApi(catalog),
+    retired: Object.keys(RETIRED_INVESTIGATIONS),
+  };
+}
+
 /** The lists ./pack.js checks references against. */
 export function courseApi(catalog) {
   return {
@@ -116,6 +126,8 @@ export function lessonFacts(lesson) {
       title: s.title || '',
       scenario: scenarioId(s.setup?.scenario) ?? s.setup?.scenario ?? null,
     })),
+    // Steps retired from the lesson, with their successors (./review.js).
+    retired: lesson.retired ?? null,
     pkg: lessonProvider(lesson.id),
     locales: es ? ['en', 'es'] : ['en'],
     uses: {
@@ -151,6 +163,25 @@ export async function courseFacts(
     lessons.set(id, known.get(id));
   }
 
+  // A lesson that left Gravitas on purpose says where it went (js/data/
+  // retiredInvestigations.js: read here and only for an id that is missing). A
+  // successor is loaded too, so a reviewed upgrade can follow it.
+  const retired = new Map();
+  const gone = [...ids].filter(id => !have.has(id));
+  if (gone.length) {
+    const { retiredInvestigation } =
+      await import('../data/retiredInvestigations.js');
+    for (const id of gone) {
+      const r = retiredInvestigation(id, have);
+      if (!r) continue;
+      retired.set(id, r);
+      if (r.to && !lessons.has(r.to)) {
+        if (!known.has(r.to)) known.set(r.to, lessonFacts(await load(r.to)));
+        lessons.set(r.to, known.get(r.to));
+      }
+    }
+  }
+
   // An investigation pack travels in its item as a link. Opening one needs
   // the lesson engine's checks (./packItems.js), which the builder's route has
   // no room for: a page that has them hands `openPack` in, and a pack nobody
@@ -178,6 +209,7 @@ export async function courseFacts(
     platform: PLATFORM_API,
     locales: [...LOCALES],
     lessons,
+    retired,
     unchecked,
     scenarios: new Map(Object.keys(SCENARIO_INFO).map(k => [k, {}])),
     scenarioId,

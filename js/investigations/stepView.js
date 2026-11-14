@@ -1413,6 +1413,7 @@ export const sessionProgress = new Map();
 
 /** Per lesson: the answers to steps it no longer has, written back with every save. */
 const earlierKept = new Map();
+export const earlierFor = id => earlierKept.get(id);
 
 /** Where a v1 payload is kept after it has been migrated, in case it was wrong. */
 const legacyKey = id => `${STORAGE_PREFIX}${id}:v1`;

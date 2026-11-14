@@ -20,6 +20,7 @@ import {
   wordCount,
 } from './curriculum.js';
 
+import { earlierOf, wasIn } from '../../investigations/revisions.js';
 import { readJson, writeJson } from '../../storage/local.js';
 import { ID_MISSION_LAB_REPORT } from '../../names.js';
 
@@ -290,7 +291,26 @@ export function createGuidePanel({ els, t, lab }) {
     const guides = GUIDES.map(g => {
       let p = readJson(STORE(g.id, path), {});
       if (g.id === guide.id) p = progress;
+      // Saved answers to steps the guide no longer has stay in the file, as
+      // from an earlier version, with where each went (a progress record keeps
+      // every key it was given, so nothing is dropped on load or save).
+      const earlier = earlierOf(
+        g,
+        new Set(g.steps.map(s => s.id)),
+        Object.entries(p).filter(
+          ([k, v]) => k !== 'at' && v?.constructor === Object
+        )
+      ).map(e => ({
+        step: e.id,
+        input: e.value.input ?? null,
+        passed: !!e.value.passed,
+        shown: !!e.value.shown,
+        release: e.release || null,
+        replacedBy: e.to,
+        was: wasIn(e.was, lab.language()) || null,
+      }));
       return {
+        ...(earlier.length ? { earlier } : {}),
         guide: g.id,
         path,
         steps: stepsOn(g, path)

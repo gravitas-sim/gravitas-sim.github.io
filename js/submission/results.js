@@ -49,6 +49,7 @@ import { checkAnswer } from '../answerCheck.js';
 import { toCsv } from '../csv.js';
 import { gradedSteps } from '../data/investigations/catalog.js';
 import { stepFingerprint } from '../investigations/progressBackup.js';
+import { liveSids, successorOf } from '../investigations/revisions.js';
 const DEPTHS = ['core', 'quantitative', 'advanced'];
 const rank = d => Math.max(0, DEPTHS.indexOf(d));
 const inDepth = (s, d) => rank(s?.depth) <= rank(d);
@@ -89,6 +90,7 @@ export const WARNINGS = Object.freeze([
   'changedSteps',
   'staleAnswers',
   'evidenceMismatch',
+  'earlierVersion',
 ]);
 
 /** One row per accepted submission. */
@@ -423,15 +425,22 @@ export function gradeSubmission(
       workedShown: help.get(step.sid)?.revealed ?? false,
       locale: has ? answer.locale : null,
       changed: changed.has(step.sid),
+      earlier: null,
       response: has ? String(answer.value) : null,
     });
   }
   // Answers the lesson has no step for, after every step it does. Only a value
   // under a removed step's own key is recognizable as one: which of its
   // sub-keys were measure fields, nothing in the lesson now says.
+  const live = liveSids(lesson);
   for (const [sid, answer] of answers) {
     if (gradedIds.has(sid) || steps.some(s => s.sid === sid)) continue;
+    // A step the lesson retired says so (js/investigations/revisions.js): the
+    // answer is from an earlier version of the lesson, which is not the
+    // student's fault, and is never marked against the step that replaced it.
+    const gone = successorOf(lesson, sid, live);
     questions.push({
+      earlier: gone && { to: gone.to, release: gone.release },
       stepNumber: null,
       sid,
       type: null,
@@ -476,6 +485,7 @@ export function gradeSubmission(
       ? backup.lesson.stepCount
       : null,
     changedSteps: changed.size,
+    earlierSteps: questions.filter(q => q.earlier).length,
     submissionSchema: kind === 'backup' ? null : submission.v,
     backupVersion: backup.version ?? null,
     savedAt: backup.savedAt || null,
@@ -577,6 +587,7 @@ export function annotate(records) {
     if (r.attemptGroup !== null) w.push('repeatedAttempt');
     if (r.changedSteps > 0) w.push('changedSteps');
     if (r.stale > 0) w.push('staleAnswers');
+    if (r.earlierSteps > 0) w.push('earlierVersion');
     if (r.evidence?.state === 'mismatch') w.push('evidenceMismatch');
     r.warnings = w;
   }

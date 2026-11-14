@@ -42,6 +42,12 @@ import {
   stepsOn,
 } from '../../observatory/guides/core.js';
 import { EN_LAB3DGUIDES } from '../../i18n/en.lab3dGuides.js';
+import {
+  earlierOf,
+  mergeEarlier,
+  splitSaved,
+  wasIn,
+} from '../../investigations/revisions.js';
 import { put, readJson } from '../../storage/local.js';
 import { KEY_LAB3D_GUIDE_PREFIX } from '../../names.js';
 
@@ -84,6 +90,24 @@ export function reportOf(
     }
     return row;
   });
+  // Answers to steps the guide no longer has, each marked as from an earlier
+  // version with where it went. Present only when there are some, so a report
+  // without any is the bytes it always was.
+  const live = new Set(guide.steps.map(s => s.id));
+  const earlier = earlierOf(
+    guide,
+    live,
+    Object.entries(progress.earlier?.answers ?? {})
+  ).map(e => ({
+    step: e.id,
+    typed: e.value?.typed ?? null,
+    choice: e.value?.choice ?? null,
+    passed: Boolean(e.value?.passed),
+    shown: Boolean(e.value?.shown),
+    release: e.release || null,
+    replacedBy: e.to,
+    was: wasIn(e.was, locale) || null,
+  }));
   return {
     format: REPORT_FORMAT,
     formatVersion: REPORT_VERSION,
@@ -93,6 +117,7 @@ export function reportOf(
     locale,
     name,
     steps,
+    ...(earlier.length ? { earlier } : {}),
   };
 }
 
@@ -162,22 +187,31 @@ export function createGuidePanel(root, lab) {
   const load = () => {
     try {
       const saved = readJson(key());
-      // A minor version only adds guides (curriculum II), so progress made
-      // under the same major version stands.
-      if (
-        saved &&
-        String(saved.curriculum).split('.')[0] ===
-          CURRICULUM_VERSION.split('.')[0]
-      ) {
+      if (saved) {
+        // A major version changes what a step means, so nothing saved under
+        // another major is read as an answer; it is kept, as an earlier version.
+        const same =
+          String(saved.curriculum).split('.')[0] ===
+          CURRICULUM_VERSION.split('.')[0];
+        const { kept, earlier } = splitSaved(
+          new Set(guide.steps.map(s => s.id)),
+          { answers: saved.answers, records: saved.records },
+          same
+        );
         const records = {};
-        for (const [k, r] of Object.entries(saved.records || {}))
+        for (const [k, r] of Object.entries(kept.records))
           records[k] = revive(r);
-        return { answers: saved.answers || {}, records, at: saved.at || 0 };
+        return {
+          answers: kept.answers,
+          records,
+          at: same ? saved.at || 0 : 0,
+          earlier: mergeEarlier(saved.earlier, earlier),
+        };
       }
     } catch {
       /* storage unavailable or damaged: start afresh */
     }
-    return { answers: {}, records: {}, at: 0 };
+    return { answers: {}, records: {}, at: 0, earlier: {} };
   };
   const save = () => {
     try {
@@ -191,6 +225,7 @@ export function createGuidePanel(root, lab) {
           answers: progress.answers,
           records,
           at,
+          earlier: progress.earlier,
         }),
         'progress'
       );
@@ -443,6 +478,33 @@ export function createGuidePanel(root, lab) {
         )
       )
     );
+    const gone = earlierOf(
+      guide,
+      new Set(guide.steps.map(q => q.id)),
+      Object.entries(progress.earlier.answers ?? {})
+    );
+    if (gone.length)
+      root.append(
+        el(
+          'details',
+          {},
+          el('summary', { text: tr('g3.earlier', { n: gone.length }) }),
+          el(
+            'ul',
+            {},
+            gone.map(e => {
+              const a = e.value || {};
+              return el('li', {
+                text: tr('g3.earlierItem', {
+                  was: wasIn(e.was, lab.language()) || e.id,
+                  text: a.typed ?? a.choice ?? '-',
+                  release: e.release || '-',
+                }),
+              });
+            })
+          )
+        )
+      );
     wire(s);
     refresh();
     if (focus) root.querySelector('h2').focus();

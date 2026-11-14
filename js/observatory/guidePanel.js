@@ -27,6 +27,7 @@
 // =============================================================================
 
 import { typedNumber } from '../answerParse.js';
+import { mergeEarlier, splitSaved } from '../investigations/revisions.js';
 import { readJson, writeJson } from '../storage/local.js';
 import { SUITES, suiteOf } from './guides/suites.js';
 import {
@@ -94,6 +95,8 @@ export function mountGuidePanel(root, ctx) {
     at: 0,
     // Per step id: {value, ok, shown} | {choice, ok} | {passed, value}
     record: {},
+    // Saved answers to steps the guide no longer has (./revisions.js).
+    earlier: {},
     // The measurement node or fit document that passed a `do` step.
     evidence: {},
     feedback: null,
@@ -354,6 +357,9 @@ export function mountGuidePanel(root, ctx) {
       path: run.path,
       at: run.at,
       record: run.record,
+      ...(Object.keys(run.earlier).length
+        ? { earlier: { record: run.earlier } }
+        : {}),
     };
     writeJson(STORAGE_KEY, saved, 'progress'); // refused: progress lasts as long as the page
   }
@@ -364,7 +370,15 @@ export function mountGuidePanel(root, ctx) {
     const kept = saved[g.id];
     run.guide = g;
     run.path = PATHS.includes(path) ? path : (kept?.path ?? 'intro');
-    run.record = kept?.v === GUIDE_VERSION ? { ...kept.record } : {};
+    // A record of another major version is not read as answers but is kept, as
+    // an earlier version; so is a record under a step the guide no longer has.
+    const split = splitSaved(
+      new Set(g.steps.map(x => x.id)),
+      { record: kept?.record },
+      String(kept?.v).split('.')[0] === GUIDE_VERSION.split('.')[0]
+    );
+    run.record = split.kept.record;
+    run.earlier = mergeEarlier(kept?.earlier, split.earlier).record ?? {};
     run.evidence = {};
     run.at = Math.min(
       kept?.path === run.path ? kept.at : 0,
@@ -890,6 +904,7 @@ export function mountGuidePanel(root, ctx) {
       at: run.at,
       step: run.guide ? steps()[run.at].id : null,
       record: JSON.parse(JSON.stringify(run.record)),
+      earlier: JSON.parse(JSON.stringify(run.earlier)),
     }),
   };
 }

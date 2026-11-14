@@ -16,6 +16,11 @@
 // =============================================================================
 
 import { assignmentIdFor, assignmentVersion, shortHash } from './assignment.js';
+import {
+  liveSids,
+  resolveIds,
+  successorOf,
+} from '../investigations/revisions.js';
 
 /** The most a student-facing sentence on one step may hold, in characters. */
 export const MAX_NOTE = 600;
@@ -289,11 +294,20 @@ export function whatChanged(assignment, lesson, resolution, pin) {
   const missing = of('missing');
   const changed = of('changed');
   const moved = ['major', 'moved'].includes(pin?.status);
+  // Missing steps the lesson records as retired, with where each went: the
+  // instructor is told in words, and the successor is what a re-pin offers.
+  const revised = resolution.bindings
+    .filter(b => b.status === 'missing' && b.retired)
+    .map(b => ({
+      sid: b.sid,
+      ...successorOf(lesson, b.sid, liveSids(lesson)),
+    }));
   return {
     missing: missing.map(title),
     changed: changed.map(title),
     missingSids: missing,
     changedSids: changed,
+    revised,
     pin,
     any: Boolean(missing.length || changed.length || moved),
   };
@@ -321,7 +335,10 @@ export function repin(
   now = new Date()
 ) {
   const byId = new Map((lesson?.steps || []).map(s => [s.sid, s]));
-  const s = (assignment.s || []).filter(sid => byId.has(sid));
+  // A retired step becomes its successor, in its place; one with none is gone.
+  const s = resolveIds(lesson, assignment.s || [], liveSids(lesson)).ids.filter(
+    sid => byId.has(sid)
+  );
   const f = s.map(sid => shortHash(fingerprint(byId.get(sid))));
   const rest = { ...assignment };
   delete rest.p;

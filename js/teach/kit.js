@@ -302,12 +302,20 @@ async function reuse() {
     const { stepFingerprint } =
       await import('../investigations/progressBackup.js');
     const { lessonProvider } = await import('../assignments/provider.js');
+    const { wasIn } = await import('../investigations/revisions.js');
     const l = await lesson(a.l, 'en');
     const r = D.reuseCheck(a, l, stepFingerprint, lessonProvider(a.l));
     reissued = r.clean ? null : r.reissued;
+    const title = sid => l.steps.find(s => s.sid === sid)?.title || sid;
+    const said = r.revised.map(n => {
+      const was = wasIn(n.was, lang());
+      return n.to
+        ? T('reuse.replacedBy', { was, title: title(n.to) })
+        : T('reuse.removedIn', { was, release: n.release });
+    });
     out.textContent = r.clean
       ? T('reuse.clean', { n: r.present })
-      : `${T('reuse.dirty', r)} ${r.reissued ? T('reuse.reissued') : ''}`;
+      : `${T('reuse.dirty', r)} ${said.length ? T('reuse.revised', { steps: said.join('; ') }) : ''} ${r.reissued ? T('reuse.reissued') : ''}`;
     $('kitReuseUse').hidden = !reissued;
   } catch {
     out.textContent = T('reuse.failed');

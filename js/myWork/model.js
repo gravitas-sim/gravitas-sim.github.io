@@ -79,7 +79,7 @@ const text = v => (typeof v === 'string' ? v : '');
  * @returns {object} lessons, assignments, courses, evidence, experiments,
  *   saved, drafts and the name, each item with the `id` of the key it lives in
  */
-export function describe(records, library = new Map()) {
+export function describe(records, library = new Map(), retired = {}) {
   const out = {
     lessons: [],
     assignments: [],
@@ -139,6 +139,12 @@ export function describe(records, library = new Map()) {
         done: Boolean(e?.steps) && seen >= e.steps,
         ...(text(value?.deepest) ? { depth: text(value.deepest) } : {}),
         since: text(value?.startedAt) || null,
+        // Saved under an investigation retired on purpose: kept readable, and
+        // said to be from an earlier version (js/data/retiredInvestigations.js).
+        earlier:
+          !e && Object.hasOwn(retired, id)
+            ? { to: retired[id].to ?? null, release: retired[id].release }
+            : null,
       });
     } else if (key === KEY_GUIDES && isObj(value)) {
       for (const [id, rec] of Object.entries(value))

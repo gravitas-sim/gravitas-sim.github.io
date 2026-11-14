@@ -27,6 +27,7 @@ import {
   resolveSelection,
 } from '../assignments/assignment.js';
 import { stepFingerprint } from '../investigations/progressBackup.js';
+import { liveSids, resolveIds } from '../investigations/revisions.js';
 import { activityById, formatById } from '../data/activities.js';
 
 /** What went wrong, for a caller that has to show something useful. */
@@ -46,7 +47,8 @@ export const LAUNCH = Object.freeze({
  * @param {string} [title] - The activity's title in the reader's language
  * @param {string} [intro] - The format's own opening, in the same
  * @returns {{ok: boolean, reason?: string, assignment?: object,
- *   added?: Array<object>, unknown?: Array<string>}} The payload, or why not
+ *   added?: Array<object>, unknown?: Array<string>, revised?: Array<object>}}
+ *   The payload, or why not
  */
 export function assignmentForFormat(
   lesson,
@@ -62,12 +64,15 @@ export function assignmentForFormat(
     return { ok: false, reason: LAUNCH.NO_LESSON };
   }
 
-  const resolved = resolveSelection(lesson, format.steps);
+  // A format names step ids; one the lesson has retired is its successor, or
+  // left out (with a note in `revised`), never an unknown id.
+  const { ids, notes } = resolveIds(lesson, format.steps, liveSids(lesson));
+  const resolved = resolveSelection(lesson, ids);
   if (!resolved.sids.length) return { ok: false, reason: LAUNCH.NO_STEPS };
 
   const assignment = buildAssignment({
     lesson,
-    chosen: format.steps,
+    chosen: ids,
     title: title || activity.id,
     intro: intro || '',
     // Fixed, so a student keeps their work across terms. See the header.
@@ -97,6 +102,7 @@ export function assignmentForFormat(
     // them.
     added: resolved.added,
     unknown: resolved.unknown,
+    revised: notes,
   };
 }
 
@@ -112,7 +118,8 @@ export function assignmentForFormat(
  * @returns {{sids: Array<string>, added: Array<object>, unknown: Array<string>}}
  */
 export function resolvedSteps(lesson, format) {
-  return resolveSelection(lesson, format?.steps || []);
+  const { ids } = resolveIds(lesson, format?.steps || [], liveSids(lesson));
+  return resolveSelection(lesson, ids);
 }
 
 /**
