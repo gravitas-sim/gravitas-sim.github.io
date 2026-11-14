@@ -1,0 +1,77 @@
+{
+  "format": "gravitas.scene-record/1",
+  "id": "galilean-resonance-zoomed-midnight-1366",
+  "scenario": "galilean-resonance",
+  "load": {
+    "how": "preset_scenario+initialize_simulation",
+    "seed": "r4-before",
+    "seedNumber": 1036648069
+  },
+  "clock": {
+    "targetSimTime": 10123.874999999998,
+    "tolerance": 1e-9,
+    "fixedFrameSeconds": 0.016666666666666666
+  },
+  "camera": {
+    "zoom": 28,
+    "pan": {
+      "x": 31.324935800612977,
+      "y": 64.3698299366186
+    },
+    "frameOffset": {
+      "x": 0,
+      "y": 0
+    },
+    "followMode": "None",
+    "frame": "world",
+    "worldCentre": {
+      "x": -1.1187477071647491,
+      "y": 2.2989224977363785
+    },
+    "centredOn": {
+      "body": "Ganymede",
+      "at": "the planning capture centred the pan on this body at the simulated time the sidecar names; the record pins that time"
+    }
+  },
+  "theme": "midnight",
+  "viewport": {
+    "width": 1366,
+    "height": 800
+  },
+  "pixelRatio": 1,
+  "qualityTier": "full",
+  "settings": {
+    "follow_mode": "None",
+    "show_trails": true,
+    "trail_length": 400,
+    "trail_style": "Simple",
+    "trail_color_mode": "type",
+    "show_velocity_vectors": false,
+    "show_acceleration_vectors": false,
+    "show_potential_well": false,
+    "show_scale_bar": true,
+    "show_elapsed_time": true,
+    "show_conservation_diagnostics": false,
+    "show_bh_glow": true,
+    "show_accretion_disk": true,
+    "show_bh_jets": false,
+    "show_dynamic_overlays": true,
+    "show_ambient_lighting": true,
+    "show_gravitational_waves": true,
+    "show_object_lensing": true
+  },
+  "physics": {
+    "integrator": "Velocity Verlet",
+    "sim_speed": 750,
+    "max_timestep": 1
+  },
+  "paused": true,
+  "cardOpen": true,
+  "animation": "reduced motion is emulated so the starfield does not twinkle; the capture drives the frames on a fake clock and seeds the run's random draws from the record, so two captures of a record are the same image",
+  "commit": "f9277ff8 (tag v3.0)",
+  "source": {
+    "capture": "c-galilean-zoomed-body-1366-canvas.png",
+    "simTimeReached": 10123.874999999998,
+    "note": "zoom and pan as set after the unzoomed capture; the target is the time that capture reached"
+  }
+}

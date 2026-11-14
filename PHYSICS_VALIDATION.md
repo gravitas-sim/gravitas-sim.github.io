@@ -1006,9 +1006,12 @@ headless Chromium, drives the real render loop with `setFixedStep`, pauses
 before a frame can overshoot, and takes one last `updatePhysics(remaining)` so
 the clock equals the target to 1e-9; it writes the canvas and the viewport as
 images outside the repository, and a sidecar with what the page reported.
-Reduced motion is emulated so the starfield does not twinkle; `--repeat`
-captures twice and measures any pixel that still differs, so the layer is named
-and not hidden. `npm run perf -- --scene <record>` profiles the same state for
+Reduced motion is emulated so the starfield does not twinkle, the frames run on
+Playwright's fake clock so that the page's wall-clock layers (the playback bar,
+the paused redraw) stand still between them, and the run's random draws come
+from a stream seeded by the record; `--repeat` captures twice and measures any
+pixel that still differs, so a layer that is not pinned is named and not hidden
+(six records captured twice came out byte for byte the same). `npm run perf -- --scene <record>` profiles the same state for
 frame time; the advisory profile of the reference scenes is in
 `tools/perf-thresholds.json`.
 
