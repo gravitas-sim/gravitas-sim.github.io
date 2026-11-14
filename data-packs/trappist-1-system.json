@@ -39,7 +39,7 @@
     "archive": "NASA Exoplanet Archive; SIMBAD; NASA NSSDCA; JPL SSD",
     "urls": [
       "https://exoplanetarchive.ipac.caltech.edu/TAP/sync?query=select+pl_name%2Cpl_refname%2Cpl_orbper%2Cpl_orbsmax%2Cpl_rade%2Cpl_bmasse%2Cst_teff%2Cst_rad%2Cst_mass%2Cst_lum+from+ps+where+hostname%3D%27TRAPPIST-1%27+order+by+pl_name%2Cpl_refname&format=csv",
-      "https://simbad.cds.unistra.fr/simbad/sim-tap/sync?request=doQuery&lang=adql&format=csv&query=SELECT+main_id%2C+plx_value%2C+plx_err%2C+plx_bibcode%2C+sp_type%2C+sp_bibcode+FROM+basic+JOIN+ident+ON+oidref%3Doid+WHERE+id+%3D+%27TRAPPIST-1%27"
+      "https://simbad.cfa.harvard.edu/simbad/sim-tap/sync?request=doQuery&lang=adql&format=csv&query=SELECT+main_id%2C+plx_value%2C+plx_err%2C+plx_bibcode%2C+sp_type%2C+sp_bibcode+FROM+basic+JOIN+ident+ON+oidref%3Doid+WHERE+id+%3D+%27TRAPPIST-1%27"
     ],
     "citations": [
       {
@@ -90,7 +90,7 @@
     },
     {
       "file": "simbad-trappist1.csv",
-      "url": "https://simbad.cds.unistra.fr/simbad/sim-tap/sync?request=doQuery&lang=adql&format=csv&query=SELECT+main_id%2C+plx_value%2C+plx_err%2C+plx_bibcode%2C+sp_type%2C+sp_bibcode+FROM+basic+JOIN+ident+ON+oidref%3Doid+WHERE+id+%3D+%27TRAPPIST-1%27",
+      "url": "https://simbad.cfa.harvard.edu/simbad/sim-tap/sync?request=doQuery&lang=adql&format=csv&query=SELECT+main_id%2C+plx_value%2C+plx_err%2C+plx_bibcode%2C+sp_type%2C+sp_bibcode+FROM+basic+JOIN+ident+ON+oidref%3Doid+WHERE+id+%3D+%27TRAPPIST-1%27",
       "bytes": 137,
       "sha256": "d831247c6ea27907d6acaf854e36642bd81de724073497e48ebc5f679a337e86"
     }

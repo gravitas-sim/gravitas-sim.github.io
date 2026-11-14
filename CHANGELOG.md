@@ -78,6 +78,10 @@ the release rather than in the tag.
   are recorded, and the evidence row for the datasets' provenance is current.
   Nothing changes on screen and no data value changes.
 
+- The SIMBAD product the TRAPPIST-1 data pack is rebuilt from is pinned to the
+  CfA (Harvard) mirror of SIMBAD while CDS's Strasbourg servers are degraded
+  (register row D-R4-304-05). The mirror answers with the same 137 bytes, so
+  the pin's digest, the pack's values and what a student sees are unchanged.
 ### Fixed
 
 - Instrument choices that failed when picked (Prompt 302; register rows
