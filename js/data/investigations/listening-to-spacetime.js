@@ -507,7 +507,7 @@ const LISTENING_TO_SPACETIME = {
         hide: ['m1', 'm2', 'distance', 'inclination'],
         presets: false,
       }),
-      tip: 'Be careful how far you push the conclusion. A rising chirp is good evidence that whatever produced it was two compact objects spiralling together — but it is not, on its own, a detection of anything, and it does not say what the objects are. Two black holes, two neutron stars and one of each all chirp; step 15 shows you what does distinguish them, and step 20 shows you what a detection actually takes.',
+      tip: 'Be careful how far you push the conclusion. A rising chirp is good evidence that whatever produced it was two compact objects spiralling together — but it is not, on its own, a detection of anything, and it does not say what the objects are. Two black holes, two neutron stars and one of each all chirp; “Three kinds of pair” shows you what does distinguish them, and “It looks like it. Is that enough?” shows you what a detection actually takes.',
     },
 
     // -----------------------------------------------------------------------
@@ -1307,8 +1307,9 @@ const LISTENING_TO_SPACETIME = {
              under a heading that says they were <em>not measured here</em>.
              \n\nPut the four you ranked in order of chirp mass and compare
              with your ranking.
-             \n\nThen look at the distances. GW190521 is about seven times
-             further away than GW150914, and space expanded while its wave was
+             \n\nThen look at the distances. In these tables GW190521 is about
+             seven times further away than GW150914, though both intervals are
+             wide, and space expanded while its wave was
              on its way here, stretching it. A stretched chirp looks exactly
              like the chirp of a heavier pair. What a detector measures is the
              chirp mass multiplied by one plus the redshift: for GW150914 that
@@ -1478,7 +1479,7 @@ const LISTENING_TO_SPACETIME = {
         capture: true,
         hide: ['m1', 'm2', 'distance', 'inclination'],
         presets: false,
-        note: 'The new signal, for the question opposite. Two objects of 1.4 solar masses each, which is where the ninety seconds and the kilohertz come from.',
+        note: 'The new signal, for the question opposite. Two objects of 1.4 solar masses each, which is where the ninety seconds and the kilohertz come from. The pair drawn on the canvas is still the 36 and 29 solar-mass pair of the earlier steps, not this source.',
       }),
       tip: 'Nothing in a gravitational wave says what the objects were made of. It says how heavy they were, how they moved, and how far away they were - and the reason we believe GW170817 was a pair of neutron stars is that a gamma-ray burst went off in the same place two seconds later and a telescope found the galaxy.',
     },

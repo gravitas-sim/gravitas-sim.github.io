@@ -167,7 +167,9 @@ const WHEN_ORBITS_LOCK = {
              narrower than Jupiter is drawn. So every distance here is a hundred
              times life size, and Newtonian gravity being what it is, that makes
              every duration a thousand times longer. The instrument converts
-             back; the app's own distance and time readouts do not. Nothing
+             back; the app's own distance and time readouts do not, so the
+             object inspector shows each moon's period a thousand times too
+             long. Nothing
              dimensionless — no ratio, no eccentricity, no angle — is affected
              at all.`,
       tip: 'The simulation is paused. Nothing moves until you let it.',
@@ -1104,7 +1106,7 @@ const WHEN_ORBITS_LOCK = {
              the forces on it come out exactly right: it circles the Sun at
              Jupiter's rate and keeps its position relative to Jupiter forever.
              There are two such corners, 60° ahead and 60° behind, called L4 and
-             L5. Something like ten thousand asteroids are known at them.
+             L5. More than fifteen thousand asteroids are known at them.
 
              \n\nGascheau proved in 1843 that these two points are stable only
              when the primary is more than 24.96 times the secondary. The Sun is
@@ -1270,8 +1272,8 @@ const WHEN_ORBITS_LOCK = {
                 it right past both triangular points and back. Still a 1:1
                 resonance, and a completely different shape of one.
 
-                \n\nAnd it is why there are no asteroids at L3 and ten thousand
-                at L4 and L5. Stability is not a detail; it is the whole reason
+                \n\nAnd it is why there are no asteroids at L3 and more than fifteen
+                thousand at L4 and L5. Stability is not a detail; it is the whole reason
                 a population exists.`,
     },
     {

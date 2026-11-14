@@ -939,8 +939,8 @@ const BUTTERFLY_EFFECT = {
              right to.
 
              \n\n<strong>The three-body system diverged exponentially.</strong>
-             The same nudge grew by a factor of e every seven simulated seconds
-             or so — a factor of ten million over the run.
+             The same nudge grew by a factor of e every eight simulated seconds
+             or so — a factor of about two hundred over the forty-second run.
 
              \n\n<strong>That is physics, not arithmetic.</strong> The rate
              survived halving the timestep and changing the integrator.

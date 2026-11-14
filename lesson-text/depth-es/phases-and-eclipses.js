@@ -8,7 +8,7 @@ export default {
         'Medio año de eclipses, el tiempo entre temporadas de eclipses, en días',
       hints: ['Suma las dos tasas, invierte y toma la mitad del resultado.'],
       worked:
-        'E = 346,62 días, así que la mitad es 173,3 días: las temporadas de eclipses llegan cada 173 días, unos 4 días antes cada medio año que el calendario.',
+        'E = 346,62 días, así que la mitad es 173,3 días: las temporadas de eclipses llegan cada 173 días, unos 9 días antes cada medio año que los 182,6 días del calendario.',
       feedback: {
         close: 'Casi. Suma los inversos, invierte y luego toma la mitad.',
         'wrong-order-of-magnitude': 'Es cerca de medio año, en días.',

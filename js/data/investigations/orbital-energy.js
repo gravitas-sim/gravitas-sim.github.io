@@ -205,7 +205,7 @@ const ENERGY = {
         'Raise the speed until the ball goes right round without landing',
         'Note roughly the speed at which that first happens',
       ],
-      tip: 'The cannon is 320 km up, which is roughly where the space station flies and safely above the air. From there, the lowest speed that gets all the way round without touching the ground is about 7.7 km/s. That is why rockets tip over and fly sideways rather than straight up: getting high is the easy part, going fast enough sideways is the hard part.',
+      tip: 'The cannon is 320 km up, which is roughly where the space station flies and safely above the air. From there, the lowest speed that gets all the way round without touching the ground is about 7.6 km/s. That is why rockets tip over and fly sideways rather than straight up: getting high is the easy part, going fast enough sideways is the hard part.',
     },
     {
       sid: 'load-it-heavily',
@@ -333,7 +333,7 @@ const ENERGY = {
       options: ['8 km/s', '12 km/s', '20 km/s', '40 km/s'],
       answer: 1,
       because:
-        'From the cannon it is 10.9 km/s, so 12 is much the closest. From the ground itself it is 11.2 km/s, and that is the number worth carrying around: roughly 25,000 miles per hour, or about forty times the speed of sound. Every spacecraft that has ever left for another planet had to be given at least this much. Notice that the two differ, and that the cannon on its tower needs slightly less. That is a clue you will come back to.',
+        'From the cannon it is 10.9 km/s, so 12 is much the closest. From the ground itself it is 11.2 km/s, and that is the number worth carrying around: roughly 25,000 miles per hour, or about thirty-three times the speed of sound. Every spacecraft that has ever left for another planet had to be given at least this much. Notice that the two differ, and that the cannon on its tower needs slightly less. That is a clue you will come back to.',
       hints: [
         'Escape speed depends on how strong gravity is where you start and how far you must go.',
         'It is fast by everyday standards: compare it with a jet airliner and with a rifle bullet.',

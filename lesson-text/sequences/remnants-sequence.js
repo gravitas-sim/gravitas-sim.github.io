@@ -242,7 +242,7 @@ export const FROM_STAR_TO_REMNANT_ES = {
       ],
       hints: ['Las probabilidades de la lectura suman uno. ¿Cuáles son?'],
       because:
-        'Las mismas, 50 por ciento cada una. El cambio de enana blanca a estrella de neutrones se sitúa en algún punto entre 7 y 9,5 masas solares, y 8,25 está en la mitad de ese intervalo, así que una estrella de esa masa es tan probable a un lado como al otro. La respuesta honrada son las probabilidades, no una clase.',
+        'Las mismas, 50 por ciento cada una. El cambio de enana blanca a estrella de neutrones se sitúa en algún punto entre 7 y 9,5 masas solares, y 8,25 está en la mitad de ese intervalo, así que una estrella de esa masa es tan probable a un lado como al otro. El panel obtiene estas probabilidades tratando como igual de probable cada masa dentro de un intervalo publicado: una simplificación de los artículos, no una probabilidad medida. La respuesta honrada son las probabilidades, no una clase.',
       misconceptions: [
         {
           say: 'Algunas estimaciones publicadas sitúan el cambio cerca de 9 y otras cerca de 8; una estrella de 8,25 está a un lado de una de ellas y al otro lado de la otra.',
@@ -251,7 +251,7 @@ export const FROM_STAR_TO_REMNANT_ES = {
     },
     'read-the-odds': {
       title: 'Lee las probabilidades',
-      body: 'Pon la masa inicial en 25 masas solares, mostrando todavía las probabilidades. Lee la probabilidad de una <strong>estrella de neutrones</strong> y de un <strong>agujero negro</strong>, como porcentajes.',
+      body: 'Pon la masa inicial en 25 masas solares, mostrando todavía las probabilidades. Lee la probabilidad de una <strong>estrella de neutrones</strong> y de un <strong>agujero negro</strong>, como porcentajes. Estas probabilidades salen de la misma simplificación: cada masa dentro de un intervalo publicado se trata como igual de probable.',
       fields: [{ label: 'Estrella de neutrones' }, { label: 'Agujero negro' }],
     },
     'a-limit-for-a-white-dwarf': {

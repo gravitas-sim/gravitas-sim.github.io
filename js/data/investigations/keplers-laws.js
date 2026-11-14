@@ -1071,7 +1071,8 @@ const KEPLER = {
       title: 'Weighing another star',
       kind: 'numeric',
       body: `Here is the payoff. Kepler-10 is a Sun-like star about 600 light
-             years away with a rocky planet, Kepler-10c, discovered by transit.
+             years away with a planet 2.4 times Earth’s radius, Kepler-10c,
+             discovered by transit.
              Its orbit has a semi-major axis of about 0.24 AU and a period of
              about 45 days, which is 0.123 years.
              \n\nUse Newton's form, taking the planet's mass as negligible:

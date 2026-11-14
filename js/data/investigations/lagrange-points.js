@@ -250,7 +250,7 @@ const LAGRANGE_POINTS = {
              with the two stars — Lagrange's discovery, and the surprising one,
              because there is no obvious reason for a balance point to be
              sixty degrees off to the side.`,
-      tip: 'Jupiter has about 12,000 known asteroids sitting near its L4 and L5 with the Sun. They are called the Trojans.',
+      tip: 'Jupiter has more than 15,000 known asteroids sitting near its L4 and L5 with the Sun. They are called the Trojans.',
     },
     {
       sid: 'l4-distance',
@@ -521,7 +521,7 @@ const LAGRANGE_POINTS = {
       title: 'Permitted, reached, and stable',
       body: `You read a Jacobi constant off the scene, opened the neck, watched
              two tracers with the same accessible region take different routes,
-             and nudged tracers at the five points to see which stayed.`,
+             and predicted which of the five points would hold a tracer through a nudge.`,
       prompt:
         'In two or three sentences, distinguish what the Jacobi constant tells you from what it does not, and say which of the five Lagrange points survive a nudge and under what condition.',
       rubric:

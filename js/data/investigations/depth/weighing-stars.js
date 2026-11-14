@@ -134,7 +134,7 @@ export default {
       kind: 'numeric',
       uncertainty: true,
       title: 'Weigh one star, with an error bar',
-      body: `The total is 4.0 ± 0.3 solar masses. The balance point sits so
+      body: `The total is 4.0 ± 0.5 solar masses. The balance point sits so
  that Star A, the heavier, carries 0.75 of the total, known to
  ±0.02. A share of a total is a product, so the fractional
  uncertainties add in quadrature: σ<sub>m</sub>/m =
@@ -146,11 +146,11 @@ export default {
       tolerance: 0.35,
       hints: {
         concept: `Star A's mass is its share of the total.`,
-        method: `m = 0.75 × 4.0. The fractions are 0.3/4.0 and 0.02/0.75;
+        method: `m = 0.75 × 4.0. The fractions are 0.5/4.0 and 0.02/0.75;
  combine them and multiply by m.`,
       },
       because:
-        'Three solar masses, uncertain by about a quarter of one. The split of the mass is known better than the mass itself, because the ratio of the two distances is measured directly, while the total depends on a cubed.',
+        'Three solar masses, uncertain by about four tenths of one. The split of the mass is known better than the mass itself, because the ratio of the two distances is measured directly, while the total depends on a cubed.',
     },
   ],
 };

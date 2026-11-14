@@ -123,7 +123,7 @@ export default {
              con las dos estrellas: el hallazgo de Lagrange, y el sorprendente,
              porque no hay ninguna razón evidente para que haya un punto de
              equilibrio sesenta grados a un lado.`,
-      tip: 'Júpiter tiene unos 12.000 asteroides conocidos en sus L4 y L5 con el Sol. Se llaman los troyanos.',
+      tip: 'Júpiter tiene más de 15.000 asteroides conocidos en sus L4 y L5 con el Sol. Se llaman los troyanos.',
     },
     'l4-distance': {
       title: '¿A qué distancia está L4 de cada estrella?',
@@ -330,8 +330,8 @@ export default {
       title: 'Permitido, alcanzado y estable',
       body: `Leiste una constante de Jacobi en la escena, abriste el cuello,
              viste dos trazadores con la misma regi\u00f3n accesible tomar rutas
-             distintas y empujaste trazadores en los cinco puntos para ver
-             cu\u00e1les se quedaban.`,
+             distintas y predijiste cuáles de los cinco puntos conservarían un trazador
+             tras un empujón.`,
       prompt:
         'En dos o tres frases, distingue lo que te dice la constante de Jacobi de lo que no, y di cu\u00e1les de los cinco puntos de Lagrange sobreviven a un empuj\u00f3n y bajo qu\u00e9 condici\u00f3n.',
       rubric:

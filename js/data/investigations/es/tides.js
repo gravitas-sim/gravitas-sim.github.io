@@ -346,7 +346,7 @@ export default {
         'Para un cuerpo de la densidad de la Luna, el estiramiento iguala al agarre a una distancia de aproximadamente…',
       unit: 'radios terrestres',
       because:
-        'Alrededor de 1,5 radios terrestres desde el centro de la Tierra, o unos 9500 km, que son solo unos 3100 km sobre el suelo. Esa distancia tiene nombre: es el <strong>límite de Roche</strong>, por Édouard Roche, que lo dedujo en 1848. No es casualidad que haya salido de una comparación que montaste tú: el límite de Roche se define exactamente por ese equilibrio, y la fórmula de los libros de texto no es más que el álgebra de igualar esas dos barras.',
+        'Alrededor de 1,5 radios terrestres desde el centro de la Tierra, o unos 9500 km, que son solo unos 3100 km sobre el suelo. Esa distancia tiene nombre: es el <strong>límite de Roche</strong>, por Édouard Roche, que lo dedujo en 1848. No es casualidad que haya salido de una comparación que montaste tú: el límite de Roche de un cuerpo rígido se define exactamente por ese equilibrio, y su fórmula de los libros de texto no es más que el álgebra de igualar esas dos barras. Un cuerpo que puede deformarse se rompe más lejos, y el paso siguiente muestra los dos límites.',
       tool: {
         title: 'Lee la distancia de cruce',
         note: 'La densidad se mantiene en la propia de la Luna para esta pregunta. Desliza la distancia hasta que las dos barras coincidan, o simplemente lee la línea que dice dónde son iguales.',

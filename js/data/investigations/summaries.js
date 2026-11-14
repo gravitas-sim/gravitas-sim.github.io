@@ -47,7 +47,7 @@ export const SUMMARIES = {
   'lagrange-points':
     'Two stars on a circular orbit and a speck of dust that feels them both. There is one number you can compute about the speck that tells you where it is forbidden to be — and as you make it go faster, walls open one at a time in a fixed order. Find the five places where the speck could sit still, work out which of them it can reach, and then find out why "can reach" is three different questions wearing the same coat.',
   'what-is-a-gravitational-wave':
-    'Two objects circle each other on screen and emit no light at all. Over twenty-four short screens you work out what leaves them, what it does to anything it passes, and how an instrument could notice - and you learn to tell the three kinds of picture apart: the drawing, the calculation and the measurement. No equations, no prior physics, and it can be done with the sound off.',
+    'Two objects circle each other on screen and emit no light at all. Step by step you work out what leaves them, what it does to anything it passes, and how an instrument could notice - and you learn to tell the three kinds of picture apart: the drawing, the calculation and the measurement. No equations, no prior physics, and it can be done with the sound off.',
   'listening-to-spacetime':
     'A pattern arrives with no label on it: a wiggle that gets faster and louder and then stops. You work out what could produce it, measure the two relationships that give it away, find out which questions the model can answer and which it cannot, compare your answer with what two detectors recorded in September 2015, and then measure five more mergers from the open archive yourself. You can do all of it with the sound off.',
   'a-universe-of-stars':
@@ -63,7 +63,7 @@ export const SUMMARIES = {
   'the-turning-sky':
     'Follow one star through a night and then through a month, from a model of the sky computed by the Sky Lab kernel. You will measure how much earlier it rises each night and explain the four minutes, read a sidereal clock, find how high a star climbs from its declination and your latitude, and see which stars never set.',
   'the-sun-through-the-year':
-    "Measure the Sun's height at noon and the length of the day at the equinoxes and solstices and at three latitudes, then change the tilt of the axis and see the seasons go. The distance to the Sun turns out to be the wrong suspect. Deeper levels compute the sunlight on a square meter and compare the pole with the equator.",
+    "Measure the Sun's height at noon and the length of the day at the equinoxes and solstices and at three latitudes, then change the tilt of the axis and see the seasons go. The distance to the Sun turns out to be the wrong suspect. Deeper levels compute the sunlight on a square meter and compare a high latitude with the equator.",
   'phases-and-eclipses':
     "Measure how much of the Moon is lit as it moves away from the Sun, and turn the angle into a fraction with one formula. Then list the new and full Moons of a half year against the Moon's tilted orbit and find the few that can make an eclipse, and why they come in seasons. Deeper levels derive the eclipse year and the saros.",
   'wanderers-on-the-sky':

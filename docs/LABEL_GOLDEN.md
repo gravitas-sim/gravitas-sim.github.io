@@ -81,12 +81,15 @@ Identity says the label did not change; it does not say the label was right.
 - a value written finer than the uncertainty stated beside it ("x ± u", "x,
   give or take u").
 
-Six answers are found, all of the first kind, and are proposed corrections for
-Carl, not changes: `binary-star-planets` `circumbinary-boundary` (3.605 within
-0.12), `color-and-temperature` `peak-of-4000` (724.4 nm within 15),
-`gravity-assist` `the-ceiling` (8.686 km/s within 0.2), `hohmann-transfer`
-`first-burn-size` (5.815 km/s within 0.15), `second-burn-size` (4.598 km/s
-within 0.15) and `transfer-time` (422.7 days within 12).
+Six answers are found, all of the first kind: `binary-star-planets`
+`circumbinary-boundary` (3.605 within 0.12), `color-and-temperature`
+`peak-of-4000` (724.4 nm within 15), `gravity-assist` `the-ceiling` (8.686 km/s
+within 0.2), `hohmann-transfer` `first-burn-size` (5.815 km/s within 0.15),
+`second-burn-size` (4.598 km/s within 0.15) and `transfer-time` (422.7 days
+within 12). They are not wrong answers, and the golden still lists the six by
+design: the displayed precision was reworded, so no student-visible text prints
+any of them finer than its tolerance resolves, in either language, and the data
+literals (`answer`, `tolerance` and the key line) were kept as they were.
 
 ## What it found about the family
 

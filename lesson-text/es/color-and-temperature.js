@@ -49,7 +49,7 @@ export default {
         'Divide la constante entre la temperatura.',
         'Las unidades salen en nm porque la constante está en nm·K.',
       ],
-      worked: '2.897.772 nm·K ÷ 4.000 K = 724,4 nm.',
+      worked: '2.897.772 nm·K ÷ 4.000 K = 724 nm.',
       feedback: {
         close:
           'Casi. Divide la constante entre la temperatura, sin ningún otro factor.',

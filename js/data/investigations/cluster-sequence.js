@@ -375,7 +375,7 @@ export const TWO_CLUSTERS_TWO_AGES_DEEPER = {
         {
           id: 'fits-metal',
           option: 2,
-          say: 'The metallicity is never fitted here; fitting it as well was tested (CLUSTER_FOUR_PARAMETER_GATE.md) and its intervals did not cover the truth, so it is not offered.',
+          say: 'The metallicity is never fitted here; fitting it as well was tested separately and its intervals did not cover the truth, so it is not offered.',
         },
       ],
       hints: ['Look at which cluster is older at each of the three settings.'],
@@ -620,7 +620,7 @@ export const TWO_CLUSTERS_TWO_AGES_DEEPER_ES = {
           say: 'Cada cúmulo tiene una edad. Lo que cambia es lo que un ajuste puede decir de ella cuando un número que no se le dio es falso.',
         },
         {
-          say: 'Aquí la metalicidad nunca se ajusta; se probó ajustarla también (CLUSTER_FOUR_PARAMETER_GATE.md) y sus intervalos no cubrieron la verdad, así que no se ofrece.',
+          say: 'Aquí la metalicidad nunca se ajusta; se probó ajustarla también por separado y sus intervalos no cubrieron la verdad, así que no se ofrece.',
         },
       ],
       hints: ['Mira cuál cúmulo es más viejo en cada uno de los tres valores.'],

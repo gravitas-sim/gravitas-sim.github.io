@@ -96,8 +96,9 @@ const RETROGRADE = {
              <strong>Mars</strong> in orange on the outer one.
              \n\nThe distances are real: Earth at 1.00 AU, Mars at 1.52. The
              masses are real, so the periods are real too, and the whole system
-             is running about four hundred thousand times faster than the sky
-             does. A year of Earth's takes a few seconds here.
+             is running about three million times faster than the sky does, at
+             60 frames a second. A year of Earth's takes about ten seconds
+             here.
              \n\nWatch for a moment. Both planets go round the Sun the same way,
              counterclockwise, and neither ever slows, stops or turns back. Whatever
              makes Mars appear to reverse, it is not something Mars does.`,
@@ -566,9 +567,9 @@ const RETROGRADE = {
       type: 'question',
       title: 'Bright and backwards together',
       kind: 'choice',
-      body: `Your two distances differ by a factor of three or so. Brightness
-             falls off as the square of distance, so a factor of three in
-             distance is a factor of about nine in brightness.
+      body: `Your two distances differ by a factor of nearly five. Brightness
+             falls off as the square of distance, so a factor of five in
+             distance is a factor of more than twenty in brightness.
              \n\nNow recall when the direction ran backwards.`,
       prompt: 'In this simulation, Mars is closest to Earth…',
       options: [

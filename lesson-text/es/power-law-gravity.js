@@ -56,13 +56,15 @@ export default {
 
              \n\nSupón que escribieras simplemente la ley como
              <strong>a = GM / r<sup>n</sup></strong> y pasaras n de 2 a 2,01.
-             Descubrirías que la gravedad se debilita en todas partes —alrededor
-             de un cinco por ciento a una unidad astronómica— y las órbitas
+             Descubrirías que la gravedad cambia en todas partes y las órbitas
              cambiarían por ese motivo tanto como por cualquier otro. Peor aún:
-             <em>cuánto</em> se debilita dependería de si has decidido medir las
-             distancias en kilómetros, en unidades astronómicas o en píxeles, lo
-             cual es absurdo, porque al universo le da igual qué unidades
-             escribas.
+             <em>cuánto</em> cambia dependería de si has decidido medir las
+             distancias en kilómetros, en unidades astronómicas o en las
+             unidades propias de la simulación, 100 por unidad astronómica. A una
+             unidad astronómica la atracción sería un 17 por ciento más débil en
+             kilómetros, un 4,5 por ciento más débil en unidades de la simulación
+             y no cambiaría en absoluto en unidades astronómicas. Eso es absurdo:
+             al universo le da igual qué unidades escribas.
 
              \n\nAsí que la ley que se usa aquí está anclada. Está escrita de
              modo que a una distancia elegida —el <strong>radio de referencia

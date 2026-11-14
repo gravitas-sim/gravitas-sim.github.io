@@ -160,7 +160,7 @@ const LIVES_OF_STARS = {
       ],
       answer: 2,
       because:
-        'The heaviest one, by an enormous margin: its main sequence lasts 8.7 million years against the Sun&rsquo;s 9.9 billion and the red dwarf&rsquo;s 1.1 trillion. "Losing energy fastest" is the right reason - it is a hundred thousand times more luminous than the Sun, and light is fuel leaving. The answers about the other two are the two commonest wrong pictures and both get corrected later: the red dwarf does not burn out quickly, it barely changes at all, and the Sun does not explode.',
+        'The heaviest one, by an enormous margin: its main sequence lasts 8.7 million years against the Sun&rsquo;s 9.9 billion and the red dwarf&rsquo;s 1.1 trillion. "Losing energy fastest" is the right reason - it is about forty thousand times more luminous than the Sun, and light is fuel leaving. The answers about the other two are the two commonest wrong pictures and both get corrected later: the red dwarf does not burn out quickly, it barely changes at all, and the Sun does not explode.',
       tool: stage({
         pace: 'phase',
         pinStaged: true,
@@ -1171,7 +1171,7 @@ const LIVES_OF_STARS = {
       because:
         'Three conditions, and the last one is luck. A pulsar is a neutron star whose beam happens to point our way once per rotation; if the geometry is wrong we never see the pulses, however close it is. Many neutron stars are not observed as pulsars at all, and older ones slow down and stop producing detectable pulses regardless of geometry. Nothing in this lab models any of it - the endpoint here is a mass and a kind, and calling it a pulsar would be adding a claim the model does not make.',
       tool: evol({ track: 'm1000', phase: 'end' }),
-      tip: 'Twenty kilometers for 1.4 solar masses is about a hundred million tonnes in a teaspoon. It has no photosphere in the ordinary sense, which is why it has no place on the diagram.',
+      tip: 'Twenty kilometers for 1.4 solar masses is a few billion tonnes in a teaspoon. It has no photosphere in the ordinary sense, which is why it has no place on the diagram.',
     },
     {
       sid: 'the-black-hole',
@@ -1333,8 +1333,8 @@ const LIVES_OF_STARS = {
       body: `<strong>Mass sets the luminosity, and the luminosity sets the
              lifetime.</strong> Lifetime is fuel divided by the rate of spending
              it, and because the rate climbs so much faster than the supply, the
-             heaviest star you followed lived for a ten-thousandth as long as the
-             lightest. A red dwarf has barely started.
+             heaviest star you followed lived for about a hundred-thousandth as long
+             as the lightest. A red dwarf has barely started.
              \n\n<strong>Leaving the main sequence is core hydrogen running
              out, not hydrogen running out.</strong> Most of the star's hydrogen
              is still there when it goes; it is simply not where the fusion is.
