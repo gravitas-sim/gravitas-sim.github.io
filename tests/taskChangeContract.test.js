@@ -336,3 +336,35 @@ describe('the other readers', () => {
     expect(migrate({ v: SCHEMA_VERSION + 1 }).ok).toBe(false);
   });
 });
+
+describe('the author rule id/retired', () => {
+  test('accepts the fixture lessons and names each fault', async () => {
+    const { retiredFindings } =
+      await import('../tools/authoring/retiredRules.mjs');
+    expect(retiredFindings(lesson())).toEqual([]);
+    expect(retiredFindings(editedLesson('revise'))).toEqual([]);
+    expect(retiredFindings(editedLesson('remove'))).toEqual([]);
+    const bad = editedLesson('revise');
+    bad.retired.ask = { to: 'nowhere', release: 'soon', was: { en: 'x' } };
+    bad.retired.guess.to = 'gone';
+    const found = retiredFindings(bad).join('\n');
+    expect(found).toMatch(/"ask": the lesson has a step with this id/);
+    expect(found).toMatch(/"ask": `to` must be a step/);
+    expect(found).toMatch(/"ask": `release`/);
+    expect(found).toMatch(/"ask": `was.es`/);
+    expect(found).toMatch(/"guess": `to` must be a step/);
+  });
+
+  test('is wired into the catalog check, which reports a bad map on a real lesson', async () => {
+    const { checkCatalog } = await import('../js/authoring/rules.js');
+    const base = await import('../tools/authoring/inputs.mjs');
+    const inputs = await base.loadAuthoringInputs();
+    const one = inputs.investigations.find(l => l.steps?.length);
+    const copy = { ...one, retired: { [one.steps[0].sid]: { to: null } } };
+    const found = checkCatalog({
+      ...inputs,
+      investigations: [copy],
+    }).filter(f => f.rule === 'id/retired');
+    expect(found.length).toBeGreaterThan(0);
+  });
+});
