@@ -16,21 +16,11 @@
    ],
    "numbered": [
     ["steps.flux-at-one-au.fields.0.label","The flux at the Earth on 4 May (W/m²)"],
-    ["steps.flux-at-one-au.fields.0.hint","1338.90"],
     ["steps.flux-at-one-au.fields.1.label","The flux at 1 AU (W/m²)"],
-    ["steps.flux-at-one-au.fields.1.hint","1361.60"],
     ["steps.luminosity.fields.0.label","The Sun’s luminosity (× 10²⁶ W)"],
-    ["steps.luminosity.fields.0.hint","3.828"],
-    ["steps.luminosity.fields.1.hint","5772"],
-    ["steps.the-fall-and-its-cause.fields.0.hint","4.04"],
     ["steps.the-fall-and-its-cause.fields.1.label","The fall at 1 AU (W/m²)"],
-    ["steps.the-fall-and-its-cause.fields.1.hint","0.86"],
-    ["steps.how-sure-is-the-mean.fields.0.hint","0.15"],
     ["steps.how-sure-is-the-mean.fields.1.label","The uncertainty of the luminosity (× 10²² W)"],
-    ["steps.how-sure-is-the-mean.fields.1.hint","4.2"],
-    ["steps.compare-with-the-nominal.fields.0.hint","0.00"],
-    ["steps.compare-with-the-nominal.fields.1.label","The temperature against 5772 K"],
-    ["steps.compare-with-the-nominal.fields.1.hint","0.0"]
+    ["steps.compare-with-the-nominal.fields.1.label","The temperature against 5772 K"]
    ]
   },
   "es": {

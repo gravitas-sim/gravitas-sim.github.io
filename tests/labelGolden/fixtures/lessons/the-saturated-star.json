@@ -24,28 +24,14 @@
     ["steps.aperture-scatter.fields.2.unit",""]
    ],
    "numbered": [
-    ["steps.clipped-star.fields.0.hint","30"],
-    ["steps.magnitude-error.fields.0.hint","30"],
-    ["steps.linear-limit.fields.0.hint","45330"],
-    ["steps.linear-limit.fields.1.hint","47616"],
-    ["steps.brightest-measured.fields.0.hint","12.5"],
-    ["steps.safe-flux.fields.0.hint","11"],
     ["steps.safe-flux.fields.2.label","Its magnitude at 60 s"],
     ["steps.trail.fields.0.label","Faint stars refused (of N1, N2, C)"],
-    ["steps.trail.fields.0.hint","2"],
-    ["steps.trail.fields.1.hint","85"],
     ["steps.phase-dependence.fields.0.label","Smallest share at 1.2 px"],
-    ["steps.phase-dependence.fields.0.hint","24"],
     ["steps.phase-dependence.fields.1.label","Largest share at 1.2 px"],
-    ["steps.phase-dependence.fields.1.hint","45"],
     ["steps.phase-dependence.fields.2.label","Smallest share at 2.8 px"],
-    ["steps.phase-dependence.fields.2.hint","9"],
     ["steps.phase-dependence.fields.3.label","Largest share at 2.8 px"],
-    ["steps.phase-dependence.fields.3.hint","11"],
     ["steps.aperture-scatter.fields.0.label","Variation at 1.2 px"],
-    ["steps.aperture-scatter.fields.0.hint","0.27"],
     ["steps.aperture-scatter.fields.1.label","Variation at 2.8 px"],
-    ["steps.aperture-scatter.fields.1.hint","0.035"],
     ["steps.aperture-scatter.fields.2.label","Ratio (1.2 over 2.8)"]
    ]
   },

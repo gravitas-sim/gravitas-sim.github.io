@@ -495,7 +495,7 @@ export function checkCatalog(inputs, { skip = [] } = {}) {
 
       // --- Placeholders and staged help --------------------------------------
       // A cue in an empty box is visible before the student has thought about
-      // the question; it may name a form and never a value (js/authoring/cueRules.js,
+      // the question; it may name a form and never a value (tools/authoring/cueRules.mjs,
       // handed in through the inputs: the Composer route carries no such rule).
       for (const c of cueFindings?.(
         step,

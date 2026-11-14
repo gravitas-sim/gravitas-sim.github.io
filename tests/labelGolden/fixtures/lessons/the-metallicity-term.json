@@ -9,10 +9,7 @@
     ["steps.the-distance-for-m101.unit","%"],
     ["steps.two-published-coefficients.unit","mag"]
    ],
-   "numbered": [
-    ["steps.the-distance-twice.fields.0.hint","29.40"],
-    ["steps.the-distance-twice.fields.1.hint","29.44"]
-   ]
+   "numbered": []
   },
   "es": {
    "units": [],

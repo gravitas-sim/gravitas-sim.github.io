@@ -15,13 +15,7 @@
    ],
    "numbered": [
     ["steps.measure-the-shells.fields.0.label","Shell 0–250 pc"],
-    ["steps.measure-the-shells.fields.0.hint","0.5"],
-    ["steps.measure-the-shells.fields.1.label","Shell 750–1,000 pc"],
-    ["steps.measure-the-shells.fields.1.hint","3.6"],
-    ["steps.standard-candles.fields.0.hint","-0.65"],
-    ["steps.standard-candles.fields.1.hint","-0.68"],
-    ["steps.a-second-bias.fields.0.hint","18"],
-    ["steps.a-second-bias.fields.1.hint","0.25"]
+    ["steps.measure-the-shells.fields.1.label","Shell 750–1,000 pc"]
    ]
   },
   "es": {

@@ -14,16 +14,7 @@
     ["steps.an-isothermal-galaxy.fields.1.unit",""],
     ["steps.the-speed-spread.unit","km/s"]
    ],
-   "numbered": [
-    ["steps.a-star-ring.fields.0.hint","1.0"],
-    ["steps.a-galaxy-ring.fields.0.hint","0.64"],
-    ["steps.a-galaxy-ring.fields.1.hint","3.1"],
-    ["steps.weigh-the-lens.fields.0.hint","2.5"],
-    ["steps.move-the-source.fields.0.hint","1.28"],
-    ["steps.move-the-source.fields.1.hint","2.18"],
-    ["steps.an-isothermal-galaxy.fields.0.hint","1.5"],
-    ["steps.an-isothermal-galaxy.fields.1.hint","4"]
-   ]
+   "numbered": []
   },
   "es": {
    "units": [],

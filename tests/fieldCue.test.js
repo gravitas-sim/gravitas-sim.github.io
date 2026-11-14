@@ -5,7 +5,7 @@ import { loadInvestigation } from '../js/data/investigations/registry.js';
 import { DEPTH_LESSONS, loadDepthSteps } from '../js/investigations/depth.js';
 import { layDepth } from '../js/investigations/depthPure.js';
 import { cueText, stepMarkup } from '../js/investigations/stepView.js';
-import { cueFindings } from '../js/authoring/cueRules.js';
+import { cueFindings } from '../tools/authoring/cueRules.mjs';
 import { checkCatalog } from '../js/authoring/rules.js';
 import { loadAuthoringInputs } from '../tools/authoring/inputs.mjs';
 

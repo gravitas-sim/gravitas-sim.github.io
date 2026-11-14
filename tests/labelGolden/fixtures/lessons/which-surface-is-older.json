@@ -3,22 +3,7 @@
  "static": {
   "en": {
    "units": [],
-   "numbered": [
-    ["steps.count-the-moon.fields.0.hint","40"],
-    ["steps.count-the-moon.fields.1.hint","7"],
-    ["steps.per-area.fields.0.hint","131.2"],
-    ["steps.per-area.fields.1.hint","20.5"],
-    ["steps.ratio-moon.fields.0.hint","6.39"],
-    ["steps.ratio-moon.fields.1.hint","2.83"],
-    ["steps.harder-craters.fields.0.hint","2"],
-    ["steps.harder-craters.fields.1.hint","84.8"],
-    ["steps.mars-pair.fields.0.hint","6.50"],
-    ["steps.mars-pair.fields.1.hint","3.68"],
-    ["steps.the-flip.fields.0.hint","3.00"],
-    ["steps.the-flip.fields.1.hint","0.91"],
-    ["steps.no-craters-at-all.fields.0.hint","5"],
-    ["steps.no-craters-at-all.fields.1.hint","1.02"]
-   ]
+   "numbered": []
   },
   "es": {
    "units": [],

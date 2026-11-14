@@ -220,7 +220,7 @@ describe('what the recording can tell apart', () => {
     for (const site of [
       'js/investigations/stepView.js:643:11',
       'js/investigations/stepView.js:801:35',
-      'js/investigations/stepView.js:1194:13',
+      'js/investigations/stepView.js:1193:13',
       'js/observatory/guides/core.js:320:27',
     ])
       expect(at(site).hyphen).toBe(true);

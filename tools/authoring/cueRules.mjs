@@ -8,9 +8,10 @@
 // numeral); this rule is what makes the author fix the source, and it reads the
 // numbers inside the text ("e.g. 8.0 ± 0.1"), not only a bare number.
 //
-// It is handed to checkCatalog through the inputs (tools/authoring/inputs.mjs),
-// not imported by js/authoring/rules.js: that module ships on the Composer
-// route, which has no cue to check (a pack field has no `hint`) and no room.
+// Node-side, like the rest of tools/authoring: tools/authoring/inputs.mjs hands
+// it to checkCatalog, and js/authoring/rules.js, which ships on the Composer
+// route, does not import it. A pack field has no `hint` and nothing precaches
+// this file.
 //
 //   error  a number in the cue is the step's answer, within its tolerance, or a
 //          value its validate accepts for that field
@@ -19,15 +20,16 @@
 // The author's own expected value lives under `want`, which no renderer reads.
 // =============================================================================
 
-import { toleranceFor } from '../answerCheck.js';
+import { toleranceFor } from '../../js/answerCheck.js';
+import { parseNumber } from '../../js/answerParse.js';
 
 /** A digit of any script or a numeric symbol: what the lesson panel refuses to render in a cue. */
 const hasNumeral = text => /[\p{Nd}\p{No}\p{Nl}]/u.test(String(text));
 
 /** The numbers written in a cue, as either decimal convention writes them. */
 const numbersIn = text =>
-  [...String(text).matchAll(/\d+(?:[.,]\d+)?/g)].map(m =>
-    Number(m[0].replace(',', '.'))
+  [...String(text).matchAll(/\d+(?:[.,]\d+)?/g)].map(
+    m => parseNumber(m[0], m[0].includes(',') ? 'es' : 'en').value
   );
 
 /**

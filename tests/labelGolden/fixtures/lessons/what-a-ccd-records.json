@@ -20,17 +20,7 @@
     ["steps.the-bars-that-do-not-see.unit",""]
    ],
    "numbered": [
-    ["steps.the-bias.fields.0.hint","500.4"],
-    ["steps.the-bias.fields.1.hint","8.05"],
-    ["steps.the-dark.fields.0.hint","0.100"],
-    ["steps.the-dark.fields.1.label","Electrons in 120 seconds (one pixel)"],
-    ["steps.the-dark.fields.1.hint","12"],
-    ["steps.the-flat.fields.0.hint","76.2"],
-    ["steps.the-flat.fields.1.hint","1.52"],
-    ["steps.what-the-flat-does.fields.0.hint","47300"],
-    ["steps.what-the-flat-does.fields.1.hint","54080"],
-    ["steps.cosmic-rays.fields.0.hint","4"],
-    ["steps.cosmic-rays.fields.1.hint","13"]
+    ["steps.the-dark.fields.1.label","Electrons in 120 seconds (one pixel)"]
    ]
   },
   "es": {

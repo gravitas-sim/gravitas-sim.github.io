@@ -20,23 +20,8 @@
     ["steps.the-cluster-and-the-zero-point.fields.1.unit","kpc"]
    ],
    "numbered": [
-    ["steps.read-the-distance.fields.0.hint","2.5"],
-    ["steps.read-the-distance.fields.1.hint","2.22"],
-    ["steps.read-the-distance.fields.2.hint","2.86"],
-    ["steps.the-relative-error.fields.0.hint","12.5"],
     ["steps.an-interval-with-no-far-end.fields.0.label","Lower end at 0.10 mas"],
-    ["steps.an-interval-with-no-far-end.fields.0.hint","5.0"],
-    ["steps.an-interval-with-no-far-end.fields.1.label","Upper end at 0.15 mas"],
-    ["steps.an-interval-with-no-far-end.fields.1.hint","20"],
-    ["steps.from-parallax-to-speed.fields.0.hint","59.3"],
-    ["steps.from-parallax-to-speed.fields.1.hint","52.7"],
-    ["steps.from-parallax-to-speed.fields.2.hint","67.7"],
-    ["steps.add-a-prior.fields.0.hint","5.11"],
-    ["steps.add-a-prior.fields.1.hint","3.85"],
-    ["steps.add-a-prior.fields.2.hint","6.93"],
-    ["steps.the-zero-point.fields.0.hint","2.27"],
-    ["steps.the-cluster-and-the-zero-point.fields.0.hint","2.324"],
-    ["steps.the-cluster-and-the-zero-point.fields.1.hint","2.555"]
+    ["steps.an-interval-with-no-far-end.fields.1.label","Upper end at 0.15 mas"]
    ]
   },
   "es": {

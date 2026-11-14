@@ -16,28 +16,10 @@
    ],
    "numbered": [
     ["steps.the-aliases.fields.0.label","The alias near 4 days"],
-    ["steps.the-aliases.fields.0.hint","4.04"],
-    ["steps.the-aliases.fields.1.hint","0"],
-    ["steps.break-the-tie.fields.0.hint","67"],
-    ["steps.break-the-tie.fields.1.hint","490"],
-    ["steps.design-a-cadence.fields.0.hint","77"],
-    ["steps.design-a-cadence.fields.1.hint","116"],
-    ["steps.how-many-resolve.fields.0.hint","3"],
-    ["steps.verify-on-a-series.fields.0.hint","0.8004"],
-    ["steps.verify-on-a-series.fields.1.hint","0.0002"],
-    ["steps.window-width.fields.0.hint","38.9"],
     ["steps.phase-coverage.fields.0.label","Bins filled at 0.8 d"],
-    ["steps.phase-coverage.fields.0.hint","13"],
     ["steps.phase-coverage.fields.1.label","Largest empty arc at 0.8 d, in cycles"],
-    ["steps.phase-coverage.fields.1.hint","0.137"],
     ["steps.phase-coverage.fields.2.label","Bins filled at 1.0 d"],
-    ["steps.phase-coverage.fields.2.hint","4"],
-    ["steps.phase-coverage.fields.3.label","Largest empty arc at 1.0 d, in cycles"],
-    ["steps.phase-coverage.fields.3.hint","0.894"],
-    ["steps.what-a-plan-costs.fields.0.hint","4.2"],
-    ["steps.what-a-plan-costs.fields.1.hint","2.4"],
-    ["steps.the-plan-and-the-verdict.fields.0.hint","30"],
-    ["steps.the-plan-and-the-verdict.fields.1.hint","0"]
+    ["steps.phase-coverage.fields.3.label","Largest empty arc at 1.0 d, in cycles"]
    ]
   },
   "es": {

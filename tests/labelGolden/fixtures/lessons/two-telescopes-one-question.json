@@ -6,10 +6,7 @@
     ["steps.read-the-hours.fields.0.unit","h"],
     ["steps.the-field-ratio.unit",""]
    ],
-   "numbered": [
-    ["steps.read-the-hours.fields.0.hint","3.84"],
-    ["steps.read-the-hours.fields.1.hint","0.0155"]
-   ]
+   "numbered": []
   },
   "es": {
    "units": [],
