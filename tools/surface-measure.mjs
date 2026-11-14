@@ -211,8 +211,18 @@ async function measureOne(context, base, state, viewport, locale, library) {
           timeout: 30_000,
         }
       );
-    const ready = state.ready || (app ? '.ui-container.showUI' : 'main');
-    await page.waitForSelector(ready, { state: 'visible', timeout: 30_000 });
+    if (state.ready || !app)
+      await page.waitForSelector(state.ready || 'main', {
+        state: 'visible',
+        timeout: 30_000,
+      });
+    else
+      await page.waitForFunction(
+        () =>
+          document.querySelector('.ui-container')?.classList.contains('showUI'),
+        null,
+        { timeout: 30_000 }
+      );
     if (app && state.id === 'home')
       await page.waitForFunction(
         () =>
@@ -235,19 +245,18 @@ async function measureOne(context, base, state, viewport, locale, library) {
           `state not as declared: ${SEED_KEYS[key]} is ${JSON.stringify(got.storage[key])}, the row declares ${JSON.stringify(want)}`
         );
     }
+    // The state is set up; a primary action that is absent, not drawn or
+    // covered fails the row, and the page's own numbers are still recorded.
+    let primaryError = null;
     if (got.primary?.error)
-      throw new Error(
-        `primary action ${state.primary.selector}: ${got.primary.error}`
-      );
-    if (got.primary?.covered)
-      throw new Error(
-        `primary action ${state.primary.selector} is covered where it sits`
-      );
+      primaryError = `primary action ${state.primary.selector}: ${got.primary.error}`;
+    else if (got.primary?.covered)
+      primaryError = `primary action ${state.primary.selector} is covered where it sits`;
 
     // The walk to it: Tab from the top of the page, then scrolls of one viewport.
     let tabs = null;
     let scrolls = null;
-    if (state.primary) {
+    if (state.primary && !primaryError) {
       await page.evaluate(() => {
         document.activeElement?.blur?.();
         window.scrollTo(0, 0);
@@ -304,7 +313,7 @@ async function measureOne(context, base, state, viewport, locale, library) {
       scroll_viewports: scrolls,
       first_link_proxy_text: got.first_link_proxy?.text ?? null,
       first_link_proxy_y_px: got.first_link_proxy?.y ?? null,
-      error: null,
+      error: primaryError,
     });
     if (state.primary && tabs === null)
       out.note = `Tab did not reach the control in ${TAB_LIMIT} presses`;
