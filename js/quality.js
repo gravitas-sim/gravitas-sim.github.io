@@ -108,12 +108,7 @@ let aboveSince = 0;
 let listeners = [];
 /** Whether the classifier has ever reached a verdict (see qualityReport). */
 let decided = false;
-/**
- * Whether this page renders the simulation: the application page, which calls
- * initMotionPreference at start-up, or any page that is fed a frame. Such a
- * page decides its own tier and writes the verdict; every other page adopts
- * the stored one (see adoptVerdict).
- */
+/** Whether this page renders the simulation (see adoptVerdict). */
 let simulationPage = false;
 /** Whether the stored verdict has been looked at on this page. */
 let adopted = false;
@@ -194,9 +189,6 @@ export function setTier(next) {
     tier = next;
     announce();
   }
-  // A reader who forces a tier on the simulation page has decided it, and the
-  // other pages follow. On any other page the same call (applyTierRequest) is
-  // for that page alone and stores nothing.
   if (simulationPage) rememberVerdict();
 }
 
@@ -280,26 +272,14 @@ export function sampleFrame(timestamp) {
       aboveSince = 0;
     }
   } else if (verdictWritten !== 'full') {
-    // The first decision, when it is the full tier: the other pages are told
-    // so, and a stale 'low' from an earlier, slower moment is replaced.
     rememberVerdict();
   }
 }
 
-// --- The verdict, carried to the pages that never render the simulation --------
-//
-// The classifier is fed by the simulation's render loop alone. The Observatory
-// and the other pages that compute never draw a frame, so on their own they never
-// decide and compute at the full tier (D-R10-285-03). The application page's
-// verdict is therefore kept in one sessionStorage key, which lives as long as the
-// tab and goes nowhere: those pages read it and never exceed it.
-//
-// What is stored is a tier, 'low' or 'full', and the time it was reached. An
-// entry is used only when it is one of those, was written within the last hour
-// and is not from the future. Anything else (a malformed value, a record from
-// another version, a tab left open overnight, a machine that has since been
-// freed of its other work) is ignored, and the page behaves as it did before the
-// key existed. A page whose storage is blocked does the same.
+// --- The verdict for pages that never render the simulation ------------------
+// The application page keeps the tier it decided in one session-only key, and a
+// page that computes without drawing the simulation (the Observatory) never
+// exceeds it. OFFLINE_AND_LOW_END.md and STORAGE.md say what is kept and why.
 
 /** How long a stored verdict is believed, in milliseconds. */
 export const VERDICT_MAX_AGE_MS = 3600000;
@@ -307,54 +287,38 @@ export const VERDICT_MAX_AGE_MS = 3600000;
 /** The tier last written by this page, so it is written once per decision. */
 let verdictWritten = null;
 
-/**
- * Record the tier in force as the application page's verdict.
- *
- * @param {number} [now] - The time to stamp it with
- */
+/** Record the tier in force as the application page's verdict. */
 function rememberVerdict(now = Date.now()) {
-  const value = tier === 'low' ? 'low' : 'full';
-  verdictWritten = value;
+  verdictWritten = tier === 'low' ? 'low' : 'full';
   try {
-    globalThis.sessionStorage?.setItem(
+    sessionStorage.setItem(
       KEY_QUALITY_VERDICT,
-      JSON.stringify({ tier: value, at: now })
+      JSON.stringify({ tier: verdictWritten, at: now })
     );
   } catch {
     /* storage unavailable: the other pages behave as they always have */
   }
 }
 
-/**
- * The stored verdict, if there is a usable one.
- *
- * @param {number} [now] - The time to judge its age against
- * @returns {?('low'|'full')} The tier, or null when absent, stale or unusable
- */
+/** @returns {?('low'|'full')} The stored tier; null when absent, stale or unusable */
 export function storedVerdict(now = Date.now()) {
   try {
-    const raw = globalThis.sessionStorage?.getItem(KEY_QUALITY_VERDICT);
-    if (!raw) return null;
-    const v = JSON.parse(raw);
-    if (!v || (v.tier !== 'low' && v.tier !== 'full')) return null;
-    if (!Number.isFinite(v.at) || v.at > now || now - v.at > VERDICT_MAX_AGE_MS)
-      return null;
-    return v.tier;
+    const v = JSON.parse(sessionStorage.getItem(KEY_QUALITY_VERDICT));
+    const age = now - v.at;
+    return (v.tier === 'low' || v.tier === 'full') &&
+      age >= 0 &&
+      age <= VERDICT_MAX_AGE_MS
+      ? v.tier
+      : null;
   } catch {
     return null;
   }
 }
 
 /**
- * Take the stored verdict on a page that does not render the simulation, once.
- *
- * It lowers the tier and never raises it, so a page can only do less work than
- * it would have, and it leaves alone a page that decides for itself (the
- * application page) and a tier somebody has already forced (?quality=full on
- * the address, or the button beside a reduced result).
- *
- * @param {number} [now] - The time to judge the verdict's age against
- * @returns {boolean} Whether the verdict lowered the tier
+ * Take the stored verdict once, on a page that does not render the simulation.
+ * It only lowers the tier, and leaves alone a page that decides for itself and
+ * a tier somebody has already forced.
  */
 export function adoptVerdict(now = Date.now()) {
   if (adopted) return false;
@@ -647,8 +611,6 @@ export function setMotionPreference(mode, { remember = true } = {}) {
 
 /** Restore the stored override at start-up. */
 export function initMotionPreference() {
-  // Only the application page calls this: it renders the simulation, so it
-  // decides its own tier (see adoptVerdict).
   simulationPage = true;
   let saved = null;
   try {

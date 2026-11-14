@@ -4,7 +4,7 @@
     <meta charset="utf-8" />
     <meta
       http-equiv="Content-Security-Policy"
-      content="default-src 'self'; script-src 'self' 'sha256-13d/H9TW6ThkmbFRMmFSspzev0BlVtoIsZsQrHxy/QY=' 'sha256-33c99M7lF+ARlwp2Ds/AffjcgB7Tl62rR+i99EGmjck='; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data: blob:; media-src 'self' blob:; connect-src 'self' blob:; worker-src 'self' blob:; frame-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'"
+      content="default-src 'self'; script-src 'self' 'sha256-KVWuDmsCLLIUHJyGub/dvXqfrLK4WMDibZoja4uEQrk=' 'sha256-33c99M7lF+ARlwp2Ds/AffjcgB7Tl62rR+i99EGmjck='; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data: blob:; media-src 'self' blob:; connect-src 'self' blob:; worker-src 'self' blob:; frame-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'"
     />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>When the Method Must Refuse | Gravitas</title>
@@ -40,19 +40,15 @@
 <link rel="stylesheet" href="/css/shell.css" />
 <script>
 try {
+  const r = document.documentElement;
   const t = localStorage.getItem('gravitas_theme');
   if (['deep', 'observatory', 'daylight'].includes(t)) {
-    document.documentElement.setAttribute('data-theme', t);
-    document.documentElement.style.colorScheme =
-      t === 'daylight' ? 'light' : 'dark';
+    r.setAttribute('data-theme', t);
+    r.style.colorScheme = t === 'daylight' ? 'light' : 'dark';
   }
-  const m = localStorage.getItem('gravitas_motion');
-  if (m === 'reduce' || m === 'step')
-    document.documentElement.setAttribute('data-motion', m);
-} catch {
-  /* storage unavailable: the defaults are correct */
-}
-/* The offline note (shellFor): shown once when the connection drops, gone when it returns, dismissed by its button or Escape. */
+  const m = localStorage.gravitas_motion;
+  if (m === 'reduce' || m === 'step') r.dataset.motion = m;
+} catch {}
 (() => {
   const sync = () => {
     const el = document.querySelector('.gs-offline');
