@@ -221,6 +221,8 @@ current, and the orchestrator checks it.
 | `prose-whitespace.mjs` | Prose whitespace: write a lesson's line wrapping once, in the source only |  |
 | `pulsar-validate.mjs` | The pulsar kernel against its committed thresholds (Prompt 242, Part A) | `npm run pulsar:validate` |
 | `radio-validate.mjs` | The HI spectroscopy kernel against its committed thresholds (Prompt 241) | `npm run radio:validate` |
+| `reference-cases.mjs` | The sandbox's reference cases, stepped the way the page steps them | `npm run validate:reference` |
+| `reference-physics.mjs` | Reference solutions for the sandbox's reference cases |  |
 | `release-check.mjs` | npm run release:check | `npm run release:check` |
 | `remnants-pin.mjs` | The cooling-table pin of the remnants validation (Prompt 222, REMNANTS.md) |  |
 | `remnants-validate.mjs` | The remnants kernel against its committed thresholds (Prompt 222) | `npm run remnants:validate` |
@@ -232,6 +234,8 @@ current, and the orchestrator checks it.
 | `route-harness.mjs` | Student-route harness | `npm run perf:routes` |
 | `route-walks.mjs` | The walk from a lesson link to its first accepted reading | `npm run perf:walks` |
 | `scenario-stability.mjs` | Scenario stability probe | `npm run validate:scenarios` |
+| `scene-capture.mjs` | Capture a scene record at its exact simulated time | `npm run scene:capture` |
+| `scene-record.mjs` | The scene record: one sandbox view, pinned so that it can be photographed |  |
 | `sed-followup-validate.mjs` | The SED kernel's follow-up legs against their committed thresholds (Prompt 245, follow-up) | `npm run sed:followup` |
 | `sed-scenes.mjs` | The committed scenes of the SED kernel's validation (Prompt 245) |  |
 | `sed-validate.mjs` | The SED kernel against its committed thresholds (Prompt 245) | `npm run sed:validate` |

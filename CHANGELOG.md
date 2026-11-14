@@ -27,6 +27,19 @@ the release rather than in the tag.
   and the first real action the same way every run. Walk states and dialog
   outlines were added for Share, the lesson finish dialog, the author preview,
   the assignment builder, embed mode and Settings. Nothing changes on screen.
+- Reference cases for the sandbox (`npm run validate:reference`, "Reference
+  cases" in `PHYSICS_VALIDATION.md`): seven cases on shipped scenarios
+  (a near-circular orbit, an eccentric orbit, a binary, a gravity assist, a hard
+  three-body pass, a tidal stripping and the camera), each with a bound and its
+  reason committed before the runner existed, stepped the way the page steps
+  them at 120, 60 and 30 frames a second and at the slow-frame clamp, with the
+  quality tiers compared and a step study at four fixed steps. The record
+  lists the failing cases with their numbers. The scene record
+  (`gravitas.scene-record/1`) pins a sandbox view so that
+  `tools/scene-capture.mjs` can photograph the same simulated moment before and
+  after a change, and `npm run perf -- --scene` profiles it for frame time.
+  Nothing changes on screen; the 442 checks of `validate:physics` do not move.
+
 - A measurement harness for the pages a student opens (`npm run perf:routes`, `npm run perf:walks`; `STUDENT_ROUTE_BASELINE.md`): Home, two lessons, an Observatory guide and the 3-D lab, cold, warm and offline over compressed transport, and the walk from a lesson link to its first accepted reading. The test server gains an opt-in gzip and cache-header mode. Nothing a visitor sees changes.
 
 - The catalog ledger (Prompt 297; register row D-R4-297-01): a generated

@@ -75,6 +75,8 @@
     "bench:observatory": "node tools/observatory-bench.mjs",
     "bench:inference": "node tools/inference-bench.mjs",
     "validate:physics": "node tools/validate-physics.mjs",
+    "validate:reference": "node tools/reference-cases.mjs",
+    "scene:capture": "node tools/scene-capture.mjs",
     "validate:lab3d": "node tools/validate-lab3d.mjs",
     "validate:mission": "node tools/validate-mission.mjs",
     "validate:orbital": "node tools/orbital-validate.mjs",

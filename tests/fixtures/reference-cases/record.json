@@ -1,0 +1,2873 @@
+{
+  "format": "gravitas.reference-record/1",
+  "thresholds": "tests/fixtures/reference-cases/thresholds.json",
+  "note": "Written by node tools/reference-cases.mjs --write. A row that fails keeps `limit` empty until the change that states the limit in the product fills it; a change that fixes a row flips that row in its own change. `steps` is what each run stated: the substeps and the step the page would take at that rate.",
+  "steps": [
+    {
+      "case": "R1",
+      "rate": "120",
+      "substeps": 1,
+      "step": 0.0416667
+    },
+    {
+      "case": "R1",
+      "rate": "30",
+      "substeps": 1,
+      "step": 0.166667
+    },
+    {
+      "case": "R1",
+      "rate": "60",
+      "substeps": 1,
+      "step": 0.0833333
+    },
+    {
+      "case": "R1",
+      "rate": "clamp",
+      "substeps": 1,
+      "step": 0.25
+    },
+    {
+      "case": "R2",
+      "rate": "120",
+      "substeps": 5,
+      "step": 0.0416667
+    },
+    {
+      "case": "R2",
+      "rate": "30",
+      "substeps": 17,
+      "step": 0.0490196
+    },
+    {
+      "case": "R2",
+      "rate": "60",
+      "substeps": 9,
+      "step": 0.0462963
+    },
+    {
+      "case": "R2",
+      "rate": "clamp",
+      "substeps": 25,
+      "step": 0.05
+    },
+    {
+      "case": "R3",
+      "rate": "120",
+      "substeps": 2,
+      "step": 0.0833333
+    },
+    {
+      "case": "R3",
+      "rate": "30",
+      "substeps": 5,
+      "step": 0.133333
+    },
+    {
+      "case": "R3",
+      "rate": "60",
+      "substeps": 3,
+      "step": 0.111111
+    },
+    {
+      "case": "R3",
+      "rate": "clamp",
+      "substeps": 7,
+      "step": 0.142857
+    },
+    {
+      "case": "R4",
+      "rate": "120",
+      "substeps": 1,
+      "step": 0.125
+    },
+    {
+      "case": "R4",
+      "rate": "30",
+      "substeps": 2,
+      "step": 0.25
+    },
+    {
+      "case": "R4",
+      "rate": "60",
+      "substeps": 1,
+      "step": 0.25
+    },
+    {
+      "case": "R4",
+      "rate": "clamp",
+      "substeps": 4,
+      "step": 0.1875
+    },
+    {
+      "case": "R4x",
+      "rate": "120",
+      "substeps": 1,
+      "step": 0.0416667
+    },
+    {
+      "case": "R4x",
+      "rate": "30",
+      "substeps": 1,
+      "step": 0.166667
+    },
+    {
+      "case": "R4x",
+      "rate": "60",
+      "substeps": 1,
+      "step": 0.0833333
+    },
+    {
+      "case": "R4x",
+      "rate": "clamp",
+      "substeps": 1,
+      "step": 0.25
+    },
+    {
+      "case": "R5",
+      "rate": "120",
+      "substeps": 1,
+      "step": 0.0208333
+    },
+    {
+      "case": "R5",
+      "rate": "30",
+      "substeps": 1,
+      "step": 0.0833333
+    },
+    {
+      "case": "R5",
+      "rate": "60",
+      "substeps": 1,
+      "step": 0.0416667
+    },
+    {
+      "case": "R5",
+      "rate": "clamp",
+      "substeps": 1,
+      "step": 0.125
+    }
+  ],
+  "rows": [
+    {
+      "id": "R1.angularMomentum@120",
+      "case": "R1",
+      "quantity": "angularMomentum",
+      "rate": "120",
+      "step": 0.0416667,
+      "value": 6.094e-14,
+      "bound": 1e-12,
+      "pass": true,
+      "limit": ""
+    },
+    {
+      "id": "R1.angularMomentum@30",
+      "case": "R1",
+      "quantity": "angularMomentum",
+      "rate": "30",
+      "step": 0.166667,
+      "value": 3.254e-14,
+      "bound": 1e-12,
+      "pass": true,
+      "limit": ""
+    },
+    {
+      "id": "R1.angularMomentum@60",
+      "case": "R1",
+      "quantity": "angularMomentum",
+      "rate": "60",
+      "step": 0.0833333,
+      "value": 3.415e-14,
+      "bound": 1e-12,
+      "pass": true,
+      "limit": ""
+    },
+    {
+      "id": "R1.angularMomentum@clamp",
+      "case": "R1",
+      "quantity": "angularMomentum",
+      "rate": "clamp",
+      "step": 0.25,
+      "value": 2.355e-14,
+      "bound": 1e-12,
+      "pass": true,
+      "limit": ""
+    },
+    {
+      "id": "R1.energy@120",
+      "case": "R1",
+      "quantity": "energy",
+      "rate": "120",
+      "step": 0.0416667,
+      "value": 0.000001736,
+      "bound": 0.000003472,
+      "pass": true,
+      "limit": ""
+    },
+    {
+      "id": "R1.energy@30",
+      "case": "R1",
+      "quantity": "energy",
+      "rate": "30",
+      "step": 0.166667,
+      "value": 0.00002778,
+      "bound": 0.00005556,
+      "pass": true,
+      "limit": ""
+    },
+    {
+      "id": "R1.energy@60",
+      "case": "R1",
+      "quantity": "energy",
+      "rate": "60",
+      "step": 0.0833333,
+      "value": 0.000006944,
+      "bound": 0.00001389,
+      "pass": true,
+      "limit": ""
+    },
+    {
+      "id": "R1.energy@clamp",
+      "case": "R1",
+      "quantity": "energy",
+      "rate": "clamp",
+      "step": 0.25,
+      "value": 0.0000625,
+      "bound": 0.000125,
+      "pass": true,
+      "limit": ""
+    },
+    {
+      "id": "R1.growth@120",
+      "case": "R1",
+      "quantity": "growth",
+      "rate": "120",
+      "step": 0.0416667,
+      "value": 1,
+      "bound": 1.5,
+      "pass": true,
+      "limit": ""
+    },
+    {
+      "id": "R1.growth@30",
+      "case": "R1",
+      "quantity": "growth",
+      "rate": "30",
+      "step": 0.166667,
+      "value": 1,
+      "bound": 1.5,
+      "pass": true,
+      "limit": ""
+    },
+    {
+      "id": "R1.growth@60",
+      "case": "R1",
+      "quantity": "growth",
+      "rate": "60",
+      "step": 0.0833333,
+      "value": 1,
+      "bound": 1.5,
+      "pass": true,
+      "limit": ""
+    },
+    {
+      "id": "R1.growth@clamp",
+      "case": "R1",
+      "quantity": "growth",
+      "rate": "clamp",
+      "step": 0.25,
+      "value": 1,
+      "bound": 1.5,
+      "pass": true,
+      "limit": ""
+    },
+    {
+      "id": "R1.period@120",
+      "case": "R1",
+      "quantity": "period",
+      "rate": "120",
+      "step": 0.0416667,
+      "value": 0.00000123,
+      "bound": 0.000003472,
+      "pass": true,
+      "limit": ""
+    },
+    {
+      "id": "R1.period@30",
+      "case": "R1",
+      "quantity": "period",
+      "rate": "30",
+      "step": 0.166667,
+      "value": 0.00001968,
+      "bound": 0.00005556,
+      "pass": true,
+      "limit": ""
+    },
+    {
+      "id": "R1.period@60",
+      "case": "R1",
+      "quantity": "period",
+      "rate": "60",
+      "step": 0.0833333,
+      "value": 0.000004919,
+      "bound": 0.00001389,
+      "pass": true,
+      "limit": ""
+    },
+    {
+      "id": "R1.period@clamp",
+      "case": "R1",
+      "quantity": "period",
+      "rate": "clamp",
+      "step": 0.25,
+      "value": 0.00004427,
+      "bound": 0.000125,
+      "pass": true,
+      "limit": ""
+    },
+    {
+      "id": "R2.angularMomentum@120",
+      "case": "R2",
+      "quantity": "angularMomentum",
+      "rate": "120",
+      "step": 0.0416667,
+      "value": 3.721e-14,
+      "bound": 1e-12,
+      "pass": true,
+      "limit": ""
+    },
+    {
+      "id": "R2.angularMomentum@30",
+      "case": "R2",
+      "quantity": "angularMomentum",
+      "rate": "30",
+      "step": 0.0490196,
+      "value": 4.136e-14,
+      "bound": 1e-12,
+      "pass": true,
+      "limit": ""
+    },
+    {
+      "id": "R2.angularMomentum@60",
+      "case": "R2",
+      "quantity": "angularMomentum",
+      "rate": "60",
+      "step": 0.0462963,
+      "value": 3.839e-14,
+      "bound": 1e-12,
+      "pass": true,
+      "limit": ""
+    },
+    {
+      "id": "R2.angularMomentum@clamp",
+      "case": "R2",
+      "quantity": "angularMomentum",
+      "rate": "clamp",
+      "step": 0.05,
+      "value": 2.612e-14,
+      "bound": 1e-12,
+      "pass": true,
+      "limit": ""
+    },
+    {
+      "id": "R2.apsides@120",
+      "case": "R2",
+      "quantity": "apsides",
+      "rate": "120",
+      "step": 0.0416667,
+      "value": 0.00002225,
+      "bound": 0.009574,
+      "pass": true,
+      "limit": ""
+    },
+    {
+      "id": "R2.apsides@30",
+      "case": "R2",
+      "quantity": "apsides",
+      "rate": "30",
+      "step": 0.0490196,
+      "value": 0.00003079,
+      "bound": 0.01126,
+      "pass": true,
+      "limit": ""
+    },
+    {
+      "id": "R2.apsides@60",
+      "case": "R2",
+      "quantity": "apsides",
+      "rate": "60",
+      "step": 0.0462963,
+      "value": 0.00002747,
+      "bound": 0.01064,
+      "pass": true,
+      "limit": ""
+    },
+    {
+      "id": "R2.apsides@clamp",
+      "case": "R2",
+      "quantity": "apsides",
+      "rate": "clamp",
+      "step": 0.05,
+      "value": 0.00003204,
+      "bound": 0.01149,
+      "pass": true,
+      "limit": ""
+    },
+    {
+      "id": "R2.energy@120",
+      "case": "R2",
+      "quantity": "energy",
+      "rate": "120",
+      "step": 0.0416667,
+      "value": 0.00308,
+      "bound": 0.006118,
+      "pass": true,
+      "limit": ""
+    },
+    {
+      "id": "R2.energy@30",
+      "case": "R2",
+      "quantity": "energy",
+      "rate": "30",
+      "step": 0.0490196,
+      "value": 0.003628,
+      "bound": 0.007198,
+      "pass": true,
+      "limit": ""
+    },
+    {
+      "id": "R2.energy@60",
+      "case": "R2",
+      "quantity": "energy",
+      "rate": "60",
+      "step": 0.0462963,
+      "value": 0.003425,
+      "bound": 0.006798,
+      "pass": true,
+      "limit": ""
+    },
+    {
+      "id": "R2.energy@clamp",
+      "case": "R2",
+      "quantity": "energy",
+      "rate": "clamp",
+      "step": 0.05,
+      "value": 0.003701,
+      "bound": 0.007342,
+      "pass": true,
+      "limit": ""
+    },
+    {
+      "id": "R2.growth@120",
+      "case": "R2",
+      "quantity": "growth",
+      "rate": "120",
+      "step": 0.0416667,
+      "value": 1,
+      "bound": 1.5,
+      "pass": true,
+      "limit": ""
+    },
+    {
+      "id": "R2.growth@30",
+      "case": "R2",
+      "quantity": "growth",
+      "rate": "30",
+      "step": 0.0490196,
+      "value": 1,
+      "bound": 1.5,
+      "pass": true,
+      "limit": ""
+    },
+    {
+      "id": "R2.growth@60",
+      "case": "R2",
+      "quantity": "growth",
+      "rate": "60",
+      "step": 0.0462963,
+      "value": 1,
+      "bound": 1.5,
+      "pass": true,
+      "limit": ""
+    },
+    {
+      "id": "R2.growth@clamp",
+      "case": "R2",
+      "quantity": "growth",
+      "rate": "clamp",
+      "step": 0.05,
+      "value": 1,
+      "bound": 1.5,
+      "pass": true,
+      "limit": ""
+    },
+    {
+      "id": "R2.period@120",
+      "case": "R2",
+      "quantity": "period",
+      "rate": "120",
+      "step": 0.0416667,
+      "value": 0.00002623,
+      "bound": 0.00004583,
+      "pass": true,
+      "limit": ""
+    },
+    {
+      "id": "R2.period@30",
+      "case": "R2",
+      "quantity": "period",
+      "rate": "30",
+      "step": 0.0490196,
+      "value": 0.00003631,
+      "bound": 0.00006344,
+      "pass": true,
+      "limit": ""
+    },
+    {
+      "id": "R2.period@60",
+      "case": "R2",
+      "quantity": "period",
+      "rate": "60",
+      "step": 0.0462963,
+      "value": 0.00003239,
+      "bound": 0.00005658,
+      "pass": true,
+      "limit": ""
+    },
+    {
+      "id": "R2.period@clamp",
+      "case": "R2",
+      "quantity": "period",
+      "rate": "clamp",
+      "step": 0.05,
+      "value": 0.00003778,
+      "bound": 0.000066,
+      "pass": true,
+      "limit": ""
+    },
+    {
+      "id": "R3.angularMomentum@120",
+      "case": "R3",
+      "quantity": "angularMomentum",
+      "rate": "120",
+      "step": 0.0833333,
+      "value": 4.344e-14,
+      "bound": 1e-12,
+      "pass": true,
+      "limit": ""
+    },
+    {
+      "id": "R3.angularMomentum@30",
+      "case": "R3",
+      "quantity": "angularMomentum",
+      "rate": "30",
+      "step": 0.133333,
+      "value": 4.326e-14,
+      "bound": 1e-12,
+      "pass": true,
+      "limit": ""
+    },
+    {
+      "id": "R3.angularMomentum@60",
+      "case": "R3",
+      "quantity": "angularMomentum",
+      "rate": "60",
+      "step": 0.111111,
+      "value": 2.08e-14,
+      "bound": 1e-12,
+      "pass": true,
+      "limit": ""
+    },
+    {
+      "id": "R3.angularMomentum@clamp",
+      "case": "R3",
+      "quantity": "angularMomentum",
+      "rate": "clamp",
+      "step": 0.142857,
+      "value": 2.577e-14,
+      "bound": 1e-12,
+      "pass": true,
+      "limit": ""
+    },
+    {
+      "id": "R3.barycentre@120",
+      "case": "R3",
+      "quantity": "barycentre",
+      "rate": "120",
+      "step": 0.0833333,
+      "value": 0,
+      "bound": 1e-9,
+      "pass": true,
+      "limit": ""
+    },
+    {
+      "id": "R3.barycentre@30",
+      "case": "R3",
+      "quantity": "barycentre",
+      "rate": "30",
+      "step": 0.133333,
+      "value": 0,
+      "bound": 1e-9,
+      "pass": true,
+      "limit": ""
+    },
+    {
+      "id": "R3.barycentre@60",
+      "case": "R3",
+      "quantity": "barycentre",
+      "rate": "60",
+      "step": 0.111111,
+      "value": 0,
+      "bound": 1e-9,
+      "pass": true,
+      "limit": ""
+    },
+    {
+      "id": "R3.barycentre@clamp",
+      "case": "R3",
+      "quantity": "barycentre",
+      "rate": "clamp",
+      "step": 0.142857,
+      "value": 0,
+      "bound": 1e-9,
+      "pass": true,
+      "limit": ""
+    },
+    {
+      "id": "R3.energy@120",
+      "case": "R3",
+      "quantity": "energy",
+      "rate": "120",
+      "step": 0.0833333,
+      "value": 4.34e-7,
+      "bound": 8.681e-7,
+      "pass": true,
+      "limit": ""
+    },
+    {
+      "id": "R3.energy@30",
+      "case": "R3",
+      "quantity": "energy",
+      "rate": "30",
+      "step": 0.133333,
+      "value": 0.000001111,
+      "bound": 0.000002222,
+      "pass": true,
+      "limit": ""
+    },
+    {
+      "id": "R3.energy@60",
+      "case": "R3",
+      "quantity": "energy",
+      "rate": "60",
+      "step": 0.111111,
+      "value": 7.716e-7,
+      "bound": 0.000001543,
+      "pass": true,
+      "limit": ""
+    },
+    {
+      "id": "R3.energy@clamp",
+      "case": "R3",
+      "quantity": "energy",
+      "rate": "clamp",
+      "step": 0.142857,
+      "value": 0.000001276,
+      "bound": 0.000002551,
+      "pass": true,
+      "limit": ""
+    },
+    {
+      "id": "R3.growth@120",
+      "case": "R3",
+      "quantity": "growth",
+      "rate": "120",
+      "step": 0.0833333,
+      "value": 1,
+      "bound": 1.5,
+      "pass": true,
+      "limit": ""
+    },
+    {
+      "id": "R3.growth@30",
+      "case": "R3",
+      "quantity": "growth",
+      "rate": "30",
+      "step": 0.133333,
+      "value": 1,
+      "bound": 1.5,
+      "pass": true,
+      "limit": ""
+    },
+    {
+      "id": "R3.growth@60",
+      "case": "R3",
+      "quantity": "growth",
+      "rate": "60",
+      "step": 0.111111,
+      "value": 1,
+      "bound": 1.5,
+      "pass": true,
+      "limit": ""
+    },
+    {
+      "id": "R3.growth@clamp",
+      "case": "R3",
+      "quantity": "growth",
+      "rate": "clamp",
+      "step": 0.142857,
+      "value": 1,
+      "bound": 1.5,
+      "pass": true,
+      "limit": ""
+    },
+    {
+      "id": "R3.momentum@120",
+      "case": "R3",
+      "quantity": "momentum",
+      "rate": "120",
+      "step": 0.0833333,
+      "value": 0,
+      "bound": 1e-12,
+      "pass": true,
+      "limit": ""
+    },
+    {
+      "id": "R3.momentum@30",
+      "case": "R3",
+      "quantity": "momentum",
+      "rate": "30",
+      "step": 0.133333,
+      "value": 0,
+      "bound": 1e-12,
+      "pass": true,
+      "limit": ""
+    },
+    {
+      "id": "R3.momentum@60",
+      "case": "R3",
+      "quantity": "momentum",
+      "rate": "60",
+      "step": 0.111111,
+      "value": 0,
+      "bound": 1e-12,
+      "pass": true,
+      "limit": ""
+    },
+    {
+      "id": "R3.momentum@clamp",
+      "case": "R3",
+      "quantity": "momentum",
+      "rate": "clamp",
+      "step": 0.142857,
+      "value": 0,
+      "bound": 1e-12,
+      "pass": true,
+      "limit": ""
+    },
+    {
+      "id": "R3.period@120",
+      "case": "R3",
+      "quantity": "period",
+      "rate": "120",
+      "step": 0.0833333,
+      "value": 3.074e-7,
+      "bound": 8.681e-7,
+      "pass": true,
+      "limit": ""
+    },
+    {
+      "id": "R3.period@30",
+      "case": "R3",
+      "quantity": "period",
+      "rate": "30",
+      "step": 0.133333,
+      "value": 7.87e-7,
+      "bound": 0.000002222,
+      "pass": true,
+      "limit": ""
+    },
+    {
+      "id": "R3.period@60",
+      "case": "R3",
+      "quantity": "period",
+      "rate": "60",
+      "step": 0.111111,
+      "value": 5.465e-7,
+      "bound": 0.000001543,
+      "pass": true,
+      "limit": ""
+    },
+    {
+      "id": "R3.period@clamp",
+      "case": "R3",
+      "quantity": "period",
+      "rate": "clamp",
+      "step": 0.142857,
+      "value": 9.035e-7,
+      "bound": 0.000002551,
+      "pass": true,
+      "limit": ""
+    },
+    {
+      "id": "R4.angularMomentum@120",
+      "case": "R4",
+      "quantity": "angularMomentum",
+      "rate": "120",
+      "step": 0.125,
+      "value": 1.026e-14,
+      "bound": 1e-11,
+      "pass": true,
+      "limit": ""
+    },
+    {
+      "id": "R4.angularMomentum@30",
+      "case": "R4",
+      "quantity": "angularMomentum",
+      "rate": "30",
+      "step": 0.25,
+      "value": 5.806e-15,
+      "bound": 1e-11,
+      "pass": true,
+      "limit": ""
+    },
+    {
+      "id": "R4.angularMomentum@60",
+      "case": "R4",
+      "quantity": "angularMomentum",
+      "rate": "60",
+      "step": 0.25,
+      "value": 5.806e-15,
+      "bound": 1e-11,
+      "pass": true,
+      "limit": ""
+    },
+    {
+      "id": "R4.angularMomentum@clamp",
+      "case": "R4",
+      "quantity": "angularMomentum",
+      "rate": "clamp",
+      "step": 0.1875,
+      "value": 6.076e-15,
+      "bound": 1e-11,
+      "pass": true,
+      "limit": ""
+    },
+    {
+      "id": "R4.craftDv@120",
+      "case": "R4",
+      "quantity": "craftDv",
+      "rate": "120",
+      "step": 0.125,
+      "value": 0.000002731,
+      "bound": 0.01,
+      "pass": true,
+      "limit": ""
+    },
+    {
+      "id": "R4.craftDv@30",
+      "case": "R4",
+      "quantity": "craftDv",
+      "rate": "30",
+      "step": 0.25,
+      "value": 0.00001092,
+      "bound": 0.01,
+      "pass": true,
+      "limit": ""
+    },
+    {
+      "id": "R4.craftDv@60",
+      "case": "R4",
+      "quantity": "craftDv",
+      "rate": "60",
+      "step": 0.25,
+      "value": 0.00001092,
+      "bound": 0.01,
+      "pass": true,
+      "limit": ""
+    },
+    {
+      "id": "R4.craftDv@clamp",
+      "case": "R4",
+      "quantity": "craftDv",
+      "rate": "clamp",
+      "step": 0.1875,
+      "value": 0.000006144,
+      "bound": 0.01,
+      "pass": true,
+      "limit": ""
+    },
+    {
+      "id": "R4.energy@120",
+      "case": "R4",
+      "quantity": "energy",
+      "rate": "120",
+      "step": 0.125,
+      "value": 3.825e-12,
+      "bound": 0.000001,
+      "pass": true,
+      "limit": ""
+    },
+    {
+      "id": "R4.energy@30",
+      "case": "R4",
+      "quantity": "energy",
+      "rate": "30",
+      "step": 0.25,
+      "value": 1.527e-11,
+      "bound": 0.000001,
+      "pass": true,
+      "limit": ""
+    },
+    {
+      "id": "R4.energy@60",
+      "case": "R4",
+      "quantity": "energy",
+      "rate": "60",
+      "step": 0.25,
+      "value": 1.527e-11,
+      "bound": 0.000001,
+      "pass": true,
+      "limit": ""
+    },
+    {
+      "id": "R4.energy@clamp",
+      "case": "R4",
+      "quantity": "energy",
+      "rate": "clamp",
+      "step": 0.1875,
+      "value": 8.595e-12,
+      "bound": 0.000001,
+      "pass": true,
+      "limit": ""
+    },
+    {
+      "id": "R4.momentum@120",
+      "case": "R4",
+      "quantity": "momentum",
+      "rate": "120",
+      "step": 0.125,
+      "value": 2.684e-14,
+      "bound": 1e-11,
+      "pass": true,
+      "limit": ""
+    },
+    {
+      "id": "R4.momentum@30",
+      "case": "R4",
+      "quantity": "momentum",
+      "rate": "30",
+      "step": 0.25,
+      "value": 1.813e-14,
+      "bound": 1e-11,
+      "pass": true,
+      "limit": ""
+    },
+    {
+      "id": "R4.momentum@60",
+      "case": "R4",
+      "quantity": "momentum",
+      "rate": "60",
+      "step": 0.25,
+      "value": 1.813e-14,
+      "bound": 1e-11,
+      "pass": true,
+      "limit": ""
+    },
+    {
+      "id": "R4.momentum@clamp",
+      "case": "R4",
+      "quantity": "momentum",
+      "rate": "clamp",
+      "step": 0.1875,
+      "value": 1.398e-14,
+      "bound": 1e-11,
+      "pass": true,
+      "limit": ""
+    },
+    {
+      "id": "R4x.energy@120",
+      "case": "R4x",
+      "quantity": "energy",
+      "rate": "120",
+      "step": 0.0416667,
+      "value": 0.04667,
+      "bound": 0.02,
+      "pass": false,
+      "limit": ""
+    },
+    {
+      "id": "R4x.energy@30",
+      "case": "R4x",
+      "quantity": "energy",
+      "rate": "30",
+      "step": 0.166667,
+      "value": 0.1675,
+      "bound": 0.02,
+      "pass": false,
+      "limit": ""
+    },
+    {
+      "id": "R4x.energy@60",
+      "case": "R4x",
+      "quantity": "energy",
+      "rate": "60",
+      "step": 0.0833333,
+      "value": 0.07727,
+      "bound": 0.02,
+      "pass": false,
+      "limit": ""
+    },
+    {
+      "id": "R4x.energy@clamp",
+      "case": "R4x",
+      "quantity": "energy",
+      "rate": "clamp",
+      "step": 0.25,
+      "value": 0.2572,
+      "bound": 0.02,
+      "pass": false,
+      "limit": ""
+    },
+    {
+      "id": "R5.fragmentSpread",
+      "case": "R5",
+      "quantity": "fragmentSpread",
+      "rate": "all",
+      "value": 1.673,
+      "bound": 0.2,
+      "pass": false,
+      "limit": "",
+      "perRate": {
+        "30": 75,
+        "60": 53,
+        "120": 0,
+        "clamp": 92
+      }
+    },
+    {
+      "id": "R5.massSpread",
+      "case": "R5",
+      "quantity": "massSpread",
+      "rate": "all",
+      "value": 0.001252,
+      "bound": 0.05,
+      "pass": true,
+      "limit": "",
+      "perRate": {
+        "30": 0.7983,
+        "60": 0.797912,
+        "120": 0.797747,
+        "clamp": 0.798746
+      }
+    },
+    {
+      "id": "R5.position@120",
+      "case": "R5",
+      "quantity": "position",
+      "rate": "120",
+      "step": 0.0208333,
+      "value": 0.01081,
+      "bound": 0.01,
+      "pass": false,
+      "limit": ""
+    },
+    {
+      "id": "R5.position@30",
+      "case": "R5",
+      "quantity": "position",
+      "rate": "30",
+      "step": 0.0833333,
+      "value": 0.04239,
+      "bound": 0.01,
+      "pass": false,
+      "limit": ""
+    },
+    {
+      "id": "R5.position@60",
+      "case": "R5",
+      "quantity": "position",
+      "rate": "60",
+      "step": 0.0416667,
+      "value": 0.02143,
+      "bound": 0.01,
+      "pass": false,
+      "limit": ""
+    },
+    {
+      "id": "R5.position@clamp",
+      "case": "R5",
+      "quantity": "position",
+      "rate": "clamp",
+      "step": 0.125,
+      "value": 0.06244,
+      "bound": 0.01,
+      "pass": false,
+      "limit": ""
+    },
+    {
+      "id": "R6.deleted@120.z0.25.p0",
+      "case": "R6",
+      "quantity": "deleted",
+      "value": 3,
+      "bound": 0,
+      "condition": "zoom 0.25, pan 0 AU, 120 frames a second",
+      "liveEqual": false,
+      "referenceLive": 35,
+      "detail": [
+        {
+          "canvas": "1366x800",
+          "deleted": 3,
+          "live": 32
+        },
+        {
+          "canvas": "375x812",
+          "deleted": 3,
+          "live": 32
+        },
+        {
+          "canvas": "1920x1080",
+          "deleted": 3,
+          "live": 32
+        }
+      ],
+      "rate": "120",
+      "pass": false,
+      "limit": ""
+    },
+    {
+      "id": "R6.deleted@120.z0.25.p200",
+      "case": "R6",
+      "quantity": "deleted",
+      "value": 35,
+      "bound": 0,
+      "condition": "zoom 0.25, pan 200 AU, 120 frames a second",
+      "liveEqual": false,
+      "referenceLive": 35,
+      "detail": [
+        {
+          "canvas": "1366x800",
+          "deleted": 19,
+          "live": 16
+        },
+        {
+          "canvas": "375x812",
+          "deleted": 35,
+          "live": 0
+        },
+        {
+          "canvas": "1920x1080",
+          "deleted": 19,
+          "live": 16
+        }
+      ],
+      "rate": "120",
+      "pass": false,
+      "limit": ""
+    },
+    {
+      "id": "R6.deleted@120.z3.p0",
+      "case": "R6",
+      "quantity": "deleted",
+      "value": 5,
+      "bound": 0,
+      "condition": "zoom 3, pan 0 AU, 120 frames a second",
+      "liveEqual": false,
+      "referenceLive": 35,
+      "detail": [
+        {
+          "canvas": "1366x800",
+          "deleted": 4,
+          "live": 31
+        },
+        {
+          "canvas": "375x812",
+          "deleted": 5,
+          "live": 30
+        },
+        {
+          "canvas": "1920x1080",
+          "deleted": 4,
+          "live": 31
+        }
+      ],
+      "rate": "120",
+      "pass": false,
+      "limit": ""
+    },
+    {
+      "id": "R6.deleted@120.z3.p200",
+      "case": "R6",
+      "quantity": "deleted",
+      "value": 35,
+      "bound": 0,
+      "condition": "zoom 3, pan 200 AU, 120 frames a second",
+      "liveEqual": false,
+      "referenceLive": 35,
+      "detail": [
+        {
+          "canvas": "1366x800",
+          "deleted": 35,
+          "live": 0
+        },
+        {
+          "canvas": "375x812",
+          "deleted": 35,
+          "live": 0
+        },
+        {
+          "canvas": "1920x1080",
+          "deleted": 31,
+          "live": 4
+        }
+      ],
+      "rate": "120",
+      "pass": false,
+      "limit": ""
+    },
+    {
+      "id": "R6.deleted@30.z0.25.p0",
+      "case": "R6",
+      "quantity": "deleted",
+      "value": 3,
+      "bound": 0,
+      "condition": "zoom 0.25, pan 0 AU, 30 frames a second",
+      "liveEqual": false,
+      "referenceLive": 35,
+      "detail": [
+        {
+          "canvas": "1366x800",
+          "deleted": 3,
+          "live": 32
+        },
+        {
+          "canvas": "375x812",
+          "deleted": 3,
+          "live": 32
+        },
+        {
+          "canvas": "1920x1080",
+          "deleted": 3,
+          "live": 32
+        }
+      ],
+      "rate": "30",
+      "pass": false,
+      "limit": ""
+    },
+    {
+      "id": "R6.deleted@30.z0.25.p200",
+      "case": "R6",
+      "quantity": "deleted",
+      "value": 35,
+      "bound": 0,
+      "condition": "zoom 0.25, pan 200 AU, 30 frames a second",
+      "liveEqual": false,
+      "referenceLive": 35,
+      "detail": [
+        {
+          "canvas": "1366x800",
+          "deleted": 19,
+          "live": 16
+        },
+        {
+          "canvas": "375x812",
+          "deleted": 35,
+          "live": 0
+        },
+        {
+          "canvas": "1920x1080",
+          "deleted": 19,
+          "live": 16
+        }
+      ],
+      "rate": "30",
+      "pass": false,
+      "limit": ""
+    },
+    {
+      "id": "R6.deleted@30.z3.p0",
+      "case": "R6",
+      "quantity": "deleted",
+      "value": 5,
+      "bound": 0,
+      "condition": "zoom 3, pan 0 AU, 30 frames a second",
+      "liveEqual": false,
+      "referenceLive": 35,
+      "detail": [
+        {
+          "canvas": "1366x800",
+          "deleted": 4,
+          "live": 31
+        },
+        {
+          "canvas": "375x812",
+          "deleted": 5,
+          "live": 30
+        },
+        {
+          "canvas": "1920x1080",
+          "deleted": 4,
+          "live": 31
+        }
+      ],
+      "rate": "30",
+      "pass": false,
+      "limit": ""
+    },
+    {
+      "id": "R6.deleted@30.z3.p200",
+      "case": "R6",
+      "quantity": "deleted",
+      "value": 35,
+      "bound": 0,
+      "condition": "zoom 3, pan 200 AU, 30 frames a second",
+      "liveEqual": false,
+      "referenceLive": 35,
+      "detail": [
+        {
+          "canvas": "1366x800",
+          "deleted": 35,
+          "live": 0
+        },
+        {
+          "canvas": "375x812",
+          "deleted": 35,
+          "live": 0
+        },
+        {
+          "canvas": "1920x1080",
+          "deleted": 31,
+          "live": 4
+        }
+      ],
+      "rate": "30",
+      "pass": false,
+      "limit": ""
+    },
+    {
+      "id": "R6.deleted@60.z0.25.p0",
+      "case": "R6",
+      "quantity": "deleted",
+      "value": 3,
+      "bound": 0,
+      "condition": "zoom 0.25, pan 0 AU, 60 frames a second",
+      "liveEqual": false,
+      "referenceLive": 35,
+      "detail": [
+        {
+          "canvas": "1366x800",
+          "deleted": 3,
+          "live": 32
+        },
+        {
+          "canvas": "375x812",
+          "deleted": 3,
+          "live": 32
+        },
+        {
+          "canvas": "1920x1080",
+          "deleted": 3,
+          "live": 32
+        }
+      ],
+      "rate": "60",
+      "pass": false,
+      "limit": ""
+    },
+    {
+      "id": "R6.deleted@60.z0.25.p200",
+      "case": "R6",
+      "quantity": "deleted",
+      "value": 35,
+      "bound": 0,
+      "condition": "zoom 0.25, pan 200 AU, 60 frames a second",
+      "liveEqual": false,
+      "referenceLive": 35,
+      "detail": [
+        {
+          "canvas": "1366x800",
+          "deleted": 19,
+          "live": 16
+        },
+        {
+          "canvas": "375x812",
+          "deleted": 35,
+          "live": 0
+        },
+        {
+          "canvas": "1920x1080",
+          "deleted": 19,
+          "live": 16
+        }
+      ],
+      "rate": "60",
+      "pass": false,
+      "limit": ""
+    },
+    {
+      "id": "R6.deleted@60.z3.p0",
+      "case": "R6",
+      "quantity": "deleted",
+      "value": 5,
+      "bound": 0,
+      "condition": "zoom 3, pan 0 AU, 60 frames a second",
+      "liveEqual": false,
+      "referenceLive": 35,
+      "detail": [
+        {
+          "canvas": "1366x800",
+          "deleted": 4,
+          "live": 31
+        },
+        {
+          "canvas": "375x812",
+          "deleted": 5,
+          "live": 30
+        },
+        {
+          "canvas": "1920x1080",
+          "deleted": 4,
+          "live": 31
+        }
+      ],
+      "rate": "60",
+      "pass": false,
+      "limit": ""
+    },
+    {
+      "id": "R6.deleted@60.z3.p200",
+      "case": "R6",
+      "quantity": "deleted",
+      "value": 35,
+      "bound": 0,
+      "condition": "zoom 3, pan 200 AU, 60 frames a second",
+      "liveEqual": false,
+      "referenceLive": 35,
+      "detail": [
+        {
+          "canvas": "1366x800",
+          "deleted": 35,
+          "live": 0
+        },
+        {
+          "canvas": "375x812",
+          "deleted": 35,
+          "live": 0
+        },
+        {
+          "canvas": "1920x1080",
+          "deleted": 31,
+          "live": 4
+        }
+      ],
+      "rate": "60",
+      "pass": false,
+      "limit": ""
+    },
+    {
+      "id": "R6.deleted@clamp.z0.25.p0",
+      "case": "R6",
+      "quantity": "deleted",
+      "value": 3,
+      "bound": 0,
+      "condition": "zoom 0.25, pan 0 AU, at the slow-frame clamp",
+      "liveEqual": false,
+      "referenceLive": 35,
+      "detail": [
+        {
+          "canvas": "1366x800",
+          "deleted": 3,
+          "live": 32
+        },
+        {
+          "canvas": "375x812",
+          "deleted": 3,
+          "live": 32
+        },
+        {
+          "canvas": "1920x1080",
+          "deleted": 3,
+          "live": 32
+        }
+      ],
+      "rate": "clamp",
+      "pass": false,
+      "limit": ""
+    },
+    {
+      "id": "R6.deleted@clamp.z0.25.p200",
+      "case": "R6",
+      "quantity": "deleted",
+      "value": 35,
+      "bound": 0,
+      "condition": "zoom 0.25, pan 200 AU, at the slow-frame clamp",
+      "liveEqual": false,
+      "referenceLive": 35,
+      "detail": [
+        {
+          "canvas": "1366x800",
+          "deleted": 19,
+          "live": 16
+        },
+        {
+          "canvas": "375x812",
+          "deleted": 35,
+          "live": 0
+        },
+        {
+          "canvas": "1920x1080",
+          "deleted": 19,
+          "live": 16
+        }
+      ],
+      "rate": "clamp",
+      "pass": false,
+      "limit": ""
+    },
+    {
+      "id": "R6.deleted@clamp.z3.p0",
+      "case": "R6",
+      "quantity": "deleted",
+      "value": 5,
+      "bound": 0,
+      "condition": "zoom 3, pan 0 AU, at the slow-frame clamp",
+      "liveEqual": false,
+      "referenceLive": 35,
+      "detail": [
+        {
+          "canvas": "1366x800",
+          "deleted": 4,
+          "live": 31
+        },
+        {
+          "canvas": "375x812",
+          "deleted": 5,
+          "live": 30
+        },
+        {
+          "canvas": "1920x1080",
+          "deleted": 4,
+          "live": 31
+        }
+      ],
+      "rate": "clamp",
+      "pass": false,
+      "limit": ""
+    },
+    {
+      "id": "R6.deleted@clamp.z3.p200",
+      "case": "R6",
+      "quantity": "deleted",
+      "value": 35,
+      "bound": 0,
+      "condition": "zoom 3, pan 200 AU, at the slow-frame clamp",
+      "liveEqual": false,
+      "referenceLive": 35,
+      "detail": [
+        {
+          "canvas": "1366x800",
+          "deleted": 35,
+          "live": 0
+        },
+        {
+          "canvas": "375x812",
+          "deleted": 35,
+          "live": 0
+        },
+        {
+          "canvas": "1920x1080",
+          "deleted": 31,
+          "live": 4
+        }
+      ],
+      "rate": "clamp",
+      "pass": false,
+      "limit": ""
+    },
+    {
+      "id": "tiers.binary-pair@full",
+      "case": "tiers",
+      "quantity": "equal",
+      "value": 0,
+      "bound": 0,
+      "condition": "binary-pair at the full tier against full",
+      "hash": "c3f84c0af00e98f9",
+      "bodies": 2,
+      "pass": true,
+      "limit": ""
+    },
+    {
+      "id": "tiers.binary-pair@low",
+      "case": "tiers",
+      "quantity": "equal",
+      "value": 0,
+      "bound": 0,
+      "condition": "binary-pair at the low tier against full",
+      "hash": "c3f84c0af00e98f9",
+      "bodies": 2,
+      "pass": true,
+      "limit": ""
+    },
+    {
+      "id": "tiers.binary-pair@ultra",
+      "case": "tiers",
+      "quantity": "equal",
+      "value": 0,
+      "bound": 0,
+      "condition": "binary-pair at the ultra tier against full",
+      "hash": "c3f84c0af00e98f9",
+      "bodies": 2,
+      "pass": true,
+      "limit": ""
+    },
+    {
+      "id": "tiers.gravity-assist-heliocentric@full",
+      "case": "tiers",
+      "quantity": "equal",
+      "value": 0,
+      "bound": 0,
+      "condition": "gravity-assist-heliocentric at the full tier against full",
+      "hash": "b3143ff1cbb01c77",
+      "bodies": 3,
+      "pass": true,
+      "limit": ""
+    },
+    {
+      "id": "tiers.gravity-assist-heliocentric@low",
+      "case": "tiers",
+      "quantity": "equal",
+      "value": 0,
+      "bound": 0,
+      "condition": "gravity-assist-heliocentric at the low tier against full",
+      "hash": "b3143ff1cbb01c77",
+      "bodies": 3,
+      "pass": true,
+      "limit": ""
+    },
+    {
+      "id": "tiers.gravity-assist-heliocentric@ultra",
+      "case": "tiers",
+      "quantity": "equal",
+      "value": 0,
+      "bound": 0,
+      "condition": "gravity-assist-heliocentric at the ultra tier against full",
+      "hash": "b3143ff1cbb01c77",
+      "bodies": 3,
+      "pass": true,
+      "limit": ""
+    },
+    {
+      "id": "tiers.keplers-2nd-law@full",
+      "case": "tiers",
+      "quantity": "equal",
+      "value": 0,
+      "bound": 0,
+      "condition": "keplers-2nd-law at the full tier against full",
+      "hash": "6472bf807764c47b",
+      "bodies": 3,
+      "pass": true,
+      "limit": ""
+    },
+    {
+      "id": "tiers.keplers-2nd-law@low",
+      "case": "tiers",
+      "quantity": "equal",
+      "value": 0,
+      "bound": 0,
+      "condition": "keplers-2nd-law at the low tier against full",
+      "hash": "6472bf807764c47b",
+      "bodies": 3,
+      "pass": true,
+      "limit": ""
+    },
+    {
+      "id": "tiers.keplers-2nd-law@ultra",
+      "case": "tiers",
+      "quantity": "equal",
+      "value": 0,
+      "bound": 0,
+      "condition": "keplers-2nd-law at the ultra tier against full",
+      "hash": "6472bf807764c47b",
+      "bodies": 3,
+      "pass": true,
+      "limit": ""
+    },
+    {
+      "id": "tiers.solar-system@full",
+      "case": "tiers",
+      "quantity": "equal",
+      "value": 0,
+      "bound": 0,
+      "condition": "solar-system at the full tier against full",
+      "hash": "78a8f5b1a59bbb6a",
+      "bodies": 35,
+      "pass": true,
+      "limit": ""
+    },
+    {
+      "id": "tiers.solar-system@low",
+      "case": "tiers",
+      "quantity": "equal",
+      "value": 0,
+      "bound": 0,
+      "condition": "solar-system at the low tier against full",
+      "hash": "78a8f5b1a59bbb6a",
+      "bodies": 35,
+      "pass": true,
+      "limit": ""
+    },
+    {
+      "id": "tiers.solar-system@ultra",
+      "case": "tiers",
+      "quantity": "equal",
+      "value": 0,
+      "bound": 0,
+      "condition": "solar-system at the ultra tier against full",
+      "hash": "78a8f5b1a59bbb6a",
+      "bodies": 35,
+      "pass": true,
+      "limit": ""
+    },
+    {
+      "id": "tiers.three-body-sensitivity-lab@full",
+      "case": "tiers",
+      "quantity": "equal",
+      "value": 0,
+      "bound": 0,
+      "condition": "three-body-sensitivity-lab at the full tier against full",
+      "hash": "1308759317f0d4a8",
+      "bodies": 3,
+      "pass": true,
+      "limit": ""
+    },
+    {
+      "id": "tiers.three-body-sensitivity-lab@low",
+      "case": "tiers",
+      "quantity": "equal",
+      "value": 0,
+      "bound": 0,
+      "condition": "three-body-sensitivity-lab at the low tier against full",
+      "hash": "1308759317f0d4a8",
+      "bodies": 3,
+      "pass": true,
+      "limit": ""
+    },
+    {
+      "id": "tiers.three-body-sensitivity-lab@ultra",
+      "case": "tiers",
+      "quantity": "equal",
+      "value": 0,
+      "bound": 0,
+      "condition": "three-body-sensitivity-lab at the ultra tier against full",
+      "hash": "1308759317f0d4a8",
+      "bodies": 3,
+      "pass": true,
+      "limit": ""
+    },
+    {
+      "id": "tiers.tidal-disruption-event@full",
+      "case": "tiers",
+      "quantity": "equal",
+      "value": 0,
+      "bound": 0,
+      "condition": "tidal-disruption-event at the full tier against full",
+      "hash": "49238a3b4a4d6eb4",
+      "bodies": 2,
+      "pass": true,
+      "limit": ""
+    },
+    {
+      "id": "tiers.tidal-disruption-event@low",
+      "case": "tiers",
+      "quantity": "equal",
+      "value": 0,
+      "bound": 0,
+      "condition": "tidal-disruption-event at the low tier against full",
+      "hash": "49238a3b4a4d6eb4",
+      "bodies": 2,
+      "pass": true,
+      "limit": ""
+    },
+    {
+      "id": "tiers.tidal-disruption-event@ultra",
+      "case": "tiers",
+      "quantity": "equal",
+      "value": 0,
+      "bound": 0,
+      "condition": "tidal-disruption-event at the ultra tier against full",
+      "hash": "49238a3b4a4d6eb4",
+      "bodies": 2,
+      "pass": true,
+      "limit": ""
+    }
+  ],
+  "failing": [
+    "R4x.energy@120",
+    "R4x.energy@30",
+    "R4x.energy@60",
+    "R4x.energy@clamp",
+    "R5.fragmentSpread",
+    "R5.position@120",
+    "R5.position@30",
+    "R5.position@60",
+    "R5.position@clamp",
+    "R6.deleted@120.z0.25.p0",
+    "R6.deleted@120.z0.25.p200",
+    "R6.deleted@120.z3.p0",
+    "R6.deleted@120.z3.p200",
+    "R6.deleted@30.z0.25.p0",
+    "R6.deleted@30.z0.25.p200",
+    "R6.deleted@30.z3.p0",
+    "R6.deleted@30.z3.p200",
+    "R6.deleted@60.z0.25.p0",
+    "R6.deleted@60.z0.25.p200",
+    "R6.deleted@60.z3.p0",
+    "R6.deleted@60.z3.p200",
+    "R6.deleted@clamp.z0.25.p0",
+    "R6.deleted@clamp.z0.25.p200",
+    "R6.deleted@clamp.z3.p0",
+    "R6.deleted@clamp.z3.p200"
+  ],
+  "reported": {
+    "R1@60": {
+      "endPositionOverA": 0.003091,
+      "stepsPerOrbit": 2384,
+      "orbitsRun": 100,
+      "periodsMeasured": 99,
+      "omegaDt": 0.002635
+    },
+    "R1@30": {
+      "endPositionOverA": 0.01236,
+      "stepsPerOrbit": 1192,
+      "orbitsRun": 100,
+      "periodsMeasured": 99,
+      "omegaDt": 0.00527
+    },
+    "R3@120": {
+      "endSeparationOverA": 0.00009658,
+      "stepsPerOrbit": 9537,
+      "orbitsRun": 50,
+      "omegaDt": 0.0006588
+    },
+    "R1@clamp": {
+      "endPositionOverA": 0.02782,
+      "stepsPerOrbit": 794.8,
+      "orbitsRun": 100,
+      "periodsMeasured": 99,
+      "omegaDt": 0.007906
+    },
+    "R3@60": {
+      "endSeparationOverA": 0.0001717,
+      "stepsPerOrbit": 7153,
+      "orbitsRun": 50,
+      "omegaDt": 0.0008784
+    },
+    "R3@30": {
+      "endSeparationOverA": 0.0002473,
+      "stepsPerOrbit": 5961,
+      "orbitsRun": 50,
+      "omegaDt": 0.001054
+    },
+    "R1@120": {
+      "endPositionOverA": 0.0007727,
+      "stepsPerOrbit": 4769,
+      "orbitsRun": 100,
+      "periodsMeasured": 100,
+      "omegaDt": 0.001318
+    },
+    "R2@120": {
+      "endPositionOverA": 0.01079,
+      "stepsPerOrbit": 8142,
+      "orbitsRun": 30,
+      "periodsMeasured": 29,
+      "turnAngle": 0.004787,
+      "shadowAmplitude": 0.07342
+    },
+    "R2@60": {
+      "endPositionOverA": 0.01332,
+      "stepsPerOrbit": 7328,
+      "orbitsRun": 30,
+      "periodsMeasured": 29,
+      "turnAngle": 0.005319,
+      "shadowAmplitude": 0.07342
+    },
+    "R6.control@30": {
+      "deletedAtHundredThousandAU": 35
+    },
+    "R3@clamp": {
+      "endSeparationOverA": 0.0002838,
+      "stepsPerOrbit": 5563,
+      "orbitsRun": 50,
+      "omegaDt": 0.001129
+    },
+    "R6.control@60": {
+      "deletedAtHundredThousandAU": 35
+    },
+    "R6.control@120": {
+      "deletedAtHundredThousandAU": 35
+    },
+    "R6.control@clamp": {
+      "deletedAtHundredThousandAU": 35
+    },
+    "R4@120": {
+      "closestApproach": 13.06,
+      "craftPositionError": 0.006025,
+      "endTime": 1200,
+      "dvSim": 1.739,
+      "dvRef": 1.739
+    },
+    "R2@30": {
+      "endPositionOverA": 0.01493,
+      "stepsPerOrbit": 6921,
+      "orbitsRun": 30,
+      "periodsMeasured": 30,
+      "turnAngle": 0.005632,
+      "shadowAmplitude": 0.07342
+    },
+    "R2@clamp": {
+      "endPositionOverA": 0.01553,
+      "stepsPerOrbit": 6785,
+      "orbitsRun": 30,
+      "periodsMeasured": 30,
+      "turnAngle": 0.005745,
+      "shadowAmplitude": 0.07342
+    },
+    "R4@60": {
+      "closestApproach": 13.06,
+      "craftPositionError": 0.0241,
+      "endTime": 1200,
+      "dvSim": 1.739,
+      "dvRef": 1.739
+    },
+    "R4@30": {
+      "closestApproach": 13.06,
+      "craftPositionError": 0.0241,
+      "endTime": 1200,
+      "dvSim": 1.739,
+      "dvRef": 1.739
+    },
+    "R4x@120": {
+      "timeOfCloseApproach": 33.63,
+      "minimumSeparation": 25.46,
+      "energyErrorThroughTheRun": 0.04667,
+      "side": 86.6
+    },
+    "R4@clamp": {
+      "closestApproach": 13.06,
+      "craftPositionError": 0.01356,
+      "endTime": 1200,
+      "dvSim": 1.739,
+      "dvRef": 1.739
+    },
+    "R5@120": {
+      "periapsisTime": 3.217,
+      "sampleTime": 3.208,
+      "periapsisDistance": 117.4,
+      "fragmentsCreated": 0,
+      "massFraction": 0.7977
+    },
+    "R4x@60": {
+      "timeOfCloseApproach": 33.58,
+      "minimumSeparation": 25.79,
+      "energyErrorThroughTheRun": 0.07727,
+      "side": 86.6
+    },
+    "R5@60": {
+      "periapsisTime": 3.217,
+      "sampleTime": 3.208,
+      "periapsisDistance": 117.4,
+      "fragmentsCreated": 53,
+      "massFraction": 0.7979
+    },
+    "R4x@30": {
+      "timeOfCloseApproach": 33.67,
+      "minimumSeparation": 21.53,
+      "energyErrorThroughTheRun": 0.1675,
+      "side": 86.6
+    },
+    "R5@30": {
+      "periapsisTime": 3.217,
+      "sampleTime": 3.25,
+      "periapsisDistance": 117.4,
+      "fragmentsCreated": 75,
+      "massFraction": 0.7983
+    },
+    "R4x@clamp": {
+      "timeOfCloseApproach": 33.75,
+      "minimumSeparation": 17.56,
+      "energyErrorThroughTheRun": 0.2572,
+      "side": 86.6
+    },
+    "R5@clamp": {
+      "periapsisTime": 3.217,
+      "sampleTime": 3.25,
+      "periapsisDistance": 117.4,
+      "fragmentsCreated": 92,
+      "massFraction": 0.7987
+    }
+  },
+  "study": [
+    {
+      "case": "R1",
+      "scenario": "solar-system",
+      "integrator": "Symplectic Euler",
+      "label": "1/24",
+      "step": 0.041666666666666664,
+      "steps": 476861,
+      "values": {
+        "energy": 0.000001736,
+        "growth": 1,
+        "angularMomentum": 3.721e-14,
+        "period": 0.00000123
+      },
+      "bounds": {
+        "energy": 0.000003472,
+        "growth": 1.5,
+        "angularMomentum": 1e-12,
+        "period": 0.000003472
+      },
+      "pass": {
+        "energy": true,
+        "growth": true,
+        "angularMomentum": true,
+        "period": true
+      },
+      "reported": {
+        "endPositionOverA": 0.0007727,
+        "stepsPerOrbit": 4769,
+        "orbitsRun": 100,
+        "periodsMeasured": 100,
+        "omegaDt": 0.001318
+      }
+    },
+    {
+      "case": "R1",
+      "scenario": "solar-system",
+      "integrator": "Symplectic Euler",
+      "label": "1/48",
+      "step": 0.020833333333333332,
+      "steps": 953721,
+      "values": {
+        "energy": 4.34e-7,
+        "growth": 1,
+        "angularMomentum": 1.005e-13,
+        "period": 3.074e-7
+      },
+      "bounds": {
+        "energy": 8.681e-7,
+        "growth": 1.5,
+        "angularMomentum": 1e-12,
+        "period": 8.681e-7
+      },
+      "pass": {
+        "energy": true,
+        "growth": true,
+        "angularMomentum": true,
+        "period": true
+      },
+      "reported": {
+        "endPositionOverA": 0.0001932,
+        "stepsPerOrbit": 9537,
+        "orbitsRun": 100,
+        "periodsMeasured": 100,
+        "omegaDt": 0.0006588
+      },
+      "order": {
+        "energy": 2,
+        "growth": 0,
+        "angularMomentum": -1.43,
+        "period": 2
+      }
+    },
+    {
+      "case": "R1",
+      "scenario": "solar-system",
+      "integrator": "Symplectic Euler",
+      "label": "1/96",
+      "step": 0.010416666666666666,
+      "steps": 1907441,
+      "values": {
+        "energy": 1.085e-7,
+        "growth": 1,
+        "angularMomentum": 6.004e-14,
+        "period": 7.686e-8
+      },
+      "bounds": {
+        "energy": 2.17e-7,
+        "growth": 1.5,
+        "angularMomentum": 1e-12,
+        "period": 2.17e-7
+      },
+      "pass": {
+        "energy": true,
+        "growth": true,
+        "angularMomentum": true,
+        "period": true
+      },
+      "reported": {
+        "endPositionOverA": 0.00004829,
+        "stepsPerOrbit": 19070,
+        "orbitsRun": 100,
+        "periodsMeasured": 99,
+        "omegaDt": 0.0003294
+      },
+      "order": {
+        "energy": 2,
+        "growth": 0,
+        "angularMomentum": 0.743,
+        "period": 2
+      }
+    },
+    {
+      "case": "R1",
+      "scenario": "solar-system",
+      "integrator": "Symplectic Euler",
+      "label": "1/192",
+      "step": 0.005208333333333333,
+      "steps": 3814882,
+      "values": {
+        "energy": 2.713e-8,
+        "growth": 1,
+        "angularMomentum": 1.461e-13,
+        "period": 1.921e-8
+      },
+      "bounds": {
+        "energy": 5.425e-8,
+        "growth": 1.5,
+        "angularMomentum": 1e-12,
+        "period": 5.425e-8
+      },
+      "pass": {
+        "energy": true,
+        "growth": true,
+        "angularMomentum": true,
+        "period": true
+      },
+      "reported": {
+        "endPositionOverA": 0.00001207,
+        "stepsPerOrbit": 38150,
+        "orbitsRun": 100,
+        "periodsMeasured": 100,
+        "omegaDt": 0.0001647
+      },
+      "order": {
+        "energy": 2,
+        "growth": 0,
+        "angularMomentum": -1.28,
+        "period": 2
+      }
+    },
+    {
+      "case": "R2",
+      "scenario": "keplers-2nd-law",
+      "integrator": "Symplectic Euler",
+      "label": "1/24",
+      "step": 0.041666666666666664,
+      "steps": 244268,
+      "values": {
+        "energy": 0.00308,
+        "growth": 1,
+        "angularMomentum": 3.721e-14,
+        "apsides": 0.00002225,
+        "period": 0.00002623
+      },
+      "bounds": {
+        "energy": 0.006118,
+        "growth": 1.5,
+        "angularMomentum": 1e-12,
+        "apsides": 0.009574,
+        "period": 0.00004583
+      },
+      "pass": {
+        "energy": true,
+        "growth": true,
+        "angularMomentum": true,
+        "apsides": true,
+        "period": true
+      },
+      "reported": {
+        "endPositionOverA": 0.01079,
+        "stepsPerOrbit": 8142,
+        "orbitsRun": 30,
+        "periodsMeasured": 29,
+        "turnAngle": 0.004787,
+        "shadowAmplitude": 0.07342
+      }
+    },
+    {
+      "case": "R2",
+      "scenario": "keplers-2nd-law",
+      "integrator": "Symplectic Euler",
+      "label": "1/48",
+      "step": 0.020833333333333332,
+      "steps": 488535,
+      "values": {
+        "energy": 0.001535,
+        "growth": 1,
+        "angularMomentum": 6.669e-14,
+        "apsides": 0.000005562,
+        "period": 0.000006558
+      },
+      "bounds": {
+        "energy": 0.003059,
+        "growth": 1.5,
+        "angularMomentum": 1e-12,
+        "apsides": 0.004787,
+        "period": 0.00001146
+      },
+      "pass": {
+        "energy": true,
+        "growth": true,
+        "angularMomentum": true,
+        "apsides": true,
+        "period": true
+      },
+      "reported": {
+        "endPositionOverA": 0.002698,
+        "stepsPerOrbit": 16280,
+        "orbitsRun": 30,
+        "periodsMeasured": 29,
+        "turnAngle": 0.002394,
+        "shadowAmplitude": 0.07342
+      },
+      "order": {
+        "energy": 1,
+        "growth": 0,
+        "angularMomentum": -0.842,
+        "apsides": 2,
+        "period": 2
+      }
+    },
+    {
+      "case": "R2",
+      "scenario": "keplers-2nd-law",
+      "integrator": "Symplectic Euler",
+      "label": "1/96",
+      "step": 0.010416666666666666,
+      "steps": 977070,
+      "values": {
+        "energy": 0.0007661,
+        "growth": 1,
+        "angularMomentum": 5.363e-14,
+        "apsides": 0.00000139,
+        "period": 0.00000164
+      },
+      "bounds": {
+        "energy": 0.00153,
+        "growth": 1.5,
+        "angularMomentum": 1e-12,
+        "apsides": 0.002394,
+        "period": 0.000002865
+      },
+      "pass": {
+        "energy": true,
+        "growth": true,
+        "angularMomentum": true,
+        "apsides": true,
+        "period": true
+      },
+      "reported": {
+        "endPositionOverA": 0.0006746,
+        "stepsPerOrbit": 32570,
+        "orbitsRun": 30,
+        "periodsMeasured": 29,
+        "turnAngle": 0.001197,
+        "shadowAmplitude": 0.07342
+      },
+      "order": {
+        "energy": 1,
+        "growth": 0,
+        "angularMomentum": 0.314,
+        "apsides": 2,
+        "period": 2
+      }
+    },
+    {
+      "case": "R2",
+      "scenario": "keplers-2nd-law",
+      "integrator": "Symplectic Euler",
+      "label": "1/192",
+      "step": 0.005208333333333333,
+      "steps": 1954139,
+      "values": {
+        "energy": 0.0003827,
+        "growth": 1,
+        "angularMomentum": 6.887e-14,
+        "apsides": 3.476e-7,
+        "period": 4.099e-7
+      },
+      "bounds": {
+        "energy": 0.0007648,
+        "growth": 1.5,
+        "angularMomentum": 1e-12,
+        "apsides": 0.001197,
+        "period": 7.161e-7
+      },
+      "pass": {
+        "energy": true,
+        "growth": true,
+        "angularMomentum": true,
+        "apsides": true,
+        "period": true
+      },
+      "reported": {
+        "endPositionOverA": 0.0001686,
+        "stepsPerOrbit": 65140,
+        "orbitsRun": 30,
+        "periodsMeasured": 29,
+        "turnAngle": 0.0005984,
+        "shadowAmplitude": 0.07342
+      },
+      "order": {
+        "energy": 1,
+        "growth": 0,
+        "angularMomentum": -0.361,
+        "apsides": 2,
+        "period": 2
+      }
+    },
+    {
+      "case": "R3",
+      "scenario": "binary-pair",
+      "integrator": "Symplectic Euler",
+      "label": "1/24",
+      "step": 0.041666666666666664,
+      "steps": 953721,
+      "values": {
+        "energy": 1.085e-7,
+        "growth": 1,
+        "angularMomentum": 3.387e-14,
+        "momentum": 0,
+        "barycentre": 0,
+        "period": 7.686e-8
+      },
+      "bounds": {
+        "energy": 2.17e-7,
+        "growth": 1.5,
+        "angularMomentum": 1e-12,
+        "momentum": 1e-12,
+        "barycentre": 1e-9,
+        "period": 2.17e-7
+      },
+      "pass": {
+        "energy": true,
+        "growth": true,
+        "angularMomentum": true,
+        "momentum": true,
+        "barycentre": true,
+        "period": true
+      },
+      "reported": {
+        "endSeparationOverA": 0.00002415,
+        "stepsPerOrbit": 19070,
+        "orbitsRun": 50,
+        "omegaDt": 0.0003294
+      }
+    },
+    {
+      "case": "R3",
+      "scenario": "binary-pair",
+      "integrator": "Symplectic Euler",
+      "label": "1/48",
+      "step": 0.020833333333333332,
+      "steps": 1907441,
+      "values": {
+        "energy": 2.713e-8,
+        "growth": 1,
+        "angularMomentum": 9.553e-14,
+        "momentum": 0,
+        "barycentre": 0,
+        "period": 1.922e-8
+      },
+      "bounds": {
+        "energy": 5.425e-8,
+        "growth": 1.5,
+        "angularMomentum": 1e-12,
+        "momentum": 1e-12,
+        "barycentre": 1e-9,
+        "period": 5.425e-8
+      },
+      "pass": {
+        "energy": true,
+        "growth": true,
+        "angularMomentum": true,
+        "momentum": true,
+        "barycentre": true,
+        "period": true
+      },
+      "reported": {
+        "endSeparationOverA": 0.000006037,
+        "stepsPerOrbit": 38150,
+        "orbitsRun": 50,
+        "omegaDt": 0.0001647
+      },
+      "order": {
+        "energy": 2,
+        "growth": 0,
+        "angularMomentum": -1.5,
+        "period": 2
+      }
+    },
+    {
+      "case": "R3",
+      "scenario": "binary-pair",
+      "integrator": "Symplectic Euler",
+      "label": "1/96",
+      "step": 0.010416666666666666,
+      "steps": 3814882,
+      "values": {
+        "energy": 6.782e-9,
+        "growth": 1,
+        "angularMomentum": 9.719e-14,
+        "momentum": 0,
+        "barycentre": 0,
+        "period": 4.801e-9
+      },
+      "bounds": {
+        "energy": 1.356e-8,
+        "growth": 1.5,
+        "angularMomentum": 1e-12,
+        "momentum": 1e-12,
+        "barycentre": 1e-9,
+        "period": 1.356e-8
+      },
+      "pass": {
+        "energy": true,
+        "growth": true,
+        "angularMomentum": true,
+        "momentum": true,
+        "barycentre": true,
+        "period": true
+      },
+      "reported": {
+        "endSeparationOverA": 0.000001508,
+        "stepsPerOrbit": 76300,
+        "orbitsRun": 50,
+        "omegaDt": 0.00008235
+      },
+      "order": {
+        "energy": 2,
+        "growth": 0,
+        "angularMomentum": -0.0249,
+        "period": 2
+      }
+    },
+    {
+      "case": "R3",
+      "scenario": "binary-pair",
+      "integrator": "Symplectic Euler",
+      "label": "1/192",
+      "step": 0.005208333333333333,
+      "steps": 7629764,
+      "values": {
+        "energy": 1.695e-9,
+        "growth": 0.9999,
+        "angularMomentum": 2.411e-13,
+        "momentum": 0,
+        "barycentre": 0,
+        "period": 1.205e-9
+      },
+      "bounds": {
+        "energy": 3.391e-9,
+        "growth": 1.5,
+        "angularMomentum": 1e-12,
+        "momentum": 1e-12,
+        "barycentre": 1e-9,
+        "period": 3.391e-9
+      },
+      "pass": {
+        "energy": true,
+        "growth": true,
+        "angularMomentum": true,
+        "momentum": true,
+        "barycentre": true,
+        "period": true
+      },
+      "reported": {
+        "endSeparationOverA": 3.787e-7,
+        "stepsPerOrbit": 152600,
+        "orbitsRun": 50,
+        "omegaDt": 0.00004118
+      },
+      "order": {
+        "energy": 2,
+        "growth": 0.000144,
+        "angularMomentum": -1.31,
+        "period": 1.99
+      }
+    },
+    {
+      "case": "R4",
+      "scenario": "gravity-assist-heliocentric",
+      "integrator": "Velocity Verlet",
+      "label": "1/24",
+      "step": 0.041666666666666664,
+      "steps": 28801,
+      "values": {
+        "energy": 4.343e-13,
+        "craftDv": 3.034e-7,
+        "momentum": 4.122e-14,
+        "angularMomentum": 2.498e-14
+      },
+      "bounds": {
+        "energy": 0.000001,
+        "craftDv": 0.01,
+        "momentum": 1e-11,
+        "angularMomentum": 1e-11
+      },
+      "pass": {
+        "energy": true,
+        "craftDv": true,
+        "momentum": true,
+        "angularMomentum": true
+      },
+      "reported": {
+        "closestApproach": 13.06,
+        "craftPositionError": 0.0006694,
+        "endTime": 1200,
+        "dvSim": 1.739,
+        "dvRef": 1.739
+      }
+    },
+    {
+      "case": "R4",
+      "scenario": "gravity-assist-heliocentric",
+      "integrator": "Velocity Verlet",
+      "label": "1/48",
+      "step": 0.020833333333333332,
+      "steps": 57600,
+      "values": {
+        "energy": 1.062e-13,
+        "craftDv": 7.585e-8,
+        "momentum": 3.206e-14,
+        "angularMomentum": 3.686e-14
+      },
+      "bounds": {
+        "energy": 0.000001,
+        "craftDv": 0.01,
+        "momentum": 1e-11,
+        "angularMomentum": 1e-11
+      },
+      "pass": {
+        "energy": true,
+        "craftDv": true,
+        "momentum": true,
+        "angularMomentum": true
+      },
+      "reported": {
+        "closestApproach": 13.06,
+        "craftPositionError": 0.0001674,
+        "endTime": 1200,
+        "dvSim": 1.739,
+        "dvRef": 1.739
+      },
+      "order": {
+        "energy": 2.03,
+        "craftDv": 2,
+        "momentum": 0.363,
+        "angularMomentum": -0.561
+      }
+    },
+    {
+      "case": "R4",
+      "scenario": "gravity-assist-heliocentric",
+      "integrator": "Velocity Verlet",
+      "label": "1/96",
+      "step": 0.010416666666666666,
+      "steps": 115201,
+      "values": {
+        "energy": 8.244e-14,
+        "craftDv": 1.896e-8,
+        "momentum": 8.082e-14,
+        "angularMomentum": 4.064e-14
+      },
+      "bounds": {
+        "energy": 0.000001,
+        "craftDv": 0.01,
+        "momentum": 1e-11,
+        "angularMomentum": 1e-11
+      },
+      "pass": {
+        "energy": true,
+        "craftDv": true,
+        "momentum": true,
+        "angularMomentum": true
+      },
+      "reported": {
+        "closestApproach": 13.06,
+        "craftPositionError": 0.00004184,
+        "endTime": 1200,
+        "dvSim": 1.739,
+        "dvRef": 1.739
+      },
+      "order": {
+        "energy": 0.365,
+        "craftDv": 2,
+        "momentum": -1.33,
+        "angularMomentum": -0.141
+      }
+    },
+    {
+      "case": "R4",
+      "scenario": "gravity-assist-heliocentric",
+      "integrator": "Velocity Verlet",
+      "label": "1/192",
+      "step": 0.005208333333333333,
+      "steps": 230400,
+      "values": {
+        "energy": 1.15e-13,
+        "craftDv": 4.741e-9,
+        "momentum": 6.972e-14,
+        "angularMomentum": 5.725e-14
+      },
+      "bounds": {
+        "energy": 0.000001,
+        "craftDv": 0.01,
+        "momentum": 1e-11,
+        "angularMomentum": 1e-11
+      },
+      "pass": {
+        "energy": true,
+        "craftDv": true,
+        "momentum": true,
+        "angularMomentum": true
+      },
+      "reported": {
+        "closestApproach": 13.06,
+        "craftPositionError": 0.00001046,
+        "endTime": 1200,
+        "dvSim": 1.739,
+        "dvRef": 1.739
+      },
+      "order": {
+        "energy": -0.48,
+        "craftDv": 2,
+        "momentum": 0.213,
+        "angularMomentum": -0.494
+      }
+    },
+    {
+      "case": "R4x",
+      "scenario": "three-body-sensitivity-lab",
+      "integrator": "Symplectic Euler",
+      "label": "1/24",
+      "step": 0.041666666666666664,
+      "steps": 807,
+      "values": {
+        "energy": 0.04667
+      },
+      "bounds": {
+        "energy": 0.02
+      },
+      "pass": {
+        "energy": false
+      },
+      "reported": {
+        "timeOfCloseApproach": 33.63,
+        "minimumSeparation": 25.46,
+        "energyErrorThroughTheRun": 0.04667,
+        "side": 86.6
+      }
+    },
+    {
+      "case": "R4x",
+      "scenario": "three-body-sensitivity-lab",
+      "integrator": "Symplectic Euler",
+      "label": "1/48",
+      "step": 0.020833333333333332,
+      "steps": 1615,
+      "values": {
+        "energy": 0.02564
+      },
+      "bounds": {
+        "energy": 0.02
+      },
+      "pass": {
+        "energy": false
+      },
+      "reported": {
+        "timeOfCloseApproach": 33.65,
+        "minimumSeparation": 25.35,
+        "energyErrorThroughTheRun": 0.02564,
+        "side": 86.6
+      },
+      "order": {
+        "energy": 0.864
+      }
+    },
+    {
+      "case": "R4x",
+      "scenario": "three-body-sensitivity-lab",
+      "integrator": "Symplectic Euler",
+      "label": "1/96",
+      "step": 0.010416666666666666,
+      "steps": 3229,
+      "values": {
+        "energy": 0.01254
+      },
+      "bounds": {
+        "energy": 0.02
+      },
+      "pass": {
+        "energy": true
+      },
+      "reported": {
+        "timeOfCloseApproach": 33.64,
+        "minimumSeparation": 25.96,
+        "energyErrorThroughTheRun": 0.01254,
+        "side": 86.6
+      },
+      "order": {
+        "energy": 1.03
+      }
+    },
+    {
+      "case": "R4x",
+      "scenario": "three-body-sensitivity-lab",
+      "integrator": "Symplectic Euler",
+      "label": "1/192",
+      "step": 0.005208333333333333,
+      "steps": 6459,
+      "values": {
+        "energy": 0.006412
+      },
+      "bounds": {
+        "energy": 0.02
+      },
+      "pass": {
+        "energy": true
+      },
+      "reported": {
+        "timeOfCloseApproach": 33.64,
+        "minimumSeparation": 25.94,
+        "energyErrorThroughTheRun": 0.006412,
+        "side": 86.6
+      },
+      "order": {
+        "energy": 0.968
+      }
+    },
+    {
+      "case": "R5",
+      "scenario": "tidal-disruption-event",
+      "integrator": "Symplectic Euler",
+      "label": "1/24",
+      "step": 0.041666666666666664,
+      "steps": 150,
+      "values": {
+        "position": 0.02143
+      },
+      "bounds": {
+        "position": 0.01
+      },
+      "pass": {
+        "position": false
+      },
+      "reported": {
+        "periapsisTime": 3.217,
+        "sampleTime": 3.208,
+        "periapsisDistance": 117.4,
+        "fragmentsCreated": 53,
+        "massFraction": 0.7979
+      },
+      "data": {
+        "massFraction": 0.7979,
+        "fragments": 53
+      }
+    },
+    {
+      "case": "R5",
+      "scenario": "tidal-disruption-event",
+      "integrator": "Symplectic Euler",
+      "label": "1/48",
+      "step": 0.020833333333333332,
+      "steps": 301,
+      "values": {
+        "position": 0.01081
+      },
+      "bounds": {
+        "position": 0.01
+      },
+      "pass": {
+        "position": false
+      },
+      "reported": {
+        "periapsisTime": 3.217,
+        "sampleTime": 3.208,
+        "periapsisDistance": 117.4,
+        "fragmentsCreated": 0,
+        "massFraction": 0.7977
+      },
+      "data": {
+        "massFraction": 0.7977,
+        "fragments": 0
+      },
+      "order": {
+        "position": 0.987
+      }
+    },
+    {
+      "case": "R5",
+      "scenario": "tidal-disruption-event",
+      "integrator": "Symplectic Euler",
+      "label": "1/96",
+      "step": 0.010416666666666666,
+      "steps": 602,
+      "values": {
+        "position": 0.005442
+      },
+      "bounds": {
+        "position": 0.01
+      },
+      "pass": {
+        "position": true
+      },
+      "reported": {
+        "periapsisTime": 3.217,
+        "sampleTime": 3.219,
+        "periapsisDistance": 117.4,
+        "fragmentsCreated": 0,
+        "massFraction": 0.7977
+      },
+      "data": {
+        "massFraction": 0.7977,
+        "fragments": 0
+      },
+      "order": {
+        "position": 0.99
+      }
+    },
+    {
+      "case": "R5",
+      "scenario": "tidal-disruption-event",
+      "integrator": "Symplectic Euler",
+      "label": "1/192",
+      "step": 0.005208333333333333,
+      "steps": 1204,
+      "values": {
+        "position": 0.002727
+      },
+      "bounds": {
+        "position": 0.01
+      },
+      "pass": {
+        "position": true
+      },
+      "reported": {
+        "periapsisTime": 3.217,
+        "sampleTime": 3.219,
+        "periapsisDistance": 117.4,
+        "fragmentsCreated": 0,
+        "massFraction": 0.7976
+      },
+      "data": {
+        "massFraction": 0.7976,
+        "fragments": 0
+      },
+      "order": {
+        "position": 0.997
+      }
+    }
+  ]
+}
