@@ -502,16 +502,11 @@ export function scrubTo(offset) {
 }
 
 /**
- * Step one recorded frame backwards. From live, the first stop is the
- * newest recorded frame when that is not the live moment, and the one before
- * it when it is (a frame taken a step ago is the world as it stands).
+ * Step one recorded frame backwards. From live the first stop is one frame
+ * back, as it has always been; a frame recorded a step ago is the world as it
+ * stands, and the one before it is the step before.
  */
 export function stepBack() {
-  if (!scrubbing) {
-    const newest = frameTimes[indexForOffset(0)];
-    scrubTo(newest === getSimulationTime() ? 1 : 0);
-    return;
-  }
   scrubTo(scrubOffset + 1);
 }
 
