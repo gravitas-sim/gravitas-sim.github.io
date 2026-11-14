@@ -86,11 +86,8 @@ const ALL_LISTS = () => [
   ['Galaxy', galaxies],
 ];
 
-// A row holds numbers only, and a galaxy's kind and name are not numbers. A
-// galaxy rebuilt from a row - after Blank Simulation, which does not reset the
-// recording - would otherwise come back a spiral with a new name, and Coma
-// Cluster would lose the six ellipticals it puts at its center. Kept by id for
-// as long as the recording is.
+// A row holds numbers only; a galaxy's kind and name are kept by id for as long
+// as the recording is (Blank Simulation does not reset it).
 const galaxyIdentity = new Map();
 
 // --- Capture budget -----------------------------------------------------------
@@ -529,16 +526,9 @@ function syncUI() {
   });
 }
 
-/** @returns {{frames:number, bytes:number}} Recording memory footprint */
 /**
- * Walk every recorded frame, oldest first.
- *
- * The ring buffer is the only record of where things have been, and the CSV
- * export is the one caller that needs all of it rather than one frame at a
- * time. It is handed one decoded frame per call rather than the whole history
- * as an array: a dense scenario holds nine hundred frames of a hundred bodies,
- * and materialising ninety thousand object literals to write a file that is
- * consumed line by line is a lot of garbage for no gain.
+ * Walk every recorded frame, oldest first, one decoded frame per call (the CSV
+ * export reads all of it; materialising the whole history is needless garbage).
  *
  * @param {Function} visit - Called as visit(simSeconds, bodies) per frame
  */

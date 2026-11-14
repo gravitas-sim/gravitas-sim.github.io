@@ -587,22 +587,11 @@ function layerOffset(layer, W, H) {
 
 // --- When the starfield actually needs repainting ----------------------------
 //
-// It lives on its own canvas, so whatever it painted last frame is still on
-// screen. Repainting it is not free: every star is offset for parallax, tested
-// against every active ripple, and tested against every black hole, neutron
-// star and white dwarf for lensing. At three hundred stars and a dozen compact
-// objects that is thousands of distance checks, and profiling put it at 2-10ms
-// per frame, consistently more than drawing the simulation itself.
-//
-// Almost none of that changes between one frame and the next. What does:
-//   - the view moves (pan or zoom)
-//   - a gravitational-wave ripple is expanding
-//   - a lensing object has moved
-//   - the twinkle phase advances
-//
-// The first three are detected; the last is an amplitude-0.1 sine that nobody
-// can see stepping at 20Hz. So the starfield repaints when the view changes,
-// at 30Hz while something on it is genuinely moving, and at 20Hz otherwise.
+// It lives on its own canvas, so last frame's paint is still on screen, and
+// repainting it (parallax, ripple and lensing tests per star) cost 2-10ms a
+// frame. It repaints when the view changes (pan, zoom), at 30Hz while a ripple
+// or lensing object is moving, and at 20Hz otherwise; the twinkle phase alone
+// is not worth a repaint.
 let starfieldDirty = true;
 let lastStarPaint = 0;
 let lastStarPan = { x: 0, y: 0 };
@@ -947,17 +936,9 @@ function drawStarfield() {
 const wrap = (v, size) => ((v % size) + size) % size;
 
 /**
- * Blit one layer, wrapped, moving exactly one canvas worth of pixels.
- *
- * A pan slides the layer, and the part that slides off one edge has to come
- * back on the other or the sky ends. Drawing the whole canvas at four offsets
- * does that and composites four megapixels per layer to show one - twelve
- * blits a repaint across three layers, which was the entire remaining cost of
- * a panned scene: 8.9ms in Compact Object Zoo against 0.2ms in an unpanned
- * empty one, for a field with thirteen small lensing patches in it.
- *
- * The four pieces are disjoint and together are the canvas exactly once, so
- * this is the same picture for a quarter of the fill.
+ * Blit one layer, wrapped, moving exactly one canvas worth of pixels: four
+ * disjoint pieces that together are the canvas once, a quarter of the fill of
+ * drawing it at four offsets (8.9ms down to the cost of an unpanned scene).
  *
  * @param {HTMLCanvasElement} canvas - The layer
  * @param {number} ox - Horizontal offset, already wrapped into [0, W)
@@ -999,13 +980,8 @@ const framedPointPool = [];
 const framedTrailView = [];
 
 /**
- * A trail as the current reference frame would have seen it.
- *
- * Points older than the origin's own history are dropped rather than drawn
- * unshifted. A body that has been alive longer than the frame's origin has trail
- * points that simply cannot be expressed in that frame, and drawing them where
- * they happen to sit in world coordinates would splice a piece of a different
- * picture onto the end of this one.
+ * A trail as the current reference frame would have seen it. Points older than
+ * the origin's own history are dropped: they cannot be expressed in that frame.
  *
  * @param {Array} trail - The body's recorded trail, oldest first
  * @param {?object} shifts - From frameShifts, or null in the world frame
@@ -1122,19 +1098,9 @@ const drawScene = () => {
 
   /**
    * Brightness reference for a trail, in the object's own speed units.
-   *
-   * Trail brightness used to be scaled against a hard-coded 50 sim-units/time,
-   * which silently deleted the trail of anything slower. A two-solar-mass binary
-   * four AU apart orbits at 1.58 units/time, giving every one of its points an
-   * intensity of 0.032 against a draw threshold of 0.05: the trail was computed,
-   * aged and stored, and then skipped on every frame. Scenarios whose entire
-   * subject is an orbit drew two dots and nothing else.
-   *
-   * Scaling against the fastest point in the object's own trail keeps what the
-   * cue was for - periapsis brighter than apoapsis - while making it scale-free,
-   * so a slow binary and a black-hole inspiral both read. The floor stops a
-   * near-circular orbit, where every point is the same speed, from sitting at
-   * the bottom of the ramp.
+   * Scaled to the fastest point in the trail rather than a fixed 50 units/time,
+   * which hid the trail of anything slow (a 1.58 units/time binary fell under
+   * the 0.05 draw threshold); the floor keeps a circular orbit off the bottom.
    *
    * @param {Array<{velocity: number}>} trail - The object's trail points
    * @returns {number} Speed to treat as full brightness, never zero
@@ -1455,16 +1421,9 @@ const drawScene = () => {
 
   bh_list.forEach(bh => bh.draw(ctx));
 
-  // Which black hole is selected, marked as UI rather than as light.
-  //
-  // Every black hole used to be drawn with a pale ring at the edge of its
-  // silhouette, all the time and over the top of the foreground half of its
-  // disk. It was there so a dark object could be found, and it was read as
-  // something the object was emitting - which a horizon does not. The ring
-  // lives here now, where the hover ring above already lives: it appears for
-  // the one object the reader has chosen, it is dashed and one and a half
-  // screen pixels wide at any zoom, and it sits outside the silhouette rather
-  // than on it. Nothing in js/blackHole/render.js draws a boundary any more.
+  // Which black hole is selected, marked as UI rather than as light: a dashed
+  // ring outside the silhouette at any zoom, for the chosen object only (a ring
+  // drawn on every hole read as something the object emitted).
   if (state.selectedObject?.type === 'BlackHole') {
     const bh = state.selectedObject.object;
     if (bh && bh.alive && bh.pos) {
@@ -1667,16 +1626,10 @@ const drawScene = () => {
     drawGwWavefronts(ctx);
   }
 
-  // The overlay carries the ids of the bodies to average over and nothing
-  // else: the point is recomputed from those bodies every frame rather than
-  // written in by the lesson, because a student is being asked to watch it
-  // stay still while two stars swing round it, and a value pushed in at 4 Hz
-  // by the panel's tick would visibly jitter and would be a restatement of
-  // what the lesson expects rather than a measurement of what the engine did.
-  //
-  // Drawn in screen-space widths so it reads as an instrument laid over the
-  // scene rather than as an object in it - there is nothing at the barycenter
-  // of a binary, and a filled disc there would teach the opposite.
+  // The overlay carries only body ids; the point is recomputed from those
+  // bodies every frame, so a student watches it stay still while two stars
+  // swing round it (not a value pushed in by the panel). Drawn in screen-space
+  // widths as an instrument: nothing is at a binary's barycenter, so no disc.
   if (state.barycenterOverlay?.active) {
     const ids = state.barycenterOverlay.ids || [];
     const members = stars.filter(o => ids.includes(o.id));
@@ -2048,15 +2001,8 @@ onLocaleChange(() => {
 });
 
 /**
- * The live readout, top left.
- *
- * What this panel is for is the handful of numbers that change while the
- * simulation runs. It used to be three fixed rows of object counts - six of the
- * nine typically reading zero - followed by a crib of the keyboard controls,
- * which is neither live nor a number. The counts now appear only for the kinds
- * of body that are actually present, the crib has gone to the Shortcuts dialog,
- * and the room that frees is given to the measurements that used to be painted
- * in a second panel in the opposite corner.
+ * The live readout, top left: the handful of numbers that change while the
+ * simulation runs. Object counts appear only for the kinds present.
  *
  * @param {Object|null} drawn - What the vector overlay drew this frame, so the
  *   key describes the arrows actually on screen
@@ -2255,18 +2201,9 @@ let lastReadoutHtml = null;
 
 /**
  * Put the readout on screen, without destroying what the reader was doing.
- *
- * This used to be `innerHTML = ...` once a frame. That is fine for a list of
- * numbers and fatal for anything interactive: the <details> holding the
- * explanation was recreated sixty times a second, so it snapped shut the
- * instant it was opened and focus never survived long enough to press it. The
- * disclosure was unreachable by keyboard in the most literal way.
- *
- * Three things fix it. Most frames write nothing at all, because the markup is
- * identical. When it does change - a drift figure ticking a few times a second
- * - the open state is carried across, and the focus is put back if it was on
- * the summary. Together those make the explanation behave like an element
- * rather than like a repainted picture of one.
+ * Most frames write nothing (the markup is identical); when it changes, the
+ * <details> open state and focus on its summary are carried across, so the
+ * explanation behaves like an element and not a repainted picture of one.
  *
  * @param {string} html - The readout's markup, or '' to clear it
  */
@@ -2365,18 +2302,10 @@ function instrumentationSettings() {
   return override;
 }
 
-// How much of the bottom-left corner the page's own chrome is using.
-//
-// The instrumentation is painted on the canvas and the transport bar and
-// tutorial button are HTML on top of it, so the canvas has to be told where
-// they are or the scale bar ends up behind the scrubber. Measured rather than
-// assumed, because both of them move: the transport bar is centered on the
-// window and hidden entirely on a narrow screen.
-//
-// Re-measured a few times a second rather than every frame. A layout read in
-// the middle of a paint forces the browser to flush pending style work, and
-// doing that sixty times a second for a number that changes when a panel opens
-// is the wrong trade.
+// How much of the bottom-left corner the page's own chrome is using: the
+// scale bar is painted on the canvas, the transport bar is HTML over it, and
+// both move, so it is measured, a few times a second (a layout read mid-paint
+// forces a style flush).
 let chromeInset = 0;
 let chromeMeasuredAt = 0;
 const CHROME_MEASURE_MS = 400;
@@ -2751,22 +2680,11 @@ if (typeof window !== 'undefined') {
   }
 }
 
-// Fixed-step recording, for a controlled experiment.
-//
-// The loop normally derives its step from how long the last frame actually
-// took, which is right for a sandbox: the simulation then runs at the same
-// apparent speed on a fast machine and a slow one. It is fatal for an A/B
-// experiment. Two runs of the same world get different sequences of frame
-// times, so they take different sequences of steps, so they are not the same
-// calculation - and in a chaotic system that difference grows exponentially
-// like any other. The reproducibility control at the start of the chaos
-// investigation would fail, and it would fail for a reason that has nothing to
-// do with the physics being taught.
-//
-// While the Experiment Bench is recording, every frame therefore advances the
-// clock by the same amount. The simulation then runs slightly fast or slow in
-// wall-clock terms depending on the machine, which nobody can see, and two runs
-// of the same length become bit-identical, which is the whole point.
+// Fixed-step recording, for a controlled experiment. The loop normally steps
+// by the last frame's real duration; two runs of one world would then take
+// different steps and diverge (chaotically, in a chaotic system). While the
+// Experiment Bench records, every frame advances the clock by the same amount,
+// so two runs of the same length are bit-identical.
 let fixedStepSeconds = 0;
 
 /**
