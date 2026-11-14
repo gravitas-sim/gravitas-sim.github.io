@@ -443,6 +443,7 @@ const transitLab = ps => {
  */
 export const SCENARIO_PRESETS = /* @__PURE__ */ Object.freeze({
   'binary-bh': {
+    max_timestep: 1 / 24,
     // Matter is present in this scenario, so the holes are given a disk. No jets: nothing here says these are launching one.
     bh_environment: 'accreting',
     bh_disk_inclination: 62,
@@ -482,6 +483,7 @@ export const SCENARIO_PRESETS = /* @__PURE__ */ Object.freeze({
     preset_zoom: 1.5,
   },
   'neutron-star-collision': {
+    max_timestep: 1 / 24,
     num_black_holes: 0,
     num_neutron_stars: 2,
     use_individual_ns_masses: true,
@@ -501,6 +503,7 @@ export const SCENARIO_PRESETS = /* @__PURE__ */ Object.freeze({
     preset_zoom: 1.5,
   },
   'pulsar-system': {
+    max_timestep: 1 / 24,
     num_black_holes: 0,
     num_neutron_stars: 1,
     num_planets: 3,
@@ -516,6 +519,7 @@ export const SCENARIO_PRESETS = /* @__PURE__ */ Object.freeze({
     preset_zoom: 1.5,
   },
   'white-dwarf-binary': {
+    max_timestep: 1 / 24,
     num_black_holes: 0,
     num_white_dwarfs: 2,
     num_planets: 0,
@@ -533,6 +537,7 @@ export const SCENARIO_PRESETS = /* @__PURE__ */ Object.freeze({
     preset_zoom: 1.5,
   },
   'stellar-graveyard': {
+    max_timestep: 1 / 24,
     num_black_holes: 3,
     num_neutron_stars: 5,
     num_white_dwarfs: 8,
@@ -551,6 +556,7 @@ export const SCENARIO_PRESETS = /* @__PURE__ */ Object.freeze({
     preset_zoom: 1.5,
   },
   'galactic-center': {
+    max_timestep: 1 / 24,
     // An active nucleus: a feeding supermassive hole with a collimated outflow.
     bh_environment: 'jet',
     bh_disk_inclination: 25,
@@ -575,6 +581,7 @@ export const SCENARIO_PRESETS = /* @__PURE__ */ Object.freeze({
     preset_zoom: 1.5,
   },
   'supernova-remnant': {
+    max_timestep: 1 / 24,
     num_black_holes: 0,
     num_neutron_stars: 1,
     num_white_dwarfs: 0,
@@ -592,6 +599,7 @@ export const SCENARIO_PRESETS = /* @__PURE__ */ Object.freeze({
     preset_zoom: 1.5,
   },
   'compact-object-zoo': {
+    max_timestep: 1 / 24,
     num_black_holes: 3,
     num_neutron_stars: 4,
     num_white_dwarfs: 6,
@@ -609,6 +617,7 @@ export const SCENARIO_PRESETS = /* @__PURE__ */ Object.freeze({
     preset_zoom: 1.5,
   },
   'millisecond-pulsar': {
+    max_timestep: 1 / 24,
     num_black_holes: 0,
     num_neutron_stars: 1,
     num_white_dwarfs: 1,
@@ -632,6 +641,7 @@ export const SCENARIO_PRESETS = /* @__PURE__ */ Object.freeze({
   // star on a plunging orbit whose closest approach falls inside the tidal
   // radius, so the existing mass-loss code has something to act on.
   'tidal-disruption-event': {
+    max_timestep: 1 / 24,
     // A star has been pulled apart and its debris forms a disk. Jetted disruptions exist and are rare, so none is drawn.
     bh_environment: 'accreting',
     bh_disk_inclination: 40,
@@ -655,6 +665,7 @@ export const SCENARIO_PRESETS = /* @__PURE__ */ Object.freeze({
     preset_zoom: 0.7,
   },
   'intermediate-mass-bh': {
+    max_timestep: 1 / 24,
     num_black_holes: 1,
     bh_mass: 400,
     num_neutron_stars: 2,
@@ -672,6 +683,7 @@ export const SCENARIO_PRESETS = /* @__PURE__ */ Object.freeze({
     preset_zoom: 1.5,
   },
   'galactic-collision': {
+    max_timestep: 1 / 24,
     // Gas driven inwards by the collision feeds both nuclei.
     bh_environment: 'jet',
     bh_disk_inclination: 55,
@@ -699,6 +711,7 @@ export const SCENARIO_PRESETS = /* @__PURE__ */ Object.freeze({
     preset_zoom: 1.5,
   },
   'micro-bh-swarm': {
+    max_timestep: 1 / 24,
     num_black_holes: 12,
     bh_mass: 1.2,
     bh_behavior: 'Orbiting', // Make them dynamic!
@@ -719,6 +732,7 @@ export const SCENARIO_PRESETS = /* @__PURE__ */ Object.freeze({
     preset_zoom: 1.5,
   },
   'exoplanet-lab': {
+    max_timestep: 1 / 24,
     num_black_holes: 0,
     num_planets: 120, // Diverse exoplanet collection
     num_gas_giants: 25, // Including hot Jupiters, mini-Neptunes
@@ -737,6 +751,7 @@ export const SCENARIO_PRESETS = /* @__PURE__ */ Object.freeze({
     preset_zoom: 1.5,
   },
   'triple-bh-system': {
+    max_timestep: 1 / 24,
     num_black_holes: 3,
     bh_behavior: 'Orbiting',
     use_individual_bh_masses: true,
@@ -755,6 +770,7 @@ export const SCENARIO_PRESETS = /* @__PURE__ */ Object.freeze({
     preset_zoom: 1.5,
   },
   'supermassive-bh': {
+    max_timestep: 1 / 24,
     // Drawn as a feeding hole because that is what the scenario is for.
     bh_environment: 'accreting',
     bh_disk_inclination: 70,
@@ -772,6 +788,7 @@ export const SCENARIO_PRESETS = /* @__PURE__ */ Object.freeze({
     preset_zoom: 1.5,
   },
   'star-cluster': {
+    max_timestep: 1 / 24,
     num_black_holes: 0,
     num_planets: 80, // These represent main-sequence stars
     num_gas_giants: 15, // These represent evolved stars
@@ -790,6 +807,7 @@ export const SCENARIO_PRESETS = /* @__PURE__ */ Object.freeze({
     preset_zoom: 1.5,
   },
   'kuiper-belt': {
+    max_timestep: 1 / 24,
     // Was 'Empty', which: with no custom placement code for this scenario: // left all 300 belt objects stacked at the origin. Multi-Ring gives the
     // nested rings a Kuiper Belt actually wants, on circular orbits around
     // the central star.
@@ -814,6 +832,7 @@ export const SCENARIO_PRESETS = /* @__PURE__ */ Object.freeze({
     preset_zoom: 1.5,
   },
   'sagittarius-a': {
+    max_timestep: 1 / 24,
     // The real Sgr A* accretes at a tiny fraction of the Eddington rate and shows no large-scale jet, so it gets a faint disk and no outflow. It is the nearest thing to a quiescent supermassive hole that is still worth drawing.
     bh_environment: 'accreting',
     bh_disk_inclination: 30,
@@ -867,6 +886,7 @@ export const SCENARIO_PRESETS = /* @__PURE__ */ Object.freeze({
     max_timestep: 0.15,
   },
   'solar-system': {
+    max_timestep: 1 / 24,
     num_black_holes: 0,
     num_stars: 1, // One sun-like star
     // Use central-star gravity but disable planet-planet mutual gravity
@@ -892,6 +912,7 @@ export const SCENARIO_PRESETS = /* @__PURE__ */ Object.freeze({
     preset_zoom: 0.25,
   },
   'earth-moon-system': {
+    max_timestep: 1 / 24,
     num_black_holes: 0,
     num_stars: 0, // No central star, just Earth-Moon
     num_planets: 1, // Earth
@@ -931,6 +952,7 @@ export const SCENARIO_PRESETS = /* @__PURE__ */ Object.freeze({
     preset_zoom: 1.5,
   },
   slingshot: {
+    max_timestep: 1 / 24,
     placement: 'Random',
     num_black_holes: 2,
     use_individual_bh_masses: true,
@@ -950,6 +972,7 @@ export const SCENARIO_PRESETS = /* @__PURE__ */ Object.freeze({
     preset_zoom: 1.5,
   },
   'rogue-encounter': {
+    max_timestep: 1 / 24,
     placement: 'Empty',
     num_black_holes: 1,
     num_stars: 1, // Central star system
@@ -969,6 +992,7 @@ export const SCENARIO_PRESETS = /* @__PURE__ */ Object.freeze({
     preset_zoom: 1.5,
   },
   'quasar-cannon': {
+    max_timestep: 1 / 24,
     // A quasar is this: a supermassive hole accreting hard, with a jet.
     bh_environment: 'jet',
     bh_disk_inclination: 68,
@@ -991,6 +1015,7 @@ export const SCENARIO_PRESETS = /* @__PURE__ */ Object.freeze({
     preset_zoom: 0.05,
   },
   'the-pinwheel-galaxy-core': {
+    max_timestep: 1 / 24,
     // Gas-rich nucleus.
     bh_environment: 'accreting',
     bh_disk_inclination: 35,
@@ -1012,6 +1037,7 @@ export const SCENARIO_PRESETS = /* @__PURE__ */ Object.freeze({
     preset_zoom: 1.5,
   },
   'star-frisbee': {
+    max_timestep: 1 / 24,
     num_black_holes: 1,
     bh_mass: 10,
     num_stars: 30,
@@ -1029,6 +1055,7 @@ export const SCENARIO_PRESETS = /* @__PURE__ */ Object.freeze({
     preset_zoom: 1.5,
   },
   'kessler-cascade': {
+    max_timestep: 1 / 24,
     num_black_holes: 1,
     // Five solar masses was the shipped value and it cannot hold a swarm:
     // three hundred micro-stars of a tenth of a solar mass each weigh thirty
@@ -1063,6 +1090,7 @@ export const SCENARIO_PRESETS = /* @__PURE__ */ Object.freeze({
     micro_star_high_velocity: true,
   },
   'alien-dyson-swarm-collapse': {
+    max_timestep: 1 / 24,
     num_black_holes: 1,
     bh_mass: 1,
     num_stars: 100,
@@ -1079,6 +1107,7 @@ export const SCENARIO_PRESETS = /* @__PURE__ */ Object.freeze({
     preset_zoom: 1.5,
   },
   'tidal-arm-tango': {
+    max_timestep: 1 / 24,
     num_black_holes: 2,
     use_individual_bh_masses: true,
     bh_masses: [1e6, 1e6],
@@ -1101,6 +1130,7 @@ export const SCENARIO_PRESETS = /* @__PURE__ */ Object.freeze({
     bh_layout: 'parabolic-flyby',
   },
   'hungry-hungry-holes': {
+    max_timestep: 1 / 24,
     // The scenario is about accretion; the holes are drawn accreting.
     bh_environment: 'accreting',
     bh_disk_inclination: 50,
@@ -1122,6 +1152,7 @@ export const SCENARIO_PRESETS = /* @__PURE__ */ Object.freeze({
     preset_zoom: 1.5,
   },
   'slingshot-gauntlet': {
+    max_timestep: 1 / 24,
     num_black_holes: 5,
     use_individual_bh_masses: true,
     bh_masses: [30, 30, 30, 30, 30],
@@ -1149,6 +1180,7 @@ export const SCENARIO_PRESETS = /* @__PURE__ */ Object.freeze({
   // Two thousand solar masses puts the radius at 78, small enough to see
   // around and still four times the radius of the three that orbit it.
   'black-hole-billiards': {
+    max_timestep: 1 / 24,
     num_black_holes: 4,
     use_individual_bh_masses: true,
     bh_masses: [2000, 25, 25, 25],
@@ -1168,6 +1200,7 @@ export const SCENARIO_PRESETS = /* @__PURE__ */ Object.freeze({
     preset_zoom: 0.85,
   },
   'stellar-nursery': {
+    max_timestep: 1 / 24,
     num_black_holes: 1,
     bh_mass: 1,
     num_stars: 100,
@@ -1259,6 +1292,7 @@ export const SCENARIO_PRESETS = /* @__PURE__ */ Object.freeze({
   // could inject a second difference - a random asteroid, a merger rule
   // firing, a body being culled for leaving the view - has to be off.
   'three-body-sensitivity-lab': {
+    max_timestep: 1 / 24,
     num_black_holes: 0,
     num_stars: 3,
     num_planets: 0,
@@ -1671,6 +1705,7 @@ export const SCENARIO_PRESETS = /* @__PURE__ */ Object.freeze({
     min_interaction_distance: 0.2,
   },
   gw150914: {
+    max_timestep: 1 / 24,
     // Two black holes merging in vacuum. Stated explicitly rather than left to a default: this event emitted gravitational waves and no light, and nothing here should suggest otherwise.
     bh_environment: 'quiescent',
     bh_disk_inclination: 62,
