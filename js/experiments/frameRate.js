@@ -36,8 +36,9 @@ export async function measureFrameRatio({
   frames = cb => requestAnimationFrame(cb),
 }) {
   const timestep = await import('../timestep.js');
-  const { getSimClock } = await import('../timeline.js');
-  const { DT } = await import('../physics.js');
+  // The one simulated clock: the physics clock, which the timeline label and
+  // every recorded frame read too.
+  const { DT, getSimulationTime } = await import('../physics.js');
   const wanted = timestep.frameAdvance(1 / 60, settings.sim_speed, DT);
   if (!(wanted > 0)) return 1;
 
@@ -55,13 +56,13 @@ export async function measureFrameRatio({
   // and a frame that did not move costs it nothing.
   const wasPaused = state.paused;
   state.paused = false;
-  let last = getSimClock();
+  let last = getSimulationTime();
   let moved = 0;
   let covered = 0;
   await new Promise(resolve => {
     let n = 0;
     const tick = () => {
-      const now = getSimClock();
+      const now = getSimulationTime();
       if (now > last) {
         moved++;
         covered += now - last;

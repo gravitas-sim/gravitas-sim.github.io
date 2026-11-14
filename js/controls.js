@@ -26,12 +26,16 @@ import {
   scrubTo,
   stepBack,
   stepForward,
-  resumeLive,
+  returnToLive,
+  rewindToHere,
+  startReplay,
   isScrubbing,
+  isReplaying,
   bindTimelineUI,
   resetTimeline,
   getFrameCount,
 } from './timeline.js';
+import { stepOnce, stepSize } from './worldStep.js';
 import {
   initUnits,
   toggleUnitMode,
@@ -133,6 +137,11 @@ let scrubberEl = null;
 let timeLabelEl = null;
 let playBtn = null;
 let liveBtn = null;
+let auxEl = null;
+let stepSizeEl = null;
+let parkedNoteEl = null;
+let replayBtn = null;
+let rewindBtn = null;
 let userDraggingScrubber = false;
 
 function setupTransport() {
@@ -140,6 +149,11 @@ function setupTransport() {
   timeLabelEl = document.getElementById('timelineTime');
   playBtn = document.getElementById('timelinePlay');
   liveBtn = document.getElementById('timelineLive');
+  auxEl = document.getElementById('timelineAux');
+  stepSizeEl = document.getElementById('timelineStepSize');
+  parkedNoteEl = document.getElementById('timelineParkedNote');
+  replayBtn = document.getElementById('timelineReplay');
+  rewindBtn = document.getElementById('timelineRewind');
 
   if (!scrubberEl) return;
 
@@ -159,15 +173,30 @@ function setupTransport() {
     const offset = Number(scrubberEl.max) - scrubberEl.valueAsNumber;
     scrubTo(offset);
   });
+  // Said once the reader has landed, not on every pixel of a drag.
+  scrubberEl.addEventListener('change', () => {
+    const text = scrubberEl.getAttribute('aria-valuetext');
+    if (text) announce(text, false);
+  });
 
-  // Scrubbing through history always resumes, as it always has.
-  playBtn?.addEventListener('click', () =>
-    setPlaying(isScrubbing() || state.paused)
-  );
+  // While parked, Play is Return to live and puts the pause state back as it
+  // was left; nothing is discarded.
+  playBtn?.addEventListener('click', () => {
+    if (isScrubbing()) returnToLive();
+    else state.paused = !state.paused;
+    refreshTransport();
+  });
 
   liveBtn?.addEventListener('click', () => {
-    resumeLive();
-    state.paused = false;
+    returnToLive();
+    refreshTransport();
+  });
+  replayBtn?.addEventListener('click', () => {
+    startReplay();
+  });
+  rewindBtn?.addEventListener('click', () => {
+    rewindToHere();
+    toast(t('toast.timeline.rewound'));
     refreshTransport();
   });
 
@@ -176,23 +205,100 @@ function setupTransport() {
     ?.addEventListener('click', () => stepBack());
   document
     .getElementById('timelineStepFwd')
-    ?.addEventListener('click', () => stepForward());
+    ?.addEventListener('click', () => stepForwardOrOne());
 
-  bindTimelineUI({ onChange: onTimelineChange });
+  // The step's size follows the speed, which the buttons and keys write into
+  // the settings and then into this text.
+  const speedText = document.getElementById('speedDisplay');
+  if (speedText) {
+    new MutationObserver(paintStepSize).observe(speedText, {
+      childList: true,
+      characterData: true,
+      subtree: true,
+    });
+  }
+
+  bindTimelineUI({ onChange: onTimelineChange, onClock: paintClock });
 }
 
-function onTimelineChange({ frameCount, offset, scrubbing, simClock }) {
+/**
+ * The step control: one simulation step while the world is paused and live,
+ * one recorded frame while the reader is looking back. A running world has
+ * nothing to step.
+ */
+function stepForwardOrOne() {
+  if (isScrubbing()) stepForward();
+  else if (state.paused) stepOnce();
+}
+
+let lastClock = NaN;
+let lastPaused = null;
+
+/**
+ * Every frame the world is live: the timeline's label painted with the clock,
+ * which is the number the Elapsed readout shows too, and the transport's
+ * state followed when something other than its own buttons paused the world.
+ */
+function paintClock(simClock) {
+  if (state.paused !== lastPaused) {
+    lastPaused = state.paused;
+    refreshTransport();
+  }
+  if (!timeLabelEl || simClock === lastClock) return;
+  lastClock = simClock;
+  timeLabelEl.textContent = formatTime(simClock);
+}
+
+/** "1 step = x days", shown while the world is paused. */
+function paintStepSize() {
+  if (!stepSizeEl) return;
+  const text = t('transport.timelineStepSize', {
+    size: formatTime(stepSize()),
+  });
+  if (stepSizeEl.textContent !== text) stepSizeEl.textContent = text;
+}
+
+function onTimelineChange({
+  frameCount,
+  offset,
+  scrubbing,
+  replaying,
+  simClock,
+  behind,
+}) {
   if (!scrubberEl) return;
   const max = Math.max(1, frameCount - 1);
   scrubberEl.max = String(max);
   scrubberEl.disabled = frameCount < 2;
   if (!userDraggingScrubber) scrubberEl.value = String(max - offset);
 
-  if (timeLabelEl) timeLabelEl.textContent = formatTime(simClock);
+  paintClock(simClock);
+  // The value in words, for a screen reader: how far from live, and which
+  // recorded frame of how many.
+  scrubberEl.setAttribute(
+    'aria-valuetext',
+    scrubbing
+      ? t('transport.timelineScrubber.valueText', {
+          behind: formatTime(behind),
+          n: frameCount - offset,
+          total: frameCount,
+        })
+      : t('transport.timelineScrubber.valueLive')
+  );
 
   const bar = document.getElementById('timelineBar');
   bar?.classList.toggle('is-scrubbing', scrubbing);
   if (liveBtn) liveBtn.hidden = !scrubbing;
+  if (replayBtn) replayBtn.hidden = !scrubbing;
+  if (rewindBtn) rewindBtn.hidden = !scrubbing;
+  if (parkedNoteEl) {
+    parkedNoteEl.hidden = !scrubbing;
+    if (scrubbing) {
+      parkedNoteEl.textContent = replaying
+        ? t('transport.timelineReplaying.note')
+        : t('transport.timelineParked.note', { behind: formatTime(behind) });
+    }
+  }
   // The event marker rides the same track, so it is repositioned whenever the
   // track changes. It draws nothing unless an event has fired.
   renderEventMarker({ frameCount, simClock });
@@ -214,9 +320,11 @@ function refreshTransport() {
   playBtn.setAttribute(
     'aria-label',
     t(
-      showPlayIcon
-        ? 'transport.timelinePlay.playLabel'
-        : 'transport.timelinePlay.label'
+      scrubbingNow
+        ? 'transport.timelinePlay.returnLabel'
+        : showPlayIcon
+          ? 'transport.timelinePlay.playLabel'
+          : 'transport.timelinePlay.label'
     )
   );
   playBtn.title = t(
@@ -224,6 +332,12 @@ function refreshTransport() {
       ? 'transport.timelinePlay.playHint'
       : 'transport.timelinePlay.hint'
   );
+  // The step's size is only worth a line while there is a step to take.
+  if (auxEl) {
+    auxEl.hidden = !(paused || scrubbingNow);
+    if (stepSizeEl) stepSizeEl.hidden = scrubbingNow;
+    if (!auxEl.hidden && !scrubbingNow) paintStepSize();
+  }
 }
 
 // --- Rail sections ------------------------------------------------------------
@@ -367,8 +481,10 @@ function setupShortcuts() {
     group: 'Playback',
     label: t('shortcut.pause'),
     run: () => {
-      if (isScrubbing()) resumeLive();
-      state.paused = !state.paused;
+      // Parked in history, Space is Return to live, and the pause state it
+      // was left in comes back with it: nothing is discarded.
+      if (isScrubbing()) returnToLive();
+      else state.paused = !state.paused;
       refreshTransport();
     },
   });
@@ -384,7 +500,7 @@ function setupShortcuts() {
     match: '.',
     group: 'Playback',
     label: t('shortcut.stepForward'),
-    run: stepForward,
+    run: stepForwardOrOne,
   });
   registerShortcut({
     keys: 'L',
@@ -392,7 +508,9 @@ function setupShortcuts() {
     group: 'Playback',
     label: t('shortcut.live'),
     run: () => {
-      resumeLive();
+      if (!isScrubbing()) return;
+      returnToLive();
+      refreshTransport();
       toast(t('toast.timeline.live'));
     },
   });
@@ -740,7 +858,9 @@ function setupRangeFills() {
  * @param {boolean} playing - True to run
  */
 export function setPlaying(playing) {
-  if (playing && isScrubbing()) resumeLive();
+  // An explicit command, unlike the Play button: playing means running, from
+  // the live moment, whatever the pause state was when history was entered.
+  if (isScrubbing()) returnToLive();
   state.paused = !playing;
   refreshTransport();
 }
@@ -751,6 +871,21 @@ export function initControls() {
   initUnits();
   window.addEventListener(EV_OBJECT_PLACED, e => {
     if (e.detail?.object) recordPlacement(e.detail.object);
+    // A body placed while looking back is part of the world from here on, so
+    // the moment it was placed into becomes the world; Return to live would
+    // otherwise put back a world that never had it.
+    if (isScrubbing()) {
+      rewindToHere();
+      toast(t('toast.timeline.placedRewound'));
+      refreshTransport();
+    }
+  });
+  // Escape ends a replay the way Pause does: back to the live moment.
+  window.addEventListener(EV_ESCAPE, () => {
+    if (isReplaying()) {
+      returnToLive();
+      refreshTransport();
+    }
   });
   window.addEventListener(EV_SIMULATION_RESET, () => {
     clearPlacementHistory();

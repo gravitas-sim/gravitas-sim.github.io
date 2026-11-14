@@ -141,7 +141,7 @@ test.describe('scrubbing a galaxy cluster', () => {
     const got = await page.evaluate(async () => {
       const tl = await import('/js/timeline.js');
       const p = await import('/js/physics.js');
-      tl.resumeLive();
+      tl.rewindToHere();
       // The constructor takes the next id from the counter restore() set,
       // which is what placing a body with the mouse does too.
       const star = new p.StarObject({ x: 0, y: 0 }, { x: 0, y: 0 });

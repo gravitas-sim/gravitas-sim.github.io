@@ -288,19 +288,35 @@ export const ES = {
   // --- Transport bar ---------------------------------------------------------
   'transport.timelinePlay.hint': 'Pausar (espacio)',
   'transport.timelineStepBack.hint': 'Retroceder un fotograma (,)',
-  'transport.timelineStepFwd.hint': 'Avanzar un fotograma (.)',
+  'transport.timelineStepFwd.hint':
+    'Avanzar (.): un paso de la simulación en pausa, un fotograma grabado al mirar atrás',
   'transport.timelineScrubber.hint':
-    'Arrastrar para retroceder por el historial grabado. La simulación se detiene en el fotograma elegido hasta volver al directo.',
+    'Arrastra para mirar atrás en el historial grabado. El mundo se queda en el fotograma elegido y «Volver al directo» lo deja todo como estaba. Las estelas empiezan de nuevo tras restaurar, y las partículas, las partículas de disco y las ondas no se graban.',
   'transport.timelineLive.hint': 'Volver al directo (L)',
   'transport.timelineBar.label': 'Reproducción y línea de tiempo',
   'transport.timelinePlay.playLabel': 'Reanudar la simulación',
   'transport.timelinePlay.playHint': 'Reanudar (espacio)',
   'transport.timelinePlay.label': 'Pausar la simulación',
   'transport.timelineStepBack.label': 'Retroceder un fotograma',
-  'transport.timelineStepFwd.label': 'Avanzar un fotograma',
+  'transport.timelineStepFwd.label': 'Avanzar un paso',
   'transport.timelineScrubber.label':
     'Recorrer el historial grabado de la simulación',
   'transport.timelineLive': '● DIRECTO',
+  'transport.timelineStepSize': '1 paso = {size}',
+  'transport.timelinePlay.returnLabel': 'Volver al directo',
+  'transport.timelineReplay': 'Repetir',
+  'transport.timelineReplay.hint':
+    'Repite el historial grabado a la velocidad actual y termina en el momento en directo. Escape o Pausa la detienen del mismo modo. No se pierde nada.',
+  'transport.timelineRewind': 'Retroceder hasta aquí',
+  'transport.timelineRewind.hint':
+    'Convierte este momento en el mundo y continúa desde él. Se descarta el historial posterior.',
+  'transport.timelineParked.note':
+    'Mirando atrás, {behind} antes del directo. «Retroceder hasta aquí» descarta el historial posterior.',
+  'transport.timelineReplaying.note':
+    'Repitiendo. Escape o Pausa vuelven al directo.',
+  'transport.timelineScrubber.valueText':
+    '{behind} antes del directo, fotograma {n} de {total}',
+  'transport.timelineScrubber.valueLive': 'En directo',
 
   // --- Front door ------------------------------------------------------------
   'welcome.welcomeClose.hint': 'Cerrar y entrar en el laboratorio',
@@ -847,6 +863,10 @@ export const ES = {
   'toast.undo.removed': 'Se quitó el último objeto colocado',
   'toast.undo.nothing': 'No hay nada que deshacer',
   'toast.timeline.live': 'De vuelta al directo',
+  'toast.timeline.rewound':
+    'Retrocedido hasta aquí. Historial posterior descartado',
+  'toast.timeline.placedRewound':
+    'Al colocar un cuerpo, este momento pasó a ser el mundo. Historial posterior descartado',
   'toast.view.reset': 'Vista restablecida',
   'toast.units.showing': 'Mostrando {units}',
   'toast.theme.changed': 'Tema: {theme}',

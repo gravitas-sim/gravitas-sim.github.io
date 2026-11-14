@@ -23,7 +23,6 @@ import {
   white_dwarfs,
   galaxies,
   accretion_disk_particles,
-  updatePhysics,
   DT,
   gravity_ripples,
   screen_to_world,
@@ -279,7 +278,8 @@ import { updateLightCurve, drawObserverIndicator } from './lightCurve.js';
 import { updateRadialVelocity } from './radialVelocity.js';
 import { updateAstrometry } from './astrometry.js';
 import { updateRotationCurve } from './rotationCurve.js';
-import { tickTimeline } from './timeline.js';
+import { tickTimeline, isReplaying } from './timeline.js';
+import { integrateFrame } from './worldStep.js';
 import { MAX_SUBSTEPS, substepPlan, frameAdvance } from './timestep.js';
 import { drawOverlays } from './overlays.js';
 import { readToken, onThemeChange } from './theme.js';
@@ -294,7 +294,6 @@ import {
 import {
   drawSandboxTools,
   drawInstrumentation,
-  tickSandboxTools,
   stopwatchRows,
 } from './sandboxTools.js';
 import {
@@ -2792,25 +2791,7 @@ const gameLoop = timestamp => {
   // skipped so the recorded state is what gets drawn.
   const mayIntegrate = tickTimeline(dt_sim);
   if (!state.paused && mayIntegrate) {
-    // Symplectic Euler's error grows with the step, and it shows up first as a
-    // slow change in eccentricity: an orbit that should be fixed visibly
-    // reshapes over a minute or two. That is fine in a sandbox and fatal in a
-    // lesson that asks students to measure a supposedly constant orbit, so a
-    // scenario can cap the step it is integrated at and take several smaller
-    // ones per frame instead.
-    //
-    // The ceiling is 64 rather than 16 because a tightly packed system needs a
-    // genuinely small step: TRAPPIST-1's innermost planet has a year of a day
-    // and a half, and at 16 substeps it was getting 225 steps per orbit, which
-    // symplectic Euler turns into unbound orbits after a few hundred circuits.
-    // Only scenarios that opt in pay for this, and those are small ones.
-    const { substeps, step } = substepPlan(dt_sim, SETTINGS.max_timestep);
-    for (let i = 0; i < substeps; i++) updatePhysics(step);
-    // The stopwatch runs on simulated time, so it is advanced by what was
-    // actually integrated: a paused frame or a scrubbed one advances it by
-    // nothing, and changing the simulation speed does not change a period the
-    // student measures with it.
-    tickSandboxTools(dt_sim);
+    integrateFrame(dt_sim);
   }
 
   // While paused and untouched, the picture cannot change; drop to 10Hz rather
@@ -2818,6 +2799,7 @@ const gameLoop = timestamp => {
   // scrub is never missed, and any input restores full rate immediately.
   const idle =
     state.paused &&
+    !isReplaying() &&
     frameStart > interactionUntil &&
     frameStart - lastIdleDraw < IDLE_REDRAW_MS;
 

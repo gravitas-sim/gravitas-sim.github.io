@@ -381,19 +381,35 @@ export const EN = {
   // --- transport -------------------------------------------------------------
   'transport.timelinePlay.hint': 'Pause (Space)',
   'transport.timelineStepBack.hint': 'Step back (,)',
-  'transport.timelineStepFwd.hint': 'Step forward (.)',
+  'transport.timelineStepFwd.hint':
+    'Step forward (.): one simulation step while paused, one recorded frame while looking back',
   'transport.timelineScrubber.hint':
-    'Drag to rewind through recorded history. The simulation holds on the frame you land on until you return to live.',
+    'Drag to look back through recorded history. The world holds on the frame you land on, and Return to live puts everything back. Trails restart after a restore, and particles, disk particles and ripples are not recorded.',
   'transport.timelineLive.hint': 'Return to live (L)',
   'transport.timelineBar.label': 'Playback and timeline',
   'transport.timelinePlay.playLabel': 'Play simulation',
   'transport.timelinePlay.playHint': 'Play (Space)',
   'transport.timelinePlay.label': 'Pause simulation',
   'transport.timelineStepBack.label': 'Step back one frame',
-  'transport.timelineStepFwd.label': 'Step forward one frame',
+  'transport.timelineStepFwd.label': 'Step forward',
   'transport.timelineScrubber.label':
     'Scrub through recorded simulation history',
   'transport.timelineLive': '● LIVE',
+  'transport.timelineStepSize': '1 step = {size}',
+  'transport.timelinePlay.returnLabel': 'Return to live',
+  'transport.timelineReplay': 'Replay',
+  'transport.timelineReplay.hint':
+    'Replay the recorded history at the current speed and end at the live moment. Escape or Pause stops it the same way. Nothing is lost.',
+  'transport.timelineRewind': 'Rewind to here',
+  'transport.timelineRewind.hint':
+    'Make this moment the world and continue from it. The history after it is dropped.',
+  'transport.timelineParked.note':
+    'Looking back, {behind} before live. Rewind to here drops the later history.',
+  'transport.timelineReplaying.note':
+    'Replaying. Escape or Pause returns to live.',
+  'transport.timelineScrubber.valueText':
+    '{behind} before live, frame {n} of {total}',
+  'transport.timelineScrubber.valueLive': 'Live',
 
   // --- welcome ---------------------------------------------------------------
   'welcome.welcomeClose.hint': 'Close and enter the sandbox',
@@ -416,6 +432,9 @@ export const EN = {
   'toast.undo.removed': 'Removed last placed object',
   'toast.undo.nothing': 'Nothing to undo',
   'toast.timeline.live': 'Back to live',
+  'toast.timeline.rewound': 'Rewound to here. Later history dropped',
+  'toast.timeline.placedRewound':
+    'Placing a body made this moment the world. Later history dropped',
   'toast.view.reset': 'View reset',
   'toast.units.showing': 'Showing {units}',
   'toast.theme.changed': 'Theme: {theme}',
