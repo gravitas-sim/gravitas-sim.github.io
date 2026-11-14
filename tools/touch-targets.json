@@ -167,6 +167,22 @@
       "control": 0,
       "under44": 2
     },
+    "phone:lesson.author": {
+      "targets": 18,
+      "atSize": 17,
+      "spacing": 1,
+      "inline": 0,
+      "control": 0,
+      "under44": 2
+    },
+    "phone:lesson.finish": {
+      "targets": 12,
+      "atSize": 11,
+      "spacing": 1,
+      "inline": 0,
+      "control": 0,
+      "under44": 7
+    },
     "phone:library": {
       "targets": 52,
       "atSize": 47,
@@ -239,6 +255,22 @@
       "control": 0,
       "under44": 4
     },
+    "phone:sandbox.assign": {
+      "targets": 33,
+      "atSize": 33,
+      "spacing": 0,
+      "inline": 0,
+      "control": 0,
+      "under44": 27
+    },
+    "phone:sandbox.embed": {
+      "targets": 5,
+      "atSize": 4,
+      "spacing": 1,
+      "inline": 0,
+      "control": 0,
+      "under44": 2
+    },
     "phone:sandbox.light-curve": {
       "targets": 52,
       "atSize": 52,
@@ -246,6 +278,22 @@
       "inline": 0,
       "control": 0,
       "under44": 17
+    },
+    "phone:sandbox.settings": {
+      "targets": 94,
+      "atSize": 94,
+      "spacing": 0,
+      "inline": 0,
+      "control": 0,
+      "under44": 60
+    },
+    "phone:sandbox.share": {
+      "targets": 12,
+      "atSize": 12,
+      "spacing": 0,
+      "inline": 0,
+      "control": 0,
+      "under44": 6
     },
     "phone:sandbox.state": {
       "targets": 24,
@@ -527,6 +575,22 @@
       "control": 0,
       "under44": 5
     },
+    "tablet:lesson.author": {
+      "targets": 24,
+      "atSize": 23,
+      "spacing": 1,
+      "inline": 0,
+      "control": 0,
+      "under44": 5
+    },
+    "tablet:lesson.finish": {
+      "targets": 12,
+      "atSize": 7,
+      "spacing": 5,
+      "inline": 0,
+      "control": 0,
+      "under44": 12
+    },
     "tablet:library": {
       "targets": 58,
       "atSize": 53,
@@ -599,6 +663,22 @@
       "control": 0,
       "under44": 4
     },
+    "tablet:sandbox.assign": {
+      "targets": 33,
+      "atSize": 33,
+      "spacing": 0,
+      "inline": 0,
+      "control": 0,
+      "under44": 32
+    },
+    "tablet:sandbox.embed": {
+      "targets": 6,
+      "atSize": 5,
+      "spacing": 1,
+      "inline": 0,
+      "control": 0,
+      "under44": 2
+    },
     "tablet:sandbox.light-curve": {
       "targets": 52,
       "atSize": 52,
@@ -606,6 +686,22 @@
       "inline": 0,
       "control": 0,
       "under44": 18
+    },
+    "tablet:sandbox.settings": {
+      "targets": 93,
+      "atSize": 93,
+      "spacing": 0,
+      "inline": 0,
+      "control": 0,
+      "under44": 71
+    },
+    "tablet:sandbox.share": {
+      "targets": 12,
+      "atSize": 12,
+      "spacing": 0,
+      "inline": 0,
+      "control": 0,
+      "under44": 10
     },
     "tablet:sandbox.state": {
       "targets": 24,

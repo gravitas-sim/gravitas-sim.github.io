@@ -1,0 +1,73 @@
+{
+  "format": "gravitas.scene-record/1",
+  "id": "black-hole-lab-daylight-375",
+  "scenario": "black-hole-lab",
+  "load": {
+    "how": "preset_scenario+initialize_simulation",
+    "seed": "r4-before",
+    "seedNumber": 1036648069
+  },
+  "clock": {
+    "targetSimTime": 20,
+    "tolerance": 1e-9,
+    "fixedFrameSeconds": 0.016666666666666666
+  },
+  "camera": {
+    "zoom": 1.5,
+    "pan": {
+      "x": 0,
+      "y": 0
+    },
+    "frameOffset": {
+      "x": 0,
+      "y": 0
+    },
+    "followMode": "None",
+    "frame": "world",
+    "worldCentre": {
+      "x": 0,
+      "y": 0
+    }
+  },
+  "theme": "daylight",
+  "viewport": {
+    "width": 375,
+    "height": 812
+  },
+  "pixelRatio": 1,
+  "qualityTier": "full",
+  "settings": {
+    "follow_mode": "None",
+    "show_trails": true,
+    "trail_length": 260,
+    "trail_style": "Glow",
+    "trail_color_mode": "type",
+    "show_velocity_vectors": false,
+    "show_acceleration_vectors": false,
+    "show_potential_well": false,
+    "show_scale_bar": true,
+    "show_elapsed_time": true,
+    "show_conservation_diagnostics": false,
+    "show_bh_glow": true,
+    "show_accretion_disk": true,
+    "show_bh_jets": false,
+    "show_dynamic_overlays": true,
+    "show_ambient_lighting": true,
+    "show_gravitational_waves": true,
+    "show_object_lensing": true
+  },
+  "physics": {
+    "integrator": "Symplectic Euler",
+    "sim_speed": 1.6,
+    "max_timestep": 0.05
+  },
+  "paused": true,
+  "cardOpen": true,
+  "animation": "reduced motion is emulated so the starfield does not twinkle; the capture drives the frames on a fake clock and seeds the run's random draws from the record, so two captures of a record are the same image",
+  "commit": "f9277ff8 (tag v3.0)",
+  "source": {
+    "capture": "e-black-hole-lab-daylight-375-canvas.png",
+    "simTimeReached": 20.1328,
+    "note": "the planning capture paused up to 11 percent past its target (the step followed the frame rate); this record stops at the target"
+  }
+}

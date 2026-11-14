@@ -34,6 +34,7 @@
 import { readFileSync, writeFileSync } from 'node:fs';
 import { test, expect } from './fixtures.js';
 import { open } from './sweepOpen.js';
+import { tabTo } from './walk.js';
 
 const contract = JSON.parse(
   readFileSync('tools/interaction-contract.json', 'utf8')
@@ -59,6 +60,13 @@ function carriesShellHead(route) {
 
 /** The surfaces judged: every row of the walk inventory but the exempt. */
 const pages = inventory.rows.filter(r => !record.exempt[r.surface]);
+
+/**
+ * The walk states that carry an outline of their own: a dialog opened on a
+ * page, whose outline is the dialog's (Prompt 453: Settings, Share and the
+ * finish dialog). Recorded under the state's id.
+ */
+const dialogs = inventory.states.filter(s => s.outline);
 
 // -----------------------------------------------------------------------------
 // In the page
@@ -394,35 +402,80 @@ const written = {};
 test.describe('the outline of every page', () => {
   test.setTimeout(90_000);
 
+  /** Open a page or a state, read its outline in both languages, hold it. */
+  async function holdOutline(page, browserName, key, entry, row) {
+    const seen = {};
+    for (const locale of LOCALES) {
+      // The rail remembers which sections the first language left open.
+      await page
+        .evaluate(() => {
+          for (const key of Object.keys(window.localStorage))
+            if (/rail/i.test(key)) window.localStorage.removeItem(key);
+        })
+        .catch(() => {});
+      await open(page, row.path, locale.id, row);
+      // Into the state, from the keyboard, as a reader gets there.
+      for (const selector of row.open || []) {
+        expect(
+          await tabTo(page, browserName, selector),
+          `Tab reaches ${selector}`
+        ).toBeGreaterThan(0);
+        await page.keyboard.press('Enter');
+        await page.waitForLoadState('networkidle').catch(() => {});
+      }
+      if (row.opened)
+        await expect(page.locator(row.opened)).toBeVisible({ timeout: 15_000 });
+      seen[locale.id] = await page.evaluate(outline);
+      expect(
+        seen[locale.id].problems,
+        `${locale.label}: what is wrong`
+      ).toEqual([]);
+    }
+    // Spanish has the English page's structure: the same levels and
+    // landmark roles in the same order. Names differ, and only English's
+    // are recorded.
+    const roles = l => l.map(x => x.split(':')[0]);
+    expect(seen.es.headings, 'headings, Spanish').toBe(seen.en.headings);
+    expect(roles(seen.es.landmarks), 'landmarks, Spanish').toEqual(
+      roles(seen.en.landmarks)
+    );
+    const mine = { ...seen.en };
+    delete mine.problems;
+    if (WRITE) written[key] = { path: row.path, ...mine };
+    else
+      expect(
+        { path: row.path, ...mine },
+        `${key}: the outline changed; if that is intended, regenerate tools/page-outlines.json and read the diff`
+      ).toEqual(entry);
+  }
+
   for (const row of pages) {
     test(`the outline of ${row.surface} (${row.path}) is sound, the same in both languages, and the recorded one`, async ({
       page,
+      browserName,
     }) => {
-      const seen = {};
-      for (const locale of LOCALES) {
-        await open(page, row.path, locale.id);
-        seen[locale.id] = await page.evaluate(outline);
-        expect(
-          seen[locale.id].problems,
-          `${locale.label}: what is wrong`
-        ).toEqual([]);
-      }
-      // Spanish has the English page's structure: the same levels and
-      // landmark roles in the same order. Names differ, and only English's
-      // are recorded.
-      const roles = l => l.map(x => x.split(':')[0]);
-      expect(seen.es.headings, 'headings, Spanish').toBe(seen.en.headings);
-      expect(roles(seen.es.landmarks), 'landmarks, Spanish').toEqual(
-        roles(seen.en.landmarks)
+      await holdOutline(
+        page,
+        browserName,
+        row.surface,
+        record.pages[row.surface],
+        { ...row, open: [] }
       );
-      const mine = { ...seen.en };
-      delete mine.problems;
-      if (WRITE) written[row.surface] = { path: row.path, ...mine };
-      else
-        expect(
-          { path: row.path, ...mine },
-          `${row.surface}: the outline changed; if that is intended, regenerate tools/page-outlines.json and read the diff`
-        ).toEqual(record.pages[row.surface]);
+    });
+  }
+
+  for (const state of dialogs) {
+    test(`the outline of ${state.id} (${state.path}, opened) is sound, the same in both languages, and the recorded one`, async ({
+      page,
+      browserName,
+    }) => {
+      await holdOutline(
+        page,
+        browserName,
+        state.id,
+        record.pages[state.id],
+        state
+      );
     });
   }
 
@@ -439,7 +492,7 @@ test.describe('the outline of every page', () => {
 
   test('the record names every page of the walk inventory, and only those', () => {
     expect(Object.keys(record.pages).sort()).toEqual(
-      pages.map(r => r.surface).sort()
+      [...pages.map(r => r.surface), ...dialogs.map(s => s.id)].sort()
     );
     for (const surface of Object.keys(record.exempt))
       expect(

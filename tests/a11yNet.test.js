@@ -74,8 +74,13 @@ describe('the net holds on the tree', () => {
     const ids = new Set(tree.nav.surfaces.map(s => s.id));
     for (const r of tree.contract.inventory.rows)
       expect(ids).toContain(r.surface);
-    for (const id of Object.keys(tree.outlines.pages))
-      expect(ids).toContain(id);
+    // A dialog opened on a page is recorded under its walk state's id, and
+    // the state belongs to a page of the inventory.
+    const states = new Map(tree.contract.inventory.states.map(s => [s.id, s]));
+    for (const id of Object.keys(tree.outlines.pages)) {
+      if (states.has(id)) expect(ids).toContain(states.get(id).surface);
+      else expect(ids).toContain(id);
+    }
   });
 
   test('the tool-and-3-D registrations of this prompt are in the contract with their walks', () => {
