@@ -382,9 +382,9 @@ export const EN = {
   'transport.timelinePlay.hint': 'Pause (Space)',
   'transport.timelineStepBack.hint': 'Step back (,)',
   'transport.timelineStepFwd.hint':
-    'Step forward (.): one simulation step while paused, one recorded frame while looking back',
+    'Step forward (.): one step when paused, one frame when looking back',
   'transport.timelineScrubber.hint':
-    'Drag to look back through recorded history. The world holds on the frame you land on, and Return to live puts everything back. Trails restart after a restore, and particles, disk particles and ripples are not recorded.',
+    'Drag to look back. The world holds on the frame you land on; Return to live puts it back. Trails restart; particles and ripples are not recorded.',
   'transport.timelineLive.hint': 'Return to live (L)',
   'transport.timelineBar.label': 'Playback and timeline',
   'transport.timelinePlay.playLabel': 'Play simulation',
@@ -397,11 +397,8 @@ export const EN = {
   'transport.timelineLive': '● LIVE',
   'transport.timelineStepSize': '1 step = {size}',
   'transport.timelineReplay': 'Replay',
-  'transport.timelineReplay.hint':
-    'Replay the recorded history at the current speed and end at the live moment. Escape or Pause stops it the same way. Nothing is lost.',
   'transport.timelineRewind': 'Rewind to here',
-  'transport.timelineRewind.hint':
-    'Make this moment the world and continue from it. The history after it is dropped.',
+  'transport.timelineRewind.hint': 'Later history is dropped.',
   'transport.timelineScrubber.valueText':
     '{behind} before live, frame {n} of {total}',
   'transport.timelineScrubber.valueLive': 'Live',

@@ -263,10 +263,7 @@ function restore(offset) {
   if (!row) return;
 
   // Reuse live instances where possible (names, disks).
-  const existing = new Map();
-  for (const [, list] of ALL_LISTS()) {
-    for (const o of list) existing.set(o.id, o);
-  }
+  const existing = indexLive();
 
   const rebuilt = new Map(KINDS.map(k => [k, []]));
   let maxId = 0;
@@ -277,7 +274,7 @@ function restore(offset) {
     const id = row[b + F_ID];
     maxId = Math.max(maxId, id);
 
-    let obj = existing.get(id);
+    let obj = existing.get(id)?.obj;
     if (!obj) {
       obj = construct(
         kind,
@@ -520,7 +517,6 @@ function syncUI() {
     frameCount,
     offset: scrubOffset,
     scrubbing,
-    replaying,
     simClock: getSimulationTime(),
     behind: held ? Math.max(0, held.clock - getSimulationTime()) : 0,
     span:

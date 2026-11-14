@@ -289,9 +289,9 @@ export const ES = {
   'transport.timelinePlay.hint': 'Pausar (espacio)',
   'transport.timelineStepBack.hint': 'Retroceder un fotograma (,)',
   'transport.timelineStepFwd.hint':
-    'Avanzar (.): un paso de la simulación en pausa, un fotograma grabado al mirar atrás',
+    'Avanzar (.): un paso en pausa, un fotograma al mirar atrás',
   'transport.timelineScrubber.hint':
-    'Arrastra para mirar atrás en el historial grabado. El mundo se queda en el fotograma elegido y «Volver al directo» lo deja todo como estaba. Las estelas empiezan de nuevo tras restaurar, y las partículas, las partículas de disco y las ondas no se graban.',
+    'Arrastra para mirar atrás. El mundo se queda en el fotograma elegido y «Volver al directo» lo repone. Las estelas empiezan de nuevo; las partículas y las ondas no se graban.',
   'transport.timelineLive.hint': 'Volver al directo (L)',
   'transport.timelineBar.label': 'Reproducción y línea de tiempo',
   'transport.timelinePlay.playLabel': 'Reanudar la simulación',
@@ -304,11 +304,8 @@ export const ES = {
   'transport.timelineLive': '● DIRECTO',
   'transport.timelineStepSize': '1 paso = {size}',
   'transport.timelineReplay': 'Repetir',
-  'transport.timelineReplay.hint':
-    'Repite el historial grabado a la velocidad actual y termina en el momento en directo. Escape o Pausa la detienen del mismo modo. No se pierde nada.',
   'transport.timelineRewind': 'Retroceder hasta aquí',
-  'transport.timelineRewind.hint':
-    'Convierte este momento en el mundo y continúa desde él. Se descarta el historial posterior.',
+  'transport.timelineRewind.hint': 'Se descarta el historial posterior.',
   'transport.timelineScrubber.valueText':
     '{behind} antes del directo, fotograma {n} de {total}',
   'transport.timelineScrubber.valueLive': 'En directo',
@@ -859,7 +856,7 @@ export const ES = {
   'toast.undo.nothing': 'No hay nada que deshacer',
   'toast.timeline.live': 'De vuelta al directo',
   'toast.timeline.rewound':
-    'Retrocedido hasta aquí. Historial posterior descartado',
+    'Este momento es ahora el mundo. Historial posterior descartado',
   'toast.view.reset': 'Vista restablecida',
   'toast.units.showing': 'Mostrando {units}',
   'toast.theme.changed': 'Tema: {theme}',

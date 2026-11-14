@@ -118,8 +118,11 @@ test.describe('a step', () => {
       )
       .toBeCloseTo(before.clock + before.size, 9);
     await expect
-      .poll(async () => (await shownClocks(page)).label)
-      .toBe((await shownClocks(page)).elapsed);
+      .poll(async () => {
+        const s = await shownClocks(page);
+        return s.label === s.elapsed;
+      })
+      .toBe(true);
   });
 
   test('it works in Step by step, where nothing runs by itself', async ({

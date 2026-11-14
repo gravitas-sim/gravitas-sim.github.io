@@ -145,7 +145,7 @@ let replayBtn = null;
 let rewindBtn = null;
 let userDraggingScrubber = false;
 let lastClock = NaN;
-let lastPaused = null;
+let lastKey = '';
 
 function setupTransport() {
   scrubberEl = document.getElementById('timelineScrubber');
@@ -202,15 +202,6 @@ function setupTransport() {
   document
     .getElementById('timelineStepFwd')
     ?.addEventListener('click', stepForwardOrOne);
-  const speedText = document.getElementById('speedDisplay');
-  if (speedText) {
-    new MutationObserver(paintStepSize).observe(speedText, {
-      childList: true,
-      characterData: true,
-      subtree: true,
-    });
-  }
-
   bindTimelineUI({ onChange: onTimelineChange, onClock: paintClock });
 }
 
@@ -220,10 +211,11 @@ function stepForwardOrOne() {
   else if (state.paused) stepOnce();
 }
 
-/** Each live frame: the label follows the clock; follow the pause state too. */
+/** Each live frame: the label follows the clock; so do the pause and speed. */
 function paintClock(simClock) {
-  if (state.paused !== lastPaused) {
-    lastPaused = state.paused;
+  const key = `${state.paused}${SETTINGS.sim_speed}`;
+  if (key !== lastKey) {
+    lastKey = key;
     refreshTransport();
   }
   if (!timeLabelEl || simClock === lastClock) return;
