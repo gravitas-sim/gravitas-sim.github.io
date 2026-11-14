@@ -1690,6 +1690,14 @@
       "student": false
     },
     {
+      "file": "STEP_POLICY_GATE.md",
+      "kind": "gate",
+      "purpose": "Step-policy gate: may a number read in the sandbox depend on how fast a screen draws; five candidate step policies, eight thresholds, two slices, fixed before any measurement (Prompt 446).",
+      "owner": 446,
+      "added": "2026-11-14",
+      "student": false
+    },
+    {
       "file": "POPULATION_INFERENCE_GATE.md",
       "kind": "gate",
       "purpose": "Population inference gate: one selected-population likelihood, 52 legs, verdict B (Prompt 264); its follow-up (D8b, penalty convergence) passes 12 of 12 judged legs, real-data legs not run.",

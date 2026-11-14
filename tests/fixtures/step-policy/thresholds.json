@@ -1,0 +1,127 @@
+{
+  "format": "gravitas.step-policy-thresholds/1",
+  "prompt": "446",
+  "committed": "2026-11-14, in a documentation commit that precedes every candidate. No candidate's output existed when these bounds, slices and conditions were written. The numbers known beforehand are the recorded results of the unchanged policy (S0) in tests/fixtures/reference-cases/record.json and the step study in the same file; they are the evidence for the candidates' steps, not results of any candidate. A threshold is never moved, widened or made conditional after a result. A candidate that fails is recorded as failing with its numbers.",
+  "document": "STEP_POLICY_GATE.md",
+  "question": "May a number read in the sandbox depend on how fast the screen draws?",
+  "inputs": {
+    "cases": "tests/fixtures/reference-cases/thresholds.json (R1, R2, R3, R4, R4x, R5, R6) and its record; bounds are taken from there unchanged",
+    "runner": "tools/reference-cases.mjs, one frame plan replaced per candidate on the spike branch",
+    "scenes": "tests/fixtures/scene-records (the sandbox reference scenes) with the advisory profiles of tools/perf-thresholds.json"
+  },
+  "rates": {
+    "120": 0.008333333333333333,
+    "60": 0.016666666666666666,
+    "30": 0.03333333333333333,
+    "clamp": 0.2,
+    "clampNote": "a frame of 0.05 s or longer: frameAdvance clamps it to 0.05 s"
+  },
+  "changedSet": {
+    "rule": "A candidate other than S0 changes the plan of a scenario only where SETTINGS.max_timestep is 0 (35 of 61 scenarios, listed in STEP_POLICY_GATE.md). A scenario with its own max_timestep keeps its present plan under every candidate: this is how 'a scenario's own cap where it has one' is read, and it is why R2, R3 and R4 (capped) are identical to S0 under every candidate.",
+    "uncapped": 35,
+    "capped": 26
+  },
+  "candidates": {
+    "S0": {
+      "name": "as it is",
+      "plan": "substepPlan(frameAdvance(seconds, sim_speed, DT), max_timestep) every frame",
+      "step": "the frame's own advance (uncapped scenarios)",
+      "largestStep": "the frame's advance, up to 0.25 at the clamp for sim_speed 1"
+    },
+    "S1": {
+      "name": "cap the step at 1/24 on the uncapped scenarios",
+      "plan": "max_timestep = 1/24 in the preset row of each of the 35 uncapped scenarios; the plan is the unchanged substepPlan",
+      "h": 0.041666666666666664,
+      "stepStudyRow": "1/24",
+      "carry": "none: the plan divides the frame into ceil(advance / cap) equal pieces, each at most the cap; the 64-piece limit is reported if it ever binds on a changed scenario",
+      "settingsChange": "the 35 rows (js/scenarios.js)"
+    },
+    "S2": {
+      "name": "fixed step 1/24",
+      "plan": "planFrame (below) with h = 1/24",
+      "h": 0.041666666666666664,
+      "stepStudyRow": "1/24"
+    },
+    "S3": {
+      "name": "fixed step 1/48",
+      "plan": "planFrame (below) with h = 1/48",
+      "h": 0.020833333333333332,
+      "stepStudyRow": "1/48"
+    },
+    "S4": {
+      "name": "fixed step 1/96",
+      "plan": "planFrame (below) with h = 1/96",
+      "h": 0.010416666666666666,
+      "stepStudyRow": "1/96"
+    },
+    "planFrame": "acc = carry + advance; n = min(64, floor(|acc| / h + 1e-9)); every piece is h with the sign of acc; carry = acc - n*h*sign; the carry is set to 0 when the sign of the advance changes. Where n would exceed 64 the step is NOT lengthened: 64 pieces of h are taken, the remainder stays in the carry, and simulated time falls behind the clock. The report gives the share of frames on which the limit binds and the largest carry in units of h. A frame whose advance is under h takes no step and keeps its advance in the carry.",
+    "otherCandidates": "A higher-order scheme or another h is a candidate only if it is added to this file, with its row in the step study, in a commit that precedes its first run. None is added."
+  },
+  "thresholds": {
+    "T1": {
+      "what": "R1, R2, R3, R4, R4x and R5 of the reference cases meet the bounds of tests/fixtures/reference-cases/thresholds.json at each of the four rates, each run's own step stated; the R5 fragment leg (460) and R6 (496) are reported only",
+      "reason": "the project already accepts that error and no more",
+      "reading": "a case whose scenario is capped is unchanged by every candidate and is read from the record of S0 (R2, R3, R4 pass there); the cases whose scenario a candidate changes are R1 (solar-system), R4x (three-body-sensitivity-lab) and R5 (tidal-disruption-event), run under the candidate",
+      "judged": "R5 position at first periapsis within 1 percent of the periapsis distance at 60 fps and R5 mass spread 5 percent are judged; the R5 position is judged at all four rates"
+    },
+    "T2": {
+      "what": "R1, R2, R3: the end-state position error, as a fraction of a, differs between any two of the four rates by at most 0.005 (0.5 percent of a)",
+      "reason": "1.5 px on a 300 px orbit, under the smallest drawn radius of 2.75 px (js/bodyVisuals.js:154)",
+      "reading": "R1 is judged under the candidate; R2 and R3 are capped, identical under every candidate, and carried from S0: the runner reports R2's end-state error (0.0108 to 0.0155 in the record, a spread of 0.00474) and does not report R3's; R3's is computed on the spike if its two-body reference allows and is otherwise recorded NOT RUN, which cannot change the choice because every candidate leaves R3 as it is"
+    },
+    "T3": {
+      "what": "R4x: the bound (|dE/E| <= 2 percent before a pair is under 0.3 of the side) is met at each rate, and the pre-encounter energy error differs between any two rates by at most 0.02 (2 points)",
+      "reason": "the same 2 percent"
+    },
+    "T4": {
+      "what": "the mean frame time of each of the sandbox reference scenes the candidate's changed set holds (six records of tests/fixtures/scene-records: solar-system, circumbinary-planet-lab, galilean-resonance at two zooms, star-cluster, black-hole-lab) is at most 1.5 times the baseline, at both profiles of tools/perf-thresholds.json: sandbox-scenes-full (full tier, no throttle) and sandbox-scenes-low-cpu4 (low tier, CPU throttled 4x)",
+      "reason": "the ratio of tools/perf-thresholds.json: a threshold is the measured value times 1.5",
+      "instrument": "npm run perf with --scene, three runs of 5 s per scene, the median; the frame is driven as a 60 Hz screen drives it (render.setFixedStep(1/60)), so that the work a frame must do is the work the policy asks of a real display; with the frame cap lifted and the real elapsed time, a policy that steps by elapsed time would take almost no step per frame and the instrument could not see its cost. The baseline is the LOWER of (a) the recorded measuredFrameMs of tools/perf-thresholds.json for that scene and profile and (b) the median of S0 measured by the same instrument in the same session, interleaved with the candidates; a candidate is never judged against a baseline that carried more load than the candidate had. The machine and the load average are stated beside every number. A scene whose scenario the candidate does not change is not judged (its plan is S0's)",
+      "slice": "on a slice, T4 is read on the reference scenes the slice holds; a slice that holds none is read on its scenario with the most bodies, at the full tier with the CPU unthrottled and at the low tier with the CPU throttled 4x, against S0 measured the same way"
+    },
+    "T5": {
+      "what": "the world golden (e2e/golden/world-construction.json): the 'bodies' and 'camera' digests of all 61 rows are equal; the 'settings' digest changes only in rows the candidate names; a seeded share link made on the base for each named row rebuilds equal t = 0 bodies on the candidate; an old saved world restores with its stored max_timestep. Each is stated in the document, including what a candidate does to the way an old link or saved world runs, which is not what it builds",
+      "reason": "no stored record, link or golden changes meaning without a stated, tested migration (rule 7.2 item 16)",
+      "reading": "S1 names the 35 rows (or the slice's rows). S2 to S4 are a code policy keyed to max_timestep = 0 and name no row, so the settings digest must be equal in all 61 rows; a slice of S2 to S4 is a list of scenario ids in code, also naming no row, unless the candidate stores the choice in a setting, in which case the rows that carry it are named"
+    },
+    "T6": {
+      "what": "for every lesson step reading a live scene from a scenario the candidate changes (recounted from the lesson data by tools/lesson-scene-audit.mjs and the lessons' scenario fields), the step's own validate accepts the candidate's value at all four rates; every other such step is listed for a revision under 7.8 and the verdict names the prompt that carries it (345)",
+      "reason": "a changed number is a changed answer for whoever read the old one",
+      "reading": "T6 is a bill and not a bound: a step that does not accept is listed with its prompt and does not by itself change the verdict, because the consequence of A or B is that 345 re-derives the listed steps. The list must be complete and each row must say 'accepts' (with its four values) or 'listed' (with the reason it could not be judged here, NOT RUN where a browser run is needed)"
+    },
+    "T7": {
+      "what": "two bench runs with setFixedStep are bit-identical; the reliability check (tests/reliability.test.js:431-504) still halves the real step under the candidate; tools/seeded-step.mjs prints the same with and without --effects; tools/reversibility-probe.mjs prints the same as on the base",
+      "reason": "the determinism and convergence instruments the bench and the lessons rest on"
+    },
+    "T8": {
+      "what": "npm run validate:physics prints 442 of 442 and the same checks as on the base; all 61 scenarios run 600 frames at each of the four rates under the candidate without a NaN in a position or velocity and without a throw",
+      "reason": "no weakening of the engine's checks and no scenario that breaks"
+    }
+  },
+  "slices": {
+    "B1": {
+      "what": "the uncapped scenarios a lesson names as the scene a step runs in (a setup, a stage or a scenario field in js/data/investigations/, recounted at the base by tools/lesson-scene-audit.mjs)",
+      "members": ["solar-system", "earth-moon-system", "tidal-disruption-event", "three-body-sensitivity-lab"],
+      "referenceCases": ["R1", "R4x", "R5"],
+      "note": "holds three-body-sensitivity-lab (butterfly-effect names it), so B1 needs R4x met"
+    },
+    "B2": {
+      "what": "the uncapped scenarios in which no pair of bodies comes closer than the softening floor (js/engine/state.js minInteractionDistance) at any frame of 600 frames at 60 fps under S0, measured at the end of each frame from t = 0 with seed 1 on every list of bodies",
+      "members": "produced by the baseline run (S0, not a candidate) and listed in STEP_POLICY_GATE.md; the rule above is the commitment",
+      "note": "a slice that holds none of R1 to R5 and R4x cannot be B"
+    }
+  },
+  "verdict": {
+    "A": "one candidate meets T1 to T8 on all 35 uncapped scenarios",
+    "B": "one candidate meets T1 to T8 on a named slice only; on a slice, T1 to T3 judge each reference case whose scenario is in the slice and report the others unjudged, T4 is read on the reference scenes the slice holds, T5 to T7 judge the slice's rows, T8 applies whole; the document lists each slice's scenarios and reference cases",
+    "C": "otherwise; C stays a real outcome",
+    "order": "A is preferred to B. Where several candidates pass, the verdict names the one with the largest step; where one candidate passes more than one slice, the slice with the most scenarios; every other passing pair is recorded as an alternative. A candidate that passes T1 to T3 and T8 but fails T4 on a scene the slice holds fails on that slice.",
+    "consequence": "A or B: 458 builds the named candidate on all 35 or on the slice, 345 re-derives the listed steps. C: 458 is recorded NOT RUN with the reason, and 461 states the dependence with this table's numbers beside timed readings and on the model page. 460 and 496 proceed in every verdict."
+  },
+  "conditions": {
+    "seed": 1,
+    "machine": "stated beside every timing; the reference cases are CPU-time counts and are machine-independent to rounding",
+    "load": "no timing run beside another job; the reference-case legs run before the frame-time runs, never beside them",
+    "prohibited": "moving a threshold after a result; widening one to reach A; merging the spike; editing a preset row, the loop or the engine in the pull request; raising a ceiling; judging cost on one machine without naming it"
+  }
+}
