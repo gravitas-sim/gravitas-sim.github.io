@@ -117,13 +117,13 @@ export const WEIGHING_JUPITER = {
           id: 'd14',
           label: 'Ganymede’s distance from Jupiter in frame 14',
           unit: 'RJup',
-          hint: '9.7',
+          want: '9.7',
         },
         {
           id: 'move',
           label: 'How far it moved between frame 14 and frame 16',
           unit: 'RJup',
-          hint: '0.9',
+          want: '0.9',
         },
       ],
       validate: v => {
@@ -156,12 +156,12 @@ export const WEIGHING_JUPITER = {
              distance from Jupiter, which for a circular orbit seen edge on is the radius
              of the orbit.`,
       fields: [
-        { id: 'period', label: 'Io’s period', unit: 'd', hint: '1.77' },
+        { id: 'period', label: 'Io’s period', unit: 'd', want: '1.77' },
         {
           id: 'radius',
           label: 'Io’s orbit radius',
           unit: 'RJup',
-          hint: '5.9',
+          want: '5.9',
         },
       ],
       validate: v => {
@@ -219,7 +219,7 @@ export const WEIGHING_JUPITER = {
           id: 'period',
           label: 'Io’s period from once-a-night frames',
           unit: 'd',
-          hint: '2.30',
+          want: '2.30',
         },
       ],
       validate: v => {
@@ -326,13 +326,13 @@ export const WHY_RINGS = {
           id: 'rigid',
           label: 'Rigid limit (planet radii)',
           unit: '',
-          hint: '1.64',
+          want: '1.64',
         },
         {
           id: 'fluid',
           label: 'Fluid limit (planet radii)',
           unit: '',
-          hint: '3.18',
+          want: '3.18',
         },
       ],
       validate: v => {
@@ -383,8 +383,8 @@ export const WHY_RINGS = {
       body: `Set the pair to <strong>Phobos, Mars</strong> and read the two limits in
              kilometers from the center of Mars.`,
       fields: [
-        { id: 'rigid', label: 'Rigid limit', unit: 'km', hint: '5466' },
-        { id: 'fluid', label: 'Fluid limit', unit: 'km', hint: '10585' },
+        { id: 'rigid', label: 'Rigid limit', unit: 'km', want: '5466' },
+        { id: 'fluid', label: 'Fluid limit', unit: 'km', want: '10585' },
       ],
       validate: v => {
         if (![v.rigid, v.fluid].every(Number.isFinite)) return null;
@@ -431,13 +431,13 @@ export const WHY_RINGS = {
           id: 'radius',
           label: 'Radius of the 2:1 resonance',
           unit: 'km',
-          hint: '116883',
+          want: '116883',
         },
         {
           id: 'offset',
           label: 'From the nearest feature',
           unit: '%',
-          hint: '0.59',
+          want: '0.59',
         },
       ],
       validate: v => {
@@ -542,13 +542,13 @@ export const TIDES_THAT_MOVE_THE_MOON = {
           id: 'rate',
           label: 'The Moon’s recession (cm per year)',
           unit: '',
-          hint: '3.75',
+          want: '3.75',
         },
         {
           id: 'day',
           label: 'The day’s lengthening (ms per century)',
           unit: '',
-          hint: '2.05',
+          want: '2.05',
         },
       ],
       validate: v => {
@@ -604,9 +604,9 @@ export const TIDES_THAT_MOVE_THE_MOON = {
           id: 'a',
           label: 'The Moon’s distance (thousand km)',
           unit: '',
-          hint: '414.6',
+          want: '414.6',
         },
-        { id: 'day', label: 'The day', unit: 'h', hint: '29.5' },
+        { id: 'day', label: 'The day', unit: 'h', want: '29.5' },
       ],
       validate: v => {
         if (![v.a, v.day].every(Number.isFinite)) return null;
@@ -638,7 +638,7 @@ export const TIDES_THAT_MOVE_THE_MOON = {
           id: 'gyr',
           label: 'Contact, billion years ago',
           unit: 'Gyr',
-          hint: '1.58',
+          want: '1.58',
         },
       ],
       validate: v => {
@@ -722,12 +722,12 @@ export const IOS_FIRE = {
              eccentricity to 0.0041. Read the <strong>heating</strong> in units of 10<sup>13</sup>
              W, and the energy in one orbit in units of 10<sup>19</sup> J.`,
       fields: [
-        { id: 'power', label: 'Heating', unit: '1e13 W', hint: '9.33' },
+        { id: 'power', label: 'Heating', unit: '1e13 W', want: '9.33' },
         {
           id: 'orbit',
           label: 'Energy in one orbit (10¹⁹ J)',
           unit: '',
-          hint: '1.43',
+          want: '1.43',
         },
       ],
       validate: v => {
@@ -774,7 +774,7 @@ export const IOS_FIRE = {
       type: 'measure',
       title: 'Doubling the eccentricity',
       body: `Set the eccentricity to 0.0082 and read the heating in units of 10<sup>14</sup> W.`,
-      fields: [{ id: 'power', label: 'Heating', unit: '1e14 W', hint: '3.73' }],
+      fields: [{ id: 'power', label: 'Heating', unit: '1e14 W', want: '3.73' }],
       validate: v => {
         if (!Number.isFinite(v.power)) return null;
         if (near(v.power, 3.73, 0.05)) {
@@ -805,7 +805,7 @@ export const IOS_FIRE = {
           id: 'need',
           label: 'k2/Q the observed middle value needs',
           unit: '',
-          hint: '0.0177',
+          want: '0.0177',
         },
       ],
       validate: v => {
@@ -983,13 +983,13 @@ export const THE_GAPS_IN_THE_BELT = {
           id: 'found',
           label: 'Found in the window',
           unit: '',
-          hint: '26',
+          want: '26',
         },
         {
           id: 'expected',
           label: 'Expected from the baseline',
           unit: '',
-          hint: '216',
+          want: '216',
         },
       ],
       validate: v => {
@@ -1023,19 +1023,19 @@ export const THE_GAPS_IN_THE_BELT = {
           id: 'dep',
           label: 'The depletion (percent)',
           unit: '',
-          hint: '88.0',
+          want: '88.0',
         },
         {
           id: 'lo',
           label: 'Low end of the 95 percent interval (percent)',
           unit: '',
-          hint: '82.9',
+          want: '82.9',
         },
         {
           id: 'hi',
           label: 'High end of the 95 percent interval (percent)',
           unit: '',
-          hint: '92.4',
+          want: '92.4',
         },
       ],
       validate: v => {
@@ -1107,13 +1107,13 @@ export const THE_GAPS_IN_THE_BELT = {
           id: 'found',
           label: 'Found in the window',
           unit: '',
-          hint: '115',
+          want: '115',
         },
         {
           id: 'dep',
           label: 'The depletion (percent)',
           unit: '',
-          hint: '63.3',
+          want: '63.3',
         },
       ],
       validate: v => {
@@ -1221,13 +1221,13 @@ export const HOW_FAST_DOES_IT_SPIN = {
           id: 'peak',
           label: 'The light’s period at the strongest peak (hours)',
           unit: '',
-          hint: '3.099',
+          want: '3.099',
         },
         {
           id: 'period',
           label: 'The rotation period (hours)',
           unit: '',
-          hint: '6.199',
+          want: '6.199',
         },
       ],
       validate: v => {
@@ -1260,13 +1260,13 @@ export const HOW_FAST_DOES_IT_SPIN = {
           id: 'amp',
           label: 'The amplitude (mag)',
           unit: '',
-          hint: '0.333',
+          want: '0.333',
         },
         {
           id: 'bound',
           label: 'a/b is at least',
           unit: '',
-          hint: '1.36',
+          want: '1.36',
         },
       ],
       validate: v => {

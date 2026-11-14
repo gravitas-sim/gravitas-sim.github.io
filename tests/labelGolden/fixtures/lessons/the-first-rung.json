@@ -17,16 +17,7 @@
     ["steps.another-galaxy.fields.1.unit","Mpc"],
     ["steps.ten-hosts.unit","mag"]
    ],
-   "numbered": [
-    ["steps.a-maser-galaxy.fields.0.hint","29.40"],
-    ["steps.a-maser-galaxy.fields.1.hint","7.59"],
-    ["steps.the-maser-check.fields.0.hint","29.40"],
-    ["steps.the-maser-check.fields.1.hint","0.032"],
-    ["steps.the-budget.fields.0.hint","0.043"],
-    ["steps.the-budget.fields.1.hint","0.026"],
-    ["steps.another-galaxy.fields.0.hint","29.21"],
-    ["steps.another-galaxy.fields.1.hint","6.95"]
-   ]
+   "numbered": []
   },
   "es": {
    "units": [],

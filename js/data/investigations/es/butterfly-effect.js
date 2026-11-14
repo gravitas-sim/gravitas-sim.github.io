@@ -344,13 +344,13 @@ export default {
         {
           label: 'tiempo de crecimiento',
           unit: 'segundos simulados',
-          hint: '8,3',
+          want: '8,3',
         },
-        { label: 'calidad del ajuste r²', unit: '', hint: '0,99' },
+        { label: 'calidad del ajuste r²', unit: '', want: '0,99' },
         {
           label: 'factor de crecimiento total',
           unit: '× la separación inicial',
-          hint: '220',
+          want: '220',
         },
       ],
     },

@@ -11,13 +11,7 @@
     ["steps.where-the-rays-cross.unit","au"],
     ["steps.where-the-formula-fails.fields.0.unit",""]
    ],
-   "numbered": [
-    ["steps.the-suns-limb.fields.0.hint","1.75"],
-    ["steps.the-far-ray.fields.0.hint","0.0175"],
-    ["steps.ten-times-the-mass.fields.0.hint","17.5"],
-    ["steps.ten-times-the-mass.fields.1.hint","29.5"],
-    ["steps.where-the-formula-fails.fields.0.hint","2.4"]
-   ]
+   "numbered": []
   },
   "es": {
    "units": [],

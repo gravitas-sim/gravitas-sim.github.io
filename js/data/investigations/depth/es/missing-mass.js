@@ -16,7 +16,7 @@ export default {
       body: 'Escribe la razón como se da: el valor, ±, y la incertidumbre del paso anterior. Cuenta como correcta cuando el rango que das se solapa con el que respalda la medición y no es más ancho que el doble de la semianchura de ese rango.',
       prompt:
         'Masa del halo dentro de 30 kpc, dividida entre la masa visible, con su incertidumbre',
-      placeholder: 'p. ej. 3,4 ± 0,7',
+      placeholder: 'un valor y, luego, ± su incertidumbre',
       hints: {
         concept: 'La razón que hallaste, ahora con lo bien que se conoce.',
         method: 'Copia la razón y su incertidumbre del paso anterior.',

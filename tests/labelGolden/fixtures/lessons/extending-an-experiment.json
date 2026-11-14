@@ -13,16 +13,8 @@
     ["steps.move-the-definition.fields.1.unit",""]
    ],
    "numbered": [
-    ["steps.the-fit.fields.0.hint","0.255"],
-    ["steps.the-fit.fields.1.hint","0.0243"],
-    ["steps.the-fit.fields.2.hint","0.6"],
-    ["steps.the-fit.fields.3.hint","0.596"],
-    ["steps.a-uniform-population.fields.0.hint","0.451"],
-    ["steps.a-uniform-population.fields.1.hint","0.149"],
     ["steps.move-the-definition.fields.0.label","Half-way distance, cutoff 6"],
-    ["steps.move-the-definition.fields.0.hint","0.289"],
-    ["steps.move-the-definition.fields.1.label","Fraction bound, cutoff 6"],
-    ["steps.move-the-definition.fields.1.hint","0.701"]
+    ["steps.move-the-definition.fields.1.label","Fraction bound, cutoff 6"]
    ]
   },
   "es": {

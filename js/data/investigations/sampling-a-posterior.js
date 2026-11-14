@@ -101,19 +101,19 @@ const SAMPLING_A_POSTERIOR = {
              interval (high end minus low end), and the same for the impact
              parameter.`,
       fields: [
-        { id: 'k', label: 'Rp/R*, median', unit: '', hint: '0.11926' },
+        { id: 'k', label: 'Rp/R*, median', unit: '', want: '0.11926' },
         {
           id: 'kWidth',
           label: 'Rp/R*, width of the interval',
           unit: '',
-          hint: '0.00026',
+          want: '0.00026',
         },
-        { id: 'b', label: 'Impact parameter, median', unit: '', hint: '0.430' },
+        { id: 'b', label: 'Impact parameter, median', unit: '', want: '0.430' },
         {
           id: 'bWidth',
           label: 'Impact parameter, width of the interval',
           unit: '',
-          hint: '0.0051',
+          want: '0.0051',
         },
       ],
       validate: v => {
@@ -149,18 +149,18 @@ const SAMPLING_A_POSTERIOR = {
              least 400 draws' worth of independent information), and the <strong>acceptance
              fraction</strong> of proposals (between 0.1 and 0.9). Enter all three.`,
       fields: [
-        { id: 'rhat', label: 'Largest R-hat', unit: '', hint: '1.01' },
+        { id: 'rhat', label: 'Largest R-hat', unit: '', want: '1.01' },
         {
           id: 'ess',
           label: 'Smallest effective sample size',
           unit: '',
-          hint: '2000',
+          want: '2000',
         },
         {
           id: 'acceptance',
           label: 'Acceptance fraction',
           unit: '',
-          hint: '0.72',
+          want: '0.72',
         },
       ],
       validate: v => {

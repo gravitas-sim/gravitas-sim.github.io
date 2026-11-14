@@ -19,18 +19,12 @@
    ],
    "numbered": [
     ["steps.three-peaks.fields.0.label","Peak at 3,000 K"],
-    ["steps.three-peaks.fields.0.hint","965.9"],
     ["steps.three-peaks.fields.1.label","Peak at 6,000 K"],
-    ["steps.three-peaks.fields.1.hint","483"],
     ["steps.three-peaks.fields.2.label","Peak at 12,000 K"],
-    ["steps.three-peaks.fields.2.hint","241.5"],
     ["steps.three-peaks.fields.3.label","Peak × temperature at 6,000 K (nm·K)"],
     ["steps.three-colors.fields.0.label","B − V at 3,000 K"],
-    ["steps.three-colors.fields.0.hint","1.69"],
     ["steps.three-colors.fields.1.label","B − V at 6,000 K"],
-    ["steps.three-colors.fields.1.hint","0.6"],
-    ["steps.three-colors.fields.2.label","B − V at 10,000 K"],
-    ["steps.three-colors.fields.2.hint","0.15"]
+    ["steps.three-colors.fields.2.label","B − V at 10,000 K"]
    ]
   },
   "es": {

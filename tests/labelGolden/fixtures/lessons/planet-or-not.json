@@ -7,11 +7,7 @@
     ["steps.the-exclusion-radius.fields.0.unit","pixels"],
     ["steps.the-exclusion-radius.fields.1.unit","pixels"]
    ],
-   "numbered": [
-    ["steps.read-the-power.fields.0.hint","37"],
-    ["steps.the-exclusion-radius.fields.0.hint","0.17"],
-    ["steps.the-exclusion-radius.fields.1.hint","0.30"]
-   ]
+   "numbered": []
   },
   "es": {
    "units": [],

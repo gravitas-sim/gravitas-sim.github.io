@@ -13,9 +13,7 @@
    ],
    "numbered": [
     ["steps.measure-one-shift.fields.0.label","Synthetic star 1, from H-alpha"],
-    ["steps.measure-one-shift.fields.0.hint","85"],
-    ["steps.measure-one-shift.fields.1.label","Synthetic star 2, from H-alpha"],
-    ["steps.measure-one-shift.fields.1.hint","-142"]
+    ["steps.measure-one-shift.fields.1.label","Synthetic star 2, from H-alpha"]
    ]
   },
   "es": {

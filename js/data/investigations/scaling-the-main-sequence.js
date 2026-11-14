@@ -104,14 +104,14 @@ const SCALING_THE_MAIN_SEQUENCE = {
              masses, and the scatter of those models about the predicted
              exponent (in dex, factors of ten).`,
       fields: [
-        { id: 'pred', label: 'Predicted exponent', unit: '', hint: '3' },
+        { id: 'pred', label: 'Predicted exponent', unit: '', want: '3' },
         {
           id: 'fit',
           label: 'Fitted exponent, 2 to 40 M☉',
           unit: '',
-          hint: '3.16',
+          want: '3.16',
         },
-        { id: 'rms', label: 'Scatter, 2 to 40 M☉', unit: 'dex', hint: '0.143' },
+        { id: 'rms', label: 'Scatter, 2 to 40 M☉', unit: 'dex', want: '0.143' },
       ],
       validate: v => {
         if (![v.pred, v.fit, v.rms].every(Number.isFinite)) return null;
@@ -145,12 +145,12 @@ const SCALING_THE_MAIN_SEQUENCE = {
              the scaling predicts and the exponent fitted to the models from
              0.5 to 2 solar masses.`,
       fields: [
-        { id: 'pred', label: 'Predicted exponent', unit: '', hint: '5.46' },
+        { id: 'pred', label: 'Predicted exponent', unit: '', want: '5.46' },
         {
           id: 'fit',
           label: 'Fitted exponent, 0.5 to 2 M☉',
           unit: '',
-          hint: '4.43',
+          want: '4.43',
         },
       ],
       validate: v => {
@@ -179,8 +179,8 @@ const SCALING_THE_MAIN_SEQUENCE = {
              to <strong>Kramers</strong>. Read the exponent it predicts and the
              scatter of the 2 to 40 solar-mass models about it.`,
       fields: [
-        { id: 'pred', label: 'Predicted exponent', unit: '', hint: '5.16' },
-        { id: 'rms', label: 'Scatter, 2 to 40 M☉', unit: 'dex', hint: '0.92' },
+        { id: 'pred', label: 'Predicted exponent', unit: '', want: '5.16' },
+        { id: 'rms', label: 'Scatter, 2 to 40 M☉', unit: 'dex', want: '0.92' },
       ],
       validate: v => {
         if (![v.pred, v.rms].every(Number.isFinite)) return null;
@@ -242,12 +242,12 @@ const SCALING_THE_MAIN_SEQUENCE = {
              predicts for the radius and the exponent fitted to the 2 to 40
              solar-mass models.`,
       fields: [
-        { id: 'pred', label: 'Predicted exponent', unit: '', hint: '0.789' },
+        { id: 'pred', label: 'Predicted exponent', unit: '', want: '0.789' },
         {
           id: 'fit',
           label: 'Fitted exponent, 2 to 40 M☉',
           unit: '',
-          hint: '0.546',
+          want: '0.546',
         },
       ],
       validate: v => {
@@ -281,12 +281,12 @@ const SCALING_THE_MAIN_SEQUENCE = {
              predicts and the exponent fitted to the models from 2 to 40 solar
              masses.`,
       fields: [
-        { id: 'pred', label: 'Predicted exponent', unit: '', hint: '-2' },
+        { id: 'pred', label: 'Predicted exponent', unit: '', want: '-2' },
         {
           id: 'fit',
           label: 'Fitted exponent, 2 to 40 M☉',
           unit: '',
-          hint: '-1.82',
+          want: '-1.82',
         },
       ],
       validate: v => {
@@ -320,9 +320,9 @@ const SCALING_THE_MAIN_SEQUENCE = {
           id: 'mist',
           label: 'Main-sequence life (MIST)',
           unit: 'Gyr',
-          hint: '9.88',
+          want: '9.88',
         },
-        { id: 'nuc', label: 'Nuclear timescale', unit: 'Gyr', hint: '13.9' },
+        { id: 'nuc', label: 'Nuclear timescale', unit: 'Gyr', want: '13.9' },
       ],
       validate: v => {
         if (![v.mist, v.nuc].every(Number.isFinite)) return null;

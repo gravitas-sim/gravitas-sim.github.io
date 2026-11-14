@@ -151,7 +151,8 @@ export function entryFor(step, index) {
       label: plainText(f.label),
       unit: f.unit ?? null,
       derived: Boolean(f.compute),
-      hint: plainText(f.hint) || null,
+      // The author's expected value when there is one (`want`), else the text cue.
+      hint: plainText(f.want ?? f.hint) || null,
     }));
     entry.hasValidator =
       typeof step.validate === 'function' || Boolean(step.plan);

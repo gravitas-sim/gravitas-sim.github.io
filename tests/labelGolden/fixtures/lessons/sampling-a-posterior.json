@@ -11,15 +11,7 @@
     ["steps.did-it-converge.fields.1.unit",""],
     ["steps.did-it-converge.fields.2.unit",""]
    ],
-   "numbered": [
-    ["steps.the-draws.fields.0.hint","0.11926"],
-    ["steps.the-draws.fields.1.hint","0.00026"],
-    ["steps.the-draws.fields.2.hint","0.430"],
-    ["steps.the-draws.fields.3.hint","0.0051"],
-    ["steps.did-it-converge.fields.0.hint","1.01"],
-    ["steps.did-it-converge.fields.1.hint","2000"],
-    ["steps.did-it-converge.fields.2.hint","0.72"]
-   ]
+   "numbered": []
   },
   "es": {
    "units": [],

@@ -11,9 +11,7 @@
    ],
    "numbered": [
     ["steps.the-same-stars-three-ways.fields.0.label","Age assuming [Fe/H] = −0.5"],
-    ["steps.the-same-stars-three-ways.fields.0.hint","3.35"],
-    ["steps.the-same-stars-three-ways.fields.1.label","Age assuming [Fe/H] = 0"],
-    ["steps.the-same-stars-three-ways.fields.1.hint","1.47"]
+    ["steps.the-same-stars-three-ways.fields.1.label","Age assuming [Fe/H] = 0"]
    ]
   },
   "es": {

@@ -16,20 +16,7 @@
     ["steps.a-mass-if-circular.fields.1.unit","M⊕"],
     ["steps.a-mass-if-circular.fields.2.unit","M⊕"]
    ],
-   "numbered": [
-    ["steps.one-transit-time.fields.0.hint","1.53"],
-    ["steps.one-transit-time.fields.1.hint","0.52"],
-    ["steps.read-the-wave.fields.0.hint","345"],
-    ["steps.read-the-wave.fields.1.hint","4.7"],
-    ["steps.the-beat.fields.0.hint","10.0003"],
-    ["steps.the-beat.fields.1.hint","20.5955"],
-    ["steps.the-beat.fields.2.hint","346.2"],
-    ["steps.a-different-pair.fields.0.hint","173.7"],
-    ["steps.a-different-pair.fields.1.hint","173.8"],
-    ["steps.a-mass-if-circular.fields.0.hint","14.4"],
-    ["steps.a-mass-if-circular.fields.1.hint","12.1"],
-    ["steps.a-mass-if-circular.fields.2.hint","17.4"]
-   ]
+   "numbered": []
   },
   "es": {
    "units": [],

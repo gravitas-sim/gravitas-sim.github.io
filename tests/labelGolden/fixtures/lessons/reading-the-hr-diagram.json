@@ -8,9 +8,7 @@
     ["steps.the-distance-in-parsecs.unit","pc"],
     ["steps.what-binaries-do-to-the-fit.unit","%"]
    ],
-   "numbered": [
-    ["steps.distance-puts-it-there.fields.0.hint","12.10"]
-   ]
+   "numbered": []
   },
   "es": {
    "units": [],

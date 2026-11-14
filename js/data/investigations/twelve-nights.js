@@ -163,13 +163,13 @@ const TWELVE_NIGHTS = {
           id: 'windowHours',
           label: 'Usable window per night',
           unit: 'h',
-          hint: '4.96',
+          want: '4.96',
         },
         {
           id: 'driftMinutes',
           label: 'How much earlier the window opens each night',
           unit: 'min',
-          hint: '3.9',
+          want: '3.9',
         },
       ],
       validate: v => {
@@ -272,12 +272,12 @@ const TWELVE_NIGHTS = {
         {
           id: 'wCenter',
           label: 'Spread out, best moment (window use 0)',
-          hint: '0.998',
+          want: '0.998',
         },
         {
           id: 'wEnds',
           label: 'Spread out, both ends (window use 1)',
-          hint: '0.701',
+          want: '0.701',
         },
       ],
       validate: v => {
@@ -429,13 +429,13 @@ const TWELVE_NIGHTS = {
           id: 'periodCenter',
           label: 'Best moment: best period',
           unit: 'd',
-          hint: '0.78',
+          want: '0.78',
         },
         {
           id: 'periodEnds',
           label: 'Both ends: best period',
           unit: 'd',
-          hint: '3.52',
+          want: '3.52',
         },
       ],
       validate: v => {

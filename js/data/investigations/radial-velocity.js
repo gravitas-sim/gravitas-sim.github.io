@@ -351,7 +351,7 @@ const RADIAL_VELOCITY = {
           id: 'period',
           label: 'Time for one full cycle',
           unit: 'days',
-          hint: '3.5',
+          want: '3.5',
         },
       ],
     },
@@ -375,7 +375,7 @@ const RADIAL_VELOCITY = {
       setup: RV_LAB,
       body: `With the Radial Velocity panel open and at least one complete cycle
              recorded, read the semi-amplitude it reports.`,
-      fields: [{ id: 'k', label: 'Semi-amplitude K', unit: 'm/s', hint: '84' }],
+      fields: [{ id: 'k', label: 'Semi-amplitude K', unit: 'm/s', want: '84' }],
     },
 
     // --- Part 5: what controls K --------------------------------------------

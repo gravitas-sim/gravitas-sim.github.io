@@ -18,19 +18,8 @@
     ["steps.a-model-that-fits.fields.1.unit",""]
    ],
    "numbered": [
-    ["steps.try-a-mass.fields.0.hint","0.425"],
-    ["steps.try-a-mass.fields.1.hint","0.00"],
-    ["steps.try-a-small-mass.fields.0.hint","1.000"],
-    ["steps.try-a-small-mass.fields.1.hint","34.0"],
     ["steps.the-lower-limit.fields.0.label","Smallest mass, rise of 1"],
-    ["steps.the-lower-limit.fields.0.hint","0.79"],
-    ["steps.the-lower-limit.fields.1.label","Smallest mass, rise of 3.84"],
-    ["steps.the-lower-limit.fields.1.hint","0.73"],
-    ["steps.fit-the-line.fields.0.hint","1.078"],
-    ["steps.fit-the-line.fields.1.hint","0.024"],
-    ["steps.fit-the-line.fields.2.hint","7.64"],
-    ["steps.a-model-that-fits.fields.0.hint","0.37"],
-    ["steps.a-model-that-fits.fields.1.hint","0.089"]
+    ["steps.the-lower-limit.fields.1.label","Smallest mass, rise of 3.84"]
    ]
   },
   "es": {

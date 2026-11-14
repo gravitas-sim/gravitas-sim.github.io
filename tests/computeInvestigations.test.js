@@ -349,14 +349,14 @@ describe.each([
       );
     });
     // What a shadow leaves out on purpose: the card's machinery, and a
-    // field's hint, which is the number it expects.
+    // field's expected value, which is the number it expects.
     const { missing } = translationCoverage(lesson, es);
     expect(
       missing.filter(
         k =>
           !/^(duration|level|audience|courseLevel|mathematics|prerequisites\.\d+|steps\.\d+\.compute)$/.test(
             k
-          ) && !/\.fields\.\d+\.hint$/.test(k)
+          ) && !/\.fields\.\d+\.want$/.test(k)
       )
     ).toEqual([]);
   });

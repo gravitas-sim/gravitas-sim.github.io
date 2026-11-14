@@ -237,7 +237,7 @@ export default {
  told anyone anything.`,
       prompt: 'Period at a = 4 AU, with its uncertainty',
       unit: 'years',
-      placeholder: 'e.g. 8.0 ± 0.1',
+      placeholder: 'a value, then ± its uncertainty',
       answer: 8,
       tolerance: 0.4,
       expect: { dimension: 'time', unit: 'yr', accept: ['yr', 'years'] },
@@ -273,7 +273,7 @@ export default {
  (2σ<sub>P</sub>/P)²).`,
       prompt: 'Mass of HD 209458, with its uncertainty',
       unit: 'M☉',
-      placeholder: 'e.g. 1.15 ± 0.04',
+      placeholder: 'a value, then ± its uncertainty',
       answer: 1.15,
       tolerance: 0.06,
       hints: {

@@ -20,25 +20,14 @@
    ],
    "numbered": [
     ["steps.how-fast-does-ganymede-move.fields.0.label","Ganymede’s distance from Jupiter in frame 14"],
-    ["steps.how-fast-does-ganymede-move.fields.0.hint","9.7"],
-    ["steps.how-fast-does-ganymede-move.fields.1.label","How far it moved between frame 14 and frame 16"],
-    ["steps.how-fast-does-ganymede-move.fields.1.hint","0.9"],
-    ["steps.io-period-and-radius.fields.0.hint","1.77"],
-    ["steps.io-period-and-radius.fields.1.hint","5.9"],
-    ["steps.try-once-a-night.fields.0.hint","2.30"],
-    ["steps.ganymede-period-and-radius.fields.0.hint","7.14"],
-    ["steps.ganymede-period-and-radius.fields.1.hint","15.0"],
-    ["steps.jupiters-mass.placeholder","e.g. 1.5 ± 0.05"],
-    ["steps.weigh-again-corrected.fields.0.hint","126.9"],
-    ["steps.weigh-again-corrected.fields.1.hint","6.1"]
+    ["steps.how-fast-does-ganymede-move.fields.1.label","How far it moved between frame 14 and frame 16"]
    ]
   },
   "es": {
    "units": [],
    "numbered": [
     ["steps.how-fast-does-ganymede-move.fields.0.label","Distancia de Ganímedes a Júpiter en la imagen 14"],
-    ["steps.how-fast-does-ganymede-move.fields.1.label","Cuánto se movió entre la imagen 14 y la imagen 16"],
-    ["steps.jupiters-mass.placeholder","p. ej. 1,5 ± 0,05"]
+    ["steps.how-fast-does-ganymede-move.fields.1.label","Cuánto se movió entre la imagen 14 y la imagen 16"]
    ]
   }
  },

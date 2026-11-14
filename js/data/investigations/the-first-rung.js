@@ -91,8 +91,8 @@ const THE_FIRST_RUNG = {
              Read its <strong>distance modulus</strong> and its
              <strong>distance</strong> in megaparsecs.`,
       fields: [
-        { id: 'mu', label: 'Distance modulus', unit: 'mag', hint: '29.40' },
-        { id: 'd', label: 'Distance', unit: 'Mpc', hint: '7.59' },
+        { id: 'mu', label: 'Distance modulus', unit: 'mag', want: '29.40' },
+        { id: 'd', label: 'Distance', unit: 'Mpc', want: '7.59' },
       ],
       validate: v => {
         if (![v.mu, v.d].every(Number.isFinite)) return null;
@@ -148,9 +148,9 @@ const THE_FIRST_RUNG = {
           id: 'maser',
           label: 'Maser distance modulus',
           unit: 'mag',
-          hint: '29.40',
+          want: '29.40',
         },
-        { id: 'sigma', label: 'Its error', unit: 'mag', hint: '0.032' },
+        { id: 'sigma', label: 'Its error', unit: 'mag', want: '0.032' },
       ],
       validate: v => {
         if (![v.maser, v.sigma].every(Number.isFinite)) return null;
@@ -186,13 +186,13 @@ const THE_FIRST_RUNG = {
           id: 'host',
           label: 'From this galaxy’s scatter',
           unit: 'mag',
-          hint: '0.043',
+          want: '0.043',
         },
         {
           id: 'lmc',
           label: 'From the Cloud’s distance',
           unit: 'mag',
-          hint: '0.026',
+          want: '0.026',
         },
       ],
       validate: v => {
@@ -261,8 +261,8 @@ const THE_FIRST_RUNG = {
              <strong>distance modulus</strong> and its
              <strong>distance</strong>.`,
       fields: [
-        { id: 'mu', label: 'Distance modulus', unit: 'mag', hint: '29.21' },
-        { id: 'd', label: 'Distance', unit: 'Mpc', hint: '6.95' },
+        { id: 'mu', label: 'Distance modulus', unit: 'mag', want: '29.21' },
+        { id: 'd', label: 'Distance', unit: 'Mpc', want: '6.95' },
       ],
       validate: v => {
         if (![v.mu, v.d].every(Number.isFinite)) return null;

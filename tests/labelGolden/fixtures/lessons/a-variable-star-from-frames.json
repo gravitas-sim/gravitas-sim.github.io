@@ -14,13 +14,7 @@
     ["steps.the-uncalibrated-night.unit","mag"],
     ["steps.the-whole-pipeline.unit","h"]
    ],
-   "numbered": [
-    ["steps.the-star-alone.fields.0.hint","0.070"],
-    ["steps.against-the-comparison.fields.0.hint","0.0088"],
-    ["steps.against-the-comparison.fields.1.hint","8.0"],
-    ["steps.the-sine.fields.0.hint","0.122"],
-    ["steps.the-sine.fields.1.hint","0.042"]
-   ]
+   "numbered": []
   },
   "es": {
    "units": [],

@@ -13,17 +13,7 @@
     ["steps.the-slope.fields.2.unit",""],
     ["steps.the-slope.fields.3.unit",""]
    ],
-   "numbered": [
-    ["steps.read-a-flare.fields.0.hint","118"],
-    ["steps.read-a-flare.fields.1.hint","3.5"],
-    ["steps.read-a-flare.fields.2.hint","29"],
-    ["steps.count-the-flares.fields.0.hint","76"],
-    ["steps.count-the-flares.fields.1.hint","3.1"],
-    ["steps.the-slope.fields.0.hint","1.92"],
-    ["steps.the-slope.fields.1.hint","1.62"],
-    ["steps.the-slope.fields.2.hint","2.28"],
-    ["steps.the-slope.fields.3.hint","29"]
-   ]
+   "numbered": []
   },
   "es": {
    "units": [],

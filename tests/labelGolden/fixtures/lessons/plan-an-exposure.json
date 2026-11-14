@@ -13,13 +13,7 @@
     ["steps.on-the-frame.fields.1.unit",""]
    ],
    "numbered": [
-    ["steps.the-plan.fields.0.hint","455"],
-    ["steps.the-plan.fields.1.label","Faintest object (5σ)"],
-    ["steps.the-plan.fields.1.hint","25.51"],
-    ["steps.twenty-exposures.fields.0.hint","512"],
-    ["steps.twenty-exposures.fields.1.hint","12.5"],
-    ["steps.on-the-frame.fields.0.hint","19.8"],
-    ["steps.on-the-frame.fields.1.hint","19.6"]
+    ["steps.the-plan.fields.1.label","Faintest object (5σ)"]
    ]
   },
   "es": {

@@ -232,8 +232,8 @@ export default {
       title: 'Un ensayo',
       body: 'Prueba la fórmula una vez con números elegidos para ser amables, antes de usarla con algo real.\n\nUn par de estrellas está a <strong>2 UA</strong> y tarda <strong>2 años</strong> en dar la vuelta. Escribe esos dos números. El resto se calcula por ti, línea a línea, para que veas de dónde sale la respuesta.',
       fields: [
-        { label: 'Tamaño de la órbita a', unit: 'UA', hint: '2' },
-        { label: 'Periodo P', unit: 'años', hint: '2' },
+        { label: 'Tamaño de la órbita a', unit: 'UA', want: '2' },
+        { label: 'Periodo P', unit: 'años', want: '2' },
         { label: 'a<sup>3</sup>, es decir a × a × a', unit: '' },
         { label: 'P<sup>2</sup>, es decir P × P', unit: '' },
         { label: 'Masa total, a<sup>3</sup> ÷ P<sup>2</sup>', unit: 'M☉' },
@@ -382,8 +382,8 @@ export default {
       title: 'Uno por tu cuenta',
       body: 'Un par nuevo, que no has visto. Las dos estrellas están a <strong>3 UA</strong> y tardan <strong>3 años</strong> en girar una alrededor de la otra.\n\nCalcula cuánto pesan entre las dos.',
       fields: [
-        { label: 'Tamaño de la órbita a', unit: 'UA', hint: '3' },
-        { label: 'Periodo P', unit: 'años', hint: '3' },
+        { label: 'Tamaño de la órbita a', unit: 'UA', want: '3' },
+        { label: 'Periodo P', unit: 'años', want: '3' },
         { label: 'a<sup>3</sup>', unit: '' },
         { label: 'P<sup>2</sup>', unit: '' },
         { label: 'Masa total', unit: 'M☉' },

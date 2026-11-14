@@ -12,16 +12,7 @@
     ["steps.planet-q.fields.0.unit",""],
     ["steps.planet-q.fields.1.unit",""]
    ],
-   "numbered": [
-    ["steps.full-phase-albedo.fields.0.hint","0.35"],
-    ["steps.full-phase-albedo.fields.1.hint","0.52"],
-    ["steps.the-interval.fields.0.hint","0.34"],
-    ["steps.the-interval.fields.1.hint","0.36"],
-    ["steps.match-by-hand.fields.0.hint","0.35"],
-    ["steps.match-by-hand.fields.1.hint","31.2"],
-    ["steps.planet-q.fields.0.hint","82"],
-    ["steps.planet-q.fields.1.hint","23"]
-   ]
+   "numbered": []
   },
   "es": {
    "units": [],

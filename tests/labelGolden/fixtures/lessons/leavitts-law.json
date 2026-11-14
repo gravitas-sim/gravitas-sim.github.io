@@ -13,11 +13,7 @@
     ["steps.many-stars.unit","mag"]
    ],
    "numbered": [
-    ["steps.the-calibration.fields.0.hint","-3.29"],
-    ["steps.the-calibration.fields.1.label","Magnitude at 10 days"],
-    ["steps.the-calibration.fields.1.hint","12.60"],
-    ["steps.how-tight.fields.0.hint","0.089"],
-    ["steps.how-tight.fields.1.hint","0.040"]
+    ["steps.the-calibration.fields.1.label","Magnitude at 10 days"]
    ]
   },
   "es": {

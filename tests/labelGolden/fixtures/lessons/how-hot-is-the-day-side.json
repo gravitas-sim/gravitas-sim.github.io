@@ -14,16 +14,7 @@
     ["steps.planet-y-misfit.fields.0.unit",""]
    ],
    "numbered": [
-    ["steps.one-band.fields.0.hint","2094"],
-    ["steps.four-bands.fields.0.hint","2171"],
-    ["steps.four-bands.fields.1.hint","2067"],
-    ["steps.match-by-hand.fields.0.hint","2090"],
-    ["steps.match-by-hand.fields.1.hint","6.5"],
-    ["steps.the-manifest.fields.0.label","Intervals that contain 2,100 K"],
-    ["steps.the-manifest.fields.0.hint","3"],
-    ["steps.reflected-light.fields.0.hint","0"],
-    ["steps.planet-y.fields.0.hint","314"],
-    ["steps.planet-y-misfit.fields.0.hint","231"]
+    ["steps.the-manifest.fields.0.label","Intervals that contain 2,100 K"]
    ]
   },
   "es": {

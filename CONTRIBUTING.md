@@ -467,11 +467,16 @@ guide sections are there to be replaced, and the checker is the to-do list.
 content, references to scenarios, widgets, controls and response fields, setup
 values against the control ranges a widget actually has, answer shapes and
 tolerances, whether the grader accepts the answer the lesson declares, whether
-a validator accepts the author's own hint values, translation shape, instructor
+a validator accepts the author's own expected values (`want` on a measure field), that no cue in an empty box (a field's `hint`, a numeric step's `placeholder`) holds a number, translation shape, instructor
 guidance, and agreement between the lessons, both manifests, the answer keys and
 the guides. `npm run author:rules` lists what is enforced and why; every finding
 names its rule, so an argument with a finding is an argument with a rule in
 `js/authoring/rules.js` rather than with the tool.
+
+A measure field's expected value is written as `want: '9.33'` and no page reads it
+except the checks and the instructor key. `hint` is words for the empty box ("from
+the previous step"), never a number: the lesson panel does not render a cue that
+holds a numeral, and `author:check` says so before it ships.
 
 Errors fail the command and CI. Warnings do not, unless you pass `--warnings`:
 they are things a person should look at, and a checker that fails on those gets

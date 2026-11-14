@@ -30,7 +30,7 @@ export default {
       title: 'Predice, con barra de error',
       body: 'Una predicción sin incertidumbre no se puede poner a prueba: cualquier medida sería «cercana». Da el periodo del planeta a 4 UA como se da un resultado: el valor, luego ±, luego su incertidumbre, tomados de las dos últimas casillas del paso anterior.\n\nCuenta como correcta cuando el rango que das se solapa con el que permite la ley y no es más ancho que el doble de la semianchura de ese rango, porque una incertidumbre capaz de solaparse con cualquier cosa no ha dicho nada a nadie.',
       prompt: 'Periodo a a = 4 UA, con su incertidumbre',
-      placeholder: 'p. ej. 8,0 ± 0,1',
+      placeholder: 'un valor y, luego, ± su incertidumbre',
       hints: {
         concept:
           'El ajuste ponderado da una constante k y lo bien que se conoce. La ley la convierte en un periodo y una incertidumbre del periodo.',
@@ -44,7 +44,7 @@ export default {
       title: 'Pesa la estrella de un planeta real',
       body: 'El lienzo sigue mostrando el Sistema Solar; este paso usa solo números. Son los que usan las investigaciones de tránsitos y de velocidad radial para HD 209458 b: un periodo orbital de <strong>3,5247 ± 0,0001 días</strong> y una órbita de <strong>0,0475 ± 0,0005 UA</strong>.\n\nLa forma de Newton de la tercera ley da la masa de la estrella en masas solares a partir de a en UA y P en años: M = a³ / P². Convierte antes el periodo. La incertidumbre de un producto de potencias suma en cuadratura las incertidumbres fraccionarias, cada una multiplicada por su potencia: σ<sub>M</sub>/M = √((3σ<sub>a</sub>/a)² + (2σ<sub>P</sub>/P)²).',
       prompt: 'Masa de HD 209458, con su incertidumbre',
-      placeholder: 'p. ej. 1,15 ± 0,04',
+      placeholder: 'un valor y, luego, ± su incertidumbre',
       hints: {
         concept:
           'La tercera ley de Kepler en años, UA y masas solares: la masa es a al cubo dividido entre P al cuadrado.',
