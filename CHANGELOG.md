@@ -20,6 +20,17 @@ the release rather than in the tag.
 
 ### Added
 
+- The step-policy gate for the sandbox (Prompt 446; register row D-R4-446-01;
+  invisible, documentation): `STEP_POLICY_GATE.md` records, against thresholds
+  committed before any run, whether a number read in the sandbox may depend on
+  how fast a screen draws. Verdict C: a fixed step of 1/96 removes the
+  dependence (the hard three-body pass loses 1.25 percent of its energy at every
+  rate instead of 4.7 to 25.7) but costs more than 1.5 times the frame time on
+  the solar-system scene, so the step keeps following the frame and the
+  dependence is stated instead (Prompts 458 and 461). The document also holds the
+  compatibility bill and the lesson steps a built policy would touch;
+  `tests/stepPolicyGate.test.js` recomputes the verdict from the pinned results.
+  Nothing changes on screen.
 - The surface ledger (Prompt 453; register row D-R4-453-01): a generated record
   with one row per published page, generated family, route parameter, dialog,
   mode and shared region, each with one closing prompt, and

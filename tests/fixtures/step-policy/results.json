@@ -1,0 +1,929 @@
+{
+ "format": "gravitas.step-policy-results/1",
+ "thresholds": "tests/fixtures/step-policy/thresholds.json",
+ "note": "Pinned results of the spike (spike/step-policy, never merged). tests/stepPolicyGate.test.js recomputes every pass and the verdict from these values and the committed thresholds. Values are as the runner printed them (four significant digits).",
+ "machine": "Intel Core i5-10500, 24 GB, macOS (Darwin 25.6), Node 22.23.4, headless Chromium (Playwright 1.64)",
+ "candidates": {
+  "S0": {
+   "judgedRows": 85,
+   "failingRows": [
+    "R4x.energy@120",
+    "R4x.energy@30",
+    "R4x.energy@60",
+    "R4x.energy@clamp",
+    "R5.position@120",
+    "R5.position@30",
+    "R5.position@60",
+    "R5.position@clamp"
+   ],
+   "steps": {
+    "R1@120": 0.04167,
+    "R1@60": 0.08333,
+    "R1@30": 0.1667,
+    "R1@clamp": 0.25,
+    "R4x@120": 0.04167,
+    "R4x@60": 0.08333,
+    "R4x@30": 0.1667,
+    "R4x@clamp": 0.25,
+    "R5@120": 0.02083,
+    "R5@60": 0.04167,
+    "R5@30": 0.08333,
+    "R5@clamp": 0.125
+   },
+   "T2": {
+    "R1": [
+     0.0007727,
+     0.003091,
+     0.01236,
+     0.02782
+    ],
+    "R2": [
+     0.01079,
+     0.01332,
+     0.01493,
+     0.01553
+    ]
+   },
+   "T3": {
+    "R4x": [
+     0.04667,
+     0.07727,
+     0.1675,
+     0.2572
+    ],
+    "bound": 0.02
+   },
+   "R5position": [
+    0.01081,
+    0.02143,
+    0.04239,
+    0.06244
+   ],
+   "R1energy": [
+    {
+     "value": 1.736e-06,
+     "bound": 3.472e-06
+    },
+    {
+     "value": 6.944e-06,
+     "bound": 1.389e-05
+    },
+    {
+     "value": 2.778e-05,
+     "bound": 5.556e-05
+    },
+    {
+     "value": 6.25e-05,
+     "bound": 0.000125
+    }
+   ],
+   "stepOfRecord": 0.25
+  },
+  "S1": {
+   "judgedRows": 85,
+   "failingRows": [
+    "R4x.energy@120",
+    "R4x.energy@30",
+    "R4x.energy@60",
+    "R4x.energy@clamp",
+    "R5.position@120",
+    "R5.position@30",
+    "R5.position@60",
+    "R5.position@clamp"
+   ],
+   "steps": {
+    "R1@120": 0.02083,
+    "R1@60": 0.02778,
+    "R1@30": 0.03333,
+    "R1@clamp": 0.04167,
+    "R4x@120": 0.02083,
+    "R4x@60": 0.02778,
+    "R4x@30": 0.03333,
+    "R4x@clamp": 0.04167,
+    "R5@120": 0.02083,
+    "R5@60": 0.02083,
+    "R5@30": 0.02778,
+    "R5@clamp": 0.04167
+   },
+   "T2": {
+    "R1": [
+     0.0001932,
+     0.0003434,
+     0.0004945,
+     0.0007727
+    ],
+    "R2": [
+     0.01079,
+     0.01332,
+     0.01493,
+     0.01553
+    ]
+   },
+   "T3": {
+    "R4x": [
+     0.02564,
+     0.03313,
+     0.03877,
+     0.04667
+    ],
+    "bound": 0.02
+   },
+   "R5position": [
+    0.01081,
+    0.01081,
+    0.01441,
+    0.02143
+   ],
+   "R1energy": [
+    {
+     "value": 4.34e-07,
+     "bound": 8.681e-07
+    },
+    {
+     "value": 7.716e-07,
+     "bound": 1.543e-06
+    },
+    {
+     "value": 1.111e-06,
+     "bound": 2.222e-06
+    },
+    {
+     "value": 1.736e-06,
+     "bound": 3.472e-06
+    }
+   ],
+   "stepOfRecord": 0.041666666666666664
+  },
+  "S1b": {
+   "judgedRows": 25,
+   "failingRows": [
+    "R4x.energy@120",
+    "R4x.energy@30",
+    "R4x.energy@60",
+    "R4x.energy@clamp",
+    "R5.position@120",
+    "R5.position@30",
+    "R5.position@60",
+    "R5.position@clamp"
+   ],
+   "steps": {
+    "R1@120": 0.04167,
+    "R1@60": 0.04167,
+    "R1@30": 0.04167,
+    "R1@clamp": 0.04167,
+    "R4x@120": 0.04167,
+    "R4x@60": 0.04167,
+    "R4x@30": 0.04167,
+    "R4x@clamp": 0.04167,
+    "R5@120": 0.02083,
+    "R5@60": 0.04167,
+    "R5@30": 0.04167,
+    "R5@clamp": 0.04167
+   },
+   "T2": {
+    "R1": [
+     0.0007727,
+     0.0007727,
+     0.0007727,
+     0.0007727
+    ],
+    "R2": null
+   },
+   "T3": {
+    "R4x": [
+     0.04667,
+     0.04667,
+     0.04667,
+     0.04667
+    ],
+    "bound": 0.02
+   },
+   "R5position": [
+    0.01081,
+    0.02143,
+    0.02143,
+    0.02143
+   ],
+   "R1energy": [
+    {
+     "value": 1.736e-06,
+     "bound": 3.472e-06
+    },
+    {
+     "value": 1.736e-06,
+     "bound": 3.472e-06
+    },
+    {
+     "value": 1.736e-06,
+     "bound": 3.472e-06
+    },
+    {
+     "value": 1.736e-06,
+     "bound": 3.472e-06
+    }
+   ],
+   "stepOfRecord": 0.0417
+  },
+  "S2": {
+   "judgedRows": 85,
+   "failingRows": [
+    "R4x.energy@120",
+    "R4x.energy@30",
+    "R4x.energy@60",
+    "R4x.energy@clamp",
+    "R5.position@120",
+    "R5.position@30",
+    "R5.position@60",
+    "R5.position@clamp"
+   ],
+   "steps": {
+    "R1@120": 0.04167,
+    "R1@60": 0.04167,
+    "R1@30": 0.04167,
+    "R1@clamp": 0.04167,
+    "R4x@120": 0.04167,
+    "R4x@60": 0.04167,
+    "R4x@30": 0.04167,
+    "R4x@clamp": 0.04167,
+    "R5@120": 0.04167,
+    "R5@60": 0.04167,
+    "R5@30": 0.04167,
+    "R5@clamp": 0.04167
+   },
+   "T2": {
+    "R1": [
+     0.0007727,
+     0.0007727,
+     0.0007727,
+     0.0007727
+    ],
+    "R2": [
+     0.01079,
+     0.01332,
+     0.01493,
+     0.01553
+    ]
+   },
+   "T3": {
+    "R4x": [
+     0.04667,
+     0.04667,
+     0.04667,
+     0.04667
+    ],
+    "bound": 0.02
+   },
+   "R5position": [
+    0.02143,
+    0.02143,
+    0.02143,
+    0.02143
+   ],
+   "R1energy": [
+    {
+     "value": 1.736e-06,
+     "bound": 3.472e-06
+    },
+    {
+     "value": 1.736e-06,
+     "bound": 3.472e-06
+    },
+    {
+     "value": 1.736e-06,
+     "bound": 3.472e-06
+    },
+    {
+     "value": 1.736e-06,
+     "bound": 3.472e-06
+    }
+   ],
+   "stepOfRecord": 0.041666666666666664
+  },
+  "S3": {
+   "judgedRows": 85,
+   "failingRows": [
+    "R4x.energy@120",
+    "R4x.energy@30",
+    "R4x.energy@60",
+    "R4x.energy@clamp",
+    "R5.position@120",
+    "R5.position@30",
+    "R5.position@60",
+    "R5.position@clamp"
+   ],
+   "steps": {
+    "R1@120": 0.02083,
+    "R1@60": 0.02083,
+    "R1@30": 0.02083,
+    "R1@clamp": 0.02083,
+    "R4x@120": 0.02083,
+    "R4x@60": 0.02083,
+    "R4x@30": 0.02083,
+    "R4x@clamp": 0.02083,
+    "R5@120": 0.02083,
+    "R5@60": 0.02083,
+    "R5@30": 0.02083,
+    "R5@clamp": 0.02083
+   },
+   "T2": {
+    "R1": [
+     0.0001932,
+     0.0001932,
+     0.0001932,
+     0.0001932
+    ],
+    "R2": [
+     0.01079,
+     0.01332,
+     0.01493,
+     0.01553
+    ]
+   },
+   "T3": {
+    "R4x": [
+     0.02564,
+     0.02564,
+     0.02564,
+     0.02564
+    ],
+    "bound": 0.02
+   },
+   "R5position": [
+    0.01081,
+    0.01081,
+    0.01081,
+    0.01081
+   ],
+   "R1energy": [
+    {
+     "value": 4.34e-07,
+     "bound": 8.681e-07
+    },
+    {
+     "value": 4.34e-07,
+     "bound": 8.681e-07
+    },
+    {
+     "value": 4.34e-07,
+     "bound": 8.681e-07
+    },
+    {
+     "value": 4.34e-07,
+     "bound": 8.681e-07
+    }
+   ],
+   "stepOfRecord": 0.020833333333333332
+  },
+  "S4": {
+   "judgedRows": 85,
+   "failingRows": [],
+   "steps": {
+    "R1@120": 0.01042,
+    "R1@60": 0.01042,
+    "R1@30": 0.01042,
+    "R1@clamp": 0.01042,
+    "R4x@120": 0.01042,
+    "R4x@60": 0.01042,
+    "R4x@30": 0.01042,
+    "R4x@clamp": 0.01042,
+    "R5@120": 0.01042,
+    "R5@60": 0.01042,
+    "R5@30": 0.01042,
+    "R5@clamp": 0.01042
+   },
+   "T2": {
+    "R1": [
+     4.829e-05,
+     4.829e-05,
+     4.83e-05,
+     4.829e-05
+    ],
+    "R2": [
+     0.01079,
+     0.01332,
+     0.01493,
+     0.01553
+    ]
+   },
+   "T3": {
+    "R4x": [
+     0.01254,
+     0.01254,
+     0.01254,
+     0.01254
+    ],
+    "bound": 0.02
+   },
+   "R5position": [
+    0.005442,
+    0.005442,
+    0.005442,
+    0.005442
+   ],
+   "R1energy": [
+    {
+     "value": 1.085e-07,
+     "bound": 2.17e-07
+    },
+    {
+     "value": 1.085e-07,
+     "bound": 2.17e-07
+    },
+    {
+     "value": 1.085e-07,
+     "bound": 2.17e-07
+    },
+    {
+     "value": 1.085e-07,
+     "bound": 2.17e-07
+    }
+   ],
+   "stepOfRecord": 0.010416666666666666
+  }
+ },
+ "t4": {
+  "instrument": "npm run perf --scene ... --policy Sx --fixed-step 1/60, 3 runs of 5 s per scene and profile, median, S0 and S4 interleaved; baseline is the lower of the recorded measuredFrameMs and the session median of S0",
+  "candidates": [
+   "S4"
+  ],
+  "notMeasured": "S1, S2 and S3 fail T1 and T3 on every slice, which decides them before T4",
+  "rows": [
+   {
+    "profile": "sandbox-scenes-full",
+    "scene": "black-hole-lab-midnight-1366",
+    "scenario": "black-hole-lab",
+    "changedByCandidate": false,
+    "recordedMs": 8.79,
+    "s0Ms": 5.28,
+    "s4Ms": 4.77,
+    "baselineMs": 5.28,
+    "ratio": 0.9
+   },
+   {
+    "profile": "sandbox-scenes-full",
+    "scene": "circumbinary-planet-lab-midnight-1366",
+    "scenario": "circumbinary-planet-lab",
+    "changedByCandidate": false,
+    "recordedMs": 3.44,
+    "s0Ms": 3.85,
+    "s4Ms": 4.23,
+    "baselineMs": 3.44,
+    "ratio": 1.23
+   },
+   {
+    "profile": "sandbox-scenes-full",
+    "scene": "galilean-resonance-midnight-1366",
+    "scenario": "galilean-resonance",
+    "changedByCandidate": false,
+    "recordedMs": 4.06,
+    "s0Ms": 3.63,
+    "s4Ms": 3.74,
+    "baselineMs": 3.63,
+    "ratio": 1.03
+   },
+   {
+    "profile": "sandbox-scenes-full",
+    "scene": "galilean-resonance-zoomed-midnight-1366",
+    "scenario": "galilean-resonance",
+    "changedByCandidate": false,
+    "recordedMs": 4.4,
+    "s0Ms": 3.6,
+    "s4Ms": 3.66,
+    "baselineMs": 3.6,
+    "ratio": 1.02
+   },
+   {
+    "profile": "sandbox-scenes-full",
+    "scene": "solar-system-midnight-1366",
+    "scenario": "solar-system",
+    "changedByCandidate": true,
+    "recordedMs": 2.32,
+    "s0Ms": 2.05,
+    "s4Ms": 3.09,
+    "baselineMs": 2.05,
+    "ratio": 1.51
+   },
+   {
+    "profile": "sandbox-scenes-full",
+    "scene": "star-cluster-midnight-1366",
+    "scenario": "star-cluster",
+    "changedByCandidate": true,
+    "recordedMs": 26.01,
+    "s0Ms": 16.7,
+    "s4Ms": 32.13,
+    "baselineMs": 16.7,
+    "ratio": 1.92
+   },
+   {
+    "profile": "sandbox-scenes-low-cpu4",
+    "scene": "black-hole-lab-midnight-1366",
+    "scenario": "black-hole-lab",
+    "changedByCandidate": false,
+    "recordedMs": 19.5,
+    "s0Ms": 10.93,
+    "s4Ms": 8.86,
+    "baselineMs": 10.93,
+    "ratio": 0.81
+   },
+   {
+    "profile": "sandbox-scenes-low-cpu4",
+    "scene": "circumbinary-planet-lab-midnight-1366",
+    "scenario": "circumbinary-planet-lab",
+    "changedByCandidate": false,
+    "recordedMs": 13.44,
+    "s0Ms": 8.66,
+    "s4Ms": 8.94,
+    "baselineMs": 8.66,
+    "ratio": 1.03
+   },
+   {
+    "profile": "sandbox-scenes-low-cpu4",
+    "scene": "galilean-resonance-midnight-1366",
+    "scenario": "galilean-resonance",
+    "changedByCandidate": false,
+    "recordedMs": 22.1,
+    "s0Ms": 11.89,
+    "s4Ms": 14.11,
+    "baselineMs": 11.89,
+    "ratio": 1.19
+   },
+   {
+    "profile": "sandbox-scenes-low-cpu4",
+    "scene": "galilean-resonance-zoomed-midnight-1366",
+    "scenario": "galilean-resonance",
+    "changedByCandidate": false,
+    "recordedMs": 17.73,
+    "s0Ms": 11.67,
+    "s4Ms": 13.19,
+    "baselineMs": 11.67,
+    "ratio": 1.13
+   },
+   {
+    "profile": "sandbox-scenes-low-cpu4",
+    "scene": "solar-system-midnight-1366",
+    "scenario": "solar-system",
+    "changedByCandidate": true,
+    "recordedMs": 16.34,
+    "s0Ms": 8.18,
+    "s4Ms": 13.33,
+    "baselineMs": 8.18,
+    "ratio": 1.63
+   },
+   {
+    "profile": "sandbox-scenes-low-cpu4",
+    "scene": "star-cluster-midnight-1366",
+    "scenario": "star-cluster",
+    "changedByCandidate": true,
+    "recordedMs": 25.4,
+    "s0Ms": 16.56,
+    "s4Ms": 21.07,
+    "baselineMs": 16.56,
+    "ratio": 1.27
+   }
+  ],
+  "loadAverage1min": "between 6.4 and 12.9 across the 14 invocations (a shared machine; the unchanged-plan scenes are the instrument spread)",
+  "unchangedPlanSpread": {
+   "min": 0.81,
+   "max": 1.23
+  },
+  "heavierB2MembersFullTierMs": {
+   "S0": {
+    "exoplanet-lab": 22.3,
+    "kuiper-belt": 12.4,
+    "sagittarius-a": 22.9,
+    "galactic-center": 12.6,
+    "intermediate-mass-bh": 10.5,
+    "galactic-collision": 71.9,
+    "star-cluster": 21.7
+   },
+   "S4": {
+    "exoplanet-lab": 47.0,
+    "kuiper-belt": 32.5,
+    "sagittarius-a": 37.4,
+    "galactic-center": 17.6,
+    "intermediate-mass-bh": 11.2,
+    "galactic-collision": 116.7,
+    "star-cluster": 23.8
+   }
+  }
+ },
+ "t8": {
+  "S0": {
+   "legs": 244,
+   "nan": 0,
+   "errors": 0,
+   "limitBound": 0,
+   "maxStepsPerFrame": 64.0
+  },
+  "S1": {
+   "legs": 140,
+   "nan": 0,
+   "errors": 0,
+   "limitBound": 0,
+   "maxStepsPerFrame": 8.0
+  },
+  "S2": {
+   "legs": 140,
+   "nan": 0,
+   "errors": 0,
+   "limitBound": 0,
+   "maxStepsPerFrame": 7.2
+  },
+  "S3": {
+   "legs": 140,
+   "nan": 0,
+   "errors": 0,
+   "limitBound": 0,
+   "maxStepsPerFrame": 14.4
+  },
+  "S4": {
+   "legs": 140,
+   "nan": 0,
+   "errors": 0,
+   "limitBound": 0,
+   "maxStepsPerFrame": 28.8
+  },
+  "validatePhysics": "442 of 442 on the spike and on the base, the same lines apart from timings"
+ },
+ "slices": {
+  "all": {
+   "members": [
+    "binary-bh",
+    "neutron-star-collision",
+    "pulsar-system",
+    "white-dwarf-binary",
+    "stellar-graveyard",
+    "galactic-center",
+    "supernova-remnant",
+    "compact-object-zoo",
+    "millisecond-pulsar",
+    "tidal-disruption-event",
+    "intermediate-mass-bh",
+    "galactic-collision",
+    "micro-bh-swarm",
+    "exoplanet-lab",
+    "triple-bh-system",
+    "supermassive-bh",
+    "star-cluster",
+    "kuiper-belt",
+    "sagittarius-a",
+    "solar-system",
+    "earth-moon-system",
+    "slingshot",
+    "rogue-encounter",
+    "quasar-cannon",
+    "the-pinwheel-galaxy-core",
+    "star-frisbee",
+    "kessler-cascade",
+    "alien-dyson-swarm-collapse",
+    "tidal-arm-tango",
+    "hungry-hungry-holes",
+    "slingshot-gauntlet",
+    "black-hole-billiards",
+    "stellar-nursery",
+    "three-body-sensitivity-lab",
+    "gw150914"
+   ],
+   "cases": [
+    "R1",
+    "R4x",
+    "R5"
+   ]
+  },
+  "B1": {
+   "members": [
+    "solar-system",
+    "earth-moon-system",
+    "tidal-disruption-event",
+    "three-body-sensitivity-lab"
+   ],
+   "cases": [
+    "R1",
+    "R4x",
+    "R5"
+   ]
+  },
+  "B2": {
+   "members": [
+    "binary-bh",
+    "pulsar-system",
+    "galactic-center",
+    "millisecond-pulsar",
+    "intermediate-mass-bh",
+    "exoplanet-lab",
+    "kuiper-belt",
+    "sagittarius-a",
+    "solar-system",
+    "earth-moon-system",
+    "three-body-sensitivity-lab",
+    "gw150914"
+   ],
+   "cases": [
+    "R1",
+    "R4x"
+   ],
+   "closestPairOverFloor": {
+    "binary-bh": 2.1501,
+    "neutron-star-collision": 0.0331,
+    "pulsar-system": 14.5829,
+    "white-dwarf-binary": 0.8,
+    "stellar-graveyard": 0.0049,
+    "galactic-center": 1.4325,
+    "supernova-remnant": 0.0094,
+    "compact-object-zoo": 0.0192,
+    "millisecond-pulsar": 2.0328,
+    "tidal-disruption-event": 0.0613,
+    "intermediate-mass-bh": 1.0478,
+    "galactic-collision": 0.0049,
+    "micro-bh-swarm": 0.009,
+    "exoplanet-lab": 2.048,
+    "triple-bh-system": 0.0298,
+    "supermassive-bh": 0.4199,
+    "star-cluster": 0.008,
+    "kuiper-belt": 1.6949,
+    "sagittarius-a": 1.0465,
+    "solar-system": 2.2187,
+    "earth-moon-system": 6.993,
+    "slingshot": 0.2421,
+    "rogue-encounter": 0.0199,
+    "quasar-cannon": 0.0052,
+    "the-pinwheel-galaxy-core": 0.0039,
+    "star-frisbee": 0.0055,
+    "kessler-cascade": 0.0014,
+    "alien-dyson-swarm-collapse": 0.0015,
+    "tidal-arm-tango": 0.0023,
+    "hungry-hungry-holes": 0.0011,
+    "slingshot-gauntlet": 0.0114,
+    "black-hole-billiards": 0.0197,
+    "stellar-nursery": 0.0016,
+    "three-body-sensitivity-lab": 17.1539,
+    "gw150914": 10.5418
+   }
+  }
+ },
+ "bill": {
+  "S1": {
+   "all": {
+    "T5": true,
+    "T7": true
+   },
+   "B1": {
+    "T5": true,
+    "T7": true
+   },
+   "B2": {
+    "T5": true,
+    "T7": true
+   }
+  },
+  "S2": {
+   "all": {
+    "T5": true,
+    "T7": true
+   },
+   "B1": {
+    "T5": true,
+    "T7": true
+   },
+   "B2": {
+    "T5": true,
+    "T7": true
+   }
+  },
+  "S3": {
+   "all": {
+    "T5": true,
+    "T7": true
+   },
+   "B1": {
+    "T5": true,
+    "T7": true
+   },
+   "B2": {
+    "T5": true,
+    "T7": true
+   }
+  },
+  "S4": {
+   "all": {
+    "T5": true,
+    "T7": true
+   },
+   "B1": {
+    "T5": true,
+    "T7": true
+   },
+   "B2": {
+    "T5": true,
+    "T7": true
+   }
+  }
+ },
+ "t5": {
+  "S1": "golden regenerated on spike/step-policy-s1-rows: bodies and camera digests equal in 61 rows; settings digest changed in exactly the 35 uncapped rows and in no other field",
+  "S2_S4": "unchanged golden passes in all 61 rows (code policy, no row named)"
+ },
+ "t7": {
+  "benchDeterminism": "two live runs of 240 frames under setFixedStep(1/60), same seed, every body state compared as text: identical for S0 to S4 on solar-system and three-body-sensitivity-lab (10 of 10)",
+  "reliabilityUnchangedConsumer": "the check halves max_timestep, not the step: with the live plan from the policy it halves the real step exactly in 56 of 56 scenarios it does not refuse under S0 and S1, and in 33 to 36 under S2 to S4 (fails where the frame advance is not a multiple of h: 20 to 23 scenarios)",
+  "reliabilityPolicyAwareConsumer": "driving the policy step itself (coarse h, fine h/2): the pieces taken equal h and h/2 to 0 relative error in 35 of 35 uncapped scenarios, durations within 0.21 percent (S1, S2), 0.10 (S3), 0.05 (S4)",
+  "seededStep": "node tools/seeded-step.mjs stellar-graveyard 9 300: same digest with and without --effects, and the same as on the base",
+  "reversibilityProbe": "identical to the base in every deterministic row; the rows it labels an unseeded shower differ from run to run on the base itself"
+ },
+ "t6": {
+  "lessons": [
+   "butterfly-effect",
+   "comets-and-the-sun",
+   "goldilocks-question",
+   "keplers-laws",
+   "missing-mass",
+   "power-law-gravity",
+   "the-scale-of-the-solar-system",
+   "tides"
+  ],
+  "stepsWithAChangedSceneLive": 118,
+  "readingTheEngine": 16,
+  "validated": 6,
+  "maxRelativeDeviationOverFiveEarthYearsAndFourRates": {
+   "S0": {
+    "a": 0.00108,
+    "P": 0.00162,
+    "k": 6.66e-16,
+    "peri": 7.89e-06,
+    "apo": 2.43e-05,
+    "dist": 0.00398
+   },
+   "S1": {
+    "a": 3e-05,
+    "P": 4.49e-05,
+    "k": 6.66e-16,
+    "peri": 1.32e-06,
+    "apo": 4.05e-06,
+    "dist": 0.00066
+   },
+   "S2": {
+    "a": 3e-05,
+    "P": 4.49e-05,
+    "k": 6.66e-16,
+    "peri": 1.32e-06,
+    "apo": 4.05e-06,
+    "dist": 0.00066
+   },
+   "S3": {
+    "a": 7.49e-06,
+    "P": 1.12e-05,
+    "k": 6.66e-16,
+    "peri": 6.58e-07,
+    "apo": 2.03e-06,
+    "dist": 0.00033
+   },
+   "S4": {
+    "a": 1.87e-06,
+    "P": 2.81e-06,
+    "k": 6.66e-16,
+    "peri": 3.29e-07,
+    "apo": 1.01e-06,
+    "dist": 0.000165
+   }
+  },
+  "readingsFields": {
+   "a": "semi-major axis of the eight planets",
+   "P": "period",
+   "k": "P^2/a^3",
+   "peri": "periapsis of the first bound comet (Halley)",
+   "apo": "apoapsis of that comet",
+   "dist": "distance from the Sun of Earth, Jupiter and Neptune"
+  },
+  "steps": {
+   "accepts": [
+    "keplers-laws/measure-four-planets",
+    "keplers-laws/work-the-law-out-step",
+    "the-scale-of-the-solar-system/three-distances",
+    "comets-and-the-sun/orbit-ends",
+    "comets-and-the-sun/heat-at-the-ends"
+   ],
+   "listed": [
+    "butterfly-effect/write-down-what-you-measured",
+    "butterfly-effect/the-reproducibility-control",
+    "butterfly-effect/measure-the-triple",
+    "butterfly-effect/the-numerical-control",
+    "butterfly-effect/move-the-horizon",
+    "tides/the-extreme-case-running-live"
+   ],
+   "displayOnly": [
+    "missing-mass/the-solar-system-plotted",
+    "tides/twice-a-day-everywhere",
+    "tides/three-points-three-pulls",
+    "tides/take-the-center-away",
+    "comets-and-the-sun/watch-the-tails"
+   ]
+  }
+ },
+ "verdict": {
+  "letter": "C",
+  "text": "C",
+  "candidate": null,
+  "slice": null,
+  "reason": "S4 (h = 1/96) is the only candidate that meets T1 to T3, and it exceeds 1.5 times the baseline frame time on the solar-system reference scene (1.51 at the full tier, 1.63 at the low tier with the CPU throttled 4x) and on star-cluster at the full tier (1.92); solar-system is a member of both slices and of the 35, so S4 fails T4 on all of them. S1 to S3 fail R4x and R5 on every slice."
+ }
+}
