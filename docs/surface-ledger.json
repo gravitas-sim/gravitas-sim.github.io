@@ -1,0 +1,2360 @@
+{
+  "format": "gravitas.surface-ledger/1",
+  "about": "One row per published surface of the product (Roadmap IV, Appendix E): every page, generated family, route parameter, dialog, mode and shared region. Whether a page is in the sitemap or the offline tour, its walk row, outline record, gate id and destination are read from their own files and are in the Markdown view, not here. The definition columns come from tools/surface-ledger-seed.json; disposition, redesign, reason, sitemap_reason and decision are written by the prompt that closes the row. A row is OPEN until its owner closes it; DEFERRED with redesign FOUNDATIONS ONLY needs a decision row of the register.",
+  "vocabularies": {
+    "kinds": [
+      "page",
+      "generated-family",
+      "route-family",
+      "dialog",
+      "mode",
+      "shared-region",
+      "not-a-surface"
+    ],
+    "jobs": [
+      "workspace",
+      "catalogue",
+      "lesson",
+      "reference",
+      "instructor",
+      "entry"
+    ],
+    "dispositions": [
+      "OPEN",
+      "REVISED",
+      "REVIEWED CLEAR",
+      "DEFERRED",
+      "NOT A SURFACE"
+    ],
+    "redesigns": ["LANDED", "FOUNDATIONS ONLY", "NOT APPLICABLE"],
+    "owners": [
+      370, 371, 454, 456, 483, 487, 488, 489, 490, 491, 492, 493, 494, 495, 497
+    ]
+  },
+  "scan": {
+    "about": "Files that read the address through URLSearchParams or searchParams and are not a reader of any route row, each with the reason.",
+    "ignored": [
+      {
+        "file": "js/archive/cds.js",
+        "reason": "It builds the query string it sends to the CDS archive; it reads no part of the page address."
+      }
+    ]
+  },
+  "rows": [
+    {
+      "id": "page:sandbox",
+      "kind": "page",
+      "locator": { "nav": "sandbox" },
+      "purpose": "The main sandbox: build or load a gravitating system, run it, and read and change anything while it runs; one page that also hosts Home, the lessons and the sandbox dialogs.",
+      "audience": "any visitor, student first",
+      "primary_action": "Open the scenario browser and run a system (walk task)",
+      "job": "workspace",
+      "template": "application",
+      "disposition": "OPEN",
+      "redesign": null,
+      "owner": 483,
+      "supporting": [
+        447, 448, 449, 450, 451, 452, 467, 468, 469, 470, 471, 472, 473, 474,
+        475, 476, 477, 478, 479, 480, 481
+      ],
+      "reason": "",
+      "sitemap_reason": "",
+      "decision": "",
+      "note": "",
+      "measure": [
+        {
+          "id": "page",
+          "path": "/",
+          "seeds": ["welcome", "orientation"],
+          "ready": null,
+          "primary": { "selector": "#loadScenarioBtn" }
+        }
+      ]
+    },
+    {
+      "id": "page:library",
+      "kind": "page",
+      "locator": { "nav": "library" },
+      "purpose": "The Learn destination: find an investigation, scenario, dataset, course or activity by search, subject, sequence or start card.",
+      "audience": "student and instructor",
+      "primary_action": "Search the Library (#libSearch)",
+      "job": "catalogue",
+      "template": "ui-page is-wide",
+      "disposition": "OPEN",
+      "redesign": null,
+      "owner": 488,
+      "supporting": [455],
+      "reason": "",
+      "sitemap_reason": "No recorded reason: the page has no robots exclusion and the hand-written part of sitemap.xml does not list it. The closing prompt decides whether to list it or to record why not. It is one of the five destinations.",
+      "decision": "",
+      "note": "",
+      "measure": [
+        {
+          "id": "page",
+          "path": "/library/",
+          "seeds": [],
+          "ready": "main",
+          "primary": { "selector": "#libSearch" }
+        }
+      ]
+    },
+    {
+      "id": "page:catalog",
+      "kind": "page",
+      "locator": { "nav": "catalog" },
+      "purpose": "List the data packs and course packs that can be installed, and install one.",
+      "audience": "student and instructor (installing packs)",
+      "primary_action": "Search the catalog (#catSearch)",
+      "job": "catalogue",
+      "template": "ui-page",
+      "disposition": "OPEN",
+      "redesign": null,
+      "owner": 497,
+      "supporting": [],
+      "reason": "",
+      "sitemap_reason": "No recorded reason: the page has no robots exclusion and the hand-written part of sitemap.xml does not list it. The closing prompt decides whether to list it or to record why not.",
+      "decision": "",
+      "note": "",
+      "measure": [
+        {
+          "id": "page",
+          "path": "/catalog/",
+          "seeds": [],
+          "ready": "main",
+          "primary": { "selector": "#catSearch" }
+        }
+      ]
+    },
+    {
+      "id": "page:observatory",
+      "kind": "page",
+      "locator": { "nav": "observatory" },
+      "purpose": "The Observe destination: one workspace of measurement panels that turn real or practice images and data into a light curve, a period or a population.",
+      "audience": "student measuring data",
+      "primary_action": "Open a sample observation (#obsOpen)",
+      "job": "workspace",
+      "template": "ui-page is-full",
+      "disposition": "OPEN",
+      "redesign": null,
+      "owner": 493,
+      "supporting": [452],
+      "reason": "",
+      "sitemap_reason": "",
+      "decision": "",
+      "note": "",
+      "measure": [
+        {
+          "id": "page",
+          "path": "/observatory/",
+          "seeds": [],
+          "ready": "main",
+          "primary": { "selector": "#obsOpen" }
+        }
+      ]
+    },
+    {
+      "id": "page:experiments",
+      "kind": "page",
+      "locator": { "nav": "experiments" },
+      "purpose": "Choose one of the bench experiments and open it.",
+      "audience": "student/instructor running parameter sweeps on the model",
+      "primary_action": "Run the experiment (#xpRun)",
+      "job": "catalogue",
+      "template": "ui-page is-wide",
+      "disposition": "OPEN",
+      "redesign": null,
+      "owner": 494,
+      "supporting": [422],
+      "reason": "",
+      "sitemap_reason": "",
+      "decision": "",
+      "note": "",
+      "measure": [
+        {
+          "id": "page",
+          "path": "/experiments/",
+          "seeds": [],
+          "ready": "main",
+          "primary": { "selector": "#xpRun" }
+        }
+      ]
+    },
+    {
+      "id": "page:sky-lab",
+      "kind": "page",
+      "locator": { "nav": "sky-lab" },
+      "purpose": "Compute where the Sun, Moon and planets are for a place and a time, and how far to trust the numbers.",
+      "audience": "student planning observations",
+      "primary_action": "Move the sky forward an hour (#skyFwd1h)",
+      "job": "workspace",
+      "template": "ui-page is-wide",
+      "disposition": "OPEN",
+      "redesign": null,
+      "owner": 497,
+      "supporting": [],
+      "reason": "",
+      "sitemap_reason": "No recorded reason: the page has no robots exclusion and the hand-written part of sitemap.xml does not list it. The closing prompt decides whether to list it or to record why not.",
+      "decision": "",
+      "note": "",
+      "measure": [
+        {
+          "id": "page",
+          "path": "/sky/",
+          "seeds": [],
+          "ready": "main",
+          "primary": { "selector": "#skyFwd1h" }
+        }
+      ]
+    },
+    {
+      "id": "page:compute",
+      "kind": "page",
+      "locator": { "nav": "compute" },
+      "purpose": "Download and run the optional heavier computing runtime, reached only from inside the product.",
+      "audience": "advanced student/analyst",
+      "primary_action": "Start the notebook (#cpStart)",
+      "job": "workspace",
+      "template": "ui-page is-wide",
+      "disposition": "OPEN",
+      "redesign": null,
+      "owner": 497,
+      "supporting": [],
+      "reason": "",
+      "sitemap_reason": "The page is deliberately unlinked from the menu (D-COMPUTE-03: a 9 to 19 MB online-only download, reached by address); that decision does not mention the sitemap, so the omission is consistent with it and not stated by it.",
+      "decision": "",
+      "note": "",
+      "measure": [
+        {
+          "id": "page",
+          "path": "/compute/",
+          "seeds": [],
+          "ready": "main",
+          "primary": { "selector": "#cpStart" }
+        }
+      ]
+    },
+    {
+      "id": "page:figure-builder",
+      "kind": "page",
+      "locator": { "nav": "figure-builder" },
+      "purpose": "Make a figure of a world or system to embed in a document, with the matching link and the text to copy.",
+      "audience": "author/teacher embedding a figure",
+      "primary_action": "Show or hide the figure controls (#fbControls)",
+      "job": "workspace",
+      "template": "ui-page is-wide",
+      "disposition": "OPEN",
+      "redesign": null,
+      "owner": 492,
+      "supporting": [],
+      "reason": "",
+      "sitemap_reason": "",
+      "decision": "",
+      "note": "",
+      "measure": [
+        {
+          "id": "page",
+          "path": "/figure/",
+          "seeds": [],
+          "ready": "main",
+          "primary": { "selector": "#fbControls" }
+        }
+      ]
+    },
+    {
+      "id": "page:lab3d",
+      "kind": "page",
+      "locator": { "nav": "lab3d" },
+      "purpose": "The 3-D lab: place bodies in three dimensions, run them, view them from any side and open its guides.",
+      "audience": "student/advanced explorer",
+      "primary_action": "Play the system (#l3-play)",
+      "job": "workspace",
+      "template": "ui-page is-full",
+      "disposition": "OPEN",
+      "redesign": null,
+      "owner": 494,
+      "supporting": [],
+      "reason": "",
+      "sitemap_reason": "",
+      "decision": "",
+      "note": "",
+      "measure": [
+        {
+          "id": "page",
+          "path": "/3d/",
+          "seeds": [],
+          "ready": "main",
+          "primary": { "selector": "#l3-play" }
+        }
+      ]
+    },
+    {
+      "id": "page:kernel-diagnostics",
+      "kind": "page",
+      "locator": { "nav": "kernel-diagnostics" },
+      "purpose": "Evidence page for the 3-D kernel: how its integrators behave on the reference systems; not a student lab.",
+      "audience": "reviewer/physics checker",
+      "primary_action": "Run the chosen problem (#lb-go)",
+      "job": "reference",
+      "template": "ui-page",
+      "disposition": "OPEN",
+      "redesign": null,
+      "owner": 494,
+      "supporting": [],
+      "reason": "",
+      "sitemap_reason": "",
+      "decision": "",
+      "note": "",
+      "measure": [
+        {
+          "id": "page",
+          "path": "/lab3d/",
+          "seeds": [],
+          "ready": "main",
+          "primary": { "selector": "#lb-go" }
+        }
+      ]
+    },
+    {
+      "id": "page:mission-lab",
+      "kind": "page",
+      "locator": { "nav": "mission-lab" },
+      "purpose": "The mission lab: plan a transfer to Mars in 2026, see the timeline, the views, the launch window and the checks.",
+      "audience": "student/advanced explorer",
+      "primary_action": "Compute the transfer (#ml-go)",
+      "job": "workspace",
+      "template": "ui-page",
+      "disposition": "OPEN",
+      "redesign": null,
+      "owner": 494,
+      "supporting": [],
+      "reason": "",
+      "sitemap_reason": "",
+      "decision": "",
+      "note": "",
+      "measure": [
+        {
+          "id": "page",
+          "path": "/mission/lab/",
+          "seeds": [],
+          "ready": "main",
+          "primary": { "selector": "#ml-go" }
+        }
+      ]
+    },
+    {
+      "id": "page:mission-diagnostics",
+      "kind": "page",
+      "locator": { "nav": "mission-diagnostics" },
+      "purpose": "Evidence page for the mission core: transfer, meeting, Lambert solver, planets, window and flight checks.",
+      "audience": "reviewer/physics checker",
+      "primary_action": "Compute the transfer (#mn-transfer-go)",
+      "job": "reference",
+      "template": "ui-page",
+      "disposition": "OPEN",
+      "redesign": null,
+      "owner": 494,
+      "supporting": [],
+      "reason": "",
+      "sitemap_reason": "",
+      "decision": "",
+      "note": "",
+      "measure": [
+        {
+          "id": "page",
+          "path": "/mission/",
+          "seeds": [],
+          "ready": "main",
+          "primary": { "selector": "#mn-transfer-go" }
+        }
+      ]
+    },
+    {
+      "id": "page:courses",
+      "kind": "page",
+      "locator": { "nav": "courses" },
+      "purpose": "Open a built-in course or a draft course home and see its weeks and items.",
+      "audience": "student in a course",
+      "primary_action": "Open the example course (main a[href])",
+      "job": "catalogue",
+      "template": "ui-page is-narrow",
+      "disposition": "OPEN",
+      "redesign": null,
+      "owner": 489,
+      "supporting": [424, 425],
+      "reason": "",
+      "sitemap_reason": "",
+      "decision": "",
+      "note": "",
+      "measure": [
+        {
+          "id": "page",
+          "path": "/course/",
+          "seeds": [],
+          "ready": "main",
+          "primary": null
+        }
+      ]
+    },
+    {
+      "id": "page:my-work",
+      "kind": "page",
+      "locator": { "nav": "my-work" },
+      "purpose": "The My work destination: see what this device holds, back it up, move it to another device or clear it.",
+      "audience": "student",
+      "primary_action": "Open \"Move to another device\" (main summary)",
+      "job": "workspace",
+      "template": "ui-page is-wide",
+      "disposition": "OPEN",
+      "redesign": null,
+      "owner": 370,
+      "supporting": [],
+      "reason": "",
+      "sitemap_reason": "No recorded reason: the page has no robots exclusion and the hand-written part of sitemap.xml does not list it. The closing prompt decides whether to list it or to record why not. It is one of the five destinations.",
+      "decision": "",
+      "note": "",
+      "measure": [
+        {
+          "id": "page",
+          "path": "/my-work/",
+          "seeds": [],
+          "ready": "main",
+          "primary": { "selector": "main summary" }
+        }
+      ]
+    },
+    {
+      "id": "page:teaching",
+      "kind": "page",
+      "locator": { "nav": "teaching" },
+      "purpose": "The Teach destination: what to assign, how to adopt Gravitas, and the materials a class needs.",
+      "audience": "instructor deciding to adopt",
+      "primary_action": "Follow the first section link / Start with the quick start (a[href=\"#path-start\"])",
+      "job": "instructor",
+      "template": "doc-main is-wide",
+      "disposition": "OPEN",
+      "redesign": null,
+      "owner": 491,
+      "supporting": [371],
+      "reason": "",
+      "sitemap_reason": "",
+      "decision": "",
+      "note": "",
+      "measure": [
+        {
+          "id": "page",
+          "path": "/teaching/",
+          "seeds": [],
+          "ready": "main",
+          "primary": null
+        }
+      ]
+    },
+    {
+      "id": "page:teaching-find",
+      "kind": "page",
+      "locator": { "nav": "teaching-find" },
+      "purpose": "Filter every investigation and activity by topic, level, length and textbook chapter to choose what to assign.",
+      "audience": "instructor",
+      "primary_action": "Open a found investigation",
+      "job": "instructor",
+      "template": "doc-main is-wide",
+      "disposition": "OPEN",
+      "redesign": null,
+      "owner": 490,
+      "supporting": [],
+      "reason": "",
+      "sitemap_reason": "",
+      "decision": "",
+      "note": "",
+      "measure": [
+        {
+          "id": "page",
+          "path": "/teaching/find/",
+          "seeds": [],
+          "ready": "main",
+          "primary": { "selector": "#adTable tbody a[href]" }
+        }
+      ]
+    },
+    {
+      "id": "page:teaching-adopt",
+      "kind": "page",
+      "locator": { "nav": "teaching-adopt" },
+      "purpose": "The adopter guide: what Gravitas is, what a course needs from it and how to start.",
+      "audience": "instructor",
+      "primary_action": "Follow the first section link",
+      "job": "instructor",
+      "template": "doc-main is-wide",
+      "disposition": "OPEN",
+      "redesign": null,
+      "owner": 490,
+      "supporting": [],
+      "reason": "",
+      "sitemap_reason": "",
+      "decision": "",
+      "note": "",
+      "measure": [
+        {
+          "id": "page",
+          "path": "/teaching/adopt/",
+          "seeds": [],
+          "ready": "main",
+          "primary": { "selector": "nav.ad-toc a[href]" }
+        }
+      ]
+    },
+    {
+      "id": "page:teaching-alignment",
+      "kind": "page",
+      "locator": { "nav": "teaching-alignment" },
+      "purpose": "Match textbook chapters to the investigations that cover them.",
+      "audience": "instructor choosing by textbook chapter",
+      "primary_action": "Open an aligned investigation",
+      "job": "instructor",
+      "template": "doc-main is-wide",
+      "disposition": "OPEN",
+      "redesign": null,
+      "owner": 490,
+      "supporting": [],
+      "reason": "",
+      "sitemap_reason": "",
+      "decision": "",
+      "note": "",
+      "measure": [
+        {
+          "id": "page",
+          "path": "/teaching/alignment/",
+          "seeds": [],
+          "ready": "main",
+          "primary": null
+        }
+      ]
+    },
+    {
+      "id": "page:teaching-kit",
+      "kind": "page",
+      "locator": { "nav": "teaching-kit" },
+      "purpose": "The distribution kit: collections, first-week lists, assignment links and the files a class is given.",
+      "audience": "instructor making links, handouts, cartridges",
+      "primary_action": "Make a link from what is saved here (#kitCollOpen)",
+      "job": "instructor",
+      "template": "ui-page",
+      "disposition": "OPEN",
+      "redesign": null,
+      "owner": 491,
+      "supporting": [],
+      "reason": "",
+      "sitemap_reason": "",
+      "decision": "",
+      "note": "",
+      "measure": [
+        {
+          "id": "page",
+          "path": "/teaching/kit/",
+          "seeds": [],
+          "ready": "main",
+          "primary": { "selector": "#kitCollOpen" }
+        }
+      ]
+    },
+    {
+      "id": "page:instructors",
+      "kind": "page",
+      "locator": { "nav": "instructors" },
+      "purpose": "The gated instructor portal: unlock the instructor materials with the passphrase and read them.",
+      "audience": "instructor",
+      "primary_action": "Unlock with the passphrase (#togglePassword shows the field text)",
+      "job": "instructor",
+      "template": "doc-main is-wide",
+      "disposition": "OPEN",
+      "redesign": null,
+      "owner": 491,
+      "supporting": [371],
+      "reason": "",
+      "sitemap_reason": "Kept out of search on purpose: robots.txt disallows /instructors/ (its comment says there is no reason to index the page) and the page carries a robots noindex meta tag.",
+      "decision": "",
+      "note": "",
+      "measure": [
+        {
+          "id": "page",
+          "path": "/instructors/",
+          "seeds": [],
+          "ready": "main",
+          "primary": { "selector": "#togglePassword" }
+        }
+      ]
+    },
+    {
+      "id": "page:submissions",
+      "kind": "page",
+      "locator": { "nav": "submissions" },
+      "purpose": "Paste student submission tokens and read per-question failure rates and gradebook files.",
+      "audience": "instructor reviewing student work",
+      "primary_action": "Include written answers in the review (#includeWritten)",
+      "job": "instructor",
+      "template": "ui-page",
+      "disposition": "OPEN",
+      "redesign": null,
+      "owner": 491,
+      "supporting": [],
+      "reason": "",
+      "sitemap_reason": "Kept out of search on purpose: it is under /instructors/, which robots.txt disallows, and the page carries a robots noindex meta tag.",
+      "decision": "",
+      "note": "",
+      "measure": [
+        {
+          "id": "page",
+          "path": "/instructors/submissions/",
+          "seeds": [],
+          "ready": "main",
+          "primary": { "selector": "#includeWritten" }
+        }
+      ]
+    },
+    {
+      "id": "page:evaluation",
+      "kind": "page",
+      "locator": { "nav": "evaluation" },
+      "purpose": "The classroom evidence kit: instruments for measuring what a class learned.",
+      "audience": "instructor/researcher evaluating learning",
+      "primary_action": "Answer the first question of the record (#setting-0)",
+      "job": "instructor",
+      "template": "doc-main is-wide",
+      "disposition": "OPEN",
+      "redesign": null,
+      "owner": 491,
+      "supporting": [],
+      "reason": "",
+      "sitemap_reason": "The page carries a robots noindex meta tag, so it is kept out of search on purpose.",
+      "decision": "",
+      "note": "",
+      "measure": [
+        {
+          "id": "page",
+          "path": "/evaluation/",
+          "seeds": [],
+          "ready": "main",
+          "primary": { "selector": "#setting-0" }
+        }
+      ]
+    },
+    {
+      "id": "page:scenario-studio",
+      "kind": "page",
+      "locator": { "nav": "scenario-studio" },
+      "purpose": "Author a scenario: set the system, check it, preview it, compare versions and resolve conflicts.",
+      "audience": "instructor/author building a scenario",
+      "primary_action": "Add a body to the scenario (#st-body-add)",
+      "job": "workspace",
+      "template": "ui-page is-full",
+      "disposition": "OPEN",
+      "redesign": null,
+      "owner": 492,
+      "supporting": [],
+      "reason": "",
+      "sitemap_reason": "",
+      "decision": "",
+      "note": "",
+      "measure": [
+        {
+          "id": "page",
+          "path": "/studio/",
+          "seeds": [],
+          "ready": "main",
+          "primary": { "selector": "#st-body-add" }
+        }
+      ]
+    },
+    {
+      "id": "page:composer",
+      "kind": "page",
+      "locator": { "nav": "composer" },
+      "purpose": "Compose an investigation: write steps, check them, estimate length, translate and publish.",
+      "audience": "author/instructor writing an investigation or activity",
+      "primary_action": "Start a new investigation (#cp-new)",
+      "job": "workspace",
+      "template": "ui-page is-full",
+      "disposition": "OPEN",
+      "redesign": null,
+      "owner": 492,
+      "supporting": [],
+      "reason": "",
+      "sitemap_reason": "",
+      "decision": "",
+      "note": "",
+      "measure": [
+        {
+          "id": "page",
+          "path": "/studio/lesson/",
+          "seeds": [],
+          "ready": "main",
+          "primary": { "selector": "#cp-new" }
+        }
+      ]
+    },
+    {
+      "id": "page:course-builder",
+      "kind": "page",
+      "locator": { "nav": "course-builder" },
+      "purpose": "Build a course package: choose items, check, estimate, translate, link and preview.",
+      "audience": "instructor making a course package",
+      "primary_action": "Load the example course (#cb-example)",
+      "job": "workspace",
+      "template": "ui-page is-full",
+      "disposition": "OPEN",
+      "redesign": null,
+      "owner": 492,
+      "supporting": [],
+      "reason": "",
+      "sitemap_reason": "",
+      "decision": "",
+      "note": "",
+      "measure": [
+        {
+          "id": "page",
+          "path": "/studio/course/",
+          "seeds": [],
+          "ready": "main",
+          "primary": { "selector": "#cb-example" }
+        }
+      ]
+    },
+    {
+      "id": "page:course-packages",
+      "kind": "page",
+      "locator": { "nav": "course-packages" },
+      "purpose": "Make a course item from an investigation and check a course.",
+      "audience": "instructor/author making a course item package",
+      "primary_action": "Make a package (#pkMake)",
+      "job": "workspace",
+      "template": "ui-page",
+      "disposition": "OPEN",
+      "redesign": null,
+      "owner": 492,
+      "supporting": [],
+      "reason": "",
+      "sitemap_reason": "",
+      "decision": "",
+      "note": "",
+      "measure": [
+        {
+          "id": "page",
+          "path": "/studio/course/packs/",
+          "seeds": [],
+          "ready": "main",
+          "primary": { "selector": "#pkMake" }
+        }
+      ]
+    },
+    {
+      "id": "page:model",
+      "kind": "page",
+      "locator": { "nav": "model" },
+      "purpose": "The reference for every model assumption in Gravitas: integrators, physics, limits and derivations.",
+      "audience": "curious student, instructor, reviewer",
+      "primary_action": "Follow the first contents link (main a[href])",
+      "job": "reference",
+      "template": "doc-main",
+      "disposition": "OPEN",
+      "redesign": null,
+      "owner": 454,
+      "supporting": [],
+      "reason": "",
+      "sitemap_reason": "",
+      "decision": "",
+      "note": "",
+      "measure": [
+        {
+          "id": "page",
+          "path": "/model/",
+          "seeds": [],
+          "ready": "main",
+          "primary": { "selector": "nav.doc-toc a[href]" }
+        }
+      ]
+    },
+    {
+      "id": "page:validation",
+      "kind": "page",
+      "locator": { "nav": "validation" },
+      "purpose": "The physics validation report: what is checked against known results and how it did.",
+      "audience": "reviewer, skeptical instructor",
+      "primary_action": "Run the checks in this browser (#valRunBtn)",
+      "job": "reference",
+      "template": "doc-main is-wide",
+      "disposition": "OPEN",
+      "redesign": null,
+      "owner": 495,
+      "supporting": [454],
+      "reason": "",
+      "sitemap_reason": "No recorded reason: the page has no robots exclusion and the hand-written part of sitemap.xml does not list it. The closing prompt decides whether to list it or to record why not. The page carries a canonical link to its own address.",
+      "decision": "",
+      "note": "",
+      "measure": [
+        {
+          "id": "page",
+          "path": "/validation/",
+          "seeds": [],
+          "ready": "main",
+          "primary": { "selector": "#valRunBtn" }
+        }
+      ]
+    },
+    {
+      "id": "page:glossary",
+      "kind": "page",
+      "locator": { "nav": "glossary" },
+      "purpose": "Look up a term used in the product and see where it is used.",
+      "audience": "student, instructor",
+      "primary_action": "Read the page and follow a link from its end (.gs-foot a[href])",
+      "job": "reference",
+      "template": "doc-main",
+      "disposition": "OPEN",
+      "redesign": null,
+      "owner": 495,
+      "supporting": [454],
+      "reason": "",
+      "sitemap_reason": "No recorded reason: the page has no robots exclusion and the hand-written part of sitemap.xml does not list it. The closing prompt decides whether to list it or to record why not. The page carries a canonical link to its own address.",
+      "decision": "",
+      "note": "",
+      "measure": [
+        {
+          "id": "page",
+          "path": "/glossary/",
+          "seeds": [],
+          "ready": "main",
+          "primary": null
+        }
+      ]
+    },
+    {
+      "id": "page:manual",
+      "kind": "page",
+      "locator": { "nav": "manual" },
+      "purpose": "The printed user manual as a PDF.",
+      "audience": "instructor, student",
+      "primary_action": "Read or print the manual",
+      "job": "reference",
+      "template": "PDF in the browser viewer",
+      "disposition": "OPEN",
+      "redesign": null,
+      "owner": 495,
+      "supporting": [],
+      "reason": "",
+      "sitemap_reason": "",
+      "decision": "",
+      "note": "",
+      "measure": []
+    },
+    {
+      "id": "page:history-original",
+      "kind": "page",
+      "locator": { "nav": "history-original" },
+      "purpose": "The first Gravitas, kept byte for byte as a record of where the project began.",
+      "audience": "curious visitor (history)",
+      "primary_action": "Open the settings (#settingsBtn)",
+      "job": "reference",
+      "template": "own single-file layout",
+      "disposition": "OPEN",
+      "redesign": null,
+      "owner": 497,
+      "supporting": [],
+      "reason": "",
+      "sitemap_reason": "",
+      "decision": "",
+      "note": "",
+      "measure": [
+        {
+          "id": "page",
+          "path": "/history/original/",
+          "seeds": [],
+          "ready": "main",
+          "primary": { "selector": "#settingsBtn" }
+        }
+      ]
+    },
+    {
+      "id": "family:teaching-investigations",
+      "kind": "generated-family",
+      "locator": {
+        "nav": "teaching-investigations",
+        "generator": "tools/build-adoption-pages.mjs",
+        "glob": "teaching/investigation/*/index.html",
+        "count": 146
+      },
+      "purpose": "One generated adoption page per investigation: what it teaches, how long it takes and what the student does.",
+      "audience": "instructor deciding on one investigation",
+      "primary_action": "Open the investigation (clean, reads/writes no progress)",
+      "job": "instructor",
+      "template": null,
+      "disposition": "OPEN",
+      "redesign": null,
+      "owner": 490,
+      "supporting": [],
+      "reason": "",
+      "sitemap_reason": "",
+      "decision": "",
+      "note": "Each lesson batch (content prompts) also changes this surface without closing it.",
+      "measure": [
+        {
+          "id": "page",
+          "path": "/teaching/investigation/a-binary-stars-orbit/",
+          "seeds": [],
+          "ready": "main",
+          "primary": null
+        }
+      ]
+    },
+    {
+      "id": "family:teaching-activities",
+      "kind": "generated-family",
+      "locator": {
+        "nav": "teaching-activities",
+        "generator": "tools/build-adoption-pages.mjs",
+        "glob": "teaching/activity/*/index.html",
+        "count": 3
+      },
+      "purpose": "One generated adoption page per activity, covering each of its formats.",
+      "audience": "instructor",
+      "primary_action": "Open the activity (main a[href])",
+      "job": "instructor",
+      "template": null,
+      "disposition": "OPEN",
+      "redesign": null,
+      "owner": 490,
+      "supporting": [421],
+      "reason": "",
+      "sitemap_reason": "",
+      "decision": "",
+      "note": "",
+      "measure": [
+        {
+          "id": "page",
+          "path": "/teaching/activity/orbital-speed/",
+          "seeds": [],
+          "ready": "main",
+          "primary": null
+        }
+      ]
+    },
+    {
+      "id": "route:library-browse",
+      "kind": "route-family",
+      "locator": {
+        "param": "browse",
+        "params": ["browse", "group", "path"],
+        "via": "URLSearchParams",
+        "readers": ["js/libraryPage.js"]
+      },
+      "purpose": "The Library browse view and its filters, held in the address so a filtered view is a link.",
+      "audience": "student, instructor",
+      "primary_action": "Search or filter 248 entries (4 facets, 7 behind More filters)",
+      "job": "catalogue",
+      "template": null,
+      "disposition": "OPEN",
+      "redesign": null,
+      "owner": 488,
+      "supporting": [],
+      "reason": "",
+      "sitemap_reason": "",
+      "decision": "",
+      "note": "",
+      "measure": [
+        {
+          "id": "browse",
+          "path": "/library/?browse=1",
+          "seeds": [],
+          "ready": "main",
+          "primary": { "selector": "#libSearch" }
+        }
+      ]
+    },
+    {
+      "id": "route:library-topic",
+      "kind": "route-family",
+      "locator": {
+        "param": "topic",
+        "params": ["topic"],
+        "via": "URLSearchParams",
+        "readers": ["js/libraryPage.js"]
+      },
+      "purpose": "A Library page for one of the fourteen subjects.",
+      "audience": "student",
+      "primary_action": "Open a sequence, course or investigation for the subject",
+      "job": "catalogue",
+      "template": null,
+      "disposition": "OPEN",
+      "redesign": null,
+      "owner": 488,
+      "supporting": [],
+      "reason": "",
+      "sitemap_reason": "",
+      "decision": "",
+      "note": "",
+      "measure": [
+        {
+          "id": "topic",
+          "path": "/library/?topic=stars",
+          "seeds": [],
+          "ready": "main",
+          "primary": null
+        }
+      ]
+    },
+    {
+      "id": "route:library-sequence",
+      "kind": "route-family",
+      "locator": {
+        "param": "sequence",
+        "params": ["sequence"],
+        "via": "URLSearchParams",
+        "readers": ["js/libraryPage.js"]
+      },
+      "purpose": "A Library page for one of the eleven sequences, in order.",
+      "audience": "student",
+      "primary_action": "Follow an ordered path of investigations",
+      "job": "catalogue",
+      "template": null,
+      "disposition": "OPEN",
+      "redesign": null,
+      "owner": 489,
+      "supporting": [426],
+      "reason": "",
+      "sitemap_reason": "",
+      "decision": "",
+      "note": "",
+      "measure": [
+        {
+          "id": "sequence",
+          "path": "/library/?sequence=the-sky&group=sequence",
+          "seeds": [],
+          "ready": "main",
+          "primary": null
+        }
+      ]
+    },
+    {
+      "id": "route:library-item",
+      "kind": "route-family",
+      "locator": {
+        "param": "item",
+        "params": ["item"],
+        "via": "URLSearchParams",
+        "readers": ["js/libraryPage.js"]
+      },
+      "purpose": "A Library page for one entry: what it is, how long it takes and how to open it.",
+      "audience": "student, instructor",
+      "primary_action": "Open the item (before / next / goes with it)",
+      "job": "catalogue",
+      "template": null,
+      "disposition": "OPEN",
+      "redesign": null,
+      "owner": 488,
+      "supporting": [455],
+      "reason": "",
+      "sitemap_reason": "",
+      "decision": "",
+      "note": "",
+      "measure": [
+        {
+          "id": "item",
+          "path": "/library/?item=investigation:tides",
+          "seeds": [],
+          "ready": "main",
+          "primary": null
+        }
+      ]
+    },
+    {
+      "id": "route:investigation",
+      "kind": "route-family",
+      "locator": {
+        "param": "investigation",
+        "params": ["investigation"],
+        "via": "hash",
+        "readers": ["js/investigations.js"]
+      },
+      "purpose": "Open one of the 124 lessons, at a depth, inside the sandbox page.",
+      "audience": "student",
+      "primary_action": "Work through the steps and finish with a report",
+      "job": "lesson",
+      "template": null,
+      "disposition": "OPEN",
+      "redesign": null,
+      "owner": 497,
+      "supporting": [334, 335, 456],
+      "reason": "",
+      "sitemap_reason": "",
+      "decision": "",
+      "note": "Each lesson batch (content prompts) also changes this surface without closing it.",
+      "measure": []
+    },
+    {
+      "id": "route:activity",
+      "kind": "route-family",
+      "locator": {
+        "param": "activity",
+        "params": ["activity", "format"],
+        "via": "URLSearchParams",
+        "readers": ["js/activities/activities.js"]
+      },
+      "purpose": "Open an activity in one of its formats (demonstration, route, guided, lab).",
+      "audience": "student (assigned)",
+      "primary_action": "Run the activity in the chosen format",
+      "job": "lesson",
+      "template": null,
+      "disposition": "OPEN",
+      "redesign": null,
+      "owner": 497,
+      "supporting": [421],
+      "reason": "",
+      "sitemap_reason": "",
+      "decision": "",
+      "note": "",
+      "measure": []
+    },
+    {
+      "id": "route:assign",
+      "kind": "route-family",
+      "locator": {
+        "param": "assign",
+        "params": ["assign"],
+        "via": "regular expression on the address",
+        "readers": [
+          "js/investigationsLoader.js",
+          "js/investigations.js",
+          "js/assignments/assignmentBuilder.js"
+        ]
+      },
+      "purpose": "Open the assignment builder for a lesson, so an instructor can make a link with its settings.",
+      "audience": "instructor",
+      "primary_action": "Name an assignment, pick a route, copy the student link",
+      "job": "instructor",
+      "template": null,
+      "disposition": "OPEN",
+      "redesign": null,
+      "owner": 371,
+      "supporting": [492],
+      "reason": "",
+      "sitemap_reason": "",
+      "decision": "",
+      "note": "",
+      "measure": []
+    },
+    {
+      "id": "route:author",
+      "kind": "route-family",
+      "locator": {
+        "param": "author",
+        "params": ["author", "step", "view"],
+        "via": "URLSearchParams",
+        "readers": ["js/authoring/preview.js"]
+      },
+      "purpose": "Preview a lesson at any step as a student sees it, with author tools around it.",
+      "audience": "investigation author",
+      "primary_action": "Open a lesson at any step with the author overlay (or the student view)",
+      "job": "lesson",
+      "template": null,
+      "disposition": "OPEN",
+      "redesign": null,
+      "owner": 492,
+      "supporting": [],
+      "reason": "",
+      "sitemap_reason": "",
+      "decision": "",
+      "note": "",
+      "measure": []
+    },
+    {
+      "id": "route:quality",
+      "kind": "route-family",
+      "locator": {
+        "param": "quality",
+        "params": ["quality"],
+        "via": "URLSearchParams",
+        "readers": ["js/quality.js"]
+      },
+      "purpose": "Choose the drawing quality tier from the address.",
+      "audience": "any visitor on a slow device",
+      "primary_action": "Force the low or full render tier",
+      "job": "workspace",
+      "template": null,
+      "disposition": "OPEN",
+      "redesign": null,
+      "owner": 497,
+      "supporting": [],
+      "reason": "",
+      "sitemap_reason": "",
+      "decision": "",
+      "note": "",
+      "measure": []
+    },
+    {
+      "id": "route:observatory-guide",
+      "kind": "route-family",
+      "locator": {
+        "param": "guide",
+        "params": ["guide", "path"],
+        "via": "URLSearchParams",
+        "readers": ["js/observatoryPage.js", "js/observatory/guidePanel.js"]
+      },
+      "purpose": "Open an Observatory guide, in its core or advanced path.",
+      "audience": "student",
+      "primary_action": "Follow a guided measurement",
+      "job": "lesson",
+      "template": null,
+      "disposition": "OPEN",
+      "redesign": null,
+      "owner": 493,
+      "supporting": [413, 414, 415, 416],
+      "reason": "",
+      "sitemap_reason": "",
+      "decision": "",
+      "note": "",
+      "measure": [
+        {
+          "id": "guide",
+          "path": "/observatory/?guide=exo-star",
+          "seeds": [],
+          "ready": "main",
+          "primary": null
+        }
+      ]
+    },
+    {
+      "id": "route:observatory-open",
+      "kind": "route-family",
+      "locator": {
+        "param": "open",
+        "params": ["open", "installed"],
+        "via": "URLSearchParams",
+        "readers": ["js/observatoryPage.js"]
+      },
+      "purpose": "Open the Observatory on a named observation dataset or an installed data package.",
+      "audience": "student",
+      "primary_action": "Open the named observation (as pressing Open)",
+      "job": "workspace",
+      "template": null,
+      "disposition": "OPEN",
+      "redesign": null,
+      "owner": 493,
+      "supporting": [],
+      "reason": "",
+      "sitemap_reason": "",
+      "decision": "",
+      "note": "",
+      "measure": []
+    },
+    {
+      "id": "route:lab3d-system",
+      "kind": "route-family",
+      "locator": {
+        "param": "system",
+        "params": ["system"],
+        "via": "searchParams",
+        "readers": ["js/lab3dLab.js", "js/figureBuilder.js"]
+      },
+      "purpose": "Open the 3-D lab on one of its reference systems, or on a system read from a pasted link.",
+      "audience": "student",
+      "primary_action": "Open a named 3-D system",
+      "job": "workspace",
+      "template": null,
+      "disposition": "OPEN",
+      "redesign": null,
+      "owner": 494,
+      "supporting": [],
+      "reason": "",
+      "sitemap_reason": "",
+      "decision": "",
+      "note": "",
+      "measure": []
+    },
+    {
+      "id": "route:lab3d-guide",
+      "kind": "route-family",
+      "locator": {
+        "param": "guide",
+        "params": ["guide", "open", "path"],
+        "via": "searchParams",
+        "readers": ["js/lab3dLab.js", "js/lab3d/view/guidePanel.js"]
+      },
+      "purpose": "Open a 3-D lab guide, or a saved system, from the address.",
+      "audience": "student",
+      "primary_action": "Work through the 3-D guide",
+      "job": "lesson",
+      "template": null,
+      "disposition": "OPEN",
+      "redesign": null,
+      "owner": 497,
+      "supporting": [417, 418, 419, 494],
+      "reason": "",
+      "sitemap_reason": "",
+      "decision": "",
+      "note": "",
+      "measure": [
+        {
+          "id": "guide",
+          "path": "/3d/?guide=l3-planes",
+          "seeds": [],
+          "ready": "main",
+          "primary": null
+        }
+      ]
+    },
+    {
+      "id": "route:mission-guide",
+      "kind": "route-family",
+      "locator": {
+        "param": "guide",
+        "params": ["guide", "path", "open"],
+        "via": "URLSearchParams",
+        "readers": ["js/missionLabPage.js", "js/mission/lab/address.js"]
+      },
+      "purpose": "Open a mission lab guide, or a saved or shared plan, from the address.",
+      "audience": "student",
+      "primary_action": "Work through the mission guide",
+      "job": "lesson",
+      "template": null,
+      "disposition": "OPEN",
+      "redesign": null,
+      "owner": 497,
+      "supporting": [420, 494],
+      "reason": "",
+      "sitemap_reason": "",
+      "decision": "",
+      "note": "",
+      "measure": [
+        {
+          "id": "guide",
+          "path": "/mission/lab/?guide=ml-orbit",
+          "seeds": [],
+          "ready": "main",
+          "primary": null
+        }
+      ]
+    },
+    {
+      "id": "route:course",
+      "kind": "route-family",
+      "locator": {
+        "param": "course",
+        "params": ["course"],
+        "via": "URLSearchParams",
+        "readers": ["js/courseHome.js", "js/coursePage.js"]
+      },
+      "purpose": "Open one of the six built-in courses.",
+      "audience": "student, instructor",
+      "primary_action": "Start the first unit of the course",
+      "job": "catalogue",
+      "template": null,
+      "disposition": "OPEN",
+      "redesign": null,
+      "owner": 489,
+      "supporting": [424, 425],
+      "reason": "",
+      "sitemap_reason": "",
+      "decision": "",
+      "note": "",
+      "measure": [
+        {
+          "id": "course",
+          "path": "/course/?course=intro-astronomy",
+          "seeds": [],
+          "ready": "main",
+          "primary": null
+        }
+      ]
+    },
+    {
+      "id": "route:course-draft",
+      "kind": "route-family",
+      "locator": {
+        "param": "draft",
+        "params": ["draft"],
+        "via": "URLSearchParams",
+        "readers": ["js/courseHome.js", "js/coursePage.js"]
+      },
+      "purpose": "Open the course builder preview of a draft course, or a course home link.",
+      "audience": "instructor previewing; student arriving by link",
+      "primary_action": "Preview the draft or open the course from the link",
+      "job": "catalogue",
+      "template": null,
+      "disposition": "OPEN",
+      "redesign": null,
+      "owner": 489,
+      "supporting": [],
+      "reason": "",
+      "sitemap_reason": "",
+      "decision": "",
+      "note": "",
+      "measure": []
+    },
+    {
+      "id": "route:teaching-activity",
+      "kind": "route-family",
+      "locator": {
+        "param": "activity",
+        "params": ["activity"],
+        "via": "URLSearchParams, through the activity resolver",
+        "readers": ["js/teachingPage.js", "js/activities/activities.js"]
+      },
+      "purpose": "Open a demonstration from the Teach page by name and format.",
+      "audience": "instructor",
+      "primary_action": "Run a demonstration here",
+      "job": "instructor",
+      "template": null,
+      "disposition": "OPEN",
+      "redesign": null,
+      "owner": 491,
+      "supporting": [421],
+      "reason": "",
+      "sitemap_reason": "",
+      "decision": "",
+      "note": "",
+      "measure": []
+    },
+    {
+      "id": "mode:home-introduction",
+      "kind": "mode",
+      "locator": {
+        "page": "index.html",
+        "element": "welcomeDialog",
+        "state": "first visit, orientation key unset",
+        "readers": ["js/welcome.js"]
+      },
+      "purpose": "The three-screen introduction a first-time visitor sees before Home.",
+      "audience": "first-time visitor",
+      "primary_action": "Skip or step through the introduction (walk task: Skip)",
+      "job": "entry",
+      "template": null,
+      "disposition": "OPEN",
+      "redesign": null,
+      "owner": 487,
+      "supporting": [],
+      "reason": "",
+      "sitemap_reason": "",
+      "decision": "",
+      "note": "",
+      "measure": [
+        {
+          "id": "introduction",
+          "path": "/",
+          "seeds": [],
+          "ready": "#welcomeDialog",
+          "primary": { "selector": "#welcomeDialog button:not(#welcomeClose)" }
+        }
+      ]
+    },
+    {
+      "id": "mode:home-first-week",
+      "kind": "mode",
+      "locator": {
+        "page": "index.html",
+        "element": "welWeek",
+        "state": "a collection marked as the first week",
+        "readers": ["js/welcome.js"]
+      },
+      "purpose": "Home as the list of the first week, when a collection has been marked as one.",
+      "audience": "student in a course",
+      "primary_action": "Start the first item of the week (walk task)",
+      "job": "entry",
+      "template": null,
+      "disposition": "OPEN",
+      "redesign": null,
+      "owner": 487,
+      "supporting": [],
+      "reason": "",
+      "sitemap_reason": "",
+      "decision": "",
+      "note": "",
+      "measure": [
+        {
+          "id": "first-week",
+          "path": "/",
+          "seeds": ["orientation"],
+          "ready": "#welWeek",
+          "primary": { "selector": "#welWeek a[href]" },
+          "firstWeek": [
+            "investigation:keplers-laws",
+            "scenario:solar-system",
+            "dataset:tess-light-curve"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "mode:embed",
+      "kind": "mode",
+      "locator": {
+        "param": "embed",
+        "params": ["embed", "ev", "parent"],
+        "via": "URLSearchParams",
+        "page": "index.html",
+        "readers": [
+          "js/presentation.js",
+          "js/embedOptions.js",
+          "js/world.js",
+          "js/lab3dLab.js",
+          "js/mission/lab/address.js"
+        ]
+      },
+      "purpose": "The embedded form of a page: the canvas alone, with options for events and the parent page, for use inside another document.",
+      "audience": "teacher or author embedding a figure in another page",
+      "primary_action": "Interact with the figure; nothing else on screen",
+      "job": "workspace",
+      "template": null,
+      "disposition": "OPEN",
+      "redesign": null,
+      "owner": 497,
+      "supporting": [479],
+      "reason": "",
+      "sitemap_reason": "",
+      "decision": "",
+      "note": "",
+      "measure": [
+        {
+          "id": "embed",
+          "path": "/?embed=1",
+          "seeds": ["welcome", "orientation"],
+          "ready": null,
+          "primary": null
+        }
+      ]
+    },
+    {
+      "id": "mode:lecture",
+      "kind": "mode",
+      "locator": {
+        "page": "index.html",
+        "element": "lectureBtn",
+        "readers": ["js/lecture.js"]
+      },
+      "purpose": "Lecture mode: larger controls and a scene sequence for presenting the sandbox to a room.",
+      "audience": "instructor projecting to a room",
+      "primary_action": "Drive the simulation from the keyboard at wall size",
+      "job": "workspace",
+      "template": null,
+      "disposition": "OPEN",
+      "redesign": null,
+      "owner": 497,
+      "supporting": [],
+      "reason": "",
+      "sitemap_reason": "",
+      "decision": "",
+      "note": "",
+      "measure": []
+    },
+    {
+      "id": "mode:library-start",
+      "kind": "mode",
+      "locator": {
+        "page": "library/index.html",
+        "state": "default view, no query",
+        "readers": ["js/libraryPage.js"]
+      },
+      "purpose": "The Library start view: resume, committed start cards, sequences and topics.",
+      "audience": "student, instructor",
+      "primary_action": "Continue where you left off or open a committed start card",
+      "job": "catalogue",
+      "template": null,
+      "disposition": "OPEN",
+      "redesign": null,
+      "owner": 488,
+      "supporting": [455],
+      "reason": "",
+      "sitemap_reason": "",
+      "decision": "",
+      "note": "",
+      "measure": []
+    },
+    {
+      "id": "mode:library-collections",
+      "kind": "mode",
+      "locator": {
+        "page": "library/index.html",
+        "element": "collections",
+        "readers": ["js/library/collections.js"]
+      },
+      "purpose": "The instructor collections panel of the Library.",
+      "audience": "instructor",
+      "primary_action": "Group items into a collection and make a link",
+      "job": "catalogue",
+      "template": null,
+      "disposition": "OPEN",
+      "redesign": null,
+      "owner": 488,
+      "supporting": [],
+      "reason": "",
+      "sitemap_reason": "",
+      "decision": "",
+      "note": "",
+      "measure": []
+    },
+    {
+      "id": "mode:lesson-panel",
+      "kind": "mode",
+      "locator": {
+        "page": "index.html",
+        "host": "lesson",
+        "readers": ["js/fragments/lesson.html"]
+      },
+      "purpose": "The lesson player inside the sandbox page: contents, the step, its tools and its checks.",
+      "audience": "student",
+      "primary_action": "Read the step, act, answer a prompt",
+      "job": "lesson",
+      "template": null,
+      "disposition": "OPEN",
+      "redesign": null,
+      "owner": 497,
+      "supporting": [334, 335, 456],
+      "reason": "",
+      "sitemap_reason": "",
+      "decision": "",
+      "note": "",
+      "measure": []
+    },
+    {
+      "id": "mode:sandbox-rail",
+      "kind": "mode",
+      "locator": { "page": "index.html", "element": "railScenario" },
+      "purpose": "The rail of the sandbox: Scenario, State and Tools panels.",
+      "audience": "any visitor",
+      "primary_action": "Open Tools to reach the light curve and instruments",
+      "job": "workspace",
+      "template": null,
+      "disposition": "OPEN",
+      "redesign": null,
+      "owner": 483,
+      "supporting": [452],
+      "reason": "",
+      "sitemap_reason": "",
+      "decision": "",
+      "note": "",
+      "measure": []
+    },
+    {
+      "id": "mode:sandbox-fragment-panels",
+      "kind": "mode",
+      "locator": {
+        "page": "index.html",
+        "readers": ["tools/index-fragments.mjs"]
+      },
+      "purpose": "The sandbox panels that load on demand: 3-D view, pause at an event, radial velocity workspace, gravity assist and others.",
+      "audience": "student",
+      "primary_action": "Use the panel when its family loads",
+      "job": "workspace",
+      "template": null,
+      "disposition": "OPEN",
+      "redesign": null,
+      "owner": 483,
+      "supporting": [],
+      "reason": "",
+      "sitemap_reason": "",
+      "decision": "",
+      "note": "",
+      "measure": []
+    },
+    {
+      "id": "mode:observatory-panels",
+      "kind": "mode",
+      "locator": { "page": "observatory/index.html", "element": "details" },
+      "purpose": "The disclosure panels of the Observatory, closed until opened.",
+      "audience": "student",
+      "primary_action": "Pick a panel, measure",
+      "job": "workspace",
+      "template": null,
+      "disposition": "OPEN",
+      "redesign": null,
+      "owner": 493,
+      "supporting": [],
+      "reason": "",
+      "sitemap_reason": "",
+      "decision": "",
+      "note": "",
+      "measure": []
+    },
+    {
+      "id": "mode:my-work-sections",
+      "kind": "mode",
+      "locator": { "page": "my-work/index.html", "element": "mwDialog" },
+      "purpose": "The fourteen sections of My work and its confirmation dialog.",
+      "audience": "student",
+      "primary_action": "Download everything / Import from a file / Delete everything here (#mwExport)",
+      "job": "workspace",
+      "template": null,
+      "disposition": "OPEN",
+      "redesign": null,
+      "owner": 370,
+      "supporting": [],
+      "reason": "",
+      "sitemap_reason": "",
+      "decision": "",
+      "note": "",
+      "measure": []
+    },
+    {
+      "id": "mode:instructor-materials",
+      "kind": "mode",
+      "locator": {
+        "page": "instructors/index.html",
+        "readers": ["instructors/materials.manifest.json"]
+      },
+      "purpose": "The instructor materials once decrypted: documents, notes and keys.",
+      "audience": "instructor with the passphrase",
+      "primary_action": "Open a guide, key, note or worksheet",
+      "job": "instructor",
+      "template": null,
+      "disposition": "OPEN",
+      "redesign": null,
+      "owner": 491,
+      "supporting": [],
+      "reason": "",
+      "sitemap_reason": "",
+      "decision": "",
+      "note": "",
+      "measure": []
+    },
+    {
+      "id": "dialog:welcome",
+      "kind": "dialog",
+      "locator": {
+        "page": "index.html",
+        "element": "welcomeDialog",
+        "opener": "the address #home, or the brand link of every page"
+      },
+      "purpose": "Home: start the first thing offered, continue where you were, or go to one of the five destinations.",
+      "audience": "first-time visitor, returning student",
+      "primary_action": "Start the first thing Home offers (walk task); Home is #welcomeDialog filled by js/welcome.js from js/fragments/home.html",
+      "job": "entry",
+      "template": null,
+      "disposition": "OPEN",
+      "redesign": null,
+      "owner": 487,
+      "supporting": [455],
+      "reason": "",
+      "sitemap_reason": "",
+      "decision": "",
+      "note": "",
+      "measure": [
+        {
+          "id": "home",
+          "path": "/#home",
+          "seeds": ["welcome", "orientation"],
+          "ready": "#welcomeSections",
+          "primary": { "selector": "#welcomeDialog a[href]" }
+        }
+      ]
+    },
+    {
+      "id": "dialog:precise-placement",
+      "kind": "dialog",
+      "locator": {
+        "page": "index.html",
+        "element": "precisePlaceDialog",
+        "opener": "#precisePlaceBtn"
+      },
+      "purpose": "Place a body by typing its position, velocity and mass instead of dragging.",
+      "audience": "student placing a body",
+      "primary_action": "Enter exact numbers and place the body",
+      "job": "workspace",
+      "template": null,
+      "disposition": "OPEN",
+      "redesign": null,
+      "owner": 497,
+      "supporting": [477],
+      "reason": "",
+      "sitemap_reason": "",
+      "decision": "",
+      "note": "",
+      "measure": []
+    },
+    {
+      "id": "dialog:sound",
+      "kind": "dialog",
+      "locator": {
+        "page": "index.html",
+        "element": "soundPanel",
+        "opener": "#sonificationToggle"
+      },
+      "purpose": "Switch the sonification on or off and read what it plays and what the browser allowed.",
+      "audience": "any student",
+      "primary_action": "Switch the sound on or off",
+      "job": "workspace",
+      "template": null,
+      "disposition": "OPEN",
+      "redesign": null,
+      "owner": 483,
+      "supporting": [335],
+      "reason": "",
+      "sitemap_reason": "",
+      "decision": "",
+      "note": "",
+      "measure": []
+    },
+    {
+      "id": "dialog:scenario-browser",
+      "kind": "dialog",
+      "locator": {
+        "page": "index.html",
+        "element": "scenarioListContent",
+        "opener": "#loadScenarioBtn"
+      },
+      "purpose": "Browse the 61 sandbox scenarios and load one.",
+      "audience": "any visitor",
+      "primary_action": "Choose a scenario to load (61 sandbox scenarios)",
+      "job": "catalogue",
+      "template": null,
+      "disposition": "OPEN",
+      "redesign": null,
+      "owner": 497,
+      "supporting": [423],
+      "reason": "",
+      "sitemap_reason": "",
+      "decision": "",
+      "note": "",
+      "measure": []
+    },
+    {
+      "id": "dialog:investigation-browser",
+      "kind": "dialog",
+      "locator": {
+        "page": "index.html",
+        "element": "investigationBrowserContent",
+        "opener": "#investigationsBtn",
+        "nav": "investigations"
+      },
+      "purpose": "Browse the lessons and open one, or build an assignment from it.",
+      "audience": "student",
+      "primary_action": "Open an investigation from the browser (#investigationBrowserContent .inv-card)",
+      "job": "catalogue",
+      "template": null,
+      "disposition": "OPEN",
+      "redesign": null,
+      "owner": 497,
+      "supporting": [],
+      "reason": "",
+      "sitemap_reason": "",
+      "decision": "",
+      "note": "",
+      "measure": []
+    },
+    {
+      "id": "dialog:data-export",
+      "kind": "dialog",
+      "locator": {
+        "page": "index.html",
+        "element": "dataExportContent",
+        "opener": "#exportDataBtn"
+      },
+      "purpose": "Choose and download the measurements and files of the current run.",
+      "audience": "student",
+      "primary_action": "Choose scope and download files or a notebook",
+      "job": "workspace",
+      "template": null,
+      "disposition": "OPEN",
+      "redesign": null,
+      "owner": 497,
+      "supporting": [480],
+      "reason": "",
+      "sitemap_reason": "",
+      "decision": "",
+      "note": "",
+      "measure": []
+    },
+    {
+      "id": "dialog:investigation-finish",
+      "kind": "dialog",
+      "locator": {
+        "page": "index.html",
+        "element": "investigationFinishContent",
+        "opener": "the last step of a lesson (js/investigations.js)"
+      },
+      "purpose": "The end of a lesson: summary, name, the report to download, the token and what to do next.",
+      "audience": "student",
+      "primary_action": "Enter a name, download the report or copy the submission token",
+      "job": "lesson",
+      "template": null,
+      "disposition": "OPEN",
+      "redesign": null,
+      "owner": 456,
+      "supporting": [369],
+      "reason": "",
+      "sitemap_reason": "",
+      "decision": "",
+      "note": "",
+      "measure": []
+    },
+    {
+      "id": "dialog:share",
+      "kind": "dialog",
+      "locator": {
+        "page": "index.html",
+        "element": "shareContent",
+        "opener": "#shareBtn"
+      },
+      "purpose": "Make a link to the current world, an embed, a figure link, or save it to My work.",
+      "audience": "author, teacher",
+      "primary_action": "Copy a link to the current world or an embed",
+      "job": "workspace",
+      "template": null,
+      "disposition": "OPEN",
+      "redesign": null,
+      "owner": 483,
+      "supporting": [479],
+      "reason": "",
+      "sitemap_reason": "",
+      "decision": "",
+      "note": "",
+      "measure": []
+    },
+    {
+      "id": "dialog:settings",
+      "kind": "dialog",
+      "locator": {
+        "page": "index.html",
+        "element": "settingsPanel",
+        "opener": "#settingsBtn"
+      },
+      "purpose": "Change the simulation settings and apply, cancel or reset them.",
+      "audience": "any visitor",
+      "primary_action": "Search and change a simulation setting, then Apply",
+      "job": "workspace",
+      "template": null,
+      "disposition": "OPEN",
+      "redesign": null,
+      "owner": 483,
+      "supporting": [335],
+      "reason": "",
+      "sitemap_reason": "",
+      "decision": "",
+      "note": "Walk NOT RUN (state sandbox.settings in tools/interaction-contract.json): with Settings open, Tab stays inside the panel while 31 controls of the bar, rail and footer stay on screen and pressable, because the panel is aria-modal=\"false\" and the page behind it is not inert. The outline is recorded. The closing prompt decides between a modal panel and a reachable page behind it.",
+      "measure": []
+    },
+    {
+      "id": "dialog:black-hole-masses",
+      "kind": "dialog",
+      "locator": {
+        "page": "index.html",
+        "element": "bhMassesModal",
+        "opener": "the button the settings panel adds beside the black hole masses (js/settingsPanel.js)"
+      },
+      "purpose": "Set each black hole mass separately from inside Settings; every close but Done puts the masses back.",
+      "audience": "a student editing a scenario",
+      "primary_action": "Enter the masses and press Done",
+      "job": "workspace",
+      "template": null,
+      "disposition": "OPEN",
+      "redesign": null,
+      "owner": 483,
+      "supporting": [335],
+      "reason": "",
+      "sitemap_reason": "",
+      "decision": "",
+      "note": "",
+      "measure": []
+    },
+    {
+      "id": "dialog:object-inspector",
+      "kind": "dialog",
+      "locator": {
+        "page": "index.html",
+        "element": "objectInspector",
+        "opener": "a body selected on the canvas (js/inspectorWindow.js)"
+      },
+      "purpose": "Name a selected body and read or change its values.",
+      "audience": "any student",
+      "primary_action": "Read or change one value of the selected body",
+      "job": "workspace",
+      "template": null,
+      "disposition": "OPEN",
+      "redesign": null,
+      "owner": 483,
+      "supporting": [452],
+      "reason": "",
+      "sitemap_reason": "",
+      "decision": "",
+      "note": "",
+      "measure": []
+    },
+    {
+      "id": "dialog:tutorial",
+      "kind": "dialog",
+      "locator": {
+        "page": "index.html",
+        "element": "tutorialPopup",
+        "opener": "#tutorialBtn"
+      },
+      "purpose": "The quick tour of the sandbox, reachable at any time from the tour button.",
+      "audience": "a first-time visitor",
+      "primary_action": "Step through or close the tour",
+      "job": "entry",
+      "template": null,
+      "disposition": "OPEN",
+      "redesign": null,
+      "owner": 487,
+      "supporting": [],
+      "reason": "",
+      "sitemap_reason": "",
+      "decision": "",
+      "note": "",
+      "measure": []
+    },
+    {
+      "id": "dialog:lecture-sequence",
+      "kind": "dialog",
+      "locator": {
+        "page": "index.html",
+        "element": "lectureSequenceDialog",
+        "opener": "#lectureSequenceBtn"
+      },
+      "purpose": "Write or load the list of scenes lecture mode plays in order.",
+      "audience": "an instructor presenting",
+      "primary_action": "Write or load the sequence",
+      "job": "workspace",
+      "template": null,
+      "disposition": "OPEN",
+      "redesign": null,
+      "owner": 483,
+      "supporting": [],
+      "reason": "",
+      "sitemap_reason": "",
+      "decision": "",
+      "note": "",
+      "measure": []
+    },
+    {
+      "id": "dialog:my-work-move",
+      "kind": "dialog",
+      "locator": {
+        "page": "my-work/index.html",
+        "element": "mwDialog",
+        "opener": "a control of the section it confirms (js/myWorkPage.js)",
+        "native": true
+      },
+      "purpose": "Confirm moving, restoring or clearing what this device holds before it happens.",
+      "audience": "a student or instructor",
+      "primary_action": "Confirm or cancel",
+      "job": "workspace",
+      "template": null,
+      "disposition": "OPEN",
+      "redesign": null,
+      "owner": 370,
+      "supporting": [],
+      "reason": "",
+      "sitemap_reason": "",
+      "decision": "",
+      "note": "",
+      "measure": []
+    },
+    {
+      "id": "dialog:course-builder-conflict",
+      "kind": "dialog",
+      "locator": {
+        "page": "studio/course/index.html",
+        "element": "cb-conflict",
+        "opener": "a save that finds a newer draft (js/courseBuilderPage.js)",
+        "native": true
+      },
+      "purpose": "Choose which version to keep when the course builder finds a newer draft saved elsewhere.",
+      "audience": "a course author",
+      "primary_action": "Keep one version",
+      "job": "workspace",
+      "template": null,
+      "disposition": "OPEN",
+      "redesign": null,
+      "owner": 492,
+      "supporting": [],
+      "reason": "",
+      "sitemap_reason": "",
+      "decision": "",
+      "note": "",
+      "measure": []
+    },
+    {
+      "id": "dialog:scenario-studio-conflict",
+      "kind": "dialog",
+      "locator": {
+        "page": "studio/index.html",
+        "element": "st-conflict",
+        "opener": "a save that finds a newer draft (js/studioPage.js)",
+        "native": true
+      },
+      "purpose": "Choose which version to keep when the Scenario Studio finds a newer draft saved elsewhere.",
+      "audience": "a scenario author",
+      "primary_action": "Keep one version",
+      "job": "workspace",
+      "template": null,
+      "disposition": "OPEN",
+      "redesign": null,
+      "owner": 492,
+      "supporting": [],
+      "reason": "",
+      "sitemap_reason": "",
+      "decision": "",
+      "note": "",
+      "measure": []
+    },
+    {
+      "id": "dialog:composer-conflict",
+      "kind": "dialog",
+      "locator": {
+        "page": "studio/lesson/index.html",
+        "element": "cp-conflict",
+        "opener": "a save that finds a newer draft (js/composerPage.js)",
+        "native": true
+      },
+      "purpose": "Choose which version to keep when the Composer finds a newer draft saved elsewhere.",
+      "audience": "a lesson author",
+      "primary_action": "Keep one version",
+      "job": "workspace",
+      "template": null,
+      "disposition": "OPEN",
+      "redesign": null,
+      "owner": 492,
+      "supporting": [],
+      "reason": "",
+      "sitemap_reason": "",
+      "decision": "",
+      "note": "",
+      "measure": []
+    },
+    {
+      "id": "region:footer",
+      "kind": "shared-region",
+      "locator": { "file": "tools/shell.mjs" },
+      "purpose": "The footer stamped on every page: source, citation, licence and validation links.",
+      "audience": "any visitor",
+      "primary_action": "Open source or cite",
+      "job": "reference",
+      "template": null,
+      "disposition": "OPEN",
+      "redesign": null,
+      "owner": 497,
+      "supporting": [],
+      "reason": "",
+      "sitemap_reason": "",
+      "decision": "",
+      "note": "",
+      "measure": []
+    },
+    {
+      "id": "region:global-navigation",
+      "kind": "shared-region",
+      "locator": { "file": "tools/shell.mjs" },
+      "purpose": "The five destinations (Explore, Learn, Observe, My work, Teach) and the places block of each page.",
+      "audience": "any visitor",
+      "primary_action": "Choose a destination",
+      "job": "entry",
+      "template": null,
+      "disposition": "OPEN",
+      "redesign": null,
+      "owner": 497,
+      "supporting": [],
+      "reason": "",
+      "sitemap_reason": "",
+      "decision": "",
+      "note": "",
+      "measure": []
+    },
+    {
+      "id": "region:offline-notice",
+      "kind": "shared-region",
+      "locator": { "file": "js/offline.js" },
+      "purpose": "The notice that says whether the page works without a connection and what is saved.",
+      "audience": "offline visitor",
+      "primary_action": "Read which pages are saved on this device",
+      "job": "entry",
+      "template": null,
+      "disposition": "OPEN",
+      "redesign": null,
+      "owner": 497,
+      "supporting": [],
+      "reason": "",
+      "sitemap_reason": "",
+      "decision": "",
+      "note": "",
+      "measure": []
+    },
+    {
+      "id": "not-a-surface:compute-frame",
+      "kind": "not-a-surface",
+      "locator": { "files": ["compute-frame/index.html"] },
+      "purpose": "A sandboxed frame document published to its own origin; not a page of the site.",
+      "audience": "none (machine frame)",
+      "primary_action": "none",
+      "job": null,
+      "template": null,
+      "disposition": "OPEN",
+      "redesign": null,
+      "owner": 497,
+      "supporting": [],
+      "reason": "",
+      "sitemap_reason": "",
+      "decision": "",
+      "note": "",
+      "measure": []
+    },
+    {
+      "id": "not-a-surface:spike",
+      "kind": "not-a-surface",
+      "locator": { "glob": "spike/**/*.html", "count": 3 },
+      "purpose": "Spike pages kept as evidence for a decision; not published as product.",
+      "audience": "maintainers",
+      "primary_action": "none",
+      "job": null,
+      "template": null,
+      "disposition": "OPEN",
+      "redesign": null,
+      "owner": 497,
+      "supporting": [],
+      "reason": "",
+      "sitemap_reason": "",
+      "decision": "",
+      "note": "",
+      "measure": []
+    },
+    {
+      "id": "not-a-surface:fragments",
+      "kind": "not-a-surface",
+      "locator": { "glob": "js/fragments/*.html", "count": 10 },
+      "purpose": "Panel markup fetched into the sandbox page at run time; not pages.",
+      "audience": "n/a",
+      "primary_action": "none (markup fetched into index.html)",
+      "job": null,
+      "template": null,
+      "disposition": "OPEN",
+      "redesign": null,
+      "owner": 497,
+      "supporting": [],
+      "reason": "",
+      "sitemap_reason": "",
+      "decision": "",
+      "note": "",
+      "measure": []
+    },
+    {
+      "id": "not-a-surface:static-files",
+      "kind": "not-a-surface",
+      "locator": { "files": ["docs", "manual", "sdk", "extensions"] },
+      "purpose": "Documents and folders published as raw files; not pages.",
+      "audience": "maintainers, adopters, contributors",
+      "primary_action": "none",
+      "job": null,
+      "template": null,
+      "disposition": "OPEN",
+      "redesign": null,
+      "owner": 497,
+      "supporting": [],
+      "reason": "",
+      "sitemap_reason": "",
+      "decision": "",
+      "note": "",
+      "measure": []
+    },
+    {
+      "id": "route:studio-open",
+      "kind": "route-family",
+      "locator": {
+        "param": "open",
+        "params": ["open"],
+        "via": "URLSearchParams",
+        "readers": [
+          "js/studioPage.js",
+          "js/composerPage.js",
+          "js/coursePage.js"
+        ]
+      },
+      "purpose": "Open a saved draft in the Scenario Studio, the Composer or the course builder by its id.",
+      "audience": "an author returning to a draft",
+      "primary_action": "Open the named draft",
+      "job": "workspace",
+      "template": null,
+      "disposition": "OPEN",
+      "redesign": null,
+      "owner": 492,
+      "supporting": [],
+      "reason": "",
+      "sitemap_reason": "",
+      "decision": "",
+      "note": "",
+      "measure": []
+    },
+    {
+      "id": "route:course-add",
+      "kind": "route-family",
+      "locator": {
+        "param": "add",
+        "params": ["add", "activity", "use"],
+        "via": "URLSearchParams",
+        "readers": ["js/coursePage.js"]
+      },
+      "purpose": "Add an investigation or an activity fragment to a course draft, or open a course with an item in use.",
+      "audience": "an instructor building a course from a link",
+      "primary_action": "Add the named item to the draft",
+      "job": "catalogue",
+      "template": null,
+      "disposition": "OPEN",
+      "redesign": null,
+      "owner": 489,
+      "supporting": [],
+      "reason": "",
+      "sitemap_reason": "",
+      "decision": "",
+      "note": "",
+      "measure": []
+    },
+    {
+      "id": "route:assign-roster",
+      "kind": "route-family",
+      "locator": {
+        "param": "roster",
+        "params": ["roster"],
+        "via": "URLSearchParams",
+        "readers": [
+          "js/assignments/assignmentBuilder.js",
+          "js/investigations/finish.js",
+          "js/teach/activity.js",
+          "js/teach/kit.js"
+        ]
+      },
+      "purpose": "Carry a roster id on a student link so a report returns to that roster.",
+      "audience": "an instructor and their students",
+      "primary_action": "Open the lesson under the roster",
+      "job": "instructor",
+      "template": null,
+      "disposition": "OPEN",
+      "redesign": null,
+      "owner": 371,
+      "supporting": [492],
+      "reason": "",
+      "sitemap_reason": "",
+      "decision": "",
+      "note": "",
+      "measure": []
+    },
+    {
+      "id": "route:teaching-find-filters",
+      "kind": "route-family",
+      "locator": {
+        "param": "data-filter",
+        "params": [],
+        "via": "URLSearchParams",
+        "readers": ["js/teach/find.js"]
+      },
+      "purpose": "Keep the filters of the teaching finder in the address so a filtered view can be shared.",
+      "audience": "an instructor choosing what to assign",
+      "primary_action": "Filter the finder",
+      "job": "instructor",
+      "template": null,
+      "disposition": "OPEN",
+      "redesign": null,
+      "owner": 490,
+      "supporting": [],
+      "reason": "",
+      "sitemap_reason": "",
+      "decision": "",
+      "note": "",
+      "measure": []
+    }
+  ]
+}

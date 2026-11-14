@@ -19,6 +19,14 @@ the release rather than in the tag.
 
 ### Added
 
+- The surface ledger (Prompt 453; register row D-R4-453-01): a generated record
+  with one row per published page, generated family, route parameter, dialog,
+  mode and shared region, each with one closing prompt, and
+  `npm run surface-ledger:check`, which fails when a page, a route parameter or
+  a dialog has no row. `npm run surface-ledger:measure` measures page length
+  and the first real action the same way every run. Walk states and dialog
+  outlines were added for Share, the lesson finish dialog, the author preview,
+  the assignment builder, embed mode and Settings. Nothing changes on screen.
 - A measurement harness for the pages a student opens (`npm run perf:routes`, `npm run perf:walks`; `STUDENT_ROUTE_BASELINE.md`): Home, two lessons, an Observatory guide and the 3-D lab, cold, warm and offline over compressed transport, and the walk from a lesson link to its first accepted reading. The test server gains an opt-in gzip and cache-header mode. Nothing a visitor sees changes.
 
 - The catalog ledger (Prompt 297; register row D-R4-297-01): a generated
