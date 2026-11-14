@@ -422,6 +422,15 @@ four datasets with commands of their own are rebuilt by those
 an archive that is down is reported for itself; `node tools/build-data-packs.mjs
 --check --require-sources --all` rebuilds all sixteen at once.
 
+`packs:data` fetches in the order of the pack list and stops at the first
+archive that does not answer, so one archive that is down leaves every pack
+after it unfetched and unjudged. To fetch and rebuild one pack alone, run
+`node tools/build-data-packs.mjs --only=<id>`: it checks the download against
+the pin, rewrites that pack's two files, and `git diff` then shows whether the
+committed files are the ones the builder writes. A failed download names its
+URL and the reason Node reports (a connect timeout, a refused connection, an
+HTTP status), so a failed scheduled run says which archive was at fault.
+
 ## The datasets that came before packs
 
 Roadmap II Prompt 62 brought every dataset under the format. What each one

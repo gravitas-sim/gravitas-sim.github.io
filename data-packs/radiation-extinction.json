@@ -82,7 +82,7 @@
     "sha256": "bdefe28b7589ae5b9a2798e1a571e7a027dd474c0de25eb5ec7bfd36d0e510de"
   },
   "validation": {
-    "check": "A(lambda)/A(V) at R_V = 3.1 reproduces the eight published values of CCM89 Table 3 inside the law's range within 0.015, the residual of the paper's own fit to that table",
+    "check": "A(lambda)/A(V) at R_V = 3.1 reproduces the eight published values of CCM89 Table 3 inside the law's range within 0.003 (0.015 at B, where the paper's table is the data its polynomial was fitted to and the polynomial departs from it by 0.014)",
     "against": [
       {
         "quantity": "A(U)/A(V) at R_V = 3.1",

@@ -470,6 +470,7 @@ export async function fetchSources(
   {
     cache = process.env.GRAVITAS_PACKS_CACHE || path.join(REPO, '.packs-cache'),
     fetchImpl = globalThis.fetch,
+    retryDelayMs,
   } = {}
 ) {
   const problems = [];
@@ -483,7 +484,12 @@ export async function fetchSources(
       continue;
     }
     try {
-      await pinnedBytes(RAW, { cache, offline: false, fetchImpl });
+      await pinnedBytes(RAW, {
+        cache,
+        offline: false,
+        fetchImpl,
+        ...(retryDelayMs === undefined ? {} : { retryDelayMs }),
+      });
       cached++;
     } catch (err) {
       problems.push(`${item.path}: ${err.message}`);

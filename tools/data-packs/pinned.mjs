@@ -58,6 +58,9 @@ export function pinProblem(bytes, pin) {
     : `${pin.file} is ${digest}, not the pinned ${pin.sha256}`;
 }
 
+/** HTTP statuses that mean "try again", not "this is not the file". */
+const RETRY_STATUS = new Set([429, 500, 502, 503, 504]);
+
 /**
  * The raw product's bytes: from the cache, or fetched into it when allowed,
  * and in either case checked against the pin before anything reads them.
@@ -76,6 +79,8 @@ export function pinProblem(bytes, pin) {
  * @param {boolean} [opts.offlineFlag] - The caller was told --offline, and the message says so
  * @param {object} [opts.headers] - Request headers, for an archive that asks to be told who is asking
  * @param {number} [opts.timeoutMs] - How long a download may take
+ * @param {number} [opts.attempts] - How many times an archive that errs transiently is asked (default 3)
+ * @param {number} [opts.retryDelayMs] - The wait before the second ask; the third waits twice as long
  * @returns {Promise<Uint8Array>}
  */
 export async function pinnedBytes(
@@ -88,6 +93,8 @@ export async function pinnedBytes(
     offlineFlag = false,
     headers,
     timeoutMs = 120_000,
+    attempts = 3,
+    retryDelayMs = 5_000,
   }
 ) {
   const at = path.join(cache, pin.file);
@@ -107,11 +114,42 @@ export async function pinnedBytes(
       ...(headers ?? {}),
       ...(pin.range ? { Range: `bytes=${pin.range}` } : {}),
     };
-    const res = await fetchImpl(pin.url, {
-      signal: globalThis.AbortSignal.timeout(timeoutMs),
-      ...(Object.keys(ask).length ? { headers: ask } : {}),
-    });
-    if (!res.ok) throw new Error(`${pin.url}: HTTP ${res.status}`);
+    // Node's fetch reports every network failure as "fetch failed" and keeps
+    // the reason (a refused connection, a name that does not resolve, a
+    // timeout) on `cause`. Say which archive and why, so that a failed
+    // scheduled run names its source without a second dry run.
+    //
+    // An archive that answers HTTP 500 or 503, or does not answer a connection
+    // in time, is asked again a few times, a little later each time: the
+    // scheduled run's archives (SDSS, GWOSC) did both within the same month.
+    // Only the wait changes. Whatever is served is still held to the pin below,
+    // so a retry can never admit a different file. An HTTP 4xx, a download that
+    // runs past its own timeout, and a body that is not the pin fail at once.
+    let res;
+    for (let attempt = 1; ; attempt++) {
+      let failure = null;
+      let again = false;
+      try {
+        res = await fetchImpl(pin.url, {
+          signal: globalThis.AbortSignal.timeout(timeoutMs),
+          ...(Object.keys(ask).length ? { headers: ask } : {}),
+        });
+        if (res.ok) break;
+        failure = new Error(`${pin.url}: HTTP ${res.status}`);
+        again = RETRY_STATUS.has(res.status);
+      } catch (err) {
+        const why = err?.cause?.code ?? err?.cause?.message ?? err?.name;
+        failure = new Error(
+          `${pin.url}: ${err?.message ?? err}${why ? ` (${why})` : ''}`,
+          { cause: err }
+        );
+        again = err?.name !== 'TimeoutError';
+      }
+      if (!again || attempt >= attempts) throw failure;
+      await new Promise(done =>
+        globalThis.setTimeout(done, retryDelayMs * attempt)
+      );
+    }
     bytes = Buffer.from(await res.arrayBuffer());
     // Checked before it is cached: a truncated or substituted download never
     // reaches the cache, so the next offline run cannot read it either.
