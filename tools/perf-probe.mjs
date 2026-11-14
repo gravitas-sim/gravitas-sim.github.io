@@ -134,6 +134,9 @@ async function main() {
   if (!(cpu >= 1))
     throw new Error(`--cpu ${args[ci + 1]} is not a number >= 1`);
   const vi = args.indexOf('--viewport');
+  // --scene may repeat; each takes the next argument as a scene record.
+  const sceneIndexes = args.flatMap((a, i) => (a === '--scene' ? [i] : []));
+  const sceneRecords = sceneIndexes.map(i => loadRecord(args[i + 1]));
   // A scene record brings its own window; an explicit --viewport still wins.
   const defaultViewport = sceneRecords.length
     ? `${sceneRecords[0].viewport.width}x${sceneRecords[0].viewport.height}`
@@ -145,9 +148,6 @@ async function main() {
     throw new Error(`--viewport ${args[vi + 1]} is not WIDTHxHEIGHT`);
   }
   const trace = args.includes('--trace');
-  // --scene may repeat; each takes the next argument as a scene record.
-  const sceneIndexes = args.flatMap((a, i) => (a === '--scene' ? [i] : []));
-  const sceneRecords = sceneIndexes.map(i => loadRecord(args[i + 1]));
   const valueIndexes = new Set(
     [si, ti, ji, di, ci, vi, ...sceneIndexes]
       .filter(i => i >= 0)
@@ -218,7 +218,7 @@ async function main() {
   });
 
   console.log(
-    `\nFrame-time probe: ${seconds}s per scenario at ${width}x${height}, headless` +
+    `\nFrame-time probe: ${seconds}s per scenario at ${width}x${height}, headless ` +
       `Chromium, quality tier ${tier}\n`
   );
   console.log(
