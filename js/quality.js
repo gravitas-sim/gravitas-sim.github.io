@@ -7,55 +7,30 @@
 // cannot do the three things that actually matter on that machine: draw fewer
 // pixels, draw fewer bodies, and stop drawing the expensive effects at all.
 //
-// So there is an explicit tier, and it is chosen by measurement.
+// So there is an explicit tier, and it is chosen by measurement: draw fewer
+// pixels, fewer bodies, and none of the expensive effects on a machine that is
+// not keeping up. Nothing here reads navigator.userAgent, deviceMemory or
+// hardwareConcurrency: they describe the label on the box, not the frame rate
+// this machine achieves on this scenario right now.
 //
-// Why not a user-agent string
-// -----------------------------------------------------------------------------
-// Because it does not answer the question. The same Chromebook model runs at
-// 55fps on an empty Solar System and 12fps on Galactic Collision; a MacBook Pro
-// with forty other tabs open and a thermal problem is slower than either. What
-// matters is the frame rate this machine is achieving on this scenario right
-// now, and that is measurable. Nothing in this file reads navigator.userAgent,
-// navigator.deviceMemory or hardwareConcurrency: those describe the label on
-// the box, not the frame rate.
+// What is measured: the interval between animation frames, which is what the
+// reader experiences (work time can finish in 8ms and still be presented at
+// 20fps). Samples are filtered first. The first 1.5 seconds are discarded,
+// timed rather than counted in frames so the slowest machines do not wait
+// longest for help. Intervals over 500ms are discarded (a hidden tab, a garbage
+// collection). The median is used, not the mean, so one hitch cannot outvote a
+// hundred good frames.
 //
-// What is measured
-// -----------------------------------------------------------------------------
-// The interval between animation frames, which is what the reader actually
-// experiences. Not the time spent inside the frame callback: on a machine that
-// is compositing slowly, or throttled, or sharing a core with a video call, the
-// work can finish in 8ms and still be presented at 20fps. The interval catches
-// that and the work time does not.
-//
-// Samples are filtered before they count:
-//
-//   the first 1.5 seconds are discarded start-up is not representative: the
-//                                       world is being built and the starfield
-//                                       generated. Timed rather than counted in
-//                                       frames, because 45 frames is 0.75s at
-//                                       60fps and 4.5s at 10fps - which would
-//                                       make the slowest machines, the ones
-//                                       this exists for, wait longest for help
-//   intervals over 500ms are discarded  a backgrounded tab, a garbage
-//                                       collection, a breakpoint. rAF stops
-//                                       entirely in a hidden tab, and counting
-//                                       the resumption as a slow frame would
-//                                       demote a machine for being minimized
-//   the median is used, not the mean    one 300ms hitch should not outvote a
-//                                       hundred good frames, and on a loaded
-//                                       machine the distribution is skewed
-//
-// Hysteresis, because flapping is worse than either tier
-// -----------------------------------------------------------------------------
-// Dropping to the low tier raises the frame rate, which - with a single
-// threshold - would immediately qualify the machine to go back up, which would
-// lower it again. So the thresholds are far apart (below 32fps to drop, above
-// 48fps to return) and a promotion additionally requires the machine to have
-// held that rate for a while. The asymmetry is deliberate: being slow to
-// promote costs some fidelity, being quick to demote costs a stutter.
+// Hysteresis, because flapping is worse than either tier: below 32fps drops to
+// the low tier, above 48fps for a while returns. Slow to promote costs some
+// fidelity; quick to demote costs a stutter.
 // =============================================================================
 
-import { KEY_MOTION } from './names.js';
+import { KEY_MOTION, KEY_QUALITY_VERDICT } from './names.js';
+
+// Read back by js/qualityVerdict.js, which takes it from here so the key stays
+// with this module's code in a build rather than in the shared names chunk.
+export { KEY_QUALITY_VERDICT };
 
 /**
  * Time ignored at start-up, while the first world and starfield are built.
@@ -181,6 +156,7 @@ export function setTier(next) {
     tier = next;
     announce();
   }
+  if (seen) remember();
 }
 
 /** The wall-clock time the current window spans, in milliseconds. */
@@ -242,6 +218,7 @@ export function sampleFrame(timestamp) {
   if (tier !== 'low' && fps < DEMOTE_FPS) {
     tier = 'low';
     aboveSince = 0;
+    remember();
     announce();
     return;
   }
@@ -254,11 +231,29 @@ export function sampleFrame(timestamp) {
       if (aboveSince >= PROMOTE_DWELL_MS) {
         tier = 'full';
         aboveSince = 0;
+        remember();
         announce();
       }
     } else {
       aboveSince = 0;
     }
+  } else if (written !== 'full') {
+    remember();
+  }
+}
+
+// The application page keeps the tier it decided in one session-only key, for
+// the pages that never render the simulation (js/qualityVerdict.js reads it).
+let written;
+function remember() {
+  written = tier === 'low' ? 'low' : 'full';
+  try {
+    sessionStorage.setItem(
+      KEY_QUALITY_VERDICT,
+      JSON.stringify({ tier: written, at: Date.now() })
+    );
+  } catch {
+    /* storage unavailable: the other pages behave as they always have */
   }
 }
 
