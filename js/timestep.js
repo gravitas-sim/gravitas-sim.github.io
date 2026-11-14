@@ -115,9 +115,19 @@ export const stepPolicyStats = () => ({ policy, ...carryState });
  * substepPlan; S1 is the unchanged substepPlan with a cap of 1/24 where there
  * is none; S2 to S4 take pieces of exactly h and carry the remainder.
  */
+let frameLimit = 0;
+/** Stop integrating after this many frames of the live loop (0 = never); for the determinism check. */
+export const setFrameLimit = n => {
+  frameLimit = n;
+};
 export function planFrame(dtSim, maxStep, id = policy, state = carryState, hOverride = 0) {
+  if (state === carryState && frameLimit > 0) {
+    if (carryState.frames >= frameLimit) return { substeps: 0, step: 0, capped: false };
+    if (maxStep > 0 || id === 'S0' || id === 'S1' || id === 'S1b') carryState.frames++;
+  }
   if (maxStep > 0 || id === 'S0') return substepPlan(dtSim, maxStep);
   if (id === 'S1' && !hOverride) return substepPlan(dtSim, 1 / 24);
+  if (id === 'S1b') return substepPlan(dtSim, 0.0417);
   const h = hOverride || H[id];
   const sign = dtSim < 0 ? -1 : 1;
   if (state.sign !== 0 && state.sign !== sign) state.carry = 0;
