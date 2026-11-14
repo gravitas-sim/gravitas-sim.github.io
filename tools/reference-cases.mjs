@@ -1135,21 +1135,21 @@ if (
   process.argv[1] &&
   import.meta.url.endsWith(process.argv[1].split('/').pop())
 ) {
+  // process.exit() drops what a pipe has not yet taken (a Linux runner cut the
+  // report off mid-listing), so leave only once stdout has flushed.
+  const leave = code => process.stdout.write('', () => process.exit(code));
   if (flag('--leg')) {
     legMain().then(
-      () => process.exit(0),
+      () => leave(0),
       e => {
         console.error(e);
-        process.exit(2);
+        leave(2);
       }
     );
   } else {
-    main().then(
-      code => process.exit(code),
-      e => {
-        console.error(e);
-        process.exit(2);
-      }
-    );
+    main().then(leave, e => {
+      console.error(e);
+      leave(2);
+    });
   }
 }

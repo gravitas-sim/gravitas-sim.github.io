@@ -279,15 +279,23 @@ describe('the engine, run again in processes of its own', () => {
       maxBuffer: 1 << 26,
     });
 
+  // Jest cuts a long received string, so a failure names the differing rows
+  // itself: the DIFF lines and the closing count, nothing else.
+  const verdict = out =>
+    out
+      .split('\n')
+      .filter(l => /^DIFF|^# \d+ differences/.test(l))
+      .join('\n');
+
   test('every judged row comes out as recorded', () => {
-    const out = tool(['--jobs', '2']);
-    expect(out).toMatch(/# 0 differences from the record/);
-    expect(out).not.toMatch(/^DIFF/m);
+    expect(verdict(tool(['--jobs', '2']))).toBe(
+      '# 0 differences from the record'
+    );
   }, 300000);
 
   test('the step study of the cheap cases comes out as recorded', () => {
     const out = tool(['--only', 'R4,R4x,R5', '--study', '--jobs', '2']);
-    expect(out).toMatch(/# 0 differences from the record/);
+    expect(verdict(out)).toBe('# 0 differences from the record');
   }, 300000);
 });
 
