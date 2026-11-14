@@ -4,7 +4,7 @@
     <meta charset="utf-8" />
     <meta
       http-equiv="Content-Security-Policy"
-      content="default-src 'self'; script-src 'self' 'sha256-rGqbul9qtm+38MIlYJKdx0H6c4VuF1UlvMnvIWrlbhQ=' 'sha256-cP4mqg7PQvYyjCQIGmawm4bN4bc59aJlopB7XKtSx54='; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data: blob:; media-src 'self' blob:; connect-src 'self' blob:; worker-src 'self' blob:; frame-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'"
+      content="default-src 'self'; script-src 'self' 'sha256-13d/H9TW6ThkmbFRMmFSspzev0BlVtoIsZsQrHxy/QY=' 'sha256-cP4mqg7PQvYyjCQIGmawm4bN4bc59aJlopB7XKtSx54='; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data: blob:; media-src 'self' blob:; connect-src 'self' blob:; worker-src 'self' blob:; frame-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'"
     />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Extending an Experiment | Gravitas</title>
@@ -50,7 +50,7 @@ try {
   if (m === 'reduce' || m === 'step')
     document.documentElement.setAttribute('data-motion', m);
 } catch {
-  /* storage unavailable: the default theme and the system's motion setting are correct */
+  /* storage unavailable: the defaults are correct */
 }
 /* The offline note (shellFor): shown once when the connection drops, gone when it returns, dismissed by its button or Escape. */
 (() => {

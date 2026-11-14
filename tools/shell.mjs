@@ -456,7 +456,7 @@ export const HEAD = [
   `  if (m === 'reduce' || m === 'step')`,
   `    document.documentElement.setAttribute('data-motion', m);`,
   `} catch {`,
-  `  /* storage unavailable: the default theme and the system's motion setting are correct */`,
+  `  /* storage unavailable: the defaults are correct */`,
   `}`,
   `/* The offline note (shellFor): shown once when the connection drops, gone when it returns, dismissed by its button or Escape. */`,
   `(() => {`,

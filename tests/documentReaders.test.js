@@ -100,6 +100,11 @@ const PARSES = {
   ],
   'js/library/progress.js': [1, 'none', OWN],
   'js/platform/resolver.js': [1, 'none', OWN],
+  'js/quality.js': [
+    1,
+    'none',
+    'its own one-line verdict in sessionStorage, checked for shape and age before use',
+  ],
   'js/authoring/preview.js': [1, 'none', OWN],
   'js/experimentsPage.js': [
     2,
