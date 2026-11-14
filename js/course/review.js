@@ -223,7 +223,7 @@ export function upgradeCoursePack(pack, facts, accepted, opts) {
         continue;
       }
       const moved =
-        kept.length !== item.steps.length || v.detail.changedSteps.length;
+        kept.join() !== item.steps.join() || v.detail.changedSteps.length;
       if (moved) {
         item.steps = kept;
         item.assignment = {

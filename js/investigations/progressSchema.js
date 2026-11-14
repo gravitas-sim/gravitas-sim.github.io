@@ -110,7 +110,6 @@ const EMPTY = () => ({
   spent: 0,
   schema: PROGRESS_SCHEMA,
   migrated: false,
-  earlier: null,
   notes: [],
 });
 

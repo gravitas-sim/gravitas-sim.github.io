@@ -611,9 +611,7 @@ async function repin(path) {
 
 /**
  * A pasted course item for an investigation pack, as /studio/course/packs/
- * makes it: the pack, its version, its link and its pin. The builder reads no
- * more of it than the format has fields for; that page is where the link is
- * opened and judged, which needs the lesson engine this route has no room for.
+ * makes it (pack, version, link, pin); that page opens and judges the link.
  */
 function readPackItem(base, text) {
   let v = null;
@@ -1219,12 +1217,6 @@ async function check(d) {
   });
   const findings = errors.length ? [] : auditCourse(d, facts);
   const review = reviewCoursePack(d, facts);
-  // Rows that say a step or lesson was replaced get their words (lazy).
-  for (const x of review)
-    if (x.detail?.revisedSteps?.length || x.detail?.retiredLesson)
-      x.detail.notes = await (
-        await import('./course/retired.js')
-      ).notes(x.detail);
   let links = null;
   if (!errors.length && !findings.some(f => f.level === 'error'))
     links = await makeLinks(d);
@@ -1355,7 +1347,18 @@ function renderReview(r, d) {
           list: x.detail.changedSteps.join(', '),
         })
       );
-    detail.push(...(x.detail?.notes || []));
+    const rv = x.detail?.revisedSteps;
+    if (rv?.length)
+      detail.push(
+        t('course.review.revisedSteps', {
+          list: rv.map(r => `${r.sid} -> ${r.to ?? '-'}`).join(', '),
+        })
+      );
+    const gone = x.detail?.retiredLesson;
+    if (gone)
+      detail.push(
+        t('course.review.retiredLesson', { ...gone, to: gone.to ?? '-' })
+      );
     if (x.detail?.pinnedPackage || x.detail?.currentPackage)
       detail.push(
         t('course.review.package', {
@@ -2086,9 +2089,7 @@ function wire() {
 /**
  * Add what the address names to the course being edited, or to a new one:
  * ?add=<investigation id> a whole investigation, ?activity=<fragment of an
- * activity link> that activity with its code kept, so the link already handed
- * out still opens it. Used from the adoption pages, the Library and the
- * activity builder (INSTRUCTOR_FLOW.md).
+ * activity link> that activity with its code kept (INSTRUCTOR_FLOW.md).
  * @param {boolean} hadDraft - Whether a draft was restored
  * @returns {Promise<?string>} A status message, or null when nothing was asked
  */

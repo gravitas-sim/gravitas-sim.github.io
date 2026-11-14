@@ -104,8 +104,54 @@ generate:check`) fails when one is stale.
   the lesson no longer has.
 
 Arrays that carry no sid (options, objectives, hints, rows) still line up by
-index with the English, inside the entry. Step ids themselves never change in a
-shipped lesson.
+index with the English, inside the entry. A step id never changes in a
+shipped lesson; changing what a step asks is a revision, below.
+
+## Changing a shipped step: reword, revise, insert, remove, retire
+
+Saved work, assignments, course pins and submission tokens name a step by its
+id, so an id is a promise that the task is the same. Four edits, and only these:
+
+- **Reword** (same task, same evidence, same answer): edit in place. Nothing
+  else changes.
+- **Revise** (the task, the expected answer, the evidence or the meaning of a
+  saved answer changes): the step gets a **new id**, and the old id is written
+  into the lesson's `retired` map with its successor and the release:
+
+  ```js
+  retired: {
+    'old-id': { to: 'new-id', release: '3.1',
+      was: { en: 'What the step asked.', es: 'Lo que preguntaba el paso.' } },
+  },
+  ```
+
+  `to` is a step the lesson has now (when a successor is itself revised later,
+  point every older entry at the final one), or `null` when the step was
+  removed. `was` says what it asked in both languages: an answer needs its
+  question. A retired id is never reused.
+- **Insert, reorder or remove**: allowed (the Spanish follows by sid). A removal
+  is a retirement with `to: null`.
+- **Merge or retire a whole investigation**: only by the consolidation gate; its
+  decision adds a row to `js/data/retiredInvestigations.js`
+  (`old-id: { to, release, reason }`, `to` a real investigation or `null`).
+
+What a reader does: saved answers under a retired id stay readable and are shown
+as "answered in an earlier version", never marked against the new step (lesson
+panel, My work, the lab report, the submission results); an assignment, an
+activity format or a course pin that names the retired step reports it in words
+and offers the successor (re-pin, reviewed course upgrade); `#investigation=<old
+id>` opens the successor with a notice.
+
+The same `retired` map sits on a guide of the 3-D lab, the mission lab or the
+Observatory, and a guide's report lists the old answer marked with its release.
+Other families: **bench labs** use the store version (`SCHEMA_VERSION`): a
+changed built-in setup is a version bump whose `migrate()` step keeps the old
+runs and says what it withdrew, as version 3 did; **activities** resolve a
+retired id through the lesson's `retired` map.
+
+A step's fingerprint does not cover its prompt: the corpus
+(`tests/compat/revisions.test.js`) found no silent misread that a prompt digest
+would catch, because a changed meaning is a revision and so a new id.
 
 ## The review checklist
 

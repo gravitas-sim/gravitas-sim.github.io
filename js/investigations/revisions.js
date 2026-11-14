@@ -88,32 +88,6 @@ export function earlierOf(owner, live, entries) {
   return out;
 }
 
-/**
- * Ids named by something saved elsewhere (an activity format, a pin), resolved
- * against the owner as it is now: a retired id becomes its successor, or is
- * left out when there is none, and each change is returned as a note.
- *
- * @param {?object} owner - A lesson or a guide
- * @param {Array<string>} ids - The ids as written
- * @param {Set<string>} live - The ids the owner has now
- * @returns {{ids: Array<string>, notes: Array<{id: string, to: ?string,
- *   release: string, was: *}>}} The ids to use, and what changed
- */
-export function resolveIds(owner, ids, live) {
-  const out = [];
-  const notes = [];
-  for (const id of ids) {
-    const s = live.has(id) ? null : successorOf(owner, id, live);
-    if (!s) {
-      out.push(id);
-      continue;
-    }
-    notes.push({ id, ...s });
-    if (s.to && !out.includes(s.to)) out.push(s.to);
-  }
-  return { ids: out, notes };
-}
-
 /** The ids a lesson has now. */
 export const liveSids = lesson =>
   new Set((lesson?.steps || []).map(s => s?.sid));
@@ -204,39 +178,3 @@ export const retiredAnswers = (oldId, responses, entry) =>
       known: false,
     }))
     .filter(r => r.text);
-
-/**
- * A guide's saved tables, split into what its steps own now and what they do
- * not: each table is `{step id: saved value}` (answers, records).
- *
- * `keepAll` false (the saved version's major differs from the build's) puts
- * every entry on the earlier side, to be shown and never read as an answer. A
- * guide used to start afresh then; nothing is dropped.
- *
- * @param {Set<string>} live - The ids the guide has now
- * @param {Record<string, object>} tables - By table name
- * @param {boolean} [keepAll] - Whether the saved version is this build's major
- * @returns {{kept: Record<string, object>, earlier: Record<string, object>}}
- */
-export function splitSaved(live, tables, keepAll = true) {
-  const kept = {};
-  const earlier = {};
-  for (const [name, table] of Object.entries(tables)) {
-    kept[name] = {};
-    earlier[name] = {};
-    for (const [id, value] of Object.entries(table || {}))
-      (keepAll && live.has(id) ? kept : earlier)[name][id] = value;
-  }
-  return { kept, earlier };
-}
-
-/** Two sets of earlier tables, the second written over the first. */
-export const mergeEarlier = (a, b) => {
-  const out = {};
-  for (const name of new Set([
-    ...Object.keys(a || {}),
-    ...Object.keys(b || {}),
-  ]))
-    out[name] = { ...a?.[name], ...b?.[name] };
-  return out;
-};

@@ -8,7 +8,6 @@
 // =============================================================================
 
 export const EN_REVISIONS = {
-  'rev.earlier': 'answered in an earlier version',
   'rev.heading': 'Answers from an earlier version ({n})',
   'rev.item':
     '"{was}" - your answer: {text}. Answered in an earlier version (before {release}); not marked.',
@@ -20,16 +19,8 @@ export const EN_REVISIONS = {
     'The step "{was}" was replaced in release {release} by "{title}".',
   'rev.removed':
     'The step "{was}" was removed in release {release}; no step replaces it.',
-  'rev.pin.step':
-    'The assigned step "{was}" ({sid}) was replaced in release {release} by the step {to}.',
-  'rev.pin.stepGone':
-    'The assigned step "{was}" ({sid}) was removed in release {release}; no step replaces it.',
   'rev.inv.moved':
     'This investigation was replaced in release {release} by "{title}", which is open now.',
   'rev.inv.retired':
     'This investigation was retired in release {release} and is no longer in Gravitas.',
-  'rev.inv.pin':
-    'The investigation "{id}" was replaced in release {release} by "{to}".',
-  'rev.inv.pinGone':
-    'The investigation "{id}" was retired in release {release}; no investigation replaces it.',
 };

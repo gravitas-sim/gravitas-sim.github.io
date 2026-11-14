@@ -305,14 +305,9 @@ async function reuse() {
     const l = await lesson(a.l, 'en');
     const r = D.reuseCheck(a, l, stepFingerprint, lessonProvider(a.l));
     reissued = r.clean ? null : r.reissued;
-    // What each revised step became, in words (the site's language).
-    const said = r.revised.length
-      ? await import('../investigations/revisionText.js')
-      : null;
-    await said?.ensureRevisionMessages();
     out.textContent = r.clean
       ? T('reuse.clean', { n: r.present })
-      : `${T('reuse.dirty', r)} ${r.revised.map(n => said.revisionLine(n, l)).join(' ')} ${r.reissued ? T('reuse.reissued') : ''}`;
+      : `${T('reuse.dirty', r)} ${r.revised.length ? T('reuse.revised', { steps: r.revised.map(n => `${n.sid} -> ${n.to ?? '-'}`).join(', ') }) : ''} ${r.reissued ? T('reuse.reissued') : ''}`;
     $('kitReuseUse').hidden = !reissued;
   } catch {
     out.textContent = T('reuse.failed');
