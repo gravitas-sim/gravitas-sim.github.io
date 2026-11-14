@@ -46,7 +46,7 @@ Scene class of the lessons: portrait or backdrop 94, setup scenario 26, engine-i
 | `investigation:color-and-temperature`                | lesson      |   378 | FOCUSED  | portrait or backdrop    | OPEN      | OPEN     | NOT RUN | -                                     |          1 |
 | `investigation:comets-and-the-sun`                   | lesson      |   361 | REDESIGN | setup scenario          | OPEN      | OPEN     | NOT RUN | -                                     |          0 |
 | `investigation:coordinates-and-time`                 | lesson      |   408 | REDESIGN | portrait or backdrop    | OPEN      | OPEN     | NOT RUN | -                                     |          0 |
-| `investigation:counts-to-magnitudes`                 | lesson      |   409 | FOCUSED  | portrait or backdrop    | OPEN      | OPEN     | NOT RUN | synthetic nights (+1)                 |          0 |
+| `investigation:counts-to-magnitudes`                 | lesson      |   409 | FOCUSED  | portrait or backdrop    | OPEN      | OPEN     | NOT RUN | synthetic nights (+1)                 |          1 |
 | `investigation:craters-by-size`                      | lesson      |   392 | FOCUSED  | portrait or backdrop    | OPEN      | OPEN     | NOT RUN | -                                     |          0 |
 | `investigation:deep-or-wide`                         | lesson      |   410 | FOCUSED  | portrait or backdrop    | OPEN      | OPEN     | NOT RUN | -                                     |          0 |
 | `investigation:design-the-schedule`                  | lesson      |   355 | STRONG   | setup scenario          | OPEN      | OPEN     | NOT RUN | -                                     |          0 |
@@ -110,7 +110,7 @@ Scene class of the lessons: portrait or backdrop 94, setup scenario 26, engine-i
 | `investigation:pop-variable`                         | observatory |   416 | STRONG   | -                       | OPEN      | OPEN     | NOT RUN | -                                     |          0 |
 | `investigation:populations-i-and-ii`                 | lesson      |   381 | REDESIGN | portrait or backdrop    | OPEN      | OPEN     | NOT RUN | -                                     |          0 |
 | `investigation:power-law-gravity`                    | lesson      |   347 | STRONG   | setup scenario          | OPEN      | OPEN     | NOT RUN | -                                     |          0 |
-| `investigation:propose-an-observation`               | lesson      |   410 | FOCUSED  | portrait or backdrop    | OPEN      | OPEN     | NOT RUN | -                                     |          0 |
+| `investigation:propose-an-observation`               | lesson      |   410 | FOCUSED  | portrait or backdrop    | OPEN      | OPEN     | NOT RUN | -                                     |          1 |
 | `investigation:radial-velocity`                      | lesson      |   354 | FOCUSED  | setup scenario          | OPEN      | OPEN     | NOT RUN | authentic leg E1 NOT RUN              |          1 |
 | `investigation:reading-the-hr-diagram`               | lesson      |   382 | REDESIGN | portrait or backdrop    | OPEN      | OPEN     | NOT RUN | -                                     |          0 |
 | `investigation:refitting-a-transit`                  | lesson      |   362 | FOCUSED  | setup scenario          | OPEN      | OPEN     | NOT RUN | -                                     |          0 |

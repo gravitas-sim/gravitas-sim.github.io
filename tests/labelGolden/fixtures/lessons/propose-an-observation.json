@@ -9,15 +9,15 @@
     ["steps.a-second-plan.fields.5.unit","mag"]
    ],
    "numbered": [
-    ["steps.propose-a-plan.fields.0.label","Facility: 1 LCO 0.35 m, 2 LCO 1.0 m, 3 Rubin 8.4 m"],
-    ["steps.a-second-plan.fields.0.label","Facility: 1 LCO 0.35 m, 2 LCO 1.0 m, 3 Rubin 8.4 m"]
+    ["steps.propose-a-plan.fields.0.label","Facility, counted from 1: 1 LCO 0.35 m, 2 LCO 1.0 m, 3 Rubin 8.4 m"],
+    ["steps.a-second-plan.fields.0.label","Facility, counted from 1: 1 LCO 0.35 m, 2 LCO 1.0 m, 3 Rubin 8.4 m"]
    ]
   },
   "es": {
    "units": [],
    "numbered": [
-    ["steps.propose-a-plan.fields.0.label","Instalación: 1 LCO 0,35 m, 2 LCO 1,0 m, 3 Rubin 8,4 m"],
-    ["steps.a-second-plan.fields.0.label","Instalación: 1 LCO 0,35 m, 2 LCO 1,0 m, 3 Rubin 8,4 m"]
+    ["steps.propose-a-plan.fields.0.label","Instalación, contada desde 1: 1 LCO 0,35 m, 2 LCO 1,0 m, 3 Rubin 8,4 m"],
+    ["steps.a-second-plan.fields.0.label","Instalación, contada desde 1: 1 LCO 0,35 m, 2 LCO 1,0 m, 3 Rubin 8,4 m"]
    ]
   }
  },

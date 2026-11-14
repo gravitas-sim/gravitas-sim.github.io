@@ -32,6 +32,7 @@ import {
   zoneLimits,
 } from './kernels/habitablezone/index.js';
 import { zoneAtAge } from './kernels/habitablezone/age.js';
+import { TidesError } from './kernels/tides/errors.js';
 
 registerMessages('en', EN_HABITABLEZONE);
 registerMessages('es', ES_HABITABLEZONE);
@@ -252,7 +253,11 @@ function lockingFor(trackId, ageYr, Q) {
     });
     return { trackId, ok: true, star: r.star, zone: r.zone, lock };
   } catch (e) {
-    if (!(e instanceof HabitableZoneError)) throw e;
+    // The locking radius is given with a band from a tenth to ten times the
+    // chosen Q, and the tidal model holds for Q of 5 and up: at Q = 10 and 30 a
+    // tenth of Q is outside it, and the readout says so (it threw before).
+    const outOfRange = e instanceof TidesError && e.code === 'q-range';
+    if (!(e instanceof HabitableZoneError) && !outOfRange) throw e;
     return { trackId, ok: false, refused: e };
   }
 }

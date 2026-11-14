@@ -72,6 +72,8 @@ export const ES_HABITABLEZONE = {
     'A esa edad la estrella ya no está en este modelo (ha salido de la etapa de secuencia principal que cubre), así que no hay nada que leer.',
   'hzL.k.refused.teff-domain':
     'A esa edad la estrella es más caliente o más fría de lo que cubre el ajuste de los límites (2600 a 7200 K), así que no se da ninguna zona.',
+  'hzL.k.refused.q-range':
+    'El radio de acoplamiento se da con una banda de la décima parte a diez veces este Q, y el modelo de mareas solo vale para Q de 5 o más, así que la décima parte de este Q queda fuera de rango y no se lee nada. Elige un Q mayor.',
   'hzL.mass.m020': '0,2 masas solares',
   'hzL.mass.m050': '0,5 masas solares',
   'hzL.mass.m100': '1 masa solar',
