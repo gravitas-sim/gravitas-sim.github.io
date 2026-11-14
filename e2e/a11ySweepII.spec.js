@@ -718,7 +718,7 @@ test.describe("the reader's Motion choice is set before any script runs", () => 
     await page.addInitScript(() => {
       Object.defineProperty(window, 'localStorage', {
         get() {
-          throw new DOMException('blocked', 'SecurityError');
+          throw new Error('storage blocked');
         },
       });
     });
