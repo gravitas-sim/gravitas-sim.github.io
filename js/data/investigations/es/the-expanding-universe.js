@@ -9,13 +9,13 @@ export default {
     'Mostrar que la pendiente cambia con la muestra de galaxias, y decir qué significa eso para un único número llamado constante de Hubble',
     'Decir por qué una recta deja de ser la forma correcta para las galaxias lejanas',
   ],
-  steps: [
-    {
+  steps: {
+    'a-line-through-the-origin': {
       title: 'Una recta por el origen',
       body: `En 1929 Edwin Hubble representó la velocidad a la que se alejan de nosotros 24 nebulosas frente a sus distancias, y los puntos caían cerca de una recta por el origen: una galaxia al doble de distancia va al doble de velocidad. La pendiente de esa recta, en kilómetros por segundo por cada megapársec, es la <strong>constante de Hubble</strong>, H<sub>0</sub>.
              \n\nEl instrumento empieza con la tabla del propio Hubble, <strong>auténtica</strong>, tal como se imprimió en su artículo. La recta cálida es la mejor recta por el origen, y la pálida deja que la recta no pase por el origen.`,
     },
-    {
+    'predict-the-slope': {
       title: 'Qué pendiente tiene',
       body: `Las medidas de hoy sitúan la constante de Hubble cerca de 70 km/s por megapársec. Las galaxias de Hubble llegan solo a 2 megapársecs según sus propias distancias, y la más rápida se aleja a 1.090 km/s. Todavía no cambies el instrumento.`,
       prompt: 'La pendiente del propio Hubble será&hellip;',
@@ -31,12 +31,12 @@ export default {
       because:
         'Será varias veces el valor de hoy, unas seis. Las velocidades se midieron bien; las distancias no, y una pendiente es velocidad dividida por distancia, así que distancias demasiado pequeñas dan una pendiente demasiado grande. El paso siguiente la lee.',
     },
-    {
+    'hubbles-slope': {
       title: 'La pendiente de Hubble',
       body: `Con las 24 nebulosas de Hubble elegidas, lee la <strong>pendiente por el origen</strong> y su error.`,
       fields: [{ label: 'Pendiente' }, { label: 'Su error' }],
     },
-    {
+    'does-it-need-the-origin': {
       title: '¿Tiene que pasar por cero?',
       body: `El instrumento también da la pendiente cuando la recta puede no pasar por el origen: 454 ± 75, frente a 424 ± 42 por él.`,
       prompt: '¿Qué dicen las dos pendientes?',
@@ -60,12 +60,12 @@ export default {
       because:
         'La diferencia, 30, es menor que cualquiera de los errores. Una recta por el origen es además lo que predice un universo en expansión: a distancia cero la recesión es cero. La recta más simple no pierde nada aquí.',
     },
-    {
+    'a-modern-sample': {
       title: 'Una muestra moderna',
       body: `Ahora elige las <strong>supernovas del Dark Energy Survey</strong> y llévalas hasta <strong>z ≤ 0,10</strong>. Son supernovas de tipo Ia, cada una con una distancia por su brillo y una velocidad por su corrimiento al rojo. Lee el <strong>número de objetos</strong> y la <strong>pendiente</strong>.`,
       fields: [{ label: 'Objetos en el ajuste' }, { label: 'Pendiente' }],
     },
-    {
+    'predict-further-out': {
       title: 'Más lejos',
       body: `La muestra se detiene en un corrimiento al rojo de 0,1. Las supernovas llegan hasta 0,5, donde la luz ha viajado unos cinco mil millones de años. Todavía no cambies el instrumento.`,
       prompt:
@@ -82,12 +82,12 @@ export default {
       because:
         'Baja. Las supernovas lejanas quedan por debajo de la recta que forman las cercanas, así que la mejor recta por el origen se inclina hacia abajo. El paso siguiente lee cuánto.',
     },
-    {
+    'further-out': {
       title: 'Hasta z = 0,5',
       body: `Lleva el intervalo a <strong>z ≤ 0,50</strong> y lee otra vez el número de objetos y la pendiente.`,
       fields: [{ label: 'Objetos en el ajuste' }, { label: 'Pendiente' }],
     },
-    {
+    'why-it-changes': {
       title: 'Por qué cambia la pendiente',
       body: `Una pendiente de 66 con la muestra cercana y de 59 con la lejana. Ambas muestras son de una misma clase de supernova, medidas del mismo modo.`,
       prompt: '¿Qué explicación encaja con lo que viste?',
@@ -111,10 +111,10 @@ export default {
       because:
         'La relación es una recta solo para corrimientos pequeños, donde la luz ha viajado poco tiempo. Más lejos la distancia depende de cómo cambió la tasa de expansión por el camino, y la recta se curva. La constante de Hubble es la pendiente a distancia cero, que un ajuste a toda la muestra no ve; las investigaciones siguientes preguntan qué dice la propia curvatura.',
     },
-    {
+    'what-you-worked-out': {
       title: 'Lo que has deducido',
       body: `Las 24 nebulosas de Hubble dan una pendiente de 424 ± 42 kilómetros por segundo por megapársec, seis veces el valor moderno, porque sus distancias eran demasiado pequeñas. Las supernovas modernas hasta z = 0,1 dan 66,33 ± 0,24 en una escala de distancias fijada por su publicación, y hasta z = 0,5 dan 59,35 ± 0,20: una recta por el origen solo es correcta cerca.
              \n\nNo se hace aquí: la propia escala de distancias, que viene de los peldaños de la escalera de distancias; los errores de las supernovas son solo estadísticos; y el ajuste no tiene en cuenta las velocidades peculiares de las propias supernovas, que importan solo para las más cercanas. La curvatura de la relación es el tema de <em>La forma de la expansión</em>.`,
     },
-  ],
+  },
 };

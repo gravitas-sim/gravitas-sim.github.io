@@ -331,7 +331,7 @@ describe.each([
   ['Sampling a Posterior', SAMPLING, SAMPLING_ES],
 ])('%s in both locales', (name, lesson, es) => {
   test('every step, option and field has Spanish, aligned by index', () => {
-    expect(es.steps).toHaveLength(lesson.steps.length);
+    expect(Object.keys(es.steps)).toHaveLength(lesson.steps.length);
     const merged = mergeTranslation(lesson, es);
     expect(merged.title).not.toBe(lesson.title);
     lesson.steps.forEach((s, i) => {

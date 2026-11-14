@@ -92,7 +92,7 @@ describe('a step with entities, on screen', () => {
 
   test('its Spanish does the same', async () => {
     const es = (await import(path.join(ES_DIR, 'twelve-nights.js'))).default;
-    const text = shown(es.steps[0].body);
+    const text = shown(Object.values(es.steps)[0].body);
     expect(text).toContain('HD\u00a0209458');
     expect(text.match(LEFTOVER)).toBeNull();
   });
@@ -189,7 +189,7 @@ describe('every lesson, English and Spanish', () => {
 
   test.each(LESSONS)('%s shows no entity in any step', (id, lesson) => {
     const found = [];
-    for (const [i, step] of (lesson.steps || []).entries()) {
+    for (const [i, step] of Object.entries(lesson.steps || {})) {
       for (const [at, text] of strings(step)) {
         const left = shown(text).match(LEFTOVER);
         if (left) found.push(`steps[${i}].${at}: ${left.join(' ')}`);

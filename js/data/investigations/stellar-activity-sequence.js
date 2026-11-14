@@ -786,12 +786,12 @@ export const HOW_FAST_DOES_THE_STAR_SPIN_ES = {
     'Leer el periodo de rotación de una estrella real en un periodograma, con su intervalo',
     'Decir que el Sol y otras estrellas giran más deprisa en el ecuador que cerca de los polos, y qué hace eso a un periodo leído de las manchas',
   ],
-  steps: [
-    {
+  steps: {
+    'a-spot-turns-with-the-star': {
       title: 'Una mancha gira con la estrella',
       body: 'Una estrella no es un disco uniforme. Las <strong>manchas estelares</strong> son zonas más frías y oscuras, como las manchas solares, y viajan por la superficie mientras la estrella gira. Cuando una mancha nos mira, la estrella es un poco más tenue; al pasar el limbo, la estrella se aviva otra vez; y el patrón se repite una vez por vuelta.\n\nEl panel hace girar una estrella modelo con una mancha oscura cada 4,00 días y dibuja su luz durante 16 días, con un poco de ruido. La línea es la estrella sin ruido; los puntos son lo que registraría un telescopio. Los datos son sintéticos y el panel lo dice.',
     },
-    {
+    'how-many-dips': {
       title: '¿Cuántos mínimos en una vuelta?',
       body: 'La estrella gira una vez en 4,00 días y lleva una mancha oscura, que nos mira en algún momento y queda oculta tras la estrella media vuelta después.',
       prompt: 'En 16 días la curva de luz mostrará&hellip;',
@@ -807,7 +807,7 @@ export const HOW_FAST_DOES_THE_STAR_SPIN_ES = {
       because:
         'Cuatro. La mancha atenúa la estrella cuando nos mira y no hace nada mientras está en la cara lejana, así que hay un mínimo por vuelta: 16 días son cuatro vueltas de 4,00 días. Incluso una mancha de pocos por ciento del disco atenúa la estrella unos pocos por ciento, lo que un telescopio espacial mide con facilidad.',
     },
-    {
+    'read-the-period': {
       title: 'Lee el periodo',
       body: 'El periodograma busca el periodo que mejor ajusta la luz. Lee el <strong>periodo hallado</strong> y la <strong>atenuación por las manchas</strong>, de pico a valle.',
       fields: [
@@ -815,7 +815,7 @@ export const HOW_FAST_DOES_THE_STAR_SPIN_ES = {
         { label: 'Atenuación por las manchas' },
       ],
     },
-    {
+    'two-spots': {
       title: 'Una segunda mancha, en la cara lejana',
       body: 'Activa <strong>Segunda mancha, en el lado opuesto</strong>: una mancha del mismo tamaño media vuelta más allá de la primera. La estrella sigue girando una vez en 4,00 días. El periodograma tiene ahora su pico en 2,00 días, y el panel anota 4,00 días como otro periodo posible.',
       prompt:
@@ -840,7 +840,7 @@ export const HOW_FAST_DOES_THE_STAR_SPIN_ES = {
         },
       ],
     },
-    {
+    'a-real-star': {
       title: 'Una estrella real: AU Microscopii',
       body: 'AU Microscopii es una enana roja joven, a 32 años luz, y el telescopio espacial TESS la observó durante 27 días. Este es su periodograma. Lee el <strong>periodo de rotación</strong> y el <strong>otro periodo que podría ser</strong>, en días.',
       fields: [
@@ -848,7 +848,7 @@ export const HOW_FAST_DOES_THE_STAR_SPIN_ES = {
         { label: 'Otro periodo que podría ser' },
       ],
     },
-    {
+    'the-sun-turns-unevenly': {
       title: 'El Sol, y las estrellas como él, giran de forma desigual',
       body: 'El Sol no es una rueda sólida. Sus manchas cerca del ecuador dan la vuelta en unos 25 días y las que están cerca de los 60&deg; de latitud tardan unos 30 (mira <em>El Sol que gira</em>). El panel puede hacer lo mismo con la estrella modelo: pon la mancha a <strong>60&deg;</strong> y la rotación diferencial en <strong>0,20</strong>, y lee el periodo de la latitud de la mancha junto al del ecuador.',
       fields: [
@@ -856,16 +856,16 @@ export const HOW_FAST_DOES_THE_STAR_SPIN_ES = {
         { label: 'Periodo de la latitud de la mancha' },
       ],
     },
-    {
+    'why-no-age': {
       title: 'Lo que el periodo no da',
       body: 'Una estrella joven gira deprisa y se frena al envejecer, así que se han usado un periodo de giro y un color para estimar la edad de una estrella, un método llamado <strong>girocronología</strong>. Esta investigación se detiene en el periodo, a propósito. Las relaciones publicadas valen solo para las estrellas y edades con que se calibraron, tienen una dispersión grande, y dos de las más conocidas discrepan en una estrella más de lo que dicen sus intervalos. Gravitas comprobó con qué frecuencia se cumplía el intervalo que daría en una muestra sintética, y la comprobación quedó por debajo del listón que se había fijado de antemano; por eso no da una edad.\n\nEl periodo, su intervalo y el periodo que podría ser es lo que da la curva de luz. Los niveles más profundos leen una segunda estrella, preguntan por qué es ancho el intervalo y miran lo que el modelo deja fuera.',
     },
-  ],
+  },
 };
 
 export const HOW_FAST_DOES_THE_STAR_SPIN_DEEPER_ES = {
-  steps: [
-    {
+  steps: {
+    'a-second-star': {
       title: 'Una segunda estrella: EK Draconis',
       body: 'EK Draconis es una estrella joven parecida al Sol, observada durante 27 días por TESS. Lee su <strong>periodo de rotación</strong> y los dos extremos de su <strong>intervalo del 95 por ciento</strong>.',
       fields: [
@@ -874,7 +874,7 @@ export const HOW_FAST_DOES_THE_STAR_SPIN_DEEPER_ES = {
         { label: 'Extremo superior del intervalo' },
       ],
     },
-    {
+    'why-the-interval-is-wider': {
       title: 'Por qué el intervalo es ancho',
       body: 'El pico de un periodograma tiene una anchura que fija cuántas vueltas contienen los datos, y el intervalo que da el panel es más ancho que eso. EK Draconis se ensancha por un factor de 6,2 y AU Microscopii por 2,9.',
       prompt: '¿Para qué sirve el ensanchamiento?',
@@ -898,7 +898,7 @@ export const HOW_FAST_DOES_THE_STAR_SPIN_DEEPER_ES = {
         },
       ],
     },
-    {
+    'fold-it-twice': {
       title: 'Pliégalo dos veces',
       body: 'Plegar una curva de luz a un periodo es poner cada ciclo encima del anterior, por fase. El panel puede plegar AU Microscopii a su periodo de 4,86 días y al doble, 9,71 días. Prueba las dos.',
       prompt: '¿Qué muestra el pliegue de 9,71 días?',
@@ -919,7 +919,7 @@ export const HOW_FAST_DOES_THE_STAR_SPIN_DEEPER_ES = {
         },
       ],
     },
-    {
+    'a-baseline-too-short': {
       title: 'Un alias que los datos no pueden probar',
       body: 'Vuelve a la estrella modelo con una mancha. Sus 16 días contienen cuatro vueltas de 4,00 días. El panel anota 8,00 días como otro periodo posible, y dice que no se puede probar.',
       prompt: '¿Por qué no pueden probar los datos 8,00 días?',
@@ -935,7 +935,7 @@ export const HOW_FAST_DOES_THE_STAR_SPIN_DEEPER_ES = {
       because:
         'Para decir si los mínimos pares e impares difieren hay que ver más de un ciclo del periodo más largo, y 16 días son un poco menos de dos ciclos de 8,00. El panel marca entonces el periodo más largo como no comprobable en vez de decir que está excluido o permitido. Un sector más largo, o la misma estrella observada otra vez, lo probaría.',
     },
-    {
+    'the-equator-from-a-spot': {
       title: 'El ecuador a partir de una mancha',
       body: 'La estrella modelo a 60&deg; con rotación diferencial 0,20 muestra un periodo de 4,71 días en su luz.',
       prompt: '¿Puedes saber su periodo ecuatorial solo con la curva de luz?',
@@ -956,7 +956,7 @@ export const HOW_FAST_DOES_THE_STAR_SPIN_DEEPER_ES = {
         },
       ],
     },
-  ],
+  },
 };
 
 export const FLARES_ES = {
@@ -969,12 +969,12 @@ export const FLARES_ES = {
     'Contar las erupciones de una estrella real y decir con qué frecuencia ocurren',
     'Decir qué significa la pendiente de la distribución de erupciones por tamaño, y por qué depende de dónde empieza el ajuste',
   ],
-  steps: [
-    {
+  steps: {
+    'a-flare-is-a-spike': {
       title: 'Una erupción es un pico en la luz',
       body: 'Una <strong>erupción</strong> es una liberación repentina de energía magnética en la atmósfera de una estrella, el mismo tipo de suceso que una erupción solar. La estrella se aviva en minutos y se apaga en más tiempo. Las enanas rojas tienen erupciones a menudo, y una erupción puede sumar más de una décima de la luz de la estrella.\n\nEl panel muestra un día de la luz de AU Microscopii, una enana roja joven, del telescopio espacial TESS, con una lectura cada dos minutos. La línea azul es el nivel en calma de la estrella, los puntos son la luz, y cada anillo marca una erupción hallada por una regla: puntos al menos tres desviaciones típicas por encima del nivel en calma, tres o más seguidos.',
     },
-    {
+    'rise-or-fall': {
       title: '¿Más rápida la subida o la bajada?',
       body: 'Una erupción se aviva y luego se apaga hasta el nivel en calma de la estrella.',
       prompt: '¿Qué parte de una erupción es la más rápida?',
@@ -990,7 +990,7 @@ export const FLARES_ES = {
       because:
         'La más rápida es la subida: la luz sube en minutos y luego baja en más tiempo, con una cola larga. Las erupciones de distinto tamaño comparten una forma común, una subida rápida y una bajada en dos partes, y por eso se puede ajustar una forma estándar para hallar el tamaño de una erupción.',
     },
-    {
+    'read-a-flare': {
       title: 'Lee una erupción',
       body: 'El panel muestra de cerca la segunda mayor erupción de AU Microscopii. Lee su <strong>duración equivalente</strong> en segundos, su <strong>pico sobre el nivel en calma</strong> en por ciento y su <strong>anchura a la mitad del pico</strong> en minutos.',
       fields: [
@@ -999,7 +999,7 @@ export const FLARES_ES = {
         { label: 'Anchura a la mitad del pico' },
       ],
     },
-    {
+    'what-is-an-equivalent-duration': {
       title: 'Qué es una duración equivalente',
       body: 'La erupción que leíste tiene una duración equivalente de unos 118 segundos.',
       prompt: '¿Qué significa ese número?',
@@ -1023,7 +1023,7 @@ export const FLARES_ES = {
         },
       ],
     },
-    {
+    'count-the-flares': {
       title: 'Cuenta las erupciones',
       body: 'El segundo panel cuenta las erupciones de AU Microscopii por tamaño. Lee el <strong>número de erupciones halladas</strong> y calcula cuántas hay <strong>al día</strong> de media.',
       fields: [
@@ -1031,16 +1031,16 @@ export const FLARES_ES = {
         { label: 'Erupciones al día' },
       ],
     },
-    {
+    'a-time-not-an-energy': {
       title: 'Un tiempo, no una energía',
       body: 'Todos los números de aquí son en la banda del telescopio, que cubre más o menos de 600 a 1000 nanómetros. La energía de una erupción exigiría la luminosidad de la estrella en esa banda y una corrección por el resto del espectro, que depende de cuán caliente sea la erupción. Gravitas comprobó una corrección de ese tipo y vio que depende demasiado de la temperatura que se suponga, así que no da energía de erupción: la medida es la duración equivalente.\n\nLos niveles más profundos ajustan cómo se distribuyen las erupciones por tamaño y preguntan qué puede y qué no puede decir el ajuste.',
     },
-  ],
+  },
 };
 
 export const FLARES_DEEPER_ES = {
-  steps: [
-    {
+  steps: {
+    'the-slope': {
       title: 'La pendiente',
       body: 'Por encima de un suelo, los recuentos de erupciones de al menos cada tamaño caen en una recta en estos ejes logarítmicos: una <strong>ley de potencias</strong> de pendiente α. El panel la ajusta por encima del tamaño que el telescopio halla por completo. Lee α, su intervalo del 95 por ciento y el número de erupciones por encima del suelo.',
       fields: [
@@ -1050,7 +1050,7 @@ export const FLARES_DEEPER_ES = {
         { label: 'Erupciones sobre el suelo' },
       ],
     },
-    {
+    'move-the-floor': {
       title: 'Mueve el suelo',
       body: 'Pon <strong>Suelo del ajuste</strong> en <em>ninguno</em>. La pendiente baja de 1,92 a 1,27 y la recta ya no sigue los puntos.',
       prompt:
@@ -1067,7 +1067,7 @@ export const FLARES_DEEPER_ES = {
       because:
         'Las erupciones débiles y breves se hallan solo en parte o no se hallan, así que los recuentos en tamaños pequeños caen por debajo de la ley de potencias y la recta ajustada se aplana. El límite de completitud es el tamaño por encima del cual la regla halla una erupción por completo en la prueba de inyección del panel, y ahí empieza el ajuste. Más puntos no son mejores puntos.',
     },
-    {
+    'a-known-truth': {
       title: 'Un ajuste con una verdad conocida',
       body: 'Cambia la fuente a la estrella sintética. Sus erupciones se sortearon de una ley de potencias de pendiente 1,80, y se aplicaron la misma regla y el mismo ajuste a su curva de luz: el ajuste devuelve 1,74, con un intervalo del 95 por ciento de 1,55 a 1,96.',
       prompt: '¿Qué dice eso del ajuste?',
@@ -1088,7 +1088,7 @@ export const FLARES_DEEPER_ES = {
         },
       ],
     },
-    {
+    'the-floor-you-pick': {
       title: 'Un suelo elegido tras mirar',
       body: 'Pon <strong>Suelo del ajuste</strong> en <em>mejor ajuste</em> para AU Microscopii: el suelo que hace que la recta siga mejor los puntos es 6,1 segundos, y el ajuste da 1,98 (1,71 a 2,29) con 44 erupciones.',
       prompt: '¿Es una medida mejor que 1,92 con el límite de completitud?',
@@ -1105,7 +1105,7 @@ export const FLARES_DEEPER_ES = {
         'El límite de completitud sale de una prueba de inyección con otros datos y no depende de esta curva de luz; el suelo que mejor ajusta se elige a partir de ella. Una elección hecha mirando el resultado no se cuenta en el intervalo, que por eso subestima la incertidumbre. 1,98 queda dentro del primer intervalo (1,62 a 2,28), así que los dos no discrepan.',
       misconceptions: [{ say: '1,98 queda dentro de 1,62 a 2,28.' }],
     },
-    {
+    'how-many-flares': {
       title: 'Cuántas erupciones para una pendiente',
       body: 'El intervalo del 95 por ciento de la pendiente con 29 erupciones va de 1,62 a 2,28, unos 0,67 de ancho.',
       prompt:
@@ -1122,7 +1122,7 @@ export const FLARES_DEEPER_ES = {
       because:
         'El error de una pendiente ajustada por máxima verosimilitud va como (α − 1) dividido por la raíz cuadrada del número de erupciones, así que reducirlo a la mitad exige cuatro veces las erupciones. Para AU Microscopii son unas cuatro veces 27 días de buenos datos, o unos cuantos sectores más.',
     },
-  ],
+  },
 };
 
 const CONTENT = {

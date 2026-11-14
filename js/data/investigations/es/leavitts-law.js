@@ -9,13 +9,13 @@ export default {
     'Decir por qué se usa una magnitud de Wesenheit y cuánto polvo deja todavía',
     'Convertir la pendiente en una razón de brillos entre una cefeida de periodo largo y una de periodo corto',
   ],
-  steps: [
-    {
+  steps: {
+    'brighter-and-slower': {
       title: 'Más brillante y más lenta',
       body: `En 1912 Henrietta Leavitt, clasificando placas fotográficas de la Pequeña Nube de Magallanes, notó que las variables cefeidas de periodo más largo eran las más brillantes. Todas las estrellas de esa nube están casi a la misma distancia, así que una diferencia de brillo aparente es una diferencia de luminosidad verdadera: el periodo de una cefeida dice lo que vale.
              \n\nEl instrumento guarda la misma relación para la Gran Nube de Magallanes, medida con el telescopio espacial Hubble: 339 cefeidas, cada una un punto de magnitud de Wesenheit (brillo con el efecto del polvo casi eliminado) frente al periodo en un eje logarítmico. Lo más brillante está arriba. La recta es un ajuste por mínimos cuadrados. Son mediciones <strong>auténticas</strong>; la fuente de la tabla está en la primera fila del instrumento.`,
     },
-    {
+    'predict-the-trend': {
       title: 'Hacia dónde se inclina',
       body: `El gráfico tiene el periodo abajo y la magnitud a un lado, con las estrellas más brillantes más arriba. Todavía no cambies el instrumento.`,
       prompt:
@@ -32,12 +32,12 @@ export default {
       because:
         'Más arriba, más brillante: la recta sube hacia la derecha en este gráfico. Las magnitudes van al revés, así que una estrella más brillante tiene una magnitud menor, y la pendiente ajustada es negativa. El paso siguiente la lee.',
     },
-    {
+    'the-calibration': {
       title: 'La calibración',
       body: `Lee la <strong>pendiente</strong> del ajuste en magnitudes por dex (un dex es un factor diez en el periodo) y la <strong>magnitud que da con un periodo de 10 días</strong>, el punto cero de la relación.`,
       fields: [{ label: 'Pendiente' }, { label: 'Magnitud a los 10 días' }],
     },
-    {
+    'how-tight': {
       title: 'Qué tan ceñida es la relación',
       body: `Lee la <strong>dispersión alrededor de la relación</strong>, la separación de las estrellas por encima y por debajo de la recta, y el <strong>polvo que queda en una magnitud de Wesenheit</strong> por cada magnitud de atenuación visual por polvo (A<sub>V</sub>).`,
       fields: [
@@ -45,7 +45,7 @@ export default {
         { label: 'Polvo que queda por magnitud de A_V' },
       ],
     },
-    {
+    'why-wesenheit': {
       title: 'Por qué una magnitud de Wesenheit',
       body: `El brillo medido de una cefeida está atenuado por el polvo que hay entre ella y nosotros, en una cantidad que cambia de una estrella a otra. La magnitud de Wesenheit combina el brillo infrarrojo con la diferencia de dos colores visibles, en la proporción en que el polvo los atenúa.`,
       prompt: '¿Qué hace la combinación?',
@@ -69,7 +69,7 @@ export default {
       because:
         'El polvo atenúa los colores en una razón conocida, así que una mezcla concreta de las magnitudes (la de Wesenheit) no lo ve: lo que queda son 0,04 magnitudes por magnitud de atenuación en V, con la ley del núcleo de radiación y un R_V estándar de 3,3. Otra ley de polvo u otro R_V cambiaría esa cifra, y ese es el supuesto declarado.',
     },
-    {
+    'the-tenfold-step': {
       title: 'Un paso de diez en el periodo',
       body: `La pendiente ajustada es −3,29 magnitudes por dex. Dos cefeidas tienen periodos de 10 y 100 días.`,
       prompt: '¿Cuántas magnitudes más brillante es la cefeida de 100 días?',
@@ -88,7 +88,7 @@ export default {
       because:
         'Un dex son 3,29 magnitudes, y cinco magnitudes son un factor 100 en brillo, así que 3,29 magnitudes son un factor 10^(0,4 × 3,29) = 21. Una cefeida diez veces más lenta es veintiuna veces más luminosa.',
     },
-    {
+    'why-one-galaxy': {
       title: 'Por qué ajustar en una sola galaxia',
       body: `La relación se ajusta con estrellas de la Gran Nube de Magallanes, no con una mezcla de galaxias.`,
       prompt: '¿Por qué?',
@@ -109,10 +109,10 @@ export default {
       because:
         'En una galaxia la distancia es un único número, así que las magnitudes de las estrellas difieren solo por la luminosidad, y el ajuste lee la luminosidad a partir del periodo. Para convertirlo en una escala absoluta hay que conocer la distancia de la nube por otro camino, que viene de binarias eclipsantes y entra en la investigación siguiente como un número declarado.',
     },
-    {
+    'what-you-worked-out': {
       title: 'Lo que has deducido',
       body: `Las cefeidas de la Gran Nube de Magallanes están sobre una recta: la magnitud de Wesenheit baja 3,29 magnitudes por cada factor diez en el periodo, con un punto cero de 12,60 a los 10 días y una dispersión de 0,09 magnitudes, así que una cefeida diez veces más lenta es veintiuna veces más luminosa. Una magnitud de Wesenheit cancela casi toda la atenuación por polvo. Ajustar en una sola galaxia funciona porque todas sus estrellas están a una misma distancia.
              \n\nLa recta es una regla cuya longitud solo se conoce salvo la distancia de la nube. La investigación siguiente la pone frente a cefeidas de otras dos galaxias y mide a qué distancia están, con un presupuesto de cada error. Sin corregir aquí: la metalicidad, que cambia algo la relación, y el apiñamiento en las imágenes de las galaxias anfitrionas.`,
     },
-  ],
+  },
 };

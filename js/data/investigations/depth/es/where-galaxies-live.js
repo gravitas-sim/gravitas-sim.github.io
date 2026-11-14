@@ -1,7 +1,6 @@
-// Dónde viven las galaxias, más a fondo: las palabras en español, paso a paso con ../where-galaxies-live.js.
 export default {
-  steps: [
-    {
+  steps: {
+    'the-density-ratio': {
       title: 'La razón de las densidades',
       body: `Divide la densidad de la capa cercana entre la de la lejana, tal como se leyeron: 15.800 y 4.860.`,
       prompt: 'La densidad cercana sobre la lejana',
@@ -15,7 +14,7 @@ export default {
         off: 'cercana ÷ lejana.',
       },
     },
-    {
+    'the-volume-of-a-shell': {
       title: 'El volumen de una capa',
       body: `La franja cubre un ángulo sólido de 120° × 0,5°, que son 0,01828 estereorradianes. El volumen entre dos distancias r<sub>1</sub> y r<sub>2</sub> es (ángulo sólido ÷ 3)(r<sub>2</sub>³ − r<sub>1</sub>³). Halla el volumen de la capa de 100 a 125 megapársecs.`,
       prompt: 'El volumen de la capa, en megapársecs cúbicos',
@@ -30,7 +29,7 @@ export default {
         off: '(0,01828 ÷ 3)(125³ − 100³).',
       },
     },
-    {
+    'how-much-brighter': {
       title: 'Cuánto más brillante',
       body: `Un límite de flujo significa que una galaxia solo puede verse hasta una distancia que crece como la raíz cuadrada de su luminosidad. Una galaxia que apenas pasa el corte a 100 megapársecs queda fuera de alcance a 300 salvo que sea más brillante. ¿Cuántas veces más luminosa debe ser?`,
       prompt:
@@ -47,7 +46,7 @@ export default {
         off: '(300 ÷ 100)².',
       },
     },
-    {
+    'that-in-magnitudes': {
       title: 'Eso en magnitudes',
       body: `Un factor de luminosidad L son 2,5 log<sub>10</sub>(L) magnitudes. Pasa a magnitudes el factor del paso anterior.`,
       prompt: 'El mismo factor, en magnitudes',
@@ -61,5 +60,5 @@ export default {
         off: '2,5 × log₁₀(9).',
       },
     },
-  ],
+  },
 };

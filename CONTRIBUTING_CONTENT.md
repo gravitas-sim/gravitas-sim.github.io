@@ -70,6 +70,30 @@ and table is described in words; the text is plain at the level it states.
 and the sources you cite. A claim Gravitas's model does not support is removed
 or said to be outside it.
 
+## Adding, moving or removing a step in a shipped lesson
+
+A lesson's Spanish is matched to its English by step id (`sid`), not by
+position. In `js/data/investigations/es/<id>.js` (and `depth/es/<id>.js` for
+deeper steps) `steps` is an object with one entry for each step, filed under
+that step's sid:
+
+```js
+steps: {
+  'eight-minutes-of-arc': { title: '...', body: '...' },
+}
+```
+
+- **Insert** a step: add one entry under the new step's sid, with the words and
+  nothing else (no sid inside it, no numbers, no machinery). No other Spanish
+  entry moves, and nothing is renumbered. Until the entry exists the step shows
+  its English, and `npm run author:check` fails (`i18n/steps`).
+- **Move** a step: change the English only.
+- **Remove** a step: delete its entry; `author:check` names an entry whose sid
+  the lesson no longer has, and the merge drops it without a word.
+
+Arrays that carry no sid (options, objectives, hints, rows) still line up by
+index with the English. Step ids themselves never change in a shipped lesson.
+
 ## The review checklist
 
 `sdk review` runs the first six and prints the rest. The same function runs in

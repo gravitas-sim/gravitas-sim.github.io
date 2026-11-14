@@ -275,9 +275,9 @@ describe('the Spanish and the panels', () => {
   ];
   test('every shadow has the step structure of its English', () => {
     for (const [en, es] of pairs) {
-      expect(es.steps.length).toBe(en.steps.length);
+      expect(Object.keys(es.steps).length).toBe(en.steps.length);
       en.steps.forEach((st, i) => {
-        const sh = es.steps[i];
+        const sh = es.steps[st.sid];
         expect(Boolean(sh.options)).toBe(Boolean(st.options));
         if (st.options) expect(sh.options.length).toBe(st.options.length);
         if (st.fields) expect(sh.fields.length).toBe(st.fields.length);

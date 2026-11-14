@@ -1,7 +1,6 @@
-// Líneas y movimiento, más a fondo: las palabras en español, paso a paso con ../lines-and-motion.js.
 export default {
-  steps: [
-    {
+  steps: {
+    'fast-galaxy': {
       title: 'Cuando el corrimiento no es pequeño',
       body: 'v = c × Δλ ÷ λ<sub>reposo</sub> solo vale muy por debajo de la velocidad de la luz. En general, el corrimiento z = Δλ ÷ λ<sub>reposo</sub> y la velocidad β = v ÷ c se relacionan por 1 + z = √((1 + β) ÷ (1 − β)). Todas las líneas de una galaxia están corridas z = 0,1, una décima de su longitud de onda. (A este tamaño la mayor parte del corrimiento es el estiramiento del espacio, no una velocidad; el número que se pide es la velocidad que sería si fuese un corrimiento Doppler.)',
       prompt: 'La velocidad según la fórmula relativista',
@@ -19,7 +18,7 @@ export default {
         off: 'β = ((1 + z)² − 1) ÷ ((1 + z)² + 1), y luego multiplica por c.',
       },
     },
-    {
+    'two-lines-one-star': {
       title: 'Dos líneas, una estrella',
       body: 'La estrella sintética 1 tiene H-alfa y H-beta, dos líneas de una misma estrella, cada una una medición aparte de la misma velocidad. Lee las dos velocidades y sus incertidumbres en el visor y combínalas ponderando cada una por 1 ÷ σ², el inverso del cuadrado de su incertidumbre σ.',
       prompt: 'La velocidad media ponderada de la estrella sintética 1',
@@ -35,7 +34,7 @@ export default {
         off: 'Media = Σ(v ÷ σ²) ÷ Σ(1 ÷ σ²), sobre las dos líneas.',
       },
     },
-    {
+    'how-wide-is-wide': {
       title: 'Cuánta luz quita una línea',
       body: 'El <strong>ancho equivalente</strong> de una línea es el ancho de un rectángulo tan alto como el continuo que tiene la misma área que la línea: la luz total que quita la línea, medida en Å. No depende de la forma de la línea. Acércate a <strong>H-beta</strong> en la estrella A y léelo en la lista.',
       prompt: 'El ancho equivalente de H-beta en la estrella A',
@@ -47,7 +46,7 @@ export default {
         off: 'Lee la fila «Ancho equivalente» con la estrella A y H-beta elegidas.',
       },
     },
-    {
+    'a-real-star-two-lines': {
       title: 'La velocidad de una estrella real',
       body: 'La estrella A es real, observada por SDSS. Acércate a sus líneas <strong>H-alfa</strong> y <strong>H-beta</strong> y lee cada velocidad y su incertidumbre. Combina las dos como antes, ponderando por 1 ÷ σ².',
       prompt: 'La velocidad media ponderada de la estrella A',
@@ -62,7 +61,7 @@ export default {
         off: 'Media = Σ(v ÷ σ²) ÷ Σ(1 ÷ σ²), sobre H-alfa y H-beta.',
       },
     },
-    {
+    'against-the-catalog': {
       title: 'Frente al catálogo',
       body: 'La canalización de SDSS da a esta estrella z = −0,00081, es decir −243 ± 1&nbsp;km/s; el visor lo lista bajo las líneas. La canalización ajusta una plantilla a todo el espectro, no a una línea. (Todavía no existe un instrumento de comparación que superponga tu medición al catálogo; el valor del catálogo es el que tabula el paquete de datos.)',
       prompt: '¿Cómo se compara tu −225 ± 10 km/s?',
@@ -78,7 +77,7 @@ export default {
       because:
         'La diferencia es de unos 18 km/s, menos de dos veces la incertidumbre de 10 km/s, así que concuerdan. El valor del catálogo es mucho más preciso porque usa miles de píxeles y no dos líneas; una medición con mayor incertidumbre no está mal, solo es menos nítida.',
     },
-    {
+    'whose-frame': {
       title: '¿La velocidad de quién?',
       body: 'El telescopio va sobre la Tierra, que gira alrededor del Sol a unos 30&nbsp;km/s. Las longitudes de onda de los espectros de SDSS se han corregido al sistema del Sol, así que son <em>heliocéntricas</em>.',
       prompt: '¿Por qué hace falta esa corrección?',
@@ -94,5 +93,5 @@ export default {
       because:
         'La velocidad orbital de la Tierra es de unos 30 km/s, hacia una estrella en una época del año y alejándose en la opuesta, así que una velocidad sin corregir oscila hasta 30 km/s a lo largo del año. El movimiento del Sol alrededor de la galaxia es mucho mayor (cientos de km/s) y una corrección heliocéntrica no lo quita.',
     },
-  ],
+  },
 };

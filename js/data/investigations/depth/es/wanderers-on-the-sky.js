@@ -1,7 +1,6 @@
-// Errantes en el cielo, más a fondo: palabras en español, paso a paso con ../wanderers-on-the-sky.js.
 export default {
-  steps: [
-    {
+  steps: {
+    'synodic-period': {
       title: 'Cada cuánto vuelve el lazo',
       body: 'La Tierra gana a Marte una vez por <em>periodo sinódico</em> S, con 1/S = 1/P<sub>Tierra</sub> − 1/P<sub>Marte</sub>. Los periodos orbitales son 365,256 y 686,98 días.',
       prompt: 'El periodo sinódico de Marte',
@@ -15,7 +14,7 @@ export default {
         off: 'S = 1 ÷ (1/365,256 − 1/686,98).',
       },
     },
-    {
+    'westward-rate': {
       title: 'La velocidad del lazo',
       body: 'En la oposición la Tierra (29,78&nbsp;km/s) adelanta a Marte (24,07&nbsp;km/s) en una línea que pasa por el Sol, a 0,524&nbsp;ua (7,84×10⁷&nbsp;km) en órbitas circulares. La línea de visión gira a la velocidad relativa dividida entre la distancia.',
       prompt:
@@ -33,5 +32,5 @@ export default {
         off: 'Tasa = (v Tierra − v Marte) ÷ distancia, en rad por segundo; ×86.400 s y ×57,30 para grados por día.',
       },
     },
-  ],
+  },
 };

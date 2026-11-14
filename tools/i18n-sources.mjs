@@ -41,6 +41,7 @@ import * as parse5 from 'parse5';
 import { completeCatalogs, registeredLocales } from './i18n-catalog.mjs';
 import { assembledIndexHtml } from './index-fragments.mjs';
 import { digest } from './i18n-ledger.mjs';
+import { alignShadow, isStepList } from '../js/data/investigations/i18n.js';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const LESSONS = path.join(ROOT, 'js', 'data', 'investigations');
@@ -106,7 +107,9 @@ export async function catalogRows() {
  * The strings of a translation shadow laid against the English it shadows.
  *
  * The walk is mergeTranslation's (js/data/investigations/i18n.js): a shadow can
- * only reach keys the English has, arrays line up by index, `null` is "not
+ * only reach keys the English has, a lesson's steps are matched by sid (and a
+ * row's key names the step by it: `steps[<sid>].title`, so it does not change
+ * when a step moves) and other arrays line up by index, `null` is "not
  * translated", functions and the structural keys are machinery.
  *
  * @param {*} base - The English, or a part of it
@@ -135,9 +138,20 @@ export function shadowPairs(
     return;
   }
   if (Array.isArray(base)) {
-    if (!Array.isArray(overlay)) return;
+    const aligned = alignShadow(base, overlay);
+    if (!aligned) return;
+    // A step is named by its sid, so a row does not move when a step does.
+    const named = isStepList(base);
     base.forEach((b, i) =>
-      shadowPairs(b, overlay[i], skip, out, prefix, `${at}[${i}]`, name)
+      shadowPairs(
+        b,
+        aligned[i],
+        skip,
+        out,
+        prefix,
+        `${at}[${named ? b.sid : i}]`,
+        name
+      )
     );
     return;
   }

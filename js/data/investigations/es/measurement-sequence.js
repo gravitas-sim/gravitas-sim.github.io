@@ -11,12 +11,12 @@ export const WHAT_IS_A_MEASUREMENT = {
     'Predecir, antes de mostrar la verdad, cuán cerca de ella quedará la media de las marcas',
     'Decir qué incluye el error estándar y qué deja fuera',
   ],
-  steps: [
-    {
+  steps: {
+    'a-star-on-a-frame': {
       title: 'Una estrella, marcada una y otra vez',
       body: 'Una medición de dónde está una estrella empieza con una marca sobre una imagen. El cuadro de abajo es <strong>sintético</strong>: se puso una estrella en una posición que elegimos, se la desenfocó como la desenfoca un telescopio y se le dio un poco de ruido de cielo. Cada cruz es una marca, el lugar donde una persona cuidadosa pondría el centro de la mancha borrosa.\n\nComo hicimos el cuadro, sabemos dónde está realmente la estrella. Un cuadro real nunca lo dice. Por ahora la verdad está oculta. Se muestran cinco marcas, cada una con su posición en píxeles (x, y) en la lista bajo la imagen, y el anillo es su media.',
     },
-    {
+    'predict-the-marks': {
       title: '¿Coincidirán las marcas?',
       body: 'Se marca cinco veces la misma estrella, cada vez con el mayor cuidado posible. Todavía no cambies el instrumento.',
       prompt: 'Las cinco posiciones serán&hellip;',
@@ -30,7 +30,7 @@ export const WHAT_IS_A_MEASUREMENT = {
       because:
         'Algo dispersas. La estrella es una mancha de varios píxeles de ancho, así que incluso una marca cuidadosa cae un poco a un lado u otro, y ninguna marca es la verdad. La dispersión es una propiedad del marcado. El paso siguiente la mide.',
     },
-    {
+    'read-the-spread': {
       title: 'La media y la dispersión',
       body: 'Con <strong>5</strong> marcas, lee la posición x <strong>media</strong> y la <strong>dispersión</strong> de las marcas en x, su desviación estándar. La media es la mejor posición única que dan las marcas; la dispersión dice cuánto se aparta típicamente una marca de ella.',
       fields: [
@@ -38,7 +38,7 @@ export const WHAT_IS_A_MEASUREMENT = {
         { label: 'Dispersión de x (desviación estándar)' },
       ],
     },
-    {
+    'the-standard-error': {
       title: '¿Cuán bien se conoce la media?',
       body: 'La media de cinco marcas se conoce mejor que cualquiera de ellas. El <strong>error estándar</strong> dice cuánto mejor: es la dispersión dividida entre la raíz cuadrada del número de marcas. Léelo para las marcas en x y en y.',
       fields: [
@@ -46,7 +46,7 @@ export const WHAT_IS_A_MEASUREMENT = {
         { label: 'Error estándar de y' },
       ],
     },
-    {
+    'predict-more-marks': {
       title: '¿Qué compran más marcas?',
       body: 'Vas a marcar la estrella veinte veces en lugar de cinco, que son cuatro veces más marcas.',
       prompt: 'El error estándar de la media&hellip;',
@@ -62,7 +62,7 @@ export const WHAT_IS_A_MEASUREMENT = {
       because:
         'Más o menos la mitad. Cuatro veces las marcas son un factor de dos en la raíz cuadrada, así que el error estándar baja a la mitad aproximadamente. El paso siguiente lo mide.',
     },
-    {
+    'twenty-marks': {
       title: 'Veinte marcas',
       body: 'Pon <strong>Cuántas marcas</strong> en 20. Lee otra vez el error estándar de x y calcula cuántas veces menor es que el error estándar con cinco marcas (0,36&nbsp;px).',
       fields: [
@@ -70,7 +70,7 @@ export const WHAT_IS_A_MEASUREMENT = {
         { label: 'Cuántas veces menor que con 5 marcas' },
       ],
     },
-    {
+    'predict-the-truth': {
       title: '¿Dónde está realmente la estrella?',
       body: 'De vuelta a <strong>5</strong> marcas. La posición verdadera de la estrella está oculta. Tu media es una buena estimación de ella, pero solo una estimación.',
       prompt: 'Cuando se muestre la verdad, estará&hellip;',
@@ -84,7 +84,7 @@ export const WHAT_IS_A_MEASUREMENT = {
       because:
         'Cerca, pero no exactamente sobre ella. El error estándar es cuánto se aparta típicamente la media de la verdad, así que la verdad debería caer a menos de uno o dos de ellos. El paso siguiente lo muestra.',
     },
-    {
+    'reveal-the-truth': {
       title: 'La posición verdadera',
       body: 'El anillo discontinuo marca ahora la posición <strong>verdadera</strong> de la estrella. Lee el error de tu media en x (la media menos la verdad) y ese error en unidades del error estándar.',
       fields: [
@@ -92,12 +92,12 @@ export const WHAT_IS_A_MEASUREMENT = {
         { label: 'Ese error en errores estándar' },
       ],
     },
-    {
+    'a-blurrier-star': {
       title: 'Una estrella dos veces más desenfocada',
       body: 'Otra noche, la misma estrella, pero la turbulencia es peor y la mancha es <strong>el doble de ancha</strong>. Pon <strong>Ancho de la estrella</strong> en 8 píxeles, con 5 marcas, y lee la dispersión y el error estándar de x.',
       fields: [{ label: 'Dispersión de x' }, { label: 'Error estándar de x' }],
     },
-    {
+    'why-it-doubled': {
       title: '¿Por qué se duplicaron los dos números?',
       body: 'Con la estrella el doble de ancha, la dispersión y el error estándar de x salieron los dos más o menos el doble de grandes.',
       prompt: '¿Qué dice eso?',
@@ -116,7 +116,7 @@ export const WHAT_IS_A_MEASUREMENT = {
       because:
         'La dispersión viene de cuán precisamente se puede colocar una marca sobre la imagen. Una estrella más ancha es más difícil de colocar, así que la dispersión es mayor y la media del mismo número de marcas se conoce peor. Una incertidumbre pertenece a la medición y a la imagen de la que salió.',
     },
-    {
+    'what-you-would-report': {
       rubric:
         'Crédito completo por informar la media de las marcas (unos 31,1 píxeles) con su error estándar (unos 0,36 píxeles, la dispersión dividida entre la raíz del número de marcas), y por decir que una marca es una extracción de la dispersión, de modo que la siguiente difiere. También se acredita decir que el error estándar deja fuera un desplazamiento constante. No se acredita informar solo la primera marca, ni decir que las marcas son errores que hay que descartar.',
       title: '¿Qué informarías?',
@@ -124,11 +124,11 @@ export const WHAT_IS_A_MEASUREMENT = {
       prompt:
         'En una o dos frases, di qué informarías como posición x de la estrella y por qué no informarías solo la primera marca.',
     },
-    {
+    'what-you-worked-out': {
       title: 'Lo que has deducido',
       body: 'Las marcas cuidadosas de una misma estrella difieren, porque la mancha es borrosa, y la dispersión de las marcas dice con qué precisión se puede hacer una marca. La media de las marcas es la mejor estimación que dan, y su error estándar, la dispersión entre la raíz cuadrada del número de marcas, dice cuán cerca de la verdad queda típicamente la media. Más marcas lo reducen despacio: cuatro veces las marcas lo reducen a la mitad. Una imagen más borrosa lo aumenta. Aquí se conocía la verdad, y pudimos ver cómo la media caía a menos de un error estándar de ella. La próxima investigación pregunta qué afirma un «más menos» declarado y cómo comprobar una afirmación así.',
     },
-  ],
+  },
 };
 
 export const WHAT_DOES_PLUS_MINUS_CLAIM = {
@@ -140,12 +140,12 @@ export const WHAT_DOES_PLUS_MINUS_CLAIM = {
     'Decir por qué un pequeño más-menos de un instrumento sesgado es una afirmación segura y errónea',
     'Leer un intervalo asimétrico y un límite superior como afirmaciones con una cobertura propia',
   ],
-  steps: [
-    {
+  steps: {
+    'a-claim-to-check': {
       title: 'Una afirmación que puedes comprobar',
       body: 'Una medición se informa como un valor con un intervalo: «10,0 ± 1,0». Si el intervalo es una afirmación de <strong>una sigma</strong>, dice que, en muchas repeticiones de la medición, unas dos de cada tres pondrían el valor verdadero dentro de su propio intervalo.\n\nEsa afirmación se puede comprobar, porque aquí los datos son <strong>sintéticos</strong> y el valor verdadero se conoce (10,0). La imagen muestra las primeras cuarenta de un conjunto sembrado de repeticiones: cada barra es el intervalo que declaró una repetición, la línea es la verdad. Las barras que la fallan se dibujan discontinuas. La tabla cuenta todas.',
     },
-    {
+    'predict-one-sigma': {
       title: '¿Cuántas repeticiones contienen la verdad?',
       body: 'El instrumento realmente se dispersa 1,0, y cada repetición declara «± 1,0»: una afirmación honesta. Entre 2000 repeticiones, cuenta las que tienen el valor verdadero en su intervalo.',
       prompt: 'La parte que contiene la verdad será aproximadamente&hellip;',
@@ -161,7 +161,7 @@ export const WHAT_DOES_PLUS_MINUS_CLAIM = {
       because:
         'Unos dos tercios. Un intervalo de una sigma a cada lado contiene la verdad en el 68 por ciento de las repeticiones cuando la sigma declarada es la dispersión real. El paso siguiente las cuenta.',
     },
-    {
+    'coverage-at-one-sigma': {
       title: 'Cuenta las repeticiones que contienen la verdad',
       body: 'Con el intervalo en <strong>±1 σ</strong> y 2000 repeticiones, lee cuántos intervalos contienen el valor verdadero y qué parte de las repeticiones es.',
       fields: [
@@ -169,7 +169,7 @@ export const WHAT_DOES_PLUS_MINUS_CLAIM = {
         { label: 'Parte de las repeticiones' },
       ],
     },
-    {
+    'coverage-at-two-sigma': {
       title: 'Ensancha el intervalo',
       body: 'Ensancha el intervalo a <strong>±2 σ</strong>. Lee otra vez la cuenta y la parte.',
       fields: [
@@ -177,7 +177,7 @@ export const WHAT_DOES_PLUS_MINUS_CLAIM = {
         { label: 'Parte de las repeticiones' },
       ],
     },
-    {
+    'predict-the-biased-instrument': {
       title: 'Un pequeño más-menos de un instrumento sesgado',
       body: 'Un segundo instrumento es mucho más preciso: se dispersa solo 0,3 y declara «± 0,3». Pero lee <strong>0,4 de más</strong> siempre, y nada en su barra de error lo dice.',
       prompt:
@@ -194,12 +194,12 @@ export const WHAT_DOES_PLUS_MINUS_CLAIM = {
       because:
         'Mucho menor. Cada repetición se desplaza más de lo que mide el intervalo de ancho, así que la mayoría de los intervalos fallan la verdad: la barra de error describe la dispersión y no dice nada del desplazamiento. El paso siguiente cuenta.',
     },
-    {
+    'biased-coverage': {
       title: 'Cuéntalas',
       body: 'Lee la parte de las repeticiones que contienen la verdad con <strong>±1 σ</strong> y luego con <strong>±2 σ</strong>.',
       fields: [{ label: 'Parte con ±1 σ' }, { label: 'Parte con ±2 σ' }],
     },
-    {
+    'what-a-small-error-bar-says': {
       title: '¿Qué dice una barra de error pequeña?',
       body: 'La barra de error del instrumento sesgado es un tercio de la del instrumento honesto, y sus intervalos contienen la verdad mucho menos veces.',
       prompt: '¿Qué te dice una incertidumbre declarada pequeña?',
@@ -220,7 +220,7 @@ export const WHAT_DOES_PLUS_MINUS_CLAIM = {
       because:
         'El acuerdo entre repeticiones, que es la precisión. La exactitud, la cercanía a la verdad, necesita una comprobación que no use el propio instrumento. Un más-menos declarado es una afirmación, y es una afirmación sobre la dispersión a menos que alguien haya comprobado también un desplazamiento.',
     },
-    {
+    'an-asymmetric-interval': {
       title: 'Un intervalo que no es simétrico',
       body: 'El paralaje de una estrella es 3,0&nbsp;mas, medido con ±0,9&nbsp;mas, y su distancia en parsecs es 1000 dividido entre el paralaje. El intervalo del paralaje, llevado a través de esa división, <strong>no es simétrico</strong> respecto de la distancia: se extiende más por arriba que por abajo. Elige la forma <strong>asimétrica</strong> con ±1 σ y lee la cobertura, y cuántas repeticiones no tenían extremo superior, porque su intervalo de paralaje llegaba a cero.',
       fields: [
@@ -228,12 +228,12 @@ export const WHAT_DOES_PLUS_MINUS_CLAIM = {
         { label: 'Repeticiones sin extremo superior' },
       ],
     },
-    {
+    'the-symmetric-shortcut': {
       title: 'El atajo simétrico',
       body: 'Un atajo declara la distancia con una barra de error simétrica: la distancia más o menos el error del paralaje llevado a primer orden. Elige la forma <strong>simétrica</strong> con ±1 σ y lee la cobertura.',
       fields: [{ label: 'Parte que contiene la distancia verdadera' }],
     },
-    {
+    'predict-the-upper-limit': {
       title: 'Cuando no se ve lo bastante bien para medir',
       body: 'Un experimento cuenta sucesos de una fuente cuya media verdadera es 3,0 sucesos, e informa un <strong>límite superior del 95 por ciento</strong> para la tasa a partir de cada cuenta: un número por debajo del cual se afirma que está la tasa verdadera. No cambies el instrumento.',
       prompt:
@@ -250,7 +250,7 @@ export const WHAT_DOES_PLUS_MINUS_CLAIM = {
       because:
         'Cerca del 95 por ciento, nunca por debajo por construcción. Las cuentas son números enteros, así que la cobertura no se puede ajustar a exactamente 95, y las 2000 repeticiones añaden una oscilación propia. El paso siguiente cuenta.',
     },
-    {
+    'upper-limit-coverage': {
       title: 'Comprueba el límite',
       body: 'Lee la cobertura de los límites superiores con una tasa verdadera de <strong>3,0</strong>, y luego sube la tasa a <strong>4,0</strong> y léela otra vez.',
       fields: [
@@ -258,7 +258,7 @@ export const WHAT_DOES_PLUS_MINUS_CLAIM = {
         { label: 'Parte que contiene la tasa en 4,0' },
       ],
     },
-    {
+    'what-would-prove-it-wrong': {
       rubric:
         'Crédito completo por decir que la afirmación 4,2 ± 0,3 (1σ) trata de repeticiones: un intervalo construido así contiene el valor verdadero en unas dos de cada tres repeticiones (68 por ciento); que la comprobación es repetir la medición muchas veces, o simularla con una verdad conocida, y contar cuántas veces el intervalo contiene la verdad; y que la afirmación es falsa si esa proporción está lejos del 68 por ciento más allá de su propia incertidumbre de conteo (por ejemplo, cerca del 36 por ciento para un instrumento sesgado). No se acredita decir que el valor verdadero está en este intervalo con probabilidad del 68 por ciento, ni que un ± pequeño significa que el valor es correcto.',
       title: '¿Qué la demostraría errónea?',
@@ -266,11 +266,11 @@ export const WHAT_DOES_PLUS_MINUS_CLAIM = {
       prompt:
         'En dos o tres frases: ¿qué dice esa afirmación sobre las repeticiones, cómo la comprobarías y qué tendrías que ver para que fuera errónea?',
     },
-    {
+    'what-you-worked-out': {
       title: 'Lo que has deducido',
       body: 'Un intervalo declarado de una sigma es una afirmación sobre repeticiones: debería contener la verdad en unas dos de cada tres, y uno de dos sigmas en unas diecinueve de cada veinte. Aquí se conocía la verdad, así que la afirmación se pudo contar, y se cumplió para el instrumento honesto y falló para el sesgado, cuyo pequeño más-menos no decía nada de su desplazamiento. Un intervalo llevado a través de una división es asimétrico, y el atajo simétrico no conserva su cobertura. Un límite superior es una afirmación de al menos su cobertura. Con datos reales no se conoce la verdad, así que una afirmación solo se puede comprobar contra repeticiones o contra otro método. La última investigación de las tres pregunta qué decir cuando un método no puede dar un intervalo.',
     },
-  ],
+  },
 };
 
 export const WHEN_THE_METHOD_MUST_REFUSE = {
@@ -283,12 +283,12 @@ export const WHEN_THE_METHOD_MUST_REFUSE = {
     'Decir «no acotado» como resultado, y por qué dar un número sería inventarlo',
     'Rechazar un ajuste cuyo chi cuadrado reducido y cuyo valor p dicen que el modelo no describe los datos',
   ],
-  steps: [
-    {
+  steps: {
+    'a-product-not-two-numbers': {
       title: 'Dos parámetros, una medición',
       body: 'El bamboleo de una estrella mide el tirón de un planeta invisible a lo largo de nuestra línea de visión. Eso fija el producto de la masa <em>m</em> del planeta y el seno de la inclinación de su órbita, <em>s</em> (1 para una órbita vista de canto, casi 0 vista de frente). Supón que los datos dan <strong>m s = 0,85 ± 0,06</strong> masas de Júpiter. Fijan ese producto y, hasta donde llegan, nada más.\n\nEl <strong>perfil</strong> pregunta: para cada masa de prueba, ¿cuál es el mejor ajuste cuando la inclinación puede tomar el valor que mejor ajuste? Donde el ajuste no cuesta más que el mejor, la masa está permitida. Los datos son <strong>sintéticos</strong>, y no se declaran la masa ni la inclinación verdaderas.',
     },
-    {
+    'predict-the-mass': {
       title: '¿Qué dicen los datos sobre la masa?',
       body: 'Los datos dicen m s = 0,85 ± 0,06 masas de Júpiter, y la inclinación no se mide. Todavía no cambies el instrumento.',
       prompt: 'La masa m es&hellip;',
@@ -302,7 +302,7 @@ export const WHEN_THE_METHOD_MUST_REFUSE = {
       because:
         'La masa es al menos más o menos el producto y podría ser mucho mayor, porque una s menor necesita una m mayor para dar el mismo producto. Los pasos siguientes miden la cota.',
     },
-    {
+    'try-a-mass': {
       title: 'Prueba una masa de 2 masas de Júpiter',
       body: 'Pon la masa de prueba en <strong>2,0</strong> y lee la inclinación que mejor ajusta con esa masa y lo que cuesta entonces el ajuste (el chi cuadrado).',
       fields: [
@@ -310,7 +310,7 @@ export const WHEN_THE_METHOD_MUST_REFUSE = {
         { label: 'Chi cuadrado de ese ajuste' },
       ],
     },
-    {
+    'try-a-small-mass': {
       title: 'Prueba una masa de 0,5',
       body: 'Ahora pon la masa de prueba en <strong>0,5</strong>, por debajo del producto. La inclinación no puede pasar de 1, así que no ayuda. Lee la mejor inclinación y el chi cuadrado.',
       fields: [
@@ -318,7 +318,7 @@ export const WHEN_THE_METHOD_MUST_REFUSE = {
         { label: 'Chi cuadrado de ese ajuste' },
       ],
     },
-    {
+    'the-lower-limit': {
       title: 'La masa más pequeña que permiten los datos',
       body: 'El perfil muestra el chi cuadrado del mejor ajuste con cada masa de prueba, con líneas donde ha subido 1 (un intervalo de una sigma) y 3,84 (un intervalo del 95 por ciento). Lee la masa más pequeña dentro de cada subida.',
       fields: [
@@ -326,7 +326,7 @@ export const WHEN_THE_METHOD_MUST_REFUSE = {
         { label: 'Masa más pequeña, subida de 3,84' },
       ],
     },
-    {
+    'is-there-a-largest-mass': {
       title: '¿Hay una masa máxima?',
       body: 'Mira el lado derecho del perfil, para masas por encima del producto.',
       prompt: '¿Fijan estos datos una masa máxima para el planeta?',
@@ -347,7 +347,7 @@ export const WHEN_THE_METHOD_MUST_REFUSE = {
       because:
         'No. Para cualquier masa mayor la inclinación que ajusta es menor, y el chi cuadrado se queda en su mejor valor. Con solo el producto medido, la masa tiene una cota inferior y ninguna superior.',
     },
-    {
+    'what-to-report': {
       title: '¿Qué entra en el artículo?',
       body: 'El análisis tiene que afirmar algo sobre la masa del planeta.',
       prompt: '¿Qué enunciado es honesto?',
@@ -371,7 +371,7 @@ export const WHEN_THE_METHOD_MUST_REFUSE = {
       because:
         'Una cota inferior con la confianza declarada, y «no acotado» por encima. Dar una sola masa sería inventar un número que los datos no contienen; no decir nada tiraría la cota que sí contienen.',
     },
-    {
+    'predict-the-line': {
       title: 'Una recta por seis puntos',
       body: 'Un segundo análisis ajusta una recta a seis puntos, cada uno con una barra de error de 0,1. Si una recta es el modelo correcto, el chi cuadrado del ajuste dividido entre sus grados de libertad, el <strong>chi cuadrado reducido</strong>, debería salir de un tamaño parecido en cada repetición del experimento. Todavía no ajustes.',
       prompt:
@@ -388,7 +388,7 @@ export const WHEN_THE_METHOD_MUST_REFUSE = {
       because:
         'Cerca de 1. Cada punto debería estar a más o menos una barra de error del modelo, y los grados de libertad cuentan los puntos que no se usaron ya para fijar la recta. Un chi cuadrado reducido muy superior a 1 dice que el modelo falla.',
     },
-    {
+    'fit-the-line': {
       title: 'Ajusta la recta',
       body: 'La recta se ajusta por mínimos cuadrados ponderados, y el ajuste declara una pendiente con su incertidumbre formal. Lee la pendiente, su incertidumbre formal y el chi cuadrado reducido.',
       fields: [
@@ -397,7 +397,7 @@ export const WHEN_THE_METHOD_MUST_REFUSE = {
         { label: 'Chi cuadrado reducido' },
       ],
     },
-    {
+    'refuse-or-report': {
       title: '¿Qué debe decir el análisis?',
       body: 'La recta tiene un chi cuadrado reducido de 7,6 con cuatro grados de libertad, y un valor p inferior a 0,001: una probabilidad inferior a una entre mil de que una recta verdadera fallara los puntos tan mal.',
       prompt: '¿Qué informa el análisis?',
@@ -419,7 +419,7 @@ export const WHEN_THE_METHOD_MUST_REFUSE = {
       because:
         'Se rechaza el modelo. Una incertidumbre formal solo significa algo cuando el modelo describe los datos, y aquí un chi cuadrado reducido de 7,6 con un valor p inferior a 0,001 dice que no los describe. La respuesta honesta es el rechazo y un modelo mejor, no un número.',
     },
-    {
+    'a-model-that-fits': {
       title: 'Un modelo con un término más',
       body: 'Cambia el ajuste a una <strong>parábola</strong> (tres términos). Lee el chi cuadrado reducido y el coeficiente del término al cuadrado.',
       fields: [
@@ -427,7 +427,7 @@ export const WHEN_THE_METHOD_MUST_REFUSE = {
         { label: 'Coeficiente del término al cuadrado' },
       ],
     },
-    {
+    'what-would-you-refuse': {
       rubric:
         'Crédito completo por decir que, para un parámetro que los datos no fijan (solo se acota un producto de dos), el análisis informa una cota o no acotado, con la combinación que sí se fija, en lugar de un valor; que, para un modelo que los datos rechazan (un chi cuadrado reducido muy superior a 1 y un valor p diminuto), dice que el modelo no ajusta y no da pendiente; y por nombrar la comprobación: el perfil de chi cuadrado frente al parámetro, y el chi cuadrado reducido y el valor p del ajuste. No se acredita citar el mejor ajuste con su error formal.',
       title: '¿Qué rechazarías?',
@@ -435,11 +435,11 @@ export const WHEN_THE_METHOD_MUST_REFUSE = {
       prompt:
         'En dos o tres frases: para cada una, ¿qué diría el análisis en lugar de un número, y qué comprobarías antes de dar un número?',
     },
-    {
+    'what-you-worked-out': {
       title: 'Lo que has deducido',
       body: 'Unos datos que solo fijan un producto dan una cota inferior de un factor y ninguna por encima: el perfil es plano, y el resultado honesto es un límite inferior con «no acotado» más allá. Un número como el propio producto, o el medio del intervalo, inventaría una medición. Un ajuste cuyo chi cuadrado reducido es muy superior a 1 tiene un modelo que los datos rechazan, y su incertidumbre formal no es un resultado; un modelo con un término más puede ajustar y aun así no queda demostrado. Los dos conjuntos de datos eran sintéticos, con la verdad incorporada. El método con datos reales tendrá los mismos rechazos, y son hallazgos.',
     },
-  ],
+  },
 };
 
 // Las investigaciones de imágenes (Prompt 191): tres más, paso a paso con el inglés.
@@ -453,12 +453,12 @@ export const MEASURING_THE_MOON = {
     'Predecir el tamaño de un accidente antes de medirlo, y decir qué incluye la incertidumbre indicada y qué deja fuera',
     'Decir por qué esta imagen se puede marcar y medir en píxeles pero no leer su brillo',
   ],
-  steps: [
-    {
+  steps: {
+    'a-picture-of-the-moon': {
       title: 'Una imagen real de la Luna',
       body: 'Esta es una imagen <strong>real</strong>: la Luna, fotografiada por la sonda Galileo de la NASA el 7 de diciembre de 1992 al pasar junto a la Tierra camino de Júpiter. Es un compuesto en color realzado, mostrado aquí en gris. <em>Realzado</em> significa que se estiró el contraste para mostrar diferencias en el terreno, así que sus niveles de gris son para el ojo y no miden la luz que refleja la Luna. El Observatorio llama a una imagen así <strong>solo para mostrar</strong>: puedes marcarla y medirla en píxeles, y nada más.\n\nUna imagen no tiene escala propia. Esta mide 496 píxeles de ancho, y un píxel no es un kilómetro. Los píxeles se numeran desde abajo a la izquierda, x hacia la derecha e y hacia arriba, y el disco está recortado muy justo: su borde derecho toca la última columna. En esta investigación das a la imagen una escala y tomas una medida de ella.',
     },
-    {
+    'predict-the-scale': {
       title: '¿Qué da escala a una imagen?',
       body: 'Quieres una longitud sobre la imagen en kilómetros, y solo tienes píxeles.',
       prompt: 'Para convertir píxeles en kilómetros necesitas&hellip;',
@@ -474,7 +474,7 @@ export const MEASURING_THE_MOON = {
       because:
         'Una longitud en la imagen que ya conoces. Una imagen registra ángulos y píxeles y nunca dice a qué distancia está la cosa, así que la única vía a una escala es señalar algo en ella cuyo tamaño conozcas por otros medios. Aquí es la propia Luna, cuyo diámetro medio, 3474,8 km, se midió por otros medios.',
     },
-    {
+    'scale-from-the-disc': {
       title: 'Un par de referencia a través del disco',
       body: 'Marca el ancho completo del disco con un <strong>par de referencia</strong>: una línea a lo largo de la horizontal por el centro del disco (fila 245), de su borde izquierdo a su borde derecho. Pon el extremo izquierdo en <strong>3</strong> y el derecho en <strong>496</strong>. Se toma que el par abarca 3474,8 km, el diámetro medio de la Luna. Lee su longitud en píxeles y la escala que da.\n\nEl extremo derecho está sobre la última columna del cuadro, así que el disco puede ser uno o dos píxeles más ancho que la imagen. Tenlo presente: no está en la incertidumbre que indica la herramienta.',
       fields: [
@@ -482,7 +482,7 @@ export const MEASURING_THE_MOON = {
         { label: 'Escala a partir del par, en km por píxel' },
       ],
     },
-    {
+    'why-a-pair': {
       title: 'Por qué la escala sale de ti',
       body: 'El Observatorio puede dar a una imagen una escala en segundos de arco por píxel cuando la imagen lleva coordenadas del mundo, y se niega a hacerlo con esta imagen. La escala que acabas de hacer salió de un par que marcaste.',
       prompt: '¿Por qué la escala tiene que salir de un par que marcas tú?',
@@ -504,7 +504,7 @@ export const MEASURING_THE_MOON = {
       because:
         'La imagen no lleva coordenadas ni unidades, así que nada en ella dice lo que vale un píxel. Una escala hecha a partir de una longitud conocida es una medida tuya, con el supuesto escrito al lado, y es la única clase que esta imagen permite.',
     },
-    {
+    'predict-the-plain': {
       title: '¿Cuán ancha es la llanura oscura?',
       body: 'Cerca del centro del disco hay una gran llanura oscura, casi redonda, con su centro cerca de x = 289, y = 306. Las llanuras oscuras de la Luna son antiguas coladas de lava. Antes de medirla, mírala junto al disco entero.',
       prompt: 'De lado a lado, la llanura mide unos&hellip;',
@@ -515,12 +515,12 @@ export const MEASURING_THE_MOON = {
       because:
         'Unos 600 km, algo menos de una quinta parte del ancho de la Luna: la llanura abarca más o menos una quinta parte del disco y el disco mide 3475 km. El paso siguiente la mide.',
     },
-    {
+    'measure-the-plain': {
       title: 'Un círculo sobre la llanura',
       body: 'El par se queda a través del disco. El círculo empieza en x = 289, y = 306. Cambia el <strong>radio</strong> hasta que el círculo siga el borde de la llanura oscura, y mueve el centro si el círculo se va hacia un lado. Lee el diámetro del círculo en kilómetros.',
       fields: [{ label: 'Diámetro del círculo' }],
     },
-    {
+    'what-would-change-it': {
       rubric:
         'Crédito completo por nombrar dos cosas que cambian el diámetro, por ejemplo dónde se coloca el borde de la llanura (un borde suave, así que dos personas cuidadosas difieren en unos píxeles), dónde se colocan los dos extremos del par, el diámetro supuesto de la Luna, o el recorte de la imagen a la derecha, y por decir que la incertidumbre indicada de unos 6 km incluye solo el redondeo de cada colocación, y deja fuera lo suave del borde y los supuestos. No dar crédito por decir que el número es exacto, ni que más marcas del mismo tipo quitan los supuestos.',
       title: '¿Qué cambiaría el número?',
@@ -528,11 +528,11 @@ export const MEASURING_THE_MOON = {
       prompt:
         'En dos o tres frases: nombra dos cosas que cambiarían el diámetro que obtuviste, y di cuál de ellas incluye la incertidumbre indicada.',
     },
-    {
+    'what-you-worked-out': {
       title: 'Lo que has deducido',
       body: 'Una imagen no tiene escala hasta que se la das, y la escala que le das es una medida tuya, apoyada en una longitud que supusiste y en dos marcas que colocaste. Con ella, un círculo sobre un accidente dio un tamaño en kilómetros, unos 630 km para la llanura, y la incertidumbre indicada por la herramienta cubría solo el redondeo de tus marcas. Lo suave del borde, el recorte a la derecha y el diámetro supuesto no están en ella. Y como la imagen es para mostrar, sus niveles de gris no son luz: mediste dónde están las cosas y cuán grandes son, y nada sobre su brillo.',
     },
-  ],
+  },
 };
 
 export const HOW_FAR_IS_THAT_STAR = {
@@ -545,12 +545,12 @@ export const HOW_FAR_IS_THAT_STAR = {
     'Leer un paralaje y una distancia con un intervalo a partir de una serie bien muestreada, y decir qué afirma el intervalo',
     'Decir qué deja fuera un paralaje relativo, y por qué se rechazan muy pocas épocas',
   ],
-  steps: [
-    {
+  steps: {
+    'fourteen-positions': {
       title: 'Una estrella, catorce fechas',
       body: 'Se ha medido la posición de una estrella en el cielo en catorce fechas durante casi dos años. Los datos son <strong>sintéticos</strong>: se puso una estrella a una distancia y con un movimiento que elegimos, vista desde la órbita real de la Tierra, y a cada posición se le dio un error aleatorio de 4 milisegundos de arco (mas). La verdad queda oculta hasta el final.\n\nDos cosas mueven una estrella en el cielo. Su propio movimiento por el espacio, su <strong>movimiento propio</strong>, es constante. El movimiento de la Tierra alrededor del Sol hace que una estrella cercana trace un pequeño lazo una vez al año, su <strong>paralaje</strong>, y cuanto más cerca está la estrella, mayor es el lazo. Un paralaje de p segundos de arco es una distancia de 1/p pársecs.',
     },
-    {
+    'predict-the-shift': {
       title: '¿Da un desplazamiento una distancia?',
       body: 'Toma la primera y la última de las catorce posiciones. Difieren: la estrella se ha movido.',
       prompt: 'Ese desplazamiento entre dos posiciones&hellip;',
@@ -566,7 +566,7 @@ export const HOW_FAR_IS_THAT_STAR = {
       because:
         'No los distingue. Entre dos fechas la estrella se ha movido por su propio movimiento y por una parte distinta de su lazo anual, y un par de posiciones no puede decir cuánto es de cada cosa. La herramienta etiqueta un resultado así como un desplazamiento bajo un supuesto de movimiento fijo, y no da paralaje ni distancia para él.',
     },
-    {
+    'the-shift': {
       title: 'El desplazamiento, de la primera a la última',
       body: 'Pon <strong>Qué ajustar</strong> en el desplazamiento entre dos épocas y usa las 14 épocas, de modo que el desplazamiento vaya de la primera posición a la última. Lee el tamaño del desplazamiento y la velocidad que sería si todo fuera movimiento.',
       fields: [
@@ -577,7 +577,7 @@ export const HOW_FAR_IS_THAT_STAR = {
         },
       ],
     },
-    {
+    'predict-a-straight-line': {
       title: '¿Describe una recta la trayectoria?',
       body: 'Ahora ajusta las catorce posiciones solo con un movimiento propio: una recta a velocidad constante, sin paralaje.',
       prompt: 'Una recta&hellip;',
@@ -593,7 +593,7 @@ export const HOW_FAR_IS_THAT_STAR = {
       because:
         'No. El lazo es unas quince veces el error de 4 mas de una posición, así que cada posición fuera de la recta lo está por mucho. Un modelo que no puede hacer un lazo no puede describir una estrella que lo hace.',
     },
-    {
+    'a-straight-line-fails': {
       title: 'La recta, juzgada',
       body: 'Pon <strong>Qué ajustar</strong> en el movimiento propio, con 14 épocas. Lee el chi cuadrado del ajuste y sus grados de libertad: 28 números (14 posiciones en dos coordenadas) menos los cuatro que tiene la recta.',
       fields: [
@@ -601,7 +601,7 @@ export const HOW_FAR_IS_THAT_STAR = {
         { label: 'Grados de libertad' },
       ],
     },
-    {
+    'the-parallax': {
       title: 'Paralaje y movimiento juntos',
       body: 'Pon <strong>Qué ajustar</strong> en paralaje y movimiento, con 14 épocas. Lee el paralaje, su incertidumbre y la distancia.',
       fields: [
@@ -610,7 +610,7 @@ export const HOW_FAR_IS_THAT_STAR = {
         { label: 'Distancia, 1 sobre el paralaje' },
       ],
     },
-    {
+    'what-the-interval-says': {
       title: 'Lo que dice el intervalo',
       body: 'La herramienta da la distancia como 16,59 pc, con un intervalo del 68 por ciento de 16,18 a 17,02 pc y un intervalo del 95 por ciento de 15,80 a 17,45 pc. El paralaje tiene una incertidumbre de 1,53 mas.',
       prompt: '¿Qué frase respalda el resultado?',
@@ -637,7 +637,7 @@ export const HOW_FAR_IS_THAT_STAR = {
       because:
         'El intervalo es una afirmación sobre repeticiones de la medición, como en ¿Qué afirma el ±?, y sobre el marco: el paralaje es relativo a las estrellas de referencia, así que la distancia nunca es menor que la verdadera si ellas tienen un paralaje propio.',
     },
-    {
+    'six-epochs': {
       title: 'Solo seis épocas',
       body: 'Pon <strong>Épocas usadas</strong> en 6, y deja paralaje y movimiento. Las seis primeras épocas cubren 0,74 de un año.',
       prompt: '¿Qué informa la herramienta?',
@@ -659,7 +659,7 @@ export const HOW_FAR_IS_THAT_STAR = {
       because:
         'Sin restricción. Un paralaje es la parte de la trayectoria de la estrella que se repite cada año, así que las épocas deben muestrear ese lazo; la herramienta exige ocho épocas durante al menos 0,9 de un año y no da ningún número por debajo. Un rechazo es un resultado, no un fallo.',
     },
-    {
+    'say-what-relative-means': {
       rubric:
         'Crédito completo por decir que un paralaje necesita cobertura de cerca de un año porque es la parte del movimiento que se repite cada año y hay que distinguirla del movimiento propio constante, y que un paralaje relativo se mide frente a estrellas de referencia que tienen paralaje propio, así que es menor que el absoluto en su paralaje medio y la distancia que sale es demasiado grande. No dar crédito por decir que la distancia es exacta, ni que relativo significa aproximado.',
       title: 'Por qué un año, y qué significa relativo',
@@ -667,11 +667,11 @@ export const HOW_FAR_IS_THAT_STAR = {
       prompt:
         'En dos o tres frases: ¿por qué un paralaje necesita épocas que cubran cerca de un año, y qué dice «relativo» del paralaje que lees?',
     },
-    {
+    'what-you-worked-out': {
       title: 'Lo que has deducido',
       body: 'Un desplazamiento entre dos posiciones mezcla el movimiento propio de una estrella con un paralaje y no da distancia. Un movimiento propio recto ajustado a una estrella con paralaje lo rechaza su propio chi cuadrado, aquí 1576 con 24 grados de libertad. Con el lazo en el modelo, catorce épocas dieron 60,3 &plusmn; 1,5 mas, unos 16,6 pársecs, con un intervalo, y con seis épocas la herramienta no dio nada, que es la respuesta correcta. El paralaje es relativo a las estrellas de referencia, así que la distancia nunca es menor que la verdadera. Los datos eran sintéticos; la estrella se hizo a 16,67 pársecs, un paralaje de 60 mas, y el intervalo lo contiene.',
     },
-  ],
+  },
 };
 
 export const A_BINARY_STARS_ORBIT = {
@@ -684,12 +684,12 @@ export const A_BINARY_STARS_ORBIT = {
     'Convertir el tamaño de la órbita y un paralaje en unidades astronómicas, y el período y el tamaño en una suma de masas por la tercera ley de Kepler',
     'Decir qué fijan las posiciones de una binaria y qué dejan abierto: la masa de cada estrella, el nodo y la distancia que hay tras la suma',
   ],
-  steps: [
-    {
+  steps: {
+    'twelve-positions': {
       title: 'Una compañera, doce fechas',
       body: 'Una estrella binaria son dos estrellas que giran una alrededor de otra. Aquí se ha medido la posición de la más tenue, respecto de la más brillante, en doce fechas durante dieciséis años, cada una con un error de 15 milisegundos de arco. Los datos son <strong>sintéticos</strong>: una binaria de elementos que elegimos, vista en ángulo, con errores aleatorios. La verdad queda oculta hasta el final.\n\nLa trayectoria en el cielo es la órbita vista en ángulo. Su tamaño en segundos de arco, a, y su período, P, es lo que fijan las posiciones. La tercera ley de Kepler da entonces la masa del par, M = a³/P² en masas solares cuando a está en unidades astronómicas y P en años, y a en unidades astronómicas necesita la distancia: un paralaje de p segundos de arco hace a (ua) = a (segundos de arco)/p. Las posiciones solas fijan solo la <em>suma</em> de las dos masas.',
     },
-    {
+    'predict-the-shape': {
       title: '¿Qué forma tiene la trayectoria en el cielo?',
       body: 'Supón que la órbita verdadera fuera un círculo perfecto, inclinado respecto de verlo de frente.',
       prompt: 'La trayectoria de la compañera en el cielo sería&hellip;',
@@ -703,7 +703,7 @@ export const A_BINARY_STARS_ORBIT = {
       because:
         'Una elipse. Un círculo visto en ángulo queda acortado en una dirección y es una elipse, así que una elipse en el cielo no significa por sí sola una órbita excéntrica. El ajuste las separa: pregunta a los datos si un círculo, visto en algún ángulo, los describe.',
     },
-    {
+    'a-circle-first': {
       title: 'Primero, una órbita circular',
       body: 'Pon <strong>Modelo de órbita</strong> en circular, con las doce épocas, y lee qué dice la herramienta.',
       prompt: '¿Qué informa la herramienta?',
@@ -725,7 +725,7 @@ export const A_BINARY_STARS_ORBIT = {
       because:
         'Se rechaza el modelo circular. Su chi cuadrado es 5225 con 19 grados de libertad: las posiciones lo fallan por unas dieciséis veces su propia barra de error cada una. La órbita es excéntrica, y los datos lo dicen.',
     },
-    {
+    'the-elliptical-fit': {
       title: 'La órbita elíptica',
       body: 'Pon <strong>Modelo de órbita</strong> en elíptica, con las doce épocas. Lee el período, el semieje mayor y la excentricidad.',
       fields: [
@@ -734,7 +734,7 @@ export const A_BINARY_STARS_ORBIT = {
         { label: 'Excentricidad' },
       ],
     },
-    {
+    'from-arcseconds-to-au': {
       title: 'La órbita en unidades astronómicas',
       body: 'El paralaje de la binaria, relativo a sus estrellas de referencia, es de 100 mas: 0,100 segundos de arco. Convierte el semieje mayor de 0,908 segundos de arco en unidades astronómicas.',
       prompt: 'El semieje mayor',
@@ -751,7 +751,7 @@ export const A_BINARY_STARS_ORBIT = {
         off: 'a (segundos de arco) ÷ paralaje (segundos de arco).',
       },
     },
-    {
+    'the-mass-sum': {
       title: 'La masa del par',
       body: 'Con el paralaje en 100 mas, lee la suma de masas y su intervalo del 68 por ciento. El intervalo sale de la incertidumbre de la órbita y de la del paralaje, 4 mas, juntas.',
       fields: [
@@ -764,7 +764,7 @@ export const A_BINARY_STARS_ORBIT = {
         },
       ],
     },
-    {
+    'six-epochs': {
       title: 'Solo las seis primeras épocas',
       body: 'Pon <strong>Épocas usadas</strong> en 6 con el modelo elíptico. Las seis primeras épocas cubren siete años de una órbita de catorce.',
       prompt: '¿Qué informa la herramienta?',
@@ -786,7 +786,7 @@ export const A_BINARY_STARS_ORBIT = {
       because:
         'Sin restricción. Una órbita elíptica tiene siete parámetros y necesita al menos ocho épocas, que cubran bastante del período; seis no dan nada. Como con la estrella, el rechazo es la respuesta.',
     },
-    {
+    'say-what-the-sum-needs': {
       rubric:
         'Crédito completo por decir que las posiciones fijan solo la suma de las dos masas, no cada una (hace falta el movimiento de las estrellas alrededor de su centro común, o velocidades radiales, para repartirla), y que la suma depende de la distancia al cubo, así que el paralaje y su marco (relativo, de modo que la distancia y la suma salen altas) pasan a la masa. No dar crédito por decir que la suma es exacta o que el intervalo es solo el de la órbita.',
       title: 'Lo que necesita la suma',
@@ -794,11 +794,11 @@ export const A_BINARY_STARS_ORBIT = {
       prompt:
         'En dos o tres frases: ¿qué no dicen las posiciones sobre las masas, y qué dato de entrada de la suma es el más peligroso de equivocar?',
     },
-    {
+    'what-you-worked-out': {
       title: 'Lo que has deducido',
       body: 'Doce posiciones durante dieciséis años fijaron una órbita: un período de 14,13 &plusmn; 0,06 años, un semieje mayor de 0,908 segundos de arco y una excentricidad de 0,44. Un círculo se rechazó de plano, y seis épocas no dieron nada. Con un paralaje de 100 mas la órbita mide 9,08 ua de ancho y el par pesa unas 3,8 masas solares, entre 3,3 y 4,2 al 68 por ciento. Las posiciones fijan solo la suma, y la suma es el cubo de la distancia: el paralaje es el eslabón más débil. Los datos eran sintéticos, hechos con un período de 14,2 años, una excentricidad de 0,45, un semieje mayor de 0,9 segundos de arco y un paralaje de 100 mas, y el ajuste los contiene.',
     },
-  ],
+  },
 };
 
 // ¿Qué superficie es más antigua?: paso a paso con el inglés (Prompt 195).
@@ -812,12 +812,12 @@ export const WHICH_SURFACE_IS_OLDER = {
     'Leer un cociente de densidades y su intervalo, y decir qué significa y qué no significa un intervalo que contiene el 1',
     'Nombrar lo que puede hacer que una superficie parezca más antigua o más joven de lo que es: la renovación de la superficie, la saturación y los cráteres secundarios',
   ],
-  steps: [
-    {
+  steps: {
+    'two-surfaces': {
       title: 'Dos superficies, un reloj',
       body: 'Una superficie empieza sin cráteres y los va acumulando a medida que la golpean. Si el ritmo de impactos es más o menos el mismo en todas partes, una superficie que ha tenido más tiempo para acumularlos tiene más cráteres <strong>por área</strong>. Esa es la idea de contar cráteres: la densidad de cráteres dice cuál de dos superficies es más <strong>antigua</strong>, en relación con la otra.\n\nEl instrumento muestra dos regiones de la Luna (unas tierras altas y un mar liso y oscuro) y dos de Marte. Los círculos de las imágenes son los cráteres que enumera un <strong>catálogo</strong>, hecho por sus autores a partir de otros datos: nadie ha marcado estas imágenes, y nada de esto es un recuento tuyo. Lo que haces es elegir un diámetro, leer los números y decir qué muestran y qué no. Un cociente de densidades <em>no</em> es una edad en años.',
     },
-    {
+    'which-is-older-predict': {
       title: '¿Cuál tiene más?',
       body: 'Piensa en dos regiones de la Luna: unas tierras altas claras y accidentadas en el sur, y el oscuro y liso Mar de la Tranquilidad. Cuenta solo los cráteres de al menos 30 km de diámetro.',
       prompt: 'Por área, las tierras altas tendrán&hellip;',
@@ -833,7 +833,7 @@ export const WHICH_SURFACE_IS_OLDER = {
       because:
         'Una densidad mucho mayor. La lava enterró los cráteres que ya había en el mar, así que empezó a contar de nuevo desde la inundación, mientras que las tierras altas llevan contando desde mucho antes. El paso siguiente lee los recuentos.',
     },
-    {
+    'count-the-moon': {
       title: 'Cuenta los cráteres de al menos 30 km',
       body: 'Elige la <strong>Luna</strong> y pon el diámetro en <strong>30 km</strong>. Lee cuántos cráteres de al menos 30 km de diámetro tienen las tierras altas y cuántos el mar.',
       fields: [
@@ -841,7 +841,7 @@ export const WHICH_SURFACE_IS_OLDER = {
         { label: 'Cráteres en el mar lunar' },
       ],
     },
-    {
+    'per-area': {
       title: 'Por millón de kilómetros cuadrados',
       body: 'Las tierras altas cubren unos 305 mil km² y el mar unos 341 mil, así que los recuentos no están en pie de igualdad. Lee la <strong>densidad</strong> de cada una, en cráteres por millón de km², en las dos filas de región.',
       fields: [
@@ -849,7 +849,7 @@ export const WHICH_SURFACE_IS_OLDER = {
         { label: 'Densidad del mar, por millón de km²' },
       ],
     },
-    {
+    'ratio-moon': {
       title: '¿Cuánto más densa, y con cuánta seguridad?',
       body: 'Lee el <strong>cociente de densidades</strong>, tierras altas entre mar, y el <strong>extremo inferior de su intervalo del 95 por ciento</strong>. El intervalo se calcula exactamente a partir de los dos recuentos (un intervalo de Clopper&ndash;Pearson para la proporción de cráteres que caen en las tierras altas).',
       fields: [
@@ -857,7 +857,7 @@ export const WHICH_SURFACE_IS_OLDER = {
         { label: 'Extremo inferior del intervalo' },
       ],
     },
-    {
+    'reading-the-interval': {
       title: '¿Qué dice el intervalo?',
       body: 'El cociente es 6,4, con un intervalo de 2,8 a 16,9.',
       prompt: '¿Cuál es la mejor lectura?',
@@ -884,7 +884,7 @@ export const WHICH_SURFACE_IS_OLDER = {
       because:
         'El intervalo no contiene el 1, así que las tierras altas son más densas. Su anchura, de 2,8 a 16,9, es la incertidumbre honesta de un recuento de 40 y otro de 7.',
     },
-    {
+    'mars-pair': {
       title: 'La misma pregunta en Marte',
       body: 'Pasa a <strong>Marte</strong>: unas tierras altas (Terra Sabaea) y unas llanuras de lava jóvenes (Elysium Planitia), de 12&deg; por 12&deg; cada una. En Marte el recuento es completo desde 20 km, así que pon el diámetro en <strong>20 km</strong>. Lee el cociente de densidades, tierras altas entre llanuras, y el extremo inferior de su intervalo.',
       fields: [
@@ -892,7 +892,7 @@ export const WHICH_SURFACE_IS_OLDER = {
         { label: 'Extremo inferior del intervalo' },
       ],
     },
-    {
+    'fewer-craters': {
       title: 'Cuando el veredicto es «ninguna diferencia significativa»',
       body: 'Sube el diámetro en Marte a 60 km. Solo 12 cráteres de las tierras altas y 4 de las llanuras son tan grandes, y el instrumento lee ahora un cociente de 3,0 con un intervalo de 0,91 a 12,8, y el veredicto &ldquo;ninguna diferencia significativa&rdquo;.',
       prompt: '¿Qué significa ese veredicto?',
@@ -914,7 +914,7 @@ export const WHICH_SURFACE_IS_OLDER = {
       because:
         'El intervalo, de 0,91 a 12,8, contiene el 1. Con 12 y 4 cráteres, el azar solo puede dar un cociente de 3 con dos superficies igual de antiguas. Contar hacia cráteres más pequeños, donde hay más, es lo que vuelve a estrechar el intervalo.',
     },
-    {
+    'what-can-go-wrong': {
       title:
         '¿Qué podría hacer que una superficie parezca más antigua de lo que es?',
       body: 'Un cociente de densidades supone que los cráteres cayeron de forma independiente, a un ritmo constante, y se quedaron. Las superficies reales rompen estas suposiciones. Un impacto grande lanza escombros que cavan miles de pequeños <strong>cráteres secundarios</strong> cerca, todos a la vez.',
@@ -943,11 +943,11 @@ export const WHICH_SURFACE_IS_OLDER = {
       because:
         'Más antigua de lo que es. La renovación de la superficie oculta cráteres viejos y hace que parezca más joven; la saturación hace lo mismo; los secundarios añaden cráteres que no son independientes y la hacen parecer más antigua. Una edad relativa supone que nada de eso ha ocurrido, y lo dice.',
     },
-    {
+    'what-you-worked-out': {
       title: 'Lo que has deducido',
       body: 'Por encima de 30 km las tierras altas lunares tienen 131 cráteres por millón de km² y el mar 20,5, un cociente de 6,4 con un intervalo del 95 por ciento de 2,8 a 17: las tierras altas son las más densas. En Marte por encima de 20 km las tierras altas son 6,5 veces las llanuras, de 3,7 a 12,4. Sube el diámetro y los recuentos bajan y los intervalos se ensanchan, hasta que en Marte a 60 km el veredicto pasa a ser &ldquo;ninguna diferencia significativa&rdquo;, que no es lo mismo que &ldquo;la misma edad&rdquo;. El cociente no es una edad en años: supone una sola función de producción, ninguna saturación, ninguna parte grande de secundarios y un recuento completo. Los pasos más profundos miran cómo depende el intervalo del diámetro y qué rechaza el instrumento.',
     },
-  ],
+  },
 };
 
 // Cráteres por tamaño: paso a paso con el inglés.
@@ -961,12 +961,12 @@ export const CRATERS_BY_SIZE = {
     'Mostrar que un recuento que se queda corto a diámetros pequeños curva el gráfico, y decir qué dice y qué no dice la señal sobre la pendiente',
     'Decir por qué la pendiente del gráfico y el nivel del gráfico responden a preguntas distintas',
   ],
-  steps: [
-    {
+  steps: {
+    'a-plot-of-counts': {
       title: 'Un gráfico de cuántos hay, de al menos este tamaño',
       body: 'Los cráteres pequeños son muchos y los grandes pocos. El gráfico <strong>acumulado</strong> de tamaño y frecuencia cuenta, para cada diámetro <em>D</em>, todos los cráteres de al menos ese tamaño, por área. Los dos ejes son logarítmicos, así que una ley de potencias <em>N</em>(≥<em>D</em>) ∝ <em>D</em><sup>&minus;<em>b</em></sup> es una recta de pendiente &minus;<em>b</em>. Cada punto lleva un intervalo de Poisson del 95 por ciento: un recuento es incierto porque el azar decide cuántos cráteres cayeron.\n\nLos cráteres son de un catálogo, no marcas sobre la imagen. Una línea discontinua es la ley de potencias ajustada por encima del diámetro que elijas, y la lectura da su índice <em>b</em> con un intervalo. Por debajo del diámetro en el que el recuento es <em>completo</em>, los puntos se dibujan de otro color y no son fiables.',
     },
-    {
+    'highland-slope': {
       title: 'La pendiente de las tierras altas lunares',
       body: 'Elige las <strong>tierras altas lunares</strong> y ajusta los cráteres de al menos <strong>30 km</strong> de diámetro, el diámetro por encima del cual su recuento es completo. Lee el índice acumulado <em>b</em> y los dos extremos de su intervalo del 95 por ciento.',
       fields: [
@@ -975,7 +975,7 @@ export const CRATERS_BY_SIZE = {
         { label: 'Extremo superior del intervalo' },
       ],
     },
-    {
+    'narrower-predict': {
       title: '¿De quién se conoce mejor la pendiente?',
       body: 'Las tierras altas lunares dieron un índice con un intervalo de 1,06 de ancho, a partir de 40 cráteres. Las tierras altas de Marte tienen 91 cráteres de al menos 20 km de diámetro, el diámetro por encima del cual su recuento es completo.',
       prompt:
@@ -992,7 +992,7 @@ export const CRATERS_BY_SIZE = {
       because:
         'Más estrecho. El intervalo de un índice a partir de n cráteres se estrecha aproximadamente como uno entre la raíz cuadrada de n, así que 91 cráteres conocen la pendiente mejor que 40. El paso siguiente lo lee.',
     },
-    {
+    'mars-slope': {
       title: 'La pendiente de las tierras altas de Marte',
       body: 'Elige las <strong>tierras altas de Marte</strong> y ajusta los cráteres de al menos <strong>20 km</strong> de diámetro. Lee los dos extremos del intervalo de su índice.',
       fields: [
@@ -1000,7 +1000,7 @@ export const CRATERS_BY_SIZE = {
         { label: 'Extremo superior del intervalo' },
       ],
     },
-    {
+    'thin-mare': {
       title: 'Una pendiente a partir de siete cráteres',
       body: 'Elige el <strong>mar lunar</strong>, ajustado desde <strong>30 km</strong>. Solo siete cráteres son tan grandes. Lee su índice y el extremo superior de su intervalo.',
       fields: [
@@ -1008,7 +1008,7 @@ export const CRATERS_BY_SIZE = {
         { label: 'Extremo superior del intervalo' },
       ],
     },
-    {
+    'does-mare-differ': {
       title: '¿Es distinta la pendiente del mar?',
       body: 'El índice del mar es 3,5, de 1,4 a 6,5. El de las tierras altas lunares es 1,7, de 1,2 a 2,3.',
       prompt: '¿Qué se puede decir?',
@@ -1032,7 +1032,7 @@ export const CRATERS_BY_SIZE = {
       because:
         'El 1,7 de las tierras altas está dentro del intervalo del mar, que es ancho porque se apoya en siete cráteres. Los datos ni muestran ni descartan una diferencia de pendiente.',
     },
-    {
+    'roll-off': {
       title: 'Un recuento que se queda corto',
       body: 'Un recuento de una imagen pasa por alto primero los cráteres pequeños. Elige las <strong>tierras altas lunares</strong>, ajusta los cráteres de al menos <strong>20 km</strong>, por debajo de su límite de completitud de 30 km, y pon <strong>Un recuento que se queda corto</strong> en <strong>100 %</strong>: todos los cráteres de menos de 30 km quedan fuera de la lista, como los pasaría por alto un recuento de la imagen. Lee el índice y la <strong>z</strong> de la comprobación de la pendiente más arriba.',
       fields: [
@@ -1043,7 +1043,7 @@ export const CRATERS_BY_SIZE = {
         },
       ],
     },
-    {
+    'what-the-flag-says': {
       title: '¿Qué dice la señal?',
       body: 'El instrumento indica que la pendiente no es constante: el índice por encima de 40 km difiere del índice de 1,0 ajustado desde 20 km.',
       prompt: '¿Qué debes concluir?',
@@ -1065,11 +1065,11 @@ export const CRATERS_BY_SIZE = {
       because:
         'La señal dice que la lista no es una sola ley de potencias. No corrige nada y no nombra una causa: un recuento que se queda corto, la saturación, la renovación de la superficie y un cambio real en los impactores pueden curvar el gráfico. El remedio es ajustar solo por encima del diámetro en el que el recuento es completo.',
     },
-    {
+    'what-you-worked-out': {
       title: 'Lo que has deducido',
       body: 'Un gráfico acumulado de tamaño y frecuencia cuenta los cráteres de al menos cada diámetro, por área, con un intervalo de Poisson en cada punto. La pendiente de las tierras altas lunares es 1,71 de 1,22 a 2,28 (40 cráteres) y la de las tierras altas de Marte 1,72 de 1,39 a 2,09 (91 cráteres): más cráteres, un intervalo más estrecho. El 3,5 del mar, a partir de 7 cráteres, es casi todo incertidumbre. Deja fuera los cráteres pequeños y el ajuste cae a 1,0 y la comprobación de la pendiente lo señala: la señal dice que una lista no es una sola ley de potencias, no por qué. La caída <em>no</em> se corrige aquí. Los pasos más profundos miran cómo se ensancha el intervalo al subir el ajuste, y por qué el ajuste no es una recta trazada por los puntos dibujados.',
     },
-  ],
+  },
 };
 
 // Lo que vale el diámetro de un cráter: paso a paso con el inglés.
@@ -1083,17 +1083,17 @@ export const WHAT_A_CRATER_DIAMETER_IS_WORTH = {
     'Decir por qué una corrección mayor que su propia incertidumbre sigue siendo una corrección, y qué cuesta omitirla',
     'Decir por qué esta investigación da un diámetro y un cociente de densidades pero ninguna edad en años',
   ],
-  steps: [
-    {
+  steps: {
+    'a-circle-and-a-scale': {
       title: 'De un círculo a un diámetro',
       body: 'Un diámetro en un mapa es una longitud en píxeles por la escala del mapa. Aquí el mapa es una imagen de Clementine de las tierras altas del sur de la Luna a 2,02 km por píxel, y tu círculo tiene un <strong>centro</strong> y un <strong>punto del borde</strong>. El instrumento convierte el radio del círculo en kilómetros, corrige la vista si lo permites y da el diámetro con cuatro términos de su incertidumbre: la escala, lo bien que una mano coloca un círculo, dónde está de verdad el borde y la vista.\n\nEl mapa es una vista de una esfera. Cerca del borde del disco un cráter circular se ve de soslayo y queda comprimido en la dirección hacia el centro del disco. El instrumento dibuja el círculo del suelo como la elipse que forma. El círculo de la imagen parte de un cráter del catálogo, y se pueden mostrar los círculos del propio catálogo para comparar.',
     },
-    {
+    'read-the-diameter': {
       title: 'Lee el diámetro',
       body: 'El círculo está puesto sobre un cráter grande, con su punto del borde a 25 píxeles del centro, en la dirección hacia el centro del disco, y la vista corregida. Lee el <strong>diámetro</strong> y su incertidumbre.',
       fields: [{ label: 'Diámetro' }, { label: 'Su incertidumbre (un sigma)' }],
     },
-    {
+    'largest-term-predict': {
       title: '¿Qué término es el mayor?',
       body: 'La incertidumbre del diámetro se compone de cuatro términos: la escala del mapa, lo bien que se coloca el círculo, dónde está de verdad el borde y la vista.',
       prompt: 'Para este círculo, el término mayor es&hellip;',
@@ -1109,7 +1109,7 @@ export const WHAT_A_CRATER_DIAMETER_IS_WORTH = {
       because:
         'Dónde está el borde. El borde de un cráter es una cresta, erosionada y solapada, y dos personas cuidadosas discrepan sobre ella en unos pocos por ciento del diámetro. La colocación de una mano y la escala son mucho menores, y la vista se conoce bien. El paso siguiente lee cada término.',
     },
-    {
+    'the-budget': {
       title: 'Los cuatro términos',
       body: 'Lee la incertidumbre de <strong>colocar el círculo</strong> y de <strong>dónde está el borde</strong>, cada una como porcentaje del diámetro. El término de reconocimiento es tuyo: lo fijaste en un 5 por ciento, y el instrumento no sabe más.',
       fields: [
@@ -1117,7 +1117,7 @@ export const WHAT_A_CRATER_DIAMETER_IS_WORTH = {
         { label: 'Incertidumbre de dónde está el borde' },
       ],
     },
-    {
+    'the-correction': {
       title: 'Omite la vista',
       body: 'Pon <strong>Corregir la vista</strong> en no: la vista se toma como cenital y el círculo se dibuja redondo. Lee el diámetro y cuánto, en porcentaje, baja.',
       fields: [
@@ -1125,7 +1125,7 @@ export const WHAT_A_CRATER_DIAMETER_IS_WORTH = {
         { label: 'Cuánto menos que con ella' },
       ],
     },
-    {
+    'big-correction-small-uncertainty': {
       title: 'Una corrección grande, una incertidumbre pequeña',
       body: 'La vista cambia el diámetro en un diez por ciento y añade un 0,06 por ciento a su incertidumbre.',
       prompt: '¿Qué dice eso?',
@@ -1149,7 +1149,7 @@ export const WHAT_A_CRATER_DIAMETER_IS_WORTH = {
       because:
         'Una corrección puede ser grande y segura. La vista la fija dónde está el cráter en el disco, que se conoce con un píxel. Omitirla no es una barra de error mayor: es una respuesta equivocada en un diez por ciento, siempre, en el mismo sentido.',
     },
-    {
+    'why-no-age': {
       title: '¿Por qué no hay edad en años?',
       body: 'Esta investigación, y las dos anteriores, dan un diámetro, una densidad y un cociente de dos densidades. Ninguna da una edad en años.',
       prompt: '¿Por qué no?',
@@ -1174,11 +1174,11 @@ export const WHAT_A_CRATER_DIAMETER_IS_WORTH = {
       because:
         'Una edad necesita varias cosas que no están aquí: una función de producción y una cronología para convertir una densidad en años, correcciones por saturación y cráteres secundarios, y una corrección de lo que pasa por alto un recuento, comprobada con cráteres de tamaño conocido. Hasta que pasen su prueba, un cociente de densidades es el hallazgo, y dice qué superficie es más antigua, no en cuántos años.',
     },
-    {
+    'what-you-worked-out': {
       title: 'Lo que has deducido',
       body: 'Un círculo con un centro y un punto del borde a 25 píxeles dio un diámetro de 112,0 &plusmn; 5,9 km: la escala del mapa, la colocación del círculo, dónde está el borde y la vista, sumados en cuadratura, con el borde, una fracción que fijas tú, el mayor. La vista cambia el diámetro en un diez por ciento aproximadamente y su incertidumbre en un 0,06 por ciento: es una corrección que aplicar, no un error que citar. Un diámetro y un cociente de densidades es lo que da esta investigación. Una edad en años no, porque necesita una función de producción, correcciones por saturación y cráteres secundarios, y una corrección de completitud que no ha pasado su prueba.',
     },
-  ],
+  },
 };
 
 // ¿Qué hay en este campo?: paso a paso con el inglés (Prompt 191, tercera parte).
@@ -1192,12 +1192,12 @@ export const WHAT_IS_IN_THIS_FIELD = {
     'Leer una curva de completitud: la proporción de estrellas añadidas que se halla por magnitud, y las magnitudes al 50 y al 90 por ciento con un intervalo',
     'Decir de qué es respuesta una curva de completitud, de una búsqueda de un cuadro, y de qué no lo es',
   ],
-  steps: [
-    {
+  steps: {
+    'a-field-of-stars': {
       title: 'Un cuadro, y todavía ninguna lista',
       body: 'Abajo hay un cuadro de un campo de estrellas: cuarenta estrellas, de brillantes a tenues, sobre un cielo con ruido. Un detector aún no lo ha mirado. Aquí se le piden tres cosas: qué fuentes sobresalen del ruido, qué ancho tienen las estrellas y, la que dice cuánto fiarse de las otras dos, cuán tenue habría sido la estrella que hallaría.\n\nEl cuadro es <strong>sintético</strong>: las estrellas se colocaron a partir de una tabla, y esa verdad queda oculta hasta que un paso la activa. Un cuadro real nunca la ofrece. Las magnitudes aquí son <em>instrumentales</em>: menos 2,5 por el logaritmo de los electrones por segundo, así que un número menor es una estrella más brillante, y no hay punto cero.',
     },
-    {
+    'predict-the-list': {
       title: '¿Qué contendrá la lista?',
       body: 'El detector resta el cielo, suaviza el cuadro y lista cada lugar que sobresale cuatro sigmas del ruido.',
       prompt:
@@ -1212,7 +1212,7 @@ export const WHAT_IS_IN_THIS_FIELD = {
       because:
         'Las estrellas más brillantes, con las más tenues sin hallar. A cuatro sigmas casi nada más que una estrella sobresale tanto del ruido, y una estrella cuya luz se reparte entre unos pocos píxeles de ruido de cielo no lo hace. Los pasos siguientes muestran qué hace un umbral más bajo.',
     },
-    {
+    'how-many-sources': {
       title: '¿Cuántas fuentes?',
       body: 'Deja el <strong>Umbral</strong> en 4 sigmas. Lee cuántas fuentes lista el detector y cuántas llevan una marca.',
       fields: [
@@ -1220,7 +1220,7 @@ export const WHAT_IS_IN_THIS_FIELD = {
         { label: 'Fuentes con una marca' },
       ],
     },
-    {
+    'lower-the-threshold': {
       title: 'Un umbral más bajo',
       body: 'Pon el <strong>Umbral</strong> en 2,5 sigmas y activa <strong>Estrellas colocadas</strong> en mostradas. Lee cuántas fuentes se listan y cuántas de ellas no son una estrella colocada.',
       fields: [
@@ -1228,7 +1228,7 @@ export const WHAT_IS_IN_THIS_FIELD = {
         { label: 'Fuentes que no son una estrella colocada' },
       ],
     },
-    {
+    'the-width': {
       title: 'El ancho de las estrellas',
       body: 'Vuelve a poner el <strong>Umbral</strong> en 4 sigmas y la verdad en oculta. El detector toma las estrellas más brillantes que son redondas y no tienen marca, ajusta una gaussiana a cada una y las combina. Lee cuántas estrellas usó y el ancho (FWHM) con su incertidumbre.',
       fields: [
@@ -1237,7 +1237,7 @@ export const WHAT_IS_IN_THIS_FIELD = {
         { label: 'Su incertidumbre' },
       ],
     },
-    {
+    'why-the-width': {
       title: 'Para qué sirve el ancho',
       body: 'El instrumento siguiente añade estrellas de brillo elegido a una copia de este cuadro y hace que el detector vuelva a mirar. Pide el ancho de las estrellas que añade.',
       prompt: '¿Por qué usar el ancho que se acaba de medir?',
@@ -1259,7 +1259,7 @@ export const WHAT_IS_IN_THIS_FIELD = {
       because:
         'Una curva de completitud dice cuán probable es que este detector halle estrellas como las añadidas. Si son más estrechas o más anchas que las propias del cuadro, la curva trata de estrellas que el cuadro no tiene.',
     },
-    {
+    'one-magnitude': {
       title: 'Estrellas añadidas, halladas y perdidas',
       body: 'Se añadieron doce ensayos de veinte estrellas cada uno en lugares al azar, entre la magnitud menos 3,4 y menos 1,6, y el detector miró cada vez. Con el umbral en 4 sigmas y el ancho en 3 píxeles, lee la proporción hallada en el intervalo más brillante (menos 3,4 a menos 3,1) y en el que va de menos 2,5 a menos 2,2.',
       fields: [
@@ -1267,7 +1267,7 @@ export const WHAT_IS_IN_THIS_FIELD = {
         { label: 'Halladas, magnitud −2,5 a −2,2' },
       ],
     },
-    {
+    'the-curve': {
       title: 'La curva',
       body: 'Las proporciones, intervalo a intervalo, son la curva de completitud de esta búsqueda de este cuadro. Lee la magnitud a la que se halla la mitad de las estrellas añadidas, y aquella a la que se hallan nueve de cada diez.',
       fields: [
@@ -1275,7 +1275,7 @@ export const WHAT_IS_IN_THIS_FIELD = {
         { label: 'Magnitud con el 90 por ciento hallado' },
       ],
     },
-    {
+    'how-faint': {
       title: '¿Cuán tenue puede ver?',
       body: 'Una pregunta que quiere un solo número tiene por respuesta una curva.',
       prompt: '¿Cuán tenue puede ver este detector?',
@@ -1302,11 +1302,11 @@ export const WHAT_IS_IN_THIS_FIELD = {
       because:
         'Depende de cuán seguro quieras estar. La curva da la respuesta completa: el 90 por ciento en −2,87, la mitad en −2,47 y el 5 por ciento en −2,2. «Cuán tenue» sin una proporción no es una medición, y una fuente tenue listada tampoco es una respuesta.',
     },
-    {
+    'what-you-worked-out': {
       title: 'Lo que has deducido',
       body: 'A cuatro sigmas el detector listó 30 fuentes y no marcó ninguna. A 2,5 sigmas listó 44 y siete eran solo ruido, algo que ninguna lista puede decir de sí misma. Seis estrellas limpias dieron un ancho de 3,00 &plusmn; 0,02 píxeles. Estrellas de ese ancho añadidas en lugares al azar se hallaron nueve de cada diez veces en la magnitud −2,87 y la mitad de las veces en −2,47, con casi ninguna hallada más allá de −2,2: la curva de completitud es como una búsqueda responde a «cuán tenue». Pertenece a este cuadro, este ancho y este umbral. El cuadro era sintético: cuarenta estrellas de una tabla, un cielo de 90 electrones por píxel y 8 de ruido de lectura, y un ancho de 3,0 píxeles, que la medición recuperó.',
     },
-  ],
+  },
 };
 
 /** By lesson id: what instructorLocale.js registers. */

@@ -1,19 +1,21 @@
 // =============================================================================
 // Laying deeper steps into a lesson: the pure half of ./depth.js
 // -----------------------------------------------------------------------------
-// No imports but the depth names, so the answer-key build, the author checks and
-// the tests can lay a lesson out synchronously. See DEPTH.md.
+// No imports but the depth names and the Spanish matching rule (loaded with
+// every lesson), so the answer-key build, the author checks and the tests can
+// lay a lesson out synchronously. See DEPTH.md.
 // =============================================================================
 
-// Duplicates the two names of ./progressSchema.js on purpose: a module shared
-// between the lesson panel and this lazy one is its own file, and a request on
-// every lesson route (tests/progressiveDepth.test.js holds them equal).
+import { alignShadow } from '../data/investigations/i18n.js';
+
+// Duplicates ./progressSchema.js's names on purpose: a shared module would be a
+// request on every lesson route (tests/progressiveDepth.test.js holds them equal).
 export const DEPTHS = Object.freeze(['core', 'quantitative', 'advanced']);
 export const inDepth = (step, depth = 'core') =>
   Math.max(0, DEPTHS.indexOf(step?.depth)) <=
   Math.max(0, DEPTHS.indexOf(depth));
 
-/** The Spanish laid over a deeper step list: strings only, by index, never the machinery. */
+/** The Spanish laid over a deeper step list: strings only, steps by sid, never the machinery. */
 const KEEP = new Set([
   'sid',
   'after',
@@ -28,8 +30,10 @@ const KEEP = new Set([
 export function overlay(base, over) {
   if (over === undefined || over === null) return base;
   if (typeof base === 'string') return typeof over === 'string' ? over : base;
-  if (Array.isArray(base))
-    return Array.isArray(over) ? base.map((b, i) => overlay(b, over[i])) : base;
+  if (Array.isArray(base)) {
+    const aligned = alignShadow(base, over);
+    return aligned ? base.map((b, i) => overlay(b, aligned[i])) : base;
+  }
   if (base && typeof base === 'object' && typeof over === 'object') {
     const out = { ...base };
     for (const k of Object.keys(over))
@@ -41,12 +45,10 @@ export function overlay(base, over) {
 }
 
 /**
- * A lesson with its deeper steps laid in. Each goes right after the step it
- * names (`after`), in the order given, so the core steps keep their order and
- * their ids; nothing is renumbered, since a step is known by its id.
- *
- * Pure: the lesson is not modified. A step whose anchor is not there is put
- * last before the closing step, which author:check refuses anyway.
+ * A lesson with its deeper steps laid in, each right after the step it names
+ * (`after`), in the order given; core steps keep their order and ids. Pure. A
+ * step whose anchor is missing goes before the closing step (author:check
+ * refuses it).
  *
  * @param {object} lesson - The lesson as the registry returns it
  * @param {Array<object>} steps - From loadDepthSteps()
@@ -67,8 +69,8 @@ export function layDepth(lesson, steps) {
 }
 
 /**
- * What a lesson is at one depth: its steps at or above none deeper. The
- * numbering a student sees, the answer key and the report all follow it.
+ * A lesson at one depth: only the steps at or above none deeper (what the
+ * numbering, the answer key and the report follow).
  * @param {object} lesson - A lesson with its deeper steps laid in
  * @param {string} depth - A depth
  * @returns {object} The lesson, with `depth` and only the steps that belong
@@ -80,9 +82,9 @@ export const lessonAt = (lesson, depth) => ({
 });
 
 /**
- * Which depths a lesson really has steps at, shallowest first.
+ * The depths a lesson has steps at, shallowest first (always with core).
  * @param {object} lesson - A lesson with its deeper steps laid in
- * @returns {string[]} A subset of DEPTHS, always starting with core
+ * @returns {string[]} A subset of DEPTHS
  */
 export const depthsOf = lesson =>
   DEPTHS.filter(
@@ -90,7 +92,7 @@ export const depthsOf = lesson =>
   );
 
 /**
- * How many steps a reader sees at each depth.
+ * Steps a reader sees at each depth.
  * @param {object} lesson - A lesson with its deeper steps laid in
  * @returns {Record<string, number>} depth -> step count
  */

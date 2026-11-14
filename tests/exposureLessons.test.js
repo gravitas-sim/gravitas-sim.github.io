@@ -88,11 +88,11 @@ describe('Plan an Exposure: the numbers the steps state', () => {
 
 describe('Plan an Exposure: the two languages agree', () => {
   test('the Spanish follows the English step by step', () => {
-    expect(PLAN_AN_EXPOSURE_ES.steps).toHaveLength(
+    expect(Object.keys(PLAN_AN_EXPOSURE_ES.steps)).toHaveLength(
       PLAN_AN_EXPOSURE.steps.length
     );
     PLAN_AN_EXPOSURE.steps.forEach((s, i) => {
-      const es = PLAN_AN_EXPOSURE_ES.steps[i];
+      const es = PLAN_AN_EXPOSURE_ES.steps[s.sid];
       expect(es.title).toBeTruthy();
       expect(Boolean(es.options)).toBe(Boolean(s.options));
       if (s.options) expect(es.options).toHaveLength(s.options.length);
@@ -138,8 +138,10 @@ describe('Signal, Noise and Exposure: the new upper-depth steps', () => {
     );
   });
   test('the Spanish deeper steps stay index-aligned', () => {
-    expect(SNR_DEEP_ES.steps).toHaveLength(SNR_DEEP.steps.length);
-    SNR_DEEP_ES.steps.forEach(s => expect(s.worked?.length).toBeGreaterThan(0));
+    expect(Object.keys(SNR_DEEP_ES.steps)).toHaveLength(SNR_DEEP.steps.length);
+    Object.values(SNR_DEEP_ES.steps).forEach(s =>
+      expect(s.worked?.length).toBeGreaterThan(0)
+    );
   });
 });
 

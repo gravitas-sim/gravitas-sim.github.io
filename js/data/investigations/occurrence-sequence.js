@@ -373,12 +373,12 @@ export const HOW_MANY_EARTHS_ES = {
     'Calcular una tasa a partir de los listados y la completitud de una casilla, con su intervalo',
     'Decir qué dan una casilla sin listados y una que el sondeo apenas podía ver, y qué no puede decir una rejilla de tasas',
   ],
-  steps: [
-    {
+  steps: {
+    'a-count-is-not-a-rate': {
       title: 'Una cuenta no es una tasa',
       body: `Un sondeo vigiló 2000 estrellas y listó algunos planetas. ¿Cuántos planetas tiene una estrella? No el número listado dividido entre 2000: un planeta solo se ve si su órbita cruza por casualidad nuestra línea de visión, y solo si la búsqueda saca su caída del ruido de la estrella. El primer panel muestra la segunda parte. Se <em>inyectaron</em> planetas de todos los tamaños y períodos en la serie propia de cada estrella y se ejecutó la búsqueda: la parte que encontró es la eficiencia. Las estrellas son sintéticas, con ruido y duración propios, y los planetas también.`,
     },
-    {
+    'what-is-easy-prediction': {
       title: 'A quién ve el sondeo',
       body: `Planetas de 0,5 a 1 radio terrestre, con períodos orbitales de 8 a 16 días. Solo importan los que transitan.`,
       prompt: '¿Qué parte de los planetas que transitan recupera la búsqueda?',
@@ -394,7 +394,7 @@ export const HOW_MANY_EARTHS_ES = {
       because:
         'Cerca de un tercio: el 36 por ciento. Un planeta tan pequeño se recupera cuando se suman sus muchos tránsitos, y a este período una estrella contiene muchos, así que algunos se encuentran y muchos no.',
     },
-    {
+    'who-the-survey-sees': {
       title: 'Pruébalo',
       body: `Pon la <strong>casilla de radio</strong> en 0,5 a 1 y la <strong>casilla de período</strong> en 8 a 16, y lee la fila de la eficiencia.`,
       prompt:
@@ -416,7 +416,7 @@ export const HOW_MANY_EARTHS_ES = {
         },
       ],
     },
-    {
+    'how-many-it-lists': {
       title: 'De los listados a una tasa',
       body: `El segundo panel tiene los listados de una población buscada. Mira planetas de 1 a 2 radios terrestres con períodos de 8 a 16 días. La fila de la completitud dice cuántos planetas lista el sondeo por cada planeta por estrella en esta casilla: probabilidad de tránsito por recuperación, sumada sobre las estrellas. Los listados se dividen entre ella, y entre la parte de listados que no son planetas (la fiabilidad, declarada).`,
       prompt:
@@ -428,7 +428,7 @@ export const HOW_MANY_EARTHS_ES = {
       because:
         'El sondeo lista 82 planetas por cada planeta por estrella aquí. Diez listados son por tanto unos 0,12 planetas por estrella (10 entre 82 es 0,122, y una fiabilidad de 0,95 lo deja en 0,116). Los listados decían 10; la tasa dice qué significa eso por estrella.',
     },
-    {
+    'the-next-population': {
       title: 'Otra población',
       body: `Cambia la <strong>semilla</strong> a 2. Es otra población sacada de la misma verdad, listada por el mismo sondeo.`,
       prompt: '¿Qué hace la tasa de la misma casilla?',
@@ -449,7 +449,7 @@ export const HOW_MANY_EARTHS_ES = {
         },
       ],
     },
-    {
+    'a-bin-it-cannot-see': {
       title: 'Una casilla que no puede ver',
       body: `Vuelve a poner la semilla en 1, la <strong>casilla de radio</strong> en 0,5 a 1 y la <strong>casilla de período</strong> en 128 a 256.`,
       prompt: '¿Qué da el panel para esta casilla, que no tiene listados?',
@@ -470,17 +470,17 @@ export const HOW_MANY_EARTHS_ES = {
         },
       ],
     },
-    {
+    'what-you-can-now-say': {
       title: 'Lo que ya puedes decir',
       body: `Una tasa es los listados divididos entre la completitud, quitando la fiabilidad: los planetas por estrella que darían lo que listó el sondeo. La completitud es la probabilidad de un tránsito por la probabilidad de que la búsqueda lo recupere, sumada sobre las estrellas, y baja con el período y con el tamaño. Otra población mueve una casilla en torno a la raíz cuadrada de sus listados. Una casilla que el sondeo apenas podía ver no da tasa, y una casilla sin listados donde podía haber visto da solo un límite.`,
     },
-  ],
+  },
 };
 
 export const HOW_MANY_EARTHS_DEEPER_ES = {
   id: 'how-many-earths',
-  steps: [
-    {
+  steps: {
+    'read-a-rate': {
       title: 'Lee una tasa',
       body: `Con la semilla 1, 1 a 2 radios terrestres y 8 a 16 días, lee la tasa y el extremo superior de su intervalo del 68 por ciento.`,
       fields: [
@@ -491,7 +491,7 @@ export const HOW_MANY_EARTHS_DEEPER_ES = {
         },
       ],
     },
-    {
+    'a-bin-with-none': {
       title: 'Una casilla sin listados',
       body: `Pon la semilla en 1, la <strong>casilla de radio</strong> en 8 a 16 y la <strong>casilla de período</strong> en 8 a 16. El sondeo no vio ningún planeta tan grande. Lee el límite, y cuántos planetas lista el sondeo por cada planeta por estrella aquí.`,
       fields: [
@@ -499,7 +499,7 @@ export const HOW_MANY_EARTHS_DEEPER_ES = {
         { label: 'Planetas listados por cada planeta por estrella' },
       ],
     },
-    {
+    'what-a-stated-reliability-does': {
       title: 'Qué hace una fiabilidad declarada',
       body: `Pon la <strong>casilla de radio</strong> en 2 a 4 y la <strong>casilla de período</strong> en 64 a 128, sin fiabilidad declarada. Lee la tasa (0,224 con los 4 listados) y declara después la fiabilidad. Se toma que una quinta parte de los listados a este período no son planetas.`,
       prompt: '¿Por qué factor cambia la tasa?',
@@ -515,7 +515,7 @@ export const HOW_MANY_EARTHS_DEEPER_ES = {
       because:
         'La tasa es n por la fiabilidad entre E, así que baja en la fiabilidad misma, de 0,224 a 0,179 planetas por estrella. La fiabilidad se declara, no se calcula: el sondeo no sabe qué listados son falsos, y una declaración errónea mueve todas las tasas de la casilla por el mismo factor.',
     },
-    {
+    'the-total-the-grid-cannot-give': {
       title: 'El total que la rejilla no puede dar',
       body: `Pon la <strong>casilla de radio</strong> en 0,5 a 1 y la semilla en 1. La última fila suma las tasas de las casillas que tienen una: cerca de un planeta por estrella. Dos de las ocho casillas de período no están acotadas.`,
       prompt:
@@ -532,11 +532,11 @@ export const HOW_MANY_EARTHS_DEEPER_ES = {
       because:
         'La suma cubre las casillas que el sondeo podía ver. Las que apenas podía ver (aquí 128 días en adelante, con los períodos largos donde está la mayoría de los planetas de esta población) contienen más que la suma, y la rejilla no tiene modo de decir cuánto sin un modelo de cómo depende la tasa del período que el propio sondeo no puede comprobar. Activa las tasas verdaderas para verlo: suman 1,6.',
     },
-    {
+    'what-the-grid-cannot-say': {
       title: 'Lo que la rejilla no puede decir',
       body: `Las tasas son de este sondeo, esta búsqueda y esta población. La búsqueda es el filtro adaptado al período y la fase conocidos, así que la completitud es mejor que la de una búsqueda real. El intervalo lleva solo el error de cuenta de los listados: la fiabilidad se declara y se toma como exacta, y la completitud tiene un pequeño error propio. Una tasa puede pasar de un planeta por estrella, y una suma sobre casillas también. No se ofrece ningún suavizado de la rejilla; una rejilla suavizada sería una regularización y no una posterior. Y un sondeo no dice nada de las casillas que apenas podía ver.`,
     },
-  ],
+  },
 };
 
 // ---- instructor content -------------------------------------------------------------------------------

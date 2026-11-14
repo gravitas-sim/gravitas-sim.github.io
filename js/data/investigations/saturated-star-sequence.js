@@ -691,12 +691,12 @@ export const THE_SATURATED_STAR_ES = {
     'Decir qué hace el desbordamiento de carga a las estrellas de la columna de una estrella saturada y por qué un píxel marcado se rechaza en vez de repararse a mano',
     'Decir qué hace la traza de un rayo cósmico a las estrellas que cruza y qué hace un observador al respecto',
   ],
-  steps: [
-    {
+  steps: {
+    'a-bright-star': {
       title: 'La estrella más brillante de la imagen',
       body: 'Un CCD registra la luz acumulando electrones en cada píxel, y un píxel solo puede guardar cierto número: la <strong>capacidad máxima</strong>, 50&nbsp;000 electrones aquí. La imagen muestra una estrella muy brillante, <strong>S</strong>, entre otras más débiles. La herramienta de fotometría mide cada estrella y, cuando no puede fiarse de un número, lo <em>rechaza</em> y dice por qué: las estrellas dibujadas en naranja son las que rechazó.\n\nLa imagen es <strong>sintética</strong>: la hizo un modelo, y los brillos de las estrellas y los electrones que pusieron en la imagen se conocen exactamente. Nadie la observó.',
     },
-    {
+    'bright-star-predict': {
       title: '¿Cuál habría sido el número?',
       body: 'La herramienta rechaza S. Supón que no lo hubiera hecho: suma la luz en un círculo alrededor de la estrella, como en todas las demás. La fila de S dice qué habría leído, como parte de los electrones que puso el modelo.',
       prompt: 'Sumado de todos modos, el flujo de S sería&hellip;',
@@ -712,12 +712,12 @@ export const THE_SATURATED_STAR_ES = {
       because:
         'Mucho menor: los píxeles centrales guardan 50&nbsp;000 electrones cada uno y el resto de su luz no se registra.',
     },
-    {
+    'clipped-star': {
       title: 'Lo que lee la estrella recortada',
       body: 'Lee la fila de la <strong>Estrella S</strong>: sin tener en cuenta el rechazo, ¿qué parte de los electrones que puso el modelo habría leído la suma? Dala en porcentaje.',
       fields: [{ label: 'Parte del flujo verdadero que leería' }],
     },
-    {
+    'magnitude-error': {
       title: 'El error de magnitud',
       body: 'Una estrella con el 30 por ciento de su flujo parece más débil en cierto número de magnitudes. Escribe de nuevo la parte y el instrumento da el error de magnitud, 2,5 veces el logaritmo del flujo verdadero entre el medido: lo demasiado débil que se catalogaría la estrella.',
       fields: [
@@ -725,7 +725,7 @@ export const THE_SATURATED_STAR_ES = {
         { label: 'Error de magnitud (demasiado débil)' },
       ],
     },
-    {
+    'why-too-faint': {
       title: '¿Por qué demasiado débil?',
       body: 'La estrella es lo más brillante de la imagen y su flujo medido es la fracción más pequeña de la verdad.',
       prompt: '¿Por qué una estrella demasiado brillante sale demasiado débil?',
@@ -752,7 +752,7 @@ export const THE_SATURATED_STAR_ES = {
       because:
         'Cada píxel se satura en la capacidad máxima; la luz que llega cuando un píxel está lleno se pierde (o, como muestra el paso siguiente, se derrama), y una suma de lo registrado se queda corta.',
     },
-    {
+    'trail-predict': {
       title: 'Adónde va la carga de más',
       body: 'Activa el <strong>desbordamiento de carga</strong>. En un CCD la carga que un píxel lleno no puede guardar puede derramarse a lo largo de su columna hacia los píxeles de arriba y de abajo. <strong>N1</strong> y <strong>N2</strong> son estrellas débiles en la columna de S; <strong>C</strong> es una estrella débil en otro sitio. La imagen marca ahora los píxeles que recibieron carga derramada (magenta).',
       prompt: '¿Cuáles de las tres estrellas débiles rechazará la herramienta?',
@@ -768,7 +768,7 @@ export const THE_SATURATED_STAR_ES = {
       because:
         'N1 y N2: la carga se derrama hacia arriba y hacia abajo por la columna de S hasta agotarse, y una estela que atraviesa el círculo de una estrella se marca y se rechaza.',
     },
-    {
+    trail: {
       title: 'La estela',
       body: 'Con el desbordamiento activado, cuenta cuántas de las estrellas débiles <strong>N1, N2 y C</strong> rechaza la herramienta, y lee en la fila <em>Desbordamiento</em> cuántos píxeles recibieron carga de píxeles saturados.',
       fields: [
@@ -776,7 +776,7 @@ export const THE_SATURATED_STAR_ES = {
         { label: 'Píxeles que recibieron carga desbordada' },
       ],
     },
-    {
+    'a-ray': {
       title: 'Un rayo por el círculo',
       body: 'Ahora desactiva el desbordamiento y activa las <strong>trazas de rayos cósmicos</strong>, con S atenuada para que no esté saturada. Un rayo cósmico es una partícula cargada que cruza el detector y deja una traza de carga (cian). La herramienta rechaza las estrellas cuyo círculo cruza una traza.',
       prompt:
@@ -802,7 +802,7 @@ export const THE_SATURATED_STAR_ES = {
       because:
         'Combina varias exposiciones con un rechazo (una mediana o una media recortada): una traza está en una imagen en un lugar que las otras no tienen, y la combinación la elimina.',
     },
-    {
+    'what-an-observer-does': {
       title: 'Qué hace un observador',
       body: `Lo que viste se reduce a una idea: <strong>un indicador de calidad es una
              negativa, y la negativa es la respuesta segura</strong>. Una estrella saturada
@@ -812,16 +812,16 @@ export const THE_SATURATED_STAR_ES = {
              corrige a mano: se sustituye por una imagen mejor. Las imágenes son sintéticas
              y los efectos son modelos declarados, no un detector medido.`,
     },
-  ],
+  },
 };
 
 export const THE_SATURATED_STAR_DEEPER_ES = {
-  steps: [
-    {
+  steps: {
+    'the-response': {
       title: 'Una respuesta que se curva antes de parar',
       body: 'Activa la <strong>no linealidad</strong>. Un detector real no registra los electrones linealmente hasta la capacidad máxima: la respuesta se curva cerca de ella. El modelo es aquí una curva declarada: lineal hasta un codo en 0,8 de la capacidad máxima y después una caída tipo tanh, de modo que un píxel lleno lee algo menos de 50&nbsp;000. El gráfico bajo la imagen muestra el máximo de cada estrella, registrado frente a la carga recogida. La línea vertical discontinua es el <strong>límite lineal</strong>, donde la respuesta está 1 por ciento por debajo de la recta.\n\nLa curva es <strong>una elección del modelo</strong>, no una medida de ningún detector. En uno real se mide, exponiéndolo a una luz uniforme y representando la salida frente a la exposición.',
     },
-    {
+    'linear-limit': {
       title: 'El límite lineal y la meseta',
       body: 'Lee la fila <em>Límite lineal</em>: el número de electrones con el que la respuesta está 1 por ciento por debajo de lo lineal, y lo que lee un píxel lleno. Después da el límite como porcentaje de la capacidad máxima.',
       fields: [
@@ -830,12 +830,12 @@ export const THE_SATURATED_STAR_DEEPER_ES = {
         { label: 'Límite como parte de la capacidad máxima' },
       ],
     },
-    {
+    'brightest-measured': {
       title: '¿Cuánto puede brillar S y seguir midiéndose?',
       body: 'Con la no linealidad activada, sube la magnitud de S desde 12 (más brillante es más bajo). Halla la magnitud <strong>más brillante</strong>, con el medio punto de magnitud del control, con la que la herramienta todavía mide S en vez de rechazarla.',
       fields: [{ label: 'Magnitud más brillante aún medida' }],
     },
-    {
+    'safe-flux': {
       title: 'Dónde es segura la medida',
       body: 'El límite es de un <em>píxel</em>. El píxel más brillante de una estrella guarda solo una parte de su luz: la fila <em>Muestreo</em> da el intervalo, según dónde esté la estrella dentro de su píxel. Una estrella es segura si su píxel más brillante se queda por debajo del límite incluso en el peor sitio, la parte mayor. Escribe esa parte mayor (porcentaje); el instrumento da los electrones máximos que puede entregar una estrella y la magnitud de esa estrella en 60 segundos (una estrella de magnitud 0 da aquí 5,606 &times; 10<sup>8</sup> electrones por segundo).',
       fields: [
@@ -846,7 +846,7 @@ export const THE_SATURATED_STAR_DEEPER_ES = {
         { label: 'Su magnitud en 60 s' },
       ],
     },
-    {
+    'can-you-correct-it': {
       title: '¿Podría corregirse?',
       body: 'Aquí se conoce la curva, así que podría deshacerse: un píxel que lee 46&nbsp;000 electrones dice cuántos se recogieron. La herramienta rechaza en su lugar.',
       prompt:
@@ -871,11 +871,11 @@ export const THE_SATURATED_STAR_DEEPER_ES = {
       because:
         'La corrección necesita una curva medida, y falla en un píxel lleno, que lee la misma meseta llegue lo que llegue. Los observadores mantienen las estrellas por debajo del límite lineal y miden la curva (la curva de transferencia de fotones) antes de fiarse de una corrección.',
     },
-    {
+    undersampled: {
       title: 'Una estrella más estrecha que dos píxeles',
       body: 'Fija la anchura del perfil en <strong>1,2 píxeles</strong>. Un perfil necesita una anchura de unos 2 píxeles para estar muestreado: más estrecho está <em>submuestreado</em>, y los píxeles ya no siguen su forma. El modelo ya integra el perfil sobre cada píxel cuadrado, así que los píxeles son exactos; lo que cambia es que dónde está la estrella <em>dentro</em> de su píxel decide ahora cuánta luz cae en el píxel más brillante. La fila <em>Muestreo</em> da el intervalo.',
     },
-    {
+    'phase-predict': {
       title: 'Dos estrellas, un brillo',
       body: 'Dos estrellas entregan exactamente el mismo número de electrones. Una está en el centro de un píxel y la otra en su esquina. El perfil mide 1,2 píxeles de ancho.',
       prompt: 'Los píxeles más brillantes de las dos estrellas guardan&hellip;',
@@ -891,7 +891,7 @@ export const THE_SATURATED_STAR_DEEPER_ES = {
       because:
         'Un factor de unos dos: el píxel del máximo guarda el 45 por ciento de la luz en el centro y el 24 en la esquina.',
     },
-    {
+    'phase-dependence': {
       title: 'El píxel del máximo, según la fase',
       body: 'Lee la fila <em>Muestreo</em> con una anchura de <strong>1,2</strong> píxeles y luego de <strong>2,8</strong>: la parte menor y la mayor de la luz de una estrella que guarda el píxel más brillante.',
       fields: [
@@ -901,7 +901,7 @@ export const THE_SATURATED_STAR_DEEPER_ES = {
         { label: 'Parte mayor con 2,8 px' },
       ],
     },
-    {
+    'aperture-scatter': {
       title: 'Qué le hace a la fotometría',
       body: 'La fotometría suma el flujo en una apertura de radio 1,5 FWHM. La fila <em>Muestreo</em> da también cuánto varía ese flujo (una desviación típica, en porcentaje) al moverse la estrella dentro de su píxel. Léelo con <strong>1,2</strong> y con <strong>2,8</strong> píxeles; el instrumento da el cociente.',
       fields: [
@@ -910,7 +910,7 @@ export const THE_SATURATED_STAR_DEEPER_ES = {
         { label: 'Cociente (1,2 entre 2,8)' },
       ],
     },
-    {
+    'what-undersampling-costs': {
       title: 'Lo que cuesta el submuestreo',
       body: 'El flujo de la apertura varió unas décimas de por ciento; el píxel del máximo, un factor de dos.',
       prompt:
@@ -935,7 +935,7 @@ export const THE_SATURATED_STAR_DEEPER_ES = {
       because:
         'La suma sobrevive; el píxel del máximo no. Una estrella que es segura en la esquina de un píxel puede saturarse en su centro, así que el flujo seguro lo fija la parte mayor, como en el paso sobre dónde es segura la medida.',
     },
-  ],
+  },
 };
 
 const CONTENT = {

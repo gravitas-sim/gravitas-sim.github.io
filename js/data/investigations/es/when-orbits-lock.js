@@ -29,8 +29,8 @@ export default {
     'Usar la libración del argumento de Laplace y del argumento 3:2 de Plutón para explicar qué protege cada resonancia',
     'Distinguir un equilibrio estable de uno inestable en los puntos de Lagrange de Júpiter, trabajando en el marco rotante',
   ],
-  steps: [
-    {
+  steps: {
+    'four-moons-and-a-suspicious': {
       title: 'Cuatro lunas y una coincidencia sospechosa',
       body: `En pantalla están las cuatro lunas que Galileo vio en enero de
              1610: Ío, Europa, Ganímedes y Calisto, girando alrededor de Júpiter
@@ -59,7 +59,7 @@ export default {
              afectado.`,
       tip: 'La simulación está en pausa. Nada se mueve hasta que la dejes correr.',
     },
-    {
+    'how-close-is-close': {
       title: '¿Cómo de cerca es cerca?',
       body: `Antes de medir nada: se dice que Ío y Europa están en una
              resonancia 2:1, es decir, que Ío da exactamente dos vueltas por
@@ -76,7 +76,7 @@ export default {
                 es demasiado grande para ser error de medida. Haga lo que haga la
                 resonancia, no está volviendo la razón exactamente dos.`,
     },
-    {
+    'measure-the-four-periods': {
       title: 'Mide los cuatro periodos',
       body: `Déjalo correr. El instrumento de abajo mide el periodo de cada luna
              a partir de su órbita —de la energía y la distancia, como lo haría
@@ -105,7 +105,7 @@ export default {
                exterior, que <em>no</em> está en resonancia, tiene con
                diferencia la razón más limpia.`,
     },
-    {
+    'write-down-the-ratios': {
       title: 'Anota las razones',
       body: `Léelas del instrumento. Van a tu informe, y dos de ellas están a
              punto de usarse en tu contra.`,
@@ -115,7 +115,7 @@ export default {
         { label: 'Periodo de Calisto ÷ el de Ganímedes' },
       ],
     },
-    {
+    'which-is-the-impressive-one': {
       title: '¿Cuál es la impresionante?',
       body: `Las tres razones que has medido rondan 2:1, 2:1 y 7:3
              respectivamente. Sus distancias a esas razones son de un 0,4 %, un
@@ -144,7 +144,7 @@ export default {
                 es llamativo —unas veinticinco veces mejor que el azar— y
                 veinticinco veces mejor que el azar no demuestra nada.`,
     },
-    {
+    'what-a-resonance-actually-is': {
       title: 'Qué es realmente una resonancia',
       body: `Aparta la razón y pregúntate qué se supone que <em>hace</em> la
              resonancia.
@@ -170,7 +170,7 @@ export default {
              «¿son vuestros periodos casi conmensurables?». Es
              «<strong>¿ocurren vuestras conjunciones en el mismo sitio?</strong>».`,
     },
-    {
+    'where-do-the-line-ups': {
       title: '¿Dónde ocurren las alineaciones?',
       body: `Ío y Europa se alinean cada 3,5 días aproximadamente. En una
              ejecución de cien órbitas de Ío habrá docenas de alineaciones.`,
@@ -189,7 +189,7 @@ export default {
                 algo más sutil, y encontrarlo es el resto de esta
                 investigación.`,
     },
-    {
+    'watch-the-line-ups': {
       title: 'Observa las alineaciones',
       body: `Déjalo correr un minuto o así. Cada punto del disco de la izquierda
              es una conjunción Ío–Europa, situada según la dirección en la que
@@ -212,7 +212,7 @@ export default {
                de la dispersión en lugar de informar del agrupamiento que
                predecía la respuesta equivocada del paso anterior.`,
     },
-    {
+    'why-the-sky-is-the': {
       title: 'Por qué el cielo es el sitio equivocado donde mirar',
       body: `Las conjunciones no se quedan quietas en el cielo. Pero la
              resonancia es real: las tres lunas llevan enganchadas casi toda la
@@ -235,7 +235,7 @@ export default {
                 órbitas</em>. Eso es exactamente un ángulo resonante, y por eso
                 su definición parece tan quisquillosa.`,
     },
-    {
+    'the-resonant-angle': {
       title: 'El ángulo resonante',
       body: `Aquí está la construcción. Parece arbitraria la primera vez y no lo
              es.
@@ -277,7 +277,7 @@ export default {
              suman, y los dos cuerpos se sujetan ahí. <em>Eso</em> es una
              resonancia, y es lo único que lo es.`,
     },
-    {
+    'the-laplace-argument': {
       title: 'El argumento de Laplace',
       body: `Para las tres lunas interiores la combinación adecuada las
              involucra a las tres a la vez, y Laplace la halló en 1805:
@@ -301,7 +301,7 @@ export default {
                 confirmarlo durante el primer minuto y medio, y el motivo de esa
                 negativa es lo siguiente que merece la pena entender.`,
     },
-    {
+    'watch-the-laplace-argument': {
       title: 'Observa el argumento de Laplace',
       body: `Ponlo en marcha y <strong>déjalo correr</strong>. Este tarda un
              rato, y la forma en que cambia de opinión es lo importante.
@@ -340,7 +340,7 @@ export default {
                se negó a dar una respuesta durante la primera parte de la
                ejecución.`,
     },
-    {
+    'why-the-instrument-refuses': {
       title: 'Por qué el instrumento se niega',
       body: `Un instrumento que siempre da una respuesta no está midiendo nada, y
              este está construido para decirlo.
@@ -368,7 +368,7 @@ export default {
              ángulo se queda en no concluyente durante toda la investigación, y la
              tentación de llamarlo resonante será considerable.`,
     },
-    {
+    'record-the-laplace-libration': {
       title: 'Registra la libración de Laplace',
       body: `Cuando el veredicto diga LIBRACIÓN, lee estos valores y anótalos.
 
@@ -380,7 +380,7 @@ export default {
         { label: 'periodo de libración', unit: 'días' },
       ],
     },
-    {
+    'what-180-means': {
       title: 'Lo que significan los 180°',
       body: `φ<sub>L</sub> = λ<sub>Ío</sub> − 3λ<sub>Europa</sub> +
              2λ<sub>Ganímedes</sub> se sitúa en 180°.
@@ -421,7 +421,7 @@ export default {
         off: 'Mira la expresión simplificada: es un múltiplo de un ángulo. Iguálala al valor que mantiene φ y despeja el ángulo.',
       },
     },
-    {
+    'one-percent': {
       title: 'Un uno por ciento',
       body: `A continuación ejecutarás las mismas cuatro lunas con un solo número
              cambiado: Europa parte un uno por ciento más lejos. No difiere nada
@@ -443,7 +443,7 @@ export default {
                 mayor de Europa a una parte en mil; una parte en cien queda diez
                 veces fuera, y fuera no hay nada.`,
     },
-    {
+    'break-it': {
       title: 'Rómpelo',
       body: `El mismo sistema con Europa desplazada un uno por ciento hacia
              fuera. Observa los dos gráficos.
@@ -467,7 +467,7 @@ export default {
                completa por contrastar la rapidez con que llega este veredicto
                frente a lo que tardó el de libración, y por explicar por qué.`,
     },
-    {
+    'what-the-pair-of-runs': {
       title: 'Qué establece el par de ejecuciones',
       body: `Dos ejecuciones que difieren en un número. En una el argumento de
              Laplace libra; en la otra circula.`,
@@ -491,7 +491,7 @@ export default {
                 capturar ambos como pareja si quieres la comparación en tu
                 informe.`,
     },
-    {
+    'the-awkward-case': {
       title: 'El caso incómodo',
       body: `De vuelta al sistema intacto, y ahora a Calisto: la de la razón más
              limpia de todo el sistema.
@@ -521,7 +521,7 @@ export default {
                sólo del final, y por advertir que la amplitud informada no deja
                de crecer, que es la señal.`,
     },
-    {
+    'the-best-ratio-in-the': {
       title: 'La mejor razón del sistema',
       body: `La razón de periodos de Calisto con Ganímedes es 2,3327, a un
              0,03 % de 7:3: unas veinticinco veces más cerca que el azar. La de
@@ -553,7 +553,7 @@ export default {
                 más lenta que unos cientos de ciclos de conjunción. Es una
                 restricción genuina. Sólo que no es una resonancia.`,
     },
-    {
+    'the-orbit-that-crosses-and': {
       title: 'La órbita que se cruza y nunca choca',
       body: `La órbita de Plutón cruza la de Neptuno. En el perihelio Plutón está
              a 29,7 UA del Sol; la órbita de Neptuno está a 30,1. Durante veinte
@@ -581,7 +581,7 @@ export default {
              igual pero fuera de la resonancia. Observa qué le ocurre.`,
       tip: 'Dos desviaciones respecto de la realidad, ambas declaradas en el modelo: Gravitas es bidimensional, así que la inclinación de 17° de Plutón queda proyectada, y Plutón parte de la 3:2 exacta y no de su distancia observada. Ninguna de las dos afecta al argumento que vas a medir.',
     },
-    {
+    'measure-pluto-s-resonance': {
       title: 'Mide la resonancia de Plutón',
       body: `Déjalo correr minuto y medio. Este llega a su veredicto deprisa: la
              libración es lo bastante amplia y rápida en estas unidades como para
@@ -602,7 +602,7 @@ export default {
                180°, unos 82° y 19.670 años. Puntuación completa por los tres más
                la observación de que el ángulo del errante circula.`,
     },
-    {
+    'record-pluto-s-libration': {
       title: 'Registra la libración de Plutón',
       body: `Lee estos valores del instrumento.`,
       fields: [
@@ -611,7 +611,7 @@ export default {
         { label: 'periodo de libración', unit: 'años' },
       ],
     },
-    {
+    'where-the-line-ups-happen': {
       title: 'Dónde ocurren las alineaciones',
       body: `Ahora la misma ejecución, vista como conjunciones. El disco
              izquierdo es dónde se alinean Plutón y Neptuno vistos desde el Sol;
@@ -631,7 +631,7 @@ export default {
                toda conjunción Plutón–Neptuno ocurre cerca del punto más alejado
                de Plutón respecto del Sol.`,
     },
-    {
+    'why-180-protects-pluto': {
       title: 'Por qué 180° protege a Plutón',
       body: `Toma el argumento φ = 3λ<sub>Plutón</sub> − 2λ<sub>Neptuno</sub> −
              ϖ<sub>Plutón</sub> y evalúalo en una conjunción, donde las dos
@@ -670,7 +670,7 @@ export default {
                 que se mantengan lejos del perihelio, y una libración de 80° en
                 torno a 180° lo consigue de sobra.`,
     },
-    {
+    'sixty-degrees-ahead': {
       title: 'Sesenta grados por delante',
       body: `El último caso es el más extraño, y también es una resonancia: una
              1:1.
@@ -698,7 +698,7 @@ export default {
              una sonda a un grado de L3, y otra en una órbita circular corriente
              un cuarto más ancha.`,
     },
-    {
+    'the-rotating-frame': {
       title: 'El marco rotante',
       body: `Déjalo correr minuto y medio. En esta vista Júpiter está fijo a la
              derecha, a una unidad del Sol, y las dos cruces son L4 y L5:
@@ -735,7 +735,7 @@ export default {
                circulando. Puntuación completa por las cuatro y por usar el marco
                rotante en lugar de la vista principal para leerlas.`,
     },
-    {
+    'record-the-tadpole': {
       title: 'Registra el renacuajo',
       body: `Patroclo es un objeto real y esta es una medida real del tipo que se
              hace para él. Lee su libración en el instrumento del marco.
@@ -750,7 +750,7 @@ export default {
         { label: 'periodo de libración', unit: 'años jovianos' },
       ],
     },
-    {
+    'two-equilibria-one-survivor': {
       title: 'Dos equilibrios, un superviviente',
       body: `L3, L4 y L5 son todos puntos de equilibrio: un cuerpo colocado
              exactamente en cualquiera de ellos se queda ahí. La sonda L4 de esta
@@ -781,7 +781,7 @@ export default {
                 L4 y L5. La estabilidad no es un detalle; es toda la razón de que
                 exista una población.`,
     },
-    {
+    'one-last-ratio': {
       title: 'Una última razón',
       body: `El cuarto cuerpo de esta escena va en una órbita circular corriente
              un cuarto más ancha que la de Júpiter. Su razón de periodos con
@@ -804,7 +804,7 @@ export default {
                enunciar la comparación explícitamente: este cuerpo tiene mejor
                razón que Plutón y no está en resonancia alguna.`,
     },
-    {
+    'what-you-can-and-cannot': {
       title: 'Qué puedes y qué no puedes concluir de una razón',
       body: `Reúne los cuatro casos.
 
@@ -836,7 +836,7 @@ export default {
 
              \n\nLo que sí zanja la cuestión es un ángulo que se da la vuelta.`,
     },
-    {
+    'the-report-you-would-write': {
       title: 'El informe que escribirías',
       body: `Un colega te envía un par de cuerpos recién descubiertos. La razón
              de periodos es 1,9987: a un 0,065 % de 2:1, unas doce veces más
@@ -867,7 +867,7 @@ export default {
                 \n\nEjecútalo más tiempo. Es lo único que lo zanja, y es lo que
                 hicieron Cohen y Hubbard en 1965 con Plutón.`,
     },
-    {
+    'say-what-a-libration-shows': {
       title: 'Lo que muestra una libraci\u00f3n y no muestra una raz\u00f3n',
       body: `Mediste razones de periodos cercanas a n\u00fameros enteros, y tambi\u00e9n
              registraste \u00e1ngulos resonantes que oscilan en torno a un valor fijo
@@ -877,7 +877,7 @@ export default {
       rubric:
         'Una raz\u00f3n cercana a un entero peque\u00f1o puede darse por casualidad, y con suficientes cuerpos y pares algunas lo estar\u00e1n; la raz\u00f3n es una coincidencia hasta que algo demuestra que se mantiene. Un \u00e1ngulo resonante que libra \u2014 oscila en torno a un valor fijo con amplitud acotada en vez de circular 360\u00b0 \u2014 muestra que la configuraci\u00f3n se mantiene activamente: las conjunciones siguen ocurriendo en el mismo sitio. El argumento de Laplace \u03c6_L = \u03bb_\u00cdo \u2212 3\u03bb_Europa + 2\u03bb_Gan\u00edmedes en torno a 180\u00b0 es algo que ningun par de periodos podr\u00eda mostrar por s\u00ed solo.',
     },
-    {
+    'where-this-goes': {
       title: 'Adónde lleva esto',
       body: `La resonancia no es una curiosidad del borde del Sistema Solar. Es
              una de las principales cosas que decidieron el aspecto que tiene el
@@ -916,5 +916,5 @@ export default {
              veces: ¿el ángulo vuelve, o da la vuelta?`,
       tip: 'El escenario Sistema TRAPPIST-1 está en la galería si quieres ver una cadena resonante de siete eslabones.',
     },
-  ],
+  },
 };

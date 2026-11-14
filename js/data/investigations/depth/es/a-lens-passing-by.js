@@ -1,7 +1,6 @@
-// Una lente que pasa, más a fondo: las palabras en español, paso a paso con ../a-lens-passing-by.js.
 export default {
-  steps: [
-    {
+  steps: {
+    'the-crossing-time-by-hand': {
       title: 'El tiempo de cruce a mano',
       body: 'El ángulo de Einstein de la lente es 0,319 milisegundos de arco y está a 6 kpc, así que su radio de Einstein en la lente es 0,319 × 6 = 1,91 unidades astronómicas. Una unidad astronómica son 1,496 × 10<sup>8</sup> km, y la lente se mueve a 200 km/s a través de la línea de visión.',
       prompt: 'El tiempo que tarda la lente en recorrer un radio de Einstein',
@@ -15,7 +14,7 @@ export default {
         off: 't_E = (1,91 × 1,496 × 10⁸ km) ÷ (200 km/s), en días.',
       },
     },
-    {
+    'the-peak-by-hand': {
       title: 'El máximo a mano',
       body: 'La amplificación de una lente puntual es A(u) = (u² + 2) ÷ (u √(u² + 4)). Toma u = 0,5, un paso a medio radio de Einstein.',
       prompt: 'La amplificación con u = 0,5',
@@ -27,7 +26,7 @@ export default {
         off: 'A = (0,25 + 2) ÷ (0,5 × √(0,25 + 4)).',
       },
     },
-    {
+    'fit-the-event-blend-free': {
       title: 'Ajusta el suceso sintético, con la mezcla libre',
       body: 'Activa “Suceso sintético con ruido”. Los puntos grises son un suceso de microlente sintético: una curva modelo con un 2 por ciento de ruido, hecha aquí, así que la verdad existe aunque no se te dice. El instrumento lo ajusta con el ajustador del núcleo de inferencia. Lee el tiempo de cruce del ajuste en que la mezcla es libre.',
       prompt: 'El tiempo de cruce del mejor ajuste con la mezcla libre',
@@ -41,7 +40,7 @@ export default {
         off: 'Usa “Mejor ajuste con mezcla libre: tE”.',
       },
     },
-    {
+    'the-wrong-blend': {
       title: 'El ajuste que supone que no hay mezcla',
       body: 'El otro ajuste fija la mezcla en cero: supone que toda la luz es de la fuente. Halla un suceso más corto con una barra de error mucho menor. Lee su chi cuadrado por punto; un ajuste que describe los datos dentro del ruido tiene cerca de 1.',
       prompt: 'Chi cuadrado por punto del ajuste sin mezcla',
@@ -53,5 +52,5 @@ export default {
         off: 'Usa “Mejor ajuste sin mezcla: chi cuadrado por punto”.',
       },
     },
-  ],
+  },
 };

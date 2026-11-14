@@ -403,12 +403,12 @@ export const PLAN_AN_EXPOSURE_ES = {
     'Comprobar el plan con una imagen sintética medida con fotometría de abertura, y decir qué muestra el acuerdo y qué no',
     'Decir cuándo un objetivo no se alcanza dentro del límite de exposición, y qué omite el cálculo',
   ],
-  steps: [
-    {
+  steps: {
+    'what-a-plan-is': {
       title: 'Un plan a partir de la ecuación',
       body: 'El <strong>planificador de exposición</strong> toma una instalación de la biblioteca de instrumentos (aquí la cámara del Observatorio Rubin en la banda r), un objetivo y una señal a ruido que alcanzar, y devuelve la exposición que pide la ecuación del CCD, el presupuesto del ruido y el objeto más débil que alcanza esa exposición. A su lado hay una <strong>imagen sintética</strong> de ese mismo plan, y la fotometría de esa imagen.\n\nLos valores que declara la biblioteca (la escala de píxel, el ruido de lectura, el brillo del cielo, el seeing) vienen de su tabla citada. Los que no declara (la parte de la luz que entrega el sistema, la corriente oscura) son <strong>valores didácticos</strong>, y el panel los lista como aportados por Gravitas. El cálculo es una <strong>predicción</strong>: omite el error de aplanado, el apiñamiento y el cielo cambiante, y no es una garantía.',
     },
-    {
+    'predict-the-limit': {
       title: 'Qué limita una estrella débil',
       body: 'Una estrella de magnitud 24 en la banda r, vista desde el suelo con el seeing que declara la biblioteca, es débil pero no imposible para un telescopio de 8 metros. Todavía no leas el planificador.',
       prompt:
@@ -425,7 +425,7 @@ export const PLAN_AN_EXPOSURE_ES = {
       because:
         'El cielo. En la abertura el cielo emite mucha más luz que la estrella, así que el ruido es el ruido de disparo del cielo, y el plan está limitado por el cielo. Las estrellas más brillantes están limitadas por sí mismas; las más débiles, en exposiciones cortas, por la cámara.',
     },
-    {
+    'the-plan': {
       title: 'El plan para una señal a ruido de 20',
       body: 'Con Rubin en <strong>r</strong>, una magnitud de <strong>24</strong>, una señal a ruido objetivo de <strong>20</strong> y <strong>2</strong> exposiciones, lee la <strong>exposición total</strong> y el <strong>objeto más débil (5σ)</strong> que alcanza esa exposición.',
       fields: [
@@ -433,7 +433,7 @@ export const PLAN_AN_EXPOSURE_ES = {
         { label: 'Objeto más débil (5σ)' },
       ],
     },
-    {
+    'predict-more-exposures': {
       title: 'Dividir la exposición',
       body: 'Deja la misma estrella y el mismo objetivo. Un telescopio a menudo no puede tomar una sola imagen larga: el cielo satura el detector o un rayo cósmico la estropea. Supón que el plan se divide en 20 exposiciones más cortas.',
       prompt:
@@ -450,7 +450,7 @@ export const PLAN_AN_EXPOSURE_ES = {
       because:
         'Algo mayor. La luz de la estrella y del cielo se recoge durante todo el tiempo, se divida como se divida, pero el ruido de lectura se paga una vez por imagen, así que 20 imágenes llevan 10 veces el ruido de lectura de 2, y algo más de tiempo total recupera la calidad.',
     },
-    {
+    'twenty-exposures': {
       title: 'Veinte exposiciones',
       body: 'Pon las exposiciones en <strong>20</strong> y lee la <strong>exposición total</strong> y la parte del ruido al cuadrado que tiene ahora el <strong>ruido de lectura</strong>, en por ciento.',
       fields: [
@@ -458,7 +458,7 @@ export const PLAN_AN_EXPOSURE_ES = {
         { label: 'Parte del ruido de lectura' },
       ],
     },
-    {
+    'airmass-cost': {
       title: 'Lo que cuesta el aire',
       body: 'Vuelve a 2 exposiciones. En el cenit el plan tarda 455,3 segundos. Pon la <strong>masa de aire</strong> en 2 (una estrella a 30 grados sobre el horizonte): la estrella se atenúa con la extinción que declara la biblioteca para la banda y el seeing se ensancha como la masa de aire elevada a 0,6.',
       prompt:
@@ -476,7 +476,7 @@ export const PLAN_AN_EXPOSURE_ES = {
         off: 'exposición con masa de aire 2 ÷ exposición en el cenit.',
       },
     },
-    {
+    'the-moon': {
       title: 'Lo que cuesta la Luna',
       body: 'Elige <strong>Las Cumbres 1,0 m, V</strong>, una magnitud de <strong>22</strong>, un objetivo de <strong>20</strong> y <strong>1</strong> exposición. Lee la exposición total con el cielo en el valor oscuro de la biblioteca, y luego con el cielo <strong>2 magnitudes más brillante</strong> (una Luna brillante).',
       prompt:
@@ -493,7 +493,7 @@ export const PLAN_AN_EXPOSURE_ES = {
         off: 'exposición con Luna ÷ exposición sin ella.',
       },
     },
-    {
+    'on-the-frame': {
       title: 'Lo que responde la imagen',
       body: 'Vuelve a <strong>Rubin, r</strong>, magnitud 24, 2 exposiciones, un objetivo de 20 y masa de aire en el cenit. La imagen junto a la lectura es una exposición sintética de exactamente ese plan, y sus dos filas dicen qué predice el cálculo para la abertura de la propia imagen y qué <em>mide</em> en ella la fotometría de abertura. Lee las dos señales a ruido.',
       fields: [
@@ -501,7 +501,7 @@ export const PLAN_AN_EXPOSURE_ES = {
         { label: 'Señal a ruido medida' },
       ],
     },
-    {
+    'cannot-be-reached': {
       title: 'Un objetivo que el límite de exposición prohíbe',
       body: 'Pon el brillo en <strong>29</strong>: una estrella más de cien veces más débil que el límite de 5σ de una exposición de 455 segundos. El planificador tiene un límite de cuatro horas de exposición.',
       prompt: '¿Qué hace el planificador?',
@@ -528,7 +528,7 @@ export const PLAN_AN_EXPOSURE_ES = {
       because:
         'Dice que el objetivo no se alcanza dentro del límite de exposición, e informa de la señal a ruido que alcanzan cuatro horas, cerca de 1,1. Las exposiciones limitadas por el cielo crecen como el cuadrado de la señal a ruido, así que una estrella tan débil necesita semanas, y la respuesta honesta es no.',
     },
-    {
+    'what-the-plan-leaves-out': {
       title: 'Lo que omite el cálculo',
       body: 'Lee la última fila del panel, «Lo que omite». Un estudiante planifica la exposición de una estrella muy brillante para una señal a ruido de 500.',
       prompt: '¿Qué es lo correcto decir de ese plan?',
@@ -552,11 +552,11 @@ export const PLAN_AN_EXPOSURE_ES = {
       because:
         'El cálculo omite el error de aplanado y de resta del cielo, así que para estrellas brillantes sigue prometiendo más con el tiempo de lo que da una medida real. El panel avisa por encima de una señal a ruido de 100 (un valor didáctico declarado para un aplanado de cerca del uno por ciento). Una predicción no es una garantía.',
     },
-    {
+    'what-you-worked-out': {
       title: 'Lo que averiguaste',
       body: 'Una estrella de magnitud 24 en la banda r de Rubin necesitó unos 455 segundos en dos exposiciones para una señal a ruido de 20, limitada por el cielo, y esos 455 segundos alcanzarían una estrella de magnitud 25,5 con una señal a ruido de 5. Veinte exposiciones costaron un 12 por ciento más de tiempo, todo de ruido de lectura; una masa de aire de 2 costó un factor 2,8; y un cielo 2 magnitudes más brillante, en el telescopio de 1 m, un factor 5. Un objetivo 5 magnitudes más débil fue rechazado, con la señal a ruido que alcanzarían cuatro horas. La imagen coincidió con la predicción en unas décimas, lo que permite una realización del ruido.\n\nEl plan es una <strong>predicción</strong>. Omite el error de aplanado y de resta del cielo, el apiñamiento y el centelleo, y tres de sus entradas son valores didácticos que la biblioteca no declara. Un calculador real de tiempos de exposición añade un margen; este muestra adónde va el tiempo.',
     },
-  ],
+  },
 };
 
 const CONTENT = {

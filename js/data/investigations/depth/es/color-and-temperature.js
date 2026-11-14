@@ -1,7 +1,6 @@
-// Color y temperatura, más a fondo: las palabras en español, paso a paso con ../color-and-temperature.js.
 export default {
-  steps: [
-    {
+  steps: {
+    'power-and-size': {
       title: 'Cuánta luz, de qué tamaño de superficie',
       body: 'Un cuerpo negro da σT⁴ de potencia por cada metro cuadrado (léelo bajo la gráfica), así que una esfera de radio R da L = 4πR²σT⁴. Una estrella tiene 0,8 radios solares y una temperatura de 4.400&nbsp;K. La temperatura del Sol es 5.772&nbsp;K.',
       prompt: 'La luminosidad de la estrella, en luminosidades solares',
@@ -18,7 +17,7 @@ export default {
         off: 'El radio cuenta al cuadrado y la temperatura a la cuarta potencia.',
       },
     },
-    {
+    'size-from-light': {
       title: 'El tamaño a partir de la luz y el color',
       body: 'Una supergigante fría da 100.000 veces la luminosidad del Sol a una temperatura de 3.600&nbsp;K. Da la vuelta a L = 4πR²σT⁴ para hallar su radio.',
       prompt: 'Su radio, en radios solares',
@@ -33,7 +32,7 @@ export default {
         off: 'Radio = √(luminosidad) ÷ (razón de temperaturas)², todo en unidades solares.',
       },
     },
-    {
+    'color-in-two-bands': {
       title: 'Fotometría sintética en dos bandas reales',
       body: 'El explorador halla un color integrando la luz del cuerpo negro con dos curvas de filtro reales y comparando los resultados, como haría un observador. Pon las bandas en <strong>g &minus; r</strong> (los filtros de SDSS, sistema AB) y la temperatura en 4.400&nbsp;K.',
       prompt: 'El color g − r de un cuerpo negro de 4.400 K',
@@ -46,7 +45,7 @@ export default {
         off: 'Lee la fila del índice de color con las bandas en g − r.',
       },
     },
-    {
+    'two-systems': {
       title: 'Dos colores para un mismo cuerpo negro',
       body: 'A 4.400 K el mismo cuerpo negro tiene B − V = 1,00 (sistema Vega) y g − r = 0,91 (sistema AB). Un enano naranja real tiene un g − r medido algo distinto otra vez.',
       prompt: '¿Por qué difieren los dos números para el mismo cuerpo negro?',
@@ -60,5 +59,5 @@ export default {
       because:
         'Los dos índices usan bandas y puntos cero distintos (Vega frente a AB), así que sus números difieren para el mismo cuerpo negro. Una estrella real difiere del cuerpo negro otra vez por sus líneas. Un color solo tiene sentido con sus bandas y su sistema nombrados.',
     },
-  ],
+  },
 };

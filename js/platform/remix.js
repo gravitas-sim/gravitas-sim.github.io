@@ -30,6 +30,7 @@ import { shortHash } from '../assignments/assignment.js';
 import { stepFingerprint } from '../investigations/progressBackup.js';
 import { ID_INVESTIGATION_PACK } from '../names.js';
 import { withVersion } from './investigation.js';
+import { alignShadow } from '../data/investigations/i18n.js';
 
 const isObject = v => v !== null && typeof v === 'object' && !Array.isArray(v);
 
@@ -863,13 +864,15 @@ export function compileRemix(pack, original, originalEs, api) {
       if (w !== undefined) shadow[k] = w;
     }
   shadow.duration = pack.duration;
-  shadow.steps = [];
+  shadow.steps = {};
+  const packWords = alignShadow(base.lesson.steps, base.shadow?.steps);
+  const originalWords = alignShadow(original.steps, es.steps);
 
   lesson.steps = base.lesson.steps.map((compiled, i) => {
     const at = byOriginal.get(compiled.sid);
-    const words = base.shadow?.steps?.[i] || {};
+    const words = packWords?.[i] || {};
     if (at === undefined) {
-      shadow.steps.push(words);
+      shadow.steps[compiled.sid] = words;
       return compiled;
     }
     const o = original.steps[at];
@@ -937,7 +940,7 @@ export function compileRemix(pack, original, originalEs, api) {
     if (compiled.depth === undefined) delete step.depth;
     if (compiled.requires === undefined) delete step.requires;
     if (compiled.when === undefined) delete step.when;
-    const spanish = spanishWords(o, es.steps?.[at]) || {};
+    const spanish = spanishWords(o, originalWords?.[at]) || {};
     const sw = { ...spanish, ...words };
     // A text the pack has no Spanish for falls back to the original's.
     for (const k of Object.keys(words))
@@ -960,13 +963,13 @@ export function compileRemix(pack, original, originalEs, api) {
           ? { say: words.misconceptions[j].say }
           : {}),
       }));
-    shadow.steps.push(sw);
+    shadow.steps[compiled.sid] = sw;
     return step;
   });
   const hasSpanish =
     Boolean(originalEs) ||
     base.shadow !== null ||
-    shadow.steps.some(w => Object.keys(w).length);
+    Object.values(shadow.steps).some(w => Object.keys(w).length);
   return {
     lesson,
     shadow: hasSpanish ? shadow : null,

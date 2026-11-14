@@ -152,9 +152,9 @@ describe('Design the Schedule: the new advanced steps', () => {
 
 describe('the two languages agree', () => {
   const same = (en, es) => {
-    expect(es.steps).toHaveLength(en.steps.length);
+    expect(Object.keys(es.steps)).toHaveLength(en.steps.length);
     en.steps.forEach((s, i) => {
-      const e = es.steps[i];
+      const e = es.steps[s.sid];
       expect(e.title).toBeTruthy();
       expect(Boolean(e.options)).toBe(Boolean(s.options));
       if (s.options) expect(e.options).toHaveLength(s.options.length);

@@ -8,6 +8,7 @@
 
 import { DEPTHS, inDepth } from '../investigations/progressSchema.js';
 import { toleranceFor } from '../answerCheck.js';
+import { alignShadow } from '../data/investigations/i18n.js';
 
 /** Rule ids and what they say, for `author:check --rules`. */
 export const DEPTH_RULES = {
@@ -33,7 +34,7 @@ export const DEPTH_RULES = {
  * The findings for one lesson's deeper steps.
  * @param {object} core - The lesson as the registry has it
  * @param {object} laid - The same lesson with every depth laid in
- * @param {{steps: object[]}} words - The Spanish shadow of the deeper steps
+ * @param {{steps: object}} words - The Spanish shadow of the deeper steps
  * @param {Array<object>} deeper - The deeper steps, as written
  * @returns {Array<{level: string, rule: string, lesson: string, step: ?number, message: string}>}
  */
@@ -44,6 +45,13 @@ export function checkDepth(core, laid, deeper, words) {
     out.push({ level: 'error', rule, lesson: L, step: sid, message });
   const at = sid => laid.steps.findIndex(s => s.sid === sid);
   const offered = core.depths || [];
+  const spoken = words ? alignShadow(deeper, words.steps) : null;
+  if (words && (!spoken || Array.isArray(words.steps)))
+    err('depth/translation', null, 'steps must be an object keyed by step sid');
+  else if (spoken)
+    for (const k of Object.keys(words.steps))
+      if (!deeper.some(s => s.sid === k))
+        err('depth/translation', null, `steps.${k} names no deeper step`);
 
   if (offered[0] !== 'core' || offered.some(d => !DEPTHS.includes(d)))
     err('depth/offered', null, `depths must start with core: ${offered}`);
@@ -151,7 +159,7 @@ export function checkDepth(core, laid, deeper, words) {
           `expects ${s.answer}; "${g.sid}:${g.id}" computes ${value}`
         );
     }
-    const sp = words?.steps?.[n];
+    const sp = spoken?.[n];
     if (words && !sp) err('depth/translation', w, 'has no Spanish');
   });
 
@@ -165,7 +173,7 @@ export function checkDepth(core, laid, deeper, words) {
   // The words a reader sees, step for step: the title and body, and every
   // other text and list the English step has.
   deeper.forEach((s, n) => {
-    const sp = words?.steps?.[n];
+    const sp = spoken?.[n];
     if (!sp) return;
     const need = (key, ok) =>
       s[key] !== undefined &&

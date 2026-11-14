@@ -1,7 +1,6 @@
-// El latido de una estrella, más a fondo: las palabras en español, paso a paso con ../the-beat-of-a-star.js.
 export default {
-  steps: [
-    {
+  steps: {
+    'the-width-from-the-run': {
       title: 'La anchura a partir de la duración de la serie',
       body: 'La anchura de un pico de la búsqueda de periodos es aproximadamente P² ÷ T, donde P es el periodo y T la duración de la serie. La serie de SU Draconis tiene 39,4 ciclos de 0,66041 días (el instrumento da ambos), así que T = 39,4 × 0,66041 días. Calcula P² ÷ T y compáralo con la anchura que leíste.',
       prompt: 'P² ÷ T para SU Draconis, en días',
@@ -16,7 +15,7 @@ export default {
         off: '(0,66041)² ÷ (39,4 × 0,66041), que es 0,66041 ÷ 39,4.',
       },
     },
-    {
+    'the-drift-by-hand': {
       title: 'Cuánto se desfasa',
       body: 'Un periodo de plegado un 2 por ciento demasiado largo se equivoca en 0,02 de ciclo en cada ciclo. A lo largo de los 39,4 ciclos de la serie esos errores se suman. Da la deriva total del último ciclo respecto del primero, en ciclos.',
       prompt: 'Deriva a lo largo de toda la serie, en ciclos',
@@ -32,7 +31,7 @@ export default {
         off: '39,4 × 0,02, y luego tener en cuenta que el periodo de plegado es 1,02 P, no P.',
       },
     },
-    {
+    'the-alias-by-hand': {
       title: 'Un alias a mano',
       body: 'Toma la frecuencia verdadera, 1 ÷ 0,66041 días, y réstale un ciclo por día, la frecuencia de muestreo de quien observa una vez por noche. El periodo de lo que queda es el alias más largo. Compáralo con los 1,945 días del instrumento.',
       prompt: 'El periodo del alias más largo, en días',
@@ -46,7 +45,7 @@ export default {
         off: '1 ÷ (1 ÷ 0,66041 − 1).',
       },
     },
-    {
+    'the-honest-error': {
       title: 'El pico y el periodo afinado',
       body: 'Para Eta Aquilae el pico más alto de la búsqueda está en 7,502 días, y el periodo afinado es 7,226 días. Su diferencia, dividida por la anchura del pico, 2,12 días, dice qué parte de la anchura del pico movió el afinado a la respuesta.',
       prompt: 'El desplazamiento como fracción de la anchura del pico',
@@ -61,7 +60,7 @@ export default {
         off: '(7,502 − 7,226) ÷ 2,12.',
       },
     },
-    {
+    'the-sigma-count': {
       title: 'Cuántos sigma del catálogo',
       body: 'El Catálogo General de Estrellas Variables da el periodo de Eta Aquilae como 7,1766 días, tras décadas de observación. La serie midió 7,226 ± 0,030 días. Expresa la diferencia en unidades del error del bootstrap.',
       prompt: 'La diferencia en errores del bootstrap',
@@ -75,5 +74,5 @@ export default {
         off: '(7,226 − 7,1766) ÷ 0,030.',
       },
     },
-  ],
+  },
 };

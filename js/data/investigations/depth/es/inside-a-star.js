@@ -1,7 +1,6 @@
-// Dentro de una estrella, más a fondo: las palabras en español, paso a paso con ../inside-a-star.js.
 export default {
-  steps: [
-    {
+  steps: {
+    'the-estimate-by-hand': {
       title: 'La temperatura a mano',
       body: 'Toma un gas de peso molecular medio μ = 0,6 sostenido contra el peso de una estrella de masa <em>M</em> y radio <em>R</em>. Igualar la energía térmica por partícula, kT, a la energía gravitatoria por partícula, GMμm<sub>u</sub> ÷ R, da una escala de temperatura T ≈ GMμm<sub>u</sub> ÷ (kR). Para el Sol, GM = 1,3275 × 10<sup>20</sup> m³/s², m<sub>u</sub> = 1,6605 × 10<sup>−27</sup> kg, k = 1,3806 × 10<sup>−23</sup> J/K y R = 6,957 × 10<sup>8</sup> m.',
       prompt: 'La escala de temperatura del Sol, en millones de kelvin',
@@ -17,7 +16,7 @@ export default {
         off: 'T = G M μ m_u ÷ (k R), y luego divide entre un millón.',
       },
     },
-    {
+    'the-central-pressure': {
       title: 'La presión central en unidades naturales',
       body: 'Las dimensiones dicen que la presión central de cualquier estrella es un número por GM² ÷ R⁴. Para el Sol, GM² ÷ R⁴ es 1,127 × 10<sup>15</sup> Pa. Pon el instrumento en el Sol y lee la presión central (se da en pascales); luego divide.',
       prompt: 'Presión central ÷ (GM² ÷ R⁴) para n = 3',
@@ -33,5 +32,5 @@ export default {
         off: 'Divide la presión central entre 1,127 × 10¹⁵ Pa.',
       },
     },
-  ],
+  },
 };

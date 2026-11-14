@@ -9,13 +9,13 @@ export default {
     'Mostrar lo que compra cada medida añadida, y por qué una sola cifra de exactitud lo oculta',
     'Decir qué no te cuenta una muestra sintética y equilibrada sobre un sondeo real',
   ],
-  steps: [
-    {
+  steps: {
+    'five-kinds-of-star': {
       title: 'Cinco tipos de estrella',
       body: `Los sondeos encuentran millones de estrellas cuyo brillo cambia, y nadie puede mirar cada una. Un <strong>clasificador</strong> las ordena por números medidos en la curva de luz: el <strong>periodo</strong>, la <strong>amplitud</strong> y la <strong>forma</strong> (aquí el número R21, la fuerza del segundo armónico de la curva sobre el primero, como en la primera investigación).
              \n\nEl instrumento guarda 120 estrellas, 24 de cada uno de cinco tipos: estrellas RR Lyrae con curva en diente de sierra (RRab) y otra más suave (RRc), cefeidas, estrellas delta Scuti y binarias eclipsantes. La muestra es <strong>sintética</strong>: hecha por un modelo directo a partir de plantillas estilizadas de cada tipo, con ruido, y medida con la misma tubería que una curva de luz real, así que las etiquetas se conocen. El clasificador da a cada estrella el tipo mayoritario de sus cinco vecinas más próximas entre las otras 119, y el instrumento muestra una <strong>tabla de confusión</strong>: para cada tipo verdadero, cómo se le llamó.`,
     },
-    {
+    'period-alone': {
       title: 'Solo el periodo',
       body: `Con “solo el periodo” como lo que el clasificador puede usar, lee la <strong>proporción bien clasificada</strong> y la <strong>proporción hallada</strong> de las binarias eclipsantes.`,
       fields: [
@@ -23,7 +23,7 @@ export default {
         { label: 'Binarias eclipsantes halladas' },
       ],
     },
-    {
+    'read-the-table': {
       title: 'Leer la tabla de confusión',
       body: `Cada fila “En verdad …, llamadas” cuenta las estrellas de un tipo verdadero según cómo las llamó el clasificador. Mira la fila de las <strong>binarias eclipsantes</strong>: lee cuántas se llamaron <strong>RRab</strong> y cuántas se llamaron <strong>eclipsante</strong>.`,
       fields: [
@@ -31,7 +31,7 @@ export default {
         { label: 'Binarias eclipsantes llamadas eclipsante' },
       ],
     },
-    {
+    'why-the-eclipsers-are-lost': {
       title: 'Por qué se pierden las binarias',
       body: `Mira la imagen: con solo el periodo, las binarias eclipsantes se reparten por los mismos periodos que los pulsadores. Una búsqueda de periodo sobre una binaria eclipsante halla la mitad del periodo orbital, porque la estrella se atenúa dos veces en cada órbita, casi por igual.`,
       prompt:
@@ -56,7 +56,7 @@ export default {
       because:
         'El periodo es un solo número, y varios tipos comparten el intervalo de unas horas a unos días. Las otras medidas (cuánto oscila y la forma de la curva) difieren mucho más entre los tipos.',
     },
-    {
+    'predict-the-amplitude': {
       title: 'Añade la amplitud',
       body: `Deja ahora que el clasificador use la amplitud además del periodo. Todavía no cambies el instrumento.`,
       prompt: 'El tipo de estrella que más mejorará será&hellip;',
@@ -70,7 +70,7 @@ export default {
       because:
         'Las binarias eclipsantes: eran las que más margen tenían, y un eclipse típico es más profundo o más somero que una pulsación, lo que las separa de varios pulsadores. El paso siguiente lee los números nuevos.',
     },
-    {
+    'add-the-amplitude': {
       title: 'Periodo y amplitud',
       body: `Elige “el periodo y la amplitud”. Lee la proporción bien clasificada y la proporción hallada de las binarias eclipsantes.`,
       fields: [
@@ -78,7 +78,7 @@ export default {
         { label: 'Binarias eclipsantes halladas' },
       ],
     },
-    {
+    'the-shape': {
       title: 'Añade la forma',
       body: `Elige “el periodo, la amplitud y la forma” y pon la imagen en “Forma (R21) frente al periodo”. Lee la proporción bien clasificada y la proporción hallada de las binarias eclipsantes.`,
       fields: [
@@ -86,7 +86,7 @@ export default {
         { label: 'Binarias eclipsantes halladas' },
       ],
     },
-    {
+    'what-a-single-number-hides': {
       title: 'Lo que oculta un solo número',
       body: `Un clasificador que da un 99 por ciento de exactitud parece terminado.`,
       prompt: '¿Qué te dice la tabla de confusión que no te dice la exactitud?',
@@ -110,10 +110,10 @@ export default {
       because:
         'La tabla dice dónde están los errores, así que se ve qué tipo está en apuros y qué medir para arreglarlo. Y como la exactitud es un promedio sobre los tipos, ponderado por cuántos hay de cada uno, una muestra con muchas binarias y pocos pulsadores daría una cifra peor con el mismo clasificador. Un cielo real no está equilibrado, así que la cifra de aquí no se traslada a un sondeo.',
     },
-    {
+    'what-you-worked-out': {
       title: 'Lo que has deducido',
       body: `Con solo el periodo, el 83 por ciento de una muestra sintética y equilibrada de cinco tipos se clasifica bien, pero las binarias eclipsantes solo el 29 por ciento de las veces, tomadas por pulsadores de periodo parecido. La amplitud lo sube al 54 por ciento, y la forma de la curva al 100, con un 99 por ciento en total. Una tabla de confusión muestra qué tipos se toman por cuáles, y la exactitud depende de la mezcla de tipos de la muestra.
              \n\nLa muestra es sintética y estilizada: solo cinco tipos, sin mezclas de luz, sin estallidos, sin segundos periodos, y la búsqueda de periodo de una binaria eclipsante cae en la mitad de la órbita. Un sondeo real no está equilibrado y tiene estrellas fuera de estos cinco tipos. Esto muestra cómo funciona el método; no dice lo bien que rinde el clasificador de un sondeo concreto.`,
     },
-  ],
+  },
 };

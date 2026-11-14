@@ -86,9 +86,9 @@ describe('the lesson is deepened, not changed', () => {
   });
 
   test('the Spanish has a step for each deeper step, with the same fields and options', () => {
-    expect(ES_DEEP.steps).toHaveLength(DEEP.steps.length);
+    expect(Object.keys(ES_DEEP.steps)).toHaveLength(DEEP.steps.length);
     DEEP.steps.forEach((s, i) => {
-      const es = ES_DEEP.steps[i];
+      const es = ES_DEEP.steps[s.sid];
       expect(es.title).toBeTruthy();
       expect(es.body ?? s.body).toBeTruthy();
       if (s.fields) expect(es.fields).toHaveLength(s.fields.length);

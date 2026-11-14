@@ -768,12 +768,12 @@ export const HOW_OLD_IS_THIS_WHITE_DWARF_ES = {
     'Decir que una edad tiene dos incertidumbres, una de las medidas y otra de la ley, y cuál de ellas pueden quitar mejores medidas',
     'Decir dónde está comprobada la ley, y por qué una enana fuera de ese intervalo recibe una cota y no una edad',
   ],
-  steps: [
-    {
+  steps: {
+    'an-ember-cooling': {
       title: 'Una brasa que se enfría',
       body: 'Una enana blanca es lo que queda de una estrella que ha dejado de quemar combustible. No produce calor propio. Brilla con el calor que sus núcleos guardaron cuando era estrella, y lo deja salir despacio por una capa exterior delgada, así que se enfría, y cuanto más tiempo lleva enfriándose, más débil es. Eso es un reloj: si se sabe a qué ritmo se enfría una enana blanca, su brillo dice hace cuánto se formó. \n\nEl panel lo hace con una ley del tipo de la de Mestel. Dale la masa de una enana blanca y su luminosidad, y da la <strong>edad de enfriamiento</strong>: el tiempo desde que empezó a enfriarse. Aquí hay una enana blanca de 0,6 masas solares, más o menos la masa más común, con una milésima de la luminosidad del Sol. La ley es un modelo, y el panel dice dónde está comprobada.',
     },
-    {
+    'ten-times-fainter': {
       title: 'Diez veces más débil',
       body: 'Una enana blanca de 0,6 masas solares con una milésima de la luminosidad del Sol lleva enfriándose algo menos de mil millones de años. Se sigue enfriando hasta ser diez veces más débil, con una diezmilésima.',
       prompt:
@@ -790,7 +790,7 @@ export const HOW_OLD_IS_THIS_WHITE_DWARF_ES = {
       because:
         'Unas cinco veces. Una enana blanca caliente pierde su calor deprisa y una fría despacio, así que cada factor de diez en la luminosidad tarda más que el anterior: en la ley la edad crece como la luminosidad elevada a menos cinco séptimos, y diez elevado a cinco séptimos es 5,2. Llegar a una milésima tarda menos de mil millones de años y llegar a una diezmilésima, unos cuatro mil millones.',
     },
-    {
+    'read-two-ages': {
       title: 'Lee dos edades',
       body: 'Pon la <strong>luminosidad</strong> en una diezmilésima de la del Sol (el log10 es &minus;4,0) y lee la edad de enfriamiento; luego vuelve a una milésima (&minus;3,0) y lee esa. Da las dos en miles de millones de años.',
       fields: [
@@ -798,7 +798,7 @@ export const HOW_OLD_IS_THIS_WHITE_DWARF_ES = {
         { label: 'Edad con una milésima' },
       ],
     },
-    {
+    'two-uncertainties': {
       title: 'Dos incertidumbres',
       body: 'Una edad de enfriamiento tiene dos incertidumbres. Una viene de cuán bien se conocen la masa y la luminosidad. El control <strong>Medida</strong> del panel la fija: exacta, buena (la masa a 0,02 masas solares, la luminosidad a 0,02 en log10), típica o pobre. La otra viene de la propia ley: Gravitas la comparó con una tabla publicada de enfriamiento de enanas blancas y midió cuánto se aparta. El panel está en medidas buenas; lee las dos líneas.',
       prompt: '¿Qué fija sobre todo la anchura del intervalo?',
@@ -822,7 +822,7 @@ export const HOW_OLD_IS_THIS_WHITE_DWARF_ES = {
         },
       ],
     },
-    {
+    'beyond-the-edge': {
       title: 'Más allá del borde',
       body: 'Pon la luminosidad en &minus;4,4, más fría que la enana blanca más débil para la que la ley está comprobada. El panel no da edad.',
       prompt: '¿Por qué no da ninguna?',
@@ -843,7 +843,7 @@ export const HOW_OLD_IS_THIS_WHITE_DWARF_ES = {
         },
       ],
     },
-    {
+    'a-bound-not-an-age': {
       title: 'Una cota, no una edad',
       body: 'Se halla una enana blanca de 0,6 masas solares con una luminosidad de &minus;4,4, más allá del borde. El panel en el borde, &minus;4,0, da una edad de 4,1 miles de millones de años, con un intervalo de 3,4 a 4,9. Una enana blanca solo se vuelve más débil con el tiempo.',
       prompt: '¿Qué puedes decir de la edad de la de −4,4?',
@@ -864,16 +864,16 @@ export const HOW_OLD_IS_THIS_WHITE_DWARF_ES = {
         },
       ],
     },
-    {
+    'what-the-age-says': {
       title: 'Lo que dice la edad',
       body: `La edad de enfriamiento de una enana blanca sale de su masa y de su luz con una ley comprobada de 0,5 a 1,0 masas solares y de una diezmilésima a un treintavo de la luminosidad del Sol. La edad lleva dos incertidumbres, la de las medidas y la de la propia ley; con medidas exactas queda solo la segunda, cerca del 19 por ciento. Más allá del borde el panel da una cota y no una edad, y la ley es un modelo comprobado con secuencias de modelos publicadas: esta investigación no incluye ninguna tabla de enanas blancas observadas.`,
     },
-  ],
+  },
 };
 
 export const HOW_OLD_IS_THIS_WHITE_DWARF_DEEPER_ES = {
-  steps: [
-    {
+  steps: {
+    'from-a-temperature': {
       title: 'A partir de una temperatura',
       body: 'Un espectro da la temperatura de una enana blanca más directamente que su luminosidad. Pon <strong>Dar</strong> en temperatura, la temperatura en 6000 K, la masa en 0,6 y la medida en buena. El panel convierte la temperatura en luminosidad con el radio de la enana blanca. Lee la <strong>edad</strong>, la parte de la incertidumbre que viene de las medidas y la que viene de la ley, como porcentajes.',
       fields: [
@@ -882,7 +882,7 @@ export const HOW_OLD_IS_THIS_WHITE_DWARF_DEEPER_ES = {
         { label: 'De la ley' },
       ],
     },
-    {
+    'heavier-is-older': {
       title: 'Más pesada, y más vieja',
       body: 'Muestra <strong>por masa</strong>, la edad frente a la masa, con una luminosidad de &minus;3,5. Una enana blanca de 0,5 masas solares con esa luminosidad tiene 1,6 miles de millones de años; una de 1,0 masas solares, 2,6.',
       prompt:
@@ -904,12 +904,12 @@ export const HOW_OLD_IS_THIS_WHITE_DWARF_DEEPER_ES = {
         },
       ],
     },
-    {
+    'what-better-measurements-buy': {
       title: 'Lo que compran mejores medidas',
       body: 'Pon la medida en <strong>exacta</strong>, para una enana blanca de 0,6 masas solares en &minus;3,0. La edad es 0,79 miles de millones de años. Lee los dos extremos del intervalo del 95 por ciento: es lo que queda cuando las medidas son perfectas.',
       fields: [{ label: 'Extremo inferior' }, { label: 'Extremo superior' }],
     },
-    {
+    'why-two-terms': {
       title: 'Por qué el error de la ley está en el intervalo',
       body: 'Gravitas probó el intervalo con 1166 enanas blancas simuladas de masas 0,7, 0,8 y 0,9 a las que no se ajustó la ley, con sus edades verdaderas tomadas de la tabla publicada y medidas tan ruidosas como las del panel: 0,03 masas solares y 0,04 en log10 de la luminosidad. Un intervalo del 95 por ciento hecho solo con las medidas contenía la edad verdadera el 86 por ciento de las veces. Con el error propio de la ley añadido, la contenía el 96 por ciento.',
       prompt: '¿Qué dice la diferencia?',
@@ -930,7 +930,7 @@ export const HOW_OLD_IS_THIS_WHITE_DWARF_DEEPER_ES = {
         },
       ],
     },
-    {
+    'why-not-a-heavy-one': {
       title: 'Por qué se rechazan 1,2 masas solares',
       body: 'Pon la masa en 1,2. El panel no da edad, aunque con la misma luminosidad a 1,0 sí la da. Frente a la tabla publicada, la ley con 1,2 masas solares se equivoca en un 21 por ciento en la mediana y en un 49 por ciento en el peor caso, en el mismo intervalo de luminosidad. Dentro del intervalo de 0,5 a 1,0 masas solares se equivoca en un 7,5 por ciento en la mediana y como mucho en un 32 por ciento.',
       prompt: '¿Para qué sirve el rechazo?',
@@ -951,7 +951,7 @@ export const HOW_OLD_IS_THIS_WHITE_DWARF_DEEPER_ES = {
         },
       ],
     },
-  ],
+  },
 };
 
 export const FROM_STAR_TO_REMNANT_ES = {
@@ -964,12 +964,12 @@ export const FROM_STAR_TO_REMNANT_ES = {
     'Decir que las masas en que cambia la clase de remanente solo se conocen como intervalos, así que la respuesta cerca de ellas es una probabilidad',
     'Decir por qué una estrella de neutrones puede ser más pesada que el límite de una enana blanca',
   ],
-  steps: [
-    {
+  steps: {
+    'three-ends': {
       title: 'Tres finales',
       body: 'Una estrella que ha gastado su combustible deja una de tres cosas. Las estrellas más ligeras, la gran mayoría, dejan una <strong>enana blanca</strong>. Las más pesadas explotan y dejan una <strong>estrella de neutrones</strong> o, si el núcleo es lo bastante pesado, un <strong>agujero negro</strong>. Cuál, y cuán pesada, depende de la masa con que nació la estrella. \n\nEl panel da ambas cosas. Para estrellas de hasta unas pocas masas solares da la masa final de la enana blanca a partir de una relación ajustada a enanas blancas de cúmulos estelares, cuyas edades dan la masa con que empezaron sus progenitoras. Para todas las masas da la <strong>probabilidad</strong> de cada clase de remanente, a partir de intervalos de la literatura para las masas en que la clase cambia. Da probabilidades y nunca una respuesta única, porque los cambios no se conocen mejor que un intervalo.',
     },
-    {
+    'how-heavy-the-ember': {
       title: 'Cuán pesada la brasa',
       body: 'Una estrella nace con 3 masas solares y acaba como enana blanca.',
       prompt: 'La enana blanca tendrá una masa de unas&hellip;',
@@ -985,12 +985,12 @@ export const FROM_STAR_TO_REMNANT_ES = {
       because:
         'Unas 0,75 masas solares. La estrella pierde la mayor parte de su masa en vientos y en la envoltura que expulsa al final, y lo que queda es el núcleo, una cuarta parte de lo que tenía al empezar. La relación leída de enanas blancas de cúmulos da 0,745.',
     },
-    {
+    'read-the-final-mass': {
       title: 'Lee la masa final',
       body: 'El panel está puesto en una estrella de 3 masas solares y la relación de los modelos estelares MIST. Lee la <strong>masa final</strong> y la <strong>masa perdida</strong> como porcentaje de la masa inicial.',
       fields: [{ label: 'Masa final' }, { label: 'Masa perdida' }],
     },
-    {
+    'a-star-near-a-threshold': {
       title: 'Una estrella cerca de un umbral',
       body: 'Muestra las <strong>probabilidades</strong> y pon la masa inicial en 8,25 masas solares. En algún punto entre 7 y 9,5 masas solares una estrella deja de dejar una enana blanca y empieza a explotar, y las estimaciones publicadas difieren en tanto.',
       prompt: '¿Qué dice el panel que deja una estrella de 8,25 masas solares?',
@@ -1009,12 +1009,12 @@ export const FROM_STAR_TO_REMNANT_ES = {
         },
       ],
     },
-    {
+    'read-the-odds': {
       title: 'Lee las probabilidades',
       body: 'Pon la masa inicial en 25 masas solares, mostrando todavía las probabilidades. Lee la probabilidad de una <strong>estrella de neutrones</strong> y de un <strong>agujero negro</strong>, como porcentajes.',
       fields: [{ label: 'Estrella de neutrones' }, { label: 'Agujero negro' }],
     },
-    {
+    'a-limit-for-a-white-dwarf': {
       title: 'Un límite para una enana blanca',
       body: 'Muestra las <strong>estrellas de neutrones</strong>. Las masas son las de los componentes de siete sistemas de dos estrellas de neutrones, medidas a partir de sus órbitas. La línea naranja es la mayor masa que puede tener una enana blanca en el modelo de <em>El límite</em>, 1,46 masas solares. El púlsar del sistema J0453+1559 tiene 1,559, por encima.',
       prompt: '¿Rompe eso el límite?',
@@ -1033,21 +1033,21 @@ export const FROM_STAR_TO_REMNANT_ES = {
         },
       ],
     },
-    {
+    'what-the-odds-say': {
       title: 'Lo que dicen las probabilidades',
       body: `La masa con que nace una estrella solo fija lo que deja como probabilidades. La relación entre masa inicial y masa final da la masa de la enana blanca con una dispersión de 0,06 masas solares que es real y no un error de medida. Una estrella de unas 8 masas solares puede dejar una enana blanca o una estrella de neutrones, y una de 20 a 40 una estrella de neutrones o un agujero negro, porque los umbrales solo se conocen como rangos; por eso el panel nombra un desenlace solo cuando sus probabilidades son de nueve de cada diez o más. Una estrella de neutrones puede ser más pesada que el límite de una enana blanca, porque ese límite es de los electrones y no de los neutrones.`,
     },
-  ],
+  },
 };
 
 export const FROM_STAR_TO_REMNANT_DEEPER_ES = {
-  steps: [
-    {
+  steps: {
+    'the-relation-at-two-masses': {
       title: 'La relación en dos masas',
       body: 'Muestra otra vez la <strong>masa final</strong>. Lee la masa final de una estrella nacida con <strong>1,0</strong> masa solar, y luego de una nacida con <strong>6,0</strong>.',
       fields: [{ label: 'Con 1,0 M☉' }, { label: 'Con 6,0 M☉' }],
     },
-    {
+    'models-or-scatter': {
       title: '¿Modelos o dispersión?',
       body: 'La masa inicial de una enana blanca de cúmulo no se mide: se deduce de la edad del cúmulo y de modelos estelares, y dos conjuntos de modelos, MIST y PARSEC, dan dos relaciones. Con 5 masas solares dicen 1,006 y 0,983 masas solares. La dispersión de las enanas blancas en torno a cualquiera de ellas es 0,06.',
       prompt: '¿Qué concluyes con esta masa?',
@@ -1068,7 +1068,7 @@ export const FROM_STAR_TO_REMNANT_DEEPER_ES = {
         },
       ],
     },
-    {
+    'ranges-not-edges': {
       title: 'Intervalos, no bordes',
       body: 'Con 30 masas solares el panel da una probabilidad de agujero negro del 50 por ciento. Sale de un intervalo, de 20 a 40 masas solares, en el que el trabajo publicado sitúa el cambio a agujeros negros, y el panel trata cada masa del intervalo como igual de probable.',
       prompt: '¿Qué es ese 50 por ciento, y qué no es?',
@@ -1089,7 +1089,7 @@ export const FROM_STAR_TO_REMNANT_DEEPER_ES = {
         },
       ],
     },
-    {
+    'a-wide-interval': {
       title: 'Un intervalo ancho',
       body: 'Con 1,0 masa solar el intervalo del 95 por ciento de la masa final es de 0,43 a 0,70, unas 0,14 a cada lado. Con 3,0 es de 0,20 a 1,29, unas 0,54 a cada lado, aunque la dispersión de los datos es 0,06 en ambas.',
       prompt: '¿Por qué es tanto más ancho con 3,0?',
@@ -1110,7 +1110,7 @@ export const FROM_STAR_TO_REMNANT_DEEPER_ES = {
         },
       ],
     },
-  ],
+  },
 };
 
 // ---- instructor content ------------------------------------------------------------------

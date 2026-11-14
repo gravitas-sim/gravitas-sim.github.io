@@ -37,6 +37,8 @@ import {
   STANDARD_MISCONCEPTIONS,
 } from '../answerFeedback.js';
 import {
+  alignShadow,
+  isStepList,
   mergeTranslation,
   translationCoverage,
 } from '../data/investigations/i18n.js';
@@ -139,6 +141,7 @@ export const RULE_INDEX = {
     'A remediation step follows an earlier graded step every student reaches',
   'interaction/animated': 'An animated widget can be rewound',
   'i18n/shape': 'A translation matches the shape of its lesson',
+  'i18n/steps': 'A translation has one step, under its sid, for each step',
   'i18n/machinery': 'A translation never replaces machinery',
   'i18n/coverage': 'A translation is complete enough to ship',
   'instructor/present': 'Every lesson has instructor guidance',
@@ -1305,6 +1308,9 @@ export function checkCatalog(inputs, { skip = [] } = {}) {
       checkTranslationMachinery(inv, data, (level, message, step) =>
         add(level, 'i18n/machinery', id, step, message)
       );
+      checkTranslationSteps(inv, data, (level, message, step) =>
+        add(level, 'i18n/steps', id, step, message)
+      );
 
       // What a Spanish reader sees must not give the answer away either.
       const merged = mergeTranslation(inv, data);
@@ -1542,7 +1548,8 @@ function checkTranslationShape(
 ) {
   if (overlay === undefined || overlay === null) return;
   if (Array.isArray(base)) {
-    if (!Array.isArray(overlay)) {
+    const aligned = alignShadow(base, overlay);
+    if (!aligned) {
       report(
         'error',
         `${locale}: ${path.join('.') || 'root'} should be a list`,
@@ -1550,7 +1557,7 @@ function checkTranslationShape(
       );
       return;
     }
-    if (overlay.length > base.length) {
+    if (Array.isArray(overlay) && overlay.length > base.length) {
       report(
         'error',
         `${locale}: ${path.join('.')} has ${overlay.length} entries for ${base.length} in English; the extras are dropped`,
@@ -1558,11 +1565,11 @@ function checkTranslationShape(
       );
     }
     base.forEach((item, i) => {
-      if (i >= overlay.length) return;
+      if (aligned[i] === undefined) return;
       const nextStep = path.length === 1 && path[0] === 'steps' ? i : stepIndex;
       checkTranslationShape(
         item,
-        overlay[i],
+        aligned[i],
         locale,
         report,
         [...path, String(i)],
@@ -1599,6 +1606,22 @@ function checkTranslationShape(
       );
     }
   }
+}
+
+/** A translation's steps are an object keyed by sid: one entry per step of the lesson, none for another. */
+function checkTranslationSteps(base, overlay, report) {
+  if (!isStepList(base.steps)) return;
+  const steps = overlay?.steps;
+  if (!isPlainObject(steps))
+    return report('error', 'steps must be an object keyed by step sid', null);
+  const have = new Set(base.steps.map(s => s.sid));
+  for (const key of Object.keys(steps))
+    if (!have.has(key))
+      report('error', `steps.${key} names no step of the lesson`, null);
+  base.steps.forEach((s, i) => {
+    if (!Object.hasOwn(steps, s.sid))
+      report('error', `step "${s.sid}" has no Spanish step`, i);
+  });
 }
 
 /** A translation may replace words. It may not replace anything else. */
@@ -1638,13 +1661,14 @@ function checkTranslationMachinery(
     );
     return;
   }
-  if (Array.isArray(base) && Array.isArray(overlay)) {
+  if (Array.isArray(base) && alignShadow(base, overlay)) {
+    const aligned = alignShadow(base, overlay);
     base.forEach((item, i) => {
-      if (i >= overlay.length) return;
+      if (aligned[i] === undefined) return;
       const nextStep = path.length === 1 && path[0] === 'steps' ? i : stepIndex;
       checkTranslationMachinery(
         item,
-        overlay[i],
+        aligned[i],
         report,
         [...path, String(i)],
         nextStep

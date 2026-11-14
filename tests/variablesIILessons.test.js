@@ -177,22 +177,26 @@ describe('the family, the Spanish and the instructor content', () => {
         expect(ids.has(s.tool.id) || s.tool.id === 'variable-class').toBe(true);
   });
   test('the Spanish carries the same structure, step for step', () => {
-    expect(LESSON_ES.steps).toHaveLength(LESSON.steps.length);
-    expect(DEEP_ES.steps).toHaveLength(DEEP.steps.length);
-    expect(KIND_DEEP_ES.steps).toHaveLength(KIND_DEEP.steps.length);
+    expect(Object.keys(LESSON_ES.steps)).toHaveLength(LESSON.steps.length);
+    expect(Object.keys(DEEP_ES.steps)).toHaveLength(DEEP.steps.length);
+    expect(Object.keys(KIND_DEEP_ES.steps)).toHaveLength(
+      KIND_DEEP.steps.length
+    );
     LESSON.steps.forEach((s, i) => {
       if (s.options)
-        expect(LESSON_ES.steps[i].options).toHaveLength(s.options.length);
+        expect(LESSON_ES.steps[s.sid].options).toHaveLength(s.options.length);
       if (s.fields)
-        expect(LESSON_ES.steps[i].fields).toHaveLength(s.fields.length);
+        expect(LESSON_ES.steps[s.sid].fields).toHaveLength(s.fields.length);
     });
     DEEP.steps.forEach((s, i) => {
       if (s.options)
-        expect(DEEP_ES.steps[i].options).toHaveLength(s.options.length);
+        expect(DEEP_ES.steps[s.sid].options).toHaveLength(s.options.length);
     });
     KIND_DEEP.steps.forEach((s, i) => {
       if (s.options)
-        expect(KIND_DEEP_ES.steps[i].options).toHaveLength(s.options.length);
+        expect(KIND_DEEP_ES.steps[s.sid].options).toHaveLength(
+          s.options.length
+        );
     });
   });
   test('every flow step and expectation names a step of the lesson', () => {

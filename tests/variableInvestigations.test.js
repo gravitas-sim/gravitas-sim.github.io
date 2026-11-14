@@ -365,10 +365,10 @@ describe('the two languages agree', () => {
     id => {
       const en = lesson(id);
       const es = ES.lessons[id];
-      expect(es.steps).toHaveLength(en.steps.length);
+      expect(Object.keys(es.steps)).toHaveLength(en.steps.length);
       expect(es.objectives).toHaveLength(en.objectives.length);
       en.steps.forEach((s, i) => {
-        const e = es.steps[i];
+        const e = es.steps[s.sid];
         expect(e.title?.length).toBeGreaterThan(0);
         expect(e.body?.length).toBeGreaterThan(0);
         if (s.options) expect(e.options).toHaveLength(s.options.length);
@@ -378,8 +378,10 @@ describe('the two languages agree', () => {
           expect(e.misconceptions).toHaveLength(s.misconceptions.length);
       });
       const dd = ES.depth[id];
-      expect(dd.steps.length).toBeGreaterThan(0);
-      dd.steps.forEach(s => expect(s.worked?.length).toBeGreaterThan(0));
+      expect(Object.keys(dd.steps).length).toBeGreaterThan(0);
+      Object.values(dd.steps).forEach(s =>
+        expect(s.worked?.length).toBeGreaterThan(0)
+      );
     }
   );
 });

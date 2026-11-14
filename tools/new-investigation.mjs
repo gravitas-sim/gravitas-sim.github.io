@@ -264,6 +264,11 @@ const ${constName} = {
 export default ${constName};
 `;
 
+// One empty entry for each step of the lesson above, under its sid.
+const stepEntries = [...lesson.matchAll(/sid: '([^']+)'/g)]
+  .map(m => `    '${m[1]}': {}, // { title: '', body: '' }`)
+  .join('\n');
+
 const shadow = `// =============================================================================
 // ${title} - Spanish
 // -----------------------------------------------------------------------------
@@ -278,7 +283,11 @@ const shadow = `// =============================================================
 //   numbers, functions, widget ids, scenario names and answers are machinery
 //   and must never appear
 //
-// Arrays line up by index: the third Spanish option translates the third
+// Steps are matched by sid: \`steps\` is an object with one entry for each step
+// of the lesson, under that step's sid, so adding, moving or removing a step in
+// the English never moves another step's Spanish. \`npm run author:check\` fails
+// on a step with no entry here and on an entry whose sid the lesson lacks. Other
+// arrays line up by index: the third Spanish option translates the third
 // English one.
 // =============================================================================
 
@@ -286,9 +295,9 @@ export default {
   title: '',
   subtitle: '',
   objectives: [],
-  steps: [
-    // { title: '', body: '' },
-  ],
+  steps: {
+${stepEntries}
+  },
 };
 `;
 

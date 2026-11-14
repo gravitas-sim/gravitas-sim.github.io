@@ -1,7 +1,6 @@
-// La forma de la expansión, más a fondo: las palabras en español, paso a paso con ../the-shape-of-expansion.js.
 export default {
-  steps: [
-    {
+  steps: {
+    'acceleration-today': {
       title: 'La aceleración hoy',
       body: `Para un universo plano de materia y una constante cosmológica, el parámetro de deceleración hoy es q<sub>0</sub> = Ω<sub>m</sub> ÷ 2 − Ω<sub>Λ</sub>, con Ω<sub>Λ</sub> = 1 − Ω<sub>m</sub>. Un q<sub>0</sub> negativo es una expansión que se acelera. Usa Ω<sub>m</sub> = 0,361.`,
       prompt: 'El parámetro de deceleración q₀ (negativo si hay aceleración)',
@@ -16,7 +15,7 @@ export default {
         off: 'Ωm ÷ 2 − (1 − Ωm).',
       },
     },
-    {
+    'the-dark-energy-share': {
       title: 'La parte de energía oscura',
       body: `En un universo plano la densidad de materia y la de la constante cosmológica suman uno. Halla la parte de la constante cosmológica cuando Ω<sub>m</sub> = 0,361.`,
       prompt: 'La parte de la constante cosmológica, en porcentaje',
@@ -30,7 +29,7 @@ export default {
         off: '100 × (1 − Ωm).',
       },
     },
-    {
+    'how-many-sigma-is-0-3': {
       title: 'Cuántas sigmas',
       body: `Para un único parámetro ajustado, un chi cuadrado Δχ² por encima del mínimo está a √Δχ² desviaciones típicas del mejor ajuste. Usa el 30,9 que leíste para Ω<sub>m</sub> = 0,30.`,
       prompt: 'La distancia de 0,30 al mejor ajuste, en desviaciones típicas',
@@ -44,7 +43,7 @@ export default {
         off: 'sqrt(30,9).',
       },
     },
-    {
+    'the-published-interval': {
       title: 'El intervalo publicado',
       body: `El intervalo del 68% del instrumento, de 0,349 a 0,372, tiene una semianchura de (0,372 − 0,349) ÷ 2. El análisis publicado de las mismas supernovas da ± 0,017. Halla cuántas veces más ancho es el publicado.`,
       prompt: 'La semianchura publicada sobre la de este ajuste, como razón',
@@ -58,5 +57,5 @@ export default {
         off: '0,017 ÷ ((0,372 − 0,349) ÷ 2).',
       },
     },
-  ],
+  },
 };

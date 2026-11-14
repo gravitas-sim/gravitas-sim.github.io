@@ -6,8 +6,8 @@
 // English and nothing here can reach the lesson's machinery: no scenario name,
 // no seed, no widget id, no numeric answer, no probe.
 //
-// Arrays line up by index with the English. `null` means "not translated";
-// that entry keeps its English.
+// `steps` is keyed by step sid; other arrays line up by index. `null` means
+// "not translated": that entry keeps its English.
 // =============================================================================
 
 export default {
@@ -23,13 +23,13 @@ export default {
     'Decir qué le ocurre a la velocidad de escape para un cuerpo más masivo, y para una distancia inicial mayor',
     'Decidir, a partir de su trayectoria, si un objeto real está ligado al Sol',
   ],
-  steps: [
-    {
+  steps: {
+    'how-hard-would-you-have': {
       title: '¿Con cuánta fuerza habría que lanzarlo?',
       body: 'Lanza una pelota y cae. Lánzala con más fuerza y cae más lejos. Newton se hizo la pregunta obvia que venía después, en un experimento mental que dibujó en 1687: pon un cañón en una montaña tan alta que esté por encima del aire y dispáralo horizontalmente. ¿Qué ocurre si sigues cargando más pólvora?\n\nSu respuesta fue que, en algún momento, el suelo se curva y se aleja por debajo de la bala tan deprisa como la bala cae, y esta deja de caer del todo. Da la vuelta entera y te golpea por la espalda. Eso es una órbita, y es la razón por la que un satélite se mantiene arriba: no porque haya escapado de la gravedad, sino porque está cayendo y fallando continuamente.\n\n¿Y si cargas aún más pólvora? A cierta velocidad se marcha y no vuelve. En algún punto entre esos dos desenlaces hay una línea divisoria. Encontrar esa línea, y entender qué decide de qué lado cae cada cosa, es todo el contenido de esta investigación.\n\nEn los siguientes pasos dispararás tú mismo el cañón de Newton.',
       tip: 'Todavía no hay que medir nada. El panel de la derecha aparecerá en un momento con un cañón en él.',
     },
-    {
+    'load-it-lightly': {
       title: 'Cárgalo con poca pólvora',
       body: 'El primer disparo sale de la cima de la montaña de lado a <strong>6 kilómetros por segundo</strong>. Eso es rápido: unas veinte veces la velocidad del sonido, y mucho más rápido que cualquier bala.\n\nComprométete con una respuesta antes de dispararlo.',
       prompt: 'Disparada de lado a 6 km/s, la bala de cañón…',
@@ -42,7 +42,7 @@ export default {
       because:
         'Vuelve a caer. Seis kilómetros por segundo suena enorme, y lo es, pero no basta: la bala sube, se frena, da la vuelta y cae. Todo proyectil disparado alguna vez en la Tierra ha hecho esto.',
     },
-    {
+    'fire-it': {
       title: 'Dispáralo',
       body: 'Ahí está el disparo. La trayectoria verde es la bala de cañón, lanzada de lado desde la superficie, y aterriza muy lejos, dando casi la vuelta al mundo.\n\nPulsa <strong>Ejecutar</strong> para dispararla de nuevo, y usa el deslizador de velocidad para probar algunas más. No te preocupes todavía por las barras de la parte inferior del panel: volverás a ellas.',
       checklist: [
@@ -53,7 +53,7 @@ export default {
       ],
       tip: 'El cañón está a 320 km de altura, que es más o menos donde vuela la estación espacial y con seguridad por encima del aire. Desde allí, la velocidad mínima que da la vuelta completa sin tocar el suelo es de unos 7,7 km/s. Por eso los cohetes se inclinan y vuelan de lado en vez de subir en vertical: subir es la parte fácil, ir lo bastante rápido de lado es la difícil.',
     },
-    {
+    'load-it-heavily': {
       title: 'Cárgalo a tope',
       body: 'Ahora dobla la pólvora. Esta vez la bala sale a <strong>14 kilómetros por segundo</strong>.',
       prompt: 'Disparada de lado a 14 km/s, la bala de cañón…',
@@ -66,7 +66,7 @@ export default {
       because:
         'Se marcha para siempre. La trayectoria ya no es un bucle cerrado: se abre, y la bala sigue alejándose cuando está mucho más allá de todo lo que hay en la pantalla. Nada la trae de vuelta.',
     },
-    {
+    'fire-it-again': {
       title: 'Dispáralo otra vez',
       body: 'La trayectoria ha cambiado de naturaleza. No es un bucle muy grande: no es un bucle en absoluto. La bala sale y sigue saliendo.\n\nFíjate en que ahora el panel dice que la trayectoria es <em>abierta</em>, y que la línea de "hasta dónde llega" no tiene ninguna respuesta que dar.',
       checklist: [
@@ -76,7 +76,7 @@ export default {
         'Lee la línea "¿vuelve?" en cada caso',
       ],
     },
-    {
+    'find-the-dividing-line': {
       title: 'Encuentra la línea divisoria',
       body: 'En algún punto entre 9 y 12 km/s la respuesta pasa de <em>sí, vuelve</em> a <em>no, se ha ido</em>.\n\nMueve el deslizador con cuidado y encuentra dónde. Merece la pena ir despacio en el último tramo: justo por debajo de la línea, la bala sale a una distancia absurda y aun así da la vuelta.',
       checklist: [
@@ -87,7 +87,7 @@ export default {
       ],
       tip: 'A 10,9 km/s la bala llega más allá de 350 radios terrestres, más lejos que la Luna, y aun así regresa. A 10,92 no da la vuelta jamás. Las dos parecen idénticas durante el primer tramo del vuelo, que es exactamente por lo que los astrónomos quieren un número y no una imagen.',
     },
-    {
+    'write-down-the-dividing-speed': {
       title: 'Anota la velocidad que encontraste',
       body: `Antes de seguir, anota los dos números con los que acabas de
              trabajar: la velocidad más alta que aún volvía y la más baja que
@@ -101,7 +101,7 @@ export default {
       ],
       tip: 'Dos números y la diferencia entre ellos es una respuesta más honesta que un solo número. Nadie encuentra un umbral exacto; se encuentran las dos últimas velocidades a cada lado.',
     },
-    {
+    'where-is-the-line': {
       title: '¿Dónde está la línea?',
       body: 'Acabas de encontrarla a mano.',
       prompt:
@@ -114,12 +114,12 @@ export default {
         'Es rápida para lo cotidiano: compárala con un avión de pasajeros y con una bala de fusil.',
       ],
     },
-    {
+    'what-is-actually-deciding-this': {
       title: '¿Qué es lo que decide esto en realidad?',
       body: 'Podrías quedarte aquí con una regla práctica: por encima de 11,2 km/s se marcha, por debajo vuelve. Pero ese número no es fundamental, y cambia por completo si te sitúas en otro lugar. Algo por debajo de él está haciendo el trabajo de verdad.\n\nUn objeto cercano a un planeta lleva dos clases de energía a la vez.\n\n<strong>La energía de movimiento</strong> es la obvia: cuanto más rápido va, más tiene. Nunca es negativa, y solo es cero si el objeto está quieto.\n\n<strong>La energía de posición</strong> es la rara. Estar hundido en la gravedad de un planeta es como estar en el fondo de un pozo: para salir hay que trepar, y trepar cuesta. La física lleva la cuenta de esto llamando <em>negativa</em> a la energía de posición, y llamando cero al valor que tiene cuando estás infinitamente lejos y libre del planeta por completo. En lo hondo del pozo es un número negativo grande. Muy lejos, es uno pequeño.\n\nSuma las dos y obtienes la <strong>energía total</strong>, y ese total no cambia mientras el objeto vuela. Acelera al entrar, frena al salir: las dos se intercambian de un lado a otro y la suma se queda quieta.',
       tip: 'Las energías se muestran por kilogramo, y por eso el panel nunca pregunta cuánto pesa la bala. Resulta que no importa, y verás por qué en breve.',
     },
-    {
+    'watch-the-total': {
       title: 'Observa el total',
       body: 'Las tres barras de la parte inferior del panel son esas energías, con una línea gruesa que marca el <strong>cero</strong>.\n\nLa barra verde es la energía de movimiento, por encima de la línea. La barra azul es la energía de posición, por debajo. La tercera barra es el total, y es la que hay que vigilar.\n\nMueve el deslizador de velocidad despacio y observa cómo la barra del total sube y cruza la línea.',
       checklist: [
@@ -131,7 +131,7 @@ export default {
       ],
       tip: 'La velocidad a la que la energía total cruza el cero es exactamente la velocidad a la que la trayectoria deja de cerrarse. No es una coincidencia. Es el mismo hecho contado de dos maneras distintas.',
     },
-    {
+    'reading-the-sign': {
       title: 'Leer el signo',
       body: 'Ya has visto que la energía total pasa de estar por debajo de cero a estar por encima, y la trayectoria pasa de cerrada a abierta, en el mismo instante.',
       prompt: 'Un objeto cuya energía total es menor que cero está…',
@@ -148,7 +148,7 @@ export default {
         'Si el total es menor que eso, ¿puede el objeto llegar alguna vez?',
       ],
     },
-    {
+    'around-a-real-orbit': {
       title: 'Alrededor de una órbita real',
       body: 'Eso era un lanzamiento. Ahora observa una órbita entera.\n\nEn la simulación hay dos planetas girando alrededor de una estrella. El <strong>naranja</strong> va por una órbita estirada: se acerca mucho y corre, luego se aleja y se arrastra. Púlsalo.\n\nEl panel muestra sus dos energías como barras, y las representa frente al tiempo debajo. Obsérvalo durante una vuelta completa.',
       checklist: [
@@ -160,7 +160,7 @@ export default {
       ],
       tip: 'Este es el intercambio. Caer hacia dentro convierte energía de posición en energía de movimiento, y volver a trepar la convierte de nuevo. No se gana ni se pierde nada, y por eso la órbita se repite para siempre.',
     },
-    {
+    'what-stays-put': {
       title: 'Lo que se mantiene',
       body: 'A lo largo de una vuelta de esa órbita estirada, la velocidad del planeta cambió en un factor grande y su distancia cambió aún más.',
       prompt:
@@ -178,12 +178,12 @@ export default {
         'Dos de las tres se intercambian energía. ¿Qué dejaría sin cambiar un intercambio?',
       ],
     },
-    {
+    'escape-speed': {
       title: 'Velocidad de escape',
       body: 'La velocidad divisoria tiene nombre: <strong>velocidad de escape</strong>. Es la velocidad a la que la energía total sale exactamente cero, que es lo más lento que puedes ser lanzado sin volver jamás.\n\nEscrita, es\n\n<strong>v<sub>escape</sub> = √( 2 G M / r )</strong>\n\ndonde M es la masa del cuerpo del que te marchas y r es lo lejos que ya estás de su centro. No tendrás que despejarla. Lo que importa es lo que dice, que son dos cosas:\n\n<strong>Más masa hace el escape más difícil.</strong> M está arriba, así que un cuerpo más pesado exige una velocidad mayor.\n\n<strong>Empezar más lejos hace el escape más fácil.</strong> r está abajo, así que cuanto más lejos empieces, menos necesitas. No es porque la gravedad se haya rendido contigo; es porque ya has hecho parte de la subida.\n\nFíjate en lo que <em>no</em> aparece ahí: la masa de lo que escapa. Un grano de polvo y un acorazado necesitan exactamente la misma velocidad, por la misma razón por la que una pluma y un martillo caen a la vez en la Luna.',
       tip: 'La raíz cuadrada es la razón por la que doblar la distancia no reduce a la mitad la velocidad que necesitas. La divide por 1,4 aproximadamente.',
     },
-    {
+    'a-common-misunderstanding': {
       title: 'Un malentendido frecuente',
       body: 'Una nave espacial se lanza desde la Tierra a 12 km/s, cómodamente por encima de la velocidad de escape. Una semana después está mucho más allá de la Luna y sigue alejándose.',
       prompt: 'En ese momento, la gravedad de la Tierra…',
@@ -208,7 +208,7 @@ export default {
         },
       ],
     },
-    {
+    'somewhere-else-entirely': {
       title: 'En otro lugar completamente distinto',
       body: 'Todo lo anterior ha tratado de marcharse de la Tierra. La velocidad de escape depende de aquello de lo que te marchas.',
       prompt:
@@ -217,7 +217,7 @@ export default {
       because:
         'El Sol, con diferencia: unos 618 km/s desde su superficie, más de cincuenta veces la de la Tierra. El Sol tiene un tercio de millón de veces la masa de la Tierra y, aunque su superficie está además mucho más lejos de su centro, la masa gana.',
     },
-    {
+    'more-mass-harder-to-leave': {
       title: 'Más masa, más difícil marcharse',
       body: 'Aquí tienes cuatro cuerpos reales con sus velocidades de escape reales, todas medidas de pie sobre la superficie.\n\nLa barra del Sol se sale del gráfico a propósito. Dibujada a la misma escala que las demás sería diez veces más larga que el panel, lo cual da una impresión bastante fiel de la situación.',
       checklist: [
@@ -228,7 +228,7 @@ export default {
       ],
       tip: 'Los 2,4 km/s de la Luna son la razón por la que el módulo lunar del Apolo pudo ser una caja endeble forrada de aluminio con un solo motor pequeño, mientras que sacar a esos mismos astronautas de la Tierra exigió un cohete de 110 metros.',
     },
-    {
+    'further-out-easier-to-leave': {
       title: 'Más lejos, más fácil marcharse',
       body: 'Ahora deja los cuerpos como están y cambia el punto de partida.\n\nEl deslizador aleja tu punto de partida del centro, medido en múltiplos del radio de cada cuerpo. Arrástralo y observa cómo todas las barras encogen a la vez.',
       checklist: [
@@ -240,7 +240,7 @@ export default {
       ],
       tip: 'Nada relativo a la Tierra cambia cuando mueves el deslizador. Lo único que cambió es cuánta subida has hecho ya.',
     },
-    {
+    'starting-further-out': {
       title: 'Empezar más lejos',
       body: 'Se dispara un cohete desde la superficie de la Tierra, y un cohete idéntico desde una estación espacial que la orbita muy por encima.',
       prompt:
@@ -263,7 +263,7 @@ export default {
         },
       ],
     },
-    {
+    'three-shapes-one-law': {
       title: 'Tres formas, una sola ley',
       body: 'Una última cosa que mirar antes de aplicar todo esto.\n\nLas curvas tenues son tres lanzamientos desde el mismo punto: uno por debajo de la velocidad de escape, uno exactamente en ella y uno por encima. La curva blanca gruesa es la tuya. Mueve el deslizador y obsérvala cambiar de una a otra.\n\nEstas formas tienen nombre. Por debajo de la velocidad de escape la trayectoria es una <strong>elipse</strong>, un bucle cerrado. Exactamente en la velocidad de escape es una <strong>parábola</strong>. Por encima es una <strong>hipérbola</strong>, una curva abierta que a lo lejos se endereza hasta ser una recta.\n\nLos nombres no son lo importante. Lo importante es que las tres salen de la misma ley de la gravedad actuando sobre el mismo planeta. Nada de la física cambió entre ellas. Solo cambió la energía.',
       checklist: [
@@ -274,12 +274,12 @@ export default {
       ],
       tip: 'Los astrónomos leen esto al revés. Mide suficiente trayectoria de un objeto como para deducir su forma, y habrás aprendido si está ligado sin haber tenido que observarlo durante una órbita entera.',
     },
-    {
+    'something-that-came-from-outside': {
       title: 'Algo que vino de fuera',
       body: 'El 19 de octubre de 2017, un telescopio de rastreo en Hawái captó un objeto tenue en movimiento. En cuestión de días quedó claro que no se comportaba como nada del Sistema Solar.\n\nTodo lo que orbita el Sol sigue una trayectoria cerrada. Este no. Su trayectoria medida era abierta: entró desde la dirección de la constelación de Lyra, rodeó el Sol por dentro de la órbita de Mercurio a 87 kilómetros por segundo y se marchó. Se le llamó <strong>1I/ʻOumuamua</strong>, «explorador» o «mensajero de lejos» en hawaiano, y el «1I» significa que fue el primer objeto interestelar que se haya capturado jamás.\n\nEstá en pantalla ahora, en su órbita real, con la Tierra mostrada como referencia de escala. Obsérvalo entrar.',
       tip: 'Se descubrió cuando ya se marchaba, pasado el Sol y apagándose. Nadie lo ha visto desde 2018, y nadie volverá a verlo.',
     },
-    {
+    'check-it-yourself': {
       title: 'Compruébalo tú mismo',
       body: 'No te fíes de la palabra de nadie. Ahora tienes una prueba.\n\nPulsa el visitante y lee el signo de su energía total. Después pulsa la Tierra, lee el suyo y compara.',
       checklist: [
@@ -290,7 +290,7 @@ export default {
       ],
       tip: 'Su trayectoria es una hipérbola con una excentricidad de 1,20. Todo cometa registrado antes que este tenía una excentricidad menor que 1, que es otra manera de decir que todos ellos estaban ligados al Sol.',
     },
-    {
+    'will-it-be-back': {
       title: '¿Volverá?',
       body: 'El visitante ya ha pasado el Sol y se aleja de nuevo, todavía frenándose mientras el Sol tira de él.',
       prompt:
@@ -326,10 +326,10 @@ export default {
         },
       ],
     },
-    {
+    'what-you-worked-out': {
       title: 'Lo que has deducido',
       body: 'Empezaste disparando un cañón y haciéndote una pregunta que podría hacer un niño: ¿vuelve? Al final has sido capaz de responder esa misma pregunta sobre un objeto procedente de otro sistema estelar, usando un solo número.\n\nLas cinco cosas que merece la pena conservar:\n\n<strong>La gravedad no se apaga nunca.</strong> Un objeto que escapa sigue siendo atraído hacia atrás durante todo el trayecto. Escapa de todos modos.\n\n<strong>Ligado significa atrapado.</strong> Energía total menor que cero: el objeto no puede llegar al infinito, así que la gravedad acaba dándole la vuelta.\n\n<strong>No ligado significa que se ha ido.</strong> Energía total mayor que cero: se marcha y sigue en movimiento cuando ya está muy lejos.\n\n<strong>La velocidad de escape es la línea divisoria</strong>, la velocidad a la que el total sale exactamente cero.\n\n<strong>Depende de dónde estás, no solo de qué abandonas.</strong> Más masa la sube. Empezar más lejos la baja.\n\nEse último punto es la razón por la que no hay una única respuesta a «con qué rapidez hay que ir para escapar de la Tierra». Depende de dónde empieces. Y es la razón por la que la manera honesta de plantear la pregunta nunca fue en términos de velocidad. Fue en términos de energía.',
       tip: 'La misma prueba decide cuestiones mucho mayores: si una estrella escapa del cúmulo en el que nació, si una galaxia retiene el gas expulsado por sus supernovas, y si la Vía Láctea y Andrómeda están ligadas entre sí. Lo están.',
     },
-  ],
+  },
 };

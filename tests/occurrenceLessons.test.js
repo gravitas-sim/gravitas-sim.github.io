@@ -206,20 +206,20 @@ describe('the steps check what a student reads', () => {
     ]);
     for (const s of added) expect(s.depth).toBe('advanced');
     expect(added[0].after).toBe('what-the-real-sample-cannot-say');
-    expect(WHO_ES.steps.length).toBe(WHO.steps.length);
+    expect(Object.keys(WHO_ES.steps).length).toBe(WHO.steps.length);
   });
 });
 
 describe('the Spanish', () => {
   test('carries the same step structure', () => {
-    expect(LESSON_ES.steps.length).toBe(LESSON.steps.length);
-    expect(DEEP_ES.steps.length).toBe(DEEP.steps.length);
+    expect(Object.keys(LESSON_ES.steps).length).toBe(LESSON.steps.length);
+    expect(Object.keys(DEEP_ES.steps).length).toBe(DEEP.steps.length);
     for (const [en, es] of [
       [LESSON, LESSON_ES],
       [DEEP, DEEP_ES],
     ]) {
       en.steps.forEach((s, i) => {
-        const e = es.steps[i];
+        const e = es.steps[s.sid];
         expect(e.title).toBeTruthy();
         expect(e.title).not.toBe(s.title);
         if (s.options) expect(e.options.length).toBe(s.options.length);

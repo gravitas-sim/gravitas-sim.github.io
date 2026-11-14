@@ -2,8 +2,8 @@
 // Sin lectura por una persona que lea español con fluidez.
 
 export const WHAT_IS_A_MEASUREMENT_DEEPER = {
-  steps: [
-    {
+  steps: {
+    'a-position-with-an-error-bar': {
       title: 'La posición con su barra de error',
       body: 'Un resultado se informa como un valor, luego ±, luego su incertidumbre. Informa la posición x media de las cinco marcas con su error estándar, a partir de las dos filas que ya has leído.\n\nCuenta como correcto cuando el intervalo que das se solapa con el que permiten las marcas, y no es más ancho que unos pocos errores estándar, porque una incertidumbre tan grande que se solapa con cualquier cosa no ha dicho nada a nadie.',
       prompt: 'La posición x media, con su incertidumbre',
@@ -12,7 +12,7 @@ export const WHAT_IS_A_MEASUREMENT_DEEPER = {
       because:
         'La media es 31,10 píxeles y su error estándar 0,36, así que la posición es 31,10 ± 0,36 píxeles: un intervalo que queda alrededor de las marcas y, como muestran los pasos siguientes, alrededor de la verdad.',
     },
-    {
+    'how-many-marks-by-hand': {
       title: '¿Cuántas marcas para una décima de píxel?',
       body: 'Una marca de esta estrella se dispersa unos 0,8&nbsp;píxeles. El error estándar es la dispersión entre la raíz cuadrada del número de marcas, N. Quieres que el error estándar sea 0,1&nbsp;píxeles.',
       prompt: 'El número de marcas necesarias',
@@ -27,7 +27,7 @@ export const WHAT_IS_A_MEASUREMENT_DEEPER = {
         off: 'N = (dispersión ÷ error estándar deseado)², con 0,8 y 0,1.',
       },
     },
-    {
+    'a-pointer-offset': {
       title: 'Lo que más marcas no pueden arreglar',
       body: 'Un instrumento nuevo coloca cada marca <strong>1,0 píxel</strong> demasiado a la derecha: la cruz queda donde está el punto activo del cursor, y nadie lo ha comprobado. Pon <strong>Desplazamiento de cada marca</strong> en 1,0, toma 30 marcas y muestra la verdad. Lee el error estándar de x y el error de la media en errores estándar.',
       fields: [
@@ -35,7 +35,7 @@ export const WHAT_IS_A_MEASUREMENT_DEEPER = {
         { label: 'Error de la media en errores estándar' },
       ],
     },
-    {
+    'what-the-standard-error-leaves-out': {
       title: 'De qué es una declaración el más-menos',
       body: 'Un informe declara la posición x de la estrella como 32,27 ± 0,14 píxeles, a partir de 30 marcas.',
       prompt: '¿Qué describe el ± 0,14?',
@@ -54,12 +54,12 @@ export const WHAT_IS_A_MEASUREMENT_DEEPER = {
       because:
         'La dispersión de la media bajo repetición, con un supuesto sobre las marcas. Un desplazamiento sistemático, igual en todas las marcas, queda fuera, y también cualquier cosa que las marcas compartan. Declarar las dos cosas, la parte aleatoria y lo que se hizo para comprobar la sistemática, es la afirmación completa.',
     },
-  ],
+  },
 };
 
 export const WHAT_DOES_PLUS_MINUS_CLAIM_DEEPER = {
-  steps: [
-    {
+  steps: {
+    'the-ensemble-wobbles': {
       title: 'La cuenta también es incierta',
       body: 'La cobertura se contó con un número finito de repeticiones, así que tiene una incertidumbre propia. Pon <strong>Repeticiones</strong> en 100 y el intervalo en ±1 σ. Lee la cobertura y su propia incertidumbre.',
       fields: [
@@ -67,7 +67,7 @@ export const WHAT_DOES_PLUS_MINUS_CLAIM_DEEPER = {
         { label: 'Incertidumbre de la cobertura' },
       ],
     },
-    {
+    'the-binomial-by-hand': {
       title: 'La incertidumbre de una cobertura, a mano',
       body: 'Cada repetición contiene la verdad o no, con probabilidad p. Para R repeticiones la parte que la contiene tiene una desviación estándar √(p(1 − p) ÷ R). Toma p = 0,68 y R = 2000.',
       prompt: 'La incertidumbre de la parte, en por ciento',
@@ -83,7 +83,7 @@ export const WHAT_DOES_PLUS_MINUS_CLAIM_DEEPER = {
         off: 'La dispersión es la raíz cuadrada de p por la probabilidad de fallar, dividida entre R.',
       },
     },
-    {
+    'the-bias-by-hand': {
       title: 'La cobertura sesgada, a mano',
       body: 'Cada lectura es la verdad más 0,4 más un error aleatorio de dispersión 0,3. Un intervalo de ±0,3 contiene la verdad cuando ese error aleatorio queda entre −0,7 y −0,1 respecto del centro, es decir entre −2,33 y −0,33 dispersiones. La curva normal tiene 0,0099 de su área por debajo de −2,33 y 0,3707 por debajo de −0,33.',
       prompt:
@@ -96,7 +96,7 @@ export const WHAT_DOES_PLUS_MINUS_CLAIM_DEEPER = {
         off: 'Parte = área por debajo de −0,33 menos área por debajo de −2,33.',
       },
     },
-    {
+    'the-zero-count-limit': {
       title: 'El límite a partir de una cuenta de cero',
       body: 'Un experimento no ve ningún suceso. El límite superior del 95 por ciento para la tasa es la tasa λ con la que no ver ninguno tiene solo un 5 por ciento de probabilidad. La probabilidad de no ver ninguno, cuando la media es λ, es e<sup>−λ</sup>.',
       prompt: 'El límite superior del 95 por ciento para la tasa, en sucesos',
@@ -110,7 +110,7 @@ export const WHAT_DOES_PLUS_MINUS_CLAIM_DEEPER = {
         off: 'λ = −ln(0,05).',
       },
     },
-    {
+    'why-a-real-claim-cannot-be-counted': {
       title: 'Lo que esta comprobación no puede hacer',
       body: 'En este instrumento se conocía el valor verdadero, y la cobertura era una cuenta.',
       prompt:
@@ -125,7 +125,7 @@ export const WHAT_DOES_PLUS_MINUS_CLAIM_DEEPER = {
       because:
         'La cuenta necesitaba la verdad. Una afirmación real se comprueba contra repeticiones de la medición, contra una fuente de calibración de valor conocido o contra un método independiente, y cada una de esas es una comprobación de una sola cosa. Esta investigación muestra qué es una comprobación, y una real rara vez es tan completa.',
     },
-    {
+    'why-not-exactly-95': {
       title: 'Por qué un límite superior no alcanza su nivel',
       body: 'Con una tasa verdadera de 3,0 los límites cumplieron el 95,6 por ciento, y con 4,0 cumplieron el 98,7. Las cuentas de sucesos son números enteros.',
       prompt: '¿Qué muestra el salto entre las dos coberturas?',
@@ -139,12 +139,12 @@ export const WHAT_DOES_PLUS_MINUS_CLAIM_DEEPER = {
       because:
         'El límite es una función escalonada de la cuenta, así que la cobertura es una escalera en la tasa, nunca por debajo de 95 y tocándolo solo en los escalones. Una afirmación conservadora es legítima; una afirmación de exactamente 95 por ciento necesitaría un procedimiento aleatorizado.',
     },
-  ],
+  },
 };
 
 export const WHEN_THE_METHOD_MUST_REFUSE_DEEPER = {
-  steps: [
-    {
+  steps: {
+    'the-95-percent-bound-by-hand': {
       title: 'La cota del 95 por ciento, a mano',
       body: 'Para masas por debajo del producto el mejor ajuste tiene la inclinación en su límite de 1, así que el chi cuadrado es ((m − 0,85) ÷ 0,06)². El intervalo del 95 por ciento es donde el chi cuadrado ha subido 3,84, que son 1,96 errores estándar.',
       prompt:
@@ -157,7 +157,7 @@ export const WHEN_THE_METHOD_MUST_REFUSE_DEEPER = {
         off: 'm = 0,85 − 1,96 × 0,06.',
       },
     },
-    {
+    'degrees-of-freedom': {
       title: 'Los grados de libertad de la recta',
       body: 'El chi cuadrado reducido es el chi cuadrado dividido entre el número de grados de libertad: el número de puntos menos el número de parámetros ajustados. La recta tiene dos parámetros, una ordenada y una pendiente, y hay seis puntos.',
       prompt: 'Los grados de libertad',
@@ -169,7 +169,7 @@ export const WHEN_THE_METHOD_MUST_REFUSE_DEEPER = {
         off: 'Grados de libertad = puntos − parámetros.',
       },
     },
-    {
+    'what-a-prior-would-add': {
       title: 'Lo que añadiría un a priori sobre la inclinación',
       body: 'Un análisis distinto supone que las órbitas están inclinadas al azar, sin dirección preferida, e informa una masa mediana con un intervalo.',
       prompt: '¿Qué lleva ese número que el perfil no lleva?',
@@ -190,7 +190,7 @@ export const WHEN_THE_METHOD_MUST_REFUSE_DEEPER = {
       because:
         'De un supuesto. Un a priori puede ser razonable, y con inclinaciones al azar da un intervalo definido, pero entonces el intervalo responde «dado este supuesto». El perfil mantiene separadas las dos cosas: lo que fijan los datos, y lo que se supone.',
     },
-    {
+    'what-a-fitting-model-does-not-prove': {
       title: 'Lo que un modelo que ajusta no demuestra',
       body: 'La parábola tiene un chi cuadrado reducido inferior a 1 y un valor p cercano a 0,8, con seis puntos.',
       prompt: '¿Qué se puede decir de la parábola?',
@@ -206,15 +206,15 @@ export const WHEN_THE_METHOD_MUST_REFUSE_DEEPER = {
       because:
         'No se rechaza. Un modelo que ajusta es uno que los datos no pueden rechazar, lo que es más débil que uno que los datos apoyan frente a toda alternativa. Si más términos, otras formas o una razón física de la curva ajustan igual de bien es la pregunta siguiente, y el chi cuadrado reducido no puede responderla.',
     },
-  ],
+  },
 };
 
 /** By lesson id: what instructorLocale.js registers. */
 
 // Las investigaciones de imágenes, más a fondo (Prompt 191): las palabras en español, paso a paso con el inglés.
 export const MEASURING_THE_MOON_DEEPER = {
-  steps: [
-    {
+  steps: {
+    'a-pixel-at-each-end': {
       title: 'Un píxel en cada extremo',
       body: 'Supón que los dos extremos del diámetro del círculo están un píxel demasiado afuera, el peor caso de una colocación descuidada. Un píxel es la escala que leíste, 7,05 km.',
       prompt: '¿Cuánto cambia el diámetro, en kilómetros?',
@@ -228,7 +228,7 @@ export const MEASURING_THE_MOON_DEEPER = {
         off: '2 píxeles × 7,05 km por píxel.',
       },
     },
-    {
+    'a-diameter-with-an-error-bar': {
       title: 'El diámetro con su barra de error',
       body: 'Informa el diámetro de la llanura oscura como un valor, luego &plusmn;, luego una incertidumbre que puedas defender. Una persona cuidadosa coloca el borde suave de esta llanura con unos tres píxeles de margen a cada lado, que son 21 km. Cuenta como correcto cuando el intervalo que das se solapa con el que permite la llanura, y no es más ancho que 60 km.',
       prompt: 'El diámetro, con su incertidumbre',
@@ -239,7 +239,7 @@ export const MEASURING_THE_MOON_DEEPER = {
       because:
         'Unos 634 km, con 20 a 40 de más o de menos: los 6 km que indica la herramienta son el redondeo de las marcas y son demasiado pequeños para ser toda la incertidumbre, porque el borde de la llanura es suave. Una barra de error defendible incluye lo que la indicada deja fuera.',
     },
-    {
+    'near-the-limb': {
       title: 'El mismo círculo cerca del limbo',
       body: 'Un cráter redondo cerca del borde del disco se ve de soslayo, así que queda apretado en la dirección hacia el centro. Mueve el círculo a <strong>x = 470, y = 245</strong>, cerca del borde derecho, con el par a través del disco. Lee a qué distancia del centro del disco está el círculo, en radios del disco, y qué ancho parece tener allí un accidente redondo en esa dirección, como parte de su ancho verdadero.',
       fields: [
@@ -247,7 +247,7 @@ export const MEASURING_THE_MOON_DEEPER = {
         { label: 'Ancho en esa dirección' },
       ],
     },
-    {
+    'a-gray-level-is-not-light': {
       title: 'Lo que dice un nivel de gris',
       body: 'La llanura oscura es más oscura en la imagen que la tierra alta brillante a su lado. Un estudiante escribe que la llanura refleja alrededor de un tercio de la luz.',
       prompt: '¿Qué falla en la afirmación?',
@@ -271,12 +271,12 @@ export const MEASURING_THE_MOON_DEEPER = {
       because:
         'Los niveles de gris son valores para mostrar: contraste estirado para el ojo, sin unidad ni calibración registradas. Una escala y un tamaño son medidas de dónde están las cosas, que sobreviven al estiramiento; un brillo sería una medida de luz, que no.',
     },
-  ],
+  },
 };
 
 export const HOW_FAR_IS_THAT_STAR_DEEPER = {
-  steps: [
-    {
+  steps: {
+    'the-distance-by-hand': {
       title: 'La distancia a mano',
       body: 'El ajuste da un paralaje relativo de 60,29 mas. Conviértelo en una distancia.',
       prompt: 'La distancia, 1 sobre el paralaje',
@@ -292,7 +292,7 @@ export const HOW_FAR_IS_THAT_STAR_DEEPER = {
         off: '1000 ÷ 60,29.',
       },
     },
-    {
+    'how-many-sigma': {
       title: 'Cuántas sigma',
       body: 'Un paralaje solo es una medición cuando está bien por encima de su propia incertidumbre. El ajuste da 60,29 mas con una incertidumbre de 1,53 mas.',
       prompt: 'El paralaje sobre su incertidumbre',
@@ -306,7 +306,7 @@ export const HOW_FAR_IS_THAT_STAR_DEEPER = {
         off: '60,29 ÷ 1,53.',
       },
     },
-    {
+    'fewer-epochs-wider': {
       title: 'Menos épocas, una barra más ancha',
       body: 'Pon <strong>Épocas usadas</strong> en 8, dejando paralaje y movimiento, y lee la incertidumbre del paralaje. Con las 14 épocas era de 1,53 mas.',
       prompt: '¿Cuántas veces mayor es la incertidumbre con 8 épocas?',
@@ -322,7 +322,7 @@ export const HOW_FAR_IS_THAT_STAR_DEEPER = {
         off: '(incertidumbre con 8 épocas) ÷ (incertidumbre con 14 épocas).',
       },
     },
-    {
+    'a-zero-point': {
       title: 'Una corrección a absoluto',
       body: 'Las estrellas de referencia no están en el infinito: un paralaje relativo es menor que el absoluto en su paralaje medio. Supón, como un supuesto que esta investigación indica y no mide, que ese promedio es de 1,0 mas con una incertidumbre de 0,5. Pon la <strong>Corrección</strong> en 1,0 mas, con 14 épocas y el ajuste de paralaje, y lee el paralaje absoluto y la distancia.',
       fields: [
@@ -330,7 +330,7 @@ export const HOW_FAR_IS_THAT_STAR_DEEPER = {
         { label: 'Distancia, 1 sobre el paralaje' },
       ],
     },
-    {
+    'which-way-does-it-move': {
       title: 'Hacia dónde se mueve la distancia',
       body: 'Frente a la distancia del paralaje relativo, 16,59 pc, la corregida es de 16,32 pc.',
       prompt:
@@ -355,7 +355,7 @@ export const HOW_FAR_IS_THAT_STAR_DEEPER = {
       because:
         'Las estrellas de referencia tienen un paralaje propio, así que la estrella se mide frente a un marco que se mueve un poco del mismo modo. Lo que se mide es la diferencia, que es demasiado pequeña, y uno sobre un número demasiado pequeño es demasiado grande. La herramienta lo dice junto a cada distancia.',
     },
-    {
+    'what-limits-the-distance': {
       rubric:
         'Crédito completo por nombrar dos límites que no están en el intervalo indicado y decir hacia dónde mueve cada uno la distancia: el paralaje propio de las estrellas de referencia (el punto cero del marco: la distancia relativa sale alta), el número y el reparto de las épocas (muy pocas se rechazan y pocas dan un intervalo ancho), errores que no son independientes de una época a otra (el intervalo queda demasiado estrecho), o el movimiento orbital si la estrella es una binaria (parece un paralaje). No dar crédito por decir que el intervalo ya lo incluye todo.',
       title: 'Qué limita la distancia',
@@ -363,12 +363,12 @@ export const HOW_FAR_IS_THAT_STAR_DEEPER = {
       prompt:
         'En dos o tres frases: nombra dos límites de esta distancia que el intervalo no incluye, y di hacia dónde mueve cada uno la distancia.',
     },
-  ],
+  },
 };
 
 export const A_BINARY_STARS_ORBIT_DEEPER = {
-  steps: [
-    {
+  steps: {
+    'the-mass-by-hand': {
       title: 'La masa a mano',
       body: 'Usa la tercera ley de Kepler, M = a&sup3;/P&sup2;, con el semieje mayor que hallaste en unidades astronómicas, 9,08 ua, y el período, 14,13 años.',
       prompt: 'La suma de masas',
@@ -384,7 +384,7 @@ export const A_BINARY_STARS_ORBIT_DEEPER = {
         off: '9,08³ ÷ 14,13².',
       },
     },
-    {
+    'a-nearer-star': {
       title: 'Si el paralaje fuera de 80 mas',
       body: 'Pon <strong>Paralaje, relativo</strong> en 80 mas, con la órbita elíptica y las doce épocas, y lee la suma de masas. La órbita es la misma.',
       prompt: 'La suma de masas a 80 mas',
@@ -400,7 +400,7 @@ export const A_BINARY_STARS_ORBIT_DEEPER = {
         off: 'La suma de masas con el paralaje puesto en 80 mas.',
       },
     },
-    {
+    'eight-epochs': {
       title: 'Ocho épocas, un período más ancho',
       body: 'Pon <strong>Épocas usadas</strong> en 8 con el modelo elíptico y lee la incertidumbre del período. Con las doce es de 0,06 años.',
       prompt:
@@ -416,7 +416,7 @@ export const A_BINARY_STARS_ORBIT_DEEPER = {
         off: '(incertidumbre del período, 8 épocas) ÷ 0,064.',
       },
     },
-    {
+    'the-node': {
       title: 'El nodo',
       body: 'La herramienta da el nodo ascendente como 34,7 &plusmn; 0,7 grados y dice que solo con posiciones no se puede saber cuál de los dos cruces del cielo es el ascendente, así que da el nodo entre 0 y 180 grados.',
       prompt: '¿Qué resolvería cuál cruce es el ascendente?',
@@ -438,7 +438,7 @@ export const A_BINARY_STARS_ORBIT_DEEPER = {
       because:
         'Las velocidades radiales. Las posiciones son las dos direcciones del cielo; qué lado de la órbita está más cerca de nosotros es la tercera, y solo el movimiento a lo largo de la línea de visión, medido en el espectro, lo dice.',
     },
-    {
+    'the-reference-frame': {
       title: 'Un paralaje relativo y la masa',
       body: 'Los 100 mas son un paralaje relativo a estrellas de referencia, y la herramienta dice que la distancia y la suma de masas salen altas en el paralaje medio de esas estrellas.',
       prompt:
@@ -463,13 +463,13 @@ export const A_BINARY_STARS_ORBIT_DEEPER = {
       because:
         'Menor. El paralaje absoluto es mayor que el relativo, así que la estrella está más cerca, el mismo ángulo es una órbita menor en ua, y la suma de masas, que va como ese tamaño al cubo, es menor. La suma de masas relativa es un lado alto de la verdad.',
     },
-  ],
+  },
 };
 
 // ¿Qué superficie es más antigua?, pasos más profundos: paso a paso con el inglés (Prompt 195).
 export const WHICH_SURFACE_IS_OLDER_DEEPER = {
-  steps: [
-    {
+  steps: {
+    'harder-craters': {
       title: 'Solo los cráteres mayores',
       body: 'Sube el diámetro en la Luna a <strong>50 km</strong>. Menos cráteres cumplen. Lee cuántos tiene el mar y el <strong>extremo superior</strong> del intervalo del cociente de densidades.',
       fields: [
@@ -477,7 +477,7 @@ export const WHICH_SURFACE_IS_OLDER_DEEPER = {
         { label: 'Extremo superior del intervalo' },
       ],
     },
-    {
+    'below-the-limit': {
       title: '¿Por qué no compara a 25 km?',
       body: 'Pon el diámetro en la Luna en <strong>25 km</strong>. El instrumento rechaza una comparación y dice que el diámetro queda por debajo de aquel en el que el recuento es completo.',
       prompt: '¿Por qué no se permite un diámetro menor?',
@@ -501,7 +501,7 @@ export const WHICH_SURFACE_IS_OLDER_DEEPER = {
       because:
         'Una comparación necesita los dos recuentos completos por encima del diámetro. El límite de la Luna, 30 km, son 15 píxeles de ancho; el instrumento rechaza por debajo en vez de comparar densidades a las que les faltan cráteres.',
     },
-    {
+    'the-flip': {
       title: 'Dónde cambia su veredicto Marte',
       body: 'Pon Marte en <strong>60 km</strong> y lee el cociente de densidades y el <strong>extremo inferior</strong> de su intervalo. Luego sube el diámetro de 5 en 5 km desde 20 y observa dónde cambia el veredicto.',
       fields: [
@@ -509,7 +509,7 @@ export const WHICH_SURFACE_IS_OLDER_DEEPER = {
         { label: 'Extremo inferior del intervalo' },
       ],
     },
-    {
+    'no-craters-at-all': {
       title: 'Cuando una región no tiene ninguno',
       body: 'Pon la Luna en <strong>100 km</strong>. Las tierras altas tienen cráteres así de grandes y el mar ninguno. Lee cuántos tienen las tierras altas y el extremo inferior del intervalo del cociente.',
       fields: [
@@ -517,13 +517,13 @@ export const WHICH_SURFACE_IS_OLDER_DEEPER = {
         { label: 'Extremo inferior del intervalo' },
       ],
     },
-  ],
+  },
 };
 
 // Cráteres por tamaño, pasos más profundos: paso a paso con el inglés.
 export const CRATERS_BY_SIZE_DEEPER = {
-  steps: [
-    {
+  steps: {
+    'raise-the-floor': {
       title: 'Ajustar solo los mayores',
       body: 'Elige las <strong>tierras altas lunares</strong> y sube el ajuste a <strong>60 km</strong>. Lee cuántos cráteres hay en el ajuste y el extremo superior del intervalo.',
       fields: [
@@ -531,12 +531,12 @@ export const CRATERS_BY_SIZE_DEEPER = {
         { label: 'Extremo superior del intervalo' },
       ],
     },
-    {
+    'unbiased-form': {
       title: 'La forma insesgada',
       body: 'El índice de máxima verosimilitud es <em>n</em>/<em>S</em>, donde <em>S</em> es la suma de ln(<em>D</em>/<em>D</em><sub>mín</sub>). Con pocos cráteres está sesgado al alza; <em>(n &minus; 1)/S</em> es la forma insesgada. Elige el <strong>mar lunar</strong>, ajustado desde <strong>30 km</strong>, y lee el índice insesgado.',
       fields: [{ label: 'Índice, forma insesgada (n − 1) / S' }],
     },
-    {
+    'why-not-a-line': {
       title: '¿Por qué no trazar una recta por los puntos?',
       body: 'El gráfico muestra puntos unidos, a la vista, por una línea. El índice no es la pendiente de una recta ajustada a ellos.',
       prompt:
@@ -559,7 +559,7 @@ export const CRATERS_BY_SIZE_DEEPER = {
       because:
         'Cada punto acumulado incluye todos los cráteres a su derecha, así que los puntos están correlacionados, y el error de un recuento es de Poisson, no gaussiano. El ajuste usa los cráteres, una vez cada uno, y obtiene un intervalo exacto.',
     },
-    {
+    'the-limit-is-the-picture': {
       title: '¿Por qué 30 km, si el catálogo llega más abajo?',
       body: 'El catálogo lunar dice que es completo hasta unos 8 km, y el instrumento aún marca 30 km como límite de completitud de las tierras altas lunares.',
       prompt: '¿Por qué?',
@@ -581,13 +581,13 @@ export const CRATERS_BY_SIZE_DEEPER = {
       because:
         'La completitud depende de los datos con que se hace un recuento. La misma superficie necesita otro límite en otra imagen, así que el límite se indica con la imagen, y un ajuste por debajo se señala como poco fiable.',
     },
-  ],
+  },
 };
 
 // Lo que vale el diámetro de un cráter, pasos más profundos: paso a paso con el inglés.
 export const WHAT_A_CRATER_DIAMETER_IS_WORTH_DEEPER = {
-  steps: [
-    {
+  steps: {
+    'a-small-circle': {
       title: 'Un círculo pequeño',
       body: 'Pon el punto del borde a <strong>5 píxeles</strong> del centro, un cráter de 10 píxeles de ancho. Lee el diámetro y la incertidumbre de <strong>colocar el círculo</strong>, en porcentaje.',
       fields: [
@@ -595,12 +595,12 @@ export const WHAT_A_CRATER_DIAMETER_IS_WORTH_DEEPER = {
         { label: 'Incertidumbre de colocar el círculo' },
       ],
     },
-    {
+    'coin-toss': {
       title: '¿Mide al menos 110 km?',
       body: 'Un recuento por encima de 110 km necesita saber si este cráter está dentro. Con el círculo de nuevo a 25 píxeles, pon <strong>Contando cráteres de al menos</strong> en <strong>110 km</strong> y lee la probabilidad de que este cráter mida al menos eso, dada su incertidumbre.',
       fields: [{ label: 'Probabilidad de que el cráter mida al menos 110 km' }],
     },
-    {
+    'which-improvement': {
       title: 'La mejor mejora',
       body: 'Cuatro cosas podrían reducir la incertidumbre del diámetro: una mejor escala del mapa, una mano más cuidadosa, acordar dónde está un borde y una mejor estimación de la vista.',
       prompt: '¿Cuál la reduciría más para este círculo?',
@@ -622,18 +622,18 @@ export const WHAT_A_CRATER_DIAMETER_IS_WORTH_DEEPER = {
       because:
         'Los términos se suman como cuadrados, así que domina el mayor. Aquí es dónde está el borde, un 5 por ciento. Una convención que lo fije, como la misma definición de borde para todos los cráteres, es lo que necesitan los cráteres contados por distintas personas, y es un trabajo distinto de un mejor instrumento.',
     },
-    {
+    'against-the-catalog': {
       title: 'Contra el catálogo',
       body: 'Activa <strong>Los círculos del catálogo</strong>. El catálogo enumera un cráter bajo el centro de tu círculo. Lee su diámetro.',
       fields: [{ label: 'El diámetro del catálogo' }],
     },
-  ],
+  },
 };
 
 // ¿Qué hay en este campo?, pasos más profundos: paso a paso con el inglés.
 export const WHAT_IS_IN_THIS_FIELD_DEEPER = {
-  steps: [
-    {
+  steps: {
+    'a-lower-threshold': {
       title: 'Un umbral de 3 sigmas',
       body: 'Pon el <strong>Umbral</strong> en 3 sigmas, con el ancho en 3 píxeles. Lee la magnitud a la que se halla la mitad de las estrellas añadidas, y nueve de cada diez.',
       fields: [
@@ -641,7 +641,7 @@ export const WHAT_IS_IN_THIS_FIELD_DEEPER = {
         { label: 'Magnitud con el 90 por ciento hallado' },
       ],
     },
-    {
+    'not-the-same-search': {
       title: '¿Qué búsqueda describe la curva?',
       body: 'Con el umbral en 3 sigmas, lee <strong>¿Describe la búsqueda del primer instrumento?</strong> El primer instrumento buscó en este cuadro a 4 sigmas.',
       prompt: 'Tienes la curva de 3 sigmas. ¿Qué puedes decir con ella?',
@@ -668,7 +668,7 @@ export const WHAT_IS_IN_THIS_FIELD_DEEPER = {
       because:
         'Una curva es la respuesta para la búsqueda con que se midió: su ancho, su ruido, su umbral y su área mínima. No es una propiedad del cuadro solo, así que una curva para otro ajuste es otra curva, y la herramienta lo dice en vez de prestar una a la otra.',
     },
-    {
+    'the-curve-and-the-field': {
       title: 'La curva frente a las estrellas que hay',
       body: 'Pon el umbral en 4 sigmas y el ancho en 3 píxeles y activa <strong>Estrellas del campo</strong> en mostradas. La curva da a cada estrella del campo una probabilidad de ser hallada a su propia magnitud. Lee cuántas de las cuarenta estrellas dice la curva que halla una búsqueda, y cuántas listó la búsqueda.',
       fields: [
@@ -679,7 +679,7 @@ export const WHAT_IS_IN_THIS_FIELD_DEEPER = {
         { label: 'Estrellas del campo que la búsqueda listó' },
       ],
     },
-    {
+    'a-wrong-width': {
       title: 'Estrellas del ancho equivocado',
       body: 'Pon el <strong>Ancho de las añadidas</strong> en 4,5 píxeles, con el umbral en 4 sigmas, como si la medición hubiera dado un enfoque peor. Lee la magnitud con el 50 por ciento hallado, y la proporción hallada en el intervalo más brillante.',
       fields: [
@@ -687,7 +687,7 @@ export const WHAT_IS_IN_THIS_FIELD_DEEPER = {
         { label: 'Halladas, magnitud −3,4 a −3,1' },
       ],
     },
-    {
+    'say-what-a-curve-needs': {
       title: 'Lo que necesita una curva',
       rubric:
         'Crédito completo por decir que la curva es una afirmación sobre una búsqueda de un cuadro (no sobre el telescopio), y por nombrar lo que debe coincidir antes de usarla en otro cuadro: el ancho de las estrellas, el ruido (cielo y exposición) y los ajustes de detección (el umbral y la fuente mínima), con estrellas aisladas solamente. También crédito por decir que una fuente tenue listada o un solo límite de magnitud no es la misma respuesta. No des crédito por decir que la curva es una propiedad del telescopio o que vale para cualquier cuadro.',
@@ -695,7 +695,7 @@ export const WHAT_IS_IN_THIS_FIELD_DEEPER = {
       prompt:
         'En dos o tres frases: ¿de qué es afirmación la curva, y qué tendría que coincidir antes de usarla en un cuadro distinto?',
     },
-  ],
+  },
 };
 
 export default {

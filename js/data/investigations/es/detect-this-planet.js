@@ -6,7 +6,7 @@
 // keeps its English and nothing here can reach the lesson's machinery: no
 // scenario name, no seed, no widget id, no numeric answer, no probe.
 //
-// Arrays line up by index with the English.
+// `steps` is keyed by step sid; other arrays line up by index.
 // =============================================================================
 
 export default {
@@ -22,13 +22,13 @@ export default {
     'Enunciar qué establece, y qué no, un exceso de dispersión en un conjunto de datos de velocidad radial',
     'Decir qué descarta un conjunto de datos de velocidad radial plano, y qué deja abierto',
   ],
-  steps: [
-    {
+  steps: {
+    'twelve-nights': {
       title: 'Doce noches',
       body: 'Te han concedido doce noches en un espectrógrafo. No necesariamente doce noches seguidas: doce noches, para usarlas cuando quieras, repartidas por el tiempo que pidas.\n\nEl objetivo es la estrella en pantalla. En algún lugar a su alrededor, demasiado tenue para verse, puede haber o no un planeta. Tus doce medidas de la velocidad de la estrella son todas las pruebas que vas a tener.\n\nLa pregunta habitual es <em>¿hay un planeta?</em>. Esta investigación plantea otra distinta, y es la que un observador tiene que responder primero: <strong>¿lo encontraría este calendario si lo hubiera?</strong>\n\nEl objetivo es la estrella de la pantalla: haz clic en ella, o usa <strong>Objetos de esta actividad</strong> más abajo, para que el instrumento sepa a qué estrella te refieres.',
       tip: 'El tiempo en un telescopio grande se asigna por noches, con meses de antelación. El calendario se decide antes de que nadie sepa qué mostrarán los datos.',
     },
-    {
+    'what-decides-whether-you-find': {
       title: '¿Qué decide si lo encuentras?',
       body: 'Cuatro cosas son evidentes en cualquier campaña de observación: cuántas medidas tomas, con qué precisión, qué intervalo de tiempo abarcan y cómo se reparten dentro de ese intervalo.\n\nSupón que el número de medidas está fijado en doce y que el instrumento también está fijado. Comprométete con una respuesta antes de ver ningún dato.',
       prompt:
@@ -42,7 +42,7 @@ export default {
       because:
         'El espaciado con respecto a la órbita. Las próximas pantallas son la demostración: dos campañas de doce medidas, una de ellas once veces más larga que la otra, y es la más corta la que encuentra el planeta.',
     },
-    {
+    'schedule-a-twelve-nights-one': {
       title: 'Calendario A: doce noches, una órbita',
       body: 'Este instrumento planifica una campaña y te muestra con qué volvería a casa. Está puesto en el primer calendario: doce medidas, separadas unas ocho horas, que abarcan una sola órbita del planeta.\n\nLa curva discontinua es el planeta tal como lo conoce la simulación. Está dibujada para enseñar y <strong>no son datos</strong>: un sondeo real solo tiene los puntos y sus barras de error. El panel de la derecha pliega esas mismas medidas sobre un ciclo, que es donde el espaciado se hace visible.\n\nUna «fase» es un lugar de la órbita en el que está la estrella, no una abstracción: la lectura de abajo da la fase en la que está la estrella ahora mismo, y el panel plegado usa ese mismo eje.',
       tool: {
@@ -56,7 +56,7 @@ export default {
       ],
       tip: 'El panel de la derecha está plegado con el periodo verdadero. Un sondeo real no conoce el periodo, y esa es una de las razones por las que en la práctica esto es más difícil de lo que parece aquí.',
     },
-    {
+    'write-down-what-schedule-a': {
       title: 'Anota lo que consiguió el calendario A',
       body: 'Vuelve a poner el instrumento en <strong>Calendario A: un ciclo</strong>, con la incertidumbre en 8 m/s y la semilla en 1, y lee tres números del panel de resultados.',
       fields: [
@@ -65,7 +65,7 @@ export default {
         { label: 'χ²/gdl frente a una velocidad constante' },
       ],
     },
-    {
+    'what-have-you-established': {
       title: '¿Qué has establecido?',
       body: 'Las medidas se dispersan unos 56 m/s. Las barras de error son de 8 m/s. Un χ²/gdl cercano a 49 dice que, si la velocidad de la estrella hubiera sido realmente constante, una dispersión así prácticamente nunca ocurriría por azar.\n\nCuidado con el siguiente paso. Es aquel sobre el que se construye toda esta investigación.',
       prompt: 'Lo máximo que establecen por sí solas estas doce medidas es:',
@@ -84,7 +84,7 @@ export default {
         'La velocidad no es constante. Eso es todo lo que la dispersión puede sostener por sí misma. Un planeta es la explicación más probable y no es la única: una compañera estelar tenue, pulsaciones, manchas que rotan por la superficie o un fallo del instrumento producen también variaciones de velocidad. Convertir «no es constante» en «un planeta, de esta masa, con este periodo» necesita más que una dispersión: necesita que la variación se repita con un periodo definido, y necesita descartar las demás explicaciones.',
       tip: 'El panel de resultados dice lo mismo bajo «Lo que eso no dice». Está ahí a propósito.',
     },
-    {
+    'schedule-b-twelve-nights-thirty': {
       title: 'Calendario B: doce noches, treinta y nueve días',
       body: 'Ahora el segundo plan. La misma estrella, el mismo instrumento, las mismas doce medidas y la misma precisión de 8 m/s, pero tomadas cada 3,52 días en lugar de cada ocho horas, de modo que la campaña abarca treinta y nueve días en vez de tres y medio.\n\nOnce veces el intervalo total, por las mismas doce noches de telescopio.',
       prompt: 'Comparado con el calendario A, el calendario B:',
@@ -97,7 +97,7 @@ export default {
       because:
         'Lo hace mucho peor, y la razón no es el número de medidas ni la duración de la campaña. Cambia el instrumento al calendario B en la pantalla siguiente y mira el panel plegado.',
     },
-    {
+    'the-same-planet-invisible': {
       title: 'El mismo planeta, invisible',
       body: 'Cambia al ajuste <strong>Calendario B: un ciclo de separación</strong>.\n\nEl panel izquierdo abarca ahora treinta y nueve días en lugar de tres y medio, y las doce medidas son casi una línea plana. El panel derecho enseña por qué: al plegarlas sobre el ciclo se amontonan en dos intervalos de diez.\n\nSé exacto sobre qué ha cambiado y qué no. La misma estrella, el mismo planeta, la misma precisión del instrumento, las mismas doce noches, la misma tirada aleatoria. Difiere una sola cosa: cuánto se separan las noches entre sí. Así que cualquier cosa que concluyas comparando estas dos campañas es una conclusión sobre la <em>cadencia</em>, y sobre nada más.\n\nLa estrella del lienzo tampoco ha cambiado. Fíjate en dónde está cuando se habría tomado cada medida: una cadencia de una órbita significa pillarla casi en el mismo sitio de su órbita cada vez, y por eso doce medidas pueden no decirte casi nada.',
       tool: {
@@ -110,7 +110,7 @@ export default {
         'Aparta un poco la cadencia de 3,52 (prueba 3,0 o 4,2) y observa cómo se recupera la cobertura',
       ],
     },
-    {
+    'write-down-what-schedule-b': {
       title: 'Anota lo que consiguió el calendario B',
       body: 'Con el ajuste en <strong>Calendario B</strong>, incertidumbre 8 m/s y semilla 1, lee los mismos tres números.',
       fields: [
@@ -119,7 +119,7 @@ export default {
         { label: 'χ²/gdl frente a una velocidad constante' },
       ],
     },
-    {
+    'why-it-failed': {
       hints: [
         'Divide el tiempo entre mediciones por el período orbital.',
         'Ambos están en días. Cuenta las órbitas completas que caben; lo que sobra es una fracción de órbita.',
@@ -137,7 +137,7 @@ export default {
       because:
         '3,52 / 3,5247 = 0,9987, que es una órbita con un margen de dos milésimas. Cada medida sorprende a la estrella casi exactamente en el mismo punto de su órbita, así que el movimiento del planeta no tiene dónde manifestarse. La estrella se movía de verdad a 84 m/s en cada sentido todo el tiempo; sencillamente, el calendario nunca miró la otra parte del ciclo. Esto se llama solapamiento (aliasing), y es la razón por la que los observadores evitan cadencias cercanas a un número entero de días cuando buscan planetas con periodos cercanos a un número entero de días.',
     },
-    {
+    'the-third-knob': {
       title: 'El tercer mando',
       body: 'La cadencia es uno de tres factores distintos, y merece la pena ver los otros dos por separado.\n\nPulsa <strong>Un planeta más pequeño</strong>: el calendario vuelve a ser el bueno, pero el planeta pasa a ser un Neptuno y K cae de 84 a unos 7 m/s, más pequeño que las barras de error. Después pulsa <strong>Un espectrógrafo mejor</strong>: el mismo Neptuno, el mismo calendario, medido con 1 m/s en lugar de 8.',
       tool: {
@@ -151,7 +151,7 @@ export default {
       ],
       tip: 'La cadencia decide si miras en los momentos adecuados. El intervalo total decide qué periodos podrías llegar a ver. La precisión decide qué señal tan pequeña sobrevive al ruido. Fallan de forma independiente, y cualquiera de los tres puede arruinar una campaña.',
     },
-    {
+    'ambiguous-evidence': {
       title: 'Pruebas ambiguas',
       body: 'El calendario B dio un χ²/gdl cercano a 1,9 con doce medidas. Tomado al pie de la letra, eso es un exceso leve: más dispersión de la que predicen las barras de error, pero del tipo que aparece por azar quizá en uno de cada cuarenta conjuntos de datos.\n\nEstás redactando el informe de la campaña.',
       prompt: '¿Cuál es la frase honesta?',
@@ -165,7 +165,7 @@ export default {
         'La tercera. La primera exagera gravemente un resultado de apenas dos sigmas. La segunda se equivoca en el sentido contrario: <em>sí</em> hay un planeta, y uno al que este sondeo resultó ser ciego, así que «no hay indicios» se queda corto respecto a lo que los datos no pueden decir. La cuarta es justamente el error que esta investigación existe para evitar: un cociente entre amplitud y ruido no es una significación, porque no tiene en cuenta cuántos puntos hay, cómo se distribuyen, ni cuántos periodos distintos has buscado de forma implícita.',
       tip: 'Las barras de error subestimadas son la causa más común de un exceso leve de χ² en el trabajo real, y por eso la tercera opción la menciona.',
     },
-    {
+    'do-it-to-the-real': {
       title: 'Hazlo con la estrella de verdad',
       body: 'El instrumento de arriba es un modelo de la señal. Ahora ejecuta un calendario contra la propia simulación.\n\nAbre <strong>Velocidad radial</strong> en la lista de Herramientas y marca <strong>Campaña de observación sintética</strong> al final del panel. Deja la cadencia en 0,32 días y el intervalo total en 3,52 (eso es el calendario A) y déjalo correr. Una órbita tarda unos trece segundos, así que todo el programa termina en aproximadamente ese tiempo.\n\nLas medidas están fechadas en días simulados, no en fotogramas, de modo que un portátil lento y uno rápido registran los mismos doce números. Entre ellas no se registra nada.',
       checklist: [
@@ -175,12 +175,12 @@ export default {
       ],
       tip: 'La campaña se reinicia sola si cambias el calendario, cambias de estrella o mueves al observador: las medidas tomadas en condiciones distintas no son un mismo programa, y el panel no las va a concatenar.',
     },
-    {
+    'take-the-data-with-you': {
       title: 'Llévate los datos',
       body: 'Una campaña se puede exportar. Abre <strong>Exportar datos</strong> en el menú y elige <strong>Medidas de velocidad radial</strong>.\n\nEl archivo tiene una fila por medida y nada entre ellas: el instante en días, la velocidad medida, su incertidumbre, de qué estrella se trata y el calendario que la produjo. Los huecos del archivo son los huecos de la campaña de observación, y ese es el objetivo: un ajuste a estos datos tiene que lidiar con los mismos agujeros que uno real.\n\nComo el ruido procede de una semilla, todo el mundo en el aula que use la misma semilla tiene el mismo archivo, y quien use otra tiene otra extracción del mismo experimento.',
       tip: 'La incertidumbre es una columna junto a la velocidad, no una nota en una cabecera, así que no se queda atrás cuando se representan los datos.',
     },
-    {
+    'the-limits-of-finding-nothing': {
       title: 'Los límites de no encontrar nada',
       body: 'Apuntas el mismo programa de doce noches a otra estrella y obtienes un conjunto de datos plano: χ²/gdl cercano a 1, ningún exceso de dispersión y cobertura en fase completa para periodos de unos pocos días.',
       prompt:
@@ -188,7 +188,7 @@ export default {
       rubric:
         'Crédito completo por las dos mitades. Lo que descarta: planetas lo bastante masivos y cercanos como para producir una oscilación de velocidad holgadamente mayor que la precisión, en el rango de periodos que el calendario podía muestrear; a grandes rasgos, queda excluido un Júpiter caliente. Lo que no descarta: planetas más pequeños, cuya señal queda por debajo del ruido; planetas con periodos más largos que el intervalo total, que aparecen como una deriva demasiado lenta para verse o como ningún cambio; planetas con periodos que la cadencia solapa, exactamente como en el calendario B; y planetas en órbitas casi de frente, donde la componente del movimiento estelar a lo largo de la línea de visión es pequeña por masivo que sea el planeta.\n\nAcepta dos cualesquiera de las cuatro exclusiones. No aceptes «no hay planeta» sin matizar, ni «no aprendimos nada»: una no detección con una sensibilidad declarada es un resultado real y es la forma en que se publican los límites superiores. Una buena respuesta dice que la conclusión trata de una región del espacio de parámetros, no de la estrella.',
     },
-    {
+    'the-other-way-to-find-one': {
       title: 'La otra forma de encontrarlos',
       body: `Todo lo anterior ha vigilado el movimiento de la estrella. Hay un
              segundo método, y a él se debe la mayoría de los planetas que
@@ -204,7 +204,7 @@ export default {
              decisiones tomadas antes de empezar a observar.`,
       tip: 'Los tránsitos exigen además que la órbita esté casi de canto. Para un Júpiter caliente las probabilidades son de una entre diez; para una Tierra a una unidad astronómica, de una entre doscientas.',
     },
-    {
+    'how-deep-is-an-earth': {
       title: '¿Cómo de profunda es una Tierra?',
       body: `El radio de la Tierra es de 6.371 km y el del Sol de 695.700 km.
              \n\nCalcula la profundidad del tránsito que vería un astrónomo
@@ -231,7 +231,7 @@ export default {
         },
       ],
     },
-    {
+    'the-noise-budget': {
       title: 'Contra qué compite un tránsito',
       body: `Una profundidad es solo la mitad de la pregunta. La otra mitad es
              todo lo demás que hace oscilar el brillo medido de una estrella, y
@@ -251,7 +251,7 @@ export default {
       ],
       tip: 'Un cociente de 355 no es una detección marginal que se discuta. Este es el régimen en el que las preguntas interesantes son sobre el planeta y no sobre si existe.',
     },
-    {
+    'the-same-planet-from-the-ground': {
       title: 'El mismo planeta, desde tierra',
       body: `Coge ese planeta idéntico -misma estrella, mismas 6.400 ppm de
              profundidad, mismo tránsito de cuatro horas- y obsérvalo con un buen
@@ -275,7 +275,7 @@ export default {
                 calientes, pero tuvieron que observar miles de estrellas durante
                 años para lograrlo, y esta es la razón.`,
     },
-    {
+    'the-floor': {
       title: '¿Hasta dónde llega la paciencia?',
       body: `Cambia el instrumento a <strong>El mismo planeta, desde
              tierra</strong>.
@@ -295,7 +295,7 @@ export default {
       ],
       tip: 'Cien veces más datos han comprado un factor de ocho, no de diez, porque parte del presupuesto ya era el término persistente. Sigue arrastrando y la razón se acerca a 49 y se para. Ese número, y no el de noches, es el que decide si la medida es posible.',
     },
-    {
+    'white-noise-and-red-noise': {
       title: 'Tres clases de ruido, tres respuestas distintas',
       body: `El ruido suele enseñarse en dos clases. Aquí es más útil en tres,
              porque la del medio es la que decide cuánta observación merece la
@@ -326,7 +326,7 @@ export default {
              gastar las noches.`,
       tip: 'Por eso los telescopios espaciales valen lo que cuestan, y no es solo que la atmósfera desaparezca. Por encima de ella el término correlacionado en horas es mucho menor y el persistente está mucho mejor caracterizado, y un sistemático que puedes medir es un sistemático que puedes restar.',
     },
-    {
+    'assumptions-of-the-model': {
       title: 'Qué está fingiendo este modelo',
       body: `El panel hace dos supuestos sobre el término del medio y los dos son
              extremos.
@@ -350,7 +350,7 @@ export default {
              real.`,
       tip: 'El diagnóstico habitual es un «factor beta»: la razón entre la dispersión real de los residuos agrupados y la que predeciría el ruido blanco puro. Los artículos de tránsitos lo citan de forma rutinaria, y son comunes valores de 1,5 a 3, es decir que la verdad suele estar más cerca del extremo optimista que del pesimista, pero nunca en él.',
     },
-    {
+    'read-two-budgets': {
       title: 'Dos presupuestos, uno al lado del otro',
       body: `Lee la profundidad sobre ruido de dos de los ajustes, y la mayor
              contribución individual al ruido en cada uno.`,
@@ -372,7 +372,7 @@ export default {
         },
       ],
     },
-    {
+    'why-more-nights-do-not-help': {
       title: '¿Dónde deja de pagar la paciencia?',
       body: `Desde tierra, tres tránsitos daban una razón de unas 4 y trescientos
              daban unas 31: una mejora real, pero no el factor de diez que
@@ -394,7 +394,7 @@ export default {
                 ese techo es bastante alto es lo que te dice si merece la pena
                 gastar las noches.`,
     },
-    {
+    'the-edge-of-what-tess-can-do': {
       title: 'El límite de lo que puede hacer un sondeo',
       body: `Ahora tres casos reales de TESS, en orden de dificultad.
              \n\n<strong>Supertierra</strong> es Pi Mensae c: el doble del radio
@@ -417,7 +417,7 @@ export default {
       ],
       tip: 'TOI-700 d es un planeta real, encontrado en 2020, y encontrarlo costó once sectores de datos de TESS más un reanálisis después de un error en los parámetros estelares originales.',
     },
-    {
+    'what-would-it-take': {
       title: '¿Qué haría falta?',
       body: `La gemela de la Tierra se queda en 0,54 -la caída es más o menos la
              mitad de la incertidumbre que la mide- y cien veces más observación
@@ -440,10 +440,10 @@ export default {
                 <em>esta</em> estrella, y la diferencia entre esas dos
                 afirmaciones es todo el asunto de esta investigación.`,
     },
-    {
+    'what-you-decided-before-you': {
       title: 'Lo que decidiste antes de mirar',
       body: 'Dos métodos, y la misma investigación dos veces.\n\nDoce medidas. Un instrumento. Un planeta, que estuvo ahí todo el tiempo.\n\nEl calendario A estableció, más allá de toda duda razonable, que la velocidad de esta estrella no es constante, a lo largo de un ciclo que muestreó de principio a fin. Eso no es lo mismo que haber detectado un planeta: es la prueba sobre la que un planeta pasa a ser, con diferencia, la mejor explicación, una vez que se demuestra que la variación se repite con un periodo definido y se descartan las demás causas.\n\nEl calendario B, con once veces el intervalo total y ni una medida menos, no pudo establecer ni siquiera eso. No está vacío: acota cuán grande pudo ser la oscilación de velocidad de la estrella en las dos fases que llegó a visitar, y esa es una restricción real aunque estrecha. Lo que no puede es decir nada sobre las otras ocho décimas del ciclo, que es donde vive este planeta.\n\nNinguno de los dos resultados es un fallo de los datos. Ambos se decidieron meses antes, cuando alguien escribió una cadencia. El calendario de observación forma parte del experimento y, como el resto del experimento, puede diseñarse bien o mal antes de que llegue un solo fotón.\n\nLa mitad de los tránsitos hizo el mismo planteamiento con otro mando. Un planeta, una profundidad, y una detección a 355 sigmas o una discusión a 2,5 dependiendo por completo de lo que hubiera por debajo de la medida. Y mientras que el fallo de la velocidad radial podía repararse observando de otra manera, el fotométrico en general no: pasado el suelo de ruido correlacionado, más noches compran más datos con la misma precisión y nada más. Una gemela de la Tierra no es indetectable en principio: es indetectable con ese instrumento, alrededor de esa estrella, y mejorar cualquiera de las tres cosas es un proyecto distinto de tener paciencia.\n\nQue es el resumen honesto de las dos mitades. La pregunta \u00ab¿puedes detectar este planeta?\u00bb nunca trata solo del planeta.',
       tip: 'Los sondeos reales se protegen del fallo de la velocidad radial con espaciados deliberadamente irregulares, varias longitudes geográficas y comprobando cualquier periodo candidato frente a la cadencia que lo encontró. Del fotométrico se protegen yendo al espacio, eligiendo estrellas tranquilas y modelando el ruido correlacionado en vez de fingir que se promediará solo.',
     },
-  ],
+  },
 };

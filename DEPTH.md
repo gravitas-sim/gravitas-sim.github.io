@@ -42,7 +42,7 @@ every per-step rule over the deeper steps, laid into their lesson):
 | `depth/earlier` | A computed field reads only earlier steps of no deeper depth (`compute(values, earlier)`): nothing is measured twice |
 | `depth/uncertainty` | An uncertainty answer is numeric, with a finite answer and a positive tolerance |
 | `depth/expectation` | A deeper step that `restates` a core numeric step carries the same answer and unit, within the core tolerance; one that `agrees` with a core computed field gets the value that field computes (by the lesson's own code) |
-| `depth/translation` | Every deeper step has its Spanish, text for text |
+| `depth/translation` | Every deeper step has its Spanish, text for text, filed under its sid; a Spanish step whose sid is not a deeper step fails |
 
 ## A number with its uncertainty
 

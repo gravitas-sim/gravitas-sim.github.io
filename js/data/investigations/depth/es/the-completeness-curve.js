@@ -1,7 +1,6 @@
-// La curva de completitud, más a fondo: las palabras en español, paso a paso con ../the-completeness-curve.js.
 export default {
-  steps: [
-    {
+  steps: {
+    'weight-by-hand': {
       title: 'El peso de una estrella',
       body: 'Toma una estrella contada de magnitud absoluta 11 en un sondeo con un límite duro de 20, en un cono de 1.000&nbsp;pc de profundidad. Alcanza el límite en d = 10 pc × 10<sup>(20 − 11 + 5) ÷ 5</sup> = 631&nbsp;pc. Como el volumen de un cono va como el cubo de su profundidad, la estrella podía contarse en (631 ÷ 1.000)³ del cono.',
       prompt:
@@ -15,7 +14,7 @@ export default {
         off: 'Peso = (1.000 ÷ 631)³.',
       },
     },
-    {
+    'poisson-by-hand': {
       title: 'El error de Poisson',
       body: 'En el intervalo de M = 10 a 12 el sondeo contó 498 estrellas. El número de estrellas contadas en un intervalo varía de un sondeo a otro como una cuenta de Poisson, con una dispersión de √N.',
       prompt: 'El error fraccionario de la cuenta',
@@ -27,7 +26,7 @@ export default {
         off: 'Error = √N ÷ N, con N = 498.',
       },
     },
-    {
+    'euclidean-slope': {
       title: 'La pendiente de cuentas de un campo uniforme',
       body: 'Para estrellas de un solo brillo, repartidas por igual, el número más brillante que la magnitud m crece como el cubo de la distancia hasta la que pueden verse, y una magnitud es un factor 10<sup>0,2</sup> en distancia. Así que log<sub>10</sub> N sube linealmente con m.',
       prompt: 'La pendiente de log₁₀ N(< m) frente a m',
@@ -40,7 +39,7 @@ export default {
         off: 'Pendiente = 3 × 0,2.',
       },
     },
-    {
+    'real-completeness': {
       title: 'Un catálogo real se agota',
       body: 'El paquete de fotometría de NGC 2420 (SDSS DR18, estrellas reales a menos de 14 minutos de arco del cúmulo) cuenta estrellas por magnitud en r: 312 de 17 a 18, 377, 431 y 519 de 20 a 21, luego <strong>153</strong> de 21 a 22 y <strong>11</strong> de 22 a 23. El cielo no se queda sin estrellas débiles en r = 21.',
       prompt: '¿Qué muestran las dos últimas cuentas?',
@@ -61,7 +60,7 @@ export default {
       because:
         'La completitud está cayendo. Las cuentas subieron con regularidad hasta 519 y luego caen en un factor de 3 y otro de 14: el cielo no hace eso, una curva de completitud sí. Es el mismo desvanecimiento que dibuja el instrumento, aquí medido en estrellas reales (el paquete es el campo del cúmulo, así que la subida no es euclídea).',
     },
-    {
+    'what-the-bootstrap-says': {
       title: 'Qué puede decir un bootstrap',
       body: 'El bootstrap del laboratorio de análisis remuestrea con reemplazo las estrellas contadas y recalcula cada vez la función de luminosidad corregida, dando un intervalo para cada intervalo. Para el intervalo más débil el intervalo es ancho; para los intermedios es estrecho.',
       prompt: '¿Qué mide el intervalo del bootstrap?',
@@ -75,5 +74,5 @@ export default {
       because:
         'Solo la dispersión de muestreo. Remuestrea las estrellas que se contaron y mantiene la selección y las magnitudes tal como están, así que un sesgo en cualquiera de las dos, como el 60 por ciento de la corrección con magnitudes del catálogo, le es invisible. El intervalo dice cuánto restringen los datos la respuesta, no si la respuesta es correcta.',
     },
-  ],
+  },
 };

@@ -181,11 +181,11 @@ describe('the lesson’s structure', () => {
     ]);
   });
   test('the Spanish parallels the English step for step and field for field', () => {
-    expect(ES.steps.length).toBe(EN.steps.length);
-    expect(DEEP_ES.steps.length).toBe(DEEP.steps.length);
+    expect(Object.keys(ES.steps).length).toBe(EN.steps.length);
+    expect(Object.keys(DEEP_ES.steps).length).toBe(DEEP.steps.length);
     const pairs = [
-      ...EN.steps.map((s, i) => [s, ES.steps[i]]),
-      ...DEEP.steps.map((s, i) => [s, DEEP_ES.steps[i]]),
+      ...EN.steps.map((s, i) => [s, ES.steps[s.sid]]),
+      ...DEEP.steps.map((s, i) => [s, DEEP_ES.steps[s.sid]]),
     ];
     for (const [en, es] of pairs) {
       expect(es.title).toBeTruthy();

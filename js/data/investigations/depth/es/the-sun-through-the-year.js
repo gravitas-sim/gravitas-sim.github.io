@@ -1,7 +1,6 @@
-// El Sol a lo largo del año, más a fondo: palabras en español, paso a paso con ../the-sun-through-the-year.js.
 export default {
-  steps: [
-    {
+  steps: {
+    'daily-sunlight': {
       title: 'Luz solar sobre un metro cuadrado',
       body: 'La luz solar media diaria en lo alto de la atmósfera sobre un metro cuadrado horizontal es S₀/π × (1/R²) × (H senφ senδ + cosφ cosδ sen&nbsp;H), donde S₀ es la constante solar del Sol del núcleo de radiación, 1.361&nbsp;W/m², R la distancia en ua y H el semiarco del día. El instrumento la evalúa. A latitud 40°, léela en los dos solsticios.',
       fields: [
@@ -10,7 +9,7 @@ export default {
         { label: 'Junio dividido entre diciembre' },
       ],
     },
-    {
+    'distance-in-percent': {
       title: 'Cuánto importa la distancia',
       body: 'La luz solar cae como 1/R². El Sol está a 1,0163&nbsp;ua en el solsticio de junio y a 0,9838&nbsp;ua en el de diciembre.',
       prompt:
@@ -28,7 +27,7 @@ export default {
         off: 'Luz solar ∝ 1/R², así que la razón es (R junio ÷ R diciembre)².',
       },
     },
-    {
+    'polar-summer': {
       title: 'El polo supera al ecuador',
       body: 'En el solsticio de junio, lee la luz solar media diaria a latitud 0° y a latitud 65°.',
       prompt: '¿Cuál recibe más luz solar a lo largo del día?',
@@ -44,5 +43,5 @@ export default {
       because:
         'La latitud 65° recibe unos 478 W/m² frente a los 385 del ecuador: el Sol está arriba 22 horas, y eso pesa más que la menor altura. En todo el año el ecuador sigue recibiendo más, porque el invierno polar no tiene ninguna.',
     },
-  ],
+  },
 };

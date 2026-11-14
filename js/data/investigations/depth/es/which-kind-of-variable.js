@@ -1,7 +1,6 @@
-// Qué tipo de variable, más a fondo: las palabras en español, paso a paso con ../which-kind-of-variable.js.
 export default {
-  steps: [
-    {
+  steps: {
+    'accuracy-from-the-table': {
       title: 'La exactitud a partir de la tabla',
       body: 'Con solo el periodo, la diagonal de la tabla (estrellas llamadas lo que son en verdad) es 23 RRab, 24 RRc, 22 cefeidas, 24 delta Scuti y 7 binarias eclipsantes, de 120 estrellas. Calcula la exactitud y compárala con la del instrumento.',
       prompt: 'La exactitud, en porcentaje',
@@ -16,7 +15,7 @@ export default {
         off: '(23 + 24 + 22 + 24 + 7) ÷ 120 × 100.',
       },
     },
-    {
+    'the-four-easy-kinds': {
       title: 'Sin las binarias',
       body: 'De las 96 estrellas que no son binarias eclipsantes, el periodo solo clasifica bien 23 + 24 + 22 + 24. Da la exactitud en esos cuatro tipos.',
       prompt: 'La exactitud en los cuatro tipos de pulsador, en porcentaje',
@@ -30,7 +29,7 @@ export default {
         off: '(23 + 24 + 22 + 24) ÷ 96 × 100.',
       },
     },
-    {
+    'a-skewed-sky': {
       title: 'El mismo clasificador con otra mezcla',
       body: 'Supón que un sondeo tuviera diez veces más binarias eclipsantes que de cada uno de los cuatro tipos de pulsador (los pesos son 1, 1, 1, 1 y 10), y que cada tipo se hallara con la misma tasa que en esta muestra con solo el periodo: 23/24, 24/24, 22/24, 24/24 y 7/24. La exactitud es la tasa de cada tipo ponderada por su peso. Calcúlala.',
       prompt: 'La exactitud ponderada, en porcentaje',
@@ -45,7 +44,7 @@ export default {
         off: '(23/24 + 1 + 22/24 + 1 + 10 × 7/24) ÷ 14 × 100.',
       },
     },
-    {
+    'features-with-their-errors': {
       title: 'El número de forma y su error',
       body: 'El clasificador de arriba lee R21, la razón del segundo armónico de la curva de luz al primero, para estrellas sintéticas. Una curva de luz real lo da con un error. El panel contiene la curva de luz de TESS de SU Draconis, una estrella RR Lyrae, plegada con su período, con el ajuste de tres armónicos; lee <strong>R21</strong> y su error para toda la serie.',
       prompt: 'R21 de SU Draconis',
@@ -60,7 +59,7 @@ export default {
         off: 'Pon la estrella en SU Draconis y los días en 28, y lee R21.',
       },
     },
-    {
+    'a-run-too-short': {
       title: 'Una serie demasiado corta para una forma',
       body: 'Cambia la estrella a <strong>Eta Aquilae</strong>, una cefeida, y usa solo los primeros <strong>6 días</strong> de su serie. El período es 7,2 días. Lee la fila <em>Números de forma</em>.',
       prompt: '¿Por qué retira el panel los números de forma?',
@@ -81,7 +80,7 @@ export default {
         },
       ],
     },
-    {
+    'when-not-to-say': {
       title: 'Cuándo no decir',
       body: 'Un clasificador que debe nombrar toda estrella se equivoca en las que no sabe distinguir. Este panel da una clase a una estrella solo si coinciden al menos <strong>4 de sus 5 vecinas más próximas</strong>, y deja las demás abiertas. Usa el período y la amplitud. Lee cuántas de las 120 estrellas quedan abiertas.',
       prompt: 'Estrellas abiertas',
@@ -98,5 +97,5 @@ export default {
         off: 'Usa período y amplitud, 4 vecinas de 5, y lee la fila.',
       },
     },
-  ],
+  },
 };

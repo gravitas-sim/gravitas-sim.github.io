@@ -1,7 +1,6 @@
-// The Missing Mass, deeper: the Spanish words, step for step with ../missing-mass.js.
 export default {
-  steps: [
-    {
+  steps: {
+    'how-sure-is-the-dark-fraction': {
       title: '¿Qué tan seguro es ese número?',
       body: 'La razón entre la masa del halo y la visible lleva dos incertidumbres. La masa del halo va como el cuadrado de la velocidad plana, así que el fallo medio del ajuste, como fracción de esa velocidad, cuenta dos veces. Y la masa visible no se pesa: se calcula a partir de la luz, con una suposición sobre cuánta masa lleva cada unidad de luz, que es buena hasta quizá un 20 %.\n\nLos números del ajuste son los que anotaste; solo el 20 % es nuevo. Las incertidumbres fraccionarias se suman en cuadratura.',
       fields: [
@@ -11,7 +10,7 @@ export default {
         { label: 'Incertidumbre de la razón' },
       ],
     },
-    {
+    'dark-fraction-with-an-error-bar': {
       title: 'Dale una barra de error a la razón',
       body: 'Escribe la razón como se da: el valor, ±, y la incertidumbre del paso anterior. Cuenta como correcta cuando el rango que das se solapa con el que respalda la medición y no es más ancho que el doble de la semianchura de ese rango.',
       prompt:
@@ -24,7 +23,7 @@ export default {
       because:
         'Unos 3,4 con una incertidumbre de unos 0,7. Incluso en el extremo de ese rango el halo pesa más del doble que lo visible, y por eso la conclusión sobrevive a una incertidumbre tan grande.',
     },
-    {
+    'why-not-report-one-number': {
       title: '¿Por qué no dar un solo número?',
       body: 'El consejo del ajuste decía que los dos deslizadores del halo se compensan: un halo más rápido con un núcleo mayor ajusta casi tan bien como uno más lento con un núcleo menor. Di que dos ajustes, 150 km/s con un núcleo de 6 kpc y 160 km/s con uno de 9 kpc, fallan ambos en 2 km/s.',
       prompt: '¿Qué debería decir un resultado publicado?',
@@ -37,7 +36,7 @@ export default {
       because:
         'Cuando dos parámetros se compensan, los datos restringen una combinación de ellos mejor que cualquiera por separado. Dar uno solo con su propia barra de error subestima su incertidumbre; el informe honesto da ambos y la covarianza, que es lo que hacen los artículos reales de curvas de rotación.',
     },
-    {
+    'what-would-tell-them-apart': {
       title: '¿Qué distinguiría dos modelos?',
       body: 'Un halo y una ley de gravedad modificada pueden ajustar la misma curva de rotación. La incertidumbre de tu ajuste dice cuánto margen tiene cada modelo.',
       prompt:
@@ -45,11 +44,11 @@ export default {
       rubric:
         'Busca una medida que los modelos predigan distinto (el cúmulo, o una galaxia de otra masa, o las lentes) y la idea de que dos modelos que ajustan una curva dentro de su incertidumbre no han sido separados por ella.',
     },
-    {
+    'the-milky-way-as-measured': {
       title: 'La opción auténtica: la Vía Láctea medida',
       body: 'Todas las curvas de galaxia de esta investigación hasta ahora son un <strong>modelo</strong>: la curva de NGC 3198 se construyó con parámetros publicados y una dispersión fija añadida, y está rotulada como sintética. Aquí hay una medida. El instrumento muestra la rapidez circular de la propia Vía Láctea de 2 a 25 kpc, de Bhattacharjee, Chaudhury y Kundu (2014), que combinaron muchos trazadores. Supone que el Sol está a 8,3 kpc del centro y se mueve a 244 km/s; las citas están en el paquete de datos. Pon el modelo en un mejor ajuste sin halo y luego con uno.',
     },
-    {
+    'the-real-halo-fit': {
       title: 'La misma prueba con datos reales',
       body: 'Lee el χ² reducido del mejor ajuste <strong>sin halo</strong> (el disco acotado en 8 × 10<sup>10</sup> masas solares) y del mejor ajuste <strong>con halo</strong>. Compara la mejora con la que hallaste para la curva sintética.',
       fields: [
@@ -57,5 +56,5 @@ export default {
         { label: 'χ² reducido, con halo' },
       ],
     },
-  ],
+  },
 };

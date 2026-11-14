@@ -1,7 +1,6 @@
-// Anillos y arcos de Einstein, más a fondo: las palabras en español, paso a paso con ../einstein-rings-and-arcs.js.
 export default {
-  steps: [
-    {
+  steps: {
+    'mass-by-hand': {
       title: 'La masa dentro de un anillo, a mano',
       body: 'Despejar la masa en el radio de Einstein da <em>M</em> = θ<sub>E</sub>² c² D<sub>l</sub>D<sub>s</sub> ÷ (4G D<sub>ls</sub>). Toma un anillo de 1,0 segundo de arco (4,848 × 10<sup>−6</sup> radianes) alrededor de una lente a 1 Gpc, con la fuente a 2 Gpc, de modo que D<sub>ls</sub> = 1 Gpc. Un gigaparsec son 3,086 × 10<sup>25</sup> m y una masa solar son 1,989 × 10<sup>30</sup> kg.',
       prompt: 'La masa dentro del anillo',
@@ -17,7 +16,7 @@ export default {
         off: 'M = θ² c² D_l D_s ÷ (4 G D_ls), en kilogramos, y luego divide entre 1,989 × 10³⁰.',
       },
     },
-    {
+    'the-speed-spread': {
       title: 'La dispersión de velocidades de una lente',
       body: 'Una galaxia isoterma tiene un radio de Einstein θ<sub>E</sub> = 4π (σ ÷ c)² D<sub>ls</sub> ÷ D<sub>s</sub>, donde σ es la dispersión unidimensional de velocidades de sus estrellas. Toma θ<sub>E</sub> = 1,0 segundo de arco y D<sub>ls</sub> ÷ D<sub>s</sub> = 0,5, como en el instrumento. La velocidad de la luz es 299.792 km/s.',
       prompt:
@@ -34,5 +33,5 @@ export default {
         off: 'σ = c √(θ_E ÷ (4π × 0,5)), con θ_E = 4,848 × 10⁻⁶.',
       },
     },
-  ],
+  },
 };

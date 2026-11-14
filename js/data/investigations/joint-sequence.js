@@ -315,8 +315,8 @@ export const WHAT_IS_IT_MADE_OF_ES = {
     'Decir qué le pasa al radio y a la densidad de un planeta cuando se declara mal la estrella alrededor de la cual se mide',
     'Decir qué puede decir una densidad media sobre la composición y qué no',
   ],
-  steps: [
-    {
+  steps: {
+    'a-radius-and-a-mass': {
       title: 'Un radio y una masa',
       body: `Un tránsito da el radio del planeta <em>como fracción del de la estrella</em>. El bamboleo de la estrella da la masa del planeta
              <em>para una estrella de la masa que digas</em>. Junta ambos y tienes una densidad, y una densidad dice algo de qué está hecho el
@@ -324,7 +324,7 @@ export const WHAT_IS_IT_MADE_OF_ES = {
              incertidumbre a cada número. Este planeta es sintético: una curva de luz de cuatro tránsitos y treinta velocidades de dos
              instrumentos, ajustadas juntas.`,
     },
-    {
+    'bigger-star-prediction': {
       title: 'Si la estrella es mayor',
       body: `El panel declara la estrella con 1,15 radios solares. Supón que en realidad es un 13 por ciento mayor, 1,30 radios solares, y
              nada más cambia: el tránsito y las velocidades son los mismos.`,
@@ -342,7 +342,7 @@ export const WHAT_IS_IT_MADE_OF_ES = {
       because:
         'El radio es el cociente de radios por el radio de la estrella, así que una estrella un 13 por ciento mayor da un planeta un 13 por ciento mayor. La masa no depende del radio de la estrella, así que se queda, en un volumen 1,13 al cubo o 1,44 veces mayor, y la densidad baja a 0,69 de la que era: casi un tercio menos.',
     },
-    {
+    'a-bigger-star': {
       title: 'Pruébalo',
       body: `Pon el <strong>radio estelar declarado</strong> en 1,30 radios solares y lee el radio y la densidad del planeta.`,
       prompt: '¿Cuánto dice ahora el panel que es la densidad?',
@@ -361,7 +361,7 @@ export const WHAT_IS_IT_MADE_OF_ES = {
         },
       ],
     },
-    {
+    'whose-uncertainty': {
       title: '¿De quién es la incertidumbre?',
       body: `Vuelve a poner el radio estelar declarado en 1,15. Lee la fila de la masa: los datos solos dan una incertidumbre pequeña, la estrella
              añade la suya, y el panel dice qué parte de la varianza es de la estrella.`,
@@ -383,7 +383,7 @@ export const WHAT_IS_IT_MADE_OF_ES = {
         },
       ],
     },
-    {
+    'where-on-the-diagram': {
       title: 'En el diagrama',
       body: `El segundo panel pone el planeta en un diagrama de radio contra masa, ambos en logaritmos, con los planetas del Sistema Solar y líneas de densidad constante.`,
       prompt: '¿A qué línea de densidad constante está más cerca el planeta?',
@@ -394,7 +394,7 @@ export const WHAT_IS_IT_MADE_OF_ES = {
       because:
         'La densidad media del planeta es 0,36 g/cm³, la más cercana a la línea de 0,3, muy por debajo de la de Saturno. Es ligero para su tamaño: un planeta grande de poca masa.',
     },
-    {
+    'what-the-density-says': {
       title: 'Lo que dice la densidad',
       body: `Lee la línea <em>Lo que dice la densidad</em>.`,
       prompt:
@@ -416,7 +416,7 @@ export const WHAT_IS_IT_MADE_OF_ES = {
         },
       ],
     },
-    {
+    'what-you-can-now-say': {
       title: 'Lo que ya puedes decir',
       body: `El radio, la masa y la densidad de un planeta se miden cada uno <em>frente a su estrella</em>, y la masa y el radio de la estrella se
              declaran, no se ajustan, con una incertidumbre que entra en cada uno de ellos. Aquí la estrella tiene la mayor parte de la incertidumbre
@@ -424,13 +424,13 @@ export const WHAT_IS_IT_MADE_OF_ES = {
              propio tránsito hace de la densidad de la estrella puede decirlo. Una densidad media por debajo de 1,8 g/cm³ es rica en
              volátiles, que es una pista de qué está hecho un planeta y no la respuesta.`,
     },
-  ],
+  },
 };
 
 export const WHAT_IS_IT_MADE_OF_DEEPER_ES = {
   id: 'what-is-it-made-of',
-  steps: [
-    {
+  steps: {
+    'the-stars-share-of-density': {
       title: 'La parte de la estrella en la densidad',
       body: `Pon <strong>ambas</strong> incertidumbres estelares en 8 por ciento (y la estrella declarada otra vez en 1,10 y 1,15). Lee la fila de la
              densidad: su incertidumbre, y la parte de su varianza que es de la estrella.`,
@@ -439,7 +439,7 @@ export const WHAT_IS_IT_MADE_OF_DEEPER_ES = {
         { label: 'Parte de la varianza de la densidad que es de la estrella' },
       ],
     },
-    {
+    'a-star-that-does-not-fit': {
       title: 'Una estrella que no encaja',
       body: `El tránsito mide también la densidad de la estrella, a partir del período y el tamaño de la órbita. Pon el radio estelar declarado en
              1,60 radios solares (con masa al 5 por ciento y radio al 3,5 por ciento). Lee a cuántas sigmas está la densidad de la estrella
@@ -449,7 +449,7 @@ export const WHAT_IS_IT_MADE_OF_DEEPER_ES = {
         { label: 'Densidad del planeta alrededor de esa estrella' },
       ],
     },
-  ],
+  },
 };
 
 // ---- the upper depth of Finding Planets by Their Tug --------------------------------------------
@@ -559,8 +559,8 @@ export const RADIAL_VELOCITY_DEEPER = {
 
 export const RADIAL_VELOCITY_DEEPER_ES = {
   id: 'radial-velocity',
-  steps: [
-    {
+  steps: {
+    'the-star-in-the-density': {
       title: 'La estrella en la densidad',
       body: `Los 0,33 g/cm³ que acabas de leer tomaron la estrella como dada. No lo era: el radio es el cociente de radios del tránsito por el radio de la
              estrella, la masa necesita la masa de la estrella, y la densidad necesita ambas. El panel de abajo ajusta juntos un tránsito y treinta
@@ -569,7 +569,7 @@ export const RADIAL_VELOCITY_DEEPER_ES = {
              <em>e</em> y la duración del tránsito se mueve con ella), y deja que las velocidades se dispersen más de lo que dicen sus barras de
              error, la <em>fluctuación</em>.`,
     },
-    {
+    'whose-share-is-the-mass': {
       title: 'La parte de la estrella',
       body: `Lee la fila de la masa del panel: lo que dan los datos solos, lo que añade la estrella y la parte.`,
       prompt:
@@ -586,7 +586,7 @@ export const RADIAL_VELOCITY_DEEPER_ES = {
       because:
         'Cerca del 87 por ciento. Las velocidades fijan la amplitud a menos del 2 por ciento; la masa va con la masa de la estrella a la dos tercios, y una masa estelar declarada al 5 por ciento añade más que los datos.',
     },
-    {
+    'jitter-and-the-model': {
       title: 'Más dispersión de la que dicen los errores',
       body: `El ajuste encontró una fluctuación de 2,3 m/s frente a errores de 3,0 m/s en las velocidades, que es poco. Supón que hubiera encontrado 15 m/s.`,
       prompt: '¿Qué diría eso?',
@@ -602,7 +602,7 @@ export const RADIAL_VELOCITY_DEEPER_ES = {
       because:
         'El modelo de un planeta explica las velocidades solo hasta esa dispersión; una grande dice que algo no está en el modelo, y el panel avisa de una fluctuación mayor que los errores. La masa depende del modelo de un planeta.',
     },
-    {
+    'a-star-that-does-not-fit-tug': {
       title: 'Una estrella que no encaja',
       body: `El tránsito mide la densidad de la estrella a partir de la órbita. Pon el radio estelar declarado en 1,60 radios solares. Lee a cuántas sigmas
              está la densidad de la estrella declarada de la del tránsito, y la densidad del planeta alrededor de esa estrella.`,
@@ -611,7 +611,7 @@ export const RADIAL_VELOCITY_DEEPER_ES = {
         { label: 'Densidad del planeta alrededor de esa estrella' },
       ],
     },
-  ],
+  },
 };
 
 // ---- instructor content -------------------------------------------------------------------------------

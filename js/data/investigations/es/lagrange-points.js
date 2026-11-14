@@ -6,8 +6,8 @@
 // keeps its English and nothing here can reach the lesson's machinery: no
 // scenario name, no seed, no numeric answer, no unit token.
 //
-// Arrays line up by index with the English. `null` means "not translated";
-// that entry keeps its English.
+// `steps` is keyed by step sid; other arrays line up by index. `null` means
+// "not translated": that entry keeps its English.
 // =============================================================================
 
 export default {
@@ -24,8 +24,8 @@ export default {
     'Identificar los valores críticos a los que se abren los cuellos de L1 y L2',
     'Decir de qué supuestos depende todo el cuadro y cuál se rompe primero',
   ],
-  steps: [
-    {
+  steps: {
+    'two-stars-and-a-speck': {
       title: 'Dos estrellas y una mota',
       body: `Dos estrellas se orbitan mutuamente en un círculo: una como el Sol y
              otra de una treintava parte de su masa, separadas ocho unidades
@@ -39,7 +39,7 @@ export default {
              resolvieron Euler, Lagrange y Jacobi antes de 1840.`,
       tip: 'El panel de tres cuerpos restringido se abrió con el escenario. Todo lo que esta investigación te pide leer está ahí.',
     },
-    {
+    'the-rotating-frame': {
       title: 'Viaja con ellas',
       body: `Mirando desde fuera, las dos estrellas giran y nada se queda quieto.
              Así que congelamos el cuadro: trabajamos en un sistema de referencia
@@ -54,7 +54,7 @@ export default {
              están en estas unidades, y un valor sacado de un libro solo coincidirá
              si estaba escrito en las mismas.`,
     },
-    {
+    'predict-forbidden': {
       title: '¿Hay algún sitio vedado?',
       body: `El trazador tiene cierta energía. Algunos lugares exigirían más
              energía de la que tiene, no porque haya algo en medio, sino porque
@@ -71,7 +71,7 @@ export default {
       because:
         'Más energía cinética significa que se puede permitir más del paisaje potencial, así que la región prohibida encoge. La trampa es de contabilidad y no de física: el número con el que esto se mide por convenio, la constante de Jacobi, se hace MENOR cuando el trazador va más rápido. Así que la región prohibida encoge cuando la constante baja, lo que suena al revés hasta que lo has dicho en voz alta unas cuantas veces.',
     },
-    {
+    'the-jacobi-constant': {
       title: 'Un número que no cambia',
       body: `En el sistema giratorio hay una cantidad que se mantiene fija a lo
              largo de cualquier trayectoria, por complicada que sea:
@@ -87,14 +87,14 @@ export default {
              más se entiende al contrario.`,
       tip: 'El panel imprime el convenio debajo de la lectura, incluido el hecho de que algunos libros añaden una constante que desplaza toda C en μ(1−μ)/2.',
     },
-    {
+    'read-the-constant': {
       title: 'Léela',
       body: `Lee la constante de Jacobi en el panel, luego usa el control de
              velocidad para dejar correr la simulación un rato y léela otra vez.`,
       fields: [{ label: 'C al principio' }, { label: 'C después de un rato' }],
       tip: 'Deberían coincidir en cuatro o cinco cifras. Cualquier diferencia es del integrador, no de la física.',
     },
-    {
+    'why-conserved-matters': {
       title: 'Por qué un solo número vale tanto',
       body: `La trayectoria del trazador en este sistema no tiene solución
              cerrada: el problema de los tres cuerpos es célebre por eso. Pero C
@@ -109,7 +109,7 @@ export default {
       because:
         'Esto es lo que hace que valga la pena tener la constante de Jacobi. No puedes resolver el movimiento, pero puedes dibujar un muro: en cualquier punto donde 2Ω sea menor que C haría falta que v² fuera negativa, así que el trazador no puede estar nunca ahí. Una cantidad conservada te compra una frontera aunque no te compre una solución.',
     },
-    {
+    'five-places': {
       title: 'Cinco sitios donde quedarse quieto',
       body: `En el sistema giratorio hay exactamente cinco puntos donde un
              trazador colocado en reposo se quedaría en reposo: la gravedad de
@@ -125,7 +125,7 @@ export default {
              equilibrio sesenta grados a un lado.`,
       tip: 'Júpiter tiene unos 12.000 asteroides conocidos en sus L4 y L5 con el Sol. Se llaman los troyanos.',
     },
-    {
+    'l4-distance': {
       title: '¿A qué distancia está L4 de cada estrella?',
       body: `L4 forma un triángulo equilátero con las dos estrellas. Las estrellas
              están a distancia uno en estas coordenadas.`,
@@ -146,7 +146,7 @@ export default {
         off: 'Dibuja el triángulo de las dos estrellas y L4. ¿Qué lados son iguales y cuánto mide el lado que te dieron?',
       },
     },
-    {
+    'critical-order': {
       title: 'Los muros se abren en un orden fijo',
       body: `Cada uno de los cinco puntos tiene su propia constante de Jacobi: el
              valor que tendría un trazador sentado allí. Léelos en el panel:
@@ -159,7 +159,7 @@ export default {
              entre las dos estrellas, luego L2 hacia el mundo exterior, luego L3,
              y al final no hay nada prohibido en ninguna parte.`,
     },
-    {
+    'open-the-neck': {
       title: 'Abre el cuello',
       body: `El trazador empieza casi en reposo en el sistema giratorio, así que
              su C es alta y está sellado en la región de la estrella grande: el
@@ -177,7 +177,7 @@ export default {
       ],
       tip: 'El panel te dice cuánto más tiene que bajar C para que se abra la siguiente puerta.',
     },
-    {
+    'accessible-not-reachable': {
       title: 'El cuello está abierto. ¿Y ahora?',
       body: `El muro entre las dos estrellas ha desaparecido. Al trazador se le
              permite energéticamente estar en cualquier punto de la región de la
@@ -197,7 +197,7 @@ export default {
       because:
         'Esta es la distinción para cuya mala lectura existe todo el diagrama. Un cuello abierto es un hueco en un muro, no una ruta a través de él. La curva de velocidad cero dice dónde no puede estar el trazador; no dice absolutamente nada sobre adónde va. Un trazador puede orbitar para siempre a un lado de una abertura que nunca usa, y la única forma de averiguarlo es integrar la trayectoria y mirar.',
     },
-    {
+    'predict-same-region-same-path': {
       title: '¿Mismo permiso, misma ruta?',
       body: `Dos trazadores, desde el mismo punto, a la misma rapidez en el
              sistema rotante, lanzados en dos direcciones distintas. Sus
@@ -221,7 +221,7 @@ export default {
                 forma muy distinta de la otra.`,
       tip: 'Lo que hayas predicho se guarda, acertado o no. Lo que te pide la pantalla siguiente es leer lo que pasó de verdad y decir si apoya tu respuesta.',
     },
-    {
+    'watch-it-not-cross': {
       title: 'Mira cómo uno cruza y el otro no',
       body: `En el panel de tres cuerpos, abre <strong>Dos direcciones, una
              misma región accesible</strong> y pulsa <strong>Ejecutar las dos
@@ -259,7 +259,7 @@ export default {
                ventana son dos periodos, y la advertencia bajo la tabla lo dice.`,
       tip: 'Todo se dibuja y se cita en el sistema rotante, el mismo en el que se dibuja la región sombreada, asi que los caminos y los muros están en las mismas coordenadas.',
     },
-    {
+    'stability-is-different': {
       title: 'Una tercera pregunta',
       body: `Hasta ahora ha habido dos preguntas que suenan igual: <em>¿se le
              permite estar ahí?</em> y <em>¿irá ahí?</em>. Aquí va una tercera:
@@ -269,7 +269,7 @@ export default {
              son equilibrios: un trazador en reposo en cualquiera de ellos se
              queda. La pregunta es qué pasa cuando se le da un empujoncito.`,
     },
-    {
+    'predict-stability': {
       title: '¿Cuáles sobreviven a un empujón?',
       body: `L1, L2 y L3 están en la recta entre las estrellas, en lo que son de
              hecho puntos de silla del potencial efectivo. L4 y L5 están, por
@@ -284,7 +284,7 @@ export default {
       because:
         'Los tres puntos colineales son sillas: da un empujón al trazador y se va, con cualquier razón de masas. L4 y L5 son el caso contraintuitivo. Están en máximos del potencial efectivo, que suena al peor sitio para hacer equilibrio, y la fuerza de Coriolis del sistema giratorio hace volver al trazador que se marcha, metiéndolo en una pequeña órbita alrededor del punto. Eso solo funciona cuando la razón de masas está por debajo del valor de Routh, 0,03852, que este sistema, con 0,0291, cumple por poco.',
     },
-    {
+    trojans: {
       title: 'Y por eso existen los troyanos',
       body: `Del Sol a Júpiter la razón de masas es 0,000955, muy por debajo del
              valor de Routh, así que los L4 y L5 de Júpiter son estables y llevan
@@ -297,7 +297,7 @@ export default {
              en paz se iría a la deriva en unos meses.`,
       tip: 'Este sistema tiene μ = 0,0291, cerca del 0,0385 de Routh. Sube la masa de la estrella pequeña por encima de una treintava parte de la grande y L4 y L5 dejan de ser estables; el panel te dice de qué lado de la raya estás.',
     },
-    {
+    'break-it': {
       title: 'Rómpelo a propósito',
       body: `Todo lo que has leído depende de supuestos que el panel comprueba
              cada vez que se reconstruye el mundo: exactamente dos cuerpos
@@ -312,7 +312,7 @@ export default {
       ],
       tip: 'Esto no es una limitación por la que haya que pedir disculpas. Un diagrama de un sistema que no está en pantalla sería peor que ningún diagrama.',
     },
-    {
+    'which-assumption': {
       title: '¿Cuál se rompe primero?',
       body: `Supón que dieras a las dos estrellas una órbita ligeramente excéntrica
              en lugar de circular.`,
@@ -326,7 +326,7 @@ export default {
       because:
         'Toda la construcción se apoya en que el sistema gire a ritmo constante, lo que exige que los dos cuerpos estén a separación constante. Haz la órbita excéntrica y el sistema acelera y frena, el potencial efectivo respira y C deja de conservarse. Hay versiones elípticas de este problema y son bastante más difíciles, y por eso el panel se niega en lugar de aproximar.',
     },
-    {
+    'say-what-jacobi-cannot-tell-you': {
       title: 'Permitido, alcanzado y estable',
       body: `Leiste una constante de Jacobi en la escena, abriste el cuello,
              viste dos trazadores con la misma regi\u00f3n accesible tomar rutas
@@ -337,7 +337,7 @@ export default {
       rubric:
         'La constante de Jacobi acota d\u00f3nde le est\u00e1 energ\u00e9ticamente permitido ir a un trazador: dibuja las curvas de velocidad cero y dice qu\u00e9 regiones quedan cerradas. No dice ad\u00f3nde ir\u00e1 realmente \u2014 dos trazadores con la misma constante, y por tanto la misma regi\u00f3n permitida, pueden seguir caminos completamente distintos \u2014 y no dice nada sobre estabilidad. L1, L2 y L3 son puntos de silla inestables: un empuj\u00f3n crece. L4 y L5 son estables, pero solo cuando la raz\u00f3n de masas es lo bastante extrema, aproximadamente cuando el primario supera unas 25 veces al secundario.',
     },
-    {
+    'three-claims': {
       title: 'Tres afirmaciones, bien separadas',
       body: `Lo que merece la pena llevarse es que son tres afirmaciones distintas
              y el diagrama solo hace la primera:
@@ -356,5 +356,5 @@ export default {
              combustible de mantenimiento durante todo el tiempo que se espera que
              dure la nave.`,
     },
-  ],
+  },
 };

@@ -3,8 +3,8 @@
 
 // Júpiter, pasos más profundos (Prompt 193): paso a paso con el inglés.
 export const WEIGHING_JUPITER_DEEPER = {
-  steps: [
-    {
+  steps: {
+    'ganymede-period-and-radius': {
       title: 'Período y radio de Ganímedes',
       body: 'Ahora el mismo ajuste para Ganímedes, con el muestreo diseñado. Elige Ganímedes (3) y lee su <strong>período</strong> y su <strong>radio de órbita</strong>, la amplitud, en radios de Júpiter. Un radio de Júpiter son 71 492 km.',
       fields: [
@@ -12,7 +12,7 @@ export const WEIGHING_JUPITER_DEEPER = {
         { label: 'Radio de la órbita de Ganímedes' },
       ],
     },
-    {
+    'keplers-third-law': {
       title: 'La tercera ley de Kepler con una luna',
       body: 'Para una luna pequeña alrededor de un planeta pesado, GM = 4π²a&sup3;/P&sup2;, con a el radio de órbita en kilómetros y P el período en segundos. G es la constante gravitatoria y M la masa de Júpiter. Usa el radio y el período que acabas de leer: a = 14,97 &times; 71 492 km y P = 7,141 días.',
       prompt:
@@ -29,7 +29,7 @@ export const WEIGHING_JUPITER_DEEPER = {
         off: '4π² a³ / P² con a en km y P en s.',
       },
     },
-    {
+    'jupiters-mass': {
       title: 'La masa de Júpiter, con su incertidumbre',
       body: 'Divide GM por la constante gravitatoria, G = 6,674 &times; 10&minus;&sup1;&sup1; m&sup3;/(kg s&sup2;), y Ganímedes da la masa de Júpiter. El instrumento indica la incertidumbre a partir de la del ajuste, llevada por la ley: tres veces la incertidumbre relativa del radio y dos veces la del período.',
       prompt:
@@ -45,7 +45,7 @@ export const WEIGHING_JUPITER_DEEPER = {
         off: 'GM / G, con GM en m³/s² (1 km³ = 10⁹ m³).',
       },
     },
-    {
+    'against-the-ephemeris': {
       title: 'Frente al valor de JPL',
       body: 'Las tablas de JPL dan el GM del planeta como 126,69 millones de km³/s². El de Ganímedes es 127,17 &plusmn; 0,17: 0,48 por encima, casi tres de sus propias incertidumbres.',
       prompt: '¿Qué te dice ese desacuerdo?',
@@ -66,7 +66,7 @@ export const WEIGHING_JUPITER_DEEPER = {
       because:
         'La incertidumbre lleva la dispersión de los puntos y nada más. El período que ve la Tierra no es del todo el período orbital de la luna, porque la Tierra y Júpiter se mueven mientras la luna da la vuelta; eso desplaza el GM de Ganímedes en un 0,3 por ciento, más que el 0,13 indicado. Los pasos avanzados lo corrigen.',
     },
-    {
+    'the-sky-frame-turns': {
       title: 'La Tierra también se mueve',
       body: 'En estas noches la línea de la Tierra a Júpiter gira, y eso gira el marco en que se leen las distancias 0,083 grados al día (el instrumento lo muestra cuando la corrección está activa). Una luna avanza en su órbita 360&deg;/P al día, Calisto 21,6&deg; al día. El período que ve la Tierra difiere del orbital en el cociente de los dos.',
       prompt:
@@ -82,7 +82,7 @@ export const WEIGHING_JUPITER_DEEPER = {
         off: '0,083 / 21,57 × 100.',
       },
     },
-    {
+    'weigh-again-corrected': {
       title: 'Cuatro lunas, corregidas',
       body: 'Elige <strong>las cuatro</strong> (0) y pon la corrección en <strong>1</strong>. El instrumento convierte cada período aparente en el orbital con el giro del marco, pesa Júpiter con cada luna y combina las cuatro, con una prueba de chi cuadrado de cuán bien concuerdan. Sin la corrección las cuatro discrepan mucho (chi cuadrado 21 con 3 grados de libertad); lee la media ponderada corregida y el chi cuadrado.',
       fields: [
@@ -90,7 +90,7 @@ export const WEIGHING_JUPITER_DEEPER = {
         { label: 'Chi cuadrado de las cuatro, corregido' },
       ],
     },
-    {
+    'projection-and-light-time': {
       title: 'Vista casi de canto',
       body: 'Desde la Tierra la línea de visión está 1,37&deg; sobre el plano ecuatorial de Júpiter, que es donde están las órbitas de las lunas. El mayor desplazamiento al norte o al sur de una luna respecto de Júpiter es entonces su radio de órbita por el seno de ese ángulo. Los desplazamientos este-oeste, que ajustaste, son el radio completo. (La luz de Júpiter tarda además de 36 a 38 minutos en llegar a la Tierra aquí, y las imágenes y las efemérides lo tienen en cuenta.)',
       prompt:
@@ -107,7 +107,7 @@ export const WEIGHING_JUPITER_DEEPER = {
         off: '26,4 × sen 1,37°.',
       },
     },
-    {
+    'the-alias-exercise': {
       title: 'El alias, a mano',
       body: 'Una luna a f vueltas al día, muestreada una vez al día, parece una a 1 &minus; f vueltas al día cuando f supera un medio. Ío da 1/1,769 = 0,565 vueltas al día.',
       prompt:
@@ -123,7 +123,7 @@ export const WEIGHING_JUPITER_DEEPER = {
         off: '1 / (1 − 1/1,769).',
       },
     },
-    {
+    'galileos-nights': {
       rubric:
         'Crédito completo por decir que los dibujos nocturnos de Galileo de enero de 1610 podían establecer la identificación, que había varios puntos que se quedaban cerca de Júpiter y cambiaban de lado, y por tanto que eran lunas, y por decir que un ritmo nocturno no podía dar el período de Ío de 1,77 días (daría un alias, unos 2,3 días), que necesita imágenes dentro de una misma noche. No dar crédito por decir que los dibujos nocturnos dieron los períodos de las cuatro lunas sin una cautela, ni que no se podía aprender nada de ellos.',
       title: 'Las noches de Galileo',
@@ -131,13 +131,13 @@ export const WEIGHING_JUPITER_DEEPER = {
       prompt:
         'En dos o tres frases: ¿qué podían establecer los dibujos de una vez por noche sobre las lunas, y qué no?',
     },
-  ],
+  },
 };
 
 // Anillos y mareas, pasos más profundos (Prompt 204, segunda parte): paso a paso con el inglés.
 export const WHY_RINGS_DEEPER = {
-  steps: [
-    {
+  steps: {
+    'saturn-ice-limit': {
       title: 'Hielo alrededor de Saturno',
       body: 'El límite sale de las dos densidades: d = 2,44 R (ρ<sub>planeta</sub> / ρ<sub>satélite</sub>)<sup>1/3</sup> para un cuerpo que puede deformarse. Saturno tiene un radio de 60 268 km y una densidad media de 687 kg/m&sup3;, y el hielo ronda los 900 kg/m&sup3;.',
       prompt:
@@ -155,7 +155,7 @@ export const WHY_RINGS_DEEPER = {
         off: '2,44 R (ρ del planeta / ρ del satélite)^(1/3).',
       },
     },
-    {
+    'mimas-3-to-1': {
       title: 'Las otras resonancias de Mimas',
       body: 'La resonancia p:q está en a<sub>m</sub> (q/p)<sup>2/3</sup>, con a<sub>m</sub> = 185 540 km para Mimas. La resonancia 3:1, donde una partícula da tres vueltas por cada órbita de Mimas, queda mucho más adentro.',
       prompt:
@@ -170,7 +170,7 @@ export const WHY_RINGS_DEEPER = {
         off: 'a (q/p)^(2/3) con q = 1 y p = 3.',
       },
     },
-    {
+    'why-two-limits': {
       rubric:
         'Crédito completo por decir que un cuerpo rígido resiste que lo desgarren y uno fluido no, así que el fluido se rompe más lejos; que el límite real de un cuerpo real queda entre los dos; y que el límite depende de las densidades y no del tamaño del satélite. Crédito parcial por una de las tres.',
       title: 'Dos límites para un par',
@@ -178,12 +178,12 @@ export const WHY_RINGS_DEEPER = {
       prompt:
         'En dos o tres frases: ¿por qué hay dos límites, y dónde queda el de una luna real?',
     },
-  ],
+  },
 };
 
 export const TIDES_DEEPER = {
-  steps: [
-    {
+  steps: {
+    'moon-locking-time': {
       title: 'Cuánto tarda en bloquearse la Luna',
       body: 'El mismo par que mueve a la Luna frena el giro propio de la Luna: la marea de la Tierra sobre la Luna. El tiempo para quitar un giro ω es t = Iω/N, con I = α m R&sup2; el momento de inercia de la Luna (α = 0,393) y N = (3/2)(k2/Q) G M&sup2; R&sup5; / a&sup6; el par. Para la Luna (k2 = 0,024, Q = 100, radio 1 737,4 km) a 384 400 km, desde un giro de una vuelta en diez horas, el núcleo de cálculo da el tiempo de abajo.',
       prompt:
@@ -200,7 +200,7 @@ export const TIDES_DEEPER = {
         off: 't = I ω / N.',
       },
     },
-    {
+    'a-q-that-changes': {
       rubric:
         'Crédito completo por decir que la Q del modelo es un solo número y que la disipación de marea real de la Tierra depende de los océanos (su profundidad, la forma de las cuencas, que han cambiado con la deriva continental) y por tanto del tiempo; que corrido hacia atrás con la Q actual la Luna está en contacto hace 1,58 miles de millones de años, cosa que la edad de la Luna contradice; y que eso significa que el ritmo de alejamiento en el pasado fue menor, no que el ritmo actual del modelo sea erróneo. Crédito parcial por dos.',
       title: 'Una Q que cambia',
@@ -208,12 +208,12 @@ export const TIDES_DEEPER = {
       prompt:
         'En dos o tres frases: ¿qué dice eso de Q, y del ritmo de alejamiento de la Luna en el pasado?',
     },
-  ],
+  },
 };
 
 export const IOS_DEEPER = {
-  steps: [
-    {
+  steps: {
+    'how-far-from-the-maximum': {
       title: 'A qué distancia del k2/Q máximo',
       body: 'El modelo admite k2/Q hasta 0,3 (k2 = 1,5 entre Q = 5). El k2/Q que necesita el valor medio del calor observado es el número que leíste.',
       prompt:
@@ -228,7 +228,7 @@ export const IOS_DEEPER = {
         off: '0,3 dividido entre el k2/Q necesario.',
       },
     },
-    {
+    'what-the-formula-leaves-out': {
       rubric:
         'Crédito completo por decir que la fórmula toma k2 y Q como números dados para todo el cuerpo mientras el interior de Ío es por capas y puede estar parcialmente fundido, así que k2 y Q no se conocen y el calor es una cota; que es de primer orden en la excentricidad; y que necesita una razón para que la órbita siga excéntrica (la resonancia con Europa y Ganímedes), porque el calentamiento de marea también circulariza la órbita. Crédito parcial por dos.',
       title: 'Lo que la fórmula deja fuera',
@@ -236,13 +236,13 @@ export const IOS_DEEPER = {
       prompt:
         'En dos o tres frases: ¿qué toma como dado la fórmula, y qué mantiene excéntrica la órbita de Ío?',
     },
-  ],
+  },
 };
 
 // Los huecos del cinturón, pasos más profundos: paso a paso con el inglés (Prompt 198, parte 3).
 export const THE_GAPS_IN_THE_BELT_DEEPER = {
-  steps: [
-    {
+  steps: {
+    'a-different-window': {
       title: 'Otra ventana',
       body: 'Pon el ancho de la ventana 3:1 en 2, el doble (0,05 UA a cada lado). Lee cuántos objetos contiene y el vaciamiento.',
       fields: [
@@ -250,7 +250,7 @@ export const THE_GAPS_IN_THE_BELT_DEEPER = {
         { label: 'El vaciamiento (por ciento)' },
       ],
     },
-    {
+    'a-brighter-cut': {
       title: 'Solo los más brillantes',
       body: 'Vuelve a poner el ancho en 1 y el límite de H en 11: solo los 2 537 objetos más brillantes del catálogo, 1 118 de ellos en el intervalo de la figura. Lee el recuento de la ventana 3:1, su vaciamiento y el extremo bajo del intervalo.',
       fields: [
@@ -259,7 +259,7 @@ export const THE_GAPS_IN_THE_BELT_DEEPER = {
         { label: 'Extremo bajo del intervalo del 95 por ciento (por ciento)' },
       ],
     },
-    {
+    'which-gaps-are-resolved': {
       title: 'Dos ventanas que el instrumento no da por resueltas',
       body: 'Elige la ventana 7:3 y luego la 2:1. Ambas muestran vaciamientos profundos, del 84 y el 89 por ciento, y el instrumento se niega a dar ninguna por resuelta.',
       prompt: '¿Por qué?',
@@ -286,12 +286,12 @@ export const THE_GAPS_IN_THE_BELT_DEEPER = {
       because:
         'La densidad del cinturón cambia en un factor grande de un lado a otro de cada ventana, así que el vaciamiento no puede separarse de la pendiente de la línea base. El instrumento informa &ldquo;no resuelto&rdquo; y dice por qué, en lugar de una profundidad que parezca tan segura como la de 3:1. No se demuestra que la profundidad sea cero; se demuestra que este método no puede medirla.',
     },
-    {
+    'hildas-and-trojans': {
       title: 'Hildas y troyanos',
       body: 'Activa &ldquo;Mostrar el recuento por clases de órbita&rdquo;. Las hildas (cerca de 3,97 UA, la resonancia 3:2) y los troyanos de Júpiter (a 5,20 UA, la 1:1) se cuentan con una caja en semieje mayor, excentricidad e inclinación: una regla de clase, no una prueba de que la órbita esté en resonancia. Lee ambos recuentos.',
       fields: [{ label: 'Hildas' }, { label: 'Troyanos de Júpiter' }],
     },
-    {
+    'what-a-survey-keeps': {
       title: 'Lo que conserva un sondeo',
       body: 'Activa &ldquo;Mostrar lo que conserva un sondeo&rdquo;. Un sondeo con una sola magnitud límite encuentra con más completitud los cuerpos cercanos, porque el brillo en oposición cae con la distancia. Es un modelo con una pendiente declarada, no una corrección del catálogo. Lee cuántas veces más completamente se encuentra un cuerpo a 2,0 UA que uno a 3,5 UA, y la media de a que mostraría un cinturón uniforme en a.',
       fields: [
@@ -299,7 +299,7 @@ export const THE_GAPS_IN_THE_BELT_DEEPER = {
         { label: 'La media de a de lo encontrado (UA)' },
       ],
     },
-    {
+    'the-baseline-is-a-choice': {
       title: 'La línea base es una elección',
       body: 'La línea base es un polinomio en el logaritmo del recuento; el grado por defecto es 4. Pon el grado en 3 y lee el vaciamiento de 3:1, luego ponlo en 6 y léelo otra vez.',
       fields: [
@@ -307,7 +307,7 @@ export const THE_GAPS_IN_THE_BELT_DEEPER = {
         { label: 'El vaciamiento con grado 6 (por ciento)' },
       ],
     },
-    {
+    'a-depletion-is-not-a-clearing-fraction': {
       title: '¿Qué dice el 88 por ciento de Júpiter?',
       body: 'La ventana 3:1 está vaciada en un 88 por ciento.',
       prompt: '¿Qué dice ese número?',
@@ -334,7 +334,7 @@ export const THE_GAPS_IN_THE_BELT_DEEPER = {
       because:
         'El vaciamiento es una afirmación medida sobre este catálogo contra una línea base suave declarada. Que la línea base sea lo que sería el cinturón sin Júpiter es un modelo, y que el hueco se despejara como imaginas es una pregunta dinámica; el intervalo cubre solo el error de muestreo.',
     },
-    {
+    'resolved-is-not-precise': {
       title: '¿Qué promete &ldquo;resuelto&rdquo;?',
       body: 'Pon el límite de H en 9: los 304 objetos más brillantes entre 2,0 y 3,5 UA. La ventana 3:1 contiene 1 donde se esperan 17, un vaciamiento del 94 por ciento con un intervalo del 80 al 100 por ciento, y el instrumento lo da por resuelto.',
       prompt: '¿Qué promete &ldquo;resuelto&rdquo; aquí?',
@@ -359,13 +359,13 @@ export const THE_GAPS_IN_THE_BELT_DEEPER = {
       because:
         'La regla es que el extremo bajo del intervalo esté por encima de cero y no se aplique ninguna advertencia. Con 304 objetos el intervalo abarca unos veinte puntos. &ldquo;Resuelto&rdquo; es un piso de lo que puedes decir, no una afirmación de precisión, y un veredicto debe leerse siempre junto al intervalo.',
     },
-  ],
+  },
 };
 
 // ¿Qué tan rápido gira?, pasos más profundos: paso a paso con el inglés (Prompt 198, parte 3).
 export const HOW_FAST_DOES_IT_SPIN_DEEPER = {
-  steps: [
-    {
+  steps: {
+    'fewer-nights': {
       title: 'Solo una noche',
       body: 'Pon el número de noches en 1: 40 medidas en una noche de 7 horas. Lee el periodo de rotación y su incertidumbre.',
       fields: [
@@ -373,7 +373,7 @@ export const HOW_FAST_DOES_IT_SPIN_DEEPER = {
         { label: 'Su incertidumbre (horas)' },
       ],
     },
-    {
+    'the-error-is-a-floor': {
       title: 'El error es un piso',
       body: 'Elige el objetivo B (de nuevo cinco noches). Lee su periodo de rotación y la incertidumbre que da el instrumento, luego activa &ldquo;Mostrar la verdad&rdquo; y compara.',
       fields: [
@@ -381,12 +381,12 @@ export const HOW_FAST_DOES_IT_SPIN_DEEPER = {
         { label: 'Su incertidumbre (horas)' },
       ],
     },
-    {
+    'a-nearly-round-body': {
       title: 'Un cuerpo casi redondo',
       body: 'El objetivo B es casi redondo. Lee su amplitud y la cota de a/b que da.',
       fields: [{ label: 'La amplitud (mag)' }, { label: 'a/b es al menos' }],
     },
-    {
+    'one-night-is-not-enough': {
       title: 'Una noche de un rotador lento',
       body: 'Elige el objetivo B con una noche. Su rotación dura 11,4 horas y la noche dura 7. El instrumento da un periodo de 16,6 &plusmn; 9,3 h y, para la amplitud, la palabra &ldquo;retenida&rdquo;.',
       prompt: '¿Por qué se retiene la amplitud?',
@@ -411,7 +411,7 @@ export const HOW_FAST_DOES_IT_SPIN_DEEPER = {
       because:
         'El hueco en la fase plegada, el tramo más largo del giro nunca observado, es 0,60 de la rotación, por encima del límite de 0,35 que admite el instrumento. El periodo de una noche no es mejor, 16,6 ± 9,3 h frente a una verdad de 11,4: una rotación más lenta que la duración de la noche no puede medirse con una sola noche.',
     },
-    {
+    'once-a-night': {
       title: 'Un punto por noche',
       body: 'Pon el muestreo en un punto por noche: 40 noches, a una hora algo distinta cada noche. Lee los dos periodos en competencia que enumera el instrumento.',
       fields: [
@@ -419,7 +419,7 @@ export const HOW_FAST_DOES_IT_SPIN_DEEPER = {
         { label: 'El segundo periodo (horas)' },
       ],
     },
-    {
+    'not-periodic-is-the-samplings': {
       title: 'Un periodo que no se encuentra',
       body: 'Elige el objetivo C con un punto por noche. La simulación rota cada 8,0 horas y varía 0,315 mag, pero el veredicto es &ldquo;no periódica&rdquo;.',
       prompt: '¿Qué dice ese veredicto?',
@@ -444,7 +444,7 @@ export const HOW_FAST_DOES_IT_SPIN_DEEPER = {
       because:
         'Un periodo que divide un día, muestreado una vez por noche, se ve en la misma fase cada vez, así que la luz parece constante. El muestreo denso lo revela. &ldquo;No periódica&rdquo; es el veredicto del muestreo, que ninguna cantidad de mirar los mismos datos puede revocar.',
     },
-    {
+    'nothing-to-find': {
       title: 'Un pico sin nada detrás',
       body: 'Elige el objetivo D: un punto que no varía en absoluto. El periodograma sigue teniendo un pico más alto, en 4,09 horas con una potencia de 0,06, y el instrumento no informa ningún periodo.',
       prompt: '¿Por qué?',
@@ -469,7 +469,7 @@ export const HOW_FAST_DOES_IT_SPIN_DEEPER = {
       because:
         'El pico más fuerte del periodograma es el más fuerte de cientos de periodos de prueba, y hasta el ruido puro tiene uno. La probabilidad de falsa alarma pregunta con qué frecuencia el ruido alcanzaría esa potencia; con 0,26 no es inusual, y el instrumento se niega a dar un periodo.',
     },
-    {
+    'one-maximum': {
       title: '¿Seis horas o tres?',
       body: 'El pico más fuerte está en 3,10 h y el instrumento da el periodo de rotación como el doble, 6,20 h. La fila de debajo da la otra lectura: 3,10 h, si la curva tiene un máximo por rotación.',
       prompt: '¿Qué decide entre 6,20 h y 3,10 h?',
@@ -494,7 +494,7 @@ export const HOW_FAST_DOES_IT_SPIN_DEEPER = {
       because:
         'El factor de dos es un supuesto sobre la forma, la regla de los dos máximos, y el instrumento declara la otra lectura junto a la primera por eso. La evidencia que lo decide viene de otra parte: curvas vistas con otras geometrías, o las dos mitades del pliegue siendo distintas.',
     },
-  ],
+  },
 };
 
 export default {

@@ -205,17 +205,17 @@ describe('the instrument', () => {
 
 describe('the Spanish', () => {
   test('lines up with the English step for step', () => {
-    expect(MADE_OF_ES.steps).toHaveLength(MADE_OF.steps.length);
-    expect(DEEPER_ES.steps).toHaveLength(DEEPER.steps.length);
+    expect(Object.keys(MADE_OF_ES.steps)).toHaveLength(MADE_OF.steps.length);
+    expect(Object.keys(DEEPER_ES.steps)).toHaveLength(DEEPER.steps.length);
     MADE_OF.steps.forEach((s, i) => {
       if (s.options)
-        expect(MADE_OF_ES.steps[i].options).toHaveLength(s.options.length);
+        expect(MADE_OF_ES.steps[s.sid].options).toHaveLength(s.options.length);
       if (s.fields)
-        expect(MADE_OF_ES.steps[i].fields).toHaveLength(s.fields.length);
+        expect(MADE_OF_ES.steps[s.sid].fields).toHaveLength(s.fields.length);
     });
     DEEPER.steps.forEach((s, i) => {
       if (s.options)
-        expect(DEEPER_ES.steps[i].options).toHaveLength(s.options.length);
+        expect(DEEPER_ES.steps[s.sid].options).toHaveLength(s.options.length);
     });
   });
 });

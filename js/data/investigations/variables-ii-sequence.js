@@ -397,13 +397,13 @@ export const THE_METALLICITY_TERM_ES = {
     'Decir que el coeficiente y el contenido de metales de las galaxias son valores citados con errores, y dónde se detiene la calibración citada',
     'Decir por qué una sola galaxia no puede decidir si hace falta el término',
   ],
-  steps: [
-    {
+  steps: {
+    'a-term-for-the-gas': {
       title: 'Un término para el gas',
       body: `La ley de Leavitt dice que el período de una cefeida indica su brillo real. Para medir la distancia de una galaxia se calibra la ley donde la distancia se conoce, aquí la Gran Nube de Magallanes, y se lleva el desfase a las cefeidas de la otra galaxia. Eso supone que la ley es la misma en las dos. Podría no serlo: las estrellas se forman del gas, y el gas de galaxias distintas tiene cantidades distintas de elementos pesados, que los astrónomos llaman metales y miden como la abundancia de oxígeno, escrita [O/H] y dada en <strong>dex</strong> (un factor diez) respecto del Sol.
              \n\nLa ley recibe entonces un término más, el término de metalicidad, un coeficiente por [O/H]. El panel usa el coeficiente de Riess et al. 2022, &minus;0,217 &plusmn; 0,046 magnitudes por dex, y el [O/H] medio que dan para las cefeidas de cada galaxia. Ninguno se midió aquí; ambos son citados, y cada uno tiene un error que el panel lleva. Las cefeidas son auténticas. Se dibujan la relación y las cefeidas de la galaxia; las distancias están en la lectura.`,
     },
-    {
+    'which-way-does-metal-go': {
       title: 'Hacia dónde van los metales',
       body: `Toma dos cefeidas con el mismo período, una en una galaxia rica en metales y otra en una pobre. No cambies todavía el panel. El coeficiente es negativo: una magnitud es menor cuanto más brillante es la estrella.`,
       prompt: 'La cefeida rica en metales es…',
@@ -419,7 +419,7 @@ export const THE_METALLICITY_TERM_ES = {
       because:
         'Un poco más brillante: &minus;0,217 mag por dex por una galaxia 0,2 dex más rica son &minus;0,04 mag. Una galaxia más rica que aquella en que se calibró la ley tiene cefeidas más brillantes de lo que dice esa ley, así que si omites el término las tomas por más cercanas de lo que están. No es polvo: la magnitud Wesenheit ya lo quita. El paso siguiente lo mide.',
     },
-    {
+    'the-distance-twice': {
       title: 'La distancia dos veces',
       body: `El panel está en <strong>NGC 4258</strong>, con sus cefeidas puestas frente a las de la GNM. Lee el <strong>módulo de distancia</strong> con el término <strong>omitido</strong>, luego pon el término en <strong>incluido</strong> y léelo otra vez.`,
       fields: [
@@ -427,7 +427,7 @@ export const THE_METALLICITY_TERM_ES = {
         { label: 'Módulo, con el término' },
       ],
     },
-    {
+    'what-a-term-this-size-does': {
       title: 'Lo que hace un término de este tamaño',
       body: `Un cambio de 0,041 mag en el módulo parece pequeño. Un módulo es cinco veces el logaritmo de la distancia, así que un cambio de <em>s</em> magnitudes cambia la distancia en un factor diez elevado a <em>s</em> sobre cinco. Las filas de <strong>distancia</strong> dan las dos distancias; el cociente es la última fila de la lectura.`,
       prompt:
@@ -450,7 +450,7 @@ export const THE_METALLICITY_TERM_ES = {
         },
       ],
     },
-    {
+    'what-the-term-adds-to-the-error': {
       title: 'Lo que el término añade al error',
       body: `Con el término incluido el módulo es 29,444 &plusmn; 0,053, y omitido 29,403 &plusmn; 0,051. Tres filas se suman al balance de errores: el error del coeficiente llevado sobre la diferencia de [O/H], y el error del [O/H] medio de cada galaxia llevado por el coeficiente. Léelas frente al error de las propias cefeidas de la galaxia.`,
       prompt: '¿Cómo cambia el término el error total?',
@@ -474,7 +474,7 @@ export const THE_METALLICITY_TERM_ES = {
         },
       ],
     },
-    {
+    'beyond-the-calibration': {
       title: 'Más allá de la calibración',
       body: `Pon la metalicidad de la galaxia en <strong>mía</strong> y el deslizador en el valor más bajo, &minus;0,6 dex por debajo de la GNM. La fila Intervalo avisa.`,
       prompt: '¿Qué significa el aviso?',
@@ -495,16 +495,16 @@ export const THE_METALLICITY_TERM_ES = {
         },
       ],
     },
-    {
+    'what-the-term-says': {
       title: 'Lo que dice el término',
       body: `La relación de las cefeidas no es del todo la misma en todas partes: una galaxia más rica en metales que aquella en que se calibró la relación tiene cefeidas más brillantes con el mismo período, y omitir el término la sitúa demasiado cerca. Para NGC 4258 el efecto es de 0,04 magnitudes, un dos por ciento en distancia; para M101, aún más rica, un cuatro. El término viene con un coeficiente citado y abundancias citadas, cada uno con un error, y esos errores pasan al de la distancia. Se ajustó en un intervalo de abundancias, y fuera de él la corrección es una extrapolación. La imagen del <strong>efecto</strong> dibuja el cambio y su error por el coeficiente frente a la diferencia de [O/H].`,
     },
-  ],
+  },
 };
 
 export const THE_METALLICITY_TERM_DEEPER_ES = {
-  steps: [
-    {
+  steps: {
+    'the-shift-for-m101': {
       title: 'M101 a mano',
       body: `Cambia la galaxia a <strong>M101</strong>. Su [O/H] citado es +0,10 y el de la GNM &minus;0,29. El término suma <em>&minus;&#947; &times; &#916;[O/H]</em> al módulo con &#947; = &minus;0,217. Calcula el cambio y compáralo con el del panel.`,
       prompt: 'El cambio del módulo de distancia, en magnitudes',
@@ -518,7 +518,7 @@ export const THE_METALLICITY_TERM_DEEPER_ES = {
         off: '0,217 × (0,10 − (−0,29)).',
       },
     },
-    {
+    'the-distance-for-m101': {
       title: 'La distancia de M101',
       body: `La distancia cambia en diez elevado a <em>s</em> sobre cinco para un cambio de <em>s</em> magnitudes. Usa el cambio que hallaste para M101.`,
       prompt: '¿En qué porcentaje cambia el término la distancia de M101?',
@@ -533,7 +533,7 @@ export const THE_METALLICITY_TERM_DEEPER_ES = {
         off: '(10^(0,0846 / 5) − 1) × 100.',
       },
     },
-    {
+    'two-published-coefficients': {
       title: 'Dos coeficientes publicados',
       body: `El panel usa &minus;0,217 &plusmn; 0,046 (Riess et al. 2022). Otro ajuste a las cefeidas de la Vía Láctea y las Nubes de Magallanes (Breuval et al. 2022, tabla 4, la misma magnitud Wesenheit) da &minus;0,280 &plusmn; 0,078. Los dos coinciden dentro de 0,7 de su error combinado. Para NGC 4258, con &#916;[O/H] = 0,19 dex, calcula cuánto difiere el módulo entre los dos coeficientes.`,
       prompt: 'La diferencia de los dos cambios, en magnitudes',
@@ -548,7 +548,7 @@ export const THE_METALLICITY_TERM_DEEPER_ES = {
         off: '(0,280 − 0,217) × 0,19.',
       },
     },
-    {
+    'does-one-galaxy-prove-the-term': {
       title: '¿Prueba una galaxia el término?',
       body: `NGC 4258 tiene una distancia por máseres de agua que no usa cefeidas: 29,397 &plusmn; 0,032. El panel la muestra. Con el término omitido la calibración de la GNM da 29,403 (0,1 de error combinado de los máseres); con él, 29,444 (0,8 de ellos).`,
       prompt: '¿Qué dice esta galaxia sobre el término?',
@@ -572,7 +572,7 @@ export const THE_METALLICITY_TERM_DEEPER_ES = {
         },
       ],
     },
-  ],
+  },
 };
 
 const CONTENT = {

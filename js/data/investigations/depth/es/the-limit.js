@@ -1,7 +1,6 @@
-// El límite, más a fondo: las palabras en español, paso a paso con ../the-limit.js.
 export default {
-  steps: [
-    {
+  steps: {
+    'the-mean-density-by-hand': {
       title: 'La densidad media a mano',
       body: 'La enana típica tiene una masa de 0,597 masas solares (1 masa solar = 1,989 × 10<sup>30</sup> kg) y un radio de 8.864 km. La densidad media es la masa ÷ (4/3 π R³). Dala en unidades de 10<sup>5</sup> g/cm³ (1 g/cm³ son 1.000 kg/m³); el instrumento indica el mismo número.',
       prompt:
@@ -18,7 +17,7 @@ export default {
         off: 'ρ = M ÷ (4/3 π R³) con R en metros, y luego divide entre 1.000 y entre 10⁵.',
       },
     },
-    {
+    'the-diminishing-return': {
       title: 'Lo que compra una densidad cien veces mayor',
       body: 'Subir la densidad central de 10⁹ a 10¹¹ g/cm³ llevó la masa de 1,367 a 1,450 masas solares. Halla cuánta masa añadió ese aumento de cien veces, como porcentaje de los 1,367.',
       prompt: 'Aumento de masa, como porcentaje',
@@ -35,5 +34,5 @@ export default {
         off: '100 × (1,450 − 1,367) ÷ 1,367.',
       },
     },
-  ],
+  },
 };

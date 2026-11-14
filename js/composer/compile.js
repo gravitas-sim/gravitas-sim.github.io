@@ -4,10 +4,10 @@
 // js/platform/investigation.js says what a pack may hold. This turns one into
 // the two objects a lesson in the repository is: the English lesson (the
 // default export of a js/data/investigations/<id>.js) and its Spanish shadow
-// (js/data/investigations/es/<id>.js), whose arrays line up with the English
-// by index. The pack keeps each text's languages side by side, so a step can
-// be inserted without mis-aligning a translation; the index alignment exists
-// only here, in the one place that writes it, and the tests hold it.
+// (js/data/investigations/es/<id>.js), whose steps are keyed by sid and whose
+// other arrays line up with the English by index. The pack keeps each text's
+// languages side by side, so a step can be inserted without mis-aligning a
+// translation; the alignment exists only here, and the tests hold it.
 //
 // Three things are decided here and recorded, never left to chance:
 //
@@ -252,7 +252,7 @@ export function compileInvestigation(pack, api) {
     level: es(pack.level),
     summary: es(pack.summary),
     objectives: pack.objectives.map(es),
-    steps: [],
+    steps: {},
   };
 
   for (const s of pack.steps) {
@@ -314,7 +314,7 @@ export function compileInvestigation(pack, api) {
       if (s.from !== undefined) variants[s.sid] = got.variant;
     }
     lesson.steps.push(out);
-    shadow.steps.push(w);
+    shadow.steps[s.sid] = w;
   }
   const deeper = new Set(pack.steps.map(s => s.depth));
   if (deeper.has('quantitative') || deeper.has('advanced'))

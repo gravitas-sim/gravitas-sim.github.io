@@ -223,11 +223,10 @@ describe('the lesson shadows are read the way the engine lays them', () => {
   const spanish = {
     id: 'leccion',
     title: 'Kepler',
-    steps: [
-      { sid: 'uno', title: 'Uno', options: ['x', null] },
-      null,
-      { title: 'extra' },
-    ],
+    steps: {
+      one: { sid: 'uno', title: 'Uno', options: ['x', null] },
+      ghost: { title: 'extra' },
+    },
     extra: 'not a key of the English',
   };
   const STRUCTURAL = new Set(['id', 'sid']);
@@ -237,8 +236,8 @@ describe('the lesson shadows are read the way the engine lays them', () => {
     shadowPairs(english, spanish, STRUCTURAL, pairs, 'k');
     expect(pairs.map(p => [p.key, p.en, p.es])).toEqual([
       ['k/title', 'Kepler', 'Kepler'],
-      ['k/steps[0].title', 'One', 'Uno'],
-      ['k/steps[0].options[0]', 'a', 'x'],
+      ['k/steps[one].title', 'One', 'Uno'],
+      ['k/steps[one].options[0]', 'a', 'x'],
     ]);
     const merged = mergeTranslation(english, spanish);
     expect(merged.steps[0].title).toBe('Uno');
@@ -247,31 +246,31 @@ describe('the lesson shadows are read the way the engine lays them', () => {
     expect(merged.steps[1].body).toBe('Second');
   });
 
-  test('a step inserted into the English slides every later pair, loudly', () => {
+  test('a shadow that still lists its steps is read by index and its rows still name the sid', () => {
     const pairs = [];
     shadowPairs(
       english,
-      { steps: [{ title: 'Uno' }, { title: 'Dos' }] },
+      { steps: [{ title: 'Uno' }, null, { title: 'extra' }] },
       STRUCTURAL,
       pairs,
       'k'
     );
+    expect(pairs.map(p => p.key)).toEqual(['k/steps[one].title']);
+  });
+
+  test('a step inserted into the English adds no pair and turns no other stale', () => {
+    const shadow = { steps: { one: { title: 'Uno' }, two: { title: 'Dos' } } };
+    const pairs = [];
+    shadowPairs(english, shadow, STRUCTURAL, pairs, 'k');
     const ledger = stamped(pairs);
     const inserted = {
       ...english,
       steps: [english.steps[0], { sid: 'new', title: 'New' }, english.steps[1]],
     };
     const after = [];
-    shadowPairs(
-      inserted,
-      { steps: [{ title: 'Uno' }, { title: 'Dos' }] },
-      STRUCTURAL,
-      after,
-      'k'
-    );
-    expect(evaluate(after, ledger, '2026-01-02').stale.map(x => x.key)).toEqual(
-      ['k/steps[1].title']
-    );
+    shadowPairs(inserted, shadow, STRUCTURAL, after, 'k');
+    expect(after.map(p => p.key)).toEqual(pairs.map(p => p.key));
+    expect(evaluate(after, ledger, '2026-01-02').stale).toEqual([]);
   });
 });
 

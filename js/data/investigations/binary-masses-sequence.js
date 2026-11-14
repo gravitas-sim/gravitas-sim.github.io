@@ -731,12 +731,12 @@ export const WEIGHING_THE_STARS_ES = {
     'Leer las masas y los radios de un par eclipsante con sus incertidumbres, y decir de dónde viene la incertidumbre',
     'Decir qué da una sola línea (la función de masa) y qué no da (una masa)',
   ],
-  steps: [
-    {
+  steps: {
+    'two-stars-one-center': {
       title: 'Dos estrellas, un centro',
       body: 'Dos estrellas giran en torno al punto que queda quieto entre ellas, su <strong>centro de masas</strong>. La luz de cada estrella se desplaza por el efecto Doppler al acercarse y alejarse de nosotros: las curvas del panel son las velocidades de las dos estrellas a lo largo de la visual frente a la fase de la órbita, a partir de un espectro de dos líneas, con una velocidad medida de cada estrella cada noche. Cuando la estrella 1 se aleja, la 2 se acerca.\n\nLas estrellas son un modelo, los datos son sintéticos y el panel lo dice. Lo que las curvas pueden y no pueden decir de las masas es esta investigación.',
     },
-    {
+    'who-moves-faster': {
       title: '¿Quién se mueve más deprisa?',
       body: 'El centro de masas está entre las estrellas, más cerca de una de ellas. Antes de leer las curvas, decide cuál de las dos oscila con mayor velocidad.',
       prompt: 'La estrella con mayor amplitud de velocidad es&hellip;',
@@ -752,12 +752,12 @@ export const WEIGHING_THE_STARS_ES = {
       because:
         'Las dos estrellas giran en torno a su centro de masas en el mismo tiempo. El centro está más cerca de la más pesada, que recorre el círculo menor, y la más ligera el mayor, lo que exige más velocidad. En números, las masas son inversamente proporcionales a las amplitudes de velocidad: M1 K1 = M2 K2. Las fuerzas son iguales y opuestas, y también los momentos; las velocidades no son iguales, porque la estrella más ligera necesita más velocidad para el mismo momento.',
     },
-    {
+    'read-the-amplitudes': {
       title: 'Lee las amplitudes',
       body: 'El panel ajusta una órbita a las velocidades de las dos estrellas. Lee la <strong>semiamplitud</strong> de cada curva, K1 para la estrella 1 y K2 para la estrella 2, en km/s: la mitad de la distancia entre la velocidad más alta y la más baja.',
       fields: [{ label: 'K1 (estrella 1)' }, { label: 'K2 (estrella 2)' }],
     },
-    {
+    'the-mass-ratio': {
       title: 'El cociente de masas',
       body: 'Las amplitudes son K1 = 45,2 y K2 = 61,0 km/s.',
       prompt: '¿Cuánto vale el cociente de masas M2 / M1?',
@@ -782,7 +782,7 @@ export const WEIGHING_THE_STARS_ES = {
         },
       ],
     },
-    {
+    'a-mass-or-a-limit': {
       title: 'Una masa, o solo un límite',
       body: 'Las dos amplitudes y el periodo dan el tamaño de la órbita por <strong>sen i</strong> y, con la tercera ley de Kepler, las masas por <strong>sen³ i</strong>: con i = 90&deg;, de canto, 0,582 y 0,432 masas solares. La inclinación <em>i</em> de la órbita no está en las velocidades. Pon la inclinación que supones en <strong>60&deg;</strong> y lee qué serían las masas.',
       fields: [
@@ -790,7 +790,7 @@ export const WEIGHING_THE_STARS_ES = {
         { label: 'Masa de la estrella 2 a 60 grados' },
       ],
     },
-    {
+    'what-fixes-the-tilt': {
       title: 'Qué fija la inclinación',
       body: 'Ahora hay un par que se eclipsa en el panel: el mismo tipo de órbita, con la curva de luz junto a las curvas de velocidad.',
       prompt: '¿Por qué nos dice la inclinación un eclipse?',
@@ -811,16 +811,16 @@ export const WEIGHING_THE_STARS_ES = {
         },
       ],
     },
-    {
+    'what-the-pair-gives': {
       title: 'Lo que da el par y lo que deja abierto',
       body: 'Las dos amplitudes dieron la <strong>razón de masas</strong> y las velocidades solas dieron solo <strong>masas mínimas</strong>. El eclipse añadió la inclinación y, con ella, las masas mismas y los radios, cada uno con la incertidumbre que arrastra todo el ajuste. Quita el eclipse, o una de las dos líneas, y la respuesta vuelve a ser un mínimo o una función de masa. \n\nLos niveles más profundos pesan el par con sus incertidumbres, sitúan las estrellas en los diagramas masa-radio y masa-luminosidad, y miran una estrella real.',
     },
-  ],
+  },
 };
 
 export const WEIGHING_THE_STARS_DEEPER_ES = {
-  steps: [
-    {
+  steps: {
+    'weigh-the-pair': {
       title: 'Pesa el par',
       body: 'El panel ajusta a la vez la curva de luz del eclipse y las dos curvas de velocidad, con una sola órbita para las tres (<em>el par de estrellas F</em>, sintético). Lee las masas de las dos estrellas y la incertidumbre de la primera, en unidades de 0,001 masas solares.',
       fields: [
@@ -829,7 +829,7 @@ export const WEIGHING_THE_STARS_DEEPER_ES = {
         { label: 'Incertidumbre de M1 (en unidades de 0,001)' },
       ],
     },
-    {
+    'where-the-uncertainty-comes-from': {
       title: 'De dónde viene la incertidumbre',
       body: 'La masa de la estrella 1 se conoce al 0,6 por ciento. El panel dice que la inclinación aporta el 0,000 por ciento de la varianza de esa masa.',
       prompt: '¿De dónde viene la incertidumbre de las masas?',
@@ -853,7 +853,7 @@ export const WEIGHING_THE_STARS_DEEPER_ES = {
       because:
         'El ajuste arrastra la covarianza de todo: la parte de la varianza de M1 que corresponde a la inclinación es una millonésima de un por ciento. La incertidumbre de las masas es la de K1 y K2 (0,3 km/s de 46 y 61) y la del periodo, por eso mejoran con más espectros, no con más fotometría.',
     },
-    {
+    'one-line-only': {
       title: 'Una sola línea',
       body: 'Pon <em>Estrellas con curva de velocidad</em> en <em>una (de una sola línea)</em>: solo se midieron las líneas de la estrella más brillante. El ajuste devuelve ahora la <strong>función de masa</strong>, f = M2³ sen³ i / (M1 + M2)², y, para la masa primaria de 1,30 masas solares que te dan, el menor compañero que podría producirla. Lee ambas.',
       fields: [
@@ -861,12 +861,12 @@ export const WEIGHING_THE_STARS_DEEPER_ES = {
         { label: 'Masa mínima del compañero' },
       ],
     },
-    {
+    'on-the-diagram': {
       title: 'En el diagrama',
       body: 'El diagrama masa-radio contiene las ocho estrellas de los cuatro pares eclipsantes que puedes resolver en el panel anterior, frente a las trayectorias MIST: la línea inferior es una estrella recién nacida en la secuencia principal y la superior una en su final. Lee la masa y el radio de la <strong>estrella más ligera del par caliente</strong> (sistema D, estrella 2).',
       fields: [{ label: 'Masa' }, { label: 'Radio' }],
     },
-    {
+    'the-mass-luminosity-slope': {
       title: 'La pendiente masa-luminosidad',
       body: 'Cambia el eje vertical a <em>luminosidad</em>. Lee la luminosidad de la estrella más pesada del par caliente (D1, 2,6 masas solares) y de la más pesada del par de estrellas F (A1, 1,3), y calcula el exponente <strong>n</strong> de L ∝ M<sup>n</sup> entre ellas: n = log(L<sub>D1</sub>/L<sub>A1</sub>) / log(M<sub>D1</sub>/M<sub>A1</sub>).',
       fields: [
@@ -875,7 +875,7 @@ export const WEIGHING_THE_STARS_DEEPER_ES = {
         { label: 'Exponente n' },
       ],
     },
-    {
+    'the-tilt-you-did-not-measure': {
       title: 'La inclinación que no mediste',
       body: 'De vuelta en el panel de masas mínimas, el par que nunca se eclipsa está en realidad inclinado <strong>52&deg;</strong> respecto de la visual (la verdad, que los datos no contienen). Pon la inclinación que supones en 52&deg; y lee M1 y M2, y calcula cuántas veces es la masa verdadera la mínima: <strong>1 / sen³ i</strong>.',
       fields: [
@@ -884,7 +884,7 @@ export const WEIGHING_THE_STARS_DEEPER_ES = {
         { label: 'Masa verdadera sobre masa mínima' },
       ],
     },
-    {
+    'the-real-star': {
       title: 'Una estrella real: V505 Persei',
       body: 'V505 Persei es un par real de estrellas F5 que se eclipsan cada 4,22 días. Southworth (2021, <em>The Observatory</em> 141, 122) tomó sus amplitudes de velocidad, <strong>89,12</strong> y <strong>90,31 km/s</strong>, de espectros publicados. Hicimos correr esta cadena sobre la curva de luz de TESS del sector 18 con esas dos amplitudes: masas de 1,2745 y 1,2577 masas solares, las publicadas 1,2745 &plusmn; 0,0036 y 1,2577 &plusmn; 0,0030, y radios de 1,2929 &plusmn; 0,0015 y 1,2679 &plusmn; 0,0015 frente a los publicados 1,2941 &plusmn; 0,0016 y 1,2637 &plusmn; 0,0017. El radio de la segunda estrella está a 2,4 desviaciones típicas publicadas; la prueba admitía 2.',
       prompt: '¿Qué debes concluir?',
@@ -911,7 +911,7 @@ export const WEIGHING_THE_STARS_DEEPER_ES = {
       because:
         'Las masas y el tamaño de la órbita salen de las amplitudes de velocidad y del periodo, que son los mismos en los dos análisis, así que su coincidencia comprueba la aritmética y las constantes de la cadena y no la curva de luz. Los radios salen de los eclipses, y el modelo simple de dos esferas usado aquí, sin efecto de reflexión ni líneas ajustadas fuera del eclipse, coincide para una estrella y queda a 2,4 desviaciones típicas del valor publicado para la otra. La validación lo registra como una prueba fallida y la mantiene fallida.',
     },
-    {
+    'what-the-chain-leaves-out': {
       title: 'Lo que una prueba superada no dice',
       body: 'El ajuste conjunto del par de estrellas F tiene un chi-cuadrado reducido de 0,94 y ningún ruido correlacionado: supera la prueba de los residuos.',
       prompt: '¿Qué dice eso de las masas?',
@@ -938,7 +938,7 @@ export const WEIGHING_THE_STARS_DEEPER_ES = {
       because:
         'Un desplazamiento de velocidad entre las líneas de las dos estrellas (un desajuste de plantilla, o el corrimiento al rojo gravitacional de una estrella compacta) mueve K2 y con ella las dos masas, y el ajuste puede absorber parte en la velocidad sistémica. Las barras de error son de quien midió y el modelo tiene las estrellas como dos esferas en una órbita, así que lo que omite está en las notas del modelo, no en la prueba. Las masas de las binarias eclipsantes de dos líneas reales se dan con unas pocas décimas por ciento por estos motivos, y solo cuando coinciden varios análisis.',
     },
-    {
+    'how-small-is-the-photocentre': {
       title: 'La elipse de la luz',
       body: 'El sistema A es un par visual cuyas dos estrellas el telescopio no puede separar, así que solo ve un punto, el <strong>fotocentro</strong>, el centro de la luz. Pon <em>Lo que se ve</em> en <em>un fotocentro</em>. La órbita ajustada de ese punto tiene un semieje mayor de 0,090 segundos de arco; la órbita propia del par, dibujada en gris desde la verdad, tiene 0,300. El compañero lleva el 10 por ciento de la luz y el 40 por ciento de la masa.',
       prompt: '¿Por qué la elipse del fotocentro es 0,30 de la del par?',
@@ -965,7 +965,7 @@ export const WEIGHING_THE_STARS_DEEPER_ES = {
       because:
         'El centro de masas está a 0,40 del camino de la estrella 1 a la estrella 2, y el centro de la luz a 0,10. El fotocentro está pues a 0,40 − 0,10 = 0,30 de la separación del centro de masas, del lado de la primaria, y al girar el par traza la misma elipse reducida por 0,30. Ese es todo el contrato: el eje de la órbita del fotocentro es |B − l| veces el del par, y su función de masa es la masa del par por |B − l| al cubo, no una masa.',
     },
-    {
+    'weigh-a-visual-pair': {
       title: 'Pesa un par resuelto',
       body: 'Pon <em>Lo que se ve</em> en <em>dos resueltas</em> (sistema A, una señal a ruido del paralaje de 20). El movimiento propio de cada estrella alrededor del centro de masas en movimiento da la <strong>fracción de masa</strong> de la estrella 2, y la órbita con el paralaje da la <strong>suma de masas</strong>. Lee las dos.',
       fields: [
@@ -973,7 +973,7 @@ export const WEIGHING_THE_STARS_DEEPER_ES = {
         { label: 'Suma de masas' },
       ],
     },
-    {
+    'two-roots-for-the-companion': {
       title: 'Dos compañeros ajustan una órbita',
       body: 'El sistema B tiene dos estrellas casi iguales, y el telescopio ve un solo fotocentro. La órbita del fotocentro en el panel es diminuta, 0,031 segundos de arco frente a los 0,410 del par, y con la fracción de luz (0,40) y la masa de la primaria (1,10) que usted declara, lista <strong>dos</strong> masas del compañero, 0,98 y 0,53 masas solares.',
       prompt: '¿Por qué dos, y qué elegiría entre ellas?',
@@ -1000,7 +1000,7 @@ export const WEIGHING_THE_STARS_DEEPER_ES = {
       because:
         'La órbita del fotocentro con un paralaje fija la función de masa f = (M1 + M2) |B − l|³ y el signo de l − B solo gira la elipse media vuelta, que una órbita en el cielo no distingue del nodo de la propia órbita. En este par el compañero verdadero (1,00 masas solares, B = 0,476) es la primera raíz; un compañero más ligero que su parte de la luz sería la segunda. Cuál vale es un dato más, y el panel no lo adivina.',
     },
-  ],
+  },
 };
 
 const CONTENT = {

@@ -23,7 +23,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import * as prettier from 'prettier';
 import { INVESTIGATIONS } from '../js/data/investigations.js';
-import { STRUCTURAL } from '../js/data/investigations/i18n.js';
+import { STRUCTURAL, isStepList } from '../js/data/investigations/i18n.js';
 
 const HERE = path.dirname(fileURLToPath(import.meta.url));
 const DIR = path.join(HERE, '..', 'js', 'data', 'investigations');
@@ -43,6 +43,11 @@ function wordsOf(v, key = '') {
   if (typeof v === 'string') {
     if (STRUCTURAL.has(key)) return undefined;
     return v;
+  }
+  // A lesson's steps are keyed by sid, one entry for each, so a step added,
+  // moved or removed in the English never moves another step's Spanish.
+  if (isStepList(v)) {
+    return Object.fromEntries(v.map(step => [step.sid, wordsOf(step) ?? {}]));
   }
   if (Array.isArray(v)) {
     const out = v.map(x => wordsOf(x, key));
@@ -70,8 +75,10 @@ const HEADER = (
 // English and nothing here can reach the lesson's machinery: no scenario name,
 // no seed, no widget id, no numeric answer, no probe.
 //
-// Arrays line up by index with the English. \`null\` means "not translated";
-// that entry keeps its English.
+// \`steps\` is an object keyed by each step's sid: a step is matched to its
+// English step by that id, wherever either one stands in its list. Other
+// arrays line up by index with the English; \`null\` means "not translated"
+// and that entry keeps its English.
 // =============================================================================
 `;
 

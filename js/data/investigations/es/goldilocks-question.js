@@ -6,8 +6,8 @@
 // English and nothing here can reach the lesson's machinery: no scenario name,
 // no seed, no widget id, no numeric answer, no probe.
 //
-// Arrays line up by index with the English. `null` means "not translated";
-// that entry keeps its English.
+// `steps` is keyed by step sid; other arrays line up by index. `null` means
+// "not translated": that entry keeps its English.
 // =============================================================================
 
 export default {
@@ -26,13 +26,13 @@ export default {
     'Leer el sistema TRAPPIST-1 frente a un modelo de zona habitable y decir dónde cae cada planeta',
     'Explicar por qué estar dentro de la zona habitable no establece que un planeta sea habitable',
   ],
-  steps: [
-    {
+  steps: {
+    'what-does-earth-get-from': {
       title: '¿Qué recibe la Tierra del Sol?',
       body: 'La luz del Sol tarda ocho minutos y veinte segundos en llegarnos. Lo que llega es energía, y casi todo lo relativo a la superficie de la Tierra se sigue de cuánta de ella aterriza aquí: la temperatura, el tiempo atmosférico, si el agua está en océanos o en hielo o escapa al espacio por completo.\n\nEsa magnitud tiene nombre. El <strong>flujo estelar</strong>, o insolación, es la energía que llega cada segundo a cada metro cuadrado de un planeta. Para la Tierra son unos 1361 vatios por metro cuadrado, que es aproximadamente la potencia de un pequeño calefactor eléctrico cayendo sobre cada metro cuadrado del lado iluminado.\n\nEsta investigación trata de una sola pregunta: ¿qué decide cuánto de eso recibe un planeta, y qué te permite decir la respuesta sobre el planeta?',
       tip: 'Aquí no hace falta álgebra. Moverás un deslizador, leerás tres números en un panel y verás cómo una gráfica se dibuja sola.',
     },
-    {
+    'one-earth-of-starlight': {
       title: 'Una Tierra de luz estelar',
       body: 'En lugar de arrastrar vatios por metro cuadrado, esta investigación usa la propia Tierra como regla. La Tierra está a una unidad astronómica del Sol, que son 150 millones de kilómetros, y recibe lo que llamaremos <strong>una Tierra</strong> de luz estelar.\n\nEl panel contiguo muestra exactamente eso: el Sol a la izquierda, un planeta a 1 UA, y una barra para la energía que llega allí. La barra está en la marca etiquetada «lo que recibe la Tierra», porque el planeta está donde está la Tierra.\n\nTodo lo que viene a partir de aquí se mide frente a ese único número.',
       tool: {
@@ -41,7 +41,7 @@ export default {
       },
       tip: 'Una unidad astronómica, 1 UA, es la distancia media de la Tierra al Sol. Es la vara de medir natural para cualquier cosa dentro de un sistema planetario.',
     },
-    {
+    'move-it-twice-as-far': {
       title: 'Llévalo al doble de distancia',
       body: 'Ahora imagina levantar la Tierra y dejarla a 2 UA, al doble de distancia del Sol de la que está ahora. El Sol no cambia. El planeta no cambia. Solo cambia la distancia.\n\nComprométete con una respuesta antes de tocar nada.',
       prompt: 'Al doble de distancia, cada metro cuadrado del planeta recibe…',
@@ -54,7 +54,7 @@ export default {
       because:
         'La cuarta parte. La mitad es la respuesta que casi todo el mundo elige de primeras, y merece la pena notar por qué es errónea: la luz no se está repartiendo a lo largo de una línea, se está repartiendo sobre una superficie. Dobla la distancia y esa superficie es cuatro veces mayor. Estás a punto de medirlo en lugar de creértelo.',
     },
-    {
+    'three-distances': {
       title: 'Tres distancias',
       body: 'El deslizador mueve el planeta. Toma una lectura en cada una de las tres distancias de abajo y anota los números, o deja este panel abierto: la pantalla siguiente te pide que los registres.\n\nEl número que hay que leer es el etiquetado <strong>luz estelar que llega a cada metro cuadrado</strong>.',
       tool: {
@@ -69,7 +69,7 @@ export default {
       ],
       tip: 'La barra cambia de longitud y el número de debajo cambia con ella. Ambos dicen lo mismo; la barra está ahí para que el cambio se vea antes de leer las cifras.',
     },
-    {
+    'write-the-three-down': {
       title: 'Anota las tres',
       body: 'Pon el deslizador en cada distancia por turno y escribe lo que marque el panel. El instrumento y la gráfica están ambos en esta pantalla, así que no hay que recordar nada de la anterior: lee un valor, introdúcelo, observa cómo cae el punto.',
       fields: [
@@ -92,7 +92,7 @@ export default {
       },
       tip: 'Las tres distancias sugeridas son solo sugerencias. Sirven tres cualesquiera, siempre que el valor de luz estelar de al lado se leyera a esa distancia.',
     },
-    {
+    'what-the-graph-says': {
       title: 'Qué dice la gráfica',
       body: 'Mira la curva que forman tus tres puntos. Empieza alta a la izquierda, cae con fuerza y después se aplana hacia la derecha sin llegar nunca del todo a cero.',
       prompt:
@@ -106,7 +106,7 @@ export default {
       because:
         'Cae deprisa cerca y despacio lejos. Ir de 0,5 UA a 1 UA cuesta tres cuartas partes de la luz estelar. Ir de 2 UA a 2,5 UA, la misma media unidad astronómica, cuesta muy poco. Esa forma es la firma de la relación que estás a punto de ver, y es por lo que la parte interior de cualquier sistema planetario es mucho más sensible a la distancia que la exterior.',
     },
-    {
+    'the-star-is-not-running': {
       title: 'La estrella no se está quedando sin luz',
       body: 'Aquí está el porqué, y no tiene nada que ver con que la luz se canse por el camino.\n\nUna estrella vierte la misma energía en todas las direcciones. Imagina esa energía cruzando una cáscara imaginaria centrada en la estrella. El panel dibuja una cáscara cada vez. Arrastra la distancia hacia fuera y observa dos cosas a la vez: el trozo de luz sigue teniendo la misma energía, y la cáscara que tiene que cubrir no para de crecer.',
       checklist: [
@@ -120,7 +120,7 @@ export default {
       },
       tip: 'La misma regla gobierna lo fuerte que suena un altavoz y lo brillante que se ve una farola. No es exclusiva de la astronomía; es lo que le ocurre a cualquier cosa que se reparte por igual en todas las direcciones.',
     },
-    {
+    'writing-it-down-then-using': {
       hints: [
         'Usa la regla del paso anterior: la luz de la estrella cae como uno entre la distancia al cuadrado.',
         'Pon la distancia en UA, elévala al cuadrado y toma uno entre el resultado.',
@@ -140,7 +140,7 @@ export default {
         'Una novena parte, o unas 0,11 Tierras. Tres veces la distancia, nueve veces el área, una novena parte de la energía en cada metro cuadrado. Júpiter está algo más lejos, a 5,2 UA, y recibe alrededor de una veintisieteava parte de lo que recibe la Tierra.',
       tip: 'Esto se llama ley del inverso del cuadrado. «Inverso» porque más distancia significa menos luz estelar, y «del cuadrado» porque es la distancia al cuadrado la que hace el trabajo.',
     },
-    {
+    'leave-the-planet-change-the': {
       title: 'Deja el planeta, cambia la estrella',
       body: 'Hasta ahora la estrella ha sido el Sol y solo se ha movido el planeta. Ahora dale la vuelta.\n\nPon un planeta a 1 UA, exactamente donde está la Tierra, y cambia el Sol por una enana roja: una estrella pequeña, fría y muy tenue. Las enanas rojas son con diferencia el tipo de estrella más común de la galaxia, y la estrella más cercana al Sol es una.',
       prompt: 'Ese planeta, todavía a 1 UA, recibiría ahora…',
@@ -153,7 +153,7 @@ export default {
       because:
         'Muchísimo menos. La distancia es solo la mitad de la historia; la otra mitad es cuánta luz produce la estrella para empezar. Una enana roja puede ser menos de una milésima de luminosa que el Sol, y un planeta a 1 UA alrededor de una estaría recibiendo menos de una milésima de lo que recibe la Tierra.',
     },
-    {
+    'four-stars-one-planet': {
       title: 'Cuatro estrellas, un planeta',
       body: 'El planeta se queda a 1 UA. El deslizador de estrella alterna entre cuatro tipos reales de estrella de la secuencia principal, desde una enana roja tenue hasta una estrella cinco veces más luminosa que el Sol.\n\nVigila el número de la esquina superior derecha del panel mientras las recorres.',
       tool: {
@@ -168,7 +168,7 @@ export default {
       ],
       tip: 'Una estrella cuatrocientas veces más tenue entrega cuatrocientas veces menos luz a un planeta a la misma distancia. Los dos números van a la par, porque la luminosidad multiplica directamente en la relación del inverso del cuadrado.',
     },
-    {
+    'what-luminosity-does': {
       title: 'Qué hace la luminosidad',
       body: 'Ya has cambiado la estrella cuatro veces sin mover el planeta en absoluto.',
       prompt: 'A una distancia fija, la luz estelar que recibe un planeta…',
@@ -181,7 +181,7 @@ export default {
       because:
         'Es proporcional a la luminosidad. Diez veces la luminosidad, diez veces la luz estelar a la misma distancia. Combina eso con lo que descubriste antes y tienes la relación entera: la luz estelar sube con la luminosidad de la estrella y baja con el cuadrado de la distancia.',
     },
-    {
+    'so-where-would-a-planet': {
       title: 'Entonces, ¿dónde tendría que estar un planeta?',
       body: 'Junta esas dos cosas y surge una pregunta obvia. Si una estrella tenue entrega mucha menos luz, entonces un planeta tendría que estar mucho más cerca de ella para recibir tanto como recibe la Tierra del Sol.\n\nLos astrónomos convierten eso en una banda, y el panel dibuja ahora una: el rango de distancias en el que la luz estelar está en un intervalo que podría permitir agua líquida en la superficie, dadas condiciones adecuadas en el planeta. Está delimitada por una línea discontinua en el lado caliente y una punteada en el frío, y los números de abajo dan sus bordes interior y exterior para la estrella que se esté mostrando.\n\nCambia la estrella y observa la banda en lugar del planeta.',
       tool: {
@@ -196,7 +196,7 @@ export default {
       ],
       tip: 'Para la enana roja la banda va de unas 0,042 a unas 0,080 UA. Para la estrella brillante va de unas 2,1 a unas 3,6 UA. Eso es un factor de cincuenta entre ambas, y es enteramente cosa de la estrella.',
     },
-    {
+    'dim-stars-close-bands': {
       title: 'Estrellas tenues, bandas cercanas',
       body: 'Has visto la banda saltar de sitio a medida que cambiaba la estrella.',
       prompt:
@@ -210,12 +210,12 @@ export default {
       because:
         'Mucho más cerca. Una estrella tenue entrega menos luz, así que un planeta tiene que estar más cerca para recibir la misma cantidad, y toda la banda se mueve hacia dentro con él. La relación es una raíz cuadrada: una estrella cien veces más luminosa tiene su banda diez veces más lejos. No necesitas calcular eso, pero es por lo que la banda de la estrella brillante estaba en torno a 2 y 3,5 UA mientras que la de la enana roja estaba a una vigésima de UA.',
     },
-    {
+    'saying-it-carefully': {
       title: 'Decirlo con cuidado',
       body: 'La banda tiene nombre: la <strong>zona habitable circunestelar</strong>, abreviada normalmente como zona habitable. Merece la pena leer una vez la definición cuidadosa, porque el nombre corto invita a una afirmación mucho más fuerte de la que la idea puede sostener.\n\nLa zona habitable es <em>el rango de distancias orbitales en el que un planeta rocoso con condiciones atmosféricas adecuadas podría potencialmente mantener agua líquida en su superficie.</em>\n\nCada parte de esa frase hace trabajo. <strong>Rango</strong>, no una línea. <strong>Podría potencialmente</strong>, no lo hace. <strong>Con condiciones atmosféricas adecuadas</strong>, que es un supuesto sobre el planeta, no algo que la zona mida.\n\nLa zona se calcula enteramente a partir de la estrella. No sabe absolutamente nada de ningún planeta concreto.',
       tip: 'El agua líquida es el criterio porque es el único requisito que comparten todas las formas de vida que conocemos, y porque no tenemos manera de buscar los requisitos de una vida que no conocemos.',
     },
-    {
+    'now-put-it-round-the': {
       title: 'Ahora ponla alrededor del Sol real',
       body: 'Basta de diagramas. La simulación que hay detrás de este panel es ahora el Sol con cuatro mundos reales a su alrededor: <strong>Venus</strong> a 0,72 UA, la <strong>Tierra</strong> a 1,00, <strong>Marte</strong> a 1,52 y <strong>Ceres</strong>, el mayor asteroide, a 2,77.\n\nEl anillo verde es la zona habitable, trazada a partir de la luminosidad y la temperatura propias del Sol por el mismo código que han estado usando los paneles. Aquí nada es un boceto. Tómate un momento y mira dónde cae cada mundo.\n\nHaz clic en cada mundo por turno y lee debajo su distancia y la luz estelar que recibe. Los números salen de las mismas funciones con las que se dibuja el anillo, así que el instrumento y la imagen no pueden discrepar.',
       checklist: [
@@ -226,7 +226,7 @@ export default {
       ],
       tip: 'El anillo es un cálculo, no un objeto. No hay nada físicamente presente a 0,98 UA; esa es simplemente la distancia a la que el modelo dice que empieza un efecto invernadero desbocado para un planeta de este tipo.',
     },
-    {
+    'reading-the-real-solar-system': {
       title: 'Leer el Sistema Solar real',
       body: 'La zona conservadora alrededor del Sol va de unas 0,98 UA a unas 1,69 UA. Venus está a 0,72, la Tierra a 1,00, Marte a 1,52 y Ceres a 2,77.',
       prompt: '¿Qué mundos de la pantalla están dentro del anillo?',
@@ -239,7 +239,7 @@ export default {
       because:
         'La Tierra y Marte. Venus, a 0,72 UA, está dentro del borde interior, recibiendo unas 1,9 Tierras de luz estelar; Ceres, a 2,77 UA, está muy lejos, más allá del borde exterior. Marte, a 1,52 UA, está cómodamente dentro de la zona conservadora. Esto último suele sorprender, y es el dato más útil de esta investigación.',
     },
-    {
+    'the-mars-problem': {
       title: 'El problema de Marte',
       body: 'Marte está dentro de la zona habitable. Marte no tiene agua líquida en ningún lugar de su superficie y no la ha tenido desde hace algo así como tres mil millones de años. Su atmósfera tiene alrededor de una centésima de la presión de la de la Tierra, y su temperatura superficial media ronda los −60 °C.\n\nAsí que o el cálculo está mal, o el cálculo responde a una pregunta más estrecha de lo que sugiere el nombre.',
       prompt:
@@ -250,7 +250,7 @@ export default {
       because:
         'La zona se calcula solo a partir de la estrella, y la definición supone un planeta rocoso con condiciones atmosféricas adecuadas. Marte está en el lugar correcto y falla el supuesto: es demasiado pequeño para haber retenido una atmósfera gruesa, así que no hay presión ni calentamiento por efecto invernadero suficientes para mantener el agua líquida. La zona dijo «esta distancia podría funcionar para un planeta adecuado». Nunca dijo que Marte lo fuera.',
     },
-    {
+    'the-two-edges': {
       title: 'Los dos bordes',
       body: '¿Por qué se detiene la zona en cada extremo?\n\n<strong>El borde interior.</strong> Estar más cerca de la estrella significa más energía entrante, lo que significa una superficie más cálida, lo que significa más vapor de agua en el aire. El vapor de agua es a su vez un potente gas de efecto invernadero, así que atrapa más calor, lo que evapora más agua. Pasada cierta cantidad de luz entrante esa retroalimentación se desboca, los océanos acaban en la atmósfera, y la luz ultravioleta rompe el agua de modo que el hidrógeno escapa al espacio. Ese límite se llama <strong>efecto invernadero desbocado</strong>, y fija el borde interior.\n\n<strong>El borde exterior.</strong> Estar más lejos significa menos energía y una superficie más fría. Un planeta puede compensarlo con una atmósfera de dióxido de carbono más gruesa, y por eso el borde exterior no está simplemente donde se congela el agua. Pero el dióxido de carbono tiene un límite: amontona bastante y empieza a reflejar y dispersar más luz solar de la que atrapa. Lo mejor que puede hacer una atmósfera de dióxido de carbono se llama <strong>invernadero máximo</strong>, y eso fija el borde exterior.\n\nNinguno de los dos bordes es una temperatura. Ambos son límites de cuánta luz estelar puede manejar un modelo climático.',
       tool: {
@@ -259,7 +259,7 @@ export default {
       },
       tip: 'Se cree que Venus pasó por un efecto invernadero desbocado. Está a 0,72 UA, recibe unas 1,9 Tierras de luz estelar, y tiene una superficie lo bastante caliente para fundir plomo bajo una atmósfera noventa veces más pesada que la nuestra.',
     },
-    {
+    'two-definitions-of-the-same': {
       title: 'Dos definiciones de la misma zona',
       body: 'Las zonas habitables publicadas vienen en dos sabores, y la diferencia no es cuestión de humor.\n\nLa zona <strong>conservadora</strong> usa los dos límites que acabas de conocer, ambos salidos de un modelo climático. La zona <strong>optimista</strong> usa en su lugar dos límites empíricos, tomados de la historia de nuestro propio Sistema Solar: Venus parece no haber tenido agua superficial desde hace al menos mil millones de años, y Marte parece haber tenido algo al principio. Esos dos hechos acotan una banda más ancha.\n\nAlterna entre ellas y observa qué borde se mueve más.',
       tool: {
@@ -274,7 +274,7 @@ export default {
       ],
       tip: 'El borde interior optimista se llama Venus Reciente y el exterior optimista se llama Marte Temprano. Los nombres son literales: esos dos mundos son la evidencia.',
     },
-    {
+    'what-actually-changed': {
       title: 'Qué cambió en realidad',
       body: 'Has visto ambas bandas dibujadas en el mismo eje.',
       prompt: 'Pasar de la zona conservadora a la optimista cambia…',
@@ -287,7 +287,7 @@ export default {
       because:
         'Los supuestos. Los bordes conservadores salen de un modelo climático que pregunta qué puede sobrevivir un planeta rico en agua; los optimistas salen de preguntar qué descartan nuestros propios vecinos. Ambos son defendibles y ambos están publicados. Cuál uses depende de qué pregunta estés haciendo, y un artículo que cite una zona habitable debería decir a cuál se refiere.',
     },
-    {
+    'the-wider-definition-on-the': {
       title: 'La definición más amplia, en el Sol real',
       body: 'De vuelta al Sistema Solar en vivo, con un cambio: la zona habitable se dibuja ahora con la definición <strong>optimista</strong>. La estrella no ha cambiado. Los planetas no han cambiado. Solo el supuesto sobre qué cuenta como borde.\n\nEl borde interior ha saltado de 0,98 UA hacia dentro, hasta <strong>0,75 UA</strong>, que es un movimiento grande en pantalla. El borde exterior apenas se ha desplazado, de 1,69 a 1,77 UA.\n\nMira con atención a Venus.\n\nSelecciona Venus y observa la lectura: el mismo planeta, la misma distancia, un veredicto distinto. Lo que cambió fue la definición, no Venus.',
       checklist: [
@@ -297,7 +297,7 @@ export default {
       ],
       tip: 'El borde interior optimista es el límite de Venus Reciente, y lo fija el propio Venus: el argumento es que Venus no ha tenido agua superficial desde hace al menos mil millones de años, así que allí donde esté Venus ya tiene que ser demasiado cerca. Venus queda por tanto justo dentro de su propio límite, por unas 0,03 UA. La definición está casi tocando la evidencia con la que se construyó.',
     },
-    {
+    'what-the-wider-band-bought': {
       title: 'Qué compró la banda más ancha',
       body: 'Cambiar a la definición optimista movió el borde interior hacia dentro casi un cuarto de unidad astronómica.',
       prompt:
@@ -311,7 +311,7 @@ export default {
       because:
         'Ninguno. Venus, a 0,72 UA, sigue quedando justo dentro del borde interior optimista de 0,75, y Ceres, a 2,77, no está ni cerca del borde exterior de 1,77. Marte ya estaba dentro de la zona conservadora. Así que las dos definiciones publicadas, que discrepan sobre los bordes por un margen amplio, coinciden por completo sobre nuestro propio Sistema Solar: dos mundos en la zona, y uno de ellos es Marte.',
     },
-    {
+    'venus-by-the-rule-you': {
       hints: [
         'Usa la misma regla, uno entre la distancia al cuadrado, con Venus a su propia distancia del Sol.',
         'Primero eleva la distancia al cuadrado y luego invierte. Un planeta más cercano que la Tierra recibe más luz que ella.',
@@ -327,7 +327,7 @@ export default {
       because:
         'Unas 1,9 Tierras. Venus recibe casi el doble de luz estelar que la Tierra, que es lo que lo sitúa dentro del límite del efecto invernadero desbocado y fuera de la zona conservadora. Su superficie está a unos 460 °C, lo bastante caliente para fundir plomo, bajo una atmósfera noventa veces más pesada que la nuestra. Fíjate en el sentido del argumento: la luz estelar de más pone el proceso en marcha, la atmósfera lo remata.',
     },
-    {
+    'a-year-on-a-circular': {
       title: 'Un año en una órbita circular',
       body: 'Hasta ahora se ha supuesto calladamente una cosa: que un planeta tiene <em>una</em> distancia a su estrella. La mayoría de los planetas que has conocido en estas investigaciones están en órbitas casi circulares, y para esos es casi cierto.\n\nEl panel muestra un planeta en una órbita perfectamente circular a 1,2 UA. Debajo hay una gráfica de la luz estelar que recibe a lo largo de un año completo, con un marcador que sigue el ritmo del planeta.\n\nObserva la gráfica. Es una línea plana.',
       tool: {
@@ -336,7 +336,7 @@ export default {
       },
       tip: 'La órbita de la Tierra no es exactamente circular: su excentricidad es 0,017, lo que hace variar la luz estelar alrededor de un siete por ciento a lo largo del año. Eso es poco, y no es lo que causa las estaciones.',
     },
-    {
+    'now-stretch-the-orbit': {
       title: 'Ahora estira la órbita',
       body: 'Dentro de un momento podrás subir la excentricidad, que estira el círculo hasta convertirlo en una elipse. La estrella se queda en uno de los focos, así que el planeta se acerca mucho por un lado de la órbita y se aleja mucho por el otro.\n\nEl semieje mayor, la media de las distancias mínima y máxima, se mantendrá igual.',
       prompt: 'En una órbita estirada, la luz estelar que recibe el planeta…',
@@ -349,7 +349,7 @@ export default {
       because:
         'Varía, y alcanza su máximo cuando el planeta está más cerca. Como la relación va con el inverso del cuadrado, un estiramiento modesto de la órbita produce un vaivén grande en la luz estelar: en la órbita que estás a punto de ejecutar, el planeta recibe siete veces más en su punto más cercano que en el más lejano.',
     },
-    {
+    'run-an-eccentric-year': {
       title: 'Ejecuta un año excéntrico',
       body: 'Sube la excentricidad y observa a la vez las dos mitades del panel: el planeta dando vueltas, y el marcador trazando la gráfica de luz estelar de debajo.\n\nFíjate en <em>dónde está el planeta cuando se mueve deprisa</em>. No se mueve a velocidad constante, y nunca lo hizo: esta es la segunda ley de Kepler, y es importante para la pantalla siguiente.',
       tool: {
@@ -364,7 +364,7 @@ export default {
       ],
       tip: 'El pico de la gráfica es estrecho y el valle es ancho. Eso no es una decisión de dibujo: el planeta pasa de verdad la mayor parte de su año en la fría parte exterior de la órbita, y se apresura por la parte caliente.',
     },
-    {
+    'crossing-the-edges': {
       title: 'Cruzar los bordes',
       body: 'Ahora la zona habitable está dibujada en ambas mitades del panel: como un anillo alrededor de la estrella, y como una banda horizontal en la gráfica. Son la misma información dos veces.\n\nEsta órbita concreta no se queda dentro de ella. Observa cómo el planeta abandona el anillo en un extremo de su año y vuelve en el otro, y observa cómo la línea de la gráfica sale de la banda en el mismo momento.\n\nLa lectura da ahora la fracción del <em>año</em> pasada dentro de la zona.\n\nY en el lienzo hay ahora uno de verdad. <strong>Wanderer</strong> va por una elipse auténtica —1,2 UA de media, excentricidad 0,45— movida por el mismo solucionador de gravedad que todo lo demás en Gravitas, no dibujada a lo largo de un camino. Usa el vigilante de sucesos para detenerla en su máximo acercamiento y otra vez en su punto más lejano, y lee la luz estelar que recibe en cada uno. Esos dos números son todo el sentido de esta pantalla.',
       tool: {
@@ -379,7 +379,7 @@ export default {
       ],
       tip: 'La fracción se mide en tiempo, no en distancia recorrida por el bucle. Son números distintos, porque el planeta no cubre tramos iguales de órbita en tiempos iguales.',
     },
-    {
+    'reading-the-fraction': {
       title: 'Leer la fracción',
       body: 'Con una excentricidad de 0,45 este planeta pasa algo más de la mitad de su año dentro de la zona. Con 0,3 pasa allí unas tres cuartas partes. En una órbita circular a la misma distancia media no la abandona nunca.',
       prompt:
@@ -393,7 +393,7 @@ export default {
       because:
         'Menos de lo que parece. La fracción describe la luz estelar entrante frente a los límites de un modelo climático. Una atmósfera y un océano transportan una cantidad enorme de calor y tardan mucho en cambiar de temperatura, así que un planeta no sigue minuto a minuto la luz que le llega, igual que una playa no se enfría en el instante en que pasa una nube. Un planeta que salga brevemente de la zona cada año puede estar perfectamente bien. El número es una señal útil, no un pronóstico.',
     },
-    {
+    'a-real-system-forty-light': {
       title: 'Un sistema real, a cuarenta años luz',
       body: 'Hora de apuntar todo esto a un objeto real.\n\nTRAPPIST-1 es una estrella muy pequeña y muy fría: alrededor del nueve por ciento de la masa del Sol, apenas mayor que Júpiter, con una temperatura superficial de 2566 K frente a los 5772 del Sol. Su luminosidad medida es de 0,000553 Soles, alrededor de una milochocientosava parte de la producción del Sol. Tiene siete planetas rocosos conocidos.',
       prompt:
@@ -407,7 +407,7 @@ export default {
       because:
         'Mucho más cerca. Lo dedujiste hace dos secciones: la banda sigue la raíz cuadrada de la luminosidad. Una estrella mil ochocientas veces más tenue tiene su banda unas cuarenta veces más cerca, lo que la sitúa a unas pocas centésimas de unidad astronómica.',
     },
-    {
+    'all-seven-planets': {
       title: 'Los siete planetas',
       body: 'Aquí está el sistema real, con la zona habitable del mismo modelo que has estado usando toda la investigación, calculada a partir de la luminosidad y la temperatura medidas de TRAPPIST-1.\n\nEl eje de distancias está comprimido, porque si no los planetas interiores se amontonarían encima de la estrella. Lee los números, no los píxeles.\n\nEl segundo panel pone el Sistema Solar en el mismo eje. Todo el sistema de siete planetas cabría cómodamente dentro de la órbita de Mercurio.',
       tool: {
@@ -423,7 +423,7 @@ export default {
       ],
       tip: 'TRAPPIST-1b recibe unas cuatro veces lo que recibe la Tierra, y TRAPPIST-1h alrededor de una séptima parte. Los siete planetas abarcan todo ese rango dentro de seis centésimas de unidad astronómica.',
     },
-    {
+    'watch-it-run': {
       title: 'Míralo correr',
       body: 'El diagrama era un diagrama. Esto es la simulación, con los siete planetas en sus órbitas reales y la zona habitable dibujada a la misma escala que todo lo demás.\n\nLa vista está unas treinta veces más ampliada que en los pasos del Sistema Solar, porque todo el sistema mide seis centésimas de unidad astronómica de lado a lado. TRAPPIST-1b completa una órbita en día y medio; h tarda diecinueve días.\n\nHay una advertencia impresa en el propio anillo. TRAPPIST-1, a 2566 K, es más fría que el rango de temperaturas que cubre el ajuste publicado, así que el modelo se evalúa en su propio límite inferior en lugar de extrapolarse más allá de sus datos. Esa es una decisión de modelado, y la etiqueta lo dice en lugar de dar el número como si fuera una medida.',
       checklist: [
@@ -434,7 +434,7 @@ export default {
       ],
       tip: 'Los periodos orbitales de aquí no están escritos a mano. Salen del mismo solucionador gravitatorio que todos los demás escenarios, a partir de los semiejes mayores medidos y de la masa estelar medida. Si coinciden con los valores publicados, eso es la simulación coincidiendo con las observaciones.',
     },
-    {
+    'take-the-readings-yourself': {
       title: 'Toma tú mismo las lecturas',
       body: 'En lugar de que te digan qué planetas caen dónde, léelo en el instrumento. El panel está de vuelta, en la definición conservadora.\n\nRecorre la lista de debajo de la imagen y anota la luz estelar que recibe cada uno de los tres planetas centrales, en Tierras. Después anota dónde empieza y dónde acaba la zona.',
       fields: [
@@ -450,7 +450,7 @@ export default {
       },
       tip: 'Los tres planetas dentro de la zona reciben entre un cuarto y dos tercios de lo que recibe la Tierra. Los tres están más cerca de su estrella que Mercurio del Sol.',
     },
-    {
+    'the-question-the-name-invites': {
       title: 'La pregunta que invita el nombre',
       body: 'Así que: un planeta rocoso, del tamaño adecuado, orbitando dentro de la zona habitable de su estrella.',
       prompt:
@@ -464,7 +464,7 @@ export default {
       because:
         'No, y la razón no es que nuestros telescopios sean demasiado pequeños. La zona habitable se calcula a partir de la luminosidad y la temperatura de una estrella. Nada de ese cálculo sabe si el planeta tiene atmósfera, si tiene agua para empezar, de qué está hecho, o qué está haciendo su superficie. Estar dentro de la zona significa que el planeta recibe una cantidad de energía que sería compatible con agua líquida superficial si además resultaran ser ciertas muchas otras cosas.',
     },
-    {
+    'three-planets-that-all-look': {
       title: 'Tres planetas que parecen prometedores',
       body: 'Para ver cuánto margen deja eso, considera tres planetas que reciben todos cerca de una Tierra de luz estelar y están todos dentro de la zona habitable de su estrella.\n\nEn el único número al que esta investigación ha dedicado cuarenta minutos, son idénticos. Mira qué más se sabe de cada uno.\n\nComo referencia de nuestro propio sistema: Venus y la Tierra son casi del mismo tamaño y reciben luz estelar dentro de un factor dos la una de la otra, y sus superficies difieren en más de cuatrocientos grados. Marte recibe 0,43 Tierras y tiene una superficie que estaría mucho más caliente con una atmósfera más gruesa que la fina que tiene. La distancia importa enormemente, y no es lo único que importa.',
       tool: {
@@ -479,7 +479,7 @@ export default {
       ],
       tip: 'Un planeta mayor de unos 1,6 radios terrestres no suele ser roca desnuda: tiende a haber conservado una envoltura gruesa de hidrógeno, lo que significa que no hay superficie en el sentido que nos interesa.',
     },
-    {
+    'which-one-would-you-observe': {
       title: '¿Cuál observarías a continuación?',
       body: 'El tiempo de telescopio es el recurso más escaso de la astronomía. Puedes tener un espectro de uno de estos tres.\n\nLa pregunta no es cuál tiene vida. Es cuál es el más prometedor para estudiarlo.',
       prompt:
@@ -493,7 +493,7 @@ export default {
       because:
         'El Planeta B. Es el único de los tres que es a la vez lo bastante pequeño para ser plausiblemente rocoso y del que se sabe que tiene atmósfera, y su estrella no está arrancándole activamente esa atmósfera. Esa combinación es de lo que un espectro podría decir algo de verdad. El Planeta A todavía podría tener una atmósfera demasiado fina para haberse detectado, y el Planeta C es lo bastante grande como para ser probablemente un mundo pequeño rico en gas y no uno rocoso. Nada de esto establece que B sea habitable. Establece que B es adonde debería apuntar la próxima observación.',
     },
-    {
+    'one-more-and-then-you': {
       title: 'Uno más, y ya has terminado',
       body: 'Se anuncia un nuevo descubrimiento. Un planeta rocoso, de tamaño próximo al de la Tierra, orbitando dentro de la zona habitable conservadora de su estrella y recibiendo 0,9 Tierras de luz estelar. Su estrella emite fulguraciones a menudo. Todavía no se ha medido ninguna atmósfera.\n\nUn titular lo llama una segunda Tierra.',
       prompt: '¿Qué puede concluirse honestamente de lo que se sabe?',
@@ -506,10 +506,10 @@ export default {
       because:
         'La tercera. Es un objeto genuinamente interesante y el descubrimiento merece genuinamente la pena, y todo lo que va más allá de «digno de estudiarse más» carece de apoyo. Las fulguraciones son una preocupación real sobre si sobrevive una atmósfera, pero no descartan por sí solas el planeta, y una única atmósfera sin medir es exactamente el hueco para el que sirve la próxima observación. La zona habitable hizo aquí su trabajo: les dijo a los astrónomos adónde apuntar.',
     },
-    {
+    'what-you-worked-out': {
       title: 'Lo que has deducido',
       body: 'Partiendo de un planeta y una estrella, encontraste tú mismo todo esto:\n\n<strong>Más lejos → menos luz estelar.</strong> Al doble de distancia, la cuarta parte, porque la luz se reparte sobre una esfera cuya área crece como el cuadrado de la distancia.\n\n<strong>Estrella más luminosa → zona habitable más lejos. Estrella menos luminosa → zona habitable más cerca.</strong> Una estrella cien veces más brillante tiene su zona diez veces más lejos.\n\n<strong>Órbita excéntrica → la luz estelar cambia a lo largo del año</strong>, y el planeta pasa la mayor parte de ese año en la fría parte exterior de su órbita y no en la caliente parte interior.\n\n<strong>Estar dentro de la zona habitable no es lo mismo que ser habitable</strong>, y no se parece ni de lejos a estar habitado. La zona se calcula solo a partir de la estrella.\n\nLo que deja a la zona habitable haciendo algo genuinamente valioso, solo que no lo que sugiere su nombre. Hay miles de millones de planetas en la galaxia y un puñado de telescopios capaces de tomar sus espectros. La zona habitable es cómo decides cuáles mirar primero.\n\nEs un sitio excelente para empezar a buscar. No es la respuesta a si un mundo es habitable.',
       tip: 'La expresión «zona de Ricitos de Oro» es más antigua que la ciencia y ha hecho verdadero daño a cómo se entiende la idea. Todos los artículos profesionales usan «zona habitable circunestelar», y todos ellos se refieren a la definición cuidadosa que leíste antes.',
     },
-  ],
+  },
 };

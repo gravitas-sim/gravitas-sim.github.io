@@ -24,8 +24,8 @@ export default {
     'Comprobar si una divergencia calculada sobrevive a un paso temporal menor y a otro integrador, y rechazarla si no lo hace',
     'Explicar por qué «tres cuerpos» y «caótico» no son la misma afirmación',
   ],
-  steps: [
-    {
+  steps: {
+    'a-word-that-has-been': {
       title: 'Una palabra desgastada por el uso',
       body: `En pantalla hay tres estrellas de seis masas solares cada una,
              situadas en los vértices de un triángulo equilátero y girando
@@ -50,7 +50,7 @@ export default {
              las que se confunde habitualmente.`,
       tip: 'La simulación está en pausa. No se moverá nada hasta que la dejes correr.',
     },
-    {
+    'the-same-numbers-twice': {
       title: 'Los mismos números, dos veces',
       body: `Antes que nada, la pregunta más básica que existe sobre una
              simulación.
@@ -74,7 +74,7 @@ export default {
                 demostrarlo <em>primero</em> es lo que hace que el resto de la
                 investigación signifique algo.`,
     },
-    {
+    'how-to-run-the-same': {
       title: 'Cómo ejecutar lo mismo dos veces',
       body: `Hacerlo a mano es imposible: no puedes devolver tres estrellas a su
              sitio a ojo. El <strong>Banco A/B</strong>, en Herramientas, existe
@@ -95,7 +95,7 @@ export default {
              las ejecuciones lleven lo que esta investigación necesita.`,
       tip: 'El banco mantiene las dos ejecuciones sobre el mismo eje de tiempo simulado, que es lo que las hace comparables.',
     },
-    {
+    'the-reproducibility-control': {
       title: 'El control de reproducibilidad',
       body: `Ejecuta el experimento idéntico dos veces, sin cambiar
              <em>nada</em> entre una y otra.
@@ -134,7 +134,7 @@ export default {
                las ejecuciones; la propia línea «qué cambió entre las
                ejecuciones» del banco lo dirá.`,
     },
-    {
+    'what-zero-proves': {
       title: 'Qué demuestra el cero',
       body: `Tus dos ejecuciones se separaron exactamente nada.`,
       prompt: 'La conclusión correcta a partir de eso es…',
@@ -151,7 +151,7 @@ export default {
                 equivocada— ni sobre si el sistema es caótico. Ésas son las dos
                 preguntas siguientes, en ese orden.`,
     },
-    {
+    'a-control-before-the-interesting': {
       title: 'Un control, antes del caso interesante',
       body: `Ahora dos estrellas, no tres. Es el escenario <strong>Par
              binario</strong>: dos estrellas girando en torno a su centro de
@@ -174,7 +174,7 @@ export default {
              física: ambas ejecuciones usan el mismo paso, así que la comparación
              entre ellas no se ve afectada.`,
     },
-    {
+    'nudge-one-star-in-a': {
       title: 'Un empujón a una estrella de un binario',
       body: `Captura el inicio, graba la ejecución A, vuelve al inicio, aplica el
              empujón de 1500 km y graba la ejecución B.`,
@@ -193,7 +193,7 @@ export default {
                 se acelera. Esto es <em>deriva de fase</em>, y es lo que más a
                 menudo se confunde con el caos.`,
     },
-    {
+    'measure-the-binary': {
       title: 'Mide el binario',
       body: `Hazlo. En el Banco A/B, pulsa <strong>Preparar y ejecutar los
              dos</strong>: captura, ejecución A, vuelta al inicio, empujón de
@@ -222,7 +222,7 @@ export default {
                exponencial. La puntuación completa exige advertir la negativa y
                leerla como un resultado y no como una avería.`,
     },
-    {
+    'the-instrument-refused': {
       title: 'El instrumento se negó',
       body: `El instrumento informó de un factor de crecimiento pero se negó a dar
              un tiempo de crecimiento, diciendo que la separación crece
@@ -242,7 +242,7 @@ export default {
                 una recta ajusta mejor— antes de citar ninguno. Un instrumento
                 que siempre da una respuesta no está midiendo nada.`,
     },
-    {
+    'linear-in-numbers': {
       hints: [
         'El crecimiento proporcional significa que la separación escala con el tiempo, así que una carrera más larga da el mismo múltiplo de lo que tenías al empezar.',
         'Compara el tiempo nuevo con el del ejemplo: ¿cuántas veces más largo es? Escala la separación por ese mismo factor.',
@@ -264,7 +264,7 @@ export default {
                 cuerpos que estás a punto de ejecutar, diez veces más tiempo no
                 da diez veces más: da algo con muchos más ceros.`,
     },
-    {
+    'back-to-the-triangle': {
       title: 'De vuelta al triángulo',
       body: `Otra vez tres estrellas, en la configuración equilátera de Lagrange.
 
@@ -290,7 +290,7 @@ export default {
              así que no hay duda sobre cuál era el estado inicial, y se aparta de
              ese orden de una manera que podemos medir.`,
     },
-    {
+    'the-same-nudge-three-bodies': {
       title: 'El mismo empujón, tres cuerpos',
       body: `El mismo experimento que con el binario: captura, ejecución A,
              vuelve, empuja una estrella 1500 km, ejecución B. El triángulo mide
@@ -307,7 +307,7 @@ export default {
                 medirlo, porque el tamaño del efecto cuesta de creer hasta que se
                 ha visto el número.`,
     },
-    {
+    'measure-the-triple': {
       title: 'Mide el triple',
       body: `Ejecútalo. <strong>Preparar y ejecutar los dos</strong> otra vez:
              la misma accion, en un escenario con una estrella mas. Cuarenta
@@ -337,7 +337,7 @@ export default {
                ejecución o el escenario equivocados; la sección informa del
                intervalo y del paso que realmente usó.`,
     },
-    {
+    'write-down-what-you-measured': {
       title: 'Anota lo que mediste',
       body: `Lee estos valores en el instrumento y anótalos. Van a tu informe.`,
       fields: [
@@ -354,7 +354,7 @@ export default {
         },
       ],
     },
-    {
+    'what-an-e-folding-time': {
       title: 'Qué es un tiempo de crecimiento',
       body: `El instrumento ajustó una recta al logaritmo de la separación y
              convirtió la pendiente en un tiempo. Ese tiempo, que suele escribirse
@@ -376,7 +376,7 @@ export default {
              intermedio es exponencial, y citar un ritmo ajustado a los extremos
              planos sería citar un ritmo más lento que el real.`,
     },
-    {
+    'how-long-does-a-prediction': {
       hints: [
         'Crecer por un factor fijo cada τ significa que la separación se multiplica por e una vez por τ. Necesitas el número de τ que alcanza el factor de crecimiento.',
         'Ese número de τ es el logaritmo natural del factor de crecimiento. Multiplícalo por el τ que mediste.',
@@ -403,7 +403,7 @@ export default {
                 que sabías sobre dónde estarían las estrellas desaparece en tres
                 vueltas, a partir de un error inicial del ancho de un país.`,
     },
-    {
+    'buying-more-time': {
       title: 'Comprar más tiempo',
       body: `Supón que eso no te satisface y mejoras tu medida de las posiciones
              iniciales en un factor de mil: de 1500 km a 1,5 km.`,
@@ -423,7 +423,7 @@ export default {
                 predicción a largo plazo, y eso es una afirmación sobre el sistema,
                 no sobre tus instrumentos.`,
     },
-    {
+    'the-objection-you-should-have': {
       title: 'La objeción que deberías tener',
       body: `Ésta es la objeción que cualquier persona cuidadosa debería plantear
              a estas alturas.
@@ -443,7 +443,7 @@ export default {
              mitad lo cambiará, normalmente mucho. Esa prueba no es opcional. Sin
              ella, la medida es una propiedad del programa.`,
     },
-    {
+    'before-you-refine': {
       title: 'Antes de refinar',
       body: `Estás a punto de repetir la comparación de tres cuerpos con el paso
              temporal reducido y con otro integrador.`,
@@ -460,7 +460,7 @@ export default {
                 la forma en que se calculó. Si se mueve mucho, el informe honesto
                 no es un número más pequeño, sino «numéricamente no resuelto».`,
     },
-    {
+    'the-numerical-control': {
       title: 'El control numérico',
       body: `Repite la comparación de tres cuerpos dos veces más. Elige un
              <strong>control numérico</strong> y pulsa <strong>Repetir como
@@ -507,7 +507,7 @@ export default {
                sección lo dice con todas las letras, porque el acuerdo entre dos
                cálculos idénticos no es evidencia.`,
     },
-    {
+    'reading-the-verdict': {
       title: 'Leer el veredicto',
       body: `Imagina un sistema distinto en el que repetir la comparación con la
              mitad del paso temporal diera un tiempo de crecimiento tres veces
@@ -528,7 +528,7 @@ export default {
                 de las configuraciones consideradas para este laboratorio se
                 comportaron exactamente así y fueron descartadas por ello.`,
     },
-    {
+    'not-every-three-body-system': {
       title: 'No todos los sistemas de tres cuerpos',
       body: `Se dice muy a menudo que el problema de los tres cuerpos <em>es</em>
              caótico. No es cierto, y los contraejemplos son famosos.
@@ -552,7 +552,7 @@ export default {
              concreta, y la manera de averiguarlo es la medida que acabas de
              hacer.`,
     },
-    {
+    'which-of-these-is-chaos': {
       title: '¿Cuál de éstos es caos?',
       body: `Cuatro sistemas, cada uno ejecutado dos veces desde inicios que
              difieren en una perturbación diminuta.`,
@@ -572,7 +572,7 @@ export default {
                 ruido, y en una simulación determinista suele significar que algo
                 va mal en la medida más que algo interesante en la física.`,
     },
-    {
+    'deterministic-and-unpredictable': {
       title: 'Determinista e impredecible',
       body: `Has demostrado dos cosas que suenan contradictorias: la simulación es
              exactamente reproducible, y su comportamiento a largo plazo no puede
@@ -592,7 +592,7 @@ export default {
                significa que las reglas dejan de funcionar» (las reglas nunca
                cambian).`,
     },
-    {
+    'move-the-horizon': {
       title: 'Mueve el horizonte',
       body: `Un último experimento, y éste lo diseñas tú.
 
@@ -618,7 +618,7 @@ export default {
                ritmo del horizonte: el ritmo lo fija la física, el horizonte se
                mueve logarítmicamente con lo bien que conozcas el inicio.`,
     },
-    {
+    'what-this-is-a-model': {
       title: 'De qué es modelo esto',
       body: `Las tres estrellas son un laboratorio, no una observación. Ningún
              sistema real tiene tres estrellas exactamente iguales en un triángulo
@@ -650,7 +650,7 @@ export default {
              artefacto. No es la cantidad asintótica que lleva ese nombre, y
              presentarlo como tal sería afirmar de más.`,
     },
-    {
+    'where-these-results-come-from': {
       title: 'De dónde salen estos resultados',
       body: `Las afirmaciones de esta investigación, y dónde comprobarlas:
 
@@ -690,7 +690,7 @@ export default {
              Nature 459, 817. El tiempo de Lyapunov del propio Sistema Solar, y lo
              que implica para predecirlo.`,
     },
-    {
+    'what-you-established': {
       title: 'Qué has establecido',
       body: `Por orden, y cada punto medido en lugar de afirmado:
 
@@ -716,5 +716,5 @@ export default {
              \n\nGenera tu informe para conservar los números, la perturbación que
              aplicaste y la gráfica de divergencia.`,
     },
-  ],
+  },
 };

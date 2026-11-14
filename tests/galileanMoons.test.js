@@ -293,10 +293,10 @@ describe('the lesson and the instruments', () => {
   });
 
   test('the Spanish shadow has the English steps, index for index', () => {
-    expect(ES.WEIGHING_JUPITER.steps.length).toBe(
+    expect(Object.keys(ES.WEIGHING_JUPITER.steps).length).toBe(
       EN.WEIGHING_JUPITER.steps.length
     );
-    expect(DEEP_ES.WEIGHING_JUPITER_DEEPER.steps.length).toBe(
+    expect(Object.keys(DEEP_ES.WEIGHING_JUPITER_DEEPER.steps).length).toBe(
       DEEP.WEIGHING_JUPITER_DEEPER.steps.length
     );
   });
