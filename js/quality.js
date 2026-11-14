@@ -7,55 +7,30 @@
 // cannot do the three things that actually matter on that machine: draw fewer
 // pixels, draw fewer bodies, and stop drawing the expensive effects at all.
 //
-// So there is an explicit tier, and it is chosen by measurement.
+// So there is an explicit tier, and it is chosen by measurement: draw fewer
+// pixels, fewer bodies, and none of the expensive effects on a machine that is
+// not keeping up. Nothing here reads navigator.userAgent, deviceMemory or
+// hardwareConcurrency: they describe the label on the box, not the frame rate
+// this machine achieves on this scenario right now.
 //
-// Why not a user-agent string
-// -----------------------------------------------------------------------------
-// Because it does not answer the question. The same Chromebook model runs at
-// 55fps on an empty Solar System and 12fps on Galactic Collision; a MacBook Pro
-// with forty other tabs open and a thermal problem is slower than either. What
-// matters is the frame rate this machine is achieving on this scenario right
-// now, and that is measurable. Nothing in this file reads navigator.userAgent,
-// navigator.deviceMemory or hardwareConcurrency: those describe the label on
-// the box, not the frame rate.
+// What is measured: the interval between animation frames, which is what the
+// reader experiences (work time can finish in 8ms and still be presented at
+// 20fps). Samples are filtered first. The first 1.5 seconds are discarded,
+// timed rather than counted in frames so the slowest machines do not wait
+// longest for help. Intervals over 500ms are discarded (a hidden tab, a garbage
+// collection). The median is used, not the mean, so one hitch cannot outvote a
+// hundred good frames.
 //
-// What is measured
-// -----------------------------------------------------------------------------
-// The interval between animation frames, which is what the reader actually
-// experiences. Not the time spent inside the frame callback: on a machine that
-// is compositing slowly, or throttled, or sharing a core with a video call, the
-// work can finish in 8ms and still be presented at 20fps. The interval catches
-// that and the work time does not.
-//
-// Samples are filtered before they count:
-//
-//   the first 1.5 seconds are discarded start-up is not representative: the
-//                                       world is being built and the starfield
-//                                       generated. Timed rather than counted in
-//                                       frames, because 45 frames is 0.75s at
-//                                       60fps and 4.5s at 10fps - which would
-//                                       make the slowest machines, the ones
-//                                       this exists for, wait longest for help
-//   intervals over 500ms are discarded  a backgrounded tab, a garbage
-//                                       collection, a breakpoint. rAF stops
-//                                       entirely in a hidden tab, and counting
-//                                       the resumption as a slow frame would
-//                                       demote a machine for being minimized
-//   the median is used, not the mean    one 300ms hitch should not outvote a
-//                                       hundred good frames, and on a loaded
-//                                       machine the distribution is skewed
-//
-// Hysteresis, because flapping is worse than either tier
-// -----------------------------------------------------------------------------
-// Dropping to the low tier raises the frame rate, which - with a single
-// threshold - would immediately qualify the machine to go back up, which would
-// lower it again. So the thresholds are far apart (below 32fps to drop, above
-// 48fps to return) and a promotion additionally requires the machine to have
-// held that rate for a while. The asymmetry is deliberate: being slow to
-// promote costs some fidelity, being quick to demote costs a stutter.
+// Hysteresis, because flapping is worse than either tier: below 32fps drops to
+// the low tier, above 48fps for a while returns. Slow to promote costs some
+// fidelity; quick to demote costs a stutter.
 // =============================================================================
 
 import { KEY_MOTION, KEY_QUALITY_VERDICT } from './names.js';
+
+// Read back by js/qualityVerdict.js, which takes it from here so the key stays
+// with this module's code in a build rather than in the shared names chunk.
+export { KEY_QUALITY_VERDICT };
 
 /**
  * Time ignored at start-up, while the first world and starfield are built.
@@ -108,16 +83,9 @@ let aboveSince = 0;
 let listeners = [];
 /** Whether the classifier has ever reached a verdict (see qualityReport). */
 let decided = false;
-/** Whether this page renders the simulation (see adoptVerdict). */
-let simulationPage = false;
-/** Whether the stored verdict has been looked at on this page. */
-let adopted = false;
 
 /** @returns {string} The tier currently in force */
-export const currentTier = () => {
-  if (!adopted) adoptVerdict();
-  return tier;
-};
+export const currentTier = () => tier;
 
 /**
  * The median of the current window, in frames per second.
@@ -133,7 +101,6 @@ export function measuredFps() {
 
 /** @returns {object} Everything the diagnostics readout and the tests want */
 export function qualityReport() {
-  adoptVerdict();
   return {
     tier,
     auto,
@@ -189,7 +156,7 @@ export function setTier(next) {
     tier = next;
     announce();
   }
-  if (simulationPage) rememberVerdict();
+  if (seen) remember();
 }
 
 /** The wall-clock time the current window spans, in milliseconds. */
@@ -216,7 +183,6 @@ export function resetSamples() {
  */
 export function sampleFrame(timestamp) {
   seen++;
-  simulationPage = true;
   const previous = last;
   last = timestamp;
   if (!first) first = timestamp;
@@ -252,7 +218,7 @@ export function sampleFrame(timestamp) {
   if (tier !== 'low' && fps < DEMOTE_FPS) {
     tier = 'low';
     aboveSince = 0;
-    rememberVerdict();
+    remember();
     announce();
     return;
   }
@@ -265,69 +231,30 @@ export function sampleFrame(timestamp) {
       if (aboveSince >= PROMOTE_DWELL_MS) {
         tier = 'full';
         aboveSince = 0;
-        rememberVerdict();
+        remember();
         announce();
       }
     } else {
       aboveSince = 0;
     }
-  } else if (verdictWritten !== 'full') {
-    rememberVerdict();
+  } else if (written !== 'full') {
+    remember();
   }
 }
 
-// --- The verdict for pages that never render the simulation ------------------
-// The application page keeps the tier it decided in one session-only key, and a
-// page that computes without drawing the simulation (the Observatory) never
-// exceeds it. OFFLINE_AND_LOW_END.md and STORAGE.md say what is kept and why.
-
-/** How long a stored verdict is believed, in milliseconds. */
-export const VERDICT_MAX_AGE_MS = 3600000;
-
-/** The tier last written by this page, so it is written once per decision. */
-let verdictWritten = null;
-
-/** Record the tier in force as the application page's verdict. */
-function rememberVerdict(now = Date.now()) {
-  verdictWritten = tier === 'low' ? 'low' : 'full';
+// The application page keeps the tier it decided in one session-only key, for
+// the pages that never render the simulation (js/qualityVerdict.js reads it).
+let written;
+function remember() {
+  written = tier === 'low' ? 'low' : 'full';
   try {
     sessionStorage.setItem(
       KEY_QUALITY_VERDICT,
-      JSON.stringify({ tier: verdictWritten, at: now })
+      JSON.stringify({ tier: written, at: Date.now() })
     );
   } catch {
     /* storage unavailable: the other pages behave as they always have */
   }
-}
-
-/** @returns {?('low'|'full')} The stored tier; null when absent, stale or unusable */
-export function storedVerdict(now = Date.now()) {
-  try {
-    const v = JSON.parse(sessionStorage.getItem(KEY_QUALITY_VERDICT));
-    const age = now - v.at;
-    return (v.tier === 'low' || v.tier === 'full') &&
-      age >= 0 &&
-      age <= VERDICT_MAX_AGE_MS
-      ? v.tier
-      : null;
-  } catch {
-    return null;
-  }
-}
-
-/**
- * Take the stored verdict once, on a page that does not render the simulation.
- * It only lowers the tier, and leaves alone a page that decides for itself and
- * a tier somebody has already forced.
- */
-export function adoptVerdict(now = Date.now()) {
-  if (adopted) return false;
-  adopted = true;
-  if (simulationPage || !auto || tier === 'low') return false;
-  if (storedVerdict(now) !== 'low') return false;
-  tier = 'low';
-  announce();
-  return true;
 }
 
 // --- What the tier actually does ----------------------------------------------
@@ -498,10 +425,7 @@ export const COMPUTE_TIERS = Object.freeze({
 });
 
 /** The computation tier: 'low' while the quality tier is low, otherwise 'full'. */
-export const computeTier = () => {
-  adoptVerdict();
-  return tier === 'low' ? 'low' : 'full';
-};
+export const computeTier = () => (tier === 'low' ? 'low' : 'full');
 
 /**
  * The size a computation should use now.
@@ -541,7 +465,6 @@ export function computeNote(keys) {
 export function applyTierRequest(
   search = typeof location !== 'undefined' ? location.search : ''
 ) {
-  adoptVerdict();
   const want = new URLSearchParams(search).get('quality');
   if (want !== 'low' && want !== 'full') return null;
   setTier(want);
@@ -611,7 +534,6 @@ export function setMotionPreference(mode, { remember = true } = {}) {
 
 /** Restore the stored override at start-up. */
 export function initMotionPreference() {
-  simulationPage = true;
   let saved = null;
   try {
     saved = window.localStorage?.getItem(MOTION_KEY);

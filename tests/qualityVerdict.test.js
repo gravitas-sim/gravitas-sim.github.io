@@ -20,10 +20,13 @@ import { KEY_QUALITY_VERDICT } from '../js/names.js';
 
 const HOUR = 3600000;
 
-/** A fresh copy of js/quality.js, as a newly loaded page would have it. */
+/** Fresh copies of js/quality.js and js/qualityVerdict.js, as a newly loaded page has them. */
 async function freshPage() {
   jest.resetModules();
-  return import('../js/quality.js');
+  return {
+    ...(await import('../js/quality.js')),
+    ...(await import('../js/qualityVerdict.js')),
+  };
 }
 
 const store = (tier, at = Date.now()) =>
@@ -44,6 +47,7 @@ afterEach(() => jest.restoreAllMocks());
 describe('a page that does not render the simulation', () => {
   test('with no verdict stored it computes at the full tier, as before', async () => {
     const q = await freshPage();
+    q.adoptVerdict();
     expect(q.computeTier()).toBe('full');
     expect(q.computeNote(['bootstrapDraws'])).toBeNull();
     expect(q.computeValue('bootstrapDraws')).toBe(1000);
@@ -54,6 +58,7 @@ describe('a page that does not render the simulation', () => {
     const q = await freshPage();
     const heard = [];
     q.onTierChange(t => heard.push(t));
+    expect(q.adoptVerdict()).toBe(true);
     expect(q.computeTier()).toBe('low');
     expect(q.computeValue('bootstrapDraws')).toBe(300);
     expect(q.computeNote(['profilePoints'])).toEqual({
@@ -67,6 +72,7 @@ describe('a page that does not render the simulation', () => {
   test('a full verdict changes nothing: the verdict only ever lowers the tier', async () => {
     store('full');
     const q = await freshPage();
+    expect(q.adoptVerdict()).toBe(false);
     expect(q.computeTier()).toBe('full');
     expect(q.currentTier()).toBe('full');
   });
@@ -87,6 +93,7 @@ describe('a page that does not render the simulation', () => {
       sessionStorage.setItem(KEY_QUALITY_VERDICT, raw);
       const q = await freshPage();
       expect(q.storedVerdict()).toBeNull();
+      expect(q.adoptVerdict()).toBe(false);
       expect(q.computeTier()).toBe('full');
     }
   });
@@ -104,7 +111,7 @@ describe('a page that does not render the simulation', () => {
       throw new DOMException('blocked', 'SecurityError');
     });
     const q = await freshPage();
-    expect(() => q.computeTier()).not.toThrow();
+    expect(() => q.adoptVerdict()).not.toThrow();
     expect(q.computeTier()).toBe('full');
     expect(q.qualityReport().decided).toBe(false);
   });
@@ -112,6 +119,8 @@ describe('a page that does not render the simulation', () => {
   test('the address can still force the full tier over a stored low verdict, and stores nothing', async () => {
     store('low');
     const q = await freshPage();
+    q.adoptVerdict();
+    expect(q.computeTier()).toBe('low');
     expect(q.applyTierRequest('?quality=full')).toBe('full');
     expect(q.computeTier()).toBe('full');
     expect(JSON.parse(sessionStorage.getItem(KEY_QUALITY_VERDICT)).tier).toBe(
@@ -155,14 +164,15 @@ describe('the application page', () => {
   test('decides for itself: a stored low verdict does not lower it before it has measured', async () => {
     store('low');
     const q = await freshPage();
-    q.initMotionPreference();
+    q.sampleFrame(1000);
+    expect(q.adoptVerdict()).toBe(false);
     expect(q.computeTier()).toBe('full');
     expect(q.currentTier()).toBe('full');
   });
 
   test('a reader who forces a tier in Settings has decided it for the other pages too', async () => {
     const q = await freshPage();
-    q.initMotionPreference();
+    q.sampleFrame(1000);
     q.setTier('low');
     expect(JSON.parse(sessionStorage.getItem(KEY_QUALITY_VERDICT)).tier).toBe(
       'low'

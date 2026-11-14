@@ -43,6 +43,7 @@ import {
 import { sniff, unknownFormat } from '../dataKinds/raster.js';
 import { createPool, ledger as book } from '../workers/pool.js';
 import { computeValue } from '../quality.js';
+import { adoptVerdict } from '../qualityVerdict.js';
 import { readFitsOnPool } from '../dataKinds/fitsJob.js';
 import { readRasterOnPool } from '../dataKinds/rasterJob.js';
 import { sha256Hex } from '../hash.js';
@@ -429,6 +430,7 @@ export function buildObservation(
 
 let pool = null;
 const poolFor = ctx => {
+  adoptVerdict();
   // The aggregate cap is the tier's (js/quality.js, tools/perf-thresholds.json):
   // 256 MB across the page's Workers and two of them at the low tier, the
   // desktop profile's figures otherwise. Said again at each use, so a tier that

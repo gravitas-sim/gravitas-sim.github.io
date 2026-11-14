@@ -31,7 +31,7 @@ import { rewriteSource } from '../tools/key-registry-codemod.mjs';
 const PINNED = {
   KEY_UNITS: 'gravitas_units',
   KEY_MOTION: 'gravitas_motion',
-  KEY_QUALITY_VERDICT: 'gravitas_quality_verdict',
+  KEY_QUALITY_VERDICT: 'gravitas_quality',
   EV_SIMULATION_RESET: 'gravitasSimulationReset',
   EV_UNITS_CHANGED: 'gravitasUnitsChanged',
   EV_THEME_CHANGED: 'gravitasThemeChanged',
