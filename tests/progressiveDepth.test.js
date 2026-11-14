@@ -137,7 +137,7 @@ describe('the rules refuse what would change the science', () => {
     const found = checkDepth(c, layDepth(c, DEEPER[id]), DEEPER[id], es);
     expect(
       found.filter(f => f.rule === 'depth/translation').map(f => f.message)
-    ).toEqual(['steps.no-such-step names no deeper step']);
+    ).toEqual(['steps.no-such-step names no step of the lesson']);
   });
   test('a deeper step with no Spanish step', async () => {
     const c = core(id);

@@ -31,6 +31,25 @@ export const DEPTH_RULES = {
 };
 
 /**
+ * A translation's steps are an object keyed by sid: one entry for each step of
+ * the lesson (core or deeper) and none for a step it does not have.
+ * @param {Array<{sid: string}>} steps - The English steps
+ * @param {*} shadow - The translation's `steps`
+ * @param {(level: string, message: string, index: ?number) => void} report - Findings
+ */
+export function checkShadowSteps(steps, shadow, report) {
+  if (!shadow || typeof shadow !== 'object' || Array.isArray(shadow))
+    return report('error', 'steps must be an object keyed by step sid', null);
+  for (const key of Object.keys(shadow))
+    if (!steps.some(s => s.sid === key))
+      report('error', `steps.${key} names no step of the lesson`, null);
+  steps.forEach((s, i) => {
+    if (!Object.hasOwn(shadow, s.sid))
+      report('error', `step "${s.sid}" has no Spanish step`, i);
+  });
+}
+
+/**
  * The findings for one lesson's deeper steps.
  * @param {object} core - The lesson as the registry has it
  * @param {object} laid - The same lesson with every depth laid in
@@ -46,12 +65,10 @@ export function checkDepth(core, laid, deeper, words) {
   const at = sid => laid.steps.findIndex(s => s.sid === sid);
   const offered = core.depths || [];
   const spoken = words ? alignShadow(deeper, words.steps) : null;
-  if (words && (!spoken || Array.isArray(words.steps)))
-    err('depth/translation', null, 'steps must be an object keyed by step sid');
-  else if (spoken)
-    for (const k of Object.keys(words.steps))
-      if (!deeper.some(s => s.sid === k))
-        err('depth/translation', null, `steps.${k} names no deeper step`);
+  if (words)
+    checkShadowSteps(deeper, words.steps, (_, message, n) =>
+      err('depth/translation', n == null ? null : deeper[n].sid, message)
+    );
 
   if (offered[0] !== 'core' || offered.some(d => !DEPTHS.includes(d)))
     err('depth/offered', null, `depths must start with core: ${offered}`);
@@ -60,7 +77,7 @@ export function checkDepth(core, laid, deeper, words) {
       err('depth/offered', null, `offers ${d} and has no step at it`);
 
   const coreSids = new Set(core.steps.map(s => s.sid));
-  deeper.forEach((s, n) => {
+  deeper.forEach(s => {
     const w = s.sid;
     if (!offered.includes(s.depth) || s.depth === 'core')
       err(
@@ -159,8 +176,6 @@ export function checkDepth(core, laid, deeper, words) {
           `expects ${s.answer}; "${g.sid}:${g.id}" computes ${value}`
         );
     }
-    const sp = spoken?.[n];
-    if (words && !sp) err('depth/translation', w, 'has no Spanish');
   });
 
   if (laid.steps.at(-1)?.sid !== core.steps.at(-1)?.sid)

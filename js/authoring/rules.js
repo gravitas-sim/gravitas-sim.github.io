@@ -31,6 +31,7 @@ import { checkAnswer, toleranceFor } from '../answerCheck.js';
 import { verifyKey } from '../answerKey.js';
 import { isValidSid } from '../investigations/progressSchema.js';
 import { parseNumber } from '../answerParse.js';
+import { checkShadowSteps } from './depthRules.js';
 import {
   FEEDBACK_CLASSES,
   HINT_LIMIT,
@@ -38,7 +39,6 @@ import {
 } from '../answerFeedback.js';
 import {
   alignShadow,
-  isStepList,
   mergeTranslation,
   translationCoverage,
 } from '../data/investigations/i18n.js';
@@ -1302,15 +1302,11 @@ export function checkCatalog(inputs, { skip = [] } = {}) {
         );
         continue;
       }
-      checkTranslationShape(inv, data, `${locale}`, (level, message, step) =>
-        add(level, 'i18n/shape', id, step, message)
-      );
-      checkTranslationMachinery(inv, data, (level, message, step) =>
-        add(level, 'i18n/machinery', id, step, message)
-      );
-      checkTranslationSteps(inv, data, (level, message, step) =>
-        add(level, 'i18n/steps', id, step, message)
-      );
+      const said = rule => (level, message, step) =>
+        add(level, rule, id, step, message);
+      checkTranslationShape(inv, data, `${locale}`, said('i18n/shape'));
+      checkTranslationMachinery(inv, data, said('i18n/machinery'));
+      checkShadowSteps(inv.steps, data?.steps, said('i18n/steps'));
 
       // What a Spanish reader sees must not give the answer away either.
       const merged = mergeTranslation(inv, data);
@@ -1531,12 +1527,8 @@ export function checkLesson(inv, refs) {
 }
 
 /**
- * A translation must be a shadow of its lesson, not a document of its own.
- *
- * mergeTranslation silently drops any key the English does not have, so a typo
- * in a shadow is invisible: the work is done, the file is committed, and the
- * string never appears. That is the single most likely way for translated
- * content to be lost, and nothing else notices it.
+ * A translation must be a shadow of its lesson. mergeTranslation silently
+ * drops any key the English lacks, so a typo is invisible work.
  */
 function checkTranslationShape(
   base,
@@ -1608,22 +1600,6 @@ function checkTranslationShape(
   }
 }
 
-/** A translation's steps are an object keyed by sid: one entry per step of the lesson, none for another. */
-function checkTranslationSteps(base, overlay, report) {
-  if (!isStepList(base.steps)) return;
-  const steps = overlay?.steps;
-  if (!isPlainObject(steps))
-    return report('error', 'steps must be an object keyed by step sid', null);
-  const have = new Set(base.steps.map(s => s.sid));
-  for (const key of Object.keys(steps))
-    if (!have.has(key))
-      report('error', `steps.${key} names no step of the lesson`, null);
-  base.steps.forEach((s, i) => {
-    if (!Object.hasOwn(steps, s.sid))
-      report('error', `step "${s.sid}" has no Spanish step`, i);
-  });
-}
-
 /** A translation may replace words. It may not replace anything else. */
 function checkTranslationMachinery(
   base,
@@ -1661,8 +1637,8 @@ function checkTranslationMachinery(
     );
     return;
   }
-  if (Array.isArray(base) && alignShadow(base, overlay)) {
-    const aligned = alignShadow(base, overlay);
+  const aligned = Array.isArray(base) && alignShadow(base, overlay);
+  if (aligned) {
     base.forEach((item, i) => {
       if (aligned[i] === undefined) return;
       const nextStep = path.length === 1 && path[0] === 'steps' ? i : stepIndex;
