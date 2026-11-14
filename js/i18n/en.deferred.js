@@ -2152,9 +2152,17 @@ export const EN_DEFERRED = {
   'inv.progress.migrated':
     'Carried {n} saved answers over from an older format, matched by position. If this investigation has changed since you last opened it, check that each answer is on the question you meant.',
   'inv.progress.removedSteps':
-    'Discarded {n} saved answers for steps this investigation no longer has.',
+    'Set aside {n} saved answers for steps this investigation no longer has. They are kept and listed below as answers from an earlier version.',
   'inv.progress.foreign':
     'Your saved progress for this investigation was written by a newer version of Gravitas and could not be read. It has been left where it is rather than overwritten.',
+  'rev.earlier': 'answered in an earlier version',
+  'rev.earlier.heading': 'Answers from an earlier version ({n})',
+  'rev.earlier.item':
+    '"{was}" - your answer: {text}. Answered in an earlier version (before {release}); not marked.',
+  'rev.earlier.unknown':
+    'A step this investigation no longer has - your answer: {text}. Answered in an earlier version; not marked.',
+  'rev.earlier.now': 'The step is now: {title}.',
+  'rev.earlier.gone': 'No step replaces it.',
   'inv.backup.downloaded': 'Progress backup downloaded.',
   'inv.backup.restored': 'Progress restored.',
   'inv.backup.restoredMoved':

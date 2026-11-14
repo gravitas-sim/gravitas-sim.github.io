@@ -1194,11 +1194,8 @@ export const formatFieldNumber = (value, decimals, locale) =>
     : '';
 
 // --- Persistence: the saved record and the save status (Prompt 139 part C) ----
-// What the engine holds (the lesson open, its answers, the clock, the
-// assignment in force, the elements) is read through the host it binds once,
-// when it loads; this module owns the status of the last write and this tab's
-// copy of every lesson's progress. Keys, payloads, migration and notices are
-// exactly what they were.
+// The engine's state is read through the host it binds once; this module owns
+// the status of the last write and this tab's copy of every lesson's progress.
 
 /**
  * What persistence needs of the engine: state() is {active, responses,
@@ -1220,21 +1217,15 @@ const STORAGE_PREFIX = KEY_INVESTIGATION_PREFIX;
 
 export const storageKey = id => `${STORAGE_PREFIX}${id}`;
 
-/**
- * Where this activity's progress lives.
- *
- * @param {string} id - Lesson id
- * @returns {string} Storage key
- */
+/** Where this activity's progress lives (lesson id -> storage key). */
 const progressKey = id =>
   host.assigned() ? host.assignmentKey() : storageKey(id);
 const progressArea = () => (host.assigned() ? 'assignments' : 'progress');
 
 /**
  * An assignment's progress key: its lesson, steps and title, never its date,
- * so a link re-issued on another day keeps the work. A new title is a new
- * activity and re-keys on purpose. Work under the old dated key, from this
- * link or an earlier issue of it, moves across the first time it is read.
+ * so a link re-issued on another day keeps the work (work under an old dated
+ * key moves across when first read). A new title re-keys on purpose.
  *
  * @param {object} a - A validated assignment payload
  * @returns {string} The storage key
@@ -1265,14 +1256,9 @@ export function keyForAssignment(a) {
 }
 
 /**
- * Whether the last write reached the disk, and what went wrong if not.
- *
- * 'saved' | 'unavailable' | 'full' | 'authoring' | 'idle'
- *
- * This used to be swallowed entirely - the comment said progress was "not worth
- * an alert", which is true of a toast and false of the reader's forty minutes
- * of work. A student in a private window, or on a machine whose disk is full,
- * was told nothing at all and found out when they closed the tab.
+ * Whether the last write reached the disk, and what went wrong if not:
+ * 'saved' | 'unavailable' | 'full' | 'authoring' | 'idle'. A student in a
+ * private window, or on a full disk, must not find out when they close the tab.
  */
 let saveState = { status: 'idle', at: null };
 
@@ -1317,6 +1303,7 @@ export function save() {
     depth: s.depthChoice,
     deepest: s.deepest,
     spent: s.spent,
+    earlier: earlierKept.get(active.id),
   });
 
   // This tab's copy, always, and before the disk is asked. It is what makes
@@ -1345,12 +1332,10 @@ export function save() {
  * while typing an answer is worse than silence.
  */
 /**
- * Say what reading the saved progress turned up, once, when the lesson opens.
- *
- * Only three things reach here and all three mean the reader's answers may not
- * be where they left them, so none of them is a toast: a migration from the
- * pre-sid format, which was necessarily done by position; answers for steps the
- * lesson no longer has; and a payload from a newer build, which was not read.
+ * Say what reading the saved progress turned up, once, when the lesson opens:
+ * a migration from the pre-sid format (done by position); answers for steps the
+ * lesson no longer has, which are kept and listed as from an earlier version
+ * (./earlierView.js); and a payload from a newer build, which was not read.
  */
 export function renderProgressNotice() {
   const el = host.els()?.progressNotice;
@@ -1369,8 +1354,20 @@ export function renderProgressNotice() {
 
   el.textContent = lines.join(' ');
   el.hidden = lines.length === 0;
+  const { active } = host.state();
+  if (earlierKept.get(active?.id))
+    import('./earlierView.js').then(m =>
+      m.showEarlier(el, active, earlierKept.get(active.id))
+    );
 }
 
+/**
+ * Show whether the work is safe, without shouting about it.
+ *
+ * A polite live region, not a toast: a toast for a storage failure would fire
+ * on every keystroke, and the one thing a reader needs here is a message that
+ * *stays* until the situation changes. Successes announce nothing.
+ */
 export function renderSaveStatus() {
   const el = host.els()?.saveStatus;
   if (!el) return;
@@ -1406,15 +1403,16 @@ export function renderSaveStatus() {
 }
 
 /**
- * This tab's copy of every lesson's progress, whether or not the disk took it.
- * Written on every save, so never the older of the two: when localStorage
- * refuses a write, closing and reopening the lesson still finds the work. It
- * dies with the tab, as the unsaved warning promises. Authoring previews never
- * reach it, as they never reach storage.
+ * This tab's copy of every lesson's progress, whether or not the disk took it,
+ * written on every save so never the older of the two. It dies with the tab;
+ * authoring previews never reach it.
  *
  * @type {Map<string, object>}
  */
 export const sessionProgress = new Map();
+
+/** Per lesson: the answers to steps it no longer has, written back with every save. */
+const earlierKept = new Map();
 
 /** Where a v1 payload is kept after it has been migrated, in case it was wrong. */
 const legacyKey = id => `${STORAGE_PREFIX}${id}:v1`;
@@ -1455,6 +1453,7 @@ export function load(id, lesson = null) {
   // A lesson from a capability package may have renamed a control since the
   // answers were saved; its manifest says how, and this applies it.
   progress.responses = migrateSavedProgress(id, progress.responses);
+  earlierKept.set(id, progress.earlier);
 
   // Keep the original. A positional migration is right whenever the lesson has
   // not been reordered since the save and there is no way to tell from the
