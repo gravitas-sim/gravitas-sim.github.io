@@ -19,12 +19,9 @@
 //                     Drawn, exaggerated, and labeled as drawn.
 //   a model           the waveform, the separation, the frequency. Computed,
 //                     in real units, valid over a stated range.
-//   an observation    the GW150914 trace on screen 22, and nothing else in
-//                     this lesson.
+//   an observation    the GW150914 trace, and nothing else in this lesson.
 //
-// Screens 2, 7, 12 and 22 each say which of the three the reader is looking at
-// in the moment it matters. A beginner who leaves able to make that
-// distinction has got the most transferable thing here.
+// The steps where it matters say which of the three the reader is looking at.
 //
 // Why the canvas rather than the panel
 // -----------------------------------------------------------------------------
@@ -40,8 +37,7 @@
  *
  * Separation to scale in Schwarzschild radii of the total mass, driven by the
  * waveform's own timeline; the two bodies are fixed-size markers. The scale
- * and the reason for it are in js/lessonStage.js, and screens 2 and 12 say so
- * to the reader.
+ * and the reason for it are in js/lessonStage.js.
  */
 const source = (kinds, m1, m2, extra = {}) => ({
   binary: { kinds, m1, m2, fit: true, ...extra },
@@ -82,10 +78,9 @@ const NEUTRON_PAIR = source(['ns', 'ns'], 1.4, 1.4);
 /**
  * The lab, showing only what the current screen needs.
  *
- * Controls arrive one at a time. A beginner handed six sliders on screen 1
- * spends the lesson discovering the interface instead of the subject, so every
- * screen hides everything it has not asked about yet, and the screen that
- * introduces a control says what it does.
+ * Controls arrive one at a time. A beginner handed six sliders on the first
+ * step spends the lesson on the interface, so every step hides what it has not
+ * asked about yet, and the step that introduces a control says what it does.
  */
 const lab = (extra = {}) => ({
   id: 'gw-lab',
@@ -379,7 +374,7 @@ const WHAT_IS_A_GRAVITATIONAL_WAVE = {
       ],
       answer: 1,
       because:
-        'Half an orbit. Swap two identical objects and you cannot tell: the pair lined up left-to-right at the start is lined up left-to-right again halfway round, with the two objects exchanged. So the pattern the source presents to the outside world repeats twice per orbit - and the wave it sends out does too. That is why the wave frequency for a pair like this is <em>twice</em> the orbital frequency, a fact “Count the rhythm” has you count for yourself. For two objects of different masses, as on screen here (36 and 29 solar masses), the picture is not identical after half an orbit, because the heavier one has changed sides. But the lopsided shape of the mass, the part that radiates, does repeat, so the wave still comes at twice the orbital frequency.',
+        'Half an orbit. Swap two identical objects and you cannot tell: the pair lined up left-to-right at the start is lined up left-to-right again halfway round, with the two objects exchanged. So the pattern the source presents to the outside world repeats twice per orbit - and the wave it sends out does too. That is why the wave frequency for a pair like this is <em>twice</em> the orbital frequency, a fact “Count the rhythm” has you count for yourself. For unequal masses, as here, the heavier one changes sides, but the lopsided shape of the mass still repeats, so the wave is still at twice the orbital frequency.',
       tool: lab({ view: 'source', autoplay: false }),
       tip: 'Use the playhead in small steps. The readout gives the orbital phase, so you can check your answer against a number rather than by eye.',
       hints: [

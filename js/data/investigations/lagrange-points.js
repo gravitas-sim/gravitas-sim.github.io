@@ -521,7 +521,7 @@ const LAGRANGE_POINTS = {
       title: 'Permitted, reached, and stable',
       body: `You read a Jacobi constant off the scene, opened the neck, watched
              two tracers with the same accessible region take different routes,
-             and predicted which of the five points would hold a tracer through a nudge.`,
+             and predicted which of the five points survive a nudge.`,
       prompt:
         'In two or three sentences, distinguish what the Jacobi constant tells you from what it does not, and say which of the five Lagrange points survive a nudge and under what condition.',
       rubric:

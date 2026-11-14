@@ -51,7 +51,7 @@ export default {
       prompt: 'R21 de SU Draconis',
       hints: ['La fila R21 da el valor y, tras el signo más-menos, su error.'],
       worked:
-        'R21 = 0,539 ± 0,007, con 39 ciclos. Una curva RR Lyrae en diente de sierra tiene un segundo armónico grande, y un diente de sierra ideal tiene R21 = 0,5, que es lo que usa la plantilla RRab del ejercicio, con una dispersión de 0,05, así que 0,54 cae dentro. La plantilla es un diente de sierra general y no un ajuste a esta estrella, así que la coincidencia es una comprobación real y no circular. El error es la propagación de primer orden de la covarianza del ajuste, y supone que los puntos son independientes.',
+        'R21 = 0,539 ± 0,007, con 39 ciclos. Una curva RR Lyrae en diente de sierra tiene un segundo armónico grande, y un diente de sierra ideal tiene R21 = 0,5, la plantilla RRab del ejercicio, así que 0,54 cae dentro de su dispersión; la plantilla no está ajustada a esta estrella. El error es la propagación de primer orden de la covarianza del ajuste, y supone que los puntos son independientes.',
       feedback: {
         close:
           'Casi. Lee la fila R21 con la estrella en SU Draconis y toda la serie.',

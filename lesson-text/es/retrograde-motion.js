@@ -35,7 +35,7 @@ export default {
     },
     'what-you-are-looking-at': {
       title: 'Lo que estás mirando',
-      body: 'Tres cuerpos, y nada más. El <strong>Sol</strong> en el centro, la <strong>Tierra</strong> en azul en la órbita interior y <strong>Marte</strong> en naranja en la exterior.\n\nLas distancias son reales: la Tierra a 1,00 UA, Marte a 1,52. Las masas son reales, así que los periodos también lo son, y todo el sistema corre unos tres millones de veces más rápido que el cielo, a 60 fotogramas por segundo. Un año terrestre dura aquí unos diez segundos.\n\nObserva un momento. Ambos planetas giran alrededor del Sol en el mismo sentido, en sentido antihorario, y ninguno frena, se detiene ni retrocede jamás. Sea lo que sea lo que hace que Marte parezca invertir la marcha, no es algo que Marte haga.',
+      body: 'Tres cuerpos, y nada más. El <strong>Sol</strong> en el centro, la <strong>Tierra</strong> en azul en la órbita interior y <strong>Marte</strong> en naranja en la exterior.\n\nLas distancias son reales: la Tierra a 1,00 UA, Marte a 1,52. Las masas son reales, así que los periodos también lo son, y todo el sistema corre unos tres millones de veces más rápido que el cielo. Un año terrestre dura aquí unos diez segundos.\n\nObserva un momento. Ambos planetas giran alrededor del Sol en el mismo sentido, en sentido antihorario, y ninguno frena, se detiene ni retrocede jamás. Sea lo que sea lo que hace que Marte parezca invertir la marcha, no es algo que Marte haga.',
       tip: 'Si las estelas no aparecen, pulsa el botón de reinicio junto a la barra de progreso para reconstruir el sistema.',
     },
     'against-the-fixed-stars': {

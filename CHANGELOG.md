@@ -15,6 +15,8 @@ the release rather than in the tag.
 
 ### Changed
 
+- Lesson statements that the lesson's own readout contradicts were corrected in 25 lessons, in English and Spanish (Prompt 300; register rows D-R4-300-01 to 26; visible and instructional). Examples: Voyager 2 leaves Jupiter at about 20 km/s, not 26 (JPL Horizons); more than 15,000 Jupiter Trojans are known (JPL Small-Body Database); the butterfly-effect lesson's growth is about two hundred over the run, not ten million; the eclipse seasons come 9 days sooner each half year, not 4; stale "screen N" and "step N" references name the step by title; student-visible file names and "E1 NOT RUN" are gone. Six answers printed finer than their tolerance resolves now print to the places the tolerance allows; no task, answer, key or tolerance changed. The instructor bundle needs its owner rebuild.
+
 - A measuring step no longer shows the expected number in grey inside the empty box (Prompt 299; register row D-R4-299-01; visible and instructional). A measure field's expected value moves from `hint` to a new `want` property in 897 fields of 113 lessons and their Spanish shadows; no page reads `want` except the authoring checks and the instructor key, which prints the same text as before. The lesson panel renders a field's `hint` or a numeric step's `placeholder` only when it holds no numeral, the rule `content/placeholder` now reads the numbers inside a cue ("e.g. 8.0 ± 0.1") and checks core and deeper steps, and the ten error-bar steps read "a value, then ± its uncertainty" (and its Spanish). The instructor bundle needs the owner's rebuild; the keys it prints do not change.
 
 ### Added

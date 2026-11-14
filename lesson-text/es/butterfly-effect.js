@@ -704,8 +704,7 @@ export default {
 
              \n\n<strong>El sistema de tres cuerpos divergió exponencialmente.</strong>
              El mismo empujón creció un factor e cada ocho segundos simulados
-             aproximadamente: un factor de unos doscientos a lo largo de los cuarenta
-             segundos de la ejecución.
+             aproximadamente: unos doscientos a lo largo de la ejecución.
 
              \n\n<strong>Y eso es física, no aritmética.</strong> El ritmo sobrevivió
              a reducir el paso temporal a la mitad y a cambiar de integrador.

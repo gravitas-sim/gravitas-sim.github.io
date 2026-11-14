@@ -330,8 +330,8 @@ export default {
       title: 'Permitido, alcanzado y estable',
       body: `Leiste una constante de Jacobi en la escena, abriste el cuello,
              viste dos trazadores con la misma regi\u00f3n accesible tomar rutas
-             distintas y predijiste cuáles de los cinco puntos conservarían un trazador
-             tras un empujón.`,
+             distintas y predijiste cuáles de los cinco puntos resisten un
+             empujón.`,
       prompt:
         'En dos o tres frases, distingue lo que te dice la constante de Jacobi de lo que no, y di cu\u00e1les de los cinco puntos de Lagrange sobreviven a un empuj\u00f3n y bajo qu\u00e9 condici\u00f3n.',
       rubric:

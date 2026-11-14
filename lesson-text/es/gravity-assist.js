@@ -446,7 +446,7 @@ export default {
              tomando una curva-, así que su sistema ya no es inercial, y la
              estrella también tira de la nave. La columna izquierda ya no estará
              exactamente igual. Fíjate en cuán cerca lo está.`,
-      tip: 'El Júpiter real se frena unos 4 × 10⁻²¹ metros por segundo por cada Voyager (unos 800 kilogramos que ganan unos 10 kilómetros por segundo, repartidos con un planeta de 1,9 × 10²⁷ kilogramos). En toda la edad del sistema solar, todas las naves lanzadas juntas no han alterado su órbita de forma medible.',
+      tip: 'El Júpiter real se frena unos 4 × 10⁻²¹ metros por segundo por cada Voyager (800 kg que ganan 10 km/s frente a los 1,9 × 10²⁷ kg de Júpiter). En toda la edad del sistema solar, todas las naves lanzadas juntas no han alterado su órbita de forma medible.',
     },
     'fly-it-heliocentric': {
       title: 'Lánzala y vigila el residuo',

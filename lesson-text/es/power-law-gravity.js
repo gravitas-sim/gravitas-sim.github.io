@@ -60,11 +60,10 @@ export default {
              cambiarían por ese motivo tanto como por cualquier otro. Peor aún:
              <em>cuánto</em> cambia dependería de si has decidido medir las
              distancias en kilómetros, en unidades astronómicas o en las
-             unidades propias de la simulación, 100 por unidad astronómica. A una
-             unidad astronómica la atracción sería un 17 por ciento más débil en
-             kilómetros, un 4,5 por ciento más débil en unidades de la simulación
-             y no cambiaría en absoluto en unidades astronómicas. Eso es absurdo:
-             al universo le da igual qué unidades escribas.
+             unidades de la simulación (100 por unidad astronómica): a una
+             unidad astronómica, un 17 por ciento más débil en kilómetros, un
+             4,5 en unidades de la simulación, igual en unidades astronómicas.
+             Al universo le da igual qué unidades escribas.
 
              \n\nAsí que la ley que se usa aquí está anclada. Está escrita de
              modo que a una distancia elegida —el <strong>radio de referencia

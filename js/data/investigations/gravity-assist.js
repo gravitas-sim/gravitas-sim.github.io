@@ -819,7 +819,7 @@ const GRAVITY_ASSIST = {
              — it is going round a corner — so its frame is no longer inertial,
              and the star pulls on the spacecraft too. The left-hand column will
              no longer be exactly unchanged. Watch how nearly it is.`,
-      tip: 'The real Jupiter slows by about 4 × 10⁻²¹ meters per second per Voyager (about 800 kilograms gaining about 10 kilometers per second, shared with a planet 1.9 × 10²⁷ kilograms heavy). Over the age of the solar system, all the spacecraft ever launched have not measurably altered its orbit.',
+      tip: 'The real Jupiter slows by about 4 × 10⁻²¹ meters per second per Voyager (800 kg gaining 10 km/s against Jupiter’s 1.9 × 10²⁷ kg). Over the age of the solar system, all the spacecraft ever launched have not measurably altered its orbit.',
     },
     {
       sid: 'fly-it-heliocentric',

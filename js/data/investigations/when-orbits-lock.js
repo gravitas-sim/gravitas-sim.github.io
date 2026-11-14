@@ -167,9 +167,7 @@ const WHEN_ORBITS_LOCK = {
              narrower than Jupiter is drawn. So every distance here is a hundred
              times life size, and Newtonian gravity being what it is, that makes
              every duration a thousand times longer. The instrument converts
-             back; the app's own distance and time readouts do not, so the
-             object inspector shows each moon's period a thousand times too
-             long. Nothing
+             back; the app's own distance and time readouts do not. Nothing
              dimensionless — no ratio, no eccentricity, no angle — is affected
              at all.`,
       tip: 'The simulation is paused. Nothing moves until you let it.',

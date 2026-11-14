@@ -516,7 +516,7 @@ const WEIGHING = {
              r<sub>A</sub> + r<sub>B</sub>, which is simply the distance from one
              star across to the other.
              \n\nSo when you measure a, measure star to star.`,
-      tip: 'If you take only one star’s distance from the barycenter by mistake, you will get a mass far too small: the mass goes as the cube of a, so for two equal stars, whose shares are each half the orbit, you get an eighth of the true mass. Measuring star to star is the fix, and it is easier to do anyway.',
+      tip: 'If you take only one star’s distance from the barycenter by mistake, you will get a mass far too small: for two equal stars, an eighth of the mass. Measuring star to star is the fix, and it is easier to do anyway.',
     },
     {
       sid: 'a-practice-run',

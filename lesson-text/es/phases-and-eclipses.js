@@ -23,7 +23,7 @@ export default {
         'Dibuja el Sol, la Tierra y la Luna desde arriba, con la Luna en ángulo recto con el Sol visto desde la Tierra.',
       ],
       because:
-        'La mitad. «Cuarto» cuenta cuánto de su órbita ha recorrido la Luna, no cuánto está iluminado. Vista desde la Tierra en ángulo recto con el Sol, se ve exactamente la mitad del hemisferio iluminado. La velocidad de la Luna varía a lo largo de su órbita, así que los 7,4 días del instrumento, un cuarto del mes medio, no caen en exactamente 90°. El paso siguiente lo mide.',
+        'La mitad. «Cuarto» cuenta cuánto de su órbita ha recorrido la Luna, no cuánto está iluminado. Vista desde la Tierra en ángulo recto con el Sol, se ve exactamente la mitad del hemisferio iluminado. La velocidad de la Luna varía, así que 7,4 días no son exactamente 90°. El paso siguiente lo mide.',
     },
     'four-phases': {
       title: 'Cuatro lecturas',

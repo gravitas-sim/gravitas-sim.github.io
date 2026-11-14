@@ -54,9 +54,7 @@ export default {
              aquí toda distancia es cien veces mayor que la real y, siendo la
              gravedad newtoniana lo que es, eso hace que toda duración sea mil
              veces más larga. El instrumento hace la conversión; los indicadores
-             de distancia y tiempo de la aplicación, no, así que el inspector de
-             objetos muestra el periodo de cada luna mil veces demasiado largo.
-             Nada adimensional
+             de distancia y tiempo de la aplicación, no. Nada adimensional
              —ninguna razón, ninguna excentricidad, ningún ángulo— se ve
              afectado.`,
       tip: 'La simulación está en pausa. Nada se mueve hasta que la dejes correr.',
