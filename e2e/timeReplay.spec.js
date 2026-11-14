@@ -185,7 +185,7 @@ test.describe('looking back', () => {
     await expect(page.locator('#timelineRewind')).toBeVisible();
     await expect(page.locator('#timelineRewind')).toHaveAttribute(
       'title',
-      /dropped/
+      /later history/
     );
     await page.locator('#timelineReplay').click();
     await expect
