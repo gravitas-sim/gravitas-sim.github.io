@@ -145,17 +145,24 @@ describe('what a Spanish reader sees is checked too', () => {
         ...es,
         data: {
           ...es.data,
-          steps: es.data.steps.map((s, i) => {
-            const en = inputs.investigations.find(x => x.id === id).steps[i];
-            return s && s.hints && en.kind === 'numeric'
-              ? {
-                  ...s,
-                  hints: {
-                    concept: `Es ${String(en.answer).replace('.', ',')}, claro.`,
-                  },
-                }
-              : s;
-          }),
+          steps: Object.fromEntries(
+            inputs.investigations
+              .find(x => x.id === id)
+              .steps.map(en => {
+                const s = es.data.steps[en.sid];
+                return [
+                  en.sid,
+                  s && s.hints && en.kind === 'numeric'
+                    ? {
+                        ...s,
+                        hints: {
+                          concept: `Es ${String(en.answer).replace('.', ',')}, claro.`,
+                        },
+                      }
+                    : s,
+                ];
+              })
+          ),
         },
       },
     };

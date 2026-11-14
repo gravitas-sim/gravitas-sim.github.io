@@ -94,7 +94,7 @@ describe('both lessons are registered whole', () => {
       expect(l.steps.at(-1).body.replace(/\s+/g, ' ')).toMatch(
         /no published table was compared/
       );
-      expect(ES_LESSONS[id].steps[0].body).toMatch(
+      expect(Object.values(ES_LESSONS[id].steps)[0].body).toMatch(
         /No se comparó ninguna tabla publicada/
       );
       const sids = full.steps.map(s => s.sid);
