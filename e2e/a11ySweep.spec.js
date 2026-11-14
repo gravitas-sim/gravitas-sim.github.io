@@ -121,12 +121,14 @@ test.describe('the walk inventory: every surface by keyboard', () => {
   // A state is its surface's row with a way in: the controls to press first.
   const walks = [
     ...inventory.rows.map(row => ({ ...row, name: row.surface, open: [] })),
-    ...inventory.states.map(state => ({
-      ...state,
-      open: state.open || [],
-      name: state.id,
-      spanish: inventory.rows.find(r => r.surface === state.surface).spanish,
-    })),
+    ...inventory.states
+      .filter(state => !state.notRun)
+      .map(state => ({
+        ...state,
+        open: state.open || [],
+        name: state.id,
+        spanish: inventory.rows.find(r => r.surface === state.surface).spanish,
+      })),
   ];
 
   for (const row of walks) {

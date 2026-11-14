@@ -118,7 +118,7 @@ current, and the orchestrator checks it.
 | `generate-graph.mjs` | Every generated artifact, what it is made from, and what it must follow |  |
 | `generate-lesson-cards.mjs` | A card picture for a lesson that stages its own scene | `npm run cards` |
 | `generate-scenario-thumbnails.mjs` | Scenario thumbnail generator | `npm run thumbnails` |
-| `generate.mjs` | Regenerate what is stale, in the order it has to happen | `npm run instructors:check`, `npm run thumbnails:check`, `npm run teaching:check`, `npm run cards:check`, `npm run audit:scene:check`, `npm run audit:irreversible:check`, `npm run docs:check:full`, `npm run manual:check`, `npm run validation:check`, `npm run catalog:check`, `npm run ledger:check`, `npm run generate`, `npm run generate:check`, `npm run docs-map:check`, `npm run tools:index:check`, `npm run sw:check`, `npm run registries:check`, `npm run capabilities:check` |
+| `generate.mjs` | Regenerate what is stale, in the order it has to happen | `npm run instructors:check`, `npm run thumbnails:check`, `npm run teaching:check`, `npm run cards:check`, `npm run audit:scene:check`, `npm run audit:irreversible:check`, `npm run docs:check:full`, `npm run manual:check`, `npm run validation:check`, `npm run catalog:check`, `npm run ledger:check`, `npm run surface-ledger:check`, `npm run generate`, `npm run generate:check`, `npm run docs-map:check`, `npm run tools:index:check`, `npm run sw:check`, `npm run registries:check`, `npm run capabilities:check` |
 | `generated-blocks.mjs` | Generated files and generated regions |  |
 | `generated-tripwire.mjs` | A merge must not drop what one side wrote into a file with generated regions |  |
 | `geometry-fuzz.mjs` | Base-versus-head fuzz of every scenario's world (Roadmap II Prompt 108) |  |
@@ -259,6 +259,8 @@ current, and the orchestrator checks it.
 | `sun-frames-build.mjs` | The 14-day solar sequence (Prompt 194 part 2, SUN_KERNEL.md Part 2) |  |
 | `sun-validate.mjs` | The solar kernel against its committed thresholds (Prompt 194) | `npm run sun:validate` |
 | `surface-gate.mjs` | The surface gate: one decision function, the same for every surface | `npm run surface:check`, `npm run surface:measure`, `npm run surface:write`, `npm run surface:report` |
+| `surface-ledger.mjs` | The surface ledger: one written record per published surface, and the check | `npm run surface-ledger` |
+| `surface-measure.mjs` | Page length and the first real action, measured the same way every run | `npm run surface-ledger:measure` |
 | `survey-validate.mjs` | The survey-design kernel against its committed thresholds (Prompt 215) | `npm run survey:validate` |
 | `telescopes-validate.mjs` | The telescope optics against their committed thresholds (Prompt 208) | `npm run telescopes:validate` |
 | `three-shaders.mjs` | three.js shaders in the bundle: pruned to what the 3-D view can reach, then |  |

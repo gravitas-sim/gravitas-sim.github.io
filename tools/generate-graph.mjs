@@ -271,6 +271,34 @@ export const GRAPH = Object.freeze([
       "The status columns are hand-written inside the JSON and kept on regenerate: resolve a conflict by taking both sides' status fields and regenerating, never by taking a side of the derived ones. A closed row's hash is re-recorded with `node tools/catalog-ledger.mjs --record <row id>`.",
   },
   {
+    // Roadmap IV Prompt 453: the surface ledger, one row per published surface
+    // (page, generated family, route parameter, dialog, mode, shared region).
+    // Definitions come from the seed; the status columns a closing prompt
+    // writes are kept. What the sitemap, the tour, the walk, the outlines and
+    // the gate hold is read for the Markdown view, never copied. Never loaded
+    // by the application.
+    id: 'surface-ledger',
+    generate: 'node tools/surface-ledger.mjs --write',
+    check: 'node tools/surface-ledger.mjs --check',
+    inputs: [
+      'tools/surface-ledger.mjs',
+      'tools/surface-ledger-seed.json',
+      'tools/navigation-inventory.json',
+      'tools/interaction-contract.json',
+      'tools/page-outlines.json',
+      'tools/offline-pages.json',
+      'tools/surface-gate.json',
+      'tools/index-fragments.mjs',
+      'sitemap.xml',
+      'index.html',
+      'js',
+    ],
+    outputs: ['docs/surface-ledger.json', 'docs/surface-ledger.md'],
+    after: ['registries', 'ledger'],
+    notes:
+      "The status columns (disposition, redesign, reason, sitemap_reason, decision) are hand-written inside the JSON and kept on regenerate: resolve a conflict by taking both sides' status fields and regenerating, never by taking a side of the derived ones. A new page, route parameter or dialog needs a row in tools/surface-ledger-seed.json.",
+  },
+  {
     id: 'irreversible',
     generate: 'node tools/build-irreversibility-audit.mjs',
     check: 'node tools/build-irreversibility-audit.mjs --check',
