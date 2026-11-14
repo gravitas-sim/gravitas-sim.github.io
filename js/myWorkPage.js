@@ -1,14 +1,11 @@
 // =============================================================================
 // /my-work/: the one place a student sees and manages what they have made
 // -----------------------------------------------------------------------------
-// Roadmap II Prompt 69 (MY_WORK.md). Everything is read through the storage
-// module's store over the student's own keys (openStudentStore), so the page
-// lists, exports, imports and deletes exactly what the writers keep, in the
-// keys and formats they already use. Nothing is written on the way in, nothing
-// leaves the browser (a backup is a file the student saves), and the page needs
-// no account. The prose that does not change is in the page's markup, in both
-// languages; the strings built here come as English/Spanish pairs.
-//
+// (MY_WORK.md). Everything is read through the storage module's store over the
+// student's own keys, so the page lists, exports, imports and deletes exactly
+// what the writers keep. Nothing leaves the browser (a backup is a file the
+// student saves), and no account is needed. The strings built here come as
+// English/Spanish pairs.
 // =============================================================================
 
 import { EXPORT_FORMAT, openStudentStore } from './storage/index.js';
@@ -112,8 +109,7 @@ const SURFACES = {
 async function refresh() {
   s.file = await s.store.exportAll();
   s.records = flatten(s.file);
-  // Progress under an investigation the Library no longer has may be one that
-  // was retired on purpose: the record is read only then.
+  // The retired record, read only for a lesson the Library lacks.
   if (
     s.records.some(
       r =>
@@ -204,8 +200,8 @@ function lessonItem(x) {
       since(x.since),
       x.earlier
         ? L(
-            `answered in an earlier version (replaced in release ${x.earlier.release})`,
-            `respondida en una versión anterior (sustituida en la versión ${x.earlier.release})`
+            `earlier version (${x.earlier.release})`,
+            `versión anterior (${x.earlier.release})`
           )
         : '',
     ],

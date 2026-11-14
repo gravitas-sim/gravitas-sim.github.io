@@ -20,6 +20,10 @@ export const EN_REVISIONS = {
     'The step "{was}" was replaced in release {release} by "{title}".',
   'rev.removed':
     'The step "{was}" was removed in release {release}; no step replaces it.',
+  'rev.pin.step':
+    'The assigned step "{was}" ({sid}) was replaced in release {release} by the step {to}.',
+  'rev.pin.stepGone':
+    'The assigned step "{was}" ({sid}) was removed in release {release}; no step replaces it.',
   'rev.inv.moved':
     'This investigation was replaced in release {release} by "{title}", which is open now.',
   'rev.inv.retired':

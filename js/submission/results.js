@@ -49,7 +49,6 @@ import { checkAnswer } from '../answerCheck.js';
 import { toCsv } from '../csv.js';
 import { gradedSteps } from '../data/investigations/catalog.js';
 import { stepFingerprint } from '../investigations/progressBackup.js';
-import { liveSids, successorOf } from '../investigations/revisions.js';
 const DEPTHS = ['core', 'quantitative', 'advanced'];
 const rank = d => Math.max(0, DEPTHS.indexOf(d));
 const inDepth = (s, d) => rank(s?.depth) <= rank(d);
@@ -432,15 +431,12 @@ export function gradeSubmission(
   // Answers the lesson has no step for, after every step it does. Only a value
   // under a removed step's own key is recognizable as one: which of its
   // sub-keys were measure fields, nothing in the lesson now says.
-  const live = liveSids(lesson);
   for (const [sid, answer] of answers) {
     if (gradedIds.has(sid) || steps.some(s => s.sid === sid)) continue;
-    // A step the lesson retired says so (js/investigations/revisions.js): the
-    // answer is from an earlier version of the lesson, which is not the
-    // student's fault, and is never marked against the step that replaced it.
-    const gone = successorOf(lesson, sid, live);
+    // A step the lesson retired says so: from an earlier version, never marked.
+    const gone = lesson.retired?.[sid];
     questions.push({
-      earlier: gone && { to: gone.to, release: gone.release },
+      earlier: gone ? { to: gone.to, release: gone.release } : null,
       stepNumber: null,
       sid,
       type: null,

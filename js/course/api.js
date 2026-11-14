@@ -1,20 +1,11 @@
 // =============================================================================
 // What a course pack is checked against: this build of Gravitas
 // -----------------------------------------------------------------------------
-// ./pack.js and ./review.js are pure. This gathers what they read, for the
-// builder and the tests:
-//
-//   courseApi()      the languages, lessons, scenarios and datasets a pack may
-//                    name, for the format's reference checks;
-//   courseFacts()    every lesson a pack names, loaded (and every investigation
-//                    pack it carries, when the page gives it ./packItems.js's
-//                    openedPack to open them with) (its steps' hashes and
-//                    digest, its package, its languages, what its steps use,
-//                    whether it has an instructor guide), with the sequences
-//                    Gravitas puts lessons in and the datasets' licenses.
-//
-// Lessons are loaded through the registry, the way the lesson engine loads
-// them, only for the ones the pack names.
+// ./pack.js and ./review.js are pure. This gathers what they read: courseApi()
+// (the languages, lessons, scenarios and datasets a pack may name) and
+// courseFacts() (every lesson a pack names, loaded through the registry: its
+// steps' hashes and digest, package, languages and what its steps use, with
+// the sequences and the datasets' licenses).
 // =============================================================================
 
 import { MANIFEST } from '../data/investigations/manifest.js';
@@ -74,16 +65,6 @@ export function datasetsOf(catalog) {
   return out;
 }
 
-/** courseApi() with the investigation ids retired on purpose (read on demand). */
-export async function courseApiNow(catalog) {
-  const { RETIRED_INVESTIGATIONS } =
-    await import('../data/retiredInvestigations.js');
-  return {
-    ...courseApi(catalog),
-    retired: Object.keys(RETIRED_INVESTIGATIONS),
-  };
-}
-
 /** The lists ./pack.js checks references against. */
 export function courseApi(catalog) {
   return {
@@ -126,7 +107,6 @@ export function lessonFacts(lesson) {
       title: s.title || '',
       scenario: scenarioId(s.setup?.scenario) ?? s.setup?.scenario ?? null,
     })),
-    // Steps retired from the lesson, with their successors (./review.js).
     retired: lesson.retired ?? null,
     pkg: lessonProvider(lesson.id),
     locales: es ? ['en', 'es'] : ['en'],
@@ -163,24 +143,13 @@ export async function courseFacts(
     lessons.set(id, known.get(id));
   }
 
-  // A lesson that left Gravitas on purpose says where it went (js/data/
-  // retiredInvestigations.js: read here and only for an id that is missing). A
-  // successor is loaded too, so a reviewed upgrade can follow it.
-  const retired = new Map();
-  const gone = [...ids].filter(id => !have.has(id));
-  if (gone.length) {
-    const { retiredInvestigation } =
-      await import('../data/retiredInvestigations.js');
-    for (const id of gone) {
-      const r = retiredInvestigation(id, have);
-      if (!r) continue;
-      retired.set(id, r);
-      if (r.to && !lessons.has(r.to)) {
-        if (!known.has(r.to)) known.set(r.to, lessonFacts(await load(r.to)));
-        lessons.set(r.to, known.get(r.to));
-      }
-    }
-  }
+  // A lesson that left Gravitas on purpose says where it went (lazy).
+  const retired =
+    ids.size > lessons.size
+      ? await (
+          await import('./retired.js')
+        ).retiredFacts(ids, have, lessons, known, load, lessonFacts)
+      : new Map();
 
   // An investigation pack travels in its item as a link. Opening one needs
   // the lesson engine's checks (./packItems.js), which the builder's route has

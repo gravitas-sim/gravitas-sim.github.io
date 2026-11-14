@@ -2173,7 +2173,7 @@ export const ES_DEFERRED = {
   'inv.progress.migrated':
     'Se han recuperado {n} respuestas guardadas de un formato anterior, emparejadas por posición. Si esta investigación ha cambiado desde la última vez que la abriste, comprueba que cada respuesta esté en la pregunta que pretendías.',
   'inv.progress.removedSteps':
-    'Se apartaron {n} respuestas guardadas de pasos que esta investigación ya no tiene. Se conservan y se listan abajo como respuestas de una versión anterior.',
+    'Se guardaron {n} respuestas de pasos que esta investigación ya no tiene (versión anterior).',
   'inv.progress.foreign':
     'Tu progreso guardado de esta investigación lo escribió una versión más reciente de Gravitas y no se ha podido leer. Se ha dejado tal cual en lugar de sobrescribirlo.',
   'inv.backup.downloaded': 'Copia del progreso descargada.',

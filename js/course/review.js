@@ -6,41 +6,30 @@
 // archived last year is well formed and may name a lesson that has since been
 // rewritten, or a package that has moved on a major version.
 //
-// Pins. Every lesson, assignment and investigation-pack item may carry a pin: an eight-digit
-// digest of the lesson's steps (each step's sid and the fingerprint
-// js/investigations/progressBackup.js gives it - its type, instrument,
-// scenario, fields and the shape of its answer, never its words, so a
-// translation does not move it), the number of steps, and the package and
-// version the lesson came from when it came from one. An assignment's pin
-// also holds each assigned step's own hash, the one its link carries.
+// Pins. Every lesson, assignment and investigation-pack item may carry a pin: a
+// digest of the lesson's steps (each step's sid and its fingerprint, never its
+// words), the step count, and the package and version it came from. An
+// assignment's pin also holds each assigned step's own hash.
 //
-// Against the lesson as it is now, an item is:
+// Against the lesson as it is now, an item is: same; changed (the steps are not
+// the ones pinned); compatible (the package moved within its major version);
+// major; moved (another package, or none); unpinned (a /1 pack, migrated);
+// missing (Gravitas no longer has it; a retired lesson says where it went); or
+// unchecked (an investigation pack no page here has opened).
 //
-//   same        the digest and the package match;
-//   changed     the lesson's steps are not the ones pinned;
-//   compatible  the package moved within its major version;
-//   major       the package moved a major version;
-//   moved       the lesson now comes from another package, or none;
-//   unpinned    the item carries no pin (a /1 pack, migrated);
-//   missing     Gravitas no longer has the lesson, scenario or dataset;
-//   unchecked   an investigation pack no page here has opened (the builder
-//               cannot: /studio/course/packs/ does).
-//
-// Whether that needs an instructor to look depends on the pack's pinning. An
-// exact pack is an archive: anything but "same" needs review. A compatible
-// pack accepts changes within a major version, and still stops on a missing
-// reference, a major or a moved package, and an assignment step that is gone
-// or rewritten. upgradeCoursePack() is the reviewed way forward: it re-pins
-// only the items the instructor accepted, gives a rewritten assignment a new
-// id (so no stored answer attaches to a question it did not answer), and says
-// how far the version has to move.
+// Whether an instructor has to look depends on the pack's pinning: an exact
+// pack needs review for anything but "same"; a compatible pack still stops on a
+// missing reference, a major or moved package, and an assigned step that is
+// gone or rewritten. upgradeCoursePack() re-pins only the items the instructor
+// accepted, gives a rewritten assignment a new id (no stored answer attaches to
+// a question it did not answer), replaces a retired step by its successor, and
+// says how far the version has to move.
 //
 // Pure: ./api.js gathers the facts (it loads the lessons), and the builder,
 // the course home and the tests read the verdicts.
 // =============================================================================
 
 import { shortHash } from '../assignments/assignment.js';
-import { resolveIds, successorOf } from '../investigations/revisions.js';
 import { GUIDES, itemsOf, lessonKeyOf, PATHS } from './pack.js';
 
 export { shortHash };
@@ -126,21 +115,16 @@ export function reviewItem(item, facts, pinning) {
   if (!lesson && facts.unchecked?.has(lessonKeyOf(item)))
     return verdict(STATUS.UNCHECKED);
   if (!lesson) {
-    // A lesson that left Gravitas on purpose says where it went
-    // (js/data/retiredInvestigations.js, read by ./api.js courseFacts()).
+    // Retired on purpose: where it went (./retired.js, via courseFacts()).
     const gone = facts.retired?.get(lessonKeyOf(item));
     return verdict(STATUS.MISSING, gone ? { retiredLesson: gone } : {});
   }
   const steps = item.kind === 'assignment' ? stepStates(item, lesson) : [];
-  const live = new Set(lesson.sids);
   const detail = {
-    // Missing steps the lesson recorded as retired, and what replaced each.
+    // Missing steps the lesson retired, and what replaced each.
     revisedSteps: steps
       .filter(s => s.state === 'missing' && lesson.retired?.[s.sid])
-      .map(s => ({
-        sid: s.sid,
-        ...successorOf({ retired: lesson.retired }, s.sid, live),
-      })),
+      .map(s => ({ sid: s.sid, ...lesson.retired[s.sid] })),
     stepsThen: item.pin?.n ?? null,
     stepsNow: lesson.n,
     missingSteps: steps.filter(s => s.state === 'missing').map(s => s.sid),
@@ -161,10 +145,6 @@ export function reviewItem(item, facts, pinning) {
   }
   return verdict(pin.fp === lesson.fp ? STATUS.SAME : STATUS.CHANGED, detail);
 }
-
-/** Retired steps and where each went, as one line: `old -> new`, `old -> -` when none. */
-export const revisedList = detail =>
-  (detail.revisedSteps || []).map(r => `${r.sid} -> ${r.to ?? '-'}`).join(', ');
 
 /** Whether an instructor has to look before students are sent to it. */
 export function needsReview(status, pinning, detail = {}) {
@@ -192,20 +172,16 @@ export function reviewCoursePack(pack, facts) {
 }
 
 /**
- * The reviewed upgrade: re-pin the accepted items to this build.
- *
- * An assignment whose steps moved keeps the ones still there, drops the ones
- * that are gone, and gets a new id and date, because its old id names a
- * progress namespace holding answers to the steps as they were.
+ * The reviewed upgrade: re-pin the accepted items to this build. An assignment
+ * whose steps moved keeps the ones still there and gets a new id and date (the
+ * old id names answers to the steps as they were).
  *
  * @param {object} pack - A valid /2 pack
  * @param {object} facts - This build
  * @param {Iterable<string>} accepted - Item ids the instructor reviewed
  * @param {{today: string, newAssignmentId: Function}} opts
  * @returns {{pack: object, bump: 'major'|'minor'|null, upgraded: string[],
- *   refused: string[]}} refused: accepted items that cannot be re-pinned (a
- *   missing lesson, or an assignment with no step left); they stay as they
- *   were, for the instructor to remove
+ *   refused: string[]}} refused: accepted items that cannot be re-pinned
  */
 export function upgradeCoursePack(pack, facts, accepted, opts) {
   const want = new Set(accepted);
@@ -219,8 +195,7 @@ export function upgradeCoursePack(pack, facts, accepted, opts) {
     const v = reviewItem(item, facts, out.pinning);
     const lesson = facts.lessons.get(lessonKeyOf(item));
     if (!lesson) {
-      // A lesson item whose investigation was replaced follows it, once the
-      // instructor has accepted the review; anything else is theirs to redo.
+      // A lesson item follows its replaced investigation once reviewed.
       const to = v.detail.retiredLesson?.to;
       const next = to && item.kind === 'lesson' && facts.lessons.get(to);
       if (!next) {
@@ -236,11 +211,13 @@ export function upgradeCoursePack(pack, facts, accepted, opts) {
     if (v.status === STATUS.SAME && !v.needsReview) continue;
     if (item.kind === 'assignment') {
       // A retired step is replaced by its successor, in its place.
-      const kept = resolveIds(
-        { retired: lesson.retired },
-        item.steps,
-        new Set(lesson.sids)
-      ).ids.filter(sid => lesson.hashes.has(sid));
+      const kept = [
+        ...new Set(
+          item.steps.map(sid =>
+            lesson.hashes.has(sid) ? sid : lesson.retired?.[sid]?.to
+          )
+        ),
+      ].filter(sid => lesson.hashes.has(sid));
       if (!kept.length) {
         refused.push(item.id);
         continue;

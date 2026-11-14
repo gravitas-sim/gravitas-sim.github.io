@@ -2,25 +2,11 @@
 // Guided investigations in the 3-D lab: the runner
 // -----------------------------------------------------------------------------
 // Loaded when a reader presses "Guided investigations", or with
-// ?guide=<id>[&path=advanced], so the lab carries none of it at start-up. The
-// investigations are data (js/lab3d/guides/curriculum.js). This draws one
-// step at a time and checks it against the lab, which it drives only
-// through the page's labApi (js/lab3dLab.js): open a system, set a control,
-// read the choices and the numbers the tables show.
-//
-//   read     text
-//   do       something to do in the lab, with a button that does it, and a
-//            check that looks for the result; a record step also keeps the
-//            moment the reader chooses, for later answers
-//   answer   a number to type, checked against what the lab's state gives
-//   choose   an option, checked, or recorded when it is a prediction a
-//            later step answers
-//
-// A reader may move on without passing a step; the progress list says which
-// passed. After a wrong answer the right one can be shown, and the step then
-// says it was shown rather than found. Progress is kept in this browser,
-// per guide and path, and the report is a file: the same answers make the
-// same bytes (reportOf below).
+// ?guide=<id>[&path=advanced]. The investigations are data
+// (js/lab3d/guides/curriculum.js); this draws one step at a time (read, do,
+// answer, choose) and checks it against the lab through the page's labApi
+// (js/lab3dLab.js). Progress is kept in this browser per guide and path, and
+// the report is a file: the same answers make the same bytes (reportOf below).
 // =============================================================================
 
 import {
@@ -42,12 +28,6 @@ import {
   stepsOn,
 } from '../../observatory/guides/core.js';
 import { EN_LAB3DGUIDES } from '../../i18n/en.lab3dGuides.js';
-import {
-  earlierOf,
-  mergeEarlier,
-  splitSaved,
-  wasIn,
-} from '../../investigations/revisions.js';
 import { put, readJson } from '../../storage/local.js';
 import { KEY_LAB3D_GUIDE_PREFIX } from '../../names.js';
 
@@ -90,24 +70,23 @@ export function reportOf(
     }
     return row;
   });
-  // Answers to steps the guide no longer has, each marked as from an earlier
-  // version with where it went. Present only when there are some, so a report
-  // without any is the bytes it always was.
-  const live = new Set(guide.steps.map(s => s.id));
-  const earlier = earlierOf(
-    guide,
-    live,
-    Object.entries(progress.earlier?.answers ?? {})
-  ).map(e => ({
-    step: e.id,
-    typed: e.value?.typed ?? null,
-    choice: e.value?.choice ?? null,
-    passed: Boolean(e.value?.passed),
-    shown: Boolean(e.value?.shown),
-    release: e.release || null,
-    replacedBy: e.to,
-    was: wasIn(e.was, locale) || null,
-  }));
+  // Answers to steps the guide no longer has, from an earlier version, with
+  // where each went (the guide's `retired` map). Only when there are some.
+  const earlier = Object.entries(progress.earlier?.answers ?? {}).map(
+    ([id, a]) => {
+      const r = guide.retired?.[id];
+      return {
+        step: id,
+        typed: a.typed ?? null,
+        choice: a.choice ?? null,
+        passed: Boolean(a.passed),
+        shown: Boolean(a.shown),
+        release: r?.release ?? null,
+        replacedBy: r?.to ?? null,
+        was: r?.was?.[locale] ?? r?.was?.en ?? null,
+      };
+    }
+  );
   return {
     format: REPORT_FORMAT,
     formatVersion: REPORT_VERSION,
@@ -188,25 +167,26 @@ export function createGuidePanel(root, lab) {
     try {
       const saved = readJson(key());
       if (saved) {
-        // A major version changes what a step means, so nothing saved under
-        // another major is read as an answer; it is kept, as an earlier version.
+        // Another major version: nothing saved under it is read as an answer
+        // and nothing is dropped; ids the guide lacks stay, as earlier answers.
         const same =
           String(saved.curriculum).split('.')[0] ===
           CURRICULUM_VERSION.split('.')[0];
-        const { kept, earlier } = splitSaved(
-          new Set(guide.steps.map(s => s.id)),
-          { answers: saved.answers, records: saved.records },
-          same
-        );
+        const live = new Set(guide.steps.map(s => s.id));
+        const answers = {};
         const records = {};
-        for (const [k, r] of Object.entries(kept.records))
-          records[k] = revive(r);
-        return {
-          answers: kept.answers,
-          records,
-          at: same ? saved.at || 0 : 0,
-          earlier: mergeEarlier(saved.earlier, earlier),
+        const earlier = {
+          answers: { ...saved.earlier?.answers },
+          records: { ...saved.earlier?.records },
         };
+        for (const [name, from, to] of [
+          ['answers', saved.answers, answers],
+          ['records', saved.records, records],
+        ])
+          for (const [k, v] of Object.entries(from || {}))
+            (same && live.has(k) ? to : earlier[name])[k] = v;
+        for (const [k, r] of Object.entries(records)) records[k] = revive(r);
+        return { answers, records, at: same ? saved.at || 0 : 0, earlier };
       }
     } catch {
       /* storage unavailable or damaged: start afresh */
@@ -478,33 +458,6 @@ export function createGuidePanel(root, lab) {
         )
       )
     );
-    const gone = earlierOf(
-      guide,
-      new Set(guide.steps.map(q => q.id)),
-      Object.entries(progress.earlier.answers ?? {})
-    );
-    if (gone.length)
-      root.append(
-        el(
-          'details',
-          {},
-          el('summary', { text: tr('g3.earlier', { n: gone.length }) }),
-          el(
-            'ul',
-            {},
-            gone.map(e => {
-              const a = e.value || {};
-              return el('li', {
-                text: tr('g3.earlierItem', {
-                  was: wasIn(e.was, lab.language()) || e.id,
-                  text: a.typed ?? a.choice ?? '-',
-                  release: e.release || '-',
-                }),
-              });
-            })
-          )
-        )
-      );
     wire(s);
     refresh();
     if (focus) root.querySelector('h2').focus();

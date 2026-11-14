@@ -19,6 +19,10 @@ export const ES_REVISIONS = {
     'El paso "{was}" se sustituyó en la versión {release} por "{title}".',
   'rev.removed':
     'El paso "{was}" se quitó en la versión {release}; ningún paso lo sustituye.',
+  'rev.pin.step':
+    'El paso asignado "{was}" ({sid}) se sustituyó en la versión {release} por el paso {to}.',
+  'rev.pin.stepGone':
+    'El paso asignado "{was}" ({sid}) se quitó en la versión {release}; ningún paso lo sustituye.',
   'rev.inv.moved':
     'Esta investigación se sustituyó en la versión {release} por "{title}", que se abre ahora.',
   'rev.inv.retired':

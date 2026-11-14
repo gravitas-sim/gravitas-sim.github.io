@@ -245,8 +245,8 @@ export function itemsOf(pack) {
  *
  * @param {unknown} c - A parsed pack
  * @param {{locales: string[], lessons?: Iterable<string>,
- *   retired?: Iterable<string>, scenarios?: Iterable<string>,
- *   scenarioId?: Function, datasets?: Iterable<string>}} api - What
+ *   scenarios?: Iterable<string>, scenarioId?: Function,
+ *   datasets?: Iterable<string>}} api - What
  *   this build of Gravitas has (./api.js courseApi()); a list left out is not
  *   checked
  * @returns {Array<{path: string, code: string, vars: object, message: string}>}
@@ -266,11 +266,7 @@ export function validateCoursePack(c, api) {
   // reviewed must open even when a lesson it names has left Gravitas, and
   // ./review.js reports that as missing instead.
   const known = list => (list === undefined ? ANY : new Set(list));
-  // An investigation retired on purpose is still a lesson a pack may name:
-  // ./review.js reports it, with where it went, instead of refusing the file.
-  const lessons = known(
-    api.lessons && [...api.lessons, ...(api.retired || [])]
-  );
+  const lessons = known(api.lessons);
   const scenarioIds = known(api.scenarios);
   // By id, or in English in a pack older than ids.
   const scenarios = {

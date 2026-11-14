@@ -35,7 +35,6 @@ import {
   validateCoursePack,
 } from '../course/pack.js';
 import { PLATFORM_API } from '../platform/catalog.generated.js';
-import { liveSids, resolveIds } from '../investigations/revisions.js';
 
 /** The largest file or pasted text read: a course pack is well under this. */
 export const MAX_SOURCE = 512 * 1024;
@@ -187,11 +186,15 @@ export function reuseCheck(
   now = new Date()
 ) {
   const r = stepBindings(activity, lesson, fingerprint);
-  // A retired step is replaced by its successor, in its place; a step with no
-  // successor is dropped. `revised` says which, for the instructor in words.
+  // A retired step becomes its successor in place; one with none is dropped.
   const byId = new Map((lesson?.steps || []).map(s => [s.sid, s]));
-  const swapped = resolveIds(lesson, activity.s || [], liveSids(lesson));
-  const keep = swapped.ids.filter(sid => byId.has(sid));
+  const keep = [
+    ...new Set(
+      (activity.s || []).map(sid =>
+        byId.has(sid) ? sid : lesson?.retired?.[sid]?.to
+      )
+    ),
+  ].filter(sid => byId.has(sid));
   const reissued = keep.length
     ? {
         ...activity,
@@ -214,7 +217,9 @@ export function reuseCheck(
     changed: r.changed,
     missing: r.missing,
     clean: r.changed === 0 && r.missing === 0,
-    revised: swapped.notes,
+    revised: r.bindings
+      .filter(b => b.retired)
+      .map(b => ({ sid: b.sid, ...b.retired })),
     bindings: r.bindings,
     reissued,
   };

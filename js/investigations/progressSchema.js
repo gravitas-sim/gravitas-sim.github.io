@@ -227,13 +227,7 @@ export function readProgress(data, lesson) {
   out.schema = schema;
 
   const prefix = `${lesson?.id}:`;
-  /**
-   * Keep the keys that name a step this lesson has. A key under a step it no
-   * longer has is never dropped: it is set aside in `earlier`, shown as an
-   * answer from an earlier version and written back (writeProgress), and never
-   * read as an answer to any step the lesson has now. Only a key that is not
-   * this lesson's at all is left out.
-   */
+  /** Keys under a step the lesson no longer has are set aside in `earlier`, never read as answers. */
   const keep = (source, into, kind) => {
     let setAside = 0;
     for (const [key, value] of Object.entries(source || {})) {
@@ -274,8 +268,7 @@ export function readProgress(data, lesson) {
   if (DEPTHS.includes(data.deepest)) out.deepest = data.deepest;
   if (data.spent > 0) out.spent = Math.floor(data.spent);
 
-  // A step that has been removed from the lesson since the save. The answer is
-  // out of the working set, kept in `earlier`, and the reader is told how much.
+  // Steps removed since the save: kept in `earlier`, and the reader is told.
   if (droppedResponses > 0) {
     out.notes.push({ code: 'removedSteps', dropped: droppedResponses });
   }
@@ -304,9 +297,6 @@ export function writeProgress({
     schema: PROGRESS_SCHEMA,
     lesson: lesson?.id ?? null,
     stepSid: stepSid ?? null,
-    // Answers to steps the lesson no longer has ride along under their own
-    // keys. The shape is unchanged: a build that reads this lesson without
-    // them sets them aside as it always has.
     responses: { ...earlier?.responses, ...responses },
     attempts: { ...earlier?.attempts, ...attempts },
     visited: [...(visited || [])],

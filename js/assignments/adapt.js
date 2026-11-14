@@ -2,25 +2,14 @@
 // Adapting an activity, proven against the step graph (Prompt 175)
 // -----------------------------------------------------------------------------
 // Adapting an activity is three choices (step order, an instructor's sentence on
-// a step, a due line), and no adaptation may make a step mean something it did
-// not mean in the lesson. The step graph is what the lesson already declares:
-// requires (a step reads another's answer, so it comes first), reveal (a
-// prediction's verdict is held until the step it names, which comes after),
-// when (a remediation step follows the graded one), setup (a step keeps the
-// world of the nearest step before it that builds one) and scene (a step that
-// stages nothing keeps the scene before it).
-//
-// checkAdaptation() names each broken edge and reports only what the adaptation
-// introduces; the builder will not write a package that fails it. Pure: no DOM,
-// no storage (tests/assignmentAdaptation.test.js runs it on every lesson).
+// a step, a due line), and none may make a step mean something it did not mean
+// in the lesson. The step graph is what the lesson declares: requires, reveal,
+// when, setup and scene. checkAdaptation() names each broken edge it introduces;
+// the builder will not write a package that fails it. Pure: no DOM, no storage
+// (tests/assignmentAdaptation.test.js runs it on every lesson).
 // =============================================================================
 
 import { assignmentIdFor, assignmentVersion, shortHash } from './assignment.js';
-import {
-  liveSids,
-  resolveIds,
-  successorOf,
-} from '../investigations/revisions.js';
 
 /** The most a student-facing sentence on one step may hold, in characters. */
 export const MAX_NOTE = 600;
@@ -294,14 +283,10 @@ export function whatChanged(assignment, lesson, resolution, pin) {
   const missing = of('missing');
   const changed = of('changed');
   const moved = ['major', 'moved'].includes(pin?.status);
-  // Missing steps the lesson records as retired, with where each went: the
-  // instructor is told in words, and the successor is what a re-pin offers.
+  // Missing steps the lesson retired, with the step that replaced each.
   const revised = resolution.bindings
-    .filter(b => b.status === 'missing' && b.retired)
-    .map(b => ({
-      sid: b.sid,
-      ...successorOf(lesson, b.sid, liveSids(lesson)),
-    }));
+    .filter(b => b.retired)
+    .map(b => ({ sid: b.sid, ...b.retired }));
   return {
     missing: missing.map(title),
     changed: changed.map(title),
@@ -336,9 +321,13 @@ export function repin(
 ) {
   const byId = new Map((lesson?.steps || []).map(s => [s.sid, s]));
   // A retired step becomes its successor, in its place; one with none is gone.
-  const s = resolveIds(lesson, assignment.s || [], liveSids(lesson)).ids.filter(
-    sid => byId.has(sid)
-  );
+  const s = [
+    ...new Set(
+      (assignment.s || []).map(sid =>
+        byId.has(sid) ? sid : lesson?.retired?.[sid]?.to
+      )
+    ),
+  ].filter(sid => byId.has(sid));
   const f = s.map(sid => shortHash(fingerprint(byId.get(sid))));
   const rest = { ...assignment };
   delete rest.p;

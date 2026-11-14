@@ -27,7 +27,6 @@ import {
   resolveSelection,
 } from '../assignments/assignment.js';
 import { stepFingerprint } from '../investigations/progressBackup.js';
-import { liveSids, resolveIds } from '../investigations/revisions.js';
 import { activityById, formatById } from '../data/activities.js';
 
 /** What went wrong, for a caller that has to show something useful. */
@@ -64,9 +63,11 @@ export function assignmentForFormat(
     return { ok: false, reason: LAUNCH.NO_LESSON };
   }
 
-  // A format names step ids; one the lesson has retired is its successor, or
-  // left out (with a note in `revised`), never an unknown id.
-  const { ids, notes } = resolveIds(lesson, format.steps, liveSids(lesson));
+  // A retired step is its successor, or left out (noted in `revised`).
+  const gone = sid => lesson.retired?.[sid];
+  const ids = [
+    ...new Set(format.steps.map(s => (gone(s) ? gone(s).to : s))),
+  ].filter(Boolean);
   const resolved = resolveSelection(lesson, ids);
   if (!resolved.sids.length) return { ok: false, reason: LAUNCH.NO_STEPS };
 
@@ -102,7 +103,7 @@ export function assignmentForFormat(
     // them.
     added: resolved.added,
     unknown: resolved.unknown,
-    revised: notes,
+    revised: format.steps.filter(gone).map(sid => ({ sid, ...gone(sid) })),
   };
 }
 
@@ -118,8 +119,11 @@ export function assignmentForFormat(
  * @returns {{sids: Array<string>, added: Array<object>, unknown: Array<string>}}
  */
 export function resolvedSteps(lesson, format) {
-  const { ids } = resolveIds(lesson, format?.steps || [], liveSids(lesson));
-  return resolveSelection(lesson, ids);
+  const gone = sid => lesson?.retired?.[sid];
+  const ids = (format?.steps || []).map(sid =>
+    gone(sid) ? gone(sid).to : sid
+  );
+  return resolveSelection(lesson, [...new Set(ids)].filter(Boolean));
 }
 
 /**
