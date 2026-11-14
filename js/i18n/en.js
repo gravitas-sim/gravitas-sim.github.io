@@ -396,17 +396,12 @@ export const EN = {
     'Scrub through recorded simulation history',
   'transport.timelineLive': '● LIVE',
   'transport.timelineStepSize': '1 step = {size}',
-  'transport.timelinePlay.returnLabel': 'Return to live',
   'transport.timelineReplay': 'Replay',
   'transport.timelineReplay.hint':
     'Replay the recorded history at the current speed and end at the live moment. Escape or Pause stops it the same way. Nothing is lost.',
   'transport.timelineRewind': 'Rewind to here',
   'transport.timelineRewind.hint':
     'Make this moment the world and continue from it. The history after it is dropped.',
-  'transport.timelineParked.note':
-    'Looking back, {behind} before live. Rewind to here drops the later history.',
-  'transport.timelineReplaying.note':
-    'Replaying. Escape or Pause returns to live.',
   'transport.timelineScrubber.valueText':
     '{behind} before live, frame {n} of {total}',
   'transport.timelineScrubber.valueLive': 'Live',
@@ -432,9 +427,8 @@ export const EN = {
   'toast.undo.removed': 'Removed last placed object',
   'toast.undo.nothing': 'Nothing to undo',
   'toast.timeline.live': 'Back to live',
-  'toast.timeline.rewound': 'Rewound to here. Later history dropped',
-  'toast.timeline.placedRewound':
-    'Placing a body made this moment the world. Later history dropped',
+  'toast.timeline.rewound':
+    'This moment is now the world. Later history dropped',
   'toast.view.reset': 'View reset',
   'toast.units.showing': 'Showing {units}',
   'toast.theme.changed': 'Theme: {theme}',

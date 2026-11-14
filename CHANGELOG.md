@@ -15,6 +15,7 @@ the release rather than in the tag.
 
 ### Changed
 
+- The sandbox has one clock, a step you can take, Replay and Rewind to here (Prompt 451; register row D-R4-451-01; visible). The timeline label, the Elapsed readout, the stopwatch and every recorded frame read the physics clock; the label had been a second sum, repainted on each recorded frame (up to 100 ms behind, and frozen while paused). The step key and button take one real step while paused, also in Step by step, and the bar shows its size. Leaving live captures the full state once; Return to live restores it in place and drops nothing; Replay plays the history forward and ends in the live moment; Rewind to here commits the shown frame and says the later history is dropped.
 - A measuring step no longer shows the expected number in grey inside the empty box (Prompt 299; register row D-R4-299-01; visible and instructional). A measure field's expected value moves from `hint` to a new `want` property in 897 fields of 113 lessons and their Spanish shadows; no page reads `want` except the authoring checks and the instructor key, which prints the same text as before. The lesson panel renders a field's `hint` or a numeric step's `placeholder` only when it holds no numeral, the rule `content/placeholder` now reads the numbers inside a cue ("e.g. 8.0 ± 0.1") and checks core and deeper steps, and the ten error-bar steps read "a value, then ± its uncertainty" (and its Spanish). The instructor bundle needs the owner's rebuild; the keys it prints do not change.
 
 ### Added

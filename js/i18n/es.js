@@ -303,17 +303,12 @@ export const ES = {
     'Recorrer el historial grabado de la simulación',
   'transport.timelineLive': '● DIRECTO',
   'transport.timelineStepSize': '1 paso = {size}',
-  'transport.timelinePlay.returnLabel': 'Volver al directo',
   'transport.timelineReplay': 'Repetir',
   'transport.timelineReplay.hint':
     'Repite el historial grabado a la velocidad actual y termina en el momento en directo. Escape o Pausa la detienen del mismo modo. No se pierde nada.',
   'transport.timelineRewind': 'Retroceder hasta aquí',
   'transport.timelineRewind.hint':
     'Convierte este momento en el mundo y continúa desde él. Se descarta el historial posterior.',
-  'transport.timelineParked.note':
-    'Mirando atrás, {behind} antes del directo. «Retroceder hasta aquí» descarta el historial posterior.',
-  'transport.timelineReplaying.note':
-    'Repitiendo. Escape o Pausa vuelven al directo.',
   'transport.timelineScrubber.valueText':
     '{behind} antes del directo, fotograma {n} de {total}',
   'transport.timelineScrubber.valueLive': 'En directo',
@@ -865,8 +860,6 @@ export const ES = {
   'toast.timeline.live': 'De vuelta al directo',
   'toast.timeline.rewound':
     'Retrocedido hasta aquí. Historial posterior descartado',
-  'toast.timeline.placedRewound':
-    'Al colocar un cuerpo, este momento pasó a ser el mundo. Historial posterior descartado',
   'toast.view.reset': 'Vista restablecida',
   'toast.units.showing': 'Mostrando {units}',
   'toast.theme.changed': 'Tema: {theme}',

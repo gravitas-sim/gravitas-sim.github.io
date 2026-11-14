@@ -1,7 +1,7 @@
 // =============================================================================
 // Time you can trust: one clock, a step, Replay and Rewind to here
 // -----------------------------------------------------------------------------
-// js/timeline.js, js/worldStep.js, js/controls.js. The timeline used to keep a
+// js/timeline.js, js/render.js, js/controls.js. The timeline used to keep a
 // second sum of the elapsed time and repaint its label only on a recorded
 // frame, so the label read up to 100 ms behind the Elapsed readout and never
 // moved while the world was paused. There is one clock now; these tests read
@@ -101,8 +101,12 @@ test.describe('a step', () => {
     await app.pressPause();
     const before = await inApp(page, async () => {
       const p = await import('/js/physics.js');
-      const w = await import('/js/worldStep.js');
-      return { clock: p.getSimulationTime(), size: w.stepSize() };
+      const ts = await import('/js/timestep.js');
+      const ui = await import('/js/ui.js');
+      return {
+        clock: p.getSimulationTime(),
+        size: ts.frameAdvance(ts.STEP_SECONDS, ui.SETTINGS.sim_speed, p.DT),
+      };
     });
     await expect(page.locator('#timelineStepSize')).toContainText('1 step =');
     await page.keyboard.press('.');
@@ -176,8 +180,9 @@ test.describe('looking back', () => {
     await page.keyboard.press(',');
     await expect(page.locator('#timelineReplay')).toBeVisible();
     await expect(page.locator('#timelineRewind')).toBeVisible();
-    await expect(page.locator('#timelineParkedNote')).toContainText(
-      'drops the later history'
+    await expect(page.locator('#timelineRewind')).toHaveAttribute(
+      'title',
+      /dropped/
     );
     await page.locator('#timelineReplay').click();
     await expect

@@ -4,7 +4,7 @@ import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 // The sandbox's time controls: one clock, a step you can take, Replay and
-// Rewind to here (js/timeline.js, js/worldStep.js).
+// Rewind to here (js/timeline.js, js/render.js).
 //
 // Thresholds are committed in tests/fixtures/time-controls/thresholds.json
 // before the implementation existed. The comparison for "the world is back" is
@@ -50,7 +50,7 @@ beforeAll(async () => {
   physics = await import('../js/physics.js');
   await import('../js/bodyEffects.js');
   timeline = await import('../js/timeline.js');
-  step = await import('../js/worldStep.js');
+  step = await import('../js/render.js');
   appState = await import('../js/appState.js');
   tools = await import('../js/sandboxTools.js');
   pauseAtEvent = await import('../js/pauseAtEvent.js');

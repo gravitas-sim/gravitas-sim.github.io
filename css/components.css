@@ -1595,34 +1595,26 @@
     letter-spacing: 0.05em;
   }
 
-  /* The row above the bar: one step's size while paused, and the ways out of
-     history. The bar is a fixed pill, so the row hangs off its top edge
-     instead of widening it; a flex display would beat the hidden attribute,
-     hence the explicit rule. */
+  /* A row on the bar's top edge: step size while paused, ways out of history. */
   .timeline-aux {
     position: absolute;
-    left: 0;
-    right: 0;
+    left: 50%;
     bottom: calc(100% + var(--space-2));
+    transform: translateX(-50%);
     display: flex;
-    flex-wrap: wrap;
     align-items: center;
-    justify-content: center;
-    gap: var(--space-1) var(--space-2);
+    gap: var(--space-2);
+    padding: var(--space-1) var(--space-3);
     font-size: var(--text-xs);
     color: var(--text-secondary);
-    text-shadow: 0 0 6px var(--surface-1);
+    background: color-mix(in srgb, var(--surface-1) 88%, transparent);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-lg);
   }
 
   .timeline-aux[hidden],
   .timeline-aux [hidden] {
     display: none;
-  }
-
-  .timeline-action {
-    background: color-mix(in srgb, var(--surface-1) 88%, transparent);
-    border-color: var(--border-subtle);
-    color: var(--text-primary);
   }
 
   @media (max-width: 767px) {

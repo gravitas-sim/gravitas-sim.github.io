@@ -9,22 +9,13 @@
 // nine columns, because allocating an object literal per body per snapshot at
 // 10 Hz produces enough garbage to show up as frame stutter.
 //
-// One clock. Every recorded frame is stamped with the physics clock
-// (getSimulationTime), restoring a frame sets that clock, and getSimClock is
-// that clock under its older name. The module used to sum its own copy of the
-// elapsed time, which agreed with the physics clock to the last digit and was
-// repainted on a different schedule (a capture, every 100 ms, and never while
-// paused), so the label beside the scrubber read up to 100 ms behind the
-// Elapsed readout. There is no second quantity to drift now.
+// One clock: frames are stamped with the physics clock (getSimulationTime),
+// a restore sets it, and getSimClock is that clock under its older name.
 //
-// Three ways to look back, named for what they do to the world:
-//   - parked: scrubTo, stepBack, stepForward hold the world on a recorded
-//     frame. Leaving live captures the full state once (the same capture a
-//     lesson's entry and exit use), so nothing is lost by looking.
-//   - Replay plays the recorded frames forward at the current speed and
-//     ends in the held live state; Escape or Pause ends it the same way.
-//   - Rewind to here is the one destructive action: the shown frame becomes
-//     the world and the later history is dropped.
+// Looking back: scrubTo, stepBack and stepForward park the world on a recorded
+// frame and capture the full state once on the way out of live; Return to live
+// puts it back and drops nothing; Replay plays the frames forward and ends
+// there; Rewind to here makes the shown frame the world and drops what is after.
 // =============================================================================
 
 import {
@@ -121,11 +112,9 @@ let recording = true;
 let scrubbing = false;
 let scrubOffset = 0; // 0 = newest recorded frame, up to frameCount-1 back
 // The live moment, captured once on leaving it: { states, paused, clock }.
-// null while live. `states` are packed bodies with ids, as a full capture
-// carries them (twelve significant figures).
 let held = null;
 let replaying = false;
-let replayClock = 0; // simulated time the replay has reached
+let replayClock = 0;
 
 let ui = null;
 
@@ -216,12 +205,7 @@ function indexForOffset(offset) {
   return (writeIndex - 1 - clamped + capacity * 2) % capacity;
 }
 
-/**
- * Rebuild an object of the given kind.
- * Objects destroyed since capture have to be reconstructed, so their
- * constructors are invoked with the position, velocity and mass the record
- * holds and the rest is written over them.
- */
+/** Make a body of the given kind; the rest is written over it. */
 function construct(kind, pos, vel, mass) {
   switch (kind) {
     case 'BlackHole':
@@ -247,11 +231,7 @@ function construct(kind, pos, vel, mass) {
   }
 }
 
-/**
- * Every recorded body by id, with the list it is in. A transformed body keeps
- * the obj_type of what it became in the class of what it was, so the list is
- * what says where it goes back, not its type.
- */
+/** Recorded bodies by id with their list (a transformed body keeps its list). */
 function indexLive() {
   const byId = new Map();
   for (const [kind, list] of ALL_LISTS()) {
@@ -260,11 +240,7 @@ function indexLive() {
   return byId;
 }
 
-/**
- * Replace the recorded kinds' lists with the rebuilt ones.
- * @returns {boolean} True if any body was added or dropped (the instances
- *   in the lists are no longer the ones the physics caches may hold)
- */
+/** Swap in the rebuilt lists; true if any instance was added or dropped. */
 function installLists(rebuilt, maxId) {
   let changed = false;
   for (const [kind, list] of ALL_LISTS()) {
@@ -279,18 +255,14 @@ function installLists(rebuilt, maxId) {
   return changed;
 }
 
-/**
- * Restore the simulation to a recorded frame.
- * @param {number} offset - Frames back from newest (0 = most recent)
- */
+/** Restore the world to a recorded frame (offset 0 = newest). */
 function restore(offset) {
   if (frameCount === 0) return;
   const idx = indexForOffset(offset);
   const row = frames[idx];
   if (!row) return;
 
-  // Index everything currently alive so restoring reuses instances where it
-  // can: preserving trails, disks and names rather than rebuilding them.
+  // Reuse live instances where possible (names, disks).
   const existing = new Map();
   for (const [, list] of ALL_LISTS()) {
     for (const o of list) existing.set(o.id, o);
@@ -314,8 +286,7 @@ function restore(offset) {
         row[b + F_MASS]
       );
       if (!obj) continue;
-      // set_state, not a bare id: a galaxy's drawing is turned by its id, and
-      // this also gives back the kind and name the row could not hold.
+      // set_state: a galaxy's drawing is turned by its id.
       if (kind === 'Galaxy') obj.set_state({ id, ...galaxyIdentity.get(id) });
       else obj.id = id;
     }
@@ -325,46 +296,34 @@ function restore(offset) {
     obj.vel.x = row[b + F_VX];
     obj.vel.y = row[b + F_VY];
     obj.mass = row[b + F_MASS];
-    // A scrub writes the recorded mass straight onto the body, so the mass the
-    // class reports has to be recomputed from it. Without this, rewinding past
-    // a merger or a collision left the inspector describing the body's mass
-    // before the event and gravity using the mass after it.
+    // The reported mass follows the recorded one (rewinding past a merger).
     syncReportedMass(obj);
     obj.radius = row[b + F_RADIUS];
     obj.alive = row[b + F_ALIVE] !== 0;
     if (typeof obj.updateRadius === 'function' && kind === 'BlackHole') {
       obj.updateRadius();
     }
-    // Trails would otherwise draw a straight line from where the object was
-    // to where it has jumped back to.
+    // No straight trail line across the jump.
     if (Array.isArray(obj.trail)) obj.trail.length = 0;
 
     rebuilt.get(kind).push(obj);
   }
 
   installLists(rebuilt, maxId);
-  // The one clock: a restored frame is a moment, and the moment is the time.
   setSimulationTime(frameTimes[idx] ?? getSimulationTime());
 }
 
 /**
- * Put the held live moment back: every body from the full capture taken when
- * history was entered, the clock, and nothing else touched.
- *
- * In place, not a rebuild. applyShareState re-initializes the world, and the
- * reset it fires would empty this recording, the armed event watch and the
- * placement undo stack: the very things Return to live must not drop. Instances
- * are reused by id so a selection, a followed body or an open inspector keeps
- * pointing at the same object; a body the scrub dropped is made again and
- * given its state by set_state, as a share link's bodies are.
+ * Put the held live moment back, in place. applyShareState would rebuild the
+ * world, and its reset empties this recording and the armed event watch.
+ * Instances are reused by id; a body the scrub dropped is made again.
  */
 function restoreHeld() {
   if (!held) return;
   const live = indexLive();
   const rebuilt = new Map(KINDS.map(k => [k, []]));
   let maxId = 0;
-  // set_state keeps the objects it is given, so a restore takes its own copy
-  // and the held capture stays what was captured.
+  // set_state keeps the objects it is given: restore from a copy.
   const states = JSON.parse(JSON.stringify(held.states));
   for (const s of states) {
     if (!s || !s.pos || !s.vel) continue;
@@ -391,8 +350,7 @@ function leaveLive() {
   const payload = captureShareState({
     kind: 'full',
     includeCamera: false,
-    // For the ids, which keep a selection and a followed body pointing at the
-    // same object after the restore.
+    // Ids keep a selection or followed body on the same object.
     forExperiment: true,
   });
   held = {
@@ -414,10 +372,9 @@ function endHistory() {
 }
 
 /**
- * Advance the timeline. Called once per frame from the render loop, before
- * physics when scrubbing (so the restored frame is what gets drawn).
- * @param {number} dtSim - Simulated time elapsed this frame
- * @returns {boolean} True if physics should run this frame
+ * Once per frame, before physics.
+ * @param {number} dtSim - Simulated time this frame advances by
+ * @returns {boolean} True if physics should run
  */
 export function tickTimeline(dtSim) {
   if (replaying) {
@@ -438,11 +395,7 @@ export function tickTimeline(dtSim) {
   return true;
 }
 
-/**
- * Repaint the clock label now. The label follows the clock, not the next
- * capture; called before the physics step each frame and again after it, so
- * the label and the Elapsed readout painted later in the frame agree.
- */
+/** Repaint the clock label: before and after the step, so it matches the readout. */
 export function syncClock() {
   if (ui && typeof ui.onClock === 'function') ui.onClock(getSimulationTime());
 }
@@ -457,12 +410,7 @@ export function isReplaying() {
   return replaying;
 }
 
-/**
- * Simulated time now: the physics clock, which the Elapsed readout, the
- * stopwatch and every recorded frame share. Kept under its older name for
- * the modules that read it.
- * @returns {number} Simulated time units
- */
+/** The physics clock, under its older name. */
 export function getSimClock() {
   return getSimulationTime();
 }
@@ -472,26 +420,21 @@ export function getFrameCount() {
   return frameCount;
 }
 
-/**
- * Record the present moment as a frame now, rather than at the next 100 ms
- * tick. A step taken while paused records through this.
- */
+/** Record a frame now (a paused step does). */
 export function recordFrame() {
   if (scrubbing) return;
   capture();
   syncUI();
 }
 
-/** @returns {boolean} True when there is no recorded frame yet */
-export function isUnrecorded() {
-  return frameCount === 0;
+/** Ready the recording for a paused step; false when running or looking back. */
+export function beginStep() {
+  if (!state.paused || scrubbing) return false;
+  if (frameCount === 0) capture();
+  return true;
 }
 
-/**
- * Jump to a recorded frame and hold there. Leaving live captures the full
- * state once; scrubbing again while parked does not.
- * @param {number} offset - Frames back from newest (0 = most recent)
- */
+/** Hold on a recorded frame; leaving live captures the full state once. */
 export function scrubTo(offset) {
   if (frameCount === 0) return;
   leaveLive();
@@ -501,19 +444,12 @@ export function scrubTo(offset) {
   syncUI();
 }
 
-/**
- * Step one recorded frame backwards. From live the first stop is one frame
- * back, as it has always been; a frame recorded a step ago is the world as it
- * stands, and the one before it is the step before.
- */
+/** One recorded frame back (from live, one frame back, as it always was). */
 export function stepBack() {
   scrubTo(scrubOffset + 1);
 }
 
-/**
- * Step one recorded frame forwards. Past the newest recorded frame it is
- * Return to live.
- */
+/** One recorded frame forward; past the newest it is Return to live. */
 export function stepForward() {
   if (!scrubbing) return;
   if (scrubOffset <= 0) {
@@ -523,10 +459,7 @@ export function stepForward() {
   scrubTo(scrubOffset - 1);
 }
 
-/**
- * Return to the live moment exactly: the held full capture, the clock and
- * the pause state it was left in. Nothing is dropped, the recording included.
- */
+/** Back to the held live moment, clock and pause state; nothing is dropped. */
 export function returnToLive() {
   if (!scrubbing) return;
   restoreHeld();
@@ -534,11 +467,7 @@ export function returnToLive() {
   endHistory();
 }
 
-/**
- * Rewind to here: the shown frame becomes the world. Recording continues from
- * it, so the frames that were ahead are discarded: the way an edit after an
- * undo drops the redo stack. The pause state it was left in comes back.
- */
+/** The shown frame becomes the world; later frames are dropped. */
 export function rewindToHere() {
   if (!scrubbing) return;
   if (scrubOffset > 0) {
@@ -549,11 +478,7 @@ export function rewindToHere() {
   endHistory();
 }
 
-/**
- * Play the recorded frames forward at the current speed, from the frame
- * shown (or the oldest, from live), to the live moment, and end there.
- * @returns {boolean} False when there is not enough history to play
- */
+/** Play the frames forward at the current speed to the live moment. */
 export function startReplay() {
   if (frameCount < 2) return false;
   if (!scrubbing) scrubTo(frameCount - 1);
@@ -563,7 +488,6 @@ export function startReplay() {
   return true;
 }
 
-/** Called each frame while replaying: show the newest frame the clock passed. */
 function advanceReplay(dtSim) {
   replayClock += dtSim;
   if (!held || replayClock >= held.clock) {
@@ -598,9 +522,7 @@ function syncUI() {
     scrubbing,
     replaying,
     simClock: getSimulationTime(),
-    // Simulated time between the shown frame and the live moment
     behind: held ? Math.max(0, held.clock - getSimulationTime()) : 0,
-    // Seconds of history available, for the scrubber's left-hand label
     span:
       frameCount > 1
         ? Math.abs(

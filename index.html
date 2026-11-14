@@ -2021,8 +2021,8 @@ try {
       <button
         id="timelineStepFwd"
         class="timeline-btn"
-        aria-label="Step forward"
-        title="Step forward (.): one simulation step while paused, one recorded frame while looking back"
+        aria-label="Step forward one frame"
+        title="Step forward (.)"
         data-i18n-title="transport.timelineStepFwd.hint"
         data-i18n-aria-label="transport.timelineStepFwd.label"
       >
@@ -2056,7 +2056,7 @@ try {
           step="1"
           disabled=""
           aria-label="Scrub through recorded simulation history"
-          title="Drag to look back through recorded history. The world holds on the frame you land on, and Return to live puts everything back. Trails restart after a restore, and particles, disk particles and ripples are not recorded."
+          title="Drag to rewind through recorded history. The simulation holds on the frame you land on until you return to live."
           data-i18n-title="transport.timelineScrubber.hint"
           data-i18n-aria-label="transport.timelineScrubber.label"
         />
@@ -2082,21 +2082,12 @@ try {
         ● LIVE
       </button>
 
-      <!-- Above the bar: how far one step goes (while paused), and the two
-           ways out of history besides Return to live. Filled and shown by
-           js/controls.js. -->
       <div id="timelineAux" class="timeline-aux" hidden="">
-        <span id="timelineStepSize" class="timeline-step-size numeric"></span>
-        <span
-          id="timelineParkedNote"
-          class="timeline-parked-note"
-          hidden=""
-        ></span>
+        <span id="timelineStepSize" class="numeric"></span>
         <button
           id="timelineReplay"
-          class="timeline-btn timeline-action"
+          class="timeline-btn"
           hidden=""
-          title="Replay the recorded history at the current speed and end at the live moment. Escape or Pause stops it the same way. Nothing is lost."
           data-i18n-title="transport.timelineReplay.hint"
           data-i18n="transport.timelineReplay"
         >
@@ -2104,9 +2095,8 @@ try {
         </button>
         <button
           id="timelineRewind"
-          class="timeline-btn timeline-action"
+          class="timeline-btn"
           hidden=""
-          title="Make this moment the world and continue from it. The history after it is dropped."
           data-i18n-title="transport.timelineRewind.hint"
           data-i18n="transport.timelineRewind"
         >

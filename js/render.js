@@ -23,6 +23,7 @@ import {
   white_dwarfs,
   galaxies,
   accretion_disk_particles,
+  updatePhysics,
   DT,
   gravity_ripples,
   screen_to_world,
@@ -50,7 +51,7 @@ import {
 import { LOD_POINT_MAX_PX, hitRadius, starColor } from './bodyVisuals.js';
 import { setBloomLayer } from './bodyDraw.js';
 import { getWorldSeed } from './rng.js';
-import { state, SETTINGS } from './appState.js';
+import { state, SETTINGS, registerCommands } from './appState.js';
 import { barycenterOf } from './lesson/barycenter.js';
 import { sceneFor } from './lesson/evolutionScene.js';
 import { updateCanvasSummary } from './canvasSummary.js';
@@ -278,9 +279,8 @@ import { updateLightCurve, drawObserverIndicator } from './lightCurve.js';
 import { updateRadialVelocity } from './radialVelocity.js';
 import { updateAstrometry } from './astrometry.js';
 import { updateRotationCurve } from './rotationCurve.js';
-import { tickTimeline, isReplaying } from './timeline.js';
-import { integrateFrame } from './worldStep.js';
-import { MAX_SUBSTEPS, substepPlan, frameAdvance } from './timestep.js';
+import * as timeline from './timeline.js';
+import { STEP_SECONDS, substepPlan, frameAdvance } from './timestep.js';
 import { drawOverlays } from './overlays.js';
 import { readToken, onThemeChange } from './theme.js';
 import { auToSim, formatTime } from './units.js';
@@ -294,6 +294,7 @@ import {
 import {
   drawSandboxTools,
   drawInstrumentation,
+  tickSandboxTools,
   stopwatchRows,
 } from './sandboxTools.js';
 import {
@@ -2776,7 +2777,24 @@ export function setFixedStep(seconds) {
   fixedStepSeconds = Number.isFinite(seconds) && seconds > 0 ? seconds : 0;
 }
 
-export { MAX_SUBSTEPS, substepPlan };
+export { MAX_SUBSTEPS, substepPlan } from './timestep.js';
+
+/** One frame's simulated time: substeps, then the stopwatch and the label. */
+export function integrateFrame(dtSim) {
+  const { substeps, step } = substepPlan(dtSim, SETTINGS.max_timestep);
+  for (let i = 0; i < substeps; i++) updatePhysics(step);
+  tickSandboxTools(dtSim);
+  timeline.syncClock();
+}
+
+/** One step while paused and live (the period key). */
+export function stepOnce() {
+  if (!timeline.beginStep()) return false;
+  integrateFrame(frameAdvance(STEP_SECONDS, SETTINGS.sim_speed, DT));
+  timeline.recordFrame();
+  return true;
+}
+registerCommands({ stepOnce });
 
 // Original gameLoop function from index.html
 const gameLoop = timestamp => {
@@ -2789,7 +2807,7 @@ const gameLoop = timestamp => {
   const dt_sim = frameAdvance(dt_seconds, SETTINGS.sim_speed, DT);
   // While scrubbing, tickTimeline holds the restored frame and physics is
   // skipped so the recorded state is what gets drawn.
-  const mayIntegrate = tickTimeline(dt_sim);
+  const mayIntegrate = timeline.tickTimeline(dt_sim);
   if (!state.paused && mayIntegrate) {
     integrateFrame(dt_sim);
   }
@@ -2799,7 +2817,7 @@ const gameLoop = timestamp => {
   // scrub is never missed, and any input restores full rate immediately.
   const idle =
     state.paused &&
-    !isReplaying() &&
+    !timeline.isReplaying() &&
     frameStart > interactionUntil &&
     frameStart - lastIdleDraw < IDLE_REDRAW_MS;
 
