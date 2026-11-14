@@ -10,10 +10,7 @@
     ["steps.a-worse-star.unit","%"],
     ["steps.the-eclipse.unit","K"]
    ],
-   "numbered": [
-    ["steps.read-the-record.fields.0.hint","0.365"],
-    ["steps.read-the-record.fields.1.hint","0.050"]
-   ]
+   "numbered": []
   },
   "es": {
    "units": [],

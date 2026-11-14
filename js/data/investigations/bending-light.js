@@ -73,7 +73,7 @@ const BENDING_LIGHT = {
       body: `Set the mass to <strong>1</strong> solar mass and the closest
              approach to <strong>1</strong> solar radius: a ray that just
              grazes the Sun. Read how far it is bent, in arcseconds.`,
-      fields: [{ id: 'alpha', label: 'Bending', unit: 'arcsec', hint: '1.75' }],
+      fields: [{ id: 'alpha', label: 'Bending', unit: 'arcsec', want: '1.75' }],
       validate: v => {
         if (!Number.isFinite(v.alpha)) return null;
         if (Math.abs(v.alpha - 1.75) <= 0.02) {
@@ -120,7 +120,7 @@ const BENDING_LIGHT = {
       body: `Set the closest approach to <strong>100</strong> solar radii and read
              the bending.`,
       fields: [
-        { id: 'alpha', label: 'Bending', unit: 'arcsec', hint: '0.0175' },
+        { id: 'alpha', label: 'Bending', unit: 'arcsec', want: '0.0175' },
       ],
       validate: v => {
         if (!Number.isFinite(v.alpha)) return null;
@@ -148,8 +148,8 @@ const BENDING_LIGHT = {
              <strong>10</strong> solar masses. Read the bending, and the
              Schwarzschild radius 2GM/c².`,
       fields: [
-        { id: 'alpha', label: 'Bending', unit: 'arcsec', hint: '17.5' },
-        { id: 'rs', label: 'Schwarzschild radius', unit: 'km', hint: '29.5' },
+        { id: 'alpha', label: 'Bending', unit: 'arcsec', want: '17.5' },
+        { id: 'rs', label: 'Schwarzschild radius', unit: 'km', want: '29.5' },
       ],
       validate: v => {
         if (![v.alpha, v.rs].every(Number.isFinite)) return null;
@@ -215,7 +215,7 @@ const BENDING_LIGHT = {
           id: 'ratio',
           label: 'Closest approach in Schwarzschild radii',
           unit: '',
-          hint: '2.4',
+          want: '2.4',
         },
       ],
       validate: v => {

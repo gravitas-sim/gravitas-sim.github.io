@@ -13,17 +13,7 @@
     ["steps.the-sun-turns-unevenly.fields.0.unit","days"],
     ["steps.the-sun-turns-unevenly.fields.1.unit","days"]
    ],
-   "numbered": [
-    ["steps.read-the-period.fields.0.hint","4.00"],
-    ["steps.read-the-period.fields.1.hint","2.7"],
-    ["steps.a-real-star.fields.0.hint","4.86"],
-    ["steps.a-real-star.fields.1.hint","9.71"],
-    ["steps.a-second-star.fields.0.hint","2.555"],
-    ["steps.a-second-star.fields.1.hint","2.532"],
-    ["steps.a-second-star.fields.2.hint","2.579"],
-    ["steps.the-sun-turns-unevenly.fields.0.hint","4.00"],
-    ["steps.the-sun-turns-unevenly.fields.1.hint","4.71"]
-   ]
+   "numbered": []
   },
   "es": {
    "units": [],

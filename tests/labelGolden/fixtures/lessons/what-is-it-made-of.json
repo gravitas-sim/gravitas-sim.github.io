@@ -8,12 +8,7 @@
     ["steps.a-star-that-does-not-fit.fields.0.unit",""],
     ["steps.a-star-that-does-not-fit.fields.1.unit","g/cm3"]
    ],
-   "numbered": [
-    ["steps.the-stars-share-of-density.fields.0.hint","0.088"],
-    ["steps.the-stars-share-of-density.fields.1.hint","82"],
-    ["steps.a-star-that-does-not-fit.fields.0.hint","3.2"],
-    ["steps.a-star-that-does-not-fit.fields.1.hint","0.135"]
-   ]
+   "numbered": []
   },
   "es": {
    "units": [],

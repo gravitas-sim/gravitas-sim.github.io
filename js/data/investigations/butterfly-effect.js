@@ -478,14 +478,14 @@ const BUTTERFLY_EFFECT = {
           id: 'tau',
           label: 'e-folding time',
           unit: 'simulated seconds',
-          hint: '8.3',
+          want: '8.3',
         },
-        { id: 'r2', label: 'fit quality r²', unit: '', hint: '0.99' },
+        { id: 'r2', label: 'fit quality r²', unit: '', want: '0.99' },
         {
           id: 'growth',
           label: 'total growth factor',
           unit: '× the starting separation',
-          hint: '220',
+          want: '220',
         },
       ],
       validate: v => {

@@ -22,17 +22,7 @@
     ["steps.callisto-is-not-in-the-chain.fields.1.unit",""]
    ],
    "numbered": [
-    ["steps.three-periods.fields.0.hint","1.7682"],
-    ["steps.three-periods.fields.1.hint","3.5480"],
-    ["steps.three-periods.fields.2.hint","7.1413"],
-    ["steps.the-ratios.fields.0.hint","1.7682"],
-    ["steps.the-ratios.fields.1.hint","3.5480"],
-    ["steps.the-ratios.fields.2.hint","7.1413"],
-    ["steps.the-motions-together.fields.0.hint","1.7682"],
-    ["steps.the-motions-together.fields.1.hint","3.5480"],
-    ["steps.the-motions-together.fields.2.hint","7.1413"],
-    ["steps.the-motions-together.fields.6.label","Io − 3 × Europa + 2 × Ganymede, degrees a day"],
-    ["steps.callisto-is-not-in-the-chain.fields.0.hint","16.624"]
+    ["steps.the-motions-together.fields.6.label","Io − 3 × Europa + 2 × Ganymede, degrees a day"]
    ]
   },
   "es": {

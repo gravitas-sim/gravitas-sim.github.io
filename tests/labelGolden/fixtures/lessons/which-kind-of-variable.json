@@ -17,16 +17,7 @@
     ["steps.a-skewed-sky.unit","%"],
     ["steps.when-not-to-say.unit",""]
    ],
-   "numbered": [
-    ["steps.period-alone.fields.0.hint","83.3"],
-    ["steps.period-alone.fields.1.hint","29.2"],
-    ["steps.read-the-table.fields.0.hint","6"],
-    ["steps.read-the-table.fields.1.hint","7"],
-    ["steps.add-the-amplitude.fields.0.hint","90.8"],
-    ["steps.add-the-amplitude.fields.1.hint","54.2"],
-    ["steps.the-shape.fields.0.hint","99.2"],
-    ["steps.the-shape.fields.1.hint","100"]
-   ]
+   "numbered": []
   },
   "es": {
    "units": [],

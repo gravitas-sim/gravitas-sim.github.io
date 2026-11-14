@@ -603,7 +603,7 @@ const WHAT_IS_A_GRAVITATIONAL_WAVE = {
           id: 'toy',
           label: 'Practice: a 10 m rod that stretches by 1 mm has a strain of…',
           unit: '',
-          hint: '0.0001',
+          want: '0.0001',
         },
         {
           id: 'real',

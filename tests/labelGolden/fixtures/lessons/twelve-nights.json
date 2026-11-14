@@ -9,14 +9,8 @@
     ["steps.read-what-you-got.fields.1.unit","d"]
    ],
    "numbered": [
-    ["steps.measure-the-window.fields.0.hint","4.96"],
-    ["steps.measure-the-window.fields.1.hint","3.9"],
     ["steps.measure-the-window-power.fields.0.label","Spread out, best moment (window use 0)"],
-    ["steps.measure-the-window-power.fields.0.hint","0.998"],
-    ["steps.measure-the-window-power.fields.1.label","Spread out, both ends (window use 1)"],
-    ["steps.measure-the-window-power.fields.1.hint","0.701"],
-    ["steps.read-what-you-got.fields.0.hint","0.78"],
-    ["steps.read-what-you-got.fields.1.hint","3.52"]
+    ["steps.measure-the-window-power.fields.1.label","Spread out, both ends (window use 1)"]
    ]
   },
   "es": {

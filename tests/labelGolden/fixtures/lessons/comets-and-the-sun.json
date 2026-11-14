@@ -12,13 +12,7 @@
     ["steps.the-real-halley.fields.0.unit","AU"],
     ["steps.the-real-halley.fields.1.unit","K"]
    ],
-   "numbered": [
-    ["steps.orbit-ends.fields.0.hint","5.79"],
-    ["steps.orbit-ends.fields.1.hint","17.84"],
-    ["steps.heat-at-the-ends.fields.0.hint","5.79"],
-    ["steps.heat-at-the-ends.fields.1.hint","17.84"],
-    ["steps.the-real-halley.fields.0.hint","0.586"]
-   ]
+   "numbered": []
   },
   "es": {
    "units": [],

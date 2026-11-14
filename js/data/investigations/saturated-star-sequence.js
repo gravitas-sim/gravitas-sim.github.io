@@ -115,7 +115,7 @@ export const THE_SATURATED_STAR = {
           id: 'r',
           label: 'Share of the true flux it would read',
           unit: '%',
-          hint: '30',
+          want: '30',
         },
       ],
       validate: v => {
@@ -149,7 +149,7 @@ export const THE_SATURATED_STAR = {
           id: 'r',
           label: 'Share of the true flux it would read',
           unit: '%',
-          hint: '30',
+          want: '30',
         },
         {
           id: 'dm',
@@ -251,13 +251,13 @@ export const THE_SATURATED_STAR = {
           id: 'k',
           label: 'Faint stars refused (of N1, N2, C)',
           unit: '',
-          hint: '2',
+          want: '2',
         },
         {
           id: 'p',
           label: 'Pixels that received bled charge',
           unit: 'pixels',
-          hint: '85',
+          want: '85',
         },
       ],
       validate: v => {
@@ -366,12 +366,12 @@ export const THE_SATURATED_STAR_DEEPER = {
              response is 1 percent below linear, and what a full pixel reads. Then give the
              limit as a percentage of the full well.`,
       fields: [
-        { id: 'lim', label: 'Linear limit', unit: 'electrons', hint: '45330' },
+        { id: 'lim', label: 'Linear limit', unit: 'electrons', want: '45330' },
         {
           id: 'plateau',
           label: 'What a full pixel reads',
           unit: 'electrons',
-          hint: '47616',
+          want: '47616',
         },
         {
           id: 'pct',
@@ -412,7 +412,7 @@ export const THE_SATURATED_STAR_DEEPER = {
           id: 'm',
           label: 'Brightest magnitude still measured',
           unit: 'V',
-          hint: '12.5',
+          want: '12.5',
         },
       ],
       validate: v => {
@@ -450,7 +450,7 @@ export const THE_SATURATED_STAR_DEEPER = {
           id: 'share',
           label: 'Largest share of the light in one pixel',
           unit: '%',
-          hint: '11',
+          want: '11',
         },
         {
           id: 'f',
@@ -573,11 +573,11 @@ export const THE_SATURATED_STAR_DEEPER = {
           id: 'lo12',
           label: 'Smallest share at 1.2 px',
           unit: '%',
-          hint: '24',
+          want: '24',
         },
-        { id: 'hi12', label: 'Largest share at 1.2 px', unit: '%', hint: '45' },
-        { id: 'lo28', label: 'Smallest share at 2.8 px', unit: '%', hint: '9' },
-        { id: 'hi28', label: 'Largest share at 2.8 px', unit: '%', hint: '11' },
+        { id: 'hi12', label: 'Largest share at 1.2 px', unit: '%', want: '45' },
+        { id: 'lo28', label: 'Smallest share at 2.8 px', unit: '%', want: '9' },
+        { id: 'hi28', label: 'Largest share at 2.8 px', unit: '%', want: '11' },
       ],
       validate: v => {
         if (![v.lo12, v.hi12, v.lo28, v.hi28].every(Number.isFinite))
@@ -614,8 +614,8 @@ export const THE_SATURATED_STAR_DEEPER = {
              <strong>1.2</strong> and at <strong>2.8</strong> pixels; the instrument gives
              the ratio.`,
       fields: [
-        { id: 's12', label: 'Variation at 1.2 px', unit: '%', hint: '0.27' },
-        { id: 's28', label: 'Variation at 2.8 px', unit: '%', hint: '0.035' },
+        { id: 's12', label: 'Variation at 1.2 px', unit: '%', want: '0.27' },
+        { id: 's28', label: 'Variation at 2.8 px', unit: '%', want: '0.035' },
         {
           id: 'ratio',
           label: 'Ratio (1.2 over 2.8)',

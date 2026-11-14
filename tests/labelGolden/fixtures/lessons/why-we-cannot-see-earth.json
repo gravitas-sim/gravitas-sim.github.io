@@ -7,9 +7,7 @@
     ["steps.young-giant-angle.fields.0.unit",""]
    ],
    "numbered": [
-    ["steps.read-the-contrast.fields.0.label","Reflected contrast, in units of 10⁻¹⁰"],
-    ["steps.read-the-contrast.fields.0.hint","1.18"],
-    ["steps.young-giant-angle.fields.0.hint","70.5"]
+    ["steps.read-the-contrast.fields.0.label","Reflected contrast, in units of 10⁻¹⁰"]
    ]
   },
   "es": {

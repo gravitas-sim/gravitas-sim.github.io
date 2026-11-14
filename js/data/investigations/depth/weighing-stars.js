@@ -31,12 +31,12 @@ export default {
  (2σ<sub>P</sub>/P)²). The orbit size and the period are the ones
  you entered in the weighing step.`,
       fields: [
-        { id: 'sa', label: 'How far off a could be', unit: 'AU', hint: '0.1' },
+        { id: 'sa', label: 'How far off a could be', unit: 'AU', want: '0.1' },
         {
           id: 'sp',
           label: 'How far off P could be',
           unit: 'years',
-          hint: '0.2',
+          want: '0.2',
         },
         {
           id: 'a_in',
@@ -95,7 +95,7 @@ export default {
  and is no wider than twice that range's half-width.`,
       prompt: 'Total mass of the pair, with its uncertainty',
       unit: 'M☉',
-      placeholder: 'e.g. 4.0 ± 0.5',
+      placeholder: 'a value, then ± its uncertainty',
       answer: 4,
       tolerance: 0.5,
       agrees: [{ sid: 'weigh-the-pair', id: 'total', at: { a: 4, p: 4 } }],
@@ -141,7 +141,7 @@ export default {
  √((σ<sub>M</sub>/M)² + (σ<sub>f</sub>/f)²).`,
       prompt: 'Mass of Star A, with its uncertainty',
       unit: 'M☉',
-      placeholder: 'e.g. 3.0 ± 0.3',
+      placeholder: 'a value, then ± its uncertainty',
       answer: 3,
       tolerance: 0.35,
       hints: {

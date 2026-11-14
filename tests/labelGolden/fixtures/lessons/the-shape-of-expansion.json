@@ -9,16 +9,7 @@
     ["steps.the-published-interval.unit",""],
     ["steps.the-degeneracy-check.fields.1.unit","km/s/Mpc"]
    ],
-   "numbered": [
-    ["steps.a-matter-only-universe.fields.0.hint","3303"],
-    ["steps.a-matter-only-universe.fields.1.hint","1615"],
-    ["steps.the-best-fit.fields.0.hint","0.361"],
-    ["steps.the-best-fit.fields.1.hint","0.349"],
-    ["steps.the-best-fit.fields.2.hint","0.372"],
-    ["steps.the-usual-value.fields.0.hint","30.9"],
-    ["steps.the-degeneracy-check.fields.0.hint","1688"],
-    ["steps.the-degeneracy-check.fields.1.hint","65.3"]
-   ]
+   "numbered": []
   },
   "es": {
    "units": [],

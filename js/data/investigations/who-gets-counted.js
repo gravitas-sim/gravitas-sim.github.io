@@ -100,8 +100,8 @@ const WHO_GETS_COUNTED = {
              survey <strong>counted</strong> and what share of all the stars in
              the cone that is.`,
       fields: [
-        { id: 'counted', label: 'Stars counted', unit: '', hint: '167' },
-        { id: 'share', label: 'Share of the stars', unit: '%', hint: '6.3' },
+        { id: 'counted', label: 'Stars counted', unit: '', want: '167' },
+        { id: 'share', label: 'Share of the stars', unit: '%', want: '6.3' },
       ],
       validate: v => {
         if (![v.counted, v.share].every(Number.isFinite)) return null;
@@ -129,8 +129,8 @@ const WHO_GETS_COUNTED = {
              magnitudes fainter is counted, which is forty times fainter in
              light. Read the number counted and the share again.`,
       fields: [
-        { id: 'counted', label: 'Stars counted', unit: '', hint: '1289' },
-        { id: 'share', label: 'Share of the stars', unit: '%', hint: '49' },
+        { id: 'counted', label: 'Stars counted', unit: '', want: '1289' },
+        { id: 'share', label: 'Share of the stars', unit: '%', want: '49' },
       ],
       validate: v => {
         if (![v.counted, v.share].every(Number.isFinite)) return null;
@@ -190,8 +190,8 @@ const WHO_GETS_COUNTED = {
              limit: a Sun-like star (absolute magnitude 4.7) and a red dwarf
              (absolute magnitude 10). Read both.`,
       fields: [
-        { id: 'sun', label: 'A star like the Sun', unit: 'pc', hint: '711' },
-        { id: 'dwarf', label: 'A red dwarf', unit: 'pc', hint: '63' },
+        { id: 'sun', label: 'A star like the Sun', unit: 'pc', want: '711' },
+        { id: 'dwarf', label: 'A red dwarf', unit: 'pc', want: '63' },
       ],
       validate: v => {
         if (![v.sun, v.dwarf].every(Number.isFinite)) return null;
@@ -219,12 +219,12 @@ const WHO_GETS_COUNTED = {
              of every star in the cone, and of the stars the survey counted. A
              larger number is a fainter star.`,
       fields: [
-        { id: 'all', label: 'Mean of every star', unit: 'mag', hint: '8.3' },
+        { id: 'all', label: 'Mean of every star', unit: 'mag', want: '8.3' },
         {
           id: 'counted',
           label: 'Mean of the counted stars',
           unit: 'mag',
-          hint: '3.8',
+          want: '3.8',
         },
       ],
       validate: v => {

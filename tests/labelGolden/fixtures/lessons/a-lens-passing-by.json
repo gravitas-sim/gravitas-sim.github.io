@@ -17,17 +17,9 @@
     ["steps.a-star-with-a-size.fields.0.unit",""]
    ],
    "numbered": [
-    ["steps.the-peak.fields.0.hint","10"],
-    ["steps.how-long.fields.0.hint","16.6"],
     ["steps.how-long.fields.1.label","Brighter than 1.34"],
-    ["steps.how-long.fields.1.hint","33"],
-    ["steps.a-faster-lens.fields.0.hint","8.3"],
     ["steps.one-curve-three-lenses.fields.0.label","At 2 kpc and 100 km/s"],
-    ["steps.one-curve-three-lenses.fields.0.hint","0.075"],
-    ["steps.one-curve-three-lenses.fields.1.label","At 6 kpc and 300 km/s"],
-    ["steps.one-curve-three-lenses.fields.1.hint","0.68"],
-    ["steps.blended-light.fields.0.hint","5.5"],
-    ["steps.a-star-with-a-size.fields.0.hint","20"]
+    ["steps.one-curve-three-lenses.fields.1.label","At 6 kpc and 300 km/s"]
    ]
   },
   "es": {

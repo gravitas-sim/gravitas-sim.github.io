@@ -119,8 +119,8 @@ export const WEIGHING_THE_STARS = {
              <strong>semi-amplitude</strong> of each curve, K1 for star 1 and K2 for star 2,
              in km/s: half the distance from the highest to the lowest velocity.`,
       fields: [
-        { id: 'a', label: 'K1 (star 1)', unit: 'km/s', hint: '45.2' },
-        { id: 'b', label: 'K2 (star 2)', unit: 'km/s', hint: '61.0' },
+        { id: 'a', label: 'K1 (star 1)', unit: 'km/s', want: '45.2' },
+        { id: 'b', label: 'K2 (star 2)', unit: 'km/s', want: '61.0' },
       ],
       validate: v => {
         if (![v.a, v.b].every(Number.isFinite)) return null;
@@ -192,13 +192,13 @@ export const WEIGHING_THE_STARS = {
           id: 'a',
           label: 'Mass of star 1 at 60 degrees',
           unit: 'solar masses',
-          hint: '0.90',
+          want: '0.90',
         },
         {
           id: 'b',
           label: 'Mass of star 2 at 60 degrees',
           unit: 'solar masses',
-          hint: '0.66',
+          want: '0.66',
         },
       ],
       validate: v => {
@@ -285,12 +285,12 @@ export const WEIGHING_THE_STARS_DEEPER = {
              the two stars and the uncertainty of the first, in units of 0.001 solar
              masses.`,
       fields: [
-        { id: 'a', label: 'M1', unit: 'solar masses', hint: '1.303' },
-        { id: 'b', label: 'M2', unit: 'solar masses', hint: '1.104' },
+        { id: 'a', label: 'M1', unit: 'solar masses', want: '1.303' },
+        { id: 'b', label: 'M2', unit: 'solar masses', want: '1.104' },
         {
           id: 'u',
           label: 'Uncertainty of M1 (in units of 0.001)',
-          hint: '7.6',
+          want: '7.6',
         },
       ],
       validate: v => {
@@ -366,13 +366,13 @@ export const WEIGHING_THE_STARS_DEEPER = {
           id: 'f',
           label: 'Mass function',
           unit: 'solar masses',
-          hint: '0.232',
+          want: '0.232',
         },
         {
           id: 'm',
           label: 'Minimum companion mass',
           unit: 'solar masses',
-          hint: '1.10',
+          want: '1.10',
         },
       ],
       validate: v => {
@@ -404,8 +404,8 @@ export const WEIGHING_THE_STARS_DEEPER = {
              and the radius of the <strong>lighter star of the hot pair</strong> (system D,
              star 2).`,
       fields: [
-        { id: 'm', label: 'Mass', unit: 'solar masses', hint: '2.01' },
-        { id: 'r', label: 'Radius', unit: 'R☉', hint: '1.63' },
+        { id: 'm', label: 'Mass', unit: 'solar masses', want: '2.01' },
+        { id: 'r', label: 'Radius', unit: 'R☉', want: '1.63' },
       ],
       validate: v => {
         if (![v.m, v.r].every(Number.isFinite)) return null;
@@ -436,9 +436,9 @@ export const WEIGHING_THE_STARS_DEEPER = {
              <strong>n</strong> in L ∝ M<sup>n</sup> between them:
              n = log(L<sub>D1</sub>/L<sub>A1</sub>) / log(M<sub>D1</sub>/M<sub>A1</sub>).`,
       fields: [
-        { id: 'a', label: 'Luminosity of D1', unit: 'L☉', hint: '54' },
-        { id: 'b', label: 'Luminosity of A1', unit: 'L☉', hint: '3.4' },
-        { id: 'n', label: 'Exponent n', hint: '4.1' },
+        { id: 'a', label: 'Luminosity of D1', unit: 'L☉', want: '54' },
+        { id: 'b', label: 'Luminosity of A1', unit: 'L☉', want: '3.4' },
+        { id: 'n', label: 'Exponent n', want: '4.1' },
       ],
       validate: v => {
         if (![v.a, v.b, v.n].every(Number.isFinite)) return null;
@@ -478,15 +478,15 @@ export const WEIGHING_THE_STARS_DEEPER = {
           id: 'a',
           label: 'M1 at 52 degrees',
           unit: 'solar masses',
-          hint: '1.19',
+          want: '1.19',
         },
         {
           id: 'b',
           label: 'M2 at 52 degrees',
           unit: 'solar masses',
-          hint: '0.88',
+          want: '0.88',
         },
-        { id: 'r', label: 'True mass over minimum mass', hint: '2.04' },
+        { id: 'r', label: 'True mass over minimum mass', want: '2.04' },
       ],
       validate: v => {
         if (![v.a, v.b, v.r].every(Number.isFinite)) return null;
@@ -654,8 +654,8 @@ export const WEIGHING_THE_STARS_DEEPER = {
              mass gives the <strong>mass fraction</strong> of star 2, and the orbit with the
              parallax gives the <strong>mass sum</strong>. Read both.`,
       fields: [
-        { id: 'b', label: 'Mass fraction of star 2', hint: '0.400' },
-        { id: 's', label: 'Mass sum', unit: 'solar masses', hint: '1.31' },
+        { id: 'b', label: 'Mass fraction of star 2', want: '0.400' },
+        { id: 's', label: 'Mass sum', unit: 'solar masses', want: '1.31' },
       ],
       validate: v => {
         if (![v.b, v.s].every(Number.isFinite)) return null;

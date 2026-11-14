@@ -237,13 +237,13 @@ export const HOW_MANY_EARTHS_DEEPER = {
           id: 'a',
           label: 'Rate, in planets per star',
           unit: '',
-          hint: '0.116',
+          want: '0.116',
         },
         {
           id: 'b',
           label: 'Upper end of the 68 percent interval, in planets per star',
           unit: '',
-          hint: '0.166',
+          want: '0.166',
         },
       ],
       validate: v => {
@@ -275,13 +275,13 @@ export const HOW_MANY_EARTHS_DEEPER = {
           id: 'a',
           label: 'Upper limit at 95 percent, in planets per star',
           unit: '',
-          hint: '0.031',
+          want: '0.031',
         },
         {
           id: 'b',
           label: 'Planets listed for every planet per star',
           unit: '',
-          hint: '96',
+          want: '96',
         },
       ],
       validate: v => {

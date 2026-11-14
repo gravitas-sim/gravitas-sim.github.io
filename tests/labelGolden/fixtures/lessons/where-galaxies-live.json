@@ -11,15 +11,8 @@
     ["steps.that-in-magnitudes.unit","mag"]
    ],
    "numbered": [
-    ["steps.the-near-sample.fields.0.hint","363"],
-    ["steps.the-near-sample.fields.1.hint","170"],
-    ["steps.the-whole-strip.fields.0.hint","2911"],
-    ["steps.the-whole-strip.fields.1.hint","500"],
-    ["steps.the-clumping.fields.0.hint","9.8"],
     ["steps.the-thinning.fields.0.label","At 100 to 125 Mpc"],
-    ["steps.the-thinning.fields.0.hint","15800"],
-    ["steps.the-thinning.fields.1.label","At 300 to 325 Mpc"],
-    ["steps.the-thinning.fields.1.hint","4860"]
+    ["steps.the-thinning.fields.1.label","At 300 to 325 Mpc"]
    ]
   },
   "es": {

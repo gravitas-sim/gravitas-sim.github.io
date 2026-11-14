@@ -43,7 +43,7 @@ export const WHAT_IS_A_MEASUREMENT_DEEPER = {
              uncertainty large enough to overlap anything has told nobody anything.`,
       prompt: 'The mean x position, with its uncertainty',
       unit: 'px',
-      placeholder: 'e.g. 12.3 ± 0.4',
+      placeholder: 'a value, then ± its uncertainty',
       answer: 31.1,
       tolerance: 0.1,
       maxUncertainty: 0.8,
@@ -94,13 +94,13 @@ export const WHAT_IS_A_MEASUREMENT_DEEPER = {
           id: 'sex',
           label: 'Standard error of x, 30 marks',
           unit: 'px',
-          hint: '0.14',
+          want: '0.14',
         },
         {
           id: 'inse',
           label: 'Error of the mean in standard errors',
           unit: '',
-          hint: '6.2',
+          want: '6.2',
         },
       ],
       validate: v => {
@@ -165,12 +165,12 @@ export const WHAT_DOES_PLUS_MINUS_CLAIM_DEEPER = {
              carries an uncertainty of its own. Set <strong>Repeats</strong> to 100 and
              the interval to ±1 σ. Read the coverage and its own uncertainty.`,
       fields: [
-        { id: 'share', label: 'Coverage', unit: '%', hint: '70.0' },
+        { id: 'share', label: 'Coverage', unit: '%', want: '70.0' },
         {
           id: 'se',
           label: 'Uncertainty of the coverage',
           unit: '%',
-          hint: '4.6',
+          want: '4.6',
         },
       ],
       validate: v => {
@@ -514,7 +514,7 @@ export const MEASURING_THE_MOON_DEEPER = {
              give overlaps the range the plain allows, and is no wider than 60 km.`,
       prompt: 'The diameter, with its uncertainty',
       unit: 'km',
-      placeholder: 'e.g. 600 ± 30',
+      placeholder: 'a value, then ± its uncertainty',
       answer: 634,
       tolerance: 40,
       maxUncertainty: 60,
@@ -541,13 +541,13 @@ export const MEASURING_THE_MOON_DEEPER = {
           id: 'off',
           label: 'Distance from the disc’s center, in disc radii',
           unit: '',
-          hint: '0.89',
+          want: '0.89',
         },
         {
           id: 'share',
           label: 'Width along that direction',
           unit: '%',
-          hint: '45',
+          want: '45',
         },
       ],
       validate: v => {
@@ -696,12 +696,12 @@ export const HOW_FAR_IS_THAT_STAR_DEEPER = {
              <strong>Correction</strong> to 1.0 mas, with 14 epochs and the parallax fit, and read
              the absolute parallax and the distance.`,
       fields: [
-        { id: 'abs', label: 'Parallax, absolute', unit: 'mas', hint: '61.3' },
+        { id: 'abs', label: 'Parallax, absolute', unit: 'mas', want: '61.3' },
         {
           id: 'd',
           label: 'Distance, 1 over the parallax',
           unit: 'pc',
-          hint: '16.3',
+          want: '16.3',
         },
       ],
       validate: v => {
@@ -960,8 +960,8 @@ export const WHICH_SURFACE_IS_OLDER_DEEPER = {
       body: `Raise the diameter on the Moon to <strong>50 km</strong>. Fewer craters qualify. Read how many the mare has,
              and the <strong>upper end</strong> of the interval of the density ratio.`,
       fields: [
-        { id: 'mare', label: 'Craters in the lunar mare', hint: '2' },
-        { id: 'hi', label: 'Upper end of the interval', hint: '84.8' },
+        { id: 'mare', label: 'Craters in the lunar mare', want: '2' },
+        { id: 'hi', label: 'Upper end of the interval', want: '84.8' },
       ],
       validate: v => {
         if (![v.mare, v.hi].every(Number.isFinite)) return null;
@@ -1026,9 +1026,9 @@ export const WHICH_SURFACE_IS_OLDER_DEEPER = {
         {
           id: 'ratio',
           label: 'Density ratio, highland over plains',
-          hint: '3.00',
+          want: '3.00',
         },
-        { id: 'lo', label: 'Lower end of the interval', hint: '0.91' },
+        { id: 'lo', label: 'Lower end of the interval', want: '0.91' },
       ],
       validate: v => {
         if (![v.ratio, v.lo].every(Number.isFinite)) return null;
@@ -1056,8 +1056,8 @@ export const WHICH_SURFACE_IS_OLDER_DEEPER = {
       body: `Set the Moon to <strong>100 km</strong>. The highland has craters this large and the mare has none. Read how many the
              highland has and the lower end of the interval of the ratio.`,
       fields: [
-        { id: 'highland', label: 'Craters in the lunar highland', hint: '5' },
-        { id: 'lo', label: 'Lower end of the interval', hint: '1.02' },
+        { id: 'highland', label: 'Craters in the lunar highland', want: '5' },
+        { id: 'lo', label: 'Lower end of the interval', want: '1.02' },
       ],
       validate: v => {
         if (![v.highland, v.lo].every(Number.isFinite)) return null;
@@ -1091,8 +1091,8 @@ export const CRATERS_BY_SIZE_DEEPER = {
       body: `Choose the <strong>lunar highland</strong> and raise the fit to <strong>60 km</strong>. Read how many craters
              are in the fit and the upper end of the interval.`,
       fields: [
-        { id: 'n', label: 'Craters in the fit', hint: '14' },
-        { id: 'hi', label: 'Upper end of the interval', hint: '3.56' },
+        { id: 'n', label: 'Craters in the fit', want: '14' },
+        { id: 'hi', label: 'Upper end of the interval', want: '3.56' },
       ],
       validate: v => {
         if (![v.n, v.hi].every(Number.isFinite)) return null;
@@ -1124,7 +1124,7 @@ export const CRATERS_BY_SIZE_DEEPER = {
         {
           id: 'unbiased',
           label: 'Index, unbiased form (n − 1) / S',
-          hint: '2.97',
+          want: '2.97',
         },
       ],
       validate: v => {
@@ -1227,12 +1227,12 @@ export const WHAT_A_CRATER_DIAMETER_IS_WORTH_DEEPER = {
       body: `Set the rim point to <strong>5 pixels</strong> from the center, a crater 10 pixels across. Read the diameter and the
              uncertainty from <strong>placing the circle</strong>, as a percentage.`,
       fields: [
-        { id: 'D', label: 'Diameter', unit: 'km', hint: '22.4' },
+        { id: 'D', label: 'Diameter', unit: 'km', want: '22.4' },
         {
           id: 'fit',
           label: 'Uncertainty from placing the circle',
           unit: '%',
-          hint: '8.2',
+          want: '8.2',
         },
       ],
       validate: v => {
@@ -1266,7 +1266,7 @@ export const WHAT_A_CRATER_DIAMETER_IS_WORTH_DEEPER = {
           id: 'p',
           label: 'Chance the crater is at least 110 km across',
           unit: '%',
-          hint: '63',
+          want: '63',
         },
       ],
       validate: v => {
@@ -1329,7 +1329,7 @@ export const WHAT_A_CRATER_DIAMETER_IS_WORTH_DEEPER = {
       body: `Switch <strong>The catalog&rsquo;s circles</strong> on. The catalog lists a crater under the center of your circle.
              Read its diameter.`,
       fields: [
-        { id: 'D', label: 'The catalog’s diameter', unit: 'km', hint: '112.2' },
+        { id: 'D', label: 'The catalog’s diameter', unit: 'km', want: '112.2' },
       ],
       validate: v => {
         if (!Number.isFinite(v.D)) return null;
@@ -1373,13 +1373,13 @@ export const WHAT_IS_IN_THIS_FIELD_DEEPER = {
           id: 'm50',
           label: 'Magnitude at 50 percent found',
           unit: 'mag',
-          hint: '-2.14',
+          want: '-2.14',
         },
         {
           id: 'm90',
           label: 'Magnitude at 90 percent found',
           unit: 'mag',
-          hint: '-2.53',
+          want: '-2.53',
         },
       ],
       validate: v => {
@@ -1452,13 +1452,13 @@ export const WHAT_IS_IN_THIS_FIELD_DEEPER = {
           id: 'expected',
           label: 'Stars of the field this curve says a search finds',
           unit: '',
-          hint: '27.2',
+          want: '27.2',
         },
         {
           id: 'found',
           label: 'Stars of the field the search listed',
           unit: '',
-          hint: '30',
+          want: '30',
         },
       ],
       validate: v => {
@@ -1492,13 +1492,13 @@ export const WHAT_IS_IN_THIS_FIELD_DEEPER = {
           id: 'm50',
           label: 'Magnitude at 50 percent found',
           unit: 'mag',
-          hint: '-2.79',
+          want: '-2.79',
         },
         {
           id: 'bright',
           label: 'Found, magnitude −3.4 to −3.1',
           unit: '%',
-          hint: '90',
+          want: '90',
         },
       ],
       validate: v => {

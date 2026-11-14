@@ -97,19 +97,19 @@ const TWO_PERIODOGRAMS = {
           id: 'ls',
           label: 'Lomb-Scargle best period',
           unit: 'd',
-          hint: '1.7689',
+          want: '1.7689',
         },
         {
           id: 'bls',
           label: 'Box least squares best period',
           unit: 'd',
-          hint: '3.524',
+          want: '3.524',
         },
         {
           id: 'ratio',
           label: 'Lomb-Scargle over box',
           unit: '',
-          hint: '0.502',
+          want: '0.502',
         },
       ],
       validate: v => {
@@ -176,9 +176,9 @@ const TWO_PERIODOGRAMS = {
              error bar is scaled up because the points scatter about 2.8 times their
              error bars. Enter the duration, the depth and the signal-to-noise ratio.`,
       fields: [
-        { id: 'duration', label: 'Box duration', unit: 'h', hint: '2.5' },
-        { id: 'depth', label: 'Box depth', unit: 'ppm', hint: '14582' },
-        { id: 'snr', label: 'Depth S/N', unit: '', hint: '191' },
+        { id: 'duration', label: 'Box duration', unit: 'h', want: '2.5' },
+        { id: 'depth', label: 'Box depth', unit: 'ppm', want: '14582' },
+        { id: 'snr', label: 'Depth S/N', unit: '', want: '191' },
       ],
       validate: v => {
         if (![v.duration, v.depth, v.snr].every(Number.isFinite)) return null;
@@ -214,13 +214,13 @@ const TWO_PERIODOGRAMS = {
           id: 'difference',
           label: 'Box period minus fitted period',
           unit: 'd',
-          hint: '-0.00058',
+          want: '-0.00058',
         },
         {
           id: 'sigmas',
           label: 'In the fit’s uncertainties',
           unit: '',
-          hint: '-19',
+          want: '-19',
         },
       ],
       validate: v => {

@@ -230,7 +230,7 @@ export default {
       title: 'Mide un cambio de longitud',
       fields: [
         {
-          hint: '0,0001',
+          want: '0,0001',
           label:
             'Práctica: una barra de 10 m que se estira 1 mm tiene una deformación de…',
         },

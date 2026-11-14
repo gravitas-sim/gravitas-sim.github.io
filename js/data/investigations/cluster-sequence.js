@@ -113,8 +113,8 @@ export const TWO_CLUSTERS_TWO_AGES = {
              gigayears and the <strong>distance modulus</strong> in magnitudes. The
              orange curve is the best isochrone; the interval is one sigma.`,
       fields: [
-        { id: 'a', label: 'Age of cluster A', unit: 'Gyr', hint: '2.02' },
-        { id: 'd', label: 'Distance modulus', unit: 'mag', hint: '12.10' },
+        { id: 'a', label: 'Age of cluster A', unit: 'Gyr', want: '2.02' },
+        { id: 'd', label: 'Distance modulus', unit: 'mag', want: '12.10' },
       ],
       validate: v => {
         if (![v.a, v.d].every(Number.isFinite)) return null;
@@ -141,8 +141,8 @@ export const TWO_CLUSTERS_TWO_AGES = {
       body: `Choose cluster B in the panel, at the same metallicity, and read its age
              and distance modulus.`,
       fields: [
-        { id: 'a', label: 'Age of cluster B', unit: 'Gyr', hint: '3.16' },
-        { id: 'd', label: 'Distance modulus', unit: 'mag', hint: '12.09' },
+        { id: 'a', label: 'Age of cluster B', unit: 'Gyr', want: '3.16' },
+        { id: 'd', label: 'Distance modulus', unit: 'mag', want: '12.09' },
       ],
       validate: v => {
         if (![v.a, v.d].every(Number.isFinite)) return null;
@@ -173,7 +173,7 @@ export const TWO_CLUSTERS_TWO_AGES = {
           id: 'd',
           label: 'Age of B minus age of A',
           unit: 'Gyr',
-          hint: '1.14',
+          want: '1.14',
         },
       ],
       validate: v => {
@@ -259,8 +259,8 @@ export const TWO_CLUSTERS_TWO_AGES_DEEPER = {
              metallicity to <strong>&minus;0.50</strong>, read the age, then to
              <strong>0</strong> (the Sun&rsquo;s) and read it again.`,
       fields: [
-        { id: 'p', label: 'Age at [Fe/H] −0.50', unit: 'Gyr', hint: '3.35' },
-        { id: 's', label: 'Age at [Fe/H] 0', unit: 'Gyr', hint: '1.47' },
+        { id: 'p', label: 'Age at [Fe/H] −0.50', unit: 'Gyr', want: '3.35' },
+        { id: 's', label: 'Age at [Fe/H] 0', unit: 'Gyr', want: '1.47' },
       ],
       validate: v => {
         if (![v.p, v.s].every(Number.isFinite)) return null;
@@ -324,12 +324,12 @@ export const TWO_CLUSTERS_TWO_AGES_DEEPER = {
              &minus;0.50 the panel reports B&rsquo;s age as older than the models reach:
              the interval is open.`,
       fields: [
-        { id: 'b', label: 'Age of B at [Fe/H] 0', unit: 'Gyr', hint: '2.24' },
+        { id: 'b', label: 'Age of B at [Fe/H] 0', unit: 'Gyr', want: '2.24' },
         {
           id: 'd',
           label: 'Age of B minus age of A at 0',
           unit: 'Gyr',
-          hint: '0.78',
+          want: '0.78',
         },
       ],
       validate: v => {
@@ -399,9 +399,9 @@ export const TWO_CLUSTERS_TWO_AGES_DEEPER = {
           id: 'd',
           label: 'Distance modulus with binaries',
           unit: 'mag',
-          hint: '12.04',
+          want: '12.04',
         },
-        { id: 'e', label: 'True minus fitted', unit: 'mag', hint: '0.06' },
+        { id: 'e', label: 'True minus fitted', unit: 'mag', want: '0.06' },
       ],
       validate: v => {
         if (![v.d, v.e].every(Number.isFinite)) return null;

@@ -289,7 +289,7 @@ describe('every validator accepts what the instrument reads and refuses a wrong 
     const bad = Object.fromEntries(Object.keys(values).map(k => [k, 12345]));
     expect(s.validate(bad).level).toBe('error');
     // A step's own hint values are accepted (the author check's rule).
-    const hints = Object.fromEntries(s.fields.map(f => [f.id, Number(f.hint)]));
+    const hints = Object.fromEntries(s.fields.map(f => [f.id, Number(f.want)]));
     expect(s.validate(hints).level).toBe('ok');
   };
   test('What Is a Measurement?', () => {
