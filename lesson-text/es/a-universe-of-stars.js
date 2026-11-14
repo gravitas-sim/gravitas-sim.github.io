@@ -1,0 +1,625 @@
+// =============================================================================
+// a-universe-of-stars - es
+// -----------------------------------------------------------------------------
+// A shadow of ../a-universe-of-stars.js carrying only its words. Laid over the
+// English lesson by mergeTranslation() in ../i18n.js, so anything absent here
+// keeps its English and nothing here can reach the lesson's machinery: no
+// scenario name, no seed, no widget id, no numeric answer, no probe.
+//
+// Arrays line up by index with the English. `null` means "not translated";
+// that entry keeps its English.
+// =============================================================================
+
+export default {
+  title: 'Un universo de estrellas',
+  subtitle:
+    'Tamaño, color y el diagrama H-R, a partir de ocho estrellas modeladas',
+  duration: '70-90 min',
+  level: 'Astronomía introductoria',
+  objectives: [
+    'Distinguir masa, radio, temperatura, luminosidad y brillo aparente',
+    'Leer una posición en un diagrama H-R, y saber por qué la temperatura va al revés',
+    'Usar la relación entre temperatura, luminosidad y radio en ambos sentidos',
+    'Decir qué es la secuencia principal y nombrar dos tipos de estrella que no están en ella',
+    'Explicar por qué una gigante es una etapa de una vida y no una estrella pesada',
+    'Explicar por qué una estrella con más combustible puede agotarlo antes',
+    'Reconocer un efecto de selección en una muestra de estrellas',
+    'Distinguir una observación de un modelo, y decir cuál de los dos es un número dado',
+    'Leer un rasgo de absorción en un espectro real y decir qué establece que un color no puede establecer',
+  ],
+  steps: {
+    'three-stars-no-labels': {
+      stage: {
+        stars: [
+          { name: 'Estrella 1' },
+          { name: 'Estrella 2' },
+          { name: 'Estrella 3' },
+        ],
+      },
+      title: 'Tres estrellas, sin etiquetas',
+      body: 'En el escenario hay tres estrellas, dibujadas en una escala común, así que la que parece mayor <em>es</em> mayor. Sus números están apagados en este paso.\n\nAntes de que se revele nada, decide qué puede decirte de verdad esta imagen. Compromete una respuesta; se te volverá a preguntar por ella justo al final.',
+      prompt: 'Solo con esta imagen, ¿de qué puedes estar seguro?',
+      options: [
+        'De cuál es la mayor: están dibujadas en una escala común, así que el tamaño se puede leer',
+        'De cuál es la más luminosa: será la que se vea más brillante en pantalla',
+        'De cuál tiene más masa: la estrella más grande es la más pesada',
+        'De las tres, porque tamaño, brillo y masa van juntos',
+      ],
+      because:
+        'Solo del tamaño. El escenario usa una única escala para las tres, así que la mayor es realmente la mayor. Las otras dos son trampas. El brillo en pantalla es una decisión de dibujo: el laboratorio dibuja igual de brillante una estrella cien mil veces más débil que el Sol, porque si no no la verías, y el pie de la imagen lo dice. Y la masa no acompaña al tamaño: cuando aparezcan los números verás que la estrella 3, la mayor de las tres, tiene alrededor de una quinta parte de la masa de la estrella 2, y que la 2 emite doce veces más luz siendo una cuarta parte de grande. Esas cuatro palabras —masa, radio, temperatura, luminosidad— son cuatro cosas distintas, y separarlas es para lo que sirven los veintisiete pasos siguientes.',
+      tool: {
+        note: 'Tres estrellas modeladas en una escala común. Los números están apagados en este paso a propósito.',
+      },
+      tip: 'El tamaño en este escenario es real. El brillo en pantalla no lo es: está elegido para que toda estrella se vea, y el pie de la imagen lo dice.',
+    },
+    'the-numbers-arrive': {
+      stage: {
+        stars: [
+          { name: 'Estrella 1' },
+          { name: 'Estrella 2' },
+          { name: 'Estrella 3' },
+        ],
+      },
+      title: 'Ahora los números',
+      body: 'Las mismas tres estrellas, con las etiquetas puestas. Todo lo que dibuja la imagen está también en la lista de debajo, que es de donde salen las medidas de esta investigación.\n\nLee las tres temperaturas superficiales y anótalas de la más fría a la más caliente. La unidad es el kelvin: del mismo tamaño que un grado Celsius, contado desde el cero absoluto, así que una habitación templada está a unos 293 K.',
+      fields: [
+        { label: 'La más fría de las tres' },
+        { label: 'La intermedia' },
+        { label: 'La más caliente de las tres' },
+      ],
+      tip: 'La lista de debajo son los datos de la propia imagen. Toda medida de esta investigación se puede leer ahí sin interpretar el dibujo.',
+    },
+    'temperature-makes-color': {
+      stage: { stars: [{ name: 'Tu estrella' }] },
+      title: 'Lo que la temperatura le hace al color',
+      body: 'Pasa el laboratorio a un punto elegido —el botón de modo está bajo el diagrama— y mueve el cursor a izquierda y derecha por una misma línea horizontal. La izquierda es lo más caliente.\n\nEstás cambiando una sola cosa y mirando qué se sigue de ella. La estrella dibujada junto al diagrama es la misma estrella a la temperatura que hayas seleccionado.',
+      checklist: [
+        'Pulsa «Cambiar de modo» hasta que la lectura diga «Un punto que elegiste»',
+        'Lleva el cursor al extremo izquierdo del diagrama y mira la estrella de al lado',
+        'Llévalo al extremo derecho y vuelve a mirar',
+        'Vuelve a unos 6.000 K y párate ahí',
+        'Observa la temperatura en la lista de debajo mientras te mueves',
+        'Lee el pie bajo la estrella: el color es de la estrella, el brillo no',
+      ],
+      tip: 'Puedes hacer clic o arrastrar sobre el diagrama, usar las flechas del teclado o escribir en los dos deslizadores: las tres cosas son lo mismo. Nada de esta investigación se califica según el tono que veas.',
+    },
+    'same-temperature-different-light': {
+      stage: {
+        stars: [{ name: 'La más pequeña' }, { name: 'La más brillante' }],
+      },
+      title: 'Dos estrellas, una temperatura',
+      body: 'Las dos estrellas del escenario tienen la superficie cerca de 4.300 K. Son del mismo color, porque el color sigue a la temperatura superficial y a nada más.\n\nUna de ellas emite unas trescientas veces más luz que la otra.\n\nPiensa qué significa una temperatura fija. Cada metro cuadrado de una superficie a 4.300 K radia lo mismo por segundo, sea de la estrella que sea: eso <em>es</em> una temperatura. Así que la única forma de que una de ellas emita trescientas veces más luz es tener muchísimos más metros cuadrados.',
+      tip: 'La luminosidad es toda la luz que emite una estrella. El brillo aparente es cuánta te llega, y eso depende además de la distancia. Este paso trata de lo primero.',
+    },
+    'predict-which-is-bigger': {
+      stage: {
+        stars: [{ name: 'La más pequeña' }, { name: 'La más brillante' }],
+      },
+      title: '¿Cuál es mayor, y por cuánto?',
+      body: 'Las mismas dos estrellas. La misma temperatura superficial. Una unas trescientas veces más luminosa.\n\nCompromete una respuesta antes de medir. El razonamiento importa más que el número: la superficie de una estrella crece con el <em>cuadrado</em> del radio.',
+      prompt:
+        'Dos estrellas a la misma temperatura superficial, una 300 veces más luminosa. Su radio es unas…',
+      options: [
+        '300 veces mayor',
+        '17 veces mayor',
+        'el mismo: luminosidad y tamaño son propiedades separadas',
+        '90.000 veces mayor',
+      ],
+      because:
+        'Unas diecisiete, porque el área va con el cuadrado del radio y la raíz cuadrada de 300 es poco más de 17. Eso es toda la relación entre las tres magnitudes: la luz que emite una estrella es su superficie multiplicada por lo fuerte que radia cada trozo de esa superficie, y a temperatura fija el segundo factor es el mismo para las dos. Duplica el radio y cuadruplicas la luz.',
+      tip: 'Radio, no diámetro. Todos los tamaños de esta investigación son radios, en unidades del radio del Sol: 696.000 km.',
+    },
+    'measure-the-radius-ratio': {
+      checklist: [
+        'Selecciona la estrella más pequeña y lee su radio',
+        'Selecciona la más brillante y lee su radio',
+        'Guarda la comparación en tu cuaderno',
+      ],
+      stage: {
+        stars: [{ name: 'La más pequeña' }, { name: 'La más brillante' }],
+      },
+      title: 'Mídelo',
+      body: 'Lee los dos radios en la lista y haz tú la división. El escenario da la razón en la línea de la segunda estrella, así que puedes comprobar tu resultado.\n\nDespués pulsa <strong>Guardar en el cuaderno</strong>. La entrada registra qué modelos eran estos y qué calculó el laboratorio, de modo que la comparación es una prueba y no un número recordado.',
+      fields: [
+        { label: 'Radio de la menor' },
+        { label: 'Radio de la mayor' },
+        { label: 'Cuántas veces mayor' },
+        {
+          label:
+            'En una frase: estas dos están casi a la misma temperatura, ¿por qué una es tanto más brillante?',
+          hint: '¿Qué es lo único que queda que pueda ser distinto?',
+        },
+      ],
+      tip: 'Este atajo funciona porque las temperaturas coinciden. Cuando no coinciden se mueven los dos factores a la vez, que es para lo que sirve el diagrama del paso siguiente.',
+    },
+    'the-two-axes': {
+      stage: { stars: [{ name: 'Tu estrella' }] },
+      title: 'El diagrama, y su eje al revés',
+      body: 'De aquí en adelante todo ocurre en un mismo diagrama: la temperatura a lo largo de la base, la luminosidad por el lateral, las dos logarítmicas, de modo que un paso a lo largo de un eje es una multiplicación y no una suma.\n\nUna rareza a la que conviene acostumbrarse ya: <strong>la temperatura crece hacia la izquierda.</strong> Caliente a la izquierda, frío a la derecha. No hay una buena razón: las primeras versiones de este diagrama se dibujaron contra clases espectrales que estaban ordenadas así, y desde entonces todo el mundo lo lee al revés. Pilla a cualquiera una vez. Los dos extremos del eje están rotulados.\n\nPon el cursor lo más cerca que puedas de 10.000 K y 100 luminosidades solares, y anota dónde has caído en realidad.',
+      fields: [
+        { label: 'Temperatura donde lo pusiste' },
+        { label: 'Luminosidad ahí' },
+      ],
+      tip: 'Haz clic o arrastra sobre el diagrama, muévelo con las flechas del teclado o escribe números en los deslizadores. Los deslizadores son el mismo instrumento.',
+    },
+    'where-the-sun-sits': {
+      stage: { stars: [{ name: 'Tu estrella' }] },
+      title: 'Encuentra el Sol',
+      body: 'La superficie del Sol está a 5.772 K y su luminosidad es, por definición, una luminosidad solar. Pon ahí el cursor y lee el radio.\n\nDeberías obtener alrededor de un radio solar. No es un razonamiento circular: el laboratorio no está consultando el Sol en ninguna tabla. Está calculando un radio a partir de la temperatura y la luminosidad que has puesto, con la misma relación que usa en todas partes. Que salga 1,0 es una comprobación de que la relación hace su trabajo.',
+      fields: [{ label: 'Radio que da el laboratorio' }],
+      tip: 'El Sol es la referencia de las tres unidades de aquí: R☉, L☉ y M☉. Es una comodidad, no una afirmación de que sea una estrella típica. El paso 24 enseña qué aspecto tiene lo típico.',
+    },
+    'straight-up-the-diagram': {
+      stage: { stars: [{ name: 'Tu estrella' }] },
+      title: 'Recto hacia arriba, a una temperatura',
+      body: 'Desde la posición del Sol, mueve el cursor recto hacia arriba —más brillante, la misma temperatura— hasta 10.000 luminosidades solares, y lee el radio ahí.\n\nEstás repitiendo la comparación del paso 6, pero haciéndola tú y en un rango mucho mayor.',
+      fields: [{ label: 'Radio a 5.772 K y 10.000 L☉' }],
+      tip: 'Fíjate en cómo cambia la clase de tamaño en la lectura según subes. Es una etiqueta pegada a una zona del diagrama, no una medida aparte.',
+    },
+    'sideways-at-one-luminosity': {
+      stage: { stars: [{ name: 'Tu estrella' }] },
+      title: 'De lado, a una luminosidad',
+      body: 'Ahora en la otra dirección. Pon el cursor en 1 luminosidad solar y recorre esa línea, del lado frío de la derecha al lado caliente de la izquierda, mirando el radio.\n\nA luminosidad fija, una superficie más caliente radia muchísimo más por metro cuadrado —con la cuarta potencia de la temperatura—, así que la estrella necesita menos metros cuadrados para emitir la misma luz.',
+      prompt:
+        'Moviéndose a la izquierda por una línea de luminosidad constante, de 3.000 K a 30.000 K, el radio…',
+      options: [
+        'crece, porque las estrellas más calientes son mayores',
+        'no cambia, porque la luminosidad está fija',
+        'se reduce en un factor de unas 100 veces',
+        'se reduce en un factor de unas 10 veces',
+      ],
+      because:
+        'Se reduce unas cien veces. Diez veces la temperatura son diez a la cuarta —diez mil veces— de emisión por metro cuadrado, y para mantener fija la luz total el área tiene que caer esas mismas diez mil, que son cien en radio. Compruébalo en el diagrama: a 1 L(sol) el extremo frío está en unos 3,7 radios solares y el caliente en unos 0,037. Ese segundo número es territorio de enana blanca, y el paso 20 vuelve sobre él.',
+      tip: 'Los dos movimientos —hacia arriba y a lo largo del diagrama— son la misma relación usada en direcciones distintas. No se está introduciendo nada nuevo.',
+    },
+    'lines-of-constant-radius': {
+      stage: { stars: [{ name: 'Tu estrella' }] },
+      title: 'Líneas de un mismo tamaño',
+      body: 'Activa las <strong>líneas de radio constante</strong>. Cada línea de trazos une todas las parejas de temperatura y luminosidad que dan un mismo radio, y en estos ejes salen rectas.\n\nUsa la línea de 1 R☉. Busca dos puntos sobre ella con temperaturas claramente distintas y anota la luminosidad en cada uno: dos estrellas del tamaño del Sol, una caliente y otra fría.',
+      fields: [
+        { label: 'Punto más frío, temperatura' },
+        { label: 'Su luminosidad' },
+        { label: 'Punto más caliente, temperatura' },
+        { label: 'Su luminosidad' },
+      ],
+      tip: 'Las líneas son rectas porque log L = 2 log R + 4 log T: a radio fijo eso es una recta de pendiente 4. Por eso este diagrama separa tan limpiamente las gigantes de las enanas.',
+    },
+    'switch-to-modeled-stars': {
+      stage: {
+        stars: [
+          { name: '0,2 M☉' },
+          { name: '0,5 M☉' },
+          { name: '1 M☉' },
+          { name: '2 M☉' },
+          { name: '5 M☉' },
+          { name: '10 M☉' },
+          { name: '20 M☉' },
+          { name: '40 M☉' },
+        ],
+      },
+      title: 'Estrellas que están modeladas de verdad',
+      body: 'Hasta ahora cada punto lo elegías tú. Vuelve a <strong>Una estrella modelada</strong> y la lectura cambia de naturaleza: ahora hay una masa, una edad, una fase y una vida, porque un cálculo publicado de evolución estelar puso esta estrella aquí y sabe cómo llegó.\n\nHay ocho incluidas, de 0,2, 0,5, 1, 2, 5, 10, 20 y 40 masas solares, todas con la composición del Sol y sin rotación. Recórrelas y mira dónde se sitúa cada una.',
+      checklist: [
+        'Pulsa «Cambiar de modo» hasta que la lectura diga «Una estrella modelada»',
+        'Mueve el deslizador «Estrella modelada» de 0,2 M☉ a 40 M☉, paso a paso',
+        'Observa cómo el marcador sube y va hacia la izquierda según crece la masa',
+        'Lee la masa, la edad y la fase en la lista en cada parada',
+        'Fíjate en que la banda que trazan los marcadores es la zona sombreada de la secuencia principal',
+      ],
+      tip: 'Las zonas sombreadas están dibujadas a partir de los puntos inicial y final de estas mismas trazas, así que la banda y los marcadores no pueden contradecirse.',
+    },
+    'three-on-the-main-sequence': {
+      stage: {
+        stars: [
+          { name: '0,2 M☉' },
+          { name: '0,5 M☉' },
+          { name: '1 M☉' },
+          { name: '2 M☉' },
+          { name: '5 M☉' },
+          { name: '10 M☉' },
+          { name: '20 M☉' },
+          { name: '40 M☉' },
+        ],
+      },
+      title: 'Tres estrellas de la secuencia principal',
+      body: 'Tres estrellas fijadas, las tres a mitad de su vida en la secuencia principal: 0,2, 1 y 20 masas solares.\n\nLee la temperatura y la luminosidad de la menor y de la mayor, y calcula cuántas veces más luz emite la pesada.',
+      fields: [
+        { label: 'Luminosidad de la estrella de 0,2 M☉' },
+        { label: 'Luminosidad de la estrella de 20 M☉' },
+        { label: 'Cuántas veces más luz' },
+      ],
+      tip: 'Ordena el escenario por luminosidad y por temperatura además de por radio: los tres criterios ponen estas estrellas en el mismo orden, y eso dejará de ser cierto en el paso 17.',
+    },
+    'predict-mass-and-light': {
+      stage: {
+        stars: [
+          { name: '0,2 M☉' },
+          { name: '0,5 M☉' },
+          { name: '1 M☉' },
+          { name: '2 M☉' },
+          { name: '5 M☉' },
+          { name: '10 M☉' },
+          { name: '20 M☉' },
+          { name: '40 M☉' },
+        ],
+      },
+      title: '¿Con cuánta pendiente?',
+      body: 'Tienes dos puntos de la secuencia principal: 0,2 masas solares dando unas 0,0066 luminosidades solares, y 20 masas solares dando unas 59.000.\n\nCien veces la masa, nueve millones de veces la luz. Compromete la forma de esa relación antes de comprobar las estrellas intermedias.',
+      prompt:
+        'A lo largo de la secuencia principal, la luminosidad crece aproximadamente como la masa elevada a…',
+      options: ['1: proporcional', '2', '3,5', '10'],
+      because:
+        'Aproximadamente a 3,5, y esta medida da 3,5 casi exactamente: nueve millones son cien elevado a 3,5. No es una ley de la naturaleza —es un resumen de lo que producen los cálculos de estructura estelar para estrellas sostenidas como lo están las de la secuencia principal— y el exponente no es realmente constante: es más pronunciado cerca de una masa solar y más suave en el extremo alto. Lo que importa para el resto de la investigación es que es muy pronunciado. Una estrella con diez veces la masa no emite diez veces la luz; emite miles de veces más.',
+      tip: 'Cien elevado a 3,5 es diez elevado a siete, que son diez millones: bastante cerca de nueve millones para una relación tan aproximada.',
+    },
+    'the-whole-sequence': {
+      stage: {
+        stars: [
+          { name: '0,2 M☉' },
+          { name: '0,5 M☉' },
+          { name: '1 M☉' },
+          { name: '2 M☉' },
+          { name: '5 M☉' },
+          { name: '10 M☉' },
+          { name: '20 M☉' },
+          { name: '40 M☉' },
+        ],
+      },
+      title: 'Las ocho, en una comparación',
+      body: 'Comprueba la tendencia en todo el conjunto y no solo en sus dos extremos. Vuelve al laboratorio, recorre el deslizador de masa por los ocho modelos y anota la luminosidad de las estrellas de 1, 5 y 20 masas solares.\n\nEsto es una comparación controlada: cada estrella está a mitad de su vida en la secuencia principal, todos los modelos tienen la misma composición y ninguna rotación, y lo único que cambia es la masa.',
+      fields: [{ label: '1 M☉' }, { label: '5 M☉' }, { label: '20 M☉' }],
+      tip: 'El banco que ejecuta experimentos A/B en Gravitas mide órbitas, no estrellas, así que esta comparación se hace directamente sobre los modelos. Las notas del profesorado explican por qué las dos cosas no se pueden unir.',
+    },
+    'what-the-trend-covers': {
+      stage: {
+        stars: [
+          { name: '0,2 M☉' },
+          { name: '0,5 M☉' },
+          { name: '1 M☉' },
+          { name: '2 M☉' },
+          { name: '5 M☉' },
+          { name: '10 M☉' },
+          { name: '20 M☉' },
+          { name: '40 M☉' },
+        ],
+      },
+      rubric:
+        'Para la nota completa hacen falta dos ideas. Primero, que la secuencia principal no es una categoría de estrella sino una etapa —el largo tramo en que una estrella fusiona hidrógeno en su núcleo— y que las estrellas ocupan una banda estrecha del diagrama durante ella porque, para ese mecanismo, la masa fija en gran medida la temperatura y la luminosidad. Segundo, que la gigante es la misma estrella en una etapa posterior, ya no sostenida del mismo modo, así que una relación ajustada a la combustión de hidrógeno en el núcleo no tiene por qué valer. Da crédito a una respuesta que diga que la gigante «ha dejado la secuencia principal» y muestre que entiende que eso significa un cambio de mecanismo y no un cambio de posición. NO des crédito a «la gigante es más grande, así que la relación es distinta» sin mecanismo, ni a una respuesta que trate la secuencia principal como una clase de objeto a la que algunas estrellas pertenecen para siempre.',
+      title: 'Qué cubre la tendencia y qué no',
+      body: 'Has medido una relación muy pronunciada entre masa y luminosidad, y la has medido sobre ocho estrellas que estaban haciendo todas lo mismo: fusionar hidrógeno en el núcleo, a mitad de su vida.\n\nLa gigante del paso 4 tenía una masa de casi exactamente una masa solar y emitía 58 luminosidades solares, cincuenta veces lo que da la relación de la secuencia principal para esa masa.',
+      prompt:
+        'En dos o tres frases: ¿qué es la secuencia principal, y por qué la relación masa-luminosidad que has medido no se aplica a esa gigante?',
+      tip: 'La palabra «secuencia» también es un accidente histórico. Es una secuencia en masa, no en el tiempo: ninguna estrella la recorre.',
+    },
+    'two-red-stars': {
+      stage: { stars: [{ name: 'Enana roja' }, { name: 'Gigante roja' }] },
+      title: 'Dos estrellas rojas',
+      body: 'Las dos estrellas del escenario tienen la superficie cerca de 3.350 K. Las dos son rojas. Las dos se clasifican como M.\n\nUna es una estrella de 0,2 masas solares fusionando hidrógeno en su núcleo. La otra empezó con una masa solar —la del Sol— y ya ha terminado de hacerlo.\n\nEl escenario está en <em>tamaños relativos reales</em>. Míralo y después comprométete.',
+      prompt: 'Las dos estrellas se diferencian en radio en un factor de unas…',
+      options: [
+        '4',
+        '40',
+        '400',
+        'nada: la misma temperatura significa el mismo tamaño',
+      ],
+      because:
+        'Unas cuatrocientas. La pequeña tiene 0,24 radios solares y la hinchada 102. Son del mismo color y de la misma temperatura, y una se tragaría a la otra doscientos millones de veces. Por eso «estrella roja» no es una categoría útil por sí sola, y es la demostración más clara de toda la investigación de que el color habla de una superficie y no dice nada de un tamaño. Lo que las separa no es el color sino la luminosidad: una es una enana roja y la otra una gigante roja.',
+      tip: 'Si la más pequeña aparece como un marcador y no como un disco, no es un fallo del dibujo: el pie lo dice. A esta escala es de verdad más pequeña que un píxel.',
+    },
+    'measure-the-two-reds': {
+      stage: { stars: [{ name: 'Enana roja' }, { name: 'Gigante roja' }] },
+      title: 'Mídelas, y mide su luz',
+      body: 'Lee los dos radios y las dos luminosidades en la lista, y calcula las dos razones.\n\nDespués guarda la comparación en el cuaderno: esta es la pieza central del argumento que se te pedirá escribir al final.',
+      fields: [
+        { label: 'Radio de la enana' },
+        { label: 'Radio de la gigante' },
+        { label: 'Luminosidad de la enana' },
+        { label: 'Luminosidad de la gigante' },
+        { label: 'Razón de radios' },
+        { label: 'Razón de luminosidades' },
+      ],
+      tip: 'Una gigante no es una estrella pesada. Esta tiene 0,97 masas solares —menos que el Sol, porque ya ha expulsado parte— y la enana de al lado tiene 0,2.',
+    },
+    'a-supergiant': {
+      stage: {
+        stars: [
+          { name: 'El Sol' },
+          { name: 'Gigante roja' },
+          { name: 'Supergigante' },
+        ],
+      },
+      title: 'Y ahora una supergigante',
+      body: 'Se une una tercera estrella: un modelo que empezó con veinte masas solares, al final de la traza, donde MESA dejó de seguirlo justo antes de que su núcleo colapsara.\n\nEl Sol está en el escenario como referencia, y allí donde una estrella es mayor que una órbita del sistema solar, esa órbita se dibuja como un círculo de trazos para dar escala. Es una comparación de tamaños y nada más: nadie afirma que hubiera nunca un planeta ahí.\n\nAnota su radio y su masa actual.',
+      fields: [
+        { label: 'Radio de la supergigante' },
+        { label: 'Su masa ahora' },
+      ],
+      tip: 'Cambia el escenario a «ajustar cada uno» y vuelve. En ese modo cada estrella llena su propio recuadro y la ampliación aparece bajo cada una, porque los tamaños aparentes ya no son comparables.',
+    },
+    'predict-hot-and-faint': {
+      stage: { stars: [{ name: 'El Sol' }, { name: 'Caliente y débil' }] },
+      title: 'Caliente, y casi sin nada',
+      body: `En el escenario, junto al Sol, hay una estrella a veinticinco mil
+             kelvin —más de cuatro veces la temperatura superficial del Sol—
+             que emite una centésima de su luz.
+             \n\nYa tienes todo lo que hace falta para decir su tamaño sin
+             que nadie te lo diga. Cada metro cuadrado de una superficie a
+             25.000 K radia muchísimo más que uno a 5.772 K; aun así, esta
+             estrella consigue ser cien veces más débil en total.
+             \n\nDecídete antes de medir.`,
+      prompt: '¿Cuánta superficie puede tener entonces?',
+      options: [
+        'Muchísima menos que el Sol: una superficie tan caliente y tan débil tiene que ser diminuta',
+        'Más o menos la del Sol: la temperatura y el brillo se compensan',
+        'Muchísima más que el Sol: está caliente, así que será grande',
+        'No hay forma de saberlo sin conocer su masa',
+      ],
+      because:
+        'Muchísima menos. La luminosidad es el área por lo que emite cada unidad de área, y lo que emite cada unidad de área sube como la cuarta potencia de la temperatura: a 25.000 K un metro cuadrado emite unas 350 veces lo que uno solar. Para salir cien veces más débil en total, el área tiene que ser unas treinta y cinco mil veces menor: un radio de aproximadamente una doscientava parte del solar. Eso es un cuerpo del tamaño de la Tierra. La última opción es la que merece discusión: la masa es justo lo que <em>no</em> necesitas aquí, y recurrir a ella es la costumbre que esta investigación intenta romper.',
+      tip: 'Dos de las tres —temperatura y luminosidad— fijan la tercera. Es lo único que una posición en este diagrama determina de verdad.',
+    },
+    'hot-and-faint': {
+      stage: { stars: [{ name: 'El Sol' }, { name: 'Caliente y débil' }] },
+      title: 'Caliente, y casi invisible',
+      body: 'De vuelta al laboratorio, en la traza de una masa solar, con el deslizador de edad marcado por fases y no por tiempo: si no, todo lo que sigue a la secuencia principal es una franja en la que no puedes caer.\n\nArrastra el deslizador de edad hasta el extremo derecho, al final mismo de la traza. Lo que queda es el núcleo desnudo de la estrella: sin fusión, solo una brasa caliente enfriándose.\n\nLee su temperatura, su luminosidad y su radio.',
+      fields: [
+        { label: 'Temperatura' },
+        { label: 'Luminosidad' },
+        { label: 'Radio' },
+      ],
+      tip: 'Pulsa «Cambiar lo que marca el deslizador de edad» para volver al tiempo y mira cómo todo este tramo de la traza se reduce a la última franja del deslizador. Las dos cosas son ciertas; responden a preguntas distintas.',
+    },
+    'classify-from-position': {
+      stage: {
+        stars: [{ name: 'A' }, { name: 'B' }, { name: 'C' }, { name: 'D' }],
+      },
+      title: 'Lee el diagrama',
+      body: 'Ya has visto las cuatro zonas. Se encuentra una estrella a 30.000 K y 0,01 luminosidades solares.\n\nCalcula su radio antes de responder: puedes poner ahí el cursor en el modo libre y la lectura hará la aritmética.',
+      prompt: 'Una estrella a 30.000 K y 0,01 L☉ es…',
+      options: [
+        'una estrella caliente de la secuencia principal, porque está a 30.000 K',
+        'una enana blanca, porque esa temperatura y esa debilidad juntas la obligan a ser diminuta',
+        'una gigante roja, porque es débil',
+        'imposible: nada puede estar tan caliente y ser tan débil',
+      ],
+      because:
+        'Una enana blanca. A 30.000 K cada metro cuadrado radia ferozmente, así que emitir solo una centésima de luminosidad solar exige muy poca superficie: el radio sale en unos 0,0037 radios solares, bastante menos que el tamaño de la Tierra. Una estrella de la secuencia principal a 30.000 K estaría en decenas de miles de luminosidades solares, seis millones de veces más brillante que esta. La posición en el diagrama basta para clasificarla, porque los dos ejes fijan el radio entre ambos, y para eso sirve el diagrama.',
+      tip: 'Las zonas del diagrama están dibujadas como bloques suaves con el borde de trazos a propósito. Una estrella no es gigante por cruzar una línea; el sombreado resume dónde acaba cada tipo de estrella.',
+    },
+    'predict-who-lives-longer': {
+      stage: {
+        stars: [{ name: '0,2 M☉' }, { name: '1 M☉' }, { name: '20 M☉' }],
+      },
+      title: '¿Más combustible, más vida?',
+      body: 'Una estrella de veinte masas solares tiene cien veces más material que una de 0,2. Cien veces el combustible.\n\nTambién has medido, en el paso 15, que emite algo así como nueve millones de veces más luz, y la luz es el combustible saliendo.\n\nComprométete antes de consultarlo.',
+      prompt:
+        'La vida en la secuencia principal de la estrella de 20 M☉, comparada con la de 0,2 M☉, es…',
+      options: [
+        'unas cien veces más larga: tiene cien veces el combustible',
+        'aproximadamente igual: los dos efectos se cancelan',
+        'unas cien mil veces más corta',
+        'unas diez veces más corta',
+      ],
+      because:
+        'Más de cien mil veces más corta. Esta es la consecuencia más útil de lo pronunciada que es la relación masa-luminosidad, y conviene enunciarla como una razón: lo que dura el combustible es cuánto hay dividido por lo deprisa que se va. El combustible va con la masa y el ritmo va con la luminosidad, que va aproximadamente con la masa a la 3,5. Así que la vida va con la masa dividida por la masa a la 3,5, que es uno partido por la masa a la 2,5. Cien veces la masa son cien elevado a dos y medio —cien mil— veces menos. El paso siguiente lo mide.',
+      tip: 'Un coche con un depósito mayor no llega necesariamente más lejos. Depende de lo que haga el motor con él.',
+    },
+    'measure-the-lifetimes': {
+      stage: {
+        stars: [{ name: '0,2 M☉' }, { name: '1 M☉' }, { name: '20 M☉' }],
+      },
+      title: 'Cuánto dura cada una',
+      body: 'La lectura da la vida total en la secuencia principal del modelo seleccionado. Recorre el deslizador de masa y anota tres de ellas.\n\nUno de estos números merece cuidado. El modelo de 0,2 masas solares da una vida en la secuencia principal de unos 1,1 <em>billones</em> de años. El Universo tiene unos 13.800 millones de años, aproximadamente una milésima de eso. Así que ninguna estrella así ha terminado su secuencia principal en ninguna parte. Esa cifra es una predicción obtenida integrando un modelo hacia adelante, no una vida observada, y no se puede contrastar con nada.',
+      fields: [
+        { label: 'Vida en la secuencia principal de 0,2 M☉' },
+        { label: '1 M☉' },
+        { label: '20 M☉' },
+      ],
+      tip: 'Aquí usa el deslizador de edad marcado por tiempo, no por fases. Marcado por tiempo, lo que ha avanzado el mando es de verdad lo que ha avanzado la vida, que es justo lo que pregunta este paso.',
+    },
+    'a-population': {
+      title: 'Cuatrocientas estrellas',
+      body: 'Una población sintética: cuatrocientas estrellas extraídas de una distribución publicada de masas de nacimiento, repartidas por los últimos diez mil millones de años, cada una situada sobre las mismas trazas que has estado usando, las que van de 0,2 a 20 masas solares, que es el rango en el que se muestrea la función de masas. Es reproducible a partir de su semilla y no es un sondeo: nada en ella se ha observado y ninguna de sus estrellas es real.\n\nEl histograma las cuenta por tipo espectral: O y B son las calientes, luego A, F, G —el Sol es una G— y después K y las frías enanas M.\n\nCuenta los dos tipos más comunes.',
+      fields: [
+        { label: 'Cuántas son de tipo M' },
+        { label: 'Cuántas son de tipo K' },
+        { label: 'Cuántas son de tipo G, como el Sol' },
+      ],
+      tip: 'La lectura da cada recuento como número además de dibujarlo, y dice qué deja fuera la muestra: nada de polvo, nada de binarias, ninguna composición que no sea la del Sol.',
+    },
+    'predict-the-bright-subset': {
+      title: 'Antes de recortarla',
+      body: `Dos tercios de esta población son enanas M. Dentro de un momento
+             pondrás todas estas estrellas a la misma distancia y te quedarás
+             solo con las que superen un corte de brillo: el modelo más burdo
+             posible de lo que cataloga un sondeo.
+             \n\nLas estrellas del lienzo no cambian. El corte solo decide
+             cuáles siguen ahí después.
+             \n\nPredice qué aspecto tendrán las supervivientes.`,
+      prompt:
+        'De las estrellas que superen el corte, ¿qué fracción serán enanas M, más o menos?',
+      options: [
+        'Casi ninguna',
+        'Unos dos tercios, como en la población',
+        'Un tercio: menos, pero seguirán siendo las más comunes',
+        'Todas, porque hay muchísimas para empezar',
+      ],
+      because:
+        'Casi ninguna: de hecho, ninguna. Es la respuesta que más cuesta creer antes de verla, y por eso se te pide que te comprometas primero. Un corte de brillo selecciona por luminosidad, y la luminosidad abarca un rango mucho más amplio que el número de estrellas: una enana M emite una milésima de la luz del Sol, así que sale de la muestra mucho antes que ninguna otra cosa, por muchas que haya. La pantalla siguiente es la misma población con el corte aplicado, y puedes contarlas.',
+      tip: 'Fíjate en cómo nombra las cosas el panel: cuatrocientas extraídas, menos modeladas, menos aún superando el corte, y una muestra acotada de ellas en el lienzo. Son cuatro números distintos y todo el argumento depende de no confundirlos.',
+    },
+    'only-the-bright-ones': {
+      title: 'Ahora solo las que podrías ver',
+      body: 'Las mismas cuatrocientas estrellas: la misma muestra, no una nueva. Cambia la vista al subconjunto brillante. Cada estrella se coloca a la misma distancia, cien pársecs, y solo se conservan las que superan un corte de brillo declarado.\n\nEste es el modelo más burdo posible de lo que hace un sondeo, y es suficiente.\n\nVuelve a contar.',
+      fields: [
+        { label: 'Cuántas estrellas quedan' },
+        { label: 'De esas, cuántas son de tipo M' },
+        { label: 'Cuántas son de tipo F' },
+      ],
+      tip: 'El deslizador de umbral mueve el corte. Súbelo y los supervivientes son más raros y más calientes; bájalo y las enanas M vuelven. La población de debajo nunca cambia.',
+    },
+    'what-a-survey-misses': {
+      rubric:
+        'Para la nota completa hacen falta el mecanismo y un número. El mecanismo: un corte de brillo selecciona por luminosidad, la luminosidad varía en un rango mucho más amplio que el número de estrellas, y por eso las raras estrellas luminosas quedan enormemente sobrerrepresentadas entre las que superan el corte: dos estrellas A de 351 pasan a ser un octavo de la lista brillante, mientras que 227 enanas M no son ninguna. Cualquiera de esas cifras vale como número. Da crédito a una respuesta que acierte el mecanismo con otra cifra correcta. NO des crédito a «las brillantes están más cerca», que es otro efecto de selección distinto y no es lo que hace este modelo: aquí todas las estrellas se colocaron a la misma distancia, y las notas del profesorado señalan esto como el error más frecuente. No des crédito a una respuesta que se limite a repetir los recuentos sin decir por qué el corte los produce.',
+      title: 'De qué es catálogo un catálogo de estrellas brillantes',
+      body: 'Dos recuentos de una población. Dos tercios de enanas M; ninguna en absoluto cuando te quedas solo con las brillantes.\n\nTodas las estrellas que puedes ver a simple vista desde un lugar oscuro pertenecen a la segunda lista. Ni una sola enana M lo hace.',
+      prompt:
+        'En dos o tres frases: ¿por qué una lista de las estrellas más brillantes del cielo puede dar una impresión muy equivocada de cómo son las estrellas normalmente? Usa un número de tus dos recuentos.',
+      tip: 'Esto es un efecto de selección: una conclusión sobre una muestra que en realidad es un hecho sobre cómo se eligió la muestra. No es una corrección pequeña en astronomía, y no es exclusivo de la astronomía.',
+    },
+    'find-a-counterexample': {
+      stage: {
+        stars: [
+          { name: '0,2 M☉' },
+          { name: '0,5 M☉' },
+          { name: '1 M☉' },
+          { name: '2 M☉' },
+          { name: '5 M☉' },
+          { name: '10 M☉' },
+          { name: '20 M☉' },
+          { name: '40 M☉' },
+        ],
+      },
+      title: 'Rompe una regla',
+      body: 'Dos afirmaciones que suenan razonables y son las dos falsas:\n\n<strong>«Las estrellas rojas son pequeñas.»</strong>\n\n<strong>«Las estrellas más calientes son más luminosas.»</strong>\n\nElige una de las dos y rómpela con el laboratorio. Vale cualquiera de los ocho modelos a cualquier edad, y también el cursor libre, aunque si usas el cursor libre recuerda qué establece y qué no: enseña que una temperatura y una luminosidad <em>podrían</em> ir juntas, no que alguna estrella concreta lo haga.\n\nAnota las dos estrellas que hayas usado y guarda la comparación en el cuaderno como prueba.',
+      fields: [
+        { label: 'Temperatura de la estrella A' },
+        { label: 'Luminosidad de la estrella A' },
+        { label: 'Temperatura de la estrella B' },
+        { label: 'Luminosidad de la estrella B' },
+      ],
+      tip: 'Las dos afirmaciones son ciertas para las estrellas de la secuencia principal, y por eso suenan bien. Ninguna es cierta para las estrellas en general, y aproximadamente una de cada mil estrellas cercanas al Sol es un contraejemplo de la segunda.',
+    },
+    'spectra-the-light-itself': {
+      stage: {
+        stars: [
+          { name: 'Estrella 1' },
+          { name: 'Estrella 2' },
+          { name: 'Estrella 3' },
+        ],
+      },
+      title: 'La luz misma',
+      body: 'Todo lo que has hecho hasta aquí se apoyaba en dos números por estrella —una temperatura y una luminosidad—, y esos venían de ocho trazas evolutivas publicadas. Una traza es un cálculo. No se midió ninguna estrella para construirlas.\n\nEstas cuatro son medidas. Cada una es la luz de una estrella real, separada por longitud de onda por el espectrógrafo de SDSS en Apache Point y contada, una noche cada una, en 2008. Las depresiones son longitudes de onda en las que algo de la propia atmósfera de la estrella absorbió su luz al salir.\n\nLas cuatro se muestran sin sus nombres. Las curvas <em>no</em> están dibujadas en los colores de sus estrellas, y eso es deliberado: estarían regalando la pregunta que hacen las cinco pantallas siguientes.\n\n<strong>Las tres estrellas del lienzo no son estas cuatro.</strong> Son las estrellas modeladas de la investigación, donde han estado desde el paso 1, y nadie las ha observado nunca: son puntos de una traza publicada. Mantén separadas las dos mitades de la pantalla: el lienzo es el modelo, el panel es la medida.',
+      tip: 'Cada número bajo el lienzo se mide sobre la marcha a partir de los datos incluidos. El panel también da la placa, la fibra y la noche, así que cualquiera de estas cuatro se puede buscar en el archivo.',
+    },
+    'spectra-color-is-enough-here': {
+      stage: {
+        stars: [
+          { name: 'Estrella 1' },
+          { name: 'Estrella 2' },
+          { name: 'Estrella 3' },
+        ],
+      },
+      title: 'Ordénalas por color',
+      body: 'Ignora las depresiones por completo. Fíjate solo en la inclinación general de cada curva: si cae del azul al rojo o si sube.\n\nUna de las cuatro emite unas tres veces más luz a 4.100&nbsp;&#8491; que a 8.100&nbsp;&#8491;. Otra emite alrededor de una décima parte. Eso es un factor treinta de diferencia en la pendiente entre las cuatro, y es la misma información que la simulación ya usa para decidir de qué color pintar una estrella.',
+      prompt:
+        'Ordenadas de más caliente a menos usando solo la inclinación del continuo, las cuatro son&hellip;',
+      options: [
+        'W, X, Y, Z',
+        'Z, Y, X, W',
+        'X, W, Z, Y',
+        'la inclinación no sirve para ordenarlas',
+      ],
+      because:
+        'W, X, Y, Z, y lo has hecho sin mirar una sola línea de absorción. Esta pantalla está pensada para ser fácil. La pendiente del continuo es realmente un termómetro, realmente ordena bien a estas cuatro, y nada de las cuatro pantallas siguientes se desdice de eso. La pregunta que hace el resto de esta sección no es si el color funciona, sino si el color es todo lo que hay.',
+      tip: 'La inclinación es lo que hace una superficie caliente: cuanto más caliente está, mayor es la fracción de su luz que sale a longitudes de onda cortas. Por eso una estrella tiene color.',
+    },
+    'spectra-two-features': {
+      stage: {
+        stars: [
+          { name: 'Estrella 1' },
+          { name: 'Estrella 2' },
+          { name: 'Estrella 3' },
+        ],
+      },
+      title: 'Dos rasgos, en una ventana sin color',
+      body: 'Pon el control de longitud de onda en <strong>hidrógeno &beta;</strong>. Ahora el gráfico tiene 170&nbsp;&#8491; de ancho en lugar de cinco mil, y a lo largo de ese tramo los continuos de W, X e Y difieren en inclinación un dos por ciento. Aquí no hay color que leer. Aquello por lo que aún puedas distinguir estas estrellas no es su color.\n\nLa banda sombreada es donde se mide el número: la depresión, frente al nivel de los dos tramos despejados a cada lado. Con el control de foco en <em>las cuatro</em>, el panel lleva todos los rasgos de todas las estrellas a la vez, así que puedes anotar las dos columnas sin perder la imagen; pero pasa el control a <strong>calcio</strong> y mira, porque la segunda columna no se comporta como la primera.',
+      fields: [
+        { label: 'Profundidad de Hβ, estrella W' },
+        { label: 'Hβ, estrella X' },
+        { label: 'Hβ, estrella Y' },
+        { label: 'Hβ, estrella Z' },
+        { label: 'Profundidad de Ca II K, estrella W' },
+        { label: 'Ca II K, estrella X' },
+        { label: 'Ca II K, estrella Y' },
+        { label: 'Ca II K, estrella Z' },
+      ],
+      tip: 'El hidrógeno es con diferencia el elemento más abundante en las cuatro. Su línea es débil en la estrella Z no porque falte hidrógeno, sino porque la estrella está demasiado fría para poner mucho de él en el estado que absorbe esta longitud de onda. La intensidad de una línea no es una abundancia.',
+    },
+    'spectra-name-the-star': {
+      stage: {
+        stars: [
+          { name: 'Estrella 1' },
+          { name: 'Estrella 2' },
+          { name: 'Estrella 3' },
+        ],
+      },
+      title: 'Nombra una',
+      body: 'Otro instrumento y otra estrella: la <strong>estrella S</strong>, mostrada solo en ventanas estrechas. Este instrumento no tiene ningún ajuste que enseñe el espectro entero, así que no dispones de ningún color.\n\nRecorre las cuatro posiciones del control de longitud de onda y lee las cuatro profundidades bajo el lienzo. Cada opción de abajo nombra una clase <em>y</em> la prueba que la apoya. Solo una es una afirmación verdadera sobre este espectro.',
+      prompt: 'La estrella S es&hellip;',
+      options: [
+        'una estrella A: su línea de hidrógeno es el rasgo más profundo del espectro',
+        'una estrella G: su calcio es muy profundo, su hidrógeno moderado, y no tiene banda de óxido de titanio',
+        'una estrella K: su sodio es profundo, en torno a una cuarta parte del continuo',
+        'una estrella M: la banda de óxido de titanio está ahí, en torno a una séptima parte',
+      ],
+      because:
+        'Una estrella G. Las otras tres nombran un rasgo real y se equivocan en su valor, y por eso el panel lo zanja: la profundidad del hidrógeno es de un 14%, no del 37% que da una estrella A; el sodio está en torno al 9%, no en el 23% de una estrella K; y el óxido de titanio marca un 2%, que no es banda ninguna: la estrella M de la comparación da un 13%. Cuatro números, sin color, y la clase se sigue de ellos. Fíjate en cuáles hicieron el trabajo. El calcio y el hidrógeno juntos separan esta estrella de una K, y no hizo falta nada sobre su brillo general ni su inclinación; ni siquiera estaban en pantalla.',
+      tip: 'La respuesta del propio archivo está en el último control, y sigue apagada hasta que la enciendas. Comprométete primero.',
+    },
+    'spectra-what-color-cannot-give': {
+      stage: {
+        stars: [
+          { name: 'Estrella 1' },
+          { name: 'Estrella 2' },
+          { name: 'Estrella 3' },
+        ],
+      },
+      title: 'La afirmación que hay que desmontar',
+      body: 'Un colega lo plantea así:\n\n<em>«El color de una estrella te dice su temperatura, y su temperatura te dice qué aspecto tiene su espectro. Así que el espectro no añade nada que no tuvieras ya.»</em>\n\nLa primera mitad se acerca bastante a la verdad, y tú mismo lo demostraste dos pantallas atrás. La segunda mitad es de lo que trata tu columna de calcio.',
+      prompt:
+        'Usando un número que hayas medido, di qué falla en la segunda mitad de esa afirmación. Sé concreto sobre qué rasgo y qué valores.',
+      tip: 'Tu cuaderno tiene las dos columnas que anotaste. La pregunta te pide usar una de ellas, no recordar la forma de una imagen.',
+    },
+    'spectra-four-is-four': {
+      stage: {
+        stars: [
+          { name: 'Estrella 1' },
+          { name: 'Estrella 2' },
+          { name: 'Estrella 3' },
+        ],
+      },
+      title: 'Qué son cuatro espectros, y qué no son',
+      body: '<strong>Los nombres ya están puestos.</strong> La estrella W está clasificada como A0 por la tubería de SDSS y como A1V por una plantilla independiente; X es G2 y G5; Y es K3 y K3V; Z es M1 y M2Vvar. Dos clasificaciones que coinciden en la letra en los cuatro casos, y por eso esta investigación se permite llamarlas A, G, K y M. Ninguna de esas letras se leyó de un color.\n\n<strong>Un color es un buen termómetro.</strong> Ordenó bien a estas cuatro de un vistazo, y es lo que la simulación ha usado siempre. Aquí no se argumenta nada en su contra.\n\n<strong>Un espectro no es una versión más caliente o más fría de una misma imagen.</strong> El hidrógeno cae de W a Z; el calcio sube y luego baja. Dos rasgos, dos formas distintas, y el segundo no se puede obtener de una temperatura por ningún medio, porque no es una función uno a uno de ella.\n\n<strong>Y esto son cuatro estrellas.</strong> Una por letra. No es un atlas, ni un sondeo, ni una muestra representativa de nada: otra estrella A daría otros números, las tres letras más calientes que A no están aquí, y cada una de estas se eligió por tener la señal más limpia del archivo, no por ser típica. Nada de estas seis pantallas establece qué hacen las estrellas A en general. Lo que sí pueden hacer cuatro ejemplos es zanjar una cuestión de existencia —si un espectro lleva algo que un color no lleva—, y para eso se han traído.',
+      tip: 'Si quieres estas cuatro en el archivo y no aquí: el panel da la placa, el MJD y la fibra de cada una, que es su dirección permanente en SDSS. La gravedad superficial que la propia tubería asigna a la estrella W sugiere que no es una enana de secuencia principal, y por eso esta investigación no la llama así en ningún momento.',
+    },
+    'the-argument': {
+      rubric:
+        'Esta es la pregunta sumativa y debería calificarse por las conexiones, no por la cobertura. Busca: que la temperatura y la luminosidad juntas fijan el radio, y que el estudiante sabe usarlo en ambos sentidos; que a lo largo de la secuencia principal la masa fija en gran medida las otras tres, y de forma muy pronunciada, de modo que un factor cien en masa son millones en luz; que esa pendiente es la razón de que las estrellas más pesadas vivan menos, combustible frente a ritmo de consumo; y que todo eso vale para la secuencia principal, con la gigante y la enana blanca como contraejemplos que el estudiante midió. Una buena respuesta dice qué NO fija una posición en el diagrama —una masa, una edad— y cita la diferencia de 426 veces en radio entre dos estrellas del mismo color, o la enana blanca a 48.000 K emitiendo 1,6 luminosidades solares. Da crédito tanto a quien revise su predicción del paso 1 como a quien la defienda, siempre que la defensa se apoye en las medidas. NO exijas aquí el material de poblaciones; es el objeto de su propia pregunta en el paso 28.',
+      stage: {
+        stars: [
+          { name: 'Estrella 1' },
+          { name: 'Estrella 2' },
+          { name: 'Estrella 3' },
+        ],
+      },
+      title: 'De vuelta a las tres estrellas',
+      body: 'En el paso 1 se te enseñaron tres estrellas con los números apagados y se te preguntó qué podía decirte la imagen. Tu respuesta está guardada; nada la ha sobrescrito desde entonces.\n\nLas tres eran una estrella de secuencia principal de 0,2 masas solares, otra de secuencia principal de 5 masas solares y una gigante roja que empezó con una masa solar. La gigante era la mayor de las tres, con una quinta parte de la masa de la estrella intermedia y una doceava parte de su luminosidad.\n\nEscribe la explicación que darías ahora.',
+      prompt:
+        'Explica cómo se relacionan masa, temperatura, radio, luminosidad y vida, y dónde dejan de valer esas relaciones. Cita al menos dos de tus propias medidas y di si tu respuesta del paso 1 sigue en pie.',
+      tip: 'Tu cuaderno tiene las medidas, con el modelo del que salió cada una. Ábrelo en otra pestaña si quieres citar un número exacto.',
+    },
+    'what-the-diagram-is-for': {
+      stage: {
+        stars: [
+          { name: 'Estrella 1' },
+          { name: 'Estrella 2' },
+          { name: 'Estrella 3' },
+        ],
+      },
+      title: 'Para qué sirve el diagrama',
+      body: '<strong>Cinco magnitudes, y no son la misma.</strong> La masa es cuánta estrella hay. El radio es cómo de grande es. La temperatura es cómo de caliente está su superficie. La luminosidad es cuánta luz sale de ella. El brillo aparente es cuánta de esa luz te llega, y depende de dónde estés tú.\n\n<strong>La temperatura y la luminosidad juntas fijan el radio</strong>, y lo usaste en ambos sentidos: así fue como dos estrellas del mismo color resultaron diferir en tamaño en un factor de varios cientos.\n\n<strong>En la secuencia principal, la masa fija lo demás</strong>, y de forma muy pronunciada: un factor cien en masa son millones en luz. Esa pendiente es toda la respuesta a cómo una estrella con mucho más combustible se queda sin él mucho antes.\n\n<strong>Una posición en el diagrama no fija una masa ni una edad.</strong> La gigante y la enana blanca que mediste son contraejemplos de las dos cosas, y las dos fueron estrellas corrientes de secuencia principal en su momento. Las relaciones de arriba son afirmaciones sobre la secuencia principal, no sobre las estrellas.\n\n<strong>Y una muestra no es una población.</strong> Las estrellas más brillantes del cielo no son las más comunes de la galaxia. Son las que se ven desde más lejos, que es un hecho sobre el muestreo y no sobre las estrellas.',
+      tip: 'Si quieres ver cambiar a estas estrellas en vez de compararlas, «Vidas de las estrellas» sigue a cuatro de ellas desde una nube que se colapsa hasta lo que dejan atrás.',
+    },
+  },
+};

@@ -118,7 +118,7 @@ current, and the orchestrator checks it.
 | `generate-graph.mjs` | Every generated artifact, what it is made from, and what it must follow |  |
 | `generate-lesson-cards.mjs` | A card picture for a lesson that stages its own scene | `npm run cards` |
 | `generate-scenario-thumbnails.mjs` | Scenario thumbnail generator | `npm run thumbnails` |
-| `generate.mjs` | Regenerate what is stale, in the order it has to happen | `npm run instructors:check`, `npm run thumbnails:check`, `npm run teaching:check`, `npm run cards:check`, `npm run audit:scene:check`, `npm run audit:irreversible:check`, `npm run docs:check:full`, `npm run manual:check`, `npm run validation:check`, `npm run catalog:check`, `npm run ledger:check`, `npm run surface-ledger:check`, `npm run generate`, `npm run generate:check`, `npm run docs-map:check`, `npm run tools:index:check`, `npm run sw:check`, `npm run registries:check`, `npm run capabilities:check` |
+| `generate.mjs` | Regenerate what is stale, in the order it has to happen | `npm run instructors:check`, `npm run thumbnails:check`, `npm run lesson-text:check`, `npm run teaching:check`, `npm run cards:check`, `npm run audit:scene:check`, `npm run audit:irreversible:check`, `npm run docs:check:full`, `npm run manual:check`, `npm run validation:check`, `npm run catalog:check`, `npm run ledger:check`, `npm run surface-ledger:check`, `npm run generate`, `npm run generate:check`, `npm run docs-map:check`, `npm run tools:index:check`, `npm run sw:check`, `npm run registries:check`, `npm run capabilities:check` |
 | `generated-blocks.mjs` | Generated files and generated regions |  |
 | `generated-tripwire.mjs` | A merge must not drop what one side wrote into a file with generated regions |  |
 | `geometry-fuzz.mjs` | Base-versus-head fuzz of every scenario's world (Roadmap II Prompt 108) |  |
@@ -174,6 +174,7 @@ current, and the orchestrator checks it.
 | `lesson-golden-dom.mjs` | npm run lesson:golden:dom -- --regenerate-lesson-golden | `npm run lesson:golden:dom` |
 | `lesson-golden.mjs` | npm run lesson:golden -- --regenerate-lesson-golden | `npm run lesson:golden` |
 | `lesson-scene-audit.mjs` | What every lesson step does with the main scene | `npm run audit:scene` |
+| `lesson-text.mjs` | Spanish lesson text, keyed by step: the source, and the files the app loads | `npm run lesson-text` |
 | `library-routes.mjs` | Does a Library route open what it names? |  |
 | `longtask-census.mjs` | Main-thread work above a stated budget (Prompt 112, part 2) |  |
 | `make-social-card.js` | Generate social-card.png (1200x630) for the Open Graph / Twitter preview. | `npm run build`, `npm run social-card`, `npm run build:ci` |

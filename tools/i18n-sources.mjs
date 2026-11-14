@@ -106,8 +106,9 @@ export async function catalogRows() {
  * The strings of a translation shadow laid against the English it shadows.
  *
  * The walk is mergeTranslation's (js/data/investigations/i18n.js): a shadow can
- * only reach keys the English has, arrays line up by index, `null` is "not
- * translated", functions and the structural keys are machinery.
+ * only reach keys the English has, arrays line up by index (a row names a
+ * lesson's step by its sid: `steps[<sid>].title`), `null` is "not translated",
+ * functions and the structural keys are machinery.
  *
  * @param {*} base - The English, or a part of it
  * @param {*} overlay - The shadow, or the matching part of it
@@ -136,8 +137,20 @@ export function shadowPairs(
   }
   if (Array.isArray(base)) {
     if (!Array.isArray(overlay)) return;
+    // A step is named by its sid, so a row does not move when a step does (the
+    // shadow is the index-aligned list tools/lesson-text.mjs writes).
+    const named =
+      base.length > 0 && base.every(b => typeof b?.sid === 'string');
     base.forEach((b, i) =>
-      shadowPairs(b, overlay[i], skip, out, prefix, `${at}[${i}]`, name)
+      shadowPairs(
+        b,
+        overlay[i],
+        skip,
+        out,
+        prefix,
+        `${at}[${named ? b.sid : i}]`,
+        name
+      )
     );
     return;
   }

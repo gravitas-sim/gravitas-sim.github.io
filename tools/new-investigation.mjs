@@ -12,12 +12,15 @@
 // and the guide builds with a hole in it. The mechanical ones are done here.
 //
 //   js/data/investigations/<id>.js         the lesson
-//   js/data/investigations/es/<id>.js      the Spanish shadow
+//   lesson-text/es/<id>.js                 the Spanish text, keyed by step id
+//   js/data/investigations/es/<id>.js      the Spanish shadow the app loads
+//                                          (npm run lesson-text writes it)
 //   js/data/investigations.js              the synchronous barrel and catalog
 //   js/data/instructorContent.js           the guide stub
 //   then: npm run manifest                 manifests and filter metadata
 //   then: npm run registries               the lazy loader and the translation
 //                                          in registry.js, from the catalog
+//   then: npm run lesson-text              the Spanish shadow, from lesson-text/
 //
 // Nothing is overwritten. Re-running after an edit reports what is already in
 // place and touches nothing else, so it is safe to run twice.
@@ -279,18 +282,25 @@ const shadow = `// =============================================================
 //   and must never appear
 //
 // Arrays line up by index: the third Spanish option translates the third
-// English one.
+// English one. Spanish steps are the exception: they are keyed by step id in
+// lesson-text/es/${id}.js, and \`npm run lesson-text\` writes this list from
+// them, so edit that file and never this one.
 // =============================================================================
 
 export default {
   title: '',
   subtitle: '',
   objectives: [],
-  steps: [
-    // { title: '', body: '' },
-  ],
+  steps: [],
 };
 `;
+
+// The keyed source is the same file with its steps written as a map; the
+// generator changes nothing else, so the shadow it writes matches this text.
+const keyed = shadow.replace(
+  'steps: [],',
+  "steps: {\n    // 'step-sid': { title: '', body: '' },\n  },"
+);
 
 const guide = `
   '${id}': {
@@ -314,6 +324,7 @@ const guide = `
 
 await writeNew(`js/data/investigations/${id}.js`, lesson);
 await writeNew(`js/data/investigations/es/${id}.js`, shadow);
+await writeNew(`lesson-text/es/${id}.js`, keyed);
 
 // The card paragraph, in both languages, at the end of each summaries file.
 for (const [file, text] of [
@@ -390,6 +401,7 @@ console.log(
 Next:
   npm run manifest          regenerate the manifests and the filter metadata
   npm run registries        add the lesson's lazy loaders (registry.js)
+  npm run lesson-text       write the Spanish shadow from lesson-text/
   npm run author:check      validate the new lesson, and every other one
   npm run format            the scaffold is written plainly, prettier owns it
 

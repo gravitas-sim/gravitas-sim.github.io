@@ -16,8 +16,8 @@ that stands beside it. Every content type has exactly one way to know.
 |---|---|---|
 | Pack texts (investigation, course, activity packs, the SDK's examples) | `{en, es, esOf}` in the file | `esOf`, the digest of the English the Spanish was written from. Already in the formats (`js/course/review.js` `translationState`, `js/composer/compile.js` `digest`); the tool only reports it. A `/1` course pack has no such field (its schema has none); migrating it to `/2` adds it |
 | Message catalogs | `js/i18n/*.js`, five or more fragments per locale | the ledger, keyed by message id |
-| Lesson shadows | `js/data/investigations/es/<id>.js` | the ledger, keyed by lesson id and the path to the string (arrays line up by index) |
-| Deeper-step shadows | `js/data/investigations/depth/es/<id>.js` | the same |
+| Lesson shadows | `lesson-text/es/<id>.js` (keyed by step id), written to `js/data/investigations/es/<id>.js` by `npm run lesson-text` | the ledger, keyed by lesson id and the path to the string (a step by its sid, other arrays by index) |
+| Deeper-step shadows | `lesson-text/depth-es/<id>.js`, written to `js/data/investigations/depth/es/<id>.js` | the same |
 | Instructor prose and expectations | `js/data/instructorContent.es.js`, `instructorExpectations.es.js` | the same; empty in Spanish today |
 | Lesson cards' summaries, the "what am I looking at" explainers, the distribution kit's words, the instructor guides' labels, the SDK example's strings | one twin table each | the same, keyed by table and path |
 | Document pages | an English span with a Spanish span beside it | the ledger, keyed by the digest of the Spanish, so an insertion elsewhere on a page moves nothing |
@@ -99,10 +99,17 @@ with `--write` and listed in the pull request with the day its grace period ends
 
 ### Inserting a lesson step
 
-Lesson strings line up with the Spanish by index, so inserting a step in the
-English slides every later string against the wrong Spanish, silently, at run
-time. The ledger turns that into a loud result: every later string goes stale.
-Append a step, or translate the steps after the insertion in the same change.
+The app matches a lesson's Spanish to its English by index, which is the
+smallest form to ship, so the text a person edits is keyed by step id instead
+(`lesson-text/`, see CONTRIBUTING_CONTENT.md) and `npm run lesson-text` writes
+the index-aligned files the app loads. An insert, a move or a removal in the
+English moves no other Spanish: an insert needs one Spanish step under the new
+sid and a run of the generator. `npm run author:check` fails until the step is
+there and fails on a Spanish step whose sid the lesson no longer has, and
+`npm run lesson-text:check` fails on a written file that is out of date. A
+ledger row names a step by its sid (`steps[<sid>].title`), so an insert adds a
+row for the new step and does not turn the rows after it stale. Arrays with no
+sid (options, hints, rows) still line up by index.
 
 ## The glossary: identifiers and labels
 

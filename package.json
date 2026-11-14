@@ -86,6 +86,8 @@
     "probe:decoded": "node tools/decoded-memory-probe.mjs",
     "probe:import-cancel": "node tools/import-cancel-probe.mjs",
     "validate:inference": "node tools/inference-validate.mjs",
+    "lesson-text": "node tools/lesson-text.mjs --write",
+    "lesson-text:check": "node tools/generate.mjs --check --only lesson-text",
     "manifest": "node tools/build-investigation-manifest.js",
     "teaching:data": "node tools/build-teaching-demos.mjs",
     "teaching:check": "node tools/generate.mjs --check --only teaching",

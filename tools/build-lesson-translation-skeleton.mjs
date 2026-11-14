@@ -13,6 +13,9 @@
 // a lesson that then loads no scenario at all. The shape comes off the lesson
 // itself, so none of those are possible.
 //
+// Spanish is written keyed by step id under lesson-text/es (the generated
+// shadow under js/data/investigations/es is `npm run lesson-text`'s).
+//
 // It is a starting point, not a build step. Once a translation exists this
 // script is not run over it again - that would throw the Spanish away. It
 // prints to stdout unless told otherwise, and refuses to overwrite.
@@ -27,6 +30,7 @@ import { STRUCTURAL } from '../js/data/investigations/i18n.js';
 
 const HERE = path.dirname(fileURLToPath(import.meta.url));
 const DIR = path.join(HERE, '..', 'js', 'data', 'investigations');
+const KEYED = path.join(HERE, '..', 'lesson-text');
 
 /**
  * The translatable half of a value.
@@ -83,6 +87,12 @@ const HEADER = (
  */
 async function render(inv, locale) {
   const words = wordsOf(inv) || {};
+  // The Spanish is written keyed by step id (tools/lesson-text.mjs writes the
+  // shadow the app loads from it): each step's words under its sid.
+  if (locale === 'es' && Array.isArray(words.steps))
+    words.steps = Object.fromEntries(
+      words.steps.map((w, i) => [inv.steps[i].sid, w ?? {}])
+    );
   const raw = `${HEADER(inv.id, locale)}\nexport default ${JSON.stringify(words, null, 2)};\n`;
   const options = (await prettier.resolveConfig(path.join(DIR, 'x.js'))) || {};
   return prettier.format(raw, { ...options, filepath: path.join(DIR, 'x.js') });
@@ -100,7 +110,10 @@ const ids = rest.includes('--all')
   ? INVESTIGATIONS.map(i => i.id)
   : rest.filter(a => !a.startsWith('--'));
 
-const outDir = path.join(DIR, locale);
+// Spanish goes to lesson-text/es, keyed by step id; run `npm run lesson-text`
+// afterwards to write the shadow the app loads.
+const outDir =
+  locale === 'es' ? path.join(KEYED, 'es') : path.join(DIR, locale);
 if (!toStdout) mkdirSync(outDir, { recursive: true });
 
 for (const id of ids) {
@@ -121,4 +134,5 @@ for (const id of ids) {
   }
   writeFileSync(file, text);
   console.log(`wrote ${path.relative(process.cwd(), file)}`);
+  if (locale === 'es') console.log('then: npm run lesson-text');
 }
