@@ -436,24 +436,30 @@ export function shellFor(page, { main }) {
 }
 
 /**
- * What the shell puts in <head>: its stylesheet, and the stored theme applied
- * before the first paint, so no page flashes Midnight first. The ids and the
- * attribute are js/theme.js's; tools/csp.mjs hashes the script.
+ * What the shell puts in <head>: its stylesheet, the stored theme applied
+ * before the first paint, so no page flashes Midnight first, and the reader's
+ * Settings, Motion choice (data-motion, js/quality.js's attribute and key), so
+ * every page honours it as the application does. The ids and the attributes are
+ * js/theme.js's and js/quality.js's; tools/csp.mjs hashes the script. With
+ * storage unavailable the default theme and the system's motion setting are
+ * correct, hence the empty catch. The second block is the offline note
+ * (shellFor): shown once when the connection drops, gone when it returns,
+ * dismissed by its button or Escape. Comments stay here, not in the emitted
+ * text, because every page ships that text.
  */
 export const HEAD = [
   `<link rel="stylesheet" href="/css/shell.css" />`,
   `<script>`,
   `try {`,
+  `  const r = document.documentElement;`,
   `  const t = localStorage.getItem('gravitas_theme');`,
   `  if (['deep', 'observatory', 'daylight'].includes(t)) {`,
-  `    document.documentElement.setAttribute('data-theme', t);`,
-  `    document.documentElement.style.colorScheme =`,
-  `      t === 'daylight' ? 'light' : 'dark';`,
+  `    r.setAttribute('data-theme', t);`,
+  `    r.style.colorScheme = t === 'daylight' ? 'light' : 'dark';`,
   `  }`,
-  `} catch {`,
-  `  /* storage unavailable: the default theme is correct */`,
-  `}`,
-  `/* The offline note (shellFor): shown once when the connection drops, gone when it returns, dismissed by its button or Escape. */`,
+  `  const m = localStorage.gravitas_motion;`,
+  `  if (m === 'reduce' || m === 'step') r.dataset.motion = m;`,
+  `} catch {}`,
   `(() => {`,
   `  const sync = () => {`,
   `    const el = document.querySelector('.gs-offline');`,

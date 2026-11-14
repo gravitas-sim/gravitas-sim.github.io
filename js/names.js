@@ -1,9 +1,9 @@
-// Names (P107 2c, D-DECOMP-14): KEY_ storage keys, EV_ window events, ID_ format
-// ids, DOM_ element ids, spelled once; values never change. tests/keyRegistry.test.js pins them,
-// tools/key-registry-allowlist.json lists those not yet moved. A leaf module.
+// Names (D-DECOMP-14): KEY_ storage keys, EV_ events, ID_ format ids, DOM_
+// element ids, spelled once; values never change (tests/keyRegistry.test.js).
 
 export const KEY_UNITS = 'gravitas_units';
 export const KEY_MOTION = 'gravitas_motion';
+export const KEY_QUALITY_VERDICT = 'gravitas_quality';
 export const CACHE_PARTS = 'gravitas-parts';
 export const EV_SIMULATION_RESET = 'gravitasSimulationReset';
 export const EV_UNITS_CHANGED = 'gravitasUnitsChanged';
@@ -26,8 +26,7 @@ export const EV_GALAXY_GRAVITY_CHANGED = 'gravitasGalaxyGravityChanged';
 export const EV_SETTINGS_APPLIED = 'gravitasSettingsApplied';
 export const EV_PRESENTATION_CHANGED = 'gravitasPresentationChanged';
 
-// Storage keys, and the prefixes a key is built from (a name that ends in _PREFIX),
-// with the database, protocol, format and meta names that share the shape.
+// Storage keys, and the prefixes (_PREFIX) a key is built from.
 export const KEY_DASHED_PREFIX = 'gravitas-';
 export const KEY_META_BUILD = 'gravitas-build';
 export const KEY_PROTOCOL_EMBED = 'gravitas-embed';
@@ -49,8 +48,7 @@ export const KEY_TERMS = 'gravitas_terms';
 export const KEY_THEME = 'gravitas_theme';
 export const KEY_WELCOME_SEEN_V1 = 'gravitas_welcome_seen_v1';
 
-// The rest of the storage keys, with the database, protocol, format and meta
-// names that share the shape.
+// The rest of the storage keys.
 export const KEY_DB_ARCHIVE = 'gravitas-archive';
 export const KEY_DB_CATALOG = 'gravitas-catalog';
 export const KEY_PROTOCOL_COMPUTE = 'gravitas-compute';
