@@ -47,13 +47,13 @@ export const WHY_VENUS_IS_HOT_DEEPER = {
           id: 'teq',
           label: 'Earth’s equilibrium temperature with albedo 0',
           unit: 'K',
-          hint: '278.3',
+          want: '278.3',
         },
         {
           id: 'rise',
           label: 'How much warmer than with its own albedo',
           unit: 'K',
-          hint: '24.3',
+          want: '24.3',
         },
       ],
       validate: v => {
@@ -89,13 +89,13 @@ export const WHY_VENUS_IS_HOT_DEEPER = {
           id: 'venus',
           label: 'Venus’s scale height',
           unit: 'km',
-          hint: '15.9',
+          want: '15.9',
         },
         {
           id: 'earth',
           label: 'Earth’s scale height',
           unit: 'km',
-          hint: '8.4',
+          want: '8.4',
         },
       ],
       validate: v => {
@@ -134,8 +134,8 @@ export const TWO_GREENHOUSE_MODELS_DEEPER = {
              emissivity of one layer and the optical depth that give its measured surface
              temperature, 210 K.`,
       fields: [
-        { id: 'eps', label: 'Emissivity that gives 210 K', hint: '0.006' },
-        { id: 'tau', label: 'Optical depth that gives 210 K', hint: '0.004' },
+        { id: 'eps', label: 'Emissivity that gives 210 K', want: '0.006' },
+        { id: 'tau', label: 'Optical depth that gives 210 K', want: '0.004' },
       ],
       validate: v => {
         if (![v.eps, v.tau].every(Number.isFinite)) return null;
@@ -168,13 +168,13 @@ export const TWO_GREENHOUSE_MODELS_DEEPER = {
           id: 'gray',
           label: 'Ground temperature, gray model with optical depth 1',
           unit: 'K',
-          hint: '292.2',
+          want: '292.2',
         },
         {
           id: 'layer',
           label: 'Ground temperature, one layer with emissivity 1',
           unit: 'K',
-          hint: '302.1',
+          want: '302.1',
         },
       ],
       validate: v => {
@@ -212,7 +212,7 @@ export const TWO_GREENHOUSE_MODELS_DEEPER = {
           id: 'gap',
           label: 'Eddington against exact gray, at the top',
           unit: '%',
-          hint: '3.7',
+          want: '3.7',
         },
       ],
       validate: v => {
@@ -264,13 +264,13 @@ export const THE_TURNING_SUN_DEEPER = {
           id: 'rate',
           label: 'G3’s sidereal rate (degrees a day)',
           unit: '',
-          hint: '13.48',
+          want: '13.48',
         },
         {
           id: 'sigma',
           label: 'The uncertainty of that rate (degrees a day)',
           unit: '',
-          hint: '0.06',
+          want: '0.06',
         },
       ],
       validate: v => {
@@ -305,14 +305,14 @@ export const THE_TURNING_SUN_DEEPER = {
           id: 'law1',
           label: 'The law’s rate at G1’s latitude, 7.3 degrees (degrees a day)',
           unit: '',
-          hint: '14.29',
+          want: '14.29',
         },
         {
           id: 'law3',
           label:
             'The law’s rate at G3’s latitude, −20.1 degrees (degrees a day)',
           unit: '',
-          hint: '14.05',
+          want: '14.05',
         },
       ],
       validate: v => {
@@ -383,12 +383,12 @@ export const THE_TURNING_SUN_DEEPER = {
              G1&rsquo;s <strong>mu</strong>, the cosine of the angle from the middle of the disc as seen from the Sun (1 in the
              middle, 0 at the edge), and the uncertainty of its longitude.`,
       fields: [
-        { id: 'mu', label: 'G1’s mu on day 7', unit: '', hint: '0.29' },
+        { id: 'mu', label: 'G1’s mu on day 7', unit: '', want: '0.29' },
         {
           id: 'sigma',
           label: 'The uncertainty of its longitude',
           unit: 'deg',
-          hint: '0.64',
+          want: '0.64',
         },
       ],
       validate: v => {
@@ -422,13 +422,13 @@ export const THE_TURNING_SUN_DEEPER = {
           id: 'a',
           label: 'The fitted equatorial term A (degrees a day)',
           unit: '',
-          hint: '13.96',
+          want: '13.96',
         },
         {
           id: 'sigma',
           label: 'The uncertainty of A (degrees a day)',
           unit: '',
-          hint: '0.22',
+          want: '0.22',
         },
       ],
       validate: v => {
@@ -494,7 +494,7 @@ export const THE_TURNING_SUN_DEEPER = {
           id: 'chi',
           label: 'G3’s chi-square per degree of freedom',
           unit: '',
-          hint: '2.35',
+          want: '2.35',
         },
       ],
       validate: v => {
@@ -533,9 +533,9 @@ export const THE_SUNS_POWER_DEEPER = {
           id: 'earth',
           label: 'The fall at the Earth (W/m²)',
           unit: '',
-          hint: '4.04',
+          want: '4.04',
         },
-        { id: 'au', label: 'The fall at 1 AU (W/m²)', unit: '', hint: '0.86' },
+        { id: 'au', label: 'The fall at 1 AU (W/m²)', unit: '', want: '0.86' },
       ],
       validate: v => {
         if (![v.earth, v.au].every(Number.isFinite)) return null;
@@ -567,13 +567,13 @@ export const THE_SUNS_POWER_DEEPER = {
           id: 'se',
           label: 'The uncertainty of the mean flux (W/m²)',
           unit: '',
-          hint: '0.15',
+          want: '0.15',
         },
         {
           id: 'sl',
           label: 'The uncertainty of the luminosity (× 10²² W)',
           unit: '',
-          hint: '4.2',
+          want: '4.2',
         },
       ],
       validate: v => {
@@ -674,13 +674,13 @@ export const THE_SUNS_POWER_DEEPER = {
           id: 'diff',
           label: 'The luminosity against the nominal',
           unit: '%',
-          hint: '0.00',
+          want: '0.00',
         },
         {
           id: 'dt',
           label: 'The temperature against 5772 K',
           unit: 'K',
-          hint: '0.0',
+          want: '0.0',
         },
       ],
       validate: v => {
@@ -985,7 +985,7 @@ export const HOW_HOT_IS_THE_DAY_SIDE_DEEPER = {
           id: 'chi',
           label: 'The lowest chi-square for Planet Y',
           unit: '',
-          hint: '231',
+          want: '231',
         },
       ],
       validate: v => {
@@ -1019,7 +1019,7 @@ export const HOW_HOT_IS_THE_DAY_SIDE_DEEPER = {
           id: 'n',
           label: 'Intervals that contain 2,100 K',
           unit: '',
-          hint: '3',
+          want: '3',
         },
       ],
       validate: v => {
@@ -1058,13 +1058,13 @@ export const PHASES_AND_ALBEDO_DEEPER = {
           id: 'lo',
           label: 'Lower end of the interval',
           unit: '',
-          hint: '0.34',
+          want: '0.34',
         },
         {
           id: 'hi',
           label: 'Upper end of the interval',
           unit: '',
-          hint: '0.36',
+          want: '0.36',
         },
       ],
       validate: v => {

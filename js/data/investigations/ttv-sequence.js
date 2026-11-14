@@ -84,13 +84,13 @@ export const THE_CLOCK_THAT_DRIFTS = {
           id: 'a',
           label: 'Mid-time from the prediction',
           unit: 'minutes',
-          hint: '1.53',
+          want: '1.53',
         },
         {
           id: 'b',
           label: 'Error bar (one sigma)',
           unit: 'minutes',
-          hint: '0.52',
+          want: '0.52',
         },
       ],
       validate: v => {
@@ -188,8 +188,8 @@ export const THE_CLOCK_THAT_DRIFTS = {
              <strong>super-period</strong>, the length of the wave in days, and its
              <strong>amplitude</strong>, half the swing from top to bottom, in minutes.`,
       fields: [
-        { id: 'a', label: 'Super-period', unit: 'days', hint: '345' },
-        { id: 'b', label: 'Amplitude', unit: 'minutes', hint: '4.7' },
+        { id: 'a', label: 'Super-period', unit: 'days', want: '345' },
+        { id: 'b', label: 'Amplitude', unit: 'minutes', want: '4.7' },
       ],
       validate: v => {
         if (![v.a, v.b].every(Number.isFinite)) return null;
@@ -269,9 +269,9 @@ export const THE_CLOCK_THAT_DRIFTS_DEEPER = {
              days (the two to one resonance has j = 2). Read the inner planet’s clock from the panel, then switch to
              the outer planet and read its clock, and compute the super-period.`,
       fields: [
-        { id: 'a', label: 'Inner period', unit: 'days', hint: '10.0003' },
-        { id: 'b', label: 'Outer period', unit: 'days', hint: '20.5955' },
-        { id: 'c', label: 'Super-period', unit: 'days', hint: '346.2' },
+        { id: 'a', label: 'Inner period', unit: 'days', want: '10.0003' },
+        { id: 'b', label: 'Outer period', unit: 'days', want: '20.5955' },
+        { id: 'c', label: 'Super-period', unit: 'days', want: '346.2' },
       ],
       validate: v => {
         if (![v.a, v.b, v.c].every(Number.isFinite)) return null;
@@ -303,8 +303,8 @@ export const THE_CLOCK_THAT_DRIFTS_DEEPER = {
       body: `Switch to the pair near three to two (ten and fifteen and a half days, j = 3), inner planet. Read
              the super-period the fit finds, and the one the relation gives from the two periods.`,
       fields: [
-        { id: 'a', label: 'Fitted super-period', unit: 'days', hint: '173.7' },
-        { id: 'b', label: 'From the periods', unit: 'days', hint: '173.8' },
+        { id: 'a', label: 'Fitted super-period', unit: 'days', want: '173.7' },
+        { id: 'b', label: 'From the periods', unit: 'days', want: '173.8' },
       ],
       validate: v => {
         if (![v.a, v.b].every(Number.isFinite)) return null;
@@ -400,10 +400,10 @@ export const THE_CLOCK_THAT_DRIFTS_DEEPER = {
           id: 'a',
           label: 'Mass of the outer planet',
           unit: 'M⊕',
-          hint: '14.4',
+          want: '14.4',
         },
-        { id: 'b', label: 'Low end', unit: 'M⊕', hint: '12.1' },
-        { id: 'c', label: 'High end', unit: 'M⊕', hint: '17.4' },
+        { id: 'b', label: 'Low end', unit: 'M⊕', want: '12.1' },
+        { id: 'c', label: 'High end', unit: 'M⊕', want: '17.4' },
       ],
       validate: v => {
         if (![v.a, v.b, v.c].every(Number.isFinite)) return null;

@@ -23,22 +23,7 @@
     ["steps.the-false-periods.fields.1.unit","d"],
     ["steps.the-alias-by-hand.unit","d"]
    ],
-   "numbered": [
-    ["steps.the-first-period.fields.0.hint","0.6604"],
-    ["steps.the-first-period.fields.1.hint","0.0167"],
-    ["steps.fold-it.fields.0.hint","0.66041"],
-    ["steps.fold-it.fields.1.hint","0.00015"],
-    ["steps.fold-it.fields.2.hint","0.712"],
-    ["steps.fold-on-twice-the-period.fields.0.hint","1.3208"],
-    ["steps.a-slightly-wrong-period.fields.0.hint","0.6736"],
-    ["steps.a-second-star.fields.0.hint","7.226"],
-    ["steps.a-second-star.fields.1.hint","0.030"],
-    ["steps.a-second-star.fields.2.hint","3.68"],
-    ["steps.once-a-night.fields.0.hint","1.972"],
-    ["steps.once-a-night.fields.1.hint","0.212"],
-    ["steps.the-false-periods.fields.0.hint","1.945"],
-    ["steps.the-false-periods.fields.1.hint","0.3977"]
-   ]
+   "numbered": []
   },
   "es": {
    "units": [],

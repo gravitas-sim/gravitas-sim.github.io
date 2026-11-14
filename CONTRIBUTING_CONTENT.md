@@ -70,6 +70,43 @@ and table is described in words; the text is plain at the level it states.
 and the sources you cite. A claim Gravitas's model does not support is removed
 or said to be outside it.
 
+## Adding, moving or removing a step in a shipped lesson
+
+A lesson's Spanish is written keyed by step id (`sid`), in `lesson-text/`:
+
+- `lesson-text/es/<id>.js`: the lesson's Spanish;
+- `lesson-text/depth-es/<id>.js`: its deeper steps;
+- `lesson-text/sequences/<name>-sequence.js`: the `*_ES` constants of a
+  sequence module, whose Spanish sits beside its English.
+
+In each, `steps` is an object with one entry for each step, filed under that
+step's sid:
+
+```js
+steps: {
+  'eight-minutes-of-arc': { title: '...', body: '...' },
+}
+```
+
+The app does not read these files. `npm run lesson-text` writes the files it
+does load (`js/data/investigations/es/<id>.js`, `depth/es/<id>.js` and the
+`*_ES` statements of the sequence modules) with each `steps` list in the
+English order and a `null` for a step with no Spanish yet. Never edit the
+written files by hand: `npm run lesson-text:check` (part of `npm run
+generate:check`) fails when one is stale.
+
+- **Insert** a step: add one Spanish entry under the new step's sid, with the
+  words and nothing else (no sid inside it, no numbers, no machinery), then run
+  `npm run lesson-text`. No other Spanish entry moves and nothing is renumbered.
+  Until the entry exists `npm run author:check` fails (`i18n/steps`).
+- **Move** a step: change the English, then run `npm run lesson-text`.
+- **Remove** a step: delete its entry; `author:check` names an entry whose sid
+  the lesson no longer has.
+
+Arrays that carry no sid (options, objectives, hints, rows) still line up by
+index with the English, inside the entry. Step ids themselves never change in a
+shipped lesson.
+
 ## The review checklist
 
 `sdk review` runs the first six and prints the rest. The same function runs in

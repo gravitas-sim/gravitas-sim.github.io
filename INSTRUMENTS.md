@@ -122,6 +122,16 @@ reproduces all six tabulated depths to 0.01 mag with the first row and misses by
 only the first row is stored, under the footnote's label with the doubt in its
 note. It should be checked against the typeset table.
 
+That check was made on 2026-11-13 against the text layer of the typeset PDF
+(arXiv:0805.2366v5). Footnote b, "delivered median zenith seeing", belongs to
+the row 0.81, 0.77, 0.73, 0.71, 0.69, 0.68 arcsec (u to y), and footnote c,
+"effective zenith seeing", to the row 0.92, 0.87, 0.83, 0.80, 0.78, 0.76: so the
+per-band rows stored above are the effective seeing, and their label and note
+still say delivered. The site's g and i seeing (0.77 and 0.71) are the delivered
+row, added so that the exposure planner can read Rubin in g and i; the site's r
+value (0.65, Sec. II.1.5) is a free-air figure and is not on that footing
+(register row D-R4-302-01).
+
 ## What is deliberately absent
 
 - **Sinistro gain.** The page states gain only per readout mode (6.6 e-/ADU in

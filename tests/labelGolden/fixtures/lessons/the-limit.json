@@ -14,16 +14,7 @@
     ["steps.hydrogen-would-be-different.fields.0.unit","M☉"],
     ["steps.an-iron-core.fields.0.unit","M☉"]
    ],
-   "numbered": [
-    ["steps.a-typical-dwarf.fields.0.hint","0.60"],
-    ["steps.a-typical-dwarf.fields.1.hint","8860"],
-    ["steps.a-dense-dwarf.fields.0.hint","1.37"],
-    ["steps.a-dense-dwarf.fields.1.hint","2470"],
-    ["steps.the-ceiling.fields.0.hint","1.45"],
-    ["steps.the-ceiling.fields.1.hint","1.456"],
-    ["steps.hydrogen-would-be-different.fields.0.hint","5.82"],
-    ["steps.an-iron-core.fields.0.hint","1.26"]
-   ]
+   "numbered": []
   },
   "es": {
    "units": [],

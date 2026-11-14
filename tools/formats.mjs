@@ -929,6 +929,12 @@ export const FREEZE = Object.freeze({
       'tools/variables-sample.mjs prints a sample of the variable-star classifier for its author; no page, file or link carries it',
     'gravitas.catalog-ledger':
       "docs/catalog-ledger.json is the maintainers' record of what was reviewed, written and read only by tools/catalog-ledger.mjs; the application never loads it and no file, page or link carries it",
+    'gravitas.surface-ledger':
+      "docs/surface-ledger.json is the maintainers' record of the published surfaces, written and read only by tools/surface-ledger.mjs; the application never loads it and no file, page or link carries it",
+    'gravitas.surface-ledger-seed':
+      'tools/surface-ledger-seed.json holds the first values of the surface ledger rows, read only by tools/surface-ledger.mjs; the application never loads it',
+    'gravitas.surface-measurements':
+      'docs/surface-measurements.json is the record of one browser run of tools/surface-measure.mjs, a development measurement; the application never loads it and no file, page or link carries it',
     'gravitas.something':
       'tools/data-kinds-cases.mjs hands the data-kind readers a format id that is wrong on purpose, to see them refuse it',
   }),

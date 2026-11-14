@@ -22,7 +22,6 @@
     ["steps.now-swap.fields.0.label","At your first stop, which way was the ring widest? (1 = across, 2 = up and down)"],
     ["steps.now-swap.fields.1.label","Half a cycle later, which way? (1 = across, 2 = up and down)"],
     ["steps.measure-a-change-in-length.fields.0.label","Practice: a 10 m rod that stretches by 1 mm has a strain of…"],
-    ["steps.measure-a-change-in-length.fields.0.hint","0.0001"],
     ["steps.the-same-source-farther-away.fields.0.label","Strain amplitude at 400 Mpc"],
     ["steps.the-same-source-farther-away.fields.1.label","Strain amplitude at 800 Mpc"],
     ["steps.the-same-source-farther-away.fields.2.label","Strain amplitude at 1600 Mpc"],
@@ -34,7 +33,6 @@
    "numbered": [
     ["steps.now-swap.fields.1.label","Medio ciclo después, ¿en cuál? (1 = a lo ancho, 2 = de arriba abajo)"],
     ["steps.measure-a-change-in-length.fields.0.label","Práctica: una barra de 10 m que se estira 1 mm tiene una deformación de…"],
-    ["steps.measure-a-change-in-length.fields.0.hint","0,0001"],
     ["steps.the-same-source-farther-away.fields.0.label","Amplitud de deformación a 400 Mpc"],
     ["steps.the-same-source-farther-away.fields.1.label","Amplitud de deformación a 800 Mpc"],
     ["steps.the-same-source-farther-away.fields.2.label","Amplitud de deformación a 1600 Mpc"],

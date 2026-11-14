@@ -17,21 +17,7 @@
     ["steps.hold-the-limb-darkening.fields.1.unit",""],
     ["steps.hold-the-limb-darkening.fields.2.unit",""]
    ],
-   "numbered": [
-    ["steps.the-fit.fields.0.hint","3.52454"],
-    ["steps.the-fit.fields.1.hint","0.11926"],
-    ["steps.the-fit.fields.2.hint","9.21"],
-    ["steps.the-fit.fields.3.hint","0.430"],
-    ["steps.the-fit.fields.4.hint","7.98"],
-    ["steps.sigma-and-profile.fields.0.hint","0.00164"],
-    ["steps.sigma-and-profile.fields.1.hint","0.11797"],
-    ["steps.sigma-and-profile.fields.2.hint","0.12043"],
-    ["steps.sigma-and-profile.fields.3.hint","0.368"],
-    ["steps.sigma-and-profile.fields.4.hint","0.476"],
-    ["steps.hold-the-limb-darkening.fields.0.hint","0.11767"],
-    ["steps.hold-the-limb-darkening.fields.1.hint","0.00050"],
-    ["steps.hold-the-limb-darkening.fields.2.hint","3.2"]
-   ]
+   "numbered": []
   },
   "es": {
    "units": [],

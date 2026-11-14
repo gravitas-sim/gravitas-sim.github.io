@@ -23,30 +23,12 @@
     ["steps.the-baseline-is-a-choice.fields.1.unit",""]
    ],
    "numbered": [
-    ["steps.count-the-gap.fields.0.hint","26"],
-    ["steps.count-the-gap.fields.1.hint","216"],
-    ["steps.depletion.fields.0.hint","88.0"],
     ["steps.depletion.fields.1.label","Low end of the 95 percent interval (percent)"],
-    ["steps.depletion.fields.1.hint","82.9"],
     ["steps.depletion.fields.2.label","High end of the 95 percent interval (percent)"],
-    ["steps.depletion.fields.2.hint","92.4"],
-    ["steps.the-second-gap.fields.0.hint","115"],
-    ["steps.the-second-gap.fields.1.hint","63.3"],
-    ["steps.a-different-window.fields.0.hint","170"],
-    ["steps.a-different-window.fields.1.hint","62.4"],
-    ["steps.a-brighter-cut.fields.0.hint","7"],
-    ["steps.a-brighter-cut.fields.1.hint","83.8"],
     ["steps.a-brighter-cut.fields.2.label","Low end of the 95 percent interval (percent)"],
-    ["steps.a-brighter-cut.fields.2.hint","69.4"],
-    ["steps.hildas-and-trojans.fields.0.hint","183"],
-    ["steps.hildas-and-trojans.fields.1.hint","1555"],
     ["steps.what-a-survey-keeps.fields.0.label","Found at 2.0 AU against 3.5 AU"],
-    ["steps.what-a-survey-keeps.fields.0.hint","40.0"],
-    ["steps.what-a-survey-keeps.fields.1.hint","2.35"],
     ["steps.the-baseline-is-a-choice.fields.0.label","The depletion at degree 3 (percent)"],
-    ["steps.the-baseline-is-a-choice.fields.0.hint","83.7"],
-    ["steps.the-baseline-is-a-choice.fields.1.label","The depletion at degree 6 (percent)"],
-    ["steps.the-baseline-is-a-choice.fields.1.hint","88.5"]
+    ["steps.the-baseline-is-a-choice.fields.1.label","The depletion at degree 6 (percent)"]
    ]
   },
   "es": {

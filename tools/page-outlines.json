@@ -164,7 +164,9 @@
       "scope": "dialog",
       "h1": "",
       "headings": "3 4 5+ 4",
-      "landmarks": ["region"]
+      "landmarks": [
+        "region"
+      ]
     },
     "kernel-diagnostics": {
       "path": "/lab3d/",
@@ -192,6 +194,15 @@
         "main",
         "region+",
         "contentinfo"
+      ]
+    },
+    "lesson.finish": {
+      "path": "/?author=keplers-laws&step=99",
+      "scope": "dialog",
+      "h1": "",
+      "headings": "3 4",
+      "landmarks": [
+        "region"
       ]
     },
     "library": {
@@ -294,6 +305,20 @@
         "region+",
         "contentinfo"
       ]
+    },
+    "sandbox.settings": {
+      "path": "/",
+      "scope": "dialog",
+      "h1": "",
+      "headings": "3+",
+      "landmarks": []
+    },
+    "sandbox.share": {
+      "path": "/",
+      "scope": "dialog",
+      "h1": "",
+      "headings": "3",
+      "landmarks": []
     },
     "scenario-studio": {
       "path": "/studio/",

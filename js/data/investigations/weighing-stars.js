@@ -530,8 +530,8 @@ const WEIGHING = {
              rest is worked out for you, one line at a time, so you can see where
              the answer comes from.`,
       fields: [
-        { id: 'a', label: 'Orbit size a', unit: 'AU', hint: '2' },
-        { id: 'p', label: 'Period P', unit: 'years', hint: '2' },
+        { id: 'a', label: 'Orbit size a', unit: 'AU', want: '2' },
+        { id: 'p', label: 'Period P', unit: 'years', want: '2' },
         {
           id: 'a3',
           label: 'a<sup>3</sup>, that is a × a × a',
@@ -997,8 +997,8 @@ const WEIGHING = {
              round each other.
              \n\nWork out what they weigh between them.`,
       fields: [
-        { id: 'a', label: 'Orbit size a', unit: 'AU', hint: '3' },
-        { id: 'p', label: 'Period P', unit: 'years', hint: '3' },
+        { id: 'a', label: 'Orbit size a', unit: 'AU', want: '3' },
+        { id: 'p', label: 'Period P', unit: 'years', want: '3' },
         {
           id: 'a3',
           label: 'a<sup>3</sup>',

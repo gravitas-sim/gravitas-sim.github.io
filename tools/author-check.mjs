@@ -42,6 +42,11 @@ import {
   RULE_ID as FORWARD_RULE,
   forwardFindings,
 } from './authoring/forwardSources.mjs';
+import {
+  generate as generateLessonText,
+  RULE_ID as STEPS_RULE,
+  RULE_DESCRIPTION as STEPS_RULE_DESCRIPTION,
+} from './lesson-text.mjs';
 
 const argv = process.argv.slice(2);
 const has = flag => argv.includes(flag);
@@ -71,6 +76,7 @@ if (has('--rules')) {
     ...DEPTH_RULES,
     // Node-only rule: kept out of js/authoring/rules.js, which ships on the Composer route
     [MODEL_RULE]: MODEL_RULE_DESCRIPTION,
+    [STEPS_RULE]: STEPS_RULE_DESCRIPTION,
   })) {
     const family = id.split('/')[0];
     if (!groups.has(family)) groups.set(family, []);
@@ -146,6 +152,21 @@ for (const f of modelCheckFindings(inputs.investigations, {
     rule: MODEL_RULE,
     lesson: f.where,
     step: f.step,
+    message: f.message,
+  });
+}
+
+// Spanish lesson text is keyed by step id (tools/lesson-text.mjs): a Spanish step
+// whose key names no English step, and an English step with no Spanish step,
+// are both errors. A stale generated shadow is the generate:check node's.
+// Only the findings are wanted, so nothing is formatted.
+for (const f of (await generateLessonText(undefined, undefined, text => text))
+  .findings) {
+  findings.push({
+    level: 'error',
+    rule: STEPS_RULE,
+    lesson: f.lesson ?? 'lesson-text',
+    step: null,
     message: f.message,
   });
 }

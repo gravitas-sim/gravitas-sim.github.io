@@ -46,11 +46,7 @@
     ["steps.measure-the-enclosed-mass-yourself.fields.3.label","Flat curve: mass inside 30 kpc"],
     ["steps.measure-the-enclosed-mass-yourself.fields.4.label","Falling curve: mass inside 30 kpc"],
     ["steps.measure-the-enclosed-mass-yourself.plot.yLabel","mass inside  (10¹⁰ M☉)"],
-    ["steps.record-the-fit-that-works.fields.4.label","Halo mass inside 30 kpc"],
-    ["steps.how-sure-is-the-dark-fraction.fields.0.hint","0.2"],
-    ["steps.dark-fraction-with-an-error-bar.placeholder","e.g. 3.4 ± 0.7"],
-    ["steps.the-real-halo-fit.fields.0.hint","50"],
-    ["steps.the-real-halo-fit.fields.1.hint","4.8"]
+    ["steps.record-the-fit-that-works.fields.4.label","Halo mass inside 30 kpc"]
    ]
   },
   "es": {
@@ -62,8 +58,7 @@
     ["steps.measure-the-enclosed-mass-yourself.fields.3.label","Curva plana: masa dentro de 30 kpc"],
     ["steps.measure-the-enclosed-mass-yourself.fields.4.label","Curva descendente: masa dentro de 30 kpc"],
     ["steps.measure-the-enclosed-mass-yourself.plot.yLabel","masa interior  (10¹⁰ M☉)"],
-    ["steps.record-the-fit-that-works.fields.4.label","Masa del halo dentro de 30 kpc"],
-    ["steps.dark-fraction-with-an-error-bar.placeholder","p. ej. 3,4 ± 0,7"]
+    ["steps.record-the-fit-that-works.fields.4.label","Masa del halo dentro de 30 kpc"]
    ]
   }
  },

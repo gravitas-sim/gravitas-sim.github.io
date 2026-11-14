@@ -11,9 +11,7 @@
    ],
    "numbered": [
     ["steps.a-sun-like-life.fields.0.label","Main sequence of 1 M☉"],
-    ["steps.a-sun-like-life.fields.0.hint","9.9"],
-    ["steps.a-heavy-life.fields.0.label","Main sequence of 20 M☉"],
-    ["steps.a-heavy-life.fields.0.hint","8.7"]
+    ["steps.a-heavy-life.fields.0.label","Main sequence of 20 M☉"]
    ]
   },
   "es": {

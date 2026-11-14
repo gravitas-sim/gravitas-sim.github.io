@@ -108,9 +108,9 @@ const THE_SUNS_MOTION = {
              blue cross is their mean, and the orange arrow, minus that mean, is
              the Sun’s motion.`,
       fields: [
-        { id: 'U', label: 'Sun’s U', unit: 'km/s', hint: '10' },
-        { id: 'V', label: 'Sun’s V', unit: 'km/s', hint: '22' },
-        { id: 'W', label: 'Sun’s W', unit: 'km/s', hint: '9' },
+        { id: 'U', label: 'Sun’s U', unit: 'km/s', want: '10' },
+        { id: 'V', label: 'Sun’s V', unit: 'km/s', want: '22' },
+        { id: 'W', label: 'Sun’s W', unit: 'km/s', want: '9' },
       ],
       validate: v => {
         if (![v.U, v.V, v.W].every(Number.isFinite)) return null;
@@ -177,9 +177,9 @@ const THE_SUNS_MOTION = {
           id: 'U',
           label: 'Sun’s U within 1,000 pc',
           unit: 'km/s',
-          hint: '9.7',
+          want: '9.7',
         },
-        { id: 'err', label: 'its uncertainty', unit: 'km/s', hint: '1.0' },
+        { id: 'err', label: 'its uncertainty', unit: 'km/s', want: '1.0' },
       ],
       validate: v => {
         if (![v.U, v.err].every(Number.isFinite)) return null;
@@ -237,13 +237,13 @@ const THE_SUNS_MOTION = {
           id: 'stromberg',
           label: 'V, Strömberg’s correction',
           unit: 'km/s',
-          hint: '3.8',
+          want: '3.8',
         },
         {
           id: 'schonrich',
           label: 'V, Schönrich et al.',
           unit: 'km/s',
-          hint: '12.2',
+          want: '12.2',
         },
       ],
       validate: v => {

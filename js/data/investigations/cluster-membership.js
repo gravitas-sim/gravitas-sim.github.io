@@ -104,15 +104,15 @@ const CLUSTER_MEMBERSHIP = {
           id: 'pmra',
           label: 'Proper motion in right ascension',
           unit: 'mas/yr',
-          hint: '-1.2',
+          want: '-1.2',
         },
         {
           id: 'pmdec',
           label: 'Proper motion in declination',
           unit: 'mas/yr',
-          hint: '-2.0',
+          want: '-2.0',
         },
-        { id: 'members', label: 'Stars above 0.5', unit: '', hint: '506' },
+        { id: 'members', label: 'Stars above 0.5', unit: '', want: '506' },
       ],
       validate: v => {
         if (![v.pmra, v.pmdec, v.members].every(Number.isFinite)) return null;
@@ -173,8 +173,8 @@ const CLUSTER_MEMBERSHIP = {
              and read the number of stars above it. Then lower it to
              <strong>0.1</strong> and read it again.`,
       fields: [
-        { id: 'strict', label: 'Stars above 0.99', unit: '', hint: '497' },
-        { id: 'loose', label: 'Stars above 0.1', unit: '', hint: '509' },
+        { id: 'strict', label: 'Stars above 0.99', unit: '', want: '497' },
+        { id: 'loose', label: 'Stars above 0.1', unit: '', want: '509' },
       ],
       validate: v => {
         if (![v.strict, v.loose].every(Number.isFinite)) return null;
@@ -263,13 +263,13 @@ const CLUSTER_MEMBERSHIP = {
           id: 'parallax',
           label: 'Mean parallax of the members',
           unit: 'mas',
-          hint: '0.385',
+          want: '0.385',
         },
         {
           id: 'distance',
           label: 'Reading, 1 ÷ parallax (uncorrected)',
           unit: 'kpc',
-          hint: '2.6',
+          want: '2.6',
         },
       ],
       validate: v => {

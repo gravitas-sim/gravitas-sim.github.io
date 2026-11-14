@@ -130,8 +130,8 @@ export const WHY_THE_PERIOD_IS_WRONG = {
              how many times worse than the truth a fit at the alias is, in the
              statistician&rsquo;s units. Nine or more is a clear preference.`,
       fields: [
-        { id: 'p', label: 'The alias near 4 days', unit: 'd', hint: '4.04' },
-        { id: 'x', label: 'Chi-square preference for the truth', hint: '0' },
+        { id: 'p', label: 'The alias near 4 days', unit: 'd', want: '4.04' },
+        { id: 'x', label: 'Chi-square preference for the truth', want: '0' },
       ],
       validate: v => {
         if (![v.p, v.x].every(Number.isFinite)) return null;
@@ -203,9 +203,9 @@ export const WHY_THE_PERIOD_IS_WRONG = {
         {
           id: 'h',
           label: 'Strongest alias, percent of the true peak',
-          hint: '67',
+          want: '67',
         },
-        { id: 'x', label: 'Chi-square preference for the truth', hint: '490' },
+        { id: 'x', label: 'Chi-square preference for the truth', want: '490' },
       ],
       validate: v => {
         if (![v.h, v.x].every(Number.isFinite)) return null;
@@ -331,9 +331,9 @@ export const WHY_THE_PERIOD_IS_WRONG_DEEPER = {
         {
           id: 'h',
           label: 'Strongest alias, percent of the true peak',
-          hint: '77',
+          want: '77',
         },
-        { id: 'x', label: 'Chi-square preference for the truth', hint: '116' },
+        { id: 'x', label: 'Chi-square preference for the truth', want: '116' },
       ],
       validate: v => {
         if (![v.h, v.x].every(Number.isFinite)) return null;
@@ -361,7 +361,7 @@ export const WHY_THE_PERIOD_IS_WRONG_DEEPER = {
       body: `Step through all five cadences at 0.8 days, forty nights, and an amplitude of
              five times the noise. Count the ones whose verdict reads <em>resolved</em>.`,
       fields: [
-        { id: 'n', label: 'Cadences that resolve the period', hint: '3' },
+        { id: 'n', label: 'Cadences that resolve the period', want: '3' },
       ],
       validate: v => {
         if (!Number.isFinite(v.n)) return null;
@@ -390,8 +390,8 @@ export const WHY_THE_PERIOD_IS_WRONG_DEEPER = {
              search on a series</strong>. Read the period the search finds and its
              uncertainty, from the Cramer-Rao bound for the epochs and the noise.`,
       fields: [
-        { id: 'p', label: 'Period found', unit: 'd', hint: '0.8004' },
-        { id: 's', label: 'Its uncertainty', unit: 'd', hint: '0.0002' },
+        { id: 'p', label: 'Period found', unit: 'd', want: '0.8004' },
+        { id: 's', label: 'Its uncertainty', unit: 'd', want: '0.0002' },
       ],
       validate: v => {
         if (![v.p, v.s].every(Number.isFinite)) return null;
@@ -455,7 +455,7 @@ export const WHY_THE_PERIOD_IS_WRONG_DEEPER = {
              <strong>one over the baseline</strong> wide, in cycles a day: how finely the
              plan can tell two frequencies apart.`,
       fields: [
-        { id: 'T', label: 'Baseline', unit: 'd', hint: '38.9' },
+        { id: 'T', label: 'Baseline', unit: 'd', want: '38.9' },
         {
           id: 'r',
           label: 'Peak width in cycles per day, one over the baseline',
@@ -493,19 +493,19 @@ export const WHY_THE_PERIOD_IS_WRONG_DEEPER = {
              and then of <strong>1.0 days</strong>: the number of the twenty phase bins that
              hold a point, and the largest empty arc.`,
       fields: [
-        { id: 'c8', label: 'Bins filled at 0.8 d', hint: '13' },
+        { id: 'c8', label: 'Bins filled at 0.8 d', want: '13' },
         {
           id: 'g8',
           label: 'Largest empty arc at 0.8 d, in cycles',
           unit: '',
-          hint: '0.137',
+          want: '0.137',
         },
-        { id: 'c1', label: 'Bins filled at 1.0 d', hint: '4' },
+        { id: 'c1', label: 'Bins filled at 1.0 d', want: '4' },
         {
           id: 'g1',
           label: 'Largest empty arc at 1.0 d, in cycles',
           unit: '',
-          hint: '0.894',
+          want: '0.894',
         },
       ],
       validate: v => {
@@ -542,8 +542,8 @@ export const WHY_THE_PERIOD_IS_WRONG_DEEPER = {
              60 percent clear nights, persistence 0.5): it loses whole nights. Read the
              <em>Cost</em> row: the hours requested, and the hours executed.`,
       fields: [
-        { id: 'r', label: 'Hours requested', unit: 'h', hint: '4.2' },
-        { id: 'e', label: 'Hours executed', unit: 'h', hint: '2.4' },
+        { id: 'r', label: 'Hours requested', unit: 'h', want: '4.2' },
+        { id: 'e', label: 'Hours executed', unit: 'h', want: '2.4' },
         {
           id: 'l',
           label: 'Hours lost to weather',
@@ -581,8 +581,8 @@ export const WHY_THE_PERIOD_IS_WRONG_DEEPER = {
              of the window every night, so it is the comb again). Type the chi-square
              preference of each.`,
       fields: [
-        { id: 'x3', label: 'Preference with three visits a night', hint: '30' },
-        { id: 'x1', label: 'Preference with one visit a night', hint: '0' },
+        { id: 'x3', label: 'Preference with three visits a night', want: '30' },
+        { id: 'x1', label: 'Preference with one visit a night', want: '0' },
       ],
       validate: v => {
         if (![v.x3, v.x1].every(Number.isFinite)) return null;
@@ -659,9 +659,9 @@ export const DESIGN_THE_SCHEDULE_DEEPER = {
           id: 'p',
           label: 'Alias period near 1.4 days',
           unit: 'd',
-          hint: '1.395',
+          want: '1.395',
         },
-        { id: 'x', label: 'Chi-square preference for the truth', hint: '0' },
+        { id: 'x', label: 'Chi-square preference for the truth', want: '0' },
       ],
       validate: v => {
         if (![v.p, v.x].every(Number.isFinite)) return null;
@@ -693,9 +693,9 @@ export const DESIGN_THE_SCHEDULE_DEEPER = {
         {
           id: 'h',
           label: 'Strongest alias, percent of the true peak',
-          hint: '69',
+          want: '69',
         },
-        { id: 'x', label: 'Chi-square preference for the truth', hint: '282' },
+        { id: 'x', label: 'Chi-square preference for the truth', want: '282' },
       ],
       validate: v => {
         if (![v.h, v.x].every(Number.isFinite)) return null;

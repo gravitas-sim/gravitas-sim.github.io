@@ -105,7 +105,7 @@ const A_LENS_PASSING_BY = {
       body: `With the typical event (closest approach 0.1) read the peak flux
              over the baseline.`,
       fields: [
-        { id: 'peak', label: 'Peak flux over baseline', unit: '', hint: '10' },
+        { id: 'peak', label: 'Peak flux over baseline', unit: '', want: '10' },
       ],
       validate: v => {
         if (!Number.isFinite(v.peak)) return null;
@@ -134,8 +134,8 @@ const A_LENS_PASSING_BY = {
              away. Read the crossing time and how long the star is brighter
              than 1.34 times its baseline.`,
       fields: [
-        { id: 'tE', label: 'Crossing time tE', unit: 'd', hint: '16.6' },
-        { id: 'above', label: 'Brighter than 1.34', unit: 'd', hint: '33' },
+        { id: 'tE', label: 'Crossing time tE', unit: 'd', want: '16.6' },
+        { id: 'above', label: 'Brighter than 1.34', unit: 'd', want: '33' },
       ],
       validate: v => {
         if (![v.tE, v.above].every(Number.isFinite)) return null;
@@ -161,7 +161,7 @@ const A_LENS_PASSING_BY = {
       title: 'Twice the speed',
       body: `Raise the lens's sideways speed to <strong>400 km/s</strong>, keeping
              everything else. Read the crossing time.`,
-      fields: [{ id: 'tE', label: 'Crossing time tE', unit: 'd', hint: '8.3' }],
+      fields: [{ id: 'tE', label: 'Crossing time tE', unit: 'd', want: '8.3' }],
       validate: v => {
         if (!Number.isFinite(v.tE)) return null;
         if (Math.abs(v.tE - 8.29) <= 0.2) {
@@ -192,13 +192,13 @@ const A_LENS_PASSING_BY = {
           id: 'near',
           label: 'At 2 kpc and 100 km/s',
           unit: 'solar masses',
-          hint: '0.075',
+          want: '0.075',
         },
         {
           id: 'far',
           label: 'At 6 kpc and 300 km/s',
           unit: 'solar masses',
-          hint: '0.68',
+          want: '0.68',
         },
       ],
       validate: v => {
@@ -258,7 +258,7 @@ const A_LENS_PASSING_BY = {
              same event, half the light blended”: only half of the baseline
              light is the source's. Read the peak flux over the baseline.`,
       fields: [
-        { id: 'peak', label: 'Peak flux over baseline', unit: '', hint: '5.5' },
+        { id: 'peak', label: 'Peak flux over baseline', unit: '', want: '5.5' },
       ],
       validate: v => {
         if (!Number.isFinite(v.peak)) return null;
@@ -287,7 +287,7 @@ const A_LENS_PASSING_BY = {
              radii. A point source would be a hundred times brighter. Read the
              peak.`,
       fields: [
-        { id: 'peak', label: 'Peak flux over baseline', unit: '', hint: '20' },
+        { id: 'peak', label: 'Peak flux over baseline', unit: '', want: '20' },
       ],
       validate: v => {
         if (!Number.isFinite(v.peak)) return null;

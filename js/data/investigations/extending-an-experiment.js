@@ -97,24 +97,24 @@ const EXTENDING_AN_EXPERIMENT = {
              uncertainty shown beside it; the fraction of the twenty trials that were
              bound; and the fraction of the synthetic population.`,
       fields: [
-        { id: 'edge', label: 'Half-way distance', unit: '', hint: '0.255' },
+        { id: 'edge', label: 'Half-way distance', unit: '', want: '0.255' },
         {
           id: 'edgeSigma',
           label: 'Its uncertainty',
           unit: '',
-          hint: '0.0243',
+          want: '0.0243',
         },
         {
           id: 'sample',
           label: 'Fraction bound in the trials',
           unit: '',
-          hint: '0.6',
+          want: '0.6',
         },
         {
           id: 'extended',
           label: 'Fraction bound in the synthetic population',
           unit: '',
-          hint: '0.596',
+          want: '0.596',
         },
       ],
       validate: v => {
@@ -154,13 +154,13 @@ const EXTENDING_AN_EXPERIMENT = {
           id: 'extended',
           label: 'Fraction bound, uniform population',
           unit: '',
-          hint: '0.451',
+          want: '0.451',
         },
         {
           id: 'gap',
           label: 'Trials’ fraction minus this',
           unit: '',
-          hint: '0.149',
+          want: '0.149',
         },
       ],
       validate: v => {
@@ -230,13 +230,13 @@ const EXTENDING_AN_EXPERIMENT = {
           id: 'edge',
           label: 'Half-way distance, cutoff 6',
           unit: '',
-          hint: '0.289',
+          want: '0.289',
         },
         {
           id: 'extended',
           label: 'Fraction bound, cutoff 6',
           unit: '',
-          hint: '0.701',
+          want: '0.701',
         },
       ],
       validate: v => {

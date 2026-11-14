@@ -9,9 +9,7 @@
     ["steps.the-share-of-the-light.unit","%"],
     ["steps.how-faint-is-harmless.unit","mag"]
    ],
-   "numbered": [
-    ["steps.the-frames.fields.0.hint","1.8"]
-   ]
+   "numbered": []
   },
   "es": {
    "units": [],

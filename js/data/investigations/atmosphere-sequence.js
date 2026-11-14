@@ -91,13 +91,13 @@ export const WHY_VENUS_IS_HOT = {
           id: 'teq',
           label: 'Earth’s equilibrium temperature',
           unit: 'K',
-          hint: '254',
+          want: '254',
         },
         {
           id: 'gap',
           label: 'Measured surface temperature minus equilibrium',
           unit: 'K',
-          hint: '34',
+          want: '34',
         },
       ],
       validate: v => {
@@ -154,13 +154,13 @@ export const WHY_VENUS_IS_HOT = {
           id: 'teq',
           label: 'Venus’s equilibrium temperature',
           unit: 'K',
-          hint: '229',
+          want: '229',
         },
         {
           id: 'gap',
           label: 'Measured surface temperature minus equilibrium',
           unit: 'K',
-          hint: '508',
+          want: '508',
         },
       ],
       validate: v => {
@@ -228,13 +228,13 @@ export const WHY_VENUS_IS_HOT = {
           id: 'mars',
           label: 'Mars: measured minus equilibrium',
           unit: 'K',
-          hint: '0.2',
+          want: '0.2',
         },
         {
           id: 'jupiter',
           label: 'Jupiter: measured (1 bar) minus equilibrium',
           unit: 'K',
-          hint: '55',
+          want: '55',
         },
       ],
       validate: v => {
@@ -270,7 +270,7 @@ export const WHY_VENUS_IS_HOT = {
           id: 'ground',
           label: 'Highest ground temperature one layer can give Venus',
           unit: 'K',
-          hint: '272',
+          want: '272',
         },
       ],
       validate: v => {
@@ -304,7 +304,7 @@ export const WHY_VENUS_IS_HOT = {
         {
           id: 'tau',
           label: 'Optical depth that gives Venus’s surface temperature',
-          hint: '141.6',
+          want: '141.6',
         },
       ],
       validate: v => {
@@ -395,7 +395,7 @@ export const TWO_GREENHOUSE_MODELS = {
         {
           id: 'eps',
           label: 'Emissivity that gives 288 K',
-          hint: '0.790',
+          want: '0.790',
         },
       ],
       validate: v => {
@@ -426,7 +426,7 @@ export const TWO_GREENHOUSE_MODELS = {
         {
           id: 'tau',
           label: 'Optical depth that gives 288 K',
-          hint: '0.87',
+          want: '0.87',
         },
       ],
       validate: v => {
@@ -508,12 +508,12 @@ export const TWO_GREENHOUSE_MODELS = {
           id: 'ceiling',
           label: 'Highest ground temperature one layer can give Venus',
           unit: 'K',
-          hint: '272',
+          want: '272',
         },
         {
           id: 'tau',
           label: 'Optical depth that gives Venus’s surface temperature',
-          hint: '141.6',
+          want: '141.6',
         },
       ],
       validate: v => {
@@ -649,13 +649,13 @@ export const THE_TURNING_SUN = {
           id: 'lat',
           label: 'G1’s latitude on day 1',
           unit: 'deg',
-          hint: '7.1',
+          want: '7.1',
         },
         {
           id: 'lon',
           label: 'G1’s longitude from the central meridian on day 1',
           unit: 'deg',
-          hint: '-7.3',
+          want: '-7.3',
         },
       ],
       validate: v => {
@@ -687,14 +687,14 @@ export const THE_TURNING_SUN = {
           id: 'lon4',
           label: 'G1’s longitude on day 4',
           unit: 'deg',
-          hint: '32.4',
+          want: '32.4',
         },
         {
           id: 'rate',
           label:
             'How far it turned each day, from day 1 to day 4 (degrees a day)',
           unit: '',
-          hint: '13.2',
+          want: '13.2',
         },
       ],
       validate: v => {
@@ -728,13 +728,13 @@ export const THE_TURNING_SUN = {
           id: 'rate',
           label: 'G1’s synodic rate (degrees a day)',
           unit: '',
-          hint: '13.17',
+          want: '13.17',
         },
         {
           id: 'period',
           label: 'The synodic period',
           unit: 'd',
-          hint: '27.3',
+          want: '27.3',
         },
       ],
       validate: v => {
@@ -789,13 +789,13 @@ export const THE_TURNING_SUN = {
           id: 'rate',
           label: 'G1’s sidereal rate (degrees a day)',
           unit: '',
-          hint: '14.13',
+          want: '14.13',
         },
         {
           id: 'period',
           label: 'The sidereal period',
           unit: 'd',
-          hint: '25.5',
+          want: '25.5',
         },
       ],
       validate: v => {
@@ -917,13 +917,13 @@ export const THE_SUNS_POWER = {
           id: 'earth',
           label: 'The flux at the Earth on 4 May (W/m²)',
           unit: '',
-          hint: '1338.90',
+          want: '1338.90',
         },
         {
           id: 'au',
           label: 'The flux at 1 AU (W/m²)',
           unit: '',
-          hint: '1361.60',
+          want: '1361.60',
         },
       ],
       validate: v => {
@@ -978,13 +978,13 @@ export const THE_SUNS_POWER = {
           id: 'lum',
           label: 'The Sun’s luminosity (× 10²⁶ W)',
           unit: '',
-          hint: '3.828',
+          want: '3.828',
         },
         {
           id: 'teff',
           label: 'The effective temperature',
           unit: 'K',
-          hint: '5772',
+          want: '5772',
         },
       ],
       validate: v => {
@@ -1132,7 +1132,7 @@ export const HOW_HOT_IS_THE_DAY_SIDE = {
           id: 't',
           label: 'Brightness temperature, band C',
           unit: 'K',
-          hint: '2094',
+          want: '2094',
         },
       ],
       validate: v => {
@@ -1164,13 +1164,13 @@ export const HOW_HOT_IS_THE_DAY_SIDE = {
           id: 'hi',
           label: 'The highest of the four',
           unit: 'K',
-          hint: '2171',
+          want: '2171',
         },
         {
           id: 'lo',
           label: 'The lowest of the four',
           unit: 'K',
-          hint: '2067',
+          want: '2067',
         },
       ],
       validate: v => {
@@ -1238,9 +1238,9 @@ export const HOW_HOT_IS_THE_DAY_SIDE = {
           id: 't',
           label: 'My blackbody temperature',
           unit: 'K',
-          hint: '2090',
+          want: '2090',
         },
-        { id: 'chi', label: 'Its chi-square', unit: '', hint: '6.5' },
+        { id: 'chi', label: 'Its chi-square', unit: '', want: '6.5' },
       ],
       validate: v => {
         if (![v.t, v.chi].every(Number.isFinite)) return null;
@@ -1273,7 +1273,7 @@ export const HOW_HOT_IS_THE_DAY_SIDE = {
           id: 'n',
           label: 'Bands converted to a temperature',
           unit: '',
-          hint: '0',
+          want: '0',
         },
       ],
       validate: v => {
@@ -1330,7 +1330,7 @@ export const HOW_HOT_IS_THE_DAY_SIDE = {
           id: 'drop',
           label: 'Band C of Planet Y, cooler than Planet X’s by',
           unit: 'K',
-          hint: '314',
+          want: '314',
         },
       ],
       validate: v => {
@@ -1456,13 +1456,13 @@ export const PHASES_AND_ALBEDO = {
           id: 'ag',
           label: 'Geometric albedo of the Lambert sphere that fits',
           unit: '',
-          hint: '0.35',
+          want: '0.35',
         },
         {
           id: 'ab',
           label: 'Bond albedo of that sphere',
           unit: '',
-          hint: '0.52',
+          want: '0.52',
         },
       ],
       validate: v => {
@@ -1530,8 +1530,8 @@ export const PHASES_AND_ALBEDO = {
              instrument reports a chi-square for your albedo: for 24 points it is about 23 when a
              model fits. Report your albedo and its chi-square.`,
       fields: [
-        { id: 'ag', label: 'My geometric albedo', unit: '', hint: '0.35' },
-        { id: 'chi', label: 'Its chi-square', unit: '', hint: '31.2' },
+        { id: 'ag', label: 'My geometric albedo', unit: '', want: '0.35' },
+        { id: 'chi', label: 'Its chi-square', unit: '', want: '31.2' },
       ],
       validate: v => {
         if (![v.ag, v.chi].every(Number.isFinite)) return null;
@@ -1585,9 +1585,9 @@ export const PHASES_AND_ALBEDO = {
           id: 'chi',
           label: 'Chi-square of the best Lambert fit',
           unit: '',
-          hint: '82',
+          want: '82',
         },
-        { id: 'dof', label: 'Degrees of freedom', unit: '', hint: '23' },
+        { id: 'dof', label: 'Degrees of freedom', unit: '', want: '23' },
       ],
       validate: v => {
         if (![v.chi, v.dof].every(Number.isFinite)) return null;

@@ -93,8 +93,8 @@ const WHY_THE_BRIGHT_ONES_WIN = {
              shell (0–250&nbsp;pc) and the farthest (750–1,000&nbsp;pc): how many
              magnitudes brighter the counted stars are.`,
       fields: [
-        { id: 'near', label: 'Shell 0–250 pc', unit: 'mag', hint: '0.5' },
-        { id: 'far', label: 'Shell 750–1,000 pc', unit: 'mag', hint: '3.6' },
+        { id: 'near', label: 'Shell 0–250 pc', unit: 'mag', want: '0.5' },
+        { id: 'far', label: 'Shell 750–1,000 pc', unit: 'mag', want: '3.6' },
       ],
       validate: v => {
         if (![v.near, v.far].every(Number.isFinite)) return null;
@@ -160,9 +160,9 @@ const WHY_THE_BRIGHT_ONES_WIN = {
           id: 'measured',
           label: 'Bias at the limit',
           unit: 'mag',
-          hint: '-0.65',
+          want: '-0.65',
         },
-        { id: 'formula', label: 'Closed form', unit: 'mag', hint: '-0.68' },
+        { id: 'formula', label: 'Closed form', unit: 'mag', want: '-0.68' },
       ],
       validate: v => {
         if (![v.measured, v.formula].every(Number.isFinite)) return null;
@@ -219,12 +219,12 @@ const WHY_THE_BRIGHT_ONES_WIN = {
              sample are, and how much too faint the absolute magnitudes worked
              out from them come out.`,
       fields: [
-        { id: 'plx', label: 'Parallaxes too large by', unit: '%', hint: '18' },
+        { id: 'plx', label: 'Parallaxes too large by', unit: '%', want: '18' },
         {
           id: 'dM',
           label: 'Absolute magnitudes too faint by',
           unit: 'mag',
-          hint: '0.25',
+          want: '0.25',
         },
       ],
       validate: v => {

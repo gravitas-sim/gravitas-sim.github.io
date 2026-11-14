@@ -17,11 +17,7 @@
    ],
    "numbered": [
     ["steps.dark-hours.fields.0.label","Astronomical dark, 29 January"],
-    ["steps.dark-hours.fields.0.hint","10.5"],
-    ["steps.dark-hours.fields.1.label","Astronomical dark, 21 June"],
-    ["steps.dark-hours.fields.1.hint","6.7"],
-    ["steps.what-the-moon-costs.fields.0.hint","8.1"],
-    ["steps.what-the-moon-costs.fields.1.hint","0.0"]
+    ["steps.dark-hours.fields.1.label","Astronomical dark, 21 June"]
    ]
   },
   "es": {

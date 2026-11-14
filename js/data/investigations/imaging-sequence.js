@@ -224,7 +224,7 @@ export const WHY_NOT_EARTH_DEEPER = {
           id: 'a',
           label: 'Reflected contrast, in units of 10⁻¹⁰',
           unit: '',
-          hint: '1.18',
+          want: '1.18',
         },
       ],
       validate: v => {
@@ -284,7 +284,7 @@ export const WHY_NOT_EARTH_DEEPER = {
           id: 'a',
           label: 'Separation in λ/D',
           unit: '',
-          hint: '70.5',
+          want: '70.5',
         },
       ],
       validate: v => {
@@ -534,7 +534,7 @@ export const ARCHITECTURES_DEEPER = {
           id: 'a',
           label: 'Imaged planets outside the working angle',
           unit: '',
-          hint: '49',
+          want: '49',
         },
       ],
       validate: v => {
@@ -563,8 +563,8 @@ export const ARCHITECTURES_DEEPER = {
       body: `Read the medians of the imaged planets that have an axis and a mass: the semi-major axis in AU and the
              mass in Jupiter masses.`,
       fields: [
-        { id: 'a', label: 'Median semi-major axis', unit: 'AU', hint: '170' },
-        { id: 'b', label: 'Median mass', unit: 'M_Jup', hint: '12' },
+        { id: 'a', label: 'Median semi-major axis', unit: 'AU', want: '170' },
+        { id: 'b', label: 'Median mass', unit: 'M_Jup', want: '12' },
       ],
       validate: v => {
         if (![v.a, v.b].every(Number.isFinite)) return null;

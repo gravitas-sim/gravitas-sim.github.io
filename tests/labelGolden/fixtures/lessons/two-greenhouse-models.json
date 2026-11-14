@@ -10,20 +10,11 @@
    ],
    "numbered": [
     ["steps.earth-one-layer.fields.0.label","Emissivity that gives 288 K"],
-    ["steps.earth-one-layer.fields.0.hint","0.790"],
     ["steps.earth-gray.fields.0.label","Optical depth that gives 288 K"],
-    ["steps.earth-gray.fields.0.hint","0.87"],
     ["steps.mars-barely-a-greenhouse.fields.0.label","Emissivity that gives 210 K"],
-    ["steps.mars-barely-a-greenhouse.fields.0.hint","0.006"],
     ["steps.mars-barely-a-greenhouse.fields.1.label","Optical depth that gives 210 K"],
-    ["steps.mars-barely-a-greenhouse.fields.1.hint","0.004"],
     ["steps.one-unit-two-models.fields.0.label","Ground temperature, gray model with optical depth 1"],
-    ["steps.one-unit-two-models.fields.0.hint","292.2"],
-    ["steps.one-unit-two-models.fields.1.label","Ground temperature, one layer with emissivity 1"],
-    ["steps.one-unit-two-models.fields.1.hint","302.1"],
-    ["steps.venus-both-try.fields.0.hint","272"],
-    ["steps.venus-both-try.fields.1.hint","141.6"],
-    ["steps.limits-of-gray.fields.0.hint","3.7"]
+    ["steps.one-unit-two-models.fields.1.label","Ground temperature, one layer with emissivity 1"]
    ]
   },
   "es": {

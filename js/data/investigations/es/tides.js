@@ -135,29 +135,29 @@ export default {
       title: 'Cuatro distancias',
       body: 'El panel informa del estiramiento de marea como un múltiplo de la marea lunar real, así que la Luna real marca 1,00 y todo lo demás se mide frente a ella.\n\nPon el deslizador en cada una de las cuatro distancias por turno y escribe lo que diga el panel. Tus puntos aparecen en la gráfica según escribes, así que no hay que recordar nada de una fila a la siguiente.',
       fields: [
-        { label: 'Distancia 1', unit: '× la de la Luna', hint: '2' },
+        { label: 'Distancia 1', unit: '× la de la Luna', want: '2' },
         {
           label: 'Estiramiento de marea allí',
           unit: '× marea lunar',
-          hint: '0,13',
+          want: '0,13',
         },
-        { label: 'Distancia 2', unit: '× la de la Luna', hint: '1' },
+        { label: 'Distancia 2', unit: '× la de la Luna', want: '1' },
         {
           label: 'Estiramiento de marea allí',
           unit: '× marea lunar',
-          hint: '1',
+          want: '1',
         },
-        { label: 'Distancia 3', unit: '× la de la Luna', hint: '0,5' },
+        { label: 'Distancia 3', unit: '× la de la Luna', want: '0,5' },
         {
           label: 'Estiramiento de marea allí',
           unit: '× marea lunar',
-          hint: '8',
+          want: '8',
         },
-        { label: 'Distancia 4', unit: '× la de la Luna', hint: '0,25' },
+        { label: 'Distancia 4', unit: '× la de la Luna', want: '0,25' },
         {
           label: 'Estiramiento de marea allí',
           unit: '× marea lunar',
-          hint: '64',
+          want: '64',
         },
       ],
       plot: {
@@ -221,23 +221,23 @@ export default {
       title: 'Tres masas',
       body: 'La distancia se mantiene ahora en la distancia real de la Luna y el deslizador de masa es tuyo. Ponlo en cada valor por turno y anota lo que marque el panel.\n\nTres puntos bastan aquí, porque buscas una recta y tres puntos o la forman o no.',
       fields: [
-        { label: 'Masa 1', unit: '× la de la Luna', hint: '1' },
+        { label: 'Masa 1', unit: '× la de la Luna', want: '1' },
         {
           label: 'Estiramiento de marea allí',
           unit: '× marea lunar',
-          hint: '1',
+          want: '1',
         },
-        { label: 'Masa 2', unit: '× la de la Luna', hint: '2' },
+        { label: 'Masa 2', unit: '× la de la Luna', want: '2' },
         {
           label: 'Estiramiento de marea allí',
           unit: '× marea lunar',
-          hint: '2',
+          want: '2',
         },
-        { label: 'Masa 3', unit: '× la de la Luna', hint: '4' },
+        { label: 'Masa 3', unit: '× la de la Luna', want: '4' },
         {
           label: 'Estiramiento de marea allí',
           unit: '× marea lunar',
-          hint: '4',
+          want: '4',
         },
       ],
       plot: {

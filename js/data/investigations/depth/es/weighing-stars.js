@@ -17,7 +17,7 @@ export default {
       title: 'Da la masa con barra de error',
       body: 'Escribe la masa total del par como se da: el valor, ±, y su incertidumbre del paso anterior. Cuenta como correcta cuando el rango que das se solapa con el que respalda la medición y no es más ancho que el doble de la semianchura de ese rango.',
       prompt: 'Masa total del par, con su incertidumbre',
-      placeholder: 'p. ej. 4,0 ± 0,5',
+      placeholder: 'un valor y, luego, ± su incertidumbre',
       hints: {
         concept: 'Una masa es un valor y lo bien que se conoce.',
         method: 'Copia el total y su incertidumbre del paso anterior.',
@@ -41,7 +41,7 @@ export default {
       title: 'Pesa una estrella, con barra de error',
       body: 'El total es 4,0 ± 0,3 masas solares. El punto de equilibrio queda de modo que la Estrella A, la más pesada, lleva 0,75 del total, conocido con ±0,02. Una parte de un total es un producto, así que las incertidumbres fraccionarias se suman en cuadratura: σ<sub>m</sub>/m = √((σ<sub>M</sub>/M)² + (σ<sub>f</sub>/f)²).',
       prompt: 'Masa de la Estrella A, con su incertidumbre',
-      placeholder: 'p. ej. 3,0 ± 0,3',
+      placeholder: 'un valor y, luego, ± su incertidumbre',
       hints: {
         concept: 'La masa de la Estrella A es su parte del total.',
         method:

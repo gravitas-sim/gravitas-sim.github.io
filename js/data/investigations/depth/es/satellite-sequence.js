@@ -34,7 +34,7 @@ export const WEIGHING_JUPITER_DEEPER = {
       body: 'Divide GM por la constante gravitatoria, G = 6,674 &times; 10&minus;&sup1;&sup1; m&sup3;/(kg s&sup2;), y Ganímedes da la masa de Júpiter. El instrumento indica la incertidumbre a partir de la del ajuste, llevada por la ley: tres veces la incertidumbre relativa del radio y dos veces la del período.',
       prompt:
         'Informa la masa de Júpiter según Ganímedes como valor ± incertidumbre, en unidades de 10²⁷ kg.',
-      placeholder: 'p. ej. 1,5 ± 0,05',
+      placeholder: 'un valor y, luego, ± su incertidumbre',
       hints: ['GM es 1,272 × 10¹⁷ m³/s²; divide por 6,674 × 10⁻¹¹.'],
       worked:
         '1,2717 × 10¹⁷ / 6,674 × 10⁻¹¹ = 1,905 × 10²⁷ kg, con la incertidumbre del instrumento de unos 0,003 × 10²⁷ kg.',

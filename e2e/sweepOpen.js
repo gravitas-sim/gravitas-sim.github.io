@@ -58,7 +58,9 @@ export async function open(page, path, locale, o = {}) {
     }
   }, Object.entries(storage));
   await page.goto(path, { waitUntil: 'load' });
-  const app = path === '/' || path.startsWith('/#');
+  // The application: the front page, with a hash or a query (an author
+  // preview, an assignment, an embed).
+  const app = path === '/' || /^\/[?#]/.test(path);
   if (app)
     await page.waitForFunction(() => window.splashScreenEnded === true, null, {
       timeout: 30_000,
@@ -69,7 +71,7 @@ export async function open(page, path, locale, o = {}) {
     });
     // Home is a dialog: it takes focus when it has finished opening, and a
     // walk begun before that counts the stops of a page still arranging itself.
-    if (app)
+    if (app && o.ready.startsWith('#wel'))
       await page.waitForFunction(
         () =>
           document

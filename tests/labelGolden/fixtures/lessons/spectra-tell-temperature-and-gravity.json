@@ -10,10 +10,7 @@
     ["steps.resolved-or-not.unit",""],
     ["steps.gravity-in-numbers.unit","dex"]
    ],
-   "numbered": [
-    ["steps.read-the-depths.fields.0.hint","36.6"],
-    ["steps.read-the-depths.fields.1.hint","4.8"]
-   ]
+   "numbered": []
   },
   "es": {
    "units": [],

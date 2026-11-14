@@ -787,6 +787,20 @@ export const CHECKS = [
       'ledger against the shipped inventory, and the failure shapes).',
     group: 'generated',
   },
+  // Every published page, generated family, route parameter read from an
+  // address and dialog has a row in the surface ledger, and every row has a
+  // closing prompt.
+  {
+    id: 'surface-ledger',
+    label: 'the surface ledger covers every page, route parameter and dialog',
+    command: ['npm', 'run', 'surface-ledger:check'],
+    tier: 'quick',
+    ci: null,
+    why:
+      'CI runs the same facts in tests/surfaceLedger.test.js (the committed ' +
+      'ledger against the tree, and the failure shapes).',
+    group: 'generated',
+  },
   // The list of engine operations that destroy information is scanned out of
   // js/physics.js, not remembered. This is the check that makes that worth
   // anything: add a cull or a new merge path and the committed list is stale

@@ -10,12 +10,8 @@
     ["steps.how-far-from-the-maximum.unit",""]
    ],
    "numbered": [
-    ["steps.heating-at-the-maximum.fields.0.hint","9.33"],
     ["steps.heating-at-the-maximum.fields.1.label","Energy in one orbit (10¹⁹ J)"],
-    ["steps.heating-at-the-maximum.fields.1.hint","1.43"],
-    ["steps.double-the-eccentricity.fields.0.hint","3.73"],
-    ["steps.the-bound.fields.0.label","k2/Q the observed middle value needs"],
-    ["steps.the-bound.fields.0.hint","0.0177"]
+    ["steps.the-bound.fields.0.label","k2/Q the observed middle value needs"]
    ]
   },
   "es": {

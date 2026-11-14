@@ -41,7 +41,7 @@ beforeAll(async () => {
 
 /** The calls no recording reaches, and why each one cannot be reached here. */
 const UNREACHED = {
-  'js/observatory/fitPanel.js:743':
+  'js/observatory/fitPanel.js:745':
     'the seconds a fit took, read from the clock when the run ends',
   'js/observatory/guidePanel.js:330':
     'a rounding inside the guide panel, which needs a mounted observation',
@@ -220,7 +220,7 @@ describe('what the recording can tell apart', () => {
     for (const site of [
       'js/investigations/stepView.js:643:11',
       'js/investigations/stepView.js:801:35',
-      'js/investigations/stepView.js:1194:13',
+      'js/investigations/stepView.js:1193:13',
       'js/observatory/guides/core.js:320:27',
     ])
       expect(at(site).hyphen).toBe(true);

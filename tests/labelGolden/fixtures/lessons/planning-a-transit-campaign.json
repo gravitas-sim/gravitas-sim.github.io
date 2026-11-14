@@ -9,10 +9,7 @@
     ["steps.the-expected-count.unit",""],
     ["steps.the-ephemeris-grows-old.unit","h"]
    ],
-   "numbered": [
-    ["steps.which-nights.fields.0.hint","5"],
-    ["steps.what-the-weather-left.fields.0.hint","2"]
-   ]
+   "numbered": []
   },
   "es": {
    "units": [],

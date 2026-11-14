@@ -121,9 +121,9 @@ export const WHY_TWO_LINES_BECOME_ONE = {
              peaks, relative to the lower peak. If the row says the peaks have merged, the
              dip is 0.`,
       fields: [
-        { id: 'd500', label: 'Dip at R = 500', unit: '%', hint: '0' },
-        { id: 'd1000', label: 'Dip at R = 1000', unit: '%', hint: '7.3' },
-        { id: 'd2000', label: 'Dip at R = 2000', unit: '%', hint: '87.5' },
+        { id: 'd500', label: 'Dip at R = 500', unit: '%', want: '0' },
+        { id: 'd1000', label: 'Dip at R = 1000', unit: '%', want: '7.3' },
+        { id: 'd2000', label: 'Dip at R = 2000', unit: '%', want: '87.5' },
       ],
       validate: v => {
         if (![v.d500, v.d1000, v.d2000].every(Number.isFinite)) return null;
@@ -161,19 +161,19 @@ export const WHY_TWO_LINES_BECOME_ONE = {
           id: 'p500',
           label: 'Peaks at R = 500, 8 pixels per FWHM',
           unit: '',
-          hint: '1',
+          want: '1',
         },
         {
           id: 'p1000a',
           label: 'Peaks at R = 1000, 2 pixels per FWHM',
           unit: '',
-          hint: '1',
+          want: '1',
         },
         {
           id: 'p1000b',
           label: 'Peaks at R = 1000, 8 pixels per FWHM',
           unit: '',
-          hint: '2',
+          want: '2',
         },
       ],
       validate: v => {
@@ -206,7 +206,7 @@ export const WHY_TWO_LINES_BECOME_ONE = {
           id: 'w',
           label: 'Broader than the instrument',
           unit: '%',
-          hint: '16',
+          want: '16',
         },
       ],
       validate: v => {
@@ -281,19 +281,19 @@ export const WHY_TWO_LINES_BECOME_ONE_DEEPER = {
           id: 'k5',
           label: 'Degrees of freedom with 5 lines',
           unit: '',
-          hint: '1',
+          want: '1',
         },
         {
           id: 'k8',
           label: 'Degrees of freedom with 8 lines',
           unit: '',
-          hint: '4',
+          want: '4',
         },
         {
           id: 'k14',
           label: 'Degrees of freedom with 14 lines',
           unit: '',
-          hint: '10',
+          want: '10',
         },
       ],
       validate: v => {
@@ -324,8 +324,8 @@ export const WHY_TWO_LINES_BECOME_ONE_DEEPER = {
              a wavelength scale that bends, and the residuals show the bend; the panel also says
              when the scatter exceeds the errors.`,
       fields: [
-        { id: 'r3', label: 'rms at degree 3', unit: 'nm', hint: '0.0005' },
-        { id: 'r1', label: 'rms at degree 1', unit: 'nm', hint: '0.018' },
+        { id: 'r3', label: 'rms at degree 3', unit: 'nm', want: '0.0005' },
+        { id: 'r1', label: 'rms at degree 1', unit: 'nm', want: '0.018' },
       ],
       validate: v => {
         if (![v.r3, v.r1].every(Number.isFinite)) return null;
@@ -355,8 +355,8 @@ export const WHY_TWO_LINES_BECOME_ONE_DEEPER = {
              pixel into a wavelength with the solution&rsquo;s uncertainty, and gives the
              <em>Radial velocity</em> with its own. Read both.`,
       fields: [
-        { id: 'v', label: 'Radial velocity', unit: 'km/s', hint: '116' },
-        { id: 's', label: 'Its uncertainty', unit: 'km/s', hint: '3.2' },
+        { id: 'v', label: 'Radial velocity', unit: 'km/s', want: '116' },
+        { id: 's', label: 'Its uncertainty', unit: 'km/s', want: '3.2' },
       ],
       validate: v => {
         if (![v.v, v.s].every(Number.isFinite)) return null;
@@ -393,7 +393,7 @@ export const WHY_TWO_LINES_BECOME_ONE_DEEPER = {
           id: 'wrong',
           label: 'Velocity with the media ignored',
           unit: 'km/s',
-          hint: '32',
+          want: '32',
         },
         {
           id: 'off',
@@ -449,13 +449,13 @@ export const WHY_TWO_LINES_BECOME_ONE_DEEPER = {
           id: 't3000',
           label: 'Light passed at R = 3000',
           unit: '%',
-          hint: '76',
+          want: '76',
         },
         {
           id: 't10000',
           label: 'Light passed at R = 10000',
           unit: '%',
-          hint: '28',
+          want: '28',
         },
       ],
       validate: v => {
@@ -511,12 +511,12 @@ export const WHY_TWO_LINES_BECOME_ONE_DEEPER = {
              extra resolving power only costs light. Read <em>The resolving power that maximises
              it</em> and the signal to noise there.`,
       fields: [
-        { id: 'rbest', label: 'Best resolving power', unit: '', hint: '2355' },
+        { id: 'rbest', label: 'Best resolving power', unit: '', want: '2355' },
         {
           id: 'snrbest',
           label: 'Signal to noise there',
           unit: '',
-          hint: '12.6',
+          want: '12.6',
         },
       ],
       validate: v => {

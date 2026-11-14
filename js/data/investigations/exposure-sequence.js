@@ -119,12 +119,12 @@ export const PLAN_AN_EXPOSURE = {
              exposures, read the <strong>total exposure</strong> and the
              <strong>faintest object (5σ)</strong> that exposure reaches.`,
       fields: [
-        { id: 'total', label: 'Total exposure', unit: 's', hint: '455' },
+        { id: 'total', label: 'Total exposure', unit: 's', want: '455' },
         {
           id: 'limit',
           label: 'Faintest object (5σ)',
           unit: 'mag',
-          hint: '25.51',
+          want: '25.51',
         },
       ],
       validate: v => {
@@ -178,8 +178,8 @@ export const PLAN_AN_EXPOSURE = {
              exposure</strong> and the share of the noise squared that the
              <strong>read noise</strong> now has, in percent.`,
       fields: [
-        { id: 'total', label: 'Total exposure', unit: 's', hint: '512' },
-        { id: 'read', label: 'Read noise share', unit: '%', hint: '12.5' },
+        { id: 'total', label: 'Total exposure', unit: 's', want: '512' },
+        { id: 'read', label: 'Read noise share', unit: '%', want: '12.5' },
       ],
       validate: v => {
         if (![v.total, v.read].every(Number.isFinite)) return null;
@@ -269,13 +269,13 @@ export const PLAN_AN_EXPOSURE = {
           id: 'predicted',
           label: 'Predicted signal-to-noise',
           unit: '',
-          hint: '19.8',
+          want: '19.8',
         },
         {
           id: 'measured',
           label: 'Measured signal-to-noise',
           unit: '',
-          hint: '19.6',
+          want: '19.6',
         },
       ],
       validate: v => {

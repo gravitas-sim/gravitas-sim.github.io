@@ -21,21 +21,11 @@
     ["steps.a-redder-sky.unit",""]
    ],
    "numbered": [
-    ["steps.a-sky-limited-plan.fields.0.hint","79.8"],
-    ["steps.a-sky-limited-plan.fields.1.hint","87"],
-    ["steps.two-magnitudes-brighter.fields.0.hint","79.8"],
     ["steps.two-magnitudes-brighter.fields.1.label","Total exposure, sky 2 mag brighter"],
-    ["steps.two-magnitudes-brighter.fields.1.hint","443"],
-    ["steps.the-moon-up-hours.fields.0.hint","0"],
-    ["steps.the-moon-up-hours.fields.1.hint","10.8"],
     ["steps.the-moon-and-a-bright-star.fields.0.label","Magnitude 20, dark sky"],
-    ["steps.the-moon-and-a-bright-star.fields.0.hint","43.1"],
     ["steps.the-moon-and-a-bright-star.fields.1.label","Magnitude 20, sky 3 mag brighter"],
-    ["steps.the-moon-and-a-bright-star.fields.1.hint","204"],
     ["steps.the-moon-and-a-bright-star.fields.2.label","Magnitude 17, dark sky"],
-    ["steps.the-moon-and-a-bright-star.fields.2.hint","2.3"],
-    ["steps.the-moon-and-a-bright-star.fields.3.label","Magnitude 17, sky 3 mag brighter"],
-    ["steps.the-moon-and-a-bright-star.fields.3.hint","2.7"]
+    ["steps.the-moon-and-a-bright-star.fields.3.label","Magnitude 17, sky 3 mag brighter"]
    ]
   },
   "es": {

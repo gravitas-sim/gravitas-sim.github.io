@@ -95,7 +95,7 @@ const EINSTEIN_RINGS_AND_ARCS = {
       body: `With one solar mass at 4 kpc, read the Einstein radius in
              milliarcseconds.`,
       fields: [
-        { id: 'theta', label: 'Einstein radius', unit: 'mas', hint: '1.0' },
+        { id: 'theta', label: 'Einstein radius', unit: 'mas', want: '1.0' },
       ],
       validate: v => {
         if (!Number.isFinite(v.theta)) return null;
@@ -123,8 +123,8 @@ const EINSTEIN_RINGS_AND_ARCS = {
              solar masses inside the ring, 1 gigaparsec away. Read the Einstein
              radius in arcseconds, and its size at the lens in kiloparsecs.`,
       fields: [
-        { id: 'theta', label: 'Einstein radius', unit: 'arcsec', hint: '0.64' },
-        { id: 'radius', label: 'Radius at the lens', unit: 'kpc', hint: '3.1' },
+        { id: 'theta', label: 'Einstein radius', unit: 'arcsec', want: '0.64' },
+        { id: 'radius', label: 'Radius at the lens', unit: 'kpc', want: '3.1' },
       ],
       validate: v => {
         if (![v.theta, v.radius].every(Number.isFinite)) return null;
@@ -161,7 +161,7 @@ const EINSTEIN_RINGS_AND_ARCS = {
           id: 'mass',
           label: 'Mass inside the ring',
           unit: '10^11 solar masses',
-          hint: '2.5',
+          want: '2.5',
         },
       ],
       validate: v => {
@@ -196,9 +196,9 @@ const EINSTEIN_RINGS_AND_ARCS = {
           id: 'outer',
           label: 'Outer image',
           unit: '',
-          hint: '1.28',
+          want: '1.28',
         },
-        { id: 'total', label: 'Total magnification', unit: '', hint: '2.18' },
+        { id: 'total', label: 'Total magnification', unit: '', want: '2.18' },
       ],
       validate: v => {
         if (![v.outer, v.total].every(Number.isFinite)) return null;
@@ -234,9 +234,9 @@ const EINSTEIN_RINGS_AND_ARCS = {
           id: 'outer',
           label: 'Outer image',
           unit: '',
-          hint: '1.5',
+          want: '1.5',
         },
-        { id: 'total', label: 'Total magnification', unit: '', hint: '4' },
+        { id: 'total', label: 'Total magnification', unit: '', want: '4' },
       ],
       validate: v => {
         if (![v.outer, v.total].every(Number.isFinite)) return null;

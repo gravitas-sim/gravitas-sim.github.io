@@ -19,28 +19,14 @@
     ["steps.a-pointer-offset.fields.1.unit",""]
    ],
    "numbered": [
-    ["steps.read-the-spread.fields.0.hint","31.1"],
-    ["steps.read-the-spread.fields.1.hint","0.80"],
-    ["steps.the-standard-error.fields.0.hint","0.36"],
-    ["steps.the-standard-error.fields.1.hint","0.34"],
-    ["steps.a-position-with-an-error-bar.placeholder","e.g. 12.3 ± 0.4"],
     ["steps.twenty-marks.fields.0.label","Standard error of x, 20 marks"],
-    ["steps.twenty-marks.fields.0.hint","0.17"],
     ["steps.twenty-marks.fields.1.label","How many times smaller than with 5 marks"],
-    ["steps.twenty-marks.fields.1.hint","2.06"],
-    ["steps.reveal-the-truth.fields.0.hint","-0.30"],
-    ["steps.reveal-the-truth.fields.1.hint","-0.84"],
-    ["steps.a-blurrier-star.fields.0.hint","1.60"],
-    ["steps.a-blurrier-star.fields.1.hint","0.71"],
-    ["steps.a-pointer-offset.fields.0.label","Standard error of x, 30 marks"],
-    ["steps.a-pointer-offset.fields.0.hint","0.14"],
-    ["steps.a-pointer-offset.fields.1.hint","6.2"]
+    ["steps.a-pointer-offset.fields.0.label","Standard error of x, 30 marks"]
    ]
   },
   "es": {
    "units": [],
    "numbered": [
-    ["steps.a-position-with-an-error-bar.placeholder","p. ej. 12,3 ± 0,4"],
     ["steps.twenty-marks.fields.0.label","Error estándar de x, 20 marcas"],
     ["steps.twenty-marks.fields.1.label","Cuántas veces menor que con 5 marcas"],
     ["steps.a-pointer-offset.fields.0.label","Error estándar de x, 30 marcas"]

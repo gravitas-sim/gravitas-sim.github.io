@@ -140,7 +140,7 @@ describe('the lesson’s answers are the instrument’s', () => {
     expect(s.validate({ v1: v1 + 30, v2 }).level).toBe('error');
     for (const f of s.fields)
       expect(
-        s.validate({ v1: 85, v2: -142, [f.id]: Number(f.hint) }).level
+        s.validate({ v1: 85, v2: -142, [f.id]: Number(f.want) }).level
       ).toBe('ok');
   });
 

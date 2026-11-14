@@ -7,7 +7,7 @@ export const WHAT_IS_A_MEASUREMENT_DEEPER = {
       title: 'La posición con su barra de error',
       body: 'Un resultado se informa como un valor, luego ±, luego su incertidumbre. Informa la posición x media de las cinco marcas con su error estándar, a partir de las dos filas que ya has leído.\n\nCuenta como correcto cuando el intervalo que das se solapa con el que permiten las marcas, y no es más ancho que unos pocos errores estándar, porque una incertidumbre tan grande que se solapa con cualquier cosa no ha dicho nada a nadie.',
       prompt: 'La posición x media, con su incertidumbre',
-      placeholder: 'p. ej. 12,3 ± 0,4',
+      placeholder: 'un valor y, luego, ± su incertidumbre',
       hints: ['Escribe la media, luego ±, luego el error estándar de x.'],
       because:
         'La media es 31,10 píxeles y su error estándar 0,36, así que la posición es 31,10 ± 0,36 píxeles: un intervalo que queda alrededor de las marcas y, como muestran los pasos siguientes, alrededor de la verdad.',
@@ -232,7 +232,7 @@ export const MEASURING_THE_MOON_DEEPER = {
       title: 'El diámetro con su barra de error',
       body: 'Informa el diámetro de la llanura oscura como un valor, luego &plusmn;, luego una incertidumbre que puedas defender. Una persona cuidadosa coloca el borde suave de esta llanura con unos tres píxeles de margen a cada lado, que son 21 km. Cuenta como correcto cuando el intervalo que das se solapa con el que permite la llanura, y no es más ancho que 60 km.',
       prompt: 'El diámetro, con su incertidumbre',
-      placeholder: 'p. ej. 600 ± 30',
+      placeholder: 'un valor y, luego, ± su incertidumbre',
       hints: [
         'Escribe el diámetro, luego ±, luego una incertidumbre que incluya cuán bien se puede colocar el borde.',
       ],

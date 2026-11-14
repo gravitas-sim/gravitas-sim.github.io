@@ -220,7 +220,7 @@ export const READING_THE_HR_DIAGRAM = {
           id: 'dm',
           label: 'Distance modulus of cluster A',
           unit: 'mag',
-          hint: '12.10',
+          want: '12.10',
         },
       ],
       validate: v => {
@@ -448,7 +448,7 @@ export const A_STARS_LIFE_IN_NUMBERS = {
              star. Read the <strong>This phase</strong> row of the readout: how long this phase really
              lasts.`,
       fields: [
-        { id: 'sun', label: 'Main sequence of 1 M☉', unit: 'Gyr', hint: '9.9' },
+        { id: 'sun', label: 'Main sequence of 1 M☉', unit: 'Gyr', want: '9.9' },
       ],
       validate: v => {
         if (!Number.isFinite(v.sun)) return null;
@@ -479,7 +479,7 @@ export const A_STARS_LIFE_IN_NUMBERS = {
           id: 'heavy',
           label: 'Main sequence of 20 M☉',
           unit: 'Myr',
-          hint: '8.7',
+          want: '8.7',
         },
       ],
       validate: v => {
@@ -780,7 +780,7 @@ export const WHEN_A_STAR_EXPLODES = {
           id: 'share',
           label: 'Blast motion over the binding energy',
           unit: '%',
-          hint: '0.39',
+          want: '0.39',
         },
       ],
       validate: v => {
@@ -964,13 +964,13 @@ export const POPULATIONS_I_AND_II = {
           id: 'poor',
           label: 'Age assuming [Fe/H] = −0.5',
           unit: 'Gyr',
-          hint: '3.35',
+          want: '3.35',
         },
         {
           id: 'rich',
           label: 'Age assuming [Fe/H] = 0',
           unit: 'Gyr',
-          hint: '1.47',
+          want: '1.47',
         },
       ],
       validate: v => {
@@ -1245,8 +1245,8 @@ export const SPECTRA_TELL_TEMPERATURE_AND_GRAVITY = {
              star&rsquo;s line is, as a percentage of the continuum next to it. Read the A star&rsquo;s and
              the M star&rsquo;s.`,
       fields: [
-        { id: 'a', label: 'H-beta depth, A star', unit: '%', hint: '36.6' },
-        { id: 'm', label: 'H-beta depth, M star', unit: '%', hint: '4.8' },
+        { id: 'a', label: 'H-beta depth, A star', unit: '%', want: '36.6' },
+        { id: 'm', label: 'H-beta depth, M star', unit: '%', want: '4.8' },
       ],
       validate: v => {
         if (![v.a, v.m].every(Number.isFinite)) return null;

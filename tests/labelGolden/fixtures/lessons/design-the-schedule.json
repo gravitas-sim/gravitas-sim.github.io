@@ -10,15 +10,7 @@
     ["steps.the-site-sets-the-comb.fields.0.unit","d"]
    ],
    "numbered": [
-    ["steps.read-the-comparison.fields.0.hint","0.28"],
-    ["steps.read-the-comparison.fields.1.hint","7"],
-    ["steps.read-the-comparison.fields.2.hint","3.52"],
-    ["steps.read-the-comparison.fields.3.hint","105"],
-    ["steps.the-site-sets-the-comb.fields.0.label","Alias period near 1.4 days"],
-    ["steps.the-site-sets-the-comb.fields.0.hint","1.395"],
-    ["steps.the-site-sets-the-comb.fields.1.hint","0"],
-    ["steps.an-irregular-night-costs-nothing.fields.0.hint","69"],
-    ["steps.an-irregular-night-costs-nothing.fields.1.hint","282"]
+    ["steps.the-site-sets-the-comb.fields.0.label","Alias period near 1.4 days"]
    ]
   },
   "es": {

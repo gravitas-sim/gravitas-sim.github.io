@@ -265,12 +265,12 @@ const GOLDILOCKS = {
              nothing has to be remembered from the last one: read a value,
              enter it, watch the point land.`,
       fields: [
-        { id: 'd1', label: 'Distance 1', unit: 'AU', hint: '0.5' },
-        { id: 's1', label: 'Starlight there', unit: 'Earths', hint: '4' },
-        { id: 'd2', label: 'Distance 2', unit: 'AU', hint: '1' },
-        { id: 's2', label: 'Starlight there', unit: 'Earths', hint: '1' },
-        { id: 'd3', label: 'Distance 3', unit: 'AU', hint: '2' },
-        { id: 's3', label: 'Starlight there', unit: 'Earths', hint: '0.25' },
+        { id: 'd1', label: 'Distance 1', unit: 'AU', want: '0.5' },
+        { id: 's1', label: 'Starlight there', unit: 'Earths', want: '4' },
+        { id: 'd2', label: 'Distance 2', unit: 'AU', want: '1' },
+        { id: 's2', label: 'Starlight there', unit: 'Earths', want: '1' },
+        { id: 'd3', label: 'Distance 3', unit: 'AU', want: '2' },
+        { id: 's3', label: 'Starlight there', unit: 'Earths', want: '0.25' },
       ],
       validate: v => {
         const rows = [
@@ -998,22 +998,22 @@ const GOLDILOCKS = {
           id: 'e',
           label: 'TRAPPIST-1e receives',
           unit: 'Earths',
-          hint: '0.65',
+          want: '0.65',
         },
         {
           id: 'f',
           label: 'TRAPPIST-1f receives',
           unit: 'Earths',
-          hint: '0.37',
+          want: '0.37',
         },
         {
           id: 'g',
           label: 'TRAPPIST-1g receives',
           unit: 'Earths',
-          hint: '0.25',
+          want: '0.25',
         },
-        { id: 'inner', label: 'Zone inner edge', unit: 'AU', hint: '0.0254' },
-        { id: 'outer', label: 'Zone outer edge', unit: 'AU', hint: '0.0499' },
+        { id: 'inner', label: 'Zone inner edge', unit: 'AU', want: '0.0254' },
+        { id: 'outer', label: 'Zone outer edge', unit: 'AU', want: '0.0499' },
       ],
       validate: v => {
         const want = {

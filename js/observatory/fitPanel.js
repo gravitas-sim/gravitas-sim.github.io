@@ -57,6 +57,7 @@ import {
   computeValue,
   setTier,
 } from '../quality.js';
+import { adoptVerdict } from '../qualityVerdict.js';
 
 // Nothing from the page's own modules - its plot, selection, units and
 // translator - is imported here: they arrive in `ctx`. esbuild puts a module
@@ -433,6 +434,7 @@ export function mountFitPanel(root, ctx) {
     tierLine,
     results
   );
+  adoptVerdict();
   applyTierRequest();
   showTier();
 

@@ -6,14 +6,7 @@
     ["steps.the-zero-point-under-cuts.fields.0.unit","mas"],
     ["steps.the-velocity-scatter.fields.0.unit","km/s"]
    ],
-   "numbered": [
-    ["steps.read-what-is-left.fields.0.hint","755"],
-    ["steps.read-what-is-left.fields.1.hint","238"],
-    ["steps.cuts-overlap.fields.0.hint","189"],
-    ["steps.cuts-overlap.fields.1.hint","5"],
-    ["steps.the-zero-point-under-cuts.fields.0.hint","-0.0417"],
-    ["steps.the-velocity-scatter.fields.0.hint","1.04"]
-   ]
+   "numbered": []
   },
   "es": {
    "units": [],

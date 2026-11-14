@@ -114,12 +114,12 @@ export const WHAT_IS_A_MEASUREMENT = {
              standard deviation. The mean is the best single position the marks
              give; the spread says how far one mark typically lies from it.`,
       fields: [
-        { id: 'mean', label: 'Mean x', unit: 'px', hint: '31.1' },
+        { id: 'mean', label: 'Mean x', unit: 'px', want: '31.1' },
         {
           id: 'sd',
           label: 'Spread of x (standard deviation)',
           unit: 'px',
-          hint: '0.80',
+          want: '0.80',
         },
       ],
       validate: v => {
@@ -149,8 +149,8 @@ export const WHAT_IS_A_MEASUREMENT = {
              divided by the square root of the number of marks. Read it for
              the x marks and for the y marks.`,
       fields: [
-        { id: 'sex', label: 'Standard error of x', unit: 'px', hint: '0.36' },
-        { id: 'sey', label: 'Standard error of y', unit: 'px', hint: '0.34' },
+        { id: 'sex', label: 'Standard error of x', unit: 'px', want: '0.36' },
+        { id: 'sey', label: 'Standard error of y', unit: 'px', want: '0.34' },
       ],
       validate: v => {
         if (![v.sex, v.sey].every(Number.isFinite)) return null;
@@ -205,13 +205,13 @@ export const WHAT_IS_A_MEASUREMENT = {
           id: 'sex',
           label: 'Standard error of x, 20 marks',
           unit: 'px',
-          hint: '0.17',
+          want: '0.17',
         },
         {
           id: 'factor',
           label: 'How many times smaller than with 5 marks',
           unit: '',
-          hint: '2.06',
+          want: '2.06',
         },
       ],
       validate: v => {
@@ -267,13 +267,13 @@ export const WHAT_IS_A_MEASUREMENT = {
           id: 'err',
           label: 'Error of the mean in x (mean minus truth)',
           unit: 'px',
-          hint: '-0.30',
+          want: '-0.30',
         },
         {
           id: 'inse',
           label: 'That error in standard errors',
           unit: '',
-          hint: '-0.84',
+          want: '-0.84',
         },
       ],
       validate: v => {
@@ -303,8 +303,8 @@ export const WHAT_IS_A_MEASUREMENT = {
              star</strong> to 8 pixels, with 5 marks, and read the spread and the
              standard error of x.`,
       fields: [
-        { id: 'sd', label: 'Spread of x', unit: 'px', hint: '1.60' },
-        { id: 'sex', label: 'Standard error of x', unit: 'px', hint: '0.71' },
+        { id: 'sd', label: 'Spread of x', unit: 'px', want: '1.60' },
+        { id: 'sex', label: 'Standard error of x', unit: 'px', want: '0.71' },
       ],
       validate: v => {
         if (![v.sd, v.sex].every(Number.isFinite)) return null;
@@ -462,9 +462,9 @@ export const WHAT_DOES_PLUS_MINUS_CLAIM = {
           id: 'hits',
           label: 'Intervals that hold the truth',
           unit: '',
-          hint: '1361',
+          want: '1361',
         },
-        { id: 'share', label: 'Share of the repeats', unit: '%', hint: '68.0' },
+        { id: 'share', label: 'Share of the repeats', unit: '%', want: '68.0' },
       ],
       validate: v => {
         if (![v.hits, v.share].every(Number.isFinite)) return null;
@@ -495,9 +495,9 @@ export const WHAT_DOES_PLUS_MINUS_CLAIM = {
           id: 'hits',
           label: 'Intervals that hold the truth',
           unit: '',
-          hint: '1901',
+          want: '1901',
         },
-        { id: 'share', label: 'Share of the repeats', unit: '%', hint: '95.0' },
+        { id: 'share', label: 'Share of the repeats', unit: '%', want: '95.0' },
       ],
       validate: v => {
         if (![v.hits, v.share].every(Number.isFinite)) return null;
@@ -558,8 +558,8 @@ export const WHAT_DOES_PLUS_MINUS_CLAIM = {
       body: `Read the share of the repeats that hold the truth at <strong>±1
              σ</strong> and then at <strong>±2 σ</strong>.`,
       fields: [
-        { id: 'one', label: 'Share at ±1 σ', unit: '%', hint: '36.3' },
-        { id: 'two', label: 'Share at ±2 σ', unit: '%', hint: '74.4' },
+        { id: 'one', label: 'Share at ±1 σ', unit: '%', want: '36.3' },
+        { id: 'two', label: 'Share at ±2 σ', unit: '%', want: '74.4' },
       ],
       validate: v => {
         if (![v.one, v.two].every(Number.isFinite)) return null;
@@ -635,13 +635,13 @@ export const WHAT_DOES_PLUS_MINUS_CLAIM = {
           id: 'share',
           label: 'Share that hold the true distance',
           unit: '%',
-          hint: '68.0',
+          want: '68.0',
         },
         {
           id: 'open',
           label: 'Repeats with no upper end',
           unit: '',
-          hint: '17',
+          want: '17',
         },
       ],
       validate: v => {
@@ -678,7 +678,7 @@ export const WHAT_DOES_PLUS_MINUS_CLAIM = {
           id: 'share',
           label: 'Share that hold the true distance',
           unit: '%',
-          hint: '78.3',
+          want: '78.3',
         },
       ],
       validate: v => {
@@ -744,13 +744,13 @@ export const WHAT_DOES_PLUS_MINUS_CLAIM = {
           id: 'at3',
           label: 'Share that hold the rate at 3.0',
           unit: '%',
-          hint: '95.6',
+          want: '95.6',
         },
         {
           id: 'at4',
           label: 'Share that hold the rate at 4.0',
           unit: '%',
-          hint: '98.7',
+          want: '98.7',
         },
       ],
       validate: v => {
@@ -882,8 +882,8 @@ export const WHEN_THE_METHOD_MUST_REFUSE = {
       body: `Set the trial mass to <strong>2.0</strong> and read the tilt that fits
              best at that mass and what the fit then costs (the chi-square).`,
       fields: [
-        { id: 's', label: 'Best tilt, the sine s', unit: '', hint: '0.425' },
-        { id: 'chi', label: 'Chi-square of that fit', unit: '', hint: '0.00' },
+        { id: 's', label: 'Best tilt, the sine s', unit: '', want: '0.425' },
+        { id: 'chi', label: 'Chi-square of that fit', unit: '', want: '0.00' },
       ],
       validate: v => {
         if (![v.s, v.chi].every(Number.isFinite)) return null;
@@ -911,8 +911,8 @@ export const WHEN_THE_METHOD_MUST_REFUSE = {
              cannot exceed 1, so it cannot help. Read the best tilt and the
              chi-square.`,
       fields: [
-        { id: 's', label: 'Best tilt, the sine s', unit: '', hint: '1.000' },
-        { id: 'chi', label: 'Chi-square of that fit', unit: '', hint: '34.0' },
+        { id: 's', label: 'Best tilt, the sine s', unit: '', want: '1.000' },
+        { id: 'chi', label: 'Chi-square of that fit', unit: '', want: '34.0' },
       ],
       validate: v => {
         if (![v.s, v.chi].every(Number.isFinite)) return null;
@@ -943,13 +943,13 @@ export const WHEN_THE_METHOD_MUST_REFUSE = {
           id: 'one',
           label: 'Smallest mass, rise of 1',
           unit: 'M_J',
-          hint: '0.79',
+          want: '0.79',
         },
         {
           id: 'two',
           label: 'Smallest mass, rise of 3.84',
           unit: 'M_J',
-          hint: '0.73',
+          want: '0.73',
         },
       ],
       validate: v => {
@@ -1069,14 +1069,14 @@ export const WHEN_THE_METHOD_MUST_REFUSE = {
              with its formal uncertainty. Read the slope, its formal
              uncertainty and the reduced chi-square.`,
       fields: [
-        { id: 'slope', label: 'Slope', unit: '', hint: '1.078' },
+        { id: 'slope', label: 'Slope', unit: '', want: '1.078' },
         {
           id: 'sigma',
           label: 'Formal uncertainty of the slope',
           unit: '',
-          hint: '0.024',
+          want: '0.024',
         },
-        { id: 'reduced', label: 'Reduced chi-square', unit: '', hint: '7.64' },
+        { id: 'reduced', label: 'Reduced chi-square', unit: '', want: '7.64' },
       ],
       validate: v => {
         if (![v.slope, v.sigma, v.reduced].every(Number.isFinite)) return null;
@@ -1141,12 +1141,12 @@ export const WHEN_THE_METHOD_MUST_REFUSE = {
       body: `Change the fit to a <strong>parabola</strong> (three terms). Read the reduced
              chi-square and the coefficient of the squared term.`,
       fields: [
-        { id: 'reduced', label: 'Reduced chi-square', unit: '', hint: '0.37' },
+        { id: 'reduced', label: 'Reduced chi-square', unit: '', want: '0.37' },
         {
           id: 'curve',
           label: 'Coefficient of the squared term',
           unit: '',
-          hint: '0.089',
+          want: '0.089',
         },
       ],
       validate: v => {
@@ -1303,12 +1303,12 @@ export const MEASURING_THE_MOON = {
              be a pixel or two wider than the picture. Keep that in mind: it is not in
              the uncertainty the tool states.`,
       fields: [
-        { id: 'pair', label: 'Length of the pair', unit: 'px', hint: '493' },
+        { id: 'pair', label: 'Length of the pair', unit: 'px', want: '493' },
         {
           id: 'scale',
           label: 'Scale from the pair, in km per pixel',
           unit: '',
-          hint: '7.05',
+          want: '7.05',
         },
       ],
       validate: v => {
@@ -1395,7 +1395,7 @@ export const MEASURING_THE_MOON = {
           id: 'km',
           label: 'Diameter of the circle',
           unit: 'km',
-          hint: '630',
+          want: '630',
         },
       ],
       validate: v => {
@@ -1520,12 +1520,12 @@ export const HOW_FAR_IS_THAT_STAR = {
              the shift is from the first position to the last. Read the size of the shift
              and the rate it would be if it were all motion.`,
       fields: [
-        { id: 'sep', label: 'Size of the shift', unit: 'mas', hint: '549' },
+        { id: 'sep', label: 'Size of the shift', unit: 'mas', want: '549' },
         {
           id: 'rate',
           label: 'Rate if it were all motion, in arcseconds a year',
           unit: '',
-          hint: '0.287',
+          want: '0.287',
         },
       ],
       validate: v => {
@@ -1577,8 +1577,8 @@ export const HOW_FAR_IS_THAT_STAR = {
              chi-square of the fit and its degrees of freedom: 28 numbers (14 positions in
              two coordinates) less the four the line has.`,
       fields: [
-        { id: 'chi2', label: 'Chi-square of the fit', unit: '', hint: '1576' },
-        { id: 'dof', label: 'Degrees of freedom', unit: '', hint: '24' },
+        { id: 'chi2', label: 'Chi-square of the fit', unit: '', want: '1576' },
+        { id: 'dof', label: 'Degrees of freedom', unit: '', want: '24' },
       ],
       validate: v => {
         if (![v.chi2, v.dof].every(Number.isFinite)) return null;
@@ -1605,18 +1605,18 @@ export const HOW_FAR_IS_THAT_STAR = {
       body: `Set <strong>What to fit</strong> to parallax and motion, with 14 epochs. Read the
              parallax, its uncertainty and the distance.`,
       fields: [
-        { id: 'p', label: 'Parallax, relative', unit: 'mas', hint: '60.3' },
+        { id: 'p', label: 'Parallax, relative', unit: 'mas', want: '60.3' },
         {
           id: 'sigma',
           label: 'Uncertainty of the parallax',
           unit: 'mas',
-          hint: '1.5',
+          want: '1.5',
         },
         {
           id: 'd',
           label: 'Distance, 1 over the parallax',
           unit: 'pc',
-          hint: '16.6',
+          want: '16.6',
         },
       ],
       validate: v => {
@@ -1851,9 +1851,9 @@ export const A_BINARY_STARS_ORBIT = {
       body: `Set <strong>Orbit model</strong> to elliptical, with all twelve epochs. Read the
              period, the semi-major axis and the eccentricity.`,
       fields: [
-        { id: 'P', label: 'Period', unit: 'yr', hint: '14.13' },
-        { id: 'a', label: 'Semi-major axis', unit: 'arcsec', hint: '0.908' },
-        { id: 'e', label: 'Eccentricity', unit: '', hint: '0.443' },
+        { id: 'P', label: 'Period', unit: 'yr', want: '14.13' },
+        { id: 'a', label: 'Semi-major axis', unit: 'arcsec', want: '0.908' },
+        { id: 'e', label: 'Eccentricity', unit: '', want: '0.443' },
       ],
       validate: v => {
         if (![v.P, v.a, v.e].every(Number.isFinite)) return null;
@@ -1910,18 +1910,18 @@ export const A_BINARY_STARS_ORBIT = {
              The interval comes from the orbit&rsquo;s uncertainty and the parallax&rsquo;s, 4 mas,
              together.`,
       fields: [
-        { id: 'm', label: 'Mass sum', unit: 'M_sun', hint: '3.76' },
+        { id: 'm', label: 'Mass sum', unit: 'M_sun', want: '3.76' },
         {
           id: 'lo',
           label: 'Mass sum, low end of the 68 percent interval',
           unit: 'M_sun',
-          hint: '3.33',
+          want: '3.33',
         },
         {
           id: 'hi',
           label: 'Mass sum, high end of the 68 percent interval',
           unit: 'M_sun',
-          hint: '4.25',
+          want: '4.25',
         },
       ],
       validate: v => {
@@ -2110,12 +2110,12 @@ export const WHICH_SURFACE_IS_OLDER = {
         {
           id: 'highland',
           label: 'Craters in the lunar highland',
-          hint: '40',
+          want: '40',
         },
         {
           id: 'mare',
           label: 'Craters in the lunar mare',
-          hint: '7',
+          want: '7',
         },
       ],
       validate: v => {
@@ -2147,12 +2147,12 @@ export const WHICH_SURFACE_IS_OLDER = {
         {
           id: 'highland',
           label: 'Highland density, per million km²',
-          hint: '131.2',
+          want: '131.2',
         },
         {
           id: 'mare',
           label: 'Mare density, per million km²',
-          hint: '20.5',
+          want: '20.5',
         },
       ],
       validate: v => {
@@ -2185,9 +2185,9 @@ export const WHICH_SURFACE_IS_OLDER = {
         {
           id: 'ratio',
           label: 'Density ratio, highland over mare',
-          hint: '6.39',
+          want: '6.39',
         },
-        { id: 'lo', label: 'Lower end of the interval', hint: '2.83' },
+        { id: 'lo', label: 'Lower end of the interval', want: '2.83' },
       ],
       validate: v => {
         if (![v.ratio, v.lo].every(Number.isFinite)) return null;
@@ -2258,9 +2258,9 @@ export const WHICH_SURFACE_IS_OLDER = {
         {
           id: 'ratio',
           label: 'Density ratio, highland over plains',
-          hint: '6.50',
+          want: '6.50',
         },
-        { id: 'lo', label: 'Lower end of the interval', hint: '3.68' },
+        { id: 'lo', label: 'Lower end of the interval', want: '3.68' },
       ],
       validate: v => {
         if (![v.ratio, v.lo].every(Number.isFinite)) return null;
@@ -2425,9 +2425,9 @@ export const CRATERS_BY_SIZE = {
              across, the diameter above which its count is complete. Read the cumulative index
              <em>b</em> and the two ends of its 95 percent interval.`,
       fields: [
-        { id: 'b', label: 'Index b', hint: '1.71' },
-        { id: 'lo', label: 'Lower end of the interval', hint: '1.22' },
-        { id: 'hi', label: 'Upper end of the interval', hint: '2.28' },
+        { id: 'b', label: 'Index b', want: '1.71' },
+        { id: 'lo', label: 'Lower end of the interval', want: '1.22' },
+        { id: 'hi', label: 'Upper end of the interval', want: '2.28' },
       ],
       validate: v => {
         if (![v.b, v.lo, v.hi].every(Number.isFinite)) return null;
@@ -2479,8 +2479,8 @@ export const CRATERS_BY_SIZE = {
       body: `Choose the <strong>Martian highland</strong> and fit craters at least
              <strong>20 km</strong> across. Read the two ends of the interval of its index.`,
       fields: [
-        { id: 'lo', label: 'Lower end of the interval', hint: '1.39' },
-        { id: 'hi', label: 'Upper end of the interval', hint: '2.09' },
+        { id: 'lo', label: 'Lower end of the interval', want: '1.39' },
+        { id: 'hi', label: 'Upper end of the interval', want: '2.09' },
       ],
       validate: v => {
         if (![v.lo, v.hi].every(Number.isFinite)) return null;
@@ -2507,8 +2507,8 @@ export const CRATERS_BY_SIZE = {
       body: `Choose the <strong>lunar mare</strong>, fitted from <strong>30 km</strong>. Only seven craters are
              that large. Read its index and the upper end of its interval.`,
       fields: [
-        { id: 'b', label: 'Index b', hint: '3.47' },
-        { id: 'hi', label: 'Upper end of the interval', hint: '6.47' },
+        { id: 'b', label: 'Index b', want: '3.47' },
+        { id: 'hi', label: 'Upper end of the interval', want: '6.47' },
       ],
       validate: v => {
         if (![v.b, v.hi].every(Number.isFinite)) return null;
@@ -2570,11 +2570,11 @@ export const CRATERS_BY_SIZE = {
              left out of the list, as a count of the picture would miss it. Read the index and the
              <strong>z</strong> of the check on the slope higher up.`,
       fields: [
-        { id: 'b', label: 'Index b', hint: '1.01' },
+        { id: 'b', label: 'Index b', want: '1.01' },
         {
           id: 'z',
           label: 'z of the check above twice the fit diameter',
-          hint: '2.77',
+          want: '2.77',
         },
       ],
       validate: v => {
@@ -2696,12 +2696,12 @@ export const WHAT_A_CRATER_DIAMETER_IS_WORTH = {
              toward the center of the disc, and the view corrected. Read the <strong>diameter</strong> and its
              uncertainty.`,
       fields: [
-        { id: 'D', label: 'Diameter', unit: 'km', hint: '112.0' },
+        { id: 'D', label: 'Diameter', unit: 'km', want: '112.0' },
         {
           id: 'sigma',
           label: 'Its uncertainty (one sigma)',
           unit: 'km',
-          hint: '5.9',
+          want: '5.9',
         },
       ],
       validate: v => {
@@ -2756,13 +2756,13 @@ export const WHAT_A_CRATER_DIAMETER_IS_WORTH = {
           id: 'fit',
           label: 'Uncertainty from placing the circle',
           unit: '%',
-          hint: '1.6',
+          want: '1.6',
         },
         {
           id: 'rim',
           label: 'Uncertainty from where the rim is',
           unit: '%',
-          hint: '5.0',
+          want: '5.0',
         },
       ],
       validate: v => {
@@ -2794,13 +2794,13 @@ export const WHAT_A_CRATER_DIAMETER_IS_WORTH = {
           id: 'D',
           label: 'Diameter without the correction',
           unit: 'km',
-          hint: '101.1',
+          want: '101.1',
         },
         {
           id: 'pct',
           label: 'How much smaller than with it',
           unit: '%',
-          hint: '9.8',
+          want: '9.8',
         },
       ],
       validate: v => {
@@ -2999,12 +2999,12 @@ export const WHAT_IS_IN_THIS_FIELD = {
       body: `Leave <strong>Threshold</strong> at 4 sigma. Read how many sources the detector lists,
              and how many of them carry a flag.`,
       fields: [
-        { id: 'n', label: 'Sources listed', unit: '', hint: '30' },
+        { id: 'n', label: 'Sources listed', unit: '', want: '30' },
         {
           id: 'flagged',
           label: 'Sources carrying a flag',
           unit: '',
-          hint: '0',
+          want: '0',
         },
       ],
       validate: v => {
@@ -3032,12 +3032,12 @@ export const WHAT_IS_IN_THIS_FIELD = {
       body: `Set <strong>Threshold</strong> to 2.5 sigma and switch <strong>Placed stars</strong> to shown. Read how many sources are listed, and how many of them are
              not a star that was placed.`,
       fields: [
-        { id: 'n', label: 'Sources listed', unit: '', hint: '44' },
+        { id: 'n', label: 'Sources listed', unit: '', want: '44' },
         {
           id: 'noise',
           label: 'Sources that are not a star that was placed',
           unit: '',
-          hint: '7',
+          want: '7',
         },
       ],
       validate: v => {
@@ -3067,9 +3067,9 @@ export const WHAT_IS_IN_THIS_FIELD = {
              and combines them. Read how many stars it used and the width (FWHM) with its
              uncertainty.`,
       fields: [
-        { id: 'n', label: 'Stars used for the width', unit: '', hint: '6' },
-        { id: 'w', label: 'Width of the stars', unit: 'px', hint: '3.00' },
-        { id: 's', label: 'Its uncertainty', unit: 'px', hint: '0.02' },
+        { id: 'n', label: 'Stars used for the width', unit: '', want: '6' },
+        { id: 'w', label: 'Width of the stars', unit: 'px', want: '3.00' },
+        { id: 's', label: 'Its uncertainty', unit: 'px', want: '0.02' },
       ],
       validate: v => {
         if (![v.n, v.w, v.s].every(Number.isFinite)) return null;
@@ -3135,13 +3135,13 @@ export const WHAT_IS_IN_THIS_FIELD = {
           id: 'bright',
           label: 'Found, magnitude −3.4 to −3.1',
           unit: '%',
-          hint: '100',
+          want: '100',
         },
         {
           id: 'faint',
           label: 'Found, magnitude −2.5 to −2.2',
           unit: '%',
-          hint: '31',
+          want: '31',
         },
       ],
       validate: v => {
@@ -3174,13 +3174,13 @@ export const WHAT_IS_IN_THIS_FIELD = {
           id: 'm50',
           label: 'Magnitude at 50 percent found',
           unit: 'mag',
-          hint: '-2.47',
+          want: '-2.47',
         },
         {
           id: 'm90',
           label: 'Magnitude at 90 percent found',
           unit: 'mag',
-          hint: '-2.87',
+          want: '-2.87',
         },
       ],
       validate: v => {

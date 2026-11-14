@@ -992,7 +992,8 @@
         "open": ["#railTools"],
         "task": "Open the light curve from Tools.",
         "reach": "#toggleLightCurve",
-        "press": "Enter"
+        "press": "Enter",
+        "ledger": "mode:sandbox-rail"
       },
       {
         "id": "sandbox.state",
@@ -1001,7 +1002,8 @@
         "open": ["#railState"],
         "task": "Use the first control of State.",
         "reach": "#railState ~ * button, #railState ~ * input, #railState ~ * select",
-        "press": "Enter"
+        "press": "Enter",
+        "ledger": "mode:sandbox-rail"
       },
       {
         "id": "sandbox.light-curve",
@@ -1021,7 +1023,8 @@
         "ready": "#welcomeSections",
         "task": "Open the first thing Home offers.",
         "reach": "#welcomeDialog a[href]",
-        "press": "Enter"
+        "press": "Enter",
+        "ledger": "dialog:welcome"
       },
       {
         "id": "home.first-week",
@@ -1038,7 +1041,8 @@
         "ready": "#welWeek",
         "task": "Start the first item of the week.",
         "reach": "#welWeek a[href]",
-        "press": "Enter"
+        "press": "Enter",
+        "ledger": "mode:home-first-week"
       },
       {
         "id": "home.introduction",
@@ -1049,7 +1053,8 @@
         "ready": "#welcomeDialog",
         "task": "Skip the introduction.",
         "reach": "#welcomeDialog button:not(#welcomeClose)",
-        "press": "Enter"
+        "press": "Enter",
+        "ledger": "mode:home-introduction"
       },
       {
         "id": "teaching-kit.collections",
@@ -1061,6 +1066,77 @@
         "press": "Space",
         "saved": ["investigation:tides", "scenario:solar-system"],
         "ready": "#coll-week"
+      },
+      {
+        "id": "sandbox.settings",
+        "surface": "sandbox",
+        "path": "/",
+        "open": ["#settingsBtn"],
+        "ledger": "dialog:settings",
+        "outline": true,
+        "task": "Cancel Settings without applying anything.",
+        "reach": "#settingsCancel",
+        "press": "Enter",
+        "notRun": "With Settings open, Tab stays inside the panel (it wraps and is not trapped) while the 31 controls of the bar, the rail and the footer that stay on screen are still pressable by a pointer: the panel is aria-modal=\"false\" and does not make the page behind it inert, so the sweep's every-pressable-control-is-reached check cannot pass on a page left as it is. No page changes under this prompt; the closing prompt of the sandbox workspace decides between making the panel modal or the page behind it reachable.",
+        "opened": "#settingsPanel"
+      },
+      {
+        "id": "sandbox.share",
+        "surface": "sandbox",
+        "path": "/",
+        "open": ["#railState", "#shareBtn"],
+        "ledger": "dialog:share",
+        "outline": true,
+        "task": "Copy the link to this simulation.",
+        "reach": "#shareCopyBtn",
+        "press": "Enter",
+        "opened": "#shareContent"
+      },
+      {
+        "id": "lesson.finish",
+        "surface": "sandbox",
+        "path": "/?author=keplers-laws&step=99",
+        "open": ["#investigationNext"],
+        "ready": "#investigationPanel",
+        "ledger": "dialog:investigation-finish",
+        "outline": true,
+        "task": "Type a name for the report.",
+        "reach": "#investigationName",
+        "press": "type:Ada",
+        "opened": "#investigationFinishContent"
+      },
+      {
+        "id": "lesson.author",
+        "surface": "sandbox",
+        "path": "/?author=keplers-laws&step=1",
+        "open": [],
+        "ready": "#investigationPanel",
+        "ledger": "route:author",
+        "task": "Move the author preview to the next step with the step field.",
+        "reach": "#investigationAuthorStep",
+        "press": "ArrowUp"
+      },
+      {
+        "id": "sandbox.assign",
+        "surface": "sandbox",
+        "path": "/?assign=keplers-laws",
+        "open": [],
+        "ready": "#assignName",
+        "ledger": "route:assign",
+        "task": "Name the assignment.",
+        "reach": "#assignName",
+        "press": "type:Week one"
+      },
+      {
+        "id": "sandbox.embed",
+        "surface": "sandbox",
+        "path": "/?embed=1",
+        "open": [],
+        "ready": "#embedOpenFull",
+        "ledger": "mode:embed",
+        "task": "Play or pause the embedded simulation.",
+        "reach": "#timelinePlay",
+        "press": "Enter"
       }
     ]
   }

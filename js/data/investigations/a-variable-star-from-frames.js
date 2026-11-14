@@ -81,7 +81,7 @@ const A_VARIABLE_STAR_FROM_FRAMES = {
           id: 'raw',
           label: 'Scatter of the star alone',
           unit: 'mag',
-          hint: '0.070',
+          want: '0.070',
         },
       ],
       validate: v => {
@@ -150,9 +150,9 @@ const A_VARIABLE_STAR_FROM_FRAMES = {
           id: 'check',
           label: 'Scatter of the check star',
           unit: 'mag',
-          hint: '0.0088',
+          want: '0.0088',
         },
-        { id: 'factor', label: 'Improvement', unit: '', hint: '8.0' },
+        { id: 'factor', label: 'Improvement', unit: '', want: '8.0' },
       ],
       validate: v => {
         if (![v.check, v.factor].every(Number.isFinite)) return null;
@@ -208,8 +208,8 @@ const A_VARIABLE_STAR_FROM_FRAMES = {
              <strong>period</strong> and the <strong>amplitude</strong> of the
              best sine.`,
       fields: [
-        { id: 'period', label: 'Period', unit: 'd', hint: '0.122' },
-        { id: 'amp', label: 'Amplitude', unit: 'mag', hint: '0.042' },
+        { id: 'period', label: 'Period', unit: 'd', want: '0.122' },
+        { id: 'amp', label: 'Amplitude', unit: 'mag', want: '0.042' },
       ],
       validate: v => {
         if (![v.period, v.amp].every(Number.isFinite)) return null;

@@ -21,23 +21,10 @@
     ["steps.the-zero-count-limit.unit",""]
    ],
    "numbered": [
-    ["steps.coverage-at-one-sigma.fields.0.hint","1361"],
-    ["steps.coverage-at-one-sigma.fields.1.hint","68.0"],
-    ["steps.coverage-at-two-sigma.fields.0.hint","1901"],
-    ["steps.coverage-at-two-sigma.fields.1.hint","95.0"],
-    ["steps.the-ensemble-wobbles.fields.0.hint","70.0"],
-    ["steps.the-ensemble-wobbles.fields.1.hint","4.6"],
     ["steps.biased-coverage.fields.0.label","Share at ±1 σ"],
-    ["steps.biased-coverage.fields.0.hint","36.3"],
     ["steps.biased-coverage.fields.1.label","Share at ±2 σ"],
-    ["steps.biased-coverage.fields.1.hint","74.4"],
-    ["steps.an-asymmetric-interval.fields.0.hint","68.0"],
-    ["steps.an-asymmetric-interval.fields.1.hint","17"],
-    ["steps.the-symmetric-shortcut.fields.0.hint","78.3"],
     ["steps.upper-limit-coverage.fields.0.label","Share that hold the rate at 3.0"],
-    ["steps.upper-limit-coverage.fields.0.hint","95.6"],
-    ["steps.upper-limit-coverage.fields.1.label","Share that hold the rate at 4.0"],
-    ["steps.upper-limit-coverage.fields.1.hint","98.7"]
+    ["steps.upper-limit-coverage.fields.1.label","Share that hold the rate at 4.0"]
    ]
   },
   "es": {

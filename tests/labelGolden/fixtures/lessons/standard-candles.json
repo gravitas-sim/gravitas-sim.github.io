@@ -11,11 +11,7 @@
     ["steps.the-calibration-for-one-percent.unit","mag"]
    ],
    "numbered": [
-    ["steps.the-sample.fields.0.hint","1829"],
-    ["steps.the-sample.fields.1.hint","1688"],
-    ["steps.a-calibration-error.fields.0.hint","66.85"],
-    ["steps.a-calibration-error.fields.1.label","Change in H₀ for 0.1 mag"],
-    ["steps.a-calibration-error.fields.1.hint","4.5"]
+    ["steps.a-calibration-error.fields.1.label","Change in H₀ for 0.1 mag"]
    ]
   },
   "es": {

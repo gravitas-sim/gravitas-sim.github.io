@@ -15,17 +15,10 @@
     ["steps.distance-by-hand.unit","kpc"]
    ],
    "numbered": [
-    ["steps.measure-the-cluster.fields.0.hint","-1.2"],
-    ["steps.measure-the-cluster.fields.1.hint","-2.0"],
     ["steps.measure-the-cluster.fields.2.label","Stars above 0.5"],
-    ["steps.measure-the-cluster.fields.2.hint","506"],
     ["steps.move-the-threshold.fields.0.label","Stars above 0.99"],
-    ["steps.move-the-threshold.fields.0.hint","497"],
     ["steps.move-the-threshold.fields.1.label","Stars above 0.1"],
-    ["steps.move-the-threshold.fields.1.hint","509"],
-    ["steps.read-the-distance.fields.0.hint","0.385"],
-    ["steps.read-the-distance.fields.1.label","Reading, 1 ÷ parallax (uncorrected)"],
-    ["steps.read-the-distance.fields.1.hint","2.6"]
+    ["steps.read-the-distance.fields.1.label","Reading, 1 ÷ parallax (uncorrected)"]
    ]
   },
   "es": {

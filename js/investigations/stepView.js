@@ -395,7 +395,7 @@ export function stepMarkup(step, c) {
               <input type="text" ${f.kind === 'text' ? '' : 'inputmode="decimal"'}
                      data-field="${attr(key)}" value="${attr(responses[key] ?? '')}"
                      ${derived ? 'readonly tabindex="-1"' : ''}
-                     placeholder="${escape(f.hint || '')}" />
+                     placeholder="${escape(cueText(f.hint))}" />
             </label>`;
         })
         .join('')}</div>`
@@ -863,23 +863,22 @@ export function isWrittenAnswer(value) {
 // --- Answer controls ----------------------------------------------------------
 
 /**
- * The placeholder for a numeric box.
- *
- * Audited, because a placeholder is visible before the student has thought
- * about the question: one that shows the shape of the expected measurement -
- * "e.g. 3.52" - hands over the answer to the first digit. A step may set its
- * own only when it says something about *form* rather than value, and the
- * default says nothing at all beyond the unit.
- *
- * @param {Object} step - Step definition
- * @returns {string} The placeholder text
+ * The cue an empty box may show (Prompt 299, rule L1): words that name a form, never a value.
+ * A numeral in any script hides it, so a pack or an unmigrated file cannot leak a reading.
+ * @param {*} cue - A field's `hint` or a numeric step's `placeholder`
+ * @returns {string} The cue to render, possibly empty
  */
-function numericPlaceholder(step) {
-  if (step.placeholder) return step.placeholder;
-  return step.unit
+export const cueText = cue => {
+  const text = typeof cue === 'string' ? cue.trim() : '';
+  return /[\p{Nd}\p{No}\p{Nl}]/u.test(text) ? '' : text;
+};
+
+/** The placeholder of a numeric box: the step's own cue, else only the unit. */
+const numericPlaceholder = step =>
+  cueText(step.placeholder) ||
+  (step.unit
     ? t('inv.answer.placeholderUnit', { unit: step.unit })
-    : t('inv.answer.placeholder');
-}
+    : t('inv.answer.placeholder'));
 
 /**
  * Why a typed answer could not be read, in words a student can act on.

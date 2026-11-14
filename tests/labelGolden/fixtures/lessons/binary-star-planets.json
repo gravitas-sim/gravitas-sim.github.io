@@ -22,20 +22,15 @@
     ["steps.circumbinary-boundary.unit",""]
    ],
    "numbered": [
-    ["steps.read-the-sweep.fields.0.hint","4"],
-    ["steps.read-the-sweep.fields.1.hint","0.22"],
-    ["steps.read-the-sweep.fields.2.hint","0.30"],
     ["steps.the-drift-was-tiny.fields.0.label","Energy drift at step 1.0, in per cent"],
-    ["steps.the-drift-was-tiny.fields.1.label","Energy drift at step 0.25, in per cent"],
-    ["steps.the-drift-was-tiny.fields.2.hint","of 3"]
+    ["steps.the-drift-was-tiny.fields.1.label","Energy drift at step 0.25, in per cent"]
    ]
   },
   "es": {
    "units": [],
    "numbered": [
     ["steps.the-drift-was-tiny.fields.0.label","Deriva de energía con paso 1,0, en por ciento"],
-    ["steps.the-drift-was-tiny.fields.1.label","Deriva de energía con paso 0,25, en por ciento"],
-    ["steps.the-drift-was-tiny.fields.2.hint","de 3"]
+    ["steps.the-drift-was-tiny.fields.1.label","Deriva de energía con paso 0,25, en por ciento"]
    ]
   }
  },

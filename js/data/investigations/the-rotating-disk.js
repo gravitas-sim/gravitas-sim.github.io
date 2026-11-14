@@ -94,8 +94,8 @@ const THE_ROTATING_DISK = {
              centered. With the stars weighted by distance (the default), read
              <strong>Oort A</strong> and <strong>Oort B</strong>.`,
       fields: [
-        { id: 'A', label: 'Oort A', unit: 'km/s/kpc', hint: '14' },
-        { id: 'B', label: 'Oort B', unit: 'km/s/kpc', hint: '-15' },
+        { id: 'A', label: 'Oort A', unit: 'km/s/kpc', want: '14' },
+        { id: 'B', label: 'Oort B', unit: 'km/s/kpc', want: '-15' },
       ],
       validate: v => {
         if (![v.A, v.B].every(Number.isFinite)) return null;
@@ -152,7 +152,7 @@ const THE_ROTATING_DISK = {
           id: 'v0',
           label: 'Circular speed at the Sun',
           unit: 'km/s',
-          hint: '247',
+          want: '247',
         },
       ],
       validate: v => {
@@ -222,12 +222,12 @@ const THE_ROTATING_DISK = {
              χ² (χ² per degree of freedom: about 1 is a fit as good as the
              errors) and the disk mass.`,
       fields: [
-        { id: 'reduced', label: 'Reduced χ²', unit: '', hint: '50' },
+        { id: 'reduced', label: 'Reduced χ²', unit: '', want: '50' },
         {
           id: 'disc',
           label: 'Disk mass, in 10¹⁰ solar masses',
           unit: '',
-          hint: '8',
+          want: '8',
         },
       ],
       validate: v => {
@@ -255,8 +255,8 @@ const THE_ROTATING_DISK = {
       body: `Now choose <strong>best fit, with a halo</strong>. Read the reduced
              χ² and the halo’s speed far out.`,
       fields: [
-        { id: 'reduced', label: 'Reduced χ²', unit: '', hint: '4.8' },
-        { id: 'halo', label: 'Halo speed, far out', unit: 'km/s', hint: '250' },
+        { id: 'reduced', label: 'Reduced χ²', unit: '', want: '4.8' },
+        { id: 'halo', label: 'Halo speed, far out', unit: 'km/s', want: '250' },
       ],
       validate: v => {
         if (![v.reduced, v.halo].every(Number.isFinite)) return null;

@@ -9,12 +9,8 @@
     ["steps.a-bin-with-none.fields.1.unit",""]
    ],
    "numbered": [
-    ["steps.read-a-rate.fields.0.hint","0.116"],
     ["steps.read-a-rate.fields.1.label","Upper end of the 68 percent interval, in planets per star"],
-    ["steps.read-a-rate.fields.1.hint","0.166"],
-    ["steps.a-bin-with-none.fields.0.label","Upper limit at 95 percent, in planets per star"],
-    ["steps.a-bin-with-none.fields.0.hint","0.031"],
-    ["steps.a-bin-with-none.fields.1.hint","96"]
+    ["steps.a-bin-with-none.fields.0.label","Upper limit at 95 percent, in planets per star"]
    ]
   },
   "es": {

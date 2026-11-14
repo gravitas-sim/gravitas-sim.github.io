@@ -132,19 +132,19 @@ export const HOW_FAR_AND_HOW_SURE = {
           id: 'distance',
           label: 'Distance, the maximum of the likelihood',
           unit: 'kpc',
-          hint: '2.5',
+          want: '2.5',
         },
         {
           id: 'lo',
           label: 'Lower end of the interval',
           unit: 'kpc',
-          hint: '2.22',
+          want: '2.22',
         },
         {
           id: 'hi',
           label: 'Upper end of the interval',
           unit: 'kpc',
-          hint: '2.86',
+          want: '2.86',
         },
       ],
       validate: v => {
@@ -313,7 +313,7 @@ export const HOW_FAR_AND_HOW_SURE_DEEPER = {
           id: 'relative',
           label: 'Error of the parallax as a share of the parallax',
           unit: 'percent',
-          hint: '12.5',
+          want: '12.5',
         },
       ],
       validate: v => {
@@ -365,8 +365,8 @@ export const HOW_FAR_AND_HOW_SURE_DEEPER = {
       body: `Press “Low signal” (0.10 mas, error 0.10 mas) and read the lower end of the 68 percent interval. Then
              raise the parallax to 0.15 mas and read both ends.`,
       fields: [
-        { id: 'lo', label: 'Lower end at 0.10 mas', unit: 'kpc', hint: '5.0' },
-        { id: 'hi', label: 'Upper end at 0.15 mas', unit: 'kpc', hint: '20' },
+        { id: 'lo', label: 'Lower end at 0.10 mas', unit: 'kpc', want: '5.0' },
+        { id: 'hi', label: 'Upper end at 0.15 mas', unit: 'kpc', want: '20' },
       ],
       validate: v => {
         if (![v.lo, v.hi].every(Number.isFinite)) return null;
@@ -395,18 +395,18 @@ export const HOW_FAR_AND_HOW_SURE_DEEPER = {
              for each mas/yr at 1 kpc. Set the parallax to 0.40 mas with an error of 0.05 mas and the proper motion to 5.0
              mas/yr, and read the tangential speed and its interval.`,
       fields: [
-        { id: 'speed', label: 'Tangential speed', unit: 'km/s', hint: '59.3' },
+        { id: 'speed', label: 'Tangential speed', unit: 'km/s', want: '59.3' },
         {
           id: 'lo',
           label: 'Lower end of the interval',
           unit: 'km/s',
-          hint: '52.7',
+          want: '52.7',
         },
         {
           id: 'hi',
           label: 'Upper end of the interval',
           unit: 'km/s',
-          hint: '67.7',
+          want: '67.7',
         },
       ],
       validate: v => {
@@ -552,9 +552,9 @@ export const HOW_FAR_AND_HOW_SURE_DEEPER = {
              spread along the line of sight: here a space density that falls as exp(−r ÷ L). Read the median of the posterior
              and its 68 percent interval.`,
       fields: [
-        { id: 'median', label: 'Posterior median', unit: 'kpc', hint: '5.11' },
-        { id: 'lo', label: 'Lower end', unit: 'kpc', hint: '3.85' },
-        { id: 'hi', label: 'Upper end', unit: 'kpc', hint: '6.93' },
+        { id: 'median', label: 'Posterior median', unit: 'kpc', want: '5.11' },
+        { id: 'lo', label: 'Lower end', unit: 'kpc', want: '3.85' },
+        { id: 'hi', label: 'Upper end', unit: 'kpc', want: '6.93' },
       ],
       validate: v => {
         if (![v.median, v.lo, v.hi].every(Number.isFinite)) return null;
@@ -679,7 +679,7 @@ export const HOW_FAR_AND_HOW_SURE_DEEPER = {
           id: 'distance',
           label: 'Distance with the zero point',
           unit: 'kpc',
-          hint: '2.27',
+          want: '2.27',
         },
       ],
       validate: v => {
@@ -714,13 +714,13 @@ export const HOW_FAR_AND_HOW_SURE_DEEPER = {
           id: 'with',
           label: 'Distance with the zero point',
           unit: 'kpc',
-          hint: '2.324',
+          want: '2.324',
         },
         {
           id: 'without',
           label: 'Distance without it',
           unit: 'kpc',
-          hint: '2.555',
+          want: '2.555',
         },
       ],
       validate: v => {
@@ -902,9 +902,9 @@ export const WHAT_GAIA_DOES_NOT_SEE = {
         {
           id: 'removed',
           label: 'Stars removed by the cut',
-          hint: '755',
+          want: '755',
         },
-        { id: 'left', label: 'Stars left', hint: '238' },
+        { id: 'left', label: 'Stars left', want: '238' },
       ],
       validate: v => {
         if (![v.removed, v.left].every(Number.isFinite)) return null;
@@ -1071,12 +1071,12 @@ export const WHAT_GAIA_DOES_NOT_SEE_DEEPER = {
         {
           id: 'alone',
           label: 'Removed by parallax over error alone',
-          hint: '189',
+          want: '189',
         },
         {
           id: 'after',
           label: 'Removed after the magnitude limit',
-          hint: '5',
+          want: '5',
         },
       ],
       validate: v => {
@@ -1141,7 +1141,7 @@ export const WHAT_GAIA_DOES_NOT_SEE_DEEPER = {
           id: 'zp',
           label: 'Mean zero point of the stars used',
           unit: 'mas',
-          hint: '-0.0417',
+          want: '-0.0417',
         },
       ],
       validate: v => {
@@ -1175,7 +1175,7 @@ export const WHAT_GAIA_DOES_NOT_SEE_DEEPER = {
           id: 'scatter',
           label: 'Scatter along right ascension',
           unit: 'km/s',
-          hint: '1.04',
+          want: '1.04',
         },
       ],
       validate: v => {

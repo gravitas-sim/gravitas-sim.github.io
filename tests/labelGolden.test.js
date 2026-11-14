@@ -75,7 +75,9 @@ describe('the recording', () => {
     const lessons = Object.values(all.lessons);
     const count = pick => lessons.reduce((n, l) => n + pick(l), 0);
     expect(count(l => l.static.en.units.length)).toBeGreaterThan(800);
-    expect(count(l => l.static.en.numbered.length)).toBeGreaterThan(500);
+    // 897 field hints were recorded here as numbered labels until the expected
+    // values moved to `want`; 358 remain (labels, axis titles, units, cues).
+    expect(count(l => l.static.en.numbered.length)).toBeGreaterThan(300);
     // Spanish numbered labels that differ from the English are recorded too.
     expect(count(l => l.static.es.numbered.length)).toBeGreaterThan(150);
     expect(

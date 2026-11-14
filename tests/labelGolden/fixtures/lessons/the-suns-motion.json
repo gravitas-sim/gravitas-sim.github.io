@@ -16,14 +16,7 @@
     ["steps.speed-two-frames.unit","km/s"]
    ],
    "numbered": [
-    ["steps.measure-the-sun.fields.0.hint","10"],
-    ["steps.measure-the-sun.fields.1.hint","22"],
-    ["steps.measure-the-sun.fields.2.hint","9"],
-    ["steps.measure-farther.fields.0.label","Sun’s U within 1,000 pc"],
-    ["steps.measure-farther.fields.0.hint","9.7"],
-    ["steps.measure-farther.fields.1.hint","1.0"],
-    ["steps.record-both-frames.fields.0.hint","3.8"],
-    ["steps.record-both-frames.fields.1.hint","12.2"]
+    ["steps.measure-farther.fields.0.label","Sun’s U within 1,000 pc"]
    ]
   },
   "es": {

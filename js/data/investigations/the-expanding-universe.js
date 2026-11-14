@@ -100,8 +100,8 @@ const THE_EXPANDING_UNIVERSE = {
       body: `With Hubble’s 24 nebulae chosen, read the <strong>slope through the
              origin</strong> and its error.`,
       fields: [
-        { id: 'h0', label: 'Slope', unit: 'km/s/Mpc', hint: '424' },
-        { id: 'sigma', label: 'Its error', unit: 'km/s/Mpc', hint: '42' },
+        { id: 'h0', label: 'Slope', unit: 'km/s/Mpc', want: '424' },
+        { id: 'sigma', label: 'Its error', unit: 'km/s/Mpc', want: '42' },
       ],
       validate: v => {
         if (![v.h0, v.sigma].every(Number.isFinite)) return null;
@@ -166,8 +166,8 @@ const THE_EXPANDING_UNIVERSE = {
              redshift. Read the <strong>number of objects</strong> and the
              <strong>slope</strong>.`,
       fields: [
-        { id: 'n', label: 'Objects in the fit', hint: '197' },
-        { id: 'h0', label: 'Slope', unit: 'km/s/Mpc', hint: '66.3' },
+        { id: 'n', label: 'Objects in the fit', want: '197' },
+        { id: 'h0', label: 'Slope', unit: 'km/s/Mpc', want: '66.3' },
       ],
       validate: v => {
         if (![v.n, v.h0].every(Number.isFinite)) return null;
@@ -219,8 +219,8 @@ const THE_EXPANDING_UNIVERSE = {
       body: `Set the range to <strong>z ≤ 0.50</strong> and read the number of
              objects and the slope again.`,
       fields: [
-        { id: 'n', label: 'Objects in the fit', hint: '955' },
-        { id: 'h0', label: 'Slope', unit: 'km/s/Mpc', hint: '59.3' },
+        { id: 'n', label: 'Objects in the fit', want: '955' },
+        { id: 'h0', label: 'Slope', unit: 'km/s/Mpc', want: '59.3' },
       ],
       validate: v => {
         if (![v.n, v.h0].every(Number.isFinite)) return null;

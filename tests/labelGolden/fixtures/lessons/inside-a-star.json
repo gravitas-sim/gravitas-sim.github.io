@@ -16,18 +16,7 @@
     ["steps.no-concentration.fields.0.unit",""],
     ["steps.no-concentration.fields.1.unit",""]
    ],
-   "numbered": [
-    ["steps.the-suns-center.fields.0.hint","76.4"],
-    ["steps.the-suns-center.fields.1.hint","11.8"],
-    ["steps.half-the-mass.fields.0.hint","0.28"],
-    ["steps.half-the-mass.fields.1.hint","54.2"],
-    ["steps.twice-the-mass.fields.0.hint","153"],
-    ["steps.twice-the-mass.fields.1.hint","23.5"],
-    ["steps.a-red-dwarf.fields.0.hint","6.74"],
-    ["steps.a-red-dwarf.fields.1.hint","5.99"],
-    ["steps.no-concentration.fields.0.hint","1"],
-    ["steps.no-concentration.fields.1.hint","0.79"]
-   ]
+   "numbered": []
   },
   "es": {
    "units": [],

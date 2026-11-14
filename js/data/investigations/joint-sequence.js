@@ -236,13 +236,13 @@ export const WHAT_IS_IT_MADE_OF_DEEPER = {
           id: 'a',
           label: 'Uncertainty of the density (plus or minus)',
           unit: 'g/cm3',
-          hint: '0.088',
+          want: '0.088',
         },
         {
           id: 'b',
           label: 'Share of the density’s variance that is the star’s',
           unit: 'percent',
-          hint: '82',
+          want: '82',
         },
       ],
       validate: v => {
@@ -276,13 +276,13 @@ export const WHAT_IS_IT_MADE_OF_DEEPER = {
           id: 'a',
           label: 'Disagreement of the stated star with the transit',
           unit: '',
-          hint: '3.2',
+          want: '3.2',
         },
         {
           id: 'b',
           label: 'Density of the planet around that star',
           unit: 'g/cm3',
-          hint: '0.135',
+          want: '0.135',
         },
       ],
       validate: v => {
@@ -528,13 +528,13 @@ export const RADIAL_VELOCITY_DEEPER = {
           id: 'a',
           label: 'Disagreement of the stated star with the transit',
           unit: '',
-          hint: '3.2',
+          want: '3.2',
         },
         {
           id: 'b',
           label: 'Density of the planet around that star',
           unit: 'g/cm3',
-          hint: '0.135',
+          want: '0.135',
         },
       ],
       validate: v => {

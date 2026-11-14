@@ -30,31 +30,13 @@
     ["steps.a-blue-target.fields.2.unit","mag"]
    ],
    "numbered": [
-    ["steps.bouguer.fields.0.hint","0.21"],
     ["steps.bouguer.fields.1.label","Fainter at airmass 2.4 than overhead"],
     ["steps.the-zero-point.fields.0.label","Zero point at airmass 1, Z1"],
-    ["steps.the-zero-point.fields.0.hint","24.80"],
-    ["steps.the-zero-point.fields.1.hint","0.21"],
-    ["steps.calibrate-a-target.fields.0.hint","13.20"],
-    ["steps.calibrate-a-target.fields.1.hint","0.008"],
     ["steps.calibrate-a-target.fields.2.label","Half-width of the 95 percent interval"],
-    ["steps.the-airmass-limit.fields.0.hint","6"],
-    ["steps.the-airmass-limit.fields.1.hint","0.21"],
-    ["steps.narrow-night.fields.0.hint","1.30"],
-    ["steps.narrow-night.fields.1.hint","1.42"],
-    ["steps.narrow-night.fields.3.hint","0.079"],
-    ["steps.a-cited-coefficient.fields.0.hint","13.22"],
-    ["steps.a-cited-coefficient.fields.1.hint","0.012"],
     ["steps.a-cited-coefficient.fields.2.label","Distance from the true 13.200"],
     ["steps.how-few-standards.fields.0.label","Uncertainty with 2 standards"],
-    ["steps.how-few-standards.fields.0.hint","0.081"],
     ["steps.how-few-standards.fields.1.label","Uncertainty with 3 standards"],
-    ["steps.how-few-standards.fields.1.hint","0.0088"],
-    ["steps.second-order.fields.0.hint","67.8"],
-    ["steps.second-order.fields.1.label","Color-dependent extinction, k2"],
-    ["steps.second-order.fields.1.hint","-0.047"],
-    ["steps.a-blue-target.fields.0.hint","13.215"],
-    ["steps.a-blue-target.fields.1.hint","13.202"]
+    ["steps.second-order.fields.1.label","Color-dependent extinction, k2"]
    ]
   },
   "es": {

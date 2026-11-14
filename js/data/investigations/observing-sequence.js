@@ -128,9 +128,9 @@ export const WHICH_INSTRUMENT_FOR_WHICH_QUESTION = {
              asks. Rubin’s band is r and the others’ V; the star is the same brightness in
              each.`,
       fields: [
-        { id: 't035', label: 'Las Cumbres 0.35 m', unit: 's', hint: '12070' },
-        { id: 't1m', label: 'Las Cumbres 1.0 m', unit: 's', hint: '602' },
-        { id: 'trub', label: 'Rubin', unit: 's', hint: '15.2' },
+        { id: 't035', label: 'Las Cumbres 0.35 m', unit: 's', want: '12070' },
+        { id: 't1m', label: 'Las Cumbres 1.0 m', unit: 's', want: '602' },
+        { id: 'trub', label: 'Rubin', unit: 's', want: '15.2' },
       ],
       validate: v => {
         if (![v.t035, v.t1m, v.trub].every(Number.isFinite)) return null;
@@ -232,8 +232,8 @@ export const WHICH_INSTRUMENT_FOR_WHICH_QUESTION = {
              instrument divides: the number of pixels across the blur (its full width at half
              maximum). A common rule is at least two.`,
       fields: [
-        { id: 'pix', label: 'Pixel scale', unit: 'arcsec', hint: '0.73' },
-        { id: 'see', label: 'Seeing (FWHM)', unit: 'arcsec', hint: '1.3' },
+        { id: 'pix', label: 'Pixel scale', unit: 'arcsec', want: '0.73' },
+        { id: 'see', label: 'Seeing (FWHM)', unit: 'arcsec', want: '1.3' },
         {
           id: 'across',
           label: 'Pixels across the FWHM',
@@ -561,12 +561,12 @@ export const THE_SKY_BACKGROUND = {
              <strong>total exposure</strong> and the share of the noise squared that
              <strong>the sky</strong> has, in percent.`,
       fields: [
-        { id: 'total', label: 'Total exposure', unit: 's', hint: '79.8' },
+        { id: 'total', label: 'Total exposure', unit: 's', want: '79.8' },
         {
           id: 'sky',
           label: 'Share of the noise squared from the sky',
           unit: '%',
-          hint: '87',
+          want: '87',
         },
       ],
       validate: v => {
@@ -624,13 +624,13 @@ export const THE_SKY_BACKGROUND = {
           id: 'dark',
           label: 'Total exposure, dark sky',
           unit: 's',
-          hint: '79.8',
+          want: '79.8',
         },
         {
           id: 'moon',
           label: 'Total exposure, sky 2 mag brighter',
           unit: 's',
-          hint: '443',
+          want: '443',
         },
         {
           id: 'ratio',
@@ -720,19 +720,19 @@ export const THE_SKY_BACKGROUND = {
              <strong>20</strong> and for one of magnitude <strong>17</strong>, each on the
              dark sky and with the sky <strong>3 magnitudes</strong> brighter.`,
       fields: [
-        { id: 'f0', label: 'Magnitude 20, dark sky', unit: 's', hint: '43.1' },
+        { id: 'f0', label: 'Magnitude 20, dark sky', unit: 's', want: '43.1' },
         {
           id: 'f3',
           label: 'Magnitude 20, sky 3 mag brighter',
           unit: 's',
-          hint: '204',
+          want: '204',
         },
-        { id: 'b0', label: 'Magnitude 17, dark sky', unit: 's', hint: '2.3' },
+        { id: 'b0', label: 'Magnitude 17, dark sky', unit: 's', want: '2.3' },
         {
           id: 'b3',
           label: 'Magnitude 17, sky 3 mag brighter',
           unit: 's',
-          hint: '2.7',
+          want: '2.7',
         },
       ],
       validate: v => {
@@ -862,13 +862,13 @@ export const THE_SKY_BACKGROUND_DEEPER = {
           id: 'newMoon',
           label: 'Hours up, new Moon night',
           unit: 'h',
-          hint: '0',
+          want: '0',
         },
         {
           id: 'fullMoon',
           label: 'Hours up, full Moon night',
           unit: 'h',
-          hint: '10.8',
+          want: '10.8',
         },
       ],
       validate: v => {
@@ -969,8 +969,8 @@ export const COORDINATES_AND_TIME = {
              nights from 2025-01-01) and thirty nights later. The instrument divides the
              difference by 30.`,
       fields: [
-        { id: 't0', label: 'Crossing, night 0', unit: 'min', hint: '718.7' },
-        { id: 't30', label: 'Crossing, night 30', unit: 'min', hint: '600.8' },
+        { id: 't0', label: 'Crossing, night 0', unit: 'min', want: '718.7' },
+        { id: 't30', label: 'Crossing, night 30', unit: 'min', want: '600.8' },
         {
           id: 'gain',
           label: 'Earlier each night',
@@ -1013,13 +1013,13 @@ export const COORDINATES_AND_TIME = {
           id: 'lst',
           label: 'Sidereal time at midnight',
           unit: 'h',
-          hint: '6.792',
+          want: '6.792',
         },
         {
           id: 'ra',
           label: 'Right ascension of Sirius',
           unit: 'h',
-          hint: '6.752',
+          want: '6.752',
         },
         {
           id: 'cross',
@@ -1287,19 +1287,19 @@ export const A_NIGHT_AT_THE_TELESCOPE = {
           id: 'dark',
           label: 'Hours of astronomical dark',
           unit: 'h',
-          hint: '10.5',
+          want: '10.5',
         },
         {
           id: 'usable',
           label: 'Regulus, hours usable',
           unit: 'h',
-          hint: '8.08',
+          want: '8.08',
         },
         {
           id: 'airmass',
           label: 'Regulus, best airmass',
           unit: '',
-          hint: '1.05',
+          want: '1.05',
         },
       ],
       validate: v => {
@@ -1384,12 +1384,12 @@ export const A_NIGHT_AT_THE_TELESCOPE = {
              exposure</strong> and the percent of the noise squared that comes from the
              <strong>target’s own photons</strong>.`,
       fields: [
-        { id: 'total', label: 'Total exposure', unit: 's', hint: '59.3' },
+        { id: 'total', label: 'Total exposure', unit: 's', want: '59.3' },
         {
           id: 'source',
           label: 'Share from the target’s photons',
           unit: '%',
-          hint: '49',
+          want: '49',
         },
       ],
       validate: v => {
@@ -1427,19 +1427,19 @@ export const A_NIGHT_AT_THE_TELESCOPE = {
           id: 'z',
           label: 'Zero point at airmass 1',
           unit: 'mag',
-          hint: '24.803',
+          want: '24.803',
         },
         {
           id: 'k',
           label: 'Extinction of the air, k',
           unit: 'mag/airmass',
-          hint: '0.213',
+          want: '0.213',
         },
         {
           id: 'sigma',
           label: 'Uncertainty of the calibrated target',
           unit: 'mag',
-          hint: '0.008',
+          want: '0.008',
         },
       ],
       validate: v => {
@@ -1477,13 +1477,13 @@ export const A_NIGHT_AT_THE_TELESCOPE = {
           id: 'pred',
           label: 'Predicted signal-to-noise',
           unit: '',
-          hint: '49.5',
+          want: '49.5',
         },
         {
           id: 'meas',
           label: 'Measured signal-to-noise',
           unit: '',
-          hint: '49.9',
+          want: '49.9',
         },
       ],
       validate: v => {
@@ -1702,8 +1702,8 @@ export const FROM_PHOTONS_TO_A_NUMBER = {
              gives the electrons the star puts in the aperture, with their noise. Type them;
              the instrument forms the signal-to-noise.`,
       fields: [
-        { id: 'signal', label: 'Signal', unit: 'electrons', hint: '5101' },
-        { id: 'noise', label: 'Noise', unit: 'electrons', hint: '103' },
+        { id: 'signal', label: 'Signal', unit: 'electrons', want: '5101' },
+        { id: 'noise', label: 'Noise', unit: 'electrons', want: '103' },
         {
           id: 'snr',
           label: 'Signal-to-noise',
@@ -1798,13 +1798,13 @@ export const FROM_PHOTONS_TO_A_NUMBER = {
           id: 'sigz',
           label: 'Zero point uncertainty',
           unit: 'mag',
-          hint: '0.003',
+          want: '0.003',
         },
         {
           id: 'sigt',
           label: 'Calibrated target uncertainty',
           unit: 'mag',
-          hint: '0.008',
+          want: '0.008',
         },
       ],
       validate: v => {
@@ -1892,13 +1892,13 @@ export const FROM_PHOTONS_TO_A_NUMBER = {
           id: 't50',
           label: 'Total exposure, signal-to-noise 50',
           unit: 's',
-          hint: '59.3',
+          want: '59.3',
         },
         {
           id: 't100',
           label: 'Total exposure, signal-to-noise 100',
           unit: 's',
-          hint: '191',
+          want: '191',
         },
         {
           id: 'ratio',

@@ -17,20 +17,7 @@
     ["steps.record-the-tadpole.fields.1.unit","degrees"],
     ["steps.record-the-tadpole.fields.2.unit","Jupiter years"]
    ],
-   "numbered": [
-    ["steps.write-down-the-ratios.fields.0.hint","2.0075"],
-    ["steps.write-down-the-ratios.fields.1.hint","2.0144"],
-    ["steps.write-down-the-ratios.fields.2.hint","2.3327"],
-    ["steps.record-the-laplace-libration.fields.0.hint","180"],
-    ["steps.record-the-laplace-libration.fields.1.hint","26"],
-    ["steps.record-the-laplace-libration.fields.2.hint","2100"],
-    ["steps.record-pluto-s-libration.fields.0.hint","180"],
-    ["steps.record-pluto-s-libration.fields.1.hint","80"],
-    ["steps.record-pluto-s-libration.fields.2.hint","19600"],
-    ["steps.record-the-tadpole.fields.0.hint","296"],
-    ["steps.record-the-tadpole.fields.1.hint","24"],
-    ["steps.record-the-tadpole.fields.2.hint","13"]
-   ]
+   "numbered": []
   },
   "es": {
    "units": [],

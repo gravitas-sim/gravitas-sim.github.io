@@ -97,11 +97,11 @@ const REFITTING_A_TRANSIT = {
              period, the planet-to-star radius ratio, the orbit size in stellar
              radii, the impact parameter, and the reduced chi-square.`,
       fields: [
-        { id: 'period', label: 'Period', unit: 'd', hint: '3.52454' },
-        { id: 'k', label: 'Rp/R*', unit: '', hint: '0.11926' },
-        { id: 'aRs', label: 'a/R*', unit: '', hint: '9.21' },
-        { id: 'b', label: 'Impact parameter', unit: '', hint: '0.430' },
-        { id: 'chi2', label: 'Reduced chi-square', unit: '', hint: '7.98' },
+        { id: 'period', label: 'Period', unit: 'd', want: '3.52454' },
+        { id: 'k', label: 'Rp/R*', unit: '', want: '0.11926' },
+        { id: 'aRs', label: 'a/R*', unit: '', want: '9.21' },
+        { id: 'b', label: 'Impact parameter', unit: '', want: '0.430' },
+        { id: 'chi2', label: 'Reduced chi-square', unit: '', want: '7.98' },
       ],
       validate: v => {
         if (![v.period, v.k, v.aRs, v.b, v.chi2].every(Number.isFinite))
@@ -138,30 +138,30 @@ const REFITTING_A_TRANSIT = {
              rises by no more than one. Enter Rp/R*'s sigma, and the two ends of each
              profile interval.`,
       fields: [
-        { id: 'kSigma', label: 'Rp/R*, sigma', unit: '', hint: '0.00164' },
+        { id: 'kSigma', label: 'Rp/R*, sigma', unit: '', want: '0.00164' },
         {
           id: 'kLow',
           label: 'Rp/R*, profile interval, low end',
           unit: '',
-          hint: '0.11797',
+          want: '0.11797',
         },
         {
           id: 'kHigh',
           label: 'Rp/R*, profile interval, high end',
           unit: '',
-          hint: '0.12043',
+          want: '0.12043',
         },
         {
           id: 'bLow',
           label: 'Impact parameter, profile interval, low end',
           unit: '',
-          hint: '0.368',
+          want: '0.368',
         },
         {
           id: 'bHigh',
           label: 'Impact parameter, profile interval, high end',
           unit: '',
-          hint: '0.476',
+          want: '0.476',
         },
       ],
       validate: v => {
@@ -242,14 +242,14 @@ const REFITTING_A_TRANSIT = {
           id: 'k',
           label: 'Rp/R*, limb darkening held',
           unit: '',
-          hint: '0.11767',
+          want: '0.11767',
         },
-        { id: 'kSigma', label: 'Its sigma', unit: '', hint: '0.00050' },
+        { id: 'kSigma', label: 'Its sigma', unit: '', want: '0.00050' },
         {
           id: 'shift',
           label: 'Shift, in new sigmas',
           unit: '',
-          hint: '3.2',
+          want: '3.2',
         },
       ],
       validate: v => {

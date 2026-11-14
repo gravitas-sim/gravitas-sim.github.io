@@ -12,13 +12,7 @@
     ["steps.scale-model.fields.1.unit","m"],
     ["steps.scale-model.fields.2.unit","km"]
    ],
-   "numbered": [
-    ["steps.three-distances.fields.0.hint","1.00"],
-    ["steps.three-distances.fields.1.hint","5.20"],
-    ["steps.three-distances.fields.2.hint","30.07"],
-    ["steps.light-time.fields.0.hint","30.07"],
-    ["steps.scale-model.fields.0.hint","30.07"]
-   ]
+   "numbered": []
   },
   "es": {
    "units": [],

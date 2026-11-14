@@ -12,14 +12,7 @@
     ["steps.further-out.fields.1.unit","km/s/Mpc"],
     ["steps.how-many-errors-apart.unit",""]
    ],
-   "numbered": [
-    ["steps.hubbles-slope.fields.0.hint","424"],
-    ["steps.hubbles-slope.fields.1.hint","42"],
-    ["steps.a-modern-sample.fields.0.hint","197"],
-    ["steps.a-modern-sample.fields.1.hint","66.3"],
-    ["steps.further-out.fields.0.hint","955"],
-    ["steps.further-out.fields.1.hint","59.3"]
-   ]
+   "numbered": []
   },
   "es": {
    "units": [],

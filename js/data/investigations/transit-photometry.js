@@ -393,7 +393,7 @@ const TRANSITS = {
           id: 'base',
           label: 'Brightness outside transit',
           unit: '',
-          hint: 'e.g. 1.000065',
+          want: 'e.g. 1.000065',
         },
         { id: 'bot', label: 'Brightness at the bottom of the dip', unit: '' },
         {
@@ -524,7 +524,7 @@ const TRANSITS = {
           id: 'rstar',
           label: 'Star radius R<sub>★</sub>',
           unit: 'R☉',
-          hint: '1.155',
+          want: '1.155',
         },
         {
           id: 'k_true',
@@ -771,9 +771,9 @@ const TRANSITS = {
       ],
       fields: [
         { id: 't1', label: 'First mid-transit time', unit: 'days' },
-        { id: 'n1', label: 'which transit it was', unit: '', hint: 'e.g. 2' },
+        { id: 'n1', label: 'which transit it was', unit: '', want: 'e.g. 2' },
         { id: 't2', label: 'A later mid-transit time', unit: 'days' },
-        { id: 'n2', label: 'which transit it was', unit: '', hint: 'e.g. 5' },
+        { id: 'n2', label: 'which transit it was', unit: '', want: 'e.g. 5' },
         {
           id: 'n',
           label: 'Orbits between the two',
@@ -875,7 +875,7 @@ const TRANSITS = {
           id: 'M',
           label: 'Star mass M<sub>★</sub>',
           unit: 'M☉',
-          hint: '1.148',
+          want: '1.148',
         },
         {
           id: 'P_yr',
@@ -1216,7 +1216,7 @@ const TRANSITS = {
           id: 'd_clean',
           label: 'Depth you measured earlier, unblended',
           unit: '',
-          hint: 'from step 8',
+          want: 'from step 8',
         },
         {
           id: 'rp_blend',

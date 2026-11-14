@@ -237,8 +237,8 @@ describe('the lesson shadows are read the way the engine lays them', () => {
     shadowPairs(english, spanish, STRUCTURAL, pairs, 'k');
     expect(pairs.map(p => [p.key, p.en, p.es])).toEqual([
       ['k/title', 'Kepler', 'Kepler'],
-      ['k/steps[0].title', 'One', 'Uno'],
-      ['k/steps[0].options[0]', 'a', 'x'],
+      ['k/steps[one].title', 'One', 'Uno'],
+      ['k/steps[one].options[0]', 'a', 'x'],
     ]);
     const merged = mergeTranslation(english, spanish);
     expect(merged.steps[0].title).toBe('Uno');
@@ -247,7 +247,7 @@ describe('the lesson shadows are read the way the engine lays them', () => {
     expect(merged.steps[1].body).toBe('Second');
   });
 
-  test('a step inserted into the English slides every later pair, loudly', () => {
+  test('a step inserted into the English moves no ledger row once the shadow is regenerated', () => {
     const pairs = [];
     shadowPairs(
       english,
@@ -261,17 +261,32 @@ describe('the lesson shadows are read the way the engine lays them', () => {
       ...english,
       steps: [english.steps[0], { sid: 'new', title: 'New' }, english.steps[1]],
     };
-    const after = [];
+    // The shadow as it stood (tools/lesson-text.mjs --check fails on it): Dos is
+    // read against the new step.
+    const slid = [];
     shadowPairs(
       inserted,
       { steps: [{ title: 'Uno' }, { title: 'Dos' }] },
       STRUCTURAL,
+      slid,
+      'k'
+    );
+    expect(slid.map(p => p.key)).toEqual([
+      'k/steps[one].title',
+      'k/steps[new].title',
+    ]);
+    // Regenerated from the keyed source (tools/lesson-text.mjs): a null for the
+    // new step, Dos at its own index; the ledger rows follow the sid, none stale.
+    const after = [];
+    shadowPairs(
+      inserted,
+      { steps: [{ title: 'Uno' }, null, { title: 'Dos' }] },
+      STRUCTURAL,
       after,
       'k'
     );
-    expect(evaluate(after, ledger, '2026-01-02').stale.map(x => x.key)).toEqual(
-      ['k/steps[1].title']
-    );
+    expect(after.map(p => p.key)).toEqual(pairs.map(p => p.key));
+    expect(evaluate(after, ledger, '2026-01-02').stale).toEqual([]);
   });
 });
 

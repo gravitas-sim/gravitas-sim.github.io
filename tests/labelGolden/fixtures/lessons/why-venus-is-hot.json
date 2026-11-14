@@ -16,20 +16,8 @@
     ["steps.how-thick-is-venus.fields.1.unit","km"]
    ],
    "numbered": [
-    ["steps.earth-sunlight-alone.fields.0.hint","254"],
-    ["steps.earth-sunlight-alone.fields.1.hint","34"],
-    ["steps.venus-sunlight-alone.fields.0.hint","229"],
-    ["steps.venus-sunlight-alone.fields.1.hint","508"],
     ["steps.earth-without-clouds.fields.0.label","Earth’s equilibrium temperature with albedo 0"],
-    ["steps.earth-without-clouds.fields.0.hint","278.3"],
-    ["steps.earth-without-clouds.fields.1.hint","24.3"],
-    ["steps.six-bodies.fields.0.hint","0.2"],
-    ["steps.six-bodies.fields.1.label","Jupiter: measured (1 bar) minus equilibrium"],
-    ["steps.six-bodies.fields.1.hint","55"],
-    ["steps.one-layer-for-venus.fields.0.hint","272"],
-    ["steps.gray-depth-for-venus.fields.0.hint","141.6"],
-    ["steps.how-thick-is-venus.fields.0.hint","15.9"],
-    ["steps.how-thick-is-venus.fields.1.hint","8.4"]
+    ["steps.six-bodies.fields.1.label","Jupiter: measured (1 bar) minus equilibrium"]
    ]
   },
   "es": {

@@ -17,13 +17,7 @@
    ],
    "numbered": [
     ["steps.write-down-what-schedule-a.fields.0.label","Phase bins covered (out of 10)"],
-    ["steps.write-down-what-schedule-a.fields.0.hint","10"],
-    ["steps.write-down-what-schedule-a.fields.1.hint","55.8"],
-    ["steps.write-down-what-schedule-a.fields.2.hint","48.7"],
-    ["steps.write-down-what-schedule-b.fields.0.label","Phase bins covered (out of 10)"],
-    ["steps.write-down-what-schedule-b.fields.0.hint","2"],
-    ["steps.write-down-what-schedule-b.fields.1.hint","11"],
-    ["steps.write-down-what-schedule-b.fields.2.hint","1.9"]
+    ["steps.write-down-what-schedule-b.fields.0.label","Phase bins covered (out of 10)"]
    ]
   },
   "es": {

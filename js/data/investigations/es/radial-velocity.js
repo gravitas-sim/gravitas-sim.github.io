@@ -133,7 +133,7 @@ export default {
         {
           label: 'Tiempo de un ciclo completo',
           unit: 'días',
-          hint: '3,5',
+          want: '3,5',
         },
       ],
     },
@@ -149,7 +149,7 @@ export default {
         {
           label: 'Semiamplitud K',
           unit: 'm/s',
-          hint: '84',
+          want: '84',
         },
       ],
     },

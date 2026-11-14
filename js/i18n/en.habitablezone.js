@@ -69,6 +69,8 @@ export const EN_HABITABLEZONE = {
     'The star is no longer on this track at that age (it has left the main sequence stage the track covers), so there is nothing to read.',
   'hzL.k.refused.teff-domain':
     'The star at that age is hotter or cooler than the limits’ fit covers (2600 to 7200 K), so no zone is given.',
+  'hzL.k.refused.q-range':
+    'The locking radius is given with a band from a tenth to ten times this Q, and the tidal model holds only for Q of 5 and up, so a tenth of this Q is out of range and nothing is read. Choose a larger Q.',
   'hzL.mass.m020': '0.2 solar masses',
   'hzL.mass.m050': '0.5 solar masses',
   'hzL.mass.m100': '1 solar mass',

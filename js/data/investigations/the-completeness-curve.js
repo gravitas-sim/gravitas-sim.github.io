@@ -96,8 +96,8 @@ const THE_COMPLETENESS_CURVE = {
              a sharp edge. In the two faintest bins, read the <strong>raw count as a
              share of the truth</strong>: the bin from M = 8 to 10 and the bin from 10 to 12.`,
       fields: [
-        { id: 'b8', label: 'Bin 8 to 10', unit: '%', hint: '96' },
-        { id: 'b10', label: 'Bin 10 to 12', unit: '%', hint: '57' },
+        { id: 'b8', label: 'Bin 8 to 10', unit: '%', want: '96' },
+        { id: 'b10', label: 'Bin 10 to 12', unit: '%', want: '57' },
       ],
       validate: v => {
         if (![v.b8, v.b10].every(Number.isFinite)) return null;
@@ -151,12 +151,12 @@ const THE_COMPLETENESS_CURVE = {
              in the bin from M = 8 to 10, and the <strong>corrected</strong>
              value.`,
       fields: [
-        { id: 'raw', label: 'Raw, bin 8 to 10', unit: '%', hint: '13' },
+        { id: 'raw', label: 'Raw, bin 8 to 10', unit: '%', want: '13' },
         {
           id: 'fixed',
           label: 'Corrected, bin 8 to 10',
           unit: '',
-          hint: '0.97',
+          want: '0.97',
         },
       ],
       validate: v => {
@@ -211,13 +211,13 @@ const THE_COMPLETENESS_CURVE = {
           id: 'n',
           label: 'Stars counted, bin 10 to 12',
           unit: '',
-          hint: '3',
+          want: '3',
         },
         {
           id: 'err',
           label: 'Error of the corrected value',
           unit: '',
-          hint: '0.46',
+          want: '0.46',
         },
       ],
       validate: v => {
@@ -252,13 +252,13 @@ const THE_COMPLETENESS_CURVE = {
           id: 'true',
           label: 'Corrected, true magnitudes',
           unit: '',
-          hint: '1.00',
+          want: '1.00',
         },
         {
           id: 'catalog',
           label: 'Corrected, catalog magnitudes',
           unit: '',
-          hint: '1.6',
+          want: '1.6',
         },
       ],
       validate: v => {

@@ -90,9 +90,9 @@ const WHAT_A_CCD_RECORDS = {
           id: 'level',
           label: 'Master bias level (counts)',
           unit: 'count',
-          hint: '500.4',
+          want: '500.4',
         },
-        { id: 'read', label: 'Read noise (electrons)', unit: '', hint: '8.05' },
+        { id: 'read', label: 'Read noise (electrons)', unit: '', want: '8.05' },
       ],
       validate: v => {
         if (![v.level, v.read].every(Number.isFinite)) return null;
@@ -160,13 +160,13 @@ const WHAT_A_CCD_RECORDS = {
           id: 'rate',
           label: 'Dark current',
           unit: 'electron/s',
-          hint: '0.100',
+          want: '0.100',
         },
         {
           id: 'total',
           label: 'Electrons in 120 seconds (one pixel)',
           unit: 'count',
-          hint: '12',
+          want: '12',
         },
       ],
       validate: v => {
@@ -201,9 +201,9 @@ const WHAT_A_CCD_RECORDS = {
           id: 'corner',
           label: 'Corner, share of the center',
           unit: '%',
-          hint: '76.2',
+          want: '76.2',
         },
-        { id: 'gain', label: 'Gain', unit: '', hint: '1.52' },
+        { id: 'gain', label: 'Gain', unit: '', want: '1.52' },
       ],
       validate: v => {
         if (![v.corner, v.gain].every(Number.isFinite)) return null;
@@ -260,13 +260,13 @@ const WHAT_A_CCD_RECORDS = {
           id: 'raw',
           label: 'Star B, raw (electrons)',
           unit: 'count',
-          hint: '47300',
+          want: '47300',
         },
         {
           id: 'cal',
           label: 'Star B, calibrated (electrons)',
           unit: 'count',
-          hint: '54080',
+          want: '54080',
         },
       ],
       validate: v => {
@@ -333,13 +333,13 @@ const WHAT_A_CCD_RECORDS = {
           id: 'flagged',
           label: 'Cosmic-ray pixels flagged',
           unit: 'count',
-          hint: '4',
+          want: '4',
         },
         {
           id: 'saturated',
           label: 'Saturated pixels',
           unit: 'count',
-          hint: '13',
+          want: '13',
         },
       ],
       validate: v => {

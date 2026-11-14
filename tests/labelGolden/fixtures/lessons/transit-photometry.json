@@ -44,18 +44,7 @@
     ["steps.recover-the-real-planet.fields.6.unit","R⊕"]
    ],
    "numbered": [
-    ["steps.measure-the-dip.fields.0.hint","e.g. 1.000065"],
-    ["steps.correct-it-and-get-a.fields.1.hint","1.155"],
     ["steps.correct-it-and-get-a.fields.2.label","Corrected ratio √(δ / 1.215)"],
-    ["steps.how-sure-is-the-depth.fields.0.hint","0.0003"],
-    ["steps.how-sure-is-the-depth.fields.1.hint","90"],
-    ["steps.how-sure-is-the-depth.fields.2.hint","450"],
-    ["steps.radius-with-an-error-bar.placeholder","e.g. 1.37 ± 0.01"],
-    ["steps.forward-model-the-dip.placeholder","e.g. 0.0183 ± 0.0007"],
-    ["steps.time-two-transits.fields.1.hint","e.g. 2"],
-    ["steps.time-two-transits.fields.3.hint","e.g. 5"],
-    ["steps.from-a-period-to-an.fields.1.hint","1.148"],
-    ["steps.recover-the-real-planet.fields.1.hint","from step 8"],
     ["steps.recover-the-real-planet.fields.3.label","Depth ratio = 1 + F₂/F₁"],
     ["steps.recover-the-real-planet.fields.5.label","Radius correction √(1 + F₂/F₁)"]
    ]
@@ -63,15 +52,7 @@
   "es": {
    "units": [],
    "numbered": [
-    ["steps.measure-the-dip.fields.0.hint","p. ej. 1,000065"],
-    ["steps.correct-it-and-get-a.fields.1.hint","1,155"],
     ["steps.correct-it-and-get-a.fields.2.label","Cociente corregido √(δ / 1,215)"],
-    ["steps.radius-with-an-error-bar.placeholder","p. ej. 1,37 ± 0,01"],
-    ["steps.forward-model-the-dip.placeholder","p. ej. 0,0183 ± 0,0007"],
-    ["steps.time-two-transits.fields.1.hint","p. ej. 2"],
-    ["steps.time-two-transits.fields.3.hint","p. ej. 5"],
-    ["steps.from-a-period-to-an.fields.1.hint","1,148"],
-    ["steps.recover-the-real-planet.fields.1.hint","del paso 8"],
     ["steps.recover-the-real-planet.fields.3.label","Cociente de profundidades = 1 + F₂/F₁"],
     ["steps.recover-the-real-planet.fields.5.label","Corrección del radio √(1 + F₂/F₁)"]
    ]

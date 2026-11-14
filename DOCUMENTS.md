@@ -257,6 +257,7 @@ out.
 | registries | `node tools/capability-registries.mjs` | `js/widgets.js`, `js/platform/builtins.js`, `js/data/investigations/registry.js`, and 1 more | deterministic |
 | capabilities | `node tools/capabilities.mjs generate` | `js/platform/catalog.generated.js`, `docs/capabilities.md` | deterministic |
 | catalog | `node tools/catalog.mjs generate` | `catalog/catalog.json` | deterministic |
+| lesson-text | `node tools/lesson-text.mjs --write` | `js/data/investigations/es`, `js/data/investigations/depth/es`, `js/data/investigations/binaries-sequence.js`, and 22 more | deterministic |
 | manifest | `node tools/build-investigation-manifest.js` | `js/data/investigations/manifest.js`, `js/data/investigations/manifest.es.js`, `js/data/investigations/browseData.js` | deterministic |
 | cards | `node tools/generate-lesson-cards.mjs` | `images/investigations` | deterministic |
 | compute | `node tools/compute.mjs` | `compute-frame`, `js/compute/framePin.js`, `js/compute/catalogueHashes.js` | deterministic |
@@ -268,6 +269,7 @@ out.
 | instruments | `node tools/build-instruments.mjs` | `js/data/instruments.js`, `INSTRUMENTS.md` | deterministic |
 | glossary | `node tools/glossary.mjs --write` | `js/explain/terms.en.js`, `js/explain/terms.es.js`, `glossary/index.html` | deterministic |
 | ledger | `node tools/catalog-ledger.mjs --write` | `docs/catalog-ledger.json`, `docs/catalog-ledger.md` | deterministic |
+| surface-ledger | `node tools/surface-ledger.mjs --write` | `docs/surface-ledger.json`, `docs/surface-ledger.md` | deterministic |
 | irreversible | `node tools/build-irreversibility-audit.mjs` | `js/data/irreversible.js` | deterministic |
 | validation-data | `node tools/build-validation-data.mjs` | `validation/data.json` | deterministic |
 | tools-index | `node tools/build-tools-index.mjs` | `tools/README.md` | deterministic |

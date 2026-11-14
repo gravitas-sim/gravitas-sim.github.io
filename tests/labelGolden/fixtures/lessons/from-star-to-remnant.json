@@ -11,14 +11,8 @@
     ["steps.the-relation-at-two-masses.fields.1.unit","M☉"]
    ],
    "numbered": [
-    ["steps.read-the-final-mass.fields.0.hint","0.745"],
-    ["steps.read-the-final-mass.fields.1.hint","75"],
-    ["steps.read-the-odds.fields.0.hint","75"],
-    ["steps.read-the-odds.fields.1.hint","25"],
     ["steps.the-relation-at-two-masses.fields.0.label","At 1.0 M☉"],
-    ["steps.the-relation-at-two-masses.fields.0.hint","0.569"],
-    ["steps.the-relation-at-two-masses.fields.1.label","At 6.0 M☉"],
-    ["steps.the-relation-at-two-masses.fields.1.hint","1.113"]
+    ["steps.the-relation-at-two-masses.fields.1.label","At 6.0 M☉"]
    ]
   },
   "es": {

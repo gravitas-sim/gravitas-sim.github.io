@@ -109,13 +109,13 @@ const LEAVITTS_LAW = {
           id: 'slope',
           label: 'Slope, magnitudes per dex',
           unit: '',
-          hint: '-3.29',
+          want: '-3.29',
         },
         {
           id: 'zero',
           label: 'Magnitude at 10 days',
           unit: 'mag',
-          hint: '12.60',
+          want: '12.60',
         },
       ],
       validate: v => {
@@ -159,13 +159,13 @@ const LEAVITTS_LAW = {
           id: 'scatter',
           label: 'Scatter about the relation',
           unit: 'mag',
-          hint: '0.089',
+          want: '0.089',
         },
         {
           id: 'dust',
           label: 'Dust left per magnitude of A_V',
           unit: '',
-          hint: '0.040',
+          want: '0.040',
         },
       ],
       validate: v => {

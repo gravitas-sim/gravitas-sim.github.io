@@ -15,12 +15,7 @@
    ],
    "numbered": [
     ["steps.the-same-star-three-ways.fields.0.label","Las Cumbres 0.35 m"],
-    ["steps.the-same-star-three-ways.fields.0.hint","12070"],
-    ["steps.the-same-star-three-ways.fields.1.label","Las Cumbres 1.0 m"],
-    ["steps.the-same-star-three-ways.fields.1.hint","602"],
-    ["steps.the-same-star-three-ways.fields.2.hint","15.2"],
-    ["steps.pixels-across-the-seeing.fields.0.hint","0.73"],
-    ["steps.pixels-across-the-seeing.fields.1.hint","1.3"]
+    ["steps.the-same-star-three-ways.fields.1.label","Las Cumbres 1.0 m"]
    ]
   },
   "es": {

@@ -16,21 +16,10 @@
     ["steps.add-binaries.fields.1.unit","mag"]
    ],
    "numbered": [
-    ["steps.fit-a.fields.0.hint","2.02"],
-    ["steps.fit-a.fields.1.hint","12.10"],
-    ["steps.fit-b.fields.0.hint","3.16"],
-    ["steps.fit-b.fields.1.hint","12.09"],
-    ["steps.how-much-older.fields.0.hint","1.14"],
     ["steps.change-the-metallicity.fields.0.label","Age at [Fe/H] −0.50"],
-    ["steps.change-the-metallicity.fields.0.hint","3.35"],
     ["steps.change-the-metallicity.fields.1.label","Age at [Fe/H] 0"],
-    ["steps.change-the-metallicity.fields.1.hint","1.47"],
     ["steps.the-difference-holds.fields.0.label","Age of B at [Fe/H] 0"],
-    ["steps.the-difference-holds.fields.0.hint","2.24"],
-    ["steps.the-difference-holds.fields.1.label","Age of B minus age of A at 0"],
-    ["steps.the-difference-holds.fields.1.hint","0.78"],
-    ["steps.add-binaries.fields.0.hint","12.04"],
-    ["steps.add-binaries.fields.1.hint","0.06"]
+    ["steps.the-difference-holds.fields.1.label","Age of B minus age of A at 0"]
    ]
   },
   "es": {

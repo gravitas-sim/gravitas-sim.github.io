@@ -135,6 +135,190 @@
         }
       }
     },
+    "sandbox-scenes-full": {
+      "command": "npm run perf -- --scene tests/fixtures/scene-records/solar-system-midnight-1366.json --scene tests/fixtures/scene-records/circumbinary-planet-lab-midnight-1366.json --scene tests/fixtures/scene-records/galilean-resonance-midnight-1366.json --scene tests/fixtures/scene-records/galilean-resonance-zoomed-midnight-1366.json --scene tests/fixtures/scene-records/star-cluster-midnight-1366.json --scene tests/fixtures/scene-records/black-hole-lab-midnight-1366.json --tier full --seconds 5",
+      "description": "The sandbox reference scenes (scene records of tests/fixtures/scene-records) at their recorded state, then run live: headless Chromium 1366x800, device pixel ratio 1, no throttle, full tier. Advisory; the frame time is the mean time between animation frames with the frame-rate cap lifted.",
+      "enforced": false,
+      "measured": {
+        "date": "2026-11-13",
+        "machine": "Intel Core i5-10500 (UHD 630), 24 GB, macOS, headless Chromium (Playwright 1.64) with GPU rasterisation through ANGLE, 3 runs of 5 s per scene, median reported; another job was using the machine (load average 5.5 to 12.9 across the three runs (another job was running tests in a browser)), so a median can carry that job; quietestRunFrameMs is the smallest of the three",
+        "runs": 3,
+        "statistic": "median",
+        "seconds": 5
+      },
+      "scenarios": {
+        "solar-system-midnight-1366": {
+          "measuredFrameMs": 2.32,
+          "frameMsThreshold": 3.5,
+          "measuredHeapAfterMB": 5.6,
+          "heapAfterMBThreshold": 9,
+          "runsFrameMs": [
+            2.3,
+            2.32,
+            4.67
+          ],
+          "quietestRunFrameMs": 2.3,
+          "medianSceneMs": 0.91
+        },
+        "circumbinary-planet-lab-midnight-1366": {
+          "measuredFrameMs": 3.44,
+          "frameMsThreshold": 5.5,
+          "measuredHeapAfterMB": 7.2,
+          "heapAfterMBThreshold": 11,
+          "runsFrameMs": [
+            2.56,
+            3.44,
+            5.09
+          ],
+          "quietestRunFrameMs": 2.56,
+          "medianSceneMs": 1.2
+        },
+        "galilean-resonance-midnight-1366": {
+          "measuredFrameMs": 4.06,
+          "frameMsThreshold": 6.5,
+          "measuredHeapAfterMB": 7.8,
+          "heapAfterMBThreshold": 12,
+          "runsFrameMs": [
+            1.71,
+            4.06,
+            4.33
+          ],
+          "quietestRunFrameMs": 1.71,
+          "medianSceneMs": 1.46
+        },
+        "galilean-resonance-zoomed-midnight-1366": {
+          "measuredFrameMs": 4.4,
+          "frameMsThreshold": 7.0,
+          "measuredHeapAfterMB": 8.1,
+          "heapAfterMBThreshold": 13,
+          "runsFrameMs": [
+            3.02,
+            5.08,
+            4.4
+          ],
+          "quietestRunFrameMs": 3.02,
+          "medianSceneMs": 1.55
+        },
+        "star-cluster-midnight-1366": {
+          "measuredFrameMs": 26.01,
+          "frameMsThreshold": 39.5,
+          "measuredHeapAfterMB": 7.8,
+          "heapAfterMBThreshold": 12,
+          "runsFrameMs": [
+            18.9,
+            26.01,
+            26.36
+          ],
+          "quietestRunFrameMs": 18.9,
+          "medianSceneMs": 8.11
+        },
+        "black-hole-lab-midnight-1366": {
+          "measuredFrameMs": 8.79,
+          "frameMsThreshold": 13.5,
+          "measuredHeapAfterMB": 7.1,
+          "heapAfterMBThreshold": 11,
+          "runsFrameMs": [
+            5.85,
+            9.11,
+            8.79
+          ],
+          "quietestRunFrameMs": 5.85,
+          "medianSceneMs": 3.6
+        }
+      }
+    },
+    "sandbox-scenes-low-cpu4": {
+      "command": "npm run perf -- --scene tests/fixtures/scene-records/solar-system-midnight-1366.json --scene tests/fixtures/scene-records/circumbinary-planet-lab-midnight-1366.json --scene tests/fixtures/scene-records/galilean-resonance-midnight-1366.json --scene tests/fixtures/scene-records/galilean-resonance-zoomed-midnight-1366.json --scene tests/fixtures/scene-records/star-cluster-midnight-1366.json --scene tests/fixtures/scene-records/black-hole-lab-midnight-1366.json --tier low --cpu 4 --seconds 5",
+      "description": "The same reference scenes, CPU throttled 4x (main thread only), low tier. A proxy, not a Chromebook.",
+      "enforced": false,
+      "measured": {
+        "date": "2026-11-13",
+        "machine": "Intel Core i5-10500 (UHD 630), 24 GB, macOS, headless Chromium (Playwright 1.64) with GPU rasterisation through ANGLE, 3 runs of 5 s per scene, median reported; another job was using the machine (load average 13.4 to 15.0 across the three runs (the same job)), so a median can carry that job; quietestRunFrameMs is the smallest of the three",
+        "runs": 3,
+        "statistic": "median",
+        "seconds": 5
+      },
+      "scenarios": {
+        "solar-system-midnight-1366": {
+          "measuredFrameMs": 16.34,
+          "frameMsThreshold": 25.0,
+          "measuredHeapAfterMB": 4.5,
+          "heapAfterMBThreshold": 7,
+          "runsFrameMs": [
+            16.96,
+            16.34,
+            15.27
+          ],
+          "quietestRunFrameMs": 15.27,
+          "medianSceneMs": 5.62
+        },
+        "circumbinary-planet-lab-midnight-1366": {
+          "measuredFrameMs": 13.44,
+          "frameMsThreshold": 20.5,
+          "measuredHeapAfterMB": 6.6,
+          "heapAfterMBThreshold": 10,
+          "runsFrameMs": [
+            13.44,
+            11.9,
+            15.76
+          ],
+          "quietestRunFrameMs": 11.9,
+          "medianSceneMs": 3.6
+        },
+        "galilean-resonance-midnight-1366": {
+          "measuredFrameMs": 22.1,
+          "frameMsThreshold": 33.5,
+          "measuredHeapAfterMB": 7.0,
+          "heapAfterMBThreshold": 11,
+          "runsFrameMs": [
+            22.1,
+            23.73,
+            21.89
+          ],
+          "quietestRunFrameMs": 21.89,
+          "medianSceneMs": 6.64
+        },
+        "galilean-resonance-zoomed-midnight-1366": {
+          "measuredFrameMs": 17.73,
+          "frameMsThreshold": 27.0,
+          "measuredHeapAfterMB": 7.2,
+          "heapAfterMBThreshold": 11,
+          "runsFrameMs": [
+            17.04,
+            18.85,
+            17.73
+          ],
+          "quietestRunFrameMs": 17.04,
+          "medianSceneMs": 5.56
+        },
+        "star-cluster-midnight-1366": {
+          "measuredFrameMs": 25.4,
+          "frameMsThreshold": 38.5,
+          "measuredHeapAfterMB": 6.1,
+          "heapAfterMBThreshold": 10,
+          "runsFrameMs": [
+            25.4,
+            24.61,
+            26.62
+          ],
+          "quietestRunFrameMs": 24.61,
+          "medianSceneMs": 11.92
+        },
+        "black-hole-lab-midnight-1366": {
+          "measuredFrameMs": 19.5,
+          "frameMsThreshold": 29.5,
+          "measuredHeapAfterMB": 6.4,
+          "heapAfterMBThreshold": 10,
+          "runsFrameMs": [
+            19.5,
+            16.95,
+            21.1
+          ],
+          "quietestRunFrameMs": 16.95,
+          "medianSceneMs": 9.13
+        }
+      }
+    },
     "real-chromebook": {
       "command": "npm run perf on the device, then the protocol in OFFLINE_AND_LOW_END.md",
       "description": "To be filled from real hardware (Prompt 112 part 1, skipped under D-PLAN-02).",

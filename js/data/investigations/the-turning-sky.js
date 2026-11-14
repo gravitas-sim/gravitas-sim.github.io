@@ -98,13 +98,13 @@ const THE_TURNING_SKY = {
           id: 'r0',
           label: 'Rises on night 0 (minutes after noon)',
           unit: 'min',
-          hint: '738.5',
+          want: '738.5',
         },
         {
           id: 'r30',
           label: 'Rises on night 30 (minutes after noon)',
           unit: 'min',
-          hint: '620.6',
+          want: '620.6',
         },
         {
           id: 'shift',
@@ -210,13 +210,13 @@ const THE_TURNING_SKY = {
           id: 'lst0',
           label: 'Sidereal time at midnight, night 0',
           unit: 'h',
-          hint: '6.79',
+          want: '6.79',
         },
         {
           id: 'lst30',
           label: 'Sidereal time at midnight, night 30',
           unit: 'h',
-          hint: '8.76',
+          want: '8.76',
         },
         {
           id: 'adv',

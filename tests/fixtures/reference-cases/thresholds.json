@@ -1,0 +1,291 @@
+{
+  "format": "gravitas.reference-thresholds/1",
+  "prompt": "445",
+  "committed": "2026-11-13, in a documentation commit that precedes tools/reference-cases.mjs, its record and its test. No candidate output of this runner existed when these bounds were written. The only numbers known beforehand are the planning probes quoted in ROADMAP IV section 9.6 (a separate harness, other code, one machine); they are evidence for the choice of the cases, not results of this runner. A case that fails is recorded as failing with its numbers and its bound is never moved, widened, made conditional or made non-fatal. A later change that fixes a case flips its own row in its own change.",
+  "scope": "What the sandbox must get right for systems a visitor can load, stepped the way the page steps them: one frameAdvance (js/timestep.js) per frame, split by substepPlan, each piece one updatePhysics call. Reference solutions are written in the runner and never taken from the engine: exact Kepler propagation, and a fourth-order Runge-Kutta of the engine's own softened force law (js/engine/forces.js:204-213). The engine's orbitalElements and energy readouts are not used.",
+  "conditions": {
+    "seed": 1,
+    "seedNote": "world built through the page's builder under js/rng.js withSeed(seed); stepped inside the same seeded stream (js/random/streams.js engine) so that debris draws reproduce",
+    "rates": {
+      "120": {
+        "fps": 120,
+        "frameSeconds": 0.008333333333333333
+      },
+      "60": {
+        "fps": 60,
+        "frameSeconds": 0.016666666666666666
+      },
+      "30": {
+        "fps": 30,
+        "frameSeconds": 0.03333333333333333
+      },
+      "clamp": {
+        "fps": 5,
+        "frameSeconds": 0.2,
+        "note": "a frame of 0.05 s or longer: frameAdvance clamps it to 0.05 s, the step of a 20 frames a second screen and of every slower one"
+      }
+    },
+    "stepStudy": {
+      "steps": [0.041666666666666664, 0.020833333333333332, 0.010416666666666666, 0.005208333333333333],
+      "labels": ["1/24", "1/48", "1/96", "1/192"],
+      "note": "reported and not judged: each case run at these fixed steps whatever the frame rate, one updatePhysics call per step; every scenario's own max_timestep (0, 0.05, 0.15 or 0.25) is at least 1/24, so no cap binds and the step is the step named"
+    },
+    "tiers": ["low", "full", "ultra"],
+    "tierNote": "js/quality.js setTier before the build; the tier reaches physics only through the world build (population caps, js/world/build.js:1659-1684), and a hand-placed world is exempt, so count and t = 0 state must be equal across tiers (exact); trajectories are not rerun per tier",
+    "camera": {
+      "frames": 600,
+      "frameSeconds": 0.016666666666666666,
+      "canvases": [
+        [1366, 800],
+        [375, 812],
+        [1920, 1080]
+      ],
+      "zooms": [0.25, 3],
+      "panAU": [0, 200],
+      "panNote": "pan is in screen pixels (js/utils.js isOffscreen reads the world centre as -pan/zoom); 200 AU along +x of the world is pan.x = -200 * SIM_UNITS_PER_AU * zoom"
+    }
+  },
+  "scheme": {
+    "reading": "js/engine/bodies.js apply_step (symplectic Euler, kick then drift: v' = v + a(x) dt, x' = x + v' dt) is the default of 49 of 61 scenarios. It is first-order accurate in general and conjugate to velocity Verlet, so its phase and period errors are second order in dt. The energy it holds is a shadow Hamiltonian that differs from H by (dt/2) v.a, to first order: the term vanishes when v is perpendicular to a (a circular orbit), leaving an O(dt^2) energy error, and it does not vanish on an eccentric orbit or in an encounter, where the energy error is O(dt). Velocity Verlet (js/engine/forces.js stepVelocityVerlet; 12 of 61 scenarios, among them gravity-assist-heliocentric) is second order with a bounded energy error. Order of operations inside updatePhysics (js/engine/step.js): clock, accelerations for every body from one snapshot, integrator, trails, black holes on their own path, tidal loop, merging and collisions, cull.",
+    "consequence": "R1 and R3 start on circular orbits: the committed energy form is second order, 2 (omega dt)^2. R2 is eccentric: the committed energy form is first order. The roadmap's w dt form for a first-order scheme is not used for a circular start because the first-order term is exactly the one that vanishes there; if the observed order contradicts this reading the row is recorded as it comes out and the bound stays."
+  },
+  "cases": {
+    "R1": {
+      "scenario": "solar-system",
+      "body": "Earth about Sol",
+      "what": "near-circular restricted two-body orbit (one-way gravity: Earth is a test particle in Sol's field; Sol never moves)",
+      "run": {
+        "orbits": 100,
+        "stop": "first frame boundary at or after 100 orbital periods of the exact orbit"
+      },
+      "omega": "sqrt(mu / a^3), mu = G * mass of Sol, a from the initial state by vis-viva",
+      "checks": {
+        "energy": {
+          "what": "max over every step of |E - E0| / |E0|, E = v^2/2 - mu/r for Earth about Sol",
+          "bound": "factor * (omega dt)^2",
+          "factor": 2,
+          "reason": "circular start: the first-order shadow term vanishes, leaving a second-order amplitude; twice that amplitude leaves room for the sampling phase of the step without allowing a first-order error to pass at any rate",
+          "step": "each run's own step dt as the page took it"
+        },
+        "growth": {
+          "what": "peak |dE/E| in the last tenth of the elapsed time divided by the peak in the first tenth",
+          "bound": 1.5,
+          "reason": "a symplectic scheme's error is bounded and oscillatory, not secular; 1.5 is generous for a bounded oscillation and fails a drift"
+        },
+        "angularMomentum": {
+          "what": "max |L - L0| / |L0| about Sol",
+          "bound": 1e-12,
+          "reason": "a central kick exerts no torque and the drift moves along v', so L is conserved exactly by this scheme; 1e-12 is round-off over millions of steps"
+        },
+        "period": {
+          "what": "|T / T_exact - 1|; T is the mean interval between successive crossings of the initial polar angle (unwrapped, linear interpolation inside the step), the sidereal period; T_exact = 2 pi sqrt(a^3 / mu)",
+          "bound": "factor * (omega dt)^2",
+          "factor": 2,
+          "reason": "conjugacy to velocity Verlet makes the phase error second order; the sidereal period is the quantity of a circular orbit (an apsis is not defined)"
+        }
+      },
+      "reported": ["end-state position error over a", "sampled periapsis and apoapsis error", "steps per orbit"]
+    },
+    "R2": {
+      "scenario": "keplers-2nd-law",
+      "body": "Eccentric Orbiter about Kepler Star",
+      "what": "eccentric restricted two-body orbit, e = 0.65",
+      "run": {
+        "orbits": 30,
+        "stop": "first frame boundary at or after 30 anomalistic periods of the exact orbit"
+      },
+      "checks": {
+        "energy": {
+          "what": "max over every step of |E - E0| / |E0|",
+          "bound": "factor * dt * max over the exact orbit of (a |rdot| / r^2)",
+          "factor": 2,
+          "reason": "first-order shadow term (dt/2) v.a = (dt/2) mu rdot / r^2, divided by |E| = mu / (2a), is dt a rdot / r^2; twice the amplitude on the exact orbit",
+          "step": "each run's own step dt as the page took it"
+        },
+        "growth": {
+          "what": "peak |dE/E| last tenth over first tenth of the elapsed time",
+          "bound": 1.5,
+          "reason": "bounded, not secular"
+        },
+        "angularMomentum": {
+          "what": "max |L - L0| / |L0| about the star",
+          "bound": 1e-12,
+          "reason": "as R1"
+        },
+        "apsides": {
+          "what": "max of |r_min - r_p| / r_p and |r_max - r_a| / r_a over the whole run, r_min and r_max the smallest and largest sampled distances, r_p and r_a the exact ones",
+          "bound": "factor * dt * v_p / r_p",
+          "factor": 2,
+          "reason": "dt v_p / r_p is the fastest local turn rate of the orbit (the angle swept in a step at periapsis); twice it is the largest shift of a sampled apsis the geometry allows"
+        },
+        "period": {
+          "what": "|T / T_exact - 1|, T the mean interval between successive periapsis passages (radial-velocity sign change from minus to plus of x.v, linear interpolation inside the step), T_exact the exact anomalistic period",
+          "bound": "factor * (dt v_p / r_p)^2",
+          "factor": 2,
+          "reason": "second-order phase error expressed in the step's turn angle at periapsis, where the orbit turns fastest"
+        }
+      },
+      "reported": ["end-state position error over a", "steps per orbit"]
+    },
+    "R3": {
+      "scenario": "binary-pair",
+      "body": "Star A and Star B, equal masses, circular relative orbit, mutual gravity",
+      "what": "stellar binary, two bodies attracting each other",
+      "run": {
+        "orbits": 50,
+        "stop": "first frame boundary at or after 50 periods of the exact relative orbit"
+      },
+      "omega": "sqrt(G (M1 + M2) / a^3), a the initial separation",
+      "checks": {
+        "energy": {
+          "what": "max |E - E0| / |E0|, E the total of both bodies with the engine's softened potential (-1.5/rmin + r^2/(2 rmin^3) inside the floor rmin = 1)",
+          "bound": "factor * (omega dt)^2",
+          "factor": 2,
+          "reason": "as R1 (circular relative orbit)"
+        },
+        "growth": {
+          "what": "last tenth over first tenth",
+          "bound": 1.5,
+          "reason": "bounded, not secular"
+        },
+        "angularMomentum": {
+          "what": "max |L - L0| / |L0| about the barycentre",
+          "bound": 1e-12,
+          "reason": "pair forces are equal and opposite and central, so the scheme conserves L exactly"
+        },
+        "momentum": {
+          "what": "max |sum p - sum p0| / sum m |v0|",
+          "bound": 1e-12,
+          "reason": "mutual gravity with every acceleration from one snapshot gives equal and opposite kicks (the note on PhysicsObject.apply_step); momentum is conserved to round-off"
+        },
+        "barycentre": {
+          "what": "max distance of the centre of mass from its initial place, divided by the initial separation",
+          "bound": 1e-9,
+          "reason": "round-off of the momentum drift integrated over the run, with room"
+        },
+        "period": {
+          "what": "|T / T_exact - 1|, sidereal period of the relative vector",
+          "bound": "factor * (omega dt)^2",
+          "factor": 2,
+          "reason": "as R1"
+        }
+      },
+      "reported": ["end-state separation error over a", "steps per orbit"]
+    },
+    "R4": {
+      "scenario": "gravity-assist-heliocentric",
+      "body": "Sun, a 5 Jupiter-mass planet and a spacecraft, mutual gravity, Velocity Verlet, floor 0.01",
+      "what": "a multi-body encounter: a gravity assist",
+      "run": {
+        "until": "t = 1200 (first frame boundary at or after it)"
+      },
+      "reference": "RK4 at h = 1e-3 of the same softened law with every body a source and a target, advanced to the engine's own clock time",
+      "checks": {
+        "energy": {
+          "what": "max |E - E0| / |E0| over the run, total energy of the three bodies",
+          "bound": 1e-6,
+          "reason": "Velocity Verlet is second order with a bounded energy error; at the shipped step the planning probe's reading was five orders below this bound, so it fails only on a real defect"
+        },
+        "craftDv": {
+          "what": "| |v_craft(t) - v_craft(0)| - | v_ref(t) - v_ref(0)| | / |v_ref(t) - v_ref(0)|, at the end of the run, against the RK4 reference",
+          "bound": 0.01,
+          "reason": "the assist's purpose is the craft's change of velocity; one percent is the accuracy a lesson reads it to"
+        },
+        "momentum": {
+          "what": "max |sum p - sum p0| / sum m |v0|",
+          "bound": 1e-11,
+          "reason": "mutual gravity, one snapshot per stage: round-off"
+        },
+        "angularMomentum": {
+          "what": "max |L - L0| / |L0| about the centre of mass",
+          "bound": 1e-11,
+          "reason": "as momentum"
+        }
+      },
+      "reported": ["closest craft-planet approach", "craft position error against the reference at the end, in length units"]
+    },
+    "R4x": {
+      "scenario": "three-body-sensitivity-lab",
+      "body": "three equal stars on a circle; Beta moved 1 length unit along +x after the build",
+      "what": "a hard three-body encounter: the shipped scene is symmetric and has none, so the case moves one star by the amount a student would",
+      "run": {
+        "until": "the first step at which any pair is closer than 0.3 of the side of the as-built equilateral triangle (side = |Alpha - Gamma| before the move), or t = 300",
+        "scheme": "Symplectic Euler (the scenario's own)"
+      },
+      "checks": {
+        "energy": {
+          "what": "max |E - E0| / |E0| over every step before that step, E0 taken after the move",
+          "bound": 0.02,
+          "reason": "a pass that has not yet begun should not have changed the energy by more than two percent; the encounter itself is where a fixed step is allowed to hurt, not the approach to it. The committed condition is 60 frames a second; the same bound is applied at every rate"
+        }
+      },
+      "reported": ["time of first close approach", "minimum pair separation", "energy error over the whole run"]
+    },
+    "R5": {
+      "scenario": "tidal-disruption-event",
+      "body": "Doomed star (1000 mass units) about a static 2000 solar-mass hole, G = 2",
+      "what": "a model boundary: tidal stripping inside 5 hole radii (js/engine/bodies.js tidal_mass_loss), and the orbit that gets there",
+      "run": {
+        "until": "the first step after periapsis at which the star is farther than 5 hole radii from the hole",
+        "reference": "exact Kepler about the hole, mu = G * M_hole; the hole is static and the star is a test particle (its mass changes nothing in its own motion)"
+      },
+      "checks": {
+        "position": {
+          "what": "|x_sim - x_Kepler| / r_p at the stored step whose clock is nearest the exact first periapsis time, each position against the exact one at that step's own clock",
+          "bound": 0.01,
+          "reason": "one percent of the periapsis distance is the accuracy of the star's arrival at the place where the stripping begins; the committed condition is 60 frames a second; the same bound is applied at every rate"
+        },
+        "massSpread": {
+          "what": "(max - min) / mean over the four rates of the star's mass fraction at the first step beyond the threshold",
+          "bound": 0.05,
+          "reason": "the project's stated intent is a frame-rate independent apparent speed; the same stripping should leave the same star"
+        },
+        "fragmentSpread": {
+          "what": "(max - min) / mean over the four rates of the number of Debris objects created by then (zero spread if the mean is zero)",
+          "bound": 0.2,
+          "reason": "as the mass: a page that sheds 0 fragments on one screen and 92 on another does not show one event"
+        }
+      },
+      "reported": ["periapsis distance error", "fragments created per rate", "mass fraction per rate"]
+    },
+    "R6": {
+      "scenario": "solar-system",
+      "what": "the camera is not physics: the same world stepped with the view as a visitor sets it must keep the same bodies as the world with no view",
+      "run": {
+        "frames": 600,
+        "reference": "the same run with a zero-sized canvas, which switches the off-screen cull off (js/engine/step.js is_offscreen)"
+      },
+      "checks": {
+        "deleted": {
+          "what": "number of bodies live in the cull-off run and absent from the run with the canvas, zoom and pan set; one row per rate, zoom and pan, the largest of the three canvases",
+          "bound": 0,
+          "reason": "a body leaves the world only when the physics removes it; the window size, the zoom and the pan are choices of the viewer",
+          "liveBodies": "the count of live bodies must also be equal"
+        }
+      },
+      "control": "a view panned 100000 AU must delete bodies, to show the cull fires in this harness; recorded, not judged"
+    },
+    "tiers": {
+      "scenarios": [
+        "solar-system",
+        "keplers-2nd-law",
+        "binary-pair",
+        "gravity-assist-heliocentric",
+        "three-body-sensitivity-lab",
+        "tidal-disruption-event"
+      ],
+      "checks": {
+        "equal": {
+          "what": "per scenario and per tier, the body count of every list and the t = 0 state (mass, position, velocity of every body in list order) equal to the full tier's, exactly",
+          "bound": 0,
+          "reason": "a lower quality tier changes appearance only and never an answer"
+        }
+      }
+    }
+  },
+  "record": {
+    "file": "tests/fixtures/reference-cases/record.json",
+    "limit": "empty for every failing row until the prompt that states the limit in the product fills it",
+    "exit": "tools/reference-cases.mjs exits 0 when every row comes out as recorded (PASS or FAIL) and 1 when a row differs from the record; --strict exits 1 on any FAIL"
+  }
+}

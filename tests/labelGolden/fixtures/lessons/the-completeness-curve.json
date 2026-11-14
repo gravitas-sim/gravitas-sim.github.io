@@ -17,18 +17,10 @@
    ],
    "numbered": [
     ["steps.raw-against-truth.fields.0.label","Bin 8 to 10"],
-    ["steps.raw-against-truth.fields.0.hint","96"],
     ["steps.raw-against-truth.fields.1.label","Bin 10 to 12"],
-    ["steps.raw-against-truth.fields.1.hint","57"],
     ["steps.correct-the-fade.fields.0.label","Raw, bin 8 to 10"],
-    ["steps.correct-the-fade.fields.0.hint","13"],
     ["steps.correct-the-fade.fields.1.label","Corrected, bin 8 to 10"],
-    ["steps.correct-the-fade.fields.1.hint","0.97"],
-    ["steps.when-it-cannot-help.fields.0.label","Stars counted, bin 10 to 12"],
-    ["steps.when-it-cannot-help.fields.0.hint","3"],
-    ["steps.when-it-cannot-help.fields.1.hint","0.46"],
-    ["steps.the-catalog-own-magnitudes.fields.0.hint","1.00"],
-    ["steps.the-catalog-own-magnitudes.fields.1.hint","1.6"]
+    ["steps.when-it-cannot-help.fields.0.label","Stars counted, bin 10 to 12"]
    ]
   },
   "es": {

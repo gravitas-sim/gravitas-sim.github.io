@@ -16,14 +16,7 @@
     ["steps.jupiter-loop.fields.2.unit","days"],
     ["steps.synodic-period.unit","d"]
    ],
-   "numbered": [
-    ["steps.retrograde-window.fields.0.hint","68"],
-    ["steps.retrograde-window.fields.1.hint","147"],
-    ["steps.venus-elongation.fields.0.hint","47.2"],
-    ["steps.venus-elongation.fields.1.hint","101"],
-    ["steps.jupiter-loop.fields.0.hint","9"],
-    ["steps.jupiter-loop.fields.1.hint","127"]
-   ]
+   "numbered": []
   },
   "es": {
    "units": [],

@@ -17,25 +17,13 @@
     ["steps.the-engine.fields.2.unit","%"]
    ],
    "numbered": [
-    ["steps.four-drifts.fields.0.hint","49.75"],
-    ["steps.four-drifts.fields.1.hint","-0.002317"],
-    ["steps.four-drifts.fields.2.hint","0.001768"],
     ["steps.four-drifts.fields.3.label","Runge-Kutta 4"],
-    ["steps.four-drifts.fields.3.hint","-6.47e-8"],
-    ["steps.four-drifts.fields.4.hint","10722"],
     ["steps.halve-the-step.fields.0.label","Velocity Verlet, 1000 steps"],
-    ["steps.halve-the-step.fields.0.hint","0.000442"],
     ["steps.halve-the-step.fields.1.label","Runge-Kutta 4, 1000 steps"],
-    ["steps.halve-the-step.fields.1.hint","-2.44e-9"],
-    ["steps.halve-the-step.fields.2.hint","4.0"],
     ["steps.halve-the-step.fields.3.label","Runge-Kutta 4: improvement"],
-    ["steps.halve-the-step.fields.3.hint","26.5"],
     ["steps.the-engine.fields.0.label","Velocity Verlet, 438 steps"],
-    ["steps.the-engine.fields.0.hint","0.002304"],
     ["steps.the-engine.fields.1.label","Runge-Kutta 4, 438 steps"],
-    ["steps.the-engine.fields.1.hint","-1.22e-7"],
-    ["steps.the-engine.fields.2.label","Symplectic Euler, 438 steps"],
-    ["steps.the-engine.fields.2.hint","-0.0001646"]
+    ["steps.the-engine.fields.2.label","Symplectic Euler, 438 steps"]
    ]
   },
   "es": {

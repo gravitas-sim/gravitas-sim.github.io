@@ -9,18 +9,11 @@
     ["steps.write-down-what-you-measured.fields.2.unit","× the starting separation"],
     ["steps.how-long-does-a-prediction.unit","simulated seconds"]
    ],
-   "numbered": [
-    ["steps.write-down-what-you-measured.fields.0.hint","8.3"],
-    ["steps.write-down-what-you-measured.fields.1.hint","0.99"],
-    ["steps.write-down-what-you-measured.fields.2.hint","220"]
-   ]
+   "numbered": []
   },
   "es": {
    "units": [],
-   "numbered": [
-    ["steps.write-down-what-you-measured.fields.0.hint","8,3"],
-    ["steps.write-down-what-you-measured.fields.1.hint","0,99"]
-   ]
+   "numbered": []
   }
  },
  "numeric": {

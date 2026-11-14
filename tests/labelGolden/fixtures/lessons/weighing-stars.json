@@ -31,19 +31,11 @@
     ["steps.one-on-your-own.fields.4.unit","M☉"]
    ],
    "numbered": [
-    ["steps.a-practice-run.fields.0.hint","2"],
-    ["steps.a-practice-run.fields.1.hint","2"],
     ["steps.a-practice-run.fields.2.label","a<sup>3</sup>, that is a × a × a"],
     ["steps.a-practice-run.fields.3.label","P<sup>2</sup>, that is P × P"],
     ["steps.a-practice-run.fields.4.label","Total mass, a<sup>3</sup> ÷ P<sup>2</sup>"],
     ["steps.weigh-the-pair.fields.2.label","a<sup>3</sup>"],
     ["steps.weigh-the-pair.fields.3.label","P<sup>2</sup>"],
-    ["steps.how-sure-is-the-total.fields.0.hint","0.1"],
-    ["steps.how-sure-is-the-total.fields.1.hint","0.2"],
-    ["steps.weigh-it-with-an-error-bar.placeholder","e.g. 4.0 ± 0.5"],
-    ["steps.weigh-one-star-with-an-error-bar.placeholder","e.g. 3.0 ± 0.3"],
-    ["steps.one-on-your-own.fields.0.hint","3"],
-    ["steps.one-on-your-own.fields.1.hint","3"],
     ["steps.one-on-your-own.fields.2.label","a<sup>3</sup>"],
     ["steps.one-on-your-own.fields.3.label","P<sup>2</sup>"]
    ]
@@ -53,9 +45,7 @@
    "numbered": [
     ["steps.a-practice-run.fields.2.label","a<sup>3</sup>, es decir a × a × a"],
     ["steps.a-practice-run.fields.3.label","P<sup>2</sup>, es decir P × P"],
-    ["steps.a-practice-run.fields.4.label","Masa total, a<sup>3</sup> ÷ P<sup>2</sup>"],
-    ["steps.weigh-it-with-an-error-bar.placeholder","p. ej. 4,0 ± 0,5"],
-    ["steps.weigh-one-star-with-an-error-bar.placeholder","p. ej. 3,0 ± 0,3"]
+    ["steps.a-practice-run.fields.4.label","Masa total, a<sup>3</sup> ÷ P<sup>2</sup>"]
    ]
   }
  },

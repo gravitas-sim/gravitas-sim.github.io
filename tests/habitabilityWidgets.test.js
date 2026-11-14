@@ -617,22 +617,22 @@ describe('the Goldilocks investigation', () => {
       .sort();
     expect(asked).toEqual(inside.sort());
 
-    // Every hint is the value the panel actually shows, to the precision the
+    // Every expected value is the value the panel actually shows, to the precision the
     // student will read it at.
     for (const f of step.fields) {
       if (/^[b-h]$/.test(f.id)) {
         const p = TRAPPIST1_PLANETS.find(x => x.name === f.id);
-        expect(Number(f.hint)).toBeCloseTo(
+        expect(Number(f.want)).toBeCloseTo(
           relativeInsolation(TRAPPIST.luminositySolar, p.a),
           2
         );
       }
     }
-    expect(Number(step.fields.find(f => f.id === 'inner').hint)).toBeCloseTo(
+    expect(Number(step.fields.find(f => f.id === 'inner').want)).toBeCloseTo(
       bounds.innerAU,
       4
     );
-    expect(Number(step.fields.find(f => f.id === 'outer').hint)).toBeCloseTo(
+    expect(Number(step.fields.find(f => f.id === 'outer').want)).toBeCloseTo(
       bounds.outerAU,
       4
     );

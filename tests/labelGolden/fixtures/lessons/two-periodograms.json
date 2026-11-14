@@ -12,16 +12,7 @@
     ["steps.against-the-fit.fields.0.unit","d"],
     ["steps.against-the-fit.fields.1.unit",""]
    ],
-   "numbered": [
-    ["steps.the-two-periods.fields.0.hint","1.7689"],
-    ["steps.the-two-periods.fields.1.hint","3.524"],
-    ["steps.the-two-periods.fields.2.hint","0.502"],
-    ["steps.the-box.fields.0.hint","2.5"],
-    ["steps.the-box.fields.1.hint","14582"],
-    ["steps.the-box.fields.2.hint","191"],
-    ["steps.against-the-fit.fields.0.hint","-0.00058"],
-    ["steps.against-the-fit.fields.1.hint","-19"]
-   ]
+   "numbered": []
   },
   "es": {
    "units": [],

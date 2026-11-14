@@ -34,6 +34,7 @@
 import { readFileSync, writeFileSync } from 'node:fs';
 import { test, expect } from './fixtures.js';
 import { open } from './sweepOpen.js';
+import { tabTo } from './walk.js';
 
 const contract = JSON.parse(
   readFileSync('tools/interaction-contract.json', 'utf8')
@@ -50,8 +51,22 @@ const LOCALES = [
   { id: 'es', label: 'Spanish' },
 ];
 
+/** Whether the page at a route carries the shell's stamped head. */
+function carriesShellHead(route) {
+  const clean = route.split('#')[0].split('?')[0];
+  const file = clean === '/' ? 'index.html' : `${clean.slice(1)}index.html`;
+  return readFileSync(file, 'utf8').includes('<!-- shell:head -->');
+}
+
 /** The surfaces judged: every row of the walk inventory but the exempt. */
 const pages = inventory.rows.filter(r => !record.exempt[r.surface]);
+
+/**
+ * The walk states that carry an outline of their own: a dialog opened on a
+ * page, whose outline is the dialog's (Prompt 453: Settings, Share and the
+ * finish dialog). Recorded under the state's id.
+ */
+const dialogs = inventory.states.filter(s => s.outline);
 
 // -----------------------------------------------------------------------------
 // In the page
@@ -387,35 +402,80 @@ const written = {};
 test.describe('the outline of every page', () => {
   test.setTimeout(90_000);
 
+  /** Open a page or a state, read its outline in both languages, hold it. */
+  async function holdOutline(page, browserName, key, entry, row) {
+    const seen = {};
+    for (const locale of LOCALES) {
+      // The rail remembers which sections the first language left open.
+      await page
+        .evaluate(() => {
+          for (const key of Object.keys(window.localStorage))
+            if (/rail/i.test(key)) window.localStorage.removeItem(key);
+        })
+        .catch(() => {});
+      await open(page, row.path, locale.id, row);
+      // Into the state, from the keyboard, as a reader gets there.
+      for (const selector of row.open || []) {
+        expect(
+          await tabTo(page, browserName, selector),
+          `Tab reaches ${selector}`
+        ).toBeGreaterThan(0);
+        await page.keyboard.press('Enter');
+        await page.waitForLoadState('networkidle').catch(() => {});
+      }
+      if (row.opened)
+        await expect(page.locator(row.opened)).toBeVisible({ timeout: 15_000 });
+      seen[locale.id] = await page.evaluate(outline);
+      expect(
+        seen[locale.id].problems,
+        `${locale.label}: what is wrong`
+      ).toEqual([]);
+    }
+    // Spanish has the English page's structure: the same levels and
+    // landmark roles in the same order. Names differ, and only English's
+    // are recorded.
+    const roles = l => l.map(x => x.split(':')[0]);
+    expect(seen.es.headings, 'headings, Spanish').toBe(seen.en.headings);
+    expect(roles(seen.es.landmarks), 'landmarks, Spanish').toEqual(
+      roles(seen.en.landmarks)
+    );
+    const mine = { ...seen.en };
+    delete mine.problems;
+    if (WRITE) written[key] = { path: row.path, ...mine };
+    else
+      expect(
+        { path: row.path, ...mine },
+        `${key}: the outline changed; if that is intended, regenerate tools/page-outlines.json and read the diff`
+      ).toEqual(entry);
+  }
+
   for (const row of pages) {
     test(`the outline of ${row.surface} (${row.path}) is sound, the same in both languages, and the recorded one`, async ({
       page,
+      browserName,
     }) => {
-      const seen = {};
-      for (const locale of LOCALES) {
-        await open(page, row.path, locale.id);
-        seen[locale.id] = await page.evaluate(outline);
-        expect(
-          seen[locale.id].problems,
-          `${locale.label}: what is wrong`
-        ).toEqual([]);
-      }
-      // Spanish has the English page's structure: the same levels and
-      // landmark roles in the same order. Names differ, and only English's
-      // are recorded.
-      const roles = l => l.map(x => x.split(':')[0]);
-      expect(seen.es.headings, 'headings, Spanish').toBe(seen.en.headings);
-      expect(roles(seen.es.landmarks), 'landmarks, Spanish').toEqual(
-        roles(seen.en.landmarks)
+      await holdOutline(
+        page,
+        browserName,
+        row.surface,
+        record.pages[row.surface],
+        { ...row, open: [] }
       );
-      const mine = { ...seen.en };
-      delete mine.problems;
-      if (WRITE) written[row.surface] = { path: row.path, ...mine };
-      else
-        expect(
-          { path: row.path, ...mine },
-          `${row.surface}: the outline changed; if that is intended, regenerate tools/page-outlines.json and read the diff`
-        ).toEqual(record.pages[row.surface]);
+    });
+  }
+
+  for (const state of dialogs) {
+    test(`the outline of ${state.id} (${state.path}, opened) is sound, the same in both languages, and the recorded one`, async ({
+      page,
+      browserName,
+    }) => {
+      await holdOutline(
+        page,
+        browserName,
+        state.id,
+        record.pages[state.id],
+        state
+      );
     });
   }
 
@@ -432,7 +492,7 @@ test.describe('the outline of every page', () => {
 
   test('the record names every page of the walk inventory, and only those', () => {
     expect(Object.keys(record.pages).sort()).toEqual(
-      pages.map(r => r.surface).sort()
+      [...pages.map(r => r.surface), ...dialogs.map(s => s.id)].sort()
     );
     for (const surface of Object.keys(record.exempt))
       expect(
@@ -629,20 +689,97 @@ test.describe('reduced motion: a page at rest moves nothing', () => {
       });
       await open(page, row.path, 'en');
       await settle(page);
-      const reaches = motion.override.reaches.includes(row.surface);
-      // The choice reaches the application and no other page (the inventory's
-      // `override`): the list is exact, so a page that learns it fails here
-      // until its row is corrected.
+      // The choice reaches every page that carries the shell's head, which
+      // sets it before the first paint (tools/shell.mjs); the inventory's
+      // `override.unstamped` names the surfaces that do not carry it, and the
+      // list is exact, so a page that gains or loses the head fails here until
+      // its row is corrected.
+      const stamped = carriesShellHead(row.path);
+      expect(
+        motion.override.unstamped.includes(row.surface),
+        'the inventory lists exactly the pages without the shell head'
+      ).toBe(!stamped);
       expect(
         await page.evaluate(() => document.documentElement.dataset.motion),
-        reaches ? 'the choice is applied' : 'the choice is not read here'
-      ).toBe(reaches ? 'reduce' : undefined);
-      if (!reaches) return;
+        stamped ? 'the choice is applied' : 'the choice is not read here'
+      ).toBe(stamped ? 'reduce' : undefined);
+      if (!stamped) return;
       const now = await page.evaluate(movingNow);
       expect(now.animations, 'running animations').toEqual([]);
       expect(now.transitions, 'transitions that would run').toEqual([]);
     });
   }
+});
+
+test.describe("the reader's Motion choice is set before any script runs", () => {
+  // The head script alone: every script the page loads is served empty, so what
+  // the page shows of the choice is what the stamped head did before the first
+  // paint. Home, the Observatory, the 3-D lab, the kernel diagnostics and the submission review.
+  const probes = [
+    'sandbox',
+    'observatory',
+    'lab3d',
+    'kernel-diagnostics',
+    'submissions',
+  ];
+  for (const surface of probes) {
+    for (const choice of ['reduce', 'step']) {
+      test(`${surface}: ${choice}`, async ({ page }) => {
+        const row = pages.find(r => r.surface === surface);
+        await page.route('**/*.js', route =>
+          route.fulfill({ contentType: 'text/javascript', body: '' })
+        );
+        await page.addInitScript(c => {
+          try {
+            window.localStorage.setItem('gravitas_motion', c);
+          } catch {
+            /* storage unavailable */
+          }
+        }, choice);
+        const errors = [];
+        page.on('console', m => {
+          if (/Content Security Policy|Refused to/.test(m.text()))
+            errors.push(m.text());
+        });
+        await page.goto(row.path.split('#')[0], { waitUntil: 'commit' });
+        await page.waitForLoadState('domcontentloaded');
+        expect(
+          await page.evaluate(() => document.documentElement.dataset.motion)
+        ).toBe(choice);
+        expect(errors).toEqual([]);
+      });
+    }
+  }
+
+  test('a stored value that is not a choice, or blocked storage, leaves the system setting alone', async ({
+    page,
+  }) => {
+    await page.route('**/*.js', route =>
+      route.fulfill({ contentType: 'text/javascript', body: '' })
+    );
+    await page.addInitScript(() => {
+      try {
+        window.localStorage.setItem('gravitas_motion', 'system');
+      } catch {
+        /* storage unavailable */
+      }
+    });
+    await page.goto('/observatory/', { waitUntil: 'domcontentloaded' });
+    expect(
+      await page.evaluate(() => document.documentElement.dataset.motion)
+    ).toBeUndefined();
+    await page.addInitScript(() => {
+      Object.defineProperty(window, 'localStorage', {
+        get() {
+          throw new Error('storage blocked');
+        },
+      });
+    });
+    await page.goto('/3d/', { waitUntil: 'domcontentloaded' });
+    expect(
+      await page.evaluate(() => document.documentElement.dataset.motion)
+    ).toBeUndefined();
+  });
 });
 
 // -----------------------------------------------------------------------------

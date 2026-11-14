@@ -13,7 +13,32 @@ the release rather than in the tag.
 
 ## [Unreleased]
 
+### Changed
+
+- A measuring step no longer shows the expected number in grey inside the empty box (Prompt 299; register row D-R4-299-01; visible and instructional). A measure field's expected value moves from `hint` to a new `want` property in 897 fields of 113 lessons and their Spanish shadows; no page reads `want` except the authoring checks and the instructor key, which prints the same text as before. The lesson panel renders a field's `hint` or a numeric step's `placeholder` only when it holds no numeral, the rule `content/placeholder` now reads the numbers inside a cue ("e.g. 8.0 ± 0.1") and checks core and deeper steps, and the ten error-bar steps read "a value, then ± its uncertainty" (and its Spanish). The instructor bundle needs the owner's rebuild; the keys it prints do not change.
+
 ### Added
+
+- The surface ledger (Prompt 453; register row D-R4-453-01): a generated record
+  with one row per published page, generated family, route parameter, dialog,
+  mode and shared region, each with one closing prompt, and
+  `npm run surface-ledger:check`, which fails when a page, a route parameter or
+  a dialog has no row. `npm run surface-ledger:measure` measures page length
+  and the first real action the same way every run. Walk states and dialog
+  outlines were added for Share, the lesson finish dialog, the author preview,
+  the assignment builder, embed mode and Settings. Nothing changes on screen.
+- Reference cases for the sandbox (`npm run validate:reference`, "Reference
+  cases" in `PHYSICS_VALIDATION.md`): seven cases on shipped scenarios
+  (a near-circular orbit, an eccentric orbit, a binary, a gravity assist, a hard
+  three-body pass, a tidal stripping and the camera), each with a bound and its
+  reason committed before the runner existed, stepped the way the page steps
+  them at 120, 60 and 30 frames a second and at the slow-frame clamp, with the
+  quality tiers compared and a step study at four fixed steps. The record
+  lists the failing cases with their numbers. The scene record
+  (`gravitas.scene-record/1`) pins a sandbox view so that
+  `tools/scene-capture.mjs` can photograph the same simulated moment before and
+  after a change, and `npm run perf -- --scene` profiles it for frame time.
+  Nothing changes on screen; the 442 checks of `validate:physics` do not move.
 
 - A measurement harness for the pages a student opens (`npm run perf:routes`, `npm run perf:walks`; `STUDENT_ROUTE_BASELINE.md`): Home, two lessons, an Observatory guide and the 3-D lab, cold, warm and offline over compressed transport, and the walk from a lesson link to its first accepted reading. The test server gains an opt-in gzip and cache-header mode. Nothing a visitor sees changes.
 
@@ -24,6 +49,15 @@ the release rather than in the tag.
   the ledger and the shipped inventory disagree. Nothing changes on screen.
 
 ### Changed
+
+- The Motion choice in Settings now applies on every page (Prompt 303; register
+  rows D-R4-303-01 and 02): the script the shell stamps into each page's head
+  sets it before the first paint, so Reduced and Step by step reach the
+  Observatory, the 3-D lab, the reports and Home itself, not only the
+  application. The 178 stamped pages and their policies were re-stamped. A page
+  that computes without drawing the simulation (the Observatory) now uses the
+  quality tier the application page decided, carried in one session-only key,
+  and never exceeds it; with no key, or storage blocked, it behaves as before.
 
 - The monthly provenance run (Prompt 304; register rows D-R4-304-01 to 04): a
   download from a pinned archive that fails on the network now names its URL
@@ -37,6 +71,17 @@ the release rather than in the tag.
   CfA (Harvard) mirror of SIMBAD while CDS's Strasbourg servers are degraded
   (register row D-R4-304-05). The mirror answers with the same 137 bytes, so
   the pin's digest, the pack's values and what a student sees are unchanged.
+### Fixed
+
+- Instrument choices that failed when picked (Prompt 302; register rows
+  D-R4-302-01 to D-R4-302-03): the exposure planner's Rubin g and Rubin i
+  setups read a seeing from the instrument table (0.77 and 0.71 arcsec,
+  Ivezić et al. 2019, Table 2, delivered median zenith seeing; the r value and
+  every lesson number are unchanged); the habitable-zone locking instrument
+  says why it reads nothing at Q = 10 and 30 instead of failing; the
+  `narrow-night` step of Counts to Magnitudes names the rows its fields read;
+  and the facility field of the two survey-plan steps says it counts from 1.
+  A new test reads every choice of all 170 instruments.
 
 ## [3.0.0] - 2026-11-12
 

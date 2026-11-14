@@ -20,25 +20,12 @@
     ["steps.the-suns-clock.fields.1.unit","Gyr"]
    ],
    "numbered": [
-    ["steps.the-prediction.fields.0.hint","3"],
     ["steps.the-prediction.fields.1.label","Fitted exponent, 2 to 40 M☉"],
-    ["steps.the-prediction.fields.1.hint","3.16"],
     ["steps.the-prediction.fields.2.label","Scatter, 2 to 40 M☉"],
-    ["steps.the-prediction.fields.2.hint","0.143"],
-    ["steps.low-mass-stars.fields.0.hint","5.46"],
     ["steps.low-mass-stars.fields.1.label","Fitted exponent, 0.5 to 2 M☉"],
-    ["steps.low-mass-stars.fields.1.hint","4.43"],
-    ["steps.the-wrong-law.fields.0.hint","5.16"],
     ["steps.the-wrong-law.fields.1.label","Scatter, 2 to 40 M☉"],
-    ["steps.the-wrong-law.fields.1.hint","0.92"],
-    ["steps.radius-scaling.fields.0.hint","0.789"],
     ["steps.radius-scaling.fields.1.label","Fitted exponent, 2 to 40 M☉"],
-    ["steps.radius-scaling.fields.1.hint","0.546"],
-    ["steps.lifetimes.fields.0.hint","-2"],
-    ["steps.lifetimes.fields.1.label","Fitted exponent, 2 to 40 M☉"],
-    ["steps.lifetimes.fields.1.hint","-1.82"],
-    ["steps.the-suns-clock.fields.0.hint","9.88"],
-    ["steps.the-suns-clock.fields.1.hint","13.9"]
+    ["steps.lifetimes.fields.1.label","Fitted exponent, 2 to 40 M☉"]
    ]
   },
   "es": {

@@ -18,17 +18,9 @@
     ["steps.equinox-longitude.unit","deg"]
    ],
    "numbered": [
-    ["steps.three-noons.fields.0.hint","50"],
-    ["steps.three-noons.fields.1.hint","73.4"],
-    ["steps.three-noons.fields.2.hint","26.6"],
     ["steps.three-day-lengths.fields.0.label","Day length at latitude 0°"],
-    ["steps.three-day-lengths.fields.0.hint","12.1"],
     ["steps.three-day-lengths.fields.1.label","Day length at latitude 40°"],
-    ["steps.three-day-lengths.fields.1.hint","15.0"],
-    ["steps.three-day-lengths.fields.2.label","Day length at latitude 65°"],
-    ["steps.three-day-lengths.fields.2.hint","22.0"],
-    ["steps.daily-sunlight.fields.0.hint","483"],
-    ["steps.daily-sunlight.fields.1.hint","156"]
+    ["steps.three-day-lengths.fields.2.label","Day length at latitude 65°"]
    ]
   },
   "es": {

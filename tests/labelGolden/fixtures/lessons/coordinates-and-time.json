@@ -17,11 +17,7 @@
    ],
    "numbered": [
     ["steps.earlier-each-night.fields.0.label","Crossing, night 0"],
-    ["steps.earlier-each-night.fields.0.hint","718.7"],
-    ["steps.earlier-each-night.fields.1.label","Crossing, night 30"],
-    ["steps.earlier-each-night.fields.1.hint","600.8"],
-    ["steps.from-sidereal-time-to-crossing.fields.0.hint","6.792"],
-    ["steps.from-sidereal-time-to-crossing.fields.1.hint","6.752"]
+    ["steps.earlier-each-night.fields.1.label","Crossing, night 30"]
    ]
   },
   "es": {

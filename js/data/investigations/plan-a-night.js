@@ -92,14 +92,14 @@ const PLAN_A_NIGHT = {
           label: 'Astronomical dark, 29 January',
           unit: 'h',
           decimals: 1,
-          hint: '10.5',
+          want: '10.5',
         },
         {
           id: 'jun',
           label: 'Astronomical dark, 21 June',
           unit: 'h',
           decimals: 1,
-          hint: '6.7',
+          want: '6.7',
         },
         {
           id: 'diff',
@@ -184,14 +184,14 @@ const PLAN_A_NIGHT = {
           label: 'Regulus, new Moon night',
           unit: 'h',
           decimals: 1,
-          hint: '8.1',
+          want: '8.1',
         },
         {
           id: 'fullm',
           label: 'Regulus, full Moon night',
           unit: 'h',
           decimals: 1,
-          hint: '0.0',
+          want: '0.0',
         },
         {
           id: 'lost',

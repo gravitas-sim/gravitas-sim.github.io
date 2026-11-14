@@ -101,8 +101,8 @@ const THE_SHAPE_OF_EXPANSION = {
              <strong>chi-square of the curve you chose</strong> and how far it is
              <strong>above the best fit</strong>.`,
       fields: [
-        { id: 'chi2', label: 'Chi-square of the curve', hint: '3303' },
-        { id: 'delta', label: 'Above the best fit', hint: '1615' },
+        { id: 'chi2', label: 'Chi-square of the curve', want: '3303' },
+        { id: 'delta', label: 'Above the best fit', want: '1615' },
       ],
       validate: v => {
         if (![v.chi2, v.delta].every(Number.isFinite)) return null;
@@ -129,9 +129,9 @@ const THE_SHAPE_OF_EXPANSION = {
       body: `Read the <strong>best-fit matter density</strong> and the two ends of
              its <strong>68% interval</strong>.`,
       fields: [
-        { id: 'om', label: 'Best-fit Ωm', hint: '0.361' },
-        { id: 'lo', label: 'Lower end of the interval', hint: '0.349' },
-        { id: 'hi', label: 'Upper end of the interval', hint: '0.372' },
+        { id: 'om', label: 'Best-fit Ωm', want: '0.361' },
+        { id: 'lo', label: 'Lower end of the interval', want: '0.349' },
+        { id: 'hi', label: 'Upper end of the interval', want: '0.372' },
       ],
       validate: v => {
         if (![v.om, v.lo, v.hi].every(Number.isFinite)) return null;
@@ -162,7 +162,7 @@ const THE_SHAPE_OF_EXPANSION = {
       body: `Many textbooks use Ω<sub>m</sub> = 0.3. Set it to
              <strong>0.30</strong> and read how far the <strong>chi-square of the
              curve</strong> is <strong>above the best fit</strong>.`,
-      fields: [{ id: 'delta', label: 'Above the best fit', hint: '30.9' }],
+      fields: [{ id: 'delta', label: 'Above the best fit', want: '30.9' }],
       validate: v => {
         if (![v.delta].every(Number.isFinite)) return null;
         if (Math.abs(v.delta - 30.9) <= 0.4) {
@@ -252,12 +252,12 @@ const THE_SHAPE_OF_EXPANSION = {
              <strong>0.15</strong>. Read the <strong>chi-square of the curve</strong>
              and the <strong>Hubble constant implied</strong>.`,
       fields: [
-        { id: 'chi2', label: 'Chi-square of the curve', hint: '1688' },
+        { id: 'chi2', label: 'Chi-square of the curve', want: '1688' },
         {
           id: 'implied',
           label: 'Implied Hubble constant',
           unit: 'km/s/Mpc',
-          hint: '65.3',
+          want: '65.3',
         },
       ],
       validate: v => {

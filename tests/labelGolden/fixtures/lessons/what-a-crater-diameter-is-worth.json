@@ -15,17 +15,7 @@
     ["steps.against-the-catalog.fields.0.unit","km"]
    ],
    "numbered": [
-    ["steps.read-the-diameter.fields.0.hint","112.0"],
-    ["steps.read-the-diameter.fields.1.hint","5.9"],
-    ["steps.the-budget.fields.0.hint","1.6"],
-    ["steps.the-budget.fields.1.hint","5.0"],
-    ["steps.the-correction.fields.0.hint","101.1"],
-    ["steps.the-correction.fields.1.hint","9.8"],
-    ["steps.a-small-circle.fields.0.hint","22.4"],
-    ["steps.a-small-circle.fields.1.hint","8.2"],
-    ["steps.coin-toss.fields.0.label","Chance the crater is at least 110 km across"],
-    ["steps.coin-toss.fields.0.hint","63"],
-    ["steps.against-the-catalog.fields.0.hint","112.2"]
+    ["steps.coin-toss.fields.0.label","Chance the crater is at least 110 km across"]
    ]
   },
   "es": {

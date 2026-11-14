@@ -33,7 +33,7 @@ export default {
           id: 'vis_frac',
           label: 'Uncertainty of the visible mass, as a fraction',
           unit: '',
-          hint: '0.2',
+          want: '0.2',
         },
         {
           id: 'ratio',
@@ -86,7 +86,7 @@ export default {
       prompt:
         'Halo mass inside 30 kpc, divided by visible mass, with its uncertainty',
       unit: TIMES,
-      placeholder: 'e.g. 3.4 ± 0.7',
+      placeholder: 'a value, then ± its uncertainty',
       answer: 3.4,
       tolerance: 0.9,
       hints: {
@@ -159,8 +159,8 @@ export default {
              best fit <strong>with a halo</strong>. Compare the improvement with
              what you found for the synthetic curve.`,
       fields: [
-        { id: 'stars', label: 'Reduced χ², stars only', unit: '', hint: '50' },
-        { id: 'halo', label: 'Reduced χ², with a halo', unit: '', hint: '4.8' },
+        { id: 'stars', label: 'Reduced χ², stars only', unit: '', want: '50' },
+        { id: 'halo', label: 'Reduced χ², with a halo', unit: '', want: '4.8' },
       ],
       validate: v => {
         if (![v.stars, v.halo].every(Number.isFinite)) return null;

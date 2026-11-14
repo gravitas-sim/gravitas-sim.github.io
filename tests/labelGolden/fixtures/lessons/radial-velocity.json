@@ -12,18 +12,11 @@
     ["steps.a-star-that-does-not-fit-tug.fields.0.unit",""],
     ["steps.a-star-that-does-not-fit-tug.fields.1.unit","g/cm3"]
    ],
-   "numbered": [
-    ["steps.measure-the-period.fields.0.hint","3.5"],
-    ["steps.read-k-off-the-panel.fields.0.hint","84"],
-    ["steps.a-star-that-does-not-fit-tug.fields.0.hint","3.2"],
-    ["steps.a-star-that-does-not-fit-tug.fields.1.hint","0.135"]
-   ]
+   "numbered": []
   },
   "es": {
    "units": [],
-   "numbered": [
-    ["steps.measure-the-period.fields.0.hint","3,5"]
-   ]
+   "numbered": []
   }
  },
  "numeric": {

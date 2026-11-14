@@ -112,13 +112,13 @@ const WHAT_A_SPECTRUM_IS_MADE_OF = {
           id: 'cool',
           label: 'H-alpha center, cloud at 4,000 K',
           unit: '%',
-          hint: '20',
+          want: '20',
         },
         {
           id: 'hot',
           label: 'H-alpha center, cloud at 8,000 K',
           unit: '%',
-          hint: '250',
+          want: '250',
         },
       ],
       validate: v => {

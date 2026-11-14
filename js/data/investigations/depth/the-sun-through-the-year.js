@@ -22,8 +22,8 @@ export default {
              half-day arc. The instrument evaluates it. At latitude 40°,
              read it at the two solstices.`,
       fields: [
-        { id: 'jun', label: 'June solstice', unit: '', hint: '483' },
-        { id: 'dec', label: 'December solstice', unit: '', hint: '156' },
+        { id: 'jun', label: 'June solstice', unit: '', want: '483' },
+        { id: 'dec', label: 'December solstice', unit: '', want: '156' },
         {
           id: 'ratio',
           label: 'June divided by December',

@@ -10,13 +10,7 @@
     ["steps.the-model-run-backward.fields.0.unit","Gyr"],
     ["steps.moon-locking-time.unit",""]
    ],
-   "numbered": [
-    ["steps.the-moons-recession.fields.0.hint","3.75"],
-    ["steps.the-moons-recession.fields.1.hint","2.05"],
-    ["steps.forward-one-billion.fields.0.hint","414.6"],
-    ["steps.forward-one-billion.fields.1.hint","29.5"],
-    ["steps.the-model-run-backward.fields.0.hint","1.58"]
-   ]
+   "numbered": []
   },
   "es": {
    "units": [],

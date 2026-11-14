@@ -72,12 +72,12 @@ const WHERE_GALAXIES_LIVE = {
              <strong>galaxies shown</strong> and the <strong>distance of the
              farthest</strong>.`,
       fields: [
-        { id: 'n', label: 'Galaxies shown', hint: '363' },
+        { id: 'n', label: 'Galaxies shown', want: '363' },
         {
           id: 'r',
           label: 'Distance of the farthest',
           unit: 'Mpc',
-          hint: '170',
+          want: '170',
         },
       ],
       validate: v => {
@@ -105,12 +105,12 @@ const WHERE_GALAXIES_LIVE = {
       body: `Now take all of it, <strong>z ≤ 0.12</strong>. Read the galaxies
              shown and the farthest distance.`,
       fields: [
-        { id: 'n', label: 'Galaxies shown', hint: '2911' },
+        { id: 'n', label: 'Galaxies shown', want: '2911' },
         {
           id: 'r',
           label: 'Distance of the farthest',
           unit: 'Mpc',
-          hint: '500',
+          want: '500',
         },
       ],
       validate: v => {
@@ -163,7 +163,7 @@ const WHERE_GALAXIES_LIVE = {
       title: 'How clumped',
       body: `With the whole strip showing, read the <strong>variance over
              mean</strong> of the counts in cells.`,
-      fields: [{ id: 'vmr', label: 'Variance over mean', hint: '9.8' }],
+      fields: [{ id: 'vmr', label: 'Variance over mean', want: '9.8' }],
       validate: v => {
         if (![v.vmr].every(Number.isFinite)) return null;
         if (Math.abs(v.vmr - 9.79) <= 0.2) {
@@ -213,8 +213,8 @@ const WHERE_GALAXIES_LIVE = {
       body: `Read the <strong>galaxies per million cubic megaparsecs</strong> in the
              shell at 100 to 125 megaparsecs, and in the one at 300 to 325.`,
       fields: [
-        { id: 'near', label: 'At 100 to 125 Mpc', hint: '15800' },
-        { id: 'far', label: 'At 300 to 325 Mpc', hint: '4860' },
+        { id: 'near', label: 'At 100 to 125 Mpc', want: '15800' },
+        { id: 'far', label: 'At 300 to 325 Mpc', want: '4860' },
       ],
       validate: v => {
         if (![v.near, v.far].every(Number.isFinite)) return null;

@@ -13,9 +13,7 @@
    ],
    "numbered": [
     ["steps.measure-two-clouds.fields.0.label","H-alpha center, cloud at 4,000 K"],
-    ["steps.measure-two-clouds.fields.0.hint","20"],
-    ["steps.measure-two-clouds.fields.1.label","H-alpha center, cloud at 8,000 K"],
-    ["steps.measure-two-clouds.fields.1.hint","250"]
+    ["steps.measure-two-clouds.fields.1.label","H-alpha center, cloud at 8,000 K"]
    ]
   },
   "es": {

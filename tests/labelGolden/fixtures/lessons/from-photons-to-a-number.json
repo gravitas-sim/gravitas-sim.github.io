@@ -18,14 +18,8 @@
     ["steps.halve-it.fields.2.unit",""]
    ],
    "numbered": [
-    ["steps.the-counts.fields.0.hint","5101"],
-    ["steps.the-counts.fields.1.hint","103"],
-    ["steps.the-calibration-term.fields.0.hint","0.003"],
-    ["steps.the-calibration-term.fields.1.hint","0.008"],
     ["steps.halve-it.fields.0.label","Total exposure, signal-to-noise 50"],
-    ["steps.halve-it.fields.0.hint","59.3"],
-    ["steps.halve-it.fields.1.label","Total exposure, signal-to-noise 100"],
-    ["steps.halve-it.fields.1.hint","191"]
+    ["steps.halve-it.fields.1.label","Total exposure, signal-to-noise 100"]
    ]
   },
   "es": {

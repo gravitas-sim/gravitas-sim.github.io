@@ -162,13 +162,13 @@ const LINES_AND_MOTION = {
           id: 'v1',
           label: 'Synthetic star 1, from H-alpha',
           unit: 'km/s',
-          hint: '85',
+          want: '85',
         },
         {
           id: 'v2',
           label: 'Synthetic star 2, from H-alpha',
           unit: 'km/s',
-          hint: '-142',
+          want: '-142',
         },
       ],
       validate: v => {
