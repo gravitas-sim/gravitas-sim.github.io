@@ -220,24 +220,21 @@ export function registerMessages(locale, messages) {
 let current = DEFAULT_LOCALE;
 const listeners = new Set();
 
-/** The locale last asked for, which `current` becomes once its fetches land. */
-let target = null;
+/**
+ * The locale last asked for, which `current` becomes once its fetches land;
+ * undefined until the first change (deferredMessages.js reads it, and
+ * guesses from the stored choice until then).
+ *
+ * @type {string|undefined}
+ */
+export let targetLocale;
 /** Work a language change waits for, given the new locale (deferredMessages). */
-let prepare = null;
+let prepare;
 
-/** @param {(locale: string) => (Promise<void>|void)} fn - Set the change's preparer */
+/** @param {(locale: string) => (Promise<void>|void|number)} fn - Set the change's preparer */
 export const setLocalePreparer = fn => {
   prepare = fn;
 };
-
-/**
- * The language the page is on or is about to be on. Start-up applies the stored
- * choice a moment after modules begin asking for strings, when `current` is
- * still English, so until the first change this is the preferred locale.
- *
- * @returns {string} A locale id
- */
-export const intendedLocale = () => target ?? preferredLocale();
 
 /**
  * Tell everything that shows text that the catalog it read from has changed.
@@ -349,11 +346,11 @@ const raw = (catalog, id) =>
 const held = new Set();
 
 /**
- * Locales whose deferred catalog has arrived or failed. An id is only missing
- * for a locale in this set: the page fetches the catalog of the language in
+ * Locales whose deferred catalog has arrived or failed, as keys. An id is only
+ * missing for a locale in it: the page fetches the catalog of the language in
  * use, and for the other language "not in memory" is the ordinary state.
  */
-const deferredSettled = new Set();
+let deferredSettled = {};
 
 /**
  * Say that an id could not be resolved - now, or later, or not at all.
@@ -372,7 +369,7 @@ const deferredSettled = new Set();
  */
 function reportMissing(id) {
   if (missing.has(id)) return;
-  if (!deferredSettled.has(current) && mayBeDeferred(id)) {
+  if (!deferredSettled[current] && mayBeDeferred(id)) {
     held.add(id);
     return;
   }
@@ -391,24 +388,19 @@ function reportMissing(id) {
  * @returns {Array<string>} The ids that turned out to be missing after all
  */
 export function settleDeferredMessages(locale = current) {
-  deferredSettled.add(locale);
-  return sweepHeld();
-}
-
-/** Report what was held and is still unresolved, if the active locale settled. */
-function sweepHeld() {
+  deferredSettled[locale] = true;
   const stillMissing = [];
-  if (!deferredSettled.has(current)) return stillMissing;
-  for (const id of held) {
-    if (resolves(id)) continue;
-    stillMissing.push(id);
-    missing.add(id);
-    console.warn(
-      `[i18n] no message for "${id}" (a deferred namespace, but not in the ` +
-        'deferred catalog either)'
-    );
+  if (deferredSettled[current]) {
+    for (const id of held) {
+      if (resolves(id)) continue;
+      stillMissing.push(id);
+      missing.add(id);
+      console.warn(
+        `[i18n] no message for "${id}" (not in the deferred catalog either)`
+      );
+    }
+    held.clear();
   }
-  held.clear();
   return stillMissing;
 }
 
@@ -416,7 +408,7 @@ function sweepHeld() {
 export function resetMissingForTests() {
   missing.clear();
   held.clear();
-  deferredSettled.clear();
+  deferredSettled = {};
 }
 
 /** Whether an id resolves in the active locale or in English. */
@@ -529,18 +521,15 @@ export function num(n) {
  */
 export async function setLocale(id, { persist = true } = {}) {
   const next = isSupportedLocale(id) ? id : DEFAULT_LOCALE;
-  target = next;
+  targetLocale = next;
   // Fetched together; the old strings stay on screen until both are in, so the
   // listeners below repaint into a complete language. Nothing is awaited when
   // there is nothing to fetch: English applies synchronously at start-up.
-  const base = baseLoaded.has(next) ? null : loadLocale(next);
   const extra = prepare?.(next);
-  if (base) await base;
-  if (extra)
-    await extra.catch(err => console.warn(`[i18n] "${next}" extras:`, err));
+  if (!baseLoaded.has(next)) await loadLocale(next);
+  if (extra) await extra;
   const changed = next !== current;
   current = next;
-  sweepHeld();
 
   document.documentElement.setAttribute('lang', current);
 
@@ -582,17 +571,17 @@ export function onLocaleChange(fn) {
  * @returns {string} A locale id
  */
 export function preferredLocale() {
+  let saved;
   try {
-    const saved = window.localStorage?.getItem(STORAGE_KEY);
-    if (saved && isSupportedLocale(saved)) return saved;
+    saved = window.localStorage?.getItem(STORAGE_KEY);
   } catch {
     /* ignore */
   }
-  const nav = (typeof navigator !== 'undefined' && navigator.language) || '';
-  const base = String(nav).toLowerCase().split('-')[0];
-  return isSupportedLocale(base) && base !== DEFAULT_LOCALE
-    ? base
-    : DEFAULT_LOCALE;
+  if (isSupportedLocale(saved)) return saved;
+  const base = String(globalThis.navigator?.language)
+    .toLowerCase()
+    .split('-')[0];
+  return isSupportedLocale(base) ? base : DEFAULT_LOCALE;
 }
 
 /**

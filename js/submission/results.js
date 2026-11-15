@@ -423,6 +423,7 @@ export function gradeSubmission(
       workedShown: help.get(step.sid)?.revealed ?? false,
       locale: has ? answer.locale : null,
       changed: changed.has(step.sid),
+      earlier: null,
       response: has ? String(answer.value) : null,
     });
   }
@@ -431,7 +432,10 @@ export function gradeSubmission(
   // sub-keys were measure fields, nothing in the lesson now says.
   for (const [sid, answer] of answers) {
     if (gradedIds.has(sid) || steps.some(s => s.sid === sid)) continue;
+    // A step the lesson retired says so: from an earlier version, never marked.
+    const gone = lesson.retired?.[sid];
     questions.push({
+      earlier: gone ? { to: gone.to, release: gone.release } : null,
       stepNumber: null,
       sid,
       type: null,

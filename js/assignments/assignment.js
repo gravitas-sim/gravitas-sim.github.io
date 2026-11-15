@@ -22,12 +22,10 @@
 //
 // What an assignment is not
 // -----------------------------------------------------------------------------
-// It carries no answers, no worked solutions, no hints, and no student
-// responses. It is a lesson id, an ordered list of permanent step ids, a
-// fingerprint per step, and some prose the instructor wrote. Everything a
-// student sees is loaded from the catalog at open time, which is what makes
-// the link short and what makes it impossible for a link to leak an answer key
-// even if somebody decodes it. There is a test for exactly that.
+// It carries no answers, hints or student responses: a lesson id, an ordered
+// list of permanent step ids, a fingerprint per step, and the instructor's
+// prose. Everything a student sees is loaded at open time, so a link cannot
+// leak an answer key (a test holds that).
 //
 // Lessons change
 // -----------------------------------------------------------------------------
@@ -407,12 +405,22 @@ export function validateAssignment(data) {
  * @returns {{bindings: Array<object>, steps: Array<object>, present: number,
  *   changed: number, missing: number, usable: boolean}} The resolution
  */
+/** Step ids, each retired one replaced by its successor (or dropped). */
+export const swapRetired = (lesson, sids) =>
+  [
+    ...new Set(
+      sids.map(s => (lesson?.retired?.[s] ? lesson.retired[s].to : s))
+    ),
+  ].filter(Boolean);
+
 export function stepBindings(assignment, lesson, fingerprint) {
   const byId = new Map((lesson?.steps || []).map(s => [s.sid, s]));
   const bindings = (assignment.s || []).map((sid, i) => {
     const step = byId.get(sid);
     if (!step) {
-      return { sid, status: BINDING.MISSING, step: null, index: i };
+      // The lesson's own record of what replaced the id (stepView.js earlierAnswers).
+      const retired = lesson?.retired?.[sid] ?? null;
+      return { sid, status: BINDING.MISSING, step: null, index: i, retired };
     }
     const want = assignment.f?.[i];
     const have = shortHash(fingerprint(step));

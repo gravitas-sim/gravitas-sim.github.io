@@ -25,6 +25,7 @@
 import {
   buildAssignment,
   resolveSelection,
+  swapRetired,
 } from '../assignments/assignment.js';
 import { stepFingerprint } from '../investigations/progressBackup.js';
 import { activityById, formatById } from '../data/activities.js';
@@ -46,7 +47,8 @@ export const LAUNCH = Object.freeze({
  * @param {string} [title] - The activity's title in the reader's language
  * @param {string} [intro] - The format's own opening, in the same
  * @returns {{ok: boolean, reason?: string, assignment?: object,
- *   added?: Array<object>, unknown?: Array<string>}} The payload, or why not
+ *   added?: Array<object>, unknown?: Array<string>}}
+ *   The payload, or why not
  */
 export function assignmentForFormat(
   lesson,
@@ -62,12 +64,13 @@ export function assignmentForFormat(
     return { ok: false, reason: LAUNCH.NO_LESSON };
   }
 
-  const resolved = resolveSelection(lesson, format.steps);
+  const ids = swapRetired(lesson, format.steps);
+  const resolved = resolveSelection(lesson, ids);
   if (!resolved.sids.length) return { ok: false, reason: LAUNCH.NO_STEPS };
 
   const assignment = buildAssignment({
     lesson,
-    chosen: format.steps,
+    chosen: ids,
     title: title || activity.id,
     intro: intro || '',
     // Fixed, so a student keeps their work across terms. See the header.
@@ -112,7 +115,7 @@ export function assignmentForFormat(
  * @returns {{sids: Array<string>, added: Array<object>, unknown: Array<string>}}
  */
 export function resolvedSteps(lesson, format) {
-  return resolveSelection(lesson, format?.steps || []);
+  return resolveSelection(lesson, swapRetired(lesson, format?.steps || []));
 }
 
 /**

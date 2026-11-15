@@ -288,19 +288,25 @@ export const ES = {
   // --- Transport bar ---------------------------------------------------------
   'transport.timelinePlay.hint': 'Pausar (espacio)',
   'transport.timelineStepBack.hint': 'Retroceder un fotograma (,)',
-  'transport.timelineStepFwd.hint': 'Avanzar un fotograma (.)',
+  'transport.timelineStepFwd.hint': 'Avanzar (.)',
   'transport.timelineScrubber.hint':
-    'Arrastrar para retroceder por el historial grabado. La simulación se detiene en el fotograma elegido hasta volver al directo.',
+    'Arrastra para mirar atrás. Las estelas empiezan de nuevo; las partículas y las ondas no se graban.',
   'transport.timelineLive.hint': 'Volver al directo (L)',
   'transport.timelineBar.label': 'Reproducción y línea de tiempo',
   'transport.timelinePlay.playLabel': 'Reanudar la simulación',
   'transport.timelinePlay.playHint': 'Reanudar (espacio)',
   'transport.timelinePlay.label': 'Pausar la simulación',
   'transport.timelineStepBack.label': 'Retroceder un fotograma',
-  'transport.timelineStepFwd.label': 'Avanzar un fotograma',
+  'transport.timelineStepFwd.label': 'Avanzar un paso',
   'transport.timelineScrubber.label':
     'Recorrer el historial grabado de la simulación',
   'transport.timelineLive': '● DIRECTO',
+  'transport.stepSize': '1 paso = {size}',
+  'transport.replay': 'Repetir',
+  'transport.rewind': 'Retroceder hasta aquí',
+  'transport.rewind.hint': 'Descarta el historial posterior.',
+  'transport.scrubAt': '{behind} antes del directo, fotograma {n} de {total}',
+  'transport.scrubLive': 'En directo',
 
   // --- Front door ------------------------------------------------------------
   'welcome.welcomeClose.hint': 'Cerrar y entrar en el laboratorio',

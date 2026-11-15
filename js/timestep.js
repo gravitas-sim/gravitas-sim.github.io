@@ -33,6 +33,9 @@
  */
 export const MAX_SUBSTEPS = 64;
 
+/** The frame time one step of the period key stands for: 1/60 s. */
+export const STEP_SECONDS = 1 / 60;
+
 /**
  * How one frame's worth of simulated time is actually integrated.
  *

@@ -11,16 +11,11 @@
 // =============================================================================
 
 import { describe, test, expect } from '@jest/globals';
-import {
-  getLocale,
-  intendedLocale,
-  onLocaleChange,
-  setLocale,
-  t,
-} from '../js/i18n/index.js';
+import { getLocale, onLocaleChange, setLocale, t } from '../js/i18n/index.js';
 import {
   deferredMessagesReady,
   ensureDeferredMessages,
+  intendedLocale,
 } from '../js/i18n/deferredMessages.js';
 import { EN_DEFERRED } from '../js/i18n/en.deferred.js';
 import { ES_DEFERRED } from '../js/i18n/es.deferred.js';

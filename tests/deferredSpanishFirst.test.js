@@ -12,9 +12,8 @@ import { describe, test, expect } from '@jest/globals';
 
 globalThis.localStorage.setItem('gravitas_locale', 'es');
 
-const { getLocale, initI18n, intendedLocale, t } =
-  await import('../js/i18n/index.js');
-const { deferredMessagesReady, ensureDeferredMessages } =
+const { getLocale, initI18n, t } = await import('../js/i18n/index.js');
+const { deferredMessagesReady, ensureDeferredMessages, intendedLocale } =
   await import('../js/i18n/deferredMessages.js');
 const { ES_DEFERRED } = await import('../js/i18n/es.deferred.js');
 

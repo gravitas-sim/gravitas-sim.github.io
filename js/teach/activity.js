@@ -23,10 +23,10 @@ import {
 } from '../assignments/assignmentLink.js';
 import {
   ASSIGNMENT_KIND,
-  BINDING,
   assignmentIdFor,
   shortHash,
   stepBindings,
+  swapRetired,
 } from '../assignments/assignment.js';
 import { readCourseFragment, assignmentPayload } from '../course/links.js';
 import {
@@ -177,7 +177,7 @@ export function activitiesOf(source, locale = 'en') {
  * @param {?{id: string, version: string}} provider - lessonProvider(lesson.id)
  * @param {Date} [now] - For the new id and date
  * @returns {{present: number, changed: number, missing: number, clean: boolean,
- *   bindings: Array<object>, reissued: ?object}}
+ *   revised: string (" (a -> b)", or empty), bindings: Array<object>, reissued: ?object}}
  */
 export function reuseCheck(
   activity,
@@ -187,16 +187,19 @@ export function reuseCheck(
   now = new Date()
 ) {
   const r = stepBindings(activity, lesson, fingerprint);
-  const keep = r.bindings.filter(b => b.status !== BINDING.MISSING);
+  const byId = new Map((lesson?.steps || []).map(s => [s.sid, s]));
+  const keep = swapRetired(lesson, activity.s || []).filter(sid =>
+    byId.has(sid)
+  );
   const reissued = keep.length
     ? {
         ...activity,
         i: assignmentIdFor(
-          { lesson: lesson.id, sids: keep.map(b => b.sid), title: activity.t },
+          { lesson: lesson.id, sids: keep, title: activity.t },
           now
         ),
-        s: keep.map(b => b.sid),
-        f: keep.map(b => shortHash(fingerprint(b.step))),
+        s: keep,
+        f: keep.map(sid => shortHash(fingerprint(byId.get(sid)))),
         c: now.toISOString().slice(0, 10),
         v: provider || (activity.d && activity.d !== 'core') ? 2 : 1,
       }
@@ -210,6 +213,11 @@ export function reuseCheck(
     changed: r.changed,
     missing: r.missing,
     clean: r.changed === 0 && r.missing === 0,
+    revised: r.bindings
+      .filter(b => b.retired)
+      .map(b => `${b.sid} -> ${b.retired.to ?? '-'}`)
+      .join(', ')
+      .replace(/.+/, ' ($&)'),
     bindings: r.bindings,
     reissued,
   };

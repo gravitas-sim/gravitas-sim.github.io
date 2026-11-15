@@ -3,6 +3,7 @@ import { measureFrameRatio } from '../js/experiments/frameRate.js';
 import { comparisonSpec } from '../js/experiments/assistSweep.js';
 import { validateSweepSpec } from '../js/experiments/sweep.js';
 import { resetTimeline, tickTimeline } from '../js/timeline.js';
+import { advanceSimulationTime } from '../js/engine/state.js';
 import { frameAdvance } from '../js/timestep.js';
 import { state } from '../js/appState.js';
 import { DT } from '../js/physics.js';
@@ -15,7 +16,7 @@ const PREDICTED = frameAdvance(1 / 60, settings.sim_speed, DT);
 /**
  * The render loop in miniature, as the measurement sees it.
  *
- * Each frame advances the real timeline clock the way js/render.js does - by
+ * Each frame advances the one simulated clock the way js/render.js does - by
  * the frame's advance, and only while the world is unpaused - and then runs
  * whatever was waiting for the frame. `between(frame)` runs after the clock
  * and before the measurement reads it, which is where a pause-at-event, a
@@ -29,7 +30,9 @@ function loop({ advance = PREDICTED, between = () => {} } = {}) {
   return cb =>
     Promise.resolve().then(() => {
       frame++;
-      tickTimeline(advance);
+      // The loop's tick, then what the integrator does to the clock.
+      if (tickTimeline(advance) && !state.paused)
+        advanceSimulationTime(advance);
       between(frame);
       cb();
     });

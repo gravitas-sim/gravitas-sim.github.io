@@ -19,13 +19,16 @@ export const OLD_COMMIT = 'a71f73f50f30ec6a81d398d2cd54f474e87ddd85';
 export const REPO = process.cwd();
 export const KIND_DIR = path.join(REPO, 'tests', 'compat', 'kinds');
 
-/** Unpack js/ and sdk/ of the old commit; returns {tree, cleanup}. */
-export function archiveOld() {
+/** The commit the v3.0 tag names: what a browser still holding 3.0's cached code reads with. */
+export const V3_COMMIT = 'f9277ff8ed92efe1bc41d3d6c2fcf224f6989a70';
+
+/** Unpack js/ and sdk/ of an old commit (2.0.0 by default); returns {tree, cleanup}. */
+export function archiveOld(commit = OLD_COMMIT) {
   const tree = mkdtempSync(path.join(tmpdir(), 'gravitas-compat-'));
   const tar = path.join(tree, 'js.tar');
   execFileSync(
     'git',
-    ['archive', '--format=tar', '-o', tar, OLD_COMMIT, 'js', 'sdk'],
+    ['archive', '--format=tar', '-o', tar, commit, 'js', 'sdk'],
     {
       cwd: REPO,
     }
@@ -39,13 +42,13 @@ export function archiveOld() {
 }
 
 /** Run one spec operation against a tree: {ok, value} or {ok: false, error}. */
-export function run(tree, kind, op, input) {
+export function run(tree, kind, op, input, dir = KIND_DIR) {
   const out = execFileSync(
     process.execPath,
     [
       path.join(REPO, 'tests', 'compat', 'run.mjs'),
       tree,
-      path.join(KIND_DIR, `${kind}.mjs`),
+      path.join(dir, `${kind}.mjs`),
       op,
     ],
     {

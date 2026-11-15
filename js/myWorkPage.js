@@ -1,14 +1,11 @@
 // =============================================================================
 // /my-work/: the one place a student sees and manages what they have made
 // -----------------------------------------------------------------------------
-// Roadmap II Prompt 69 (MY_WORK.md). Everything is read through the storage
-// module's store over the student's own keys (openStudentStore), so the page
-// lists, exports, imports and deletes exactly what the writers keep, in the
-// keys and formats they already use. Nothing is written on the way in, nothing
-// leaves the browser (a backup is a file the student saves), and the page needs
-// no account. The prose that does not change is in the page's markup, in both
-// languages; the strings built here come as English/Spanish pairs.
-//
+// (MY_WORK.md). Everything is read through the storage module's store over the
+// student's own keys, so the page lists, exports, imports and deletes exactly
+// what the writers keep. Nothing leaves the browser (a backup is a file the
+// student saves), and no account is needed. The strings built here come as
+// English/Spanish pairs.
 // =============================================================================
 
 import { EXPORT_FORMAT, openStudentStore } from './storage/index.js';
