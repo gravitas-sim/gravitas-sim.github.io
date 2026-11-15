@@ -417,9 +417,11 @@ test.describe('persistence', () => {
     await answerAndAdvance(page);
     expect(await stepNumber(page)).toBeGreaterThan(1);
 
-    page.once('dialog', d => d.accept());
     await openMore(page);
     await page.locator('#investigationReset').click();
+    // It asks first; the answers are erased only when the reader says so.
+    await expect(page.locator('#investigationRestart')).toBeVisible();
+    await page.locator('#investigationRestart [value=go]').click();
     await expect.poll(() => stepNumber(page), { timeout: 15_000 }).toBe(1);
   });
 });

@@ -24,6 +24,7 @@ import {
   formatFieldNumber,
   keyForAssignment,
   earlierFor,
+  forgetDrafts,
   load,
   parseFieldNumber,
   progressFor,
@@ -154,7 +155,7 @@ import {
   setChooserElements,
   wireBrowserFilters,
 } from './investigations/browser.js';
-import { drop, get, put } from './storage/local.js';
+import { get, put } from './storage/local.js';
 import { helpStages, helpTaken } from './answerFeedback.js';
 import { frameState } from './referenceFrame.js';
 import {
@@ -743,7 +744,7 @@ function applySetup(setup) {
  * Resolve this step's `bind` against the world that is on screen.
  * @returns {void}
  */
-function bindStepRoles() {
+function bindStepRoles(force) {
   const step = currentStep();
   // Whatever the last step was illustrating is not this step's business. The
   // widget re-asserts it on its first tick if this step wants one, so the
@@ -758,7 +759,7 @@ function bindStepRoles() {
   // precedence: a step cannot both stand its own stars on the canvas and bind
   // roles to somebody else's.
   if (step?.stage) {
-    const { problems } = applyStage(step.stage);
+    const { problems } = applyStage(step.stage, { force });
     // The fit itself is deferred: applyStage records that one was asked for
     // and the panel's own tick performs it, once the panel and the instrument
     // have been laid out and the application has finished setting up its
@@ -2120,13 +2121,9 @@ function importSelection() {
 // --- Navigation ---------------------------------------------------------------
 
 /**
- * The scenario a step runs against.
- *
- * Not every step carries its own setup: a lesson sets up a system once and
- * then asks several things about it. Walking backwards to the most recent one
- * is what makes resuming work: a student who closes the tab on step 6 and comes
- * back would otherwise return to whatever scenario happened to be loaded,
- * reading questions about a system that is no longer on screen.
+ * The scenario a step runs against: its own setup, or the most recent one
+ * before it, which is what makes resuming work (a student who comes back on
+ * step 6 must not read questions about whatever system happens to be loaded).
  *
  * @param {number} index - Step index
  * @returns {Object|null} The setup in force at that step
@@ -2184,7 +2181,7 @@ function goToStep(index, { rebuild = false } = {}) {
   // Before the new step draws anything, so a reader never hears the last
   // step's signal over the new step's instructions.
   releaseLessonAudio();
-  bindStepRoles();
+  bindStepRoles(rebuild);
 
   // A lesson that leaves the inspector reachable, as the black hole one does,
   // can have its object card open when the student moves on. The card is a
@@ -2633,19 +2630,18 @@ bindChooser({
 
 // --- Finishing and the report -------------------------------------------------
 
+/** Whether a step holds an answer: its own value, or one of a measure's fields. */
+const answeredStep = s => {
+  const id = stepId(active.steps.indexOf(s));
+  return s.type === 'measure'
+    ? s.fields?.some(f => String(responses[`${id}:${f.id}`] ?? '').trim())
+    : String(responses[id] ?? '').trim() !== '';
+};
+
 function openFinish() {
   if (!els.finish) return;
   const graded = gradedSteps({ steps: shown() });
-  const answered = graded.filter(s => {
-    const i = active.steps.indexOf(s);
-    const id = stepId(i);
-    if (s.type === 'measure') {
-      return s.fields?.some(f =>
-        String(responses[`${id}:${f.id}`] ?? '').trim()
-      );
-    }
-    return String(responses[id] ?? '').trim() !== '';
-  }).length;
+  const answered = graded.filter(answeredStep).length;
 
   showToken('');
   // Not in an authoring preview, as the panel's backup controls are not.
@@ -2726,6 +2722,7 @@ const finishHost = () => ({
     depth,
   }),
   elements: () => els,
+  answered: () => active.steps.filter(answeredStep).length,
   earlier: earlierFor,
   payloadFromSetup,
   plotData: plotAnywhere,
@@ -2736,12 +2733,16 @@ const finishHost = () => ({
   saveFile,
   restoreInto: restored => {
     progressNotes = [];
-    responses = restored.responses;
-    attempts = restored.attempts;
-    visited = restored.visited;
+    responses = restored.responses ?? {};
+    attempts = restored.attempts ?? {};
+    visited = restored.visited ?? new Set();
     startedAt = restored.startedAt || new Date().toISOString();
+    if (restored.fresh) {
+      forgetDrafts();
+      toast(t('inv.progress.cleared'));
+    }
     save();
-    goToStep(restored.stepIndex, { rebuild: true });
+    goToStep(restored.stepIndex ?? 0, { rebuild: !restored.fresh });
   },
   showToken,
   lib: {
@@ -2795,20 +2796,16 @@ function plotAnywhere() {
   return plot;
 }
 
-function resetProgress() {
-  if (!active) return;
-  responses = {};
-  attempts = {};
-  visited = new Set();
-  startedAt = new Date().toISOString();
-  try {
-    if (!authoring) drop(storageKey(active.id));
-  } catch {
-    /* ignore */
-  }
-  closeFinish();
-  goToStep(0);
-  toast(t('inv.progress.cleared'));
+/** Put what this step shows (scene, instrument) back to its start; answers stay. */
+function resetStepScene() {
+  const step = currentStep();
+  for (const k in responses)
+    if (k.startsWith(`${stepId(stepIndex)}:tool:`)) delete responses[k];
+  goToStep(stepIndex, { rebuild: true });
+  const said =
+    els.resetScenario.dataset[getLocale() === 'es' ? 'saidEs' : 'saidEn'];
+  const scene = step.stage || setupInForceAt(stepIndex);
+  toast(said.split('|')[+!!step.tool + 2 * !!scene]);
 }
 
 // --- Wiring -------------------------------------------------------------------
@@ -2958,7 +2955,6 @@ export function initInvestigations({ signal } = {}) {
     tokenBody: document.getElementById('investigationTokenBody'),
     finishClose: document.getElementById('investigationFinishClose'),
     finishBack: document.getElementById('investigationFinishBack'),
-    resetBtn: document.getElementById('investigationReset'),
     resetScenario: document.getElementById('investigationResetScenario'),
     plotPanel: document.getElementById('investigationPlot'),
     plotCanvas: document.getElementById('investigationPlotCanvas'),
@@ -3090,7 +3086,6 @@ export function initInvestigations({ signal } = {}) {
     toast(t(on ? 'inv.stage.scale.true' : 'inv.stage.scale.display'));
   });
 
-  els.resetBtn?.addEventListener('click', resetProgress);
   els.ecc?.addEventListener('input', () => {
     paintEllipse(els.ecc.value);
     els.presetNote.textContent = '';
@@ -3110,18 +3105,13 @@ export function initInvestigations({ signal } = {}) {
     drawPlot(currentStep(), stepId(stepIndex));
   });
 
-  els.resetScenario?.addEventListener('click', () => {
-    // Left running, a scenario drifts: bodies merge, get flung out, or simply
-    // leave the view. Putting the step's system back is a far more common need
-    // than restarting the lesson, so it gets its own control.
-    applySetup(setupInForceAt(stepIndex));
-    toast(t('inv.scenario.reset'));
-  });
+  els.resetScenario?.addEventListener('click', resetStepScene);
 
   els.finishClose?.addEventListener('click', closeFinish);
   els.finishBack?.addEventListener('click', closeFinish);
   const on = (id, fn) =>
     document.getElementById(id)?.addEventListener('click', fn);
+  on('investigationReset', finishAction('restart', 'inv.load.failed'));
   on('investigationDownload', finishAction('generateReport'));
   on('investigationDownloadHtml', finishAction('generateHtmlReport'));
   els.finishProgress?.addEventListener(
