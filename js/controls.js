@@ -181,21 +181,10 @@ function setupTransport() {
   );
 
   // Looking back, Play is Return to live (the pause state it left comes back).
-  playBtn?.addEventListener('click', () => {
-    if (isScrubbing()) returnToLive();
-    else state.paused = !state.paused;
-    refreshTransport();
-  });
-  liveBtn?.addEventListener('click', () => {
-    returnToLive();
-    refreshTransport();
-  });
+  playBtn?.addEventListener('click', togglePlay);
+  liveBtn?.addEventListener('click', goLive);
   replayBtn?.addEventListener('click', startReplay);
-  rewindBtn?.addEventListener('click', () => {
-    rewindToHere();
-    toast(t('transport.rewind.hint'));
-    refreshTransport();
-  });
+  rewindBtn?.addEventListener('click', rewindHere);
   document
     .getElementById('timelineStepBack')
     ?.addEventListener('click', stepBack);
@@ -203,6 +192,23 @@ function setupTransport() {
     .getElementById('timelineStepFwd')
     ?.addEventListener('click', stepForwardOrOne);
   bindTimelineUI({ onChange: onTimelineChange, onClock: paintClock });
+}
+
+function togglePlay() {
+  if (isScrubbing()) returnToLive();
+  else state.paused = !state.paused;
+  refreshTransport();
+}
+
+function goLive() {
+  returnToLive();
+  refreshTransport();
+}
+
+function rewindHere() {
+  rewindToHere();
+  toast(t('transport.rewind.hint'));
+  refreshTransport();
 }
 
 /** One step when paused and live, one recorded frame when looking back. */
@@ -423,11 +429,7 @@ function setupShortcuts() {
     match: ' ',
     group: 'Playback',
     label: t('shortcut.pause'),
-    run: () => {
-      if (isScrubbing()) returnToLive();
-      else state.paused = !state.paused;
-      refreshTransport();
-    },
+    run: togglePlay,
   });
   registerShortcut({
     keys: ',',
@@ -450,8 +452,7 @@ function setupShortcuts() {
     label: t('shortcut.live'),
     run: () => {
       if (!isScrubbing()) return;
-      returnToLive();
-      refreshTransport();
+      goLive();
       toast(t('toast.timeline.live'));
     },
   });
@@ -796,7 +797,7 @@ function setupRangeFills() {
  */
 export function setPlaying(playing) {
   // An explicit command: playing means running, from the live moment.
-  if (isScrubbing()) returnToLive();
+  returnToLive();
   state.paused = !playing;
   refreshTransport();
 }
@@ -809,18 +810,11 @@ export function initControls() {
     if (e.detail?.object) recordPlacement(e.detail.object);
     // A body placed while looking back commits that moment, or Return to live
     // would put back a world that never had it.
-    if (isScrubbing()) {
-      rewindToHere();
-      toast(t('transport.rewind.hint'));
-      refreshTransport();
-    }
+    if (isScrubbing()) rewindHere();
   });
   // Escape ends a replay as Pause does.
   window.addEventListener(EV_ESCAPE, () => {
-    if (isReplaying()) {
-      returnToLive();
-      refreshTransport();
-    }
+    if (isReplaying()) goLive();
   });
   window.addEventListener(EV_SIMULATION_RESET, () => {
     clearPlacementHistory();

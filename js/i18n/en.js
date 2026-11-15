@@ -383,7 +383,7 @@ export const EN = {
   'transport.timelineStepBack.hint': 'Step back (,)',
   'transport.timelineStepFwd.hint': 'Step forward (.)',
   'transport.timelineScrubber.hint':
-    'Drag to look back; Return to live restores it. Trails restart; particles and ripples are not recorded.',
+    'Drag to look back. Trails restart; particles and ripples are not recorded.',
   'transport.timelineLive.hint': 'Return to live (L)',
   'transport.timelineBar.label': 'Playback and timeline',
   'transport.timelinePlay.playLabel': 'Play simulation',

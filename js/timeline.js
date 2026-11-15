@@ -313,26 +313,19 @@ function restore(offset) {
  * Instances are reused by id; a body the scrub dropped is made again.
  */
 function restoreHeld() {
-  if (!held) return;
   const live = indexLive();
   const rebuilt = new Map(KINDS.map(k => [k, []]));
   let maxId = 0;
-  // set_state keeps the objects it is given: restore from a copy.
-  const states = JSON.parse(JSON.stringify(held.states));
-  for (const s of states) {
-    if (!s || !s.pos || !s.vel) continue;
-    const hit = Number.isFinite(s.id) ? live.get(s.id) : null;
-    let obj = hit?.obj ?? null;
+  // set_state keeps the objects it is given, so each restore parses a copy.
+  for (const s of JSON.parse(held.states)) {
+    const hit = live.get(s.id);
     const kind = hit?.kind ?? s.type;
-    if (!rebuilt.has(kind)) continue;
-    if (!obj) {
-      obj = construct(kind, s.pos, s.vel, s.mass);
-      if (!obj) continue;
-    }
+    const obj = hit?.obj ?? construct(kind, s.pos, s.vel, s.mass);
+    if (!obj) continue;
     obj.set_state(s);
     obj.alive = true;
     maxId = Math.max(maxId, obj.id ?? 0);
-    rebuilt.get(kind).push(obj);
+    rebuilt.get(kind)?.push(obj);
   }
   if (installLists(rebuilt, maxId)) bumpWorldGeneration();
   setSimulationTime(held.clock);
@@ -348,7 +341,7 @@ function leaveLive() {
     forExperiment: true,
   });
   held = {
-    states: payload.b ?? [],
+    states: JSON.stringify(payload.b ?? []),
     paused: state.paused,
     clock: getSimulationTime(),
   };
@@ -357,6 +350,7 @@ function leaveLive() {
 
 /** Leave history for live, with nothing held. */
 function endHistory() {
+  state.paused = held.paused;
   scrubbing = false;
   replaying = false;
   scrubOffset = 0;
@@ -391,7 +385,7 @@ export function tickTimeline(dtSim) {
 
 /** Repaint the clock label: before and after the step, so it matches the readout. */
 export function syncClock() {
-  if (ui && typeof ui.onClock === 'function') ui.onClock(getSimulationTime());
+  ui?.onClock?.(getSimulationTime());
 }
 
 /** @returns {boolean} True while the view is parked on a recorded frame */
@@ -446,18 +440,14 @@ export function stepBack() {
 /** One recorded frame forward; past the newest it is Return to live. */
 export function stepForward() {
   if (!scrubbing) return;
-  if (scrubOffset <= 0) {
-    returnToLive();
-    return;
-  }
-  scrubTo(scrubOffset - 1);
+  if (scrubOffset > 0) scrubTo(scrubOffset - 1);
+  else returnToLive();
 }
 
 /** Back to the held live moment, clock and pause state; nothing is dropped. */
 export function returnToLive() {
   if (!scrubbing) return;
   restoreHeld();
-  if (held) state.paused = held.paused;
   endHistory();
 }
 
@@ -468,7 +458,6 @@ export function rewindToHere() {
     frameCount = Math.max(1, frameCount - scrubOffset);
     writeIndex = (indexForOffset(scrubOffset) + 1) % capacity;
   }
-  if (held) state.paused = held.paused;
   endHistory();
 }
 
@@ -484,7 +473,7 @@ export function startReplay() {
 
 function advanceReplay(dtSim) {
   replayClock += dtSim;
-  if (!held || replayClock >= held.clock) {
+  if (replayClock >= held.clock) {
     returnToLive();
     return;
   }
@@ -515,7 +504,7 @@ function syncUI() {
     offset: scrubOffset,
     scrubbing,
     simClock: getSimulationTime(),
-    behind: held ? Math.max(0, held.clock - getSimulationTime()) : 0,
+    behind: scrubbing ? Math.max(0, held.clock - getSimulationTime()) : 0,
     span:
       frameCount > 1
         ? Math.abs(

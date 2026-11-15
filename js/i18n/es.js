@@ -290,7 +290,7 @@ export const ES = {
   'transport.timelineStepBack.hint': 'Retroceder un fotograma (,)',
   'transport.timelineStepFwd.hint': 'Avanzar (.)',
   'transport.timelineScrubber.hint':
-    'Arrastra para mirar atrás; «Volver al directo» lo repone. Las estelas empiezan de nuevo; las partículas y las ondas no se graban.',
+    'Arrastra para mirar atrás. Las estelas empiezan de nuevo; las partículas y las ondas no se graban.',
   'transport.timelineLive.hint': 'Volver al directo (L)',
   'transport.timelineBar.label': 'Reproducción y línea de tiempo',
   'transport.timelinePlay.playLabel': 'Reanudar la simulación',
