@@ -43,7 +43,7 @@ beforeAll(async () => {
 const UNREACHED = {
   'js/observatory/fitPanel.js:745':
     'the seconds a fit took, read from the clock when the run ends',
-  'js/observatory/guidePanel.js:330':
+  'js/observatory/guidePanel.js:332':
     'a rounding inside the guide panel, which needs a mounted observation',
   'js/observatory/measurePanel.js:491':
     'a rounding inside the measure panel, which needs a mounted pipeline',
@@ -212,15 +212,15 @@ describe('what the recording can tell apart', () => {
 
   test('per site: the sites that stayed wrote a hyphen, or are machine text, or are not reached', () => {
     // Recorded on the tree before the move: the four calls that moved
-    // (stepView.js 541 and 544, archivePanel.js 257 and 258) wrote no hyphen
+    // (stepView.js 537 and 540, archivePanel.js 257 and 258) wrote no hyphen
     // and were handed no number that is not finite, on every reading of their
     // surfaces. The two in fixtures.js are as eligible and wait for a request
     // (js/format.js is not loaded by /observatory/ at start).
     const at = site => all.hazards[site] ?? { hyphen: false, nonFinite: false };
     for (const site of [
-      'js/investigations/stepView.js:643:11',
-      'js/investigations/stepView.js:801:35',
-      'js/investigations/stepView.js:1193:13',
+      'js/investigations/stepView.js:630:11',
+      'js/investigations/stepView.js:788:35',
+      'js/investigations/stepView.js:1176:13',
       'js/observatory/guides/core.js:320:27',
     ])
       expect(at(site).hyphen).toBe(true);
@@ -240,7 +240,7 @@ describe('what the recording can tell apart', () => {
         .split('\n')
         .filter((_, i) => numbers.includes(i + 1));
     for (const line of [
-      ...lines('js/investigations/stepView.js', 541, 544),
+      ...lines('js/investigations/stepView.js', 537, 540),
       ...lines('js/observatory/archivePanel.js', 258, 259),
     ])
       expect(line).toMatch(/fixed\(/);

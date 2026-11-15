@@ -99,6 +99,7 @@ export const RULE_INDEX = {
   'id/file': 'A lesson lives in a file named after its id',
   'id/step':
     'Every step has a stable sid of lowercase letters, digits and hyphens, unique within the lesson',
+  'id/retired': 'A retired step names its successor and release',
   'id/field': 'Response field ids are unique within a step and usable as keys',
   'content/lesson': 'Title, subtitle, duration, level, summary and thumbnail',
   'content/objectives': 'Objectives exist and say something',
@@ -369,6 +370,7 @@ export function checkCatalog(inputs, { skip = [] } = {}) {
     sources,
     gradedSteps,
     cueFindings,
+    retiredFindings,
   } = inputs;
 
   const widgetById = new Map(widgets.map(w => [w.id, w]));
@@ -436,10 +438,8 @@ export function checkCatalog(inputs, { skip = [] } = {}) {
       continue;
     }
 
-    // --- Step ids ------------------------------------------------------------
-    // Positional, `${lesson}:${index}`, which cannot collide - but it is also
-    // what saved progress and the instructor expectations are keyed by, so it
-    // is asserted rather than assumed.
+    // --- Step ids: positional, asserted because progress is keyed by them.
+    retiredFindings?.(inv).forEach(c => err('id/retired', null, c));
     const stepIds = steps.map((_, i) => `${inv.id}:${i}`);
     if (new Set(stepIds).size !== stepIds.length) {
       err('id/step', null, 'two steps derive the same id');

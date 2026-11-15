@@ -24,6 +24,7 @@ import { buildLabReport, downloadPdf, reportMessages } from '../labReport.js';
  *   {active, stepIndex, responses, attempts, visited, startedAt, assignment,
  *   assignmentBinding, depth}
  * @property {() => Object} elements - The engine's elements
+ * @property {(id: string) => (Object|undefined)} earlier - Kept earlier answers
  * @property {(setup: Object) => Object} payloadFromSetup - A step's setup as a
  *   shared-link payload
  * @property {() => (Object|null)} plotData - The lesson's plot wherever it lives
@@ -75,7 +76,7 @@ export async function makeSubmissionToken(host, name) {
       tokenMod.buildSubmission({
         backup: backupMod.buildBackup({
           lesson: active,
-          responses,
+          responses: { ...host.earlier(active.id)?.responses, ...responses },
           attempts,
           visited,
           stepSid: active.steps[stepIndex]?.sid ?? null,
@@ -292,7 +293,7 @@ export async function downloadBackup(host) {
   const backup = await import('./progressBackup.js');
   const payload = backup.buildBackup({
     lesson: active,
-    responses,
+    responses: { ...host.earlier(active.id)?.responses, ...responses },
     attempts,
     visited,
     stepSid: active.steps[stepIndex]?.sid ?? null,

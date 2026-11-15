@@ -1,6 +1,6 @@
 {
   "version": "November 2026",
-  "generated": "2026-11-14",
+  "generated": "2026-11-15",
   "documents": 1222,
   "inventory": {
     "documents": 1222,
@@ -24,9 +24,9 @@
     }
   },
   "sourceFiles": 306,
-  "sourceDigest": "5b654ea83ad2c335797e7bd540dd0a259afc918921e02a97754f987300a0dd39",
+  "sourceDigest": "fe9e661b5c704cc7aebbd017756e1c41f954496b2fd9fb6411c40affb2eabc91",
   "sources": {
-    "js/activities/activities.js": "39ac98cd99b8b0387c55e41d5d4530bad55a8da8758819ad056be73e7a716b01",
+    "js/activities/activities.js": "af9b7e121b9a72c2a5cc18e07331d6ee841934d402b030294d25c442628881ef",
     "js/activities/activityBridge.js": "67a82aff98e0ed935d6b8b0f0f654c6ad4332ee929cb3604e896a7f790a6fdc1",
     "js/activityDocs.js": "a5c56e6db7b4b82fdaf5535db62c402ed6ed90bf819b34e1473792af0724abe8",
     "js/answerCheck.js": "93d09ed32008916989cdc01b4acd9fc1a5e54581cebd9645d061b6c48303dfa4",
@@ -34,11 +34,11 @@
     "js/answerKey.js": "99a305cfddd9e069f401887d071c45122979fc92c9ed8738da2e73f3aef69a54",
     "js/answerKeyDocument.js": "b7bb157ea52e9b9c6547dfcdd73fe5905518f71e7afbe198baa72afc70f0fe3e",
     "js/answerParse.js": "420ce48b5513fa3c1d2b8abe1ad35c9a7c281ac3deca4c3cfd2204b38e1d4863",
-    "js/assignments/assignment.js": "c89ab86e79b7727f9f51c52a06cb4df878901332b29d6785e371f6f44b39a62f",
+    "js/assignments/assignment.js": "5c6a2a6fee62da5111a12fb7a9eab6e1f2322bc227bded4daf0af5d3b8879970",
     "js/authoring/instructorSchema.js": "e53fac3d680fd804ee5341004c86652bceb01c30015bb50c347a6356b6d9e002",
     "js/constants.js": "4610b3640de5b1c28f336d251e3817ddb440b562f5f72d75051c72f6d0388240",
     "js/course/pack.js": "4b48801bf2a575c2a5463d02061d8761622d4605eed5cd66ec153567a429419a",
-    "js/course/review.js": "5da7fa2eeca27a09fdf40e31aaba5bf523845ac6d4cb262ae2e5f236cba2b489",
+    "js/course/review.js": "0939dd364d499da88291898d9ca665ab73aec642c9ff7e199829f7410c0954d5",
     "js/data/activities.js": "e044dc2eb8942dfc9b9c9856bc6e30de828d9bc4d6b18829314bc893711a069c",
     "js/data/activityTeaching.js": "7694fc798f8c4130e5aead5357e69bab04d6a5d386013d009430dba9a1c31008",
     "js/data/exoplanetAnswerKey.js": "d00f17b6b41e8585a21ab7118b24c7ed43e008263693ac48e3e1df57f8233570",
