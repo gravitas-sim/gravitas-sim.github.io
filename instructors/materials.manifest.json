@@ -1,6 +1,6 @@
 {
   "version": "November 2026",
-  "generated": "2026-11-14",
+  "generated": "2026-11-15",
   "documents": 1222,
   "inventory": {
     "documents": 1222,
@@ -24,7 +24,7 @@
     }
   },
   "sourceFiles": 306,
-  "sourceDigest": "a460f1ef08ab5dd67a155844834122ffe5a07549c58147192f36157c5a68336d",
+  "sourceDigest": "fe9e661b5c704cc7aebbd017756e1c41f954496b2fd9fb6411c40affb2eabc91",
   "sources": {
     "js/activities/activities.js": "af9b7e121b9a72c2a5cc18e07331d6ee841934d402b030294d25c442628881ef",
     "js/activities/activityBridge.js": "67a82aff98e0ed935d6b8b0f0f654c6ad4332ee929cb3604e896a7f790a6fdc1",
@@ -34,7 +34,7 @@
     "js/answerKey.js": "99a305cfddd9e069f401887d071c45122979fc92c9ed8738da2e73f3aef69a54",
     "js/answerKeyDocument.js": "b7bb157ea52e9b9c6547dfcdd73fe5905518f71e7afbe198baa72afc70f0fe3e",
     "js/answerParse.js": "420ce48b5513fa3c1d2b8abe1ad35c9a7c281ac3deca4c3cfd2204b38e1d4863",
-    "js/assignments/assignment.js": "2536b82d9ab2714dcecc29b671e6ece694c27a8401f211d8f8e3f9ebcae99d28",
+    "js/assignments/assignment.js": "5c6a2a6fee62da5111a12fb7a9eab6e1f2322bc227bded4daf0af5d3b8879970",
     "js/authoring/instructorSchema.js": "e53fac3d680fd804ee5341004c86652bceb01c30015bb50c347a6356b6d9e002",
     "js/constants.js": "4610b3640de5b1c28f336d251e3817ddb440b562f5f72d75051c72f6d0388240",
     "js/course/pack.js": "4b48801bf2a575c2a5463d02061d8761622d4605eed5cd66ec153567a429419a",
