@@ -316,8 +316,8 @@ function restoreHeld() {
   const live = indexLive();
   const rebuilt = new Map(KINDS.map(k => [k, []]));
   let maxId = 0;
-  // set_state keeps the objects it is given, so each restore parses a copy.
-  for (const s of JSON.parse(held.states)) {
+  // set_state keeps the objects it is given; held is used once, then dropped.
+  for (const s of held.states) {
     const hit = live.get(s.id);
     const kind = hit?.kind ?? s.type;
     const obj = hit?.obj ?? construct(kind, s.pos, s.vel, s.mass);
@@ -341,7 +341,7 @@ function leaveLive() {
     forExperiment: true,
   });
   held = {
-    states: JSON.stringify(payload.b ?? []),
+    states: payload.b ?? [],
     paused: state.paused,
     clock: getSimulationTime(),
   };
