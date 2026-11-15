@@ -13,6 +13,7 @@ import {
   setLocalePreparer,
   settleDeferredMessages,
 } from './index.js';
+import { KEY_LOCALE } from '../names.js';
 import { applyTranslations } from './dom.js';
 
 // The panels' markup helpers (./dom.js), handed on from here, and imported from
@@ -108,7 +109,7 @@ export const intendedLocale = () => {
   let id = targetLocale;
   if (!id) {
     try {
-      id = localStorage.getItem('gravitas_locale');
+      id = localStorage.getItem(KEY_LOCALE);
     } catch {
       /* no storage: the browser's language */
     }
