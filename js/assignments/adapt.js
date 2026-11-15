@@ -2,20 +2,19 @@
 // Adapting an activity, proven against the step graph (Prompt 175)
 // -----------------------------------------------------------------------------
 // Adapting an activity is three choices (step order, an instructor's sentence on
-// a step, a due line), and no adaptation may make a step mean something it did
-// not mean in the lesson. The step graph is what the lesson already declares:
-// requires (a step reads another's answer, so it comes first), reveal (a
-// prediction's verdict is held until the step it names, which comes after),
-// when (a remediation step follows the graded one), setup (a step keeps the
-// world of the nearest step before it that builds one) and scene (a step that
-// stages nothing keeps the scene before it).
-//
-// checkAdaptation() names each broken edge and reports only what the adaptation
-// introduces; the builder will not write a package that fails it. Pure: no DOM,
-// no storage (tests/assignmentAdaptation.test.js runs it on every lesson).
+// a step, a due line), and none may make a step mean something it did not mean
+// in the lesson. The step graph is what the lesson declares: requires, reveal,
+// when, setup and scene. checkAdaptation() names each broken edge it introduces;
+// the builder will not write a package that fails it. Pure: no DOM, no storage
+// (tests/assignmentAdaptation.test.js runs it on every lesson).
 // =============================================================================
 
-import { assignmentIdFor, assignmentVersion, shortHash } from './assignment.js';
+import {
+  assignmentIdFor,
+  assignmentVersion,
+  shortHash,
+  swapRetired,
+} from './assignment.js';
 
 /** The most a student-facing sentence on one step may hold, in characters. */
 export const MAX_NOTE = 600;
@@ -321,7 +320,9 @@ export function repin(
   now = new Date()
 ) {
   const byId = new Map((lesson?.steps || []).map(s => [s.sid, s]));
-  const s = (assignment.s || []).filter(sid => byId.has(sid));
+  const s = swapRetired(lesson, assignment.s || []).filter(sid =>
+    byId.has(sid)
+  );
   const f = s.map(sid => shortHash(fingerprint(byId.get(sid))));
   const rest = { ...assignment };
   delete rest.p;

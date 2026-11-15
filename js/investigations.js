@@ -23,6 +23,7 @@ import {
   bindStepInputs,
   formatFieldNumber,
   keyForAssignment,
+  earlierFor,
   load,
   parseFieldNumber,
   progressFor,
@@ -2725,6 +2726,7 @@ const finishHost = () => ({
     depth,
   }),
   elements: () => els,
+  earlier: earlierFor,
   payloadFromSetup,
   plotData: plotAnywhere,
   stepId,
@@ -2838,7 +2840,6 @@ export function currentPlotData() {
   };
 }
 
-/** Wire up the investigations panel. Safe to call once, from init. */
 /** Lesson id named in the address bar, if there is one. */
 function investigationFromHash() {
   const m = /^#investigation=([\w-]+)(?:\/(\w+))?$/.exec(location.hash);
@@ -2846,10 +2847,8 @@ function investigationFromHash() {
 }
 
 /**
- * Open the lesson the URL names.
- *
- * Called at start-up and on every hash change, so a link handed out in an
- * assignment lands the student on the right lesson rather than on the browser.
+ * Open the lesson the URL names, at start-up and on every hash change, so a
+ * link handed out lands the student on the right lesson.
  */
 function openInvestigationFromHash() {
   const [id, depth] = investigationFromHash();

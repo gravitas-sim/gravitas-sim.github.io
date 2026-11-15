@@ -15,6 +15,7 @@ the release rather than in the tag.
 
 ### Changed
 
+- A lesson step that is revised under a new id no longer silently re-marks or drops what a student saved under the old one (Prompt 306; register row D-R4-306-01; visible and instructional). The old answer stays readable as an earlier-version answer in the lesson panel and the submission results, and an assignment, activity format or course pin that names the retired step offers its successor (the readers of a retired whole investigation wait for the first one). The author rule is in CONTRIBUTING_CONTENT.md; `tests/compat/revisions.test.js` runs reword, revise, insert and remove against the 2.0.0 and 3.0 readers. No step is revised yet.
 - A measuring step no longer shows the expected number in grey inside the empty box (Prompt 299; register row D-R4-299-01; visible and instructional). A measure field's expected value moves from `hint` to a new `want` property in 897 fields of 113 lessons and their Spanish shadows; no page reads `want` except the authoring checks and the instructor key, which prints the same text as before. The lesson panel renders a field's `hint` or a numeric step's `placeholder` only when it holds no numeral, the rule `content/placeholder` now reads the numbers inside a cue ("e.g. 8.0 ± 0.1") and checks core and deeper steps, and the ten error-bar steps read "a value, then ± its uncertainty" (and its Spanish). The instructor bundle needs the owner's rebuild; the keys it prints do not change.
 
 ### Added

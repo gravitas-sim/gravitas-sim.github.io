@@ -143,6 +143,45 @@ describe('npm run author:check', () => {
       await rm(dir, { recursive: true, force: true });
     }
   }, 120_000);
+
+  test("it holds a lesson's retired map: a good one passes, a bad one fails by name", async () => {
+    const dir = await copyOfCli();
+    try {
+      const file = path.join(dir, 'js/data/investigations/tides.js');
+      const original = await readFile(file, 'utf8');
+      const withMap = map =>
+        original.replace(/^(\s*)steps: \[/m, `$1retired: ${map},\n$1steps: [`);
+      const check = async map => {
+        await writeFile(file, withMap(map));
+        try {
+          const { stdout } = await run(
+            'node',
+            ['tools/author-check.mjs', '--lesson=tides'],
+            { cwd: dir, maxBuffer: 32 * 1024 * 1024 }
+          );
+          return { code: 0, out: stdout };
+        } catch (err) {
+          return {
+            code: err.code,
+            out: String(err.stdout || '') + String(err.stderr || ''),
+          };
+        }
+      };
+      expect(withMap('{}')).not.toBe(original);
+      const good = await check(
+        "{ 'old-step': { to: null, release: '3.1', was: { en: 'Old?', es: 'Antes?' } } }"
+      );
+      expect(good.code).toBe(0);
+      const bad = await check(
+        "{ 'old-step': { to: 'nowhere', release: 'soon', was: { en: 'Old?' } } }"
+      );
+      expect(bad.code).not.toBe(0);
+      expect(bad.out).toMatch(/id\/retired/);
+      expect(bad.out).toMatch(/"old-step": `to` must be a step/);
+    } finally {
+      await rm(dir, { recursive: true, force: true });
+    }
+  }, 120_000);
 });
 
 describe('the boundary the CLI depends on', () => {

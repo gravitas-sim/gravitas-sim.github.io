@@ -2,25 +2,11 @@
 // Guided investigations in the 3-D lab: the runner
 // -----------------------------------------------------------------------------
 // Loaded when a reader presses "Guided investigations", or with
-// ?guide=<id>[&path=advanced], so the lab carries none of it at start-up. The
-// investigations are data (js/lab3d/guides/curriculum.js). This draws one
-// step at a time and checks it against the lab, which it drives only
-// through the page's labApi (js/lab3dLab.js): open a system, set a control,
-// read the choices and the numbers the tables show.
-//
-//   read     text
-//   do       something to do in the lab, with a button that does it, and a
-//            check that looks for the result; a record step also keeps the
-//            moment the reader chooses, for later answers
-//   answer   a number to type, checked against what the lab's state gives
-//   choose   an option, checked, or recorded when it is a prediction a
-//            later step answers
-//
-// A reader may move on without passing a step; the progress list says which
-// passed. After a wrong answer the right one can be shown, and the step then
-// says it was shown rather than found. Progress is kept in this browser,
-// per guide and path, and the report is a file: the same answers make the
-// same bytes (reportOf below).
+// ?guide=<id>[&path=advanced]. The investigations are data
+// (js/lab3d/guides/curriculum.js); this draws one step at a time (read, do,
+// answer, choose) and checks it against the lab through the page's labApi
+// (js/lab3dLab.js). Progress is kept in this browser per guide and path, and
+// the report is a file: the same answers make the same bytes (reportOf below).
 // =============================================================================
 
 import {
@@ -84,6 +70,11 @@ export function reportOf(
     }
     return row;
   });
+  // Answers under ids the guide no longer has, each with its `retired` entry.
+  const old = { ...progress.earlier, ...progress.answers };
+  const earlier = Object.keys(old)
+    .filter(id => !guide.steps.some(s => s.id === id))
+    .map(id => ({ step: id, ...old[id], ...guide.retired?.[id] }));
   return {
     format: REPORT_FORMAT,
     formatVersion: REPORT_VERSION,
@@ -93,6 +84,7 @@ export function reportOf(
     locale,
     name,
     steps,
+    ...(earlier.length ? { earlier } : {}),
   };
 }
 
@@ -124,6 +116,10 @@ function el(tag, attrs = {}, ...children) {
     if (c !== null && c !== undefined && c !== false) node.append(c);
   return node;
 }
+
+/** A button, the way every control of the panel is made. */
+const btn = attrs =>
+  el('button', { type: 'button', class: 'ui-button', ...attrs });
 
 /**
  * @param {HTMLElement} root - The page's guide section (#l3-guide)
@@ -160,10 +156,9 @@ export function createGuidePanel(root, lab) {
 
   const key = () => `${STORE}${guide.id}_${path}`;
   const load = () => {
+    let saved = null;
     try {
-      const saved = readJson(key());
-      // A minor version only adds guides (curriculum II), so progress made
-      // under the same major version stands.
+      saved = readJson(key());
       if (
         saved &&
         String(saved.curriculum).split('.')[0] ===
@@ -172,12 +167,19 @@ export function createGuidePanel(root, lab) {
         const records = {};
         for (const [k, r] of Object.entries(saved.records || {}))
           records[k] = revive(r);
-        return { answers: saved.answers || {}, records, at: saved.at || 0 };
+        return {
+          answers: saved.answers || {},
+          records,
+          at: saved.at || 0,
+          earlier: saved.earlier,
+        };
       }
     } catch {
       /* storage unavailable or damaged: start afresh */
     }
-    return { answers: {}, records: {}, at: 0 };
+    // Another major version is not read as answers, and is not dropped either.
+    const earlier = saved && { ...saved.earlier, ...saved.answers };
+    return { answers: {}, records: {}, at: 0, earlier };
   };
   const save = () => {
     try {
@@ -191,6 +193,7 @@ export function createGuidePanel(root, lab) {
           answers: progress.answers,
           records,
           at,
+          earlier: progress.earlier,
         }),
         'progress'
       );
@@ -228,17 +231,13 @@ export function createGuidePanel(root, lab) {
                   advanced: g.minutes.advanced,
                 }),
               }),
-              el('button', {
-                type: 'button',
-                class: 'ui-button',
+              btn({
                 'data-guide': g.id,
                 'data-path': 'intro',
                 text: tr('g3.startIntro'),
               }),
               ' ',
-              el('button', {
-                type: 'button',
-                class: 'ui-button',
+              btn({
                 'data-guide': g.id,
                 'data-path': 'advanced',
                 text: tr('g3.startAdvanced'),
@@ -348,8 +347,7 @@ export function createGuidePanel(root, lab) {
             'data-status': status(q),
             'aria-current': n === at ? 'step' : null,
           },
-          el('button', {
-            type: 'button',
+          btn({
             class: 'ui-link',
             'data-at': String(n),
             text: `${words(guide, q, 'title')} (${tr(`g3.status.${status(q)}`)})`,
@@ -394,31 +392,25 @@ export function createGuidePanel(root, lab) {
       el(
         'p',
         {},
-        el('button', {
-          type: 'button',
-          class: 'ui-button',
+        btn({
           id: 'l3-guide-back',
           disabled: at === 0 ? true : null,
           text: tr('g3.back'),
         }),
         ' ',
         at < steps.length - 1
-          ? el('button', {
-              type: 'button',
+          ? btn({
               class: 'ui-button is-primary',
               id: 'l3-guide-next',
               text: tr('g3.next'),
             })
-          : el('button', {
-              type: 'button',
+          : btn({
               class: 'ui-button is-primary',
               id: 'l3-guide-finish',
               text: tr('g3.finish'),
             }),
         ' ',
-        el('button', {
-          type: 'button',
-          class: 'ui-button',
+        btn({
           id: 'l3-guide-list',
           text: tr('g3.all'),
         })
@@ -454,18 +446,14 @@ export function createGuidePanel(root, lab) {
         'p',
         {},
         s.go
-          ? el('button', {
-              type: 'button',
-              class: 'ui-button',
+          ? btn({
               id: 'l3-guide-do',
               text: tr('g3.do'),
             })
           : null,
         s.record ? ' ' : null,
         s.record
-          ? el('button', {
-              type: 'button',
-              class: 'ui-button',
+          ? btn({
               id: 'l3-guide-keep',
               text: tr('g3.keep'),
             })
@@ -490,16 +478,12 @@ export function createGuidePanel(root, lab) {
           value: a.typed ?? '',
         }),
         ' ',
-        el('button', {
-          type: 'button',
-          class: 'ui-button',
+        btn({
           id: 'l3-guide-check',
           text: tr('g3.check'),
         }),
         ' ',
-        el('button', {
-          type: 'button',
-          class: 'ui-button',
+        btn({
           id: 'l3-guide-reveal',
           hidden: !(a.typed && !a.passed) ? true : null,
           text: tr('g3.reveal'),
@@ -528,9 +512,7 @@ export function createGuidePanel(root, lab) {
             words(guide, s, `opt.${o}`)
           )
         ),
-        el('button', {
-          type: 'button',
-          class: 'ui-button',
+        btn({
           id: 'l3-guide-choose',
           text: tr(s.correct === null ? 'g3.record' : 'g3.check'),
         })
@@ -719,23 +701,18 @@ export function createGuidePanel(root, lab) {
         el(
           'p',
           {},
-          el('button', {
-            type: 'button',
+          btn({
             class: 'ui-button is-primary',
             id: 'l3-guide-save',
             text: tr('g3.save'),
           }),
           ' ',
-          el('button', {
-            type: 'button',
-            class: 'ui-button',
+          btn({
             id: 'l3-guide-back',
             text: tr('g3.back'),
           }),
           ' ',
-          el('button', {
-            type: 'button',
-            class: 'ui-button',
+          btn({
             id: 'l3-guide-list',
             text: tr('g3.all'),
           })

@@ -164,6 +164,8 @@ export const EN_COURSE = {
   'course.review.steps': 'Steps: {then} then, {now} now.',
   'course.review.missingSteps': 'Assigned steps that are gone: {list}.',
   'course.review.changedSteps': 'Assigned steps that were rewritten: {list}.',
+  'course.review.revisedSteps':
+    'Assigned steps that were revised, and the step that replaces each: {list}.',
   'course.review.package': 'Package: {then} then, {now} now.',
   'course.review.mark': 'Reviewed',
   'course.review.remove': 'Remove it, or replace it.',

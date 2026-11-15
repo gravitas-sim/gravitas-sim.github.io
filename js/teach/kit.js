@@ -50,6 +50,8 @@ const $ = id => document.getElementById(id);
 const lang = () =>
   document.documentElement.lang.startsWith('es') ? 'es' : 'en';
 const T = (id, vars) => tr(lang(), id, vars);
+/** An element with these properties. */
+const make = (tag, props) => Object.assign(document.createElement(tag), props);
 const text = (v, loc) => (v && (v[loc] || v.en)) || '';
 
 let source = null;
@@ -193,17 +195,14 @@ async function renderHandout() {
     const h = document.createElement('h3');
     h.textContent = name;
     const ol = document.createElement('ol');
-    for (const s of steps)
-      ol.append(
-        Object.assign(document.createElement('li'), { textContent: s })
-      );
+    for (const s of steps) ol.append(make('li', { textContent: s }));
     const ta = document.createElement('textarea');
     ta.className = 'ui-textarea';
     ta.readOnly = true;
     ta.rows = 4;
     ta.value = paste;
     ta.setAttribute('aria-label', `${name}: ${T('lms.paste')}`);
-    const copy = Object.assign(document.createElement('button'), {
+    const copy = make('button', {
       type: 'button',
       className: 'ui-button',
       textContent: T('lms.copy'),
@@ -384,7 +383,7 @@ async function newTerm() {
         const name =
           text(item?.title, loc) ||
           (item?.lesson ? cardTitle(item.lesson, loc) : r.id);
-        return Object.assign(document.createElement('li'), {
+        return make('li', {
           textContent: W('r.item', {
             name,
             standing: W(`st.${r.standing}`),
@@ -414,7 +413,7 @@ async function newTerm() {
 
 function saveCourse() {
   const p = source.pack;
-  const link = Object.assign(document.createElement('a'), {
+  const link = make('a', {
     href: URL.createObjectURL(
       new Blob([`${JSON.stringify(p, null, 2)}\n`], {
         type: 'application/json',
@@ -431,7 +430,7 @@ function saveActivity() {
   const blob = new Blob([`${JSON.stringify(a, null, 2)}\n`], {
     type: 'application/json',
   });
-  const link = Object.assign(document.createElement('a'), {
+  const link = make('a', {
     href: URL.createObjectURL(blob),
     download: `${a.l}-${a.i}.json`,
   });
@@ -468,7 +467,7 @@ function wire() {
     const blob = new Blob([qrSvg(code, { label: $('kitName').textContent })], {
       type: 'image/svg+xml',
     });
-    const link = Object.assign(document.createElement('a'), {
+    const link = make('a', {
       href: URL.createObjectURL(blob),
       download: 'gravitas-code.svg',
     });
@@ -536,7 +535,7 @@ async function openCartridge() {
         lang()
       ),
     download: (name, bytes, type) => {
-      const a = Object.assign(document.createElement('a'), {
+      const a = make('a', {
         href: URL.createObjectURL(new Blob([bytes], { type })),
         download: name,
       });

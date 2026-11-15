@@ -4,24 +4,14 @@
 // The Studio's third page: a course assembled from what Gravitas already has
 // - lessons, assignments cut from them, scenarios, the Observatory's data and
 // the catalog's, and readings - in units, with objectives, prerequisites,
-// time, optional introductory and advanced paths, and notes for the teacher
-// and the student in English and Spanish side by side. What it makes is a
-// gravitas.course-pack/2 file (js/course/pack.js, COURSE_PACKS.md), and from
+// time, optional paths, and notes in English and Spanish side by side. It makes
+// a gravitas.course-pack/2 file (js/course/pack.js, COURSE_PACKS.md), and from
 // it the course home link, every item's link and embed, the manifest and the
-// syllabus.
-//
-// It checks as it goes (js/course/review.js): the format, then the pack
-// against this build - lessons that are gone or changed since they were
-// pinned, what a lesson assumes that the course does not give first, an
-// assignment's missing setup steps, licenses, translations, objectives no
-// core item serves - and the reviewed upgrade that re-pins what an
+// syllabus. It checks as it goes (js/course/review.js): the format, then the
+// pack against this build, and the reviewed upgrade that re-pins what an
 // instructor has looked at. The preview is the course home itself
-// (/course/?draft=1), reading the draft from this browser.
-//
-// The form helpers are the Investigation Composer's (js/composerPage.js):
-// every control's id is its path in the document, so a complaint lands on
-// the control that edits it. The history, drafts and differences are the
-// Studio's (js/studio/model.js).
+// (/course/?draft=1). Form helpers are the Composer's (js/composerPage.js), the
+// history, drafts and differences the Studio's (js/studio/model.js).
 // =============================================================================
 
 import { parseDocument } from './shareState.js';
@@ -621,9 +611,7 @@ async function repin(path) {
 
 /**
  * A pasted course item for an investigation pack, as /studio/course/packs/
- * makes it: the pack, its version, its link and its pin. The builder reads no
- * more of it than the format has fields for; that page is where the link is
- * opened and judged, which needs the lesson engine this route has no room for.
+ * makes it (pack, version, link, pin); that page opens and judges the link.
  */
 function readPackItem(base, text) {
   let v = null;
@@ -1359,6 +1347,13 @@ function renderReview(r, d) {
           list: x.detail.changedSteps.join(', '),
         })
       );
+    const rv = x.detail?.revisedSteps;
+    if (rv?.length)
+      detail.push(
+        t('course.review.revisedSteps', {
+          list: rv.map(r => `${r.sid} -> ${r.to ?? '-'}`).join(', '),
+        })
+      );
     if (x.detail?.pinnedPackage || x.detail?.currentPackage)
       detail.push(
         t('course.review.package', {
@@ -2088,9 +2083,7 @@ function wire() {
 /**
  * Add what the address names to the course being edited, or to a new one:
  * ?add=<investigation id> a whole investigation, ?activity=<fragment of an
- * activity link> that activity with its code kept, so the link already handed
- * out still opens it. Used from the adoption pages, the Library and the
- * activity builder (INSTRUCTOR_FLOW.md).
+ * activity link> that activity with its code kept (INSTRUCTOR_FLOW.md).
  * @param {boolean} hadDraft - Whether a draft was restored
  * @returns {Promise<?string>} A status message, or null when nothing was asked
  */
