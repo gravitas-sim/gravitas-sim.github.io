@@ -177,7 +177,7 @@ export function activitiesOf(source, locale = 'en') {
  * @param {?{id: string, version: string}} provider - lessonProvider(lesson.id)
  * @param {Date} [now] - For the new id and date
  * @returns {{present: number, changed: number, missing: number, clean: boolean,
- *   revised: Array<object>, bindings: Array<object>, reissued: ?object}}
+ *   revised: string (" (a -> b)", or empty), bindings: Array<object>, reissued: ?object}}
  */
 export function reuseCheck(
   activity,
@@ -215,7 +215,9 @@ export function reuseCheck(
     clean: r.changed === 0 && r.missing === 0,
     revised: r.bindings
       .filter(b => b.retired)
-      .map(b => ({ sid: b.sid, ...b.retired })),
+      .map(b => `${b.sid} -> ${b.retired.to ?? '-'}`)
+      .join(', ')
+      .replace(/.+/, ' ($&)'),
     bindings: r.bindings,
     reissued,
   };

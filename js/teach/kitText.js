@@ -90,8 +90,7 @@ export const WORDS = {
     'reuse.clean':
       'All {n} steps are as they were. The link is good to use again.',
     'reuse.dirty':
-      '{present} steps unchanged, {changed} rewritten, {missing} removed.',
-    'reuse.revised': 'Revised steps and their successors: {steps}.',
+      '{present} steps unchanged, {changed} rewritten, {missing} removed{revised}.',
     'reuse.reissued':
       'A new link has been made with the steps as they are now and a new code, so answers saved under the old one do not attach to rewritten steps.',
     'reuse.course':
@@ -213,8 +212,7 @@ export const WORDS = {
     'reuse.clean':
       'Los {n} pasos están como estaban. El enlace sirve de nuevo.',
     'reuse.dirty':
-      '{present} pasos sin cambios, {changed} reescritos, {missing} quitados.',
-    'reuse.revised': 'Pasos revisados y su sucesor: {steps}.',
+      '{present} pasos sin cambios, {changed} reescritos, {missing} quitados{revised}.',
     'reuse.reissued':
       'Se hizo un enlace nuevo con los pasos como están ahora y un código nuevo, para que las respuestas guardadas con el anterior no se asocien a pasos reescritos.',
     'reuse.course':

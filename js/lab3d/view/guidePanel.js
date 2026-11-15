@@ -70,23 +70,11 @@ export function reportOf(
     }
     return row;
   });
-  // Answers to steps the guide no longer has, from an earlier version, with
-  // where each went (the guide's `retired` map). Only when there are some.
-  const earlier = Object.entries(progress.earlier?.answers ?? {}).map(
-    ([id, a]) => {
-      const r = guide.retired?.[id];
-      return {
-        step: id,
-        typed: a.typed ?? null,
-        choice: a.choice ?? null,
-        passed: Boolean(a.passed),
-        shown: Boolean(a.shown),
-        release: r?.release ?? null,
-        replacedBy: r?.to ?? null,
-        was: r?.was?.[locale] ?? r?.was?.en ?? null,
-      };
-    }
-  );
+  // Answers under ids the guide no longer has, each with its `retired` entry.
+  const old = { ...progress.earlier, ...progress.answers };
+  const earlier = Object.keys(old)
+    .filter(id => !guide.steps.some(s => s.id === id))
+    .map(id => ({ step: id, ...old[id], ...guide.retired?.[id] }));
   return {
     format: REPORT_FORMAT,
     formatVersion: REPORT_VERSION,
@@ -129,6 +117,10 @@ function el(tag, attrs = {}, ...children) {
   return node;
 }
 
+/** A button, the way every control of the panel is made. */
+const btn = attrs =>
+  el('button', { type: 'button', class: 'ui-button', ...attrs });
+
 /**
  * @param {HTMLElement} root - The page's guide section (#l3-guide)
  * @param {object} lab - The page's labApi
@@ -164,34 +156,30 @@ export function createGuidePanel(root, lab) {
 
   const key = () => `${STORE}${guide.id}_${path}`;
   const load = () => {
+    let saved = null;
     try {
-      const saved = readJson(key());
-      if (saved) {
-        // Another major version: nothing saved under it is read as an answer
-        // and nothing is dropped; ids the guide lacks stay, as earlier answers.
-        const same =
-          String(saved.curriculum).split('.')[0] ===
-          CURRICULUM_VERSION.split('.')[0];
-        const live = new Set(guide.steps.map(s => s.id));
-        const answers = {};
+      saved = readJson(key());
+      if (
+        saved &&
+        String(saved.curriculum).split('.')[0] ===
+          CURRICULUM_VERSION.split('.')[0]
+      ) {
         const records = {};
-        const earlier = {
-          answers: { ...saved.earlier?.answers },
-          records: { ...saved.earlier?.records },
+        for (const [k, r] of Object.entries(saved.records || {}))
+          records[k] = revive(r);
+        return {
+          answers: saved.answers || {},
+          records,
+          at: saved.at || 0,
+          earlier: saved.earlier,
         };
-        for (const [name, from, to] of [
-          ['answers', saved.answers, answers],
-          ['records', saved.records, records],
-        ])
-          for (const [k, v] of Object.entries(from || {}))
-            (same && live.has(k) ? to : earlier[name])[k] = v;
-        for (const [k, r] of Object.entries(records)) records[k] = revive(r);
-        return { answers, records, at: same ? saved.at || 0 : 0, earlier };
       }
     } catch {
       /* storage unavailable or damaged: start afresh */
     }
-    return { answers: {}, records: {}, at: 0, earlier: {} };
+    // Another major version is not read as answers, and is not dropped either.
+    const earlier = saved && { ...saved.earlier, ...saved.answers };
+    return { answers: {}, records: {}, at: 0, earlier };
   };
   const save = () => {
     try {
@@ -243,17 +231,13 @@ export function createGuidePanel(root, lab) {
                   advanced: g.minutes.advanced,
                 }),
               }),
-              el('button', {
-                type: 'button',
-                class: 'ui-button',
+              btn({
                 'data-guide': g.id,
                 'data-path': 'intro',
                 text: tr('g3.startIntro'),
               }),
               ' ',
-              el('button', {
-                type: 'button',
-                class: 'ui-button',
+              btn({
                 'data-guide': g.id,
                 'data-path': 'advanced',
                 text: tr('g3.startAdvanced'),
@@ -363,8 +347,7 @@ export function createGuidePanel(root, lab) {
             'data-status': status(q),
             'aria-current': n === at ? 'step' : null,
           },
-          el('button', {
-            type: 'button',
+          btn({
             class: 'ui-link',
             'data-at': String(n),
             text: `${words(guide, q, 'title')} (${tr(`g3.status.${status(q)}`)})`,
@@ -409,31 +392,25 @@ export function createGuidePanel(root, lab) {
       el(
         'p',
         {},
-        el('button', {
-          type: 'button',
-          class: 'ui-button',
+        btn({
           id: 'l3-guide-back',
           disabled: at === 0 ? true : null,
           text: tr('g3.back'),
         }),
         ' ',
         at < steps.length - 1
-          ? el('button', {
-              type: 'button',
+          ? btn({
               class: 'ui-button is-primary',
               id: 'l3-guide-next',
               text: tr('g3.next'),
             })
-          : el('button', {
-              type: 'button',
+          : btn({
               class: 'ui-button is-primary',
               id: 'l3-guide-finish',
               text: tr('g3.finish'),
             }),
         ' ',
-        el('button', {
-          type: 'button',
-          class: 'ui-button',
+        btn({
           id: 'l3-guide-list',
           text: tr('g3.all'),
         })
@@ -469,18 +446,14 @@ export function createGuidePanel(root, lab) {
         'p',
         {},
         s.go
-          ? el('button', {
-              type: 'button',
-              class: 'ui-button',
+          ? btn({
               id: 'l3-guide-do',
               text: tr('g3.do'),
             })
           : null,
         s.record ? ' ' : null,
         s.record
-          ? el('button', {
-              type: 'button',
-              class: 'ui-button',
+          ? btn({
               id: 'l3-guide-keep',
               text: tr('g3.keep'),
             })
@@ -505,16 +478,12 @@ export function createGuidePanel(root, lab) {
           value: a.typed ?? '',
         }),
         ' ',
-        el('button', {
-          type: 'button',
-          class: 'ui-button',
+        btn({
           id: 'l3-guide-check',
           text: tr('g3.check'),
         }),
         ' ',
-        el('button', {
-          type: 'button',
-          class: 'ui-button',
+        btn({
           id: 'l3-guide-reveal',
           hidden: !(a.typed && !a.passed) ? true : null,
           text: tr('g3.reveal'),
@@ -543,9 +512,7 @@ export function createGuidePanel(root, lab) {
             words(guide, s, `opt.${o}`)
           )
         ),
-        el('button', {
-          type: 'button',
-          class: 'ui-button',
+        btn({
           id: 'l3-guide-choose',
           text: tr(s.correct === null ? 'g3.record' : 'g3.check'),
         })
@@ -734,23 +701,18 @@ export function createGuidePanel(root, lab) {
         el(
           'p',
           {},
-          el('button', {
-            type: 'button',
+          btn({
             class: 'ui-button is-primary',
             id: 'l3-guide-save',
             text: tr('g3.save'),
           }),
           ' ',
-          el('button', {
-            type: 'button',
-            class: 'ui-button',
+          btn({
             id: 'l3-guide-back',
             text: tr('g3.back'),
           }),
           ' ',
-          el('button', {
-            type: 'button',
-            class: 'ui-button',
+          btn({
             id: 'l3-guide-list',
             text: tr('g3.all'),
           })

@@ -48,8 +48,6 @@ import { investigationMeta } from '../data/investigations/registry.js';
 import { assignmentStorageKey, shortHash } from '../assignments/assignment.js';
 import {
   classifyStorageError,
-  earlierAnswers,
-  earlierLine,
   readProgress,
   writeProgress,
 } from './progressSchema.js';
@@ -410,10 +408,8 @@ export function stepMarkup(step, c) {
 // --- Ellipse explorer ---------------------------------------------------------
 
 /**
- * Draw an ellipse with its anatomy labeled, at a chosen eccentricity.
- *
- * "The Sun is at a focus" means nothing until the focus is watched sliding
- * out of the center as e grows; the slider is the explanation.
+ * Draw an ellipse with its anatomy labeled, at a chosen eccentricity (the
+ * slider is how "the Sun is at a focus" becomes visible).
  */
 export function drawEllipse(canvas, e) {
   if (!canvas) return;
@@ -570,8 +566,7 @@ const tick = v => tickLabel(v);
 /**
  * Least-squares fit through the origin.
  *
- * Forced through zero: the relation has no constant term, and an intercept
- * would let a bad data set look straight by sliding the line sideways.
+ * Forced through zero: an intercept would let bad data look straight.
  *
  * @param {Array} pts - [{x, y}]
  * @returns {number|null} Slope, or null when it is not determined
@@ -606,12 +601,6 @@ export function logSlope(pts) {
   return den === 0 ? null : num / den;
 }
 
-/**
- * Draw the step's scatter plot.
- *
- * A power law is hard to judge by eye as a curve and trivial as a straight
- * line; the log toggle is that move.
- */
 /**
  * The plot's points, as a table.
  * @param {Object} spec - The step's plot specification
@@ -837,9 +826,8 @@ export function drawPlot(step, vals, { canvas, els, transformed, log }) {
 /**
  * Whether a written answer is a written answer.
  *
- * Deliberately weak, and not marking: something short and wrong has answered.
- * It refuses the null response (an empty box, a space, a full stop, "...")
- * so no empty field reaches a report a teacher will read.
+ * Deliberately weak, and not marking: it refuses only the null response
+ * (an empty box, a space, a full stop, "...").
  *
  * @param {string} value - What the reader typed
  * @returns {boolean} True when there is something there
@@ -1189,8 +1177,8 @@ export const formatFieldNumber = (value, decimals, locale) =>
     : '';
 
 // --- Persistence: the saved record and the save status (Prompt 139 part C) ----
-// The engine's state is read through the host it binds once; this module owns
-// the status of the last write and this tab's copy of every lesson's progress.
+// The engine's state comes through the host it binds once; this module owns
+// the last write's status and this tab's copy of the progress.
 
 /**
  * What persistence needs of the engine: state() is {active, responses,
@@ -1250,11 +1238,7 @@ export function keyForAssignment(a) {
   return key;
 }
 
-/**
- * Whether the last write reached the disk, and what went wrong if not:
- * 'saved' | 'unavailable' | 'full' | 'authoring' | 'idle'. A student in a
- * private window, or on a full disk, must not find out when they close the tab.
- */
+/** Whether the last write reached the disk: 'saved' | 'unavailable' | 'full' | 'authoring' | 'idle'. */
 let saveState = { status: 'idle', at: null };
 
 function setSaveState(status) {
@@ -1326,11 +1310,7 @@ export function save() {
  * there to be looked at, and a screen reader being told "saved" forty times
  * while typing an answer is worse than silence.
  */
-/**
- * Say what reading the saved progress turned up, once, on opening: a migration
- * by position, answers kept for steps the lesson no longer has (listed, not
- * marked), and a payload from a newer build, which was not read.
- */
+/** Say what reading the saved progress turned up, once, on opening. */
 export function renderProgressNotice() {
   const el = host.els()?.progressNotice;
   if (!el) return;
@@ -1349,24 +1329,16 @@ export function renderProgressNotice() {
   el.textContent = lines.join(' ');
   const { active } = host.state();
   const rows = earlierAnswers(active, earlierKept.get(active?.id)?.responses);
-  if (rows.length)
-    el.appendChild(document.createElement('ul')).append(
-      ...rows.map(e =>
-        Object.assign(document.createElement('li'), {
-          textContent: earlierLine(e, getLocale()),
-        })
-      )
+  const ul = rows.length && el.appendChild(document.createElement('ul'));
+  for (const e of rows)
+    ul.appendChild(document.createElement('li')).textContent = earlierLine(
+      e,
+      getLocale()
     );
   el.hidden = lines.length === 0 && rows.length === 0;
 }
 
-/**
- * Show whether the work is safe, without shouting about it.
- *
- * A polite live region, not a toast: a toast for a storage failure would fire
- * on every keystroke, and the one thing a reader needs here is a message that
- * *stays* until the situation changes. Successes announce nothing.
- */
+/** Show whether the work is safe: a polite live region, not a toast. */
 export function renderSaveStatus() {
   const el = host.els()?.saveStatus;
   if (!el) return;
@@ -1401,18 +1373,46 @@ export function renderSaveStatus() {
   );
 }
 
-/**
- * This tab's copy of every lesson's progress, whether or not the disk took it,
- * written on every save so never the older of the two. It dies with the tab;
- * authoring previews never reach it.
- *
- * @type {Map<string, object>}
- */
+/** This tab's copy of every lesson's progress, written on every save. */
 export const sessionProgress = new Map();
 
 /** Per lesson: answers to steps it no longer has, written back on save. */
 const earlierKept = new Map();
 export const earlierFor = id => earlierKept.get(id);
+
+export const wasIn = (was, locale = 'en') =>
+  (typeof was === 'string' ? was : was?.[locale] || was?.en) || '';
+
+const str = v =>
+  v == null ? '' : typeof v === 'object' ? JSON.stringify(v) : `${v}`.trim();
+
+// Answers under step ids the lesson lacks: [{id, text, r}], r its `retired` entry.
+export function earlierAnswers(lesson, table) {
+  const live = new Set((lesson?.steps || []).map(s => s?.sid));
+  const by = new Map();
+  for (const [k, v] of Object.entries(table || {})) {
+    const [sid, ...sub] = k.slice(`${lesson?.id}:`.length).split(':');
+    if (k.startsWith(`${lesson?.id}:`) && !live.has(sid))
+      by.set(sid, [...(by.get(sid) || []), [sub.join(':'), v]]);
+  }
+  return [...by].flatMap(([id, kv]) => {
+    const text =
+      str(kv.find(([k]) => !k)?.[1]) ||
+      kv
+        .filter(
+          ([k, v]) =>
+            k && !/^(shown|locale|tool:|help|hint)|:locale$/.test(k) && str(v)
+        )
+        .map(([k, v]) => `${k}=${str(v)}`)
+        .join('; ');
+    return text ? [{ id, text, r: lesson.retired?.[id] }] : [];
+  });
+}
+
+export const earlierLine = ({ text, r }, locale) => {
+  const was = wasIn(r?.was, locale);
+  return `${was ? `"${was}": ` : ''}${text}${r ? ` (${r.release})` : ''}`;
+};
 
 /** Where a v1 payload is kept after it has been migrated, in case it was wrong. */
 const legacyKey = id => `${STORAGE_PREFIX}${id}:v1`;

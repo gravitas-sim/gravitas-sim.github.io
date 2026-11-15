@@ -18,7 +18,7 @@
 // minted by tools/add-step-ids.mjs, enforced by author:check, and listed in
 // STRUCTURAL so a translation cannot supply one. It survives reordering,
 // rewording and translation. A step whose task changes gets a new sid and the
-// old one is retired (earlierAnswers below).
+// old one is retired (earlierAnswers, in stepView.js).
 //
 // This module owns the stored shape and the migration into it. It is pure and
 // DOM-free: a migration bug is a student's work quietly attached to the wrong
@@ -225,24 +225,18 @@ export function readProgress(data, lesson) {
   out.schema = schema;
 
   const prefix = `${lesson?.id}:`;
-  /** Keys under a step the lesson no longer has are set aside in `earlier`, never read as answers. */
+  /** Keys of another lesson are left out; a step the lesson lacks goes to `earlier`. */
   const keep = (source, into, kind) => {
     let setAside = 0;
     for (const [key, value] of Object.entries(source || {})) {
-      if (!key.startsWith(prefix)) {
-        setAside++; // not this lesson's: left out, and counted in the notice
-        continue;
+      const sid =
+        key.startsWith(prefix) && key.slice(prefix.length).split(':')[0];
+      if (known.has(sid)) into[key] = value;
+      else {
+        setAside++;
+        if (sid !== false)
+          (out.earlier ??= { responses: {}, attempts: {} })[kind][key] = value;
       }
-      const rest = key.slice(prefix.length);
-      const cut = rest.indexOf(':');
-      const sid = cut === -1 ? rest : rest.slice(0, cut);
-      if (known.has(sid)) {
-        into[key] = value;
-        continue;
-      }
-      out.earlier ??= { responses: {}, attempts: {} };
-      out.earlier[kind][key] = value;
-      setAside++;
     }
     return setAside;
   };
@@ -292,7 +286,7 @@ export function writeProgress({
   depth,
   deepest,
   spent,
-  earlier = null,
+  earlier,
 }) {
   return {
     schema: PROGRESS_SCHEMA,
@@ -356,36 +350,3 @@ export function setStudentName(name) {
     /* ignore */
   }
 }
-
-export const wasIn = (was, locale = 'en') =>
-  (typeof was === 'string' ? was : was?.[locale] || was?.en) || '';
-
-const str = v =>
-  v == null ? '' : typeof v === 'object' ? JSON.stringify(v) : `${v}`.trim();
-const NOT_AN_ANSWER = /^(shown|locale|tool:|help|hint)|:locale$/;
-
-// Answers under step ids the lesson lacks: [{id, text, r}], r its `retired` entry.
-export function earlierAnswers(lesson, table) {
-  const live = new Set((lesson?.steps || []).map(s => s?.sid));
-  const by = new Map();
-  for (const [k, v] of Object.entries(table || {})) {
-    if (!k.startsWith(`${lesson?.id}:`)) continue;
-    const [sid, ...sub] = k.slice(lesson.id.length + 1).split(':');
-    if (!live.has(sid))
-      by.set(sid, [...(by.get(sid) || []), [sub.join(':'), v]]);
-  }
-  return [...by].flatMap(([id, kv]) => {
-    const text =
-      str(kv.find(([k]) => !k)?.[1]) ||
-      kv
-        .filter(([k, v]) => k && !NOT_AN_ANSWER.test(k) && str(v))
-        .map(([k, v]) => `${k}=${str(v)}`)
-        .join('; ');
-    return text ? [{ id, text, r: lesson.retired?.[id] }] : [];
-  });
-}
-
-export const earlierLine = ({ text, r }, locale) => {
-  const was = wasIn(r?.was, locale);
-  return `${was ? `"${was}": ` : ''}${text}${r ? ` (${r.release})` : ''}`;
-};

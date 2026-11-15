@@ -418,7 +418,7 @@ export function stepBindings(assignment, lesson, fingerprint) {
   const bindings = (assignment.s || []).map((sid, i) => {
     const step = byId.get(sid);
     if (!step) {
-      // The lesson's own record of what replaced the id (progressSchema.js earlierAnswers).
+      // The lesson's own record of what replaced the id (stepView.js earlierAnswers).
       const retired = lesson?.retired?.[sid] ?? null;
       return { sid, status: BINDING.MISSING, step: null, index: i, retired };
     }

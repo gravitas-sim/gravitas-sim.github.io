@@ -1,10 +1,9 @@
 import { describe, expect, test } from '@jest/globals';
 import {
-  earlierAnswers,
   readProgress,
-  wasIn,
   writeProgress,
 } from '../js/investigations/progressSchema.js';
+import { earlierAnswers, wasIn } from '../js/investigations/stepView.js';
 import { EDITS, editedLesson, lesson } from './compat/kinds/_lesson.mjs';
 
 // The task-change contract: a shipped step is reworded in place, or revised
@@ -210,7 +209,7 @@ describe('the other readers', () => {
     expect(up.refused).toEqual([]);
   });
 
-  test('a 3-D guide report lists a retired step answer, marked with its release and successor', async () => {
+  test('a 3-D guide report lists a retired step answer with its retirement entry', async () => {
     const { reportOf } = await import('../js/lab3d/view/guidePanel.js');
     const guide = {
       id: 'g',
@@ -222,19 +221,17 @@ describe('the other readers', () => {
     const progress = {
       answers: {},
       records: {},
-      earlier: { answers: { s1: { typed: '4', passed: true } } },
+      earlier: { s1: { typed: '4', passed: true } },
     };
     const rep = reportOf(guide, 'intro', progress, { locale: 'es' });
     expect(rep.earlier).toEqual([
       {
         step: 's1',
         typed: '4',
-        choice: null,
         passed: true,
-        shown: false,
+        to: 's2',
         release: '3.1',
-        replacedBy: 's2',
-        was: 'Viejo',
+        was: { en: 'Old', es: 'Viejo' },
       },
     ]);
     expect(
