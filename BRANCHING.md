@@ -41,8 +41,8 @@ deploy:
 
 A push to any other branch satisfies the first term and fails the second. A pull
 request fails the first. A manual `workflow_dispatch` fails the first. There is
-no path through it for any ref but `main`, and `on.push.branches` lists `main`
-alone. GitHub resolves a `push` event against the workflow file on the pushed
+no path through it for any ref but `main`. `on.push.branches` lists `main` and
+the integration trains (`v3`, `v4`), which get CI on each merge and nothing else. GitHub resolves a `push` event against the workflow file on the pushed
 ref, so `main`'s copy of `ci.yml` governs `main`. The tags and both DOIs are
 immutable: nothing on a branch can disturb what has been archived.
 
