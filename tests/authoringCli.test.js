@@ -91,6 +91,9 @@ describe('npm run author:check', () => {
       'js',
       'tools/author-check.mjs',
       'tools/authoring',
+      'tools/lesson-standard.mjs',
+      'tools/lesson-standard-ratchet.json',
+      'docs/lesson-acceptance.json',
       'tools/lesson-text.mjs',
       'lesson-text',
     ]) {
