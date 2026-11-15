@@ -201,7 +201,10 @@ function childEnv(repo, out, physicsReport) {
   env.GRAVITAS_COUNT_TRACK = '1';
   env.GRAVITAS_COUNT_REPO = repo;
   env.GRAVITAS_COUNT_OUT = out;
+  // Never inherit a report path that was meant for some other working
+  // directory (CI sets a relative one).
   if (physicsReport) env.GRAVITAS_PHYSICS_REPORT = physicsReport;
+  else delete env.GRAVITAS_PHYSICS_REPORT;
   return env;
 }
 

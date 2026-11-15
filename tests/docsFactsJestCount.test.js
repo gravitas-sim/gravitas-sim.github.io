@@ -40,13 +40,21 @@ import {
 } from 'node:fs';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
-import { createRequire } from 'node:module';
+import nodeModule, { createRequire } from 'node:module';
 
 import { countJestTests, environmentKey } from '../tools/jest-count-cache.mjs';
 import { jestModeFrom } from '../tools/docs-facts.mjs';
 
 const require = createRequire(import.meta.url);
 const JEST = require.resolve('jest/bin/jest');
+
+// A node child's ES module imports are seen through module.registerHooks
+// (Node 22.15 and later). Without it, which is Node 20, the tracker marks any
+// suite that runs a node child as uncacheable rather than guess, so the two
+// suites that run one are loaded again every time. Both behaviors are
+// correct; the expectations below say which one this Node has.
+const follows = typeof nodeModule.registerHooks === 'function';
+const reusedWhen = (withHooks, without) => (follows ? withHooks : without);
 
 let repo;
 let cacheFile;
@@ -71,6 +79,10 @@ const realRun = () => {
   const out = path.join(repo, 'real.json');
   const env = { ...process.env, NODE_OPTIONS: '--experimental-vm-modules' };
   delete env.JEST_WORKER_ID;
+  // CI points this at a path relative to the repository's own working
+  // directory, which does not exist in the fixture; the fixture's physics
+  // stand-in would fail to write it and lose its tests from the real run.
+  delete env.GRAVITAS_PHYSICS_REPORT;
   try {
     execFileSync(
       process.execPath,
@@ -179,9 +191,18 @@ describe('the count and the cache', () => {
     rmSync(physics());
     const warm = count();
     expect(warm.tests).toBe(14);
-    expect(warm.reused).toBe(4);
-    expect(warm.counted).toBe(1);
-    expect(warm.uncacheable).toEqual(['tests/d.test.js']);
+    expect(warm.reused).toBe(reusedWhen(4, 2));
+    expect(warm.counted).toBe(reusedWhen(1, 3));
+    expect(warm.uncacheable).toEqual(
+      reusedWhen(
+        ['tests/d.test.js'],
+        [
+          'tests/c.test.js',
+          'tests/d.test.js',
+          'tests/physicsValidation.test.js',
+        ]
+      )
+    );
     // the suite that produced the physics report was served, and so was the report
     expect(JSON.parse(readFileSync(physics(), 'utf8')).checks).toHaveLength(2);
   });
@@ -200,8 +221,8 @@ describe('the count and the cache', () => {
     put('lib/a.js', 'export const n = 4;\n');
     const after = count();
     expect(after.tests).toBe(15);
-    expect(after.reused).toBe(3);
-    expect(after.counted).toBe(2);
+    expect(after.reused).toBe(reusedWhen(3, 1));
+    expect(after.counted).toBe(reusedWhen(2, 4));
     expect(after.tests).toBe(realRun().tests);
   });
 
@@ -209,7 +230,7 @@ describe('the count and the cache', () => {
     put('lib/val.mjs', 'export const v = 3;\n');
     const after = count();
     expect(after.tests).toBe(16);
-    expect(after.reused).toBe(3);
+    expect(after.reused).toBe(reusedWhen(3, 2));
     expect(after.tests).toBe(realRun().tests);
   });
 
@@ -217,14 +238,14 @@ describe('the count and the cache', () => {
     put('data/three.txt', '3\n');
     const after = count();
     expect(after.tests).toBe(18);
-    expect(after.reused).toBe(3);
+    expect(after.reused).toBe(reusedWhen(3, 1));
     expect(after.tests).toBe(realRun().tests);
   });
 
   test('a file nobody listed does not', () => {
     put('lib/unlisted.txt', 'x\n');
     const after = count();
-    expect(after.reused).toBe(4);
+    expect(after.reused).toBe(reusedWhen(4, 2));
     expect(after.tests).toBe(18);
   });
 
@@ -232,7 +253,7 @@ describe('the count and the cache', () => {
     put('lib/checks.mjs', 'export const checks = [1, 2, 3];\n');
     const after = count();
     expect(after.tests).toBe(19);
-    expect(after.reused).toBe(3);
+    expect(after.reused).toBe(reusedWhen(3, 2));
     expect(JSON.parse(readFileSync(physics(), 'utf8')).checks).toHaveLength(3);
     // and the new report is what a later, fully cached run serves
     rmSync(physics());
@@ -247,7 +268,7 @@ describe('the count and the cache', () => {
     );
     const after = count();
     expect(after.tests).toBe(19 - 6 + 1);
-    expect(after.reused).toBe(4 - 1);
+    expect(after.reused).toBe(reusedWhen(3, 1));
   });
 
   test('a changed Jest config, lock file or environment discards everything', () => {
