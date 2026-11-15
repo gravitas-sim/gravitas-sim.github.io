@@ -1271,7 +1271,7 @@ export function save() {
     spent: s.spent,
     earlier: earlierKept.get(active.id),
   });
-  if (Object.keys(typed).length) payload.drafts = { ...typed };
+  if (Object.keys(typed).length) payload.drafts = typed;
 
   // This tab's copy, always, and before the disk is asked. It is what makes
   // closing and reopening the lesson safe when the write below fails.

@@ -227,7 +227,8 @@ test.describe('Restart asks first', () => {
   }) => {
     await openAt(page, app, LESSON, NUMERIC, answers);
     await ask(page);
-    await expect(dialog(page)).toContainText('Answers recorded here: 2');
+    await expect(page.locator('#investigationRestartN')).toHaveText('2');
+    await expect(dialog(page).locator('.gs-en').first()).toBeVisible();
     await expect(
       page.locator('#investigationRestart [value=cancel]')
     ).toBeFocused();
@@ -257,7 +258,7 @@ test.describe('Restart asks first', () => {
     expect((await download).suggestedFilename()).toMatch(/\.json$/);
     await expect(dialog(page)).toBeVisible();
 
-    await page.locator('#investigationRestart [value=go]').click();
+    await page.locator('#investigationRestartGo').click();
     await expect(dialog(page)).toBeHidden();
     await expect(page.locator('#investigationProgressText')).toContainText(
       /^1 /
@@ -271,13 +272,11 @@ test.describe('Restart asks first', () => {
   }) => {
     await openAt(page, app, LESSON, NUMERIC, answers, 'es');
     await ask(page);
-    await expect(dialog(page)).toContainText('Respuestas registradas aquí: 2');
-    await expect(
-      page.locator('#investigationRestart [value=go] .gs-es')
-    ).toBeVisible();
-    await expect(
-      page.locator('#investigationRestart [value=go] .gs-en')
-    ).toBeHidden();
+    await expect(page.locator('#investigationRestartN')).toHaveText('2');
+    await expect(dialog(page).locator('.gs-es').first()).toBeVisible();
+    await expect(dialog(page).locator('.gs-en').first()).toBeHidden();
+    await expect(page.locator('#investigationRestartGo .gs-es')).toBeVisible();
+    await expect(page.locator('#investigationRestartGo .gs-en')).toBeHidden();
     const results = await new AxeBuilder({ page })
       .include('#investigationRestart')
       .analyze();

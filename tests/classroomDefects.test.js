@@ -1,11 +1,9 @@
 // =============================================================================
-// Classroom defects: a typed number that is kept, restart's count of answers
+// Classroom defects: a typed number that is kept
 // -----------------------------------------------------------------------------
 // A half-typed number is kept as a draft per step. It must come back when the
 // step is shown again, and it must never be an answer: never in `responses`,
 // never an attempt, never in a backup or the token that carry `responses`.
-// Restart asks first, and what it says about the answers it will erase is a
-// count of answers, not of every key under a step.
 // =============================================================================
 
 import { afterEach, beforeEach, describe, expect, test } from '@jest/globals';
@@ -19,7 +17,6 @@ import {
   stepMarkup,
 } from '../js/investigations/stepView.js';
 import { readProgress } from '../js/investigations/progressSchema.js';
-import { answerCount } from '../js/investigations/finish.js';
 import { BOUNDARY } from './compat/boundary.mjs';
 
 const lesson = {
@@ -139,7 +136,13 @@ describe('a typed number is kept without being an answer', () => {
   test('a draft shows no verdict, and a saved record without one is as it was', () => {
     type(show(), '8');
     expect(body.querySelector('.inv-feedback')).toBeNull();
+    // A box the student emptied stays empty on return.
     type(body.querySelector('[data-numeric]'), '');
+    expect(show().value).toBe('');
+  });
+
+  test('a record saved with nothing typed carries no drafts field', () => {
+    save();
     expect('drafts' in stored()).toBe(false);
   });
 
@@ -174,33 +177,22 @@ describe('a typed number is kept without being an answer', () => {
   });
 });
 
-describe('what Restart says it will erase', () => {
-  test('an answer is a value under a step or in a measure field', () => {
+describe('the reset button names what it did, in both languages', () => {
+  test('four messages each, answers kept in every one', async () => {
+    const { readFileSync } = await import('node:fs');
+    const html = readFileSync('js/fragments/lesson.html', 'utf8');
+    const said = /data-said="([^"]*)"/.exec(html)[1].split('|');
+    expect(said).toHaveLength(8);
+    expect(said.slice(0, 4).every(m => /Your answers are kept\./.test(m))).toBe(
+      true
+    );
     expect(
-      answerCount({
-        'tides:guess': '8',
-        'tides:measure:d': '3',
-        'tides:measure:p': '4',
-      })
-    ).toBe(3);
-  });
-
-  test('a slider position, a flag, the locale and a first try are not answers', () => {
-    expect(
-      answerCount({
-        'tides:guess': '8',
-        'tides:guess:locale': 'en',
-        'tides:guess:first': '9',
-        'tides:measure:tool:speed': '2',
-        'tides:intro:shown': true,
-        'tides:measure:help': 2,
-        'tides:measure:d': '',
-      })
-    ).toBe(1);
-    expect(answerCount({})).toBe(0);
-  });
-
-  test('a choice recorded as the first option counts', () => {
-    expect(answerCount({ 'tides:guess': 0 })).toBe(1);
+      said.slice(4).every(m => /Tus respuestas se conservan\./.test(m))
+    ).toBe(true);
+    // none, instrument, scene, both
+    expect(said[0]).toMatch(/no scene or instrument/);
+    expect(said[1]).toMatch(/^Instrument/);
+    expect(said[2]).toMatch(/^Scene back/);
+    expect(said[3]).toMatch(/^Scene and instrument/);
   });
 });

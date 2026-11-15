@@ -24,7 +24,6 @@ import { buildLabReport, downloadPdf, reportMessages } from '../labReport.js';
  *   {active, stepIndex, responses, attempts, visited, startedAt, assignment,
  *   assignmentBinding, depth}
  * @property {() => Object} elements - The engine's elements
- * @property {() => number} answered - Steps that hold an answer
  * @property {(id: string) => (Object|undefined)} earlier - Kept earlier answers
  * @property {(setup: Object) => Object} payloadFromSetup - A step's setup as a
  *   shared-link payload
@@ -44,25 +43,6 @@ import { buildLabReport, downloadPdf, reportMessages } from '../labReport.js';
  *   encodePayload, shareUrl, toast, announce, parseDocument
  */
 
-/** What is on record now, as a backup file's payload under a student's name. */
-const backupOf = (host, backup, studentName) => {
-  const { active, stepIndex, responses, attempts, visited, startedAt } =
-    host.state();
-  return backup.buildBackup({
-    lesson: active,
-    responses: { ...host.earlier(active.id)?.responses, ...responses },
-    attempts,
-    visited,
-    stepSid: active.steps[stepIndex]?.sid ?? null,
-    startedAt,
-    studentName,
-  });
-};
-
-/** The evidence the report prints, which is also what rides in the token. */
-const evidenceLedger = async () =>
-  (await import('../notebook/report.js')).ledgerForReport();
-
 /**
  * The submission token for what is on record now, or '' if it cannot be made.
  * Both modules are dynamic imports, so a reader who hands nothing in never pays
@@ -75,14 +55,34 @@ const evidenceLedger = async () =>
  */
 export async function makeSubmissionToken(host, name) {
   const { getLocale } = host.lib;
-  const { active, assignment, depth } = host.state();
+  const {
+    active,
+    stepIndex,
+    responses,
+    attempts,
+    visited,
+    startedAt,
+    assignment,
+    depth,
+  } = host.state();
   try {
     const backupMod = await import('./progressBackup.js');
     const tokenMod = await import('../submission/submissionToken.js');
-    const ledger = await evidenceLedger();
+    // The evidence the report prints: its record and digest ride in the token.
+    const ledger = await (
+      await import('../notebook/report.js')
+    ).ledgerForReport();
     const encoded = await tokenMod.encodeSubmission(
       tokenMod.buildSubmission({
-        backup: backupOf(host, backupMod, name),
+        backup: backupMod.buildBackup({
+          lesson: active,
+          responses: { ...host.earlier(active.id)?.responses, ...responses },
+          attempts,
+          visited,
+          stepSid: active.steps[stepIndex]?.sid ?? null,
+          startedAt,
+          studentName: name,
+        }),
         assignmentId: assignment?.i ?? null,
         rosterId: new URLSearchParams(location.search).get('roster') || null,
         fallbackLocale: getLocale(),
@@ -95,15 +95,14 @@ export async function makeSubmissionToken(host, name) {
       // Say so rather than hand over something that will be truncated at the
       // far end, where the student cannot fix it.
       console.warn(
-        `[gravitas] submission token is ${encoded.length} characters, over ` +
-          `the ${encoded.limit} this project treats as safely pasteable.`
+        `Submission token is ${encoded.length} characters, over ${encoded.limit}.`
       );
     }
     return encoded.token;
   } catch (err) {
     // A report without a token is still a report. The completion code and
     // every answer are on the page either way.
-    console.warn('[gravitas] could not build a submission token:', err);
+    console.warn('Submission token failed:', err);
     return '';
   }
 }
@@ -220,7 +219,9 @@ async function report(host, format) {
     const submissionToken = await makeSubmissionToken(host, name);
     host.showToken(submissionToken);
     await reportMessages();
-    const ledger = await evidenceLedger();
+    const ledger = await (
+      await import('../notebook/report.js')
+    ).ledgerForReport();
 
     const { active, responses, attempts, visited, startedAt } = host.state();
     const { assignment, assignmentBinding, depth } = host.state();
@@ -268,7 +269,7 @@ async function report(host, format) {
     toast(t('inv.report.done'));
     announce(t('inv.report.done'));
   } catch (err) {
-    console.error('Report generation failed:', err);
+    console.error('Report failed:', err);
     toast(t('inv.report.failed'));
   } finally {
     button.disabled = false;
@@ -284,11 +285,20 @@ async function report(host, format) {
  * the heaviest thing in the application.
  */
 export async function downloadBackup(host) {
-  const { active } = host.state();
+  const { active, stepIndex, responses, attempts, visited, startedAt } =
+    host.state();
   if (!active) return;
   const { t, announce } = host.lib;
   const backup = await import('./progressBackup.js');
-  const payload = backupOf(host, backup, host.getStudentName());
+  const payload = backup.buildBackup({
+    lesson: active,
+    responses: { ...host.earlier(active.id)?.responses, ...responses },
+    attempts,
+    visited,
+    stepSid: active.steps[stepIndex]?.sid ?? null,
+    startedAt,
+    studentName: host.getStudentName(),
+  });
 
   const blob = new Blob([JSON.stringify(payload, null, 2)], {
     type: 'application/json',
@@ -377,22 +387,4 @@ export async function restoreBackup(host, file) {
   } else {
     toast(t('inv.backup.restored'));
   }
-}
-
-/**
- * Ask before Restart erases the answers: how many there are, and the offer My
- * work's delete makes, a file first. A native modal dialog: focus starts on
- * Cancel and Escape cancels.
- *
- * @param {FinishHost} host - The engine's side
- */
-export function restart(host) {
-  const dialog = document.getElementById('investigationRestart');
-  for (const n of dialog.querySelectorAll('.inv-restart-n'))
-    n.textContent = host.answered();
-  dialog.querySelector('[type=button]').onclick = () => downloadBackup(host);
-  dialog.returnValue = '';
-  dialog.onclose = () =>
-    dialog.returnValue === 'go' && host.restoreInto({ fresh: true });
-  dialog.showModal();
 }

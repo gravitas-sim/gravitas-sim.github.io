@@ -13,6 +13,10 @@ the release rather than in the tag.
 
 ## [Unreleased]
 
+### Fixed
+
+- A first-time student who opens an assignment, activity or pack link now lands on the task instead of the introduction; the reset beside the lesson's progress bar resets what the step shows (scene, stage and instrument values) and says what it did and that answers are kept; Restart asks first, with the answer count and a backup offer; and a numeric answer typed but not checked is kept as a draft and restored on return, without counting as an answer (Prompt 308; register rows D-R4-308-01 to 06; visible).
+
 ### Changed
 
 - A lesson step that is revised under a new id no longer silently re-marks or drops what a student saved under the old one (Prompt 306; register row D-R4-306-01; visible and instructional). The old answer stays readable as an earlier-version answer in the lesson panel and the submission results, and an assignment, activity format or course pin that names the retired step offers its successor (the readers of a retired whole investigation wait for the first one). The author rule is in CONTRIBUTING_CONTENT.md; `tests/compat/revisions.test.js` runs reword, revise, insert and remove against the 2.0.0 and 3.0 readers. No step is revised yet.

@@ -218,9 +218,9 @@ describe('what the recording can tell apart', () => {
     // (js/format.js is not loaded by /observatory/ at start).
     const at = site => all.hazards[site] ?? { hyphen: false, nonFinite: false };
     for (const site of [
-      'js/investigations/stepView.js:634:11',
-      'js/investigations/stepView.js:792:35',
-      'js/investigations/stepView.js:1186:13',
+      'js/investigations/stepView.js:619:11',
+      'js/investigations/stepView.js:774:35',
+      'js/investigations/stepView.js:1163:13',
       'js/observatory/guides/core.js:320:27',
     ])
       expect(at(site).hyphen).toBe(true);
@@ -240,7 +240,7 @@ describe('what the recording can tell apart', () => {
         .split('\n')
         .filter((_, i) => numbers.includes(i + 1));
     for (const line of [
-      ...lines('js/investigations/stepView.js', 541, 544),
+      ...lines('js/investigations/stepView.js', 526, 529),
       ...lines('js/observatory/archivePanel.js', 258, 259),
     ])
       expect(line).toMatch(/fixed\(/);

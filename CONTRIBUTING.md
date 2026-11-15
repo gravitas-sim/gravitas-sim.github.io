@@ -171,10 +171,10 @@ their ceilings:
 | Module | Lines | Ceiling |
 | --- | ---: | ---: |
 | `js/data/instructorContent.js` | 6,761 | 6,761 |
-| `js/i18n/es.deferred.js` | 4,253 | 4,253 |
-| `js/i18n/en.deferred.js` | 4,006 | 4,006 |
+| `js/i18n/es.deferred.js` | 4,252 | 4,252 |
+| `js/i18n/en.deferred.js` | 4,005 | 4,005 |
 | `js/data/investigations/observing-sequence.js` | 3,341 | 3,341 |
-| `js/investigations.js` | 3,297 | 3,297 |
+| `js/investigations.js` | 3,288 | 3,288 |
 | `js/data/investigations/measurement-sequence.js` | 3,270 | 3,270 |
 | `js/render.js` | 3,015 | 3,015 |
 | `js/data/investigations/depth/measurement-sequence.js` | 2,840 | 2,840 |

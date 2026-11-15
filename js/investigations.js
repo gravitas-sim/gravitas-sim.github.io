@@ -726,7 +726,7 @@ function applySetup(setup) {
     // have to be reasserted every time rather than set once on open.
     applyLocks();
   } catch (err) {
-    console.warn('Could not set up investigation step:', err);
+    console.warn('Step setup failed:', err);
     toast(t('inv.error.scenario'));
   }
 }
@@ -768,7 +768,7 @@ function bindStepRoles(force) {
 
     for (const [role, reason] of Object.entries(problems)) {
       console.warn(
-        `Investigation "${active?.id}" step "${step.sid}": staged star "${role}" - ${reason}`
+        `${active?.id}/${step.sid}: staged star "${role}" - ${reason}`
       );
     }
     return;
@@ -783,7 +783,7 @@ function bindStepRoles(force) {
   });
   for (const [role, reason] of Object.entries(problems)) {
     console.warn(
-      `Investigation "${active?.id}" step "${step.sid}": role "${role}" is unbound - ${reason}`
+      `${active?.id}/${step.sid}: role "${role}" unbound - ${reason}`
     );
   }
 }
@@ -1105,7 +1105,7 @@ function syncEventWatch(step) {
       });
     })
     .catch(err => {
-      console.warn('The pause-at-event tool could not be opened:', err);
+      console.warn('Pause tool failed:', err);
     });
 }
 
@@ -2136,19 +2136,9 @@ function setupInForceAt(index) {
 }
 
 /**
- * Move to a step.
- * @param {number} index - Step to show
- * @param {Object} [opts]
- * @param {boolean} [opts.rebuild] - Reload the scenario in force at that step
- */
-/**
- * Release any sound a lesson started: a waveform belongs to the step that
- * started it, and one still playing after the step is gone sounds like an
- * answer. Sent as an event, because js/gwAudio.js pulls in the whole waveform
- * model; the scope is the prefix js/gwWidgets.js owns, so it cannot silence
- * sound started outside a lesson.
- *
- * @returns {void}
+ * Release any sound a lesson started: a waveform still playing after its step
+ * sounds like an answer. Sent as an event, because js/gwAudio.js pulls in the
+ * whole waveform model; the scope is the prefix js/gwWidgets.js owns.
  */
 function releaseLessonAudio() {
   if (typeof window === 'undefined') return;
@@ -2159,6 +2149,7 @@ function releaseLessonAudio() {
   );
 }
 
+/** Move to a step; `rebuild` reloads the scenario (and stage) in force there. */
 function goToStep(index, { rebuild = false } = {}) {
   if (!active) return;
   stepIndex = Math.max(0, Math.min(active.steps.length - 1, index));
@@ -2461,10 +2452,7 @@ export async function openInvestigation(id, opts = {}) {
           forExperiment: true,
         });
       } catch (err) {
-        console.warn(
-          'Could not save the sandbox before the investigation:',
-          err
-        );
+        console.warn('Sandbox save failed:', err);
         return null;
       }
     })(),
@@ -2500,7 +2488,7 @@ function restoreSandbox(saved) {
     applyShareState(JSON.parse(JSON.stringify(payload)));
     return true;
   } catch (err) {
-    console.warn('Could not restore the sandbox after the investigation:', err);
+    console.warn('Sandbox restore failed:', err);
     return false;
   }
 }
@@ -2638,6 +2626,16 @@ const answeredStep = s => {
     : String(responses[id] ?? '').trim() !== '';
 };
 
+function startOver() {
+  responses = {};
+  attempts = {};
+  visited = new Set();
+  startedAt = new Date().toISOString();
+  forgetDrafts();
+  toast(t('inv.progress.cleared'));
+  goToStep(0);
+}
+
 function openFinish() {
   if (!els.finish) return;
   const graded = gradedSteps({ steps: shown() });
@@ -2722,7 +2720,6 @@ const finishHost = () => ({
     depth,
   }),
   elements: () => els,
-  answered: () => active.steps.filter(answeredStep).length,
   earlier: earlierFor,
   payloadFromSetup,
   plotData: plotAnywhere,
@@ -2733,16 +2730,12 @@ const finishHost = () => ({
   saveFile,
   restoreInto: restored => {
     progressNotes = [];
-    responses = restored.responses ?? {};
-    attempts = restored.attempts ?? {};
-    visited = restored.visited ?? new Set();
+    responses = restored.responses;
+    attempts = restored.attempts;
+    visited = restored.visited;
     startedAt = restored.startedAt || new Date().toISOString();
-    if (restored.fresh) {
-      forgetDrafts();
-      toast(t('inv.progress.cleared'));
-    }
     save();
-    goToStep(restored.stepIndex ?? 0, { rebuild: !restored.fresh });
+    goToStep(restored.stepIndex, { rebuild: true });
   },
   showToken,
   lib: {
@@ -2802,10 +2795,9 @@ function resetStepScene() {
   for (const k in responses)
     if (k.startsWith(`${stepId(stepIndex)}:tool:`)) delete responses[k];
   goToStep(stepIndex, { rebuild: true });
-  const said =
-    els.resetScenario.dataset[getLocale() === 'es' ? 'saidEs' : 'saidEn'];
   const scene = step.stage || setupInForceAt(stepIndex);
-  toast(said.split('|')[+!!step.tool + 2 * !!scene]);
+  const which = +!!step.tool + 2 * !!scene + 4 * (getLocale() === 'es');
+  toast(els.resetScenario.dataset.said.split('|')[which]);
 }
 
 // --- Wiring -------------------------------------------------------------------
@@ -3080,9 +3072,8 @@ export function initInvestigations({ signal } = {}) {
     setStageScale(next);
     const on = next === SCALE.TRUE;
     els.scaleBtn.setAttribute('aria-pressed', String(on));
-    // At true scale the smallest stars fall below what the canvas can draw.
-    // That is the honest picture and it is why the list above exists, so the
-    // interface says it rather than leaving a reader hunting for a speck.
+    // At true scale the smallest stars fall below what the canvas can draw;
+    // say so rather than leave a reader hunting for a speck.
     toast(t(on ? 'inv.stage.scale.true' : 'inv.stage.scale.display'));
   });
 
@@ -3111,13 +3102,23 @@ export function initInvestigations({ signal } = {}) {
   els.finishBack?.addEventListener('click', closeFinish);
   const on = (id, fn) =>
     document.getElementById(id)?.addEventListener('click', fn);
-  on('investigationReset', finishAction('restart', 'inv.load.failed'));
+  // Restart asks first (lesson-finish.html); the Escape shortcut must not eat its Esc.
+  const ask = document.getElementById('investigationRestart');
+  ask.onkeydown = e => e.key === 'Escape' && e.stopPropagation();
+  on('investigationReset', () => {
+    ask.querySelector('b').textContent =
+      active.steps.filter(answeredStep).length;
+    ask.showModal();
+  });
+  on('investigationRestartGo', () => {
+    ask.close();
+    startOver();
+  });
   on('investigationDownload', finishAction('generateReport'));
   on('investigationDownloadHtml', finishAction('generateHtmlReport'));
-  els.finishProgress?.addEventListener(
-    'click',
-    finishAction('downloadBackup', 'inv.backup.failed')
-  );
+  const backup = finishAction('downloadBackup', 'inv.backup.failed');
+  els.finishProgress?.addEventListener('click', backup);
+  on('investigationRestartBackup', backup);
   on('investigationTokenShow', finishAction('revealToken', 'inv.token.failed'));
   on('investigationTokenCopy', finishAction('copyToken', 'inv.token.failed'));
   on('investigationTokenSave', () =>

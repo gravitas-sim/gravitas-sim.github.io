@@ -421,7 +421,7 @@ test.describe('persistence', () => {
     await page.locator('#investigationReset').click();
     // It asks first; the answers are erased only when the reader says so.
     await expect(page.locator('#investigationRestart')).toBeVisible();
-    await page.locator('#investigationRestart [value=go]').click();
+    await page.locator('#investigationRestartGo').click();
     await expect.poll(() => stepNumber(page), { timeout: 15_000 }).toBe(1);
   });
 });
