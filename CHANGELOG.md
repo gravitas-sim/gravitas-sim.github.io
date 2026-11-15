@@ -20,6 +20,18 @@ the release rather than in the tag.
 
 ### Added
 
+- The lesson standard as authoring checks (Prompt 307; register rows
+  D-R4-307-01 to 05; invisible, tooling): `npm run author:check` now holds
+  seven patterns the lesson audits found by hand to a committed count per lesson
+  that may only fall (`tools/lesson-standard-ratchet.json`): an instrument that
+  opens at a value its validator accepts, a predicted answer already stated in an
+  earlier body, tip or checklist, a numeric question whose body holds its answer,
+  a core measure step with every field computed, the project's own vocabulary and
+  a wrong `step N` or `screen N` in student text, and a layout at any depth that
+  ends on a graded step (none does; held at zero). `node tools/lesson-standard.mjs --list`
+  names each finding by lesson and step. `docs/lesson-acceptance.json` gains
+  `decision` and `leakFree` per lesson, and `npm run audit:scene:check` requires
+  both. No lesson is edited and nothing changes on screen.
 - The step-policy gate for the sandbox (Prompt 446; register row D-R4-446-01;
   invisible, documentation): `STEP_POLICY_GATE.md` records, against thresholds
   committed before any run, whether a number read in the sandbox may depend on
