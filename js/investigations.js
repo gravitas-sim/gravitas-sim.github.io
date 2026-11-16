@@ -726,7 +726,7 @@ function applySetup(setup) {
     // have to be reasserted every time rather than set once on open.
     applyLocks();
   } catch (err) {
-    console.warn('Step setup', err);
+    console.warn(err);
     toast(t('inv.error.scenario'));
   }
 }
@@ -746,6 +746,7 @@ function applySetup(setup) {
  */
 function bindStepRoles(force) {
   const step = currentStep();
+  holdClock(step, appliedSetup);
   // Whatever the last step was illustrating is not this step's business. The
   // widget re-asserts it on its first tick if this step wants one, so the
   // cost of clearing here is one frame and the cost of not clearing is a
@@ -757,7 +758,7 @@ function bindStepRoles(force) {
   clearSnapshots();
   const warn = (problems, what) => {
     for (const [role, why] of Object.entries(problems))
-      console.warn(`${step.sid} ${what} "${role}": ${why}`);
+      console.warn(`${step.sid} ${what} ${role}: ${why}`);
   };
   // A stage declares the whole scene and binds its own roles, so it takes
   // precedence: a step cannot both stand its own stars on the canvas and bind
@@ -2169,7 +2170,6 @@ function goToStep(index, { rebuild = false } = {}) {
   // step's signal over the new step's instructions.
   releaseLessonAudio();
   bindStepRoles(rebuild);
-  holdClock(currentStep(), appliedSetup);
 
   // A lesson that leaves the inspector reachable, as the black hole one does,
   // can have its object card open when the student moves on. The card is a

@@ -426,16 +426,12 @@ let held = null;
  * @param {object|null} world - The setup the scene was built from
  */
 export function holdClock(step, world) {
-  const from = world || state;
-  if (!state.paused || held !== from) held = null;
-  if (step?.type === 'read' && !step.motion && !step.tool) {
-    if (!state.paused) {
-      state.paused = true;
-      held = from;
-    }
-  } else if (held) {
-    state.paused = false;
-    held = null;
+  world ||= state;
+  const hold = step?.type === 'read' && !(step.motion || step.tool);
+  if (!state.paused || held !== world) held = null;
+  if (hold ? !state.paused : held) {
+    state.paused = hold;
+    held = hold && world;
   }
 }
 

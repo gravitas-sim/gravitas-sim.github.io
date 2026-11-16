@@ -382,7 +382,6 @@ const RETROGRADE = {
       sid: 'reference-frames',
       bind: INNER_PAIR,
       type: 'read',
-      motion: true,
       title: 'Reference frames',
       body: `A position is never a property of a body on its own. It is a
              relationship between that body and something else, and the something
