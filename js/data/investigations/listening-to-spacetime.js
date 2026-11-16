@@ -1308,7 +1308,7 @@ const LISTENING_TO_SPACETIME = {
              \n\nPut the four you ranked in order of chirp mass and compare
              with your ranking.
              \n\nThen look at the distances. In these tables GW190521 is about
-             seven times further away than GW150914, and space expanded while its wave was
+             seven times further away than GW150914 (central values), and space expanded while its wave was
              on its way here, stretching it. A stretched chirp looks exactly
              like the chirp of a heavier pair. What a detector measures is the
              chirp mass multiplied by one plus the redshift: for GW150914 that

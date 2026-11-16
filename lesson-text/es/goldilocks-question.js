@@ -237,7 +237,7 @@ export default {
         'Los cuatro',
       ],
       because:
-        'La Tierra y Marte. Venus, a 0,72 UA, está dentro del borde interior, recibiendo unas 1,9 Tierras de luz estelar; Ceres, a 2,77 UA, está muy lejos, más allá del borde exterior. Marte, a 1,52 UA, está cómodamente dentro de la zona conservadora. Esto último suele sorprender, y es el dato más útil de esta investigación.',
+        'La Tierra y Marte. Venus, a 0,72 UA, está más cerca del Sol que el borde interior, recibiendo unas 1,9 Tierras de luz estelar; Ceres, a 2,77 UA, está muy lejos, más allá del borde exterior. Marte, a 1,52 UA, está cómodamente dentro de la zona conservadora. Esto último suele sorprender.',
     },
     'the-mars-problem': {
       title: 'El problema de Marte',
@@ -289,7 +289,7 @@ export default {
     },
     'the-wider-definition-on-the': {
       title: 'La definición más amplia, en el Sol real',
-      body: 'De vuelta al Sistema Solar en vivo, con un cambio: la zona habitable se dibuja ahora con la definición <strong>optimista</strong>. La estrella no ha cambiado. Los planetas no han cambiado. Solo el supuesto sobre qué cuenta como borde.\n\nEl borde interior ha saltado de 0,98 UA hacia dentro, hasta <strong>0,75 UA</strong>, que es un movimiento grande en pantalla. El borde exterior apenas se ha desplazado, de 1,69 a 1,77 UA.\n\nMira con atención a Venus.\n\nSelecciona Venus y observa la lectura: el mismo planeta, la misma distancia, un veredicto distinto. Lo que cambió fue la definición, no Venus.',
+      body: 'De vuelta al Sistema Solar en vivo, con un cambio: la zona habitable se dibuja ahora con la definición <strong>optimista</strong>. La estrella no ha cambiado. Los planetas no han cambiado. Solo el supuesto sobre qué cuenta como borde.\n\nEl borde interior ha saltado de 0,98 UA hacia dentro, hasta <strong>0,75 UA</strong>. El borde exterior apenas se ha desplazado, de 1,69 a 1,77 UA.\n\nMira con atención a Venus.\n\nSelecciona Venus y observa la lectura: el borde se movió, el veredicto no. Cambió la definición, no Venus.',
       checklist: [
         'Encuentra el nuevo borde interior y compáralo con dónde orbita Venus, a 0,72 UA.',
         'Comprueba el borde exterior frente a Ceres, a 2,77 UA.',
@@ -325,7 +325,7 @@ export default {
       prompt: 'Luz estelar en Venus, en Tierras',
       unit: 'Tierras',
       because:
-        'Unas 1,9 Tierras. Venus recibe casi el doble de luz estelar que la Tierra, que es lo que lo sitúa dentro del límite del efecto invernadero desbocado y fuera de la zona conservadora. Su superficie está a unos 460 °C, lo bastante caliente para fundir plomo, bajo una atmósfera noventa veces más pesada que la nuestra. Fíjate en el sentido del argumento: la luz estelar de más pone el proceso en marcha, la atmósfera lo remata.',
+        'Unas 1,9 Tierras. Venus recibe casi el doble de luz estelar que la Tierra, que es lo que lo sitúa más cerca del Sol que el límite del efecto invernadero desbocado y fuera de la zona conservadora. Su superficie está a unos 460 °C, bajo una atmósfera noventa veces más pesada que la nuestra. Fíjate en el sentido del argumento: la luz estelar de más pone el proceso en marcha, la atmósfera lo remata.',
     },
     'a-year-on-a-circular': {
       title: 'Un año en una órbita circular',
@@ -409,7 +409,7 @@ export default {
     },
     'all-seven-planets': {
       title: 'Los siete planetas',
-      body: 'Aquí está el sistema real, con la zona habitable del mismo modelo que has estado usando toda la investigación, a partir de la luminosidad de TRAPPIST-1 (extrapolada: la estrella es más fría que el ajuste).\n\nEl eje de distancias está comprimido, porque si no los planetas interiores se amontonarían encima de la estrella. Lee los números, no los píxeles.\n\nEl segundo panel pone el Sistema Solar en el mismo eje. Todo el sistema de siete planetas cabría cómodamente dentro de la órbita de Mercurio.',
+      body: 'Aquí está el sistema real, con la zona habitable del mismo modelo, a partir de la luminosidad de TRAPPIST-1, con el ajuste fijado en su límite inferior de 2600 K porque la estrella es más fría.\n\nEl eje de distancias está comprimido. Lee los números, no los píxeles.\n\nEl segundo panel pone el Sistema Solar en el mismo eje. Todo el sistema de siete planetas cabría cómodamente dentro de la órbita de Mercurio.',
       tool: {
         title: 'TRAPPIST-1',
         note: 'Cada planeta está listado debajo con la luz estelar que recibe y dónde cae respecto a la zona modelada.',
@@ -436,7 +436,7 @@ export default {
     },
     'take-the-readings-yourself': {
       title: 'Toma tú mismo las lecturas',
-      body: 'En lugar de que te digan qué planetas caen dónde, léelo en el instrumento. El panel está de vuelta, en la definición conservadora.\n\nRecorre la lista de debajo de la imagen y anota la luz estelar que recibe cada uno de los tres planetas centrales, en Tierras. Después anota dónde empieza y dónde acaba la zona (extrapolada).',
+      body: 'En lugar de que te digan qué planetas caen dónde, léelo en el instrumento. El panel está de vuelta, en la definición conservadora.\n\nRecorre la lista de debajo de la imagen y anota la luz estelar que recibe cada uno de los tres planetas centrales, en Tierras. Después anota dónde empieza y dónde acaba la zona (en el límite inferior del ajuste).',
       fields: [
         { label: 'TRAPPIST-1e recibe', unit: 'Tierras', want: '0,65' },
         { label: 'TRAPPIST-1f recibe', unit: 'Tierras', want: '0,37' },

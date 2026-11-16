@@ -1695,7 +1695,7 @@ export const INSTRUCTOR_CONTENT = {
       'For a class that has done Planets in Binary Stars: the fifteenth screen is a deliberate counterpoint. There, a discrepancy that changed with the timestep meant the run was not converged. Here, a discrepancy that does not change with the timestep means the model is approximate. Telling those two apart is the transferable skill.',
     ],
     discussion: [
-      'Voyager 2 gained about 16 km/s at Jupiter. Jupiter lost the corresponding momentum. Is there any measurement that could ever detect that?',
+      'Voyager 2 gained about 10 km/s at Jupiter. Jupiter lost equal momentum. Is there any measurement that could ever detect that?',
       'The Parker Solar Probe uses seven flybys of Venus on the leading side to lose speed and fall closer to the Sun. Why is losing speed hard, and why does it take seven?',
       'Every assist is capped at twice the approach speed. What does that imply about missions to the outer solar system, and about why they are so often routed past Jupiter?',
       'The investigation uses an Earth-mass spacecraft so the recoil is readable. Does using an unrealistic mass weaken the demonstration, and what would you have done instead?',
@@ -4147,7 +4147,7 @@ export const INSTRUCTOR_CONTENT = {
       'The resonance protects Pluto from Neptune, and the same mechanism clears the Kirkwood gaps in the asteroid belt. What is different about the two situations?',
       'A referee receives a paper claiming a new resonance on the strength of a period ratio and a forty-cycle integration. What should the referee ask for?',
       'Why can circulation be established in one circuit while libration takes several times as long to establish? Is there any way round that asymmetry?',
-      'Ten thousand asteroids sit at L4 and L5 and none at L3, although all three are equilibrium points. What does that tell you about how the Solar System selects what survives?',
+      'Over 15,000 asteroids sit at L4 and L5 and none at L3, although all three are equilibrium points. What does that tell you about how the Solar System selects what survives?',
       'Io is the most volcanically active body known and the energy comes from the resonance holding its orbit eccentric. Would Io be geologically dead without Europa and Ganymede?',
     ],
     extensions: [

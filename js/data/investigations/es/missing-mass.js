@@ -385,7 +385,7 @@ export default {
     },
     {
       title: '¿Qué has demostrado en realidad?',
-      body: 'Has hecho ya tres medidas, en dos clases de sistema, usando dos métodos distintos: ajustaste la curva de rotación de una galaxia y descubriste que ninguna disposición de sus estrellas servía, y pesaste un cúmulo por su movimiento y encontraste dieciocho veces más masa que luz. Ambas cosas dicen lo mismo.\n\nTen cuidado con lo que se sigue de ahí.',
+      body: 'Has hecho ya tres medidas, en dos clases de sistema, usando dos métodos distintos: ajustaste la curva de rotación de una galaxia y descubriste que ninguna disposición de sus estrellas servía, y pesaste un cúmulo por su movimiento y encontraste dieciocho veces más masa de la que explican las galaxias visibles. Ambas cosas dicen lo mismo.\n\nTen cuidado con lo que se sigue de ahí.',
       prompt:
         'En dos o tres frases: ¿qué establecen estas medidas y qué no establecen? Nombra al menos una cosa distinta de un nuevo tipo de partícula que en principio pudiera explicarlas.',
       rubric:

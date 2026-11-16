@@ -69,7 +69,7 @@ const PHASES_AND_ECLIPSES = {
         'Draw the Sun, Earth and Moon from above, with the Moon at a right angle to the Sun as seen from Earth.',
       ],
       because:
-        'A half. “Quarter” counts how far round its orbit the Moon is, not how much is lit. Seen from Earth at a right angle to the Sun, exactly half the lit hemisphere shows. The Moon’s speed varies, so 7.4 days is not exactly 90°. The next step measures it.',
+        'A half. “Quarter” counts how far round its orbit the Moon is, not how much is lit. Seen from Earth at a right angle to the Sun, exactly half the lit hemisphere shows. 7.4 days is the mean quarter; the real Moon is about 8° ahead. The next step measures it.',
       tool: PH({ day: 7.4 }),
     },
     {

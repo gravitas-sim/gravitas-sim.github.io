@@ -259,7 +259,7 @@ export const COMETS_AND_THE_SUN_ES = {
     'a-dirty-snowball': {
       title: 'Una bola de nieve sucia',
       body: 'Un cometa son unos kilómetros de hielo y polvo en una órbita larga. Lejos del Sol está oscuro e inerte. Cerca del Sol el hielo pasa a gas, y el gas y el polvo escapan y forman una <strong>coma</strong> y dos colas. El sandbox tiene el Sol, los ocho planetas y cometas. Llevan los nombres de cometas famosos, pero el sandbox coloca cada uno a la distancia de su órbita media con el 70 por ciento de la velocidad de una órbita circular, así que son <strong>cometas modelo en órbitas propias</strong>, no las órbitas reales.',
-      tip: 'Los cometas se mueven deprisa. Pausa la simulación para leer un número; vuelve a ponerla en marcha para ver las colas.',
+      tip: 'Los cometas se mueven deprisa. Pausa para leer un número; reanuda para ver las colas.',
     },
     'tail-predict': {
       title: '¿Hacia dónde apunta la cola?',
@@ -277,9 +277,9 @@ export const COMETS_AND_THE_SUN_ES = {
     },
     'watch-the-tails': {
       title: 'Mira las colas',
-      body: 'Las colas solo se ven a menos de unas 3 UA del Sol. Halley, el cometa de la lectura, se queda más allá de 5,8 UA. Wild 2 y Hartley 2 llegan a 1,1 UA: busca uno, acércate y compara su cola con la dirección del Sol.',
+      body: 'Las colas solo se ven a menos de unas 3 UA. Halley, el cometa de la lectura, se queda más allá de 5,8 UA. Wild 2 y Hartley 2 llegan a 1,1 UA, Shoemaker-Levy 9 a 2,1 (tenue; en un equipo más lento, el único): busca uno, acércate y compara su cola con la dirección del Sol.',
       checklist: [
-        'Busca Wild 2 o Hartley 2 cerca del Sol y acércate',
+        'Busca un cometa cerca del Sol y acércate',
         'Ve la cola estrecha de iones apuntar lejos del Sol',
         'Ve el mismo cometa mientras se aleja del Sol: ¿dónde está ahora su cola?',
       ],

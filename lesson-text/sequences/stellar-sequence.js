@@ -517,7 +517,7 @@ export const POPULATIONS_I_AND_II_DEEPER_ES = {
         '¿En qué porcentaje es mayor la distancia ajustada con [Fe/H] 0 que con −0,5?',
       hints: ['10^((12,43 − 11,86) / 5) − 1.'],
       worked:
-        '10^(0,563/5) = 1,296: un 29,6 por ciento. Un cambio en la composición supuesta mueve la edad en un factor de 2,3 y la distancia casi en un tercio, en sentidos opuestos: pobre en metales es más viejo y más cercano. Ninguna es la respuesta sin la metalicidad.',
+        '10^(0,563/5) = 1,296: un 29,6 por ciento. Otra composición supuesta mueve la edad en un factor de 2,3 y la distancia casi en un tercio de la del ajuste pobre en metales, en sentidos opuestos: pobre en metales es más viejo y más cercano.',
       feedback: {
         close:
           'Casi. Diez elevado a la diferencia entre cinco, menos uno, por cien.',

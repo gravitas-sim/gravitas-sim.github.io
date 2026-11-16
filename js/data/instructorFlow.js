@@ -996,7 +996,7 @@ export default {
       {
         from: 'voyager-left-faster',
         to: 'which-side-gains',
-        text: 'Voyager 2 arriving at Jupiter at 10 km/s and leaving at 26 with its engines off, then the stripped-down version on screen and why it has no star. Students commit to which side of the planet gains before running anything.',
+        text: 'Voyager 2 arriving at Jupiter at 10 km/s and leaving at 20 with its engines off, then the stripped-down version on screen and why it has no star. Students commit to which side of the planet gains before running anything.',
       },
       {
         from: 'fly-the-gaining-pass',
