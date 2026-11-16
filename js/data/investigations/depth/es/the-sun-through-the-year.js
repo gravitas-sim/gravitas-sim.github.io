@@ -29,7 +29,7 @@ export default {
       },
     },
     {
-      title: 'El polo supera al ecuador',
+      title: 'Una latitud alta supera al ecuador',
       body: 'En el solsticio de junio, lee la luz solar media diaria a latitud 0° y a latitud 65°.',
       prompt: '¿Cuál recibe más luz solar a lo largo del día?',
       options: [

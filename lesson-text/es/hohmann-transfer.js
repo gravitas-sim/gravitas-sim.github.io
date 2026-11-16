@@ -185,7 +185,7 @@ export default {
       hints: [
         'Las dos velocidades van en la misma dirección, así que esto es una resta y no algo vectorial.',
       ],
-      worked: 'Δv₁ = 35,60 − 29,787 = 5,815 km/s.',
+      worked: 'Δv₁ = 35,60 − 29,787 = 5,81 km/s.',
       feedback: {
         close:
           'Cerca. El impulso es la diferencia de dos velocidades en la misma dirección; revisa la resta.',
@@ -307,7 +307,7 @@ export default {
         'Otra vez las dos van en la misma dirección, así que es una resta.',
         'Vas demasiado despacio para la órbita que quieres, así que esto es otra aceleración.',
       ],
-      worked: 'Δv₂ = 18,840 − 14,242 = 4,598 km/s.',
+      worked: 'Δv₂ = 18,840 − 14,242 = 4,60 km/s.',
       feedback: {
         close:
           'Cerca. Compara la velocidad con que llegas y la de la órbita de destino, en la misma dirección.',
@@ -344,7 +344,7 @@ export default {
         method: `Suma los dos cambios de velocidad que calculaste en los dos
                  pasos anteriores. Los dos están ya en km/s.`,
       },
-      worked: 'Δv = 5,815 + 4,598 = 10,41 km/s.',
+      worked: 'Δv = 5,81 + 4,60 = 10,41 km/s.',
       feedback: {
         close: 'Cerca. Suma los dos impulsos, cada uno como tamaño.',
         'wrong-order-of-magnitude':

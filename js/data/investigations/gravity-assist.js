@@ -169,7 +169,7 @@ const GRAVITY_ASSIST = {
       setup: ISOLATED,
       body: `In July 1979 Voyager 2 passed Jupiter. It approached at about ten
              kilometers per second relative to the Sun and departed at about
-             twenty-six. Its engines were off.
+             twenty. Its engines were off.
              \n\nThis is not a curiosity. Every mission to the outer solar system
              has depended on it: Voyager could not have reached Neptune,
              Cassini could not have reached Saturn, and New Horizons could not
@@ -523,7 +523,7 @@ const GRAVITY_ASSIST = {
                   by?`,
         method: `Twice the approach speed.`,
       },
-      worked: `2 × 4.343 = 8.686 km/s. Your actual pass achieved 2.57 km/s of
+      worked: `2 × 4.343 = 8.69 km/s. Your actual pass achieved 2.57 km/s of
                speed gain, which is well under the ceiling because a 58-degree
                turn is a long way from a reversal.`,
       because: `About 8.7 km/s. Notice what sets that ceiling: the
@@ -819,7 +819,7 @@ const GRAVITY_ASSIST = {
              — it is going round a corner — so its frame is no longer inertial,
              and the star pulls on the spacecraft too. The left-hand column will
              no longer be exactly unchanged. Watch how nearly it is.`,
-      tip: 'The real Jupiter slows by about 10⁻²⁵ meters per second per Voyager. Over the age of the solar system, all the spacecraft ever launched have not measurably altered its orbit.',
+      tip: 'The real Jupiter slows by about 4 × 10⁻²¹ meters per second per Voyager. Over the age of the solar system, all the spacecraft ever launched have not measurably altered its orbit.',
     },
     {
       sid: 'fly-it-heliocentric',

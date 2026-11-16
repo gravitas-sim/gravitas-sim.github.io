@@ -157,6 +157,7 @@ current, and the orchestrator checks it.
 | `interaction-contract.mjs` | Is a surface keeping the interaction contract? |  |
 | `interiors-validate.mjs` | The interiors kernel's Part A against its committed thresholds (Prompt 203) | `npm run interiors:validate` |
 | `ism-validate.mjs` | The ISM kernel against its committed thresholds (Prompt 247, Part A) | `npm run ism:validate` |
+| `jest-count-cache.mjs` | How many Jest tests are there? Counted without running them, and remembered |  |
 | `jest-sequencer.mjs` | Start the slowest suites first |  |
 | `joint-inference-validate.mjs` | The joint transit and radial-velocity model against its committed thresholds (Prompt 227) | `npm run joint-inference:validate` |
 | `key-groups-check.mjs` | Key groups: does the rewritten catalog equal its source? |  |
@@ -174,6 +175,7 @@ current, and the orchestrator checks it.
 | `lesson-golden-dom.mjs` | npm run lesson:golden:dom -- --regenerate-lesson-golden | `npm run lesson:golden:dom` |
 | `lesson-golden.mjs` | npm run lesson:golden -- --regenerate-lesson-golden | `npm run lesson:golden` |
 | `lesson-scene-audit.mjs` | What every lesson step does with the main scene | `npm run audit:scene` |
+| `lesson-standard.mjs` | The lesson standard's ratchet | `npm run author:standard` |
 | `lesson-text.mjs` | Spanish lesson text, keyed by step: the source, and the files the app loads | `npm run lesson-text` |
 | `library-routes.mjs` | Does a Library route open what it names? |  |
 | `longtask-census.mjs` | Main-thread work above a stated budget (Prompt 112, part 2) |  |

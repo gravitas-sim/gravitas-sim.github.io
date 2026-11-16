@@ -1104,7 +1104,7 @@ const WHEN_ORBITS_LOCK = {
              the forces on it come out exactly right: it circles the Sun at
              Jupiter's rate and keeps its position relative to Jupiter forever.
              There are two such corners, 60° ahead and 60° behind, called L4 and
-             L5. Something like ten thousand asteroids are known at them.
+             L5. More than fifteen thousand asteroids are known at them.
 
              \n\nGascheau proved in 1843 that these two points are stable only
              when the primary is more than 24.96 times the secondary. The Sun is
@@ -1270,8 +1270,8 @@ const WHEN_ORBITS_LOCK = {
                 it right past both triangular points and back. Still a 1:1
                 resonance, and a completely different shape of one.
 
-                \n\nAnd it is why there are no asteroids at L3 and ten thousand
-                at L4 and L5. Stability is not a detail; it is the whole reason
+                \n\nAnd it is why there are no asteroids at L3 and more than fifteen
+                thousand at L4 and L5. Stability is not a detail; it is the whole reason
                 a population exists.`,
     },
     {

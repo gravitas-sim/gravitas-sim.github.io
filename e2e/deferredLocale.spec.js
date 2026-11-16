@@ -97,6 +97,89 @@ test.describe('Spanish first, then a deferred panel', () => {
   });
 });
 
+/** The deferred catalog files a page has requested so far. */
+function watchCatalogs(page) {
+  const seen = { en: 0, es: 0 };
+  page.on('request', request => {
+    const url = request.url();
+    if (/\/i18n\/en\.deferred\.js/.test(url)) seen.en += 1;
+    if (/\/i18n\/es\.deferred\.js/.test(url)) seen.es += 1;
+  });
+  return seen;
+}
+
+test.describe('one language on the wire', () => {
+  test('an English session downloads the English catalog only', async ({
+    page,
+    app,
+  }) => {
+    const seen = watchCatalogs(page);
+    await app.boot();
+    await openBench(page, app);
+    await expect(page.locator('#benchCapture')).toHaveText(DEFERRED.en);
+    expect(seen.en).toBe(1);
+    expect(seen.es).toBe(0);
+  });
+
+  test('a Spanish session downloads the Spanish catalog only', async ({
+    page,
+    app,
+  }) => {
+    await page.addInitScript(() => {
+      localStorage.setItem('gravitas_locale', 'es');
+    });
+    const seen = watchCatalogs(page);
+    await app.boot();
+    await openBench(page, app);
+    await expect(page.locator('#benchCapture')).toHaveText(DEFERRED.es);
+    expect(seen.es).toBe(1);
+    expect(seen.en).toBe(0);
+  });
+
+  test('a switch with a panel open fetches the other catalog and shows no id', async ({
+    page,
+    app,
+  }) => {
+    const seen = watchCatalogs(page);
+    await app.boot();
+    await openBench(page, app);
+    await expect(page.locator('#benchCapture')).toHaveText(DEFERRED.en);
+    expect(seen.es).toBe(0);
+
+    // Record every message id that is ever written into the open panel, from
+    // before the switch until the repaint has finished.
+    await page.evaluate(() => {
+      const ID = /^[a-z][A-Za-z0-9]*(\.[A-Za-z0-9]+){1,}$/;
+      window.__ids = [];
+      const note = text => {
+        const trimmed = String(text ?? '').trim();
+        if (ID.test(trimmed)) window.__ids.push(trimmed);
+      };
+      new globalThis.MutationObserver(records => {
+        for (const r of records) {
+          if (r.type === 'characterData') note(r.target.data);
+          else if (r.type === 'attributes')
+            note(r.target.getAttribute(r.attributeName));
+          else r.addedNodes.forEach(n => note(n.textContent));
+        }
+      }).observe(document.querySelector('#experimentPanel'), {
+        subtree: true,
+        childList: true,
+        characterData: true,
+        attributes: true,
+      });
+    });
+
+    await page.evaluate(async () => {
+      const i18n = await import('/js/i18n/index.js');
+      await i18n.setLocale('es');
+    });
+    await expect(page.locator('#benchCapture')).toHaveText(DEFERRED.es);
+    expect(seen.es).toBe(1);
+    expect(await page.evaluate(() => window.__ids)).toEqual([]);
+  });
+});
+
 test.describe('two panels asking at once', () => {
   test('concurrent callers share one load and all see the strings', async ({
     page,

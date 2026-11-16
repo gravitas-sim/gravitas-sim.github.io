@@ -327,7 +327,7 @@ const HOHMANN_TRANSFER = {
       hints: [
         'Both speeds are in the same direction, so this is a subtraction rather than anything vectorial.',
       ],
-      worked: 'Δv₁ = 35.60 − 29.787 = 5.815 km/s.',
+      worked: 'Δv₁ = 35.60 − 29.787 = 5.81 km/s.',
       feedback: {
         close:
           'Close. The burn is a difference of two speeds in the same direction; check the subtraction.',
@@ -546,7 +546,7 @@ const HOHMANN_TRANSFER = {
         'Again both are in the same direction, so it is a subtraction.',
         'You are too slow for the orbit you want, so this is another acceleration.',
       ],
-      worked: 'Δv₂ = 18.840 − 14.242 = 4.598 km/s.',
+      worked: 'Δv₂ = 18.840 − 14.242 = 4.60 km/s.',
       feedback: {
         close:
           'Close. Compare the speed you arrive with and the speed of the target orbit, along the same direction.',
@@ -602,7 +602,7 @@ const HOHMANN_TRANSFER = {
         method: `Add the two speed changes you worked out in the two steps
                  before this one. Both are already in km/s.`,
       },
-      worked: 'Δv = 5.815 + 4.598 = 10.41 km/s.',
+      worked: 'Δv = 5.81 + 4.60 = 10.41 km/s.',
       feedback: {
         close: 'Close. Add the two burns, each as a size.',
         'wrong-order-of-magnitude':

@@ -1,0 +1,23 @@
+{
+  "about": "Thresholds for the sandbox time controls (one clock, a step, Replay and Rewind to here), committed before the implementation exists. A restore is the in-place return to a held full capture; the comparison is made through captureShareState with kind full, the same authority a lesson's entry and exit use. A threshold is never moved after a result is seen; only the maintainer resets one.",
+  "committed": "2026-11-14",
+  "restore": {
+    "relativeTolerance": 1e-11,
+    "quantities": ["position", "velocity", "mass"],
+    "figures": 12,
+    "reason": "A full capture keeps twelve significant figures (js/shareState.js LINK_PRECISION), so a capture taken after a restore differs from the one taken before by at most half a unit in the twelfth figure, 5e-12 relative. 1e-11 is the next round number above that and is two orders tighter than anything a reading on the panel shows."
+  },
+  "capture": {
+    "maxMilliseconds": 5,
+    "scenario": "star-cluster",
+    "bodies": 255,
+    "measuredIn": "the browser, chromium, median of 20 captures after 3 warm-up captures",
+    "reason": "A third of a 16.7 ms frame, so that leaving live for history costs less than one dropped frame on the largest built-in scenario."
+  },
+  "clock": {
+    "equalTo": "the digit shown",
+    "absoluteToleranceSimUnits": 1e-9,
+    "reason": "The timeline label, the Elapsed readout and the stopwatch all read one number. Summation order in the integrator leaves 1e-11 of rounding; the label is formatted to a handful of figures."
+  },
+  "fallback": "If the capture threshold is missed, the live button and Space become Rewind to here (and run): Space no longer ends paused, and nothing else changes."
+}

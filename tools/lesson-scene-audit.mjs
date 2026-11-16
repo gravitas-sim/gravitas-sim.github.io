@@ -2023,6 +2023,23 @@ async function checkAcceptance(data) {
       if (!entry[key])
         problems.push(`${lesson.id}: acceptance entry has no ${key}`);
     }
+    // Acceptance map II (tools/lesson-standard.mjs writes both). `decision` is
+    // what the student decides in the lesson's measuring ("unreviewed" while no
+    // one has read the lesson against Q4, "none" where there is no measure
+    // step); `leakFree` is a boolean, so it is not read as an empty value.
+    const measures = lesson.steps.some(s => s.type === 'measure');
+    if (typeof entry.decision !== 'string' || !entry.decision.trim()) {
+      problems.push(`${lesson.id}: acceptance entry has no decision`);
+    } else if (measures && entry.decision === 'none') {
+      problems.push(
+        `${lesson.id}: has a measure step, so its acceptance decision cannot be "none"`
+      );
+    }
+    if (typeof entry.leakFree !== 'boolean') {
+      problems.push(
+        `${lesson.id}: acceptance entry has no leakFree (true or false)`
+      );
+    }
     // A provenance label is a claim a learner reads, so it has to be one the
     // lesson can support. `engine` on a lesson whose central loop never
     // measures anything the integrator produced would be telling a reader the

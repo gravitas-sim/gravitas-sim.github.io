@@ -83,7 +83,7 @@ export default {
       depth: 'advanced',
       type: 'question',
       kind: 'choice',
-      title: 'The pole beats the equator',
+      title: 'High latitude beats the equator',
       body: `At the June solstice, read the daily mean sunlight at latitude
              0° and at latitude 65°.`,
       prompt: 'Which receives more sunlight over the day?',

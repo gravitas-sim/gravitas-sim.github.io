@@ -226,7 +226,7 @@ export default {
     {
       title: 'La versión de Newton, y para qué sirve',
       body: 'Aquí está la relación que encontró Newton, escrita como la usa un astrónomo:\n\n<strong>masa total = a<sup>3</sup> ÷ P<sup>2</sup></strong>\n\ncon <strong>a</strong> el tamaño de la órbita en UA, <strong>P</strong> el tiempo de una vuelta en años, y la respuesta en masas solares. Eso es todo. Dos medidas dentro, un número fuera:\n\n<strong>mide el tamaño de la órbita → mide el periodo → obtén la masa total.</strong>\n\nUn detalle importa, y es el único sitio donde la gente se equivoca. La <strong>a</strong> de esa fórmula es el tamaño de la órbita de las <em>dos</em> estrellas, no la parte de una sola. Imagina el par con el punto de equilibrio entre ellas:\n\n<strong>Estrella A ── r<sub>A</sub> ── baricentro ── r<sub>B</sub> ── Estrella B</strong>\n\ny <strong>a</strong> es la suma de los dos trozos: r<sub>A</sub> + r<sub>B</sub>, que es simplemente la distancia de una estrella a la otra.\n\nAsí que cuando midas a, mide de estrella a estrella.',
-      tip: 'Si por error tomas solo la distancia de una estrella al baricentro, obtendrás una masa varias veces demasiado pequeña. Medir de estrella a estrella lo arregla, y de todos modos es más fácil.',
+      tip: 'Si por error tomas solo la distancia de una estrella al baricentro, obtendrás una masa muy por debajo de la real: con dos estrellas iguales, un octavo de la masa. Medir de estrella a estrella lo arregla, y de todos modos es más fácil.',
     },
     {
       title: 'Un ensayo',

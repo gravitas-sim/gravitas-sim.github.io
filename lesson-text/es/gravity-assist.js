@@ -33,7 +33,7 @@ export default {
       title: 'La Voyager se marchó más rápido de lo que llegó',
       body: `En julio de 1979 la Voyager 2 pasó junto a Júpiter. Se acercó a unos
              diez kilómetros por segundo respecto del Sol y se marchó a unos
-             veintiséis. Con los motores apagados.
+             veinte. Con los motores apagados.
              \n\nEsto no es una curiosidad. Todas las misiones al sistema solar
              exterior han dependido de ello: la Voyager no habría llegado a
              Neptuno, la Cassini no habría llegado a Saturno y la New Horizons
@@ -251,7 +251,7 @@ export default {
                   ha cambiado?`,
         method: `El doble de la velocidad de aproximación.`,
       },
-      worked: `2 × 4,343 = 8,686 km/s. Tu paso real consiguió 2,57 km/s de
+      worked: `2 × 4,343 = 8,69 km/s. Tu paso real consiguió 2,57 km/s de
                ganancia, bastante por debajo del techo, porque un giro de 58
                grados queda muy lejos de una inversión.`,
       because: `Unos 8,7 km/s. Fíjate en qué fija ese techo: la
@@ -446,7 +446,7 @@ export default {
              tomando una curva-, así que su sistema ya no es inercial, y la
              estrella también tira de la nave. La columna izquierda ya no estará
              exactamente igual. Fíjate en cuán cerca lo está.`,
-      tip: 'El Júpiter real se frena unos 10⁻²⁵ metros por segundo por cada Voyager. En toda la edad del sistema solar, todas las naves lanzadas juntas no han alterado su órbita de forma medible.',
+      tip: 'El Júpiter real se frena unos 4 × 10⁻²¹ metros por segundo por cada Voyager. En toda la edad del sistema solar, todas las naves lanzadas juntas no han alterado su órbita de forma medible.',
     },
     'fly-it-heliocentric': {
       title: 'Lánzala y vigila el residuo',

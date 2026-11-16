@@ -887,7 +887,7 @@ const TIDES = {
       answer: 1.5,
       tolerance: 0.2,
       because:
-        'About 1.5 Earth radii from the Earth’s center, or roughly 9,500 km, which is only about 3,100 km above the ground. That distance has a name: it is the <strong>Roche limit</strong>, after Édouard Roche, who worked it out in 1848. It is not a coincidence that it came out of a comparison you set up yourself: the Roche limit is defined by exactly that balance, and the textbook formula is nothing more than the algebra of setting those two bars equal to each other.',
+        'About 1.5 Earth radii from the Earth’s center, or roughly 9,500 km, which is only about 3,100 km above the ground. That distance has a name: it is the <strong>Roche limit</strong>, after Édouard Roche, who worked it out in 1848. It is not a coincidence that it came out of a comparison you set up yourself: the rigid-body Roche limit is defined by exactly that balance, and its textbook formula is nothing more than the algebra of setting those two bars equal to each other.',
       tool: {
         id: 'tide-balance',
         values: { dist: 3, density: 3300 },

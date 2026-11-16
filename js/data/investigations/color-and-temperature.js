@@ -145,7 +145,7 @@ const COLOR_AND_TEMPERATURE = {
         'Divide the constant by the temperature.',
         'The units come out in nm because the constant is in nm·K.',
       ],
-      worked: '2,897,772 nm·K ÷ 4,000 K = 724.4 nm.',
+      worked: '2,897,772 nm·K ÷ 4,000 K = 724 nm.',
       feedback: {
         close:
           'Close. Divide the constant by the temperature, with no other factor.',

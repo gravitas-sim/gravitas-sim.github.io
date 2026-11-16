@@ -41,8 +41,8 @@ deploy:
 
 A push to any other branch satisfies the first term and fails the second. A pull
 request fails the first. A manual `workflow_dispatch` fails the first. There is
-no path through it for any ref but `main`, and `on.push.branches` lists `main`
-alone. GitHub resolves a `push` event against the workflow file on the pushed
+no path through it for any ref but `main`. `on.push.branches` lists `main` and
+the integration trains (`v3`, `v4`), which get CI on each merge and nothing else. GitHub resolves a `push` event against the workflow file on the pushed
 ref, so `main`'s copy of `ci.yml` governs `main`. The tags and both DOIs are
 immutable: nothing on a branch can disturb what has been archived.
 
@@ -140,6 +140,19 @@ npm run build:instructors && npm run manifest && npm run cards \
 The `--full` on `docs:sync` is not optional. `CITATION.cff` and `.zenodo.json`
 quote a fact that only a full run measures, so a cheap sync neither writes nor
 judges them and will report success while leaving them stale.
+
+A full sync does not run the Jest suite. It counts the tests by loading each
+suite with its tests filtered out, keeps a suite's count while nothing the suite
+read has changed (a hash of each file, directory listing and absent path it
+opened, in `node_modules/.cache/gravitas/jest-counts.json`), and reuses the
+report that the physics test writes while it loads, so the physics suite runs
+once. The first sync in a checkout loads every suite and takes several
+minutes; a refresh after a merge loads only the suites whose inputs changed
+(and the few that start child processes, which are never cached). To get the
+old behavior, a real run of every test, pass `--jest=run`; `--jest=collect`
+counts without the cache. A suite that cannot be loaded during the count stops the sync with its name; it is never counted as zero. The numbers are the same either way, and CI
+checks the documented counts against the report of its own full Jest run
+(`docs:check:tests`), so a wrong count fails there.
 
 The world golden is the exception: if `e2e/golden/world-construction.json`
 conflicts, that is a signal, not a chore. Two branches changed physics. Resolve

@@ -176,7 +176,7 @@ their ceilings:
 | `js/data/investigations/observing-sequence.js` | 3,341 | 3,341 |
 | `js/investigations.js` | 3,288 | 3,288 |
 | `js/data/investigations/measurement-sequence.js` | 3,270 | 3,270 |
-| `js/render.js` | 3,015 | 3,015 |
+| `js/render.js` | 2,933 | 2,933 |
 | `js/data/investigations/depth/measurement-sequence.js` | 2,840 | 2,840 |
 <!--/fact-block-->
 
@@ -472,6 +472,19 @@ guidance, and agreement between the lessons, both manifests, the answer keys and
 the guides. `npm run author:rules` lists what is enforced and why; every finding
 names its rule, so an argument with a finding is an argument with a rule in
 `js/authoring/rules.js` rather than with the tool.
+
+`author:check` also holds the lesson standard's mechanical patterns to a ratchet
+(`tools/authoring/standardRules.mjs`, counts in `tools/lesson-standard-ratchet.json`):
+an instrument that opens at a value its validator accepts, a predicted answer already
+stated in an earlier body, tip or checklist, a numeric question whose body holds its
+answer, a core measure step with every field computed, the project's own vocabulary
+("Prompt 12", "NOT RUN", a leg id, a file name) in student text, a "step N" or "screen N"
+that names the wrong step, and a layout at any depth that ends on a graded step. A lesson
+may carry the findings it has today and no more; fix one and the command asks you to lower
+the record with `node tools/lesson-standard.mjs --record`, which also refreshes `leakFree`
+in `docs/lesson-acceptance.json`. `node tools/lesson-standard.mjs --list` names each finding
+by lesson and step. None of it judges prose, and a lesson with no finding has avoided these
+patterns and nothing more.
 
 A measure field's expected value is written as `want: '9.33'` and no page reads it
 except the checks and the instructor key. `hint` is words for the empty box ("from

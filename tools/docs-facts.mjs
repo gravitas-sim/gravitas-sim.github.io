@@ -49,6 +49,17 @@
 //           instead of running them again. What is left is the playwright
 //           listing, which takes four seconds.
 //
+//           Off CI, where nothing has paid for them, the Jest counts are not
+//           had by running twenty thousand tests either: tools/jest-count-cache.mjs
+//           loads each suite with its tests filtered out, which is how a test
+//           is counted, and remembers a suite's count while nothing the suite
+//           read has changed. The physics suite is run once, by the Jest suite
+//           that wraps it, and its report is reused. `--jest=run` (or
+//           GRAVITAS_FACTS_JEST=run) brings back the real run, and
+//           `--jest=collect` counts without the cache; all three give the same
+//           numbers, and CI's `docs:check:tests`, which reads the report of its
+//           own full Jest run, is the backstop that fails on any wrong count.
+//
 //   build   The bundle sizes, read from dist/build-summary.json. Only the
 //           `build` job has a dist/, and it has one already - so that job
 //           checks them, rather than `checks` waiting for a build it does not
@@ -61,7 +72,13 @@
 // =============================================================================
 
 import { readFile, writeFile } from 'node:fs/promises';
-import { existsSync, readFileSync, readdirSync } from 'node:fs';
+import {
+  existsSync,
+  mkdtempSync,
+  readFileSync,
+  readdirSync,
+  rmSync,
+} from 'node:fs';
 import { execFileSync } from 'node:child_process';
 import { join, resolve, dirname, relative } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -89,6 +106,7 @@ import {
   registeredLocales,
 } from './i18n-catalog.mjs';
 import { inOwnTransformCache } from './playwright-cache.mjs';
+import { countJestTests, defaultCacheFile } from './jest-count-cache.mjs';
 
 const REPO = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const rel = p => relative(REPO, p) || '.';
@@ -624,32 +642,122 @@ function run(cmd, args, opts = {}) {
 }
 
 /**
+ * How the Jest totals are had.
+ *
+ *   cached   (the default) count the tests without running their bodies, and
+ *            serve a suite's count while nothing it read has changed
+ *   collect  the same count, with no cache
+ *   run      run every test and read the totals off the report, as this tool
+ *            did before tools/jest-count-cache.mjs; slow, and the reference the
+ *            other two are checked against
+ *
+ * tools/jest-count-cache.mjs says why the first two give the same numbers as
+ * the third. CI does none of them: it hands this tool the report of its own
+ * `npm test` run (GRAVITAS_FACTS_CACHE).
+ */
+export const JEST_MODES = Object.freeze(['cached', 'collect', 'run']);
+
+/**
+ * Which mode a run uses, from `--jest=<mode>` or GRAVITAS_FACTS_JEST.
+ *
+ * @param {string[]} argv - Command-line arguments
+ * @param {NodeJS.ProcessEnv} [env] - Environment
+ * @returns {string} One of JEST_MODES
+ */
+export function jestModeFrom(argv, env = process.env) {
+  const flag = argv.find(a => a.startsWith('--jest='));
+  const mode = flag ? flag.slice('--jest='.length) : env.GRAVITAS_FACTS_JEST;
+  if (!mode) return 'cached';
+  if (!JEST_MODES.includes(mode)) {
+    throw new Error(
+      `Unknown Jest mode "${mode}". Known modes: ${JEST_MODES.join(', ')}.`
+    );
+  }
+  return mode;
+}
+
+/**
+ * The Jest totals: from CI's own report when there is one, else by the mode.
+ *
+ * @param {string[]} report - Notes
+ * @param {string} mode - One of JEST_MODES
+ * @param {string} physicsOut - Where the physics suite's test should leave its
+ *   report, so that the physics suite runs once for both facts
+ * @returns {{tests: number, suites: number}|null} The totals
+ */
+function jestTotals(report, mode, physicsOut) {
+  const fromCache = cached('jest.json', report);
+  if (fromCache) {
+    const jest = JSON.parse(fromCache);
+    if (jest.numFailedTests) {
+      report.push(`jest reported ${jest.numFailedTests} failing test(s)`);
+    }
+    return { tests: jest.numTotalTests, suites: jest.numTotalTestSuites };
+  }
+
+  if (mode === 'run') {
+    const out = join(tmpdir(), `gravitas-jest-${process.pid}.json`);
+    run('npx', ['jest', '--json', `--outputFile=${out}`, '--silent'], {
+      env: {
+        ...process.env,
+        NODE_OPTIONS: '--experimental-vm-modules',
+        GRAVITAS_PHYSICS_REPORT: physicsOut,
+      },
+    });
+    if (!existsSync(out)) {
+      report.push('could not read a Jest report');
+      return null;
+    }
+    const jest = JSON.parse(readFileSync(out, 'utf8'));
+    if (jest.numFailedTests) {
+      report.push(`jest reported ${jest.numFailedTests} failing test(s)`);
+    }
+    return { tests: jest.numTotalTests, suites: jest.numTotalTestSuites };
+  }
+
+  try {
+    const workers =
+      Number(process.env.GRAVITAS_FACTS_JEST_WORKERS) || undefined;
+    const counted = countJestTests({
+      repo: REPO,
+      cacheFile: defaultCacheFile(REPO),
+      cached: mode === 'cached',
+      workers,
+      physicsReport: physicsOut,
+    });
+    report.push(
+      `counted Jest tests without running them: ${counted.counted} suite(s) loaded, ` +
+        `${counted.reused} served from ${rel(defaultCacheFile(REPO))}` +
+        (counted.uncacheable.length
+          ? `, ${counted.uncacheable.length} never cached (they start processes the cache cannot follow)`
+          : '')
+    );
+    if (counted.failed.length) {
+      report.push(
+        `${counted.failed.length} suite(s) failed to load: ${counted.failed.join(', ')}`
+      );
+    }
+    return { tests: counted.tests, suites: counted.suites };
+  } catch (err) {
+    report.push(`could not count the Jest tests: ${err.message}`);
+    return null;
+  }
+}
+
+/**
  * The facts in the `tests` group: what a run of the suites counts.
  *
  * @param {string[]} report - Notes about anything that could not be measured
  * @param {object|null} physics - A physics report, when one has been read already
+ * @param {{tests: number, suites: number}|null} jest - The Jest totals
  * @returns {object} Facts
  */
-function testFacts(report, physics) {
+function testFacts(report, physics, jest) {
   const facts = {};
 
-  // Jest, via its own JSON report rather than by parsing a summary line.
-  const fromCache = cached('jest.json', report);
-  let jestJson = fromCache;
-  if (!jestJson) {
-    const out = join(tmpdir(), `gravitas-jest-${process.pid}.json`);
-    run('npx', ['jest', '--json', `--outputFile=${out}`, '--silent'], {
-      env: { ...process.env, NODE_OPTIONS: '--experimental-vm-modules' },
-    });
-    if (existsSync(out)) jestJson = readFileSync(out, 'utf8');
-  }
-  if (jestJson) {
-    const jest = JSON.parse(jestJson);
-    facts.jestTests = jest.numTotalTests;
-    facts.jestSuites = jest.numTotalTestSuites;
-    if (jest.numFailedTests) {
-      report.push(`jest reported ${jest.numFailedTests} failing test(s)`);
-    }
+  if (jest) {
+    facts.jestTests = jest.tests;
+    facts.jestSuites = jest.suites;
   } else {
     report.push('could not read a Jest report');
   }
@@ -893,15 +1001,31 @@ export async function gatherBlocks({ physics = null } = {}) {
   });
 }
 
+/** A report that a test run left at `file`, if it did. */
+function fromTestRun(file, report) {
+  if (!file || !existsSync(file)) return null;
+  const text = readFileSync(file, 'utf8');
+  if (!text.trim()) return null;
+  report.push('reused the report the physics test wrote while Jest counted');
+  return text;
+}
+
 /**
  * The physics suite's report, run once or read from what CI already ran.
  *
+ * Jest's physics test runs the suite as it loads, and leaves its report where
+ * GRAVITAS_PHYSICS_REPORT says, so a run that has counted Jest's tests already
+ * has it: the suite runs once for the Jest totals and the physics facts, not
+ * once for each.
+ *
  * @param {string[]} report - Notes, for a run that could not be read
+ * @param {string} [writtenBy] - Where the physics test was asked to write it
  * @returns {object|null} The parsed report
  */
-function physicsReport(report) {
+function physicsReport(report, writtenBy) {
   const out =
     cached('physics.json', report) ||
+    fromTestRun(writtenBy, report) ||
     run('node', ['tools/validate-physics.mjs', '--json']);
   if (!out) {
     report.push('could not run the physics validation suite');
@@ -948,16 +1072,33 @@ function physicsInventory(report) {
  * Returns the physics report alongside the facts so the caller can build the
  * coverage block from the same run rather than paying for a second one.
  *
- * @param {object} [options] - `groups`, a Set of group names
+ * @param {object} [options] - `groups`, a Set of group names, and `jestMode`,
+ *   one of JEST_MODES (how the Jest totals are had)
  * @returns {Promise<{facts: object, notes: string[], physics: object|null}>} The facts
  */
-export async function gatherFacts({ groups = new Set() } = {}) {
+export async function gatherFacts({
+  groups = new Set(),
+  jestMode = 'cached',
+} = {}) {
   const notes = [];
-  const physics = groups.has('tests') ? physicsReport(notes) : null;
+  let physics = null;
+  let jest = null;
+  if (groups.has('tests')) {
+    // The Jest totals first: counting runs the physics test, which leaves the
+    // physics report behind for the physicsReport() that follows.
+    const scratch = mkdtempSync(join(tmpdir(), 'gravitas-facts-'));
+    try {
+      const physicsOut = join(scratch, 'physics.json');
+      jest = jestTotals(notes, jestMode, physicsOut);
+      physics = physicsReport(notes, physicsOut);
+    } finally {
+      rmSync(scratch, { recursive: true, force: true });
+    }
+  }
   const facts = {
     ...(await cheapFacts()),
     ...(groups.has('build') ? buildFacts(notes) : {}),
-    ...(groups.has('tests') ? testFacts(notes, physics) : {}),
+    ...(groups.has('tests') ? testFacts(notes, physics, jest) : {}),
   };
   return { facts, notes, physics };
 }
@@ -1430,13 +1571,15 @@ async function main() {
   const has = flag => argv.includes(flag);
   const mode = has('--sync') ? 'sync' : has('--check') ? 'check' : 'print';
   let groups;
+  let jestMode;
   try {
     groups = groupsFrom(argv);
+    jestMode = jestModeFrom(argv);
   } catch (err) {
     process.stderr.write(`${err.message}\n`);
     return 2;
   }
-  const { facts, notes, physics } = await gatherFacts({ groups });
+  const { facts, notes, physics } = await gatherFacts({ groups, jestMode });
 
   if (has('--json')) {
     process.stdout.write(JSON.stringify(facts, null, 2) + '\n');
@@ -1540,7 +1683,13 @@ async function main() {
       process.stderr.write(`${u.doc}: unknown fact "${u.key}"\n`);
     }
     for (const b of broken) process.stderr.write(`${b}\n`);
-    return unknown.length || broken.length ? 1 : 0;
+    // A count that could not be had is not a count that did not change: say so
+    // and fail, rather than leave the old number in the docs under a green run.
+    const unmeasured = notes.filter(n =>
+      /^could not count the Jest tests/.test(n)
+    );
+    for (const n of unmeasured) process.stderr.write(`${n}\n`);
+    return unknown.length || broken.length || unmeasured.length ? 1 : 0;
   }
 
   // check
