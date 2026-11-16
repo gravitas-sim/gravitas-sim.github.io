@@ -2180,7 +2180,7 @@ export const ES_DEFERRED = {
   'inv.backup.restoredMoved':
     'Progreso restaurado. {moved} respuestas se asociaron a pasos que han cambiado de sitio desde la copia.',
   'inv.backup.restoredPartly':
-    'Progreso restaurado, pero {dropped} pasos de la copia ya no est\u00e1n en esta investigaci\u00f3n y sus respuestas se omitieron.',
+    'Progreso restaurado. Se omitieron las respuestas de la copia a pasos que esta investigaci\u00f3n no tiene.',
   'inv.backup.restoredUncertain':
     'Se restauraron {applied} respuestas. {n} no se pudieron ubicar porque sus pasos han cambiado desde que se hizo la copia; siguen estando en el archivo que restauraste.',
   'inv.backup.tooLarge':

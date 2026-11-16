@@ -37,6 +37,7 @@ import {
   NeutronStar,
   WhiteDwarf,
   Galaxy,
+  PhysicsObject_id_counter,
   setPhysicsObjectCounter,
   syncReportedMass,
   getSimulationTime,
@@ -248,7 +249,8 @@ function installLists(rebuilt, maxId) {
     list.length = 0;
     for (const o of next) list.push(o);
   }
-  setPhysicsObjectCounter(maxId + 1);
+  // Debris is not in these lists: never below the live counter.
+  setPhysicsObjectCounter(Math.max(PhysicsObject_id_counter, maxId + 1));
   return changed;
 }
 
@@ -303,7 +305,7 @@ function restore(offset) {
     rebuilt.get(kind).push(obj);
   }
 
-  installLists(rebuilt, maxId);
+  if (installLists(rebuilt, maxId)) bumpWorldGeneration();
   setSimulationTime(frameTimes[idx] ?? getSimulationTime());
 }
 

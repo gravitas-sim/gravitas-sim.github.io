@@ -29,13 +29,10 @@ export {
 } from './dom.js';
 
 /**
- * One catalog per language, each its own chunk, fetched when its language is the
- * one in use or about to be. A page used to fetch both so that a switch with a
- * panel open never showed ids, which cost every reader the catalog they could
- * not read (78 KB gzipped English, 90 KB Spanish). A switch now fetches the
- * other one itself and waits for it (setLocalePreparer below). English is not
- * fetched as Spanish's fallback: Spanish has every English key
- * (tests/deferredByLocale.test.js) and the English base catalog is bundled.
+ * One catalog per language, each its own chunk, fetched when its language is in
+ * use or about to be; a switch fetches the other (setLocalePreparer below).
+ * English is not Spanish's fallback: Spanish has every key
+ * (tests/deferredByLocale.test.js).
  */
 const LOADERS = {
   en: () => import('./en.deferred.js').then(m => m.EN_DEFERRED),
@@ -44,8 +41,7 @@ const LOADERS = {
 
 /**
  * Loads in flight or done, by locale; dropped on failure so the next caller
- * retries. A promise rather than a flag: a second caller arriving mid-load
- * must wait for the same work, not render against a catalog that has not come.
+ * retries. A promise, so a second caller mid-load waits for the same work.
  *
  * @type {Map<string, Promise<void>>}
  */
@@ -62,33 +58,26 @@ function ensureFor(id) {
   if (!loading.has(id))
     loading.set(
       id,
-      LOADERS[id]()
+      Promise.resolve()
+        .then(() => LOADERS[id]())
         .then(strings => {
           registerMessages(id, strings);
           registered_.add(id);
           lastFailure = null;
-          // What the start-up sweep asked for and did not get is now resolved
-          // or genuinely missing, and ./index.js says which.
           settleDeferredMessages(id);
-          // Repaint the static markup: forty-one of these strings are
-          // data-i18n attributes in index.html that the start-up sweep walked
-          // past while the catalog was empty. Only the language on screen (a
-          // switch in flight repaints when it lands), and not in the Node
-          // authoring tools, which have no document and need only the
-          // registration above.
+          // Repaint the static markup the start-up sweep walked past, for the
+          // language on screen only (not in Node, which has no document).
           if (typeof document !== 'undefined' && getLocale() === id)
             applyTranslations(document);
         })
-        .catch(err => {
-          // Forget the attempt. A browser may record a module whose fetch
-          // failed and reject every later import of the same specifier, so for
-          // a genuine network failure the reader's recovery is a reload; this
-          // does recover a throw from registerMessages or the repaint. Strings
-          // render as ids (or English) and the application keeps working.
+        .catch(async err => {
+          // Forget the attempt (a failed fetch may stay failed until reload).
           loading.delete(id);
-          lastFailure = err;
           settleDeferredMessages(id);
           console.warn('[i18n] deferred messages did not load:', err);
+          // Last resort: English, so panels read words, not ids.
+          if (id !== 'en') await ensureFor('en').catch(() => {});
+          lastFailure = err;
           throw err;
         })
     );
@@ -96,12 +85,9 @@ function ensureFor(id) {
 }
 
 /**
- * The language the page is on or is about to be on. Start-up applies the stored
- * choice a moment after modules begin asking for strings, when the active
- * language is still English, so until the first change this is a guess from the
- * stored choice or the browser's language. Kept here, with the loaders that
- * validate it, rather than behind the catalog's list of locales: a page that
- * never loads these strings then carries none of it.
+ * The language the page is on or about to be on. Until the first change this is
+ * a guess from the stored choice or the browser's language, because start-up
+ * applies the stored choice after modules begin asking.
  *
  * @returns {string} A locale id with a deferred catalog
  */
@@ -143,12 +129,9 @@ export const deferredMessagesReady = (locale = intendedLocale()) =>
 export const deferredMessagesFailure = () => lastFailure;
 
 /**
- * The readiness boundary a consumer awaits before reading any deferred label.
- *
- * `ensureDeferredMessages()` rejects, which is right for a caller that wants to
- * know. This one never rejects: it reports whether the strings arrived, so a
- * renderer can decide what to draw instead of choosing between a crash and a
- * `.catch(() => {})` that hides every failure including the ones worth seeing.
+ * The readiness boundary a consumer awaits before reading a deferred label.
+ * Unlike `ensureDeferredMessages()` it never rejects: it reports whether the
+ * strings arrived, so a renderer can decide what to draw.
  *
  * @returns {Promise<boolean>} True when the deferred strings are usable
  */
@@ -157,7 +140,6 @@ export async function awaitDeferredMessages() {
     await ensureFor(intendedLocale());
     return true;
   } catch {
-    // Already reported once by ensureDeferredMessages, with the error.
     return false;
   }
 }

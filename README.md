@@ -341,7 +341,7 @@ run directly, so debugging never requires a build step.
 ### Everything else
 
 ```bash
-npm test                  # <!--fact:jestTests-->21228<!--/fact--> tests across <!--fact:jestSuites-->643<!--/fact--> suites
+npm test                  # <!--fact:jestTests-->21221<!--/fact--> tests across <!--fact:jestSuites-->643<!--/fact--> suites
 npm run validate:physics  # the physics validation table
 npm run e2e               # browser smoke tests, against the sources
 npm run lint              # eslint
@@ -366,7 +366,7 @@ reports what the browser downloads at start-up separately from what is deferred:
 | What                   | Size                                                   | Files / chunks                                |
 | ---------------------- | ------------------------------------------------------ | --------------------------------------------- |
 | CSS                    | <!--fact:buildCss-->213<!--/fact--> KB                 | 1                                             |
-| JavaScript at start-up | <!--fact:buildStartupJs-->518<!--/fact--> KB           | <!--fact:buildStartupFiles-->53<!--/fact-->   |
+| JavaScript at start-up | <!--fact:buildStartupJs-->519<!--/fact--> KB           | <!--fact:buildStartupFiles-->53<!--/fact-->   |
 | JavaScript on demand   | <!--fact:buildDeferredJs-->8792<!--/fact--> KB         | <!--fact:buildDeferredChunks-->823<!--/fact--> |
 | **Initial download**   | **<!--fact:buildInitialDownload-->732<!--/fact--> KB** |                                               |
 
@@ -489,8 +489,8 @@ npm run e2e:ui                    # the Playwright inspector
 npm run e2e:report                # open the last HTML report
 ```
 
-The suite is <!--fact:e2eTests-->4102<!--/fact--> tests
-in <!--fact:e2eFiles-->248<!--/fact--> files and takes several minutes in
+The suite is <!--fact:e2eTests-->4099<!--/fact--> tests
+in <!--fact:e2eFiles-->247<!--/fact--> files and takes several minutes in
 Chromium.
 
 Some notes on how it is put together, because two of the choices are not

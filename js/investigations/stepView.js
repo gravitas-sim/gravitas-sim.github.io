@@ -1397,7 +1397,9 @@ export function earlierAnswers(lesson, table) {
           {
             id,
             text,
-            r: lesson.retired?.[id],
+            r: Object.hasOwn(lesson.retired ?? {}, id)
+              ? lesson.retired[id]
+              : undefined,
           },
         ]
       : [];
@@ -1454,7 +1456,8 @@ export function load(id, lesson = null) {
   keepEarlier(id, progress.earlier);
   // Only this lesson's own typed text: a draft is never carried between records.
   for (const [k, v] of Object.entries(data?.drafts ?? {}))
-    if (k.startsWith(`${id}:`) && typeof v === 'string') typed[k] = v;
+    if (k.startsWith(`${id}:`) && typeof v === 'string')
+      typed[k] = v.slice(0, 99);
 
   // Keep the original: a positional migration cannot tell from the payload
   // whether the lesson was reordered since the save.
