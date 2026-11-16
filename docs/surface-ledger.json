@@ -1885,6 +1885,30 @@
       "measure": []
     },
     {
+      "id": "dialog:investigation-restart",
+      "kind": "dialog",
+      "locator": {
+        "page": "index.html",
+        "element": "investigationRestart",
+        "opener": "Restart in the lesson panel's More (js/investigations.js)",
+        "native": true
+      },
+      "purpose": "The question before Restart erases a lesson's answers: how many there are, a backup to download first, and a way to cancel.",
+      "audience": "student",
+      "primary_action": "Download a backup first, or erase the answers and start over",
+      "job": "lesson",
+      "template": null,
+      "disposition": "OPEN",
+      "redesign": null,
+      "owner": 456,
+      "supporting": [],
+      "reason": "",
+      "sitemap_reason": "",
+      "decision": "",
+      "note": "",
+      "measure": []
+    },
+    {
       "id": "dialog:share",
       "kind": "dialog",
       "locator": {

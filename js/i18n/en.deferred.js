@@ -876,7 +876,6 @@ export const EN_DEFERRED = {
   'inv.answer.needsUncertainty':
     'Give your value and its uncertainty, for example 8.1 ± 0.2.',
   'inv.progress.steps': '{done} of {total} steps',
-  'inv.scenario.reset': 'Scenario reset',
   'inv.card.loading': 'Loading…',
   'inv.card.review': 'Review investigation',
   'inv.card.start': 'Start investigation',

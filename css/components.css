@@ -4287,7 +4287,12 @@
   #investigationFinish.hidden {
     display: none;
   }
-  #investigationFinishContent {
+  #investigationRestart::backdrop {
+    background: color-mix(in srgb, var(--bg-color) 88%, transparent);
+    backdrop-filter: blur(8px);
+  }
+  #investigationFinishContent,
+  #investigationRestart {
     width: min(520px, 100%);
     max-height: 90vh;
     overflow-y: auto;
