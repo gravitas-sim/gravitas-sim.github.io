@@ -393,6 +393,7 @@ test.describe('persistence', () => {
     await answerAndAdvance(page);
 
     const before = await page.evaluate(async id => {
+      await import('/js/investigations.js');
       const inv = await import('/js/investigations/stepView.js');
       const { investigationMeta } =
         await import('/js/data/investigations/registry.js');
@@ -404,6 +405,7 @@ test.describe('persistence', () => {
     await page.waitForFunction(() => window.splashScreenEnded === true);
 
     const after = await page.evaluate(async id => {
+      await import('/js/investigations.js');
       const inv = await import('/js/investigations/stepView.js');
       const { investigationMeta } =
         await import('/js/data/investigations/registry.js');
