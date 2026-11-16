@@ -2625,8 +2625,7 @@ const finishHost = () => ({
   restoreInto: restored => {
     progressNotes = [];
     ({ responses, attempts, visited } = restored);
-    forgetKept();
-    keepEarlier(active.id, restored.earlier);
+    keepEarlier(active.id, (forgetKept(), restored.earlier));
     startedAt = restored.startedAt || new Date().toISOString();
     save();
     goToStep(restored.stepIndex, { rebuild: true });
