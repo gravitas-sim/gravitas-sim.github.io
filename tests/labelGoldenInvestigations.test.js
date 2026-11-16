@@ -218,9 +218,9 @@ describe('what the recording can tell apart', () => {
     // (js/format.js is not loaded by /observatory/ at start).
     const at = site => all.hazards[site] ?? { hyphen: false, nonFinite: false };
     for (const site of [
-      'js/investigations/stepView.js:619:11',
-      'js/investigations/stepView.js:774:35',
-      'js/investigations/stepView.js:1163:13',
+      'js/investigations/stepView.js:616:11',
+      'js/investigations/stepView.js:771:35',
+      'js/investigations/stepView.js:1152:13',
       'js/observatory/guides/core.js:320:27',
     ])
       expect(at(site).hyphen).toBe(true);
