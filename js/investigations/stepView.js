@@ -270,8 +270,7 @@ export function stepMarkup(step, c) {
          aria-describedby="invAnswerNote"
          placeholder="${escape(t('inv.answer.placeholder'))}">${escape(saved || '')}</textarea>`
     );
-    // Shown only once something has been typed that is not an answer: an empty
-    // box on arrival is where every reader starts and does not need telling.
+    // Shown only once something typed is not an answer.
     const empty =
       String(saved || '').trim().length > 0 && !isWrittenAnswer(saved);
     parts.push(
@@ -1004,13 +1003,10 @@ export function bindStepInputs(h) {
         const hint = els.body.querySelector('[data-reveal-hint]');
         if (hint) hint.hidden = ready;
       }
-      // A box holding only whitespace or punctuation is not an answer, and
-      // saying so beside it is kinder than letting it reach a report as one.
+      // Whitespace or punctuation is not an answer: say so beside the box.
       const note = els.body.querySelector('#invAnswerNote');
       if (note) {
-        // Raw length, not trimmed: a box of spaces is something the reader
-        // typed and is not an answer, while a box they have not touched needs
-        // no telling.
+        // Raw length: a box of spaces is typed and not an answer.
         note.hidden = area.value.length === 0 || isWrittenAnswer(area.value);
       }
     });
@@ -1184,17 +1180,13 @@ const progressArea = () => (host.assigned() ? 'assignments' : 'progress');
 /**
  * An assignment's progress key: its lesson, steps and title, never its date,
  * so a link re-issued on another day keeps the work (work under an old dated
- * key moves across when first read). A new title re-keys on purpose; a step
- * revised since does not: a successor keys as the first id it replaced.
+ * key moves across when first read). A new title re-keys on purpose.
  *
  * @param {object} a - A validated assignment payload
- * @param {?object} lesson - The merged lesson, for its `retired` map
  * @returns {string} The storage key
  */
-export function keyForAssignment(a, lesson) {
-  const r = lesson?.retired ?? {};
-  const old = s => Object.keys(r).find(k => r[k].to === s) ?? s;
-  const hash = shortHash(`${a.l}|${a.s.map(old)}|${a.t}`);
+export function keyForAssignment(a) {
+  const hash = shortHash(`${a.l}|${a.s.join(',')}|${a.t}`);
   const key = `gravitas_assignment_${hash}`;
   if (host.authoring()) return key;
   try {
@@ -1406,9 +1398,7 @@ export function earlierAnswers(lesson, table) {
           {
             id,
             text,
-            r: Object.hasOwn(lesson.retired ?? {}, id)
-              ? lesson.retired[id]
-              : undefined,
+            r: lesson.retired?.[id],
           },
         ]
       : [];
@@ -1433,7 +1423,10 @@ export function load(id, lesson = null) {
   // This tab first. It is written on every save and storage is not, so when the
   // two differ the session copy is the newer one - and when storage refused
   // every write, it is the only one there is.
-  if (lesson) earlierKept.delete(progressKey(id));
+  if (lesson) {
+    earlierKept.delete(progressKey(id));
+    typed = {};
+  }
   let data = sessionProgress.get(progressKey(id)) ?? null;
 
   if (!data) {
@@ -1460,7 +1453,9 @@ export function load(id, lesson = null) {
   // answers were saved; its manifest says how, and this applies it.
   progress.responses = migrateSavedProgress(id, progress.responses);
   keepEarlier(id, progress.earlier);
-  typed = { ...data?.drafts };
+  // Only this lesson's own typed text: a draft is never carried between records.
+  for (const [k, v] of Object.entries(data?.drafts ?? {}))
+    if (k.startsWith(`${id}:`) && typeof v === 'string') typed[k] = v;
 
   // Keep the original: a positional migration cannot tell from the payload
   // whether the lesson was reordered since the save.

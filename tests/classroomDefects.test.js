@@ -159,8 +159,7 @@ describe('a typed number is kept without being an answer', () => {
   test('it belongs to the lesson it was typed in', () => {
     type(show(), '3');
     expect(load('other', { id: 'other', steps: [] }) ?? null).toBeNull();
-    expect(show().value).toBe('3');
-    forgetKept();
+    // opening another lesson leaves this one's typed text behind
     expect(show().value).toBe('');
   });
 

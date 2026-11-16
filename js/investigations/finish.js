@@ -51,12 +51,9 @@ import { buildLabReport, downloadPdf, reportMessages } from '../labReport.js';
 const backupOf = (host, mod, studentName) => {
   const { active, stepIndex, responses, attempts, visited, startedAt } =
     host.state();
-  const kept = { ...host.earlier(active.id)?.responses };
-  for (const k in kept)
-    if (active.steps.some(s => s.sid === k.split(':')[1])) delete kept[k];
   return mod.buildBackup({
     lesson: active,
-    responses: { ...kept, ...responses },
+    responses: { ...host.earlier(active.id)?.responses, ...responses },
     attempts,
     visited,
     stepSid: active.steps[stepIndex]?.sid ?? null,

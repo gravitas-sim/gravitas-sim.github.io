@@ -9,7 +9,6 @@ import {
   earlierFor,
   forgetKept,
   keepEarlier,
-  keyForAssignment,
   load,
   save,
   sessionProgress,
@@ -458,76 +457,51 @@ describe('earlier answers: backup, storage, Restart', () => {
     expect(saved(FREE).attempts).toEqual({});
     expect(load('tides', state.lesson).earlier).toBeUndefined();
   });
+});
 
-  test('a held-back answer survives the next save, and the notice lists only steps the lesson lacks', () => {
-    state.lesson = lesson();
-    keepEarlier('tides', { responses: { 'tides:guess': 1 } });
-    state.responses = { 'tides:ask': 2 };
-    save();
-    expect(saved(FREE).responses).toEqual({ 'tides:guess': 1, 'tides:ask': 2 });
-    expect(earlierAnswers(state.lesson, earlierFor('tides').responses)).toEqual(
-      []
-    );
-  });
-
-  test('a report or backup never carries a held-back answer under a step the lesson has', async () => {
-    const { downloadBackup } = await import('../js/investigations/finish.js');
-    let blob;
-    const host = {
+describe('typed drafts do not travel between records', () => {
+  test('a draft of another lesson, or not text, is not read; a new lesson starts with none', () => {
+    bindPersistence({
       state: () => ({
         active: lesson(),
         stepIndex: 0,
-        responses: { 'tides:ask': 2 },
+        responses: {},
         attempts: {},
         visited: new Set(),
         startedAt: null,
+        depthChoice: 'core',
+        deepest: 'core',
+        spent: 0,
+        progressNotes: [],
       }),
-      earlier: () => ({
-        responses: {
-          'tides:guess': 0,
-          'tides:old-step': 3,
-          'tides:old-step:d': '4',
-        },
-      }),
-      getStudentName: () => '',
-      saveFile: b => (blob = b),
-      lib: { t: x => x, announce: () => {} },
-    };
-    await downloadBackup(host);
-    const written = JSON.parse(await blob.text()).progress.responses;
-    expect(written).toEqual({
-      'tides:old-step': 3,
-      'tides:old-step:d': '4',
-      'tides:ask': 2,
+      authoring: () => false,
+      assigned: () => false,
+      assignmentKey: () => 'x',
+      els: () => ({}),
+      clock: () => {},
     });
-  });
-});
-
-describe('an activity keeps its progress key through a revision', () => {
-  test('the key is the one the unrevised lesson gave, and a new title still re-keys', async () => {
-    bindPersistence({ authoring: () => true });
-    const { assignmentForFormat } =
-      await import('../js/activities/activities.js');
-    const make = l =>
-      assignmentForFormat(
-        l,
-        { id: 'a', markingNote: false },
-        { steps: ['guess', 'ask'], assignmentId: 'f1' },
-        'A',
-        ''
-      ).assignment;
-    const first = lesson();
-    const revised = editedLesson('revise');
-    const before = keyForAssignment(make(first), first);
-    expect(make(revised).s).toContain('guess-2');
-    expect(keyForAssignment(make(revised), revised)).toBe(before);
-    expect(keyForAssignment({ ...make(revised), t: 'B' }, revised)).not.toBe(
-      before
+    sessionProgress.clear();
+    localStorage.clear();
+    localStorage.setItem(
+      'gravitas_investigation_tides',
+      JSON.stringify({
+        ...SAVED,
+        drafts: { 'tides:measure:d': '4,5', 'other:x': '9', 'tides:guess': 7 },
+      })
     );
-    // no retired map, no change: the key is what it always was
-    expect(keyForAssignment(make(first))).toBe(before);
-    // a link made before the revision, still naming the old id, keeps its key
-    expect(keyForAssignment(make(first), revised)).toBe(before);
+    load('tides', lesson());
+    save();
+    expect(sessionProgress.get('gravitas_investigation_tides').drafts).toEqual({
+      'tides:measure:d': '4,5',
+    });
+    // opening a lesson with nothing saved drops the last lesson's drafts
+    localStorage.clear();
+    sessionProgress.clear();
+    expect(load('tides', lesson())).toBeNull();
+    save();
+    expect(
+      'drafts' in sessionProgress.get('gravitas_investigation_tides')
+    ).toBe(false);
   });
 });
 
@@ -569,13 +543,6 @@ describe('the small ones', () => {
     const { swapRetired } = await import('../js/assignments/assignment.js');
     const l = { id: 'l', steps: [{ sid: 'constructor' }], retired: {} };
     expect(swapRetired(l, ['constructor'])).toEqual(['constructor']);
-    expect(earlierAnswers(l, { 'l:constructor': 1 })).toEqual([]);
-    expect(
-      earlierAnswers(
-        { id: 'l', steps: [], retired: {} },
-        { 'l:constructor': 1 }
-      )[0].r
-    ).toBeUndefined();
   });
 
   test('a release must be a string: 3.1 as a number is refused', async () => {

@@ -355,7 +355,7 @@ export function restoreProgress(backup, lesson) {
       const to = indexBySid.get(sid);
       if (to === undefined) {
         // A step the lesson retired is set aside (kept below), not lost.
-        if (!Object.hasOwn(lesson?.retired ?? {}, sid)) dropped.push(sid);
+        if (!lesson?.retired?.[sid]) dropped.push(sid);
         continue;
       }
       // An option list that changed length invalidates a stored choice index.

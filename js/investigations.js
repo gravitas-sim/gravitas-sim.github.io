@@ -2351,7 +2351,7 @@ export async function openInvestigation(id, opts = {}) {
       return { ok: false, reason: 'noStepsLeft' };
     }
     active = { ...inv, steps: assignmentBinding.steps };
-    assignmentKey = keyForAssignment(assignment, inv);
+    assignmentKey = keyForAssignment(assignment);
     fullSteps = inv.steps.filter(s => inDepth(s, 'core')).length;
   } else {
     fullSteps = 0;
@@ -2363,15 +2363,12 @@ export async function openInvestigation(id, opts = {}) {
   responses = saved?.responses || {};
   if (assignment && saved?.responses) {
     // A step rewritten under its own id since the assignment was made is a
-    // different question: its old answer is held back, not shown, and kept.
-    const { kept, dropped } = filterResponses(
+    // different question: its old answer is held back, not shown.
+    responses = filterResponses(
       assignmentBinding,
       saved.responses,
       sid => `${inv.id}:${sid}`
-    );
-    responses = kept;
-    const held = dropped.map(k => [k, saved.responses[k]]);
-    keepEarlier(id, { responses: Object.fromEntries(held) });
+    ).kept;
   }
   attempts = saved?.attempts || {};
   visited = saved?.visited || new Set();
