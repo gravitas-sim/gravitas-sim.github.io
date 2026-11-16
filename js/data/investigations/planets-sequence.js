@@ -815,9 +815,8 @@ export const COMETS_AND_THE_SUN = {
       type: 'explore',
       title: 'Watch the tails',
       body: `Tails show only inside about 3 AU. Halley, the readout&rsquo;s comet, stays
-             beyond 5.8 AU. Wild 2 and Hartley 2 come in to 1.1 AU, Shoemaker-Levy 9 to 2.1 (faint;
-             the only one on a slower device): find one, zoom in, and compare
-             its tail with the direction to the Sun.`,
+             beyond 5.8 AU. Wild 2 and Hartley 2 come in to 1.1 AU, Shoemaker-Levy 9 to 2.1 (faint; the only one on a
+             slower device): find one, zoom in, and compare its tail with the direction to the Sun.`,
       checklist: [
         'Find a comet near the Sun and zoom in',
         'See the narrow ion tail point away from the Sun',
