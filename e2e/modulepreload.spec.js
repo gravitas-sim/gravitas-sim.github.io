@@ -8,9 +8,9 @@
 //   - every module in the page's static closure was fetched by the browser
 //     (so the walk misses none: a module the walk does not know is an import
 //     form it cannot read);
-//   - every module the browser fetched under /js/ was either in that closure
-//     or reached by a dynamic import(), and none was fetched twice (a link
-//     whose address differed from the import's would fetch the file again);
+//   - none was fetched twice by the page's own document (a link whose address
+//     differed from the import's would fetch the file again; a frame the page
+//     embeds fetches its own copies and is not counted);
 //   - every linked module is one the page really used.
 //
 // Source tree only: dist/ is bundled and its pages carry no links.
@@ -36,10 +36,16 @@ for (const { page: file, url } of PAGES) {
   test(`${url} fetches its static closure once, and every link is used`, async ({
     page,
   }) => {
+    // The page's own document only: a page that embeds the application in a
+    // frame (the figure builder) fetches the application's modules again there.
     const fetched = [];
     page.on('request', req => {
       const u = new URL(req.url());
-      if (u.pathname.startsWith('/js/') && u.pathname.endsWith('.js'))
+      if (
+        req.frame() === page.mainFrame() &&
+        u.pathname.startsWith('/js/') &&
+        u.pathname.endsWith('.js')
+      )
         fetched.push(u.pathname.slice(1));
     });
     await page.goto(url);
