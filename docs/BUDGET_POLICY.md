@@ -1,5 +1,9 @@
 # Budget policy (Prompt 133): proposed values, switched off
 
+> The figures below date from Prompt 133. The current measurements, the lowered
+> ceilings and the proposed allocation are in
+> [`BUDGET_POLICY_II.md`](BUDGET_POLICY_II.md).
+
 Nothing here changes a ceiling or a measured value. `tools/budget-policy.json`
 says `"mode": "exact"`, which is today's behavior; the values below are
 **proposals for the owner to adopt or change in writing**. Tooling:
