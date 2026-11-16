@@ -24,7 +24,7 @@
     }
   },
   "sourceFiles": 306,
-  "sourceDigest": "84116afcf553c2143cf6b43d94ec6ebe79e25bb55b4891dde352bb46a58c7f2f",
+  "sourceDigest": "8d6cffde6dc127b78dbabeca81ff111c325d808fca5a61557e26d21708802b61",
   "sources": {
     "js/activities/activities.js": "af9b7e121b9a72c2a5cc18e07331d6ee841934d402b030294d25c442628881ef",
     "js/activities/activityBridge.js": "67a82aff98e0ed935d6b8b0f0f654c6ad4332ee929cb3604e896a7f790a6fdc1",
@@ -59,7 +59,7 @@
     "js/data/investigations/binary-masses-sequence.js": "47670ac6193214d45ee1e1c8f70c14cf5f55bcdfe2cd6e9dd97c8de8735fd86a",
     "js/data/investigations/binary-star-planets.js": "23a64a19c5bdbba8e7d67191f3cb54c218bf27c3fa8076c1cb3d0d63875950b2",
     "js/data/investigations/black-holes.js": "3e666dd2ad06285545ee0749124d0654f9f66783f51a60ac97182a58ff23fd89",
-    "js/data/investigations/butterfly-effect.js": "9a27b3e2cefb9595d450453fe62e6a3c116282a2fa98c784c80ee0ca536c2bdd",
+    "js/data/investigations/butterfly-effect.js": "df2f9178416242672026214a3d1e9aea637740a84f0e59fecdc72be7f0b6d1d2",
     "js/data/investigations/catalog.js": "c24c233767ebd28a49066263de0c3db6eca72298a925e62ece364eec38dfc04f",
     "js/data/investigations/cluster-membership.js": "59468a5218f173d3a5d5d8a9a96afe32b63b333046f6fe5a047744502b2cfc76",
     "js/data/investigations/cluster-sequence.js": "41d5a25786bfd988e315c9876fa1da6a6210d0abd59bdb7f24991937801d57e2",
@@ -153,7 +153,7 @@
     "js/data/investigations/es/bending-light.js": "f829d275b78b89ffcbf678ffd4b4f9980cbb531a5bc3ce80b9bbd6b5b31abb65",
     "js/data/investigations/es/binary-star-planets.js": "42532d0631ef8e4b369fd7d0eb29264b12c501bf5c5714b1009693d58a2e5cb7",
     "js/data/investigations/es/black-holes.js": "7c1a2560b46a8ca54988d403033872fc862d0e0d327071f8fbd253b86b31038e",
-    "js/data/investigations/es/butterfly-effect.js": "875a4e52675f87e6e44d920f42979f4c1d06ca4e25f3bfbb4cf705d18063afc0",
+    "js/data/investigations/es/butterfly-effect.js": "57e3767ddc3c1c71329f66f455aedf455b71e9e0ec8f636990a81400947098bb",
     "js/data/investigations/es/cluster-membership.js": "95ff54e6e741347b89832acb85e474a13f940fa5c02418306c606739244eb7a2",
     "js/data/investigations/es/color-and-temperature.js": "adf69c99005335493a3ab93da14b23780751b20fd65ab719c4664a2d25f1b88d",
     "js/data/investigations/es/design-the-schedule.js": "2c8f4dd583188fcdf4962e3154f23810ac11874c1727818db79cae1f18b768d4",
