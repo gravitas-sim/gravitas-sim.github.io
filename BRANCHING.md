@@ -150,7 +150,7 @@ once. The first sync in a checkout loads every suite and takes several
 minutes; a refresh after a merge loads only the suites whose inputs changed
 (and the few that start child processes, which are never cached). To get the
 old behavior, a real run of every test, pass `--jest=run`; `--jest=collect`
-counts without the cache. The numbers are the same either way, and CI
+counts without the cache. A suite that cannot be loaded during the count stops the sync with its name; it is never counted as zero. The numbers are the same either way, and CI
 checks the documented counts against the report of its own full Jest run
 (`docs:check:tests`), so a wrong count fails there.
 

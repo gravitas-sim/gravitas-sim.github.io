@@ -181,7 +181,16 @@ if (process.env.GRAVITAS_COUNT_TRACK === '1') {
   };
 
   const seen = args => note(args[0], false);
-  const listed = args => note(args[0], true);
+  // A recursive listing reads every directory below the one named, and a file
+  // added three levels down does not change the top directory's entries, so the
+  // hash of those cannot stand for it.
+  const listed = args => {
+    note(args[0], true);
+    const options = args[1];
+    if (options && typeof options === 'object' && options.recursive) {
+      flag('fs.readdir recursive')();
+    }
+  };
   // cp and copyFile take a source and a destination; both are touched.
   const both = args => {
     note(args[0], false);
