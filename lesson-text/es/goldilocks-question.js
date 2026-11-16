@@ -166,7 +166,7 @@ export default {
         'Cambia a la enana naranja, y luego a la estrella más brillante',
         'Mira la fila de luminosidad cada vez, y la fila de luz estelar',
       ],
-      tip: 'Una estrella cuatrocientas veces más tenue entrega cuatrocientas veces menos luz a un planeta a la misma distancia. Los dos números van a la par, porque la luminosidad multiplica directamente en la relación del inverso del cuadrado.',
+      tip: 'Una estrella unas 670 veces más tenue entrega unas 670 veces menos luz a un planeta a la misma distancia. Los dos números van a la par, porque la luminosidad multiplica directamente en la relación del inverso del cuadrado.',
     },
     'what-luminosity-does': {
       title: 'Qué hace la luminosidad',
@@ -294,8 +294,9 @@ export default {
         'Encuentra el nuevo borde interior y compáralo con dónde orbita Venus, a 0,72 UA.',
         'Comprueba el borde exterior frente a Ceres, a 2,77 UA.',
         'Cuenta cuántos mundos hay ahora dentro del anillo, y compáralo con la cuenta que hiciste con la definición conservadora.',
+        'Selecciona Venus y lee su veredicto: el borde se movió, el veredicto no.',
       ],
-      tip: 'El borde interior optimista es el límite de Venus Reciente, y lo fija el propio Venus: el argumento es que Venus no ha tenido agua superficial desde hace al menos mil millones de años, así que allí donde esté Venus ya tiene que ser demasiado cerca. Venus queda por tanto justo dentro de su propio límite, por unas 0,03 UA. La definición está casi tocando la evidencia con la que se construyó.',
+      tip: 'El borde interior optimista es el límite de Venus Reciente, y lo fija el propio Venus: el argumento es que Venus no ha tenido agua superficial desde hace al menos mil millones de años, así que allí donde esté Venus ya tiene que ser demasiado cerca. Venus queda por tanto justo más cerca del Sol que su propio límite, por unas 0,03 UA. La definición está casi tocando la evidencia con la que se construyó.',
     },
     'what-the-wider-band-bought': {
       title: 'Qué compró la banda más ancha',
@@ -309,7 +310,7 @@ export default {
         'Uno: Marte, que estaba fuera de la zona conservadora',
       ],
       because:
-        'Ninguno. Venus, a 0,72 UA, sigue quedando justo dentro del borde interior optimista de 0,75, y Ceres, a 2,77, no está ni cerca del borde exterior de 1,77. Marte ya estaba dentro de la zona conservadora. Así que las dos definiciones publicadas, que discrepan sobre los bordes por un margen amplio, coinciden por completo sobre nuestro propio Sistema Solar: dos mundos en la zona, y uno de ellos es Marte.',
+        'Ninguno. Venus, a 0,72 UA, sigue quedando justo más cerca del Sol que el borde interior optimista de 0,75, y Ceres, a 2,77, no está ni cerca del borde exterior de 1,77. Marte ya estaba dentro de la zona conservadora. Así que las dos definiciones publicadas, que discrepan sobre los bordes por un margen amplio, coinciden por completo sobre nuestro propio Sistema Solar: dos mundos en la zona, y uno de ellos es Marte.',
     },
     'venus-by-the-rule-you': {
       hints: [
@@ -409,7 +410,7 @@ export default {
     },
     'all-seven-planets': {
       title: 'Los siete planetas',
-      body: 'Aquí está el sistema real, con la zona habitable del mismo modelo que has estado usando toda la investigación, calculada a partir de la luminosidad y la temperatura medidas de TRAPPIST-1.\n\nEl eje de distancias está comprimido, porque si no los planetas interiores se amontonarían encima de la estrella. Lee los números, no los píxeles.\n\nEl segundo panel pone el Sistema Solar en el mismo eje. Todo el sistema de siete planetas cabría cómodamente dentro de la órbita de Mercurio.',
+      body: 'Aquí está el sistema real, con la zona habitable del mismo modelo que has estado usando toda la investigación, a partir de la luminosidad medida de TRAPPIST-1. Sus bordes son una extrapolación: la estrella es más fría que el ajuste.\n\nEl eje de distancias está comprimido, porque si no los planetas interiores se amontonarían encima de la estrella. Lee los números, no los píxeles.\n\nEl segundo panel pone el Sistema Solar en el mismo eje. Todo el sistema de siete planetas cabría cómodamente dentro de la órbita de Mercurio.',
       tool: {
         title: 'TRAPPIST-1',
         note: 'Cada planeta está listado debajo con la luz estelar que recibe y dónde cae respecto a la zona modelada.',
@@ -436,7 +437,7 @@ export default {
     },
     'take-the-readings-yourself': {
       title: 'Toma tú mismo las lecturas',
-      body: 'En lugar de que te digan qué planetas caen dónde, léelo en el instrumento. El panel está de vuelta, en la definición conservadora.\n\nRecorre la lista de debajo de la imagen y anota la luz estelar que recibe cada uno de los tres planetas centrales, en Tierras. Después anota dónde empieza y dónde acaba la zona.',
+      body: 'En lugar de que te digan qué planetas caen dónde, léelo en el instrumento. El panel está de vuelta, en la definición conservadora.\n\nRecorre la lista de debajo de la imagen y anota la luz estelar que recibe cada uno de los tres planetas centrales, en Tierras. Después anota dónde empieza y dónde acaba la zona (una extrapolación).',
       fields: [
         { label: 'TRAPPIST-1e recibe', unit: 'Tierras', want: '0,65' },
         { label: 'TRAPPIST-1f recibe', unit: 'Tierras', want: '0,37' },

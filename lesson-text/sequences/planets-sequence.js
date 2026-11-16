@@ -157,7 +157,7 @@ export const THE_SCALE_OF_THE_SOLAR_SYSTEM_ES = {
   steps: {
     'a-picture-you-have-seen': {
       title: 'Una imagen que ya has visto',
-      body: 'Todo diagrama del sistema solar tiene el Sol, ocho planetas en fila y planetas dibujados lo bastante grandes para verse. Esta investigación usa en cambio el sandbox, donde las <strong>distancias son verdaderas</strong>: 100 unidades por unidad astronómica, la distancia de la Tierra al Sol. Los planetas se dibujan más grandes que su tamaño real para que se vean, y la vista empieza de Mercurio a Saturno porque una más amplia dejaría invisibles los planetas interiores. Desplázate para alejar la vista y encuentra a Neptuno.',
+      body: 'Todo diagrama del sistema solar tiene el Sol, ocho planetas en fila y planetas dibujados lo bastante grandes para verse. Esta investigación usa en cambio el sandbox, donde las <strong>distancias son verdaderas</strong>: 100 unidades por unidad astronómica, la distancia de la Tierra al Sol. Los planetas se dibujan más grandes que su tamaño real para que se vean, y la vista empieza lo bastante ancha para Mercurio hasta al menos Saturno, porque una más amplia dejaría invisibles los planetas interiores. Desplázate para alejar la vista y encuentra a Neptuno.',
       tip: 'Las distancias de la lectura vienen del sandbox, no de una tabla; los pasos siguientes las comparan con los números que conoces.',
     },
     'three-distances': {
@@ -258,7 +258,7 @@ export const COMETS_AND_THE_SUN_ES = {
   steps: {
     'a-dirty-snowball': {
       title: 'Una bola de nieve sucia',
-      body: 'Un cometa son unos kilómetros de hielo y polvo en una órbita larga. Lejos del Sol está oscuro e inerte. Cerca del Sol el hielo pasa a gas, y el gas y el polvo escapan y forman una <strong>coma</strong> y dos colas. El sandbox tiene el Sol, los ocho planetas y unos cuantos cometas. Llevan los nombres de cometas famosos, pero el sandbox coloca cada uno a la distancia de su órbita media con el 70 por ciento de la velocidad de una órbita circular, así que son <strong>cometas modelo en órbitas propias</strong>, no las órbitas reales.',
+      body: 'Un cometa son unos kilómetros de hielo y polvo en una órbita larga. Lejos del Sol está oscuro e inerte. Cerca del Sol el hielo pasa a gas, y el gas y el polvo escapan y forman una <strong>coma</strong> y dos colas. El sandbox tiene el Sol, los ocho planetas y cometas. Llevan los nombres de cometas famosos, pero el sandbox coloca cada uno a la distancia de su órbita media con el 70 por ciento de la velocidad de una órbita circular, así que son <strong>cometas modelo en órbitas propias</strong>, no las órbitas reales.',
       tip: 'Los cometas se mueven deprisa. Pausa la simulación para leer un número; vuelve a ponerla en marcha para ver las colas.',
     },
     'tail-predict': {
@@ -277,9 +277,9 @@ export const COMETS_AND_THE_SUN_ES = {
     },
     'watch-the-tails': {
       title: 'Mira las colas',
-      body: 'Sigue a los cometas mientras giran y compara la cola de cada uno con la dirección del Sol. La lectura dice si el primer cometa se mueve hacia el Sol o se aleja de él.',
+      body: 'Una cola solo se ve donde la luz del Sol supera un noveno de la de la Tierra, a menos de unas 3 UA del Sol. El cometa de la lectura, Halley, se queda más allá de 5,8 UA y nunca la desarrolla. Wild 2 y Hartley 2 se acercan hasta unas 1,1 UA: busca uno cerca del Sol, acércate a él y compara su cola con la dirección del Sol.',
       checklist: [
-        'Busca un cometa con una cola visible, cerca del Sol',
+        'Busca Wild 2 o Hartley 2 a menos de unas 3 UA y acércate a él',
         'Ve la cola estrecha de iones apuntar lejos del Sol',
         'Ve el mismo cometa mientras se aleja del Sol: ¿dónde está ahora su cola?',
       ],
@@ -345,14 +345,14 @@ export const COMETS_AND_THE_SUN_ES = {
         },
       ],
       hints: [
-        'La temperatura en el extremo cercano era mucho mayor que en el lejano.',
+        'Los 360 K del Halley real en el extremo cercano están muy por encima de los 160 K a los que el hielo pasa a gas.',
       ],
       because:
-        'El calor. La temperatura del núcleo sube como uno sobre la raíz cuadrada de la distancia; el hielo pasa a gas hacia los 160 K, y el gas y el polvo que escapan forman la coma y las colas. La luz del Sol y el viento solar empujan la cola lejos del Sol.',
+        'El calor. La temperatura del núcleo sube como uno sobre la raíz cuadrada de la distancia; el hielo pasa a gas hacia los 160 K, y el gas y el polvo que escapan forman la coma y las colas: el viento solar barre el gas directamente lejos del Sol, y la luz del Sol empuja el polvo en una cola curva.',
     },
     'what-you-worked-out': {
       title: 'Lo que has deducido',
-      body: 'La órbita de un cometa tiene dos extremos, aquí leídos en el sandbox; un núcleo desnudo está más caliente, en el extremo cercano, en la raíz cuadrada del cociente de esas distancias; el cometa modelo se queda por debajo de los 160 K a los que el hielo pasa a gas, y el Halley real, a 0,586 UA, llega a 360 K; y la cola de iones apunta siempre lejos del Sol, así que un cometa vuela con la cola por delante al alejarse. Un cometa real añade lo que esta estimación deja fuera: su reflectividad, la energía gastada en pasar el hielo a gas y su giro.',
+      body: 'La órbita de un cometa tiene dos extremos, aquí leídos en el sandbox; un núcleo desnudo está más caliente, en el extremo cercano, en la raíz cuadrada del cociente de esas distancias; el Halley modelo se queda por debajo de los 160 K a los que el hielo pasa a gas, y el Halley real, a 0,586 UA, llega a 360 K; y la cola de iones apunta siempre lejos del Sol, así que un cometa vuela con la cola por delante al alejarse. Un cometa real añade lo que esta estimación deja fuera: su reflectividad, la energía gastada en pasar el hielo a gas y su giro.',
     },
   },
 };

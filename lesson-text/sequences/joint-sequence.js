@@ -102,7 +102,7 @@ export const WHAT_IS_IT_MADE_OF_ES = {
         'La línea dice a qué clase pertenece una densidad por debajo de 1,8, y qué no distingue.',
       ],
       because:
-        'Una densidad por debajo de 1,8 g/cm³ es rica en volátiles por convención, y la clase no distingue hidrógeno y helio del hielo de agua. Un planeta grande es además menos denso que su material en uno pequeño, por su propio peso. Dice algo y no todo.',
+        'Una densidad por debajo de 1,8 g/cm³ es rica en volátiles por convención, y la clase no distingue hidrógeno y helio del hielo de agua. Un planeta grande es además más denso que el mismo material en uno pequeño, porque su propio peso lo comprime. Dice algo y no todo.',
       misconceptions: [
         {
           say: 'El hidrógeno y el helio son una manera de ser así de ligero y el hielo de agua a menor presión es otra; una densidad sola no puede elegir. La clase es una convención sobre un número.',

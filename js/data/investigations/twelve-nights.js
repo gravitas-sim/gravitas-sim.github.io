@@ -125,7 +125,7 @@ const TWELVE_NIGHTS = {
              come from the simulation on screen. The only thing that crosses
              between the two is the list of times &mdash; which is exactly what
              crosses between a planning tool and a telescope.`,
-      tip: 'Gravitas does not model the Earth’s rotation. js/observingWindow.js computes it separately, from the same spherical trigonometry an observatory uses, and hands the schedule over as a list of numbers.',
+      tip: 'Gravitas does not model the Earth’s rotation. A separate calculation does it, from the same spherical trigonometry an observatory uses, and hands the schedule over as a list of numbers.',
     },
     {
       sid: 'look-at-the-windows',

@@ -264,7 +264,7 @@ const THE_ROTATING_DISK = {
           return {
             level: 'ok',
             message:
-              'Ten times better (4.8 against 50) with a halo that carries about 250 km/s far out. It is still not 1: the model is simple (a point bulge, one disk, one halo shape) and the points are combined from different tracers. A good fit shows a halo is enough, not that it is the only possibility.',
+              'Ten times smaller (4.8 against 50) with a halo that carries about 250 km/s far out. It is still well above 1: the model is simple (a point bulge, one disk, one halo shape) and the points are combined from different tracers. A good fit shows a halo is enough, not that it is the only possibility.',
           };
         }
         return {
@@ -303,7 +303,7 @@ const THE_ROTATING_DISK = {
         'Compare the two numbers in the 8.3 kpc row, then compare the green and orange curves at 20 kpc.',
       ],
       because:
-        'At 8.3 kpc stars and gas give about 203 km/s against the halo’s 178, the larger part but not all. At 20 kpc the disk has fallen and the halo is the bigger one. The dark matter is a small part of the force here and most of it far out.',
+        'At 8.3 kpc stars and gas give about 203 km/s against the halo’s 178, the larger part but not all; their total, 270 km/s, is above the 244 the curve assumes for the Sun. At 20 kpc the disk has fallen and the halo is the bigger one. The halo is a large part of the force here and most of it far out.',
       tool: RD({ view: 1, fit: 1 }),
     },
     {
@@ -330,7 +330,7 @@ const THE_ROTATING_DISK = {
              −15.2&nbsp;km/s/kpc, so the Sun’s circular speed is about
              247&nbsp;km/s. The measured rotation curve stays flat out to 25&nbsp;kpc;
              a bulge and disk, bounded in mass, fit it badly (reduced χ² of 50)
-             and adding a halo fits it ten times better (4.8). That shows a halo is
+             and adding a halo cuts it ten times, to 4.8, still well above 1. That shows a halo is
              enough within a simple model with stated assumptions: the disk’s
              bound, the Sun’s distance and speed.`,
       tool: RD({ view: 1, fit: 1 }),

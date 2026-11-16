@@ -922,7 +922,7 @@ const DARK_MATTER = {
       unit: '×',
       answer: 18.3,
       tolerance: 4,
-      because: `About eighteen. The galaxies you can see account for roughly one
+      because: `About eighteen, for this scale model. The galaxies you can see account for roughly one
                 twentieth of the mass needed to hold the cluster together at the
                 speeds its members are actually moving. Zwicky's own figure for
                 Coma was larger still, partly because the distance scale of the
@@ -1065,7 +1065,7 @@ const DARK_MATTER = {
       body: `You have made three measurements now, in two kinds of system, using
              two different methods: you fitted a galaxy's rotation curve and found
              no arrangement of its stars would do, and you weighed a cluster by
-             its motion and found five times more mass than light. Both say the
+             its motion and found eighteen times more mass than light. Both say the
              same thing.
              \n\nBe careful about what follows from that.`,
       prompt:
@@ -1120,7 +1120,7 @@ const DARK_MATTER = {
              has been repeated in a dozen independent ways. The explanation is a
              name for something we have not identified. Those are different kinds
              of statement and it is worth keeping them apart.`,
-      tip: 'You fitted a curve built from a real galaxy’s published parameters and weighed a real cluster. The numbers came from the literature; the conclusion you reached yourself, without taking anyone’s word for it.',
+      tip: 'You fitted a curve built from a real galaxy’s published parameters and weighed a scale model of a cluster. The numbers came from the literature; the conclusion you reached yourself, without taking anyone’s word for it.',
     },
   ],
 };

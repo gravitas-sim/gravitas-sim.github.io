@@ -162,7 +162,7 @@ export const ONE_PLANET_EVERY_METHOD = {
     'Say what a transit gives (a radius ratio, a depth, the shape) and what a velocity curve gives (an amplitude), and that a density needs both',
     'Read a planet’s density with its uncertainty from a joint fit, and say how much of that uncertainty is the star’s',
     'Say that a candidate that survives a checklist is not validated, and what a report must carry besides the values',
-    'Write one record per method, each with its value, its uncertainty, its method and its assumption',
+    'Say what one record per method carries: its value, its uncertainty, its method and its assumption',
   ],
   steps: [
     {
@@ -640,8 +640,7 @@ export const WHAT_KINDS_OF_PLANETS_EXIST = {
              does not answer it. A low density says the planet <em>has</em> a thick envelope; whether a small, hot world
              can <em>hold on to</em> one is a balance between how fast gas moves at its temperature and how fast it takes
              to leave, and it depends on the star&rsquo;s light over time, which no diagram of mass and radius carries.
-             \n\nThe calculation of the escape of a gas from a world was gated out of this project (it was judged that
-             the models could not support it at the standard the rest of the unit keeps), so this is a reading step and not
+             \n\nThis unit does not calculate the escape of a gas from a world, so this is a reading step and not
              an investigation. The honest statement from this diagram is the one in the box: a bulk density, with its
              uncertainty, and nothing about what a planet keeps.`,
       tool: MR({ lines: 1 }),
@@ -1379,7 +1378,7 @@ export const ONE_PLANET_EVERY_METHOD_ES = {
     'Decir qué da un tránsito (una razón de radios, una profundidad, la forma) y qué da una curva de velocidades (una amplitud), y que una densidad necesita las dos',
     'Leer la densidad de un planeta con su incertidumbre en un ajuste conjunto, y decir qué parte de esa incertidumbre es de la estrella',
     'Decir que un candidato que supera una lista de comprobación no está validado, y qué debe llevar un informe además de los valores',
-    'Escribir un registro por método, cada uno con su valor, su incertidumbre, su método y su suposición',
+    'Decir qué lleva un registro por método: su valor, su incertidumbre, su método y su suposición',
   ],
   steps: [
     {
@@ -1626,7 +1625,7 @@ export const WHAT_KINDS_OF_PLANETS_EXIST_ES = {
     {
       title: '¿Podría tener una atmósfera?',
       body: `Una pregunta natural es si un planeta de una masa y un radio dados conserva un gas, y el diagrama no la responde. Una densidad baja dice que el planeta <em>tiene</em> una envoltura gruesa; si un mundo pequeño y caliente puede <em>retener</em> una es un equilibrio entre lo rápido que se mueve el gas a su temperatura y lo que tarda en escapar, y depende de la luz de la estrella a lo largo del tiempo, que ningún diagrama de masa y radio lleva.
-             \n\nEl cálculo del escape de un gas de un mundo quedó fuera de este proyecto (se juzgó que los modelos no podían sostenerlo al nivel que mantiene el resto de la unidad), así que este es un paso de lectura y no una investigación. La afirmación honesta de este diagrama es la de la caja: una densidad media, con su incertidumbre, y nada sobre lo que un planeta conserva.`,
+             \n\nEsta unidad no calcula el escape de un gas de un mundo, así que este es un paso de lectura y no una investigación. La afirmación honesta de este diagrama es la de la caja: una densidad media, con su incertidumbre, y nada sobre lo que un planeta conserva.`,
     },
     {
       title: 'Tipos, y lo que oculta cada diagrama',
@@ -2167,13 +2166,13 @@ const CONTENT = {
       {
         claim: 'The diagram says whether a planet has an atmosphere.',
         response:
-          'A low density says there is a thick envelope; whether a world keeps one depends on escape, which these diagrams do not carry and this project gated out.',
+          'A low density says there is a thick envelope; whether a world keeps one depends on escape, which these diagrams do not carry and this unit does not calculate.',
       },
     ],
     [
       'The survey is synthetic (2000 stars with a known truth); the mass-radius diagram’s Solar System table is typed from published values and not rechecked (D-R10-203); the hot Jupiter is the synthetic planet of the joint fit.',
       'A public catalog subset (the first choice for the diagrams) is not shipped: no rights decision was made and nothing was fetched, so the investigation uses what the suite holds.',
-      'The reading step on atmospheres replaces an investigation that was gated out (gate verdict B: the escape panel was not built); it makes no retention statement.',
+      'The reading step on atmospheres stands where gas escape is not calculated; it makes no retention statement.',
       'The rate of a bin is the panel’s (a count over the completeness with a stated reliability); the first seed and the stated reliability are the opening values.',
     ],
     [

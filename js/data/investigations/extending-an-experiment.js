@@ -223,7 +223,7 @@ const EXTENDING_AN_EXPERIMENT = {
       title: 'Move the definition',
       body: `Put the <strong>slope</strong> back to <strong>1</strong> and set the
              <strong>cutoff</strong> to <strong>6</strong>: a planet now counts as bound
-             if it stays within six starting distances, not three. Run again. Enter the
+             if it stays within six starting distances, not three. This is the notebook's cutoff, not the ejection test of the binary-star lesson. Run again. Enter the
              new half-way distance, and the fraction of the synthetic population.`,
       fields: [
         {
@@ -289,7 +289,7 @@ const EXTENDING_AN_EXPERIMENT = {
         'Which planets are bound at a cutoff of six that were not at three?',
       ],
       because:
-        'One planet, at a starting distance of 0.2315, stayed at a mean distance of 3.8 times its start: unbound at a cutoff of three and bound at six. That one reclassification moves the edge by a third of the gap beside it. An outcome is a definition, and the uncertainty of the extension does not include the choice of it.',
+        'One planet, at a starting distance of 0.2315, stayed at a mean distance of 3.8 times its start: unbound at a cutoff of three and bound at six. That one reclassification moves the edge by a third of the gap beside it. An outcome is a definition (this one a distance cutoff, not an energy test), and the uncertainty of the extension does not include the choice of it.',
     },
     {
       sid: 'what-you-worked-out',

@@ -110,7 +110,7 @@ export default {
         'Compara los dos números de la fila de 8,3 kpc, y luego las curvas verde y naranja a 20 kpc.',
       ],
       because:
-        'A 8,3 kpc las estrellas y el gas dan unos 203 km/s frente a los 178 del halo, la parte mayor pero no toda. A 20 kpc el disco ha caído y el halo es el mayor. La materia oscura es una parte pequeña de la fuerza aquí y la mayor parte lejos.',
+        'A 8,3 kpc las estrellas y el gas dan unos 203 km/s frente a los 178 del halo, la parte mayor pero no toda; su total, 270 km/s, supera los 244 que la curva supone para el Sol. A 20 kpc el disco ha caído y el halo es el mayor. El halo es una parte grande de la fuerza aquí y la mayor parte lejos.',
     },
     'say-what-it-assumes': {
       title: 'Lo que supone el ajuste',
@@ -120,7 +120,7 @@ export default {
     },
     'what-you-worked-out': {
       title: 'Lo que has deducido',
-      body: 'Los movimientos propios de las estrellas cercanas hacen una onda doble en la longitud, cuya altura y centro son las constantes de Oort: A cerca de 14,5 y B cerca de −15,2&nbsp;km/s/kpc, así que la rapidez circular del Sol es cerca de 247&nbsp;km/s. La curva de rotación medida se mantiene plana hasta 25&nbsp;kpc; un bulbo y un disco, acotados en masa, la ajustan mal (χ² reducido de 50) y añadir un halo la ajusta diez veces mejor (4,8). Eso muestra que un halo basta dentro de un modelo simple con supuestos declarados: la cota del disco, la distancia y la rapidez del Sol.',
+      body: 'Los movimientos propios de las estrellas cercanas hacen una onda doble en la longitud, cuya altura y centro son las constantes de Oort: A cerca de 14,5 y B cerca de −15,2&nbsp;km/s/kpc, así que la rapidez circular del Sol es cerca de 247&nbsp;km/s. La curva de rotación medida se mantiene plana hasta 25&nbsp;kpc; un bulbo y un disco, acotados en masa, la ajustan mal (χ² reducido de 50) y añadir un halo lo reduce diez veces, a 4,8, aún muy por encima de 1. Eso muestra que un halo basta dentro de un modelo simple con supuestos declarados: la cota del disco, la distancia y la rapidez del Sol.',
     },
   },
 };

@@ -470,7 +470,7 @@ export const THE_SCALE_OF_THE_SOLAR_SYSTEM = {
              instead, where the <strong>distances are true</strong>: 100 units to an
              astronomical unit, the distance from the Earth to the Sun. The planets are
              drawn larger than their true size so that they show at all, and the
-             view starts from Mercury out to Saturn because nothing wider would
+             view starts wide enough for Mercury out to at least Saturn, because nothing wider would
              leave the inner planets visible. Scroll to zoom out and find Neptune.`,
       tip: 'The distances in the readout come from the sandbox, not from a table; the next steps check them against the numbers you know.',
       setup: SCALE_SETUP,
@@ -707,8 +707,8 @@ export const THE_SCALE_OF_THE_SOLAR_SYSTEM = {
 const COMET_SETUP = {
   scenario: 'Solar System',
   seed: 'comets-and-the-sun',
-  settings: { enable_asteroids: false, num_asteroids: 0, num_comets: 3 },
-  camera: { zoom: 0.25, pan: { x: 0, y: 0 } },
+  settings: { enable_asteroids: false, num_asteroids: 0, num_comets: 12 },
+  camera: { zoom: 1.5, pan: { x: 0, y: 0 } },
   paused: false,
 };
 const COMET_BIND = { sun: { name: 'Sol' } };
@@ -782,7 +782,7 @@ export const COMETS_AND_THE_SUN = {
       body: `A comet is a few kilometers of ice and dust on a long orbit. Far from the Sun
              it is dark and inert. Near the Sun the ice turns to gas, the gas and dust
              escape and make a <strong>coma</strong> and two tails. The sandbox here has
-             the Sun, the eight planets and a few comets. They carry the names of famous
+             the Sun, the eight planets and comets. They carry the names of famous
              comets, but the sandbox starts each one at the distance of its average orbit
              with 70 percent of the speed of a circular orbit, so they are
              <strong>model comets on orbits of their own</strong>, not the real orbits.`,
@@ -814,11 +814,12 @@ export const COMETS_AND_THE_SUN = {
       bind: COMET_BIND,
       type: 'explore',
       title: 'Watch the tails',
-      body: `Follow the comets as they go round, and compare each comet&rsquo;s tail with
-             the direction to the Sun. The readout says whether the first comet is moving
-             toward or away from the Sun.`,
+      body: `A tail shows only where sunlight is above a ninth of Earth&rsquo;s, inside about
+             3 AU of the Sun. The readout&rsquo;s comet, Halley, stays beyond 5.8 AU and never grows
+             one. Wild 2 and Hartley 2 come in to about 1.1 AU: find one near the Sun, zoom in on
+             it, and compare its tail with the direction to the Sun.`,
       checklist: [
-        'Find a comet with a visible tail, near the Sun',
+        'Find Wild 2 or Hartley 2 inside about 3 AU, and zoom in on it',
         'See the narrow ion tail point away from the Sun',
         'See the same comet while it moves away from the Sun: where is its tail now?',
       ],
@@ -1018,10 +1019,10 @@ export const COMETS_AND_THE_SUN = {
         },
       ],
       hints: [
-        'The temperature at the near end was much higher than at the far end.',
+        'The real Halley’s 360 K at the near end is far above the 160 K at which ice turns to gas.',
       ],
       because:
-        'Heating. The nucleus’s temperature rises as one over the square root of the distance; ice turns to gas near 160 K, and the escaping gas and dust form the coma and the tails. The tail is pushed away from the Sun by sunlight and the solar wind.',
+        'Heating. The nucleus’s temperature rises as one over the square root of the distance; ice turns to gas near 160 K, and the escaping gas and dust form the coma and the tails: the solar wind sweeps the gas straight away from the Sun, and sunlight pushes the dust into a curved tail.',
     },
     {
       sid: 'what-you-worked-out',
@@ -1030,7 +1031,7 @@ export const COMETS_AND_THE_SUN = {
       title: 'What you worked out',
       body: `A comet&rsquo;s orbit has two ends, here read from the sandbox; a bare nucleus
              is hotter by the square root of the ratio of those distances at the near end;
-             the model comet stays below the 160 K at which ice turns to gas, and the real
+             the model Halley stays below the 160 K at which ice turns to gas, and the real
              Halley, at 0.586 AU, reaches 360 K; and the ion tail always points away from the
              Sun, so a comet flies tail first on the way out. A real comet adds what this
              estimate leaves out: its reflectivity, the energy spent turning ice to gas, and
@@ -1201,7 +1202,7 @@ export const THE_SCALE_OF_THE_SOLAR_SYSTEM_ES = {
   steps: [
     {
       title: 'Una imagen que ya has visto',
-      body: 'Todo diagrama del sistema solar tiene el Sol, ocho planetas en fila y planetas dibujados lo bastante grandes para verse. Esta investigación usa en cambio el sandbox, donde las <strong>distancias son verdaderas</strong>: 100 unidades por unidad astronómica, la distancia de la Tierra al Sol. Los planetas se dibujan más grandes que su tamaño real para que se vean, y la vista empieza de Mercurio a Saturno porque una más amplia dejaría invisibles los planetas interiores. Desplázate para alejar la vista y encuentra a Neptuno.',
+      body: 'Todo diagrama del sistema solar tiene el Sol, ocho planetas en fila y planetas dibujados lo bastante grandes para verse. Esta investigación usa en cambio el sandbox, donde las <strong>distancias son verdaderas</strong>: 100 unidades por unidad astronómica, la distancia de la Tierra al Sol. Los planetas se dibujan más grandes que su tamaño real para que se vean, y la vista empieza lo bastante ancha para Mercurio hasta al menos Saturno, porque una más amplia dejaría invisibles los planetas interiores. Desplázate para alejar la vista y encuentra a Neptuno.',
       tip: 'Las distancias de la lectura vienen del sandbox, no de una tabla; los pasos siguientes las comparan con los números que conoces.',
     },
     {
@@ -1302,7 +1303,7 @@ export const COMETS_AND_THE_SUN_ES = {
   steps: [
     {
       title: 'Una bola de nieve sucia',
-      body: 'Un cometa son unos kilómetros de hielo y polvo en una órbita larga. Lejos del Sol está oscuro e inerte. Cerca del Sol el hielo pasa a gas, y el gas y el polvo escapan y forman una <strong>coma</strong> y dos colas. El sandbox tiene el Sol, los ocho planetas y unos cuantos cometas. Llevan los nombres de cometas famosos, pero el sandbox coloca cada uno a la distancia de su órbita media con el 70 por ciento de la velocidad de una órbita circular, así que son <strong>cometas modelo en órbitas propias</strong>, no las órbitas reales.',
+      body: 'Un cometa son unos kilómetros de hielo y polvo en una órbita larga. Lejos del Sol está oscuro e inerte. Cerca del Sol el hielo pasa a gas, y el gas y el polvo escapan y forman una <strong>coma</strong> y dos colas. El sandbox tiene el Sol, los ocho planetas y cometas. Llevan los nombres de cometas famosos, pero el sandbox coloca cada uno a la distancia de su órbita media con el 70 por ciento de la velocidad de una órbita circular, así que son <strong>cometas modelo en órbitas propias</strong>, no las órbitas reales.',
       tip: 'Los cometas se mueven deprisa. Pausa la simulación para leer un número; vuelve a ponerla en marcha para ver las colas.',
     },
     {
@@ -1321,9 +1322,9 @@ export const COMETS_AND_THE_SUN_ES = {
     },
     {
       title: 'Mira las colas',
-      body: 'Sigue a los cometas mientras giran y compara la cola de cada uno con la dirección del Sol. La lectura dice si el primer cometa se mueve hacia el Sol o se aleja de él.',
+      body: 'Una cola solo se ve donde la luz del Sol supera un noveno de la de la Tierra, a menos de unas 3 UA del Sol. El cometa de la lectura, Halley, se queda más allá de 5,8 UA y nunca la desarrolla. Wild 2 y Hartley 2 se acercan hasta unas 1,1 UA: busca uno cerca del Sol, acércate a él y compara su cola con la dirección del Sol.',
       checklist: [
-        'Busca un cometa con una cola visible, cerca del Sol',
+        'Busca Wild 2 o Hartley 2 a menos de unas 3 UA y acércate a él',
         'Ve la cola estrecha de iones apuntar lejos del Sol',
         'Ve el mismo cometa mientras se aleja del Sol: ¿dónde está ahora su cola?',
       ],
@@ -1389,14 +1390,14 @@ export const COMETS_AND_THE_SUN_ES = {
         },
       ],
       hints: [
-        'La temperatura en el extremo cercano era mucho mayor que en el lejano.',
+        'Los 360 K del Halley real en el extremo cercano están muy por encima de los 160 K a los que el hielo pasa a gas.',
       ],
       because:
-        'El calor. La temperatura del núcleo sube como uno sobre la raíz cuadrada de la distancia; el hielo pasa a gas hacia los 160 K, y el gas y el polvo que escapan forman la coma y las colas. La luz del Sol y el viento solar empujan la cola lejos del Sol.',
+        'El calor. La temperatura del núcleo sube como uno sobre la raíz cuadrada de la distancia; el hielo pasa a gas hacia los 160 K, y el gas y el polvo que escapan forman la coma y las colas: el viento solar barre el gas directamente lejos del Sol, y la luz del Sol empuja el polvo en una cola curva.',
     },
     {
       title: 'Lo que has deducido',
-      body: 'La órbita de un cometa tiene dos extremos, aquí leídos en el sandbox; un núcleo desnudo está más caliente, en el extremo cercano, en la raíz cuadrada del cociente de esas distancias; el cometa modelo se queda por debajo de los 160 K a los que el hielo pasa a gas, y el Halley real, a 0,586 UA, llega a 360 K; y la cola de iones apunta siempre lejos del Sol, así que un cometa vuela con la cola por delante al alejarse. Un cometa real añade lo que esta estimación deja fuera: su reflectividad, la energía gastada en pasar el hielo a gas y su giro.',
+      body: 'La órbita de un cometa tiene dos extremos, aquí leídos en el sandbox; un núcleo desnudo está más caliente, en el extremo cercano, en la raíz cuadrada del cociente de esas distancias; el Halley modelo se queda por debajo de los 160 K a los que el hielo pasa a gas, y el Halley real, a 0,586 UA, llega a 360 K; y la cola de iones apunta siempre lejos del Sol, así que un cometa vuela con la cola por delante al alejarse. Un cometa real añade lo que esta estimación deja fuera: su reflectividad, la energía gastada en pasar el hielo a gas y su giro.',
     },
   ],
 };

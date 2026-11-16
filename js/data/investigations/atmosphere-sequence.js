@@ -211,7 +211,7 @@ export const WHY_VENUS_IS_HOT = {
         'Compare the temperature the planet radiates to space with the temperature of its ground.',
       ],
       because:
-        'The planet as a whole radiates what it absorbs, at 229 K, from high in the atmosphere. The ground is much hotter because a thick atmosphere that absorbs infrared radiation carries the heating from the ground up through many layers: a greenhouse effect.',
+        'The planet as a whole radiates what it absorbs, at 229 K, from high in the atmosphere. The ground is much hotter because a thick atmosphere that absorbs infrared radiation holds back what the ground radiates, layer after layer, so the ground has to be hotter for the planet to shed what it absorbs: a greenhouse effect.',
       tool: BAL({ body: 0 }),
     },
     {
