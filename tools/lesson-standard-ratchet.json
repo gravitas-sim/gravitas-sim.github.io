@@ -166,13 +166,11 @@
     },
     "task/measure-all-computed": {},
     "text/internal-vocabulary": {
-      "cluster-membership": 2,
       "gravity-assist": 1,
       "how-far-and-how-sure": 5,
       "lagrange-points": 1,
       "the-clock-that-drifts": 1,
       "the-suns-motion": 2,
-      "two-clusters-two-ages": 2,
       "what-gaia-does-not-see": 2
     },
     "text/step-reference": {}
