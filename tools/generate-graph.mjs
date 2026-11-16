@@ -226,6 +226,21 @@ export const GRAPH = Object.freeze([
       'Whole files, each stamped with the shared shell and its policy as the repository holds it, so shell.mjs --write and csp.mjs --write find nothing to change.',
   },
   {
+    // Early module fetches: a region in the head of every page that carries the
+    // shell, chosen from the page's static import closure by one rule. The
+    // adoption pages are written whole by their own generator, which applies
+    // the same function, so this node runs after it and finds nothing to add.
+    id: 'preload',
+    generate: 'node tools/modulepreload.mjs --write',
+    check: 'node tools/modulepreload.mjs --check',
+    inputs: ['js', 'index.html', 'tools/modulepreload.mjs', 'tools/shell.mjs'],
+    outputs: [],
+    regions: ['index.html'],
+    after: ['registries', 'adoption'],
+    notes:
+      "Between `<!-- preload:head -->` and `<!-- /preload:head -->` in each stamped page; a page whose list is empty has no region. A conflict inside one is resolved by regenerating, never by taking a side. The list is cut to the room under index.html's served-size ceiling; no ceiling is raised.",
+  },
+  {
     id: 'thumbnails',
     generate: 'node tools/generate-scenario-thumbnails.mjs',
     check: 'node tools/generate-scenario-thumbnails.mjs --check',
@@ -420,6 +435,7 @@ export const GRAPH = Object.freeze([
       'cards',
       'teaching',
       'library',
+      'preload',
       'thumbnails',
       'scene',
       'irreversible',

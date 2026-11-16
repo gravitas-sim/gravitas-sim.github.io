@@ -49,6 +49,7 @@ import {
 } from '../js/instructorCartridgeText.js';
 import { withShell } from './shell.mjs';
 import { withPolicy } from './csp.mjs';
+import { withPreload } from './modulepreload.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 /**
@@ -495,8 +496,12 @@ ${retitled}  </body>
 `;
 };
 
-/** The page with the shell and the policy written in, as the repository holds it. */
-const finish = (file, text) => withPolicy(file, withShell(file, text));
+/**
+ * The page with the shell, its early module fetches and the policy written in,
+ * as the repository holds it.
+ */
+const finish = (file, text) =>
+  withPolicy(file, withPreload(file, withShell(file, text)));
 
 // ----------------------------------------------------------------------------
 // Sources
