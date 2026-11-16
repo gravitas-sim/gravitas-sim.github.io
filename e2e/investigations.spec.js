@@ -22,6 +22,8 @@ import {
   savedProgress,
   storeProgress,
 } from './workflow.js';
+import { readdir, readFile } from 'node:fs/promises';
+import { join } from 'node:path';
 import { MANIFEST } from '../js/data/investigations/manifest.js';
 
 const LESSON = 'missing-mass';
@@ -557,23 +559,45 @@ test.describe('the student report', () => {
 // =============================================================================
 
 /**
- * A string that is in one lesson's file and in no other file: the first
- * ASCII run of at least 30 characters, with no quote, backslash or markup,
- * among the lesson's own step text. A bundler may rename and merge the files
- * of the sources but it leaves string contents alone, so this finds the lesson
- * wherever the build put it.
+ * A string that is in one lesson's file and in no other file of the tree: an
+ * ASCII run of 40 characters, with no quote, backslash or markup, from the
+ * lesson's own step text. A bundler may rename and merge the files of the
+ * sources but it leaves string contents alone, so this finds the lesson
+ * wherever the build put it, and it cannot be found in a catalogue or a hub
+ * that quotes the lesson's opening.
  */
 const markers = new Map();
+let treeText;
+const readTree = async () => {
+  if (treeText) return treeText;
+  const files = [];
+  const walk = async dir => {
+    for (const entry of await readdir(dir, { withFileTypes: true })) {
+      const path = join(dir, entry.name);
+      if (entry.isDirectory()) await walk(path);
+      else if (entry.name.endsWith('.js')) files.push(path);
+    }
+  };
+  await walk(join(process.cwd(), 'js'));
+  treeText = await Promise.all(
+    files.map(async path => ({ path, text: await readFile(path, 'utf8') }))
+  );
+  return treeText;
+};
 async function markerOf(id) {
   if (!markers.has(id)) {
     const lesson = await loadInvestigation(id);
-    const run = /[ -!#-%(-;=?-[\]-~]{30,}/;
-    const text = lesson.steps.flatMap(s => [s.title, s.body, s.prompt]);
-    const found = text
-      .map(t => run.exec(String(t ?? ''))?.[0])
-      .find(Boolean)
-      ?.slice(0, 30);
-    if (!found) throw new Error(`no marker string in lesson ${id}`);
+    const run = /[ -!#-%(-;=?-[\]-~]{40,}/g;
+    const candidates = lesson.steps
+      .flatMap(s => [s.body, s.prompt, s.title])
+      .flatMap(t =>
+        [...String(t ?? '').matchAll(run)].map(m => m[0].slice(0, 40))
+      );
+    const tree = await readTree();
+    const found = candidates.find(
+      c => tree.filter(f => f.text.includes(c)).length === 1
+    );
+    if (!found) throw new Error(`no marker string unique to lesson ${id}`);
     markers.set(id, found);
   }
   return markers.get(id);

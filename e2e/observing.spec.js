@@ -139,10 +139,20 @@ test.describe('astrometry', () => {
     await expect(page.locator('#astrometryCanvas')).toBeVisible();
     await expect(page.locator('#astrometryTarget')).not.toBeEmpty();
 
-    const signature = async () =>
-      parseFloat(await page.locator('#astrometrySignature').innerText());
+    // The signature is the largest offset the panel has watched, written in
+    // the unit that suits it; read back in arcseconds whatever the unit.
+    const signature = async () => {
+      const text = await page.locator('#astrometrySignature').innerText();
+      const unit = { arcsec: 1, mas: 1e-3, '\u00b5as': 1e-6 };
+      const m = text.match(/([\d.]+(?:e[+-]?\d+)?)\s*(\S+)/i);
+      return m && unit[m[2]] !== undefined ? Number(m[1]) * unit[m[2]] : NaN;
+    };
+    await expect
+      .poll(async () => Number.isFinite(await signature()), {
+        timeout: 20_000,
+      })
+      .toBe(true);
     const offset = await signature();
-    expect(Number.isFinite(offset)).toBe(true);
 
     // Distance changes the angle and never the orbit, which is the whole point
     // of the panel: twice the distance, half the angle.
