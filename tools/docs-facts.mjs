@@ -1683,7 +1683,13 @@ async function main() {
       process.stderr.write(`${u.doc}: unknown fact "${u.key}"\n`);
     }
     for (const b of broken) process.stderr.write(`${b}\n`);
-    return unknown.length || broken.length ? 1 : 0;
+    // A count that could not be had is not a count that did not change: say so
+    // and fail, rather than leave the old number in the docs under a green run.
+    const unmeasured = notes.filter(n =>
+      /^could not count the Jest tests/.test(n)
+    );
+    for (const n of unmeasured) process.stderr.write(`${n}\n`);
+    return unknown.length || broken.length || unmeasured.length ? 1 : 0;
   }
 
   // check
