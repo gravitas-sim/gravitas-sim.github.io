@@ -1509,7 +1509,7 @@ export const A_NIGHT_AT_THE_TELESCOPE = {
       type: 'question',
       kind: 'numeric',
       title: 'Station 5: the number and what it is good to',
-      body: `A signal-to-noise of 50 is a photometric uncertainty of 1.0857 ÷ 50 = 0.0217
+      body: `A signal-to-noise of 50 (rounded from 49.5) is a photometric uncertainty of 1.0857 ÷ 50 = 0.0217
              magnitude (1.0857 is 2.5 ÷ ln 10). The calibration leaves 0.008. Two independent
              uncertainties combine as the square root of the sum of their squares.`,
       prompt:
@@ -2549,7 +2549,7 @@ export const A_NIGHT_AT_THE_TELESCOPE_ES = {
     },
     {
       title: 'Estación 5: el número y a qué es bueno',
-      body: 'Una señal a ruido de 50 es una incertidumbre fotométrica de 1,0857 ÷ 50 = 0,0217 magnitudes (1,0857 es 2,5 ÷ ln 10). La calibración deja 0,008. Dos incertidumbres independientes se combinan como la raíz cuadrada de la suma de sus cuadrados.',
+      body: 'Una señal a ruido de 50 (redondeada de 49,5) es una incertidumbre fotométrica de 1,0857 ÷ 50 = 0,0217 magnitudes (1,0857 es 2,5 ÷ ln 10). La calibración deja 0,008. Dos incertidumbres independientes se combinan como la raíz cuadrada de la suma de sus cuadrados.',
       prompt:
         '¿Cuál es la incertidumbre total de una sigma de la magnitud informada, en magnitudes?',
       hints: ['Eleva al cuadrado cada incertidumbre, súmalas y toma la raíz.'],

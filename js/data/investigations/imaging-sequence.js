@@ -197,7 +197,7 @@ export const WHY_NOT_EARTH = {
       stage: STAGE,
       type: 'read',
       title: 'What it would take',
-      body: `Of the four examples only the 6 m visible-light instrument sees Earth at all, and only because its contrast
+      body: `Of the four examples only the 6 m visible-light instrument sees Earth at all, and that is true by construction: its contrast
              floor of 10⁻¹⁰ was chosen just below Earth&rsquo;s own 1.2 × 10⁻¹⁰: it is a thought experiment about what
              a telescope would have to do, not a statement about any mission. Seeing an Earth-like planet needs both a
              working angle under 0.1 arcsecond at a given wavelength and a suppression of the star&rsquo;s light that
@@ -748,7 +748,7 @@ export const WHY_NOT_EARTH_ES = {
     },
     {
       title: 'Lo que haría falta',
-      body: `De los cuatro ejemplos solo el instrumento de 6 m en luz visible ve la Tierra, y solo porque su piso de contraste de 10⁻¹⁰ se eligió justo por debajo de los 1,2 × 10⁻¹⁰ de la Tierra: es un experimento mental sobre lo que tendría que hacer un telescopio, no una afirmación sobre ninguna misión. Ver un planeta como la Tierra exige un ángulo de trabajo menor de 0,1 segundos de arco a una longitud de onda dada y una supresión de la luz de la estrella que llegue al contraste del planeta.\n\nEl panel no modela la supresión misma: ni coronógrafo, ni ruido de moteado, ni tiempo de exposición. Lo que dice es una condición necesaria.`,
+      body: `De los cuatro ejemplos solo el instrumento de 6 m en luz visible ve la Tierra, y eso es cierto por construcción: su piso de contraste de 10⁻¹⁰ se eligió justo por debajo de los 1,2 × 10⁻¹⁰ de la Tierra: es un experimento mental sobre lo que tendría que hacer un telescopio, no una afirmación sobre ninguna misión. Ver un planeta como la Tierra exige un ángulo de trabajo menor de 0,1 segundos de arco a una longitud de onda dada y una supresión de la luz de la estrella que llegue al contraste del planeta.\n\nEl panel no modela la supresión misma: ni coronógrafo, ni ruido de moteado, ni tiempo de exposición. Lo que dice es una condición necesaria.`,
     },
   ],
 };

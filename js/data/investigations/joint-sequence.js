@@ -195,7 +195,7 @@ export const WHAT_IS_IT_MADE_OF = {
         'The line says what class a density below 1.8 belongs to, and what it cannot tell apart.',
       ],
       because:
-        'A density below 1.8 g/cm³ is volatile-rich by convention, and the class cannot tell hydrogen and helium from water ice. A large planet is also less dense than its material would be in a small one, because of its own weight. It says something and not everything.',
+        'A density below 1.8 g/cm³ is volatile-rich by convention, and the class cannot tell hydrogen and helium from water ice. A large planet is also denser than the same material would be in a small one, because its own weight compresses it. It says something and not everything.',
       misconceptions: [
         {
           id: 'hydrogen',
@@ -409,7 +409,7 @@ export const WHAT_IS_IT_MADE_OF_ES = {
         'La línea dice a qué clase pertenece una densidad por debajo de 1,8, y qué no distingue.',
       ],
       because:
-        'Una densidad por debajo de 1,8 g/cm³ es rica en volátiles por convención, y la clase no distingue hidrógeno y helio del hielo de agua. Un planeta grande es además menos denso que su material en uno pequeño, por su propio peso. Dice algo y no todo.',
+        'Una densidad por debajo de 1,8 g/cm³ es rica en volátiles por convención, y la clase no distingue hidrógeno y helio del hielo de agua. Un planeta grande es además más denso que el mismo material en uno pequeño, porque su propio peso lo comprime. Dice algo y no todo.',
       misconceptions: [
         {
           say: 'El hidrógeno y el helio son una manera de ser así de ligero y el hielo de agua a menor presión es otra; una densidad sola no puede elegir. La clase es una convención sobre un número.',

@@ -529,7 +529,7 @@ export const A_NIGHT_AT_THE_TELESCOPE_ES = {
     },
     'station-report': {
       title: 'Estación 5: el número y a qué es bueno',
-      body: 'Una señal a ruido de 50 es una incertidumbre fotométrica de 1,0857 ÷ 50 = 0,0217 magnitudes (1,0857 es 2,5 ÷ ln 10). La calibración deja 0,008. Dos incertidumbres independientes se combinan como la raíz cuadrada de la suma de sus cuadrados.',
+      body: 'Una señal a ruido de 50 (redondeada de 49,5) es una incertidumbre fotométrica de 1,0857 ÷ 50 = 0,0217 magnitudes (1,0857 es 2,5 ÷ ln 10). La calibración deja 0,008. Dos incertidumbres independientes se combinan como la raíz cuadrada de la suma de sus cuadrados.',
       prompt:
         '¿Cuál es la incertidumbre total de una sigma de la magnitud informada, en magnitudes?',
       hints: ['Eleva al cuadrado cada incertidumbre, súmalas y toma la raíz.'],

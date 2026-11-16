@@ -121,7 +121,7 @@ const EINSTEIN_RINGS_AND_ARCS = {
       title: 'The ring of a galaxy',
       body: `Load “A galaxy at 1 Gpc, source straight behind”: 10<sup>11</sup>
              solar masses inside the ring, 1 gigaparsec away. Read the Einstein
-             radius in arcseconds, and its size at the lens in kiloparsecs.`,
+             radius in arcseconds (rough: Euclidean distances) and its size at the lens in kiloparsecs.`,
       fields: [
         { id: 'theta', label: 'Einstein radius', unit: 'arcsec', want: '0.64' },
         { id: 'radius', label: 'Radius at the lens', unit: 'kpc', want: '3.1' },
@@ -262,7 +262,7 @@ const EINSTEIN_RINGS_AND_ARCS = {
       kind: 'choice',
       title: 'Arcs, not rings',
       body: `Set the offset to <strong>0.3</strong> and the source radius to
-             <strong>0.2</strong>, keeping the point mass. The source is a disk
+             <strong>0.2</strong>, keeping the point mass (a rough galaxy). The source is a disk
              and not a point.`,
       prompt: 'Why are most lensed galaxies seen as arcs and not as rings?',
       options: [

@@ -448,7 +448,7 @@ const GOLDILOCKS = {
         'Switch to the orange dwarf, then to the brighter star',
         'Look at the luminosity row each time, and at the starlight row',
       ],
-      tip: 'A star four hundred times fainter delivers four hundred times less light to a planet at the same distance. The two numbers track each other exactly, because luminosity multiplies straight through the inverse-square relation.',
+      tip: 'A star about 670 times fainter delivers about 670 times less light to a planet at the same distance.',
     },
     {
       sid: 'what-luminosity-does',
@@ -699,7 +699,7 @@ const GOLDILOCKS = {
         'Find the new inner edge and compare it with where Venus orbits, at 0.72 AU.',
         'Check the outer edge against Ceres at 2.77 AU.',
         'Count how many worlds are inside the ring now, and compare with the count you made on the conservative definition.',
-        'Select Venus and watch the readout: the same planet, the same distance, a different verdict.',
+        'Select Venus and read its verdict: the edge moved, the verdict did not.',
       ],
       allowInspector: true,
       // The definition change moves the ring on the canvas and the numbers in
@@ -708,7 +708,7 @@ const GOLDILOCKS = {
       probe: zoneRows,
       setup: HZ_RINGS_WIDE,
       bind: SOLAR_WORLDS,
-      tip: 'The optimistic inner edge is the Recent Venus limit, and it is set by Venus itself: the argument is that Venus has had no surface water for at least a billion years, so wherever Venus is must already be too close. Venus therefore sits just inside its own limit, by about 0.03 AU. The definition is nearly touching the evidence it was built from.',
+      tip: 'The optimistic inner edge is the Recent Venus limit, and it is set by Venus itself: the argument is that Venus has had no surface water for at least a billion years, so wherever Venus is must already be too close. Venus therefore sits just sunward of its own limit, by about 0.03 AU. The definition is nearly touching the evidence it was built from.',
     },
     {
       sid: 'what-the-wider-band-bought',
@@ -728,7 +728,7 @@ const GOLDILOCKS = {
       ],
       answer: 2,
       because:
-        'None. Venus at 0.72 AU still falls just inside the optimistic inner edge at 0.75, and Ceres at 2.77 is nowhere near the outer edge at 1.77. Mars was already inside the conservative zone. So the two published definitions, which disagree about the edges by a wide margin, agree completely about our own Solar System: two worlds in the zone, and one of them is Mars.',
+        'None. Venus at 0.72 AU still falls just sunward of the optimistic inner edge at 0.75, and Ceres at 2.77 is nowhere near the outer edge at 1.77. Mars was already inside the conservative zone. So the two published definitions, which disagree about the edges by a wide margin, agree completely about our own Solar System: two worlds in the zone, and one of them is Mars.',
     },
     {
       hints: [
@@ -925,8 +925,8 @@ const GOLDILOCKS = {
       type: 'explore',
       title: 'All seven planets',
       body: `Here is the real system, with the habitable zone from the same
-             model you have been using all investigation, calculated from TRAPPIST-1's
-             measured luminosity and temperature.
+             model you have been using all investigation, from TRAPPIST-1's
+             luminosity (extrapolated: the star is cooler than the fit).
              \n\nThe distance axis is compressed, because otherwise the inner
              planets would pile up on top of the star. Read the numbers, not the
              pixels.
@@ -992,7 +992,7 @@ const GOLDILOCKS = {
              instrument. The panel is back, on the conservative definition.
              \n\nWork down the list under the picture and record the starlight
              each of the three middle planets receives, in Earths. Then record
-             where the zone begins and ends.`,
+             where the zone begins and ends (extrapolated).`,
       fields: [
         {
           id: 'e',

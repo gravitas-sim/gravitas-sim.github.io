@@ -342,7 +342,7 @@ export default {
       prompt: 'Masa dinámica dividida entre masa visible',
       unit: '×',
       because:
-        'Alrededor de dieciocho. Las galaxias que puedes ver dan cuenta de aproximadamente una vigésima parte de la masa necesaria para mantener unido el cúmulo a las velocidades a las que sus miembros se mueven de verdad. La cifra del propio Zwicky para Coma fue todavía mayor, en parte porque la escala de distancias del universo estaba equivocada en 1933 y en parte porque no tenía manera de contar el gas caliente entre las galaxias, que resulta llevar varias veces más masa que las galaxias. La cifra moderna para Coma ronda un factor diez una vez incluido ese gas, que es el número que informa el instrumento de dos pasos atrás.',
+        'Alrededor de dieciocho, en este modelo a escala. Las galaxias que puedes ver dan cuenta de aproximadamente una vigésima parte de la masa necesaria para mantener unido el cúmulo a las velocidades a las que sus miembros se mueven de verdad. La cifra del propio Zwicky para Coma fue todavía mayor, en parte porque la escala de distancias del universo estaba equivocada en 1933 y en parte porque no tenía manera de contar el gas caliente entre las galaxias, que resulta llevar varias veces más masa que las galaxias. La cifra moderna para Coma ronda un factor diez una vez incluido ese gas, que es el número que informa el instrumento de dos pasos atrás.',
     },
     'a-different-way-to-read': {
       title: 'Otra manera de leer la misma curva',
@@ -385,7 +385,7 @@ export default {
     },
     'what-have-you-actually-shown': {
       title: '¿Qué has demostrado en realidad?',
-      body: 'Has hecho ya tres medidas, en dos clases de sistema, usando dos métodos distintos: ajustaste la curva de rotación de una galaxia y descubriste que ninguna disposición de sus estrellas servía, y pesaste un cúmulo por su movimiento y encontraste cinco veces más masa que luz. Ambas cosas dicen lo mismo.\n\nTen cuidado con lo que se sigue de ahí.',
+      body: 'Has hecho ya tres medidas, en dos clases de sistema, usando dos métodos distintos: ajustaste la curva de rotación de una galaxia y descubriste que ninguna disposición de sus estrellas servía, y pesaste un cúmulo por su movimiento y encontraste dieciocho veces más masa que luz. Ambas cosas dicen lo mismo.\n\nTen cuidado con lo que se sigue de ahí.',
       prompt:
         'En dos o tres frases: ¿qué establecen estas medidas y qué no establecen? Nombra al menos una cosa distinta de un nuevo tipo de partícula que en principio pudiera explicarlas.',
       rubric:
@@ -399,7 +399,7 @@ export default {
     'where-it-stands': {
       title: 'Dónde estamos',
       body: 'Las pruebas han crecido mucho desde 1933 y desde 1970, y ya no descansan en absoluto en las curvas de rotación. El patrón de puntos calientes y fríos del fondo cósmico de microondas, cómo se distribuyen las galaxias por el cielo, cómo la lente gravitatoria curva la luz alrededor de los cúmulos, y las abundancias de hidrógeno y helio sobrantes de los primeros minutos apuntan todos en el mismo sentido, y son sensibles a cosas distintas. La materia ordinaria que resulte ser oscura no puede dar cuenta de lo que muestran; tiene que haber algo que tenga masa y no interactúe con la luz.\n\nQué es ese algo, nadie lo sabe. Nunca se ha detectado en un laboratorio, no se ha encontrado ninguna partícula candidata, y las búsquedas llevan cuarenta años en marcha. El Cúmulo Bala, donde dos cúmulos se atravesaron y la masa se separó visiblemente del gas, es la observación más difícil de acomodar para las alternativas de gravedad modificada.\n\nEse es un lugar honesto donde dejarlo. La medida es sólida y se ha repetido de una docena de maneras independientes. La explicación es un nombre para algo que no hemos identificado. Son dos clases distintas de afirmación y merece la pena mantenerlas separadas.',
-      tip: 'Ajustaste una curva construida con los parámetros publicados de una galaxia real y pesaste un cúmulo real. Los números venían de la literatura; la conclusión la sacaste tú, sin fiarte de la palabra de nadie.',
+      tip: 'Ajustaste una curva construida con los parámetros publicados de una galaxia real y pesaste un modelo a escala de un cúmulo. Los números venían de la literatura; la conclusión la sacaste tú, sin fiarte de la palabra de nadie.',
     },
   },
 };
