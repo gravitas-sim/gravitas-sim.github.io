@@ -1065,7 +1065,7 @@ const DARK_MATTER = {
       body: `You have made three measurements now, in two kinds of system, using
              two different methods: you fitted a galaxy's rotation curve and found
              no arrangement of its stars would do, and you weighed a cluster by
-             its motion and found eighteen times more mass than light. Both say the
+             its motion and found eighteen times more mass than the visible galaxies account for. Both say the
              same thing.
              \n\nBe careful about what follows from that.`,
       prompt:

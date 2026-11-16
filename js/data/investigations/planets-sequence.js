@@ -815,10 +815,11 @@ export const COMETS_AND_THE_SUN = {
       type: 'explore',
       title: 'Watch the tails',
       body: `Tails show only inside about 3 AU of the Sun. Halley, the readout&rsquo;s comet, stays
-             beyond 5.8 AU. Wild 2 and Hartley 2 come in to 1.1 AU: find one, zoom in, and compare
+             beyond 5.8 AU. Wild 2 and Hartley 2 come in to 1.1 AU, Shoemaker-Levy 9 to 2.1 (a faint
+             tail; on a slower device, the only one): find one, zoom in, and compare
              its tail with the direction to the Sun.`,
       checklist: [
-        'Find Wild 2 or Hartley 2 near the Sun and zoom in',
+        'Find a comet near the Sun and zoom in',
         'See the narrow ion tail point away from the Sun',
         'See the same comet while it moves away from the Sun: where is its tail now?',
       ],
@@ -1319,9 +1320,9 @@ export const COMETS_AND_THE_SUN_ES = {
     },
     {
       title: 'Mira las colas',
-      body: 'Las colas solo se ven a menos de unas 3 UA del Sol. Halley, el cometa de la lectura, se queda más allá de 5,8 UA. Wild 2 y Hartley 2 llegan a 1,1 UA: busca uno, acércate y compara su cola con la dirección del Sol.',
+      body: 'Las colas solo se ven a menos de unas 3 UA del Sol. Halley, el cometa de la lectura, se queda más allá de 5,8 UA. Wild 2 y Hartley 2 llegan a 1,1 UA, Shoemaker-Levy 9 a 2,1 (una cola tenue; en un dispositivo más lento, el único): busca uno, acércate y compara su cola con la dirección del Sol.',
       checklist: [
-        'Busca Wild 2 o Hartley 2 cerca del Sol y acércate',
+        'Busca un cometa cerca del Sol y acércate',
         'Ve la cola estrecha de iones apuntar lejos del Sol',
         'Ve el mismo cometa mientras se aleja del Sol: ¿dónde está ahora su cola?',
       ],

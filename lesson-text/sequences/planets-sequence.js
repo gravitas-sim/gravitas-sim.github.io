@@ -277,9 +277,9 @@ export const COMETS_AND_THE_SUN_ES = {
     },
     'watch-the-tails': {
       title: 'Mira las colas',
-      body: 'Las colas solo se ven a menos de unas 3 UA del Sol. Halley, el cometa de la lectura, se queda más allá de 5,8 UA. Wild 2 y Hartley 2 llegan a 1,1 UA: busca uno, acércate y compara su cola con la dirección del Sol.',
+      body: 'Las colas solo se ven a menos de unas 3 UA del Sol. Halley, el cometa de la lectura, se queda más allá de 5,8 UA. Wild 2 y Hartley 2 llegan a 1,1 UA, Shoemaker-Levy 9 a 2,1 (una cola tenue; en un dispositivo más lento, el único): busca uno, acércate y compara su cola con la dirección del Sol.',
       checklist: [
-        'Busca Wild 2 o Hartley 2 cerca del Sol y acércate',
+        'Busca un cometa cerca del Sol y acércate',
         'Ve la cola estrecha de iones apuntar lejos del Sol',
         'Ve el mismo cometa mientras se aleja del Sol: ¿dónde está ahora su cola?',
       ],

@@ -39,7 +39,7 @@ export default {
     },
     {
       title: 'El anillo de una galaxia',
-      body: `Carga “Una galaxia a 1 Gpc, fuente justo detrás”: 10<sup>11</sup> masas solares dentro del anillo, a un gigaparsec. Lee el radio de Einstein en segundos de arco, (aproximado: distancias euclídeas) y su tamaño en la lente en kiloparsecs.`,
+      body: `Carga “Una galaxia a 1 Gpc, fuente justo detrás”: 10<sup>11</sup> masas solares dentro del anillo, a un gigaparsec. Lee el radio de Einstein en segundos de arco (aproximado: distancias euclídeas) y su tamaño en la lente en kiloparsecs.`,
       fields: [{ label: 'Radio de Einstein' }, { label: 'Radio en la lente' }],
     },
     {

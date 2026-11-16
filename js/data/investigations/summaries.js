@@ -41,7 +41,7 @@ export const SUMMARIES = {
   'binary-star-planets':
     'Most stars come in pairs, so most planets have to make a living in a system with two suns. Some orbits work and some do not, and the line between them is sharper than you would guess. Find it twice — once for a planet around one star, once for a planet around both — and then find out how much of what you just measured was the physics and how much was the arithmetic.',
   'gravity-assist':
-    'Voyager 2 arrived at Jupiter traveling ten kilometers a second and left traveling twenty-six. Jupiter did not burn any fuel for it. Fly the same maneuver yourself, measure it in the planet’s frame and in an inertial one, run it past both sides of the planet at once, and find out why the two measurements disagree — and who actually paid.',
+    'Voyager 2 arrived at Jupiter traveling ten kilometers a second and left traveling twenty. Jupiter did not burn any fuel for it. Fly the same maneuver yourself, measure it in the planet’s frame and in an inertial one, run it past both sides of the planet at once, and find out why the two measurements disagree — and who actually paid.',
   'hohmann-transfer':
     'A spacecraft at 1 AU, a station at 2.5 AU, and no fuel to waste. Work out both burns and the coast between them with a pencil, then fly the maneuver and see whether the engine agrees with you. It does — to a part in a thousand — which is what makes the two surprises in it worth trusting: you speed up to go further out, and you have to speed up again on arrival or you fall straight back.',
   'lagrange-points':
