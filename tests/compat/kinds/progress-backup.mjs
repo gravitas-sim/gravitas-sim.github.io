@@ -32,7 +32,14 @@ export default {
     const v = validateBackup(doc);
     if (!v.ok) return { accepted: false, problems: [v.reason] };
     const restored = restoreProgress(doc, lesson());
-    return { accepted: true, value: JSON.parse(JSON.stringify(restored)) };
+    // `earlier` (answers set aside for steps the lesson lacks) is new, and
+    // absent from what a 2.0.0 reader returns: compared only when it has any.
+    const { earlier, ...rest } = restored;
+    const some = Object.keys(earlier?.responses || {}).length;
+    return {
+      accepted: true,
+      value: JSON.parse(JSON.stringify(some ? restored : rest)),
+    };
   },
   async rewrite(load, doc) {
     // A new build restores the backup and saves it again: what it saves is

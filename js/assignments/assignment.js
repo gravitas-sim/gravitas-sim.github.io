@@ -390,6 +390,16 @@ export function validateAssignment(data) {
   return { ok: true, reason: null, detail: null };
 }
 
+/** Step ids, each retired one replaced by its successor (or dropped). */
+export const swapRetired = (lesson, sids) =>
+  [
+    ...new Set(
+      sids.map(s =>
+        Object.hasOwn(lesson?.retired ?? {}, s) ? lesson.retired[s].to : s
+      )
+    ),
+  ].filter(Boolean);
+
 /**
  * Resolve an assignment's steps against the lesson as it stands today.
  *
@@ -405,14 +415,6 @@ export function validateAssignment(data) {
  * @returns {{bindings: Array<object>, steps: Array<object>, present: number,
  *   changed: number, missing: number, usable: boolean}} The resolution
  */
-/** Step ids, each retired one replaced by its successor (or dropped). */
-export const swapRetired = (lesson, sids) =>
-  [
-    ...new Set(
-      sids.map(s => (lesson?.retired?.[s] ? lesson.retired[s].to : s))
-    ),
-  ].filter(Boolean);
-
 export function stepBindings(assignment, lesson, fingerprint) {
   const byId = new Map((lesson?.steps || []).map(s => [s.sid, s]));
   const bindings = (assignment.s || []).map((sid, i) => {

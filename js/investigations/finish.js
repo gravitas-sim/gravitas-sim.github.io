@@ -44,6 +44,25 @@ import { buildLabReport, downloadPdf, reportMessages } from '../labReport.js';
  */
 
 /**
+ * The backup of what is on record now, with the answers set aside for steps the
+ * lesson lacks. One under a step it has (held back as a rewritten step's) stays
+ * out: a marker would read it as an answer to a question it was not asked.
+ */
+const backupOf = (host, mod, studentName) => {
+  const { active, stepIndex, responses, attempts, visited, startedAt } =
+    host.state();
+  return mod.buildBackup({
+    lesson: active,
+    responses: { ...host.earlier(active.id)?.responses, ...responses },
+    attempts,
+    visited,
+    stepSid: active.steps[stepIndex]?.sid ?? null,
+    startedAt,
+    studentName,
+  });
+};
+
+/**
  * The submission token for what is on record now, or '' if it cannot be made.
  * Both modules are dynamic imports, so a reader who hands nothing in never pays
  * for the encoder. The roster id comes off the assignment link's ?roster=
@@ -55,16 +74,7 @@ import { buildLabReport, downloadPdf, reportMessages } from '../labReport.js';
  */
 export async function makeSubmissionToken(host, name) {
   const { getLocale } = host.lib;
-  const {
-    active,
-    stepIndex,
-    responses,
-    attempts,
-    visited,
-    startedAt,
-    assignment,
-    depth,
-  } = host.state();
+  const { active, assignment, depth } = host.state();
   try {
     const backupMod = await import('./progressBackup.js');
     const tokenMod = await import('../submission/submissionToken.js');
@@ -74,15 +84,7 @@ export async function makeSubmissionToken(host, name) {
     ).ledgerForReport();
     const encoded = await tokenMod.encodeSubmission(
       tokenMod.buildSubmission({
-        backup: backupMod.buildBackup({
-          lesson: active,
-          responses: { ...host.earlier(active.id)?.responses, ...responses },
-          attempts,
-          visited,
-          stepSid: active.steps[stepIndex]?.sid ?? null,
-          startedAt,
-          studentName: name,
-        }),
+        backup: backupOf(host, backupMod, name),
         assignmentId: assignment?.i ?? null,
         rosterId: new URLSearchParams(location.search).get('roster') || null,
         fallbackLocale: getLocale(),
@@ -283,20 +285,11 @@ async function report(host, format) {
  * the heaviest thing in the application.
  */
 export async function downloadBackup(host) {
-  const { active, stepIndex, responses, attempts, visited, startedAt } =
-    host.state();
+  const { active } = host.state();
   if (!active) return;
   const { t, announce } = host.lib;
   const backup = await import('./progressBackup.js');
-  const payload = backup.buildBackup({
-    lesson: active,
-    responses: { ...host.earlier(active.id)?.responses, ...responses },
-    attempts,
-    visited,
-    stepSid: active.steps[stepIndex]?.sid ?? null,
-    startedAt,
-    studentName: host.getStudentName(),
-  });
+  const payload = backupOf(host, backup, host.getStudentName());
 
   const blob = new Blob([JSON.stringify(payload, null, 2)], {
     type: 'application/json',

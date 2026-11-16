@@ -24,7 +24,8 @@ import {
   formatFieldNumber,
   keyForAssignment,
   earlierFor,
-  forgetDrafts,
+  forgetKept,
+  keepEarlier,
   load,
   parseFieldNumber,
   progressFor,
@@ -2361,15 +2362,13 @@ export async function openInvestigation(id, opts = {}) {
   const saved = authoring ? null : load(id, active);
   responses = saved?.responses || {};
   if (assignment && saved?.responses) {
-    // A step rewritten under its own id since this assignment was made is a
-    // different question: a stored answer to the old one is held back, not
-    // shown, which is the point of carrying fingerprints in the payload.
-    const filtered = filterResponses(
+    // A step rewritten under its own id since the assignment was made is a
+    // different question: its old answer is held back, not shown.
+    responses = filterResponses(
       assignmentBinding,
       saved.responses,
       sid => `${inv.id}:${sid}`
-    );
-    responses = filtered.kept;
+    ).kept;
   }
   attempts = saved?.attempts || {};
   visited = saved?.visited || new Set();
@@ -2714,9 +2713,8 @@ const finishHost = () => ({
   saveFile,
   restoreInto: restored => {
     progressNotes = [];
-    responses = restored.responses;
-    attempts = restored.attempts;
-    visited = restored.visited;
+    ({ responses, attempts, visited } = restored);
+    keepEarlier(active.id, restored.earlier);
     startedAt = restored.startedAt || new Date().toISOString();
     save();
     goToStep(restored.stepIndex, { rebuild: true });
@@ -3095,11 +3093,9 @@ export function initInvestigations({ signal } = {}) {
   });
   on('investigationRestartGo', () => {
     ask.close();
-    responses = {};
-    attempts = {};
-    visited = new Set();
+    [responses, attempts, visited] = [{}, {}, new Set()];
     startedAt = new Date().toISOString();
-    forgetDrafts();
+    forgetKept(active.id);
     toast(t('inv.progress.cleared'));
     goToStep(0);
   });

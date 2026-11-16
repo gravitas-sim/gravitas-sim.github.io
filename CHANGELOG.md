@@ -15,6 +15,7 @@ the release rather than in the tag.
 
 ### Fixed
 
+- A student's earlier-version answers (those under a step a lesson has since revised) now survive a backup restore, Restart clears them with the rest, and they no longer carry over from a free-play lesson into an assignment; a typed numeric draft is no longer carried into another lesson, the notice counts steps rather than keys, and Escape leaves an open modal dialog alone (register rows D-R4-306-02 to 09; visible and instructional: the instructor bundle needs the owner's rebuild).
 - A first-time student who opens an assignment, activity or pack link now lands on the task instead of the introduction; the reset beside the lesson's progress bar resets what the step shows (scene, stage and instrument values) and says what it did and that answers are kept; Restart asks first, with the answer count and a backup offer; and a numeric answer typed but not checked is kept as a draft and restored on return, without counting as an answer (Prompt 308; register rows D-R4-308-01 to 06; visible).
 
 ### Changed

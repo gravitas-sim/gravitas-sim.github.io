@@ -119,7 +119,9 @@ export function reviewItem(item, facts, pinning) {
   const detail = {
     // Missing steps the lesson retired, and what replaced each.
     revisedSteps: steps
-      .filter(s => s.state === 'missing' && lesson.retired?.[s.sid])
+      .filter(
+        s => s.state === 'missing' && Object.hasOwn(lesson.retired ?? {}, s.sid)
+      )
       .map(s => ({ sid: s.sid, ...lesson.retired[s.sid] })),
     stepsThen: item.pin?.n ?? null,
     stepsNow: lesson.n,

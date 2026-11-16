@@ -433,7 +433,8 @@ export function gradeSubmission(
   for (const [sid, answer] of answers) {
     if (gradedIds.has(sid) || steps.some(s => s.sid === sid)) continue;
     // A step the lesson retired says so: from an earlier version, never marked.
-    const gone = lesson.retired?.[sid];
+    const gone =
+      Object.hasOwn(lesson.retired ?? {}, sid) && lesson.retired[sid];
     questions.push({
       earlier: gone ? { to: gone.to, release: gone.release } : null,
       stepNumber: null,
