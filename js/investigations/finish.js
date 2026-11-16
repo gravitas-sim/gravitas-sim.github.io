@@ -94,15 +94,13 @@ export async function makeSubmissionToken(host, name) {
     if (!encoded.comfortable) {
       // Say so rather than hand over something that will be truncated at the
       // far end, where the student cannot fix it.
-      console.warn(
-        `Submission token is ${encoded.length} characters, over ${encoded.limit}.`
-      );
+      console.warn('Token too long');
     }
     return encoded.token;
   } catch (err) {
     // A report without a token is still a report. The completion code and
     // every answer are on the page either way.
-    console.warn('Submission token failed:', err);
+    console.warn('Submission token', err);
     return '';
   }
 }
@@ -269,7 +267,7 @@ async function report(host, format) {
     toast(t('inv.report.done'));
     announce(t('inv.report.done'));
   } catch (err) {
-    console.error('Report failed:', err);
+    console.error('Report', err);
     toast(t('inv.report.failed'));
   } finally {
     button.disabled = false;

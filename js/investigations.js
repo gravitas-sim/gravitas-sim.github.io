@@ -726,7 +726,7 @@ function applySetup(setup) {
     // have to be reasserted every time rather than set once on open.
     applyLocks();
   } catch (err) {
-    console.warn('Step setup failed:', err);
+    console.warn('Step setup', err);
     toast(t('inv.error.scenario'));
   }
 }
@@ -755,6 +755,10 @@ function bindStepRoles(force) {
   // steps can share a stage - in which case applyStage does nothing and the
   // copies would otherwise still be standing there under a different question.
   clearSnapshots();
+  const warn = (problems, what) => {
+    for (const [role, why] of Object.entries(problems))
+      console.warn(`${step.sid} ${what} "${role}": ${why}`);
+  };
   // A stage declares the whole scene and binds its own roles, so it takes
   // precedence: a step cannot both stand its own stars on the canvas and bind
   // roles to somebody else's.
@@ -766,11 +770,7 @@ function bindStepRoles(force) {
     // camera. Fitting here instead measured panels that were not there yet and
     // was then overwritten by the boot.
 
-    for (const [role, reason] of Object.entries(problems)) {
-      console.warn(
-        `${active?.id}/${step.sid}: staged star "${role}" - ${reason}`
-      );
-    }
+    warn(problems, 'staged star');
     return;
   }
   clearStage();
@@ -781,11 +781,7 @@ function bindStepRoles(force) {
   const { problems } = bindRoles(step.bind, {
     modelOwned: step.prescribes || [],
   });
-  for (const [role, reason] of Object.entries(problems)) {
-    console.warn(
-      `${active?.id}/${step.sid}: role "${role}" unbound - ${reason}`
-    );
-  }
+  warn(problems, 'unbound role');
 }
 
 function applyLocks() {
@@ -983,7 +979,7 @@ function validateStep(step, id) {
   try {
     return step.validate(fieldValues(step, id), probeContext()) || null;
   } catch (err) {
-    console.warn('Step validation failed:', err);
+    console.warn(err);
     return null;
   }
 }
@@ -1105,7 +1101,7 @@ function syncEventWatch(step) {
       });
     })
     .catch(err => {
-      console.warn('Pause tool failed:', err);
+      console.warn(err);
     });
 }
 
@@ -1385,7 +1381,7 @@ function syncToolPanel(step) {
           widget.live ? probeContext() : undefined
         );
       } catch (err) {
-        console.warn('Widget action failed:', err);
+        console.warn(err);
       }
       paintTool();
     });
@@ -1425,7 +1421,7 @@ function startToolLoop(widget, toolSpec) {
       );
       paintTool({ quiet: true });
     } catch (err) {
-      console.warn('Widget frame failed:', err);
+      console.warn(err);
       stopToolLoop();
       return;
     }
@@ -1651,7 +1647,7 @@ function paintTool({ quiet = false } = {}) {
       lastToolHtml = html;
     }
   } catch (err) {
-    console.warn('Widget draw failed:', err);
+    console.warn(err);
   }
   if (!quiet) save();
 }
@@ -2036,7 +2032,7 @@ function renderProbe() {
   try {
     rows = step.probe(probeContext());
   } catch (err) {
-    console.warn('Probe failed:', err);
+    console.warn(err);
     rows = [{ label: t('inv.probe.unavailable'), value: '-' }];
   }
   const html = rows
@@ -2072,7 +2068,7 @@ function importSelection() {
   try {
     values = step.importFromSelection(ctx);
   } catch (err) {
-    console.warn('Import failed:', err);
+    console.warn(err);
     values = null;
   }
   const hint = els.body.querySelector('[data-import-hint]');
@@ -2336,9 +2332,7 @@ export async function openInvestigation(id, opts = {}) {
   // rendering it.
   const unsafe = inv.steps.find(s => !isValidSid(s.sid));
   if (unsafe) {
-    throw new Error(
-      `Investigation "${id}" has a step id that is not a safe key: ${JSON.stringify(unsafe.sid)}`
-    );
+    throw new Error(`Unsafe step id: ${JSON.stringify(unsafe.sid)}`);
   }
 
   // An assignment is the same lesson with most of its steps taken out. It is
@@ -2452,7 +2446,7 @@ export async function openInvestigation(id, opts = {}) {
           forExperiment: true,
         });
       } catch (err) {
-        console.warn('Sandbox save failed:', err);
+        console.warn(err);
         return null;
       }
     })(),
@@ -2488,7 +2482,7 @@ function restoreSandbox(saved) {
     applyShareState(JSON.parse(JSON.stringify(payload)));
     return true;
   } catch (err) {
-    console.warn('Sandbox restore failed:', err);
+    console.warn(err);
     return false;
   }
 }
@@ -2625,16 +2619,6 @@ const answeredStep = s => {
     ? s.fields?.some(f => String(responses[`${id}:${f.id}`] ?? '').trim())
     : String(responses[id] ?? '').trim() !== '';
 };
-
-function startOver() {
-  responses = {};
-  attempts = {};
-  visited = new Set();
-  startedAt = new Date().toISOString();
-  forgetDrafts();
-  toast(t('inv.progress.cleared'));
-  goToStep(0);
-}
 
 function openFinish() {
   if (!els.finish) return;
@@ -3102,9 +3086,8 @@ export function initInvestigations({ signal } = {}) {
   els.finishBack?.addEventListener('click', closeFinish);
   const on = (id, fn) =>
     document.getElementById(id)?.addEventListener('click', fn);
-  // Restart asks first (lesson-finish.html); the Escape shortcut must not eat its Esc.
+  // Restart asks first (lesson-finish.html).
   const ask = document.getElementById('investigationRestart');
-  ask.onkeydown = e => e.key === 'Escape' && e.stopPropagation();
   on('investigationReset', () => {
     ask.querySelector('b').textContent =
       active.steps.filter(answeredStep).length;
@@ -3112,7 +3095,13 @@ export function initInvestigations({ signal } = {}) {
   });
   on('investigationRestartGo', () => {
     ask.close();
-    startOver();
+    responses = {};
+    attempts = {};
+    visited = new Set();
+    startedAt = new Date().toISOString();
+    forgetDrafts();
+    toast(t('inv.progress.cleared'));
+    goToStep(0);
   });
   on('investigationDownload', finishAction('generateReport'));
   on('investigationDownloadHtml', finishAction('generateHtmlReport'));

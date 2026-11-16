@@ -1890,7 +1890,8 @@
       "locator": {
         "page": "index.html",
         "element": "investigationRestart",
-        "opener": "Restart in the lesson panel's More (js/investigations.js)"
+        "opener": "Restart in the lesson panel's More (js/investigations.js)",
+        "native": true
       },
       "purpose": "The question before Restart erases a lesson's answers: how many there are, a backup to download first, and a way to cancel.",
       "audience": "student",

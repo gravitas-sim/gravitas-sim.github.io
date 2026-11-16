@@ -1127,10 +1127,10 @@ export function bindStepInputs(h) {
       announce(els.body.querySelector('.inv-feedback')?.textContent ?? '');
     };
     checkBtn.addEventListener('click', submit);
-    numeric.addEventListener('input', () => {
+    numeric.oninput = () => {
       typed[id] = numeric.value;
       h.save();
-    });
+    };
     numeric.addEventListener('keydown', e => {
       if (e.key === 'Enter') {
         e.preventDefault();
