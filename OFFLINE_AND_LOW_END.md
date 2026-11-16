@@ -29,9 +29,10 @@ registration, logs a warning and carries on without offline support.
 
 ### The version
 
-A SHA-256 over the contents of every precached file, truncated to twelve hex
-digits, producing a cache named `gravitas-<hash>`. Two properties follow, and
-both are wanted:
+A SHA-256 over the contents of every precached file and of the translated
+lesson files the page asks the worker to warm (the latter add nothing to any
+tier), truncated to twelve hex digits, producing a cache named
+`gravitas-<hash>`. Two properties follow, and both are wanted:
 
 - A rebuild that changed nothing produces the same name, so a returning browser
   keeps a cache that is still correct.
@@ -151,18 +152,19 @@ it, and picking a favorite subset would be guessing which lesson a class is
 about to want.
 
 **The <!--fact:spanishShadows-->127<!--/fact--> Spanish shadows are not**: they are only ever fetched
-when the interface is in Spanish. They are runtime-cached on first use, and
-`js/offline.js` asks the worker to warm all of them the moment the language is
-switched. A Spanish classroom is therefore covered from when it chooses
-Spanish, not from when it opens a lesson.
+when the interface is in Spanish. `js/offline.js` asks the worker to warm all
+of them the moment the language is switched and on every open in Spanish; the
+worker fetches only the ones its cache lacks, so a second visit costs no
+request for them (Prompt 313). A Spanish classroom is therefore covered from
+when it chooses Spanish, not from when it opens a lesson.
 
 ### Strategies
 
 | Request | Strategy | Why |
 | --- | --- | --- |
 | Navigation | The precache for the application's route and the pages in it, otherwise the network; offline, a redirect to the application | A document the worker was not given is never stored, so no build's shell mixes with another's; offline a reader reaches the application, not an error page (and not its shell at another page's address, which loaded nothing: Prompt 284) |
-| Precached asset | Cache first | Versioned by the cache name, so a hit is known-current |
-| Anything else | Stale-while-revalidate | Spanish shadows, the data a page fetches, anything added later (a document page is a navigation, above) |
+| Precached asset, or a locale's warm file | Cache first | Versioned by the cache name (the warm files are hashed into it), so a hit is known-current |
+| Anything else | Stale-while-revalidate | The lessons outside the precache, the data a page fetches, anything added later (a document page is a navigation, above) |
 
 Only same-origin GETs. No opaque responses, no range requests.
 
@@ -870,6 +872,109 @@ No real iOS or Android device has been used for the backup's share sheet or file
 
 The row is UNKNOWN in `tools/evidence-status.json`; the real-device protocol
 above is the way to settle it.
+
+## Warm start and offline for a lesson (Prompt 313)
+
+What the second visit to a lesson costs, which requests the worker answers and
+which reach the network, and what a lesson does with the network gone. Measured
+under Prompt 298's profile (`mid-range-phone`: 412 x 915, CPU 6x, 1.6 Mbps down,
+150 ms, low quality tier), headless Chromium 156 over `tools/static-server.mjs
+--gzip --cache-headers` (the host's `max-age=600`), the service worker allowed,
+three runs per cell, median, on a shared Mac (load 5 to 13). **A proxy**: not a
+phone, not HTTP/2, not the live site. "Usable" is the harness's definition
+(the lesson's Next button visible). The warm visit is the third load of the
+context, after the install and the idle tier had finished.
+
+### Warm against cold
+
+| Lesson | Cold, s | Warm, s | Warm as a fraction of cold | Offline, s (HTTP cache off) |
+|---|---:|---:|---:|---:|
+| `keplers-laws`, live scene | 15.5 | 7.5 | 48% | 7.3 |
+| `ios-fire`, instrument | 14.5 | 7.6 | 53% | 7.8 |
+| `color-and-temperature`, staged stars | 13.9 | 7.5 | 54% | 7.3 |
+| `keplers-laws` in Spanish | 14.3 | 8.0 | 56% | 8.6 |
+
+After the change below, `keplers-laws` measured 14.9 s cold and 8.5 s warm (57%,
+one run at 7.3 and one at 8.8 either side of the median) and 8.1 s warm in
+Spanish (57%): inside the run-to-run spread of the table above, as expected,
+because the change removes requests and not time. **The 40% target is not met,
+and the cause is measured: it is not the network.**
+
+- Every request of a warm English visit is answered by the worker from its
+  cache: 153 of 153 for `keplers-laws`, 154 of 154 for `color-and-temperature`,
+  155 of 155 for `ios-fire`, with 0 bytes on the wire. The only request that
+  reaches the server is the browser's own check of `sw.js` (one or two). The
+  worker's answer takes a median of 3 ms (at most 42 ms) per request.
+- What remains is the main thread at CPU 6x. A trace of a warm `keplers-laws`
+  load shows the main thread busy for 7.1 s of the 7.2 s to usable (cold: 9.2 s
+  busy of 14.1 s), with module compilation a few tens of milliseconds because
+  the browser already holds the compiled code. The time is the lesson engine and
+  its 135 modules running and the first layouts and commits, and it is the same
+  with or without a network. A faster warm visit is a smaller start-up, which is
+  the work of the idle-work, scene-cost and render prompts, not of a cache tier.
+
+### The cache-versus-network table
+
+| What | Served from the worker's cache | Reached the network | Revalidated |
+|---|---|---|---|
+| English lesson, warm (`keplers-laws`, `ios-fire`, `color-and-temperature`): 153 to 155 page requests | all | 0 (`sw.js` update check only) | 0 |
+| Spanish lesson, warm, before this change: 155 page requests | all | **129** (the 127 translated lesson files, fetched past the browser's cache by `warm-locale` on every open, and `sw.js`) | 0 on the page's own requests |
+| Spanish lesson, warm, after: 155 page requests | all | 2 (`sw.js`) | 0 |
+| A lesson outside the precache (see below), second visit | all that were fetched the first time | 0 | one background request per file served, for a file no list names |
+
+The repair (D-R4-313-01): the page asks the worker to warm a language on every
+open in that language, on the controller change and on every language switch, and
+the worker fetched all of the list again each time with the browser's cache
+bypassed. It now fetches only what its cache lacks, as the idle tier does, and a
+warmed file is served cache first like a precached one. That is only safe
+because the warmed files are now part of the version: the cache name hashes
+them, so editing a translated lesson changes the name and the next install
+replaces the cache. Nothing is added to any tier (no byte of `sw-manifest.js`
+changes but the version string), and `tests/warmStart.test.js` runs `sw.js`
+against a fake cache and network to hold both behaviours.
+
+### What a student can rely on offline for a lesson
+
+From `e2e/offline.spec.js` and a sweep of six lessons (service worker active,
+install and idle tier finished, network cut, the browser's cache off):
+
+| Lesson | Never opened before the drop | Opened once before the drop |
+|---|---|---|
+| In the precache, staged stars (`color-and-temperature`, `tides`) | opens with its scene and steps on | opens with its scene and steps on |
+| In the precache, live setup scenario (`keplers-laws`) | opens with its scene and steps on | opens with its scene and steps on |
+| Outside the precache (`ios-fire`, `a-binary-stars-orbit`, `measuring-the-moon`) | **does not open**: the worker answers 504 for the lesson file | opens with its scene; five to six steps taken offline without having been taken online all worked, because the lesson's instrument files arrive with the first screens |
+| Any of the above, in Spanish, after the language was chosen online | as English | as English |
+
+A lesson outside the precache is one of the families the first-visit ceiling kept
+out (`NEVER_PRECACHED` in `tools/build-service-worker.mjs`: the measurement and
+claim lessons of D-R10-67 and the later families it lists). They stay out: the
+first-visit tier has no room and a tier is not raised here. They open offline
+only after one online use, which is the standing statement of D-R10-284-06 and
+is unchanged.
+
+Unchanged open items of D-R10-284-06: 166 pages need a connection (no document
+is stored when visited); Save-Data keeps the idle tier off.
+
+### A keep-this-lesson control, priced and not built
+
+For a lesson outside the precache, keeping it means fetching the files its first
+screens would fetch, from the worker (a message like `warm-locale`), into the
+version cache: one request per file and no new tier. Measured by loading the
+lesson with the worker blocked and walking up to eight steps, gzip level 6:
+
+| Lesson | Files outside every tier | Raw | Gzip |
+|---|---:|---:|---:|
+| `ios-fire` | 10 | 113 KB | 33.6 KB |
+| `a-binary-stars-orbit` | 21 | 831 KB | 334.6 KB |
+| `measuring-the-moon` | 21 | 831 KB | 334.6 KB |
+
+The last two share one imaging family (the second costs only its own lesson
+file once the first is kept); in Spanish each adds its translated lesson file.
+The same files in the first-visit tier would add 334.6 KB to every reader's
+install where there is almost no room (5,422,931 of 5,423,572 B gzip measured
+here under Node 22; CI's figure is the gate); `js/offlineParts.js` is for
+digest-named data, not lesson modules, so a control would use the version cache.
+No control is built (D-PERF-05).
 
 ## Reduced computation and automated profiles (Prompt 285)
 
