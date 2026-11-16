@@ -643,6 +643,20 @@ export const BOUNDARY = [
     expect: 'ignored',
     note: 'not a boundary: 2.0.0 keeps every sub-key of a step it knows (readProgress), so a record with them opens there and is saved again with them, and nothing there reads them. The schema stays 2; the progress backup and the submission token carry `responses` whole, so they carry these too, as strings their checks already allow.',
   },
+  {
+    id: 'numeric-draft',
+    prompt: 308,
+    kind: 'progress-store',
+    plans:
+      'a number typed in a numeric answer box and not yet checked, kept as `drafts` (`<lesson>:<sid>` to the text), a top-level field of the progress record written only while one is held',
+    mutate: doc => ({
+      ...clone(doc),
+      drafts: { 'tides:guess': '0,910' },
+    }),
+    // 2.0.0 opens the record and reads nothing from the field.
+    expect: 'ignored',
+    note: 'not a boundary: 2.0.0 ignores a top-level field it does not know (unknownFields: ignored), so a record with a draft opens there with the same answers, attempts and position. The draft is never in `responses`, so no answer, check, report row, backup or submission token carries it. The schema stays 2.',
+  },
 ];
 
 /**

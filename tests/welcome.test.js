@@ -149,6 +149,20 @@ describe('deep links are never intercepted', () => {
   test('an assignment is not covered by an introduction', () => {
     expect(shouldShowWelcome({ hash: shared, seen: false })).toBe(false);
     expect(shouldShowWelcome({ hash: lesson, seen: false })).toBe(false);
+    // The forms the lesson engine reads besides a lesson: an assignment, a
+    // pack, an activity. tests/linkShapes.test.js runs real ones through the
+    // loader's predicates as well.
+    for (const hash of [
+      '#a1zeJyrVkrLz1eyUkrOSC0uUUgtSc7PLShKLS7JzM9TqgUAY_MJ8Q',
+      '#i1rAAAA',
+      '#activity=orbital-speed/guided',
+      '#activity=orbital-speed',
+    ]) {
+      expect(hasDeepLinkDestination(hash)).toBe(true);
+      expect(shouldShowWelcome({ hash, seen: false })).toBe(false);
+    }
+    expect(hasDeepLinkDestination('#activity=')).toBe(false);
+    expect(hasDeepLinkDestination('#a1')).toBe(false);
   });
 
   test('being bypassed by a deep link does not mark it seen', () => {

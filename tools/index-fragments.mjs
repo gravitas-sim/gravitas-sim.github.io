@@ -119,7 +119,7 @@ export const FRAGMENTS = [
     family: 'lesson engine',
     kind: 'file',
     owner: 'js/investigations.js',
-    ids: ['investigationFinish'],
+    ids: ['investigationFinish', 'investigationRestart'],
   },
   {
     host: 'bh-masses',

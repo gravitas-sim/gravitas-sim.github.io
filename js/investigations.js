@@ -24,6 +24,7 @@ import {
   formatFieldNumber,
   keyForAssignment,
   earlierFor,
+  forgetDrafts,
   load,
   parseFieldNumber,
   progressFor,
@@ -154,7 +155,7 @@ import {
   setChooserElements,
   wireBrowserFilters,
 } from './investigations/browser.js';
-import { drop, get, put } from './storage/local.js';
+import { get, put } from './storage/local.js';
 import { helpStages, helpTaken } from './answerFeedback.js';
 import { frameState } from './referenceFrame.js';
 import {
@@ -725,7 +726,7 @@ function applySetup(setup) {
     // have to be reasserted every time rather than set once on open.
     applyLocks();
   } catch (err) {
-    console.warn('Could not set up investigation step:', err);
+    console.warn('Step setup', err);
     toast(t('inv.error.scenario'));
   }
 }
@@ -743,7 +744,7 @@ function applySetup(setup) {
  * Resolve this step's `bind` against the world that is on screen.
  * @returns {void}
  */
-function bindStepRoles() {
+function bindStepRoles(force) {
   const step = currentStep();
   // Whatever the last step was illustrating is not this step's business. The
   // widget re-asserts it on its first tick if this step wants one, so the
@@ -754,22 +755,22 @@ function bindStepRoles() {
   // steps can share a stage - in which case applyStage does nothing and the
   // copies would otherwise still be standing there under a different question.
   clearSnapshots();
+  const warn = (problems, what) => {
+    for (const [role, why] of Object.entries(problems))
+      console.warn(`${step.sid} ${what} "${role}": ${why}`);
+  };
   // A stage declares the whole scene and binds its own roles, so it takes
   // precedence: a step cannot both stand its own stars on the canvas and bind
   // roles to somebody else's.
   if (step?.stage) {
-    const { problems } = applyStage(step.stage);
+    const { problems } = applyStage(step.stage, { force });
     // The fit itself is deferred: applyStage records that one was asked for
     // and the panel's own tick performs it, once the panel and the instrument
     // have been laid out and the application has finished setting up its
     // camera. Fitting here instead measured panels that were not there yet and
     // was then overwritten by the boot.
 
-    for (const [role, reason] of Object.entries(problems)) {
-      console.warn(
-        `Investigation "${active?.id}" step "${step.sid}": staged star "${role}" - ${reason}`
-      );
-    }
+    warn(problems, 'staged star');
     return;
   }
   clearStage();
@@ -780,11 +781,7 @@ function bindStepRoles() {
   const { problems } = bindRoles(step.bind, {
     modelOwned: step.prescribes || [],
   });
-  for (const [role, reason] of Object.entries(problems)) {
-    console.warn(
-      `Investigation "${active?.id}" step "${step.sid}": role "${role}" is unbound - ${reason}`
-    );
-  }
+  warn(problems, 'unbound role');
 }
 
 function applyLocks() {
@@ -982,7 +979,7 @@ function validateStep(step, id) {
   try {
     return step.validate(fieldValues(step, id), probeContext()) || null;
   } catch (err) {
-    console.warn('Step validation failed:', err);
+    console.warn(err);
     return null;
   }
 }
@@ -1104,7 +1101,7 @@ function syncEventWatch(step) {
       });
     })
     .catch(err => {
-      console.warn('The pause-at-event tool could not be opened:', err);
+      console.warn(err);
     });
 }
 
@@ -1384,7 +1381,7 @@ function syncToolPanel(step) {
           widget.live ? probeContext() : undefined
         );
       } catch (err) {
-        console.warn('Widget action failed:', err);
+        console.warn(err);
       }
       paintTool();
     });
@@ -1424,7 +1421,7 @@ function startToolLoop(widget, toolSpec) {
       );
       paintTool({ quiet: true });
     } catch (err) {
-      console.warn('Widget frame failed:', err);
+      console.warn(err);
       stopToolLoop();
       return;
     }
@@ -1650,7 +1647,7 @@ function paintTool({ quiet = false } = {}) {
       lastToolHtml = html;
     }
   } catch (err) {
-    console.warn('Widget draw failed:', err);
+    console.warn(err);
   }
   if (!quiet) save();
 }
@@ -2035,7 +2032,7 @@ function renderProbe() {
   try {
     rows = step.probe(probeContext());
   } catch (err) {
-    console.warn('Probe failed:', err);
+    console.warn(err);
     rows = [{ label: t('inv.probe.unavailable'), value: '-' }];
   }
   const html = rows
@@ -2071,7 +2068,7 @@ function importSelection() {
   try {
     values = step.importFromSelection(ctx);
   } catch (err) {
-    console.warn('Import failed:', err);
+    console.warn(err);
     values = null;
   }
   const hint = els.body.querySelector('[data-import-hint]');
@@ -2120,13 +2117,9 @@ function importSelection() {
 // --- Navigation ---------------------------------------------------------------
 
 /**
- * The scenario a step runs against.
- *
- * Not every step carries its own setup: a lesson sets up a system once and
- * then asks several things about it. Walking backwards to the most recent one
- * is what makes resuming work: a student who closes the tab on step 6 and comes
- * back would otherwise return to whatever scenario happened to be loaded,
- * reading questions about a system that is no longer on screen.
+ * The scenario a step runs against: its own setup, or the most recent one
+ * before it, which is what makes resuming work (a student who comes back on
+ * step 6 must not read questions about whatever system happens to be loaded).
  *
  * @param {number} index - Step index
  * @returns {Object|null} The setup in force at that step
@@ -2139,19 +2132,9 @@ function setupInForceAt(index) {
 }
 
 /**
- * Move to a step.
- * @param {number} index - Step to show
- * @param {Object} [opts]
- * @param {boolean} [opts.rebuild] - Reload the scenario in force at that step
- */
-/**
- * Release any sound a lesson started: a waveform belongs to the step that
- * started it, and one still playing after the step is gone sounds like an
- * answer. Sent as an event, because js/gwAudio.js pulls in the whole waveform
- * model; the scope is the prefix js/gwWidgets.js owns, so it cannot silence
- * sound started outside a lesson.
- *
- * @returns {void}
+ * Release any sound a lesson started: a waveform still playing after its step
+ * sounds like an answer. Sent as an event, because js/gwAudio.js pulls in the
+ * whole waveform model; the scope is the prefix js/gwWidgets.js owns.
  */
 function releaseLessonAudio() {
   if (typeof window === 'undefined') return;
@@ -2162,6 +2145,7 @@ function releaseLessonAudio() {
   );
 }
 
+/** Move to a step; `rebuild` reloads the scenario (and stage) in force there. */
 function goToStep(index, { rebuild = false } = {}) {
   if (!active) return;
   stepIndex = Math.max(0, Math.min(active.steps.length - 1, index));
@@ -2184,7 +2168,7 @@ function goToStep(index, { rebuild = false } = {}) {
   // Before the new step draws anything, so a reader never hears the last
   // step's signal over the new step's instructions.
   releaseLessonAudio();
-  bindStepRoles();
+  bindStepRoles(rebuild);
 
   // A lesson that leaves the inspector reachable, as the black hole one does,
   // can have its object card open when the student moves on. The card is a
@@ -2348,9 +2332,7 @@ export async function openInvestigation(id, opts = {}) {
   // rendering it.
   const unsafe = inv.steps.find(s => !isValidSid(s.sid));
   if (unsafe) {
-    throw new Error(
-      `Investigation "${id}" has a step id that is not a safe key: ${JSON.stringify(unsafe.sid)}`
-    );
+    throw new Error(`Unsafe step id: ${JSON.stringify(unsafe.sid)}`);
   }
 
   // An assignment is the same lesson with most of its steps taken out. It is
@@ -2464,10 +2446,7 @@ export async function openInvestigation(id, opts = {}) {
           forExperiment: true,
         });
       } catch (err) {
-        console.warn(
-          'Could not save the sandbox before the investigation:',
-          err
-        );
+        console.warn(err);
         return null;
       }
     })(),
@@ -2503,7 +2482,7 @@ function restoreSandbox(saved) {
     applyShareState(JSON.parse(JSON.stringify(payload)));
     return true;
   } catch (err) {
-    console.warn('Could not restore the sandbox after the investigation:', err);
+    console.warn(err);
     return false;
   }
 }
@@ -2633,19 +2612,18 @@ bindChooser({
 
 // --- Finishing and the report -------------------------------------------------
 
+/** Whether a step holds an answer: its own value, or one of a measure's fields. */
+const answeredStep = s => {
+  const id = stepId(active.steps.indexOf(s));
+  return s.type === 'measure'
+    ? s.fields?.some(f => String(responses[`${id}:${f.id}`] ?? '').trim())
+    : String(responses[id] ?? '').trim() !== '';
+};
+
 function openFinish() {
   if (!els.finish) return;
   const graded = gradedSteps({ steps: shown() });
-  const answered = graded.filter(s => {
-    const i = active.steps.indexOf(s);
-    const id = stepId(i);
-    if (s.type === 'measure') {
-      return s.fields?.some(f =>
-        String(responses[`${id}:${f.id}`] ?? '').trim()
-      );
-    }
-    return String(responses[id] ?? '').trim() !== '';
-  }).length;
+  const answered = graded.filter(answeredStep).length;
 
   showToken('');
   // Not in an authoring preview, as the panel's backup controls are not.
@@ -2795,20 +2773,15 @@ function plotAnywhere() {
   return plot;
 }
 
-function resetProgress() {
-  if (!active) return;
-  responses = {};
-  attempts = {};
-  visited = new Set();
-  startedAt = new Date().toISOString();
-  try {
-    if (!authoring) drop(storageKey(active.id));
-  } catch {
-    /* ignore */
-  }
-  closeFinish();
-  goToStep(0);
-  toast(t('inv.progress.cleared'));
+/** Put what this step shows (scene, instrument) back to its start; answers stay. */
+function resetStepScene() {
+  const step = currentStep();
+  for (const k in responses)
+    if (k.startsWith(`${stepId(stepIndex)}:tool:`)) delete responses[k];
+  goToStep(stepIndex, { rebuild: true });
+  const scene = step.stage || setupInForceAt(stepIndex);
+  const which = +!!step.tool + 2 * !!scene + 4 * (getLocale() === 'es');
+  toast(els.resetScenario.dataset.said.split('|')[which]);
 }
 
 // --- Wiring -------------------------------------------------------------------
@@ -2958,7 +2931,6 @@ export function initInvestigations({ signal } = {}) {
     tokenBody: document.getElementById('investigationTokenBody'),
     finishClose: document.getElementById('investigationFinishClose'),
     finishBack: document.getElementById('investigationFinishBack'),
-    resetBtn: document.getElementById('investigationReset'),
     resetScenario: document.getElementById('investigationResetScenario'),
     plotPanel: document.getElementById('investigationPlot'),
     plotCanvas: document.getElementById('investigationPlotCanvas'),
@@ -3084,13 +3056,11 @@ export function initInvestigations({ signal } = {}) {
     setStageScale(next);
     const on = next === SCALE.TRUE;
     els.scaleBtn.setAttribute('aria-pressed', String(on));
-    // At true scale the smallest stars fall below what the canvas can draw.
-    // That is the honest picture and it is why the list above exists, so the
-    // interface says it rather than leaving a reader hunting for a speck.
+    // At true scale the smallest stars fall below what the canvas can draw;
+    // say so rather than leave a reader hunting for a speck.
     toast(t(on ? 'inv.stage.scale.true' : 'inv.stage.scale.display'));
   });
 
-  els.resetBtn?.addEventListener('click', resetProgress);
   els.ecc?.addEventListener('input', () => {
     paintEllipse(els.ecc.value);
     els.presetNote.textContent = '';
@@ -3110,24 +3080,34 @@ export function initInvestigations({ signal } = {}) {
     drawPlot(currentStep(), stepId(stepIndex));
   });
 
-  els.resetScenario?.addEventListener('click', () => {
-    // Left running, a scenario drifts: bodies merge, get flung out, or simply
-    // leave the view. Putting the step's system back is a far more common need
-    // than restarting the lesson, so it gets its own control.
-    applySetup(setupInForceAt(stepIndex));
-    toast(t('inv.scenario.reset'));
-  });
+  els.resetScenario?.addEventListener('click', resetStepScene);
 
   els.finishClose?.addEventListener('click', closeFinish);
   els.finishBack?.addEventListener('click', closeFinish);
   const on = (id, fn) =>
     document.getElementById(id)?.addEventListener('click', fn);
+  // Restart asks first (lesson-finish.html).
+  const ask = document.getElementById('investigationRestart');
+  on('investigationReset', () => {
+    ask.querySelector('b').textContent =
+      active.steps.filter(answeredStep).length;
+    ask.showModal();
+  });
+  on('investigationRestartGo', () => {
+    ask.close();
+    responses = {};
+    attempts = {};
+    visited = new Set();
+    startedAt = new Date().toISOString();
+    forgetDrafts();
+    toast(t('inv.progress.cleared'));
+    goToStep(0);
+  });
   on('investigationDownload', finishAction('generateReport'));
   on('investigationDownloadHtml', finishAction('generateHtmlReport'));
-  els.finishProgress?.addEventListener(
-    'click',
-    finishAction('downloadBackup', 'inv.backup.failed')
-  );
+  const backup = finishAction('downloadBackup', 'inv.backup.failed');
+  els.finishProgress?.addEventListener('click', backup);
+  on('investigationRestartBackup', backup);
   on('investigationTokenShow', finishAction('revealToken', 'inv.token.failed'));
   on('investigationTokenCopy', finishAction('copyToken', 'inv.token.failed'));
   on('investigationTokenSave', () =>

@@ -419,6 +419,7 @@
     #closeScenarioList,
     #investigationBrowser,
     #investigationFinish,
+    #investigationRestart,
     #shareModal,
     #dataExport,
     #mobileInstructions {
@@ -492,6 +493,8 @@
     #investigationBrowser,
   :is(body.investigation-open, body.investigation-browser-open)
     #investigationFinish,
+  :is(body.investigation-open, body.investigation-browser-open)
+    #investigationRestart,
   :is(body.investigation-open, body.investigation-browser-open) #shareModal,
   :is(body.investigation-open, body.investigation-browser-open) #dataExport,
   :is(body.investigation-open, body.investigation-browser-open)

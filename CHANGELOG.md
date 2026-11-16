@@ -13,6 +13,10 @@ the release rather than in the tag.
 
 ## [Unreleased]
 
+### Fixed
+
+- A first-time student who opens an assignment, activity or pack link now lands on the task instead of the introduction; the reset beside the lesson's progress bar resets what the step shows (scene, stage and instrument values) and says what it did and that answers are kept; Restart asks first, with the answer count and a backup offer; and a numeric answer typed but not checked is kept as a draft and restored on return, without counting as an answer (Prompt 308; register rows D-R4-308-01 to 06; visible).
+
 ### Changed
 
 - The cached Jest count in the documentation sync can no longer leave a suite out silently (register row D-R4-DOCS-02; invisible). A suite that fails to load during the count is loaded again on its own, and if it still fails the sync stops with its name and Jest's message instead of writing a total that is short by that suite's tests; a recursive directory listing is no longer cached.

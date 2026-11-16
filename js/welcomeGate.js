@@ -104,22 +104,28 @@ export const keep = (key, text) => {
 /**
  * Does this URL name something the visitor specifically asked for?
  *
- * Both forms are matched against the actual link architecture rather than an
- * invented query string: share.js writes `#<n><z|r><payload>` and
- * investigations.js reads `#investigation=<id>`. Someone opening an
- * instructor's assignment must not have it covered by an introduction.
+ * Matched against the link architecture the application writes: share.js
+ * writes `#<n><z|r><payload>`, an assignment `#a<n><z|r>...`, a pack
+ * `#i<n><z|r>...`, and the lesson engine reads `#investigation=<id>` and
+ * `#activity=<id>[/<format>]`. Someone opening an instructor's link must not
+ * have it covered by an introduction.
  *
  * @param {string} [hash] - Defaults to the current fragment
  * @returns {boolean} True if the URL encodes an intentional destination
  */
 export function hasDeepLinkDestination(hash) {
   const h = hash === undefined ? window.location?.hash || '' : hash || '';
-  // Kept in step with hasSharedLink() in share.js and investigationFromHash()
-  // in investigations.js. Duplicated rather than imported because this runs
-  // during start-up coordination, before either module is needed.
+  // Kept in step with hasSharedLink() in share.js and the predicates in
+  // investigationsLoader.js; tests/linkShapes.test.js holds the three together.
+  // Duplicated rather than imported because this runs during start-up
+  // coordination, before either module is needed.
   // `#investigations` is the shell's Investigations entry: the chooser.
   // A lesson link may name a depth, as a course's links do.
-  return /^#\d+[zr]./.test(h) || /^#investigation(=[\w-]+(\/\w+)?|s)$/.test(h);
+  return (
+    /^#[ai]?\d+[zr]./.test(h) ||
+    /^#investigation(=[\w-]+(\/\w+)?|s)$/.test(h) ||
+    /^#activity=[a-z0-9-]+(\/[a-z0-9-]+)?$/i.test(h)
+  );
 }
 
 /**
