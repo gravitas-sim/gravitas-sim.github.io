@@ -240,7 +240,7 @@ describe('what the recording can tell apart', () => {
         .split('\n')
         .filter((_, i) => numbers.includes(i + 1));
     for (const line of [
-      ...lines('js/investigations/stepView.js', 526, 529),
+      ...lines('js/investigations/stepView.js', 523, 526),
       ...lines('js/observatory/archivePanel.js', 258, 259),
     ])
       expect(line).toMatch(/fixed\(/);

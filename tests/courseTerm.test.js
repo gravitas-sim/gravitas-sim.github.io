@@ -51,7 +51,7 @@ const clone = v => JSON.parse(JSON.stringify(v));
  * The place a student keeps an assignment's answers: a hash of the lesson, the
  * steps and the title (js/investigations/stepView.js keyForAssignment, which
  * needs the lesson engine's host to run; the first test below holds this copy
- * to the source).
+ * to the source: with no retired map, `a.s.map(old)` is `a.s` joined).
  */
 const keyForAssignment = a => shortHash(`${a.l}|${a.s.join(',')}|${a.t}`);
 const api = courseApi();
@@ -71,7 +71,7 @@ const assignments = pack =>
 describe("the student's key", () => {
   test('is still the lesson, the steps and the title, so a new title is a new place', () => {
     expect(readFileSync('js/investigations/stepView.js', 'utf8')).toContain(
-      "shortHash(`${a.l}|${a.s.join(',')}|${a.t}`)"
+      '`${a.l}|${a.s.map(old)}|${a.t}`'
     );
   });
 });

@@ -9,13 +9,13 @@
   "js/observatoryPage.js:542:50"
  ],
  "hazards": {
-  "js/investigations/stepView.js:1163:13": [
+  "js/investigations/stepView.js:1152:13": [
    "hyphen"
   ],
-  "js/investigations/stepView.js:619:11": [
+  "js/investigations/stepView.js:616:11": [
    "hyphen"
   ],
-  "js/investigations/stepView.js:774:35": [
+  "js/investigations/stepView.js:771:35": [
    "hyphen"
   ],
   "js/observatory/guides/core.js:320:27": [

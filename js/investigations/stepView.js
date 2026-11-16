@@ -1,13 +1,10 @@
 // =============================================================================
 // What a step looks like: its markup and its two figures
 // -----------------------------------------------------------------------------
-// The part of renderStep that only reads: the step and the reader's state (named
-// in `c`) in, the panel's markup out as a list of strings. renderStep joins it
-// into the panel and does everything that touches the page. Below it: the saved
-// record's persistence and the answer boxes' listeners.
-//
-// Pure to import: no canvas and no simulation, so a unit test can load it, and
-// folded in here to keep the lesson routes' request count where it was.
+// The part of renderStep that only reads: the step and the reader's state (in
+// `c`) in, the panel's markup out as strings. Below it: the saved record's
+// persistence and the answer boxes' listeners. Pure to import (no canvas, no
+// simulation), and folded in here to keep the lesson routes' request count.
 // =============================================================================
 
 import { fixed, formatNumber, tickLabel } from '../format.js';
@@ -810,10 +807,7 @@ export function drawPlot(step, vals, { canvas, els, transformed, log }) {
 // --- Written answers ----------------------------------------------------------
 
 /**
- * Whether a written answer is a written answer.
- *
- * Deliberately weak, and not marking: it refuses only the null response
- * (an empty box, a space, a full stop, "...").
+ * Whether a written answer is a written answer. Not marking: it refuses only the null response (empty, a space, "...").
  *
  * @param {string} value - What the reader typed
  * @returns {boolean} True when there is something there
@@ -821,10 +815,8 @@ export function drawPlot(step, vals, { canvas, els, transformed, log }) {
 export function isWrittenAnswer(value) {
   const text = String(value ?? '').trim();
   if (!text) return false;
-  // Two letters or digits anywhere, in any script - not two in a row. A run of
-  // two would reject "a = 1.5", which is terse but is an answer: a reader who
-  // writes down the number they measured has said something. Any script,
-  // because a Spanish reader's answer and a Greek symbol are both content.
+  // Two letters or digits anywhere, in any script - not two in a row, which
+  // would reject "a = 1.5", terse but an answer.
   const content = text.match(/[\p{L}\p{N}]/gu);
   return (content?.length ?? 0) >= 2;
 }
@@ -852,8 +844,7 @@ const numericPlaceholder = step =>
 /**
  * Why a typed answer could not be read, in words a student can act on.
  *
- * Each refusal names a different thing to do about it, which is the whole
- * reason the parser distinguishes them instead of returning NaN.
+ * Each refusal names a different thing to do about it.
  *
  * @param {Object} step - Step definition
  * @param {Object} graded - From gradeAnswer()
@@ -894,10 +885,8 @@ function unreadableMessage(step, graded) {
 /**
  * The hint controls, and whatever the student has already asked for.
  *
- * Nothing appears unbidden. A hint that shows itself has done the thinking
- * before the student has tried to, which is the opposite of what a hint is
- * for - so each stage is a button, and the worked explanation is behind one
- * more press than the hints are.
+ * Nothing appears unbidden: each stage is a button, and the worked
+ * explanation is behind one more press than the hints are.
  *
  * @param {Object} step - Step definition
  * @param {string} id - Response-key prefix
@@ -1195,13 +1184,17 @@ const progressArea = () => (host.assigned() ? 'assignments' : 'progress');
 /**
  * An assignment's progress key: its lesson, steps and title, never its date,
  * so a link re-issued on another day keeps the work (work under an old dated
- * key moves across when first read). A new title re-keys on purpose.
+ * key moves across when first read). A new title re-keys on purpose; a step
+ * revised since does not: a successor keys as the first id it replaced.
  *
  * @param {object} a - A validated assignment payload
+ * @param {?object} lesson - The merged lesson, for its `retired` map
  * @returns {string} The storage key
  */
-export function keyForAssignment(a) {
-  const hash = shortHash(`${a.l}|${a.s.join(',')}|${a.t}`);
+export function keyForAssignment(a, lesson) {
+  const r = lesson?.retired ?? {};
+  const old = s => Object.keys(r).find(k => r[k].to === s) ?? s;
+  const hash = shortHash(`${a.l}|${a.s.map(old)}|${a.t}`);
   const key = `gravitas_assignment_${hash}`;
   if (host.authoring()) return key;
   try {
@@ -1269,16 +1262,17 @@ export function save() {
     depth: s.depthChoice,
     deepest: s.deepest,
     spent: s.spent,
-    earlier: earlierKept.get(active.id),
+    earlier: earlierFor(active.id),
   });
   if (Object.keys(typed).length) payload.drafts = typed;
 
   // This tab's copy, always, and before the disk is asked. It is what makes
   // closing and reopening the lesson safe when the write below fails.
-  sessionProgress.set(progressKey(active.id), payload);
+  const key = progressKey(active.id);
+  sessionProgress.set(key, payload);
 
   try {
-    put(progressKey(active.id), JSON.stringify(payload), progressArea());
+    put(key, JSON.stringify(payload), progressArea());
     setSaveState('saved');
     noteLesson(active.id, payload.stepSid);
   } catch (err) {
@@ -1289,15 +1283,6 @@ export function save() {
   }
 }
 
-/**
- * Show whether the work is safe, without shouting about it.
- *
- * A polite live region, not a toast: a toast for a storage failure would fire
- * on every keystroke, and the one thing a reader needs here is a message that
- * *stays* until the situation changes. Successes announce nothing - the text is
- * there to be looked at, and a screen reader being told "saved" forty times
- * while typing an answer is worse than silence.
- */
 /** Say what reading the saved progress turned up, once, on opening. */
 export function renderProgressNotice() {
   const el = host.els()?.progressNotice;
@@ -1316,7 +1301,7 @@ export function renderProgressNotice() {
 
   el.textContent = lines.join(' ');
   const { active } = host.state();
-  const rows = earlierAnswers(active, earlierKept.get(active?.id)?.responses);
+  const rows = earlierAnswers(active, earlierFor(active?.id)?.responses);
   const ul = rows.length && el.appendChild(document.createElement('ul'));
   for (const e of rows)
     ul.appendChild(document.createElement('li')).textContent = earlierLine(
@@ -1326,7 +1311,11 @@ export function renderProgressNotice() {
   el.hidden = lines.length === 0 && rows.length === 0;
 }
 
-/** Show whether the work is safe: a polite live region, not a toast. */
+/**
+ * Show whether the work is safe: a polite live region, not a toast (one would
+ * fire on every keystroke). Successes announce nothing: "saved" forty times
+ * while typing an answer is worse than silence.
+ */
 export function renderSaveStatus() {
   const el = host.els()?.saveStatus;
   if (!el) return;
@@ -1370,11 +1359,22 @@ export const sessionProgress = new Map();
  * `responses`; a 2.0.0 reader ignores the `drafts` field it is saved in.
  */
 let typed = {};
-export const forgetDrafts = () => (typed = {});
+export const forgetKept = id => ((typed = {}), id && keepEarlier(id));
 
-/** Per lesson: answers to steps it no longer has, written back on save. */
+/** Per storage key: answers to steps it no longer has, written back on save. */
 const earlierKept = new Map();
-export const earlierFor = id => earlierKept.get(id);
+export const earlierFor = id => earlierKept.get(progressKey(id));
+/** Set more answers aside beside those kept; with none, forget them all. */
+export const keepEarlier = (id, more) => {
+  const kept = earlierFor(id);
+  earlierKept.set(
+    progressKey(id),
+    more && {
+      responses: { ...kept?.responses, ...more.responses },
+      attempts: { ...kept?.attempts, ...more.attempts },
+    }
+  );
+};
 
 export const wasIn = (was, locale = 'en') =>
   (typeof was === 'string' ? was : was?.[locale] || was?.en) || '';
@@ -1387,8 +1387,8 @@ export function earlierAnswers(lesson, table) {
   const live = new Set((lesson?.steps || []).map(s => s?.sid));
   const by = new Map();
   for (const [k, v] of Object.entries(table || {})) {
-    const [sid, ...sub] = k.slice(`${lesson?.id}:`.length).split(':');
-    if (k.startsWith(`${lesson?.id}:`) && !live.has(sid))
+    const [owner, sid, ...sub] = k.split(':');
+    if (owner === lesson?.id && !live.has(sid))
       by.set(sid, [...(by.get(sid) || []), [sub.join(':'), v]]);
   }
   return [...by].flatMap(([id, kv]) => {
@@ -1397,11 +1397,21 @@ export function earlierAnswers(lesson, table) {
       kv
         .filter(
           ([k, v]) =>
-            k && !/^(shown|locale|tool:|help|hint)|:locale$/.test(k) && str(v)
+            k && !/^(shown|locale|help|hint)$|^tool:|:locale$/.test(k) && str(v)
         )
         .map(([k, v]) => `${k}=${str(v)}`)
         .join('; ');
-    return text ? [{ id, text, r: lesson.retired?.[id] }] : [];
+    return text
+      ? [
+          {
+            id,
+            text,
+            r: Object.hasOwn(lesson.retired ?? {}, id)
+              ? lesson.retired[id]
+              : undefined,
+          },
+        ]
+      : [];
   });
 }
 
@@ -1414,8 +1424,7 @@ export const earlierLine = ({ text, r }, locale) => {
 const legacyKey = id => `${STORAGE_PREFIX}${id}:v1`;
 
 /**
- * Read a lesson's saved progress, migrating an older save if that is what is
- * there.
+ * Read a lesson's saved progress, migrating an older save if need be.
  * @param {string} id - Lesson id
  * @param {?object} lesson - The merged lesson, when the caller has it
  * @returns {?object} The progress, or null when there is none
@@ -1424,6 +1433,7 @@ export function load(id, lesson = null) {
   // This tab first. It is written on every save and storage is not, so when the
   // two differ the session copy is the newer one - and when storage refused
   // every write, it is the only one there is.
+  if (lesson) earlierKept.delete(progressKey(id));
   let data = sessionProgress.get(progressKey(id)) ?? null;
 
   if (!data) {
@@ -1449,7 +1459,7 @@ export function load(id, lesson = null) {
   // A lesson from a capability package may have renamed a control since the
   // answers were saved; its manifest says how, and this applies it.
   progress.responses = migrateSavedProgress(id, progress.responses);
-  earlierKept.set(id, progress.earlier);
+  keepEarlier(id, progress.earlier);
   typed = { ...data?.drafts };
 
   // Keep the original: a positional migration cannot tell from the payload
@@ -1467,21 +1477,18 @@ export function load(id, lesson = null) {
 /**
  * How far through an investigation a student is.
  *
- * `done` counts steps seen, which is what the progress bar shows; `at` is the
- * step a resume would land on, which is not the same number once a student has
- * gone back to reread something.
+ * `done` counts steps seen (the progress bar); `at` is the step a resume lands
+ * on, which differs once a student has gone back to reread.
  *
  * @param {string} id - Investigation id
  * @returns {{done:number, total:number, started:boolean, at:number}} Progress
  */
 export function progressFor(id) {
-  // From the manifest: the browser asks this for all ten lessons before any of
-  // them is loaded, and a step count is a number the manifest already carries.
+  // From the manifest: the browser asks before any lesson is loaded.
   const total = investigationMeta(id)?.stepCount || 0;
   const saved = load(id);
-  // `at` is a 1-based screen number for the card. A v2 payload stores a sid
-  // rather than an index and the card has no lesson to resolve it against, so
-  // it reports how far the reader got rather than exactly where they stopped.
+  // `at` is a 1-based screen number for the card: a v2 payload stores a sid and
+  // the card has no lesson to resolve it, so it is how far, not where exactly.
   const done = saved ? saved.visited.size : 0;
   return {
     done,

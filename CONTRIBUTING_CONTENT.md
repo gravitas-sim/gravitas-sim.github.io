@@ -140,7 +140,9 @@ What a reader does: saved answers under a retired id stay readable and are shown
 as "answered in an earlier version", never marked against the new step (lesson
 panel, the submission results); an assignment, an
 activity format or a course pin that names the retired step offers the successor
-(re-pin, reviewed course upgrade).
+(re-pin, reviewed course upgrade). A backup file carries the earlier answers
+and a restore keeps them; Restart clears them with the rest; an activity
+format keeps its saved work when one of its steps is revised.
 
 The same `retired` map sits on a guide of the 3-D lab, the mission lab or the
 Observatory (the 3-D lab's report lists the old answer marked with its release;

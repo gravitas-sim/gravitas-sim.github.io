@@ -10,7 +10,7 @@ import { afterEach, beforeEach, describe, expect, test } from '@jest/globals';
 import {
   bindPersistence,
   bindStepInputs,
-  forgetDrafts,
+  forgetKept,
   load,
   save,
   sessionProgress,
@@ -104,7 +104,7 @@ beforeEach(() => {
   document.body.append(body);
   localStorage.clear();
   sessionProgress.clear();
-  forgetDrafts();
+  forgetKept();
   bind();
 });
 
@@ -126,7 +126,7 @@ describe('a typed number is kept without being an answer', () => {
 
   test('and after the lesson is closed and opened again', () => {
     type(show(), '0,910');
-    forgetDrafts();
+    forgetKept();
     expect(show().value).toBe('');
     const read = load('tides', lesson);
     expect(read.responses).toEqual({});
@@ -160,7 +160,7 @@ describe('a typed number is kept without being an answer', () => {
     type(show(), '3');
     expect(load('other', { id: 'other', steps: [] }) ?? null).toBeNull();
     expect(show().value).toBe('3');
-    forgetDrafts();
+    forgetKept();
     expect(show().value).toBe('');
   });
 

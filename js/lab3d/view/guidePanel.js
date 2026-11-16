@@ -70,11 +70,26 @@ export function reportOf(
     }
     return row;
   });
-  // Answers under ids the guide no longer has, each with its `retired` entry.
+  // Answers under ids the guide no longer has, one fixed shape each, with its
+  // `retired` entry.
   const old = { ...progress.earlier, ...progress.answers };
   const earlier = Object.keys(old)
     .filter(id => !guide.steps.some(s => s.id === id))
-    .map(id => ({ step: id, ...old[id], ...guide.retired?.[id] }));
+    .sort()
+    .map(id => {
+      const { typed, choice, passed } = old[id];
+      const r = Object.hasOwn(guide.retired ?? {}, id) ? guide.retired[id] : {};
+      return {
+        step: id,
+        kind: 'earlier',
+        typed: typed ?? null,
+        choice: choice ?? null,
+        passed: Boolean(passed),
+        to: r.to ?? null,
+        release: r.release ?? null,
+        was: r.was ?? null,
+      };
+    });
   return {
     format: REPORT_FORMAT,
     formatVersion: REPORT_VERSION,
