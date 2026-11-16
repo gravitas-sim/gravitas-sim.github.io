@@ -212,15 +212,15 @@ describe('what the recording can tell apart', () => {
 
   test('per site: the sites that stayed wrote a hyphen, or are machine text, or are not reached', () => {
     // Recorded on the tree before the move: the four calls that moved
-    // (stepView.js 537 and 540, archivePanel.js 257 and 258) wrote no hyphen
+    // (stepView.js 536 and 539, archivePanel.js 257 and 258) wrote no hyphen
     // and were handed no number that is not finite, on every reading of their
     // surfaces. The two in fixtures.js are as eligible and wait for a request
     // (js/format.js is not loaded by /observatory/ at start).
     const at = site => all.hazards[site] ?? { hyphen: false, nonFinite: false };
     for (const site of [
-      'js/investigations/stepView.js:630:11',
-      'js/investigations/stepView.js:788:35',
-      'js/investigations/stepView.js:1176:13',
+      'js/investigations/stepView.js:629:11',
+      'js/investigations/stepView.js:787:35',
+      'js/investigations/stepView.js:1175:13',
       'js/observatory/guides/core.js:320:27',
     ])
       expect(at(site).hyphen).toBe(true);
@@ -240,7 +240,7 @@ describe('what the recording can tell apart', () => {
         .split('\n')
         .filter((_, i) => numbers.includes(i + 1));
     for (const line of [
-      ...lines('js/investigations/stepView.js', 537, 540),
+      ...lines('js/investigations/stepView.js', 536, 539),
       ...lines('js/observatory/archivePanel.js', 258, 259),
     ])
       expect(line).toMatch(/fixed\(/);

@@ -42,7 +42,7 @@ export const GRAPH = Object.freeze([
     regions: [
       'js/widgets.js',
       'js/platform/builtins.js',
-      'js/data/investigations/registry.js',
+      'js/data/investigations/loaders.js',
       'js/explainers.js',
     ],
     after: [],

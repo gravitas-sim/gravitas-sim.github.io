@@ -11,6 +11,11 @@
 // that goes through setSettings() and setScenarioName(); importers read them.
 // =============================================================================
 
+// Pins js/lesson/barycenter.js (pure arithmetic, no imports) to this chunk. The
+// canvas (render.js) and the lazily loaded stage (lessonStage.js) both use it;
+// left to the bundler it becomes a chunk of its own that every page requests.
+import './lesson/barycenter.js';
+
 export const DEFAULT_SETTINGS = {
   preset_scenario: 'binary-bh',
   gravitational_constant: 2.0,

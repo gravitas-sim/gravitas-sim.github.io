@@ -38,7 +38,7 @@ import {
 import { BUILTINS } from './builtins.js';
 import { satisfies } from './semver.js';
 import { migrateSaved } from './migrate.js';
-import { provideLessonLoaders } from '../data/investigations/registry.js';
+import { provideLessonLoaders } from '../data/investigations/loaders.js';
 import { KEY_CAPABILITY_VERSIONS } from '../names.js';
 
 /** A capability that could not be resolved or loaded. */

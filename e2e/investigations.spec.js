@@ -393,8 +393,10 @@ test.describe('persistence', () => {
     await answerAndAdvance(page);
 
     const before = await page.evaluate(async id => {
-      const inv = await import('/js/investigations.js');
-      return inv.progressFor(id);
+      const inv = await import('/js/investigations/stepView.js');
+      const { investigationMeta } =
+        await import('/js/data/investigations/registry.js');
+      return inv.progressFor(id, investigationMeta(id).stepCount);
     }, LESSON);
     expect(before).toBeTruthy();
 
@@ -402,8 +404,10 @@ test.describe('persistence', () => {
     await page.waitForFunction(() => window.splashScreenEnded === true);
 
     const after = await page.evaluate(async id => {
-      const inv = await import('/js/investigations.js');
-      return inv.progressFor(id);
+      const inv = await import('/js/investigations/stepView.js');
+      const { investigationMeta } =
+        await import('/js/data/investigations/registry.js');
+      return inv.progressFor(id, investigationMeta(id).stepCount);
     }, LESSON);
     expect(after).toEqual(before);
   });

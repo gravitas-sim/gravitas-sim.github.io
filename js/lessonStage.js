@@ -19,7 +19,14 @@
 // strided subsample and the readout says how many of how many are shown.
 // =============================================================================
 
-import { SCALE, displayRadius, fitCamera, rowLayout } from './lesson/stage.js';
+import {
+  COMPONENT_MARKER,
+  SCALE,
+  UNITS_PER_RS,
+  displayRadius,
+  fitCamera,
+  rowLayout,
+} from './lesson/stage.js';
 import {
   Asteroid,
   BlackHole,
@@ -699,12 +706,6 @@ export function clearSnapshots() {
 // neutron-star radii into a lesson that has not earned one. The readout says
 // both of those things rather than leaving a reader to guess.
 
-/** World units per Schwarzschild radius of the total mass. A display choice. */
-const UNITS_PER_RS = 3.2;
-
-/** How big each component is drawn. A marker, not a radius. */
-const COMPONENT_MARKER = 7;
-
 /**
  * Stand a compact binary on the canvas, of the kinds a preset names.
  *
@@ -1368,12 +1369,6 @@ export function placeBinary(
   b.star.pos.y = -uy * d * (m1 / total);
   return true;
 }
-
-/** What the binary picture is drawn at, for a readout to quote. */
-export const BINARY_SCALE = Object.freeze({
-  unitsPerSchwarzschildRadius: UNITS_PER_RS,
-  componentMarkerUnits: COMPONENT_MARKER,
-});
 
 /** Take the stage down and give the bodies back. */
 export function clearStage() {

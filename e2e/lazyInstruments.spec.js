@@ -35,6 +35,10 @@ const TRANSIT_MARK = 'blockedFraction';
 const POWER_LAW_MARK = 'stabilityBoundary';
 /** And the GWOSC event family's, which is in it and its strain data only. */
 const GW_EVENTS_MARK = 'strainVersion';
+/** The MIST tracks' pack id: in the star model's data and nowhere else. */
+const STAR_MODEL_MARK = 'mist-v12-tracks';
+/** One lesson's card subtitle: in the catalogue of every lesson, not here. */
+const CATALOGUE_MARK = 'fourteen centuries of epicycles fall away';
 
 async function openLesson(page, id) {
   await page.addInitScript(() => {
@@ -198,6 +202,45 @@ async function advanceTo(page, target) {
   }
   expect(await stepOnScreen(page)).toBe(target);
 }
+
+test.describe('the star model and the catalogue of lessons', () => {
+  test('a lesson that stages no star opens without either', async ({
+    page,
+  }) => {
+    const scriptsSoFar = recordScripts(page);
+    await openLesson(page, 'keplers-laws');
+    await next(page, 2);
+    const scripts = await scriptsSoFar();
+    expect(contains(scripts, 'investigationNext')).toBe(true);
+    expect(contains(scripts, STAR_MODEL_MARK)).toBe(false);
+    expect(contains(scripts, CATALOGUE_MARK)).toBe(false);
+  });
+
+  test('a lesson that stages stars fetches the model with its first step and draws the stage', async ({
+    page,
+  }) => {
+    const scriptsSoFar = recordScripts(page);
+    await openLesson(page, 'color-and-temperature');
+    await expect(
+      page.locator('#investigationObjects [data-object-id]').first()
+    ).toBeVisible({ timeout: 30_000 });
+    const scripts = await scriptsSoFar();
+    expect(contains(scripts, STAR_MODEL_MARK)).toBe(true);
+    expect(contains(scripts, CATALOGUE_MARK)).toBe(false);
+  });
+
+  test('the list of lessons is fetched when it is first opened', async ({
+    page,
+  }) => {
+    const scriptsSoFar = recordScripts(page);
+    await openLesson(page, 'keplers-laws');
+    await page.locator('#investigationsBtn').click();
+    await expect(
+      page.locator('#investigationList .inv-card').first()
+    ).toBeVisible({ timeout: 30_000 });
+    expect(contains(await scriptsSoFar(), CATALOGUE_MARK)).toBe(true);
+  });
+});
 
 test.describe('instrument families fetched on demand', () => {
   test('a lesson that names neither family never fetches one', async ({

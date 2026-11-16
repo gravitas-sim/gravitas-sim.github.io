@@ -46,7 +46,7 @@ const attr = text => escape(text).replace(/"/g, '&quot;');
 /**
  * The engine's side of the seam.
  * @typedef {Object} ChooserHost
- * @property {(id: string) => Object} progressFor - Saved progress for a lesson
+ * @property {(id: string, total: number) => Object} progressFor - Saved progress for a lesson, given its step count
  * @property {(id: string) => Promise<void>} openInvestigation - Open a lesson
  * @property {() => Promise<Object>} loadDialogs - js/dialog.js, fetched on use
  * @property {() => (Object|null)} dialogs - js/dialog.js if already fetched
@@ -57,7 +57,8 @@ let host = null;
 /** The engine's elements; empty while its markup is not mounted. */
 let els = {};
 
-const progressFor = id => host.progressFor(id);
+const progressFor = id =>
+  host.progressFor(id, investigationMeta(id)?.stepCount || 0);
 const openInvestigation = id => host.openInvestigation(id);
 const loadDialogs = () => host.loadDialogs();
 

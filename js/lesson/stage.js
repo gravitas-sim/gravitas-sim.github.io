@@ -209,3 +209,15 @@ export function fitCamera(
     },
   };
 }
+
+/** World units per Schwarzschild radius of the total mass. A display choice. */
+export const UNITS_PER_RS = 3.2;
+
+/** How big each component is drawn. A marker, not a radius. */
+export const COMPONENT_MARKER = 7;
+
+/** What the binary picture is drawn at, for a readout to quote. */
+export const BINARY_SCALE = Object.freeze({
+  unitsPerSchwarzschildRadius: UNITS_PER_RS,
+  componentMarkerUnits: COMPONENT_MARKER,
+});
