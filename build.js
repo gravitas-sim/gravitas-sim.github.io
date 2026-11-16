@@ -20,6 +20,7 @@ import path from 'node:path';
 import { keyGroupsPlugin } from './tools/key-groups.mjs';
 import { proseWhitespacePlugin } from './tools/prose-whitespace.mjs';
 import { threeShadersPlugin } from './tools/three-shaders.mjs';
+import { withoutPreload } from './tools/modulepreload.mjs';
 
 const OUT = 'dist';
 const watch = process.argv.includes('--watch');
@@ -458,6 +459,10 @@ async function buildHtml() {
     '\n    <script type="module" src="js/app.js"></script>'
   );
 
+  // The unbundled tree's early module fetches name files the bundle does not
+  // have (tools/modulepreload.mjs).
+  html = withoutPreload(html);
+
   await writeFile(path.join(OUT, 'index.html'), html);
   return html.length;
 }
@@ -485,6 +490,7 @@ async function buildDocPages() {
       '\n    <link rel="stylesheet" href="/css/app.css" />' +
         '\n    <link rel="stylesheet" href="/css/page.css" />'
     );
+    html = withoutPreload(html);
     await writeFile(path.join(OUT, dir, 'index.html'), html);
   }
 

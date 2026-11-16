@@ -265,6 +265,7 @@ out.
 | teaching | `node tools/build-teaching-demos.mjs` | `js/data/teachingGenerated.js` | deterministic |
 | library | `node tools/build-library.mjs` | `library/library.json`, `library/search-index.json`, `LIBRARY.md`, and 1 more | deterministic |
 | adoption | `node tools/build-adoption-pages.mjs` | `teaching/investigation`, `teaching/activity`, `teaching/find`, and 3 more | deterministic |
+| preload | `node tools/modulepreload.mjs --write` | `index.html` | deterministic |
 | thumbnails | `node tools/generate-scenario-thumbnails.mjs` | `images/scenarios` | deterministic |
 | scene | `node tools/lesson-scene-audit.mjs --write` | `docs/lesson-scene-catalog.json`, `docs/lesson-scene-record.md`, `js/data/investigations/provenance.js` | deterministic |
 | instruments | `node tools/build-instruments.mjs` | `js/data/instruments.js`, `INSTRUMENTS.md` | deterministic |

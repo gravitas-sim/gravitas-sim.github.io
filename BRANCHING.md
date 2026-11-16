@@ -67,6 +67,7 @@ The table is written from `tools/generate-graph.mjs`, the list that
 | `js/data/teachingGenerated.js` | `node tools/build-teaching-demos.mjs` |  |
 | `library/library.json`, `library/search-index.json` | `node tools/build-library.mjs` |  |
 | `teaching/investigation`, `teaching/activity`, `teaching/find`, `teaching/alignment`, `teaching/adopt` | `node tools/build-adoption-pages.mjs` | Whole files, each stamped with the shared shell and its policy as the repository holds it, so shell.mjs --write and csp.mjs --write find nothing to change. |
+| `index.html` (regions) | `node tools/modulepreload.mjs --write` | Between `<!-- preload:head -->` and `<!-- /preload:head -->` in each stamped page; a page whose list is empty has no region. A conflict inside one is resolved by regenerating, never by taking a side. The list is cut to the room under index.html's served-size ceiling; no ceiling is raised. |
 | `images/scenarios` | `node tools/generate-scenario-thumbnails.mjs` |  |
 | `docs/lesson-scene-catalog.json`, `docs/lesson-scene-record.md`, `js/data/investigations/provenance.js` | `node tools/lesson-scene-audit.mjs --write` |  |
 | `js/data/instruments.js` | `node tools/build-instruments.mjs` | The facilities table in INSTRUMENTS.md sits between `<!-- instruments:begin -->` and `<!-- instruments:end -->`; a conflict inside it is resolved by regenerating. |

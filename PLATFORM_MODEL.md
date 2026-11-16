@@ -323,6 +323,33 @@ In every arrangement the lesson's panels, the shell bar and the transport bar le
 - The tablet's sheet is not draggable to full height. Dragging needs script on the lesson's path, which has about 2.7 KB of deferred room, and a full-height sheet would cover the canvas.
 - The Observatory keeps its stacked views at 1440 (the table below the plot and image, not beside them), keeps its "What you are seeing" card open on a tablet, and shows its views together on a phone rather than one at a time by tab. The prompt's own requirement is the stack, and the linkage holds in it.
 
+## Early module fetches
+
+The site is published unbundled, so a browser finds a page's modules one import
+level at a time. `tools/modulepreload.mjs` writes a `<link rel="modulepreload">`
+for each of them into a region between `<!-- preload:head -->` and
+`<!-- /preload:head -->`, after the shell's head region, in every page that
+carries the shell. One function (`preloadPlan`) picks the list:
+
+- the page's entries are its `<script type="module" src>` tags and the static
+  imports of its inline module scripts;
+- the closure follows static `import` and `export ... from` edges only, so a lazy
+  family (a dynamic `import()`) is never linked;
+- a module's level is the shortest chain from an entry; the deepest levels are
+  taken first, and a level is taken whole or not at all, because a chain is only
+  shortened when every module on a level is linked;
+- a page with a served-size ceiling (`PAGE_CEILINGS`, today `index.html`'s,
+  held by `tests/indexDecomposition.test.js`) takes levels while it stays under
+  it. No ceiling is raised to fit a link; a page whose list is empty has no region.
+
+`node tools/modulepreload.mjs --write` writes the regions, `--check` fails when a
+page's links are not what the rule picks (it runs in the generator graph as
+`preload`, and in `tests/modulepreload.test.js`), `--report` prints each page's
+levels. The adoption pages are written whole by `tools/build-adoption-pages.mjs`,
+which applies the same function. `build.js` removes the region from the pages it
+copies into `dist/`, where the modules are bundled. `e2e/modulepreload.spec.js`
+holds the closure to what a browser fetches.
+
 ## Rejected alternatives
 
 - **A framework** (React, Vue, Lit). It would cost far more than the whole
