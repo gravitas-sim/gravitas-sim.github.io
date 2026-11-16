@@ -288,3 +288,36 @@ Terms in the lessons' own prose, and in the instructor notes, wait for a pass
 that edits the lessons (closure files and the Spanish ledger).
 
 <!-- Listed in DOCUMENTS.md. -->
+
+## 7. Time in the sandbox (Prompt 451)
+
+One clock. The timeline label, the Elapsed readout, the stopwatch and every
+recorded frame read the physics clock (`getSimulationTime`); `getSimClock` is
+that clock under its older name. A restore sets it.
+
+Four actions, named for what they do to the world:
+
+- **Step** (`.` and the step button): while the world is paused and live, one
+  simulation step, the simulated time one frame at 60 frames a second advances
+  by at the current speed (`stepOnce` in `js/render.js`, the same arithmetic as the frame
+  loop, substeps included). The bar says how big it is ("1 step = x"). It works
+  in Step by step. While looking back, the same key moves one recorded frame;
+  past the newest one it is Return to live. A running world has nothing to step.
+- **Return to live** (the live button, `L`, Space or the play button while
+  looking back): the full state captured on leaving live comes back, in place,
+  with the clock and the pause state it was left in. Nothing is dropped.
+- **Replay** (button, no bare key): plays the recorded frames forward at the
+  current speed from the frame shown and ends in the held live moment. Escape or
+  Pause ends it the same way. It runs even if the world was paused.
+- **Rewind to here** (button, no bare key): the shown frame becomes the world,
+  the later history is dropped, and the button's text says so. Placing a body
+  while looking back does the same, since Return to live would otherwise put
+  back a world that never had the body.
+
+Trails restart after a restore. Particles, disk particles and ripples are not
+recorded, so they are not brought back either. Recorded frames stay one per
+100 ms of wall time. The scrubber's value text reads "12 d before live, frame
+14 of 60" and is announced when the reader lands, not on every pixel of a drag.
+The thresholds (a restore equals the live capture to 1e-11 relative on
+positions, velocities and masses; the capture costs under 5 ms on the
+255-body `star-cluster`) are `tests/fixtures/time-controls/thresholds.json`.

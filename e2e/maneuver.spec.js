@@ -195,46 +195,46 @@ test.describe('undo', () => {
     await expect(page.locator('#maneuverUndo')).toBeDisabled();
   });
 
-  test('undo resets the timeline, because the recorded future is gone', async ({
+  test('undo drops the recorded future and keeps the one clock', async ({
     page,
     app,
   }) => {
     await openPlanner(page, app);
-    // A long enough history that the reset is unambiguous. The clock starts
-    // climbing again the instant the world is restored - five simulation units
-    // a frame here - so a short history is overtaken before the test can read
-    // it, which is what made an earlier version of this check race.
+    // A long enough history that the reset is unambiguous.
     await app.waitForFrames(400);
 
-    // The timeline's own clock rather than its frame count. The recorder
-    // throttles captures on simulated time, and this scenario runs fast enough
-    // that a hundred and fifty animation frames are only a couple of recorded
-    // ones - so a count is a measurement of the throttle, not of the reset.
-    const clockBefore = await page.evaluate(async () => {
-      const tl = await import('/js/timeline.js');
-      return tl.getSimClock();
-    });
-    expect(clockBefore).toBeGreaterThan(0);
+    // The timeline label, the recording and the burn log all read the physics
+    // clock now, so undo returns the world to the moment it captured and the
+    // clock comes back with it; what the burn made of the future is gone. The
+    // recording is the thing that restarts, so it is counted.
+    const read = () =>
+      page.evaluate(async () => {
+        const tl = await import('/js/timeline.js');
+        return { clock: tl.getSimClock(), frames: tl.getFrameCount() };
+      });
+    const before = await read();
+    expect(before.clock).toBeGreaterThan(0);
+    expect(before.frames).toBeGreaterThan(3);
 
     await page.locator('#maneuverTransverse').fill('0.2');
     await page.locator('#maneuverTransverse').dispatchEvent('input');
     await page.locator('#maneuverApply').click();
+    const burnt = await read();
     await page.locator('#maneuverUndo').click();
 
     // Polled rather than waited on: the restore is asynchronous, and the
-    // window in which the clock is below where it was is bounded.
+    // window in which the recording is shorter than it was is bounded.
     await expect
-      .poll(
-        async () =>
-          page.evaluate(async () => {
-            const tl = await import('/js/timeline.js');
-            return tl.getSimClock();
-          }),
-        { timeout: 5000, intervals: [50] }
-      )
-      .toBeLessThan(clockBefore);
+      .poll(async () => (await read()).frames, {
+        timeout: 5000,
+        intervals: [50],
+      })
+      .toBeLessThan(burnt.frames);
     // Restoring re-initializes the world, so the recorded history - which
-    // describes a future that has been discarded - goes with it.
+    // describes a future that has been discarded - goes with it; the clock is
+    // the moment that was captured (never earlier than what was read before
+    // the burn), not zero.
+    expect((await read()).clock).toBeGreaterThanOrEqual(before.clock);
   });
 });
 

@@ -1595,6 +1595,28 @@
     letter-spacing: 0.05em;
   }
 
+  /* A row on the bar's top edge: step size while paused, ways out of history. */
+  .timeline-aux {
+    position: absolute;
+    left: 50%;
+    bottom: calc(100% + var(--space-2));
+    transform: translateX(-50%);
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    padding: var(--space-1) var(--space-3);
+    font-size: var(--text-xs);
+    color: var(--text-secondary);
+    background: color-mix(in srgb, var(--surface-1) 88%, transparent);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-lg);
+  }
+
+  .timeline-aux[hidden],
+  .timeline-aux [hidden] {
+    display: none;
+  }
+
   @media (max-width: 767px) {
     .timeline-bar {
       width: calc(100vw - var(--space-4));
@@ -1606,6 +1628,13 @@
     .timeline-time {
       min-width: 52px;
       font-size: var(--text-2xs);
+    }
+
+    /* Clear of the help button at the right edge. */
+    .timeline-aux {
+      flex-wrap: wrap;
+      justify-content: center;
+      max-width: calc(100vw - 8rem);
     }
   }
 

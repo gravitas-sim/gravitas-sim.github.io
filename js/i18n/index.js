@@ -1,29 +1,21 @@
 // =============================================================================
 // Messages: one catalog, one lookup, one place a language is chosen
 // -----------------------------------------------------------------------------
-// Small on purpose. The application has about nine hundred user-facing strings,
-// which is enough to need a catalog and nowhere near enough to need a
-// framework: a flat map per locale, a lookup with a fallback, and a DOM sweep
-// for the static markup covers all of it in a couple of hundred lines.
+// Small on purpose: a flat map per locale, a lookup with a fallback, and a DOM
+// sweep for the static markup.
 //
 // Three rules the rest of the codebase relies on:
 //
 //   English is the source of truth. js/i18n/en.js holds every string exactly
-//   once; nothing else in the application may carry a second copy of one. A
-//   locale file is a set of overrides against it and is allowed to be partial.
+//   once; a locale file is a set of overrides against it and may be partial.
 //
-//   A missing message falls back to English, never to blank and never to a
-//   half-sentence. The id itself is the last resort, which is loud enough to be
-//   noticed in review and quiet enough not to break a layout.
+//   A missing message falls back to English, never to blank. The id itself is
+//   the last resort: loud enough for review, quiet enough not to break a layout.
 //
-//   The investigations are deliberately *absent* from this catalog rather
-//   than present and untranslated. A lesson is a piece of continuous writing
-//   and a half-translated one is worse than an English one, so the boundary is
-//   structural: a locale's lessons are whole files under
-//   js/data/investigations/<locale>/, merged over the English lesson by
-//   mergeTranslation(), and carry words only - never a scenario name, a seed,
-//   a widget id or a numeric answer. LOCALES[].coverage says in one sentence,
-//   in that language, how far a translation reaches.
+//   The investigations are deliberately absent from this catalog: a locale's
+//   lessons are whole files under js/data/investigations/<locale>/, merged over
+//   the English lesson by mergeTranslation(), and carry words only - never a
+//   scenario name, a seed, a widget id or a numeric answer.
 //
 // This module touches no DOM beyond localStorage and the custom event it fires.
 // The markup sweep lives in js/i18n/dom.js.
@@ -35,19 +27,11 @@ import { EN } from './en.js';
 // Which message ids are allowed to be late
 // -----------------------------------------------------------------------------
 // A clean start-up used to print dozens of `[i18n] no message for ...` warnings
-// for ids that exist: data-i18n attributes of panels whose strings were split
-// into ./en.deferred.js, which is not fetched until a panel asks for it. The
-// catalog cannot say "is this id real?" before it has loaded, but the
-// namespaces the deferred catalog covers can be listed, and that is enough: an
-// id in one of them is held rather than reported, and re-checked once the
-// catalog settles. Ten of these also appear in the eager catalog, which does
-// not matter: an eager id resolves and never reaches the warning path.
-//
-// It lives here and not in a module of its own because this is its only
-// reader, and in the published sources a module is a request on every page
-// that loads this one (tools/route-budgets.json). Kept honest by
-// tests/i18nDeferredNamespaces.test.js, which regenerates the list from the
-// two deferred catalogs and fails if it has drifted.
+// for ids that exist: data-i18n attributes of panels whose strings are in the
+// deferred catalogs, which are not fetched until a panel asks. An id in one of
+// these namespaces is held rather than reported, and re-checked once the
+// catalog settles. Kept in this module (a module is a request in the published
+// sources) and honest by tests/i18nDeferredNamespaces.test.js.
 // -----------------------------------------------------------------------------
 
 /** Namespaces whose strings arrive with a lazily imported panel. */
@@ -159,15 +143,9 @@ const pending = new Map();
 const baseLoaded = new Set([DEFAULT_LOCALE]);
 
 /**
- * Strings registered at runtime, per locale, kept beside the base catalogs.
- *
- * Beside rather than merged into, so that CATALOGS[id] stays the object the
- * locale's own module exported. Merging a copy over it worked and cost
- * something subtle: two tests delete a key from the exported object to prove
- * the English fallback, and against a copy the deletion is invisible and the
- * test passes for the wrong reason. Anything that reasons about what a locale
- * file actually contains - coverage, the split check, those tests - wants the
- * file, and a lookup wants the file plus whatever arrived later.
+ * Strings registered at runtime, per locale, kept beside the base catalogs so
+ * that CATALOGS[id] stays the object the locale's own module exported: coverage,
+ * the split check and two fallback tests reason about what a file contains.
  */
 const registered = Object.create(null);
 
@@ -233,24 +211,30 @@ export function registerMessages(locale, messages) {
   for (const id of Object.keys(messages)) missing.delete(id);
 
   // Tell everything that shows text, exactly as a language change would.
-  //
-  // Registering is a change to the catalog, and whether a panel rendered
-  // before or after its own strings arrived is a race nobody should have to
-  // reason about. It is winnable in the normal path - the bridges await this
-  // before importing their panel - and losable the moment anything drives a
-  // panel directly, which a lesson, a share link and the tests all do: the
-  // reset that triggers the bridge is dispatched synchronously, the bridge's
-  // await is not, so a caller that renders on the next line renders first and
-  // gets message ids.
-  //
-  // Announcing the change instead of relying on ordering removes the race
-  // rather than narrowing it. Only for the locale on screen: registering the
-  // other language's copy changes nothing anyone is looking at.
+  // Whether a panel rendered before or after its own strings arrived is a race
+  // a lesson, a share link or a test can lose by driving a panel directly;
+  // announcing the change removes it. Only for the locale on screen.
   if (locale === current) notifyLocaleListeners();
 }
 
 let current = DEFAULT_LOCALE;
 const listeners = new Set();
+
+/**
+ * The locale last asked for, which `current` becomes once its fetches land;
+ * undefined until the first change (deferredMessages.js reads it, and
+ * guesses from the stored choice until then).
+ *
+ * @type {string|undefined}
+ */
+export let targetLocale;
+/** Work a language change waits for, given the new locale (deferredMessages). */
+let prepare;
+
+/** @param {(locale: string) => (Promise<void>|void|number)} fn - Set the change's preparer */
+export const setLocalePreparer = fn => {
+  prepare = fn;
+};
 
 /**
  * Tell everything that shows text that the catalog it read from has changed.
@@ -361,8 +345,12 @@ const raw = (catalog, id) =>
  */
 const held = new Set();
 
-/** True once something has registered deferred strings, right or wrong. */
-let deferredSettled = false;
+/**
+ * Locales whose deferred catalog has arrived or failed, as keys. An id is only
+ * missing for a locale in it: the page fetches the catalog of the language in
+ * use, and for the other language "not in memory" is the ordinary state.
+ */
+let deferredSettled = {};
 
 /**
  * Say that an id could not be resolved - now, or later, or not at all.
@@ -381,7 +369,7 @@ let deferredSettled = false;
  */
 function reportMissing(id) {
   if (missing.has(id)) return;
-  if (!deferredSettled && mayBeDeferred(id)) {
+  if (!deferredSettled[current] && mayBeDeferred(id)) {
     held.add(id);
     return;
   }
@@ -392,27 +380,27 @@ function reportMissing(id) {
 }
 
 /**
- * The deferred catalogs have arrived, or have failed to.
+ * A locale's deferred catalog has arrived, or has failed to. Called by
+ * ./deferredMessages.js either way: whatever is still unresolved in the active
+ * locale once its catalog has settled is genuinely missing.
  *
- * Called by ./deferredMessages.js either way, because a load that failed
- * answers the question just as well as one that succeeded: whatever is still
- * unresolved now is genuinely unresolved, and a reader is looking at raw ids.
- *
+ * @param {string} [locale] - The locale that settled (default: the active one)
  * @returns {Array<string>} The ids that turned out to be missing after all
  */
-export function settleDeferredMessages() {
-  deferredSettled = true;
+export function settleDeferredMessages(locale = current) {
+  deferredSettled[locale] = true;
   const stillMissing = [];
-  for (const id of held) {
-    if (resolves(id)) continue;
-    stillMissing.push(id);
-    missing.add(id);
-    console.warn(
-      `[i18n] no message for "${id}" (a deferred namespace, but not in the ` +
-        'deferred catalog either)'
-    );
+  if (deferredSettled[current]) {
+    for (const id of held) {
+      if (resolves(id)) continue;
+      stillMissing.push(id);
+      missing.add(id);
+      console.warn(
+        `[i18n] no message for "${id}" (not in the deferred catalog either)`
+      );
+    }
+    held.clear();
   }
-  held.clear();
   return stillMissing;
 }
 
@@ -420,7 +408,7 @@ export function settleDeferredMessages() {
 export function resetMissingForTests() {
   missing.clear();
   held.clear();
-  deferredSettled = false;
+  deferredSettled = {};
 }
 
 /** Whether an id resolves in the active locale or in English. */
@@ -533,7 +521,13 @@ export function num(n) {
  */
 export async function setLocale(id, { persist = true } = {}) {
   const next = isSupportedLocale(id) ? id : DEFAULT_LOCALE;
+  targetLocale = next;
+  // Fetched together; the old strings stay on screen until both are in, so the
+  // listeners below repaint into a complete language. Nothing is awaited when
+  // there is nothing to fetch: English applies synchronously at start-up.
+  const extra = prepare?.(next);
   if (!baseLoaded.has(next)) await loadLocale(next);
+  if (extra) await extra;
   const changed = next !== current;
   current = next;
 
@@ -577,17 +571,17 @@ export function onLocaleChange(fn) {
  * @returns {string} A locale id
  */
 export function preferredLocale() {
+  let saved;
   try {
-    const saved = window.localStorage?.getItem(STORAGE_KEY);
-    if (saved && isSupportedLocale(saved)) return saved;
+    saved = window.localStorage?.getItem(STORAGE_KEY);
   } catch {
     /* ignore */
   }
-  const nav = (typeof navigator !== 'undefined' && navigator.language) || '';
-  const base = String(nav).toLowerCase().split('-')[0];
-  return isSupportedLocale(base) && base !== DEFAULT_LOCALE
-    ? base
-    : DEFAULT_LOCALE;
+  if (isSupportedLocale(saved)) return saved;
+  const base = String(globalThis.navigator?.language)
+    .toLowerCase()
+    .split('-')[0];
+  return isSupportedLocale(base) ? base : DEFAULT_LOCALE;
 }
 
 /**
