@@ -7,7 +7,7 @@ in force is the one in `tools/budget-policy.json` (mode `"exact"`), the route
 note's rule (a ceiling is the value measured plus 0.5% of its bytes and one
 request), and the standing size-budget approval of 2026-10-10. Nothing here
 switches the mode, raises a ceiling or treats the proposal as adopted. The
-register rows are D-R4-317-01 (Part 1) and D-R4-317-02 (Part 2).
+register rows are D-R4-317-01 and 02 (Part 1) and D-R4-317-03 (Part 2).
 
 Tooling read, not changed: `tools/bundle-budget.mjs`, `tools/route-budget.mjs`,
 `tools/data-budget.mjs`, `tools/budget-policy.mjs`, `tools/perf-probe.mjs`,
@@ -313,14 +313,18 @@ measured core. This change does not do that.
 
 ### What the checks showed
 
-Recorded in D-R4-317-01: each lowered route ceiling passes on the tip and fails
-in a scratch copy of the tree where a module is added to the route (a 40 KB
-module, which is over the 0.5% margin of every lowered route, and a second
-module for the request ceilings); the tier ceilings, none lowered, were put
-through a scratch copy whose policy mode was set to declared to show the
-mechanism. A single extra request on its own does not fail a request ceiling
-that sits at its measurement plus one request: the margin is one request by
-definition.
+Recorded in D-R4-317-01 and 02. Each lowered route ceiling passes on the tip.
+In a scratch copy of the tree where a 40 KB module (and a second, tiny one it
+imports) was added to the page of every lowered route, all 26 lowered size
+ceilings and the lowered request ceiling (studio, build) failed. A single extra
+request on its own does not fail a request ceiling that sits at its
+measurement plus one request, because the margin is one request by definition;
+it did fail the 13 request ceilings that already sat at the measurement (or
+whose page loads the application twice, as the figure builder's preview does).
+The tier ceilings, none lowered, were put through a scratch copy whose policy
+mode was set to declared: `budget:data` exits 1 when a tier ceiling is 1 B under
+the measurement and 0 at the ceilings in the tree, and `budget:policy` fails
+on the stale core described above.
 
 ### Not measured
 
