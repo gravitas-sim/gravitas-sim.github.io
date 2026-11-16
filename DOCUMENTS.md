@@ -255,7 +255,7 @@ out.
 
 | Node | Generator | Writes | Determinism |
 | --- | --- | --- | --- |
-| registries | `node tools/capability-registries.mjs` | `js/widgets.js`, `js/platform/builtins.js`, `js/data/investigations/registry.js`, and 1 more | deterministic |
+| registries | `node tools/capability-registries.mjs` | `js/widgets.js`, `js/platform/builtins.js`, `js/data/investigations/loaders.js`, and 1 more | deterministic |
 | capabilities | `node tools/capabilities.mjs generate` | `js/platform/catalog.generated.js`, `docs/capabilities.md` | deterministic |
 | catalog | `node tools/catalog.mjs generate` | `catalog/catalog.json` | deterministic |
 | lesson-text | `node tools/lesson-text.mjs --write` | `js/data/investigations/es`, `js/data/investigations/depth/es`, `js/data/investigations/binaries-sequence.js`, and 22 more | deterministic |

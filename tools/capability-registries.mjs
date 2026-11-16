@@ -7,7 +7,7 @@
 //   LAZY_FAMILIES   js/widgets.js                          instrument families
 //   BUILTINS        js/platform/builtins.js                what a manifest names
 //   LOADERS, TRANSLATIONS
-//                   js/data/investigations/registry.js     lessons, and Spanish
+//                   js/data/investigations/loaders.js      lessons, and Spanish
 //
 // Each entry has to be a literal import(), so that a bundler can see it and give
 // the module a chunk of its own. That is why they were written by hand, and why
@@ -50,7 +50,7 @@ const REPO = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 export const FILES = Object.freeze({
   families: 'js/widgets.js',
   builtins: 'js/platform/builtins.js',
-  lessons: 'js/data/investigations/registry.js',
+  lessons: 'js/data/investigations/loaders.js',
   explainers: 'js/explainers.js',
 });
 

@@ -107,7 +107,7 @@ export async function installedPack(id, store) {
  */
 export async function openPackFromUrl() {
   // Dynamic, like every bridge's: a static import splits a chunk a lesson loads.
-  const facts = (await import('../investigations.js')).packFacts();
+  const facts = await (await import('../investigations.js')).packFacts();
   const [{ toast }, { readPackFragment }, { EN_REMIX }, { ES_REMIX }] =
     await Promise.all([
       import('../notify.js'),

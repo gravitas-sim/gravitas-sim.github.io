@@ -57,7 +57,7 @@ The table is written from `tools/generate-graph.mjs`, the list that
 <!--fact-block:generatedArtifacts-->
 | File | Made by | Notes |
 | --- | --- | --- |
-| `js/widgets.js` (regions), `js/platform/builtins.js` (regions), `js/data/investigations/registry.js` (regions), `js/explainers.js` (regions) | `node tools/capability-registries.mjs` | Regions between `// <generated:NAME>` and `// </generated:NAME>`; the rest of each file is hand-written. A conflict inside one is resolved by regenerating, never by taking a side. |
+| `js/widgets.js` (regions), `js/platform/builtins.js` (regions), `js/data/investigations/loaders.js` (regions), `js/explainers.js` (regions) | `node tools/capability-registries.mjs` | Regions between `// <generated:NAME>` and `// </generated:NAME>`; the rest of each file is hand-written. A conflict inside one is resolved by regenerating, never by taking a side. |
 | `js/platform/catalog.generated.js`, `docs/capabilities.md` | `node tools/capabilities.mjs generate` |  |
 | `catalog/catalog.json` | `node tools/catalog.mjs generate` |  |
 | `js/data/investigations/es`, `js/data/investigations/depth/es` | `node tools/lesson-text.mjs --write` | Edit the keyed text in lesson-text/, never the shadow it writes. A conflict in a generated shadow is resolved by regenerating, never by taking a side. |

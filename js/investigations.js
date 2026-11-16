@@ -38,7 +38,6 @@ import {
 } from './investigations/stepView.js';
 // The public readers of the saved record, as they were exported from here.
 export { getStudentName } from './investigations/progressSchema.js';
-export { progressFor } from './investigations/stepView.js';
 import { getLocale, t, onLocaleChange } from './i18n/index.js';
 import { lessonText } from './i18n/lesson.js';
 import {
@@ -49,16 +48,14 @@ import {
   setProse,
 } from './lessonMarkup.js';
 import { SCENARIO_IDS, scenarioId } from './scenarios.js';
-// The registry, not the barrel. ../data/investigations.js pulls all ten lessons
-// in statically, which is right for a build script and wrong here: the browser
-// draws ten cards from the manifest, and opening one lesson fetches that one.
+// The loaders, not the barrel (every lesson) or the registry (every card):
+// opening one lesson fetches that one.
 import {
-  MANIFEST,
+  gradedSteps,
   hasInvestigation,
   loadInvestigation,
   provideLessonLoaders,
-  gradedSteps,
-} from './data/investigations/registry.js';
+} from './data/investigations/loaders.js';
 // Lessons provided by capability packages load through the platform resolver,
 // which installs their loaders in the registry when it is imported.
 import { state, SETTINGS, command, holdClock } from './appState.js';
@@ -148,46 +145,33 @@ import {
 import { filterResponses, stepBindings } from './assignments/assignment.js';
 import { stepFingerprint } from './investigations/progressBackup.js';
 import {
-  bindChooser,
+  bindChooserHost,
   closeBrowser,
   isBrowserOpen,
   openBrowser,
   renderBrowser,
   setChooserElements,
   wireBrowserFilters,
-} from './investigations/browser.js';
+} from './investigations/chooser.js';
 import { get, put } from './storage/local.js';
 import { helpStages, helpTaken } from './answerFeedback.js';
 import { frameState } from './referenceFrame.js';
 import {
   SCALE,
-  BINARY_SCALE,
   applyStage,
   centerOnSelected,
   clearStage,
-  fitStage,
-  setStageScale,
-  stageScale,
-  becomeRemnant,
-  placeBinary,
-  restageHole,
-  restageStarPair,
-  stagedBarycenter,
   clearSnapshots,
-  pinSnapshot,
-  pinnedSnapshots,
-  pulseSource,
-  remnantKindOf,
-  restageBinary,
-  restagePopulation,
-  restageStar,
-  setSourceMode,
-  stageKey,
+  fitStage,
+  loadStage,
+  setStageScale,
+  stageContext,
+  stageLoaded,
+  stageScale,
   stagePresence,
-  stagedPopulation,
   stagedStars,
   takeFit,
-} from './lessonStage.js';
+} from './lesson/stageGate.js';
 import {
   bindRoles,
   boundRoles,
@@ -205,12 +189,7 @@ import {
 } from './lessonScene.js';
 
 export { checkAnswer };
-export {
-  browserSummary,
-  closeBrowser,
-  openBrowser,
-  resetBrowserFilters,
-} from './investigations/browser.js';
+export { closeBrowser, openBrowser };
 
 const applyShareState = command('applyShareState');
 const captureShareState = command('captureShareState');
@@ -449,19 +428,7 @@ function probeContext() {
     },
     /** Who is computing what, for a line under an instrument. */
     mode: modeDescription,
-    /**
-     * The stars this step stood on the canvas, as values.
-     */
-    stagedSample: () =>
-      stagedStars().map(entry => ({
-        role: entry.role,
-        name: entry.star?.name ?? entry.role,
-        bodyId: entry.star?.id ?? null,
-        model: entry.model,
-        anonymous: Boolean(entry.star?.anonymous),
-      })),
-    /** A cheap signature of the current stage, so a widget can memoise. */
-    stageKey: () => stageKey(),
+    ...stageContext(),
     /**
      * Draw the stage of a star's life around a staged body.
      */
@@ -478,28 +445,6 @@ function probeContext() {
     },
     /** Take it down. */
     clearEvolutionScene,
-    /**
-     * Change which gravitational-wave source is on the canvas.
-     *
-     * The beginner lesson's central claim is that motion is not what makes a
-     * source radiate, and it needs a reader to be able to stand a static
-     * mass, a spherically pulsing one and a binary on the canvas in turn.
-     * This is what its source control calls.
-     */
-    setSourceMode,
-    /** Breathe the single source, from the model clock. */
-    pulseSource,
-    /** Rebuild the staged pair when its components change. */
-    restageBinary,
-    /**
-     * The units the staged binary is placed in.
-     *
-     * Handed over rather than imported, so an instrument can size an overlay
-     * against the pair without js/gwWidgets.js taking a dependency on the
-     * stage - and so there is one definition of the scale rather than a copy
-     * of the constant in the widget.
-     */
-    binaryScale: () => BINARY_SCALE,
     /**
      * Put the crests a source has emitted on the canvas.
      *
@@ -520,59 +465,6 @@ function probeContext() {
       o.crests = crests;
       return true;
     },
-    /** Re-apply the population stage under a new brightness cut. */
-    restagePopulation,
-    /** What the population stage last put up: counts, cut, and provenance. */
-    population: () => stagedPopulation(),
-    /** Write a model's answer onto a staged star, sizing it as it goes. */
-    restageStar,
-    /**
-     * Replace a staged star with the remnant its track's prescription names.
-     *
-     * The reader's selection follows it, because a white dwarf is a different
-     * body class from a star and the card they have open must not close on
-     * them. A prescription of 'unfinished' leaves the star where it is:
-     * inventing a remnant for a model that stopped first is the one thing
-     * js/stellar/endpoints.js exists to refuse.
-     */
-    becomeRemnant,
-    /** Which remnant a staged role has become, if any. */
-    remnantKindOf,
-    /**
-     * Put the staged binary where a waveform model says it is.
-     *
-     * The separation and phase come from the timeline the plot is drawn from,
-     * so the picture on the canvas and the curve in the panel are one thing
-     * described twice rather than two things that happen to look alike.
-     */
-    placeBinary,
-    /**
-     * Where the staged pair's balance point is, and how far each star is from
-     * it - measured off the live bodies, not restated from the declaration.
-     *
-     * The ratio of the two arms is the inverse of the mass ratio, which is the
-     * one relationship "Weighing the Stars" is built on, so it is read rather
-     * than told.
-     */
-    barycenter: stagedBarycenter,
-    /**
-     * Rebuild the staged pair with different masses, same separation.
-     *
-     * A mass-ratio control has to restand the pair rather than edit a mass in
-     * place: a star whose mass changed mid-orbit is on a path that no longer
-     * closes, and the lesson would be showing a decaying spiral while calling
-     * it a circle.
-     */
-    restageStarPair,
-    /**
-     * Rebuild the staged black hole with a different mass.
-     *
-     * A restage rather than an edit for the same reason the star pair is: the
-     * orbiters' speeds were chosen for the old mass, and changing the central
-     * mass under them would leave every one of them on a path that no longer
-     * closes.
-     */
-    restageHole,
     /**
      * What a black hole of a given mass is really like, in SI.
      *
@@ -649,10 +541,6 @@ function probeContext() {
      * curve, so the label and the curve cannot disagree.
      */
     transitGeometry: body => transitGeometry(body || selected),
-    /** Pin a labeled copy of a staged star as it is right now. */
-    pinSnapshot,
-    /** Every pinned snapshot, oldest first. */
-    snapshots: pinnedSnapshots,
     /** An immutable record of what was on screen, for the notebook. */
     evidence: evidenceSnapshot,
     find: name =>
@@ -2148,9 +2036,29 @@ function releaseLessonAudio() {
 }
 
 /** Move to a step; `rebuild` reloads the scenario (and stage) in force there. */
-function goToStep(index, { rebuild = false } = {}) {
+function goToStep(index, { rebuild = false, open = false } = {}) {
   if (!active) return;
-  stepIndex = Math.max(0, Math.min(active.steps.length - 1, index));
+  const at = Math.max(0, Math.min(active.steps.length - 1, index));
+  // A step that stages waits for the stage code; opening rejects on failure.
+  if (active.steps[at]?.stage && !stageLoaded()) {
+    const turn = openGeneration;
+    els.panel.setAttribute('aria-busy', 'true');
+    announce(t('inv.tool.loading'));
+    if (open) els.body.textContent = t('inv.tool.loading');
+    return loadStage()
+      .then(() => {
+        if (turn !== openGeneration || !active) return false;
+        goToStep(at, { rebuild });
+        return true;
+      })
+      .catch(err => {
+        if (open) throw err;
+        loadFailed(() => goToStep(at, { rebuild }), err);
+        return false;
+      })
+      .finally(() => els.panel?.removeAttribute('aria-busy'));
+  }
+  stepIndex = at;
   const sid = active.steps[stepIndex]?.sid;
   if (sid) visited.add(sid);
 
@@ -2454,7 +2362,13 @@ export async function openInvestigation(id, opts = {}) {
   });
   // rebuild: the simulation on screen belongs to whatever the student was doing
   // before, not to the step they are resuming at.
-  goToStep(stepIndex, { rebuild: true });
+  try {
+    await goToStep(stepIndex, { rebuild: true, open: true });
+  } catch (err) {
+    closeInvestigation();
+    throw err;
+  }
+  if (generation !== openGeneration) return;
   startProbeLoop();
   announce(t('inv.announce.started', { title: inv.title }));
 }
@@ -2599,9 +2513,7 @@ function stopProbeLoop() {
 let dialogs = null;
 const loadDialogs = async () => (dialogs ??= await import('./dialog.js'));
 
-// The chooser lives in js/investigations/browser.js and takes these four
-// instead of importing this module back.
-bindChooser({
+bindChooserHost({
   progressFor,
   openInvestigation,
   loadDialogs,
@@ -3260,7 +3172,7 @@ export function teardownInvestigations() {
 }
 
 /** What js/remix/open.js needs of the engine. */
-export const packFacts = () => ({
+export const packFacts = async () => ({
   provideLessonLoaders,
   loadInvestigation,
   openInvestigation,
@@ -3268,5 +3180,7 @@ export const packFacts = () => ({
   UNITS,
   scenarios: SCENARIO_IDS,
   scenarioId,
-  lessons: MANIFEST.map(m => m.id),
+  lessons: (
+    await import('./data/investigations/registry.js')
+  ).investigationIds(),
 });

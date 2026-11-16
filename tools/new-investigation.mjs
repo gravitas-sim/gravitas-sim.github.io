@@ -19,7 +19,7 @@
 //   js/data/instructorContent.js           the guide stub
 //   then: npm run manifest                 manifests and filter metadata
 //   then: npm run registries               the lazy loader and the translation
-//                                          in registry.js, from the catalog
+//                                          in loaders.js, from the catalog
 //   then: npm run lesson-text              the Spanish shadow, from lesson-text/
 //
 // Nothing is overwritten. Re-running after an edit reports what is already in
@@ -400,7 +400,7 @@ console.log(
   `
 Next:
   npm run manifest          regenerate the manifests and the filter metadata
-  npm run registries        add the lesson's lazy loaders (registry.js)
+  npm run registries        add the lesson's lazy loaders (loaders.js)
   npm run lesson-text       write the Spanish shadow from lesson-text/
   npm run author:check      validate the new lesson, and every other one
   npm run format            the scaffold is written plainly, prettier owns it

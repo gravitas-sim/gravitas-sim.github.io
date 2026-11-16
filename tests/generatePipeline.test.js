@@ -142,7 +142,7 @@ describe('the merge tripwire', () => {
     for (const f of [
       'js/widgets.js',
       'js/platform/builtins.js',
-      'js/data/investigations/registry.js',
+      'js/data/investigations/loaders.js',
     ])
       expect(WATCHED).toContain(f);
   });

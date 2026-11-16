@@ -303,12 +303,14 @@ describe('the service worker manifest is current', () => {
     const lessons = paths.filter(p =>
       /^js\/data\/investigations\/[a-z0-9-]+\.js$/.test(p)
     );
+    // loaders.js is the generated map from a lesson id to its import, beside
+    // the registry that re-exports it; it is machinery, not a lesson body.
     // provenance.js is generated infrastructure, not a lesson body - it is in
     // this directory because the lesson engine imports it. So is discovery.js,
     // the course-planning metadata generated with the manifest.
     const bodies = lessons.filter(
       p =>
-        !/\/(manifest|manifest\.es|summaries|summaries\.es|registry|i18n|catalog|browse|browseData|discovery|sequences|provenance)\.js$/.test(
+        !/\/(manifest|manifest\.es|summaries|summaries\.es|registry|loaders|i18n|catalog|browse|browseData|discovery|sequences|provenance)\.js$/.test(
           p
         )
     );

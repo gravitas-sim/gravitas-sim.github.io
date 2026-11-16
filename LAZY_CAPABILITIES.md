@@ -90,6 +90,35 @@ shared module arrives with whichever of the two a lesson reaches first, never
 the other family's own code. The stellar families' MIST tracks and H-R diagram
 are the engine's already.
 
+## The stage and the lesson catalogue
+
+Two more things used to arrive with the lesson engine and no longer do.
+
+- **The stage and the star model.** `js/lessonStage.js` (the canvas as a comparison
+  workspace: stars, pairs, holes, populations) imports the stellar model, the
+  MIST tracks and the population sampler. The engine imports `js/lesson/stageGate.js`
+  instead, which holds the same names as small wrappers that answer as an empty
+  stage does until the code is in. `goToStep` fetches the stage when the step
+  about to be shown declares one (`loadStage`): opening a lesson waits for it and
+  rejects on failure, so the opener's retry offers it again; a later step keeps
+  the reader where they are, says so (`aria-busy` and the loading announcement)
+  and offers the same retry. The second ask goes to a new URL, as for a family.
+  Of the 124 lessons, 100 stage and 99 of those on their first step; the 24 that
+  do not (Kepler's Laws among them) never fetch any of it.
+- **The catalogue.** `js/data/investigations/loaders.js` holds what opening one
+  lesson needs (the loader of each lesson and its Spanish words, the memo, the
+  language, the door a package installs lessons by). `registry.js` adds the cards
+  of all of them (the manifest, summaries, series positions) and re-exports every
+  name, so a page that lists lessons still imports one module. The lesson browser
+  (`js/investigations/browser.js`, with the browse and sequence data) is fetched when
+  it is first opened, through `js/investigations/chooser.js`.
+
+`tests/lessonRouteClosure.test.js` holds both out of the engine's static import
+closure, `tests/lessonStageEquivalence.test.js` holds every staged lesson's stage
+to a fixture recorded before the change, and `e2e/lazyInstruments.spec.js` holds
+the page's side. Measured effect on a lesson route: see the register row
+D-R4-310-01.
+
 ## Failure and retry
 
 A browser caches a failed module fetch for the life of the page: importing the

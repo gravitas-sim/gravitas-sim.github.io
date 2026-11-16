@@ -37,7 +37,6 @@ import {
 import { command, state } from '../appState.js';
 import { drop, get, noteLesson, put } from '../storage/local.js';
 import { migrateSavedProgress } from '../platform/resolver.js';
-import { investigationMeta } from '../data/investigations/registry.js';
 import { assignmentStorageKey, shortHash } from '../assignments/assignment.js';
 import {
   classifyStorageError,
@@ -1476,11 +1475,12 @@ export function load(id, lesson = null) {
  * on, which differs once a student has gone back to reread.
  *
  * @param {string} id - Investigation id
+ * @param {number} total - Steps in it. The lesson browser reads this from the
+ *   manifest, which the engine does not import: the browser asks for all of
+ *   them before any is loaded.
  * @returns {{done:number, total:number, started:boolean, at:number}} Progress
  */
-export function progressFor(id) {
-  // From the manifest: the browser asks before any lesson is loaded.
-  const total = investigationMeta(id)?.stepCount || 0;
+export function progressFor(id, total = 0) {
   const saved = load(id);
   // `at` is a 1-based screen number for the card: a v2 payload stores a sid and
   // the card has no lesson to resolve it, so it is how far, not where exactly.

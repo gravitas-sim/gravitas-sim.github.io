@@ -30,19 +30,25 @@
 // =============================================================================
 
 import { MANIFEST as MANIFEST_EN } from './manifest.js';
-import { gradedSteps, positionIn } from './catalog.js';
-import { mergeTranslation } from './i18n.js';
-// Two hundred bytes that hold one string and import nothing. The registry
-// cannot read the interface's locale - it deliberately imports no i18n - but it
-// can read what the application asked for, which is what lets this module be
-// loaded on demand without a window in which lessons come back in the wrong
-// language. See js/lessonLocale.js.
 import {
-  requestedLessonLocale,
-  registerLessonLocaleSink,
-} from '../../lessonLocale.js';
+  getLessonLocale,
+  gradedSteps,
+  positionIn,
+  loadInvestigation,
+  onLessonLocale,
+  setLoaderLocale,
+} from './loaders.js';
 
+// The lessons themselves are ./loaders.js's; every name is here too, so a
+// caller that wants the cards and the lessons imports one module.
 export { gradedSteps };
+export {
+  getLessonLocale,
+  hasInvestigation,
+  loadInvestigation,
+  loadedInvestigation,
+  provideLessonLoaders,
+} from './loaders.js';
 
 /**
  * The card-level catalog, in the language lessons are being served in.
@@ -91,364 +97,33 @@ const MANIFESTS = {
     })),
 };
 
-/**
- * The lesson loaders, by id. Literal specifiers, because a bundler has to see
- * one to split a chunk for it: `import('./' + id + '.js')` bundles every lesson
- * into one chunk, the thing this module exists to avoid. Generated
- * (tools/capability-registries.mjs).
- */
-// <generated:loaders>
-const LOADERS = {
-  'keplers-laws': () => import('./keplers-laws.js'),
-  'retrograde-motion': () => import('./retrograde-motion.js'),
-  'transit-photometry': () => import('./transit-photometry.js'),
-  'orbital-energy': () => import('./orbital-energy.js'),
-  'weighing-stars': () => import('./weighing-stars.js'),
-  'black-holes': () => import('./black-holes.js'),
-  'radial-velocity': () => import('./radial-velocity.js'),
-  'goldilocks-question': () => import('./goldilocks-question.js'),
-  'missing-mass': () => import('./missing-mass.js'),
-  tides: () => import('./tides.js'),
-  'butterfly-effect': () => import('./butterfly-effect.js'),
-  'when-orbits-lock': () => import('./when-orbits-lock.js'),
-  'detect-this-planet': () => import('./detect-this-planet.js'),
-  'design-the-schedule': () => import('./design-the-schedule.js'),
-  'binary-star-planets': () => import('./binary-star-planets.js'),
-  'gravity-assist': () => import('./gravity-assist.js'),
-  'hohmann-transfer': () => import('./hohmann-transfer.js'),
-  'lagrange-points': () => import('./lagrange-points.js'),
-  'what-is-a-gravitational-wave': () =>
-    import('./what-is-a-gravitational-wave.js'),
-  'listening-to-spacetime': () => import('./listening-to-spacetime.js'),
-  'a-universe-of-stars': () => import('./a-universe-of-stars.js'),
-  'lives-of-stars': () => import('./lives-of-stars.js'),
-  'twelve-nights': () => import('./twelve-nights.js'),
-  'power-law-gravity': () => import('./power-law-gravity.js'),
-  'color-and-temperature': () => import('./color-and-temperature.js'),
-  'the-turning-sky': () => import('./the-turning-sky.js'),
-  'the-sun-through-the-year': () => import('./the-sun-through-the-year.js'),
-  'phases-and-eclipses': () => import('./phases-and-eclipses.js'),
-  'wanderers-on-the-sky': () => import('./wanderers-on-the-sky.js'),
-  'plan-a-night': () => import('./plan-a-night.js'),
-  'lines-and-motion': () => import('./lines-and-motion.js'),
-  'what-a-spectrum-is-made-of': () => import('./what-a-spectrum-is-made-of.js'),
-  'the-suns-motion': () => import('./the-suns-motion.js'),
-  'the-rotating-disk': () => import('./the-rotating-disk.js'),
-  'cluster-membership': () => import('./cluster-membership.js'),
-  'inside-a-star': () => import('./inside-a-star.js'),
-  'scaling-the-main-sequence': () => import('./scaling-the-main-sequence.js'),
-  'the-limit': () => import('./the-limit.js'),
-  'the-expanding-universe': () => import('./the-expanding-universe.js'),
-  'standard-candles': () => import('./standard-candles.js'),
-  'the-shape-of-expansion': () => import('./the-shape-of-expansion.js'),
-  'where-galaxies-live': () => import('./where-galaxies-live.js'),
-  'what-a-ccd-records': () => import('./what-a-ccd-records.js'),
-  'signal-noise-and-exposure': () => import('./signal-noise-and-exposure.js'),
-  'a-variable-star-from-frames': () =>
-    import('./a-variable-star-from-frames.js'),
-  'the-beat-of-a-star': () => import('./the-beat-of-a-star.js'),
-  'leavitts-law': () => import('./leavitts-law.js'),
-  'the-first-rung': () => import('./the-first-rung.js'),
-  'which-kind-of-variable': () => import('./which-kind-of-variable.js'),
-  'bending-light': () => import('./bending-light.js'),
-  'einstein-rings-and-arcs': () => import('./einstein-rings-and-arcs.js'),
-  'a-lens-passing-by': () => import('./a-lens-passing-by.js'),
-  'who-gets-counted': () => import('./who-gets-counted.js'),
-  'why-the-bright-ones-win': () => import('./why-the-bright-ones-win.js'),
-  'the-completeness-curve': () => import('./the-completeness-curve.js'),
-  'integrators-in-practice': () => import('./integrators-in-practice.js'),
-  'extending-an-experiment': () => import('./extending-an-experiment.js'),
-  'refitting-a-transit': () => import('./refitting-a-transit.js'),
-  'two-periodograms': () => import('./two-periodograms.js'),
-  'sampling-a-posterior': () => import('./sampling-a-posterior.js'),
-  'what-is-a-measurement': () => import('./what-is-a-measurement.js'),
-  'what-does-plus-minus-claim': () => import('./what-does-plus-minus-claim.js'),
-  'when-the-method-must-refuse': () =>
-    import('./when-the-method-must-refuse.js'),
-  'measuring-the-moon': () => import('./measuring-the-moon.js'),
-  'how-far-is-that-star': () => import('./how-far-is-that-star.js'),
-  'a-binary-stars-orbit': () => import('./a-binary-stars-orbit.js'),
-  'which-surface-is-older': () => import('./which-surface-is-older.js'),
-  'craters-by-size': () => import('./craters-by-size.js'),
-  'what-a-crater-diameter-is-worth': () =>
-    import('./what-a-crater-diameter-is-worth.js'),
-  'what-is-in-this-field': () => import('./what-is-in-this-field.js'),
-  'weighing-jupiter': () => import('./weighing-jupiter.js'),
-  'why-rings': () => import('./why-rings.js'),
-  'tides-that-move-the-moon': () => import('./tides-that-move-the-moon.js'),
-  'ios-fire': () => import('./ios-fire.js'),
-  'the-gaps-in-the-belt': () => import('./the-gaps-in-the-belt.js'),
-  'how-fast-does-it-spin': () => import('./how-fast-does-it-spin.js'),
-  'why-venus-is-hot': () => import('./why-venus-is-hot.js'),
-  'two-greenhouse-models': () => import('./two-greenhouse-models.js'),
-  'the-turning-sun': () => import('./the-turning-sun.js'),
-  'the-suns-power': () => import('./the-suns-power.js'),
-  'how-hot-is-the-day-side': () => import('./how-hot-is-the-day-side.js'),
-  'phases-and-albedo': () => import('./phases-and-albedo.js'),
-  'moons-of-the-giants': () => import('./moons-of-the-giants.js'),
-  'the-scale-of-the-solar-system': () =>
-    import('./the-scale-of-the-solar-system.js'),
-  'comets-and-the-sun': () => import('./comets-and-the-sun.js'),
-  'what-a-telescope-resolves': () => import('./what-a-telescope-resolves.js'),
-  'why-two-lines-become-one': () => import('./why-two-lines-become-one.js'),
-  'the-saturated-star': () => import('./the-saturated-star.js'),
-  'counts-to-magnitudes': () => import('./counts-to-magnitudes.js'),
-  'plan-an-exposure': () => import('./plan-an-exposure.js'),
-  'why-the-period-is-wrong': () => import('./why-the-period-is-wrong.js'),
-  'two-stars-eclipsing': () => import('./two-stars-eclipsing.js'),
-  'two-clusters-two-ages': () => import('./two-clusters-two-ages.js'),
-  'weighing-the-stars-for-real': () =>
-    import('./weighing-the-stars-for-real.js'),
-  'how-fast-does-the-star-spin': () =>
-    import('./how-fast-does-the-star-spin.js'),
-  flares: () => import('./flares.js'),
-  'how-old-is-this-white-dwarf': () =>
-    import('./how-old-is-this-white-dwarf.js'),
-  'from-star-to-remnant': () => import('./from-star-to-remnant.js'),
-  'planet-or-not': () => import('./planet-or-not.js'),
-  'why-we-cannot-see-earth': () => import('./why-we-cannot-see-earth.js'),
-  architectures: () => import('./architectures.js'),
-  'what-is-it-made-of': () => import('./what-is-it-made-of.js'),
-  'how-many-earths': () => import('./how-many-earths.js'),
-  'how-far-and-how-sure': () => import('./how-far-and-how-sure.js'),
-  'what-gaia-does-not-see': () => import('./what-gaia-does-not-see.js'),
-  'the-metallicity-term': () => import('./the-metallicity-term.js'),
-  'the-clock-that-drifts': () => import('./the-clock-that-drifts.js'),
-  'deep-or-wide': () => import('./deep-or-wide.js'),
-  'two-telescopes-one-question': () =>
-    import('./two-telescopes-one-question.js'),
-  'propose-an-observation': () => import('./propose-an-observation.js'),
-  'which-instrument-for-which-question': () =>
-    import('./which-instrument-for-which-question.js'),
-  'the-sky-background': () => import('./the-sky-background.js'),
-  'coordinates-and-time': () => import('./coordinates-and-time.js'),
-  'a-night-at-the-telescope': () => import('./a-night-at-the-telescope.js'),
-  'from-photons-to-a-number': () => import('./from-photons-to-a-number.js'),
-  'reading-the-hr-diagram': () => import('./reading-the-hr-diagram.js'),
-  'a-stars-life-in-numbers': () => import('./a-stars-life-in-numbers.js'),
-  'when-a-star-explodes': () => import('./when-a-star-explodes.js'),
-  'populations-i-and-ii': () => import('./populations-i-and-ii.js'),
-  'spectra-tell-temperature-and-gravity': () =>
-    import('./spectra-tell-temperature-and-gravity.js'),
-  'one-planet-every-method': () => import('./one-planet-every-method.js'),
-  'what-kinds-of-planets-exist': () =>
-    import('./what-kinds-of-planets-exist.js'),
-  'the-transit-that-was-a-star': () =>
-    import('./the-transit-that-was-a-star.js'),
-  'planning-a-transit-campaign': () =>
-    import('./planning-a-transit-campaign.js'),
-};
-// </generated:loaders>
-
-/**
- * The translations, by locale and then by lesson: a shadow of a lesson carrying
- * only its words (./i18n.js), fetched alongside it when the interface is in that
- * language. English needs none. Static specifiers again, and generated too.
- */
-// <generated:translations>
-const TRANSLATIONS = {
-  es: {
-    'keplers-laws': () => import('./es/keplers-laws.js'),
-    'retrograde-motion': () => import('./es/retrograde-motion.js'),
-    'transit-photometry': () => import('./es/transit-photometry.js'),
-    'orbital-energy': () => import('./es/orbital-energy.js'),
-    'weighing-stars': () => import('./es/weighing-stars.js'),
-    'black-holes': () => import('./es/black-holes.js'),
-    'radial-velocity': () => import('./es/radial-velocity.js'),
-    'goldilocks-question': () => import('./es/goldilocks-question.js'),
-    'missing-mass': () => import('./es/missing-mass.js'),
-    tides: () => import('./es/tides.js'),
-    'butterfly-effect': () => import('./es/butterfly-effect.js'),
-    'when-orbits-lock': () => import('./es/when-orbits-lock.js'),
-    'detect-this-planet': () => import('./es/detect-this-planet.js'),
-    'design-the-schedule': () => import('./es/design-the-schedule.js'),
-    'binary-star-planets': () => import('./es/binary-star-planets.js'),
-    'gravity-assist': () => import('./es/gravity-assist.js'),
-    'hohmann-transfer': () => import('./es/hohmann-transfer.js'),
-    'lagrange-points': () => import('./es/lagrange-points.js'),
-    'what-is-a-gravitational-wave': () =>
-      import('./es/what-is-a-gravitational-wave.js'),
-    'listening-to-spacetime': () => import('./es/listening-to-spacetime.js'),
-    'a-universe-of-stars': () => import('./es/a-universe-of-stars.js'),
-    'lives-of-stars': () => import('./es/lives-of-stars.js'),
-    'twelve-nights': () => import('./es/twelve-nights.js'),
-    'power-law-gravity': () => import('./es/power-law-gravity.js'),
-    'color-and-temperature': () => import('./es/color-and-temperature.js'),
-    'the-turning-sky': () => import('./es/the-turning-sky.js'),
-    'the-sun-through-the-year': () =>
-      import('./es/the-sun-through-the-year.js'),
-    'phases-and-eclipses': () => import('./es/phases-and-eclipses.js'),
-    'wanderers-on-the-sky': () => import('./es/wanderers-on-the-sky.js'),
-    'plan-a-night': () => import('./es/plan-a-night.js'),
-    'lines-and-motion': () => import('./es/lines-and-motion.js'),
-    'what-a-spectrum-is-made-of': () =>
-      import('./es/what-a-spectrum-is-made-of.js'),
-    'the-suns-motion': () => import('./es/the-suns-motion.js'),
-    'the-rotating-disk': () => import('./es/the-rotating-disk.js'),
-    'cluster-membership': () => import('./es/cluster-membership.js'),
-    'inside-a-star': () => import('./es/inside-a-star.js'),
-    'scaling-the-main-sequence': () =>
-      import('./es/scaling-the-main-sequence.js'),
-    'the-limit': () => import('./es/the-limit.js'),
-    'the-expanding-universe': () => import('./es/the-expanding-universe.js'),
-    'standard-candles': () => import('./es/standard-candles.js'),
-    'the-shape-of-expansion': () => import('./es/the-shape-of-expansion.js'),
-    'where-galaxies-live': () => import('./es/where-galaxies-live.js'),
-    'what-a-ccd-records': () => import('./es/what-a-ccd-records.js'),
-    'signal-noise-and-exposure': () =>
-      import('./es/signal-noise-and-exposure.js'),
-    'a-variable-star-from-frames': () =>
-      import('./es/a-variable-star-from-frames.js'),
-    'the-beat-of-a-star': () => import('./es/the-beat-of-a-star.js'),
-    'leavitts-law': () => import('./es/leavitts-law.js'),
-    'the-first-rung': () => import('./es/the-first-rung.js'),
-    'which-kind-of-variable': () => import('./es/which-kind-of-variable.js'),
-    'bending-light': () => import('./es/bending-light.js'),
-    'einstein-rings-and-arcs': () => import('./es/einstein-rings-and-arcs.js'),
-    'a-lens-passing-by': () => import('./es/a-lens-passing-by.js'),
-    'who-gets-counted': () => import('./es/who-gets-counted.js'),
-    'why-the-bright-ones-win': () => import('./es/why-the-bright-ones-win.js'),
-    'the-completeness-curve': () => import('./es/the-completeness-curve.js'),
-    'integrators-in-practice': () => import('./es/integrators-in-practice.js'),
-    'extending-an-experiment': () => import('./es/extending-an-experiment.js'),
-    'refitting-a-transit': () => import('./es/refitting-a-transit.js'),
-    'two-periodograms': () => import('./es/two-periodograms.js'),
-    'sampling-a-posterior': () => import('./es/sampling-a-posterior.js'),
-    'what-is-a-measurement': () => import('./es/what-is-a-measurement.js'),
-    'what-does-plus-minus-claim': () =>
-      import('./es/what-does-plus-minus-claim.js'),
-    'when-the-method-must-refuse': () =>
-      import('./es/when-the-method-must-refuse.js'),
-    'measuring-the-moon': () => import('./es/measuring-the-moon.js'),
-    'how-far-is-that-star': () => import('./es/how-far-is-that-star.js'),
-    'a-binary-stars-orbit': () => import('./es/a-binary-stars-orbit.js'),
-    'which-surface-is-older': () => import('./es/which-surface-is-older.js'),
-    'craters-by-size': () => import('./es/craters-by-size.js'),
-    'what-a-crater-diameter-is-worth': () =>
-      import('./es/what-a-crater-diameter-is-worth.js'),
-    'what-is-in-this-field': () => import('./es/what-is-in-this-field.js'),
-    'weighing-jupiter': () => import('./es/weighing-jupiter.js'),
-    'why-rings': () => import('./es/why-rings.js'),
-    'tides-that-move-the-moon': () =>
-      import('./es/tides-that-move-the-moon.js'),
-    'ios-fire': () => import('./es/ios-fire.js'),
-    'the-gaps-in-the-belt': () => import('./es/the-gaps-in-the-belt.js'),
-    'how-fast-does-it-spin': () => import('./es/how-fast-does-it-spin.js'),
-    'why-venus-is-hot': () => import('./es/why-venus-is-hot.js'),
-    'two-greenhouse-models': () => import('./es/two-greenhouse-models.js'),
-    'the-turning-sun': () => import('./es/the-turning-sun.js'),
-    'the-suns-power': () => import('./es/the-suns-power.js'),
-    'how-hot-is-the-day-side': () => import('./es/how-hot-is-the-day-side.js'),
-    'phases-and-albedo': () => import('./es/phases-and-albedo.js'),
-    'moons-of-the-giants': () => import('./es/moons-of-the-giants.js'),
-    'the-scale-of-the-solar-system': () =>
-      import('./es/the-scale-of-the-solar-system.js'),
-    'comets-and-the-sun': () => import('./es/comets-and-the-sun.js'),
-    'what-a-telescope-resolves': () =>
-      import('./es/what-a-telescope-resolves.js'),
-    'why-two-lines-become-one': () =>
-      import('./es/why-two-lines-become-one.js'),
-    'the-saturated-star': () => import('./es/the-saturated-star.js'),
-    'counts-to-magnitudes': () => import('./es/counts-to-magnitudes.js'),
-    'plan-an-exposure': () => import('./es/plan-an-exposure.js'),
-    'why-the-period-is-wrong': () => import('./es/why-the-period-is-wrong.js'),
-    'two-stars-eclipsing': () => import('./es/two-stars-eclipsing.js'),
-    'two-clusters-two-ages': () => import('./es/two-clusters-two-ages.js'),
-    'weighing-the-stars-for-real': () =>
-      import('./es/weighing-the-stars-for-real.js'),
-    'how-fast-does-the-star-spin': () =>
-      import('./es/how-fast-does-the-star-spin.js'),
-    flares: () => import('./es/flares.js'),
-    'how-old-is-this-white-dwarf': () =>
-      import('./es/how-old-is-this-white-dwarf.js'),
-    'from-star-to-remnant': () => import('./es/from-star-to-remnant.js'),
-    'planet-or-not': () => import('./es/planet-or-not.js'),
-    'why-we-cannot-see-earth': () => import('./es/why-we-cannot-see-earth.js'),
-    architectures: () => import('./es/architectures.js'),
-    'what-is-it-made-of': () => import('./es/what-is-it-made-of.js'),
-    'how-many-earths': () => import('./es/how-many-earths.js'),
-    'how-far-and-how-sure': () => import('./es/how-far-and-how-sure.js'),
-    'what-gaia-does-not-see': () => import('./es/what-gaia-does-not-see.js'),
-    'the-metallicity-term': () => import('./es/the-metallicity-term.js'),
-    'the-clock-that-drifts': () => import('./es/the-clock-that-drifts.js'),
-    'deep-or-wide': () => import('./es/deep-or-wide.js'),
-    'two-telescopes-one-question': () =>
-      import('./es/two-telescopes-one-question.js'),
-    'propose-an-observation': () => import('./es/propose-an-observation.js'),
-    'which-instrument-for-which-question': () =>
-      import('./es/which-instrument-for-which-question.js'),
-    'the-sky-background': () => import('./es/the-sky-background.js'),
-    'coordinates-and-time': () => import('./es/coordinates-and-time.js'),
-    'a-night-at-the-telescope': () =>
-      import('./es/a-night-at-the-telescope.js'),
-    'from-photons-to-a-number': () =>
-      import('./es/from-photons-to-a-number.js'),
-    'reading-the-hr-diagram': () => import('./es/reading-the-hr-diagram.js'),
-    'a-stars-life-in-numbers': () => import('./es/a-stars-life-in-numbers.js'),
-    'when-a-star-explodes': () => import('./es/when-a-star-explodes.js'),
-    'populations-i-and-ii': () => import('./es/populations-i-and-ii.js'),
-    'spectra-tell-temperature-and-gravity': () =>
-      import('./es/spectra-tell-temperature-and-gravity.js'),
-    'one-planet-every-method': () => import('./es/one-planet-every-method.js'),
-    'what-kinds-of-planets-exist': () =>
-      import('./es/what-kinds-of-planets-exist.js'),
-    'the-transit-that-was-a-star': () =>
-      import('./es/the-transit-that-was-a-star.js'),
-    'planning-a-transit-campaign': () =>
-      import('./es/planning-a-transit-campaign.js'),
-  },
-};
-// </generated:translations>
-
-// Keyed by `${locale}:${id}`, so switching language and switching back does not
-// re-merge, and so a lesson open in Spanish and the same lesson opened again in
-// Spanish are the same object.
-/** Lessons already fetched, so a second open is instant and identity is stable. */
-const loaded = new Map();
-/** In-flight requests, so two rapid clicks share one network fetch. */
-const pending = new Map();
-
-/**
- * The locale lessons are fetched in.
- *
- * Initialized from what the application has already asked for rather than from
- * a hardcoded 'en'. This module is loaded on demand, so by the time it exists
- * the reader may have chosen a language several seconds ago; starting in
- * English and waiting to be told would serve one lesson in the wrong language
- * for every switch made before the first lesson was opened.
- */
-let lessonLocale = requestedLessonLocale() || 'en';
-
 /** The in-flight catalog fetch, if there is one. See lessonCatalogReady. */
 let manifestLoad = null;
 /** Whether the browser has asked for the cards with their summaries. */
 let summariesWanted = false;
 
 /**
- * Choose the language lessons are loaded in.
+ * Fetch the card-level catalog for a language.
  *
- * Separate from the interface locale rather than reading it directly, so this
- * module keeps its promise of importing nothing: a lesson is content, and the
- * registry that serves it should not drag the i18n runtime into the chunk. The
- * application connects the two in js/main.js.
+ * Follows the lessons: ./loaders.js tells this module when the language
+ * changes. The catalog is fetched rather than bundled, so a reader who never
+ * switches language never pays for the other one.
  *
  * @param {string} locale - A locale id
+ * @returns {Promise<Array>} The manifest for that language
  */
-export function setLessonLocale(locale) {
-  lessonLocale = locale || 'en';
+function loadCatalog(locale) {
   // English cards need no fetch until the browser asks for them with their
   // summaries; a lesson opened by link never does.
-  if (lessonLocale === 'en' && !summariesWanted) {
+  if (locale === 'en' && !summariesWanted) {
     MANIFEST = MANIFEST_EN;
     return (manifestLoad = Promise.resolve(MANIFEST));
   }
-  // The catalog follows the lessons. Fetched rather than bundled, so a
-  // reader who never switches language never pays for the other one.
-  const load = MANIFESTS[lessonLocale] || MANIFESTS.en;
+  const load = MANIFESTS[locale] || MANIFESTS.en;
   manifestLoad = load()
     .then(mod => {
       // A second change while this one was in flight wins.
-      if (MANIFESTS[lessonLocale] === load) MANIFEST = mod.MANIFEST;
+      if (MANIFESTS[getLessonLocale()] === load) MANIFEST = mod.MANIFEST;
       return MANIFEST;
     })
     .catch(() => {
@@ -458,8 +133,15 @@ export function setLessonLocale(locale) {
   return manifestLoad;
 }
 
-/** @returns {string} The language lessons are currently loaded in */
-export const getLessonLocale = () => lessonLocale;
+/**
+ * Choose the language lessons and their cards are loaded in.
+ * @param {string} locale - A locale id
+ * @returns {Promise<Array>} The manifest for that language
+ */
+export function setLessonLocale(locale) {
+  setLoaderLocale(locale);
+  return manifestLoad;
+}
 
 /**
  * Resolves when MANIFEST holds the catalog for the current language.
@@ -481,22 +163,18 @@ export const getLessonLocale = () => lessonLocale;
 export function lessonCatalogReady() {
   if (!summariesWanted) {
     summariesWanted = true;
-    return setLessonLocale(lessonLocale);
+    return loadCatalog(getLessonLocale());
   }
-  return manifestLoad || setLessonLocale(lessonLocale);
+  return manifestLoad || loadCatalog(getLessonLocale());
 }
 
-// And fetch the card-level catalog for that language, now, without waiting to
-// be told. The lesson bodies are already correct - `lessonLocale` above decides
-// those - but the browser's cards come from a per-language manifest, and a
-// reader who chose Spanish before this module existed should not see a grid of
-// English titles until something else happens to call setLessonLocale.
-if (lessonLocale !== 'en') setLessonLocale(lessonLocale);
-
-// And from here on, a language change reaches this module directly rather than
-// through another import. Registered last, so a change that arrives during
-// module evaluation is not applied to a half-built registry.
-registerLessonLocaleSink(setLessonLocale);
+// Follow the language from here on, and fetch the card-level catalog for the
+// current one now, without waiting to be told: the browser's cards come from a
+// per-language manifest, and a reader who chose Spanish before this module
+// existed should not see a grid of English titles until something else happens
+// to change the language.
+onLessonLocale(loadCatalog);
+if (getLessonLocale() !== 'en') loadCatalog(getLessonLocale());
 
 /** @returns {Array<string>} Every lesson id, in catalog order */
 export const investigationIds = () => MANIFEST.map(m => m.id);
@@ -507,90 +185,6 @@ export const investigationIds = () => MANIFEST.map(m => m.id);
  * @returns {Object|undefined} A manifest entry
  */
 export const investigationMeta = id => MANIFEST.find(m => m.id === id);
-
-/** @param {string} id - Investigation id @returns {boolean} True if it exists */
-export const hasInvestigation = id => Object.hasOwn(LOADERS, id);
-
-/**
- * Loaders a capability package supplies for a lesson.
- *
- * Installed by the platform (js/platform/lessons.js) rather than imported here:
- * a content registry does not depend on the layer that loads packages, so the
- * package route arrives through this door and everything below - memoizing,
- * the translation merge, the retry after a failed fetch - is unchanged.
- *
- * @param {string} id - Investigation id
- * @param {{lesson: Function, translations?: Record<string, Function>}} loaders
- */
-export function provideLessonLoaders(id, { lesson, translations = {} }) {
-  LOADERS[id] = lesson;
-  for (const [locale, load] of Object.entries(translations)) {
-    TRANSLATIONS[locale] = TRANSLATIONS[locale] || {};
-    TRANSLATIONS[locale][id] = load;
-  }
-}
-
-/**
- * A lesson already in memory, or undefined.
- *
- * For the places that want to use a lesson if it happens to be loaded and do
- * something cheaper otherwise. Never triggers a fetch.
- *
- * @param {string} id - Investigation id
- * @returns {Object|undefined} The investigation
- */
-export const loadedInvestigation = (id, locale = lessonLocale) =>
-  loaded.get(`${TRANSLATIONS[locale]?.[id] ? locale : 'en'}:${id}`);
-
-/**
- * Load one lesson.
- *
- * Memoized on both sides: a resolved lesson is returned from the map, and a
- * lesson still arriving is returned as the same promise, so the double click a
- * student gives a card fetches once.
- *
- * @param {string} id - Investigation id
- * @returns {Promise<Object|undefined>} The investigation, or undefined if no
- *   such lesson exists
- */
-export function loadInvestigation(id, locale = lessonLocale) {
-  const loader = LOADERS[id];
-  if (!loader) return Promise.resolve(undefined);
-
-  const translate = TRANSLATIONS[locale]?.[id];
-  const key = `${translate ? locale : 'en'}:${id}`;
-  if (loaded.has(key)) return Promise.resolve(loaded.get(key));
-  if (pending.has(key)) return pending.get(key);
-
-  const p = Promise.all([
-    loader(),
-    // A translation that fails to arrive must not take the lesson down with
-    // it: the English is the lesson, and the words are an improvement on it.
-    translate
-      ? translate().catch(err => {
-          console.warn(`No ${locale} translation for ${id}:`, err);
-          return null;
-        })
-      : null,
-  ])
-    .then(([mod, words]) => {
-      const inv = words
-        ? mergeTranslation(mod.default, words.default)
-        : mod.default;
-      loaded.set(key, inv);
-      pending.delete(key);
-      return inv;
-    })
-    .catch(err => {
-      // Left out of `loaded` so a retry is possible: a lesson that failed to
-      // arrive because the network dropped should not be permanently missing
-      // for the rest of the session.
-      pending.delete(key);
-      throw err;
-    });
-  pending.set(key, p);
-  return p;
-}
 
 /**
  * Every lesson, in catalog order.
