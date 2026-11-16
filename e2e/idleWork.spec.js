@@ -37,16 +37,35 @@ const countDraws = page =>
 
 const draws = page => page.evaluate(() => window.__draws);
 
+/** Let n animation frames go by: a wait on the page's own clock, not a timer. */
+const frames = (page, n) =>
+  page.evaluate(
+    count =>
+      new Promise(done => {
+        let seen = 0;
+        const tick = () =>
+          ++seen >= count ? done() : window.requestAnimationFrame(tick);
+        window.requestAnimationFrame(tick);
+      }),
+    n
+  );
+
 async function openKepler(page, app) {
   await app.boot({ url: '/#investigation=keplers-laws' });
   await page.waitForSelector('#investigationNext', { timeout: 25_000 });
-  await page.waitForTimeout(500);
+  await expect(page.locator('.inv-step-title')).not.toBeEmpty();
 }
 
-const next = async page => {
-  await page.locator('#investigationNext').click();
-  await page.waitForTimeout(400);
+const stepText = page => page.locator('.inv-step-count').innerText();
+
+/** Press Next, or Back, and wait for the step counter to change. */
+const go = async (page, id) => {
+  const before = await stepText(page);
+  await page.locator(id).click();
+  await expect.poll(() => stepText(page)).not.toBe(before);
 };
+const next = page => go(page, '#investigationNext');
+const back = page => go(page, '#investigationPrev');
 
 test.describe('a reading step holds the clock', () => {
   test('step 1 stays where it started, the scene runs again where the motion is the point', async ({
@@ -59,7 +78,7 @@ test.describe('a reading step holds the clock', () => {
     // Step 1 is a reading step: held, and the clock stays where it began.
     expect(await paused(page)).toBe(true);
     const start = await clock(page);
-    await page.waitForTimeout(1200);
+    await frames(page, 60);
     expect(await clock(page)).toBe(start);
 
     // Step 2 declares the motion is the point ("watch them for a moment").
@@ -74,9 +93,8 @@ test.describe('a reading step holds the clock', () => {
     expect(await paused(page)).toBe(false);
 
     // Back to a reading step without motion: held again.
-    await page.locator('#investigationPrev').click();
-    await page.locator('#investigationPrev').click();
-    await page.waitForTimeout(300);
+    await back(page);
+    await back(page);
     expect(await paused(page)).toBe(true);
   });
 
@@ -108,11 +126,11 @@ test.describe('a hidden document', () => {
     await openKepler(page, app);
     await next(page); // a step that runs
     await countDraws(page);
-    await page.waitForTimeout(500);
+    await frames(page, 30);
 
     // The rate before: simulated time per real second while visible.
     const a = await clock(page);
-    await page.waitForTimeout(1000);
+    await frames(page, 60);
     const rate = (await clock(page)) - a;
     expect(rate).toBeGreaterThan(0);
 
@@ -128,10 +146,10 @@ test.describe('a hidden document', () => {
       });
       document.dispatchEvent(new Event('visibilitychange'));
     });
-    await page.waitForTimeout(100);
+    await frames(page, 3);
     const before = await clock(page);
     await page.evaluate(() => (window.__draws = 0));
-    await page.waitForTimeout(2000);
+    await frames(page, 120);
     expect(await clock(page), 'simulated time while hidden').toBe(before);
     expect(await draws(page), 'draw calls while hidden').toBe(0);
 
@@ -143,7 +161,7 @@ test.describe('a hidden document', () => {
       document.dispatchEvent(new Event('visibilitychange'));
     });
     const back = await clock(page);
-    await page.waitForTimeout(1000);
+    await frames(page, 60);
     const gained = (await clock(page)) - back;
     expect(gained).toBeGreaterThan(0);
     expect(gained, 'time credited after the return').toBeLessThan(rate * 1.6);
@@ -159,10 +177,10 @@ test.describe('a covered canvas', () => {
     await openKepler(page, app);
     await next(page); // running, so the paused idle rate is not what is measured
     await countDraws(page);
-    await page.waitForTimeout(500);
+    await frames(page, 30);
 
     await page.evaluate(() => (window.__draws = 0));
-    await page.waitForTimeout(1000);
+    await frames(page, 60);
     const open = await draws(page);
 
     await page.evaluate(() => {
@@ -172,18 +190,18 @@ test.describe('a covered canvas', () => {
         'position:fixed;inset:0;z-index:2147483000;background:#000';
       document.body.append(cover);
     });
-    await page.waitForTimeout(700);
+    await frames(page, 45);
     await page.evaluate(() => (window.__draws = 0));
-    await page.waitForTimeout(1000);
+    await frames(page, 60);
     const covered = await draws(page);
     // The scene itself still runs: only the picture is redrawn less often.
     expect(await paused(page)).toBe(false);
     expect(covered, 'draw calls a second while covered').toBeLessThan(open / 2);
 
     await page.evaluate(() => document.getElementById('testCover').remove());
-    await page.waitForTimeout(700);
+    await frames(page, 45);
     await page.evaluate(() => (window.__draws = 0));
-    await page.waitForTimeout(1000);
+    await frames(page, 60);
     expect(await draws(page)).toBeGreaterThan(open / 2);
   });
 });
