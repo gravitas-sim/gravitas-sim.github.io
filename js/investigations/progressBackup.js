@@ -314,6 +314,9 @@ export function restoreProgress(backup, lesson) {
     Array.isArray(step?.options) ? step.options.length : null
   );
 
+  const isRetired = sid =>
+    !indexBySid.has(sid) && Object.hasOwn(lesson?.retired ?? {}, sid);
+
   const version = Number(backup.version) || 1;
   const byPosition = version < 2 || !backupSteps.some(entry => entry?.sid);
 
@@ -355,7 +358,7 @@ export function restoreProgress(backup, lesson) {
       const to = indexBySid.get(sid);
       if (to === undefined) {
         // A step the lesson retired is set aside (kept below), not lost.
-        if (!lesson?.retired?.[sid]) dropped.push(sid);
+        if (!isRetired(sid)) dropped.push(sid);
         continue;
       }
       // An option list that changed length invalidates a stored choice index.
@@ -386,7 +389,9 @@ export function restoreProgress(backup, lesson) {
         continue;
       }
       const to = resolve.get(parsed.head);
-      if (to === undefined && !byPosition && !indexBySid.has(parsed.head)) {
+      // Only a step the lesson retired is kept. An assignment is a subset, so
+      // an unassigned step is not retired and its answer is not carried.
+      if (to === undefined && !byPosition && isRetired(parsed.head)) {
         gone[`${lessonId}:${parsed.head}${parsed.suffix}`] = value;
         continue;
       }

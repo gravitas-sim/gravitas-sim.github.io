@@ -2159,7 +2159,7 @@ export const EN_DEFERRED = {
   'inv.backup.restoredMoved':
     'Progress restored. {moved} answers were matched to steps that have moved since the backup was made.',
   'inv.backup.restoredPartly':
-    'Progress restored, but {dropped} steps in the backup are no longer in this investigation and their answers were left out.',
+    'Progress restored. Answers in the backup to steps this investigation does not have were left out.',
   'inv.backup.restoredUncertain':
     'Restored {applied} answers. {n} could not be placed because their steps have changed since the backup was made; they are still in the file you restored from.',
   'inv.backup.tooLarge': 'That file is too large to be a progress backup.',

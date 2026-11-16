@@ -421,7 +421,9 @@ export function stepBindings(assignment, lesson, fingerprint) {
     const step = byId.get(sid);
     if (!step) {
       // The lesson's own record of what replaced the id (stepView.js earlierAnswers).
-      const retired = lesson?.retired?.[sid] ?? null;
+      const retired = Object.hasOwn(lesson?.retired ?? {}, sid)
+        ? lesson.retired[sid]
+        : null;
       return { sid, status: BINDING.MISSING, step: null, index: i, retired };
     }
     const want = assignment.f?.[i];

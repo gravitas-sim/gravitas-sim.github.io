@@ -367,12 +367,7 @@ export async function restoreBackup(host, file) {
       })
     );
   } else if (restored.dropped.length || restored.discardedKeys) {
-    toast(
-      t('inv.backup.restoredPartly', {
-        dropped: restored.dropped.length,
-        moved: restored.moved.length,
-      })
-    );
+    toast(t('inv.backup.restoredPartly'));
   } else if (restored.moved.length) {
     toast(t('inv.backup.restoredMoved', { moved: restored.moved.length }));
   } else {

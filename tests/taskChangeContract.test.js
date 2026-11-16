@@ -63,11 +63,13 @@ describe('the retired map', () => {
       'o:z': 2,
       'o:gone': 3,
       'o:mystery': 4,
+      'o:constructor': 5,
     });
     expect(rows.map(r => [r.id, r.r?.to])).toEqual([
       ['a', 'z'],
       ['gone', null],
       ['mystery', undefined],
+      ['constructor', undefined],
     ]);
   });
 });
@@ -412,6 +414,33 @@ describe('earlier answers: backup, storage, Restart', () => {
     expect(p.discardedKeys).toBe(1);
   });
 
+  test('an assignment on a revised lesson sets aside only the retired step, not the unassigned ones', () => {
+    const full = editedLesson('revise');
+    const b = buildBackup({
+      lesson: full,
+      responses: {
+        'tides:guess': 0,
+        'tides:look': 'unassigned',
+        'tides:measure:d': '4.2',
+        'tides:ask': 2,
+        'tides:constructor': 1,
+      },
+      attempts: { 'tides:look': 1, 'tides:guess': 1 },
+      visited: [],
+      stepSid: 'ask',
+      startedAt: null,
+    });
+    // what the engine restores into: the full lesson's other fields, a subset of its steps
+    const subset = { ...full, steps: full.steps.filter(s => s.sid === 'ask') };
+    const r = restoreProgress(b, subset);
+    expect(r.responses).toEqual({ 'tides:ask': 2 });
+    expect(r.earlier).toEqual({
+      responses: { 'tides:guess': 0 },
+      attempts: { 'tides:guess': 1 },
+    });
+    expect(r.discardedKeys).toBe(4);
+  });
+
   test('earlier answers of the free lesson are not written into an assignment on it', () => {
     localStorage.setItem(FREE, JSON.stringify(SAVED));
     const l = state.lesson;
@@ -486,13 +515,19 @@ describe('typed drafts do not travel between records', () => {
       'gravitas_investigation_tides',
       JSON.stringify({
         ...SAVED,
-        drafts: { 'tides:measure:d': '4,5', 'other:x': '9', 'tides:guess': 7 },
+        drafts: {
+          'tides:measure:d': '4,5',
+          'other:x': '9',
+          'tides:guess': 7,
+          'tides:measure:long': '7'.repeat(5000),
+        },
       })
     );
     load('tides', lesson());
     save();
     expect(sessionProgress.get('gravitas_investigation_tides').drafts).toEqual({
       'tides:measure:d': '4,5',
+      'tides:measure:long': '7'.repeat(99),
     });
     // opening a lesson with nothing saved drops the last lesson's drafts
     localStorage.clear();
@@ -543,6 +578,13 @@ describe('the small ones', () => {
     const { swapRetired } = await import('../js/assignments/assignment.js');
     const l = { id: 'l', steps: [{ sid: 'constructor' }], retired: {} };
     expect(swapRetired(l, ['constructor'])).toEqual(['constructor']);
+  });
+
+  test('an assignment step called constructor is missing, with no retired entry', async () => {
+    const { stepBindings } = await import('../js/assignments/assignment.js');
+    const l = { id: 'l', steps: [{ sid: 'a' }], retired: {} };
+    const [b] = stepBindings({ s: ['constructor'] }, l, () => '').bindings;
+    expect(b.retired).toBeNull();
   });
 
   test('a release must be a string: 3.1 as a number is refused', async () => {

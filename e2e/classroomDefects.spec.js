@@ -11,6 +11,8 @@
 // is still there after a reload and is not an answer.
 // =============================================================================
 
+import { readFile } from 'node:fs/promises';
+import { join } from 'node:path';
 import AxeBuilder from '@axe-core/playwright';
 import { test, expect, openMore } from './fixtures.js';
 
@@ -338,5 +340,26 @@ test.describe('a number typed and not yet checked', () => {
       .toBe('2.5');
     expect((await stored(page)).drafts).toBeUndefined();
     expect((await stored(page)).attempts[key]).toBe(1);
+  });
+
+  test('a restored backup replaces it: the box shows the restored answer', async ({
+    page,
+    app,
+  }, info) => {
+    await openAt(page, app, LESSON, NUMERIC, { [key]: '2.5' });
+    const path = join(info.outputDir, 'draft-restore.json');
+    const download = page.waitForEvent('download');
+    await openMore(page);
+    await page.locator('#investigationBackupDownload').click();
+    await (await download).saveAs(path);
+    expect(JSON.parse(await readFile(path, 'utf8')).kind).toBe(
+      'gravitas.investigation.progress'
+    );
+
+    await page.locator('.inv-answer-num').fill('9.9');
+    page.once('dialog', d => d.accept());
+    await page.locator('#investigationBackupFile').setInputFiles(path);
+    await expect(page.locator('.inv-answer-num')).toHaveValue('2.5');
+    expect((await stored(page)).drafts).toBeUndefined();
   });
 });

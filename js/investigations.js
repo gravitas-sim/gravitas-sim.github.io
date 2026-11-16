@@ -2271,7 +2271,7 @@ export async function openInvestigation(id, opts = {}) {
   }
   // An authoring preview reads no saved progress: an author is shown a clean
   // lesson, and the position they asked for cannot be silently overridden.
-  const saved = authoring ? null : load(id, active);
+  const saved = authoring ? (forgetKept(id), null) : load(id, active);
   responses = saved?.responses || {};
   if (assignment && saved?.responses) {
     // A step rewritten under its own id since the assignment was made is a
@@ -2625,6 +2625,7 @@ const finishHost = () => ({
   restoreInto: restored => {
     progressNotes = [];
     ({ responses, attempts, visited } = restored);
+    forgetKept();
     keepEarlier(active.id, restored.earlier);
     startedAt = restored.startedAt || new Date().toISOString();
     save();
