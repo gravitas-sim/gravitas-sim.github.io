@@ -803,8 +803,8 @@ function setupRangeFills() {
  * @param {boolean} playing - True to run
  */
 export function setPlaying(playing) {
-  // An explicit command: playing means running, from the live moment.
-  returnToLive();
+  // Playing means running, from the live moment; pausing leaves history be.
+  if (playing) returnToLive();
   state.paused = !playing;
   releaseHold();
   refreshTransport();
