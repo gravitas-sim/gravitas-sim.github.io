@@ -1,73 +1,49 @@
 {
- "total": 593800,
+ "total": 524594,
  "modules": [
   {
    "module": "js/i18n/en.js",
-   "bytes": 84084
+   "bytes": 85334
   },
   {
    "module": "js/world/build.js",
-   "bytes": 37120
+   "bytes": 37184
   },
   {
    "module": "js/render.js",
-   "bytes": 29807
+   "bytes": 30025
   },
   {
    "module": "js/scenarios.js",
-   "bytes": 25418
+   "bytes": 25459
   },
   {
-   "module": "js/inspectorView.js",
-   "bytes": 19116
-  },
-  {
-   "module": "js/settingsPanel.js",
-   "bytes": 15063
+   "module": "js/ui.js",
+   "bytes": 15003
   },
   {
    "module": "js/radialVelocity.js",
    "bytes": 14943
   },
   {
-   "module": "js/ui.js",
-   "bytes": 14620
-  },
-  {
-   "module": "js/inspectorPanel.js",
-   "bytes": 14364
-  },
-  {
    "module": "js/placement.js",
-   "bytes": 14147
+   "bytes": 14578
   },
   {
    "module": "js/engine/bodies.js",
-   "bytes": 13767
-  },
-  {
-   "module": "js/inspectorWindow.js",
-   "bytes": 13337
-  },
-  {
-   "module": "js/inspectorInfo.js",
-   "bytes": 12931
+   "bytes": 13862
   },
   {
    "module": "js/engine/collisions.js",
-   "bytes": 12438
+   "bytes": 12122
   },
   {
    "module": "js/bodyDraw.js",
    "bytes": 11290
   },
   {
-   "module": "js/rotationCurve.js",
-   "bytes": 10031
-  },
-  {
    "module": "js/world.js",
-   "bytes": 9463
+   "bytes": 9447
   },
   {
    "module": "js/engine/step.js",
@@ -75,7 +51,11 @@
   },
   {
    "module": "js/captureMeasure.js",
-   "bytes": 9201
+   "bytes": 9156
+  },
+  {
+   "module": "js/controls.js",
+   "bytes": 9100
   },
   {
    "module": "js/lightCurve.js",
@@ -83,15 +63,15 @@
   },
   {
    "module": "js/bodyDrawSky.js",
-   "bytes": 8078
-  },
-  {
-   "module": "js/controls.js",
-   "bytes": 7984
+   "bytes": 8130
   },
   {
    "module": "js/sandboxTools.js",
    "bytes": 7605
+  },
+  {
+   "module": "js/settingsSchema.js",
+   "bytes": 7598
   },
   {
    "module": "js/audio.js",
@@ -100,10 +80,6 @@
   {
    "module": "js/scenarioBrowser.js",
    "bytes": 7315
-  },
-  {
-   "module": "js/settingsSchema.js",
-   "bytes": 6546
   },
   {
    "module": "js/soundPanel.js",
@@ -123,14 +99,14 @@
   },
   {
    "module": "js/main.js",
-   "bytes": 5442
-  },
-  {
-   "module": "js/share.js",
-   "bytes": 5369
+   "bytes": 5547
   },
   {
    "module": "js/shareState.js",
+   "bytes": 5386
+  },
+  {
+   "module": "js/share.js",
    "bytes": 5369
   },
   {
@@ -143,27 +119,35 @@
   },
   {
    "module": "js/bodyVisuals.js",
-   "bytes": 4991
+   "bytes": 4970
   },
   {
    "module": "js/engine/blackHole.js",
    "bytes": 4836
   },
   {
+   "module": "js/appState.js",
+   "bytes": 4724
+  },
+  {
    "module": "js/engine/forces.js",
    "bytes": 4573
   },
   {
-   "module": "js/appState.js",
-   "bytes": 4550
+   "module": "js/data/scenarioInfo.js",
+   "bytes": 4364
+  },
+  {
+   "module": "js/timeline.js",
+   "bytes": 4291
   },
   {
    "module": "js/vectorOverlay.js",
    "bytes": 4289
   },
   {
-   "module": "js/data/scenarioInfo.js",
-   "bytes": 4260
+   "module": "js/inspectorGate.js",
+   "bytes": 4118
   },
   {
    "module": "js/darkMatter.js",
@@ -182,12 +166,8 @@
    "bytes": 3408
   },
   {
-   "module": "js/timeline.js",
-   "bytes": 3338
-  },
-  {
    "module": "js/i18n/index.js",
-   "bytes": 3300
+   "bytes": 3263
   },
   {
    "module": "js/engine/state.js",
@@ -202,12 +182,20 @@
    "bytes": 2607
   },
   {
-   "module": "js/habitability.js",
-   "bytes": 2549
+   "module": "js/quality.js",
+   "bytes": 2598
+  },
+  {
+   "module": "js/format.js",
+   "bytes": 2499
   },
   {
    "module": "js/instruments.js",
-   "bytes": 2444
+   "bytes": 2423
+  },
+  {
+   "module": "js/habitability.js",
+   "bytes": 2399
   },
   {
    "module": "js/observerControls.js",
@@ -218,8 +206,12 @@
    "bytes": 2353
   },
   {
-   "module": "js/format.js",
-   "bytes": 2279
+   "module": "js/shortcuts.js",
+   "bytes": 2319
+  },
+  {
+   "module": "js/objectGlyphs.js",
+   "bytes": 2249
   },
   {
    "module": "js/engine/events.js",
@@ -230,12 +222,8 @@
    "bytes": 2155
   },
   {
-   "module": "js/shortcuts.js",
-   "bytes": 2117
-  },
-  {
-   "module": "js/blackHolePhysics.js",
-   "bytes": 2094
+   "module": "js/names.js",
+   "bytes": 2098
   },
   {
    "module": "js/referenceFrame.js",
@@ -248,6 +236,10 @@
   {
    "module": "js/investigationsLoader.js",
    "bytes": 1883
+  },
+  {
+   "module": "js/world/tidalSystems.js",
+   "bytes": 1870
   },
   {
    "module": "js/lesson/evolutionScene.js",
@@ -267,11 +259,7 @@
   },
   {
    "module": "js/shell.js",
-   "bytes": 1639
-  },
-  {
-   "module": "js/quality.js",
-   "bytes": 1636
+   "bytes": 1638
   },
   {
    "module": "js/units.js",
@@ -282,24 +270,16 @@
    "bytes": 1422
   },
   {
+   "module": "js/orbital.js",
+   "bytes": 1337
+  },
+  {
    "module": "js/observingSession.js",
    "bytes": 1310
   },
   {
-   "module": "js/orbital.js",
-   "bytes": 1216
-  },
-  {
-   "module": "js/names.js",
-   "bytes": 1184
-  },
-  {
    "module": "js/rng.js",
    "bytes": 1135
-  },
-  {
-   "module": "js/widgetRuntime.js",
-   "bytes": 1106
   },
   {
    "module": "js/i18n/dom.js",
@@ -310,6 +290,14 @@
    "bytes": 1088
   },
   {
+   "module": "js/notify.js",
+   "bytes": 1085
+  },
+  {
+   "module": "js/widgetRuntime.js",
+   "bytes": 1074
+  },
+  {
    "module": "js/binaryOrbits.js",
    "bytes": 1071
   },
@@ -318,12 +306,8 @@
    "bytes": 1066
   },
   {
-   "module": "js/notify.js",
-   "bytes": 1027
-  },
-  {
    "module": "js/observationChart.js",
-   "bytes": 995
+   "bytes": 1065
   },
   {
    "module": "js/presentation.js",
@@ -338,8 +322,16 @@
    "bytes": 850
   },
   {
+   "module": "js/welcomeGate.js",
+   "bytes": 825
+  },
+  {
    "module": "js/view3dBridge.js",
    "bytes": 771
+  },
+  {
+   "module": "js/i18n/deferredMessages.js",
+   "bytes": 723
   },
   {
    "module": "js/data/exoplanetSystems.js",
@@ -347,15 +339,19 @@
   },
   {
    "module": "js/lesson/barycenter.js",
-   "bytes": 636
+   "bytes": 634
+  },
+  {
+   "module": "js/data/tidePresets.js",
+   "bytes": 623
+  },
+  {
+   "module": "js/instrumentGate.js",
+   "bytes": 605
   },
   {
    "module": "js/data/trappist1.js",
    "bytes": 593
-  },
-  {
-   "module": "js/welcomeGate.js",
-   "bytes": 584
   },
   {
    "module": "js/exportBridge.js",
@@ -364,10 +360,6 @@
   {
    "module": "js/blackHole/appearance.js",
    "bytes": 499
-  },
-  {
-   "module": "js/i18n/deferredMessages.js",
-   "bytes": 478
   },
   {
    "module": "js/data/scenarioTags.js",
@@ -382,20 +374,16 @@
    "bytes": 313
   },
   {
+   "module": "js/timestep.js",
+   "bytes": 255
+  },
+  {
    "module": "js/sonify/law.js",
-   "bytes": 244
+   "bytes": 240
   },
   {
    "module": "js/constants.js",
    "bytes": 236
-  },
-  {
-   "module": "js/timestep.js",
-   "bytes": 233
-  },
-  {
-   "module": "js/listeners.js",
-   "bytes": 200
   },
   {
    "module": "js/stellar/mainSequence.js",

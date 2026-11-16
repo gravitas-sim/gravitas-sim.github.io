@@ -42,13 +42,13 @@ import { announce } from './notify.js';
 import { formatNumber } from './format.js';
 import { t, onLocaleChange } from './i18n/index.js';
 import { registerShortcut, nudgeScale } from './shortcuts.js';
-import { glyphMarkup } from './inspectorView.js';
+import { glyphMarkup } from './objectGlyphs.js';
 import {
   toolsPointerDown,
   toolsPointerMove,
   toolsPointerUp,
 } from './sandboxTools.js';
-import { showObjectInspector, hideObjectInspector } from './inspectorWindow.js';
+import { showObjectInspector, hideObjectInspector } from './inspectorGate.js';
 import { worldToScreen, debugLog } from './utils.js';
 import { resetFollowCamera } from './followCamera.js';
 import {

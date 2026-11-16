@@ -105,7 +105,7 @@ import {
 } from './shareState.js';
 import { generateStarfield } from './render.js';
 import { stopSignalAudio } from './soundPanel.js';
-import { hideObjectInspector } from './inspectorWindow.js';
+import { hideObjectInspector } from './inspectorGate.js';
 import {
   constructBody,
   typeName,

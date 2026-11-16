@@ -25,7 +25,10 @@ import {
   loadInvestigation,
 } from '../js/data/investigations/registry.js';
 import { LAZY_FAMILIES } from '../js/widgets.js';
-import { familiesInScript } from '../tools/instrument-families.mjs';
+import {
+  familiesInScript,
+  modulesInScript,
+} from '../tools/instrument-families.mjs';
 
 const DIST = process.env.GRAVITAS_E2E_TARGET === 'dist';
 
@@ -684,5 +687,97 @@ test.describe('offline, with the family precached', () => {
       await advanceTo(page, 2);
     }
     await expectDrawn(page);
+  });
+});
+
+// -----------------------------------------------------------------------------
+// The first screen does not fetch what only a gesture needs
+// -----------------------------------------------------------------------------
+// Three groups of the sandbox are fetched at their first use: the inspector
+// card (the first selected body), the Settings panel (the first press of
+// Settings) and the rotation curve panel (the first press of its rail button).
+// Held from the page: none is fetched by Home or by a lesson, each is fetched
+// by its own gesture and by no other, and each then works. The import graph is
+// held by tests/firstUseClosure.test.js.
+// -----------------------------------------------------------------------------
+const FIRST_USE = {
+  inspector: ['js/inspectorWindow.js', 'js/inspectorView.js'],
+  settings: ['js/settingsPanel.js'],
+  rotationCurve: ['js/rotationCurve.js'],
+};
+
+/** Every application module the page has asked for, as it asks. */
+function recordModules(page) {
+  const seen = new Set();
+  page.on('request', req => {
+    if (req.resourceType() !== 'script') return;
+    for (const m of modulesInScript(req.url(), SERVED)) seen.add(m);
+  });
+  const groups = () =>
+    Object.entries(FIRST_USE)
+      .filter(([, mods]) => mods.some(m => seen.has(m)))
+      .map(([name]) => name)
+      .sort();
+  return async () => {
+    await page.waitForLoadState('networkidle');
+    return groups();
+  };
+}
+
+test.describe('the sandbox fetches each first-use group at its gesture', () => {
+  // Home's own first screen, with the front door passed: both targets.
+  test('Home fetches none of them', async ({ page }) => {
+    const fetched = recordModules(page);
+    await page.addInitScript(() => {
+      try {
+        localStorage.setItem('gravitas_welcome_seen_v1', '1');
+      } catch {
+        /* the sandbox still opens */
+      }
+    });
+    await page.goto('/', { waitUntil: 'domcontentloaded' });
+    await expect(page.locator('#settingsBtn')).toBeVisible({ timeout: 60_000 });
+    expect(await fetched()).toEqual([]);
+  });
+
+  test('a lesson fetches none of them', async ({ page }) => {
+    const fetched = recordModules(page);
+    await openLesson(page, 'keplers-laws');
+    expect(await fetched()).toEqual([]);
+  });
+
+  test('each is fetched by its own gesture, and then works', async ({
+    page,
+    app,
+  }) => {
+    // Selecting a body goes through the application's source modules, which a
+    // bundle does not publish; the other two gestures are plain presses.
+    const fetched = recordModules(page);
+    await app.boot();
+    if (!DIST) {
+      await app.loadScenario('solar-system');
+      await app.waitForFrames(10);
+    }
+
+    await app.railControl('settingsBtn');
+    await page.locator('#settingsBtn').click();
+    await expect(page.locator('#settingsPanel')).toBeVisible();
+    await expect(page.locator('#settingsApply')).toBeVisible();
+    expect(await fetched()).toEqual(['settings']);
+    await page.locator('#settingsCancel').click();
+    await expect(page.locator('#settingsPanel')).toBeHidden();
+
+    await app.openPanel('toggleRotationCurve', 'rotationCurveContainer');
+    await expect(page.locator('#toggleRotationCurve')).toHaveAttribute(
+      'aria-pressed',
+      'true'
+    );
+    expect(await fetched()).toEqual(['rotationCurve', 'settings']);
+
+    if (DIST) return;
+    await app.selectFirstObject('StarObject');
+    await expect(page.locator('#objectInspector')).toBeVisible();
+    await expect(page.locator('#inspectorContent')).not.toBeEmpty();
+    expect(await fetched()).toEqual(['inspector', 'rotationCurve', 'settings']);
   });
 });

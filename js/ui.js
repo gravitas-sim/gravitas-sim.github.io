@@ -12,15 +12,6 @@ import {
   EV_SETTINGS_APPLIED,
 } from './names.js';
 import { SPACE_OBJECT_NAMES } from './data/objectNames.js';
-import {
-  getBlackHoleInfo,
-  getStarInfo,
-  getPlanetInfo,
-  getGasGiantInfo,
-  getAsteroidInfo,
-  getNeutronStarInfo,
-  getWhiteDwarfInfo,
-} from './inspectorInfo.js';
 import { SCENARIO_INFO } from './data/scenarioInfo.js';
 
 import { onLocaleChange } from './i18n/index.js';
@@ -52,8 +43,8 @@ import {
   inspectorTypeFor,
   setInspectorSuppressed,
   setupOverlayMinimize,
-  wireInspectorControls,
-} from './inspectorWindow.js';
+  setupReferenceFrameControl,
+} from './inspectorGate.js';
 import {
   initPlacement,
   initObjectPicker,
@@ -414,16 +405,7 @@ import {
   registerCommands,
 } from './appState.js';
 import { resetFollowCamera } from './followCamera.js';
-import {
-  localSettings,
-  setLocalSettings,
-  getPendingCourseLevel,
-  fetchSettingsHelp,
-  levelHintText,
-  buildSettingsMenu,
-  showBHMassesModal,
-  hideBHMassesModal,
-} from './settingsPanel.js';
+import { setPlaying } from './controls.js';
 
 // Immediately hide object inspector when module loads
 if (typeof document !== 'undefined') {
@@ -508,7 +490,8 @@ onLocaleChange(() => {
     if (
       !document.getElementById('settingsPanel')?.classList.contains('hidden')
     ) {
-      buildSettingsMenu();
+      // Open means loaded: the panel cannot be seen before its module is here.
+      settingsModule?.buildSettingsMenu();
     }
   } catch {
     /* the panel is optional chrome */
@@ -544,8 +527,9 @@ onLocaleChange(() => {
 
 initPlacement({ canvas });
 
-// The inspector header buttons and the resize handler (js/inspectorWindow.js).
-wireInspectorControls();
+// The rail's reference-frame selector. The inspector card's own buttons are
+// wired when its code arrives (js/inspectorGate.js).
+setupReferenceFrameControl();
 
 /**
  * Settings is one dialog with one way in and one way out.
@@ -569,6 +553,21 @@ const settingsPanel = () => document.getElementById('settingsPanel');
 let dialogModule = null;
 const dialog = async () => (dialogModule ??= await import('./dialog.js'));
 
+/**
+ * The panel's own code (the grid builder, the search, the help text, the black
+ * hole masses dialog), fetched with the dialog machinery the first time
+ * Settings is opened. Everything below that reads it does so after that open,
+ * or through `?.`, so a press that has not finished loading does nothing yet.
+ */
+let settingsModule = null;
+const settingsCode = async () => {
+  if (!settingsModule) {
+    settingsModule = await import('./settingsPanel.js');
+    settingsModule.setSettingsServices({ pause: () => setPlaying(false) });
+  }
+  return settingsModule;
+};
+
 /** Open, asked of the DOM rather than of a module that may not be here yet. */
 const settingsOpen = () => settingsPanel()?.hidden === false;
 
@@ -578,19 +577,29 @@ let pausedBeforeSettings = false;
 async function openSettings() {
   const panel = settingsPanel();
   if (!panel || settingsOpen()) return;
-  const { openDialog } = await dialog();
+  const [{ openDialog }, panelCode] = await Promise.all([
+    dialog(),
+    settingsCode(),
+  ]);
+  // The first press waited for the code; a second press that arrived meanwhile
+  // must not open it twice.
+  if (settingsOpen()) return;
   // Rebuilt from SETTINGS every time, so nothing staged in a previous visit
   // and then abandoned can leak into this one.
-  buildSettingsMenu();
+  panelCode.buildSettingsMenu();
   pausedBeforeSettings = state.paused;
   state.paused = true;
   // The level's description arrives while the reader looks. Written into its
   // one line rather than registered: registering repaints the panel, and a
   // repaint now would take the focus the dialog is about to place.
-  fetchSettingsHelp()
+  panelCode
+    .fetchSettingsHelp()
     .then(() => {
       const hint = document.getElementById('settingsCourseLevelHint');
-      if (hint) hint.textContent = levelHintText(getPendingCourseLevel());
+      if (hint)
+        hint.textContent = panelCode.levelHintText(
+          panelCode.getPendingCourseLevel()
+        );
     })
     .catch(() => {});
   openDialog(panel, {
@@ -660,6 +669,9 @@ const changedRebuildKeys = next =>
   );
 
 document.getElementById('settingsApply').onclick = () => {
+  // Reachable only from the open panel, which is only open once its code is.
+  if (!settingsModule) return;
+  const { localSettings, getPendingCourseLevel } = settingsModule;
   const next = JSON.parse(JSON.stringify(localSettings));
   const needsRebuild = changedRebuildKeys(next);
   const starfieldChanged =
@@ -713,8 +725,9 @@ document.getElementById('settingsApply').onclick = () => {
   syncPlacementAvailability();
 };
 document.getElementById('settingsReset').onclick = () => {
-  setLocalSettings(JSON.parse(JSON.stringify(DEFAULT_SETTINGS)));
-  buildSettingsMenu({ keep: true });
+  if (!settingsModule) return;
+  settingsModule.setLocalSettings(JSON.parse(JSON.stringify(DEFAULT_SETTINGS)));
+  settingsModule.buildSettingsMenu({ keep: true });
 };
 document.getElementById('settingsCancel').onclick = () =>
   dismissSettings('cancel');
@@ -725,9 +738,9 @@ if (settingsCloseChip)
 initCaptureMeasure({ canvas, starfieldCanvas });
 // BH Masses Modal event handlers
 document.getElementById('bhMassesDone').onclick = () =>
-  hideBHMassesModal('done');
+  settingsModule?.hideBHMassesModal('done');
 document.getElementById('bhMassesCloseChip').onclick = () =>
-  hideBHMassesModal('cancel');
+  settingsModule?.hideBHMassesModal('cancel');
 
 initObjectPicker();
 
@@ -1110,20 +1123,10 @@ registerCommands({
 export {
   showObjectInspector,
   hideObjectInspector,
-  getBlackHoleInfo,
-  getStarInfo,
-  getPlanetInfo,
-  getGasGiantInfo,
-  getAsteroidInfo,
-  getNeutronStarInfo,
-  getWhiteDwarfInfo,
-  showBHMassesModal,
-  hideBHMassesModal,
   show_scenario_info,
   show_enhanced_scenario_info,
   apply_preset,
   initialize_simulation,
-  buildSettingsMenu,
   save_simulation_state,
   load_simulation_state,
   isAreaSweepSuppressed,
@@ -1145,7 +1148,6 @@ export {
   state,
   current_scenario_name,
   DEFAULT_SETTINGS,
-  localSettings,
 };
 // Tutorial lives in js/tutorial.js - see initTutorial(), wired from main.js.
 

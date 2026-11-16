@@ -23,7 +23,7 @@
 import { forEachRecordedFrame, recordedExtent } from './timeline.js';
 import { lightCurveSeries, transitAnalysis } from './lightCurve.js';
 import { radialVelocitySurvey } from './radialVelocity.js';
-import { rotationCurveState } from './rotationCurve.js';
+import { rotationCurveState } from './rotationCurveState.js';
 import { timeUnitSeconds } from './units.js';
 import { SOLAR_MASS_UNIT } from './physics.js';
 import { G_SI, SOLAR_MASS_KG, AU_M } from './blackHolePhysics.js';

@@ -13,7 +13,7 @@ import { watchForBench } from './experimentsBridge.js';
 import { watchForNotebook } from './notebookBridge.js';
 import { initLightCurve } from './lightCurve.js';
 import { initRadialVelocity } from './radialVelocity.js';
-import { initRotationCurve } from './rotationCurve.js';
+import { initRotationCurve } from './instrumentGate.js';
 import { initAstrometry } from './astrometry.js';
 import { watchForPauseAtEvent } from './pauseAtEventBridge.js';
 import { initScenarioPanels } from './placement.js';
@@ -32,7 +32,7 @@ import {
   watchForAssignments,
 } from './investigationsLoader.js';
 import { initExportBridge } from './exportBridge.js';
-import { watchForManeuver } from './inspectorWindow.js';
+import { watchForManeuver } from './inspectorGate.js';
 import { watchForInvestigations } from './investigationsLoader.js';
 import { shouldShowWelcome } from './welcomeGate.js';
 

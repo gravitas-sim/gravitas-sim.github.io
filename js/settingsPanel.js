@@ -21,7 +21,6 @@ import {
   motionPreference,
   setMotionPreference,
 } from './quality.js';
-import { setPlaying } from './controls.js';
 import {
   COURSE_LEVELS,
   SETTING_SECTIONS,
@@ -452,6 +451,18 @@ const getSettingTooltip = async (key, label) => {
 };
 
 // Motion: filled by its lazy module; its own scope, so a slow file holds only the row.
+/**
+ * What the panel asks of the transport, handed over by js/ui.js when this
+ * module is fetched (this module does not import the transport, which keeps
+ * the start-up chunks the shape they had before the panel was fetched late).
+ */
+let services = { pause: () => {} };
+
+/** @param {{pause: Function}} given - The transport's pause */
+export const setSettingsServices = given => {
+  services = given;
+};
+
 const addMotionRow = grid => {
   const row = document.createElement('div');
   row.className = 'settings-level';
@@ -463,7 +474,7 @@ const addMotionRow = grid => {
       modes: MOTION_MODES,
       preference: motionPreference,
       setPreference: setMotionPreference,
-      pause: () => setPlaying(false),
+      pause: () => services.pause(),
     })
   );
 };
