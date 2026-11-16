@@ -389,8 +389,7 @@ export function restoreProgress(backup, lesson) {
         continue;
       }
       const to = resolve.get(parsed.head);
-      // Only a step the lesson retired is kept. An assignment is a subset, so
-      // an unassigned step is not retired and its answer is not carried.
+      // Only a retired step is kept: an unassigned one is not carried.
       if (to === undefined && !byPosition && isRetired(parsed.head)) {
         gone[`${lessonId}:${parsed.head}${parsed.suffix}`] = value;
         continue;

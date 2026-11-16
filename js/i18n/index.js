@@ -222,15 +222,13 @@ const listeners = new Set();
 
 /**
  * The locale last asked for, which `current` becomes once its fetches land;
- * undefined until the first change (deferredMessages.js reads it, and
- * guesses from the stored choice until then).
+ * undefined until the first change (deferredMessages.js reads it).
  *
  * @type {string|undefined}
  */
 export let targetLocale;
 /** Work a language change waits for, given the new locale (deferredMessages). */
 let prepare;
-/** Counts language changes, so a slow one cannot land after a later one. */
 let sequence = 0;
 
 /** @param {(locale: string) => (Promise<void>|void|number)} fn - Set the change's preparer */
@@ -512,9 +510,9 @@ export function num(n) {
  * touch the simulation, the scenario, the seed or the share state. Every
  * listener here redraws text; none of them rebuilds a world.
  *
- * The catalog is fetched first when it is not already in memory, so the
- * interface never repaints into a half-loaded language. Callers that do not
- * await simply see the change land a tick later.
+ * The catalog is fetched first, so the interface never repaints into a
+ * half-loaded language. A language that fails to load is not applied, and a
+ * newer call overtakes an older one still waiting.
  *
  * @param {string} id - Locale id
  * @param {Object} [opts]
@@ -525,9 +523,7 @@ export async function setLocale(id, { persist = true } = {}) {
   let next = isSupportedLocale(id) ? id : DEFAULT_LOCALE;
   const mine = ++sequence;
   targetLocale = next;
-  // Fetched together; the old strings stay on screen until both are in, so the
-  // listeners below repaint into a complete language. Nothing is awaited when
-  // there is nothing to fetch: English applies synchronously at start-up.
+  // The old strings stay on screen until both fetches land.
   let ok = false;
   try {
     const extra = prepare?.(next);
@@ -535,9 +531,8 @@ export async function setLocale(id, { persist = true } = {}) {
     if (extra) await extra;
     ok = next === DEFAULT_LOCALE || baseLoaded.has(next);
   } catch {
-    /* stays on the language in use */
+    /* none */
   }
-  // A newer call has taken over; applying this one would undo it.
   if (mine !== sequence) return current;
   if (!ok) targetLocale = next = current;
   const changed = next !== current;
@@ -573,12 +568,8 @@ export function onLocaleChange(fn) {
 }
 
 /**
- * The locale to open in, before any listener exists.
- *
- * A stored choice wins. Failing that the browser's language is honored only
- * when this build actually ships it, which keeps a French or Japanese visitor
- * in English rather than in a language they did not ask for and cannot read
- * any better. Region subtags are ignored: es-MX and es-419 are both `es` here.
+ * The locale to open in, before any listener exists: a stored choice, else the
+ * browser's language when this build ships it. Region subtags are ignored.
  *
  * @returns {string} A locale id
  */
@@ -598,10 +589,8 @@ export function preferredLocale() {
 
 /**
  * Restore the saved or preferred language. Call once, before anything paints.
- *
- * English applies synchronously, so the first paint is never in the id-name
- * fallback. A stored non-English choice is fetched and applied a moment later,
- * behind the splash, which is up for three and a half seconds.
+ * English applies synchronously; another language is fetched and applied a
+ * moment later, behind the splash.
  *
  * @returns {Promise<string>} The locale finally applied
  */

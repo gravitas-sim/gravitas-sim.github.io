@@ -249,7 +249,7 @@ function installLists(rebuilt, maxId) {
     list.length = 0;
     for (const o of next) list.push(o);
   }
-  // Never below the live counter: debris is not in these lists.
+  // Debris is not in these lists: never below the live counter.
   setPhysicsObjectCounter(Math.max(PhysicsObject_id_counter, maxId + 1));
   return changed;
 }
