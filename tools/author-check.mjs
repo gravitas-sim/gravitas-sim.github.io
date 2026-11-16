@@ -42,6 +42,7 @@ import {
   RULE_ID as FORWARD_RULE,
   forwardFindings,
 } from './authoring/forwardSources.mjs';
+import { STANDARD_RULES, ratchetFindings } from './lesson-standard.mjs';
 import {
   generate as generateLessonText,
   RULE_ID as STEPS_RULE,
@@ -77,6 +78,8 @@ if (has('--rules')) {
     // Node-only rule: kept out of js/authoring/rules.js, which ships on the Composer route
     [MODEL_RULE]: MODEL_RULE_DESCRIPTION,
     [STEPS_RULE]: STEPS_RULE_DESCRIPTION,
+    // Node-only and ratcheted: a lesson may not carry more than its record
+    ...STANDARD_RULES,
   })) {
     const family = id.split('/')[0];
     if (!groups.has(family)) groups.set(family, []);
@@ -170,6 +173,13 @@ for (const f of (await generateLessonText(undefined, undefined, text => text))
     message: f.message,
   });
 }
+
+// The lesson standard (tools/authoring/standardRules.mjs): the patterns the
+// audits found by hand, each held to its committed count per lesson in
+// tools/lesson-standard-ratchet.json. A count that rises is an error, and so is
+// one that fell without the record being lowered. `node tools/lesson-standard.mjs
+// --list` names every finding by lesson and step.
+findings.push(...(await ratchetFindings(inputs)));
 
 const only = value('lesson');
 if (only) {

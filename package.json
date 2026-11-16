@@ -228,6 +228,7 @@
     "author:check": "node tools/author-check.mjs",
     "author:strict": "node tools/author-check.mjs --warnings",
     "author:rules": "node tools/author-check.mjs --rules",
+    "author:standard": "node tools/lesson-standard.mjs",
     "author:new": "node tools/new-investigation.mjs",
     "author:walk": "playwright test e2e/authorWalk.spec.js --project=chromium",
     "check:architecture": "node tools/check-architecture.mjs",

@@ -4,6 +4,8 @@
   "note": "Hand-written and human-reviewed. One central experiment per investigation: the object a reader acts on, the control they move, the quantity that comes back, where the evidence lands, the steps of the loop, and the browser test that drives it end to end. `npm run audit:scene:check` refuses to pass if any of those six names something the lesson no longer has. It cannot judge whether the experiment is a good one, and does not claim to. Nothing here is a claim about learning gains: no study has been run.",
   "objectForms": "A role the lesson binds or stages, the literal \"the selected body\", or \"panel:<widget-id>\" for a lesson whose central experiment is a panel model with nothing on the canvas. It can also be \"compute:<notebook id>\" for a lesson whose experiment is run on the compute page; some step must then declare the same notebook with `compute: \"<notebook id>\"` (Roadmap II Prompt 102).",
   "controlForms": "\"<widget-id>/<control-id>\" is checked against the registry. Anything else is prose, for an affordance that lives in the application's own panels rather than in a lesson widget.",
+  "decisionForms": "Acceptance map II. `decision` is what the student decides in the lesson's measuring (which object, which moment, which setting, which comparison, when to stop: Q4 of the lesson standard), in one sentence. \"unreviewed\" means no one has read the lesson against Q4 yet; it is accepted and counted, and the count may only fall (tools/lesson-standard-ratchet.json, `acceptance/decision-unreviewed`). \"none\" is for a lesson with no measure step, and a lesson with one may not use it. `npm run audit:scene:check` refuses a missing or empty `decision` and a missing `leakFree`.",
+  "leakFreeForm": "`leakFree` is true when none of the leak rules finds anything in the lesson (leak/instrument-at-answer, leak/prediction-stated-earlier, leak/question-states-answer of tools/authoring/standardRules.mjs). It is derived: node tools/lesson-standard.mjs --record writes it, and author:check fails when it disagrees with the counts. It says no pattern was found, not that no answer is shown.",
   "lessons": {
     "keplers-laws": {
       "centralExperimentId": "ce.keplers-laws",
@@ -17,7 +19,9 @@
         "fast-and-slow-in-numbers",
         "why-the-speed-changes"
       ],
-      "evidenceFrom": "engine"
+      "evidenceFrom": "engine",
+      "decision": "unreviewed",
+      "leakFree": false
     },
     "retrograde-motion": {
       "centralExperimentId": "ce.retrograde-motion",
@@ -27,7 +31,9 @@
       "evidence": "notebook-fields",
       "test": "e2e/centralExperiments.spec.js",
       "loop": ["before-you-look", "catch-the-reversal", "say-it-in-your-own"],
-      "evidenceFrom": "engine"
+      "evidenceFrom": "engine",
+      "decision": "unreviewed",
+      "leakFree": true
     },
     "transit-photometry": {
       "centralExperimentId": "ce.transit-photometry",
@@ -41,7 +47,9 @@
         "measure-the-dip",
         "what-the-method-misses"
       ],
-      "evidenceFrom": "engine"
+      "evidenceFrom": "engine",
+      "decision": "unreviewed",
+      "leakFree": true
     },
     "orbital-energy": {
       "centralExperimentId": "ce.orbital-energy",
@@ -56,7 +64,9 @@
         "write-down-the-dividing-speed",
         "where-is-the-line"
       ],
-      "evidenceFrom": "model"
+      "evidenceFrom": "model",
+      "decision": "unreviewed",
+      "leakFree": true
     },
     "weighing-stars": {
       "centralExperimentId": "ce.weighing-stars",
@@ -71,7 +81,9 @@
         "now-weigh-each-one",
         "say-how-the-weighing-worked"
       ],
-      "evidenceFrom": "engine"
+      "evidenceFrom": "engine",
+      "decision": "unreviewed",
+      "leakFree": false
     },
     "black-holes": {
       "centralExperimentId": "ce.black-holes",
@@ -85,7 +97,9 @@
         "three-measurements",
         "say-what-scales-with-what"
       ],
-      "evidenceFrom": "model"
+      "evidenceFrom": "model",
+      "decision": "none",
+      "leakFree": true
     },
     "radial-velocity": {
       "centralExperimentId": "ce.radial-velocity",
@@ -99,7 +113,9 @@
         "read-k-off-the-panel",
         "what-would-you-still-want"
       ],
-      "evidenceFrom": "model"
+      "evidenceFrom": "model",
+      "decision": "unreviewed",
+      "leakFree": true
     },
     "goldilocks-question": {
       "centralExperimentId": "ce.goldilocks-question",
@@ -114,7 +130,9 @@
         "write-the-three-down",
         "what-the-graph-says"
       ],
-      "evidenceFrom": "model"
+      "evidenceFrom": "model",
+      "decision": "unreviewed",
+      "leakFree": true
     },
     "missing-mass": {
       "centralExperimentId": "ce.missing-mass",
@@ -128,7 +146,9 @@
         "measure-the-real-curve",
         "does-the-curve-decide"
       ],
-      "evidenceFrom": "engine"
+      "evidenceFrom": "engine",
+      "decision": "unreviewed",
+      "leakFree": true
     },
     "tides": {
       "centralExperimentId": "ce.tides",
@@ -142,7 +162,9 @@
         "four-distances",
         "say-it-in-your-own"
       ],
-      "evidenceFrom": "model"
+      "evidenceFrom": "model",
+      "decision": "unreviewed",
+      "leakFree": false
     },
     "butterfly-effect": {
       "centralExperimentId": "ce.butterfly-effect",
@@ -157,7 +179,9 @@
         "write-down-what-you-measured",
         "how-long-does-a-prediction"
       ],
-      "evidenceFrom": "engine"
+      "evidenceFrom": "engine",
+      "decision": "unreviewed",
+      "leakFree": false
     },
     "when-orbits-lock": {
       "centralExperimentId": "ce.when-orbits-lock",
@@ -171,7 +195,9 @@
         "record-the-laplace-libration",
         "say-what-a-libration-shows"
       ],
-      "evidenceFrom": "engine"
+      "evidenceFrom": "engine",
+      "decision": "unreviewed",
+      "leakFree": true
     },
     "detect-this-planet": {
       "centralExperimentId": "ce.detect-this-planet",
@@ -185,7 +211,9 @@
         "write-down-what-schedule-b",
         "the-limits-of-finding-nothing"
       ],
-      "evidenceFrom": "model"
+      "evidenceFrom": "model",
+      "decision": "unreviewed",
+      "leakFree": false
     },
     "design-the-schedule": {
       "centralExperimentId": "ce.design-the-schedule",
@@ -200,7 +228,9 @@
         "read-the-comparison",
         "say-what-the-schedule-decided"
       ],
-      "evidenceFrom": "engine"
+      "evidenceFrom": "engine",
+      "decision": "unreviewed",
+      "leakFree": true
     },
     "binary-star-planets": {
       "centralExperimentId": "ce.binary-star-planets",
@@ -215,7 +245,9 @@
         "read-the-sweep",
         "what-the-sweep-shows"
       ],
-      "evidenceFrom": "engine"
+      "evidenceFrom": "engine",
+      "decision": "unreviewed",
+      "leakFree": false
     },
     "gravity-assist": {
       "centralExperimentId": "ce.gravity-assist",
@@ -230,7 +262,9 @@
         "write-down-both-columns",
         "explain-the-sweep"
       ],
-      "evidenceFrom": "engine"
+      "evidenceFrom": "engine",
+      "decision": "unreviewed",
+      "leakFree": true
     },
     "hohmann-transfer": {
       "centralExperimentId": "ce.hohmann-transfer",
@@ -245,7 +279,9 @@
         "read-the-arc",
         "say-why-sideways"
       ],
-      "evidenceFrom": "engine"
+      "evidenceFrom": "engine",
+      "decision": "unreviewed",
+      "leakFree": true
     },
     "lagrange-points": {
       "centralExperimentId": "ce.lagrange-points",
@@ -259,7 +295,9 @@
         "read-the-constant",
         "say-what-jacobi-cannot-tell-you"
       ],
-      "evidenceFrom": "engine"
+      "evidenceFrom": "engine",
+      "decision": "unreviewed",
+      "leakFree": false
     },
     "what-is-a-gravitational-wave": {
       "centralExperimentId": "ce.what-is-a-gravitational-wave",
@@ -269,7 +307,9 @@
       "evidence": "notebook-fields",
       "test": "e2e/centralExperiments.spec.js",
       "loop": ["a-sphere-that-breathes", "change-the-shape", "the-chirp"],
-      "evidenceFrom": "model"
+      "evidenceFrom": "model",
+      "decision": "unreviewed",
+      "leakFree": true
     },
     "listening-to-spacetime": {
       "centralExperimentId": "ce.listening-to-spacetime",
@@ -284,7 +324,9 @@
         "measure-time-in-band",
         "explain-the-chirp"
       ],
-      "evidenceFrom": "model"
+      "evidenceFrom": "model",
+      "decision": "unreviewed",
+      "leakFree": false
     },
     "a-universe-of-stars": {
       "centralExperimentId": "ce.a-universe-of-stars",
@@ -298,7 +340,9 @@
         "measure-the-radius-ratio",
         "what-the-trend-covers"
       ],
-      "evidenceFrom": "data"
+      "evidenceFrom": "data",
+      "decision": "unreviewed",
+      "leakFree": false
     },
     "lives-of-stars": {
       "centralExperimentId": "ce.lives-of-stars",
@@ -308,7 +352,9 @@
       "evidence": "instrument-capture",
       "test": "e2e/centralExperiments.spec.js",
       "loop": ["predict-direction", "measure-the-giant", "why-iron-stops-it"],
-      "evidenceFrom": "data"
+      "evidenceFrom": "data",
+      "decision": "unreviewed",
+      "leakFree": false
     },
     "twelve-nights": {
       "centralExperimentId": "ce.twelve-nights",
@@ -323,7 +369,9 @@
         "measure-the-window-power",
         "why-not-one-day"
       ],
-      "evidenceFrom": "model"
+      "evidenceFrom": "model",
+      "decision": "unreviewed",
+      "leakFree": true
     },
     "power-law-gravity": {
       "centralExperimentId": "ce.power-law-gravity",
@@ -337,7 +385,9 @@
         "first-look-at-the-orbit",
         "record-the-precession"
       ],
-      "evidenceFrom": "model"
+      "evidenceFrom": "model",
+      "decision": "unreviewed",
+      "leakFree": true
     },
     "color-and-temperature": {
       "centralExperimentId": "ce.color-and-temperature",
@@ -347,7 +397,9 @@
       "evidence": "notebook-fields",
       "test": "e2e/centralExperiments.spec.js",
       "loop": ["predict-the-peak", "three-peaks"],
-      "evidenceFrom": "model"
+      "evidenceFrom": "model",
+      "decision": "unreviewed",
+      "leakFree": true
     },
     "the-turning-sky": {
       "centralExperimentId": "ce.the-turning-sky",
@@ -357,7 +409,9 @@
       "evidence": "notebook-fields",
       "test": "e2e/centralExperiments.spec.js",
       "loop": ["predict-tomorrow", "rise-shift"],
-      "evidenceFrom": "model"
+      "evidenceFrom": "model",
+      "decision": "unreviewed",
+      "leakFree": true
     },
     "the-sun-through-the-year": {
       "centralExperimentId": "ce.the-sun-through-the-year",
@@ -367,7 +421,9 @@
       "evidence": "notebook-fields",
       "test": "e2e/centralExperiments.spec.js",
       "loop": ["predict-noon-height", "three-noons"],
-      "evidenceFrom": "model"
+      "evidenceFrom": "model",
+      "decision": "unreviewed",
+      "leakFree": true
     },
     "phases-and-eclipses": {
       "centralExperimentId": "ce.phases-and-eclipses",
@@ -377,7 +433,9 @@
       "evidence": "notebook-fields",
       "test": "e2e/centralExperiments.spec.js",
       "loop": ["predict-the-quarter", "four-phases"],
-      "evidenceFrom": "model"
+      "evidenceFrom": "model",
+      "decision": "unreviewed",
+      "leakFree": true
     },
     "wanderers-on-the-sky": {
       "centralExperimentId": "ce.wanderers-on-the-sky",
@@ -387,7 +445,9 @@
       "evidence": "notebook-fields",
       "test": "e2e/centralExperiments.spec.js",
       "loop": ["predict-the-loop", "retrograde-window"],
-      "evidenceFrom": "model"
+      "evidenceFrom": "model",
+      "decision": "unreviewed",
+      "leakFree": true
     },
     "plan-a-night": {
       "centralExperimentId": "ce.plan-a-night",
@@ -397,7 +457,9 @@
       "evidence": "notebook-fields",
       "test": "e2e/centralExperiments.spec.js",
       "loop": ["predict-the-dark", "dark-hours"],
-      "evidenceFrom": "model"
+      "evidenceFrom": "model",
+      "decision": "unreviewed",
+      "leakFree": true
     },
     "lines-and-motion": {
       "centralExperimentId": "ce.lines-and-motion",
@@ -407,7 +469,9 @@
       "evidence": "notebook-fields",
       "test": "e2e/centralExperiments.spec.js",
       "loop": ["predict-the-shift", "measure-one-shift"],
-      "evidenceFrom": "model"
+      "evidenceFrom": "model",
+      "decision": "unreviewed",
+      "leakFree": true
     },
     "what-a-spectrum-is-made-of": {
       "centralExperimentId": "ce.what-a-spectrum-is-made-of",
@@ -417,7 +481,9 @@
       "evidence": "notebook-fields",
       "test": "e2e/centralExperiments.spec.js",
       "loop": ["predict-the-cloud", "measure-two-clouds"],
-      "evidenceFrom": "model"
+      "evidenceFrom": "model",
+      "decision": "unreviewed",
+      "leakFree": false
     },
     "the-suns-motion": {
       "centralExperimentId": "ce.the-suns-motion",
@@ -427,7 +493,9 @@
       "evidence": "notebook-fields",
       "test": "e2e/centralExperiments.spec.js",
       "loop": ["predict-the-mean", "measure-the-sun"],
-      "evidenceFrom": "model"
+      "evidenceFrom": "model",
+      "decision": "unreviewed",
+      "leakFree": false
     },
     "the-rotating-disk": {
       "centralExperimentId": "ce.the-rotating-disk",
@@ -437,7 +505,9 @@
       "evidence": "notebook-fields",
       "test": "e2e/centralExperiments.spec.js",
       "loop": ["predict-the-shape", "measure-a-and-b"],
-      "evidenceFrom": "model"
+      "evidenceFrom": "model",
+      "decision": "unreviewed",
+      "leakFree": true
     },
     "cluster-membership": {
       "centralExperimentId": "ce.cluster-membership",
@@ -447,7 +517,9 @@
       "evidence": "notebook-fields",
       "test": "e2e/centralExperiments.spec.js",
       "loop": ["predict-the-clump", "measure-the-cluster"],
-      "evidenceFrom": "model"
+      "evidenceFrom": "model",
+      "decision": "unreviewed",
+      "leakFree": true
     },
     "who-gets-counted": {
       "centralExperimentId": "ce.who-gets-counted",
@@ -457,7 +529,9 @@
       "evidence": "notebook-fields",
       "test": "e2e/centralExperiments.spec.js",
       "loop": ["predict-what-is-missed", "count-a-shallow-survey"],
-      "evidenceFrom": "model"
+      "evidenceFrom": "model",
+      "decision": "unreviewed",
+      "leakFree": true
     },
     "why-the-bright-ones-win": {
       "centralExperimentId": "ce.why-the-bright-ones-win",
@@ -467,7 +541,9 @@
       "evidence": "notebook-fields",
       "test": "e2e/centralExperiments.spec.js",
       "loop": ["predict-the-shells", "measure-the-shells"],
-      "evidenceFrom": "model"
+      "evidenceFrom": "model",
+      "decision": "unreviewed",
+      "leakFree": true
     },
     "the-completeness-curve": {
       "centralExperimentId": "ce.the-completeness-curve",
@@ -477,7 +553,9 @@
       "evidence": "notebook-fields",
       "test": "e2e/centralExperiments.spec.js",
       "loop": ["predict-the-raw-count", "raw-against-truth"],
-      "evidenceFrom": "model"
+      "evidenceFrom": "model",
+      "decision": "unreviewed",
+      "leakFree": true
     },
     "bending-light": {
       "centralExperimentId": "ce.bending-light",
@@ -487,7 +565,9 @@
       "evidence": "notebook-fields",
       "test": "e2e/centralExperiments.spec.js",
       "loop": ["predict-the-far-ray", "the-far-ray"],
-      "evidenceFrom": "model"
+      "evidenceFrom": "model",
+      "decision": "unreviewed",
+      "leakFree": true
     },
     "einstein-rings-and-arcs": {
       "centralExperimentId": "ce.einstein-rings-and-arcs",
@@ -497,7 +577,9 @@
       "evidence": "notebook-fields",
       "test": "e2e/centralExperiments.spec.js",
       "loop": ["predict-the-ring", "a-star-ring"],
-      "evidenceFrom": "model"
+      "evidenceFrom": "model",
+      "decision": "unreviewed",
+      "leakFree": true
     },
     "a-lens-passing-by": {
       "centralExperimentId": "ce.a-lens-passing-by",
@@ -507,7 +589,9 @@
       "evidence": "notebook-fields",
       "test": "e2e/centralExperiments.spec.js",
       "loop": ["predict-the-peak", "the-peak"],
-      "evidenceFrom": "model"
+      "evidenceFrom": "model",
+      "decision": "unreviewed",
+      "leakFree": true
     },
     "inside-a-star": {
       "centralExperimentId": "ce.inside-a-star",
@@ -517,7 +601,9 @@
       "evidence": "notebook-fields",
       "test": "e2e/centralExperiments.spec.js",
       "loop": ["predict-the-center", "the-suns-center"],
-      "evidenceFrom": "model"
+      "evidenceFrom": "model",
+      "decision": "unreviewed",
+      "leakFree": true
     },
     "scaling-the-main-sequence": {
       "centralExperimentId": "ce.scaling-the-main-sequence",
@@ -527,7 +613,9 @@
       "evidence": "notebook-fields",
       "test": "e2e/centralExperiments.spec.js",
       "loop": ["predict-the-slope", "the-prediction"],
-      "evidenceFrom": "model"
+      "evidenceFrom": "model",
+      "decision": "unreviewed",
+      "leakFree": true
     },
     "the-limit": {
       "centralExperimentId": "ce.the-limit",
@@ -537,7 +625,9 @@
       "evidence": "notebook-fields",
       "test": "e2e/centralExperiments.spec.js",
       "loop": ["predict-the-squeeze", "a-dense-dwarf"],
-      "evidenceFrom": "model"
+      "evidenceFrom": "model",
+      "decision": "unreviewed",
+      "leakFree": true
     },
     "the-beat-of-a-star": {
       "centralExperimentId": "ce.the-beat-of-a-star",
@@ -547,7 +637,9 @@
       "evidence": "notebook-fields",
       "test": "e2e/centralExperiments.spec.js",
       "loop": ["predict-once-a-night", "once-a-night"],
-      "evidenceFrom": "model"
+      "evidenceFrom": "model",
+      "decision": "unreviewed",
+      "leakFree": false
     },
     "leavitts-law": {
       "centralExperimentId": "ce.leavitts-law",
@@ -557,7 +649,9 @@
       "evidence": "notebook-fields",
       "test": "e2e/centralExperiments.spec.js",
       "loop": ["predict-the-trend", "the-calibration"],
-      "evidenceFrom": "model"
+      "evidenceFrom": "model",
+      "decision": "unreviewed",
+      "leakFree": true
     },
     "the-first-rung": {
       "centralExperimentId": "ce.the-first-rung",
@@ -567,7 +661,9 @@
       "evidence": "notebook-fields",
       "test": "e2e/centralExperiments.spec.js",
       "loop": ["predict-the-maser-check", "a-maser-galaxy"],
-      "evidenceFrom": "model"
+      "evidenceFrom": "model",
+      "decision": "unreviewed",
+      "leakFree": true
     },
     "which-kind-of-variable": {
       "centralExperimentId": "ce.which-kind-of-variable",
@@ -577,7 +673,9 @@
       "evidence": "notebook-fields",
       "test": "e2e/centralExperiments.spec.js",
       "loop": ["predict-the-amplitude", "add-the-amplitude"],
-      "evidenceFrom": "model"
+      "evidenceFrom": "model",
+      "decision": "unreviewed",
+      "leakFree": false
     },
     "the-expanding-universe": {
       "centralExperimentId": "ce.the-expanding-universe",
@@ -587,7 +685,9 @@
       "evidence": "notebook-fields",
       "test": "e2e/centralExperiments.spec.js",
       "loop": ["predict-further-out", "a-modern-sample"],
-      "evidenceFrom": "model"
+      "evidenceFrom": "model",
+      "decision": "unreviewed",
+      "leakFree": true
     },
     "standard-candles": {
       "centralExperimentId": "ce.standard-candles",
@@ -597,7 +697,9 @@
       "evidence": "notebook-fields",
       "test": "e2e/centralExperiments.spec.js",
       "loop": ["predict-a-calibration-error", "a-calibration-error"],
-      "evidenceFrom": "model"
+      "evidenceFrom": "model",
+      "decision": "unreviewed",
+      "leakFree": true
     },
     "the-shape-of-expansion": {
       "centralExperimentId": "ce.the-shape-of-expansion",
@@ -607,7 +709,9 @@
       "evidence": "notebook-fields",
       "test": "e2e/centralExperiments.spec.js",
       "loop": ["predict-matter-only", "a-matter-only-universe"],
-      "evidenceFrom": "model"
+      "evidenceFrom": "model",
+      "decision": "unreviewed",
+      "leakFree": true
     },
     "where-galaxies-live": {
       "centralExperimentId": "ce.where-galaxies-live",
@@ -617,7 +721,9 @@
       "evidence": "notebook-fields",
       "test": "e2e/centralExperiments.spec.js",
       "loop": ["predict-the-clumping", "the-clumping"],
-      "evidenceFrom": "model"
+      "evidenceFrom": "model",
+      "decision": "unreviewed",
+      "leakFree": true
     },
     "what-a-ccd-records": {
       "centralExperimentId": "ce.what-a-ccd-records",
@@ -627,7 +733,9 @@
       "evidence": "notebook-fields",
       "test": "e2e/centralExperiments.spec.js",
       "loop": ["predict-the-flat", "what-the-flat-does"],
-      "evidenceFrom": "model"
+      "evidenceFrom": "model",
+      "decision": "unreviewed",
+      "leakFree": true
     },
     "signal-noise-and-exposure": {
       "centralExperimentId": "ce.signal-noise-and-exposure",
@@ -637,7 +745,9 @@
       "evidence": "notebook-fields",
       "test": "e2e/centralExperiments.spec.js",
       "loop": ["predict-four-times", "four-times-longer"],
-      "evidenceFrom": "model"
+      "evidenceFrom": "model",
+      "decision": "unreviewed",
+      "leakFree": true
     },
     "a-variable-star-from-frames": {
       "centralExperimentId": "ce.a-variable-star-from-frames",
@@ -647,7 +757,9 @@
       "evidence": "notebook-fields",
       "test": "e2e/centralExperiments.spec.js",
       "loop": ["predict-the-curve", "the-sine"],
-      "evidenceFrom": "model"
+      "evidenceFrom": "model",
+      "decision": "unreviewed",
+      "leakFree": true
     },
     "integrators-in-practice": {
       "centralExperimentId": "ce.integrators-in-practice",
@@ -657,7 +769,9 @@
       "evidence": "notebook-fields",
       "test": "e2e/centralExperiments.spec.js",
       "loop": ["which-loses-most", "four-drifts", "halve-the-step"],
-      "evidenceFrom": "computation"
+      "evidenceFrom": "computation",
+      "decision": "unreviewed",
+      "leakFree": true
     },
     "extending-an-experiment": {
       "centralExperimentId": "ce.extending-an-experiment",
@@ -671,7 +785,9 @@
         "the-fit",
         "move-the-definition"
       ],
-      "evidenceFrom": "computation"
+      "evidenceFrom": "computation",
+      "decision": "unreviewed",
+      "leakFree": true
     },
     "refitting-a-transit": {
       "centralExperimentId": "ce.refitting-a-transit",
@@ -681,7 +797,9 @@
       "evidence": "notebook-fields",
       "test": "e2e/centralExperiments.spec.js",
       "loop": ["how-close", "the-fit", "hold-the-limb-darkening"],
-      "evidenceFrom": "computation"
+      "evidenceFrom": "computation",
+      "decision": "unreviewed",
+      "leakFree": true
     },
     "two-periodograms": {
       "centralExperimentId": "ce.two-periodograms",
@@ -691,7 +809,9 @@
       "evidence": "notebook-fields",
       "test": "e2e/centralExperiments.spec.js",
       "loop": ["the-tallest-peak", "the-two-periods", "against-the-fit"],
-      "evidenceFrom": "computation"
+      "evidenceFrom": "computation",
+      "decision": "unreviewed",
+      "leakFree": true
     },
     "sampling-a-posterior": {
       "centralExperimentId": "ce.sampling-a-posterior",
@@ -701,7 +821,9 @@
       "evidence": "notebook-fields",
       "test": "e2e/centralExperiments.spec.js",
       "loop": ["how-wide", "the-draws", "did-it-converge"],
-      "evidenceFrom": "computation"
+      "evidenceFrom": "computation",
+      "decision": "unreviewed",
+      "leakFree": true
     },
     "what-is-a-measurement": {
       "centralExperimentId": "ce.what-is-a-measurement",
@@ -711,7 +833,9 @@
       "evidence": "notebook-fields",
       "test": "e2e/centralExperiments.spec.js",
       "loop": ["predict-more-marks", "twenty-marks"],
-      "evidenceFrom": "model"
+      "evidenceFrom": "model",
+      "decision": "unreviewed",
+      "leakFree": true
     },
     "what-does-plus-minus-claim": {
       "centralExperimentId": "ce.what-does-plus-minus-claim",
@@ -721,7 +845,9 @@
       "evidence": "notebook-fields",
       "test": "e2e/centralExperiments.spec.js",
       "loop": ["predict-one-sigma", "coverage-at-one-sigma"],
-      "evidenceFrom": "model"
+      "evidenceFrom": "model",
+      "decision": "unreviewed",
+      "leakFree": false
     },
     "when-the-method-must-refuse": {
       "centralExperimentId": "ce.when-the-method-must-refuse",
@@ -731,7 +857,9 @@
       "evidence": "notebook-fields",
       "test": "e2e/centralExperiments.spec.js",
       "loop": ["predict-the-mass", "try-a-mass"],
-      "evidenceFrom": "model"
+      "evidenceFrom": "model",
+      "decision": "unreviewed",
+      "leakFree": true
     },
     "measuring-the-moon": {
       "centralExperimentId": "ce.measuring-the-moon",
@@ -741,7 +869,9 @@
       "evidence": "notebook-fields",
       "test": "e2e/centralExperiments.spec.js",
       "loop": ["predict-the-plain", "measure-the-plain"],
-      "evidenceFrom": "model"
+      "evidenceFrom": "model",
+      "decision": "unreviewed",
+      "leakFree": true
     },
     "how-far-is-that-star": {
       "centralExperimentId": "ce.how-far-is-that-star",
@@ -751,7 +881,9 @@
       "evidence": "notebook-fields",
       "test": "e2e/centralExperiments.spec.js",
       "loop": ["predict-a-straight-line", "a-straight-line-fails"],
-      "evidenceFrom": "model"
+      "evidenceFrom": "model",
+      "decision": "unreviewed",
+      "leakFree": false
     },
     "a-binary-stars-orbit": {
       "centralExperimentId": "ce.a-binary-stars-orbit",
@@ -761,7 +893,9 @@
       "evidence": "notebook-fields",
       "test": "e2e/centralExperiments.spec.js",
       "loop": ["predict-the-shape", "the-mass-sum"],
-      "evidenceFrom": "model"
+      "evidenceFrom": "model",
+      "decision": "unreviewed",
+      "leakFree": true
     },
     "weighing-jupiter": {
       "centralExperimentId": "ce.weighing-jupiter",
@@ -771,7 +905,9 @@
       "evidence": "notebook-fields",
       "test": "e2e/centralExperiments.spec.js",
       "loop": ["once-a-night", "try-once-a-night"],
-      "evidenceFrom": "model"
+      "evidenceFrom": "model",
+      "decision": "unreviewed",
+      "leakFree": true
     },
     "why-venus-is-hot": {
       "centralExperimentId": "ce.why-venus-is-hot",
@@ -781,7 +917,9 @@
       "evidence": "notebook-fields",
       "test": "e2e/centralExperiments.spec.js",
       "loop": ["venus-predict", "venus-sunlight-alone"],
-      "evidenceFrom": "model"
+      "evidenceFrom": "model",
+      "decision": "unreviewed",
+      "leakFree": false
     },
     "two-greenhouse-models": {
       "centralExperimentId": "ce.two-greenhouse-models",
@@ -791,7 +929,9 @@
       "evidence": "notebook-fields",
       "test": "e2e/centralExperiments.spec.js",
       "loop": ["venus-both", "venus-both-try"],
-      "evidenceFrom": "model"
+      "evidenceFrom": "model",
+      "decision": "unreviewed",
+      "leakFree": false
     },
     "how-hot-is-the-day-side": {
       "centralExperimentId": "ce.how-hot-is-the-day-side",
@@ -801,7 +941,9 @@
       "evidence": "notebook-fields",
       "test": "e2e/centralExperiments.spec.js",
       "loop": ["planet-y-predict", "planet-y"],
-      "evidenceFrom": "model"
+      "evidenceFrom": "model",
+      "decision": "unreviewed",
+      "leakFree": false
     },
     "phases-and-albedo": {
       "centralExperimentId": "ce.phases-and-albedo",
@@ -811,7 +953,9 @@
       "evidence": "notebook-fields",
       "test": "e2e/centralExperiments.spec.js",
       "loop": ["planet-q-predict", "planet-q"],
-      "evidenceFrom": "model"
+      "evidenceFrom": "model",
+      "decision": "unreviewed",
+      "leakFree": false
     },
     "which-surface-is-older": {
       "centralExperimentId": "ce.which-surface-is-older",
@@ -821,7 +965,9 @@
       "evidence": "notebook-fields",
       "test": "e2e/centralExperiments.spec.js",
       "loop": ["which-is-older-predict", "count-the-moon"],
-      "evidenceFrom": "model"
+      "evidenceFrom": "model",
+      "decision": "unreviewed",
+      "leakFree": true
     },
     "counts-to-magnitudes": {
       "centralExperimentId": "ce.counts-to-magnitudes",
@@ -831,7 +977,9 @@
       "evidence": "notebook-fields",
       "test": "e2e/centralExperiments.spec.js",
       "loop": ["low-in-the-sky-predict", "bouguer"],
-      "evidenceFrom": "model"
+      "evidenceFrom": "model",
+      "decision": "unreviewed",
+      "leakFree": true
     },
     "craters-by-size": {
       "centralExperimentId": "ce.craters-by-size",
@@ -841,7 +989,9 @@
       "evidence": "notebook-fields",
       "test": "e2e/centralExperiments.spec.js",
       "loop": ["narrower-predict", "mars-slope"],
-      "evidenceFrom": "model"
+      "evidenceFrom": "model",
+      "decision": "unreviewed",
+      "leakFree": true
     },
     "what-a-crater-diameter-is-worth": {
       "centralExperimentId": "ce.what-a-crater-diameter-is-worth",
@@ -851,7 +1001,9 @@
       "evidence": "notebook-fields",
       "test": "e2e/centralExperiments.spec.js",
       "loop": ["largest-term-predict", "the-budget"],
-      "evidenceFrom": "model"
+      "evidenceFrom": "model",
+      "decision": "unreviewed",
+      "leakFree": true
     },
     "the-turning-sun": {
       "centralExperimentId": "ce.the-turning-sun",
@@ -861,7 +1013,9 @@
       "evidence": "notebook-fields",
       "test": "e2e/centralExperiments.spec.js",
       "loop": ["longer-or-shorter", "the-sidereal-period"],
-      "evidenceFrom": "model"
+      "evidenceFrom": "model",
+      "decision": "unreviewed",
+      "leakFree": false
     },
     "the-suns-power": {
       "centralExperimentId": "ce.the-suns-power",
@@ -871,7 +1025,9 @@
       "evidence": "notebook-fields",
       "test": "e2e/centralExperiments.spec.js",
       "loop": ["power-predict", "luminosity"],
-      "evidenceFrom": "model"
+      "evidenceFrom": "model",
+      "decision": "unreviewed",
+      "leakFree": true
     },
     "the-gaps-in-the-belt": {
       "centralExperimentId": "ce.the-gaps-in-the-belt",
@@ -881,7 +1037,9 @@
       "evidence": "notebook-fields",
       "test": "e2e/centralExperiments.spec.js",
       "loop": ["depletion-predict", "depletion"],
-      "evidenceFrom": "model"
+      "evidenceFrom": "model",
+      "decision": "unreviewed",
+      "leakFree": true
     },
     "how-fast-does-it-spin": {
       "centralExperimentId": "ce.how-fast-does-it-spin",
@@ -891,7 +1049,9 @@
       "evidence": "notebook-fields",
       "test": "e2e/centralExperiments.spec.js",
       "loop": ["two-maxima-predict", "rotation-period"],
-      "evidenceFrom": "model"
+      "evidenceFrom": "model",
+      "decision": "unreviewed",
+      "leakFree": true
     },
     "moons-of-the-giants": {
       "centralExperimentId": "ce.moons-of-the-giants",
@@ -901,7 +1061,9 @@
       "evidence": "notebook-fields",
       "test": "e2e/centralExperiments.spec.js",
       "loop": ["three-periods-predict", "three-periods"],
-      "evidenceFrom": "model"
+      "evidenceFrom": "model",
+      "decision": "unreviewed",
+      "leakFree": true
     },
     "the-scale-of-the-solar-system": {
       "centralExperimentId": "ce.the-scale-of-the-solar-system",
@@ -911,7 +1073,9 @@
       "evidence": "notebook-fields",
       "test": "e2e/centralExperiments.spec.js",
       "loop": ["light-time-predict", "light-time"],
-      "evidenceFrom": "engine"
+      "evidenceFrom": "engine",
+      "decision": "unreviewed",
+      "leakFree": true
     },
     "comets-and-the-sun": {
       "centralExperimentId": "ce.comets-and-the-sun",
@@ -921,7 +1085,9 @@
       "evidence": "notebook-fields",
       "test": "e2e/centralExperiments.spec.js",
       "loop": ["tail-predict", "watch-the-tails"],
-      "evidenceFrom": "engine"
+      "evidenceFrom": "engine",
+      "decision": "unreviewed",
+      "leakFree": true
     },
     "what-is-in-this-field": {
       "centralExperimentId": "ce.what-is-in-this-field",
@@ -931,7 +1097,9 @@
       "evidence": "notebook-fields",
       "test": "e2e/centralExperiments.spec.js",
       "loop": ["predict-the-list", "how-many-sources"],
-      "evidenceFrom": "model"
+      "evidenceFrom": "model",
+      "decision": "unreviewed",
+      "leakFree": true
     },
     "why-rings": {
       "centralExperimentId": "ce.why-rings",
@@ -941,7 +1109,9 @@
       "evidence": "notebook-fields",
       "test": "e2e/centralExperiments.spec.js",
       "loop": ["phobos-predict", "phobos-where"],
-      "evidenceFrom": "model"
+      "evidenceFrom": "model",
+      "decision": "unreviewed",
+      "leakFree": true
     },
     "tides-that-move-the-moon": {
       "centralExperimentId": "ce.moon-recedes",
@@ -951,7 +1121,9 @@
       "evidence": "notebook-fields",
       "test": "e2e/centralExperiments.spec.js",
       "loop": ["forward-predict", "forward-one-billion"],
-      "evidenceFrom": "model"
+      "evidenceFrom": "model",
+      "decision": "unreviewed",
+      "leakFree": true
     },
     "ios-fire": {
       "centralExperimentId": "ce.ios-fire",
@@ -961,7 +1133,9 @@
       "evidence": "notebook-fields",
       "test": "e2e/centralExperiments.spec.js",
       "loop": ["double-predict", "double-the-eccentricity"],
-      "evidenceFrom": "model"
+      "evidenceFrom": "model",
+      "decision": "unreviewed",
+      "leakFree": false
     },
     "plan-an-exposure": {
       "centralExperimentId": "ce.plan-an-exposure",
@@ -971,7 +1145,9 @@
       "evidence": "notebook-fields",
       "test": "e2e/centralExperiments.spec.js",
       "loop": ["predict-more-exposures", "twenty-exposures"],
-      "evidenceFrom": "model"
+      "evidenceFrom": "model",
+      "decision": "unreviewed",
+      "leakFree": false
     },
     "which-instrument-for-which-question": {
       "centralExperimentId": "ce.which-instrument-for-which-question",
@@ -981,7 +1157,9 @@
       "evidence": "notebook-fields",
       "test": "e2e/centralExperiments.spec.js",
       "loop": ["a-question-first", "the-same-star-three-ways"],
-      "evidenceFrom": "model"
+      "evidenceFrom": "model",
+      "decision": "unreviewed",
+      "leakFree": true
     },
     "the-sky-background": {
       "centralExperimentId": "ce.the-sky-background",
@@ -991,7 +1169,9 @@
       "evidence": "notebook-fields",
       "test": "e2e/centralExperiments.spec.js",
       "loop": ["predict-the-moon", "two-magnitudes-brighter"],
-      "evidenceFrom": "model"
+      "evidenceFrom": "model",
+      "decision": "unreviewed",
+      "leakFree": true
     },
     "coordinates-and-time": {
       "centralExperimentId": "ce.coordinates-and-time",
@@ -1001,7 +1181,9 @@
       "evidence": "notebook-fields",
       "test": "e2e/centralExperiments.spec.js",
       "loop": ["earlier-each-night", "from-sidereal-time-to-crossing"],
-      "evidenceFrom": "model"
+      "evidenceFrom": "model",
+      "decision": "unreviewed",
+      "leakFree": false
     },
     "a-night-at-the-telescope": {
       "centralExperimentId": "ce.a-night-at-the-telescope",
@@ -1011,7 +1193,9 @@
       "evidence": "notebook-fields",
       "test": "e2e/centralExperiments.spec.js",
       "loop": ["predict-the-limit", "station-expose"],
-      "evidenceFrom": "model"
+      "evidenceFrom": "model",
+      "decision": "unreviewed",
+      "leakFree": false
     },
     "from-photons-to-a-number": {
       "centralExperimentId": "ce.from-photons-to-a-number",
@@ -1021,7 +1205,9 @@
       "evidence": "notebook-fields",
       "test": "e2e/centralExperiments.spec.js",
       "loop": ["a-number-from-photons", "halve-it"],
-      "evidenceFrom": "model"
+      "evidenceFrom": "model",
+      "decision": "unreviewed",
+      "leakFree": false
     },
     "why-the-period-is-wrong": {
       "centralExperimentId": "ce.why-the-period-is-wrong",
@@ -1031,7 +1217,9 @@
       "evidence": "notebook-fields",
       "test": "e2e/centralExperiments.spec.js",
       "loop": ["predict-the-period", "the-aliases"],
-      "evidenceFrom": "model"
+      "evidenceFrom": "model",
+      "decision": "unreviewed",
+      "leakFree": false
     },
     "deep-or-wide": {
       "centralExperimentId": "ce.deep-or-wide",
@@ -1041,7 +1229,9 @@
       "evidence": "notebook-fields",
       "test": "e2e/centralExperiments.spec.js",
       "loop": ["predict-deep-or-wide", "euclid-best"],
-      "evidenceFrom": "model"
+      "evidenceFrom": "model",
+      "decision": "unreviewed",
+      "leakFree": true
     },
     "two-telescopes-one-question": {
       "centralExperimentId": "ce.two-telescopes-one-question",
@@ -1051,7 +1241,9 @@
       "evidence": "notebook-fields",
       "test": "e2e/centralExperiments.spec.js",
       "loop": ["predict-the-ratio", "read-the-hours"],
-      "evidenceFrom": "model"
+      "evidenceFrom": "model",
+      "decision": "unreviewed",
+      "leakFree": true
     },
     "propose-an-observation": {
       "centralExperimentId": "ce.propose-an-observation",
@@ -1061,7 +1253,9 @@
       "evidence": "notebook-fields",
       "test": "e2e/centralExperiments.spec.js",
       "loop": ["the-brief", "propose-a-plan", "justify-the-plan"],
-      "evidenceFrom": "model"
+      "evidenceFrom": "model",
+      "decision": "unreviewed",
+      "leakFree": true
     },
     "two-clusters-two-ages": {
       "centralExperimentId": "ce.two-clusters-two-ages",
@@ -1071,7 +1265,9 @@
       "evidence": "notebook-fields",
       "test": "e2e/centralExperiments.spec.js",
       "loop": ["which-is-older", "fit-b"],
-      "evidenceFrom": "model"
+      "evidenceFrom": "model",
+      "decision": "unreviewed",
+      "leakFree": true
     },
     "two-stars-eclipsing": {
       "centralExperimentId": "ce.two-stars-eclipsing",
@@ -1081,7 +1277,9 @@
       "evidence": "notebook-fields",
       "test": "e2e/centralExperiments.spec.js",
       "loop": ["which-eclipse-is-deeper", "the-two-depths"],
-      "evidenceFrom": "model"
+      "evidenceFrom": "model",
+      "decision": "unreviewed",
+      "leakFree": true
     },
     "weighing-the-stars-for-real": {
       "centralExperimentId": "ce.weighing-the-stars-for-real",
@@ -1091,7 +1289,9 @@
       "evidence": "notebook-fields",
       "test": "e2e/centralExperiments.spec.js",
       "loop": ["who-moves-faster", "read-the-amplitudes"],
-      "evidenceFrom": "model"
+      "evidenceFrom": "model",
+      "decision": "unreviewed",
+      "leakFree": true
     },
     "how-fast-does-the-star-spin": {
       "centralExperimentId": "ce.how-fast-does-the-star-spin",
@@ -1101,7 +1301,9 @@
       "evidence": "notebook-fields",
       "test": "e2e/centralExperiments.spec.js",
       "loop": ["how-many-dips", "read-the-period"],
-      "evidenceFrom": "model"
+      "evidenceFrom": "model",
+      "decision": "unreviewed",
+      "leakFree": false
     },
     "flares": {
       "centralExperimentId": "ce.flares",
@@ -1111,7 +1313,9 @@
       "evidence": "notebook-fields",
       "test": "e2e/centralExperiments.spec.js",
       "loop": ["rise-or-fall", "read-a-flare"],
-      "evidenceFrom": "model"
+      "evidenceFrom": "model",
+      "decision": "unreviewed",
+      "leakFree": true
     },
     "how-old-is-this-white-dwarf": {
       "centralExperimentId": "ce.how-old-is-this-white-dwarf",
@@ -1121,7 +1325,9 @@
       "evidence": "notebook-fields",
       "test": "e2e/centralExperiments.spec.js",
       "loop": ["ten-times-fainter", "read-two-ages"],
-      "evidenceFrom": "model"
+      "evidenceFrom": "model",
+      "decision": "unreviewed",
+      "leakFree": true
     },
     "from-star-to-remnant": {
       "centralExperimentId": "ce.from-star-to-remnant",
@@ -1131,7 +1337,9 @@
       "evidence": "notebook-fields",
       "test": "e2e/centralExperiments.spec.js",
       "loop": ["how-heavy-the-ember", "read-the-final-mass"],
-      "evidenceFrom": "model"
+      "evidenceFrom": "model",
+      "decision": "unreviewed",
+      "leakFree": true
     },
     "the-clock-that-drifts": {
       "centralExperimentId": "ce.the-clock-that-drifts",
@@ -1144,7 +1352,9 @@
         "a-wave",
         "read-the-wave"
       ],
-      "evidenceFrom": "model"
+      "evidenceFrom": "model",
+      "decision": "unreviewed",
+      "leakFree": true
     },
     "what-a-telescope-resolves": {
       "centralExperimentId": "ce.what-a-telescope-resolves",
@@ -1154,7 +1364,9 @@
       "evidence": "notebook-fields",
       "test": "e2e/centralExperiments.spec.js",
       "loop": ["smallest-aperture-predict", "dips"],
-      "evidenceFrom": "model"
+      "evidenceFrom": "model",
+      "decision": "unreviewed",
+      "leakFree": false
     },
     "why-two-lines-become-one": {
       "centralExperimentId": "ce.why-two-lines-become-one",
@@ -1164,7 +1376,9 @@
       "evidence": "notebook-fields",
       "test": "e2e/centralExperiments.spec.js",
       "loop": ["smallest-r-predict", "dip-by-r"],
-      "evidenceFrom": "model"
+      "evidenceFrom": "model",
+      "decision": "unreviewed",
+      "leakFree": true
     },
     "the-saturated-star": {
       "centralExperimentId": "ce.the-saturated-star",
@@ -1174,7 +1388,9 @@
       "evidence": "notebook-fields",
       "test": "e2e/centralExperiments.spec.js",
       "loop": ["bright-star-predict", "clipped-star"],
-      "evidenceFrom": "model"
+      "evidenceFrom": "model",
+      "decision": "unreviewed",
+      "leakFree": true
     },
     "planet-or-not": {
       "centralExperimentId": "ce.planet-or-not",
@@ -1184,7 +1400,9 @@
       "evidence": "none",
       "test": "e2e/vettingLesson.spec.js",
       "loop": ["which-test-catches", "deep-and-shallow"],
-      "evidenceFrom": "model"
+      "evidenceFrom": "model",
+      "decision": "none",
+      "leakFree": true
     },
     "how-far-and-how-sure": {
       "centralExperimentId": "ce.how-far-and-how-sure",
@@ -1194,7 +1412,9 @@
       "evidence": "none",
       "test": "e2e/gaiaLesson.spec.js",
       "loop": ["commit-to-a-distance", "read-the-distance"],
-      "evidenceFrom": "model"
+      "evidenceFrom": "model",
+      "decision": "unreviewed",
+      "leakFree": false
     },
     "what-gaia-does-not-see": {
       "centralExperimentId": "ce.what-gaia-does-not-see",
@@ -1204,7 +1424,9 @@
       "evidence": "none",
       "test": "e2e/gaiaLesson.spec.js",
       "loop": ["commit-to-a-cut", "read-what-is-left"],
-      "evidenceFrom": "model"
+      "evidenceFrom": "model",
+      "decision": "unreviewed",
+      "leakFree": false
     },
     "how-many-earths": {
       "centralExperimentId": "ce.how-many-earths",
@@ -1214,7 +1436,9 @@
       "evidence": "none",
       "test": "e2e/occurrenceLesson.spec.js",
       "loop": ["what-is-easy-prediction", "who-the-survey-sees"],
-      "evidenceFrom": "model"
+      "evidenceFrom": "model",
+      "decision": "none",
+      "leakFree": true
     },
     "what-is-it-made-of": {
       "centralExperimentId": "ce.what-is-it-made-of",
@@ -1224,7 +1448,9 @@
       "evidence": "none",
       "test": "e2e/jointLesson.spec.js",
       "loop": ["bigger-star-prediction", "a-bigger-star"],
-      "evidenceFrom": "model"
+      "evidenceFrom": "model",
+      "decision": "none",
+      "leakFree": true
     },
     "the-metallicity-term": {
       "centralExperimentId": "ce.the-metallicity-term",
@@ -1234,7 +1460,9 @@
       "evidence": "notebook-fields",
       "test": "e2e/centralExperiments.spec.js",
       "loop": ["which-way-does-metal-go", "the-distance-twice"],
-      "evidenceFrom": "model"
+      "evidenceFrom": "model",
+      "decision": "unreviewed",
+      "leakFree": false
     },
     "reading-the-hr-diagram": {
       "centralExperimentId": "ce.reading-the-hr-diagram",
@@ -1244,7 +1472,9 @@
       "evidence": "notebook-fields",
       "test": "e2e/centralExperiments.spec.js",
       "loop": ["which-region", "distance-puts-it-there"],
-      "evidenceFrom": "model"
+      "evidenceFrom": "model",
+      "decision": "unreviewed",
+      "leakFree": true
     },
     "a-stars-life-in-numbers": {
       "centralExperimentId": "ce.a-stars-life-in-numbers",
@@ -1254,7 +1484,9 @@
       "evidence": "notebook-fields",
       "test": "e2e/centralExperiments.spec.js",
       "loop": ["which-lives-longer", "a-heavy-life"],
-      "evidenceFrom": "model"
+      "evidenceFrom": "model",
+      "decision": "unreviewed",
+      "leakFree": true
     },
     "when-a-star-explodes": {
       "centralExperimentId": "ce.when-a-star-explodes",
@@ -1264,7 +1496,9 @@
       "evidence": "notebook-fields",
       "test": "e2e/centralExperiments.spec.js",
       "loop": ["where-the-energy-goes", "the-share-in-the-blast"],
-      "evidenceFrom": "model"
+      "evidenceFrom": "model",
+      "decision": "unreviewed",
+      "leakFree": true
     },
     "populations-i-and-ii": {
       "centralExperimentId": "ce.populations-i-and-ii",
@@ -1274,7 +1508,9 @@
       "evidence": "notebook-fields",
       "test": "e2e/centralExperiments.spec.js",
       "loop": ["what-minus-half-means", "the-same-stars-three-ways"],
-      "evidenceFrom": "model"
+      "evidenceFrom": "model",
+      "decision": "unreviewed",
+      "leakFree": true
     },
     "spectra-tell-temperature-and-gravity": {
       "centralExperimentId": "ce.spectra-tell-temperature-and-gravity",
@@ -1284,7 +1520,9 @@
       "evidence": "notebook-fields",
       "test": "e2e/centralExperiments.spec.js",
       "loop": ["the-deepest-balmer", "the-opposite-orderings"],
-      "evidenceFrom": "model"
+      "evidenceFrom": "model",
+      "decision": "unreviewed",
+      "leakFree": false
     },
     "why-we-cannot-see-earth": {
       "centralExperimentId": "ce.why-we-cannot-see-earth",
@@ -1294,7 +1532,9 @@
       "evidence": "none",
       "test": "e2e/imagingLesson.spec.js",
       "loop": ["how-far-apart", "the-angle"],
-      "evidenceFrom": "model"
+      "evidenceFrom": "model",
+      "decision": "none",
+      "leakFree": true
     },
     "architectures": {
       "centralExperimentId": "ce.architectures",
@@ -1304,7 +1544,9 @@
       "evidence": "none",
       "test": "e2e/imagingLesson.spec.js",
       "loop": ["where-do-they-sit", "the-median-planet"],
-      "evidenceFrom": "model"
+      "evidenceFrom": "model",
+      "decision": "none",
+      "leakFree": true
     },
     "one-planet-every-method": {
       "centralExperimentId": "ce.one-planet-every-method",
@@ -1314,7 +1556,9 @@
       "evidence": "notebook-fields",
       "test": "e2e/centralExperiments.spec.js",
       "loop": ["what-needs-both", "read-the-record"],
-      "evidenceFrom": "model"
+      "evidenceFrom": "model",
+      "decision": "unreviewed",
+      "leakFree": true
     },
     "what-kinds-of-planets-exist": {
       "centralExperimentId": "ce.what-kinds-of-planets-exist",
@@ -1324,7 +1568,9 @@
       "evidence": "notebook-fields",
       "test": "e2e/centralExperiments.spec.js",
       "loop": ["what-the-survey-sees", "larger-is-easier"],
-      "evidenceFrom": "model"
+      "evidenceFrom": "model",
+      "decision": "unreviewed",
+      "leakFree": false
     },
     "the-transit-that-was-a-star": {
       "centralExperimentId": "ce.the-transit-that-was-a-star",
@@ -1334,7 +1580,9 @@
       "evidence": "notebook-fields",
       "test": "e2e/centralExperiments.spec.js",
       "loop": ["odd-and-even", "the-whole-story"],
-      "evidenceFrom": "model"
+      "evidenceFrom": "model",
+      "decision": "unreviewed",
+      "leakFree": true
     },
     "planning-a-transit-campaign": {
       "centralExperimentId": "ce.planning-a-transit-campaign",
@@ -1344,7 +1592,9 @@
       "evidence": "notebook-fields",
       "test": "e2e/centralExperiments.spec.js",
       "loop": ["which-nights", "what-the-weather-left"],
-      "evidenceFrom": "model"
+      "evidenceFrom": "model",
+      "decision": "unreviewed",
+      "leakFree": true
     }
   }
 }

@@ -15,6 +15,7 @@ the release rather than in the tag.
 
 ### Changed
 
+- The cached Jest count in the documentation sync can no longer leave a suite out silently (register row D-R4-DOCS-02; invisible). A suite that fails to load during the count is loaded again on its own, and if it still fails the sync stops with its name and Jest's message instead of writing a total that is short by that suite's tests; a recursive directory listing is no longer cached.
 - A page downloads the deferred panel text for the language in use only (Prompt 309; register row D-R4-309-01; invisible and instructional: the instructor bundle needs the owner's rebuild). An English lesson route moves 88.6 KB less and one request fewer (a Spanish one 77.6 KB and one request) in the student-route harness, a proxy measurement; choosing the other language fetches its catalogue first, keeps the old text on screen until it has arrived and then repaints, with no message id shown. The lesson-route size ceilings are lowered to the new measurements and none is raised.
 - CI now runs on every push to `v4`, the open train, so each merge has a full run on the merged tip (register row D-R4-CI-01; invisible). `on.push.branches` in `ci.yml` goes from `[main, v3]` to `[main, v3, v4]`; the deploy job is still gated on `main`, so a `v4` push cannot publish (maintainer decision, 2026-11-15).
 - The documentation sync no longer runs the whole Jest suite to count it (register row D-R4-DOCS-01; invisible). `npm run docs:sync -- --full` counts the tests by loading each suite with its tests filtered out, keeps a suite's count while nothing it read has changed (a hash of every file, directory listing and absent path it opened, in `node_modules/.cache/gravitas/jest-counts.json`), and reuses the report the physics test writes while it loads, so the physics validation runs once. On a quiet Mac at two workers a full sync went from about 31 minutes to 8 with an empty cache and under a minute with nothing changed; the counts are the same as a real run's (`--jest=run` brings the real run back) and CI, which checks them against its own full run, is unchanged.
@@ -25,6 +26,18 @@ the release rather than in the tag.
 
 ### Added
 
+- The lesson standard as authoring checks (Prompt 307; register rows
+  D-R4-307-01 to 05; invisible, tooling): `npm run author:check` now holds
+  seven patterns the lesson audits found by hand to a committed count per lesson
+  that may only fall (`tools/lesson-standard-ratchet.json`): an instrument that
+  opens at a value its validator accepts, a predicted answer already stated in an
+  earlier body, tip or checklist, a numeric question whose body holds its answer,
+  a core measure step with every field computed, the project's own vocabulary and
+  a wrong `step N` or `screen N` in student text, and a layout at any depth that
+  ends on a graded step (none does; held at zero). `node tools/lesson-standard.mjs --list`
+  names each finding by lesson and step. `docs/lesson-acceptance.json` gains
+  `decision` and `leakFree` per lesson, and `npm run audit:scene:check` requires
+  both. No lesson is edited and nothing changes on screen.
 - The step-policy gate for the sandbox (Prompt 446; register row D-R4-446-01;
   invisible, documentation): `STEP_POLICY_GATE.md` records, against thresholds
   committed before any run, whether a number read in the sandbox may depend on

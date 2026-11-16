@@ -299,6 +299,101 @@ describe('the count and the cache', () => {
   });
 });
 
+describe('a suite that does not load, and a listing the cache cannot hash', () => {
+  jest.setTimeout(240000);
+
+  let repo2;
+  const write = (rel, text) => {
+    const file = path.join(repo2, rel);
+    mkdirSync(path.dirname(file), { recursive: true });
+    writeFileSync(file, text);
+  };
+  const count2 = () =>
+    countJestTests({
+      repo: repo2,
+      cacheFile: path.join(repo2, 'cache', 'jest-counts.json'),
+      workers: 1,
+    });
+
+  beforeAll(() => {
+    repo2 = realpathSync(
+      mkdtempSync(path.join(tmpdir(), 'gravitas-count-fx2-'))
+    );
+    write('package.json', '{"name":"fx2","type":"module"}\n');
+    write('package-lock.json', '{}\n');
+    write(
+      'jest.config.js',
+      "export default { testEnvironment: 'jsdom', transform: {}, testMatch: ['**/tests/**/*.test.js'] };\n"
+    );
+    write(
+      'tests/ok.test.js',
+      "test('one', () => {});\ntest('two', () => {});\n"
+    );
+  });
+
+  afterAll(() => {
+    rmSync(repo2, { recursive: true, force: true });
+  });
+
+  test('a suite that fails to load once is loaded again, not counted as nothing', () => {
+    // Fails the first time it is loaded and never after: the marker lives
+    // outside the repository, where nothing watches it.
+    const marker = path.join(repo2, '..', `${path.basename(repo2)}.once`);
+    write(
+      'tests/flaky.test.js',
+      `import { existsSync, writeFileSync } from 'node:fs';
+const marker = ${JSON.stringify(marker)};
+if (!existsSync(marker)) {
+  writeFileSync(marker, 'x');
+  throw new Error('failed to load, this once');
+}
+test('f1', () => {});
+test('f2', () => {});
+`
+    );
+    try {
+      const counted = count2();
+      expect(counted.tests).toBe(4);
+      expect(counted.suites).toBe(2);
+      expect(counted.failed).toEqual([]);
+    } finally {
+      rmSync(marker, { force: true });
+      rmSync(path.join(repo2, 'tests', 'flaky.test.js'));
+    }
+  });
+
+  test('a suite that never loads is an error, never a zero in the total', () => {
+    write(
+      'tests/broken.test.js',
+      "throw new Error('always broken');\ntest('never', () => {});\n"
+    );
+    try {
+      expect(() => count2()).toThrow(/did not load.*always broken/s);
+    } finally {
+      rmSync(path.join(repo2, 'tests', 'broken.test.js'));
+    }
+  });
+
+  test('a recursive listing is never cached, since a file three levels down would not change what it hashed', () => {
+    write('data/a.txt', 'a\n');
+    write('data/sub/b.txt', 'b\n');
+    write(
+      'tests/rec.test.js',
+      `import { readdirSync } from 'node:fs';
+const n = readdirSync(new URL('../data/', import.meta.url), { recursive: true }).length;
+for (let i = 0; i < n; i++) test('entry ' + i, () => {});
+`
+    );
+    const first = count2();
+    expect(first.tests).toBe(2 + 3); // ok.test.js, then a.txt, sub, sub/b.txt
+    expect(first.uncacheable).toEqual(['tests/rec.test.js']);
+    write('data/sub/c.txt', 'c\n');
+    const second = count2();
+    expect(second.tests).toBe(2 + 4);
+    expect(second.reused).toBe(1);
+  });
+});
+
 describe('choosing how the totals are had', () => {
   test('the default is the cached count, and a flag or variable chooses', () => {
     expect(jestModeFrom([], {})).toBe('cached');

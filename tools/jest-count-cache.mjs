@@ -85,7 +85,10 @@ const TOOLS = dirname(fileURLToPath(import.meta.url));
 const TRACKER = join(TOOLS, 'jest-read-tracker.cjs');
 const { stateOf, hashOf } = require('./jest-read-tracker.cjs');
 
-const SCHEMA = 4;
+const SCHEMA = 5;
+
+/** How many more times a suite that did not load is tried, alone. */
+const RETRIES = 2;
 
 /**
  * The suite that runs the physics validation as it loads and, when
@@ -212,12 +215,14 @@ function childEnv(repo, out, physicsReport) {
  * Count the tests in the suites that have to be loaded, by loading them.
  *
  * @returns {{counts: Map<string, number>, records: Map<string, object>,
- *   failed: string[]}} Per-suite counts and what each suite read
+ *   failed: string[], messages: Map<string, string>}} Per-suite counts, what
+ *   each suite read, and why a suite that did not load did not
  */
 function collect({ repo, files, workers, work, physicsReport, jestBin }) {
   const out = join(work, 'records');
   mkdirSync(out, { recursive: true });
   const json = join(work, 'report.json');
+  rmSync(json, { force: true });
   const args = [
     jestBin,
     '--silent',
@@ -240,12 +245,21 @@ function collect({ repo, files, workers, work, physicsReport, jestBin }) {
   }
   const counts = new Map();
   const failed = [];
+  const messages = new Map();
   if (existsSync(json)) {
     const report = JSON.parse(readFileSync(json, 'utf8'));
     for (const r of report.testResults) {
       const rel = relative(repo, r.name).split(sep).join('/');
       counts.set(rel, r.assertionResults.length);
-      if (r.status === 'failed') failed.push(rel);
+      if (r.status === 'failed') {
+        failed.push(rel);
+        messages.set(
+          rel,
+          String(r.message || '')
+            .trim()
+            .slice(0, 400)
+        );
+      }
     }
   }
   const records = new Map();
@@ -253,7 +267,7 @@ function collect({ repo, files, workers, work, physicsReport, jestBin }) {
     const rec = JSON.parse(readFileSync(join(out, f), 'utf8'));
     records.set(relative(repo, rec.testPath).split(sep).join('/'), rec);
   }
-  return { counts, records, failed };
+  return { counts, records, failed, messages };
 }
 
 /** List the suites exactly as Jest would run them. */
@@ -335,6 +349,49 @@ export function countJestTests({
         physicsReport,
         jestBin,
       });
+      // A suite that did not load registered no tests, so its count is not a
+      // count: a real run would have reported its tests, or failed. Loading
+      // can fail for reasons that are not the suite's (a worker under load, a
+      // module link that raced another), so each such suite is loaded again,
+      // on its own, before the run gives up. What cannot be loaded is an error,
+      // never a zero: a documented count that silently left a suite out is the
+      // failure this exists to prevent.
+      const broken = () =>
+        todo.filter(
+          rel => got.failed.includes(rel) || got.counts.get(rel) === 0
+        );
+      for (let attempt = 1; attempt <= RETRIES && broken().length; attempt++) {
+        const again = collect({
+          repo,
+          files: broken(),
+          workers: 1,
+          work,
+          physicsReport,
+          jestBin,
+        });
+        for (const rel of again.counts.keys()) {
+          got.counts.set(rel, again.counts.get(rel));
+          got.failed = got.failed.filter(f => f !== rel);
+          if (again.failed.includes(rel)) {
+            got.failed.push(rel);
+            got.messages.set(rel, again.messages.get(rel));
+          }
+          if (again.records.has(rel))
+            got.records.set(rel, again.records.get(rel));
+        }
+      }
+      if (broken().length) {
+        const why = broken()
+          .slice(0, 5)
+          .map(
+            rel =>
+              `${rel}: ${(got.messages.get(rel) || 'no tests').replace(/\s+/g, ' ').slice(0, 300)}`
+          )
+          .join('; ');
+        throw new Error(
+          `${broken().length} suite(s) did not load, so the tests in them cannot be counted (${why})`
+        );
+      }
       failed = got.failed;
       for (const rel of todo) {
         if (!got.counts.has(rel)) {
