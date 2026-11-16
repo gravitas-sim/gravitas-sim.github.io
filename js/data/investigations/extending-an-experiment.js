@@ -223,7 +223,7 @@ const EXTENDING_AN_EXPERIMENT = {
       title: 'Move the definition',
       body: `Put the <strong>slope</strong> back to <strong>1</strong> and set the
              <strong>cutoff</strong> to <strong>6</strong>: a planet now counts as bound
-             if it stays within six starting distances, not three. Run again. Enter the
+             if it stays within six starting distances, not three. (A distance cutoff, not the ejection test of the binary-star investigation.) Run again. Enter the
              new half-way distance, and the fraction of the synthetic population.`,
       fields: [
         {

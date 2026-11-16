@@ -1265,6 +1265,10 @@
    "moved": [],
    "dropped": [],
    "quarantined": {},
+   "earlier": {
+    "responses": {},
+    "attempts": {}
+   },
    "uncertain": 0,
    "discardedKeys": 0,
    "byPosition": false

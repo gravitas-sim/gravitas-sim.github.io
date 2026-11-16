@@ -322,7 +322,7 @@ const BINARY_STAR_PLANETS = {
       answer: 1,
       because: `Proximity, not mass. At 1.5 AU from a 1.0 solar-mass star the
                 planet feels a pull about eighteen times stronger than the one
-                from a 0.5 solar-mass star six AU away at its closest. The
+                from a 0.5 solar-mass star at its very closest, 4.5 AU away. The
                 companion is a perturbation rather than a competitor, and a
                 perturbation that small mostly averages out.
                 \n\nMostly. Look again at the highest-eccentricity row from that
@@ -952,8 +952,8 @@ This is the same test you did by hand at 0.25, applied to the
       title: 'Four separations out, then two',
       setup: P_LAB,
       body: `Forty binary periods this time, because a circumbinary planet is
-             slow: at 40 AU it takes about five and a half binary periods to go
-             round once, so forty periods is only seven planet orbits. That is
+             slow: at 40 AU it takes about eight binary periods to go
+             round once, so forty periods is only five planet orbits. That is
              worth remembering when you read the result.
              \n\nRun it as it stands, at <strong>4.0</strong> separations, and
              watch the ring. Then halve the starting radius to

@@ -146,7 +146,7 @@ export const WHEN_THE_METHOD_MUST_REFUSE_DEEPER = {
   steps: {
     'the-95-percent-bound-by-hand': {
       title: 'La cota del 95 por ciento, a mano',
-      body: 'Para masas por debajo del producto el mejor ajuste tiene la inclinación en su límite de 1, así que el chi cuadrado es ((m − 0,85) ÷ 0,06)². El intervalo del 95 por ciento es donde el chi cuadrado ha subido 3,84, que son 1,96 errores estándar.',
+      body: 'Para masas por debajo del producto el mejor ajuste tiene la inclinación en su límite de 1, así que el chi cuadrado es ((m − 0,85) ÷ 0,06)². El intervalo del 95 por ciento es donde el chi cuadrado ha subido 3,84, que son 1,96 errores estándar: de dos lados (unilateral: 1,645).',
       prompt:
         'La masa más pequeña dentro de un intervalo del 95 por ciento, en masas de Júpiter',
       hints: ['Resta al producto 1,96 veces el error del producto.'],

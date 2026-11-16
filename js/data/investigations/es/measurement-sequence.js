@@ -353,7 +353,7 @@ export const WHEN_THE_METHOD_MUST_REFUSE = {
       prompt: '¿Qué enunciado es honesto?',
       options: [
         'm = 0,85 ± 0,06 masas de Júpiter',
-        'm es al menos 0,79 masas de Júpiter (una sigma), y los datos no fijan cota superior',
+        'm es al menos 0,79 masas de Júpiter (una cota de una sigma, 84 por ciento), y los datos no fijan cota superior',
         'm = 2,0 masas de Júpiter, el medio del intervalo permitido',
         'No se puede decir nada de m',
       ],
@@ -530,7 +530,7 @@ export const MEASURING_THE_MOON = {
     },
     {
       title: 'Lo que has deducido',
-      body: 'Una imagen no tiene escala hasta que se la das, y la escala que le das es una medida tuya, apoyada en una longitud que supusiste y en dos marcas que colocaste. Con ella, un círculo sobre un accidente dio un tamaño en kilómetros, unos 630 km para la llanura, y la incertidumbre indicada por la herramienta cubría solo el redondeo de tus marcas. Lo suave del borde, el recorte a la derecha y el diámetro supuesto no están en ella. Y como la imagen es para mostrar, sus niveles de gris no son luz: mediste dónde están las cosas y cuán grandes son, y nada sobre su brillo.',
+      body: 'Una imagen no tiene escala hasta que se la das, y la escala que le das es una medida tuya, apoyada en una longitud que supusiste y en dos marcas que colocaste. Con ella, un círculo sobre un accidente dio un tamaño en kilómetros, unos 634 km para la llanura, y la incertidumbre indicada por la herramienta cubría solo el redondeo de tus marcas. Lo suave del borde, el recorte a la derecha, el diámetro supuesto y el escorzo (96 por ciento en la llanura) no están en ella. Y como la imagen es para mostrar, sus niveles de gris no son luz: mediste dónde están las cosas y cuán grandes son, y nada sobre su brillo.',
     },
   ],
 };
@@ -1249,10 +1249,10 @@ export const WHAT_IS_IN_THIS_FIELD = {
       ],
       misconceptions: [
         {
-          say: 'Una estrella más ancha reparte la misma luz en más píxeles, así que cada uno es más tenue frente al mismo ruido, y es más difícil de hallar. Los últimos pasos lo muestran.',
+          say: 'Una estrella más ancha reparte la misma luz en más píxeles, así que cada uno es más tenue frente al mismo ruido, y es más difícil de hallar.',
         },
         {
-          say: 'La herramienta acepta otros anchos, y los últimos pasos usan uno. Un ancho equivocado da una curva que describe la clase de estrella equivocada.',
+          say: 'La herramienta acepta otros anchos. Un ancho equivocado da una curva que describe la clase de estrella equivocada.',
         },
       ],
       hints: ['¿Qué se está probando: el detector, con qué estrellas?'],
@@ -1293,7 +1293,7 @@ export const WHAT_IS_IN_THIS_FIELD = {
           say: 'La fuente más tenue listada es la más tenue que casualmente cruzó el umbral, con la mayoría de sus vecinas sin hallar. Una lista no recuerda lo que perdió; las estrellas añadidas lo aportan.',
         },
         {
-          say: 'El umbral es un ajuste, no una propiedad del telescopio. Cámbialo y la curva se mueve, como muestra el camino más profundo.',
+          say: 'El umbral es un ajuste, no una propiedad del telescopio. Cámbialo y la curva se mueve.',
         },
       ],
       hints: [

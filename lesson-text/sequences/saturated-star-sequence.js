@@ -67,7 +67,7 @@ export const THE_SATURATED_STAR_ES = {
         '¿Cuál es el mayor número de electrones que puede guardar un píxel?',
       ],
       because:
-        'Cada píxel se satura en la capacidad máxima; la luz que llega cuando un píxel está lleno se pierde (o, como muestra el paso siguiente, se derrama), y una suma de lo registrado se queda corta.',
+        'Cada píxel se satura en la capacidad máxima; la luz que llega cuando un píxel está lleno se pierde (o, como muestran los pasos que siguen, se derrama), y una suma de lo registrado se queda corta.',
     },
     'trail-predict': {
       title: 'Adónde va la carga de más',

@@ -80,7 +80,7 @@ export default {
       tolerance: 0.02,
       hints: ['The calibrated light divided by the raw light.'],
       worked:
-        '54,083 ÷ 47,296 = 1.14: the flat raised star B’s light by 14 percent. Its pixels were at about 87 percent of average, and 1 ÷ 0.875 = 1.14.',
+        '54,083 ÷ 47,296 = 1.14: the flat raised star B’s light by 14 percent, undoing the 12 percent it read low. Its pixels were at about 87 percent of average, and 1 ÷ 0.875 = 1.14.',
       feedback: {
         close: 'Close. Divide the calibrated light by the raw light.',
         'wrong-order-of-magnitude':

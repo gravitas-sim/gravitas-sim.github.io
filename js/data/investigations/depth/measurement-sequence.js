@@ -348,7 +348,7 @@ export const WHEN_THE_METHOD_MUST_REFUSE_DEEPER = {
       body: `For masses below the product the best fit has the tilt at its limit of 1,
              so the chi-square is ((m − 0.85) ÷ 0.06)². The 95 percent range is
              where the chi-square has risen by 3.84, which is 1.96 standard
-             errors.`,
+             errors: two-sided (one-sided: 1.645).`,
       prompt: 'The smallest mass inside a 95 percent range, in Jupiter masses',
       unit: 'M_J',
       answer: 0.732,
@@ -1467,7 +1467,7 @@ export const WHAT_IS_IN_THIS_FIELD_DEEPER = {
           return {
             level: 'ok',
             message:
-              'The curve says 27.2 of the forty and the search listed 30. The difference, 2.8, is 1.7 times the scatter of 1.6 that forty stars, each found with a chance and not a certainty, would show: the two agree. The curve was measured on added stars and was never shown the field’s own: that it predicts them is the test.',
+              'The curve says 27.2 of the forty and the search listed 30. The difference, 2.8, is 1.7 times the scatter of 1.6 that forty stars, each found with a chance and not a certainty, would show: the two are consistent, though not identical. The curve was measured on added stars and was never shown the field’s own: that it predicts them is the test.',
           };
         }
         return {

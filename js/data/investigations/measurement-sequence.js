@@ -1009,7 +1009,7 @@ export const WHEN_THE_METHOD_MUST_REFUSE = {
       prompt: 'Which statement is honest?',
       options: [
         'm = 0.85 ± 0.06 Jupiter masses',
-        'm is at least 0.79 Jupiter masses (one sigma), and the data set no upper bound',
+        'm is at least 0.79 Jupiter masses (a one-sigma bound, 84 percent), and the data set no upper bound',
         'm = 2.0 Jupiter masses, the middle of the allowed range',
         'Nothing can be said about m',
       ],
@@ -1404,7 +1404,7 @@ export const MEASURING_THE_MOON = {
           return {
             level: 'ok',
             message:
-              'About 630 km across, as the prediction said, within the few pixels a careful person can place the edge of a soft dark plain. The tool states about 6 km; the next step is about what that number does and does not include.',
+              'About 634 km across, as the prediction said, within the few pixels a careful person can place the edge of a soft dark plain. The tool states about 6 km; the next step is about what that number does and does not include.',
           };
         }
         return {
@@ -1437,9 +1437,9 @@ export const MEASURING_THE_MOON = {
       body: `A picture has no scale until you give it one, and the scale you give it is
              a measurement of yours, resting on a length you assumed and on two marks you
              placed. With it, a circle on a feature gave a size in kilometers, about
-             630 km for the plain, and the tool&rsquo;s stated uncertainty covered only the
-             rounding of your marks. The softness of the edge, the crop at the right
-             and the assumed diameter are not in it. And because the picture is a
+             634 km for the plain, and the tool&rsquo;s stated uncertainty covered only the
+             rounding of your marks. The softness of the edge, the crop at the right,
+             the assumed diameter and the foreshortening (96 percent at the plain) are not in it. And because the picture is a
              display picture, its gray levels are not light: you measured where things
              are and how big they are, and nothing about how bright.`,
       tool: MM({ x1: 3, x2: 496, cx: 289, cy: 306, r: 45 }, ['x1', 'x2']),
@@ -3108,12 +3108,12 @@ export const WHAT_IS_IN_THIS_FIELD = {
         {
           id: 'wide-is-easy',
           option: 2,
-          say: 'A wider star spreads the same light over more pixels, so each pixel is dimmer against the same noise, and it is harder to find. The last steps show it.',
+          say: 'A wider star spreads the same light over more pixels, so each pixel is dimmer against the same noise, and it is harder to find.',
         },
         {
           id: 'refuses',
           option: 3,
-          say: 'The tool accepts other widths, and the last steps use one. A wrong width gives a curve that describes the wrong kind of star.',
+          say: 'The tool accepts other widths. A wrong width gives a curve that describes the wrong kind of star.',
         },
       ],
       hints: ['What is being tested: the detector, on which stars?'],
@@ -3229,7 +3229,7 @@ export const WHAT_IS_IN_THIS_FIELD = {
         {
           id: 'fixed-property',
           option: 3,
-          say: 'The threshold is a setting, not a property of the telescope. Change it and the curve moves, as the deeper path shows.',
+          say: 'The threshold is a setting, not a property of the telescope. Change it and the curve moves.',
         },
       ],
       hints: ['Look at the shares, bin by bin, and not at one number.'],

@@ -406,7 +406,7 @@ const WHAT_A_CCD_RECORDS = {
              pixel); a flat gives the sensitivity of every pixel, the corner
              receiving about 76 percent of the center’s light. The bias and the
              dark are subtracted, and the flat is divided last. Star B, near a
-             corner, read 12 percent low until the flat was applied; a cosmic ray
+             corner, read 12 percent low until the flat raised it by 14 percent; a cosmic ray
              is flagged because it is sharp, and a saturated star cannot be
              repaired.
              \n\nThe camera is <strong>synthetic</strong>: every number is from a

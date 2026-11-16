@@ -131,7 +131,7 @@ export const THE_CLOCK_THAT_DRIFTS = {
         'The time is fixed by how the light changes at the edges of the dip. What does noise on those points do to where the edge seems to be?',
       ],
       because:
-        'The error bar goes from 0.52 to 2.1 minutes, four times larger, because the time is read from the slope at the two edges of the dip and four times the noise blurs where the edge is by four times. And at this noise the panel adds that the error bar is as long as the two-minute spacing of the points, and in that regime the real scatter is larger than the error bar says: it is a lower bound, not an interval. The check that found this is in the validation table.',
+        'The error bar goes from 0.52 to 2.1 minutes, four times larger, because the time is read from the slope at the two edges of the dip and four times the noise blurs where the edge is by four times. And at this noise the panel adds that the error bar is as long as the two-minute spacing of the points, and in that regime the real scatter is larger than the error bar says: it is a lower bound, not an interval.',
       misconceptions: [
         {
           id: 'same',
@@ -300,8 +300,9 @@ export const THE_CLOCK_THAT_DRIFTS_DEEPER = {
       depth: 'quantitative',
       type: 'measure',
       title: 'A different pair',
-      body: `Switch to the pair near three to two (ten and fifteen and a half days, j = 3), inner planet. Read
-             the super-period the fit finds, and the one the relation gives from the two periods.`,
+      body: `Switch to the pair near three to two (ten and fifteen and a half days), inner planet. For j = 3
+             the relation is 1 / |3 / P<sub>outer</sub> &minus; 2 / P<sub>inner</sub>|. Read the super-period the fit finds,
+             and the one the relation gives.`,
       fields: [
         { id: 'a', label: 'Fitted super-period', unit: 'days', want: '173.7' },
         { id: 'b', label: 'From the periods', unit: 'days', want: '173.8' },
@@ -450,7 +451,7 @@ export const THE_CLOCK_THAT_DRIFTS_DEEPER = {
         'The curves are for fixed masses. If the amplitude moves along them, what does a reader who assumed a circular orbit do with the number?',
       ],
       because:
-        'For these masses an eccentricity combination of 0.010 could make the amplitude anywhere from 55 to 145 percent of the circular one, so a reader who assumed circular orbits would be off by tens of percent in either direction and the amplitude has no way to say which. A gate tested whether an interval that allows for an assumed bound on the eccentricity is useful: it covered, but its edges were about four times apart, wider than the bound committed beforehand, so Gravitas gives the circular mass and states the assumption, and does not give the interval as a bound.',
+        'For these masses an eccentricity combination of 0.010 could make the amplitude anywhere from 55 to 145 percent of the circular one, so a reader who assumed circular orbits would be off by tens of percent in either direction and the amplitude has no way to say which. An interval that allows for an assumed bound on the eccentricity covers the truth, but its edges are about four times apart, too wide to give as a bound, so Gravitas gives the circular mass and states the assumption, and does not give the interval as a bound.',
       misconceptions: [
         {
           id: 'only-mass',
@@ -546,7 +547,7 @@ export const THE_CLOCK_THAT_DRIFTS_ES = {
         'El instante se fija por cómo cambia la luz en los bordes del descenso. ¿Qué hace el ruido en esos puntos con el lugar donde parece estar el borde?',
       ],
       because:
-        'La barra de error pasa de 0,52 a 2,1 minutos, cuatro veces mayor, porque el instante se lee de la pendiente en los dos bordes del descenso y un ruido cuatro veces mayor emborrona cuatro veces dónde está el borde. Y con este ruido el panel añade que la barra de error es tan larga como los dos minutos entre puntos, y en ese régimen la dispersión real es mayor de lo que la barra dice: es una cota inferior, no un intervalo. La comprobación que lo halló está en la tabla de validación.',
+        'La barra de error pasa de 0,52 a 2,1 minutos, cuatro veces mayor, porque el instante se lee de la pendiente en los dos bordes del descenso y un ruido cuatro veces mayor emborrona cuatro veces dónde está el borde. Y con este ruido el panel añade que la barra de error es tan larga como los dos minutos entre puntos, y en ese régimen la dispersión real es mayor de lo que la barra dice: es una cota inferior, no un intervalo.',
       misconceptions: [
         {
           say: 'El planeta sí cruzó en el mismo instante verdadero. Lo que cambió es lo bien que la luz permite decir cuándo.',
@@ -619,7 +620,7 @@ export const THE_CLOCK_THAT_DRIFTS_DEEPER_ES = {
     },
     {
       title: 'Otro par',
-      body: 'Cambia al par cercano a tres a dos (diez y quince días y medio, j = 3), planeta interior. Lee el superperiodo que halla el ajuste y el que da la relación con los dos periodos.',
+      body: 'Cambia al par cercano a tres a dos (diez y quince días y medio), planeta interior. Para j = 3 la relación es 1 / |3 / P<sub>exterior</sub> &minus; 2 / P<sub>interior</sub>|. Lee el superperiodo que halla el ajuste y el que da la relación.',
       fields: [
         { label: 'Superperiodo ajustado' },
         { label: 'Según los periodos' },
@@ -691,7 +692,7 @@ export const THE_CLOCK_THAT_DRIFTS_DEEPER_ES = {
         'Las curvas son para masas fijas. Si la amplitud se mueve sobre ellas, ¿qué hace con el número quien supuso una órbita circular?',
       ],
       because:
-        'Para estas masas una combinación de excentricidades de 0,010 podría hacer que la amplitud estuviera entre el 55 y el 145 por ciento de la circular, de modo que quien supusiera órbitas circulares se equivocaría en decenas por ciento en cualquier sentido y la amplitud no tiene cómo decir cuál. Una puerta comprobó si un intervalo que admite una cota supuesta de la excentricidad es útil: cubría, pero sus extremos estaban unas cuatro veces separados, más que la cota fijada de antemano, así que Gravitas da la masa circular y declara la suposición, y no da el intervalo como cota.',
+        'Para estas masas una combinación de excentricidades de 0,010 podría hacer que la amplitud estuviera entre el 55 y el 145 por ciento de la circular, de modo que quien supusiera órbitas circulares se equivocaría en decenas por ciento en cualquier sentido y la amplitud no tiene cómo decir cuál. Un intervalo que admite una cota supuesta de la excentricidad cubre la verdad, pero sus extremos están unas cuatro veces separados, demasiado para darlo como cota, así que Gravitas da la masa circular y declara la suposición, y no da el intervalo como cota.',
       misconceptions: [
         {
           say: 'A primer orden la amplitud es proporcional a la masa, pero tiene además un término con la excentricidad, y eso es lo que muestran las dos curvas.',
