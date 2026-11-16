@@ -266,6 +266,19 @@ test.describe('Restart asks first', () => {
     await expect.poll(async () => (await stored(page)).responses).toEqual({});
   });
 
+  test('erasing clears the answers kept from an earlier version too', async ({
+    page,
+    app,
+  }) => {
+    const earlier = `${LESSON}:a-step-this-lesson-no-longer-has`;
+    await openAt(page, app, LESSON, NUMERIC, { ...answers, [earlier]: '7' });
+    expect((await stored(page)).responses).toMatchObject({ [earlier]: '7' });
+    await ask(page);
+    await page.locator('#investigationRestartGo').click();
+    await expect(dialog(page)).toBeHidden();
+    await expect.poll(async () => (await stored(page)).responses).toEqual({});
+  });
+
   test('it is in Spanish for a Spanish reader, and passes axe', async ({
     page,
     app,

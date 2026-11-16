@@ -773,7 +773,7 @@ add(
     ['both', 'a later schema', d => (d.schema = 3)],
     ['lenient', 'a list, which reads as an empty record', () => as([])],
     [
-      'validator',
+      'fine',
       'an answer to a step of another lesson',
       d => (d.responses.other = 1),
     ],

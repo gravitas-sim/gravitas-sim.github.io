@@ -24,7 +24,8 @@ import {
   formatFieldNumber,
   keyForAssignment,
   earlierFor,
-  forgetDrafts,
+  forgetKept,
+  keepEarlier,
   load,
   parseFieldNumber,
   progressFor,
@@ -57,7 +58,7 @@ import {
 } from './data/investigations/loaders.js';
 // Lessons provided by capability packages load through the platform resolver,
 // which installs their loaders in the registry when it is imported.
-import { state, SETTINGS, command } from './appState.js';
+import { state, SETTINGS, command, holdClock } from './appState.js';
 
 import {
   bh_list,
@@ -614,7 +615,7 @@ function applySetup(setup) {
     // have to be reasserted every time rather than set once on open.
     applyLocks();
   } catch (err) {
-    console.warn('Step setup', err);
+    console.warn(err);
     toast(t('inv.error.scenario'));
   }
 }
@@ -634,6 +635,7 @@ function applySetup(setup) {
  */
 function bindStepRoles(force) {
   const step = currentStep();
+  holdClock(step, appliedSetup);
   // Whatever the last step was illustrating is not this step's business. The
   // widget re-asserts it on its first tick if this step wants one, so the
   // cost of clearing here is one frame and the cost of not clearing is a
@@ -645,7 +647,7 @@ function bindStepRoles(force) {
   clearSnapshots();
   const warn = (problems, what) => {
     for (const [role, why] of Object.entries(problems))
-      console.warn(`${step.sid} ${what} "${role}": ${why}`);
+      console.warn(`${step.sid} ${what} ${role}: ${why}`);
   };
   // A stage declares the whole scene and binds its own roles, so it takes
   // precedence: a step cannot both stand its own stars on the canvas and bind
@@ -2093,9 +2095,7 @@ function goToStep(index, { rebuild = false, open = false } = {}) {
   save();
   renderStep();
   els.body.scrollTop = 0;
-  // On a narrow screen it is the whole sheet that scrolls, not the body, and
-  // Next sits at the bottom of it: without this the next step would open
-  // scrolled to wherever the reader had to go to press it.
+  // On a narrow screen the whole sheet scrolls, not the body.
   els.panel.scrollTop = 0;
 }
 
@@ -2269,15 +2269,13 @@ export async function openInvestigation(id, opts = {}) {
   const saved = authoring ? null : load(id, active);
   responses = saved?.responses || {};
   if (assignment && saved?.responses) {
-    // A step rewritten under its own id since this assignment was made is a
-    // different question: a stored answer to the old one is held back, not
-    // shown, which is the point of carrying fingerprints in the payload.
-    const filtered = filterResponses(
+    // A step rewritten under its own id since the assignment was made is a
+    // different question: its old answer is held back, not shown.
+    responses = filterResponses(
       assignmentBinding,
       saved.responses,
       sid => `${inv.id}:${sid}`
-    );
-    responses = filtered.kept;
+    ).kept;
   }
   attempts = saved?.attempts || {};
   visited = saved?.visited || new Set();
@@ -2626,9 +2624,8 @@ const finishHost = () => ({
   saveFile,
   restoreInto: restored => {
     progressNotes = [];
-    responses = restored.responses;
-    attempts = restored.attempts;
-    visited = restored.visited;
+    ({ responses, attempts, visited } = restored);
+    keepEarlier(active.id, restored.earlier);
     startedAt = restored.startedAt || new Date().toISOString();
     save();
     goToStep(restored.stepIndex, { rebuild: true });
@@ -3007,11 +3004,9 @@ export function initInvestigations({ signal } = {}) {
   });
   on('investigationRestartGo', () => {
     ask.close();
-    responses = {};
-    attempts = {};
-    visited = new Set();
+    [responses, attempts, visited] = [{}, {}, new Set()];
     startedAt = new Date().toISOString();
-    forgetDrafts();
+    forgetKept(active.id);
     toast(t('inv.progress.cleared'));
     goToStep(0);
   });

@@ -38,7 +38,7 @@ export function retiredFindings(lesson) {
     }
     if (e.to !== null && !live.has(e.to))
       out.push(`${at}: \`to\` must be a step the lesson has, or null`);
-    if (!/^\d+\.\d+(\.\d+)?$/.test(e.release ?? ''))
+    if (typeof e.release !== 'string' || !/^\d+\.\d+(\.\d+)?$/.test(e.release))
       out.push(`${at}: \`release\` must be a version such as 3.1`);
     for (const l of ['en', 'es'])
       if (typeof e.was?.[l] !== 'string' || !e.was[l].trim())

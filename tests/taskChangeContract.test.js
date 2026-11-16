@@ -1,9 +1,23 @@
-import { describe, expect, test } from '@jest/globals';
+import { beforeEach, describe, expect, test } from '@jest/globals';
 import {
   readProgress,
   writeProgress,
 } from '../js/investigations/progressSchema.js';
-import { earlierAnswers, wasIn } from '../js/investigations/stepView.js';
+import {
+  bindPersistence,
+  earlierAnswers,
+  earlierFor,
+  forgetKept,
+  keepEarlier,
+  load,
+  save,
+  sessionProgress,
+  wasIn,
+} from '../js/investigations/stepView.js';
+import {
+  buildBackup,
+  restoreProgress,
+} from '../js/investigations/progressBackup.js';
 import { EDITS, editedLesson, lesson } from './compat/kinds/_lesson.mjs';
 
 // The task-change contract: a shipped step is reworded in place, or revised
@@ -95,7 +109,8 @@ describe('progress load: reword, revise, insert and remove', () => {
     const [e] = earlierAnswers(l, r.earlier.responses);
     expect(e).toMatchObject({ id: 'measure', text: 'd=4.2' });
     expect(e.r.to).toBeNull();
-    expect(r.notes.find(n => n.code === 'removedSteps').dropped).toBe(2);
+    // one step, not its two keys
+    expect(r.notes.find(n => n.code === 'removedSteps').dropped).toBe(1);
   });
 
   test.each(EDITS)('%s: saving after reading loses no saved key', edit => {
@@ -227,7 +242,9 @@ describe('the other readers', () => {
     expect(rep.earlier).toEqual([
       {
         step: 's1',
+        kind: 'earlier',
         typed: '4',
+        choice: null,
         passed: true,
         to: 's2',
         release: '3.1',
@@ -282,5 +299,297 @@ describe('the author rule id/retired', () => {
       investigations: [copy],
     }).filter(f => f.rule === 'id/retired');
     expect(found.length).toBeGreaterThan(0);
+  });
+});
+
+// --- The record the engine keeps, and what carries it between devices ---------
+
+describe('earlier answers: backup, storage, Restart', () => {
+  let state;
+  const bind = over =>
+    bindPersistence({
+      state: () => ({
+        active: state.lesson,
+        stepIndex: 0,
+        responses: state.responses,
+        attempts: {},
+        visited: new Set(),
+        startedAt: '2026-11-15T00:00:00.000Z',
+        depthChoice: 'core',
+        deepest: 'core',
+        spent: 0,
+        progressNotes: [],
+      }),
+      authoring: () => false,
+      assigned: () => state.assigned,
+      assignmentKey: () => 'gravitas_assignment_abc',
+      els: () => ({}),
+      clock: () => {},
+      ...over,
+    });
+  const FREE = 'gravitas_investigation_tides';
+  const saved = key => sessionProgress.get(key);
+
+  beforeEach(() => {
+    localStorage.clear();
+    sessionProgress.clear();
+    state = { lesson: editedLesson('revise'), responses: {}, assigned: false };
+    bind();
+    forgetKept('tides');
+    forgetKept('other');
+  });
+
+  test('a backup made before the revision restores the old answer as an earlier one, not a lost one', () => {
+    const old = buildBackup({
+      lesson: lesson(),
+      responses: { 'tides:guess': 0, 'tides:ask': 2 },
+      attempts: { 'tides:guess': 1 },
+      visited: ['intro', 'guess'],
+      stepSid: 'ask',
+      startedAt: '2026-10-01T00:00:00.000Z',
+    });
+    const r = restoreProgress(old, editedLesson('revise'));
+    expect(r.responses).toEqual({ 'tides:ask': 2 });
+    expect(r.earlier).toEqual({
+      responses: { 'tides:guess': 0 },
+      attempts: { 'tides:guess': 1 },
+    });
+    // set aside, not lost: neither reported dropped nor counted discarded
+    expect(r.dropped).toEqual([]);
+    expect(r.discardedKeys).toBe(0);
+  });
+
+  test('a backup exported after the revision carries the earlier answers and restores them', () => {
+    const l = editedLesson('revise');
+    const exported = buildBackup({
+      lesson: l,
+      responses: {
+        'tides:guess': 0,
+        'tides:guess:locale': 'en',
+        'tides:ask': 2,
+      },
+      attempts: {},
+      visited: [],
+      stepSid: 'ask',
+      startedAt: null,
+    });
+    const r = restoreProgress(exported, l);
+    expect(r.earlier.responses).toEqual({
+      'tides:guess': 0,
+      'tides:guess:locale': 'en',
+    });
+    expect(r.discardedKeys).toBe(0);
+    // the engine merges them before it saves, so the saved record has them
+    state.responses = r.responses;
+    keepEarlier('tides', r.earlier);
+    save();
+    expect(saved(FREE).responses).toEqual({
+      'tides:guess': 0,
+      'tides:guess:locale': 'en',
+      'tides:ask': 2,
+    });
+    expect(readProgress(saved(FREE), l).earlier.responses['tides:guess']).toBe(
+      0
+    );
+  });
+
+  test('a restore never turns a key of another lesson, or a key by position, into an earlier answer', () => {
+    const l = editedLesson('revise');
+    const b = buildBackup({
+      lesson: l,
+      responses: { 'tides:ask': 2, 'other:x': 1 },
+      attempts: {},
+      visited: [],
+      stepSid: 'ask',
+      startedAt: null,
+    });
+    expect(restoreProgress(b, l).earlier.responses).toEqual({});
+    expect(restoreProgress(b, l).discardedKeys).toBe(1);
+    const byPosition = { ...b, version: 1, steps: [] };
+    byPosition.progress = { ...b.progress, responses: { 'tides:9': 1 } };
+    const p = restoreProgress(byPosition, l);
+    expect(p.earlier.responses).toEqual({});
+    expect(p.discardedKeys).toBe(1);
+  });
+
+  test('earlier answers of the free lesson are not written into an assignment on it', () => {
+    localStorage.setItem(FREE, JSON.stringify(SAVED));
+    const l = state.lesson;
+    expect(load('tides', l).earlier.responses['tides:guess']).toBe(0);
+    expect(earlierFor('tides').responses['tides:guess']).toBe(0);
+
+    state.assigned = true; // its own key, nothing saved there yet
+    expect(load('tides', l)).toBeNull();
+    expect(earlierFor('tides')).toBeUndefined();
+    save();
+    expect(saved('gravitas_assignment_abc').responses).toEqual({});
+    expect(saved('gravitas_assignment_abc').attempts).toEqual({});
+
+    // and back in free play they are still there, under their own key
+    state.assigned = false;
+    expect(load('tides', l).earlier.responses['tides:guess']).toBe(0);
+  });
+
+  test('a lesson opened again with nothing saved keeps no earlier answers from before', () => {
+    localStorage.setItem(FREE, JSON.stringify(SAVED));
+    load('tides', state.lesson);
+    localStorage.clear();
+    sessionProgress.clear();
+    expect(load('tides', state.lesson)).toBeNull();
+    expect(earlierFor('tides')).toBeUndefined();
+  });
+
+  test('reading the counts for a card does not forget what the open lesson holds', () => {
+    localStorage.setItem(FREE, JSON.stringify(SAVED));
+    load('tides', state.lesson);
+    load('tides');
+    expect(earlierFor('tides').responses['tides:guess']).toBe(0);
+  });
+
+  test('Restart clears the earlier answers too, and the next save writes none', () => {
+    localStorage.setItem(FREE, JSON.stringify(SAVED));
+    load('tides', state.lesson);
+    forgetKept('tides');
+    expect(earlierFor('tides')).toBeUndefined();
+    state.responses = {};
+    save();
+    expect(saved(FREE).responses).toEqual({});
+    expect(saved(FREE).attempts).toEqual({});
+    expect(load('tides', state.lesson).earlier).toBeUndefined();
+  });
+});
+
+describe('typed drafts do not travel between records', () => {
+  test('a draft of another lesson, or not text, is not read; a new lesson starts with none', () => {
+    bindPersistence({
+      state: () => ({
+        active: lesson(),
+        stepIndex: 0,
+        responses: {},
+        attempts: {},
+        visited: new Set(),
+        startedAt: null,
+        depthChoice: 'core',
+        deepest: 'core',
+        spent: 0,
+        progressNotes: [],
+      }),
+      authoring: () => false,
+      assigned: () => false,
+      assignmentKey: () => 'x',
+      els: () => ({}),
+      clock: () => {},
+    });
+    sessionProgress.clear();
+    localStorage.clear();
+    localStorage.setItem(
+      'gravitas_investigation_tides',
+      JSON.stringify({
+        ...SAVED,
+        drafts: { 'tides:measure:d': '4,5', 'other:x': '9', 'tides:guess': 7 },
+      })
+    );
+    load('tides', lesson());
+    save();
+    expect(sessionProgress.get('gravitas_investigation_tides').drafts).toEqual({
+      'tides:measure:d': '4,5',
+    });
+    // opening a lesson with nothing saved drops the last lesson's drafts
+    localStorage.clear();
+    sessionProgress.clear();
+    expect(load('tides', lesson())).toBeNull();
+    save();
+    expect(
+      'drafts' in sessionProgress.get('gravitas_investigation_tides')
+    ).toBe(false);
+  });
+});
+
+describe('the small ones', () => {
+  test('the notice counts steps, not their keys, and not another lesson', () => {
+    const r = readProgress(
+      {
+        ...SAVED,
+        responses: {
+          ...SAVED.responses,
+          'tides:gone': 1,
+          'tides:gone:d': '1',
+          'tides:gone:d:locale': 'en',
+          'other:x': 1,
+          'other:y': 1,
+        },
+      },
+      lesson()
+    );
+    expect(r.notes.find(n => n.code === 'removedSteps').dropped).toBe(1);
+  });
+
+  test('a field named like a bookkeeping key is an answer, and the real ones are not', () => {
+    const owner = { id: 'o', steps: [{ sid: 'z' }] };
+    const rows = earlierAnswers(owner, {
+      'o:a:helpful': 3,
+      'o:a:hinge': 4,
+      'o:a:shown': true,
+      'o:a:help': 1,
+      'o:a:tool:g': 2,
+      'o:a:d:locale': 'en',
+    });
+    expect(rows).toEqual([
+      { id: 'a', text: 'helpful=3; hinge=4', r: undefined },
+    ]);
+  });
+
+  test('a step called constructor is not a retired step', async () => {
+    const { swapRetired } = await import('../js/assignments/assignment.js');
+    const l = { id: 'l', steps: [{ sid: 'constructor' }], retired: {} };
+    expect(swapRetired(l, ['constructor'])).toEqual(['constructor']);
+  });
+
+  test('a release must be a string: 3.1 as a number is refused', async () => {
+    const { retiredFindings } =
+      await import('../tools/authoring/retiredRules.mjs');
+    const l = editedLesson('revise');
+    l.retired.guess.release = 3.1;
+    expect(retiredFindings(l).join('\n')).toMatch(/"guess": `release`/);
+  });
+
+  test('the 3-D guide report lists every earlier answer in one fixed shape', async () => {
+    const { reportOf } = await import('../js/lab3d/view/guidePanel.js');
+    const guide = {
+      id: 'g',
+      steps: [
+        { id: 's2', kind: 'read', path: 'both' },
+        { id: 's3', kind: 'read', path: 'both' },
+      ],
+      retired: {
+        b: { to: 's2', release: '3.1', was: { en: 'B?', es: 'B?es' } },
+      },
+    };
+    const progress = {
+      answers: { b: { choice: 1 }, a: { typed: '5', to: 'mine', was: 'x' } },
+      records: {},
+      earlier: { s3: { typed: '7' } },
+    };
+    const rows = reportOf(guide, 'intro', progress).earlier;
+    expect(rows.map(r => r.step)).toEqual(['a', 'b']);
+    for (const r of rows)
+      expect(Object.keys(r)).toEqual([
+        'step',
+        'kind',
+        'typed',
+        'choice',
+        'passed',
+        'to',
+        'release',
+        'was',
+      ]);
+    // a saved field cannot stand in for the retirement entry
+    expect(rows[0]).toMatchObject({
+      kind: 'earlier',
+      typed: '5',
+      to: null,
+      was: null,
+    });
+    expect(rows[1]).toMatchObject({ choice: 1, to: 's2', release: '3.1' });
   });
 });

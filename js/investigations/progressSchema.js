@@ -140,16 +140,13 @@ export function migrateFromV1(data, lesson) {
   let orphaned = 0;
 
   /** `<lesson>:<index>` and `<lesson>:<index>:<rest>` -> `<lesson>:<sid>...` */
+  const prefix = `${lessonId}:`;
   const rekey = key => {
-    const prefix = `${lessonId}:`;
-    if (!key.startsWith(prefix)) return null;
-    const rest = key.slice(prefix.length);
-    const cut = rest.indexOf(':');
-    const head = cut === -1 ? rest : rest.slice(0, cut);
-    const tail = cut === -1 ? '' : rest.slice(cut);
-    if (!/^\d+$/.test(head)) return null;
-    const sid = sids[Number(head)];
-    return sid ? `${prefix}${sid}${tail}` : null;
+    const m = /^(\d+)(:[^]*)?$/.exec(
+      key.startsWith(prefix) ? key.slice(prefix.length) : ''
+    );
+    const sid = m && sids[Number(m[1])];
+    return sid ? `${prefix}${sid}${m[2] ?? ''}` : null;
   };
 
   for (const [key, value] of Object.entries(data?.responses || {})) {
@@ -227,29 +224,18 @@ export function readProgress(data, lesson) {
   const prefix = `${lesson?.id}:`;
   /** Keys of another lesson are left out; a step the lesson lacks goes to `earlier`. */
   const keep = (source, into, kind) => {
-    let setAside = 0;
     for (const [key, value] of Object.entries(source || {})) {
       const sid =
         key.startsWith(prefix) && key.slice(prefix.length).split(':')[0];
       if (known.has(sid)) into[key] = value;
-      else {
-        setAside++;
-        if (sid !== false)
-          (out.earlier ??= { responses: {}, attempts: {} })[kind][key] = value;
-      }
+      else if (sid !== false)
+        (out.earlier ??= { responses: {}, attempts: {} })[kind][key] = value;
     }
-    return setAside;
   };
 
-  const droppedResponses =
-    data.responses &&
-    typeof data.responses === 'object' &&
-    !Array.isArray(data.responses)
-      ? keep(data.responses, out.responses, 'responses')
-      : 0;
-  if (data.attempts && typeof data.attempts === 'object') {
-    keep(data.attempts, out.attempts, 'attempts');
-  }
+  // Anything but an object has no keys of this lesson, so it sets nothing aside.
+  keep(data.responses, out.responses, 'responses');
+  keep(data.attempts, out.attempts, 'attempts');
 
   for (const sid of Array.isArray(data.visited) ? data.visited : []) {
     if (known.has(sid)) out.visited.add(sid);
@@ -263,10 +249,12 @@ export function readProgress(data, lesson) {
   if (DEPTHS.includes(data.deepest)) out.deepest = data.deepest;
   if (data.spent > 0) out.spent = Math.floor(data.spent);
 
-  // Steps removed since the save: kept in `earlier`, and the reader is told.
-  if (droppedResponses > 0) {
-    out.notes.push({ code: 'removedSteps', dropped: droppedResponses });
-  }
+  // Steps removed since the save: kept in `earlier`, and the reader is told how
+  // many steps (not keys: a step's sub-keys and a foreign key are not answers).
+  const gone = new Set(
+    Object.keys(out.earlier?.responses || {}).map(k => k.split(':')[1])
+  );
+  if (gone.size) out.notes.push({ code: 'removedSteps', dropped: gone.size });
   return out;
 }
 

@@ -83,6 +83,7 @@
       "key:question.unit",
       "key:question.worked",
       "key:read.bind",
+      "key:read.motion",
       "key:read.quote",
       "key:read.setup",
       "key:read.tip",
@@ -280,7 +281,7 @@
     "investigations": 124,
     "steps": 1980,
     "activityCuts": 6,
-    "lessonTokens": 149,
+    "lessonTokens": 150,
     "activityTokens": 29,
     "stepTypes": {
       "read": 375,

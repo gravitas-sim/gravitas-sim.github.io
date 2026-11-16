@@ -15,29 +15,21 @@
 // Stable step identity
 // -----------------------------------------------------------------------------
 // Version 2 of this format keys progress by a step's `sid` - the stable id
-// written into the lesson, minted by tools/add-step-ids.mjs and protected from
+// written into the lesson (tools/add-step-ids.mjs) and protected from
 // translation by STRUCTURAL. A sid survives reordering, rewording and a change
 // of language, because it is derived from none of them.
 //
-// Version 1 keyed by *position* and carried a structural fingerprint per step
-// so a reordered lesson could be recovered. Both of those are wrong, in
-// different ways:
+// Version 1 keyed by *position* and carried a structural fingerprint per step.
+// Position is not identity (insert a step at the top and every answer below it
+// belongs to the question above), and neither is a fingerprint: two four-option
+// predict steps produce the same string, and swapping them moved one answer onto
+// the other's question while reporting that nothing had moved.
 //
-//   Position is not identity. Insert a step at the top and every answer below
-//   it belongs to the question above the one it answers.
-//
-//   A structural fingerprint is not identity either. It is built from type,
-//   kind, widget id, scenario and field ids, so two four-option predict steps
-//   produce the same string. `detect-this-planet` has three such pairs; swapping
-//   steps 1 and 5 moved one answer onto the other's question and reported that
-//   nothing had moved, which is worse than refusing.
-//
-// So a v1 backup is now restored *by position*, which is the only mapping its
-// contents actually support, and the fingerprints are used as a **check**
-// rather than as a matcher: where the fingerprint at a position disagrees with
-// the step now there, the restore says so instead of quietly hunting for a
-// better-looking home for the answer. Reporting uncertainty is the whole
-// improvement; guessing plausibly is what went wrong before.
+// So a v1 backup is restored *by position*, the only mapping its contents
+// support, and the fingerprints are a **check**, not a matcher: where the one at
+// a position disagrees with the step now there, the restore says so instead of
+// hunting for a better-looking home. Reporting uncertainty is the improvement;
+// guessing plausibly is what went wrong before.
 // =============================================================================
 
 /**
@@ -82,20 +74,11 @@ export function stepFingerprint(step) {
   // The number of options discriminates two choice questions from each other
   // without depending on their wording.
   parts.push(Array.isArray(step.options) ? String(step.options.length) : '-');
-  // The answer's semantics, which the count alone does not carry.
-  //
-  // The count was the whole of it, so a same-length reorder of the options
-  // left the fingerprint identical - and a stored answer is an INDEX. A
-  // student's "2" would silently come to mean a different option, and an
-  // assignment binding would go on calling it valid. Changing which option is
-  // correct, or moving a numeric answer or its tolerance, was invisible in
-  // exactly the same way.
-  //
-  // Deliberately not the option prose: the Spanish shadow translates it, and
-  // hashing words would invalidate every binding in the other language for no
-  // reason. What is hashed is the shape of the answer - where the correct one
-  // sits, what a numeric answer is, and how wide its tolerance is - all of
-  // which a translation leaves alone and an edit to the question does not.
+  // The answer's semantics, which the count alone does not carry: a stored
+  // answer is an INDEX, so a same-length reorder of the options, or a moved
+  // correct option, numeric answer or tolerance, would otherwise change what
+  // "2" means and go on being called valid. Not the option prose: the Spanish
+  // shadow translates it. What is hashed is the shape of the answer.
   parts.push(answerSignature(step));
   return parts.join('|');
 }
@@ -191,78 +174,47 @@ export function buildBackup({
  * @returns {{ok: true}|{ok: false, reason: string}} The verdict
  */
 export function validateBackup(data) {
-  if (!data || typeof data !== 'object' || Array.isArray(data)) {
-    return { ok: false, reason: 'notAnObject' };
-  }
-  if (data.kind !== BACKUP_KIND) return { ok: false, reason: 'notABackup' };
-  if (!Number.isInteger(data.version) || data.version < 1) {
-    return { ok: false, reason: 'noVersion' };
-  }
-  if (data.version > BACKUP_VERSION) {
-    return { ok: false, reason: 'tooNew' };
-  }
-  if (!data.lesson || typeof data.lesson.id !== 'string') {
-    return { ok: false, reason: 'noLesson' };
-  }
+  const no = reason => ({ ok: false, reason });
+  const nil = v => v === undefined || v === null;
+  if (!isPlainObject(data)) return no('notAnObject');
+  if (data.kind !== BACKUP_KIND) return no('notABackup');
+  if (!Number.isInteger(data.version) || data.version < 1)
+    return no('noVersion');
+  if (data.version > BACKUP_VERSION) return no('tooNew');
+  if (typeof data.lesson?.id !== 'string') return no('noLesson');
   const p = data.progress;
-  if (!p || typeof p !== 'object' || Array.isArray(p)) {
-    return { ok: false, reason: 'noProgress' };
-  }
+  if (!isPlainObject(p)) return no('noProgress');
 
   // Every field is checked before the caller is allowed to touch a student's
-  // current answers. `typeof [] === 'object'` on its own let an array of
-  // anything through as a response map, and nothing checked `attempts`,
-  // `steps`, the timestamps or the values at all - so a file that was almost a
-  // backup could half-apply and leave the panel holding a mixture.
-  if (!isPlainObject(p.responses, true)) {
-    return { ok: false, reason: 'badResponses' };
-  }
-  if (!isPlainObject(p.attempts, true)) {
-    return { ok: false, reason: 'badAttempts' };
-  }
-  if (p.visited !== undefined && !Array.isArray(p.visited)) {
-    return { ok: false, reason: 'badVisited' };
-  }
-  if (!isScalarMap(p.responses)) return { ok: false, reason: 'badResponses' };
-  if (!isNumberMap(p.attempts)) return { ok: false, reason: 'badAttempts' };
-
-  if (p.startedAt !== undefined && p.startedAt !== null) {
-    if (
-      typeof p.startedAt !== 'string' ||
-      Number.isNaN(Date.parse(p.startedAt))
-    ) {
-      return { ok: false, reason: 'badStartedAt' };
-    }
-  }
+  // current answers: a file that was almost a backup could otherwise half-apply
+  // and leave the panel holding a mixture.
+  if (!isPlainObject(p.responses, true)) return no('badResponses');
+  if (!isPlainObject(p.attempts, true)) return no('badAttempts');
+  if (p.visited !== undefined && !Array.isArray(p.visited))
+    return no('badVisited');
+  if (!isScalarMap(p.responses)) return no('badResponses');
+  if (!isNumberMap(p.attempts)) return no('badAttempts');
   if (
-    p.stepSid !== undefined &&
-    p.stepSid !== null &&
-    typeof p.stepSid !== 'string'
-  ) {
-    return { ok: false, reason: 'badPosition' };
-  }
-  if (p.stepIndex !== undefined && !Number.isInteger(p.stepIndex)) {
-    return { ok: false, reason: 'badPosition' };
-  }
-
-  if (data.steps !== undefined) {
-    if (!Array.isArray(data.steps)) return { ok: false, reason: 'badSteps' };
-    for (const entry of data.steps) {
-      if (!entry || typeof entry !== 'object' || Array.isArray(entry)) {
-        return { ok: false, reason: 'badSteps' };
-      }
-      if (
-        entry.sid !== undefined &&
-        entry.sid !== null &&
-        typeof entry.sid !== 'string'
-      ) {
-        return { ok: false, reason: 'badSteps' };
-      }
-      if (entry.index !== undefined && !Number.isInteger(entry.index)) {
-        return { ok: false, reason: 'badSteps' };
-      }
-    }
-  }
+    !nil(p.startedAt) &&
+    (typeof p.startedAt !== 'string' || Number.isNaN(Date.parse(p.startedAt)))
+  )
+    return no('badStartedAt');
+  if (
+    (!nil(p.stepSid) && typeof p.stepSid !== 'string') ||
+    (p.stepIndex !== undefined && !Number.isInteger(p.stepIndex))
+  )
+    return no('badPosition');
+  if (
+    data.steps !== undefined &&
+    (!Array.isArray(data.steps) ||
+      data.steps.some(
+        e =>
+          !isPlainObject(e) ||
+          (!nil(e.sid) && typeof e.sid !== 'string') ||
+          (e.index !== undefined && !Number.isInteger(e.index))
+      ))
+  )
+    return no('badSteps');
   return { ok: true };
 }
 
@@ -326,7 +278,7 @@ function splitStepKey(key, lessonId) {
  *
  * **v2** keys by sid, so the mapping is exact: an answer goes to the step whose
  * id it names, wherever that step now sits, and an answer whose step has been
- * deleted is dropped. Nothing is inferred.
+ * deleted is set aside in `earlier`. Nothing is inferred.
  *
  * **v1** keys by index. Position is the only mapping its contents support, so
  * position is what is used - and the fingerprints it carries are used to *check*
@@ -345,8 +297,9 @@ function splitStepKey(key, lessonId) {
  * @param {object} lesson - The merged lesson to restore into
  * @returns {{responses: object, attempts: object, visited: Set<string>,
  *   stepIndex: number, startedAt: ?string, moved: string[], dropped: string[],
- *   quarantined: object, uncertain: number, discardedKeys: number,
- *   byPosition: boolean}} The progress, and everything that was not certain
+ *   quarantined: object, earlier: {responses: object, attempts: object},
+ *   uncertain: number, discardedKeys: number, byPosition: boolean}} The
+ *   progress, and everything that was not certain
  */
 export function restoreProgress(backup, lesson) {
   const lessonId = lesson?.id;
@@ -401,7 +354,8 @@ export function restoreProgress(backup, lesson) {
       if (!sid) continue;
       const to = indexBySid.get(sid);
       if (to === undefined) {
-        dropped.push(sid);
+        // A step the lesson retired is set aside (kept below), not lost.
+        if (!lesson?.retired?.[sid]) dropped.push(sid);
         continue;
       }
       // An option list that changed length invalidates a stored choice index.
@@ -416,7 +370,10 @@ export function restoreProgress(backup, lesson) {
     }
   }
 
-  const rekey = (table, out) => {
+  // Answers to steps this lesson no longer has: an exported backup carries the
+  // ones the student's browser had set aside, so a restore sets them aside too.
+  const earlier = { responses: {}, attempts: {} };
+  const rekey = (table, out, gone) => {
     for (const [key, value] of Object.entries(table || {})) {
       const parsed = splitStepKey(key, fromId);
       if (!parsed) {
@@ -429,6 +386,10 @@ export function restoreProgress(backup, lesson) {
         continue;
       }
       const to = resolve.get(parsed.head);
+      if (to === undefined && !byPosition && !indexBySid.has(parsed.head)) {
+        gone[`${lessonId}:${parsed.head}${parsed.suffix}`] = value;
+        continue;
+      }
       if (to === undefined || to >= lessonSteps.length) {
         discardedKeys++;
         continue;
@@ -436,8 +397,8 @@ export function restoreProgress(backup, lesson) {
       out[`${lessonId}:${sids[to]}${parsed.suffix}`] = value;
     }
   };
-  rekey(source.responses, responses);
-  rekey(source.attempts, attempts);
+  rekey(source.responses, responses, earlier.responses);
+  rekey(source.attempts, attempts, earlier.attempts);
 
   const visited = new Set();
   for (const entry of source.visited || []) {
@@ -464,6 +425,7 @@ export function restoreProgress(backup, lesson) {
     moved,
     dropped,
     quarantined,
+    earlier,
     uncertain,
     discardedKeys,
     byPosition,

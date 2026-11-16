@@ -643,6 +643,7 @@ const ENERGY = {
       sid: 'something-that-came-from-outside',
       bind: VISITOR_BODIES,
       type: 'read',
+      motion: true,
       title: 'Something that came from outside',
       body: `On 19 October 2017, a survey telescope in Hawaii picked up a faint
              moving object. Within days it was clear that it was not behaving
