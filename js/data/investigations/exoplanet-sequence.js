@@ -640,7 +640,7 @@ export const WHAT_KINDS_OF_PLANETS_EXIST = {
              does not answer it. A low density says the planet <em>has</em> a thick envelope; whether a small, hot world
              can <em>hold on to</em> one is a balance between how fast gas moves at its temperature and how fast it takes
              to leave, and it depends on the star&rsquo;s light over time, which no diagram of mass and radius carries.
-             \n\nThis unit does not calculate the escape of a gas from a world, so this is a reading step and not
+             \n\nThe calculation of the escape of a gas from a world was gated out of this unit, so this is a reading step and not
              an investigation. The honest statement from this diagram is the one in the box: a bulk density, with its
              uncertainty, and nothing about what a planet keeps.`,
       tool: MR({ lines: 1 }),
@@ -1625,7 +1625,7 @@ export const WHAT_KINDS_OF_PLANETS_EXIST_ES = {
     {
       title: '¿Podría tener una atmósfera?',
       body: `Una pregunta natural es si un planeta de una masa y un radio dados conserva un gas, y el diagrama no la responde. Una densidad baja dice que el planeta <em>tiene</em> una envoltura gruesa; si un mundo pequeño y caliente puede <em>retener</em> una es un equilibrio entre lo rápido que se mueve el gas a su temperatura y lo que tarda en escapar, y depende de la luz de la estrella a lo largo del tiempo, que ningún diagrama de masa y radio lleva.
-             \n\nEsta unidad no calcula el escape de un gas de un mundo, así que este es un paso de lectura y no una investigación. La afirmación honesta de este diagrama es la de la caja: una densidad media, con su incertidumbre, y nada sobre lo que un planeta conserva.`,
+             \n\nEl cálculo del escape de un gas de un mundo quedó fuera de esta unidad, así que este es un paso de lectura y no una investigación. La afirmación honesta de este diagrama es la de la caja: una densidad media, con su incertidumbre, y nada sobre lo que un planeta conserva.`,
     },
     {
       title: 'Tipos, y lo que oculta cada diagrama',
