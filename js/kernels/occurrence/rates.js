@@ -80,9 +80,7 @@ export function startInjection({
   only = null,
 }) {
   if (!Number.isInteger(trials) || trials < 1 || trials > 64)
-    throw new RangeError(
-      'trials per star and bin: a whole number from 1 to 64'
-    );
+    throw new RangeError('trials per star and bin: a whole number 1 to 64');
   return {
     stars,
     seed,

@@ -56,12 +56,12 @@ export function harmonicFlux(p, t) {
 export function run(state, rawSetup, opts = {}) {
   const p = state.periodic;
   if (!p || !(p.periodDays > 0))
-    throw new Error('the periodic model needs state.periodic with a period');
+    throw new Error('the periodic model needs state.periodic.period');
   if (!['harmonic', 'eclipsing'].includes(p.kind))
     throw new Error('periodic.kind is harmonic or eclipsing');
   if (p.kind === 'eclipsing' && !(p.r1 > 0 && p.r2 > 0 && p.r1 + p.r2 < 1))
     throw new Error(
-      'the eclipsing model needs radii in units of the separation, summing to less than 1'
+      'the eclipsing model needs radii (in separations) summing below 1'
     );
   const setup = requireSetup(rawSetup, ['photometer']);
   const plan = epochsInDays(setup);

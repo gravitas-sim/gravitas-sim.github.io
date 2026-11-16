@@ -56,9 +56,15 @@ import {
   loadInvestigation,
   provideLessonLoaders,
 } from './data/investigations/loaders.js';
-// Lessons provided by capability packages load through the platform resolver,
-// which installs their loaders in the registry when it is imported.
-import { state, SETTINGS, command, holdClock } from './appState.js';
+// Capability-package lessons load through the platform resolver on import.
+import {
+  state,
+  SETTINGS,
+  command,
+  holdClock,
+  releaseHold,
+} from './appState.js';
+import { setParkedPause } from './timeline.js';
 
 import {
   bh_list,
@@ -635,11 +641,12 @@ function applySetup(setup) {
  */
 function bindStepRoles(force) {
   const step = currentStep();
+  const running = !state.paused;
   holdClock(step, appliedSetup);
-  // Whatever the last step was illustrating is not this step's business. The
-  // widget re-asserts it on its first tick if this step wants one, so the
-  // cost of clearing here is one frame and the cost of not clearing is a
-  // supernova drawn around a star that has just been restaged as the Sun.
+  if (running && state.paused) announce(t('readout.status.paused'));
+  setParkedPause(state.paused);
+  // Whatever the last step illustrated is not this step's business; a widget
+  // re-asserts its own on its first tick, one frame later.
   clearEvolutionScene();
   // Frozen copies belong to the screen that froze them, and two consecutive
   // steps can share a stage - in which case applyStage does nothing and the
@@ -2066,11 +2073,9 @@ function goToStep(index, { rebuild = false, open = false } = {}) {
   // only then, so work a student has done: objects placed, mass changed,
   // survives moving between questions about the same system.
   //
-  // Comparing the setup in force rather than testing for a setup on this step
-  // is what makes going backwards correct. The transit lesson swaps in a
-  // blended binary near the end; stepping back to an earlier measurement used
-  // to leave that binary loaded, so a student re-doing the measurement would
-  // quietly be measuring the wrong system.
+  // Comparing the setup in force, not testing for one on this step, makes going
+  // backwards correct: the transit lesson swaps in a blended binary near the
+  // end, and stepping back must not leave it loaded for the earlier measurement.
   const setup = setupInForceAt(stepIndex);
   if (rebuild || (setup && setup !== appliedSetup)) applySetup(setup);
   else applyLocks();
@@ -2452,17 +2457,12 @@ export function closeInvestigation() {
   // give every model-owned body back to the integrator. A body still flagged
   // when the lesson closes is a body that never moves again.
   //
-  // What comes back, and what deliberately does not.
-  //
-  // The sandbox does: a lesson that stages its own scene destroys whatever the
-  // reader had built, and handing back an empty sky was the application
-  // throwing their work away. It is restored from the same share payload the
-  // experiment bench uses to return from an A/B run, so the bodies, the
-  // settings, the clock and the observing context all come back together
-  // rather than in pieces.
-  //
-  // The camera does not, unless it came back with the sandbox. A reader who
-  // panned and zoomed during a lesson meant to.
+  // The sandbox comes back (bodies, settings, clock and observing context, from
+  // the share payload the experiment bench uses): a lesson that stages its own
+  // scene destroyed the reader's work, and an empty sky threw it away. The
+  // camera does not, unless it came back with the sandbox: a reader who panned
+  // and zoomed during a lesson meant to.
+  releaseHold();
   const saved = Object.fromEntries(leaveLessonScope());
   if ('paused' in saved) state.paused = Boolean(saved.paused);
   // Asked before the stage comes down, because taking it down destroys the

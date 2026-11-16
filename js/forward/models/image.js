@@ -37,7 +37,7 @@ export function run(state, rawSetup, opts = {}) {
   const { width, height, pixelScale, psfFwhm } = setup.instrument;
   if (!(pixelScale > 0 && psfFwhm > 0))
     throw new Error(
-      'an image needs instrument.pixelScale and psfFwhm, in arcsec'
+      'an image needs instrument.pixelScale and psfFwhm (arcsec)'
     );
   const sigmaPix = psfFwhm / pixelScale / FWHM_PER_SIGMA;
   const sources = state.sources ?? [];

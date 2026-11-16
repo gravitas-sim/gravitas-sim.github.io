@@ -17,7 +17,13 @@ import {
   clearObjectEnergyHistory,
   DT,
 } from './physics.js';
-import { state, SETTINGS, current_scenario_name, command } from './appState.js';
+import {
+  state,
+  SETTINGS,
+  current_scenario_name,
+  command,
+  releaseHold,
+} from './appState.js';
 import { resetFollowCamera } from './followCamera.js';
 import { ensurePauseAtEvent, renderEventMarker } from './pauseAtEventBridge.js';
 import { toast, announce, loadFailed } from './notify.js';
@@ -197,6 +203,7 @@ function setupTransport() {
 function togglePlay() {
   if (isScrubbing()) returnToLive();
   else state.paused = !state.paused;
+  releaseHold();
   refreshTransport();
 }
 
@@ -799,6 +806,7 @@ export function setPlaying(playing) {
   // An explicit command: playing means running, from the live moment.
   returnToLive();
   state.paused = !playing;
+  releaseHold();
   refreshTransport();
 }
 

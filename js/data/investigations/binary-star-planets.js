@@ -134,6 +134,7 @@ const BINARY_STAR_PLANETS = {
       sid: 'two-suns',
       bind: BINARY_CAST,
       type: 'read',
+      motion: true,
       title: 'Two suns',
       setup: S_LAB,
       body: `Rather more than half of the Sun-like stars in the galaxy have at

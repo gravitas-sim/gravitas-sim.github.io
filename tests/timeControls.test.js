@@ -274,6 +274,26 @@ describe('looking back and returning', () => {
     expect(appState.state.paused).toBe(true);
   });
 
+  test('a lesson step that sets the clock while parked is what Return to live resumes', () => {
+    recordSome();
+    appState.state.paused = false;
+    appState.holdClock({ type: 'read' }, null); // a reading step holds ...
+    timeline.scrubTo(5);
+    appState.holdClock({ type: 'question' }, null); // ... the next one runs
+    timeline.setParkedPause(appState.state.paused);
+    expect(appState.state.paused).toBe(false);
+    timeline.returnToLive();
+    expect(appState.state.paused).toBe(false);
+    // And the other way: a reading step reached while parked holds on return.
+    timeline.scrubTo(5);
+    appState.holdClock({ type: 'read' }, null);
+    timeline.setParkedPause(appState.state.paused);
+    timeline.returnToLive();
+    expect(appState.state.paused).toBe(true);
+    appState.holdClock({ type: 'question' }, null);
+    expect(appState.state.paused).toBe(false);
+  });
+
   test('a body the scrub dropped comes back from the capture, as itself', () => {
     recordSome();
     // A body born after the recording began: not in the early frames.

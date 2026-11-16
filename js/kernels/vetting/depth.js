@@ -46,7 +46,7 @@ export function checkEphemeris(eph) {
     throw new RangeError('the epoch t0 must be a number');
   if (!(Number.isFinite(duration) && duration > 0 && duration < P / 2))
     throw new RangeError(
-      'the duration must be positive and shorter than half the period'
+      'the duration must be positive, under half the period'
     );
 }
 

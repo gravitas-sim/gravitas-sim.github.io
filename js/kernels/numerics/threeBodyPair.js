@@ -91,7 +91,7 @@ export function threeBodyPair(
   const A = run(m, buildScenario, applyLab, c, seed, 0, every);
   const B = run(m, buildScenario, applyLab, c, seed, delta * c.radius, every);
   if (A.count !== 3 || B.count !== 3)
-    throw new Error('a star merged or was removed; the pair has no separation');
+    throw new Error('a star merged or left: no separation');
   const series = A.positions.map((p, i) => ({
     t: i * every * c.dt,
     d: separationOf(p, B.positions[i]),
