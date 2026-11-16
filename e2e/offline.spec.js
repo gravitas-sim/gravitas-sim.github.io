@@ -239,8 +239,20 @@ test.describe('the application survives the network going away', () => {
       });
     // The first visit warms them: the worker fetches the whole list once.
     await expect.poll(warmed, { timeout: 60_000 }).toBeGreaterThan(100);
+    // Until the count stops moving: the worker has fetched the whole list.
+    await expect
+      .poll(
+        async () => {
+          const before = await warmed();
+          await page.evaluate(
+            () => new Promise(resolve => setTimeout(resolve, 500))
+          );
+          return before === (await warmed());
+        },
+        { timeout: 60_000 }
+      )
+      .toBe(true);
     const first = await warmed();
-    await page.waitForTimeout(1500);
 
     // The second visit: requests the worker itself sends to the network.
     const reached = [];
@@ -252,8 +264,14 @@ test.describe('the application survives the network going away', () => {
     await page.waitForFunction(() => window.splashScreenEnded === true, null, {
       timeout: 60_000,
     });
-    // Past the controller change and the page's own warm request.
-    await page.waitForTimeout(3000);
+    // Past the controller change and the page's own warm request: the worker
+    // answers a status ask after the warm ask that came before it, and gets
+    // three seconds in the page for the fetches it would have sent.
+    await page.evaluate(async () => {
+      const m = await import('/js/offline.js');
+      await m.cacheStatus(5000);
+      await new Promise(resolve => setTimeout(resolve, 3000));
+    });
     expect(reached).toEqual([]);
     expect(await warmed()).toBe(first);
   });
