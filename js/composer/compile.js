@@ -273,6 +273,7 @@ export function compileInvestigation(pack, api) {
       if (s.setup.paused !== undefined) out.setup.paused = s.setup.paused;
       if (s.setup.zoom !== undefined) out.setup.camera = { zoom: s.setup.zoom };
     }
+    if (s.motion) out.motion = true;
     if (s.tool) out.tool = { id: s.tool.id };
     if (s.requires) out.requires = [...s.requires];
     if (s.depth && s.depth !== 'core') out.depth = s.depth;

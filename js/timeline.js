@@ -348,6 +348,9 @@ function leaveLive() {
   scrubbing = true;
 }
 
+/** The pause Return to live resumes with, when a lesson step sets it while parked. */
+export const setParkedPause = paused => held && (held.paused = paused);
+
 /** Leave history for live, with nothing held. */
 function endHistory() {
   state.paused = held.paused;

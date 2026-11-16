@@ -58,7 +58,14 @@ import {
 } from './data/investigations/loaders.js';
 // Lessons provided by capability packages load through the platform resolver,
 // which installs their loaders in the registry when it is imported.
-import { state, SETTINGS, command, holdClock } from './appState.js';
+import {
+  state,
+  SETTINGS,
+  command,
+  holdClock,
+  releaseHold,
+} from './appState.js';
+import { setParkedPause } from './timeline.js';
 
 import {
   bh_list,
@@ -636,6 +643,7 @@ function applySetup(setup) {
 function bindStepRoles(force) {
   const step = currentStep();
   holdClock(step, appliedSetup);
+  setParkedPause(state.paused);
   // Whatever the last step was illustrating is not this step's business. The
   // widget re-asserts it on its first tick if this step wants one, so the
   // cost of clearing here is one frame and the cost of not clearing is a
@@ -2463,6 +2471,7 @@ export function closeInvestigation() {
   //
   // The camera does not, unless it came back with the sandbox. A reader who
   // panned and zoomed during a lesson meant to.
+  releaseHold();
   const saved = Object.fromEntries(leaveLessonScope());
   if ('paused' in saved) state.paused = Boolean(saved.paused);
   // Asked before the stage comes down, because taking it down destroys the
