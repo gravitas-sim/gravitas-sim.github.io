@@ -56,8 +56,7 @@ import {
   loadInvestigation,
   provideLessonLoaders,
 } from './data/investigations/loaders.js';
-// Lessons provided by capability packages load through the platform resolver,
-// which installs their loaders in the registry when it is imported.
+// Capability-package lessons load through the platform resolver on import.
 import {
   state,
   SETTINGS,
@@ -644,10 +643,8 @@ function bindStepRoles(force) {
   const step = currentStep();
   if (holdClock(step, appliedSetup)) announce(t('readout.status.paused'));
   setParkedPause(state.paused);
-  // Whatever the last step was illustrating is not this step's business. The
-  // widget re-asserts it on its first tick if this step wants one, so the
-  // cost of clearing here is one frame and the cost of not clearing is a
-  // supernova drawn around a star that has just been restaged as the Sun.
+  // Whatever the last step illustrated is not this step's business; a widget
+  // re-asserts its own on its first tick, one frame later.
   clearEvolutionScene();
   // Frozen copies belong to the screen that froze them, and two consecutive
   // steps can share a stage - in which case applyStage does nothing and the
@@ -2460,17 +2457,11 @@ export function closeInvestigation() {
   // give every model-owned body back to the integrator. A body still flagged
   // when the lesson closes is a body that never moves again.
   //
-  // What comes back, and what deliberately does not.
-  //
-  // The sandbox does: a lesson that stages its own scene destroys whatever the
-  // reader had built, and handing back an empty sky was the application
-  // throwing their work away. It is restored from the same share payload the
-  // experiment bench uses to return from an A/B run, so the bodies, the
-  // settings, the clock and the observing context all come back together
-  // rather than in pieces.
-  //
-  // The camera does not, unless it came back with the sandbox. A reader who
-  // panned and zoomed during a lesson meant to.
+  // The sandbox comes back (bodies, settings, clock and observing context, from
+  // the share payload the experiment bench uses): a lesson that stages its own
+  // scene destroyed the reader's work, and an empty sky threw it away. The
+  // camera does not, unless it came back with the sandbox: a reader who panned
+  // and zoomed during a lesson meant to.
   releaseHold();
   const saved = Object.fromEntries(leaveLessonScope());
   if ('paused' in saved) state.paused = Boolean(saved.paused);
