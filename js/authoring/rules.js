@@ -164,7 +164,7 @@ const isPlainObject = v => !!v && typeof v === 'object' && !Array.isArray(v);
  * before a student has clicked anything - so a probe that throws here would
  * throw in front of a class.
  */
-function emptyProbeContext() {
+export function emptyProbeContext() {
   // Mirrors the object js/investigations.js builds. Kept in step with it by
   // tests/authoring.test.js, which fails if the engine grows a context member
   // this stub does not have: a probe calling something missing here would be
