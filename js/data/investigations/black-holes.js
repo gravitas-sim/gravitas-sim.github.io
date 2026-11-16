@@ -88,6 +88,7 @@ const BLACK_HOLES = {
       sid: 'not-a-hole-and-not',
       stage: HOLE,
       type: 'read',
+      motion: true,
       title: 'Not a hole, and not a vacuum cleaner',
       body: `On screen is a black hole of ten solar masses, and four objects
              going round it. Watch them for a moment.

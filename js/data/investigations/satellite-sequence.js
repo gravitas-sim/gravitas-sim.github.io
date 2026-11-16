@@ -406,6 +406,7 @@ export const WHY_RINGS = {
     {
       sid: 'a-pass-inside-the-limit',
       type: 'read',
+      motion: true,
       title: 'A clump on a pass inside the limit',
       setup: { scenario: 'Roche Pass', seed: 'roche-pass', paused: false },
       body: `This is a scale model with Newtonian gravity and nothing else: a planet and a

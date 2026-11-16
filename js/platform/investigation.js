@@ -131,7 +131,7 @@ const COMMON_STEP = [
   'depth',
 ];
 const STEP_FIELDS = {
-  read: [],
+  read: ['motion'],
   explore: ['checklist'],
   measure: ['fields'],
   predict: ['prompt', 'options', 'answer', 'because', 'reveal'],

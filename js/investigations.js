@@ -60,7 +60,7 @@ import {
 } from './data/investigations/registry.js';
 // Lessons provided by capability packages load through the platform resolver,
 // which installs their loaders in the registry when it is imported.
-import { state, SETTINGS, command } from './appState.js';
+import { state, SETTINGS, command, holdClock } from './appState.js';
 
 import {
   bh_list,
@@ -2169,6 +2169,7 @@ function goToStep(index, { rebuild = false } = {}) {
   // step's signal over the new step's instructions.
   releaseLessonAudio();
   bindStepRoles(rebuild);
+  holdClock(currentStep(), appliedSetup);
 
   // A lesson that leaves the inspector reachable, as the black hole one does,
   // can have its object card open when the student moves on. The card is a
@@ -2185,9 +2186,7 @@ function goToStep(index, { rebuild = false } = {}) {
   save();
   renderStep();
   els.body.scrollTop = 0;
-  // On a narrow screen it is the whole sheet that scrolls, not the body, and
-  // Next sits at the bottom of it: without this the next step would open
-  // scrolled to wherever the reader had to go to press it.
+  // On a narrow screen the whole sheet scrolls, not the body.
   els.panel.scrollTop = 0;
 }
 

@@ -2646,19 +2646,35 @@ function phase(bucket, fn) {
 
 // --- Idle rendering ----------------------------------------------------------
 //
-// A paused simulation is a still image, but the loop kept redrawing it sixty
-// times a second: a tab left paused on a laptop held a core warm for nothing.
-//
-// It cannot simply stop, because plenty still changes while paused - panning,
-// zooming, selecting, dragging an object into place, scrubbing the timeline.
-// So rather than trying to enumerate every source of change and risking a
-// frame that never arrives, any input at all opens a window of full-rate
-// rendering. Outside that window, and only while paused, the scene redraws at
-// 10Hz, which is invisible on a static picture.
+// A paused simulation is a still image, but plenty still changes while paused
+// (panning, zooming, dragging, scrubbing), so rather than enumerate those, any
+// input opens a window of full-rate rendering. Outside it, while paused or
+// while panels cover the whole canvas, the scene redraws at 10Hz.
 const IDLE_REDRAW_MS = 100;
 const INTERACTION_GRACE_MS = 700;
 let interactionUntil = 0;
 let lastIdleDraw = 0;
+let coverCheckedAt = 0;
+let covered = false;
+
+/** Whether panels hide the whole canvas: a hit test on a grid, 4 times a second. */
+function canvasCovered(now) {
+  if (now - coverCheckedAt < 250) return covered;
+  coverCheckedAt = now;
+  covered = true;
+  for (let i = 1; i < 8 && covered; i++)
+    for (let j = 1; j < 8; j++)
+      if (
+        document.elementFromPoint(
+          (window.innerWidth * i) / 8,
+          (window.innerHeight * j) / 8
+        ) === canvas
+      ) {
+        covered = false;
+        break;
+      }
+  return covered;
+}
 
 /** Render at full rate for a moment: something the user did may be animating. */
 export function noteInteraction() {
@@ -2680,11 +2696,9 @@ if (typeof window !== 'undefined') {
   }
 }
 
-// Fixed-step recording, for a controlled experiment. The loop normally steps
-// by the last frame's real duration; two runs of one world would then take
-// different steps and diverge (chaotically, in a chaotic system). While the
-// Experiment Bench records, every frame advances the clock by the same amount,
-// so two runs of the same length are bit-identical.
+// Fixed-step recording, for a controlled experiment: the loop normally steps by
+// the last frame's real duration, so two runs of one world would diverge. While
+// the Experiment Bench records, every frame advances the clock equally.
 let fixedStepSeconds = 0;
 
 /**
@@ -2716,6 +2730,12 @@ registerCommands({ stepOnce });
 
 // Original gameLoop function from index.html
 const gameLoop = timestamp => {
+  // A hidden document runs nothing, and the first frame back is a zero step.
+  if (document.hidden) {
+    state.last_time = 0;
+    requestAnimationFrame(gameLoop);
+    return;
+  }
   const frameStart = performance.now();
 
   if (!state.last_time) state.last_time = timestamp;
@@ -2734,7 +2754,7 @@ const gameLoop = timestamp => {
   // than repainting an identical frame. tickTimeline above still runs, so a
   // scrub is never missed, and any input restores full rate immediately.
   const idle =
-    state.paused &&
+    (state.paused || canvasCovered(frameStart)) &&
     !timeline.isReplaying() &&
     frameStart > interactionUntil &&
     frameStart - lastIdleDraw < IDLE_REDRAW_MS;
@@ -2788,14 +2808,11 @@ const gameLoop = timestamp => {
     }
   });
 
-  // The quality tier measures the interval between frames, which is what the
-  // reader experiences; the adaptive-detail block below measures the work done
-  // inside one, which is a different question. Both are wanted: a machine can
-  // finish its work in 8ms and still present at 20fps.
-  //
-  // The reader's choice is pushed in from here rather than watched for with an
-  // event, because a string comparison per frame is cheaper than an event
-  // listener is to keep correct across the several paths that write SETTINGS.
+  // The tier measures the interval between frames (what the reader sees); the
+  // adaptive-detail block below measures the work inside one. Both are wanted.
+  // The reader's choice is pushed in here, not watched for with an event: a
+  // string comparison per frame is cheaper than a listener kept correct across
+  // every path that writes SETTINGS.
   if (SETTINGS.quality_tier !== lastRequestedTier) {
     lastRequestedTier = SETTINGS.quality_tier;
     setTier(lastRequestedTier || 'auto');
@@ -2816,10 +2833,8 @@ const gameLoop = timestamp => {
         `Performance warning: Average frame time ${avgFrameTime.toFixed(1)}ms (target: 16.67ms for 60fps)`
       );
     }
-    // Adaptive detail: adjust the render budget based on performance.
-    // adaptiveScale is applied to the user's setting at read time - it must
-    // never be written back into SETTINGS, or each pass would compound on the
-    // last and the setting would run away instead of tracking frame time.
+    // Adaptive detail: adaptiveScale is applied at read time and never written
+    // back into SETTINGS, or each pass would compound on the last.
     if (SETTINGS.adaptive_detail) {
       const target = 1000 / (SETTINGS.target_fps || 60);
       if (avgFrameTime > target * 1.2) {
@@ -2859,18 +2874,10 @@ function q(key) {
 
 // Original resizeCanvas function from index.html
 function resizeCanvas() {
-  // Never fall to zero: a 0x0 canvas makes every drawing and culling
-  // calculation degenerate. Browsers can report 0 for a page that is not
-  // being presented yet (background tab, hidden container).
-  // The backing store. renderScale() folds the quality tier, the display's
-  // device-pixel ratio and a per-tier pixel budget into one multiplier on the
-  // CSS box, so this function does not need to know which of the three moved.
-  // At the low tier it is still deliberately smaller than the box the
-  // compositor stretches it over; above it, a HiDPI display now gets the
-  // resolution it has always been able to show.
-  //
-  // js/ui.js converts pointer events through the same ratio, which is what
-  // keeps a click landing on the body underneath it.
+  // Never fall to zero: a 0x0 canvas makes drawing and culling degenerate, and
+  // a page not yet presented (background tab) can report 0. renderScale() folds
+  // the tier, the device-pixel ratio and a pixel budget into one multiplier on
+  // the CSS box; js/ui.js converts pointer events through the same ratio.
   const cssW = window.innerWidth || 0;
   const cssH = window.innerHeight || 0;
   const scale = renderScale(cssW, cssH);
@@ -2884,10 +2891,8 @@ function resizeCanvas() {
   generateStarfield(); // redraw background
 }
 
-// Dragging a window edge fires resize continuously, and each one reallocated
-// three full-screen canvases and generated three hundred new stars. Coalescing
-// into the next frame does that once per painted frame instead, and the early
-// return above drops the ones where nothing actually changed.
+// Dragging a window edge fires resize continuously; coalescing into the next
+// frame reallocates the canvases once per painted frame, not once per event.
 let resizePending = false;
 window.addEventListener('resize', () => {
   if (resizePending) return;
@@ -2898,20 +2903,14 @@ window.addEventListener('resize', () => {
   });
 });
 
-// Changing tier changes the size of the backing store, and resizeCanvas returns
-// early when the size it computes matches what is already there - so the tier
-// has to say when its answer has changed. Scheduled rather than immediate: the
-// change arrives from inside sampleFrame, which is called from the render loop,
-// and reallocating three canvases mid-frame is how a frame gets dropped at
-// exactly the moment the machine has proved it cannot afford one.
+// A tier change can leave the backing store's size as it was, and resizeCanvas
+// returns early then, so the tier says when its answer changed. Scheduled, not
+// immediate: it arrives from inside sampleFrame, and reallocating canvases
+// mid-frame drops a frame when the machine can least afford it.
 onTierChange(() => {
   requestAnimationFrame(() => {
-    // resizeCanvas() regenerates the sky, but only when the backing store
-    // actually changed size. The tier also sets the star density, so a tier
-    // change that happened to leave the canvas the same size would keep a
-    // field built for the other tier. Regenerating unconditionally costs
-    // about a millisecond on an event that happens when someone moves a
-    // slider.
+    // The tier also sets the star density, so the sky is regenerated even when
+    // the store kept its size (about a millisecond, on a rare event).
     resizeCanvas();
     generateStarfield();
     starfieldDirty = true;

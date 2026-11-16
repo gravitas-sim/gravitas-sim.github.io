@@ -153,6 +153,7 @@ const BINARY_STAR_PLANETS = {
       sid: 'nothing-here-is-random',
       bind: BINARY_CAST,
       type: 'read',
+      motion: true,
       title: 'Nothing here is random',
       body: `The scenario next to this one in the gallery — "Binary Star System"
              — builds its stars from a random number generator. It is a fine

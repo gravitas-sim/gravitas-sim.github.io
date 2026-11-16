@@ -90,6 +90,7 @@ const RETROGRADE = {
       sid: 'what-you-are-looking-at',
       bind: INNER_PAIR,
       type: 'read',
+      motion: true,
       title: 'What you are looking at',
       body: `Three bodies, and nothing else. The <strong>Sun</strong> at the
              center, <strong>Earth</strong> in blue on the inner orbit, and
@@ -381,6 +382,7 @@ const RETROGRADE = {
       sid: 'reference-frames',
       bind: INNER_PAIR,
       type: 'read',
+      motion: true,
       title: 'Reference frames',
       body: `A position is never a property of a body on its own. It is a
              relationship between that body and something else, and the something
