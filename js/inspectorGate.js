@@ -1,32 +1,14 @@
 // =============================================================================
-// The inspector's door: what is on screen before anything is selected
+// The inspector's door
 // -----------------------------------------------------------------------------
-// The inspector card (js/inspectorWindow.js, with js/inspectorView.js and
-// js/inspectorPanel.js) is fetched the first time a body is selected. Nothing
-// before that needs it, and a first visit or a lesson that never selects a body
-// never pays for it. This module is what stays: the calls the rest of the
-// application makes of the inspector, answered without it, and the three
-// things of the same name that are not the card at all.
-//
-// Answered without the card:
-//   showObjectInspector      fetches the card (once), then shows it. Calls made
-//                            while it is on its way run in the order made and
-//                            the last wins, as they do when it is here; a hide
-//                            made meanwhile cancels the ones before it.
-//   hideObjectInspector      nothing to hide before the card has ever been
-//                            shown: every field the card sets is set by it.
-//   setInspectorSuppressed   the lesson's switch; its flag lives here, and the
-//                            card reads it.
-//   inspectorTypeFor         a pure mapping from a body to the card's type.
-//
-// Not the card: the readout's minimize control (setupOverlayMinimize), the
-// rail's reference-frame selector (setupReferenceFrameControl,
-// paintFrameControls, and the card's own row reads it) and the lazy maneuver
-// planner with the listener that answers the card's burn button. All three were
-// in the card's module and are on the first screen or answer a button of it.
-//
-// A failed fetch offers the selection again (js/notify.js, as the other lazy
-// panels do); nothing is cached on failure.
+// The inspector card (js/inspectorWindow.js, inspectorView.js, inspectorPanel.js)
+// is fetched on the first selection. This module answers the calls the rest of
+// the application makes of it until then: show fetches it first (calls made
+// meanwhile run in order, a hide cancels the earlier ones), hide has nothing to
+// do before it has ever been shown, and the lesson's suppression flag and the
+// type mapping live here, where the card reads them. It also holds what shares
+// the card's old module but is not the card: the readout's minimize control, the
+// rail's reference-frame selector, and the maneuver planner's loader.
 // =============================================================================
 
 import { barycenterBodies } from './physics.js';
@@ -58,7 +40,11 @@ let wish = 0;
 export function ensureInspector() {
   cardLoading ??= import('./inspectorWindow.js').then(
     mod => {
-      mod.wireInspectorControls();
+      mod.wireInspectorControls({
+        isSuppressed: isInspectorSuppressed,
+        paintFrameControls,
+        setupOverlayMinimize,
+      });
       cardModule = mod;
       return mod;
     },
@@ -103,13 +89,9 @@ export const hideObjectInspector = () => {
   cardModule?.hideObjectInspector();
 };
 
-// Selecting and inspecting are the same call here - showObjectInspector sets
-// state.selectedObject and opens the card in one go - and js/lessonScene.js
-// cannot import this module, because this module is the coordinator and that
-// one sits below it. So it goes through the port in js/widgetRuntime.js, the
-// way js/gwAudio.js installs its player there. What it buys is that a lesson's
-// accessible object list, a plot marker and a click on the canvas all take the
-// same path and cannot end up disagreeing about what is selected.
+// Selecting and inspecting are one call, through the port in
+// js/widgetRuntime.js, so a lesson's object list, a plot marker and a click on
+// the canvas cannot disagree about what is selected.
 setBodySelector(showObjectInspector);
 
 /**

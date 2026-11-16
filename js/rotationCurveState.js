@@ -1,11 +1,8 @@
 // =============================================================================
 // What the rotation curve says, without the panel
 // -----------------------------------------------------------------------------
-// The numbers behind the rotation-curve panel (js/rotationCurve.js): which
-// bodies count, the fit, the two predictions, the law in force, and what a
-// cluster of galaxies offers to be measured. The panel is fetched when it is
-// first opened; the data export and the lesson probes read these numbers
-// without it, so they live here and the panel re-exports them.
+// The numbers behind js/rotationCurve.js, which is fetched when the panel is
+// first opened: the data export and the lesson probes read them without it.
 // =============================================================================
 
 import {

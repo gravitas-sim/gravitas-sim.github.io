@@ -41,11 +41,6 @@ import {
 } from './physics.js';
 import { debugLog } from './utils.js';
 import {
-  isInspectorSuppressed,
-  paintFrameControls,
-  setupOverlayMinimize,
-} from './inspectorGate.js';
-import {
   objectInfoFor,
   wireInspectorOverlayToggles,
   buildInspectorView,
@@ -55,6 +50,19 @@ import {
 } from './inspectorView.js';
 import { state, SETTINGS } from './appState.js';
 import { EV_MANEUVER_REQUESTED } from './names.js';
+
+/**
+ * What the gate (js/inspectorGate.js) holds that the card reads: the lesson's
+ * suppression flag, the reference-frame selector's paint and the readout's
+ * minimize control. Handed over by wireInspectorControls rather than imported,
+ * so that the gate stays in the start-up chunk and this module is the only
+ * thing in its own.
+ */
+let door = {
+  isSuppressed: () => false,
+  paintFrameControls: () => {},
+  setupOverlayMinimize: () => {},
+};
 
 /**
  * Show the object inspector modal with detailed information about a physics object
@@ -173,7 +181,7 @@ export const showObjectInspector = (object, type) => {
   // is a large floating card that lands squarely over the orbit the student has
   // just been asked to watch. Selection and the orbit overlay above still
   // happen - only the panel is withheld.
-  if (isInspectorSuppressed()) return;
+  if (door.isSuppressed()) return;
 
   const updateInspector = () => {
     if (!state.inspector_open || !state.selectedObject) return;
@@ -359,11 +367,11 @@ export const showObjectInspector = (object, type) => {
   }, 100); // Small delay to ensure DOM elements are ready
 
   // Set up overlay minimize functionality
-  setupOverlayMinimize();
+  door.setupOverlayMinimize();
 
   // The rail's "Selected object" option names the current selection, so it
   // changes whenever the selection does.
-  paintFrameControls();
+  door.paintFrameControls();
 };
 
 // One way to select a body, installed rather than imported.
@@ -408,7 +416,7 @@ export const hideObjectInspector = () => {
   releaseEnergyChart();
 
   state.selectedObject = null;
-  paintFrameControls();
+  door.paintFrameControls();
 };
 
 // Add mobile-friendly backdrop click to close functionality
@@ -867,10 +875,14 @@ const updatePinnedInspectors = () => {
 };
 
 /**
- * Wire the header buttons and the resize handler. Called once from ui.js, where
- * these statements used to run at the top level, so the order is unchanged.
+ * Wire the header buttons and the resize handler, and take what the gate holds.
+ * Called once, by js/inspectorGate.js, when this module arrives.
+ *
+ * @param {{isSuppressed: Function, paintFrameControls: Function,
+ *   setupOverlayMinimize: Function}} services - See `door`
  */
-export function wireInspectorControls() {
+export function wireInspectorControls(services) {
+  door = services;
   // Button event handlers
   document.getElementById('inspectorClose').onclick = hideObjectInspector;
   const inspectorCloseChip = document.getElementById('inspectorCloseChip');

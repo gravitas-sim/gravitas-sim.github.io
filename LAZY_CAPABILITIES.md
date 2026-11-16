@@ -536,3 +536,51 @@ its CSV through the shared `js/csv.js` and its spreadsheet-formula guard (30.5
 KB in 3 requests from the sources, 11.6 KB from the build).
 
 <!-- Listed in DOCUMENTS.md. -->
+
+## The first screen and what only a gesture needs
+
+Three groups of the sandbox used to be in the start-up download of every visit,
+including a lesson's, though nothing before a particular gesture reads them.
+Each now arrives on that gesture, and the first screen keeps a small door in its
+place.
+
+- **The inspector card** (`js/inspectorWindow.js`, `js/inspectorView.js`,
+  `js/inspectorPanel.js`, `js/inspectorInfo.js`), fetched on the first selection
+  of a body by `js/inspectorGate.js`. The gate answers every call the rest of the
+  application makes of the inspector meanwhile: show fetches the card and then
+  shows it (calls made while it is on its way run in order, and a hide cancels
+  the earlier ones), hide has nothing to do before the card has ever been shown,
+  and the lesson's suppression flag and the type mapping live in the gate, where
+  the card reads them. Three things that were in the card's module are not the
+  card and stayed on the first screen, in the gate: the readout's minimize
+  control, the rail's reference-frame selector, and the maneuver planner's loader
+  with the listener that answers the card's burn button. The object-type glyphs
+  the object picker draws moved to `js/objectGlyphs.js`. A failed fetch offers the
+  selection again (`js/notify.js`, as the bench and the 3-D view do).
+- **The Settings panel** (`js/settingsPanel.js`), fetched with the dialog
+  machinery by the first press of Settings. Apply, Reset and the black hole masses
+  dialog's buttons act only through the module, which is there whenever the panel
+  is open.
+- **The rotation curve panel** (`js/rotationCurve.js`), fetched by the first press
+  of its rail button through `js/instrumentGate.js`: the button is disabled while
+  the code is on its way, a failure offers the press again, and the render loop's
+  per-frame update does nothing until the panel has been opened, as its own does
+  while it is closed. The numbers behind it (the points, the fit, the law in
+  force, the cluster measurements) are in `js/rotationCurveState.js`, which the
+  data export and the lesson probes read without the panel.
+
+`tests/firstUseClosure.test.js` holds all three out of the static closure of the
+eight start-up scripts, and `e2e/lazyInstruments.spec.js` holds the page's side
+(Home and a lesson fetch none of them; each gesture fetches its own group and no
+other). Measured effect: see the register row D-R4-311-01.
+
+**Left on the first screen, and why.** The object picker and the canvas gestures
+(`js/placement.js`: selecting, dragging, zooming, placing a body), the transport
+buttons and area sweep (`js/captureMeasure.js`) and the ruler, protractor and
+stopwatch (`js/sandboxTools.js`) are read by the first pointer event, the first
+frame or a world rebuild, each of which is synchronous; a first-use fetch would
+drop or replay that gesture. The light curve, radial velocity and astrometry
+panels (`js/lightCurve.js`, `js/radialVelocity.js`, `js/astrometry.js`) share the
+observed star, the clock and the observer angle with the world builder and the
+frame loop, and share one another's state; moving them needs their state
+separated first, as the rotation curve's was.

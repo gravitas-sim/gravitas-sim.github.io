@@ -1,20 +1,12 @@
 // =============================================================================
-// Observing panels that are fetched when their rail button is first pressed
+// Observing panels fetched on the first press of their rail button
 // -----------------------------------------------------------------------------
-// A panel that starts closed does not need its code to be on the first screen.
-// What stays here is a button: pressing it the first time fetches the panel's
-// module, lets the module wire its own controls, and then opens the panel as
-// the press would have. While the code is on its way the button is disabled,
-// and a failed fetch offers the press again (js/notify.js, the same shape as
-// js/experimentsBridge.js). Every press after the first is the panel's own.
-//
-// The render loop calls the panel's per-frame update on every frame; the gate's
-// version of it does nothing until the module is here, which is what the
-// panel's own update does while it is closed.
-//
-// The rotation curve is the first panel here. The numbers behind it, which the
-// data export and the lesson probes read, are in js/rotationCurveState.js and
-// are not part of what is fetched.
+// The first press fetches the panel's module, lets it wire its own controls and
+// opens it; the button is disabled meanwhile and a failure offers the press
+// again (js/notify.js, as js/experimentsBridge.js does). The render loop's
+// per-frame update does nothing until the module is here, as the panel's own
+// does while it is closed. The rotation curve is the first; its numbers, which
+// the data export and the lesson probes read, are in js/rotationCurveState.js.
 // =============================================================================
 
 import { loadFailed } from './notify.js';

@@ -405,6 +405,7 @@ import {
   registerCommands,
 } from './appState.js';
 import { resetFollowCamera } from './followCamera.js';
+import { setPlaying } from './controls.js';
 
 // Immediately hide object inspector when module loads
 if (typeof document !== 'undefined') {
@@ -559,8 +560,13 @@ const dialog = async () => (dialogModule ??= await import('./dialog.js'));
  * or through `?.`, so a press that has not finished loading does nothing yet.
  */
 let settingsModule = null;
-const settingsCode = async () =>
-  (settingsModule ??= await import('./settingsPanel.js'));
+const settingsCode = async () => {
+  if (!settingsModule) {
+    settingsModule = await import('./settingsPanel.js');
+    settingsModule.setSettingsServices({ pause: () => setPlaying(false) });
+  }
+  return settingsModule;
+};
 
 /** Open, asked of the DOM rather than of a module that may not be here yet. */
 const settingsOpen = () => settingsPanel()?.hidden === false;
