@@ -46,10 +46,8 @@ import {
   setProse,
 } from './lessonMarkup.js';
 import { SCENARIO_IDS, scenarioId } from './scenarios.js';
-// The loaders, not the barrel and not the registry. ../data/investigations.js
-// pulls every lesson in statically, which is right for a build script and wrong
-// here; the registry adds the cards of all of them, which opening one lesson
-// has no use for. This fetches that one.
+// The loaders, not the barrel (every lesson) or the registry (every card):
+// opening one lesson fetches that one.
 import {
   gradedSteps,
   hasInvestigation,
@@ -2055,10 +2053,7 @@ function releaseLessonAudio() {
 function goToStep(index, { rebuild = false, open = false } = {}) {
   if (!active) return;
   const at = Math.max(0, Math.min(active.steps.length - 1, index));
-  // The stage code is fetched when the first step that declares a stage is
-  // about to be shown, and the step is shown once it is in. Opening a lesson
-  // rejects on failure (its caller offers the retry); a later step offers its
-  // own, and stays where it was. The panel says so while it waits.
+  // A step that stages waits for the stage code; opening rejects on failure.
   if (active.steps[at]?.stage && !stageLoaded()) {
     const turn = openGeneration;
     els.panel.setAttribute('aria-busy', 'true');
@@ -2541,8 +2536,6 @@ function stopProbeLoop() {
 let dialogs = null;
 const loadDialogs = async () => (dialogs ??= await import('./dialog.js'));
 
-// The lesson browser (js/investigations/browser.js) takes these instead of
-// importing this module back, and is fetched when it is first opened.
 bindChooserHost({
   progressFor,
   openInvestigation,
