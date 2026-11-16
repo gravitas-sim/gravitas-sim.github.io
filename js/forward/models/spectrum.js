@@ -35,7 +35,7 @@ export function wavelengthGrid(instrument) {
       ? (0.5 * (lo + hi)) / instrument.resolvingPower / 3
       : null);
   if (!(step > 0))
-    throw new Error('a spectrum needs instrument.dispersion or resolvingPower');
+    throw new Error('a spectrum needs dispersion or resolvingPower');
   const n = Math.floor((hi - lo) / step) + 1;
   if (n < 2 || n > MAX_PIXELS)
     throw new Error(

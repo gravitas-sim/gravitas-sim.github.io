@@ -280,10 +280,7 @@ export const ECLIPSING_BINARY = {
             esinw: 0,
           });
     }
-    if (!out.length)
-      throw new Error(
-        'no eclipse found: too few rows across the orbit to fold'
-      );
+    if (!out.length) throw new Error('no eclipse found: too few rows to fold');
     return out;
   },
 

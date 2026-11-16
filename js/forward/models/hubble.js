@@ -23,7 +23,7 @@ export function run(state, rawSetup, opts = {}) {
   const sv = setup.instrument.survey ?? {};
   const count = sv.count ?? 300;
   if (!(Number.isInteger(count) && count >= 5 && count <= 20000))
-    throw new Error('the Hubble-diagram survey needs 5 to 20000 supernovae');
+    throw new Error('the Hubble survey needs 5 to 20000 supernovae');
   const zMax = sv.zMax ?? 1;
   const zMin = sv.zMin ?? 0.01;
   if (!(zMin > 0 && zMax > zMin && zMax <= 5))

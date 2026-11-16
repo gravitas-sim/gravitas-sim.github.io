@@ -22,7 +22,7 @@ export function polyfit(x, y, degree, { sigma = null } = {}) {
   const p = degree + 1;
   if (!Number.isInteger(degree) || degree < 0 || m <= p || y.length !== m)
     throw new RangeError(
-      'need an integer degree >= 0 and more points than coefficients'
+      'need integer degree >= 0 and more points than coefficients'
     );
   let lo = Infinity;
   let hi = -Infinity;

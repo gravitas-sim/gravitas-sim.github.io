@@ -642,7 +642,7 @@ function applySetup(setup) {
  */
 function bindStepRoles(force) {
   const step = currentStep();
-  holdClock(step, appliedSetup);
+  if (holdClock(step, appliedSetup)) announce(t('readout.status.paused'));
   setParkedPause(state.paused);
   // Whatever the last step was illustrating is not this step's business. The
   // widget re-asserts it on its first tick if this step wants one, so the

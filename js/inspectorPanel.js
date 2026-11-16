@@ -596,9 +596,7 @@ export function updateChart(data, updateHz) {
     // Validate first data point has required properties
     const firstPoint = data[0];
     if (!firstPoint || typeof firstPoint.timestamp !== 'number') {
-      console.warn(
-        'Invalid data format: missing or invalid timestamp in first data point'
-      );
+      console.warn('Invalid timestamp in first data point');
       return;
     }
 

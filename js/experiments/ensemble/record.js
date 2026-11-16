@@ -337,9 +337,7 @@ export function citation(m) {
   const e = m.ensemble;
   const digest = e.result?.digest;
   if (!isText(digest))
-    throw new Error(
-      'only a record that has run, and states its digest, can be cited'
-    );
+    throw new Error('only a run record with a digest can be cited');
   return {
     citations: [
       {

@@ -429,16 +429,19 @@ let held = null;
  *
  * @param {object|undefined} step - The step now on screen
  * @param {object|null} world - The setup the scene was built from
+ * @returns {boolean} True when this call paused a running scene
  */
 export function holdClock(step, world) {
   world ||= state;
   const hold =
     step?.type === 'read' && !(step.motion || step.tool || step.pauseAt);
   if (!state.paused || held !== world) held = null;
-  if (hold ? !state.paused : held) {
+  const pause = hold && !state.paused;
+  if (pause || (!hold && held)) {
     state.paused = hold;
     held = hold && world;
   }
+  return pause;
 }
 
 /** Forget a hold: the clock is the reader's (their own play or pause, a lesson opening or closing). */
