@@ -60,9 +60,9 @@ export default {
              cambiarían por ese motivo tanto como por cualquier otro. Peor aún:
              <em>cuánto</em> cambia dependería de si has decidido medir las
              distancias en kilómetros, en unidades astronómicas o en las
-             unidades de la simulación (100 por unidad astronómica): a una
-             unidad astronómica, un 17 por ciento más débil en kilómetros, un
-             4,5 en unidades de la simulación, igual en unidades astronómicas.
+             unidades de la simulación (100 por UA): a 1 UA, un 17 por
+             ciento más débil en kilómetros, un 4,5 en unidades de la
+             simulación, igual en UA.
              Al universo le da igual qué unidades escribas.
 
              \n\nAsí que la ley que se usa aquí está anclada. Está escrita de

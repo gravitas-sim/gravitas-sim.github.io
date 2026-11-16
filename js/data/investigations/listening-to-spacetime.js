@@ -1478,7 +1478,7 @@ const LISTENING_TO_SPACETIME = {
         capture: true,
         hide: ['m1', 'm2', 'distance', 'inclination'],
         presets: false,
-        note: 'The new signal, for the question opposite. Two objects of 1.4 solar masses each, which is where the ninety seconds and the kilohertz come from. The canvas still shows the earlier 36 and 29 solar-mass pair.',
+        note: 'The new signal, for the question opposite. Two objects of 1.4 solar masses each, which is where the ninety seconds and the kilohertz come from.',
       }),
       tip: 'Nothing in a gravitational wave says what the objects were made of. It says how heavy they were, how they moved, and how far away they were - and the reason we believe GW170817 was a pair of neutron stars is that a gamma-ray burst went off in the same place two seconds later and a telescope found the galaxy.',
     },

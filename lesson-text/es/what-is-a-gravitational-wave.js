@@ -153,7 +153,7 @@ export default {
         'Dos órbitas completas',
       ],
       because:
-        'Media órbita. Intercambia dos objetos idénticos y no lo notas: el par alineado de izquierda a derecha al principio vuelve a estar alineado de izquierda a derecha a mitad de camino, con los dos objetos cambiados. Así que el patrón que la fuente le presenta al mundo exterior se repite dos veces por órbita, y la onda que emite también. Por eso la frecuencia de la onda para un par así es el <em>doble</em> de la frecuencia orbital, un hecho que «Cuenta el ritmo» te hace contar por ti mismo. Con masas desiguales, como aquí, el más pesado cambia de lado, pero la forma asimétrica de la masa se repite, así que la onda sigue al doble de la frecuencia orbital.',
+        'Media órbita. Intercambia dos objetos idénticos y no lo notas: el par alineado de izquierda a derecha al principio vuelve a estar alineado de izquierda a derecha a mitad de camino, con los dos objetos cambiados. Así que el patrón que la fuente le presenta al mundo exterior se repite dos veces por órbita, y la onda que emite también. Por eso la frecuencia de la onda para un par así es el <em>doble</em> de la frecuencia orbital, un hecho que «Cuenta el ritmo» te hace contar por ti mismo. Con masas desiguales la forma es asimétrica pero se repite igual, así que la frecuencia sigue siendo el doble.',
       tip: 'Usa el cabezal en pasos pequeños. La lectura da la fase orbital, así que puedes comprobar tu respuesta con un número en vez de a ojo.',
       hints: [
         'Imagina la pareja como dos objetos idénticos. ¿Qué pasa con la imagen si los intercambias?',

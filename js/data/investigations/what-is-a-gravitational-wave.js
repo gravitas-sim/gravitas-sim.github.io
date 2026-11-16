@@ -374,7 +374,7 @@ const WHAT_IS_A_GRAVITATIONAL_WAVE = {
       ],
       answer: 1,
       because:
-        'Half an orbit. Swap two identical objects and you cannot tell: the pair lined up left-to-right at the start is lined up left-to-right again halfway round, with the two objects exchanged. So the pattern the source presents to the outside world repeats twice per orbit - and the wave it sends out does too. That is why the wave frequency for a pair like this is <em>twice</em> the orbital frequency, a fact “Count the rhythm” has you count for yourself. For unequal masses, as here, the heavier one changes sides, but the lopsided shape of the mass still repeats, so the wave is still at twice the orbital frequency.',
+        'Half an orbit. Swap two identical objects and you cannot tell: the pair lined up left-to-right at the start is lined up left-to-right again halfway round, with the two objects exchanged. So the pattern the source presents to the outside world repeats twice per orbit - and the wave it sends out does too. That is why the wave frequency for a pair like this is <em>twice</em> the orbital frequency, a fact “Count the rhythm” has you count for yourself. For unequal masses the shape is lopsided but repeats just the same, so the frequency is still twice.',
       tool: lab({ view: 'source', autoplay: false }),
       tip: 'Use the playhead in small steps. The readout gives the orbital phase, so you can check your answer against a number rather than by eye.',
       hints: [

@@ -78,7 +78,7 @@ export const WEIGHING_THE_STARS_ES = {
         'No lo dice: la inclinación solo puede venir de más velocidades',
       ],
       because:
-        'Para que las estrellas se eclipsen, la órbita debe verse casi de canto. La profundidad y la duración de un eclipse dependen de la inclinación con una precisión de menos de una centésima de grado, y con i conocida las masas ya no son valores mínimos: la masa verdadera es el mínimo M sen³ i dividido por sen³ i, y sen i es casi 1.',
+        'Para que las estrellas se eclipsen, la órbita debe verse casi de canto. La profundidad y la duración de un eclipse dependen de la inclinación con una precisión de menos de una centésima de grado, y con i conocida las masas ya no son valores mínimos: M = (M sen³ i) ÷ sen³ i, y sen i es casi 1.',
       misconceptions: [
         {
           say: 'Un eclipse quita luz, y lo que fija la geometría es la forma de lo perdido, no solo su cantidad.',

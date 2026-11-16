@@ -540,7 +540,7 @@ export const FROM_STAR_TO_REMNANT = {
       answer: 0,
       hints: ['The probabilities in the readout add up to one. What are they?'],
       because:
-        'Even odds, 50 percent each. The change from white dwarf to neutron star is placed somewhere between 7 and 9.5 solar masses, and 8.25 is in the middle of that range, so a star of that mass is as likely to be on one side as the other. The panel treats a published range as uniform. The honest answer is the odds, not a class.',
+        'Even odds, 50 percent each. The change from white dwarf to neutron star is placed somewhere between 7 and 9.5 solar masses, and 8.25 is in the middle of that range, so a star of that mass is as likely to be on one side as the other. The honest answer is the odds, not a class.',
       misconceptions: [
         {
           id: 'below',
@@ -1002,7 +1002,7 @@ export const FROM_STAR_TO_REMNANT_ES = {
       ],
       hints: ['Las probabilidades de la lectura suman uno. ¿Cuáles son?'],
       because:
-        'Las mismas, 50 por ciento cada una. El cambio de enana blanca a estrella de neutrones se sitúa en algún punto entre 7 y 9,5 masas solares, y 8,25 está en la mitad de ese intervalo, así que una estrella de esa masa es tan probable a un lado como al otro. El panel trata un intervalo publicado como uniforme. La respuesta honrada son las probabilidades, no una clase.',
+        'Las mismas, 50 por ciento cada una. El cambio de enana blanca a estrella de neutrones se sitúa en algún punto entre 7 y 9,5 masas solares, y 8,25 está en la mitad de ese intervalo, así que una estrella de esa masa es tan probable a un lado como al otro. La respuesta honrada son las probabilidades, no una clase.',
       misconceptions: [
         {
           say: 'Algunas estimaciones publicadas sitúan el cambio cerca de 9 y otras cerca de 8; una estrella de 8,25 está a un lado de una de ellas y al otro lado de la otra.',

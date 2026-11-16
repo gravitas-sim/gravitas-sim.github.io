@@ -238,7 +238,7 @@ export const WEIGHING_THE_STARS = {
         'For one star to cross the disk of the other, the line of sight must lie almost in the orbit’s plane.',
       ],
       because:
-        'For the stars to eclipse each other the orbit must be seen almost edge on. How deep an eclipse is and how long it lasts depend on the inclination to better than a hundredth of a degree, and with i known the masses are no longer minimum values: the true mass is the minimum M sin³ i divided by sin³ i, and sin i is within a hair of 1.',
+        'For the stars to eclipse each other the orbit must be seen almost edge on. How deep an eclipse is and how long it lasts depend on the inclination to better than a hundredth of a degree, and with i known the masses are no longer minimum values: M = (M sin³ i) ÷ sin³ i, and sin i is within a hair of 1.',
       misconceptions: [
         {
           id: 'brighter',
@@ -801,7 +801,7 @@ export const WEIGHING_THE_STARS_ES = {
         'No lo dice: la inclinación solo puede venir de más velocidades',
       ],
       because:
-        'Para que las estrellas se eclipsen, la órbita debe verse casi de canto. La profundidad y la duración de un eclipse dependen de la inclinación con una precisión de menos de una centésima de grado, y con i conocida las masas ya no son valores mínimos: la masa verdadera es el mínimo M sen³ i dividido por sen³ i, y sen i es casi 1.',
+        'Para que las estrellas se eclipsen, la órbita debe verse casi de canto. La profundidad y la duración de un eclipse dependen de la inclinación con una precisión de menos de una centésima de grado, y con i conocida las masas ya no son valores mínimos: M = (M sen³ i) ÷ sen³ i, y sen i es casi 1.',
       misconceptions: [
         {
           say: 'Un eclipse quita luz, y lo que fija la geometría es la forma de lo perdido, no solo su cantidad.',

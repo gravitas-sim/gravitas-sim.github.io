@@ -111,9 +111,8 @@ const POWER_LAW_GRAVITY = {
              change for that reason as much as for any other. Worse,
              <em>how much</em> it changed would depend on whether you had
              chosen to measure distance in kilometers, astronomical units or
-             simulation units (100 to the astronomical unit): at one
-             astronomical unit, 17 percent weaker in kilometers, 4.5 in
-             simulation units, unchanged in astronomical units. The universe does not care what units you write down.
+             simulation units (100 to the AU): at 1 AU, 17 percent weaker
+             in kilometers, 4.5 in simulation units, unchanged in AU. The universe does not care what units you write down.
 
              \n\nSo the law used here is anchored. It is written so that at one
              chosen distance — the <strong>reference radius r₀</strong>, which
