@@ -1,17 +1,13 @@
 // =============================================================================
 // What a step looks like: its markup and its two figures
 // -----------------------------------------------------------------------------
-// js/investigations.js used to build this inline in renderStep. It is the part
-// of that function that only reads: it takes the step and the reader's state
-// (named in `c`, not reached for) and returns the panel's markup as a list of
-// strings. renderStep joins it into the panel and does everything that touches
-// the page (the panels beside it, the probe, the footer, the listeners).
+// The part of renderStep that only reads: the step and the reader's state (named
+// in `c`) in, the panel's markup out as a list of strings. renderStep joins it
+// into the panel and does everything that touches the page. Below it: the saved
+// record's persistence and the answer boxes' listeners.
 //
-// Nothing here writes to the page or to a saved record. Prompt 139 part A.
-//
-// Pure to import, as writtenAnswer.js was (it is folded in below): this module
-// reaches no canvas and no simulation, so a unit test can load it. Folding it
-// in kept the lesson routes' request count where it was.
+// Pure to import: no canvas and no simulation, so a unit test can load it, and
+// folded in here to keep the lesson routes' request count where it was.
 // =============================================================================
 
 import { fixed, formatNumber, tickLabel } from '../format.js';
@@ -173,11 +169,9 @@ export function stepMarkup(step, c) {
 
   if (step.type === 'predict' || step.kind === 'choice') {
     const locked = saved !== undefined;
-    // A prediction that is marked the instant it is committed has not been
-    // tested by anything: the answer key settles it before the experiment
-    // runs. A step that names `reveal` holds the marking and the explanation
-    // until the reader has reached the step where the result actually
-    // arrives, and that step shows them how it turned out.
+    // A step that names `reveal` holds the marking and the explanation until
+    // the reader reaches the step where the result arrives: marked the instant
+    // it is committed, a prediction has not been tested by anything.
     const held = locked && Boolean(step.reveal) && !visited.has(step.reveal);
     const marked = locked && !held;
     // Named by the prompt on screen rather than a copy of it in an attribute,
@@ -263,13 +257,10 @@ export function stepMarkup(step, c) {
         `<p class="inv-reflect-note">${escape(t('inv.reflect.note'))}</p>`
       );
     }
-    // Where the number this step asks about came from. Four sources, and the
-    // difference is the thing this application is most often misread about: a
-    // Schwarzschild radius is a closed-form panel and a period is the
-    // integrator, and a reader who thinks the first was simulated has learned
-    // something false. Shown only on the step that asks for an interpretation,
-    // because that is where a reader is about to commit to what the evidence
-    // means. See js/data/investigations/provenance.js.
+    // Where the number came from: a closed-form panel is not the integrator,
+    // and a reader who thinks it was simulated has learned something false.
+    // Shown only where the step asks for an interpretation
+    // (js/data/investigations/provenance.js).
     const from = active ? evidenceFrom(active.id) : null;
     if (from) {
       parts.push(
@@ -289,10 +280,8 @@ export function stepMarkup(step, c) {
       `<p class="inv-answer-note" id="invAnswerNote" role="status"
           ${empty ? '' : 'hidden'}>${escape(t('inv.answer.saysNothing'))}</p>`
     );
-    // A written answer no one ever sees an answer to is not an exercise, it is
-    // a diary entry. The model answer is available, but only once the student
-    // has written enough to have committed to something: reading it first and
-    // then writing turns the step into a copying task.
+    // The model answer is offered only once the student has written enough to
+    // have committed to something: read first, the step is a copying task.
     if (step.because) {
       const shown = responses[`${id}:shown`] === true;
       const ready = String(saved || '').trim().length >= SHORT_ANSWER_MIN;
@@ -326,7 +315,7 @@ export function stepMarkup(step, c) {
     parts.push(
       `<div class="inv-numeric">
          <input type="text" inputmode="decimal" class="inv-answer-num" data-numeric="${attr(id)}"
-                value="${attr(saved ?? '')}" placeholder="${attr(numericPlaceholder(step))}" />
+                value="${attr(typed[id] ?? saved ?? '')}" placeholder="${attr(numericPlaceholder(step))}" />
          ${step.unit ? `<span class="inv-unit">${escape(step.unit)}</span>` : ''}
          <button type="button" class="ui-button" data-check-numeric="${attr(id)}">${escape(t('inv.answer.check'))}</button>
        </div>`
@@ -667,12 +656,9 @@ export function drawPlot(step, vals, { canvas, els, transformed, log }) {
     }));
   }
 
-  // The same points as numbers, before anything is drawn. A scatter is a
-  // picture of a relationship, and the position of a dot is not available to
-  // a reader on a screen reader nor to one who cannot tell two plotted
-  // colors apart. Built from `shown` rather than from the raw values, so the
-  // table says what the picture says: press "Square P, cube a" and both
-  // transform together.
+  // The same points as numbers, before anything is drawn: a dot's position is
+  // not available to a screen reader or to a reader who cannot tell two colors
+  // apart. Built from `shown`, so the table says what the picture says.
   renderPlotTable(els, spec, shown, { transform, useLog });
   canvas.setAttribute(
     'aria-label',
@@ -997,12 +983,8 @@ export function bindStepInputs(h) {
       h.save();
       h.renderStep();
       const step = h.currentStep();
-      // A held prediction has no verdict yet, on screen or off it. This used to
-      // be graded here regardless, so a screen reader heard "Correct.", or the
-      // whole explanation, before the experiment meant to settle it, while the
-      // screen said only that the answer was recorded. The note h.renderStep()
-      // has just drawn under the options is what it hears now: the same words,
-      // by construction, and nothing the screen is keeping back.
+      // A held prediction has no verdict yet, on screen or off it: what is
+      // announced is the note h.renderStep() has just drawn, not a grade.
       announce(
         els.body.querySelector('.inv-held')?.textContent ||
           (checkAnswer(step, choice)
@@ -1136,6 +1118,7 @@ export function bindStepInputs(h) {
       // let a later reader (the PDF, a language switch) misread "1,234".
       recordAnswer(h.responses(), id, numeric.value, getLocale());
       h.attempts()[id] = (h.attempts()[id] || 0) + 1;
+      delete typed[id];
       h.save();
       h.renderStep();
       // What the panel now says under the box, read out: a result that only
@@ -1143,6 +1126,10 @@ export function bindStepInputs(h) {
       announce(els.body.querySelector('.inv-feedback')?.textContent ?? '');
     };
     checkBtn.addEventListener('click', submit);
+    numeric.oninput = () => {
+      typed[id] = numeric.value;
+      h.save();
+    };
     numeric.addEventListener('keydown', e => {
       if (e.key === 'Enter') {
         e.preventDefault();
@@ -1283,6 +1270,7 @@ export function save() {
     spent: s.spent,
     earlier: earlierKept.get(active.id),
   });
+  if (Object.keys(typed).length) payload.drafts = typed;
 
   // This tab's copy, always, and before the disk is asked. It is what makes
   // closing and reopening the lesson safe when the write below fails.
@@ -1375,6 +1363,14 @@ export function renderSaveStatus() {
 /** This tab's copy of every lesson's progress, written on every save. */
 export const sessionProgress = new Map();
 
+/**
+ * A number typed and not yet checked, by step key, for the open lesson: kept so
+ * that leaving a step half-typed loses nothing. Never an answer, so never in
+ * `responses`; a 2.0.0 reader ignores the `drafts` field it is saved in.
+ */
+let typed = {};
+export const forgetDrafts = () => (typed = {});
+
 /** Per lesson: answers to steps it no longer has, written back on save. */
 const earlierKept = new Map();
 export const earlierFor = id => earlierKept.get(id);
@@ -1453,11 +1449,10 @@ export function load(id, lesson = null) {
   // answers were saved; its manifest says how, and this applies it.
   progress.responses = migrateSavedProgress(id, progress.responses);
   earlierKept.set(id, progress.earlier);
+  typed = { ...data?.drafts };
 
-  // Keep the original. A positional migration is right whenever the lesson has
-  // not been reordered since the save and there is no way to tell from the
-  // payload, so the thing it replaced is worth keeping until the reader has
-  // looked at their answers.
+  // Keep the original: a positional migration cannot tell from the payload
+  // whether the lesson was reordered since the save.
   if (isLegacy && progress.migrated) {
     try {
       put(legacyKey(id), JSON.stringify(data), progressArea());

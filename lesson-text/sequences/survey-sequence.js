@@ -180,7 +180,7 @@ export const TWO_TELESCOPES_DEEPER_ES = {
       prompt: '¿Cuántas veces más cielo cubre un apuntado de Rubin?',
       hints: ['Divide los dos campos.'],
       because:
-        '9,6 / 0,195 = 49,2: 52 apuntados frente a 2 es el mismo factor salvo el redondeo a apuntados enteros.',
+        '9,6 / 0,195 = 49,2. Los apuntados para 10 grados cuadrados son 52 y 2 (26): 1,04 apuntados de Rubin pasan a 2.',
     },
     'the-fixed-exposure': {
       title: 'Una exposición fija',

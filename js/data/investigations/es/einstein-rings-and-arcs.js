@@ -39,7 +39,7 @@ export default {
     },
     {
       title: 'El anillo de una galaxia',
-      body: `Carga “Una galaxia a 1 Gpc, fuente justo detrás”: 10<sup>11</sup> masas solares dentro del anillo, a un gigaparsec. Lee el radio de Einstein en segundos de arco, y su tamaño en la lente en kiloparsecs.`,
+      body: `Carga “Una galaxia a 1 Gpc, fuente justo detrás”: 10<sup>11</sup> masas solares dentro del anillo, a un gigaparsec. Lee el radio de Einstein en segundos de arco, (aproximado: distancias euclídeas) y su tamaño en la lente en kiloparsecs.`,
       fields: [{ label: 'Radio de Einstein' }, { label: 'Radio en la lente' }],
     },
     {
@@ -59,7 +59,7 @@ export default {
     },
     {
       title: 'Arcos, no anillos',
-      body: `Pon el desplazamiento en <strong>0,3</strong> y el radio de la fuente en <strong>0,2</strong>, conservando la masa puntual. La fuente es un disco y no un punto.`,
+      body: `Pon el desplazamiento en <strong>0,3</strong> y el radio de la fuente en <strong>0,2</strong>, conservando la masa puntual (una galaxia aproximada). La fuente es un disco y no un punto.`,
       prompt:
         '¿Por qué la mayoría de las galaxias con lente se ven como arcos y no como anillos?',
       options: [

@@ -606,8 +606,8 @@ const TRANSITS = {
              \n\n<strong>Ingress</strong> begins when the planet's leading edge
              first touches the stellar disk and ends when its trailing edge has
              fully crossed onto it. During that interval the blocked area climbs
-             from nothing to its full value. Ingress lasts roughly
-             2R<sub>p</sub>/2R<sub>★</sub> of the whole event, so the steepness of
+             from nothing to its full value. For a central
+             transit ingress lasts k/(1 + k) of the whole event, with k = R<sub>p</sub>/R<sub>★</sub>, so the steepness of
              the shoulders is itself a measurement of the radius ratio,
              independent of the depth.
              \n\nThe <strong>floor</strong> between second and third contact is
@@ -624,9 +624,7 @@ const TRANSITS = {
              \n\nThe <strong>total duration</strong> depends on how fast the planet
              is moving and how long a chord it cuts across the disk. Combine the
              duration with the period and you can extract the density of the
-             star, without ever resolving it. That trick, called asterodensity
-             profiling, is one of the reasons transit surveys turned out to be
-             useful for stellar astrophysics as well.`,
+             star, without ever resolving it.`,
     },
     {
       sid: 'reading-the-floor',
@@ -1155,7 +1153,7 @@ const TRANSITS = {
       title: 'Now measure it',
       body: `The same star and the same planet are back, with one change: a
              second star half a magnitude fainter sits 300 AU away. At the
-             distance of this system that is about three arcseconds on the sky,
+             distance of this system that is about six arcseconds on the sky,
              comfortably inside a single TESS pixel and inside a Kepler aperture,
              and it is 30,000 simulation units from the star you are watching, far
              outside the view. It is there. You cannot see it. Neither could the

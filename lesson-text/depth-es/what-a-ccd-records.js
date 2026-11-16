@@ -40,7 +40,7 @@ export default {
         'El factor por el que el campo plano multiplicó la luz de la estrella B',
       hints: ['La luz calibrada dividida entre la luz en bruto.'],
       worked:
-        '54.083 ÷ 47.296 = 1,14: el campo plano elevó la luz de la estrella B un 14 por ciento. Sus píxeles estaban a cerca del 87 por ciento del promedio, y 1 ÷ 0,875 = 1,14.',
+        '54.083 ÷ 47.296 = 1,14: el campo plano elevó la luz de la estrella B un 14 por ciento, deshaciendo el 12 por ciento que leía de menos. Sus píxeles estaban a cerca del 87 por ciento del promedio, y 1 ÷ 0,875 = 1,14.',
       feedback: {
         close: 'Casi. Divide la luz calibrada entre la luz en bruto.',
         'wrong-order-of-magnitude':

@@ -268,7 +268,7 @@ const THE_EXPANDING_UNIVERSE = {
         },
       ],
       hints: [
-        'A straight line is what a universe that expands at a fixed rate predicts. Ask whether the far light left when that was true.',
+        'A line through the origin is the shape at small redshift. Ask what changes for light that has traveled a long time.',
       ],
       because:
         'The relation is a line only for small redshifts, where the light has traveled a short time. Farther out the distance depends on how the expansion rate changed along the way, and the line bends. The Hubble constant is the slope at zero distance, which a fit to the whole sample misses; the next investigations ask what the bend itself says.',

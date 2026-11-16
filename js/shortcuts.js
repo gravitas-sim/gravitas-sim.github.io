@@ -73,6 +73,8 @@ const ownsSpace = target =>
 function handleKey(e) {
   if (!enabled) return;
   if (e.metaKey || e.ctrlKey || e.altKey) return;
+  // A native <dialog> closes itself on Escape; the shortcut would cancel that.
+  if (e.target.closest?.('dialog')) return;
   // Escape is exempt from the typing guard, and it is the only key that is.
   //
   // A dialog has to be dismissable from wherever focus happens to be, and in

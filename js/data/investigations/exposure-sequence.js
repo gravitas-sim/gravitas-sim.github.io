@@ -301,7 +301,7 @@ export const PLAN_AN_EXPOSURE = {
       type: 'question',
       kind: 'choice',
       title: 'A target the exposure limit forbids',
-      body: `Set the brightness to <strong>29</strong>: a star more than a hundred times
+      body: `Set the brightness to <strong>29</strong>: a star about 25 times
              fainter than the 5σ limit of a 455 second exposure. The planner has a limit of four
              hours of exposure.`,
       prompt: 'What does the planner do?',
@@ -503,7 +503,7 @@ export const PLAN_AN_EXPOSURE_ES = {
     },
     {
       title: 'Un objetivo que el límite de exposición prohíbe',
-      body: 'Pon el brillo en <strong>29</strong>: una estrella más de cien veces más débil que el límite de 5σ de una exposición de 455 segundos. El planificador tiene un límite de cuatro horas de exposición.',
+      body: 'Pon el brillo en <strong>29</strong>: una estrella unas 25 veces más débil que el límite de 5σ de una exposición de 455 segundos. El planificador tiene un límite de cuatro horas de exposición.',
       prompt: '¿Qué hace el planificador?',
       options: [
         'Devuelve una exposición larguísima, de 4 millones de segundos, como plan',

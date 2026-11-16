@@ -375,7 +375,7 @@ export const HOW_FAST_DOES_IT_SPIN_DEEPER = {
     },
     'the-error-is-a-floor': {
       title: 'El error es un piso',
-      body: 'Elige el objetivo B (de nuevo cinco noches). Lee su periodo de rotación y la incertidumbre que da el instrumento, luego activa &ldquo;Mostrar la verdad&rdquo; y compara.',
+      body: 'Elige el objetivo B (de nuevo cinco noches). Lee su periodo de rotación y la incertidumbre que da el instrumento, e introduce ambos. Luego activa &ldquo;Mostrar la verdad&rdquo; y compara.',
       fields: [
         { label: 'El periodo de rotación (horas)' },
         { label: 'Su incertidumbre (horas)' },

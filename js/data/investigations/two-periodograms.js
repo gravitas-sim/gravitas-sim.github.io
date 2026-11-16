@@ -232,7 +232,7 @@ const TWO_PERIODOGRAMS = {
           return {
             level: 'ok',
             message:
-              'The box period is 0.0006 day below the fitted one, about 19 of the fit’s uncertainties. That is not a mistake of the box search: its period is the best point of a grid of boxes, and it was never a number with an error bar of 0.00003.',
+              'The box period is 0.0006 day below the fitted one, about 19 of the fit’s uncertainties, or more than 10 with the panel’s red-noise factor of 1.66. That is not a mistake of the box search: its period is the best point of a grid of boxes, and it was never a number with an error bar of 0.00003.',
           };
         }
         return {

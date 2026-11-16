@@ -380,13 +380,13 @@ describe('the committed ledger and the real tree', () => {
     }
   });
 
-  test('every kind has rows, and 13 + 4 dialogs are recorded', () => {
+  test('every kind has rows, and 13 + 5 dialogs are recorded', () => {
     for (const k of KINDS)
       expect(count(ledger.rows, r => r.kind === k)).toBeGreaterThan(0);
-    expect(count(ledger.rows, r => r.kind === 'dialog')).toBe(17);
+    expect(count(ledger.rows, r => r.kind === 'dialog')).toBe(18);
     expect(
       count(ledger.rows, r => r.kind === 'dialog' && r.locator.native)
-    ).toBe(4);
+    ).toBe(5);
   });
 
   test('the ten pages missing from the sitemap each carry a reason', () => {

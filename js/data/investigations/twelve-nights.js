@@ -110,22 +110,21 @@ const TWELVE_NIGHTS = {
              across a twenty-night run in September. One measurement a night,
              8&nbsp;m/s each. You may choose the nights and you may choose the
              hour.
-             \n\nThere is a catch, and it is not a small one. HD&nbsp;209458
+             \n\nThere is a catch. HD&nbsp;209458
              sits at declination <strong>+18.9&deg;</strong> and La&nbsp;Silla
              at latitude <strong>&minus;29.3&deg;</strong>. The target never
              rises higher than <strong>41.9&deg;</strong> above the horizon, so
              it is never seen through less than one and a half atmospheres, and
              it is above the usual <strong>airmass&nbsp;2</strong> limit for
              only part of each night.
-             \n\nOne thing to be clear about before you start, because the rest
-             of the investigation depends on it. <strong>The sky here is real and the
+             \n\nOne thing to be clear about first. <strong>The sky here is real and the
              star is not.</strong> The observing windows are computed for the
              real site, the real target and real dates in September 2026,
              against published ephemerides. The velocities you will collect
              come from the simulation on screen. The only thing that crosses
              between the two is the list of times &mdash; which is exactly what
              crosses between a planning tool and a telescope.`,
-      tip: 'Gravitas does not model the Earth’s rotation. js/observingWindow.js computes it separately, from the same spherical trigonometry an observatory uses, and hands the schedule over as a list of numbers.',
+      tip: 'Gravitas does not model the Earth’s rotation. A separate calculation does it, from the same spherical trigonometry an observatory uses, and hands the schedule over as a list of numbers.',
     },
     {
       sid: 'look-at-the-windows',

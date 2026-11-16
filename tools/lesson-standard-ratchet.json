@@ -167,11 +167,7 @@
     "task/measure-all-computed": {},
     "text/internal-vocabulary": {
       "gravity-assist": 1,
-      "how-far-and-how-sure": 5,
-      "lagrange-points": 1,
-      "the-clock-that-drifts": 1,
-      "the-suns-motion": 2,
-      "what-gaia-does-not-see": 2
+      "lagrange-points": 1
     },
     "text/step-reference": {}
   }
