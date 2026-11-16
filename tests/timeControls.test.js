@@ -23,6 +23,7 @@ let step;
 let appState;
 let tools;
 let pauseAtEvent;
+let controls;
 
 beforeAll(async () => {
   // world.js pulls in the renderer, which wants its canvases at import time.
@@ -54,6 +55,7 @@ beforeAll(async () => {
   appState = await import('../js/appState.js');
   tools = await import('../js/sandboxTools.js');
   pauseAtEvent = await import('../js/pauseAtEvent.js');
+  controls = await import('../js/controls.js');
   appState.registerCommands({
     captureShareState: world.captureShareState,
   });
@@ -305,6 +307,29 @@ describe('looking back and returning', () => {
     timeline.returnToLive();
     expect(worstRelative(before, fullCapture())).toBeLessThan(TOL);
     expect(physics.planets.length).toBe(4);
+  });
+
+  test('scrubbing across a change bumps the world generation, and never lowers the id counter', () => {
+    recordSome();
+    const late = new physics.Planet({ x: 700, y: 50 }, { x: 0, y: 0.4 });
+    physics.planets.push(late);
+    physics.setPhysicsObjectCounter(5000); // a debris id the lists do not hold
+    const generation = physics.getWorldGeneration();
+    timeline.scrubTo(timeline.getFrameCount() - 1);
+    expect(physics.planets.includes(late)).toBe(false);
+    expect(physics.getWorldGeneration()).toBeGreaterThan(generation);
+    expect(physics.PhysicsObject_id_counter).toBe(5000);
+    timeline.returnToLive();
+    expect(physics.PhysicsObject_id_counter).toBeGreaterThanOrEqual(5000);
+  });
+
+  test('pausing leaves the history being looked at; playing returns to live', () => {
+    recordSome();
+    timeline.stepBack();
+    controls.setPlaying(false);
+    expect(timeline.isScrubbing()).toBe(true);
+    controls.setPlaying(true);
+    expect(timeline.isScrubbing()).toBe(false);
   });
 
   test('stepping back from live is a look, not a loss', () => {
