@@ -332,7 +332,7 @@ export default {
     },
     'weighing-another-star': {
       title: 'Pesar otra estrella',
-      body: 'Aquí está la recompensa. Kepler-10 es una estrella parecida al Sol a unos 600 años luz con un planeta rocoso, Kepler-10c, descubierto por tránsito. Su órbita tiene un semieje mayor de unas 0,24 UA y un periodo de unos 45 días, que son 0,123 años.\n\nUsa la forma de Newton, tomando la masa del planeta como despreciable:\n\nM = a³ / P²  (en masas solares, con a en UA y P en años)\n\n<strong>Paso 1.</strong> Eleva la distancia al cubo: 0,24³ = 0,0138.\n\n<strong>Paso 2.</strong> Eleva el periodo al cuadrado: 0,123² = 0,0151.\n\n<strong>Paso 3.</strong> Divide.',
+      body: 'Aquí está la recompensa. Kepler-10 es una estrella parecida al Sol a unos 600 años luz con un planeta de 2,4 radios terrestres, Kepler-10c, descubierto por tránsito. Su órbita tiene un semieje mayor de unas 0,24 UA y un periodo de unos 45 días, que son 0,123 años.\n\nUsa la forma de Newton, tomando la masa del planeta como despreciable:\n\nM = a³ / P²  (en masas solares, con a en UA y P en años)\n\n<strong>Paso 1.</strong> Eleva la distancia al cubo: 0,24³ = 0,0138.\n\n<strong>Paso 2.</strong> Eleva el periodo al cuadrado: 0,123² = 0,0151.\n\n<strong>Paso 3.</strong> Divide.',
       prompt: 'Masa de Kepler-10, en masas solares',
       unit: 'M_sol',
       because:

@@ -67,7 +67,7 @@ export default {
         'El polvo atenúa más la luz azul que la roja; lo que mides en dos colores dice cuánta atenuación ha sufrido la estrella.',
       ],
       because:
-        'El polvo atenúa los colores en una razón conocida, así que una mezcla concreta de las magnitudes (la de Wesenheit) no lo ve: lo que queda son 0,04 magnitudes por magnitud de atenuación en V, con la ley del núcleo de radiación y un R_V estándar de 3,3. Otra ley de polvo u otro R_V cambiaría esa cifra, y ese es el supuesto declarado.',
+        'El polvo atenúa los colores en una razón conocida, así que una mezcla concreta de las magnitudes (la de Wesenheit) no lo ve: lo que queda son 0,04 magnitudes por magnitud de atenuación en V, con la ley de extinción de Cardelli, Clayton y Mathis (1989) y un R_V estándar de 3,3. Otra ley de polvo u otro R_V cambiaría esa cifra, y ese es el supuesto declarado.',
     },
     {
       title: 'Un paso de diez en el periodo',

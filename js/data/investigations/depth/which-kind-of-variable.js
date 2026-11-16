@@ -112,7 +112,7 @@ export default {
         'The R21 row gives the value and, after the plus-minus sign, its error.',
       ],
       worked:
-        'R21 = 0.539 ± 0.007, from 39 cycles. A sawtooth RR Lyrae curve has a large second harmonic, and 0.54 is the value the exercise’s RRab template takes; the error is the first-order propagation of the fit’s covariance, and it assumes the points are independent.',
+        'R21 = 0.539 ± 0.007, from 39 cycles. A sawtooth RR Lyrae curve has a large second harmonic, and an ideal sawtooth has R21 = 0.5, the exercise’s RRab template, so 0.54 sits inside its scatter; the template is not fitted to this star. The error is the first-order propagation of the fit’s covariance, and it assumes the points are independent.',
       feedback: {
         close:
           'Close. Read the R21 row with the star on SU Draconis and the whole run.',

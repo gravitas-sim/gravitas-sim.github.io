@@ -303,7 +303,7 @@ export default {
         'nada: la misma temperatura significa el mismo tamaño',
       ],
       because:
-        'Unas cuatrocientas. La pequeña tiene 0,24 radios solares y la hinchada 102. Son del mismo color y de la misma temperatura, y una se tragaría a la otra doscientos millones de veces. Por eso «estrella roja» no es una categoría útil por sí sola, y es la demostración más clara de toda la investigación de que el color habla de una superficie y no dice nada de un tamaño. Lo que las separa no es el color sino la luminosidad: una es una enana roja y la otra una gigante roja.',
+        'Unas cuatrocientas. La pequeña tiene 0,24 radios solares y la hinchada 102. Son del mismo color y de la misma temperatura, y una se tragaría a la otra unos ochenta millones de veces, en volumen. Por eso «estrella roja» no es una categoría útil por sí sola, y es la demostración más clara de toda la investigación de que el color habla de una superficie y no dice nada de un tamaño. Lo que las separa no es el color sino la luminosidad: una es una enana roja y la otra una gigante roja.',
       tip: 'Si la más pequeña aparece como un marcador y no como un disco, no es un fallo del dibujo: el pie lo dice. A esta escala es de verdad más pequeña que un píxel.',
     },
     'measure-the-two-reds': {

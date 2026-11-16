@@ -51,7 +51,7 @@ export default {
         'Sube la velocidad hasta que la bala dé la vuelta entera sin aterrizar',
         'Anota aproximadamente la velocidad a la que eso ocurre por primera vez',
       ],
-      tip: 'El cañón está a 320 km de altura, que es más o menos donde vuela la estación espacial y con seguridad por encima del aire. Desde allí, la velocidad mínima que da la vuelta completa sin tocar el suelo es de unos 7,7 km/s. Por eso los cohetes se inclinan y vuelan de lado en vez de subir en vertical: subir es la parte fácil, ir lo bastante rápido de lado es la difícil.',
+      tip: 'El cañón está a 320 km de altura, que es más o menos donde vuela la estación espacial y con seguridad por encima del aire. Desde allí, la velocidad mínima que da la vuelta completa sin tocar el suelo es de unos 7,6 km/s. Por eso los cohetes se inclinan y vuelan de lado en vez de subir en vertical: subir es la parte fácil, ir lo bastante rápido de lado es la difícil.',
     },
     {
       title: 'Cárgalo a tope',
@@ -108,7 +108,7 @@ export default {
         'La velocidad divisoria para una bala disparada desde la superficie de la Tierra se acerca más a…',
       options: ['8 km/s', '12 km/s', '20 km/s', '40 km/s'],
       because:
-        'Desde el cañón es 10,9 km/s, así que 12 es con diferencia la más próxima. Desde el suelo mismo es 11,2 km/s, y ese es el número que merece la pena llevar encima: unas 25.000 millas por hora, o unas cuarenta veces la velocidad del sonido. Toda nave espacial que haya partido hacia otro planeta tuvo que recibir al menos esto. Fíjate en que ambas cifras difieren, y en que el cañón sobre su torre necesita algo menos. Esa es una pista a la que volverás.',
+        'Desde el cañón es 10,9 km/s, así que 12 es con diferencia la más próxima. Desde el suelo mismo es 11,2 km/s, y ese es el número que merece la pena llevar encima: unas 25.000 millas por hora, o unas treinta y tres veces la velocidad del sonido. Toda nave espacial que haya partido hacia otro planeta tuvo que recibir al menos esto. Fíjate en que ambas cifras difieren, y en que el cañón sobre su torre necesita algo menos. Esa es una pista a la que volverás.',
       hints: [
         'La velocidad de escape depende de lo fuerte que es la gravedad donde empiezas y de lo lejos que debes llegar.',
         'Es rápida para lo cotidiano: compárala con un avión de pasajeros y con una bala de fusil.',

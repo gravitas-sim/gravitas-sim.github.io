@@ -39,16 +39,16 @@ export default {
     },
     {
       title: 'Pesa una estrella, con barra de error',
-      body: 'El total es 4,0 ± 0,3 masas solares. El punto de equilibrio queda de modo que la Estrella A, la más pesada, lleva 0,75 del total, conocido con ±0,02. Una parte de un total es un producto, así que las incertidumbres fraccionarias se suman en cuadratura: σ<sub>m</sub>/m = √((σ<sub>M</sub>/M)² + (σ<sub>f</sub>/f)²).',
+      body: 'El total es 4,0 ± 0,5 masas solares. El punto de equilibrio queda de modo que la Estrella A, la más pesada, lleva 0,75 del total, conocido con ±0,02. Una parte de un total es un producto, así que las incertidumbres fraccionarias se suman en cuadratura: σ<sub>m</sub>/m = √((σ<sub>M</sub>/M)² + (σ<sub>f</sub>/f)²).',
       prompt: 'Masa de la Estrella A, con su incertidumbre',
       placeholder: 'un valor y, luego, ± su incertidumbre',
       hints: {
         concept: 'La masa de la Estrella A es su parte del total.',
         method:
-          'm = 0,75 × 4,0. Las fracciones son 0,3/4,0 y 0,02/0,75; combínalas y multiplica por m.',
+          'm = 0,75 × 4,0. Las fracciones son 0,5/4,0 y 0,02/0,75; combínalas y multiplica por m.',
       },
       because:
-        'Tres masas solares, con incertidumbre de un cuarto. El reparto de la masa se conoce mejor que la masa misma, porque la razón de las dos distancias se mide directamente, mientras que el total depende de a al cubo.',
+        'Tres masas solares, con incertidumbre de unos cuatro décimos. El reparto de la masa se conoce mejor que la masa misma, porque la razón de las dos distancias se mide directamente, mientras que el total depende de a al cubo.',
     },
   ],
 };

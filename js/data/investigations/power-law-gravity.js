@@ -107,12 +107,12 @@ const POWER_LAW_GRAVITY = {
 
              \n\nSuppose you simply wrote the law as
              <strong>a = GM / r<sup>n</sup></strong> and turned n from 2 to
-             2.01. You would find that gravity got weaker everywhere — by about
-             five percent at one astronomical unit — and orbits would change
-             for that reason as much as for any other. Worse, <em>how much</em>
-             weaker would depend on whether you had chosen to measure distance
-             in kilometers, astronomical units or pixels, which is absurd: the
-             universe does not care what units you write down.
+             2.01. You would find that gravity changed everywhere, and orbits would
+             change for that reason as much as for any other. Worse,
+             <em>how much</em> it changed would depend on whether you had
+             chosen to measure distance in kilometers, astronomical units or
+             simulation units (100 to the AU): at 1 AU, 17 percent weaker
+             in kilometers, 4.5 in simulation units, unchanged in AU. The universe does not care what units you write down.
 
              \n\nSo the law used here is anchored. It is written so that at one
              chosen distance — the <strong>reference radius r₀</strong>, which

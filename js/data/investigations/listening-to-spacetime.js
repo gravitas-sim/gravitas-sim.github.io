@@ -507,7 +507,7 @@ const LISTENING_TO_SPACETIME = {
         hide: ['m1', 'm2', 'distance', 'inclination'],
         presets: false,
       }),
-      tip: 'Be careful how far you push the conclusion. A rising chirp is good evidence that whatever produced it was two compact objects spiralling together — but it is not, on its own, a detection of anything, and it does not say what the objects are. Two black holes, two neutron stars and one of each all chirp; step 15 shows you what does distinguish them, and step 20 shows you what a detection actually takes.',
+      tip: 'Be careful how far you push the conclusion. A rising chirp is good evidence that whatever produced it was two compact objects spiralling together — but it is not, on its own, a detection of anything, and it does not say what the objects are. Two black holes, two neutron stars and one of each all chirp; “Three kinds of pair” shows what does distinguish them, and “It looks like it. Is that enough?” what a detection takes.',
     },
 
     // -----------------------------------------------------------------------
@@ -1307,8 +1307,8 @@ const LISTENING_TO_SPACETIME = {
              under a heading that says they were <em>not measured here</em>.
              \n\nPut the four you ranked in order of chirp mass and compare
              with your ranking.
-             \n\nThen look at the distances. GW190521 is about seven times
-             further away than GW150914, and space expanded while its wave was
+             \n\nThen look at the distances. In these tables GW190521 is about
+             seven times further away than GW150914, and space expanded while its wave was
              on its way here, stretching it. A stretched chirp looks exactly
              like the chirp of a heavier pair. What a detector measures is the
              chirp mass multiplied by one plus the redshift: for GW150914 that

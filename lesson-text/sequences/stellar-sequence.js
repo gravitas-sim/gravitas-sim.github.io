@@ -153,7 +153,7 @@ export const A_STARS_LIFE_IN_NUMBERS_ES = {
         'unas 20 veces menos, porque las estrellas mayores son 20 veces más calientes',
       ],
       because:
-        'Una milésima, más o menos. La estrella tiene 20 veces el combustible, pero brilla unas 57 000 veces más que la estrella parecida al Sol, así que gasta su combustible miles de veces más deprisa de lo que tiene más. El paso siguiente lee las dos vidas.',
+        'Una milésima, más o menos. La estrella tiene 20 veces el combustible, pero brilla unas 57 000 veces más que la estrella parecida al Sol al empezar (43 000 veces el Sol de hoy), así que gasta su combustible miles de veces más deprisa de lo que tiene más. El paso siguiente lee las dos vidas.',
     },
     'a-sun-like-life': {
       title: 'Una vida como la del Sol',
@@ -167,7 +167,7 @@ export const A_STARS_LIFE_IN_NUMBERS_ES = {
     },
     'why-the-heavy-one-is-short': {
       title: 'Por qué la pesada dura poco',
-      body: `La estrella de 20 masas solares tiene 20 veces el combustible y una secuencia principal mil veces más corta. Lee la <strong>luminosidad</strong> de la estrella de 20 masas solares al principio de su secuencia principal: unas 43 000 veces la del Sol.`,
+      body: `La estrella de 20 masas solares tiene 20 veces el combustible y una secuencia principal mil veces más corta. Lee la <strong>luminosidad</strong> de la estrella de 20 masas solares al principio de su secuencia principal: unas 43 000 veces el Sol de hoy.`,
       prompt: '¿Qué explica la vida corta?',
       options: [
         'Su luminosidad crece mucho más deprisa que su masa, así que gasta su combustible mucho más deprisa de lo que tiene más',
@@ -517,7 +517,7 @@ export const POPULATIONS_I_AND_II_DEEPER_ES = {
         '¿En qué porcentaje es mayor la distancia ajustada con [Fe/H] 0 que con −0,5?',
       hints: ['10^((12,43 − 11,86) / 5) − 1.'],
       worked:
-        '10^(0,563/5) = 1,296: un 29,6 por ciento. Un cambio en la composición supuesta mueve la edad en un factor de 2,3 y la distancia casi en un tercio; se mueven juntas porque un modelo más brillante pone el cúmulo más lejos. Ninguna es la respuesta sin la metalicidad.',
+        '10^(0,563/5) = 1,296: un 29,6 por ciento. Un cambio en la composición supuesta mueve la edad en un factor de 2,3 y la distancia casi en un tercio, en sentidos opuestos: pobre en metales es más viejo y más cercano. Ninguna es la respuesta sin la metalicidad.',
       feedback: {
         close:
           'Casi. Diez elevado a la diferencia entre cinco, menos uno, por cien.',

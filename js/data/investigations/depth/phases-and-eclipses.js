@@ -25,7 +25,7 @@ export default {
       tolerance: 0.3,
       hints: ['Add the two rates, invert, and halve the result.'],
       worked:
-        'E = 346.62 days, so half is 173.3 days: the eclipse seasons come about every 173 days, 4 days sooner each half year than the calendar.',
+        'E = 346.62 days, so half is 173.3 days: the eclipse seasons come about every 173 days, 9 days sooner each half year than the calendar’s 182.6 days.',
       feedback: {
         close: 'Close. Add the reciprocals, invert, then halve.',
         'wrong-order-of-magnitude': 'It is about half a year in days.',

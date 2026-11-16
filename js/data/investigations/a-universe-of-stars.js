@@ -934,7 +934,7 @@ const A_UNIVERSE_OF_STARS = {
       options: ['4', '40', '400', 'nothing — same temperature means same size'],
       answer: 2,
       because:
-        'About four hundred. The little one is 0.24 solar radii, the swollen one is 102. They are the same color and the same temperature and one would swallow the other two hundred million times over. This is why "red star" is not a useful category on its own, and it is the single clearest demonstration in the investigation that color tells you about a surface and nothing about a size. The classification that separates them is not color but luminosity: one is a red dwarf, the other a red giant.',
+        'About four hundred. The little one is 0.24 solar radii, the swollen one is 102. They are the same color and the same temperature and one would swallow the other about eighty million times over, by volume. This is why "red star" is not a useful category on its own, and it is the single clearest demonstration in the investigation that color tells you about a surface and nothing about a size. The classification that separates them is not color but luminosity: one is a red dwarf, the other a red giant.',
       tool: stage({
         pace: 'phase',
         pinStaged: true,

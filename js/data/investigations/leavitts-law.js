@@ -222,7 +222,7 @@ const LEAVITTS_LAW = {
         'Dust dims blue light more than red; what you measure in two colors tells you how much dimming the star has had.',
       ],
       because:
-        'Dust dims the colors in a known ratio, so a particular mix of the magnitudes (the Wesenheit one) is blind to it: what is left is 0.04 magnitudes per magnitude of V dimming, with the law of the radiation kernel and a standard R_V of 3.3. A different dust law or R_V would change that figure, which is the stated assumption.',
+        'Dust dims the colors in a known ratio, so a particular mix of the magnitudes (the Wesenheit one) is blind to it: what is left is 0.04 magnitudes per magnitude of V dimming, with the Cardelli, Clayton and Mathis (1989) extinction law and a standard R_V of 3.3. A different dust law or R_V would change that figure, which is the stated assumption.',
       tool: LEAVITT(LMC),
     },
     {

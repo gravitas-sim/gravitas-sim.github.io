@@ -680,7 +680,7 @@ export default {
              Júpiter, las fuerzas sobre él salen exactamente bien: rodea el Sol
              al ritmo de Júpiter y conserva su posición relativa a Júpiter para
              siempre. Hay dos vértices así, 60° por delante y 60° por detrás,
-             llamados L4 y L5. Se conocen unos diez mil asteroides en ellos.
+             llamados L4 y L5. Se conocen más de quince mil asteroides en ellos.
 
              \n\nGascheau demostró en 1843 que esos dos puntos son estables sólo
              cuando el primario supera 24,96 veces al secundario. El Sol es 1.047
@@ -777,8 +777,8 @@ export default {
                 lleva más allá de ambos puntos triangulares y de vuelta. Sigue
                 siendo una resonancia 1:1, y de una forma completamente distinta.
 
-                \n\nY es la razón de que no haya asteroides en L3 y sí diez mil en
-                L4 y L5. La estabilidad no es un detalle; es toda la razón de que
+                \n\nY es la razón de que no haya asteroides en L3 y sí más de quince mil
+                en L4 y L5. La estabilidad no es un detalle; es toda la razón de que
                 exista una población.`,
     },
     {

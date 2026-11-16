@@ -19,12 +19,9 @@
 //                     Drawn, exaggerated, and labeled as drawn.
 //   a model           the waveform, the separation, the frequency. Computed,
 //                     in real units, valid over a stated range.
-//   an observation    the GW150914 trace on screen 22, and nothing else in
-//                     this lesson.
+//   an observation    the GW150914 trace, and nothing else in this lesson.
 //
-// Screens 2, 7, 12 and 22 each say which of the three the reader is looking at
-// in the moment it matters. A beginner who leaves able to make that
-// distinction has got the most transferable thing here.
+// The steps where it matters say which of the three the reader is looking at.
 //
 // Why the canvas rather than the panel
 // -----------------------------------------------------------------------------
@@ -40,8 +37,7 @@
  *
  * Separation to scale in Schwarzschild radii of the total mass, driven by the
  * waveform's own timeline; the two bodies are fixed-size markers. The scale
- * and the reason for it are in js/lessonStage.js, and screens 2 and 12 say so
- * to the reader.
+ * and the reason for it are in js/lessonStage.js.
  */
 const source = (kinds, m1, m2, extra = {}) => ({
   binary: { kinds, m1, m2, fit: true, ...extra },
@@ -82,10 +78,9 @@ const NEUTRON_PAIR = source(['ns', 'ns'], 1.4, 1.4);
 /**
  * The lab, showing only what the current screen needs.
  *
- * Controls arrive one at a time. A beginner handed six sliders on screen 1
- * spends the lesson discovering the interface instead of the subject, so every
- * screen hides everything it has not asked about yet, and the screen that
- * introduces a control says what it does.
+ * Controls arrive one at a time. A beginner handed six sliders on the first
+ * step spends the lesson on the interface, so every step hides what it has not
+ * asked about yet, and the step that introduces a control says what it does.
  */
 const lab = (extra = {}) => ({
   id: 'gw-lab',
@@ -162,7 +157,7 @@ const WHAT_IS_A_GRAVITATIONAL_WAVE = {
       ],
       answer: 1,
       because:
-        'Yes, and by the second route. Mass curves the space around it, and when the mass moves in the right way that curvature does not simply sit there - a ripple in it travels outwards, at the speed of light, carrying energy. That ripple is a gravitational wave, and it is what the rest of this investigation is about. The two wrong answers worth naming: there is no sound, because sound needs air and there is none between here and there, and nothing has to light the pair up, because what leaves them is not light. Keep the answer you gave; screen 24 asks you about it again.',
+        'Yes, and by the second route. Mass curves the space around it, and when the mass moves in the right way that curvature does not simply sit there - a ripple in it travels outwards, at the speed of light, carrying energy. That ripple is a gravitational wave, and it is what the rest of this investigation is about. The two wrong answers worth naming: there is no sound, because sound needs air and there is none between here and there, and nothing has to light the pair up, because what leaves them is not light. Keep the answer you gave; “Tell the story” asks you about it again.',
       tool: lab({ view: 'source', autoplay: false, hide: ALL_HIDDEN }),
       tip: 'The two discs are a drawing of where the model says the objects are. They are not a photograph, and nothing in this investigation is.',
     },
@@ -379,7 +374,7 @@ const WHAT_IS_A_GRAVITATIONAL_WAVE = {
       ],
       answer: 1,
       because:
-        'Half an orbit. Swap two identical objects and you cannot tell: the pair lined up left-to-right at the start is lined up left-to-right again halfway round, with the two objects exchanged. So the pattern the source presents to the outside world repeats twice per orbit - and the wave it sends out does too. That is why the wave frequency for a pair like this is <em>twice</em> the orbital frequency, a fact screen 16 has you count for yourself. For two objects of different masses it is not quite so clean, which is a complication this investigation leaves alone.',
+        'Half an orbit. Swap two identical objects and you cannot tell: the pair lined up left-to-right at the start is lined up left-to-right again halfway round, with the two objects exchanged. So the pattern the source presents to the outside world repeats twice per orbit - and the wave it sends out does too. That is why the wave frequency for a pair like this is <em>twice</em> the orbital frequency, a fact “Count the rhythm” has you count for yourself. For unequal masses the shape is lopsided but repeats just the same, so the frequency is still twice.',
       tool: lab({ view: 'source', autoplay: false }),
       tip: 'Use the playhead in small steps. The readout gives the orbital phase, so you can check your answer against a number rather than by eye.',
       hints: [
@@ -443,7 +438,7 @@ const WHAT_IS_A_GRAVITATIONAL_WAVE = {
              They are somewhere else entirely, out where the wave has got to.
              \n\nWatch what the wave does to them.`,
       tool: lab({ view: 'both', autoplay: true, hide: ALL_HIDDEN }),
-      tip: 'The effect is drawn enormously larger than life. Screen 12 lets you turn the exaggeration down and see what the real size of it would be.',
+      tip: 'The effect is drawn enormously larger than life. “Stretch one way” gives you a control to turn the exaggeration down and see what the real size of it would be.',
     },
     {
       sid: 'stretch-one-way',
@@ -796,7 +791,7 @@ const WHAT_IS_A_GRAVITATIONAL_WAVE = {
       prompt:
         'In two or three sentences, and without using any equations, say what a "chirp" is and why this signal is one.',
       rubric:
-        'Credit an answer that has the frequency rising as the two objects get closer and go round faster, and that connects the rise to the shrinking orbit rather than treating it as a property the signal simply has. A good answer may also say that it gets louder towards the end. Do not require the word "amplitude" or any mention of energy loss - that was the previous screen and this one is about describing what is heard and seen. Do not credit "it speeds up because it is being pulled harder" with no mention of the separation. Watch also for the overclaim: a rising chirp says two compact objects were spiralling together and does not say what they were made of, which screen 20 comes back to.',
+        'Credit an answer that has the frequency rising as the two objects get closer and go round faster, and that connects the rise to the shrinking orbit rather than treating it as a property the signal simply has. A good answer may also say that it gets louder towards the end. Do not require the word "amplitude" or any mention of energy loss - that was the previous screen and this one is about describing what is heard and seen. Do not credit "it speeds up because it is being pulled harder" with no mention of the separation. Watch also for the overclaim: a rising chirp says two compact objects were spiralling together and does not say what they were made of, which “Different compact pairs” comes back to.',
       tool: lab({
         view: 'both',
         autoplay: false,
@@ -984,7 +979,7 @@ const WHAT_IS_A_GRAVITATIONAL_WAVE = {
              kilometers apart recorded the same thing, seven milliseconds
              apart, and that is what is plotted.
              \n\nYou are not asked to analyze it. Look at it, and notice that
-             it has the shape you have spent twenty screens learning to
+             it has the shape you have spent this investigation learning to
              expect — a wobble that speeds up and grows. That is the point. The
              model you have been using is simple enough for a first investigation, and
              the real thing looks like it.
@@ -1071,13 +1066,13 @@ const WHAT_IS_A_GRAVITATIONAL_WAVE = {
              \n\nYou have a pair of objects circling each other, something
              leaving them and traveling outwards, and an instrument a long way
              off whose two arms change length by different amounts.
-             \n\nGo back to screen 1 for a moment. You were asked whether we
+             \n\nGo back to the opening question for a moment. You were asked whether we
              could learn that two dark objects were moving. Look at what you
              answered.`,
       prompt:
-        'In four or five sentences, explain how the motion of two objects ends up as a measurement in an instrument on Earth. Then say whether your answer on screen 1 still stands, and what you would change about it.',
+        'In four or five sentences, explain how the motion of two objects ends up as a measurement in an instrument on Earth. Then say whether your first answer still stands, and what you would change about it.',
       rubric:
-        'A full answer has the chain: two objects orbiting means an uneven arrangement of mass that keeps changing; that sends a disturbance outwards at the speed of light; the disturbance stretches and squeezes distances at right angles to its travel; an L-shaped instrument measures the difference between two arms and so notices it. Credit an answer that has four of those five links. Look for, and credit, any mention of the effect being tiny or of the difference between a drawing and a measurement - both are the harder half of this investigation. Do not require any technical vocabulary at all; "the gap between things changes" is a complete answer to the third link. The revisit of screen 1 matters more than its correctness: a student who says "I said no, and I was wrong because I was thinking only about light" has understood the investigation.',
+        'A full answer has the chain: two objects orbiting means an uneven arrangement of mass that keeps changing; that sends a disturbance outwards at the speed of light; the disturbance stretches and squeezes distances at right angles to its travel; an L-shaped instrument measures the difference between two arms and so notices it. Credit an answer that has four of those five links. Look for, and credit, any mention of the effect being tiny or of the difference between a drawing and a measurement - both are the harder half of this investigation. Do not require any technical vocabulary at all; "the gap between things changes" is a complete answer to the third link. The revisit of the opening question matters more than its correctness: a student who says "I said no, and I was wrong because I was thinking only about light" has understood the investigation.',
       tool: lab({ view: 'both', autoplay: false, capture: true }),
     },
     {
@@ -1101,7 +1096,7 @@ const WHAT_IS_A_GRAVITATIONAL_WAVE = {
              Nothing grew.
              \n\n<strong>A shrinking orbit makes a rising signal</strong>, at
              twice the orbital frequency - closer and faster means higher and
-             louder, and that is what makes the pattern on screen 1 a chirp
+             louder, and that is what makes the signal you plotted a chirp
              rather than a hum.
              \n\n<strong>An L-shaped instrument measures a difference.</strong>
              Two arms at right angles respond oppositely to the same wave, so

@@ -397,7 +397,7 @@ export const HOW_FAST_DOES_THE_STAR_SPIN_DEEPER = {
              8.00 days as another period it could be, and says it cannot be tested.`,
       prompt: 'Why can the data not test 8.00 days?',
       options: [
-        'A test needs the data to hold at least two cycles of the period tested, and 16 days hold fewer than two cycles of 8.00 days',
+        'A test needs the data to hold at least two cycles of the period tested, and 16 days hold just under two cycles of 8.00 days',
         'Because 8.00 days is not a multiple of 4.00',
         'Because the star does not turn that slowly',
         'Because the noise is too large',
@@ -924,7 +924,7 @@ export const HOW_FAST_DOES_THE_STAR_SPIN_DEEPER_ES = {
       body: 'Vuelve a la estrella modelo con una mancha. Sus 16 días contienen cuatro vueltas de 4,00 días. El panel anota 8,00 días como otro periodo posible, y dice que no se puede probar.',
       prompt: '¿Por qué no pueden probar los datos 8,00 días?',
       options: [
-        'Una prueba necesita que los datos contengan al menos dos ciclos del periodo probado, y 16 días contienen menos de dos ciclos de 8,00',
+        'Una prueba necesita que los datos contengan al menos dos ciclos del periodo probado, y 16 días contienen algo menos de dos ciclos de 8,00',
         'Porque 8,00 días no es múltiplo de 4,00',
         'Porque la estrella no gira tan despacio',
         'Porque el ruido es demasiado grande',
@@ -933,7 +933,7 @@ export const HOW_FAST_DOES_THE_STAR_SPIN_DEEPER_ES = {
         'Para ver si las dos mitades de un ciclo de 8,00 días difieren, hacen falta dos de esos ciclos.',
       ],
       because:
-        'Para decir si los mínimos pares e impares difieren hay que ver más de un ciclo del periodo más largo, y 16 días son un poco menos de dos ciclos de 8,00. El panel marca entonces el periodo más largo como no comprobable en vez de decir que está excluido o permitido. Un sector más largo, o la misma estrella observada otra vez, lo probaría.',
+        'Para decir si los mínimos pares e impares difieren hay que ver más de un ciclo del periodo más largo, y 16 días son algo menos de dos ciclos de 8,00. El panel marca entonces el periodo más largo como no comprobable en vez de decir que está excluido o permitido. Un sector más largo, o la misma estrella observada otra vez, lo probaría.',
     },
     {
       title: 'El ecuador a partir de una mancha',
