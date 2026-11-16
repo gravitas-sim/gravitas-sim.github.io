@@ -86,21 +86,21 @@ export default {
       body: 'Abre el mapa del cielo con el LSR de Strömberg y luego con el de Schönrich. La cruz marca el <strong>ápex</strong>: el punto del cielo hacia el que se mueve el Sol. El centro galáctico está en medio del mapa, en l = 0°. El ápex se mueve entre los dos sistemas.',
       prompt: '¿Qué es cierto del ápex en cualquiera de los dos sistemas?',
       options: [
-        'Está bien a un lado del centro galáctico: el Sol se mueve sobre todo alrededor de la Galaxia, no hacia su centro',
+        'Está bien a un lado del centro galáctico: el Sol no se mueve directo hacia su centro',
         'Es el centro galáctico',
         'Es el polo norte galáctico',
         'Es el mismo en los dos sistemas',
       ],
       misconceptions: [
         {
-          say: 'El ápex estaría en l = 0° si U fuera la componente mayor. Lo es V: el Sol se mueve en el sentido de la rotación, a 90° del centro.',
+          say: 'El ápex estaría en l = 0° solo si V fuera cero. No lo es: l es de unos 20° y 49° a 100 pc, entre el centro y el sentido de la rotación, 90°.',
         },
       ],
       hints: [
         'Compara la l del ápex con 0° (el centro) y 90° (el sentido de rotación).',
       ],
       because:
-        'Bien a un lado: l queda a decenas de grados del centro en los dos sistemas (unos 20° y 49° a 100 pc), porque el movimiento del Sol tiene una V grande. Se mueve con la rotación de la Galaxia, y el ápex depende del LSR que se suponga.',
+        'Bien a un lado: l queda a decenas de grados del centro en los dos sistemas (unos 20° y 49° a 100 pc), porque el movimiento del Sol tiene una V además de una U: tan l es V entre U, y el LSR que se suponga fija V.',
     },
     'state-the-assumption': {
       title: 'Tu supuesto',

@@ -162,7 +162,7 @@ export const HOW_FAR_AND_HOW_SURE_DEEPER_ES = {
     },
     'why-one-over-p-is-biased': {
       title: 'Promediar uno entre la paralaje',
-      body: `La validación sorteó muchas paralajes con ruido de estrellas a una misma distancia verdadera y promedió uno entre cada una. Con una paralaje cinco veces su error la media salió 1,043 veces la distancia verdadera; con diez veces, 1,010; con veinte, 1,003. La mediana de uno entre la paralaje, con veinte veces, fue 1,00007 de la distancia verdadera (tramo A1 de GAIA_WORKFLOWS.md).`,
+      body: `La validación sorteó muchas paralajes con ruido de estrellas a una misma distancia verdadera y promedió uno entre cada una. Con una paralaje cinco veces su error la media salió 1,043 veces la distancia verdadera; con diez veces, 1,010; con veinte, 1,003. La mediana de uno entre la paralaje, con veinte veces, fue 1,00007 de la distancia verdadera.`,
       prompt: '¿Qué dice esto?',
       options: [
         'Las paralajes de Gaia están sesgadas al alza',
@@ -249,7 +249,7 @@ export const HOW_FAR_AND_HOW_SURE_DEEPER_ES = {
     },
     'double-the-scale-length': {
       title: 'Cambia lo que dice la previa',
-      body: `Ahora cambia la longitud de escala de 1 a 2 kpc y vuelve a leer el intervalo: su extremo superior pasa de 6,93 a 10,81 kpc. La validación midió lo mismo: con una paralaje corregida igual a su error, duplicar la longitud de escala movió el extremo superior en un factor de 1,56 (tramo D3).`,
+      body: `Ahora cambia la longitud de escala de 1 a 2 kpc y vuelve a leer el intervalo: su extremo superior pasa de 6,93 a 10,81 kpc. La validación midió lo mismo: con una paralaje corregida igual a su error, duplicar la longitud de escala movió el extremo superior en un factor de 1,56.`,
       prompt:
         '¿Qué significa esto para una estrella con una paralaje tan débil?',
       options: [
@@ -285,7 +285,7 @@ export const HOW_FAR_AND_HOW_SURE_DEEPER_ES = {
     },
     'what-the-prior-assumes': {
       title: 'Qué supone la previa',
-      body: `La previa se declara junto a la verosimilitud: las estrellas muestreadas tienen una densidad espacial que decrece como exp(−r ÷ L), y la muestra es completa en las distancias dibujadas. Un estudiante la aplica a estrellas elegidas porque su paralaje sobre error supera 5. En la validación, una previa con la escala equivocada (1 kpc para estrellas que en realidad decrecen en 3) dio intervalos del 68 por ciento que cubrieron entre el 22 y el 42 por ciento de las estrellas (tramo C4, registrado sin aprobado ni suspenso).`,
+      body: `La previa se declara junto a la verosimilitud: las estrellas muestreadas tienen una densidad espacial que decrece como exp(−r ÷ L), y la muestra es completa en las distancias dibujadas. Un estudiante la aplica a estrellas elegidas porque su paralaje sobre error supera 5. En la validación, una previa con la escala equivocada (1 kpc para estrellas que en realidad decrecen en 3) dio intervalos del 68 por ciento que cubrieron entre el 22 y el 42 por ciento de las estrellas (registrado sin aprobado ni suspenso).`,
       prompt: '¿Qué falla al aplicar la previa a esa muestra?',
       options: [
         'Nada: una previa siempre es mejor que ninguna',
@@ -319,11 +319,11 @@ export const HOW_FAR_AND_HOW_SURE_DEEPER_ES = {
     },
     'what-the-interval-leaves-out': {
       title: 'Di qué es la distancia',
-      body: `La distancia corregida del cúmulo es 2,324 kpc con un intervalo estadístico de 2,316 a 2,332 kpc. Ese intervalo no tiene suelo sistemático. El tramo de la validación que comprobaría la distancia con la de un catálogo publicado basado en Gaia (E1) no se ejecutó: la tabla que necesita, Hunt y Reffert 2023, no pudo obtenerse. Los valores de la literatura en la validación van de 2,48 kpc (fotometría, convertida de un módulo de distancia) a 2,59 (Gaia DR2); una paralaje de DR3 tal como se imprimió, sin punto cero, da 2,78 kpc.`,
+      body: `La distancia corregida del cúmulo es 2,324 kpc con un intervalo estadístico de 2,316 a 2,332 kpc. Ese intervalo no tiene suelo sistemático. La comprobación de la distancia con la de un catálogo publicado basado en Gaia no se ejecutó: la tabla que necesita, Hunt y Reffert 2023, no pudo obtenerse. Los valores de la literatura en la validación van de 2,48 kpc (fotometría, convertida de un módulo de distancia) a 2,59 (Gaia DR2); una paralaje de DR3 tal como se imprimió, sin punto cero, da 2,78 kpc.`,
       prompt:
         'Escribe la frase que pondrías en un informe para esta distancia, con sus etiquetas, y di qué no se ha hecho.',
       rubric:
-        'Crédito por 2,324 kpc con el intervalo estadístico de 2,316 a 2,332 rotulado como solo estadístico y sin suelo sistemático; por decir que aquí no se conoce la incertidumbre del propio punto cero; por decir que la distancia no se ha validado con la de un catálogo publicado (E1 NO SE EJECUTÓ) y queda por debajo de los valores de la literatura listados; y por no llamarlo concordancia. No se da crédito a una frase que dé 2,324 kpc como la distancia del cúmulo sin etiqueta.',
+        'Crédito por 2,324 kpc con el intervalo estadístico de 2,316 a 2,332 rotulado como solo estadístico y sin suelo sistemático; por decir que aquí no se conoce la incertidumbre del propio punto cero; por decir que la distancia no se ha validado con la de un catálogo publicado (no se ejecutó) y queda por debajo de los valores de la literatura listados; y por no llamarlo concordancia. No se da crédito a una frase que dé 2,324 kpc como la distancia del cúmulo sin etiqueta.',
       rubricCriteria: [
         {
           name: 'Da el valor con sus etiquetas',
@@ -344,7 +344,7 @@ export const HOW_FAR_AND_HOW_SURE_DEEPER_ES = {
           levels: [
             {
               label: 'Completo',
-              text: 'Dice que la distancia no está validada con un catálogo publicado y que el tramo E1 no se ejecutó.',
+              text: 'Dice que la distancia no está validada con un catálogo publicado y que la comprobación no se ejecutó.',
             },
             { label: 'Aún no', text: 'Afirma concordancia con la literatura.' },
           ],
@@ -601,7 +601,7 @@ export const WHAT_GAIA_DOES_NOT_SEE_DEEPER_ES = {
     },
     'far-stars-need-to-be-bright': {
       title: 'Las estrellas lejanas deben ser brillantes',
-      body: `Un límite de magnitud deja pasar una estrella por su brillo aparente. En la validación, una muestra sintética de estrellas idénticas repartidas uniformemente en el espacio y recortadas en un límite de magnitud dio recuentos cuyo logaritmo crece con el límite con una pendiente de 0,600 por magnitud, el valor euclídeo de 0,6 (tramo S1).`,
+      body: `Un límite de magnitud deja pasar una estrella por su brillo aparente. En la validación, una muestra sintética de estrellas idénticas repartidas uniformemente en el espacio y recortadas en un límite de magnitud dio recuentos cuyo logaritmo crece con el límite con una pendiente de 0,600 por magnitud, el valor euclídeo de 0,6.`,
       prompt:
         '¿Qué le hace un límite de magnitud a las estrellas a gran distancia?',
       options: [
@@ -650,7 +650,7 @@ export const WHAT_GAIA_DOES_NOT_SEE_DEEPER_ES = {
     },
     'a-pack-that-gives-no-distance': {
       title: 'Un paquete que no da distancia',
-      body: `Gravitas tiene una segunda muestra de Gaia, estrellas cercanas al Sol con velocidades radiales, pero sus paralajes están redondeadas a 0,02 mas. En la validación, el 80 por ciento de sus 1.570 estrellas se redondeó en más de una décima de su error de paralaje (el mayor redondeo fue 0,00999 mas; tramo E3). El panel no la usa.`,
+      body: `Gravitas tiene una segunda muestra de Gaia, estrellas cercanas al Sol con velocidades radiales, pero sus paralajes están redondeadas a 0,02 mas. En la validación, el 80 por ciento de sus 1.570 estrellas se redondeó en más de una décima de su error de paralaje (el mayor redondeo fue 0,00999 mas). El panel no la usa.`,
       prompt: '¿Por qué no se toma ninguna distancia de ella?',
       options: [
         'Sus estrellas están demasiado cerca para la paralaje',

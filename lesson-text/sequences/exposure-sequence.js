@@ -108,7 +108,7 @@ export const PLAN_AN_EXPOSURE_ES = {
     },
     'cannot-be-reached': {
       title: 'Un objetivo que el límite de exposición prohíbe',
-      body: 'Pon el brillo en <strong>29</strong>: una estrella más de cien veces más débil que el límite de 5σ de una exposición de 455 segundos. El planificador tiene un límite de cuatro horas de exposición.',
+      body: 'Pon el brillo en <strong>29</strong>: una estrella unas 25 veces más débil que el límite de 5σ de una exposición de 455 segundos. El planificador tiene un límite de cuatro horas de exposición.',
       prompt: '¿Qué hace el planificador?',
       options: [
         'Devuelve una exposición larguísima, de 4 millones de segundos, como plan',

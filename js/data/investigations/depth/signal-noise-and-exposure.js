@@ -210,7 +210,7 @@ export default {
         'Under a bright moon every pixel of the aperture collects the moon’s sky for the whole exposure.',
       ],
       worked:
-        'The sky is 97 percent of the noise squared. The moon’s extra light adds noise in every pixel, and at 300 seconds the read noise has become a rounding error: the star is sky-limited, the regime where the square-root law holds and where a longer exposure is worth the most.',
+        'The sky is 97 percent of the noise squared. The moon’s extra light adds noise in every pixel, and at 300 seconds the read noise has become a rounding error: the star is sky-limited, the regime where the square-root law holds and a longer exposure buys only the square root of the time.',
       feedback: {
         close:
           'Close. Divide the largest term by the square of the total noise.',

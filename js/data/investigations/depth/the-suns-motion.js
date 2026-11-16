@@ -120,7 +120,7 @@ export default {
       body: `Strömberg’s correction treats the lag as set by the dispersion
              alone. Schönrich and colleagues found it depends on metallicity as
              well. Fitting the lag across color bins of this sample is the obvious
-             test. The project’s notes (GALACTIC_DYNAMICS.md) record it giving
+             test. The project’s notes record it giving
              12.3 ± 6.7&nbsp;km/s for one choice of bins: an error about as big as
              the 8&nbsp;km/s between the two values, so it cannot settle them.
              That is a recorded result, not something the instrument shows.`,

@@ -278,7 +278,7 @@ const THE_SUNS_MOTION = {
              map, at l = 0°. The apex moves between the two frames.`,
       prompt: 'Which is true of the apex in either frame?',
       options: [
-        'It is well to one side of the Galactic center: the Sun is mostly moving around the Galaxy, not toward its center',
+        'It is well to one side of the Galactic center: the Sun is not moving straight toward its center',
         'It is the Galactic center',
         'It is the north Galactic pole',
         'It is the same in both frames',
@@ -288,14 +288,14 @@ const THE_SUNS_MOTION = {
         {
           id: 'apex-is-center',
           option: 1,
-          say: 'The apex would be at l = 0° if U were the biggest component. V is: the Sun moves along the rotation, at 90° from the center.',
+          say: 'The apex would be at l = 0° only if V were zero. It is not: l is about 20° and 49° at 100 pc, between the center and the direction of rotation, 90°.',
         },
       ],
       hints: [
         'Compare the apex’s l with 0° (the center) and 90° (the rotation direction).',
       ],
       because:
-        'Well to one side: l is tens of degrees from the center in both frames (about 20° and 49° at 100 pc), because the Sun’s motion has a large V. It moves with the Galaxy’s rotation, and the apex depends on which LSR is assumed.',
+        'Well to one side: l is tens of degrees from the center in both frames (about 20° and 49° at 100 pc), because the Sun’s motion has a V as well as a U: tan l is V over U, and which LSR is assumed sets V.',
       tool: SM({ maxPc: 100, frame: 1, view: 1 }),
     },
     {

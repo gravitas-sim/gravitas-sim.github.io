@@ -126,7 +126,7 @@ export default {
         'Bajo una Luna brillante cada píxel de la abertura recoge el cielo de la Luna durante toda la exposición.',
       ],
       worked:
-        'El cielo es un 97 por ciento del ruido al cuadrado. La luz extra de la Luna añade ruido en cada píxel, y a los 300 segundos el ruido de lectura se ha vuelto un error de redondeo: la estrella está limitada por el cielo, el régimen donde vale la ley de la raíz cuadrada y donde una exposición más larga rinde más.',
+        'El cielo es un 97 por ciento del ruido al cuadrado. La luz extra de la Luna añade ruido en cada píxel, y a los 300 segundos el ruido de lectura se ha vuelto un error de redondeo: la estrella está limitada por el cielo, el régimen donde vale la ley de la raíz cuadrada y una exposición más larga rinde solo la raíz del tiempo.',
       feedback: {
         close:
           'Casi. Divide el término mayor entre el cuadrado del ruido total.',

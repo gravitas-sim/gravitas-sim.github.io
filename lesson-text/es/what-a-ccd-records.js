@@ -146,7 +146,7 @@ export default {
     },
     'what-you-worked-out': {
       title: 'Lo que calculaste',
-      body: `Una imagen de sesgo da el desfase (500 cuentas) y el ruido de lectura (8 electrones); un oscuro da la corriente de oscuridad (0,1 electrón por segundo y píxel); un campo plano da la sensibilidad de cada píxel, y la esquina recibe cerca del 76 por ciento de la luz del centro. El sesgo y el oscuro se restan, y el campo plano se divide al final. La estrella B, cerca de una esquina, leía un 12 por ciento de menos hasta que se aplicó el campo plano; un rayo cósmico se marca porque es agudo, y una estrella saturada no se puede reparar.
+      body: `Una imagen de sesgo da el desfase (500 cuentas) y el ruido de lectura (8 electrones); un oscuro da la corriente de oscuridad (0,1 electrón por segundo y píxel); un campo plano da la sensibilidad de cada píxel, y la esquina recibe cerca del 76 por ciento de la luz del centro. El sesgo y el oscuro se restan, y el campo plano se divide al final. La estrella B, cerca de una esquina, leía un 12 por ciento de menos hasta que el campo plano lo elevó un 14 por ciento; un rayo cósmico se marca porque es agudo, y una estrella saturada no se puede reparar.
              \n\nLa cámara es <strong>sintética</strong>: cada número sale de un modelo declarado, sin blooming, sin no linealidad, con un campo plano para todos los colores y una estrella perfectamente redonda. Una cámara real añade todo eso, y cada una de sus imágenes de calibración tiene que ser tomada, revisada y combinada por alguien. Esto muestra para qué sirve cada imagen; no sustituye tomarlas.`,
     },
   },

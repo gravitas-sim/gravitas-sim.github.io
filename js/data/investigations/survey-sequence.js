@@ -519,7 +519,7 @@ export const TWO_TELESCOPES_DEEPER = {
       unit: '',
       hints: ['Divide the two fields.'],
       because:
-        '9.6 / 0.195 = 49.2: 52 pointings against 2 is the same factor within the whole-pointing rounding.',
+        '9.6 / 0.195 = 49.2. The pointings for 10 square degrees are 52 and 2 (26): 1.04 Rubin pointings round up to 2.',
       tool: CMP(),
     },
     {
@@ -930,7 +930,7 @@ export const TWO_TELESCOPES_DEEPER_ES = {
       prompt: '¿Cuántas veces más cielo cubre un apuntado de Rubin?',
       hints: ['Divide los dos campos.'],
       because:
-        '9,6 / 0,195 = 49,2: 52 apuntados frente a 2 es el mismo factor salvo el redondeo a apuntados enteros.',
+        '9,6 / 0,195 = 49,2. Los apuntados para 10 grados cuadrados son 52 y 2 (26): 1,04 apuntados de Rubin pasan a 2.',
     },
     {
       title: 'Una exposición fija',

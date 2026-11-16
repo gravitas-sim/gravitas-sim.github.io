@@ -160,8 +160,8 @@ export default {
       ],
       because: `La cercanía, no la masa. A 1,5 AU de una estrella de 1,0 masas
                 solares el planeta siente un tirón unas dieciocho veces mayor que
-                el de una estrella de 0,5 masas solares a seis AU en su máximo
-                acercamiento. La compañera es una perturbación y no una
+                el de una estrella de 0,5 masas solares en su máximo
+                acercamiento, a 4,5 AU. La compañera es una perturbación y no una
                 competidora, y una perturbación así de pequeña se promedia casi
                 del todo.
                 \n\nCasi. Vuelve a mirar la fila de excentricidad máxima de esa
@@ -560,8 +560,8 @@ export default {
     'run-the-circumbinary': {
       title: 'Cuatro separaciones, y luego dos',
       body: `Cuarenta periodos binarios esta vez, porque un planeta circumbinario
-             es lento: a 40 AU tarda unos cinco periodos binarios y medio en dar
-             una vuelta, así que cuarenta periodos son solo siete órbitas del
+             es lento: a 40 AU tarda unos ocho periodos binarios en dar
+             una vuelta, así que cuarenta periodos son solo cinco órbitas del
              planeta. Conviene recordarlo al leer el resultado.
              \n\nEjecútalo tal como está, a <strong>4,0</strong> separaciones, y
              mira el anillo. Después reduce a la mitad el radio inicial, hasta
