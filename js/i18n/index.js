@@ -230,6 +230,8 @@ const listeners = new Set();
 export let targetLocale;
 /** Work a language change waits for, given the new locale (deferredMessages). */
 let prepare;
+/** Counts language changes, so a slow one cannot land after a later one. */
+let sequence = 0;
 
 /** @param {(locale: string) => (Promise<void>|void|number)} fn - Set the change's preparer */
 export const setLocalePreparer = fn => {
@@ -520,20 +522,30 @@ export function num(n) {
  * @returns {Promise<string>} The locale actually applied
  */
 export async function setLocale(id, { persist = true } = {}) {
-  const next = isSupportedLocale(id) ? id : DEFAULT_LOCALE;
+  let next = isSupportedLocale(id) ? id : DEFAULT_LOCALE;
+  const mine = ++sequence;
   targetLocale = next;
   // Fetched together; the old strings stay on screen until both are in, so the
   // listeners below repaint into a complete language. Nothing is awaited when
   // there is nothing to fetch: English applies synchronously at start-up.
-  const extra = prepare?.(next);
-  if (!baseLoaded.has(next)) await loadLocale(next);
-  if (extra) await extra;
+  let ok = false;
+  try {
+    const extra = prepare?.(next);
+    if (!baseLoaded.has(next)) await loadLocale(next);
+    if (extra) await extra;
+    ok = next === DEFAULT_LOCALE || baseLoaded.has(next);
+  } catch {
+    /* stays on the language in use */
+  }
+  // A newer call has taken over; applying this one would undo it.
+  if (mine !== sequence) return current;
+  if (!ok) targetLocale = next = current;
   const changed = next !== current;
   current = next;
 
   document.documentElement.setAttribute('lang', current);
 
-  if (persist) {
+  if (persist && ok) {
     try {
       window.localStorage?.setItem(STORAGE_KEY, current);
     } catch {

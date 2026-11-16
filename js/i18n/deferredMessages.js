@@ -62,7 +62,8 @@ function ensureFor(id) {
   if (!loading.has(id))
     loading.set(
       id,
-      LOADERS[id]()
+      Promise.resolve()
+        .then(() => LOADERS[id]())
         .then(strings => {
           registerMessages(id, strings);
           registered_.add(id);
@@ -79,16 +80,18 @@ function ensureFor(id) {
           if (typeof document !== 'undefined' && getLocale() === id)
             applyTranslations(document);
         })
-        .catch(err => {
+        .catch(async err => {
           // Forget the attempt. A browser may record a module whose fetch
           // failed and reject every later import of the same specifier, so for
           // a genuine network failure the reader's recovery is a reload; this
-          // does recover a throw from registerMessages or the repaint. Strings
-          // render as ids (or English) and the application keeps working.
+          // does recover a throw from registerMessages or the repaint.
           loading.delete(id);
-          lastFailure = err;
           settleDeferredMessages(id);
           console.warn('[i18n] deferred messages did not load:', err);
+          // Last resort: English, which every lookup falls back to, so the
+          // panels read words rather than ids.
+          if (id !== 'en') await ensureFor('en').catch(() => {});
+          lastFailure = err;
           throw err;
         })
     );
