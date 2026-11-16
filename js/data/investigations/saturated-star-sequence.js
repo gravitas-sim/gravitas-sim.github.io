@@ -211,7 +211,7 @@ export const THE_SATURATED_STAR = {
       ],
       hints: ['What is the largest number of electrons one pixel can hold?'],
       because:
-        'Each pixel saturates at the full well; light that arrives after a pixel is full is lost (or, as the next step shows, spills), and a sum of what was recorded is short.',
+        'Each pixel saturates at the full well; light that arrives after a pixel is full is lost (or, as the steps after it show, spills), and a sum of what was recorded is short.',
       tool: FX(),
     },
     {
@@ -750,7 +750,7 @@ export const THE_SATURATED_STAR_ES = {
         '¿Cuál es el mayor número de electrones que puede guardar un píxel?',
       ],
       because:
-        'Cada píxel se satura en la capacidad máxima; la luz que llega cuando un píxel está lleno se pierde (o, como muestra el paso siguiente, se derrama), y una suma de lo registrado se queda corta.',
+        'Cada píxel se satura en la capacidad máxima; la luz que llega cuando un píxel está lleno se pierde (o, como muestran los pasos que siguen, se derrama), y una suma de lo registrado se queda corta.',
     },
     {
       title: 'Adónde va la carga de más',

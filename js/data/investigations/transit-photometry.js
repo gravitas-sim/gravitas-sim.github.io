@@ -624,9 +624,7 @@ const TRANSITS = {
              \n\nThe <strong>total duration</strong> depends on how fast the planet
              is moving and how long a chord it cuts across the disk. Combine the
              duration with the period and you can extract the density of the
-             star, without ever resolving it. That trick, called asterodensity
-             profiling, is one of the reasons transit surveys turned out to be
-             useful for stellar astrophysics as well.`,
+             star, without ever resolving it.`,
     },
     {
       sid: 'reading-the-floor',

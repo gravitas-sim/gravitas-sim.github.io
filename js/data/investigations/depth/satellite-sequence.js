@@ -871,7 +871,7 @@ export const HOW_FAST_DOES_IT_SPIN_DEEPER = {
       type: 'measure',
       title: 'The error is a floor',
       body: `Choose target B (five nights again). Read its rotation period and the uncertainty the instrument gives, and enter both. Then
-             turn on &ldquo;Show the truth&rdquo; and compare; nothing to enter for that.`,
+             turn on &ldquo;Show the truth&rdquo; and compare.`,
       fields: [
         {
           id: 'p',

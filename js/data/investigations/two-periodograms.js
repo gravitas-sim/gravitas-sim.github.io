@@ -232,7 +232,7 @@ const TWO_PERIODOGRAMS = {
           return {
             level: 'ok',
             message:
-              'The box period is 0.0006 day below the fitted one, about 19 of the fit’s uncertainties, or more than 10 if they are widened by the panel’s red-noise factor of 1.66. That is not a mistake of the box search: its period is the best point of a grid of boxes, and it was never a number with an error bar of 0.00003.',
+              'The box period is 0.0006 day below the fitted one, about 19 of the fit’s uncertainties, or more than 10 with the panel’s red-noise factor of 1.66. That is not a mistake of the box search: its period is the best point of a grid of boxes, and it was never a number with an error bar of 0.00003.',
           };
         }
         return {
@@ -252,7 +252,7 @@ const TWO_PERIODOGRAMS = {
              across the peak, which has a step of 3e-7 day.`,
       prompt: 'What is wrong with that?',
       options: [
-        'The grid step is how finely the periods were sampled, not how well the data fix the period: this period is 19 of the fit’s uncertainties from the fit’s (more than 10 with its red-noise factor), so its real uncertainty is far larger than the step',
+        'The grid step is how finely the periods were sampled, not how well the data fix the period: this period is 19 of the fit’s uncertainties from the fit’s, so its real uncertainty is far larger than the step',
         'The grid step is too small and should be made larger',
         'A box search cannot find a period at all',
         'The uncertainty should be the signal-to-noise ratio',

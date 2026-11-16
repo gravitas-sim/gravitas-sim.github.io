@@ -72,7 +72,7 @@ export const WHY_VENUS_IS_HOT = {
         'Compara la temperatura que el planeta irradia al espacio con la temperatura de su suelo.',
       ],
       because:
-        'El planeta en conjunto irradia lo que absorbe, a 229 K, desde lo alto de la atmósfera. El suelo está mucho más caliente porque una atmósfera espesa que absorbe radiación infrarroja retiene lo que irradia el suelo, capa tras capa, así que el suelo tiene que estar más caliente para que el planeta emita lo que absorbe: un efecto invernadero.',
+        'El planeta en conjunto irradia lo que absorbe, a 229 K, desde lo alto de la atmósfera. El suelo está mucho más caliente porque una atmósfera espesa que absorbe radiación infrarroja retiene lo que irradia el suelo, así que este debe estar más caliente para que el planeta emita lo que absorbe: un efecto invernadero.',
     },
     'six-bodies': {
       title: '¿La diferencia es siempre un efecto invernadero?',

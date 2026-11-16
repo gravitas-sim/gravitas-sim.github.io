@@ -303,7 +303,7 @@ const THE_ROTATING_DISK = {
         'Compare the two numbers in the 8.3 kpc row, then compare the green and orange curves at 20 kpc.',
       ],
       because:
-        'At 8.3 kpc stars and gas give about 203 km/s against the halo’s 178, the larger part but not all; their total, 270 km/s, is above the 244 the curve assumes for the Sun. At 20 kpc the disk has fallen and the halo is the bigger one. The halo is a large part of the force here and most of it far out.',
+        'At 8.3 kpc stars and gas give about 203 km/s against the halo’s 178, the larger part but not all, a total of 270, above the 244 assumed for the Sun. At 20 kpc the disk has fallen and the halo is the bigger one. The halo is a large part of the force here and most of it far out.',
       tool: RD({ view: 1, fit: 1 }),
     },
     {

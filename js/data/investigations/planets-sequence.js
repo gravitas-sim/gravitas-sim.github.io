@@ -470,7 +470,7 @@ export const THE_SCALE_OF_THE_SOLAR_SYSTEM = {
              instead, where the <strong>distances are true</strong>: 100 units to an
              astronomical unit, the distance from the Earth to the Sun. The planets are
              drawn larger than their true size so that they show at all, and the
-             view starts wide enough for Mercury out to at least Saturn, because nothing wider would
+             view reaches at least Saturn, because nothing wider would
              leave the inner planets visible. Scroll to zoom out and find Neptune.`,
       tip: 'The distances in the readout come from the sandbox, not from a table; the next steps check them against the numbers you know.',
       setup: SCALE_SETUP,
@@ -814,12 +814,11 @@ export const COMETS_AND_THE_SUN = {
       bind: COMET_BIND,
       type: 'explore',
       title: 'Watch the tails',
-      body: `A tail shows only where sunlight is above a ninth of Earth&rsquo;s, inside about
-             3 AU of the Sun. The readout&rsquo;s comet, Halley, stays beyond 5.8 AU and never grows
-             one. Wild 2 and Hartley 2 come in to about 1.1 AU: find one near the Sun, zoom in on
-             it, and compare its tail with the direction to the Sun.`,
+      body: `Tails show only inside about 3 AU of the Sun. Halley, the readout&rsquo;s comet, stays
+             beyond 5.8 AU. Wild 2 and Hartley 2 come in to 1.1 AU: find one, zoom in, and compare
+             its tail with the direction to the Sun.`,
       checklist: [
-        'Find Wild 2 or Hartley 2 inside about 3 AU, and zoom in on it',
+        'Find Wild 2 or Hartley 2 near the Sun and zoom in',
         'See the narrow ion tail point away from the Sun',
         'See the same comet while it moves away from the Sun: where is its tail now?',
       ],
@@ -1018,11 +1017,9 @@ export const COMETS_AND_THE_SUN = {
           say: 'There is no air out here to stream past. What is swept along is gas the comet itself lost, by sunlight and the solar wind.',
         },
       ],
-      hints: [
-        'The real Halley’s 360 K at the near end is far above the 160 K at which ice turns to gas.',
-      ],
+      hints: ['The real Halley’s 360 K is far above 160 K.'],
       because:
-        'Heating. The nucleus’s temperature rises as one over the square root of the distance; ice turns to gas near 160 K, and the escaping gas and dust form the coma and the tails: the solar wind sweeps the gas straight away from the Sun, and sunlight pushes the dust into a curved tail.',
+        'Heating. The nucleus’s temperature rises as one over the square root of the distance; ice turns to gas near 160 K, and the escaping gas and dust form the coma and the tails: the solar wind sweeps the gas away from the Sun and sunlight pushes the dust.',
     },
     {
       sid: 'what-you-worked-out',
@@ -1202,7 +1199,7 @@ export const THE_SCALE_OF_THE_SOLAR_SYSTEM_ES = {
   steps: [
     {
       title: 'Una imagen que ya has visto',
-      body: 'Todo diagrama del sistema solar tiene el Sol, ocho planetas en fila y planetas dibujados lo bastante grandes para verse. Esta investigación usa en cambio el sandbox, donde las <strong>distancias son verdaderas</strong>: 100 unidades por unidad astronómica, la distancia de la Tierra al Sol. Los planetas se dibujan más grandes que su tamaño real para que se vean, y la vista empieza lo bastante ancha para Mercurio hasta al menos Saturno, porque una más amplia dejaría invisibles los planetas interiores. Desplázate para alejar la vista y encuentra a Neptuno.',
+      body: 'Todo diagrama del sistema solar tiene el Sol, ocho planetas en fila y planetas dibujados lo bastante grandes para verse. Esta investigación usa en cambio el sandbox, donde las <strong>distancias son verdaderas</strong>: 100 unidades por unidad astronómica, la distancia de la Tierra al Sol. Los planetas se dibujan más grandes que su tamaño real para que se vean, y la vista llega al menos a Saturno, porque una más amplia dejaría invisibles los planetas interiores. Desplázate para alejar la vista y encuentra a Neptuno.',
       tip: 'Las distancias de la lectura vienen del sandbox, no de una tabla; los pasos siguientes las comparan con los números que conoces.',
     },
     {
@@ -1322,9 +1319,9 @@ export const COMETS_AND_THE_SUN_ES = {
     },
     {
       title: 'Mira las colas',
-      body: 'Una cola solo se ve donde la luz del Sol supera un noveno de la de la Tierra, a menos de unas 3 UA del Sol. El cometa de la lectura, Halley, se queda más allá de 5,8 UA y nunca la desarrolla. Wild 2 y Hartley 2 se acercan hasta unas 1,1 UA: busca uno cerca del Sol, acércate a él y compara su cola con la dirección del Sol.',
+      body: 'Las colas solo se ven a menos de unas 3 UA del Sol. Halley, el cometa de la lectura, se queda más allá de 5,8 UA. Wild 2 y Hartley 2 llegan a 1,1 UA: busca uno, acércate y compara su cola con la dirección del Sol.',
       checklist: [
-        'Busca Wild 2 o Hartley 2 a menos de unas 3 UA y acércate a él',
+        'Busca Wild 2 o Hartley 2 cerca del Sol y acércate',
         'Ve la cola estrecha de iones apuntar lejos del Sol',
         'Ve el mismo cometa mientras se aleja del Sol: ¿dónde está ahora su cola?',
       ],
@@ -1389,11 +1386,9 @@ export const COMETS_AND_THE_SUN_ES = {
           say: 'Aquí fuera no hay aire que corra a su lado. Lo que se arrastra es gas que el propio cometa perdió, por la luz del Sol y el viento solar.',
         },
       ],
-      hints: [
-        'Los 360 K del Halley real en el extremo cercano están muy por encima de los 160 K a los que el hielo pasa a gas.',
-      ],
+      hints: ['Los 360 K del Halley real superan con mucho los 160 K.'],
       because:
-        'El calor. La temperatura del núcleo sube como uno sobre la raíz cuadrada de la distancia; el hielo pasa a gas hacia los 160 K, y el gas y el polvo que escapan forman la coma y las colas: el viento solar barre el gas directamente lejos del Sol, y la luz del Sol empuja el polvo en una cola curva.',
+        'El calor. La temperatura del núcleo sube como uno sobre la raíz cuadrada de la distancia; el hielo pasa a gas hacia los 160 K, y el gas y el polvo que escapan forman la coma y las colas: el viento solar barre el gas lejos del Sol y la luz empuja el polvo.',
     },
     {
       title: 'Lo que has deducido',

@@ -106,7 +106,7 @@ export default {
         },
       ],
       hints: [
-        'Una recta es lo que predice un universo que se expande a ritmo fijo. Pregunta si la luz lejana salió cuando eso era cierto.',
+        'Una recta por el origen es la forma a corto desplazamiento al rojo. Pregunta qué cambia para la luz que ha viajado mucho tiempo.',
       ],
       because:
         'La relación es una recta solo para corrimientos pequeños, donde la luz ha viajado poco tiempo. Más lejos la distancia depende de cómo cambió la tasa de expansión por el camino, y la recta se curva. La constante de Hubble es la pendiente a distancia cero, que un ajuste a toda la muestra no ve; las investigaciones siguientes preguntan qué dice la propia curvatura.',

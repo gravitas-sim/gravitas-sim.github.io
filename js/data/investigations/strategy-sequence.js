@@ -87,7 +87,7 @@ export const WHY_THE_PERIOD_IS_WRONG = {
       title: 'A star seen once a night',
       body: `A star brightens and fades every <strong>0.8 days</strong>, about 19 hours. You
              can look at it from one observatory, once a night, for forty nights, at the
-             same time each night. The panel below is the period search&rsquo;s own view
+             same sidereal time each night. The panel below is the period search&rsquo;s own view
              of that plan: the blue curve is what the search returns for a
              <em>perfect</em> signal at the true frequency when it is sampled at your
              epochs. The true peak is 1; every other peak is an <strong>alias</strong>, a
@@ -102,7 +102,7 @@ export const WHY_THE_PERIOD_IS_WRONG = {
       type: 'predict',
       reveal: 'the-aliases',
       title: 'What will the search say?',
-      body: `Forty visits, one a night, always at the same time. The true period is 0.8
+      body: `Forty visits, one a night, always at the same sidereal time. The true period is 0.8
              days. A period search looks for the period that fits the points best.`,
       prompt: 'The search will return&hellip;',
       options: [
@@ -116,7 +116,7 @@ export const WHY_THE_PERIOD_IS_WRONG = {
         'Look at the curve: how high is the tallest peak other than the true one?',
       ],
       because:
-        'The data cannot tell them apart: one visit a night at the same time recurs once a sidereal day, so a star that pulses every 0.8 days and one that pulses every 4.04 days give exactly the same forty points. The curve reaches 1 at the alias as well as at the truth.',
+        'The data cannot tell them apart: one visit a night at the same sidereal time recurs once a sidereal day, so a star that pulses every 0.8 days and one that pulses every 4.04 days give exactly the same forty points. The curve reaches 1 at the alias as well as at the truth.',
       tool: WIN(),
     },
     {
@@ -764,11 +764,11 @@ export const WHY_THE_PERIOD_IS_WRONG_ES = {
   steps: [
     {
       title: 'Una estrella vista una vez por noche',
-      body: 'Una estrella se aviva y se apaga cada <strong>0,8 días</strong>, unas 19 horas. Puedes mirarla desde un observatorio, una vez por noche, durante cuarenta noches, a la misma hora cada noche. El panel de abajo es la vista de la búsqueda de períodos de ese plan: la curva azul es lo que devuelve la búsqueda para una señal <em>perfecta</em> en la frecuencia verdadera cuando se muestrea en tus épocas. El pico verdadero vale 1; cualquier otro pico es un <strong>alias</strong>, una frecuencia que tu cadencia no distingue de la verdadera. \n\nTodas las series son <strong>sintéticas</strong>: las hace el modelo, con el período fijado en 0,8 días. Nadie las observó.',
+      body: 'Una estrella se aviva y se apaga cada <strong>0,8 días</strong>, unas 19 horas. Puedes mirarla desde un observatorio, una vez por noche, durante cuarenta noches, a la misma hora sidérea cada noche. El panel de abajo es la vista de la búsqueda de períodos de ese plan: la curva azul es lo que devuelve la búsqueda para una señal <em>perfecta</em> en la frecuencia verdadera cuando se muestrea en tus épocas. El pico verdadero vale 1; cualquier otro pico es un <strong>alias</strong>, una frecuencia que tu cadencia no distingue de la verdadera. \n\nTodas las series son <strong>sintéticas</strong>: las hace el modelo, con el período fijado en 0,8 días. Nadie las observó.',
     },
     {
       title: '¿Qué dirá la búsqueda?',
-      body: 'Cuarenta visitas, una por noche, siempre a la misma hora. El período verdadero es 0,8 días. Una búsqueda de períodos busca el período que mejor ajusta los puntos.',
+      body: 'Cuarenta visitas, una por noche, siempre a la misma hora sidérea. El período verdadero es 0,8 días. Una búsqueda de períodos busca el período que mejor ajusta los puntos.',
       prompt: 'La búsqueda devolverá&hellip;',
       options: [
         '0,8 días, el período verdadero, porque es el único período que tiene la estrella',
@@ -780,7 +780,7 @@ export const WHY_THE_PERIOD_IS_WRONG_ES = {
         'Mira la curva: ¿qué altura tiene el pico más alto aparte del verdadero?',
       ],
       because:
-        'Los datos no los distinguen: una visita por noche a la misma hora se repite una vez por día sidéreo, así que una estrella que pulsa cada 0,8 días y otra que pulsa cada 4,04 días dan exactamente los mismos cuarenta puntos. La curva llega a 1 en el alias igual que en la verdad.',
+        'Los datos no los distinguen: una visita por noche a la misma hora sidérea se repite una vez por día sidéreo, así que una estrella que pulsa cada 0,8 días y otra que pulsa cada 4,04 días dan exactamente los mismos cuarenta puntos. La curva llega a 1 en el alias igual que en la verdad.',
     },
     {
       title: 'Lee los alias',

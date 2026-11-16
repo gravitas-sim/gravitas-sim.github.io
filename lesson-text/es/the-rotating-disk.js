@@ -110,7 +110,7 @@ export default {
         'Compara los dos números de la fila de 8,3 kpc, y luego las curvas verde y naranja a 20 kpc.',
       ],
       because:
-        'A 8,3 kpc las estrellas y el gas dan unos 203 km/s frente a los 178 del halo, la parte mayor pero no toda; su total, 270 km/s, supera los 244 que la curva supone para el Sol. A 20 kpc el disco ha caído y el halo es el mayor. El halo es una parte grande de la fuerza aquí y la mayor parte lejos.',
+        'A 8,3 kpc las estrellas y el gas dan unos 203 km/s frente a los 178 del halo, la parte mayor pero no toda, en total 270, sobre los 244 supuestos para el Sol. A 20 kpc el disco ha caído y el halo es el mayor. El halo es una parte grande de la fuerza aquí y la mayor parte lejos.',
     },
     'say-what-it-assumes': {
       title: 'Lo que supone el ajuste',

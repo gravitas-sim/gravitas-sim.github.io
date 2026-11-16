@@ -85,7 +85,7 @@ export default {
       body: `Un colega informa del período de la búsqueda de caja como 3,52396 &plusmn; 0,0000003 días, tomando el segundo número de la rejilla fina que el cuaderno recorre sobre el pico, cuyo paso es de 3e-7 días.`,
       prompt: '¿Qué hay de malo en eso?',
       options: [
-        'El paso de la rejilla es la finura con que se muestrearon los períodos, no lo bien que los datos fijan el período: este período está a 19 incertidumbres del período del ajuste (más de 10 con su factor de ruido rojo), así que su incertidumbre real es mucho mayor que el paso',
+        'El paso de la rejilla es la finura con que se muestrearon los períodos, no lo bien que los datos fijan el período: este período está a 19 incertidumbres del período del ajuste, así que su incertidumbre real es mucho mayor que el paso',
         'El paso de la rejilla es demasiado pequeño y debería hacerse mayor',
         'Una búsqueda de caja no puede encontrar un período',
         'La incertidumbre debería ser la relación señal-ruido',

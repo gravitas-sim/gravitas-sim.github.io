@@ -74,7 +74,7 @@ export default {
     },
     {
       title: 'Mueve la definición',
-      body: `Devuelve la <strong>pendiente</strong> a <strong>1</strong> y pon el <strong>umbral</strong> en <strong>6</strong>: un planeta cuenta ahora como ligado si se queda dentro de seis distancias iniciales, no tres. Es el umbral del cuaderno, no la prueba de expulsión de la lección de las binarias. Ejecuta de nuevo. Introduce la nueva distancia a medio camino y la fracción de la población sintética.`,
+      body: `Devuelve la <strong>pendiente</strong> a <strong>1</strong> y pon el <strong>umbral</strong> en <strong>6</strong>: un planeta cuenta ahora como ligado si se queda dentro de seis distancias iniciales, no tres. (Un umbral de distancia, no la prueba de expulsión de la lección de las binarias.) Ejecuta de nuevo. Introduce la nueva distancia a medio camino y la fracción de la población sintética.`,
       fields: [
         { label: 'Distancia a medio camino, umbral 6' },
         { label: 'Fracción ligada, umbral 6' },
@@ -102,7 +102,7 @@ export default {
         '¿Qué planetas están ligados con un umbral de seis que no lo estaban con tres?',
       ],
       because:
-        'Un planeta, con una distancia inicial de 0,2315, se quedó a una distancia media de 3,8 veces la de partida: no ligado con un umbral de tres y ligado con seis. Esa única reclasificación mueve el borde un tercio de la brecha que tiene al lado. Un desenlace es una definición (aquí un umbral de distancia, no una prueba de energía), y la incertidumbre de la ampliación no incluye su elección.',
+        'Un planeta, con una distancia inicial de 0,2315, se quedó a una distancia media de 3,8 veces la de partida: no ligado con un umbral de tres y ligado con seis. Esa única reclasificación mueve el borde un tercio de la brecha que tiene al lado. Un desenlace es una definición, y la incertidumbre de la ampliación no incluye su elección.',
     },
     {
       title: 'Lo que calculaste',

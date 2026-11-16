@@ -448,7 +448,7 @@ const GOLDILOCKS = {
         'Switch to the orange dwarf, then to the brighter star',
         'Look at the luminosity row each time, and at the starlight row',
       ],
-      tip: 'A star about 670 times fainter delivers about 670 times less light to a planet at the same distance. The two numbers track each other exactly, because luminosity multiplies straight through the inverse-square relation.',
+      tip: 'A star about 670 times fainter delivers about 670 times less light to a planet at the same distance.',
     },
     {
       sid: 'what-luminosity-does',
@@ -925,8 +925,8 @@ const GOLDILOCKS = {
       type: 'explore',
       title: 'All seven planets',
       body: `Here is the real system, with the habitable zone from the same
-             model you have been using all investigation, from TRAPPIST-1's measured
-             luminosity. Its edges are an extrapolation: the star is cooler than the fit.
+             model you have been using all investigation, from TRAPPIST-1's
+             luminosity (extrapolated: the star is cooler than the fit).
              \n\nThe distance axis is compressed, because otherwise the inner
              planets would pile up on top of the star. Read the numbers, not the
              pixels.
@@ -992,7 +992,7 @@ const GOLDILOCKS = {
              instrument. The panel is back, on the conservative definition.
              \n\nWork down the list under the picture and record the starlight
              each of the three middle planets receives, in Earths. Then record
-             where the zone begins and ends (an extrapolation).`,
+             where the zone begins and ends (extrapolated).`,
       fields: [
         {
           id: 'e',
