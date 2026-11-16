@@ -41,7 +41,7 @@ export const SUMMARIES_ES = {
   'binary-star-planets':
     'La mayoría de las estrellas vienen de dos en dos, así que la mayoría de los planetas tienen que arreglárselas en un sistema con dos soles. Algunas órbitas funcionan y otras no, y la línea que las separa es más nítida de lo que imaginarías. Encuéntrala dos veces —una para un planeta alrededor de una estrella y otra para un planeta alrededor de las dos— y averigua después cuánto de lo que acabas de medir era la física y cuánto la aritmética.',
   'gravity-assist':
-    'La Voyager 2 llegó a Júpiter a diez kilómetros por segundo y se marchó a veintiséis. Júpiter no quemó combustible por ella. Haz tú mismo la misma maniobra, mídela en el sistema del planeta y en uno inercial, lánzala por los dos lados del planeta a la vez, y averigua por qué las dos medidas no coinciden, y quién pagó en realidad.',
+    'La Voyager 2 llegó a Júpiter a diez kilómetros por segundo y se marchó a veinte. Júpiter no quemó combustible por ella. Haz tú mismo la misma maniobra, mídela en el sistema del planeta y en uno inercial, lánzala por los dos lados del planeta a la vez, y averigua por qué las dos medidas no coinciden, y quién pagó en realidad.',
   'hohmann-transfer':
     'Una nave a 1 UA, una estación a 2,5 UA y nada de combustible que desperdiciar. Calcula con lápiz los dos impulsos y la travesía entre ellos, y después vuela la maniobra a ver si el motor de física te da la razón. Te la da, con un error de una parte entre mil, y eso es lo que hace fiables las dos sorpresas que contiene: aceleras para alejarte, y al llegar tienes que acelerar otra vez o te caes de vuelta.',
   'lagrange-points':

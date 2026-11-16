@@ -582,7 +582,7 @@ const GOLDILOCKS = {
       ],
       answer: 1,
       because:
-        'Earth and Mars. Venus at 0.72 AU is inside the inner edge, receiving about 1.9 Earths of starlight; Ceres at 2.77 AU is far beyond the outer edge. Mars, at 1.52 AU, is comfortably within the conservative zone. That last one usually comes as a surprise, and it is the most useful fact in this investigation.',
+        'Earth and Mars. Venus at 0.72 AU is sunward of the inner edge, receiving about 1.9 Earths of starlight; Ceres at 2.77 AU is far beyond the outer edge. Mars, at 1.52 AU, is comfortably within the conservative zone. That last one usually comes as a surprise.',
     },
     {
       sid: 'the-mars-problem',
@@ -692,7 +692,7 @@ const GOLDILOCKS = {
              star has not changed. The planets have not changed. Only the
              assumption about what counts as an edge.
              \n\nThe inner edge has jumped from 0.98 AU in towards
-             <strong>0.75 AU</strong>, which is a large move on screen. The
+             <strong>0.75 AU</strong>. The
              outer edge has barely shifted, from 1.69 to 1.77 AU.
              \n\nLook carefully at Venus.`,
       checklist: [
@@ -753,7 +753,7 @@ const GOLDILOCKS = {
       answer: 1.92,
       tolerance: 0.12,
       because:
-        'About 1.9 Earths. Venus receives nearly twice the starlight Earth does, which is what puts it inside the runaway greenhouse limit and outside the conservative zone. Its surface sits at about 460 °C, hot enough to melt lead, under an atmosphere ninety times heavier than ours. Note the direction of the argument: the extra starlight starts the process, the atmosphere finishes it.',
+        'About 1.9 Earths. Venus receives nearly twice the starlight Earth does, which is what puts it sunward of the runaway greenhouse limit and outside the conservative zone. Its surface sits at about 460 °C, under an atmosphere ninety times heavier than ours. Note the direction of the argument: the extra starlight starts the process, the atmosphere finishes it.',
     },
     {
       sid: 'a-year-on-a-circular',
@@ -925,10 +925,9 @@ const GOLDILOCKS = {
       type: 'explore',
       title: 'All seven planets',
       body: `Here is the real system, with the habitable zone from the same
-             model you have been using all investigation, from TRAPPIST-1's
-             luminosity (extrapolated: the star is cooler than the fit).
-             \n\nThe distance axis is compressed, because otherwise the inner
-             planets would pile up on top of the star. Read the numbers, not the
+             model, from TRAPPIST-1's luminosity, with the fit held at its
+             2600 K lower limit because the star is cooler.
+             \n\nThe distance axis is compressed. Read the numbers, not the
              pixels.
              \n\nThe second panel puts the Solar System on the same axis. The
              whole seven-planet system would fit comfortably inside the orbit of
@@ -992,7 +991,7 @@ const GOLDILOCKS = {
              instrument. The panel is back, on the conservative definition.
              \n\nWork down the list under the picture and record the starlight
              each of the three middle planets receives, in Earths. Then record
-             where the zone begins and ends (extrapolated).`,
+             where the zone begins and ends (at the fit’s lower limit).`,
       fields: [
         {
           id: 'e',
