@@ -414,6 +414,27 @@ export const state = {
   },
 };
 
+let held = null;
+
+/**
+ * A lesson's reading step holds the clock, so nothing runs behind the panels,
+ * unless it says `motion: true` or carries an instrument, which needs the
+ * clock. The next step releases what this held. `world` is what the scene was
+ * built from: a rebuild owns the clock again.
+ *
+ * @param {object|undefined} step - The step now on screen
+ * @param {object|null} world - The setup the scene was built from
+ */
+export function holdClock(step, world) {
+  world ||= state;
+  const hold = step?.type === 'read' && !(step.motion || step.tool);
+  if (!state.paused || held !== world) held = null;
+  if (hold ? !state.paused : held) {
+    state.paused = hold;
+    held = hold && world;
+  }
+}
+
 /** The live settings. Reassigned wholesale when a save is loaded. */
 export let SETTINGS = { ...DEFAULT_SETTINGS };
 

@@ -131,7 +131,7 @@ const COMMON_STEP = [
   'depth',
 ];
 const STEP_FIELDS = {
-  read: [],
+  read: ['motion'],
   explore: ['checklist'],
   measure: ['fields'],
   predict: ['prompt', 'options', 'answer', 'because', 'reveal'],
@@ -426,8 +426,13 @@ function checkStep(s, path, index, ctx) {
       options: STEP_TYPES.join(', '),
     }
   );
-  const allowed = new Set([...COMMON_STEP, ...(STEP_FIELDS[s.type] || [])]);
-  knownKeys(need, s, [...allowed], path, `a field of a ${s.type} step`);
+  knownKeys(
+    need,
+    s,
+    [...COMMON_STEP, ...(STEP_FIELDS[s.type] || [])],
+    path,
+    `a field of a ${s.type} step`
+  );
   need(
     isValidSid(s.sid),
     `${path}.sid`,

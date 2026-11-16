@@ -80,7 +80,7 @@ The browser half takes about seven minutes on the private port.
 
 | # | Investigation | Tokens it adds |
 |---|---|---|
-| 1 | `keplers-laws` | 84: `audience:intro`, `check:choice/number`, `check:numeric/number+tolerance+unit`, `check:short/undefined`, `depth-step:advanced/question`, `depth-step:quantitative/measure`, … |
+| 1 | `keplers-laws` | 85: `audience:intro`, `check:choice/number`, `check:numeric/number+tolerance+unit`, `check:short/undefined`, `depth-step:advanced/question`, `depth-step:quantitative/measure`, … |
 | 2 | `goldilocks-question` | 22: `depth-step:advanced/measure`, `depth-step:advanced/read`, `key:explore.allowInspector`, `key:explore.pauseAt`, `key:explore.setup`, `key:explore.stage`, … |
 | 3 | `the-saturated-star` | 9: `depth-step:advanced/predict`, `depth-step:quantitative/read`, `key:measure.stage`, `key:predict.after`, `key:predict.depth`, `key:predict.hints`, … |
 | 4 | `transit-photometry` | 9: `check:numeric/number+tolerance`, `key:explore.clearLightCurve`, `key:explore.lightCurve`, `key:explore.observerAngle`, `key:measure.lightCurve`, `key:question.agrees`, … |

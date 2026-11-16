@@ -148,6 +148,9 @@ test.describe('opening a lesson', () => {
   }) => {
     await openLesson(page, app);
     await app.waitForBodies(1);
+    // The first step is a reading step, which holds the clock; the reader's
+    // Play sets the scene going and it stays alive.
+    await page.locator('#timelinePlay').click();
     await app.waitForFrames(20);
     expect((await app.bodySnapshot()).nonFinite).toBe(0);
   });
