@@ -14,16 +14,15 @@
 // one answer onto the other's question and reported nothing moved. Steps 2, 6
 // and 9 collide the same way, as do 4 and 10, and 12 and 14.
 //
-// So identity is now an explicit `sid` written into the lesson and never
-// changed: minted by tools/add-step-ids.mjs, enforced by author:check, and
-// listed in STRUCTURAL so a translation cannot supply one. It survives
-// reordering, rewording and translation, because it is derived from none of
-// them.
+// Identity is now an explicit `sid` written into the lesson and never changed:
+// minted by tools/add-step-ids.mjs, enforced by author:check, and listed in
+// STRUCTURAL so a translation cannot supply one. It survives reordering,
+// rewording and translation. A step whose task changes gets a new sid and the
+// old one is retired (earlierAnswers, in stepView.js).
 //
 // This module owns the stored shape and the migration into it. It is pure and
-// DOM-free so the migration can be tested directly, which matters more here
-// than usual: a migration bug is not a broken screen, it is a student's work
-// quietly attached to the wrong questions.
+// DOM-free: a migration bug is a student's work quietly attached to the wrong
+// questions.
 // =============================================================================
 
 import { get, put } from '../storage/local.js';
@@ -226,34 +225,30 @@ export function readProgress(data, lesson) {
   out.schema = schema;
 
   const prefix = `${lesson?.id}:`;
-  /** Keep only keys that name a step this lesson still has. */
-  const keep = (source, into) => {
-    let dropped = 0;
+  /** Keys of another lesson are left out; a step the lesson lacks goes to `earlier`. */
+  const keep = (source, into, kind) => {
+    let setAside = 0;
     for (const [key, value] of Object.entries(source || {})) {
-      if (!key.startsWith(prefix)) {
-        dropped++;
-        continue;
+      const sid =
+        key.startsWith(prefix) && key.slice(prefix.length).split(':')[0];
+      if (known.has(sid)) into[key] = value;
+      else {
+        setAside++;
+        if (sid !== false)
+          (out.earlier ??= { responses: {}, attempts: {} })[kind][key] = value;
       }
-      const rest = key.slice(prefix.length);
-      const cut = rest.indexOf(':');
-      const sid = cut === -1 ? rest : rest.slice(0, cut);
-      if (!known.has(sid)) {
-        dropped++;
-        continue;
-      }
-      into[key] = value;
     }
-    return dropped;
+    return setAside;
   };
 
   const droppedResponses =
     data.responses &&
     typeof data.responses === 'object' &&
     !Array.isArray(data.responses)
-      ? keep(data.responses, out.responses)
+      ? keep(data.responses, out.responses, 'responses')
       : 0;
   if (data.attempts && typeof data.attempts === 'object') {
-    keep(data.attempts, out.attempts);
+    keep(data.attempts, out.attempts, 'attempts');
   }
 
   for (const sid of Array.isArray(data.visited) ? data.visited : []) {
@@ -268,8 +263,7 @@ export function readProgress(data, lesson) {
   if (DEPTHS.includes(data.deepest)) out.deepest = data.deepest;
   if (data.spent > 0) out.spent = Math.floor(data.spent);
 
-  // A step that has been removed from the lesson since the save. The answer is
-  // gone from the working set and the reader is told how much.
+  // Steps removed since the save: kept in `earlier`, and the reader is told.
   if (droppedResponses > 0) {
     out.notes.push({ code: 'removedSteps', dropped: droppedResponses });
   }
@@ -292,13 +286,14 @@ export function writeProgress({
   depth,
   deepest,
   spent,
+  earlier,
 }) {
   return {
     schema: PROGRESS_SCHEMA,
     lesson: lesson?.id ?? null,
     stepSid: stepSid ?? null,
-    responses: { ...responses },
-    attempts: { ...attempts },
+    responses: { ...earlier?.responses, ...responses },
+    attempts: { ...earlier?.attempts, ...attempts },
     visited: [...(visited || [])],
     startedAt: startedAt ?? null,
     ...(DEPTHS.includes(depth) ? { depth } : {}),

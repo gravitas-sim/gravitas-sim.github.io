@@ -6,7 +6,14 @@
 // prose travels with the code that uses it.
 // =============================================================================
 
-import { registerMessages, settleDeferredMessages } from './index.js';
+import {
+  getLocale,
+  targetLocale,
+  registerMessages,
+  setLocalePreparer,
+  settleDeferredMessages,
+} from './index.js';
+import { KEY_LOCALE } from '../names.js';
 import { applyTranslations } from './dom.js';
 
 // The panels' markup helpers (./dom.js), handed on from here, and imported from
@@ -22,115 +29,115 @@ export {
 } from './dom.js';
 
 /**
- * The load in flight, or the completed one. Null until somebody asks, and null
- * again after a failure so the next caller retries.
- *
- * A boolean was not enough. `done = true` was set before the awaits, so a
- * second caller arriving while the imports were still in the air returned
- * immediately and rendered against a catalog that had not arrived - which is
- * the ordinary case, because a scenario that brings a panel and a lesson that
- * opens a tool ask within a frame of each other. Sharing the promise makes
- * every caller wait for the same work exactly once.
- *
- * @type {?Promise<void>}
+ * One catalog per language, each its own chunk, fetched when its language is the
+ * one in use or about to be. A page used to fetch both so that a switch with a
+ * panel open never showed ids, which cost every reader the catalog they could
+ * not read (78 KB gzipped English, 90 KB Spanish). A switch now fetches the
+ * other one itself and waits for it (setLocalePreparer below). English is not
+ * fetched as Spanish's fallback: Spanish has every English key
+ * (tests/deferredByLocale.test.js) and the English base catalog is bundled.
  */
-let loading = null;
+const LOADERS = {
+  en: () => import('./en.deferred.js').then(m => m.EN_DEFERRED),
+  es: () => import('./es.deferred.js').then(m => m.ES_DEFERRED),
+};
 
 /**
- * True once the strings are actually in the catalogs.
+ * Loads in flight or done, by locale; dropped on failure so the next caller
+ * retries. A promise rather than a flag: a second caller arriving mid-load
+ * must wait for the same work, not render against a catalog that has not come.
  *
- * Separate from `loading`, because they answer different questions and the
- * exported check used to answer the wrong one: `loading !== null` is true the
- * instant somebody asks, so a consumer testing readiness got `true` while the
- * two chunks were still in the air and rendered a screenful of message ids.
+ * @type {Map<string, Promise<void>>}
  */
-let registered_ = false;
+const loading = new Map();
+
+/** Locales whose strings are actually in the catalogs (not merely asked for). */
+const registered_ = new Set();
 
 /** Why the last attempt failed, for a caller that wants to say so. */
 let lastFailure = null;
 
+/** Load one language's deferred strings, once. */
+function ensureFor(id) {
+  if (!loading.has(id))
+    loading.set(
+      id,
+      LOADERS[id]()
+        .then(strings => {
+          registerMessages(id, strings);
+          registered_.add(id);
+          lastFailure = null;
+          // What the start-up sweep asked for and did not get is now resolved
+          // or genuinely missing, and ./index.js says which.
+          settleDeferredMessages(id);
+          // Repaint the static markup: forty-one of these strings are
+          // data-i18n attributes in index.html that the start-up sweep walked
+          // past while the catalog was empty. Only the language on screen (a
+          // switch in flight repaints when it lands), and not in the Node
+          // authoring tools, which have no document and need only the
+          // registration above.
+          if (typeof document !== 'undefined' && getLocale() === id)
+            applyTranslations(document);
+        })
+        .catch(err => {
+          // Forget the attempt. A browser may record a module whose fetch
+          // failed and reject every later import of the same specifier, so for
+          // a genuine network failure the reader's recovery is a reload; this
+          // does recover a throw from registerMessages or the repaint. Strings
+          // render as ids (or English) and the application keeps working.
+          loading.delete(id);
+          lastFailure = err;
+          settleDeferredMessages(id);
+          console.warn('[i18n] deferred messages did not load:', err);
+          throw err;
+        })
+    );
+  return loading.get(id);
+}
+
 /**
- * Add the deferred-panel strings to the catalogs, once.
+ * The language the page is on or is about to be on. Start-up applies the stored
+ * choice a moment after modules begin asking for strings, when the active
+ * language is still English, so until the first change this is a guess from the
+ * stored choice or the browser's language. Kept here, with the loaders that
+ * validate it, rather than behind the catalog's list of locales: a page that
+ * never loads these strings then carries none of it.
  *
- * Both locales are registered rather than only the current one: the reader can
- * switch language with the panel open, and fetching a second small module at
- * that moment would show them a screenful of message ids while it arrived.
+ * @returns {string} A locale id with a deferred catalog
+ */
+export const intendedLocale = () => {
+  let id = targetLocale;
+  if (!id) {
+    try {
+      id = localStorage.getItem(KEY_LOCALE);
+    } catch {
+      /* no storage: the browser's language */
+    }
+    id ??= globalThis.navigator?.language;
+  }
+  id = String(id).slice(0, 2);
+  return LOADERS[id] ? id : 'en';
+};
+
+/**
+ * Add the deferred strings of the language in use to the catalogs, once. A
+ * language switch loads the other catalog by itself, before it takes effect.
  *
  * @returns {Promise<void>} Resolves when the strings are usable
  */
-export function ensureDeferredMessages() {
-  if (loading) return loading;
-  loading = (async () => {
-    const [en, es] = await Promise.all([
-      import('./en.deferred.js'),
-      import('./es.deferred.js'),
-    ]);
-    registerMessages('en', en.EN_DEFERRED);
-    registerMessages('es', es.ES_DEFERRED);
-    registered_ = true;
-    lastFailure = null;
-    // Anything the start-up sweep asked for and did not get is now either
-    // resolved or genuinely missing, and ./index.js says which. Held warnings
-    // are released here rather than at a guessed interval, because this is the
-    // moment the answer becomes knowable.
-    settleDeferredMessages();
+export const ensureDeferredMessages = () => ensureFor(intendedLocale());
 
-    // Repaint. This used to do nothing, on the reasoning that every caller
-    // registers before it renders - which is true of the panels' own
-    // JavaScript and false of their markup. Forty-one of these strings are
-    // data-i18n attributes in index.html, and the start-up sweep in ./dom.js
-    // had already walked past them while the catalog had no such ids: every
-    // slider label, every button and both panel hints were left showing a raw
-    // message id.
-    //
-    // A whole-document sweep rather than a targeted one because the panels are
-    // static markup that exists from the first paint, so there is no subtree to
-    // scope this to, and re-translating an element to the string it already has
-    // costs nothing.
-    //
-    // Skipped where there is no document, which is every Node authoring tool:
-    // docs-facts.mjs, the manual builder and author-check all import modules
-    // that reach this, and a bare `applyTranslations(document)` threw a
-    // ReferenceError at them. The callers' answer was a blanket
-    // `.catch(() => {})`, which swallowed that AND every genuine failure with
-    // it. Registering the strings is the part a Node tool needs and it has
-    // already happened above; repainting a page there is meaningless, so it is
-    // declined explicitly rather than thrown and caught.
-    if (typeof document !== 'undefined') applyTranslations(document);
-  })().catch(err => {
-    // Forget the attempt so the next caller can make a fresh one.
-    //
-    // How much this actually recovers is worth being precise about, because it
-    // is less than it looks. A module whose fetch failed is recorded as failed
-    // in the browser's module map, and every later import of the SAME specifier
-    // is rejected from that record without another request - measured, not
-    // assumed: after an aborted fetch, a re-import fails and only a distinct
-    // URL succeeds. So a genuine network failure of these two chunks is not
-    // recoverable inside the page, and the recovery a reader has is a reload.
-    //
-    // Retrying with a cache-busting query would work and would cost more than
-    // it is worth: a computed specifier is not statically analysable, and these
-    // two files are deliberately separate chunks. What this does recover is
-    // everything else - a throw from registerMessages, a failure inside the
-    // repaint - which would otherwise latch permanently the way the old boolean
-    // did.
-    //
-    // Either way the application keeps working: affected strings render as
-    // their ids, which is visible, reported, and not a blank screen.
-    loading = null;
-    lastFailure = err;
-    // A failure settles the question too: whatever was being held for these
-    // catalogs is not coming, the reader is looking at raw ids, and saying so
-    // is the whole point of not having silenced it.
-    settleDeferredMessages();
-    console.warn('[i18n] deferred messages did not load:', err);
-    throw err;
-  });
-  return loading;
-}
+// A switch fetches the new language too once anything has asked.
+setLocalePreparer(
+  locale => loading.size && ensureFor(locale).catch(() => {}) // warned in ensureFor
+);
 
-/** @returns {boolean} Whether the deferred strings are in the catalogs */
-export const deferredMessagesReady = () => registered_;
+/**
+ * @param {string} [locale] - A language; default is the one in use
+ * @returns {boolean} Whether its deferred strings are in the catalogs
+ */
+export const deferredMessagesReady = (locale = intendedLocale()) =>
+  registered_.has(locale);
 
 /** @returns {?Error} Why the last attempt failed, or null */
 export const deferredMessagesFailure = () => lastFailure;
@@ -146,10 +153,9 @@ export const deferredMessagesFailure = () => lastFailure;
  * @returns {Promise<boolean>} True when the deferred strings are usable
  */
 export async function awaitDeferredMessages() {
-  if (registered_) return true;
   try {
-    await ensureDeferredMessages();
-    return registered_;
+    await ensureFor(intendedLocale());
+    return true;
   } catch {
     // Already reported once by ensureDeferredMessages, with the error.
     return false;
@@ -158,7 +164,7 @@ export async function awaitDeferredMessages() {
 
 /** Forget everything, so a test can exercise a failure and then a recovery. */
 export function resetDeferredMessagesForTests() {
-  loading = null;
-  registered_ = false;
+  loading.clear();
+  registered_.clear();
   lastFailure = null;
 }

@@ -383,17 +383,23 @@ export const EN = {
   'transport.timelineStepBack.hint': 'Step back (,)',
   'transport.timelineStepFwd.hint': 'Step forward (.)',
   'transport.timelineScrubber.hint':
-    'Drag to rewind through recorded history. The simulation holds on the frame you land on until you return to live.',
+    'Drag to look back. Trails restart; particles and ripples are not recorded.',
   'transport.timelineLive.hint': 'Return to live (L)',
   'transport.timelineBar.label': 'Playback and timeline',
   'transport.timelinePlay.playLabel': 'Play simulation',
   'transport.timelinePlay.playHint': 'Play (Space)',
   'transport.timelinePlay.label': 'Pause simulation',
   'transport.timelineStepBack.label': 'Step back one frame',
-  'transport.timelineStepFwd.label': 'Step forward one frame',
+  'transport.timelineStepFwd.label': 'Step forward',
   'transport.timelineScrubber.label':
     'Scrub through recorded simulation history',
   'transport.timelineLive': '● LIVE',
+  'transport.stepSize': '1 step = {size}',
+  'transport.replay': 'Replay',
+  'transport.rewind': 'Rewind to here',
+  'transport.rewind.hint': 'Drops later history.',
+  'transport.scrubAt': '{behind} before live, frame {n} of {total}',
+  'transport.scrubLive': 'Live',
 
   // --- welcome ---------------------------------------------------------------
   'welcome.welcomeClose.hint': 'Close and enter the sandbox',

@@ -165,6 +165,8 @@ export const ES_COURSE = {
   'course.review.steps': 'Pasos: {then} entonces, {now} ahora.',
   'course.review.missingSteps': 'Pasos asignados que ya no están: {list}.',
   'course.review.changedSteps': 'Pasos asignados que se reescribieron: {list}.',
+  'course.review.revisedSteps':
+    'Pasos asignados que se revisaron, y el paso que sustituye a cada uno: {list}.',
   'course.review.package': 'Paquete: {then} entonces, {now} ahora.',
   'course.review.mark': 'Revisado',
   'course.review.remove': 'Quítalo o reemplázalo.',

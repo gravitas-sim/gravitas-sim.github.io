@@ -408,12 +408,8 @@ export function stepMarkup(step, c) {
 // --- Ellipse explorer ---------------------------------------------------------
 
 /**
- * Draw an ellipse with its anatomy labeled, at a chosen eccentricity.
- *
- * Kepler's first law is a statement about a shape, and the shape is the part a
- * student has no intuition for: "the Sun is at a focus" means nothing until you
- * have watched the focus slide out of the center as e grows. The slider is the
- * explanation.
+ * Draw an ellipse with its anatomy labeled, at a chosen eccentricity (the
+ * slider is how "the Sun is at a focus" becomes visible).
  */
 export function drawEllipse(canvas, e) {
   if (!canvas) return;
@@ -570,9 +566,7 @@ const tick = v => tickLabel(v);
 /**
  * Least-squares fit through the origin.
  *
- * Forced through zero because the relation being tested has no constant term:
- * a planet with no orbit takes no time. Fitting an intercept would let a bad
- * data set look straight by sliding the line sideways.
+ * Forced through zero: an intercept would let bad data look straight.
  *
  * @param {Array} pts - [{x, y}]
  * @returns {number|null} Slope, or null when it is not determined
@@ -607,13 +601,6 @@ export function logSlope(pts) {
   return den === 0 ? null : num / den;
 }
 
-/**
- * Draw the step's scatter plot.
- *
- * The point of the toggle is that a power law is hard to judge by eye as a
- * curve and trivial to judge as a straight line, which is exactly the move
- * that turns four measurements into evidence for Kepler's third law.
- */
 /**
  * The plot's points, as a table.
  * @param {Object} spec - The step's plot specification
@@ -839,12 +826,8 @@ export function drawPlot(step, vals, { canvas, els, transformed, log }) {
 /**
  * Whether a written answer is a written answer.
  *
- * Deliberately weak. This is not marking: a reader who writes something short
- * and wrong has answered, and telling them their phrasing is unscientific is
- * not this function's business. What it refuses is the null response - an empty
- * box, a space, a full stop, "..." - because the step is a prompt to say
- * something and those say nothing, and recording them as an answer puts an
- * empty field into a report a teacher will read.
+ * Deliberately weak, and not marking: it refuses only the null response
+ * (an empty box, a space, a full stop, "...").
  *
  * @param {string} value - What the reader typed
  * @returns {boolean} True when there is something there
@@ -1194,11 +1177,8 @@ export const formatFieldNumber = (value, decimals, locale) =>
     : '';
 
 // --- Persistence: the saved record and the save status (Prompt 139 part C) ----
-// What the engine holds (the lesson open, its answers, the clock, the
-// assignment in force, the elements) is read through the host it binds once,
-// when it loads; this module owns the status of the last write and this tab's
-// copy of every lesson's progress. Keys, payloads, migration and notices are
-// exactly what they were.
+// The engine's state comes through the host it binds once; this module owns
+// the last write's status and this tab's copy of the progress.
 
 /**
  * What persistence needs of the engine: state() is {active, responses,
@@ -1220,21 +1200,15 @@ const STORAGE_PREFIX = KEY_INVESTIGATION_PREFIX;
 
 export const storageKey = id => `${STORAGE_PREFIX}${id}`;
 
-/**
- * Where this activity's progress lives.
- *
- * @param {string} id - Lesson id
- * @returns {string} Storage key
- */
+/** Where this activity's progress lives (lesson id -> storage key). */
 const progressKey = id =>
   host.assigned() ? host.assignmentKey() : storageKey(id);
 const progressArea = () => (host.assigned() ? 'assignments' : 'progress');
 
 /**
  * An assignment's progress key: its lesson, steps and title, never its date,
- * so a link re-issued on another day keeps the work. A new title is a new
- * activity and re-keys on purpose. Work under the old dated key, from this
- * link or an earlier issue of it, moves across the first time it is read.
+ * so a link re-issued on another day keeps the work (work under an old dated
+ * key moves across when first read). A new title re-keys on purpose.
  *
  * @param {object} a - A validated assignment payload
  * @returns {string} The storage key
@@ -1264,16 +1238,7 @@ export function keyForAssignment(a) {
   return key;
 }
 
-/**
- * Whether the last write reached the disk, and what went wrong if not.
- *
- * 'saved' | 'unavailable' | 'full' | 'authoring' | 'idle'
- *
- * This used to be swallowed entirely - the comment said progress was "not worth
- * an alert", which is true of a toast and false of the reader's forty minutes
- * of work. A student in a private window, or on a machine whose disk is full,
- * was told nothing at all and found out when they closed the tab.
- */
+/** Whether the last write reached the disk: 'saved' | 'unavailable' | 'full' | 'authoring' | 'idle'. */
 let saveState = { status: 'idle', at: null };
 
 function setSaveState(status) {
@@ -1317,6 +1282,7 @@ export function save() {
     depth: s.depthChoice,
     deepest: s.deepest,
     spent: s.spent,
+    earlier: earlierKept.get(active.id),
   });
 
   // This tab's copy, always, and before the disk is asked. It is what makes
@@ -1344,14 +1310,7 @@ export function save() {
  * there to be looked at, and a screen reader being told "saved" forty times
  * while typing an answer is worse than silence.
  */
-/**
- * Say what reading the saved progress turned up, once, when the lesson opens.
- *
- * Only three things reach here and all three mean the reader's answers may not
- * be where they left them, so none of them is a toast: a migration from the
- * pre-sid format, which was necessarily done by position; answers for steps the
- * lesson no longer has; and a payload from a newer build, which was not read.
- */
+/** Say what reading the saved progress turned up, once, on opening. */
 export function renderProgressNotice() {
   const el = host.els()?.progressNotice;
   if (!el) return;
@@ -1368,9 +1327,18 @@ export function renderProgressNotice() {
   }
 
   el.textContent = lines.join(' ');
-  el.hidden = lines.length === 0;
+  const { active } = host.state();
+  const rows = earlierAnswers(active, earlierKept.get(active?.id)?.responses);
+  const ul = rows.length && el.appendChild(document.createElement('ul'));
+  for (const e of rows)
+    ul.appendChild(document.createElement('li')).textContent = earlierLine(
+      e,
+      getLocale()
+    );
+  el.hidden = lines.length === 0 && rows.length === 0;
 }
 
+/** Show whether the work is safe: a polite live region, not a toast. */
 export function renderSaveStatus() {
   const el = host.els()?.saveStatus;
   if (!el) return;
@@ -1405,16 +1373,46 @@ export function renderSaveStatus() {
   );
 }
 
-/**
- * This tab's copy of every lesson's progress, whether or not the disk took it.
- * Written on every save, so never the older of the two: when localStorage
- * refuses a write, closing and reopening the lesson still finds the work. It
- * dies with the tab, as the unsaved warning promises. Authoring previews never
- * reach it, as they never reach storage.
- *
- * @type {Map<string, object>}
- */
+/** This tab's copy of every lesson's progress, written on every save. */
 export const sessionProgress = new Map();
+
+/** Per lesson: answers to steps it no longer has, written back on save. */
+const earlierKept = new Map();
+export const earlierFor = id => earlierKept.get(id);
+
+export const wasIn = (was, locale = 'en') =>
+  (typeof was === 'string' ? was : was?.[locale] || was?.en) || '';
+
+const str = v =>
+  v == null ? '' : typeof v === 'object' ? JSON.stringify(v) : `${v}`.trim();
+
+// Answers under step ids the lesson lacks: [{id, text, r}], r its `retired` entry.
+export function earlierAnswers(lesson, table) {
+  const live = new Set((lesson?.steps || []).map(s => s?.sid));
+  const by = new Map();
+  for (const [k, v] of Object.entries(table || {})) {
+    const [sid, ...sub] = k.slice(`${lesson?.id}:`.length).split(':');
+    if (k.startsWith(`${lesson?.id}:`) && !live.has(sid))
+      by.set(sid, [...(by.get(sid) || []), [sub.join(':'), v]]);
+  }
+  return [...by].flatMap(([id, kv]) => {
+    const text =
+      str(kv.find(([k]) => !k)?.[1]) ||
+      kv
+        .filter(
+          ([k, v]) =>
+            k && !/^(shown|locale|tool:|help|hint)|:locale$/.test(k) && str(v)
+        )
+        .map(([k, v]) => `${k}=${str(v)}`)
+        .join('; ');
+    return text ? [{ id, text, r: lesson.retired?.[id] }] : [];
+  });
+}
+
+export const earlierLine = ({ text, r }, locale) => {
+  const was = wasIn(r?.was, locale);
+  return `${was ? `"${was}": ` : ''}${text}${r ? ` (${r.release})` : ''}`;
+};
 
 /** Where a v1 payload is kept after it has been migrated, in case it was wrong. */
 const legacyKey = id => `${STORAGE_PREFIX}${id}:v1`;
@@ -1455,6 +1453,7 @@ export function load(id, lesson = null) {
   // A lesson from a capability package may have renamed a control since the
   // answers were saved; its manifest says how, and this applies it.
   progress.responses = migrateSavedProgress(id, progress.responses);
+  earlierKept.set(id, progress.earlier);
 
   // Keep the original. A positional migration is right whenever the lesson has
   // not been reordered since the save and there is no way to tell from the

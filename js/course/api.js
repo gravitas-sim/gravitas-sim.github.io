@@ -1,20 +1,11 @@
 // =============================================================================
 // What a course pack is checked against: this build of Gravitas
 // -----------------------------------------------------------------------------
-// ./pack.js and ./review.js are pure. This gathers what they read, for the
-// builder and the tests:
-//
-//   courseApi()      the languages, lessons, scenarios and datasets a pack may
-//                    name, for the format's reference checks;
-//   courseFacts()    every lesson a pack names, loaded (and every investigation
-//                    pack it carries, when the page gives it ./packItems.js's
-//                    openedPack to open them with) (its steps' hashes and
-//                    digest, its package, its languages, what its steps use,
-//                    whether it has an instructor guide), with the sequences
-//                    Gravitas puts lessons in and the datasets' licenses.
-//
-// Lessons are loaded through the registry, the way the lesson engine loads
-// them, only for the ones the pack names.
+// ./pack.js and ./review.js are pure. This gathers what they read: courseApi()
+// (the languages, lessons, scenarios and datasets a pack may name) and
+// courseFacts() (every lesson a pack names, loaded through the registry: its
+// steps' hashes and digest, package, languages and what its steps use, with
+// the sequences and the datasets' licenses).
 // =============================================================================
 
 import { MANIFEST } from '../data/investigations/manifest.js';
@@ -116,6 +107,7 @@ export function lessonFacts(lesson) {
       title: s.title || '',
       scenario: scenarioId(s.setup?.scenario) ?? s.setup?.scenario ?? null,
     })),
+    retired: lesson.retired ?? null,
     pkg: lessonProvider(lesson.id),
     locales: es ? ['en', 'es'] : ['en'],
     uses: {

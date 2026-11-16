@@ -18,15 +18,12 @@ import {
 // =============================================================================
 // What a student has made, read from the records the writers keep
 // -----------------------------------------------------------------------------
-// Roadmap II Prompt 69 (MY_WORK.md). /my-work/ lists everything a student owns
-// from one snapshot of the student store (js/storage/index.js, openStudentStore):
-// a flat list of { collection, id, value } over the keys STORAGE.md names. This
-// module only reads. It has no DOM, and nothing in it writes or sends anything.
+// (MY_WORK.md). /my-work/ lists everything a student owns from one snapshot of
+// the student store: a flat list of { collection, id, value } over the keys
+// STORAGE.md names. This module only reads: no DOM, nothing written or sent.
 //
-// Records from the legacy adapter carry no saved time, so each document's own
-// stamp is used where it has one: a lesson's `startedAt`, a draft's `savedAt`, an
-// experiment's `updated`, a notebook entry's `capturedAt`. A document without one
-// is listed without a date rather than with an invented one.
+// A document's own stamp is used where it has one (a lesson's `startedAt`, a
+// draft's `savedAt`, ...); one without is listed with no date, not an invented one.
 //
 // `library` is the Library's index as a Map (id -> entry): titles, step counts
 // and the page that opens each thing. Without it an item still lists, under its

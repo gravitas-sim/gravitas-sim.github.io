@@ -27,6 +27,7 @@ import { expectationsFor } from '../../js/instructorExpectations.js';
 import { flowFor } from '../../js/instructorFlow.js';
 import { gradedSteps } from '../../js/data/investigations/catalog.js';
 import { cueFindings } from './cueRules.mjs';
+import { retiredFindings } from './retiredRules.mjs';
 
 export const LESSON_DIR = 'js/data/investigations';
 export const LOCALES = ['es'];
@@ -85,6 +86,7 @@ export async function loadAuthoringInputs() {
     sources,
     gradedSteps,
     cueFindings,
+    retiredFindings,
   };
 }
 
