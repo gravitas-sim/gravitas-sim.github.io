@@ -19,7 +19,7 @@
 // the spec mounts it on an existing page of the site by importing the module.
 // =============================================================================
 
-import { test, expect } from './fixtures.js';
+import { test, expect } from './workflow.js';
 import { stepKey } from './keyboard.js';
 import AxeBuilder from '@axe-core/playwright';
 

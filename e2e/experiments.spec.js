@@ -11,7 +11,7 @@
 // setup from a share link in a fresh page.
 // =============================================================================
 
-import { test, expect } from './fixtures.js';
+import { test, expect } from './workflow.js';
 import { mkdirSync, statSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
 

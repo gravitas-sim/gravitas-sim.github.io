@@ -10,7 +10,7 @@
 // on a touch profile.
 // =============================================================================
 
-import { test, expect } from './fixtures.js';
+import { test, expect } from './workflow.js';
 
 const CARD = '#scenarioInfoBox';
 const shown = page =>

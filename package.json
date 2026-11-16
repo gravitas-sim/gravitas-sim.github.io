@@ -239,6 +239,7 @@
     "e2e:tablet-walk": "GRAVITAS_E2E_TABLET_WALK=1 playwright test --project=tablet e2e/authorWalk.spec.js",
     "e2e:nav-full": "GRAVITAS_E2E_NAV_FULL=1 playwright test e2e/twoActivationNav.spec.js e2e/twoActivationNavTouch.spec.js",
     "e2e:dist": "GRAVITAS_E2E_TARGET=dist GRAVITAS_E2E_PORT=4174 playwright test --output=test-results/dist",
+    "e2e:dist:workflows": "GRAVITAS_E2E_TARGET=dist GRAVITAS_E2E_WORKFLOWS=1 GRAVITAS_E2E_PORT=4174 playwright test --output=test-results/dist-workflows",
     "e2e:all": "npm run e2e && npm run e2e:dist",
     "e2e:browsers": "GRAVITAS_E2E_BROWSERS=all playwright test",
     "e2e:cross-browser": "GRAVITAS_E2E_PROFILE=cross-browser playwright test",

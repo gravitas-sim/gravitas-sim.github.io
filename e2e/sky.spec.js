@@ -16,7 +16,8 @@
 
 import AxeBuilder from '@axe-core/playwright';
 import { readFile } from 'node:fs/promises';
-import { test, expect } from './fixtures.js';
+import { test, expect } from './workflow.js';
+import { validateArtifact } from '../js/platform/artifact.js';
 
 const TAGS = ['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'best-practice'];
 
@@ -152,11 +153,7 @@ test.describe('the Sky Lab', () => {
       const env = JSON.parse(text);
       expect(env.format).toBe('gravitas.artifact');
       expect(env.quantities.length).toBeGreaterThan(5);
-      const problems = await page.evaluate(async e => {
-        const { validateArtifact } = await import('/js/platform/artifact.js');
-        return validateArtifact(e);
-      }, env);
-      expect(problems).toEqual([]);
+      expect(validateArtifact(env)).toEqual([]);
     }
     // The reader's number is the kernel's.
     const altaz = await page.evaluate(

@@ -27,7 +27,7 @@
 // BOTH_TARGETS in playwright.config.js.
 // =============================================================================
 
-import { test, expect } from './fixtures.js';
+import { test, expect } from './workflow.js';
 
 const LESSON = 'a-universe-of-stars';
 /** The first of the six spectra screens, one-based, as the counter shows it. */

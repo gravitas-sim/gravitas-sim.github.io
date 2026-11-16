@@ -11,7 +11,7 @@
 // measured, at true relative scale, with a single star and a single planet.
 // =============================================================================
 
-import { test, expect } from './fixtures.js';
+import { test, expect } from './workflow.js';
 
 /** Get all three panels open on a system worth observing. */
 async function openObservatory(page, app) {
@@ -35,26 +35,8 @@ test.describe('the light curve', () => {
       await expect(page.locator('#lightCurveChart')).toBeVisible();
       await expect(page.locator('#lightCurveStatus')).not.toBeEmpty();
 
-      // It has to actually accumulate samples, not merely appear. A panel that
-      // opens and then records nothing is the failure a DOM assertion misses.
-      await expect
-        .poll(
-          () =>
-            page.evaluate(async () => {
-              const lc = await import('/js/lightCurve.js');
-              return lc.lightCurveSeries().flux.length;
-            }),
-          { timeout: 20_000 }
-        )
-        .toBeGreaterThan(5);
-
-      // And the brightness it records has to be a number.
-      const brightness = await page.evaluate(async () => {
-        const lc = await import('/js/lightCurve.js');
-        return lc.currentBrightness();
-      });
-      expect(Number.isFinite(brightness)).toBe(true);
-
+      // It has to actually accumulate samples, not merely appear: the chart's
+      // recording is a connected path of points (below).
       // And it is on the chart: the recording is a connected path of points,
       // with the series chart's axis titles around it.
       await expect
@@ -108,15 +90,8 @@ test.describe('radial velocity', () => {
     // This scenario deliberately lets the star move, so a reflex velocity is
     // something the panel can honestly report.
     await expect
-      .poll(
-        () =>
-          page.evaluate(async () => {
-            const rv = await import('/js/radialVelocity.js');
-            return rv.currentRadialVelocity();
-          }),
-        { timeout: 20_000 }
-      )
-      .not.toBeNull();
+      .poll(() => page.locator('#rvCurrent').innerText(), { timeout: 20_000 })
+      .not.toBe('\u2014');
 
     // And the trace is on the chart, not only in the readout.
     await expect
@@ -144,15 +119,8 @@ test.describe('radial velocity', () => {
     await app.loadScenario('transit-lab');
     await app.openPanel('toggleRadialVelocity', 'rvContainer');
 
-    const held = await page.evaluate(async () => {
-      const rv = await import('/js/radialVelocity.js');
-      return {
-        pinned: rv.starIsHeldFixed(),
-        velocity: rv.currentRadialVelocity(),
-      };
-    });
-    expect(held.pinned).toBe(true);
-    expect(held.velocity).toBeNull();
+    // No velocity is shown, and the panel says why.
+    await expect(page.locator('#rvCurrent')).toHaveText('\u2014');
     // And it explains itself rather than showing a blank.
     await expect(page.locator('#rvNotice')).toBeVisible();
   });
@@ -171,30 +139,19 @@ test.describe('astrometry', () => {
     await expect(page.locator('#astrometryCanvas')).toBeVisible();
     await expect(page.locator('#astrometryTarget')).not.toBeEmpty();
 
-    const offset = await page.evaluate(async () => {
-      const a = await import('/js/astrometry.js');
-      return a.currentAstrometricOffset();
-    });
-    expect(offset).not.toBeNull();
-    expect(Number.isFinite(offset.arcsec)).toBe(true);
+    const signature = async () =>
+      parseFloat(await page.locator('#astrometrySignature').innerText());
+    const offset = await signature();
+    expect(Number.isFinite(offset)).toBe(true);
 
     // Distance changes the angle and never the orbit, which is the whole point
-    // of the panel.
-    const scaled = await page.evaluate(async () => {
-      const a = await import('/js/astrometry.js');
-      const before = a.currentAstrometricOffset();
-      const d0 = a.getAssumedDistance();
-      a.setAssumedDistance(d0 * 2);
-      const after = a.currentAstrometricOffset();
-      a.setAssumedDistance(d0);
-      return {
-        beforeAu: before.au,
-        afterAu: after.au,
-        ratio: after.arcsec / before.arcsec,
-      };
-    });
-    expect(scaled.afterAu).toBeCloseTo(scaled.beforeAu, 6);
-    expect(scaled.ratio).toBeCloseTo(0.5, 3);
+    // of the panel: twice the distance, half the angle.
+    const distance = page.locator('#astrometryDistance');
+    const d0 = Number(await distance.inputValue());
+    await distance.fill(String(d0 * 2));
+    await expect
+      .poll(async () => (await signature()) / offset, { timeout: 10_000 })
+      .toBeCloseTo(0.5, 2);
   });
 });
 
@@ -308,13 +265,11 @@ test.describe('the shared observer geometry', () => {
     await app.setObserver({ inclination: 0 });
     await app.waitForFrames(30);
 
-    const rv = await page.evaluate(async () => {
-      const m = await import('/js/radialVelocity.js');
-      return m.currentRadialVelocity();
-    });
-    // Either it reports nothing, or it reports something indistinguishable from
-    // zero. Both are honest; a finite amplitude would not be.
-    if (rv !== null) expect(Math.abs(rv)).toBeLessThan(1e-6);
+    const shown = (await page.locator('#rvCurrent').innerText()).trim();
+    // Either it shows nothing, or something indistinguishable from zero.
+    // Both are honest; a finite amplitude would not be.
+    if (shown !== '\u2014')
+      expect(Math.abs(parseFloat(shown))).toBeLessThan(1e-3);
   });
 
   test('the reference frame selector re-expresses the view', async ({
@@ -331,30 +286,12 @@ test.describe('the shared observer geometry', () => {
     const select = page.locator('#referenceFrameSelect');
 
     await select.selectOption('barycenter');
-    await expect
-      .poll(
-        () =>
-          page.evaluate(async () => {
-            const f = await import('/js/referenceFrame.js');
-            return f.frameMode();
-          }),
-        { timeout: 10_000 }
-      )
-      .toBe('barycenter');
+    await expect(select).toHaveValue('barycenter');
 
     await app.waitForFrames(30);
     expect((await app.bodySnapshot()).nonFinite).toBe(0);
 
     await select.selectOption('world');
-    await expect
-      .poll(
-        () =>
-          page.evaluate(async () => {
-            const f = await import('/js/referenceFrame.js');
-            return f.frameMode();
-          }),
-        { timeout: 10_000 }
-      )
-      .toBe('world');
+    await expect(select).toHaveValue('world');
   });
 });

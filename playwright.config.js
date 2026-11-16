@@ -187,6 +187,17 @@ const BOTH_TARGETS =
   /selfContained\.spec\.js|accessibilityParity\.spec\.js|sonifyTextEquivalent\.spec\.js|lazyInstruments\.spec\.js|capabilityPackages\.spec\.js|embedContract\.spec\.js|figureBuilder\.spec\.js|experimentRunner\.spec\.js|observatory\.spec\.js|inference\.spec\.js|catalog\.spec\.js|catalogGovernance\.spec\.js|archive\.spec\.js|measure\.spec\.js|historyOriginal\.spec\.js|analysisLab\.spec\.js|modelCompare\.spec\.js|exoplanetGuides\.spec\.js|populationsGuides\.spec\.js|systemBuilder\.spec\.js|studio\.spec\.js|composer\.spec\.js|course\.spec\.js|lab3d\.spec\.js|lab3dView\.spec\.js|lab3dGuides\.spec\.js|mission\.spec\.js|missionLab\.spec\.js|shell\.spec\.js/;
 
 /**
+ * The workflow specs: the 28 files the eleven workflows of
+ * tools/conformance/product.json name (ten student workflows and the instructor
+ * path). Each is DOM-only, so each runs against sources and against the build.
+ * `GRAVITAS_E2E_WORKFLOWS=1` with `GRAVITAS_E2E_TARGET=dist` runs exactly these
+ * on the build (npm run e2e:dist:workflows); CI's dist job is not changed.
+ */
+const WORKFLOW_SPECS =
+  /(onboarding|firstRun|investigations|sandbox|bodyPlacement|accessibilityParity|answerEntry|predictionLoops|measure|plotChart|chartParity|observatory|stellarSpectra|sky|observing|experimentRunner|experiments|htmlReport|myWork|progressSafety|presetRecovery|sharing|shareObserving|adoption|instructorFlow|assignment|submissionReview|instructorPortal)\.spec\.js$/;
+const WORKFLOWS_ON_DIST = process.env.GRAVITAS_E2E_WORKFLOWS === '1';
+
+/**
  * Which engines to run.
  *
  * 'chromium' by default; 'all' for the full set; or an explicit comma-separated
@@ -320,9 +331,9 @@ export default defineConfig({
   testDir: './e2e',
   ...(target === 'dist'
     ? {
-        testMatch: new RegExp(
-          `${PRODUCTION_SPEC.source}|${BOTH_TARGETS.source}`
-        ),
+        testMatch: WORKFLOWS_ON_DIST
+          ? WORKFLOW_SPECS
+          : new RegExp(`${PRODUCTION_SPEC.source}|${BOTH_TARGETS.source}`),
       }
     : { testIgnore: PRODUCTION_SPEC }),
   ...(PROFILE === 'cross-browser' ? { grep: CROSS_BROWSER_TAG } : {}),

@@ -14,7 +14,7 @@
 // position, its velocity - for each of the eight, on each of the three paths.
 // =============================================================================
 
-import { test, expect } from './fixtures.js';
+import { test, expect } from './workflow.js';
 
 /** The eight, and the list each belongs in. */
 const TYPES = [

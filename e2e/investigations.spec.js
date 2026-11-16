@@ -11,7 +11,18 @@
 // answer and a short answer.
 // =============================================================================
 
-import { test, expect, openMore } from './fixtures.js';
+import {
+  test,
+  expect,
+  openMore,
+  getInvestigation,
+  loadInvestigation,
+  message,
+  saveLanguage,
+  savedProgress,
+  storeProgress,
+} from './workflow.js';
+import { MANIFEST } from '../js/data/investigations/manifest.js';
 
 const LESSON = 'missing-mass';
 
@@ -216,13 +227,7 @@ test.describe('advancing through representative step types', () => {
     await answerAndAdvance(page); // -> 2, explore
     await answerAndAdvance(page); // -> 3, a graded choice
 
-    const correct = await page.evaluate(
-      async ([id, n]) => {
-        const data = await import('/js/data/investigations.js');
-        return data.getInvestigation(id).steps[n - 1].answer;
-      },
-      [LESSON, 3]
-    );
+    const correct = getInvestigation(LESSON).steps[2].answer;
     expect(Number.isInteger(correct)).toBe(true);
 
     const options = page.locator('#investigationBody .inv-option');
@@ -255,13 +260,7 @@ test.describe('advancing through representative step types', () => {
     await answerAndAdvance(page);
     await answerAndAdvance(page);
 
-    const correct = await page.evaluate(
-      async ([id, n]) => {
-        const data = await import('/js/data/investigations.js');
-        return data.getInvestigation(id).steps[n - 1].answer;
-      },
-      [LESSON, 3]
-    );
+    const correct = getInvestigation(LESSON).steps[2].answer;
 
     const options = page.locator('#investigationBody .inv-option');
     const total = await options.count();
@@ -285,13 +284,7 @@ test.describe('advancing through representative step types', () => {
     await openLesson(page, app);
     await answerAndAdvance(page);
     await answerAndAdvance(page);
-    const correct = await page.evaluate(
-      async ([id, n]) => {
-        const data = await import('/js/data/investigations.js');
-        return data.getInvestigation(id).steps[n - 1].answer;
-      },
-      [LESSON, 3]
-    );
+    const correct = getInvestigation(LESSON).steps[2].answer;
     const options = page.locator('#investigationBody .inv-option');
     const wrong = (correct + 1) % (await options.count());
     await options.nth(wrong).click();
@@ -326,17 +319,6 @@ test.describe('advancing through representative step types', () => {
     await openLesson(page, app);
     // Step 8 is the measure-with-plot step: four fields, then a graph of the
     // student's own numbers.
-    await page.evaluate(
-      async ([id, target]) => {
-        const inv = await import('/js/investigations.js');
-        inv.openInvestigation(id);
-        // The engine has no public jump, so advance by pressing its own button.
-        const next = document.getElementById('investigationNext');
-        for (let i = 1; i < target; i++) next.click();
-      },
-      [LESSON, 1]
-    );
-
     // Walk there properly, satisfying each gate.
     while ((await stepNumber(page)) < 8) await answerAndAdvance(page);
     expect(await stepNumber(page)).toBe(8);
@@ -352,11 +334,11 @@ test.describe('advancing through representative step types', () => {
     }
 
     await expect(page.locator('#investigationPlot')).toBeVisible();
-    const points = await page.evaluate(async () => {
-      const inv = await import('/js/investigations.js');
-      return inv.currentPlotData?.()?.points?.length ?? null;
-    });
-    expect(points).toBeGreaterThan(2);
+    // The points are the rows of the plot's own table, which is what a reader
+    // without the canvas is given.
+    await expect
+      .poll(() => page.locator('#investigationPlotTable tbody tr').count())
+      .toBeGreaterThan(2);
   });
 });
 
@@ -395,25 +377,14 @@ test.describe('persistence', () => {
     await answerAndAdvance(page);
     await answerAndAdvance(page);
 
-    const before = await page.evaluate(async id => {
-      await import('/js/investigations.js');
-      const inv = await import('/js/investigations/stepView.js');
-      const { investigationMeta } =
-        await import('/js/data/investigations/registry.js');
-      return inv.progressFor(id, investigationMeta(id).stepCount);
-    }, LESSON);
+    const before = await savedProgress(page, LESSON);
     expect(before).toBeTruthy();
+    expect(before.visited.length).toBeGreaterThan(1);
 
     await page.reload({ waitUntil: 'domcontentloaded' });
     await page.waitForFunction(() => window.splashScreenEnded === true);
 
-    const after = await page.evaluate(async id => {
-      await import('/js/investigations.js');
-      const inv = await import('/js/investigations/stepView.js');
-      const { investigationMeta } =
-        await import('/js/data/investigations/registry.js');
-      return inv.progressFor(id, investigationMeta(id).stepCount);
-    }, LESSON);
+    const after = await savedProgress(page, LESSON);
     expect(after).toEqual(before);
   });
 
@@ -448,10 +419,7 @@ test.describe('the student report', () => {
 
     await openLesson(page, app);
 
-    const total = await page.evaluate(async id => {
-      const data = await import('/js/data/investigations.js');
-      return data.getInvestigation(id).steps.length;
-    }, LESSON);
+    const total = getInvestigation(LESSON).steps.length;
 
     const next = page.locator('#investigationNext');
     const finish = page.locator('#investigationFinish');
@@ -532,12 +500,8 @@ test.describe('the student report', () => {
     // cannot reach it. Opened on the last step through the authoring preview,
     // because what is checked is the dialog, not the walk to it.
     await app.boot({ url: '/?author=keplers-laws&step=1' });
-    const total = await page.evaluate(async () => {
-      const data = await import('/js/data/investigations.js');
-      const i18n = await import('/js/i18n/index.js');
-      await i18n.setLocale('es');
-      return data.getInvestigation('keplers-laws').steps.length;
-    });
+    await saveLanguage(page, 'es');
+    const total = getInvestigation('keplers-laws').steps.length;
     const url = `/?author=keplers-laws&step=${total}`;
     await app.boot({ url });
     await expect(page.locator('#investigationPanel')).toBeVisible();
@@ -592,30 +556,59 @@ test.describe('the student report', () => {
 // tab has to show one lesson arriving, not ten.
 // =============================================================================
 
-/** Lesson modules the page has actually fetched, by filename. */
-// Kept as "which lesson bodies were fetched" rather than "which files in that
-// directory", because the directory also holds the machinery - the registry,
-// the manifests, the catalog, and the browser's search and filter modules -
-// and a list of exclusions is a list somebody has to remember to extend. The
-// lesson ids come from the manifest, so this needs no editing when one is
-// added; tests/investigationRegistry.test.js is what guards the directory
-// against strays.
-const lessonsFetched = async page => {
-  const ids = await page.evaluate(async () => {
-    const { MANIFEST } = await import('/js/data/investigations/registry.js');
-    return MANIFEST.map(m => m.id);
-  });
-  return page.evaluate(
-    lessons =>
-      performance
-        .getEntriesByType('resource')
-        .map(r => r.name)
-        .filter(n => /\/data\/investigations\/[^/]+\.js/.test(n))
-        .map(n => n.split('/').pop())
-        .filter(n => lessons.includes(n.replace(/\.js$/, ''))),
-    ids
-  );
+/**
+ * A string that is in one lesson's file and in no other file: the first
+ * ASCII run of at least 30 characters, with no quote, backslash or markup,
+ * among the lesson's own step text. A bundler may rename and merge the files
+ * of the sources but it leaves string contents alone, so this finds the lesson
+ * wherever the build put it.
+ */
+const markers = new Map();
+async function markerOf(id) {
+  if (!markers.has(id)) {
+    const lesson = await loadInvestigation(id);
+    const run = /[ -!#-%(-;=?-[\]-~]{30,}/;
+    const text = lesson.steps.flatMap(s => [s.title, s.body, s.prompt]);
+    const found = text
+      .map(t => run.exec(String(t ?? ''))?.[0])
+      .find(Boolean)
+      ?.slice(0, 30);
+    if (!found) throw new Error(`no marker string in lesson ${id}`);
+    markers.set(id, found);
+  }
+  return markers.get(id);
+}
+
+/**
+ * The lessons whose file the page has fetched, by lesson id, and how many of
+ * the page's script requests carried each. Read from what the page fetched
+ * (its resource timings, then each script's text from the cache) rather than
+ * from file names, because the build names its files by hash.
+ */
+const lessonFetches = async page => {
+  const wanted = {};
+  for (const { id } of MANIFEST) wanted[id] = await markerOf(id);
+  return page.evaluate(async wanted => {
+    const urls = performance
+      .getEntriesByType('resource')
+      .map(r => r.name)
+      .filter(n => /\.m?js(\?|$)/.test(n));
+    const counts = {};
+    for (const url of urls) {
+      const text = await window
+        .fetch(url, { cache: 'force-cache' })
+        .then(r => r.text())
+        .catch(() => '');
+      for (const [id, marker] of Object.entries(wanted))
+        if (text.includes(marker)) counts[id] = (counts[id] ?? 0) + 1;
+    }
+    return counts;
+  }, wanted);
 };
+
+/** The ids of the lessons fetched, sorted. */
+const lessonsFetched = async page =>
+  Object.keys(await lessonFetches(page)).sort();
 
 test.describe('lesson loading', () => {
   test('the browser lists every lesson without loading any of them', async ({
@@ -627,10 +620,7 @@ test.describe('lesson loading', () => {
     await expect(page.locator('#investigationBrowser')).toBeVisible();
     // From the manifest rather than a literal: the catalog grows, and a test
     // that hard-codes its size fails for the one reason nobody needs telling.
-    const expected = await page.evaluate(async () => {
-      const { MANIFEST } = await import('/js/data/investigations/manifest.js');
-      return MANIFEST.length;
-    });
+    const expected = MANIFEST.length;
     await expect(page.locator('#investigationList .inv-card')).toHaveCount(
       expected
     );
@@ -649,7 +639,7 @@ test.describe('lesson loading', () => {
   }) => {
     await openLesson(page, app, 'tides');
     await expect(page.locator('#investigationTitle')).toHaveText('Tides');
-    expect(await lessonsFetched(page)).toEqual(['tides.js']);
+    expect(await lessonsFetched(page)).toEqual(['tides']);
 
     // A second lesson adds itself and nothing else. Eight of the ten are still
     // untouched at this point, which is the whole point.
@@ -659,10 +649,7 @@ test.describe('lesson loading', () => {
     await expect(page.locator('#investigationTitle')).toHaveText(
       'Black Holes by the Numbers'
     );
-    expect((await lessonsFetched(page)).sort()).toEqual([
-      'black-holes.js',
-      'tides.js',
-    ]);
+    expect(await lessonsFetched(page)).toEqual(['black-holes', 'tides']);
   });
 
   test('a lesson link loads only the lesson it names', async ({
@@ -676,7 +663,7 @@ test.describe('lesson loading', () => {
     await expect(page.locator('#investigationTitle')).toHaveText(
       'Weighing the Stars'
     );
-    expect(await lessonsFetched(page)).toEqual(['weighing-stars.js']);
+    expect(await lessonsFetched(page)).toEqual(['weighing-stars']);
   });
 
   test('a card opened twice in a row fetches once', async ({ page, app }) => {
@@ -686,14 +673,7 @@ test.describe('lesson loading', () => {
     await page.locator('[data-investigation="orbital-energy"]').click();
     await expect(page.locator('#investigationPanel')).toBeVisible();
 
-    const fetched = await page.evaluate(
-      () =>
-        performance
-          .getEntriesByType('resource')
-          .map(r => r.name)
-          .filter(n => n.endsWith('/orbital-energy.js')).length
-    );
-    expect(fetched).toBe(1);
+    expect((await lessonFetches(page))['orbital-energy']).toBe(1);
   });
 
   test('closing while a lesson is still arriving does not reopen it', async ({
@@ -704,12 +684,19 @@ test.describe('lesson loading', () => {
     // it, and closes the browser before the lesson lands. The abandoned lesson
     // must not appear on top of them a moment later.
     await app.boot();
-    await page.evaluate(async () => {
-      const mod = await import('/js/investigations.js');
-      const opening = mod.openInvestigation('goldilocks-question');
-      mod.closeInvestigation();
-      await opening;
+    // Through the interface: click the card and close the panel in the same
+    // task, before the lesson's file has arrived.
+    await page.locator('#investigationsBtn').click();
+    await expect(page.locator('#investigationBrowser')).toBeVisible();
+    await page.evaluate(() => {
+      document
+        .querySelector('[data-investigation="goldilocks-question"]')
+        .click();
+      document.getElementById('investigationClose').click();
     });
+    // The lesson's file has landed once the network is quiet; had it been
+    // going to open, it would have by now.
+    await page.waitForLoadState('networkidle');
     await expect(page.locator('#investigationPanel')).toBeHidden();
     await expect(page.locator('body')).not.toHaveClass(/investigation-open/);
   });
@@ -938,38 +925,21 @@ test.describe('a screen reader hears every answer, not only the first', () => {
     await app.boot();
     // Resumed at the first of the two, the way a returning student is, rather
     // than walked to: the panel's own progress record, naming the step.
-    const facts = await page.evaluate(
-      async ([id, first]) => {
-        const reg = await import('/js/data/investigations/registry.js');
-        const { writeProgress } =
-          await import('/js/investigations/progressSchema.js');
-        const lesson = await reg.loadInvestigation(id);
-        const at = lesson.steps.findIndex(s => s.sid === first);
-        localStorage.setItem(
-          `gravitas_investigation_${id}`,
-          JSON.stringify(
-            writeProgress({
-              lesson,
-              responses: {},
-              attempts: {},
-              visited: [],
-              stepSid: first,
-              startedAt: null,
-            })
-          )
-        );
-        return {
-          steps: lesson.steps.slice(at, at + 2).map(s => ({
-            sid: s.sid,
-            title: s.title,
-            kind: s.kind,
-            answer: s.answer,
-            reveal: s.reveal ?? null,
-          })),
-        };
-      },
-      [ID, FIRST]
-    );
+    const lesson = await storeProgress(page, ID, {
+      visited: [],
+      stepSid: FIRST,
+      spent: 0,
+    });
+    const at = lesson.steps.findIndex(s => s.sid === FIRST);
+    const facts = {
+      steps: lesson.steps.slice(at, at + 2).map(s => ({
+        sid: s.sid,
+        title: s.title,
+        kind: s.kind,
+        answer: s.answer,
+        reveal: s.reveal ?? null,
+      })),
+    };
     // If either gains a `reveal`, or they stop being neighbors, this is no
     // longer the case being tested.
     expect(facts.steps.map(s => s.sid)).toEqual([FIRST, SECOND]);
@@ -984,9 +954,7 @@ test.describe('a screen reader hears every answer, not only the first', () => {
     const title = page.locator('.inv-step-title');
     await expect(title).toHaveText(facts.steps[0].title);
     // Read now: the panel's strings arrive with the panel.
-    const correct = await page.evaluate(async () =>
-      (await import('/js/i18n/index.js')).t('inv.answer.correct')
-    );
+    const correct = await message('inv.answer.correct');
     expect(correct).not.toBe('inv.answer.correct');
 
     // Every state the live region is left in from here on, starting with the
