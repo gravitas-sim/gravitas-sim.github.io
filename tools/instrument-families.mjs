@@ -29,6 +29,39 @@ export function familyOfModule(modulePath) {
 
 const maps = new Map();
 
+/** The modules a build's chunk was made from, read from its source map. */
+function mapSources(root, pathname) {
+  const file = path.join(root, `${decodeURIComponent(pathname)}.map`);
+  if (!maps.has(file)) {
+    let sources = [];
+    if (existsSync(file)) {
+      try {
+        sources = JSON.parse(readFileSync(file, 'utf8')).sources || [];
+      } catch {
+        /* unreadable map: no module, see above */
+      }
+    }
+    maps.set(file, sources);
+  }
+  return maps.get(file);
+}
+
+/**
+ * The application modules one fetched script contains.
+ * @param {string} url - The script's URL as the page fetched it
+ * @param {Object} opts
+ * @param {'sources'|'build'} opts.config - Which configuration served it
+ * @param {string} [opts.root] - The served directory, for a build's maps
+ * @returns {string[]} Repository paths, e.g. ['js/settingsPanel.js']
+ */
+export function modulesInScript(url, { config, root }) {
+  const { pathname } = new URL(url);
+  if (config === 'sources') return [pathname.replace(/^\//, '')];
+  return mapSources(root, pathname)
+    .map(s => s.replace(/^(\.\.\/)+/, ''))
+    .filter(s => /^js\//.test(s));
+}
+
 /**
  * The families one fetched script contains.
  * @param {string} url - The script's URL as the page fetched it
@@ -38,27 +71,11 @@ const maps = new Map();
  * @returns {string[]} Family module names, e.g. ['energyWidgets']
  */
 export function familiesInScript(url, { config, root }) {
-  const { pathname } = new URL(url);
-  if (config === 'sources') {
-    const one = familyOfModule(pathname);
-    return one ? [one] : [];
-  }
-  const file = path.join(root, `${decodeURIComponent(pathname)}.map`);
-  if (!maps.has(file)) {
-    let sources = [];
-    if (existsSync(file)) {
-      try {
-        sources = JSON.parse(readFileSync(file, 'utf8')).sources || [];
-      } catch {
-        /* unreadable map: no family, see above */
-      }
-    }
-    maps.set(
-      file,
-      [...new Set(sources.map(familyOfModule).filter(Boolean))].sort()
-    );
-  }
-  return maps.get(file);
+  return [
+    ...new Set(modulesInScript(url, { config, root }).map(familyOfModule)),
+  ]
+    .filter(Boolean)
+    .sort();
 }
 
 /**
