@@ -61,9 +61,7 @@ export const DEFAULT_BLEED = Object.freeze({ maxLengthPx: 64 });
 function checkResponse(fullWell, kneeFraction) {
   if (!(fullWell > 0)) throw new Error('the full well is a positive number');
   if (!(kneeFraction > 0 && kneeFraction < 1))
-    throw new Error(
-      'the nonlinearity’s knee is a fraction of the full well between 0 and 1'
-    );
+    throw new Error('the nonlinearity knee is 0 to 1 of the full well');
 }
 
 /**
@@ -278,9 +276,7 @@ export function normalizeEffects(effects = {}) {
   const n = out.nonlinearity;
   if (n) {
     if (!(n.kneeFraction > 0 && n.kneeFraction < 1))
-      throw new Error(
-        'the nonlinearity’s knee is a fraction of the full well between 0 and 1'
-      );
+      throw new Error('the nonlinearity knee is 0 to 1 of the full well');
     if (!(n.safeDeviation > 0 && n.safeDeviation < 1))
       throw new Error('the safe deviation is a fraction between 0 and 1');
   }

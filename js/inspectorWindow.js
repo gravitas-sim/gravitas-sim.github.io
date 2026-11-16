@@ -382,7 +382,7 @@ export const showObjectInspector = (object, type) => {
 export const hideObjectInspector = () => {
   const objectInspector = document.getElementById('objectInspector');
   if (!objectInspector) {
-    console.error('objectInspector element not found when trying to hide!');
+    console.error('objectInspector element not found');
     return;
   }
   objectInspector.classList.remove('visible');

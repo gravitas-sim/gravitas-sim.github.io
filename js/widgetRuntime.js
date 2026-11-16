@@ -76,8 +76,7 @@ export function captureToNotebook(make) {
     if (!warned) {
       warned = true;
       console.warn(
-        'A notebook capture was requested before js/notebookBridge.js had ' +
-          'installed its sink. The reading was not saved.'
+        'A notebook capture came before notebookBridge.js installed its sink; not saved.'
       );
     }
     return Promise.resolve(false);

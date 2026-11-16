@@ -111,9 +111,7 @@ export function artifactEntry({
       `not an envelope: ${problems[0].path} ${problems[0].message}`
     );
   if (!envelope.source.digest)
-    throw new Error(
-      'an envelope kept as evidence names the digest of its data'
-    );
+    throw new Error('an evidence envelope names its data digest');
   const env = headline(envelope);
   return buildEntry({
     source,

@@ -35,7 +35,7 @@ function detectorFor(state, setup) {
   const { width, height, pixelScale, psfFwhm } = setup.instrument;
   if (!(pixelScale > 0 && psfFwhm > 0))
     throw new Error(
-      'a ccd frame needs instrument.pixelScale and psfFwhm, in arcsec'
+      'a ccd frame needs instrument.pixelScale and psfFwhm (arcsec)'
     );
   return normalizeDetector({
     ...(state.detector ?? {}),

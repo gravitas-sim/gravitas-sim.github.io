@@ -24,7 +24,7 @@
     }
   },
   "sourceFiles": 306,
-  "sourceDigest": "bd0239da7c170aa855aa41447dab89b290b6134a776bd7227ae9c0420699cf63",
+  "sourceDigest": "3025def3667965ed0214ae82a21597fc2100c06f1b7b840e9650a4b2e907af65",
   "sources": {
     "js/activities/activities.js": "af9b7e121b9a72c2a5cc18e07331d6ee841934d402b030294d25c442628881ef",
     "js/activities/activityBridge.js": "67a82aff98e0ed935d6b8b0f0f654c6ad4332ee929cb3604e896a7f790a6fdc1",
@@ -57,7 +57,7 @@
     "js/data/investigations/bending-light.js": "b5c8699d4362d0c9e65ca4232621962f780d95c099605badb2d33cd330de5f4b",
     "js/data/investigations/binaries-sequence.js": "c55578a36fdd97af6cc11832cf9b4445dced5cb49abd77ac377d944d060b1e32",
     "js/data/investigations/binary-masses-sequence.js": "47670ac6193214d45ee1e1c8f70c14cf5f55bcdfe2cd6e9dd97c8de8735fd86a",
-    "js/data/investigations/binary-star-planets.js": "dbf212e9054915ed11c45a00de4c76c3fafc83fee98e6bddeb28b931013929a1",
+    "js/data/investigations/binary-star-planets.js": "3652f0390cdfbaacaac626c0ff27d6b1eb5ddb56a537c7d0598a997cea391ff3",
     "js/data/investigations/black-holes.js": "2edcc87a8f89961762bcc94682abdde3d3d2cc59adc45e020bce7bd4b676d4c1",
     "js/data/investigations/butterfly-effect.js": "df2f9178416242672026214a3d1e9aea637740a84f0e59fecdc72be7f0b6d1d2",
     "js/data/investigations/catalog.js": "c24c233767ebd28a49066263de0c3db6eca72298a925e62ece364eec38dfc04f",
@@ -272,7 +272,7 @@
     "js/data/investigations/variables-ii-sequence.js": "9ff4d1206a5855ee7d9214c25b7e341c651ecd0d83ed285dc143652254331309",
     "js/data/investigations/vetting-sequence.js": "0556f738ed291414b79d3216eb38e2f20bd9673e37869ac9363aac18a74d3950",
     "js/data/investigations/wanderers-on-the-sky.js": "862001cb5511331219dc89afba53e5028d2aac490ec37f784340871b5b73a11b",
-    "js/data/investigations/weighing-stars.js": "f50631f6a79f0a205dfc7926bc89fcde8935d6d41b0310591aa8d6dfb02b0665",
+    "js/data/investigations/weighing-stars.js": "6921dcb88e43fd8ac12e86bb1b8c24b57a61f902023f3f19d79064658200873a",
     "js/data/investigations/what-a-ccd-records.js": "1d307031eb7234e0bfb1c26ee5a1a0b68c96734d2725e755b6888e329e9504e4",
     "js/data/investigations/what-a-spectrum-is-made-of.js": "44d31535b0251a22531b3ef15b268c7bb26b4c4cae0718b3265c60b891e7644b",
     "js/data/investigations/what-is-a-gravitational-wave.js": "2a033bb96ca91827cb6884914e6eb6e520f8180fe2a53cfce6d812cfb22f9dd2",

@@ -119,9 +119,7 @@ export function welchPsd(
     columns.push(p);
   }
   if (!columns.length) {
-    throw new RangeError(
-      'welchPsd: no segment fits outside the excluded intervals'
-    );
+    throw new RangeError('welchPsd: no segment fits outside the exclusions');
   }
 
   const psd = new Float64Array(nbin);

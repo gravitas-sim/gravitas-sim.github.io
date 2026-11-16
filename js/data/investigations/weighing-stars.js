@@ -195,6 +195,7 @@ const WEIGHING = {
       sid: 'what-are-they-going-round',
       stage: EQUAL_PAIR,
       type: 'read',
+      motion: true,
       title: 'What are they going round?',
       body: `If both stars are moving, and they are always on opposite sides of
              each other, then there is a point between them that neither star

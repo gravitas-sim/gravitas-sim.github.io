@@ -94,8 +94,13 @@ test.describe('a reading step holds the clock', () => {
 
     // Back to a reading step without motion: held again.
     await back(page);
+    await page.evaluate(
+      () => (document.getElementById('srStatus').textContent = '')
+    );
     await back(page);
     expect(await paused(page)).toBe(true);
+    // A screen reader is told: the Play control's label alone is silent.
+    await expect(page.locator('#srStatus')).toHaveText(/paused/i);
   });
 
   test('a reader who pauses on a question step keeps their pause', async ({
@@ -114,6 +119,67 @@ test.describe('a reading step holds the clock', () => {
     await next(page);
     await next(page);
     expect(await paused(page)).toBe(true);
+  });
+});
+
+test.describe('a reading step that needs the clock, and the transport', () => {
+  const author = async (page, app, lesson, step) => {
+    await app.boot({ url: `/?author=${lesson}&step=${step}` });
+    await page.waitForSelector('#investigationNext', { timeout: 25_000 });
+    await expect(page.locator('.inv-step-title')).not.toBeEmpty();
+  };
+
+  test('the dip step, which waits on a transit watch, runs; so does the barycenter step', async ({
+    page,
+    app,
+  }) => {
+    test.slow();
+    await author(page, app, 'transit-photometry', 11);
+    expect(await paused(page)).toBe(false);
+    const a = await clock(page);
+    await expect.poll(() => clock(page), { timeout: 8000 }).toBeGreaterThan(a);
+    await author(page, app, 'weighing-stars', 6);
+    expect(await paused(page)).toBe(false);
+    const b = await clock(page);
+    await expect.poll(() => clock(page), { timeout: 8000 }).toBeGreaterThan(b);
+  });
+
+  test('a reader who plays and then pauses a held step keeps the pause on the next one', async ({
+    page,
+    app,
+  }) => {
+    test.slow();
+    await openKepler(page, app);
+    expect(await paused(page)).toBe(true);
+    await page.locator('#timelinePlay').click();
+    expect(await paused(page)).toBe(false);
+    await page.locator('#timelinePlay').click();
+    expect(await paused(page)).toBe(true);
+    await next(page); // a step that runs: the pause is the reader's
+    expect(await paused(page)).toBe(true);
+  });
+
+  test('history opened on a held step does not leave the next step paused on return', async ({
+    page,
+    app,
+  }) => {
+    test.slow();
+    await openKepler(page, app);
+    expect(await paused(page)).toBe(true);
+    await page.evaluate(async () => {
+      const tl = await import('/js/timeline.js');
+      tl.recordFrame();
+      tl.recordFrame();
+      tl.scrubTo(1);
+    });
+    await next(page); // meant to run
+    expect(await paused(page)).toBe(false);
+    await page.evaluate(async () =>
+      (await import('/js/timeline.js')).returnToLive()
+    );
+    expect(await paused(page)).toBe(false);
+    const a = await clock(page);
+    await expect.poll(() => clock(page), { timeout: 8000 }).toBeGreaterThan(a);
   });
 });
 
