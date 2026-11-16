@@ -355,4 +355,49 @@ plain hybrid bundle through route-budget (its size was taken from the file);
 tests of the hybrid with the validation groups and tests repointed (not an
 option the slices allow).
 
+## Third run, part A (Roadmap IV, Prompt 315): the workflow specs read the page
+
+Written on 2026-11-16 against `v4` at 80f1282e. Part B (the thresholds and the
+comparison) has not started and no threshold is committed here.
+
+**What changed.** The specs the eleven workflows name were written against the
+running application's modules (`import('/js/ui.js')` inside the page), which a
+bundle does not have; 161 of the second run's 164 build failures were that. They
+now judge the product through the page: the world is loaded, emptied, paused and
+counted through the interface and the live readout, and what a spec compares the
+page with (a lesson's answers, a saved record, a message, an assignment link) is
+read in the spec's own Node process, as `production.spec.js` reads `DEMOS`.
+The shared helper is `e2e/workflow.js`; `npm run e2e:dist:workflows` runs the 28
+specs on the build and leaves CI's dist list alone.
+
+**Which workflows can be judged on the build.** Only a workflow every one of
+whose specs is DOM-level can be. Status at this commit:
+
+| Workflow | Specs | Status |
+|---|---|---|
+| S1 | onboarding, firstRun, investigations | DOM-level |
+| S2 | sandbox, bodyPlacement, accessibilityParity | **not judged**: bodyPlacement reads a placed body's velocity and mass and the keyboard aim; accessibilityParity compares typed and placed bodies and plotted arrays (3 tests are build-target skips) |
+| S3 | investigations, answerEntry, predictionLoops | DOM-level |
+| S4 | measure, plotChart, chartParity | **not judged**: plotChart and chartParity test the chart component through `createChart` and the chart parts; the plot's arrays are not on the page |
+| S5 | observatory, stellarSpectra | DOM-level (the offline test stays a build-target skip: the build has no service worker, which is T2) |
+| S6 | sky, observing | DOM-level |
+| S7 | experimentRunner, experiments | **not judged**: experiments drives the bench module and `SETTINGS` |
+| S8 | investigations, htmlReport | DOM-level |
+| S9 | myWork, progressSafety, presetRecovery | DOM-level |
+| S10 | sharing, shareObserving | **not judged**: shareObserving applies crafted payloads through `applyShareState` |
+| I1 | adoption, instructorFlow, assignment, submissionReview, instructorPortal | DOM-level |
+
+At most 7 of the 11 workflows can be judged on the build at this commit; T4 asks
+for at least 10, so a verdict of A is not reachable from this state. No spec was
+made conditional, skipped or loosened to change that. The existing build-target
+skips (D-R10-292-02 and others) are unchanged.
+
+**Tests moved out of the workflow specs.** Six tests call a module inside the
+page (the experiment scheduler with stand-in Workers; the assignment binding,
+link-refusal, language and backup rules; the seeded-world determinism). They are
+in `experimentSchedulerRealm.spec.js`, `assignmentLogic.spec.js` and
+`sharingDeterminism.spec.js`, each with a README row, source-only, still run
+with the browser suite. The workflow table does not count them as judged on the
+build.
+
 <!-- Listed in DOCUMENTS.md. -->
