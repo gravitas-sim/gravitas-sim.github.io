@@ -1,21 +1,21 @@
 // =============================================================================
 // The inspector window: putting the card on screen, not what is on it
 // -----------------------------------------------------------------------------
-// Opening, closing, dragging and docking the object inspector, the readout's
-// minimize control, the reference-frame switcher, the pinned comparison cards,
-// the header buttons (close, delete, maneuver, pin) and the lazy maneuver
-// planner they ask for (formerly js/maneuverBridge.js, folded in to pay for
-// this module's request). Content is js/inspectorView.js, js/inspectorPanel.js
-// and js/inspectorInfo.js.
+// Opening, closing, dragging and docking the object inspector, the pinned
+// comparison cards and the header buttons (close, delete, maneuver, pin).
+// Content is js/inspectorView.js, js/inspectorPanel.js and js/inspectorInfo.js.
+//
+// Fetched the first time a body is selected, by js/inspectorGate.js, which
+// answers every call the rest of the application makes of the inspector until
+// then and keeps what is not the card: the readout's minimize control, the
+// reference-frame selector, the suppression flag and the maneuver planner's
+// loader. Nothing may import this module statically but the gate's own
+// dynamic import (tests/inspectorGate.test.js).
 //
 // Interface (CONTRIBUTING.md, Module boundaries): no context object, because
 // nothing is needed from the coordinator. Exports: showObjectInspector,
-// hideObjectInspector, inspectorTypeFor, setInspectorSuppressed (the flag
-// lives here), setupOverlayMinimize, wireInspectorControls (ui.js calls it
-// once, where its own start-up code ran these statements), and the planner's
-// watchForManeuver, openManeuverFor, ensureManeuverPlanner,
-// maneuverPlannerLoaded. ui.js registers hideObjectInspector and
-// setInspectorSuppressed on the command bus; this module never imports ui.js.
+// hideObjectInspector, wireInspectorControls (called once, by the gate, when
+// this module arrives). This module never imports ui.js.
 // Nothing here touches an element at import time (ui.js mounts the markup
 // after the imports run), so every lookup is inside a function.
 // =============================================================================
@@ -37,20 +37,14 @@ import {
   gas_giants,
   neutron_stars,
   white_dwarfs,
-  barycenterBodies,
   clearObjectEnergyHistory,
 } from './physics.js';
 import { debugLog } from './utils.js';
 import {
-  WORLD,
-  BARYCENTER,
-  OBJECT,
-  setFrame,
-  frameState,
-  onFrameChange,
-} from './referenceFrame.js';
-import { t } from './i18n/index.js';
-import { setBodySelector } from './widgetRuntime.js';
+  isInspectorSuppressed,
+  paintFrameControls,
+  setupOverlayMinimize,
+} from './inspectorGate.js';
 import {
   objectInfoFor,
   wireInspectorOverlayToggles,
@@ -59,41 +53,8 @@ import {
   setupMassSliderListeners,
   isObjectStillInSimulation,
 } from './inspectorView.js';
-import { state, SETTINGS, current_scenario_name, command } from './appState.js';
-import { EV_MANEUVER_REQUESTED, EV_SIMULATION_RESET } from './names.js';
-
-/**
- * The type string the inspector dispatches on, for a body.
- *
- * Not obj_type, which is what this used to pass. A StarObject's obj_type is
- * "StarObject" and objectInfoFor's case is "Star", so a star merger re-selected
- * the product and then logged "Unknown object type: StarObject" and rendered
- * nothing. Every other caller of showObjectInspector gets its type from
- * findObjectAtPosition, which is where this mapping otherwise lives; this is
- * the one caller that has a body and no click to resolve it from.
- *
- * Keyed on the class rather than obj_type because the two are not
- * interchangeable - a transformed body carries the obj_type of what it became
- * and the class of what it was - and build.js keeps class names through
- * minification for exactly this kind of comparison.
- *
- * @param {object} body - A physics body
- * @returns {string} The inspector's type string
- */
-export const inspectorTypeFor = body => {
-  const byClass = {
-    BlackHole: 'BlackHole',
-    StarObject: 'Star',
-    NeutronStar: 'NeutronStar',
-    WhiteDwarf: 'WhiteDwarf',
-    Planet: 'Planet',
-    GasGiant: 'GasGiant',
-    Comet: 'Comet',
-    Asteroid: 'Asteroid',
-    Galaxy: 'Galaxy',
-  };
-  return byClass[body?.kind] || body?.obj_type || 'Planet';
-};
+import { state, SETTINGS } from './appState.js';
+import { EV_MANEUVER_REQUESTED } from './names.js';
 
 /**
  * Show the object inspector modal with detailed information about a physics object
@@ -212,7 +173,7 @@ export const showObjectInspector = (object, type) => {
   // is a large floating card that lands squarely over the orbit the student has
   // just been asked to watch. Selection and the orbit overlay above still
   // happen - only the panel is withheld.
-  if (inspectorSuppressed) return;
+  if (isInspectorSuppressed()) return;
 
   const updateInspector = () => {
     if (!state.inspector_open || !state.selectedObject) return;
@@ -407,14 +368,8 @@ export const showObjectInspector = (object, type) => {
 
 // One way to select a body, installed rather than imported.
 //
-// Selecting and inspecting are the same call here - showObjectInspector sets
-// state.selectedObject and opens the card in one go - and js/lessonScene.js
-// cannot import this module, because this module is the coordinator and that
-// one sits below it. So it goes through the port in js/widgetRuntime.js, the
-// way js/gwAudio.js installs its player there. What it buys is that a lesson's
-// accessible object list, a plot marker and a click on the canvas all take the
-// same path and cannot end up disagreeing about what is selected.
-setBodySelector(showObjectInspector);
+// Registered with the lesson port (js/widgetRuntime.js) by js/inspectorGate.js,
+// which is what a selection calls before this module has been fetched.
 
 export const hideObjectInspector = () => {
   const objectInspector = document.getElementById('objectInspector');
@@ -670,75 +625,6 @@ const endDrag = () => {
   }
 };
 
-// Overlay minimize/maximize functionality. Run at start-up and again for every
-// selection; the registrations of the run before are taken back each time.
-let overlayAbort = null;
-export const setupOverlayMinimize = () => {
-  const overlay = document.getElementById('overlay');
-  const minimizeBtn = document.getElementById('overlayMinimize');
-
-  if (!overlay || !minimizeBtn) return;
-
-  overlayAbort?.abort();
-  overlayAbort = new AbortController();
-  const on = (target, type, fn) =>
-    target.addEventListener(type, fn, { signal: overlayAbort.signal });
-
-  // Add minimize/maximize handler
-  on(minimizeBtn, 'click', toggleOverlayMinimize);
-
-  // The whole collapsed panel is the target for re-opening, not just the chip
-  on(overlay, 'click', e => {
-    if (!overlay.classList.contains('minimized')) return;
-    if (minimizeBtn.contains(e.target)) return;
-    setOverlayMinimized(overlay, minimizeBtn, false);
-  });
-
-  setOverlayMinimized(
-    overlay,
-    minimizeBtn,
-    overlay.classList.contains('minimized')
-  );
-};
-
-const toggleOverlayMinimize = e => {
-  e.preventDefault();
-  e.stopPropagation();
-
-  const overlay = document.getElementById('overlay');
-  const minimizeBtn = document.getElementById('overlayMinimize');
-
-  if (!overlay || !minimizeBtn) return;
-
-  const isMinimized = overlay.classList.contains('minimized');
-
-  setOverlayMinimized(overlay, minimizeBtn, !isMinimized);
-};
-
-/**
- * Apply the minimized/expanded state to the readout panel and its control.
- * The button carries a word as well as a glyph - a bare "−" gave no clue that
- * the panel could be collapsed, and the collapsed state was an unlabeled box.
- * @param {HTMLElement} overlay - The overlay panel
- * @param {HTMLElement} btn - The minimize/expand button
- * @param {boolean} minimized - Target state
- */
-const setOverlayMinimized = (overlay, btn, minimized) => {
-  overlay.classList.toggle('minimized', minimized);
-  const glyph = minimized ? '▸' : '▾';
-  const label = minimized ? t('readout.toggle.show') : t('readout.toggle.hide');
-  btn.innerHTML =
-    `<span aria-hidden="true">${glyph}</span>` +
-    `<span class="overlay-toggle-label">${label}</span>`;
-  btn.title = minimized
-    ? t('readout.toggle.show.hint')
-    : t('readout.toggle.hide.hint');
-  btn.setAttribute('aria-expanded', String(!minimized));
-  btn.setAttribute(
-    'aria-label',
-    minimized ? t('readout.toggle.show.label') : t('readout.toggle.hide.hint')
-  );
-};
 /**
  * Create a mass adjustment slider for the object inspector
  * @param {Object} object - The physics object
@@ -793,98 +679,6 @@ const dockInspector = panel => {
   // Never taller than the stylesheet allows; only shorter, when the position
   // it was given leaves less room than that.
   panel.style.maxHeight = `min(72vh, 640px, ${maxHeight}px)`;
-};
-
-// --- Reference-frame switcher -------------------------------------------------
-// The rail control and the inspector row are two doors into the same state, so
-// both are driven from one subscription rather than each trying to keep the
-// other in step.
-
-/**
- * The name to show for a frame, and what choosing it does.
- *
- * @param {{mode: string, objectId: ?number}} frame - The frame
- * @returns {{value: string, note: string, active: boolean}} What the rail shows
- */
-const describeFrame = frame => {
-  if (frame.mode === BARYCENTER) {
-    return {
-      value: BARYCENTER,
-      note: 'Positions relative to the system\u2019s center of mass. It does not sit inside the largest body.',
-      active: true,
-    };
-  }
-  if (frame.mode === OBJECT) {
-    const body = barycenterBodies().find(b => b.id === frame.objectId);
-    const name = body?.name || 'the selected object';
-    return {
-      value: OBJECT,
-      note: `Positions and trails as seen from ${name}, which now sits still.`,
-      active: true,
-    };
-  }
-  return {
-    value: WORLD,
-    note: 'Positions as the scenario defines them.',
-    active: false,
-  };
-};
-
-/** Bring the rail control and the inspector row in line with the frame. */
-const paintFrameControls = () => {
-  const frame = frameState();
-  const shown = describeFrame(frame);
-
-  const select = document.getElementById('referenceFrameSelect');
-  if (select) {
-    const objectOption = select.querySelector('option[value="object"]');
-    if (objectOption) {
-      // "Selected object" is only a choice when there is one. Offering it with
-      // nothing selected would set a frame with no origin.
-      const sel = state.selectedObject?.object;
-      objectOption.disabled = !sel;
-      objectOption.textContent = sel
-        ? `Selected: ${sel.name || 'object'}`
-        : 'Selected object';
-    }
-    select.value = shown.value;
-  }
-
-  const note = document.getElementById('referenceFrameNote');
-  if (note) {
-    // Only shown while a frame is active. It is a reminder that every number on
-    // screen is now measured against something other than the scenario's own
-    // coordinates, and in the world frame there is nothing to remind anyone of.
-    note.textContent = shown.note;
-    note.hidden = !shown.active;
-  }
-
-  const btn = document.getElementById('frameToggleBtn');
-  if (btn) {
-    const sel = state.selectedObject?.object;
-    const on = !!sel && frame.mode === OBJECT && frame.objectId === sel.id;
-    btn.setAttribute('data-state', on ? 'on' : 'off');
-    btn.setAttribute('aria-checked', on ? 'true' : 'false');
-    btn.textContent = on ? t('settings.toggle.on') : t('settings.toggle.off');
-  }
-};
-
-/** Wire the rail's frame selector. */
-const setupReferenceFrameControl = () => {
-  const select = document.getElementById('referenceFrameSelect');
-  if (select) {
-    select.addEventListener('change', () => {
-      const value = select.value;
-      if (value === OBJECT) {
-        const sel = state.selectedObject?.object;
-        setFrame(sel ? OBJECT : WORLD, sel ? sel.id : null);
-      } else {
-        setFrame(value === BARYCENTER ? BARYCENTER : WORLD);
-      }
-    });
-  }
-  onFrameChange(paintFrameControls);
-  paintFrameControls();
 };
 
 // --- Pinned comparison cards ------------------------------------------------
@@ -1072,36 +866,6 @@ const updatePinnedInspectors = () => {
   }
 };
 
-// Set while a guided investigation is running; see showObjectInspector.
-let inspectorSuppressed = false;
-
-/**
- * Hide the object inspector without disabling selection.
- * @param {boolean} value - True to withhold the panel on click
- */
-export const setInspectorSuppressed = value => {
-  inspectorSuppressed = !!value;
-  // Deliberately not hideObjectInspector(): that also clears the orbit overlay
-  // and the equal-areas wedges, which are exactly what a lesson wants left on
-  // screen. Only the panel itself is put away.
-  if (inspectorSuppressed) {
-    const el = document.getElementById('objectInspector');
-    if (el) {
-      el.classList.remove('visible');
-      el.style.display = 'none';
-      el.style.pointerEvents = 'none';
-    }
-    state.inspector_open = false;
-    if (state.inspectorUpdateInterval) {
-      clearInterval(state.inspectorUpdateInterval);
-      state.inspectorUpdateInterval = null;
-    }
-  } else {
-    const el = document.getElementById('objectInspector');
-    if (el) el.style.display = '';
-  }
-};
-
 /**
  * Wire the header buttons and the resize handler. Called once from ui.js, where
  * these statements used to run at the top level, so the order is unchanged.
@@ -1156,7 +920,6 @@ export function wireInspectorControls() {
       );
     };
   }
-  setupReferenceFrameControl();
   const inspectorPinBtn = document.getElementById('inspectorPin');
   if (inspectorPinBtn) inspectorPinBtn.onclick = pinCurrentObject;
   // Cards are positioned in viewport coordinates against the inspector's edge,
@@ -1169,72 +932,3 @@ export function wireInspectorControls() {
     layoutPinnedCards();
   });
 }
-
-// --- The maneuver planner, loaded on demand ----------------------------------
-// Most visitors never plan a burn, and the planner drags in the panel and its
-// prose. This is what the start-up path sees instead: one function, and an
-// import that happens the first time somebody asks for it from the inspector.
-// The same shape as js/experimentsBridge.js; the application is reached through
-// the command bus in js/appState.js, not by importing ui.js.
-let loading = null;
-
-/**
- * Load the planner and hand it what it needs of the application.
- *
- * @returns {Promise<object>} The planner module
- */
-export function ensureManeuverPlanner() {
-  if (!loading) {
-    loading = (async () => {
-      const [planner, i18n] = await Promise.all([
-        import('./maneuverPlanner.js'),
-        import('./i18n/deferredMessages.js'),
-      ]);
-      await i18n.ensureDeferredMessages().catch(() => {});
-      planner.initManeuver({
-        captureShareState: command('captureShareState'),
-        applyShareState: command('applyShareState'),
-        getSettings: () => SETTINGS,
-        getScenario: () => current_scenario_name,
-      });
-      // A rebuilt world is a different set of bodies, so the burns recorded
-      // against the old ones are not a log of anything that is on screen.
-      window.addEventListener(EV_SIMULATION_RESET, () => {
-        planner.resetManeuverPlanner();
-      });
-      return planner;
-    })();
-  }
-  return loading;
-}
-
-/**
- * Open the planner on a body.
- *
- * @param {?number} bodyId - Which body, or null for the first available
- * @returns {Promise<void>}
- */
-export async function openManeuverFor(bodyId = null) {
-  const planner = await ensureManeuverPlanner();
-  planner.openManeuverPlanner(bodyId);
-}
-
-/**
- * Listen for the inspector asking for the planner. Called once from start-up.
- *
- * The listener is what keeps the dependency one-way: ui.js announces, this
- * module answers, and nothing in the coordinator has to know that the planner
- * exists.
- *
- * @returns {void}
- */
-export function watchForManeuver() {
-  window.addEventListener(EV_MANEUVER_REQUESTED, event => {
-    openManeuverFor(event.detail?.bodyId ?? null).catch(err =>
-      console.error('The maneuver planner could not be loaded:', err)
-    );
-  });
-}
-
-/** @returns {boolean} Whether the planner has been loaded */
-export const maneuverPlannerLoaded = () => loading !== null;
