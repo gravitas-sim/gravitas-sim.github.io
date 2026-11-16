@@ -71,6 +71,15 @@ export const showObjectInspector = (object, type) => {
     cardModule.showObjectInspector(object, type);
     return;
   }
+  // Selecting is synchronous, as it is with the card here: readers of
+  // state.selectedObject (the lesson port, the observing panels) see it at
+  // once, under the card's own guards (the splash, the card's element).
+  if (
+    window.splashScreenEnded &&
+    !window.isSplashActive &&
+    document.getElementById('objectInspector')
+  )
+    state.selectedObject = { object, type };
   const mine = ++wish;
   ensureInspector().then(
     mod => {
@@ -86,7 +95,11 @@ export const showObjectInspector = (object, type) => {
 /** Hide the card, if it has ever been shown. @returns {void} */
 export const hideObjectInspector = () => {
   wish++;
-  cardModule?.hideObjectInspector();
+  if (cardModule) cardModule.hideObjectInspector();
+  else if (state.selectedObject) {
+    state.selectedObject = null;
+    paintFrameControls();
+  }
 };
 
 // Selecting and inspecting are one call, through the port in
