@@ -40,8 +40,8 @@
         "requests": 5
       },
       "instructors": {
-        "kb": 2860.7,
-        "requests": 41
+        "kb": 2862.0,
+        "requests": 42
       },
       "figure": {
         "kb": 2414.2,
@@ -49,7 +49,7 @@
       },
       "experiments": {
         "kb": 1109,
-        "requests": 59
+        "requests": 60
       },
       "observatory": {
         "kb": 200.4,
@@ -69,7 +69,7 @@
       },
       "studio": {
         "kb": 975.6,
-        "requests": 49
+        "requests": 50
       },
       "composer": {
         "kb": 545.1,
@@ -77,7 +77,7 @@
       },
       "course-builder": {
         "kb": 1146.8,
-        "requests": 47
+        "requests": 48
       },
       "course-home": {
         "kb": 306.5,
@@ -117,7 +117,7 @@
       },
       "course-packs": {
         "kb": 738.8,
-        "requests": 45
+        "requests": 46
       },
       "sky": {
         "kb": 115.1,
@@ -155,7 +155,7 @@
       },
       "largest-lesson": {
         "kb": 1101.3,
-        "requests": 77
+        "requests": 79
       },
       "teaching": {
         "kb": 140.2,
