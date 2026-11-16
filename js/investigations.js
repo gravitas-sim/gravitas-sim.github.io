@@ -641,7 +641,9 @@ function applySetup(setup) {
  */
 function bindStepRoles(force) {
   const step = currentStep();
-  if (holdClock(step, appliedSetup)) announce(t('readout.status.paused'));
+  const running = !state.paused;
+  holdClock(step, appliedSetup);
+  if (running && state.paused) announce(t('readout.status.paused'));
   setParkedPause(state.paused);
   // Whatever the last step illustrated is not this step's business; a widget
   // re-asserts its own on its first tick, one frame later.
@@ -2071,11 +2073,9 @@ function goToStep(index, { rebuild = false, open = false } = {}) {
   // only then, so work a student has done: objects placed, mass changed,
   // survives moving between questions about the same system.
   //
-  // Comparing the setup in force rather than testing for a setup on this step
-  // is what makes going backwards correct. The transit lesson swaps in a
-  // blended binary near the end; stepping back to an earlier measurement used
-  // to leave that binary loaded, so a student re-doing the measurement would
-  // quietly be measuring the wrong system.
+  // Comparing the setup in force, not testing for one on this step, makes going
+  // backwards correct: the transit lesson swaps in a blended binary near the
+  // end, and stepping back must not leave it loaded for the earlier measurement.
   const setup = setupInForceAt(stepIndex);
   if (rebuild || (setup && setup !== appliedSetup)) applySetup(setup);
   else applyLocks();
