@@ -118,7 +118,7 @@ import {
   rotationCurveState,
   clusterState,
   darkMatterHaloOn,
-} from './rotationCurve.js';
+} from './rotationCurveState.js';
 import {
   setLightCurveEnabled,
   isLightCurveEnabled,

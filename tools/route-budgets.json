@@ -4,32 +4,32 @@
   "routes": {
     "sources": {
       "front-door": {
-        "kb": 2137.8,
-        "requests": 109
+        "kb": 1926.9,
+        "requests": 105
       },
       "sandbox": {
-        "kb": 2137.8,
-        "requests": 109
+        "kb": 1926.9,
+        "requests": 105
       },
       "kepler": {
-        "kb": 2853.2,
-        "requests": 139
+        "kb": 2648.0,
+        "requests": 136
       },
       "transit": {
-        "kb": 2865.2,
-        "requests": 139,
-        "toolKb": 2945.8,
-        "toolRequests": 144
+        "kb": 2659.9,
+        "requests": 136,
+        "toolKb": 2740.4,
+        "toolRequests": 141
       },
       "power-law": {
-        "kb": 2830.4,
-        "requests": 139,
-        "toolKb": 2883.9,
-        "toolRequests": 142
+        "kb": 2625.2,
+        "requests": 136,
+        "toolKb": 2678.7,
+        "toolRequests": 139
       },
       "largest-lesson": {
-        "kb": 3161.4,
-        "requests": 148
+        "kb": 2956.1,
+        "requests": 145
       },
       "teaching": {
         "kb": 248.1,
@@ -44,8 +44,8 @@
         "requests": 42
       },
       "figure": {
-        "kb": 2414.2,
-        "requests": 129
+        "kb": 2203.7,
+        "requests": 125
       },
       "experiments": {
         "kb": 1109,
@@ -130,31 +130,31 @@
     },
     "build": {
       "front-door": {
-        "kb": 628.4,
-        "requests": 57
+        "kb": 529.5,
+        "requests": 56
       },
       "sandbox": {
-        "kb": 628.4,
-        "requests": 57
+        "kb": 529.5,
+        "requests": 56
       },
       "kepler": {
-        "kb": 972.2,
+        "kb": 895.6,
         "requests": 73
       },
       "transit": {
-        "kb": 983.6,
+        "kb": 907.0,
         "requests": 73,
-        "toolKb": 1024.4,
+        "toolKb": 947.5,
         "toolRequests": 78
       },
       "power-law": {
-        "kb": 956.7,
+        "kb": 880.1,
         "requests": 73,
-        "toolKb": 973.6,
+        "toolKb": 896.7,
         "toolRequests": 76
       },
       "largest-lesson": {
-        "kb": 1101.3,
+        "kb": 1024.7,
         "requests": 79
       },
       "teaching": {
@@ -170,8 +170,8 @@
         "requests": 2
       },
       "figure": {
-        "kb": 761.6,
-        "requests": 59
+        "kb": 664.4,
+        "requests": 58
       },
       "experiments": {
         "kb": 325.2,

@@ -178,7 +178,7 @@ describe('what the tree adds to a record', () => {
     const tree = await readTree();
     const ids = tree.budgets.map(b => b.id);
     expect(ids).toEqual(expect.arrayContaining(['initial', 'deferred']));
-    expect(tree.budgets.find(b => b.id === 'initial').limitKb).toBe(830);
+    expect(tree.budgets.find(b => b.id === 'initial').limitKb).toBe(735);
     expect(tree.budgets.find(b => b.id === 'deferred').limitKb).toBeGreaterThan(
       3000
     );

@@ -278,7 +278,7 @@ import { update3DScene } from './view3dBridge.js';
 import { updateLightCurve, drawObserverIndicator } from './lightCurve.js';
 import { updateRadialVelocity } from './radialVelocity.js';
 import { updateAstrometry } from './astrometry.js';
-import { updateRotationCurve } from './rotationCurve.js';
+import { updateRotationCurve } from './instrumentGate.js';
 import * as timeline from './timeline.js';
 import { STEP_SECONDS, substepPlan, frameAdvance } from './timestep.js';
 import { drawOverlays } from './overlays.js';

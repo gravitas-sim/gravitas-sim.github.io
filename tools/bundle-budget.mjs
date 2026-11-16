@@ -53,7 +53,7 @@ const BUDGETS = [
   {
     id: 'initial',
     label: 'Initial download (CSS + eager JS)',
-    limit: 830,
+    limit: 735,
     reason:
       'Was 743 KB when this budget was first asked for. The application had ' +
       'already grown to 771 KB on its own - the extracted state module, the ' +
@@ -108,12 +108,16 @@ const BUDGETS = [
       'isWelcomeSeen(), which reads one key out of localStorage. Those four ' +
       'small functions are js/welcomeGate.js now, js/main.js imports the ' +
       'layer itself only when it is about to be shown, and a returning ' +
-      'visitor never fetches it. 824.7 KB against an untouched 830.0 limit.',
+      'visitor never fetches it. 824.7 KB against an untouched 830.0 limit.' +
+      '\n\nLowered from 830 to 735 KB when the inspector card, the Settings ' +
+      'panel and the rotation curve panel became fetches at their first use: ' +
+      '811.3 to 731.3 KB measured on a Node 22.23.4 build, the ceiling the ' +
+      'measurement plus 0.5%, rounded up to 0.1 KB (D-R4-311-01).',
   },
   {
     id: 'deferred',
     label: 'Deferred JavaScript (lazy chunks, gzipped)',
-    limit: 3129.7,
+    limit: 3156.8,
     reason:
       'Jumped from 1369 KB to 2105 KB when three.js and Chart.js stopped being ' +
       'CDN requests and became bundled chunks. That is the point of the change ' +
@@ -704,7 +708,8 @@ const BUDGETS = [
       "\n\nPrompt 286 (Help II: the glossary definitions, 81 terms in both languages as the lazy modules js/explain/terms.en.js and terms.es.js, the term markup js/glossaryTerms.js, the where-to-check table js/explain/where.js, the H key in js/explainers.js, the problem note's provenance lines and the Teach page's kernel table; D-R10-286-05) 3,200,392 bytes gzipped (3125.38 KB) on a Node 22.23.4 build over v3 b4ac1b70, 17,796 bytes over the 3108.1 KB ceiling, so the limit moves to 3125.4 KB, the measured overrun rounded up to 0.1 KB, under the standing approval of 2026-10-10 in CLAUDE.md. The initial download did not move. The figure is local; CI measures slightly differently and is the gate." +
       "\n\nPrompt 285 (reduced computation modes: the tier's sizes and their readers in js/quality.js, the fit panel's low-tier line and button, the image panel's release, the ledger caps in js/observatory/imageImport.js, massSum's draws; D-R10-285-06) 3,200,441 bytes gzipped measured here on Node 22.23.4 over v3 4c856fa2, 32 B over the previous limit of 3125.4 KB (3,200,409 B), so the limit is raised to 3125.5 KB, the exact overrun rounded up to 0.1 KB, under the standing approval of 2026-10-10." +
       '\n\nFactual corrections to about twenty-five lessons in English and Spanish (reworded text only, D-R4-300-27): the limit is raised from 3125.5 to 3125.9 KB, the exact overrun measured on CI (309 B over 3,200,512 B) rounded up to 0.1 KB, under the standing approval of 2026-10-10 and a maintainer decision of 2026-11-16, after the added wording was trimmed twice. CI (run 43798082531) measured 3,200,821 bytes gzipped; the Node 22.23.4 build on macOS measured 3,200,774, 47 B lower, so the first raise to 3125.8 KB left it 2 B over.' +
-      '\n\nThe lesson route without the star model and the catalogue (D-R4-310-02): the limit is raised from 3125.9 to 3129.7 KB, the exact overrun measured on CI (run 43875844166, 3,204,747 bytes gzipped, 3129.64 KB, 3.74 KB over) rounded up to 0.1 KB, under the standing approval of 2026-10-10 and a maintainer decision of 2026-11-16. The overrun is the gzip cost of the new chunk boundaries (the stage module, the loaders beside the registry, the lesson browser); the initial download is unchanged at 811.3 KB.',
+      '\n\nThe lesson route without the star model and the catalogue (D-R4-310-02): the limit is raised from 3125.9 to 3129.7 KB, the exact overrun measured on CI (run 43875844166, 3,204,747 bytes gzipped, 3129.64 KB, 3.74 KB over) rounded up to 0.1 KB, under the standing approval of 2026-10-10 and a maintainer decision of 2026-11-16. The overrun is the gzip cost of the new chunk boundaries (the stage module, the loaders beside the registry, the lesson browser); the initial download is unchanged at 811.3 KB.' +
+      '\n\nThe inspector card, Settings and rotation curve loading on first use (D-R4-311-03): the limit is raised from 3129.7 to 3156.8 KB, the overrun measured on CI (3,232,496 bytes gzipped, 3156.73 KB), under the standing approval of 2026-10-10 and a maintainer decision of 2026-11-16. Code that was in the start-up chunks is now in lazy chunks and counts as deferred; the initial download falls from 811.3 to 731.3 KB.',
   },
 ];
 
