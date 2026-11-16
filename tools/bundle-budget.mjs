@@ -53,7 +53,7 @@ const BUDGETS = [
   {
     id: 'initial',
     label: 'Initial download (CSS + eager JS)',
-    limit: 830,
+    limit: 735,
     reason:
       'Was 743 KB when this budget was first asked for. The application had ' +
       'already grown to 771 KB on its own - the extracted state module, the ' +
@@ -108,7 +108,11 @@ const BUDGETS = [
       'isWelcomeSeen(), which reads one key out of localStorage. Those four ' +
       'small functions are js/welcomeGate.js now, js/main.js imports the ' +
       'layer itself only when it is about to be shown, and a returning ' +
-      'visitor never fetches it. 824.7 KB against an untouched 830.0 limit.',
+      'visitor never fetches it. 824.7 KB against an untouched 830.0 limit.' +
+      '\n\nLowered from 830 to 735 KB when the inspector card, the Settings ' +
+      'panel and the rotation curve panel became fetches at their first use: ' +
+      '811.3 to 731.3 KB measured on a Node 22.23.4 build, the ceiling the ' +
+      'measurement plus 0.5%, rounded up to 0.1 KB (D-R4-311-01).',
   },
   {
     id: 'deferred',
