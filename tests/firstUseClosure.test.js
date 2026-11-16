@@ -11,7 +11,12 @@
 //                        js/inspectorPanel.js, js/inspectorInfo.js; fetched on
 //                        the first selection by js/inspectorGate.js;
 //   the Settings panel   js/settingsPanel.js; fetched with the dialog
-//                        machinery by the first press of Settings (js/ui.js).
+//                        machinery by the first press of Settings (js/ui.js);
+//   the rotation curve   js/rotationCurve.js, the panel; fetched by the first
+//                        press of its rail button (js/instrumentGate.js). The
+//                        numbers behind it (js/rotationCurveState.js) are read
+//                        by the data export and the lesson probes, which are
+//                        fetched later, and need no panel.
 //
 // Static edges only: a dynamic import() is exactly how they arrive later.
 // e2e/lazyInstruments.spec.js holds the same from the page.
@@ -39,6 +44,7 @@ const GROUPS = {
     'js/inspectorInfo.js',
   ],
   'the Settings panel': ['js/settingsPanel.js'],
+  'the rotation curve panel': ['js/rotationCurve.js'],
 };
 
 describe('the first screen statically imports', () => {
@@ -56,6 +62,8 @@ describe('the first screen statically imports', () => {
     expect(files).toContain('js/inspectorGate.js');
     expect(dynamic).toContain('js/inspectorGate.js -> ./inspectorWindow.js');
     expect(dynamic).toContain('js/ui.js -> ./settingsPanel.js');
+    expect(files).toContain('js/instrumentGate.js');
+    expect(dynamic).toContain('js/instrumentGate.js -> ./rotationCurve.js');
   });
 
   test('and the object glyphs the picker draws, apart from the card', () => {

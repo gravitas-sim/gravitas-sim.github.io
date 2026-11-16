@@ -25,8 +25,8 @@
 // planner with the listener that answers the card's burn button. All three were
 // in the card's module and are on the first screen or answer a button of it.
 //
-// A failed fetch is told to the reader once (failure.load) and the next
-// selection asks again: nothing is cached on failure.
+// A failed fetch offers the selection again (js/notify.js, as the other lazy
+// panels do); nothing is cached on failure.
 // =============================================================================
 
 import { barycenterBodies } from './physics.js';
@@ -39,7 +39,7 @@ import {
   onFrameChange,
 } from './referenceFrame.js';
 import { t } from './i18n/index.js';
-import { toast } from './notify.js';
+import { loadFailed } from './notify.js';
 import { setBodySelector } from './widgetRuntime.js';
 import { state, SETTINGS, current_scenario_name, command } from './appState.js';
 import { EV_MANEUVER_REQUESTED, EV_SIMULATION_RESET } from './names.js';
@@ -92,7 +92,7 @@ export const showObjectInspector = (object, type) => {
     },
     err => {
       console.error('The inspector could not be loaded:', err);
-      toast(t('failure.load'));
+      loadFailed(() => showObjectInspector(object, type), err);
     }
   );
 };
