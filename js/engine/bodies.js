@@ -526,7 +526,10 @@ export class PhysicsObject {
   update_trail() {
     if (!this.alive) return;
     const now = getTrailTime();
-    const unit = trailReferenceStep(physicsSettings.max_timestep);
+    const unit = trailReferenceStep(
+      physicsSettings.max_timestep,
+      physicsSettings.sim_speed
+    );
     const span = trailSpan();
     const budget = trailBudget();
 

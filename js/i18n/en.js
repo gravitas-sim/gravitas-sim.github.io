@@ -483,6 +483,11 @@ export const EN = {
   'vector.acceleration': 'acceleration',
   'vector.acceleration.total': 'acceleration, total',
   'vector.source': 'from {body}',
+  'vector.scale.velocity': 'Velocity arrow: 1 cm = {value}',
+  'vector.scale.acceleration': 'Acceleration arrow: 1 cm = {value}',
+  'vector.limit.floor': 'shown at its shortest',
+  'vector.limit.ceiling': 'shortened to fit',
+  'vector.trails': 'Trails: the last {span}',
 
   // --- Readout counts and status ---------------------------------------------
   'readout.count.planets': 'Planets',
@@ -568,7 +573,7 @@ export const EN = {
   'inspector.stat.rings': 'Ring system',
   'inspector.rings.visible': 'Visible',
   'inspector.tip.radius':
-    'The physical radius, and what the simulation runs on: collisions, merging, Roche limits and the transit geometry all use this number. It is not the size the body is drawn at. Canvas diameters use a compressed illustrative scale so that a star, a gas giant and a rocky planet can share one picture; read radii here, never off the drawing.',
+    'The model radius the simulation runs on: collisions, merging, Roche limits and the transit geometry all use this number. For a generated body it follows from the mass, so it is not always a measured radius. It is not the size the body is drawn at: every kind of body is drawn enlarged, by a different factor, so that a star, a gas giant and a rocky planet can share one picture. Read radii here, never off the drawing.',
   'inspector.tip.rings':
     'This body is drawn with a ring system. Rings are illustrative: about a quarter of generated gas giants are given them for visual variety, and a scenario may set them on or off deliberately. They have no mass, no gravity and no effect on collisions, transit depth or any measurement.',
   'inspector.stat.radius': 'Radius',
@@ -1192,9 +1197,10 @@ export const EN = {
   'inv.browser.activities':
     'Short on time? Classroom activities are prepared teaching formats — a five-minute demonstration, a twenty-minute activity, a full lab — cut from these same investigations.',
   'inv.browser.activities.link': 'See the classroom activities',
-  'canvas.sizeDisclosure': 'Body sizes enlarged for visibility',
+  'canvas.sizeDisclosure':
+    'Bodies enlarged, not to one scale (radii: inspector)',
   'canvas.sizeDisclosure.detail':
-    'Canvas diameters are illustrative and use a compressed scale. Do not infer physical size ratios from the drawing; use the inspector and investigation measurements for numerical radii.',
+    'Canvas diameters are illustrative. Each kind of body is enlarged by a different factor, so the sizes of a star, a gas giant and a rocky planet are not to one scale and their ratios are not physical. Do not infer size ratios from the drawing; use the inspector and investigation measurements for numerical radii.',
   'capture.screenshotFailed': 'The screenshot could not be saved',
   'chart.notReady': 'The chart is not ready yet',
   'chart.exportFailed': 'Could not export the chart',

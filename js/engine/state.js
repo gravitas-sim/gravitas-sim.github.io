@@ -410,7 +410,11 @@ export const advanceTrailTick = () => {
 export const trailSampleInterval = () => {
   const thin = currentTier() === 'low' ? 2 : 1;
   return (
-    (trailReferenceStep(physicsSettings.max_timestep) * thin) /
+    (trailReferenceStep(
+      physicsSettings.max_timestep,
+      physicsSettings.sim_speed
+    ) *
+      thin) /
     (detailScale > 0 ? detailScale : 1)
   );
 };
@@ -421,7 +425,11 @@ export const trailSampleInterval = () => {
  * @returns {number} Simulation time units
  */
 export const trailSpan = () =>
-  trailSpanTime(physicsSettings.trail_length, physicsSettings.max_timestep);
+  trailSpanTime(
+    physicsSettings.trail_length,
+    physicsSettings.max_timestep,
+    physicsSettings.sim_speed
+  );
 
 /**
  * Advance the trail clock by one physics step and say whether this step is a

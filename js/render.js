@@ -301,6 +301,7 @@ import {
   drawBodyVectors,
   vectorLegendRows,
   drawPotentialWell,
+  fitFont,
 } from './vectorOverlay.js';
 import { isEmbed } from './presentation.js';
 import { t, onLocaleChange } from './i18n/index.js';
@@ -1361,7 +1362,7 @@ const drawScene = () => {
       ctx.save();
       ctx.setTransform(1, 0, 0, 1, 0, 0);
       if (outerR * state.zoom > 30) {
-        ctx.font = '12px Inter, system-ui, sans-serif';
+        ctx.font = fitFont(ctx, '12px Inter, system-ui, sans-serif');
         ctx.textBaseline = 'middle';
         ctx.shadowColor = 'rgba(0,0,0,0.8)';
         ctx.shadowBlur = 4;
@@ -1383,7 +1384,7 @@ const drawScene = () => {
         );
         // Edge labels only once there is room for them to not collide.
         if ((outerR - innerR) * state.zoom > 46) {
-          ctx.font = '10px Inter, system-ui, sans-serif';
+          ctx.font = fitFont(ctx, '11px Inter, system-ui, sans-serif');
           label(
             innerR,
             bounds.innerLabel,
@@ -1588,7 +1589,7 @@ const drawScene = () => {
       }
       if (top) {
         ctx.save();
-        ctx.font = 'bold 14px sans-serif';
+        ctx.font = fitFont(ctx, 'bold 14px sans-serif');
         ctx.fillStyle = 'rgba(90, 160, 255, 0.95)';
         ctx.textAlign = 'center';
         ctx.textBaseline = 'bottom';
@@ -1769,8 +1770,7 @@ const drawScene = () => {
       if (state.zoom > 0.35) {
         const total = wedgeAreas.reduce((a, b) => a + b, 0);
         ctx.save();
-        ctx.font =
-          '600 11px ui-monospace, SFMono-Regular, Menlo, Consolas, monospace';
+        ctx.font = fitFont(ctx, '600 11px ui-monospace, Menlo, monospace');
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
         ctx.shadowColor = 'rgba(0, 0, 0, 0.9)';
@@ -1860,7 +1860,7 @@ const drawScene = () => {
       }
       if (sweepTop) {
         ctx.save();
-        ctx.font = 'bold 13px sans-serif';
+        ctx.font = fitFont(ctx, 'bold 13px sans-serif');
         ctx.fillStyle = 'rgba(200, 200, 255, 0.9)';
         ctx.textAlign = 'center';
         ctx.textBaseline = 'bottom';
@@ -1955,7 +1955,7 @@ const drawScene = () => {
       instrumentationSettings(),
       state.zoom,
       bottomChromeInset(),
-      vectorLegendRows(drawnVectors)
+      vectorLegendRows(drawnVectors, SETTINGS)
     );
   } catch {
     /* instrumentation is never worth losing a frame over */
@@ -2079,7 +2079,7 @@ function readoutHtml(drawn) {
     );
   }
 
-  const legend = vectorLegendRows(drawn);
+  const legend = vectorLegendRows(drawn, SETTINGS);
   if (legend.length) {
     sections.push(
       `<ul class="readout-legend">${legend
@@ -2575,7 +2575,7 @@ function renderOrbitPreview(preview) {
     }
     if (top) {
       ctx.save();
-      ctx.font = 'bold 14px sans-serif';
+      ctx.font = fitFont(ctx, 'bold 14px sans-serif');
       ctx.fillStyle = 'rgba(90, 160, 255, 0.95)';
       ctx.textAlign = 'center';
       ctx.textBaseline = 'bottom';

@@ -34,6 +34,8 @@ import {
   wireMore,
 } from './settingsSchema.js';
 import { SETTINGS, DEFAULT_SETTINGS } from './appState.js';
+import { formatTime } from './units.js';
+import { trailSpanTime } from './trailSpan.js';
 
 /** The staged copy of SETTINGS the panel edits; Apply copies it back. */
 let localSettings = {};
@@ -736,20 +738,25 @@ const buildSettingsMenu = ({ keep = false } = {}) => {
         slider.step = item.step;
         slider.value = value;
 
+        // A trail's length is a stretch of simulated time, so that is what the
+        // slider reads out; the stored number is a count of reference steps
+        // (js/trailSpan.js) and means nothing to a student.
+        const shown = v =>
+          item.key === 'trail_length'
+            ? formatTime(
+                trailSpanTime(v, SETTINGS.max_timestep, SETTINGS.sim_speed)
+              )
+            : v.toFixed(item.precision || (item.type === 'float' ? 1 : 0));
         const valueDisplay = document.createElement('span');
         valueDisplay.className = 'value-display';
-        valueDisplay.textContent = Number(value).toFixed(
-          item.precision || (item.type === 'float' ? 1 : 0)
-        );
+        valueDisplay.textContent = shown(Number(value));
         slider.oninput = () => {
           const val =
             item.type === 'int'
               ? Math.trunc(slider.valueAsNumber)
               : slider.valueAsNumber;
           localSettings[item.key] = val;
-          valueDisplay.textContent = val.toFixed(
-            item.precision || (item.type === 'float' ? 1 : 0)
-          );
+          valueDisplay.textContent = shown(val);
           if (
             item.key === 'num_black_holes' ||
             item.key === 'use_individual_bh_masses'

@@ -33,8 +33,29 @@
 // POTENTIAL_SOURCE_CAP below.
 // =============================================================================
 
-import { accelerationBreakdown, gravitySourcesFor } from './physics.js';
+import {
+  accelerationBreakdown,
+  gravitySourcesFor,
+  physicsSettings,
+  planets,
+  stars,
+  gas_giants,
+  asteroids,
+  comets,
+  neutron_stars,
+  white_dwarfs,
+} from './physics.js';
 import { t } from './i18n/index.js';
+import {
+  isPhysical,
+  formatSpeed,
+  formatTime,
+  sig,
+  velocityUnitToMs,
+  timeUnitSeconds,
+} from './units.js';
+import { withUnit } from './format.js';
+import { trailSpanTime } from './trailSpan.js';
 
 // --- Palette ------------------------------------------------------------------
 //
@@ -63,8 +84,40 @@ const HALO = 'rgba(4, 8, 16, 0.85)';
 
 /** The most component arrows drawn at once. See the note where it is used. */
 const MAX_SOURCE_ARROWS = 8;
-const LABEL_FONT =
-  '600 11px ui-monospace, SFMono-Regular, Menlo, Consolas, monospace';
+const MONO = 'ui-monospace, SFMono-Regular, Menlo, Consolas, monospace';
+
+/** The smallest label the main canvas draws, in CSS pixels. */
+const LABEL_MIN_CSS_PX = 11;
+
+/**
+ * Canvas pixels per CSS pixel. The canvas is drawn at the display's pixel
+ * ratio (js/quality.js renderScale), so a font of 11 canvas pixels is 5.5 CSS
+ * pixels on a HiDPI screen; this is what turns a size in CSS pixels into one
+ * the context draws at.
+ *
+ * @param {CanvasRenderingContext2D} ctx - The context
+ * @returns {number} Canvas pixels per CSS pixel, 1 where it cannot be read
+ */
+export function canvasRatio(ctx) {
+  const c = ctx && ctx.canvas;
+  const ratio = c && c.clientWidth > 0 ? c.width / c.clientWidth : 1;
+  return ratio > 0 && Number.isFinite(ratio) ? ratio : 1;
+}
+
+/**
+ * A CSS font shorthand with its size made a size on screen: raised to
+ * LABEL_MIN_CSS_PX if smaller, then scaled to canvas pixels.
+ *
+ * @param {CanvasRenderingContext2D} ctx - The context
+ * @param {string} font - A shorthand with a size in px, such as "bold 13px sans-serif"
+ * @returns {string} The shorthand to assign to ctx.font
+ */
+export const fitFont = (ctx, font) =>
+  font.replace(
+    /(\d+(?:\.\d+)?)px/,
+    (_, n) =>
+      `${+(Math.max(LABEL_MIN_CSS_PX, Number(n)) * canvasRatio(ctx)).toFixed(2)}px`
+  );
 
 /**
  * The color a given gravitational source's arrow is drawn in.
@@ -139,7 +192,7 @@ function arrow(ctx, from, to, opts = {}) {
   }
 
   if (label) {
-    ctx.font = LABEL_FONT;
+    ctx.font = fitFont(ctx, `600 11px ${MONO}`);
     ctx.textAlign = ux >= 0 ? 'left' : 'right';
     ctx.textBaseline = uy >= 0 ? 'top' : 'bottom';
     const lx = to.x + ux * 8;
@@ -153,22 +206,139 @@ function arrow(ctx, from, to, opts = {}) {
   ctx.restore();
 }
 
+// --- Length means magnitude ---------------------------------------------------
+//
+// One scale for each kind of arrow, shared by every body in the scene: the
+// longest velocity (or acceleration) among the bodies sets it, so a body moving
+// twice as fast has an arrow twice as long and two bodies can be compared by
+// selecting them in turn. Velocity and acceleration have different dimensions
+// and keep a scale each; the legend says what a centimetre of either means.
+//
+// Two limits keep the picture usable, and the legend says when one applies: a
+// floor, so a slow body still has an arrow to see (its length is then not
+// proportional), and a ceiling, so a body far faster than the scale was set for
+// cannot draw off the canvas.
+//
+// The scale follows the scene gradually. Set afresh every frame it would jump
+// when a body is flung out or absorbed and every arrow in the picture would
+// change length at once; eased, a change in the scene is a change a student
+// can watch.
+
+/** Arrow for the largest magnitude in the scene, in CSS pixels. */
+const ARROW_REF_PX = 96;
+const ARROW_FLOOR_PX = 14;
+const ARROW_CEIL_PX = 220;
+/** What one centimetre is in CSS pixels (CSS defines 96 pixels to the inch). */
+const CSS_PX_PER_CM = 96 / 2.54;
+/** How far the scale moves toward the scene each frame it is drawn. */
+const SCALE_EASE = 0.12;
+
+/** CSS pixels of arrow per simulation unit, by kind; 0 until first drawn. */
+const arrowScales = { v: 0, a: 0 };
+
+/** Forget the scales, so the next scene sets them afresh. */
+export function resetVectorScale() {
+  arrowScales.v = 0;
+  arrowScales.a = 0;
+}
+
 /**
- * Pixels per unit of a vector quantity, chosen so the arrow is a readable
- * length on screen whatever the scenario's units happen to be.
+ * The largest speed and the largest step acceleration among the live bodies.
  *
- * Velocity and acceleration have different dimensions and cannot share a scale;
- * each is normalized against its own magnitude so that both are always visible.
- * That means the arrows show direction faithfully and length only comparatively
- * - which is stated on the legend, because an arrow whose length looked like a
- * number would be lying about a quantity nobody can read off a screen anyway.
+ * Read off the bodies as the integrator left them (`last_accel`), so the scale
+ * comes from the same numbers the arrows do and costs one pass, with no
+ * allocation, however many bodies there are.
  *
- * @param {number} magnitude - The vector's length in its own units
- * @param {number} target - Desired arrow length in pixels
- * @returns {number} Pixels per unit
+ * @returns {{v: number, a: number}} The two maxima, 0 where nothing moves
  */
-const arrowScale = (magnitude, target) =>
-  magnitude > 0 ? target / magnitude : 0;
+function sceneMaxima() {
+  let v = 0;
+  let a = 0;
+  for (const list of [
+    planets,
+    stars,
+    gas_giants,
+    asteroids,
+    comets,
+    neutron_stars,
+    white_dwarfs,
+  ]) {
+    for (let i = 0; i < list.length; i++) {
+      const b = list[i];
+      if (!b || b.alive === false) continue;
+      if (b.vel) v = Math.max(v, Math.hypot(b.vel.x, b.vel.y));
+      if (b.last_accel)
+        a = Math.max(a, Math.hypot(b.last_accel.x, b.last_accel.y));
+    }
+  }
+  return { v, a };
+}
+
+/**
+ * Move one scale toward the value that gives `max` the reference length.
+ *
+ * @param {'v'|'a'} kind - Which scale
+ * @param {number} max - The largest magnitude the scale must cover
+ * @returns {number} CSS pixels per unit, 0 if there is nothing to scale
+ */
+function followScale(kind, max) {
+  if (!(max > 0)) return arrowScales[kind];
+  const target = ARROW_REF_PX / max;
+  const now = arrowScales[kind];
+  // A scene that has changed by a large factor (a new world, a lesson step
+  // that swaps the system) gets its scale at once rather than over a second.
+  arrowScales[kind] =
+    now > 0 && now / target < 4 && target / now < 4
+      ? now + (target - now) * SCALE_EASE
+      : target;
+  return arrowScales[kind];
+}
+
+/**
+ * Length in canvas pixels of an arrow for `magnitude`, and whether a limit
+ * applied.
+ *
+ * @param {number} magnitude - In the quantity's own units
+ * @param {number} k - CSS pixels per unit
+ * @param {number} ratio - Canvas pixels per CSS pixel
+ * @returns {{px: number, limit: ?string}} Length and 'floor', 'ceiling' or null
+ */
+function arrowLength(magnitude, k, ratio) {
+  const css = magnitude * k;
+  if (css < ARROW_FLOOR_PX)
+    return { px: ARROW_FLOOR_PX * ratio, limit: 'floor' };
+  if (css > ARROW_CEIL_PX)
+    return { px: ARROW_CEIL_PX * ratio, limit: 'ceiling' };
+  return { px: css * ratio, limit: null };
+}
+
+/**
+ * An acceleration as a readable quantity.
+ *
+ * @param {number} a - Simulation acceleration units
+ * @returns {string} For example "5.9 mm/s²"
+ */
+function formatAcceleration(a) {
+  if (!isPhysical()) return withUnit(sig(a), 'u/t²');
+  const ms2 = (a * velocityUnitToMs()) / timeUnitSeconds();
+  const m = Math.abs(ms2);
+  if (m >= 1) return withUnit(sig(ms2), 'm/s²');
+  if (m >= 1e-3) return withUnit(sig(ms2 * 1e3), 'mm/s²');
+  return withUnit(sig(ms2 * 1e6), 'µm/s²');
+}
+
+/**
+ * What one centimetre of arrow stands for, as a quantity.
+ *
+ * @param {'v'|'a'} kind - Which kind
+ * @returns {string} For example "12 km/s"
+ */
+function perCentimetre(kind) {
+  const k = arrowScales[kind];
+  if (!(k > 0)) return '';
+  const unit = CSS_PX_PER_CM / k;
+  return kind === 'v' ? formatSpeed(unit) : formatAcceleration(unit);
+}
 
 /**
  * Draw the vector overlay for one body.
@@ -177,7 +347,8 @@ const arrowScale = (magnitude, target) =>
  * @param {object} body - The selected body
  * @param {Function} toScreen - World-to-screen transform
  * @param {object} settings - Live settings
- * @returns {?object} What was drawn, for tests: the vectors in world units
+ * @returns {?object} What was drawn, for tests: the vectors in world units,
+ *   their magnitudes, the scale note and which limit (if any) each arrow met
  */
 export function drawBodyVectors(ctx, body, toScreen, settings) {
   if (!body || body.alive === false) return null;
@@ -186,23 +357,22 @@ export function drawBodyVectors(ctx, body, toScreen, settings) {
   if (!wantV && !wantA) return null;
 
   const origin = toScreen(body.pos);
+  const ratio = canvasRatio(ctx);
   const drawn = { velocity: null, total: null, sources: [] };
-
-  // A single length both classes are drawn against, so the two arrows are
-  // comparable in prominence and neither can dominate the picture by accident.
-  const BASE = 78;
+  const maxima = sceneMaxima();
 
   if (wantV) {
     const speed = Math.hypot(body.vel.x, body.vel.y);
-    const k = arrowScale(speed, BASE);
-    if (k > 0) {
+    const k = followScale('v', Math.max(maxima.v, speed));
+    if (speed > 0 && k > 0) {
+      const len = arrowLength(speed, k, ratio);
       // The canvas is not transformed here, so the world's +y has to be flipped
       // by hand: an overlay drawn in screen space with the world's sign would
       // point the velocity arrow at the mirror image of the motion, which is
       // exactly the kind of error the overlay exists to prevent.
       const tip = {
-        x: origin.x + body.vel.x * k,
-        y: origin.y - body.vel.y * k,
+        x: origin.x + (body.vel.x / speed) * len.px,
+        y: origin.y - (body.vel.y / speed) * len.px,
       };
       arrow(ctx, origin, tip, {
         color: VELOCITY_COLOR,
@@ -210,6 +380,9 @@ export function drawBodyVectors(ctx, body, toScreen, settings) {
         label: 'v',
       });
       drawn.velocity = { x: body.vel.x, y: body.vel.y };
+      drawn.speed = speed;
+      drawn.velocityLimit = len.limit;
+      drawn.velocityScale = perCentimetre('v');
     }
   }
 
@@ -217,8 +390,8 @@ export function drawBodyVectors(ctx, body, toScreen, settings) {
     const parts = accelerationBreakdown(body);
     if (parts) {
       const mag = Math.hypot(parts.total.ax, parts.total.ay);
-      const k = arrowScale(mag, BASE);
-      if (k > 0) {
+      const k = followScale('a', Math.max(maxima.a, mag));
+      if (mag > 0 && k > 0) {
         // The components go down first and the total on top of them, so that
         // where a single source accounts for nearly all of the pull the total
         // is the arrow you see rather than the one hidden underneath.
@@ -235,11 +408,17 @@ export function drawBodyVectors(ctx, body, toScreen, settings) {
           const shown = parts.sources.slice(0, MAX_SOURCE_ARROWS);
           for (const s of shown) {
             const sm = Math.hypot(s.ax, s.ay);
-            if (!(sm * k > 6)) continue;
+            // Same scale as the total, no floor: a component too small to see
+            // is left out rather than drawn at a length it does not have.
+            const px = Math.min(sm * k, ARROW_CEIL_PX) * ratio;
+            if (!(px > 6)) continue;
             arrow(
               ctx,
               origin,
-              { x: origin.x + s.ax * k, y: origin.y - s.ay * k },
+              {
+                x: origin.x + (s.ax / sm) * px,
+                y: origin.y - (s.ay / sm) * px,
+              },
               {
                 color: sourceColor(s.id),
                 width: 1.8,
@@ -252,16 +431,20 @@ export function drawBodyVectors(ctx, body, toScreen, settings) {
           }
         }
 
+        const len = arrowLength(mag, k, ratio);
         arrow(
           ctx,
           origin,
           {
-            x: origin.x + parts.total.ax * k,
-            y: origin.y - parts.total.ay * k,
+            x: origin.x + (parts.total.ax / mag) * len.px,
+            y: origin.y - (parts.total.ay / mag) * len.px,
           },
           { color: ACCEL_COLOR, width: 3, label: 'a' }
         );
         drawn.total = { x: parts.total.ax, y: parts.total.ay };
+        drawn.pull = mag;
+        drawn.pullLimit = len.limit;
+        drawn.pullScale = perCentimetre('a');
         drawn.sourceCount = parts.sources.length;
       }
     }
@@ -279,35 +462,73 @@ export function drawBodyVectors(ctx, body, toScreen, settings) {
  * control rail on a desktop window, and a legend behind a panel is a legend
  * nobody reads.
  *
+ * An arrow row carries the magnitude it shows, so the value is in the text and
+ * not only in the colour and the length. A `note` row has no swatch: it is the
+ * scale of the arrows above it, or how long the trails are.
+ *
  * @param {?object} drawn - What drawBodyVectors reported
- * @returns {Array<{color: string, label: string, dash: boolean}>} Rows
+ * @param {object} [settings] - The live settings; with show_trails on, the
+ *   trail's span is stated whether or not an arrow was drawn
+ * @returns {Array<{color: string, label: string, dash: boolean, note?: boolean}>} Rows
  */
-export function vectorLegendRows(drawn) {
-  if (!drawn) return [];
+export function vectorLegendRows(drawn, settings) {
   const rows = [];
-  if (drawn.velocity) {
-    rows.push({
-      color: VELOCITY_COLOR,
-      label: t('vector.velocity'),
-      dash: false,
-    });
-  }
-  if (drawn.total) {
-    rows.push({
-      color: ACCEL_COLOR,
-      label:
+  const note = label =>
+    rows.push({ color: 'transparent', label, dash: false, note: true });
+  if (drawn) {
+    if (drawn.velocity) {
+      rows.push({
+        color: VELOCITY_COLOR,
+        label:
+          drawn.speed > 0
+            ? `${t('vector.velocity')} ${formatSpeed(drawn.speed)}`
+            : t('vector.velocity'),
+        dash: false,
+      });
+    }
+    if (drawn.total) {
+      const name =
         drawn.sources.length > 0
           ? t('vector.acceleration.total')
-          : t('vector.acceleration'),
-      dash: false,
-    });
+          : t('vector.acceleration');
+      rows.push({
+        color: ACCEL_COLOR,
+        label:
+          drawn.pull > 0 ? `${name} ${formatAcceleration(drawn.pull)}` : name,
+        dash: false,
+      });
+    }
+    for (const s of drawn.sources) {
+      rows.push({
+        color: sourceColor(s.id),
+        label: t('vector.source', { body: s.label }),
+        dash: true,
+      });
+    }
+    const limited = limit => (limit ? ` (${t(`vector.limit.${limit}`)})` : '');
+    if (drawn.velocityScale) {
+      note(
+        `${t('vector.scale.velocity', { value: drawn.velocityScale })}${limited(drawn.velocityLimit)}`
+      );
+    }
+    if (drawn.pullScale) {
+      note(
+        `${t('vector.scale.acceleration', { value: drawn.pullScale })}${limited(drawn.pullLimit)}`
+      );
+    }
   }
-  for (const s of drawn.sources) {
-    rows.push({
-      color: sourceColor(s.id),
-      label: t('vector.source', { body: s.label }),
-      dash: true,
-    });
+  if (settings && settings.show_trails) {
+    note(
+      t('vector.trails', {
+        span: formatTime(
+          trailSpanTime(
+            physicsSettings.trail_length,
+            physicsSettings.max_timestep,
+            physicsSettings.sim_speed
+          )
+        ),
+      })
+    );
   }
   return rows;
 }
@@ -535,6 +756,7 @@ export function drawPotentialWell(ctx, canvas, toWorld, G, softening, sources) {
 
 /** Forget the cached field. Called when a new world is built. */
 export function resetPotentialCache() {
+  resetVectorScale();
   potentialKey = '';
   potentialCanvas = null;
   potentialCtx = null;

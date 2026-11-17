@@ -3179,7 +3179,7 @@ export const INSTRUCTOR_CONTENT = {
       },
       {
         name: 'A trail long enough to close the loop',
-        text: 'The scenario holds about 110 days of history, a little longer than a whole retrograde episode.',
+        text: 'The scenario holds about a year of history, several times a whole retrograde episode of about 72 days.',
       },
     ],
     misconceptions: [

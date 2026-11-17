@@ -17,11 +17,7 @@ import {
   StarObject,
   DT,
 } from '../js/physics.js';
-import {
-  getTrailTime,
-  trailSpan,
-  setDetailScale,
-} from '../js/engine/state.js';
+import { getTrailTime, trailSpan, setDetailScale } from '../js/engine/state.js';
 import { setTier } from '../js/quality.js';
 import { frameAdvance, substepPlan } from '../js/timestep.js';
 import {
@@ -166,9 +162,34 @@ describe('a trail spans a stated time', () => {
     expect(planet.trail.length).toBeLessThan(40);
   });
 
-  test('a speed other than 1 does not stretch the trail', () => {
+  test('a world built at a faster speed keeps the trail it was tuned for', () => {
+    // A scenario's trail length was chosen at its own speed: the span is
+    // trail_length reference steps at that speed, so it is longer in time than
+    // the same number at speed 1, and the same at any frame rate.
+    const spans = {};
+    for (const fps of [30, 144]) {
+      const planet = build(40);
+      updatePhysicsSettings({ sim_speed: 4 });
+      const advance = frameAdvance(1 / fps, 4, DT);
+      const plan = substepPlan(advance, 0);
+      for (let f = 0; f < fps * 8; f++) {
+        for (let s = 0; s < plan.substeps; s++) updatePhysics(plan.step);
+      }
+      spans[fps] = spanOf(planet);
+      updatePhysicsSettings({ sim_speed: 1 });
+    }
+    expect(trailSpan()).toBeCloseTo(trailSpanTime(40, 0, 1), 12);
+    updatePhysicsSettings({ sim_speed: 4 });
+    expect(trailSpan()).toBeCloseTo(trailSpanTime(40, 0, 4), 12);
+    expect(trailSpanTime(40, 0, 4)).toBeCloseTo(4 * trailSpanTime(40, 0, 1), 9);
+    updatePhysicsSettings({ sim_speed: 1 });
+    expect(spans[30] / spans[144]).toBeGreaterThan(0.95);
+    expect(spans[30] / spans[144]).toBeLessThan(1.05);
+  });
+
+  test('moving the live speed control does not change the span', () => {
     const planet = build(40);
-    // Five times the speed: the frame advances five times as far.
+    // Five times the speed on the live control, which does not push settings.
     const advance = frameAdvance(1 / 60, 5, DT);
     for (let f = 0; f < 200; f++) {
       const plan = substepPlan(advance, 0);
