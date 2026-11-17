@@ -222,11 +222,19 @@ export function createPlot(svg, hooks) {
    *   overlays?: Array<{label: string, points: Array<[number, number]>}>}} view
    *   - selection is ./select.js's, for a view that shows one; overlays are
    *   curves in the axes' units, broken where a point is not finite; the x
-   *   axis spans xAlso too; yScale is ./log.js's.
+   *   axes span xAlso and yAlso too; yScale is ./log.js's.
    */
   function draw(
     o,
-    { xColumn, yColumn, selection, overlays = [], yScale, xAlso = [] }
+    {
+      xColumn,
+      yColumn,
+      selection,
+      overlays = [],
+      yScale,
+      xAlso = [],
+      yAlso = [],
+    }
   ) {
     const xc = columnOf(o, xColumn);
     const yc = columnOf(o, yColumn);
@@ -264,6 +272,10 @@ export function createPlot(svg, hooks) {
     for (const v of xAlso) {
       x0 = Math.min(x0, v);
       x1 = Math.max(x1, v);
+    }
+    for (const v of yAlso) {
+      y0 = Math.min(y0, v);
+      y1 = Math.max(y1, v);
     }
     if (yScale) {
       y0 = yScale.f(y0);
