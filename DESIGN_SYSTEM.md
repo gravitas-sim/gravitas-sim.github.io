@@ -242,7 +242,7 @@ after can be shown beside its before (`tools/visual-matrix.mjs`).
   English and Spanish: 108 cells, each with the canvas, the viewport and the
   viewport with the focus ring on one control. The images are an output and
   stay outside the repository, in
-  `/Users/carl/Desktop/Gravitas/visual-baseline/v4-f1c30f6f/`;
+  `visual-baseline/v4-f1c30f6f/ in the folder that holds the roadmap files`;
   `tests/fixtures/visual-baseline.json` holds the table of what was captured,
   with image hashes, clocks and records, and `--compare` says which cells a
   later capture changed.

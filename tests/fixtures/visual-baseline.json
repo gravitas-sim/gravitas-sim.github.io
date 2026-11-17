@@ -3,7 +3,7 @@
   "base": "v4 at f1c30f6f (the 3.0 drawing; this change draws nothing)",
   "tree": "84532c50",
   "machine": "headless Chromium (Playwright), device pixel ratio 1, reduced motion, English or Spanish, one worker",
-  "images": "/Users/carl/Desktop/Gravitas/visual-baseline/v4-f1c30f6f/ (outside the repository): <cell id>-canvas.png, -viewport.png, -focus.png, <cell id>.record.json",
+  "images": "visual-baseline/v4-f1c30f6f/ in the folder that holds the roadmap files (outside the repository): <cell id>-canvas.png, -viewport.png, -focus.png, <cell id>.record.json",
   "reproducibility": "Each cell was captured twice. 49 of 108 repeat (identical, inside the playback bar only, or under 6 pixels); 59 do not (47 lesson cells: all of Weighing the Stars, Galilean Resonance and Moon image, 8 of Transit Lab, 3 of Kepler; 12 sandbox cells: 8 binary, 3 crowded, 1 close world). The staged-star lessons run a physics clock the capture cannot hold; a cell that did not repeat is compared by eye or by crop, never by hash alone.",
   "failsByDesign": {
     "count": 41,
