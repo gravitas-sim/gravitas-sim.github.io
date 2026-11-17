@@ -92,7 +92,6 @@ export const ES = {
 
   // --- Application chrome ----------------------------------------------------
   'chrome.readout.label': 'Lectura de la simulación',
-  'chrome.scenarioInfo.label': 'Información del escenario',
   'chrome.mobileMenuToggle.hint': 'Mostrar los controles de la simulación',
   'chrome.mobileMenuToggle.label': 'Abrir el menú de controles',
   'chrome.tutorial.hint':
@@ -117,11 +116,11 @@ export const ES = {
   'rail.settings.hint':
     'Abrir el panel completo de ajustes: número de objetos, gravedad, aspecto visual y rendimiento. Los cambios estructurales reinician la simulación; el resto se aplica en directo.',
   'rail.refreshScenario.hint':
-    'Reconstruir el escenario actual desde cero, descartando todo lo añadido o modificado.',
+    'Reconstruir este escenario desde su inicio con una semilla aleatoria nueva: los cuerpos que añadiste o cambiaste desaparecen, la cámara vuelve a la vista del escenario, el reloj vuelve a cero y la simulación sigue en marcha. Tus ajustes se conservan.',
   'rail.resetAll.hint':
-    'Devolver todos los ajustes a sus valores de fábrica y cargar el escenario Agujeros negros binarios.',
+    'Devolver todos los ajustes a sus valores por defecto y cargar el escenario Agujeros negros binarios con una semilla aleatoria nueva: la cámara vuelve a su vista, el reloj vuelve a cero y la simulación sigue en marcha.',
   'rail.cleanSim.hint':
-    'Vaciar el universo hasta dejar espacio vacío, para construir un sistema desde cero haciendo clic y arrastrando.',
+    'Quitar todos los cuerpos para dejar espacio vacío donde construir. Los ajustes, la semilla y el reloj se conservan; la cámara vuelve a 1\u00d7 en el centro, la velocidad vuelve a 1\u00d7 y la simulación sigue en marcha.',
 
   // --- Rail: state -----------------------------------------------------------
   'rail.railState.hint': 'Mostrar u ocultar los controles de estado',
@@ -169,7 +168,8 @@ export const ES = {
     'Abrir el panel de astrometría: la diminuta elipse que la estrella traza en el cielo mientras su planeta la hace girar alrededor del centro de masas común. Donde la velocidad radial falla, en una órbita vista de frente, la astrometría funciona mejor.',
   'rail.slowDown.hint': 'Reducir la velocidad en 0,5×',
   'rail.speedUp.hint': 'Aumentar la velocidad en 0,5×',
-  'rail.resetView.hint': 'Recentrar la cámara y volver a la ampliación 1× (R).',
+  'rail.resetView.hint':
+    'Centrar la cámara en los cuerpos y ajustar el zoom para que quepan. Los cuerpos, los ajustes, el reloj y la pausa no cambian.',
   'rail.shortcuts.hint': 'Atajos de teclado (?)',
 
   // --- Rail: learn -----------------------------------------------------------
@@ -200,9 +200,9 @@ export const ES = {
   'rail.loadScenario': 'Cargar escenario',
   'rail.investigations': 'Investigaciones',
   'rail.settings': 'Ajustes',
-  'rail.refreshScenario': 'Recargar escenario',
-  'rail.resetAll': 'Restablecer valores',
-  'rail.cleanSim': 'Simulación vacía',
+  'rail.refreshScenario': 'Reiniciar escenario',
+  'rail.resetAll': 'Restablecer ajustes y escenario',
+  'rail.cleanSim': 'Quitar todos los cuerpos',
   'rail.railState': 'Estado',
   'rail.save': 'Guardar estado',
   'rail.load': 'Cargar estado',
@@ -254,7 +254,7 @@ export const ES = {
   'rail.toggleAstrometry': 'Astrometría',
   'rail.slowDown': 'Lento',
   'rail.speedUp': 'Rápido',
-  'rail.resetView': 'Restablecer vista',
+  'rail.resetView': 'Ajustar vista a los cuerpos',
   'rail.shortcuts': 'Atajos',
   'rail.objectType.choose': 'Añadir objeto',
   'rail.objectType.placing': 'Haz clic para colocar · Esc',
@@ -264,7 +264,7 @@ export const ES = {
 
   // --- Readout ---------------------------------------------------------------
   'readout.overlayMinimize.hint': 'Minimizar',
-  'readout.closeScenarioInfo.hint': 'Descartar esta descripción del escenario',
+  'readout.aboutScenario': 'Acerca de este escenario',
   'readout.closeMobileInstructions.hint':
     'Descartar estas instrucciones táctiles',
   'readout.mobileInstructions': 'Controles táctiles',
@@ -1134,7 +1134,7 @@ export const ES = {
   'shortcut.live': 'Volver al directo',
   'shortcut.pan': 'Desplazar la vista',
   'shortcut.zoom': 'Acercar y alejar',
-  'shortcut.resetView': 'Restablecer la vista',
+  'shortcut.resetView': 'Centrar la vista a 1\u00d7',
   'shortcut.investigations': 'Abrir las investigaciones guiadas',
   'shortcut.share': 'Compartir un enlace a esta simulación',
   'shortcut.export': 'Exportar los datos grabados en CSV',

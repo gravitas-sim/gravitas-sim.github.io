@@ -33,7 +33,6 @@
   body.presentation-embed #overlay,
   body.presentation-embed #tutorialBtn,
   body.presentation-embed #tutorialPopup,
-  body.presentation-embed #scenarioInfoBox,
   body.presentation-embed #scenarioInfoDisplay,
   body.presentation-embed #sonificationControl,
   body.presentation-embed #shareModal,
@@ -262,36 +261,6 @@
   body.presentation-lecture #overlay * {
     color: var(--text-primary);
     text-shadow: none;
-  }
-
-  /* The scenario card is the title of the slide, and at projection distance it
-     is the single most important piece of text on the screen. */
-  /* The card is normally centered in the band between the readout and the rail
-     by a transform built from two custom properties. In lecture mode the rail
-     is gone and the readout is much wider, and the arithmetic that assumes both
-     put the card a third of its width off the left edge of a 1024px screen.
-     Rather than adjust the inputs to a formula that no longer describes the
-     layout, it is pinned outright: anchored to the right, clear of the readout,
-     with no transform for an animation to fight over. */
-  body.presentation-lecture #scenarioInfoBox,
-  body.presentation-lecture .scenario-info-box {
-    left: auto;
-    right: var(--space-4);
-    width: min(44rem, calc(100vw - 22rem - 2 * var(--space-4)));
-    max-width: none;
-    transform: none;
-    font-size: var(--text-lg);
-    line-height: var(--leading-normal);
-  }
-
-  body.presentation-lecture #scenarioInfoBox .scenario-info-content {
-    padding: var(--space-4) var(--space-5);
-  }
-
-  body.presentation-lecture #scenarioInfoBox h2,
-  body.presentation-lecture #scenarioInfoBox h3 {
-    font-size: var(--text-2xl);
-    line-height: var(--leading-tight);
   }
 
   /* The inspector is what a lecturer opens to answer "how heavy is that one?".
@@ -529,16 +498,6 @@
       gap: var(--space-2);
     }
 
-    body.presentation-lecture #scenarioInfoBox,
-    body.presentation-lecture .scenario-info-box {
-      width: min(36rem, calc(100vw - 20rem - 2 * var(--space-3)));
-      right: var(--space-3);
-    }
-
-    body.presentation-lecture #scenarioInfoBox .scenario-info-content {
-      padding: var(--space-3) var(--space-4);
-    }
-
     /* The readout is reference rather than headline; it gives up a step before
        the scenario title does. */
     body.presentation-lecture #overlay {
@@ -774,34 +733,6 @@
 
     .attribution .attribution-sep {
       display: none;
-    }
-  }
-
-  /* ===========================================================================
-     7. The scenario card below the rail's breakpoint
-     ---------------------------------------------------------------------------
-     A pre-existing bug, fixed here because it lands squarely on the 1024x768
-     projector this pass had to validate against, and because half the card was
-     off the left edge of every laptop between about 740 and 1024 pixels wide.
-
-     Two rules were disagreeing across a cascade layer. css/styles.css, in the
-     `legacy` layer, pins the card with `left: 10px; right: 10px;
-     transform: none` below 1201px. css/components.css, in `components`, gives
-     it `left: 50%` and a transform that centers it in the band between the
-     readout and the rail. Layer order means the component transform wins while
-     the legacy `left` also applies, so the card was translated by half its own
-     width away from an edge it was already flush against.
-
-     Resetting the transform in the same layer as the one that set it is the
-     whole fix; the insets that were always intended then apply.
-     =========================================================================== */
-
-  @media (max-width: 1200px) {
-    #scenarioInfoBox,
-    .scenario-info-box {
-      transform: none;
-      width: auto;
-      max-width: none;
     }
   }
 }

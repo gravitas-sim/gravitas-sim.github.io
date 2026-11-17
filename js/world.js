@@ -181,83 +181,34 @@ const show_scenario_info = () => {
   }
 };
 
-// Enhanced scenario info box function
+// "About this scenario", the disclosure in the readout panel. It is closed
+// when a different scenario arrives and left as the reader set it when the same
+// one is rebuilt; a world with no scenario of its own (Clear All Bodies, a built
+// system) hides it.
 const show_enhanced_scenario_info = scenarioName => {
-  if (!scenarioName || !SCENARIO_INFO[scenarioName]) {
-    return;
-  }
-
-  // A lesson loads a scenario every time a step asks for one, and this card is
-  // 720px wide and lands on top of the instrument panel. During an
-  // investigation the step's own text is the introduction to the scenario, so
-  // the card is redundant as well as in the way.
-  if (document.body.classList.contains('investigation-open')) return;
-
   const infoBox = document.getElementById('scenarioInfoBox');
   const title = document.getElementById('scenarioInfoTitle');
   const summary = document.getElementById('scenarioInfoSummary');
   const features = document.getElementById('scenarioInfoFeatures');
-
-  // The info card is optional chrome; a missing node must not abort
-  // initialize_simulation and leave the app half-built.
+  // Optional chrome: a missing node must not abort initialize_simulation.
   if (!infoBox || !title || !summary || !features) return;
+  const known = Boolean(scenarioName && SCENARIO_INFO[scenarioName]);
+  infoBox.hidden = !known;
+  if (!known) return;
 
-  // A card the reader closed does not come back for the same scenario - on
-  // Refresh, or an Apply that rebuilds it. A different scenario is new news.
-  if (infoBox.dataset.dismissed === scenarioName) return;
-  delete infoBox.dataset.dismissed;
-
-  // Set the title and summary. The key is kept on the element because the card
-  // outlives the call that wrote it: a language arriving late has to be able to
-  // ask which scenario is on screen.
+  if (infoBox.dataset.scenarioKey !== scenarioName) infoBox.open = false;
+  // The key stays on the element: a language arriving late asks which scenario
+  // is on screen (js/ui.js).
   infoBox.dataset.scenarioKey = scenarioName;
   title.textContent = scenarioTitle(scenarioName);
   summary.textContent = scenarioSummary(scenarioName);
 
-  // Populate features with relevant notices
   features.innerHTML = '';
   if (SETTINGS.enable_star_merging === false) {
     const li = document.createElement('li');
     li.className = 'merging-disabled-notice';
     li.textContent = t('scenarioCard.notice.mergingDisabledLong');
     features.appendChild(li);
-  }
-
-  // Whether anything is currently covering the simulation. The card is shown
-  // for eighteen seconds and then hides itself, so raising it under a
-  // full-screen layer would burn the whole eighteen seconds where nobody can
-  // read it: a first-time visitor would enter the sandbox to find the card that
-  // names their scenario already gone. Both start-up layers are checked, and
-  // the welcome screen through a body class, which needs no import of it.
-  const onboardingLayerUp = () => {
-    const splash = document.getElementById('splash');
-    const splashUp =
-      splash &&
-      !splash.classList.contains('hidden') &&
-      splash.style.display !== 'none';
-    return (
-      Boolean(splashUp) ||
-      document.body.classList.contains('welcome-open') ||
-      document.body.classList.contains('welcome-pending')
-    );
-  };
-
-  const raise = () => {
-    infoBox.classList.add('showUI');
-    setTimeout(() => infoBox.classList.remove('showUI'), 18000);
-  };
-
-  if (onboardingLayerUp()) {
-    const waitForClearScreen = () => {
-      if (onboardingLayerUp()) {
-        setTimeout(waitForClearScreen, 100);
-        return;
-      }
-      raise();
-    };
-    waitForClearScreen();
-  } else {
-    raise();
   }
 };
 // What Refresh rebuilds under 'None', which it would otherwise rebuild as an

@@ -243,24 +243,6 @@ document.addEventListener('DOMContentLoaded', () => {
       const { collapseReadoutOnSmallScreens } = await import('./controls.js');
       collapseReadoutOnSmallScreens();
 
-      // Show scenario info box after splash ends, unless a lesson has already
-      // started: a deep link straight into an investigation opens the panel
-      // before this fires, and the card lands on top of its instruments.
-      // Nor if the reader has already closed it: this runs 200 ms after the
-      // door closes, and a quick Escape in between used to be undone.
-      const scenarioInfoBox = document.getElementById('scenarioInfoBox');
-      if (
-        scenarioInfoBox &&
-        !document.body.classList.contains('investigation-open') &&
-        !(
-          scenarioInfoBox.dataset.dismissed &&
-          scenarioInfoBox.dataset.dismissed ===
-            scenarioInfoBox.dataset.scenarioKey
-        )
-      ) {
-        scenarioInfoBox.classList.add('showUI');
-      }
-
       // Show the narrow-screen menu button. The rail itself *is* the menu it
       // opens, so there is no separate dropdown to reveal.
       document.getElementById('mobileMenuToggle')?.classList.add('showUI');
@@ -298,8 +280,7 @@ document.addEventListener('DOMContentLoaded', () => {
    */
   const anotherOverlayUp = () =>
     document.body.classList.contains('welcome-open') ||
-    document.body.classList.contains('welcome-pending') ||
-    Boolean(document.querySelector('#scenarioInfoBox.showUI'));
+    document.body.classList.contains('welcome-pending');
 
   /**
    * The touch tips wait for the first touch on the simulation, and for the
