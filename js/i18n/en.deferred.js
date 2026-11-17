@@ -743,6 +743,27 @@ export const EN_DEFERRED = {
   'inv.import.needObject': 'Select an object with a measurable orbit first.',
   'inv.import.duplicate': 'You have already recorded that one.',
   'inv.import.full': 'All rows are filled. Clear one to import again.',
+  'inv.take.default': 'Take reading',
+  'inv.take.name': 'Take reading: {what}',
+  'inv.take.predict': 'Make your prediction first.',
+  'inv.take.none': '{what} is not showing, so there is nothing to read.',
+  'inv.take.done': 'Reading taken: {what}, {value}.',
+  'inv.take.from': 'Taken from {what}.',
+  'inv.take.typed': 'Typed by you.',
+  'inv.span.title': 'Interval reading',
+  'inv.span.from': 'From',
+  'inv.span.to': 'To',
+  'inv.span.step': 'Arrow keys move a bound by {step}.',
+  'inv.span.pick': 'Choose both bounds.',
+  'inv.span.few': 'Fewer than two points lie between the bounds.',
+  'inv.span.result':
+    '{n} points, {lo} to {hi}: mean {mean}, standard error {se}.',
+  'inv.span.clip': 'The bounds were cut to the data.',
+  'inv.span.note':
+    'The standard error is the scatter of these points over the square root of their number.',
+  'inv.span.take': 'Take interval reading',
+  'inv.span.done':
+    'Reading taken: {what}, mean {mean}, {n} points, standard error {se}.',
   'inv.action.finish': 'Finish',
   'inv.action.next': 'Next',
   'inv.probe.unavailable': 'Readout unavailable',
@@ -2752,11 +2773,6 @@ export const EN_DEFERRED = {
   'nb.neckPair.limit.stability':
     'Nothing here is about stability. Whether either path would stay where it is if nudged is a separate question with its own evidence.',
   // ---------------------------------------------------------------------------
-  // The gravitational-wave lab (js/gwWidgets.js, js/gwLab.js)
-  // ---------------------------------------------------------------------------
-  // Two rules run through all of this. The model is named as a model wherever
-  // it appears, and the published data is named as a measurement wherever it
-  // appears. Nothing here says "gravitational wave" without saying which.
   'gwW.lab.title': 'Gravitational-wave observing lab',
   'gwW.lab.note':
     'A model of two compact objects spiralling together, and the strain a detector would record from it. Leading-order inspiral only: it stops before the merger, and the readout says where.',
@@ -2982,13 +2998,6 @@ export const EN_DEFERRED = {
   'sound.shortcut': 'Mute or unmute sound',
 
   // ---------------------------------------------------------------------------
-  // Instrument prose moved out of the start-up download
-  // ---------------------------------------------------------------------------
-  // The dark-matter, transit and black-hole widget families, reachable only through
-  // js/widgets.js (the lazy lesson engine): every visitor was downloading thirteen
-  // kilobytes of instrument labels to not use them. Each module now calls
-  // ensureDeferredMessages() itself, as js/chaosWidgets.js does, so a test or an
-  // authoring preview that imports one directly still gets its strings.
   'dmW.mondTitle': 'The same curve, two explanations',
   'dmW.mondNote':
     'The halo fit and MOND, scored against the same points. Switch between them, and adjust the disc until each one matches. Watch what each of them needed to be told.',
@@ -3356,11 +3365,6 @@ export const EN_DEFERRED = {
     'A normalized overlap, and nothing more. It is not a signal-to-noise ratio, a probability, or evidence that anything was detected — establishing that needs a template bank, a background estimate and a trials factor, none of which are here.',
 
   // ---------------------------------------------------------------------------
-  // More prose moved out of the start-up download
-  // ---------------------------------------------------------------------------
-  // The front door, the tidal-disruption model, the activity bridge, the export dialog
-  // and the lesson engine load on demand, and so do their strings. The stellar phase
-  // and class names went with them: read only when an inspector card is built.
   'export.empty': 'There is nothing recorded to export yet.',
   'export.failed': 'Could not build that file.',
   'export.done': { one: 'Exported {n} row.', other: 'Exported {n} rows.' },
@@ -3404,11 +3408,6 @@ export const EN_DEFERRED = {
   'stellar.phase.neutron-star': 'Neutron star',
   'stellar.phase.black-hole': 'Black hole',
   'stellar.phase.unknown': 'Not modeled',
-  // ---------------------------------------------------------------------------
-  // The Stellar Lab (js/stellarWidgets.js, js/stellarLab.js)
-  // ---------------------------------------------------------------------------
-  // ---------------------------------------------------------------------------
-  // The evolutionary playback (js/stellarEvolutionWidgets.js)
   // ---------------------------------------------------------------------------
   'stelE.title': 'A star, from start to finish',
   'stelE.note':
@@ -3870,6 +3869,8 @@ export const EN_DEFERRED = {
     'Four examples, one per letter. Not an atlas, not a survey, and not a representative sample of anything — four stars that happened to be observed.',
   // The Stellar Lab's evidence
   'nb.source.stellar-lab': 'Stellar Lab',
+  'nb.source.lesson-reading': 'Investigation reading',
+  'nb.reading.note': 'As printed: {text}',
   'nb.source.binary-orbit': 'Binary orbit',
   'nb.source.observatory': 'Observatory measurement',
   'nb.source.inference-fit': 'Inference-core fit',
@@ -3992,11 +3993,6 @@ export const EN_DEFERRED = {
     'The gravity worker stopped, so gravity is now worked out on the main thread. The simulation is still correct, but may run more slowly.',
 
   // --- Words a lesson computes ----------------------------------------------
-  // None in English, on purpose. js/i18n/lesson.js looks a computed sentence up by an
-  // id made from what it says and returns the sentence itself when the locale has no
-  // entry, so an English entry could only repeat its source (all 139 did). The Spanish
-  // catalog keeps its translations under the same ids; tools/i18n-audit.mjs does not
-  // count them as orphans.
   'assign.roster.help':
     'The code rides on the link into every report, so one code can cover a whole class; it does not say which student made a report. To tell students apart, ask them to type their login or student number where the report asks for a name, or make one link per student.',
   'assign.kit': 'Open the distribution kit',

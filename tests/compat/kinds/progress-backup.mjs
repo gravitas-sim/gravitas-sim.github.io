@@ -16,7 +16,16 @@ export default {
     const { buildBackup } = await load('js/investigations/progressBackup.js');
     const b = buildBackup({
       lesson: lesson(),
-      responses: { 'tides:guess': 0, 'tides:ask': 2 },
+      responses: {
+        'tides:guess': 0,
+        'tides:ask': 2,
+        // A reading taken by a button press: the text as printed, its
+        // convention, and how it was taken (a sub-key an older build ignores).
+        'tides:measure:d': '3.2504',
+        'tides:measure:d:locale': 'en',
+        'tides:measure:d:src':
+          '{"k":"c","r":"period","x":"3.2504","l":"Period","b":"Alpha","t":12.5}',
+      },
       attempts: { 'tides:guess': 1 },
       visited: ['intro', 'guess'],
       stepSid: 'guess',

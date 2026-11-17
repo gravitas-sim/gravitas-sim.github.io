@@ -5,34 +5,6 @@
 // terminated the moment it answers. That is the whole isolation story: no
 // trial can inherit another's id counter, conservation baseline or caches,
 // because no two trials ever share a realm (MULTI_WORLD_DECISION.md).
-//
-// What this adds on top of "start a Worker":
-//
-//   concurrency    at most N realms at once, N from the device profile
-//   ordering       results are reported by trial index, whatever order they
-//                  finish in, so two runs of one manifest are comparable
-//                  line by line
-//   progress       every trial's fraction, and the run's
-//   cancellation   every running realm terminated, every queued trial
-//                  reported as canceled rather than dropped
-//   timeouts       a trial past its limit is terminated and reported; the
-//                  whole run stops at its own limit and says it did
-//   result caps    a trial whose answer would take the run past its byte
-//                  budget keeps its status and loses its numbers
-//   corruption     an answer that is not a trial result is a status, not an
-//                  exception
-//   checkpoints    trials already finished (from an earlier, interrupted run
-//                  of the same manifest) are not run again
-//
-// Checkpoints are per trial and nothing finer. Trials are independent and
-// each is a pure function of the manifest, its parameters and its seed, so a
-// finished trial is a finished fact; the state inside a running realm is a
-// physics world that has no serialization, so a trial interrupted halfway is
-// run again from the start. Only real outcomes are kept - a trial that was
-// canceled, timed out or lost its realm is a scheduling event, not a result.
-//
-// Workers are made by an injected `spawn`, so the tests can hand it realms
-// that hang, answer garbage or die, and the page hands it the real thing.
 // =============================================================================
 
 import { STATUS, isTrialResult } from './status.js';
