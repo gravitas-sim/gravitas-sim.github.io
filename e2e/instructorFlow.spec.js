@@ -15,7 +15,7 @@
 import { readFileSync } from 'node:fs';
 import AxeBuilder from '@axe-core/playwright';
 
-import { test, expect } from './fixtures.js';
+import { test, expect } from './workflow.js';
 import { buildBackup } from '../js/investigations/progressBackup.js';
 import { stepKey } from '../js/investigations/progressSchema.js';
 import {

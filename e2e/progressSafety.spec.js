@@ -13,7 +13,7 @@
 
 import { readFile } from 'node:fs/promises';
 import { join } from 'node:path';
-import { test, expect, openMore } from './fixtures.js';
+import { test, expect, openMore } from './workflow.js';
 
 /** The backup buttons are in the lesson panel's More (Prompt 167). */
 const openBackup = openMore;

@@ -9,7 +9,15 @@
 // comes back from storage exactly as it was written.
 // =============================================================================
 
-import { test, expect, openMore } from './fixtures.js';
+import {
+  test,
+  expect,
+  openMore,
+  saveLanguage,
+  storeProgress,
+  loadInvestigation,
+} from './workflow.js';
+import { buildBackup } from '../js/investigations/progressBackup.js';
 
 /** Open one step of a lesson directly, through the authoring preview. */
 async function openStep(app, page, lesson, step) {
@@ -158,11 +166,6 @@ test.describe('hints arrive one at a time, and only when asked', () => {
     await expect(page.locator('#investigationPanel')).toBeVisible();
 
     // Walk to the numeric step through the interface.
-    await page.evaluate(async () => {
-      const reg = await import('/js/data/investigations/registry.js');
-      const lesson = await reg.loadInvestigation('keplers-laws');
-      window.__sid = lesson.steps.find(s => s.sid === 'use-the-law').sid;
-    });
     for (let i = 0; i < 40; i++) {
       if (await page.locator('[data-numeric]').count()) break;
       const options = page.locator('#investigationBody .inv-option');
@@ -191,17 +194,14 @@ test.describe('hints arrive one at a time, and only when asked', () => {
     await check(page).click();
     await expect(feedback(page)).toHaveClass(/is-right/);
 
-    const stored = await page.evaluate(
-      sid => {
-        const raw = localStorage.getItem('gravitas_investigation_keplers-laws');
-        const data = raw ? JSON.parse(raw) : {};
-        return {
-          first: data.responses?.[`keplers-laws:${sid}`.concat(':first')],
-          current: data.responses?.[`keplers-laws:${sid}`],
-        };
-      },
-      await page.evaluate(() => window.__sid)
-    );
+    const stored = await page.evaluate(sid => {
+      const raw = localStorage.getItem('gravitas_investigation_keplers-laws');
+      const data = raw ? JSON.parse(raw) : {};
+      return {
+        first: data.responses?.[`keplers-laws:${sid}`.concat(':first')],
+        current: data.responses?.[`keplers-laws:${sid}`],
+      };
+    }, 'use-the-law');
 
     // The number they committed to before any help, kept beside the one they
     // arrived at. A report that only holds the second describes a different
@@ -252,25 +252,11 @@ test.describe('a saved answer comes back exactly as it was written', () => {
     // Resume on the numeric step, saved in the panel's own format, rather
     // than walking fifteen steps to reach it.
     await app.boot();
-    await page.evaluate(async lesson => {
-      const reg = await import('/js/data/investigations/registry.js');
-      const { writeProgress } =
-        await import('/js/investigations/progressSchema.js');
-      const inv = await reg.loadInvestigation(lesson);
-      localStorage.setItem(
-        `gravitas_investigation_${lesson}`,
-        JSON.stringify(
-          writeProgress({
-            lesson: inv,
-            responses: {},
-            attempts: {},
-            visited: [],
-            stepSid: 'use-the-law',
-            startedAt: new Date().toISOString(),
-          })
-        )
-      );
-    }, LESSON);
+    await storeProgress(page, LESSON, {
+      visited: [],
+      stepSid: 'use-the-law',
+      startedAt: new Date().toISOString(),
+    });
     await openAsStudent(page);
     await expect(answer(page)).toBeVisible();
 
@@ -324,23 +310,14 @@ test.describe('a saved answer comes back exactly as it was written', () => {
 
     // A real backup of this lesson with one value edited, which is all a
     // crafted file needs to be: it passes every check the restore makes.
-    const backup = await page.evaluate(
-      async ([lesson, value]) => {
-        const reg = await import('/js/data/investigations/registry.js');
-        const { buildBackup } =
-          await import('/js/investigations/progressBackup.js');
-        const inv = await reg.loadInvestigation(lesson);
-        return buildBackup({
-          lesson: inv,
-          responses: { [`${lesson}:measure-four-planets:p1_name`]: value },
-          attempts: {},
-          visited: [],
-          stepSid: 'measure-four-planets',
-          startedAt: new Date().toISOString(),
-        });
-      },
-      [LESSON, INJECTED]
-    );
+    const backup = buildBackup({
+      lesson: await loadInvestigation(LESSON),
+      responses: { [`${LESSON}:measure-four-planets:p1_name`]: INJECTED },
+      attempts: {},
+      visited: [],
+      stepSid: 'measure-four-planets',
+      startedAt: new Date().toISOString(),
+    });
     page.on('dialog', d => d.accept());
     await page.locator('#investigationBackupFile').setInputFiles({
       name: `${LESSON}.json`,
@@ -368,10 +345,7 @@ test.describe('in Spanish', () => {
     app,
   }) => {
     await app.boot({ url: '/?author=radial-velocity&step=17' });
-    await page.evaluate(async () => {
-      const i = await import('/js/i18n/index.js');
-      await i.setLocale('es');
-    });
+    await saveLanguage(page, 'es');
     await app.boot({ url: '/?author=radial-velocity&step=17' });
     await expect(page.locator('[data-numeric]')).toBeVisible();
 
@@ -393,10 +367,7 @@ test.describe('in Spanish', () => {
     // NaN: every derived column stayed blank and the step's own check never
     // ran, for anyone typing the way Spanish writes numbers.
     await app.boot({ url: '/?author=keplers-laws&step=15' });
-    await page.evaluate(async () => {
-      const i = await import('/js/i18n/index.js');
-      await i.setLocale('es');
-    });
+    await saveLanguage(page, 'es');
     await app.boot({ url: '/?author=keplers-laws&step=15' });
     const field = id => page.locator(`[data-field$=":${id}"]`);
     await expect(field('k_a')).toBeVisible();
@@ -422,10 +393,7 @@ test.describe('in Spanish', () => {
     // Opened as a student, not as an author, because an authoring preview
     // writes nothing and what is being checked is exactly what gets written.
     await app.boot();
-    await page.evaluate(async () => {
-      const i = await import('/js/i18n/index.js');
-      await i.setLocale('es');
-    });
+    await saveLanguage(page, 'es');
     await app.boot();
 
     await page.locator('#investigationsBtn').click();
@@ -454,14 +422,14 @@ test.describe('in Spanish', () => {
     await expect(answer(page)).toBeVisible();
 
     // Answer with a decimal comma, and be told it is right.
-    const typed = await page.evaluate(async () => {
-      const reg = await import('/js/data/investigations/registry.js');
-      const lesson = await reg.loadInvestigation('radial-velocity');
-      const step = lesson.steps.find(
-        s => s.kind === 'numeric' && Number.isFinite(s.answer)
-      );
-      return { sid: step.sid, text: String(step.answer).replace('.', ',') };
-    });
+    const rv = await loadInvestigation('radial-velocity');
+    const rvStep = rv.steps.find(
+      s => s.kind === 'numeric' && Number.isFinite(s.answer)
+    );
+    const typed = {
+      sid: rvStep.sid,
+      text: String(rvStep.answer).replace('.', ','),
+    };
     await answer(page).fill(typed.text);
     await check(page).click();
     await expect(feedback(page)).toHaveClass(/is-right/);
@@ -484,10 +452,7 @@ test.describe('in Spanish', () => {
 
     // Switch the interface to English and reopen the lesson. The verdict on
     // work already done must not move.
-    await page.evaluate(async () => {
-      const i = await import('/js/i18n/index.js');
-      await i.setLocale('en');
-    });
+    await saveLanguage(page, 'en');
     await app.boot();
     await page.locator('#investigationsBtn').click();
     await page.locator('[data-investigation="radial-velocity"]').click();

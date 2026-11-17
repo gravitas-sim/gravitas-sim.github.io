@@ -17,7 +17,7 @@
 
 import AxeBuilder from '@axe-core/playwright';
 import { readFileSync } from 'node:fs';
-import { test, expect } from './fixtures.js';
+import { test, expect } from './workflow.js';
 
 const DIST = process.env.GRAVITAS_E2E_TARGET === 'dist';
 const TAGS = [
@@ -430,10 +430,22 @@ test.describe('the observatory offline', () => {
     const deadline = Date.now() + 120_000;
     let status = null;
     while (Date.now() < deadline) {
-      status = await page.evaluate(async () => {
-        const m = await import('/js/offline.js');
-        return m.cacheStatus(2000);
-      });
+      // The page's own question to its worker (what js/offline.js asks): a
+      // `status` message on a MessageChannel, answered with the cache counts.
+      status = await page.evaluate(
+        () =>
+          new Promise(resolve => {
+            const worker = window.navigator.serviceWorker?.controller;
+            if (!worker) return resolve(null);
+            const channel = new window.MessageChannel();
+            const timer = window.setTimeout(() => resolve(null), 2000);
+            channel.port1.onmessage = event => {
+              window.clearTimeout(timer);
+              resolve(event.data);
+            };
+            worker.postMessage({ type: 'status' }, [channel.port2]);
+          })
+      );
       if (status && status.cachedCount >= status.precacheCount) break;
       await page.waitForTimeout(500);
     }

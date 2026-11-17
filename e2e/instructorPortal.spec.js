@@ -22,7 +22,7 @@
 
 import AxeBuilder from '@axe-core/playwright';
 
-import { test, expect } from './fixtures.js';
+import { test, expect } from './workflow.js';
 import { MANIFEST } from '../js/data/investigations/manifest.js';
 import { ACTIVITIES } from '../js/data/activities.js';
 import { DEEPER } from '../js/investigations/depthAll.js';

@@ -7,7 +7,7 @@
 // deeper depth. Nothing is sent anywhere; every check reads the page.
 // =============================================================================
 
-import { test, expect, openMore } from './fixtures.js';
+import { test, expect, openMore, storeProgress } from './workflow.js';
 
 const CARD = '#scenarioInfoBox';
 const orient = page => page.locator('#welOrient');
@@ -125,26 +125,7 @@ const LESSON = 'keplers-laws';
 
 async function resumeAtEnd(page, app, id = LESSON) {
   await app.boot();
-  await page.evaluate(async id => {
-    const reg = await import('/js/data/investigations/registry.js');
-    const { writeProgress } =
-      await import('/js/investigations/progressSchema.js');
-    const lesson = await reg.loadInvestigation(id);
-    localStorage.setItem(
-      `gravitas_investigation_${id}`,
-      JSON.stringify(
-        writeProgress({
-          lesson,
-          responses: {},
-          attempts: {},
-          visited: lesson.steps.map(s => s.sid),
-          stepSid: lesson.steps.at(-1).sid,
-          startedAt: null,
-          spent: 125,
-        })
-      )
-    );
-  }, id);
+  await storeProgress(page, id, { spent: 125 });
   await page.evaluate(id => {
     location.hash = `#investigation=${id}`;
   }, id);

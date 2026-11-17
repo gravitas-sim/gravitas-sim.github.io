@@ -14,7 +14,7 @@
 // =============================================================================
 
 import AxeBuilder from '@axe-core/playwright';
-import { test, expect } from './fixtures.js';
+import { test, expect } from './workflow.js';
 
 const LESSON = 'keplers-laws';
 const PROGRESS = JSON.stringify({

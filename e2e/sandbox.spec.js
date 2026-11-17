@@ -6,7 +6,7 @@
 // most needs to not be silently broken.
 // =============================================================================
 
-import { test, expect, STORAGE_KEYS } from './fixtures.js';
+import { test, expect, STORAGE_KEYS, readoutBodies } from './workflow.js';
 
 test.describe('loading from a clean browser', () => {
   test(
@@ -98,14 +98,10 @@ test.describe('the scenario gallery', () => {
       await expect(modal).toBeHidden();
       await app.waitForBodies(2);
 
-      // current_scenario_name, not SETTINGS.preset_scenario: the latter is a
-      // sentinel that apply_preset resets to 'None' once it has consumed it, so
-      // reading it after a build tells you nothing about what is loaded.
-      const loaded = await page.evaluate(async () => {
-        const ui = await import('/js/ui.js');
-        return ui.current_scenario_name;
-      });
-      expect(loaded).toMatch(/TRAPPIST/i);
+      // The scenario card names what was loaded.
+      await expect(page.locator('#scenarioInfoTitle')).toContainText(
+        /TRAPPIST/i
+      );
     }
   );
 
@@ -127,14 +123,14 @@ test.describe('the scenario gallery', () => {
 test.describe('the space bar', () => {
   test('pauses the simulation, and resumes it', async ({ page, app }) => {
     await app.boot();
-    const paused = () =>
-      page.evaluate(async () => (await import('/js/ui.js')).state.paused);
+    const paused = () => app.isPaused();
 
-    expect(await paused()).toBe(false);
+    // The readout paints the run state a frame after the key.
+    await expect.poll(paused).toBe(false);
     await page.keyboard.press('Space');
-    expect(await paused()).toBe(true);
+    await expect.poll(paused).toBe(true);
     await page.keyboard.press('Space');
-    expect(await paused()).toBe(false);
+    await expect.poll(paused).toBe(false);
   });
 
   test('exactly one handler answers it', async ({ page, app }) => {
@@ -144,19 +140,16 @@ test.describe('the space bar', () => {
     // broken ones, which is why this checks the cause and the test above
     // checks the effect.
     await app.boot();
+    // The readout paints the run state only when it changes, so two handlers
+    // that each toggle once leave it where it was and paint nothing. One
+    // handler paints exactly one change, to paused.
     const writes = await page.evaluate(async () => {
-      const ui = await import('/js/ui.js');
+      const el = document.getElementById('overlayStatus');
       const seen = [];
-      let value = ui.state.paused;
-      const original = Object.getOwnPropertyDescriptor(ui.state, 'paused');
-      Object.defineProperty(ui.state, 'paused', {
-        configurable: true,
-        get: () => value,
-        set(next) {
-          seen.push(next);
-          value = next;
-        },
-      });
+      const watch = new window.MutationObserver(() =>
+        seen.push(el.dataset.state)
+      );
+      watch.observe(el, { attributes: true, attributeFilter: ['data-state'] });
       window.dispatchEvent(
         new window.KeyboardEvent('keydown', {
           key: ' ',
@@ -164,11 +157,11 @@ test.describe('the space bar', () => {
           bubbles: true,
         })
       );
-      await new Promise(r => window.setTimeout(r, 50));
-      if (original) Object.defineProperty(ui.state, 'paused', original);
+      await new Promise(r => window.setTimeout(r, 300));
+      watch.disconnect();
       return seen;
     });
-    expect(writes).toEqual([true]);
+    expect(writes).toEqual(['paused']);
   });
 
   test('the transport button follows the key', async ({ page, app }) => {
@@ -198,9 +191,7 @@ test.describe('the space bar', () => {
     });
     await page.keyboard.press('Space');
     await page.waitForTimeout(100);
-    expect(
-      await page.evaluate(async () => (await import('/js/ui.js')).state.paused)
-    ).toBe(false);
+    expect(await app.isPaused()).toBe(false);
     await page.evaluate(() => document.getElementById('spaceProbe')?.remove());
   });
 
@@ -226,9 +217,7 @@ test.describe('the space bar', () => {
       'data-presses',
       '1'
     );
-    expect(
-      await page.evaluate(async () => (await import('/js/ui.js')).state.paused)
-    ).toBe(false);
+    expect(await app.isPaused()).toBe(false);
     await page.evaluate(() =>
       document.getElementById('spaceButtonProbe')?.remove()
     );
@@ -270,11 +259,8 @@ test.describe('the transport controls', () => {
     await app.boot();
     await app.loadScenario('binary-pair');
 
-    const speedOf = () =>
-      page.evaluate(async () => {
-        const ui = await import('/js/ui.js');
-        return ui.SETTINGS.sim_speed;
-      });
+    const speedOf = async () =>
+      parseFloat(await page.locator('#speedDisplay').innerText());
 
     const before = await speedOf();
     await app.railControl('speedUpBtn');
@@ -329,20 +315,7 @@ test.describe('the transport controls', () => {
 // =============================================================================
 test.describe('placing an object is deliberate', () => {
   /** Every body in the world, however it is classified. */
-  const bodyCount = page =>
-    page.evaluate(async () => {
-      const p = await import('/js/physics.js');
-      return (
-        p.bh_list.length +
-        p.stars.length +
-        p.planets.length +
-        p.gas_giants.length +
-        p.asteroids.length +
-        p.comets.length +
-        p.neutron_stars.length +
-        p.white_dwarfs.length
-      );
-    });
+  const bodyCount = page => readoutBodies(page);
 
   /**
    * Stop the world, so the only thing that can change the body count is a click.
@@ -351,11 +324,7 @@ test.describe('placing an object is deliberate', () => {
    * works; what stops is the merging and absorbing that was moving the number
    * underneath these assertions.
    */
-  const freezeWorld = page =>
-    page.evaluate(async () => {
-      const physics = await import('/js/physics.js');
-      physics.state.paused = true;
-    });
+  const freezeWorld = (_page, app) => app.setPaused(true);
 
   test('a click on empty space adds nothing until a type is chosen', async ({
     page,
@@ -367,7 +336,7 @@ test.describe('placing an object is deliberate', () => {
     // bodies can merge while a test is counting them, and a count that drops
     // by one between two reads looks exactly like a click that did something
     // - which is how this test came to fail on runs where nothing was wrong.
-    await freezeWorld(page);
+    await freezeWorld(page, app);
 
     const before = await bodyCount(page);
     expect(before).toBeGreaterThan(0);
@@ -388,7 +357,7 @@ test.describe('placing an object is deliberate', () => {
   }) => {
     await app.boot();
     await page.waitForTimeout(500);
-    await freezeWorld(page);
+    await freezeWorld(page, app);
 
     await page.click('#objectTypeBtn');
     await expect(page.locator('#objectTypePicker')).toBeVisible();
@@ -399,11 +368,10 @@ test.describe('placing an object is deliberate', () => {
     await page.click('.object-picker-item[data-object-type="GasGiant"]');
     await expect(page.locator('#objectTypePicker')).toBeHidden();
     await expect(page.locator('body')).toHaveClass(/is-adding/);
-    expect(
-      await page.evaluate(
-        async () => (await import('/js/ui.js')).SETTINGS.input_object_type
-      )
-    ).toBe('GasGiant');
+    await expect(page.locator('#objectTypeBtn')).toHaveAttribute(
+      'title',
+      /gas giant/i
+    );
 
     const armed = await bodyCount(page);
     await page.mouse.click(1000, 620);

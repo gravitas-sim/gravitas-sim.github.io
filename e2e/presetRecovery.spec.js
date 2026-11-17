@@ -21,7 +21,7 @@
 // compared 4.5 million with 4.5 million and passed over a broken preset.
 // =============================================================================
 
-import { test, expect } from './fixtures.js';
+import { test, expect } from './workflow.js';
 
 const slider = page =>
   page.locator('#investigationToolControls [data-tool="logm"]');

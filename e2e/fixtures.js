@@ -141,7 +141,7 @@ const BODY_LISTS = [
  * @param {import('@playwright/test').Page} page - The page under test
  * @returns {object} Helpers
  */
-function makeApp(page) {
+export function makeApp(page) {
   return {
     /**
      * Load the application in a chosen storage state and wait until it is ready.

@@ -27,7 +27,7 @@
 
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
-import { test, expect } from './fixtures.js';
+import { test, expect } from './workflow.js';
 
 const FIXTURE = join(process.cwd(), 'tests', 'fixtures', 'chart-parity.json');
 

@@ -13,7 +13,7 @@
 // The tolerance is the serializer's: nine significant figures on the angles.
 // =============================================================================
 
-import { test, expect } from './fixtures.js';
+import { test, expect } from './workflow.js';
 
 /** A context nothing defaults to, so a dropped field cannot pass by accident. */
 const CONTEXT = { inclination: 31.25, positionAngle: 137.5, distancePc: 480.5 };
