@@ -197,7 +197,6 @@ export const STRUCTURAL = new Set([
   'preset',
   'pinStaged',
   'tags',
-  // Which kind of canvas a lesson or step asks for; its `picture` is words.
   'canvas',
   // Symbols, not words. K, R(sun), L(sun), M(sun) and the multiplication sign
   // are the same in every language this ships in, and a translated one would

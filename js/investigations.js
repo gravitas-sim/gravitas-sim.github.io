@@ -646,7 +646,6 @@ function bindStepRoles(force) {
     for (const [role, why] of Object.entries(problems))
       console.warn(`${step.sid} ${what} ${role}: ${why}`);
   };
-  // A quiet canvas stages nothing, and no setup is in force behind it.
   const quiet = canvas?.kind === 'quiet';
   if (quiet) {
     clearStage();
@@ -888,7 +887,6 @@ function validateStep(step, id) {
 
 // Fetched when a lesson opens (loadSeams), so draws and reads stay synchronous.
 let figures = null;
-// js/lessonCanvas.js, for a lesson that declares what its canvas is for.
 let canvasMod = null;
 const canvasNow = (i = stepIndex) => canvasMod?.canvasAt(active, i) ?? null;
 

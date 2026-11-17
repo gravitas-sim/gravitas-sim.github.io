@@ -261,7 +261,7 @@ describe('the page', () => {
     enterCanvas(quiet);
     expect(bar().classList.contains('is-folded')).toBe(true);
     expect(fold().tagName).toBe('BUTTON');
-    expect(fold().textContent).toBe('Playback');
+    expect(fold().textContent).toBe('Playback ▸');
     expect(fold().getAttribute('aria-expanded')).toBe('false');
     // The focus that stood on a folded control moved to the toggle.
     expect(document.activeElement).toBe(fold());

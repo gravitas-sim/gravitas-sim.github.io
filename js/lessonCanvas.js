@@ -115,10 +115,7 @@ function words() {
   const name = said ? t(`inv.canvas.reset.${kind}`) : null;
   put(reset, 'aria-label', name ?? was.reset);
   put(reset, 'title', name ?? was.title);
-  if (fold) {
-    fold.textContent = t('inv.canvas.playback');
-    fold.title = t('inv.canvas.playback.hint');
-  }
+  if (fold) paintFold();
 }
 
 /** Close the open rail section the way a reader would, without keeping the choice. */
@@ -146,6 +143,17 @@ function railFold(on) {
   }
 }
 
+/** The playback toggle: its name, a triangle for the state, and the state. */
+function paintFold() {
+  const open = !$('timelineBar').classList.contains('is-folded');
+  const mark = document.createElement('span');
+  mark.setAttribute('aria-hidden', 'true');
+  mark.textContent = open ? ' ▾' : ' ▸';
+  fold.replaceChildren(t('inv.canvas.playback'), mark);
+  fold.title = t('inv.canvas.playback.hint');
+  fold.setAttribute('aria-expanded', String(open));
+}
+
 /** Tuck the playback bar behind a toggle of its own: it has none. */
 function barFold(on) {
   const bar = $('timelineBar');
@@ -161,18 +169,14 @@ function barFold(on) {
   fold.type = 'button';
   fold.id = 'timelineFold';
   fold.className = 'timeline-btn timeline-fold';
-  fold.setAttribute('aria-controls', 'timelineBar');
   fold.addEventListener('click', () => {
     bar.classList.toggle('is-folded');
-    fold.setAttribute(
-      'aria-expanded',
-      String(!bar.classList.contains('is-folded'))
-    );
+    paintFold();
   });
   bar.prepend(fold);
   if (bar.contains(document.activeElement)) fold.focus();
   bar.classList.add('is-folded');
-  fold.setAttribute('aria-expanded', 'false');
+  paintFold();
 }
 
 /**
