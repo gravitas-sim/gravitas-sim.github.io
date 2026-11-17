@@ -292,6 +292,22 @@ stated.
   phase come from the bodies' positions. Markings, bands and the ring shadow's
   width are illustration, and the canvas description and the inspector say so.
 
+How it is drawn (`js/bodyDraw.js`, with the light from `lightingFor` in
+`js/bodyDrawSky.js`, register rows D-R4-448-01 to 05):
+
+- A body keeps its light until another star sends 5% more flux, so the choice
+  does not flicker where two stars send the same.
+- The observer for a phase is the planet or giant whose Hill sphere the body
+  is inside, not the body that pulls on it hardest: the Sun pulls the real
+  Moon harder than the Earth does.
+- The night side is one fill over the disc after the markings, from 10 px of
+  drawn radius at either tier; the low tier's cap removes markings, not the
+  night side. Markings (Earth's continents and ice, the Moon's maria and
+  craters) and a giant's bands at its latitudes and its flattening come from
+  the body's visual seed at the full tier's detailed level.
+- Three looks were captured for the maintainer: the terminator alone, with
+  markings (shipped), and with limb darkening.
+
 Tolerances, checked on a fixture world (a star, a planet and a moon built by the
 scenario builder, never shipped):
 
