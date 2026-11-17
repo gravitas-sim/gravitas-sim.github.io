@@ -600,6 +600,19 @@ export function offerDraft(entry) {
   $('nbDraftClaim')?.focus();
 }
 
+/**
+ * Keep an entry at once, as a lesson's reading, without opening the notebook or
+ * taking focus (the reading is already on the lesson's screen).
+ * @param {object} entry - From a capture helper
+ */
+export function keepEntry(entry) {
+  if (!entry) return;
+  ensurePanel();
+  entries = addEntry(entries, entry);
+  persist();
+  render();
+}
+
 /** Commit the draft with whatever has been typed. */
 function commitDraft() {
   if (!draft) return;

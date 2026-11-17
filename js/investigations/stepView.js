@@ -10,7 +10,8 @@
 import { formatNumber } from '../format.js';
 import { evidenceFrom } from '../data/investigations/provenance.js';
 import { getLocale, t } from '../i18n/index.js';
-import { markHeld } from '../lesson/held.js';
+import { markHeld, predictionState } from '../lesson/held.js';
+import { lessonText } from '../i18n/lesson.js';
 import {
   decodeEntities,
   escapeHtml as escape,
@@ -70,6 +71,18 @@ export const slots = {
   canvas: null,
   feedback: null,
 };
+
+/** Install the field slot's module with the engine functions it needs. */
+export function fieldModule(m) {
+  m.setKit({
+    announce,
+    decimalSeparatorFor,
+    lessonText,
+    parseNumber,
+    predictionState,
+  });
+  return (slots.field = m);
+}
 
 /**
  * The markup of one step, as the parts renderStep joins.
@@ -385,10 +398,11 @@ export function stepMarkup(step, c) {
                      data-field="${attr(key)}" value="${attr(responses[key] ?? '')}"
                      ${derived ? 'readonly tabindex="-1"' : ''}
                      placeholder="${escape(cueText(f.hint))}" />
-            </label>`;
+            </label>${slots.field?.takeRow(step, f, c) ?? ''}`;
         })
         .join('')}</div>`
     );
+    parts.push(slots.field?.spanGroups(step, c) ?? '');
     parts.push('<div class="inv-check" data-check-slot></div>');
   }
   return parts;
@@ -650,6 +664,7 @@ export function bindStepInputs(h) {
         input.value,
         getLocale()
       );
+      slots.field?.typed(h.responses(), input.dataset.field, els.body);
       h.save();
       h.refreshMeasurements();
     });
@@ -680,6 +695,7 @@ export function bindStepInputs(h) {
   els.body.querySelector('[data-import]')?.addEventListener('click', () => {
     h.importSelection();
   });
+  h.importSelection?.({ mount: true });
 
   const numeric = els.body.querySelector('[data-numeric]');
   const checkBtn = els.body.querySelector('[data-check-numeric]');
@@ -980,7 +996,9 @@ export function earlierAnswers(lesson, table) {
       kv
         .filter(
           ([k, v]) =>
-            k && !/^(shown|locale|help|hint)$|^tool:|:locale$/.test(k) && str(v)
+            k &&
+            !/^(shown|locale|help|hint)$|^tool:|:(locale|src)$/.test(k) &&
+            str(v)
         )
         .map(([k, v]) => `${k}=${str(v)}`)
         .join('; ');

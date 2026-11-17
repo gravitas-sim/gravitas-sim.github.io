@@ -413,9 +413,6 @@ export const ES_DEFERRED = {
   'reliability.moved': 'cambio {change}',
   'reliability.noValue': 'no medido',
   // --- The A/B experiment bench ---------------------------------------------
-  // The bench loads on first press, so its prose is not in everyone's download;
-  // js/experimentsBridge.js registers it before the panel builds. failure.load
-  // stays in the base catalog: it is what the bridge says when this import fails.
   'bench.title': 'Experimento A/B',
   'bench.untitled': 'Experimento sin título',
   'bench.copyOf': 'Copia de {name}',
@@ -720,10 +717,6 @@ export const ES_DEFERRED = {
     'Impulso {n}: {body} en t = {time}, radial {radial}, transversal {transverse}.',
 
   // --- The investigations panel ------------------------------------------------
-  // js/investigations.js, loaded on demand, is the only reader; ensureInvestigations()
-  // registers them. The dozen in the base catalog are on static buttons in index.html
-  // (boot sweep) plus the two the loader says when a chunk fails. Also moved out:
-  // only js/lessonStage.js and the lesson engine read these.
   'inv.stage.scale.display':
     'Escala comprimida: todas las estrellas se ven y el orden por tamaño es correcto, pero las proporciones en pantalla no son las del modelo.',
   'inv.stage.scale.true':
@@ -751,6 +744,27 @@ export const ES_DEFERRED = {
   'inv.import.duplicate': 'Ese ya lo has registrado.',
   'inv.import.full':
     'Todas las filas están llenas. Vacía una para importar de nuevo.',
+  'inv.take.default': 'Tomar la lectura',
+  'inv.take.name': 'Tomar la lectura: {what}',
+  'inv.take.predict': 'Haz primero tu predicción.',
+  'inv.take.none': '{what} no se muestra, así que no hay nada que leer.',
+  'inv.take.done': 'Lectura tomada: {what}, {value}.',
+  'inv.take.from': 'Tomado de {what}.',
+  'inv.take.typed': 'Escrito por ti.',
+  'inv.span.title': 'Lectura de un intervalo',
+  'inv.span.from': 'Desde',
+  'inv.span.to': 'Hasta',
+  'inv.span.step': 'Las flechas mueven un límite {step}.',
+  'inv.span.pick': 'Elige los dos límites.',
+  'inv.span.few': 'Hay menos de dos puntos entre los límites.',
+  'inv.span.result':
+    '{n} puntos, de {lo} a {hi}: media {mean}, error estándar {se}.',
+  'inv.span.clip': 'Los límites se ajustaron a los datos.',
+  'inv.span.note':
+    'El error estándar es la dispersión de estos puntos dividida por la raíz de su número.',
+  'inv.span.take': 'Tomar la lectura del intervalo',
+  'inv.span.done':
+    'Lectura tomada: {what}, media {mean}, {n} puntos, error estándar {se}.',
   'inv.action.finish': 'Terminar',
   'inv.action.next': 'Siguiente',
   'inv.probe.unavailable': 'Lectura no disponible',
@@ -892,11 +906,6 @@ export const ES_DEFERRED = {
   'inv.card.seen': '{done} de {total} pasos vistos',
   'inv.card.report': 'Informe de laboratorio',
   'inv.card.series': '{label}, investigación {index} de {of}',
-  // Habitability, binary and tidal widget prose. Same boundary and same
-  // reasoning as the resW/chaosW/energyW families above: js/widgets.js is
-  // reached only from the lazy js/investigations.js, and each of these three
-  // modules registers this catalog itself so a direct import cannot render
-  // raw ids.
   'binW.twoStarsOrbiting': 'Dos estrellas, orbitando',
   'binW.bothStarsAreMovingWatch':
     'Las dos estrellas se mueven. Obsérvalas unos segundos antes de leer nada.',
@@ -1186,10 +1195,6 @@ export const ES_DEFERRED = {
     'Y cuando los reajustes se separan en familias, esa es la respuesta honesta: los datos admiten varios períodos. Lo que elimina familias son más observaciones, u observaciones espaciadas de otra forma, no más pruebas aquí. Ejecutar diez mil pruebas hace cada intervalo más suave y las familias igual de reales.',
 
   // --- Widget prose, moved off the start-up path ---------------------------
-  // Resonance, chaos and energy widget strings. Nothing outside a lesson can
-  // render these: js/widgets.js is reached only from js/investigations.js,
-  // which is lazy and whose loader registers this catalog before any step
-  // draws. Same boundary and same reasoning as the exoW.* family above it.
   'resW.periods.title': 'Periodos medidos y las razones entre ellos',
   'resW.periods.note':
     'Los periodos se miden de las propias órbitas y se promedian sobre toda la ejecución; no se leen de una tabla. La razón de enteros pequeños más cercana se halla por fracciones continuas, que encuentran una para cualquier número: por eso importa más la última cifra de cada fila —cuánto más cerca está la razón de lo que daría el azar— que la razón misma.',
@@ -3444,11 +3449,6 @@ export const ES_DEFERRED = {
   'stellar.phase.black-hole': 'Agujero negro',
   'stellar.phase.unknown': 'Sin modelar',
   // ---------------------------------------------------------------------------
-  // El Laboratorio Estelar (js/stellarWidgets.js, js/stellarLab.js)
-  // ---------------------------------------------------------------------------
-  // ---------------------------------------------------------------------------
-  // La reproducción evolutiva (js/stellarEvolutionWidgets.js)
-  // ---------------------------------------------------------------------------
   'stelE.title': 'Una estrella, de principio a fin',
   'stelE.note':
     'Una traza evolutiva publicada, reproducida. La edad manda sobre todo lo demás: temperatura, radio, luminosidad, color, masa actual y fase salen del mismo punto de la misma traza. La nube del principio y el remanente del final son ilustraciones a ambos lados de lo que el modelo cubre de verdad, y las dos lo dicen.',
@@ -3786,6 +3786,8 @@ export const ES_DEFERRED = {
     'Las estrellas que han dejado la secuencia principal, el polvo interestelar, las binarias y cualquier composición que no sea solar. Las cuatro cosas importan en un sondeo real y ninguna está aquí.',
   // La evidencia del Laboratorio Estelar
   'nb.source.stellar-lab': 'Laboratorio estelar',
+  'nb.source.lesson-reading': 'Lectura de una investigación',
+  'nb.reading.note': 'Tal como se imprime: {text}',
   'nb.source.binary-orbit': 'Órbita binaria',
   'nb.source.observatory': 'Medida en el Observatorio',
   'nb.source.inference-fit': 'Ajuste del núcleo de inferencia',
@@ -3904,10 +3906,6 @@ export const ES_DEFERRED = {
   'nb.stellar.limit.fitted':
     'La comparación se dibujó con cada estrella ajustada a su recuadro, así que los tamaños aparentes no son comparables.',
   // --- Words a lesson computes ----------------------------------------------
-  // Here, not in the start-up catalog: only js/i18n/lesson.js reads them, and only
-  // js/investigations.js imports it. js/investigationsLoader.js awaits this catalog
-  // before initInvestigations(). Probe rows and answer-checking messages come out of
-  // functions in the lesson files, which a shadow cannot reach; lesson.js looks them up.
   'lessonFn.distancesHaveToBePositiveNumbers38':
     'Las distancias tienen que ser números positivos.',
   'lessonFn.closestApproachIsLargerThanFurthest70':

@@ -6,27 +6,6 @@
 // TABLEDATA, and refuses the rest by name: BINARY, BINARY2 and FITS each need
 // a base64 and a type decoder, and a malformed binary stream fails far less
 // legibly than malformed XML.
-//
-// It keeps what a conversion needs and nothing it has to trust: each FIELD's
-// name, datatype, unit, UCD and description; the rows, converted by
-// datatype; and the INFO QUERY_STATUS, whose OVERFLOW means the service
-// stopped at MAXREC and the table is not the whole answer.
-//
-// Three rules the archive gate's prototype found the hard way
-// (VO_ARCHIVE_GATE.md, "What the prototype caught"):
-//
-//   - A `long` is kept as its digits. A Gaia source_id is 19 digits, past
-//     the 2^53 a double holds exactly, and Number() rounds SU Dra's
-//     1058066262817534336 to 1058066262817534300, which is no star.
-//   - Any DOCTYPE is refused. No engine resolves an external entity - measured
-//     in Chromium, Firefox and WebKit - but the document then parses with
-//     that cell empty, silently. A VOTable never needs a DOCTYPE.
-//   - A number the datatype cannot hold (NaN, 1e999, an empty cell) is null,
-//     never NaN and never zero.
-//
-// XML is parsed by the browser's DOMParser, which does not exist in a Worker,
-// so this runs on the main thread. That is why the answers it is given are
-// capped at 512 KB (js/archive/cds.js): about 160 ms on a low-end device.
 // =============================================================================
 
 export class VotableError extends Error {
