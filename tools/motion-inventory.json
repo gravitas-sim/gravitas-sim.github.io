@@ -291,6 +291,13 @@
       "test": "e2e/lab3dView.spec.js"
     },
     {
+      "file": "js/lesson/runs.js",
+      "kind": "raf",
+      "treatment": "opt-in",
+      "what": "The count of pinned frames a controlled run lets the lesson scene run, after the student presses Run",
+      "reason": "A run is started only by the student's press, ends by itself or on Cancel run, and puts the scene back; the motion on the canvas is the main loop's."
+    },
+    {
       "file": "js/main.js",
       "kind": "raf",
       "treatment": "content",
