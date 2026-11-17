@@ -754,7 +754,7 @@ export const EN_DEFERRED = {
   'inv.span.from': 'From',
   'inv.span.to': 'To',
   'inv.span.step': 'Arrow keys move a bound by {step}.',
-  'inv.span.pick': 'Choose both bounds, or tap two points on the curve.',
+  'inv.span.pick': 'Choose both bounds.',
   'inv.span.few': 'Fewer than two points lie between the bounds.',
   'inv.span.result':
     '{n} points, {lo} to {hi}: mean {mean}, standard error {se}.',
@@ -3869,7 +3869,7 @@ export const EN_DEFERRED = {
     'Four examples, one per letter. Not an atlas, not a survey, and not a representative sample of anything — four stars that happened to be observed.',
   // The Stellar Lab's evidence
   'nb.source.stellar-lab': 'Stellar Lab',
-  'nb.source.lesson-reading': 'Lesson reading',
+  'nb.source.lesson-reading': 'Investigation reading',
   'nb.reading.note': 'As printed: {text}',
   'nb.source.binary-orbit': 'Binary orbit',
   'nb.source.observatory': 'Observatory measurement',

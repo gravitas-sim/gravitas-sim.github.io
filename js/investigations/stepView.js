@@ -10,7 +10,8 @@
 import { formatNumber } from '../format.js';
 import { evidenceFrom } from '../data/investigations/provenance.js';
 import { getLocale, t } from '../i18n/index.js';
-import { markHeld } from '../lesson/held.js';
+import { markHeld, predictionState } from '../lesson/held.js';
+import { lessonText } from '../i18n/lesson.js';
 import {
   decodeEntities,
   escapeHtml as escape,
@@ -70,6 +71,18 @@ export const slots = {
   canvas: null,
   feedback: null,
 };
+
+/** Install the field slot's module with the engine functions it needs. */
+export function fieldModule(m) {
+  m.setKit({
+    announce,
+    decimalSeparatorFor,
+    lessonText,
+    parseNumber,
+    predictionState,
+  });
+  return (slots.field = m);
+}
 
 /**
  * The markup of one step, as the parts renderStep joins.

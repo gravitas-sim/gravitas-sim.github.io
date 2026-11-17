@@ -1,33 +1,10 @@
-// =============================================================================
-// The authoring rules
-// -----------------------------------------------------------------------------
-// One rule set, four callers: `npm run author:check` prints it for an author,
-// tests/authoring.test.js fails CI on it, the authoring preview shows an author
-// the findings for the step they are looking at, and the browser walker reads
-// the same catalog so that what it exercises and what this judges cannot
-// diverge.
-//
-// It lives in js/ rather than in tools/ because the preview runs it in a
-// browser. Nothing here touches the filesystem or the DOM: the catalog and
-// everything it is checked against arrive as arguments, gathered by
-// tools/authoring/inputs.mjs in Node and by the panel itself in the browser.
-//
-// A rule is a generator of findings. Every finding carries the rule that raised
-// it, so `npm run author:check --rules` can list what is enforced and an author
-// can silence a false positive by arguing with a specific rule rather than with
-// the tool.
-//
-// Two levels only:
-//
-//   error  the lesson is wrong, and a student or an instructor would meet it
-//   warn   the lesson is odd, and a human should look
-//
-// The bar for `error` is that a reasonable author, shown the finding, would
-// agree it must be fixed before shipping. Everything else is a warning, because
-// a checker that cries wolf gets a --no-verify and then it is checking nothing.
-// =============================================================================
+// The authoring rules: one rule set for `npm run author:check`, tests/authoring.test.js,
+// the authoring preview and the browser walker, so what they exercise and what
+// this judges cannot diverge. It lives in js/ because the preview runs it in a
+// browser; nothing here touches the filesystem or the DOM. Every finding carries
+// its rule, and is an `error` (a student or instructor would meet a wrong lesson)
+// or a `warn` (odd, a human should look; a checker that cries wolf gets bypassed).
 
-import { readingProblems } from './readings.js';
 import { checkAnswer, toleranceFor } from '../answerCheck.js';
 import { verifyKey } from '../answerKey.js';
 import { isValidSid } from '../investigations/progressSchema.js';
@@ -155,6 +132,42 @@ export const RULE_INDEX = {
   'agree/instructorIds': 'Instructor guidance names lessons that exist',
 };
 
+/** What is wrong with the sources a step's fields declare: one of probe, tool or span each, naming a row or series the step has. */
+export function readingProblems(step, { ctx, widget }) {
+  const bad = [];
+  const rowsOf = (kind, s) => {
+    try {
+      if (kind === 'probe') return step.probe?.(ctx) || [];
+      const v = Object.fromEntries(
+        (widget?.controls || []).map(c => [c.id, c.value])
+      );
+      const live = widget?.live ? ctx : undefined;
+      return (
+        widget?.readout({ ...v, ...step.tool?.values }, live, step.tool) || []
+      );
+    } catch {
+      return [];
+    }
+  };
+  for (const f of step.fields || []) {
+    const s = f.source;
+    if (s === undefined) continue;
+    const kinds = ['probe', 'tool', 'span'].filter(k => s?.[k] !== undefined);
+    const [k] = kinds;
+    const say = m => bad.push(`field ${f.id}: ${m}`);
+    if (kinds.length !== 1) say('source names one of probe, tool or span');
+    else if (f.compute) say('a computed field takes no reading');
+    else if (k === 'span') {
+      if (typeof step.series?.[s.span] !== 'function')
+        say(`the step declares no series "${s.span}"`);
+      if (!['mean', 'n', 'se'].includes(s.stat))
+        say('stat is one of mean, n, se');
+    } else if (!rowsOf(k).some(r => r.id === s[k]))
+      say(`no ${k} row has the id "${s[k]}"`);
+  }
+  return bad;
+}
+
 const isNonEmptyString = v => typeof v === 'string' && v.trim().length > 0;
 const isPlainObject = v => !!v && typeof v === 'object' && !Array.isArray(v);
 
@@ -240,9 +253,7 @@ export function emptyProbeContext() {
     // between a step opening and its stage going up.
     showEvolutionScene: () => false,
     clearEvolutionScene: () => {},
-    // No canvas, so no source to change and no crests to draw. A widget that
-    // switches the source must cope with being told no - the same answer it
-    // gets on the frame between a step opening and its stage going up.
+    // No canvas: a widget that switches the source must cope with being told no.
     setSourceMode: () => false,
     pulseSource: () => false,
     showWavefronts: () => false,
@@ -268,18 +279,14 @@ export function emptyProbeContext() {
     // orbit, and a probe that assumes a habitable zone exists is a probe
     // that throws before a reader ever sees the step.
     habitability: () => null,
-    // No baseline with no world, which is the honest answer during a rebuild
-    // and the case a probe reading drift has to survive.
+    // No baseline with no world, as during a rebuild.
     conservation: () => null,
-    // Nothing has transited with no world, so a probe that reads geometry
-    // before a frame has been computed gets the same answer it gets on the
-    // first frame of a real one.
+    // Nothing has transited with no world, as on the first frame of a real one.
     transitGeometry: () => null,
     // No run to judge, which is 'cannot tell' rather than 'stale'.
     runMatchesScene: () => null,
     // Real arithmetic even with no simulation: blackHoleFacts is a closed-form
-    // function of one number, so the stub can answer honestly rather than with
-    // a shape. A probe that divides by one of these is checked for real here.
+    // function of one number, so a probe that divides by one is checked for real.
     holeFacts: () => ({
       massInSuns: 1,
       massKg: 1.989e30,
@@ -760,15 +767,8 @@ export function checkCatalog(inputs, { skip = [] } = {}) {
           }))
             E('ref/source', m);
 
-          // What a compute() actually reads.
-          //
-          // js/investigations.js evaluates a computed field against *this*
-          // step's responses only - fieldValues() walks `step.fields` and
-          // nothing else - so a compute that reaches for a field measured on an
-          // earlier step gets undefined, produces NaN, and leaves the box
-          // permanently blank. It looks like working code and it is dead:
-          // Retrograde Motion shipped three of them, and only the browser
-          // walker noticed until this rule existed.
+          // A compute() sees this step's fields only: one that reaches for an
+          // earlier step's field gets NaN and leaves the box blank.
           for (const f of step.fields) {
             if (typeof f.compute !== 'function') continue;
             const src = String(f.compute);

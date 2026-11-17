@@ -1,20 +1,10 @@
-// The scatter plot, the ellipse explorer and the readings a measure step takes
-// (the import row, `source` and `take` fields, an interval of a series),
-// fetched when a lesson opens with a step that declares one of them
-// (js/investigations.js, `loadSeams`); one module to hold Kepler's request count.
+// The scatter plot, the ellipse explorer and the readings a measure step takes (the
+// import row, `source` and `take` fields, an interval), fetched when a lesson opens
+// with a step that declares one (js/investigations.js, `loadSeams`); one module for Kepler's request count.
 
-import { fixed, tickLabel } from '../format.js';
+import { fixed, roundSig, tickLabel } from '../format.js';
 import { getLocale, t } from '../i18n/index.js';
-import { lessonText } from '../i18n/lesson.js';
 import { escapeHtml as escape, prose } from '../lessonMarkup.js';
-import {
-  LOCALE_SUFFIX,
-  decimalSeparatorFor,
-  parseNumber,
-} from '../answerParse.js';
-import { announce } from '../notify.js';
-import { predictionState } from '../lesson/held.js';
-import { captureToNotebook } from '../widgetRuntime.js';
 
 /** Pick round axis bounds and a tick step that contain the data. */
 function niceScale(min, max) {
@@ -401,6 +391,11 @@ export function drawEllipse(canvas, e) {
 // One path writes a reading: the text as printed, how it was taken beside it
 // (`<field>:src`, a JSON string), a polite announcement and one ledger entry.
 
+// The engine's own functions, handed over by stepView.js (`fieldModule`): importing
+// them here would split them into chunks of their own on every route using this module.
+let kit = {};
+export const setKit = k => (kit = k);
+
 const SRC = ':src';
 const NUMBER = /[−+-]?\d+(?:[.,]\d+)*(?:e[+-]?\d+)?/i;
 const plain = s => String(s ?? '').replace(/<[^>]*>/g, '');
@@ -461,7 +456,7 @@ const said = (f, text) =>
 export function takeRow(step, f, c) {
   if (!f.source || f.source.span !== undefined) return '';
   if (
-    predictionState(c.active?.steps, step, c.visited, c.responses) ===
+    kit.predictionState(c.active?.steps, step, c.visited, c.responses) ===
     'uncommitted'
   )
     return `<p class="inv-import-hint">${escape(t('inv.take.predict'))}</p>`;
@@ -476,7 +471,7 @@ export function spanGroups(step, c) {
   ];
   if (!ids.length) return '';
   if (
-    predictionState(c.active?.steps, step, c.visited, c.responses) ===
+    kit.predictionState(c.active?.steps, step, c.visited, c.responses) ===
     'uncommitted'
   )
     return `<p class="inv-import-hint">${escape(t('inv.take.predict'))}</p>`;
@@ -485,7 +480,7 @@ export function spanGroups(step, c) {
   return ids
     .map(
       id =>
-        `<div class="inv-fields" role="group" aria-label="${attr(t('inv.span.title'))}" data-span="${attr(id)}">${bound('from')}${bound('to')}<svg viewBox="0 0 300 70" width="100%" height="70" aria-hidden="true" style="touch-action:none;cursor:crosshair"></svg><p class="inv-import-hint" data-span-step></p><p class="inv-field-label" data-span-result></p><div class="inv-import-row"><button type="button" class="inv-import-btn" data-take-span>${escape(step.take?.label || t('inv.span.take'))}</button><span class="inv-import-hint" data-span-hint></span></div></div>`
+        `<div class="inv-fields" role="group" aria-label="${attr(t('inv.span.title'))}" data-span="${attr(id)}">${bound('from')}${bound('to')}<p class="inv-import-hint" data-span-step></p><p class="inv-field-label" data-span-result></p><div class="inv-import-row"><button type="button" class="inv-import-btn" data-take-span>${escape(step.take?.label || t('inv.span.take'))}</button><span class="inv-import-hint" data-span-hint></span></div></div>`
     )
     .join('');
 }
@@ -535,33 +530,30 @@ function commit(host, writes, announced) {
   for (const w of writes) {
     const key = `${id}:${w.fid}`;
     responses[key] = w.text;
-    responses[key + LOCALE_SUFFIX] = w.locale;
+    responses[key + ':locale'] = w.locale;
     responses[key + SRC] = JSON.stringify(w.src);
   }
   save();
   renderStep();
-  announce(announced);
-  for (const w of writes) keep(w);
+  kit.announce(announced);
+  for (const w of writes)
+    keep(host, { ...w, value: kit.parseNumber(w.text, w.locale).value });
 }
 
-let ledger = null;
 /** One ledger entry for a reading taken; quiet, the reader's notebook is not opened. */
-function keep(w) {
-  (ledger ??= import('../notebook/reading.js'))
-    .then(m =>
-      captureToNotebook(
-        (_, provenance) => m.fromReading({ ...w, provenance }),
-        {
-          quiet: true,
-        }
-      )
+const keep = (host, w) =>
+  host
+    .capture(
+      (notebook, provenance) => notebook.fromReading({ ...w, provenance }),
+      {
+        quiet: true,
+      }
     )
     .catch(() => {});
-}
 
 const refuse = (el, text) => {
   if (el) el.textContent = text;
-  announce(text);
+  kit.announce(text);
 };
 
 /** The row a field reads, as it is printed, or null. */
@@ -572,8 +564,8 @@ function rowFor(host, src) {
       src.probe !== undefined
         ? step.probe?.(host.probeContext())?.map(r => ({
             ...r,
-            label: lessonText(r.label),
-            value: lessonText(String(r.value)),
+            label: kit.lessonText(r.label),
+            value: kit.lessonText(String(r.value)),
           }))
         : host.tool(step)?.rows;
     return rows?.find(r => r.id === (src.probe ?? src.tool)) ?? null;
@@ -591,7 +583,7 @@ function takeField(host, el, fid) {
   const row = src && rowFor(host, src);
   const text = numberText(row);
   const hint = el.parentNode.querySelector('[data-src]');
-  if (!text || !parseNumber(text, localeOf(text)).ok)
+  if (!text || !kit.parseNumber(text, localeOf(text)).ok)
     return refuse(hint, t('inv.take.none', { what: plain(f?.label) }));
   const key = `${id}:${fid}`;
   const before = parsed(responses[key + SRC]);
@@ -632,7 +624,7 @@ const bounds = new Map();
 
 /** A bound as printed: six figures, no trailing zeros. */
 const edge = x =>
-  String(+x.toPrecision(6)).replace('.', decimalSeparatorFor(getLocale()));
+  String(roundSig(x, 6)).replace('.', kit.decimalSeparatorFor(getLocale()));
 
 /** The statistics of an interval as the step prints and takes them. */
 const printed = s => {
@@ -663,7 +655,6 @@ function mount(host) {
     const [out, hint, nudge] = ['result', 'hint', 'step'].map(n =>
       g.querySelector(`[data-span-${n}]`)
     );
-    const svg = g.querySelector('svg');
     const fields = step.fields.filter(f => f.source?.span === sid);
     const read = () => {
       try {
@@ -681,25 +672,12 @@ function mount(host) {
     const paint = () => {
       const d = read();
       if (!d?.x?.length) return void (out.textContent = '');
-      const [lo, hi] = [Math.min(...d.x), Math.max(...d.x)];
-      from.step = to.step = d.step ?? Number(((hi - lo) / 200).toPrecision(1));
+      const size = Math.max(...d.x) - Math.min(...d.x);
+      from.step = to.step = d.step ?? roundSig(size / 200, 1);
       nudge.textContent = t('inv.span.step', {
         step: `${from.step}${d.unit ? ` ${d.unit}` : ''}`,
       });
-      const [y0, y1] = [
-        Math.min(...d.y.filter(Number.isFinite)),
-        Math.max(...d.y.filter(Number.isFinite)),
-      ];
-      const k = Math.max(1, Math.ceil(d.x.length / 150));
-      const px = v => (300 * (v - lo)) / (hi - lo || 1);
-      const dots = d.x
-        .filter((_, i) => i % k === 0)
-        .map(
-          (v, i) =>
-            `${px(v).toFixed(1)},${(66 - (62 * (d.y[i * k] - y0)) / (y1 - y0 || 1)).toFixed(1)}`
-        );
       const s = chosen(d);
-      svg.innerHTML = `${s ? `<rect x="${px(s.lo)}" y="0" width="${Math.max(1, px(s.hi) - px(s.lo))}" height="70" fill="currentColor" opacity=".18"/>` : ''}<polyline points="${dots.join(' ')}" fill="none" stroke="currentColor" stroke-width="1.2"/>`;
       out.textContent = !s
         ? t('inv.span.pick')
         : !s.ok
@@ -723,18 +701,6 @@ function mount(host) {
       () => ((b.lo = from.valueAsNumber), paint())
     );
     to.addEventListener('input', () => ((b.hi = to.valueAsNumber), paint()));
-    svg.addEventListener('click', e => {
-      const d = read();
-      if (!d?.x?.length) return;
-      const r = svg.getBoundingClientRect();
-      const [lo, hi] = [Math.min(...d.x), Math.max(...d.x)];
-      const x = lo + ((e.clientX - r.left) / (r.width || 1)) * (hi - lo);
-      if (b.tap === 1) [b.hi, b.tap] = [x, 0];
-      else [b.lo, b.hi, b.tap] = [x, NaN, 1];
-      from.value = b.lo;
-      to.value = Number.isFinite(b.hi) ? b.hi : '';
-      paint();
-    });
     g.querySelector('[data-take-span]').addEventListener('click', () => {
       const s = chosen(read());
       if (!s?.ok) return refuse(hint, t(s ? 'inv.span.few' : 'inv.span.pick'));
@@ -756,7 +722,9 @@ function mount(host) {
             n: s.n,
           },
           uncertainty:
-            f.source.stat === 'mean' ? +s.se.toFixed(places(s.se)) : undefined,
+            f.source.stat === 'mean'
+              ? Math.round(s.se * 10 ** places(s.se)) / 10 ** places(s.se)
+              : undefined,
         })),
         t('inv.span.done', { what: plain(fields[0]?.label), ...text })
       );

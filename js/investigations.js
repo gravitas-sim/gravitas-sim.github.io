@@ -14,6 +14,7 @@ import {
   load,
   parseFieldNumber,
   progressFor,
+  fieldModule,
   renderProgressNotice,
   renderSaveStatus,
   save,
@@ -124,7 +125,7 @@ import { normalizeSeed, formatSeed } from './rng.js';
 // every edge in it was lazy, a cycle that exists only because of a convenience
 // re-export is not one worth keeping.
 import { toast, announce, loadFailed } from './notify.js';
-import { setEvidenceContext } from './widgetRuntime.js';
+import { captureToNotebook, setEvidenceContext } from './widgetRuntime.js';
 // Lives in its own module so the instructor answer keys, which are generated
 // in Node, can grade with the identical function this page grades with.
 import { checkAnswer } from './answerCheck.js';
@@ -886,8 +887,8 @@ const loadSeams = steps =>
       s.importFromSelection ||
       s.fields?.some(f => f.source)
   )
-    ? import('./investigations/figures.js').then(
-        m => (slots.field = figures = m)
+    ? import('./investigations/figures.js').then(m =>
+        fieldModule((figures = m))
       )
     : null;
 
@@ -1883,13 +1884,9 @@ function renderProbe() {
     }
   }
   // A live instrument whose subject is the scene has to notice the reader
-  // choosing a different body. It is repainted on a control change and on a
-  // stage rebuild, and neither of those happens when somebody clicks a star -
-  // so the H-R diagram sat where the sliders had left it while the reader
-  // clicked star after star in front of it, and the comparison card marked
-  // nothing. Guarded on the selection actually changing rather than repainted
-  // every tick: a widget that redraws four times a second for no reason is
-  // the other way to get this wrong.
+  // choosing a different body (neither a control change nor a stage rebuild
+  // happens when somebody clicks a star), but repaint only when the selection
+  // actually changes, not every tick.
   const chosen = state.selectedObject?.object?.id ?? null;
   if (chosen !== lastProbeSelection) {
     lastProbeSelection = chosen;
@@ -1969,6 +1966,7 @@ const importSelection = req =>
       body: els.body,
       save,
       renderStep,
+      capture: captureToNotebook,
       tool: step => {
         const w = step.tool && getWidget(step.tool.id);
         const ctx = w?.live ? probeContext() : undefined;
@@ -2315,8 +2313,7 @@ export async function openInvestigation(id, opts = {}) {
     paused: state.paused,
     zoom: state.zoom,
     pan: state.pan ? { ...state.pan } : null,
-    // The whole world, in the share-link format, captured once here so the
-    // step changes that follow cannot overwrite it with the lesson's own world.
+    // The whole world, in the share-link format, captured once here.
     sandbox: (() => {
       try {
         return captureShareState({

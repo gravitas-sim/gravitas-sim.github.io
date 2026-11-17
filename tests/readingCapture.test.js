@@ -16,14 +16,18 @@ import {
   test,
 } from '@jest/globals';
 import * as figures from '../js/investigations/figures.js';
-import { slots, stepMarkup } from '../js/investigations/stepView.js';
+import {
+  fieldModule,
+  slots,
+  stepMarkup,
+} from '../js/investigations/stepView.js';
 import { predictionState } from '../js/lesson/held.js';
 import { INVESTIGATIONS } from '../js/data/investigations.js';
-import { setCaptureSink } from '../js/widgetRuntime.js';
-import { fromReading } from '../js/notebook/reading.js';
+import { captureToNotebook, setCaptureSink } from '../js/widgetRuntime.js';
+import { fromReading } from '../js/notebook/capture.js';
 import { SOURCE } from '../js/notebook/entry.js';
-import { readingProblems, readingField } from '../js/authoring/readings.js';
-import { emptyProbeContext } from '../js/authoring/rules.js';
+import { validateArtifact } from '../js/platform/artifact.js';
+import { emptyProbeContext, readingProblems } from '../js/authoring/rules.js';
 import { registerMessages } from '../js/i18n/index.js';
 import { EN_DEFERRED } from '../js/i18n/en.deferred.js';
 import { ES_DEFERRED } from '../js/i18n/es.deferred.js';
@@ -223,20 +227,20 @@ describe('a step that takes readings', () => {
     ],
     series: { flux: () => ({ x: X, y: Y, unit: 'd' }) },
     fields: [
-      readingField(
-        { id: 'p', label: 'Period', unit: 'd' },
-        { probe: 'period' }
-      ),
-      readingField({ id: 'a', label: 'Axis', unit: 'AU' }, { probe: 'sma' }),
-      readingField(
-        { id: 'm', label: 'Mean level' },
-        { span: 'flux', stat: 'mean' }
-      ),
-      readingField({ id: 'n', label: 'Points' }, { span: 'flux', stat: 'n' }),
-      readingField(
-        { id: 'e', label: 'Standard error' },
-        { span: 'flux', stat: 'se' }
-      ),
+      {
+        ...{ id: 'p', label: 'Period', unit: 'd' },
+        source: { probe: 'period' },
+      },
+      { ...{ id: 'a', label: 'Axis', unit: 'AU' }, source: { probe: 'sma' } },
+      {
+        ...{ id: 'm', label: 'Mean level' },
+        source: { span: 'flux', stat: 'mean' },
+      },
+      { ...{ id: 'n', label: 'Points' }, source: { span: 'flux', stat: 'n' } },
+      {
+        ...{ id: 'e', label: 'Standard error' },
+        source: { span: 'flux', stat: 'se' },
+      },
     ],
   };
   const predict = {
@@ -274,6 +278,7 @@ describe('a step that takes readings', () => {
     body,
     save: () => saved++,
     renderStep: () => paint(),
+    capture: captureToNotebook,
     tool: () => null,
   });
   const said = () => document.getElementById('srStatus').textContent.trim();
@@ -286,7 +291,7 @@ describe('a step that takes readings', () => {
     responses = {};
     saved = 0;
     sink = [];
-    slots.field = figures;
+    fieldModule(figures);
     setCaptureSink((make, opts) => {
       sink.push({ make, opts });
       return Promise.resolve(true);
@@ -339,7 +344,7 @@ describe('a step that takes readings', () => {
     await new Promise(r => setTimeout(r, 30));
     expect(sink.length).toBe(1);
     expect(sink[0].opts).toEqual({ quiet: true });
-    const entry = sink[0].make({}, {});
+    const entry = sink[0].make({ fromReading }, {});
     expect(entry.source).toBe(SOURCE.LESSON_READING);
     expect(entry.snapshot.quantities[0]).toMatchObject({
       value: 3.2504,
@@ -424,7 +429,7 @@ describe('a step that takes readings', () => {
     );
     await new Promise(r => setTimeout(r, 30));
     expect(sink.length).toBe(3);
-    const mean = sink[0].make({}, {});
+    const mean = sink[0].make({ fromReading }, {});
     expect(mean.snapshot.quantities[0]).toMatchObject({
       value: 5.25,
       uncertainty: 0.63,
@@ -445,19 +450,6 @@ describe('a step that takes readings', () => {
     g.querySelector('[data-take-span]').click();
     expect(said()).toContain('Fewer than two points');
     expect(responses[`${LESSON}:read:m`]).toBeUndefined();
-  });
-
-  test('tapping two points on the chart sets both bounds', () => {
-    responses[`${LESSON}:pred`] = 1;
-    paint();
-    const g = body.querySelector('[data-span]');
-    const svg = g.querySelector('svg');
-    svg.getBoundingClientRect = () => ({ left: 0, width: 700 });
-    svg.dispatchEvent(new MouseEvent('click', { clientX: 300, bubbles: true }));
-    svg.dispatchEvent(new MouseEvent('click', { clientX: 600, bubbles: true }));
-    const [from, to] = g.querySelectorAll('[data-bound]');
-    expect(Number(from.value)).toBeCloseTo(3, 5);
-    expect(Number(to.value)).toBeCloseTo(6, 0);
   });
 
   test('the steps of every shipped lesson are unchanged by the new slot', () => {
@@ -481,7 +473,7 @@ describe('a step that takes readings', () => {
       }).join('');
     slots.field = null;
     const before = make();
-    slots.field = figures;
+    fieldModule(figures);
     expect(make()).toBe(before);
   });
 });
@@ -496,8 +488,8 @@ describe('the authoring rule that a source exists', () => {
     const step = {
       ...base,
       fields: [
-        readingField({ id: 'x' }, { probe: 'a' }),
-        readingField({ id: 'y' }, { span: 's', stat: 'se' }),
+        { ...{ id: 'x' }, source: { probe: 'a' } },
+        { ...{ id: 'y' }, source: { span: 's', stat: 'se' } },
       ],
     };
     expect(readingProblems(step, { ctx })).toEqual([]);
@@ -506,12 +498,12 @@ describe('the authoring rule that a source exists', () => {
     const step = {
       ...base,
       fields: [
-        readingField({ id: 'x' }, { probe: 'nope' }),
-        readingField({ id: 'y' }, { span: 'gone', stat: 'mean' }),
-        readingField({ id: 'z' }, { span: 's', stat: 'median' }),
-        readingField({ id: 'w' }, { probe: 'a', tool: 'b' }),
-        readingField({ id: 'v', compute: () => 1 }, { probe: 'a' }),
-        readingField({ id: 'u' }, { tool: 'r' }),
+        { ...{ id: 'x' }, source: { probe: 'nope' } },
+        { ...{ id: 'y' }, source: { span: 'gone', stat: 'mean' } },
+        { ...{ id: 'z' }, source: { span: 's', stat: 'median' } },
+        { ...{ id: 'w' }, source: { probe: 'a', tool: 'b' } },
+        { ...{ id: 'v', compute: () => 1 }, source: { probe: 'a' } },
+        { ...{ id: 'u' }, source: { tool: 'r' } },
       ],
     };
     const found = readingProblems(step, { ctx });
@@ -529,26 +521,18 @@ describe('the authoring rule that a source exists', () => {
 });
 
 describe('the ledger entry', () => {
-  test('keeps the printed text beside the number, and refuses text that is not one', () => {
+  test('keeps the printed text beside the number', () => {
     const e = fromReading({
       label: 'Period',
+      value: 3.25,
       text: '3,25',
       unit: 'd',
-      locale: 'es',
       src: { k: 'c' },
-      provenance: {},
     });
-    expect(e.snapshot.quantities[0].value).toBe(3.25);
+    expect(e.source).toBe(SOURCE.LESSON_READING);
+    expect(e.snapshot.quantities[0]).toMatchObject({ value: 3.25, unit: 'd' });
     expect(e.snapshot.quantities[0].note).toContain('3,25');
-    expect(
-      fromReading({
-        label: 'x',
-        text: 'n/a',
-        unit: '',
-        locale: 'en',
-        src: { k: 'c' },
-      })
-    ).toBe(null);
+    expect(validateArtifact(e.snapshot.artifact)).toEqual([]);
   });
 });
 

@@ -4,31 +4,6 @@
 // compile(text, scope) reads a formula (./parse.js), checks it against the
 // units registry before it computes anything, and returns what it will give
 // and a function that gives it:
-//
-//   - Every sum is of one dimension, every logarithm and exponential of a
-//     dimensionless number, every power's exponent a plain number the formula
-//     states; a sum of a length and a time is refused, naming the
-//     sub-expression, with both dimensions written in SI.
-//   - The result is in a registry unit (an input's own where the formula only
-//     rescales it, else the registry's unit of its dimension), flagged
-//     dimensionless when it is a ratio, or has no registry unit at all (a time
-//     squared per length cubed), which the caller may refuse or write as text.
-//   - Uncertainty is first-order, for uncorrelated inputs with a standard
-//     deviation each, or for inputs whose correlation coefficients the caller
-//     gives (Prompt 151: `correlations`, from an envelope's `correlatedWith`),
-//     where the cross terms 2 rho gj gk sj sk are added and the rule says so;
-//     with none given the inputs are treated as independent, and the rule says
-//     that: every number carries its partial derivative with respect
-//     to each input, so a quantity used twice (x - x, x * x) is differentiated
-//     once, correctly, and not added in quadrature as two inputs. It is not
-//     propagated, and the result says why, when an input has none, when an
-//     aggregate and the rest of the formula share an input (they are then
-//     correlated), and it is refused when an input has an interval.
-//
-// min, max and mean take a column (any expression of one) and give one number,
-// over the rows that are not skipped and have a value.
-//
-// Pure: no DOM. Browser and Node alike.
 // =============================================================================
 
 import { FormulaError, LIMITS, fail, parse } from './parse.js';

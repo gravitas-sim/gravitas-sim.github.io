@@ -755,7 +755,7 @@ export const ES_DEFERRED = {
   'inv.span.from': 'Desde',
   'inv.span.to': 'Hasta',
   'inv.span.step': 'Las flechas mueven un límite {step}.',
-  'inv.span.pick': 'Elige los dos límites, o toca dos puntos de la curva.',
+  'inv.span.pick': 'Elige los dos límites.',
   'inv.span.few': 'Hay menos de dos puntos entre los límites.',
   'inv.span.result':
     '{n} puntos, de {lo} a {hi}: media {mean}, error estándar {se}.',
@@ -3786,7 +3786,7 @@ export const ES_DEFERRED = {
     'Las estrellas que han dejado la secuencia principal, el polvo interestelar, las binarias y cualquier composición que no sea solar. Las cuatro cosas importan en un sondeo real y ninguna está aquí.',
   // La evidencia del Laboratorio Estelar
   'nb.source.stellar-lab': 'Laboratorio estelar',
-  'nb.source.lesson-reading': 'Lectura de una lección',
+  'nb.source.lesson-reading': 'Lectura de una investigación',
   'nb.reading.note': 'Tal como se imprime: {text}',
   'nb.source.binary-orbit': 'Órbita binaria',
   'nb.source.observatory': 'Medida en el Observatorio',

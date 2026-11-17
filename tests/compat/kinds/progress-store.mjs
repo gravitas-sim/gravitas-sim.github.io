@@ -16,7 +16,13 @@ export default {
     const { writeProgress } = await load('js/investigations/progressSchema.js');
     return writeProgress({
       lesson: lesson(),
-      responses: { 'tides:guess': 0 },
+      responses: {
+        'tides:guess': 0,
+        'tides:measure:d': '3.2504',
+        'tides:measure:d:locale': 'en',
+        'tides:measure:d:src':
+          '{"k":"c","r":"period","x":"3.2504","l":"Period","b":"Alpha","t":12.5}',
+      },
       attempts: { 'tides:guess': 1 },
       visited: new Set(['intro', 'guess']),
       stepSid: 'guess',
