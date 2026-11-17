@@ -877,20 +877,24 @@ function validateStep(step, id) {
 // Fetched when a lesson opens (loadSeams), so draws and reads stay synchronous.
 let figures = null;
 
-/** Fetch the plot, ellipse and import code the steps need. @returns {?Promise} */
+/** Fetch the plot, ellipse, import and controlled-run code the steps need. @returns {?Promise} */
 const loadSeams = steps =>
-  !figures &&
-  steps.some(
-    s =>
-      s.plot ||
-      s.type === 'ellipse' ||
-      s.importFromSelection ||
-      s.fields?.some(f => f.source)
-  )
-    ? import('./investigations/figures.js').then(m =>
+  Promise.all([
+    !figures &&
+      steps.some(
+        s =>
+          s.plot ||
+          s.type === 'ellipse' ||
+          s.importFromSelection ||
+          s.fields?.some(f => f.source)
+      ) &&
+      import('./investigations/figures.js').then(m =>
         fieldModule((figures = m))
-      )
-    : null;
+      ),
+    !slots.runs &&
+      steps.some(s => s.variation) &&
+      import('./lesson/runs.js').then(m => (slots.runs = m)),
+  ]);
 
 /** Draw the step's scatter plot from the lesson's current state. */
 function drawPlot(step, id) {
@@ -960,6 +964,14 @@ function renderStep() {
     renderStep,
     refreshMeasurements,
     importSelection,
+    visited: () => visited,
+    runs: {
+      probe: x => x.probe?.(probeContext()),
+      payloadFromSetup,
+      applyLocks,
+      bind: () => bindStepRoles(false),
+      stageUp: () => stagedStars().length > 0,
+    },
   });
   refreshMeasurements();
 }
@@ -1860,18 +1872,12 @@ let lastProbeSelection = null;
 
 function renderProbe() {
   const step = currentStep();
-  // A stage owns the whole scene, so if something else has replaced the scene
-  // the stage puts itself back. This happens on a cold load into a staged step:
-  // the application rebuilds its own world after the lesson has opened, and
-  // without this the reader is left looking at a scenario the step knows
-  // nothing about. Cheap: it rebuilds only when the stars have actually gone.
+  // A stage owns the scene: if something else replaced it (a cold load into a
+  // staged step, where the app rebuilds its world after the lesson opened) the
+  // stage puts itself back. Cheap: it rebuilds only when the stars have gone.
   if (step?.stage) {
-    // Only when the scene has been *replaced*, not when the reader has been
-    // experimenting. Deleting a body, firing one into a star, letting two
-    // merge - those are things a reader did on purpose, and rebuilding the
-    // stage under them would be the application undoing their work every
-    // quarter of a second. A world that has been swapped wholesale leaves
-    // nothing of the stage behind, and that is what this waits for.
+    // Only when the scene was *replaced*, never when the reader experimented
+    // (deleted a body, merged two): a wholesale swap leaves nothing of the stage.
     const presence = stagePresence();
     if (presence.allGone) {
       applyStage(step.stage, { force: true });
@@ -2015,6 +2021,7 @@ function releaseLessonAudio() {
 /** Move to a step; `rebuild` reloads the scenario (and stage) in force there. */
 function goToStep(index, { rebuild = false, open = false } = {}) {
   if (!active) return;
+  slots.runs?.release();
   const at = Math.max(0, Math.min(active.steps.length - 1, index));
   // A step that stages waits for the stage code; opening rejects on failure.
   const declared = active.steps[at]?.stage;
@@ -2297,15 +2304,12 @@ export async function openInvestigation(id, opts = {}) {
   // but never out of an open modal: D-R10-228-08.
   if (!document.activeElement?.closest?.('[aria-modal="true"]'))
     els.title.focus?.();
-  // A scenario introduction card left over from before the lesson opened lands
-  // squarely on top of the instrument panel. New ones are suppressed for the
-  // duration; this dismisses the one that may already be up.
+  // A scenario card left from before the lesson lands on the instrument panel:
+  // new ones are suppressed meanwhile, and this dismisses the one already up.
   const infoBox = document.getElementById('scenarioInfoBox');
   if (infoBox) infoBox.classList.remove('showUI', 'show');
-  // What the lesson is about to borrow, saved once. Entering is idempotent, so
-  // the twenty step changes that follow cannot overwrite these with values the
-  // lesson itself set - which is what makes "close the lesson and you are back
-  // where you were" true rather than nearly true.
+  // What the lesson borrows, saved once (entering is idempotent), so "close the
+  // lesson and you are back where you were" is true rather than nearly true.
   enterLessonScope({
     selection: state.selectedObject
       ? { id: state.selectedObject.object?.id ?? null, generation: null }
@@ -2388,19 +2392,13 @@ function restoreSelection(selection) {
 }
 
 /**
- * Whether the scene on the canvas is still the lesson's to hand back.
- *
- * True while the lesson owns it: a stage is up, or the last thing to build the
- * world was one of the lesson's own step setups. False once the reader has
- * loaded something themselves, which is the case a delayed restore must not
- * overwrite.
- *
+ * Whether the scene on the canvas is still the lesson's to hand back: a stage
+ * is up, or the last build was one of its step setups. False once the reader
+ * has loaded something themselves, which a restore must not overwrite.
  * @returns {boolean} Whether restoring is the right thing to do
  */
 function sandboxIsStillOurs() {
-  // A stage is up: the world on screen is one the lesson built.
   if (stagedStars().length) return true;
-  // Or the last thing to rebuild it was one of the lesson's own step setups.
   return appliedSetup !== null;
 }
 
@@ -2412,6 +2410,7 @@ export function closeInvestigation() {
   els.panel.hidden = true;
   els.panel.classList.remove('is-open');
   document.body.classList.remove('investigation-open');
+  slots.runs?.release();
   stopProbeLoop();
   releaseLocks();
   if (els.plotPanel) els.plotPanel.hidden = true;
