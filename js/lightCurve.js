@@ -39,7 +39,7 @@ import {
   world_to_screen,
 } from './physics.js';
 import { state } from './appState.js';
-import { getSimClock } from './timeline.js';
+import { getSimClock, isScrubbing } from './timeline.js';
 import { timeUnitSeconds } from './units.js';
 // Aliased: `t` is already the chart palette in this module, and a translator
 // called on a color object is a crash rather than a wrong word.
@@ -567,7 +567,8 @@ function calculateBrightness() {
 // ── Per-frame update ────────────────────────────────────────────────
 
 export function updateLightCurve() {
-  if (!enabled || state.paused) return;
+  // A recorded frame is not a new observation: looking back adds no samples.
+  if (!enabled || state.paused || isScrubbing()) return;
 
   // Clear chart when observer angle changes
   if (Math.abs(getPositionAngle() - prevAngleSnapshot) > 0.5) {

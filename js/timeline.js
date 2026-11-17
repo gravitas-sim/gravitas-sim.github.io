@@ -113,6 +113,9 @@ let scrubOffset = 0; // 0 = newest recorded frame, up to frameCount-1 back
 let held = null;
 let replaying = false;
 let replayClock = 0;
+// A lesson's replay may end short of live and say when it passes the event.
+let replayEnd = Infinity;
+let replayMark = null;
 
 let ui = null;
 
@@ -130,6 +133,7 @@ export function resetTimeline() {
   scrubOffset = 0;
   held = null;
   replaying = false;
+  replayMark = null;
   capacity = MAX_FRAMES;
   syncUI();
 }
@@ -358,6 +362,7 @@ function endHistory() {
   state.paused = held.paused;
   scrubbing = false;
   replaying = false;
+  replayMark = null;
   scrubOffset = 0;
   held = null;
   lastCaptureAt = -Infinity;
@@ -406,6 +411,17 @@ export function isReplaying() {
 /** The physics clock, under its older name. */
 export function getSimClock() {
   return getSimulationTime();
+}
+
+/**
+ * Frames back from the newest to the newest frame at or before clock `t`.
+ * @param {number} t - Simulated seconds
+ * @returns {number} The offset, or -1 when every frame is later than `t`
+ */
+export function offsetAt(t) {
+  for (let off = 0; off < frameCount; off++)
+    if (frameTimes[indexForOffset(off)] <= t) return off;
+  return -1;
 }
 
 /** @returns {number} How many frames are currently recorded */
@@ -466,19 +482,31 @@ export function rewindToHere() {
   endHistory();
 }
 
-/** Play the frames forward at the current speed to the live moment. */
-export function startReplay() {
+/**
+ * Play the frames forward at the current speed to the live moment, from the
+ * frame shown (or the oldest). A lesson may end it at `until`, short of live
+ * (the held moment still comes back), and be told once at `mark` (onMark).
+ * The transport passes its click event, which names none of these.
+ */
+export function startReplay({ until = Infinity, mark = NaN, onMark } = {}) {
   if (frameCount < 2) return false;
   if (!scrubbing) scrubTo(frameCount - 1);
   replaying = true;
   replayClock = getSimulationTime();
+  replayEnd = until;
+  replayMark = typeof onMark === 'function' ? { t: mark, run: onMark } : null;
   syncUI();
   return true;
 }
 
 function advanceReplay(dtSim) {
   replayClock += dtSim;
-  if (replayClock >= held.clock) {
+  if (replayMark && replayClock >= replayMark.t) {
+    const { run } = replayMark;
+    replayMark = null;
+    run();
+  }
+  if (replayClock >= Math.min(held.clock, replayEnd)) {
     returnToLive();
     return;
   }
@@ -562,11 +590,14 @@ export function recordedFrames() {
 
 /**
  * How much history there is to export, without decoding any of it.
- * @returns {{frames:number, bodies:number, simTime:number}} Frame count, rows
- *   in the most recent frame, and the span covered in simulation time units
+ * @returns {{frames:number, bodies:number, simTime:number, oldest:number,
+ *   capacity:number}} Frame count, rows in the most recent frame, the span
+ *   covered in simulation time units, the oldest frame's clock and how many
+ *   frames the body count allows
  */
 export function recordedExtent() {
-  if (frameCount === 0) return { frames: 0, bodies: 0, simTime: 0 };
+  if (frameCount === 0)
+    return { frames: 0, bodies: 0, simTime: 0, oldest: NaN, capacity };
   const newest = frames[indexForOffset(0)];
   const oldestT = frameTimes[indexForOffset(frameCount - 1)] ?? 0;
   const newestT = frameTimes[indexForOffset(0)] ?? 0;
@@ -574,5 +605,7 @@ export function recordedExtent() {
     frames: frameCount,
     bodies: newest ? newest.length / STRIDE : 0,
     simTime: Math.max(0, newestT - oldestT),
+    oldest: oldestT,
+    capacity,
   };
 }

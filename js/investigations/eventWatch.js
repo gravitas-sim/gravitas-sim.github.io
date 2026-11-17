@@ -16,10 +16,14 @@
 //
 // What it is actually for
 // -----------------------------------------------------------------------------
-//   Open the tool with the right bodies and the right event already chosen,
-//   and stop there. Arming is the student's own click. A lesson that armed a
-//   watch on their behalf would be a lesson that answered its own question,
-//   and the panel's own Arm button is where that decision belongs.
+//   Open the tool with the right bodies and the right event already chosen.
+//   Arming is the student's own click wherever the question is the moment
+//   itself ("when is periapsis?"): a lesson that armed that watch would answer
+//   its own question. A step may arm for the student (`pauseAt.auto`, through
+//   armForLesson, js/investigations/eventWindow.js) only where the moment is
+//   the setting and not the answer - the scene stops at periapsis so the
+//   student can measure something there. The author rule step/auto-arm
+//   (tools/authoring/autoArmRules.mjs) refuses an auto step that asks when.
 //
 //   Never clobber a watch the reader set up themselves. Somebody who armed a
 //   separation crossing to answer their own question and then advanced a step
@@ -143,9 +147,10 @@ export function resolveByName(bodies, name) {
  * appears is this step's, and the listener that watches for it is ours to drop.
  *
  * @param {object} spec - { kind, bodyId, primaryId, separation }
+ * @param {object} [opts] - { onFired }, called with our event when it fires
  * @returns {Promise<{ok: boolean, reason?: string}>} Whether it could be shown
  */
-export async function openToolFor(spec) {
+export async function openToolFor(spec, { onFired = null } = {}) {
   const { events, panel, physics } = await ensureLoaded();
 
   // A watch already armed before the step opened is the reader's, and stays
@@ -156,6 +161,7 @@ export async function openToolFor(spec) {
     generation: mine,
     preexisting,
     world: physics.getWorldGeneration(),
+    onFired,
   };
 
   unsubscribe?.();
@@ -166,7 +172,17 @@ export async function openToolFor(spec) {
       return;
     }
     if (payload?.type === 'fired') {
-      ourEvent = { ...payload.event, lessonGeneration: mine };
+      // The event's moment on the simulation clock, which the recorded frames
+      // are stamped with: days scale linearly from the same zero, so the
+      // crossing sits at timeDays / (timeDays + overshootDays) of the clock now.
+      const e = payload.event;
+      const now = e.timeDays + e.overshootDays;
+      const clock = physics.getSimulationTime();
+      ourEvent = {
+        ...e,
+        lessonGeneration: mine,
+        clock: now > 0 ? (clock * e.timeDays) / now : clock,
+      };
       state = WATCH.FIRED;
       activity.armed = false;
       activity.onFired?.(lastLessonEvent());
@@ -226,7 +242,7 @@ export async function armForLesson(
   if (!activity) {
     await openToolFor(spec);
   }
-  activity.onFired = onFired;
+  if (onFired) activity.onFired = onFired;
   const resolved = await armThroughPanel(spec);
   if (!resolved.ok) {
     state = WATCH.REFUSED;

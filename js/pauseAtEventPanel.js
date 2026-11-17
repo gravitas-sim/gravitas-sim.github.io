@@ -78,6 +78,7 @@ function cacheElements() {
     arm: document.getElementById('pauseEventArm'),
     disarm: document.getElementById('pauseEventDisarm'),
     message: document.getElementById('pauseEventMessage'),
+    readout: document.querySelector('#pauseEventResult .pause-event-readout'),
     result: document.getElementById('pauseEventResult'),
     time: document.getElementById('pauseEventTime'),
     precision: document.getElementById('pauseEventPrecision'),
@@ -336,14 +337,18 @@ function render() {
   const e = cacheElements();
   const armedSpec = armedEvent();
   const event = lastEvent();
+  // A lesson holding an answer (js/lesson/held.js) is told which event, not when.
+  const held = Boolean(event && heldAnswer());
 
   if (e.status) {
     e.status.textContent = armedSpec
       ? t('pauseEvent.status.armed')
       : event
-        ? t('pauseEvent.status.fired')
+        ? t('pauseEvent.status.fired') +
+          (held ? `: ${t(`pauseEvent.kind.${event.kind}`)}` : '')
         : t('pauseEvent.status.idle');
   }
+  if (e.readout) e.readout.hidden = held;
   if (e.arm) e.arm.disabled = Boolean(armedSpec);
   if (e.disarm) e.disarm.disabled = !armedSpec;
 
@@ -369,6 +374,14 @@ function render() {
   }
   if (e.note && e.note.value !== event.note) e.note.value = event.note || '';
 }
+
+/** Whether the open lesson holds an answer (HELD_ATTRIBUTE, js/lesson/held.js). */
+const heldAnswer = () =>
+  Boolean(
+    document.querySelector(
+      '#investigationPanel[data-answer-held]:not([hidden])'
+    )
+  );
 
 /**
  * Open or close the panel.
@@ -464,10 +477,13 @@ export function renderEventMarker({ frameCount, simClock } = {}) {
   const fraction = 1 - age / spanDays;
   marker.hidden = false;
   marker.style.left = `${(fraction * 100).toFixed(2)}%`;
-  marker.title = t('pauseEvent.marker', {
-    kind: t(`pauseEvent.kind.${event.kind}`),
-    time: formatNumber(event.timeDays, { sig: 4 }),
-  });
+  const kind = t(`pauseEvent.kind.${event.kind}`);
+  marker.title = heldAnswer()
+    ? kind
+    : t('pauseEvent.marker', {
+        kind,
+        time: formatNumber(event.timeDays, { sig: 4 }),
+      });
 }
 
 /**

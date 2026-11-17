@@ -51,7 +51,7 @@ import {
   holdClock,
   releaseHold,
 } from './appState.js';
-import { setParkedPause } from './timeline.js';
+import * as timeline from './timeline.js';
 
 import {
   bh_list,
@@ -631,7 +631,7 @@ function bindStepRoles(force) {
   const running = !state.paused;
   holdClock(step, appliedSetup);
   if (running && state.paused) announce(t('readout.status.paused'));
-  setParkedPause(state.paused);
+  timeline.setParkedPause(state.paused);
   // Whatever the last step illustrated is not this step's business; a widget
   // re-asserts its own on its first tick, one frame later.
   clearEvolutionScene();
@@ -965,56 +965,39 @@ function renderStep() {
 }
 
 /**
- * Open the pause-at-event tool for a step that asks a student to catch a
- * moment. A step declares `pauseAt: {kind, body, primary, label, note}`; the
- * tool opens with those chosen and arms NOTHING, so the reader's press of Arm
- * is the interaction asked for. All of it is behind a dynamic import. The
- * release on the way out matters: a watch armed on one step must not fire into
- * the next (js/investigations/eventWatch.js).
+ * The step's time and event window (js/investigations/eventWindow.js): its
+ * speed and pause, its pause-at-event tool (armed for the student only where
+ * `pauseAt.auto` says), Replay and Rewind to here. Entered once per step, drawn
+ * on each render, released on the way out: a watch armed on one step must not
+ * fire into the next. Lazy, fetched by the first step that declares one.
  *
- * @param {Object} step - Step definition
+ * @param {?Object} step - Step definition, or null when the lesson closes
  */
 function syncEventWatch(step) {
-  const spec = step?.pauseAt;
-  if (!spec) {
-    // Leaving the activity. Released unconditionally rather than only when we
-    // armed something, because the listener is ours either way and a lesson
-    // that closed with one attached is a lesson whose callbacks outlive it.
-    if (eventWatchLoaded) {
-      import('./investigations/eventWatch.js')
-        .then(m => m.release())
-        .catch(() => {});
-    }
-    return;
-  }
-
-  eventWatchLoaded = true;
-  import('./investigations/eventWatch.js')
-    .then(async watch => {
-      // A fresh step gets a fresh generation, so anything armed for the
-      // previous one cannot report into this one.
-      watch.release();
-      const ctx = probeContext();
-      const bodies = ctx?.bodies || [];
-      const body = watch.resolveByName(bodies, spec.body);
-      const primary = watch.resolveByName(bodies, spec.primary);
-      // A transit watch needs no bodies: it reads the photometer's own
-      // detector, so it is armable with nothing selected.
-      if (spec.kind !== 'transit' && (!body || !primary)) return;
-      await watch.openToolFor({
-        kind: spec.kind,
-        bodyId: body?.id ?? null,
-        primaryId: primary?.id ?? null,
-        separation: Number.isFinite(spec.separation) ? spec.separation : null,
-      });
-    })
-    .catch(err => {
-      console.warn(err);
-    });
+  const entering = step !== windowStep;
+  windowStep = step;
+  if (!eventWindow && !step?.pauseAt && !step?.time) return;
+  eventWindow ??= import('./investigations/eventWindow.js');
+  eventWindow
+    .then(m => m.syncWindow(step, entering, windowHost))
+    .catch(err => console.warn(err));
 }
-
-/** Whether this session has ever loaded the event-watch integration. */
-let eventWatchLoaded = false;
+let windowStep = null;
+let eventWindow = null;
+const windowHost = {
+  body: () => els.body,
+  bodies: () => probeContext()?.bodies || [],
+  setTime({ paused, speed }) {
+    if (speed > 0) SETTINGS.sim_speed = speed;
+    if (typeof paused === 'boolean')
+      timeline.setParkedPause((state.paused = paused));
+  },
+  timeline,
+  t,
+  announce,
+  formatTime,
+  locale: getLocale,
+};
 
 /**
  * Show or hide the docked plot panel for the current step.
