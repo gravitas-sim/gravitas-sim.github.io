@@ -1,0 +1,374 @@
+{
+  "format": "gravitas.model-page-facts/1",
+  "facts": [
+    {
+      "id": "a",
+      "name": "The default integrator is symplectic Euler",
+      "section": "gravity",
+      "sentence": {
+        "en": ["That ordering matters", "into an orbit."],
+        "es": ["Ese orden importa", "en una órbita."]
+      }
+    },
+    {
+      "id": "b",
+      "name": "The transit fit's default limb-darkening law is quadratic",
+      "section": "transit-fitting",
+      "sentence": {
+        "en": ["The default is the", "q1 and q2 fitted."],
+        "es": ["La predeterminada es", "q1 y q2 ajustados."]
+      }
+    },
+    {
+      "id": "c",
+      "name": "The two reasons a run is not time-reversible",
+      "section": "irreversible",
+      "sentence": {
+        "en": [
+          "There are two separate reasons",
+          "The first is the integrator."
+        ],
+        "es": ["Hay dos razones distintas", "La primera es el integrador."]
+      }
+    }
+  ],
+  "conditions": {
+    "viewports": ["1366x800", "375x812"],
+    "locales": ["en", "es"],
+    "serviceWorkers": "blocked",
+    "motion": "reduced, so a link jumps and a count is not a scroll animation",
+    "server": "tools/static-server.mjs: no compression, no caching",
+    "event": "a click or tap, a Tab or Enter press, or one PageDown (a scroll of the viewport height less 40 px, the usual page step); the sentence counts when its whole range is inside the viewport",
+    "limit": "a walk that has not finished in 400 events is recorded as null"
+  },
+  "before": {
+    "commit": "6a0e284f",
+    "treeClean": true,
+    "date": "2026-11-17",
+    "node": "v24.4.0",
+    "chromium": "156.0.8078.4",
+    "rows": [
+      {
+        "fact": "a",
+        "viewport": "1366x800",
+        "locale": "en",
+        "pointer_events": 1,
+        "keyboard_events": 14,
+        "pointer_route": ["click \"Gravity and motion\" (#gravity)"],
+        "keyboard_route": ["Tab x13, Enter \"Gravity and motion\" (#gravity)"]
+      },
+      {
+        "fact": "b",
+        "viewport": "1366x800",
+        "locale": "en",
+        "pointer_events": 2,
+        "keyboard_events": 42,
+        "pointer_route": [
+          "PageDown",
+          "click \"Transit fitting: what a limb-darkening law and a circular or\" (#transit-fitting)"
+        ],
+        "keyboard_route": [
+          "Tab x41, Enter \"Transit fitting: what a limb-darkening law and a circular or\" (#transit-fitting)"
+        ]
+      },
+      {
+        "fact": "c",
+        "viewport": "1366x800",
+        "locale": "en",
+        "pointer_events": 4,
+        "keyboard_events": 46,
+        "pointer_route": [
+          "PageDown",
+          "click \"What should I trust this to show?\" (#trust)",
+          "PageDown x2"
+        ],
+        "keyboard_route": [
+          "Tab x43, Enter \"What should I trust this to show?\" (#trust)",
+          "PageDown x2"
+        ]
+      },
+      {
+        "fact": "a",
+        "viewport": "1366x800",
+        "locale": "es",
+        "pointer_events": 1,
+        "keyboard_events": 14,
+        "pointer_route": ["click \"Gravedad y movimiento\" (#gravity)"],
+        "keyboard_route": [
+          "Tab x13, Enter \"Gravedad y movimiento\" (#gravity)"
+        ]
+      },
+      {
+        "fact": "b",
+        "viewport": "1366x800",
+        "locale": "es",
+        "pointer_events": 2,
+        "keyboard_events": 42,
+        "pointer_route": [
+          "PageDown",
+          "click \"Ajuste de tránsitos: qué suponen una ley de oscurecimiento a\" (#transit-fitting)"
+        ],
+        "keyboard_route": [
+          "Tab x41, Enter \"Ajuste de tránsitos: qué suponen una ley de oscurecimiento a\" (#transit-fitting)"
+        ]
+      },
+      {
+        "fact": "c",
+        "viewport": "1366x800",
+        "locale": "es",
+        "pointer_events": 4,
+        "keyboard_events": 46,
+        "pointer_route": [
+          "PageDown",
+          "click \"¿Qué puedo esperar que muestre con fiabilidad?\" (#trust)",
+          "PageDown x2"
+        ],
+        "keyboard_route": [
+          "Tab x43, Enter \"¿Qué puedo esperar que muestre con fiabilidad?\" (#trust)",
+          "PageDown x2"
+        ]
+      },
+      {
+        "fact": "a",
+        "viewport": "375x812",
+        "locale": "en",
+        "pointer_events": 2,
+        "keyboard_events": 8,
+        "pointer_route": [
+          "PageDown",
+          "click \"Gravity and motion\" (#gravity)"
+        ],
+        "keyboard_route": ["Tab x7, Enter \"Gravity and motion\" (#gravity)"]
+      },
+      {
+        "fact": "b",
+        "viewport": "375x812",
+        "locale": "en",
+        "pointer_events": 3,
+        "keyboard_events": 36,
+        "pointer_route": [
+          "PageDown x2",
+          "click \"Transit fitting: what a limb-darkening law and a circular or\" (#transit-fitting)"
+        ],
+        "keyboard_route": [
+          "Tab x35, Enter \"Transit fitting: what a limb-darkening law and a circular or\" (#transit-fitting)"
+        ]
+      },
+      {
+        "fact": "c",
+        "viewport": "375x812",
+        "locale": "en",
+        "pointer_events": 5,
+        "keyboard_events": 40,
+        "pointer_route": [
+          "PageDown x2",
+          "click \"What should I trust this to show?\" (#trust)",
+          "PageDown x2"
+        ],
+        "keyboard_route": [
+          "Tab x37, Enter \"What should I trust this to show?\" (#trust)",
+          "PageDown x2"
+        ]
+      },
+      {
+        "fact": "a",
+        "viewport": "375x812",
+        "locale": "es",
+        "pointer_events": 2,
+        "keyboard_events": 8,
+        "pointer_route": [
+          "PageDown",
+          "click \"Gravedad y movimiento\" (#gravity)"
+        ],
+        "keyboard_route": ["Tab x7, Enter \"Gravedad y movimiento\" (#gravity)"]
+      },
+      {
+        "fact": "b",
+        "viewport": "375x812",
+        "locale": "es",
+        "pointer_events": 3,
+        "keyboard_events": 36,
+        "pointer_route": [
+          "PageDown x2",
+          "click \"Ajuste de tránsitos: qué suponen una ley de oscurecimiento a\" (#transit-fitting)"
+        ],
+        "keyboard_route": [
+          "Tab x35, Enter \"Ajuste de tránsitos: qué suponen una ley de oscurecimiento a\" (#transit-fitting)"
+        ]
+      },
+      {
+        "fact": "c",
+        "viewport": "375x812",
+        "locale": "es",
+        "pointer_events": 6,
+        "keyboard_events": 41,
+        "pointer_route": [
+          "PageDown x2",
+          "click \"¿Qué puedo esperar que muestre con fiabilidad?\" (#trust)",
+          "PageDown x3"
+        ],
+        "keyboard_route": [
+          "Tab x37, Enter \"¿Qué puedo esperar que muestre con fiabilidad?\" (#trust)",
+          "PageDown x3"
+        ]
+      }
+    ]
+  },
+  "after": {
+    "commit": "6a0e284f",
+    "treeClean": false,
+    "date": "2026-11-17",
+    "node": "v24.4.0",
+    "chromium": "156.0.8078.4",
+    "rows": [
+      {
+        "fact": "a",
+        "viewport": "1366x800",
+        "locale": "en",
+        "pointer_events": 1,
+        "keyboard_events": 7,
+        "pointer_route": ["click \"the default integrator\" (#gravity)"],
+        "keyboard_route": [
+          "Tab to the contents disclosure, Enter, Tab to the link, Enter \"Gravity and motion\" (#gravity)"
+        ]
+      },
+      {
+        "fact": "b",
+        "viewport": "1366x800",
+        "locale": "en",
+        "pointer_events": 1,
+        "keyboard_events": 14,
+        "pointer_route": [
+          "click \"the transit fit’s limb-darkening law\" (#transit-fitting)"
+        ],
+        "keyboard_route": [
+          "Tab x13, Enter \"the transit fit’s limb-darkening law\" (#transit-fitting)"
+        ]
+      },
+      {
+        "fact": "c",
+        "viewport": "1366x800",
+        "locale": "en",
+        "pointer_events": 1,
+        "keyboard_events": 15,
+        "pointer_route": [
+          "click \"why a run is not time-reversible\" (#irreversible)"
+        ],
+        "keyboard_route": [
+          "Tab x14, Enter \"why a run is not time-reversible\" (#irreversible)"
+        ]
+      },
+      {
+        "fact": "a",
+        "viewport": "1366x800",
+        "locale": "es",
+        "pointer_events": 1,
+        "keyboard_events": 7,
+        "pointer_route": ["click \"el integrador predeterminado\" (#gravity)"],
+        "keyboard_route": [
+          "Tab to the contents disclosure, Enter, Tab to the link, Enter \"Gravity and motion\" (#gravity)"
+        ]
+      },
+      {
+        "fact": "b",
+        "viewport": "1366x800",
+        "locale": "es",
+        "pointer_events": 1,
+        "keyboard_events": 14,
+        "pointer_route": [
+          "click \"la ley de oscurecimiento al limbo del ajuste de tránsitos\" (#transit-fitting)"
+        ],
+        "keyboard_route": [
+          "Tab x13, Enter \"la ley de oscurecimiento al limbo del ajuste de tránsitos\" (#transit-fitting)"
+        ]
+      },
+      {
+        "fact": "c",
+        "viewport": "1366x800",
+        "locale": "es",
+        "pointer_events": 1,
+        "keyboard_events": 15,
+        "pointer_route": [
+          "click \"por qué una ejecución no es reversible en el tiempo\" (#irreversible)"
+        ],
+        "keyboard_route": [
+          "Tab x14, Enter \"por qué una ejecución no es reversible en el tiempo\" (#irreversible)"
+        ]
+      },
+      {
+        "fact": "a",
+        "viewport": "375x812",
+        "locale": "en",
+        "pointer_events": 1,
+        "keyboard_events": 7,
+        "pointer_route": ["click \"the default integrator\" (#gravity)"],
+        "keyboard_route": [
+          "Tab x6, Enter \"the default integrator\" (#gravity)"
+        ]
+      },
+      {
+        "fact": "b",
+        "viewport": "375x812",
+        "locale": "en",
+        "pointer_events": 1,
+        "keyboard_events": 8,
+        "pointer_route": [
+          "click \"the transit fit’s limb-darkening law\" (#transit-fitting)"
+        ],
+        "keyboard_route": [
+          "Tab x7, Enter \"the transit fit’s limb-darkening law\" (#transit-fitting)"
+        ]
+      },
+      {
+        "fact": "c",
+        "viewport": "375x812",
+        "locale": "en",
+        "pointer_events": 1,
+        "keyboard_events": 9,
+        "pointer_route": [
+          "click \"why a run is not time-reversible\" (#irreversible)"
+        ],
+        "keyboard_route": [
+          "Tab x8, Enter \"why a run is not time-reversible\" (#irreversible)"
+        ]
+      },
+      {
+        "fact": "a",
+        "viewport": "375x812",
+        "locale": "es",
+        "pointer_events": 1,
+        "keyboard_events": 7,
+        "pointer_route": ["click \"el integrador predeterminado\" (#gravity)"],
+        "keyboard_route": [
+          "Tab x6, Enter \"el integrador predeterminado\" (#gravity)"
+        ]
+      },
+      {
+        "fact": "b",
+        "viewport": "375x812",
+        "locale": "es",
+        "pointer_events": 1,
+        "keyboard_events": 8,
+        "pointer_route": [
+          "click \"la ley de oscurecimiento al limbo del ajuste de tránsitos\" (#transit-fitting)"
+        ],
+        "keyboard_route": [
+          "Tab x7, Enter \"la ley de oscurecimiento al limbo del ajuste de tránsitos\" (#transit-fitting)"
+        ]
+      },
+      {
+        "fact": "c",
+        "viewport": "375x812",
+        "locale": "es",
+        "pointer_events": 1,
+        "keyboard_events": 9,
+        "pointer_route": [
+          "click \"por qué una ejecución no es reversible en el tiempo\" (#irreversible)"
+        ],
+        "keyboard_route": [
+          "Tab x8, Enter \"por qué una ejecución no es reversible en el tiempo\" (#irreversible)"
+        ]
+      }
+    ]
+  }
+}
