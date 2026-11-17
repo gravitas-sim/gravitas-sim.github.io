@@ -5,27 +5,28 @@
 //   quiet     the world is emptied, the rail and the playback bar fold behind
 //             their toggles, and nothing on the page asks for the scene
 
-import { canvasAt } from './canvasKind.js';
-import { releaseModelOwnership } from '../lessonScene.js';
-import { hideObjectInspector } from '../inspectorGate.js';
-import { KEY_RAIL_SECTIONS } from '../names.js';
-import { onLocaleChange, registerMessages, t } from '../i18n/index.js';
-import { EN_CANVAS } from '../i18n/en.canvas.js';
-import { ES_CANVAS } from '../i18n/es.canvas.js';
+import { canvasAt } from './lesson/canvasKind.js';
+import { command } from './appState.js';
+import { KEY_RAIL_SECTIONS } from './names.js';
+import { onLocaleChange, registerMessages, t } from './i18n/index.js';
+import { EN_CANVAS } from './i18n/en.canvas.js';
+import { ES_CANVAS } from './i18n/es.canvas.js';
 import {
   accretion_disk_particles,
   asteroids,
   bh_list,
   bumpWorldGeneration,
   comets,
+  galaxies,
   gas_giants,
+  getWorldGeneration,
   gravity_ripples,
   neutron_stars,
   planets,
   resetPhysicsObjectCounter,
   stars,
   white_dwarfs,
-} from '../physics.js';
+} from './physics.js';
 
 export { canvasAt };
 
@@ -33,6 +34,7 @@ registerMessages('en', EN_CANVAS);
 registerMessages('es', ES_CANVAS);
 
 const $ = id => document.getElementById(id);
+const hideObjectInspector = command('hideObjectInspector');
 const TOGGLES = '.rail-section-toggle[aria-expanded="true"]';
 
 let now = null;
@@ -40,6 +42,7 @@ let was = null;
 let owns = false;
 let railWas = null;
 let fold = null;
+let seen = 0;
 
 /** A portrait is a picture, so its step holds the clock as a reading step does. */
 export const clockStep = (step, kind) =>
@@ -48,26 +51,43 @@ export const clockStep = (step, kind) =>
 /** Whether this module emptied the world, so closing the lesson restores the sandbox. */
 export const ownsWorld = () => owns;
 
-/** Empty the canvas, as a stage does before it stands its own scene. */
+/** Every collection a world is made of; physics.js reassigns some, so read them afresh. */
+const lists = () => [
+  bh_list,
+  stars,
+  planets,
+  gas_giants,
+  asteroids,
+  comets,
+  neutron_stars,
+  white_dwarfs,
+  galaxies,
+  accretion_disk_particles,
+  gravity_ripples,
+];
+
+/**
+ * Empty the canvas, as a stage does before it stands its own scene. The caller
+ * has released any model-owned body first (js/lessonScene.js).
+ */
 function emptyWorld() {
-  releaseModelOwnership();
-  for (const list of [
-    bh_list,
-    stars,
-    planets,
-    gas_giants,
-    asteroids,
-    comets,
-    neutron_stars,
-    white_dwarfs,
-    accretion_disk_particles,
-    gravity_ripples,
-  ])
-    list.length = 0;
+  for (const list of lists()) list.length = 0;
   resetPhysicsObjectCounter();
   bumpWorldGeneration();
+  seen = getWorldGeneration();
   hideObjectInspector();
   owns = true;
+}
+
+/**
+ * Empty the canvas again if the application has built a world under a quiet
+ * step (it does, on a cold load after the lesson has opened). A body the
+ * reader placed does not rebuild a world, so it stays.
+ */
+export function keepQuiet() {
+  if (now?.kind !== 'quiet' || getWorldGeneration() === seen) return;
+  if (lists().some(list => list.length)) emptyWorld();
+  else seen = getWorldGeneration();
 }
 
 /** Set an attribute, or remove it when the value is null. */

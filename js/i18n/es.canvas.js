@@ -4,7 +4,7 @@
 export const ES_CANVAS = {
   'inv.canvas.portrait': 'Imagen de {what}, no una medida.',
   'inv.canvas.quiet':
-    'Sin escena en este paso. Lo que hay que leer es el instrumento junto a la lección.',
+    'Sin escena en este paso. Lo que hay que leer es el instrumento junto a la actividad.',
   'inv.canvas.picture': 'imagen',
   'inv.canvas.reset.portrait':
     'Restablecer la imagen y el instrumento de este paso',

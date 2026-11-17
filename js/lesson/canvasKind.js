@@ -5,7 +5,7 @@
 //             still and called a picture: `picture: 'Jupiter and Io'`
 //   quiet     nothing staged
 // A declaration holds until the next one, then the lesson's own is the default.
-// js/lesson/canvas.js is the half that touches the page.
+// js/lessonCanvas.js is the half that touches the page.
 
 export const CANVAS = Object.freeze(['scene', 'portrait', 'quiet']);
 

@@ -2722,7 +2722,7 @@
 }
 
 /* ==========================================================================
-   A quiet canvas (js/lesson/canvas.js)
+   A quiet canvas (js/lessonCanvas.js)
    --------------------------------------------------------------------------
    The lesson stages nothing, so the controls that act on a scene fold behind
    their own toggles: the rail's sections close, Add object returns with any

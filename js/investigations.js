@@ -650,6 +650,7 @@ function bindStepRoles(force) {
   const quiet = canvas?.kind === 'quiet';
   if (quiet) {
     clearStage();
+    releaseModelOwnership();
     appliedSetup = null;
   }
   canvasMod?.enterCanvas(canvas, force);
@@ -887,14 +888,14 @@ function validateStep(step, id) {
 
 // Fetched when a lesson opens (loadSeams), so draws and reads stay synchronous.
 let figures = null;
-// js/lesson/canvas.js, for a lesson that declares what its canvas is for.
+// js/lessonCanvas.js, for a lesson that declares what its canvas is for.
 let canvasMod = null;
 const canvasNow = (i = stepIndex) => canvasMod?.canvasAt(active, i) ?? null;
 
 /** Fetch the plot, ellipse, import and canvas code a lesson needs. */
 const loadSeams = async ({ steps, canvas }) => {
   if (!canvasMod && (canvas || steps.some(s => s.canvas)))
-    canvasMod = await import('./lesson/canvas.js');
+    canvasMod = await import('./lessonCanvas.js');
   if (
     !figures &&
     steps.some(
@@ -1841,6 +1842,7 @@ let lastProbeSelection = null;
 
 function renderProbe() {
   const step = currentStep();
+  canvasMod?.keepQuiet();
   // A stage owns the whole scene, so if something else has replaced the scene
   // the stage puts itself back. This happens on a cold load into a staged step:
   // the application rebuilds its own world after the lesson has opened, and
