@@ -58,9 +58,67 @@
         gap: var(--space-2);
         margin: 0;
       }
-      .lib-card.is-compact .lib-body {
-        padding: var(--space-2) var(--space-3);
-        gap: var(--space-1);
+      /* An item page: the picture beside the text from 48rem, above it on a
+         phone; no picture, no column. The page title and introduction of the
+         start view are not repeated over it (the h1 stays for screen readers). */
+      .lib-item-head {
+        display: grid;
+        gap: var(--space-4) var(--space-6);
+        align-items: start;
+        margin-bottom: var(--space-4);
+      }
+      .lib-item-head .lib-shot {
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+      }
+      .lib-item-text {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: var(--space-2);
+        max-width: 44rem;
+      }
+      .lib-item-text > * {
+        margin: 0;
+      }
+      .lib-item-text h2 {
+        font-size: var(--text-xl);
+      }
+      .lib-actions {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: var(--space-2) var(--space-3);
+      }
+      .lib-actions .lib-link {
+        width: auto;
+        padding: 0 var(--space-4);
+      }
+      .lib-rows .lib-link {
+        display: inline-block;
+        width: auto;
+        overflow: visible;
+        background: none;
+        border: 0;
+      }
+      @media (min-width: 48rem) {
+        .lib-item:not(.is-plain) .lib-item-head {
+          grid-template-columns: minmax(0, 22rem) minmax(0, 1fr);
+        }
+      }
+      html[data-view='item'] main > h1 {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        overflow: hidden;
+        clip-path: inset(50%);
+        white-space: nowrap;
+      }
+      html[data-view='item'] main > h1 + p {
+        display: none;
+      }
+      .lib-start-group .lib-summary {
+        font-size: var(--text-sm);
       }
       .lib-links {
         display: flex;

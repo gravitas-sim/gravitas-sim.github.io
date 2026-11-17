@@ -32,7 +32,7 @@ import {
   progressBucket,
 } from './data/investigations/browse.js';
 import { LENGTHS, CALCULATIONS } from './data/investigations/sequences.js';
-import { libraryCardHtml } from './library/card.js';
+import { factsOf, libraryCardHtml } from './library/card.js';
 import { checkLibrary, entryIdOfItem, previewRoute } from './library/format.js';
 import { progressOf } from './library/progress.js';
 import {
@@ -572,7 +572,6 @@ function startHtml() {
             pick,
             shown,
             progress: progressBucket(progressFor(e.id)),
-            compact: true,
           })
         );
       return `<div class="lib-start-group"><h3>${escape(pick(g.audience))}</h3><ul class="lib-list">${rows.join('')}</ul></div>`;
@@ -632,7 +631,15 @@ async function renderDetail(kind) {
   const { topicView, itemView, mountSave, bindCollections } =
     await import('./library/views.js');
   if (mine !== drawn) return;
-  const c = { t, pick, shown, byId, path: state.path, preview: previewRoute };
+  const c = {
+    t,
+    pick,
+    shown,
+    byId,
+    path: state.path,
+    preview: previewRoute,
+    facts: e => factsOf(e, t),
+  };
   const lib = state.library;
   const out =
     kind === 'topic'

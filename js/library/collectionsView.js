@@ -40,7 +40,7 @@ export function mountSave(box, entry, c) {
   const host = box.querySelector('.lib-item');
   if (!host || host.querySelector('.lib-save')) return;
   host
-    .querySelector('p')
+    .querySelector('.lib-actions')
     ?.insertAdjacentHTML(
       'afterend',
       `<p class="lib-save"><button type="button" class="ui-button" data-save="${escape(entry.id)}" aria-pressed="${isSaved(entry.id)}">${escape(c.t('lib.save'))}</button> <span class="ui-note lib-save-note" role="status" aria-live="polite"></span></p>`

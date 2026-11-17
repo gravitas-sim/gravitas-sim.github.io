@@ -138,7 +138,7 @@ ${section(c.t('lib.topic.scenarios'), on.some(e => e.kind === 'scenario') ? of('
  * The page of one entry: its relations and its pathways.
  * @param {object} lib - The library document
  * @param {string} id - The entry id
- * @param {object} c - {t, pick, byId, shown, path, preview}
+ * @param {object} c - {t, pick, byId, shown, path, preview, facts}
  * @returns {?{html: string, title: string, pathway: ?{title: string, href: string}}}
  *   Null when the entry is unknown
  */
@@ -159,16 +159,20 @@ export function itemView(lib, id, c) {
     k === 'seq'
       ? lib.sequences.find(s => s.id === pid)
       : c.byId.get(`course:${pid}`);
+  const link = (href, text) => `<a href="${escape(href)}">${escape(text)}</a>`;
   const membership = (rel?.in ?? [])
     .map(([k, pid, n]) => {
       const p = named(k, pid);
       if (!p) return '';
-      const total = k === 'seq' ? p.entries.length : 0;
-      return `<li>${escape(
-        k === 'seq'
-          ? c.t('lib.item.in.seq', { name: c.pick(p.title), n: n + 1, total })
-          : c.t('lib.item.in.course', { name: c.pick(p.title), n: n + 1 })
-      )}</li>`;
+      const seq = k === 'seq';
+      const text = seq
+        ? c.t('lib.item.in.seq', {
+            name: c.pick(p.title),
+            n: n + 1,
+            total: p.entries.length,
+          })
+        : c.t('lib.item.in.course', { name: c.pick(p.title), n: n + 1 });
+      return `<li>${link(seq ? `?sequence=${pid}&group=sequence` : p.route, text)}</li>`;
     })
     .join('');
   const [pk, pid] = String(c.path || '').split(':');
@@ -179,12 +183,17 @@ export function itemView(lib, id, c) {
         href: pk === 'seq' ? `?sequence=${pid}&group=sequence` : via.route,
       }
     : null;
-  const html = `<article class="lib-item" data-item="${escape(id)}">
+  const facts = c.facts(entry);
+  const kind = c.shown?.[entry.kind] ?? entry.kind;
+  const html = `<article class="lib-item${entry.thumbnail ? '' : ' is-plain'}" data-item="${escape(id)}">
+<div class="lib-item-head">${entry.thumbnail ? `<img class="lib-shot" src="/${escape(entry.thumbnail)}" alt="" decoding="async" width="640" height="360" />` : ''}<div class="lib-item-text">
+<p class="lib-badges"><span class="ui-badge">${escape(c.t(`lib.badge.${kind}`))}</span><span class="ui-badge">${escape(c.t(`lib.format.${entry.format}`))}</span></p>
 <h2>${escape(c.pick(entry.title))}</h2>
+${facts.length ? `<p class="lib-facts">${facts.map(f => `<span>${escape(f)}</span>`).join('')}</p>` : ''}
 ${entry.summary ? `<p>${escape(c.pick(entry.summary))}</p>` : ''}
-<p><a class="ui-button lib-link" href="${escape(entry.route)}">${escape(c.t('lib.item.open'))}</a>
-<a class="ui-button lib-link" href="${escape(c.preview(entry))}" data-preview>${escape(c.t('lib.item.preview'))}</a></p>
-<p class="ui-note">${escape(c.t('lib.item.preview.note'))}</p>${
+<div class="lib-actions"><a class="ui-button is-primary lib-link" href="${escape(entry.route)}">${escape(c.t('lib.item.open'))}</a>
+<a class="ui-button lib-link" href="${escape(c.preview(entry))}" data-preview>${escape(c.t('lib.item.preview'))}</a>
+<span class="ui-note">${escape(c.t('lib.item.preview.note'))}</span></div></div></div>${
     rel?.teach
       ? `\n<p><a href="${escape(rel.teach)}">${escape(c.t('lib.item.teach'))}</a></p>`
       : ''
