@@ -129,10 +129,7 @@ test.describe('the canvas behind a lesson', () => {
     const before = await generation();
     await page.locator('#railScenario').click();
     await page.locator('#refreshScenarioBtn').click();
-    await page.waitForFunction(
-      async g => (await import('/js/physics.js')).getWorldGeneration() > g,
-      before
-    );
+    await expect.poll(generation).toBeGreaterThan(before);
     await expect.poll(() => bodies(page), { timeout: 5_000 }).toBe(0);
     // A scene the lesson itself declares is not touched by any of this.
     await expect(page.locator('body')).toHaveAttribute(
