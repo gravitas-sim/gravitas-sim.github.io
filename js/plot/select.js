@@ -128,7 +128,7 @@ export function interact(
 
   function drawBrush() {
     svg.querySelector('.ow-brush')?.remove();
-    if (!brush) return;
+    if (!brush || !ranged) return;
     svg.append(
       el('rect', {
         class: 'ow-brush',
@@ -151,13 +151,14 @@ export function interact(
     drawBrush();
   });
   svg.addEventListener('pointermove', e => {
-    if (!brush || !ranged) return;
+    if (!brush) return;
     brush.to = point(e);
     drawBrush();
   });
   svg.addEventListener('pointerup', e => {
     if (!brush) return;
     brush.to = point(e);
+    if (!ranged) brush.from = brush.to;
     const a = plot.toX(Math.min(brush.from, brush.to));
     const b = plot.toX(Math.max(brush.from, brush.to));
     brush = null;

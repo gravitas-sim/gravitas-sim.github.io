@@ -199,7 +199,7 @@ function changed(v, source) {
  */
 export function draw(step, vals, { canvas, els, transformed, log, scene }) {
   const spec = step.plot;
-  view ??= build(canvas, els, scene);
+  if (view?.svg !== canvas) view = build(canvas, els, scene);
   const v = view;
   v.scene = scene;
   if (v.step !== step) {
