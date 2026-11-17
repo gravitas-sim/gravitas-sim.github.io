@@ -22,6 +22,10 @@ export default {
         'tides:measure:d:locale': 'en',
         'tides:measure:d:src':
           '{"k":"c","r":"period","x":"3.2504","l":"Period","b":"Alpha","t":12.5}',
+        // The instrument's control values a student left behind: they go over
+        // the step's declared opening position when the step is reopened.
+        'tides:measure:tool:k2': '1.2',
+        'tides:measure:tool:Q': '40',
       },
       attempts: { 'tides:guess': 1 },
       visited: new Set(['intro', 'guess']),

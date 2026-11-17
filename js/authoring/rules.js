@@ -184,10 +184,7 @@ const isPlainObject = v => !!v && typeof v === 'object' && !Array.isArray(v);
  * throw in front of a class.
  */
 export function emptyProbeContext() {
-  // Mirrors the object js/investigations.js builds. Kept in step with it by
-  // tests/authoring.test.js, which fails if the engine grows a context member
-  // this stub does not have: a probe calling something missing here would be
-  // reported as a broken probe when the probe is fine and the stub is stale.
+  // Mirrors the object js/investigations.js builds. Kept in step with it by tests/authoring.test.js, which fails if the engine grows a context member this stub does not have: a probe calling something missing here would be reported as a broken probe when the probe is fine and the stub is stale.
   return {
     selected: null,
     bodies: [],
@@ -204,11 +201,7 @@ export function emptyProbeContext() {
     flux: () => 1,
     days: () => 0,
     observerAngle: () => 0,
-    // Shaped as the real accessors shape them, empty rather than absent.
-    // transitAnalysis() and rotationCurveState() always return an object, so a
-    // stub handing back null would report every probe that reads one as broken
-    // when the probe is right and the stub is wrong. clusterState() genuinely
-    // can return null - fewer than three galaxies - so that one does.
+    // Shaped as the real accessors shape them, empty rather than absent. transitAnalysis() and rotationCurveState() always return an object, so a stub handing back null would report every probe that reads one as broken when the probe is right and the stub is wrong. clusterState() genuinely can return null - fewer than three galaxies - so that one does.
     photometry: () => ({
       baseline: 1,
       transits: [],
@@ -233,10 +226,7 @@ export function emptyProbeContext() {
     haloOn: () => false,
     frame: () => ({ mode: 'world', objectId: null }),
     seenFrom: () => null,
-    // Stable bindings, the replacement for `find` below. The stub answers the
-    // shape and not the world: an authoring check runs with no simulation, so
-    // every role is unbound, and a probe that copes with an unbound role here
-    // is a probe that copes with one whose body has merged at run time.
+    // Stable bindings, the replacement for `find` below. The stub answers the shape and not the world: an authoring check runs with no simulation, so every role is unbound, and a probe that copes with an unbound role here is a probe that copes with one whose body has merged at run time.
     role: () => null,
     roleStatus: () => 'unbound',
     roleOf: () => null,
@@ -495,7 +485,7 @@ export function checkCatalog(inputs, { skip = [] } = {}) {
           'id/step',
           step.sid === undefined
             ? 'step has no sid; run `node tools/add-step-ids.mjs` to mint one'
-            : `sid ${JSON.stringify(step.sid)} is not usable as a key: it must be lowercase letters, digits and single hyphens, and not only digits`
+            : `sid ${JSON.stringify(step.sid)} is not usable as a key: lowercase letters, digits and single hyphens, not only digits`
         );
       } else if (sidsSeen.has(step.sid)) {
         E('id/step', `sid "${step.sid}" is already used by another step`);
@@ -546,7 +536,7 @@ export function checkCatalog(inputs, { skip = [] } = {}) {
         ) {
           E(
             'content/hints',
-            `misconception "${rule?.id ?? '?'}" is not a standard one and gives no factor or value to match`
+            `misconception "${rule?.id ?? '?'}" is not standard and gives no factor or value`
           );
         }
       }
@@ -645,7 +635,7 @@ export function checkCatalog(inputs, { skip = [] } = {}) {
               } else if (v < c.min || v > c.max) {
                 E(
                   'setup/value',
-                  `tool.${part}.${key} = ${v} is outside the control range ${c.min}..${c.max}, so the widget can never reach it`
+                  `tool.${part}.${key} = ${v} is outside the range ${c.min}..${c.max}`
                 );
               } else if (
                 Number.isFinite(c.step) &&
@@ -667,7 +657,7 @@ export function checkCatalog(inputs, { skip = [] } = {}) {
                 if (offGrid > 1e-6 && !recoverable) {
                   W(
                     'setup/value',
-                    `tool.${part}.${key} = ${v} is not on the visible control's ${c.step} step and no preset of ${w.id} sets ${key} to it, so a student who moves it cannot get back`
+                    `tool.${part}.${key} = ${v} is off the ${c.step} step and no preset sets it, so a student cannot get back`
                   );
                 }
               }
@@ -691,7 +681,7 @@ export function checkCatalog(inputs, { skip = [] } = {}) {
               if (typeof step.tool[key] !== 'number') continue;
               E(
                 'ref/control',
-                `tool.${key} = ${step.tool[key]} names a control of ${w.id}, so it belongs under tool.values — where it is now, nothing reads it and the control opens at its own default`
+                `tool.${key} = ${step.tool[key]} names a control of ${w.id}: put it under tool.values, where nothing reads it now`
               );
             }
 
@@ -791,7 +781,7 @@ export function checkCatalog(inputs, { skip = [] } = {}) {
               if (!ids.has(name) && !ids.has(base)) {
                 E(
                   'ref/field',
-                  `field "${f.id}" computes from "${name}", which this step does not declare, so it can only ever be blank`
+                  `field "${f.id}" computes from "${name}", which this step does not declare`
                 );
               }
             }
@@ -943,12 +933,7 @@ export function checkCatalog(inputs, { skip = [] } = {}) {
         }
       }
 
-      // A remediation step is shown only when an earlier graded step was
-      // answered wrongly (or rightly): js/investigations.js stepApplies(). One
-      // level deep, so every student still walks a straight line to the end:
-      // the step it names is graded and one every student reaches (and, if a
-      // held prediction, already marked), and it is neither the last step nor
-      // where a prediction is marked.
+      // A remediation step is shown only when an earlier graded step was answered wrongly (or rightly): js/investigations.js stepApplies(). One level deep, so every student still walks a straight line to the end: the step it names is graded and one every student reaches (and, if a held prediction, already marked), and it is neither the last step nor where a prediction is marked.
       if (step.when !== undefined) {
         const w = step.when;
         const at = isPlainObject(w)
@@ -1235,7 +1220,7 @@ export function checkCatalog(inputs, { skip = [] } = {}) {
             'agree/manifest',
             inv.id,
             null,
-            `the ${locale} manifest's ${key} is not the lesson's: ${JSON.stringify(entry[key])} vs ${JSON.stringify(expected[key])}`
+            `${locale} manifest ${key} is ${JSON.stringify(entry[key])}, not ${JSON.stringify(expected[key])}`
           );
         }
       }
@@ -1549,7 +1534,7 @@ function checkTranslationShape(
     if (overlay.length > base.length) {
       report(
         'error',
-        `${locale}: ${path.join('.')} has ${overlay.length} entries for ${base.length} in English; the extras are dropped`,
+        `${locale}: ${path.join('.')} has ${overlay.length} entries for ${base.length}; extras are dropped`,
         stepIndex
       );
     }
@@ -1580,7 +1565,7 @@ function checkTranslationShape(
       if (!Object.hasOwn(base, key)) {
         report(
           'error',
-          `${locale}: ${[...path, key].join('.')} is not a key the lesson has, so this translation is silently discarded`,
+          `${locale}: ${[...path, key].join('.')} is not a lesson key and is discarded`,
           stepIndex
         );
         continue;

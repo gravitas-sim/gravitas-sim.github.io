@@ -604,8 +604,7 @@ export const ES_DEFERRED = {
   'sweep.guide.run': 'Ejecutar el barrido guiado',
 
   // --- Tareas para clase --------------------------------------------------
-  // Shown from lazy chunks (the builder, the link bridge, the lesson panel with
-  // an assignment open), so none is in a first visit; ensureDeferredMessages() registers them.
+  // Shown from lazy chunks (the builder, the link bridge, the lesson panel with an assignment open), so none is in a first visit; ensureDeferredMessages() registers them.
   'assign.title': 'Crear una actividad',
   'assign.hint':
     'Elige los pasos que quieres asignar. Los pasos que construyen el mundo del que trata otro paso se añaden solos, y se indican donde corresponden.',

@@ -801,11 +801,11 @@ export function startButton(els, widget, spec, values, done) {
   b.className = 'inv-tool-action';
   b.dataset.toolStart = '';
   b.textContent = t('inv.tool.start');
-  b.addEventListener('click', () => {
+  b.onclick = () => {
     Object.assign(values, openingValues(widget, spec));
     els.toolPresetNote.textContent = '';
     done();
-  });
+  };
   els.toolActions.append(b);
   els.toolActions.hidden = false;
 }

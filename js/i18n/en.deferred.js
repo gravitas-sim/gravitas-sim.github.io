@@ -593,8 +593,7 @@ export const EN_DEFERRED = {
   'sweep.partial':
     'Some trials did not produce a measurement, so this describes the values that ran rather than the range that was asked for.',
 
-  // The guided example. One question, one parameter, and a note about what the
-  // answer does and does not establish.
+  // The guided example. One question, one parameter, and a note about what the answer does and does not establish.
   'sweep.guide.title': 'How far out can a planet orbit one star of a pair?',
   'sweep.guide.body':
     'This sweeps the planet\u2019s starting orbit from close in to well out, holding the stars, the seed and the timestep fixed, and measures how far the planet gets from its star. Close in, the orbit is the planet\u2019s own and the distance barely changes. Further out the second star starts to matter, and past a point the planet stops being in orbit at all.',
