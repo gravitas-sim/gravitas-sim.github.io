@@ -263,6 +263,45 @@ after can be shown beside its before (`tools/visual-matrix.mjs`).
   crowded scene, 1 of the close world). A cell that did not repeat is compared
   by eye or by crop, never by hash alone; the table marks each one.
 
+### A world seen close: light, phase and surface
+
+What the sandbox may claim about a lit world, and the numbers it is held to.
+The numbers were fixed before the drawing that meets them was written; the
+fixture and its tests read them from
+`tests/fixtures/light-phase-tolerances.json`, which is the only place they are
+stated.
+
+- **The light.** A planet, moon or giant is shaded from the one luminous body
+  that sends it the most flux (`dominantLight`, `js/bodyVisuals.js`). A summed
+  direction is not used: two stars on opposite sides would cancel and leave a
+  world lit from nowhere. A body heavier than a star's lower mass limit lights
+  others; a body below it does not, whatever class a scenario gives it.
+- **The terminator.** At a drawn radius of 10 px or more, at either quality
+  tier, a rocky world or giant shows a lit half and a night half, the edge
+  between them perpendicular to the direction of the light. Below 10 px the
+  drawing does not change.
+- **The phase.** A body whose primary is a planet or a giant is drawn as that
+  primary sees it: the lit fraction of the disc is (1 + cos a) / 2, a being the
+  angle at the body between the light and the observer, and the terminator is
+  an ellipse of semi-minor axis |cos a| r. A body that goes round a star shows
+  the half-lit disc a view from above the orbital plane sees, which is the only
+  phase that view has.
+- **No star.** A scene with no luminous body keeps the fixed light from the
+  upper left, draws no phase, and says that its shading is illustration.
+- **What is modelled.** The direction of the light, the terminator and the
+  phase come from the bodies' positions. Markings, bands and the ring shadow's
+  width are illustration, and the canvas description and the inspector say so.
+
+Tolerances, checked on a fixture world (a star, a planet and a moon built by the
+scenario builder, never shipped):
+
+| Check | Tolerance | Why this number |
+|---|---|---|
+| Terminator orientation, at a = 45, 90 and 135 degrees | within 0.5 degrees of the computed one | At a = 0 the disc is fully lit and at a = 180 fully dark, so there is no edge to orient. |
+| Lit pixel fraction, at a = 0, 45, 90, 135 and 180 degrees | within 0.02 of (1 + cos a) / 2, on a disc of at least 80 px radius | Edge quantization: an 80 px disc has about 500 edge pixels in 20,000, half a part in a hundred at the limb and as much again along the terminator. |
+| The chosen light, at the equal-flux locus of two equal stars | unchanged over 100 steps | Two equal fluxes differ by rounding; a choice made on the exact comparison would flicker. |
+| A body drawn below 10 px | the same canvas calls, in the same order, with the same arguments, as before | Stronger than comparing pixels, and it does not depend on the browser's antialiasing. |
+
 ### Page families
 
 This section sets no page family's direction. A family (a workspace for doing,
