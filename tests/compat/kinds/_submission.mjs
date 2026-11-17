@@ -14,6 +14,11 @@ export async function submissionFor(load, { evidence = false } = {}) {
     responses: {
       [key('where-is-the-star')]: '1',
       [key('use-the-law')]: '8',
+      // A taken reading: the printed text, its convention and how it was taken.
+      [`${key('measure-four-planets')}:p1_a`]: '1.772',
+      [`${key('measure-four-planets')}:p1_a:locale`]: 'en',
+      [`${key('measure-four-planets')}:p1_a:src`]:
+        '{"k":"c","r":"selection","x":"1.772","b":"Eccentric Orbiter"}',
     },
     attempts: {},
     visited,

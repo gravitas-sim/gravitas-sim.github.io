@@ -759,6 +759,8 @@ export function transitAnalysis() {
     seen: transitsSeen,
     log: transitLog.map(t => ({ ...t })),
     last: transitLog.length ? { ...transitLog[transitLog.length - 1] } : null,
+    // The recorded samples, for a step that reads an interval of the curve.
+    series: () => ({ x: [...timeDays], y: [...brightnessValues] }),
   };
 }
 

@@ -6,42 +6,6 @@
 // lab writes a gravitas.analysis/1, and the notebook keeps evidence. Each was
 // complete alone and none could hand its result to another. This module is the
 // adapters, and nothing else; every one is pure data in, data out:
-//
-//   resultToObservation   an experiment's result as an observation table, one
-//                         row per setting, that opens in the Observatory and
-//                         that the inference core reads (js/inference/infer.js
-//                         dataFrom takes its x, its mean and its error)
-//   observationArtifact   that table as a gravitas.artifact/1 envelope, and
-//   artifactObservation   the envelope back as the table: the round trip
-//   experimentArtifact    an experiment result, as an envelope
-//   analysisArtifact      a sweep analysis, as an envelope
-//   fitArtifact           a fit (a gravitas.inference/1 with its results), as
-//                         an envelope
-//   readAnalysis          a saved gravitas.analysis/1 sweep analysis, checked,
-//                         for the analysis lab to open again
-//
-// Every envelope names the digest of what it was made from: the trials for an
-// experiment and its analysis, the rows a fit read. The notebook cites an
-// envelope by that digest (js/notebook/artifactEntry.js), so a report says
-// which data a number came from and a reader can check it.
-//
-// What the observation holds, per setting and metric: the mean of the trials
-// that finished, its standard error (the `uncertainty` column), the edges of
-// the 95% Student-t interval for the mean (the `lower` and `upper` columns, as
-// offsets from the mean, as GWOSC's catalog states its intervals), the spread
-// of the trials, and how many finished. A trial that did not finish is
-// counted, never averaged (the sweep's rule, js/experiments/sweep.js); a
-// setting where no trial finished for any metric is left out and named in the
-// observation's reductions. The simulation's output is origin `model`: this is
-// not an observation of the sky, and the Observatory says so.
-//
-// What the envelope holds is what the observation holds without its display
-// names: ids, units, values, intervals, the source and its digest. The round
-// trip is exact in those, and `title` and the column names come back as ids
-// unless the caller names them again.
-//
-// Pure: no DOM, no state. Browser, Worker and Node alike. A lazy module: the
-// analysis lab and the Observatory's fit panel import it, nothing at start-up.
 // =============================================================================
 
 import { canonicalJson, fnvHex8 } from '../hash.js';

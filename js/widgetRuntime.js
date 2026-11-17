@@ -66,9 +66,10 @@ export function setCaptureSink(fn) {
  * capture's provenance the provenance of the click.
  *
  * @param {Function} make - Given (capture, provenance), returns an entry
+ * @param {{quiet?: boolean}} [opts] - `quiet` keeps the entry without opening the notebook
  * @returns {Promise<boolean>} Whether anything received it
  */
-export function captureToNotebook(make) {
+export function captureToNotebook(make, opts) {
   if (!sink) {
     // Not swallowed: nothing in a browser can reach this, because start-up
     // imports the bridge, so arriving here means the seam is broken and the
@@ -81,7 +82,7 @@ export function captureToNotebook(make) {
     }
     return Promise.resolve(false);
   }
-  return sink(make);
+  return sink(make, opts);
 }
 
 // --- Where a capture is made --------------------------------------------------
