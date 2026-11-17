@@ -14,7 +14,8 @@ import { EARTH_MASSES_PER_JUPITER_MASS, SOLAR_MASS_UNIT } from './constants.js';
 import { simToAu } from './units.js';
 import { formatNumber, withUnit } from './format.js';
 import { t } from './i18n/index.js';
-import { drawSolarLabel, EARTH_SYMBOL, hexToRgb } from './utils.js';
+import { EARTH_SYMBOL, hexToRgb } from './utils.js';
+import { bodyLabel } from './bodyLabels.js';
 import { currentTier } from './quality.js';
 import { ENVIRONMENT } from './blackHole/appearance.js';
 import {
@@ -171,47 +172,15 @@ function drawPlanet(o, ctx) {
     // no-op
   }
 
-  ctx.save();
-  ctx.setTransform(1, 0, 0, 1, 0, 0);
-  const true_screen_pos = world_to_screen(world_pos);
-  // Two different sizes, on purpose.
-  //
-  // The offset follows the *drawn* body, so a label sits just off the disc
-  // the reader can see. Whether to label at all follows the *model* radius,
-  // which is the size this decision has always been made on: gating on the
-  // drawn size instead would have taken the names off every planet in the
-  // Solar System the moment the displayed-size policy shrank them, which is
-  // a labeling change nobody asked for.
-  const screen_radius = r * state.zoom;
-  const label_size = o.radius * state.zoom;
-
-  if (label_size > 4) {
-    const label_y_offset = screen_radius + 10;
-    ctx.font = '10px Roboto Mono';
-    ctx.fillStyle = '#fff';
-    ctx.textAlign = 'center';
-    ctx.textBaseline = 'middle';
-    ctx.shadowColor = 'black';
-    ctx.shadowBlur = 3;
-
-    // Show name for Solar System planets, mass for others
-    if (o.isSolarSystemPlanet) {
-      ctx.fillText(
-        o.name,
-        true_screen_pos.x,
-        true_screen_pos.y + label_y_offset
-      );
-    } else {
-      drawSolarLabel(
-        ctx,
-        formatNumber(o.massInEarths),
-        true_screen_pos.x,
-        true_screen_pos.y + label_y_offset,
-        { symbol: EARTH_SYMBOL }
-      );
-    }
-  }
-  ctx.restore();
+  // The offset follows the drawn disc; naming follows the model radius, so a
+  // compressed planet keeps its name.
+  bodyLabel(o, world_to_screen(world_pos), r * state.zoom, {
+    px: 11,
+    gate: o.radius * state.zoom > 4,
+    ...(o.isSolarSystemPlanet
+      ? { name: o.name }
+      : { value: formatNumber(o.massInEarths), symbol: EARTH_SYMBOL }),
+  });
 }
 
 /**
@@ -756,48 +725,19 @@ function drawGasGiant(o, ctx) {
     ctx.restore();
   }
 
-  ctx.save();
-  ctx.setTransform(1, 0, 0, 1, 0, 0);
-  const true_screen_pos = world_to_screen(world_pos);
-  // Two different sizes, on purpose.
-  //
-  // The offset follows the *drawn* body, so a label sits just off the disc
-  // the reader can see. Whether to label at all follows the *model* radius,
-  // which is the size this decision has always been made on: gating on the
-  // drawn size instead would have taken the names off every planet in the
-  // Solar System the moment the displayed-size policy shrank them, which is
-  // a labeling change nobody asked for.
-  const screen_radius = gr * state.zoom;
-  const label_size = o.radius * state.zoom;
-
-  if (label_size > 6) {
-    const label_y_offset = screen_radius + 12;
-    ctx.font = '11px Roboto Mono';
-    ctx.fillStyle = '#fff';
-    ctx.textAlign = 'center';
-    ctx.textBaseline = 'middle';
-    ctx.shadowColor = 'black';
-    ctx.shadowBlur = 3;
-
-    // Show name for Solar System gas giants, mass for others
-    if (o.isSolarSystemPlanet) {
-      ctx.fillText(
-        o.name,
-        true_screen_pos.x,
-        true_screen_pos.y + label_y_offset
-      );
-    } else {
-      const massInEarths = o.massInJupiters * EARTH_MASSES_PER_JUPITER_MASS;
-      drawSolarLabel(
-        ctx,
-        String(Math.round(massInEarths)),
-        true_screen_pos.x,
-        true_screen_pos.y + label_y_offset,
-        { symbol: EARTH_SYMBOL }
-      );
-    }
-  }
-  ctx.restore();
+  bodyLabel(o, world_to_screen(world_pos), gr * state.zoom, {
+    px: 11,
+    gap: 12,
+    gate: o.radius * state.zoom > 6,
+    ...(o.isSolarSystemPlanet
+      ? { name: o.name }
+      : {
+          value: String(
+            Math.round(o.massInJupiters * EARTH_MASSES_PER_JUPITER_MASS)
+          ),
+          symbol: EARTH_SYMBOL,
+        }),
+  });
 
   // ...and the near half over the top, which is what makes the disk read as
   // a disk passing behind and in front rather than as a hoop drawn on the
@@ -988,34 +928,21 @@ function drawBlackHole(o, ctx) {
     ctx.restore();
   }
 
-  ctx.save();
-  ctx.setTransform(1, 0, 0, 1, 0, 0);
-  const true_screen_pos = world_to_screen(world_pos);
-  const screen_radius = world_radius * state.zoom;
-  let label_y_offset = screen_radius + 15;
-  if (physicsSettings.show_bh_jets) {
-    label_y_offset = screen_radius * 6 + screen_radius + 10;
-  } else if (physicsSettings.show_accretion_disk) {
-    label_y_offset = screen_radius * 2.5 + 10;
-  } else if (physicsSettings.show_bh_glow) {
-    label_y_offset = screen_radius * 1.8 + 10;
-  }
-  ctx.font = '14px Roboto Mono';
-  ctx.fillStyle = '#fff';
-  ctx.textAlign = 'center';
-  ctx.textBaseline = 'middle';
-  ctx.shadowColor = 'black';
-  ctx.shadowBlur = 4;
-  // Significant figures rather than one decimal place: a stellar-mass hole
-  // reads 9.80 and a supermassive one reads 1.00 x 10^6 instead of 1000000.0.
-  const massStr = formatNumber(o.mass / SOLAR_MASS_UNIT);
-  drawSolarLabel(
-    ctx,
-    massStr,
-    true_screen_pos.x,
-    true_screen_pos.y + label_y_offset
-  );
-  ctx.restore();
+  const sr = world_radius * state.zoom;
+  // Clear of the disk and the jets, which reach several radii out. Significant
+  // figures: 9.80, and 1.00 x 10^6 for a supermassive hole.
+  const reach = physicsSettings.show_bh_jets
+    ? sr * 7
+    : physicsSettings.show_accretion_disk
+      ? sr * 2.5
+      : physicsSettings.show_bh_glow
+        ? sr * 1.8
+        : sr;
+  bodyLabel(o, world_to_screen(world_pos), reach, {
+    px: 14,
+    gate: true,
+    value: formatNumber(o.mass / SOLAR_MASS_UNIT),
+  });
 }
 
 /**
@@ -1075,26 +1002,11 @@ function drawComet(o, ctx) {
 
   ctx.restore();
 
-  // The label is text, and text has to be drawn in screen space or the
-  // render pass's flipped Y axis renders it upside down. Same shape as the
-  // planet's and the star's: reset the transform, draw, put it back.
-  if (r * z > 4) {
-    ctx.save();
-    ctx.setTransform(1, 0, 0, 1, 0, 0);
-    const true_screen_pos = world_to_screen(world_pos);
-    ctx.font = '10px Roboto Mono';
-    ctx.fillStyle = '#fff';
-    ctx.textAlign = 'center';
-    ctx.textBaseline = 'middle';
-    ctx.shadowColor = 'black';
-    ctx.shadowBlur = 2;
-    ctx.fillText(
-      withUnit(formatNumber(o.massInComets), 'C'),
-      true_screen_pos.x,
-      true_screen_pos.y + r * z + 12
-    );
-    ctx.restore();
-  }
+  bodyLabel(o, world_to_screen(world_pos), r * z, {
+    px: 11,
+    gate: r * z > 4,
+    name: withUnit(formatNumber(o.massInComets), 'C'),
+  });
 }
 
 /**

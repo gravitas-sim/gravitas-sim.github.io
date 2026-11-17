@@ -27,6 +27,7 @@ import {
 import { resetFollowCamera } from './followCamera.js';
 import { ensurePauseAtEvent, renderEventMarker } from './pauseAtEventBridge.js';
 import { toast, announce, loadFailed } from './notify.js';
+import { LABEL_MODES, labelMode } from './bodyLabels.js';
 export { toast, announce };
 import {
   tickTimeline,
@@ -587,6 +588,22 @@ function setupShortcuts() {
     run: () => {
       SETTINGS.show_trails = !SETTINGS.show_trails;
       toast(SETTINGS.show_trails ? 'Trails on' : 'Trails off');
+    },
+  });
+  registerShortcut({
+    keys: 'B',
+    match: 'b',
+    group: 'View',
+    label: t('shortcut.bodyLabels'),
+    run: () => {
+      const next =
+        LABEL_MODES[
+          (LABEL_MODES.indexOf(labelMode()) + 1) % LABEL_MODES.length
+        ];
+      SETTINGS.body_labels = next;
+      toast(
+        `${t('settings.label.bodyLabels')}: ${t(`settings.option.bodyLabels.${next}`)}`
+      );
     },
   });
 

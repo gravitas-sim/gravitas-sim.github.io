@@ -32,6 +32,7 @@
 // =============================================================================
 
 import { AU_METERS } from './constants.js';
+import { labelFont, pixelScale } from './bodyLabels.js';
 import { SIM_UNITS_PER_AU, formatTime } from './units.js';
 import {
   world_to_screen,
@@ -404,7 +405,7 @@ function drawRuler(ctx) {
   drawHandle(ctx, a, tools.drag?.tool === 'ruler' && tools.drag.key === 'a');
   drawHandle(ctx, b, tools.drag?.tool === 'ruler' && tools.drag.key === 'b');
 
-  ctx.font = `600 12px ${INSTRUMENT_MONO}`;
+  ctx.font = labelFont(12, INSTRUMENT_MONO, '600');
   ctx.fillStyle = TOOL_INK;
   ctx.textAlign = 'center';
   ctx.textBaseline = 'bottom';
@@ -476,7 +477,7 @@ function drawProtractor(ctx) {
     tools.drag?.tool === 'protractor' && tools.drag.key === 'arm2'
   );
 
-  ctx.font = `600 12px ${INSTRUMENT_MONO}`;
+  ctx.font = labelFont(12, INSTRUMENT_MONO, '600');
   ctx.fillStyle = TOOL_INK;
   ctx.textAlign = 'center';
   ctx.textBaseline = 'middle';
@@ -595,8 +596,11 @@ export function drawInstrumentation(
   bottomInset = 0,
   legend = []
 ) {
-  const W = canvas.width || 0;
-  const H = canvas.height || 0;
+  // Everything below is in CSS pixels: the context is scaled to the canvas's
+  // backing store for the whole function (js/bodyLabels.js).
+  const k = pixelScale();
+  const W = (canvas.width || 0) / k;
+  const H = (canvas.height || 0) / k;
   if (W < 240 || H < 200) return;
 
   // A phone in portrait has about a third of the width a laptop does, and the
@@ -636,6 +640,7 @@ export function drawInstrumentation(
   const barY = H - pad - 10 - Math.max(0, bottomInset);
 
   ctx.save();
+  ctx.scale(k, k);
   ctx.font = `11px ${INSTRUMENT_MONO}`;
   ctx.textBaseline = 'middle';
   ctx.textAlign = 'left';
@@ -742,7 +747,7 @@ export function drawInstrumentation(
     // ties the drawn bar to the actual view transform. Nothing else in the
     // instrumentation depends on the zoom, which is why a scale bar is the
     // thing that makes a screenshot readable.
-    const metersPerPx = METERS_PER_UNIT / (zoom > 0 ? zoom : 1);
+    const metersPerPx = METERS_PER_UNIT / (zoom > 0 ? zoom / k : 1);
     const barW = Math.min(160, W * 0.22);
     scaleBar(ctx, pad + 2, barY, barW, metersPerPx, {
       color: 'rgba(200, 214, 235, 0.9)',
@@ -755,27 +760,16 @@ export function drawInstrumentation(
       ctx.fillStyle = TOOL_INK;
       ctx.fillText(readings.join('   '), pad + 2 + barW + 64, barY);
     }
-
-    // What the scale bar does not say.
-    //
-    // The bar is honest about distance. The bodies are not honest about size,
-    // and cannot be: at a scale where the Sun is a visible disc an Earth is a
-    // fraction of a pixel, so every body in Gravitas is drawn on a compressed
-    // scale that keeps the hierarchy readable and abandons the ratios. That is
-    // a defensible thing to do and an indefensible thing to do silently, so it
-    // is said here - on the canvas, beside the instrument that establishes the
-    // other scale, and therefore inside every screenshot and every recording.
-    //
-    // The full explanation, and the pointer to where the real numbers are, is
-    // in the canvas description that assistive technology reads and in the
-    // model documentation. One line is all this has room for.
-    ctx.font = `10px ${INSTRUMENT_MONO}`;
-    ctx.fillStyle = 'rgba(200, 214, 235, 0.62)';
-    ctx.fillText(t('canvas.sizeDisclosure'), pad + 2, barY + 14);
   } else if (readings.length) {
     ctx.fillStyle = TOOL_INK;
     ctx.fillText(readings.join('   '), pad + 2, barY);
   }
+
+  // What the scale bar does not say: the bodies are drawn on a compressed
+  // scale. Always drawn, at the canvas edge, so it is in every screenshot.
+  ctx.font = `12px ${INSTRUMENT_MONO}`;
+  ctx.fillStyle = 'rgb(200, 214, 235)';
+  halo(ctx, t('canvas.sizeDisclosure'), pad + 2, barY + 14);
 
   ctx.restore();
 }

@@ -50,6 +50,14 @@ import {
 } from './bodyDrawSky.js';
 import { LOD_POINT_MAX_PX, hitRadius, starColor } from './bodyVisuals.js';
 import { setBloomLayer } from './bodyDraw.js';
+import {
+  claim,
+  frameScale,
+  drawBodyMarks,
+  labelFont,
+  nameSpots,
+  pixelScale,
+} from './bodyLabels.js';
 import { getWorldSeed } from './rng.js';
 import { state, SETTINGS, registerCommands } from './appState.js';
 import { barycenterOf } from './lesson/barycenter.js';
@@ -1045,6 +1053,7 @@ function framedTrail(trail, shifts, newestTick) {
 const drawScene = () => {
   ctx.setTransform(1, 0, 0, 1, 0, 0);
   ctx.clearRect(0, 0, canvas.width, canvas.height);
+  frameScale(canvas);
 
   // Resolve the reference frame once per rendered frame. Everything downstream
   // reads state.frameOffset - the canvas transform below, world_to_screen for
@@ -1361,7 +1370,7 @@ const drawScene = () => {
       ctx.save();
       ctx.setTransform(1, 0, 0, 1, 0, 0);
       if (outerR * state.zoom > 30) {
-        ctx.font = '12px Inter, system-ui, sans-serif';
+        ctx.font = labelFont(12, 'Inter, system-ui, sans-serif');
         ctx.textBaseline = 'middle';
         ctx.shadowColor = 'rgba(0,0,0,0.8)';
         ctx.shadowBlur = 4;
@@ -1383,7 +1392,7 @@ const drawScene = () => {
         );
         // Edge labels only once there is room for them to not collide.
         if ((outerR - innerR) * state.zoom > 46) {
-          ctx.font = '10px Inter, system-ui, sans-serif';
+          ctx.font = labelFont(11, 'Inter, system-ui, sans-serif');
           label(
             innerR,
             bounds.innerLabel,
@@ -1420,23 +1429,6 @@ const drawScene = () => {
   ctx.globalAlpha = 1;
 
   bh_list.forEach(bh => bh.draw(ctx));
-
-  // Which black hole is selected, marked as UI rather than as light: a dashed
-  // ring outside the silhouette at any zoom, for the chosen object only (a ring
-  // drawn on every hole read as something the object emitted).
-  if (state.selectedObject?.type === 'BlackHole') {
-    const bh = state.selectedObject.object;
-    if (bh && bh.alive && bh.pos) {
-      ctx.save();
-      ctx.strokeStyle = 'rgba(150,195,255,0.8)';
-      ctx.lineWidth = 1.5 / state.zoom;
-      ctx.setLineDash([6 / state.zoom, 5 / state.zoom]);
-      ctx.beginPath();
-      ctx.arc(bh.pos.x, bh.pos.y, bh.radius + 7 / state.zoom, 0, 2 * Math.PI);
-      ctx.stroke();
-      ctx.restore();
-    }
-  }
 
   // Draw enhanced hover effect for clickable objects - draw in world coordinates since canvas is already transformed
   if (!state.inspector_open && state.user_has_interacted) {
@@ -1529,6 +1521,7 @@ const drawScene = () => {
   // Hover tooltip removed per request
 
   ctx.restore();
+  drawBodyMarks(ctx, world_to_screen);
 
   // Everything from here down is screen space, and everything from here down
   // lands in an exported screenshot, because the export composites the
@@ -1588,7 +1581,7 @@ const drawScene = () => {
       }
       if (top) {
         ctx.save();
-        ctx.font = 'bold 14px sans-serif';
+        ctx.font = labelFont(14, 'sans-serif', 'bold');
         ctx.fillStyle = 'rgba(90, 160, 255, 0.95)';
         ctx.textAlign = 'center';
         ctx.textBaseline = 'bottom';
@@ -1768,9 +1761,9 @@ const drawScene = () => {
       // Area labels, drawn after every fill so no wedge paints over a label.
       if (state.zoom > 0.35) {
         const total = wedgeAreas.reduce((a, b) => a + b, 0);
+        const taken = nameSpots(); // fewer percentages, not a smear
         ctx.save();
-        ctx.font =
-          '600 11px ui-monospace, SFMono-Regular, Menlo, Consolas, monospace';
+        ctx.font = labelFont(11, 'ui-monospace, Menlo, monospace', '600');
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
         ctx.shadowColor = 'rgba(0, 0, 0, 0.9)';
@@ -1779,12 +1772,19 @@ const drawScene = () => {
           const at = wedgeLabelAt[w];
           if (!at || !total) continue;
           const s = world_to_screen({ x: px + at.x, y: py + at.y });
+          const pct = `${((wedgeAreas[w] / total) * 100).toFixed(1)}%`;
+          if (
+            !claim(
+              taken,
+              s.x,
+              s.y,
+              ctx.measureText(pct).width,
+              13 * pixelScale()
+            )
+          )
+            continue;
           ctx.fillStyle = 'rgba(255, 255, 255, 0.92)';
-          ctx.fillText(
-            `${((wedgeAreas[w] / total) * 100).toFixed(1)}%`,
-            s.x,
-            s.y
-          );
+          ctx.fillText(pct, s.x, s.y);
         }
         ctx.restore();
       }
@@ -1860,7 +1860,7 @@ const drawScene = () => {
       }
       if (sweepTop) {
         ctx.save();
-        ctx.font = 'bold 13px sans-serif';
+        ctx.font = labelFont(13, 'sans-serif', 'bold');
         ctx.fillStyle = 'rgba(200, 200, 255, 0.9)';
         ctx.textAlign = 'center';
         ctx.textBaseline = 'bottom';
@@ -2575,7 +2575,7 @@ function renderOrbitPreview(preview) {
     }
     if (top) {
       ctx.save();
-      ctx.font = 'bold 14px sans-serif';
+      ctx.font = labelFont(14, 'sans-serif', 'bold');
       ctx.fillStyle = 'rgba(90, 160, 255, 0.95)';
       ctx.textAlign = 'center';
       ctx.textBaseline = 'bottom';

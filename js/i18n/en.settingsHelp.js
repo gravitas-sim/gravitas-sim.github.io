@@ -65,6 +65,8 @@ export const EN_SETTINGSHELP = {
     "Shades the background with the Newtonian gravitational potential of the heaviest bodies (up to 24), on a logarithmic color scale, using the current G and the force law's softening. It is a picture of the field only and does not change the motion. Takes effect at once.",
   'setHelp.show_scale_bar':
     'Draws a scale bar in real distance units in the bottom-left corner of the canvas, matched to the current zoom, with a note that body sizes are not to scale; it also appears in saved screenshots. Takes effect at once.',
+  'setHelp.body_labels':
+    'Which bodies the canvas names: all, only the selected body and the bodies an investigation step is about, or none. Crowded names are spread apart or left out. The B key cycles the three.',
   'setHelp.show_elapsed_time':
     'Stamps the simulated time (t = …) along the bottom of saved screenshots. The live readout shows the elapsed time whatever this is set to. Takes effect at once.',
   'setHelp.show_accretion_disk':
