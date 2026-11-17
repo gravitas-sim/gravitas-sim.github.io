@@ -151,11 +151,21 @@ function fakeCanvas(texts) {
   };
 }
 
-/** The elements `drawPlot` writes its table into. */
-const plotElements = () => ({
-  plotTableWrap: { hidden: true },
-  plotTable: { innerHTML: '' },
-});
+/** The elements `drawPlot` draws into: the plot's svg and its table. */
+function plotElements() {
+  const NS = 'http://www.w3.org/2000/svg';
+  const host = document.createElement('div');
+  const svg = document.createElementNS(NS, 'svg');
+  host.append(svg);
+  return {
+    canvas: svg,
+    els: {
+      plotTableWrap: document.createElement('div'),
+      plotTable: document.createElement('table'),
+      body: document.createElement('div'),
+    },
+  };
+}
 
 // --- Call sites -------------------------------------------------------------------
 
@@ -328,9 +338,7 @@ function recordPlot(figures, step, vectors) {
   for (const [name, transformed, log] of options) {
     const list = [];
     for (const vals of vectors) {
-      const texts = [];
-      const els = plotElements();
-      const canvas = fakeCanvas(texts);
+      const { canvas, els } = plotElements();
       const r = outcome(() => {
         figures.drawPlot(step, vals, { canvas, els, transformed, log });
         return null;
@@ -338,13 +346,19 @@ function recordPlot(figures, step, vectors) {
       list.push({
         // The table's numbers (its headings are the lesson's own words and
         // are recorded with the lesson), the tick labels and the slope.
-        table: [...els.plotTable.innerHTML.matchAll(/<td>([^<]*)<\/td>/g)].map(
-          m => m[1]
+        table: [...els.plotTable.querySelectorAll('tbody tr')].flatMap(tr =>
+          // A value the plot cannot draw reads as a dash and the word for
+          // missing (the table component's own, in the page's language): the
+          // dash is recorded, not the word.
+          [...tr.cells].slice(2).map(c => c.textContent.replace(/^—.*/, '—'))
         ),
         // Only the slope is kept of what is painted: the ticks are
         // tickLabel's, already on js/format.js, and their step is a
         // logarithm at a whole number, which differs between engines.
-        slope: texts.filter(x => /^slope [\u2212-]?\d/.test(x)).map(maskNoise),
+        slope: [...canvas.querySelectorAll('text')]
+          .map(n => n.textContent)
+          .filter(x => /^slope [\u2212-]?\d/.test(x))
+          .map(maskNoise),
         ...(r ? { threw: r.threw } : {}),
       });
     }
@@ -583,6 +597,7 @@ export async function recordInvestigations({ coverage = true } = {}) {
       await reg.setLessonLocale(locale);
       const presets = [];
       const plots = {};
+      await figures.loadPlot();
       for (const id of [...reg.investigationIds()].sort()) {
         const lesson = await withDepth(
           await reg.loadInvestigation(id, locale),
