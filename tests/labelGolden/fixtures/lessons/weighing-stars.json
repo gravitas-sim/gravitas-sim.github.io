@@ -30,23 +30,11 @@
     ["steps.one-on-your-own.fields.3.unit",""],
     ["steps.one-on-your-own.fields.4.unit","M☉"]
    ],
-   "numbered": [
-    ["steps.a-practice-run.fields.2.label","a<sup>3</sup>, that is a × a × a"],
-    ["steps.a-practice-run.fields.3.label","P<sup>2</sup>, that is P × P"],
-    ["steps.a-practice-run.fields.4.label","Total mass, a<sup>3</sup> ÷ P<sup>2</sup>"],
-    ["steps.weigh-the-pair.fields.2.label","a<sup>3</sup>"],
-    ["steps.weigh-the-pair.fields.3.label","P<sup>2</sup>"],
-    ["steps.one-on-your-own.fields.2.label","a<sup>3</sup>"],
-    ["steps.one-on-your-own.fields.3.label","P<sup>2</sup>"]
-   ]
+   "numbered": []
   },
   "es": {
    "units": [],
-   "numbered": [
-    ["steps.a-practice-run.fields.2.label","a<sup>3</sup>, es decir a × a × a"],
-    ["steps.a-practice-run.fields.3.label","P<sup>2</sup>, es decir P × P"],
-    ["steps.a-practice-run.fields.4.label","Masa total, a<sup>3</sup> ÷ P<sup>2</sup>"]
-   ]
+   "numbered": []
   }
  },
  "numeric": {
