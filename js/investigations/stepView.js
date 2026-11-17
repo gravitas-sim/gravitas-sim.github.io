@@ -1105,3 +1105,39 @@ export function progressFor(id, total = 0) {
     at: done > 0 ? Math.min(done, total || done) : 1,
   };
 }
+
+/**
+ * A reader-facing name for a lesson's role key. A translation wins; otherwise
+ * the key is derived (`starA` becomes "star A", `m2000` "20 M☉"), right in both
+ * languages, so a role a lesson invents still gets a sensible label.
+ *
+ * @param {string} key - The role as the lesson wrote it
+ * @returns {string} What to show in the object list
+ */
+export function roleLabel(key) {
+  const id = `inv.role.${key}`;
+  const text = t(id);
+  if (text !== id) return text;
+  // The stellar shelves name their members by mass in hundredths of a solar
+  // mass, which is a storage format and not a label.
+  const mass = /^m(\d{2,4})$/.exec(key);
+  if (mass) return `${Number(mass[1]) / 100} M☉`;
+  return key.replace(/([a-z])([A-Z])/g, '$1 $2');
+}
+
+/**
+ * Whether the role chip would only repeat the body's own name.
+ *
+ * Half the lessons name their roles after the bodies - `earth`, `io`, `moon` -
+ * and the chip then read "EARTH Earth", which is a label and its own echo. The
+ * name is the more useful of the two, so in that case the role is dropped.
+ *
+ * @param {string} label - The resolved role label
+ * @param {string} name - The body's name in the world
+ * @returns {boolean} True when the role adds nothing
+ */
+export function roleEchoesName(label, name) {
+  const a = String(label).trim().toLowerCase();
+  const b = String(name).trim().toLowerCase();
+  return Boolean(a) && (a === b || b.startsWith(`${a} `));
+}

@@ -20,6 +20,7 @@ Of 195 prediction loops, 195 are returned to,
 195 produce a measurement before they are answered, and
 0 end in an explanation in the reader's own words.
 195 hold their marking until the experiment settles them.
+The canvas behind a step is stated as scene on 0, portrait on 0, quiet on 0; 1521 state none.
 
 ## Kepler's Laws (`keplers-laws`)
 

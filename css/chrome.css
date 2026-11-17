@@ -2720,3 +2720,55 @@
 .series-table tbody th {
   font-weight: 400;
 }
+
+/* ==========================================================================
+   A quiet canvas (js/lesson/canvas.js)
+   --------------------------------------------------------------------------
+   The lesson stages nothing, so the controls that act on a scene fold behind
+   their own toggles: the rail's sections close, Add object returns with any
+   section a reader opens, and the playback bar is one button until it is
+   opened. The page carries the kind in force as body[data-lesson-canvas], which
+   the layout prompts read as well.
+   ====================================================================== */
+@layer overrides {
+  .timeline-fold {
+    display: none;
+  }
+
+  body[data-lesson-canvas='quiet'] .timeline-fold {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-1);
+  }
+
+  body[data-lesson-canvas='quiet'] .timeline-fold::after {
+    content: '';
+    width: 6px;
+    height: 6px;
+    border: solid currentColor;
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg);
+  }
+
+  body[data-lesson-canvas='quiet'] .timeline-fold[aria-expanded='false']::after {
+    transform: rotate(-45deg);
+  }
+
+  body[data-lesson-canvas='quiet'] .timeline-bar.is-folded {
+    left: 50%;
+    right: auto;
+    transform: translateX(-50%);
+    margin-inline: 0;
+    width: auto;
+    min-width: 0;
+  }
+
+  body[data-lesson-canvas='quiet'] .timeline-bar.is-folded > :not(.timeline-fold) {
+    display: none;
+  }
+
+  body[data-lesson-canvas='quiet']:not(:has(.rail-section-toggle[aria-expanded='true']))
+    #objectAdd {
+    display: none;
+  }
+}

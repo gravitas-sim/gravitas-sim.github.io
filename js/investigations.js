@@ -17,6 +17,8 @@ import {
   fieldModule,
   renderProgressNotice,
   renderSaveStatus,
+  roleEchoesName,
+  roleLabel,
   save,
   sessionProgress,
   slots,
@@ -629,7 +631,8 @@ function applySetup(setup) {
 function bindStepRoles(force) {
   const step = currentStep();
   const running = !state.paused;
-  holdClock(step, appliedSetup);
+  const canvas = canvasNow();
+  holdClock(canvasMod?.clockStep(step, canvas?.kind) ?? step, appliedSetup);
   if (running && state.paused) announce(t('readout.status.paused'));
   setParkedPause(state.paused);
   // Whatever the last step illustrated is not this step's business; a widget
@@ -643,6 +646,14 @@ function bindStepRoles(force) {
     for (const [role, why] of Object.entries(problems))
       console.warn(`${step.sid} ${what} ${role}: ${why}`);
   };
+  // A quiet canvas stages nothing, and no setup is in force behind it.
+  const quiet = canvas?.kind === 'quiet';
+  if (quiet) {
+    clearStage();
+    appliedSetup = null;
+  }
+  canvasMod?.enterCanvas(canvas, force);
+  if (quiet) return;
   // A stage declares the whole scene and binds its own roles, so it takes
   // precedence: a step cannot both stand its own stars on the canvas and bind
   // roles to somebody else's.
@@ -876,21 +887,26 @@ function validateStep(step, id) {
 
 // Fetched when a lesson opens (loadSeams), so draws and reads stay synchronous.
 let figures = null;
+// js/lesson/canvas.js, for a lesson that declares what its canvas is for.
+let canvasMod = null;
+const canvasNow = (i = stepIndex) => canvasMod?.canvasAt(active, i) ?? null;
 
-/** Fetch the plot, ellipse and import code the steps need. @returns {?Promise} */
-const loadSeams = steps =>
-  !figures &&
-  steps.some(
-    s =>
-      s.plot ||
-      s.type === 'ellipse' ||
-      s.importFromSelection ||
-      s.fields?.some(f => f.source)
+/** Fetch the plot, ellipse, import and canvas code a lesson needs. */
+const loadSeams = async ({ steps, canvas }) => {
+  if (!canvasMod && (canvas || steps.some(s => s.canvas)))
+    canvasMod = await import('./lesson/canvas.js');
+  if (
+    !figures &&
+    steps.some(
+      s =>
+        s.plot ||
+        s.type === 'ellipse' ||
+        s.importFromSelection ||
+        s.fields?.some(f => f.source)
+    )
   )
-    ? import('./investigations/figures.js').then(m =>
-        fieldModule((figures = m))
-      )
-    : null;
+    fieldModule((figures = await import('./investigations/figures.js')));
+};
 
 /** Draw the step's scatter plot from the lesson's current state. */
 function drawPlot(step, id) {
@@ -1726,42 +1742,6 @@ const OBJECT_LIST_MAX = 12;
  * The keyboard's way to select the objects a step is about.
  * @returns {void}
  */
-/**
- * A reader-facing name for a lesson's role key. A translation wins; otherwise
- * the key is derived (`starA` becomes "star A", `m2000` "20 M☉"), right in both
- * languages, so a role a lesson invents still gets a sensible label.
- *
- * @param {string} key - The role as the lesson wrote it
- * @returns {string} What to show in the object list
- */
-function roleLabel(key) {
-  const id = `inv.role.${key}`;
-  const text = t(id);
-  if (text !== id) return text;
-  // The stellar shelves name their members by mass in hundredths of a solar
-  // mass, which is a storage format and not a label.
-  const mass = /^m(\d{2,4})$/.exec(key);
-  if (mass) return `${Number(mass[1]) / 100} M☉`;
-  return key.replace(/([a-z])([A-Z])/g, '$1 $2');
-}
-
-/**
- * Whether the role chip would only repeat the body's own name.
- *
- * Half the lessons name their roles after the bodies - `earth`, `io`, `moon` -
- * and the chip then read "EARTH Earth", which is a label and its own echo. The
- * name is the more useful of the two, so in that case the role is dropped.
- *
- * @param {string} label - The resolved role label
- * @param {string} name - The body's name in the world
- * @returns {boolean} True when the role adds nothing
- */
-function roleEchoesName(label, name) {
-  const a = String(label).trim().toLowerCase();
-  const b = String(name).trim().toLowerCase();
-  return Boolean(a) && (a === b || b.startsWith(`${a} `));
-}
-
 function renderObjectList() {
   if (!els.objects || !els.objectsWrap) return;
   const step = currentStep();
@@ -1780,7 +1760,8 @@ function renderObjectList() {
   const all = selectableBodies().filter(entry => entry.role);
   const crowded = all.length > OBJECT_LIST_MAX;
   const named = crowded ? all.filter(e => e.selected) : all;
-  const key = `${crowded ? all.length : 0}|${named
+  const picture = canvasNow()?.kind === 'portrait';
+  const key = `${picture}|${crowded ? all.length : 0}|${named
     .map(e => `${e.id}:${e.role}:${e.selected ? 1 : 0}`)
     .join('|')}`;
   if (key === lastObjectsKey) return;
@@ -1818,7 +1799,7 @@ function renderObjectList() {
     // without the container having to manage anything.
     button.setAttribute('aria-pressed', String(entry.selected));
     button.dataset.objectId = String(entry.id);
-    const label = roleLabel(entry.role);
+    const label = picture ? t('inv.canvas.picture') : roleLabel(entry.role);
     const name = document.createElement('span');
     name.className = 'inv-object-name';
     name.textContent = entry.name;
@@ -1992,6 +1973,7 @@ const importSelection = req =>
  * @returns {Object|null} The setup in force at that step
  */
 function setupInForceAt(index) {
+  if (canvasNow(index)?.kind === 'quiet') return null;
   for (let i = index; i >= 0; i--) {
     if (active.steps[i]?.setup) return active.steps[i].setup;
   }
@@ -2091,7 +2073,7 @@ async function changeDepth(by) {
     await import('./investigations/depth.js')
   ).change({ active, depth, deepest, stepIndex, by, locale: getLocale() });
   if (!r || r.lesson.id !== active?.id) return;
-  await loadSeams(r.lesson.steps);
+  await loadSeams(r.lesson);
   if (r.lesson.id !== active?.id) return;
   ({ depth, deepest, depthName } = r);
   depthChoice = depth;
@@ -2211,7 +2193,7 @@ export async function openInvestigation(id, opts = {}) {
     if (generation !== openGeneration) return;
     ({ inv, depth, depthChoice, deepest, depthName } = m);
   }
-  await loadSeams(inv.steps);
+  await loadSeams(inv);
   if (generation !== openGeneration) return;
   // Every step key is written into the panel's attributes and selectors. The
   // pack validator and the lesson checker refuse a sid that could end an
@@ -2399,7 +2381,7 @@ function restoreSelection(selection) {
  */
 function sandboxIsStillOurs() {
   // A stage is up: the world on screen is one the lesson built.
-  if (stagedStars().length) return true;
+  if (stagedStars().length || canvasMod?.ownsWorld()) return true;
   // Or the last thing to rebuild it was one of the lesson's own step setups.
   return appliedSetup !== null;
 }
@@ -2428,6 +2410,7 @@ export function closeInvestigation() {
   // evidence: once `staged` is empty there is no way to tell a lesson that
   // owned the world from a reader who has loaded something of their own.
   const ours = sandboxIsStillOurs();
+  canvasMod?.leaveCanvas();
   // Then the stage goes, or its bodies are still on the canvas when the
   // restored world arrives and the reader gets both.
   clearStage();
