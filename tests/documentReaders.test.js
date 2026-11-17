@@ -130,6 +130,12 @@ const PARSES = {
     OWN +
       " (a reading's :src, a string this build wrote; a bad one reads as none)",
   ],
+  'js/investigations/evidence.js': [
+    1,
+    'none',
+    OWN +
+      " (a reading's :src, as figures.js reads it; a bad one reads as none)",
+  ],
   'js/studio/model.js': [
     5,
     'none',
