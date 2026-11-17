@@ -443,6 +443,11 @@ Rules that are not obvious:
   a lesson needs a number the engine cannot produce, fix the engine.
 - **Answers carry a tolerance and a reason.** `tolerance` is not a fudge
   factor; it is the precision the instrument can actually deliver.
+- **A step arms a watch only where the moment is not the answer.**
+  `pauseAt.auto` stops the scene at an event so the student can measure
+  something there; a step that asks when the event happens leaves Arm to the
+  student. `time`, `pauseAt.replay` and `pauseAt.rewind` are described in
+  `INTERACTION.md` section 7.
 
 ### The authoring toolchain
 

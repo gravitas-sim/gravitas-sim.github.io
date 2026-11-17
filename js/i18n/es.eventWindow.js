@@ -7,7 +7,7 @@
 // Repetir y Retroceder hasta aquí son las palabras de la barra de tiempo.
 // =============================================================================
 
-export const ES_EVENT_WINDOW = {
+export const ES_EVENTWINDOW = {
   'window.armed':
     'La vigilancia está activada por ti: la escena se detiene sola en el evento.',
   'window.foreign':

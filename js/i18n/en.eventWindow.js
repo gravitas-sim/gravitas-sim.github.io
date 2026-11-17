@@ -7,7 +7,7 @@
 // transport's own words (transport.replay, transport.rewind in en.js).
 // =============================================================================
 
-export const EN_EVENT_WINDOW = {
+export const EN_EVENTWINDOW = {
   'window.armed':
     'The watch is armed for you: the scene stops by itself at the event.',
   'window.foreign':

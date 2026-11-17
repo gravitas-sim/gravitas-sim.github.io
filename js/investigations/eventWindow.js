@@ -43,7 +43,7 @@ async function strings() {
   const m = es
     ? await import('../i18n/es.eventWindow.js')
     : await import('../i18n/en.eventWindow.js');
-  words = m.ES_EVENT_WINDOW || m.EN_EVENT_WINDOW;
+  words = m.ES_EVENTWINDOW || m.EN_EVENTWINDOW;
 }
 
 const say = (id, vars = {}) =>
@@ -71,7 +71,8 @@ function reducedMotion() {
 export async function syncWindow(next, entering, h) {
   host = h;
   if (entering) await enter(next);
-  if (!words && step?.pauseAt) await strings();
+  const spec = step?.pauseAt;
+  if (!words && (spec?.auto || spec?.replay || spec?.rewind)) await strings();
   draw();
 }
 
