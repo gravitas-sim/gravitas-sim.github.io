@@ -55,6 +55,7 @@ import {
 } from './instruments.js';
 import { formatNumber } from './format.js';
 import { t } from './i18n/index.js';
+import { fitFont, canvasRatio } from './vectorOverlay.js';
 
 /** Meters in one simulation length unit. */
 const METERS_PER_UNIT = AU_METERS / SIM_UNITS_PER_AU;
@@ -633,10 +634,13 @@ export function drawInstrumentation(
   }
 
   const pad = 12;
-  const barY = H - pad - 10 - Math.max(0, bottomInset);
+  // Canvas pixels per CSS pixel: the bottom line is text, and text is sized and
+  // spaced in CSS pixels (11 or more), not in whatever the canvas is drawn at.
+  const k = canvasRatio(ctx);
+  const barY = H - pad - 10 * k - Math.max(0, bottomInset);
 
   ctx.save();
-  ctx.font = `11px ${INSTRUMENT_MONO}`;
+  ctx.font = fitFont(ctx, `11px ${INSTRUMENT_MONO}`);
   ctx.textBaseline = 'middle';
   ctx.textAlign = 'left';
 
@@ -710,7 +714,7 @@ export function drawInstrumentation(
   // The key, one row of swatches above the scale line. Horizontal rather than
   // stacked: three arrows explained in three short phrases fit across the
   // bottom of any canvas wide enough to be worth drawing arrows on.
-  let legendBottom = barY - 20;
+  let legendBottom = barY - 20 * k;
   if (capturing && legend.length) {
     let x = pad + 2;
     let y = legendBottom;
@@ -722,7 +726,7 @@ export function drawInstrumentation(
       // they are not dropped to keep the key on one line.
       if (x + w > W - pad && x > pad + 2) {
         x = pad + 2;
-        y -= 16;
+        y -= 16 * k;
       }
       if (x + w > W - pad) continue;
       if (!l.note) {
@@ -740,7 +744,7 @@ export function drawInstrumentation(
       ctx.fillText(label, x + (l.note ? 0 : 24), y);
       x += w + 14;
     }
-    legendBottom = y - 16;
+    legendBottom = y - 16 * k;
   }
 
   if (settings.show_scale_bar !== false) {
@@ -752,12 +756,12 @@ export function drawInstrumentation(
     const barW = Math.min(160, W * 0.22);
     scaleBar(ctx, pad + 2, barY, barW, metersPerPx, {
       color: 'rgba(200, 214, 235, 0.9)',
-      font: `11px ${INSTRUMENT_MONO}`,
+      font: fitFont(ctx, `11px ${INSTRUMENT_MONO}`),
     });
     // The clock sits on the scale bar's own baseline, past the end of the bar
     // and its label, so the two read as one line of provenance.
     if (readings.length) {
-      ctx.font = `11px ${INSTRUMENT_MONO}`;
+      ctx.font = fitFont(ctx, `11px ${INSTRUMENT_MONO}`);
       ctx.fillStyle = TOOL_INK;
       ctx.fillText(readings.join('   '), pad + 2 + barW + 64, barY);
     }
@@ -779,9 +783,9 @@ export function drawInstrumentation(
   //
   // The full explanation and the pointer to the real numbers are in the canvas
   // description that assistive technology reads. One line is all this has.
-  ctx.font = `10px ${INSTRUMENT_MONO}`;
-  ctx.fillStyle = 'rgba(200, 214, 235, 0.62)';
-  ctx.fillText(t('canvas.sizeDisclosure'), pad + 2, barY + 14);
+  ctx.font = fitFont(ctx, `11px ${INSTRUMENT_MONO}`);
+  ctx.fillStyle = 'rgba(200, 214, 235, 0.85)';
+  ctx.fillText(t('canvas.sizeDisclosure'), pad + 2, barY + 14 * k);
 
   ctx.restore();
 }
