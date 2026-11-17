@@ -18,7 +18,7 @@
 
 import { test, expect, requireScenarioKey } from './fixtures.js';
 
-/* global fetch, navigator, ServiceWorker, requestIdleCallback */
+/* global fetch, navigator, ServiceWorker, requestIdleCallback, caches */
 
 test.use({ serviceWorkers: 'allow' });
 
@@ -122,6 +122,158 @@ test.describe('the application survives the network going away', () => {
       () => document.body.innerText.match(/STEP\s+\d+\s+OF\s+\d+/i)?.[0] || null
     );
     expect(step).toMatch(/STEP\s+1\s+OF/i);
+  });
+
+  // Prompt 313: what a student can rely on for a lesson, from a test. A lesson
+  // in the precache opens with its scene whether or not it was opened before the
+  // drop; a lesson of a family outside the precache (D-R10-67 and the families
+  // the first-visit ceiling kept out) opens after one online use and not before.
+  for (const lesson of [
+    { id: 'color-and-temperature', what: 'a staged star' },
+    { id: 'keplers-laws', what: 'a live setup scenario' },
+  ]) {
+    test(`${lesson.what} (${lesson.id}) opens offline with its scene, opened before or not`, async ({
+      page,
+      context,
+      app,
+    }, testInfo) => {
+      testInfo.setTimeout(180_000);
+      await app.boot();
+      await waitForPrecache(page);
+      await context.setOffline(true);
+      await page.reload({ waitUntil: 'domcontentloaded' });
+      await page.waitForFunction(
+        () => window.splashScreenEnded === true,
+        null,
+        {
+          timeout: 60_000,
+        }
+      );
+      await page.evaluate(id => {
+        window.location.hash = `#investigation=${id}`;
+      }, lesson.id);
+      await expect(page.locator('#investigationNext')).toBeVisible({
+        timeout: 30_000,
+      });
+      const bodies = () =>
+        page.evaluate(async () => {
+          const p = await import('/js/physics.js');
+          return p.stars.length + p.planets.length + p.bh_list.length;
+        });
+      await expect.poll(bodies, { timeout: 15_000 }).toBeGreaterThan(0);
+      await expect(page.locator('#simulationCanvas')).toBeVisible();
+      await page.locator('#investigationNext').click();
+      await expect(page.locator('.inv-step-count')).toContainText(/2/);
+    });
+  }
+
+  test('a lesson outside the precache opens offline after one online use, and not before', async ({
+    page,
+    context,
+    app,
+    errors,
+  }, testInfo) => {
+    testInfo.setTimeout(180_000);
+    const id = 'a-binary-stars-orbit';
+    const file = `/js/data/investigations/${id}.js`;
+    await app.boot();
+    await waitForPrecache(page);
+    await context.setOffline(true);
+    // Never opened: the worker holds nothing for it and says so.
+    const before = await page.evaluate(
+      async url => (await fetch(url)).status,
+      file
+    );
+    expect(before).toBe(504);
+    // The browser logs the worker's 504; it is the answer under test.
+    errors.consoleErrors.length = 0;
+    await context.setOffline(false);
+
+    // One online use: the lesson, and a step into it.
+    await page.evaluate(lessonId => {
+      window.location.hash = `#investigation=${lessonId}`;
+    }, id);
+    await expect(page.locator('#investigationNext')).toBeVisible({
+      timeout: 30_000,
+    });
+    await page.locator('#investigationNext').click();
+    await context.setOffline(true);
+    await page.reload({ waitUntil: 'domcontentloaded' });
+    await page.waitForFunction(() => window.splashScreenEnded === true, null, {
+      timeout: 60_000,
+    });
+    await expect(page.locator('#investigationNext')).toBeVisible({
+      timeout: 30_000,
+    });
+    const bodies = await page.evaluate(async () => {
+      const p = await import('/js/physics.js');
+      return p.stars.length + p.planets.length + p.bh_list.length;
+    });
+    expect(bodies).toBeGreaterThan(0);
+  });
+
+  test('a second visit in Spanish does not fetch the translated lessons again', async ({
+    page,
+    context,
+    app,
+  }, testInfo) => {
+    testInfo.setTimeout(180_000);
+    await page.addInitScript(() => {
+      try {
+        window.localStorage.setItem('gravitas_locale', 'es');
+      } catch {
+        /* storage unavailable */
+      }
+    });
+    await app.boot();
+    await waitForPrecache(page);
+    const warmed = () =>
+      page.evaluate(async () => {
+        let n = 0;
+        for (const name of await caches.keys()) {
+          if (name === 'gravitas-parts') continue;
+          const keys = await (await caches.open(name)).keys();
+          n += keys.filter(r => /\/investigations\/es\//.test(r.url)).length;
+        }
+        return n;
+      });
+    // The first visit warms them: the worker fetches the whole list once.
+    await expect.poll(warmed, { timeout: 60_000 }).toBeGreaterThan(100);
+    // Until the count stops moving: the worker has fetched the whole list.
+    await expect
+      .poll(
+        async () => {
+          const before = await warmed();
+          await page.evaluate(
+            () => new Promise(resolve => setTimeout(resolve, 500))
+          );
+          return before === (await warmed());
+        },
+        { timeout: 60_000 }
+      )
+      .toBe(true);
+    const first = await warmed();
+
+    // The second visit: requests the worker itself sends to the network.
+    const reached = [];
+    context.on('request', r => {
+      if (r.serviceWorker() && /\/investigations\/es\//.test(r.url()))
+        reached.push(new URL(r.url()).pathname);
+    });
+    await page.reload({ waitUntil: 'domcontentloaded' });
+    await page.waitForFunction(() => window.splashScreenEnded === true, null, {
+      timeout: 60_000,
+    });
+    // Past the controller change and the page's own warm request: the worker
+    // answers a status ask after the warm ask that came before it, and gets
+    // three seconds in the page for the fetches it would have sent.
+    await page.evaluate(async () => {
+      const m = await import('/js/offline.js');
+      await m.cacheStatus(5000);
+      await new Promise(resolve => setTimeout(resolve, 3000));
+    });
+    expect(reached).toEqual([]);
+    expect(await warmed()).toBe(first);
   });
 
   test('the scenario thumbnails are there without a network', async ({

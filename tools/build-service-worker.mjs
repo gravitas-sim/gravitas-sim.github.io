@@ -913,6 +913,21 @@ export async function buildManifest() {
     digest.update(p);
     digest.update(createHash('sha256').update(body).digest());
   }
+  // The translated lesson files the page asks the worker to warm are part of
+  // the version too (D-R4-313-01): the worker serves a warmed file from its
+  // cache without asking the network, so a changed Spanish lesson has to
+  // change the name. They add nothing to `bytes` or to any tier.
+  const warm = await shadowsOnDisk();
+  for (const id of SHADOW_LOCALES) {
+    for (const p of warm.get(id) || []) {
+      digest.update(p);
+      digest.update(
+        createHash('sha256')
+          .update(await readFile(p))
+          .digest()
+      );
+    }
+  }
   const version = digest.digest('hex').slice(0, 12);
 
   return { paths, core, optional, idle, version, bytes };
