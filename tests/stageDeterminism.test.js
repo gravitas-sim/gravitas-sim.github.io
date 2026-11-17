@@ -81,6 +81,7 @@ const build = (stage, seed) => {
 const stages = [];
 
 beforeAll(async () => {
+  await stageMod.loadStageKinds({ hole: {} });
   for (const entry of MANIFEST) {
     let lesson;
     try {

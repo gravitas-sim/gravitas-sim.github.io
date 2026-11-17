@@ -184,8 +184,8 @@ describe('what the recording can tell apart', () => {
     const changed = Object.keys(all.surfaces).filter(
       name => serialize(moved.surfaces[name]) !== serialize(all.surfaces[name])
     );
-    // stepView.js 643 (the plot table: a negative point, and Infinity), 801
-    // (the slope) and 1194 (the field text) write a hyphen or a "NaN" a swap
+    // figures.js (the plot table: a negative point, and Infinity, and the
+    // slope) and stepView.js (the field text) write a hyphen or a "NaN" a swap
     // would change; the ellipse readout, the archive label and the crowding
     // note never see a negative or a non-finite number and print the same.
     expect(changed).toEqual(['plots', 'fieldNumbers']);
@@ -218,9 +218,9 @@ describe('what the recording can tell apart', () => {
     // (js/format.js is not loaded by /observatory/ at start).
     const at = site => all.hazards[site] ?? { hyphen: false, nonFinite: false };
     for (const site of [
-      'js/investigations/stepView.js:614:11',
-      'js/investigations/stepView.js:769:35',
-      'js/investigations/stepView.js:1147:13',
+      'js/investigations/figures.js:102:11',
+      'js/investigations/figures.js:257:35',
+      'js/investigations/stepView.js:750:13',
       'js/observatory/guides/core.js:320:27',
     ])
       expect(at(site).hyphen).toBe(true);
@@ -240,7 +240,7 @@ describe('what the recording can tell apart', () => {
         .split('\n')
         .filter((_, i) => numbers.includes(i + 1));
     for (const line of [
-      ...lines('js/investigations/stepView.js', 521, 524),
+      ...lines('js/investigations/figures.js', 420, 423),
       ...lines('js/observatory/archivePanel.js', 258, 259),
     ])
       expect(line).toMatch(/fixed\(/);
