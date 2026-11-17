@@ -223,7 +223,7 @@ describe('the watch a step arms', () => {
     await enter(step({ auto: true }, { sid: 'auto' }));
     expect(events.armedEvent()).toMatchObject({ kind: 'periapsis' });
     expect(watch.lessonWatchState()).toBe(watch.WATCH.ARMED);
-    expect(announced.at(-1)).toMatch(/armed for you/);
+    expect(announced.at(-1)).toMatch(/Armed for you/);
   });
 
   test("a reader's own watch is refused, kept, and said", async () => {
@@ -372,8 +372,8 @@ describe('Replay', () => {
     appState.state.paused = true;
     expect(windowMod.eventFrame().state).toBe('gone');
     await enter(step({ auto: true, replay: true }), false);
-    expect(body.textContent).toMatch(/older than the recorded history/);
-    expect(body.textContent).toMatch(/900 frames \(about 90 s/);
+    expect(body.textContent).toMatch(/older than the recording/);
+    expect(body.textContent).toMatch(/last 900 frames, about 90 s/);
     const before = snapshot();
     windowMod.replay();
     expect(timeline.isScrubbing()).toBe(false);

@@ -1,22 +1,16 @@
-// =============================================================================
-// Timeline. Record, scrub and replay the simulation
-// -----------------------------------------------------------------------------
-// The simulation is deterministic forward but not reversible (mergers and
-// absorptions destroy information), so rewinding means replaying recorded
-// state rather than integrating backwards.
+// Timeline: record, scrub and replay the simulation. Mergers destroy
+// information, so rewinding replays recorded state rather than integrating back.
 //
-// State is kept in a ring buffer of flat Float64Arrays: one row per object,
-// nine columns, because allocating an object literal per body per snapshot at
-// 10 Hz produces enough garbage to show up as frame stutter.
+// A ring buffer of flat Float64Arrays (one row per object, nine columns): an
+// object literal per body per 10 Hz snapshot would stutter frames.
 //
-// One clock: frames are stamped with the physics clock (getSimulationTime),
-// a restore sets it, and getSimClock is that clock under its older name.
+// One clock: frames are stamped with the physics clock (getSimulationTime), a
+// restore sets it, and getSimClock is its older name.
 //
-// Looking back: scrubTo, stepBack and stepForward park the world on a recorded
-// frame and capture the full state once on the way out of live; Return to live
-// puts it back and drops nothing; Replay plays the frames forward and ends
-// there; Rewind to here makes the shown frame the world and drops what is after.
-// =============================================================================
+// scrubTo, stepBack and stepForward park the world on a recorded frame and
+// capture the full state once on leaving live. Return to live restores it,
+// dropping nothing; Replay plays forward to live; Rewind to here makes the shown
+// frame the world and drops later frames.
 
 import {
   bh_list,
@@ -46,8 +40,8 @@ import {
 } from './physics.js';
 import { state, command } from './appState.js';
 
-// The full-state capture a lesson's entry and exit use. Through the command
-// bus, as js/share.js reaches it: the world module imports this one.
+// Full-state capture for a lesson's entry and exit; via the command bus, as in
+// js/share.js, because the world module imports this one.
 const captureShareState = command('captureShareState');
 
 // --- Layout of one object row -------------------------------------------------
@@ -87,13 +81,12 @@ const ALL_LISTS = () => [
   ['Galaxy', galaxies],
 ];
 
-// A row holds numbers only; a galaxy's kind and name are kept by id for as long
-// as the recording is (Blank Simulation does not reset it).
+// Rows are numbers only; a galaxy's kind and name are kept by id as long as the
+// recording (Blank Simulation does not reset it).
 const galaxyIdentity = new Map();
 
 // --- Capture budget -----------------------------------------------------------
-// Roughly 24 MB of Float64 at the ceiling. Dense scenarios record fewer frames
-// rather than eating unbounded memory.
+// About 24 MB of Float64 at the ceiling; dense scenarios record fewer frames.
 const MAX_VALUES = 3_000_000;
 const MAX_FRAMES = 900;
 const MIN_FRAMES = 60;
@@ -119,9 +112,7 @@ let replayMark = null;
 
 let ui = null;
 
-/**
- * Reset all recorded history. Called whenever the simulation is rebuilt.
- */
+/** Reset all recorded history whenever the simulation is rebuilt. */
 export function resetTimeline() {
   frames.length = 0;
   frameTimes.length = 0;
@@ -144,9 +135,7 @@ function objectCount() {
   return n;
 }
 
-/**
- * Recompute how many frames we can afford at the current object count.
- */
+/** Recompute how many frames fit at the current object count. */
 function updateCapacity(nObjects) {
   const perFrame = Math.max(1, nObjects * STRIDE);
   const affordable = Math.floor(MAX_VALUES / perFrame);
@@ -159,9 +148,7 @@ function updateCapacity(nObjects) {
   if (frameCount > capacity) frameCount = capacity;
 }
 
-/**
- * Capture the current simulation state into the ring buffer.
- */
+/** Capture the current simulation state into the ring buffer. */
 function capture() {
   const n = objectCount();
   updateCapacity(n);
@@ -192,7 +179,7 @@ function capture() {
     }
   }
 
-  // A shorter view keeps restore loops honest about how many rows are real.
+  // A shorter view keeps restore loops to the real rows.
   frames[writeIndex] =
     row.length === n * STRIDE ? row : row.subarray(0, n * STRIDE);
   frameTimes[writeIndex] = getSimulationTime();
@@ -314,9 +301,8 @@ function restore(offset) {
 }
 
 /**
- * Put the held live moment back, in place. applyShareState would rebuild the
+ * Put the held live moment back in place: applyShareState would rebuild the
  * world, and its reset empties this recording and the armed event watch.
- * Instances are reused by id; a body the scrub dropped is made again.
  */
 function restoreHeld() {
   const live = indexLive();
@@ -483,10 +469,10 @@ export function rewindToHere() {
 }
 
 /**
- * Play the frames forward at the current speed to the live moment, from the
- * frame shown (or the oldest). A lesson may end it at `until`, short of live
- * (the held moment still comes back), and be told once at `mark` (onMark).
- * The transport passes its click event, which names none of these.
+ * Play the frames forward at the current speed to live, from the frame shown (or
+ * the oldest). A lesson may end it at `until` (the held moment still comes back)
+ * and be told once at `mark` (onMark). The transport passes its click event,
+ * which names none of these.
  */
 export function startReplay({ until = Infinity, mark = NaN, onMark } = {}) {
   if (frameCount < 2) return false;
@@ -549,8 +535,8 @@ function syncUI() {
 }
 
 /**
- * Walk every recorded frame, oldest first, one decoded frame per call (the CSV
- * export reads all of it; materialising the whole history is needless garbage).
+ * Walk every recorded frame, oldest first, decoding one per call (the CSV export
+ * reads all of it).
  *
  * @param {Function} visit - Called as visit(simSeconds, bodies) per frame
  */
@@ -578,8 +564,7 @@ export function forEachRecordedFrame(visit) {
 }
 
 /**
- * The whole recorded history as an array. Convenience over
- * forEachRecordedFrame for tests and small scenarios.
+ * The whole history as an array, for tests and small scenarios.
  * @returns {Array<{t:number, bodies:Array}>} Frames, oldest first
  */
 export function recordedFrames() {
@@ -591,9 +576,8 @@ export function recordedFrames() {
 /**
  * How much history there is to export, without decoding any of it.
  * @returns {{frames:number, bodies:number, simTime:number, oldest:number,
- *   capacity:number}} Frame count, rows in the most recent frame, the span
- *   covered in simulation time units, the oldest frame's clock and how many
- *   frames the body count allows
+ *   capacity:number}} Frame count, rows in the newest frame, span in simulation
+ *   time units, oldest frame's clock, frames the body count allows
  */
 export function recordedExtent() {
   if (frameCount === 0)

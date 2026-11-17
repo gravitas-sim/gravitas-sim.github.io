@@ -1,32 +1,17 @@
-// =============================================================================
-// Pause at event
-// -----------------------------------------------------------------------------
-// "Stop when the comet reaches perihelion" is a thing a student asks for
-// constantly and could not previously do: they watched the readout, guessed,
-// and hit pause somewhere near the right moment. This arms a watch for one
-// named event and stops the simulation when it happens.
+// Pause at event: arm a watch for one named event and stop the simulation when
+// it happens.
 //
-// Three decisions shape everything here.
+// Runs on simulation steps, not frames: it subscribes to js/physics.js's step
+// hook, so it sees the integrator's own states and can report the interval the
+// event was localised to, independent of frame rate.
 //
-// It runs on simulation steps, not on frames. A scenario that substeps takes
-// several integration steps per rendered frame, and the frame rate varies with
-// the machine; an event found by looking at frames is found to a precision
-// nobody can state and that changes when the tab is backgrounded. The watcher
-// subscribes to js/physics.js's step hook, so it sees exactly the states the
-// integrator produced and can report the interval it localised the event to.
+// Never rewinds: the radial-velocity and astrometry recordings, light curve,
+// timeline ring buffer and stopwatch are all indexed by the clock, so winding it
+// back would desynchronise them. The simulation stops at the first step after
+// the event and the readout gives how far past it the pause is.
 //
-// It never rewinds. Landing exactly on an event would mean winding the clock
-// back to it, and the clock is not the only thing that would have to move: the
-// radial-velocity and astrometry recordings, the light curve, the timeline's
-// ring buffer and the stopwatch all hold state indexed by that clock. Rewinding
-// some of them and not others is how a panel ends up describing a moment that
-// never existed. So the simulation stops at the first step *after* the event,
-// and the readout says both when the event was and how far past it the pause
-// is. An honest overshoot beats a silent desynchronisation.
-//
-// It costs nothing when nobody is watching. The physics hook is subscribed on
-// arm and released on disarm, and this module is imported on demand.
-// =============================================================================
+// Free when idle: the hook is subscribed on arm, released on disarm, and this
+// module is imported on demand.
 
 import { orbitalElements } from './orbital.js';
 
@@ -37,36 +22,24 @@ export const EVENT_KINDS = Object.freeze({
   SEPARATION_INWARD: 'separationInward',
   SEPARATION_OUTWARD: 'separationOutward',
   TRANSIT: 'transit',
-  // The turning points of the line-of-sight velocity: the moments a
-  // radial-velocity curve is at its trough and its peak. Not a place in the
-  // orbit the way periapsis is - where they fall depends on which way the
-  // observer is looking - which is exactly why a lesson wants to stop there
-  // and have a student compare the star's motion with the sign of the reading.
+  // Trough and peak of the line-of-sight velocity; where they fall depends on
+  // the viewing direction, not just the orbit.
   RV_MINIMUM: 'rvMinimum',
   RV_MAXIMUM: 'rvMaximum',
 });
 
 /**
- * Below this eccentricity a periapsis is not a place.
- *
- * On a circular orbit the radial rate is zero everywhere, so its sign is
- * decided by integration error and the watch would fire on the first step and
- * every step after it. The threshold is generous - 1e-3 is a hundredth of the
- * roundest orbit in the catalog - because the failure it prevents is a
- * confident answer to a question with no answer, and the honest alternative is
- * to say so.
+ * Below this eccentricity a periapsis is not a place: on a circular orbit the
+ * radial rate is zero everywhere, its sign is integration error, and the watch
+ * would fire on every step. 1e-3 is a hundredth of the roundest catalog orbit.
  */
 export const MIN_ECCENTRICITY = 1e-3;
 
 /**
  * The signed quantity whose zero crossing is the event, and which way it must
- * be going.
- *
- * Periapsis and apoapsis are the turning points of the separation, so both are
- * crossings of the radial rate; they differ only in direction. A separation
- * crossing is the same idea one derivative down. Writing them as one shape lets
- * a single bracket-and-refine handle all four, which matters because the
- * refinement is the part that has to be right.
+ * be going. One shape lets a single bracket-and-refine handle every kind:
+ * periapsis and apoapsis cross the radial rate in opposite directions, a
+ * separation crossing is the separation minus the target.
  *
  * @param {string} kind - From EVENT_KINDS
  * @param {{r: number, rdot: number}} state - Separation and its rate
@@ -74,11 +47,9 @@ export const MIN_ECCENTRICITY = 1e-3;
  * @returns {?{value: number, rising: boolean}} The scalar, or null if not applicable
  */
 export function eventSignal(kind, state, separation = null) {
-  // The radial-velocity turning points are the one pair here that is not about
-  // the separation at all: the signal is the rate of change of the
-  // line-of-sight velocity, supplied by the caller as `vlosDot`, and it turns
-  // sign at a trough (rising) and at a peak (falling). Checked before the
-  // separation guard below, because a watch on the curve does not need r.
+  // The signal is the caller's `vlosDot` (rate of change of the line-of-sight
+  // velocity): rising at a trough, falling at a peak. Checked before the r
+  // guard because it needs no separation.
   if (kind === EVENT_KINDS.RV_MINIMUM || kind === EVENT_KINDS.RV_MAXIMUM) {
     if (!state || !Number.isFinite(state.vlosDot)) return null;
     return {
@@ -107,13 +78,9 @@ export function eventSignal(kind, state, separation = null) {
 }
 
 /**
- * Where between two steps the signal crossed zero.
- *
- * Linear in the signal, which is what two samples support. The bracket is
- * returned alongside so the reader is told the precision rather than left to
- * infer it from a number printed to six figures: the estimate sits somewhere
- * inside an interval one integration step wide, and for a smooth signal it is
- * near the middle of it.
+ * Where between two steps the signal crossed zero, by linear interpolation. The
+ * bracket (the interval between the two steps) is returned so the reader is
+ * told the precision.
  *
  * @param {{t: number, value: number}} before - The step before the crossing
  * @param {{t: number, value: number}} after - The step after it
@@ -122,18 +89,15 @@ export function eventSignal(kind, state, separation = null) {
 export function refineCrossing(before, after) {
   const span = after.t - before.t;
   const rise = after.value - before.value;
-  // A signal that did not actually move cannot be interpolated; the crossing is
-  // somewhere in the bracket and the midpoint is the least wrong guess.
+  // No movement cannot be interpolated; the midpoint is the least wrong guess.
   const f = Math.abs(rise) > 0 ? -before.value / rise : 0.5;
   const clamped = Math.min(1, Math.max(0, f));
   return { time: before.t + span * clamped, bracket: Math.abs(span) };
 }
 
 /**
- * Whether a crossing happened between two samples, in the wanted direction.
- *
- * A sample sitting exactly on zero counts as the crossing rather than being
- * missed by both comparisons, which is the case an equality test usually drops.
+ * Whether a crossing happened between two samples, in the wanted direction. A
+ * sample exactly on zero counts as the crossing.
  *
  * @param {number} before - Signal at the earlier step
  * @param {number} after - Signal at the later step
@@ -146,10 +110,8 @@ export function crossedZero(before, after, rising) {
 }
 
 /**
- * The separation of two bodies and how fast it is changing.
- *
- * rdot is the projection of the relative velocity onto the line joining them,
- * which is the derivative of |r| and is what turns sign at a turning point.
+ * The separation of two bodies and its rate: rdot is the relative velocity
+ * projected onto the line joining them, the derivative of |r|.
  *
  * @param {object} body - The orbiting object
  * @param {object} primary - What it is orbiting
@@ -167,11 +129,8 @@ export function separationState(body, primary) {
 }
 
 /**
- * Whether this watch can be armed at all, and what to say if not.
- *
- * Refusing with a reason is the point. Every one of these is a question with no
- * answer rather than a question this code cannot answer, and firing anyway
- * would hand a student a number that means nothing.
+ * Whether this watch can be armed at all, and why not. Each refusal is a
+ * question with no answer; firing anyway would give a meaningless number.
  *
  * @param {object} spec - {kind, separation}
  * @param {object} context - {body, primary, elements}
@@ -196,8 +155,7 @@ export function canArm(spec, { body, primary, elements } = {}) {
     if (!Number.isFinite(spec.separation) || spec.separation <= 0) {
       return { ok: false, reason: 'badSeparation' };
     }
-    // A crossing of a radius the orbit never reaches will never happen, and
-    // saying so now is better than a watch that quietly runs for ever.
+    // A radius the orbit never reaches would never fire; refuse now.
     if (elements?.bound) {
       const { periapsis, apoapsis } = elements;
       if (spec.separation < periapsis || spec.separation > apoapsis) {
@@ -220,15 +178,13 @@ export function canArm(spec, { body, primary, elements } = {}) {
   return { ok: true };
 }
 
-// --- The watch -----------------------------------------------------------------
-// Everything above is arithmetic and can be tested without a simulation.
-// Everything below holds the one live watch and is what the panel drives.
+// Above: arithmetic, testable without a simulation. Below: the one live watch.
 
 /** The watch, or null when nothing is armed. */
 let watch = null;
-/** Released the moment the watch is disarmed, so an idle tool costs nothing. */
+/** Step-hook release, called on disarm. */
 let unsubscribe = null;
-/** The last event that fired, kept for the readout and the timeline marker. */
+/** The last event that fired, for the readout and the timeline marker. */
 let fired = null;
 /** Callbacks for the panel and the timeline. */
 const listeners = new Set();
@@ -299,17 +255,14 @@ export function armEvent(spec, deps) {
   watch = {
     spec: { ...spec },
     deps,
-    // The signal at the previous step, so a crossing can be bracketed. Null
-    // until the first step, because one sample cannot cross anything.
+    // Signal at the previous step; null until the first step.
     previous: null,
-    // For a transit watch: how many transits the detector had logged when the
-    // watch was armed, so only a *new* one counts.
+    // Transits logged at arm time, so only a new one counts.
     transitsAtArm: deps.transitLog ? deps.transitLog().length : 0,
     armedAtDays: deps.clockDays(),
   };
 
-  // The step's own arguments are not used: the watch reads the clock in days
-  // through deps.clockDays(), which is the unit every panel and readout speaks.
+  // The step's arguments are unused; the clock is read in days via deps.clockDays().
   unsubscribe = deps.onStep(() => step());
   announce({ type: 'armed', spec: { ...spec } });
   return { ok: true };
@@ -327,20 +280,14 @@ function step() {
   const primary = deps.resolveBody(spec.primaryId);
   const state = separationState(body, primary);
 
-  // The target went away: merged, absorbed, or removed. A watch for an event
-  // that can no longer happen is disarmed and says why, rather than waiting
-  // for ever on a body that is not there.
+  // The target was merged, absorbed or removed: disarm and say why.
   if (!state) {
     disarm('targetGone');
     return;
   }
 
-  // The radial-velocity turning points need one thing this module cannot work
-  // out for itself: which way the observer is looking. It comes in through the
-  // same dependency object as the clock and the body lookup, so this file goes
-  // on knowing nothing about spectrographs. A host that does not supply it
-  // simply cannot arm those two kinds, which eventSignal reports as an unknown
-  // kind below rather than firing on a signal it does not have.
+  // The viewing direction comes in through deps.losRate, so this file knows
+  // nothing about spectrographs; without it eventSignal returns null (unknownKind).
   if (
     spec.kind === EVENT_KINDS.RV_MINIMUM ||
     spec.kind === EVENT_KINDS.RV_MAXIMUM
@@ -357,23 +304,16 @@ function step() {
   const sample = { t: nowDays, value: signal.value };
   const before = watch.previous;
 
-  // The clock advances once per rendered frame, and this runs once per
-  // integration substep, so several samples in a row carry the same timestamp.
-  // Pairing two of those brackets the crossing to zero elapsed time - a
-  // resolution the clock does not have - and interpolates across a span of
-  // zero. So one sample per distinct clock reading: the bracket is then the
-  // frame the crossing happened in, which is the real resolution and is never
-  // zero. The cost is that a crossing is reported at the end of its frame
-  // rather than at the substep that produced it, which is inside the bracket
-  // the readout already quotes.
+  // The clock advances once per frame but this runs per substep, so samples
+  // repeat timestamps and would bracket a crossing to zero elapsed time. Keep one
+  // sample per distinct clock reading: the bracket is then the frame, and the
+  // crossing is reported at the end of that frame, inside the quoted bracket.
   if (before && sample.t === before.t) return;
 
   watch.previous = sample;
   if (!before) return;
 
-  // A clock that went backwards means the timeline was scrubbed. The previous
-  // sample is from a future that is being replayed away; drop it and start the
-  // bracket again rather than reading a crossing out of two unrelated states.
+  // A backwards clock means a timeline scrub; the stored sample is stale.
   if (sample.t < before.t) return;
 
   if (!crossedZero(before.value, sample.value, signal.rising)) return;
@@ -389,14 +329,9 @@ function step() {
 }
 
 /**
- * A transit watch, which reads the photometer's own detector rather than
- * finding a crossing of its own.
- *
- * The mid-time of a transit is only known once it has finished - it is the
- * midpoint of the ingress and egress the detector measured - so this fires
- * after the event by about half a transit duration. That is reported as the
- * overshoot like any other, and is why the readout shows it: a reader who
- * expects the simulation to stop mid-transit should be told why it did not.
+ * A transit watch, which reads the photometer's detector. The mid-time is only
+ * known once the transit ends, so this fires about half a duration late; that
+ * is reported as the overshoot.
  *
  * @param {number} nowDays - The clock now
  */
@@ -406,14 +341,14 @@ function stepTransit(nowDays) {
 
   const latest = log[log.length - 1];
   if (!latest || !Number.isFinite(latest.mid)) {
-    // A logged transit with no usable mid-time is not an event to stop on.
+    // No usable mid-time: not an event to stop on.
     watch.transitsAtArm = log.length;
     return;
   }
   fire({
     kind: EVENT_KINDS.TRANSIT,
     timeDays: latest.mid,
-    // The detector's own resolution: the transit was localised to its duration.
+    // The transit is localised only to its duration.
     bracketDays: Number.isFinite(latest.duration) ? latest.duration : 0,
     overshootDays: nowDays - latest.mid,
     detail: { depth: latest.depth, duration: latest.duration, seq: latest.seq },
@@ -421,11 +356,8 @@ function stepTransit(nowDays) {
 }
 
 /**
- * Record the event, stop the simulation, and tell everyone.
- *
- * Nothing is rewound. See the note at the top of the file: the clock is not the
- * only thing indexed by the clock, and moving some of those back and not others
- * is how a panel comes to describe a moment that never happened.
+ * Record the event, stop the simulation, and tell everyone. Nothing is rewound
+ * (see the head of the file).
  *
  * @param {object} event - The event
  */
@@ -444,11 +376,8 @@ function fire(event) {
 }
 
 /**
- * Attach a student's note to the event that fired.
- *
- * Kept with the event rather than anywhere else so that whatever exports the
- * moment - a screenshot, a lab report - can pick it up without knowing about
- * the panel that collected it.
+ * Attach a student's note to the event that fired, so exports need not know
+ * about the panel.
  *
  * @param {string} text - The note
  */
@@ -459,11 +388,8 @@ export function annotateLastEvent(text) {
 }
 
 /**
- * Drop everything. Called when the world is rebuilt.
- *
- * A watch names bodies by id, and a rebuilt world reuses ids for different
- * objects, so a watch that survived a reset would be watching something else
- * entirely under the same name.
+ * Drop everything on a world rebuild: a rebuilt world reuses ids for different
+ * objects, so a surviving watch would watch the wrong body.
  */
 export function resetPauseAtEvent() {
   disarm('worldReset');

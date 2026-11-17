@@ -8,24 +8,21 @@
 // =============================================================================
 
 export const EN_EVENTWINDOW = {
-  'window.armed':
-    'The watch is armed for you: the scene stops by itself at the event.',
+  'window.armed': 'Armed for you: the scene stops at the event.',
   'window.foreign':
-    'Your own watch is armed, so this step has not armed one. Disarm yours in the Pause at event panel to use the step’s.',
+    'Your own watch is armed, so this step armed none. Disarm yours to use the step’s.',
   'window.refused':
-    'The watch could not be armed here; the Pause at event panel says why.',
-  'window.wait': 'Replay is offered once the event has happened.',
+    'The watch could not be armed; the Pause at event panel says why.',
+  'window.wait': 'Replay comes once the event has happened.',
   'window.at': 'Stopped at: {kind}.',
   'window.limit':
-    'The event is older than the recorded history, which keeps the last {frames} frames (about {seconds} s of running, {span} of simulated time here), so it cannot be replayed. Arm the watch again to catch the next one.',
+    'The event is older than the recording (the last {frames} frames, about {seconds} s of running, {span} here). Arm again to catch the next one.',
   'window.armAgain': 'Arm again',
   'window.atEvent': 'Replay: at the event.',
-  'window.jumped':
-    'Showing the recorded frame at the event. The LIVE button puts the scene back.',
+  'window.jumped': 'Showing the frame at the event. LIVE puts the scene back.',
   'window.replayHelp':
-    'Replay plays the recorded frames around the event, then puts the live scene back exactly. Comma and period step through them; Escape stops. Trails restart, and particles are not recorded.',
-  'window.rewindWhy':
-    'Replay or step back to a frame first: Rewind to here makes that frame the scene.',
+    'Replay plays the frames around the event, then puts the live scene back exactly. Comma and period step; Escape stops. Particles are not recorded.',
+  'window.rewindWhy': 'Replay or step back to a frame first.',
   'window.rewindDrops':
-    'Rewind to here makes the frame shown the scene and drops the history after it.',
+    'Rewind to here makes this frame the scene and drops later history.',
 };

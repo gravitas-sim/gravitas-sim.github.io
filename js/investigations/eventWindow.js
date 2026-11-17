@@ -1,24 +1,8 @@
-// =============================================================================
-// A step's time and its event window
-// -----------------------------------------------------------------------------
-// What a lesson step adds to the sandbox's clock, fetched only by a step that
-// declares one of these (js/investigations.js, syncEventWatch):
-//
-//   time: { paused, speed }   applied once on entering the step; the lesson's
-//                             scope puts the reader's own back when the
-//                             lesson closes (the share capture holds speed).
-//   pauseAt.auto: true        arms the step's watch for the student on entry
-//                             (eventWatch.js says when a lesson may).
-//   pauseAt.replay: true      offers Replay on the recorded frames around the
-//                             event, and puts the live scene back exactly.
-//   pauseAt.rewind: true      also offers "Rewind to here", which makes the
-//                             frame shown the scene and drops later history.
-//
-// Replay and Rewind to here are js/timeline.js's (the sandbox's two named
-// actions); this module chooses the frames and says what it cannot do. It
-// imports nothing but its sibling: the timeline, the clock, the world and the
-// words come from the host, so no start-up module joins this chunk's family.
-// =============================================================================
+// A step's time and event window, fetched by a step that declares `time` or
+// `pauseAt` (js/investigations.js, syncEventWatch; keys in INTERACTION.md
+// section 7). Replay and Rewind to here are js/timeline.js's; this chooses the
+// frames and says what it cannot do. Everything but eventWatch.js comes from
+// the host, so no start-up module joins this chunk.
 
 import * as watch from './eventWatch.js';
 
@@ -27,50 +11,48 @@ export const LEAD_FRAMES = 30;
 
 let host = null;
 let step = null;
-/** Bumped on every entry, so an entry still awaiting cannot arm for the next. */
+/** Bumped by every entry, so an entry still awaiting cannot arm for the next. */
 let turn = 0;
 /** A replay or jump this module started is on screen. */
 let ours = false;
-/** What the step's watch said on entry: 'armed', 'foreign' or 'refused'. */
+/** 'armed', 'foreign' or 'refused': what arming said. */
 let armNote = '';
-/** The watch the step opened the tool with, for Arm again. */
 let armSpec = null;
 let words = null;
+/** Whether history was shown when the window was last drawn, and a watcher runs. */
+let drawnShown = false;
+let watching = false;
 
-/** The step's own strings, for the locale in use, read straight from the file. */
 async function strings() {
-  const es = host.locale?.() === 'es';
-  const m = es
-    ? await import('../i18n/es.eventWindow.js')
-    : await import('../i18n/en.eventWindow.js');
+  const m =
+    host.locale?.() === 'es'
+      ? await import('../i18n/es.eventWindow.js')
+      : await import('../i18n/en.eventWindow.js');
   words = m.ES_EVENTWINDOW || m.EN_EVENTWINDOW;
 }
 
 const say = (id, vars = {}) =>
   String(words?.[id] ?? id).replace(/\{(\w+)\}/g, (_, k) => vars[k] ?? '');
 
-/** Whether the reader asked for less motion (css/tokens.css reads the same). */
-function reducedMotion() {
-  const mode = document.documentElement.dataset.motion;
-  return Boolean(
-    mode === 'reduce' ||
-    mode === 'step' ||
-    globalThis.matchMedia?.('(prefers-reduced-motion: reduce)').matches
-  );
-}
+/** As css/tokens.css reads it: the Motion setting, then the device. */
+const reducedMotion = () =>
+  /^(reduce|step)$/.test(document.documentElement.dataset.motion) ||
+  Boolean(globalThis.matchMedia?.('(prefers-reduced-motion: reduce)').matches);
 
 /**
  * Bring the window up to date with the step on screen.
  *
  * @param {?object} next - The step, or null when the lesson closes
  * @param {boolean} entering - True on a step change, false on a re-render
- * @param {object} h - The lesson's host: body(), bodies(), setTime(time),
- *   timeline, t, announce, formatTime, locale
+ * @param {object} h - body(), bodies(), setTime(time), timeline, t, announce,
+ *   formatTime, locale
  * @returns {Promise<void>}
  */
 export async function syncWindow(next, entering, h) {
   host = h;
+  // A staged step's bodies can land after its first render: try again.
   if (entering) await enter(next);
+  else if (step?.pauseAt && !armSpec) await open(turn);
   const spec = step?.pauseAt;
   if (!words && (spec?.auto || spec?.replay || spec?.rewind)) await strings();
   draw();
@@ -82,27 +64,29 @@ async function enter(next) {
   step = next;
   armNote = '';
   armSpec = null;
-  if (!next) return;
-  if (next.time) host.setTime(next.time);
-  const spec = next.pauseAt;
+  if (next?.time) host.setTime(next.time);
+  await open(mine);
+}
+
+async function open(mine) {
+  const spec = step?.pauseAt;
   if (!spec) return;
   const bodies = host.bodies();
   const body = watch.resolveByName(bodies, spec.body);
   const primary = watch.resolveByName(bodies, spec.primary);
-  // A transit watch reads the photometer's detector and needs no bodies.
+  // A transit watch reads the photometer and needs no bodies.
   if (spec.kind !== 'transit' && (!body || !primary)) return;
-  const arm = (armSpec = {
+  armSpec = {
     kind: spec.kind,
     bodyId: body?.id ?? null,
     primaryId: primary?.id ?? null,
     separation: Number.isFinite(spec.separation) ? spec.separation : null,
     note: spec.note || '',
-  });
-  await watch.openToolFor(arm, { onFired: () => draw() });
+  };
+  await watch.openToolFor(armSpec, { onFired: draw });
   if (spec.auto && mine === turn) await armStep(mine);
 }
 
-/** Arm the step's watch; a reader's own watch is refused, as ever. */
 async function armStep(mine) {
   const r = await watch.armForLesson(armSpec);
   if (mine !== turn) return;
@@ -115,7 +99,6 @@ async function armStep(mine) {
   host.announce(say(`window.${armNote}`));
 }
 
-/** Leave the step: its replay goes back to live, its watch is released. */
 function leave() {
   if (ours && host?.timeline.isScrubbing()) host.timeline.returnToLive();
   ours = false;
@@ -126,24 +109,20 @@ function leave() {
  * Where the step's event sits in the recording.
  *
  * @returns {{state: string, at?: number, event?: object, extent?: object}}
- *   'none' before it fires, 'gone' when it is older than every recorded frame
- *   (or nothing was recorded), else 'ready' with its frame offset
+ *   'none' before it fires, 'gone' when no recorded frame is at or before it,
+ *   else 'ready' with its offset in frames back from the newest
  */
 export function eventFrame() {
   const event = watch.lastLessonEvent();
   if (!event) return { state: 'none' };
-  const tl = host.timeline;
-  const extent = tl.recordedExtent();
-  const at = Number.isFinite(event.clock) ? tl.offsetAt(event.clock) : -1;
-  // The newest frame at or before the event must also follow the event's own
-  // bracket: a frame older than the oldest kept is a frame that is gone.
-  const kept = extent.frames >= 2 && at >= 0 && event.clock >= extent.oldest;
-  return kept
+  const extent = host.timeline.recordedExtent();
+  const at = host.timeline.offsetAt(event.clock);
+  return extent.frames > 1 && at >= 0
     ? { state: 'ready', at, event, extent }
     : { state: 'gone', event, extent };
 }
 
-/** Replay the frames around the event, or jump to it under reduced motion. */
+/** Replay the frames around the event; under reduced motion, show its frame. */
 export function replay() {
   const found = eventFrame();
   if (found.state !== 'ready') return draw();
@@ -153,24 +132,22 @@ export function replay() {
   if (reducedMotion()) {
     tl.scrubTo(at);
     host.announce(say('window.jumped'));
-    return followHistory();
+  } else {
+    tl.scrubTo(Math.min(tl.getFrameCount() - 1, at + LEAD_FRAMES));
+    // As long after the event as before it, or to live if that is sooner.
+    tl.startReplay({
+      until: 2 * event.clock - Math.min(event.clock, tl.getSimClock()),
+      mark: event.clock,
+      onMark: () => host.announce(say('window.atEvent')),
+    });
   }
-  tl.scrubTo(Math.min(tl.getFrameCount() - 1, at + LEAD_FRAMES));
-  const start = tl.getSimClock();
-  tl.startReplay({
-    // As long after the event as before it, or to live if that comes first.
-    until: event.clock + Math.max(0, event.clock - start),
-    mark: event.clock,
-    onMark: () => host.announce(say('window.atEvent')),
-  });
-  followHistory();
+  draw();
 }
 
-/** The frame shown becomes the scene; the history after it is dropped. */
+/** The frame shown becomes the scene; later history is dropped. */
 export function rewind() {
-  const tl = host.timeline;
-  if (!step?.pauseAt?.rewind || !tl.isScrubbing()) return;
-  tl.rewindToHere();
+  if (!step?.pauseAt?.rewind || !host.timeline.isScrubbing()) return;
+  host.timeline.rewindToHere();
   ours = false;
   host.announce(host.t('transport.rewind.hint'));
   draw();
@@ -181,101 +158,95 @@ export async function armAgain() {
   if (!armSpec) return;
   const mine = ++turn;
   watch.release();
-  await watch.openToolFor(armSpec, { onFired: () => draw() });
+  await watch.openToolFor(armSpec, { onFired: draw });
   if (mine === turn) await armStep(mine);
   draw();
 }
 
-/** Redraw while the recording is on screen, and once more when it is not. */
-function followHistory() {
-  draw();
+/** Redraw when history starts or stops being shown, while it matters. */
+function follow() {
+  if (watching || !globalThis.requestAnimationFrame) return;
+  watching = true;
   const tick = () => {
-    if (!ours) return;
-    if (host.timeline.isScrubbing()) globalThis.requestAnimationFrame?.(tick);
-    else {
-      ours = false;
+    if (!(ours || step?.pauseAt?.rewind)) return (watching = false);
+    if (host.timeline.isScrubbing() !== drawnShown) {
+      if (drawnShown) ours = false;
       draw();
     }
+    requestAnimationFrame(tick);
   };
-  globalThis.requestAnimationFrame?.(tick);
+  requestAnimationFrame(tick);
 }
 
-/** The window's markup, in the step's body after whatever the step drew. */
+/** The window, appended to the step's body. */
 function draw() {
   const root = host?.body?.();
   if (!root) return;
   let box = root.querySelector('[data-event-window]');
   const spec = step?.pauseAt;
-  if (!spec || !(spec.replay || spec.rewind || armNote)) {
-    box?.remove();
-    return;
-  }
+  const offers = spec?.replay || spec?.rewind;
+  if (!offers && !armNote) return box?.remove();
   if (!box) {
     box = document.createElement('div');
     box.className = 'inv-window';
     box.dataset.eventWindow = '';
+    box.style.cssText =
+      'display:flex;flex-wrap:wrap;gap:.5rem;align-items:center';
     root.append(box);
   }
   box.replaceChildren();
-  const line = (text, cls) => {
-    const p = document.createElement('p');
-    p.className = cls || 'inv-window-note';
-    p.textContent = text;
-    box.append(p);
-    return p;
+  const add = (tag, text) => {
+    const el = document.createElement(tag);
+    el.textContent = text;
+    if (tag === 'p') el.style.cssText = 'flex-basis:100%;margin:0';
+    box.append(el);
+    return el;
   };
+  const button = (text, run) => {
+    const b = add('button', text);
+    b.type = 'button';
+    b.className = 'btn';
+    b.addEventListener('click', run);
+    return b;
+  };
+  drawnShown = host.timeline.isScrubbing();
+  if (ours || spec.rewind) follow();
   const found = eventFrame();
-  // "Armed for you" is true until the event fires; a refusal stays said.
+  // "Armed for you" holds until the event fires; a refusal stays said.
   if (armNote && (armNote !== 'armed' || found.state === 'none'))
-    line(say(`window.${armNote}`));
-  if (!(spec.replay || spec.rewind)) return;
-  if (found.state === 'none') {
-    line(say('window.wait'));
-    return;
-  }
-  // The event by name, never its value: the time is the panel's to show.
-  line(
+    add('p', say(`window.${armNote}`));
+  if (!offers) return;
+  if (found.state === 'none') return add('p', say('window.wait'));
+  // The event by name, never its time.
+  add(
+    'p',
     say('window.at', { kind: host.t(`pauseEvent.kind.${found.event.kind}`) })
   );
+  const { capacity, simTime } = found.extent;
   if (found.state === 'gone') {
-    const seconds = Math.round(found.extent.capacity / 10);
-    line(
+    add(
+      'p',
       say('window.limit', {
-        frames: found.extent.capacity,
-        seconds,
-        span: host.formatTime(found.extent.simTime || 0),
+        frames: capacity,
+        seconds: Math.round(capacity / 10),
+        span: host.formatTime(simTime || 0),
       })
     );
-    button(say('window.armAgain'), armAgain);
-    return;
+    return button(say('window.armAgain'), armAgain);
   }
-  const scrubbing = host.timeline.isScrubbing();
+  const shown = drawnShown;
   if (spec.replay) button(host.t('transport.replay'), replay);
   if (spec.rewind) {
-    const b = button(host.t('transport.rewind'), rewind);
-    b.disabled = !scrubbing;
-    line(say(scrubbing ? 'window.rewindDrops' : 'window.rewindWhy'));
+    button(host.t('transport.rewind'), rewind).disabled = !shown;
+    add('p', say(shown ? 'window.rewindDrops' : 'window.rewindWhy'));
   }
-  if (spec.replay) line(say('window.replayHelp'));
-
-  function button(text, run) {
-    const b = document.createElement('button');
-    b.type = 'button';
-    b.className = 'btn inv-window-action';
-    b.textContent = text;
-    b.addEventListener('click', run);
-    box.append(b);
-    return b;
-  }
+  if (spec.replay) add('p', say('window.replayHelp'));
 }
 
 /** Forget everything. Tests only. */
 export function resetEventWindowForTests() {
   leave();
-  host = null;
-  step = null;
+  host = step = armSpec = words = null;
   armNote = '';
-  armSpec = null;
-  words = null;
   turn++;
 }

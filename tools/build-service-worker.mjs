@@ -241,6 +241,12 @@ export const NEVER_PRECACHED = [
   // until it is: a module a page imports is installed, and its bytes are that
   // change's to find.
   /^js\/numeric\/(roots|interp)\.js$/,
+  // The words of a lesson step's Replay and armed watch: fetched by a step that
+  // declares one and kept by the service worker after that, not installed (the
+  // first-visit tier is at its data-budget ceiling). The module that reads
+  // them, js/investigations/eventWindow.js, is installed: every pauseAt step
+  // opens its tool through it.
+  /^js\/i18n\/(en|es)\.eventWindow\.js$/,
   // The Worker pool (Prompt 153, WORKER_POOL.md): no shipped module imports it
   // yet, so no page can fetch it and an install has no use for it, and the
   // first-visit tier has 49 bytes of room (the adoption is a wait: its
