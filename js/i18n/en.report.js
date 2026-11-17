@@ -99,6 +99,10 @@ export const EN_REPORT = {
   'rp.outcome': 'Outcome',
   'rp.reached': 'reached',
   'rp.notReached': 'not reached',
+  'rp.range': '{low} to {high}',
+  'rp.reading': 'Your reading: {what}',
+  'rp.inside': 'The reading is inside the range given.',
+  'rp.outside': 'The reading is outside the range given.',
   'led.systems': 'Scenarios and experiments handed in',
   'led.systemsNote':
     'Attached to the evidence above. Open the link to see the same world, or use the file your student sends with the report. The build and engine say what made it.',

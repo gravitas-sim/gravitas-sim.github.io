@@ -246,13 +246,8 @@ let authoring = null;
 // --- Persistence --------------------------------------------------------------
 
 /**
- * The assignment being worked through, if this is one rather than a lesson.
- *
- * A short activity cut from a lesson keeps its own answers: two assignments
- * built from the same lesson are two pieces of work, and neither is the
- * lesson. So the storage key comes from the assignment when there is one, and
- * the lesson's own progress is left exactly as the student left it.
- *
+ * The assignment being worked through, if any. A short activity keeps its own
+ * answers, so its storage key comes from the assignment, not the lesson.
  * @type {?object}
  */
 let assignment = null;
@@ -742,8 +737,6 @@ function releaseLocks() {
   syncPlacementAvailability();
 }
 
-// --- Answer feedback ----------------------------------------------------------
-
 // --- Step helpers -------------------------------------------------------------
 
 /**
@@ -877,20 +870,24 @@ function validateStep(step, id) {
 // Fetched when a lesson opens (loadSeams), so draws and reads stay synchronous.
 let figures = null;
 
-/** Fetch the plot, ellipse and import code the steps need. @returns {?Promise} */
+/** Fetch the plot, ellipse, import and reveal code the steps need. @returns {Promise} */
 const loadSeams = steps =>
-  !figures &&
-  steps.some(
-    s =>
-      s.plot ||
-      s.type === 'ellipse' ||
-      s.importFromSelection ||
-      s.fields?.some(f => f.source)
-  )
-    ? import('./investigations/figures.js').then(m =>
+  Promise.all([
+    !figures &&
+      steps.some(
+        s =>
+          s.plot ||
+          s.type === 'ellipse' ||
+          s.importFromSelection ||
+          s.fields?.some(f => f.source)
+      ) &&
+      import('./investigations/figures.js').then(m =>
         fieldModule((figures = m))
-      )
-    : null;
+      ),
+    !slots.reveal &&
+      steps.some(s => s.evidence || s.kind === 'estimate') &&
+      import('./investigations/reveal.js').then(m => (slots.reveal = m)),
+  ]);
 
 /** Draw the step's scatter plot from the lesson's current state. */
 function drawPlot(step, id) {

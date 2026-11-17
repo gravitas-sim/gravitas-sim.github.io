@@ -19,6 +19,13 @@
 import { createDocument } from './pdf.js';
 import { fnvBase36 } from './hash.js';
 import { registerMessages } from './i18n/index.js';
+import {
+  estimateText,
+  fellInside,
+  isEstimate,
+  readEstimate,
+  readingsFor,
+} from './investigations/evidence.js';
 // Depths, shallowest first (as in investigations/progressSchema.js).
 const LEVELS = ['core', 'quantitative', 'advanced'];
 const rank = d => Math.max(0, LEVELS.indexOf(d));
@@ -316,8 +323,14 @@ export function buildLabReport({
     });
 
     if (step.type === 'predict') {
-      const chosen =
-        typeof value === 'number' ? step.options[value] : t('rp.noPred');
+      const said = isEstimate(step) && readEstimate(step, responses, id);
+      const chosen = isEstimate(step)
+        ? said
+          ? estimateText(said, step.unit, t('rp.range'))
+          : t('rp.noPred')
+        : typeof value === 'number'
+          ? step.options[value]
+          : t('rp.noPred');
       // Predictions are reported, never marked. Their value is that the student
       // committed before seeing the answer.
       doc.field(
@@ -334,6 +347,22 @@ export function buildLabReport({
             title: lessonPlain(out.title),
           })} (${t(visited.has(out.sid) ? 'rp.reached' : 'rp.notReached')})`
         );
+      // What the student then read, and the author's one sentence, once the outcome is reached.
+      if (out?.evidence && visited.has(out.sid)) {
+        const seen = readingsFor(out, investigation.steps, responses, sid =>
+          stepIdFor(investigation.steps.findIndex(s => s.sid === sid))
+        );
+        for (const r of seen)
+          doc.row(
+            t('rp.reading', { what: lessonPlain(r.field.label) }),
+            r.text ? `${r.text}${r.field.unit ? ` ${r.field.unit}` : ''}` : '-'
+          );
+        const inside = said ? fellInside(said, seen[0]?.value) : null;
+        const para = text =>
+          doc.paragraph(text, { size: 9.5, indent: 10, gap: 4 });
+        if (inside !== null) para(t(inside ? 'rp.inside' : 'rp.outside'));
+        if (out.compare) para(lessonPlain(out.compare));
+      }
       canonical.push(`${id}=${value}`);
       return;
     }

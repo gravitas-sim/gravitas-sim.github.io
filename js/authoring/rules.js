@@ -9,6 +9,7 @@ import { checkAnswer, toleranceFor } from '../answerCheck.js';
 import { verifyKey } from '../answerKey.js';
 import { isValidSid } from '../investigations/progressSchema.js';
 import { parseNumber } from '../answerParse.js';
+import { evidenceProblems } from './evidenceRules.js';
 import {
   FEEDBACK_CLASSES,
   HINT_LIMIT,
@@ -111,6 +112,8 @@ export const RULE_INDEX = {
   'answer/options': 'An option list is long enough and has no repeats',
   'answer/reveal':
     'A held prediction names a later step in the same lesson to be marked at',
+  'answer/evidence':
+    'An estimate has a unit, and a reveal names readings taken after the prediction',
   'answer/rubric': 'A short answer carries a rubric',
   'interaction/validate': "A validator accepts the author's own hint values",
   'interaction/compute': 'A computed field survives the hint values',
@@ -172,18 +175,11 @@ const isNonEmptyString = v => typeof v === 'string' && v.trim().length > 0;
 const isPlainObject = v => !!v && typeof v === 'object' && !Array.isArray(v);
 
 /**
- * A stub of the live simulation context a probe is handed.
- *
- * Deliberately hostile: nothing selected, no elements, no bodies. A probe is
- * supposed to cope with that - it renders on the very first frame of a step,
- * before a student has clicked anything - so a probe that throws here would
- * throw in front of a class.
+ * A stub of the live simulation context a probe is handed. Deliberately
+ * hostile (nothing selected, no bodies): a probe renders on the first frame.
  */
 export function emptyProbeContext() {
-  // Mirrors the object js/investigations.js builds. Kept in step with it by
-  // tests/authoring.test.js, which fails if the engine grows a context member
-  // this stub does not have: a probe calling something missing here would be
-  // reported as a broken probe when the probe is fine and the stub is stale.
+  // Mirrors the object js/investigations.js builds; tests/authoring.test.js fails if it grows a member this lacks.
   return {
     selected: null,
     bodies: [],
@@ -338,14 +334,8 @@ function hintValues(step) {
  * @returns {Array<object>} Findings, in catalog order
  */
 /**
- * The presets a step actually shows, resolved the way the panel resolves them.
- *
- * js/investigations.js lets a step suppress presets with `presets: false`, and
- * lets a widget compute them from the step - the rotation-curve instrument
- * hides its "published decomposition" button while a student is fitting with
- * stars alone. A rule that asked the widget for its presets and stopped there
- * would credit a step with a way back that the step has taken away.
- *
+ * The presets a step actually shows, resolved the way the panel resolves them
+ * (a step may suppress them, a widget may compute them from the step).
  * @param {object} widget - The widget definition
  * @param {object} spec - The step's `tool` block
  * @returns {Array<object>} The presets the student can press on this step
@@ -933,12 +923,9 @@ export function checkCatalog(inputs, { skip = [] } = {}) {
         }
       }
 
-      // A remediation step is shown only when an earlier graded step was
-      // answered wrongly (or rightly): js/investigations.js stepApplies(). One
-      // level deep, so every student still walks a straight line to the end:
-      // the step it names is graded and one every student reaches (and, if a
-      // held prediction, already marked), and it is neither the last step nor
-      // where a prediction is marked.
+      // A remediation step shows only when an earlier graded step was answered
+      // wrongly (or rightly): stepApplies(). One level deep, so every student
+      // still walks a straight line to the end.
       if (step.when !== undefined) {
         const w = step.when;
         const at = isPlainObject(w)
@@ -989,6 +976,8 @@ export function checkCatalog(inputs, { skip = [] } = {}) {
         }
       }
 
+      for (const m of evidenceProblems(step, steps, i)) E('answer/evidence', m);
+
       // --- Answers -----------------------------------------------------------
       const graded = step.type === 'predict' || step.type === 'question';
       if (!graded) return;
@@ -1001,7 +990,10 @@ export function checkCatalog(inputs, { skip = [] } = {}) {
         return;
       }
 
-      const kind = step.type === 'predict' ? 'choice' : step.kind;
+      const kind =
+        step.type === 'predict' && step.kind !== 'estimate'
+          ? 'choice'
+          : step.kind;
 
       if (kind === 'choice') {
         if (!Array.isArray(step.options) || step.options.length < 2) {
@@ -1059,7 +1051,10 @@ export function checkCatalog(inputs, { skip = [] } = {}) {
             'answer/reveal',
             `reveal names "${step.reveal}", which comes before this step`
           );
-        } else if (!Array.isArray(step.options) || step.answer === undefined) {
+        } else if (
+          step.kind !== 'estimate' &&
+          (!Array.isArray(step.options) || step.answer === undefined)
+        ) {
           E(
             'answer/reveal',
             'reveal holds the marking of a choice, so the step needs options and an answer'
