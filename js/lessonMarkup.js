@@ -78,24 +78,55 @@ export const escapeHtml = text =>
     .replace(/</g, '&lt;')
     .replace(/>/g, '&gt;');
 
+/**
+ * The typography of numbers and formulas in prose, one rule set for every
+ * lesson in both languages (NUMBER_TYPOGRAPHY.md, "Lesson prose").
+ *
+ * A number never ends a line apart from the word after it (its unit); a
+ * hyphen before a digit is a minus; a binary operator stays with the term
+ * before it, and a multiplication sign carries narrow no-break spaces.
+ * Runs on rendered prose, after entities, so an authored `&nbsp;` is kept.
+ *
+ * @param {string} html - What prose() has made so far
+ * @returns {string} The same prose with its spaces and minus signs typeset
+ */
+export const typeset = html =>
+  html
+    .replace(
+      /([\d\u00b2\u00b3\u00b9\u2070-\u2079]|<\/sup>) (?=[\p{L}%\u00b0])/gu,
+      '$1\u00a0'
+    )
+    .replace(
+      /\b(million|billion|thousand|millones|mil) (?=\p{L})/gu,
+      '$1\u00a0'
+    )
+    .replace(/(^|[\s(])-(?=\d)/g, '$1\u2212')
+    .replace(/ ([=\u2248\u221d\u00f7\u2212\u00b1])(?= )/g, '\u00a0$1')
+    .replace(/ \u00d7 /g, '\u202f\u00d7\u202f');
+
 /** Lesson prose carries a little inline markup, but never arbitrary HTML. */
 export const prose = text =>
-  escapeHtml(text)
-    // [\s\S] rather than . : lesson prose is written in template literals that
-    // wrap across lines, and a tag spanning a newline was left as raw markup on
-    // screen.
-    .replace(/&lt;strong&gt;([\s\S]*?)&lt;\/strong&gt;/g, '<strong>$1</strong>')
-    .replace(/&lt;em&gt;([\s\S]*?)&lt;\/em&gt;/g, '<em>$1</em>')
-    // Real subscripts and superscripts: R<sub>p</sub> rather than R_p, which a
-    // student then has to translate back into the algebra they were taught.
-    .replace(/&lt;sub&gt;([\s\S]*?)&lt;\/sub&gt;/g, '<sub>$1</sub>')
-    .replace(/&lt;sup&gt;([\s\S]*?)&lt;\/sup&gt;/g, '<sup>$1</sup>')
-    .replace(/\n\s*\n/g, '</p><p>')
-    .replace(/\s+/g, ' ')
-    // Entities last, found by their escaped "&amp;" and escaped again once
-    // decoded, so "&lt;" is only ever text. After the \s pass, which would
-    // fold &nbsp;'s U+00A0 into a plain space.
-    .replace(/&amp;(#?[a-zA-Z0-9]{1,32};)/g, (whole, ref) => {
-      const decoded = decodeEntities(`&${ref}`);
-      return decoded === `&${ref}` ? whole : escapeHtml(decoded);
-    });
+  typeset(
+    escapeHtml(text)
+      // [\s\S] rather than . : lesson prose is written in template literals that
+      // wrap across lines, and a tag spanning a newline was left as raw markup on
+      // screen.
+      .replace(
+        /&lt;strong&gt;([\s\S]*?)&lt;\/strong&gt;/g,
+        '<strong>$1</strong>'
+      )
+      .replace(/&lt;em&gt;([\s\S]*?)&lt;\/em&gt;/g, '<em>$1</em>')
+      // Real subscripts and superscripts: R<sub>p</sub> rather than R_p, which a
+      // student then has to translate back into the algebra they were taught.
+      .replace(/&lt;sub&gt;([\s\S]*?)&lt;\/sub&gt;/g, '<sub>$1</sub>')
+      .replace(/&lt;sup&gt;([\s\S]*?)&lt;\/sup&gt;/g, '<sup>$1</sup>')
+      .replace(/\n\s*\n/g, '</p><p>')
+      .replace(/\s+/g, ' ')
+      // Entities last, found by their escaped "&amp;" and escaped again once
+      // decoded, so "&lt;" is only ever text. After the \s pass, which would
+      // fold &nbsp;'s U+00A0 into a plain space.
+      .replace(/&amp;(#?[a-zA-Z0-9]{1,32};)/g, (whole, ref) => {
+        const decoded = decodeEntities(`&${ref}`);
+        return decoded === `&${ref}` ? whole : escapeHtml(decoded);
+      })
+  );
