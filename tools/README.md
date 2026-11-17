@@ -185,6 +185,7 @@ current, and the orchestrator checks it.
 | `migrate-flow.mjs` | One-off: move the investigation flow out of instructorContent.js into |  |
 | `mission-lab-key.mjs` | The mission lab's answer key: a reference run of every guide | `npm run mission:key` |
 | `model-comparison-validate.mjs` | The model-comparison kernel against its committed thresholds (Prompt 261) | `npm run modelcompare:validate` |
+| `model-page-facts.mjs` | Input events from the top of the model page to three named facts | `npm run model-page:facts` |
 | `module-load-hook.mjs` | Write down every module Node loads |  |
 | `modulepreload.mjs` | Early module fetches, stamped into every page |  |
 | `morphology-validate.mjs` | The galaxy-morphology kernel against its committed thresholds (Prompt 249, Part A) | `npm run morphology:validate` |

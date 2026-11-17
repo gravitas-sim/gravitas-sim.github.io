@@ -752,7 +752,7 @@
       "locator": { "nav": "model" },
       "purpose": "The reference for every model assumption in Gravitas: integrators, physics, limits and derivations.",
       "audience": "curious student, instructor, reviewer",
-      "primary_action": "Follow the first contents link (main a[href])",
+      "primary_action": "Follow the first task link (.doc-tasks a[href])",
       "job": "reference",
       "template": "doc-main",
       "disposition": "OPEN",
@@ -762,14 +762,14 @@
       "reason": "",
       "sitemap_reason": "",
       "decision": "",
-      "note": "",
+      "note": "FOUNDATIONS ONLY: navigation landed (an opening with three tasks, a contents list of every section kept reachable, one internal order for the core sections); the reference family's direction is not chosen, so the row stays OPEN.",
       "measure": [
         {
           "id": "page",
           "path": "/model/",
           "seeds": [],
           "ready": "main",
-          "primary": { "selector": "nav.doc-toc a[href]" }
+          "primary": { "selector": ".doc-tasks a[href]" }
         }
       ]
     },
