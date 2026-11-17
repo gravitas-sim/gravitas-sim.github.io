@@ -474,8 +474,11 @@ test.describe('the A/B experiment bench', () => {
     // grow out of the window. It joins the instrument stack, which lays out
     // from the bottom, so an unbounded one puts its own controls above the top
     // edge where nothing can reach them.
-    await page.setViewportSize({ width: 390, height: 844 });
+    // The scenario is chosen from the gallery at desktop width, where the
+    // rail is a column; the window is then made a phone's before the panel
+    // opens, which is where the panel is laid out.
     await app.loadScenario('binary-bh');
+    await page.setViewportSize({ width: 390, height: 844 });
     await app.waitForFrames(5);
     await page.evaluate(async () => {
       const { ensureBench } = await import('/js/experimentsBridge.js');

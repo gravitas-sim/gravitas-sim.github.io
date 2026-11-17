@@ -169,6 +169,18 @@ async function elapsedText(page) {
 
 function makeWorkflowApp(page) {
   const legacy = makeApp(page);
+  /**
+   * Bring a rail control within reach: open its accordion section, or on a
+   * narrow window (where the rail is a menu) the menu itself, as a reader does.
+   */
+  const reveal = async id => {
+    const control = page.locator(`#${id}`);
+    if (await control.isVisible().catch(() => false)) return;
+    const menu = page.locator('#mobileMenuToggle');
+    if (await menu.isVisible().catch(() => false)) await menu.click();
+    await app.railControl(id);
+  };
+
   const app = {
     ...legacy,
 
@@ -187,7 +199,7 @@ function makeWorkflowApp(page) {
         throw new Error(`loadScenario(): "${key}" is not a scenario key`);
       const modal = page.locator('#scenarioListModal');
       if (!(await modal.isVisible().catch(() => false))) {
-        await app.railControl('loadScenarioBtn');
+        await reveal('loadScenarioBtn');
         await page.locator('#loadScenarioBtn').click();
         await expect(modal).toBeVisible();
       }
@@ -198,7 +210,7 @@ function makeWorkflowApp(page) {
     },
 
     async emptyWorld(_seed, { run = true } = {}) {
-      await app.railControl('cleanSimBtn');
+      await reveal('cleanSimBtn');
       await page.locator('#cleanSimBtn').click();
       await expect.poll(() => readoutBodies(page), { timeout: 15_000 }).toBe(0);
       if (!run && !(await app.isPaused())) await app.pressPause();

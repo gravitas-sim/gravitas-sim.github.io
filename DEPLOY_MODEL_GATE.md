@@ -392,6 +392,8 @@ for at least 10, so a verdict of A is not reachable from this state. No spec was
 made conditional, skipped or loosened to change that. The existing build-target
 skips (D-R10-292-02 and others) are unchanged.
 
+**Measured, build (`npm run e2e:dist:workflows`, one worker, Chromium, `dist/` from `node build.js` on this tree).** The 22 specs whose workflows are DOM-level, plus sandbox: 247 tests, **244 passed, 0 failed, 3 skipped** (the two measure tests and the one observatory offline test that are existing build-target skips). Per spec, passed: adoption 10, answerEntry 15, assignment 16, experimentRunner 8, firstRun 7, htmlReport 3, instructorFlow 8, instructorPortal 25, investigations 23, measure 11 (2 skipped), myWork 12, observatory 8 (1 skipped), observing 10, onboarding 9, predictionLoops 19, presetRecovery 3, progressSafety 17, sandbox 15, sharing 4, sky 7, stellarSpectra 3, submissionReview 11. Workflows with every spec in that list passing on the build: S1, S3, S5, S6, S8, S9 and I1, that is 7 of 11 (S5 and S4's measure carry the existing skips). The sources were run for the same specs while editing; a full source pass of all 28 and the pass counts of the six unconverted specs (bodyPlacement, accessibilityParity, plotChart, chartParity, experiments, shareObserving) against `dist/` were **not run** here. Measured at one worker with the machine load between 5 and 24.
+
 **Tests moved out of the workflow specs.** Six tests call a module inside the
 page (the experiment scheduler with stand-in Workers; the assignment binding,
 link-refusal, language and backup rules; the seeded-world determinism). They are
