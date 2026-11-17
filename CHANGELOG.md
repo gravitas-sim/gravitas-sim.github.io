@@ -43,6 +43,13 @@ the release rather than in the tag.
 
 ### Added
 
+- A lesson or a step can say what the picture behind it is for (Prompt 325;
+  register row D-R4-325-01; visible, an engine capability no shipped lesson uses
+  yet): `canvas: 'scene'` is the step's own scene, `'portrait'` a scene held still
+  and described as a picture (`picture: 'Jupiter and Io'`), and `'quiet'` stages
+  nothing, closes the rail's open section and folds the playback bar behind a
+  button of its own. With none declared a lesson is exactly as before. The scene
+  audit records the kind per step and the acceptance map lists each lesson's kinds.
 - The lesson standard as authoring checks (Prompt 307; register rows
   D-R4-307-01 to 05; invisible, tooling): `npm run author:check` now holds
   seven patterns the lesson audits found by hand to a committed count per lesson
