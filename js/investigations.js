@@ -221,7 +221,6 @@ let probeTimer = null;
 /** js/surveyDesignPlan.js, once a lesson with a plan step has opened. */
 let planModule = null;
 let els = {};
-let plotCanvas = null;
 let plotTransformed = false;
 let plotLog = false;
 let toolValues = {};
@@ -899,6 +898,7 @@ const loadSeams = async ({ steps, canvas }) => {
     steps.some(
       s =>
         s.plot ||
+        s.point ||
         s.type === 'ellipse' ||
         s.importFromSelection ||
         s.fields?.some(f => f.source)
@@ -910,10 +910,11 @@ const loadSeams = async ({ steps, canvas }) => {
 /** Draw the step's scatter plot from the lesson's current state. */
 function drawPlot(step, id) {
   figures?.drawPlot(step, fieldValues(step, id), {
-    canvas: plotCanvas,
+    canvas: els.plotCanvas,
     els,
     transformed: plotTransformed,
     log: plotLog,
+    scene: { selectRole, selectableBodies },
   });
 }
 
@@ -963,6 +964,7 @@ function renderStep() {
   syncLightCurve(step);
   syncEventWatch(step);
   renderProbe();
+  figures?.point(step, { roleBody, announce, objects: els.objects });
   renderFooter();
   bindStepInputs({
     els: () => els,
@@ -1037,9 +1039,8 @@ let eventWatchLoaded = false;
  */
 function syncPlotPanel(step) {
   if (!els.plotPanel) return;
-  const spec = step?.plot;
+  const spec = step?.plot?.points && step.plot;
   els.plotPanel.hidden = !spec;
-  plotCanvas = spec ? els.plotCanvas : null;
   if (!spec) {
     if (els.plotTableWrap) els.plotTableWrap.hidden = true;
     return;
@@ -1737,10 +1738,6 @@ const OBJECTS_OPEN_KEY = 'gravitas_lesson_objects_open';
 /** Past this many, the object list is a count rather than a row of chips. */
 const OBJECT_LIST_MAX = 12;
 
-/**
- * The keyboard's way to select the objects a step is about.
- * @returns {void}
- */
 function renderObjectList() {
   if (!els.objects || !els.objectsWrap) return;
   const step = currentStep();
@@ -1871,6 +1868,7 @@ function renderProbe() {
   const chosen = state.selectedObject?.object?.id ?? null;
   if (chosen !== lastProbeSelection) {
     lastProbeSelection = chosen;
+    figures?.syncSelection();
     if (step?.tool && getWidget(step.tool.id)?.live) paintTool({ quiet: true });
   }
   renderObjectList();
@@ -2431,7 +2429,8 @@ export function closeInvestigation() {
     setLightCurveEnabled(false);
     lightCurveOpenedByLesson = false;
   }
-  plotCanvas = null;
+  figures?.drawPlot({}, 0, {});
+  figures?.point({}, {});
   active = null;
 }
 
