@@ -369,20 +369,13 @@ export function renderOverrides() {
     lensing_quality: 'off',
     show_gravitational_waves: false,
     show_accretion_disk: false,
-    // Presentation, not population. This was once returned from
-    // populationCaps(), which applied its result by writing into the live
-    // SETTINGS - so a slow machine permanently rewrote the reader's own
-    // settings, and those rewritten values then traveled out in share links,
-    // saved states and the A/B bench's canonical hash. It is not read during
-    // construction at all, so a read-time override here is both the correct
-    // place and the only one that has any effect.
+    // Trails are not here any more: the low tier thins their samples in the
+    // engine (trailSampleInterval) and keeps their span, because a trail that
+    // covers a stated time must not shorten on a slow machine.
     //
-    // star_density was here too and is deliberately not any more. The tier now
-    // reaches the sky through js/bodyDrawSky.js's STARS_PER_MEGAPIXEL, which is
-    // a better lever - it scales with the window as well as the tier - and
-    // star_density has become a proportion of that. Two reductions for one
-    // purpose would compound into an almost empty sky.
-    trail_length: 8,
+    // star_density is deliberately not here either. The tier reaches the sky
+    // through js/bodyDrawSky.js's STARS_PER_MEGAPIXEL, which scales with the
+    // window as well as the tier, and star_density is a proportion of that.
   };
 }
 

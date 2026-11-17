@@ -15,6 +15,8 @@
 import { setSimGravitationalConstant } from '../units.js';
 import { clearFrameHistory } from '../referenceFrame.js';
 import { SOLAR_MASS_KG, SOLAR_MASS_UNIT } from '../constants.js';
+import { currentTier } from '../quality.js';
+import { trailReferenceStep, trailSpanTime } from '../trailSpan.js';
 
 // Global state variables
 export let bh_list = [],
@@ -370,58 +372,101 @@ export const setDetailScale = scale => {
 /**
  * Sample counter for trails.
  *
- * Every live body appends one trail point per physics step, so a shared counter
- * is enough to say which samples were taken at the same moment. That is what
- * lets one body's trail be re-expressed in another body's frame: without a
- * common clock the two arrays are just two lists of coordinates, and lining them
- * up by array index breaks the moment one body is younger than the other.
+ * A trail sample is taken when a fixed slice of simulated time has passed, not
+ * once per physics step (js/trailSpan.js), so a shared counter is enough to say
+ * which samples were taken at the same moment. That is what lets one body's
+ * trail be re-expressed in another body's frame: without a common clock the two
+ * arrays are just two lists of coordinates, and lining them up by array index
+ * breaks the moment one body is younger than the other.
  */
 export let trailTick = 0;
+
+// Simulated time the trail clock has run, always forward, and when the last
+// sample was taken. Separate from simulationTime: a scrub or a lesson may set
+// that back, and a trail's age must never run backwards with it.
+let trailTime = 0;
+let lastTrailSample = -Infinity;
 
 /** @returns {number} The tick of the most recent trail sample */
 export const getTrailTick = () => trailTick;
 
-/** Count one trail sample. Called by updatePhysics once per step. */
+/** @returns {number} The simulated time the trail clock has run */
+export const getTrailTime = () => trailTime;
+
+/** Count one trail sample, unconditionally. Used by the tests. */
 export const advanceTrailTick = () => {
   trailTick++;
+};
+
+/**
+ * The simulated time between two trail samples.
+ *
+ * One reference step at the full tier. The low tier and the adaptive detail
+ * scale thin the samples, never the span: a coarser trail is the same stretch
+ * of orbit drawn with fewer points.
+ *
+ * @returns {number} Simulation time units
+ */
+export const trailSampleInterval = () => {
+  const thin = currentTier() === 'low' ? 2 : 1;
+  return (
+    (trailReferenceStep(physicsSettings.max_timestep) * thin) /
+    (detailScale > 0 ? detailScale : 1)
+  );
+};
+
+/**
+ * How much simulated time a trail covers: trail_length reference steps.
+ *
+ * @returns {number} Simulation time units
+ */
+export const trailSpan = () =>
+  trailSpanTime(physicsSettings.trail_length, physicsSettings.max_timestep);
+
+/**
+ * Advance the trail clock by one physics step and say whether this step is a
+ * trail sample.
+ *
+ * Called by updatePhysics once per step, before anything appends. A step longer
+ * than the interval is always a sample; a shorter one is a sample only when the
+ * interval has passed, which is what keeps the span the same at 30, 60 and 144
+ * frames per second.
+ *
+ * @param {number} dt - The step, simulation time units (its size only)
+ * @returns {boolean} True when the bodies should append a trail point
+ */
+export const advanceTrailClock = dt => {
+  trailTime += Math.abs(dt) || 0;
+  // A hair under the interval, so 20 steps of a twentieth are one sample and
+  // not a sample twenty-one steps later for want of a rounding error.
+  if (trailTime - lastTrailSample < trailSampleInterval() * (1 - 1e-9)) {
+    return false;
+  }
+  lastTrailSample = trailTime;
+  trailTick++;
+  return true;
 };
 
 /** Restart the trail clock and drop frame history. Called when the world is rebuilt. */
 export const resetTrailTick = () => {
   trailTick = 0;
+  trailTime = 0;
+  lastTrailSample = -Infinity;
   clearFrameHistory();
 };
 
 /**
- * How many trail samples a body keeps.
+ * The most trail samples a body keeps.
  *
- * Extracted from update_trail so the barycenter history can be kept to exactly
- * the same length. A barycenter history shorter than the trails would silently
- * truncate the re-expressed trails; one longer would just waste memory.
+ * The span is set by time (trailSpan), so this is only the ceiling on how many
+ * points that can be, and the length the barycenter history is kept to so it
+ * always covers the trails. It no longer follows the zoom: a trail that
+ * shortened when the view zoomed out would not be a stated stretch of time.
  *
  * @returns {number} Sample budget, at least 1
  */
-export const trailBudget = () => {
-  // Zoom-based budget: fewer points when zoomed out, more when zoomed in
-  const zoom = state ? state.zoom : 1.0;
-  // detailScale is the renderer's adaptive-quality multiplier. It is applied
-  // here, at read time, so the user's configured trail_length is never
-  // overwritten.
-  const baseLen = Math.max(
-    1,
-    Math.round(physicsSettings.trail_length * detailScale)
-  );
-  if (baseLen < 10) {
-    // Preserve exact behavior for small budgets (tests rely on this)
-    return baseLen;
-  }
-  const minLen = Math.max(10, Math.floor(baseLen * 0.4));
-  const maxLen = Math.max(baseLen, 10);
-  return Math.max(
-    minLen,
-    Math.min(maxLen, Math.floor(baseLen * Math.min(1.5, Math.max(0.6, zoom))))
-  );
-};
+export const trailBudget = () =>
+  Math.max(1, Math.round(physicsSettings.trail_length) || 1);
 
 export const getDetailScale = () => detailScale;
 
