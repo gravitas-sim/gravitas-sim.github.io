@@ -33,9 +33,11 @@
 //                      hit is known-current and there is no reason to ask the
 //                      network. This is what makes the offline case instant
 //                      rather than merely possible.
-//   everything else    stale-while-revalidate. The Spanish lesson shadows, the
-//                      document pages, anything added later: served from cache
-//                      when there is one, refreshed in the background.
+//   a locale's warm    cache first, like the precache: the warm files are
+//   files              hashed into the cache name too, so a hit is current.
+//   everything else    stale-while-revalidate. Lessons outside the precache,
+//                      anything added later: served from cache when there is
+//                      one, refreshed in the background.
 //
 // What it deliberately does not do
 // -----------------------------------------------------------------------------
@@ -83,6 +85,10 @@ const OPTIONAL = self.__GRAVITAS_PRECACHE_OPTIONAL || [];
 // the data tables). Not fetched at install: the page asks for them once it is
 // idle ('install-idle'), so the install a reader waits for stays small.
 const IDLE = self.__GRAVITAS_PRECACHE_IDLE || [];
+
+// The paths a locale's warm list names, for the fetch handler's "is this part
+// of this version?" question below.
+const WARMED = new Set(Object.values(LOCALE_WARM).flat());
 
 // Parts a reader chose to keep offline (js/offlineParts.js). Their URLs carry
 // their digest, so a hit here is always the right bytes.
@@ -319,13 +325,14 @@ self.addEventListener('fetch', event => {
 
       if (hit) {
         // A precached file is current by construction - the cache name is a
-        // hash of its contents - so there is nothing to revalidate. Anything
-        // else gets refreshed in the background while the hit is served.
+        // hash of its contents, a locale's warm files included - so there is
+        // nothing to revalidate. Anything else gets refreshed in the
+        // background while the hit is served.
         const url = new URL(request.url);
         const relative = `.${url.pathname}`;
         // Compared on the path alone, for the same reason matchCached ignores
         // the search: `css/styles.css?v=3` is the precached `css/styles.css`.
-        if (!PRECACHE.includes(relative)) {
+        if (!PRECACHE.includes(relative) && !WARMED.has(relative)) {
           event.waitUntil(
             fetch(request)
               .then(fresh => maybeCache(cache, request, fresh))
@@ -375,9 +382,22 @@ self.addEventListener('message', event => {
     event.waitUntil(
       (async () => {
         const cache = await caches.open(VERSION);
-        const { added, failed } = await addAllTolerant(cache, urls);
+        // Only what the cache lacks, as the idle tier does: the page asks on
+        // every open in Spanish, on the controller change and on every
+        // language switch, and each ask used to fetch all of the files again
+        // past the browser's cache. The files are part of the version (the
+        // cache name hashes them), so one that is here is the right one.
+        const have = new Set(
+          (await cache.keys()).map(r => new URL(r.url).pathname)
+        );
+        const need = urls.filter(
+          url => !have.has(new URL(url, self.location.href).pathname)
+        );
+        const { added, failed } = need.length
+          ? await addAllTolerant(cache, need)
+          : { added: 0, failed: [] };
         console.info(
-          `[gravitas-sw] warmed ${data.locale}: ${added}/${urls.length}` +
+          `[gravitas-sw] warmed ${data.locale}: ${added}/${need.length} fetched` +
             (failed.length ? `, ${failed.length} failed` : '')
         );
       })()
