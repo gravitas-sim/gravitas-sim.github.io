@@ -78,6 +78,7 @@ import {
   getSimulationTime,
 } from './physics.js';
 import { state } from './appState.js';
+import { setBoundTest } from './bodyLabels.js';
 import { selectBodyInScene, setBodySelector } from './widgetRuntime.js';
 
 export { BINDING, OWNER };
@@ -179,6 +180,8 @@ export const roleBody = role => resolveRole(role).body;
 
 /** Which role names this body, if any. @returns {?string} */
 export const roleOf = body => roleOfBody(roster, body, getWorldGeneration());
+// The canvas names a step's bodies whatever the zoom (js/bodyLabels.js).
+setBoundTest(body => roleOf(body) != null);
 
 /** Roles bound in an older world, which need re-binding. @returns {Array<string>} */
 export const rolesNeedingRebind = () =>

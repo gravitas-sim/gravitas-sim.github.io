@@ -39,6 +39,7 @@ import {
   world_to_screen,
 } from './physics.js';
 import { state } from './appState.js';
+import { labelFont } from './bodyLabels.js';
 import { getSimClock } from './timeline.js';
 import { timeUnitSeconds } from './units.js';
 // Aliased: `t` is already the chart palette in this module, and a translator
@@ -897,7 +898,7 @@ export function drawObserverIndicator(ctx, W, H) {
   const labelDist = arrowLen + 22;
   const labelX = cx + Math.cos(screenAngle) * labelDist;
   const labelY = cy + Math.sin(screenAngle) * labelDist;
-  ctx.font = '11px Inter, system-ui, sans-serif';
+  ctx.font = labelFont(11, 'Inter, system-ui, sans-serif');
   ctx.fillStyle = 'rgba(79, 172, 254, 0.85)';
   ctx.textAlign = 'center';
   ctx.textBaseline = 'middle';
