@@ -32,7 +32,6 @@ import { canvasAcceptance } from '../tools/canvas-acceptance.mjs';
 import { registerCommands } from '../js/appState.js';
 import { setLocale } from '../js/i18n/index.js';
 import { StarObject, getWorldGeneration, stars } from '../js/physics.js';
-import { KEY_RAIL_SECTIONS } from '../js/names.js';
 
 const stage = { stars: [{ role: 'a', name: 'A', teffK: 5772, lumSun: 1 }] };
 const lesson = (steps, extra = {}) => ({ id: 'x', steps, ...extra });
@@ -145,16 +144,14 @@ describe('the page', () => {
     registerCommands({ hideObjectInspector: () => {} });
     document.body.innerHTML = html;
     delete document.body.dataset.lessonCanvas;
-    localStorage.clear();
     // The accordion of js/controls.js: one section open, a click toggles it and
-    // keeps the choice.
+    //
     for (const el of document.querySelectorAll('.rail-section-toggle'))
       el.addEventListener('click', () => {
         const was = el.getAttribute('aria-expanded') === 'true';
         for (const o of document.querySelectorAll('.rail-section-toggle'))
           o.setAttribute('aria-expanded', 'false');
         el.setAttribute('aria-expanded', String(!was));
-        localStorage.setItem(KEY_RAIL_SECTIONS, JSON.stringify([el.id]));
       });
     stars.length = 0;
     leaveCanvas();
@@ -215,16 +212,12 @@ describe('the page', () => {
     expect(stars).toHaveLength(0);
   });
 
-  test('the rail folds behind its toggles, and the choice is not kept', () => {
-    localStorage.setItem(KEY_RAIL_SECTIONS, JSON.stringify(['railState']));
+  test('the rail folds behind its toggles and leaving opens it again', () => {
     enterCanvas(quiet);
     const open = [...document.querySelectorAll('[aria-expanded="true"]')];
     expect(
       open.filter(e => e.classList.contains('rail-section-toggle'))
     ).toEqual([]);
-    expect(localStorage.getItem(KEY_RAIL_SECTIONS)).toBe(
-      JSON.stringify(['railState'])
-    );
     // A reader who opens a section during the lesson keeps it open.
     document.getElementById('railState').click();
     enterCanvas(quiet);

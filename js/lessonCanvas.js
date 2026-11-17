@@ -7,7 +7,6 @@
 
 import { canvasAt } from './lesson/canvasKind.js';
 import { command } from './appState.js';
-import { KEY_RAIL_SECTIONS } from './names.js';
 import { onLocaleChange, registerMessages, t } from './i18n/index.js';
 import { EN_CANVAS } from './i18n/en.canvas.js';
 import { ES_CANVAS } from './i18n/es.canvas.js';
@@ -118,25 +117,13 @@ function words() {
   if (fold) paintFold();
 }
 
-/** Close the open rail section the way a reader would, without keeping the choice. */
+/** Close the open rail section the way a reader would; leaving opens it again. */
 function railFold(on) {
   if (on) {
     const open = document.querySelector(TOGGLES);
     if (!open || railWas) return;
-    let raw = null;
-    try {
-      raw = localStorage.getItem(KEY_RAIL_SECTIONS);
-    } catch {
-      /* no stored choice to keep */
-    }
     railWas = open.id;
     open.click();
-    try {
-      if (raw === null) localStorage.removeItem(KEY_RAIL_SECTIONS);
-      else localStorage.setItem(KEY_RAIL_SECTIONS, raw);
-    } catch {
-      /* the fold is for this lesson only; nothing was stored either way */
-    }
   } else if (railWas) {
     if (!document.querySelector(TOGGLES)) $(railWas)?.click();
     railWas = null;
