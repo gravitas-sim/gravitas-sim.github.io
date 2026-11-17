@@ -209,9 +209,11 @@ reference steps of simulated time, so its span is the same at 30, 60 and 144
 frames a second; samples are taken on that slice of time, not once per step. The
 Low tier and Adaptive Detail draw fewer points along the span and do not
 shorten it, and zoom no longer scales it. The speed in the reference is the one
-pushed at a build or an Apply, not the live speed control's. The default is 90
-(about 19 days at the default gravitational constant), replacing 15 samples,
-which was three days.
+pushed at a build or an Apply, not the live speed control's. The default stays 15
+(about three days at the default gravitational constant, and the legend says
+so); a longer default is a proposed decision (D-R4-337-05), because the 20-odd
+scenarios that omit the key would draw longer trails and their world digests
+would be re-recorded.
 
 ### The colors are the argument
 

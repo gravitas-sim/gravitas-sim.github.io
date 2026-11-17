@@ -190,10 +190,7 @@ export const DEFAULT_SETTINGS = {
   // holds to far better than anything here is measured to.
   assist_probe_mass_ratio: 1e-6,
   interactive_add: true,
-  // Reference steps (js/trailSpan.js): 90 is about 19 days at the default
-  // gravitational constant, a visible arc of an Earth-like orbit at 1x. It was
-  // 15 samples, which was three days and under the width of the body.
-  trail_length: 90,
+  trail_length: 15,
   trail_style: 'Glow',
   sim_size: 'Large',
   star_density: 10000,
