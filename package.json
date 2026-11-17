@@ -243,6 +243,7 @@
     "e2e:all": "npm run e2e && npm run e2e:dist",
     "e2e:browsers": "GRAVITAS_E2E_BROWSERS=all playwright test",
     "e2e:cross-browser": "GRAVITAS_E2E_PROFILE=cross-browser playwright test",
+    "e2e:criteria": "playwright test -c e2e/criteria.config.js",
     "e2e:ui": "playwright test --ui",
     "e2e:headed": "playwright test --headed --project=chromium",
     "e2e:report": "playwright show-report",

@@ -285,6 +285,9 @@ current, and the orchestrator checks it.
 | `verify-release.mjs` | Is this tree safe to publish? |  |
 | `vetting-validate.mjs` | The vetting kernel against its committed thresholds (Prompt 228) | `npm run vetting:validate` |
 | `visual-binary-validate.mjs` | The visual-binary gate against its committed thresholds (Prompt 218 Part B) | `npm run visual-binary:validate` |
+| `visual-criteria.mjs` | The visual criteria, as code |  |
+| `visual-matrix.mjs` | The before-and-after matrix: the pilot scenes, photographed at matched states |  |
+| `visual-measure.mjs` | Measure the visual criteria on the pilot states and print the table |  |
 | `worker-probe.mjs` | npm run probe:workers - what the page's Workers hold, and what it keeps | `npm run probe:workers` |
 | `xray-scenes.mjs` | The committed scenes of the X-ray counts kernel's validation (Prompt 243) |  |
 | `xray-validate.mjs` | The X-ray counts kernel against its committed thresholds (Prompt 243) | `npm run xray:validate` |

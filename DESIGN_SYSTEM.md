@@ -62,6 +62,216 @@ step toward the semantic tokens above, not a substitute for them.
 - **Every control has a name** from a `<label>`, or an `aria-label` where a
   visible label would repeat a heading.
 
+## Visual direction
+
+The component language above says how a control looks. This section says what
+the scene, the step and the chrome are each owed on screen, how a visual
+change is judged, and what it must cost. It applies to the sandbox's scenes,
+to the pages and to the lessons. It is the yardstick later work is held to; it
+changes nothing that is drawn.
+
+### The direction
+
+- **The scene or the instrument first, the step second, chrome last.** What a
+  student is studying gets the room and the contrast; the words that guide
+  them come next; the buttons and panels that run the application give way.
+- **Calm defaults.** Nothing moves unless it is the thing being studied, and a
+  reading step is still.
+- **Stable layout.** A panel does not change size between steps, and a control
+  does not move because something else opened.
+- **Motion only where it shows change.** Motion that shows a body moving, a
+  quantity changing or a state arriving is part of the picture; motion that
+  decorates is not. The Motion choice is honoured everywhere.
+- **Scientific accuracy before polish.** Every mark means something: an
+  arrow's length is a magnitude, a trail's length is a time, a size is true or
+  says it is not. A picture never implies a calculation that does not exist.
+
+### Three kinds of reason, all legitimate
+
+A visual change names which of the three it is for.
+
+| Kind | The question | How it is judged |
+|---|---|---|
+| **Perception** | Can a student read it? Label and tick size at the display's own sharpness, a mark that survives grayscale, a number that is a number. | Measured: criterion I-9 below, on the pilot states. |
+| **Orientation** | Can a student find their way? The scene in view while they work, the object they were told about marked, where they are in the step. | Measured: criterion I-8 below, on the pilot states. |
+| **Appearance** | Is it better to look at? Composition, typography, purposeful detail on a body, scientific imagery, polish. A reason that stands without a learning score. | Shown, not computed: matched before-and-after captures (below), judged by the maintainer. No test states it, on purpose. |
+
+### What a visual change states
+
+Every later visual change records, in its pull request and its register row:
+
+1. its **kind** and its **reason**;
+2. its **measured cost**: bytes and requests on each route it touches under the
+   pinned toolchain (`tools/route-budget.mjs`, `npm run budget:check`), frame
+   time on the sandbox reference scenes (`npm run perf` with the profiles in
+   `tools/perf-thresholds.json`: `sandbox-scenes-full` and
+   `sandbox-scenes-low-cpu4`), and heap on the same scenes;
+3. **where the room comes from**: recovered waste first (a duplicate, an unused
+   rule, a font or image that need not load), then the appearance allocation
+   that Prompt 317 proposes (10% of each saving, `docs/BUDGET_POLICY_II.md`,
+   register row D-R4-317-03).
+
+A change is dropped for lacking a stated reason, a measured cost or room. It is
+never dropped merely because it is an appearance change, or because it costs
+something, or because its value is not a learning score. A change that needs
+more than its allocation goes to the maintainer as a concrete tradeoff with
+before-and-after captures. No ceiling is raised silently, and none is raised to
+make a change fit.
+
+The appearance allocation and the rendering budget are **a proposal that the
+maintainer has not adopted** (D-R4-317-03). Until he does, the budget policy in
+force stands (mode exact, a margin of 0.5% and one request, the standing
+approval of 2026-10-10), the allocation is the reference a change cites and
+not a licence, and the deferred JavaScript ceiling has tens of bytes of room.
+A visual change that adds to a route therefore states the overrun in bytes and
+goes to the maintainer as a tradeoff.
+
+### The criteria, as tests
+
+`tools/visual-criteria.mjs` holds the numbers, the judges and the page-side
+measurements; `tests/visualCriteria.test.js` shows each judge pass on a
+known-good measurement and fail on a known-bad one. The criteria are run on the
+pilot states (five lesson pilots and the four sandbox pilot scenes, listed in
+that file) from `e2e/visualCriteria.criteria.js`. Most of the 3.0 pilots miss
+them, and that is the result: the file fails by design, so it is run on demand
+(`npm run e2e:criteria`) and is not part of the browser suite or CI. It is not
+marked as an expected failure and not run non-fatal, because a red test
+recorded as green weakens the gate. What CI does run on the same measurements
+is a ratchet in `e2e/canvasLegibility.spec.js` (no body label smaller, and no
+more overlaps, than the committed baseline, at device pixel ratios 1 and 2) and
+the judges' own tests. The prompt that makes a criterion pass on its pilots
+moves its test from the criteria file into the suite as a `.spec.js` with a
+README row, in the same change.
+
+| Criterion | Statement | Test |
+|---|---|---|
+| **I-8**, phone | At 375x812 and 412x915, during a step that uses the scene, the bound bodies are fully visible outside every panel and at least a third of the viewport height is unobscured canvas, or one announced action reaches that state with the step's controls reachable. | `e2e/visualCriteria.criteria.js` |
+| **I-8**, tablet | At 768x1024 the step and the scene are both readable side by side. | same |
+| **I-8**, desktop clause | At 1366x800 and 1440x900 the bound bodies sit outside every panel. | same |
+| **I-9**, labels | Bound-body labels are at least 11 CSS px effective and do not overlap at the pilot states, at device pixel ratios 1 and 2; other canvas text is at least 11. | `e2e/visualCriteria.criteria.js` (baseline ratchet in `e2e/canvasLegibility.spec.js`) |
+| **I-9**, selection | The selected body carries a cue that shows in luminance, not only in hue. | `e2e/visualCriteria.criteria.js` |
+| **I-9**, arrows | Arrow length rises with the speed it shows, and the legend states the scale. | `e2e/visualCriteria.criteria.js` |
+| **I-9**, trails | A trail spans a stated simulated time that does not follow the frame rate (30, 60 and 144 frames a second). | same |
+| **I-9**, plots | Ticks are at least 11 px and labels at least 12 px; with several series, each differs by marker shape. | same |
+
+How each is measured, so a later prompt can argue with the method and not the
+number:
+
+- *Bound bodies visible.* Each body the step binds is placed on the screen with
+  the canvas's own transform and tested with `document.elementFromPoint`: it is
+  visible when the canvas is what is at that point.
+- *Unobscured canvas.* The viewport is sampled on an 8 px grid with the same
+  test; the open height (or width) is the longest run of rows (columns) in
+  which at least 60% of the samples are canvas. A phone needs at least a third
+  of the height; a tablet at least a third of the width and a lesson panel at
+  least 300 px wide that does not overlap the instrument.
+- *An instrument pilot.* The Moon image and Io lessons of 3.0 stage a star that
+  nothing in the step is about, so for them I-8 asks that the instrument's own
+  canvas (or panel) lies inside the viewport and not under another panel.
+- *Label size.* Every `fillText` on the main canvas is recorded with its font,
+  its transform and the canvas's backing-store scale (`js/quality.js`
+  `renderScale`), and converted to CSS pixels. A single symbol glyph after a
+  mass (the Earth or Sun sign) belongs to the label before it and is not
+  judged alone.
+- *Arrow, trail and plot.* The arrow is the shaft the overlay strokes in its own
+  colour, drawn for a body at its speed and at three times it; the trail span is
+  the trail's sample budget times the step the app plans at that frame rate
+  (`js/timestep.js`); plot text is read from the canvas recorder or from the
+  plot SVG's `text` nodes scaled by the viewBox.
+- *The announced action.* A control in the lesson panel whose name matches
+  `SCENE_ACTION_NAME` in `tools/visual-criteria.mjs`. None exists at 3.0; the
+  layout prompt names its own control and updates the pattern.
+
+### The 3.0 baseline: what the criteria find
+
+Measured on `v4` at `f1c30f6f` (Chromium, headless, device pixel ratio 1 unless
+stated). The full table with every size is `tools/visual-measure.mjs`'s output,
+stored under `criteria` in `tests/fixtures/visual-baseline.json`.
+
+| State | 375x812 | 412x915 | 768x1024 | 1366x800 |
+|---|---|---|---|---|
+| Kepler's 2nd Law | fails: star and eccentric orbiter under the sheet, circular orbiter off screen, 192 px open | fails (240 px open) | fails: panel is 752 px wide | fails: circular orbiter under the control rail |
+| Transit Lab | fails: both bodies under panels, 192 px open | fails (232 px open) | fails: planet under the observer help, 144 px open | fails: both bodies under the light-curve panel |
+| Weighing the Stars' binary | fails: both stars off screen, 192 px open | fails (240 px open) | fails: both off screen | passes |
+| Galilean Resonance (Io, instrument) | passes | passes | passes | passes |
+| Moon image (instrument) | fails: 45% of the image canvas under the sheet | fails: 31% | passes | passes |
+
+The labels are 10 px at ratio 1 on the planets and the size disclosure, and
+5.1 to 6.1 CSS px at ratio 2 (the canvas's backing store is 1.96 times its CSS
+box and its context is not scaled to match). No body is marked when selected.
+The velocity arrow's shaft is 70.2 CSS px at speed 1 and at speed 3. A trail's
+span is 1.96, 1.85 and 1.74 simulated time units at 30, 60 and 144 frames a
+second (a ratio of 1.13). The Kepler plot's ticks and labels are 10 px; the
+transit light curve's ticks are 10 px and its labels 11.
+
+### Cost to respect
+
+Read from the files that own them; this section restates, and never sets, a
+number.
+
+- **Frame time.** `tools/perf-thresholds.json`, profile
+  `sandbox-scenes-low-cpu4` (the low tier, the CPU throttled four times, the
+  sandbox reference scenes, thresholds the measurement times 1.5). Measured
+  again at this baseline, median of three runs of five seconds, headless
+  Chromium at 1366x800 with other jobs on the machine: `solar-system` 14.23 ms
+  against 25.0, the zoomed Galilean scene 17.22 ms against 27.0,
+  `circumbinary-planet-lab` 12.01 ms against 20.5 and `star-cluster` 20.25 ms
+  against 38.5 (the committed 2026-11-13 values were 16.34, 17.73, 13.44 and
+  25.40). The profiles are advisory and their runs vary up to twofold on a
+  shared machine, so a change is compared on a quiet machine with its own
+  before-and-after pair, and a move beyond the threshold is a tradeoff for the
+  maintainer with captures, not a threshold to be loosened.
+- **Route bytes.** `tools/route-budgets.json`; source routes measured on this
+  tree (`node tools/route-budget.mjs`): front door and sandbox 1917.0 KB (104
+  requests), Kepler 2634.4 KB (135), Transit 2646.2 KB (135; with its instrument
+  2726.3 KB, 140), largest lesson 2941.0 KB (144). The deferred JavaScript
+  ceiling has 26 B of room on this build and the first-visit data tier 641 B
+  (register row D-R4-317-02).
+- **Module size.** `tools/module-size-ceilings.json`: `js/render.js` is 2,932
+  lines against a ceiling of 2,932 and `js/lessonStage.js` 1,900 against 1,900.
+  Both are at their ceilings, so a change extracts before it adds.
+
+### Matched captures
+
+Before any visual prompt runs, the pilot states are photographed so that its
+after can be shown beside its before (`tools/visual-matrix.mjs`).
+
+- **The matrix.** Nine pilot states (five lesson pilots; four sandbox pilot
+  scenes: an orbital system, a world seen close, a binary, a crowded scene) at
+  375, 768 and 1366 CSS px wide, in the Midnight and Daylight themes and in
+  English and Spanish: 108 cells, each with the canvas, the viewport and the
+  viewport with the focus ring on one control. The images are an output and
+  stay outside the repository, in
+  `visual-baseline/v4-f1c30f6f/ in the folder that holds the roadmap files`;
+  `tests/fixtures/visual-baseline.json` holds the table of what was captured,
+  with image hashes, clocks and records, and `--compare` says which cells a
+  later capture changed.
+- **Matched states.** A sandbox cell is a scene record
+  (`tools/scene-record.mjs`) derived from the committed 1366 record by changing
+  the viewport and the theme only: the same camera, seed and physics clock, so
+  a narrower width shows less of the scene. A lesson cell is a page record: the
+  route, the step's sid, the viewport, the theme, the language, the scroll
+  position, the tier and the pixel ratio, with the bodies' places.
+- **Framing.** A comparison at different framing is labelled as such and goes
+  beside the matched one, never in its place.
+- **Reproducibility.** Each cell was captured twice. 49 of the 108 repeat
+  (to the pixel, by under six pixels, or differing only inside the playback
+  bar's box, whose label samples on the wall clock); 59 do not: all of the
+  Weighing the Stars, Galilean Resonance and Moon image cells and 8 of the
+  Transit Lab and 3 of the Kepler ones (the staged-star lessons run a physics
+  clock a capture cannot hold), and 12 sandbox cells (8 of the binary, 3 of the
+  crowded scene, 1 of the close world). A cell that did not repeat is compared
+  by eye or by crop, never by hash alone; the table marks each one.
+
+### Page families
+
+This section sets no page family's direction. A family (a workspace for doing,
+a reference for finding, a catalogue for choosing, a lesson for reasoning, an
+instructor page for preparing and reviewing) is given its identity once, by its
+pilot, from two or three composed alternatives shown as matched captures and
+chosen by the maintainer; the choice is recorded here when it is made. None has
+been chosen.
+
 ## Breakpoints
 
 One scale, for every stylesheet, every page's own `<style>` and every script
