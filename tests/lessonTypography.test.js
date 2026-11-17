@@ -170,6 +170,12 @@ describe('glossary marks in the pilots', () => {
     return out;
   };
 
+  test('a mark never holds another mark', () => {
+    for (const l of Object.values(LESSONS))
+      for (const [, text] of proseStrings(l.steps))
+        expect(text).not.toMatch(/\[\[[^\]]*\[\[/);
+  });
+
   test('every mark names a glossary term in both languages', () => {
     for (const l of Object.values(LESSONS))
       for (const { id } of marksOf(l)) {
