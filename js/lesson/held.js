@@ -36,6 +36,35 @@ export function holdsAnswer(steps, step, visited) {
 }
 
 /**
+ * Where the prediction that governs a step stands: 'none' (no prediction at or
+ * before the step), 'uncommitted', 'committed' or 'revealed' (its reveal step
+ * has been reached). Of the predictions still held the latest governs; with
+ * none held, the latest one reached. `responses` is the lesson's saved record.
+ * @param {Array<{sid: string, reveal?: string}>} steps - The lesson's steps
+ * @param {object} step - The step on screen
+ * @param {{has: (sid: string) => boolean}} visited - Sids reached so far
+ * @param {object} responses - Saved answers, keyed `<lesson>:<sid>`
+ * @returns {'none'|'uncommitted'|'committed'|'revealed'}
+ */
+export function predictionState(steps, step, visited, responses) {
+  const at = steps ? steps.indexOf(step) : -1;
+  const answered = sid =>
+    Object.keys(responses || {}).some(k => {
+      const [, s, more] = k.split(':');
+      return s === sid && more === undefined;
+    });
+  let held = null;
+  let done = null;
+  for (let i = 0; i <= at; i++) {
+    if (!steps[i].reveal) continue;
+    if (visited.has(steps[i].reveal)) done = steps[i];
+    else held = steps[i];
+  }
+  if (held) return answered(held.sid) ? 'committed' : 'uncommitted';
+  return done ? 'revealed' : 'none';
+}
+
+/**
  * Mark the lesson panel as holding an answer, or not, as the step on screen
  * does. Called while a step's markup is written; returns '' so that it can sit
  * in a template without changing the markup, which is what the lesson golden

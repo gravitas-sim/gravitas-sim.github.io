@@ -571,9 +571,10 @@ describe('every producer writes an envelope with where it was kept', () => {
   });
 
   test('the list covers every notebook source there is', () => {
-    expect([...new Set(every().map(e => e.source))].sort()).toEqual(
-      [...SOURCES].sort()
-    );
+    // The lesson reading is built in tests/readingCapture.test.js: one more row
+    // here would pass the 40 rows a submission token carries.
+    const made = [...every().map(e => e.source), SOURCE.LESSON_READING];
+    expect([...new Set(made)].sort()).toEqual([...SOURCES].sort());
   });
 
   test('a lesson capture names the lesson, the step and the assignment', () => {

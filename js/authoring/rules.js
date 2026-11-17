@@ -27,6 +27,7 @@
 // a checker that cries wolf gets a --no-verify and then it is checking nothing.
 // =============================================================================
 
+import { readingProblems } from './readings.js';
 import { checkAnswer, toleranceFor } from '../answerCheck.js';
 import { verifyKey } from '../answerKey.js';
 import { isValidSid } from '../investigations/progressSchema.js';
@@ -123,6 +124,7 @@ export const RULE_INDEX = {
   'ref/setting': 'setup.settings keys are real settings',
   'ref/probe': 'A probe is a function, and survives being called',
   'ref/field': 'compute and validate read fields the step itself declares',
+  'ref/source': 'A reading source names a row or series the step has',
   'setup/value': 'Preset control values are inside the control range',
   'setup/camera': 'A camera setup is usable',
   'answer/shape': 'An answer is the shape its kind requires',
@@ -641,19 +643,8 @@ export function checkCatalog(inputs, { skip = [] } = {}) {
                 const offGrid = Math.abs(
                   (v - c.min) / c.step - Math.round((v - c.min) / c.step)
                 );
-                // And a preset is the way back. The mass of Sagittarius A* is
-                // log10(4.3e6), which is not on a 0.05 grid and never will be:
-                // a real object does not land on a slider tick. The thing this
-                // rule is actually about is whether a student who drags the
-                // slider can return to what the step staged, and a labelled
-                // preset button that sets that control to that exact number is
-                // precisely that - one click, or a tab and a press.
-                //
-                // Exact equality is the point rather than a nuisance. It makes
-                // the lesson carry the same number the preset carries, so the
-                // button lands where the step started; a lesson that rounds it
-                // by a digit gets the warning back, which is how three staged
-                // values here turned out to be hand-rounded copies.
+                // A preset that sets the control to exactly this value is the way
+                // back, though a real object (Sagittarius A*) is off the grid.
                 const recoverable = presetsFor(w, step.tool).some(
                   pr => Number(pr?.values?.[key]) === v
                 );
@@ -675,19 +666,9 @@ export function checkCatalog(inputs, { skip = [] } = {}) {
               }
             }
 
-            // A control's opening position belongs under `values`, which is
-            // what widgetDefaults() reads. A number at the top level of the
-            // spec under a control's own name lands somewhere nothing looks,
-            // and the control silently opens at its own default: three
-            // screens of A Universe of Stars said `view: 1` and every one of
-            // them opened on `view: 0`, relying on their prose to tell the
-            // reader to switch.
-            //
-            // A number, specifically. Some widgets take a spec field that
-            // shares a control's name and is not a position - the evolution
-            // playback's `track: 'm100'` names a track and the widget reads it
-            // and moves the control to match. That is deliberate and reads as
-            // a string, so it is left alone.
+            // A control's opening position belongs under `values`; a number under
+            // the control's own name is read by nothing (a string, like the
+            // playback's `track`, is a different spec field and is left alone).
             for (const key of Object.keys(step.tool)) {
               if (key === 'values' || !controls.has(key)) continue;
               if (typeof step.tool[key] !== 'number') continue;
@@ -773,6 +754,11 @@ export function checkCatalog(inputs, { skip = [] } = {}) {
               );
             }
           }
+          for (const m of readingProblems(step, {
+            ctx: emptyProbeContext(),
+            widget: widgetById.get(step.tool?.id),
+          }))
+            E('ref/source', m);
 
           // What a compute() actually reads.
           //

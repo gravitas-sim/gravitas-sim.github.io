@@ -385,10 +385,11 @@ export function stepMarkup(step, c) {
                      data-field="${attr(key)}" value="${attr(responses[key] ?? '')}"
                      ${derived ? 'readonly tabindex="-1"' : ''}
                      placeholder="${escape(cueText(f.hint))}" />
-            </label>`;
+            </label>${slots.field?.takeRow(step, f, c) ?? ''}`;
         })
         .join('')}</div>`
     );
+    parts.push(slots.field?.spanGroups(step, c) ?? '');
     parts.push('<div class="inv-check" data-check-slot></div>');
   }
   return parts;
@@ -650,6 +651,7 @@ export function bindStepInputs(h) {
         input.value,
         getLocale()
       );
+      slots.field?.typed(h.responses(), input.dataset.field, els.body);
       h.save();
       h.refreshMeasurements();
     });
@@ -680,6 +682,7 @@ export function bindStepInputs(h) {
   els.body.querySelector('[data-import]')?.addEventListener('click', () => {
     h.importSelection();
   });
+  h.importSelection?.({ mount: true });
 
   const numeric = els.body.querySelector('[data-numeric]');
   const checkBtn = els.body.querySelector('[data-check-numeric]');
@@ -980,7 +983,9 @@ export function earlierAnswers(lesson, table) {
       kv
         .filter(
           ([k, v]) =>
-            k && !/^(shown|locale|help|hint)$|^tool:|:locale$/.test(k) && str(v)
+            k &&
+            !/^(shown|locale|help|hint)$|^tool:|:(locale|src)$/.test(k) &&
+            str(v)
         )
         .map(([k, v]) => `${k}=${str(v)}`)
         .join('; ');
