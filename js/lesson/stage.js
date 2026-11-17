@@ -211,7 +211,6 @@ export function fitCamera(
   };
 }
 
-/** The points a stage's entries stand at, for a fit. */
 export const placedOf = entries =>
   entries.map(e => ({
     x: e.star.pos.x,

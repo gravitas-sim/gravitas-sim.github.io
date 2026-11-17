@@ -1,17 +1,6 @@
-// The inset a stack of panels leaves, as arithmetic over boxes (the page's
-// panels are measured in js/lessonFrame.js, which is where the window is).
-
-/** Up to this width the panels are sheets, and the scene is framed above them. */
 export const SHEET_MAX_WIDTH = 900;
 
-/**
- * The largest clear rectangle left when each box is cut away by one of its four
- * sides, taking the cut that leaves the most room.
- *
- * @param {Array<{left: number, top: number, right: number, bottom: number}>} boxes
- * @param {{width: number, height: number}} view - The window, CSS pixels
- * @returns {{left: number, right: number, top: number, bottom: number}}
- */
+/** Cut each box away by the side that leaves the most room; the window is CSS px. */
 export function insetFromBoxes(boxes, view) {
   const inset = { left: 0, right: 0, top: 0, bottom: 0 };
   const area = i =>
