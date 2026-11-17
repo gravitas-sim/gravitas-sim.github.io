@@ -604,8 +604,8 @@ export const ES_DEFERRED = {
   'sweep.guide.run': 'Ejecutar el barrido guiado',
 
   // --- Tareas para clase --------------------------------------------------
-  // Shown from lazy chunks (the builder, the link bridge, the lesson panel with
-  // an assignment open), so none is in a first visit; ensureDeferredMessages() registers them.
+  // Shown from lazy chunks (the builder, the link bridge, a lesson panel with an
+  // assignment open), never a first visit; ensureDeferredMessages() registers them.
   'assign.title': 'Crear una actividad',
   'assign.hint':
     'Elige los pasos que quieres asignar. Los pasos que construyen el mundo del que trata otro paso se añaden solos, y se indican donde corresponden.',
@@ -753,16 +753,11 @@ export const ES_DEFERRED = {
   'inv.take.typed': 'Escrito por ti.',
   'inv.run.go': 'Ejecutar {run}',
   'inv.run.change': 'Cambiar {param}',
-  'inv.run.value': '{param}: {value}',
-  'inv.run.predict':
-    'Haz primero tu predicción; las ejecuciones se abren cuando has elegido una respuesta.',
-  'inv.run.running':
-    'Ejecutando {run}. La escena vuelve a como estaba cuando termina.',
+  'inv.run.running': 'Ejecutando {run}. La escena vuelve después.',
   'inv.run.done': 'Ejecución {run} terminada: {readings}.',
   'inv.run.canceled': 'Ejecución cancelada. La escena está como estaba.',
   'inv.run.same': 'Cambia {param} antes de la siguiente ejecución.',
-  'inv.run.all':
-    'Ya están todas las ejecuciones. Borra las ejecuciones para empezar de nuevo.',
+  'inv.run.all': 'Ya están todas. Bórralas para empezar.',
   'inv.run.clear': 'Borrar ejecuciones',
   'inv.run.cancel': 'Cancelar ejecución',
   'inv.run.empty': 'Aún no hay ejecuciones.',
@@ -785,10 +780,8 @@ export const ES_DEFERRED = {
   'inv.action.finish': 'Terminar',
   'inv.action.next': 'Siguiente',
   'inv.probe.unavailable': 'Lectura no disponible',
-  // The object list's chips. A role is the lesson author's handle for a body -
-  // `eccentric`, `starA`, `tracer` - and until these existed the chip showed
-  // the key itself, which in Spanish meant an English word beside a translated
-  // body name. A role with no entry here still falls back to its key.
+  // The object list's chips: a role (`eccentric`, `starA`, `tracer`) is the
+  // author's handle for a body; one with no entry here falls back to its key.
   'inv.role.star': 'estrella',
   'inv.role.planet': 'planeta',
   'inv.role.earth': 'Tierra',
@@ -2350,9 +2343,8 @@ export const ES_DEFERRED = {
     'Estable: una tercera cuestion distinta. Significa que un trazador desplazado ligeramente de un equilibrio vuelve en lugar de irse, y aqui solo es cierto de L4 y L5, y solo por debajo de la razon de masas de Routh. Nada en una curva de velocidad cero lo implica.',
 
   // --- The exoplanet lesson widgets ---------------------------------------------
-  // js/exoplanetWidgets.js is reached only through js/widgets.js, which is
-  // reached only from js/investigations.js - all of it lazy. These were in the
-  // start-up catalog for a widget nobody sees until they open a lesson.
+  // js/exoplanetWidgets.js is reached only through the lazy js/widgets.js and
+  // js/investigations.js; nobody sees these until a lesson opens.
   'exoW.whoIsActuallyMoving': '¿Quién se mueve de verdad?',
   'exoW.theStarAndThePlanet':
     'La estrella y el planeta giran ambos alrededor del mismo punto. Sube el aumento para ver hacerlo a la estrella.',
@@ -2546,9 +2538,8 @@ export const ES_DEFERRED = {
   'rvsched.compare.oneDraw':
     'Un solo sorteo de ruido en cada brazo: esto dice lo que hicieron estos dos calendarios en esta campana, no que calendario es mejor.',
   // --- The synthetic observing run's own controls ------------------------------
-  // Eager until this release. The section is opt-in and hidden until it is
-  // switched on, which is the moment the panel registers this catalog, so
-  // every visitor who never takes a recording was downloading its prose.
+  // The section is opt-in and hidden until switched on, which is when the panel
+  // registers this catalog, so no one who never records downloads its prose.
   'rv.survey.hint':
     'Conserva solo las medidas que un calendario concreto habría producido realmente, cada una con su incertidumbre. Entre ellas no se registra nada.',
   'rv.survey.cadence': 'Cadencia',
@@ -2809,9 +2800,7 @@ export const ES_DEFERRED = {
     'Esto abarca {periods} periodos binarios. \u00abNo cruzo durante esta ejecucion\u00bb no es \u00abnunca puede cruzar\u00bb: un cuello abierto solo dice que cruzar no esta prohibido, y una ventana finita no puede decir mas.',
   'nb.neckPair.limit.stability':
     'Nada de esto trata de la estabilidad. Si cualquiera de los dos caminos se quedaria donde esta al recibir un empujon es una pregunta aparte con su propia evidencia.',
-  // ---------------------------------------------------------------------------
-  // El laboratorio de ondas gravitacionales (js/gwWidgets.js, js/gwLab.js)
-  // ---------------------------------------------------------------------------
+  // --- El laboratorio de ondas gravitacionales (js/gwWidgets.js, js/gwLab.js) ---
   'gwW.lab.title': 'Laboratorio de observación de ondas gravitacionales',
   'gwW.lab.note':
     'Un modelo de dos objetos compactos que caen en espiral, y la deformación que registraría un detector. Solo espiral a orden principal: se detiene antes de la fusión, y la lectura dice dónde.',
@@ -2996,9 +2985,7 @@ export const ES_DEFERRED = {
   'gwW.audio.refused.unsupported':
     'Este navegador no da salida de audio a la página. Todo en esta investigación puede hacerse desde las gráficas.',
   'gwW.audio.refused.empty': 'No hay nada en esta ventana que reproducir.',
-  // ---------------------------------------------------------------------------
-  // El panel de sonido (js/ui.js)
-  // ---------------------------------------------------------------------------
+  // --- El panel de sonido (js/ui.js) ---
   'sound.title': 'Sonido',
   'sound.state.long.unsupported':
     'Este navegador no da salida de audio a la página.',
@@ -3036,9 +3023,7 @@ export const ES_DEFERRED = {
   'sound.lesson.link': 'Escuchar el espacio-tiempo: descubrir una fusión',
   'sound.shortcut': 'Silenciar o activar el sonido',
 
-  // ---------------------------------------------------------------------------
-  // Textos de instrumentos sacados de la descarga inicial. Véase en.deferred.js.
-  // ---------------------------------------------------------------------------
+  // --- Textos de instrumentos sacados de la descarga inicial. Véase en.deferred.js. ---
   'dmW.mondTitle': 'La misma curva, dos explicaciones',
   'dmW.mondNote':
     'El ajuste con halo y MOND, evaluados con los mismos puntos. Cambia entre ellos y ajusta el disco hasta que cada uno coincida. Fíjate en lo que hubo que decirle a cada uno.',
@@ -3414,9 +3399,7 @@ export const ES_DEFERRED = {
   'gwW.value.notDetection':
     'Un solapamiento normalizado, y nada más. No es una relación señal-ruido, ni una probabilidad, ni evidencia de que se haya detectado algo: establecer eso requiere un banco de plantillas, una estimación del fondo y un factor de ensayos, y aquí no hay ninguno.',
 
-  // ---------------------------------------------------------------------------
-  // Más textos sacados de la descarga inicial. Véase en.deferred.js.
-  // ---------------------------------------------------------------------------
+  // --- Más textos sacados de la descarga inicial. Véase en.deferred.js. ---
   'export.empty': 'Todavía no hay nada registrado que exportar.',
   'export.failed': 'No se pudo generar ese archivo.',
   'export.done': {

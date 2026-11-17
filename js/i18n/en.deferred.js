@@ -334,10 +334,8 @@ export const EN_DEFERRED = {
   'exoW.preset.earthTwin.note':
     'An Earth around a Sun, seen by TESS: 84 ppm, a thirteen-hour transit, one transit a year. The longest transit here and the least detectable planet, which is worth sitting with.',
   // --- The numerical reliability check ---------------------------------------
-  // Deliberately careful wording throughout. There is no string here that says
-  // a result is accurate, because a convergence check cannot establish that:
-  // the strongest thing it supports is that halving the step did not move the
-  // answer, which is a much smaller claim.
+  // Careful wording: no string says a result is accurate, because a convergence
+  // check only supports that halving the step did not move the answer.
   'reliability.title': 'Numerical reliability',
   'reliability.hint':
     'Runs this experiment twice over the same simulated time - once at the step the engine is taking and once at half of it - and reports which conclusions survive.',
@@ -410,9 +408,8 @@ export const EN_DEFERRED = {
   'reliability.moved': 'moved by {change}',
   'reliability.noValue': 'not measured',
   // --- The A/B experiment bench ---------------------------------------------
-  // The bench loads on first press, so its prose is not in everyone's download;
-  // js/experimentsBridge.js registers it before the panel builds. failure.load
-  // stays in the base catalog: it is what the bridge says when this import fails.
+  // Loaded on first press (js/experimentsBridge.js registers it before the panel
+  // builds); failure.load stays in the base catalog for when that import fails.
   'bench.title': 'A/B Experiment',
   'bench.untitled': 'Untitled experiment',
   'bench.copyOf': 'Copy of {name}',
@@ -714,10 +711,9 @@ export const EN_DEFERRED = {
     'Burn {n}: {body} at t = {time}, radial {radial}, transverse {transverse}.',
 
   // --- The investigations panel ------------------------------------------------
-  // js/investigations.js, loaded on demand, is the only reader; ensureInvestigations()
-  // registers them. The dozen in the base catalog are on static buttons in index.html
-  // (boot sweep) plus the two the loader says when a chunk fails. Also moved out:
-  // only js/lessonStage.js and the lesson engine read these.
+  // Read only by js/investigations.js (ensureInvestigations() registers them),
+  // js/lessonStage.js and the lesson engine; the base catalog keeps the dozen on
+  // static buttons in index.html and the two the loader says when a chunk fails.
   'inv.stage.scale.display':
     'Compressed scale: every star is visible and the order by size is right, but the ratios on screen are not the ratios in the model.',
   'inv.stage.scale.true':
@@ -752,15 +748,11 @@ export const EN_DEFERRED = {
   'inv.take.typed': 'Typed by you.',
   'inv.run.go': 'Run {run}',
   'inv.run.change': 'Change {param}',
-  'inv.run.value': '{param}: {value}',
-  'inv.run.predict':
-    'Make your prediction first; the runs open once you have committed to an answer.',
-  'inv.run.running':
-    'Running {run}. The scene comes back as it was when the run ends.',
+  'inv.run.running': 'Running {run}. The scene comes back after.',
   'inv.run.done': 'Run {run} finished: {readings}.',
   'inv.run.canceled': 'Run canceled. The scene is back as it was.',
   'inv.run.same': 'Change {param} before the next run.',
-  'inv.run.all': 'Every run is made. Clear the runs to start again.',
+  'inv.run.all': 'Every run is made. Clear them to start again.',
   'inv.run.clear': 'Clear runs',
   'inv.run.cancel': 'Cancel run',
   'inv.run.empty': 'No runs yet.',
@@ -783,11 +775,9 @@ export const EN_DEFERRED = {
   'inv.action.finish': 'Finish',
   'inv.action.next': 'Next',
   'inv.probe.unavailable': 'Readout unavailable',
-  // The object list's chips. A role is the lesson author's handle for a body.
-  // js/investigations.js derives a label from the key where it can - `starA`
-  // becomes "star A" - and drops the chip entirely where the label would only
-  // repeat the body's own name, which is why "EARTH Earth" is now just
-  // "Earth". These are the words the two languages disagree about.
+  // The object list's chips. A role is the lesson author's handle for a body;
+  // the label comes from the key (`starA` is "star A") and is dropped where it
+  // would only repeat the body's name. These words differ between languages.
   'inv.role.star': 'star',
   'inv.role.planet': 'planet',
   'inv.role.earth': 'Earth',
@@ -921,11 +911,9 @@ export const EN_DEFERRED = {
   'inv.card.seen': '{done} of {total} steps seen',
   'inv.card.report': 'Lab report',
   'inv.card.series': '{label}, investigation {index} of {of}',
-  // Habitability, binary and tidal widget prose. Same boundary and same
-  // reasoning as the resW/chaosW/energyW families above: js/widgets.js is
-  // reached only from the lazy js/investigations.js, and each of these three
-  // modules registers this catalog itself so a direct import cannot render
-  // raw ids.
+  // Habitability, binary and tidal widget prose: the same boundary as the
+  // resW/chaosW/energyW families above, and each of these three modules registers
+  // this catalog itself so a direct import cannot render raw ids.
   'binW.twoStarsOrbiting': 'Two stars, orbiting',
   'binW.bothStarsAreMovingWatch':
     'Both stars are moving. Watch them for a few seconds before reading anything off.',
@@ -1122,10 +1110,9 @@ export const EN_DEFERRED = {
   'hzW.threePlanetsSimilarStarlight': 'Three planets, similar starlight',
   'hzW.showing': 'Showing',
   // --- The uncertainty analysis -------------------------------------------------
-  // A parametric Monte Carlo over the recorded epochs. The strings that matter
-  // most here are the assumption list and the guidance: an interval is a
-  // statement about precision, and a student who reads it as a statement about
-  // correctness has learned the opposite of the lesson.
+  // A parametric Monte Carlo over the recorded epochs. The assumption list and
+  // the guidance matter most: an interval states precision, and reading it as
+  // correctness is the opposite of the lesson.
   'rvfit.mc.title': 'Uncertainty analysis (optional)',
   'rvfit.mc.hint':
     'Simulates this observing run again and again — the same epochs, the same stated uncertainties, a fresh noise draw each time — and refits every one with the search you just ran. Where the refits land is how well your data pins the period down.',
@@ -1213,10 +1200,9 @@ export const EN_DEFERRED = {
     'And when the refits split into families, that is the honest answer: the data support several periods. More observations, or observations spaced differently, are what removes families — not more trials here. Running ten thousand trials makes each interval smoother and the families no less real.',
 
   // --- Widget prose, moved off the start-up path ---------------------------
-  // Resonance, chaos and energy widget strings. Nothing outside a lesson can
-  // render these: js/widgets.js is reached only from js/investigations.js,
-  // which is lazy and whose loader registers this catalog before any step
-  // draws. Same boundary and same reasoning as the exoW.* family above it.
+  // Resonance, chaos and energy widget strings: only a lesson can render them
+  // (js/widgets.js is reached from the lazy js/investigations.js, whose loader
+  // registers this catalog), the same boundary as the exoW.* family above.
   'resW.periods.title': 'Measured periods and the ratios between them',
   'resW.periods.note':
     'Periods are measured from the orbits themselves and averaged over the whole run, not read from a table. The nearest small-integer ratio is found by continued fractions, which will find one for any number at all — so the last figure on each row, how much closer than chance the ratio is, matters more than the ratio.',
@@ -1407,10 +1393,9 @@ export const EN_DEFERRED = {
   'energyW.escapeExactlyParabola': 'escape exactly: parabola',
   'energyW.aboveEscapeHyperbola': 'above escape: hyperbola',
   // --- The evidence notebook ---------------------------------------------------
-  // Every string a saved reading can print. The three `nb.kind.*` words are the
-  // load-bearing ones: they are what separates a number the student obtained
-  // from data, one a closed-form model predicts, and one read out of the
-  // simulation's own state - and the last is not a measurement at all.
+  // Every string a saved reading can print. The three `nb.kind.*` words separate
+  // a number obtained from data, one a closed-form model predicts, and one read
+  // from the simulation's own state, which is not a measurement at all.
   'nb.title': 'Evidence notebook',
   'nb.intro':
     'Readings you have kept. Each one is frozen as it was taken, with the conditions it was taken under; the words are yours to revise, the numbers are not. Order them the way your argument runs.',
@@ -1725,9 +1710,8 @@ export const EN_DEFERRED = {
   'nb.report.notRecorded': 'not recorded',
 
   // --- The browser's search and filters ---------------------------------------
-  // Every option these describe is generated from the manifest. The subject
-  // names below are the tag vocabulary the lessons declare, translated once
-  // here rather than repeated in every lesson file.
+  // Options are generated from the manifest; the subject names are the lessons'
+  // tag vocabulary, translated once here, not in every lesson file.
   'inv.filter.search.placeholder': 'Search by title, topic or subject',
   'inv.filter.query': 'Search',
   'inv.filter.subject': 'Subject',
@@ -2340,9 +2324,8 @@ export const EN_DEFERRED = {
     'Stable: a third question again. It means a tracer displaced slightly from an equilibrium returns rather than leaves, and it is true here only of L4 and L5, and only below Routh\u2019s mass ratio. Nothing in a zero-velocity curve implies it.',
 
   // --- The exoplanet lesson widgets ---------------------------------------------
-  // js/exoplanetWidgets.js is reached only through js/widgets.js, which is
-  // reached only from js/investigations.js - all of it lazy. These were in the
-  // start-up catalog for a widget nobody sees until they open a lesson.
+  // js/exoplanetWidgets.js is reached only through the lazy js/widgets.js and
+  // js/investigations.js; a widget nobody sees until a lesson opens.
   'exoW.whoIsActuallyMoving': 'Who is actually moving?',
   'exoW.theStarAndThePlanet':
     'The star and the planet both go round the same point. Turn the magnification up to see the star do it.',
@@ -2532,9 +2515,8 @@ export const EN_DEFERRED = {
   'rvsched.compare.oneDraw':
     'One noise draw each: this says what these two schedules did on this run, not which schedule is better.',
   // --- The synthetic observing run's own controls ------------------------------
-  // Eager until this release. The section is opt-in and hidden until it is
-  // switched on, which is the moment the panel registers this catalog, so
-  // every visitor who never takes a recording was downloading its prose.
+  // The section is opt-in and hidden until switched on, which is when the panel
+  // registers this catalog, so no one who never records downloads its prose.
   'rv.survey.hint':
     'Keep only the measurements a stated schedule would actually have produced, each with an uncertainty. Nothing is recorded between them.',
   'rv.survey.cadence': 'Cadence',
@@ -3818,9 +3800,8 @@ export const EN_DEFERRED = {
     'Five events, chosen because their chirps are visible. Not a sample of the catalog, and nothing here is a detection, a significance or a parameter estimate.',
 
   // -- Four observed spectra (js/stellarSpectraWidgets.js) --------------------
-  // Two instruments over four real SDSS spectra. Every label here is careful
-  // about one thing: these are observations, and the lesson runs them beside
-  // an instrument that draws models.
+  // Two instruments over four real SDSS spectra: every label says these are
+  // observations, beside an instrument that draws models.
   'specW.compare.title': 'Four spectra',
   'specW.compare.note':
     'Four stars, observed by SDSS in 2008 and drawn without a fit of any kind. The curves are not drawn in their stars’ colors — that would answer the question being asked — so tell them apart by the dash pattern, the label, or the numbers underneath.',

@@ -313,7 +313,7 @@ function inner(step, c) {
   const why = busy
     ? t('inv.run.running', { run: letter(rows.length) })
     : before
-      ? t('inv.run.predict')
+      ? t('inv.take.predict')
       : full
         ? t('inv.run.all')
         : used
@@ -321,7 +321,7 @@ function inner(step, c) {
           : '';
   const off = (on, ...more) => (on || more.some(Boolean) ? ' disabled' : '');
   return `<p class="inv-import-hint" data-runs-value>${escape(
-    t('inv.run.value', { param: v.label, value: formatNumber(v.values[at]) })
+    `${v.label}: ${formatNumber(v.values[at])}`
   )}</p><div class="inv-import-row"><button type="button" class="inv-import-btn" data-run-change${off(busy, before, full)}>${escape(
     t('inv.run.change', { param: v.label })
   )}</button><button type="button" class="inv-import-btn" data-run-go${off(busy, before, full, used)}>${escape(
