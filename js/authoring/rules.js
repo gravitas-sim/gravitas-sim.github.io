@@ -511,7 +511,7 @@ export function checkCatalog(inputs, { skip = [] } = {}) {
         hintValues(step),
         emptyProbeContext()
       ) ?? [])
-        add(c.level, 'content/placeholder', L, i, c.message);
+        add(c.level, c.rule || 'content/placeholder', L, i, c.message);
 
       // Staged hints only make sense in order: a method hint with no concept
       // before it is fine, but a worked explanation is the last resort and a
@@ -1301,7 +1301,7 @@ export function checkCatalog(inputs, { skip = [] } = {}) {
         for (const c of cueFindings?.(st, models, emptyProbeContext()) ?? [])
           add(
             c.level,
-            'content/placeholder',
+            c.rule || 'content/placeholder',
             id,
             si,
             `${locale}: ${c.message}`

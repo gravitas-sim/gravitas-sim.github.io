@@ -765,13 +765,12 @@ export const ES_DEFERRED = {
   'inv.span.take': 'Tomar la lectura del intervalo',
   'inv.span.done':
     'Lectura tomada: {what}, media {mean}, {n} puntos, error estándar {se}.',
+  'inv.slip.again': 'Puede intentarlo de nuevo.',
   'inv.action.finish': 'Terminar',
   'inv.action.next': 'Siguiente',
   'inv.probe.unavailable': 'Lectura no disponible',
-  // The object list's chips. A role is the lesson author's handle for a body -
-  // `eccentric`, `starA`, `tracer` - and until these existed the chip showed
-  // the key itself, which in Spanish meant an English word beside a translated
-  // body name. A role with no entry here still falls back to its key.
+  // The object list's chips (a role is the lesson author's handle for a body); a role with no
+  // entry here still falls back to its key.
   'inv.role.star': 'estrella',
   'inv.role.planet': 'planeta',
   'inv.role.earth': 'Tierra',

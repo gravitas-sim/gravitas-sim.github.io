@@ -197,14 +197,8 @@ let stepIndex = 0;
 let responses = {}; // stepId -> value
 let attempts = {}; // stepId -> number of tries
 let visited = new Set();
-/**
- * What reading the saved progress had to say for itself.
- *
- * Populated by progressSchema.readProgress: a migration from the pre-sid
- * format, keys for steps the lesson no longer has, a payload from a newer
- * build. Surfaced once when the lesson opens rather than swallowed, because
- * each of them means an answer may not be where the reader left it.
- */
+// What reading the saved progress had to say (progressSchema.readProgress): a migration, keys for
+// steps the lesson no longer has, a payload from a newer build. Surfaced once when the lesson opens.
 let progressNotes = [];
 let startedAt = null;
 // Seconds this reader has had the lesson open and in view (the where line).
@@ -958,6 +952,8 @@ function renderStep() {
     stepId: () => stepId(stepIndex),
     currentStep,
     steps: () => active?.steps ?? [],
+    visited: () => visited,
+    probeContext,
     save,
     renderStep,
     refreshMeasurements,

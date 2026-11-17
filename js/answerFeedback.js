@@ -134,12 +134,53 @@ export function nextHintStage(step, used = []) {
   return null;
 }
 
+/** Whether `n` lies in `{min, max}`, either bound optional. */
+const within = (n, r) => Number.isFinite(n) && !(n < r?.min) && !(n > r?.max);
+
+/**
+ * Whether a rule's `when` holds of how a reading was taken (the `<field>:src` record of
+ * js/investigations/figures.js). Every key given must hold; a typed value has no provenance
+ * and never matches; a key this does not know never does.
+ *   role      the lesson role (or any of several) of the body the reading was taken from
+ *   moment    {min, max} on the simulated clock the reading was taken at
+ *   setting   {name: value | {min, max}} on the instrument's settings at the moment
+ *   interval  {from, to, n}, each {min, max}, on an interval reading
+ */
+function whenHolds(when, from) {
+  const s = from?.src;
+  if (!s || s.k === 't') return false;
+  const point = s.k === 'c';
+  return Object.entries(when).every(([key, w]) =>
+    key === 'role'
+      ? point && [].concat(w).includes(from.roleOf?.(s.b))
+      : key === 'moment'
+        ? point && within(s.t, w)
+        : key === 'setting'
+          ? point &&
+            Object.entries(w).every(([n, x]) =>
+              typeof x === 'object'
+                ? within(s.s?.[n], x)
+                : typeof x === 'number'
+                  ? Math.abs(s.s?.[n] - x) <= 1e-9 * Math.max(1, Math.abs(x))
+                  : s.s?.[n] === x
+            )
+          : key === 'interval' &&
+            s.k === 's' &&
+            within(s.a, w.from) &&
+            within(s.b, w.to) &&
+            within(s.n, w.n)
+  );
+}
+
 /**
  * Whether a value matches a declared misconception.
  *
  * The comparison is against the answer *scaled by the rule's factor*, using the
  * step's own tolerance scaled the same way - so a rule for "twice the answer"
  * is as forgiving about twice the answer as the question is about the answer.
+ * A measure field stands where a question has its answer: pass
+ * `{misconceptions, answer}` for it, its expected value as the answer. A rule with
+ * `when` is judged on how the reading was taken (`from`: `{src, roleOf}`), not on its value.
  *
  * Deliberately narrow. It fires only on rules the author wrote for this
  * question, and only when the number really is the value that mistake produces;
@@ -149,9 +190,10 @@ export function nextHintStage(step, used = []) {
  * @param {object} step - Step definition, with `misconceptions`
  * @param {number} value - The student's parsed answer
  * @param {number} tolerance - The tolerance the step applies
+ * @param {{src: ?object, roleOf: ?Function}} [from] - How the reading was taken
  * @returns {?{id: string, message: ?string, factor: number}} The match, or null
  */
-export function matchMisconception(step, value, tolerance) {
+export function matchMisconception(step, value, tolerance, from) {
   const rules = step?.misconceptions;
   if (!Array.isArray(rules) || !rules.length) return null;
   // A choice: a rule bound to an option names the mistake that option is.
@@ -163,9 +205,14 @@ export function matchMisconception(step, value, tolerance) {
       ? { id: rule.id ?? null, message: rule.say ?? null, factor: 1 }
       : null;
   }
-  if (!Number.isFinite(value) || !Number.isFinite(step?.answer)) return null;
 
   for (const rule of rules) {
+    if (rule?.when) {
+      if (whenHolds(rule.when, from))
+        return { id: rule.id ?? null, message: rule.say ?? null, factor: 1 };
+      continue;
+    }
+    if (!Number.isFinite(value) || !Number.isFinite(step?.answer)) continue;
     const standard = STANDARD_MISCONCEPTIONS[rule?.id] || {};
     const factor = Number(rule?.factor ?? standard.factor);
     const target = Number.isFinite(rule?.equals)

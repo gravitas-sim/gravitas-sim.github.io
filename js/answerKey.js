@@ -125,8 +125,11 @@ export function entryFor(step, index) {
     }));
   }
 
-  // A wrong option or number that names a mistake, with what it says.
-  const named = (step.misconceptions || []).filter(m => m?.say);
+  // A wrong option, number or way of taking a reading that names a mistake, with what it says.
+  const named = [
+    ...(step.misconceptions || []),
+    ...(step.fields || []).flatMap(f => f.misconceptions || []),
+  ].filter(m => m?.say);
   if (named.length) {
     entry.mistakes = named.map(m => ({
       id: m.id,

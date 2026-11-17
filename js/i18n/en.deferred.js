@@ -764,14 +764,12 @@ export const EN_DEFERRED = {
   'inv.span.take': 'Take interval reading',
   'inv.span.done':
     'Reading taken: {what}, mean {mean}, {n} points, standard error {se}.',
+  'inv.slip.again': 'You can try again.',
   'inv.action.finish': 'Finish',
   'inv.action.next': 'Next',
   'inv.probe.unavailable': 'Readout unavailable',
-  // The object list's chips. A role is the lesson author's handle for a body.
-  // js/investigations.js derives a label from the key where it can - `starA`
-  // becomes "star A" - and drops the chip entirely where the label would only
-  // repeat the body's own name, which is why "EARTH Earth" is now just
-  // "Earth". These are the words the two languages disagree about.
+  // The object list's chips (a role is the lesson author's handle for a body): the words the two
+  // languages disagree about; js/investigations.js derives the rest from the key.
   'inv.role.star': 'star',
   'inv.role.planet': 'planet',
   'inv.role.earth': 'Earth',

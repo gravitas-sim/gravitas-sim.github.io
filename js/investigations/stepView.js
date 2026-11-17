@@ -77,6 +77,7 @@ export function fieldModule(m) {
   m.setKit({
     announce,
     decimalSeparatorFor,
+    judge: judgeReadings,
     lessonText,
     parseNumber,
     predictionState,
@@ -403,7 +404,10 @@ export function stepMarkup(step, c) {
         .join('')}</div>`
     );
     parts.push(slots.field?.spanGroups(step, c) ?? '');
-    parts.push('<div class="inv-check" data-check-slot></div>');
+    parts.push(
+      '<div class="inv-check" data-check-slot></div>',
+      slipRow(step, id)
+    );
   }
   return parts;
 }
@@ -545,6 +549,99 @@ function hintBlock(step, id, responses) {
 const spoken = text =>
   decodeEntities(String(text ?? '').replace(/<\/?(strong|em|sub|sup)>/g, ''));
 
+// --- A measure step's tries and slips -----------------------------------------
+// A try is a reading taken or a value set committed (focus leaving the fields), once per distinct
+// set, counted in `attempts` as a question's is. A slip is named only if the author declared it
+// (`fields[].misconceptions`); it is never a value, and never shown for an uncommitted prediction.
+
+let bound = null; // what the open step's controls are bound to
+const slips = new Map(); // step id -> the slip on screen
+const seen = new Map(); // step id -> the value sets already counted
+const edited = new Set(); // step ids typed in since the last count
+
+const showSlip = text => {
+  const el = bound?.els().body.querySelector('[data-slip]');
+  if (el) [el.textContent, el.hidden] = [text, !text];
+};
+
+const slipRow = (step, id) =>
+  step.fields?.some(f => f.misconceptions)
+    ? `<p class="inv-feedback is-wrong" data-slip${slips.has(id) ? '' : ' hidden'}>${escape(slips.get(id) ?? '')}</p>`
+    : '';
+
+/** The first slip a field declares that its value, or how it was taken, shows. */
+function slipOf(h, step, id) {
+  const responses = h.responses();
+  const ctx = h.probeContext();
+  const roleOf = n => ctx.roleOf(ctx.bodies.find(b => b.name === n) ?? null);
+  const how = slots.field?.readings(responses, id, step) ?? {};
+  for (const f of step.fields) {
+    const key = `${id}:${f.id}`;
+    const model = Number(String(f.want ?? '').replace(/[^0-9eE+\-.]/g, ''));
+    const hit = f.misconceptions
+      ? matchMisconception(
+          { misconceptions: f.misconceptions, answer: model },
+          parseNumber(
+            responses[key],
+            localeOfAnswer(responses, key, getLocale())
+          ).value,
+          f.tolerance ?? Math.abs(model) * 0.05,
+          { src: how[f.id], roleOf }
+        )
+      : null;
+    if (hit?.message) return hit;
+  }
+  return null;
+}
+
+/**
+ * Count a try for the step's values and name the slip they show, once per distinct set.
+ * Said at once when the fields were left; handed back as words when a reading was taken.
+ */
+function judgeReadings(taken) {
+  const h = bound;
+  const step = h?.currentStep();
+  const id = h?.stepId();
+  const responses = h?.responses();
+  const own = (step?.fields || []).filter(f => !f.compute);
+  const key = f => `${id}:${f.id}`;
+  if (
+    step?.type !== 'measure' ||
+    !own.length ||
+    !(step.validate || own.some(f => f.misconceptions)) ||
+    !own.every(f => String(responses[key(f)] ?? '').trim()) ||
+    (!taken && !edited.has(id)) ||
+    predictionState(h.steps(), step, h.visited(), responses) === 'uncommitted'
+  )
+    return '';
+  const set = JSON.stringify(
+    own.map(f => [responses[key(f)], responses[key(f) + ':src']])
+  );
+  const done = seen.get(id) ?? seen.set(id, new Set()).get(id);
+  edited.delete(id);
+  if (done.has(set)) return taken ? (slips.get(id) ?? '') : '';
+  done.add(set);
+  h.attempts()[id] = (h.attempts()[id] || 0) + 1;
+  slips.delete(id);
+  let said = '';
+  try {
+    const hit = slipOf(h, step, id);
+    if (hit) {
+      said = `${spoken(lessonText(hit.message))} ${t('inv.slip.again')}`;
+      slips.set(id, said);
+      const was = String(responses[`${id}:slip`] ?? '').split(',');
+      if (hit.id && !was.includes(hit.id))
+        responses[`${id}:slip`] = [...was, hit.id].filter(Boolean).join(',');
+    }
+  } catch (err) {
+    console.warn(err);
+  }
+  h.save();
+  showSlip(said);
+  if (!taken) announce(said);
+  return said;
+}
+
 const setAreaSweepWedges = command('setAreaSweepWedges');
 
 /**
@@ -559,6 +656,7 @@ const setAreaSweepWedges = command('setAreaSweepWedges');
 export function bindStepInputs(h) {
   const els = h.els();
   const id = h.stepId();
+  bound = h;
 
   els.body.querySelector('[data-change]')?.addEventListener('click', () => {
     delete h.responses()[id];
@@ -665,9 +763,16 @@ export function bindStepInputs(h) {
         getLocale()
       );
       slots.field?.typed(h.responses(), input.dataset.field, els.body);
+      edited.add(id);
+      if (slips.delete(id)) showSlip('');
       h.save();
       h.refreshMeasurements();
     });
+  });
+
+  // Leaving the fields commits the set: a try, and the slip it shows if one is declared.
+  els.body.querySelector('.inv-fields')?.addEventListener('focusout', e => {
+    if (!e.currentTarget.contains(e.relatedTarget)) judgeReadings(false);
   });
 
   const wedgeSlider = els.body.querySelector('[data-wedges]');
