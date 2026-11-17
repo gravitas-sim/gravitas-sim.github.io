@@ -441,26 +441,86 @@ export function lightDirection(pos, starPos) {
  * star can be the one casting the shadow, and in a scene with a distant giant
  * and a close dwarf the answer is the close dwarf. Ties go to the more
  * luminous, so the choice does not flicker between two equal stars as they
- * orbit.
+ * orbit. A body that already has a light keeps it until another sends
+ * LIGHT_HOLD more flux: at the locus where two equal stars send equal flux the
+ * two numbers differ by rounding, and the exact comparison flickered.
  *
  * @param {{x: number, y: number}} pos - Where the light is being received
  * @param {Array<{pos: object, luminosity: number}>} sources - Candidate stars
+ * @param {?object} [keep] - The star (a source's `star`, or the source) this
+ *   body was lit by last
  * @returns {?object} The winning source, or null if there is none
  */
-export function dominantLight(pos, sources) {
+export function dominantLight(pos, sources, keep = null) {
   let best = null;
   let bestFlux = 0;
+  let held = null;
+  let heldFlux = 0;
   for (const s of sources || []) {
     const l = Number(s?.luminosity);
     if (!(l > 0) || !s.pos) continue;
     const d2 = (s.pos.x - pos.x) ** 2 + (s.pos.y - pos.y) ** 2;
     const flux = d2 > 0 ? l / d2 : Infinity;
+    if (keep && (s.star ?? s) === keep) [held, heldFlux] = [s, flux];
     if (flux > bestFlux || (flux === bestFlux && l > (best?.luminosity ?? 0))) {
       bestFlux = flux;
       best = s;
     }
   }
-  return best;
+  return held && heldFlux * (1 + LIGHT_HOLD) >= bestFlux ? held : best;
+}
+
+/** Five per cent more flux, about 2.5 per cent less distance, to change light. */
+export const LIGHT_HOLD = 0.05;
+
+/**
+ * The phase a body shows an observer, as cos a: a is the angle at the body
+ * between the light and the observer, and the lit fraction of the disc the
+ * observer sees is (1 + cos a) / 2.
+ *
+ * @param {{x: number, y: number}} pos - The body
+ * @param {{x: number, y: number}} light - Unit vector toward the light
+ * @param {{x: number, y: number}} observer - Where it is seen from
+ * @returns {?number} cos a, or null when the observer is at the body
+ */
+export function phaseCos(pos, light, observer) {
+  const dx = observer.x - pos.x;
+  const dy = observer.y - pos.y;
+  const d = Math.hypot(dx, dy);
+  if (!(d > 0)) return null;
+  return Math.max(-1, Math.min(1, (light.x * dx + light.y * dy) / d));
+}
+
+/**
+ * The night side of a disc as a path, for the caller to fill.
+ *
+ * The limb away from the light, then back along the terminator: an ellipse
+ * whose axis along the light is |cos a| r, bulging into the dark half for a
+ * gibbous phase and into the lit half for a crescent. cos a = 0 is the half
+ * disc a view from above the orbital plane sees. The lit part then covers
+ * (1 + cos a) / 2 of the disc.
+ *
+ * @param {CanvasRenderingContext2D} ctx - Target
+ * @param {{x: number, y: number}} at - Centre
+ * @param {number} r - Drawn radius
+ * @param {{x: number, y: number}} light - Unit vector toward the light
+ * @param {number} [cosA] - The phase, from phaseCos
+ */
+export function nightPath(ctx, at, r, light, cosA = 0) {
+  const th = Math.atan2(light.y, light.x);
+  ctx.beginPath();
+  ctx.arc(at.x, at.y, r, th + Math.PI / 2, th + 1.5 * Math.PI);
+  ctx.ellipse(
+    at.x,
+    at.y,
+    Math.abs(cosA) * r,
+    r,
+    th,
+    1.5 * Math.PI,
+    Math.PI / 2,
+    cosA >= 0
+  );
+  ctx.closePath();
 }
 
 // --- Color ---------------------------------------------------------------------

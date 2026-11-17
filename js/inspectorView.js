@@ -59,6 +59,7 @@ import {
   HALLEY_MASS_UNIT,
   CERES_MASS_UNIT,
   JUPITER_MASS_UNIT,
+  GAS_GIANT_TO_STAR_THRESHOLD,
   Planet,
   GasGiant,
   Asteroid,
@@ -78,6 +79,7 @@ import {
   frameState,
 } from './referenceFrame.js';
 import { t } from './i18n/index.js';
+import { lightingNotes } from './bodyDraw.js';
 import { formatSpeed, formatDistance } from './units.js';
 import { state, SETTINGS, current_scenario_name, command } from './appState.js';
 
@@ -403,7 +405,12 @@ export const buildInspectorView = (object, type, info) => {
     mass: massControlModel(object, type),
     groups,
     overlays,
-    appearance: type === 'BlackHole' ? appearanceModel(object) : null,
+    appearance:
+      type === 'BlackHole'
+        ? appearanceModel(object)
+        : type === 'Planet' || type === 'GasGiant'
+          ? { title: t('inspector.light.title'), notes: lightingNotes(object) }
+          : null,
     about: info.description || '',
   };
 };
@@ -832,8 +839,9 @@ const updateObjectMass = (object, type, newMass) => {
       object.radius = Math.pow(newMass, 0.2) * GAS_GIANT_RADIUS;
       object.calculateGiantType();
 
-      // Check if gas giant should become a star (mass > 80 M♃)
-      if (newMass > 80.0) {
+      // Above the star mass limit a gas giant becomes a star; the same limit
+      // decides whether a Star-class body lights others (js/bodyDrawSky.js).
+      if (newMass > GAS_GIANT_TO_STAR_THRESHOLD) {
         newType = 'Star';
         // Transform gas giant to star
         transformGasGiantToStar(object);

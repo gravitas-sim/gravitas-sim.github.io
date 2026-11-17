@@ -24,6 +24,8 @@ import {
   hash01,
   silhouetteFor,
   lightDirection,
+  nightPath,
+  LOD_SHADED_MAX_PX,
   scaleRgb,
   tailActivity,
   ionTailDirection,
@@ -43,6 +45,7 @@ import {
   drawRadius,
   lodOf,
   dominantStarFor,
+  lightingFor,
   rgba,
   bloomLayer,
   visualClockSeconds,
@@ -69,6 +72,136 @@ const ensureBlackHoleRenderer = () => {
     });
   return null;
 };
+
+// --- A world seen close ------------------------------------------------------
+//
+// From a drawn radius of LOD_SHADED_MAX_PX (10 px), at either tier, a planet,
+// moon or giant lit by a star shows its night side, and a moon of a planet or
+// giant its phase as that primary sees it (lightingFor, js/bodyDrawSky.js).
+// The light and the phase are modelled; markings, bands and flattening are
+// illustration, at the full tier's detailed level only. Below 10 px nothing
+// here runs, so the small picture is the one it was.
+
+/**
+ * Which look a close world takes: 'markings' (shipped), or for a comparison
+ * capture 'terminator' (no markings) or 'limb' (markings and limb darkening).
+ */
+let closeLook = 'markings';
+export const setCloseLook = look => void (closeLook = look);
+
+/**
+ * What the drawing of this body claims, sentence by sentence: what lights it
+ * and from where its phase is seen (modeled), and what is illustration. The
+ * inspector's Appearance disclosure and the canvas description read it.
+ *
+ * @param {object} o - A planet, moon or giant
+ * @returns {string[]} Sentences in the current language
+ */
+export function lightingNotes(o) {
+  const { source, observer } = lightingFor(o);
+  return [
+    source
+      ? t('inspector.light.litBy', {
+          star: source.star?.name || t('summary.unnamedBody'),
+        })
+      : t('inspector.light.none'),
+    ...(source
+      ? [
+          observer
+            ? t('inspector.light.phase', { observer: observer.name })
+            : t('inspector.light.above'),
+        ]
+      : []),
+    t(
+      o.kind === 'GasGiant'
+        ? 'inspector.light.bands'
+        : 'inspector.light.markings'
+    ),
+  ];
+}
+
+/** Markings, when the level allows them and the look has them. */
+const marked = level =>
+  lodAtLeast(level, LOD.DETAILED) && closeLook !== 'terminator';
+
+/** At least 10 px across its radius on screen. */
+const close = r => r * ((state && state.zoom) || 1) >= LOD_SHADED_MAX_PX;
+
+/** A giant's flattening as drawn: Jupiter's, as illustration. */
+const GIANT_FLATTENING = 0.065;
+
+/**
+ * The night side over a disc, from the star that lights it. Nothing without a
+ * star: an invented light would claim a direction the scene does not have.
+ *
+ * @param {object} o - The body
+ * @param {CanvasRenderingContext2D} ctx - World-transformed context
+ * @param {{x: number, y: number}} at - Centre
+ * @param {number} r - Drawn radius
+ * @param {number} [ry] - Drawn polar radius, for a flattened giant
+ */
+function shadeNight(o, ctx, at, r, ry = r) {
+  if (!close(r)) return;
+  const { source, light, cosA } = lightingFor(o);
+  if (!source) return;
+  ctx.save();
+  ctx.beginPath();
+  ctx.ellipse(at.x, at.y, r, ry, 0, 0, 2 * Math.PI);
+  ctx.clip();
+  if (closeLook === 'limb') {
+    const limb = ctx.createRadialGradient(at.x, at.y, r * 0.55, at.x, at.y, r);
+    limb.addColorStop(0, 'rgba(0,0,0,0)');
+    limb.addColorStop(1, 'rgba(0,0,0,0.35)');
+    ctx.fillStyle = limb;
+    ctx.fillRect(at.x - r, at.y - r, 2 * r, 2 * r);
+  }
+  ctx.fillStyle = 'rgba(2,4,12,0.82)';
+  nightPath(ctx, at, r, light, cosA);
+  ctx.fill();
+  ctx.restore();
+}
+
+/**
+ * Markings in fixed places on this body, from its visual seed: the same world
+ * rebuilt, reloaded or opened from a share link has the same face.
+ *
+ * @param {CanvasRenderingContext2D} ctx - Clipped to the disc
+ * @param {{x: number, y: number}} at - Centre
+ * @param {number} r - Drawn radius
+ * @param {number} seed - visualSeed of the body
+ * @param {number} n - How many
+ * @param {number} salt - Separates one family of marks from another
+ * @param {number} min - Smallest radius, as a fraction of r
+ * @param {number} span - Added to min at most
+ */
+function seededMarks(ctx, at, r, seed, n, salt, min, span) {
+  for (let i = 0; i < n; i++) {
+    const a = hash01(seed, salt + i) * Math.PI * 2;
+    const d = Math.sqrt(hash01(seed, salt + 40 + i)) * 0.8 * r;
+    const rad = (min + hash01(seed, salt + 80 + i) * span) * r;
+    ctx.beginPath();
+    ctx.ellipse(
+      at.x + Math.cos(a) * d,
+      at.y + Math.sin(a) * d,
+      rad,
+      rad * (0.55 + hash01(seed, salt + 120 + i) * 0.45),
+      a,
+      0,
+      2 * Math.PI
+    );
+    ctx.fill();
+  }
+}
+
+/** Earth's or the Moon's markings, clipped to the disc. */
+function closeFace(o, ctx, at, r, paint) {
+  ctx.save();
+  ctx.beginPath();
+  ctx.arc(at.x, at.y, r, 0, 2 * Math.PI);
+  ctx.clip();
+  paint(visualSeed(o));
+  ctx.restore();
+}
 
 function drawPlanet(o, ctx) {
   const world_pos = o.pos; // Use direct world coordinates since canvas is already transformed
@@ -131,6 +264,7 @@ function drawPlanet(o, ctx) {
     drawPlanetSurface(o, ctx, world_pos, r, z, level, baseColor);
     ctx.restore();
   }
+  shadeNight(o, ctx, world_pos, r);
 
   // Soft bloom, into the offscreen layer js/render.js composites additively.
   // One pass, in the planet's own color. Two blocks used to paint the same
@@ -236,7 +370,7 @@ function drawPlanetSurface(o, ctx, at, r, z, level, baseColor) {
   // as it orbits and two planets on opposite sides of a star are lit from
   // opposite sides. A scene with no luminous body gets the fixed fallback
   // from js/bodyVisuals.js rather than an invented sun.
-  const sun = dominantStarFor(at);
+  const sun = dominantStarFor(at, o);
   const light = lightDirection(at, sun ? sun.pos : null);
   const shade = ctx.createRadialGradient(
     at.x + light.x * r * 0.55,
@@ -254,7 +388,7 @@ function drawPlanetSurface(o, ctx, at, r, z, level, baseColor) {
   ctx.arc(at.x, at.y, r, 0, 2 * Math.PI);
   ctx.fill();
 
-  if (!lodAtLeast(level, LOD.DETAILED)) return;
+  if (!marked(level)) return;
 
   // --- body-specific detail ---------------------------------------------
   if (o.density === 'gaseous') {
@@ -336,8 +470,33 @@ function drawEarth(o, ctx, world_pos) {
   ctx.arc(world_pos.x, world_pos.y, drawRadius(o, 'Planet'), 0, 2 * Math.PI);
   ctx.fill();
 
-  // Add continent-like features (simplified)
-  if (r * state.zoom > 8) {
+  // Close up (10 px and more): continents and ice from this Earth's seed, at
+  // the detailed level only, then the night side. Below, the old schematic.
+  if (close(r)) {
+    if (marked(lodOf(o, 'Planet'))) {
+      closeFace(o, ctx, world_pos, r, seed => {
+        ctx.fillStyle = '#3c6b3a';
+        seededMarks(ctx, world_pos, r, seed, 6, 200, 0.12, 0.2);
+        ctx.fillStyle = '#8a7a52';
+        seededMarks(ctx, world_pos, r, seed, 2, 300, 0.08, 0.1);
+        ctx.fillStyle = 'rgba(245,248,255,0.85)';
+        for (const sign of [-1, 1]) {
+          ctx.beginPath();
+          ctx.ellipse(
+            world_pos.x,
+            world_pos.y + sign * r,
+            r * 0.6,
+            r * 0.16,
+            0,
+            0,
+            2 * Math.PI
+          );
+          ctx.fill();
+        }
+      });
+    }
+    shadeNight(o, ctx, world_pos, r);
+  } else if (r * state.zoom > 8) {
     // Draw some green "continents" as simple shapes
     ctx.fillStyle = '#2D5A2D'; // Dark green for continents
 
@@ -422,7 +581,20 @@ function drawMoon(o, ctx, world_pos) {
   ctx.arc(world_pos.x, world_pos.y, drawRadius(o, 'Planet'), 0, 2 * Math.PI);
   ctx.fill();
 
-  // Add mock craters if zoomed in enough
+  // Close up: maria and craters from this moon's seed, at the detailed level
+  // only, then the night side or the phase. Below 10 px, the old schematic.
+  if (close(r)) {
+    if (marked(lodOf(o, 'Planet'))) {
+      closeFace(o, ctx, world_pos, r, seed => {
+        ctx.fillStyle = 'rgba(70,70,74,0.55)';
+        seededMarks(ctx, world_pos, r, seed, 3, 400, 0.18, 0.16);
+        ctx.fillStyle = '#5c5c5c';
+        seededMarks(ctx, world_pos, r, seed, 9, 500, 0.035, 0.07);
+      });
+    }
+    shadeNight(o, ctx, world_pos, r);
+    return;
+  }
   if (r * state.zoom > 6) {
     ctx.fillStyle = '#5A5A5A'; // Darker gray for craters
 
@@ -619,9 +791,16 @@ function drawGasGiant(o, ctx) {
       break;
   }
 
+  // Flattened at the detailed level only, as illustration; round below it.
+  const banded = marked(glevel) && gr * gz > 4;
+  const gry = banded ? gr * (1 - GIANT_FLATTENING) : gr;
+  const disc = () =>
+    banded
+      ? ctx.ellipse(world_pos.x, world_pos.y, gr, gry, 0, 0, 2 * Math.PI)
+      : ctx.arc(world_pos.x, world_pos.y, gr, 0, 2 * Math.PI);
   ctx.fillStyle = compute_dynamic_color(baseColor, o.pos, bh_list);
   ctx.beginPath();
-  ctx.arc(world_pos.x, world_pos.y, gr, 0, 2 * Math.PI);
+  disc();
   ctx.fill();
 
   // Spherical shading, and the clip that makes the bands below belong to the
@@ -631,10 +810,10 @@ function drawGasGiant(o, ctx) {
   if (lodAtLeast(glevel, LOD.SHADED)) {
     ctx.save();
     ctx.beginPath();
-    ctx.arc(world_pos.x, world_pos.y, gr, 0, 2 * Math.PI);
+    disc();
     ctx.clip();
 
-    const gsun = dominantStarFor(world_pos);
+    const gsun = dominantStarFor(world_pos, o);
     const glight = lightDirection(world_pos, gsun ? gsun.pos : null);
     const gshade = ctx.createRadialGradient(
       world_pos.x + glight.x * gr * 0.5,
@@ -649,18 +828,18 @@ function drawGasGiant(o, ctx) {
     gshade.addColorStop(1, 'rgba(0,0,0,0.45)');
     ctx.fillStyle = gshade;
     ctx.beginPath();
-    ctx.arc(world_pos.x, world_pos.y, gr, 0, 2 * Math.PI);
+    disc();
     ctx.fill();
     ctx.restore();
   }
 
-  if (lodAtLeast(glevel, LOD.DETAILED) && gr * gz > 4) {
+  if (banded) {
     // Clipped to the disc, for the reason above: the band ellipses are wider
     // and taller than the sphere at the latitudes they sit at, so without
     // this the outer ones hang off the limb.
     ctx.save();
     ctx.beginPath();
-    ctx.arc(world_pos.x, world_pos.y, gr, 0, 2 * Math.PI);
+    ctx.ellipse(world_pos.x, world_pos.y, gr, gry, 0, 0, 2 * Math.PI);
     ctx.clip();
 
     let bandColor, highlightColor;
@@ -688,39 +867,26 @@ function drawGasGiant(o, ctx) {
         break;
     }
 
-    // A band has to reach the limb, or it is a lozenge floating on the face.
-    // These ellipses are wider than the disc on purpose and the clip above
-    // trims them to it, which is what makes each one span the full width of
-    // the sphere at its own latitude. They used to be sized from the model
-    // radius, which over-spanned by so much that every band ran together
-    // into a wash; sized from the drawn radius they have to be widened
-    // deliberately instead of by accident.
-    const numBands = o.massInJupiters > 3 ? 4 : 2;
-    const BAND_OVERSPAN = 1.15;
+    // Belts at latitudes from this giant's seed, each as wide as a band of
+    // that latitude looks on a sphere seen side on: its edges at gry sin(lat),
+    // so a band near a pole is narrow and one at the equator wide. The
+    // ellipses overspan the limb and the clip trims them to it.
+    const seed = visualSeed(o);
+    const numBands = o.massInJupiters > 3 ? 6 : 4;
     for (let i = 0; i < numBands; i++) {
-      const bandOffset = (i - (numBands - 1) / 2) * (gr * 0.4);
-      const bandWidth = gr * 0.15;
-
-      ctx.fillStyle = bandColor;
+      const lat =
+        ((i + 0.5) / numBands - 0.5) * 2.4 +
+        (hash01(seed, 600 + i) - 0.5) * 0.2;
+      const half = 0.07 + hash01(seed, 640 + i) * 0.06;
+      const y0 = gry * Math.sin(Math.max(-1.5, lat - half));
+      const y1 = gry * Math.sin(Math.min(1.5, lat + half));
+      ctx.fillStyle = i % 2 ? highlightColor : bandColor;
       ctx.beginPath();
       ctx.ellipse(
         world_pos.x,
-        world_pos.y + bandOffset,
-        gr * BAND_OVERSPAN,
-        bandWidth,
-        0,
-        0,
-        2 * Math.PI
-      );
-      ctx.fill();
-
-      ctx.fillStyle = highlightColor;
-      ctx.beginPath();
-      ctx.ellipse(
-        world_pos.x,
-        world_pos.y + bandOffset - bandWidth * 0.3,
-        gr * BAND_OVERSPAN * 0.94,
-        bandWidth * 0.4,
+        world_pos.y + (y0 + y1) / 2,
+        gr * 1.15,
+        Math.max((y1 - y0) / 2, 0.5 / gz),
         0,
         0,
         2 * Math.PI
@@ -734,18 +900,18 @@ function drawGasGiant(o, ctx) {
       ctx.beginPath();
       ctx.ellipse(
         world_pos.x,
-        world_pos.y - gr * 0.8,
+        world_pos.y - gry * 0.8,
         gr * 0.7,
-        gr * 0.28,
+        gry * 0.28,
         0,
         0,
         2 * Math.PI
       );
       ctx.ellipse(
         world_pos.x,
-        world_pos.y + gr * 0.8,
+        world_pos.y + gry * 0.8,
         gr * 0.7,
-        gr * 0.28,
+        gry * 0.28,
         0,
         0,
         2 * Math.PI
@@ -755,6 +921,7 @@ function drawGasGiant(o, ctx) {
 
     ctx.restore();
   }
+  shadeNight(o, ctx, world_pos, gr, gry);
 
   ctx.save();
   ctx.setTransform(1, 0, 0, 1, 0, 0);
@@ -806,7 +973,7 @@ function drawGasGiant(o, ctx) {
   if (ringsVisible) {
     drawRingHalf(o, ctx, world_pos, gr, true, ringsDetailed);
     if (ringsDetailed) {
-      const rsun = dominantStarFor(world_pos);
+      const rsun = dominantStarFor(world_pos, o);
       if (rsun) {
         drawRingShadow(
           o,

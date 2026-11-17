@@ -18,6 +18,8 @@ import {
   lodFor,
   lodAtLeast,
   dominantLight,
+  lightDirection,
+  phaseCos,
   starColor,
   paintStarDisc,
   spriteFor,
@@ -29,6 +31,8 @@ import {
 import {
   state,
   stars,
+  planets,
+  gas_giants,
   bh_list,
   liveBodyCount,
   physicsSettings,
@@ -37,7 +41,10 @@ import {
   registerBodyDrawers,
   currentTier,
   stellarPropertiesFor,
+  GAS_GIANT_TO_STAR_THRESHOLD,
+  JUPITER_MASS_UNIT,
 } from './physics.js';
+import { dominantPrimary } from './orbital.js';
 
 // --- What every drawer shares -------------------------------------------------
 
@@ -124,19 +131,35 @@ const lodOf = (obj, type) => {
  * two-star system asked for this two hundred times a frame before it was
  * memoised.
  *
+ * A Star-class body below the mass at which a gas giant becomes a star is not a
+ * light: the Galilean scenario's Jupiter is one, and it lit its own moons.
+ *
  * @returns {Array<{pos: Object, luminosity: number}>} Sources, possibly empty
  */
 let lightCacheFrame = -1;
+let lightCacheStars = null;
+let lightCacheCount = -1;
+let lightCacheFirst = null;
 let lightCacheList = [];
 const luminousSources = () => {
+  // The frame, and which stars: a rebuilt world can have as many as the last.
   const frame = (state && state.frame_count) || 0;
-  if (frame === lightCacheFrame && lightCacheList.length === stars.length) {
+  if (
+    frame === lightCacheFrame &&
+    stars === lightCacheStars &&
+    stars.length === lightCacheCount &&
+    stars[0] === lightCacheFirst
+  ) {
     return lightCacheList;
   }
   lightCacheFrame = frame;
+  lightCacheStars = stars;
+  lightCacheCount = stars.length;
+  lightCacheFirst = stars[0];
   lightCacheList = [];
   for (const star of stars) {
     if (!star || star.alive === false) continue;
+    if (star.mass < GAS_GIANT_TO_STAR_THRESHOLD * JUPITER_MASS_UNIT) continue;
     const props = stellarPropertiesFor(star, SOLAR_MASS_UNIT);
     if (!(props.luminositySolar > 0)) continue;
     lightCacheList.push({
@@ -149,12 +172,55 @@ const luminousSources = () => {
   return lightCacheList;
 };
 
+/** The star each body was lit by last, so the choice holds (LIGHT_HOLD). */
+const lightOf = new WeakMap();
+
 /**
  * The star that lights this body, or null in a scene with none.
  * @param {{x: number, y: number}} pos - Where the light is received
+ * @param {object} [body] - The body, so its light holds between frames
  * @returns {?Object} A light source
  */
-const dominantStarFor = pos => dominantLight(pos, luminousSources());
+const dominantStarFor = (pos, body) => {
+  const s = dominantLight(pos, luminousSources(), body && lightOf.get(body));
+  if (body) lightOf.set(body, s?.star ?? null);
+  return s;
+};
+
+/**
+ * What lights a body and from where its phase is seen: the one answer the
+ * drawing, the inspector and the canvas description share.
+ *
+ * The observer is the planet or giant whose Hill sphere the body is inside,
+ * the nearest if several: its radius is the host's distance times the cube
+ * root of the mass ratio over three, the host being the star that pulls on
+ * the planet hardest. Not the strongest pull on the body itself (the orbit
+ * helper's rule, js/orbital.js): the Sun pulls the real Moon about twice as
+ * hard as the Earth does, and that rule calls the Moon a planet of the Sun. A
+ * body inside no Hill sphere goes round a star and shows the half-lit disc a
+ * view from above the orbital plane sees. With no star there is no light to
+ * speak of: `source` is null and the direction is the fixed one.
+ *
+ * @param {object} body - A planet, moon or giant
+ * @returns {{source: ?object, light: object, observer: ?object, cosA: number}}
+ */
+const lightingFor = body => {
+  const source = dominantStarFor(body.pos, body);
+  const light = lightDirection(body.pos, source ? source.pos : null);
+  let observer = null;
+  let nearest = Infinity;
+  for (const c of source ? [...planets, ...gas_giants] : []) {
+    if (c === body || c.alive === false || !(c.mass > body.mass)) continue;
+    const d = Math.hypot(c.pos.x - body.pos.x, c.pos.y - body.pos.y);
+    const host = d < nearest && dominantPrimary(c, stars);
+    if (!host) continue;
+    const D = Math.hypot(host.pos.x - c.pos.x, host.pos.y - c.pos.y);
+    if (d < D * Math.cbrt(c.mass / (3 * host.mass)))
+      [observer, nearest] = [c, d];
+  }
+  const cosA = observer ? (phaseCos(body.pos, light, observer.pos) ?? 0) : 0;
+  return { source, light, observer, cosA };
+};
 
 /**
  * Does the reader want animation held still?
@@ -681,6 +747,7 @@ export {
   drawRadius,
   lodOf,
   dominantStarFor,
+  lightingFor,
   rgba,
   bloomLayer,
   setBloomLayer,

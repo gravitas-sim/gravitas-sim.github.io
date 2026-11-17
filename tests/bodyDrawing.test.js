@@ -360,7 +360,10 @@ describe('the same body draws the same way twice', () => {
     // Two ring passes: one before the body's own arc and one after it.
     expect(rotates.length).toBeGreaterThanOrEqual(2);
     const bodyArc = ctx.calls.findIndex(
-      c => c.name === 'arc' && Math.abs(c.args[2] - drawnWorldRadius(g)) < 1e-9
+      // An arc, or at the detailed level the flattened disc's ellipse.
+      c =>
+        (c.name === 'arc' || c.name === 'ellipse') &&
+        Math.abs(c.args[2] - drawnWorldRadius(g)) < 1e-9
     );
     expect(bodyArc).toBeGreaterThan(rotates[0]);
     expect(rotates[rotates.length - 1]).toBeGreaterThan(bodyArc);
@@ -375,7 +378,10 @@ describe('the same body draws the same way twice', () => {
     g.hasRings = true;
     const ctx = drawAtScreenRadius(g, 60);
     const bodyArc = ctx.calls.findIndex(
-      c => c.name === 'arc' && Math.abs(c.args[2] - drawnWorldRadius(g)) < 1e-9
+      // An arc, or at the detailed level the flattened disc's ellipse.
+      c =>
+        (c.name === 'arc' || c.name === 'ellipse') &&
+        Math.abs(c.args[2] - drawnWorldRadius(g)) < 1e-9
     );
     // The far-ring pass lowers the alpha and rotates the frame; both are undone
     // before the planet is filled, or the disc would be translucent and tilted.

@@ -41,6 +41,7 @@ import {
   galaxies,
 } from './physics.js';
 import { t } from './i18n/index.js';
+import { lightingNotes } from './bodyDraw.js';
 import { scenarioTitle } from './i18n/scenario.js';
 
 /** A scenario id, as opposed to 'None', the sentinel for a hand-built world. */
@@ -108,6 +109,12 @@ export function summaryText() {
         })
       : t('summary.noSelection')
   );
+  if (
+    selected &&
+    (selected.kind === 'Planet' || selected.kind === 'GasGiant')
+  ) {
+    parts.push(...lightingNotes(selected));
+  }
 
   // The stage of a star's life, where a lesson is drawing one. The canvas is
   // showing a collapsing cloud, a wind, or the remains of an explosion, and
