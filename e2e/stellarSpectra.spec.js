@@ -27,7 +27,7 @@
 // BOTH_TARGETS in playwright.config.js.
 // =============================================================================
 
-import { test, expect } from './workflow.js';
+import { test, expect, markerFrom, scriptsCarrying } from './workflow.js';
 
 const LESSON = 'a-universe-of-stars';
 /** The first of the six spectra screens, one-based, as the counter shows it. */
@@ -70,15 +70,19 @@ test.describe('the spectra arrive only when something needs them', () => {
     page,
     app,
   }) => {
+    // Read from what the page fetched, by a string only the data file holds,
+    // because the build names its files by hash.
+    const marker = await markerFrom('js/data/spectra/sdssSpectra.js');
     const hits = [];
     page.on('request', req => {
-      if (/sdssSpectra/.test(req.url())) hits.push(req.url());
+      if (/sdssSpectra|data-packs\//.test(req.url())) hits.push(req.url());
     });
+    const fetched = () => scriptsCarrying(page, marker);
 
     await app.boot();
     await expect(page.locator('#investigationsBtn')).toBeVisible();
     // A first visit to the sandbox reaches nothing in js/data/spectra/.
-    expect(hits).toEqual([]);
+    expect(await fetched()).toBe(0);
 
     // Nor does the lesson engine, or the lesson that uses them, until a step
     // names the spectra instrument: the family is fetched on demand
@@ -91,7 +95,7 @@ test.describe('the spectra arrive only when something needs them', () => {
     await expect(page.locator('#investigationPanel')).toBeVisible();
     await expect(page.locator('.inv-step-title')).not.toBeEmpty();
     await page.waitForLoadState('networkidle');
-    expect(hits).toEqual([]);
+    expect(await fetched()).toBe(0);
 
     await advanceTo(page, FIRST_SPECTRA_STEP);
     await expect(page.locator('#investigationToolReadout')).toContainText(
@@ -104,7 +108,7 @@ test.describe('the spectra arrive only when something needs them', () => {
     expect(
       hits.filter(u => /sdssSpectraProvenance|data-packs\//.test(u))
     ).toEqual([]);
-    expect(hits).toHaveLength(1);
+    expect(await fetched()).toBe(1);
   });
 });
 

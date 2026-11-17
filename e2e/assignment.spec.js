@@ -366,6 +366,7 @@ test.describe('doing one', () => {
     expect(links[0].sids).not.toEqual(links[1].sids);
 
     for (const link of links) {
+      const known = await assignmentKeys(page);
       await page.goto(link.url);
       await expect(page.locator('#investigationPanel')).toBeVisible({
         timeout: 30_000,
@@ -375,8 +376,6 @@ test.describe('doing one', () => {
       // anything in it: its panel is named for it and holds its one step.
       await expect(page.locator('#investigationTitle')).toHaveText(link.title);
       expect((await stepsShown(page)).of).toBe(link.sids.length);
-      const known = await assignmentKeys(page);
-
       // Walk to the answerable step and answer it.
       for (let i = 0; i < 4; i++) {
         const option = page
@@ -392,6 +391,11 @@ test.describe('doing one', () => {
       }
       await page.waitForTimeout(300);
       // The record this assignment saved under: the one that was not there.
+      await expect
+        .poll(async () =>
+          (await assignmentKeys(page)).find(k => !known.includes(k))
+        )
+        .toBeTruthy();
       link.key = (await assignmentKeys(page)).find(k => !known.includes(k));
     }
 

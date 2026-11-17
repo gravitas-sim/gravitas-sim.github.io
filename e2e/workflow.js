@@ -17,7 +17,8 @@
 // (e2e/README.md, "Workflow specs").
 // =============================================================================
 
-import { readdir } from 'node:fs/promises';
+import { readdir, readFile } from 'node:fs/promises';
+import { join } from 'node:path';
 import { test as base, expect, makeApp } from './fixtures.js';
 import { SCENARIO_INFO } from '../js/data/scenarioInfo.js';
 import { getInvestigation } from '../js/data/investigations.js';
@@ -172,7 +173,12 @@ function makeWorkflowApp(page) {
     ...legacy,
 
     /** Boot without the legacy quality-tier pin, which needs /js/ui.js. */
-    boot(options = {}) {
+    async boot(options = {}) {
+      // A lesson route makes more than the 250 requests the page's resource
+      // timings keep by default; the specs that read them need all of them.
+      await page.addInitScript(() =>
+        window.performance.setResourceTimingBufferSize(10_000)
+      );
       return legacy.boot.call(app, { ...options, qualityTier: null });
     },
 
@@ -339,4 +345,63 @@ export function plainText(html) {
 export async function pageLanguage(page) {
   const lang = await page.evaluate(() => document.documentElement.lang || 'en');
   return lang.toLowerCase().startsWith('es') ? 'es' : 'en';
+}
+
+/**
+ * A string that is in one source file and in no other file of `js/`: 40 ASCII
+ * characters of a string literal, with no quote or backslash. A bundler renames
+ * and merges files but leaves string contents alone, so the string finds the
+ * file's contents wherever the build put them.
+ *
+ * @param {string} file - A path under the repository root
+ * @returns {Promise<string>}
+ */
+export async function markerFrom(file) {
+  const files = [];
+  const walk = async dir => {
+    for (const entry of await readdir(dir, { withFileTypes: true })) {
+      const path = join(dir, entry.name);
+      if (entry.isDirectory()) await walk(path);
+      else if (entry.name.endsWith('.js')) files.push(path);
+    }
+  };
+  await walk(join(process.cwd(), 'js'));
+  const texts = await Promise.all(files.map(f => readFile(f, 'utf8')));
+  const own = await readFile(join(process.cwd(), file), 'utf8');
+  // Text inside a string literal: a minifier rewrites numbers and layout but
+  // not the characters of a string.
+  const literal = /(['"`])((?:(?!\1)[ -&(-[\]-~]){40,})\1/g;
+  const found = [...own.matchAll(literal)]
+    .map(m => m[2].slice(0, 40))
+    .find(c => texts.filter(t => t.includes(c)).length === 1);
+  if (!found) throw new Error(`no marker string unique to ${file}`);
+  return found;
+}
+
+/**
+ * How many of the page's script requests so far carried a marker string,
+ * read from what the page fetched (its resource timings, then each script's
+ * text from the cache), so it is the same question against the sources and
+ * the build.
+ *
+ * @param {import('@playwright/test').Page} page - The page under test
+ * @param {string} marker - From markerFrom
+ * @returns {Promise<number>}
+ */
+export function scriptsCarrying(page, marker) {
+  return page.evaluate(async needle => {
+    const urls = performance
+      .getEntriesByType('resource')
+      .map(r => r.name)
+      .filter(n => /\.m?js(\?|$)/.test(n));
+    let count = 0;
+    for (const url of urls) {
+      const text = await window
+        .fetch(url, { cache: 'force-cache' })
+        .then(r => r.text())
+        .catch(() => '');
+      if (text.includes(needle)) count++;
+    }
+    return count;
+  }, marker);
 }

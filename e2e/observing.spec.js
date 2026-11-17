@@ -152,6 +152,9 @@ test.describe('astrometry', () => {
         timeout: 20_000,
       })
       .toBe(true);
+    // Stopped once there is a signature, so the largest offset watched cannot
+    // grow between the readings.
+    await app.setPaused(true);
     const offset = await signature();
 
     // Distance changes the angle and never the orbit, which is the whole point

@@ -101,7 +101,7 @@ test.describe('a shared link', () => {
     const sent = await shareLink(page, app, 'seeded');
     const sentPayload = await decodePayload(`#${sent.fragment}`);
     expect(sentPayload.b).toBeUndefined();
-    expect(sentPayload.scenario).toBeTruthy();
+    expect(sentPayload.s).toBeTruthy();
     // The point of the seeded kind is that it is short.
     expect(sent.fragment.length).toBeLessThan(2000);
 
@@ -112,7 +112,7 @@ test.describe('a shared link', () => {
     const got = await shareLink(page, app, 'seeded');
     const gotPayload = await decodePayload(`#${got.fragment}`);
     expect(payloadSeed(gotPayload)).toEqual(payloadSeed(sentPayload));
-    expect(gotPayload.scenario).toEqual(sentPayload.scenario);
+    expect(gotPayload.s).toEqual(sentPayload.s);
     expect(got.seed).toBe(sent.seed);
   });
 

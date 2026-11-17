@@ -38,6 +38,8 @@ test.describe('on a first visit', () => {
     app,
   }) => {
     await app.boot({ firstVisit: true });
+    // The front door is up before a key is pressed to close it.
+    await expect(page.locator('#welcomeScreen')).toBeVisible();
     await page.keyboard.press('Escape');
     await expect.poll(() => shown(page)).toBe(true);
 
