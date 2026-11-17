@@ -297,11 +297,11 @@ export function summarize(list, keyOf = item => shapeOf(JSON.stringify(item))) {
 /** The slider's own positions, js/fragments/lesson.html: 0 to 0.98 by 0.001. */
 const ECCENTRICITIES = Array.from({ length: 981 }, (_, k) => k / 1000);
 
-function recordEllipse(stepView, presets) {
+function recordEllipse(figures, presets) {
   const read = e => {
     const texts = [];
     const r = outcome(() => {
-      stepView.drawEllipse(fakeCanvas(texts), e);
+      figures.drawEllipse(fakeCanvas(texts), e);
       return texts.filter(t => /[0-9]/.test(t));
     });
     return { e: String(e), read: r };
@@ -315,7 +315,7 @@ function recordEllipse(stepView, presets) {
 
 // --- The scatter figure --------------------------------------------------------------
 
-function recordPlot(stepView, step, vectors) {
+function recordPlot(figures, step, vectors) {
   const spec = step.plot;
   const variants = {};
   const options = [
@@ -332,7 +332,7 @@ function recordPlot(stepView, step, vectors) {
       const els = plotElements();
       const canvas = fakeCanvas(texts);
       const r = outcome(() => {
-        stepView.drawPlot(step, vals, { canvas, els, transformed, log });
+        figures.drawPlot(step, vals, { canvas, els, transformed, log });
         return null;
       });
       list.push({
@@ -557,6 +557,7 @@ export async function recordInvestigations({ coverage = true } = {}) {
   const reg = await load('js/data/investigations/registry.js');
   const { withDepth } = await load('js/investigations/depth.js');
   const stepView = await load('js/investigations/stepView.js');
+  const figures = await load('js/investigations/figures.js');
   const core = await load('js/observatory/guides/core.js');
   const archive = await load('js/observatory/archivePanel.js');
   const fixtures = await load('js/observatory/fixtures.js');
@@ -598,13 +599,13 @@ export async function recordInvestigations({ coverage = true } = {}) {
             ...new Map(vectors.map(v => [JSON.stringify(v), v])).values(),
           ];
           (plots[id] ??= {})[step.sid ?? step.title] = recordPlot(
-            stepView,
+            figures,
             step,
             unique
           );
         }
       }
-      here.ellipse = recordEllipse(stepView, presets);
+      here.ellipse = recordEllipse(figures, presets);
       here.plots = plots;
       here.fieldNumbers = recordFieldNumbers(stepView, locale);
       here.aladin = ALADIN.map(([ra, dec]) => [

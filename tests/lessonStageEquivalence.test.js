@@ -121,6 +121,7 @@ const where = {};
 
 beforeAll(async () => {
   real = await import('../js/lessonStage.js');
+  await real.loadStageKinds({ hole: {} });
   gate = await import('../js/lesson/stageGate.js');
   for (const entry of MANIFEST) {
     const mod = await import(`../js/data/investigations/${entry.id}.js`);
@@ -171,6 +172,8 @@ describe('staged lessons draw the stage they always drew', () => {
     expect(() => gate.clearStage()).not.toThrow();
     await gate.loadStage();
     expect(gate.stageLoaded()).toBe(true);
+    await gate.loadStage({ hole: {} });
+    expect(gate.stageLoaded({ hole: {} })).toBe(true);
     const through = stagesThrough(gate);
     const was = JSON.parse(readFileSync(FIXTURE, 'utf8'));
     expect(through).toEqual(was.stages);

@@ -18,7 +18,7 @@
 // checked against the real body classes and the real stellar model.
 // =============================================================================
 
-import { describe, test, expect, beforeEach } from '@jest/globals';
+import { describe, test, expect, beforeAll, beforeEach } from '@jest/globals';
 import {
   DISPLAY_EXPONENT,
   SCALE,
@@ -31,6 +31,7 @@ import {
 import {
   applyStage,
   becomeRemnant,
+  loadStageKinds,
   clearStage,
   pinSnapshot,
   pinnedSnapshots,
@@ -70,6 +71,9 @@ import {
 import { endpointFor } from '../js/stellar/endpoints.js';
 import { schwarzschildRadiusM, SOLAR_MASS_KG } from '../js/blackHolePhysics.js';
 import { state } from '../js/appState.js';
+
+// The black-hole stage kinds arrive with the lesson that declares them.
+beforeAll(() => loadStageKinds({ hole: {} }));
 
 beforeEach(() => {
   resetStageForTests();
