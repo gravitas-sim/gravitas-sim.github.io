@@ -326,6 +326,8 @@ describe('a step that takes readings', () => {
     paint();
     body.querySelector('[data-take="p"]').click();
     expect(responses[`${LESSON}:read:p`]).toBe('3.2504');
+    // The panel was redrawn; the reader's place is back on the button.
+    expect(document.activeElement).toBe(body.querySelector('[data-take="p"]'));
     expect(responses[`${LESSON}:read:p:locale`]).toBe('en');
     const src = JSON.parse(responses[`${LESSON}:read:p:src`]);
     expect(src).toMatchObject({

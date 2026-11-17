@@ -525,7 +525,7 @@ export function spanStats(x, y, a, b) {
 const places = se => (se > 0 ? Math.max(0, 1 - Math.floor(Math.log10(se))) : 4);
 
 /** The one place a reading is written. */
-function commit(host, writes, announced) {
+function commit(host, writes, announced, again) {
   const { id, responses, save, renderStep } = host;
   for (const w of writes) {
     const key = `${id}:${w.fid}`;
@@ -535,6 +535,8 @@ function commit(host, writes, announced) {
   }
   save();
   renderStep();
+  // The panel is redrawn, so the reader's place is put back on the button pressed.
+  host.body.querySelector(again)?.focus();
   kit.announce(announced);
   for (const w of writes)
     keep(host, { ...w, value: kit.parseNumber(w.text, w.locale).value });
@@ -615,7 +617,8 @@ function takeField(host, el, fid) {
         },
       },
     ],
-    said(f, text)
+    said(f, text),
+    `[data-take="${fid}"]`
   );
 }
 
@@ -726,7 +729,8 @@ function mount(host) {
               ? Math.round(s.se * 10 ** places(s.se)) / 10 ** places(s.se)
               : undefined,
         })),
-        t('inv.span.done', { what: plain(fields[0]?.label), ...text })
+        t('inv.span.done', { what: plain(fields[0]?.label), ...text }),
+        `[data-span="${sid}"] [data-take-span]`
       );
     });
     paint();
@@ -802,7 +806,12 @@ function importSelection(host) {
       },
     ];
   });
-  commit(host, writes, t('inv.import.added', { value: values[0] }));
+  commit(
+    host,
+    writes,
+    t('inv.import.added', { value: values[0] }),
+    '[data-import]'
+  );
   const hint2 = host.body.querySelector('[data-import-hint]');
   if (hint2) hint2.textContent = t('inv.import.added', { value: values[0] });
 }
