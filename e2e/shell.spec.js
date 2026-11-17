@@ -178,7 +178,6 @@ const TOP_ANCHORED = [
   '#mainControls',
   '#mobileMenuToggle',
   '#scenarioInfoDisplay',
-  '#scenarioInfoBox',
   '#objectInspector',
   '.investigation-panel',
 ];

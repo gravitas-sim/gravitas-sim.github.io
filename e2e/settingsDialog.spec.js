@@ -79,14 +79,6 @@ async function tabReachesPanel(page, presses = 40) {
  * narrow one never.
  */
 const open = async page => {
-  // The scenario card is a transient overlay, and at phone widths it sits over
-  // the toolbar. A reader dismisses it before pressing anything underneath, and
-  // so does this - clicking through it would be testing a covered button.
-  const card = page.locator('#closeScenarioInfo');
-  await card.click({ timeout: 2500 }).catch(() => {
-    /* already gone, or still animating in - either way it is not the subject */
-  });
-
   const trigger = page.locator(TRIGGER);
   const menu = page.locator('#mobileMenuToggle');
   if (!(await trigger.isVisible()) && (await menu.isVisible())) {

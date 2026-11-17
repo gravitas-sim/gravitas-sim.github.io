@@ -57,12 +57,6 @@
         "treatment": "follows"
       },
       {
-        "name": "scenarioInfoSlideIn",
-        "file": "css/styles.css",
-        "what": "The scenario card arriving",
-        "treatment": "follows"
-      },
-      {
         "name": "sparkle",
         "file": "css/styles.css",
         "what": "A decorative glint",

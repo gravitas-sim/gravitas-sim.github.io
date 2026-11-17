@@ -307,7 +307,7 @@ object: its five pieces of live state (`builtSystem`, `worldPack`,
 module-level bindings (the sixth the slice 10 count named, `allBodies`, is a
 function of the physics lists), so there is one holder
 and nothing to hand in. `ui.js` still writes two of them, through
-`setBuiltSystem()` (Blank Simulation) and `setPendingSettings()` (Apply); a third
+`setBuiltSystem()` (Clear All Bodies) and `setPendingSettings()` (Apply); a third
 writer is a design decision. `initWorld()` wires the listeners where `ui.js` ran
 them. The embed shell (`initEmbedMode()`, `embedWorldBuilt()`) lives in the same
 module, to pay for its request.

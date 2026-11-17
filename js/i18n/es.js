@@ -438,7 +438,7 @@ export const ES = {
   'tutorial.scenario.body':
     'Cincuenta y tres escenarios, desde el Sistema Solar y TRAPPIST-1 hasta GW150914, la primera fusión de agujeros negros detectada por LIGO. Varios son modelos a escala y lo indican en su ficha. Busca por nombre o filtra por concepto.',
   'tutorial.scenario.tip':
-    'Reiniciar escenario lo reconstruye desde cero si un experimento se te va de las manos. Cada escenario se construye a partir de una semilla, así que la misma semilla da el mismo mundo.',
+    'Reiniciar escenario lo reconstruye desde su inicio si un experimento se te va de las manos. Cada escenario se construye a partir de una semilla, así que la misma semilla da el mismo mundo.',
 
   'tutorial.investigations.title': 'Investigaciones guiadas',
   'tutorial.investigations.body':

@@ -73,6 +73,11 @@
     display: none;
   }
 
+  /* Speed is the sandbox's; a figure's bar keeps play, step and the clock. */
+  body.presentation-embed .timeline-speed {
+    display: none;
+  }
+
   /* The way out to the sandbox: small, in the corner, and the only thing embed
      mode adds rather than removes. */
   .embed-open-full {
@@ -261,6 +266,12 @@
   body.presentation-lecture #overlay * {
     color: var(--text-primary);
     text-shadow: none;
+  }
+
+  /* The scenario's name, in the readout, is the title of the slide. */
+  body.presentation-lecture .scenario-about-body .scenario-about-title {
+    font-size: var(--text-2xl);
+    line-height: var(--leading-tight);
   }
 
   /* The inspector is what a lecturer opens to answer "how heavy is that one?".

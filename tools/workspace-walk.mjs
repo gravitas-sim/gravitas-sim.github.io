@@ -12,6 +12,12 @@
 //
 //   node tools/workspace-walk.mjs [--mode mouse|keyboard|touch] [--lang en|es]
 //                                 [--out file.json] [--print]
+//   node tools/workspace-walk.mjs --merge <out.json> --before <dir> --after <dir>
+//   node tools/workspace-walk.mjs --table <merged.json>
+//
+// A run writes one <mode>-<lang>.json; --merge joins the six runs of the tree
+// before a change and the six after it into docs/workspace-walkthrough.json,
+// and --table prints that file as the Markdown tables the pull request shows.
 //
 // mouse: 1366x800, real clicks. touch: 375x812 with a touch screen, real taps.
 // keyboard: 1366x800, real Tab presses from the top of the page, counted to the
@@ -22,7 +28,7 @@
 
 import { chromium } from 'playwright';
 import { execFileSync } from 'node:child_process';
-import { writeFileSync } from 'node:fs';
+import { readFileSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { serveStatic } from './static-server.mjs';
@@ -125,6 +131,12 @@ async function probe(page, selector) {
           ? toggle.id
           : null,
       inRail: !!rail?.contains(el),
+      railOpen:
+        !!rail &&
+        rail.getBoundingClientRect().right > 0 &&
+        rail.getBoundingClientRect().left < window.innerWidth &&
+        getComputedStyle(rail).visibility !== 'hidden' &&
+        rail.getBoundingClientRect().width > 0,
     };
   }, selector);
 }
@@ -140,7 +152,10 @@ async function reach(page, id, steps) {
   const opened = [];
   let st = first;
   for (let guard = 0; guard < 4 && st.exists && !st.ready; guard++) {
-    if (st.collapsedToggle) {
+    if (st.inRail && MODE === 'touch' && !st.railOpen) {
+      await press(page, '#mobileMenuToggle');
+      opened.push('mobileMenuToggle');
+    } else if (st.collapsedToggle) {
       await press(page, `#${st.collapsedToggle}`);
       opened.push(st.collapsedToggle);
     } else if (st.inRail && MODE === 'touch' && !st.offscreen) {
@@ -168,21 +183,47 @@ async function reach(page, id, steps) {
   return st.ready;
 }
 
-/** Tab presses from the top of the page until the control has focus. */
+/**
+ * Tab presses from the top of the page until the control has focus. A control
+ * inside a closed rail section costs the Tab presses to the section's button,
+ * Enter, and the Tabs from there.
+ */
 async function tabsTo(page, id) {
-  await page.evaluate(() => {
-    document.activeElement?.blur?.();
-    window.scrollTo(0, 0);
-  });
-  await page.evaluate(() => document.body.focus());
-  for (let n = 1; n <= 160; n++) {
-    await page.keyboard.press('Tab');
-    const at = await page.evaluate(
-      () => document.activeElement?.id || document.activeElement?.tagName
-    );
-    if (at === id) return n;
+  const start = async () =>
+    page.evaluate(() => {
+      document.getElementById('walkStart')?.remove();
+      const b = document.createElement('button');
+      b.id = 'walkStart';
+      b.textContent = 'start';
+      document.body.prepend(b);
+      b.focus();
+    });
+  const walk = async target => {
+    for (let n = 1; n <= 200; n++) {
+      await page.keyboard.press('Tab');
+      const at = await page.evaluate(
+        () => document.activeElement?.id || document.activeElement?.tagName
+      );
+      if (at === target) return n;
+    }
+    return null;
+  };
+  await start();
+  const st = await probe(page, `#${id}`);
+  let keys = 0;
+  if (st.exists && !st.ready && st.collapsedToggle) {
+    const n = await walk(st.collapsedToggle);
+    if (n === null) return null;
+    await page.keyboard.press('Enter');
+    await page.waitForTimeout(300);
+    keys += n + 1;
+    const m = await walk(id);
+    await page.evaluate(() => document.getElementById('walkStart')?.remove());
+    return m === null ? null : keys + m;
   }
-  return null;
+  const n = await walk(id);
+  await page.evaluate(() => document.getElementById('walkStart')?.remove());
+  return n;
 }
 
 async function bodyScreenPoint(page, type) {
@@ -210,6 +251,66 @@ async function bodyScreenPoint(page, type) {
       scale;
     return { x: sx, y: sy, name: b.name };
   }, type);
+}
+
+const MODES = ['mouse', 'keyboard', 'touch'];
+const LANGS = ['en', 'es'];
+
+function merge(out, beforeDir, afterDir) {
+  const read = dir =>
+    MODES.flatMap(m =>
+      LANGS.map(l => JSON.parse(readFileSync(`${dir}/${m}-${l}.json`, 'utf8')))
+    );
+  const side = dir => {
+    const runs = read(dir);
+    return { commit: runs[0].commit, measuredAt: runs[0].measuredAt, runs };
+  };
+  const record = {
+    format: 'gravitas.workspace-walk-set/1',
+    note: 'Presses to reach and use each control, a drawer or rail section opened counting as one; Tab presses (and Enter) in the keyboard runs, counted from the top of the page for each control. A task result is not waited for: the stopwatch is armed, not read.',
+    before: side(beforeDir),
+    after: side(afterDir),
+  };
+  writeFileSync(out, JSON.stringify(record, null, 1) + '\n');
+}
+
+function table(file) {
+  const set = JSON.parse(readFileSync(file, 'utf8'));
+  const cell = (side, mode, lang, id) => {
+    const run = set[side].runs.find(r => r.mode === mode && r.lang === lang);
+    const t = run?.tasks.find(x => x.id === id);
+    if (!t) return '-';
+    const where = t.first
+      ? `${t.first.control} ${t.first.visibleAtStart ? 'on screen' : 'hidden'}`
+      : '-';
+    return `${t.actions} (${where})`;
+  };
+  const ids = set.after.runs[0].tasks.map(t => [t.id, t.label]);
+  const lines = [];
+  for (const lang of LANGS) {
+    lines.push(
+      `Language: ${lang}. Each cell: presses (first control, on screen or hidden at first sight).`,
+      ''
+    );
+    lines.push(
+      '| Task | Mouse before | Mouse after | Keyboard before | Keyboard after | Touch before | Touch after |'
+    );
+    lines.push('|---|---|---|---|---|---|---|');
+    for (const [id, label] of ids) {
+      const cols = MODES.flatMap(m => [
+        cell('before', m, lang, id),
+        cell('after', m, lang, id),
+      ]);
+      lines.push(`| ${label} | ${cols.join(' | ')} |`);
+    }
+    lines.push('');
+  }
+  const open = new Map();
+  for (const r of set.after.runs)
+    for (const t of r.tasks) for (const o of t.open) open.set(o.what, o.owner);
+  lines.push('OPEN items (no route today):', '');
+  for (const [what, owner] of open) lines.push(`- ${what}: owner ${owner}`);
+  console.log(lines.join('\n'));
 }
 
 async function main() {
@@ -293,9 +394,10 @@ async function main() {
     } catch (e) {
       result = `error: ${e.message.split('\n')[0]}`;
     }
-    const pressed =
-      steps.reduce((n, s) => n + 1 + s.opened.length, 0) +
-      steps.reduce((n, s) => n + (s.extraActions || 0), 0);
+    const pressed = steps.reduce(
+      (n, s) => n + (s.tabs != null ? s.tabs + 1 : 1 + s.opened.length),
+      0
+    );
     tasks.push({
       id,
       label,
@@ -446,7 +548,9 @@ async function main() {
         await page.keyboard.press('Escape');
       }
       await page.waitForTimeout(500);
-      return 'PARTIAL: follows a type, not the chosen body';
+      return MODE === 'keyboard'
+        ? 'PARTIAL: a type, not the chosen body; the dialog fields were not walked by Tab'
+        : 'PARTIAL: follows a type, not the chosen body';
     },
     { load: true }
   );
@@ -544,7 +648,13 @@ async function main() {
   }
 }
 
-main().catch(e => {
-  console.error(e);
-  process.exit(1);
-});
+const mergeAt = process.argv.indexOf('--merge');
+if (mergeAt > 0) {
+  merge(arg('merge'), arg('before'), arg('after'));
+} else if (process.argv.includes('--table')) {
+  table(arg('table'));
+} else
+  main().catch(e => {
+    console.error(e);
+    process.exit(1);
+  });
