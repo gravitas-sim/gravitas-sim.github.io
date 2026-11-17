@@ -241,6 +241,13 @@ export const NEVER_PRECACHED = [
   // until it is: a module a page imports is installed, and its bytes are that
   // change's to find.
   /^js\/numeric\/(roots|interp)\.js$/,
+  // The lesson plot's glue, the ring a step draws round an object and their
+  // words: fetched by the first lesson step that needs them and kept by the
+  // service worker after that, not installed (the first-visit tier is at its
+  // data-budget ceiling and the idle tier has no room). The plot component
+  // they draw with is installed already.
+  /^js\/investigations\/(plotView|pointing)\.js$/,
+  /^js\/i18n\/(en|es)\.linked\.js$/,
   // The controlled-run code: fetched by a lesson step that declares a variation
   // and kept by the service worker after that, not installed (first-visit tier).
   /^js\/lesson\/runs\.js$/,
