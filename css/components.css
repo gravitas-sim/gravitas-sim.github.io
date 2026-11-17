@@ -7596,14 +7596,25 @@
 
   /* A glossary term in prose (js/glossaryTerms.js): a button that reads as the
      word it is, marked by a dotted underline, and the definition it opens. */
-  .gl-term {
+  .gl-term,
+  .gl-term:hover,
+  .gl-term:active {
+    display: inline;
+    min-height: 0;
+    padding: 0;
     background: none;
     border: 0;
     border-bottom: 1px dotted currentcolor;
+    border-radius: 0;
+    box-shadow: none;
     color: inherit;
     cursor: help;
     font: inherit;
-    padding: 0;
+    letter-spacing: inherit;
+    line-height: inherit;
+    text-align: inherit;
+    transform: none;
+    user-select: auto;
   }
 
   .gl-term:focus-visible {
@@ -7615,6 +7626,7 @@
     border-left: 3px solid var(--accent);
     display: block;
     font-size: 0.8rem;
+    font-style: normal;
     line-height: 1.45;
     margin: 0.3rem 0;
     padding: 0.2rem 0 0.2rem 0.6rem;

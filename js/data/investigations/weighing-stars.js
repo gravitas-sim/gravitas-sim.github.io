@@ -386,10 +386,10 @@ const WEIGHING = {
              \n\n<strong>the heavier star stays proportionally closer to the
              balance point.</strong>
              \n\nIf you would rather have the line, here it is. Call the two
-             masses M<sub>A</sub> and M<sub>B</sub>, and call their distances
-             from the balance point r<sub>A</sub> and r<sub>B</sub>:
-             \n\n<strong>M<sub>A</sub> × r<sub>A</sub> = M<sub>B</sub> ×
-             r<sub>B</sub></strong>
+             masses <em>M</em><sub>A</sub> and <em>M</em><sub>B</sub>, and call their distances
+             from the balance point <em>r</em><sub>A</sub> and <em>r</em><sub>B</sub>:
+             \n\n<strong><em>M</em><sub>A</sub> × <em>r</em><sub>A</sub> = <em>M</em><sub>B</sub> ×
+             <em>r</em><sub>B</sub></strong>
              \n\nYou will not have to rearrange it. It is here so that the line
              looks familiar if you meet it later. Everything you actually need
              is the see-saw: three times as far out means one third as heavy.`,
@@ -421,8 +421,8 @@ const WEIGHING = {
       title: 'What Kepler found, and what Newton added',
       body: `In the Kepler investigation you measured the orbits of planets and
              found that the size of an orbit and the time it takes go together:
-             \n\n<strong>a<sup>3</sup> = P<sup>2</sup></strong>
-             \n\nwith the orbit size a in AU and the period P in years. Bigger
+             \n\n<strong><em>a</em><sup>3</sup> = <em>P</em><sup>2</sup></strong>
+             \n\nwith the orbit size <em>a</em> in AU and the [[period|period]] <em>P</em> in years. Bigger
              orbit, longer year, every time.
              \n\nThat relationship works beautifully for the planets, and it has
              a hidden assumption in it: every planet in the Solar System is going
@@ -500,7 +500,7 @@ const WEIGHING = {
       title: 'Newton’s version, and what it is for',
       body: `Here is the relationship Newton found, written the way an astronomer
              uses it:
-             \n\n<strong>total mass = a<sup>3</sup> ÷ P<sup>2</sup></strong>
+             \n\n<strong>total mass = <em>a</em><sup>3</sup> ÷ <em>P</em><sup>2</sup></strong>
              \n\nwith <strong>a</strong> the size of the orbit in AU,
              <strong>P</strong> the time for one lap in years, and the answer in
              solar masses. That is the whole thing. Two measurements in, one
@@ -514,7 +514,7 @@ const WEIGHING = {
              \n\n<strong>Star A ── r<sub>A</sub> ── barycenter ── r<sub>B</sub>
              ── Star B</strong>
              \n\nand <strong>a</strong> is the two pieces added together:
-             r<sub>A</sub> + r<sub>B</sub>, which is simply the distance from one
+             <em>r</em><sub>A</sub> + <em>r</em><sub>B</sub>, which is simply the distance from one
              star across to the other.
              \n\nSo when you measure a, measure star to star.`,
       tip: 'If you take only one star’s distance from the barycenter by mistake, you will get a mass far too small: for two equal stars, an eighth of the mass. Measuring star to star is the fix, and it is easier to do anyway.',
@@ -535,21 +535,22 @@ const WEIGHING = {
         { id: 'p', label: 'Period P', unit: 'years', want: '2' },
         {
           id: 'a3',
-          label: 'a<sup>3</sup>, that is a × a × a',
+          label:
+            '<em>a</em><sup>3</sup>, that is <em>a</em> × <em>a</em> × <em>a</em>',
           unit: '',
           decimals: 0,
           compute: v => v.a ** 3,
         },
         {
           id: 'p2',
-          label: 'P<sup>2</sup>, that is P × P',
+          label: '<em>P</em><sup>2</sup>, that is <em>P</em> × <em>P</em>',
           unit: '',
           decimals: 0,
           compute: v => v.p ** 2,
         },
         {
           id: 'total',
-          label: 'Total mass, a<sup>3</sup> ÷ P<sup>2</sup>',
+          label: 'Total mass, <em>a</em><sup>3</sup> ÷ <em>P</em><sup>2</sup>',
           unit: 'M☉',
           decimals: 2,
           compute: v => v.a ** 3 / v.p ** 2,
@@ -571,7 +572,7 @@ const WEIGHING = {
             '2 × 2 × 2 is 8, and 2 × 2 is 4, and 8 divided by 4 is 2. The pair weighs <strong>2 solar masses</strong> between them. Nobody went there. Nobody weighed anything. Two measurements of an orbit were enough.',
         };
       },
-      tip: 'The little raised numbers just mean "multiply it by itself that many times". a³ is a × a × a. P² is P × P. If you would rather use a calculator, nothing here is against the rules.',
+      tip: 'The little raised numbers just mean "multiply it by itself that many times". <em>a</em><sup>3</sup> is <em>a</em> × <em>a</em> × <em>a</em>. <em>P</em><sup>2</sup> is <em>P</em> × <em>P</em>. If you would rather use a calculator, nothing here is against the rules.',
     },
     {
       sid: 'the-mystery-pair',
@@ -643,7 +644,7 @@ const WEIGHING = {
         'Add the two together, and check it against the star-to-star figure',
         'Start it running again and check your reading still holds a lap later',
       ],
-      tip: 'Star A is about 1 AU from the balance point and Star B about 3 AU, so the two stars are 4 AU apart. Write that down: a = 4 AU. The masses are still hidden - the inspector is closed on this screen on purpose.',
+      tip: 'Star A is about 1 AU from the balance point and Star B about 3 AU, so the two stars are 4 AU apart. Write that down: <em>a</em> = 4 AU. The masses are still hidden - the inspector is closed on this screen on purpose.',
     },
     {
       sid: 'measurement-two-how-long-does',
@@ -714,14 +715,14 @@ const WEIGHING = {
         },
         {
           id: 'a3',
-          label: 'a<sup>3</sup>',
+          label: '<em>a</em><sup>3</sup>',
           unit: '',
           decimals: 0,
           compute: v => v.a ** 3,
         },
         {
           id: 'p2',
-          label: 'P<sup>2</sup>',
+          label: '<em>P</em><sup>2</sup>',
           unit: '',
           decimals: 0,
           compute: v => v.p ** 2,
@@ -769,7 +770,7 @@ const WEIGHING = {
           message: `64 divided by 16 is 4. The two stars weigh <strong>${total.toFixed(1)} solar masses</strong> between them. You measured that by watching, and by nothing else.`,
         };
       },
-      tip: 'If you measured a = 4 and P = 4, then a³ = 4 × 4 × 4 = 64 and P² = 4 × 4 = 16.',
+      tip: 'If you measured <em>a</em> = 4 and <em>P</em> = 4, then <em>a</em><sup>3</sup> = 4 × 4 × 4 = 64 and <em>P</em><sup>2</sup> = 4 × 4 = 16.',
     },
     {
       sid: 'stop-and-look-at-what',
@@ -1002,14 +1003,14 @@ const WEIGHING = {
         { id: 'p', label: 'Period P', unit: 'years', want: '3' },
         {
           id: 'a3',
-          label: 'a<sup>3</sup>',
+          label: '<em>a</em><sup>3</sup>',
           unit: '',
           decimals: 0,
           compute: v => v.a ** 3,
         },
         {
           id: 'p2',
-          label: 'P<sup>2</sup>',
+          label: '<em>P</em><sup>2</sup>',
           unit: '',
           decimals: 0,
           compute: v => v.p ** 2,

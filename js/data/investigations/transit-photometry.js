@@ -182,7 +182,7 @@ const TRANSITS = {
       bind: TRANSIT_PAIR,
       type: 'read',
       title: 'Five ways to find a planet you cannot see',
-      body: `<strong>Radial velocity.</strong> A planet and its star both orbit
+      body: `<strong>[[radial-velocity|Radial velocity]].</strong> A planet and its star both orbit
              their common center of mass, so the star wobbles, and the wobble
              shifts its spectral lines blue then red. Jupiter moves the Sun at
              12.5 m/s; the Earth manages 9 cm/s. This is how the first planet
@@ -192,7 +192,7 @@ const TRANSITS = {
              won them a share of the 2019 Nobel Prize. Radial velocity measures a
              minimum mass, because an orbit seen face-on produces no shift at
              all.
-             \n\n<strong>Transits.</strong> If the orbit happens to be edge-on to
+             \n\n<strong>[[transit|Transits]].</strong> If the orbit happens to be edge-on to
              us, the planet crosses the stellar disk and the star dims by a fixed
              fraction, once per orbit, forever. This measures a radius. It is by
              far the most productive method, and it is the one you are about to
@@ -289,18 +289,18 @@ const TRANSITS = {
       type: 'read',
       title: 'Where the depth comes from',
       body: `A star is, to a photometer, a uniformly bright disk of radius
-             R<sub>★</sub> and area πR<sub>★</sub><sup>2</sup>. A planet in front
-             of it is an opaque disk of radius R<sub>p</sub> and area
+             <em>R</em><sub>★</sub> and area πR<sub>★</sub><sup>2</sup>. A planet in front
+             of it is an opaque disk of radius <em>R</em><sub>p</sub> and area
              πR<sub>p</sub><sup>2</sup>, and it blocks exactly its own area.
              \n\nThe fractional drop in brightness, the <strong>transit
              depth</strong>, is therefore the ratio of the two areas:
-             \n\n<strong>δ = πR<sub>p</sub><sup>2</sup> / πR<sub>★</sub><sup>2</sup>
-             = (R<sub>p</sub> / R<sub>★</sub>)<sup>2</sup></strong>
+             \n\n<strong><em>δ</em> = πR<sub>p</sub><sup>2</sup> / πR<sub>★</sub><sup>2</sup>
+             = (<em>R</em><sub>p</sub> / <em>R</em><sub>★</sub>)<sup>2</sup></strong>
              \n\nThe π cancels, the distance to the star cancels, the star's
-             luminosity cancels, and the planet's own brightness is negligible.
+             [[luminosity|luminosity]] cancels, and the planet's own brightness is negligible.
              What survives is a pure ratio of sizes. Turn it around and the
              measurement you want falls straight out:
-             \n\n<strong>R<sub>p</sub> / R<sub>★</sub> = √δ</strong>
+             \n\n<strong><em>R</em><sub>p</sub> / <em>R</em><sub>★</sub> = √<em>δ</em></strong>
              \n\nThat is the whole method in one line. It also tells you what the
              method cannot do: a transit gives you the planet's size <em>relative
              to the star</em>. To get a planet radius in kilometers you need to
@@ -339,7 +339,7 @@ const TRANSITS = {
       title: 'From a depth to a size',
       kind: 'numeric',
       body: `Suppose a survey reports a clean, repeating 1% dip:
-             δ = 0.0100.`,
+             <em>δ</em> = 0.0100.`,
       prompt: 'What is R<sub>p</sub> / R<sub>★</sub> for a 1% dip?',
       unit: '',
       answer: 0.1,
@@ -374,7 +374,7 @@ const TRANSITS = {
              measures the bottom of every complete dip that has gone past. Wait
              until the readout below shows at least one transit, then press the
              button to copy both numbers in. If you would rather read them
-             yourself, hover the pointer over the light curve and it reports the
+             yourself, hover the pointer over the [[light-curve|light curve]] and it reports the
              value under it to six decimal places.
              \n\nThe depth and the radius ratio are worked out from what you
              enter, so a slipped decimal point in your arithmetic cannot be
@@ -398,14 +398,14 @@ const TRANSITS = {
         { id: 'bot', label: 'Brightness at the bottom of the dip', unit: '' },
         {
           id: 'depth',
-          label: 'Transit depth δ = baseline − bottom',
+          label: 'Transit depth <em>δ</em> = baseline − bottom',
           unit: '',
           decimals: 5,
           compute: v => v.base - v.bot,
         },
         {
           id: 'k_naive',
-          label: 'Radius ratio R<sub>p</sub> / R<sub>★</sub> = √(δ)',
+          label: 'Radius ratio <em>R</em><sub>p</sub> / <em>R</em><sub>★</sub> = √(δ)',
           unit: '',
           decimals: 4,
           compute: v => Math.sqrt(v.base - v.bot),
@@ -468,15 +468,15 @@ const TRANSITS = {
              area ratio predicts. For the coefficients used here, the center of
              the disk is <strong>1.215</strong> times as bright as the disk
              average, so:
-             \n\n<strong>δ<sub>measured</sub> = 1.215 × (R<sub>p</sub> /
-             R<sub>★</sub>)<sup>2</sup></strong>
+             \n\n<strong><em>δ</em><sub>measured</sub> = 1.215 × (<em>R</em><sub>p</sub> /
+             <em>R</em><sub>★</sub>)<sup>2</sup></strong>
              \n\nTaking the square root of your measured depth therefore
              overestimates the radius ratio by √1.215 = 1.102, about 10%. On a
              planet near a classification boundary, 10% is the difference between
              two different answers about what the world is made of.
              \n\nThis is not a quirk of the simulation. It is why nobody in the
-             field reports √δ as a radius ratio: a real transit fit solves for the
-             radius ratio, the limb-darkening coefficients, the impact parameter
+             field reports √<em>δ</em> as a radius ratio: a real transit fit solves for the
+             radius ratio, the limb-darkening coefficients, the [[impact-parameter|impact parameter]]
              and the orbit together, because they are all tangled up in the same
              curve.`,
       figure: {
@@ -528,7 +528,7 @@ const TRANSITS = {
         },
         {
           id: 'k_true',
-          label: 'Corrected ratio √(δ / 1.215)',
+          label: 'Corrected ratio √(<em>δ</em> / 1.215)',
           unit: '',
           decimals: 4,
           compute: v => Math.sqrt(v.d2 / 1.2146),
@@ -607,7 +607,7 @@ const TRANSITS = {
              first touches the stellar disk and ends when its trailing edge has
              fully crossed onto it. During that interval the blocked area climbs
              from nothing to its full value. For a central
-             transit ingress lasts k/(1 + k) of the whole event, with k = R<sub>p</sub>/R<sub>★</sub>, so the steepness of
+             transit ingress lasts <em>k</em>/(1 + <em>k</em>) of the whole event, with <em>k</em> = <em>R</em><sub>p</sub>/<em>R</em><sub>★</sub>, so the steepness of
              the shoulders is itself a measurement of the radius ratio,
              independent of the depth.
              \n\nThe <strong>floor</strong> between second and third contact is
@@ -623,7 +623,7 @@ const TRANSITS = {
              \n\n<strong>Egress</strong> mirrors ingress.
              \n\nThe <strong>total duration</strong> depends on how fast the planet
              is moving and how long a chord it cuts across the disk. Combine the
-             duration with the period and you can extract the density of the
+             duration with the [[period|period]] and you can extract the density of the
              star, without ever resolving it.`,
     },
     {
@@ -654,10 +654,10 @@ const TRANSITS = {
              Real orbits are tilted, and the tilt is set by how the system happens
              to be oriented relative to Earth: nothing about the planet, entirely
              about us.
-             \n\nThe <strong>impact parameter</strong> b is how far from the
+             \n\nThe <strong>impact parameter</strong> <em>b</em> is how far from the
              center of the disk the planet's path passes, in units of the stellar
-             radius. b = 0 is dead center. b = 1 clips the limb. Above about
-             b = 1 + k the planet misses the star altogether and there is no
+             radius. <em>b</em> = 0 is dead center. <em>b</em> = 1 clips the limb. Above about
+             <em>b</em> = 1 + <em>k</em> the planet misses the star altogether and there is no
              transit at all, however patiently you watch.
              \n\nSlide it and watch three things change at once: the transit gets
              shorter, the floor loses its flat section and becomes a V, and the
@@ -667,13 +667,13 @@ const TRANSITS = {
       tool: { id: 'geometry' },
       lightCurve: false,
       checklist: [
-        'Start at b = 0 and note the duration and depth',
+        'Start at <em>b</em> = 0 and note the duration and depth',
         'Raise b to 0.9 and watch the flat floor turn into a V',
         'Find the value of b where the transit disappears entirely',
         'Load the Earth-around-the-Sun preset and read off the transit probability',
         'Shrink a / R★ and watch the probability climb',
       ],
-      tip: 'The simulation runs in a plane, so every orbit in it has b = 0 and transits. That is a limitation of a two-dimensional sandbox, not a claim about the sky. This instrument is where the third dimension lives.',
+      tip: 'The simulation runs in a plane, so every orbit in it has <em>b</em> = 0 and transits. That is a limitation of a two-dimensional sandbox, not a claim about the sky. This instrument is where the third dimension lives.',
     },
     {
       sid: 'how-lucky-do-you-have',
@@ -692,7 +692,7 @@ const TRANSITS = {
       answer: 215,
       tolerance: 40,
       because:
-        'R★/a = 0.00465, or about 1 in 215. That is the single hardest fact about the transit method: even a survey with perfect photometry watching every star in the sky forever would find fewer than one in two hundred of the Earth-like planets out there. Everything the method reports about how common planets are has to be divided by this geometric factor before it means anything.',
+        'R★/<em>a</em> = 0.00465, or about 1 in 215. That is the single hardest fact about the transit method: even a survey with perfect photometry watching every star in the sky forever would find fewer than one in two hundred of the Earth-like planets out there. Everything the method reports about how common planets are has to be divided by this geometric factor before it means anything.',
       hints: [
         'The chance is a ratio of two lengths that the step gives you.',
         'Divide the star’s radius by the size of the orbit, in the same unit.',
@@ -780,7 +780,8 @@ const TRANSITS = {
         },
         {
           id: 'P',
-          label: 'Orbital period P = (t₂ − t₁) / n',
+          label:
+            'Orbital period <em>P</em> = (<em>t</em><sub>2</sub> − <em>t</em><sub>1</sub>) / <em>n</em>',
           unit: 'days',
           decimals: 4,
           compute: v => (v.t2 - v.t1) / v.n,
@@ -851,15 +852,15 @@ const TRANSITS = {
       type: 'measure',
       title: 'From a period to an orbit',
       body: `A period and a stellar mass are enough to place the planet, through
-             the same third law you would use on the Solar System:
-             \n\n<strong>a<sup>3</sup> = P<sup>2</sup> M<sub>★</sub></strong>,
-             with a in AU, P in years and M<sub>★</sub> in solar masses.
+             the same [[keplers-third-law|third law]] you would use on the Solar System:
+             \n\n<strong><em>a</em><sup>3</sup> = <em>P</em><sup>2</sup> M<sub>★</sub></strong>,
+             with <em>a</em> in AU, <em>P</em> in years and M<sub>★</sub> in solar masses.
              \n\nHD 209458 weighs <strong>1.148 M<sub>☉</sub></strong>, from its
-             spectrum and its position on the main sequence. Enter your period and
+             [[spectrum|spectrum]] and its position on the [[main-sequence|main sequence]]. Enter your period and
              that mass.
              \n\nThe last two rows are what the orbit means. a / R<sub>★</sub> is
              how many stellar radii out the planet sits, which is what sets the
-             transit probability and the duration. The equilibrium temperature is
+             transit probability and the duration. The [[equilibrium-temperature|equilibrium temperature]] is
              what you get by balancing the starlight it absorbs against the heat
              it radiates away.`,
       fields: [
@@ -884,7 +885,8 @@ const TRANSITS = {
         },
         {
           id: 'a_au',
-          label: 'Semi-major axis a = (P² M)^⅓',
+          label:
+            'Semi-major axis <em>a</em> = (<em>P</em><sup>2</sup> <em>M</em>)<sup>⅓</sup>',
           unit: 'AU',
           decimals: 5,
           compute: v => Math.cbrt((v.P_d / 365.25) ** 2 * v.M),
@@ -946,7 +948,7 @@ const TRANSITS = {
       type: 'read',
       title: 'What a transit cannot tell you',
       body: `You have a radius, a period and an orbit. You do not have a mass, and
-             no amount of better photometry will give you one. A puffy gas planet
+             no amount of better [[photometry|photometry]] will give you one. A puffy gas planet
              and a dense rocky one of the same size produce identical dips.
              \n\nThe mass has to come from somewhere else, and it almost always
              comes from radial velocities: the star's spectral lines shift as the
@@ -986,11 +988,11 @@ const TRANSITS = {
              is slightly smaller. The transit depth traces out the planet's
              opacity against wavelength: a <strong>transmission spectrum</strong>.
              \n\nThe size of the effect is set by the atmospheric
-             <strong>scale height</strong>, the vertical distance over which
-             pressure falls by a factor of e: H = kT / μg. Hot, low-gravity,
+             <strong>[[scale-height|scale height]]</strong>, the vertical distance over which
+             pressure falls by a factor of e: <em>H</em> = kT / μg. Hot, low-gravity,
              hydrogen-rich atmospheres are puffy and have large scale heights,
              which is why hot Jupiters are the easiest atmospheres to study. For
-             this planet H is roughly 550 km against a radius of 99,000 km, so a
+             this planet <em>H</em> is roughly 550 km against a radius of 99,000 km, so a
              strong band lifts the radius by a few tenths of a percent and the
              depth by a few hundred parts per million on top of 18,000.
              \n\nThat sounds impossible to measure. It was done first in this very
@@ -1052,7 +1054,7 @@ const TRANSITS = {
       title: 'Things that are not planets',
       body: `A dip in a light curve is a dip in a light curve. Several things that
              are not planets produce one.
-             \n\nAn <strong>eclipsing binary</strong> of two stars produces dips
+             \n\nAn <strong>[[eclipsing-binary|eclipsing binary]]</strong> of two stars produces dips
              of tens of percent, which is obvious, until the pair is grazing and
              only clips a few percent. A <strong>background eclipsing binary</strong>
              behind your target, its deep eclipses watered down by all the light of
@@ -1060,9 +1062,9 @@ const TRANSITS = {
              depth. Starspots rotating in and out of view produce dips that
              almost repeat. Kepler and TESS both flag more candidates than they
              confirm, and sorting them out is the bulk of the follow-up effort.
-             \n\nThe subtler problem is not a false positive at all. It is a real
+             \n\nThe subtler problem is not a [[false-positive|false positive]] at all. It is a real
              planet whose measurement is quietly wrong.
-             \n\nSurvey telescopes have coarse pixels. Kepler's were about four
+             \n\nSurvey telescopes have coarse [[pixel|pixels]]. Kepler's were about four
              arcseconds across; TESS's are <strong>21 arcseconds</strong>, roughly
              the apparent size of a small crater on the Moon. Every star that
              falls in the aperture contributes light to the same one number.
@@ -1079,17 +1081,17 @@ const TRANSITS = {
       type: 'explore',
       title: 'A star you did not know was there',
       body: `Suppose a fraction of the light in the aperture comes from a
-             companion, with flux ratio F<sub>2</sub>/F<sub>1</sub>. The planet
+             companion, with [[flux|flux]] ratio <em>F</em><sub>2</sub>/F<sub>1</sub>. The planet
              still blocks the same fraction of its own star, but that blocked
              light is now a smaller share of the total:
-             \n\n<strong>δ<sub>observed</sub> = δ<sub>true</sub> /
-             (1 + F<sub>2</sub>/F<sub>1</sub>)</strong>
-             \n\nSince the radius goes as √δ, the radius you report is too small
+             \n\n<strong><em>δ</em><sub>observed</sub> = <em>δ</em><sub>true</sub> /
+             (1 + <em>F</em><sub>2</sub>/<em>F</em><sub>1</sub>)</strong>
+             \n\nSince the radius goes as √<em>δ</em>, the radius you report is too small
              by exactly
-             \n\n<strong>R<sub>true</sub> / R<sub>measured</sub> =
-             √(1 + F<sub>2</sub>/F<sub>1</sub>)</strong>
-             \n\nContrast is usually quoted as a magnitude difference, and
-             F<sub>2</sub>/F<sub>1</sub> = 10<sup>−0.4Δm</sup>. An equal twin
+             \n\n<strong><em>R</em><sub>true</sub> / <em>R</em><sub>measured</sub> =
+             √(1 + <em>F</em><sub>2</sub>/<em>F</em><sub>1</sub>)</strong>
+             \n\nContrast is usually quoted as a [[magnitude|magnitude]] difference, and
+             <em>F</em><sub>2</sub>/<em>F</em><sub>1</sub> = 10<sup>−0.4Δm</sup>. An equal twin
              makes every radius too small by √2. A companion four magnitudes
              fainter changes it by 1.2%.
              \n\nThis is what high-resolution imaging of planet hosts is for. The
@@ -1189,7 +1191,7 @@ const TRANSITS = {
       type: 'measure',
       title: 'Recover the real planet',
       body: `You have measured the same planet twice, once clean and once
-             blended. The ratio of the two depths is 1 + F<sub>2</sub>/F<sub>1</sub>
+             blended. The ratio of the two depths is 1 + <em>F</em><sub>2</sub>/<em>F</em><sub>1</sub>
              directly, which means this pair of measurements contains the
              companion's brightness even though you never saw it.
              \n\nIn practice you never get the clean measurement: that is the whole
@@ -1225,7 +1227,8 @@ const TRANSITS = {
         },
         {
           id: 'ratio',
-          label: 'Depth ratio = 1 + F₂/F₁',
+          label:
+            'Depth ratio = 1 + <em>F</em><sub>2</sub>/<em>F</em><sub>1</sub>',
           unit: '',
           decimals: 4,
           compute: v => v.d_clean / v.d_blend,
@@ -1239,7 +1242,8 @@ const TRANSITS = {
         },
         {
           id: 'corr',
-          label: 'Radius correction √(1 + F₂/F₁)',
+          label:
+            'Radius correction √(1 + <em>F</em><sub>2</sub>/<em>F</em><sub>1</sub>)',
           unit: '',
           decimals: 4,
           compute: v => Math.sqrt(v.d_clean / v.d_blend),
