@@ -4626,9 +4626,52 @@
     gap: var(--space-3);
     margin-bottom: var(--space-2);
   }
-  .inv-plot-panel canvas {
+  .inv-plot-panel :is(canvas, svg) {
     display: block;
     width: 100%;
+  }
+  /* The lesson's plot is the shared plot component (js/plot/), whose own
+     rules are on the document pages and not here. A chosen point is larger
+     and ringed, a chosen row bold with a bar, so neither rests on color. */
+  .inv-plot-svg {
+    height: auto;
+    color: var(--text-muted);
+    user-select: none;
+    touch-action: manipulation;
+  }
+  .inv-plot-svg:focus-visible {
+    outline: var(--focus-ring);
+    outline-offset: var(--focus-ring-offset);
+  }
+  .inv-plot-svg .ow-axes line {
+    stroke: var(--text-muted);
+  }
+  .inv-plot-svg :is(.ow-tick, .ow-label) {
+    fill: var(--text-muted);
+  }
+  .inv-plot-svg .ow-pt {
+    fill: var(--accent);
+  }
+  .inv-plot-svg .ow-pt.is-selected {
+    fill: var(--text-primary);
+    stroke: var(--accent);
+  }
+  .inv-plot-svg .ow-focus {
+    fill: none;
+    stroke: var(--text-primary);
+  }
+  .inv-plot-svg:not(:focus) .ow-focus {
+    display: none;
+  }
+  .inv-plot-svg .ow-overlay {
+    fill: none;
+    stroke: var(--accent);
+    stroke-width: 2;
+    stroke-dasharray: 6 4;
+    opacity: 0.6;
+  }
+  .inv-plot-tag {
+    fill: var(--text-primary);
   }
   .inv-plot-panel .inv-plot-note {
     margin-top: var(--space-2);
@@ -4816,9 +4859,16 @@
     font-weight: var(--weight-semibold);
     color: var(--text-primary);
   }
-  .inv-plot-table tbody th {
+  .inv-plot-table td:nth-child(-n + 2) {
     text-align: left;
-    font-weight: var(--weight-regular, 400);
+  }
+  .inv-plot-table tr[aria-selected='true'] {
+    font-weight: var(--weight-semibold);
+    box-shadow: inset 3px 0 0 var(--accent);
+  }
+  .inv-plot-table tr:focus-visible {
+    outline: var(--focus-ring);
+    outline-offset: -2px;
   }
   .inv-plot-table td {
     font-family: var(--font-mono);

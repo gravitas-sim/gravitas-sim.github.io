@@ -2,30 +2,9 @@
 // import row, `source` and `take` fields, an interval), fetched when a lesson opens
 // with a step that declares one (js/investigations.js, `loadSeams`); one module for Kepler's request count.
 
-import { fixed, roundSig, tickLabel } from '../format.js';
+import { fixed, roundSig } from '../format.js';
 import { getLocale, t } from '../i18n/index.js';
-import { escapeHtml as escape, prose } from '../lessonMarkup.js';
-
-/** Pick round axis bounds and a tick step that contain the data. */
-function niceScale(min, max) {
-  if (!Number.isFinite(min) || !Number.isFinite(max) || min === max) {
-    const c = Number.isFinite(min) ? min : 0;
-    return { lo: c - 1, hi: c + 1, step: 0.5 };
-  }
-  const span = max - min;
-  const raw = span / 4;
-  const mag = Math.pow(10, Math.floor(Math.log10(raw)));
-  const norm = raw / mag;
-  const step = (norm <= 1 ? 1 : norm <= 2 ? 2 : norm <= 5 ? 5 : 10) * mag;
-  return {
-    lo: Math.floor(min / step) * step,
-    hi: Math.ceil(max / step) * step,
-    step,
-  };
-}
-
-/** Format an axis tick without trailing noise. */
-const tick = v => tickLabel(v);
+import { escapeHtml as escape } from '../lessonMarkup.js';
 
 /** Least-squares fit through the origin (an intercept would let bad data look straight). */
 export function fitSlope(pts) {
@@ -39,226 +18,44 @@ export function fitSlope(pts) {
   return sxx > 0 ? sxy / sxx : null;
 }
 
-/** Least-squares slope with a free intercept, for log-log axes. */
-function logSlope(pts) {
-  const n = pts.length;
-  if (n < 2) return null;
-  const mx = pts.reduce((t, p) => t + p.x, 0) / n;
-  const my = pts.reduce((t, p) => t + p.y, 0) / n;
-  let num = 0;
-  let den = 0;
-  for (const p of pts) {
-    num += (p.x - mx) * (p.y - my);
-    den += (p.x - mx) ** 2;
-  }
-  return den === 0 ? null : num / den;
+let plotView = null;
+
+/** Fetch the plot component and its glue; a plot step needs it, no other does. */
+export const loadPlot = () =>
+  plotView
+    ? Promise.resolve(plotView)
+    : import('./plotView.js').then(m => (plotView = m));
+
+/**
+ * Draw the step's scatter plot, fetching the plot component the first time.
+ * Calls made while it loads are drawn in order once it has.
+ */
+export function drawPlot(step, vals, ctx) {
+  if (!ctx.canvas || !step.plot?.points) return plotView?.clear();
+  if (plotView) return plotView.draw(step, vals, ctx);
+  // Offline before its first use the plot stays empty; nothing else breaks.
+  loadPlot()
+    .then(m => m.draw(step, vals, ctx))
+    .catch(() => {});
 }
 
-/** The plot's points, as a table. */
-function renderPlotTable(els, spec, points, { transform, useLog } = {}) {
-  const wrap = els.plotTableWrap;
-  const table = els.plotTable;
-  if (!wrap || !table) return;
-  if (!points.length) {
-    wrap.hidden = true;
-    table.innerHTML = '';
-    return;
-  }
-  const xLabel = transform?.xLabel || spec.xLabel || 'x';
-  const yLabel = transform?.yLabel || spec.yLabel || 'y';
-  // Log axes plot the logarithm; the table says so, to agree with the picture.
-  const head = useLog
-    ? [t('inv.plot.point'), `log₁₀(${xLabel})`, `log₁₀(${yLabel})`]
-    : [t('inv.plot.point'), xLabel, yLabel];
-  const digits = n =>
-    Math.abs(n) >= 1000 || (Math.abs(n) < 0.01 && n !== 0)
-      ? n.toExponential(3)
-      : n.toFixed(3);
-  const body = points
-    .map(
-      (p, i) =>
-        `<tr><th scope="row">${escape(p.label || String(i + 1))}</th>` +
-        `<td>${escape(digits(p.x))}</td><td>${escape(digits(p.y))}</td></tr>`
-    )
-    .join('');
-  const html =
-    `<caption>${escape(t('inv.plot.tableCaption', { title: spec.title || '' }))}</caption>` +
-    `<thead><tr>${head.map(h => `<th scope="col">${prose(h)}</th>`).join('')}</tr></thead>` +
-    `<tbody>${body}</tbody>`;
-  if (table.innerHTML !== html) table.innerHTML = html;
-  wrap.hidden = false;
+let pointing = null;
+let pointAt = null;
+
+/** Point at the step's object, or stop pointing; the ring's code is fetched on use. */
+export function point(step, host) {
+  pointAt = step.point ?? null;
+  if (!pointAt) return pointing?.stop();
+  (pointing
+    ? Promise.resolve(pointing)
+    : import('./pointing.js').then(m => (pointing = m))
+  )
+    .then(m => pointAt === step.point && m.start(pointAt, host))
+    .catch(() => {});
 }
 
-export function drawPlot(step, vals, { canvas, els, transformed, log }) {
-  if (!canvas || !step.plot) return;
-  const spec = step.plot;
-  let pts;
-  try {
-    pts = (spec.points(vals) || []).filter(
-      p => Number.isFinite(p.x) && Number.isFinite(p.y)
-    );
-  } catch {
-    pts = [];
-  }
-  const transform = transformed && spec.transform ? spec.transform : null;
-  let shown = transform ? pts.map(transform.map) : pts;
-  // Log axes: a linear plot crushes Mercury to Neptune into a corner; a power
-  // law is still a straight line on log-log.
-  const useLog = log && shown.every(p => p.x > 0 && p.y > 0);
-  if (useLog) {
-    shown = shown.map(p => ({
-      x: Math.log10(p.x),
-      y: Math.log10(p.y),
-      label: p.label,
-    }));
-  }
-
-  // The points as numbers first, for a screen reader or a reader who cannot
-  // tell colors apart; built from `shown`, so the table says what the picture does.
-  renderPlotTable(els, spec, shown, { transform, useLog });
-  canvas.setAttribute(
-    'aria-label',
-    t('inv.plot.canvasLabel', {
-      title: String(spec.title || '').replace(/<[^>]*>/g, ''),
-      n: shown.length,
-    })
-  );
-
-  const css = getComputedStyle(document.documentElement);
-  const token = (name, fallback) =>
-    css.getPropertyValue(name).trim() || fallback;
-  const ink = token('--text-primary', '#e9edf7');
-  const muted = token('--text-muted', '#8a8f9e');
-  const grid = token('--border-subtle', '#2a2f3d');
-  const accent = token('--accent', '#38bdf8');
-
-  const dpr = Math.min(window.devicePixelRatio || 1, 2);
-  const w = canvas.clientWidth || 320;
-  const h = spec.height || 260;
-  canvas.width = w * dpr;
-  canvas.height = h * dpr;
-  canvas.style.height = `${h}px`;
-  const ctx = canvas.getContext('2d');
-  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-  ctx.clearRect(0, 0, w, h);
-
-  const padL = 46;
-  const padB = 30;
-  const padT = 12;
-  const padR = 10;
-  const plotW = Math.max(10, w - padL - padR);
-  const plotH = Math.max(10, h - padT - padB);
-
-  const xs = shown.map(p => p.x);
-  const ys = shown.map(p => p.y);
-  // Always include the origin: the relation is anchored there.
-  const sx = useLog
-    ? niceScale(Math.min(...xs), Math.max(...xs))
-    : niceScale(Math.min(0, ...xs), Math.max(0, ...xs, 1));
-  const sy = useLog
-    ? niceScale(Math.min(...ys), Math.max(...ys))
-    : niceScale(Math.min(0, ...ys), Math.max(0, ...ys, 1));
-  const X = v => padL + ((v - sx.lo) / (sx.hi - sx.lo)) * plotW;
-  const Y = v => padT + plotH - ((v - sy.lo) / (sy.hi - sy.lo)) * plotH;
-
-  // Grid and ticks
-  ctx.font = '10px ui-monospace, SFMono-Regular, Menlo, Consolas, monospace';
-  ctx.strokeStyle = grid;
-  ctx.lineWidth = 1;
-  ctx.fillStyle = muted;
-  ctx.textAlign = 'right';
-  ctx.textBaseline = 'middle';
-  for (let v = sy.lo; v <= sy.hi + 1e-9; v += sy.step) {
-    const y = Y(v);
-    ctx.beginPath();
-    ctx.moveTo(padL, y);
-    ctx.lineTo(padL + plotW, y);
-    ctx.stroke();
-    ctx.fillText(tick(v), padL - 6, y);
-  }
-  ctx.textAlign = 'center';
-  ctx.textBaseline = 'top';
-  for (let v = sx.lo; v <= sx.hi + 1e-9; v += sx.step) {
-    const x = X(v);
-    ctx.beginPath();
-    ctx.moveTo(x, padT);
-    ctx.lineTo(x, padT + plotH);
-    ctx.stroke();
-    ctx.fillText(tick(v), x, padT + plotH + 6);
-  }
-
-  // Axis labels
-  ctx.fillStyle = muted;
-  ctx.textAlign = 'center';
-  const xLab = transform ? transform.xLabel : spec.xLabel;
-  const yLab = transform ? transform.yLabel : spec.yLabel;
-  ctx.fillText(useLog ? `log10( ${xLab} )` : xLab, padL + plotW / 2, h - 11);
-  ctx.save();
-  ctx.translate(11, padT + plotH / 2);
-  ctx.rotate(-Math.PI / 2);
-  ctx.textBaseline = 'middle';
-  ctx.fillText(useLog ? `log10( ${yLab} )` : yLab, 0, 0);
-  ctx.restore();
-
-  // Fitted line, only in the transformed view where straightness is the claim
-  if ((transform || useLog) && shown.length >= 2) {
-    const slope = useLog ? logSlope(shown) : fitSlope(shown);
-    if (slope !== null) {
-      ctx.strokeStyle = accent;
-      ctx.globalAlpha = 0.5;
-      ctx.setLineDash([4, 3]);
-      ctx.beginPath();
-      if (useLog) {
-        // y = slope*x + intercept in log space.
-        const mx = shown.reduce((t, p) => t + p.x, 0) / shown.length;
-        const my = shown.reduce((t, p) => t + p.y, 0) / shown.length;
-        const b0 = my - slope * mx;
-        ctx.moveTo(X(sx.lo), Y(slope * sx.lo + b0));
-        ctx.lineTo(X(sx.hi), Y(slope * sx.hi + b0));
-      } else {
-        ctx.moveTo(X(sx.lo), Y(slope * sx.lo));
-        ctx.lineTo(X(sx.hi), Y(slope * sx.hi));
-      }
-      ctx.stroke();
-      ctx.setLineDash([]);
-      ctx.globalAlpha = 1;
-      ctx.fillStyle = accent;
-      ctx.textAlign = 'left';
-      ctx.textBaseline = 'top';
-      ctx.fillText(`slope ${slope.toFixed(3)}`, padL + 6, padT + 4);
-    }
-  }
-
-  // Points
-  for (const p of shown) {
-    const x = X(p.x);
-    const y = Y(p.y);
-    ctx.fillStyle = accent;
-    ctx.beginPath();
-    ctx.arc(x, y, 4, 0, Math.PI * 2);
-    ctx.fill();
-    if (p.label) {
-      ctx.fillStyle = ink;
-      // Flip the label left when it would run off the right edge.
-      const lw = ctx.measureText(p.label).width;
-      const flip = x + 7 + lw > padL + plotW;
-      ctx.textAlign = flip ? 'right' : 'left';
-      ctx.textBaseline = y - 12 < padT ? 'top' : 'bottom';
-      ctx.fillText(
-        p.label,
-        flip ? x - 7 : x + 7,
-        ctx.textBaseline === 'top' ? y + 8 : y - 5
-      );
-    }
-  }
-
-  if (!shown.length) {
-    ctx.fillStyle = muted;
-    ctx.textAlign = 'center';
-    ctx.textBaseline = 'middle';
-    ctx.fillText(t('inv.plot.placeholder'), padL + plotW / 2, padT + plotH / 2);
-  }
-}
+/** The scene's selection changed: the plot follows. */
+export const syncSelection = () => plotView?.sync();
 
 /** Draw an ellipse with its anatomy labeled, at a chosen eccentricity. */
 export function drawEllipse(canvas, e) {
