@@ -490,7 +490,7 @@ npm run e2e:report                # open the last HTML report
 ```
 
 The suite is <!--fact:e2eTests-->4103<!--/fact--> tests
-in <!--fact:e2eFiles-->248<!--/fact--> files and takes several minutes in
+in <!--fact:e2eFiles-->251<!--/fact--> files and takes several minutes in
 Chromium.
 
 Some notes on how it is put together, because two of the choices are not
