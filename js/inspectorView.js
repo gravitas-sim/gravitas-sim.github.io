@@ -79,12 +79,14 @@ import {
   frameState,
 } from './referenceFrame.js';
 import { t } from './i18n/index.js';
-import { lightingNotes } from './bodyDraw.js';
 import { formatSpeed, formatDistance } from './units.js';
 import { state, SETTINGS, current_scenario_name, command } from './appState.js';
 
 const markWorldTouched = command('markWorldTouched');
 const computeAreaSweep = command('computeAreaSweep');
+// From js/bodyDraw.js through the bus: importing it here would split the
+// drawing modules out of the start-up chunk into one of their own.
+const lightingNotes = command('lightingNotes');
 
 /**
  * Check whether an object is still part of the running simulation.

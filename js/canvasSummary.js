@@ -28,7 +28,7 @@
 // simulation legible, which is what most of the interface's controls act on.
 // =============================================================================
 
-import { state, current_scenario_name } from './appState.js';
+import { state, current_scenario_name, registerCommands } from './appState.js';
 import {
   planets,
   gas_giants,
@@ -42,6 +42,10 @@ import {
 } from './physics.js';
 import { t } from './i18n/index.js';
 import { lightingNotes } from './bodyDraw.js';
+
+// For the inspector's Appearance disclosure, which loads lazily and must not
+// import the drawing modules itself (js/inspectorView.js says why).
+registerCommands({ lightingNotes });
 import { scenarioTitle } from './i18n/scenario.js';
 
 /** A scenario id, as opposed to 'None', the sentinel for a hand-built world. */

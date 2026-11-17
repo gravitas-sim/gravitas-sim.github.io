@@ -44,7 +44,6 @@ import {
   GAS_GIANT_TO_STAR_THRESHOLD,
   JUPITER_MASS_UNIT,
 } from './physics.js';
-import { dominantPrimary } from './orbital.js';
 
 // --- What every drawer shares -------------------------------------------------
 
@@ -199,7 +198,15 @@ const lightingFor = body => {
   for (const c of source ? [...planets, ...gas_giants] : []) {
     if (c === body || c.alive === false || !(c.mass > body.mass)) continue;
     const d = Math.hypot(c.pos.x - body.pos.x, c.pos.y - body.pos.y);
-    const host = d < nearest && dominantPrimary(c, stars);
+    // The host: the star pulling on c hardest (js/orbital.js's rule, inlined
+    // so start-up does not fetch that module's chunk).
+    let host = null;
+    let pull = 0;
+    for (const st of d < nearest ? stars : []) {
+      const q =
+        st.mass / ((st.pos.x - c.pos.x) ** 2 + (st.pos.y - c.pos.y) ** 2);
+      if (q > pull) [host, pull] = [st, q];
+    }
     if (!host) continue;
     const D = Math.hypot(host.pos.x - c.pos.x, host.pos.y - c.pos.y);
     if (d < D * Math.cbrt(c.mass / (3 * host.mass)))
