@@ -282,6 +282,13 @@ export const SETTING_ITEMS = Object.freeze([
     type: 'bool',
   },
   {
+    section: 'performance',
+    labelId: 'settings.label.bodyLabels',
+    key: 'body_labels',
+    type: 'option',
+    options: ['all', 'bound', 'none'],
+  },
+  {
     section: 'visuals',
     labelId: 'settings.label.showElapsedTime',
     key: 'show_elapsed_time',
