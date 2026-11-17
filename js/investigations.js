@@ -1,19 +1,7 @@
-// =============================================================================
-// Investigations: the guided-lesson engine and its panel
-// -----------------------------------------------------------------------------
-// Turns the lesson descriptions in data/investigations.js into a walkthrough a
-// student can work through beside a live simulation, and collects what they
-// write down.
-//
-// Two deliberate choices about assessment. Nothing blocks on a correct answer:
-// a student stuck on step 6 should still reach the end; answers are checked and
-// shown, attempts are counted and go in the report. Predictions are recorded
-// before the answer is revealed and never marked wrong: their value is the
-// commitment, and grading them would teach students to skip ahead and look.
-//
-// Progress lives in localStorage, because the lesson outlives any one page load
-//: a rebuild wipes the simulation, and a student will close the tab.
-// =============================================================================
+// Investigations: the guided-lesson engine and its panel. Turns the lessons in
+// data/investigations.js into a walkthrough beside the live simulation. Nothing
+// blocks on a correct answer, and predictions are recorded, never marked wrong.
+// Progress lives in localStorage; a rebuild wipes the simulation, not the lesson.
 
 import {
   bindPersistence,
@@ -26,6 +14,7 @@ import {
   load,
   parseFieldNumber,
   progressFor,
+  fieldModule,
   renderProgressNotice,
   renderSaveStatus,
   save,
@@ -136,7 +125,7 @@ import { normalizeSeed, formatSeed } from './rng.js';
 // every edge in it was lazy, a cycle that exists only because of a convenience
 // re-export is not one worth keeping.
 import { toast, announce, loadFailed } from './notify.js';
-import { setEvidenceContext } from './widgetRuntime.js';
+import { captureToNotebook, setEvidenceContext } from './widgetRuntime.js';
 // Lives in its own module so the instructor answer keys, which are generated
 // in Node, can grade with the identical function this page grades with.
 import { checkAnswer } from './answerCheck.js';
@@ -872,7 +861,13 @@ function validateStep(step, id) {
     return planModule?.planVerdict(step, fieldValues(step, id)) ?? null;
   if (!step.validate) return null;
   try {
-    return step.validate(fieldValues(step, id), probeContext()) || null;
+    return (
+      step.validate(
+        fieldValues(step, id),
+        probeContext(),
+        slots.field?.readings(responses, id, step)
+      ) || null
+    );
   } catch (err) {
     console.warn(err);
     return null;
@@ -885,9 +880,15 @@ let figures = null;
 /** Fetch the plot, ellipse and import code the steps need. @returns {?Promise} */
 const loadSeams = steps =>
   !figures &&
-  steps.some(s => s.plot || s.type === 'ellipse' || s.importFromSelection)
-    ? import('./investigations/figures.js').then(
-        m => (slots.field = figures = m)
+  steps.some(
+    s =>
+      s.plot ||
+      s.type === 'ellipse' ||
+      s.importFromSelection ||
+      s.fields?.some(f => f.source)
+  )
+    ? import('./investigations/figures.js').then(m =>
+        fieldModule((figures = m))
       )
     : null;
 
@@ -1883,13 +1884,9 @@ function renderProbe() {
     }
   }
   // A live instrument whose subject is the scene has to notice the reader
-  // choosing a different body. It is repainted on a control change and on a
-  // stage rebuild, and neither of those happens when somebody clicks a star -
-  // so the H-R diagram sat where the sliders had left it while the reader
-  // clicked star after star in front of it, and the comparison card marked
-  // nothing. Guarded on the selection actually changing rather than repainted
-  // every tick: a widget that redraws four times a second for no reason is
-  // the other way to get this wrong.
+  // choosing a different body (neither a control change nor a stage rebuild
+  // happens when somebody clicks a star), but repaint only when the selection
+  // actually changes, not every tick.
   const chosen = state.selectedObject?.object?.id ?? null;
   if (chosen !== lastProbeSelection) {
     lastProbeSelection = chosen;
@@ -1958,18 +1955,31 @@ function renderProbe() {
   }
 }
 
-/** Copy the selected object's measurements into the next empty row. */
-const importSelection = () =>
-  slots.field?.importSelection({
-    step: currentStep(),
-    id: stepId(stepIndex),
-    responses,
-    recordAnswer,
-    probeContext,
-    body: els.body,
-    save,
-    renderStep,
-  });
+/** Take a reading, or copy the selected object's measurements into the next empty row. */
+const importSelection = req =>
+  slots.field?.take(
+    {
+      step: currentStep(),
+      id: stepId(stepIndex),
+      responses,
+      probeContext,
+      body: els.body,
+      save,
+      renderStep,
+      capture: captureToNotebook,
+      tool: step => {
+        const w = step.tool && getWidget(step.tool.id);
+        const ctx = w?.live ? probeContext() : undefined;
+        return (
+          w && {
+            values: toolValues,
+            rows: w.readout(toolValues, ctx, step.tool),
+          }
+        );
+      },
+    },
+    req
+  );
 
 // --- Navigation ---------------------------------------------------------------
 
@@ -2303,17 +2313,7 @@ export async function openInvestigation(id, opts = {}) {
     paused: state.paused,
     zoom: state.zoom,
     pan: state.pan ? { ...state.pan } : null,
-    // The whole world, in the format share links and the experiment bench
-    // already use. A lesson that stages its own scene tears the sandbox down
-    // to build it, and until now that was simply the end of whatever the
-    // reader had made: they came back to an empty sky or to a scenario they
-    // never chose. `forExperiment` carries the clock and the observing context
-    // as well, which is what makes the restored world the same world rather
-    // than a fresh copy of its scenario.
-    //
-    // Captured here, inside enterLessonScope, so it is captured exactly once:
-    // the twenty step changes that follow cannot overwrite it with a world the
-    // lesson itself built.
+    // The whole world, in the share-link format, captured once here.
     sandbox: (() => {
       try {
         return captureShareState({
@@ -2418,15 +2418,9 @@ export function closeInvestigation() {
   if (els.ellipsePanel) els.ellipsePanel.hidden = true;
   stopToolLoop();
   releaseLessonAudio();
-  // Hand back what the lesson borrowed, and - the part that matters most -
-  // give every model-owned body back to the integrator. A body still flagged
-  // when the lesson closes is a body that never moves again.
-  //
-  // The sandbox comes back (bodies, settings, clock and observing context, from
-  // the share payload the experiment bench uses): a lesson that stages its own
-  // scene destroyed the reader's work, and an empty sky threw it away. The
-  // camera does not, unless it came back with the sandbox: a reader who panned
-  // and zoomed during a lesson meant to.
+  // Hand back what the lesson borrowed: every model-owned body to the
+  // integrator (a flagged body never moves again) and the sandbox, with the
+  // camera unless the reader moved it meanwhile.
   releaseHold();
   const saved = Object.fromEntries(leaveLessonScope());
   if ('paused' in saved) state.paused = Boolean(saved.paused);

@@ -309,9 +309,10 @@ export function watchForNotebook() {
  * evidence is, and the bridge decides nothing except when to load.
  *
  * @param {Function} make - (capture, provenance) => entry|null
+ * @param {{quiet?: boolean}} [opts] - `quiet` keeps the entry and leaves the panel closed
  * @returns {Promise<boolean>} Whether anything was captured
  */
-export function captureToNotebook(make) {
+export function captureToNotebook(make, opts = {}) {
   // Deliberately not an `async function`. Everything above the first await
   // runs in the caller's own task, which is the click's task, and the
   // provenance is read there - before the notebook chunk is fetched, before
@@ -327,7 +328,8 @@ export function captureToNotebook(make) {
     const { panel, capture } = await ensureNotebook();
     const entry = capture.withContext(context, () => make(capture, provenance));
     if (!entry) return false;
-    panel.offerDraft(entry);
+    if (opts.quiet) panel.keepEntry(entry);
+    else panel.offerDraft(entry);
     return true;
   })();
 }

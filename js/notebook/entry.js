@@ -122,6 +122,8 @@ export const SOURCE = Object.freeze({
   // and the colour term with their uncertainties and the calibrated magnitudes, kept as their envelope
   // (js/photcalKeep.js, js/kernels/detector/photcal.js).
   PHOTOMETRIC_CALIBRATION: 'photometric-calibration',
+  // A reading a student took in a lesson (js/notebook/reading.js).
+  LESSON_READING: 'lesson-reading',
 });
 
 /** The sources this build can capture from. */
@@ -151,6 +153,7 @@ export const SOURCES = [
   SOURCE.IMAGE_SEQUENCE,
   SOURCE.IMAGE_SERIES,
   SOURCE.PHOTOMETRIC_CALIBRATION,
+  SOURCE.LESSON_READING,
 ];
 
 /** How long a student's prose may be, per field. */

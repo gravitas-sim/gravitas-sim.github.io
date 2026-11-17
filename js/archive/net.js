@@ -5,34 +5,6 @@
 // someone else's server for data while a reader watches. A request to another
 // origin can fail in more ways than a request to this site, and the reader is
 // told which:
-//
-//   blocked      the browser refused it: the service sends no CORS header, or
-//                the network is down. A page CANNOT tell these apart - both
-//                reject with the same TypeError, by design - so the message
-//                names both.
-//   timeout      no answer within the limit
-//   rateLimited  HTTP 429, with the Retry-After the service gave - if it
-//                exposes it: a page on another origin sees only the CORS-
-//                safelisted headers, and Retry-After is not one, so without
-//                Access-Control-Expose-Headers it reads as null
-//   unavailable  HTTP 5xx
-//   refused      any other 4xx
-//   tooLarge     the body passed the byte limit, counted as it streamed:
-//                VizieR's TAP service sends no Content-Length, so a limit
-//                that read only the header would pass an answer of any size
-//   wrongType    not the content type asked for
-//   offList      the request, or the place a redirect ended, is not on the
-//                list of services this page may talk to
-//   canceled    the reader pressed Cancel
-//
-// The list is checked before the request and again where it ended: fetch
-// follows a redirect without asking, and a service that moved, or was made to
-// send a reader somewhere else, must not become a source by accident. The
-// page's Content-Security-Policy (observatory/index.html) holds the same list
-// a second time, in the browser, where this code cannot be argued out of it.
-//
-// No cookies and no referrer go with any request. A Gravitas URL can carry an
-// assignment code, and none of it is CDS's business.
 // =============================================================================
 
 export class ArchiveFetchError extends Error {

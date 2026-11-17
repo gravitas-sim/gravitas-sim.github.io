@@ -1,22 +1,8 @@
-// =============================================================================
-// Turning an instrument's output into a piece of evidence
-// -----------------------------------------------------------------------------
-// One function per source. Each takes what the instrument already computes -
-// no new physics, no re-derivation - and decides three things:
-//
-//   which numbers are worth keeping, with their units;
-//   which of them are measured, which analytic, which revealed truth;
-//   what the reading is not evidence for, offered as a starting limitation.
-//
-// That last one is a deliberate piece of teaching. A student asked to write
-// limitations from a blank box writes "none". Offered "K gives M sin i, not a
-// mass" as editable text, they either keep it, sharpen it, or delete it - and
-// all three are better than a blank.
-//
-// Pure. Every argument is data the caller has already read out of the live
-// world, so these can be tested against fixed inputs and cannot themselves
-// reach for a body that has since been rebuilt.
-// =============================================================================
+// Turning an instrument's output into a piece of evidence: one function per
+// source, taking what the instrument already computes (no new physics) and
+// deciding which numbers are kept, which are measured, analytic or revealed
+// truth, and what the reading is not evidence for. Pure: every argument is data
+// the caller has already read out of the live world.
 
 import { t as translate } from '../i18n/index.js';
 import {
@@ -64,16 +50,8 @@ function recordedProvenance(rec, report) {
   put('scenario', rec.scenario);
   put('target', rec.target);
   put('seed', rec.seed);
-  // Assigned rather than put(), and the difference is the whole point.
-  //
-  // put() leaves a key alone when the recording does not carry it, and the
-  // live world's value then survives from liveProvenance() into the entry. For
-  // a recording that is never right: these two count how much the world had
-  // been rebuilt and interfered with WHEN THE SAMPLES WERE TAKEN, and the
-  // present's answer is a different fact wearing the same name. A recording
-  // made before three burns was being filed as though it had been made after
-  // them. Old recordings that cannot say leave it null, which is what this
-  // codebase means by unknown.
+  // Assigned, not put(): a recording that cannot say how rebuilt the world was
+  // when its samples were taken leaves null (unknown), never the present's value.
   out.worldGeneration = rec.worldGeneration ?? null;
   out.interventionEpoch = rec.interventionEpoch ?? null;
   // The direction the star was watched from when the samples were taken, not
@@ -118,16 +96,9 @@ function recordedProvenance(rec, report) {
     out.simSpeed = null;
   }
 
-  // The reference frame is the live world's, not the recording's, and it must
-  // not masquerade as a historical fact.
-  //
-  // A recording carries the observer geometry it was taken under - that IS a
-  // fact about the measurements. It does not carry the reference frame, which
-  // is a display choice made now: somebody analyzing an old recording while
-  // centered on a different body would otherwise have "barycenter:7" written
-  // into the entry as though the samples had been taken in it. So the live
-  // frame is relabeled as what it is, and the recording's own frame is
-  // recorded as unknown rather than filled in from the present.
+  // The reference frame is a display choice made now, not a fact about the
+  // recording: the live frame is relabeled as such, the recording's own recorded
+  // as unknown rather than filled in from the present.
   if (rec.referenceFrame !== undefined && rec.referenceFrame !== null) {
     put('referenceFrame', rec.referenceFrame);
   } else {
@@ -380,18 +351,8 @@ export function fromRvFit({ analysis, report, provenance = {} }) {
     title: t('nb.rv.title', { target: rec.target || t('nb.unknownTarget') }),
     quantities,
     figure: fig,
-    // The RECORDING's provenance wins; the live world only fills the gaps.
-    //
-    // This was the wrong way round and the consequence was silent corruption:
-    // a student who recorded a run, switched scenario and then saved the fit
-    // got an entry stamped with the scenario, world generation and observing
-    // geometry of the world they were looking at rather than the one the
-    // measurements came from. The reading was right and its provenance
-    // described a different star.
-    //
-    // What the live world still supplies is what a recording genuinely does
-    // not carry: the build, the rendering tier, the reference frame. Not the
-    // clock - see recordedProvenance().
+    // The RECORDING's provenance wins; the live world only fills the gaps (the
+    // build, the rendering tier, the reference frame), not the clock.
     provenance: provenanceOf({
       ...provenance,
       ...recordedProvenance(rec, report),
@@ -2077,5 +2038,39 @@ export function fromStellarObservation({ snapshot, provenance = {} }) {
       ],
     }),
     prose: { limitations: limitations.join('\n') },
+  });
+}
+
+/**
+ * A reading a student took in an investigation, as printed (js/investigations/figures.js).
+ * @param {object} spec - label, value and text (the number and its printed form),
+ *   unit, src (how it was taken), uncertainty (an interval's standard error), provenance
+ * @returns {object} A notebook entry
+ */
+export function fromReading({
+  label,
+  value,
+  text,
+  unit,
+  src,
+  uncertainty,
+  provenance = {},
+}) {
+  return buildEntry({
+    source: SOURCE.LESSON_READING,
+    title: label,
+    quantities: [
+      quantity({
+        label,
+        value,
+        unit,
+        uncertainty,
+        note: t('nb.reading.note', { text }),
+      }),
+    ],
+    provenance: provenanceOf({
+      ...provenance,
+      flags: ['simulated', src.k === 's' ? 'interval' : 'read-off'],
+    }),
   });
 }
