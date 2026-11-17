@@ -764,7 +764,6 @@ export const ES_DEFERRED = {
   'inv.run.all':
     'Ya están todas las ejecuciones. Borra las ejecuciones para empezar de nuevo.',
   'inv.run.clear': 'Borrar ejecuciones',
-  'inv.run.cleared': 'Ejecuciones borradas.',
   'inv.run.cancel': 'Cancelar ejecución',
   'inv.run.empty': 'Aún no hay ejecuciones.',
   'inv.run.caption': 'Ejecuciones: {param}, y lo que leyó cada una',

@@ -1,43 +1,28 @@
-// =============================================================================
-// Controlled runs inside a lesson
-// -----------------------------------------------------------------------------
-// A step that declares `variation: {param, values, runFor, read, label}` lets a
-// student run the lesson's own scene, change the one parameter, run it again,
-// and read the declared rows side by side. Fetched only where a step declares
-// one (js/investigations.js loadSeams).
+// Controlled runs (a step's `variation: {param, values, runFor, read, label}`):
+// the student runs the lesson's own scene, changes the one parameter, runs it
+// again and reads the declared rows side by side. Fetched only where a step
+// declares one (js/investigations.js loadSeams); imports nothing, because a lazy
+// module's imports move shared modules into chunks of their own on every lesson
+// route. Words and helpers arrive by setKit (stepView.js runsModule), the world's
+// functions with the host (`h.runs.world`).
 //
-// One run: the whole world is captured through the lesson's own entry-and-exit
-// authority (`captureShareState` kind 'full', camera, experiment extras), the
-// scene is rebuilt through the step's setup or stage with the parameter set, the
-// integration step is pinned (`setFixedStep`, the experiment bench's call) so a
-// frame is the same amount of simulated time at 30 and at 144 fps, the clock
-// runs for a fixed number of frames, the declared probe rows are read from the
-// varied world, the pin is lifted and the captured state is put back with
-// `applyShareState`. Leaving the step, closing the lesson or pressing Cancel
-// puts it back the same way.
-//
-// Not restored, and why a later reading does not depend on it: trails (drawn
-// history, not state), the timeline buffer (a recording of frames, rebuilt by
-// the next ones) and the random-number position (physics draws none after the
-// world is built).
-// =============================================================================
+// A run captures the full state (the lesson's own entry-and-exit authority),
+// rebuilds the step's setup or stage with the parameter set, pins the step
+// (`setFixedStep`, the bench's call: a frame is the same simulated time at any
+// frame rate), runs a fixed number of frames, reads the probe rows, lifts the pin
+// and applies the captured state. Cancel, leaving the step and closing the
+// lesson do the same. Not restored (no later reading depends on them): trails,
+// the timeline buffer, the random-number position.
 
-import { command, SETTINGS, state } from '../appState.js';
-import { escapeHtml as escape } from '../lessonMarkup.js';
-import { formatNumber } from '../format.js';
-import { t } from '../i18n/index.js';
-import { lessonText } from '../i18n/lesson.js';
-import { announce } from '../notify.js';
-import { DT, getSimulationTime } from '../physics.js';
-import { setFixedStep } from '../render.js';
-import { frameAdvance, STEP_SECONDS } from '../timestep.js';
-import { timeUnitSeconds } from '../units.js';
-import { allBodies, selectBody } from '../lessonScene.js';
-import { adoptStage, applyStage, stageMemo } from './stageGate.js';
-import { predictionState } from './held.js';
-
-const applyShareState = command('applyShareState');
-const captureShareState = command('captureShareState');
+let K = {};
+export const setKit = k => (K = k);
+const escape = x => K.escape(x);
+const t = (...a) => K.t(...a);
+const formatNumber = x => K.formatNumber(x);
+const announce = m => K.announce(m);
+const predictionState = (...a) => K.predictionState(...a);
+/** The world's functions, from the host. */
+let W = {};
 
 /** The most runs a table holds. */
 export const MAX_RUNS = 4;
@@ -47,8 +32,6 @@ const KINDS = ['starPair', 'system'];
 const OPTIONAL = { system: ['starMassSun'] };
 /** Frames with no clock movement before a run gives up. */
 const STALL = 240;
-
-const keys = ['param', 'values', 'runFor', 'read', 'label'];
 
 /** The scene a step runs in: its own stage or setup, else the nearest earlier one. */
 export function sceneIn(steps, step) {
@@ -72,36 +55,19 @@ export function locate(scene, param) {
   return null;
 }
 
-/**
- * What is wrong with a step's declaration, as sentences for an author.
- * @param {object} step - A step carrying `variation`
- * @param {object} scene - sceneIn() for it
- * @returns {Array<string>} Empty when the declaration can run
- */
-export function variationProblems(step, scene) {
-  const v = step.variation;
-  const bad = [];
-  if (!v || typeof v !== 'object') return ['variation is an object'];
-  for (const k of Object.keys(v))
-    if (!keys.includes(k))
-      bad.push(`variation has no key "${k}" (one parameter only)`);
-  if (typeof v.param !== 'string' || !v.param) bad.push('param names one key');
-  else if (!locate(scene, v.param))
-    bad.push(
-      `param "${v.param}" is not a numeric key of the step's setup.settings or of a starPair or system stage in force`
-    );
-  const vals = v.values;
-  if (!Array.isArray(vals) || vals.length < 2 || vals.length > MAX_RUNS)
-    bad.push(`values lists 2 to ${MAX_RUNS} numbers`);
-  else if (!vals.every(Number.isFinite) || new Set(vals).size !== vals.length)
-    bad.push('values are distinct finite numbers');
-  if (!(v.runFor > 0)) bad.push('runFor is simulated days, above zero');
-  if (!Array.isArray(v.read) || !v.read.length || !v.read.every(Boolean))
-    bad.push('read lists the probe row ids to take');
-  if (typeof v.label !== 'string' || !v.label.trim())
-    bad.push('label names the parameter');
-  return bad;
-}
+/** Whether a declaration can run (tools/authoring/variationRules.mjs says what is wrong). */
+export const usable = (v, scene) =>
+  Boolean(
+    v &&
+    locate(scene, v.param) &&
+    Array.isArray(v.values) &&
+    v.values.length >= 2 &&
+    v.values.length <= MAX_RUNS &&
+    v.values.every(Number.isFinite) &&
+    v.runFor > 0 &&
+    Array.isArray(v.read) &&
+    v.read.length
+  );
 
 /** The scene's stage with `param` set to `value` and no camera fit asked for. */
 const variedStage = (scene, loc, param, value) => ({
@@ -136,8 +102,10 @@ let run = null;
 /** The value index each step has selected, by response-key prefix. */
 const chosen = new Map();
 /** The frame source; tests replace it. */
-let env = { raf: cb => requestAnimationFrame(cb), pin: setFixedStep };
+let env = { raf: cb => requestAnimationFrame(cb), pin: null };
 export const setEnv = e => (env = { ...env, ...e });
+/** Pin the integration step (the bench's call), or lift it with 0. */
+const pin = s => (env.pin || W.setFixedStep)(s);
 
 /** Whether a run is under way. */
 export const running = () => Boolean(run);
@@ -147,27 +115,36 @@ export const running = () => Boolean(run);
  * @returns {object} The memo
  */
 function remember() {
-  const selected = state.selectedObject?.object?.id ?? null;
+  const selected = W.state.selectedObject?.object?.id ?? null;
   return {
-    payload: captureShareState({
+    payload: W.captureShareState({
       kind: 'full',
       includeCamera: true,
       forExperiment: true,
     }),
-    stage: stageMemo(),
+    stage: W.stageMemo(),
     selected,
+    // A planet's surface class: drawn, but not in the share-link body codec.
+    density: W.allBodies().flatMap(b =>
+      b.density === undefined ? [] : [[b.id, b.density]]
+    ),
   };
 }
 
 /** Put the world back as `memo` found it, and bind the step's roles again. */
 function putBack(memo, h, onStage) {
-  env.pin(0);
-  applyShareState(JSON.parse(JSON.stringify(memo.payload)));
-  if (onStage) adoptStage(memo.stage, allBodies());
+  pin(0);
+  W.applyShareState(JSON.parse(JSON.stringify(memo.payload)));
+  if (onStage) W.adoptStage(memo.stage, W.allBodies());
   else h.runs.bind();
   h.runs.applyLocks();
-  const body = allBodies().find(b => b.id === memo.selected);
-  if (body) selectBody(body);
+  const all = W.allBodies();
+  for (const [id, density] of memo.density) {
+    const b = all.find(x => x.id === id);
+    if (b) b.density = density;
+  }
+  const body = all.find(b => b.id === memo.selected);
+  if (body) W.selectBody(body);
 }
 
 /**
@@ -190,14 +167,14 @@ export function release() {
 
 /** Let the clock run for `frames` pinned frames; false when over or stalled. */
 function advance(r, frames) {
-  const dt = frameAdvance(STEP_SECONDS, SETTINGS.sim_speed, DT);
-  const start = getSimulationTime();
+  const dt = W.frameSeconds();
+  const start = W.getSimulationTime();
   let last = start;
   let idle = 0;
   return new Promise(resolve => {
     const tick = () => {
       if (r.over) return resolve(false);
-      const now = getSimulationTime();
+      const now = W.getSimulationTime();
       if (now - start >= (frames - 0.5) * dt) return resolve(true);
       idle = now === last ? idle + 1 : 0;
       last = now;
@@ -212,11 +189,7 @@ function advance(r, frames) {
 export const framesFor = days =>
   Math.max(
     1,
-    Math.round(
-      (days * 86400) /
-        timeUnitSeconds() /
-        frameAdvance(STEP_SECONDS, SETTINGS.sim_speed, DT)
-    )
+    Math.round((days * 86400) / W.timeUnitSeconds() / W.frameSeconds())
   );
 
 /**
@@ -225,11 +198,12 @@ export const framesFor = days =>
  * either way.
  */
 export async function start(h, index) {
+  W = h.runs.world;
   const step = h.currentStep();
   const v = step.variation;
   const scene = sceneIn(h.steps(), step);
   const loc = locate(scene, v.param);
-  if (run || !loc || variationProblems(step, scene).length) return null;
+  if (run || !loc || !usable(v, scene)) return null;
   if (loc.kind === 'stage' && !h.runs.stageUp()) return null;
   const id = h.stepId();
   const r = {
@@ -244,9 +218,9 @@ export async function start(h, index) {
   let record = null;
   try {
     if (r.onStage)
-      applyStage(variedStage(scene, loc, v.param, value), { force: true });
+      W.applyStage(variedStage(scene, loc, v.param, value), { force: true });
     else {
-      applyShareState(
+      W.applyShareState(
         h.runs.payloadFromSetup({
           ...scene.setup,
           settings: { ...scene.setup.settings, [v.param]: value },
@@ -256,9 +230,11 @@ export async function start(h, index) {
       h.runs.applyLocks();
       h.runs.bind();
     }
-    state.paused = false;
+    // Every run starts its own clock at zero, and runs unpaused.
+    W.setSimulationTime(0);
+    W.state.paused = false;
     // The pin is what makes the result the same at any frame rate.
-    env.pin(STEP_SECONDS);
+    pin(W.STEP_SECONDS);
     h.paint();
     const frames = framesFor(v.runFor);
     if (await advance(r, frames)) {
@@ -367,6 +343,7 @@ export const markup = (step, c) =>
 
 /** Wire the open step's section: change, run, cancel, clear. */
 export function mount(h) {
+  W = h.runs.world;
   const step = h.currentStep();
   const v = step?.variation;
   const secEl = () => h.els().body.querySelector('[data-runs]');
@@ -425,7 +402,7 @@ export function mount(h) {
       chosen.delete(id);
       h.save();
       paint();
-      announce(t('inv.run.cleared'));
+      announce(t('inv.run.empty'));
     });
   };
   wire(secEl());
@@ -434,6 +411,6 @@ export function mount(h) {
 /** Mark values as lesson text once, so a probe's printed value translates. */
 export const printed = row => ({
   ...row,
-  label: lessonText(row.label),
-  value: lessonText(String(row.value)),
+  label: K.lessonText(row.label),
+  value: K.lessonText(String(row.value)),
 });

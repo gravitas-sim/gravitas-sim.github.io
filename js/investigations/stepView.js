@@ -73,6 +73,19 @@ export const slots = {
   feedback: null,
 };
 
+/** Install the runs slot's module with the words and helpers it needs. */
+export function runsModule(m) {
+  m.setKit({
+    announce,
+    escape,
+    formatNumber,
+    lessonText,
+    predictionState,
+    t,
+  });
+  return (slots.runs = m);
+}
+
 /** Install the field slot's module with the engine functions it needs. */
 export function fieldModule(m) {
   m.setKit({

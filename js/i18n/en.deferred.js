@@ -762,7 +762,6 @@ export const EN_DEFERRED = {
   'inv.run.same': 'Change {param} before the next run.',
   'inv.run.all': 'Every run is made. Clear the runs to start again.',
   'inv.run.clear': 'Clear runs',
-  'inv.run.cleared': 'Runs cleared.',
   'inv.run.cancel': 'Cancel run',
   'inv.run.empty': 'No runs yet.',
   'inv.run.caption': 'Runs: {param}, and what each run read',
