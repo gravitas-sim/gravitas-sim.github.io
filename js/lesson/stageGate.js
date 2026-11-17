@@ -29,18 +29,13 @@ let stage = null;
 let pending = null;
 let asked = 0;
 
-/**
- * Whether the stage code has arrived, and the kinds a declaration names with it.
- *
- * @param {object} [declared] - The step's `stage` declaration
- * @returns {boolean}
- */
+/** Whether the stage code, and the kinds a declaration names, have arrived. */
 export const stageLoaded = declared =>
   stage !== null && !stage.stageKindsPending(declared);
 
 /**
- * Fetch the stage code, once, and the kinds only some declarations name
- * (js/lessonStageHole.js). Concurrent callers share one import.
+ * Fetch the stage code, once, and the kinds a declaration names. Concurrent
+ * callers share one import.
  *
  * @param {object} [declared] - The step's `stage` declaration
  * @returns {Promise<void>} Rejects with the import's own error

@@ -249,14 +249,10 @@ export function resetStageForTests() {
 /** How much of the population is on the canvas, and of how many. @returns {?object} */
 export const stagedPopulation = () => lastPopulation;
 
-/**
- * The black-hole stage kinds (js/lessonStageHole.js), fetched with the stage by
- * a lesson that declares one: applyStage stays synchronous, and is only called
- * for a declaration once loadStageKinds has resolved for it.
- */
+/** The black-hole stage kinds (js/lessonStageHole.js), fetched by loadStageKinds. */
 let holeKinds = null;
 
-/** What those kinds build through: the canvas emptied, then the world settled. */
+/** What those kinds build through. */
 const family = {
   begin: () => (clearWorld(), staged),
   end(fit) {
@@ -270,15 +266,10 @@ const family = {
 
 const needsHole = stage => Boolean(stage?.hole || stage?.equalMass);
 
-/** Whether a declaration names kinds that have not been fetched yet. @returns {boolean} */
+/** Whether a declaration names kinds not fetched yet. @returns {boolean} */
 export const stageKindsPending = stage => needsHole(stage) && !holeKinds;
 
-/**
- * Fetch the stage kinds a declaration names, once.
- *
- * @param {object} stage - The step's `stage` declaration
- * @returns {Promise<void>} Rejects with the import's own error
- */
+/** Fetch the stage kinds a declaration names, once. @param {object} stage */
 export const loadStageKinds = async stage => {
   if (needsHole(stage)) holeKinds ??= await import('./lessonStageHole.js');
 };

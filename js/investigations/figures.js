@@ -1,14 +1,6 @@
-// =============================================================================
-// What a measure step draws and only some lessons need: the scatter plot, the
-// ellipse explorer and the import row
-// -----------------------------------------------------------------------------
-// Moved out of stepView.js so that only a lesson with a step that declares
-// `plot`, an `ellipse` step or `importFromSelection` fetches them
-// (js/investigations.js loads this when the lesson opens, before the first
-// draw; one module, not three, to hold the request count of the lesson with all
-// of them). Also holds the fits the lab report reads. The import row is what
-// fills the `field` slot of stepView.js today.
-// =============================================================================
+// The scatter plot, the ellipse explorer and the import row of a measure step,
+// fetched when a lesson opens with a step that declares one of them
+// (js/investigations.js, `loadSeams`); one module to hold Kepler's request count.
 
 import { fixed, tickLabel } from '../format.js';
 import { t } from '../i18n/index.js';
@@ -90,9 +82,7 @@ function renderPlotTable(els, spec, points, { transform, useLog } = {}) {
   }
   const xLabel = transform?.xLabel || spec.xLabel || 'x';
   const yLabel = transform?.yLabel || spec.yLabel || 'y';
-  // Log axes plot the logarithm, and saying so is the difference between a
-  // table a reader can check against the picture and one that quietly
-  // disagrees with it.
+  // Log axes plot the logarithm; the table says so, to agree with the picture.
   const head = useLog
     ? [t('inv.plot.point'), `log₁₀(${xLabel})`, `log₁₀(${yLabel})`]
     : [t('inv.plot.point'), xLabel, yLabel];
@@ -128,9 +118,8 @@ export function drawPlot(step, vals, { canvas, els, transformed, log }) {
   }
   const transform = transformed && spec.transform ? spec.transform : null;
   let shown = transform ? pts.map(transform.map) : pts;
-  // Log axes: with Mercury at 0.39 AU and Neptune at 30, a linear plot crushes
-  // the inner planets into the corner. On log-log a power law is still a
-  // straight line, and the spacing becomes readable.
+  // Log axes: a linear plot crushes Mercury to Neptune into a corner; a power
+  // law is still a straight line on log-log.
   const useLog = log && shown.every(p => p.x > 0 && p.y > 0);
   if (useLog) {
     shown = shown.map(p => ({
@@ -140,9 +129,8 @@ export function drawPlot(step, vals, { canvas, els, transformed, log }) {
     }));
   }
 
-  // The same points as numbers, before anything is drawn: a dot's position is
-  // not available to a screen reader or to a reader who cannot tell two colors
-  // apart. Built from `shown`, so the table says what the picture says.
+  // The points as numbers first, for a screen reader or a reader who cannot
+  // tell colors apart; built from `shown`, so the table says what the picture does.
   renderPlotTable(els, spec, shown, { transform, useLog });
   canvas.setAttribute(
     'aria-label',
@@ -179,8 +167,7 @@ export function drawPlot(step, vals, { canvas, els, transformed, log }) {
 
   const xs = shown.map(p => p.x);
   const ys = shown.map(p => p.y);
-  // Always include the origin: the relation is anchored there, and a plot that
-  // starts at the first data point hides how far the trend has to reach.
+  // Always include the origin: the relation is anchored there.
   const sx = useLog
     ? niceScale(Math.min(...xs), Math.max(...xs))
     : niceScale(Math.min(0, ...xs), Math.max(0, ...xs, 1));
@@ -268,8 +255,7 @@ export function drawPlot(step, vals, { canvas, els, transformed, log }) {
     ctx.fill();
     if (p.label) {
       ctx.fillStyle = ink;
-      // Flip the label to the left of the point when it would otherwise run off
-      // the right edge, which is exactly where the outermost planet lands.
+      // Flip the label left when it would run off the right edge.
       const lw = ctx.measureText(p.label).width;
       const flip = x + 7 + lw > padL + plotW;
       ctx.textAlign = flip ? 'right' : 'left';
@@ -320,8 +306,7 @@ export function drawEllipse(canvas, e) {
 
   const cx = w / 2;
   const cy = h / 2 + 6;
-  // Fit the widest case (e -> 0, a circle) inside the canvas with room for
-  // labels, so nothing is ever clipped as the slider moves.
+  // Fit the widest case (a circle) with room for labels: nothing clips.
   const a = Math.min(w * 0.4, (h - 96) / 2, 200);
   const b = a * Math.sqrt(Math.max(0, 1 - e * e));
   const c = a * e;
@@ -438,12 +423,8 @@ export const importRow = step =>
          </div>`;
 
 /**
- * Copy the selected object's measurements into the next empty row.
- *
- * Reading four numbers off a panel and retyping them is where transcription
- * errors come from, and they are indistinguishable in the report from a student
- * who misunderstood the physics. The click still requires them to have chosen
- * the object, which is the part that is actually being assessed.
+ * Copy the selected object's measurements into the next empty row: no
+ * transcription errors, and the click still needs the right object chosen.
  */
 export function importSelection(host) {
   const { step, id, responses, recordAnswer, save, renderStep } = host;
@@ -464,10 +445,7 @@ export function importSelection(host) {
 
   const groups = step.importGroups || [];
 
-  // Refuse a row that is already recorded. Two clicks between one transit and
-  // the next would otherwise stamp the same event twice and hand back a period
-  // of zero, and the same click on the same planet would duplicate a row in a
-  // measurement table.
+  // Refuse a row already recorded: two clicks would stamp one event twice.
   const already = groups.some(g =>
     g.every(
       (fid, i) =>

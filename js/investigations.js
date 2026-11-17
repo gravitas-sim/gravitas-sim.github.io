@@ -879,17 +879,10 @@ function validateStep(step, id) {
   }
 }
 
-// What the lesson's steps declare is fetched when it opens (loadSeams), so the
-// draws and reads below stay synchronous.
+// Fetched when a lesson opens (loadSeams), so draws and reads stay synchronous.
 let figures = null;
 
-/**
- * Fetch the code a lesson's steps need and the rest do not: the plot panel,
- * the ellipse explorer and the import row (one module).
- *
- * @param {Object[]} steps - The lesson's steps, every depth laid in
- * @returns {?Promise<void>} Null when nothing is to be fetched
- */
+/** Fetch the plot, ellipse and import code the steps need. @returns {?Promise} */
 const loadSeams = steps =>
   !figures &&
   steps.some(s => s.plot || s.type === 'ellipse' || s.importFromSelection)
@@ -1965,7 +1958,7 @@ function renderProbe() {
   }
 }
 
-/** Copy the selected object's measurements into the next empty row (js/investigations/figures.js). */
+/** Copy the selected object's measurements into the next empty row. */
 const importSelection = () =>
   slots.field?.importSelection({
     step: currentStep(),

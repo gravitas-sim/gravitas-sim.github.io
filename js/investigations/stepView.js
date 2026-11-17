@@ -5,8 +5,6 @@
 // `c`) in, the panel's markup out as strings. Below it: the saved record's
 // persistence and the answer boxes' listeners. Pure to import (no canvas, no
 // simulation), and folded in here to keep the lesson routes' request count.
-// What only some lessons draw (the figures, the import row) is in lazy modules
-// beside it, reached through `slots` below.
 // =============================================================================
 
 import { formatNumber } from '../format.js';
@@ -61,18 +59,11 @@ export const misconceptionText = missed =>
 export const SHORT_ANSWER_MIN = 40;
 
 /**
- * The five places a lazily loaded module adds to a step, and nothing else:
- * an empty slot is the step as it always was. The lesson engine fills a slot
- * when a lesson opens, from the declaration keys its steps carry
- * (js/investigations.js, `loadSeams`), so what a step draws never waits.
- *
- *   field     importFromSelection (figures.js today); source, take, span
- *   reveal    evidence, estimate
- *   time      time, pauseAt.auto, variation
- *   canvas    canvas
- *   feedback  fields[].misconceptions
- *
- * `point` and `plot.cursor` load with the plot panel and take no slot.
+ * Five places a lazy module adds to a step; an empty slot is the step as it
+ * was. The engine fills one when a lesson opens (`loadSeams`, investigations.js).
+ * field: importFromSelection (figures.js), source, take, span; reveal: evidence,
+ * estimate; time: time, pauseAt.auto, variation; canvas: canvas; feedback:
+ * fields[].misconceptions. `point` and `plot.cursor` load with figures.js.
  */
 export const slots = {
   field: null,
