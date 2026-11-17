@@ -156,14 +156,22 @@ describe('anchors are a contract', () => {
 describe('the contents', () => {
   const nav = doc.getElementById('contents');
 
-  test('is one labelled navigation with the open list and the disclosure', () => {
+  test('is one labelled navigation with the open list and the closed disclosures', () => {
     expect(nav.tagName).toBe('NAV');
     expect(nav.getAttribute('aria-labelledby')).toBe('contents-h');
     expect(nav.querySelector('.doc-toc-wide')).not.toBeNull();
-    const more = nav.querySelector('details.ui-disclosure.doc-toc-narrow');
-    expect(more).not.toBeNull();
-    expect(more.hasAttribute('open')).toBe(false);
-    expect(more.querySelector('summary')).not.toBeNull();
+    const more = [
+      ...nav.querySelectorAll('.doc-toc-narrow details.ui-disclosure'),
+    ];
+    expect(more).toHaveLength(5);
+    for (const d of more) {
+      expect(d.hasAttribute('open')).toBe(false);
+      expect(d.querySelector(':scope > summary')).not.toBeNull();
+      // The count in the summary is the number of entries it holds.
+      expect(words(d.querySelector('summary'), 'en')).toMatch(
+        new RegExp(`\\(${d.querySelectorAll('li').length}\\)$`)
+      );
+    }
   });
 
   test.each(['.doc-toc-wide', '.doc-toc-narrow'])(

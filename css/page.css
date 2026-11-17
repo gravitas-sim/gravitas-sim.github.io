@@ -344,8 +344,7 @@
     columns: 2;
     column-gap: var(--space-6);
   }
-  .doc-toc .doc-toc-wide h3,
-  .doc-toc .doc-toc-narrow h3 {
+  .doc-toc .doc-toc-wide h3 {
     margin: var(--space-4) 0 var(--space-2);
     font-family: var(--font-mono);
     font-size: var(--text-2xs);
@@ -370,13 +369,18 @@
   }
   .doc-toc-narrow {
     display: none;
-    margin-top: var(--space-2);
-    padding: var(--space-2) var(--space-3);
+  }
+  .doc-toc-narrow details {
+    border-top: 1px solid var(--border-subtle);
+    padding: var(--space-1) 0;
   }
   .doc-toc-narrow summary {
     min-height: 44px;
     display: flex;
     align-items: center;
+  }
+  .doc-toc-narrow ul {
+    margin: var(--space-2) 0;
   }
   .doc-main .doc-back {
     margin: var(--space-9) 0 0;
