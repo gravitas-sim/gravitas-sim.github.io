@@ -116,11 +116,11 @@ export const ES = {
   'rail.settings.hint':
     'Abrir el panel completo de ajustes: número de objetos, gravedad, aspecto visual y rendimiento. Los cambios estructurales reinician la simulación; el resto se aplica en directo.',
   'rail.refreshScenario.hint':
-    'Reconstruir este escenario desde su inicio con una semilla aleatoria nueva: los cuerpos que añadiste o cambiaste desaparecen, la cámara vuelve a la vista del escenario, el reloj vuelve a cero y la simulación sigue en marcha. Tus ajustes se conservan.',
+    'Reconstruir este escenario con una semilla nueva: los cuerpos añadidos o cambiados desaparecen y los ajustes vuelven a los del escenario. La cámara vuelve a su vista, el reloj a cero y la simulación corre.',
   'rail.resetAll.hint':
-    'Devolver todos los ajustes a sus valores por defecto y cargar el escenario Agujeros negros binarios con una semilla aleatoria nueva: la cámara vuelve a su vista, el reloj vuelve a cero y la simulación sigue en marcha.',
+    'Devolver todos los ajustes a sus valores por defecto y cargar Agujeros negros binarios con una semilla nueva, con su vista, el reloj a cero y la simulación en marcha.',
   'rail.cleanSim.hint':
-    'Quitar todos los cuerpos para dejar espacio vacío donde construir. Los ajustes, la semilla y el reloj se conservan; la cámara vuelve a 1\u00d7 en el centro, la velocidad vuelve a 1\u00d7 y la simulación sigue en marcha.',
+    'Quitar todos los cuerpos para dejar espacio vacío. Los ajustes, la semilla y el reloj se conservan; la cámara y la velocidad vuelven a 1\u00d7 y la simulación corre.',
 
   // --- Rail: state -----------------------------------------------------------
   'rail.railState.hint': 'Mostrar u ocultar los controles de estado',
@@ -169,7 +169,7 @@ export const ES = {
   'rail.slowDown.hint': 'Reducir la velocidad en 0,5×',
   'rail.speedUp.hint': 'Aumentar la velocidad en 0,5×',
   'rail.resetView.hint':
-    'Centrar la cámara en los cuerpos y ajustar el zoom para que quepan. Los cuerpos, los ajustes, el reloj y la pausa no cambian.',
+    'Centrar la cámara en los cuerpos y ajustar el zoom para que quepan. Los cuerpos, los ajustes, la semilla, el reloj y la pausa no cambian.',
   'rail.shortcuts.hint': 'Atajos de teclado (?)',
 
   // --- Rail: learn -----------------------------------------------------------

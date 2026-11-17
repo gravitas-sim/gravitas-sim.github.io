@@ -172,11 +172,11 @@ export const EN = {
   'rail.settings.hint':
     'Open the full settings panel: object counts, gravity, visuals and performance. Structural changes restart the simulation; the rest apply live.',
   'rail.refreshScenario.hint':
-    'Rebuild this scenario from its start on a new random seed: bodies you added or changed are gone, the camera returns to the scenario view, the clock goes back to zero and the simulation runs. Your settings stay.',
+    'Rebuild this scenario on a new seed: added or changed bodies are gone and the settings return to those the scenario sets. The camera returns to its view, the clock to zero, and the simulation runs.',
   'rail.resetAll.hint':
-    'Return every setting to its default and load the Binary Black Hole scenario on a new random seed: the camera returns to its view, the clock goes back to zero and the simulation runs.',
+    'Return every setting to its default and load Binary Black Hole on a new seed, with its view, the clock at zero and the simulation running.',
   'rail.cleanSim.hint':
-    'Remove every body to leave empty space you can build in. Settings, the seed and the clock stay; the camera returns to 1\u00d7 at the centre, speed goes back to 1\u00d7 and the simulation runs.',
+    'Remove every body to leave empty space. Settings, seed and clock stay; the camera and speed return to 1\u00d7 and the simulation runs.',
   'rail.railState.hint': 'Show or hide the state controls',
   'rail.save.hint':
     'Save the current objects, settings and view to this browser. Only one save slot; saving again overwrites it.',
@@ -219,7 +219,7 @@ export const EN = {
   'rail.slowDown.hint': 'Decrease speed by 0.5x',
   'rail.speedUp.hint': 'Increase speed by 0.5x',
   'rail.resetView.hint':
-    'Centre the camera on the bodies and zoom to fit them. Bodies, settings, the clock and pause stay as they are.',
+    'Centre the camera on the bodies and zoom to fit them. Bodies, settings, seed, clock and pause stay as they are.',
   'rail.shortcuts.hint': 'Keyboard shortcuts (?)',
   'rail.objectType.hint':
     'Choose what to add, then click the canvas to place it',
