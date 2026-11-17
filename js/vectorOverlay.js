@@ -62,7 +62,7 @@ export const fitFont = (ctx, font) =>
   font.replace(
     /(\d+(?:\.\d+)?)px/,
     (_, n) =>
-      `${+(Math.max(LABEL_MIN_CSS_PX, Number(n)) * canvasRatio(ctx)).toFixed(2)}px`
+      `${Math.round(Math.max(LABEL_MIN_CSS_PX, Number(n)) * canvasRatio(ctx) * 100) / 100}px`
   );
 
 /**
