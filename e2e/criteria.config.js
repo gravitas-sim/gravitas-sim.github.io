@@ -26,6 +26,8 @@ export default {
   workers: 1,
   retries: 0,
   maxFailures: 0,
+  // The server command in the main config is relative to the repository root.
+  webServer: { ...base.webServer, cwd: '..' },
   reporter: [['list']],
   projects: base.projects.filter(p => p.name === 'chromium'),
 };
