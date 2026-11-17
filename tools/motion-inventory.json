@@ -268,6 +268,13 @@
       "test": "tests/motionInventory.test.js"
     },
     {
+      "file": "js/investigations/eventWindow.js",
+      "kind": "raf",
+      "treatment": "timer",
+      "what": "A lesson step's Replay and Rewind to here buttons, redrawn when the timeline starts or stops showing a recorded frame (the replay itself is the timeline's)",
+      "reason": "Text or a readout updates on a timer; nothing on the page moves."
+    },
+    {
       "file": "js/lab3d/embed.js",
       "kind": "interval",
       "treatment": "timer",
