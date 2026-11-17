@@ -7,7 +7,7 @@
 // for any of it, so the engine does not import it. It imports this, which holds
 // the same names as small wrappers, and the stage arrives when a step that
 // declares one is about to be shown (`loadStage`, awaited by the engine before
-// it applies that step).
+// it applies that step, and given the step's declaration).
 //
 // Until then the wrappers answer as an empty stage does: no staged stars, an
 // empty key, nothing pinned, nothing to clear. Nothing that acts on a stage
@@ -29,29 +29,36 @@ let stage = null;
 let pending = null;
 let asked = 0;
 
-/** Whether the stage code has arrived. @returns {boolean} */
-export const stageLoaded = () => stage !== null;
+/** Whether the stage code, and the kinds a declaration names, have arrived. */
+export const stageLoaded = declared =>
+  stage !== null && !stage.stageKindsPending(declared);
 
 /**
- * Fetch the stage code, once. Concurrent callers share one import.
+ * Fetch the stage code, once, and the kinds a declaration names. Concurrent
+ * callers share one import.
+ *
+ * @param {object} [declared] - The step's `stage` declaration
  * @returns {Promise<void>} Rejects with the import's own error
  */
-export function loadStage() {
-  if (stage) return Promise.resolve();
-  pending ??= (
-    asked++
-      ? import(
-          new URL(`../lessonStage.js?retry=${asked}`, import.meta.url).href
-        )
-      : import('../lessonStage.js')
-  ).then(
-    m => void (stage = m),
-    err => {
-      pending = null;
-      throw err;
-    }
+export function loadStage(declared) {
+  if (!stage) {
+    pending ??= (
+      asked++
+        ? import(
+            new URL(`../lessonStage.js?retry=${asked}`, import.meta.url).href
+          )
+        : import('../lessonStage.js')
+    ).then(
+      m => void (stage = m),
+      err => {
+        pending = null;
+        throw err;
+      }
+    );
+  }
+  return (stage ? Promise.resolve() : pending).then(() =>
+    stage.loadStageKinds(declared)
   );
-  return pending;
 }
 
 const call =

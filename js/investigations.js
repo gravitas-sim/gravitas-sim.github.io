@@ -16,9 +16,6 @@
 // =============================================================================
 
 import {
-  drawEllipse,
-  drawPlot as drawPlotFigure,
-  fitSlope,
   bindPersistence,
   bindStepInputs,
   formatFieldNumber,
@@ -33,6 +30,7 @@ import {
   renderSaveStatus,
   save,
   sessionProgress,
+  slots,
   stepMarkup,
   storageKey,
 } from './investigations/stepView.js';
@@ -881,9 +879,21 @@ function validateStep(step, id) {
   }
 }
 
+// Fetched when a lesson opens (loadSeams), so draws and reads stay synchronous.
+let figures = null;
+
+/** Fetch the plot, ellipse and import code the steps need. @returns {?Promise} */
+const loadSeams = steps =>
+  !figures &&
+  steps.some(s => s.plot || s.type === 'ellipse' || s.importFromSelection)
+    ? import('./investigations/figures.js').then(
+        m => (slots.field = figures = m)
+      )
+    : null;
+
 /** Draw the step's scatter plot from the lesson's current state. */
 function drawPlot(step, id) {
-  drawPlotFigure(step, fieldValues(step, id), {
+  figures?.drawPlot(step, fieldValues(step, id), {
     canvas: plotCanvas,
     els,
     transformed: plotTransformed,
@@ -1595,7 +1605,7 @@ function reflowForLightCurve() {
 function paintEllipse(e) {
   if (!active) return;
   els.eccOut.textContent = Number(e).toFixed(3);
-  drawEllipse(els.ellipseCanvas, Number(e));
+  figures?.drawEllipse(els.ellipseCanvas, Number(e));
   responses[`${stepId(stepIndex)}:e`] = String(e);
   save();
 }
@@ -1948,68 +1958,18 @@ function renderProbe() {
   }
 }
 
-/**
- * Copy the selected object's measurements into the next empty row.
- *
- * Reading four numbers off a panel and retyping them is where transcription
- * errors come from, and they are indistinguishable in the report from a student
- * who misunderstood the physics. The click still requires them to have chosen
- * the object, which is the part that is actually being assessed.
- */
-function importSelection() {
-  const step = currentStep();
-  if (!step?.importFromSelection) return;
-  const id = stepId(stepIndex);
-  const ctx = probeContext();
-  let values;
-  try {
-    values = step.importFromSelection(ctx);
-  } catch (err) {
-    console.warn(err);
-    values = null;
-  }
-  const hint = els.body.querySelector('[data-import-hint]');
-  if (!values) {
-    if (hint) hint.textContent = t('inv.import.needObject');
-    return;
-  }
-
-  const groups = step.importGroups || [];
-
-  // Refuse a row that is already recorded. Two clicks between one transit and
-  // the next would otherwise stamp the same event twice and hand back a period
-  // of zero, and the same click on the same planet would duplicate a row in a
-  // measurement table.
-  const already = groups.some(g =>
-    g.every(
-      (fid, i) =>
-        String(responses[`${id}:${fid}`] ?? '').trim() === String(values[i])
-    )
-  );
-  if (already) {
-    if (hint) hint.textContent = t('inv.import.duplicate');
-    return;
-  }
-
-  // Find the first row whose fields are all still empty.
-  const target = groups.find(g =>
-    g.every(fid => String(responses[`${id}:${fid}`] ?? '').trim() === '')
-  );
-  if (!target) {
-    if (hint) hint.textContent = t('inv.import.full');
-    return;
-  }
-
-  // The lesson writes these the JavaScript way, so they are English.
-  target.forEach((fid, i) => {
-    if (values[i] !== undefined)
-      recordAnswer(responses, `${id}:${fid}`, String(values[i]), 'en');
+/** Copy the selected object's measurements into the next empty row. */
+const importSelection = () =>
+  slots.field?.importSelection({
+    step: currentStep(),
+    id: stepId(stepIndex),
+    responses,
+    recordAnswer,
+    probeContext,
+    body: els.body,
+    save,
+    renderStep,
   });
-  save();
-  renderStep();
-  const h = els.body.querySelector('[data-import-hint]');
-  if (h) h.textContent = t('inv.import.added', { value: values[0] });
-}
 
 // --- Navigation ---------------------------------------------------------------
 
@@ -2047,12 +2007,13 @@ function goToStep(index, { rebuild = false, open = false } = {}) {
   if (!active) return;
   const at = Math.max(0, Math.min(active.steps.length - 1, index));
   // A step that stages waits for the stage code; opening rejects on failure.
-  if (active.steps[at]?.stage && !stageLoaded()) {
+  const declared = active.steps[at]?.stage;
+  if (declared && !stageLoaded(declared)) {
     const turn = openGeneration;
     els.panel.setAttribute('aria-busy', 'true');
     announce(t('inv.tool.loading'));
     if (open) els.body.textContent = t('inv.tool.loading');
-    return loadStage()
+    return loadStage(declared)
       .then(() => {
         if (turn !== openGeneration || !active) return false;
         goToStep(at, { rebuild });
@@ -2120,6 +2081,8 @@ async function changeDepth(by) {
     await import('./investigations/depth.js')
   ).change({ active, depth, deepest, stepIndex, by, locale: getLocale() });
   if (!r || r.lesson.id !== active?.id) return;
+  await loadSeams(r.lesson.steps);
+  if (r.lesson.id !== active?.id) return;
   ({ depth, deepest, depthName } = r);
   depthChoice = depth;
   active = r.lesson;
@@ -2238,6 +2201,8 @@ export async function openInvestigation(id, opts = {}) {
     if (generation !== openGeneration) return;
     ({ inv, depth, depthChoice, deepest, depthName } = m);
   }
+  await loadSeams(inv.steps);
+  if (generation !== openGeneration) return;
   // Every step key is written into the panel's attributes and selectors. The
   // pack validator and the lesson checker refuse a sid that could end an
   // attribute; this refuses a lesson that reached the panel without passing
@@ -2718,7 +2683,7 @@ export function currentPlotData() {
     points: shown,
     xLabel: t ? t.xLabel : step.plot.xLabel,
     yLabel: t ? t.yLabel : step.plot.yLabel,
-    slope: fitSlope(shown),
+    slope: figures.fitSlope(shown),
   };
 }
 
