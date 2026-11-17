@@ -138,39 +138,28 @@ export function nextHintStage(step, used = []) {
 const within = (n, r) => Number.isFinite(n) && !(n < r?.min) && !(n > r?.max);
 
 /**
- * Whether a rule's `when` holds of how a reading was taken (the `<field>:src` record of
- * js/investigations/figures.js). Every key given must hold; a typed value has no provenance
- * and never matches; a key this does not know never does.
+ * How a reading was taken (the `<field>:src` record of js/investigations/figures.js), judged by a rule's
+ * `when`; every key given must hold, a typed value never matches and a key not listed never holds.
  *   role      the lesson role (or any of several) of the body the reading was taken from
- *   moment    {min, max} on the simulated clock the reading was taken at
+ *   moment    {min, max} on the simulated clock at the reading
  *   setting   {name: value | {min, max}} on the instrument's settings at the moment
  *   interval  {from, to, n}, each {min, max}, on an interval reading
  */
-function whenHolds(when, from) {
-  const s = from?.src;
-  if (!s || s.k === 't') return false;
-  const point = s.k === 'c';
-  return Object.entries(when).every(([key, w]) =>
-    key === 'role'
-      ? point && [].concat(w).includes(from.roleOf?.(s.b))
-      : key === 'moment'
-        ? point && within(s.t, w)
-        : key === 'setting'
-          ? point &&
-            Object.entries(w).every(([n, x]) =>
-              typeof x === 'object'
-                ? within(s.s?.[n], x)
-                : typeof x === 'number'
-                  ? Math.abs(s.s?.[n] - x) <= 1e-9 * Math.max(1, Math.abs(x))
-                  : s.s?.[n] === x
-            )
-          : key === 'interval' &&
-            s.k === 's' &&
-            within(s.a, w.from) &&
-            within(s.b, w.to) &&
-            within(s.n, w.n)
-  );
-}
+const WHEN = {
+  role: (w, s, from) =>
+    s.k === 'c' && [].concat(w).includes(from.roleOf?.(s.b)),
+  moment: (w, s) => s.k === 'c' && within(s.t, w),
+  setting: (w, s) =>
+    s.k === 'c' &&
+    Object.entries(w).every(([n, x]) =>
+      typeof x === 'object' ? within(s.s?.[n], x) : s.s?.[n] === x
+    ),
+  interval: (w, s) =>
+    s.k === 's' && within(s.a, w.from) && within(s.b, w.to) && within(s.n, w.n),
+};
+const whenHolds = (when, from) =>
+  from?.src?.k in { c: 1, s: 1 } &&
+  Object.entries(when).every(([k, w]) => WHEN[k]?.(w, from.src, from));
 
 /**
  * Whether a value matches a declared misconception.

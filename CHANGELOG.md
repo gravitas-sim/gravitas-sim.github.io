@@ -44,6 +44,20 @@ the release rather than in the tag.
 
 ### Added
 
+- A measure step can name the wrong turns a reading invites, and the report shows how many tries
+  it took (Prompt 326; register rows D-R4-326-01 to 03; visible and instructional). A measure field
+  may declare `misconceptions`: by value (`factor`, `equals`, the standard ids, against the field's
+  `want`) or by how the reading was taken (`when`: the role of the body, the simulated moment, the
+  instrument's settings, the interval chosen). Both go through the matcher of the numeric questions.
+  A try on a measure step is a reading taken or a value set committed when focus leaves the fields,
+  counted once per distinct set in the existing attempts count; the slip is announced politely and
+  drawn under the check slot only then, never per keystroke, never for an uncommitted prediction,
+  and it names the slip, offers another try and states no value. The lab report (PDF and HTML)
+  prints "answered on try n" and the slip by name, and the answer key lists the slips; a held
+  prediction's steps print them after the reveal. `author:check` fails a slip or a measure step's
+  feedback that holds a field's expected value, the step's answer or a number within tolerance of
+  either. The generated hint ladder, `:tries` and `:gen` are unchanged. No shipped lesson declares a
+  slip yet; Kepler's Laws and Finding Planets by Their Shadows are the first consumers.
 - The lesson standard as authoring checks (Prompt 307; register rows
   D-R4-307-01 to 05; invisible, tooling): `npm run author:check` now holds
   seven patterns the lesson audits found by hand to a committed count per lesson

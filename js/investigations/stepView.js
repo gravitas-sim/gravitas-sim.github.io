@@ -550,8 +550,8 @@ const spoken = text =>
   decodeEntities(String(text ?? '').replace(/<\/?(strong|em|sub|sup)>/g, ''));
 
 // --- A measure step's tries and slips -----------------------------------------
-// A try is a reading taken or a value set committed (focus leaving the fields), once per distinct
-// set, counted in `attempts` as a question's is. A slip is named only if the author declared it
+// A try is a reading taken or a value set committed (focus leaving the fields), once per distinct set,
+// counted in `attempts` as a question's is. A slip is named only if the author declared it
 // (`fields[].misconceptions`); it is never a value, and never shown for an uncommitted prediction.
 
 let bound = null; // what the open step's controls are bound to
@@ -569,73 +569,65 @@ const slipRow = (step, id) =>
     ? `<p class="inv-feedback is-wrong" data-slip${slips.has(id) ? '' : ' hidden'}>${escape(slips.get(id) ?? '')}</p>`
     : '';
 
-/** The first slip a field declares that its value, or how it was taken, shows. */
-function slipOf(h, step, id) {
-  const responses = h.responses();
-  const ctx = h.probeContext();
-  const roleOf = n => ctx.roleOf(ctx.bodies.find(b => b.name === n) ?? null);
-  const how = slots.field?.readings(responses, id, step) ?? {};
-  for (const f of step.fields) {
-    const key = `${id}:${f.id}`;
-    const model = Number(String(f.want ?? '').replace(/[^0-9eE+\-.]/g, ''));
-    const hit = f.misconceptions
-      ? matchMisconception(
-          { misconceptions: f.misconceptions, answer: model },
-          parseNumber(
-            responses[key],
-            localeOfAnswer(responses, key, getLocale())
-          ).value,
-          f.tolerance ?? Math.abs(model) * 0.05,
-          { src: how[f.id], roleOf }
-        )
-      : null;
-    if (hit?.message) return hit;
-  }
-  return null;
-}
-
 /**
- * Count a try for the step's values and name the slip they show, once per distinct set.
- * Said at once when the fields were left; handed back as words when a reading was taken.
+ * Count a try for the step's values and name the slip they show, once per distinct set. Said at once when
+ * the fields were left; handed back as words when a reading was taken (it is announced with the reading).
  */
 function judgeReadings(taken) {
   const h = bound;
   const step = h?.currentStep();
   const id = h?.stepId();
-  const responses = h?.responses();
+  const r = h?.responses();
   const own = (step?.fields || []).filter(f => !f.compute);
-  const key = f => `${id}:${f.id}`;
+  const at = f => `${id}:${f.id}`;
   if (
     step?.type !== 'measure' ||
-    !own.length ||
     !(step.validate || own.some(f => f.misconceptions)) ||
-    !own.every(f => String(responses[key(f)] ?? '').trim()) ||
+    !own.length ||
+    !own.every(f => String(r[at(f)] ?? '').trim()) ||
     (!taken && !edited.has(id)) ||
-    predictionState(h.steps(), step, h.visited(), responses) === 'uncommitted'
+    predictionState(h.steps(), step, h.visited(), r) === 'uncommitted'
   )
     return '';
-  const set = JSON.stringify(
-    own.map(f => [responses[key(f)], responses[key(f) + ':src']])
-  );
-  const done = seen.get(id) ?? seen.set(id, new Set()).get(id);
+  const set = JSON.stringify(own.map(f => [r[at(f)], r[`${at(f)}:src`]]));
+  const done = seen.get(id) ?? seen.set(id, new Map()).get(id);
   edited.delete(id);
-  if (done.has(set)) return taken ? (slips.get(id) ?? '') : '';
-  done.add(set);
-  h.attempts()[id] = (h.attempts()[id] || 0) + 1;
   slips.delete(id);
+  if (done.has(set)) {
+    // A set already counted is not another try, and not announced again; its slip is drawn again.
+    const old = done.get(set);
+    if (old) slips.set(id, old);
+    showSlip(old);
+    return taken ? old : '';
+  }
+  h.attempts()[id] = (h.attempts()[id] || 0) + 1;
   let said = '';
   try {
-    const hit = slipOf(h, step, id);
-    if (hit) {
+    const ctx = h.probeContext();
+    const how = slots.field?.readings(r, id, step);
+    for (const f of own) {
+      const model = Number(String(f.want ?? '').replace(/[^0-9eE+\-.]/g, ''));
+      const hit = matchMisconception(
+        { misconceptions: f.misconceptions, answer: model },
+        parseNumber(r[at(f)], localeOfAnswer(r, at(f), getLocale())).value,
+        f.tolerance ?? Math.abs(model) * 0.05,
+        {
+          src: how?.[f.id],
+          roleOf: n => ctx.roleOf(ctx.bodies.find(b => b.name === n)),
+        }
+      );
+      if (!hit?.message) continue;
       said = `${spoken(lessonText(hit.message))} ${t('inv.slip.again')}`;
       slips.set(id, said);
-      const was = String(responses[`${id}:slip`] ?? '').split(',');
+      const was = String(r[`${id}:slip`] ?? '').split(',');
       if (hit.id && !was.includes(hit.id))
-        responses[`${id}:slip`] = [...was, hit.id].filter(Boolean).join(',');
+        r[`${id}:slip`] = [...was, hit.id].filter(Boolean).join(',');
+      break;
     }
   } catch (err) {
     console.warn(err);
   }
+  done.set(set, said);
   h.save();
   showSlip(said);
   if (!taken) announce(said);

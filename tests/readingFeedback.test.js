@@ -403,9 +403,16 @@ describe('a measure step that names slips', () => {
     expect(slip().hidden).toBe(false);
     expect(slip().textContent).toBe(said());
     expect(responses[`${id()}:slip`]).toBe('twice');
-    // The same set again is not another try.
+    // The same set again is not another try and is not announced again.
     leave();
     expect(attempts[id()]).toBe(1);
+    // After typing it away and back it is drawn again, and still counts once.
+    type('6.5');
+    expect(slip().hidden).toBe(true);
+    leave();
+    expect(attempts[id()]).toBe(1);
+    expect(slip().hidden).toBe(false);
+    expect(slip().textContent).toContain('two orbits');
   });
 
   test('a changed set is another try; a right one clears the slip and keeps the record', () => {

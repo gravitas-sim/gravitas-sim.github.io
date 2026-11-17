@@ -239,12 +239,8 @@ let authoring = null;
 // --- Persistence --------------------------------------------------------------
 
 /**
- * The assignment being worked through, if this is one rather than a lesson.
- *
- * A short activity cut from a lesson keeps its own answers: two assignments
- * built from the same lesson are two pieces of work, and neither is the
- * lesson. So the storage key comes from the assignment when there is one, and
- * the lesson's own progress is left exactly as the student left it.
+ * The assignment being worked through, if this is one rather than a lesson: two assignments cut from one
+ * lesson are two pieces of work, so the storage key comes from the assignment and the lesson's own progress is left alone.
  *
  * @type {?object}
  */
@@ -383,14 +379,9 @@ function probeContext() {
       return { separation: Math.hypot(dx, dy), longitude: lon };
     },
     /**
-     * The body a step's `bind` gave this role, or null.
-     *
-     * The replacement for `find` below, and the difference is the whole point:
-     * a role was resolved once, against one world, by an exact matcher that
-     * refused to choose when more than one body answered to it. `find` is a
-     * case-insensitive substring search that returns whichever came first.
-     * Both are here because the eight steps that use `find` have not been
-     * migrated; new steps should bind.
+     * The body a step's `bind` gave this role, or null. Unlike `find` below (a case-insensitive substring search
+     * that returns whichever came first) a role was resolved once by an exact matcher that refuses to choose; new
+     * steps should bind.
      */
     role: name => resolveRole(name).body,
     /** How a role stands: bound, stale, gone, or never bound. */
@@ -452,14 +443,9 @@ function probeContext() {
       return true;
     },
     /**
-     * What a black hole of a given mass is really like, in SI.
-     *
-     * Kept separate from anything the canvas draws, and the reason is the one
-     * this lesson has to keep making: the dark disc on screen is a drawing at
-     * a scale chosen so the orbits fit in a window, and the Schwarzschild
-     * radius is a physical length in kilometers. Quoting the second while
-     * pointing at the first is the misconception the step exists to prevent,
-     * so the readout that uses this says which is which.
+     * What a black hole of a given mass is really like, in SI, apart from anything the canvas draws: the
+     * dark disc is a drawing at a scale chosen so orbits fit, and the Schwarzschild radius is a length in km;
+     * the readout that uses this says which is which.
      */
     holeFacts: massSun => blackHoleFacts(massSun),
     /**
@@ -536,12 +522,8 @@ function probeContext() {
           .includes(String(name).toLowerCase())
       ),
     /**
-     * The Experiment Bench's active experiment, if the bench has been opened.
-     *
-     * A getter rather than a value, and null rather than an import, because the
-     * bench is lazily loaded: a lesson that never touches it must not pull its
-     * chunk in, and a widget that reads it has to cope with it not being there
-     * yet. The chaos lesson's divergence widget is the only consumer.
+     * The Experiment Bench's active experiment, if opened: a getter, and null rather than an import, because
+     * the bench is lazy and a widget must cope with it not being there yet (the chaos lesson's widget only).
      */
     experiment: () => {
       try {
@@ -564,13 +546,8 @@ function probeContext() {
 // --- Setting up a step's scenario ---------------------------------------------
 
 /**
- * Convert a lesson's declarative setup into a shared-link payload.
- *
- * Reusing the link format means a lesson step and a shared link travel the same
- * code path, so a step cannot set up a state that could not also be handed out
- * as a URL, which is how the "open this exact state" links in the report stay
- * honest.
- *
+ * Convert a lesson's declarative setup into a shared-link payload, so a step cannot set up a state that could
+ * not be handed out as a URL (the report's "open this exact state" links stay honest).
  * @param {Object} setup - From a step definition
  * @returns {Object} Payload for applyShareState
  */
@@ -607,17 +584,8 @@ function applySetup(setup) {
 }
 
 /**
- * Hold the simulation still in the ways a lesson depends on.
- *
- * Clicking a planet to select it and dragging on empty space to place a new one
- * are the same gesture a few pixels apart, so a student aiming at a planet
- * regularly drops a star next to it instead, which silently changes the system
- * they are measuring. Placement is therefore off by default during a lesson,
- * and can be turned back on for the steps that ask for it.
- */
-/**
- * Resolve this step's `bind` against the world that is on screen.
- * @returns {void}
+ * Hold the simulation still in the ways a lesson depends on. Placement is off by default during a lesson (a
+ * click on a planet and a drag that places a new body are one gesture a few pixels apart), and can be turned back on.
  */
 function bindStepRoles(force) {
   const step = currentStep();
@@ -797,12 +765,8 @@ function fieldValues(step, id) {
 }
 
 /**
- * Fill in any field that is derived from the others.
- *
- * Arithmetic a student does on a calculator and copies back is arithmetic they
- * can get wrong in a way that has nothing to do with the astronomy. Computing
- * the derived value here keeps the assessment pointed at the concept, and it
- * gives the validator a number it can trust.
+ * Fill in any field that is derived from the others, so the assessment stays on the concept and the validator
+ * gets a number it can trust.
  *
  * @param {Object} step - Step definition
  * @param {string} id - Step response-key prefix
@@ -918,12 +882,9 @@ function renderStep() {
 
   setProse(els.body, parts.join(''));
 
-  // Both classes are set before the panels are filled, not after: a widget
-  // sizes its canvas from the space it is about to be given, and reads these
-  // classes to know what that is. Toggling them afterwards left every
-  // measurement screen drawing at full height, its own controls out of view.
-  // investigation-aux: a second panel is docked beside the lesson. The light
-  // curve gives up height to it when both are on screen.
+  // Both classes are set before the panels are filled: a widget sizes its canvas from the space it is about
+  // to be given. investigation-aux: a second panel is docked beside the lesson; the light curve gives up
+  // height to it.
   document.body.classList.toggle(
     'investigation-aux',
     Boolean(step?.tool || step?.plot || step?.type === 'ellipse')
@@ -963,12 +924,9 @@ function renderStep() {
 }
 
 /**
- * Open the pause-at-event tool for a step that asks a student to catch a
- * moment. A step declares `pauseAt: {kind, body, primary, label, note}`; the
- * tool opens with those chosen and arms NOTHING, so the reader's press of Arm
- * is the interaction asked for. All of it is behind a dynamic import. The
- * release on the way out matters: a watch armed on one step must not fire into
- * the next (js/investigations/eventWatch.js).
+ * Open the pause-at-event tool for a step that asks a student to catch a moment (`pauseAt: {kind, body,
+ * primary, label, note}`): it opens with those chosen and arms NOTHING, so Arm is the reader's press.
+ * Behind a dynamic import; released on the way out so a watch cannot fire into the next step.
  *
  * @param {Object} step - Step definition
  */
@@ -1125,13 +1083,9 @@ function syncToolPanel(step) {
   const spec = step?.tool;
   const widget = spec ? getWidget(spec.id) : null;
   stopToolLoop();
-  // An instrument whose family is fetched on demand. The panel says it is
-  // loading, in the note - made a status region for as long as it is saying
-  // so, because it is not one otherwise - fetches the family, and redraws only
-  // if the reader is still on this step. A failed fetch says so in the same
-  // region. If asking again can help, it offers a retry, which takes focus; if
-  // it cannot (see WidgetLoadError), it offers a reload, which keeps the
-  // reader's answers because they are already saved.
+  // An instrument whose family is fetched on demand: the panel says it is loading (a status region while it
+  // does), fetches, and redraws only if the reader is still here. A failed fetch says so, offering a retry
+  // (focused) or, if retrying cannot help (WidgetLoadError), a reload, which keeps the saved answers.
   els.toolNote.removeAttribute('role');
   if (spec && !widget && needsLoading(spec.id)) {
     els.toolNote.setAttribute('role', 'status');
@@ -1368,12 +1322,9 @@ function clearToolInstrument() {
 }
 
 /**
- * Let a widget be driven by pointing at its canvas, if it declares `pick`.
- * The hook gets a position in CSS pixels, writes into the values, and goes
- * through paintTool like a slider, so the sliders move to match. A widget that
- * declares `pick` also names the two controls the arrow keys step, and its
- * canvas becomes focusable: a diagram only a drag can drive is closed to some
- * students.
+ * Let a widget be driven by pointing at its canvas, if it declares `pick`: the hook gets a position in CSS
+ * pixels, writes into the values and goes through paintTool like a slider. The widget also names the two
+ * controls the arrow keys step, and its canvas becomes focusable.
  * @param {Object} widget - The widget being shown
  * @param {Object} spec - The step's tool spec
  * @param {Function} applied - The runner's own "a control moved" path
@@ -1502,13 +1453,8 @@ function paintTool({ quiet = false } = {}) {
     if (!quiet) responses[`${id}:tool:${c.id}`] = String(toolValues[c.id]);
   }
 
-  // A toggle's label is a statement about the state it is in, so it has to be
-  // re-read rather than written once when the step opened. The playback's
-  // button said "Pause" for as long as the step lasted - including while the
-  // playback was stopped - and because the text is the button's accessible
-  // name, a screen reader was told the same wrong thing. The descriptors are
-  // the ones the buttons were rendered from and their labels are getters, so
-  // this reads the widget's current answer without rebuilding anything.
+  // A toggle's label states the state it is in, so it is re-read, not written once when the step opened
+  // (it is the button's accessible name); the descriptors' labels are getters that give the current answer.
   for (const action of toolActionsShown) {
     const btn = els.toolActions?.querySelector(
       `[data-tool-action="${CSS.escape(action.id)}"]`
@@ -1739,12 +1685,7 @@ function roleLabel(key) {
 }
 
 /**
- * Whether the role chip would only repeat the body's own name.
- *
- * Half the lessons name their roles after the bodies - `earth`, `io`, `moon` -
- * and the chip then read "EARTH Earth", which is a label and its own echo. The
- * name is the more useful of the two, so in that case the role is dropped.
- *
+ * Whether the role chip would only repeat the body's own name ("EARTH Earth"); then the role is dropped.
  * @param {string} label - The resolved role label
  * @param {string} name - The body's name in the world
  * @returns {boolean} True when the role adds nothing
@@ -1859,12 +1800,8 @@ function renderProbe() {
   // without this the reader is left looking at a scenario the step knows
   // nothing about. Cheap: it rebuilds only when the stars have actually gone.
   if (step?.stage) {
-    // Only when the scene has been *replaced*, not when the reader has been
-    // experimenting. Deleting a body, firing one into a star, letting two
-    // merge - those are things a reader did on purpose, and rebuilding the
-    // stage under them would be the application undoing their work every
-    // quarter of a second. A world that has been swapped wholesale leaves
-    // nothing of the stage behind, and that is what this waits for.
+    // Only when the scene has been *replaced*, not when the reader has been experimenting (deleting a
+    // body, a merge): rebuilding the stage under that would undo their work every quarter second.
     const presence = stagePresence();
     if (presence.allGone) {
       applyStage(step.stage, { force: true });
@@ -2034,13 +1971,9 @@ function goToStep(index, { rebuild = false, open = false } = {}) {
   const sid = active.steps[stepIndex]?.sid;
   if (sid) visited.add(sid);
 
-  // Reload when the scenario the step belongs to is not the one on screen, and
-  // only then, so work a student has done: objects placed, mass changed,
-  // survives moving between questions about the same system.
-  //
-  // Comparing the setup in force, not testing for one on this step, makes going
-  // backwards correct: the transit lesson swaps in a blended binary near the
-  // end, and stepping back must not leave it loaded for the earlier measurement.
+  // Reload only when the step's scenario is not the one on screen, so work done survives moving between
+  // questions about one system. Comparing the setup in force makes going backwards correct (the transit
+  // lesson swaps in a blended binary near the end).
   const setup = setupInForceAt(stepIndex);
   if (rebuild || (setup && setup !== appliedSetup)) applySetup(setup);
   else applyLocks();
@@ -2095,14 +2028,9 @@ async function changeDepth(by) {
 }
 
 /**
- * Whether a step is for this student. A remediation step (`when`, from an
- * investigation pack: js/platform/investigation.js) is shown only when the
- * graded step it names has an answer that is wrong - or right - now. One not
- * yet answered, or answered the other way, is passed over by Next and
- * Previous; every other step always applies. A held prediction counts as not
- * yet answered until its reveal step is reached, as renderStep() holds its
- * verdict: the compiler refuses remediation before the reveal, and a lesson
- * compiled before it did must not give the answer away by skipping one.
+ * Whether a step is for this student. A remediation step (`when`, from an investigation pack) is shown only
+ * when the graded step it names is wrong - or right - now; one not yet answered is passed over. A held
+ * prediction counts as not answered until its reveal step is reached, so skipping cannot give the answer away.
  */
 function stepApplies(index) {
   if (!inDepth(active.steps[index], depth)) return false;
@@ -2338,11 +2266,8 @@ export async function openInvestigation(id, opts = {}) {
 }
 
 /**
- * Put the reader's own world back, if it is still theirs to put back: only
- * when the world on screen is still the one the lesson built (a stage was up,
- * or the world generation has not moved past the lesson's rebuilds). A reader
- * who loaded a scenario or followed a link has taken it somewhere deliberate.
- *
+ * Put the reader's own world back, if it is still theirs: the world on screen is the one the lesson built
+ * (a stage was up, or the generation has not moved past the lesson's rebuilds). A loaded scenario or followed link was deliberate.
  * @param {object} saved - The pairs handed back by leaveLessonScope()
  * @returns {boolean} Whether the sandbox was put back
  */
