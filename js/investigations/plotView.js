@@ -4,15 +4,21 @@
 // the scene, as the Observatory shares one among its views.
 
 import { tickLabel } from '../format.js';
-import { t } from '../i18n/index.js';
+import { registerMessages, t } from '../i18n/index.js';
+import { EN_LINKED } from '../i18n/en.linked.js';
+import { ES_LINKED } from '../i18n/es.linked.js';
 import { PAD, createPlot, scales } from '../plot/plot.js';
 import { createSelection, interact } from '../plot/select.js';
 import { createTable } from '../plot/table.js';
 import { fitSlope } from './figures.js';
 
+registerMessages('en', EN_LINKED);
+registerMessages('es', ES_LINKED);
+
 const NS = 'http://www.w3.org/2000/svg';
 /** The component's width in its own units: the scale of what is drawn on it. */
 const UNITS_WIDE = 720;
+const UNITS_TALL = 380;
 
 const digits = n =>
   Math.abs(n) >= 1000 || (Math.abs(n) < 0.01 && n !== 0)
@@ -161,6 +167,23 @@ function size(v) {
   }
   for (const x of v.svg.querySelectorAll('.ow-tick, .ow-label, .inv-plot-tag'))
     x.style.fontSize = `${11 * k}px`;
+  // Larger type needs room under the axis: the frame grows downward only.
+  const extra = Math.round(14 * (k - 1));
+  v.svg.setAttribute('viewBox', `0 0 ${UNITS_WIDE} ${UNITS_TALL + extra}`);
+  for (const x of v.svg.querySelectorAll('.ow-axes text')) {
+    if (x.hasAttribute('transform')) {
+      // The y title is turned: its tall letters need room on the left.
+      x.dataset.t ??= x.getAttribute('transform');
+      const at = 14 + 11 * (k - 1);
+      x.setAttribute('x', at);
+      x.setAttribute('transform', x.dataset.t.replace(/ 14 /, ` ${at} `));
+      continue;
+    }
+    if (x.getAttribute('text-anchor') !== 'middle') continue;
+    x.dataset.y ??= x.getAttribute('y');
+    const title = x.classList.contains('ow-label');
+    x.setAttribute('y', Number(x.dataset.y) + extra * (title ? 1 : 0.6));
+  }
 }
 
 /** What changed in the selection: tell the views, then the scene and the form. */

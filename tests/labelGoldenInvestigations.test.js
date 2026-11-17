@@ -218,8 +218,8 @@ describe('what the recording can tell apart', () => {
     // (js/format.js is not loaded by /observatory/ at start).
     const at = site => all.hazards[site] ?? { hyphen: false, nonFinite: false };
     for (const site of [
-      'js/investigations/plotView.js:20:9',
-      'js/investigations/plotView.js:362:24',
+      'js/investigations/plotView.js:26:9',
+      'js/investigations/plotView.js:385:24',
       'js/investigations/stepView.js:739:13',
       'js/observatory/guides/core.js:320:27',
     ])

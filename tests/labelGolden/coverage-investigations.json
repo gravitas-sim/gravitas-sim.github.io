@@ -9,10 +9,10 @@
   "js/observatoryPage.js:542:50"
  ],
  "hazards": {
-  "js/investigations/plotView.js:20:9": [
+  "js/investigations/plotView.js:26:9": [
    "hyphen"
   ],
-  "js/investigations/plotView.js:362:24": [
+  "js/investigations/plotView.js:385:24": [
    "hyphen"
   ],
   "js/investigations/stepView.js:739:13": [

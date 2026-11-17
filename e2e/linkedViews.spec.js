@@ -18,6 +18,9 @@ import {
   readMainCanvasLabels,
 } from '../tools/visual-criteria.mjs';
 
+/** The widths the roadmap names: a phone, a tablet and a laptop. */
+const WIDTHS = [375, 768, 1366];
+
 const PLANETS = [
   ['Mercury', '0.387', '0.241'],
   ['Earth', '1.000', '1.000'],
@@ -51,6 +54,7 @@ async function fillPlanets(page) {
 }
 
 async function clickDot(page, k) {
+  await page.locator('#investigationPlotCanvas').scrollIntoViewIfNeeded();
   const box = await dots(page).nth(k).boundingBox();
   await page.mouse.click(box.x + box.width / 2, box.y + box.height / 2);
 }
@@ -59,22 +63,28 @@ const focusedField = page =>
   page.evaluate(() => document.activeElement?.dataset?.field ?? null);
 
 test.describe('the lesson plot is the plot component', () => {
-  test('a click on a point selects its object, its row and its form row', async ({
-    page,
-    app,
-  }) => {
-    await openSid(page, app, 'keplers-laws', 'measure-four-planets');
-    await fillPlanets(page);
-    await expect(chosen(page)).toHaveCount(0);
+  for (const width of WIDTHS) {
+    test(`a click on a point selects its object, its row and its form row at ${width} px`, async ({
+      page,
+      app,
+    }) => {
+      await page.setViewportSize({ width, height: width < 700 ? 800 : 900 });
+      await openSid(page, app, 'keplers-laws', 'measure-four-planets');
+      await fillPlanets(page);
+      await expect(chosen(page)).toHaveCount(0);
 
-    await clickDot(page, 2);
-    await expect(chosen(page)).toHaveCount(1);
-    await expect(chip(page, 'Jupiter')).toHaveAttribute('aria-pressed', 'true');
-    await expect(rows(page).nth(2)).toHaveAttribute('aria-selected', 'true');
-    // The reader is taken to the form row the point is, to correct it.
-    await expect.poll(() => focusedField(page)).toMatch(/:p3_name$/);
-    await expect(said(page)).toContainText('Jupiter');
-  });
+      await clickDot(page, 2);
+      await expect(chosen(page)).toHaveCount(1);
+      await expect(chip(page, 'Jupiter')).toHaveAttribute(
+        'aria-pressed',
+        'true'
+      );
+      await expect(rows(page).nth(2)).toHaveAttribute('aria-selected', 'true');
+      // The reader is taken to the form row the point is, to correct it.
+      await expect.poll(() => focusedField(page)).toMatch(/:p3_name$/);
+      await expect(said(page)).toContainText('Jupiter');
+    });
+  }
 
   test('a chip and a table row select the point', async ({ page, app }) => {
     await openSid(page, app, 'keplers-laws', 'measure-four-planets');
@@ -92,26 +102,32 @@ test.describe('the lesson plot is the plot component', () => {
     await expect(chosen(page)).toHaveCount(1);
   });
 
-  test('the keyboard moves between points, chooses one and lets go', async ({
-    page,
-    app,
-  }) => {
-    await openSid(page, app, 'keplers-laws', 'measure-four-planets');
-    await fillPlanets(page);
+  for (const width of WIDTHS) {
+    test(`the keyboard moves between points, chooses one and lets go at ${width} px`, async ({
+      page,
+      app,
+    }) => {
+      await page.setViewportSize({ width, height: width < 700 ? 800 : 900 });
+      await openSid(page, app, 'keplers-laws', 'measure-four-planets');
+      await fillPlanets(page);
 
-    await page.locator('#investigationPlotCanvas').focus();
-    await page.keyboard.press('ArrowRight');
-    await page.keyboard.press('ArrowRight');
-    // Moving is not choosing: it is announced, and nothing else moves.
-    await expect(said(page)).toContainText('Jupiter: a (AU) 5.203');
-    await expect(chosen(page)).toHaveCount(0);
-    await page.keyboard.press('Enter');
-    await expect(chosen(page)).toHaveCount(1);
-    await expect(chip(page, 'Jupiter')).toHaveAttribute('aria-pressed', 'true');
-    await page.locator('#investigationPlotCanvas').focus();
-    await page.keyboard.press('Escape');
-    await expect(chosen(page)).toHaveCount(0);
-  });
+      await page.locator('#investigationPlotCanvas').focus();
+      await page.keyboard.press('ArrowRight');
+      await page.keyboard.press('ArrowRight');
+      // Moving is not choosing: it is announced, and nothing else moves.
+      await expect(said(page)).toContainText('Jupiter: a (AU) 5.203');
+      await expect(chosen(page)).toHaveCount(0);
+      await page.keyboard.press('Enter');
+      await expect(chosen(page)).toHaveCount(1);
+      await expect(chip(page, 'Jupiter')).toHaveAttribute(
+        'aria-pressed',
+        'true'
+      );
+      await page.locator('#investigationPlotCanvas').focus();
+      await page.keyboard.press('Escape');
+      await expect(chosen(page)).toHaveCount(0);
+    });
+  }
 
   test('the table holds the readings as typed, with and without the transform', async ({
     page,

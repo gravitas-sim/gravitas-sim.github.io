@@ -835,13 +835,6 @@ export const ES_DEFERRED = {
   'inv.answer.model': 'Respuesta modelo mostrada.',
   'inv.plot.point': 'Punto',
   'inv.plot.tableCaption': '{title}: los puntos representados, en números',
-  'inv.plot.row': 'Fila',
-  'inv.plot.missing': 'sin valor',
-  'inv.plot.read': '{point}: {xl} {x}, {yl} {y}',
-  'inv.plot.described':
-    '{n} puntos; {xl} va de {lo} a {hi}. Las flechas mueven entre los puntos y Intro elige uno.',
-  'inv.point.label': 'Mira aquí: {name}',
-  'inv.point.announce': 'Señalando {name}.',
   'inv.plot.canvasLabel':
     '{title}: un diagrama de dispersión de {n} puntos. Los mismos puntos están en la tabla de abajo.',
   'inv.predict.held':

@@ -4,8 +4,13 @@
 // the step. Drawn through js/overlays.js, so js/render.js does not grow.
 
 import { registerOverlay } from '../overlays.js';
-import { t } from '../i18n/index.js';
+import { registerMessages, t } from '../i18n/index.js';
+import { EN_LINKED } from '../i18n/en.linked.js';
+import { ES_LINKED } from '../i18n/es.linked.js';
 import { world_to_screen } from '../physics.js';
+
+registerMessages('en', EN_LINKED);
+registerMessages('es', ES_LINKED);
 
 let remove = null;
 
