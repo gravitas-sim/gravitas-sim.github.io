@@ -7,10 +7,10 @@
 // can be stated as a measurement, and this file is where the statements live:
 //
 //   I-8   layout: the scene is in view while a student works on a phone and a
-//         tablet (e2e/visualCriteria.spec.js)
+//         tablet (e2e/visualCriteria.criteria.js)
 //   I-9   drawing: labels, arrows, trails and plot type are readable and mean
-//         what they show (e2e/canvasLegibility.spec.js for the labels,
-//         e2e/visualCriteria.spec.js for the rest)
+//         what they show (e2e/visualCriteria.criteria.js, on demand; the
+//         labels' passing baseline is in e2e/canvasLegibility.spec.js)
 //
 // Appearance has no executable test, on purpose: whether something is better
 // to look at is a judgment, and it is shown as matched before-and-after

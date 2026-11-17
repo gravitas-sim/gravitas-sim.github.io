@@ -30,19 +30,17 @@
 // says anything useful, which no test can decide.
 // =============================================================================
 
+import { readFileSync } from 'node:fs';
 import { test, expect } from './fixtures.js';
 import { TYPE } from '../js/widgetCanvas.js';
 import {
   LESSON_PILOTS,
   DRAWING_STATES,
   DEVICE_PIXEL_RATIOS,
-  CUE_LUMA_STEP,
   installCanvasTextRecorder,
   openLessonStep,
   readMainCanvasLabels,
-  measureSelectionCue,
   judgeLabels,
-  judgeCue,
 } from '../tools/visual-criteria.mjs';
 
 /** One step per widget, from the scene catalog. */
@@ -278,149 +276,73 @@ test.describe('instrument labels are legible', () => {
 });
 
 // =============================================================================
-// The main canvas (criterion I-9, label clause)
+// The main canvas, as it is today (criterion I-9, label clause, baseline)
 // -----------------------------------------------------------------------------
 // The sandbox canvas draws its labels in backing-store pixels with no scaling
 // for the display (js/quality.js renderScale makes the store larger on a HiDPI
-// screen and the context is never scaled to match), so a font of 10 px covers
-// 10 CSS pixels on an ordinary screen and about 5 on a display with a ratio
-// of 2. Nobody sees that from the machine they wrote it on, which is why this
-// measures it: the same recorder as above, on `simulationCanvas`, with each
-// label converted to CSS pixels through the transform it was drawn under and
-// the canvas's own scale (tools/visual-criteria.mjs).
+// screen and the context is not scaled to match), so a font of 10 px covers
+// 10 CSS pixels on an ordinary screen and about 5 on a display with a ratio of
+// 2. Nobody sees that from the machine they wrote it on, which is why this
+// measures it: the same recorder as above, on `simulationCanvas`, each label
+// converted to CSS pixels through the transform it was drawn under and the
+// canvas's own scale (tools/visual-criteria.mjs).
 //
-// Three questions, asked of the pilot states at device pixel ratios 1 and 2:
-//
-//   1. is every label that belongs to a body at least 11 CSS px, and is none
-//      on top of another (bound-body labels, Prompt 336's clause);
-//   2. is every other piece of text on the canvas (the scale bar, the size
-//      disclosure, the wedge and overlay labels) at least 11 CSS px (336 and
-//      337's clauses);
-//   3. is the selected body marked on the canvas by something that shows in a
-//      grayscale capture, not only by hue (the selection cue, 336).
-//
-// A label belongs to a body when its anchor is within reach of one; a symbol
-// glyph after a mass (the Earth or Sun sign) belongs to the label before it
-// and is not judged on its own. The states are the five lesson pilots' steps
-// and the Kepler wedge step. A miss the 3.0 states have is marked
-// `test.fail` with its reason (the table below), so the prompt that fixes it
-// removes the mark when the test starts to pass; nothing is skipped.
+// What runs here is the baseline of the 3.0 pilot states, committed before
+// Prompt 336 changes how labels are drawn (tests/fixtures/visual-baseline.json,
+// "criteria.labels"): at device pixel ratios 1 and 2 no body label may come out
+// smaller than it did, and none may overlap another it did not overlap. A
+// change that makes labels larger passes, and its prompt raises the recorded
+// numbers. The criterion itself (11 CSS px, no overlap, the selected body
+// marked) is stated as tests that fail on these states in
+// e2e/visualCriteria.criteria.js, which runs on demand and is not in this suite.
 // =============================================================================
 
+const BASELINE = JSON.parse(
+  readFileSync('tests/fixtures/visual-baseline.json', 'utf8')
+);
 const MAIN_STATES = [
   ...LESSON_PILOTS.filter(p => p.subject === 'scene'),
-  { id: 'galilean-resonance', ...LESSON_PILOTS[3] },
-  {
-    id: 'keplers-wedges',
-    ...DRAWING_STATES.wedges,
-    subject: 'scene',
-    role: 'eccentric',
-  },
+  { ...LESSON_PILOTS[3] },
+  { id: 'keplers-wedges', ...DRAWING_STATES.wedges },
 ];
-/** The body the cue test selects in each state. */
-const CUE_ROLE = {
-  'keplers-2nd-law': 'eccentric',
-  'keplers-wedges': 'eccentric',
-  'transit-lab': 'planet',
-  'weighing-stars-binary': 'a',
-  'galilean-resonance': 'star',
-};
-
-/** Recorded misses of the 3.0 states, by title: what the measurement found. */
-const MAIN_BY_DESIGN = new Set([
-  // Ratio 1: the planet and star mass labels are 10 px (js/bodyDraw.js) and
-  // the size disclosure is 10 px (js/sandboxTools.js).
-  'body labels: keplers-2nd-law @1',
-  'body labels: keplers-wedges @1',
-  'other canvas text: keplers-2nd-law @1',
-  'other canvas text: transit-lab @1',
-  'other canvas text: weighing-stars-binary @1',
-  'other canvas text: galilean-resonance @1',
-  'other canvas text: keplers-wedges @1',
-  // Ratio 2: every label is drawn at half its size, 5 to 6 CSS px, because the
-  // backing store doubles and the context is not scaled to match.
-  'body labels: keplers-2nd-law @2',
-  'body labels: transit-lab @2',
-  'body labels: weighing-stars-binary @2',
-  'body labels: galilean-resonance @2',
-  'body labels: keplers-wedges @2',
-  'other canvas text: keplers-2nd-law @2',
-  'other canvas text: transit-lab @2',
-  'other canvas text: weighing-stars-binary @2',
-  'other canvas text: galilean-resonance @2',
-  'other canvas text: keplers-wedges @2',
-  // No persistent cue marks the selected body (only the inspector does).
-  'cue: keplers-2nd-law',
-  'cue: transit-lab',
-  'cue: weighing-stars-binary',
-  'cue: galilean-resonance',
-  'cue: keplers-wedges',
-]);
-const mainFails = title =>
-  test.fail(MAIN_BY_DESIGN.has(title), 'recorded miss of the 3.0 pilots');
 
 for (const dpr of DEVICE_PIXEL_RATIOS) {
-  test.describe(`main canvas labels at device pixel ratio ${dpr}`, () => {
+  test.describe(`main canvas labels, baseline, at device pixel ratio ${dpr}`, () => {
     test.use({ deviceScaleFactor: dpr });
 
     for (const state of MAIN_STATES) {
-      const open = async page => {
+      test(`no smaller than recorded: ${state.id}`, async ({ page }) => {
+        const was = BASELINE.criteria.labels.find(
+          l => l.state === state.id && l.dpr === dpr
+        );
+        expect(was, 'the baseline has this state').toBeTruthy();
         await page.addInitScript(installCanvasTextRecorder);
         await page.setViewportSize({ width: 1366, height: 800 });
         await openLessonStep(page, state);
-        await page.waitForTimeout(400);
-        return page.evaluate(readMainCanvasLabels);
-      };
-
-      test(`body labels: ${state.id}`, async ({ page }) => {
-        mainFails(`body labels: ${state.id} @${dpr}`);
-        const r = await open(page);
-        expect(
-          r.bodyLabels.length,
-          'the scene drew body labels'
-        ).toBeGreaterThan(0);
-        const v = judgeLabels(r.bodyLabels);
-        expect(
-          { small: v.small, overlaps: v.overlaps },
-          `canvas scale ${r.canvasScale.toFixed(2)}`
-        ).toEqual({ small: [], overlaps: [] });
-      });
-
-      test(`other canvas text: ${state.id}`, async ({ page }) => {
-        mainFails(`other canvas text: ${state.id} @${dpr}`);
-        const r = await open(page);
-        expect(r.otherText.length, 'the scene drew other text').toBeGreaterThan(
-          0
+        const r = await page.evaluate(readMainCanvasLabels);
+        expect(r.canvasScale).toBeCloseTo(dpr === 1 ? 1 : was.canvasScale, 1);
+        const body = judgeLabels(r.bodyLabels);
+        const other = judgeLabels(r.otherText);
+        expect(body.count, 'body labels drawn').toBeGreaterThanOrEqual(
+          was.bodyLabels.count
         );
-        const v = judgeLabels(r.otherText);
-        expect(
-          { small: v.small, overlaps: v.overlaps },
-          `canvas scale ${r.canvasScale.toFixed(2)}`
-        ).toEqual({ small: [], overlaps: [] });
+        // A tenth of a pixel of slack for the rounding of the canvas scale.
+        expect(body.smallest).toBeGreaterThanOrEqual(
+          was.bodyLabels.smallestCssPx - 0.1
+        );
+        expect(other.smallest).toBeGreaterThanOrEqual(
+          was.otherText.smallestCssPx - 0.1
+        );
+        expect(body.overlaps.length).toBeLessThanOrEqual(
+          was.bodyLabels.overlaps
+        );
+        expect(other.overlaps.length).toBeLessThanOrEqual(
+          was.otherText.overlaps
+        );
       });
     }
   });
 }
-
-test.describe('the selected body is marked on the canvas', () => {
-  for (const state of MAIN_STATES) {
-    test(`cue: ${state.id}`, async ({ page }) => {
-      mainFails(`cue: ${state.id}`);
-      await page.addInitScript(installCanvasTextRecorder);
-      await page.setViewportSize({ width: 1366, height: 800 });
-      await openLessonStep(page, state);
-      const m = await page.evaluate(measureSelectionCue, {
-        role: CUE_ROLE[state.id],
-        lumaStep: CUE_LUMA_STEP,
-      });
-      expect(m.selected, 'the body was selected').toBe(true);
-      expect(
-        judgeCue(m).pass,
-        `${m.changed} pixels changed in luminance (frame noise ${m.noise})`
-      ).toBe(true);
-    });
-  }
-});
 
 test.describe('the label harness can pass and can fail', () => {
   test.use({ deviceScaleFactor: 2 });

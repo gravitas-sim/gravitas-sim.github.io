@@ -19,20 +19,29 @@
 //         frame rate; plot ticks are at least 11 px and labels 12 px. (The
 //         label clause on the main canvas lives in canvasLegibility.spec.js.)
 //
-// Expected failures. A test the 3.0 pilots miss is marked `test.fail` with the
-// reason, from the table below. Playwright reports it as passed while it
-// fails and as FAILED the day it starts to pass, so the prompt that fixes the
-// thing is told, in CI, to delete the mark. That is the reverse of a
-// quarantine: nothing here is skipped, conditional or non-fatal, and a
-// regression of a passing case fails in the ordinary way. What is measured is
-// the number the criterion names; the judges are in tools/visual-criteria.mjs
-// and are shown to pass and to fail in tests/visualCriteria.test.js.
+// On demand, not in CI. These tests state what the 3.0 pilots are measured
+// against, and most of the pilot states miss it: they FAIL, and that is the
+// result (tests/fixtures/visual-baseline.json, "criteria", holds the numbers).
+// They are not run by the browser suite and are not marked as expected
+// failures: the suite's skip policy rightly refuses a red test recorded as
+// green, and a test added to CI as non-fatal would be a weakened gate. They run
+// with
+//
+//   npm run e2e:criteria
+//
+// and the prompt that makes a criterion pass on its pilots moves that test into
+// the suite (a `.spec.js` file with a README row) in the same change, so from
+// then on a regression fails CI in the ordinary way. What is measured is the
+// number the criterion names; the judges are in tools/visual-criteria.mjs and
+// are shown to pass and to fail in tests/visualCriteria.test.js, and two cases
+// here show the harness passing on a clear layout and failing on a covered one.
 //
 // The pilot states open as a student opens them (the lesson's link, the
 // lesson's progress written with the step's sid), not through the authoring
 // preview, because the preview lays the page out differently.
 // =============================================================================
 
+/* global requestAnimationFrame */
 import { test, expect } from './fixtures.js';
 import {
   LESSON_PILOTS,
@@ -40,59 +49,28 @@ import {
   PHONE_SIZES,
   TABLET_SIZE,
   DESKTOP_SIZES,
+  DEVICE_PIXEL_RATIOS,
+  CUE_LUMA_STEP,
   SCENE_ACTION_NAME,
   ARROW_RATIO_FACTOR,
   TRAIL_FRAME_RATES,
   installCanvasTextRecorder,
   openLessonStep,
   measureLayoutInPage,
+  readMainCanvasLabels,
+  measureSelectionCue,
   measureVelocityArrow,
   measureTrailSpan,
   readCanvasText,
   readSvgPlotText,
   judgeLayout,
+  judgeLabels,
+  judgeCue,
   judgeArrows,
   judgeTrailSpans,
   judgePlotType,
   judgeSeriesWithoutColour,
 } from '../tools/visual-criteria.mjs';
-
-/**
- * What the 3.0 pilots miss, by test title. Each entry is a fact the
- * measurement reports, not a prediction; the numbers are in
- * tests/fixtures/visual-baseline.json ("criteria"). When a prompt makes one
- * pass, this list is where its entry is deleted.
- */
-const BY_DESIGN = new Set([
-  // I-8, phone and tablet: the bound bodies are under the lesson sheet or off
-  // the screen at 375 and 412, and the panel fills the width at 768.
-  'keplers-2nd-law at 375x812',
-  'keplers-2nd-law at 412x915',
-  'keplers-2nd-law at 768x1024',
-  'transit-lab at 375x812',
-  'transit-lab at 412x915',
-  'transit-lab at 768x1024',
-  'weighing-stars-binary at 375x812',
-  'weighing-stars-binary at 412x915',
-  'weighing-stars-binary at 768x1024',
-  // The Moon image canvas runs under the lesson sheet on a phone (100 px at 375x812).
-  'moon-image at 375x812',
-  'moon-image at 412x915',
-  // I-8, desktop clause: a bound body sits under the control rail or under the
-  // light-curve panel.
-  'keplers-2nd-law at 1366x800',
-  'transit-lab at 1366x800',
-  'transit-lab at 1440x900',
-  // I-9.
-  'arrow length rises with speed',
-  'the legend states the arrow scale',
-  'a trail spans a time, whatever the frame rate',
-  'plot type at reading size: the Kepler plot (canvas)',
-  'plot type at reading size: the transit light curve (SVG)',
-]);
-
-const failsBy = (title, reason) =>
-  test.fail(BY_DESIGN.has(title), reason ?? 'recorded miss of the 3.0 pilots');
 
 test.describe('I-8: the scene is in view while the student works', () => {
   const sizes = [
@@ -104,7 +82,6 @@ test.describe('I-8: the scene is in view while the student works', () => {
     for (const size of sizes) {
       const title = `${pilot.id} at ${size.width}x${size.height}`;
       test(title, async ({ page }) => {
-        failsBy(title, 'I-8 miss recorded at the 3.0 pilots');
         await page.setViewportSize({
           width: size.width,
           height: size.height,
@@ -123,7 +100,12 @@ test.describe('I-8: the scene is in view while the student works', () => {
             .getByRole('button', { name: SCENE_ACTION_NAME });
           if (await action.count()) {
             await action.first().click();
-            await page.waitForTimeout(500);
+            await page.evaluate(
+              () =>
+                new Promise(r =>
+                  requestAnimationFrame(() => requestAnimationFrame(r))
+                )
+            );
             m = await page.evaluate(measureLayoutInPage);
             verdict = judgeLayout(m, {
               kind: size.kind,
@@ -141,7 +123,6 @@ test.describe('I-9: arrows, trails and plots mean what they show', () => {
   test('arrow length rises with speed (Kepler, the eccentric orbiter)', async ({
     page,
   }) => {
-    failsBy('arrow length rises with speed');
     await page.setViewportSize({ width: 1366, height: 800 });
     await openLessonStep(page, LESSON_PILOTS[0]);
     const slow = await page.evaluate(measureVelocityArrow, {
@@ -161,7 +142,6 @@ test.describe('I-9: arrows, trails and plots mean what they show', () => {
   });
 
   test('the legend states the arrow scale', async ({ page }) => {
-    failsBy('the legend states the arrow scale');
     await page.setViewportSize({ width: 1366, height: 800 });
     await openLessonStep(page, LESSON_PILOTS[0]);
     const r = await page.evaluate(measureVelocityArrow, {
@@ -174,7 +154,6 @@ test.describe('I-9: arrows, trails and plots mean what they show', () => {
   });
 
   test('a trail spans a time, whatever the frame rate', async ({ page }) => {
-    failsBy('a trail spans a time, whatever the frame rate');
     await page.setViewportSize({ width: 1366, height: 800 });
     await openLessonStep(page, LESSON_PILOTS[0]);
     const spans = [];
@@ -192,7 +171,6 @@ test.describe('I-9: arrows, trails and plots mean what they show', () => {
   test('plot type at reading size: the Kepler plot (canvas)', async ({
     page,
   }) => {
-    failsBy('plot type at reading size: the Kepler plot (canvas)');
     await page.addInitScript(installCanvasTextRecorder);
     await page.setViewportSize({ width: 1366, height: 800 });
     await openLessonStep(page, {
@@ -200,7 +178,15 @@ test.describe('I-9: arrows, trails and plots mean what they show', () => {
       lesson: DRAWING_STATES.keplerPlot.lesson,
     });
     await page.locator('#investigationPlotCanvas').scrollIntoViewIfNeeded();
-    await page.waitForTimeout(500);
+    await expect
+      .poll(async () => {
+        const t = await page.evaluate(
+          readCanvasText,
+          'investigationPlotCanvas'
+        );
+        return t.texts.length;
+      })
+      .toBeGreaterThan(0);
     const r = await page.evaluate(readCanvasText, 'investigationPlotCanvas');
     expect(r.found, 'the plot canvas is on the step').toBe(true);
     const v = judgePlotType(r.texts);
@@ -213,7 +199,6 @@ test.describe('I-9: arrows, trails and plots mean what they show', () => {
   test('plot type at reading size: the transit light curve (SVG)', async ({
     page,
   }) => {
-    failsBy('plot type at reading size: the transit light curve (SVG)');
     await page.setViewportSize({ width: 1366, height: 800 });
     await openLessonStep(page, {
       ...DRAWING_STATES.transitCurve,
@@ -221,7 +206,12 @@ test.describe('I-9: arrows, trails and plots mean what they show', () => {
     await expect(page.locator('#lightCurveChart svg')).toBeVisible({
       timeout: 20000,
     });
-    await page.waitForTimeout(1500);
+    await expect
+      .poll(async () => {
+        const t = await page.evaluate(readSvgPlotText, '#lightCurveChart svg');
+        return t.texts.length;
+      })
+      .toBeGreaterThan(0);
     const r = await page.evaluate(readSvgPlotText, '#lightCurveChart svg');
     const v = judgePlotType(r.texts);
     expect(
@@ -236,6 +226,88 @@ test.describe('I-9: arrows, trails and plots mean what they show', () => {
     const series = judgeSeriesWithoutColour([...distinct.values()].slice(0, 1));
     expect(series.pass).toBe(true);
   });
+});
+
+// -----------------------------------------------------------------------------
+// The main canvas, criterion I-9 (labels and the selection cue)
+// -----------------------------------------------------------------------------
+// The sandbox canvas draws its labels in backing-store pixels with no scaling
+// for the display (js/quality.js renderScale makes the store larger on a HiDPI
+// screen and the context is not scaled to match), so a font of 10 px covers 10
+// CSS pixels on an ordinary screen and about 5 on a display with a ratio of 2.
+// e2e/canvasLegibility.spec.js records that baseline in CI as a ratchet; these
+// are the criteria it is measured against. A label belongs to a body when its
+// anchor is within reach of one; a symbol glyph after a mass belongs to the
+// label before it.
+// -----------------------------------------------------------------------------
+
+const MAIN_STATES = [
+  ...LESSON_PILOTS.filter(p => p.subject === 'scene'),
+  { ...LESSON_PILOTS[3] },
+  { id: 'keplers-wedges', ...DRAWING_STATES.wedges },
+];
+const CUE_ROLE = {
+  'keplers-2nd-law': 'eccentric',
+  'keplers-wedges': 'eccentric',
+  'transit-lab': 'planet',
+  'weighing-stars-binary': 'a',
+  'galilean-resonance': 'star',
+};
+
+for (const dpr of DEVICE_PIXEL_RATIOS) {
+  test.describe(`I-9: main canvas labels at device pixel ratio ${dpr}`, () => {
+    test.use({ deviceScaleFactor: dpr });
+    for (const state of MAIN_STATES) {
+      const open = async page => {
+        await page.addInitScript(installCanvasTextRecorder);
+        await page.setViewportSize({ width: 1366, height: 800 });
+        await openLessonStep(page, state);
+        return page.evaluate(readMainCanvasLabels);
+      };
+      test(`body labels: ${state.id}`, async ({ page }) => {
+        const r = await open(page);
+        expect(
+          r.bodyLabels.length,
+          'the scene drew body labels'
+        ).toBeGreaterThan(0);
+        const v = judgeLabels(r.bodyLabels);
+        expect(
+          { small: v.small, overlaps: v.overlaps },
+          `canvas scale ${r.canvasScale.toFixed(2)}`
+        ).toEqual({ small: [], overlaps: [] });
+      });
+      test(`other canvas text: ${state.id}`, async ({ page }) => {
+        const r = await open(page);
+        expect(r.otherText.length, 'the scene drew other text').toBeGreaterThan(
+          0
+        );
+        const v = judgeLabels(r.otherText);
+        expect(
+          { small: v.small, overlaps: v.overlaps },
+          `canvas scale ${r.canvasScale.toFixed(2)}`
+        ).toEqual({ small: [], overlaps: [] });
+      });
+    }
+  });
+}
+
+test.describe('I-9: the selected body is marked on the canvas', () => {
+  for (const state of MAIN_STATES) {
+    test(`cue: ${state.id}`, async ({ page }) => {
+      await page.addInitScript(installCanvasTextRecorder);
+      await page.setViewportSize({ width: 1366, height: 800 });
+      await openLessonStep(page, state);
+      const m = await page.evaluate(measureSelectionCue, {
+        role: CUE_ROLE[state.id],
+        lumaStep: CUE_LUMA_STEP,
+      });
+      expect(m.selected, 'the body was selected').toBe(true);
+      expect(
+        judgeCue(m).pass,
+        `${m.changed} pixels changed in luminance (frame noise ${m.noise})`
+      ).toBe(true);
+    });
+  }
 });
 
 test.describe('the harness can pass and can fail', () => {

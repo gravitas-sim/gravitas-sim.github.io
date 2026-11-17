@@ -2,7 +2,7 @@
 // The visual criteria's judges: can they pass, and can they fail?
 // -----------------------------------------------------------------------------
 // tools/visual-criteria.mjs holds the measurements criteria I-8 and I-9 are
-// judged by, and e2e/visualCriteria.spec.js and e2e/canvasLegibility.spec.js
+// judged by, and e2e/visualCriteria.criteria.js and e2e/canvasLegibility.spec.js
 // run them on the pilot states. A judge that cannot fail proves nothing, so
 // each is shown here on a known-good measurement and on a known-bad one, and
 // the numbers it holds are checked against the roadmap's fixed criteria.

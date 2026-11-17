@@ -5,10 +5,10 @@
   "machine": "headless Chromium (Playwright), device pixel ratio 1, reduced motion, English or Spanish, one worker",
   "images": "/Users/carl/Desktop/Gravitas/visual-baseline/v4-f1c30f6f/ (outside the repository): <cell id>-canvas.png, -viewport.png, -focus.png, <cell id>.record.json",
   "reproducibility": "Each cell was captured twice. 49 of 108 repeat (identical, inside the playback bar only, or under 6 pixels); 59 do not (47 lesson cells: all of Weighing the Stars, Galilean Resonance and Moon image, 8 of Transit Lab, 3 of Kepler; 12 sandbox cells: 8 binary, 3 crowded, 1 close world). The staged-star lessons run a physics clock the capture cannot hold; a cell that did not repeat is compared by eye or by crop, never by hash alone.",
-  "expectedFailures": {
+  "failsByDesign": {
     "count": 41,
     "where": {
-      "I-8 (visualCriteria.spec.js)": [
+      "I-8 (visualCriteria.criteria.js)": [
         "keplers-2nd-law at 375x812",
         "keplers-2nd-law at 412x915",
         "keplers-2nd-law at 768x1024",
@@ -24,21 +24,21 @@
         "moon-image at 375x812",
         "moon-image at 412x915"
       ],
-      "I-9 arrows, trails, plots (visualCriteria.spec.js)": [
+      "I-9 arrows, trails, plots (visualCriteria.criteria.js)": [
         "arrow length rises with speed",
         "the legend states the arrow scale",
         "a trail spans a time, whatever the frame rate",
         "plot type at reading size: the Kepler plot (canvas)",
         "plot type at reading size: the transit light curve (SVG)"
       ],
-      "I-9 labels and cue (canvasLegibility.spec.js)": [
+      "I-9 labels and cue (visualCriteria.criteria.js)": [
         "body labels @1: keplers-2nd-law, keplers-wedges",
         "other canvas text @1: keplers-2nd-law, transit-lab, weighing-stars-binary, galilean-resonance, keplers-wedges",
         "body labels @2 and other canvas text @2: all five states (10 tests)",
         "cue: all five states (5 tests)"
       ]
     },
-    "note": "test.fail marks in e2e/visualCriteria.spec.js (BY_DESIGN) and e2e/canvasLegibility.spec.js (MAIN_BY_DESIGN); the prompt that makes one pass deletes its entry"
+    "note": "These fail by design: e2e/visualCriteria.criteria.js states the criteria and is run on demand (npm run e2e:criteria), not by the browser suite or CI. The passing ratchet on the same measurements is in e2e/canvasLegibility.spec.js; the prompt that makes a criterion pass moves its test into the suite."
   },
   "criteria": {
     "layout": [

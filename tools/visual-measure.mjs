@@ -2,7 +2,7 @@
 // =============================================================================
 // Measure the visual criteria on the pilot states and print the table
 // -----------------------------------------------------------------------------
-// The same measurements e2e/visualCriteria.spec.js and e2e/canvasLegibility.spec.js
+// The same measurements e2e/visualCriteria.criteria.js and e2e/canvasLegibility.spec.js
 // judge, taken in one browser and written as data, so a prompt can put its
 // "before" (this file's output at the 3.0 baseline, committed in
 // tests/fixtures/visual-baseline.json under "criteria") beside its "after".
