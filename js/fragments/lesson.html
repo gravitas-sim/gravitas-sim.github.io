@@ -21,6 +21,23 @@
     </button>
   </header>
 
+  <!-- Phone only (the stylesheet hides it elsewhere): lowers the sheet to a
+       strip so the scene shows, and raises it again. js/investigations/sheet.js
+       words and states it. -->
+  <button
+    type="button"
+    id="investigationSheet"
+    class="inv-sheet-handle"
+    aria-expanded="true"
+    aria-controls="investigationBody"
+    aria-label="Lower the lesson sheet to see the scene"
+    title="Lower the lesson sheet to see the scene"
+    data-en="Lower the lesson sheet to see the scene|Raise the lesson sheet|Lesson sheet lowered. The scene is in view.|Lesson sheet raised."
+    data-es="Bajar la hoja de la lección para ver la escena|Subir la hoja de la lección|Hoja de la lección bajada. La escena está a la vista.|Hoja de la lección subida."
+  >
+    <span aria-hidden="true"></span>
+  </button>
+
   <div class="inv-progress">
     <div
       class="inv-progress-track"

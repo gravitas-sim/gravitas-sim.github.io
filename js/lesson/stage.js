@@ -196,19 +196,28 @@ export function fitCamera(
     (clearW * usable) / spanX,
     (clearH * usable) / spanY
   );
-  // The view puts world point p at viewportCenter + p * zoom + pan, so to land
-  // the stage's center in the middle of the clear region the pan is the offset
-  // between the two centers, less the stage's own center scaled.
+  // The view puts world point p at viewportCenter + (p.x, -p.y) * zoom + pan
+  // (the world's y runs up), so to land the stage's center in the middle of the
+  // clear region the pan is the offset between the two centers, less the
+  // stage's own center scaled.
   const clearCenterX = left + clearW / 2;
   const clearCenterY = top + clearH / 2;
   return {
     zoom,
     pan: {
       x: clearCenterX - view.width / 2 - ((minX + maxX) / 2) * zoom,
-      y: clearCenterY - view.height / 2 - ((minY + maxY) / 2) * zoom,
+      y: clearCenterY - view.height / 2 + ((minY + maxY) / 2) * zoom,
     },
   };
 }
+
+/** The points a stage's entries stand at, for a fit. */
+export const placedOf = entries =>
+  entries.map(e => ({
+    x: e.star.pos.x,
+    y: e.star.pos.y,
+    radius: e.star.radius,
+  }));
 
 /** World units per Schwarzschild radius of the total mass. A display choice. */
 export const UNITS_PER_RS = 3.2;

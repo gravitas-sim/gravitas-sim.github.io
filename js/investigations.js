@@ -149,6 +149,7 @@ import {
 import { get, put } from './storage/local.js';
 import { helpStages, helpTaken } from './answerFeedback.js';
 import { frameState } from './referenceFrame.js';
+import { closeSheet, initSheet } from './investigations/sheet.js';
 import {
   SCALE,
   applyStage,
@@ -163,8 +164,8 @@ import {
   stageScale,
   stagePresence,
   stagedStars,
-  takeFit,
 } from './lesson/stageGate.js';
+import { frameScene, takeFit } from './lessonFrame.js';
 import {
   bindRoles,
   boundRoles,
@@ -623,9 +624,10 @@ function applySetup(setup) {
  */
 /**
  * Resolve this step's `bind` against the world that is on screen.
+ * @param {boolean} [fresh] - The step's own scene was just built: frame it
  * @returns {void}
  */
-function bindStepRoles(force) {
+function bindStepRoles(force, fresh) {
   const step = currentStep();
   const running = !state.paused;
   holdClock(step, appliedSetup);
@@ -647,12 +649,8 @@ function bindStepRoles(force) {
   // roles to somebody else's.
   if (step?.stage) {
     const { problems } = applyStage(step.stage, { force });
-    // The fit itself is deferred: applyStage records that one was asked for
-    // and the panel's own tick performs it, once the panel and the instrument
-    // have been laid out and the application has finished setting up its
-    // camera. Fitting here instead measured panels that were not there yet and
-    // was then overwritten by the boot.
-
+    // Its fit is asked for here and taken on the panel's tick, after layout and
+    // after the boot has finished with the camera.
     warn(problems, 'staged star');
     return;
   }
@@ -665,6 +663,7 @@ function bindStepRoles(force) {
     modelOwned: step.prescribes || [],
   });
   warn(problems, 'unbound role');
+  if (fresh) frameScene();
 }
 
 function applyLocks() {
@@ -1863,12 +1862,10 @@ function renderProbe() {
   // without this the reader is left looking at a scenario the step knows
   // nothing about. Cheap: it rebuilds only when the stars have actually gone.
   if (step?.stage) {
-    // Only when the scene has been *replaced*, not when the reader has been
-    // experimenting. Deleting a body, firing one into a star, letting two
-    // merge - those are things a reader did on purpose, and rebuilding the
-    // stage under them would be the application undoing their work every
-    // quarter of a second. A world that has been swapped wholesale leaves
-    // nothing of the stage behind, and that is what this waits for.
+    // Only when the scene has been *replaced*: deleting a body or letting two
+    // merge is the reader's doing, and rebuilding under it would undo their
+    // work every quarter of a second. A swapped world leaves nothing of the
+    // stage behind, and that is what this waits for.
     const presence = stagePresence();
     if (presence.allGone) {
       applyStage(step.stage, { force: true });
@@ -1880,10 +1877,8 @@ function renderProbe() {
       paintTool({ quiet: true });
     }
   }
-  // A live instrument whose subject is the scene has to notice the reader
-  // choosing a different body (neither a control change nor a stage rebuild
-  // happens when somebody clicks a star), but repaint only when the selection
-  // actually changes, not every tick.
+  // A live instrument on the scene repaints when the reader picks another
+  // body, and only then.
   const chosen = state.selectedObject?.object?.id ?? null;
   if (chosen !== lastProbeSelection) {
     lastProbeSelection = chosen;
@@ -2046,13 +2041,14 @@ function goToStep(index, { rebuild = false, open = false } = {}) {
   // backwards correct: the transit lesson swaps in a blended binary near the
   // end, and stepping back must not leave it loaded for the earlier measurement.
   const setup = setupInForceAt(stepIndex);
-  if (rebuild || (setup && setup !== appliedSetup)) applySetup(setup);
+  const fresh = rebuild || (setup && setup !== appliedSetup);
+  if (fresh) applySetup(setup);
   else applyLocks();
 
   // Before the new step draws anything, so a reader never hears the last
   // step's signal over the new step's instructions.
   releaseLessonAudio();
-  bindStepRoles(rebuild);
+  bindStepRoles(rebuild, fresh);
 
   // A lesson that leaves the inspector reachable, as the black hole one does,
   // can have its object card open when the student moves on. The card is a
@@ -2410,6 +2406,7 @@ export function closeInvestigation() {
   els.panel.hidden = true;
   els.panel.classList.remove('is-open');
   document.body.classList.remove('investigation-open');
+  closeSheet();
   stopProbeLoop();
   releaseLocks();
   if (els.plotPanel) els.plotPanel.hidden = true;
@@ -2948,6 +2945,7 @@ export function initInvestigations({ signal } = {}) {
   });
 
   els.resetScenario?.addEventListener('click', resetStepScene);
+  initSheet({ announce, save }, signal);
 
   els.finishClose?.addEventListener('click', closeFinish);
   els.finishBack?.addEventListener('click', closeFinish);

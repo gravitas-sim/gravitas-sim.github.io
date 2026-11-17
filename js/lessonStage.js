@@ -24,9 +24,10 @@ import {
   SCALE,
   UNITS_PER_RS,
   displayRadius,
-  fitCamera,
+  placedOf,
   rowLayout,
 } from './lesson/stage.js';
+import { fitNow, requestFit } from './lessonFrame.js';
 import {
   BlackHole,
   accretion_disk_particles,
@@ -105,18 +106,6 @@ let lastBinary = null;
 let lastHole = null;
 /** Labeled "then" copies a reader has pinned, in the order they took them. */
 let snapshots = [];
-/**
- * A fit that has been asked for and not yet performed.
- *
- * A stage is built during a step change, before the lesson panel and the
- * instrument have been laid out - and on the first step of all, before the
- * application has finished setting up its own camera, which then overwrites
- * whatever the fit did. So the request is recorded here and taken by whoever
- * is in a position to honor it: js/investigations.js calls takeFit() from the
- * panel's own tick, which runs after layout and after the boot has settled.
- */
-let pendingFit = false;
-
 /** What is on the stage now. @returns {Array} */
 export const stagedStars = () => staged.slice();
 
@@ -242,8 +231,6 @@ export function resetStageForTests() {
   lastHole = null;
   snapshots = [];
   requestFit(false);
-  fitAttempts = 0;
-  fitApplied = null;
 }
 
 /** How much of the population is on the canvas, and of how many. @returns {?object} */
@@ -258,8 +245,6 @@ const family = {
   end(fit) {
     bumpWorldGeneration();
     requestFit(fit);
-    fitAttempts = 0;
-    fitApplied = null;
     return bindRoles(rolesOfStage(), {}).bound;
   },
 };
@@ -382,8 +367,6 @@ export function applyStage(stage, { force = false } = {}) {
       shownIds: stagedStars().map(e => e.spec?.populationId ?? null),
     };
     requestFit(stage.fit);
-    fitAttempts = 0;
-    fitApplied = null;
     return { built: true, roles: [], problems: {}, population: out };
   }
   if (!stage?.stars?.length) {
@@ -461,8 +444,6 @@ export function applyStage(stage, { force = false } = {}) {
   bumpWorldGeneration();
 
   requestFit(stage.fit);
-  fitAttempts = 0;
-  fitApplied = null;
   const roles = {};
   for (const entry of staged) roles[entry.role] = { id: entry.star.id };
   const bound = bindRoles(roles, { modelOwned: Object.keys(roles) });
@@ -787,8 +768,6 @@ export function applySingleStage(spec = {}) {
   });
   bumpWorldGeneration();
   requestFit(spec.fit);
-  fitAttempts = 0;
-  fitApplied = null;
   const bound = bindRoles(rolesOfStage(), { modelOwned: ['source'] });
   return { built: true, roles: bound.bound };
 }
@@ -932,8 +911,6 @@ export function applyBinaryStage(spec = {}) {
   });
   bumpWorldGeneration();
   requestFit(spec.fit);
-  fitAttempts = 0;
-  fitApplied = null;
   const bound = bindRoles(rolesOfStage(), { modelOwned: ['a', 'b'] });
   return { built: true, roles: bound.bound };
 }
@@ -1008,8 +985,6 @@ export function applySystemStage(spec = {}) {
   });
   bumpWorldGeneration();
   requestFit(spec.fit);
-  fitAttempts = 0;
-  fitApplied = null;
   const bound = bindRoles(rolesOfStage(), {});
   return { built: true, roles: bound.bound };
 }
@@ -1100,8 +1075,6 @@ export function applyStarPairStage(spec = {}) {
   });
   bumpWorldGeneration();
   requestFit(spec.fit);
-  fitAttempts = 0;
-  fitApplied = null;
   const bound = bindRoles(rolesOfStage(), {});
   return { built: true, roles: bound.bound, period: ic.period };
 }
@@ -1282,8 +1255,6 @@ export function clearStage() {
   lastHole = null;
   lastPopulation = null;
   requestFit(false);
-  fitAttempts = 0;
-  fitApplied = null;
   bumpWorldGeneration();
 }
 
@@ -1565,162 +1536,16 @@ export function restagePopulation({ thresholdFlux = null } = {}) {
   const out = applyPopulationStage({ ...decl, thresholdFlux: want });
   lastPopulation = { ...out, shownIds: next.shown.map(x => x.id) };
   requestFit(lastDeclaration.fit);
-  fitAttempts = 0;
-  fitApplied = null;
   return true;
 }
 
 /**
- * Perform a fit that was asked for, once the panels are there to measure.
- *
- * Returns false when there is nothing pending or nothing to measure yet, so a
- * caller can poll it cheaply from a tick it already has.
- *
- * @returns {boolean} Whether a fit was performed
- */
-export function takeFit() {
-  if (!pendingFit || !staged.length) return false;
-  if (typeof document === 'undefined') return false;
-  // The reader owns the camera the moment they touch it. Without this the
-  // retry below and a reader dragging the view fight each other for the first
-  // few seconds of a staged step: they pan somewhere to look at a star, the
-  // next tick decides the fit did not survive, and the view snaps back. The
-  // retry exists for an application that resets the camera during boot, not
-  // for a person who has decided to look somewhere else.
-  if (state.cameraTouchedAt) {
-    requestFit(false);
-    fitApplied = null;
-    return false;
-  }
-  const panel = document.getElementById('investigationPanel');
-  if (!panel || panel.hidden || !panel.getBoundingClientRect().width) {
-    return false;
-  }
-  // Did the last attempt survive? js/world/build.js sets the camera to the
-  // scenario's zoom and the origin whenever the world is rebuilt, and on a
-  // first load that happens *after* the lesson has opened - so a single
-  // attempt is applied and then silently undone, which is what it did.
-  if (fitApplied && sameCamera(fitApplied)) {
-    requestFit(false);
-    fitApplied = null;
-    return false;
-  }
-  // Bounded, and small. Two and a half seconds of trying is enough to outlast
-  // a boot; beyond that something else genuinely owns the camera and this must
-  // stop, because a view that keeps snapping back is worse than one that never
-  // moved.
-  if (++fitAttempts > MAX_FIT_ATTEMPTS) {
-    requestFit(false);
-    fitApplied = null;
-    return false;
-  }
-  const done = fitStage();
-  fitApplied = done ? { zoom: state.zoom, pan: { ...state.pan } } : null;
-  return done;
-}
-
-/**
- * How many ticks a fit may spend waiting for the boot to stop moving it.
- *
- * The panel ticks four times a second, so twenty-four is six seconds. It needs
- * to be that long because on a cold load the application rebuilds its own
- * world - and resets the camera with it - some way after the lesson panel has
- * opened, and a fit applied before that is silently undone. It also needs to
- * be bounded: past this the camera belongs to whoever else is moving it, and a
- * view that keeps snapping back is worse than one that never moved.
- */
-const MAX_FIT_ATTEMPTS = 24;
-let fitAttempts = 0;
-let fitApplied = null;
-
-/** Whether the camera is still where a fit put it. */
-const sameCamera = was =>
-  Math.abs(state.zoom - was.zoom) < 1e-6 &&
-  Math.abs(state.pan.x - was.pan.x) < 0.5 &&
-  Math.abs(state.pan.y - was.pan.y) < 0.5;
-
-/**
- * Ask for a fit on the next tick, or cancel one.
- *
- * Two pieces of state have to move with `pendingFit` and one of them did not.
- * `fitAttempts` is module-level, and the nine assignments this now replaces
- * left it alone: once a step had spent its budget of retries, no later step in
- * the lesson could frame itself. And `cameraTouchedAt` has to be forgotten at
- * the start of each staged step, or the reader's first pan of a session would
- * cancel every fit after it.
- *
- * @param {boolean} [on] - Whether a fit is wanted; defaults to yes
- */
-export const requestFit = (on = true) => {
-  pendingFit = Boolean(on);
-  fitAttempts = 0;
-  fitApplied = null;
-  if (on) state.cameraTouchedAt = 0;
-};
-
-/**
- * How much of the window the lesson's own furniture is covering.
- *
- * Measured rather than assumed, because the lesson panel and the instrument
- * are different widths in different languages and disappear entirely on a
- * narrow window, where they stack below the canvas instead of beside it. What
- * is left over is where the stage has to fit.
- *
- * @returns {{left: number, right: number, top: number, bottom: number}} Pixels
- */
-function panelInset() {
-  if (typeof document === 'undefined') return {};
-  let left = 0;
-  let right = 0;
-  // The main control rail counts too. It floats over the canvas on the right
-  // exactly as the lesson panel does on the left, and leaving it out put the
-  // second star of a two-star shelf underneath it - on a step that asks the
-  // reader to click that star.
-  for (const id of [
-    'investigationPanel',
-    'investigationTool',
-    'mainControls',
-  ]) {
-    const el = document.getElementById(id);
-    if (!el || el.hidden) continue;
-    const box = el.getBoundingClientRect();
-    if (!box.width || !box.height) continue;
-    // Only furniture that is genuinely beside the canvas: a panel stacked
-    // below it on a narrow window covers the bottom, not a side, and taking
-    // its width off would leave nowhere to put anything.
-    if (box.bottom < window.innerHeight * 0.5) continue;
-    if (box.left < window.innerWidth * 0.5) left = Math.max(left, box.right);
-    else right = Math.max(right, window.innerWidth - box.left);
-  }
-  return { left, right, top: 0, bottom: 0 };
-}
-
-/**
- * Frame the whole stage.
- *
- * Only ever on request - an action a reader presses, or a step that says it
- * fits on entry. A camera that re-fitted itself every frame would take the
- * view back every time somebody looked somewhere else, which is the single
- * most irritating thing an interface of this kind can do.
+ * Frame the whole stage, on request only: a camera that re-fitted itself would
+ * take the view back every time somebody looked somewhere else.
  *
  * @returns {boolean} Whether the camera moved
  */
-export function fitStage() {
-  const placed = staged.map(e => ({
-    x: e.star.pos.x,
-    y: e.star.pos.y,
-    radius: e.star.radius,
-  }));
-  const view = {
-    width: typeof window === 'undefined' ? 1280 : window.innerWidth,
-    height: typeof window === 'undefined' ? 720 : window.innerHeight,
-  };
-  const camera = fitCamera(placed, view, { inset: panelInset() });
-  if (!camera) return false;
-  state.zoom = camera.zoom;
-  state.pan = camera.pan;
-  return true;
-}
+export const fitStage = () => fitNow(placedOf(staged));
 
 /**
  * Put the selected body in the middle of the view, at the zoom it is at.

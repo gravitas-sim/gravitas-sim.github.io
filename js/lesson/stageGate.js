@@ -75,7 +75,6 @@ export const stagedPopulation = () => stage?.stagedPopulation() ?? null;
 export const pinnedSnapshots = () => stage?.pinnedSnapshots() ?? [];
 export const stagePresence = () =>
   stage?.stagePresence() ?? { present: 0, total: 0, allGone: false };
-export const takeFit = () => stage?.takeFit() ?? false;
 export const fitStage = () => stage?.fitStage() ?? false;
 export const centerOnSelected = () => stage?.centerOnSelected() ?? false;
 export const clearStage = call('clearStage');
