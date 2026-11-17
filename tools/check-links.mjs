@@ -171,6 +171,38 @@ async function checkRoute(fragment) {
 }
 
 /**
+ * Check a fragment of the validation page. Its area sections are written when
+ * the page loads (js/validationPage.js, `g-<slug>`, one per group of
+ * validation/data.json), so no HTML carries them. They are resolved against
+ * the groups the data holds, as the routes above are against their catalogs.
+ *
+ * @param {string} fragment - The fragment, without its leading '#'
+ * @returns {Promise<{routed: boolean, why: ?string}>} routed says whether the
+ *   fragment names a group at all; why is null when the group exists
+ */
+let validationGroups = null;
+async function checkValidationGroup(fragment) {
+  if (!/^g-/.test(fragment)) return { routed: false, why: null };
+  validationGroups ??= new Set(
+    JSON.parse(
+      await readFile(join(REPO, 'validation/data.json'), 'utf8')
+    ).checks.map(
+      c =>
+        `g-${c.group
+          .toLowerCase()
+          .replace(/[^a-z0-9]+/g, '-')
+          .replace(/^-|-$/g, '')}`
+    )
+  );
+  return {
+    routed: true,
+    why: validationGroups.has(fragment)
+      ? null
+      : `no validation group with id "${fragment}"`,
+  };
+}
+
+/**
  * Resolve a reference to a path on disk.
  * @param {string} root - The served root
  * @param {string} fromFile - The file the reference appears in
@@ -267,11 +299,14 @@ async function main() {
       if (fragment && extname(onDisk) === '.html') {
         const page = pages.get(onDisk) ?? parse(await readFile(onDisk, 'utf8'));
         pages.set(onDisk, page);
-        // Only the application's own front page routes on its fragment.
+        // Only the application's own front page routes on its fragment, and
+        // the validation page writes its group anchors at run time.
         const route =
           onDisk === join(root, 'index.html')
             ? await checkRoute(fragment)
-            : { routed: false, why: null };
+            : onDisk === join(root, 'validation/index.html')
+              ? await checkValidationGroup(fragment)
+              : { routed: false, why: null };
         if (route.routed) {
           if (route.why) broken.push({ file, value, why: route.why });
         } else if (!page.ids.has(fragment)) {

@@ -282,7 +282,7 @@ export const SETTING_ITEMS = Object.freeze([
     type: 'bool',
   },
   {
-    section: 'visuals',
+    section: 'performance',
     labelId: 'settings.label.bodyLabels',
     key: 'body_labels',
     type: 'option',
