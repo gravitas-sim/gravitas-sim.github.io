@@ -828,6 +828,13 @@ export const EN_DEFERRED = {
   'inv.answer.model': 'Model answer shown.',
   'inv.plot.point': 'Point',
   'inv.plot.tableCaption': '{title}: the plotted points as numbers',
+  'inv.plot.row': 'Row',
+  'inv.plot.missing': 'missing',
+  'inv.plot.read': '{point}: {xl} {x}, {yl} {y}',
+  'inv.plot.described':
+    '{n} points; {xl} runs from {lo} to {hi}. Arrow keys move between the points and Enter chooses one.',
+  'inv.point.label': 'Look here: {name}',
+  'inv.point.announce': 'Pointing at {name}.',
   'inv.plot.canvasLabel':
     '{title}: a scatter plot of {n} points. The same points are in the table below.',
   'inv.predict.held':
