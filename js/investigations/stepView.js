@@ -59,11 +59,9 @@ export const misconceptionText = missed =>
 export const SHORT_ANSWER_MIN = 40;
 
 /**
- * Five places a lazy module adds to a step; an empty slot is the step as it
- * was. The engine fills one when a lesson opens (`loadSeams`, investigations.js).
- * field: importFromSelection (figures.js), source, take, span; reveal: evidence,
- * estimate; time: time, pauseAt.auto, variation; canvas: canvas; feedback:
- * fields[].misconceptions. `point` and `plot.cursor` load with figures.js.
+ * Five places a lazy module adds to a step (an empty slot is the step as it was),
+ * filled when a lesson opens: field (importFromSelection, source, take, span),
+ * reveal, time, canvas, feedback.
  */
 export const slots = {
   field: null,

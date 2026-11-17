@@ -27,14 +27,7 @@ function niceScale(min, max) {
 /** Format an axis tick without trailing noise. */
 const tick = v => tickLabel(v);
 
-/**
- * Least-squares fit through the origin.
- *
- * Forced through zero: an intercept would let bad data look straight.
- *
- * @param {Array} pts - [{x, y}]
- * @returns {number|null} Slope, or null when it is not determined
- */
+/** Least-squares fit through the origin (an intercept would let bad data look straight). */
 export function fitSlope(pts) {
   let sxy = 0;
   let sxx = 0;
@@ -46,11 +39,7 @@ export function fitSlope(pts) {
   return sxx > 0 ? sxy / sxx : null;
 }
 
-/**
- * Least-squares slope with a free intercept, for log-log axes.
- * @param {Array} pts - [{x, y}]
- * @returns {number|null} Slope
- */
+/** Least-squares slope with a free intercept, for log-log axes. */
 function logSlope(pts) {
   const n = pts.length;
   if (n < 2) return null;
@@ -65,12 +54,7 @@ function logSlope(pts) {
   return den === 0 ? null : num / den;
 }
 
-/**
- * The plot's points, as a table.
- * @param {Object} spec - The step's plot specification
- * @param {Array<{x:number,y:number,label?:string}>} points - What is drawn
- * @param {Object} opts - {transform, useLog} - which labels apply
- */
+/** The plot's points, as a table. */
 function renderPlotTable(els, spec, points, { transform, useLog } = {}) {
   const wrap = els.plotTableWrap;
   const table = els.plotTable;
@@ -276,10 +260,7 @@ export function drawPlot(step, vals, { canvas, els, transformed, log }) {
   }
 }
 
-/**
- * Draw an ellipse with its anatomy labeled, at a chosen eccentricity (the
- * slider is how "the Sun is at a focus" becomes visible).
- */
+/** Draw an ellipse with its anatomy labeled, at a chosen eccentricity. */
 export function drawEllipse(canvas, e) {
   if (!canvas) return;
   const css = getComputedStyle(document.documentElement);
@@ -287,7 +268,6 @@ export function drawEllipse(canvas, e) {
   const ink = tok('--text-primary', '#e9edf7');
   const muted = tok('--text-muted', '#8a8f9e');
   const line = tok('--border-subtle', '#2a2f3d');
-  // One color per quantity, matched by the key beneath the canvas.
   const C_A = '#5ec8f5';
   const C_B = '#8de08a';
   const C_C = '#f2a65a';
@@ -386,7 +366,6 @@ export function drawEllipse(canvas, e) {
       ctx.setLineDash([]);
     }
     ctx.fillStyle = color;
-    // Below the axis so it never collides with a or c above it.
     ctx.fillText(label, x, cy + 44);
   };
   focus(cx + c, true, 'star', C_STAR);
@@ -408,12 +387,7 @@ export function drawEllipse(canvas, e) {
   ctx.fillText(`b/a = ${fixed(b / a, 3)}`, 6, 33);
 }
 
-/**
- * The button that copies the selected object's measurements into the form.
- *
- * @param {Object} step - A step that declares importFromSelection
- * @returns {string} Markup
- */
+/** The button that copies the selected object's measurements into the form. */
 export const importRow = step =>
   `<div class="inv-import-row">
            <button type="button" class="inv-import-btn" data-import>

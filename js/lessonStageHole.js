@@ -15,16 +15,9 @@ import {
 } from './physics.js';
 
 /**
- * Stand one black hole on the canvas, with bodies in orbit around it.
- *
- * Orbit radii are multiples of the hole's *drawn* radius: a statement about
- * the picture, not a Schwarzschild radius, and the floor is a floor on the
- * drawing, not the ISCO. The engine is Newtonian and has no horizon; the
- * relativistic numbers come from js/blackHolePhysics.js. Engine-owned: the
- * integrator moves these and the lesson measures what it does.
- *
+ * One black hole with bodies in orbit. Radii are multiples of the *drawn*
+ * radius (a picture, not Schwarzschild radii or the ISCO); engine-owned.
  * @param {object} spec - {massSun, orbits, fit}
- * @returns {{built: boolean, roles: Array<string>}} What was staged
  */
 export function applyHoleStage(spec = {}, family) {
   const massSun = Number(spec.massSun) > 0 ? Number(spec.massSun) : 10;
@@ -70,13 +63,9 @@ export function applyHoleStage(spec = {}, family) {
 }
 
 /**
- * A star and a black hole of the same mass, each with a body in the same orbit:
- * the controlled comparison, whose orbits are indistinguishable because outside
- * a spherical body the field depends on the mass alone. The orbit is outside
- * both central bodies, which is the condition under which that is true.
- *
+ * A star and a black hole of the same mass, each with a body in the same orbit,
+ * outside both: the controlled comparison.
  * @param {object} spec - {massSun, orbitUnits, fit}
- * @returns {{built: boolean, roles: Array<string>}} What was staged
  */
 export function applyEqualMassStage(spec = {}, family) {
   const massSun = Number(spec.massSun) > 0 ? Number(spec.massSun) : 8;
