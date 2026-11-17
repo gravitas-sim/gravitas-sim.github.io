@@ -290,6 +290,6 @@ current, and the orchestrator checks it.
 | `visual-matrix.mjs` | The before-and-after matrix: the pilot scenes, photographed at matched states |  |
 | `visual-measure.mjs` | Measure the visual criteria on the pilot states and print the table |  |
 | `worker-probe.mjs` | npm run probe:workers - what the page's Workers hold, and what it keeps | `npm run probe:workers` |
-| `workspace-walk.mjs` | The sandbox workspace walk: seven tasks by mouse, keyboard and touch, with each control's tier, presses and place (Prompt 452) |  |
+| `workspace-walk.mjs` | The sandbox workspace walk: seven tasks, by mouse, by keyboard and by touch |  |
 | `xray-scenes.mjs` | The committed scenes of the X-ray counts kernel's validation (Prompt 243) |  |
 | `xray-validate.mjs` | The X-ray counts kernel against its committed thresholds (Prompt 243) | `npm run xray:validate` |

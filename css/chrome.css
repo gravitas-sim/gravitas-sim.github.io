@@ -468,13 +468,20 @@
     text-align: center;
   }
 
-  /* Fit view and Undo, above the sections, one to a row: "Fit View to Bodies"
-     does not fit half a rail. */
+  /* Fit view and Undo, above the sections, side by side; the labels wrap to a
+     second line rather than push the open section off the rail. */
   .rail-at-hand {
     display: grid;
+    grid-template-columns: 1fr 1fr;
     gap: 2px;
     padding-bottom: var(--space-1);
     border-bottom: 1px solid var(--border-subtle);
+  }
+
+  .ui-container .rail-at-hand .ui-button {
+    padding: 6px var(--space-2);
+    font-size: var(--text-2xs);
+    line-height: 1.25;
   }
 
   /* A label that wraps stays against the left edge, like the rest of the rail. */

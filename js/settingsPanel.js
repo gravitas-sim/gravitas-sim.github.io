@@ -596,7 +596,7 @@ const buildSettingsMenu = ({ keep = false } = {}) => {
     // The heading's own button folds the section. The header used to be a
     // <div> with a click handler, which a keyboard could not reach and a screen
     // reader did not report as a control at all.
-    const titleDiv = document.createElement('h3');
+    const titleDiv = document.createElement('h2');
     titleDiv.className = 'settings-section-title';
     const fold = document.createElement('button');
     fold.type = 'button';

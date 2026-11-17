@@ -1862,6 +1862,14 @@
     color: var(--hud-text-strong);
   }
 
+  @media (pointer: coarse) {
+    .scenario-about > summary {
+      display: flex;
+      align-items: center;
+      min-height: 44px;
+    }
+  }
+
   .scenario-about-body {
     max-height: 40vh;
     overflow-y: auto;
