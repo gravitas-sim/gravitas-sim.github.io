@@ -53,7 +53,7 @@ const BUDGETS = [
   {
     id: 'initial',
     label: 'Initial download (CSS + eager JS)',
-    limit: 735,
+    limit: 735.9,
     reason:
       'Was 743 KB when this budget was first asked for. The application had ' +
       'already grown to 771 KB on its own - the extracted state module, the ' +
@@ -112,12 +112,17 @@ const BUDGETS = [
       '\n\nLowered from 830 to 735 KB when the inspector card, the Settings ' +
       'panel and the rotation curve panel became fetches at their first use: ' +
       '811.3 to 731.3 KB measured on a Node 22.23.4 build, the ceiling the ' +
-      'measurement plus 0.5%, rounded up to 0.1 KB (D-R4-311-01).',
+      'measurement plus 0.5%, rounded up to 0.1 KB (D-R4-311-01).' +
+      ' A world seen close (D-R4-448-06): the night side, the phase, the seeded ' +
+      'markings and the lighting sentences are drawn by the start-up drawing ' +
+      'modules, 735.0 to 735.9 KB, the exact overrun measured on CI (run ' +
+      '44177612589, 753,496 bytes, 735.84 KB) rounded up to 0.1 KB, under the ' +
+      'standing approval of 2026-10-10.',
   },
   {
     id: 'deferred',
     label: 'Deferred JavaScript (lazy chunks, gzipped)',
-    limit: 3169.6,
+    limit: 3169.8,
     reason:
       'Jumped from 1369 KB to 2105 KB when three.js and Chart.js stopped being ' +
       'CDN requests and became bundled chunks. That is the point of the change ' +
@@ -712,7 +717,8 @@ const BUDGETS = [
       '\n\nThe inspector card, Settings and rotation curve loading on first use (D-R4-311-03): the limit is raised from 3129.7 to 3156.8 KB, the overrun measured on CI (3,232,496 bytes gzipped, 3156.73 KB), under the standing approval of 2026-10-10 and a maintainer decision of 2026-11-16. Code that was in the start-up chunks is now in lazy chunks and counts as deferred; the initial download falls from 811.3 to 731.3 KB.' +
       '\n\nThe plot, ellipse, import and black-hole stage code loading only where a lesson uses it (D-R4-318-03): the limit is raised from 3156.8 to 3157.9 KB, the exact overrun measured on CI (run 44015173061, 3,233,666 bytes gzipped, 3157.88 KB) rounded up to 0.1 KB, under the standing approval of 2026-10-10. The new lazy chunks cannot be size-neutral (they gzip to 4,041 B against about 2,780 B recovered from the chunks the code left); the start-up and initial download are unchanged.' +
       '\n\nReading capture, the take-reading button and its provenance (D-R4-319-06): the limit is raised from 3157.9 to 3161.7 KB, the exact overrun measured on CI (run 44040634652, 3,237,530 bytes gzipped) rounded up to 0.1 KB, under the standing approval of 2026-10-10.' +
-      '\n\nLinked plot views (D-R4-322-05): the limit is raised from 3161.7 to 3169.6 KB, the exact overrun measured on CI (run 44077680533, 3,245,639 bytes gzipped, 3169.57 KB) rounded up to 0.1 KB, under the standing approval of 2026-10-10. The lesson graph and the Observatory are separate builds, so the lesson graph carries its own copy of the shared plot component.',
+      '\n\nLinked plot views (D-R4-322-05): the limit is raised from 3161.7 to 3169.6 KB, the exact overrun measured on CI (run 44077680533, 3,245,639 bytes gzipped, 3169.57 KB) rounded up to 0.1 KB, under the standing approval of 2026-10-10. The lesson graph and the Observatory are separate builds, so the lesson graph carries its own copy of the shared plot component.' +
+      "\n\nA world seen close (D-R4-448-06): the limit is raised from 3169.6 to 3169.8 KB, the exact overrun measured on CI (run 44177612589, 3,245,830 bytes gzipped, 3169.76 KB) rounded up to 0.1 KB, under the standing approval of 2026-10-10. The growth is the lazily loaded inspector's Appearance disclosure and the Spanish lighting sentences.",
   },
 ];
 
