@@ -135,7 +135,7 @@ export const RULE_INDEX = {
 /** What is wrong with the sources a step's fields declare: one of probe, tool or span each, naming a row or series the step has. */
 export function readingProblems(step, { ctx, widget }) {
   const bad = [];
-  const rowsOf = (kind, s) => {
+  const rowsOf = kind => {
     try {
       if (kind === 'probe') return step.probe?.(ctx) || [];
       const v = Object.fromEntries(
