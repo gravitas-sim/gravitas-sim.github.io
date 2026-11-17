@@ -317,6 +317,89 @@
     break-inside: avoid;
   }
 
+  /* --- The model page: tasks, grouped contents, back links ---------------- */
+  .doc-tasks {
+    margin: var(--space-5) 0 var(--space-6);
+    padding: var(--space-4) var(--space-5);
+    border-left: 2px solid var(--accent);
+    background: var(--surface-2);
+    border-radius: 0 var(--radius-md) var(--radius-md) 0;
+  }
+  .doc-main .doc-tasks-label {
+    margin: 0 0 var(--space-3);
+    font-family: var(--font-mono);
+    font-size: var(--text-2xs);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text-secondary);
+  }
+  .doc-tasks ul {
+    margin: 0;
+    padding-left: var(--space-5);
+  }
+  .doc-tasks li:last-child {
+    margin-bottom: 0;
+  }
+  .doc-toc-wide {
+    columns: 2;
+    column-gap: var(--space-6);
+  }
+  .doc-toc .doc-toc-wide h3 {
+    margin: var(--space-4) 0 var(--space-2);
+    font-family: var(--font-mono);
+    font-size: var(--text-2xs);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-secondary);
+    break-after: avoid;
+  }
+  .doc-toc-group:first-child h3 {
+    margin-top: 0;
+  }
+  .doc-toc-wide ul,
+  .doc-toc-narrow ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .doc-toc-wide li,
+  .doc-toc-narrow li {
+    margin-bottom: 6px;
+    break-inside: avoid;
+  }
+  .doc-toc-narrow {
+    display: none;
+  }
+  .doc-toc-narrow details {
+    border-top: 1px solid var(--border-subtle);
+    padding: var(--space-1) 0;
+  }
+  .doc-toc-narrow summary {
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+  }
+  .doc-toc-narrow ul {
+    margin: var(--space-2) 0;
+  }
+  .doc-main .doc-back {
+    margin: var(--space-9) 0 0;
+    text-align: right;
+    font-size: var(--text-xs);
+  }
+  .doc-main .doc-back + h2 {
+    margin-top: var(--space-1);
+  }
+  .doc-main h4 {
+    margin: var(--space-5) 0 var(--space-2);
+    font-size: var(--text-sm);
+    color: var(--text-primary);
+    scroll-margin-top: 84px;
+  }
+  .doc-feature > h4 {
+    margin-top: 0;
+  }
+
   /* --- Narrow screens ---------------------------------------------------- */
   @media (max-width: 767px) {
     .doc-main {
@@ -324,6 +407,15 @@
     }
     .doc-toc ol {
       columns: 1;
+    }
+    .doc-toc-wide {
+      display: none;
+    }
+    .doc-toc-narrow {
+      display: block;
+    }
+    .doc-tasks {
+      padding: var(--space-3) var(--space-4);
     }
     .doc-feature dl {
       grid-template-columns: 1fr;
@@ -338,6 +430,13 @@
   @media print {
     .doc-main {
       max-width: none;
+    }
+    .doc-toc-wide {
+      display: block;
+    }
+    .doc-toc-narrow,
+    .doc-main .doc-back {
+      display: none;
     }
   }
 }
