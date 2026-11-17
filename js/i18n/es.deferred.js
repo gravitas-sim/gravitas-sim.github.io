@@ -733,6 +733,7 @@ export const ES_DEFERRED = {
   'inv.tool.reloadNeeded':
     'Este instrumento sigue sin poder cargarse. Vuelva a cargar la página para intentarlo de nuevo; sus respuestas se conservan.',
   'inv.tool.reload': 'Volver a cargar la página',
+  'inv.tool.start': 'Devolver el instrumento a su posición inicial',
   'inv.tool.pickable':
     'Un diagrama al que puedes apuntar. Haz clic o arrastra para mover el cursor; las flechas también lo mueven, y los deslizadores de abajo hacen lo mismo con números.',
   'inv.error.scenario': 'No se pudo cargar el escenario de este paso.',

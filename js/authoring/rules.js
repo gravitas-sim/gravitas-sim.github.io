@@ -143,7 +143,11 @@ export function readingProblems(step, { ctx, widget }) {
       );
       const live = widget?.live ? ctx : undefined;
       return (
-        widget?.readout({ ...v, ...step.tool?.values }, live, step.tool) || []
+        widget?.readout(
+          { ...v, ...(step.tool?.start ?? step.tool?.values) },
+          live,
+          step.tool
+        ) || []
       );
     } catch {
       return [];
@@ -621,22 +625,27 @@ export function checkCatalog(inputs, { skip = [] } = {}) {
           } else {
             const controls = new Map((w.controls || []).map(c => [c.id, c]));
 
-            for (const [key, raw] of Object.entries(step.tool.values || {})) {
+            // `start` is where the instrument opens when that is not where the
+            // check is satisfied; it names controls the way `values` does.
+            const placed = ['values', 'start'].flatMap(part =>
+              Object.entries(step.tool[part] || {}).map(e => [...e, part])
+            );
+            for (const [key, raw, part] of placed) {
               const c = controls.get(key);
               if (!c) {
                 E(
                   'ref/control',
-                  `tool.values sets "${key}", which ${w.id} has no control for`
+                  `tool.${part} sets "${key}", which ${w.id} has no control for`
                 );
                 continue;
               }
               const v = Number(raw);
               if (!Number.isFinite(v)) {
-                E('setup/value', `tool.values.${key} is not a number`);
+                E('setup/value', `tool.${part}.${key} is not a number`);
               } else if (v < c.min || v > c.max) {
                 E(
                   'setup/value',
-                  `tool.values.${key} = ${v} is outside the control range ${c.min}..${c.max}, so the widget can never reach it`
+                  `tool.${part}.${key} = ${v} is outside the control range ${c.min}..${c.max}, so the widget can never reach it`
                 );
               } else if (
                 Number.isFinite(c.step) &&
@@ -658,7 +667,7 @@ export function checkCatalog(inputs, { skip = [] } = {}) {
                 if (offGrid > 1e-6 && !recoverable) {
                   W(
                     'setup/value',
-                    `tool.values.${key} = ${v} is not on the visible control's ${c.step} step and no preset of ${w.id} sets ${key} to it, so a student who moves it cannot get back`
+                    `tool.${part}.${key} = ${v} is not on the visible control's ${c.step} step and no preset of ${w.id} sets ${key} to it, so a student who moves it cannot get back`
                   );
                 }
               }
@@ -677,7 +686,8 @@ export function checkCatalog(inputs, { skip = [] } = {}) {
             // the control's own name is read by nothing (a string, like the
             // playback's `track`, is a different spec field and is left alone).
             for (const key of Object.keys(step.tool)) {
-              if (key === 'values' || !controls.has(key)) continue;
+              if (key === 'values' || key === 'start' || !controls.has(key))
+                continue;
               if (typeof step.tool[key] !== 'number') continue;
               E(
                 'ref/control',

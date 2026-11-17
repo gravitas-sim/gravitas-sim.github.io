@@ -734,6 +734,7 @@ export const EN_DEFERRED = {
   'inv.tool.reloadNeeded':
     'This instrument still could not be loaded. Reload the page to try again; your answers are kept.',
   'inv.tool.reload': 'Reload the page',
+  'inv.tool.start': 'Return the instrument to its starting position',
   'inv.tool.pickable':
     'Diagram you can point at. Click or drag to move the cursor; the arrow keys move it too, and the sliders below do the same thing with numbers.',
   'inv.error.scenario': 'Could not load this step’s scenario.',

@@ -90,7 +90,8 @@ import {
   getWidget,
   needsLoading,
   toolFold,
-  widgetDefaults,
+  openingValues,
+  startButton,
 } from './widgets.js';
 import { wireMore } from './settingsSchema.js';
 import {
@@ -1177,13 +1178,7 @@ function syncToolPanel(step) {
   const id = stepId(stepIndex);
   // Values persist per step, so moving back to a step finds the sliders where
   // they were left rather than reset to the lesson's opening position.
-  toolValues = widgetDefaults(widget, spec.values);
-  for (const c of widget.controls) {
-    const saved = responses[`${id}:tool:${c.id}`];
-    if (saved !== undefined && saved !== '' && Number.isFinite(Number(saved))) {
-      toolValues[c.id] = Number(saved);
-    }
-  }
+  toolValues = openingValues(widget, spec, c => responses[`${id}:tool:${c}`]);
 
   resetExplainer(els.toolExplain);
   els.toolTitle.textContent = spec.title || widget.title;
@@ -1275,6 +1270,7 @@ function syncToolPanel(step) {
     });
   });
   wireToolPointer(widget, spec, applied);
+  startButton(els, widget, spec, toolValues, applied);
 
   els.toolActions.querySelectorAll('[data-tool-action]').forEach(btn => {
     btn.addEventListener('click', () => {

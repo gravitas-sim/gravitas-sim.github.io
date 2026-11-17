@@ -24,6 +24,7 @@
 // =============================================================================
 
 import { ensureDeferredMessages } from './i18n/deferredMessages.js';
+import { t } from './i18n/index.js';
 import { currentTier, prefersReducedMotion } from './quality.js';
 // For the bundle's sake, not for anything they export: what reaches this
 // registry reaches all thirteen start-up modules the families share, as it did
@@ -767,6 +768,46 @@ export function widgetDefaults(widget, overrides = {}) {
     if (key in out) out[key] = Number(overrides[key]);
   }
   return out;
+}
+
+/**
+ * Where an instrument opens: the step's `start` where it declares one (the
+ * position apart from what its check accepts), else its `values`; a control
+ * value the student left behind (`saved(controlId)`) goes over either.
+ * @param {Object} widget - A widget definition
+ * @param {Object} spec - The step's tool spec
+ * @param {Function} [saved] - control id -> a stored value, or undefined
+ * @returns {Object} control id -> number
+ */
+export function openingValues(widget, spec, saved = () => undefined) {
+  const out = widgetDefaults(widget, spec?.start ?? spec?.values);
+  for (const c of widget.controls) {
+    const v = saved(c.id);
+    if (v !== undefined && v !== '' && Number.isFinite(Number(v)))
+      out[c.id] = Number(v);
+  }
+  return out;
+}
+
+/**
+ * The way back to where a step opens its instrument, in the actions strip, for
+ * a step that declares a `start` (one that does not opens at its `values`, so
+ * there is nothing to return to). Sliders keep their own names.
+ */
+export function startButton(els, widget, spec, values, done) {
+  if (!spec.start) return;
+  const b = document.createElement('button');
+  b.type = 'button';
+  b.className = 'inv-tool-action';
+  b.dataset.toolStart = '';
+  b.textContent = t('inv.tool.start');
+  b.addEventListener('click', () => {
+    Object.assign(values, openingValues(widget, spec));
+    els.toolPresetNote.textContent = '';
+    done();
+  });
+  els.toolActions.append(b);
+  els.toolActions.hidden = false;
 }
 
 // --- The task rule (Prompt 167, DESIGN_SYSTEM.md "More") ----------------------
