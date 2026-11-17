@@ -4911,6 +4911,25 @@
   .inv-tool-controls .inv-ecc-row input[type='range'] {
     min-width: 5rem;
   }
+  /* On a phone the label has a line of its own and the range the whole of the
+     next, with its value: beside a long label (Spanish, mostly) the range was
+     left about 80 px, and the sliders of the lens and strategy panels were
+     hard to set. */
+  @media (max-width: 480px) {
+    .inv-ecc-row {
+      flex-wrap: wrap;
+    }
+    .inv-ecc-row > span:first-child,
+    .inv-tool-controls .inv-ecc-row > span:first-child {
+      flex: 1 0 100%;
+      min-width: 0;
+    }
+    .inv-ecc-row input[type='range'],
+    .inv-tool-controls .inv-ecc-row input[type='range'] {
+      flex: 1 1 0;
+      min-width: 8rem;
+    }
+  }
   .inv-tool-controls[hidden],
   .inv-tool-actions[hidden],
   .inv-tool-readout[hidden] {

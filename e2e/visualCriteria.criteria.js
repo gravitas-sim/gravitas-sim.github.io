@@ -322,11 +322,26 @@ test.describe('the harness can pass and can fail', () => {
     expect(v.reasons).toEqual([]);
   });
 
-  test('a covered scene fails: Kepler at 375x812', async ({ page }) => {
-    await page.setViewportSize({ width: 375, height: 812 });
-    await openLessonStep(page, LESSON_PILOTS[0]);
-    const m = await page.evaluate(measureLayoutInPage);
-    const v = judgeLayout(m, { kind: 'phone', subject: 'scene' });
+  test('a covered scene fails: a body under the sheet at 375x812', () => {
+    // The 3.0 Kepler state, as measured before the sheet handle: a body under
+    // the lesson text, another off screen, and under a third of the height
+    // open. The layout now passes this pilot (e2e/lessonLayout.spec.js), so
+    // the failing side of the judge is shown on the measurement itself.
+    const covered = {
+      vw: 375,
+      vh: 812,
+      bodies: [
+        {
+          role: 'star',
+          inside: true,
+          visible: false,
+          coveredBy: 'investigationBody',
+        },
+        { role: 'circular', inside: false, visible: false },
+      ],
+      openRunPx: 192,
+    };
+    const v = judgeLayout(covered, { kind: 'phone', subject: 'scene' });
     expect(v.pass, 'the measurement can fail').toBe(false);
     expect(v.reasons.length).toBeGreaterThan(0);
   });
