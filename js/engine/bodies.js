@@ -515,14 +515,7 @@ export class PhysicsObject {
     this.pos.y = py;
   }
 
-  /**
-   * Append one trail point and drop the ones that have aged out.
-   *
-   * A point is kept for the trail's span in simulated time (js/trailSpan.js),
-   * and its `age` is how many reference steps old it is, so the renderer's
-   * fade runs from 0 at the body to the stored trail_length at the tail
-   * whatever the frame rate was when it was recorded.
-   */
+  /** Append a trail point; drop points older than the span. */
   update_trail() {
     if (!this.alive) return;
     const now = getTrailTime();

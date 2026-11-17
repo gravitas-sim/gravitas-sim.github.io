@@ -738,9 +738,7 @@ const buildSettingsMenu = ({ keep = false } = {}) => {
         slider.step = item.step;
         slider.value = value;
 
-        // A trail's length is a stretch of simulated time, so that is what the
-        // slider reads out; the stored number is a count of reference steps
-        // (js/trailSpan.js) and means nothing to a student.
+        // Trail length reads out as a time (js/trailSpan.js).
         const shown = v =>
           item.key === 'trail_length'
             ? formatTime(

@@ -634,8 +634,6 @@ export function drawInstrumentation(
   }
 
   const pad = 12;
-  // Canvas pixels per CSS pixel: the bottom line is text, and text is sized and
-  // spaced in CSS pixels (11 or more), not in whatever the canvas is drawn at.
   const k = canvasRatio(ctx);
   const barY = H - pad - 10 * k - Math.max(0, bottomInset);
 
@@ -721,9 +719,7 @@ export function drawInstrumentation(
     for (const l of legend) {
       const label = l.label;
       const w = (l.note ? 0 : 26) + ctx.measureText(label).width;
-      // A row that would run off the right edge starts a new line above: the
-      // scale and the trail span are what make a saved figure readable, so
-      // they are not dropped to keep the key on one line.
+      // Wrap upward rather than drop: the scale and trail span must stay.
       if (x + w > W - pad && x > pad + 2) {
         x = pad + 2;
         y -= 16 * k;
@@ -770,19 +766,7 @@ export function drawInstrumentation(
     ctx.fillText(readings.join('   '), pad + 2, barY);
   }
 
-  // What the scale bar does not say, and what the canvas must say with or
-  // without a scale bar.
-  //
-  // The bar is honest about distance. The bodies are not honest about size, and
-  // cannot be: at a scale where the Sun is a visible disc an Earth is a
-  // fraction of a pixel, so every kind of body is drawn enlarged by its own
-  // factor, which keeps the hierarchy readable and abandons the ratios. That is
-  // a defensible thing to do and an indefensible thing to do silently, so it is
-  // said here, inside every screenshot and every recording, and it stays when
-  // the scale bar is off: it is about the bodies, not the bar.
-  //
-  // The full explanation and the pointer to the real numbers are in the canvas
-  // description that assistive technology reads. One line is all this has.
+  // Body sizes are not to one scale; said on the canvas, with or without the bar.
   ctx.font = fitFont(ctx, `11px ${INSTRUMENT_MONO}`);
   ctx.fillStyle = 'rgba(200, 214, 235, 0.85)';
   ctx.fillText(t('canvas.sizeDisclosure'), pad + 2, barY + 14 * k);

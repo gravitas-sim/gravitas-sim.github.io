@@ -573,7 +573,7 @@ export const EN = {
   'inspector.stat.rings': 'Ring system',
   'inspector.rings.visible': 'Visible',
   'inspector.tip.radius':
-    'The model radius the simulation runs on: collisions, merging, Roche limits and the transit geometry all use this number. For a generated body it follows from the mass, so it is not always a measured radius. It is not the size the body is drawn at: every kind of body is drawn enlarged, by a different factor, so that a star, a gas giant and a rocky planet can share one picture. Read radii here, never off the drawing.',
+    'The model radius the simulation runs on: collisions, merging, Roche limits and the transit geometry use it. For a generated body it follows from the mass, so it is not always measured. It is not the size drawn: each kind of body is enlarged by a different factor. Read radii here, never off the drawing.',
   'inspector.tip.rings':
     'This body is drawn with a ring system. Rings are illustrative: about a quarter of generated gas giants are given them for visual variety, and a scenario may set them on or off deliberately. They have no mass, no gravity and no effect on collisions, transit depth or any measurement.',
   'inspector.stat.radius': 'Radius',
@@ -1200,7 +1200,7 @@ export const EN = {
   'canvas.sizeDisclosure':
     'Bodies enlarged, not to one scale (radii: inspector)',
   'canvas.sizeDisclosure.detail':
-    'Canvas diameters are illustrative. Each kind of body is enlarged by a different factor, so the sizes of a star, a gas giant and a rocky planet are not to one scale and their ratios are not physical. Do not infer size ratios from the drawing; use the inspector and investigation measurements for numerical radii.',
+    'Canvas diameters are illustrative. Each kind of body is enlarged by a different factor, so sizes are not to one scale and their ratios are not physical. Use the inspector and investigation measurements for radii.',
   'capture.screenshotFailed': 'The screenshot could not be saved',
   'chart.notReady': 'The chart is not ready yet',
   'chart.exportFailed': 'Could not export the chart',

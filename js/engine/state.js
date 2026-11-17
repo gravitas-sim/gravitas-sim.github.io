@@ -369,28 +369,16 @@ export const setDetailScale = scale => {
  * Get the current adaptive level-of-detail multiplier.
  * @returns {number} Current detail scale
  */
-/**
- * Sample counter for trails.
- *
- * A trail sample is taken when a fixed slice of simulated time has passed, not
- * once per physics step (js/trailSpan.js), so a shared counter is enough to say
- * which samples were taken at the same moment. That is what lets one body's
- * trail be re-expressed in another body's frame: without a common clock the two
- * arrays are just two lists of coordinates, and lining them up by array index
- * breaks the moment one body is younger than the other.
- */
+/** Sample counter for trails. */
 export let trailTick = 0;
 
-// Simulated time the trail clock has run, always forward, and when the last
-// sample was taken. Separate from simulationTime: a scrub or a lesson may set
-// that back, and a trail's age must never run backwards with it.
 let trailTime = 0;
 let lastTrailSample = -Infinity;
 
-/** @returns {number} The tick of the most recent trail sample */
+/**  */
 export const getTrailTick = () => trailTick;
 
-/** @returns {number} The simulated time the trail clock has run */
+/**  */
 export const getTrailTime = () => trailTime;
 
 /** Count one trail sample, unconditionally. Used by the tests. */
@@ -398,15 +386,7 @@ export const advanceTrailTick = () => {
   trailTick++;
 };
 
-/**
- * The simulated time between two trail samples.
- *
- * One reference step at the full tier. The low tier and the adaptive detail
- * scale thin the samples, never the span: a coarser trail is the same stretch
- * of orbit drawn with fewer points.
- *
- * @returns {number} Simulation time units
- */
+/** The simulated time between two trail samples. */
 export const trailSampleInterval = () => {
   const thin = currentTier() === 'low' ? 2 : 1;
   return (
@@ -419,11 +399,7 @@ export const trailSampleInterval = () => {
   );
 };
 
-/**
- * How much simulated time a trail covers: trail_length reference steps.
- *
- * @returns {number} Simulation time units
- */
+/** How much simulated time a trail covers: trail_length reference steps. */
 export const trailSpan = () =>
   trailSpanTime(
     physicsSettings.trail_length,
@@ -431,22 +407,9 @@ export const trailSpan = () =>
     physicsSettings.sim_speed
   );
 
-/**
- * Advance the trail clock by one physics step and say whether this step is a
- * trail sample.
- *
- * Called by updatePhysics once per step, before anything appends. A step longer
- * than the interval is always a sample; a shorter one is a sample only when the
- * interval has passed, which is what keeps the span the same at 30, 60 and 144
- * frames per second.
- *
- * @param {number} dt - The step, simulation time units (its size only)
- * @returns {boolean} True when the bodies should append a trail point
- */
+/** Advance the trail clock by one physics step and say whether this step is a */
 export const advanceTrailClock = dt => {
   trailTime += Math.abs(dt) || 0;
-  // A hair under the interval, so 20 steps of a twentieth are one sample and
-  // not a sample twenty-one steps later for want of a rounding error.
   if (trailTime - lastTrailSample < trailSampleInterval() * (1 - 1e-9)) {
     return false;
   }
@@ -463,16 +426,7 @@ export const resetTrailTick = () => {
   clearFrameHistory();
 };
 
-/**
- * The most trail samples a body keeps.
- *
- * The span is set by time (trailSpan), so this is only the ceiling on how many
- * points that can be, and the length the barycenter history is kept to so it
- * always covers the trails. It no longer follows the zoom: a trail that
- * shortened when the view zoomed out would not be a stated stretch of time.
- *
- * @returns {number} Sample budget, at least 1
- */
+/** The most trail samples a body keeps. */
 export const trailBudget = () =>
   Math.max(1, Math.round(physicsSettings.trail_length) || 1);
 

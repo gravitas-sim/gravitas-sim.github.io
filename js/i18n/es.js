@@ -656,7 +656,7 @@ export const ES = {
   'inspector.stat.rings': 'Sistema de anillos',
   'inspector.rings.visible': 'Visible',
   'inspector.tip.radius':
-    'El radio del modelo, con el que funciona la simulación: las colisiones, las fusiones, los límites de Roche y la geometría del tránsito usan este número. En un cuerpo generado se deduce de la masa, así que no siempre es un radio medido. No es el tamaño con el que se dibuja el cuerpo: cada tipo de cuerpo se dibuja ampliado, con un factor distinto, para que una estrella, un gigante gaseoso y un planeta rocoso quepan en una misma imagen. Lee los radios aquí, nunca del dibujo.',
+    'El radio del modelo, con el que funciona la simulación: lo usan las colisiones, las fusiones, los límites de Roche y la geometría del tránsito. En un cuerpo generado se deduce de la masa, así que no siempre es medido. No es el tamaño dibujado: cada tipo de cuerpo se amplía con un factor distinto. Lee los radios aquí, nunca del dibujo.',
   'inspector.tip.rings':
     'Este cuerpo se dibuja con un sistema de anillos. Los anillos son ilustrativos: aproximadamente una cuarta parte de los gigantes gaseosos generados los reciben por variedad visual, y un escenario puede activarlos o desactivarlos deliberadamente. No tienen masa ni gravedad, y no afectan a las colisiones, a la profundidad del tránsito ni a ninguna medición.',
   'inspector.stat.radius': 'Radio',
@@ -1180,7 +1180,7 @@ export const ES = {
   'canvas.sizeDisclosure':
     'Cuerpos ampliados, sin escala común (radios: inspector)',
   'canvas.sizeDisclosure.detail':
-    'Los diámetros del lienzo son ilustrativos. Cada tipo de cuerpo se amplía con un factor distinto, así que los tamaños de una estrella, un gigante gaseoso y un planeta rocoso no siguen una misma escala y sus proporciones no son físicas. No deduzcas proporciones de tamaño a partir del dibujo; usa el inspector y las mediciones de las investigaciones para los radios numéricos.',
+    'Los diámetros del lienzo son ilustrativos. Cada tipo de cuerpo se amplía con un factor distinto, así que los tamaños no siguen una misma escala y sus proporciones no son físicas. Usa el inspector y las mediciones de las investigaciones para los radios.',
   'capture.screenshotFailed': 'No se pudo guardar la captura',
   'chart.notReady': 'El gráfico aún no está listo',
   'chart.exportFailed': 'No se pudo exportar el gráfico',
