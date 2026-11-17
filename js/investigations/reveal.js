@@ -1,174 +1,157 @@
-// An estimate, and the box where a prediction meets the student's own readings (fetched with a
-// lesson that declares `evidence` or `kind: 'estimate'`). Held like a choice: nothing here compares
-// or marks until the reveal step is reached; the readings themselves are the student's and stay open.
+// An estimate prediction and the box where a prediction meets the student's own readings, fetched with a
+// lesson that declares `evidence` or `kind: 'estimate'`. Nothing here compares or marks before the reveal step.
 
 import { getLocale, registerMessages, t } from '../i18n/index.js';
 import { EN_REVEAL } from '../i18n/en.reveal.js';
 import { ES_REVEAL } from '../i18n/es.reveal.js';
 import { escapeHtml as escape, prose } from '../lessonMarkup.js';
-import { announce } from '../notify.js';
-import { recordAnswer, typedNumber } from '../answerParse.js';
 import {
+  setKit as evidenceKit,
   estimateFor,
   estimateText,
   fellInside,
   readEstimate,
   readingsFor,
 } from './evidence.js';
-import { stepKey } from './progressSchema.js';
 
 registerMessages('en', EN_REVEAL);
 registerMessages('es', ES_REVEAL);
 
-const attr = x => escape(x).replace(/"/g, '&quot;');
-// What was typed and not yet committed, by step, so a redraw does not empty the boxes.
+// The engine's own functions, handed over by stepView.js (`revealModule`): importing them here would split a shared
+// chunk and add a request on every lesson route.
+let kit = {};
+export const setKit = k => {
+  kit = k;
+  evidenceKit(k);
+};
+
+// Typed and not yet committed, by step, so a redraw does not empty the boxes; and the step whose box was last announced.
 const draft = {};
 let arrived = '';
 
-/** The estimate boxes of a prediction step: committed values are shown and held, never marked. */
+/** The estimate boxes: committed values are shown, held and never marked. */
 export function estimate(step, c) {
   const { id, saved, active, visited } = c;
   const done = typeof saved === 'string' && saved !== '';
   const held = done && !visited.has(step.reveal);
   const have = (done ? saved.split(';') : draft[id]) || [];
-  const names = step.range ? ['low', 'high'] : ['value'];
-  const unit = step.unit ? ` (${step.unit})` : '';
-  const at = active?.steps.find(x => x.sid === step.reveal);
-  const boxes = names
+  const title = active?.steps.find(x => x.sid === step.reveal)?.title;
+  const boxes = (step.range ? ['low', 'high'] : ['value'])
     .map(
       (n, i) =>
-        `<label class="inv-field"><span class="inv-field-label">${escape(t(`reveal.est.${n}`))}${escape(unit)}</span><input type="text" inputmode="decimal" data-est="${n}" value="${attr(have[i] ?? '')}" ${done ? 'readonly' : ''} /></label>`
+        `<label class="inv-field"><span class="inv-field-label">${escape(t(`reveal.est.${n}`))}${escape(step.unit ? ` (${step.unit})` : '')}</span><input type="text" inputmode="decimal" data-est="${n}" value="${escape(have[i] ?? '').replace(/"/g, '&quot;')}"${done ? ' readonly' : ''} /></label>`
     )
     .join('');
-  const note = held
-    ? t('reveal.est.held', { title: at?.title || step.reveal })
-    : done
-      ? ''
-      : t('reveal.est.first', { title: at?.title || step.reveal });
-  return `<div data-estimate><p class="inv-prompt" id="invChoicePrompt">${prose(step.prompt)}</p><div class="inv-fields" role="group" aria-labelledby="invChoicePrompt">${boxes}</div>${
-    done
-      ? held
-        ? `<p class="inv-held">${escape(note)}</p><button type="button" class="ui-button subtle" data-est-change>${escape(t('inv.answer.change'))}</button>`
-        : ''
-      : `<p class="inv-held" data-est-note>${escape(note)}</p><button type="button" class="ui-button" data-est-commit>${escape(t('reveal.est.commit'))}</button>`
-  }</div>`;
+  const note = t(held ? 'reveal.est.held' : 'reveal.est.first', {
+    title: title || step.reveal,
+  });
+  const after = !done
+    ? `<p class="inv-held" data-est-note>${escape(note)}</p><button type="button" class="ui-button" data-est-commit>${escape(t('reveal.est.commit'))}</button>`
+    : held
+      ? `<p class="inv-held">${escape(note)}</p><button type="button" class="ui-button subtle" data-est-change>${escape(t('inv.answer.change'))}</button>`
+      : '';
+  return `<div data-estimate><p class="inv-prompt" id="invChoicePrompt">${prose(step.prompt)}</p><div class="inv-fields" role="group" aria-labelledby="invChoicePrompt">${boxes}</div>${after}</div>`;
 }
 
 /**
- * The box on the reveal step: what was predicted beside what the student read, and the author's
- * one sentence. A region with a heading, announced once when it arrives.
- * @param {Object} step - The reveal step
- * @param {Object} c - The step view's context
- * @param {?Object} predicted - The choice prediction's verdict, when one names this step
+ * The box on the reveal step: the prediction beside the student's readings and the author's one sentence, a
+ * region with a heading. `predicted` is the choice prediction's verdict, when one names this step.
  * @returns {string} Markup, or '' when nothing was predicted here
  */
 export function verdict(step, c, predicted) {
   const { active, responses } = c;
   const est = estimateFor(active.steps, step);
-  const said = est && readEstimate(est, responses, stepKey(active.id, est.sid));
   if (!predicted && !est) return '';
+  const said =
+    est && readEstimate(est, responses, kit.stepKey(active.id, est.sid));
   const readings = readingsFor(step, active.steps, responses, sid =>
-    stepKey(active.id, sid)
+    kit.stepKey(active.id, sid)
   );
   const row = h => `<p class="inv-verdict-mark">${h}</p>`;
-  const parts = [];
+  const rows = [];
   if (predicted)
-    parts.push(
-      row(prose(t('inv.predict.youSaid', { choice: predicted.chose }))),
-      row(
-        prose(
-          predicted.right
-            ? t('inv.predict.right')
-            : t('inv.predict.wrong', { answer: predicted.answer })
-        )
+    rows.push(
+      prose(t('inv.predict.youSaid', { choice: predicted.chose })),
+      prose(
+        predicted.right
+          ? t('inv.predict.right')
+          : t('inv.predict.wrong', { answer: predicted.answer })
       )
     );
   if (said)
-    parts.push(
-      row(
-        escape(
-          t('reveal.est.said', {
-            value: estimateText(said, est.unit, t('reveal.range')),
-          })
-        )
+    rows.push(
+      escape(
+        t('reveal.est.said', {
+          value: estimateText(said, est.unit, t('reveal.range')),
+        })
       )
     );
-  for (const r of readings) {
-    const how = !r.how
+  for (const { field, text, how } of readings) {
+    const noted = !how
       ? ''
-      : r.how.k === 't'
+      : how.k === 't'
         ? t('inv.take.typed')
-        : r.how.l
-          ? t('inv.take.from', { what: r.how.l })
-          : '';
-    parts.push(
-      row(
-        `${prose(
-          t('reveal.reading', {
-            what: r.field.label,
-            value: r.text
-              ? `${r.text}${r.field.unit ? ` ${r.field.unit}` : ''}`
-              : t('reveal.none'),
-          })
-        )}${how ? ` <span class="inv-held">${escape(how)}</span>` : ''}`
-      )
+        : how.l && t('inv.take.from', { what: how.l });
+    rows.push(
+      prose(
+        t('reveal.reading', {
+          what: field.label,
+          value: text
+            ? `${text}${field.unit ? ` ${field.unit}` : ''}`
+            : t('reveal.none'),
+        })
+      ) + (noted ? ` <span class="inv-held">${escape(noted)}</span>` : '')
     );
   }
-  // The first reading is the one the estimate is held against.
+  // The estimate is held against the first reading.
   const inside = said ? fellInside(said, readings[0]?.value) : null;
   if (inside !== null)
-    parts.push(row(escape(t(inside ? 'reveal.inside' : 'reveal.outside'))));
-  if (step.compare)
-    parts.push(`<p class="inv-because">${prose(step.compare)}</p>`);
-  return `<section class="inv-verdict ${predicted ? (predicted.right ? 'is-right' : 'is-wrong') : ''}" role="region" aria-labelledby="invVerdictHead" data-verdict><h4 class="inv-verdict-head" id="invVerdictHead">${escape(t('reveal.head'))}</h4>${parts.join('')}</section>`;
+    rows.push(escape(t(inside ? 'reveal.inside' : 'reveal.outside')));
+  return `<section class="inv-verdict ${predicted ? (predicted.right ? 'is-right' : 'is-wrong') : ''}" role="region" aria-labelledby="invVerdictHead" data-verdict><h4 class="inv-verdict-head" id="invVerdictHead">${escape(t('reveal.head'))}</h4>${rows.map(row).join('')}${step.compare ? `<p class="inv-because">${prose(step.compare)}</p>` : ''}</section>`;
 }
 
-/** Wire the estimate boxes and say the verdict once, when the step is first drawn. */
+/** Wire the estimate boxes, and say the verdict once when its step is first drawn. */
 export function bind(h, body) {
   const id = h.stepId();
-  const box = body.querySelector('[data-estimate]');
   const shown = body.querySelector('[data-verdict]');
   if (!shown) arrived = '';
   else if (arrived !== id) {
     arrived = id;
-    announce(shown.textContent);
+    kit.announce(shown.textContent);
   }
+  const box = body.querySelector('[data-estimate]');
   if (!box) return;
   const boxes = [...box.querySelectorAll('[data-est]')];
-  boxes.forEach(b =>
-    b.addEventListener('input', () => {
-      draft[id] = boxes.map(x => x.value);
-    })
-  );
   const commit = () => {
     const raw = boxes.map(b => b.value.trim());
-    const locale = getLocale();
-    const bad = raw.findIndex(v => !Number.isFinite(typedNumber(v, locale)));
+    const bad = raw.findIndex(
+      v => !Number.isFinite(kit.typedNumber(v, getLocale()))
+    );
     if (bad >= 0) {
       const note = box.querySelector('[data-est-note]');
       if (note) note.textContent = t('reveal.est.number');
-      announce(t('reveal.est.number'));
-      boxes[bad].focus();
-      return;
+      kit.announce(t('reveal.est.number'));
+      return boxes[bad].focus();
     }
     const text = raw.join(';');
     h.responses()[`${id}:first`] ??= text;
-    recordAnswer(h.responses(), id, text, locale);
+    kit.recordAnswer(h.responses(), id, text, getLocale());
     h.attempts()[id] = (h.attempts()[id] || 0) + 1;
     delete draft[id];
     h.save();
     h.renderStep();
     body.querySelector('[data-est-change]')?.focus();
-    announce(body.querySelector('.inv-held')?.textContent ?? '');
+    kit.announce(body.querySelector('.inv-held')?.textContent ?? '');
   };
-  box.querySelector('[data-est-commit]')?.addEventListener('click', commit);
-  boxes.forEach(b =>
+  for (const b of boxes) {
+    b.addEventListener('input', () => (draft[id] = boxes.map(x => x.value)));
     b.addEventListener('keydown', e => {
       if (e.key !== 'Enter' || b.readOnly) return;
       e.preventDefault();
       commit();
-    })
-  );
+    });
+  }
+  box.querySelector('[data-est-commit]')?.addEventListener('click', commit);
   box.querySelector('[data-est-change]')?.addEventListener('click', () => {
     const r = h.responses();
     draft[id] = String(r[id] ?? '').split(';');
@@ -177,6 +160,6 @@ export function bind(h, body) {
     h.save();
     h.renderStep();
     body.querySelector('[data-est]')?.focus();
-    announce(t('inv.answer.changed'));
+    kit.announce(t('inv.answer.changed'));
   });
 }

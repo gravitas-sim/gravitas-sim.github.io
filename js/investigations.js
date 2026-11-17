@@ -15,6 +15,7 @@ import {
   parseFieldNumber,
   progressFor,
   fieldModule,
+  revealModule,
   renderProgressNotice,
   renderSaveStatus,
   save,
@@ -867,8 +868,7 @@ function validateStep(step, id) {
   }
 }
 
-// Fetched when a lesson opens (loadSeams), so draws and reads stay synchronous.
-let figures = null;
+let figures = null; // fetched when a lesson opens (loadSeams), so draws and reads stay synchronous
 
 /** Fetch the plot, ellipse, import and reveal code the steps need. @returns {Promise} */
 const loadSeams = steps =>
@@ -886,7 +886,7 @@ const loadSeams = steps =>
       ),
     !slots.reveal &&
       steps.some(s => s.evidence || s.kind === 'estimate') &&
-      import('./investigations/reveal.js').then(m => (slots.reveal = m)),
+      import('./investigations/reveal.js').then(revealModule),
   ]);
 
 /** Draw the step's scatter plot from the lesson's current state. */

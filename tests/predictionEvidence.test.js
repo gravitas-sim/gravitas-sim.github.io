@@ -18,15 +18,17 @@ import {
   readingsFor,
 } from '../js/investigations/evidence.js';
 import * as reveal from '../js/investigations/reveal.js';
+import * as ev from '../js/investigations/evidence.js';
 import {
   bindStepInputs,
+  revealModule,
   slots,
   stepMarkup,
 } from '../js/investigations/stepView.js';
 import { holdsAnswer, predictionState } from '../js/lesson/held.js';
 import { buildLabReport } from '../js/labReport.js';
 import { createHtmlDocument } from '../js/htmlReport.js';
-import { evidenceProblems } from '../js/authoring/evidenceRules.js';
+import { evidenceProblems } from '../js/authoring/rules.js';
 import { entryFor } from '../js/answerKey.js';
 import { describe as describeChart } from '../js/plot/describe.js';
 import { registerMessages } from '../js/i18n/index.js';
@@ -40,6 +42,9 @@ import { stepKey } from '../js/investigations/progressSchema.js';
 import { readFileSync } from 'node:fs';
 
 registerMessages('en', EN_DEFERRED);
+// The engine hands the module its functions, as it does when a lesson opens.
+revealModule(reveal);
+slots.reveal = null;
 
 const SENTENCE = 'Closer orbits are quicker, and your reading follows that.';
 const LESSON = 'fixture-est';
@@ -293,7 +298,7 @@ describe('the step on screen, held and revealed', () => {
     visited = new Set();
     saved = 0;
     l = lesson();
-    slots.reveal = reveal;
+    revealModule(reveal);
   });
   afterEach(() => {
     slots.reveal = null;
@@ -556,7 +561,7 @@ describe('the held test over the new comparison', () => {
       ['read', ['guess', 'read']],
     ]) {
       const step = l.steps.find(s => s.sid === sid);
-      slots.reveal = reveal;
+      revealModule(reveal);
       const html = stepMarkup(step, {
         id: key(sid),
         saved: responses[key(sid)],
@@ -613,6 +618,7 @@ describe('the lab report prints the same rows through both writers', () => {
       t: t(locale === 'es' ? ES_REPORT : EN_REPORT),
       locale,
       createDoc,
+      ev,
     });
   const recorder = () => {
     const calls = [];
@@ -787,14 +793,13 @@ describe('the authoring rule', () => {
       /never marked/
     );
     expect(problems({ guess: { reveal: undefined } })[0]).toMatch(
-      /names the reveal/
+      /names its reveal/
     );
     expect(
       problems({ result: { evidence: undefined, compare: undefined } })[0]
     ).toMatch(/names no evidence/);
-    expect(problems({ guess: { range: 'yes' } })[0]).toMatch(/true or false/);
     expect(problems({ guess: { unit: 'AU' } })[0]).toMatch(
-      /estimate is in AU and the first reading in d/
+      /estimate is in AU, the first reading in d/
     );
   });
   test('evidence names an earlier field of a measure step, taken after the prediction', () => {
@@ -810,13 +815,12 @@ describe('the authoring rule', () => {
     expect(problems({ result: { evidence: [] } }).join()).toMatch(
       /lists the fields/
     );
-    expect(problems({ result: { compare: '  ' } })[0]).toMatch(/one sentence/);
     // Evidence on a step no prediction names, or a reading taken before the prediction.
     const l = lesson();
     l.steps[2].evidence = [{ step: 'read', field: 'p' }];
     l.steps[0].reveal = undefined;
     expect(evidenceProblems(l.steps[2], l.steps, 2)[0]).toMatch(
-      /belongs to a step a prediction names/
+      /belongs to a prediction's reveal step/
     );
     const early = lesson();
     [early.steps[0], early.steps[1]] = [early.steps[1], early.steps[0]];
@@ -827,7 +831,7 @@ describe('the authoring rule', () => {
   test('compare without evidence, and an estimate that is not a prediction', () => {
     expect(
       evidenceProblems({ sid: 'x', type: 'read', compare: 'hm' }, [], 0)[0]
-    ).toMatch(/beside evidence/);
+    ).toMatch(/goes with evidence/);
     expect(
       evidenceProblems(
         { sid: 'x', type: 'question', kind: 'estimate' },

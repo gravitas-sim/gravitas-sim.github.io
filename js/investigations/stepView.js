@@ -25,6 +25,7 @@ import {
   localeOfAnswer,
   parseNumber,
   recordAnswer,
+  typedNumber,
 } from '../answerParse.js';
 import {
   answerClass,
@@ -42,6 +43,7 @@ import { assignmentStorageKey, shortHash } from '../assignments/assignment.js';
 import {
   classifyStorageError,
   readProgress,
+  stepKey,
   writeProgress,
 } from './progressSchema.js';
 import { KEY_INVESTIGATION_PREFIX } from '../names.js';
@@ -82,6 +84,12 @@ export function fieldModule(m) {
     predictionState,
   });
   return (slots.field = m);
+}
+
+/** Install the reveal slot's module (an estimate, and the box where a prediction meets the readings) with the engine functions it needs. */
+export function revealModule(m) {
+  m.setKit({ announce, localeOfAnswer, recordAnswer, stepKey, typedNumber });
+  return (slots.reveal = m);
 }
 
 /**
