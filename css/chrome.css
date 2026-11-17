@@ -2097,6 +2097,11 @@
       background: transparent;
       cursor: pointer;
     }
+    @media (pointer: coarse) {
+      #investigationSheet {
+        min-height: 44px;
+      }
+    }
     #investigationSheet > span {
       width: 48px;
       height: 5px;
