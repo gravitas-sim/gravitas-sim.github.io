@@ -25,6 +25,7 @@ export default {
   fullyParallel: false,
   workers: 1,
   retries: 0,
+  maxFailures: 0,
   reporter: [['list']],
   projects: base.projects.filter(p => p.name === 'chromium'),
 };
