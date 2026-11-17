@@ -16,8 +16,9 @@
 //         bodies sit outside every panel (the desktop clause).
 //   I-9   drawing. Arrow length rises with the speed it shows and the legend
 //         states its scale; a trail spans a time that does not follow the
-//         frame rate; plot ticks are at least 11 px and labels 12 px. (The
-//         label clause on the main canvas lives in canvasLegibility.spec.js.)
+//         frame rate. (The label clause on the main canvas lives in
+//         canvasLegibility.spec.js, and the plot clause, ticks at least 11 px
+//         and titles 12 px with marker shapes, in plotReadingSize.spec.js.)
 //
 // On demand, not in CI. These tests state what the 3.0 pilots are measured
 // against, and most of the pilot states miss it: they FAIL, and that is the
@@ -61,15 +62,11 @@ import {
   measureSelectionCue,
   measureVelocityArrow,
   measureTrailSpan,
-  readCanvasText,
-  readSvgPlotText,
   judgeLayout,
   judgeLabels,
   judgeCue,
   judgeArrows,
   judgeTrailSpans,
-  judgePlotType,
-  judgeSeriesWithoutColour,
 } from '../tools/visual-criteria.mjs';
 
 test.describe('I-8: the scene is in view while the student works', () => {
@@ -119,7 +116,7 @@ test.describe('I-8: the scene is in view while the student works', () => {
   }
 });
 
-test.describe('I-9: arrows, trails and plots mean what they show', () => {
+test.describe('I-9: arrows and trails mean what they show', () => {
   test('arrow length rises with speed (Kepler, the eccentric orbiter)', async ({
     page,
   }) => {
@@ -168,64 +165,8 @@ test.describe('I-9: arrows, trails and plots mean what they show', () => {
     ).toBe(true);
   });
 
-  test('plot type at reading size: the Kepler plot (canvas)', async ({
-    page,
-  }) => {
-    await page.addInitScript(installCanvasTextRecorder);
-    await page.setViewportSize({ width: 1366, height: 800 });
-    await openLessonStep(page, {
-      ...DRAWING_STATES.keplerPlot,
-      lesson: DRAWING_STATES.keplerPlot.lesson,
-    });
-    await page.locator('#investigationPlotCanvas').scrollIntoViewIfNeeded();
-    await expect
-      .poll(async () => {
-        const t = await page.evaluate(
-          readCanvasText,
-          'investigationPlotCanvas'
-        );
-        return t.texts.length;
-      })
-      .toBeGreaterThan(0);
-    const r = await page.evaluate(readCanvasText, 'investigationPlotCanvas');
-    expect(r.found, 'the plot canvas is on the step').toBe(true);
-    const v = judgePlotType(r.texts);
-    expect(
-      v.pass,
-      `ticks ${v.ticks}, smallest tick ${v.smallestTick} px, smallest label ${v.smallestLabel} px`
-    ).toBe(true);
-  });
-
-  test('plot type at reading size: the transit light curve (SVG)', async ({
-    page,
-  }) => {
-    await page.setViewportSize({ width: 1366, height: 800 });
-    await openLessonStep(page, {
-      ...DRAWING_STATES.transitCurve,
-    });
-    await expect(page.locator('#lightCurveChart svg')).toBeVisible({
-      timeout: 20000,
-    });
-    await expect
-      .poll(async () => {
-        const t = await page.evaluate(readSvgPlotText, '#lightCurveChart svg');
-        return t.texts.length;
-      })
-      .toBeGreaterThan(0);
-    const r = await page.evaluate(readSvgPlotText, '#lightCurveChart svg');
-    const v = judgePlotType(r.texts);
-    expect(
-      v.pass,
-      `ticks ${v.ticks}, smallest tick ${v.smallestTick} px, smallest label ${v.smallestLabel} px`
-    ).toBe(true);
-    // The series clause: a plot with several series tells them apart by
-    // marker shape, not by colour alone. (The light curve has one series, so
-    // this holds trivially there; the judge is the same one 338 is held to.)
-    const distinct = new Map();
-    for (const s of r.series) distinct.set(s.colour, s);
-    const series = judgeSeriesWithoutColour([...distinct.values()].slice(0, 1));
-    expect(series.pass).toBe(true);
-  });
+  // The plot clause (ticks, titles, marker shapes) passes on both pilot plots
+  // and is the suite's: e2e/plotReadingSize.spec.js.
 });
 
 // -----------------------------------------------------------------------------

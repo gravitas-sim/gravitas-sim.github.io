@@ -152,7 +152,7 @@ README row, in the same change.
 | **I-9**, selection | The selected body carries a cue that shows in luminance, not only in hue. | `e2e/visualCriteria.criteria.js` |
 | **I-9**, arrows | Arrow length rises with the speed it shows, and the legend states the scale. | `e2e/visualCriteria.criteria.js` |
 | **I-9**, trails | A trail spans a stated simulated time that does not follow the frame rate (30, 60 and 144 frames a second). | same |
-| **I-9**, plots | Ticks are at least 11 px and labels at least 12 px; with several series, each differs by marker shape. | same |
+| **I-9**, plots | Ticks are at least 11 px and labels at least 12 px; with several series, each differs by marker shape. | `e2e/plotReadingSize.spec.js` (passes on both pilot plots; on demand before) |
 
 How each is measured, so a later prompt can argue with the method and not the
 number:

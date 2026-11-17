@@ -4658,6 +4658,13 @@
   .inv-plot-tag {
     fill: var(--text-primary);
   }
+  /* The fit line's triangles: a shape, so the line is told from the dots in
+     grayscale and in forced colors, where the fill follows the system. */
+  .inv-plot-mark {
+    fill: var(--accent);
+    stroke: var(--text-primary);
+    stroke-width: 1;
+  }
   .inv-plot-panel .inv-plot-note {
     margin-top: var(--space-2);
   }

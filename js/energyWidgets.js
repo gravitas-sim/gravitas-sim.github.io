@@ -243,7 +243,7 @@ function drawEnergyBars(ctx, box, e, colors, opts = {}) {
     maxDown > 0 ? down / maxDown : Infinity
   );
 
-  ctx.font = `10px ${MONO}`;
+  ctx.font = `11px ${MONO}`;
   const slot = w / bars.length;
   bars.forEach((b, i) => {
     const cx = x + slot * (i + 0.5);
@@ -283,7 +283,7 @@ function drawEnergyBars(ctx, box, e, colors, opts = {}) {
   ctx.lineTo(x + w, zero);
   ctx.stroke();
   ctx.fillStyle = ink;
-  ctx.font = `600 10px ${MONO}`;
+  ctx.font = `600 11px ${MONO}`;
   ctx.textAlign = 'left';
   ctx.textBaseline = 'bottom';
   ctx.fillText('zero', x + 2, zero - 2);
@@ -621,7 +621,7 @@ const LAUNCH = {
 
     // Launch marker and scale
     ctx.fillStyle = SKY_MUTED;
-    ctx.font = `10px ${MONO}`;
+    ctx.font = `11px ${MONO}`;
     ctx.textAlign = 'left';
     ctx.textBaseline = 'top';
     label(
@@ -820,7 +820,7 @@ const LIVE_ENERGY = {
     line(history.pe, accent, 1.6);
     line(history.total, ink, 2.4);
 
-    g.font = `10px ${MONO}`;
+    g.font = `11px ${MONO}`;
     g.fillStyle = muted;
     g.textAlign = 'right';
     g.textBaseline = 'middle';
@@ -1216,7 +1216,7 @@ const SHAPES = {
     ctx.lineWidth = 1;
     ctx.strokeRect(box.x + 0.5, box.y + 0.5, box.w - 1, box.h - 1);
 
-    ctx.font = `10px ${MONO}`;
+    ctx.font = `11px ${MONO}`;
     ctx.textAlign = 'left';
     ctx.textBaseline = 'top';
     const legend = [
