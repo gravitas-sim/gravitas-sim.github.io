@@ -191,7 +191,7 @@ export function itemView(lib, id, c) {
 <h2>${escape(c.pick(entry.title))}</h2>
 ${facts.length ? `<p class="lib-facts">${facts.map(f => `<span>${escape(f)}</span>`).join('')}</p>` : ''}
 ${entry.summary ? `<p>${escape(c.pick(entry.summary))}</p>` : ''}
-<div class="lib-actions"><a class="ui-button is-primary lib-link" href="${escape(entry.route)}">${escape(c.t('lib.item.open'))}</a>
+<div class="lib-actions"><a class="ui-button is-primary lib-link" data-entry="${escape(id)}" href="${escape(entry.route)}">${escape(c.t('lib.item.open'))}</a>
 <a class="ui-button lib-link" href="${escape(c.preview(entry))}" data-preview>${escape(c.t('lib.item.preview'))}</a>
 <span class="ui-note">${escape(c.t('lib.item.preview.note'))}</span></div></div></div>${
     rel?.teach

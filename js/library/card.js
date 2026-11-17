@@ -63,10 +63,9 @@ export function libraryCardHtml(
     progress && progress !== 'new'
       ? `<span class="ui-badge is-accent lib-progress" data-progress="${progress}">${escape(t(`lib.progress.${progress}`))}</span>`
       : '';
-  const shot =
-    entry.thumbnail
-      ? `<img class="lib-shot" src="/${escape(entry.thumbnail)}" alt="" loading="lazy" decoding="async" width="640" height="360" />`
-      : '';
+  const shot = entry.thumbnail
+    ? `<img class="lib-shot" src="/${escape(entry.thumbnail)}" alt="" loading="lazy" decoding="async" width="640" height="360" />`
+    : '';
   const kind = shown?.[entry.kind] ?? entry.kind;
   return `<li class="lib-card${shot ? '' : ' is-plain'}" data-entry="${escape(entry.id)}" data-kind="${escape(entry.kind)}">
 <a class="lib-link" href="${escape(entry.route)}">${shot}<span class="lib-body">
