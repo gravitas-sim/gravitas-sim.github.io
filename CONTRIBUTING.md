@@ -176,7 +176,7 @@ their ceilings:
 | `js/data/investigations/observing-sequence.js` | 3,341 | 3,341 |
 | `js/data/investigations/measurement-sequence.js` | 3,270 | 3,270 |
 | `js/investigations.js` | 3,151 | 3,151 |
-| `js/render.js` | 2,932 | 2,932 |
+| `js/render.js` | 2,856 | 2,856 |
 | `js/data/investigations/depth/measurement-sequence.js` | 2,840 | 2,840 |
 <!--/fact-block-->
 

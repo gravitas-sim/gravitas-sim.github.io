@@ -138,10 +138,6 @@ function drawPlanet(o, ctx) {
   // gradient, the second in a fixed pale blue at more than twice the alpha,
   // so every planet wore the same bluish halo and paid for two gradients. The
   // alphas below are the two sets summed: the brightness is what it was.
-  //
-  // Asking for the bloom layer arms the composite (see setBloomLayer), so the
-  // tier check comes first: js/quality.js lists the bloom canvas among the
-  // passes the low tier skips, and the layer must not be touched there.
   try {
     if (currentTier() !== 'low') {
       // The halo follows the drawn body, not the model radius.
@@ -847,12 +843,6 @@ function drawBlackHole(o, ctx) {
   // determined by those four things - which is what makes the picture
   // reproducible and what keeps a rendering choice from reaching the
   // integrator.
-  //
-  // The three global toggles stay visibility controls and nothing more:
-  // `show_accretion_disk` and `show_bh_jets` can hide what the object's
-  // environment would otherwise show, and neither can conjure a disk onto a
-  // quiescent hole. Whether a black hole HAS a disk is a property of the
-  // scenario, not of the renderer.
   const bhLevel = lodOf(o, 'BlackHole');
   const wanted = o.appearance || defaultAppearance(o.id);
   const shown = {

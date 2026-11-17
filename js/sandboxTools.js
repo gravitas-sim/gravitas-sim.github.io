@@ -492,16 +492,6 @@ function drawProtractor(ctx) {
 }
 
 // Whether this frame is being drawn to be saved.
-//
-// The clock, the stopwatch and the vector key are all in the readout panel,
-// where the live numbers are, so painting them over the simulation as well is
-// telling the user the same thing twice in two places. But a screenshot is not
-// the readout: it is the canvas and the starfield and nothing else, and an
-// image that cannot say how big or how long it is is a picture of some dots.
-//
-// So they are drawn for the frame the screenshot is taken from, and not
-// otherwise. The scale bar stays either way: it is the one reading that is
-// about the picture rather than about the run.
 let capturing = false;
 
 // What the frame is of. The scale bar says how big, the clock says how long
@@ -610,18 +600,6 @@ export function drawInstrumentation(
 
   // What the canvas itself has to carry, as one line along the bottom rather
   // than as a panel.
-  //
-  // There used to be a bordered box here holding the clock, the stopwatch, the
-  // vector key, the integrator's name and two conservation-drift percentages.
-  // Most of that is a statement about the engine rather than about the
-  // scenario, and none of it needed a box: it was five rows of chrome sitting
-  // over the simulation in the corner opposite the readout, which is where
-  // readings belong and where they now are.
-  //
-  // What stays on the canvas is what a saved image cannot do without. A
-  // screenshot has to document its own scale and its own clock, or it is a
-  // picture of some objects at some size at some time. The vector key stays
-  // for the same reason: an arrow whose color is unexplained is a decoration.
   const readings = [];
   if (capturing && settings.show_elapsed_time !== false) {
     // Labeled, unlike the live readout, where the row it sits in says what it

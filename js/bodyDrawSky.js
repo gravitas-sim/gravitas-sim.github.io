@@ -226,21 +226,6 @@ function drawStar(o, ctx) {
   const level = lodOf(o, 'Star');
 
   // Color from the temperature, not from the mass directly.
-  //
-  // The two agree for a main-sequence star, because the temperature is
-  // estimated from the mass when a star does not carry one - but a star that
-  // DOES carry one, which is every star a scenario builds from real data, was
-  // being colored from a mass-to-color table that knew nothing about it.
-  // stellarPropertiesFor is the same function the habitable-zone ring and the
-  // light curve read, so the color on screen and the physics in the panels
-  // now come from one number. An explicit baseColor still wins: a scenario
-  // that names a color means it.
-  // Memoised on the star, keyed on the mass it was computed from.
-  //
-  // The color only changes when the star does, which is on accretion or a
-  // merger - not sixty times a second. A cluster of five hundred stars was
-  // otherwise running stellarPropertiesFor, which allocates, once per star
-  // per frame to arrive at the same answer it gave on the previous one.
   if (
     !o._visual ||
     o._visual.mass !== o.mass ||
