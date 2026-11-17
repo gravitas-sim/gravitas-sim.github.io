@@ -33,7 +33,10 @@ export const loadPlot = () =>
 export function drawPlot(step, vals, ctx) {
   if (!ctx.canvas || !step.plot?.points) return plotView?.clear();
   if (plotView) return plotView.draw(step, vals, ctx);
-  loadPlot().then(m => m.draw(step, vals, ctx));
+  // Offline before its first use the plot stays empty; nothing else breaks.
+  loadPlot()
+    .then(m => m.draw(step, vals, ctx))
+    .catch(() => {});
 }
 
 let pointing = null;
@@ -46,7 +49,9 @@ export function point(step, host) {
   (pointing
     ? Promise.resolve(pointing)
     : import('./pointing.js').then(m => (pointing = m))
-  ).then(m => pointAt === step.point && m.start(pointAt, host));
+  )
+    .then(m => pointAt === step.point && m.start(pointAt, host))
+    .catch(() => {});
 }
 
 /** The scene's selection changed: the plot follows. */
