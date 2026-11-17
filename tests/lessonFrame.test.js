@@ -4,7 +4,7 @@
  * measured in e2e/lessonLayout.spec.js.
  */
 import { describe, test, expect } from '@jest/globals';
-import { insetFromBoxes } from '../js/lesson/inset.js';
+import { insetFromBoxes } from '../js/lesson/stage.js';
 import { orbitPoints } from '../js/lessonFrame.js';
 import { fitCamera } from '../js/lesson/stage.js';
 import {

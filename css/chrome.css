@@ -1893,9 +1893,7 @@
     }
   }
 
-  /* Tablet: the step runs down the left, the scene stands beside it, and
-     whatever the step docks goes under the scene, so the step and the scene
-     are read side by side. */
+  /* Tablet: the step down the left, the scene beside it, the dock under it. */
   @media (min-width: 768px) and (max-width: 900px) {
     body.investigation-open {
       --lesson-col: min(380px, 46vw);
@@ -1935,9 +1933,7 @@
       height: var(--dock-room);
     }
 
-    /* An observing panel a step opens (the pause-at-event form, the radial
-       velocity curve) takes the same room. The script stacks them from the
-       foot of it. */
+    /* Observing panels take the same room. */
     body.investigation-open.observing {
       --observe-bottom: var(--transport-reserve, 76px);
       --observe-room: var(--dock-room);
@@ -2086,10 +2082,7 @@
       border-top: 1px solid var(--border-subtle);
     }
 
-    /* The handle: a row across the top of the sheet. Pressed, it lowers the
-       sheet to a strip (the sheet's height is the one number every panel that
-       stands on it reads) and raises it again. In the strip the step is a short
-       window and Back and Next stay put; an answer box takes the sheet up. */
+    /* The sheet handle; lowered, the sheet's height is what the panels on it follow. */
     #investigationSheet {
       display: flex;
       grid-column: 1 / -1;
@@ -2117,9 +2110,7 @@
       display: none;
     }
 
-    /* A lesson has no use for the readout beside the scene: its chip is a tab
-       on the left edge, in the row the menu button shares, and narrow enough
-       that the row is still canvas. */
+    /* The readout is a narrow tab, so the row it shares with the menu stays canvas. */
     body.investigation-open #overlay.minimized {
       top: calc(var(--shell-height, 0px) + var(--space-2));
       left: 0;
@@ -2136,7 +2127,7 @@
     body.investigation-open #overlay.minimized .overlay-minimize-btn {
       margin: 0;
     }
-    /* The word goes; the dot says it, and the word is still read aloud. */
+    /* The dot says it; the word is read aloud. */
     body.investigation-open #overlay.minimized .readout-status-text {
       position: absolute;
       width: 1px;

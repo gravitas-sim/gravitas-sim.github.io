@@ -45,7 +45,7 @@ import {
   writeProgress,
 } from './progressSchema.js';
 import { KEY_INVESTIGATION_PREFIX } from '../names.js';
-import { isPeek, openSheet } from './sheet.js';
+import { isPeek, openSheet } from '../lessonFrame.js';
 const getAreaSweepWedges = command('getAreaSweepWedges');
 
 /** Escape for use inside a double-quoted attribute. */

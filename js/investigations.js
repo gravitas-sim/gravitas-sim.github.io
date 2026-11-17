@@ -149,7 +149,6 @@ import {
 import { get, put } from './storage/local.js';
 import { helpStages, helpTaken } from './answerFeedback.js';
 import { frameState } from './referenceFrame.js';
-import { closeSheet, initSheet } from './investigations/sheet.js';
 import {
   SCALE,
   applyStage,
@@ -165,7 +164,7 @@ import {
   stagePresence,
   stagedStars,
 } from './lesson/stageGate.js';
-import { frameScene, takeFit } from './lessonFrame.js';
+import { closeSheet, frameScene, initSheet, takeFit } from './lessonFrame.js';
 import {
   bindRoles,
   boundRoles,

@@ -196,10 +196,8 @@ export function fitCamera(
     (clearW * usable) / spanX,
     (clearH * usable) / spanY
   );
-  // The view puts world point p at viewportCenter + (p.x, -p.y) * zoom + pan
-  // (the world's y runs up), so to land the stage's center in the middle of the
-  // clear region the pan is the offset between the two centers, less the
-  // stage's own center scaled.
+  // Screen = center + (x, -y) * zoom + pan (world y runs up): land the stage's
+  // center in the middle of the clear region.
   const clearCenterX = left + clearW / 2;
   const clearCenterY = top + clearH / 2;
   return {
@@ -217,6 +215,39 @@ export const placedOf = entries =>
     y: e.star.pos.y,
     radius: e.star.radius,
   }));
+
+export const SHEET_MAX_WIDTH = 900;
+
+export function insetFromBoxes(boxes, view) {
+  const inset = { left: 0, right: 0, top: 0, bottom: 0 };
+  const area = i =>
+    Math.max(0, view.width - i.left - i.right) *
+    Math.max(0, view.height - i.top - i.bottom);
+  const sorted = [...boxes].sort(
+    (a, b) =>
+      (b.right - b.left) * (b.bottom - b.top) -
+      (a.right - a.left) * (a.bottom - a.top)
+  );
+  for (const b of sorted) {
+    const clear =
+      b.right > inset.left &&
+      b.left < view.width - inset.right &&
+      b.bottom > inset.top &&
+      b.top < view.height - inset.bottom;
+    if (!clear) continue;
+    const cuts = [
+      { ...inset, left: Math.max(inset.left, b.right) },
+      { ...inset, right: Math.max(inset.right, view.width - b.left) },
+      { ...inset, top: Math.max(inset.top, b.bottom) },
+      { ...inset, bottom: Math.max(inset.bottom, view.height - b.top) },
+    ];
+    Object.assign(
+      inset,
+      cuts.reduce((best, c) => (area(c) > area(best) ? c : best))
+    );
+  }
+  return inset;
+}
 
 /** World units per Schwarzschild radius of the total mass. A display choice. */
 export const UNITS_PER_RS = 3.2;

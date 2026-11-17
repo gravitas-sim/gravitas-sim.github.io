@@ -4,9 +4,13 @@
 
 import { SETTINGS, state } from './appState.js';
 import { allBodies, boundRoles, roleBody } from './lessonScene.js';
-import { dominantPrimary, orbitalElements } from './orbital.js';
-import { insetFromBoxes, SHEET_MAX_WIDTH } from './lesson/inset.js';
-import { fitCamera, placedOf } from './lesson/stage.js';
+import {
+  SHEET_MAX_WIDTH,
+  fitCamera,
+  insetFromBoxes,
+  placedOf,
+} from './lesson/stage.js';
+import { getLocale } from './i18n/index.js';
 import { stagedStars } from './lesson/stageGate.js';
 
 const MAX_FIT_ATTEMPTS = 24;
@@ -55,21 +59,44 @@ export function lessonInset() {
 /** The bounding box of the ellipse a body sweeps about its primary, as points. */
 export function orbitPoints(body, primary, G) {
   const here = { x: body.pos.x, y: body.pos.y, radius: body.radius };
-  const el = primary && orbitalElements(body, primary, G);
-  if (!el?.bound || !(el.a > 0) || el.e >= 1) return [here];
-  const phi =
-    Math.atan2(body.pos.y - primary.pos.y, body.pos.x - primary.pos.x) -
-    el.trueAnomaly;
-  const b = el.a * Math.sqrt(1 - el.e * el.e);
-  const cx = primary.pos.x - el.a * el.e * Math.cos(phi);
-  const cy = primary.pos.y - el.a * el.e * Math.sin(phi);
-  const hx = Math.hypot(el.a * Math.cos(phi), b * Math.sin(phi));
-  const hy = Math.hypot(el.a * Math.sin(phi), b * Math.cos(phi));
+  if (!primary) return [here];
+  const rx = body.pos.x - primary.pos.x;
+  const ry = body.pos.y - primary.pos.y;
+  const vx = body.vel.x - primary.vel.x;
+  const vy = body.vel.y - primary.vel.y;
+  const r = Math.hypot(rx, ry);
+  const mu = G * (primary.mass + (body.mass || 0));
+  const energy = (vx * vx + vy * vy) / 2 - mu / r;
+  if (!(energy < 0) || !(r > 0)) return [here];
+  const h = rx * vy - ry * vx;
+  const ex = (vy * h) / mu - rx / r;
+  const ey = (-vx * h) / mu - ry / r;
+  const e = Math.hypot(ex, ey);
+  const a = -mu / (2 * energy);
+  if (!(e < 1)) return [here];
+  const phi = Math.atan2(ey, ex);
+  const b = a * Math.sqrt(1 - e * e);
+  const cx = primary.pos.x - a * e * Math.cos(phi);
+  const cy = primary.pos.y - a * e * Math.sin(phi);
+  const hx = Math.hypot(a * Math.cos(phi), b * Math.sin(phi));
+  const hy = Math.hypot(a * Math.sin(phi), b * Math.cos(phi));
   return [
     here,
     { x: cx - hx, y: cy - hy, radius: 0 },
     { x: cx + hx, y: cy + hy, radius: 0 },
   ];
+}
+
+/** The body that pulls hardest on another. */
+function primaryOf(body, bodies) {
+  let best = null;
+  let pull = 0;
+  for (const c of bodies) {
+    if (c === body || !(c.mass > 0)) continue;
+    const d2 = (c.pos.x - body.pos.x) ** 2 + (c.pos.y - body.pos.y) ** 2;
+    if (d2 > 0 && c.mass / d2 > pull) [best, pull] = [c, c.mass / d2];
+  }
+  return best;
 }
 
 export function boundPoints() {
@@ -78,7 +105,7 @@ export function boundPoints() {
   for (const role of boundRoles()) {
     const body = roleBody(role);
     if (!body) continue;
-    const primary = dominantPrimary(body, everything);
+    const primary = primaryOf(body, everything);
     out.push(
       ...orbitPoints(body, primary, SETTINGS.gravitational_constant),
       ...(primary
@@ -167,4 +194,68 @@ export function frameScene() {
 
 export function refit() {
   if (fitted && !state.cameraTouchedAt) requestFit();
+}
+
+// The sheet handle (phone): `body.lesson-peek`; saved as `sheet: 'peek'`.
+
+let peek = false;
+let button = null;
+let hooks = { announce() {}, save() {} };
+
+const words = () =>
+  button.dataset[getLocale() === 'es' ? 'es' : 'en'].split('|');
+
+function paint() {
+  document.body.classList.toggle('lesson-peek', peek);
+  if (!button) return;
+  const label = words()[peek ? 1 : 0];
+  button.setAttribute('aria-expanded', String(!peek));
+  button.setAttribute('aria-label', label);
+}
+
+export function setPeek(on, said = true) {
+  if (peek === on) return;
+  peek = on;
+  paint();
+  refit();
+  if (said) hooks.announce(words()[peek ? 2 : 3]);
+  hooks.save();
+}
+
+export const isPeek = () => peek;
+
+/** Wire the handle once; focusing an answer box raises the sheet. */
+export function initSheet(host, signal) {
+  button = document.getElementById('investigationSheet');
+  hooks = host;
+  button?.addEventListener('click', () => setPeek(!peek), { signal });
+  document.getElementById('investigationPanel')?.addEventListener(
+    'focusin',
+    e => {
+      if (
+        peek &&
+        e.target.closest?.('#investigationBody :is(input, textarea, select)')
+      )
+        setPeek(false);
+    },
+    { signal }
+  );
+}
+
+/** A lesson opens: the sheet as it was left, the readout folded to its chip. */
+export function openSheet(saved) {
+  peek = saved === 'peek';
+  paint();
+  const readout = document.getElementById('overlay');
+  if (
+    window.innerWidth <= 900 &&
+    readout &&
+    !readout.classList.contains('minimized')
+  )
+    document.getElementById('overlayMinimize')?.click();
+}
+
+export function closeSheet() {
+  peek = false;
+  paint();
 }

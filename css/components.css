@@ -4911,10 +4911,7 @@
   .inv-tool-controls .inv-ecc-row input[type='range'] {
     min-width: 5rem;
   }
-  /* On a phone the label has a line of its own and the range the whole of the
-     next, with its value: beside a long label (Spanish, mostly) the range was
-     left about 80 px, and the sliders of the lens and strategy panels were
-     hard to set. */
+  /* On a phone the label has its own line and the range the next. */
   @media (max-width: 480px) {
     .inv-ecc-row {
       flex-wrap: wrap;
