@@ -679,3 +679,25 @@ describe('a run through a setup setting', () => {
     expect(bound.length).toBeGreaterThanOrEqual(2);
   });
 });
+
+describe('the Spanish shadow of a step with a variation', () => {
+  test('translates the label and leaves the parameter and the rows alone', async () => {
+    const { mergeTranslation, translationCoverage } =
+      await import('../js/data/investigations/i18n.js');
+    const base = { variation: stepFor().variation };
+    const shadow = {
+      variation: {
+        param: 'masa',
+        read: ['x', 'y'],
+        label: 'Masa de la estrella',
+      },
+    };
+    const merged = mergeTranslation(base, shadow);
+    expect(merged.variation.label).toBe('Masa de la estrella');
+    expect(merged.variation.param).toBe('starMassSun');
+    expect(merged.variation.read).toEqual(['x', 'clock']);
+    expect(merged.variation.runFor).toBe(base.variation.runFor);
+    // Only the label is a word a translator owes.
+    expect(translationCoverage(base, {}).missing).toEqual(['variation.label']);
+  });
+});
