@@ -96,7 +96,7 @@ on:
     # same limit (D-R4-CI-01).
     branches: [main, v3, v4]
   pull_request:
-    # A draft pull request is not tested (D-R4-CI-02): the run starts when it is
+    # A draft pull request is not tested (D-R4-CI-03): the run starts when it is
     # marked ready for review, and every push to `v4` is still tested.
     types: [opened, synchronize, reopened, ready_for_review]
   schedule:
@@ -1240,7 +1240,7 @@ jobs:
           # it runs on any bash and can be exercised outside Actions.
           failed=0
 
-          # A draft pull request runs none of the jobs above (D-R4-CI-02). This
+          # A draft pull request runs none of the jobs above (D-R4-CI-03). This
           # says so and passes; marking it ready for review starts the full run,
           # and a draft cannot be merged.
           if [ "${{ github.event_name }}" = "pull_request" ] && [ "${{ github.event.pull_request.draft }}" = "true" ]; then
