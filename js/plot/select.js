@@ -107,8 +107,16 @@ export function createSelection(n) {
  * @param {SVGSVGElement} svg - The plot's element
  * @param {{announce: Function, describe: Function}} hooks - announce(text)
  *   speaks; describe(row) is what a focused row is called
+ * @param {{brush?: boolean, pick?: boolean}} [opts] - brush: false draws no
+ *   range, so a press and a drag are a click on the nearest row (a lesson's
+ *   plot); pick: a click selects that row, not only focuses it
  */
-export function interact(plot, svg, hooks) {
+export function interact(
+  plot,
+  svg,
+  hooks,
+  { brush: ranged = true, pick = false } = {}
+) {
   let brush = null;
   // Where a Shift extension started, for the rows the plot last drew.
   let anchor = null;
@@ -120,7 +128,7 @@ export function interact(plot, svg, hooks) {
 
   function drawBrush() {
     svg.querySelector('.ow-brush')?.remove();
-    if (!brush) return;
+    if (!brush || !ranged) return;
     svg.append(
       el('rect', {
         class: 'ow-brush',
@@ -150,16 +158,20 @@ export function interact(plot, svg, hooks) {
   svg.addEventListener('pointerup', e => {
     if (!brush) return;
     brush.to = point(e);
+    if (!ranged) brush.from = brush.to;
     const a = plot.toX(Math.min(brush.from, brush.to));
     const b = plot.toX(Math.max(brush.from, brush.to));
     brush = null;
     drawBrush();
     const { xs, order, selection } = plot.at();
-    if (Math.abs(plot.sx(b) - plot.sx(a)) < 3) {
+    if (!ranged || Math.abs(plot.sx(b) - plot.sx(a)) < 3) {
       // A click, not a drag: the nearest row.
       const d = i => Math.abs(xs[i] - a);
       const near = order.reduce((m, i) => (d(i) < d(m) ? i : m), order[0]);
-      if (near >= 0) selection.moveFocus(near, 'plot');
+      if (near >= 0) {
+        selection.moveFocus(near, 'plot');
+        if (pick) selection.set([near], 'plot');
+      }
       return;
     }
     selection.set(
