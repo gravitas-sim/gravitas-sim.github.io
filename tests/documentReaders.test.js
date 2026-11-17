@@ -124,6 +124,12 @@ const PARSES = {
     OWN + ' (the sandbox restore reads progress)',
   ],
   'js/investigations/stepView.js': [1, 'none', OWN + ' (load reads progress)'],
+  'js/investigations/figures.js': [
+    1,
+    'none',
+    OWN +
+      " (a reading's :src, a string this build wrote; a bad one reads as none)",
+  ],
   'js/studio/model.js': [
     5,
     'none',
