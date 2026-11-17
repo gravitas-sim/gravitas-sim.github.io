@@ -203,7 +203,7 @@ export async function measureAll({ origin, browser }) {
       out.plots.transitCurve = {
         kind: 'svg',
         ...V.judgePlotType(r.texts),
-        series: new Set(r.series.map(s => s.colour)).size,
+        distinctColours: new Set(r.series.map(s => s.colour)).size,
       };
     }
   );

@@ -1,0 +1,5512 @@
+{
+  "format": "gravitas.visual-baseline/1",
+  "base": "v4 at f1c30f6f (the 3.0 drawing; this change draws nothing)",
+  "tree": "84532c50",
+  "machine": "headless Chromium (Playwright), device pixel ratio 1, reduced motion, English or Spanish, one worker",
+  "images": "/Users/carl/Desktop/Gravitas/visual-baseline/v4-f1c30f6f/ (outside the repository): <cell id>-canvas.png, -viewport.png, -focus.png, <cell id>.record.json",
+  "reproducibility": "Each cell was captured twice. 49 of 108 repeat (identical, inside the playback bar only, or under 6 pixels); 59 do not (47 lesson cells: all of Weighing the Stars, Galilean Resonance and Moon image, 8 of Transit Lab, 3 of Kepler; 12 sandbox cells: 8 binary, 3 crowded, 1 close world). The staged-star lessons run a physics clock the capture cannot hold; a cell that did not repeat is compared by eye or by crop, never by hash alone.",
+  "expectedFailures": {
+    "count": 41,
+    "where": {
+      "I-8 (visualCriteria.spec.js)": [
+        "keplers-2nd-law at 375x812",
+        "keplers-2nd-law at 412x915",
+        "keplers-2nd-law at 768x1024",
+        "keplers-2nd-law at 1366x800",
+        "transit-lab at 375x812",
+        "transit-lab at 412x915",
+        "transit-lab at 768x1024",
+        "transit-lab at 1366x800",
+        "transit-lab at 1440x900",
+        "weighing-stars-binary at 375x812",
+        "weighing-stars-binary at 412x915",
+        "weighing-stars-binary at 768x1024",
+        "moon-image at 375x812",
+        "moon-image at 412x915"
+      ],
+      "I-9 arrows, trails, plots (visualCriteria.spec.js)": [
+        "arrow length rises with speed",
+        "the legend states the arrow scale",
+        "a trail spans a time, whatever the frame rate",
+        "plot type at reading size: the Kepler plot (canvas)",
+        "plot type at reading size: the transit light curve (SVG)"
+      ],
+      "I-9 labels and cue (canvasLegibility.spec.js)": [
+        "body labels @1: keplers-2nd-law, keplers-wedges",
+        "other canvas text @1: keplers-2nd-law, transit-lab, weighing-stars-binary, galilean-resonance, keplers-wedges",
+        "body labels @2 and other canvas text @2: all five states (10 tests)",
+        "cue: all five states (5 tests)"
+      ]
+    },
+    "note": "test.fail marks in e2e/visualCriteria.spec.js (BY_DESIGN) and e2e/canvasLegibility.spec.js (MAIN_BY_DESIGN); the prompt that makes one pass deletes its entry"
+  },
+  "criteria": {
+    "layout": [
+      {
+        "pilot": "keplers-2nd-law",
+        "size": "375x812",
+        "kind": "phone",
+        "subject": "scene",
+        "pass": false,
+        "reasons": [
+          "star is under investigationBody",
+          "circular is outside the viewport",
+          "eccentric is under inv-step-title",
+          "unobscured canvas is 192 px tall, under a third of 812 px"
+        ],
+        "openHeightPx": 192,
+        "openWidthPx": 8,
+        "openAreaShare": 0.36,
+        "lessonPanel": {
+          "top": 327,
+          "width": 359,
+          "height": 399
+        },
+        "bodies": [
+          {
+            "role": "star",
+            "x": 188,
+            "y": 406,
+            "state": "under investigationBody"
+          },
+          {
+            "role": "circular",
+            "x": 665,
+            "y": 354,
+            "state": "off screen"
+          },
+          {
+            "role": "eccentric",
+            "x": 71,
+            "y": 442,
+            "state": "under inv-step-title"
+          }
+        ],
+        "instrument": "absent"
+      },
+      {
+        "pilot": "keplers-2nd-law",
+        "size": "412x915",
+        "kind": "phone",
+        "subject": "scene",
+        "pass": false,
+        "reasons": [
+          "star is under inv-step-count",
+          "circular is outside the viewport",
+          "eccentric is under inv-step-title",
+          "unobscured canvas is 240 px tall, under a third of 915 px"
+        ],
+        "openHeightPx": 240,
+        "openWidthPx": 8,
+        "openAreaShare": 0.36,
+        "lessonPanel": {
+          "top": 372,
+          "width": 396,
+          "height": 458
+        },
+        "bodies": [
+          {
+            "role": "star",
+            "x": 206,
+            "y": 458,
+            "state": "under inv-step-count"
+          },
+          {
+            "role": "circular",
+            "x": 683,
+            "y": 405,
+            "state": "off screen"
+          },
+          {
+            "role": "eccentric",
+            "x": 89,
+            "y": 494,
+            "state": "under inv-step-title"
+          }
+        ],
+        "instrument": "absent"
+      },
+      {
+        "pilot": "keplers-2nd-law",
+        "size": "768x1024",
+        "kind": "tablet",
+        "subject": "scene",
+        "pass": false,
+        "reasons": [
+          "star is under inv-progress",
+          "circular is outside the viewport",
+          "eccentric is under investigationBody",
+          "unobscured canvas is 8 px wide, under a third of 768 px"
+        ],
+        "openHeightPx": 296,
+        "openWidthPx": 8,
+        "openAreaShare": 0.35,
+        "lessonPanel": {
+          "top": 397,
+          "width": 752,
+          "height": 505
+        },
+        "bodies": [
+          {
+            "role": "star",
+            "x": 384,
+            "y": 512,
+            "state": "under inv-progress"
+          },
+          {
+            "role": "circular",
+            "x": 861,
+            "y": 461,
+            "state": "off screen"
+          },
+          {
+            "role": "eccentric",
+            "x": 268,
+            "y": 546,
+            "state": "under investigationBody"
+          }
+        ],
+        "instrument": "absent"
+      },
+      {
+        "pilot": "keplers-2nd-law",
+        "size": "1366x800",
+        "kind": "desktop",
+        "subject": "scene",
+        "pass": false,
+        "reasons": [
+          "circular is under railState"
+        ],
+        "openHeightPx": 248,
+        "openWidthPx": 736,
+        "openAreaShare": 0.58,
+        "lessonPanel": {
+          "top": 60,
+          "width": 396,
+          "height": 660
+        },
+        "bodies": [
+          {
+            "role": "star",
+            "x": 683,
+            "y": 400,
+            "state": "in view"
+          },
+          {
+            "role": "circular",
+            "x": 1160,
+            "y": 345,
+            "state": "under railState"
+          },
+          {
+            "role": "eccentric",
+            "x": 565,
+            "y": 441,
+            "state": "in view"
+          }
+        ],
+        "instrument": "absent"
+      },
+      {
+        "pilot": "keplers-2nd-law",
+        "size": "1440x900",
+        "kind": "desktop",
+        "subject": "scene",
+        "pass": true,
+        "reasons": [],
+        "openHeightPx": 344,
+        "openWidthPx": 808,
+        "openAreaShare": 0.61,
+        "lessonPanel": {
+          "top": 60,
+          "width": 396,
+          "height": 760
+        },
+        "bodies": [
+          {
+            "role": "star",
+            "x": 720,
+            "y": 450,
+            "state": "in view"
+          },
+          {
+            "role": "circular",
+            "x": 1197,
+            "y": 397,
+            "state": "in view"
+          },
+          {
+            "role": "eccentric",
+            "x": 602,
+            "y": 489,
+            "state": "in view"
+          }
+        ],
+        "instrument": "absent"
+      },
+      {
+        "pilot": "transit-lab",
+        "size": "375x812",
+        "kind": "phone",
+        "subject": "scene",
+        "pass": false,
+        "reasons": [
+          "star is under lightCurveObserverControls-pa",
+          "planet is under inv-footer",
+          "unobscured canvas is 192 px tall, under a third of 812 px"
+        ],
+        "openHeightPx": 192,
+        "openWidthPx": 8,
+        "openAreaShare": 0.37,
+        "lessonPanel": {
+          "top": 502,
+          "width": 359,
+          "height": 224
+        },
+        "bodies": [
+          {
+            "role": "star",
+            "x": 188,
+            "y": 406,
+            "state": "under lightCurveObserverControls-pa"
+          },
+          {
+            "role": "planet",
+            "x": 292,
+            "y": 671,
+            "state": "under inv-footer"
+          }
+        ],
+        "instrument": "absent"
+      },
+      {
+        "pilot": "transit-lab",
+        "size": "412x915",
+        "kind": "phone",
+        "subject": "scene",
+        "pass": false,
+        "reasons": [
+          "star is under lightCurveObserverControls-pa",
+          "planet is under p",
+          "unobscured canvas is 232 px tall, under a third of 915 px"
+        ],
+        "openHeightPx": 232,
+        "openWidthPx": 8,
+        "openAreaShare": 0.36,
+        "lessonPanel": {
+          "top": 567,
+          "width": 396,
+          "height": 262
+        },
+        "bodies": [
+          {
+            "role": "star",
+            "x": 206,
+            "y": 458,
+            "state": "under lightCurveObserverControls-pa"
+          },
+          {
+            "role": "planet",
+            "x": 319,
+            "y": 719,
+            "state": "under p"
+          }
+        ],
+        "instrument": "absent"
+      },
+      {
+        "pilot": "transit-lab",
+        "size": "768x1024",
+        "kind": "tablet",
+        "subject": "scene",
+        "pass": false,
+        "reasons": [
+          "planet is under obs-control-help",
+          "unobscured canvas is 144 px wide, under a third of 768 px"
+        ],
+        "openHeightPx": 296,
+        "openWidthPx": 144,
+        "openAreaShare": 0.45,
+        "lessonPanel": {
+          "top": 397,
+          "width": 372,
+          "height": 505
+        },
+        "bodies": [
+          {
+            "role": "star",
+            "x": 384,
+            "y": 512,
+            "state": "in view"
+          },
+          {
+            "role": "planet",
+            "x": 510,
+            "y": 767,
+            "state": "under obs-control-help"
+          }
+        ],
+        "instrument": "absent"
+      },
+      {
+        "pilot": "transit-lab",
+        "size": "1366x800",
+        "kind": "desktop",
+        "subject": "scene",
+        "pass": false,
+        "reasons": [
+          "star is under light-curve-toolbar",
+          "planet is under light-curve-hint"
+        ],
+        "openHeightPx": 56,
+        "openWidthPx": 16,
+        "openAreaShare": 0.39,
+        "lessonPanel": {
+          "top": 60,
+          "width": 396,
+          "height": 660
+        },
+        "bodies": [
+          {
+            "role": "star",
+            "x": 683,
+            "y": 400,
+            "state": "under light-curve-toolbar"
+          },
+          {
+            "role": "planet",
+            "x": 794,
+            "y": 662,
+            "state": "under light-curve-hint"
+          }
+        ],
+        "instrument": "absent"
+      },
+      {
+        "pilot": "transit-lab",
+        "size": "1440x900",
+        "kind": "desktop",
+        "subject": "scene",
+        "pass": false,
+        "reasons": [
+          "planet is under svg"
+        ],
+        "openHeightPx": 56,
+        "openWidthPx": 160,
+        "openAreaShare": 0.43,
+        "lessonPanel": {
+          "top": 60,
+          "width": 396,
+          "height": 760
+        },
+        "bodies": [
+          {
+            "role": "star",
+            "x": 720,
+            "y": 450,
+            "state": "in view"
+          },
+          {
+            "role": "planet",
+            "x": 825,
+            "y": 715,
+            "state": "under svg"
+          }
+        ],
+        "instrument": "absent"
+      },
+      {
+        "pilot": "weighing-stars-binary",
+        "size": "375x812",
+        "kind": "phone",
+        "subject": "scene",
+        "pass": false,
+        "reasons": [
+          "a is outside the viewport",
+          "b is outside the viewport",
+          "unobscured canvas is 192 px tall, under a third of 812 px"
+        ],
+        "openHeightPx": 192,
+        "openWidthPx": 8,
+        "openAreaShare": 0.36,
+        "lessonPanel": {
+          "top": 327,
+          "width": 359,
+          "height": 399
+        },
+        "bodies": [
+          {
+            "role": "a",
+            "x": 382,
+            "y": 404,
+            "state": "off screen"
+          },
+          {
+            "role": "b",
+            "x": 472,
+            "y": 408,
+            "state": "off screen"
+          }
+        ],
+        "instrument": "absent"
+      },
+      {
+        "pilot": "weighing-stars-binary",
+        "size": "412x915",
+        "kind": "phone",
+        "subject": "scene",
+        "pass": false,
+        "reasons": [
+          "a is outside the viewport",
+          "b is outside the viewport",
+          "unobscured canvas is 240 px tall, under a third of 915 px"
+        ],
+        "openHeightPx": 240,
+        "openWidthPx": 8,
+        "openAreaShare": 0.36,
+        "lessonPanel": {
+          "top": 372,
+          "width": 396,
+          "height": 458
+        },
+        "bodies": [
+          {
+            "role": "a",
+            "x": 419,
+            "y": 456,
+            "state": "off screen"
+          },
+          {
+            "role": "b",
+            "x": 509,
+            "y": 459,
+            "state": "off screen"
+          }
+        ],
+        "instrument": "absent"
+      },
+      {
+        "pilot": "weighing-stars-binary",
+        "size": "768x1024",
+        "kind": "tablet",
+        "subject": "scene",
+        "pass": false,
+        "reasons": [
+          "a is outside the viewport",
+          "b is outside the viewport",
+          "unobscured canvas is 8 px wide, under a third of 768 px"
+        ],
+        "openHeightPx": 296,
+        "openWidthPx": 8,
+        "openAreaShare": 0.35,
+        "lessonPanel": {
+          "top": 397,
+          "width": 752,
+          "height": 505
+        },
+        "bodies": [
+          {
+            "role": "a",
+            "x": 775,
+            "y": 510,
+            "state": "off screen"
+          },
+          {
+            "role": "b",
+            "x": 865,
+            "y": 514,
+            "state": "off screen"
+          }
+        ],
+        "instrument": "absent"
+      },
+      {
+        "pilot": "weighing-stars-binary",
+        "size": "1366x800",
+        "kind": "desktop",
+        "subject": "scene",
+        "pass": true,
+        "reasons": [],
+        "openHeightPx": 248,
+        "openWidthPx": 736,
+        "openAreaShare": 0.58,
+        "lessonPanel": {
+          "top": 60,
+          "width": 396,
+          "height": 660
+        },
+        "bodies": [
+          {
+            "role": "a",
+            "x": 501,
+            "y": 388,
+            "state": "in view"
+          },
+          {
+            "role": "b",
+            "x": 1049,
+            "y": 412,
+            "state": "in view"
+          }
+        ],
+        "instrument": "absent"
+      },
+      {
+        "pilot": "weighing-stars-binary",
+        "size": "1440x900",
+        "kind": "desktop",
+        "subject": "scene",
+        "pass": true,
+        "reasons": [],
+        "openHeightPx": 344,
+        "openWidthPx": 808,
+        "openAreaShare": 0.61,
+        "lessonPanel": {
+          "top": 60,
+          "width": 396,
+          "height": 760
+        },
+        "bodies": [
+          {
+            "role": "a",
+            "x": 511,
+            "y": 435,
+            "state": "in view"
+          },
+          {
+            "role": "b",
+            "x": 1113,
+            "y": 465,
+            "state": "in view"
+          }
+        ],
+        "instrument": "absent"
+      },
+      {
+        "pilot": "galilean-resonance",
+        "size": "375x812",
+        "kind": "phone",
+        "subject": "instrument",
+        "pass": true,
+        "reasons": [],
+        "openHeightPx": 192,
+        "openWidthPx": 8,
+        "openAreaShare": 0.37,
+        "lessonPanel": {
+          "top": 502,
+          "width": 359,
+          "height": 224
+        },
+        "bodies": [
+          {
+            "role": "star",
+            "x": 427,
+            "y": 406,
+            "state": "off screen"
+          }
+        ],
+        "instrument": "in view"
+      },
+      {
+        "pilot": "galilean-resonance",
+        "size": "412x915",
+        "kind": "phone",
+        "subject": "instrument",
+        "pass": true,
+        "reasons": [],
+        "openHeightPx": 232,
+        "openWidthPx": 8,
+        "openAreaShare": 0.36,
+        "lessonPanel": {
+          "top": 567,
+          "width": 396,
+          "height": 262
+        },
+        "bodies": [
+          {
+            "role": "star",
+            "x": 464,
+            "y": 458,
+            "state": "off screen"
+          }
+        ],
+        "instrument": "in view"
+      },
+      {
+        "pilot": "galilean-resonance",
+        "size": "768x1024",
+        "kind": "tablet",
+        "subject": "instrument",
+        "pass": true,
+        "reasons": [],
+        "openHeightPx": 296,
+        "openWidthPx": 8,
+        "openAreaShare": 0.35,
+        "lessonPanel": {
+          "top": 397,
+          "width": 372,
+          "height": 505
+        },
+        "bodies": [
+          {
+            "role": "star",
+            "x": 820,
+            "y": 512,
+            "state": "off screen"
+          }
+        ],
+        "instrument": "in view"
+      },
+      {
+        "pilot": "galilean-resonance",
+        "size": "1366x800",
+        "kind": "desktop",
+        "subject": "instrument",
+        "pass": true,
+        "reasons": [],
+        "openHeightPx": 16,
+        "openWidthPx": 264,
+        "openAreaShare": 0.3,
+        "lessonPanel": {
+          "top": 60,
+          "width": 396,
+          "height": 660
+        },
+        "bodies": [
+          {
+            "role": "star",
+            "x": 775,
+            "y": 400,
+            "state": "under svg"
+          }
+        ],
+        "instrument": "in view"
+      },
+      {
+        "pilot": "galilean-resonance",
+        "size": "1440x900",
+        "kind": "desktop",
+        "subject": "instrument",
+        "pass": true,
+        "reasons": [],
+        "openHeightPx": 16,
+        "openWidthPx": 336,
+        "openAreaShare": 0.34,
+        "lessonPanel": {
+          "top": 60,
+          "width": 396,
+          "height": 760
+        },
+        "bodies": [
+          {
+            "role": "star",
+            "x": 812,
+            "y": 450,
+            "state": "under investigationToolNote"
+          }
+        ],
+        "instrument": "in view"
+      },
+      {
+        "pilot": "moon-image",
+        "size": "375x812",
+        "kind": "phone",
+        "subject": "instrument",
+        "pass": false,
+        "reasons": [
+          "the instrument is not fully in view (45% of it is under another panel)"
+        ],
+        "openHeightPx": 192,
+        "openWidthPx": 8,
+        "openAreaShare": 0.37,
+        "lessonPanel": {
+          "top": 502,
+          "width": 359,
+          "height": 224
+        },
+        "bodies": [
+          {
+            "role": "star",
+            "x": 427,
+            "y": 406,
+            "state": "off screen"
+          }
+        ],
+        "instrument": "45% of it is under another panel"
+      },
+      {
+        "pilot": "moon-image",
+        "size": "412x915",
+        "kind": "phone",
+        "subject": "instrument",
+        "pass": false,
+        "reasons": [
+          "the instrument is not fully in view (31% of it is under another panel)"
+        ],
+        "openHeightPx": 232,
+        "openWidthPx": 8,
+        "openAreaShare": 0.36,
+        "lessonPanel": {
+          "top": 567,
+          "width": 396,
+          "height": 262
+        },
+        "bodies": [
+          {
+            "role": "star",
+            "x": 464,
+            "y": 458,
+            "state": "off screen"
+          }
+        ],
+        "instrument": "31% of it is under another panel"
+      },
+      {
+        "pilot": "moon-image",
+        "size": "768x1024",
+        "kind": "tablet",
+        "subject": "instrument",
+        "pass": true,
+        "reasons": [],
+        "openHeightPx": 296,
+        "openWidthPx": 8,
+        "openAreaShare": 0.35,
+        "lessonPanel": {
+          "top": 397,
+          "width": 372,
+          "height": 505
+        },
+        "bodies": [
+          {
+            "role": "star",
+            "x": 820,
+            "y": 512,
+            "state": "off screen"
+          }
+        ],
+        "instrument": "in view"
+      },
+      {
+        "pilot": "moon-image",
+        "size": "1366x800",
+        "kind": "desktop",
+        "subject": "instrument",
+        "pass": true,
+        "reasons": [],
+        "openHeightPx": 16,
+        "openWidthPx": 264,
+        "openAreaShare": 0.3,
+        "lessonPanel": {
+          "top": 60,
+          "width": 396,
+          "height": 660
+        },
+        "bodies": [
+          {
+            "role": "star",
+            "x": 775,
+            "y": 400,
+            "state": "under investigationToolNote"
+          }
+        ],
+        "instrument": "in view"
+      },
+      {
+        "pilot": "moon-image",
+        "size": "1440x900",
+        "kind": "desktop",
+        "subject": "instrument",
+        "pass": true,
+        "reasons": [],
+        "openHeightPx": 16,
+        "openWidthPx": 336,
+        "openAreaShare": 0.34,
+        "lessonPanel": {
+          "top": 60,
+          "width": 396,
+          "height": 760
+        },
+        "bodies": [
+          {
+            "role": "star",
+            "x": 812,
+            "y": 450,
+            "state": "under investigationToolNote"
+          }
+        ],
+        "instrument": "in view"
+      }
+    ],
+    "labels": [
+      {
+        "state": "keplers-2nd-law",
+        "dpr": 1,
+        "canvasScale": 1,
+        "bodyLabels": {
+          "count": 3,
+          "smallestCssPx": 10,
+          "pass": false,
+          "overlaps": 0
+        },
+        "otherText": {
+          "count": 11,
+          "smallestCssPx": 10,
+          "pass": false,
+          "overlaps": 0,
+          "small": [
+            "10.0px \"Body sizes enlarged for \""
+          ]
+        }
+      },
+      {
+        "state": "transit-lab",
+        "dpr": 1,
+        "canvasScale": 1,
+        "bodyLabels": {
+          "count": 1,
+          "smallestCssPx": 12,
+          "pass": true,
+          "overlaps": 0
+        },
+        "otherText": {
+          "count": 3,
+          "smallestCssPx": 10,
+          "pass": false,
+          "overlaps": 0,
+          "small": [
+            "10.0px \"Body sizes enlarged for \""
+          ]
+        }
+      },
+      {
+        "state": "weighing-stars-binary",
+        "dpr": 1,
+        "canvasScale": 1,
+        "bodyLabels": {
+          "count": 2,
+          "smallestCssPx": 12,
+          "pass": true,
+          "overlaps": 0
+        },
+        "otherText": {
+          "count": 2,
+          "smallestCssPx": 10,
+          "pass": false,
+          "overlaps": 0,
+          "small": [
+            "10.0px \"Body sizes enlarged for \""
+          ]
+        }
+      },
+      {
+        "state": "galilean-resonance",
+        "dpr": 1,
+        "canvasScale": 1,
+        "bodyLabels": {
+          "count": 1,
+          "smallestCssPx": 12,
+          "pass": true,
+          "overlaps": 0
+        },
+        "otherText": {
+          "count": 2,
+          "smallestCssPx": 10,
+          "pass": false,
+          "overlaps": 0,
+          "small": [
+            "10.0px \"Body sizes enlarged for \""
+          ]
+        }
+      },
+      {
+        "state": "keplers-wedges",
+        "dpr": 1,
+        "canvasScale": 1,
+        "bodyLabels": {
+          "count": 3,
+          "smallestCssPx": 10,
+          "pass": false,
+          "overlaps": 0
+        },
+        "otherText": {
+          "count": 11,
+          "smallestCssPx": 10,
+          "pass": false,
+          "overlaps": 0,
+          "small": [
+            "10.0px \"Body sizes enlarged for \""
+          ]
+        }
+      },
+      {
+        "state": "keplers-2nd-law",
+        "dpr": 2,
+        "canvasScale": 1.96,
+        "bodyLabels": {
+          "count": 3,
+          "smallestCssPx": 5.1,
+          "pass": false,
+          "overlaps": 0
+        },
+        "otherText": {
+          "count": 11,
+          "smallestCssPx": 5.1,
+          "pass": false,
+          "overlaps": 0,
+          "small": [
+            "5.6px \"12.5%\"",
+            "5.6px \"12.5%\"",
+            "5.6px \"12.5%\"",
+            "5.6px \"12.5%\"",
+            "5.6px \"12.5%\"",
+            "5.6px \"12.5%\"",
+            "5.6px \"12.5%\"",
+            "5.6px \"12.5%\"",
+            "6.6px \"Kepler's 2nd Law: Equal \"",
+            "5.6px \"1 AU\"",
+            "5.1px \"Body sizes enlarged for \""
+          ]
+        }
+      },
+      {
+        "state": "transit-lab",
+        "dpr": 2,
+        "canvasScale": 1.96,
+        "bodyLabels": {
+          "count": 1,
+          "smallestCssPx": 6.1,
+          "pass": false,
+          "overlaps": 0
+        },
+        "otherText": {
+          "count": 3,
+          "smallestCssPx": 5.1,
+          "pass": false,
+          "overlaps": 0,
+          "small": [
+            "5.6px \"0.02 AU\"",
+            "5.1px \"Body sizes enlarged for \"",
+            "5.6px \"Observer\""
+          ]
+        }
+      },
+      {
+        "state": "weighing-stars-binary",
+        "dpr": 2,
+        "canvasScale": 1.96,
+        "bodyLabels": {
+          "count": 2,
+          "smallestCssPx": 6.1,
+          "pass": false,
+          "overlaps": 0
+        },
+        "otherText": {
+          "count": 2,
+          "smallestCssPx": 5.1,
+          "pass": false,
+          "overlaps": 0,
+          "small": [
+            "5.6px \"1 AU\"",
+            "5.1px \"Body sizes enlarged for \""
+          ]
+        }
+      },
+      {
+        "state": "galilean-resonance",
+        "dpr": 2,
+        "canvasScale": 1.96,
+        "bodyLabels": {
+          "count": 1,
+          "smallestCssPx": 6.1,
+          "pass": false,
+          "overlaps": 0
+        },
+        "otherText": {
+          "count": 2,
+          "smallestCssPx": 5.1,
+          "pass": false,
+          "overlaps": 0,
+          "small": [
+            "5.6px \"0.5 AU\"",
+            "5.1px \"Body sizes enlarged for \""
+          ]
+        }
+      },
+      {
+        "state": "keplers-wedges",
+        "dpr": 2,
+        "canvasScale": 1.96,
+        "bodyLabels": {
+          "count": 3,
+          "smallestCssPx": 5.1,
+          "pass": false,
+          "overlaps": 0
+        },
+        "otherText": {
+          "count": 11,
+          "smallestCssPx": 5.1,
+          "pass": false,
+          "overlaps": 0,
+          "small": [
+            "5.6px \"12.5%\"",
+            "5.6px \"12.5%\"",
+            "5.6px \"12.5%\"",
+            "5.6px \"12.5%\"",
+            "5.6px \"12.5%\"",
+            "5.6px \"12.5%\"",
+            "5.6px \"12.5%\"",
+            "5.6px \"12.5%\"",
+            "6.6px \"Kepler's 2nd Law: Equal \"",
+            "5.6px \"1 AU\"",
+            "5.1px \"Body sizes enlarged for \""
+          ]
+        }
+      }
+    ],
+    "cue": [
+      {
+        "state": "keplers-2nd-law",
+        "changedPixels": 0,
+        "frameNoise": 0,
+        "pass": false
+      },
+      {
+        "state": "transit-lab",
+        "changedPixels": 0,
+        "frameNoise": 0,
+        "pass": false
+      },
+      {
+        "state": "weighing-stars-binary",
+        "changedPixels": 0,
+        "frameNoise": 0,
+        "pass": false
+      },
+      {
+        "state": "galilean-resonance",
+        "changedPixels": 0,
+        "frameNoise": 0,
+        "pass": false
+      },
+      {
+        "state": "keplers-wedges",
+        "changedPixels": 0,
+        "frameNoise": 0,
+        "pass": false
+      }
+    ],
+    "arrows": {
+      "state": "keplers-2nd-law, the eccentric orbiter",
+      "shaftAtSpeed1CssPx": 70.2,
+      "shaftAtSpeed3CssPx": 70.2,
+      "legendText": "velocity",
+      "pass": false
+    },
+    "trails": [
+      {
+        "fps": 30,
+        "samples": 40,
+        "step": 0.04901960784313725,
+        "substeps": 17,
+        "span": 1.96078431372549,
+        "maxTimestep": 0.05
+      },
+      {
+        "fps": 60,
+        "samples": 40,
+        "step": 0.046296296296296294,
+        "substeps": 9,
+        "span": 1.8518518518518516,
+        "maxTimestep": 0.05
+      },
+      {
+        "fps": 144,
+        "samples": 40,
+        "step": 0.04340277777777778,
+        "substeps": 4,
+        "span": 1.7361111111111114,
+        "maxTimestep": 0.05
+      }
+    ],
+    "plots": {
+      "keplerPlot": {
+        "kind": "canvas",
+        "pass": false,
+        "ticks": 6,
+        "smallestTick": 10,
+        "smallestLabel": 10
+      },
+      "transitCurve": {
+        "kind": "svg",
+        "pass": false,
+        "ticks": 5,
+        "smallestTick": 10,
+        "smallestLabel": 11,
+        "distinctColours": 2
+      }
+    }
+  },
+  "costs": {
+    "frameTimeLowTierCpu4": {
+      "method": "node tools/perf-probe.mjs --scene <record> ... --tier low --cpu 4 --seconds 5, three runs, median; headless Chromium 1366x800, device pixel ratio 1; machine load average 8 to 15 from other jobs, so a median can carry them",
+      "measuredOn": "2026-11-16, tree of this change (3.0 drawing)",
+      "scenes": {
+        "solar-system-midnight-1366": {
+          "runsFrameMs": [
+            16.36,
+            13.03,
+            14.23
+          ],
+          "medianFrameMs": 14.23,
+          "quietestRunFrameMs": 13.03,
+          "medianHeapAfterMB": 4.5,
+          "committedThresholdMs": 25.0,
+          "committedMeasuredMs": 16.34
+        },
+        "galilean-resonance-zoomed-midnight-1366": {
+          "runsFrameMs": [
+            19.72,
+            16.44,
+            17.22
+          ],
+          "medianFrameMs": 17.22,
+          "quietestRunFrameMs": 16.44,
+          "medianHeapAfterMB": 5.8,
+          "committedThresholdMs": 27.0,
+          "committedMeasuredMs": 17.73
+        },
+        "circumbinary-planet-lab-midnight-1366": {
+          "runsFrameMs": [
+            13.67,
+            11.6,
+            12.01
+          ],
+          "medianFrameMs": 12.01,
+          "quietestRunFrameMs": 11.6,
+          "medianHeapAfterMB": 6.2,
+          "committedThresholdMs": 20.5,
+          "committedMeasuredMs": 13.44
+        },
+        "star-cluster-midnight-1366": {
+          "runsFrameMs": [
+            19.65,
+            20.25,
+            21.58
+          ],
+          "medianFrameMs": 20.25,
+          "quietestRunFrameMs": 19.65,
+          "medianHeapAfterMB": 5.6,
+          "committedThresholdMs": 38.5,
+          "committedMeasuredMs": 25.4
+        }
+      },
+      "note": "advisory: tools/perf-thresholds.json says its profiles are not enforced; a change beyond its threshold is a tradeoff for the maintainer"
+    },
+    "routesSources": {
+      "method": "node tools/route-budget.mjs (JavaScript bytes to usable, gzip)",
+      "routes": {
+        "front-door": {
+          "kb": 1917.0,
+          "requests": 104
+        },
+        "sandbox": {
+          "kb": 1917.0,
+          "requests": 104
+        },
+        "kepler": {
+          "kb": 2634.4,
+          "requests": 135
+        },
+        "transit": {
+          "kb": 2646.2,
+          "requests": 135,
+          "instrument": {
+            "kb": 2726.3,
+            "requests": 140
+          }
+        },
+        "power-law": {
+          "kb": 2611.7,
+          "requests": 135,
+          "instrument": {
+            "kb": 2664.9,
+            "requests": 138
+          }
+        },
+        "largest-lesson": {
+          "kb": 2941.0,
+          "requests": 144
+        },
+        "teaching": {
+          "kb": 246.9,
+          "requests": 16
+        },
+        "evaluation": {
+          "kb": 33.7,
+          "requests": 5
+        },
+        "instructors": {
+          "kb": 2861.7,
+          "requests": 42
+        },
+        "figure": {
+          "kb": 2192.0,
+          "requests": 124
+        },
+        "experiments": {
+          "kb": 1085.0,
+          "requests": 60
+        },
+        "observatory": {
+          "kb": 200.1,
+          "requests": 18
+        },
+        "catalog": {
+          "kb": 88.2,
+          "requests": 12
+        },
+        "library": {
+          "kb": 100.5,
+          "requests": 12
+        },
+        "adoption": {
+          "kb": 10.2,
+          "requests": 2
+        },
+        "teach-find": {
+          "kb": 13.0,
+          "requests": 3
+        },
+        "teach-kit": {
+          "kb": 56.9,
+          "requests": 6
+        },
+        "my-work": {
+          "kb": 104.2,
+          "requests": 10
+        },
+        "sky": {
+          "kb": 114.9,
+          "requests": 14
+        },
+        "compute": {
+          "kb": 181.3,
+          "requests": 20
+        },
+        "studio": {
+          "kb": 945.9,
+          "requests": 50
+        },
+        "composer": {
+          "kb": 543.2,
+          "requests": 31
+        },
+        "course-packs": {
+          "kb": 738.2,
+          "requests": 46
+        },
+        "course-builder": {
+          "kb": 1145.4,
+          "requests": 48
+        },
+        "course-home": {
+          "kb": 306.1,
+          "requests": 20
+        },
+        "lab3d": {
+          "kb": 87.1,
+          "requests": 10
+        },
+        "lab3d-lab": {
+          "kb": 810.8,
+          "requests": 35
+        },
+        "lab3d-guide": {
+          "kb": 988.7,
+          "requests": 40
+        },
+        "mission": {
+          "kb": 69.0,
+          "requests": 7
+        },
+        "mission-lab": {
+          "kb": 423.3,
+          "requests": 36
+        }
+      }
+    },
+    "moduleLines": {
+      "js/render.js": {
+        "lines": 2932,
+        "ceiling": 2932
+      },
+      "js/lessonStage.js": {
+        "lines": 1900,
+        "ceiling": 1900
+      }
+    },
+    "ceilings": "no route, bundle, data or module-size ceiling is raised or lowered by this change"
+  },
+  "cells": [
+    {
+      "id": "keplers-2nd-law-midnight-375-en",
+      "kind": "lesson",
+      "pilot": "keplers-2nd-law",
+      "width": 375,
+      "height": 812,
+      "theme": "midnight",
+      "language": "en",
+      "record": {
+        "route": "/#investigation=keplers-laws",
+        "stepSid": "measure-the-two-orbits",
+        "simTime": 0.4175000000000012,
+        "bodies": [
+          {
+            "role": "star",
+            "x": 0,
+            "y": 0,
+            "kind": "StarObject"
+          },
+          {
+            "role": "circular",
+            "x": 319.999054,
+            "y": 0.745386,
+            "kind": "Planet"
+          },
+          {
+            "role": "eccentric",
+            "x": -17.719331,
+            "y": 46.775034,
+            "kind": "Planet"
+          }
+        ]
+      },
+      "canvasSha": "27c2194b29510354",
+      "viewportSha": "27c2194b29510354",
+      "focusSha": "fc731d569d6429f4",
+      "focus": {
+        "selector": "#investigationNext",
+        "focused": true
+      },
+      "repeat": {
+        "canvas": false,
+        "viewport": false,
+        "focus": false,
+        "differing": 3154,
+        "box": [
+          21,
+          302,
+          374,
+          777
+        ],
+        "confinedToTimelineBar": false
+      }
+    },
+    {
+      "id": "keplers-2nd-law-midnight-375-es",
+      "kind": "lesson",
+      "pilot": "keplers-2nd-law",
+      "width": 375,
+      "height": 812,
+      "theme": "midnight",
+      "language": "es",
+      "record": {
+        "route": "/#investigation=keplers-laws",
+        "stepSid": "measure-the-two-orbits",
+        "simTime": 0,
+        "bodies": [
+          {
+            "role": "star",
+            "x": 0,
+            "y": 0,
+            "kind": "StarObject"
+          },
+          {
+            "role": "circular",
+            "x": 320,
+            "y": 0,
+            "kind": "Planet"
+          },
+          {
+            "role": "eccentric",
+            "x": -15.45085,
+            "y": 47.552826,
+            "kind": "Planet"
+          }
+        ]
+      },
+      "canvasSha": "12460748a8d8f436",
+      "viewportSha": "12460748a8d8f436",
+      "focusSha": "b425cbe295fd273e",
+      "focus": {
+        "selector": "#investigationNext",
+        "focused": true
+      },
+      "repeat": {
+        "canvas": false,
+        "viewport": false,
+        "focus": false,
+        "differing": 3690,
+        "box": [
+          32,
+          302,
+          374,
+          778
+        ],
+        "confinedToTimelineBar": false
+      }
+    },
+    {
+      "id": "keplers-2nd-law-daylight-375-en",
+      "kind": "lesson",
+      "pilot": "keplers-2nd-law",
+      "width": 375,
+      "height": 812,
+      "theme": "daylight",
+      "language": "en",
+      "record": {
+        "route": "/#investigation=keplers-laws",
+        "stepSid": "measure-the-two-orbits",
+        "simTime": 0,
+        "bodies": [
+          {
+            "role": "star",
+            "x": 0,
+            "y": 0,
+            "kind": "StarObject"
+          },
+          {
+            "role": "circular",
+            "x": 320,
+            "y": 0,
+            "kind": "Planet"
+          },
+          {
+            "role": "eccentric",
+            "x": -15.45085,
+            "y": 47.552826,
+            "kind": "Planet"
+          }
+        ]
+      },
+      "canvasSha": "ba2d6d7f4e4ac7a0",
+      "viewportSha": "ba2d6d7f4e4ac7a0",
+      "focusSha": "4b7f9e481f14ee04",
+      "focus": {
+        "selector": "#investigationNext",
+        "focused": true
+      },
+      "repeat": {
+        "canvas": true,
+        "viewport": true,
+        "focus": true
+      }
+    },
+    {
+      "id": "keplers-2nd-law-daylight-375-es",
+      "kind": "lesson",
+      "pilot": "keplers-2nd-law",
+      "width": 375,
+      "height": 812,
+      "theme": "daylight",
+      "language": "es",
+      "record": {
+        "route": "/#investigation=keplers-laws",
+        "stepSid": "measure-the-two-orbits",
+        "simTime": 0,
+        "bodies": [
+          {
+            "role": "star",
+            "x": 0,
+            "y": 0,
+            "kind": "StarObject"
+          },
+          {
+            "role": "circular",
+            "x": 320,
+            "y": 0,
+            "kind": "Planet"
+          },
+          {
+            "role": "eccentric",
+            "x": -15.45085,
+            "y": 47.552826,
+            "kind": "Planet"
+          }
+        ]
+      },
+      "canvasSha": "d1e09b27e3911d93",
+      "viewportSha": "d1e09b27e3911d93",
+      "focusSha": "fa96a219aa67b7ab",
+      "focus": {
+        "selector": "#investigationNext",
+        "focused": true
+      },
+      "repeat": {
+        "canvas": true,
+        "viewport": true,
+        "focus": true
+      }
+    },
+    {
+      "id": "keplers-2nd-law-midnight-768-en",
+      "kind": "lesson",
+      "pilot": "keplers-2nd-law",
+      "width": 768,
+      "height": 1024,
+      "theme": "midnight",
+      "language": "en",
+      "record": {
+        "route": "/#investigation=keplers-laws",
+        "stepSid": "measure-the-two-orbits",
+        "simTime": 0,
+        "bodies": [
+          {
+            "role": "star",
+            "x": 0,
+            "y": 0,
+            "kind": "StarObject"
+          },
+          {
+            "role": "circular",
+            "x": 320,
+            "y": 0,
+            "kind": "Planet"
+          },
+          {
+            "role": "eccentric",
+            "x": -15.45085,
+            "y": 47.552826,
+            "kind": "Planet"
+          }
+        ]
+      },
+      "canvasSha": "950487464a33a3d7",
+      "viewportSha": "950487464a33a3d7",
+      "focusSha": "73d5d2760708fc6f",
+      "focus": {
+        "selector": "#investigationNext",
+        "focused": true
+      },
+      "repeat": {
+        "canvas": true,
+        "viewport": true,
+        "focus": true
+      }
+    },
+    {
+      "id": "keplers-2nd-law-midnight-768-es",
+      "kind": "lesson",
+      "pilot": "keplers-2nd-law",
+      "width": 768,
+      "height": 1024,
+      "theme": "midnight",
+      "language": "es",
+      "record": {
+        "route": "/#investigation=keplers-laws",
+        "stepSid": "measure-the-two-orbits",
+        "simTime": 0,
+        "bodies": [
+          {
+            "role": "star",
+            "x": 0,
+            "y": 0,
+            "kind": "StarObject"
+          },
+          {
+            "role": "circular",
+            "x": 320,
+            "y": 0,
+            "kind": "Planet"
+          },
+          {
+            "role": "eccentric",
+            "x": -15.45085,
+            "y": 47.552826,
+            "kind": "Planet"
+          }
+        ]
+      },
+      "canvasSha": "68e1083573e75748",
+      "viewportSha": "68e1083573e75748",
+      "focusSha": "46979c9d816f588f",
+      "focus": {
+        "selector": "#investigationNext",
+        "focused": true
+      },
+      "repeat": {
+        "canvas": true,
+        "viewport": true,
+        "focus": true
+      }
+    },
+    {
+      "id": "keplers-2nd-law-daylight-768-en",
+      "kind": "lesson",
+      "pilot": "keplers-2nd-law",
+      "width": 768,
+      "height": 1024,
+      "theme": "daylight",
+      "language": "en",
+      "record": {
+        "route": "/#investigation=keplers-laws",
+        "stepSid": "measure-the-two-orbits",
+        "simTime": 0,
+        "bodies": [
+          {
+            "role": "star",
+            "x": 0,
+            "y": 0,
+            "kind": "StarObject"
+          },
+          {
+            "role": "circular",
+            "x": 320,
+            "y": 0,
+            "kind": "Planet"
+          },
+          {
+            "role": "eccentric",
+            "x": -15.45085,
+            "y": 47.552826,
+            "kind": "Planet"
+          }
+        ]
+      },
+      "canvasSha": "2de4e682e89d7749",
+      "viewportSha": "2de4e682e89d7749",
+      "focusSha": "57c71888e5f22667",
+      "focus": {
+        "selector": "#investigationNext",
+        "focused": true
+      },
+      "repeat": {
+        "canvas": true,
+        "viewport": true,
+        "focus": true
+      }
+    },
+    {
+      "id": "keplers-2nd-law-daylight-768-es",
+      "kind": "lesson",
+      "pilot": "keplers-2nd-law",
+      "width": 768,
+      "height": 1024,
+      "theme": "daylight",
+      "language": "es",
+      "record": {
+        "route": "/#investigation=keplers-laws",
+        "stepSid": "measure-the-two-orbits",
+        "simTime": 0,
+        "bodies": [
+          {
+            "role": "star",
+            "x": 0,
+            "y": 0,
+            "kind": "StarObject"
+          },
+          {
+            "role": "circular",
+            "x": 320,
+            "y": 0,
+            "kind": "Planet"
+          },
+          {
+            "role": "eccentric",
+            "x": -15.45085,
+            "y": 47.552826,
+            "kind": "Planet"
+          }
+        ]
+      },
+      "canvasSha": "02b9d526082f220c",
+      "viewportSha": "02b9d526082f220c",
+      "focusSha": "433a33e8db39b41f",
+      "focus": {
+        "selector": "#investigationNext",
+        "focused": true
+      },
+      "repeat": {
+        "canvas": true,
+        "viewport": true,
+        "focus": true
+      }
+    },
+    {
+      "id": "keplers-2nd-law-midnight-1366-en",
+      "kind": "lesson",
+      "pilot": "keplers-2nd-law",
+      "width": 1366,
+      "height": 800,
+      "theme": "midnight",
+      "language": "en",
+      "record": {
+        "route": "/#investigation=keplers-laws",
+        "stepSid": "measure-the-two-orbits",
+        "simTime": 0,
+        "bodies": [
+          {
+            "role": "star",
+            "x": 0,
+            "y": 0,
+            "kind": "StarObject"
+          },
+          {
+            "role": "circular",
+            "x": 320,
+            "y": 0,
+            "kind": "Planet"
+          },
+          {
+            "role": "eccentric",
+            "x": -15.45085,
+            "y": 47.552826,
+            "kind": "Planet"
+          }
+        ]
+      },
+      "canvasSha": "52e600805b06704d",
+      "viewportSha": "52e600805b06704d",
+      "focusSha": "ed158f178ff1ff73",
+      "focus": {
+        "selector": "#investigationNext",
+        "focused": true
+      },
+      "repeat": {
+        "canvas": false,
+        "viewport": false,
+        "focus": true,
+        "differing": 1,
+        "box": [
+          25,
+          82,
+          25,
+          82
+        ],
+        "confinedToTimelineBar": false
+      }
+    },
+    {
+      "id": "keplers-2nd-law-midnight-1366-es",
+      "kind": "lesson",
+      "pilot": "keplers-2nd-law",
+      "width": 1366,
+      "height": 800,
+      "theme": "midnight",
+      "language": "es",
+      "record": {
+        "route": "/#investigation=keplers-laws",
+        "stepSid": "measure-the-two-orbits",
+        "simTime": 0.8325000000000048,
+        "bodies": [
+          {
+            "role": "star",
+            "x": 0,
+            "y": 0,
+            "kind": "StarObject"
+          },
+          {
+            "role": "circular",
+            "x": 319.996417,
+            "y": 1.486305,
+            "kind": "Planet"
+          },
+          {
+            "role": "eccentric",
+            "x": -19.949652,
+            "y": 45.93694,
+            "kind": "Planet"
+          }
+        ]
+      },
+      "canvasSha": "1eeb60ffc9f5061d",
+      "viewportSha": "1eeb60ffc9f5061d",
+      "focusSha": "c3917062c2ec305d",
+      "focus": {
+        "selector": "#investigationNext",
+        "focused": true
+      },
+      "repeat": {
+        "canvas": false,
+        "viewport": false,
+        "focus": false,
+        "differing": 2136,
+        "box": [
+          556,
+          296,
+          895,
+          735
+        ],
+        "confinedToTimelineBar": false
+      }
+    },
+    {
+      "id": "keplers-2nd-law-daylight-1366-en",
+      "kind": "lesson",
+      "pilot": "keplers-2nd-law",
+      "width": 1366,
+      "height": 800,
+      "theme": "daylight",
+      "language": "en",
+      "record": {
+        "route": "/#investigation=keplers-laws",
+        "stepSid": "measure-the-two-orbits",
+        "simTime": 0,
+        "bodies": [
+          {
+            "role": "star",
+            "x": 0,
+            "y": 0,
+            "kind": "StarObject"
+          },
+          {
+            "role": "circular",
+            "x": 320,
+            "y": 0,
+            "kind": "Planet"
+          },
+          {
+            "role": "eccentric",
+            "x": -15.45085,
+            "y": 47.552826,
+            "kind": "Planet"
+          }
+        ]
+      },
+      "canvasSha": "3b03c0761fc8d86b",
+      "viewportSha": "3b03c0761fc8d86b",
+      "focusSha": "c4ed669ce0518667",
+      "focus": {
+        "selector": "#investigationNext",
+        "focused": true
+      },
+      "repeat": {
+        "canvas": false,
+        "viewport": false,
+        "focus": true,
+        "differing": 1,
+        "box": [
+          25,
+          82,
+          25,
+          82
+        ],
+        "confinedToTimelineBar": false
+      }
+    },
+    {
+      "id": "keplers-2nd-law-daylight-1366-es",
+      "kind": "lesson",
+      "pilot": "keplers-2nd-law",
+      "width": 1366,
+      "height": 800,
+      "theme": "daylight",
+      "language": "es",
+      "record": {
+        "route": "/#investigation=keplers-laws",
+        "stepSid": "measure-the-two-orbits",
+        "simTime": 0,
+        "bodies": [
+          {
+            "role": "star",
+            "x": 0,
+            "y": 0,
+            "kind": "StarObject"
+          },
+          {
+            "role": "circular",
+            "x": 320,
+            "y": 0,
+            "kind": "Planet"
+          },
+          {
+            "role": "eccentric",
+            "x": -15.45085,
+            "y": 47.552826,
+            "kind": "Planet"
+          }
+        ]
+      },
+      "canvasSha": "37b77d39c4ecb927",
+      "viewportSha": "37b77d39c4ecb927",
+      "focusSha": "3e76a82e6487da1c",
+      "focus": {
+        "selector": "#investigationNext",
+        "focused": true
+      },
+      "repeat": {
+        "canvas": true,
+        "viewport": true,
+        "focus": true
+      }
+    },
+    {
+      "id": "transit-lab-midnight-375-en",
+      "kind": "lesson",
+      "pilot": "transit-lab",
+      "width": 375,
+      "height": 812,
+      "theme": "midnight",
+      "language": "en",
+      "record": {
+        "route": "/#investigation=transit-photometry",
+        "stepSid": "your-first-transit",
+        "simTime": 0,
+        "bodies": [
+          {
+            "role": "star",
+            "x": 0,
+            "y": 0,
+            "kind": "StarObject"
+          },
+          {
+            "role": "planet",
+            "x": 0,
+            "y": -4.747,
+            "kind": "Planet"
+          }
+        ]
+      },
+      "canvasSha": "4d51535c3f9da5ec",
+      "viewportSha": "4d51535c3f9da5ec",
+      "focusSha": "d2977ba70783af08",
+      "focus": {
+        "selector": "#investigationNext",
+        "focused": true
+      },
+      "repeat": {
+        "canvas": false,
+        "viewport": false,
+        "focus": false,
+        "differing": 19,
+        "box": [
+          31,
+          742,
+          357,
+          752
+        ],
+        "confinedToTimelineBar": true
+      }
+    },
+    {
+      "id": "transit-lab-midnight-375-es",
+      "kind": "lesson",
+      "pilot": "transit-lab",
+      "width": 375,
+      "height": 812,
+      "theme": "midnight",
+      "language": "es",
+      "record": {
+        "route": "/#investigation=transit-photometry",
+        "stepSid": "your-first-transit",
+        "simTime": 0,
+        "bodies": [
+          {
+            "role": "star",
+            "x": 0,
+            "y": 0,
+            "kind": "StarObject"
+          },
+          {
+            "role": "planet",
+            "x": 0,
+            "y": -4.747,
+            "kind": "Planet"
+          }
+        ]
+      },
+      "canvasSha": "59e69802d6623533",
+      "viewportSha": "59e69802d6623533",
+      "focusSha": "040ac1395eaff6d8",
+      "focus": {
+        "selector": "#investigationNext",
+        "focused": true
+      },
+      "repeat": {
+        "canvas": false,
+        "viewport": false,
+        "focus": false,
+        "differing": 19,
+        "box": [
+          31,
+          742,
+          357,
+          752
+        ],
+        "confinedToTimelineBar": true
+      }
+    },
+    {
+      "id": "transit-lab-daylight-375-en",
+      "kind": "lesson",
+      "pilot": "transit-lab",
+      "width": 375,
+      "height": 812,
+      "theme": "daylight",
+      "language": "en",
+      "record": {
+        "route": "/#investigation=transit-photometry",
+        "stepSid": "your-first-transit",
+        "simTime": 0,
+        "bodies": [
+          {
+            "role": "star",
+            "x": 0,
+            "y": 0,
+            "kind": "StarObject"
+          },
+          {
+            "role": "planet",
+            "x": 0,
+            "y": -4.747,
+            "kind": "Planet"
+          }
+        ]
+      },
+      "canvasSha": "709d09c8f856ac35",
+      "viewportSha": "709d09c8f856ac35",
+      "focusSha": "8950ba64a73de8ef",
+      "focus": {
+        "selector": "#investigationNext",
+        "focused": true
+      },
+      "repeat": {
+        "canvas": false,
+        "viewport": false,
+        "focus": false,
+        "differing": 163,
+        "box": [
+          313,
+          768,
+          344,
+          777
+        ],
+        "confinedToTimelineBar": true
+      }
+    },
+    {
+      "id": "transit-lab-daylight-375-es",
+      "kind": "lesson",
+      "pilot": "transit-lab",
+      "width": 375,
+      "height": 812,
+      "theme": "daylight",
+      "language": "es",
+      "record": {
+        "route": "/#investigation=transit-photometry",
+        "stepSid": "your-first-transit",
+        "simTime": 0,
+        "bodies": [
+          {
+            "role": "star",
+            "x": 0,
+            "y": 0,
+            "kind": "StarObject"
+          },
+          {
+            "role": "planet",
+            "x": 0,
+            "y": -4.747,
+            "kind": "Planet"
+          }
+        ]
+      },
+      "canvasSha": "adfc5f8a82e66abf",
+      "viewportSha": "adfc5f8a82e66abf",
+      "focusSha": "6eb93a19df1105c4",
+      "focus": {
+        "selector": "#investigationNext",
+        "focused": true
+      },
+      "repeat": {
+        "canvas": false,
+        "viewport": false,
+        "focus": false,
+        "differing": 17,
+        "box": [
+          31,
+          742,
+          357,
+          751
+        ],
+        "confinedToTimelineBar": true
+      }
+    },
+    {
+      "id": "transit-lab-midnight-768-en",
+      "kind": "lesson",
+      "pilot": "transit-lab",
+      "width": 768,
+      "height": 1024,
+      "theme": "midnight",
+      "language": "en",
+      "record": {
+        "route": "/#investigation=transit-photometry",
+        "stepSid": "your-first-transit",
+        "simTime": 0,
+        "bodies": [
+          {
+            "role": "star",
+            "x": 0,
+            "y": 0,
+            "kind": "StarObject"
+          },
+          {
+            "role": "planet",
+            "x": 0,
+            "y": -4.747,
+            "kind": "Planet"
+          }
+        ]
+      },
+      "canvasSha": "2f2899671eddc011",
+      "viewportSha": "2f2899671eddc011",
+      "focusSha": "213553dee4a43850",
+      "focus": {
+        "selector": "#investigationNext",
+        "focused": true
+      },
+      "repeat": {
+        "canvas": false,
+        "viewport": false,
+        "focus": false,
+        "differing": 576,
+        "box": [
+          21,
+          438,
+          740,
+          818
+        ],
+        "confinedToTimelineBar": false
+      }
+    },
+    {
+      "id": "transit-lab-midnight-768-es",
+      "kind": "lesson",
+      "pilot": "transit-lab",
+      "width": 768,
+      "height": 1024,
+      "theme": "midnight",
+      "language": "es",
+      "record": {
+        "route": "/#investigation=transit-photometry",
+        "stepSid": "your-first-transit",
+        "simTime": 0,
+        "bodies": [
+          {
+            "role": "star",
+            "x": 0,
+            "y": 0,
+            "kind": "StarObject"
+          },
+          {
+            "role": "planet",
+            "x": 0,
+            "y": -4.747,
+            "kind": "Planet"
+          }
+        ]
+      },
+      "canvasSha": "6c6ab926ac42c617",
+      "viewportSha": "6c6ab926ac42c617",
+      "focusSha": "e6ea178e99dd0948",
+      "focus": {
+        "selector": "#investigationNext",
+        "focused": true
+      },
+      "repeat": {
+        "canvas": false,
+        "viewport": false,
+        "focus": false,
+        "differing": 1332,
+        "box": [
+          424,
+          793,
+          740,
+          821
+        ],
+        "confinedToTimelineBar": false
+      }
+    },
+    {
+      "id": "transit-lab-daylight-768-en",
+      "kind": "lesson",
+      "pilot": "transit-lab",
+      "width": 768,
+      "height": 1024,
+      "theme": "daylight",
+      "language": "en",
+      "record": {
+        "route": "/#investigation=transit-photometry",
+        "stepSid": "your-first-transit",
+        "simTime": 0,
+        "bodies": [
+          {
+            "role": "star",
+            "x": 0,
+            "y": 0,
+            "kind": "StarObject"
+          },
+          {
+            "role": "planet",
+            "x": 0,
+            "y": -4.747,
+            "kind": "Planet"
+          }
+        ]
+      },
+      "canvasSha": "8dfda04a165c04db",
+      "viewportSha": "8dfda04a165c04db",
+      "focusSha": "fc69f81f6fd7b5c3",
+      "focus": {
+        "selector": "#investigationNext",
+        "focused": true
+      },
+      "repeat": {
+        "canvas": false,
+        "viewport": false,
+        "focus": false,
+        "differing": 1352,
+        "box": [
+          21,
+          415,
+          740,
+          818
+        ],
+        "confinedToTimelineBar": false
+      }
+    },
+    {
+      "id": "transit-lab-daylight-768-es",
+      "kind": "lesson",
+      "pilot": "transit-lab",
+      "width": 768,
+      "height": 1024,
+      "theme": "daylight",
+      "language": "es",
+      "record": {
+        "route": "/#investigation=transit-photometry",
+        "stepSid": "your-first-transit",
+        "simTime": 0,
+        "bodies": [
+          {
+            "role": "star",
+            "x": 0,
+            "y": 0,
+            "kind": "StarObject"
+          },
+          {
+            "role": "planet",
+            "x": 0,
+            "y": -4.747,
+            "kind": "Planet"
+          }
+        ]
+      },
+      "canvasSha": "09a3659afb59a8a7",
+      "viewportSha": "09a3659afb59a8a7",
+      "focusSha": "1700091a0d98cc9f",
+      "focus": {
+        "selector": "#investigationNext",
+        "focused": true
+      },
+      "repeat": {
+        "canvas": false,
+        "viewport": false,
+        "focus": false,
+        "differing": 1321,
+        "box": [
+          424,
+          793,
+          740,
+          818
+        ],
+        "confinedToTimelineBar": false
+      }
+    },
+    {
+      "id": "transit-lab-midnight-1366-en",
+      "kind": "lesson",
+      "pilot": "transit-lab",
+      "width": 1366,
+      "height": 800,
+      "theme": "midnight",
+      "language": "en",
+      "record": {
+        "route": "/#investigation=transit-photometry",
+        "stepSid": "your-first-transit",
+        "simTime": 0,
+        "bodies": [
+          {
+            "role": "star",
+            "x": 0,
+            "y": 0,
+            "kind": "StarObject"
+          },
+          {
+            "role": "planet",
+            "x": 0,
+            "y": -4.747,
+            "kind": "Planet"
+          }
+        ]
+      },
+      "canvasSha": "fd0017c1cf17e347",
+      "viewportSha": "fd0017c1cf17e347",
+      "focusSha": "c054635ba38d1ee8",
+      "focus": {
+        "selector": "#investigationNext",
+        "focused": true
+      },
+      "repeat": {
+        "canvas": false,
+        "viewport": false,
+        "focus": false,
+        "differing": 1236,
+        "box": [
+          489,
+          595,
+          1106,
+          596
+        ],
+        "confinedToTimelineBar": false
+      }
+    },
+    {
+      "id": "transit-lab-midnight-1366-es",
+      "kind": "lesson",
+      "pilot": "transit-lab",
+      "width": 1366,
+      "height": 800,
+      "theme": "midnight",
+      "language": "es",
+      "record": {
+        "route": "/#investigation=transit-photometry",
+        "stepSid": "your-first-transit",
+        "simTime": 0.007499999999999997,
+        "bodies": [
+          {
+            "role": "star",
+            "x": 0,
+            "y": 0,
+            "kind": "StarObject"
+          },
+          {
+            "role": "planet",
+            "x": 0.116622,
+            "y": -4.745492,
+            "kind": "Planet"
+          }
+        ]
+      },
+      "canvasSha": "dfd70c2aeff9bc18",
+      "viewportSha": "dfd70c2aeff9bc18",
+      "focusSha": "110e8d73e9b85f13",
+      "focus": {
+        "selector": "#investigationNext",
+        "focused": true
+      },
+      "repeat": {
+        "canvas": false,
+        "viewport": false,
+        "focus": false,
+        "differing": 4263,
+        "box": [
+          170,
+          202,
+          1106,
+          765
+        ],
+        "confinedToTimelineBar": false
+      }
+    },
+    {
+      "id": "transit-lab-daylight-1366-en",
+      "kind": "lesson",
+      "pilot": "transit-lab",
+      "width": 1366,
+      "height": 800,
+      "theme": "daylight",
+      "language": "en",
+      "record": {
+        "route": "/#investigation=transit-photometry",
+        "stepSid": "your-first-transit",
+        "simTime": 0,
+        "bodies": [
+          {
+            "role": "star",
+            "x": 0,
+            "y": 0,
+            "kind": "StarObject"
+          },
+          {
+            "role": "planet",
+            "x": 0,
+            "y": -4.747,
+            "kind": "Planet"
+          }
+        ]
+      },
+      "canvasSha": "cffae683593d3836",
+      "viewportSha": "cffae683593d3836",
+      "focusSha": "9b1036b10d976fb4",
+      "focus": {
+        "selector": "#investigationNext",
+        "focused": true
+      },
+      "repeat": {
+        "canvas": false,
+        "viewport": false,
+        "focus": false,
+        "differing": 1236,
+        "box": [
+          489,
+          595,
+          1106,
+          596
+        ],
+        "confinedToTimelineBar": false
+      }
+    },
+    {
+      "id": "transit-lab-daylight-1366-es",
+      "kind": "lesson",
+      "pilot": "transit-lab",
+      "width": 1366,
+      "height": 800,
+      "theme": "daylight",
+      "language": "es",
+      "record": {
+        "route": "/#investigation=transit-photometry",
+        "stepSid": "your-first-transit",
+        "simTime": 0,
+        "bodies": [
+          {
+            "role": "star",
+            "x": 0,
+            "y": 0,
+            "kind": "StarObject"
+          },
+          {
+            "role": "planet",
+            "x": 0,
+            "y": -4.747,
+            "kind": "Planet"
+          }
+        ]
+      },
+      "canvasSha": "7b10e3bf98bec57f",
+      "viewportSha": "7b10e3bf98bec57f",
+      "focusSha": "d575dbd59c430186",
+      "focus": {
+        "selector": "#investigationNext",
+        "focused": true
+      },
+      "repeat": {
+        "canvas": false,
+        "viewport": false,
+        "focus": false,
+        "differing": 3330,
+        "box": [
+          25,
+          82,
+          1106,
+          599
+        ],
+        "confinedToTimelineBar": false
+      }
+    },
+    {
+      "id": "weighing-stars-binary-midnight-375-en",
+      "kind": "lesson",
+      "pilot": "weighing-stars-binary",
+      "width": 375,
+      "height": 812,
+      "theme": "midnight",
+      "language": "en",
+      "record": {
+        "route": "/#investigation=weighing-stars",
+        "stepSid": "watch-them",
+        "simTime": 7.999999999999997,
+        "bodies": [
+          {
+            "role": "a",
+            "x": -199.999826,
+            "y": 0.186712,
+            "kind": "StarObject"
+          },
+          {
+            "role": "b",
+            "x": 199.999826,
+            "y": -0.186712,
+            "kind": "StarObject"
+          }
+        ]
+      },
+      "canvasSha": "5cbca8e68f8ff22b",
+      "viewportSha": "5cbca8e68f8ff22b",
+      "focusSha": "2d2e3016ce666d93",
+      "focus": {
+        "selector": "#investigationNext",
+        "focused": true
+      },
+      "repeat": {
+        "canvas": false,
+        "viewport": false,
+        "focus": false,
+        "differing": 3039,
+        "box": [
+          0,
+          1,
+          374,
+          811
+        ],
+        "confinedToTimelineBar": false
+      }
+    },
+    {
+      "id": "weighing-stars-binary-midnight-375-es",
+      "kind": "lesson",
+      "pilot": "weighing-stars-binary",
+      "width": 375,
+      "height": 812,
+      "theme": "midnight",
+      "language": "es",
+      "record": {
+        "route": "/#investigation=weighing-stars",
+        "stepSid": "watch-them",
+        "simTime": 2.836499999999991,
+        "bodies": [
+          {
+            "role": "a",
+            "x": -200,
+            "y": 0,
+            "kind": "StarObject"
+          },
+          {
+            "role": "b",
+            "x": 200,
+            "y": 0,
+            "kind": "StarObject"
+          }
+        ]
+      },
+      "canvasSha": "a5c0f1ea993b8579",
+      "viewportSha": "a5c0f1ea993b8579",
+      "focusSha": "cffe6602b24e70e4",
+      "focus": {
+        "selector": "#investigationNext",
+        "focused": true
+      },
+      "repeat": {
+        "canvas": false,
+        "viewport": false,
+        "focus": false,
+        "differing": 3359,
+        "box": [
+          0,
+          0,
+          374,
+          811
+        ],
+        "confinedToTimelineBar": false
+      }
+    },
+    {
+      "id": "weighing-stars-binary-daylight-375-en",
+      "kind": "lesson",
+      "pilot": "weighing-stars-binary",
+      "width": 375,
+      "height": 812,
+      "theme": "daylight",
+      "language": "en",
+      "record": {
+        "route": "/#investigation=weighing-stars",
+        "stepSid": "watch-them",
+        "simTime": 6.332999999999996,
+        "bodies": [
+          {
+            "role": "a",
+            "x": -199.999828,
+            "y": 0.185594,
+            "kind": "StarObject"
+          },
+          {
+            "role": "b",
+            "x": 199.999828,
+            "y": -0.185594,
+            "kind": "StarObject"
+          }
+        ]
+      },
+      "canvasSha": "f557d30e5a2a0936",
+      "viewportSha": "f557d30e5a2a0936",
+      "focusSha": "d85052a91701f2bb",
+      "focus": {
+        "selector": "#investigationNext",
+        "focused": true
+      },
+      "repeat": {
+        "canvas": false,
+        "viewport": false,
+        "focus": false,
+        "differing": 3261,
+        "box": [
+          0,
+          0,
+          374,
+          811
+        ],
+        "confinedToTimelineBar": false
+      }
+    },
+    {
+      "id": "weighing-stars-binary-daylight-375-es",
+      "kind": "lesson",
+      "pilot": "weighing-stars-binary",
+      "width": 375,
+      "height": 812,
+      "theme": "daylight",
+      "language": "es",
+      "record": {
+        "route": "/#investigation=weighing-stars",
+        "stepSid": "watch-them",
+        "simTime": -1.4595000000000002,
+        "bodies": [
+          {
+            "role": "a",
+            "x": -200,
+            "y": 0,
+            "kind": "StarObject"
+          },
+          {
+            "role": "b",
+            "x": 200,
+            "y": 0,
+            "kind": "StarObject"
+          }
+        ]
+      },
+      "canvasSha": "80e81ec2ef733d55",
+      "viewportSha": "80e81ec2ef733d55",
+      "focusSha": "a5993d722074bef3",
+      "focus": {
+        "selector": "#investigationNext",
+        "focused": true
+      },
+      "repeat": {
+        "canvas": false,
+        "viewport": false,
+        "focus": false,
+        "differing": 3322,
+        "box": [
+          0,
+          0,
+          374,
+          811
+        ],
+        "confinedToTimelineBar": false
+      }
+    },
+    {
+      "id": "weighing-stars-binary-midnight-768-en",
+      "kind": "lesson",
+      "pilot": "weighing-stars-binary",
+      "width": 768,
+      "height": 1024,
+      "theme": "midnight",
+      "language": "en",
+      "record": {
+        "route": "/#investigation=weighing-stars",
+        "stepSid": "watch-them",
+        "simTime": -2.1174999999999997,
+        "bodies": [
+          {
+            "role": "a",
+            "x": -200,
+            "y": 0,
+            "kind": "StarObject"
+          },
+          {
+            "role": "b",
+            "x": 200,
+            "y": 0,
+            "kind": "StarObject"
+          }
+        ]
+      },
+      "canvasSha": "35c692f7b86e9a98",
+      "viewportSha": "35c692f7b86e9a98",
+      "focusSha": "e968f8526955c380",
+      "focus": {
+        "selector": "#investigationNext",
+        "focused": true
+      },
+      "repeat": {
+        "canvas": false,
+        "viewport": false,
+        "focus": false,
+        "differing": 8930,
+        "box": [
+          0,
+          0,
+          767,
+          1023
+        ],
+        "confinedToTimelineBar": false
+      }
+    },
+    {
+      "id": "weighing-stars-binary-midnight-768-es",
+      "kind": "lesson",
+      "pilot": "weighing-stars-binary",
+      "width": 768,
+      "height": 1024,
+      "theme": "midnight",
+      "language": "es",
+      "record": {
+        "route": "/#investigation=weighing-stars",
+        "stepSid": "watch-them",
+        "simTime": 2.276499999999996,
+        "bodies": [
+          {
+            "role": "a",
+            "x": -200,
+            "y": 0,
+            "kind": "StarObject"
+          },
+          {
+            "role": "b",
+            "x": 200,
+            "y": 0,
+            "kind": "StarObject"
+          }
+        ]
+      },
+      "canvasSha": "43c5dec67441ca42",
+      "viewportSha": "43c5dec67441ca42",
+      "focusSha": "715fef9dd9c80da7",
+      "focus": {
+        "selector": "#investigationNext",
+        "focused": true
+      },
+      "repeat": {
+        "canvas": false,
+        "viewport": false,
+        "focus": false,
+        "differing": 8594,
+        "box": [
+          0,
+          0,
+          767,
+          1023
+        ],
+        "confinedToTimelineBar": false
+      }
+    },
+    {
+      "id": "weighing-stars-binary-daylight-768-en",
+      "kind": "lesson",
+      "pilot": "weighing-stars-binary",
+      "width": 768,
+      "height": 1024,
+      "theme": "daylight",
+      "language": "en",
+      "record": {
+        "route": "/#investigation=weighing-stars",
+        "stepSid": "watch-them",
+        "simTime": 6.582500000000002,
+        "bodies": [
+          {
+            "role": "a",
+            "x": -200,
+            "y": 0,
+            "kind": "StarObject"
+          },
+          {
+            "role": "b",
+            "x": 200,
+            "y": 0,
+            "kind": "StarObject"
+          }
+        ]
+      },
+      "canvasSha": "09fd4cfc3f5ab79d",
+      "viewportSha": "09fd4cfc3f5ab79d",
+      "focusSha": "3cec53433f4a5cee",
+      "focus": {
+        "selector": "#investigationNext",
+        "focused": true
+      },
+      "repeat": {
+        "canvas": false,
+        "viewport": false,
+        "focus": false,
+        "differing": 8737,
+        "box": [
+          0,
+          0,
+          767,
+          1023
+        ],
+        "confinedToTimelineBar": false
+      }
+    },
+    {
+      "id": "weighing-stars-binary-daylight-768-es",
+      "kind": "lesson",
+      "pilot": "weighing-stars-binary",
+      "width": 768,
+      "height": 1024,
+      "theme": "daylight",
+      "language": "es",
+      "record": {
+        "route": "/#investigation=weighing-stars",
+        "stepSid": "watch-them",
+        "simTime": -3.0395000000000003,
+        "bodies": [
+          {
+            "role": "a",
+            "x": -200,
+            "y": 0,
+            "kind": "StarObject"
+          },
+          {
+            "role": "b",
+            "x": 200,
+            "y": 0,
+            "kind": "StarObject"
+          }
+        ]
+      },
+      "canvasSha": "15059b34c02ff01c",
+      "viewportSha": "15059b34c02ff01c",
+      "focusSha": "eedbdb87ea0ffd78",
+      "focus": {
+        "selector": "#investigationNext",
+        "focused": true
+      },
+      "repeat": {
+        "canvas": false,
+        "viewport": false,
+        "focus": false,
+        "differing": 8847,
+        "box": [
+          0,
+          0,
+          767,
+          1023
+        ],
+        "confinedToTimelineBar": false
+      }
+    },
+    {
+      "id": "weighing-stars-binary-midnight-1366-en",
+      "kind": "lesson",
+      "pilot": "weighing-stars-binary",
+      "width": 1366,
+      "height": 800,
+      "theme": "midnight",
+      "language": "en",
+      "record": {
+        "route": "/#investigation=weighing-stars",
+        "stepSid": "watch-them",
+        "simTime": -3.8015,
+        "bodies": [
+          {
+            "role": "a",
+            "x": -200,
+            "y": 0,
+            "kind": "StarObject"
+          },
+          {
+            "role": "b",
+            "x": 200,
+            "y": 0,
+            "kind": "StarObject"
+          }
+        ]
+      },
+      "canvasSha": "28bde6414c794831",
+      "viewportSha": "28bde6414c794831",
+      "focusSha": "7df4c794fe44662c",
+      "focus": {
+        "selector": "#investigationNext",
+        "focused": true
+      },
+      "repeat": {
+        "canvas": false,
+        "viewport": false,
+        "focus": false,
+        "differing": 15329,
+        "box": [
+          0,
+          0,
+          1365,
+          799
+        ],
+        "confinedToTimelineBar": false
+      }
+    },
+    {
+      "id": "weighing-stars-binary-midnight-1366-es",
+      "kind": "lesson",
+      "pilot": "weighing-stars-binary",
+      "width": 1366,
+      "height": 800,
+      "theme": "midnight",
+      "language": "es",
+      "record": {
+        "route": "/#investigation=weighing-stars",
+        "stepSid": "watch-them",
+        "simTime": -5.092,
+        "bodies": [
+          {
+            "role": "a",
+            "x": -200,
+            "y": 0,
+            "kind": "StarObject"
+          },
+          {
+            "role": "b",
+            "x": 200,
+            "y": 0,
+            "kind": "StarObject"
+          }
+        ]
+      },
+      "canvasSha": "bda13ca5f16807da",
+      "viewportSha": "bda13ca5f16807da",
+      "focusSha": "0348e402afb6223f",
+      "focus": {
+        "selector": "#investigationNext",
+        "focused": true
+      },
+      "repeat": {
+        "canvas": false,
+        "viewport": false,
+        "focus": false,
+        "differing": 14830,
+        "box": [
+          0,
+          0,
+          1365,
+          799
+        ],
+        "confinedToTimelineBar": false
+      }
+    },
+    {
+      "id": "weighing-stars-binary-daylight-1366-en",
+      "kind": "lesson",
+      "pilot": "weighing-stars-binary",
+      "width": 1366,
+      "height": 800,
+      "theme": "daylight",
+      "language": "en",
+      "record": {
+        "route": "/#investigation=weighing-stars",
+        "stepSid": "watch-them",
+        "simTime": -1.4834999999999994,
+        "bodies": [
+          {
+            "role": "a",
+            "x": -200,
+            "y": 0,
+            "kind": "StarObject"
+          },
+          {
+            "role": "b",
+            "x": 200,
+            "y": 0,
+            "kind": "StarObject"
+          }
+        ]
+      },
+      "canvasSha": "00315b2b63c784bc",
+      "viewportSha": "00315b2b63c784bc",
+      "focusSha": "c2fbeabd44979b4a",
+      "focus": {
+        "selector": "#investigationNext",
+        "focused": true
+      },
+      "repeat": {
+        "canvas": false,
+        "viewport": false,
+        "focus": false,
+        "differing": 15446,
+        "box": [
+          0,
+          0,
+          1365,
+          799
+        ],
+        "confinedToTimelineBar": false
+      }
+    },
+    {
+      "id": "weighing-stars-binary-daylight-1366-es",
+      "kind": "lesson",
+      "pilot": "weighing-stars-binary",
+      "width": 1366,
+      "height": 800,
+      "theme": "daylight",
+      "language": "es",
+      "record": {
+        "route": "/#investigation=weighing-stars",
+        "stepSid": "watch-them",
+        "simTime": 2.665499999999998,
+        "bodies": [
+          {
+            "role": "a",
+            "x": -200,
+            "y": 0,
+            "kind": "StarObject"
+          },
+          {
+            "role": "b",
+            "x": 200,
+            "y": 0,
+            "kind": "StarObject"
+          }
+        ]
+      },
+      "canvasSha": "c725cfbe91e3f40e",
+      "viewportSha": "c725cfbe91e3f40e",
+      "focusSha": "18c5526d759749de",
+      "focus": {
+        "selector": "#investigationNext",
+        "focused": true
+      },
+      "repeat": {
+        "canvas": false,
+        "viewport": false,
+        "focus": false,
+        "differing": 15485,
+        "box": [
+          0,
+          0,
+          1365,
+          799
+        ],
+        "confinedToTimelineBar": false
+      }
+    },
+    {
+      "id": "galilean-resonance-midnight-375-en",
+      "kind": "lesson",
+      "pilot": "galilean-resonance",
+      "width": 375,
+      "height": 812,
+      "theme": "midnight",
+      "language": "en",
+      "record": {
+        "route": "/#investigation=ios-fire",
+        "stepSid": "heating-at-the-maximum",
+        "simTime": 1.897499999999991,
+        "bodies": [
+          {
+            "role": "star",
+            "x": 0,
+            "y": 0,
+            "kind": "StarObject"
+          }
+        ]
+      },
+      "canvasSha": "bc6e6b2bbdb1d41b",
+      "viewportSha": "bc6e6b2bbdb1d41b",
+      "focusSha": "deadea9a0c2764bc",
+      "focus": {
+        "selector": "#investigationNext",
+        "focused": true
+      },
+      "repeat": {
+        "canvas": false,
+        "viewport": false,
+        "focus": false,
+        "differing": 3442,
+        "box": [
+          0,
+          1,
+          374,
+          811
+        ],
+        "confinedToTimelineBar": false
+      }
+    },
+    {
+      "id": "galilean-resonance-midnight-375-es",
+      "kind": "lesson",
+      "pilot": "galilean-resonance",
+      "width": 375,
+      "height": 812,
+      "theme": "midnight",
+      "language": "es",
+      "record": {
+        "route": "/#investigation=ios-fire",
+        "stepSid": "heating-at-the-maximum",
+        "simTime": 5.750499999999996,
+        "bodies": [
+          {
+            "role": "star",
+            "x": 0,
+            "y": 0,
+            "kind": "StarObject"
+          }
+        ]
+      },
+      "canvasSha": "2b23b9e415bb29c3",
+      "viewportSha": "2b23b9e415bb29c3",
+      "focusSha": "bbbc737465d77324",
+      "focus": {
+        "selector": "#investigationNext",
+        "focused": true
+      },
+      "repeat": {
+        "canvas": false,
+        "viewport": false,
+        "focus": false,
+        "differing": 3393,
+        "box": [
+          0,
+          0,
+          374,
+          811
+        ],
+        "confinedToTimelineBar": false
+      }
+    },
+    {
+      "id": "galilean-resonance-daylight-375-en",
+      "kind": "lesson",
+      "pilot": "galilean-resonance",
+      "width": 375,
+      "height": 812,
+      "theme": "daylight",
+      "language": "en",
+      "record": {
+        "route": "/#investigation=ios-fire",
+        "stepSid": "heating-at-the-maximum",
+        "simTime": 2.957500000000001,
+        "bodies": [
+          {
+            "role": "star",
+            "x": 0,
+            "y": 0,
+            "kind": "StarObject"
+          }
+        ]
+      },
+      "canvasSha": "8b6c5a01c82670e2",
+      "viewportSha": "8b6c5a01c82670e2",
+      "focusSha": "d327a9dd10128bfb",
+      "focus": {
+        "selector": "#investigationNext",
+        "focused": true
+      },
+      "repeat": {
+        "canvas": false,
+        "viewport": false,
+        "focus": false,
+        "differing": 3447,
+        "box": [
+          0,
+          0,
+          374,
+          811
+        ],
+        "confinedToTimelineBar": false
+      }
+    },
+    {
+      "id": "galilean-resonance-daylight-375-es",
+      "kind": "lesson",
+      "pilot": "galilean-resonance",
+      "width": 375,
+      "height": 812,
+      "theme": "daylight",
+      "language": "es",
+      "record": {
+        "route": "/#investigation=ios-fire",
+        "stepSid": "heating-at-the-maximum",
+        "simTime": 6.3325,
+        "bodies": [
+          {
+            "role": "star",
+            "x": 0,
+            "y": 0,
+            "kind": "StarObject"
+          }
+        ]
+      },
+      "canvasSha": "dbe40faf1b84d8e9",
+      "viewportSha": "dbe40faf1b84d8e9",
+      "focusSha": "a5eda054ca48f220",
+      "focus": {
+        "selector": "#investigationNext",
+        "focused": true
+      },
+      "repeat": {
+        "canvas": false,
+        "viewport": false,
+        "focus": false,
+        "differing": 3328,
+        "box": [
+          0,
+          0,
+          374,
+          811
+        ],
+        "confinedToTimelineBar": false
+      }
+    },
+    {
+      "id": "galilean-resonance-midnight-768-en",
+      "kind": "lesson",
+      "pilot": "galilean-resonance",
+      "width": 768,
+      "height": 1024,
+      "theme": "midnight",
+      "language": "en",
+      "record": {
+        "route": "/#investigation=ios-fire",
+        "stepSid": "heating-at-the-maximum",
+        "simTime": 0.7514999999999992,
+        "bodies": [
+          {
+            "role": "star",
+            "x": 0,
+            "y": 0,
+            "kind": "StarObject"
+          }
+        ]
+      },
+      "canvasSha": "de2afe4f4248d380",
+      "viewportSha": "de2afe4f4248d380",
+      "focusSha": "9240396b13f25210",
+      "focus": {
+        "selector": "#investigationNext",
+        "focused": true
+      },
+      "repeat": {
+        "canvas": false,
+        "viewport": false,
+        "focus": false,
+        "differing": 8994,
+        "box": [
+          0,
+          0,
+          767,
+          1023
+        ],
+        "confinedToTimelineBar": false
+      }
+    },
+    {
+      "id": "galilean-resonance-midnight-768-es",
+      "kind": "lesson",
+      "pilot": "galilean-resonance",
+      "width": 768,
+      "height": 1024,
+      "theme": "midnight",
+      "language": "es",
+      "record": {
+        "route": "/#investigation=ios-fire",
+        "stepSid": "heating-at-the-maximum",
+        "simTime": -4.620000000000002,
+        "bodies": [
+          {
+            "role": "star",
+            "x": 0,
+            "y": 0,
+            "kind": "StarObject"
+          }
+        ]
+      },
+      "canvasSha": "b24d1db89c946c3b",
+      "viewportSha": "b24d1db89c946c3b",
+      "focusSha": "195477dfba500e5e",
+      "focus": {
+        "selector": "#investigationNext",
+        "focused": true
+      },
+      "repeat": {
+        "canvas": false,
+        "viewport": false,
+        "focus": false,
+        "differing": 8470,
+        "box": [
+          0,
+          0,
+          767,
+          1023
+        ],
+        "confinedToTimelineBar": false
+      }
+    },
+    {
+      "id": "galilean-resonance-daylight-768-en",
+      "kind": "lesson",
+      "pilot": "galilean-resonance",
+      "width": 768,
+      "height": 1024,
+      "theme": "daylight",
+      "language": "en",
+      "record": {
+        "route": "/#investigation=ios-fire",
+        "stepSid": "heating-at-the-maximum",
+        "simTime": 0.09849999999999959,
+        "bodies": [
+          {
+            "role": "star",
+            "x": 0,
+            "y": 0,
+            "kind": "StarObject"
+          }
+        ]
+      },
+      "canvasSha": "a8e24824edd128af",
+      "viewportSha": "a8e24824edd128af",
+      "focusSha": "f968b535dbd1d638",
+      "focus": {
+        "selector": "#investigationNext",
+        "focused": true
+      },
+      "repeat": {
+        "canvas": false,
+        "viewport": false,
+        "focus": false,
+        "differing": 9037,
+        "box": [
+          0,
+          0,
+          767,
+          1023
+        ],
+        "confinedToTimelineBar": false
+      }
+    },
+    {
+      "id": "galilean-resonance-daylight-768-es",
+      "kind": "lesson",
+      "pilot": "galilean-resonance",
+      "width": 768,
+      "height": 1024,
+      "theme": "daylight",
+      "language": "es",
+      "record": {
+        "route": "/#investigation=ios-fire",
+        "stepSid": "heating-at-the-maximum",
+        "simTime": -2.6445,
+        "bodies": [
+          {
+            "role": "star",
+            "x": 0,
+            "y": 0,
+            "kind": "StarObject"
+          }
+        ]
+      },
+      "canvasSha": "b358fbc97edba186",
+      "viewportSha": "b358fbc97edba186",
+      "focusSha": "876375f2333f0da9",
+      "focus": {
+        "selector": "#investigationNext",
+        "focused": true
+      },
+      "repeat": {
+        "canvas": false,
+        "viewport": false,
+        "focus": false,
+        "differing": 8504,
+        "box": [
+          0,
+          0,
+          767,
+          1023
+        ],
+        "confinedToTimelineBar": false
+      }
+    },
+    {
+      "id": "galilean-resonance-midnight-1366-en",
+      "kind": "lesson",
+      "pilot": "galilean-resonance",
+      "width": 1366,
+      "height": 800,
+      "theme": "midnight",
+      "language": "en",
+      "record": {
+        "route": "/#investigation=ios-fire",
+        "stepSid": "heating-at-the-maximum",
+        "simTime": 7.915499999999999,
+        "bodies": [
+          {
+            "role": "star",
+            "x": 0,
+            "y": 0,
+            "kind": "StarObject"
+          }
+        ]
+      },
+      "canvasSha": "b951642ea6a088c9",
+      "viewportSha": "b951642ea6a088c9",
+      "focusSha": "bc89abfff97f3aa5",
+      "focus": {
+        "selector": "#investigationNext",
+        "focused": true
+      },
+      "repeat": {
+        "canvas": false,
+        "viewport": false,
+        "focus": false,
+        "differing": 8594,
+        "box": [
+          0,
+          0,
+          1365,
+          799
+        ],
+        "confinedToTimelineBar": false
+      }
+    },
+    {
+      "id": "galilean-resonance-midnight-1366-es",
+      "kind": "lesson",
+      "pilot": "galilean-resonance",
+      "width": 1366,
+      "height": 800,
+      "theme": "midnight",
+      "language": "es",
+      "record": {
+        "route": "/#investigation=ios-fire",
+        "stepSid": "heating-at-the-maximum",
+        "simTime": -4.987000000000002,
+        "bodies": [
+          {
+            "role": "star",
+            "x": 0,
+            "y": 0,
+            "kind": "StarObject"
+          }
+        ]
+      },
+      "canvasSha": "a015a02dbf7f1068",
+      "viewportSha": "a015a02dbf7f1068",
+      "focusSha": "64a47855508c7e51",
+      "focus": {
+        "selector": "#investigationNext",
+        "focused": true
+      },
+      "repeat": {
+        "canvas": false,
+        "viewport": false,
+        "focus": false,
+        "differing": 8670,
+        "box": [
+          0,
+          0,
+          1365,
+          799
+        ],
+        "confinedToTimelineBar": false
+      }
+    },
+    {
+      "id": "galilean-resonance-daylight-1366-en",
+      "kind": "lesson",
+      "pilot": "galilean-resonance",
+      "width": 1366,
+      "height": 800,
+      "theme": "daylight",
+      "language": "en",
+      "record": {
+        "route": "/#investigation=ios-fire",
+        "stepSid": "heating-at-the-maximum",
+        "simTime": -6.765500000000003,
+        "bodies": [
+          {
+            "role": "star",
+            "x": 0,
+            "y": 0,
+            "kind": "StarObject"
+          }
+        ]
+      },
+      "canvasSha": "712caa56e0ee814d",
+      "viewportSha": "712caa56e0ee814d",
+      "focusSha": "5dbd3f1bc726fc40",
+      "focus": {
+        "selector": "#investigationNext",
+        "focused": true
+      },
+      "repeat": {
+        "canvas": false,
+        "viewport": false,
+        "focus": false,
+        "differing": 8810,
+        "box": [
+          0,
+          0,
+          1365,
+          799
+        ],
+        "confinedToTimelineBar": false
+      }
+    },
+    {
+      "id": "galilean-resonance-daylight-1366-es",
+      "kind": "lesson",
+      "pilot": "galilean-resonance",
+      "width": 1366,
+      "height": 800,
+      "theme": "daylight",
+      "language": "es",
+      "record": {
+        "route": "/#investigation=ios-fire",
+        "stepSid": "heating-at-the-maximum",
+        "simTime": 6.500000000000001,
+        "bodies": [
+          {
+            "role": "star",
+            "x": 0,
+            "y": 0,
+            "kind": "StarObject"
+          }
+        ]
+      },
+      "canvasSha": "efd117c7d715f0bc",
+      "viewportSha": "efd117c7d715f0bc",
+      "focusSha": "6b11fc6244f36639",
+      "focus": {
+        "selector": "#investigationNext",
+        "focused": true
+      },
+      "repeat": {
+        "canvas": false,
+        "viewport": false,
+        "focus": false,
+        "differing": 9727,
+        "box": [
+          0,
+          0,
+          1365,
+          799
+        ],
+        "confinedToTimelineBar": false
+      }
+    },
+    {
+      "id": "moon-image-midnight-375-en",
+      "kind": "lesson",
+      "pilot": "moon-image",
+      "width": 375,
+      "height": 812,
+      "theme": "midnight",
+      "language": "en",
+      "record": {
+        "route": "/#investigation=measuring-the-moon",
+        "stepSid": "scale-from-the-disc",
+        "simTime": 3.1524999999999967,
+        "bodies": [
+          {
+            "role": "star",
+            "x": 0,
+            "y": 0,
+            "kind": "StarObject"
+          }
+        ]
+      },
+      "canvasSha": "2750ca72d0dd74c3",
+      "viewportSha": "2750ca72d0dd74c3",
+      "focusSha": "23b01a3f6464addc",
+      "focus": {
+        "selector": "#investigationNext",
+        "focused": true
+      },
+      "repeat": {
+        "canvas": false,
+        "viewport": false,
+        "focus": false,
+        "differing": 3557,
+        "box": [
+          0,
+          0,
+          374,
+          811
+        ],
+        "confinedToTimelineBar": false
+      }
+    },
+    {
+      "id": "moon-image-midnight-375-es",
+      "kind": "lesson",
+      "pilot": "moon-image",
+      "width": 375,
+      "height": 812,
+      "theme": "midnight",
+      "language": "es",
+      "record": {
+        "route": "/#investigation=measuring-the-moon",
+        "stepSid": "scale-from-the-disc",
+        "simTime": 6.583499999999996,
+        "bodies": [
+          {
+            "role": "star",
+            "x": 0,
+            "y": 0,
+            "kind": "StarObject"
+          }
+        ]
+      },
+      "canvasSha": "ffe0345a8b1b9718",
+      "viewportSha": "ffe0345a8b1b9718",
+      "focusSha": "da0468abc623cc22",
+      "focus": {
+        "selector": "#investigationNext",
+        "focused": true
+      },
+      "repeat": {
+        "canvas": false,
+        "viewport": false,
+        "focus": false,
+        "differing": 3675,
+        "box": [
+          0,
+          0,
+          374,
+          811
+        ],
+        "confinedToTimelineBar": false
+      }
+    },
+    {
+      "id": "moon-image-daylight-375-en",
+      "kind": "lesson",
+      "pilot": "moon-image",
+      "width": 375,
+      "height": 812,
+      "theme": "daylight",
+      "language": "en",
+      "record": {
+        "route": "/#investigation=measuring-the-moon",
+        "stepSid": "scale-from-the-disc",
+        "simTime": 1.1134999999999966,
+        "bodies": [
+          {
+            "role": "star",
+            "x": 0,
+            "y": 0,
+            "kind": "StarObject"
+          }
+        ]
+      },
+      "canvasSha": "931672f8f940049e",
+      "viewportSha": "931672f8f940049e",
+      "focusSha": "b372062f4b57041f",
+      "focus": {
+        "selector": "#investigationNext",
+        "focused": true
+      },
+      "repeat": {
+        "canvas": false,
+        "viewport": false,
+        "focus": false,
+        "differing": 3495,
+        "box": [
+          0,
+          0,
+          374,
+          811
+        ],
+        "confinedToTimelineBar": false
+      }
+    },
+    {
+      "id": "moon-image-daylight-375-es",
+      "kind": "lesson",
+      "pilot": "moon-image",
+      "width": 375,
+      "height": 812,
+      "theme": "daylight",
+      "language": "es",
+      "record": {
+        "route": "/#investigation=measuring-the-moon",
+        "stepSid": "scale-from-the-disc",
+        "simTime": 3.465999999999996,
+        "bodies": [
+          {
+            "role": "star",
+            "x": 0,
+            "y": 0,
+            "kind": "StarObject"
+          }
+        ]
+      },
+      "canvasSha": "b8ed162156f3e041",
+      "viewportSha": "b8ed162156f3e041",
+      "focusSha": "b77bdb6c563ac500",
+      "focus": {
+        "selector": "#investigationNext",
+        "focused": true
+      },
+      "repeat": {
+        "canvas": false,
+        "viewport": false,
+        "focus": false,
+        "differing": 3584,
+        "box": [
+          0,
+          0,
+          374,
+          811
+        ],
+        "confinedToTimelineBar": false
+      }
+    },
+    {
+      "id": "moon-image-midnight-768-en",
+      "kind": "lesson",
+      "pilot": "moon-image",
+      "width": 768,
+      "height": 1024,
+      "theme": "midnight",
+      "language": "en",
+      "record": {
+        "route": "/#investigation=measuring-the-moon",
+        "stepSid": "scale-from-the-disc",
+        "simTime": 6.583499999999999,
+        "bodies": [
+          {
+            "role": "star",
+            "x": 0,
+            "y": 0,
+            "kind": "StarObject"
+          }
+        ]
+      },
+      "canvasSha": "6dbc1fa553d5107a",
+      "viewportSha": "6dbc1fa553d5107a",
+      "focusSha": "4518a50dc23c507c",
+      "focus": {
+        "selector": "#investigationNext",
+        "focused": true
+      },
+      "repeat": {
+        "canvas": false,
+        "viewport": false,
+        "focus": false,
+        "differing": 8594,
+        "box": [
+          0,
+          0,
+          767,
+          1023
+        ],
+        "confinedToTimelineBar": false
+      }
+    },
+    {
+      "id": "moon-image-midnight-768-es",
+      "kind": "lesson",
+      "pilot": "moon-image",
+      "width": 768,
+      "height": 1024,
+      "theme": "midnight",
+      "language": "es",
+      "record": {
+        "route": "/#investigation=measuring-the-moon",
+        "stepSid": "scale-from-the-disc",
+        "simTime": -8.438499999999998,
+        "bodies": [
+          {
+            "role": "star",
+            "x": 0,
+            "y": 0,
+            "kind": "StarObject"
+          }
+        ]
+      },
+      "canvasSha": "09b6380a0e582338",
+      "viewportSha": "09b6380a0e582338",
+      "focusSha": "1906216ea3e1a079",
+      "focus": {
+        "selector": "#investigationNext",
+        "focused": true
+      },
+      "repeat": {
+        "canvas": false,
+        "viewport": false,
+        "focus": false,
+        "differing": 8548,
+        "box": [
+          0,
+          0,
+          767,
+          1023
+        ],
+        "confinedToTimelineBar": false
+      }
+    },
+    {
+      "id": "moon-image-daylight-768-en",
+      "kind": "lesson",
+      "pilot": "moon-image",
+      "width": 768,
+      "height": 1024,
+      "theme": "daylight",
+      "language": "en",
+      "record": {
+        "route": "/#investigation=measuring-the-moon",
+        "stepSid": "scale-from-the-disc",
+        "simTime": -7.803500000000001,
+        "bodies": [
+          {
+            "role": "star",
+            "x": 0,
+            "y": 0,
+            "kind": "StarObject"
+          }
+        ]
+      },
+      "canvasSha": "d1132ea4f1ad4df8",
+      "viewportSha": "d1132ea4f1ad4df8",
+      "focusSha": "a52817e253008f1b",
+      "focus": {
+        "selector": "#investigationNext",
+        "focused": true
+      },
+      "repeat": {
+        "canvas": false,
+        "viewport": false,
+        "focus": false,
+        "differing": 8833,
+        "box": [
+          0,
+          0,
+          767,
+          1023
+        ],
+        "confinedToTimelineBar": false
+      }
+    },
+    {
+      "id": "moon-image-daylight-768-es",
+      "kind": "lesson",
+      "pilot": "moon-image",
+      "width": 768,
+      "height": 1024,
+      "theme": "daylight",
+      "language": "es",
+      "record": {
+        "route": "/#investigation=measuring-the-moon",
+        "stepSid": "scale-from-the-disc",
+        "simTime": -7.577000000000002,
+        "bodies": [
+          {
+            "role": "star",
+            "x": 0,
+            "y": 0,
+            "kind": "StarObject"
+          }
+        ]
+      },
+      "canvasSha": "79792d08c0ffd27f",
+      "viewportSha": "79792d08c0ffd27f",
+      "focusSha": "2baaed4ffe965646",
+      "focus": {
+        "selector": "#investigationNext",
+        "focused": true
+      },
+      "repeat": {
+        "canvas": false,
+        "viewport": false,
+        "focus": false,
+        "differing": 8636,
+        "box": [
+          0,
+          0,
+          767,
+          1023
+        ],
+        "confinedToTimelineBar": false
+      }
+    },
+    {
+      "id": "moon-image-midnight-1366-en",
+      "kind": "lesson",
+      "pilot": "moon-image",
+      "width": 1366,
+      "height": 800,
+      "theme": "midnight",
+      "language": "en",
+      "record": {
+        "route": "/#investigation=measuring-the-moon",
+        "stepSid": "scale-from-the-disc",
+        "simTime": 10.2485,
+        "bodies": [
+          {
+            "role": "star",
+            "x": 0,
+            "y": 0,
+            "kind": "StarObject"
+          }
+        ]
+      },
+      "canvasSha": "3359da312cf6d2d7",
+      "viewportSha": "3359da312cf6d2d7",
+      "focusSha": "2b36859368eb9f8f",
+      "focus": {
+        "selector": "#investigationNext",
+        "focused": true
+      },
+      "repeat": {
+        "canvas": false,
+        "viewport": false,
+        "focus": false,
+        "differing": 9236,
+        "box": [
+          0,
+          0,
+          1365,
+          799
+        ],
+        "confinedToTimelineBar": false
+      }
+    },
+    {
+      "id": "moon-image-midnight-1366-es",
+      "kind": "lesson",
+      "pilot": "moon-image",
+      "width": 1366,
+      "height": 800,
+      "theme": "midnight",
+      "language": "es",
+      "record": {
+        "route": "/#investigation=measuring-the-moon",
+        "stepSid": "scale-from-the-disc",
+        "simTime": 10.416499999999997,
+        "bodies": [
+          {
+            "role": "star",
+            "x": 0,
+            "y": 0,
+            "kind": "StarObject"
+          }
+        ]
+      },
+      "canvasSha": "ac5f55f62f7fa548",
+      "viewportSha": "ac5f55f62f7fa548",
+      "focusSha": "9b2373d34a57f2f9",
+      "focus": {
+        "selector": "#investigationNext",
+        "focused": true
+      },
+      "repeat": {
+        "canvas": false,
+        "viewport": false,
+        "focus": false,
+        "differing": 8214,
+        "box": [
+          0,
+          0,
+          1365,
+          799
+        ],
+        "confinedToTimelineBar": false
+      }
+    },
+    {
+      "id": "moon-image-daylight-1366-en",
+      "kind": "lesson",
+      "pilot": "moon-image",
+      "width": 1366,
+      "height": 800,
+      "theme": "daylight",
+      "language": "en",
+      "record": {
+        "route": "/#investigation=measuring-the-moon",
+        "stepSid": "scale-from-the-disc",
+        "simTime": -3.3204999999999982,
+        "bodies": [
+          {
+            "role": "star",
+            "x": 0,
+            "y": 0,
+            "kind": "StarObject"
+          }
+        ]
+      },
+      "canvasSha": "25fb00fc693cd9cc",
+      "viewportSha": "25fb00fc693cd9cc",
+      "focusSha": "0589a32133ae36a2",
+      "focus": {
+        "selector": "#investigationNext",
+        "focused": true
+      },
+      "repeat": {
+        "canvas": false,
+        "viewport": false,
+        "focus": false,
+        "differing": 8916,
+        "box": [
+          0,
+          0,
+          1365,
+          799
+        ],
+        "confinedToTimelineBar": false
+      }
+    },
+    {
+      "id": "moon-image-daylight-1366-es",
+      "kind": "lesson",
+      "pilot": "moon-image",
+      "width": 1366,
+      "height": 800,
+      "theme": "daylight",
+      "language": "es",
+      "record": {
+        "route": "/#investigation=measuring-the-moon",
+        "stepSid": "scale-from-the-disc",
+        "simTime": -4.180000000000002,
+        "bodies": [
+          {
+            "role": "star",
+            "x": 0,
+            "y": 0,
+            "kind": "StarObject"
+          }
+        ]
+      },
+      "canvasSha": "a04108b3e0e1d524",
+      "viewportSha": "a04108b3e0e1d524",
+      "focusSha": "3ec86728ebab5e31",
+      "focus": {
+        "selector": "#investigationNext",
+        "focused": true
+      },
+      "repeat": {
+        "canvas": false,
+        "viewport": false,
+        "focus": false,
+        "differing": 8493,
+        "box": [
+          0,
+          0,
+          1365,
+          799
+        ],
+        "confinedToTimelineBar": false
+      }
+    },
+    {
+      "id": "orbital-system-midnight-375-en",
+      "kind": "sandbox",
+      "pilot": "orbital-system",
+      "width": 375,
+      "height": 812,
+      "theme": "midnight",
+      "language": "en",
+      "record": {
+        "scene": "solar-system-midnight-1366",
+        "simTime": 10
+      },
+      "canvasSha": "6b5657479a8e5656",
+      "viewportSha": "6b5657479a8e5656",
+      "focusSha": "f9535476441bcba2",
+      "focus": {
+        "selector": "#mobileMenuToggle",
+        "focused": true
+      },
+      "repeat": {
+        "canvas": true,
+        "viewport": true,
+        "focus": true
+      }
+    },
+    {
+      "id": "orbital-system-midnight-375-es",
+      "kind": "sandbox",
+      "pilot": "orbital-system",
+      "width": 375,
+      "height": 812,
+      "theme": "midnight",
+      "language": "es",
+      "record": {
+        "scene": "solar-system-midnight-1366",
+        "simTime": 10
+      },
+      "canvasSha": "a54be1f15c394967",
+      "viewportSha": "a54be1f15c394967",
+      "focusSha": "2c7c343d92298388",
+      "focus": {
+        "selector": "#mobileMenuToggle",
+        "focused": true
+      },
+      "repeat": {
+        "canvas": false,
+        "viewport": false,
+        "focus": false,
+        "differing": 100,
+        "box": [
+          31,
+          742,
+          366,
+          780
+        ],
+        "confinedToTimelineBar": true
+      }
+    },
+    {
+      "id": "orbital-system-daylight-375-en",
+      "kind": "sandbox",
+      "pilot": "orbital-system",
+      "width": 375,
+      "height": 812,
+      "theme": "daylight",
+      "language": "en",
+      "record": {
+        "scene": "solar-system-midnight-1366",
+        "simTime": 10
+      },
+      "canvasSha": "79c9c3549883c78f",
+      "viewportSha": "79c9c3549883c78f",
+      "focusSha": "0136500b87b2112b",
+      "focus": {
+        "selector": "#mobileMenuToggle",
+        "focused": true
+      },
+      "repeat": {
+        "canvas": false,
+        "viewport": false,
+        "focus": false,
+        "differing": 81,
+        "box": [
+          165,
+          773,
+          366,
+          788
+        ],
+        "confinedToTimelineBar": true
+      }
+    },
+    {
+      "id": "orbital-system-daylight-375-es",
+      "kind": "sandbox",
+      "pilot": "orbital-system",
+      "width": 375,
+      "height": 812,
+      "theme": "daylight",
+      "language": "es",
+      "record": {
+        "scene": "solar-system-midnight-1366",
+        "simTime": 10
+      },
+      "canvasSha": "7dee1482b48a5596",
+      "viewportSha": "7dee1482b48a5596",
+      "focusSha": "22b88769d6ae30cf",
+      "focus": {
+        "selector": "#mobileMenuToggle",
+        "focused": true
+      },
+      "repeat": {
+        "canvas": false,
+        "viewport": false,
+        "focus": false,
+        "differing": 81,
+        "box": [
+          165,
+          773,
+          366,
+          788
+        ],
+        "confinedToTimelineBar": true
+      }
+    },
+    {
+      "id": "orbital-system-midnight-768-en",
+      "kind": "sandbox",
+      "pilot": "orbital-system",
+      "width": 768,
+      "height": 1024,
+      "theme": "midnight",
+      "language": "en",
+      "record": {
+        "scene": "solar-system-midnight-1366",
+        "simTime": 10
+      },
+      "canvasSha": "11679e029c927ffe",
+      "viewportSha": "11679e029c927ffe",
+      "focusSha": "00abf7413ff2116e",
+      "focus": {
+        "selector": "#mobileMenuToggle",
+        "focused": true
+      },
+      "repeat": {
+        "canvas": true,
+        "viewport": true,
+        "focus": true
+      }
+    },
+    {
+      "id": "orbital-system-midnight-768-es",
+      "kind": "sandbox",
+      "pilot": "orbital-system",
+      "width": 768,
+      "height": 1024,
+      "theme": "midnight",
+      "language": "es",
+      "record": {
+        "scene": "solar-system-midnight-1366",
+        "simTime": 10
+      },
+      "canvasSha": "07049abaf3efa9d0",
+      "viewportSha": "07049abaf3efa9d0",
+      "focusSha": "d446d6b04d45a54c",
+      "focus": {
+        "selector": "#mobileMenuToggle",
+        "focused": true
+      },
+      "repeat": {
+        "canvas": true,
+        "viewport": true,
+        "focus": true
+      }
+    },
+    {
+      "id": "orbital-system-daylight-768-en",
+      "kind": "sandbox",
+      "pilot": "orbital-system",
+      "width": 768,
+      "height": 1024,
+      "theme": "daylight",
+      "language": "en",
+      "record": {
+        "scene": "solar-system-midnight-1366",
+        "simTime": 10
+      },
+      "canvasSha": "bd62ba3b16af5f4e",
+      "viewportSha": "bd62ba3b16af5f4e",
+      "focusSha": "2084cb9d3a962373",
+      "focus": {
+        "selector": "#mobileMenuToggle",
+        "focused": true
+      },
+      "repeat": {
+        "canvas": true,
+        "viewport": true,
+        "focus": true
+      }
+    },
+    {
+      "id": "orbital-system-daylight-768-es",
+      "kind": "sandbox",
+      "pilot": "orbital-system",
+      "width": 768,
+      "height": 1024,
+      "theme": "daylight",
+      "language": "es",
+      "record": {
+        "scene": "solar-system-midnight-1366",
+        "simTime": 10
+      },
+      "canvasSha": "c6874534e9fd3e80",
+      "viewportSha": "c6874534e9fd3e80",
+      "focusSha": "96d337d3adecb7de",
+      "focus": {
+        "selector": "#mobileMenuToggle",
+        "focused": true
+      },
+      "repeat": {
+        "canvas": false,
+        "viewport": false,
+        "focus": false,
+        "differing": 70,
+        "box": [
+          604,
+          942,
+          723,
+          957
+        ],
+        "confinedToTimelineBar": true
+      }
+    },
+    {
+      "id": "orbital-system-midnight-1366-en",
+      "kind": "sandbox",
+      "pilot": "orbital-system",
+      "width": 1366,
+      "height": 800,
+      "theme": "midnight",
+      "language": "en",
+      "record": {
+        "scene": "solar-system-midnight-1366",
+        "simTime": 10
+      },
+      "canvasSha": "43ded38149dac8aa",
+      "viewportSha": "43ded38149dac8aa",
+      "focusSha": "840cd422110fecb6",
+      "focus": {
+        "selector": "#loadScenarioBtn",
+        "focused": true
+      },
+      "repeat": {
+        "canvas": true,
+        "viewport": true,
+        "focus": true
+      }
+    },
+    {
+      "id": "orbital-system-midnight-1366-es",
+      "kind": "sandbox",
+      "pilot": "orbital-system",
+      "width": 1366,
+      "height": 800,
+      "theme": "midnight",
+      "language": "es",
+      "record": {
+        "scene": "solar-system-midnight-1366",
+        "simTime": 10
+      },
+      "canvasSha": "b07cdea9eef18e2c",
+      "viewportSha": "b07cdea9eef18e2c",
+      "focusSha": "eac5a3dc9f9a9f6c",
+      "focus": {
+        "selector": "#loadScenarioBtn",
+        "focused": true
+      },
+      "repeat": {
+        "canvas": true,
+        "viewport": true,
+        "focus": true
+      }
+    },
+    {
+      "id": "orbital-system-daylight-1366-en",
+      "kind": "sandbox",
+      "pilot": "orbital-system",
+      "width": 1366,
+      "height": 800,
+      "theme": "daylight",
+      "language": "en",
+      "record": {
+        "scene": "solar-system-midnight-1366",
+        "simTime": 10
+      },
+      "canvasSha": "357e6950e6e7cafe",
+      "viewportSha": "357e6950e6e7cafe",
+      "focusSha": "cafdc9570aa58f8e",
+      "focus": {
+        "selector": "#loadScenarioBtn",
+        "focused": true
+      },
+      "repeat": {
+        "canvas": false,
+        "viewport": false,
+        "focus": false,
+        "differing": 3,
+        "box": [
+          1331,
+          62,
+          1331,
+          428
+        ],
+        "confinedToTimelineBar": false
+      }
+    },
+    {
+      "id": "orbital-system-daylight-1366-es",
+      "kind": "sandbox",
+      "pilot": "orbital-system",
+      "width": 1366,
+      "height": 800,
+      "theme": "daylight",
+      "language": "es",
+      "record": {
+        "scene": "solar-system-midnight-1366",
+        "simTime": 10
+      },
+      "canvasSha": "a97487d0d7dc3e38",
+      "viewportSha": "a97487d0d7dc3e38",
+      "focusSha": "b11a5fe090c8cbce",
+      "focus": {
+        "selector": "#loadScenarioBtn",
+        "focused": true
+      },
+      "repeat": {
+        "canvas": false,
+        "viewport": false,
+        "focus": true,
+        "differing": 3,
+        "box": [
+          1331,
+          62,
+          1331,
+          436
+        ],
+        "confinedToTimelineBar": false
+      }
+    },
+    {
+      "id": "close-world-midnight-375-en",
+      "kind": "sandbox",
+      "pilot": "close-world",
+      "width": 375,
+      "height": 812,
+      "theme": "midnight",
+      "language": "en",
+      "record": {
+        "scene": "galilean-resonance-zoomed-midnight-1366",
+        "simTime": 10123.875000000047
+      },
+      "canvasSha": "dcce9dbe0375e73a",
+      "viewportSha": "dcce9dbe0375e73a",
+      "focusSha": "71cec83c1ba82cb3",
+      "focus": {
+        "selector": "#mobileMenuToggle",
+        "focused": true
+      },
+      "repeat": {
+        "canvas": true,
+        "viewport": true,
+        "focus": true
+      }
+    },
+    {
+      "id": "close-world-midnight-375-es",
+      "kind": "sandbox",
+      "pilot": "close-world",
+      "width": 375,
+      "height": 812,
+      "theme": "midnight",
+      "language": "es",
+      "record": {
+        "scene": "galilean-resonance-zoomed-midnight-1366",
+        "simTime": 10123.875000000047
+      },
+      "canvasSha": "adae0a52c76f21c4",
+      "viewportSha": "adae0a52c76f21c4",
+      "focusSha": "1e966a580ba084f8",
+      "focus": {
+        "selector": "#mobileMenuToggle",
+        "focused": true
+      },
+      "repeat": {
+        "canvas": false,
+        "viewport": false,
+        "focus": false,
+        "differing": 37,
+        "box": [
+          31,
+          742,
+          365,
+          788
+        ],
+        "confinedToTimelineBar": true
+      }
+    },
+    {
+      "id": "close-world-daylight-375-en",
+      "kind": "sandbox",
+      "pilot": "close-world",
+      "width": 375,
+      "height": 812,
+      "theme": "daylight",
+      "language": "en",
+      "record": {
+        "scene": "galilean-resonance-zoomed-midnight-1366",
+        "simTime": 10123.875000000047
+      },
+      "canvasSha": "08ae87fde0e38acc",
+      "viewportSha": "08ae87fde0e38acc",
+      "focusSha": "e793f4e8d214e96f",
+      "focus": {
+        "selector": "#mobileMenuToggle",
+        "focused": true
+      },
+      "repeat": {
+        "canvas": false,
+        "viewport": false,
+        "focus": false,
+        "differing": 81,
+        "box": [
+          165,
+          773,
+          366,
+          788
+        ],
+        "confinedToTimelineBar": true
+      }
+    },
+    {
+      "id": "close-world-daylight-375-es",
+      "kind": "sandbox",
+      "pilot": "close-world",
+      "width": 375,
+      "height": 812,
+      "theme": "daylight",
+      "language": "es",
+      "record": {
+        "scene": "galilean-resonance-zoomed-midnight-1366",
+        "simTime": 10123.875000000047
+      },
+      "canvasSha": "54498652e84a637e",
+      "viewportSha": "54498652e84a637e",
+      "focusSha": "c4212f6725a4d684",
+      "focus": {
+        "selector": "#mobileMenuToggle",
+        "focused": true
+      },
+      "repeat": {
+        "canvas": false,
+        "viewport": false,
+        "focus": false,
+        "differing": 92,
+        "box": [
+          165,
+          387,
+          366,
+          788
+        ],
+        "confinedToTimelineBar": false
+      }
+    },
+    {
+      "id": "close-world-midnight-768-en",
+      "kind": "sandbox",
+      "pilot": "close-world",
+      "width": 768,
+      "height": 1024,
+      "theme": "midnight",
+      "language": "en",
+      "record": {
+        "scene": "galilean-resonance-zoomed-midnight-1366",
+        "simTime": 10123.875000000047
+      },
+      "canvasSha": "a86518480e532143",
+      "viewportSha": "a86518480e532143",
+      "focusSha": "56d675fba4d69785",
+      "focus": {
+        "selector": "#mobileMenuToggle",
+        "focused": true
+      },
+      "repeat": {
+        "canvas": true,
+        "viewport": true,
+        "focus": true
+      }
+    },
+    {
+      "id": "close-world-midnight-768-es",
+      "kind": "sandbox",
+      "pilot": "close-world",
+      "width": 768,
+      "height": 1024,
+      "theme": "midnight",
+      "language": "es",
+      "record": {
+        "scene": "galilean-resonance-zoomed-midnight-1366",
+        "simTime": 10123.875000000047
+      },
+      "canvasSha": "a0e162ba82f866f7",
+      "viewportSha": "a0e162ba82f866f7",
+      "focusSha": "f6d54263ed180284",
+      "focus": {
+        "selector": "#mobileMenuToggle",
+        "focused": true
+      },
+      "repeat": {
+        "canvas": true,
+        "viewport": true,
+        "focus": true
+      }
+    },
+    {
+      "id": "close-world-daylight-768-en",
+      "kind": "sandbox",
+      "pilot": "close-world",
+      "width": 768,
+      "height": 1024,
+      "theme": "daylight",
+      "language": "en",
+      "record": {
+        "scene": "galilean-resonance-zoomed-midnight-1366",
+        "simTime": 10123.875000000047
+      },
+      "canvasSha": "731a367d720a6f51",
+      "viewportSha": "731a367d720a6f51",
+      "focusSha": "aea156e4011f5558",
+      "focus": {
+        "selector": "#mobileMenuToggle",
+        "focused": true
+      },
+      "repeat": {
+        "canvas": true,
+        "viewport": true,
+        "focus": true
+      }
+    },
+    {
+      "id": "close-world-daylight-768-es",
+      "kind": "sandbox",
+      "pilot": "close-world",
+      "width": 768,
+      "height": 1024,
+      "theme": "daylight",
+      "language": "es",
+      "record": {
+        "scene": "galilean-resonance-zoomed-midnight-1366",
+        "simTime": 10123.875000000047
+      },
+      "canvasSha": "946291bf778ecd0c",
+      "viewportSha": "946291bf778ecd0c",
+      "focusSha": "ab857c8093197eb3",
+      "focus": {
+        "selector": "#mobileMenuToggle",
+        "focused": true
+      },
+      "repeat": {
+        "canvas": true,
+        "viewport": true,
+        "focus": true
+      }
+    },
+    {
+      "id": "close-world-midnight-1366-en",
+      "kind": "sandbox",
+      "pilot": "close-world",
+      "width": 1366,
+      "height": 800,
+      "theme": "midnight",
+      "language": "en",
+      "record": {
+        "scene": "galilean-resonance-zoomed-midnight-1366",
+        "simTime": 10123.875000000047
+      },
+      "canvasSha": "7e7b73681ecb4b8a",
+      "viewportSha": "7e7b73681ecb4b8a",
+      "focusSha": "785f27e1a16b1fbb",
+      "focus": {
+        "selector": "#loadScenarioBtn",
+        "focused": true
+      },
+      "repeat": {
+        "canvas": true,
+        "viewport": true,
+        "focus": false
+      }
+    },
+    {
+      "id": "close-world-midnight-1366-es",
+      "kind": "sandbox",
+      "pilot": "close-world",
+      "width": 1366,
+      "height": 800,
+      "theme": "midnight",
+      "language": "es",
+      "record": {
+        "scene": "galilean-resonance-zoomed-midnight-1366",
+        "simTime": 10123.875000000047
+      },
+      "canvasSha": "11134e9d378e769d",
+      "viewportSha": "11134e9d378e769d",
+      "focusSha": "a688117a70f390ff",
+      "focus": {
+        "selector": "#loadScenarioBtn",
+        "focused": true
+      },
+      "repeat": {
+        "canvas": true,
+        "viewport": true,
+        "focus": false
+      }
+    },
+    {
+      "id": "close-world-daylight-1366-en",
+      "kind": "sandbox",
+      "pilot": "close-world",
+      "width": 1366,
+      "height": 800,
+      "theme": "daylight",
+      "language": "en",
+      "record": {
+        "scene": "galilean-resonance-zoomed-midnight-1366",
+        "simTime": 10123.875000000047
+      },
+      "canvasSha": "591b05daade3f826",
+      "viewportSha": "591b05daade3f826",
+      "focusSha": "c686757de2a4dfd1",
+      "focus": {
+        "selector": "#loadScenarioBtn",
+        "focused": true
+      },
+      "repeat": {
+        "canvas": true,
+        "viewport": true,
+        "focus": false
+      }
+    },
+    {
+      "id": "close-world-daylight-1366-es",
+      "kind": "sandbox",
+      "pilot": "close-world",
+      "width": 1366,
+      "height": 800,
+      "theme": "daylight",
+      "language": "es",
+      "record": {
+        "scene": "galilean-resonance-zoomed-midnight-1366",
+        "simTime": 10123.875000000047
+      },
+      "canvasSha": "b7b55adc9f7e1afe",
+      "viewportSha": "b7b55adc9f7e1afe",
+      "focusSha": "273d20b466f0a3a7",
+      "focus": {
+        "selector": "#loadScenarioBtn",
+        "focused": true
+      },
+      "repeat": {
+        "canvas": false,
+        "viewport": false,
+        "focus": false,
+        "differing": 3,
+        "box": [
+          1331,
+          62,
+          1331,
+          436
+        ],
+        "confinedToTimelineBar": false
+      }
+    },
+    {
+      "id": "binary-midnight-375-en",
+      "kind": "sandbox",
+      "pilot": "binary",
+      "width": 375,
+      "height": 812,
+      "theme": "midnight",
+      "language": "en",
+      "record": {
+        "scene": "circumbinary-planet-lab-midnight-1366",
+        "simTime": 20000.00000000002
+      },
+      "canvasSha": "b02e3975e7e2946c",
+      "viewportSha": "b02e3975e7e2946c",
+      "focusSha": "9ed71d30d1693386",
+      "focus": {
+        "selector": "#mobileMenuToggle",
+        "focused": true
+      },
+      "repeat": {
+        "canvas": false,
+        "viewport": false,
+        "focus": false,
+        "differing": 37,
+        "box": [
+          31,
+          742,
+          365,
+          788
+        ],
+        "confinedToTimelineBar": true
+      }
+    },
+    {
+      "id": "binary-midnight-375-es",
+      "kind": "sandbox",
+      "pilot": "binary",
+      "width": 375,
+      "height": 812,
+      "theme": "midnight",
+      "language": "es",
+      "record": {
+        "scene": "circumbinary-planet-lab-midnight-1366",
+        "simTime": 20000.00000000002
+      },
+      "canvasSha": "41bb0e744bdc5cd1",
+      "viewportSha": "41bb0e744bdc5cd1",
+      "focusSha": "27a640563c8e0018",
+      "focus": {
+        "selector": "#mobileMenuToggle",
+        "focused": true
+      },
+      "repeat": {
+        "canvas": false,
+        "viewport": false,
+        "focus": false,
+        "differing": 2509,
+        "box": [
+          12,
+          330,
+          333,
+          586
+        ],
+        "confinedToTimelineBar": false
+      }
+    },
+    {
+      "id": "binary-daylight-375-en",
+      "kind": "sandbox",
+      "pilot": "binary",
+      "width": 375,
+      "height": 812,
+      "theme": "daylight",
+      "language": "en",
+      "record": {
+        "scene": "circumbinary-planet-lab-midnight-1366",
+        "simTime": 20000.00000000002
+      },
+      "canvasSha": "59597a6203211521",
+      "viewportSha": "59597a6203211521",
+      "focusSha": "7c6d7f4a7912f330",
+      "focus": {
+        "selector": "#mobileMenuToggle",
+        "focused": true
+      },
+      "repeat": {
+        "canvas": false,
+        "viewport": false,
+        "focus": false,
+        "differing": 34,
+        "box": [
+          31,
+          742,
+          365,
+          788
+        ],
+        "confinedToTimelineBar": true
+      }
+    },
+    {
+      "id": "binary-daylight-375-es",
+      "kind": "sandbox",
+      "pilot": "binary",
+      "width": 375,
+      "height": 812,
+      "theme": "daylight",
+      "language": "es",
+      "record": {
+        "scene": "circumbinary-planet-lab-midnight-1366",
+        "simTime": 20000.00000000002
+      },
+      "canvasSha": "360bfe27cb46bd37",
+      "viewportSha": "360bfe27cb46bd37",
+      "focusSha": "a9b1929863effa5a",
+      "focus": {
+        "selector": "#mobileMenuToggle",
+        "focused": true
+      },
+      "repeat": {
+        "canvas": false,
+        "viewport": false,
+        "focus": false,
+        "differing": 34,
+        "box": [
+          31,
+          742,
+          365,
+          788
+        ],
+        "confinedToTimelineBar": true
+      }
+    },
+    {
+      "id": "binary-midnight-768-en",
+      "kind": "sandbox",
+      "pilot": "binary",
+      "width": 768,
+      "height": 1024,
+      "theme": "midnight",
+      "language": "en",
+      "record": {
+        "scene": "circumbinary-planet-lab-midnight-1366",
+        "simTime": 20000.00000000002
+      },
+      "canvasSha": "f3605fa6ba7aece5",
+      "viewportSha": "f3605fa6ba7aece5",
+      "focusSha": "ad2729ab7429047d",
+      "focus": {
+        "selector": "#mobileMenuToggle",
+        "focused": true
+      },
+      "repeat": {
+        "canvas": true,
+        "viewport": true,
+        "focus": true
+      }
+    },
+    {
+      "id": "binary-midnight-768-es",
+      "kind": "sandbox",
+      "pilot": "binary",
+      "width": 768,
+      "height": 1024,
+      "theme": "midnight",
+      "language": "es",
+      "record": {
+        "scene": "circumbinary-planet-lab-midnight-1366",
+        "simTime": 20000.00000000002
+      },
+      "canvasSha": "42580328451a738f",
+      "viewportSha": "42580328451a738f",
+      "focusSha": "ec4d9ab423b8cb4a",
+      "focus": {
+        "selector": "#mobileMenuToggle",
+        "focused": true
+      },
+      "repeat": {
+        "canvas": false,
+        "viewport": false,
+        "focus": false,
+        "differing": 2510,
+        "box": [
+          12,
+          534,
+          333,
+          721
+        ],
+        "confinedToTimelineBar": false
+      }
+    },
+    {
+      "id": "binary-daylight-768-en",
+      "kind": "sandbox",
+      "pilot": "binary",
+      "width": 768,
+      "height": 1024,
+      "theme": "daylight",
+      "language": "en",
+      "record": {
+        "scene": "circumbinary-planet-lab-midnight-1366",
+        "simTime": 20000.00000000002
+      },
+      "canvasSha": "9cd3149cd8106c86",
+      "viewportSha": "9cd3149cd8106c86",
+      "focusSha": "996e6b86b7a27208",
+      "focus": {
+        "selector": "#mobileMenuToggle",
+        "focused": true
+      },
+      "repeat": {
+        "canvas": false,
+        "viewport": false,
+        "focus": false,
+        "differing": 2164,
+        "box": [
+          11,
+          563,
+          283,
+          721
+        ],
+        "confinedToTimelineBar": false
+      }
+    },
+    {
+      "id": "binary-daylight-768-es",
+      "kind": "sandbox",
+      "pilot": "binary",
+      "width": 768,
+      "height": 1024,
+      "theme": "daylight",
+      "language": "es",
+      "record": {
+        "scene": "circumbinary-planet-lab-midnight-1366",
+        "simTime": 20000.00000000002
+      },
+      "canvasSha": "cdf1251e6fc77d16",
+      "viewportSha": "cdf1251e6fc77d16",
+      "focusSha": "e40ece66ffa5c56a",
+      "focus": {
+        "selector": "#mobileMenuToggle",
+        "focused": true
+      },
+      "repeat": {
+        "canvas": false,
+        "viewport": false,
+        "focus": false,
+        "differing": 2507,
+        "box": [
+          12,
+          534,
+          333,
+          721
+        ],
+        "confinedToTimelineBar": false
+      }
+    },
+    {
+      "id": "binary-midnight-1366-en",
+      "kind": "sandbox",
+      "pilot": "binary",
+      "width": 1366,
+      "height": 800,
+      "theme": "midnight",
+      "language": "en",
+      "record": {
+        "scene": "circumbinary-planet-lab-midnight-1366",
+        "simTime": 20000.00000000002
+      },
+      "canvasSha": "82214ca29e88e2e2",
+      "viewportSha": "82214ca29e88e2e2",
+      "focusSha": "1272b36aaac24302",
+      "focus": {
+        "selector": "#loadScenarioBtn",
+        "focused": true
+      },
+      "repeat": {
+        "canvas": false,
+        "viewport": false,
+        "focus": false,
+        "differing": 1891,
+        "box": [
+          44,
+          286,
+          293,
+          495
+        ],
+        "confinedToTimelineBar": false
+      }
+    },
+    {
+      "id": "binary-midnight-1366-es",
+      "kind": "sandbox",
+      "pilot": "binary",
+      "width": 1366,
+      "height": 800,
+      "theme": "midnight",
+      "language": "es",
+      "record": {
+        "scene": "circumbinary-planet-lab-midnight-1366",
+        "simTime": 20000.00000000002
+      },
+      "canvasSha": "30a55e03f83788a3",
+      "viewportSha": "30a55e03f83788a3",
+      "focusSha": "c07ff5e9a4454a45",
+      "focus": {
+        "selector": "#loadScenarioBtn",
+        "focused": true
+      },
+      "repeat": {
+        "canvas": false,
+        "viewport": false,
+        "focus": false,
+        "differing": 2082,
+        "box": [
+          44,
+          322,
+          343,
+          562
+        ],
+        "confinedToTimelineBar": false
+      }
+    },
+    {
+      "id": "binary-daylight-1366-en",
+      "kind": "sandbox",
+      "pilot": "binary",
+      "width": 1366,
+      "height": 800,
+      "theme": "daylight",
+      "language": "en",
+      "record": {
+        "scene": "circumbinary-planet-lab-midnight-1366",
+        "simTime": 20000.00000000002
+      },
+      "canvasSha": "1bee29ed934324fc",
+      "viewportSha": "1bee29ed934324fc",
+      "focusSha": "04e83286a2095fad",
+      "focus": {
+        "selector": "#loadScenarioBtn",
+        "focused": true
+      },
+      "repeat": {
+        "canvas": false,
+        "viewport": false,
+        "focus": false,
+        "differing": 1888,
+        "box": [
+          44,
+          286,
+          293,
+          495
+        ],
+        "confinedToTimelineBar": false
+      }
+    },
+    {
+      "id": "binary-daylight-1366-es",
+      "kind": "sandbox",
+      "pilot": "binary",
+      "width": 1366,
+      "height": 800,
+      "theme": "daylight",
+      "language": "es",
+      "record": {
+        "scene": "circumbinary-planet-lab-midnight-1366",
+        "simTime": 20000.00000000002
+      },
+      "canvasSha": "7ddc0b1dc204401a",
+      "viewportSha": "7ddc0b1dc204401a",
+      "focusSha": "e49c27d7f865ed77",
+      "focus": {
+        "selector": "#loadScenarioBtn",
+        "focused": true
+      },
+      "repeat": {
+        "canvas": false,
+        "viewport": false,
+        "focus": false,
+        "differing": 2079,
+        "box": [
+          44,
+          322,
+          343,
+          562
+        ],
+        "confinedToTimelineBar": false
+      }
+    },
+    {
+      "id": "crowded-scene-midnight-375-en",
+      "kind": "sandbox",
+      "pilot": "crowded-scene",
+      "width": 375,
+      "height": 812,
+      "theme": "midnight",
+      "language": "en",
+      "record": {
+        "scene": "star-cluster-midnight-1366",
+        "simTime": 10
+      },
+      "canvasSha": "22ff8dfdfaddfce0",
+      "viewportSha": "22ff8dfdfaddfce0",
+      "focusSha": "96da7dea1260bac4",
+      "focus": {
+        "selector": "#mobileMenuToggle",
+        "focused": true
+      },
+      "repeat": {
+        "canvas": false,
+        "viewport": false,
+        "focus": false,
+        "differing": 100,
+        "box": [
+          31,
+          742,
+          366,
+          780
+        ],
+        "confinedToTimelineBar": true
+      }
+    },
+    {
+      "id": "crowded-scene-midnight-375-es",
+      "kind": "sandbox",
+      "pilot": "crowded-scene",
+      "width": 375,
+      "height": 812,
+      "theme": "midnight",
+      "language": "es",
+      "record": {
+        "scene": "star-cluster-midnight-1366",
+        "simTime": 10
+      },
+      "canvasSha": "dc5b52ba3565700a",
+      "viewportSha": "dc5b52ba3565700a",
+      "focusSha": "0d3027c15271b330",
+      "focus": {
+        "selector": "#mobileMenuToggle",
+        "focused": true
+      },
+      "repeat": {
+        "canvas": true,
+        "viewport": true,
+        "focus": true
+      }
+    },
+    {
+      "id": "crowded-scene-daylight-375-en",
+      "kind": "sandbox",
+      "pilot": "crowded-scene",
+      "width": 375,
+      "height": 812,
+      "theme": "daylight",
+      "language": "en",
+      "record": {
+        "scene": "star-cluster-midnight-1366",
+        "simTime": 10
+      },
+      "canvasSha": "3f51733fb41e262b",
+      "viewportSha": "3f51733fb41e262b",
+      "focusSha": "703e729487909d69",
+      "focus": {
+        "selector": "#mobileMenuToggle",
+        "focused": true
+      },
+      "repeat": {
+        "canvas": true,
+        "viewport": true,
+        "focus": true
+      }
+    },
+    {
+      "id": "crowded-scene-daylight-375-es",
+      "kind": "sandbox",
+      "pilot": "crowded-scene",
+      "width": 375,
+      "height": 812,
+      "theme": "daylight",
+      "language": "es",
+      "record": {
+        "scene": "star-cluster-midnight-1366",
+        "simTime": 10
+      },
+      "canvasSha": "0963aaa3aa365b50",
+      "viewportSha": "0963aaa3aa365b50",
+      "focusSha": "921b4e05e5778c7c",
+      "focus": {
+        "selector": "#mobileMenuToggle",
+        "focused": true
+      },
+      "repeat": {
+        "canvas": false,
+        "viewport": false,
+        "focus": false,
+        "differing": 96,
+        "box": [
+          31,
+          742,
+          366,
+          780
+        ],
+        "confinedToTimelineBar": true
+      }
+    },
+    {
+      "id": "crowded-scene-midnight-768-en",
+      "kind": "sandbox",
+      "pilot": "crowded-scene",
+      "width": 768,
+      "height": 1024,
+      "theme": "midnight",
+      "language": "en",
+      "record": {
+        "scene": "star-cluster-midnight-1366",
+        "simTime": 10
+      },
+      "canvasSha": "215b6e2bae614b39",
+      "viewportSha": "215b6e2bae614b39",
+      "focusSha": "d3fa40b096e48161",
+      "focus": {
+        "selector": "#mobileMenuToggle",
+        "focused": true
+      },
+      "repeat": {
+        "canvas": false,
+        "viewport": false,
+        "focus": false,
+        "differing": 79,
+        "box": [
+          302,
+          704,
+          431,
+          769
+        ],
+        "confinedToTimelineBar": false
+      }
+    },
+    {
+      "id": "crowded-scene-midnight-768-es",
+      "kind": "sandbox",
+      "pilot": "crowded-scene",
+      "width": 768,
+      "height": 1024,
+      "theme": "midnight",
+      "language": "es",
+      "record": {
+        "scene": "star-cluster-midnight-1366",
+        "simTime": 10
+      },
+      "canvasSha": "90629710e0386614",
+      "viewportSha": "90629710e0386614",
+      "focusSha": "02aa77ef5b582c3d",
+      "focus": {
+        "selector": "#mobileMenuToggle",
+        "focused": true
+      },
+      "repeat": {
+        "canvas": true,
+        "viewport": true,
+        "focus": true
+      }
+    },
+    {
+      "id": "crowded-scene-daylight-768-en",
+      "kind": "sandbox",
+      "pilot": "crowded-scene",
+      "width": 768,
+      "height": 1024,
+      "theme": "daylight",
+      "language": "en",
+      "record": {
+        "scene": "star-cluster-midnight-1366",
+        "simTime": 10
+      },
+      "canvasSha": "17875b10319deee9",
+      "viewportSha": "17875b10319deee9",
+      "focusSha": "da52827211274050",
+      "focus": {
+        "selector": "#mobileMenuToggle",
+        "focused": true
+      },
+      "repeat": {
+        "canvas": true,
+        "viewport": true,
+        "focus": true
+      }
+    },
+    {
+      "id": "crowded-scene-daylight-768-es",
+      "kind": "sandbox",
+      "pilot": "crowded-scene",
+      "width": 768,
+      "height": 1024,
+      "theme": "daylight",
+      "language": "es",
+      "record": {
+        "scene": "star-cluster-midnight-1366",
+        "simTime": 10
+      },
+      "canvasSha": "f4139be11724ade1",
+      "viewportSha": "f4139be11724ade1",
+      "focusSha": "0dd54d514dc8110e",
+      "focus": {
+        "selector": "#mobileMenuToggle",
+        "focused": true
+      },
+      "repeat": {
+        "canvas": true,
+        "viewport": true,
+        "focus": true
+      }
+    },
+    {
+      "id": "crowded-scene-midnight-1366-en",
+      "kind": "sandbox",
+      "pilot": "crowded-scene",
+      "width": 1366,
+      "height": 800,
+      "theme": "midnight",
+      "language": "en",
+      "record": {
+        "scene": "star-cluster-midnight-1366",
+        "simTime": 10
+      },
+      "canvasSha": "d5d7c4d0e80781af",
+      "viewportSha": "d5d7c4d0e80781af",
+      "focusSha": "b25dcdcc72a40378",
+      "focus": {
+        "selector": "#loadScenarioBtn",
+        "focused": true
+      },
+      "repeat": {
+        "canvas": false,
+        "viewport": false,
+        "focus": false,
+        "differing": 109,
+        "box": [
+          642,
+          598,
+          678,
+          627
+        ],
+        "confinedToTimelineBar": false
+      }
+    },
+    {
+      "id": "crowded-scene-midnight-1366-es",
+      "kind": "sandbox",
+      "pilot": "crowded-scene",
+      "width": 1366,
+      "height": 800,
+      "theme": "midnight",
+      "language": "es",
+      "record": {
+        "scene": "star-cluster-midnight-1366",
+        "simTime": 10
+      },
+      "canvasSha": "f007e479f50ed3c8",
+      "viewportSha": "f007e479f50ed3c8",
+      "focusSha": "6e6dc57ba2dc3966",
+      "focus": {
+        "selector": "#loadScenarioBtn",
+        "focused": true
+      },
+      "repeat": {
+        "canvas": true,
+        "viewport": true,
+        "focus": true
+      }
+    },
+    {
+      "id": "crowded-scene-daylight-1366-en",
+      "kind": "sandbox",
+      "pilot": "crowded-scene",
+      "width": 1366,
+      "height": 800,
+      "theme": "daylight",
+      "language": "en",
+      "record": {
+        "scene": "star-cluster-midnight-1366",
+        "simTime": 10
+      },
+      "canvasSha": "aa247433f8752343",
+      "viewportSha": "aa247433f8752343",
+      "focusSha": "9795c4860d4d6d69",
+      "focus": {
+        "selector": "#loadScenarioBtn",
+        "focused": true
+      },
+      "repeat": {
+        "canvas": false,
+        "viewport": false,
+        "focus": false,
+        "differing": 112,
+        "box": [
+          642,
+          62,
+          1331,
+          627
+        ],
+        "confinedToTimelineBar": false
+      }
+    },
+    {
+      "id": "crowded-scene-daylight-1366-es",
+      "kind": "sandbox",
+      "pilot": "crowded-scene",
+      "width": 1366,
+      "height": 800,
+      "theme": "daylight",
+      "language": "es",
+      "record": {
+        "scene": "star-cluster-midnight-1366",
+        "simTime": 10
+      },
+      "canvasSha": "adf0bc8474794fb3",
+      "viewportSha": "adf0bc8474794fb3",
+      "focusSha": "e8040c0406882619",
+      "focus": {
+        "selector": "#loadScenarioBtn",
+        "focused": true
+      },
+      "repeat": {
+        "canvas": true,
+        "viewport": true,
+        "focus": true
+      }
+    }
+  ]
+}
