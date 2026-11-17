@@ -87,7 +87,7 @@
       "reason": "",
       "sitemap_reason": "No recorded reason: the page has no robots exclusion and the hand-written part of sitemap.xml does not list it. The closing prompt decides whether to list it or to record why not. It is one of the five destinations.",
       "decision": "",
-      "note": "",
+      "note": "FOUNDATIONS ONLY: the start cards show their picture, summary and facts and the item page shows its picture, facts and place in a path; the catalogue family's direction is not chosen, so the row stays OPEN.",
       "measure": [
         {
           "id": "page",
@@ -1054,7 +1054,7 @@
       "reason": "",
       "sitemap_reason": "",
       "decision": "",
-      "note": "",
+      "note": "FOUNDATIONS ONLY: the start cards show their picture, summary and facts and the item page shows its picture, facts and place in a path; the catalogue family's direction is not chosen, so the row stays OPEN.",
       "measure": [
         {
           "id": "item",
@@ -1564,7 +1564,7 @@
       "reason": "",
       "sitemap_reason": "",
       "decision": "",
-      "note": "",
+      "note": "FOUNDATIONS ONLY: the start cards show their picture, summary and facts and the item page shows its picture, facts and place in a path; the catalogue family's direction is not chosen, so the row stays OPEN.",
       "measure": []
     },
     {
