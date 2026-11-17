@@ -289,12 +289,12 @@ const TRANSITS = {
       type: 'read',
       title: 'Where the depth comes from',
       body: `A star is, to a photometer, a uniformly bright disk of radius
-             <em>R</em><sub>★</sub> and area πR<sub>★</sub><sup>2</sup>. A planet in front
+             <em>R</em><sub>★</sub> and area π<em>R</em><sub>★</sub><sup>2</sup>. A planet in front
              of it is an opaque disk of radius <em>R</em><sub>p</sub> and area
-             πR<sub>p</sub><sup>2</sup>, and it blocks exactly its own area.
+             π<em>R</em><sub>p</sub><sup>2</sup>, and it blocks exactly its own area.
              \n\nThe fractional drop in brightness, the <strong>transit
              depth</strong>, is therefore the ratio of the two areas:
-             \n\n<strong><em>δ</em> = πR<sub>p</sub><sup>2</sup> / πR<sub>★</sub><sup>2</sup>
+             \n\n<strong><em>δ</em> = π<em>R</em><sub>p</sub><sup>2</sup> / π<em>R</em><sub>★</sub><sup>2</sup>
              = (<em>R</em><sub>p</sub> / <em>R</em><sub>★</sub>)<sup>2</sup></strong>
              \n\nThe π cancels, the distance to the star cancels, the star's
              [[luminosity|luminosity]] cancels, and the planet's own brightness is negligible.
@@ -405,7 +405,8 @@ const TRANSITS = {
         },
         {
           id: 'k_naive',
-          label: 'Radius ratio <em>R</em><sub>p</sub> / <em>R</em><sub>★</sub> = √(δ)',
+          label:
+            'Radius ratio <em>R</em><sub>p</sub> / <em>R</em><sub>★</sub> = √(δ)',
           unit: '',
           decimals: 4,
           compute: v => Math.sqrt(v.base - v.bot),
@@ -781,7 +782,7 @@ const TRANSITS = {
         {
           id: 'P',
           label:
-            'Orbital period <em>P</em> = (<em>t</em><sub>2</sub> − <em>t</em><sub>1</sub>) / <em>n</em>',
+            'Orbital period <em>P</em> = (<em>t</em>₂ − <em>t</em>₁) / <em>n</em>',
           unit: 'days',
           decimals: 4,
           compute: v => (v.t2 - v.t1) / v.n,
@@ -853,7 +854,7 @@ const TRANSITS = {
       title: 'From a period to an orbit',
       body: `A period and a stellar mass are enough to place the planet, through
              the same [[keplers-third-law|third law]] you would use on the Solar System:
-             \n\n<strong><em>a</em><sup>3</sup> = <em>P</em><sup>2</sup> M<sub>★</sub></strong>,
+             \n\n<strong><em>a</em>³ = <em>P</em>² M<sub>★</sub></strong>,
              with <em>a</em> in AU, <em>P</em> in years and M<sub>★</sub> in solar masses.
              \n\nHD 209458 weighs <strong>1.148 M<sub>☉</sub></strong>, from its
              [[spectrum|spectrum]] and its position on the [[main-sequence|main sequence]]. Enter your period and
@@ -886,7 +887,7 @@ const TRANSITS = {
         {
           id: 'a_au',
           label:
-            'Semi-major axis <em>a</em> = (<em>P</em><sup>2</sup> <em>M</em>)<sup>⅓</sup>',
+            'Semi-major axis <em>a</em> = (<em>P</em>² <em>M</em>)<sup>⅓</sup>',
           unit: 'AU',
           decimals: 5,
           compute: v => Math.cbrt((v.P_d / 365.25) ** 2 * v.M),
@@ -1081,17 +1082,17 @@ const TRANSITS = {
       type: 'explore',
       title: 'A star you did not know was there',
       body: `Suppose a fraction of the light in the aperture comes from a
-             companion, with [[flux|flux]] ratio <em>F</em><sub>2</sub>/F<sub>1</sub>. The planet
+             companion, with [[flux|flux]] ratio <em>F</em>₂/F<sub>1</sub>. The planet
              still blocks the same fraction of its own star, but that blocked
              light is now a smaller share of the total:
              \n\n<strong><em>δ</em><sub>observed</sub> = <em>δ</em><sub>true</sub> /
-             (1 + <em>F</em><sub>2</sub>/<em>F</em><sub>1</sub>)</strong>
+             (1 + <em>F</em>₂/<em>F</em>₁)</strong>
              \n\nSince the radius goes as √<em>δ</em>, the radius you report is too small
              by exactly
              \n\n<strong><em>R</em><sub>true</sub> / <em>R</em><sub>measured</sub> =
-             √(1 + <em>F</em><sub>2</sub>/<em>F</em><sub>1</sub>)</strong>
+             √(1 + <em>F</em>₂/<em>F</em>₁)</strong>
              \n\nContrast is usually quoted as a [[magnitude|magnitude]] difference, and
-             <em>F</em><sub>2</sub>/<em>F</em><sub>1</sub> = 10<sup>−0.4Δm</sup>. An equal twin
+             <em>F</em>₂/<em>F</em>₁ = 10<sup>−0.4Δm</sup>. An equal twin
              makes every radius too small by √2. A companion four magnitudes
              fainter changes it by 1.2%.
              \n\nThis is what high-resolution imaging of planet hosts is for. The
@@ -1191,7 +1192,7 @@ const TRANSITS = {
       type: 'measure',
       title: 'Recover the real planet',
       body: `You have measured the same planet twice, once clean and once
-             blended. The ratio of the two depths is 1 + <em>F</em><sub>2</sub>/<em>F</em><sub>1</sub>
+             blended. The ratio of the two depths is 1 + <em>F</em>₂/<em>F</em>₁
              directly, which means this pair of measurements contains the
              companion's brightness even though you never saw it.
              \n\nIn practice you never get the clean measurement: that is the whole
@@ -1227,8 +1228,7 @@ const TRANSITS = {
         },
         {
           id: 'ratio',
-          label:
-            'Depth ratio = 1 + <em>F</em><sub>2</sub>/<em>F</em><sub>1</sub>',
+          label: 'Depth ratio = 1 + <em>F</em>₂/<em>F</em>₁',
           unit: '',
           decimals: 4,
           compute: v => v.d_clean / v.d_blend,
@@ -1242,8 +1242,7 @@ const TRANSITS = {
         },
         {
           id: 'corr',
-          label:
-            'Radius correction √(1 + <em>F</em><sub>2</sub>/<em>F</em><sub>1</sub>)',
+          label: 'Radius correction √(1 + <em>F</em>₂/<em>F</em>₁)',
           unit: '',
           decimals: 4,
           compute: v => Math.sqrt(v.d_clean / v.d_blend),

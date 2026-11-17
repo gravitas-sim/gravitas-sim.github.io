@@ -149,7 +149,7 @@ describe('numbers and formulas in the pilots', () => {
     // An upright single letter before a bound operator, or one after the
     // operator, is a variable that missed its <em>.
     const before = new RegExp(
-      `(?<![\\p{L}\\p{N}>/])[A-Za-zδ](?:<sup>\\d</sup>|<sub>[^<]*</sub>)?${NBSP}[=≈∝÷]`,
+      `(?<![\\p{L}\\p{N}>/])[A-Za-zδ](?:<sup>\\d</sup>|<sub>[^<]*</sub>|[²³¹⁰⁴-⁹₀-₉])*${NBSP}[=≈∝÷]`,
       'u'
     );
     const bad = [];

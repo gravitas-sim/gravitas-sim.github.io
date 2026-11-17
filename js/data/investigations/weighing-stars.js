@@ -421,7 +421,7 @@ const WEIGHING = {
       title: 'What Kepler found, and what Newton added',
       body: `In the Kepler investigation you measured the orbits of planets and
              found that the size of an orbit and the time it takes go together:
-             \n\n<strong><em>a</em><sup>3</sup> = <em>P</em><sup>2</sup></strong>
+             \n\n<strong><em>a</em>³ = <em>P</em>²</strong>
              \n\nwith the orbit size <em>a</em> in AU and the [[period|period]] <em>P</em> in years. Bigger
              orbit, longer year, every time.
              \n\nThat relationship works beautifully for the planets, and it has
@@ -500,7 +500,7 @@ const WEIGHING = {
       title: 'Newton’s version, and what it is for',
       body: `Here is the relationship Newton found, written the way an astronomer
              uses it:
-             \n\n<strong>total mass = <em>a</em><sup>3</sup> ÷ <em>P</em><sup>2</sup></strong>
+             \n\n<strong>total mass = <em>a</em>³ ÷ <em>P</em>²</strong>
              \n\nwith <strong>a</strong> the size of the orbit in AU,
              <strong>P</strong> the time for one lap in years, and the answer in
              solar masses. That is the whole thing. Two measurements in, one
@@ -535,22 +535,21 @@ const WEIGHING = {
         { id: 'p', label: 'Period P', unit: 'years', want: '2' },
         {
           id: 'a3',
-          label:
-            '<em>a</em><sup>3</sup>, that is <em>a</em> × <em>a</em> × <em>a</em>',
+          label: '<em>a</em>³, that is <em>a</em> × <em>a</em> × <em>a</em>',
           unit: '',
           decimals: 0,
           compute: v => v.a ** 3,
         },
         {
           id: 'p2',
-          label: '<em>P</em><sup>2</sup>, that is <em>P</em> × <em>P</em>',
+          label: '<em>P</em>², that is <em>P</em> × <em>P</em>',
           unit: '',
           decimals: 0,
           compute: v => v.p ** 2,
         },
         {
           id: 'total',
-          label: 'Total mass, <em>a</em><sup>3</sup> ÷ <em>P</em><sup>2</sup>',
+          label: 'Total mass, <em>a</em>³ ÷ <em>P</em>²',
           unit: 'M☉',
           decimals: 2,
           compute: v => v.a ** 3 / v.p ** 2,
@@ -572,7 +571,7 @@ const WEIGHING = {
             '2 × 2 × 2 is 8, and 2 × 2 is 4, and 8 divided by 4 is 2. The pair weighs <strong>2 solar masses</strong> between them. Nobody went there. Nobody weighed anything. Two measurements of an orbit were enough.',
         };
       },
-      tip: 'The little raised numbers just mean "multiply it by itself that many times". <em>a</em><sup>3</sup> is <em>a</em> × <em>a</em> × <em>a</em>. <em>P</em><sup>2</sup> is <em>P</em> × <em>P</em>. If you would rather use a calculator, nothing here is against the rules.',
+      tip: 'The little raised numbers just mean "multiply it by itself that many times". <em>a</em>³ is <em>a</em> × <em>a</em> × <em>a</em>. <em>P</em>² is <em>P</em> × <em>P</em>. If you would rather use a calculator, nothing here is against the rules.',
     },
     {
       sid: 'the-mystery-pair',
@@ -715,14 +714,14 @@ const WEIGHING = {
         },
         {
           id: 'a3',
-          label: '<em>a</em><sup>3</sup>',
+          label: '<em>a</em>³',
           unit: '',
           decimals: 0,
           compute: v => v.a ** 3,
         },
         {
           id: 'p2',
-          label: '<em>P</em><sup>2</sup>',
+          label: '<em>P</em>²',
           unit: '',
           decimals: 0,
           compute: v => v.p ** 2,
@@ -770,7 +769,7 @@ const WEIGHING = {
           message: `64 divided by 16 is 4. The two stars weigh <strong>${total.toFixed(1)} solar masses</strong> between them. You measured that by watching, and by nothing else.`,
         };
       },
-      tip: 'If you measured <em>a</em> = 4 and <em>P</em> = 4, then <em>a</em><sup>3</sup> = 4 × 4 × 4 = 64 and <em>P</em><sup>2</sup> = 4 × 4 = 16.',
+      tip: 'If you measured <em>a</em> = 4 and <em>P</em> = 4, then <em>a</em>³ = 4 × 4 × 4 = 64 and <em>P</em>² = 4 × 4 = 16.',
     },
     {
       sid: 'stop-and-look-at-what',
@@ -1003,14 +1002,14 @@ const WEIGHING = {
         { id: 'p', label: 'Period P', unit: 'years', want: '3' },
         {
           id: 'a3',
-          label: '<em>a</em><sup>3</sup>',
+          label: '<em>a</em>³',
           unit: '',
           decimals: 0,
           compute: v => v.a ** 3,
         },
         {
           id: 'p2',
-          label: '<em>P</em><sup>2</sup>',
+          label: '<em>P</em>²',
           unit: '',
           decimals: 0,
           compute: v => v.p ** 2,

@@ -184,7 +184,7 @@ export default {
     },
     {
       title: 'Lo que encontró Kepler, y lo que añadió Newton',
-      body: 'En la investigación de Kepler mediste las órbitas de los planetas y descubriste que el tamaño de una órbita y el tiempo que tarda van juntos:\n\n<strong><em>a</em><sup>3</sup> = <em>P</em><sup>2</sup></strong>\n\ncon el tamaño orbital <em>a</em> en UA y el [[period|periodo]] <em>P</em> en años. Órbita mayor, año más largo, siempre.\n\nEsa relación funciona de maravilla para los planetas, y lleva dentro un supuesto oculto: todos los planetas del Sistema Solar giran alrededor del mismo Sol. Kepler nunca tuvo que preocuparse por la masa, porque la masa nunca cambiaba.\n\nNewton dedujo qué ocurre cuando sí cambia. Más masa significa gravedad más fuerte, y gravedad más fuerte significa que un objeto es arrastrado más rápido por su órbita. Dos estrellas separadas cuatro UA tardarán tiempos distintos en darse la vuelta la una a la otra según lo pesadas que sean.\n\nEsa es la segunda idea, y es la que convierte una órbita en una balanza.',
+      body: 'En la investigación de Kepler mediste las órbitas de los planetas y descubriste que el tamaño de una órbita y el tiempo que tarda van juntos:\n\n<strong><em>a</em>³ = <em>P</em>²</strong>\n\ncon el tamaño orbital <em>a</em> en UA y el [[period|periodo]] <em>P</em> en años. Órbita mayor, año más largo, siempre.\n\nEsa relación funciona de maravilla para los planetas, y lleva dentro un supuesto oculto: todos los planetas del Sistema Solar giran alrededor del mismo Sol. Kepler nunca tuvo que preocuparse por la masa, porque la masa nunca cambiaba.\n\nNewton dedujo qué ocurre cuando sí cambia. Más masa significa gravedad más fuerte, y gravedad más fuerte significa que un objeto es arrastrado más rápido por su órbita. Dos estrellas separadas cuatro UA tardarán tiempos distintos en darse la vuelta la una a la otra según lo pesadas que sean.\n\nEsa es la segunda idea, y es la que convierte una órbita en una balanza.',
     },
     {
       title: '¿Qué par es más rápido?',
@@ -225,7 +225,7 @@ export default {
     },
     {
       title: 'La versión de Newton, y para qué sirve',
-      body: 'Aquí está la relación que encontró Newton, escrita como la usa un astrónomo:\n\n<strong>masa total = <em>a</em><sup>3</sup> ÷ <em>P</em><sup>2</sup></strong>\n\ncon <strong>a</strong> el tamaño de la órbita en UA, <strong>P</strong> el tiempo de una vuelta en años, y la respuesta en masas solares. Eso es todo. Dos medidas dentro, un número fuera:\n\n<strong>mide el tamaño de la órbita → mide el periodo → obtén la masa total.</strong>\n\nUn detalle importa, y es el único sitio donde la gente se equivoca. La <strong>a</strong> de esa fórmula es el tamaño de la órbita de las <em>dos</em> estrellas, no la parte de una sola. Imagina el par con el punto de equilibrio entre ellas:\n\n<strong>Estrella A ── r<sub>A</sub> ── baricentro ── r<sub>B</sub> ── Estrella B</strong>\n\ny <strong>a</strong> es la suma de los dos trozos: <em>r</em><sub>A</sub> + <em>r</em><sub>B</sub>, que es simplemente la distancia de una estrella a la otra.\n\nAsí que cuando midas a, mide de estrella a estrella.',
+      body: 'Aquí está la relación que encontró Newton, escrita como la usa un astrónomo:\n\n<strong>masa total = <em>a</em>³ ÷ <em>P</em>²</strong>\n\ncon <strong>a</strong> el tamaño de la órbita en UA, <strong>P</strong> el tiempo de una vuelta en años, y la respuesta en masas solares. Eso es todo. Dos medidas dentro, un número fuera:\n\n<strong>mide el tamaño de la órbita → mide el periodo → obtén la masa total.</strong>\n\nUn detalle importa, y es el único sitio donde la gente se equivoca. La <strong>a</strong> de esa fórmula es el tamaño de la órbita de las <em>dos</em> estrellas, no la parte de una sola. Imagina el par con el punto de equilibrio entre ellas:\n\n<strong>Estrella A ── r<sub>A</sub> ── baricentro ── r<sub>B</sub> ── Estrella B</strong>\n\ny <strong>a</strong> es la suma de los dos trozos: <em>r</em><sub>A</sub> + <em>r</em><sub>B</sub>, que es simplemente la distancia de una estrella a la otra.\n\nAsí que cuando midas a, mide de estrella a estrella.',
       tip: 'Si por error tomas solo la distancia de una estrella al baricentro, obtendrás una masa muy por debajo de la real: con dos estrellas iguales, un octavo de la masa. Medir de estrella a estrella lo arregla, y de todos modos es más fácil.',
     },
     {
@@ -235,20 +235,13 @@ export default {
         { label: 'Tamaño de la órbita a', unit: 'UA', want: '2' },
         { label: 'Periodo P', unit: 'años', want: '2' },
         {
-          label:
-            '<em>a</em><sup>3</sup>, es decir <em>a</em> × <em>a</em> × <em>a</em>',
+          label: '<em>a</em>³, es decir <em>a</em> × <em>a</em> × <em>a</em>',
           unit: '',
         },
-        {
-          label: '<em>P</em><sup>2</sup>, es decir <em>P</em> × <em>P</em>',
-          unit: '',
-        },
-        {
-          label: 'Masa total, <em>a</em><sup>3</sup> ÷ <em>P</em><sup>2</sup>',
-          unit: 'M☉',
-        },
+        { label: '<em>P</em>², es decir <em>P</em> × <em>P</em>', unit: '' },
+        { label: 'Masa total, <em>a</em>³ ÷ <em>P</em>²', unit: 'M☉' },
       ],
-      tip: 'Los numeritos elevados solo significan «multiplícalo por sí mismo esas veces». <em>a</em><sup>3</sup> es <em>a</em> × <em>a</em> × <em>a</em>. <em>P</em><sup>2</sup> es <em>P</em> × <em>P</em>. Si prefieres usar una calculadora, aquí nada lo prohíbe.',
+      tip: 'Los numeritos elevados solo significan «multiplícalo por sí mismo esas veces». <em>a</em>³ es <em>a</em> × <em>a</em> × <em>a</em>. <em>P</em>² es <em>P</em> × <em>P</em>. Si prefieres usar una calculadora, aquí nada lo prohíbe.',
     },
     {
       title: 'El par misterioso',
@@ -312,11 +305,11 @@ export default {
           unit: 'años',
           hint: 'del cronómetro',
         },
-        { label: '<em>a</em><sup>3</sup>', unit: '' },
-        { label: '<em>P</em><sup>2</sup>', unit: '' },
+        { label: '<em>a</em>³', unit: '' },
+        { label: '<em>P</em>²', unit: '' },
         { label: 'Masa total del par', unit: 'M☉' },
       ],
-      tip: 'Si mediste <em>a</em> = 4 y <em>P</em> = 4, entonces <em>a</em><sup>3</sup> = 4 × 4 × 4 = 64 y <em>P</em><sup>2</sup> = 4 × 4 = 16.',
+      tip: 'Si mediste <em>a</em> = 4 y <em>P</em> = 4, entonces <em>a</em>³ = 4 × 4 × 4 = 64 y <em>P</em>² = 4 × 4 = 16.',
     },
     {
       title: 'Detente y mira lo que acabas de hacer',
@@ -394,8 +387,8 @@ export default {
       fields: [
         { label: 'Tamaño de la órbita a', unit: 'UA', want: '3' },
         { label: 'Periodo P', unit: 'años', want: '3' },
-        { label: '<em>a</em><sup>3</sup>', unit: '' },
-        { label: '<em>P</em><sup>2</sup>', unit: '' },
+        { label: '<em>a</em>³', unit: '' },
+        { label: '<em>P</em>²', unit: '' },
         { label: 'Masa total', unit: 'M☉' },
       ],
     },
