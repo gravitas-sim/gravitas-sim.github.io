@@ -31,6 +31,11 @@ let cardModule = null;
 let cardLoading = null;
 /** Bumped by every show and hide, so a late card shows only the latest wish. */
 let wish = 0;
+/** Whether a first selection is waiting on the card's code. */
+let pending = false;
+
+/** @returns {boolean} Whether a selection is waiting on the card's code */
+export const inspectorPending = () => pending;
 
 /**
  * Fetch the card's code once and wire its header buttons once.
@@ -78,15 +83,25 @@ export const showObjectInspector = (object, type) => {
     window.splashScreenEnded &&
     !window.isSplashActive &&
     document.getElementById('objectInspector')
-  )
+  ) {
     state.selectedObject = { object, type };
+    paintFrameControls();
+  }
   const mine = ++wish;
+  pending = true;
   ensureInspector().then(
     mod => {
-      if (mine === wish) mod.showObjectInspector(object, type);
+      if (mine !== wish) return;
+      pending = false;
+      mod.showObjectInspector(object, type);
     },
     err => {
       console.error('The inspector could not be loaded:', err);
+      if (mine !== wish) return;
+      // Nothing is open, so nothing stays selected; the retry selects again.
+      pending = false;
+      state.selectedObject = null;
+      paintFrameControls();
       loadFailed(() => showObjectInspector(object, type), err);
     }
   );
@@ -95,6 +110,7 @@ export const showObjectInspector = (object, type) => {
 /** Hide the card, if it has ever been shown. @returns {void} */
 export const hideObjectInspector = () => {
   wish++;
+  pending = false;
   if (cardModule) cardModule.hideObjectInspector();
   else if (state.selectedObject) {
     state.selectedObject = null;
@@ -369,6 +385,8 @@ export function ensureManeuverPlanner() {
       });
       return planner;
     })();
+    // A failed import is not kept: the next press fetches again.
+    loading.catch(() => (loading = null));
   }
   return loading;
 }

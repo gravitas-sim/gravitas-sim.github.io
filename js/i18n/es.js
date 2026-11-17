@@ -245,6 +245,7 @@ export const ES = {
   'rail.toggleExperiments.hint':
     'Abrir el banco de experimentos A/B: captura un estado inicial, graba una ejecución de referencia, vuelve exactamente a ese inicio, cambia una variable y graba una segunda ejecución, y compara ambas sobre el mismo eje de tiempo simulado.',
   'failure.load': 'No se pudo cargar. Comprueba tu conexión.',
+  'failure.loading': 'Cargando…',
   'failure.retry': 'Reintentar',
   'failure.reload':
     'Sigue sin cargar. Recarga la página; tu trabajo se conserva.',

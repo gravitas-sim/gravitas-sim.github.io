@@ -24,6 +24,7 @@ import {
   velocityDispersion,
 } from './darkMatter.js';
 import { a0InSimUnits } from './mond.js';
+import { EV_SIMULATION_RESET } from './names.js';
 
 // The last fit, kept so the readout does not flicker between frames when a
 // body briefly leaves the fitting window.
@@ -33,6 +34,11 @@ let lastFit = null;
 export const resetRotationCurveFit = () => {
   lastFit = null;
 };
+
+// Registered here, not by the panel: a probe or the export reads the fit
+// without the panel, and a rebuilt world has no use for the old one.
+if (typeof window !== 'undefined')
+  window.addEventListener(EV_SIMULATION_RESET, resetRotationCurveFit);
 
 /**
  * Every body whose motion counts as part of the rotation curve.
