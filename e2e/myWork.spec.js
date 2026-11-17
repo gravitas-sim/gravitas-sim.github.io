@@ -15,42 +15,46 @@
 
 import AxeBuilder from '@axe-core/playwright';
 import { readFileSync } from 'node:fs';
-import { test, expect } from './fixtures.js';
+import { test, expect, loadInvestigation } from './workflow.js';
 
 const LESSON = 'keplers-laws';
 
 async function seed(page) {
   await page.goto('/model/', { waitUntil: 'domcontentloaded' });
-  return page.evaluate(async lesson => {
-    const reg = await import('/js/data/investigations/registry.js');
-    const inv = await reg.loadInvestigation(lesson);
-    const at = Math.min(3, inv.steps.length - 1);
-    const sid = inv.steps[at].sid;
-    localStorage.setItem(
-      `gravitas_investigation_${lesson}`,
-      JSON.stringify({
-        schema: 2,
-        lesson,
-        stepSid: sid,
-        visited: inv.steps.slice(0, at + 1).map(s => s.sid),
-        responses: {},
-        attempts: {},
-        startedAt: '2026-10-01T10:00:00.000Z',
-      })
-    );
-    localStorage.setItem(
-      'gravitas_experiment_x1',
-      JSON.stringify({ name: 'Saved run', updated: 1.7e12 })
-    );
-    localStorage.setItem(
-      'gravitas_experiments_index',
-      JSON.stringify({
-        v: 3,
-        items: [{ id: 'x1', name: 'Saved run', updated: 1.7e12 }],
-      })
-    );
-    return { sid, title: inv.steps[at].title };
-  }, LESSON);
+  const inv = await loadInvestigation(LESSON);
+  const at = Math.min(3, inv.steps.length - 1);
+  const sid = inv.steps[at].sid;
+  const sids = inv.steps.slice(0, at + 1).map(s => s.sid);
+  const title = inv.steps[at].title;
+  return page.evaluate(
+    ([lesson, sid, sids, title]) => {
+      localStorage.setItem(
+        `gravitas_investigation_${lesson}`,
+        JSON.stringify({
+          schema: 2,
+          lesson,
+          stepSid: sid,
+          visited: sids,
+          responses: {},
+          attempts: {},
+          startedAt: '2026-10-01T10:00:00.000Z',
+        })
+      );
+      localStorage.setItem(
+        'gravitas_experiment_x1',
+        JSON.stringify({ name: 'Saved run', updated: 1.7e12 })
+      );
+      localStorage.setItem(
+        'gravitas_experiments_index',
+        JSON.stringify({
+          v: 3,
+          items: [{ id: 'x1', name: 'Saved run', updated: 1.7e12 }],
+        })
+      );
+      return { sid, title };
+    },
+    [LESSON, sid, sids, title]
+  );
 }
 
 async function open(page) {

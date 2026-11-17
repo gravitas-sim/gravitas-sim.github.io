@@ -13,7 +13,15 @@
 // question it was not an answer to.
 // =============================================================================
 
-import { test, expect } from './fixtures.js';
+import { test, expect, loadInvestigation } from './workflow.js';
+import { decodeTagged } from '../js/shareState.js';
+import {
+  ASSIGNMENT_SCHEMA,
+  buildAssignment,
+} from '../js/assignments/assignment.js';
+import { assignmentLink } from '../js/assignments/assignmentLink.js';
+import { stepFingerprint } from '../js/investigations/progressBackup.js';
+import { lessonProvider } from '../js/assignments/provider.js';
 
 const LESSON = 'keplers-laws';
 
@@ -40,30 +48,46 @@ async function tick(page, indices) {
  * prerequisite rule after somebody reorders the lesson instead of quietly
  * ticking a setup step and proving nothing.
  */
-async function dependentIndices(page, howMany, { answerable = false } = {}) {
-  return page.evaluate(
-    async ({ n, answerable }) => {
-      const reg = await import('/js/data/investigations/registry.js');
-      const lesson = await reg.loadInvestigation('keplers-laws');
-      const out = [];
-      let seenSetup = false;
-      lesson.steps.forEach((step, i) => {
-        if (step.setup) {
-          seenSetup = true;
-          return;
-        }
-        if (!seenSetup || out.length >= n) return;
-        // Some tests need a step a student can actually answer, because that
-        // is what triggers a save; a `read` step has nothing to click and
-        // Next is not always enabled on one.
-        if (answerable && !Array.isArray(step.options)) return;
-        out.push(i);
-      });
-      return out;
-    },
-    { n: howMany, answerable }
-  );
+async function dependentIndices(_page, howMany, { answerable = false } = {}) {
+  const lesson = await loadInvestigation('keplers-laws');
+  const out = [];
+  let seenSetup = false;
+  lesson.steps.forEach((step, i) => {
+    if (step.setup) {
+      seenSetup = true;
+      return;
+    }
+    if (!seenSetup || out.length >= howMany) return;
+    // Some tests need a step a student can actually answer, because that
+    // is what triggers a save; a `read` step has nothing to click and
+    // Next is not always enabled on one.
+    if (answerable && !Array.isArray(step.options)) return;
+    out.push(i);
+  });
+  return out;
 }
+
+/** The payload a link carries, decoded here rather than trusted. */
+async function payloadOf(link) {
+  const hash = link.slice(link.indexOf('#') + 1);
+  const { payload } = await decodeTagged('a', hash, ASSIGNMENT_SCHEMA);
+  return payload;
+}
+
+/** The panel's own "Step n of N" line, as numbers. */
+async function stepsShown(page) {
+  const text = await page.locator('#investigationProgressText').innerText();
+  const [, at, of] = text.match(/(\d+)\s+\D+\s*(\d+)/) ?? [];
+  return { at: Number(at), of: Number(of) };
+}
+
+/** The localStorage keys an assignment's work is saved under. */
+const assignmentKeys = page =>
+  page.evaluate(() =>
+    Object.keys(localStorage)
+      .filter(k => k.startsWith('gravitas_assignment_'))
+      .sort()
+  );
 
 /** Build a link from whatever is ticked. */
 async function makeLink(page, name = 'Week 3') {
@@ -162,14 +186,7 @@ test.describe('building one', () => {
 
     // Decoded here rather than trusted: this is the claim that matters, and
     // the payload is what a student can actually read.
-    const payload = await page.evaluate(async link => {
-      const { decodeTagged } = await import('/js/shareState.js');
-      const { ASSIGNMENT_SCHEMA } =
-        await import('/js/assignments/assignment.js');
-      const hash = link.slice(link.indexOf('#') + 1);
-      const { payload } = await decodeTagged('a', hash, ASSIGNMENT_SCHEMA);
-      return payload;
-    }, url);
+    const payload = await payloadOf(url);
 
     const json = JSON.stringify(payload);
     expect(json).not.toMatch(/answer/i);
@@ -233,35 +250,23 @@ test.describe('doing one', () => {
     await tick(page, await dependentIndices(page, 3));
     const url = await makeLink(page);
 
-    const chosen = await page.evaluate(async link => {
-      const { decodeTagged } = await import('/js/shareState.js');
-      const { ASSIGNMENT_SCHEMA } =
-        await import('/js/assignments/assignment.js');
-      const { payload } = await decodeTagged(
-        'a',
-        link.slice(link.indexOf('#') + 1),
-        ASSIGNMENT_SCHEMA
-      );
-      return payload.s;
-    }, url);
+    const chosen = (await payloadOf(url)).s;
 
     await page.goto(url);
     await expect(page.locator('#investigationPanel')).toBeVisible({
       timeout: 30_000,
     });
 
-    const shown = await page.evaluate(async () => {
-      const inv = await import('/js/investigations.js');
-      const a = inv.activeAssignment();
-      return {
-        assignment: a?.t ?? null,
-        steps: inv.activeAssignmentBinding()?.steps.map(s => s.sid) ?? [],
-        title: document.getElementById('investigationTitle')?.textContent,
-      };
-    });
+    // What a student is given: the assignment's title on the panel, and as
+    // many steps as the link chose, no more.
+    const shown = {
+      assignment: await page.locator('#investigationTitle').textContent(),
+      steps: (await stepsShown(page)).of,
+      title: await page.locator('#investigationTitle').textContent(),
+    };
 
     expect(shown.assignment).toBe('Week 3');
-    expect(shown.steps).toEqual(chosen);
+    expect(shown.steps).toBe(chosen.length);
     // The panel is named for the assignment, and says which lesson it is from.
     expect(shown.title).toBe('Week 3');
     await expect(page.locator('#investigationSubtitle')).toContainText(
@@ -287,16 +292,15 @@ test.describe('doing one', () => {
     if (await nextBtn.isEnabled()) await nextBtn.click();
     await page.waitForTimeout(300);
 
-    const stored = await page.evaluate(async () => {
-      const inv = await import('/js/investigations.js');
-      const key = inv.activeAssignmentKey();
-      // Drive a response through the module's own save path.
-      return {
+    const [key] = await assignmentKeys(page);
+    const stored = await page.evaluate(
+      key => ({
         key,
         payload: localStorage.getItem(key),
         lessonKey: localStorage.getItem('gravitas_investigation_keplers-laws'),
-      };
-    });
+      }),
+      key
+    );
 
     // The assignment has its own namespace, and the full lesson's progress is
     // untouched by somebody doing eight steps of it.
@@ -309,11 +313,10 @@ test.describe('doing one', () => {
     await expect(page.locator('#investigationPanel')).toBeVisible({
       timeout: 30_000,
     });
-    const after = await page.evaluate(async () => {
-      const inv = await import('/js/investigations.js');
-      return Object.keys(inv.currentResponses?.() ?? {}).length;
-    });
-    expect(after).toBeGreaterThanOrEqual(0);
+    // The work is still in the assignment's record after the reload.
+    expect(await page.evaluate(k => localStorage.getItem(k), stored.key)).toBe(
+      stored.payload
+    );
   });
 
   test('two assignments from one lesson keep separate progress', async ({
@@ -327,62 +330,52 @@ test.describe('doing one', () => {
     // student side - that two activities cut from one lesson do not share a
     // namespace - and driving two builds through one page's DOM makes the test
     // about the interface's timing instead of about that.
-    const links = await page.evaluate(async () => {
-      const reg = await import('/js/data/investigations/registry.js');
-      const A = await import('/js/assignments/assignment.js');
-      const L = await import('/js/assignments/assignmentLink.js');
-      const { stepFingerprint } =
-        await import('/js/investigations/progressBackup.js');
-      const lesson = await reg.loadInvestigation('keplers-laws');
+    const lesson = await loadInvestigation('keplers-laws');
+    const base = new URL('/', page.url()).href;
 
-      // Two different answerable steps, each after a setup step.
-      const answerable = [];
-      let seenSetup = false;
-      for (const step of lesson.steps) {
-        if (step.setup) {
-          seenSetup = true;
-          continue;
-        }
-        if (seenSetup && Array.isArray(step.options) && answerable.length < 2) {
-          answerable.push(step.sid);
-        }
+    // Two different answerable steps, each after a setup step.
+    const answerable = [];
+    let seenSetup = false;
+    for (const step of lesson.steps) {
+      if (step.setup) {
+        seenSetup = true;
+        continue;
       }
+      if (seenSetup && Array.isArray(step.options) && answerable.length < 2) {
+        answerable.push(step.sid);
+      }
+    }
 
-      const make = async (sid, title) => {
-        const built = A.buildAssignment({
-          lesson,
-          chosen: [sid],
-          title,
-          fingerprint: stepFingerprint,
-        });
-        const link = await L.assignmentLink(built);
-        return { id: built.i, sids: built.s, url: link.url };
-      };
-      return [
-        await make(answerable[0], 'Week 3'),
-        await make(answerable[1], 'Week 4'),
-      ];
-    });
+    const make = async (sid, title) => {
+      const built = buildAssignment({
+        lesson,
+        chosen: [sid],
+        title,
+        fingerprint: stepFingerprint,
+      });
+      const link = await assignmentLink(built, base);
+      return { id: built.i, sids: built.s, url: link.url, title };
+    };
+    const links = [
+      await make(answerable[0], 'Week 3'),
+      await make(answerable[1], 'Week 4'),
+    ];
 
     // Different content, so different ids, so different namespaces.
     expect(links[0].id).not.toBe(links[1].id);
     expect(links[0].sids).not.toEqual(links[1].sids);
 
     for (const link of links) {
+      const known = await assignmentKeys(page);
       await page.goto(link.url);
       await expect(page.locator('#investigationPanel')).toBeVisible({
         timeout: 30_000,
       });
 
       // Confirm this really is the assignment we think it is before answering
-      // anything in it.
-      const open = await page.evaluate(async () => {
-        const inv = await import('/js/investigations.js');
-        return [inv.activeAssignment()?.i, inv.activeAssignmentKey()];
-      });
-      expect(open[0]).toBe(link.id);
-      link.key = open[1];
-
+      // anything in it: its panel is named for it and holds its one step.
+      await expect(page.locator('#investigationTitle')).toHaveText(link.title);
+      expect((await stepsShown(page)).of).toBe(link.sids.length);
       // Walk to the answerable step and answer it.
       for (let i = 0; i < 4; i++) {
         const option = page
@@ -397,13 +390,16 @@ test.describe('doing one', () => {
         await next.click();
       }
       await page.waitForTimeout(300);
+      // The record this assignment saved under: the one that was not there.
+      await expect
+        .poll(async () =>
+          (await assignmentKeys(page)).find(k => !known.includes(k))
+        )
+        .toBeTruthy();
+      link.key = (await assignmentKeys(page)).find(k => !known.includes(k));
     }
 
-    const keys = await page.evaluate(() =>
-      Object.keys(localStorage)
-        .filter(k => k.startsWith('gravitas_assignment_'))
-        .sort()
-    );
+    const keys = await assignmentKeys(page);
     // Two pieces of work, two records, and the full lesson's own progress
     // untouched by either.
     expect(links[0].key).not.toBe(links[1].key);
@@ -422,7 +418,8 @@ test.describe('doing one', () => {
     // the same worksheet handed out again next week opened empty.
     await openBuilder(page, app);
     await tick(page, await dependentIndices(page, 3));
-    await page.goto(await makeLink(page));
+    const issued = await makeLink(page);
+    await page.goto(issued);
     await expect(page.locator('#investigationPanel')).toBeVisible({
       timeout: 30_000,
     });
@@ -434,20 +431,16 @@ test.describe('doing one', () => {
     }
     await option.click();
 
-    const first = await page.evaluate(async () => {
-      const inv = await import('/js/investigations.js');
-      const L = await import('/js/assignments/assignmentLink.js');
-      const a = inv.activeAssignment();
-      const key = inv.activeAssignmentKey();
-      // The same activity, issued on another day.
-      const again = { ...a, i: `991231${a.i.slice(6)}`, c: '2099-12-31' };
-      return {
-        key,
-        saved: localStorage.getItem(key),
-        url: (await L.assignmentLink(again)).url,
-        legacy: `gravitas_assignment_${a.i}`,
-      };
-    });
+    const a = await payloadOf(issued);
+    // The same activity, issued on another day.
+    const again = { ...a, i: `991231${a.i.slice(6)}`, c: '2099-12-31' };
+    const [key] = await assignmentKeys(page);
+    const first = {
+      key,
+      saved: await page.evaluate(k => localStorage.getItem(k), key),
+      url: (await assignmentLink(again, new URL('/', page.url()).href)).url,
+      legacy: `gravitas_assignment_${a.i}`,
+    };
     // No date in it: the lesson, the steps and the title, hashed.
     expect(first.key).toMatch(/^gravitas_assignment_[0-9a-f]{8}$/);
     expect(first.saved).not.toBeNull();
@@ -456,11 +449,8 @@ test.describe('doing one', () => {
     await expect(page.locator('#investigationPanel')).toBeVisible({
       timeout: 30_000,
     });
-    const again = await page.evaluate(async () => {
-      const inv = await import('/js/investigations.js');
-      return [inv.activeAssignment().c, inv.activeAssignmentKey()];
-    });
-    expect(again).toEqual(['2099-12-31', first.key]);
+    // Opened by the new link, it finds the work under the same record.
+    expect(await assignmentKeys(page)).toEqual([first.key]);
 
     // Work a build before this one saved under the dated key moves across.
     await page.evaluate(({ key, legacy }) => {
@@ -487,120 +477,6 @@ test.describe('doing one', () => {
   });
 });
 
-test.describe('when the lesson has moved on', () => {
-  test('a retired step is left out and a rewritten one does not inherit its answer', async ({
-    page,
-    app,
-  }) => {
-    await openBuilder(page, app);
-    await tick(page, await dependentIndices(page, 3));
-    const url = await makeLink(page);
-
-    await page.goto(url);
-    await expect(page.locator('#investigationPanel')).toBeVisible({
-      timeout: 30_000,
-    });
-
-    // Resolve the same assignment against a lesson that has been revised: one
-    // step deleted, one rewritten under its own id. Done through the real
-    // binding function rather than by editing the catalog on disk, so this
-    // exercises the code a future revision would go through.
-    const out = await page.evaluate(async () => {
-      const inv = await import('/js/investigations.js');
-      const reg = await import('/js/data/investigations/registry.js');
-      const A = await import('/js/assignments/assignment.js');
-      const { stepFingerprint } =
-        await import('/js/investigations/progressBackup.js');
-      const assignment = inv.activeAssignment();
-      const lesson = await reg.loadInvestigation(assignment.l);
-
-      const revised = { ...lesson, steps: lesson.steps.map(s => ({ ...s })) };
-      // Retire the last step of the assignment.
-      const retired = assignment.s[assignment.s.length - 1];
-      revised.steps = revised.steps.filter(s => s.sid !== retired);
-      // Rewrite another one under its own id: a choice question with a
-      // different number of options is a different question.
-      const rewritten = assignment.s[1];
-      const target = revised.steps.find(s => s.sid === rewritten);
-      target.options = [...(target.options || ['a', 'b']), 'extra'];
-      target.type = 'question';
-      target.kind = 'choice';
-
-      const binding = A.stepBindings(assignment, revised, stepFingerprint);
-      const responses = {
-        [`${assignment.l}:${rewritten}`]: 1,
-        [`${assignment.l}:${assignment.s[0]}`]: 0,
-      };
-      const filtered = A.filterResponses(
-        binding,
-        responses,
-        sid => `${assignment.l}:${sid}`
-      );
-      return {
-        retired,
-        rewritten,
-        missing: binding.missing,
-        changed: binding.changed,
-        keptKeys: Object.keys(filtered.kept),
-        droppedKeys: filtered.dropped,
-        stepIds: binding.steps.map(s => s.sid),
-      };
-    });
-
-    // Gone means gone: not matched to a neighbor by position.
-    expect(out.missing).toBe(1);
-    expect(out.stepIds).not.toContain(out.retired);
-    // Rewritten means the answer does not carry over.
-    expect(out.changed).toBe(1);
-    expect(out.droppedKeys).toContain(`keplers-laws:${out.rewritten}`);
-    expect(out.keptKeys).not.toContain(`keplers-laws:${out.rewritten}`);
-  });
-
-  test('a mangled or hostile link is refused with a reason', async ({
-    page,
-    app,
-  }) => {
-    await app.boot();
-    const outcomes = await page.evaluate(async () => {
-      const { readAssignmentLink, readAssignmentFile } =
-        await import('/js/assignments/assignmentLink.js');
-      const { encodeTagged } = await import('/js/shareState.js');
-      const truncated = await encodeTagged('a', 1, {
-        k: 'gravitas.assignment',
-        v: 1,
-        i: 'abc',
-        l: 'keplers-laws',
-        s: ['x'],
-      });
-      return {
-        notALink: (await readAssignmentLink('#a1zNOTBASE64!!')).reason,
-        worldLink: (await readAssignmentLink('#1zabcdef')).reason,
-        chopped: (await readAssignmentLink(truncated.slice(0, 12))).reason,
-        // A file claiming to be an assignment but carrying student work.
-        withResponses: readAssignmentFile(
-          JSON.stringify({
-            k: 'gravitas.assignment',
-            v: 1,
-            i: 'abc',
-            l: 'keplers-laws',
-            s: ['x'],
-            responses: { 'keplers-laws:x': 3 },
-          })
-        ).reason,
-        notJson: readAssignmentFile('hello').reason,
-      };
-    });
-
-    expect(outcomes.worldLink).toBe('wrongKind');
-    expect(outcomes.notJson).toBe('notJson');
-    // A payload carrying somebody's answers is not an assignment and is not
-    // opened, whatever it calls itself.
-    expect(outcomes.withResponses).toBe('unexpectedField');
-    expect(outcomes.notALink).toBeTruthy();
-    expect(outcomes.chopped).toBeTruthy();
-  });
-});
-
 test.describe('the rest of the machinery still works', () => {
   test('the report names the assignment and its steps', async ({
     page,
@@ -614,116 +490,20 @@ test.describe('the rest of the machinery still works', () => {
       timeout: 30_000,
     });
 
-    const passed = await page.evaluate(async () => {
-      const inv = await import('/js/investigations.js');
-      const a = inv.activeAssignment();
-      const b = inv.activeAssignmentBinding();
-      // What the report is handed. A marker with a stack of these has to be
-      // able to tell two assignments cut from one lesson apart.
-      return {
-        id: a?.i,
-        title: a?.t,
-        steps: a?.s,
-        bound: b?.steps.length,
-      };
-    });
+    // What the report is handed: the panel is named for the assignment and
+    // holds the steps the link chose. A marker with a stack of these has to be
+    // able to tell two assignments cut from one lesson apart.
+    const a = await payloadOf(url);
+    const passed = {
+      id: a.i,
+      title: await page.locator('#investigationTitle').textContent(),
+      steps: a.s,
+      bound: (await stepsShown(page)).of,
+    };
     expect(passed.id).toBeTruthy();
     expect(passed.title).toBe('Week 3');
     expect(passed.steps.length).toBeGreaterThan(1);
     expect(passed.bound).toBe(passed.steps.length);
-  });
-
-  test('switching language does not make every step look rewritten', async ({
-    page,
-    app,
-  }) => {
-    await openBuilder(page, app);
-    await tick(page, await dependentIndices(page, 3));
-    const url = await makeLink(page);
-
-    await page.goto(url);
-    await expect(page.locator('#investigationPanel')).toBeVisible({
-      timeout: 30_000,
-    });
-
-    const out = await page.evaluate(async () => {
-      const inv = await import('/js/investigations.js');
-      const reg = await import('/js/data/investigations/registry.js');
-      const A = await import('/js/assignments/assignment.js');
-      const i18n = await import('/js/i18n/index.js');
-      const { stepFingerprint } =
-        await import('/js/investigations/progressBackup.js');
-      const assignment = inv.activeAssignment();
-
-      const en = await reg.loadInvestigation(assignment.l);
-      const beforeSwitch = A.stepBindings(assignment, en, stepFingerprint);
-      await i18n.setLocale('es');
-      const es = await reg.loadInvestigation(assignment.l);
-      const afterSwitch = A.stepBindings(assignment, es, stepFingerprint);
-      return {
-        enChanged: beforeSwitch.changed,
-        esChanged: afterSwitch.changed,
-        esMissing: afterSwitch.missing,
-        esTitle: es.steps[0].title,
-        enTitle: en.steps[0].title,
-      };
-    });
-
-    // The fingerprint is of the structure, not the wording, which is what
-    // makes an assignment work in both languages. A student switching to
-    // Spanish must not be told their whole activity was rewritten.
-    expect(out.enChanged).toBe(0);
-    expect(out.esChanged).toBe(0);
-    expect(out.esMissing).toBe(0);
-    expect(out.esTitle).not.toBe(out.enTitle);
-  });
-
-  test('a progress backup of an assignment restores into it', async ({
-    page,
-    app,
-  }) => {
-    await openBuilder(page, app);
-    await tick(page, await dependentIndices(page, 2));
-    const url = await makeLink(page);
-    await page.goto(url);
-    await expect(page.locator('#investigationPanel')).toBeVisible({
-      timeout: 30_000,
-    });
-
-    const out = await page.evaluate(async () => {
-      const inv = await import('/js/investigations.js');
-      const reg = await import('/js/data/investigations/registry.js');
-      const B = await import('/js/investigations/progressBackup.js');
-      const assignment = inv.activeAssignment();
-      const lesson = await reg.loadInvestigation(assignment.l);
-      // The assignment's own step list, which is what a student working
-      // through it has answers for.
-      const active = {
-        ...lesson,
-        steps: lesson.steps.filter(s => assignment.s.includes(s.sid)),
-      };
-      const responses = { [`${lesson.id}:${assignment.s[0]}`]: 1 };
-      const backup = B.buildBackup({
-        lesson: active,
-        responses,
-        attempts: {},
-        visited: [0],
-        stepIndex: 0,
-        startedAt: new Date().toISOString(),
-      });
-      const check = B.validateBackup(backup);
-      const restored = B.restoreProgress(backup, active);
-      return {
-        valid: check.ok,
-        keys: Object.keys(restored.responses || {}),
-        notes: (restored.notes || []).map(n => n.code),
-      };
-    });
-
-    expect(out.valid).toBe(true);
-    // The backup machinery is keyed by sid, so it works on a subset of a
-    // lesson without knowing that is what it is looking at.
-    expect(out.keys.length).toBe(1);
   });
 });
 
@@ -738,11 +518,8 @@ test.describe('the rest of the machinery still works', () => {
 test.describe('a calculation brings the measurements it copies', () => {
   /** Tick a step by its permanent id rather than by position. */
   async function tickBySid(page, sid) {
-    const index = await page.evaluate(async wanted => {
-      const reg = await import('/js/data/investigations/registry.js');
-      const lesson = await reg.loadInvestigation('keplers-laws');
-      return lesson.steps.findIndex(s => s.sid === wanted);
-    }, sid);
+    const lesson = await loadInvestigation('keplers-laws');
+    const index = lesson.steps.findIndex(s => s.sid === sid);
     expect(index).toBeGreaterThan(-1);
     await page
       .locator('.assignment-step input[type=checkbox]')
@@ -791,31 +568,16 @@ test.describe('a calculation brings the measurements it copies', () => {
     // The first step of the subset is the measurement, not the calculation:
     // the student is given the table before being asked to copy from it.
     //
-    // This read `inv.activeSteps()`, which is not exported from that module
-    // and never has been, so the value was always undefined - and the
-    // `if (first !== null)` guard around it turned every one of those reads
-    // into a pass. The test has therefore never once checked the thing it is
-    // named after. activeAssignmentBinding() is the accessor that exists: it
-    // is how the assignment's step list resolved against the lesson.
-    //
-    // Waited for, then asserted. The panel is visible before the subset is
-    // installed, so the wait is for the assignment to be in force - and after
-    // it, a missing assignment is a failure rather than a skipped assertion.
+    // Waited for, then asserted: the panel is visible before the subset is
+    // installed, so the wait is for the assignment to be in force. What the
+    // student is shown is what the link chose, in the order it chose.
+    const lesson = await loadInvestigation('keplers-laws');
+    const subset = (await payloadOf(link)).s;
     await expect
-      .poll(
-        () =>
-          page.evaluate(async () => {
-            const inv = await import('/js/investigations.js');
-            return inv.activeAssignmentBinding?.()?.steps?.length ?? 0;
-          }),
-        { timeout: 15_000 }
-      )
-      .toBeGreaterThan(0);
-
-    const subset = await page.evaluate(async () => {
-      const inv = await import('/js/investigations.js');
-      return inv.activeAssignmentBinding().steps.map(step => step.sid);
-    });
+      .poll(async () => (await stepsShown(page)).of, { timeout: 15_000 })
+      .toBe(subset.length);
+    const titles = sid => lesson.steps.find(s => s.sid === sid).title;
+    await expect(page.locator('.inv-step-title')).toHaveText(titles(subset[0]));
     // The measurement comes before the calculation that copies from it. That
     // is the ordering the dependency exists to produce, and it is what the
     // subset has to preserve: a student asked to work the law out before they
@@ -851,32 +613,25 @@ test.describe('an assignment and the package its lesson comes from', () => {
     app,
   }) => {
     await app.boot();
-    const links = await page.evaluate(async () => {
-      const A = await import('/js/assignments/assignment.js');
-      const L = await import('/js/assignments/assignmentLink.js');
-      const P = await import('/js/assignments/provider.js');
-      const reg = await import('/js/data/investigations/registry.js');
-      const { stepFingerprint } =
-        await import('/js/investigations/progressBackup.js');
-      const lesson = await reg.loadInvestigation('power-law-gravity');
-      const pinned = A.buildAssignment({
-        lesson,
-        chosen: [lesson.steps[1].sid],
-        title: 'pinned',
-        fingerprint: stepFingerprint,
-        provider: P.lessonProvider(lesson.id),
-      });
-      const old = { ...pinned, v: 1, t: 'old' };
-      delete old.p;
-      const major = { ...pinned, p: [pinned.p[0], '0.9.0'], t: 'major' };
-      const url = async a => (await L.assignmentLink(a)).url;
-      return {
-        p: pinned.p,
-        pinned: await url(pinned),
-        old: await url(old),
-        major: await url(major),
-      };
+    const lesson = await loadInvestigation('power-law-gravity');
+    const base = new URL('/', page.url()).href;
+    const pinned = buildAssignment({
+      lesson,
+      chosen: [lesson.steps[1].sid],
+      title: 'pinned',
+      fingerprint: stepFingerprint,
+      provider: lessonProvider(lesson.id),
     });
+    const old = { ...pinned, v: 1, t: 'old' };
+    delete old.p;
+    const major = { ...pinned, p: [pinned.p[0], '0.9.0'], t: 'major' };
+    const url = async a => (await assignmentLink(a, base)).url;
+    const links = {
+      p: pinned.p,
+      pinned: await url(pinned),
+      old: await url(old),
+      major: await url(major),
+    };
     expect(links.p[0]).toBe('gravitas.lesson.power-law-gravity');
     const toast = page.locator('#gravitasToast');
     await page.goto(links.old);

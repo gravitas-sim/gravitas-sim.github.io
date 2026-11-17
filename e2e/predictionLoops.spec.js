@@ -30,7 +30,14 @@
 // held, and answered by the step the lesson says answers it.
 // =============================================================================
 
-import { test, expect } from './fixtures.js';
+import {
+  test,
+  expect,
+  loadInvestigation,
+  message,
+  pageLanguage,
+  plainText,
+} from './workflow.js';
 
 /**
  * One loop per family, chosen so that every widget family and every
@@ -133,34 +140,26 @@ async function open(page, app, id) {
 
 /** What the lesson itself says about this loop, read at run time. */
 async function loopFacts(page, id, predictSid) {
-  return page.evaluate(
-    async ([lessonId, sid]) => {
-      const reg = await import('/js/data/investigations/registry.js');
-      const lesson = await reg.loadInvestigation(lessonId);
-      const at = lesson.steps.findIndex(s => s.sid === sid);
-      const step = lesson.steps[at];
-      const revealAt = lesson.steps.findIndex(s => s.sid === step.reveal);
-      // The explanation as it would be heard: its markup gone and its
-      // entities decoded, which is what the old announcement did to it.
-      const plain = document.createElement('div');
-      plain.innerHTML = step.because ?? '';
-      const because = plain.textContent.trim();
-      return {
-        predictIndex: at,
-        predictTitle: step.title,
-        answer: step.answer,
-        options: step.options?.length ?? 0,
-        reveal: step.reveal ?? null,
-        revealIndex: revealAt,
-        revealTitle: lesson.steps[revealAt]?.title ?? null,
-        because,
-        becauseSentences: because
-          .split(/(?<=[.!?:;])\s+/)
-          .filter(s => s.length >= 12),
-      };
-    },
-    [id, predictSid]
-  );
+  const lesson = await loadInvestigation(id);
+  const at = lesson.steps.findIndex(s => s.sid === predictSid);
+  const step = lesson.steps[at];
+  const revealAt = lesson.steps.findIndex(s => s.sid === step.reveal);
+  // The explanation as it would be heard: its markup gone and its entities
+  // decoded, which is what the old announcement did to it.
+  const because = plainText(step.because).trim();
+  return {
+    predictIndex: at,
+    predictTitle: step.title,
+    answer: step.answer,
+    options: step.options?.length ?? 0,
+    reveal: step.reveal ?? null,
+    revealIndex: revealAt,
+    revealTitle: lesson.steps[revealAt]?.title ?? null,
+    because,
+    becauseSentences: because
+      .split(/(?<=[.!?:;])\s+/)
+      .filter(s => s.length >= 12),
+  };
 }
 
 const title = page => page.locator('.inv-step-title').innerText();
@@ -176,14 +175,13 @@ const srSaid = page =>
   page.locator('#srStatus').evaluate(el => el.textContent.trim());
 
 /** The panel's own words for a marked answer, in the page's locale. */
-const markWords = page =>
-  page.evaluate(async () => {
-    const i18n = await import('/js/i18n/index.js');
-    return {
-      correct: i18n.t('inv.answer.correct'),
-      recorded: i18n.t('inv.answer.recorded'),
-    };
-  });
+const markWords = async page => {
+  const locale = await pageLanguage(page);
+  return {
+    correct: await message('inv.answer.correct', locale),
+    recorded: await message('inv.answer.recorded', locale),
+  };
+};
 
 /**
  * A committed prediction that is held was announced as held, and as nothing

@@ -8,7 +8,7 @@
 // =============================================================================
 
 import AxeBuilder from '@axe-core/playwright';
-import { test, expect } from './fixtures.js';
+import { test, expect, getInvestigation, saveLanguage } from './workflow.js';
 
 const TAGS = [
   'wcag2a',
@@ -21,12 +21,8 @@ const TAGS = [
 
 async function openFinish(page, app, locale) {
   await app.boot({ url: '/?author=keplers-laws&step=1' });
-  const total = await page.evaluate(async lang => {
-    const data = await import('/js/data/investigations.js');
-    const i18n = await import('/js/i18n/index.js');
-    await i18n.setLocale(lang);
-    return data.getInvestigation('keplers-laws').steps.length;
-  }, locale);
+  await saveLanguage(page, locale);
+  const total = getInvestigation('keplers-laws').steps.length;
   await app.boot({ url: `/?author=keplers-laws&step=${total}` });
   await expect(page.locator('#investigationPanel')).toBeVisible();
   await page.locator('#investigationNext').click();

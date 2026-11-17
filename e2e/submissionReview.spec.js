@@ -19,7 +19,7 @@ import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import AxeBuilder from '@axe-core/playwright';
 
-import { test, expect, openMore } from './fixtures.js';
+import { test, expect, openMore } from './workflow.js';
 import { buildBackup } from '../js/investigations/progressBackup.js';
 import { stepKey } from '../js/investigations/progressSchema.js';
 import {

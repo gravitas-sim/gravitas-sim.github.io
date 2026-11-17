@@ -23,7 +23,7 @@
 // cannot say that.
 // =============================================================================
 
-import { test, expect } from './fixtures.js';
+import { test, expect } from './workflow.js';
 import { scrollLikeAReader } from './reach.js';
 import { stepKey } from './keyboard.js';
 

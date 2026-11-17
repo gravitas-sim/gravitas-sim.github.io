@@ -14,7 +14,7 @@
 // position, its velocity - for each of the eight, on each of the three paths.
 // =============================================================================
 
-import { test, expect } from './fixtures.js';
+import { test, expect } from './workflow.js';
 
 /** The eight, and the list each belongs in. */
 const TYPES = [
@@ -70,17 +70,16 @@ async function armType(page, type) {
   // own trigger is not on screen until it is opened. This is the reader's path
   // too, and it is the reason the small-viewport cases are worth having.
   const trigger = page.locator('#objectTypeBtn');
-  // Waited for rather than polled once: right after boot the rail is still
-  // settling, and an isVisible() taken at that instant sent this down the
-  // narrow-window branch on a desktop, where the menu button it wanted is the
-  // one thing that is genuinely hidden.
-  try {
-    await trigger.waitFor({ state: 'visible', timeout: 3000 });
-  } catch {
-    await page.locator('#mobileMenuToggle').click();
-    await trigger.waitFor({ state: 'visible', timeout: 5000 });
-  }
-  await trigger.click();
+  // Retried as one step: the menu that Blank Simulation used can still be
+  // closing when the trigger is first seen, so "visible" and "clickable" are
+  // not the same moment. On a desktop the trigger is on screen and the menu
+  // button, which is genuinely hidden there, is never touched.
+  await expect(async () => {
+    if (!(await trigger.isVisible())) {
+      await page.locator('#mobileMenuToggle').click({ timeout: 2000 });
+    }
+    await trigger.click({ timeout: 2000 });
+  }).toPass({ timeout: 20_000 });
   const item = page.locator(`#objectTypePicker [data-object-type="${type}"]`);
   await expect(item).toBeVisible();
   await item.click();

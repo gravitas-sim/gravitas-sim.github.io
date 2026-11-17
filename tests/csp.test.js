@@ -110,7 +110,7 @@ describe('every published page', () => {
     expect(blobWorkers).toEqual([]);
     for (const spec of [
       'e2e/workerRealm.spec.js',
-      'e2e/experimentRunner.spec.js',
+      'e2e/experimentSchedulerRealm.spec.js',
     ])
       expect(readFileSync(spec, 'utf8')).toMatch(/new Worker\(/);
   });
