@@ -64,7 +64,7 @@ export const ES_SETTINGSHELP = {
   'setHelp.show_scale_bar':
     'Dibuja una barra de escala en unidades de distancia reales en la esquina inferior izquierda del lienzo, ajustada al zoom actual y con una nota de que el tamaño de los cuerpos no está a escala; también aparece en las capturas guardadas. Surte efecto de inmediato.',
   'setHelp.body_labels':
-    'Qué cuerpos nombra el lienzo: todos, el seleccionado y los del paso de la investigación, o ninguno. Los nombres amontonados se separan o se omiten. La tecla B los recorre.',
+    'Qué etiquetas pone el lienzo: todas (el nombre cuando el cuerpo lo tiene y, si no, su masa), solo nombres, solo masas, el cuerpo seleccionado y los del paso de la investigación, o ninguna. Las etiquetas amontonadas se separan y, pasadas 24, se omiten las de menor masa. La tecla B las recorre.',
   'setHelp.show_elapsed_time':
     'Estampa el tiempo simulado (t = …) en la parte inferior de las capturas guardadas. La lectura en vivo muestra el tiempo transcurrido sea cual sea este ajuste. Surte efecto de inmediato.',
   'setHelp.show_accretion_disk':

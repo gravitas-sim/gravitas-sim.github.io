@@ -846,8 +846,10 @@ export const EN = {
   'settings.label.showAccelerationVectors': 'Show Acceleration Vectors',
   'settings.label.showPotentialWell': 'Show Potential Well',
   'settings.label.showScaleBar': 'Show Scale Bar',
-  'settings.label.bodyLabels': 'Body Names',
+  'settings.label.bodyLabels': 'Body Labels',
   'settings.option.bodyLabels.all': 'All',
+  'settings.option.bodyLabels.names': 'Names only',
+  'settings.option.bodyLabels.masses': 'Masses only',
   'settings.option.bodyLabels.bound': 'Selected and investigation bodies',
   'settings.option.bodyLabels.none': 'None',
   'settings.label.showElapsedTime': 'Show Elapsed Time',
@@ -1181,7 +1183,7 @@ export const EN = {
   'shortcut.units': 'Toggle physical / simulation units',
   'shortcut.trails': 'Toggle trails',
   'shortcut.bodyLabels':
-    'Cycle body names: all, selected and investigation, none',
+    'Cycle body labels: all, names, masses, selected and investigation, none',
   'shortcut.undo': 'Undo last placed object',
   'shortcut.inspect': 'Inspect an object',
   'shortcut.place': 'Place an object with velocity',
@@ -1213,6 +1215,10 @@ export const EN = {
     'Short on time? Classroom activities are prepared teaching formats — a five-minute demonstration, a twenty-minute activity, a full lab — cut from these same investigations.',
   'inv.browser.activities.link': 'See the classroom activities',
   'canvas.sizeDisclosure': 'Body sizes enlarged for visibility',
+  'canvas.reducedPopulation':
+    'Reduced population on this device: {n} of {total} bodies',
+  'canvas.crowdTrails':
+    'Trails: the selected body and the {n} heaviest of {total} bodies',
   'canvas.sizeDisclosure.detail':
     'Canvas diameters are illustrative and use a compressed scale. Do not infer physical size ratios from the drawing; use the inspector and investigation measurements for numerical radii.',
   'capture.screenshotFailed': 'The screenshot could not be saved',
@@ -1379,6 +1385,7 @@ export const EN = {
     one: '{n} galaxy',
     other: '{n} galaxies',
   },
+  'summary.labels': 'Labeled on the canvas: {list}.',
   'summary.selected': '{name} is selected.',
   'summary.noSelection': 'Nothing is selected.',
   'summary.unnamedBody': 'an unnamed body',

@@ -28,12 +28,20 @@ import {
   displayRadius,
   markerFloorPx,
   CROWD_SOFT_START,
+  LOD_SHADED_MAX_PX,
 } from './bodyVisuals.js';
+import { SETTINGS } from './appState.js';
+import { builtPopulation } from './quality.js';
+import { t } from './i18n/index.js';
 import {
   state,
   stars,
   planets,
   gas_giants,
+  asteroids,
+  comets,
+  neutron_stars,
+  white_dwarfs,
   bh_list,
   liveBodyCount,
   physicsSettings,
@@ -89,6 +97,103 @@ const drawRadius = (obj, type) =>
       )
     : drawnRadius(obj.radius, type, (state && state.zoom) || 1, liveBodyCount);
 
+// --- A crowd: trails, detail and notes (drawing only; no body is moved, hidden or removed) ---
+
+/** Trails kept in a crowd: the selected body and this many heaviest. */
+let CROWD_TRAIL_BODIES = 12;
+/** Bodies drawn in full per frame in a crowd. */
+let CROWD_DETAIL_CAP = 16;
+
+/** For tests and measurement. */
+const setCrowdCaps = ({ trails, detail }) => {
+  if (trails !== undefined) CROWD_TRAIL_BODIES = trails;
+  if (detail !== undefined) CROWD_DETAIL_CAP = detail;
+};
+
+/** A scene of this many live bodies or more is a crowd. */
+const isCrowd = (n = liveBodyCount) => n >= CROWD_SOFT_START;
+
+const selectedBody = () => state.selectedObject?.object ?? null;
+
+let trailsThinned = false;
+
+/** The bodies whose trails are drawn: all, or in a crowd the selected and the heaviest. */
+function crowdTrails(list) {
+  if (!trailsThinned) return list;
+  const keep = new Set();
+  const picked = selectedBody();
+  if (picked && list.includes(picked)) keep.add(picked);
+  const top = [];
+  for (const o of list) {
+    if (!o.alive || o === picked) continue;
+    const m = o.mass || 0;
+    let i = top.length;
+    while (i > 0 && (top[i - 1].mass || 0) < m) i--;
+    if (i < CROWD_TRAIL_BODIES) {
+      top.splice(i, 0, o);
+      if (top.length > CROWD_TRAIL_BODIES) top.pop();
+    }
+  }
+  for (const o of top) keep.add(o);
+  return list.filter(o => keep.has(o));
+}
+
+// --- Detail ---------------------------------------------------------------------
+
+const DETAILED = new Set();
+const FAMILIES = [
+  ['Planet', () => planets],
+  ['GasGiant', () => gas_giants],
+  ['Asteroid', () => asteroids],
+  ['Comet', () => comets],
+  ['Star', () => stars],
+  ['NeutronStar', () => neutron_stars],
+  ['WhiteDwarf', () => white_dwarfs],
+  ['BlackHole', () => bh_list],
+];
+
+/** Once a frame: grant full detail to the cap's worth of large bodies nearest the selection (or the view's middle). The low tier grants none. */
+function beginCrowdFrame() {
+  DETAILED.clear();
+  trailsThinned = isCrowd() && !!SETTINGS.show_trails;
+  if (!isCrowd() || currentTier() === 'low' || CROWD_DETAIL_CAP <= 0) return;
+  const z = state.zoom || 1;
+  const picked = selectedBody();
+  const c = picked?.pos ?? {
+    x: -state.pan.x / z + state.frameOffset.x,
+    y: state.pan.y / z + state.frameOffset.y,
+  };
+  const big = [];
+  for (const [type, list] of FAMILIES)
+    for (const o of list()) {
+      if (!o.alive || !o.pos) continue;
+      if (displayRadius(o.radius, type) * z <= LOD_SHADED_MAX_PX) continue;
+      big.push({ o, d: (o.pos.x - c.x) ** 2 + (o.pos.y - c.y) ** 2 });
+    }
+  if (big.length > CROWD_DETAIL_CAP) big.sort((a, b) => a.d - b.d);
+  for (const { o } of big.slice(0, CROWD_DETAIL_CAP)) DETAILED.add(o);
+}
+
+/** Whether this body was granted full detail this frame. */
+const crowdDetail = o => DETAILED.has(o);
+
+// --- What the readout says ---------------------------------------------------------
+
+/** Sentences on what the tier or the crowd left out; empty when nothing. */
+function crowdNotes() {
+  const out = [];
+  const built = builtPopulation();
+  if (built)
+    out.push(
+      t('canvas.reducedPopulation', { n: built.built, total: built.wanted })
+    );
+  if (trailsThinned)
+    out.push(
+      t('canvas.crowdTrails', { n: CROWD_TRAIL_BODIES, total: liveBodyCount })
+    );
+  return out;
+}
+
 /**
  * How much detail this body is worth, at its current size on screen.
  *
@@ -108,7 +213,8 @@ const lodOf = (obj, type) => {
   const z = (state && state.zoom) || 1;
   return lodFor(displayRadius(obj.radius, type) * z, {
     tier: currentTier(),
-    crowded: liveBodyCount > CROWD_SOFT_START,
+    crowded: isCrowd(liveBodyCount),
+    detailed: crowdDetail(obj),
   });
 };
 
@@ -371,9 +477,9 @@ function drawStar(o, ctx) {
     bodyLabel(o, world_to_screen(world_pos), r * state.zoom, {
       px: 12,
       gate: o.radius * state.zoom > 5,
-      ...(o.isSolarSystemSun
-        ? { name: o.name }
-        : { value: formatNumber(o.massInSuns) }),
+      value: formatNumber(o.massInSuns),
+      known: o.name,
+      ...(o.isSolarSystemSun && { name: o.name }),
     });
 }
 
@@ -452,6 +558,7 @@ function drawNeutronStar(o, ctx) {
     gate: o.radius * state.zoom > 2,
     value: formatNumber(o.massInSuns),
     suffix: ' NS',
+    known: o.name,
   });
 }
 
@@ -517,6 +624,7 @@ function drawWhiteDwarf(o, ctx) {
     gate: o.radius * state.zoom > 3,
     value: formatNumber(o.massInSuns),
     suffix: ' WD',
+    known: o.name,
   });
 }
 
@@ -620,6 +728,14 @@ registerBodyDrawers({
 export {
   drawRadius,
   lodOf,
+  CROWD_DETAIL_CAP,
+  CROWD_TRAIL_BODIES,
+  setCrowdCaps,
+  beginCrowdFrame,
+  crowdDetail,
+  crowdNotes,
+  crowdTrails,
+  isCrowd,
   dominantStarFor,
   lightingFor,
   rgba,
@@ -633,29 +749,10 @@ export {
 
 // =============================================================================
 // The background sky: what is in it, and where
-// -----------------------------------------------------------------------------
-// Generation only. This module decides how many stars, where, how bright, what
-// color and which parallax layer; js/render.js decides how to paint them. The
-// split keeps the model testable without a canvas and lets the painting change
-// (ten thousand fills per repaint became three blits) without touching the sky.
-//
-// The old sky was ten thousand uniformly white, uniformly bright, twinkling
-// stars regenerated from Math.random on every resize and repainted in full:
-// 4.1 ms a repaint for an empty scene and 19.6 ms for a crowded one, at
-// 1440x900. See tools/starfield-probe.mjs. Four requirements follow.
-//
-// Deterministic: a screenshot, A/B run, shared link and reset must show the
-// same sky, so everything comes from the world seed and the viewport size.
-//
-// Sky-like: a uniform brightness distribution reads as noise; a real field is
-// overwhelmingly faint stars with a handful of bright ones. The distribution
-// below is a restrained version, and looks denser than its point count.
-//
-// Paintable once: three parallax layers let js/render.js pre-render each to its
-// own canvas and blit it. Nothing here changes between repaints.
-//
-// Cheap to ask "which stars are near this point", which lensing and
-// gravitational-wave distortion need and used to get by testing all of them.
+// Generation only (js/render.js paints it): deterministic from the world seed
+// and the viewport, mostly faint stars with a few bright ones, in three
+// parallax layers each painted once, and cheap to ask which stars are near a
+// point. See tools/starfield-probe.mjs for what the old sky cost.
 // =============================================================================
 
 /** The three parallax depths, far to near. Also the paint order. */

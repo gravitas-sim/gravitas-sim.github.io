@@ -262,17 +262,23 @@ export const LOD_SHADED_MAX_PX = 10;
  * @param {object} [options]
  * @param {string} [options.tier] - 'full' or 'low'
  * @param {boolean} [options.crowded] - True in a field of hundreds of bodies
+ * @param {boolean} [options.detailed] - A crowd's grant of full detail to this
+ *   body (crowd rules in js/bodyDrawSky.js); the low tier never takes it
  * @returns {string} One of LOD
  */
 export function lodFor(
   screenRadiusPx,
-  { tier = 'full', crowded = false } = {}
+  { tier = 'full', crowded = false, detailed = false } = {}
 ) {
   const px = Number(screenRadiusPx);
   if (!Number.isFinite(px) || px <= 0) return LOD.POINT;
   // A thousand bodies each drawing a silhouette is a thousand paths a frame,
-  // and at that density the picture is a field of specks anyway.
-  if (crowded) return px > LOD_SHADED_MAX_PX ? LOD.SHADED : LOD.POINT;
+  // and at that density the picture is a field of specks anyway; the few the
+  // crowd names are drawn in full.
+  if (crowded) {
+    if (px <= LOD_SHADED_MAX_PX) return LOD.POINT;
+    return detailed && tier !== 'low' ? LOD.DETAILED : LOD.SHADED;
+  }
   if (px < LOD_POINT_MAX_PX) return LOD.POINT;
   if (px < LOD_SHADED_MAX_PX) return LOD.SHADED;
   return tier === 'low' ? LOD.SHADED : LOD.DETAILED;
@@ -288,6 +294,20 @@ export function lodAtLeast(level, atLeast) {
   const order = [LOD.POINT, LOD.SHADED, LOD.DETAILED];
   return order.indexOf(level) >= order.indexOf(atLeast);
 }
+
+// --- Trails ----------------------------------------------------------------------
+
+/** Speed taken as full brightness for a trail: its own fastest point, never zero. */
+export function trailSpeedScale(trail) {
+  let peak = 0;
+  for (let i = 0; i < trail.length; i++) {
+    if (trail[i].velocity > peak) peak = trail[i].velocity;
+  }
+  return peak > 0 ? peak : 1;
+}
+
+// Slowest a trail point is drawn, as a fraction of full brightness.
+export const TRAIL_MIN_INTENSITY = 0.45;
 
 // --- Deterministic per-object variation --------------------------------------
 
