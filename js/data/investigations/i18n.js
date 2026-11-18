@@ -81,8 +81,6 @@ export function mergeTranslation(base, overlay) {
   return base;
 }
 
-const MACHINERY_RECORDS = new Set(['retired', 'evidence', 'source']);
-
 /**
  * Which of a lesson's words a translation has supplied, and which it has not.
  *
@@ -101,8 +99,6 @@ export function translationCoverage(base, overlay, skip = STRUCTURAL) {
 
   const walk = (b, o, path, key) => {
     if (typeof b === 'function') return;
-    // Machinery records, not words.
-    if (MACHINERY_RECORDS.has(key)) return;
     if (typeof b === 'string') {
       if (skip.has(key)) return;
       total++;

@@ -153,7 +153,7 @@ export const TIDES_THAT_MOVE_THE_MOON = {
     'El alejamiento de la Luna, el día que se alarga y el modelo que falla al correrlo hacia atrás',
   objectives: [
     'Decir por qué la Luna se aleja y el día se alarga, como un solo proceso',
-    'Hallar la Q con la que un modelo de marea de Q constante da el alejamiento medido de la Luna, y comparar el alargamiento del día que da entonces con el registro de eclipses',
+    'Hallar la Q con la que un modelo de marea da el alejamiento medido de la Luna, y comparar el día que da',
     'Correr el modelo hacia delante y hacia atrás y hallar dónde se detiene',
     'Decir qué supone el modelo y qué dice de él su fallo hacia atrás',
   ],
@@ -215,8 +215,8 @@ export const IOS_FIRE = {
   picture: 'Júpiter y sus cuatro lunas grandes, Ío la más interior',
   objectives: [
     'Decir de dónde viene el calor de Ío y por qué necesita una órbita que no es del todo circular',
-    'Predecir, y luego medir, cómo cambia el calentamiento cuando cambia la excentricidad y nada más',
-    'Hallar interiores, un k2 y una Q, que den el calor que se observa en Ío, y ver que más de uno lo da',
+    'Predecir, y luego medir, cómo cambia el calentamiento cuando solo cambia la excentricidad',
+    'Hallar dos interiores, un k2 y una Q, que den el calor de Ío',
     'Decir por qué la respuesta es una cota y no una predicción',
   ],
   steps: {

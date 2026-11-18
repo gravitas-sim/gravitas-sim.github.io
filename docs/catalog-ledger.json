@@ -2535,22 +2535,54 @@
       "scene_class": "portrait or backdrop",
       "limits": null,
       "open_items": [],
-      "questions": { "Q1": "", "Q2": "", "Q3": "", "Q4": "", "Q5": "" },
+      "questions": {
+        "Q1": "Yes: the student predicts what doubling the eccentricity does to Io's heating, then reads the heating from the instrument at two eccentricities, and then searches the (k2, Q) plane for two different interiors that both give the observed heat; a paragraph could show neither the surprise of the factor nor the ambiguity of the interiors.",
+        "Q2": "The canvas shows Jupiter and its four large moons with Io named, held still, as a portrait; the instrument names the three things that can be changed, k2, Q and e; each step says which row to watch and how the reading answers the question, and the reading buttons say where a number comes from.",
+        "Q3": "The Heating row, the readings taken, the `compare` sentence at the reveal and the check on the hunt use one quantity (tidal power at Io, in watts, at the stated k2, Q and e); the instrument's constant is recomputed from the kernel in tests/tidesLessons.test.js, and the observed range 0.6 to 1.6 x 10^14 W is the one the instrument's Heating row and the hunt's check both use.",
+        "Q4": "The student decides which eccentricity to read first, whether the second reading is a fair comparison with k2 and Q held, and which two interiors to offer; a wrong decision is refused in words (too much heat, too little heat, one interior given twice, a slider out of its range), and a wrong deeper decision (what would separate the interiors) is answered by an authored misconception.",
+        "Q5": "The deeper steps ask how far a given interior is from the heating maximum, how wide the band of acceptable Q is at fixed k2 (a model-limit test on the instrument's formula) and what observation could separate the two interiors; none is arithmetic on a supplied number, and the closing deeper step names what the formula leaves out."
+      },
       "leak": {
-        "L1": "HOLDS: no field cue or step placeholder holds a numeral at any depth, in either language, and the panel renders none that does (tests/fieldCue.test.js); the expected value is the field's `want`, which no page reads.",
-        "L2": "",
-        "L3": "",
-        "L4": "",
-        "L5": ""
+        "L1": "HOLDS: no field cue or step placeholder holds a numeral at any depth, in either language (tests/fieldCue.test.js); the expected values are the fields' `want`, which no page reads, and the readings are taken by buttons from the instrument rather than typed from a cue.",
+        "L2": "HOLDS: `heating-at-two-eccentricities` opens at e = 0.001 and k2 = 0.8, Q = 250 through `tool.start`, away from both accepted readings; `find-the-interiors` opens at k2 = 0.8 and Q = 250, below the observed range; tools/neutral-start-map.json no longer lists the lesson.",
+        "L3": "HOLDS: `double-predict` precedes every measurement and its rule; the e-squared sentence is gone from its body, hint and every earlier text, and the scene is a portrait of Jupiter and its moons with no heating shown.",
+        "L4": "HOLDS: no step before `heating-at-two-eccentricities` states 1.99 or 7.96, and the hunt's observed range appears only in its own step; the step offers no pair and no hint that names one.",
+        "L5": "HOLDS: the accessible instrument description, the readout rows, the reading buttons and the answer-key rows print the held values only after the student's own reading; docs/lesson-acceptance.json records leakFree for the lesson."
       },
       "task_rule_items": [],
-      "editorial": "OPEN",
-      "redesign": "OPEN",
+      "editorial": "REVISED",
+      "redesign": "REVISED",
       "reason": "",
-      "step_revisions": [],
-      "walk": "NOT RUN",
-      "pr": null,
-      "hash": null
+      "step_revisions": [
+        {
+          "step": "a-moon-that-melts",
+          "change": "Reworded; Jupiter and Io shown as a held portrait; no instrument."
+        },
+        {
+          "step": "double-predict",
+          "change": "Moved before any reading; the e-squared rule removed from its body and hint; reveal set to what-doubling-did."
+        },
+        {
+          "step": "heating-at-two-eccentricities",
+          "change": "Replaces heating-at-the-maximum and double-the-eccentricity; two readings taken by buttons at e = 0.0041 and 0.0082 from a neutral start."
+        },
+        {
+          "step": "what-doubling-did",
+          "change": "New read step; the reveal with the student's two readings as evidence and one compare sentence."
+        },
+        {
+          "step": "find-the-interiors",
+          "change": "Replaces the-bound; the student searches for two interiors that both give the observed heat; wrong answers refused in words."
+        },
+        { "step": "how-wide-is-the-bound", "change": "New deeper step." },
+        {
+          "step": "what-would-separate-them",
+          "change": "New deeper step with three authored misconceptions."
+        }
+      ],
+      "walk": "VERIFIED",
+      "pr": 676,
+      "hash": "9a8261779bed982da49e822d14e209421e3b44b663651afceea6b789f15d0806"
     },
     {
       "id": "investigation:keplers-laws",
@@ -5482,22 +5514,45 @@
       "scene_class": "portrait or backdrop",
       "limits": null,
       "open_items": [],
-      "questions": { "Q1": "", "Q2": "", "Q3": "", "Q4": "", "Q5": "" },
+      "questions": {
+        "Q1": "Yes: the student sets the dissipation Q on the instrument until the Moon's recession matches laser ranging, then runs the same model forward and backward; the match is a search that a paragraph could not do for them, and the run backward finds the model's own contradiction.",
+        "Q2": "The canvas is quiet; the instrument is the one scene and its readout says what is measured (the Moon's recession now, the day's lengthening) and which row is laser ranging; the step says what to change (Q), what to watch, and that the slider moves in whole numbers.",
+        "Q3": "The recession row, the day row, the captured readings and the check use one quantity in cm per year and hours; the measured 3.82 +/- 0.07 appears in the readout row only, and the closing step no longer introduces it.",
+        "Q4": "The student decides which Q to adopt and whether the day's lengthening agrees; a Q that is too high or too low is refused in words (slower or faster than laser ranging), and the forward and backward runs use the student's Q.",
+        "Q5": "The deeper steps test the model's limit (what the constant-Q model leaves out and why the backward run reaches a contradiction) rather than doing more arithmetic on supplied numbers."
+      },
       "leak": {
-        "L1": "HOLDS: no field cue or step placeholder holds a numeral at any depth, in either language, and the panel renders none that does (tests/fieldCue.test.js); the expected value is the field's `want`, which no page reads.",
-        "L2": "",
-        "L3": "",
-        "L4": "",
-        "L5": ""
+        "L1": "HOLDS: no field cue or step placeholder holds a numeral at any depth, in either language (tests/fieldCue.test.js); the expected values are the fields' `want`, which no page reads, and the readings are taken by buttons from the instrument rather than typed from a cue.",
+        "L2": "HOLDS: `match-the-recession` opens at Q = 40, which recedes more slowly than laser ranging; `forward-one-billion` and `the-model-run-backward` open at time 0; `forward-predict` has no instrument.",
+        "L3": "HOLDS: `forward-predict` lost its hint arithmetic and its sentence that the recession slows.",
+        "L4": "HOLDS: the measured 3.82 appears in the instrument's row and in no earlier body, hint or the closing step.",
+        "L5": "HOLDS: the readout rows and the answer-key rows print the held answers only as the student's own reading; docs/lesson-acceptance.json records the quiet canvas and the decision text."
       },
       "task_rule_items": [],
-      "editorial": "OPEN",
-      "redesign": "OPEN",
+      "editorial": "REVISED",
+      "redesign": "REVISED",
       "reason": "",
-      "step_revisions": [],
-      "walk": "NOT RUN",
-      "pr": null,
-      "hash": null
+      "step_revisions": [
+        {
+          "step": "match-the-recession",
+          "change": "Replaces the-moons-recession; the student finds the Q that matches laser ranging from a neutral start at Q = 40 and takes the day's lengthening from the row."
+        },
+        {
+          "step": "forward-predict",
+          "change": "Instrument removed; hint arithmetic and the sentence that the recession slows removed."
+        },
+        {
+          "step": "the-model-run-backward",
+          "change": "Opens at time 0; the run-back half of the tune."
+        },
+        {
+          "step": "what-the-model-leaves-out",
+          "change": "No longer introduces the measured 3.82."
+        }
+      ],
+      "walk": "VERIFIED",
+      "pr": 676,
+      "hash": "6c1f6e96e047d0ac23358b07895b30fe39c5e189db56869767eab7846b05874e"
     },
     {
       "id": "investigation:transit-photometry",

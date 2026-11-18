@@ -130,6 +130,18 @@ export const RULE_INDEX = {
 };
 
 /** What is wrong with the sources a step's fields declare: one of probe, tool or span each, naming a row or series the step has. */
+// Machinery records, not words, for the coverage count.
+const bare = v =>
+  Array.isArray(v)
+    ? v.map(bare)
+    : v && typeof v === 'object'
+      ? Object.fromEntries(
+          Object.entries(v)
+            .filter(([k]) => !['retired', 'evidence', 'source'].includes(k))
+            .map(([k, x]) => [k, bare(x)])
+        )
+      : v;
+
 export function readingProblems(step, { ctx, widget }) {
   const bad = [];
   const rowsOf = kind => {
@@ -1311,7 +1323,7 @@ export function checkCatalog(inputs, { skip = [] } = {}) {
           );
       });
 
-      const cov = translationCoverage(inv, data);
+      const cov = translationCoverage(bare(inv), bare(data));
       const done = cov.translated ?? cov.done ?? 0;
       const total = cov.total ?? 0;
       if (total > 0 && done / total < 0.5) {

@@ -536,7 +536,7 @@ export const TIDES_THAT_MOVE_THE_MOON = {
   },
   objectives: [
     'Say why the Moon recedes and the day lengthens, as one process',
-    'Find the Q that makes a constant-Q tide model give the Moon’s measured recession, and compare the day’s lengthening it then gives with the eclipse record',
+    'Find the Q that makes a tide model match the Moon’s measured recession, and compare the day it gives',
     'Run the model forward and backward and find where it stops',
     'Say what the model assumes, and what its failure backward says about it',
   ],
@@ -780,8 +780,8 @@ export const IOS_FIRE = {
   },
   objectives: [
     'Say where Io’s heat comes from and why it needs an orbit that is not quite circular',
-    'Predict, then measure, how the heating changes when the eccentricity changes and nothing else does',
-    'Find interiors, a k2 and a Q, that give the heat Io is observed to radiate, and see that more than one does',
+    'Predict, then measure, how the heating changes when only the eccentricity does',
+    'Find two interiors, a k2 and a Q, that give the heat Io radiates',
     'Say why the answer is a bound and not a prediction',
   ],
   steps: [

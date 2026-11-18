@@ -120,7 +120,7 @@ const BUDGETS = [
   {
     id: 'deferred',
     label: 'Deferred JavaScript (lazy chunks, gzipped)',
-    limit: 3194.1,
+    limit: 3194.3,
     reason:
       'Jumped from 1369 KB to 2105 KB when three.js and Chart.js stopped being ' +
       'CDN requests and became bundled chunks. That is the point of the change ' +
@@ -722,7 +722,7 @@ const BUDGETS = [
       '\n\nA world seen close (D-R4-448-06): the limit is raised from 3183.7 to 3184.0 KB, the exact overrun of a Node 22 build over v4 1ed519a17 (3,260,367 bytes gzipped, 3183.95 KB) rounded up to 0.1 KB, under the standing approval of 2026-10-10.' +
       '\n\nCrowded-scene drawing (D-R4-450-07): the limit is raised from 3184.0 to 3184.3 KB, the exact overrun of a Node 22 build over v4 dc0112f6b (3,260,637 bytes gzipped, 3184.22 KB) rounded up to 0.1 KB, under the standing approval of 2026-10-10.' +
       '\n\nOverlay, Library, lesson type, instrument start, reading feedback and lesson layout changes taken together (D-R4-TRAIN-03): the limit is raised from 3184.3 to 3188.7 KB, the exact overrun of a Node 22 build over v4 5c9942253 (3,265,116 bytes gzipped, 3188.59 KB) rounded up to 0.1 KB plus 0.1 KB because the margin is under 50 bytes, under the standing approval of 2026-10-10.' +
-      "\n\nIo's Fire and Tides That Move the Moon rebuilt around searches and predictions (D-R4-331-05): the limit is raised from 3188.7 to 3194.1 KB, the exact overrun of a Node 22 build over v4 (3,270,649 bytes gzipped, 3194.01 KB, 5.3 KB over) rounded up to 0.1 KB plus 0.1 KB because the margin is under 50 bytes, under the standing approval of 2026-10-10. What was added: the two lessons in both languages, and the new deeper-step module depth/ios-fire.js (the instructor route raises 2863.7 to 2869.1 KB and 42 to 43 requests for the same module, and its build ceiling 1988.6 to 1993.0 KB).",
+      "\n\nIo's Fire and Tides That Move the Moon rebuilt around searches and predictions (D-R4-331-05): the limit is raised from 3188.7 to 3194.3 KB, the exact overrun of a Node 22 build over v4 (3,270,789 bytes gzipped, 3194.13 KB, 5.5 KB over) rounded up to 0.1 KB plus 0.1 KB because the margin is under 50 bytes, under the standing approval of 2026-10-10. What was added: the two lessons in both languages, and the new deeper-step module depth/ios-fire.js (the instructor route raises 2863.7 to 2869.1 KB and 42 to 43 requests for the same module, and its build ceiling 1988.6 to 1993.0 KB).",
   },
 ];
 
