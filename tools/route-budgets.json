@@ -40,7 +40,7 @@
         "requests": 5
       },
       "instructors": {
-        "kb": 2869.3,
+        "kb": 2869.2,
         "requests": 43
       },
       "figure": {
@@ -72,7 +72,7 @@
         "requests": 52
       },
       "composer": {
-        "kb": 546.2,
+        "kb": 545.8,
         "requests": 31
       },
       "course-builder": {
@@ -198,7 +198,7 @@
         "requests": 3
       },
       "composer": {
-        "kb": 296.1,
+        "kb": 296.0,
         "requests": 16
       },
       "course-builder": {

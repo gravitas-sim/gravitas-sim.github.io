@@ -304,7 +304,6 @@ const RS = (values = {}, hide = []) => ({
   hide,
 });
 const TM = (values = {}, hide = []) => ({ id: 'tides-moon', values, hide });
-const TH = (values = {}, hide = []) => ({ id: 'tides-heating', values, hide });
 
 export const WHY_RINGS_DEEPER = {
   id: 'why-rings',

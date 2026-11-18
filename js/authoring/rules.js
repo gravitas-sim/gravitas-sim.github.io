@@ -18,7 +18,9 @@ import {
   mergeTranslation,
   translationCoverage,
 } from '../data/investigations/i18n.js';
-
+const MR = ['retired', 'evidence', 'source'];
+const b = v =>
+  JSON.parse(JSON.stringify(v, (k, x) => (MR.includes(k) ? undefined : x)));
 // A number as a student gives it: with an uncertainty if the step asks for one.
 const asGiven = (step, n, u = toleranceFor(step) / 2) =>
   step.uncertainty ? `${n} ± ${u}` : n;
@@ -130,18 +132,6 @@ export const RULE_INDEX = {
 };
 
 /** What is wrong with the sources a step's fields declare: one of probe, tool or span each, naming a row or series the step has. */
-// Machinery records, not words, for the coverage count.
-const bare = v =>
-  Array.isArray(v)
-    ? v.map(bare)
-    : v && typeof v === 'object'
-      ? Object.fromEntries(
-          Object.entries(v)
-            .filter(([k]) => !['retired', 'evidence', 'source'].includes(k))
-            .map(([k, x]) => [k, bare(x)])
-        )
-      : v;
-
 export function readingProblems(step, { ctx, widget }) {
   const bad = [];
   const rowsOf = kind => {
@@ -1323,9 +1313,7 @@ export function checkCatalog(inputs, { skip = [] } = {}) {
           );
       });
 
-      const cov = translationCoverage(bare(inv), bare(data));
-      const done = cov.translated ?? cov.done ?? 0;
-      const total = cov.total ?? 0;
+      const { translated: done, total } = translationCoverage(b(inv), b(data));
       if (total > 0 && done / total < 0.5) {
         add(
           'warn',
