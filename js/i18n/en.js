@@ -1384,7 +1384,7 @@ export const EN = {
     one: '{n} galaxy',
     other: '{n} galaxies',
   },
-  'summary.labels': 'Labelled on the canvas: {list}.',
+  'summary.labels': 'Labeled on the canvas: {list}.',
   'summary.selected': '{name} is selected.',
   'summary.noSelection': 'Nothing is selected.',
   'summary.unnamedBody': 'an unnamed body',

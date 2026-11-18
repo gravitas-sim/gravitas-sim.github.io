@@ -19,6 +19,7 @@ import {
   frameScale,
   labelFont,
   labelMode,
+  nameSpots,
   setBoundTest,
 } from '../js/bodyLabels.js';
 import {
@@ -34,6 +35,7 @@ import {
 import '../js/bodyDraw.js';
 import { summaryText } from '../js/canvasSummary.js';
 import { recordBuild } from '../js/quality.js';
+import { EARTH_SYMBOL, SUN_SYMBOL } from '../js/utils.js';
 import { formatNumber } from '../js/format.js';
 import {
   EARTH_MASSES_PER_JUPITER_MASS,
@@ -220,6 +222,36 @@ describe('a crowd', () => {
   });
 });
 
+describe('a lesson body with no free spot', () => {
+  test('is drawn at its home spot, recorded as drawn, and kept clear of by later labels', () => {
+    const pile = Array.from({ length: 14 }, (_, i) => ({
+      ...body(`p${i}`, 20 - i),
+      at: { x: 300, y: 300 },
+    }));
+    setBoundTest(o => o.id.startsWith('p'));
+    for (const o of pile)
+      bodyLabel(o, o.at, 4, { px: 11, gate: true, name: o.id });
+    // A free label queued with them goes last, and must keep off every one.
+    bodyLabel(body('late', 1), { x: 300, y: 300 }, 4, {
+      px: 11,
+      gate: true,
+      name: 'late',
+    });
+    const ctx = recorder();
+    drawBodyMarks(ctx, toScreen);
+    // All of the lesson ones, the ones that found no spot included, are
+    // recorded as drawn, so the description names them.
+    const names = drawnLabels();
+    for (const o of pile) expect(names).toContain(o.id);
+    const late = nameSpots().find(p => p.text === 'late');
+    if (late)
+      for (const p of nameSpots().filter(p => p !== late))
+        expect(
+          late.x0 < p.x1 && p.x0 < late.x1 && late.y0 < p.y1 && p.y0 < late.y1
+        ).toBe(false);
+  });
+});
+
 describe('the cue', () => {
   test('a ring and four corner ticks are drawn for the chosen body, whatever the setting', () => {
     const a = body('a');
@@ -281,74 +313,57 @@ describe('what a label says', () => {
     return p;
   };
 
-  test('a mass label reads the formatted mass of its body, family by family', () => {
-    const sun = 1;
+  test('a mass label reads the mass of its body with its unit symbol and suffix, family by family', () => {
+    const at = (Body, mass, ...more) =>
+      Object.assign(new Body({ x: 0, y: 0 }, { x: 0, y: 0 }, mass, ...more), {
+        alive: true,
+      });
+    const giant = at(GasGiant, 2);
     const cases = [
-      [mkPlanet(), 'masses', `${formatNumber(5)} M`],
+      [mkPlanet(), `${formatNumber(5)} M${EARTH_SYMBOL}`],
       [
-        Object.assign(new GasGiant({ x: 0, y: 0 }, { x: 0, y: 0 }, 2), {
-          alive: true,
-        }),
-        'masses',
-        null,
+        giant,
+        `${Math.round(giant.massInJupiters * EARTH_MASSES_PER_JUPITER_MASS)} M${EARTH_SYMBOL}`,
       ],
-      [
-        Object.assign(new StarObject({ x: 0, y: 0 }, { x: 0, y: 0 }, 1.5), {
-          alive: true,
-        }),
-        'masses',
-        `${formatNumber(1.5 * sun)} M`,
-      ],
-      [
-        Object.assign(new NeutronStar({ x: 0, y: 0 }, { x: 0, y: 0 }, 1.4), {
-          alive: true,
-        }),
-        'masses',
-        `${formatNumber(1.4)} M`,
-      ],
-      [
-        Object.assign(new WhiteDwarf({ x: 0, y: 0 }, { x: 0, y: 0 }, 0.6), {
-          alive: true,
-        }),
-        'masses',
-        `${formatNumber(0.6)} M`,
-      ],
+      [at(StarObject, 1.5), `${formatNumber(1.5)} M${SUN_SYMBOL}`],
+      [at(NeutronStar, 1.4), `${formatNumber(1.4)} M${SUN_SYMBOL} NS`],
+      [at(WhiteDwarf, 0.6), `${formatNumber(0.6)} M${SUN_SYMBOL} WD`],
     ];
-    for (const [o, mode, want] of cases) {
-      const texts = labelsOf(o, mode);
-      expect(texts.length).toBeGreaterThan(0);
-      if (want) expect(texts[0]).toBe(want);
+    for (const [o, want] of cases) {
+      // The label is drawn in parts (number and letter, symbol, suffix).
+      expect(labelsOf(o, 'masses').join('')).toBe(want);
     }
-    const giant = cases[1][0];
-    const gTexts = labelsOf(giant, 'masses');
-    expect(gTexts[0]).toBe(
-      `${Math.round(giant.massInJupiters * EARTH_MASSES_PER_JUPITER_MASS)} M`
-    );
   });
 
   test('a comet and a black hole read their masses too', () => {
     const c = Object.assign(new Comet({ x: 0, y: 0 }, { x: 0, y: 0 }), {
       alive: true,
     });
-    const [cText] = labelsOf(c, 'masses', 5000);
-    expect(cText).toContain(formatNumber(c.massInComets));
+    expect(labelsOf(c, 'masses', 5000).join('')).toContain(
+      formatNumber(c.massInComets)
+    );
     const b = Object.assign(new BlackHole({ x: 0, y: 0 }, { x: 0, y: 0 }, 10), {
       alive: true,
     });
-    const [bText] = labelsOf(b, 'masses');
-    expect(bText).toBe(`${formatNumber(b.mass / SOLAR_MASS_UNIT)} M`);
+    expect(labelsOf(b, 'masses').join('')).toBe(
+      `${formatNumber(b.mass / SOLAR_MASS_UNIT)} M${SUN_SYMBOL}`
+    );
   });
 
   test('names shows only a body with a name; masses never shows a name; all is today', () => {
     const p = named(mkPlanet(), 'Eris');
     expect(labelsOf(p, 'names')).toEqual(['Eris']);
-    expect(labelsOf(p, 'masses')[0]).toBe(`${formatNumber(5)} M`);
+    expect(labelsOf(p, 'masses').join('')).toBe(
+      `${formatNumber(5)} M${EARTH_SYMBOL}`
+    );
     // Named in the model (a Solar System planet): the default shows the name.
     p.isSolarSystemPlanet = true;
     expect(labelsOf(p, 'all')).toEqual(['Eris']);
     p.isSolarSystemPlanet = false;
     // Named only as data: the default is still its mass, as before.
-    expect(labelsOf(p, 'all')[0]).toBe(`${formatNumber(5)} M`);
+    expect(labelsOf(mkPlanet(), 'all').join('')).toBe(
+      `${formatNumber(5)} M${EARTH_SYMBOL}`
+    );
     // Nameless in names mode: nothing, unless it is the chosen body.
     const n = named(mkPlanet(), '');
     expect(labelsOf(n, 'names')).toEqual([]);
@@ -383,7 +398,7 @@ describe('what a label says', () => {
       [[1, 2, 3]]
     );
     const text = summaryText();
-    expect(text).toContain('Labelled on the canvas: Eris.');
+    expect(text).toContain('Labeled on the canvas: Eris.');
     expect(text).toContain(
       'Reduced population on this device: 3 of 71 bodies.'
     );

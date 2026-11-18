@@ -197,11 +197,18 @@ describe('drawing never removes a body', () => {
     star.alive = true;
     setBodyList('planets', list);
     setLiveBodyCount(255);
-    view.zoom = 3;
+    // Large enough on screen (30 px) for every planet to be worth detail.
+    view.zoom = 30 / (list[0].radius * displayFactorFor('Planet'));
+    select(list[0]);
     const drawn = [];
     for (const tier of ['low', 'full', 'ultra']) {
       setTier(tier);
       beginCrowdFrame();
+      // The rules thin trails and ration detail, and nothing else.
+      expect(crowdTrails(list)).toHaveLength(CROWD_TRAIL_BODIES + 1);
+      expect(list.filter(crowdDetail)).toHaveLength(
+        tier === 'low' ? 0 : CROWD_DETAIL_CAP
+      );
       let n = 0;
       for (const o of [...list, star]) {
         const arcs = [];

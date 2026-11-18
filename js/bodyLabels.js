@@ -66,6 +66,18 @@ const massText = spec =>
   spec.text ??
   `${spec.value} M${spec.symbol || SUN_SYMBOL}${spec.suffix || ''}`;
 
+// Text widths by font and text, so a crowd of unplaceable labels measures once.
+const widths = new Map();
+function textWidth(ctx, text) {
+  const key = `${ctx.font}|${text}`;
+  let w = widths.get(key);
+  if (w === undefined) {
+    if (widths.size > 400) widths.clear();
+    widths.set(key, (w = ctx.measureText(text).width));
+  }
+  return w;
+}
+
 const overlaps = (a, b) =>
   a.x0 < b.x1 && b.x0 < a.x1 && a.y0 < b.y1 && b.y0 < a.y1;
 
@@ -124,6 +136,7 @@ export function drawBodyMarks(ctx, toScreen, cap = LABEL_CAP) {
   const rank = q => (q.chosen ? 0 : isBound(q.o) ? 1 : 2);
   shown.sort((a, b) => rank(a) - rank(b) || (b.o.mass || 0) - (a.o.mass || 0));
   let spare = cap;
+  let tries = cap * 8; // attempts, placed or not, for the labels beyond the cap
   const placed = (spots = [...keptClear]);
   ctx.textAlign = 'center';
   ctx.textBaseline = 'middle';
@@ -132,15 +145,16 @@ export function drawBodyMarks(ctx, toScreen, cap = LABEL_CAP) {
   for (const q of shown) {
     const { spec, at, word } = q;
     const keep = rank(q) < 2;
-    if (!keep && spare <= 0) continue;
+    if (!keep && (spare <= 0 || tries-- <= 0)) continue;
     const named = word !== null;
     ctx.font = labelFont(spec.px);
     const h = Math.max(spec.px, LABEL_MIN_CSS_PX) * k * 1.15;
     const plain = named || spec.text !== undefined;
     const w =
-      ctx.measureText(
+      textWidth(
+        ctx,
         named ? word : (spec.text ?? `${spec.value} M${spec.suffix || ''}`)
-      ).width + (plain ? 0 : 0.7 * spec.px * k);
+      ) + (plain ? 0 : 0.7 * spec.px * k);
     // The chosen body's ticks reach 12 px out; its name starts past them.
     const dy = q.r + (q.chosen ? 15 : spec.gap || 10) * k;
     // Home spot; if taken, slide down past what is there, else up.
@@ -162,7 +176,15 @@ export function drawBodyMarks(ctx, toScreen, cap = LABEL_CAP) {
     }
     if (at0 === null) {
       if (!keep) continue;
+      // A chosen or lesson body keeps its home spot, and takes it on record.
       at0 = dy;
+      placed.push({
+        x0: at.x - w / 2,
+        x1: at.x + w / 2,
+        y0: at.y + dy - h / 2,
+        y1: at.y + dy + h / 2,
+        text: named ? word : massText(spec),
+      });
     }
     if (!keep) spare--;
     if (at0 !== dy) {

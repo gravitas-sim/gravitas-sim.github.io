@@ -358,7 +358,7 @@ export function populationCaps() {
 // The world a tier built, for the readout. Set once per build by js/world/build.js.
 let builtNote = null;
 
-/** Record a build: bodies made and, if capped, what the full tier would have made. `pop` is the builder's count function (null if uncapped). */
+/** Record a build: bodies made and, if capped, what the full tier would have made. `pop` is the builder's count function (null if uncapped). The note is the world as built; bodies a reader adds, removes or merges later do not change it. */
 export function recordBuild(pop, settings, starsAlready, lists) {
   const built = lists.reduce((n, l) => n + l.length, 0);
   let cut = 0;

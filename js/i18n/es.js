@@ -1369,7 +1369,7 @@ export const ES = {
     one: '{n} galaxia',
     other: '{n} galaxias',
   },
-  'summary.labels': 'Rotulado en el lienzo: {list}.',
+  'summary.labels': 'Etiquetas en el lienzo: {list}.',
   'summary.selected': '{name} está seleccionado.',
   'summary.noSelection': 'No hay nada seleccionado.',
   'summary.unnamedBody': 'un cuerpo sin nombre',

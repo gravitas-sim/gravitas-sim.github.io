@@ -561,6 +561,29 @@ export const captionText = () => captureCaption;
 /** @returns {string} The annotation that would accompany it, if any */
 export const captureNoteText = () => captureNote;
 
+// The notes' line breaks, kept while the text and the width are the same.
+let notesKey = '';
+let notesWrapped = { groups: [], width: 0 };
+function wrapNotes(ctx, notes, room) {
+  const key = `${room}|${ctx.font}|${notes.join('\n')}`;
+  if (key === notesKey) return notesWrapped;
+  const groups = [];
+  let width = 0;
+  for (const note of notes) {
+    const own = [''];
+    for (const w of note.split(' ')) {
+      const tail = `${own.at(-1)} ${w}`.trim();
+      if (own.at(-1) && ctx.measureText(tail).width > room) own.push(w);
+      else own[own.length - 1] = tail;
+    }
+    for (const line of own)
+      width = Math.max(width, ctx.measureText(line).width);
+    groups.push(own);
+  }
+  notesKey = key;
+  return (notesWrapped = { groups, width });
+}
+
 /**
  * The always-on instrumentation, drawn along the bottom-left edge: a scale bar,
  * and - for a frame being saved - the simulated clock, the stopwatch and the
@@ -597,21 +620,17 @@ export function drawInstrumentation(
   const k = pixelScale();
   const W = (canvas.width || 0) / k;
   const H = (canvas.height || 0) / k;
+  resetKeepClear();
   if (W < 240 || H < 200) return;
 
-  // A phone in portrait has about a third of the width a laptop does, and the
-  // panel is laid out as a label on the left and a value on the right; below
-  // this the two meet in the middle and the longer rows have to give way.
+  // Below this width a label and its value meet in the middle: longer rows give way.
   const narrow = W < 560;
 
-  // What the canvas itself has to carry, as one line along the bottom rather
-  // than as a panel.
+  // What the canvas itself carries, as one line along the bottom.
   const readings = [];
   if (capturing && settings.show_elapsed_time !== false) {
-    // Labeled, unlike the live readout, where the row it sits in says what it
-    // is. A bare '6.59 d' in the corner of a figure in somebody's lab report
-    // could be a period, an age or an exposure; 't =' makes it the one thing
-    // it is, at the cost of three characters.
+    // Labeled, unlike the live readout: a bare '6.59 d' in a figure could be a
+    // period, an age or an exposure.
     readings.push(`t = ${formatTime(getSimulationTime())}`);
   }
   if (capturing) {
@@ -622,7 +641,6 @@ export function drawInstrumentation(
 
   const pad = 12;
   const barY = H - pad - 10 - Math.max(0, bottomInset);
-  resetKeepClear();
   let keptW = 0;
 
   ctx.save();
@@ -631,13 +649,9 @@ export function drawInstrumentation(
   ctx.textBaseline = 'middle';
   ctx.textAlign = 'left';
 
-  // The title, top left, where the readout panel sits in the live view and
-  // where a saved frame has nothing at all - the readout is HTML and is not
-  // composited into the export. Larger than the bottom line and set slightly
-  // brighter: on a slide it is read from the back of a room, and in a lab
-  // report it is the caption the figure would otherwise need underneath it.
-  // A second line, when there is one, says where a real system's numbers come
-  // from (js/data/realSystemSources.js): smaller, under the title.
+  // The title, top left (a saved frame has no HTML readout): larger and brighter
+  // than the bottom line, the caption a slide or lab report would need. A second,
+  // smaller line says where a real system's numbers come from.
   const [captionTitle, captionSources = ''] = captureCaption.split('\n');
   let underTitle = pad + 24;
   if (capturing && captionTitle) {
@@ -702,26 +716,16 @@ export function drawInstrumentation(
   let legendBottom = barY - 20;
   ctx.font = `11px ${INSTRUMENT_MONO}`;
   ctx.fillStyle = 'rgb(200, 214, 235)';
-  for (const note of crowdNotes()) {
-    const words = note.split(' ');
-    const lines = [''];
-    for (const w of words) {
-      const tail = `${lines.at(-1)} ${w}`.trim();
-      if (lines.at(-1) && ctx.measureText(tail).width > W - 2 * pad)
-        lines.push(w);
-      else lines[lines.length - 1] = tail;
-    }
-    for (let i = lines.length - 1; i >= 0; i--) {
-      halo(ctx, lines[i], pad + 2, legendBottom);
-      keptW = Math.max(keptW, ctx.measureText(lines[i]).width);
+  const wrapped = wrapNotes(ctx, crowdNotes(), W - 2 * pad);
+  keptW = wrapped.width;
+  for (const group of wrapped.groups)
+    for (let i = group.length - 1; i >= 0; i--) {
+      halo(ctx, group[i], pad + 2, legendBottom);
       legendBottom -= 16;
     }
-  }
   const noteTop = legendBottom + 20;
 
-  // The key, one row of swatches above the scale line. Horizontal rather than
-  // stacked: three arrows explained in three short phrases fit across the
-  // bottom of any canvas wide enough to be worth drawing arrows on.
+  // The key: one row of swatches above the scale line.
   if (capturing && legend.length) {
     let x = pad + 2;
     const y = legendBottom;

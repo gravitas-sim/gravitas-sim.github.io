@@ -12,7 +12,7 @@
   ],
   "workflowCeilings": {
     "note": "PROPOSAL. Each value is today's ceiling, unchanged: classifying them as workflow ceilings moves nothing.",
-    "initialKb": 741.7,
+    "initialKb": 742.2,
     "deferredCoreKb": 1985.8,
     "routes": {
       "front-door": {
