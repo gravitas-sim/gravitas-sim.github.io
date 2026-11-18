@@ -1,10 +1,4 @@
-import {
-  describe,
-  test,
-  expect,
-  beforeEach,
-  beforeAll,
-} from '@jest/globals';
+import { describe, test, expect, beforeEach, beforeAll } from '@jest/globals';
 import {
   drawInstrumentation,
   setCaptureMode,

@@ -44,9 +44,11 @@ test('the barycenter control is reached and changed from the keyboard', async ({
     .toContain(
       'Barycenter marker: the mass-weighted mean position of the whole system, 2 bodies.'
     );
-  // A second letter within a second extends the search ("wo"); wait it out.
+  // A second letter at once would extend the search ("wo"); leaving the
+  // control and coming back starts a new one.
+  await page.keyboard.press('Shift+Tab');
+  await page.keyboard.press('Tab');
   await expect(select).toBeFocused();
-  await page.waitForTimeout(1100);
   await page.keyboard.press('o');
   await expect(select).toHaveValue('off');
   expect((await marker(page)).mode).toBe('off');
