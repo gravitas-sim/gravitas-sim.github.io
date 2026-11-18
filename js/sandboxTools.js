@@ -706,7 +706,6 @@ export function drawInstrumentation(
     ctx.restore();
   }
 
-  // The frame, as the lowest note above the scale line.
   const frame = sceneWords()?.frameLine() || '';
 
   // What the tier or a crowd left out, above the scale line.

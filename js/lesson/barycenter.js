@@ -159,15 +159,7 @@ export function splitByArms(total, r1, r2) {
   return { m1: total * (r2 / span), m2: total * (r1 / span) };
 }
 
-/**
- * Draw a barycenter as an instrument: dashed arms to the bodies (eight at
- * most; beyond that they are noise) and a cross, not a disc: an aiming point
- * rather than a body, since nothing is there. Screen-space widths.
- *
- * @param {CanvasRenderingContext2D} ctx - Context, world transform off
- * @param {{x: number, y: number}} c - The point, on screen
- * @param {Array<{x: number, y: number}>} ends - The bodies, on screen
- */
+/** A cross with dashed arms to at most eight bodies, in screen space: nothing is there. */
 export function drawBarycenterCross(ctx, c, ends) {
   ctx.save();
   ctx.lineWidth = 1.25;

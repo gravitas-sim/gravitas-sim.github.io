@@ -207,12 +207,7 @@ export let physicsSettings = {
 // the integrator used; the point of publishing it is that it cannot.
 // =============================================================================
 
-/**
- * The engine's one source rule (js/engine/sources.js): the lists the step
- * sums as sources, in its order.
- * @param {object} s - Settings
- * @returns {string[]} List names
- */
+/** The lists the step sums as sources, in its order (js/engine/sources.js). */
 export const sourceLists = s => {
   const only = s?.star_only_gravity === true;
   const lists = ['bh_list', 'stars', 'galaxies'];

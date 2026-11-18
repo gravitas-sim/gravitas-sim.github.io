@@ -30,7 +30,6 @@ import { crowdNotes } from './bodyDrawSky.js';
 registerCommands({ lightingNotes });
 let sizes = null;
 let scene = null;
-/** @returns {Promise<object>} js/sceneStatement.js, fetched once (retried after a failure) */
 export function loadSceneWords() {
   if (typeof scene?.frameLine === 'function') return Promise.resolve(scene);
   if (!scene)
@@ -44,10 +43,6 @@ export function loadSceneWords() {
   return scene;
 }
 
-/**
- * @param {boolean} [load] - Start the fetch
- * @returns {?object} js/sceneStatement.js once here, else null
- */
 export const sceneWords = (load = false) => {
   if (load) loadSceneWords().catch(() => {});
   return typeof scene?.frameLine === 'function' ? scene : null;
