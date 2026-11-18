@@ -398,7 +398,6 @@
     .obs-panel,
     .light-curve-container,
     .sonification-panel,
-    .scenario-info-content,
     .shortcut-overlay,
     .transformation-notification,
     .recording-badge,
@@ -465,8 +464,6 @@
     .light-curve-container,
   :is(body.investigation-open, body.investigation-browser-open)
     .sonification-panel,
-  :is(body.investigation-open, body.investigation-browser-open)
-    .scenario-info-content,
   :is(body.investigation-open, body.investigation-browser-open)
     .shortcut-overlay,
   :is(body.investigation-open, body.investigation-browser-open)

@@ -154,7 +154,7 @@ function frame(ctx, box, range) {
   const X = v => x + (Math.max(0, Math.min(xMax, v)) / xMax) * w;
   const Y = v => y + h - (Math.max(0, Math.min(yMax, v)) / yMax) * h;
 
-  ctx.font = `10px ${MONO}`;
+  ctx.font = `11px ${MONO}`;
   ctx.lineWidth = 1;
 
   // Gridlines first, so everything else draws over them.
@@ -262,7 +262,7 @@ function curve(ctx, t, rMax, fn, color, opts = {}) {
  * @param {string} inside - Ink to use when the label fits inside
  */
 function barLabel(ctx, text, x, y, barW, barH, inside = '#0b0f18') {
-  ctx.font = `bold 10px ${MONO}`;
+  ctx.font = `bold 11px ${MONO}`;
   ctx.textAlign = 'left';
   ctx.textBaseline = 'middle';
   const needed = ctx.measureText(text).width + 12;
@@ -286,7 +286,7 @@ function key(ctx, x, y, color, label, dashed = false) {
   ctx.stroke();
   ctx.setLineDash([]);
   ctx.fillStyle = MUTED;
-  ctx.font = `10px ${MONO}`;
+  ctx.font = `11px ${MONO}`;
   ctx.textAlign = 'left';
   ctx.textBaseline = 'middle';
   ctx.fillText(label, x + 21, y);
@@ -549,7 +549,7 @@ const SHAPES = {
     const cy = H / 2 - 8;
     const picR = Math.min(picW, H) * 0.36;
 
-    ctx.font = `10px ${MONO}`;
+    ctx.font = `11px ${MONO}`;
     ctx.textAlign = 'center';
     ctx.textBaseline = 'top';
     ctx.fillStyle = MUTED;
@@ -984,7 +984,7 @@ const NGC3198_OBSERVED = NGC3198_POINTS.map(p => ({
  */
 function syntheticLabel(ctx, box) {
   const text = t('dmW.syntheticCurve');
-  ctx.font = `10px ${MONO}`;
+  ctx.font = `11px ${MONO}`;
   ctx.textAlign = 'left';
   ctx.textBaseline = 'top';
   ctx.fillStyle = MUTED;
@@ -1544,7 +1544,7 @@ const FLYBY = {
     ctx.arc(sx, sy, 4, 0, 2 * Math.PI);
     ctx.fill();
 
-    ctx.font = `10px ${MONO}`;
+    ctx.font = `11px ${MONO}`;
     ctx.textAlign = 'left';
     ctx.textBaseline = 'top';
     ctx.fillStyle = f.withHalo ? C_HALO : WARN;
@@ -1782,7 +1782,7 @@ const VIRIAL = {
     }
     // Left-aligned rather than centered on the cluster: the caption is wider than
     // the picture beside it, and centring ran it off the left edge.
-    ctx.font = `10px ${MONO}`;
+    ctx.font = `11px ${MONO}`;
     ctx.fillStyle = MUTED;
     ctx.textAlign = 'left';
     ctx.textBaseline = 'bottom';
@@ -1831,7 +1831,7 @@ const VIRIAL = {
         top + 2 * barH + 62
       );
     }
-    ctx.font = `10px ${MONO}`;
+    ctx.font = `11px ${MONO}`;
     ctx.fillStyle = MUTED;
     halo(ctx, 'pale = hot gas, solid = galaxies', bx, top + 2 * barH + 82);
   },
@@ -1972,7 +1972,7 @@ const BUDGET = {
      * each rescale to the slice above them.
      */
     const row = (title, segs, total) => {
-      ctx.font = `10px ${MONO}`;
+      ctx.font = `11px ${MONO}`;
       ctx.fillStyle = MUTED;
       ctx.textAlign = 'left';
       ctx.textBaseline = 'bottom';
@@ -1986,7 +1986,7 @@ const BUDGET = {
         ctx.fill();
         if (sw > 46) {
           ctx.fillStyle = '#0b0f18';
-          ctx.font = `bold 10px ${MONO}`;
+          ctx.font = `bold 11px ${MONO}`;
           ctx.textAlign = 'center';
           ctx.textBaseline = 'middle';
           ctx.fillText(s.label, x + sw / 2, y + barH / 2);

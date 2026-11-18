@@ -1,0 +1,82 @@
+{
+  "format": "gravitas.depth-ii-thresholds/1",
+  "prompt": "327",
+  "document": "DEPTH_II_GATE.md",
+  "committed": "2026-11-18, in a documentation commit that precedes every prototype. A threshold, value, tolerance or slice is never moved after a result; a criterion not run is NOT RUN and does not pass.",
+  "question": "May a deeper step run the lesson's own scene twice with one value changed?",
+  "prototype": {
+    "branch": "gate/depth-ii",
+    "lesson": "weighing-stars",
+    "step": {
+      "depth": "quantitative",
+      "after": "one-on-your-own",
+      "noSetupStageOrScenario": true,
+      "variation": { "param": "m1", "values": [1, 3], "read": ["ratio"] },
+      "stageInForce": { "starPair": { "m1": 3, "m2": 1, "separation": 400 } },
+      "decision": "a held prediction of the second ratio, committed before the run"
+    },
+    "analytic": "ratio = m1 / m2 (the arms of a bound pair about its barycentre), so 1 and 3",
+    "toleranceRelative": 0.02
+  },
+  "criteria": {
+    "1": {
+      "name": "stored work opens",
+      "writer": "V3_COMMIT in tests/compat/harness.js (the v3.0 build)",
+      "rows": [
+        "progress record",
+        "assignment link (d)",
+        "course-pack pin",
+        "submission token (dp)"
+      ],
+      "depth": "quantitative",
+      "pass": "all four read without error; every recorded answer on the same step id; the depth honored; no pin or fingerprint change reported"
+    },
+    "2": {
+      "name": "depth switch and restoration",
+      "sequence": "held prediction committed, a reading taken, one run saved; core to quantitative before the run, quantitative to core after it",
+      "lost": { "answers": 0, "readings": 0, "runRows": 0 },
+      "compare": [
+        "body positions",
+        "velocities",
+        "masses",
+        "clock",
+        "settings a run may touch",
+        "camera"
+      ],
+      "relative": 1e-11,
+      "absolute": 1e-12,
+      "notRestored": ["trails", "timeline buffer"]
+    },
+    "3": {
+      "name": "report numbering",
+      "coreWalk": "step id to number identical to the base",
+      "deeperWalks": "every deeper step that exists at the base keeps its number; core steps laid after the new step move down by one and are listed"
+    },
+    "4": {
+      "name": "existing deeper steps pass unchanged",
+      "existingDeeperSteps": 558,
+      "countNote": "558 at base v4 1f1235254 (293 quantitative, 265 advanced, distinct steps over the 101 files of js/data/investigations/depth/); the roadmap's 459 was the count when it was written",
+      "pass": "author:check findings for the existing deeper steps identical to the base (rule, lesson, step, message); zero findings for the added step under every depth/* rule and ref/variation"
+    },
+    "5": {
+      "name": "variation agrees with the model",
+      "pass": "each run's ratio within 0.02 relative of m1 / m2"
+    },
+    "6": {
+      "name": "low-tier frame time",
+      "conditions": "chromebook-proxy: low tier, CPU 4x, 1440x900, the perf probe's frame measure, during a run of the prototype step",
+      "frameMsMax": 8.0,
+      "source": "tools/perf-thresholds.json profiles.chromebook-proxy.scenarios.binary-pair.frameMsThreshold"
+    }
+  },
+  "verdicts": {
+    "A": { "needs": [1, 2, 3, 4, 5, 6], "slices": [1, 2, 5] },
+    "B": {
+      "needs": [4, 6],
+      "andAnyFailedOrNotRun": [1, 2, 3],
+      "slices": [1, 3, 5]
+    },
+    "C": { "otherwise": true, "slices": [1, 4, 5] }
+  },
+  "alwaysForbidden": "a deeper step opening a setup, stage or scenario of its own"
+}

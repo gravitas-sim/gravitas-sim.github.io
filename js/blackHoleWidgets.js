@@ -160,7 +160,7 @@ function bar(ctx, x, y, w, h, color, alpha = 1) {
 function scaleBar(ctx, x, y, maxPx, metersPerPx) {
   drawScaleBar(ctx, x, y, maxPx, metersPerPx, {
     color: SKY_MUTED,
-    font: `10px ${MONO}`,
+    font: `11px ${MONO}`,
   });
 }
 
@@ -312,7 +312,7 @@ const HORIZON = {
       const px = Math.max(2, meters / (kmPerPx * 1000));
       const y = top + i * gap;
       const barW = Math.min(px, right - left);
-      ctx.font = `10px ${MONO}`;
+      ctx.font = `11px ${MONO}`;
       ctx.fillStyle = ref.m === null ? HOT : SKY_MUTED;
       ctx.textAlign = 'left';
       ctx.fillText(`${ref.label}: ${lengthLabel(meters)}`, left, y + 9);
@@ -449,7 +449,7 @@ const SCALING = {
     // Grid
     ctx.strokeStyle = SKY_GRID;
     ctx.lineWidth = 1;
-    ctx.font = `10px ${MONO}`;
+    ctx.font = `11px ${MONO}`;
     ctx.fillStyle = SKY_MUTED;
     ctx.textBaseline = 'middle';
     ctx.textAlign = 'right';
@@ -521,7 +521,7 @@ const SCALING = {
     ctx.fillStyle = trials.points.length ? HOT : SKY_MUTED;
     ctx.textAlign = 'left';
     ctx.textBaseline = 'top';
-    ctx.font = `10px ${MONO}`;
+    ctx.font = `11px ${MONO}`;
     ctx.fillText(
       trials.points.length
         ? `${trials.points.length} trial${trials.points.length === 1 ? '' : 's'} recorded`
@@ -677,7 +677,7 @@ const ESCAPE = {
     ctx.setLineDash([]);
     ctx.globalAlpha = 1;
 
-    ctx.font = `10px ${MONO}`;
+    ctx.font = `11px ${MONO}`;
     ctx.fillStyle = SUN_YELLOW;
     ctx.textBaseline = 'bottom';
     halo(ctx, "the Sun's real size", cx, cy - outline - 5);
@@ -746,7 +746,7 @@ const ESCAPE = {
     ctx.lineTo(trackX + trackW + 1, trackY + trackH + 5);
     ctx.stroke();
 
-    ctx.font = `10px ${MONO}`;
+    ctx.font = `11px ${MONO}`;
     ctx.textBaseline = 'top';
     ctx.textAlign = 'left';
     ctx.fillStyle = SKY_MUTED;
@@ -886,7 +886,7 @@ const DENSITY = {
     ctx.lineTo(axisX, yBot);
     ctx.stroke();
 
-    ctx.font = `10px ${MONO}`;
+    ctx.font = `11px ${MONO}`;
     for (let d = lo; d <= hi; d++) {
       const y = Y(d);
       const major = d % 4 === 0;
@@ -907,7 +907,7 @@ const DENSITY = {
     // The black hole's level. The dashed run starts clear of the widest
     // benchmark label rather than at the axis, so it can never be drawn
     // straight through the words it is being compared against.
-    ctx.font = `10px ${MONO}`;
+    ctx.font = `11px ${MONO}`;
     const labelRoom =
       axisX +
       13 +
@@ -929,7 +929,7 @@ const DENSITY = {
     ctx.arc(axisX, bhY, 5, 0, Math.PI * 2);
     ctx.fill();
 
-    ctx.font = `10px ${MONO}`;
+    ctx.font = `11px ${MONO}`;
     ctx.textAlign = 'left';
     ctx.textBaseline = 'middle';
     for (const mark of DENSITY_LADDER) {
@@ -1023,7 +1023,7 @@ const BLOCKS = {
     sky(ctx, w, H);
     const { f, n } = this.compute(v, spec);
 
-    ctx.font = `10px ${MONO}`;
+    ctx.font = `11px ${MONO}`;
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
     ctx.fillStyle = SKY_MUTED;
@@ -1070,7 +1070,7 @@ const BLOCKS = {
 
     rows.forEach((row, i) => {
       const y = top + i * gap;
-      ctx.font = `10px ${MONO}`;
+      ctx.font = `11px ${MONO}`;
       ctx.textAlign = 'right';
       ctx.textBaseline = 'middle';
       ctx.fillStyle = SKY_INK;
@@ -1084,7 +1084,7 @@ const BLOCKS = {
       ctx.stroke();
       bar(ctx, trackX, y, px, 12, row.up ? COOL : FALLING);
 
-      ctx.font = `10px ${MONO}`;
+      ctx.font = `11px ${MONO}`;
       ctx.textBaseline = 'middle';
       barValue(
         ctx,
@@ -1097,7 +1097,7 @@ const BLOCKS = {
     });
 
     const summary = `zeros:  mass +${n}   radius +${n}   volume +${3 * n}   density −${2 * n}`;
-    ctx.font = `10px ${MONO}`;
+    ctx.font = `11px ${MONO}`;
     if (ctx.measureText(summary).width < w - 16) {
       ctx.textAlign = 'center';
       ctx.textBaseline = 'middle';
@@ -1242,7 +1242,7 @@ const THERMO = {
     ctx.lineTo(tubeX + tubeW + 4, level);
     ctx.stroke();
 
-    ctx.font = `10px ${MONO}`;
+    ctx.font = `11px ${MONO}`;
     for (let d = lo; d <= hi; d++) {
       const y = Y(d);
       const major = (d - hi) % 4 === 0;
@@ -1391,13 +1391,13 @@ const LIFETIME = {
       const y = top + i * gap;
       const zeros = Math.log10(row.years);
       const px = Math.max(4, (zeros / maxZeros) * trackW);
-      ctx.font = `10px ${MONO}`;
+      ctx.font = `11px ${MONO}`;
       ctx.textAlign = 'left';
       ctx.textBaseline = 'alphabetic';
       ctx.fillStyle = row.color === HOT ? HOT : SKY_INK;
       ctx.fillText(row.label, left, y);
       bar(ctx, left, y + 6, px, 12, row.color, row.color === HOT ? 1 : 0.55);
-      ctx.font = `10px ${MONO}`;
+      ctx.font = `11px ${MONO}`;
       ctx.textBaseline = 'middle';
       barValue(
         ctx,
@@ -1416,7 +1416,7 @@ const LIFETIME = {
     ctx.moveTo(left, axisY);
     ctx.lineTo(right, axisY);
     ctx.stroke();
-    ctx.font = `10px ${MONO}`;
+    ctx.font = `11px ${MONO}`;
     ctx.fillStyle = SKY_MUTED;
     ctx.textBaseline = 'top';
     for (let z = 0; z <= maxZeros; z += 25) {
@@ -1555,7 +1555,7 @@ const LINEUP_WIDGET = {
     ctx.font = `bold 12px ${MONO}`;
     ctx.fillStyle = HOT;
     ctx.fillText(spec.named ? hole.real : hole.name, w / 2, 15);
-    ctx.font = `10px ${MONO}`;
+    ctx.font = `11px ${MONO}`;
     ctx.fillStyle = SKY_MUTED;
     ctx.fillText(
       `${massLabel(hole.mass)}   ·   Rₛ = ${lengthLabel(f.rsM)}`,
@@ -1600,7 +1600,7 @@ const LINEUP_WIDGET = {
 
       drawHole(ctx, cx, cy, rHole, room(cx, cy));
 
-      ctx.font = `10px ${MONO}`;
+      ctx.font = `11px ${MONO}`;
       ctx.textAlign = 'center';
       ctx.textBaseline = 'top';
       ctx.fillStyle = c.color;
@@ -1621,7 +1621,7 @@ const LINEUP_WIDGET = {
       ctx.setLineDash([]);
       ctx.globalAlpha = 1;
       drawHole(ctx, cx, cy, rHole, room(cx, cy));
-      ctx.font = `10px ${MONO}`;
+      ctx.font = `11px ${MONO}`;
       ctx.textAlign = 'center';
       ctx.textBaseline = 'top';
       ctx.fillStyle = SKY_MUTED;
@@ -1650,7 +1650,7 @@ const LINEUP_WIDGET = {
       ctx.moveTo(cx + px / 2, y - 4);
       ctx.lineTo(cx + px / 2, y + 4);
       ctx.stroke();
-      ctx.font = `10px ${MONO}`;
+      ctx.font = `11px ${MONO}`;
       ctx.textAlign = 'center';
       ctx.textBaseline = 'top';
       ctx.fillStyle = c.color;

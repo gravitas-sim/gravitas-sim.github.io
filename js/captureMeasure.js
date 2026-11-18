@@ -241,6 +241,9 @@ export const updateSpeedDisplay = () => {
     const v = SETTINGS.sim_speed;
     const shown = v === 0 ? '0' : v < 0.1 ? v.toFixed(2) : v.toFixed(1);
     speedDisplay.textContent = `${shown}\u00d7`;
+    // The phone's one speed button shows it (css/components.css).
+    const up = document.getElementById('speedUpBtn');
+    if (up) up.dataset.speed = speedDisplay.textContent;
   }
 };
 
@@ -647,7 +650,12 @@ export function initCaptureMeasure(ctx) {
   };
 
   document.getElementById('speedUpBtn').onclick = () => {
-    SETTINGS.sim_speed = adjustSimSpeed(SETTINGS.sim_speed, +1);
+    const up = adjustSimSpeed(SETTINGS.sim_speed, +1);
+    // On a phone this is the only speed button, so the top rung wraps to 1x.
+    SETTINGS.sim_speed =
+      up === SETTINGS.sim_speed && matchMedia('(max-width: 767px)').matches
+        ? 1
+        : up;
     updateSpeedDisplay();
   };
 

@@ -91,7 +91,9 @@ test.describe('keyboard operation', () => {
         ...document.querySelectorAll(
           'a[href],button,input,select,textarea,[tabindex]:not([tabindex="-1"])'
         ),
-      ].filter(visible);
+        // A disabled control cannot take focus (Undo Placement, until a body
+        // is placed), so there is no focus to be seen on it.
+      ].filter(el => visible(el) && !el.disabled);
       for (const el of controls) {
         el.focus();
         const s = getComputedStyle(el);

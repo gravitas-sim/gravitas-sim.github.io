@@ -11,14 +11,12 @@ import { test, expect, openMore, storeProgress } from './workflow.js';
 
 const CARD = '#scenarioInfoBox';
 const orient = page => page.locator('#welOrient');
+// Whether "About this scenario" is open; it is never open on its own.
 const shown = page =>
-  page.evaluate(
-    sel => document.querySelector(sel)?.classList.contains('showUI') ?? false,
-    CARD
-  );
+  page.evaluate(sel => document.querySelector(sel)?.open ?? false, CARD);
 
 test.describe('first run', () => {
-  test('three screens inside Home, by keyboard, then the sandbox card, then never again', async ({
+  test('three screens inside Home, by keyboard, then the sandbox with its scenario text closed, then never again', async ({
     page,
     app,
   }) => {
@@ -60,10 +58,12 @@ test.describe('first run', () => {
     await expect(page.locator('.wel-hero')).toBeVisible();
     expect(await shown(page)).toBe(false);
 
-    // Home closes; the scenario card follows it, as Prompt 52 ordered.
+    // Home closes on the scene: the scenario's text waits, closed, in the
+    // readout panel.
     await page.keyboard.press('Escape');
     await expect(page.locator('#welcomeScreen')).toBeHidden();
-    await expect.poll(() => shown(page)).toBe(true);
+    await expect(page.locator(CARD)).toBeVisible();
+    expect(await shown(page)).toBe(false);
 
     // Never twice: Home forgotten, introduction remembered.
     await page.evaluate(() =>

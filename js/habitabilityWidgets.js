@@ -245,7 +245,7 @@ const INSOLATION = {
     ctx.beginPath();
     ctx.arc(px, cy, 6, 0, Math.PI * 2);
     ctx.fill();
-    ctx.font = `10px ${MONO}`;
+    ctx.font = `11px ${MONO}`;
     ctx.textAlign = 'center';
     ctx.textBaseline = 'bottom';
     ctx.fillStyle = EARTHY;
@@ -305,7 +305,7 @@ const INSOLATION = {
     ctx.lineTo(ex, barTop + barH + 5);
     ctx.stroke();
     ctx.setLineDash([]);
-    ctx.font = `10px ${MONO}`;
+    ctx.font = `11px ${MONO}`;
     ctx.fillStyle = INK;
     ctx.textAlign = 'left';
     ctx.textBaseline = 'top';
@@ -454,7 +454,7 @@ const SPREADING = {
       ctx.arc(cx, cy, r, -arc, arc);
       ctx.stroke();
       ctx.setLineDash([]);
-      ctx.font = `10px ${MONO}`;
+      ctx.font = `11px ${MONO}`;
       ctx.fillStyle = on ? ZONE : MUTED;
       ctx.textAlign = 'center';
       ctx.textBaseline = 'top';
@@ -690,7 +690,7 @@ const STAR_WIDGET = {
       ctx.stroke();
       ctx.setLineDash([]);
 
-      ctx.font = `10px ${MONO}`;
+      ctx.font = `11px ${MONO}`;
       ctx.fillStyle = ZONE;
       ctx.textBaseline = 'top';
       // Inside the band when it fits, beside it when the star is faint enough
@@ -718,7 +718,7 @@ const STAR_WIDGET = {
     }
 
     drawStar(ctx, left, cy, 10, starColor(c.star.teff));
-    ctx.font = `10px ${MONO}`;
+    ctx.font = `11px ${MONO}`;
     ctx.fillStyle = MUTED;
     ctx.textAlign = 'left';
     ctx.textBaseline = 'bottom';
@@ -739,7 +739,7 @@ const STAR_WIDGET = {
     ctx.textBaseline = 'bottom';
     ctx.font = `bold 12px ${MONO}`;
     halo(ctx, `${earthUnits(c.insolation)} of starlight`, w - 8, 34);
-    ctx.font = `10px ${MONO}`;
+    ctx.font = `11px ${MONO}`;
 
     // Distance scale
     const axisY = 202;
@@ -753,7 +753,7 @@ const STAR_WIDGET = {
     ctx.fillStyle = MUTED;
     ctx.textAlign = 'center';
     ctx.textBaseline = 'top';
-    ctx.font = `10px ${MONO}`;
+    ctx.font = `11px ${MONO}`;
     // A label is only drawn when there is room for it. The axis span changes
     // by two orders of magnitude between a red dwarf and a bright star, so a
     // fixed tick count crushes the labels together at one end.
@@ -916,7 +916,7 @@ const BOUNDARIES_WIDGET = {
       ctx.setLineDash([4, 3]);
       ctx.strokeRect(x0, y, x1 - x0, h);
       ctx.setLineDash([]);
-      ctx.font = `10px ${MONO}`;
+      ctx.font = `11px ${MONO}`;
       ctx.fillStyle = fill;
       ctx.textAlign = 'center';
       ctx.textBaseline = 'middle';
@@ -949,7 +949,7 @@ const BOUNDARIES_WIDGET = {
     ctx.beginPath();
     ctx.arc(ex, cy + 44, 5, 0, Math.PI * 2);
     ctx.fill();
-    ctx.font = `10px ${MONO}`;
+    ctx.font = `11px ${MONO}`;
     ctx.fillStyle = EARTHY;
     // Offset to the right: Earth at 1 AU sits within a couple of pixels of the
     // conservative inner edge, and a centered label lands on that line.
@@ -975,7 +975,7 @@ const BOUNDARIES_WIDGET = {
       ctx.lineTo(x, edgeY);
       ctx.stroke();
       ctx.setLineDash([]);
-      ctx.font = `10px ${MONO}`;
+      ctx.font = `11px ${MONO}`;
       ctx.fillStyle = e.color;
       ctx.textBaseline = 'top';
       // The outer edge sits near the right of the plot for a bright star, and
@@ -1002,7 +1002,7 @@ const BOUNDARIES_WIDGET = {
     ctx.fillStyle = MUTED;
     ctx.textAlign = 'center';
     ctx.textBaseline = 'top';
-    ctx.font = `10px ${MONO}`;
+    ctx.font = `11px ${MONO}`;
     for (let au = 0; au <= maxAU + 1e-9; au += 0.5) {
       const x = X(au);
       ctx.beginPath();
@@ -1215,7 +1215,7 @@ const ORBIT = {
     ctx.fill();
 
     if (spec.showZone) {
-      ctx.font = `10px ${MONO}`;
+      ctx.font = `11px ${MONO}`;
       ctx.textAlign = 'center';
       ctx.textBaseline = 'top';
       ctx.fillStyle = ZONE;
@@ -1291,7 +1291,7 @@ const ORBIT = {
     ctx.arc(mx, my, 4, 0, Math.PI * 2);
     ctx.fill();
 
-    ctx.font = `10px ${MONO}`;
+    ctx.font = `11px ${MONO}`;
     ctx.fillStyle = MUTED;
     ctx.textAlign = 'center';
     ctx.textBaseline = 'top';
@@ -1405,7 +1405,7 @@ const TRAPPIST = {
     ctx.lineTo(x1, rowY + 34);
     ctx.stroke();
     ctx.setLineDash([]);
-    ctx.font = `10px ${MONO}`;
+    ctx.font = `11px ${MONO}`;
     ctx.fillStyle = ZONE;
     ctx.textAlign = 'center';
     ctx.textBaseline = 'bottom';
@@ -1457,7 +1457,7 @@ const TRAPPIST = {
     ctx.moveTo(left, axisY);
     ctx.lineTo(right, axisY);
     ctx.stroke();
-    ctx.font = `10px ${MONO}`;
+    ctx.font = `11px ${MONO}`;
     ctx.fillStyle = MUTED;
     ctx.textAlign = 'center';
     ctx.textBaseline = 'top';
@@ -1484,7 +1484,7 @@ const TRAPPIST = {
     ctx.fillStyle = MUTED;
     ctx.textAlign = 'left';
     ctx.textBaseline = 'top';
-    ctx.font = `10px ${MONO}`;
+    ctx.font = `11px ${MONO}`;
     ctx.fillText('the same axis, with the Solar System on it', left, sy - 22);
 
     const solar = [
@@ -1508,7 +1508,7 @@ const TRAPPIST = {
       },
     ];
     // All three are far off the right-hand end of this axis, which is the point.
-    ctx.font = `10px ${MONO}`;
+    ctx.font = `11px ${MONO}`;
     ctx.textAlign = 'right';
     ctx.textBaseline = 'middle';
     ctx.fillStyle = HOT;
@@ -1624,7 +1624,7 @@ const CANDIDATE_WIDGET = {
     ctx.font = `bold 13px ${MONO}`;
     ctx.fillStyle = ZONE;
     ctx.fillText(c.name, w / 2, 18);
-    ctx.font = `10px ${MONO}`;
+    ctx.font = `11px ${MONO}`;
     ctx.fillStyle = MUTED;
     ctx.fillText(
       `${earthUnits(c.insolation)}  ·  ${c.radius.toFixed(1)} Earth radii  ·  inside the modeled zone`,
@@ -1663,7 +1663,7 @@ const CANDIDATE_WIDGET = {
     ctx.arc(ex, cy, 22, 0, Math.PI * 2);
     ctx.stroke();
     ctx.setLineDash([]);
-    ctx.font = `10px ${MONO}`;
+    ctx.font = `11px ${MONO}`;
     ctx.fillStyle = MUTED;
     ctx.textAlign = 'center';
     ctx.textBaseline = 'top';
@@ -1671,7 +1671,7 @@ const CANDIDATE_WIDGET = {
 
     // What is known about it.
     ctx.textAlign = 'left';
-    ctx.font = `10px ${MONO}`;
+    ctx.font = `11px ${MONO}`;
     let y = cy + 62;
     for (const f of c.facts) {
       ctx.fillStyle = MUTED;

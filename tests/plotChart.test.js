@@ -34,6 +34,7 @@ import { readFileSync } from 'node:fs';
 
 import { createChart, decimate, niceTicks } from '../js/plot/chart.js';
 import { exportSvg } from '../js/plot/export.js';
+import { TYPE } from '../js/widgetCanvas.js';
 
 // tests/setup.js replaces the global document with a stub for the physics
 // tests; these need a real one.
@@ -47,6 +48,9 @@ beforeAll(() => {
 afterAll(() => {
   globalThis.document = saved;
 });
+
+/** How many shapes a marker path draws. */
+const markCount = node => (node.getAttribute('d').match(/M/g) ?? []).length;
 
 const N = (n, f) => Array.from({ length: n }, (_, i) => f(i));
 
@@ -129,6 +133,8 @@ describe('raw arrays, no registered units', () => {
     const src = readFileSync('js/plot/chart.js', 'utf8');
     expect(src.match(/^import\s.*$/gm)).toEqual([
       "import { EV_THEME_CHANGED } from '../names.js';",
+      // A leaf with no imports of its own: the shared type scale.
+      "import { TYPE } from '../widgetCanvas.js';",
     ]);
     // What it fetches, and only when wanted: the description and the sound
     // (Prompt 280) once a chart on a screen has drawn, and the PNG when asked.
@@ -163,8 +169,9 @@ describe('connected series', () => {
     expect(b.getAttribute('stroke-dasharray')).toBe('5 3');
     const spec = SPEC();
     vertices(a.getAttribute('d')).forEach(([x, y], i) => {
-      expect(x).toBeCloseTo(geo.sx(spec.series[0].x[i]), 1);
-      expect(y).toBeCloseTo(geo.sy(spec.series[0].y[i]), 1);
+      // Written to a tenth of a pixel: within half of one.
+      expect(Math.abs(x - geo.sx(spec.series[0].x[i]))).toBeLessThan(0.051);
+      expect(Math.abs(y - geo.sy(spec.series[0].y[i]))).toBeLessThan(0.051);
     });
     expect(vertices(a.getAttribute('d'))).toHaveLength(5);
   });
@@ -1061,5 +1068,103 @@ describe('round ticks near a constant', () => {
     expect(niceTicks(0.99998, 1.00018, 4)).toEqual([
       1, 1.00005, 1.0001, 1.00015,
     ]);
+  });
+});
+
+describe('reading size, marker shapes and direct labels', () => {
+  const sizes = svg => ({
+    ticks: [...svg.querySelectorAll('text')]
+      .filter(t => /^[-\d.]+$/.test(t.textContent))
+      .map(t => Number(t.getAttribute('font-size'))),
+    titles: [...svg.querySelectorAll('text')]
+      .filter(t => /\(/.test(t.textContent))
+      .map(t => Number(t.getAttribute('font-size'))),
+  });
+
+  test('ticks are the shared scale tick size and axis titles its label size', () => {
+    const { chart, svg } = make();
+    chart.draw(SPEC());
+    const { ticks, titles } = sizes(svg);
+    expect(ticks.length).toBeGreaterThan(0);
+    expect(new Set(ticks)).toEqual(new Set([TYPE.TICK]));
+    expect(TYPE.TICK).toBeGreaterThanOrEqual(11);
+    expect(titles).toEqual([TYPE.LABEL, TYPE.LABEL]);
+    expect(TYPE.LABEL).toBeGreaterThanOrEqual(12);
+  });
+
+  test('a series that names a marker differs by shape, in the plot and in the legend', () => {
+    const { chart, svg, host } = make();
+    const spec = SPEC();
+    spec.series[0].marker = 'circle';
+    spec.series[1].marker = 'square';
+    chart.draw(spec);
+    const marks = [...svg.querySelectorAll('[data-marker]')].filter(n =>
+      n.getAttribute('d')
+    );
+    expect(marks.map(n => n.getAttribute('data-marker'))).toEqual([
+      'circle',
+      'square',
+    ]);
+    // A line series carries a few markers along it, not one at every point.
+    expect(markCount(marks[0])).toBeGreaterThanOrEqual(2);
+    // Both are told apart in the legend without their color.
+    const swatches = [...host.querySelectorAll('ul button svg path')];
+    expect(new Set(swatches.map(p => p.getAttribute('d'))).size).toBe(2);
+    expect(chart.parts().series.map(s => s.marker)).toEqual([
+      'circle',
+      'square',
+    ]);
+  });
+
+  test('a points series with a marker draws it at every point, in the shape', () => {
+    const { chart, svg } = make();
+    const spec = SPEC();
+    spec.series[0].mode = 'points';
+    spec.series[0].marker = 'triangle';
+    chart.draw({ ...spec, series: [spec.series[0]] });
+    const path = svg.querySelector('[data-marker="triangle"]');
+    expect(markCount(path)).toBe(5);
+    expect(svg.querySelectorAll('circle').length).toBe(0);
+  });
+
+  test('a series without a marker draws none, as before', () => {
+    const { chart, svg } = make();
+    chart.draw(SPEC());
+    expect(
+      [...svg.querySelectorAll('[data-marker]')].filter(n =>
+        n.getAttribute('d')
+      )
+    ).toEqual([]);
+  });
+
+  test('direct labels sit at the line ends and stand in for the legend up to four series', () => {
+    const { chart, svg, host } = make();
+    chart.draw({ ...SPEC(), direct: true });
+    const tags = [...svg.querySelectorAll('g[clip-path] > text')];
+    expect(tags.map(t => t.textContent)).toEqual(['Kinetic', 'Potential']);
+    expect(
+      tags.every(t => t.getAttribute('font-size') === String(TYPE.LABEL))
+    ).toBe(true);
+    expect(chart.parts().legend).toBe(false);
+    expect(host.querySelector('ul').hidden).toBe(true);
+    // Two labels never share a baseline: they are pushed apart.
+    const ys = tags.map(t => Number(t.getAttribute('y')));
+    expect(Math.abs(ys[0] - ys[1])).toBeGreaterThanOrEqual(TYPE.LABEL);
+    // More than four series bring the legend back.
+    const s = SPEC().series[0];
+    const many = Array.from({ length: 5 }, (_, i) => ({
+      ...s,
+      id: `s${i}`,
+      label: `S${i}`,
+    }));
+    chart.draw({ ...SPEC(), direct: true, series: many });
+    expect(chart.parts().legend).toBe(true);
+  });
+
+  test('a chart that does not ask for direct labels keeps its legend and has no labels', () => {
+    const { chart, svg } = make();
+    chart.draw(SPEC());
+    expect(svg.querySelectorAll('g[clip-path] > text').length).toBe(0);
+    expect(chart.parts().legend).toBe(true);
   });
 });

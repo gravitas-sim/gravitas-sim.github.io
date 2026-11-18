@@ -19,6 +19,9 @@ export default {
       responses: {
         'tides:guess': 0,
         'tides:ask': 2,
+        // An estimate prediction: plain text under the step's key (a value an older build keeps as it is).
+        'tides:size': '3,0;4,0',
+        'tides:size:locale': 'es',
         // A reading taken by a button press: the text as printed, its
         // convention, and how it was taken (a sub-key an older build ignores).
         'tides:measure:d': '3.2504',

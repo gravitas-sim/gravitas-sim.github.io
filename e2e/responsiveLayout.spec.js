@@ -60,7 +60,6 @@ const APP_REGIONS = {
   menu: '#mobileMenuToggle',
   help: '#tutorialBtn',
   readout: '#overlay',
-  card: '#scenarioInfoBox',
 };
 const LESSON_REGIONS = {
   shell: '.gs-app',
@@ -305,8 +304,9 @@ test.describe('the four layouts', () => {
       await test.step(`${width}x${height}`, async () => {
         await page.setViewportSize({ width, height });
         await app.boot();
-        // The scenario card fades in once the front door has gone.
-        await expect(page.locator('#scenarioInfoBox')).toBeVisible();
+        // The readout, with the scenario's text inside it, comes in once the
+        // front door has gone.
+        await expect(page.locator('#overlay')).toBeVisible();
         await expect
           .poll(async () => overlaps(await regions(page, APP_REGIONS)), {
             message: 'regions that overlap',
@@ -331,12 +331,7 @@ test.describe('the four layouts', () => {
         }
         await expectNoSidewaysScroll(page);
         await expectPressable(page, '#timelinePlay');
-        await expectFingerSized(page, [
-          '.gs-app',
-          '#timelineBar',
-          '#overlay',
-          '#scenarioInfoBox',
-        ]);
+        await expectFingerSized(page, ['.gs-app', '#timelineBar', '#overlay']);
       });
     }
   });
