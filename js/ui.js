@@ -15,6 +15,7 @@ import { SPACE_OBJECT_NAMES } from './data/objectNames.js';
 import { SCENARIO_INFO } from './data/scenarioInfo.js';
 
 import { onLocaleChange } from './i18n/index.js';
+import { loadFailed } from './notify.js';
 import { scenarioTitle, scenarioSummary } from './i18n/scenario.js';
 
 import { generateStarfield } from './render.js';
@@ -577,10 +578,13 @@ let pausedBeforeSettings = false;
 async function openSettings() {
   const panel = settingsPanel();
   if (!panel || settingsOpen()) return;
-  const [{ openDialog }, panelCode] = await Promise.all([
-    dialog(),
-    settingsCode(),
-  ]);
+  let openDialog, panelCode;
+  try {
+    [{ openDialog }, panelCode] = await Promise.all([dialog(), settingsCode()]);
+  } catch (err) {
+    loadFailed(openSettings, err);
+    return;
+  }
   // The first press waited for the code; a second press that arrived meanwhile
   // must not open it twice.
   if (settingsOpen()) return;

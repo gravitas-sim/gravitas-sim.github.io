@@ -288,6 +288,7 @@ export const EN = {
   'rail.toggleExperiments.hint':
     'Open the A/B experiment bench: capture a starting state, record a baseline run, return to exactly that start, change one variable and record a second run, then compare the two on the same simulated-time axis.',
   'failure.load': 'That could not be loaded. Check your connection.',
+  'failure.loading': 'Loading…',
   'failure.retry': 'Retry',
   'failure.reload': 'Still not loaded. Reload the page; saved work is kept.',
   'rail.toggleNotebook': 'Evidence Notebook',

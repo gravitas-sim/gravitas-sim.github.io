@@ -14,6 +14,7 @@
 import { describe, test, expect } from '@jest/globals';
 
 const gate = await import('../js/inspectorGate.js');
+const { state } = await import('../js/appState.js');
 
 describe('before the card has been fetched', () => {
   test('it is not loaded, and hiding it does nothing and does not throw', () => {
@@ -38,12 +39,46 @@ describe('before the card has been fetched', () => {
   });
 });
 
+describe('a selection that is waiting on the card', () => {
+  const ready = () => {
+    // The card's header buttons are there for the fetch these shows start,
+    // and stay, so the wiring lands on them whenever it happens.
+    if (!document.getElementById('inspectorClose'))
+      document.body.innerHTML =
+        '<div id="objectInspector"></div>' +
+        '<button id="inspectorClose"></button>' +
+        '<button id="inspectorDelete"></button>';
+    window.splashScreenEnded = true;
+    window.isSplashActive = false;
+  };
+
+  test('is pending, and selected at once, until a hide cancels it', () => {
+    ready();
+    const object = { id: 7 };
+    gate.showObjectInspector(object, 'Planet');
+    expect(gate.inspectorLoaded()).toBe(false);
+    expect(gate.inspectorPending()).toBe(true);
+    expect(state.selectedObject).toEqual({ object, type: 'Planet' });
+
+    gate.hideObjectInspector();
+    expect(gate.inspectorPending()).toBe(false);
+    expect(state.selectedObject).toBeNull();
+  });
+
+  test('two quick shows leave one pending wish, and one hide clears it', () => {
+    ready();
+    gate.showObjectInspector({ id: 1 }, 'Planet');
+    gate.showObjectInspector({ id: 2 }, 'Star');
+    expect(gate.inspectorPending()).toBe(true);
+    expect(state.selectedObject.object.id).toBe(2);
+    gate.hideObjectInspector();
+    expect(gate.inspectorPending()).toBe(false);
+    expect(state.selectedObject).toBeNull();
+  });
+});
+
 describe('the first show', () => {
   test('fetches the card once, and wires its header buttons', async () => {
-    document.body.innerHTML =
-      '<div id="objectInspector"></div>' +
-      '<button id="inspectorClose"></button>' +
-      '<button id="inspectorDelete"></button>';
     // The splash has not ended, so the card declines to open: this is about
     // the fetch, not the card.
     window.splashScreenEnded = false;
