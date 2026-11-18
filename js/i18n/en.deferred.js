@@ -772,12 +772,12 @@ export const EN_DEFERRED = {
   'inv.span.take': 'Take interval reading',
   'inv.span.done':
     'Reading taken: {what}, mean {mean}, {n} points, standard error {se}.',
+  'inv.slip.again': 'You can try again.',
   'inv.action.finish': 'Finish',
   'inv.action.next': 'Next',
   'inv.probe.unavailable': 'Readout unavailable',
-  // The object list's chips. A role is the lesson author's handle for a body;
-  // the label comes from the key (`starA` is "star A") and is dropped where it
-  // would only repeat the body's name. These words differ between languages.
+  // The object list's chips: a role is the lesson author's handle for a body; its label comes from the
+  // key (`starA` is "star A"), and these are the words that differ between languages.
   'inv.role.star': 'star',
   'inv.role.planet': 'planet',
   'inv.role.earth': 'Earth',

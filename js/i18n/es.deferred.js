@@ -777,11 +777,11 @@ export const ES_DEFERRED = {
   'inv.span.take': 'Tomar la lectura del intervalo',
   'inv.span.done':
     'Lectura tomada: {what}, media {mean}, {n} puntos, error estándar {se}.',
+  'inv.slip.again': 'Puede intentarlo de nuevo.',
   'inv.action.finish': 'Terminar',
   'inv.action.next': 'Siguiente',
   'inv.probe.unavailable': 'Lectura no disponible',
-  // The object list's chips: a role (`eccentric`, `starA`, `tracer`) is the
-  // author's handle for a body; one with no entry here falls back to its key.
+  // The object list's chips: a role is the author's handle for a body; none here falls back to its key.
   'inv.role.star': 'estrella',
   'inv.role.planet': 'planeta',
   'inv.role.earth': 'Tierra',

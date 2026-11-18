@@ -334,7 +334,7 @@ function commit(host, writes, announced, again) {
   renderStep();
   // The panel is redrawn, so the reader's place is put back on the button pressed.
   host.body.querySelector(again)?.focus();
-  kit.announce(announced);
+  kit.announce(`${announced} ${kit.judge(true)}`.trim());
   for (const w of writes)
     keep(host, { ...w, value: kit.parseNumber(w.text, w.locale).value });
 }

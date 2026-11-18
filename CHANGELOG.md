@@ -56,6 +56,20 @@ the release rather than in the tag.
 
 - The Depth II gate (`DEPTH_II_GATE.md`): whether a deeper lesson step may run its scene twice with one value changed. Verdict C (Prompt 327; register rows D-R4-327-01 to -03; invisible). The criteria were committed before the prototype, which ran on a branch that is not merged. Stored records, links, pins and tokens opened, the run agreed with the model, and step numbering held. A depth switch, though, leaves a deeper step with no scene staged, and the frame-time bound could not be measured on the machine available. A new lesson-standard rule, `depth/decision`, counts deeper steps that do not name what the student decides, or whose fields are all computed or copied. It is a ratchet seeded from the catalog as it stands: 444 of 459 deeper steps, no lesson rewritten. `DEPTH.md` describes both.
 
+- A measure step can name the wrong turns a reading invites, and the report shows how many tries
+  it took (Prompt 326; register rows D-R4-326-01 to 03; visible and instructional). A measure field
+  may declare `misconceptions`: by value (`factor`, `equals`, the standard ids, against the field's
+  `want`) or by how the reading was taken (`when`: the role of the body, the simulated moment, the
+  instrument's settings, the interval chosen). Both go through the matcher of the numeric questions.
+  A try on a measure step is a reading taken or a value set committed when focus leaves the fields,
+  counted once per distinct set in the existing attempts count; the slip is announced politely and
+  drawn under the check slot only then, never per keystroke, never for an uncommitted prediction,
+  and it names the slip, offers another try and states no value. The lab report (PDF and HTML)
+  prints "answered on try n" and the slip by name, and the answer key lists the slips; a held
+  prediction's steps print them after the reveal. `author:check` fails a slip or a measure step's
+  feedback that holds a field's expected value, the step's answer or a number within tolerance of
+  either. The generated hint ladder, `:tries` and `:gen` are unchanged. No shipped lesson declares a
+  slip yet; Kepler's Laws and Finding Planets by Their Shadows are the first consumers.
 - A lesson or a step can say what the picture behind it is for (Prompt 325;
   register row D-R4-325-01; visible, an engine capability no shipped lesson uses
   yet): `canvas: 'scene'` is the step's own scene, `'portrait'` a scene held still

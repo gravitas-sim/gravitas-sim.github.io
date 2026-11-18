@@ -207,14 +207,8 @@ let stepIndex = 0;
 let responses = {}; // stepId -> value
 let attempts = {}; // stepId -> number of tries
 let visited = new Set();
-/**
- * What reading the saved progress had to say for itself.
- *
- * Populated by progressSchema.readProgress: a migration from the pre-sid
- * format, keys for steps the lesson no longer has, a payload from a newer
- * build. Surfaced once when the lesson opens rather than swallowed, because
- * each of them means an answer may not be where the reader left it.
- */
+// What reading the saved progress had to say (progressSchema.readProgress): a migration, keys for
+// steps the lesson no longer has, a payload from a newer build. Surfaced once when the lesson opens.
 let progressNotes = [];
 let startedAt = null;
 // Seconds this reader has had the lesson open and in view (the where line).
@@ -386,14 +380,9 @@ function probeContext() {
       return { separation: Math.hypot(dx, dy), longitude: lon };
     },
     /**
-     * The body a step's `bind` gave this role, or null.
-     *
-     * The replacement for `find` below, and the difference is the whole point:
-     * a role was resolved once, against one world, by an exact matcher that
-     * refused to choose when more than one body answered to it. `find` is a
-     * case-insensitive substring search that returns whichever came first.
-     * Both are here because the eight steps that use `find` have not been
-     * migrated; new steps should bind.
+     * The body a step's `bind` gave this role, or null. Unlike `find` below (a case-insensitive substring search
+     * that returns whichever came first) a role was resolved once by an exact matcher that refuses to choose; new
+     * steps should bind.
      */
     role: name => resolveRole(name).body,
     /** How a role stands: bound, stale, gone, or never bound. */
@@ -455,14 +444,9 @@ function probeContext() {
       return true;
     },
     /**
-     * What a black hole of a given mass is really like, in SI.
-     *
-     * Kept separate from anything the canvas draws, and the reason is the one
-     * this lesson has to keep making: the dark disc on screen is a drawing at
-     * a scale chosen so the orbits fit in a window, and the Schwarzschild
-     * radius is a physical length in kilometers. Quoting the second while
-     * pointing at the first is the misconception the step exists to prevent,
-     * so the readout that uses this says which is which.
+     * What a black hole of a given mass is really like, in SI, apart from anything the canvas draws: the
+     * dark disc is a drawing at a scale chosen so orbits fit, and the Schwarzschild radius is a length in km;
+     * the readout that uses this says which is which.
      */
     holeFacts: massSun => blackHoleFacts(massSun),
     /**
@@ -539,12 +523,8 @@ function probeContext() {
           .includes(String(name).toLowerCase())
       ),
     /**
-     * The Experiment Bench's active experiment, if the bench has been opened.
-     *
-     * A getter rather than a value, and null rather than an import, because the
-     * bench is lazily loaded: a lesson that never touches it must not pull its
-     * chunk in, and a widget that reads it has to cope with it not being there
-     * yet. The chaos lesson's divergence widget is the only consumer.
+     * The Experiment Bench's active experiment, if opened: a getter, and null rather than an import, because
+     * the bench is lazy and a widget must cope with it not being there yet (the chaos lesson's widget only).
      */
     experiment: () => {
       try {
@@ -567,13 +547,8 @@ function probeContext() {
 // --- Setting up a step's scenario ---------------------------------------------
 
 /**
- * Convert a lesson's declarative setup into a shared-link payload.
- *
- * Reusing the link format means a lesson step and a shared link travel the same
- * code path, so a step cannot set up a state that could not also be handed out
- * as a URL, which is how the "open this exact state" links in the report stay
- * honest.
- *
+ * Convert a lesson's declarative setup into a shared-link payload, so a step cannot set up a state that could
+ * not be handed out as a URL (the report's "open this exact state" links stay honest).
  * @param {Object} setup - From a step definition
  * @returns {Object} Payload for applyShareState
  */
@@ -610,17 +585,8 @@ function applySetup(setup) {
 }
 
 /**
- * Hold the simulation still in the ways a lesson depends on.
- *
- * Clicking a planet to select it and dragging on empty space to place a new one
- * are the same gesture a few pixels apart, so a student aiming at a planet
- * regularly drops a star next to it instead, which silently changes the system
- * they are measuring. Placement is therefore off by default during a lesson,
- * and can be turned back on for the steps that ask for it.
- */
-/**
- * Resolve this step's `bind` against the world that is on screen.
- * @returns {void}
+ * Hold the simulation still in the ways a lesson depends on. Placement is off by default during a lesson (a
+ * click on a planet and a drag that places a new body are one gesture a few pixels apart), and can be turned back on.
  */
 function bindStepRoles(force) {
   const step = currentStep();
@@ -807,12 +773,8 @@ function fieldValues(step, id) {
 }
 
 /**
- * Fill in any field that is derived from the others.
- *
- * Arithmetic a student does on a calculator and copies back is arithmetic they
- * can get wrong in a way that has nothing to do with the astronomy. Computing
- * the derived value here keeps the assessment pointed at the concept, and it
- * gives the validator a number it can trust.
+ * Fill in any field that is derived from the others, so the assessment stays on the concept and the validator
+ * gets a number it can trust.
  *
  * @param {Object} step - Step definition
  * @param {string} id - Step response-key prefix
@@ -936,12 +898,9 @@ function renderStep() {
 
   setProse(els.body, parts.join(''));
 
-  // Both classes are set before the panels are filled, not after: a widget
-  // sizes its canvas from the space it is about to be given, and reads these
-  // classes to know what that is. Toggling them afterwards left every
-  // measurement screen drawing at full height, its own controls out of view.
-  // investigation-aux: a second panel is docked beside the lesson. The light
-  // curve gives up height to it when both are on screen.
+  // Both classes are set before the panels are filled: a widget sizes its canvas from the space it is about
+  // to be given. investigation-aux: a second panel is docked beside the lesson; the light curve gives up
+  // height to it.
   document.body.classList.toggle(
     'investigation-aux',
     Boolean(step?.tool || step?.plot || step?.type === 'ellipse')
@@ -970,6 +929,7 @@ function renderStep() {
     stepId: () => stepId(stepIndex),
     currentStep,
     steps: () => active?.steps ?? [],
+    probeContext,
     save,
     renderStep,
     refreshMeasurements,
@@ -2006,13 +1966,9 @@ function goToStep(index, { rebuild = false, open = false } = {}) {
   const sid = active.steps[stepIndex]?.sid;
   if (sid) visited.add(sid);
 
-  // Reload when the scenario the step belongs to is not the one on screen, and
-  // only then, so work a student has done: objects placed, mass changed,
-  // survives moving between questions about the same system.
-  //
-  // Comparing the setup in force, not testing for one on this step, makes going
-  // backwards correct: the transit lesson swaps in a blended binary near the
-  // end, and stepping back must not leave it loaded for the earlier measurement.
+  // Reload only when the step's scenario is not the one on screen, so work done survives moving between
+  // questions about one system. Comparing the setup in force makes going backwards correct (the transit
+  // lesson swaps in a blended binary near the end).
   const setup = setupInForceAt(stepIndex);
   if (rebuild || (setup && setup !== appliedSetup)) applySetup(setup);
   else applyLocks();
@@ -2301,11 +2257,8 @@ export async function openInvestigation(id, opts = {}) {
 }
 
 /**
- * Put the reader's own world back, if it is still theirs to put back: only
- * when the world on screen is still the one the lesson built (a stage was up,
- * or the world generation has not moved past the lesson's rebuilds). A reader
- * who loaded a scenario or followed a link has taken it somewhere deliberate.
- *
+ * Put the reader's own world back, if it is still theirs: the world on screen is the one the lesson built
+ * (a stage was up, or the generation has not moved past the lesson's rebuilds). A loaded scenario or followed link was deliberate.
  * @param {object} saved - The pairs handed back by leaveLessonScope()
  * @returns {boolean} Whether the sandbox was put back
  */
