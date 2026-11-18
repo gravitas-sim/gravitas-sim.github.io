@@ -4912,7 +4912,7 @@
     min-width: 5rem;
   }
   /* On a phone the label has its own line and the range the next. */
-  @media (max-width: 480px) {
+  @media (max-width: 767px) {
     .inv-ecc-row {
       flex-wrap: wrap;
     }
