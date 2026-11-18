@@ -679,6 +679,11 @@ export const NEVER_PRECACHED = [
   // their first online use, not installed, for the same reason.
   /^js\/(sceneStatement|engine\/sources)\.js$/,
   /^js\/i18n\/(en|es)\.scene\.js$/,
+  // The figures drawn from the model and their declaration list: fetched when a step declares
+  // one (no shipped lesson does yet), so an install has no use for them. A lesson that adopts
+  // a figure deletes this entry, so its figure works offline from the first visit.
+  /^js\/lessonFigures\.js$/,
+  /^js\/lesson\/figureSpec\.js$/,
 ];
 
 const ON_DEMAND_ONLY = new Set([
