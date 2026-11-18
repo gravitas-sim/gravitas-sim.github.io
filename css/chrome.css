@@ -128,9 +128,7 @@
       color var(--duration) var(--ease);
   }
 
-  /* The Sizes statement's button: a row of the readout under its numbers,
-     like "About this scenario", so the panel's head stays as narrow as it was
-     and leaves the scene clear on a phone. */
+  /* The Sizes button: a readout row, like "About this scenario". */
   .readout-sizes-btn {
     display: block;
     width: 100%;

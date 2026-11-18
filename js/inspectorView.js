@@ -84,8 +84,7 @@ import { ES_ORBITGEOMETRYROW } from './i18n/es.orbitGeometryRow.js';
 import { formatSpeed, formatDistance } from './units.js';
 import { state, SETTINGS, current_scenario_name, command } from './appState.js';
 
-// The orbit geometry row's name and help: a small word file of its own, so the
-// start-up catalog carries neither and the row is named offline.
+// The orbit geometry row's words, installed so it is named offline.
 registerMessages('en', EN_ORBITGEOMETRYROW);
 registerMessages('es', ES_ORBITGEOMETRYROW);
 
@@ -407,7 +406,6 @@ export const buildInspectorView = (object, type, info) => {
     help: 'Re-express every position, and every trail, as this body would see them. Unlike Follow Mode, which only moves the camera, this redraws the recorded paths: put the Solar System into Earth\u2019s frame and Mars traces a loop that doubles back on itself.',
   });
 
-  // Every kind may ask; where no ellipse is a fair claim the overlay says why.
   overlays.push({
     id: 'orbitGeometryToggleBtn',
     label: t('overlay.orbitGeometry'),

@@ -28,7 +28,6 @@ import { crowdNotes } from './bodyDrawSky.js';
 // For the inspector's Appearance disclosure, which loads lazily and must not
 // import the drawing modules itself (js/inspectorView.js says why).
 registerCommands({ lightingNotes });
-// js/sizeFacts.js loads with the first description; the next rebuild adds it.
 let sizes = null;
 const sizeModule = () => {
   if (!sizes)
@@ -42,8 +41,7 @@ const sizeModule = () => {
   return typeof sizes.sizeSentence === 'function' ? sizes : null;
 };
 
-// The readout's Sizes button is named from the size facts' words, so it is
-// shown only once they are here (offline before a first use, it stays hidden).
+// Shown once the size facts' words are here.
 function labelSizesButton() {
   const btn = document.getElementById('readoutSizes');
   if (!btn) return;
@@ -173,7 +171,6 @@ export function summaryText() {
   );
   if (facts) parts.push(facts);
 
-  // Written by js/orbitGeometryOverlay.js while it is on.
   if (state.orbitGeometry?.active && state.orbitGeometry.summary) {
     parts.push(state.orbitGeometry.summary);
   }
@@ -181,7 +178,6 @@ export function summaryText() {
   return parts.join(' ');
 }
 
-/** The readout's Sizes button opens the statement, fetched on first use. */
 function wireSizesButton() {
   const btn = document.getElementById('readoutSizes');
   if (!btn || btn.dataset.wired) return;
