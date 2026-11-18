@@ -348,7 +348,9 @@ function describeStep(step) {
     case 'read':
       return 'Reading, and the world it sets up';
     case 'predict':
-      return 'A prediction, multiple choice';
+      return step.kind === 'estimate'
+        ? 'A prediction, an estimate'
+        : 'A prediction, multiple choice';
     case 'question':
       return step.kind === 'short' ? 'A written answer' : 'A question';
     case 'measure':
@@ -448,6 +450,8 @@ export function activityWorksheet(
         { size: 9.5, gap: 2 }
       );
       doc.writingSpace('Why do you think so?', { lines: 3 });
+    } else if (step.kind === 'estimate') {
+      doc.writingSpace(`Your estimate (${step.unit})`, { lines: 2 });
     } else if (step.type === 'measure') {
       doc.table({
         columns: ['Quantity', 'Value', 'Unit'],
