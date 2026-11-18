@@ -5047,15 +5047,6 @@
        every theme rather than sitting on a panel that changes under it. */
     background: #000;
   }
-  /* A figure drawn from the model (js/lesson/figures.js): colours are the
-     theme's own tokens, set inside the SVG. */
-  .inv-figure svg {
-    display: block;
-    width: 100%;
-    max-width: 30rem;
-    height: auto;
-    margin: 0 auto;
-  }
   .inv-figure figcaption {
     display: flex;
     flex-direction: column;

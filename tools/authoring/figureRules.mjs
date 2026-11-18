@@ -8,13 +8,31 @@
 // The photograph form (`src`) is not this rule's.
 // =============================================================================
 
-import { FIGURES } from '../../js/lesson/figureSpec.js';
+import { FIGURES as NAMES } from '../../js/lesson/figureSpec.js';
 
 export const FIGURE_RULE = 'ref/figure';
 export const FIGURE_RULE_DESCRIPTION =
   'A figure drawn from the model names a figure that exists and gives it the numbers it needs';
 
 const finite = v => Number.isFinite(v);
+const BODY = ['x', 'y', 'vx', 'vy', 'm'];
+const DISC = ['x', 'y', 'r'];
+
+/** Each figure: its constants with their domains, and the parts of a recorded state. */
+const FIGURES = {
+  orbit: {
+    ...NAMES.orbit,
+    constants: { a: v => v > 0, e: v => v >= 0 && v < 1, omegaDeg: finite },
+    required: ['a', 'e'],
+    state: { primary: BODY, body: BODY },
+  },
+  transit: {
+    ...NAMES.transit,
+    constants: { k: v => v > 0 && v <= 1, b: (v, p) => v >= 0 && v < 1 + p.k },
+    required: ['k', 'b'],
+    state: { star: DISC, planet: DISC, observer: ['phiDeg', 'incDeg'] },
+  },
+};
 const isObject = v => !!v && typeof v === 'object' && !Array.isArray(v);
 
 /**

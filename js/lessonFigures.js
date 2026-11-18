@@ -119,7 +119,7 @@ const STYLE =
   '.mf-d2{fill:var(--accent-soft);stroke:var(--accent);stroke-width:1.5}</style>';
 
 const wrap = (alt, body) =>
-  `<svg class="mf" viewBox="0 0 ${W} ${H}" role="img" aria-label="${esc(alt)}" xmlns="http://www.w3.org/2000/svg">${STYLE}${body}</svg>`;
+  `<svg style="display:block;width:100%;max-width:30rem;height:auto;margin:0 auto" viewBox="0 0 ${W} ${H}" role="img" aria-label="${esc(alt)}" xmlns="http://www.w3.org/2000/svg">${STYLE}${body}</svg>`;
 
 /** The two-body state a figure draws, as the engine's own record would hold it. */
 function orbitState(p) {

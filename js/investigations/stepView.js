@@ -160,10 +160,7 @@ export function stepMarkup(step, c) {
   }
 
   if (step.figure?.from) {
-    // Drawn from the model's own numbers: js/lesson/figures.js fills it (bindStepInputs).
-    parts.push(
-      `<figure class="inv-figure" data-figure-from="${attr(step.figure.from)}"></figure>`
-    );
+    parts.push('<figure class="inv-figure" data-figure-from></figure>');
   } else if (step.figure) {
     const f = step.figure;
     // Credit is part of the block rather than a footnote: these are other

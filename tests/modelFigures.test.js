@@ -444,7 +444,7 @@ describe('the step markup', () => {
   test('a drawn figure leaves a placeholder and nothing else; a photograph is as it was', () => {
     const drawn = stepMarkup(figureSteps[0], ctx(figureSteps[0])).join('');
     expect(drawn).toMatch(
-      /<figure class="inv-figure" data-figure-from="orbit"><\/figure>/
+      /<figure class="inv-figure" data-figure-from><\/figure>/
     );
     expect(drawn).not.toMatch(/<img|<svg/);
     const photo = {
