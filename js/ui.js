@@ -532,8 +532,7 @@ initPlacement({ canvas });
 // The rail's reference-frame selector. The inspector card's own buttons are
 // wired when its code arrives (js/inspectorGate.js).
 setupReferenceFrameControl();
-// The Tools barycenter marker: its module loads on the first choice. Offline
-// before that, the choice goes back to Off and says why.
+// The barycenter marker; back to Off if its module cannot be fetched.
 document
   .getElementById('barycenterMarkerSelect')
   ?.addEventListener('change', e => {

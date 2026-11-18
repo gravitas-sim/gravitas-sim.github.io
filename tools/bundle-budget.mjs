@@ -53,7 +53,7 @@ const BUDGETS = [
   {
     id: 'initial',
     label: 'Initial download (CSS + eager JS)',
-    limit: 739.5,
+    limit: 739.7,
     reason:
       'Was 743 KB when this budget was first asked for. The application had ' +
       'already grown to 771 KB on its own - the extracted state module, the ' +
@@ -117,12 +117,12 @@ const BUDGETS = [
       '\n\nA world seen close (D-R4-448-06): the night side, the phase, the seeded markings and the lighting sentences are drawn by the start-up drawing modules; raised from 735.3 to 738.5 KB, the exact overrun of a Node 22 build over v4 1f1235254 (756,163 bytes, 738.44 KB; the same build matched CI to the byte on the previous base) rounded up to 0.1 KB, under the standing approval of 2026-10-10.' +
       '\n\nCrowded-scene drawing (D-R4-450-07): the trail, detail and label rules, the label choice and the tier note are start-up drawing code; raised from 738.5 to 742.2 KB, the exact overrun of a Node 22 build over the light-and-phase change merged with v4 (759,937 bytes, 742.13 KB; the same build matched CI to the byte on the previous base) rounded up to 0.1 KB, under the standing approval of 2026-10-10.' +
       '\n\nThe Sizes statement and the orbit geometry overlay (D-R4-447-07): set to 738.6 KB, the measured size of a Node 22 build of the branch merged with v4 1ed519a17 and with the crowded-scene change (756,236 bytes, 738.51 KB) rounded up to 0.1 KB, under the standing approval of 2026-10-10; the size facts, the two-body model and the overlay state load lazily, and the readout button and its strings are paid for by the frozen circle and its inspector code, which are gone.' +
-      "\n\nThe frame line, the barycenter marker and the statement of which bodies pull (D-R4-449-06): raised from 738.6 to 739.5 KB, the exact overrun of a Node 22 build of the branch merged with the orbit geometry branch 340fbcb8c (757,159 bytes, 739.41 KB) rounded up to 0.1 KB, under the standing approval of 2026-10-10. The words, the marker and the source names load with the canvas description; start-up keeps the engine's one source rule, the lesson marker's cross and the control's wiring.",
+      "\n\nThe frame line, the barycenter marker and the statement of which bodies pull (D-R4-449-06): raised from 738.6 to 739.7 KB, the exact overrun of a Node 22 build of the branch merged with the orbit geometry branch 340fbcb8c (757,451 bytes, 739.70 KB) rounded up to 0.1 KB, under the standing approval of 2026-10-10. The words, the marker and the source names load three seconds after the splash, at idle, or at the marker's first choice; start-up keeps the engine's one source rule, the lesson marker's cross and the control's wiring.",
   },
   {
     id: 'deferred',
     label: 'Deferred JavaScript (lazy chunks, gzipped)',
-    limit: 3197.8,
+    limit: 3198.0,
     reason:
       'Jumped from 1369 KB to 2105 KB when three.js and Chart.js stopped being ' +
       'CDN requests and became bundled chunks. That is the point of the change ' +
@@ -724,7 +724,7 @@ const BUDGETS = [
       '\n\nA world seen close (D-R4-448-06): the limit is raised from 3178.2 to 3178.6 KB, the exact overrun of a Node 22 build over v4 1f1235254 (3,254,824 bytes gzipped, 3178.54 KB) rounded up to 0.1 KB, under the standing approval of 2026-10-10.' +
       '\n\nCrowded-scene drawing (D-R4-450-07): the limit is raised from 3178.6 to 3178.8 KB, the exact overrun of a Node 22 build over the light-and-phase change merged with v4 (3,255,073 bytes gzipped, 3178.78 KB) rounded up to 0.1 KB, under the standing approval of 2026-10-10.' +
       '\n\nThe Sizes statement and the orbit geometry overlay (D-R4-447-07): the limit is raised from 3183.7 to 3195.7 KB, the exact overrun of a Node 22 build of the branch merged with v4 1ed519a17 and with the crowded-scene change (3,272,299 bytes gzipped, 3195.60 KB) rounded up to 0.1 KB, under the standing approval of 2026-10-10; the overlay, the statement, the size facts, the two-body model and their words load only when asked for.' +
-      '\n\nThe frame line, the barycenter marker and the statement of which bodies pull (D-R4-449-06): the limit is raised from 3195.7 to 3197.8 KB, the exact overrun of a Node 22 build of the branch merged with the orbit geometry branch 340fbcb8c (3,274,455 bytes gzipped, 3197.71 KB) rounded up to 0.1 KB, under the standing approval of 2026-10-10; the words, the marker and the source names are one lazy module with their two word files.',
+      '\n\nThe frame line, the barycenter marker and the statement of which bodies pull (D-R4-449-06): the limit is raised from 3195.7 to 3198.0 KB, the exact overrun of a Node 22 build of the branch merged with the orbit geometry branch 340fbcb8c (3,274,725 bytes gzipped, 3197.97 KB) rounded up to 0.1 KB, under the standing approval of 2026-10-10; the words, the marker and the source names are one lazy module with their two word files.',
   },
 ];
 

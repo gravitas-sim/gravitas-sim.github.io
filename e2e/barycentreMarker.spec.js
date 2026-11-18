@@ -28,6 +28,11 @@ test('the barycenter control is reached and changed from the keyboard', async ({
 }) => {
   await app.boot();
   await app.loadScenario('binary-pair');
+  // The scene words arrive after the route is usable; their strings
+  // re-render the rail, so the keys are pressed once they are here.
+  await expect(page.locator('#overlayStats')).toContainText('Frame', {
+    timeout: 15_000,
+  });
   await app.railControl('referenceFrameSelect');
   await page.locator('#referenceFrameSelect').focus();
   await page.keyboard.press('Tab');

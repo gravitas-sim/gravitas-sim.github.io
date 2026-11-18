@@ -31,11 +31,7 @@ registerCommands({ lightingNotes });
 // js/sizeFacts.js loads with the first description; the next rebuild adds it.
 let sizes = null;
 let scene = null;
-/**
- * Fetch the scene's words and marker (js/sceneStatement.js), once; a failed
- * fetch (offline before its first use) can be tried again.
- * @returns {Promise<object>} The module
- */
+/** @returns {Promise<object>} js/sceneStatement.js, fetched once (retried after a failure) */
 export function loadSceneWords() {
   if (typeof scene?.frameLine === 'function') return Promise.resolve(scene);
   if (!scene)
@@ -50,11 +46,8 @@ export function loadSceneWords() {
 }
 
 /**
- * The scene's words and marker, once here. The canvas and the readout only
- * read them; the fetch starts after the route is usable (deferSceneWords),
- * at the first key or press, or at the Tools marker's first choice.
- * @param {boolean} [load] - Start the fetch if it has not started
- * @returns {?object} The module once it has arrived, null until then
+ * @param {boolean} [load] - Start the fetch
+ * @returns {?object} js/sceneStatement.js once here, else null
  */
 export const sceneWords = (load = false) => {
   if (load) loadSceneWords().catch(() => {});
@@ -62,10 +55,9 @@ export const sceneWords = (load = false) => {
 };
 
 let deferred = false;
-// After the first rebuild: three seconds on, at idle, or at the first key or
-// press, whichever comes first, so a route is usable before they are fetched.
+// Fetched 3 s after the splash, at idle: after the route is usable.
 function deferSceneWords() {
-  if (deferred) return;
+  if (deferred || !window.splashScreenEnded) return;
   deferred = true;
   const go = () => sceneWords(true);
   setTimeout(
@@ -75,8 +67,6 @@ function deferSceneWords() {
         : go(),
     3000
   );
-  for (const type of ['pointerdown', 'keydown'])
-    window.addEventListener(type, go, { once: true, passive: true });
 }
 const sizeModule = () => {
   if (!sizes)

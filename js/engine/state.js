@@ -208,9 +208,9 @@ export let physicsSettings = {
 // =============================================================================
 
 /**
- * The engine's one source rule (js/engine/sources.js says it in words): the
- * lists whose bodies the step sums as sources, in its summation order.
- * @param {object} s - mutual_gravity and star_only_gravity
+ * The engine's one source rule (js/engine/sources.js): the lists the step
+ * sums as sources, in its order.
+ * @param {object} s - Settings
  * @returns {string[]} List names
  */
 export const sourceLists = s => {

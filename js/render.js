@@ -1497,8 +1497,7 @@ const drawScene = () => {
 
   // The overlay carries only body ids; the point is recomputed from those
   // bodies every frame, so a student watches it stay still while two stars
-  // swing round it (not a value pushed in by the panel). Any bodies, not only
-  // stars. The Tools marker is js/sceneStatement.js's, loaded on first use.
+  // swing round it (not a value pushed in by the panel). Any bodies.
   if (state.barycenterOverlay?.active) {
     const ids = state.barycenterOverlay.ids || [];
     const members = barycenterBodies().filter(o => ids.includes(o.id));

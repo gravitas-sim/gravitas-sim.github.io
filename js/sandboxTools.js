@@ -713,9 +713,7 @@ export function drawInstrumentation(
     ctx.restore();
   }
 
-  // The frame the picture and its trails are drawn in, as the lowest note
-  // above the scale and size lines: beside them it ran under the transport
-  // bar's step chip at 1366 px.
+  // The frame, as the lowest note above the scale line.
   const frame = sceneWords()?.frameLine() || '';
 
   // What the tier or a crowd left out, above the scale line.
