@@ -10,7 +10,8 @@
 
 import { SOLAR_MASS_UNIT } from './constants.js';
 import { formatNumber } from './format.js';
-import { drawSolarLabel, hexToRgb, computeDynamicColor } from './utils.js';
+import { hexToRgb, computeDynamicColor } from './utils.js';
+import { bodyLabel } from './bodyLabels.js';
 import { mulberry32 } from './rng.js';
 import { whiteDwarfColor, tracerColor } from './bodyEffects.js';
 import {
@@ -280,15 +281,7 @@ function drawStar(o, ctx) {
   const screenR = r * z;
   const level = lodOf(o, 'Star');
 
-  // Color from the temperature, not the mass directly. The two agree for a
-  // main-sequence star (temperature is estimated from mass when a star carries
-  // none), but a star built from real data carries one. stellarPropertiesFor is
-  // what the habitable-zone ring and light curve read, so screen and panels
-  // share one number. An explicit baseColor still wins.
-  //
-  // Memoised on the star, keyed on the mass it was computed from: the color
-  // changes only on accretion or a merger, not sixty times a second, and
-  // stellarPropertiesFor allocates.
+  // Color from the temperature, not from the mass directly.
   if (
     !o._visual ||
     o._visual.mass !== o.mass ||
@@ -371,49 +364,17 @@ function drawStar(o, ctx) {
     // no-op
   }
 
-  ctx.save();
-  ctx.setTransform(1, 0, 0, 1, 0, 0);
-  const true_screen_pos = world_to_screen(world_pos);
-  // Two sizes, on purpose: the offset follows the *drawn* body so a label
-  // sits just off the visible disc, but whether to label at all follows the
-  // *model* radius, so shrinking the displayed size did not strip names from
-  // the Solar System's planets.
-  const screen_radius = r * state.zoom;
-  const label_size = o.radius * state.zoom;
-
-  if (label_size > 5) {
-    const label_y_offset = screen_radius + 12;
-    ctx.font = '12px Roboto Mono';
-    ctx.fillStyle = '#fff';
-    ctx.textAlign = 'center';
-    ctx.textBaseline = 'middle';
-    ctx.shadowColor = 'black';
-    ctx.shadowBlur = 4;
-
-    // Show name for Solar System sun, mass for others - unless a lesson has
-    // asked for neither: a mass printed under each of three unlabeled stars
-    // undoes the first screen of A Universe of Stars. The flag is set by
-    // js/lessonStage.js from the step's declaration and cleared with the stage.
-    if (o.anonymous) {
-      // Nothing. The lesson's object list still names it, so it is still
-      // selectable and still reachable from the keyboard.
-    } else if (o.isSolarSystemSun) {
-      ctx.fillText(
-        o.name,
-        true_screen_pos.x,
-        true_screen_pos.y + label_y_offset
-      );
-    } else {
-      drawSolarLabel(
-        ctx,
-        formatNumber(o.massInSuns),
-        true_screen_pos.x,
-        true_screen_pos.y + label_y_offset
-      );
-      // Remove subscript 'sun' drawing
-    }
-  }
-  ctx.restore();
+  // The offset follows the drawn disc; naming follows the model radius. A
+  // lesson can ask for neither (`anonymous`): the star stays selectable from
+  // the lesson's object list.
+  if (!o.anonymous)
+    bodyLabel(o, world_to_screen(world_pos), r * state.zoom, {
+      px: 12,
+      gate: o.radius * state.zoom > 5,
+      ...(o.isSolarSystemSun
+        ? { name: o.name }
+        : { value: formatNumber(o.massInSuns) }),
+    });
 }
 
 function drawNeutronStar(o, ctx) {
@@ -486,33 +447,12 @@ function drawNeutronStar(o, ctx) {
   }
 
   // Label
-  ctx.save();
-  ctx.setTransform(1, 0, 0, 1, 0, 0);
-  const true_screen_pos = world_to_screen(world_pos);
-  // Two sizes, on purpose: the offset follows the *drawn* body so a label
-  // sits just off the visible disc, but whether to label at all follows the
-  // *model* radius, so shrinking the displayed size did not strip names from
-  // the Solar System's planets.
-  const screen_radius = nsR * state.zoom;
-  const label_size = o.radius * state.zoom;
-
-  if (label_size > 2) {
-    const label_y_offset = screen_radius * 8 + 12;
-    ctx.font = '12px Roboto Mono';
-    ctx.fillStyle = '#fff';
-    ctx.textAlign = 'center';
-    ctx.textBaseline = 'middle';
-    ctx.shadowColor = 'black';
-    ctx.shadowBlur = 4;
-    drawSolarLabel(
-      ctx,
-      formatNumber(o.massInSuns),
-      true_screen_pos.x,
-      true_screen_pos.y + label_y_offset,
-      { suffix: ' NS' }
-    );
-  }
-  ctx.restore();
+  bodyLabel(o, world_to_screen(world_pos), nsR * state.zoom * 8, {
+    px: 12,
+    gate: o.radius * state.zoom > 2,
+    value: formatNumber(o.massInSuns),
+    suffix: ' NS',
+  });
 }
 
 function drawWhiteDwarf(o, ctx) {
@@ -572,33 +512,12 @@ function drawWhiteDwarf(o, ctx) {
   }
 
   // Label
-  ctx.save();
-  ctx.setTransform(1, 0, 0, 1, 0, 0);
-  const true_screen_pos = world_to_screen(world_pos);
-  // Two sizes, on purpose: the offset follows the *drawn* body so a label
-  // sits just off the visible disc, but whether to label at all follows the
-  // *model* radius, so shrinking the displayed size did not strip names from
-  // the Solar System's planets.
-  const screen_radius = wdR * state.zoom;
-  const label_size = o.radius * state.zoom;
-
-  if (label_size > 3) {
-    const label_y_offset = screen_radius * 2 + 12;
-    ctx.font = '12px Roboto Mono';
-    ctx.fillStyle = '#fff';
-    ctx.textAlign = 'center';
-    ctx.textBaseline = 'middle';
-    ctx.shadowColor = 'black';
-    ctx.shadowBlur = 4;
-    drawSolarLabel(
-      ctx,
-      formatNumber(o.massInSuns),
-      true_screen_pos.x,
-      true_screen_pos.y + label_y_offset,
-      { suffix: ' WD' }
-    );
-  }
-  ctx.restore();
+  bodyLabel(o, world_to_screen(world_pos), wdR * state.zoom * 2, {
+    px: 12,
+    gate: o.radius * state.zoom > 3,
+    value: formatNumber(o.massInSuns),
+    suffix: ' WD',
+  });
 }
 
 function drawGalaxy(o, ctx) {

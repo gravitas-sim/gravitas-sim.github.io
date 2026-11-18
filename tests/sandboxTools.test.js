@@ -331,6 +331,8 @@ function recordingContext() {
     calls,
     canvas: { width: 1200, height: 800 },
     save: noop('save'),
+    scale: noop('scale'),
+    strokeText: noop('strokeText'),
     restore: noop('restore'),
     beginPath: noop('beginPath'),
     moveTo: noop('moveTo'),
@@ -397,7 +399,7 @@ describe('the canvas instrumentation', () => {
     expect(shot.text).toContain('acceleration');
   });
 
-  test('the scale bar can be switched off and the corner goes quiet', () => {
+  test('the scale bar can be switched off and only the size disclosure stays', () => {
     const ctx = recordingContext();
     drawInstrumentation(
       ctx,
@@ -407,7 +409,8 @@ describe('the canvas instrumentation', () => {
       0,
       []
     );
-    expect(ctx.text).toEqual([]);
+    expect(ctx.text).toHaveLength(1);
+    expect(ctx.text[0].toLowerCase()).toContain('enlarged for visibility');
   });
 
   test('burns the scenario name into a captured frame', () => {

@@ -564,6 +564,11 @@ export const ES = {
   'settings.label.showAccelerationVectors': 'Mostrar vectores de aceleración',
   'settings.label.showPotentialWell': 'Mostrar el pozo de potencial',
   'settings.label.showScaleBar': 'Mostrar la barra de escala',
+  'settings.label.bodyLabels': 'Nombres de los cuerpos',
+  'settings.option.bodyLabels.all': 'Todos',
+  'settings.option.bodyLabels.bound':
+    'El seleccionado y los de la investigación',
+  'settings.option.bodyLabels.none': 'Ninguno',
   'settings.label.showElapsedTime': 'Mostrar el tiempo transcurrido',
   // No longer in the Settings panel (it drew no glow), but a scenario pack can
   // still carry it, and the Studio names it by this label.
@@ -1155,6 +1160,8 @@ export const ES = {
   'shortcut.theme': 'Cambiar de tema',
   'shortcut.units': 'Alternar unidades físicas / de simulación',
   'shortcut.trails': 'Alternar estelas',
+  'shortcut.bodyLabels':
+    'Rotar los nombres: todos, seleccionado e investigación, ninguno',
   'shortcut.undo': 'Deshacer el último objeto colocado',
   'shortcut.inspect': 'Inspeccionar un objeto',
   'shortcut.place': 'Colocar un objeto con velocidad',

@@ -95,7 +95,12 @@ on:
     # `v4` is the open train and is listed for the same reason and with the
     # same limit (D-R4-CI-01).
     branches: [main, v3, v4]
+  # Draft pull requests run nothing until they are marked ready for review
+  # (D-R4-CI-03): the runner pool fits about one full run at a time, and a
+  # draft's every push used to queue one. `ready_for_review` starts the full
+  # run; every push to a ready pull request runs as before.
   pull_request:
+    types: [opened, synchronize, reopened, ready_for_review]
   schedule:
     # Monday morning, UTC. Catches an engine or dependency change that landed
     # while nobody was pushing.
@@ -162,6 +167,7 @@ jobs:
   # in the commit and a register row, as D-R10-63 did."
   checks:
     name: Lint, tests and physics validation
+    if: ${{ !github.event.pull_request.draft }}
     runs-on: ubuntu-24.04
     timeout-minutes: 30
     steps:
@@ -435,6 +441,7 @@ jobs:
 
   build:
     name: Production build
+    if: ${{ !github.event.pull_request.draft }}
     runs-on: ubuntu-24.04
     timeout-minutes: 15
     steps:
@@ -493,6 +500,7 @@ jobs:
 
   e2e:
     name: Browser smoke tests (sources) ${{ matrix.shard }}/${{ strategy.job-total }}
+    if: ${{ !github.event.pull_request.draft }}
     runs-on: ubuntu-24.04
     # Twenty shards of equal DURATION, planned by tools/e2e-shards.mjs.
     #
@@ -617,7 +625,7 @@ jobs:
     # they did not. It does not decide anything - see the `ci` job, which
     # requires every shard itself - so a merge that fails cannot turn a red
     # suite green, and this job succeeding says nothing about the tests.
-    if: ${{ !cancelled() }}
+    if: ${{ !cancelled() && !github.event.pull_request.draft }}
     needs: [e2e]
     timeout-minutes: 10
     steps:
@@ -657,7 +665,7 @@ jobs:
     # crashed before uploading, a plan two shards computed differently, a list
     # line Playwright matched to nothing - each leaves a test missing or
     # doubled, and each fails here. Required by the ci job, unlike the report.
-    if: ${{ !cancelled() }}
+    if: ${{ !cancelled() && !github.event.pull_request.draft }}
     needs: [e2e]
     timeout-minutes: 10
     steps:
@@ -696,6 +704,7 @@ jobs:
 
   accessibility:
     name: Accessibility (axe + keyboard) ${{ matrix.part }}/${{ strategy.job-total }}
+    if: ${{ !github.event.pull_request.draft }}
     runs-on: ubuntu-24.04
     timeout-minutes: 25
     # 2026-11-12: two parts (Prompt 292 follow-up, D-R10-292-09; Carl's ruling of
@@ -1158,7 +1167,7 @@ jobs:
   # the job succeeds on a push, `ci` reads it as `optional`, and deploy runs.
   pr-class:
     name: Pull-request class
-    if: ${{ always() }}
+    if: ${{ always() && !github.event.pull_request.draft }}
     needs: [checks]
     runs-on: ubuntu-24.04
     timeout-minutes: 5
@@ -1230,6 +1239,13 @@ jobs:
           #
           # Written with a case statement rather than an associative array so
           # it runs on any bash and can be exercised outside Actions.
+          # A draft pull request runs nothing (D-R4-CI-03), so this gate fails
+          # on purpose: a draft must never read as tested.
+          if [ "${{ github.event.pull_request.draft }}" = "true" ]; then
+            echo "::error::Draft pull request: CI runs when it is marked ready for review."
+            exit 1
+          fi
+
           failed=0
 
           require() {

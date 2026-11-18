@@ -14,7 +14,8 @@ import { EARTH_MASSES_PER_JUPITER_MASS, SOLAR_MASS_UNIT } from './constants.js';
 import { simToAu } from './units.js';
 import { formatNumber, withUnit } from './format.js';
 import { t } from './i18n/index.js';
-import { drawSolarLabel, EARTH_SYMBOL, hexToRgb } from './utils.js';
+import { EARTH_SYMBOL, hexToRgb } from './utils.js';
+import { bodyLabel } from './bodyLabels.js';
 import { currentTier } from './quality.js';
 import { ENVIRONMENT } from './blackHole/appearance.js';
 import {
@@ -262,13 +263,10 @@ function drawPlanet(o, ctx) {
   shadeNight(o, ctx, world_pos, r);
 
   // Soft bloom, into the offscreen layer js/render.js composites additively.
-  // One pass, in the planet's own color (two blocks once painted the same
-  // gradient, the second in fixed pale blue, so every planet wore a bluish
-  // halo); the alphas are the two sets summed, so brightness is unchanged.
-  //
-  // Asking for the bloom layer arms the composite (see setBloomLayer), so the
-  // tier check comes first: js/quality.js lists the bloom canvas among the
-  // passes the low tier skips.
+  // One pass, in the planet's own color. Two blocks used to paint the same
+  // gradient, the second in a fixed pale blue at more than twice the alpha,
+  // so every planet wore the same bluish halo and paid for two gradients. The
+  // alphas below are the two sets summed: the brightness is what it was.
   try {
     if (currentTier() !== 'low') {
       // The halo follows the drawn body, not the model radius.
@@ -299,43 +297,15 @@ function drawPlanet(o, ctx) {
     // no-op
   }
 
-  ctx.save();
-  ctx.setTransform(1, 0, 0, 1, 0, 0);
-  const true_screen_pos = world_to_screen(world_pos);
-  // Two sizes, on purpose: the offset follows the *drawn* body so a label
-  // sits just off the visible disc, but whether to label at all follows the
-  // *model* radius, so shrinking the displayed size did not strip names from
-  // the Solar System's planets.
-  const screen_radius = r * state.zoom;
-  const label_size = o.radius * state.zoom;
-
-  if (label_size > 4) {
-    const label_y_offset = screen_radius + 10;
-    ctx.font = '10px Roboto Mono';
-    ctx.fillStyle = '#fff';
-    ctx.textAlign = 'center';
-    ctx.textBaseline = 'middle';
-    ctx.shadowColor = 'black';
-    ctx.shadowBlur = 3;
-
-    // Show name for Solar System planets, mass for others
-    if (o.isSolarSystemPlanet) {
-      ctx.fillText(
-        o.name,
-        true_screen_pos.x,
-        true_screen_pos.y + label_y_offset
-      );
-    } else {
-      drawSolarLabel(
-        ctx,
-        formatNumber(o.massInEarths),
-        true_screen_pos.x,
-        true_screen_pos.y + label_y_offset,
-        { symbol: EARTH_SYMBOL }
-      );
-    }
-  }
-  ctx.restore();
+  // The offset follows the drawn disc; naming follows the model radius, so a
+  // compressed planet keeps its name.
+  bodyLabel(o, world_to_screen(world_pos), r * state.zoom, {
+    px: 11,
+    gate: o.radius * state.zoom > 4,
+    ...(o.isSolarSystemPlanet
+      ? { name: o.name }
+      : { value: formatNumber(o.massInEarths), symbol: EARTH_SYMBOL }),
+  });
 }
 
 /**
@@ -903,44 +873,19 @@ function drawGasGiant(o, ctx) {
   }
   shadeNight(o, ctx, world_pos, gr, gry);
 
-  ctx.save();
-  ctx.setTransform(1, 0, 0, 1, 0, 0);
-  const true_screen_pos = world_to_screen(world_pos);
-  // Two sizes, on purpose: the offset follows the *drawn* body so a label
-  // sits just off the visible disc, but whether to label at all follows the
-  // *model* radius, so shrinking the displayed size did not strip names from
-  // the Solar System's planets.
-  const screen_radius = gr * state.zoom;
-  const label_size = o.radius * state.zoom;
-
-  if (label_size > 6) {
-    const label_y_offset = screen_radius + 12;
-    ctx.font = '11px Roboto Mono';
-    ctx.fillStyle = '#fff';
-    ctx.textAlign = 'center';
-    ctx.textBaseline = 'middle';
-    ctx.shadowColor = 'black';
-    ctx.shadowBlur = 3;
-
-    // Show name for Solar System gas giants, mass for others
-    if (o.isSolarSystemPlanet) {
-      ctx.fillText(
-        o.name,
-        true_screen_pos.x,
-        true_screen_pos.y + label_y_offset
-      );
-    } else {
-      const massInEarths = o.massInJupiters * EARTH_MASSES_PER_JUPITER_MASS;
-      drawSolarLabel(
-        ctx,
-        String(Math.round(massInEarths)),
-        true_screen_pos.x,
-        true_screen_pos.y + label_y_offset,
-        { symbol: EARTH_SYMBOL }
-      );
-    }
-  }
-  ctx.restore();
+  bodyLabel(o, world_to_screen(world_pos), gr * state.zoom, {
+    px: 11,
+    gap: 12,
+    gate: o.radius * state.zoom > 6,
+    ...(o.isSolarSystemPlanet
+      ? { name: o.name }
+      : {
+          value: String(
+            Math.round(o.massInJupiters * EARTH_MASSES_PER_JUPITER_MASS)
+          ),
+          symbol: EARTH_SYMBOL,
+        }),
+  });
 
   // ...and the near half over the top, which is what makes the disk read as
   // a disk passing behind and in front rather than as a hoop drawn on the
@@ -1042,14 +987,12 @@ function drawBlackHole(o, ctx) {
   const world_pos = o.pos; // Use direct world coordinates since canvas is already transformed
   const world_radius = o.radius;
 
-  // Everything visual lives in js/blackHole/render.js, handed a position, a
-  // drawn radius, this object's appearance and a clock. It reads no settings
-  // or state of its own, so the picture is reproducible and a rendering choice
-  // cannot reach the integrator.
-  //
-  // The global toggles stay visibility controls only: `show_accretion_disk` and
-  // `show_bh_jets` can hide what the environment would show, never conjure a
-  // disk onto a quiescent hole. Whether a hole HAS a disk is the scenario's.
+  // Everything visual lives in js/blackHole/render.js, which is handed a
+  // position, a drawn radius, this object's appearance and a clock. It reads
+  // no settings and no state of its own, so what is drawn here is entirely
+  // determined by those four things - which is what makes the picture
+  // reproducible and what keeps a rendering choice from reaching the
+  // integrator.
   const bhLevel = lodOf(o, 'BlackHole');
   const wanted = o.appearance || defaultAppearance(o.id);
   const shown = {
@@ -1125,34 +1068,21 @@ function drawBlackHole(o, ctx) {
     ctx.restore();
   }
 
-  ctx.save();
-  ctx.setTransform(1, 0, 0, 1, 0, 0);
-  const true_screen_pos = world_to_screen(world_pos);
-  const screen_radius = world_radius * state.zoom;
-  let label_y_offset = screen_radius + 15;
-  if (physicsSettings.show_bh_jets) {
-    label_y_offset = screen_radius * 6 + screen_radius + 10;
-  } else if (physicsSettings.show_accretion_disk) {
-    label_y_offset = screen_radius * 2.5 + 10;
-  } else if (physicsSettings.show_bh_glow) {
-    label_y_offset = screen_radius * 1.8 + 10;
-  }
-  ctx.font = '14px Roboto Mono';
-  ctx.fillStyle = '#fff';
-  ctx.textAlign = 'center';
-  ctx.textBaseline = 'middle';
-  ctx.shadowColor = 'black';
-  ctx.shadowBlur = 4;
-  // Significant figures rather than one decimal place: a stellar-mass hole
-  // reads 9.80 and a supermassive one reads 1.00 x 10^6 instead of 1000000.0.
-  const massStr = formatNumber(o.mass / SOLAR_MASS_UNIT);
-  drawSolarLabel(
-    ctx,
-    massStr,
-    true_screen_pos.x,
-    true_screen_pos.y + label_y_offset
-  );
-  ctx.restore();
+  const sr = world_radius * state.zoom;
+  // Clear of the disk and the jets, which reach several radii out. Significant
+  // figures: 9.80, and 1.00 x 10^6 for a supermassive hole.
+  const reach = physicsSettings.show_bh_jets
+    ? sr * 7
+    : physicsSettings.show_accretion_disk
+      ? sr * 2.5
+      : physicsSettings.show_bh_glow
+        ? sr * 1.8
+        : sr;
+  bodyLabel(o, world_to_screen(world_pos), reach, {
+    px: 14,
+    gate: true,
+    value: formatNumber(o.mass / SOLAR_MASS_UNIT),
+  });
 }
 
 /**
@@ -1207,26 +1137,11 @@ function drawComet(o, ctx) {
 
   ctx.restore();
 
-  // The label is text, and text has to be drawn in screen space or the
-  // render pass's flipped Y axis renders it upside down. Same shape as the
-  // planet's and the star's: reset the transform, draw, put it back.
-  if (r * z > 4) {
-    ctx.save();
-    ctx.setTransform(1, 0, 0, 1, 0, 0);
-    const true_screen_pos = world_to_screen(world_pos);
-    ctx.font = '10px Roboto Mono';
-    ctx.fillStyle = '#fff';
-    ctx.textAlign = 'center';
-    ctx.textBaseline = 'middle';
-    ctx.shadowColor = 'black';
-    ctx.shadowBlur = 2;
-    ctx.fillText(
-      withUnit(formatNumber(o.massInComets), 'C'),
-      true_screen_pos.x,
-      true_screen_pos.y + r * z + 12
-    );
-    ctx.restore();
-  }
+  bodyLabel(o, world_to_screen(world_pos), r * z, {
+    px: 11,
+    gate: r * z > 4,
+    name: withUnit(formatNumber(o.massInComets), 'C'),
+  });
 }
 
 /**
