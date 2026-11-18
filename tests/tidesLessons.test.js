@@ -391,16 +391,7 @@ describe('Io’s Fire: every stated number from the kernel', () => {
     expect(io.steps[0].setup.scenario).toBe('Galilean Resonance');
     const moon = INVESTIGATIONS.find(l => l.id === 'tides-that-move-the-moon');
     expect(moon.canvas).toBe('quiet');
-    // One neutral stage on the first step so the lesson builds a scene; the quiet canvas then empties it. Nothing else is staged, bound or set up.
-    expect(moon.steps.some(s => s.bind || s.setup)).toBe(false);
-    expect(moon.steps.map(s => Boolean(s.stage))).toEqual([
-      true,
-      false,
-      false,
-      false,
-      false,
-      false,
-    ]);
+    expect(moon.steps.some(s => s.stage || s.bind || s.setup)).toBe(false);
     expect(Object.keys(moon.retired)).toEqual(['the-moons-recession']);
   });
 });

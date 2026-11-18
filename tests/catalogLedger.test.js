@@ -114,7 +114,9 @@ describe('the baseline the ledger reproduces', () => {
   test('every row is seeded with its owning prompt, and the questions are empty', () => {
     for (const r of ledger.rows) {
       expect([r.id, Number.isInteger(r.owner)]).toEqual([r.id, true]);
-      expect(Object.values(r.questions).every(v => v === '')).toBe(true);
+      // A row a content change has closed carries its written answers; every other row is still empty.
+      if (r.editorial === 'OPEN' && r.redesign === 'OPEN')
+        expect(Object.values(r.questions).every(v => v === '')).toBe(true);
     }
     expect(
       ledger.rows

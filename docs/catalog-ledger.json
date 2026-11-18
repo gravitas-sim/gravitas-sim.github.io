@@ -2582,7 +2582,7 @@
       ],
       "walk": "VERIFIED",
       "pr": 676,
-      "hash": "9a8261779bed982da49e822d14e209421e3b44b663651afceea6b789f15d0806"
+      "hash": "a883a630f4a9cf704052205afb3d408dc899b958469e753df6cd570af03f002f"
     },
     {
       "id": "investigation:keplers-laws",
@@ -5552,7 +5552,7 @@
       ],
       "walk": "VERIFIED",
       "pr": 676,
-      "hash": "d5b9dcdac2e2de6b80bc0b6215f5d95395da73fba67240a3a6df6c2575615fa4"
+      "hash": "be022e27ba57675cb4a82d1752d1c4b18ac30fea5f97e560df3659292994b9ab"
     },
     {
       "id": "investigation:transit-photometry",

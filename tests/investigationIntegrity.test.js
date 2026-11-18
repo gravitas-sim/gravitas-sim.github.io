@@ -431,7 +431,10 @@ describe('scenario references', () => {
     // than a weaker one: it declares every object on screen rather than
     // inheriting a scenario built for something else.
     const bad = INVESTIGATIONS.filter(
-      inv => !inv.steps.some(st => st.setup?.scenario || st.stage)
+      // A quiet canvas builds no scene on purpose (Roadmap IV, canvas kinds).
+      inv =>
+        inv.canvas !== 'quiet' &&
+        !inv.steps.some(st => st.setup?.scenario || st.stage)
     ).map(inv => `${inv.id} never names a scenario and never stages a scene`);
     expect(bad).toEqual([]);
   });

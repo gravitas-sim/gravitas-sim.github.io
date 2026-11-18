@@ -543,7 +543,6 @@ export const TIDES_THAT_MOVE_THE_MOON = {
   steps: [
     {
       sid: 'the-bulge-ahead',
-      stage: STAGE,
       type: 'read',
       title: 'A bulge that runs ahead',
       body: `The Moon raises two bulges on the Earth&rsquo;s oceans and body. The Earth spins
