@@ -42,5 +42,25 @@
     "profileMeasuredFrameMs": 5.01,
     "profileThresholdMs": 8,
     "reading": "The control scene measured 8.27 to 9.55 ms against its recorded 5.01, above the 8.0 bound itself, so the machine was again not at the profile's conditions. The run cost no more than the same scene idle (medians 9.50 and 9.03). Criterion 6 stays NOT RUN."
+  },
+  "rerun2026-11-18-quiet": {
+    "conditions": "as rerun2026-11-18, the quietest window of the night",
+    "loadAverages": "one-minute 4.7 to 11.8, fifteen-minute 2.8 to 3.8",
+    "runFrameMs": [
+      8.57,
+      7.63,
+      11.6
+    ],
+    "idleSameSceneFrameMs": [
+      9.25,
+      9.1,
+      8.68
+    ],
+    "binaryPairControlFrameMs": [
+      8.07,
+      8.52,
+      7.52
+    ],
+    "reading": "Even at a fifteen-minute load of 3 the control scene measured 7.52 to 8.52 ms against its recorded 5.01, at the 8.0 bound itself, so this machine does not reproduce the profile's conditions today. The run's median (8.57) is no higher than the idle scene's (9.10). Criterion 6 stays NOT RUN; judging it needs the profile re-recorded on this machine or a run where the control returns near 5.01."
   }
 }
