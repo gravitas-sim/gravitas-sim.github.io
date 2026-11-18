@@ -1,14 +1,7 @@
-// =============================================================================
-// The pause-at-event panel
-// -----------------------------------------------------------------------------
-// The interface over js/pauseAtEvent.js, kept apart from it so the detection
-// stays free of the DOM and can be tested against an analytic orbit rather than
-// by clicking things.
-//
-// What this layer owns: which bodies the two selects offer, the units the
-// reader types in (AU, not simulation lengths), turning a refusal code into a
-// sentence, and keeping the whole thing inert until somebody opens it.
-// =============================================================================
+// The pause-at-event panel: the interface over js/pauseAtEvent.js, kept apart so
+// detection stays free of the DOM. Owns the body selects, the units the reader
+// types (AU, not simulation lengths), refusal sentences, and staying inert until
+// opened.
 
 import {
   bh_list,
@@ -78,6 +71,7 @@ function cacheElements() {
     arm: document.getElementById('pauseEventArm'),
     disarm: document.getElementById('pauseEventDisarm'),
     message: document.getElementById('pauseEventMessage'),
+    readout: document.querySelector('#pauseEventResult .pause-event-readout'),
     result: document.getElementById('pauseEventResult'),
     time: document.getElementById('pauseEventTime'),
     precision: document.getElementById('pauseEventPrecision'),
@@ -106,8 +100,7 @@ function fillBodies() {
     if (bodies.some(b => String(b.id) === wanted)) select.value = wanted;
   }
 
-  // A sensible default the first time: the selected object, about whatever it
-  // is most strongly bound to, which is the orbit a reader is looking at.
+  // First-time default: the selected object about its dominant primary.
   if (e.body && e.primary && !e.body.dataset.touched) {
     const chosen = state?.selectedObject?.object;
     const target = chosen?.alive ? chosen : bodies[bodies.length - 1];
@@ -139,9 +132,8 @@ const resolveBody = id =>
 function syncFields() {
   const e = cacheElements();
   const kind = e.kind?.value;
-  // A transit names one body; everything else names a pair. The two
-  // radial-velocity turning points name a pair too - the star and what it is
-  // orbiting - because the watch has to know which star the spectrograph is on.
+  // A transit names one body; everything else a pair (the radial-velocity
+  // kinds too: the watch needs the star the spectrograph is on).
   const needsPair = kind !== EVENT_KINDS.TRANSIT;
   const needsSeparation =
     kind === EVENT_KINDS.SEPARATION_INWARD ||
@@ -151,8 +143,7 @@ function syncFields() {
   if (e.primaryField) e.primaryField.hidden = !needsPair;
   if (e.separationField) e.separationField.hidden = !needsSeparation;
 
-  // A helpful starting radius: where the body is now, which is always inside
-  // its own orbit and therefore always a crossing that can happen.
+  // Starting radius: where the body is now, always inside its own orbit.
   if (needsSeparation && e.separation && !e.separation.value) {
     const body = resolveBody(e.body?.value);
     const primary = resolveBody(e.primary?.value);
@@ -230,11 +221,8 @@ function arm() {
 }
 
 /**
- * The dependency block the watcher needs.
- *
- * Lifted out of arm() so a lesson can arm through the same one. A second copy
- * would be a second thing that could disagree with this about what the clock
- * is, and the clock is what every reported event time is in.
+ * The dependency block the watcher needs, shared with lesson arming so there is
+ * one definition of the clock.
  *
  * @returns {object} deps for armEvent
  */
@@ -248,11 +236,9 @@ function watchDeps() {
     onStep: onPhysicsStep,
     G: () => getPhysicsSetting('gravitational_constant'),
     transitLog: () => transitAnalysis().log,
-    // How fast the line-of-sight velocity is changing, for the two
-    // radial-velocity turning points. Differenced from the reading the
-    // spectrograph itself reports rather than derived independently, so the
-    // watch fires at the turning point of the curve a student is looking at
-    // and not at the turning point of a second quantity that resembles it.
+    // Rate of the line-of-sight velocity for the radial-velocity kinds,
+    // differenced from the spectrograph's own reading so the watch fires at the
+    // turning point of the curve the student sees.
     losRate: () => {
       const now = currentRadialVelocity();
       const t = currentTimeDays();
@@ -268,12 +254,8 @@ function watchDeps() {
 let lastLos = null;
 
 /**
- * Show a spec in the form without arming it.
- *
- * For the guided lessons: a step opens the tool with the right bodies and the
- * right event already chosen, and the reader presses Arm themselves. Selecting
- * is not arming, and a lesson that armed on their behalf would be answering
- * its own question.
+ * Show a spec in the form without arming it: the reader presses Arm, since a
+ * lesson that armed would answer its own question.
  *
  * @param {object} spec - {kind, bodyId, primaryId, separation}
  * @returns {boolean} Whether every part of the spec could be shown
@@ -287,10 +269,8 @@ export function presetSelection(spec) {
   const set = (el, value) => {
     if (!el || value === null || value === undefined) return;
     const wanted = String(value);
-    // Only if the option exists. Assigning a value a select does not have
-    // leaves it on whatever it was showing, and a form that silently shows a
-    // different body from the one the step named is worse than one that says
-    // it could not.
+    // Only if the option exists: assigning a missing value leaves the select on
+    // a different body, which is worse than reporting incomplete.
     if (![...el.options].some(o => o.value === wanted)) {
       complete = false;
       return;
@@ -310,10 +290,8 @@ export function presetSelection(spec) {
 }
 
 /**
- * Arm the spec a lesson step supplied, through the panel's own deps.
- *
- * Reports the refusal in the panel as well as returning it, so a reader who
- * pressed a lesson button sees the reason in the tool they are looking at.
+ * Arm the spec a lesson step supplied, through the panel's own deps. A refusal
+ * is shown in the panel as well as returned.
  *
  * @param {object} spec - {kind, bodyId, primaryId, separation, note}
  * @returns {{ok: boolean, reason?: string, detail?: object}} Outcome
@@ -336,14 +314,18 @@ function render() {
   const e = cacheElements();
   const armedSpec = armedEvent();
   const event = lastEvent();
+  // A lesson holding an answer (js/lesson/held.js) is told which event, not when.
+  const held = Boolean(event && heldAnswer());
 
   if (e.status) {
     e.status.textContent = armedSpec
       ? t('pauseEvent.status.armed')
       : event
-        ? t('pauseEvent.status.fired')
+        ? t('pauseEvent.status.fired') +
+          (held ? `: ${t(`pauseEvent.kind.${event.kind}`)}` : '')
         : t('pauseEvent.status.idle');
   }
+  if (e.readout) e.readout.hidden = held;
   if (e.arm) e.arm.disabled = Boolean(armedSpec);
   if (e.disarm) e.disarm.disabled = !armedSpec;
 
@@ -370,12 +352,17 @@ function render() {
   if (e.note && e.note.value !== event.note) e.note.value = event.note || '';
 }
 
+/** Whether the open lesson holds an answer (HELD_ATTRIBUTE, js/lesson/held.js). */
+const heldAnswer = () =>
+  Boolean(
+    document.querySelector(
+      '#investigationPanel[data-answer-held]:not([hidden])'
+    )
+  );
+
 /**
- * Open or close the panel.
- *
- * Closing disarms. A watch is a thing the reader asked for while looking at
- * this panel; leaving one running behind a closed panel would stop the
- * simulation later with nothing on screen to say why.
+ * Open or close the panel. Closing disarms: a watch behind a closed panel would
+ * stop the simulation with nothing on screen to say why.
  *
  * @param {boolean} on - Whether to show it
  */
@@ -406,14 +393,12 @@ export function setPauseAtEventEnabled(on) {
 function handleEvent(payload) {
   if (payload.type === 'fired') {
     say(t('pauseEvent.fired'), 'fired');
-    // The stop is the last thing that happens, so the transport will not call
-    // back with a timeline change to hang the marker on. Place it here.
+    // The stop is last, so no timeline change will follow; place the marker here.
     renderEventMarker({
       frameCount: getFrameCount(),
       simClock: getSimClock(),
     });
-    // Focus the note so a reader can type what they saw without hunting for
-    // the field: the moment they wanted has just arrived and gone.
+    // Focus the note so the reader can type what they saw.
     cacheElements().note?.focus();
   } else if (payload.type === 'disarmed' && payload.reason === 'targetGone') {
     say(t('pauseEvent.refused.targetGone'), 'refused');
@@ -426,15 +411,10 @@ function handleEvent(payload) {
 }
 
 /**
- * Place the marker for the event that fired on the timeline track.
- *
- * Called from the transport whenever the track changes, and draws nothing until
- * an event has fired - the marker is the only trace of a pause that has already
- * happened, and the reader should be able to find it again after scrubbing
- * away from it.
- *
- * Positioned by clock rather than by frame index: the ring buffer's indices
- * shift as it fills, and the event's time does not.
+ * Place the fired event's marker on the timeline track, called from the
+ * transport whenever the track changes; hidden until an event has fired.
+ * Positioned by clock, not frame index, because the ring buffer's indices shift
+ * as it fills.
  *
  * @param {{frameCount: number, simClock: number}} info - From the timeline
  */
@@ -450,8 +430,7 @@ export function renderEventMarker({ frameCount, simClock } = {}) {
     return;
   }
 
-  // Where the event sits in the recorded window, as a fraction. The window is
-  // the last `extent.simTime` of simulated time ending at the current clock.
+  // Fraction of the recorded window (the last extent.simTime ending now).
   const clockDays = simToDaysApprox(simClock);
   const spanDays = simToDaysApprox(extent.simTime);
   const age = clockDays - event.timeDays;
@@ -464,17 +443,18 @@ export function renderEventMarker({ frameCount, simClock } = {}) {
   const fraction = 1 - age / spanDays;
   marker.hidden = false;
   marker.style.left = `${(fraction * 100).toFixed(2)}%`;
-  marker.title = t('pauseEvent.marker', {
-    kind: t(`pauseEvent.kind.${event.kind}`),
-    time: formatNumber(event.timeDays, { sig: 4 }),
-  });
+  const kind = t(`pauseEvent.kind.${event.kind}`);
+  marker.title = heldAnswer()
+    ? kind
+    : t('pauseEvent.marker', {
+        kind,
+        time: formatNumber(event.timeDays, { sig: 4 }),
+      });
 }
 
 /**
- * Simulation time to days, without importing the light curve's private helper.
- *
- * currentTimeDays() converts the live clock; this converts a span, and the
- * ratio is the same because the conversion is linear.
+ * Simulation time to days without the light curve's private helper: the
+ * conversion is linear, so the live-clock ratio converts a span too.
  */
 function simToDaysApprox(simTime) {
   const now = currentTimeDays();
@@ -490,14 +470,12 @@ let wired = false;
  * first needed.
  */
 export function initPauseAtEvent({ signal } = {}) {
-  // Anything that asked for the elements before the markup was mounted cached
-  // nothing; ask again now that it is there.
+  // Re-ask: an earlier call before the markup mounted cached nothing.
   if (!wired) els = null;
   const e = cacheElements();
   if (!e.container || wired) return;
   wired = true;
-  // The toggle is the rail's and the window is everyone's: both outlive the
-  // panel's markup, so their listeners go when the mount's signal does.
+  // The toggle and window outlive the markup; their listeners go with the signal.
   const opts = signal ? { signal } : undefined;
 
   e.toggle?.addEventListener(
@@ -522,14 +500,13 @@ export function initPauseAtEvent({ signal } = {}) {
   });
   e.note?.addEventListener('input', () => annotateLastEvent(e.note.value));
 
-  // A rebuilt world reuses body ids for different objects, so a watch that
-  // survived would be watching something else under the same name.
+  // A rebuilt world reuses ids for different objects.
   window.addEventListener(
     EV_SIMULATION_RESET,
     () => {
       resetPauseAtEvent();
       if (enabled) {
-        // The selects hold ids that no longer mean what they did.
+        // The selects' ids are stale.
         if (e.body) delete e.body.dataset.touched;
         fillBodies();
         syncFields();
