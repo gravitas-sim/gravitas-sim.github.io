@@ -331,6 +331,8 @@ function recordingContext() {
     calls,
     canvas: { width: 1200, height: 800 },
     save: noop('save'),
+    scale: noop('scale'),
+    strokeText: noop('strokeText'),
     restore: noop('restore'),
     beginPath: noop('beginPath'),
     moveTo: noop('moveTo'),

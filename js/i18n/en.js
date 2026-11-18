@@ -837,6 +837,10 @@ export const EN = {
   'settings.label.showAccelerationVectors': 'Show Acceleration Vectors',
   'settings.label.showPotentialWell': 'Show Potential Well',
   'settings.label.showScaleBar': 'Show Scale Bar',
+  'settings.label.bodyLabels': 'Body Names',
+  'settings.option.bodyLabels.all': 'All',
+  'settings.option.bodyLabels.bound': 'Selected and investigation bodies',
+  'settings.option.bodyLabels.none': 'None',
   'settings.label.showElapsedTime': 'Show Elapsed Time',
   // No longer in the Settings panel (it drew no glow), but a scenario pack can
   // still carry it, and the Studio names it by this label.
@@ -1167,6 +1171,8 @@ export const EN = {
   'shortcut.theme': 'Cycle theme',
   'shortcut.units': 'Toggle physical / simulation units',
   'shortcut.trails': 'Toggle trails',
+  'shortcut.bodyLabels':
+    'Cycle body names: all, selected and investigation, none',
   'shortcut.undo': 'Undo last placed object',
   'shortcut.inspect': 'Inspect an object',
   'shortcut.place': 'Place an object with velocity',

@@ -50,6 +50,14 @@ import {
 } from './bodyDrawSky.js';
 import { LOD_POINT_MAX_PX, hitRadius, starColor } from './bodyVisuals.js';
 import { setBloomLayer } from './bodyDraw.js';
+import {
+  claim,
+  frameScale,
+  drawBodyMarks,
+  labelFont,
+  nameSpots,
+  pixelScale,
+} from './bodyLabels.js';
 import { getWorldSeed } from './rng.js';
 import { state, SETTINGS, registerCommands } from './appState.js';
 import { barycenterOf } from './lesson/barycenter.js';
@@ -157,10 +165,6 @@ function drawEvolutionScene(ctx) {
   // ejecta leave it behind at once, and both have no photosphere to measure
   // against anyway. Sizing those from the body gave a smudge a few pixels
   // across on the screen whose prose says "light-years".
-  //
-  // Screen pixels either way, and clamped at both ends: this is an annotation
-  // laid over the scene, and it has to stay legible when the reader zooms out
-  // and stay bounded when they zoom in.
   const scene = sceneFor(overlay.frame, {
     seed: overlay.seed,
     stillFrame: Boolean(overlay.stillFrame),
@@ -301,7 +305,6 @@ import {
   drawBodyVectors,
   vectorLegendRows,
   drawPotentialWell,
-  fitFont,
 } from './vectorOverlay.js';
 import { isEmbed } from './presentation.js';
 import { t, onLocaleChange } from './i18n/index.js';
@@ -384,16 +387,6 @@ const starfieldCanvas = document.getElementById('starfieldCanvas');
 const starCtx = starfieldCanvas.getContext('2d');
 
 // The sky, and the three canvases it is painted onto once.
-//
-// Nothing about a star changes between repaints - not its position, not its
-// color, not its brightness - so painting all of them every repaint was
-// redrawing an unchanging picture twenty or more times a second. Each parallax
-// layer is now rendered to its own offscreen canvas when something that
-// actually affects it changes, and a repaint is three blits.
-//
-// What still happens per repaint: the handful of stars that twinkle, and the
-// stars inside a lensing or gravitational-wave region, which are cut out of
-// the blitted layer and redrawn displaced. Both are bounded and small.
 let starField = null;
 let starIndex = null;
 const starLayerCanvases = { far: null, mid: null, near: null };
@@ -407,15 +400,6 @@ const bloomCanvas = document.createElement('canvas');
 const bloomCtx = bloomCanvas.getContext('2d');
 
 // Whether anything drew a glow into the bloom layer this frame.
-//
-// Compositing it costs a full-screen `drawImage` in `lighter` mode plus a
-// full-screen clear, every frame, whether or not a single glow was drawn.
-// Most scenarios have no bloom content at all, so most of the time that was
-// two full-screen operations to add nothing.
-//
-// The flag is set by the function physics.js asks for the layer through
-// (setBloomLayer), not by each call site: asking is the intent to draw, so it
-// is the one place that cannot be forgotten when a new glow is added.
 let bloomDirty = false;
 
 setBloomLayer(() => {
@@ -661,15 +645,6 @@ function distortionRegions() {
       const screen = world_to_screen({ x: ripple.x, y: ripple.y });
       const radius = c * age * state.zoom;
       // An annulus, not a disc.
-      //
-      // A ripple's displacement is a sine under an exp(-|phase|) envelope
-      // centered on the expanding wavefront, so the sky it actually moves is a
-      // band a couple of wavelengths wide around that front. Treating it as a
-      // filled disc meant that an old ripple - and they live fifteen seconds,
-      // by which time the front is thousands of pixels out - claimed the whole
-      // screen as its affected region, repainted all of it and redrew every
-      // star in it to move almost none of them. That was the crowded scene's
-      // remaining 8.5ms and the merger scene's 4.8.
       const band = 1.5 * wavelength;
       regions.push({
         x: screen.x,
@@ -864,13 +839,6 @@ function drawStarfield() {
     if (!(region.r > 0)) continue;
     // Redraw the patch from scratch: background over the disc, then the stars
     // that belong in it, displaced.
-    //
-    // The disc is filled directly rather than clipped and then filled. A clip
-    // plus a bounding-square fill was two expensive operations per region and,
-    // in a scene with fifteen compact objects, fifteen of each - which is
-    // where the crowded case's remaining time was. Nothing needs the clip: the
-    // displacement tapers to zero at the edge of the same disc, so a star near
-    // the rim barely moves and cannot escape it.
     const inner = region.inner || 0;
     starCtx.beginPath();
     starCtx.arc(region.x, region.y, region.r, 0, 2 * Math.PI);
@@ -912,13 +880,6 @@ function drawStarfield() {
             sy += push.dy;
             // A lensed star is drawn brighter and a little larger rather than
             // with a canvas shadow.
-            //
-            // shadowBlur is the single most expensive thing a 2D context can
-            // be asked for, and this was asking for it once per star per
-            // region - hundreds of times a repaint in a scene full of compact
-            // objects. On a one-pixel square the shadow was a soft blob, which
-            // is what a slightly larger, slightly brighter square already
-            // looks like. Same reading, a fraction of the cost.
             const glow = push.blur > 0 ? Math.min(1, push.blur / 2.5) : 0;
             const size = star.size * (1 + glow * 0.9);
             const alpha = Math.min(1, star.alpha * (1 + glow * 0.6));
@@ -1046,6 +1007,7 @@ function framedTrail(trail, shifts, newestTick) {
 const drawScene = () => {
   ctx.setTransform(1, 0, 0, 1, 0, 0);
   ctx.clearRect(0, 0, canvas.width, canvas.height);
+  frameScale(canvas);
 
   // Resolve the reference frame once per rendered frame. Everything downstream
   // reads state.frameOffset - the canvas transform below, world_to_screen for
@@ -1362,7 +1324,7 @@ const drawScene = () => {
       ctx.save();
       ctx.setTransform(1, 0, 0, 1, 0, 0);
       if (outerR * state.zoom > 30) {
-        ctx.font = fitFont(ctx, '12px Inter, system-ui, sans-serif');
+        ctx.font = labelFont(12, 'Inter, system-ui, sans-serif');
         ctx.textBaseline = 'middle';
         ctx.shadowColor = 'rgba(0,0,0,0.8)';
         ctx.shadowBlur = 4;
@@ -1384,7 +1346,7 @@ const drawScene = () => {
         );
         // Edge labels only once there is room for them to not collide.
         if ((outerR - innerR) * state.zoom > 46) {
-          ctx.font = fitFont(ctx, '11px Inter, system-ui, sans-serif');
+          ctx.font = labelFont(11, 'Inter, system-ui, sans-serif');
           label(
             innerR,
             bounds.innerLabel,
@@ -1422,37 +1384,12 @@ const drawScene = () => {
 
   bh_list.forEach(bh => bh.draw(ctx));
 
-  // Which black hole is selected, marked as UI rather than as light: a dashed
-  // ring outside the silhouette at any zoom, for the chosen object only (a ring
-  // drawn on every hole read as something the object emitted).
-  if (state.selectedObject?.type === 'BlackHole') {
-    const bh = state.selectedObject.object;
-    if (bh && bh.alive && bh.pos) {
-      ctx.save();
-      ctx.strokeStyle = 'rgba(150,195,255,0.8)';
-      ctx.lineWidth = 1.5 / state.zoom;
-      ctx.setLineDash([6 / state.zoom, 5 / state.zoom]);
-      ctx.beginPath();
-      ctx.arc(bh.pos.x, bh.pos.y, bh.radius + 7 / state.zoom, 0, 2 * Math.PI);
-      ctx.stroke();
-      ctx.restore();
-    }
-  }
-
   // Draw enhanced hover effect for clickable objects - draw in world coordinates since canvas is already transformed
   if (!state.inspector_open && state.user_has_interacted) {
     const worldPos = screen_to_world(state.mouse);
     const hoveredObject = findObjectAtPosition(worldPos);
     if (hoveredObject) {
       // Draw enhanced circle in world coordinates (canvas is already transformed)
-      //
-      // Drawn around the *hit* radius rather than the body, which is the whole
-      // point of it: a rocky planet is drawn at three eighths of the size the
-      // simulation gives it, so on a small body this ring is how a reader
-      // finds the thing at all - and putting it where the click target
-      // actually ends means the ring is a true statement about what pressing
-      // here will select, instead of an approximation that got looser the
-      // moment the drawing was compressed.
       const obj_pos = hoveredObject.object.pos;
       const baseRadius = hitRadius(
         hoveredObject.object.radius,
@@ -1530,6 +1467,7 @@ const drawScene = () => {
   // Hover tooltip removed per request
 
   ctx.restore();
+  drawBodyMarks(ctx, world_to_screen);
 
   // Everything from here down is screen space, and everything from here down
   // lands in an exported screenshot, because the export composites the
@@ -1589,7 +1527,7 @@ const drawScene = () => {
       }
       if (top) {
         ctx.save();
-        ctx.font = fitFont(ctx, 'bold 14px sans-serif');
+        ctx.font = labelFont(14, 'sans-serif', 'bold');
         ctx.fillStyle = 'rgba(90, 160, 255, 0.95)';
         ctx.textAlign = 'center';
         ctx.textBaseline = 'bottom';
@@ -1604,17 +1542,6 @@ const drawScene = () => {
   }
 
   // The balance point, when a lesson step has asked for it.
-  //
-  // The stage of a star's life, drawn around the protagonist of "Lives of
-  // Stars". Everything here is an illustration attached to one body, in that
-  // body's own screen position, so it travels with the star rather than with
-  // the camera: a supernova whose ejecta stayed put while the view panned
-  // would be a picture of the viewport rather than of the star.
-  //
-  // Bounded and seeded. The shapes come from js/lesson/evolutionScene.js,
-  // which is pure and returns a fixed handful of ellipses for any model time,
-  // so seeking back and forth reproduces the frame exactly and nothing here
-  // can grow into a particle system.
   if (state.evolutionOverlay?.active) {
     drawEvolutionScene(ctx);
   }
@@ -1769,8 +1696,9 @@ const drawScene = () => {
       // Area labels, drawn after every fill so no wedge paints over a label.
       if (state.zoom > 0.35) {
         const total = wedgeAreas.reduce((a, b) => a + b, 0);
+        const taken = nameSpots(); // fewer percentages, not a smear
         ctx.save();
-        ctx.font = fitFont(ctx, '600 11px ui-monospace, Menlo, monospace');
+        ctx.font = labelFont(11, 'ui-monospace, Menlo, monospace', '600');
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
         ctx.shadowColor = 'rgba(0, 0, 0, 0.9)';
@@ -1779,12 +1707,19 @@ const drawScene = () => {
           const at = wedgeLabelAt[w];
           if (!at || !total) continue;
           const s = world_to_screen({ x: px + at.x, y: py + at.y });
+          const pct = `${((wedgeAreas[w] / total) * 100).toFixed(1)}%`;
+          if (
+            !claim(
+              taken,
+              s.x,
+              s.y,
+              ctx.measureText(pct).width,
+              13 * pixelScale()
+            )
+          )
+            continue;
           ctx.fillStyle = 'rgba(255, 255, 255, 0.92)';
-          ctx.fillText(
-            `${((wedgeAreas[w] / total) * 100).toFixed(1)}%`,
-            s.x,
-            s.y
-          );
+          ctx.fillText(pct, s.x, s.y);
         }
         ctx.restore();
       }
@@ -1860,7 +1795,7 @@ const drawScene = () => {
       }
       if (sweepTop) {
         ctx.save();
-        ctx.font = fitFont(ctx, 'bold 13px sans-serif');
+        ctx.font = labelFont(13, 'sans-serif', 'bold');
         ctx.fillStyle = 'rgba(200, 200, 255, 0.9)';
         ctx.textAlign = 'center';
         ctx.textBaseline = 'bottom';
@@ -2094,17 +2029,6 @@ function readoutHtml(drawn) {
   }
 
   // --- Conservation check ---------------------------------------------------
-  //
-  // Off unless asked for, in Settings > Numerical accuracy. What is printed
-  // here is a statement about a numerical method, and three bare percentages
-  // in the corner of a first visit were read as a fault report by people who
-  // had not asked for one - including in the scenarios where a large change is
-  // the model working correctly rather than the integrator failing.
-  //
-  // So when it is on it arrives as a labeled group with the explanation
-  // attached, the reasons this particular scene is not closed listed beside
-  // it, the moment the reference was taken, and - where a percentage would be
-  // meaningless - an honest gap instead of a large number.
   if (SETTINGS.show_conservation_diagnostics && !isEmbed()) {
     const drift = conservationDrift();
     if (drift) {
@@ -2575,7 +2499,7 @@ function renderOrbitPreview(preview) {
     }
     if (top) {
       ctx.save();
-      ctx.font = fitFont(ctx, 'bold 14px sans-serif');
+      ctx.font = labelFont(14, 'sans-serif', 'bold');
       ctx.fillStyle = 'rgba(90, 160, 255, 0.95)';
       ctx.textAlign = 'center';
       ctx.textBaseline = 'bottom';

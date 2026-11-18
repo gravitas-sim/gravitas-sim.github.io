@@ -32,6 +32,7 @@
 // =============================================================================
 
 import { AU_METERS } from './constants.js';
+import { labelFont, pixelScale } from './bodyLabels.js';
 import { SIM_UNITS_PER_AU, formatTime } from './units.js';
 import {
   world_to_screen,
@@ -55,7 +56,6 @@ import {
 } from './instruments.js';
 import { formatNumber } from './format.js';
 import { t } from './i18n/index.js';
-import { fitFont, canvasRatio } from './vectorOverlay.js';
 
 /** Meters in one simulation length unit. */
 const METERS_PER_UNIT = AU_METERS / SIM_UNITS_PER_AU;
@@ -405,7 +405,7 @@ function drawRuler(ctx) {
   drawHandle(ctx, a, tools.drag?.tool === 'ruler' && tools.drag.key === 'a');
   drawHandle(ctx, b, tools.drag?.tool === 'ruler' && tools.drag.key === 'b');
 
-  ctx.font = `600 12px ${INSTRUMENT_MONO}`;
+  ctx.font = labelFont(12, INSTRUMENT_MONO, '600');
   ctx.fillStyle = TOOL_INK;
   ctx.textAlign = 'center';
   ctx.textBaseline = 'bottom';
@@ -477,7 +477,7 @@ function drawProtractor(ctx) {
     tools.drag?.tool === 'protractor' && tools.drag.key === 'arm2'
   );
 
-  ctx.font = `600 12px ${INSTRUMENT_MONO}`;
+  ctx.font = labelFont(12, INSTRUMENT_MONO, '600');
   ctx.fillStyle = TOOL_INK;
   ctx.textAlign = 'center';
   ctx.textBaseline = 'middle';
@@ -492,16 +492,6 @@ function drawProtractor(ctx) {
 }
 
 // Whether this frame is being drawn to be saved.
-//
-// The clock, the stopwatch and the vector key are all in the readout panel,
-// where the live numbers are, so painting them over the simulation as well is
-// telling the user the same thing twice in two places. But a screenshot is not
-// the readout: it is the canvas and the starfield and nothing else, and an
-// image that cannot say how big or how long it is is a picture of some dots.
-//
-// So they are drawn for the frame the screenshot is taken from, and not
-// otherwise. The scale bar stays either way: it is the one reading that is
-// about the picture rather than about the run.
 let capturing = false;
 
 // What the frame is of. The scale bar says how big, the clock says how long
@@ -596,8 +586,11 @@ export function drawInstrumentation(
   bottomInset = 0,
   legend = []
 ) {
-  const W = canvas.width || 0;
-  const H = canvas.height || 0;
+  // Everything below is in CSS pixels: the context is scaled to the canvas's
+  // backing store for the whole function (js/bodyLabels.js).
+  const k = pixelScale();
+  const W = (canvas.width || 0) / k;
+  const H = (canvas.height || 0) / k;
   if (W < 240 || H < 200) return;
 
   // A phone in portrait has about a third of the width a laptop does, and the
@@ -607,18 +600,6 @@ export function drawInstrumentation(
 
   // What the canvas itself has to carry, as one line along the bottom rather
   // than as a panel.
-  //
-  // There used to be a bordered box here holding the clock, the stopwatch, the
-  // vector key, the integrator's name and two conservation-drift percentages.
-  // Most of that is a statement about the engine rather than about the
-  // scenario, and none of it needed a box: it was five rows of chrome sitting
-  // over the simulation in the corner opposite the readout, which is where
-  // readings belong and where they now are.
-  //
-  // What stays on the canvas is what a saved image cannot do without. A
-  // screenshot has to document its own scale and its own clock, or it is a
-  // picture of some objects at some size at some time. The vector key stays
-  // for the same reason: an arrow whose color is unexplained is a decoration.
   const readings = [];
   if (capturing && settings.show_elapsed_time !== false) {
     // Labeled, unlike the live readout, where the row it sits in says what it
@@ -634,11 +615,11 @@ export function drawInstrumentation(
   }
 
   const pad = 12;
-  const k = canvasRatio(ctx);
-  const barY = H - pad - 10 * k - Math.max(0, bottomInset);
+  const barY = H - pad - 10 - Math.max(0, bottomInset);
 
   ctx.save();
-  ctx.font = fitFont(ctx, `11px ${INSTRUMENT_MONO}`);
+  ctx.scale(k, k);
+  ctx.font = `11px ${INSTRUMENT_MONO}`;
   ctx.textBaseline = 'middle';
   ctx.textAlign = 'left';
 
@@ -712,7 +693,7 @@ export function drawInstrumentation(
   // The key, one row of swatches above the scale line. Horizontal rather than
   // stacked: three arrows explained in three short phrases fit across the
   // bottom of any canvas wide enough to be worth drawing arrows on.
-  let legendBottom = barY - 20 * k;
+  let legendBottom = barY - 20;
   if (capturing && legend.length) {
     let x = pad + 2;
     let y = legendBottom;
@@ -722,7 +703,7 @@ export function drawInstrumentation(
       // Wrap upward rather than drop: the scale and trail span must stay.
       if (x + w > W - pad && x > pad + 2) {
         x = pad + 2;
-        y -= 16 * k;
+        y -= 16;
       }
       if (x + w > W - pad) continue;
       if (!l.note) {
@@ -740,7 +721,7 @@ export function drawInstrumentation(
       ctx.fillText(label, x + (l.note ? 0 : 24), y);
       x += w + 14;
     }
-    legendBottom = y - 16 * k;
+    legendBottom = y - 16;
   }
 
   if (settings.show_scale_bar !== false) {
@@ -748,16 +729,16 @@ export function drawInstrumentation(
     // ties the drawn bar to the actual view transform. Nothing else in the
     // instrumentation depends on the zoom, which is why a scale bar is the
     // thing that makes a screenshot readable.
-    const metersPerPx = METERS_PER_UNIT / (zoom > 0 ? zoom : 1);
+    const metersPerPx = METERS_PER_UNIT / (zoom > 0 ? zoom / k : 1);
     const barW = Math.min(160, W * 0.22);
     scaleBar(ctx, pad + 2, barY, barW, metersPerPx, {
       color: 'rgba(200, 214, 235, 0.9)',
-      font: fitFont(ctx, `11px ${INSTRUMENT_MONO}`),
+      font: `11px ${INSTRUMENT_MONO}`,
     });
     // The clock sits on the scale bar's own baseline, past the end of the bar
     // and its label, so the two read as one line of provenance.
     if (readings.length) {
-      ctx.font = fitFont(ctx, `11px ${INSTRUMENT_MONO}`);
+      ctx.font = `11px ${INSTRUMENT_MONO}`;
       ctx.fillStyle = TOOL_INK;
       ctx.fillText(readings.join('   '), pad + 2 + barW + 64, barY);
     }
@@ -766,10 +747,11 @@ export function drawInstrumentation(
     ctx.fillText(readings.join('   '), pad + 2, barY);
   }
 
-  // Body sizes are not to one scale; said on the canvas, with or without the bar.
-  ctx.font = fitFont(ctx, `11px ${INSTRUMENT_MONO}`);
-  ctx.fillStyle = 'rgba(200, 214, 235, 0.85)';
-  ctx.fillText(t('canvas.sizeDisclosure'), pad + 2, barY + 14 * k);
+  // Body sizes are not to one scale; said on the canvas, with or without the
+  // bar, so it is in every screenshot.
+  ctx.font = `12px ${INSTRUMENT_MONO}`;
+  ctx.fillStyle = 'rgb(200, 214, 235)';
+  halo(ctx, t('canvas.sizeDisclosure'), pad + 2, barY + 14);
 
   ctx.restore();
 }
