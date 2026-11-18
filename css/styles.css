@@ -1610,13 +1610,6 @@
     }
   }
 
-  .energy-chart-header h3 {
-    margin: 0;
-    color: var(--c3);
-    font-size: 16px;
-    font-weight: 600;
-  }
-
   /* Refresh button specific styling */
   #refreshEnergyChart {
     background: rgba(0, 255, 136, 0.2);
