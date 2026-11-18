@@ -1,17 +1,16 @@
-// The engine's state: the body lists, the settings, the clocks and counters,
-// the camera reference and the registries that the render layer fills
-// (D-DECOMP-18, slice S1). Everything else in the engine reads these and cannot
-// leave js/physics.js without a cycle until they have a home.
+// The engine's state: body lists, settings, clocks, counters, the camera
+// reference and the registries the render layer fills (D-DECOMP-18, S1).
+// Everything else in the engine reads these, so they cannot leave js/physics.js
+// without a cycle.
 //
-// ES module bindings can be read by every importer and assigned only here, so
-// each place that used to reassign one of them now calls a setter below. An
-// importer's `planets` is this module's `planets`, a live binding, and a step
-// that replaces the list is seen by every importer; that is why the lists are
-// `export let` and never copied into another object. A test that captures one
-// once holds a detached list after the next step, as it always did.
+// Importers can read a binding but only this module assigns it, so every place
+// that reassigns a list calls a setter below. `planets` here is a live binding:
+// a step that replaces the list is seen everywhere, which is why the lists are
+// `export let` and never copied. A test that captures one holds a detached list
+// after the next step.
 //
-// js/physics.js is the facade: it re-exports these names, so no importer changes.
-// This module imports nothing that paints and nothing above the services layer.
+// js/physics.js re-exports these names. This module imports nothing that paints
+// and nothing above the services layer.
 import { setSimGravitationalConstant } from '../units.js';
 import { clearFrameHistory } from '../referenceFrame.js';
 import { SOLAR_MASS_KG, SOLAR_MASS_UNIT } from '../constants.js';
@@ -34,9 +33,8 @@ export let bh_list = [],
   galaxies = [],
   accretion_disk_particles = [];
 
-// One setter, named by list, for the sites that replace a list (the step's
-// filters, the mergers' purges, the particle refresh). An unknown name throws
-// rather than creating a list nobody reads.
+// One setter, named by list, for the sites that replace a list (step filters,
+// merger purges, particle refresh). An unknown name throws.
 const assignList = {
   bh_list: l => (bh_list = l),
   planets: l => (planets = l),
@@ -70,10 +68,9 @@ export const setStateReference = stateRef => {
   state = stateRef;
 };
 
-// How a body is painted lives in js/bodyDraw.js and js/bodyDrawSky.js,
-// registered by kind so this module imports nothing that paints. A kind with
-// no drawer draws nothing (a worker has no canvas); a page with a canvas and no
-// drawers at all gets one warning, the mark of a missing import.
+// Body painting lives in js/bodyDraw.js and js/bodyDrawSky.js, registered by
+// kind. A kind with no drawer draws nothing (a worker has no canvas); a page
+// with a canvas and no drawers gets one warning: a missing import.
 const bodyDrawers = Object.create(null);
 let drawersSeen = false; // registered, or already warned about
 export const registerBodyDrawers = table => {
@@ -87,10 +84,10 @@ export const paintBody = (o, ctx, kind) => {
   console.warn('No body drawers are registered: import js/bodyDraw.js.');
 };
 
-// The particle pool is filed by js/bodyEffects.js (registerEffects). Until then
-// the pool spawns nothing, but it hands back a scratch particle, so every
-// explosion builder below takes the same random draws in any realm: the stream
-// the collisions draw from must not depend on what was imported.
+// js/bodyEffects.js files the particle pool (registerEffects). Until then it
+// spawns nothing but hands back a scratch particle, so every explosion builder
+// takes the same random draws in any realm: the collision stream must not
+// depend on what was imported.
 const scratchParticle = {};
 const emptyPool = {
   getParticle: () => scratchParticle,
@@ -100,11 +97,10 @@ const emptyPool = {
 };
 export let particlePool = emptyPool;
 
-// What a burst looks like (size and color) and the tracer's color are filed by
-// js/bodyEffects.js with the pool. How many particles a burst throws, how fast
-// and for how long is not appearance: it is the random draws, so it stays here
-// and an engine with no module takes them all the same (a look is then empty
-// and nothing reads it).
+// js/bodyEffects.js also files a burst's look (size, color) and the tracer's
+// color. How many particles, how fast, how long is the random draws, not
+// appearance, so it stays here and an engine with no module takes them all the
+// same (a look is then empty and nothing reads it).
 export let effectLooks = {};
 export let tracerColor = () => undefined;
 export const registerEffects = ({ pool, looks, tracer }) => {
@@ -116,20 +112,17 @@ export const registerEffects = ({ pool, looks, tracer }) => {
 // Physics settings that can be updated from UI.
 //
 // Twenty-six of these twenty-seven keys also appear in DEFAULT_SETTINGS in
-// js/appState.js, and two of them disagree with it: gravitational_constant is
-// 2.0 there and 1.0 here, trail_length is 15 there and 100 here. That is not a
-// bug, but it is a trap, so it is written down.
+// js/appState.js, and two disagree: gravitational_constant is 2.0 there and
+// 1.0 here, trail_length 15 there and 100 here. Not a bug, but a trap.
 //
-// These are bootstrap values only. Every path that runs the simulation calls
-// updatePhysicsSettings(SETTINGS) first - js/world/build.js does it on every
-// world build - which merges the real settings over the top. Nothing integrates
-// an orbit at G = 1. The values here are what the module answers with in the
-// window before any world exists, and js/units.js is seeded from the same 1 so
-// that its conversions agree with whatever this object says at the time.
+// Bootstrap values only. Every path that runs the simulation calls
+// updatePhysicsSettings(SETTINGS) first (js/world/build.js on every world
+// build), merging the real settings over these. Nothing integrates an orbit at
+// G = 1. These answer in the window before any world exists, and js/units.js
+// is seeded from the same 1 so its conversions agree.
 //
-// They are deliberately not imported from js/appState.js: that would make the
-// engine depend on the interface's state module, which is the dependency this
-// file has spent this pass getting rid of.
+// Not imported from js/appState.js: that would make the engine depend on the
+// interface's state module.
 export let physicsSettings = {
   gravitational_constant: 1.0,
   mutual_gravity: false,
@@ -150,61 +143,51 @@ export let physicsSettings = {
   star_only_gravity: false,
   disk_doppler: true,
   use_barnes_hut: false,
-  // Calibrated against the direct N^2 solver on a 78-body cluster:
+  // Against direct N^2 on a 78-body cluster:
   //   theta 0.3 -> 0.20% mean / 2.6% worst error
   //   theta 0.4 -> 0.46% mean / 3.4% worst   <- default
   //   theta 0.7 -> 3.74% mean / 75.5% worst
-  // 0.7 is the textbook default but costs the same here as 0.4 while being an
-  // order of magnitude less accurate, so it is not worth the error budget.
+  // 0.7 (the textbook value) costs the same as 0.4 and is far less accurate.
   barnes_hut_theta: 0.4,
 
-  // A dark-matter halo added to the force law as a smooth background field.
-  // Off by default: the halo is a claim about the universe, and a student
-  // should switch it on deliberately and watch what changes.
+  // A dark-matter halo as a smooth background field in the force law. Off by
+  // default: it is a claim about the universe, so a student switches it on
+  // deliberately. It is a field, not a body: no position to integrate, never
+  // merged or captured, absent from the object counts.
   //
-  // The halo is a field, not a body. It has no position of its own to
-  // integrate, it never merges or is captured, and it does not appear in the
-  // object counts, because nothing about it is visible. That is the point.
-  // Which law governs a galaxy's outskirts. One setting with three values
-  // rather than two booleans, because the halo and MOND are competing
-  // explanations for the same observation and applying both at once would be
-  // physically meaningless. An enum cannot express that mistake.
+  // Which law governs a galaxy's outskirts: one enum rather than two booleans,
+  // because the halo and MOND compete as explanations and applying both is
+  // meaningless.
   //
   //   'newtonian'  visible matter only, and the curve falls
   //   'halo'       Newtonian gravity plus the pseudo-isothermal halo
   //   'mond'       Milgrom's law applied to the visible matter's own field
   //
-  // `dark_matter_halo` is kept alongside it as a mirror, not as a second source
-  // of truth: scenarios, saved games and shared links written before this
-  // existed all set the boolean, and normalizeGalaxyGravity() below keeps the
-  // two in step whichever one a caller writes.
+  // `dark_matter_halo` stays as a mirror, not a second source of truth: older
+  // scenarios, saves and links set the boolean, and normalizeGalaxyGravity()
+  // keeps the two in step whichever a caller writes.
   galaxy_gravity: 'newtonian',
   dark_matter_halo: false,
   halo_v_flat: 6.0,
   halo_core_radius: 300,
-  // What one simulation unit represents, for the scenarios that are scale
-  // models of a galaxy. Zero means "this is not a galaxy", and MOND refuses to
-  // run: there is no defensible acceleration scale for a planetary system or a
-  // black-hole encounter, and applying one silently would be worse than
-  // refusing. See js/mond.js.
+  // What one simulation unit represents, for galaxy scale models. Zero means
+  // "not a galaxy" and MOND refuses to run: a planetary system or black-hole
+  // encounter has no defensible acceleration scale. See js/mond.js.
   galaxy_kpc_per_unit: 0,
   galaxy_msun_per_unit: 0,
 
-  // The numerical scheme the bodies are advanced with. Symplectic Euler is the
-  // default, and has to stay the default: every shipped scenario was laid out,
-  // timed and tuned against its particular error, and quietly moving them to a
-  // more accurate scheme would change the dynamics of all of them at once.
-  // See INTEGRATORS below for what the other two are for.
+  // The scheme the bodies are advanced with. Symplectic Euler has to stay the
+  // default: every shipped scenario was tuned against its particular error, and
+  // a more accurate scheme would change them all. See INTEGRATORS below.
   integrator: 'Symplectic Euler',
 };
 
 // =============================================================================
 // Simulated time, and the accelerations the last step actually used
 // -----------------------------------------------------------------------------
-// Both exist so that something outside the physics can report on it without
-// recomputing it. A readout that recalculated the acceleration on a body would
-// be a second implementation of the force law, free to disagree with the one
-// the integrator used; the point of publishing it is that it cannot.
+// Both let something outside the physics report on it without recomputing it:
+// a readout that recalculated an acceleration would be a second force law,
+// free to disagree with the integrator's.
 // =============================================================================
 
 /** The lists the step sums as sources, in its order (js/engine/sources.js). */
@@ -232,13 +215,12 @@ export const resetSimulationTime = () => {
 };
 
 /**
- * Set the simulated clock, for a state that is being restored rather than built.
+ * Set the simulated clock, for a restored rather than built state.
  *
- * The A/B bench needs this: Run B has to resume from the same point on the
- * clock Run A started from, or the two runs cannot be put on one time axis
- * without a fudge factor. Nothing in the integrator reads the clock - it is a
- * readout, and the conservation baseline's own timestamp - so setting it moves
- * the reported time and nothing else.
+ * The A/B bench needs it: Run B resumes from the clock point Run A started at,
+ * so the runs share one time axis. Nothing in the integrator reads the clock
+ * (a readout and the conservation baseline's timestamp), so only the reported
+ * time moves.
  *
  * @param {number} t - Simulated seconds
  */
@@ -293,15 +275,12 @@ export const updatePhysicsSettings = (settings, options = {}) => {
 /**
  * Keep the galaxy-gravity mode and the legacy halo boolean in step.
  *
- * There is one rule and it is enforced here rather than at every call site:
- * the halo and MOND are alternatives, so at most one of them can be in the
- * force law. Expressing the mode as an enum makes "both at once" unsayable;
- * this function is what stops the old boolean from saying it anyway.
+ * The halo and MOND are alternatives, so at most one is in the force law; the
+ * enum makes "both" unsayable and this stops the old boolean saying it.
  *
- * Which one wins when a caller writes both is decided by what the caller
- * actually asked for in this patch, not by what was already there - so
- * `updatePhysicsSettings({ galaxy_gravity: 'mond' })` turns the halo off, and
- * a saved game that only knows about `dark_matter_halo` still works.
+ * Which wins when a caller writes both is decided by what this patch asked
+ * for, not what was there: `updatePhysicsSettings({ galaxy_gravity: 'mond' })`
+ * turns the halo off, and a save that only knows `dark_matter_halo` still works.
  *
  * @param {object} next - The merged settings
  * @param {object} patch - Only the keys this call supplied
@@ -313,29 +292,22 @@ const normalizeGalaxyGravity = (next, patch = {}) => {
 
   let mode = next.galaxy_gravity;
 
-  // Both named in one patch, and disagreeing. This happens when a caller merges
-  // a baseline that says 'newtonian' with an override that says the halo is on
-  // - which is exactly what the validation harness does, and it silently
-  // switched the halo off until this branch existed.
-  //
-  // Resolved toward the positive assertion: `dark_matter_halo: true` is
-  // somebody asking for something, where 'newtonian' is usually a baseline with
-  // no opinion. The state that comes out is consistent either way; this only
-  // decides which of two contradictory requests is honored.
+  // Both named in one patch, and disagreeing: a caller merges a 'newtonian'
+  // baseline with an override turning the halo on (the validation harness did,
+  // and it silently switched the halo off). Resolved toward the positive
+  // assertion: `dark_matter_halo: true` asks for something, where 'newtonian'
+  // is usually a baseline with no opinion.
   if (wroteHalo && wroteMode && patch.dark_matter_halo === true) {
     mode = 'halo';
   } else if (wroteHalo && !wroteMode) {
-    // A caller that only knows the boolean. Turning the halo on means the halo;
-    // turning it off means plain Newtonian - but not if MOND is what is
-    // running, because then the boolean was already false and saying so again
-    // should not silently switch the mode.
+    // A caller that only knows the boolean: on means the halo, off means
+    // Newtonian, but not when MOND is running (the boolean was already false).
     if (patch.dark_matter_halo === true) mode = 'halo';
     else if (mode === 'halo') mode = 'newtonian';
   }
   if (mode !== 'halo' && mode !== 'mond') mode = 'newtonian';
 
-  // MOND needs a scale to convert a0 into. Without one it is not applied, and
-  // the mode falls back rather than pretending.
+  // MOND needs a scale to convert a0 into; without one the mode falls back.
   if (
     mode === 'mond' &&
     !(next.galaxy_kpc_per_unit > 0 && next.galaxy_msun_per_unit > 0)
@@ -356,9 +328,8 @@ const normalizeGalaxyGravity = (next, patch = {}) => {
  */
 export const getPhysicsSetting = key => physicsSettings[key];
 
-// Adaptive level-of-detail multiplier owned by the renderer (see render.js).
-// Kept separate from physicsSettings so it can never be persisted to a save
-// file or written back over a user setting.
+// Adaptive level-of-detail multiplier owned by the renderer (render.js). Apart
+// from physicsSettings so it is never saved or written over a user setting.
 export let detailScale = 1;
 
 /**
@@ -366,8 +337,7 @@ export let detailScale = 1;
  * @param {number} scale - Multiplier applied to detail budgets (clamped 0.5-1.5)
  */
 export const setDetailScale = scale => {
-  // Capped at 1: adaptive detail may only trim below what the user asked for,
-  // never inflate past it.
+  // Capped at 1: adaptive detail only trims below what the user asked for.
   detailScale =
     typeof scale === 'number' && isFinite(scale)
       ? Math.max(0.5, Math.min(1, scale))
@@ -456,11 +426,11 @@ export const setPhysicsObjectCounter = value => {
   PhysicsObject_id_counter = value;
 };
 
-// Bumped whenever the object lists are repopulated. The cache below keyed only
-// off list *lengths*, so rebuilding a scenario into the same shape (Refresh
-// Scenario, or a lesson re-applying its setup) left cachedAllPhysicsObjects
-// holding the discarded objects: the integrator went on advancing bodies that
-// were no longer in the simulation while the renderer drew the new ones.
+// Bumped whenever the object lists are repopulated. The cache keyed only off
+// list *lengths*, so rebuilding a scenario into the same shape (Refresh
+// Scenario, a lesson re-applying its setup) left cachedAllPhysicsObjects holding
+// discarded objects: the integrator advanced bodies no longer in the simulation
+// while the renderer drew the new ones.
 export let worldGeneration = 0;
 let interventionEpoch = 0;
 
@@ -472,11 +442,10 @@ export const bumpWorldGeneration = () => {
 /**
  * Which world this is.
  *
- * Bumped on every repopulation of the object lists, so it distinguishes two
- * worlds that a body id cannot: ids restart from a counter, and a rebuilt
- * scenario hands the same id to a different star. The observing panels put this
- * in a recording's identity for exactly that reason - without it, a recording
- * of one star could be continued against its replacement.
+ * Bumped on every repopulation, so it tells apart worlds a body id cannot: ids
+ * restart from a counter, and a rebuilt scenario hands the same id to a
+ * different star. The observing panels put it in a recording's identity so a
+ * recording of one star is never continued against its replacement.
  *
  * @returns {number} A counter, meaningful only by comparison
  */
@@ -485,13 +454,11 @@ export const getWorldGeneration = () => worldGeneration;
 /**
  * How many times a body's state has been changed by hand.
  *
- * Distinct from the world generation, which counts rebuilds. This counts
- * interventions: a maneuver burn, a bench perturbation - the same objects,
- * moving differently because somebody made them. An observing session cannot
- * see the difference from the target's identity, and it matters to one: a
- * radial-velocity curve recorded before a burn is a recording of an orbit the
- * planet is no longer on, and continuing it afterwards would splice two
- * different systems into one dataset.
+ * Unlike the world generation (rebuilds) this counts interventions: a maneuver
+ * burn, a bench perturbation. The target's identity does not show them, and an
+ * observing session needs to know: a radial-velocity curve recorded before a
+ * burn describes an orbit the planet has left, and continuing it would splice
+ * two systems into one dataset.
  *
  * @returns {number} A counter, meaningful only by comparison
  */
@@ -509,29 +476,25 @@ export function noteIntervention() {
 // What the engine reads of the settings, for the conservation and energy module
 // (S3) and the slices after it: pure readers over `physicsSettings`, the mass
 // anchor, and the Barnes-Hut failure flag with its one writer.
-// Softening floor on the gravity calculation, to keep a near-miss from
-// producing a singular force. Five units is right for scenarios laid out at
-// hundreds of units, and completely wrong for a compact one: TRAPPIST-1's seven
-// planets orbit between 1.15 and 6.19 units of their star, so six of them sat
-// inside the floor, felt a fraction of the gravity they should, and left on
-// hyperbolic orbits within a few hundred circuits regardless of timestep. A
-// scenario can lower it to suit its own scale.
+// Softening floor on the gravity calculation, so a near-miss gives no singular
+// force. Five units suits scenarios of hundreds of units and is wrong for a
+// compact one: TRAPPIST-1's seven planets orbit at 1.15 to 6.19 units, so six
+// sat inside the floor, felt a fraction of their gravity and left on hyperbolic
+// orbits within a few hundred circuits at any timestep. A scenario can lower it.
 export const MIN_INTERACTION_DISTANCE = 5.0;
 
 /**
  * The softening floor currently in force.
  *
- * The one authority on the question, and exported because there was briefly a
- * second. `min_interaction_distance` is zero in DEFAULT_SETTINGS and zero here
- * means "no scenario has an opinion, use the default" - it does not mean "no
- * floor". js/cr3bpPanel.js read the raw setting and took the zero at face
- * value, so a compact system sitting well inside the five-unit default was
- * validated as Newtonian while the engine was clamping every force in it.
+ * The one authority, exported because there was briefly a second. Zero in
+ * `min_interaction_distance` means "no scenario has an opinion, use the
+ * default", not "no floor". js/cr3bpPanel.js took the raw zero at face value,
+ * so a compact system inside the five-unit default was validated as Newtonian
+ * while the engine clamped every force in it.
  *
- * Anything that needs to know what the force law is actually doing - the
- * integrator, the potential, or a teaching overlay deciding whether its
- * closed-form claims hold - asks this. Nothing re-reads the setting and
- * nothing else carries the fallback.
+ * Anything that needs what the force law is doing (integrator, potential, a
+ * teaching overlay's closed-form claims) asks this; nothing else re-reads the
+ * setting or carries the fallback.
  *
  * @returns {number} The floor, in simulation length units
  */
@@ -540,22 +503,18 @@ export const minInteractionDistance = () => {
   return Number.isFinite(v) && v > 0 ? v : MIN_INTERACTION_DISTANCE;
 };
 
-// Kilograms in one simulation mass unit. The solar mass is the anchor, so this
-// is the one conversion the small-body units below are allowed to go through:
-// a second route from kilograms to simulation units would be a second chance
-// to disagree with the anchor, which is the failure JUPITER_MASS_UNIT and
-// EARTH_MASS_UNIT both had.
+// Kilograms in one simulation mass unit. The solar mass is the anchor and the
+// one conversion the small-body units may go through: a second route could
+// disagree with it, as JUPITER_MASS_UNIT and EARTH_MASS_UNIT both did.
 export const MASS_UNIT_KG = SOLAR_MASS_KG / SOLAR_MASS_UNIT;
 
 /** The schemes, by the label the settings dropdown uses. */
 export const INTEGRATORS = ['Symplectic Euler', 'Velocity Verlet', 'RK4'];
 
 /**
- * The scheme in force, always one of INTEGRATORS.
- *
- * Anything unrecognized resolves to symplectic Euler rather than throwing: a
- * saved link or an old scenario file naming a scheme that no longer exists
- * should load into the default, not into a broken simulation.
+ * The scheme in force, always one of INTEGRATORS. Anything unrecognized
+ * resolves to symplectic Euler rather than throwing, so an old link or
+ * scenario naming a vanished scheme loads into the default.
  *
  * @returns {string} The active scheme's label
  */
