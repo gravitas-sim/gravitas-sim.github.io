@@ -220,6 +220,14 @@ export function renderDetails(view) {
  */
 function renderAppearance(a) {
   if (!a) return '';
+  // A planet, moon or giant: what its drawing claims, and nothing to set.
+  if (a.notes) {
+    return `
+    <details class="insp-appearance">
+      <summary>${escapeHtml(a.title)}</summary>
+      ${a.notes.map(n => `<p class="insp-appearance-note">${escapeHtml(n)}</p>`).join('')}
+    </details>`;
+  }
   const options = a.environments
     .map(
       e =>

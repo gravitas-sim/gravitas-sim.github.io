@@ -118,7 +118,7 @@ function drawGrid(ctx, cx, cy, scale, maxAu, box) {
   ctx.beginPath();
   ctx.rect(box.x, box.y, box.w, box.h);
   ctx.clip();
-  ctx.font = `10px ${MONO}`;
+  ctx.font = `11px ${MONO}`;
   ctx.textAlign = 'center';
   ctx.textBaseline = 'middle';
   for (let au = 1; au <= maxAu; au++) {
@@ -611,7 +611,7 @@ const BINARY = {
       spec.planet ? '#b8875a' : STAR_B,
       scale / 40
     );
-    ctx.font = `10px ${MONO}`;
+    ctx.font = `11px ${MONO}`;
     ctx.textAlign = 'center';
     ctx.textBaseline = 'bottom';
     ctx.fillStyle = STAR_A;
@@ -662,7 +662,7 @@ const BINARY = {
     ctx.strokeRect(box.x + 0.5, box.y + 0.5, box.w - 1, box.h - 1);
 
     // Corner captions
-    ctx.font = `10px ${MONO}`;
+    ctx.font = `11px ${MONO}`;
     ctx.fillStyle = SKY_MUTED;
     ctx.textAlign = 'left';
     ctx.textBaseline = 'top';
@@ -866,7 +866,7 @@ const BINARY_COMPARE = {
       );
       ctx.restore();
 
-      ctx.font = `10px ${MONO}`;
+      ctx.font = `11px ${MONO}`;
       ctx.fillStyle = SKY_INK;
       ctx.textAlign = 'center';
       ctx.textBaseline = 'top';
@@ -884,7 +884,7 @@ const BINARY_COMPARE = {
       ctx.strokeRect(box.x + 0.5, box.y + 0.5, box.w - 1, box.h - 1);
     });
 
-    ctx.font = `10px ${MONO}`;
+    ctx.font = `11px ${MONO}`;
     ctx.fillStyle = ink;
     ctx.textAlign = 'center';
     ctx.textBaseline = 'top';
@@ -1042,7 +1042,7 @@ const BALANCE = {
     ctx.lineTo(cx + 9, beamY + 16);
     ctx.closePath();
     ctx.fill();
-    ctx.font = `10px ${MONO}`;
+    ctx.font = `11px ${MONO}`;
     ctx.fillStyle = MARKER;
     ctx.textAlign = 'center';
     ctx.textBaseline = 'top';
@@ -1099,7 +1099,7 @@ const BALANCE = {
       ctx.lineTo(w - 10, H - 78);
       ctx.stroke();
       ctx.fillStyle = muted;
-      ctx.font = `10px ${MONO}`;
+      ctx.font = `11px ${MONO}`;
       ctx.textAlign = 'center';
       ctx.textBaseline = 'top';
       ctx.fillText(
@@ -1129,13 +1129,13 @@ const BALANCE = {
           );
         }
         ctx.fillStyle = ink;
-        ctx.font = `10px ${MONO}`;
+        ctx.font = `11px ${MONO}`;
         ctx.textAlign = 'center';
         ctx.textBaseline = 'top';
         ctx.fillText(`${name}: ${count} M☉`, x, H - 24);
       };
       ctx.fillStyle = muted;
-      ctx.font = `10px ${MONO}`;
+      ctx.font = `11px ${MONO}`;
       ctx.textAlign = 'center';
       ctx.textBaseline = 'bottom';
       ctx.fillText(`${c.total} solar masses to share out`, cx, H - 50);
@@ -1320,7 +1320,7 @@ const VISUAL_BINARY = {
     });
 
     drawStar(ctx, cx, cy, 2, STAR_A, 0.22);
-    ctx.font = `10px ${MONO}`;
+    ctx.font = `11px ${MONO}`;
     ctx.fillStyle = STAR_A;
     ctx.textAlign = 'center';
     ctx.textBaseline = 'bottom';
@@ -1330,7 +1330,7 @@ const VISUAL_BINARY = {
     ctx.strokeStyle = grid;
     ctx.lineWidth = 1;
     ctx.strokeRect(box.x + 0.5, box.y + 0.5, box.w - 1, box.h - 1);
-    ctx.font = `10px ${MONO}`;
+    ctx.font = `11px ${MONO}`;
     ctx.fillStyle = SKY_MUTED;
     ctx.textAlign = 'left';
     ctx.textBaseline = 'top';

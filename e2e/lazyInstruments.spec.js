@@ -746,6 +746,100 @@ test.describe('the sandbox fetches each first-use group at its gesture', () => {
     expect(await fetched()).toEqual([]);
   });
 
+  test('a rail button keeps its focus while its panel is on the way', async ({
+    page,
+    app,
+  }) => {
+    test.skip(DIST, 'a bundle names its chunks, not its modules');
+    let release;
+    const held = new Promise(resolve => (release = resolve));
+    await page.route(/rotationCurve\.js(\?|$)/, async route => {
+      await held;
+      await route.continue();
+    });
+    await app.boot();
+    await app.railControl('toggleRotationCurve');
+    const button = page.locator('#toggleRotationCurve');
+    await button.focus();
+    await page.keyboard.press('Enter');
+    await expect(button).toHaveAttribute('aria-busy', 'true');
+    await expect(button).toBeFocused();
+    await expect(page.locator('#srStatus')).toHaveText(/Loading/);
+    release();
+    await expect(page.locator('#rotationCurveContainer')).toBeVisible({
+      timeout: 15_000,
+    });
+    await expect(button).not.toHaveAttribute('aria-busy', 'true');
+  });
+
+  test('Escape cancels a first selection that is still on its way', async ({
+    page,
+    app,
+  }) => {
+    test.skip(DIST, 'a bundle does not publish the application modules');
+    let release;
+    const held = new Promise(resolve => (release = resolve));
+    await page.route(/inspectorWindow\.js(\?|$)/, async route => {
+      await held;
+      await route.continue();
+    });
+    await app.boot();
+    await app.loadScenario('solar-system');
+    await app.waitForFrames(10);
+    const waiting = await page.evaluate(async () => {
+      const gate = await import('/js/inspectorGate.js');
+      const physics = await import('/js/physics.js');
+      const { state } = await import('/js/appState.js');
+      const body = physics.stars[0];
+      gate.showObjectInspector(body, gate.inspectorTypeFor(body));
+      return [gate.inspectorPending(), !!state.selectedObject];
+    });
+    expect(waiting).toEqual([true, true]);
+    await page.keyboard.press('Escape');
+    release();
+    await page.waitForLoadState('networkidle');
+    await expect(page.locator('#objectInspector')).toBeHidden();
+    const after = await page.evaluate(async () => {
+      const gate = await import('/js/inspectorGate.js');
+      const { state } = await import('/js/appState.js');
+      return [gate.inspectorPending(), state.selectedObject];
+    });
+    expect(after).toEqual([false, null]);
+  });
+
+  test('Settings that cannot be fetched offers the press again', async ({
+    page,
+    app,
+    errors,
+  }) => {
+    test.skip(DIST, 'a bundle names its chunks, not its modules');
+    let blocked = true;
+    await page.route(/settingsPanel\.js(\?|$)/, route =>
+      blocked ? route.abort('failed') : route.continue()
+    );
+    await app.boot();
+    await app.railControl('settingsBtn');
+    await page.locator('#settingsBtn').click();
+    const toast = page.locator('#gravitasToast');
+    await expect(toast).toBeVisible();
+    await expect(page.locator('#settingsPanel')).toBeHidden();
+    blocked = false;
+    await toast.getByRole('button').click();
+    await expect(page.locator('#settingsPanel')).toBeVisible({
+      timeout: 15_000,
+    });
+    errors.consoleErrors.splice(
+      0,
+      errors.consoleErrors.length,
+      ...errors.consoleErrors.filter(
+        e =>
+          !/Failed to load resource|dynamically imported module|Settings could not/.test(
+            e
+          )
+      )
+    );
+  });
+
   test('each is fetched by its own gesture, and then works', async ({
     page,
     app,

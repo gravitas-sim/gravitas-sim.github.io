@@ -357,7 +357,11 @@ export function createPlot(svg, hooks) {
     // decimation kept them, every selected point; then the one in focus. A
     // selected row that a thinned plot left out would otherwise vanish from
     // the one view that was meant to show it.
-    const pts = el('g', { class: 'ow-points', 'aria-hidden': 'true' });
+    const pts = el('g', {
+      class: 'ow-points',
+      'data-marker': 'circle',
+      'aria-hidden': 'true',
+    });
     state.r = drawn.length > 3000 ? 1.2 : drawn.length > 500 ? 1.8 : 3;
     for (const i of drawn) {
       pts.append(dot(i, state.r, masked.has(i) ? 'ow-pt is-masked' : 'ow-pt'));

@@ -23,14 +23,7 @@ import {
 const asGiven = (step, n, u = toleranceFor(step) / 2) =>
   step.uncertainty ? `${n} ± ${u}` : n;
 
-/**
- * Step types the engine knows how to render.
- *
- * The last two are bespoke to Kepler's Laws - an interactive ellipse and the
- * equal-area wedges - and are rendered by name in js/investigations.js rather
- * than through the generic path. They are listed because they exist, not
- * because they are a pattern to copy: a new lesson should reach for a widget.
- */
+/** Step types the engine renders. The last two (ellipse, wedges) are Kepler's, not a pattern to copy: reach for a widget. */
 export const STEP_TYPES = new Set([
   'read',
   'predict',
@@ -111,6 +104,8 @@ export const RULE_INDEX = {
   'answer/options': 'An option list is long enough and has no repeats',
   'answer/reveal':
     'A held prediction names a later step in the same lesson to be marked at',
+  'answer/evidence':
+    'An estimate has a unit, and a reveal names readings taken after the prediction',
   'answer/rubric': 'A short answer carries a rubric',
   'interaction/validate': "A validator accepts the author's own hint values",
   'interaction/compute': 'A computed field survives the hint values',
@@ -145,7 +140,11 @@ export function readingProblems(step, { ctx, widget }) {
       );
       const live = widget?.live ? ctx : undefined;
       return (
-        widget?.readout({ ...v, ...step.tool?.values }, live, step.tool) || []
+        widget?.readout(
+          { ...v, ...(step.tool?.start ?? step.tool?.values) },
+          live,
+          step.tool
+        ) || []
       );
     } catch {
       return [];
@@ -170,22 +169,59 @@ export function readingProblems(step, { ctx, widget }) {
   return bad;
 }
 
+const readingField = (steps, e) =>
+  steps.find(s => s.sid === e?.step)?.fields?.find(f => f.id === e.field);
+
+/** answer/evidence: what is wrong with the estimate or evidence a step declares (`at` is its index). */
+export function evidenceProblems(step, steps, at) {
+  const bad = [];
+  if (step.type === 'predict' && step.kind === 'estimate') {
+    if (typeof step.unit !== 'string' || !step.unit.trim())
+      bad.push('an estimate names its unit');
+    if (step.options !== undefined || step.answer !== undefined)
+      bad.push('an estimate is never marked: no options or answer');
+    const out = steps.find(s => s.sid === step.reveal);
+    if (step.reveal === undefined) bad.push('an estimate names its reveal');
+    else if (out && !out.evidence?.length)
+      bad.push(`reveal "${step.reveal}" names no evidence`);
+    else if (out) {
+      const f = readingField(steps, out.evidence[0]);
+      if (f && typeof step.unit === 'string' && (f.unit || '') !== step.unit)
+        bad.push(
+          `the estimate is in ${step.unit}, the first reading in ${f.unit || 'no unit'}`
+        );
+    }
+  } else if (step.kind === 'estimate') bad.push('an estimate is a prediction');
+  if (step.compare !== undefined && !step.evidence)
+    bad.push('compare goes with evidence');
+  if (step.evidence === undefined) return bad;
+  const asked = steps.filter(s => s.reveal === step.sid);
+  if (!asked.length) bad.push("evidence belongs to a prediction's reveal step");
+  if (!Array.isArray(step.evidence) || !step.evidence.length)
+    return [...bad, 'evidence lists the fields to set beside the prediction'];
+  for (const e of step.evidence) {
+    const from = steps.findIndex(s => s.sid === e?.step);
+    if (from < 0 || from >= at)
+      bad.push(`evidence "${e?.step}" is not an earlier step`);
+    else if (steps[from].type !== 'measure' || !readingField(steps, e))
+      bad.push(
+        `evidence "${e.step}.${e.field}" is not a field of a measure step`
+      );
+    else if (asked.some(p => steps.indexOf(p) >= from))
+      bad.push(`evidence "${e.step}.${e.field}" comes before the prediction`);
+  }
+  return bad;
+}
+
 const isNonEmptyString = v => typeof v === 'string' && v.trim().length > 0;
 const isPlainObject = v => !!v && typeof v === 'object' && !Array.isArray(v);
 
 /**
- * A stub of the live simulation context a probe is handed.
- *
- * Deliberately hostile: nothing selected, no elements, no bodies. A probe is
- * supposed to cope with that - it renders on the very first frame of a step,
- * before a student has clicked anything - so a probe that throws here would
- * throw in front of a class.
+ * A stub of the live simulation context a probe is handed. Deliberately
+ * hostile (nothing selected, no bodies): a probe renders on the first frame.
  */
 export function emptyProbeContext() {
-  // Mirrors the object js/investigations.js builds. Kept in step with it by
-  // tests/authoring.test.js, which fails if the engine grows a context member
-  // this stub does not have: a probe calling something missing here would be
-  // reported as a broken probe when the probe is fine and the stub is stale.
+  // Mirrors the object js/investigations.js builds; tests/authoring.test.js fails if it grows a member this lacks.
   return {
     selected: null,
     bodies: [],
@@ -202,11 +238,7 @@ export function emptyProbeContext() {
     flux: () => 1,
     days: () => 0,
     observerAngle: () => 0,
-    // Shaped as the real accessors shape them, empty rather than absent.
-    // transitAnalysis() and rotationCurveState() always return an object, so a
-    // stub handing back null would report every probe that reads one as broken
-    // when the probe is right and the stub is wrong. clusterState() genuinely
-    // can return null - fewer than three galaxies - so that one does.
+    // Shaped as the real accessors shape them: empty, not absent (clusterState() alone can return null).
     photometry: () => ({
       baseline: 1,
       transits: [],
@@ -231,28 +263,19 @@ export function emptyProbeContext() {
     haloOn: () => false,
     frame: () => ({ mode: 'world', objectId: null }),
     seenFrom: () => null,
-    // Stable bindings, the replacement for `find` below. The stub answers the
-    // shape and not the world: an authoring check runs with no simulation, so
-    // every role is unbound, and a probe that copes with an unbound role here
-    // is a probe that copes with one whose body has merged at run time.
+    // Stable bindings, the replacement for `find` below: every role is unbound, as with no simulation.
     role: () => null,
     roleStatus: () => 'unbound',
     roleOf: () => null,
     roles: () => [],
     selectRole: () => false,
     selectId: () => false,
-    // No stage was built, so the authoritative sample is empty and its
-    // signature is the empty one. A widget that reads the sample must cope
-    // with there being none: that is the same state it is in for the frame
-    // between a step opening and its stage going up.
+    // No stage was built: the authoritative sample is empty, as between a step opening and its stage going up.
     stagedSample: () => [],
     stageKey: () => '',
     restagePopulation: () => false,
     population: () => null,
-    // No canvas and no bodies in an authoring check, so the life-stage
-    // illustration has nowhere to go. A widget that publishes one must cope
-    // with being told no: that is the same answer it gets for the frame
-    // between a step opening and its stage going up.
+    // No canvas and no bodies, so the life-stage illustration has nowhere to go: a widget must cope with being told no.
     showEvolutionScene: () => false,
     clearEvolutionScene: () => {},
     // No canvas: a widget that switches the source must cope with being told no.
@@ -262,10 +285,7 @@ export function emptyProbeContext() {
     binaryScale: () => ({ unitsPerSchwarzschildRadius: 3.2 }),
     restageBinary: () => false,
     mode: () => ({ mode: 'nbody', model: null, roles: [] }),
-    // The scene actions. An authoring check runs with no simulation, so each
-    // answers the shape and does nothing: a probe that copes with a stage that
-    // was never built is a probe that copes with one whose star has become a
-    // black hole under it.
+    // The scene actions answer the shape and do nothing: there is no simulation.
     restageStar: () => false,
     becomeRemnant: () => null,
     placeBinary: () => false,
@@ -273,13 +293,9 @@ export function emptyProbeContext() {
     barycenter: () => null,
     restageStarPair: () => false,
     restageHole: () => false,
-    // No star observed, which is the case with no simulation: a probe that
-    // assumes a spectrograph has something pointed at it is a probe that throws
-    // on the first frame of a cold load.
+    // No star observed: a probe that assumes a spectrograph has something pointed at it throws on a cold load.
     rvNow: () => null,
-    // No planet, no star, no zone: an authoring check runs with nothing in
-    // orbit, and a probe that assumes a habitable zone exists is a probe
-    // that throws before a reader ever sees the step.
+    // No planet, no star, no zone: a probe that assumes a habitable zone exists throws before a reader sees the step.
     habitability: () => null,
     // No baseline with no world, as during a rebuild.
     conservation: () => null,
@@ -334,17 +350,8 @@ function hintValues(step) {
 }
 
 /**
- * Run every authoring rule.
- *
- * @param {object} inputs - From loadAuthoringInputs()
- * @returns {Array<object>} Findings, in catalog order
- */
-/**
- * The presets a step actually shows, resolved the way the panel resolves them.
- *
- * A step may suppress presets (`presets: false`) or a widget compute them from
- * the step; asking only the widget would credit a way back the step took away.
- *
+ * The presets a step actually shows, resolved the way the panel resolves them
+ * (a step may suppress them, a widget may compute them from the step).
  * @param {object} widget - The widget definition
  * @param {object} spec - The step's `tool` block
  * @returns {Array<object>} The presets the student can press on this step
@@ -486,15 +493,13 @@ export function checkCatalog(inputs, { skip = [] } = {}) {
         return;
       }
       // --- Stable identity ---------------------------------------------------
-      // Student progress is keyed by `sid`, so a step without one has nowhere
-      // to store an answer, and two steps sharing one share a student's work.
-      // See js/investigations/progressSchema.js.
+      // Progress is keyed by `sid`: a step without one stores nothing, two sharing one share a student's work.
       if (!isValidSid(step.sid)) {
         E(
           'id/step',
           step.sid === undefined
             ? 'step has no sid; run `node tools/add-step-ids.mjs` to mint one'
-            : `sid ${JSON.stringify(step.sid)} is not usable as a key: it must be lowercase letters, digits and single hyphens, and not only digits`
+            : `sid ${JSON.stringify(step.sid)} is not usable as a key: lowercase letters, digits and single hyphens, not only digits`
         );
       } else if (sidsSeen.has(step.sid)) {
         E('id/step', `sid "${step.sid}" is already used by another step`);
@@ -506,20 +511,16 @@ export function checkCatalog(inputs, { skip = [] } = {}) {
       if (!isNonEmptyString(step.body)) E('content/step', 'step has no body');
 
       // --- Placeholders and staged help --------------------------------------
-      // A cue in an empty box is visible before the student has thought about
-      // the question; it may name a form and never a value (tools/authoring/cueRules.mjs,
+      // A cue in an empty box may name a form and never a value (tools/authoring/cueRules.mjs,
       // handed in through the inputs: the Composer route carries no such rule).
       for (const c of cueFindings?.(
         step,
         hintValues(step),
         emptyProbeContext()
       ) ?? [])
-        add(c.level, 'content/placeholder', L, i, c.message);
+        add(c.level, c.rule || 'content/placeholder', L, i, c.message);
 
-      // Staged hints only make sense in order: a method hint with no concept
-      // before it is fine, but a worked explanation is the last resort and a
-      // step that offers one and nothing else has skipped the two chances a
-      // student had to get there themselves.
+      // Staged hints go in order: a worked explanation is the last resort, not the only help.
       if (step.hints || step.worked) {
         if (step.hints && typeof step.hints !== 'object') {
           E('content/hints', 'hints must be an object of stages');
@@ -532,9 +533,8 @@ export function checkCatalog(inputs, { skip = [] } = {}) {
         }
       }
 
-      // Misconception rules stand on their own: a step can name a mistake
-      // without offering hints. Each has to be matchable, or it is a message
-      // that can never be shown.
+      // Misconception rules stand on their own, but each has to be matchable,
+      // or it is a message that can never be shown.
       for (const rule of step.misconceptions || []) {
         const known = Object.hasOwn(STANDARD_MISCONCEPTIONS, rule?.id ?? '');
         if (
@@ -545,7 +545,7 @@ export function checkCatalog(inputs, { skip = [] } = {}) {
         ) {
           E(
             'content/hints',
-            `misconception "${rule?.id ?? '?'}" is not a standard one and gives no factor or value to match`
+            `misconception "${rule?.id ?? '?'}" is not standard and gives no factor or value`
           );
         }
       }
@@ -624,32 +624,33 @@ export function checkCatalog(inputs, { skip = [] } = {}) {
           } else {
             const controls = new Map((w.controls || []).map(c => [c.id, c]));
 
-            for (const [key, raw] of Object.entries(step.tool.values || {})) {
+            // `start` is where the instrument opens when the check is satisfied elsewhere.
+            const placed = ['values', 'start'].flatMap(part =>
+              Object.entries(step.tool[part] || {}).map(e => [...e, part])
+            );
+            for (const [key, raw, part] of placed) {
               const c = controls.get(key);
               if (!c) {
                 E(
                   'ref/control',
-                  `tool.values sets "${key}", which ${w.id} has no control for`
+                  `tool.${part} sets "${key}", which ${w.id} has no control for`
                 );
                 continue;
               }
               const v = Number(raw);
               if (!Number.isFinite(v)) {
-                E('setup/value', `tool.values.${key} is not a number`);
+                E('setup/value', `tool.${part}.${key} is not a number`);
               } else if (v < c.min || v > c.max) {
                 E(
                   'setup/value',
-                  `tool.values.${key} = ${v} is outside the control range ${c.min}..${c.max}, so the widget can never reach it`
+                  `tool.${part}.${key} = ${v} is outside the range ${c.min}..${c.max}`
                 );
               } else if (
                 Number.isFinite(c.step) &&
                 c.step > 0 &&
                 !(step.tool.hide || []).includes(key)
               ) {
-                // Only worth saying when the student can see the slider. A
-                // hidden control set to a real measured value - a semi-major
-                // axis of 0.04747 AU - is the lesson quoting a real system,
-                // and there is no slider to fail to return to.
+                // Only when the student can see the slider: a hidden control at a real value quotes a real system.
                 const offGrid = Math.abs(
                   (v - c.min) / c.step - Math.round((v - c.min) / c.step)
                 );
@@ -661,7 +662,7 @@ export function checkCatalog(inputs, { skip = [] } = {}) {
                 if (offGrid > 1e-6 && !recoverable) {
                   W(
                     'setup/value',
-                    `tool.values.${key} = ${v} is not on the visible control's ${c.step} step and no preset of ${w.id} sets ${key} to it, so a student who moves it cannot get back`
+                    `tool.${part}.${key} = ${v} is off the ${c.step} step and no preset sets it, so a student cannot get back`
                   );
                 }
               }
@@ -676,15 +677,14 @@ export function checkCatalog(inputs, { skip = [] } = {}) {
               }
             }
 
-            // A control's opening position belongs under `values`; a number under
-            // the control's own name is read by nothing (a string, like the
-            // playback's `track`, is a different spec field and is left alone).
+            // A control's opening position belongs under `values`; a number under its own name is read by nothing.
             for (const key of Object.keys(step.tool)) {
-              if (key === 'values' || !controls.has(key)) continue;
+              if (key === 'values' || key === 'start' || !controls.has(key))
+                continue;
               if (typeof step.tool[key] !== 'number') continue;
               E(
                 'ref/control',
-                `tool.${key} = ${step.tool[key]} names a control of ${w.id}, so it belongs under tool.values — where it is now, nothing reads it and the control opens at its own default`
+                `tool.${key} = ${step.tool[key]} names a control of ${w.id}: put it under tool.values, where nothing reads it now`
               );
             }
 
@@ -784,7 +784,7 @@ export function checkCatalog(inputs, { skip = [] } = {}) {
               if (!ids.has(name) && !ids.has(base)) {
                 E(
                   'ref/field',
-                  `field "${f.id}" computes from "${name}", which this step does not declare, so it can only ever be blank`
+                  `field "${f.id}" computes from "${name}", which this step does not declare`
                 );
               }
             }
@@ -881,9 +881,8 @@ export function checkCatalog(inputs, { skip = [] } = {}) {
             );
           }
 
-          // The author's own hint values are the model answer. A validator that
-          // rejects them is telling every student who reads the hints that they
-          // are wrong.
+          // The author's own hint values are the model answer: a validator that
+          // rejects them tells every student who reads the hints they are wrong.
           const hints = hintValues(step);
           const complete =
             Object.keys(hints).length ===
@@ -936,9 +935,8 @@ export function checkCatalog(inputs, { skip = [] } = {}) {
         }
       }
 
-      // A remediation step shows only after an earlier graded step went wrong
-      // (or right): stepApplies(). One level deep: the step it names is graded,
-      // reached by all (marked, if held), and it is neither last nor a reveal.
+      // A remediation step shows only when an earlier graded step was answered
+      // wrongly (or rightly): stepApplies(), one level deep.
       if (step.when !== undefined) {
         const w = step.when;
         const at = isPlainObject(w)
@@ -989,6 +987,8 @@ export function checkCatalog(inputs, { skip = [] } = {}) {
         }
       }
 
+      for (const m of evidenceProblems(step, steps, i)) E('answer/evidence', m);
+
       // --- Answers -----------------------------------------------------------
       const graded = step.type === 'predict' || step.type === 'question';
       if (!graded) return;
@@ -1001,7 +1001,10 @@ export function checkCatalog(inputs, { skip = [] } = {}) {
         return;
       }
 
-      const kind = step.type === 'predict' ? 'choice' : step.kind;
+      const kind =
+        step.type === 'predict' && step.kind !== 'estimate'
+          ? 'choice'
+          : step.kind;
 
       if (kind === 'choice') {
         if (!Array.isArray(step.options) || step.options.length < 2) {
@@ -1041,10 +1044,8 @@ export function checkCatalog(inputs, { skip = [] } = {}) {
         }
       }
 
-      // A prediction whose marking waits for the experiment has to name the
-      // step where the experiment happens, and that step has to come after it.
-      // Pointing backwards, or at nothing, would leave the reader's answer
-      // unmarked for the rest of the lesson with no way to find out.
+      // A prediction whose marking waits for the experiment has to name a later
+      // step where it happens; otherwise the answer stays unmarked for good.
       if (step.reveal !== undefined) {
         const revealAt = steps.findIndex(x => x.sid === step.reveal);
         if (typeof step.reveal !== 'string' || !step.reveal) {
@@ -1059,7 +1060,10 @@ export function checkCatalog(inputs, { skip = [] } = {}) {
             'answer/reveal',
             `reveal names "${step.reveal}", which comes before this step`
           );
-        } else if (!Array.isArray(step.options) || step.answer === undefined) {
+        } else if (
+          step.kind !== 'estimate' &&
+          (!Array.isArray(step.options) || step.answer === undefined)
+        ) {
           E(
             'answer/reveal',
             'reveal holds the marking of a choice, so the step needs options and an answer'
@@ -1150,9 +1154,8 @@ export function checkCatalog(inputs, { skip = [] } = {}) {
           );
         }
       }
-      // Keyed by step sid (js/data/instructorExpectations.js): a number goes
-      // stale the moment a step is inserted above it. It must name a step
-      // and say something.
+      // Keyed by step sid (js/data/instructorExpectations.js), since a number
+      // goes stale when a step is inserted above it; it must name a step.
       const sids = steps.map(s => s.sid);
       for (const [key, text] of Object.entries(guide.expectations || {})) {
         const idx = sids.indexOf(key);
@@ -1225,7 +1228,7 @@ export function checkCatalog(inputs, { skip = [] } = {}) {
             'agree/manifest',
             inv.id,
             null,
-            `the ${locale} manifest's ${key} is not the lesson's: ${JSON.stringify(entry[key])} vs ${JSON.stringify(expected[key])}`
+            `${locale} manifest ${key} is ${JSON.stringify(entry[key])}, not ${JSON.stringify(expected[key])}`
           );
         }
       }
@@ -1301,7 +1304,7 @@ export function checkCatalog(inputs, { skip = [] } = {}) {
         for (const c of cueFindings?.(st, models, emptyProbeContext()) ?? [])
           add(
             c.level,
-            'content/placeholder',
+            c.rule || 'content/placeholder',
             id,
             si,
             `${locale}: ${c.message}`
@@ -1470,11 +1473,8 @@ export function scaffoldProblems(step, english = true) {
 }
 
 /**
- * Check one lesson, for the authoring preview.
- *
- * The command line's rules minus those comparing the lesson with what the
- * browser lacks (manifest, translations, instructor guide): what an author edits.
- *
+ * Check one lesson, for the authoring preview: the command line's rules minus those that compare a lesson
+ * with an artifact the browser lacks (manifest, translations, instructor guide).
  * @param {object} inv - One investigation
  * @param {object} refs - {widgets, scenarios, scenarioId, settingKeys,
  *   gradedSteps}
@@ -1508,14 +1508,7 @@ export function checkLesson(inv, refs) {
   );
 }
 
-/**
- * A translation must be a shadow of its lesson, not a document of its own.
- *
- * mergeTranslation silently drops any key the English does not have, so a typo
- * in a shadow is invisible: the work is done, the file is committed, and the
- * string never appears. That is the single most likely way for translated
- * content to be lost, and nothing else notices it.
- */
+/** A translation is a shadow of its lesson: mergeTranslation drops a key English lacks, so a typo would be invisible. */
 function checkTranslationShape(
   base,
   overlay,
@@ -1537,7 +1530,7 @@ function checkTranslationShape(
     if (overlay.length > base.length) {
       report(
         'error',
-        `${locale}: ${path.join('.')} has ${overlay.length} entries for ${base.length} in English; the extras are dropped`,
+        `${locale}: ${path.join('.')} has ${overlay.length} entries for ${base.length}; extras are dropped`,
         stepIndex
       );
     }
@@ -1568,7 +1561,7 @@ function checkTranslationShape(
       if (!Object.hasOwn(base, key)) {
         report(
           'error',
-          `${locale}: ${[...path, key].join('.')} is not a key the lesson has, so this translation is silently discarded`,
+          `${locale}: ${[...path, key].join('.')} is not a lesson key and is discarded`,
           stepIndex
         );
         continue;

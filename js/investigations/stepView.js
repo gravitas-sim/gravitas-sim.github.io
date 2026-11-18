@@ -25,6 +25,7 @@ import {
   localeOfAnswer,
   parseNumber,
   recordAnswer,
+  typedNumber,
 } from '../answerParse.js';
 import {
   answerClass,
@@ -42,9 +43,11 @@ import { assignmentStorageKey, shortHash } from '../assignments/assignment.js';
 import {
   classifyStorageError,
   readProgress,
+  stepKey,
   writeProgress,
 } from './progressSchema.js';
 import { KEY_INVESTIGATION_PREFIX } from '../names.js';
+import { isPeek, openSheet } from '../lessonFrame.js';
 const getAreaSweepWedges = command('getAreaSweepWedges');
 
 /** Escape for use inside a double-quoted attribute. */
@@ -91,11 +94,18 @@ export function fieldModule(m) {
   m.setKit({
     announce,
     decimalSeparatorFor,
+    judge: judgeReadings,
     lessonText,
     parseNumber,
     predictionState,
   });
   return (slots.field = m);
+}
+
+/** Install the reveal slot's module (an estimate, and the box where a prediction meets the readings) with the engine functions it needs. */
+export function revealModule(m) {
+  m.setKit({ announce, localeOfAnswer, recordAnswer, stepKey, typedNumber });
+  return (slots.reveal = m);
 }
 
 /**
@@ -204,7 +214,9 @@ export function stepMarkup(step, c) {
     );
   }
 
-  if (step.type === 'predict' || step.kind === 'choice') {
+  if (step.kind === 'estimate')
+    parts.push(slots.reveal?.estimate(step, c) ?? '');
+  else if (step.type === 'predict' || step.kind === 'choice') {
     const locked = saved !== undefined;
     // A step that names `reveal` holds the marking and the explanation until
     // the reader reaches the step where the result arrives: marked the instant
@@ -269,7 +281,9 @@ export function stepMarkup(step, c) {
   // says what was predicted and how it turned out. Without this the verdict
   // would sit on a screen the reader has already left.
   const predicted = predictionAnsweredHere(step);
-  if (predicted) {
+  const boxed = step.evidence && slots.reveal?.verdict(step, c, predicted);
+  if (boxed) parts.push(boxed);
+  else if (predicted) {
     parts.push(
       `<div class="inv-verdict ${predicted.right ? 'is-right' : 'is-wrong'}">
          <p class="inv-verdict-head">${prose(
@@ -417,7 +431,10 @@ export function stepMarkup(step, c) {
         .join('')}</div>`
     );
     parts.push(slots.field?.spanGroups(step, c) ?? '');
-    parts.push('<div class="inv-check" data-check-slot></div>');
+    parts.push(
+      '<div class="inv-check" data-check-slot></div>',
+      slipRow(step, id)
+    );
   }
   if (step.variation) parts.push(slots.runs?.markup(step, c) ?? '');
   return parts;
@@ -560,6 +577,91 @@ function hintBlock(step, id, responses) {
 const spoken = text =>
   decodeEntities(String(text ?? '').replace(/<\/?(strong|em|sub|sup)>/g, ''));
 
+// --- A measure step's tries and slips -----------------------------------------
+// A try is a reading taken or a value set committed (focus leaving the fields), once per distinct set,
+// counted in `attempts` as a question's is. A slip is named only if the author declared it
+// (`fields[].misconceptions`); it is never a value, and never shown for an uncommitted prediction.
+
+let bound = null; // what the open step's controls are bound to
+const slips = new Map(); // step id -> the slip on screen
+const seen = new Map(); // step id -> the value sets already counted
+const edited = new Set(); // step ids typed in since the last count
+
+const showSlip = text => {
+  const el = bound?.els().body.querySelector('[data-slip]');
+  if (el) [el.textContent, el.hidden] = [text, !text];
+};
+
+const slipRow = (step, id) =>
+  step.fields?.some(f => f.misconceptions)
+    ? `<p class="inv-feedback is-wrong" data-slip${slips.has(id) ? '' : ' hidden'}>${escape(slips.get(id) ?? '')}</p>`
+    : '';
+
+/**
+ * Count a try for the step's values and name the slip they show, once per distinct set. Said at once when
+ * the fields were left; handed back as words when a reading was taken (it is announced with the reading).
+ */
+function judgeReadings(taken) {
+  const h = bound;
+  const step = h?.currentStep();
+  const id = h?.stepId();
+  const r = h?.responses();
+  const own = (step?.fields || []).filter(f => !f.compute);
+  const at = f => `${id}:${f.id}`;
+  if (
+    step?.type !== 'measure' ||
+    !(step.validate || own.some(f => f.misconceptions)) ||
+    !own.length ||
+    !own.every(f => String(r[at(f)] ?? '').trim()) ||
+    (!taken && !edited.has(id)) ||
+    predictionState(h.steps(), step, h.visited(), r) === 'uncommitted'
+  )
+    return '';
+  const set = JSON.stringify(own.map(f => [r[at(f)], r[`${at(f)}:src`]]));
+  const done = seen.get(id) ?? seen.set(id, new Map()).get(id);
+  edited.delete(id);
+  slips.delete(id);
+  if (done.has(set)) {
+    // A set already counted is not another try, and not announced again; its slip is drawn again.
+    const old = done.get(set);
+    if (old) slips.set(id, old);
+    showSlip(old);
+    return taken ? old : '';
+  }
+  h.attempts()[id] = (h.attempts()[id] || 0) + 1;
+  let said = '';
+  try {
+    const ctx = h.probeContext();
+    const how = slots.field?.readings(r, id, step);
+    for (const f of own) {
+      const model = Number(String(f.want ?? '').replace(/[^0-9eE+\-.]/g, ''));
+      const hit = matchMisconception(
+        { misconceptions: f.misconceptions, answer: model },
+        parseNumber(r[at(f)], localeOfAnswer(r, at(f), getLocale())).value,
+        f.tolerance ?? Math.abs(model) * 0.05,
+        {
+          src: how?.[f.id],
+          roleOf: n => ctx.roleOf(ctx.bodies.find(b => b.name === n)),
+        }
+      );
+      if (!hit?.message) continue;
+      said = `${spoken(lessonText(hit.message))} ${t('inv.slip.again')}`;
+      slips.set(id, said);
+      const was = String(r[`${id}:slip`] ?? '').split(',');
+      if (hit.id && !was.includes(hit.id))
+        r[`${id}:slip`] = [...was, hit.id].filter(Boolean).join(',');
+      break;
+    }
+  } catch (err) {
+    console.warn(err);
+  }
+  done.set(set, said);
+  h.save();
+  showSlip(said);
+  if (!taken) announce(said);
+  return said;
+}
+
 const setAreaSweepWedges = command('setAreaSweepWedges');
 
 /**
@@ -574,7 +676,9 @@ const setAreaSweepWedges = command('setAreaSweepWedges');
 export function bindStepInputs(h) {
   const els = h.els();
   const id = h.stepId();
+  bound = h;
 
+  slots.reveal?.bind(h, els.body);
   els.body.querySelector('[data-change]')?.addEventListener('click', () => {
     delete h.responses()[id];
     h.save();
@@ -680,9 +784,16 @@ export function bindStepInputs(h) {
         getLocale()
       );
       slots.field?.typed(h.responses(), input.dataset.field, els.body);
+      edited.add(id);
+      if (slips.delete(id)) showSlip('');
       h.save();
       h.refreshMeasurements();
     });
+  });
+
+  // Leaving the fields commits the set: a try, and the slip it shows if one is declared.
+  els.body.querySelector('.inv-fields')?.addEventListener('focusout', e => {
+    if (!e.currentTarget.contains(e.relatedTarget)) judgeReadings(false);
   });
 
   const wedgeSlider = els.body.querySelector('[data-wedges]');
@@ -880,6 +991,7 @@ export function save() {
     earlier: earlierFor(active.id),
   });
   if (Object.keys(typed).length) payload.drafts = typed;
+  if (isPeek()) payload.sheet = 'peek';
 
   // This tab's copy, always, and before the disk is asked. It is what makes
   // closing and reopening the lesson safe when the write below fails.
@@ -1047,6 +1159,12 @@ const legacyKey = id => `${STORAGE_PREFIX}${id}:v1`;
  * @returns {?object} The progress, or null when there is none
  */
 export function load(id, lesson = null) {
+  const saved = read(id, lesson);
+  if (lesson) openSheet(saved?.sheet);
+  return saved;
+}
+
+function read(id, lesson) {
   // This tab first. It is written on every save and storage is not, so when the
   // two differ the session copy is the newer one - and when storage refused
   // every write, it is the only one there is.

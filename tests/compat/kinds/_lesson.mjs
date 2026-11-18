@@ -8,6 +8,15 @@ export const lesson = () => ({
     { sid: 'intro', type: 'read' },
     { sid: 'build-a', type: 'read', setup: { scenario: 'Solar System' } },
     { sid: 'look', type: 'read' },
+    // An estimate prediction: its answer is plain text under the step's own key.
+    {
+      sid: 'size',
+      type: 'predict',
+      kind: 'estimate',
+      unit: 'd',
+      range: true,
+      reveal: 'ask',
+    },
     {
       sid: 'guess',
       type: 'predict',

@@ -468,6 +468,27 @@
     text-align: center;
   }
 
+  /* Fit view and Undo, above the sections, side by side; the labels wrap to a
+     second line rather than push the open section off the rail. */
+  .rail-at-hand {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2px;
+    padding-bottom: var(--space-1);
+    border-bottom: 1px solid var(--border-subtle);
+  }
+
+  .ui-container .rail-at-hand .ui-button {
+    padding: 6px var(--space-2);
+    font-size: var(--text-2xs);
+    line-height: 1.25;
+  }
+
+  /* A label that wraps stays against the left edge, like the rest of the rail. */
+  .ui-container .ui-button {
+    text-align: left;
+  }
+
   /* The view pad (zoom and pan as buttons): six in one row, because Tools has
      to fit the rail without scrolling and three rows of two did not. */
   .ui-container .view-pad {
@@ -574,25 +595,6 @@
   .ui-container #stopwatchControls .measure-btn {
     justify-content: center;
     text-align: center;
-  }
-
-  /* The speed control is a single object - slow, reading, fast - and reads as
-     one when the three parts share a surface. */
-  .ui-container .speed-controls {
-    display: grid;
-    grid-template-columns: 1fr auto 1fr;
-    align-items: center;
-    gap: 2px;
-    margin: var(--space-1) 0;
-    padding: 2px;
-    background: var(--surface-2);
-    border-radius: var(--radius-sm);
-  }
-
-  .ui-container .speed-controls .ui-button {
-    justify-content: center;
-    padding: 4px var(--space-1);
-    font-size: var(--text-2xs);
   }
 
   /* Sections are tighter now that there are more of them. */
@@ -1733,25 +1735,6 @@
    sheets share it. e2e/responsiveLayout.spec.js measures it at each width.
    ========================================================================== */
 @layer overrides {
-  /* --- The scenario card and the help button, without a lesson ------------
-     Below the desktop the readout and the Menu button hold the top corners,
-     and the card used to span the top between them and lie over both. It
-     stands on the transport bar instead, as it does on a phone (the phone
-     rule is in css/components.css), centered, and the help button stands on
-     the bar's right end rather than beside its left end, which the bar
-     reaches on a tablet. A lecture places the card itself. */
-  @media (min-width: 768px) and (max-width: 1200px) {
-    body:not(.presentation-lecture) #scenarioInfoBox {
-      top: auto;
-      bottom: calc(var(--transport-reserve, 76px) + 44px + var(--space-3));
-      left: var(--space-3);
-      right: var(--space-3);
-      width: auto;
-      max-width: 720px;
-      margin-inline: auto;
-      transform: none;
-    }
-  }
   @media (min-width: 768px) and (max-width: 900px) {
     .tutorial-btn {
       left: auto;
@@ -1893,62 +1876,57 @@
     }
   }
 
-  /* Tablet: the sheet is the band, the step on the left half and whatever
-     the step docks on the right, so the instrument stands beside the step. */
+  /* Tablet: the step down the left, the scene beside it, the dock under it. */
   @media (min-width: 768px) and (max-width: 900px) {
-    body.investigation-aux {
-      --lesson-sheet: var(--lesson-band);
+    body.investigation-open {
+      --lesson-col: min(380px, 46vw);
+      --dock-left: calc(var(--lesson-col) + var(--space-3) + var(--space-2));
+      --dock-room: min(var(--lesson-band), 252px);
     }
-    body.investigation-aux .investigation-panel {
-      right: calc(50% + var(--space-1));
-      height: var(--lesson-sheet);
+    body.investigation-open .investigation-panel {
+      top: calc(var(--space-3) + var(--shell-height, 0px));
+      left: var(--space-3);
+      right: auto;
+      bottom: var(--transport-reserve, 76px);
+      width: var(--lesson-col);
+      max-height: none;
     }
     body.investigation-aux .inv-plot-panel,
     body.investigation-aux .inv-dock-tabs {
       top: auto;
-      left: calc(50% + var(--space-1));
+      left: var(--dock-left);
       right: var(--space-2);
       bottom: var(--transport-reserve, 76px);
       width: auto;
-      max-height: var(--lesson-band);
+      max-height: var(--dock-room);
     }
     body.investigation-split .inv-dock-tabs {
-      bottom: calc(var(--transport-reserve, 76px) + var(--lesson-band) - var(--dock-tabs));
+      bottom: calc(var(--transport-reserve, 76px) + var(--dock-room) - var(--dock-tabs));
     }
     body.investigation-split #investigationTool,
     body.investigation-split #investigationPlot {
       top: auto;
-      height: calc(var(--lesson-band) - var(--dock-tabs) - var(--space-2));
+      height: calc(var(--dock-room) - var(--dock-tabs) - var(--space-2));
       max-height: none;
     }
     body.investigation-lightcurve.investigation-open .light-curve-container {
       top: auto;
-      left: calc(50% + var(--space-1));
+      left: var(--dock-left);
       bottom: var(--transport-reserve, 76px);
-      height: min(var(--lesson-band), 300px);
-    }
-    body.investigation-lightcurve .investigation-panel {
-      right: calc(50% + var(--space-1));
+      height: var(--dock-room);
     }
 
-    /* An observing panel a step opens (the pause-at-event form, the radial
-       velocity curve) takes the same half. The script stacks them from the
-       foot of the band, inside it. */
+    /* Observing panels take the same room. */
     body.investigation-open.observing {
-      --lesson-sheet: var(--lesson-band);
       --observe-bottom: var(--transport-reserve, 76px);
-      --observe-room: var(--lesson-band);
-    }
-    body.investigation-open.observing .investigation-panel {
-      right: calc(50% + var(--space-1));
-      height: var(--lesson-sheet);
+      --observe-room: var(--dock-room);
     }
     body.investigation-open.observing .obs-panel {
-      left: calc(50% + var(--space-1));
+      left: var(--dock-left);
       right: var(--space-2);
       width: auto;
       max-width: none;
-      max-height: var(--lesson-band);
+      max-height: var(--dock-room);
     }
   }
 
@@ -2056,13 +2034,13 @@
     }
     #investigationClose {
       grid-column: 1;
-      grid-row: 1;
+      grid-row: 2;
       align-self: center;
       margin-left: var(--space-2);
     }
     .inv-header-text {
       grid-column: 2;
-      grid-row: 1;
+      grid-row: 2;
       align-self: center;
       padding: var(--space-2);
     }
@@ -2076,7 +2054,7 @@
     }
     .investigation-panel > .inv-progress {
       grid-column: 3;
-      grid-row: 1;
+      grid-row: 2;
       padding: 0 var(--space-2) 0 0;
       border: 0;
     }
@@ -2085,6 +2063,66 @@
     }
     .investigation-panel > .inv-body {
       border-top: 1px solid var(--border-subtle);
+    }
+
+    /* The sheet handle; lowered, the sheet's height is what the panels on it follow. */
+    #investigationSheet {
+      display: flex;
+      grid-column: 1 / -1;
+      grid-row: 1;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      min-height: 28px;
+      padding: 0;
+      border: 0;
+      border-radius: 0;
+      background: transparent;
+      cursor: pointer;
+    }
+    @media (pointer: coarse) {
+      #investigationSheet {
+        min-height: 44px;
+      }
+    }
+    #investigationSheet > span {
+      width: 48px;
+      height: 5px;
+      border-radius: var(--radius-full);
+      background: var(--text-muted);
+    }
+    body.investigation-open.lesson-peek {
+      --lesson-sheet: clamp(150px, 24vh, 210px);
+    }
+    body.investigation-open.lesson-peek .inv-where-row {
+      display: none;
+    }
+
+    /* The readout is a narrow tab, so the row it shares with the menu stays canvas. */
+    body.investigation-open #overlay.minimized {
+      top: calc(var(--shell-height, 0px) + var(--space-2));
+      left: 0;
+      border-left-width: 0;
+      border-radius: 0 var(--radius-md) var(--radius-md) 0;
+    }
+    body.investigation-open #overlay.minimized .readout-head {
+      gap: 0;
+      padding: 2px 0;
+    }
+    body.investigation-open #overlay.minimized .readout-head-actions {
+      gap: 0;
+    }
+    body.investigation-open #overlay.minimized .overlay-minimize-btn {
+      margin: 0;
+    }
+    /* The dot says it; the word is read aloud. */
+    body.investigation-open #overlay.minimized .readout-status-text {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+      clip-path: inset(50%);
+      white-space: nowrap;
     }
   }
 }
@@ -2102,6 +2140,12 @@
    its own rule in css/shell.css.
    ========================================================================== */
 @layer overrides {
+  @media (min-width: 768px) {
+    #investigationSheet {
+      display: none;
+    }
+  }
+
   /* Two fingers on the canvas zoom the simulation (js/ui.js), and only the
      simulation: the browser is told not to start a gesture of its own there,
      so the page does not zoom under the fingers at the same time. Everywhere
@@ -2112,7 +2156,6 @@
 
   @media (pointer: coarse) {
     .readout-icon-btn,
-    .scenario-info-close,
     .timeline-btn,
     .mobile-menu-toggle,
     .tutorial-btn,

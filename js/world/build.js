@@ -87,7 +87,7 @@ import {
   expandGeometry,
   scenarioId,
 } from '../scenarios.js';
-import { populationCaps } from '../quality.js';
+import { populationCaps, recordBuild } from '../quality.js';
 import { SIM_UNITS_PER_AU } from '../units.js';
 
 // Every type, for a declaration that replaces none of the generated population.
@@ -1656,39 +1656,10 @@ export const buildWorld = ctx => {
 
   setScenarioName(starting_preset);
 
-  // The low quality tier's population caps, applied here because this is the
-  // only moment the counts mean anything: they are read once, while the world
-  // is generated, and never again.
-  //
-  // Only the generic populations, and only for scenarios that use the generic
-  // generator at all. A scenario with placement 'Empty' places every body by
-  // hand - the resonance systems, TRAPPIST-1, the galaxy discs - and there the
-  // body count is the physics. A Laplace resonance missing one of its three
-  // moons is not a cheaper version of the lesson, it is a wrong one, so those
-  // are left at full population and pay for it in frame rate instead.
-  //
-  // Applied as a read-time override, never written back.
-  //
-  // The first version of this assigned the caps into the live SETTINGS, on the
-  // reasoning that the generator reads these keys in many places. It reads them
-  // in nineteen, and the write was actively harmful: SETTINGS is the reader's
-  // own document. It is what a share link serializes, what a saved state
-  // restores and what the A/B bench hashes to decide whether two runs differ.
-  // Writing a cap into it meant a teacher on a slow laptop silently exported
-  // num_asteroids: 40 to a class on faster machines, and meant the bench could
-  // report a difference between two runs that differed only in frame rate.
-  //
-  // The tier may spend fewer pixels and draw fewer bodies. It may not edit the
-  // document.
+  // The low tier's population caps (populationCaps in js/quality.js says why
+  // they are a read-time override and which scenarios they spare), read once.
   const caps = populationCaps();
   const capped = caps && SETTINGS.placement !== 'Empty' ? caps : null;
-
-  /**
-   * A generic population count, reduced to fit the current quality tier.
-   *
-   * @param {string} key - A num_* settings key
-   * @returns {number} The count to actually build
-   */
   const pop = key =>
     capped && typeof SETTINGS[key] === 'number' && SETTINGS[key] > capped[key]
       ? capped[key]
@@ -1764,6 +1735,7 @@ export const buildWorld = ctx => {
   // that same star. They used to get two - one anchored at the center and one
   // randomly generated - and the spare was dropped into the belt it was
   // supposed to be lighting.
+  const starsAlready = stars.length;
   if (pop('num_stars')) {
     for (let i = stars.length; i < pop('num_stars'); i++) {
       stars.push(new StarObject({ x: 0, y: 0 }, { x: 0, y: 0 }));
@@ -2595,4 +2567,9 @@ export const buildWorld = ctx => {
   // of the eleven import cycles the architecture check reported, because
   // js/render.js imports js/ui.js and js/ui.js imports this module.
   regenerateStarfield();
+
+  // What the tier left out, for the readout's "n of N bodies".
+  const lists = [bh_list, planets, stars, gas_giants, asteroids, comets];
+  lists.push(neutron_stars, white_dwarfs, galaxies);
+  recordBuild(capped && pop, SETTINGS, starsAlready, lists);
 };

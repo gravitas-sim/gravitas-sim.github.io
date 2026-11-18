@@ -302,14 +302,15 @@ describe('the engine, run again in processes of its own', () => {
 describe('scene records', () => {
   const all = loadAll();
 
-  test('the sixteen converted sandbox captures are valid records', () => {
-    expect(all).toHaveLength(16);
+  test('the sixteen converted sandbox captures and the two crowded-scene records are valid', () => {
+    expect(all).toHaveLength(18);
     expect(new Set(all.map(a => a.record.scenario))).toEqual(
       new Set([
         'solar-system',
         'circumbinary-planet-lab',
         'galilean-resonance',
         'star-cluster',
+        'kuiper-belt',
         'black-hole-lab',
       ])
     );

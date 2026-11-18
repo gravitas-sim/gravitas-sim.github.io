@@ -193,6 +193,7 @@ current, and the orchestrator checks it.
 | `multimessenger-authentic.mjs` | Readers for the authentic files of the multi-messenger kernel (Prompt 244) |  |
 | `multimessenger-validate.mjs` | The multi-messenger kernel against its committed thresholds (Prompt 244) | `npm run multimessenger:validate` |
 | `navigation.mjs` | The navigation model, measured: the structural navigation checks' reader | `npm run navigation:check`, `npm run navigation:write`, `npm run navigation:report` |
+| `neutral-start-report.mjs` | Where do instruments open? Three lists over the catalog |  |
 | `new-investigation.mjs` | npm run author:new -- --id=<lesson-id> --title="..." | `npm run author:new` |
 | `number-ratchet.mjs` | Three migrations that may only go one way: numbers through the formatter, |  |
 | `numeric-cases.mjs` | The numerical routines' validation group (Prompt 152) |  |
@@ -291,5 +292,6 @@ current, and the orchestrator checks it.
 | `visual-matrix.mjs` | The before-and-after matrix: the pilot scenes, photographed at matched states |  |
 | `visual-measure.mjs` | Measure the visual criteria on the pilot states and print the table |  |
 | `worker-probe.mjs` | npm run probe:workers - what the page's Workers hold, and what it keeps | `npm run probe:workers` |
+| `workspace-walk.mjs` | The sandbox workspace walk: seven tasks, by mouse, by keyboard and by touch |  |
 | `xray-scenes.mjs` | The committed scenes of the X-ray counts kernel's validation (Prompt 243) |  |
 | `xray-validate.mjs` | The X-ray counts kernel against its committed thresholds (Prompt 243) | `npm run xray:validate` |

@@ -1,23 +1,11 @@
-// =============================================================================
-// Lab report
-// -----------------------------------------------------------------------------
-// Turns a completed investigation into a PDF a student can hand in.
-//
-// The report is written to be read by an instructor who was not there: it
-// records what was asked, what the student answered, which automatically
-// checkable answers matched, and how many attempts each took. Nothing is
-// hidden: an instructor can see a question answered correctly on the fifth try
-// and treat it differently from one answered on the first.
-//
-// On the completion code: it is a checksum over the responses, not proof of
-// authorship. Anything computed in a browser can be forged by whoever controls
-// the browser, and claiming otherwise would be worse than not having it. What
-// it does do is make casual tampering visible: an edited PDF no longer matches
-// its own code, and give an instructor something to spot-check against.
-// =============================================================================
+// Lab report: a completed investigation as a PDF (or the accessible HTML twin) a student can hand in, written
+// for an instructor who was not there: what was asked, what was answered, which checkable answers matched, how
+// many attempts each took. The completion code is a checksum over the responses, not proof of authorship: it
+// makes casual tampering visible and gives an instructor something to spot-check.
 
 import { createDocument } from './pdf.js';
 import { fnvBase36 } from './hash.js';
+import { predictionState } from './lesson/held.js';
 import { registerMessages } from './i18n/index.js';
 // Depths, shallowest first (as in investigations/progressSchema.js).
 const LEVELS = ['core', 'quantitative', 'advanced'];
@@ -47,12 +35,8 @@ function completionCode(text) {
 }
 
 /**
- * Break a token into lines a person can copy without losing their place.
- *
- * Grouped in fours inside a line so the eye can track position, and the groups
- * are separated by spaces because whitespace is the only thing the reader is
- * allowed to strip.
- *
+ * Break a token into lines a person can copy without losing their place: groups of four, separated by
+ * spaces, because whitespace is the only thing the reader may strip.
  * @param {string} token - The encoded submission
  * @returns {string[]} Lines, each short enough for the page
  */
@@ -75,13 +59,7 @@ const dateText = (iso, locale) => {
   });
 };
 
-/**
- * Strip the inline markup lesson prose carries, for the PDF's plain text.
- *
- * Subscripts and superscripts become the underscore-and-caret forms rather than
- * being deleted: "R<sub>p</sub>/R<sub>star</sub>" reading as "Rp/Rstar" in a
- * submitted report is a different symbol from the one the question asked about.
- */
+/** Strip the inline markup of lesson prose for plain text; sub and sup become _ and ^ (Rp is not R_p). */
 const plain = text =>
   String(text ?? '')
     .replace(/<sub>([\s\S]*?)<\/sub>/g, '_$1')
@@ -121,6 +99,8 @@ const plain = text =>
  * @param {(id: string) => ?{hints: number, revealed: boolean, stages: string[]}} [opts.helpFor] -
  *   How much help a step was given (helpTaken() of js/answerFeedback.js),
  *   passed in so this file does not pull the grader into the report's chunk
+ * @param {?object} [opts.ev] - js/investigations/evidence.js, passed in by a caller whose lesson has estimates or
+ *   evidence, so no other report fetches it
  * @param {Function} [opts.createDoc] - The document builder: js/pdf.js
  *   createDocument (the default) or js/htmlReport.js createHtmlDocument, which
  *   has the same interface and makes the accessible HTML report
@@ -150,6 +130,7 @@ export function buildLabReport({
   evidence = null,
   helpFor = () => null,
   createDoc = createDocument,
+  ev = null,
 }) {
   // At a depth, the steps are those a student reads there, numbered as they
   // see them (DEPTH.md); `stepIdFor` still takes the index in the whole lesson.
@@ -276,6 +257,25 @@ export function buildLabReport({
         );
         canonical.push(`${id}:${f.id}=${v}`);
       }
+      // How many tries, and the slips named: facts beside the readings, never a mark. A held
+      // prediction's steps keep them back until its reveal.
+      if (
+        !/^(un)?committed$/.test(
+          predictionState(inv.steps, step, visited, responses)
+        )
+      ) {
+        const tries = attempts[id] || 0;
+        if (tries > 1) doc.row(t('rp.try'), t('rp.tryV', { n: tries }));
+        const named = String(responses[`${id}:slip`] ?? '')
+          .split(',')
+          .flatMap(sid =>
+            step.fields
+              .flatMap(f => f.misconceptions || [])
+              .filter(m => m.id === sid)
+              .map(m => lessonPlain(m.say))
+          );
+        if (named.length) doc.row(t('rp.slip'), named.join(' '));
+      }
       return;
     }
 
@@ -316,8 +316,15 @@ export function buildLabReport({
     });
 
     if (step.type === 'predict') {
-      const chosen =
-        typeof value === 'number' ? step.options[value] : t('rp.noPred');
+      const est = step.kind === 'estimate';
+      const said = est && ev?.readEstimate(step, responses, id);
+      const chosen = est
+        ? said
+          ? ev.estimateText(said, step.unit, t('rp.range'))
+          : t('rp.noPred')
+        : typeof value === 'number'
+          ? step.options[value]
+          : t('rp.noPred');
       // Predictions are reported, never marked. Their value is that the student
       // committed before seeing the answer.
       doc.field(
@@ -334,6 +341,22 @@ export function buildLabReport({
             title: lessonPlain(out.title),
           })} (${t(visited.has(out.sid) ? 'rp.reached' : 'rp.notReached')})`
         );
+      // What the student then read, and the author's one sentence, once the outcome is reached.
+      if (ev && out?.evidence && visited.has(out.sid)) {
+        const seen = ev.readingsFor(out, investigation.steps, responses, sid =>
+          stepIdFor(investigation.steps.findIndex(s => s.sid === sid))
+        );
+        for (const r of seen)
+          doc.row(
+            t('rp.reading', { what: lessonPlain(r.field.label) }),
+            r.text ? `${r.text}${r.field.unit ? ` ${r.field.unit}` : ''}` : '-'
+          );
+        const inside = said ? ev.fellInside(said, seen[0]?.value) : null;
+        const para = text =>
+          doc.paragraph(text, { size: 9.5, indent: 10, gap: 4 });
+        if (inside !== null) para(t(inside ? 'rp.inside' : 'rp.outside'));
+        if (out.compare) para(lessonPlain(out.compare));
+      }
       canonical.push(`${id}=${value}`);
       return;
     }
@@ -440,19 +463,9 @@ export function buildLabReport({
   if (evidence) evidence(doc);
 
   // --- Submission token ------------------------------------------------------
-  //
-  // Last, and on its own page, because it is the one part of this document not
-  // written for a human. The completion code above says whether the answers
-  // were altered; this says what they were, so an instructor holding thirty
-  // reports can find the question the class got wrong instead of reading
-  // thirty PDFs.
-  //
-  // Printed as well as embedded in /Keywords because the two fail differently.
-  // The embedded copy needs the file; the printed copy survives a student who
-  // photographs the page or pastes it into a text box, which is what actually
-  // happens. Broken into short groups so a reader can see where they are, and
-  // the reader on the other end strips whitespace and nothing else - '-' and
-  // '_' are base64url alphabet, not punctuation.
+  // Last, on its own page: the one part not written for a human. It says what the answers were, so an
+  // instructor can find the question a class got wrong. Printed as well as embedded in /Keywords, because the
+  // printed copy survives a photograph or a paste; the reader strips whitespace and nothing else.
   if (submissionToken) {
     doc.pageBreak();
     doc.heading(t('rp.token'), { size: 14, spaceBefore: 0 });

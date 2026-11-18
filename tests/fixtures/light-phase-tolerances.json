@@ -1,0 +1,11 @@
+{
+  "schema": "gravitas.light-phase-tolerances/1",
+  "about": "Fixed before the drawing that meets them (DESIGN_SYSTEM.md, \"A world seen close\"). Angles in degrees.",
+  "angles": [0, 45, 90, 135, 180],
+  "orientedAngles": [45, 90, 135],
+  "orientationDeg": 0.5,
+  "litFraction": 0.02,
+  "minRadiusPx": 80,
+  "equalFluxSteps": 100,
+  "terminatorMinPx": 10
+}

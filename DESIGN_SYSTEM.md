@@ -150,9 +150,10 @@ change.
 | **I-8**, desktop clause | At 1366x800 and 1440x900 the bound bodies sit outside every panel. | same |
 | **I-9**, labels | Bound-body labels are at least 11 CSS px effective and do not overlap at the pilot states, at device pixel ratios 1 and 2; other canvas text is at least 11. | `e2e/bodyLabels.spec.js`, in the suite |
 | **I-9**, selection | The selected body carries a cue that shows in luminance, not only in hue. | `e2e/bodyLabels.spec.js`, in the suite |
+| **I-9**, crowd | In the star cluster and the Kuiper belt at their scene records, at 1366 and 375 wide and device pixel ratios 1 and 2, no two body labels overlap, none is under 11 CSS px, and no more than the cap (24, besides the selected and a step's bodies) are drawn; a crowd draws trails for the selected body and the 12 heaviest only and the scene says so. | `e2e/crowdedScene.spec.js`, in the suite |
 | **I-9**, arrows | Arrow length rises with the speed it shows, and the legend states the scale. | `e2e/visualCriteria.criteria.js` |
 | **I-9**, trails | A trail spans a stated simulated time that does not follow the frame rate (30, 60 and 144 frames a second). | same |
-| **I-9**, plots | Ticks are at least 11 px and labels at least 12 px; with several series, each differs by marker shape. | same |
+| **I-9**, plots | Ticks are at least 11 px and labels at least 12 px; with several series, each differs by marker shape. | `e2e/plotReadingSize.spec.js` (passes on both pilot plots; on demand before) |
 
 How each is measured, so a later prompt can argue with the method and not the
 number:
@@ -175,8 +176,9 @@ number:
   judged alone.
 - *Arrow, trail and plot.* The arrow is the shaft the overlay strokes in its own
   colour, drawn for a body at its speed and at three times it; the trail span is
-  the trail's sample budget times the step the app plans at that frame rate
-  (`js/timestep.js`); plot text is read from the canvas recorder or from the
+  the engine's own `trailSpan()` (`js/trailSpan.js`), a stated simulated time
+  that does not depend on the step the frame rate gives; the proof at three
+  frame rates drives the real engine in `tests/trailSpan.test.js`; plot text is read from the canvas recorder or from the
   plot SVG's `text` nodes scaled by the viewBox.
 - *The announced action.* A control in the lesson panel whose name matches
   `SCENE_ACTION_NAME` in `tools/visual-criteria.mjs`. None exists at 3.0; the
@@ -263,6 +265,61 @@ after can be shown beside its before (`tools/visual-matrix.mjs`).
   crowded scene, 1 of the close world). A cell that did not repeat is compared
   by eye or by crop, never by hash alone; the table marks each one.
 
+### A world seen close: light, phase and surface
+
+What the sandbox may claim about a lit world, and the numbers it is held to.
+The numbers were fixed before the drawing that meets them was written; the
+fixture and its tests read them from
+`tests/fixtures/light-phase-tolerances.json`, which is the only place they are
+stated.
+
+- **The light.** A planet, moon or giant is shaded from the one luminous body
+  that sends it the most flux (`dominantLight`, `js/bodyVisuals.js`). A summed
+  direction is not used: two stars on opposite sides would cancel and leave a
+  world lit from nowhere. A body heavier than a star's lower mass limit lights
+  others; a body below it does not, whatever class a scenario gives it.
+- **The terminator.** At a drawn radius of 10 px or more, at either quality
+  tier, a rocky world or giant shows a lit half and a night half, the edge
+  between them perpendicular to the direction of the light. Below 10 px the
+  drawing does not change.
+- **The phase.** A body whose primary is a planet or a giant is drawn as that
+  primary sees it: the lit fraction of the disc is (1 + cos a) / 2, a being the
+  angle at the body between the light and the observer, and the terminator is
+  an ellipse of semi-minor axis |cos a| r. A body that goes round a star shows
+  the half-lit disc a view from above the orbital plane sees, which is the only
+  phase that view has.
+- **No star.** A scene with no luminous body keeps the fixed light from the
+  upper left, draws no phase, and says that its shading is illustration.
+- **What is modelled.** The direction of the light, the terminator and the
+  phase come from the bodies' positions. Markings, bands and the ring shadow's
+  width are illustration, and the canvas description and the inspector say so.
+
+How it is drawn (`js/bodyDraw.js`, with the light from `lightingFor` in
+`js/bodyDrawSky.js`, register rows D-R4-448-01 to 05):
+
+- A body keeps its light until another star sends 5% more flux, so the choice
+  does not flicker where two stars send the same.
+- The observer for a phase is the planet or giant whose Hill sphere the body
+  is inside, not the body that pulls on it hardest: the Sun pulls the real
+  Moon harder than the Earth does.
+- The night side is one fill over the disc after the markings, from 10 px of
+  drawn radius at either tier; the low tier's cap removes markings, not the
+  night side. Markings (Earth's continents and ice, the Moon's maria and
+  craters) and a giant's bands at its latitudes and its flattening come from
+  the body's visual seed at the full tier's detailed level.
+- Three looks were captured for the maintainer: the terminator alone, with
+  markings (shipped), and with limb darkening.
+
+Tolerances, checked on a fixture world (a star, a planet and a moon built by the
+scenario builder, never shipped):
+
+| Check | Tolerance | Why this number |
+|---|---|---|
+| Terminator orientation, at a = 45, 90 and 135 degrees | within 0.5 degrees of the computed one | At a = 0 the disc is fully lit and at a = 180 fully dark, so there is no edge to orient. |
+| Lit pixel fraction, at a = 0, 45, 90, 135 and 180 degrees | within 0.02 of (1 + cos a) / 2, on a disc of at least 80 px radius | Edge quantization: an 80 px disc has about 500 edge pixels in 20,000, half a part in a hundred at the limb and as much again along the terminator. |
+| The chosen light, at the equal-flux locus of two equal stars | unchanged over 100 steps | Two equal fluxes differ by rounding; a choice made on the exact comparison would flicker. |
+| A body drawn below 10 px | the same canvas calls, in the same order, with the same arguments, as before | Stronger than comparing pixels, and it does not depend on the browser's antialiasing. |
+
 ### Page families
 
 This section sets no page family's direction. A family (a workspace for doing,
@@ -271,6 +328,48 @@ instructor page for preparing and reviewing) is given its identity once, by its
 pilot, from two or three composed alternatives shown as matched captures and
 chosen by the maintainer; the choice is recorded here when it is made. None has
 been chosen.
+
+### Workspace for doing
+
+The sandbox is the pilot of this family (Prompt 452). The hierarchy below is
+what it applies; the family's direction (its first-screen composition, type
+scale and imagery) is **proposed, not chosen**: the maintainer chooses it once,
+from the matched captures and the alternative the pull request shows (rule 7.2
+item 19), and until he does the sandbox's surface row is FOUNDATIONS ONLY.
+
+**Three tiers.** Every control of the workspace belongs to one.
+
+| Tier | What it means | Where each sits now (desktop; phone) |
+|---|---|---|
+| **At hand** | On the screen at first sight, in a fixed place, with nothing opened. | Run and pause, step back, step forward, the scrubber, Slow, the speed readout, Fast and the clock: the transport bar (phone: one speed button that shows the speed, each press one rung up, the top rung back to 1x). Fit View to Bodies and Undo Placement: above the rail's sections (phone: in the Menu drawer). Select a body: a click or tap on the canvas (keyboard: OPEN, 475). |
+| **One step away** | One press, or one opened section, from the scene. | Scenario (Load Scenario, Restart Scenario, Reset Settings and Scenario, Clear All Bodies) and Add object: the rail. Frame, units, the Measure tools and the instrument chips: the rail's Tools section. "About this scenario": a disclosure in the readout panel, closed until opened. A scenario's own lab panel (the binary run, the gravity assist): open on a wide screen, its title bar on a phone, one tap to open. |
+| **Advanced** | Rarely wanted while doing; may live behind a dialog or a fold. | Settings (and its Advanced fold), the Orbital System Builder, Save and Load State, Share Link, Export Data, the A/B bench. |
+
+**Rules.** Nothing a task asks about is folded (the "More" pattern, D-R10-45,
+and its task rule): the seven tasks of `tools/workspace-walk.mjs` (load a
+scenario, find a planet, follow it, measure its period, reset, change the speed,
+pause and step) each reach their controls at hand or one step away, except
+where a step has no route yet, which is recorded OPEN with its owner and not
+worked around. A card, banner or panel that rises on its own never lies over the
+bodies: the scenario's text is a disclosure, and a lab panel opens collapsed on
+a phone (criterion I-8 holds on the three scenes in
+`e2e/sandboxWorkspace.spec.js`). A new control goes in a tier before it goes in
+a place.
+
+**Names say their effect.** A reset is named for what it touches, and its hint
+states the six things a reset can change: the world, the settings, the camera,
+the clock, the seed and the pause. `e2e/resetEffects.spec.js` holds each name and
+hint to the world it describes, in both languages.
+
+| Name | World | Settings | Camera | Clock | Seed | Pause |
+|---|---|---|---|---|---|---|
+| Fit View to Bodies | stays | stay | centred and zoomed to fit | stays | stays | stays |
+| Restart Scenario | rebuilt; added or changed bodies are gone | return to those the scenario sets | the scenario's view | zero | new | runs |
+| Reset Settings and Scenario | Binary Black Hole, rebuilt | every default | its view | zero | new | runs |
+| Clear All Bodies | empty | stay (speed back to 1x) | 1x at the centre | stays | stays | runs |
+
+The R key, Home and a double tap are a different command: they centre the view
+at 1x zoom, and their shortcut is named for that.
 
 ## Breakpoints
 

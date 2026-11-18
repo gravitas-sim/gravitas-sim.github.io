@@ -86,6 +86,15 @@ export function entryFor(step, index) {
     entry.answerText = plainText(step.options[step.answer]);
   }
 
+  // A held estimate is never marked, and a reveal sets the student's own readings beside it.
+  if (step.kind === 'estimate')
+    entry.estimate = { unit: step.unit, range: Boolean(step.range) };
+  if (step.evidence)
+    entry.evidence = {
+      readings: step.evidence.map(e => `${e.step}.${e.field}`),
+      compare: step.compare ? plainText(step.compare) : null,
+    };
+
   if (step.kind === 'numeric' && step.formula) {
     // Different for every student: the key gives the rule, not a number.
     entry.answerFormula = step.formula.expr;
@@ -125,8 +134,11 @@ export function entryFor(step, index) {
     }));
   }
 
-  // A wrong option or number that names a mistake, with what it says.
-  const named = (step.misconceptions || []).filter(m => m?.say);
+  // A wrong option, number or way of taking a reading that names a mistake, with what it says.
+  const named = [
+    ...(step.misconceptions || []),
+    ...(step.fields || []).flatMap(f => f.misconceptions || []),
+  ].filter(m => m?.say);
   if (named.length) {
     entry.mistakes = named.map(m => ({
       id: m.id,

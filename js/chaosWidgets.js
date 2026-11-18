@@ -140,7 +140,7 @@ function plot(g, box, series, opts) {
   g.lineWidth = 1;
   g.strokeRect(x, y, w, h);
 
-  g.font = `10px ${MONO}`;
+  g.font = `11px ${MONO}`;
   g.fillStyle = colors.muted;
   g.textAlign = 'left';
   g.textBaseline = 'top';

@@ -14,7 +14,8 @@
 // carry is held by tools/lesson-standard.mjs and its committed ratchet file:
 // a count may fall and never rise.
 //
-//   leak/instrument-at-answer       L2  the instrument opens at an accepted value
+//   leak/instrument-at-answer       L2  the instrument opens at an accepted value (a heuristic on the controls)
+//   leak/opens-at-answer            L2  the opening readouts, written into the fields, pass validate
 //   leak/prediction-stated-earlier  L3  a predicted answer already stated (report only)
 //   leak/question-states-answer     L4  a numeric question's body holds its answer
 //   task/measure-all-computed       T1  a core measure step with nothing typed
@@ -28,6 +29,7 @@ import {
   emptyProbeContext,
   leaksAnswer,
 } from '../../js/authoring/rules.js';
+import { isFindOrSet, judgeOpening } from './neutralStart.mjs';
 import {
   DEPTHS,
   inDepth,
@@ -38,12 +40,16 @@ import {
 export const STANDARD_RULES = {
   'leak/instrument-at-answer':
     "A step's instrument does not open at a value its validator accepts",
+  'leak/opens-at-answer':
+    "A core find-or-set step's opening readouts, written into the fields they would fill, do not pass its validate (a step that reads a prepared state says `prepared: true`)",
   'leak/prediction-stated-earlier':
     'A predicted option, or a number in its explanation, is not already in an earlier body, tip or checklist (report only)',
   'leak/question-states-answer':
     "A numeric question's body does not contain the value the step accepts",
   'task/measure-all-computed':
     'A core measure step has at least one field the student types',
+  'depth/decision':
+    'A deeper step names what the student decides (`decides`), and a deeper measure step has a field that is neither computed nor copied from a number the lesson already gave',
   'text/internal-vocabulary':
     'Student text carries no prompt numbers, gate talk, NOT RUN, file names or leg ids',
   'text/step-reference':
@@ -58,6 +64,7 @@ export const REPORT_ONLY = new Set(['leak/prediction-stated-earlier']);
 /** The rules that say a held answer reached the screen (the acceptance map's `leakFree`). */
 export const LEAK_RULES = [
   'leak/instrument-at-answer',
+  'leak/opens-at-answer',
   'leak/prediction-stated-earlier',
   'leak/question-states-answer',
 ];
@@ -127,10 +134,14 @@ export function lessonTexts(lesson) {
  * @param {object} lesson - The lesson with every depth's steps laid in
  * @param {object} [shadows] - `{ lesson, steps }`: the Spanish lesson-level
  *   words and an array parallel to `lesson.steps` (null where there is none)
+ * @param {object} [context] - `{ widgets, map }`: the instruments and the
+ *   reviewed field-to-readout table, for the rules that read an instrument
  * @returns {object} The view the rules read
  */
-export function makeView(lesson, shadows = {}) {
+export function makeView(lesson, shadows = {}, context = {}) {
   return {
+    widgets: context.widgets ?? null,
+    map: context.map ?? {},
     id: lesson.id,
     lesson,
     steps: lesson.steps,
@@ -182,9 +193,9 @@ const gradeAt = (step, values, ctx) => {
  * so a validator that accepts any number does not call every instrument a leak.
  */
 export function openingAccepted(step, ctx = emptyProbeContext()) {
-  const values = Object.entries(step?.tool?.values ?? {}).filter(
-    ([, v]) => typeof v === 'number' && Number.isFinite(v)
-  );
+  const values = Object.entries(
+    step?.tool?.start ?? step?.tool?.values ?? {}
+  ).filter(([, v]) => typeof v === 'number' && Number.isFinite(v));
   const typed = (step?.fields ?? []).filter(
     f => typeof f.compute !== 'function' && f.id
   );
@@ -231,6 +242,27 @@ function instrumentAtAnswer(view) {
         `the instrument opens at ${JSON.stringify(step.tool.values)}, and the validator accepts ${JSON.stringify(hit)}`
       )
     );
+  });
+  return out;
+}
+
+/** (a2) The instrument's opening readouts, put into the fields they fill, are an accepted answer. */
+function opensAtAnswer(view) {
+  const out = [];
+  if (!view.widgets) return out;
+  view.steps.forEach((step, i) => {
+    if (!isCore(step) || !isFindOrSet(step)) return;
+    const widget = view.widgets.find(w => w.id === step.tool.id);
+    const r = judgeOpening(step, widget, view.map[`${view.id}/${step.sid}`]);
+    if (r.verdict === 'opens-at-answer')
+      out.push(
+        found(
+          'leak/opens-at-answer',
+          view,
+          i,
+          `the instrument opens showing ${JSON.stringify(r.fields)}, and the validator accepts it`
+        )
+      );
   });
   return out;
 }
@@ -318,6 +350,75 @@ function measureAllComputed(view) {
           `every one of its ${fields.length} field(s) is computed, so the student records nothing`
         )
       );
+  });
+  return out;
+}
+
+// ---- (c2) a deeper step that asks for no decision (DEPTH_II_GATE.md) ---------
+
+/** Numbers a student can read off the text: "4.0", "3", "0,75" as 0.75. */
+const numbersIn = text =>
+  (plain(text).match(/-?\d+(?:[.,]\d+)?/g) ?? []).map(x =>
+    Number(x.replace(',', '.'))
+  );
+
+/** Whether `want` is a number the lesson put in front of the student already. */
+function copied(field, step, earlier) {
+  const want = Number(String(field.want ?? '').replace(',', '.'));
+  if (field.want === undefined || !Number.isFinite(want)) return false;
+  const given = [
+    ...numbersIn(step.body),
+    ...numbersIn(step.prompt),
+    ...earlier.flatMap(e => [
+      ...(e.fields ?? []).map(f => Number(f.want)),
+      Number.isFinite(e.answer) ? e.answer : NaN,
+    ]),
+  ];
+  return given.some(g => Number.isFinite(g) && Math.abs(g - want) < 1e-9);
+}
+
+/**
+ * Q5 of the lesson standard at depth, over the deeper steps of the laid
+ * lesson. A read step asks nothing and is skipped. A measure step whose every
+ * field is computed or copied is a `depth/decision` finding whatever its
+ * `decides` says: naming a decision does not make one.
+ */
+function depthDecision(view) {
+  const out = [];
+  view.steps.forEach((step, i) => {
+    if (isCore(step) || step.type === 'read') return;
+    const named =
+      typeof step.decides === 'string' && step.decides.trim().length > 0;
+    const fields = step.fields ?? [];
+    if (step.type === 'measure' && fields.length) {
+      const earlier = view.steps.slice(0, i);
+      if (
+        fields.every(
+          f => typeof f.compute === 'function' || copied(f, step, earlier)
+        )
+      ) {
+        out.push(
+          found(
+            'depth/decision',
+            view,
+            i,
+            `every one of its ${fields.length} field(s) is computed or copied from a number already given`
+          )
+        );
+        return;
+      }
+    }
+    if (named) return;
+    out.push(
+      found(
+        'depth/decision',
+        view,
+        i,
+        step.tool
+          ? `opens ${step.tool.id ?? 'an instrument'} and does not name the choice the student makes with it (decides)`
+          : 'does not name what the student decides (decides)'
+      )
+    );
   });
   return out;
 }
@@ -471,9 +572,11 @@ function questionStatesAnswer(view) {
 export function viewFindings(view) {
   return [
     ...instrumentAtAnswer(view),
+    ...opensAtAnswer(view),
     ...predictionStated(view),
     ...questionStatesAnswer(view),
     ...measureAllComputed(view),
+    ...depthDecision(view),
     ...internalVocabulary(view),
     ...stepReferences(view),
   ];

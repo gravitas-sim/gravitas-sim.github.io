@@ -1,13 +1,9 @@
 // =============================================================================
 // How the bodies are painted
-// -----------------------------------------------------------------------------
-// The draw code for the planets, gas giants and their rings, asteroids, debris,
-// comets and black holes, formerly a `draw(ctx)` method on each class in
-// js/physics.js. The engine holds a table of drawers (registerBodyDrawers) and
-// this module fills it, so the engine imports nothing that paints; the render
-// layer rule in check:architecture holds it to that. Each function is the old
-// method with `this` passed as `o`, unchanged otherwise. The stars, their
-// remnants, galaxies, particles and the shared helpers: js/bodyDrawSky.js.
+// Planets, gas giants and rings, asteroids, debris, comets and black holes: the
+// table of drawers the engine holds (registerBodyDrawers) is filled here, so the
+// engine imports nothing that paints. Stars, remnants, galaxies, particles and
+// the shared helpers are in js/bodyDrawSky.js.
 // =============================================================================
 
 import { EARTH_MASSES_PER_JUPITER_MASS, SOLAR_MASS_UNIT } from './constants.js';
@@ -25,6 +21,8 @@ import {
   hash01,
   silhouetteFor,
   lightDirection,
+  nightPath,
+  LOD_SHADED_MAX_PX,
   scaleRgb,
   tailActivity,
   ionTailDirection,
@@ -44,6 +42,7 @@ import {
   drawRadius,
   lodOf,
   dominantStarFor,
+  lightingFor,
   rgba,
   bloomLayer,
   visualClockSeconds,
@@ -70,6 +69,136 @@ const ensureBlackHoleRenderer = () => {
     });
   return null;
 };
+
+// --- A world seen close ------------------------------------------------------
+//
+// From a drawn radius of LOD_SHADED_MAX_PX (10 px), at either tier, a planet,
+// moon or giant lit by a star shows its night side, and a moon of a planet or
+// giant its phase as that primary sees it (lightingFor, js/bodyDrawSky.js).
+// The light and the phase are modelled; markings, bands and flattening are
+// illustration, at the full tier's detailed level only. Below 10 px nothing
+// here runs, so the small picture is the one it was.
+
+/**
+ * Which look a close world takes: 'markings' (shipped), or for a comparison
+ * capture 'terminator' (no markings) or 'limb' (markings and limb darkening).
+ */
+let closeLook = 'markings';
+export const setCloseLook = look => void (closeLook = look);
+
+/**
+ * What the drawing of this body claims, sentence by sentence: what lights it
+ * and from where its phase is seen (modeled), and what is illustration. The
+ * inspector's Appearance disclosure and the canvas description read it.
+ *
+ * @param {object} o - A planet, moon or giant
+ * @returns {string[]} Sentences in the current language
+ */
+export function lightingNotes(o) {
+  const { source, observer } = lightingFor(o);
+  return [
+    source
+      ? t('inspector.light.litBy', {
+          star: source.star?.name || t('summary.unnamedBody'),
+        })
+      : t('inspector.light.none'),
+    ...(source
+      ? [
+          observer
+            ? t('inspector.light.phase', { observer: observer.name })
+            : t('inspector.light.above'),
+        ]
+      : []),
+    t(
+      o.kind === 'GasGiant'
+        ? 'inspector.light.bands'
+        : 'inspector.light.markings'
+    ),
+  ];
+}
+
+/** Markings, when the level allows them and the look has them. */
+const marked = level =>
+  lodAtLeast(level, LOD.DETAILED) && closeLook !== 'terminator';
+
+/** At least 10 px across its radius on screen. */
+const close = r => r * ((state && state.zoom) || 1) >= LOD_SHADED_MAX_PX;
+
+/** A giant's flattening as drawn: Jupiter's, as illustration. */
+const GIANT_FLATTENING = 0.065;
+
+/**
+ * The night side over a disc, from the star that lights it. Nothing without a
+ * star: an invented light would claim a direction the scene does not have.
+ *
+ * @param {object} o - The body
+ * @param {CanvasRenderingContext2D} ctx - World-transformed context
+ * @param {{x: number, y: number}} at - Centre
+ * @param {number} r - Drawn radius
+ * @param {number} [ry] - Drawn polar radius, for a flattened giant
+ */
+function shadeNight(o, ctx, at, r, ry = r) {
+  if (!close(r)) return;
+  const { source, light, cosA } = lightingFor(o);
+  if (!source) return;
+  ctx.save();
+  ctx.beginPath();
+  ctx.ellipse(at.x, at.y, r, ry, 0, 0, 2 * Math.PI);
+  ctx.clip();
+  if (closeLook === 'limb') {
+    const limb = ctx.createRadialGradient(at.x, at.y, r * 0.55, at.x, at.y, r);
+    limb.addColorStop(0, 'rgba(0,0,0,0)');
+    limb.addColorStop(1, 'rgba(0,0,0,0.35)');
+    ctx.fillStyle = limb;
+    ctx.fillRect(at.x - r, at.y - r, 2 * r, 2 * r);
+  }
+  ctx.fillStyle = 'rgba(2,4,12,0.82)';
+  nightPath(ctx, at, r, light, cosA);
+  ctx.fill();
+  ctx.restore();
+}
+
+/**
+ * Markings in fixed places on this body, from its visual seed: the same world
+ * rebuilt, reloaded or opened from a share link has the same face.
+ *
+ * @param {CanvasRenderingContext2D} ctx - Clipped to the disc
+ * @param {{x: number, y: number}} at - Centre
+ * @param {number} r - Drawn radius
+ * @param {number} seed - visualSeed of the body
+ * @param {number} n - How many
+ * @param {number} salt - Separates one family of marks from another
+ * @param {number} min - Smallest radius, as a fraction of r
+ * @param {number} span - Added to min at most
+ */
+function seededMarks(ctx, at, r, seed, n, salt, min, span) {
+  for (let i = 0; i < n; i++) {
+    const a = hash01(seed, salt + i) * Math.PI * 2;
+    const d = Math.sqrt(hash01(seed, salt + 40 + i)) * 0.8 * r;
+    const rad = (min + hash01(seed, salt + 80 + i) * span) * r;
+    ctx.beginPath();
+    ctx.ellipse(
+      at.x + Math.cos(a) * d,
+      at.y + Math.sin(a) * d,
+      rad,
+      rad * (0.55 + hash01(seed, salt + 120 + i) * 0.45),
+      a,
+      0,
+      2 * Math.PI
+    );
+    ctx.fill();
+  }
+}
+
+/** Earth's or the Moon's markings, clipped to the disc. */
+function closeFace(o, ctx, at, r, paint) {
+  ctx.save();
+  ctx.beginPath();
+  ctx.arc(at.x, at.y, r, 0, 2 * Math.PI);
+  ctx.clip();
+  paint(visualSeed(o));
+  ctx.restore();
+}
 
 function drawPlanet(o, ctx) {
   const world_pos = o.pos; // Use direct world coordinates since canvas is already transformed
@@ -116,14 +245,9 @@ function drawPlanet(o, ctx) {
   ctx.arc(world_pos.x, world_pos.y, r, 0, 2 * Math.PI);
   ctx.fill();
 
-  // Everything from here to the label is inside the limb.
-  //
-  // The bands and the polar caps below used to be drawn as full-width
-  // rectangles across the body: correct in the middle, and running past the
-  // circle at the top and bottom of each one, so a planet had two tabs
-  // sticking out of its side. Clipping to the disc is what makes them
-  // markings on a sphere rather than stripes behind one - and it is one
-  // clip for the whole group rather than one path per marking.
+  // Everything from here to the label is inside the limb. Bands and polar caps
+  // are full-width rectangles that would poke out of the circle top and bottom;
+  // clipping to the disc, once for the group, makes them markings on a sphere.
   if (lodAtLeast(level, LOD.SHADED)) {
     ctx.save();
     ctx.beginPath();
@@ -132,6 +256,7 @@ function drawPlanet(o, ctx) {
     drawPlanetSurface(o, ctx, world_pos, r, z, level, baseColor);
     ctx.restore();
   }
+  shadeNight(o, ctx, world_pos, r);
 
   // Soft bloom, into the offscreen layer js/render.js composites additively.
   // One pass, in the planet's own color. Two blocks used to paint the same
@@ -173,19 +298,19 @@ function drawPlanet(o, ctx) {
   bodyLabel(o, world_to_screen(world_pos), r * state.zoom, {
     px: 11,
     gate: o.radius * state.zoom > 4,
-    ...(o.isSolarSystemPlanet
-      ? { name: o.name }
-      : { value: formatNumber(o.massInEarths), symbol: EARTH_SYMBOL }),
+    value: formatNumber(o.massInEarths),
+    symbol: EARTH_SYMBOL,
+    known: o.name,
+    ...(o.isSolarSystemPlanet && { name: o.name }),
   });
 }
 
 /**
  * What is drawn on the planet's face, inside the limb.
  *
- * The caller has already clipped to the disc, which is what lets everything
- * here be simple shapes: a band is a rectangle and the clip makes it a band
- * on a sphere. Ordered cheapest first, so the level of detail can stop
- * partway rather than needing a separate code path per level.
+ * The caller has already clipped to the disc, so a band is a rectangle and the
+ * clip makes it a band on a sphere. Ordered cheapest first, so the level of
+ * detail can stop partway.
  *
  * @param {CanvasRenderingContext2D} ctx - Clipped, world-transformed context
  * @param {{x: number, y: number}} at - Center, world units
@@ -197,11 +322,10 @@ function drawPlanet(o, ctx) {
 function drawPlanetSurface(o, ctx, at, r, z, level, baseColor) {
   // --- one shading pass: which side the light is on ---------------------
   //
-  // From the star that actually lights this planet, so the terminator turns
-  // as it orbits and two planets on opposite sides of a star are lit from
-  // opposite sides. A scene with no luminous body gets the fixed fallback
-  // from js/bodyVisuals.js rather than an invented sun.
-  const sun = dominantStarFor(at);
+  // From the star that actually lights this planet, so the terminator turns as
+  // it orbits. A scene with no luminous body gets the fixed fallback from
+  // js/bodyVisuals.js rather than an invented sun.
+  const sun = dominantStarFor(at, o);
   const light = lightDirection(at, sun ? sun.pos : null);
   const shade = ctx.createRadialGradient(
     at.x + light.x * r * 0.55,
@@ -219,7 +343,7 @@ function drawPlanetSurface(o, ctx, at, r, z, level, baseColor) {
   ctx.arc(at.x, at.y, r, 0, 2 * Math.PI);
   ctx.fill();
 
-  if (!lodAtLeast(level, LOD.DETAILED)) return;
+  if (!marked(level)) return;
 
   // --- body-specific detail ---------------------------------------------
   if (o.density === 'gaseous') {
@@ -301,8 +425,33 @@ function drawEarth(o, ctx, world_pos) {
   ctx.arc(world_pos.x, world_pos.y, drawRadius(o, 'Planet'), 0, 2 * Math.PI);
   ctx.fill();
 
-  // Add continent-like features (simplified)
-  if (r * state.zoom > 8) {
+  // Close up (10 px and more): continents and ice from this Earth's seed, at
+  // the detailed level only, then the night side. Below, the old schematic.
+  if (close(r)) {
+    if (marked(lodOf(o, 'Planet'))) {
+      closeFace(o, ctx, world_pos, r, seed => {
+        ctx.fillStyle = '#3c6b3a';
+        seededMarks(ctx, world_pos, r, seed, 6, 200, 0.12, 0.2);
+        ctx.fillStyle = '#8a7a52';
+        seededMarks(ctx, world_pos, r, seed, 2, 300, 0.08, 0.1);
+        ctx.fillStyle = 'rgba(245,248,255,0.85)';
+        for (const sign of [-1, 1]) {
+          ctx.beginPath();
+          ctx.ellipse(
+            world_pos.x,
+            world_pos.y + sign * r,
+            r * 0.6,
+            r * 0.16,
+            0,
+            0,
+            2 * Math.PI
+          );
+          ctx.fill();
+        }
+      });
+    }
+    shadeNight(o, ctx, world_pos, r);
+  } else if (r * state.zoom > 8) {
     // Draw some green "continents" as simple shapes
     ctx.fillStyle = '#2D5A2D'; // Dark green for continents
 
@@ -387,7 +536,20 @@ function drawMoon(o, ctx, world_pos) {
   ctx.arc(world_pos.x, world_pos.y, drawRadius(o, 'Planet'), 0, 2 * Math.PI);
   ctx.fill();
 
-  // Add mock craters if zoomed in enough
+  // Close up: maria and craters from this moon's seed, at the detailed level
+  // only, then the night side or the phase. Below 10 px, the old schematic.
+  if (close(r)) {
+    if (marked(lodOf(o, 'Planet'))) {
+      closeFace(o, ctx, world_pos, r, seed => {
+        ctx.fillStyle = 'rgba(70,70,74,0.55)';
+        seededMarks(ctx, world_pos, r, seed, 3, 400, 0.18, 0.16);
+        ctx.fillStyle = '#5c5c5c';
+        seededMarks(ctx, world_pos, r, seed, 9, 500, 0.035, 0.07);
+      });
+    }
+    shadeNight(o, ctx, world_pos, r);
+    return;
+  }
   if (r * state.zoom > 6) {
     ctx.fillStyle = '#5A5A5A'; // Darker gray for craters
 
@@ -438,15 +600,11 @@ function drawMoon(o, ctx, world_pos) {
 /**
  * One half of the ring system, as concentric projected ellipses.
  *
- * The disk is drawn in two passes with the planet between them, which is the
- * whole of what makes it read as a disk rather than as a hoop painted on the
- * sky: the far half goes down first, the opaque planet covers the part of it
- * that crosses the disc, and the near half goes over the top. The planet
- * fill is opaque, so the occlusion is exact rather than approximate.
- *
- * Bands, gaps and an optional Cassini-like division, all from the cached
- * geometry: no gradients, no allocation beyond the paths themselves, and
- * nothing random.
+ * Drawn in two passes with the planet between them, which is what makes it
+ * read as a disk rather than a hoop: the far half first, the opaque planet
+ * covers the part crossing the disc, then the near half. Bands, gaps and an
+ * optional Cassini-like division come from the cached geometry: no gradients,
+ * no allocation beyond the paths, nothing random.
  *
  * @param {CanvasRenderingContext2D} ctx - Target
  * @param {{x: number, y: number}} at - Planet center, world coordinates
@@ -504,10 +662,9 @@ function drawRingHalf(o, ctx, at, pr, near, detailed) {
 /**
  * The planet's shadow, falling across the rings away from the star.
  *
- * A wedge, not a radiative-transfer calculation, and it claims no more than
- * that: the rings are darker on the side the planet is between them and the
- * light. Drawn only when there is a light to be away from and only at the
- * size where it is legible.
+ * A wedge, not radiative transfer: the rings are darker on the side where the
+ * planet is between them and the light. Drawn only with a light to be away
+ * from, and only where legible.
  *
  * @param {CanvasRenderingContext2D} ctx - Target
  * @param {{x: number, y: number}} at - Planet center, world coordinates
@@ -547,13 +704,10 @@ function drawGasGiant(o, ctx) {
   const glevel = lodOf(o, 'GasGiant');
   const grPx = gr * gz;
 
-  // Rings, when there is room for them to be rings.
-  //
-  // A ring system on a body a few pixels across is four gray pixels beside
-  // three colored ones, which is noise rather than information - so below
-  // the shaded threshold they are simply not drawn, and in a crowded field
-  // they are not drawn at all. Between the two, a single annulus each side;
-  // above it, the bands and the division.
+  // Rings, when there is room for them to be rings. On a body a few pixels
+  // across they are noise, so below the shaded threshold they are not drawn,
+  // and in a crowded field not at all. Between: one annulus each side; above
+  // the threshold, the bands and the division.
   const ringsVisible =
     o.hasRings && lodAtLeast(glevel, LOD.SHADED) && grPx >= 5;
   const ringsDetailed =
@@ -584,9 +738,16 @@ function drawGasGiant(o, ctx) {
       break;
   }
 
+  // Flattened at the detailed level only, as illustration; round below it.
+  const banded = marked(glevel) && gr * gz > 4;
+  const gry = banded ? gr * (1 - GIANT_FLATTENING) : gr;
+  const disc = () =>
+    banded
+      ? ctx.ellipse(world_pos.x, world_pos.y, gr, gry, 0, 0, 2 * Math.PI)
+      : ctx.arc(world_pos.x, world_pos.y, gr, 0, 2 * Math.PI);
   ctx.fillStyle = compute_dynamic_color(baseColor, o.pos, bh_list);
   ctx.beginPath();
-  ctx.arc(world_pos.x, world_pos.y, gr, 0, 2 * Math.PI);
+  disc();
   ctx.fill();
 
   // Spherical shading, and the clip that makes the bands below belong to the
@@ -596,10 +757,10 @@ function drawGasGiant(o, ctx) {
   if (lodAtLeast(glevel, LOD.SHADED)) {
     ctx.save();
     ctx.beginPath();
-    ctx.arc(world_pos.x, world_pos.y, gr, 0, 2 * Math.PI);
+    disc();
     ctx.clip();
 
-    const gsun = dominantStarFor(world_pos);
+    const gsun = dominantStarFor(world_pos, o);
     const glight = lightDirection(world_pos, gsun ? gsun.pos : null);
     const gshade = ctx.createRadialGradient(
       world_pos.x + glight.x * gr * 0.5,
@@ -614,18 +775,18 @@ function drawGasGiant(o, ctx) {
     gshade.addColorStop(1, 'rgba(0,0,0,0.45)');
     ctx.fillStyle = gshade;
     ctx.beginPath();
-    ctx.arc(world_pos.x, world_pos.y, gr, 0, 2 * Math.PI);
+    disc();
     ctx.fill();
     ctx.restore();
   }
 
-  if (lodAtLeast(glevel, LOD.DETAILED) && gr * gz > 4) {
+  if (banded) {
     // Clipped to the disc, for the reason above: the band ellipses are wider
     // and taller than the sphere at the latitudes they sit at, so without
     // this the outer ones hang off the limb.
     ctx.save();
     ctx.beginPath();
-    ctx.arc(world_pos.x, world_pos.y, gr, 0, 2 * Math.PI);
+    ctx.ellipse(world_pos.x, world_pos.y, gr, gry, 0, 0, 2 * Math.PI);
     ctx.clip();
 
     let bandColor, highlightColor;
@@ -653,39 +814,26 @@ function drawGasGiant(o, ctx) {
         break;
     }
 
-    // A band has to reach the limb, or it is a lozenge floating on the face.
-    // These ellipses are wider than the disc on purpose and the clip above
-    // trims them to it, which is what makes each one span the full width of
-    // the sphere at its own latitude. They used to be sized from the model
-    // radius, which over-spanned by so much that every band ran together
-    // into a wash; sized from the drawn radius they have to be widened
-    // deliberately instead of by accident.
-    const numBands = o.massInJupiters > 3 ? 4 : 2;
-    const BAND_OVERSPAN = 1.15;
+    // Belts at latitudes from this giant's seed, each as wide as a band of
+    // that latitude looks on a sphere seen side on: its edges at gry sin(lat),
+    // so a band near a pole is narrow and one at the equator wide. The
+    // ellipses overspan the limb and the clip trims them to it.
+    const seed = visualSeed(o);
+    const numBands = o.massInJupiters > 3 ? 6 : 4;
     for (let i = 0; i < numBands; i++) {
-      const bandOffset = (i - (numBands - 1) / 2) * (gr * 0.4);
-      const bandWidth = gr * 0.15;
-
-      ctx.fillStyle = bandColor;
+      const lat =
+        ((i + 0.5) / numBands - 0.5) * 2.4 +
+        (hash01(seed, 600 + i) - 0.5) * 0.2;
+      const half = 0.07 + hash01(seed, 640 + i) * 0.06;
+      const y0 = gry * Math.sin(Math.max(-1.5, lat - half));
+      const y1 = gry * Math.sin(Math.min(1.5, lat + half));
+      ctx.fillStyle = i % 2 ? highlightColor : bandColor;
       ctx.beginPath();
       ctx.ellipse(
         world_pos.x,
-        world_pos.y + bandOffset,
-        gr * BAND_OVERSPAN,
-        bandWidth,
-        0,
-        0,
-        2 * Math.PI
-      );
-      ctx.fill();
-
-      ctx.fillStyle = highlightColor;
-      ctx.beginPath();
-      ctx.ellipse(
-        world_pos.x,
-        world_pos.y + bandOffset - bandWidth * 0.3,
-        gr * BAND_OVERSPAN * 0.94,
-        bandWidth * 0.4,
+        world_pos.y + (y0 + y1) / 2,
+        gr * 1.15,
+        Math.max((y1 - y0) / 2, 0.5 / gz),
         0,
         0,
         2 * Math.PI
@@ -699,18 +847,18 @@ function drawGasGiant(o, ctx) {
       ctx.beginPath();
       ctx.ellipse(
         world_pos.x,
-        world_pos.y - gr * 0.8,
+        world_pos.y - gry * 0.8,
         gr * 0.7,
-        gr * 0.28,
+        gry * 0.28,
         0,
         0,
         2 * Math.PI
       );
       ctx.ellipse(
         world_pos.x,
-        world_pos.y + gr * 0.8,
+        world_pos.y + gry * 0.8,
         gr * 0.7,
-        gr * 0.28,
+        gry * 0.28,
         0,
         0,
         2 * Math.PI
@@ -720,19 +868,16 @@ function drawGasGiant(o, ctx) {
 
     ctx.restore();
   }
+  shadeNight(o, ctx, world_pos, gr, gry);
 
   bodyLabel(o, world_to_screen(world_pos), gr * state.zoom, {
     px: 11,
     gap: 12,
     gate: o.radius * state.zoom > 6,
-    ...(o.isSolarSystemPlanet
-      ? { name: o.name }
-      : {
-          value: String(
-            Math.round(o.massInJupiters * EARTH_MASSES_PER_JUPITER_MASS)
-          ),
-          symbol: EARTH_SYMBOL,
-        }),
+    value: String(Math.round(o.massInJupiters * EARTH_MASSES_PER_JUPITER_MASS)),
+    symbol: EARTH_SYMBOL,
+    known: o.name,
+    ...(o.isSolarSystemPlanet && { name: o.name }),
   });
 
   // ...and the near half over the top, which is what makes the disk read as
@@ -742,7 +887,7 @@ function drawGasGiant(o, ctx) {
   if (ringsVisible) {
     drawRingHalf(o, ctx, world_pos, gr, true, ringsDetailed);
     if (ringsDetailed) {
-      const rsun = dominantStarFor(world_pos);
+      const rsun = dominantStarFor(world_pos, o);
       if (rsun) {
         drawRingShadow(
           o,
@@ -760,16 +905,14 @@ function drawGasGiant(o, ctx) {
  * A rock.
  *
  * A circle until it is big enough on screen for a shape to read, then a
- * deterministic irregular outline - because an asteroid is not round, and at
- * twenty pixels a perfect disc is the one thing it certainly is not. The
- * outline comes from this body's own visual seed, so the same rock has the
- * same shape in every session and in every share link, and the vertices are
- * cached rather than rebuilt per frame.
+ * deterministic irregular outline (at twenty pixels a perfect disc is the one
+ * thing an asteroid is not). The outline comes from the body's visual seed, so
+ * the same rock has the same shape in every session and share link, and the
+ * vertices are cached.
  *
- * In a crowded field it stays a dot however large it is: js/bodyVisuals.js
- * caps the level of detail there, and a belt of two hundred rocks each
- * stroking a nine-vertex path is two hundred paths a frame to draw something
- * the reader sees as a haze.
+ * In a crowded field it stays a dot: js/bodyVisuals.js caps the level of
+ * detail there, and two hundred stroked nine-vertex paths a frame would draw
+ * a haze.
  *
  * @param {CanvasRenderingContext2D} ctx - World-transformed context
  */
@@ -932,26 +1075,22 @@ function drawBlackHole(o, ctx) {
     px: 14,
     gate: true,
     value: formatNumber(o.mass / SOLAR_MASS_UNIT),
+    known: o.name,
   });
 }
 
 /**
  * Draw the nucleus, the coma and the tail.
  *
- * In world coordinates, like every other body: the render pass has already
- * applied the pan, the zoom and the reference-frame offset to the context.
- * This used to convert to screen coordinates first and then draw through that
- * transform, which puts a comet at roughly (zoom * pos + pan + half a canvas)
- * instead of at pos. Nothing caught it because js/render.js never called this
- * at all - `comets` was not among the collections it drew - so the Solar
- * System's ten comets and every hand-placed one were simply absent.
+ * In world coordinates like every other body: the render pass has already
+ * applied pan, zoom and the reference-frame offset. (Converting to screen
+ * coordinates first once put comets at the wrong place, unnoticed because
+ * js/render.js never called this, so every comet was absent.)
  *
- * The nucleus is held at the shared screen-space floor, the same way an
- * asteroid's is. A comet's physical radius is a fraction of a world unit and
- * covers well under a pixel at any zoom a scenario opens at, so without the
- * floor a placed comet is invisible and unclickable. The floor is a drawing
- * decision only: `this.radius` is what collisions, tidal disruption and the
- * inspector read, and it is untouched.
+ * The nucleus is held at the shared screen-space floor, as an asteroid's is: a
+ * comet's physical radius is well under a pixel at any opening zoom, so it
+ * would be invisible and unclickable. The floor is a drawing decision only;
+ * `this.radius` is what collisions, tidal disruption and the inspector read.
  *
  * @param {CanvasRenderingContext2D} ctx - The world-transformed context
  */
@@ -995,17 +1134,17 @@ function drawComet(o, ctx) {
   bodyLabel(o, world_to_screen(world_pos), r * z, {
     px: 11,
     gate: r * z > 4,
-    name: withUnit(formatNumber(o.massInComets), 'C'),
+    text: withUnit(formatNumber(o.massInComets), 'C'),
+    known: o.name,
   });
 }
 
 /**
  * The coma: the halo of gas and dust boiled off the nucleus.
  *
- * Grows with activity, so the same comet swells as it comes in and shrinks
- * as it leaves. Drawn as a single radial gradient rather than a sprite
- * because its radius changes continuously with activity, which is exactly
- * the case a size-bucketed sprite cache serves badly.
+ * Grows with activity, so the comet swells coming in and shrinks leaving.
+ * One radial gradient rather than a sprite, because the radius changes
+ * continuously, which a size-bucketed sprite cache serves badly.
  *
  * @param {CanvasRenderingContext2D} ctx - World-transformed context
  * @param {{x: number, y: number}} at - The nucleus
@@ -1025,31 +1164,10 @@ function drawComa(ctx, at, r, activity) {
 }
 
 /**
- * The two tails.
- *
- * A comet has two, they point in different directions, and telling them
- * apart is most of what there is to learn from the picture:
- *
- *   The ion tail is gas, ionized and swept straight out by the stellar wind.
- *   It is narrow, blue, and points directly away from the star - which means
- *   that on the way out of the system it leads rather than follows. This is
- *   the part the old drawing had backwards: it pointed the tail opposite the
- *   comet's velocity, which is the picture students already hold and which
- *   the real geometry contradicts.
- *
- *   The dust tail is grains, heavy enough that the wind only nudges them.
- *   They leave with the nucleus's own orbital motion and fall behind, so the
- *   tail lies between anti-solar and the orbital trail and curves along the
- *   orbit. Broader, yellower, and drawn as an arc so the curve reads.
- *
- * Geometry from js/bodyVisuals.js, which is where it is tested.
- *
- * @param {CanvasRenderingContext2D} ctx - World-transformed context
- * @param {{x: number, y: number}} at - The nucleus
- * @param {number} r - Drawn nucleus radius, world units
- * @param {number} z - Current zoom
- * @param {Object} sun - The dominant light source
- * @param {number} activity - 0 to 1
+ * The two tails. The ion tail is gas swept straight away from the star by the
+ * wind: narrow, blue, leading on the way out. The dust tail is grains that fall
+ * behind the nucleus's orbital motion: broader, yellower, an arc between
+ * anti-solar and the orbital trail. Geometry is in js/bodyVisuals.js.
  */
 function drawTails(o, ctx, at, r, z, sun, activity) {
   // `tailLength` was written as screen pixels at zoom 1, so it carries over

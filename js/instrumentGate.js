@@ -2,14 +2,15 @@
 // Observing panels fetched on the first press of their rail button
 // -----------------------------------------------------------------------------
 // The first press fetches the panel's module, lets it wire its own controls and
-// opens it; the button is disabled meanwhile and a failure offers the press
-// again (js/notify.js, as js/experimentsBridge.js does). The render loop's
+// opens it; the button is busy meanwhile, and keeps focus, and a failure offers
+// the press again (js/notify.js, as js/experimentsBridge.js does). The render loop's
 // per-frame update does nothing until the module is here, as the panel's own
 // does while it is closed. The rotation curve is the first; its numbers, which
 // the data export and the lesson probes read, are in js/rotationCurveState.js.
 // =============================================================================
 
-import { loadFailed } from './notify.js';
+import { announce, loadFailed } from './notify.js';
+import { t } from './i18n/index.js';
 
 /**
  * Open a panel on the first press of its button, fetching it first.
@@ -25,9 +26,13 @@ import { loadFailed } from './notify.js';
 export function watchForPanel({ buttonId, load, open }) {
   const button = document.getElementById(buttonId);
   if (!button) return;
+  let busy = false;
   const first = async () => {
-    if (button.disabled) return;
-    button.disabled = true;
+    if (busy) return;
+    busy = true;
+    // Not `disabled`: that drops the keyboard focus.
+    button.setAttribute('aria-busy', 'true');
+    announce(t('failure.loading'));
     try {
       const mod = await load();
       // The module wired its own click handler as it was initialised; this one
@@ -35,10 +40,10 @@ export function watchForPanel({ buttonId, load, open }) {
       button.removeEventListener('click', first);
       open(mod);
     } catch (err) {
-      console.error(`${buttonId}: the panel could not be loaded:`, err);
       loadFailed(() => button.click(), err);
     } finally {
-      button.disabled = false;
+      busy = false;
+      button.removeAttribute('aria-busy');
     }
   };
   button.addEventListener('click', first);

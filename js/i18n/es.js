@@ -92,7 +92,6 @@ export const ES = {
 
   // --- Application chrome ----------------------------------------------------
   'chrome.readout.label': 'Lectura de la simulación',
-  'chrome.scenarioInfo.label': 'Información del escenario',
   'chrome.mobileMenuToggle.hint': 'Mostrar los controles de la simulación',
   'chrome.mobileMenuToggle.label': 'Abrir el menú de controles',
   'chrome.tutorial.hint':
@@ -117,11 +116,11 @@ export const ES = {
   'rail.settings.hint':
     'Abrir el panel completo de ajustes: número de objetos, gravedad, aspecto visual y rendimiento. Los cambios estructurales reinician la simulación; el resto se aplica en directo.',
   'rail.refreshScenario.hint':
-    'Reconstruir el escenario actual desde cero, descartando todo lo añadido o modificado.',
+    'Reconstruir este escenario con una semilla nueva: los cuerpos añadidos o cambiados desaparecen y los ajustes vuelven a los del escenario. La cámara vuelve a su vista, el reloj a cero y la simulación corre.',
   'rail.resetAll.hint':
-    'Devolver todos los ajustes a sus valores de fábrica y cargar el escenario Agujeros negros binarios.',
+    'Devolver todos los ajustes a sus valores por defecto y cargar Agujeros negros binarios con una semilla nueva, con su vista, el reloj a cero y la simulación en marcha.',
   'rail.cleanSim.hint':
-    'Vaciar el universo hasta dejar espacio vacío, para construir un sistema desde cero haciendo clic y arrastrando.',
+    'Quitar todos los cuerpos para dejar espacio vacío. Los ajustes, la semilla y el reloj se conservan; la cámara y la velocidad vuelven a 1\u00d7 y la simulación corre.',
 
   // --- Rail: state -----------------------------------------------------------
   'rail.railState.hint': 'Mostrar u ocultar los controles de estado',
@@ -169,7 +168,8 @@ export const ES = {
     'Abrir el panel de astrometría: la diminuta elipse que la estrella traza en el cielo mientras su planeta la hace girar alrededor del centro de masas común. Donde la velocidad radial falla, en una órbita vista de frente, la astrometría funciona mejor.',
   'rail.slowDown.hint': 'Reducir la velocidad en 0,5×',
   'rail.speedUp.hint': 'Aumentar la velocidad en 0,5×',
-  'rail.resetView.hint': 'Recentrar la cámara y volver a la ampliación 1× (R).',
+  'rail.resetView.hint':
+    'Centrar la cámara en los cuerpos y ajustar el zoom para que quepan. Los cuerpos, los ajustes, la semilla, el reloj y la pausa no cambian.',
   'rail.shortcuts.hint': 'Atajos de teclado (?)',
 
   // --- Rail: learn -----------------------------------------------------------
@@ -200,9 +200,9 @@ export const ES = {
   'rail.loadScenario': 'Cargar escenario',
   'rail.investigations': 'Investigaciones',
   'rail.settings': 'Ajustes',
-  'rail.refreshScenario': 'Recargar escenario',
-  'rail.resetAll': 'Restablecer valores',
-  'rail.cleanSim': 'Simulación vacía',
+  'rail.refreshScenario': 'Reiniciar escenario',
+  'rail.resetAll': 'Restablecer ajustes y escenario',
+  'rail.cleanSim': 'Quitar todos los cuerpos',
   'rail.railState': 'Estado',
   'rail.save': 'Guardar estado',
   'rail.load': 'Cargar estado',
@@ -245,6 +245,7 @@ export const ES = {
   'rail.toggleExperiments.hint':
     'Abrir el banco de experimentos A/B: captura un estado inicial, graba una ejecución de referencia, vuelve exactamente a ese inicio, cambia una variable y graba una segunda ejecución, y compara ambas sobre el mismo eje de tiempo simulado.',
   'failure.load': 'No se pudo cargar. Comprueba tu conexión.',
+  'failure.loading': 'Cargando…',
   'failure.retry': 'Reintentar',
   'failure.reload':
     'Sigue sin cargar. Recarga la página; tu trabajo se conserva.',
@@ -254,7 +255,7 @@ export const ES = {
   'rail.toggleAstrometry': 'Astrometría',
   'rail.slowDown': 'Lento',
   'rail.speedUp': 'Rápido',
-  'rail.resetView': 'Restablecer vista',
+  'rail.resetView': 'Ajustar vista a los cuerpos',
   'rail.shortcuts': 'Atajos',
   'rail.objectType.choose': 'Añadir objeto',
   'rail.objectType.placing': 'Haz clic para colocar · Esc',
@@ -264,7 +265,7 @@ export const ES = {
 
   // --- Readout ---------------------------------------------------------------
   'readout.overlayMinimize.hint': 'Minimizar',
-  'readout.closeScenarioInfo.hint': 'Descartar esta descripción del escenario',
+  'readout.aboutScenario': 'Acerca de este escenario',
   'readout.closeMobileInstructions.hint':
     'Descartar estas instrucciones táctiles',
   'readout.mobileInstructions': 'Controles táctiles',
@@ -438,7 +439,7 @@ export const ES = {
   'tutorial.scenario.body':
     'Cincuenta y tres escenarios, desde el Sistema Solar y TRAPPIST-1 hasta GW150914, la primera fusión de agujeros negros detectada por LIGO. Varios son modelos a escala y lo indican en su ficha. Busca por nombre o filtra por concepto.',
   'tutorial.scenario.tip':
-    'Reiniciar escenario lo reconstruye desde cero si un experimento se te va de las manos. Cada escenario se construye a partir de una semilla, así que la misma semilla da el mismo mundo.',
+    'Reiniciar escenario lo reconstruye desde su inicio si un experimento se te va de las manos. Cada escenario se construye a partir de una semilla, así que la misma semilla da el mismo mundo.',
 
   'tutorial.investigations.title': 'Investigaciones guiadas',
   'tutorial.investigations.body':
@@ -564,8 +565,10 @@ export const ES = {
   'settings.label.showAccelerationVectors': 'Mostrar vectores de aceleración',
   'settings.label.showPotentialWell': 'Mostrar el pozo de potencial',
   'settings.label.showScaleBar': 'Mostrar la barra de escala',
-  'settings.label.bodyLabels': 'Nombres de los cuerpos',
+  'settings.label.bodyLabels': 'Etiquetas de los cuerpos',
   'settings.option.bodyLabels.all': 'Todos',
+  'settings.option.bodyLabels.names': 'Solo nombres',
+  'settings.option.bodyLabels.masses': 'Solo masas',
   'settings.option.bodyLabels.bound':
     'El seleccionado y los de la investigación',
   'settings.option.bodyLabels.none': 'Ninguno',
@@ -661,10 +664,24 @@ export const ES = {
   'inspector.stat.rings': 'Sistema de anillos',
   'inspector.rings.visible': 'Visible',
   'inspector.tip.radius':
-    'El radio físico, y con el que funciona la simulación: las colisiones, las fusiones, los límites de Roche y la geometría del tránsito usan este número. No es el tamaño con el que se dibuja el cuerpo. Los diámetros del lienzo usan una escala ilustrativa comprimida para que una estrella, un gigante gaseoso y un planeta rocoso quepan en una misma imagen; lee los radios aquí, nunca del dibujo.',
+    'El radio del modelo, con el que funciona la simulación: lo usan las colisiones, las fusiones, los límites de Roche y la geometría del tránsito. En un cuerpo generado se deduce de la masa, así que no siempre es medido. No es el tamaño dibujado: cada tipo de cuerpo se amplía con un factor distinto. Lee los radios aquí, nunca del dibujo.',
   'inspector.tip.rings':
     'Este cuerpo se dibuja con un sistema de anillos. Los anillos son ilustrativos: aproximadamente una cuarta parte de los gigantes gaseosos generados los reciben por variedad visual, y un escenario puede activarlos o desactivarlos deliberadamente. No tienen masa ni gravedad, y no afectan a las colisiones, a la profundidad del tránsito ni a ninguna medición.',
   'inspector.stat.radius': 'Radio',
+  // El bloque «Aspecto» de un planeta, una luna o un gigante, y la descripción
+  // del lienzo para el cuerpo elegido: qué se modela y qué es ilustración.
+  'inspector.light.title': 'Aspecto',
+  'inspector.light.litBy':
+    'La luz viene de {star}, la estrella que más luz le envía (modelado).',
+  'inspector.light.none':
+    'No hay ninguna estrella en esta escena: el sombreado es ilustración.',
+  'inspector.light.above':
+    'Mitades de día y de noche vistas desde encima de la órbita (modelado).',
+  'inspector.light.phase': 'Fase vista desde {observer} (modelado).',
+  'inspector.light.markings':
+    'Marcas de la superficie, cuando se ve grande en pantalla: ilustración.',
+  'inspector.light.bands':
+    'Bandas y achatamiento, cuando se ve grande en pantalla: ilustración.',
   // El bloque «Aspecto y entorno» del agujero negro. Todo lo que contiene es
   // una decisión de dibujo; las filas de arriba se calculan a partir de la masa.
   'inspector.bh.appearance': 'Aspecto y entorno',
@@ -726,6 +743,11 @@ export const ES = {
   'vector.acceleration': 'aceleración',
   'vector.acceleration.total': 'aceleración total',
   'vector.source': 'de {body}',
+  'vector.scale.velocity': 'Flecha de velocidad: 1 cm = {value}',
+  'vector.scale.acceleration': 'Flecha de aceleración: 1 cm = {value}',
+  'vector.limit.floor': 'con su longitud mínima',
+  'vector.limit.ceiling': 'acortada para que quepa',
+  'vector.trails': 'Trazas: los últimos {span}',
 
   // --- Readout counts and status ---------------------------------------------
   'readout.count.planets': 'Planetas',
@@ -1139,7 +1161,7 @@ export const ES = {
   'shortcut.live': 'Volver al directo',
   'shortcut.pan': 'Desplazar la vista',
   'shortcut.zoom': 'Acercar y alejar',
-  'shortcut.resetView': 'Restablecer la vista',
+  'shortcut.resetView': 'Centrar la vista a 1\u00d7',
   'shortcut.investigations': 'Abrir las investigaciones guiadas',
   'shortcut.share': 'Compartir un enlace a esta simulación',
   'shortcut.export': 'Exportar los datos grabados en CSV',
@@ -1147,7 +1169,7 @@ export const ES = {
   'shortcut.units': 'Alternar unidades físicas / de simulación',
   'shortcut.trails': 'Alternar estelas',
   'shortcut.bodyLabels':
-    'Rotar los nombres: todos, seleccionado e investigación, ninguno',
+    'Rotar las etiquetas: todas, nombres, masas, seleccionado e investigación, ninguna',
   'shortcut.undo': 'Deshacer el último objeto colocado',
   'shortcut.inspect': 'Inspeccionar un objeto',
   'shortcut.place': 'Colocar un objeto con velocidad',
@@ -1179,9 +1201,14 @@ export const ES = {
   'inv.browser.activities':
     '¿Con poco tiempo? Las actividades de clase son formatos de enseñanza preparados —una demostración de cinco minutos, una actividad de veinte, una práctica completa— recortados de estas mismas investigaciones.',
   'inv.browser.activities.link': 'Ver las actividades de clase',
-  'canvas.sizeDisclosure': 'Tamaños de los cuerpos ampliados para visibilidad',
+  'canvas.sizeDisclosure':
+    'Cuerpos ampliados, sin escala común (radios: inspector)',
+  'canvas.reducedPopulation':
+    'Población reducida en este dispositivo: {n} de {total} cuerpos',
+  'canvas.crowdTrails':
+    'Estelas: el cuerpo seleccionado y los {n} más masivos de {total} cuerpos',
   'canvas.sizeDisclosure.detail':
-    'Los diámetros del lienzo son ilustrativos y usan una escala comprimida. No deduzcas proporciones físicas de tamaño a partir del dibujo; usa el inspector y las mediciones de las investigaciones para los radios numéricos.',
+    'Los diámetros del lienzo son ilustrativos. Cada tipo de cuerpo se amplía con un factor distinto, así que los tamaños no siguen una misma escala y sus proporciones no son físicas. Usa el inspector y las mediciones de las investigaciones para los radios.',
   'capture.screenshotFailed': 'No se pudo guardar la captura',
   'chart.notReady': 'El gráfico aún no está listo',
   'chart.exportFailed': 'No se pudo exportar el gráfico',
@@ -1349,6 +1376,7 @@ export const ES = {
     one: '{n} galaxia',
     other: '{n} galaxias',
   },
+  'summary.labels': 'Etiquetas en el lienzo: {list}.',
   'summary.selected': '{name} está seleccionado.',
   'summary.noSelection': 'No hay nada seleccionado.',
   'summary.unnamedBody': 'un cuerpo sin nombre',

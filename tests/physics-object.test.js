@@ -1,5 +1,7 @@
 import { describe, test, expect, beforeEach, jest } from '@jest/globals';
 import { PhysicsObject, updatePhysicsSettings } from '../js/physics.js';
+import { advanceTrailClock } from '../js/engine/state.js';
+import { trailReferenceStep } from '../js/trailSpan.js';
 
 describe('PhysicsObject', () => {
   beforeEach(() => {
@@ -166,7 +168,7 @@ describe('PhysicsObject', () => {
       expect(obj.trail[0].y).toBe(20);
       expect(obj.trail[0].timestamp).toBe(1234567890); // Mocked Date.now()
       expect(obj.trail[0].velocity).toBeCloseTo(Math.sqrt(5), 6); // sqrt(1^2 + 2^2)
-      expect(obj.trail[0].age).toBe(1); // Age starts at 1 due to increment in update_trail
+      expect(obj.trail[0].age).toBe(0); // Age is reference steps since the sample
     });
 
     test('should not add trail point when object is not alive', () => {
@@ -196,11 +198,16 @@ describe('PhysicsObject', () => {
     test('should increment age of existing trail points', () => {
       const obj = new PhysicsObject({ x: 0, y: 0 }, { x: 0, y: 0 }, 50, 5);
 
+      const step = trailReferenceStep(0);
+      advanceTrailClock(step);
       obj.update_trail();
+      advanceTrailClock(step);
       obj.update_trail();
 
-      expect(obj.trail[0].age).toBe(2); // First point gets incremented twice
-      expect(obj.trail[1].age).toBe(1); // Second point gets incremented once
+      // Age is time since the sample, in reference steps: it follows the
+      // clock, not the number of calls.
+      expect(obj.trail[0].age).toBeCloseTo(1, 9);
+      expect(obj.trail[1].age).toBeCloseTo(0, 9);
     });
   });
 

@@ -164,7 +164,7 @@ export const TIDES_THAT_MOVE_THE_MOON = {
     },
     {
       title: 'Qué tan rápido se aleja ahora la Luna',
-      body: 'Con k2 = 0,30 y Q = 12 y el tiempo en 0, lee a qué ritmo se aleja la Luna, en cm por año, y cuánto se alarga el día, en milisegundos por siglo.',
+      body: 'Con k2 = 0,30 y <em>Q</em> = 12 y el tiempo en 0, lee a qué ritmo se aleja la Luna, en cm por año, y cuánto se alarga el día, en milisegundos por siglo.',
       fields: [
         { label: 'El alejamiento de la Luna (cm por año)' },
         { label: 'El alargamiento del día (ms por siglo)' },
@@ -201,7 +201,7 @@ export const TIDES_THAT_MOVE_THE_MOON = {
     },
     {
       title: 'Lo que has deducido',
-      body: 'La Luna se aleja 3,75 cm por año en un modelo con una sola Q, cerca de los 3,82 medidos, y el día se alarga 2,05 ms por siglo, cerca de los 2,3 de los eclipses. Corrido hacia atrás, el mismo modelo pone a la Luna en contacto con la Tierra hace 1,58 miles de millones de años, dentro de la edad del sistema solar. Así que Q no fue constante: en una historia real cambió con los océanos y los continentes. Un parámetro que ajusta el presente no es una ley.',
+      body: 'La Luna se aleja 3,75 cm por año en un modelo con una sola Q, cerca de los 3,82 medidos, y el día se alarga 2,05 ms por siglo, cerca de los 2,3 de los eclipses. Corrido hacia atrás, el mismo modelo pone a la Luna en contacto con la Tierra hace 1,58 miles de millones de años, dentro de la edad del sistema solar. Así que Q no fue constante: en una historia real cambió con los océanos y los continentes. Un [[parameter|parámetro]] que ajusta el presente no es una ley.',
     },
   ],
 };
@@ -219,11 +219,11 @@ export const IOS_FIRE = {
   steps: [
     {
       title: 'El cuerpo más volcánico que conocemos',
-      body: 'Ío es el cuerpo con más actividad volcánica del sistema solar, sin ayuda del Sol. Su calor es la marea: Júpiter levanta un abultamiento en Ío, y como la órbita de Ío no es del todo circular (e = 0,0041) el abultamiento sube y baja una vez por órbita, y el rozamiento de esa flexión es calor. Cuánto depende de lo fácil que Ío se flexiona (k2) y de cuánto pierde al hacerlo (Q), y ninguno se conoce para Ío.',
+      body: 'Ío es el cuerpo con más actividad volcánica del sistema solar, sin ayuda del Sol. Su calor es la marea: Júpiter levanta un abultamiento en Ío, y como la órbita de Ío no es del todo circular (<em>e</em> = 0,0041) el abultamiento sube y baja una vez por órbita, y el rozamiento de esa flexión es calor. Cuánto depende de lo fácil que Ío se flexiona (k2) y de cuánto pierde al hacerlo (Q), y ninguno se conoce para Ío.',
     },
     {
       title: 'El calor para k2 = 1,5 y Q = 100',
-      body: 'Pon k2 en 1,5 (lo máximo que puede tener un cuerpo, para un fluido), Q en 100 y la excentricidad en 0,0041. Lee el <strong>calentamiento</strong> en unidades de 10<sup>13</sup> W, y la energía en una órbita en unidades de 10<sup>19</sup> J.',
+      body: 'Pon k2 en 1,5 (lo máximo que puede tener un cuerpo, para un fluido), Q en 100 y la [[eccentricity|excentricidad]] en 0,0041. Lee el <strong>calentamiento</strong> en unidades de 10<sup>13</sup> W, y la energía en una órbita en unidades de 10<sup>19</sup> J.',
       fields: [
         { label: 'Calentamiento' },
         { label: 'Energía en una órbita (10¹⁹ J)' },
@@ -240,9 +240,9 @@ export const IOS_FIRE = {
         'ocho veces mayor',
         'el mismo',
       ],
-      hints: ['El calentamiento va como e al cuadrado.'],
+      hints: ['El calentamiento va como <em>e</em> al cuadrado.'],
       because:
-        'El calentamiento va como e al cuadrado, así que duplicar la excentricidad da cuatro veces el calor: de 9,33 × 10¹³ W a 3,73 × 10¹⁴ W con k2 = 1,5 y Q = 100.',
+        'El calentamiento va como <em>e</em> al cuadrado, así que duplicar la excentricidad da cuatro veces el calor: de 9,33 × 10¹³ W a 3,73 × 10¹⁴ W con k2 = 1,5 y <em>Q</em> = 100.',
     },
     {
       title: 'Duplicar la excentricidad',
@@ -251,7 +251,7 @@ export const IOS_FIRE = {
     },
     {
       title: 'Lo que la fórmula puede y no puede decir',
-      body: 'Vuelve a poner la excentricidad en 0,0041. La línea <strong>Intervalo que permite el modelo</strong> es el calor para el mayor k2/Q (k2 = 1,5, Q = 5) y una milésima de él. Lee el <strong>k2/Q</strong> que necesita el valor medio del flujo de calor observado.',
+      body: 'Vuelve a poner la excentricidad en 0,0041. La línea <strong>Intervalo que permite el modelo</strong> es el calor para el mayor k2/<em>Q</em> (k2 = 1,5, <em>Q</em> = 5) y una milésima de él. Lee el <strong>k2/Q</strong> que necesita el valor medio del flujo de calor observado.',
       fields: [{ label: 'k2/Q que necesita el valor medio observado' }],
     },
     {

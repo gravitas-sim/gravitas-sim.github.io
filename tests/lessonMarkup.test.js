@@ -102,7 +102,7 @@ describe('a step with entities, on screen', () => {
     ['4,100&nbsp;&#8491;', '4,100\u00a0\u212b'],
     ['&#x2014;', '\u2014'],
     ['hydrogen &beta;', 'hydrogen \u03b2'],
-    ['M(&lt;r) = v\u00b2\u00b7r / G', 'M(<r) = v\u00b2\u00b7r / G'],
+    ['M(&lt;r) = v\u00b2\u00b7r / G', 'M(<r)\u00a0= v\u00b2\u00b7r / G'],
     ['Chenciner, A. &amp; Montgomery, R.', 'Chenciner, A. & Montgomery, R.'],
     ['Tools &gt; Frame', 'Tools > Frame'],
     // A no-break space has to outlive prose()'s whitespace pass, which folds

@@ -107,7 +107,6 @@ export const EN = {
 
   // --- chrome ----------------------------------------------------------------
   'chrome.readout.label': 'Simulation readout',
-  'chrome.scenarioInfo.label': 'Scenario information',
   'chrome.mobileMenuToggle.hint': 'Show the simulation controls',
   'chrome.tutorial.hint':
     'Open the guided tour of the simulation controls. Drag the panel to move it.',
@@ -173,11 +172,11 @@ export const EN = {
   'rail.settings.hint':
     'Open the full settings panel: object counts, gravity, visuals and performance. Structural changes restart the simulation; the rest apply live.',
   'rail.refreshScenario.hint':
-    'Rebuild the current scenario from scratch, discarding anything you have added or changed.',
+    'Rebuild this scenario on a new seed: added or changed bodies are gone and the settings return to those the scenario sets. The camera returns to its view, the clock to zero, and the simulation runs.',
   'rail.resetAll.hint':
-    'Restore every setting to its factory default and load the Binary Black Hole scenario.',
+    'Return every setting to its default and load Binary Black Hole on a new seed, with its view, the clock at zero and the simulation running.',
   'rail.cleanSim.hint':
-    'Clear the universe to empty space so you can build a system from nothing by clicking and dragging.',
+    'Remove every body to leave empty space. Settings, seed and clock stay; the camera and speed return to 1\u00d7 and the simulation runs.',
   'rail.railState.hint': 'Show or hide the state controls',
   'rail.save.hint':
     'Save the current objects, settings and view to this browser. Only one save slot; saving again overwrites it.',
@@ -219,7 +218,8 @@ export const EN = {
     'Open the astrometry panel: the tiny ellipse the star traces across the sky as its planet swings it around their common center of mass. Where radial velocity fails on a face-on orbit, astrometry works best.',
   'rail.slowDown.hint': 'Decrease speed by 0.5x',
   'rail.speedUp.hint': 'Increase speed by 0.5x',
-  'rail.resetView.hint': 'Recenter the camera and return to 1× zoom (R).',
+  'rail.resetView.hint':
+    'Center the camera on the bodies and zoom to fit them. Bodies, settings, seed, clock and pause stay as they are.',
   'rail.shortcuts.hint': 'Keyboard shortcuts (?)',
   'rail.objectType.hint':
     'Choose what to add, then click the canvas to place it',
@@ -244,9 +244,9 @@ export const EN = {
   'rail.loadScenario': 'Load Scenario',
   'rail.investigations': 'Investigations',
   'rail.settings': 'Settings',
-  'rail.refreshScenario': 'Refresh Scenario',
-  'rail.resetAll': 'Reset to Default',
-  'rail.cleanSim': 'Blank Simulation',
+  'rail.refreshScenario': 'Restart Scenario',
+  'rail.resetAll': 'Reset Settings and Scenario',
+  'rail.cleanSim': 'Clear All Bodies',
   'rail.railState': 'State',
   'rail.save': 'Save State',
   'rail.load': 'Load State',
@@ -288,6 +288,7 @@ export const EN = {
   'rail.toggleExperiments.hint':
     'Open the A/B experiment bench: capture a starting state, record a baseline run, return to exactly that start, change one variable and record a second run, then compare the two on the same simulated-time axis.',
   'failure.load': 'That could not be loaded. Check your connection.',
+  'failure.loading': 'Loading…',
   'failure.retry': 'Retry',
   'failure.reload': 'Still not loaded. Reload the page; saved work is kept.',
   'rail.toggleNotebook': 'Evidence Notebook',
@@ -296,7 +297,7 @@ export const EN = {
   'rail.toggleAstrometry': 'Astrometry',
   'rail.slowDown': 'Slow',
   'rail.speedUp': 'Fast',
-  'rail.resetView': 'Reset View',
+  'rail.resetView': 'Fit View to Bodies',
   'rail.shortcuts': 'Shortcuts',
   'rail.objectType.choose': 'Add object',
   'rail.objectType.placing': 'Click to place · Esc',
@@ -306,7 +307,7 @@ export const EN = {
 
   // --- readout ---------------------------------------------------------------
   'readout.overlayMinimize.hint': 'Minimize',
-  'readout.closeScenarioInfo.hint': 'Dismiss this scenario description',
+  'readout.aboutScenario': 'About this scenario',
   'readout.closeMobileInstructions.hint': 'Dismiss these touch instructions',
   'readout.mobileInstructions': 'Touch controls',
   'readout.mobileInstructions.2': 'Drag:',
@@ -483,6 +484,11 @@ export const EN = {
   'vector.acceleration': 'acceleration',
   'vector.acceleration.total': 'acceleration, total',
   'vector.source': 'from {body}',
+  'vector.scale.velocity': 'Velocity arrow: 1 cm = {value}',
+  'vector.scale.acceleration': 'Acceleration arrow: 1 cm = {value}',
+  'vector.limit.floor': 'shown at its shortest',
+  'vector.limit.ceiling': 'shortened to fit',
+  'vector.trails': 'Trails: the last {span}',
 
   // --- Readout counts and status ---------------------------------------------
   'readout.count.planets': 'Planets',
@@ -568,10 +574,23 @@ export const EN = {
   'inspector.stat.rings': 'Ring system',
   'inspector.rings.visible': 'Visible',
   'inspector.tip.radius':
-    'The physical radius, and what the simulation runs on: collisions, merging, Roche limits and the transit geometry all use this number. It is not the size the body is drawn at. Canvas diameters use a compressed illustrative scale so that a star, a gas giant and a rocky planet can share one picture; read radii here, never off the drawing.',
+    'The model radius the simulation runs on: collisions, merging, Roche limits and the transit geometry use it. For a generated body it follows from the mass, so it is not always measured. It is not the size drawn: each kind of body is enlarged by a different factor. Read radii here, never off the drawing.',
   'inspector.tip.rings':
     'This body is drawn with a ring system. Rings are illustrative: about a quarter of generated gas giants are given them for visual variety, and a scenario may set them on or off deliberately. They have no mass, no gravity and no effect on collisions, transit depth or any measurement.',
   'inspector.stat.radius': 'Radius',
+  // A planet's, moon's or giant's Appearance disclosure, and the canvas
+  // description of the selected body: what is modeled and what is illustration.
+  'inspector.light.title': 'Appearance',
+  'inspector.light.litBy':
+    'Lit by {star}, the star that sends it the most light (modeled).',
+  'inspector.light.none': 'No star in this scene: shading is illustration.',
+  'inspector.light.above':
+    'Day and night halves as seen from above the orbit (modeled).',
+  'inspector.light.phase': 'Phase as seen from {observer} (modeled).',
+  'inspector.light.markings':
+    'Surface markings, when it is large on screen: illustration.',
+  'inspector.light.bands':
+    'Bands and flattening, when it is large on screen: illustration.',
   // The black hole's "Appearance and environment" disclosure. Everything in it
   // is a display choice; the rows above it are computed from the mass.
   'inspector.bh.appearance': 'Appearance and environment',
@@ -706,7 +725,7 @@ export const EN = {
   'tutorial.scenario.body':
     'Fifty-three scenarios, from the Solar System and TRAPPIST-1 to GW150914, the first black-hole merger LIGO detected. Several are scale models and say so on their card. Search by name, or filter by concept.',
   'tutorial.scenario.tip':
-    'Refresh Scenario rebuilds the current one from scratch if an experiment gets away from you. Every scenario is built from a seed, so the same seed gives the same world.',
+    'Restart Scenario rebuilds the current one from its start if an experiment gets away from you. Every scenario is built from a seed, so the same seed gives the same world.',
 
   'tutorial.investigations.title': 'Guided investigations',
   'tutorial.investigations.body':
@@ -832,8 +851,10 @@ export const EN = {
   'settings.label.showAccelerationVectors': 'Show Acceleration Vectors',
   'settings.label.showPotentialWell': 'Show Potential Well',
   'settings.label.showScaleBar': 'Show Scale Bar',
-  'settings.label.bodyLabels': 'Body Names',
+  'settings.label.bodyLabels': 'Body Labels',
   'settings.option.bodyLabels.all': 'All',
+  'settings.option.bodyLabels.names': 'Names only',
+  'settings.option.bodyLabels.masses': 'Masses only',
   'settings.option.bodyLabels.bound': 'Selected and investigation bodies',
   'settings.option.bodyLabels.none': 'None',
   'settings.label.showElapsedTime': 'Show Elapsed Time',
@@ -1159,7 +1180,7 @@ export const EN = {
   'shortcut.live': 'Jump back to live',
   'shortcut.pan': 'Pan the view',
   'shortcut.zoom': 'Zoom in and out',
-  'shortcut.resetView': 'Reset view',
+  'shortcut.resetView': 'Center the view at 1\u00d7 zoom',
   'shortcut.investigations': 'Open the guided investigations',
   'shortcut.share': 'Share a link to this simulation',
   'shortcut.export': 'Export the recorded data as CSV',
@@ -1167,7 +1188,7 @@ export const EN = {
   'shortcut.units': 'Toggle physical / simulation units',
   'shortcut.trails': 'Toggle trails',
   'shortcut.bodyLabels':
-    'Cycle body names: all, selected and investigation, none',
+    'Cycle body labels: all, names, masses, selected and investigation, none',
   'shortcut.undo': 'Undo last placed object',
   'shortcut.inspect': 'Inspect an object',
   'shortcut.place': 'Place an object with velocity',
@@ -1198,9 +1219,14 @@ export const EN = {
   'inv.browser.activities':
     'Short on time? Classroom activities are prepared teaching formats — a five-minute demonstration, a twenty-minute activity, a full lab — cut from these same investigations.',
   'inv.browser.activities.link': 'See the classroom activities',
-  'canvas.sizeDisclosure': 'Body sizes enlarged for visibility',
+  'canvas.sizeDisclosure':
+    'Bodies enlarged, not to one scale (radii: inspector)',
+  'canvas.reducedPopulation':
+    'Reduced population on this device: {n} of {total} bodies',
+  'canvas.crowdTrails':
+    'Trails: the selected body and the {n} heaviest of {total} bodies',
   'canvas.sizeDisclosure.detail':
-    'Canvas diameters are illustrative and use a compressed scale. Do not infer physical size ratios from the drawing; use the inspector and investigation measurements for numerical radii.',
+    'Canvas diameters are illustrative. Each kind of body is enlarged by a different factor, so sizes are not to one scale and their ratios are not physical. Use the inspector and investigation measurements for radii.',
   'capture.screenshotFailed': 'The screenshot could not be saved',
   'chart.notReady': 'The chart is not ready yet',
   'chart.exportFailed': 'Could not export the chart',
@@ -1365,6 +1391,7 @@ export const EN = {
     one: '{n} galaxy',
     other: '{n} galaxies',
   },
+  'summary.labels': 'Labeled on the canvas: {list}.',
   'summary.selected': '{name} is selected.',
   'summary.noSelection': 'Nothing is selected.',
   'summary.unnamedBody': 'an unnamed body',

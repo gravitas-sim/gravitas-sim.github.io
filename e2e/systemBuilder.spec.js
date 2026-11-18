@@ -131,9 +131,9 @@ test.describe('the Orbital System Builder', () => {
     await build(page);
     expect(await census(page)).toEqual(KEPLER16);
     await expect(page.locator('#systemBuilderBtn')).toBeFocused();
-    // The card that named the scenario open before is not left over the new
+    // The text that named the scenario open before is not left over the new
     // system: there is no scenario behind it to describe.
-    await expect(page.locator('#scenarioInfoBox')).not.toHaveClass(/showUI/);
+    await expect(page.locator('#scenarioInfoBox')).toBeHidden();
   });
 
   test('Refresh Scenario builds the system again', async ({ page, app }) => {

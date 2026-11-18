@@ -646,11 +646,8 @@ export function initRotationCurve() {
     updateRotationCurve();
   });
 
-  // A new world is a new set of bodies, so nothing about the old fit applies.
-  window.addEventListener(EV_SIMULATION_RESET, () => {
-    resetRotationCurveFit();
-    syncControls();
-  });
+  // A new world is a new set of bodies (rotationCurveState.js drops the fit).
+  window.addEventListener(EV_SIMULATION_RESET, syncControls);
 
   if (e.container) e.container.style.display = 'none';
 }

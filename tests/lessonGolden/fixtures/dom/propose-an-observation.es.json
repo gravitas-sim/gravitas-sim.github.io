@@ -9,7 +9,7 @@
   ],
   "title": "Propón una observación",
   "subtitle": "Diseña un censo para un objetivo declarado, predice qué encontrará, compruébalo con el modelo y justifica el plan: muchos planes son correctos",
-  "body": "<p class=\"inv-step-count\">Paso 1 de 4 <span class=\"inv-step-kind\">lectura</span></p><h3 class=\"inv-step-title\">El encargo</h3><div class=\"inv-step-body\"><p>Tienes <strong>diez noches</strong>. Encuentra fuentes de la <em>clase aplanada</em> (conteos que crecen 0,4 dex por magnitud) hasta una profundidad de <strong>magnitud 22,5</strong>, sobre al menos <strong>100 grados cuadrados</strong>, con al menos un <strong>95 por ciento</strong> de las detecciones reales. Hay tres instalaciones: los telescopios Las Cumbres de 0,35 m y de 1,0 m y Rubin. Explora con el panel y propón después un plan.</p><p>No hay un único plan correcto. Se comprueba si tu plan cumple el objetivo y si lo que dices que alcanza coincide con él.</p></div>",
+  "body": "<p class=\"inv-step-count\">Paso 1 de 4 <span class=\"inv-step-kind\">lectura</span></p><h3 class=\"inv-step-title\">El encargo</h3><div class=\"inv-step-body\"><p>Tienes <strong>diez noches</strong>. Encuentra fuentes de la <em>clase aplanada</em> (conteos que crecen 0,4&nbsp;dex por magnitud) hasta una profundidad de <strong>magnitud 22,5</strong>, sobre al menos <strong>100&nbsp;grados cuadrados</strong>, con al menos un <strong>95&nbsp;por ciento</strong> de las detecciones reales. Hay tres instalaciones: los telescopios Las Cumbres de 0,35&nbsp;m y de 1,0&nbsp;m y Rubin. Explora con el panel y propón después un plan.</p><p>No hay un único plan correcto. Se comprueba si tu plan cumple el objetivo y si lo que dices que alcanza coincide con él.</p></div>",
   "previousDisabled": true,
   "nextDisabled": false,
   "depthState": ""
@@ -24,7 +24,7 @@
   ],
   "title": "Propón una observación",
   "subtitle": "Diseña un censo para un objetivo declarado, predice qué encontrará, compruébalo con el modelo y justifica el plan: muchos planes son correctos",
-  "body": "<p class=\"inv-step-count\">Paso 4 de 4 <span class=\"inv-step-kind\">lectura</span></p><h3 class=\"inv-step-title\">Muchos planes, un objetivo</h3><div class=\"inv-step-body\"><p>El telescopio de un metro con unos 60 s por visita durante diez noches, Rubin con unos 30 s y el de 0,35 m con unos 1000 s cumplen este objetivo; un umbral de 3 sigma profundiza cada uno pero incumple la fiabilidad. La pantalla juzga la viabilidad y la coherencia, nunca una respuesta única. El intervalo del conteo es solo de Poisson: un censo real dispersa más, por el agrupamiento y porque la población real difiere de una clase declarada.</p></div>",
+  "body": "<p class=\"inv-step-count\">Paso 4 de 4 <span class=\"inv-step-kind\">lectura</span></p><h3 class=\"inv-step-title\">Muchos planes, un objetivo</h3><div class=\"inv-step-body\"><p>El telescopio de un metro con unos 60&nbsp;s por visita durante diez noches, Rubin con unos 30&nbsp;s y el de 0,35&nbsp;m con unos 1000&nbsp;s cumplen este objetivo; un umbral de 3&nbsp;sigma profundiza cada uno pero incumple la fiabilidad. La pantalla juzga la viabilidad y la coherencia, nunca una respuesta única. El intervalo del conteo es solo de Poisson: un censo real dispersa más, por el agrupamiento y porque la población real difiere de una clase declarada.</p></div>",
   "previousDisabled": false,
   "nextDisabled": false,
   "depthState": ""
@@ -39,7 +39,7 @@
   ],
   "title": "Propón una observación",
   "subtitle": "Diseña un censo para un objetivo declarado, predice qué encontrará, compruébalo con el modelo y justifica el plan: muchos planes son correctos",
-  "body": "<p class=\"inv-step-count\">Paso 1 de 6 <span class=\"inv-step-kind\">lectura</span></p><h3 class=\"inv-step-title\">El encargo</h3><div class=\"inv-step-body\"><p>Tienes <strong>diez noches</strong>. Encuentra fuentes de la <em>clase aplanada</em> (conteos que crecen 0,4 dex por magnitud) hasta una profundidad de <strong>magnitud 22,5</strong>, sobre al menos <strong>100 grados cuadrados</strong>, con al menos un <strong>95 por ciento</strong> de las detecciones reales. Hay tres instalaciones: los telescopios Las Cumbres de 0,35 m y de 1,0 m y Rubin. Explora con el panel y propón después un plan.</p><p>No hay un único plan correcto. Se comprueba si tu plan cumple el objetivo y si lo que dices que alcanza coincide con él.</p></div>",
+  "body": "<p class=\"inv-step-count\">Paso 1 de 6 <span class=\"inv-step-kind\">lectura</span></p><h3 class=\"inv-step-title\">El encargo</h3><div class=\"inv-step-body\"><p>Tienes <strong>diez noches</strong>. Encuentra fuentes de la <em>clase aplanada</em> (conteos que crecen 0,4&nbsp;dex por magnitud) hasta una profundidad de <strong>magnitud 22,5</strong>, sobre al menos <strong>100&nbsp;grados cuadrados</strong>, con al menos un <strong>95&nbsp;por ciento</strong> de las detecciones reales. Hay tres instalaciones: los telescopios Las Cumbres de 0,35&nbsp;m y de 1,0&nbsp;m y Rubin. Explora con el panel y propón después un plan.</p><p>No hay un único plan correcto. Se comprueba si tu plan cumple el objetivo y si lo que dices que alcanza coincide con él.</p></div>",
   "previousDisabled": true,
   "nextDisabled": false,
   "depthState": "Profundidad: Cuantitativo"
@@ -54,7 +54,7 @@
   ],
   "title": "Propón una observación",
   "subtitle": "Diseña un censo para un objetivo declarado, predice qué encontrará, compruébalo con el modelo y justifica el plan: muchos planes son correctos",
-  "body": "<p class=\"inv-step-count\">Paso 6 de 6 <span class=\"inv-step-kind\">lectura</span></p><h3 class=\"inv-step-title\">Muchos planes, un objetivo</h3><div class=\"inv-step-body\"><p>El telescopio de un metro con unos 60 s por visita durante diez noches, Rubin con unos 30 s y el de 0,35 m con unos 1000 s cumplen este objetivo; un umbral de 3 sigma profundiza cada uno pero incumple la fiabilidad. La pantalla juzga la viabilidad y la coherencia, nunca una respuesta única. El intervalo del conteo es solo de Poisson: un censo real dispersa más, por el agrupamiento y porque la población real difiere de una clase declarada.</p></div>",
+  "body": "<p class=\"inv-step-count\">Paso 6 de 6 <span class=\"inv-step-kind\">lectura</span></p><h3 class=\"inv-step-title\">Muchos planes, un objetivo</h3><div class=\"inv-step-body\"><p>El telescopio de un metro con unos 60&nbsp;s por visita durante diez noches, Rubin con unos 30&nbsp;s y el de 0,35&nbsp;m con unos 1000&nbsp;s cumplen este objetivo; un umbral de 3&nbsp;sigma profundiza cada uno pero incumple la fiabilidad. La pantalla juzga la viabilidad y la coherencia, nunca una respuesta única. El intervalo del conteo es solo de Poisson: un censo real dispersa más, por el agrupamiento y porque la población real difiere de una clase declarada.</p></div>",
   "previousDisabled": false,
   "nextDisabled": false,
   "depthState": "Profundidad: Cuantitativo"
@@ -69,7 +69,7 @@
   ],
   "title": "Propón una observación",
   "subtitle": "Diseña un censo para un objetivo declarado, predice qué encontrará, compruébalo con el modelo y justifica el plan: muchos planes son correctos",
-  "body": "<p class=\"inv-step-count\">Paso 1 de 7 <span class=\"inv-step-kind\">lectura</span></p><h3 class=\"inv-step-title\">El encargo</h3><div class=\"inv-step-body\"><p>Tienes <strong>diez noches</strong>. Encuentra fuentes de la <em>clase aplanada</em> (conteos que crecen 0,4 dex por magnitud) hasta una profundidad de <strong>magnitud 22,5</strong>, sobre al menos <strong>100 grados cuadrados</strong>, con al menos un <strong>95 por ciento</strong> de las detecciones reales. Hay tres instalaciones: los telescopios Las Cumbres de 0,35 m y de 1,0 m y Rubin. Explora con el panel y propón después un plan.</p><p>No hay un único plan correcto. Se comprueba si tu plan cumple el objetivo y si lo que dices que alcanza coincide con él.</p></div>",
+  "body": "<p class=\"inv-step-count\">Paso 1 de 7 <span class=\"inv-step-kind\">lectura</span></p><h3 class=\"inv-step-title\">El encargo</h3><div class=\"inv-step-body\"><p>Tienes <strong>diez noches</strong>. Encuentra fuentes de la <em>clase aplanada</em> (conteos que crecen 0,4&nbsp;dex por magnitud) hasta una profundidad de <strong>magnitud 22,5</strong>, sobre al menos <strong>100&nbsp;grados cuadrados</strong>, con al menos un <strong>95&nbsp;por ciento</strong> de las detecciones reales. Hay tres instalaciones: los telescopios Las Cumbres de 0,35&nbsp;m y de 1,0&nbsp;m y Rubin. Explora con el panel y propón después un plan.</p><p>No hay un único plan correcto. Se comprueba si tu plan cumple el objetivo y si lo que dices que alcanza coincide con él.</p></div>",
   "previousDisabled": true,
   "nextDisabled": false,
   "depthState": "Profundidad: Avanzado"
@@ -114,7 +114,7 @@
   ],
   "title": "Propón una observación",
   "subtitle": "Diseña un censo para un objetivo declarado, predice qué encontrará, compruébalo con el modelo y justifica el plan: muchos planes son correctos",
-  "body": "<p class=\"inv-step-count\">Paso 7 de 7 <span class=\"inv-step-kind\">lectura</span></p><h3 class=\"inv-step-title\">Muchos planes, un objetivo</h3><div class=\"inv-step-body\"><p>El telescopio de un metro con unos 60 s por visita durante diez noches, Rubin con unos 30 s y el de 0,35 m con unos 1000 s cumplen este objetivo; un umbral de 3 sigma profundiza cada uno pero incumple la fiabilidad. La pantalla juzga la viabilidad y la coherencia, nunca una respuesta única. El intervalo del conteo es solo de Poisson: un censo real dispersa más, por el agrupamiento y porque la población real difiere de una clase declarada.</p></div>",
+  "body": "<p class=\"inv-step-count\">Paso 7 de 7 <span class=\"inv-step-kind\">lectura</span></p><h3 class=\"inv-step-title\">Muchos planes, un objetivo</h3><div class=\"inv-step-body\"><p>El telescopio de un metro con unos 60&nbsp;s por visita durante diez noches, Rubin con unos 30&nbsp;s y el de 0,35&nbsp;m con unos 1000&nbsp;s cumplen este objetivo; un umbral de 3&nbsp;sigma profundiza cada uno pero incumple la fiabilidad. La pantalla juzga la viabilidad y la coherencia, nunca una respuesta única. El intervalo del conteo es solo de Poisson: un censo real dispersa más, por el agrupamiento y porque la población real difiere de una clase declarada.</p></div>",
   "previousDisabled": false,
   "nextDisabled": false,
   "depthState": "Profundidad: Avanzado"

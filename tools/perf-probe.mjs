@@ -8,7 +8,7 @@
 //   npm run perf                     the default scenario set
 //   npm run perf -- 'star-cluster'   one or more scenarios by name
 //   npm run perf -- --seconds 8      longer sample
-//   npm run perf -- --tier low       pin the quality tier
+//   npm run perf -- --tier low       pin the quality tier (low, full or ultra)
 //   npm run perf -- --dpr 2          emulate a HiDPI display
 //   npm run perf -- --cpu 4          throttle the CPU by that factor
 //   npm run perf -- --viewport 375x812   another window size (default 1440x900)
@@ -121,8 +121,8 @@ async function main() {
   const seconds = si >= 0 ? Number(args[si + 1]) : 5;
   const ti = args.indexOf('--tier');
   const tier = ti >= 0 ? String(args[ti + 1]) : 'auto';
-  if (!['auto', 'low', 'full'].includes(tier)) {
-    throw new Error(`--tier ${tier} is not auto, low or full`);
+  if (!['auto', 'low', 'full', 'ultra'].includes(tier)) {
+    throw new Error(`--tier ${tier} is not auto, low, full or ultra`);
   }
   const ji = args.indexOf('--json');
   const jsonPath = ji >= 0 ? String(args[ji + 1]) : null;

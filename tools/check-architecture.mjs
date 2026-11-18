@@ -89,6 +89,10 @@ const LAYERS = [
       /^js\/utils\.js$/,
       /^js\/format\.js$/,
       /^js\/units\.js$/,
+      // The step arithmetic and the trail's span in simulated time: pure, no
+      // imports of their own, read by the engine and the interface alike.
+      /^js\/timestep\.js$/,
+      /^js\/trailSpan\.js$/,
       /^js\/rng\.js$/,
       // The named random streams (Prompt 149): js/rng.js's algorithm under
       // stream identities, with nothing else in it, beside js/rng.js.

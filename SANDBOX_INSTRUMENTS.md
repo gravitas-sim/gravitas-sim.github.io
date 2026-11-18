@@ -172,7 +172,7 @@ produced.
 
 Three Settings toggles, all off by default:
 
-- **Show Velocity Vectors** — one arrow along the track.
+- **Show Velocity Vectors** — one arrow along the track, its length the speed.
 - **Show Acceleration Vectors** — one arrow for the total, and one dashed arrow
   per gravitational source, on the same scale as the total so the picture is a
   vector sum a student can check with a ruler.
@@ -181,6 +181,39 @@ Three Settings toggles, all off by default:
 
 All of it is drawn for the **selected** body only, which keeps the picture
 readable and the cost flat.
+
+### Length is the magnitude
+
+An arrow's length is its magnitude on one scale for the whole scene: the
+fastest body's speed (and, separately, the strongest pull) among the live
+bodies sets 96 CSS px, so a body half as fast has an arrow half as long and two
+bodies are compared by selecting them in turn. The legend states the scale
+("1 cm = 12 km/s", with 1 cm taken as CSS defines it) and gives the value of
+each arrow, so the number is in the text and not only in the length. The scale
+follows the scene gradually (12% of the gap each frame drawn) and resets when
+the world is rebuilt. A floor (14 px) keeps a slow body's arrow visible and a
+ceiling (220 px) keeps a fast one on the canvas; the legend says when either
+applies, because a floored arrow is no longer proportional. Labels on the
+canvas are drawn at 11 CSS px or more at any device pixel ratio (`fitFont`).
+
+The legend also states how long trails are ("Trails: the last 19 d").
+
+### Trails cover a stated time
+
+`trail_length` keeps its name, its numbers and its place in saved settings,
+share links and packs; what changed is its unit (`js/trailSpan.js`). One sample
+is one reference step: the step the engine takes at 60 frames a second at the
+speed and step cap the world was built with, which is the condition each
+scenario's number was tuned under. A trail keeps its points for `trail_length`
+reference steps of simulated time, so its span is the same at 30, 60 and 144
+frames a second; samples are taken on that slice of time, not once per step. The
+Low tier and Adaptive Detail draw fewer points along the span and do not
+shorten it, and zoom no longer scales it. The speed in the reference is the one
+pushed at a build or an Apply, not the live speed control's. The default stays 15
+(about three days at the default gravitational constant, and the legend says
+so); a longer default was considered and not adopted (D-R4-337-05), because the 20-odd
+scenarios that omit the key would draw longer trails and their world digests
+would be re-recorded.
 
 ### The colors are the argument
 

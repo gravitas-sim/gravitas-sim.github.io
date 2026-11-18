@@ -188,10 +188,10 @@ function factsFor(step, inv, index) {
       'widget',
       `${step.tool.id}${controls.length ? ` (${controls.map(c => (hidden.includes(c) ? `${c}·hidden` : c)).join(', ')})` : ''}`,
     ]);
-    if (step.tool.values) {
+    if (step.tool.start ?? step.tool.values) {
       facts.push([
-        'preset',
-        Object.entries(step.tool.values)
+        step.tool.start ? 'start' : 'preset',
+        Object.entries(step.tool.start ?? step.tool.values)
           .map(([k, v]) => `${k}=${v}`)
           .join(' '),
       ]);

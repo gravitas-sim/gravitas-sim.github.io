@@ -77,8 +77,8 @@ export const DEVICE_PIXEL_RATIOS = [1, 2];
 
 /**
  * The accessible name of a control that lowers the lesson sheet or brings the
- * scene into view in one announced action. None exists at 3.0; the layout
- * prompt (334) names its own control and updates this pattern when it does.
+ * scene into view in one announced action: the sheet handle of a lesson on a
+ * phone ("Lower the sheet to see the scene").
  */
 export const SCENE_ACTION_NAME =
   /show (the )?scene|lower (the )?(sheet|lesson)|peek|collapse|minimi[sz]e (the )?(lesson|sheet)/i;
@@ -793,17 +793,19 @@ export function readSvgPlotText(selector) {
         ) * scale,
       role: numeric.test(t.textContent.trim()) ? 'tick' : 'label',
     }));
-  // Series: a data mark is a path or polyline with a stroke, or a circle; its
-  // marker is the shape of any `circle`, `rect` or `use` mark it carries.
+  // Series: a mark that says its shape (`data-marker`: the dots' group, a line
+  // series' markers, the fit line's triangles). A line that draws no markers is
+  // one series with none, so a second series like it fails the judge.
   const series = [];
-  for (const e of svg.querySelectorAll('path, polyline, circle')) {
-    const stroke = e.getAttribute('stroke');
-    const fill = e.getAttribute('fill');
-    const colour = stroke && stroke !== 'none' ? stroke : fill;
-    if (!colour || colour === 'none') continue;
+  for (const e of svg.querySelectorAll('[data-marker]')) {
+    if (e.tagName === 'path' && !e.getAttribute('d')) continue;
+    const css = getComputedStyle(e);
+    const colour = [e.getAttribute('stroke'), e.getAttribute('fill')].find(
+      c => c && c !== 'none'
+    );
     series.push({
-      colour,
-      marker: e.tagName === 'circle' ? 'circle' : null,
+      colour: colour ?? (css.fill !== 'none' ? css.fill : css.stroke),
+      marker: e.getAttribute('data-marker'),
       dash: e.getAttribute('stroke-dasharray') || '',
     });
   }
@@ -877,8 +879,10 @@ export async function measureVelocityArrow({ role, factor }) {
 
 /**
  * The simulated time a trail covers at a given frame rate, from the app's own
- * planning: one trail sample per physics step, `trailBudget()` samples kept,
- * and the step the frame rate gives (js/timestep.js).
+ * planning: trail samples are taken on a fixed slice of simulated time and kept
+ * for `trailSpan()` (js/trailSpan.js), whatever step the frame rate gives
+ * (js/timestep.js). `samples` and `step` are reported for the message; the
+ * engine-level proof at three frame rates is tests/trailSpan.test.js.
  */
 export async function measureTrailSpan({ fps }) {
   const ui = await import('/js/ui.js');
@@ -887,13 +891,12 @@ export async function measureTrailSpan({ fps }) {
   const st = await import('/js/engine/state.js');
   const dtSim = ts.frameAdvance(1 / fps, ui.SETTINGS.sim_speed, physics.DT);
   const plan = ts.substepPlan(dtSim, ui.SETTINGS.max_timestep);
-  const samples = st.trailBudget();
   return {
     fps,
-    samples,
+    samples: st.trailBudget(),
     step: plan.step,
     substeps: plan.substeps,
-    span: samples * plan.step,
+    span: st.trailSpan(),
     maxTimestep: ui.SETTINGS.max_timestep,
   };
 }

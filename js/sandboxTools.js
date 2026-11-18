@@ -32,7 +32,13 @@
 // =============================================================================
 
 import { AU_METERS } from './constants.js';
-import { labelFont, pixelScale } from './bodyLabels.js';
+import {
+  keepClear,
+  labelFont,
+  pixelScale,
+  resetKeepClear,
+} from './bodyLabels.js';
+import { crowdNotes } from './bodyDrawSky.js';
 import { SIM_UNITS_PER_AU, formatTime } from './units.js';
 import {
   world_to_screen,
@@ -418,10 +424,7 @@ function drawProtractor(ctx) {
   const v = world_to_screen(tools.protractor.vertex);
   const p1 = world_to_screen(tools.protractor.arm1);
   const p2 = world_to_screen(tools.protractor.arm2);
-  // Measured in world coordinates, not screen ones. The canvas transform flips
-  // y, so an angle read off the screen positions would be the mirror image of
-  // the angle in the simulation - equal for the enclosed angle, but not for
-  // anything built on top of it.
+  // Measured in world coordinates, not screen ones.
   const deg = angleAtVertex(
     tools.protractor.vertex,
     tools.protractor.arm1,
@@ -496,15 +499,11 @@ let capturing = false;
 
 // What the frame is of. The scale bar says how big, the clock says how long
 // into the run, and this says which run - the three facts a figure in a slide
-// or a lab report has to carry to be worth citing. It is set by the caller
-// rather than read from here because the scenario name lives in ui.js, and a
-// module that owns no physics should not start reaching for application state.
+// or a lab report has to carry to be worth citing.
 let captureCaption = '';
 
 // A student's own words about the moment, when the frame was reached by a
-// pause-at-event stop. Optional, and drawn under the caption so an exported
-// figure carries the observation as well as the scenario: "what did you notice"
-// is the part of a lab report a picture cannot otherwise hold.
+// pause-at-event stop.
 let captureNote = '';
 
 /**
@@ -555,6 +554,29 @@ export const captionText = () => captureCaption;
 /** @returns {string} The annotation that would accompany it, if any */
 export const captureNoteText = () => captureNote;
 
+// The notes' line breaks, kept while the text and the width are the same.
+let notesKey = '';
+let notesWrapped = { groups: [], width: 0 };
+function wrapNotes(ctx, notes, room) {
+  const key = `${room}|${ctx.font}|${notes.join('\n')}`;
+  if (key === notesKey) return notesWrapped;
+  const groups = [];
+  let width = 0;
+  for (const note of notes) {
+    const own = [''];
+    for (const w of note.split(' ')) {
+      const tail = `${own.at(-1)} ${w}`.trim();
+      if (own.at(-1) && ctx.measureText(tail).width > room) own.push(w);
+      else own[own.length - 1] = tail;
+    }
+    for (const line of own)
+      width = Math.max(width, ctx.measureText(line).width);
+    groups.push(own);
+  }
+  notesKey = key;
+  return (notesWrapped = { groups, width });
+}
+
 /**
  * The always-on instrumentation, drawn along the bottom-left edge: a scale bar,
  * and - for a frame being saved - the simulated clock, the stopwatch and the
@@ -591,21 +613,17 @@ export function drawInstrumentation(
   const k = pixelScale();
   const W = (canvas.width || 0) / k;
   const H = (canvas.height || 0) / k;
+  resetKeepClear();
   if (W < 240 || H < 200) return;
 
-  // A phone in portrait has about a third of the width a laptop does, and the
-  // panel is laid out as a label on the left and a value on the right; below
-  // this the two meet in the middle and the longer rows have to give way.
+  // Below this width a label and its value meet in the middle: longer rows give way.
   const narrow = W < 560;
 
-  // What the canvas itself has to carry, as one line along the bottom rather
-  // than as a panel.
+  // What the canvas itself carries, as one line along the bottom.
   const readings = [];
   if (capturing && settings.show_elapsed_time !== false) {
-    // Labeled, unlike the live readout, where the row it sits in says what it
-    // is. A bare '6.59 d' in the corner of a figure in somebody's lab report
-    // could be a period, an age or an exposure; 't =' makes it the one thing
-    // it is, at the cost of three characters.
+    // Labeled, unlike the live readout: a bare '6.59 d' in a figure could be a
+    // period, an age or an exposure.
     readings.push(`t = ${formatTime(getSimulationTime())}`);
   }
   if (capturing) {
@@ -616,6 +634,7 @@ export function drawInstrumentation(
 
   const pad = 12;
   const barY = H - pad - 10 - Math.max(0, bottomInset);
+  let keptW = 0;
 
   ctx.save();
   ctx.scale(k, k);
@@ -623,13 +642,9 @@ export function drawInstrumentation(
   ctx.textBaseline = 'middle';
   ctx.textAlign = 'left';
 
-  // The title, top left, where the readout panel sits in the live view and
-  // where a saved frame has nothing at all - the readout is HTML and is not
-  // composited into the export. Larger than the bottom line and set slightly
-  // brighter: on a slide it is read from the back of a room, and in a lab
-  // report it is the caption the figure would otherwise need underneath it.
-  // A second line, when there is one, says where a real system's numbers come
-  // from (js/data/realSystemSources.js): smaller, under the title.
+  // The title, top left (a saved frame has no HTML readout): larger and brighter
+  // than the bottom line, the caption a slide or lab report would need. A second,
+  // smaller line says where a real system's numbers come from.
   const [captionTitle, captionSources = ''] = captureCaption.split('\n');
   let underTitle = pad + 24;
   if (capturing && captionTitle) {
@@ -690,41 +705,53 @@ export function drawInstrumentation(
     ctx.restore();
   }
 
-  // The key, one row of swatches above the scale line. Horizontal rather than
-  // stacked: three arrows explained in three short phrases fit across the
-  // bottom of any canvas wide enough to be worth drawing arrows on.
+  // What the tier or a crowd left out, above the scale line.
   let legendBottom = barY - 20;
+  ctx.font = `11px ${INSTRUMENT_MONO}`;
+  ctx.fillStyle = 'rgb(200, 214, 235)';
+  const wrapped = wrapNotes(ctx, crowdNotes(), W - 2 * pad);
+  keptW = wrapped.width;
+  for (const group of wrapped.groups)
+    for (let i = group.length - 1; i >= 0; i--) {
+      halo(ctx, group[i], pad + 2, legendBottom);
+      legendBottom -= 16;
+    }
+  const noteTop = legendBottom + 20;
+
+  // The key: one row of swatches above the scale line.
   if (capturing && legend.length) {
     let x = pad + 2;
-    const y = legendBottom;
+    let y = legendBottom;
     for (const l of legend) {
       const label = l.label;
-      const w = 26 + ctx.measureText(label).width;
-      // Anything that would run off the right edge is dropped rather than
-      // wrapped: a key that reaches the far side of the canvas has stopped
-      // being a key.
-      if (x + w > W - pad) break;
-      ctx.save();
-      ctx.strokeStyle = l.color;
-      ctx.lineWidth = l.dash ? 1.8 : 3;
-      ctx.setLineDash(l.dash ? [5, 3] : []);
-      ctx.beginPath();
-      ctx.moveTo(x, y);
-      ctx.lineTo(x + 18, y);
-      ctx.stroke();
-      ctx.restore();
+      const w = (l.note ? 0 : 26) + ctx.measureText(label).width;
+      // Wrap upward rather than drop: the scale and trail span must stay.
+      if (x + w > W - pad && x > pad + 2) {
+        x = pad + 2;
+        y -= 16;
+      }
+      if (x + w > W - pad) continue;
+      if (!l.note) {
+        ctx.save();
+        ctx.strokeStyle = l.color;
+        ctx.lineWidth = l.dash ? 1.8 : 3;
+        ctx.setLineDash(l.dash ? [5, 3] : []);
+        ctx.beginPath();
+        ctx.moveTo(x, y);
+        ctx.lineTo(x + 18, y);
+        ctx.stroke();
+        ctx.restore();
+      }
       ctx.fillStyle = 'rgba(214, 226, 244, 0.95)';
-      ctx.fillText(label, x + 24, y);
+      ctx.fillText(label, x + (l.note ? 0 : 24), y);
       x += w + 14;
     }
-    legendBottom -= 16;
+    legendBottom = y - 16;
   }
 
   if (settings.show_scale_bar !== false) {
-    // The zoom is pixels per simulation unit, so this is the one line that
-    // ties the drawn bar to the actual view transform. Nothing else in the
-    // instrumentation depends on the zoom, which is why a scale bar is the
-    // thing that makes a screenshot readable.
+    // The zoom is pixels per simulation unit, so this is the one line that ties
+    // the drawn bar to the actual view transform.
     const metersPerPx = METERS_PER_UNIT / (zoom > 0 ? zoom / k : 1);
     const barW = Math.min(160, W * 0.22);
     scaleBar(ctx, pad + 2, barY, barW, metersPerPx, {
@@ -743,11 +770,19 @@ export function drawInstrumentation(
     ctx.fillText(readings.join('   '), pad + 2, barY);
   }
 
-  // What the scale bar does not say: the bodies are drawn on a compressed
-  // scale. Always drawn, at the canvas edge, so it is in every screenshot.
+  // Body sizes are not to one scale; said on the canvas, with or without the
+  // bar, so it is in every screenshot.
   ctx.font = `12px ${INSTRUMENT_MONO}`;
   ctx.fillStyle = 'rgb(200, 214, 235)';
   halo(ctx, t('canvas.sizeDisclosure'), pad + 2, barY + 14);
+  const bar =
+    settings.show_scale_bar !== false ? Math.min(160, W * 0.22) + 70 : 0;
+  keptW = Math.max(
+    keptW,
+    bar,
+    ctx.measureText(t('canvas.sizeDisclosure')).width
+  );
+  keepClear(pad, Math.min(noteTop, barY) - 8, pad + keptW + 6, barY + 24);
 
   ctx.restore();
 }

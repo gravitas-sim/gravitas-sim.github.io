@@ -332,6 +332,9 @@ export function renderScale(cssW, cssH) {
 /**
  * Caps applied to the generic population settings when a world is built.
  *
+ * Read once as the world is built, as a read-time override, never written into
+ * the reader's SETTINGS (what share links, saves and the A/B bench hash).
+ *
  * Only the counts a scenario asks for generically. Scenarios that place every
  * body by hand - the resonance systems, TRAPPIST-1, the galaxy discs - are left
  * alone, because their body count is the physics rather than a decoration, and
@@ -352,6 +355,33 @@ export function populationCaps() {
   };
 }
 
+// The world a tier built, for the readout. Set once per build by js/world/build.js.
+let builtNote = null;
+
+/** Record a build: bodies made and, if capped, what the full tier would have made. `pop` is the builder's count function (null if uncapped). The note is the world as built; bodies a reader adds, removes or merges later do not change it. */
+export function recordBuild(pop, settings, starsAlready, lists) {
+  const built = lists.reduce((n, l) => n + l.length, 0);
+  let cut = 0;
+  if (pop) {
+    const lost = key => Math.max(0, settings[key] - pop(key));
+    const stars = k => Math.max(0, k - starsAlready);
+    const micro = k => Math.min(600, Math.floor(k) || 0);
+    cut =
+      stars(settings.num_stars) -
+      stars(pop('num_stars')) +
+      lost('num_planets') +
+      lost('num_gas_giants') +
+      (settings.enable_asteroids ? lost('num_asteroids') : 0) +
+      lost('num_comets') +
+      micro(settings.num_micro_stars) -
+      micro(pop('num_micro_stars'));
+  }
+  builtNote = cut > 0 ? { built, wanted: built + cut } : null;
+}
+
+/** @returns {?{built: number, wanted: number}} Set when this tier built fewer bodies */
+export const builtPopulation = () => builtNote;
+
 /**
  * Render features switched off at the low tier.
  *
@@ -369,20 +399,13 @@ export function renderOverrides() {
     lensing_quality: 'off',
     show_gravitational_waves: false,
     show_accretion_disk: false,
-    // Presentation, not population. This was once returned from
-    // populationCaps(), which applied its result by writing into the live
-    // SETTINGS - so a slow machine permanently rewrote the reader's own
-    // settings, and those rewritten values then traveled out in share links,
-    // saved states and the A/B bench's canonical hash. It is not read during
-    // construction at all, so a read-time override here is both the correct
-    // place and the only one that has any effect.
+    // Trails are not here any more: the low tier thins their samples in the
+    // engine (trailSampleInterval) and keeps their span, because a trail that
+    // covers a stated time must not shorten on a slow machine.
     //
-    // star_density was here too and is deliberately not any more. The tier now
-    // reaches the sky through js/bodyDrawSky.js's STARS_PER_MEGAPIXEL, which is
-    // a better lever - it scales with the window as well as the tier - and
-    // star_density has become a proportion of that. Two reductions for one
-    // purpose would compound into an almost empty sky.
-    trail_length: 8,
+    // star_density is deliberately not here either. The tier reaches the sky
+    // through js/bodyDrawSky.js's STARS_PER_MEGAPIXEL, which scales with the
+    // window as well as the tier, and star_density is a proportion of that.
   };
 }
 

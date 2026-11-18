@@ -663,6 +663,10 @@ export const NEVER_PRECACHED = [
   /^js\/lab3d\/libration\.js$/,
   // Its addendum's step-budget rule, in the same position: only the validator and the tests import it.
   /^js\/lab3d\/stepBudget\.js$/,
+  // An estimate and the box where a prediction meets the student's readings: fetched when a lesson declares
+  // them (none yet), so an install has no use for the module or its words (the first-visit tier has little room).
+  /^js\/investigations\/(reveal|evidence)\.js$/,
+  /^js\/i18n\/(en|es)\.reveal\.js$/,
 ];
 
 const ON_DEMAND_ONLY = new Set([

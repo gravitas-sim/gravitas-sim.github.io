@@ -54,19 +54,19 @@ export const EN_SETTINGSHELP = {
   'setHelp.trail_style':
     'Cloud draws soft layered strokes; Simple draws a thin line; Glow draws a string of glowing dots, brighter where the body moved faster. Drawn effect only; takes effect at once.',
   'setHelp.trail_length':
-    'How many recorded positions each trail keeps, one per integration step, so a longer trail shows more of the orbit. The kept length also scales with zoom (0.6× to 1.5×) and can be cut by Adaptive Detail or the Low quality tier. Drawn effect only; takes effect at once.',
+    'How much simulated time each trail covers, shown beside the slider; a longer trail shows more of the orbit. The span is the same at any frame rate, speed or zoom. Adaptive Detail and the Low quality tier draw fewer points along it but do not shorten it. Drawn effect only; takes effect at once.',
   'setHelp.trail_color_mode':
     "By type colors each trail with the body's own color or its type's default (stars by temperature). By speed colors each trail on a purple-to-yellow scale from the body's current speed, so a body on an eccentric orbit changes color as it speeds up and slows down. Drawn effect only; takes effect at once.",
   'setHelp.show_velocity_vectors':
-    'Draws a velocity arrow (v) on the selected body; a click on a body selects it. The arrow has a fixed length and shows direction only, not speed. Takes effect at once.',
+    'Draws a velocity arrow (v) on the selected body; a click on a body selects it. Its length follows the speed, on one scale for the whole scene, and the legend says what 1 cm stands for. Takes effect at once.',
   'setHelp.show_acceleration_vectors':
-    "Draws the selected body's total acceleration, the value the integrator actually used, as a fixed-length arrow, with dashed arrows to the same scale for up to eight of the strongest sources. Set beside the velocity arrow, it shows that a body does not move in the direction it is pulled. Takes effect at once.",
+    "Draws the selected body's total acceleration, the value the integrator actually used, as an arrow on a scale of its own, stated in the legend, with dashed arrows to the same scale for up to eight of the strongest sources. Set beside the velocity arrow, it shows that a body does not move in the direction it is pulled. Takes effect at once.",
   'setHelp.show_potential_well':
     "Shades the background with the Newtonian gravitational potential of the heaviest bodies (up to 24), on a logarithmic color scale, using the current G and the force law's softening. It is a picture of the field only and does not change the motion. Takes effect at once.",
   'setHelp.show_scale_bar':
     'Draws a scale bar in real distance units in the bottom-left corner of the canvas, matched to the current zoom, with a note that body sizes are not to scale; it also appears in saved screenshots. Takes effect at once.',
   'setHelp.body_labels':
-    "Which bodies the canvas names: all, the selected one and an investigation step's own, or none. Crowded names are spread apart or left out. The B key cycles them.",
+    "What the canvas labels: all (a name where the body has one, otherwise its mass), names only, masses only, the selected body and an investigation step's own, or none. Crowded labels are spread apart, and beyond 24 the lightest are left out. The B key cycles them.",
   'setHelp.show_elapsed_time':
     'Stamps the simulated time (t = …) along the bottom of saved screenshots. The live readout shows the elapsed time whatever this is set to. Takes effect at once.',
   'setHelp.show_accretion_disk':
@@ -108,9 +108,9 @@ export const EN_SETTINGSHELP = {
   'setHelp.barnes_hut_theta':
     'The opening angle of the Barnes-Hut tree: smaller is more accurate and slower. Measured on a 78-body cluster, the default 0.4 gives a mean force error near 0.5% and 0.7 near 4%, with worst cases far larger. Only matters while approximate gravity is actually running.',
   'setHelp.adaptive_detail':
-    'When frames run slower than the 60 fps target, trails are kept shorter, down to 60% of the set length, and grow back once the machine catches up; it is checked every 5 seconds. It changes nothing else, and never the physics. Takes effect at once.',
+    'When frames run slower than the 60 fps target, trails are drawn with fewer points, down to 60% as many, and keep their length of time; the points come back once the machine catches up; it is checked every 5 seconds. It changes nothing else, and never the physics. Takes effect at once.',
   'setHelp.quality_tier':
-    'Automatic drops to Low when the measured frame rate stays below about 32 fps and returns to Full above about 48; Full and Low fix the tier. Low draws the canvas at 70% resolution, turns off lensing and gravitational-wave rings, shortens trails, thins the starfield and, at the next rebuild, caps generated populations (hand-placed scenarios keep every body). Drawing changes at once, and the choice is kept across scenario loads.',
+    'Automatic drops to Low when the measured frame rate stays below about 32 fps and returns to Full above about 48; Full and Low fix the tier. Low draws the canvas at 70% resolution, turns off lensing and gravitational-wave rings, draws trails with half the points, thins the starfield and, at the next rebuild, caps generated populations (hand-placed scenarios keep every body). Drawing changes at once, and the choice is kept across scenario loads.',
   'settings.level.introductory.hint':
     'The defaults: physical units, three significant figures, and the conservation readout off. No level hides anything.',
   'settings.level.majors.hint':

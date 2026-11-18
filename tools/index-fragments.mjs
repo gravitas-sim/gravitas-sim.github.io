@@ -180,7 +180,6 @@ export const STATIC_SET = [
   'div#welcomeScreen',
   'div#overlay',
   'div#scenarioInfoDisplay',
-  'div#scenarioInfoBox',
   'div#mobileInstructions',
   'div#mainControls',
   'div#placementStatus',

@@ -24,9 +24,10 @@ import {
   SCALE,
   UNITS_PER_RS,
   displayRadius,
-  fitCamera,
+  placedOf,
   rowLayout,
 } from './lesson/stage.js';
+import { fitNow, fitWanted, requestFit } from './lessonFrame.js';
 import {
   BlackHole,
   accretion_disk_particles,
@@ -104,18 +105,6 @@ let lastHole = null;
 /** Labeled "then" copies a reader has pinned, in the order they took them. */
 let snapshots = [];
 /**
- * A fit that has been asked for and not yet performed.
- *
- * A stage is built during a step change, before the lesson panel and the
- * instrument have been laid out - and on the first step of all, before the
- * application has finished setting up its own camera, which then overwrites
- * whatever the fit did. So the request is recorded here and taken by whoever
- * is in a position to honor it: js/investigations.js calls takeFit() from the
- * panel's own tick, which runs after layout and after the boot has settled.
- */
-let pendingFit = false;
-
-/**
  * What a controlled run saves before it rebuilds the stage, so the stage can be
  * stood back on the bodies a state restore makes. @returns {object}
  */
@@ -125,7 +114,7 @@ export const stageMemo = () => ({
   scale: stagedScale,
   declared: lastDeclaration,
   pair: lastStarPair,
-  fit: pendingFit,
+  fit: fitWanted(),
 });
 
 /**
@@ -148,7 +137,7 @@ export function adoptStage(memo, bodies) {
   stagedScale = memo.scale;
   lastDeclaration = memo.declared;
   lastStarPair = memo.pair;
-  pendingFit = memo.fit;
+  requestFit(memo.fit);
   return bindRoles(rolesOfStage(), {}).bound;
 }
 
@@ -169,12 +158,7 @@ export const stagedStars = () => staged.slice();
  */
 export function stageIntact() {
   if (!staged.length) return true;
-  // Every collection, from the shared inventory. Checking a subset is how this
-  // went wrong twice: first `stars` alone, which made every binary stage
-  // report itself missing, then `stars` plus the compact-object lists, which
-  // did the same for the hole, equal-mass and system stages because their
-  // orbiters and planets live in `asteroids` and `planets`. A subset here is
-  // not a smaller check, it is a world rebuilt on every panel tick.
+  // Every collection, from the shared inventory.
   const present = new Set(bodyCollections().flat());
   return staged.every(entry => present.has(entry.star));
 }
@@ -199,8 +183,7 @@ export function stagePresence() {
     total: staged.length,
     // Nothing left at all is the signature of a replacement: a reader removing
     // bodies one at a time passes through states where some are still there,
-    // and this only fires at the end of that. It is the conservative reading -
-    // it never puts back a scene the reader was halfway through changing.
+    // and this only fires at the end of that.
     allGone: staged.length > 0 && alive === 0,
   };
 }
@@ -277,8 +260,6 @@ export function resetStageForTests() {
   lastHole = null;
   snapshots = [];
   requestFit(false);
-  fitAttempts = 0;
-  fitApplied = null;
 }
 
 /** How much of the population is on the canvas, and of how many. @returns {?object} */
@@ -293,8 +274,6 @@ const family = {
   end(fit) {
     bumpWorldGeneration();
     requestFit(fit);
-    fitAttempts = 0;
-    fitApplied = null;
     return bindRoles(rolesOfStage(), {}).bound;
   },
 };
@@ -324,16 +303,7 @@ export const loadStageKinds = async stage => {
  * @returns {{built: boolean, roles: Array<string>, problems: object}} What happened
  */
 export function applyStage(stage, { force = false } = {}) {
-  // Two stars the engine really integrates. Distinct from `binary` below, and
-  // the distinction is the scientific one: there, a prescribed inspiral model
-  // owns the positions and the integrator must not touch them; here the orbit
-  // *is* the physics being taught, so the bodies are ordinary and the engine
-  // moves them. Confusing the two would either freeze a lesson about orbits or
-  // let the integrator overwrite a lesson about a model.
-  // One black hole, with test bodies in orbit around it. Engine-owned like the
-  // star pair: what the orbiters do is Newtonian gravity, which the integrator
-  // computes correctly and the lesson measures. Not "outside the horizon" -
-  // the canvas has no horizon, only a drawn disc. See applyHoleStage.
+  // Two stars the engine really integrates.
   if (stage?.hole) {
     const key = JSON.stringify(['hole', stage.hole]);
     if (!force && key === stagedKey) {
@@ -356,11 +326,7 @@ export function applyStage(stage, { force = false } = {}) {
     stagedKey = key;
     return { built: true, roles: out.roles, problems: {} };
   }
-  // A star with planets on declared orbits, eccentricity included. The two
-  // habitable-zone scenarios are deliberately circular - circles keep the
-  // insolation measurement clean - so a lesson that wants a planet whose
-  // distance changes round its year has to stand one up itself rather than
-  // pretend one of those is elliptical.
+  // A star with planets on declared orbits, eccentricity included.
   if (stage?.system) {
     const key = JSON.stringify(['system', stage.system]);
     if (!force && key === stagedKey) {
@@ -370,11 +336,7 @@ export function applyStage(stage, { force = false } = {}) {
     stagedKey = key;
     return { built: true, roles: out.roles, problems: {} };
   }
-  // A gravitational-wave source the reader can change the kind of. Three
-  // alternatives on one declaration - a static mass, a spherically pulsing
-  // one, and a binary - because the beginner lesson's argument is that only
-  // the third radiates and it cannot make that argument by asking a reader to
-  // imagine the other two while a binary sits on the canvas.
+  // A gravitational-wave source the reader can change the kind of.
   if (stage?.gwSource) {
     const key = JSON.stringify(['gwSource', stage.gwSource]);
     if (!force && key === stagedKey) {
@@ -418,8 +380,6 @@ export function applyStage(stage, { force = false } = {}) {
       shownIds: stagedStars().map(e => e.spec?.populationId ?? null),
     };
     requestFit(stage.fit);
-    fitAttempts = 0;
-    fitApplied = null;
     return { built: true, roles: [], problems: {}, population: out };
   }
   if (!stage?.stars?.length) {
@@ -497,8 +457,6 @@ export function applyStage(stage, { force = false } = {}) {
   bumpWorldGeneration();
 
   requestFit(stage.fit);
-  fitAttempts = 0;
-  fitApplied = null;
   const roles = {};
   for (const entry of staged) roles[entry.role] = { id: entry.star.id };
   const bound = bindRoles(roles, { modelOwned: Object.keys(roles) });
@@ -628,11 +586,7 @@ export function becomeRemnant(role, endpoint) {
   body.anonymous = old.anonymous;
   list.push(body);
 
-  // Out of whichever collection actually held it. Splicing `stars` alone left
-  // a duplicate behind for anything that had already become a remnant once -
-  // a star that went to a neutron star and was then rewound and run forward
-  // again ended up on the canvas twice, both of them model-owned and one of
-  // them unreachable by role.
+  // Out of whichever collection actually held it.
   removeBody(old);
   // The presentation size belongs to the star, not to what it turned into: a
   // white dwarf drawn at a red giant's compressed radius is a lie about the
@@ -823,8 +777,6 @@ export function applySingleStage(spec = {}) {
   });
   bumpWorldGeneration();
   requestFit(spec.fit);
-  fitAttempts = 0;
-  fitApplied = null;
   const bound = bindRoles(rolesOfStage(), { modelOwned: ['source'] });
   return { built: true, roles: bound.bound };
 }
@@ -947,10 +899,6 @@ export function applyBinaryStage(spec = {}) {
           );
     body.name = spec.names?.[i] || (i === 0 ? 'Component 1' : 'Component 2');
     // The mass the model is describing, in the units the interface reports.
-    // Without this the inspector and the object list had nothing to print for
-    // either component while the panel beside them was entirely about their
-    // masses - so a reader clicking a body to check what it weighed got a card
-    // with the answer missing.
     body.massInSuns = massSun;
     body.initialMassInSuns = massSun;
     body.model_owned = true;
@@ -968,8 +916,6 @@ export function applyBinaryStage(spec = {}) {
   });
   bumpWorldGeneration();
   requestFit(spec.fit);
-  fitAttempts = 0;
-  fitApplied = null;
   const bound = bindRoles(rolesOfStage(), { modelOwned: ['a', 'b'] });
   return { built: true, roles: bound.bound };
 }
@@ -1012,11 +958,7 @@ export function applyStarPairStage(spec = {}) {
   const separation =
     Number(spec.separation) > 0 ? Number(spec.separation) : 400;
   clearWorld();
-  // The integrator's own constant, not the application's copy of it. The two
-  // are synced while the app runs and are NOT synced anywhere else, so a stage
-  // built from SETTINGS lays out an orbit for a gravity the engine is not
-  // using - which is how a pair set up at apoapsis was found spiralling
-  // outward instead of closing.
+  // The integrator's own constant, not the application's copy of it.
   const G = getPhysicsSetting('gravitational_constant');
   const ic = circularBinary({
     m1: m1Sun * SOLAR_MASS_UNIT,
@@ -1039,11 +981,7 @@ export function applyStarPairStage(spec = {}) {
     star.name = names[i];
     star.mass = massSun * SOLAR_MASS_UNIT;
     star.massInSuns = massSun;
-    // Drawn at a fixed size rather than from the mass. The lesson's whole
-    // method is reading the *arm lengths* off the picture, and a disc that
-    // grew with mass would let a student answer "which is heavier" from the
-    // drawing instead of from the geometry - which is the misconception the
-    // see-saw screens exist to remove.
+    // Drawn at a fixed size rather than from the mass.
     star.radius = Number(spec.radius) > 0 ? Number(spec.radius) : 9;
     star.persistent = true;
     // Deliberately NOT model_owned: see the note on applyStage above.
@@ -1060,8 +998,6 @@ export function applyStarPairStage(spec = {}) {
   });
   bumpWorldGeneration();
   requestFit(spec.fit);
-  fitAttempts = 0;
-  fitApplied = null;
   const bound = bindRoles(rolesOfStage(), {});
   return { built: true, roles: bound.bound, period: ic.period };
 }
@@ -1150,11 +1086,7 @@ export function placeBinary(
   const d = separationRs * UNITS_PER_RS;
   const total = m1 + m2 || 1;
   // The orbit seen from where the observer is. Face-on it is a circle; edge-on
-  // it is a line; in between it is an ellipse squashed by cos(i). The
-  // inclination changes the waveform - it is what turns the polarisation from
-  // circular to linear - and until this was here it changed the plot and the
-  // ring while the picture of the orbit stayed resolutely face-on, so the one
-  // control whose effect is geometric was the one the geometry ignored.
+  // it is a line; in between it is an ellipse squashed by cos(i).
   const squash = Math.abs(
     Math.cos(((Number(inclinationDeg) || 0) * Math.PI) / 180)
   );
@@ -1242,8 +1174,6 @@ export function clearStage() {
   lastHole = null;
   lastPopulation = null;
   requestFit(false);
-  fitAttempts = 0;
-  fitApplied = null;
   bumpWorldGeneration();
 }
 
@@ -1259,17 +1189,11 @@ export function clearStage() {
 export function setStageScale(scale) {
   stagedScale = scale === SCALE.TRUE ? SCALE.TRUE : SCALE.DISPLAY;
   for (const entry of staged) {
-    // Only bodies the model gave a physical radius. A hole's orbiters, a
-    // binary's markers and a system's planets have none: they are on the
-    // canvas to be watched, not compared by size, and writing a stellar
-    // display radius onto them changed the Goldilocks planet from 4.8 to 9 -
-    // which is a collision radius, so it changed the physics too.
+    // Only bodies the model gave a physical radius.
     if (!Number.isFinite(entry.physicalRadiusSun)) continue;
     // The presentation radius, not the engine radius. `radius` decides
     // collisions, tidal disruption, the hit test and every measured orbital
-    // property, and a scale switch is a statement about the picture. When
-    // these were the same field, flicking between true and compressed scale
-    // silently changed what the bodies would do.
+    // property, and a scale switch is a statement about the picture.
     entry.star.stageRadius = displayRadius(
       entry.physicalRadiusSun,
       stagedScale
@@ -1334,10 +1258,7 @@ export function restageStar(role, model) {
   if (!entry || !model) return false;
   // Rewinding past the endpoint. The body on the canvas is a WhiteDwarf, a
   // NeutronStar or a BlackHole, and the model being written onto it is a point
-  // on a track - a star. Writing a temperature and a luminosity onto a white
-  // dwarf leaves a white dwarf labeled main-sequence: the card says one
-  // thing, the class says another, and the H-R point is plotted for a body
-  // that is not there. So the remnant is taken back off and a star put back.
+  // on a track - a star.
   if (entry.remnantKind && entry.remnantKind !== 'unfinished') {
     revertToStar(entry);
   }
@@ -1346,10 +1267,8 @@ export function restageStar(role, model) {
   entry.physicalRadiusSun = model.radiusSun;
   entry.star.stageRadius = displayRadius(model.radiusSun, stagedScale);
   // The engine mass follows the modeled one, or the two disagree: the card
-  // would show the track's mass while gravity used the mass the star was
-  // built with. A free point supplies none, and then the engine mass is left
-  // alone rather than being invented - the body has to weigh something, and
-  // what it weighs is no longer a claim the lesson is making.
+  // would show the track's mass while gravity used the mass the star was built
+  // with.
   if (Number.isFinite(entry.star.massInSuns)) {
     entry.star.mass = entry.star.massInSuns * SOLAR_MASS_UNIT;
   }
@@ -1382,10 +1301,7 @@ export function populationSample({
   thresholdFlux = null,
 } = {}) {
   // populationOf answers with the whole synthetic survey - the stars it drew,
-  // and what it had to leave out and why - not a bare array. `stars` is the
-  // modeled subset, which is what can be put on a canvas or on a diagram; the
-  // ones it could not model are counted in the object beside it and belong in
-  // the readout rather than being quietly dropped into a total.
+  // and what it had to leave out and why - not a bare array.
   const survey = populationOf({
     populationSeed: seed,
     populationCount: count,
@@ -1394,22 +1310,15 @@ export function populationSample({
   const total = all.length;
   const requested = survey?.requested ?? count;
 
-  // The bounded canvas subsample, chosen ONCE from the whole modeled
-  // population and never from the selection. This is the fix for the thing
-  // that made the third loop unteachable: the stride used to be computed over
-  // the stars that passed the cut, so moving the threshold did not add or
-  // remove stars from a fixed shelf - it re-strided the whole shelf and put a
-  // different hundred and twenty stars on the canvas. A reader lowering the
-  // threshold to "bring the M dwarfs back" got a different sky.
+  // The bounded canvas subsample, chosen ONCE from the whole modeled population
+  // and never from the selection.
   const wanted = Math.min(show, all.length);
   const stride = wanted > 0 ? all.length / wanted : 1;
   const subsample = [];
   for (let i = 0; i < wanted; i++) subsample.push(all[Math.floor(i * stride)]);
 
-  // One selection function, the same one the panel uses, over the same
-  // distance and the same definition of flux. It used to be an intrinsic
-  // luminosity cut here and a flux cut there; they agreed at the values the
-  // lesson shipped with and would have parted company the moment either moved.
+  // One selection function, the same one the panel uses, over the same distance
+  // and the same definition of flux.
   const selected = Number.isFinite(thresholdFlux)
     ? new Set(
         brightSubset(survey, { distancePc, thresholdFlux }).stars.map(s => s.id)
@@ -1450,10 +1359,7 @@ export function applyPopulationStage(spec = {}) {
     // and the survey's own counts are in the instrument's readout.
     anonymous: true,
     stars: shown.map((s, i) => ({
-      // The star's own name, not its place in the row. A threshold that
-      // removes half the shelf used to renumber everything left on it, so
-      // "pop-7" was a different star before and after - and a selection, a
-      // binding or a capture made against it silently moved to a stranger.
+      // The star's own name, not its place in the row.
       role: `pop-${s.id ?? i}`,
       name: `Star ${s.index ?? i + 1}`,
       populationId: s.id ?? null,
@@ -1472,13 +1378,7 @@ export function applyPopulationStage(spec = {}) {
     })),
   };
   // A population stage is built by handing applyStage a list of stars, which
-  // makes applyStage think a star shelf is what is on screen. Both of these
-  // put that right: the stage key so the caller's own memoisation still
-  // matches, and the declaration because a population is what has to be put
-  // back when the reader moves the brightness cut. Losing the declaration made
-  // the cut work exactly once and then stop, silently, with the panel still
-  // moving - which is the failure this whole pass is about, arriving from the
-  // other direction.
+  // makes applyStage think a star shelf is what is on screen.
   const key = stagedKey;
   const declared = lastDeclaration;
   applyStage(stage, { force: true });
@@ -1525,162 +1425,16 @@ export function restagePopulation({ thresholdFlux = null } = {}) {
   const out = applyPopulationStage({ ...decl, thresholdFlux: want });
   lastPopulation = { ...out, shownIds: next.shown.map(x => x.id) };
   requestFit(lastDeclaration.fit);
-  fitAttempts = 0;
-  fitApplied = null;
   return true;
 }
 
 /**
- * Perform a fit that was asked for, once the panels are there to measure.
- *
- * Returns false when there is nothing pending or nothing to measure yet, so a
- * caller can poll it cheaply from a tick it already has.
- *
- * @returns {boolean} Whether a fit was performed
- */
-export function takeFit() {
-  if (!pendingFit || !staged.length) return false;
-  if (typeof document === 'undefined') return false;
-  // The reader owns the camera the moment they touch it. Without this the
-  // retry below and a reader dragging the view fight each other for the first
-  // few seconds of a staged step: they pan somewhere to look at a star, the
-  // next tick decides the fit did not survive, and the view snaps back. The
-  // retry exists for an application that resets the camera during boot, not
-  // for a person who has decided to look somewhere else.
-  if (state.cameraTouchedAt) {
-    requestFit(false);
-    fitApplied = null;
-    return false;
-  }
-  const panel = document.getElementById('investigationPanel');
-  if (!panel || panel.hidden || !panel.getBoundingClientRect().width) {
-    return false;
-  }
-  // Did the last attempt survive? js/world/build.js sets the camera to the
-  // scenario's zoom and the origin whenever the world is rebuilt, and on a
-  // first load that happens *after* the lesson has opened - so a single
-  // attempt is applied and then silently undone, which is what it did.
-  if (fitApplied && sameCamera(fitApplied)) {
-    requestFit(false);
-    fitApplied = null;
-    return false;
-  }
-  // Bounded, and small. Two and a half seconds of trying is enough to outlast
-  // a boot; beyond that something else genuinely owns the camera and this must
-  // stop, because a view that keeps snapping back is worse than one that never
-  // moved.
-  if (++fitAttempts > MAX_FIT_ATTEMPTS) {
-    requestFit(false);
-    fitApplied = null;
-    return false;
-  }
-  const done = fitStage();
-  fitApplied = done ? { zoom: state.zoom, pan: { ...state.pan } } : null;
-  return done;
-}
-
-/**
- * How many ticks a fit may spend waiting for the boot to stop moving it.
- *
- * The panel ticks four times a second, so twenty-four is six seconds. It needs
- * to be that long because on a cold load the application rebuilds its own
- * world - and resets the camera with it - some way after the lesson panel has
- * opened, and a fit applied before that is silently undone. It also needs to
- * be bounded: past this the camera belongs to whoever else is moving it, and a
- * view that keeps snapping back is worse than one that never moved.
- */
-const MAX_FIT_ATTEMPTS = 24;
-let fitAttempts = 0;
-let fitApplied = null;
-
-/** Whether the camera is still where a fit put it. */
-const sameCamera = was =>
-  Math.abs(state.zoom - was.zoom) < 1e-6 &&
-  Math.abs(state.pan.x - was.pan.x) < 0.5 &&
-  Math.abs(state.pan.y - was.pan.y) < 0.5;
-
-/**
- * Ask for a fit on the next tick, or cancel one.
- *
- * Two pieces of state have to move with `pendingFit` and one of them did not.
- * `fitAttempts` is module-level, and the nine assignments this now replaces
- * left it alone: once a step had spent its budget of retries, no later step in
- * the lesson could frame itself. And `cameraTouchedAt` has to be forgotten at
- * the start of each staged step, or the reader's first pan of a session would
- * cancel every fit after it.
- *
- * @param {boolean} [on] - Whether a fit is wanted; defaults to yes
- */
-export const requestFit = (on = true) => {
-  pendingFit = Boolean(on);
-  fitAttempts = 0;
-  fitApplied = null;
-  if (on) state.cameraTouchedAt = 0;
-};
-
-/**
- * How much of the window the lesson's own furniture is covering.
- *
- * Measured rather than assumed, because the lesson panel and the instrument
- * are different widths in different languages and disappear entirely on a
- * narrow window, where they stack below the canvas instead of beside it. What
- * is left over is where the stage has to fit.
- *
- * @returns {{left: number, right: number, top: number, bottom: number}} Pixels
- */
-function panelInset() {
-  if (typeof document === 'undefined') return {};
-  let left = 0;
-  let right = 0;
-  // The main control rail counts too. It floats over the canvas on the right
-  // exactly as the lesson panel does on the left, and leaving it out put the
-  // second star of a two-star shelf underneath it - on a step that asks the
-  // reader to click that star.
-  for (const id of [
-    'investigationPanel',
-    'investigationTool',
-    'mainControls',
-  ]) {
-    const el = document.getElementById(id);
-    if (!el || el.hidden) continue;
-    const box = el.getBoundingClientRect();
-    if (!box.width || !box.height) continue;
-    // Only furniture that is genuinely beside the canvas: a panel stacked
-    // below it on a narrow window covers the bottom, not a side, and taking
-    // its width off would leave nowhere to put anything.
-    if (box.bottom < window.innerHeight * 0.5) continue;
-    if (box.left < window.innerWidth * 0.5) left = Math.max(left, box.right);
-    else right = Math.max(right, window.innerWidth - box.left);
-  }
-  return { left, right, top: 0, bottom: 0 };
-}
-
-/**
- * Frame the whole stage.
- *
- * Only ever on request - an action a reader presses, or a step that says it
- * fits on entry. A camera that re-fitted itself every frame would take the
- * view back every time somebody looked somewhere else, which is the single
- * most irritating thing an interface of this kind can do.
+ * Frame the whole stage, on request only: a camera that re-fitted itself would
+ * take the view back every time somebody looked somewhere else.
  *
  * @returns {boolean} Whether the camera moved
  */
-export function fitStage() {
-  const placed = staged.map(e => ({
-    x: e.star.pos.x,
-    y: e.star.pos.y,
-    radius: e.star.radius,
-  }));
-  const view = {
-    width: typeof window === 'undefined' ? 1280 : window.innerWidth,
-    height: typeof window === 'undefined' ? 720 : window.innerHeight,
-  };
-  const camera = fitCamera(placed, view, { inset: panelInset() });
-  if (!camera) return false;
-  state.zoom = camera.zoom;
-  state.pan = camera.pan;
-  return true;
-}
+export const fitStage = () => fitNow(placedOf(staged));
 
 /**
  * Put the selected body in the middle of the view, at the zoom it is at.
