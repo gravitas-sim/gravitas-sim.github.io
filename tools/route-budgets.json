@@ -40,8 +40,8 @@
         "requests": 5
       },
       "instructors": {
-        "kb": 2863.7,
-        "requests": 42
+        "kb": 2869.1,
+        "requests": 43
       },
       "figure": {
         "kb": 2203,
@@ -166,7 +166,7 @@
         "requests": 2
       },
       "instructors": {
-        "kb": 1988.6,
+        "kb": 1993.0,
         "requests": 2
       },
       "figure": {
