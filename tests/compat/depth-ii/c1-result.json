@@ -1,0 +1,253 @@
+{
+ "progress-record": {
+  "control": {
+   "ok": true,
+   "value": {
+    "accepted": true,
+    "lost": [],
+    "quarantined": [],
+    "moved": 0,
+    "dropped": 0
+   }
+  },
+  "spike": {
+   "ok": true,
+   "value": {
+    "accepted": true,
+    "lost": [],
+    "quarantined": [],
+    "moved": 3,
+    "dropped": 0
+   }
+  }
+ },
+ "assignment-link": {
+  "control": {
+   "ok": true,
+   "value": {
+    "accepted": true,
+    "depth": "quantitative",
+    "steps": [
+     "where-does-it-sit",
+     "measurement-one-how-big-is",
+     "measurement-two-how-long-does",
+     "weigh-the-pair",
+     "how-sure-is-the-total",
+     "weigh-it-with-an-error-bar",
+     "one-on-your-own"
+    ],
+    "present": 7,
+    "changed": 0,
+    "missing": 0
+   }
+  },
+  "spike": {
+   "ok": true,
+   "value": {
+    "accepted": true,
+    "depth": "quantitative",
+    "steps": [
+     "where-does-it-sit",
+     "measurement-one-how-big-is",
+     "measurement-two-how-long-does",
+     "weigh-the-pair",
+     "how-sure-is-the-total",
+     "weigh-it-with-an-error-bar",
+     "one-on-your-own"
+    ],
+    "present": 7,
+    "changed": 0,
+    "missing": 0
+   }
+  }
+ },
+ "course-pin": {
+  "control": {
+   "ok": true,
+   "value": {
+    "accepted": true,
+    "reviews": [
+     {
+      "kind": "lesson",
+      "status": "same",
+      "needsReview": false,
+      "changed": [],
+      "missing": []
+     },
+     {
+      "kind": "assignment",
+      "status": "same",
+      "needsReview": false,
+      "changed": [],
+      "missing": []
+     }
+    ]
+   }
+  },
+  "spike": {
+   "ok": true,
+   "value": {
+    "accepted": true,
+    "reviews": [
+     {
+      "kind": "lesson",
+      "status": "same",
+      "needsReview": false,
+      "changed": [],
+      "missing": []
+     },
+     {
+      "kind": "assignment",
+      "status": "same",
+      "needsReview": false,
+      "changed": [],
+      "missing": []
+     }
+    ]
+   }
+  }
+ },
+ "submission-token": {
+  "control": {
+   "ok": true,
+   "value": {
+    "accepted": true,
+    "depth": "quantitative",
+    "keys": [
+     "canonical",
+     "fingerprint",
+     "source",
+     "rosterId",
+     "assignmentId",
+     "nameAsTyped",
+     "depth",
+     "lessonId",
+     "lessonTitle",
+     "lessonVersion",
+     "lessonSteps",
+     "recordedSteps",
+     "changedSteps",
+     "submissionSchema",
+     "backupVersion",
+     "savedAt",
+     "startedAt",
+     "fallbackLocale",
+     "answerLocales",
+     "visitedSteps",
+     "completion",
+     "scorable",
+     "correct",
+     "incorrect",
+     "unmarked",
+     "incomplete",
+     "stale",
+     "points",
+     "pointsPossible",
+     "pointsUnmarked",
+     "hintsTaken",
+     "workedShown",
+     "evidence",
+     "systems",
+     "questions"
+    ],
+    "stale": [],
+    "changed": [],
+    "answered": [
+     "how-would-you-do-it",
+     "where-does-it-sit",
+     "weigh-the-pair",
+     "how-sure-is-the-total",
+     "weigh-it-with-an-error-bar",
+     "splitting-them-up",
+     "one-on-your-own"
+    ],
+    "incomplete": [
+     "two-stars-side-by-side",
+     "what-moved",
+     "make-one-of-them-heavier",
+     "the-rule",
+     "reading-the-see-saw",
+     "one-more-to-be-sure",
+     "which-pair-is-quicker",
+     "why-the-heavy-pair-wins",
+     "a-practice-run",
+     "what-do-you-need-to",
+     "now-weigh-each-one",
+     "and-which-one-is-heavier",
+     "say-how-the-weighing-worked"
+    ]
+   }
+  },
+  "spike": {
+   "ok": true,
+   "value": {
+    "accepted": true,
+    "depth": "quantitative",
+    "keys": [
+     "canonical",
+     "fingerprint",
+     "source",
+     "rosterId",
+     "assignmentId",
+     "nameAsTyped",
+     "depth",
+     "lessonId",
+     "lessonTitle",
+     "lessonVersion",
+     "lessonSteps",
+     "recordedSteps",
+     "changedSteps",
+     "submissionSchema",
+     "backupVersion",
+     "savedAt",
+     "startedAt",
+     "fallbackLocale",
+     "answerLocales",
+     "visitedSteps",
+     "completion",
+     "scorable",
+     "correct",
+     "incorrect",
+     "unmarked",
+     "incomplete",
+     "stale",
+     "points",
+     "pointsPossible",
+     "pointsUnmarked",
+     "hintsTaken",
+     "workedShown",
+     "evidence",
+     "systems",
+     "questions"
+    ],
+    "stale": [],
+    "changed": [],
+    "answered": [
+     "how-would-you-do-it",
+     "where-does-it-sit",
+     "weigh-the-pair",
+     "how-sure-is-the-total",
+     "weigh-it-with-an-error-bar",
+     "splitting-them-up",
+     "one-on-your-own"
+    ],
+    "incomplete": [
+     "two-stars-side-by-side",
+     "what-moved",
+     "make-one-of-them-heavier",
+     "the-rule",
+     "reading-the-see-saw",
+     "one-more-to-be-sure",
+     "which-pair-is-quicker",
+     "why-the-heavy-pair-wins",
+     "a-practice-run",
+     "what-do-you-need-to",
+     "now-weigh-each-one",
+     "make-star-a-lighter",
+     "and-which-one-is-heavier",
+     "say-how-the-weighing-worked"
+    ]
+   }
+  }
+ }
+}
