@@ -473,6 +473,39 @@ with its numbers and its bound is not moved.
 
 ---
 
+## Barycenter, frame and what pulls on what
+
+Three statements a binary needs before anything else can be read from it. A
+Tools toggle, **Show barycenter**, draws the mass-weighted mean position of
+either the whole system (the bodies the barycentric frame averages over,
+`barycenterBodies()` in `js/engine/step.js`) or the selected body and its
+primary (the primary as the orbit geometry overlay chooses it). It is a cross,
+not a body: nothing is there. The frame the picture is drawn in is named in the
+readout and on the canvas, with a line saying the trails are drawn in it while
+a frame other than the world is active. One line says which bodies pull on
+others and which only feel gravity, read from the same function the engine
+calls to decide what is a source, so the two cannot differ. The marker is not
+stored and changes no default, force, scenario or frame.
+
+### Tolerances, fixed before the code
+
+Committed in `tests/fixtures/barycentre-tolerances.json` before the marker,
+the frame line, the statement or their tests existed. Both scenes set the
+world's gravitational constant to 1 (the scenario's own value; the app's
+default world is 2 and the integrator's bare default is 1). The separation is
+the distance between the two stars at the moment judged. A criterion that
+fails is reported with its numbers and its bound is not moved.
+
+| | What | Bound |
+|---|---|---|
+| (a) | the marker's point against an independent mass-weighted mean (plain sums in the test, not `barycenterOf`), at five times in a run (start, then every quarter of the binary period), for the pair (selected star and its primary) and for the system, on `binary-pair` and `circumbinary-planet-lab` | 1e-9 of the separation |
+| (b) | `binary-pair` as built (seed 1), stepped as the page steps it at 60 frames a second (sim speed 4, max step 0.15), for ten periods of the pair: the largest distance of the stars' centre of mass from its starting place | 1e-6 of the initial separation. Pairwise forces from one snapshot conserve momentum to rounding, so a larger drift is an engine or build defect, recorded for the gravity-rule and black-hole work and never absorbed by widening (STOP). Other rates reported, not judged |
+| (c) | positions re-expressed in the barycentric frame (each position minus the frame's origin, over the bodies that frame averages): the length of sum m r' divided by the total mass, at the five times of (a), both scenes | 1e-9 of the separation |
+| identity | the engine's source rule moved into one pure function: every coordinate of every body after 500 steps of each scene, at 60 frames a second, against the same run before the move; `e2e/golden/world-construction.json` | bit for bit; unchanged |
+| statement | the bodies the statement says pull against the kinds in `cachedMajorSources`, under all four combinations of mutual gravity and star-only gravity, with every kind present | exact |
+
+---
+
 ## What is not done
 
 - **The inspector's derived quantities for small bodies** — density, surface

@@ -1,0 +1,41 @@
+{
+  "schema": "gravitas.barycentre-tolerances/1",
+  "about": "Fixed before any code that meets them (SANDBOX_INSTRUMENTS.md, \"Barycenter, frame and what pulls on what\"). A criterion that fails is reported with its numbers; no bound here is moved, widened or made conditional after a result.",
+  "G": "both scenes set gravitational_constant 1 (the scenario's own value); the app's default world uses 2 and the integrator's bare default is 1",
+  "separation": "the distance between the two stars at the moment judged",
+  "a": {
+    "what": "the marker's point against an independent mass-weighted mean (plain sums in the test, not barycenterOf), for the pair (a selected star and its primary) and for the system (barycenterBodies())",
+    "scenes": ["binary-pair", "circumbinary-planet-lab"],
+    "times": "start, then every quarter of the binary period, five in all",
+    "seed": 1,
+    "rate": "60",
+    "relativeToSeparation": 1e-9
+  },
+  "b": {
+    "what": "largest distance of the two stars' centre of mass from its starting place over ten periods of the pair",
+    "scenario": "binary-pair",
+    "seed": 1,
+    "rate": "60",
+    "orbits": 10,
+    "relativeToInitialSeparation": 1e-6,
+    "reportedOnly": ["120", "30", "clamp"],
+    "stop": "pairwise forces from one snapshot conserve momentum to rounding; a larger drift is an engine or build defect, recorded for the gravity-rule and black-hole work, never absorbed by widening"
+  },
+  "c": {
+    "what": "|sum m r'| / sum m over the bodies the barycentric frame averages, r' = r minus the frame's origin",
+    "scenes": ["binary-pair", "circumbinary-planet-lab"],
+    "times": "the five times of (a)",
+    "relativeToSeparation": 1e-9
+  },
+  "identity": {
+    "what": "every coordinate of every body after 500 steps of each scene at 60 frames a second, before and after the source rule moved into one pure function; and the world-construction golden",
+    "scenes": ["binary-pair", "circumbinary-planet-lab"],
+    "steps": 500,
+    "seed": 1,
+    "bound": "bit for bit (Object.is on every coordinate); e2e/golden/world-construction.json unchanged"
+  },
+  "statement": {
+    "what": "the classes the statement says pull against the kinds present in cachedMajorSources, every kind present, under each of the four combinations of mutual_gravity and star_only_gravity",
+    "bound": "exact"
+  }
+}
