@@ -1203,7 +1203,6 @@ export const ES = {
   'inv.browser.activities.link': 'Ver las actividades de clase',
   'canvas.sizeDisclosure':
     'Cuerpos ampliados, sin escala común (radios: inspector)',
-  'canvas.sizeDisclosure': 'Tamaños de los cuerpos ampliados para visibilidad',
   'canvas.reducedPopulation':
     'Población reducida en este dispositivo: {n} de {total} cuerpos',
   'canvas.crowdTrails':

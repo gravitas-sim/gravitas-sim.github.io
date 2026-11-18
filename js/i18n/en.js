@@ -1221,7 +1221,6 @@ export const EN = {
   'inv.browser.activities.link': 'See the classroom activities',
   'canvas.sizeDisclosure':
     'Bodies enlarged, not to one scale (radii: inspector)',
-  'canvas.sizeDisclosure': 'Body sizes enlarged for visibility',
   'canvas.reducedPopulation':
     'Reduced population on this device: {n} of {total} bodies',
   'canvas.crowdTrails':
