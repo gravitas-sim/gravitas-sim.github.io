@@ -36,6 +36,7 @@ export const SETTING_KEYS = Object.freeze([
   'show_potential_well',
   'show_scale_bar',
   'show_elapsed_time',
+  'body_labels',
   'show_conservation_diagnostics',
   'integrator',
   'binary_lab_m1',

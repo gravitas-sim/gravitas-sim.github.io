@@ -7,7 +7,7 @@
       "asteroids": "1:b46d0aff",
       "comets": "10:6fbe85b0"
     },
-    "settings": "1e7c9998",
+    "settings": "08d94e94",
     "zoom": 0.25,
     "pan": [0, 0],
     "tail": 0.6514434448909014
@@ -20,7 +20,7 @@
       "asteroids": "16:cc7559d5",
       "comets": "10:4b2bc76a"
     },
-    "settings": "2356ac76",
+    "settings": "6bd87362",
     "zoom": 0.25,
     "pan": [0, 0],
     "tail": 0.05057696718722582
@@ -33,7 +33,7 @@
       "asteroids": "16:1db1da92",
       "comets": "10:74e2fc4a"
     },
-    "settings": "998d353f",
+    "settings": "6a37978b",
     "zoom": 0.25,
     "pan": [0, 0],
     "tail": 0.20862703607417643
@@ -46,7 +46,7 @@
       "asteroids": "16:fd1f8c26",
       "comets": "10:9e844e6f"
     },
-    "settings": "718f0614",
+    "settings": "28fc0160",
     "zoom": 0.25,
     "pan": [0, 0],
     "tail": 0.7777841831557453
@@ -59,7 +59,7 @@
       "asteroids": "16:e213048b",
       "comets": "1:d26f8f17"
     },
-    "settings": "94f605da",
+    "settings": "49cfa80e",
     "zoom": 0.25,
     "pan": [0, 0],
     "tail": 0.8617564626038074
@@ -72,7 +72,7 @@
       "asteroids": "16:0a3fec91",
       "comets": "12:0c7b5e9c"
     },
-    "settings": "c41c04e2",
+    "settings": "8cf1a66e",
     "zoom": 0.25,
     "pan": [0, 0],
     "tail": 0.284217024454847
@@ -85,7 +85,7 @@
       "asteroids": "16:e2f97e1f",
       "comets": "12:c2a60ce0"
     },
-    "settings": "05ab9083",
+    "settings": "3dbbaf6f",
     "zoom": 0.25,
     "pan": [0, 0],
     "tail": 0.541255071060732
@@ -98,7 +98,7 @@
       "asteroids": "16:77795e81",
       "comets": "12:83686eff"
     },
-    "settings": "b999209b",
+    "settings": "c51f230f",
     "zoom": 0.25,
     "pan": [0, 0],
     "tail": 0.5889332592487335
@@ -110,7 +110,7 @@
       "gas_giants": "4:d2724d2a",
       "comets": "10:eede96e6"
     },
-    "settings": "f89066ed",
+    "settings": "65545ee1",
     "zoom": 0.25,
     "pan": [0, 0],
     "tail": 0.14134371187537909
@@ -121,7 +121,7 @@
       "planets": "4:816d7208",
       "gas_giants": "4:745dd186"
     },
-    "settings": "82fd1f4c",
+    "settings": "e0e81718",
     "zoom": 0.25,
     "pan": [0, 0],
     "tail": 0.29486987087875605
@@ -134,7 +134,7 @@
       "asteroids": "16:b95a562c",
       "comets": "10:c299dfd5"
     },
-    "settings": "a2e60e99",
+    "settings": "c12b2c75",
     "zoom": 0.25,
     "pan": [0, 0],
     "tail": 0.7777841831557453
@@ -147,7 +147,7 @@
       "asteroids": "5:ade31df2",
       "comets": "5:d86bbbe9"
     },
-    "settings": "508315e0",
+    "settings": "11d12064",
     "zoom": 0.25,
     "pan": [0, 0],
     "tail": 0.5090645046439022
@@ -160,7 +160,7 @@
       "asteroids": "16:9ed62058",
       "comets": "10:b5bac4d8"
     },
-    "settings": "3f078160",
+    "settings": "907fa2d4",
     "zoom": 0.25,
     "pan": [0, 0],
     "tail": 0.9255503481253982
@@ -173,7 +173,7 @@
       "asteroids": "16:539b6995",
       "comets": "10:0105e4b0"
     },
-    "settings": "b03f8cae",
+    "settings": "f7c00962",
     "zoom": 0.25,
     "pan": [0, 0],
     "tail": 0.284217024454847
@@ -186,7 +186,7 @@
       "asteroids": "16:fd1f8c26",
       "comets": "10:9e844e6f"
     },
-    "settings": "413e68fb",
+    "settings": "d7664617",
     "zoom": 0.25,
     "pan": [0, 0],
     "tail": 0.7777841831557453
@@ -200,7 +200,7 @@
       "asteroids": "16:ee328867",
       "comets": "10:71d7021b"
     },
-    "settings": "13084b1b",
+    "settings": "9831f2b7",
     "zoom": 0.25,
     "pan": [0, 0],
     "tail": 0.014685939531773329
@@ -216,7 +216,7 @@
       "neutron_stars": "2:420acdf4",
       "white_dwarfs": "2:1c692e2b"
     },
-    "settings": "edbd6f82",
+    "settings": "d084cf3e",
     "zoom": 0.25,
     "pan": [0, 0],
     "tail": 0.15551223256625235
@@ -229,7 +229,7 @@
       "asteroids": "16:d49a2f58",
       "comets": "10:cc86831e"
     },
-    "settings": "612435e2",
+    "settings": "f4515d5e",
     "zoom": 0.25,
     "pan": [0, 0],
     "tail": 0.3762091100215912
@@ -242,7 +242,7 @@
       "asteroids": "8:7c7f1d95",
       "comets": "10:cf17de74"
     },
-    "settings": "36aafcda",
+    "settings": "9d2674b6",
     "zoom": 0.25,
     "pan": [0, 0],
     "tail": 0.5985383673105389
@@ -255,7 +255,7 @@
       "asteroids": "16:f357326f",
       "comets": "3:856e609a"
     },
-    "settings": "c2f68025",
+    "settings": "f4eab101",
     "zoom": 0.25,
     "pan": [0, 0],
     "tail": 0.9309722620528191
@@ -270,7 +270,7 @@
       "comets": "10:3e4ee330",
       "neutron_stars": "1:f73ddd4e"
     },
-    "settings": "50ddd82c",
+    "settings": "47720d88",
     "zoom": 0.25,
     "pan": [0, 0],
     "tail": 0.5945041822269559
@@ -283,7 +283,7 @@
       "asteroids": "16:62d493bc",
       "comets": "12:9550f35d"
     },
-    "settings": "945930da",
+    "settings": "093d323e",
     "zoom": 0.25,
     "pan": [0, 0],
     "tail": 0.29364070971496403
@@ -296,7 +296,7 @@
       "asteroids": "16:fd1f8c26",
       "comets": "10:9e844e6f"
     },
-    "settings": "6dec1dc4",
+    "settings": "cdab4260",
     "zoom": 0.25,
     "pan": [0, 0],
     "tail": 0.7777841831557453
@@ -309,7 +309,7 @@
       "asteroids": "16:fd1f8c26",
       "comets": "10:9e844e6f"
     },
-    "settings": "e35ff5e3",
+    "settings": "b30f26e7",
     "zoom": 0.25,
     "pan": [0, 0],
     "tail": 0.7777841831557453
@@ -322,7 +322,7 @@
       "asteroids": "16:fd1f8c26",
       "comets": "10:9e844e6f"
     },
-    "settings": "dd3be9f0",
+    "settings": "1256e2cc",
     "zoom": 0.25,
     "pan": [0, 0],
     "tail": 0.7777841831557453
@@ -335,7 +335,7 @@
       "asteroids": "16:fd1f8c26",
       "comets": "10:9e844e6f"
     },
-    "settings": "1a202359",
+    "settings": "68564f1d",
     "zoom": 0.25,
     "pan": [0, 0],
     "tail": 0.7777841831557453
@@ -348,7 +348,7 @@
       "asteroids": "16:a3454a23",
       "comets": "10:02d332c1"
     },
-    "settings": "3d2fceb6",
+    "settings": "bddb0b02",
     "zoom": 0.25,
     "pan": [0, 0],
     "tail": 0.9777017233427614
@@ -361,7 +361,7 @@
       "asteroids": "16:f6a03170",
       "comets": "10:d312f92b"
     },
-    "settings": "abb572fc",
+    "settings": "ebf05358",
     "zoom": 0.25,
     "pan": [0, 0],
     "tail": 0.07020031777210534
@@ -374,7 +374,7 @@
       "asteroids": "16:7931ef4d",
       "comets": "10:7ba1708f"
     },
-    "settings": "88fc84b1",
+    "settings": "d462a9bd",
     "zoom": 0.25,
     "pan": [0, 0],
     "tail": 0.29364070971496403
@@ -387,7 +387,7 @@
       "asteroids": "16:fd1f8c26",
       "comets": "10:9e844e6f"
     },
-    "settings": "718f0614",
+    "settings": "28fc0160",
     "zoom": 0.25,
     "pan": [0, 0],
     "tail": 0.7777841831557453
@@ -400,7 +400,7 @@
       "asteroids": "16:33301cbe",
       "comets": "10:8c17d786"
     },
-    "settings": "1c262b45",
+    "settings": "58d88661",
     "zoom": 0.25,
     "pan": [0, 0],
     "tail": 0.8608166712801903
@@ -412,7 +412,7 @@
       "gas_giants": "4:d2724d2a",
       "comets": "10:eede96e6"
     },
-    "settings": "5e58c1c1",
+    "settings": "0023d11d",
     "zoom": 0.25,
     "pan": [0, 0],
     "tail": 0.14134371187537909
@@ -425,7 +425,7 @@
       "asteroids": "3:be9803e3",
       "comets": "10:26de77f2"
     },
-    "settings": "6adc60c2",
+    "settings": "181c19ce",
     "zoom": 0.25,
     "pan": [0, 0],
     "tail": 0.9540082972962409
@@ -437,7 +437,7 @@
       "gas_giants": "4:d1326812",
       "asteroids": "16:72306470"
     },
-    "settings": "d41ead1b",
+    "settings": "9fd9848f",
     "zoom": 0.25,
     "pan": [0, 0],
     "tail": 0.14913744502700865
@@ -450,7 +450,7 @@
       "asteroids": "16:35e919a8",
       "comets": "3:c4981f09"
     },
-    "settings": "3878ea4c",
+    "settings": "44b5df80",
     "zoom": 0.25,
     "pan": [0, 0],
     "tail": 0.7836355029139668
@@ -463,7 +463,7 @@
       "asteroids": "16:fd1f8c26",
       "comets": "10:9e844e6f"
     },
-    "settings": "718f0614",
+    "settings": "28fc0160",
     "zoom": 0.25,
     "pan": [0, 0],
     "tail": 0.7777841831557453
@@ -477,7 +477,7 @@
       "asteroids": "16:ed162b9a",
       "comets": "10:91b942fa"
     },
-    "settings": "2655608b",
+    "settings": "e04bf5f7",
     "zoom": 0.25,
     "pan": [0, 0],
     "tail": 0.9984868622850627
@@ -490,7 +490,7 @@
       "asteroids": "16:fd1f8c26",
       "comets": "10:9e844e6f"
     },
-    "settings": "718f0614",
+    "settings": "28fc0160",
     "zoom": 0.25,
     "pan": [0, 0],
     "tail": 0.7777841831557453
@@ -504,7 +504,7 @@
       "comets": "10:1645c64c",
       "neutron_stars": "3:69532f92"
     },
-    "settings": "0b1ba095",
+    "settings": "224e7a01",
     "zoom": 0.25,
     "pan": [0, 0],
     "tail": 0.042436880990862846
@@ -517,7 +517,7 @@
       "asteroids": "16:fd1f8c26",
       "comets": "10:9e844e6f"
     },
-    "settings": "718f0614",
+    "settings": "28fc0160",
     "zoom": 0.25,
     "pan": [0, 0],
     "tail": 0.7777841831557453
@@ -531,7 +531,7 @@
       "comets": "10:cfc9c818",
       "white_dwarfs": "3:86e8d1a0"
     },
-    "settings": "99e3f06b",
+    "settings": "c34a02b7",
     "zoom": 0.25,
     "pan": [0, 0],
     "tail": 0.7125751252751797
@@ -544,7 +544,7 @@
       "asteroids": "16:fd1f8c26",
       "comets": "10:9e844e6f"
     },
-    "settings": "718f0614",
+    "settings": "28fc0160",
     "zoom": 0.25,
     "pan": [0, 0],
     "tail": 0.7777841831557453
@@ -557,7 +557,7 @@
       "asteroids": "16:761bf1cd",
       "comets": "10:a0623815"
     },
-    "settings": "7390af21",
+    "settings": "898f277d",
     "zoom": 0.25,
     "pan": [0, 0],
     "tail": 0.9658961724489927
@@ -570,7 +570,7 @@
       "asteroids": "16:74170649",
       "comets": "10:37645785"
     },
-    "settings": "886056e4",
+    "settings": "f16da7d0",
     "zoom": 0.25,
     "pan": [0, 0],
     "tail": 0.7777841831557453
@@ -583,7 +583,7 @@
       "asteroids": "16:74170649",
       "comets": "10:37645785"
     },
-    "settings": "babfcc49",
+    "settings": "addeb99d",
     "zoom": 0.25,
     "pan": [0, 0],
     "tail": 0.7777841831557453
@@ -596,7 +596,7 @@
       "asteroids": "16:7b45ecf7",
       "comets": "10:1db3031b"
     },
-    "settings": "45ecdba6",
+    "settings": "efa71ed2",
     "zoom": 0.25,
     "pan": [0, 0],
     "tail": 0.6162448725663126
@@ -609,7 +609,7 @@
       "asteroids": "16:0c203441",
       "comets": "10:f7ce077c"
     },
-    "settings": "da8406d7",
+    "settings": "75903d73",
     "zoom": 0.25,
     "pan": [0, 0],
     "tail": 0.6441009535919875
@@ -622,7 +622,7 @@
       "asteroids": "16:fd1f8c26",
       "comets": "10:9e844e6f"
     },
-    "settings": "718f0614",
+    "settings": "28fc0160",
     "zoom": 0.25,
     "pan": [0, 0],
     "tail": 0.7777841831557453
@@ -635,7 +635,7 @@
       "asteroids": "16:d3e61f6d",
       "comets": "8:66a15f88"
     },
-    "settings": "06eeb99c",
+    "settings": "b36b83b8",
     "zoom": 0.25,
     "pan": [0, 0],
     "tail": 0.2956430350895971
@@ -648,7 +648,7 @@
       "asteroids": "16:5b26ad96",
       "comets": "8:40b01076"
     },
-    "settings": "92d0d068",
+    "settings": "b4d83664",
     "zoom": 0.25,
     "pan": [0, 0],
     "tail": 0.38715033838525414
@@ -661,7 +661,7 @@
       "asteroids": "16:0a3fec91",
       "comets": "12:0c7b5e9c"
     },
-    "settings": "c41c04e2",
+    "settings": "8cf1a66e",
     "zoom": 0.25,
     "pan": [0, 0],
     "tail": 0.284217024454847
