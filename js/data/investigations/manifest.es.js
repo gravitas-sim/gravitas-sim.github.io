@@ -940,7 +940,7 @@ export const MANIFEST = [
     level: 'Majors and upper-level astronomy',
     thumbnail: 'images/investigations/ios-fire.webp',
     depths: 3,
-    stepCount: 6,
+    stepCount: 7,
     gradedCount: 4,
     objectiveCount: 4,
   },

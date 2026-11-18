@@ -2612,11 +2612,11 @@ test.describe('the central experiment of each investigation', () => {
     {
       id: 'ios-fire',
       title:
-        'ios-fire: Io’s tidal heating is 9.33 x 10^13 W at its eccentricity and 3.73 x 10^14 W when it is doubled @accepts:ce.ios-fire',
+        'ios-fire: with k2 and Q held, Io’s tidal heating is 1.99 x 10^13 W at its eccentricity and 7.96 x 10^13 W when it is doubled @accepts:ce.ios-fire',
       row: /^Heating$/i,
       values: [
-        [0.0041, 9.33, 0.02],
-        [0.0082, 3.73, 0.02],
+        [0.0041, 1.99, 0.02],
+        [0.0082, 7.96, 0.04],
       ],
     },
     // ---- The small-body investigations (Roadmap III, Prompt 198 part 3) ----------

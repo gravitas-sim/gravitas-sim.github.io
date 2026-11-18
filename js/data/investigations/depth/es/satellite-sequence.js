@@ -184,8 +184,6 @@ export const WHY_RINGS_DEEPER = {
 export const TIDES_DEEPER = {
   steps: [
     {
-      decides:
-        'qué k2 y Q usa el par: los de la Luna, no los de la Tierra que muestra el instrumento',
       title: 'Cuánto tarda en bloquearse la Luna',
       body: 'El mismo par que mueve a la Luna frena el giro propio de la Luna: la marea de la Tierra sobre la Luna. El tiempo para quitar un giro ω es t = Iω/N, con I = α m R&sup2; el momento de inercia de la Luna (α = 0,393) y N = (3/2)(k2/Q) G M&sup2; R&sup5; / a&sup6; el par. Para la Luna (k2 = 0,024, Q = 100, radio 1 737,4 km) a 384 400 km, desde un giro de una vuelta en diez horas, el núcleo de cálculo da el tiempo de abajo.',
       prompt:
@@ -203,8 +201,6 @@ export const TIDES_DEEPER = {
       },
     },
     {
-      decides:
-        'si dudar del ritmo actual del modelo o de su suposición de que Q nunca cambió',
       rubric:
         'Crédito completo por decir que la Q del modelo es un solo número y que la disipación de marea real de la Tierra depende de los océanos (su profundidad, la forma de las cuencas, que han cambiado con la deriva continental) y por tanto del tiempo; que corrido hacia atrás con la Q actual la Luna está en contacto hace 1,58 miles de millones de años, cosa que la edad de la Luna contradice; y que eso significa que el ritmo de alejamiento en el pasado fue menor, no que el ritmo actual del modelo sea erróneo. Crédito parcial por dos.',
       title: 'Una Q que cambia',

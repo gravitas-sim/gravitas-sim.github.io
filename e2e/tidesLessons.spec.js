@@ -15,9 +15,15 @@
 import AxeBuilder from '@axe-core/playwright';
 import { test, expect } from './fixtures.js';
 import {
+  commitPredictionHeld,
   lessonPlan,
   openInvestigation,
+  readout,
+  recordFields,
+  row,
+  setControl,
   settled,
+  step,
   walkToSid,
 } from './centralExperiment.js';
 
@@ -64,7 +70,7 @@ const CASES = [
   },
   {
     id: 'tides-that-move-the-moon',
-    sid: 'the-moons-recession',
+    sid: 'match-the-recession',
     row: /Moon’s recession now/i,
     rowEs: /Alejamiento de la Luna ahora/i,
     title: /^How the Moon/i,
@@ -72,7 +78,7 @@ const CASES = [
   },
   {
     id: 'ios-fire',
-    sid: 'heating-at-the-maximum',
+    sid: 'heating-at-two-eccentricities',
     row: /Heating/i,
     rowEs: /Calentamiento/i,
     title: /^How much heat/i,
@@ -212,3 +218,116 @@ for (const c of SCENARIOS) {
       .toBe(c.bodies);
   });
 }
+
+// The two searches of Prompt 331: a pair of k2 and Q, and a Q, are found on the
+// instrument and written down; the check refuses what lies on the wrong side of
+// the observed value in the lesson's own words and accepts any answer inside it.
+const verdictOf = page => page.locator('#investigationBody .inv-check');
+
+test('ios-fire find-the-interiors: any two pairs inside the observed range pass, one outside is refused in words', async ({
+  page,
+  app,
+}) => {
+  test.slow();
+  await openInvestigation(page, app, 'ios-fire');
+  const plan = await lessonPlan(page, 'ios-fire');
+  const predict = await walkToSid(page, plan, 'double-predict');
+  await commitPredictionHeld(page, predict);
+  await walkToSid(page, plan, 'find-the-interiors');
+
+  // The instrument opens with k2 = 0.8 and Q = 250: under the observed range, not at it.
+  const opening = row(await readout(page), /^Heating$/i);
+  expect(String(opening)).toMatch(/10¹³/);
+
+  // Too much heat: k2 = 1.5 and Q = 50 give 1.87 x 10^14 W.
+  await setControl(page, 'k2', 1.5);
+  await setControl(page, 'Q', 50);
+  expect(String(row(await readout(page), /^Heating$/i))).toMatch(/10¹⁴/);
+  const L = 'ios-fire';
+  const S = 'find-the-interiors';
+  await recordFields(page, L, S, { k2a: 1.5, qa: 50, k2b: 0.5, qb: 30 });
+  await expect(verdictOf(page)).toHaveClass(/is-error/);
+  await expect(verdictOf(page)).toContainText(/^Too much/);
+
+  // Two pairs the instrument puts inside the range, with k2 at least 0.2 apart.
+  await setControl(page, 'k2', 0.5);
+  await setControl(page, 'Q', 30);
+  const pairOne = String(row(await readout(page), /^Heating$/i));
+  expect(pairOne).toMatch(/10¹⁴/);
+  await recordFields(page, L, S, { k2a: 0.5, qa: 30, k2b: 1.0, qb: 60 });
+  await expect(verdictOf(page)).toHaveClass(/is-ok/);
+  await expect(verdictOf(page)).toContainText(/cannot tell these interiors/);
+
+  // Two pairs with the same k2 are one interior.
+  await recordFields(page, L, S, { k2b: 0.55, qb: 33 });
+  await expect(verdictOf(page)).toHaveClass(/is-error/);
+  await expect(verdictOf(page)).toContainText(/nearly the same interior/);
+});
+
+test('ios-fire: the two readings are taken from the instrument by a button, and the reveal sets them beside the prediction', async ({
+  page,
+  app,
+}) => {
+  test.slow();
+  await openInvestigation(page, app, 'ios-fire');
+  const plan = await lessonPlan(page, 'ios-fire');
+  const predict = await walkToSid(page, plan, 'double-predict');
+  await commitPredictionHeld(page, predict);
+  await walkToSid(page, plan, 'heating-at-two-eccentricities');
+
+  // The instrument opens at the smallest eccentricity, away from either reading.
+  const first = await readout(page);
+  expect(String(row(first, /^Heating$/i))).toMatch(/10¹²/);
+  const take = field =>
+    page.locator(`#investigationBody [data-take="${field}"]`);
+  await setControl(page, 'e', 0.0041);
+  await take('p1').focus();
+  await page.keyboard.press('Enter');
+  await setControl(page, 'e', 0.0082);
+  await take('p2').focus();
+  await page.keyboard.press('Enter');
+  await expect(
+    page.locator(
+      '#investigationBody [data-field="ios-fire:heating-at-two-eccentricities:p1"]'
+    )
+  ).toHaveValue('1.99');
+  await expect(
+    page.locator(
+      '#investigationBody [data-field="ios-fire:heating-at-two-eccentricities:p2"]'
+    )
+  ).toHaveValue('7.96');
+  await expect(verdictOf(page)).toHaveClass(/is-ok/);
+
+  await walkToSid(page, plan, 'what-doubling-did');
+  const verdict = page.locator('#investigationBody .inv-verdict');
+  await expect(verdict).toBeVisible();
+  await expect(verdict).toContainText('1.99');
+  await expect(verdict).toContainText('7.96');
+  await expect(verdict).toContainText(/Taken from/);
+  expect(step(plan, 'what-doubling-did').type).toBe('read');
+});
+
+test('tides-that-move-the-moon match-the-recession: the Q is found on the slider against the measured value', async ({
+  page,
+  app,
+}) => {
+  test.slow();
+  await openInvestigation(page, app, 'tides-that-move-the-moon');
+  const plan = await lessonPlan(page, 'tides-that-move-the-moon');
+  const L = 'tides-that-move-the-moon';
+  const S = 'match-the-recession';
+  await walkToSid(page, plan, S);
+  // Opens at Q = 40, which recedes more slowly than laser ranging measures.
+  expect(String(row(await readout(page), /Moon’s recession now/i))).toMatch(
+    /^1\.1/
+  );
+  await recordFields(page, L, S, { q: 40, day: 0.7 });
+  await expect(verdictOf(page)).toHaveClass(/is-error/);
+  await expect(verdictOf(page)).toContainText(/slower than laser/);
+  await setControl(page, 'Q', 12);
+  expect(String(row(await readout(page), /Moon’s recession now/i))).toMatch(
+    /^3\.7/
+  );
+  await recordFields(page, L, S, { q: 12, day: 2.05 });
+  await expect(verdictOf(page)).toHaveClass(/is-ok/);
+});

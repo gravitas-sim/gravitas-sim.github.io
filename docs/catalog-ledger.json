@@ -2522,8 +2522,8 @@
         "js/data/investigations/es/satellite-sequence.js"
       ],
       "instrument_files": ["js/tidesWidgets.js"],
-      "depths": { "core": 6, "quantitative": 1, "advanced": 1 },
-      "spanish_steps": { "core": 6, "deeper": 2 },
+      "depths": { "core": 7, "quantitative": 2, "advanced": 2 },
+      "spanish_steps": { "core": 7, "deeper": 4 },
       "languages": ["en", "es"],
       "sequences": [
         { "id": "planets-and-exoplanets", "position": 13 },

@@ -1,12 +1,11 @@
 // =============================================================================
 // An instrument that opens apart from its answer, and the way back to it
 // -----------------------------------------------------------------------------
-// No shipped lesson declares `tool.start` yet, so the lesson module of Io's Fire
-// is served with one added to the heating step (the route below rewrites only
-// that step's tool). Checked: the sliders open at the start and not at the
-// accepted values, a student's own control values are kept over it when the step
-// is left and reopened, and the button returns the controls to the start by
-// keyboard alone. The step without a start has no button.
+// The heating step of Io's Fire declares where its instrument opens (`tool.start`),
+// apart from the values its check accepts. Checked: the sliders open at the start
+// and not at the accepted values, a student's own control values are kept over it
+// when the step is left and reopened, and the button returns the controls to the
+// start by keyboard alone. A step without a start has no button.
 // =============================================================================
 
 import { test, expect } from './fixtures.js';
@@ -16,34 +15,25 @@ import {
   walkToSid,
 } from './centralExperiment.js';
 
-const START = { k2: 0.4, Q: 300, e: 0.002 };
+const START = { k2: 0.8, Q: 250, e: 0.001 };
 
 test('a step that declares a start opens there, keeps saved values over it and can return to it', async ({
   page,
   app,
 }) => {
   test.slow();
-  await page.route(
-    '**/js/data/investigations/satellite-sequence.js',
-    async route => {
-      const response = await route.fetch();
-      const text = await response.text();
-      const at = text.indexOf("sid: 'heating-at-the-maximum'");
-      const tool = 'tool: TH({ k2: 1.5, Q: 100, e: 0.0041 })';
-      const from = text.indexOf(tool, at);
-      expect(at).toBeGreaterThan(0);
-      expect(from).toBeGreaterThan(at);
-      const patched = `${text.slice(0, from)}tool: { ...TH({ k2: 1.5, Q: 100, e: 0.0041 }), start: ${JSON.stringify(START)} }${text.slice(from + tool.length)}`;
-      await route.fulfill({ response, body: patched });
-    }
-  );
   await openInvestigation(page, app, 'ios-fire');
   const plan = await lessonPlan(page, 'ios-fire');
 
   // A step with no start has no button.
   await expect(page.locator('[data-tool-start]')).toHaveCount(0);
+  await expect(
+    page.getByRole('button', {
+      name: 'Return the instrument to its starting position',
+    })
+  ).toHaveCount(0);
 
-  await walkToSid(page, plan, 'heating-at-the-maximum');
+  await walkToSid(page, plan, 'heating-at-two-eccentricities');
   const slider = id => page.locator(`#invTool-${id}`);
   const values = () =>
     Promise.all(
@@ -62,9 +52,7 @@ test('a step that declares a start opens there, keeps saved values over it and c
   const moved = Number(await slider('k2').inputValue());
   expect(moved).toBeGreaterThan(START.k2);
   await page.locator('#investigationNext').click();
-  await expect(page.locator('.inv-step-title')).not.toHaveText(
-    /The heat for k2/
-  );
+  await expect(page.locator('.inv-step-title')).not.toHaveText(/Heating at Io/);
   await page.locator('#investigationPrev').click();
   await expect(slider('k2')).toHaveValue(String(moved));
 
