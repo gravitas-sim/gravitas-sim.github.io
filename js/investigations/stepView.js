@@ -47,6 +47,7 @@ import {
   writeProgress,
 } from './progressSchema.js';
 import { KEY_INVESTIGATION_PREFIX } from '../names.js';
+import { isPeek, openSheet } from '../lessonFrame.js';
 const getAreaSweepWedges = command('getAreaSweepWedges');
 
 /** Escape for use inside a double-quoted attribute. */
@@ -990,6 +991,7 @@ export function save() {
     earlier: earlierFor(active.id),
   });
   if (Object.keys(typed).length) payload.drafts = typed;
+  if (isPeek()) payload.sheet = 'peek';
 
   // This tab's copy, always, and before the disk is asked. It is what makes
   // closing and reopening the lesson safe when the write below fails.
@@ -1157,6 +1159,12 @@ const legacyKey = id => `${STORAGE_PREFIX}${id}:v1`;
  * @returns {?object} The progress, or null when there is none
  */
 export function load(id, lesson = null) {
+  const saved = read(id, lesson);
+  if (lesson) openSheet(saved?.sheet);
+  return saved;
+}
+
+function read(id, lesson) {
   // This tab first. It is written on every save and storage is not, so when the
   // two differ the session copy is the newer one - and when storage refused
   // every write, it is the only one there is.

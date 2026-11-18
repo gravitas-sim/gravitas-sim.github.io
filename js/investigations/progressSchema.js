@@ -248,6 +248,7 @@ export function readProgress(data, lesson) {
   if (DEPTHS.includes(data.depth)) out.depth = data.depth;
   if (DEPTHS.includes(data.deepest)) out.deepest = data.deepest;
   if (data.spent > 0) out.spent = Math.floor(data.spent);
+  if (data.sheet === 'peek') out.sheet = 'peek';
 
   // Steps removed since the save: kept in `earlier`, and the reader is told how
   // many steps (not keys: a step's sub-keys and a foreign key are not answers).

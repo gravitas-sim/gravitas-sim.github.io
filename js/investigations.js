@@ -173,8 +173,8 @@ import {
   stageScale,
   stagePresence,
   stagedStars,
-  takeFit,
 } from './lesson/stageGate.js';
+import { closeSheet, frameScene, initSheet, takeFit } from './lessonFrame.js';
 import {
   bindRoles,
   boundRoles,
@@ -587,8 +587,9 @@ function applySetup(setup) {
 /**
  * Hold the simulation still in the ways a lesson depends on. Placement is off by default during a lesson (a
  * click on a planet and a drag that places a new body are one gesture a few pixels apart), and can be turned back on.
+ * @param {boolean} [fresh] - The step's own scene was just built: frame it
  */
-function bindStepRoles(force) {
+function bindStepRoles(force, fresh) {
   const step = currentStep();
   const running = !state.paused;
   const canvas = canvasNow();
@@ -619,12 +620,8 @@ function bindStepRoles(force) {
   // roles to somebody else's.
   if (step?.stage) {
     const { problems } = applyStage(step.stage, { force });
-    // The fit itself is deferred: applyStage records that one was asked for
-    // and the panel's own tick performs it, once the panel and the instrument
-    // have been laid out and the application has finished setting up its
-    // camera. Fitting here instead measured panels that were not there yet and
-    // was then overwritten by the boot.
-
+    // Its fit is asked for here and taken on the panel's tick, after layout and
+    // after the boot has finished with the camera.
     warn(problems, 'staged star');
     return;
   }
@@ -637,6 +634,7 @@ function bindStepRoles(force) {
     modelOwned: step.prescribes || [],
   });
   warn(problems, 'unbound role');
+  if (fresh) frameScene();
 }
 
 function applyLocks() {
@@ -1787,10 +1785,8 @@ function renderProbe() {
       paintTool({ quiet: true });
     }
   }
-  // A live instrument whose subject is the scene has to notice the reader
-  // choosing a different body (neither a control change nor a stage rebuild
-  // happens when somebody clicks a star), but repaint only when the selection
-  // actually changes, not every tick.
+  // A live instrument on the scene repaints when the reader picks another
+  // body, and only then.
   const chosen = state.selectedObject?.object?.id ?? null;
   if (chosen !== lastProbeSelection) {
     lastProbeSelection = chosen;
@@ -1970,13 +1966,14 @@ function goToStep(index, { rebuild = false, open = false } = {}) {
   // questions about one system. Comparing the setup in force makes going backwards correct (the transit
   // lesson swaps in a blended binary near the end).
   const setup = setupInForceAt(stepIndex);
-  if (rebuild || (setup && setup !== appliedSetup)) applySetup(setup);
+  const fresh = rebuild || (setup && setup !== appliedSetup);
+  if (fresh) applySetup(setup);
   else applyLocks();
 
   // Before the new step draws anything, so a reader never hears the last
   // step's signal over the new step's instructions.
   releaseLessonAudio();
-  bindStepRoles(rebuild);
+  bindStepRoles(rebuild, fresh);
 
   // The object card (600px) docks where an instrument goes and would hide a
   // step's picture; steps with nothing docked keep it.
@@ -2317,6 +2314,7 @@ export function closeInvestigation() {
   els.panel.hidden = true;
   els.panel.classList.remove('is-open');
   document.body.classList.remove('investigation-open');
+  closeSheet();
   slots.runs?.release();
   stopProbeLoop();
   releaseLocks();
@@ -2857,6 +2855,7 @@ export function initInvestigations({ signal } = {}) {
   });
 
   els.resetScenario?.addEventListener('click', resetStepScene);
+  initSheet({ announce, save }, signal);
 
   els.finishClose?.addEventListener('click', closeFinish);
   els.finishBack?.addEventListener('click', closeFinish);

@@ -77,8 +77,8 @@ export const DEVICE_PIXEL_RATIOS = [1, 2];
 
 /**
  * The accessible name of a control that lowers the lesson sheet or brings the
- * scene into view in one announced action. None exists at 3.0; the layout
- * prompt (334) names its own control and updates this pattern when it does.
+ * scene into view in one announced action: the sheet handle of a lesson on a
+ * phone ("Lower the sheet to see the scene").
  */
 export const SCENE_ACTION_NAME =
   /show (the )?scene|lower (the )?(sheet|lesson)|peek|collapse|minimi[sz]e (the )?(lesson|sheet)/i;

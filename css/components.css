@@ -4902,6 +4902,22 @@
   .inv-tool-controls .inv-ecc-row input[type='range'] {
     min-width: 5rem;
   }
+  /* On a phone the label has its own line and the range the next. */
+  @media (max-width: 767px) {
+    .inv-ecc-row {
+      flex-wrap: wrap;
+    }
+    .inv-ecc-row > span:first-child,
+    .inv-tool-controls .inv-ecc-row > span:first-child {
+      flex: 1 0 100%;
+      min-width: 0;
+    }
+    .inv-ecc-row input[type='range'],
+    .inv-tool-controls .inv-ecc-row input[type='range'] {
+      flex: 1 1 0;
+      min-width: 8rem;
+    }
+  }
   .inv-tool-controls[hidden],
   .inv-tool-actions[hidden],
   .inv-tool-readout[hidden] {
