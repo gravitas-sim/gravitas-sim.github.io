@@ -93,7 +93,8 @@ test('the readout and the summary name the frame and the sources', async ({
   await app.loadScenario('circumbinary-planet-lab');
   await app.waitForFrames(5);
   const readout = page.locator('#overlayStats');
-  await expect(readout).toContainText('Frame');
+  // The words load after the route is usable: a few seconds, at idle.
+  await expect(readout).toContainText('Frame', { timeout: 15_000 });
   await expect(readout).toContainText('World');
   // Mutual gravity is on here, so the planet pulls as well.
   await expect(readout).toContainText(
@@ -112,4 +113,47 @@ test('the readout and the summary name the frame and the sources', async ({
   // Star-only gravity: the stars pull, and nothing else is there.
   await expect(readout).toContainText('Pulling on others: stars (2).');
   await expect(readout).not.toContainText('Feeling gravity');
+});
+
+test('the control describes itself and says when there is no pair', async ({
+  page,
+  app,
+}) => {
+  await app.boot();
+  await app.loadScenario('binary-pair');
+  await app.railControl('barycenterMarkerSelect');
+  const select = page.locator('#barycenterMarkerSelect');
+  const note = page.locator('#barycenterMarkerNote');
+  await expect(select).toHaveAttribute(
+    'aria-describedby',
+    'barycenterMarkerNote'
+  );
+  await expect(note).toContainText('mass-weighted mean position');
+  await page.evaluate(async () =>
+    (await import('/js/inspectorGate.js')).hideObjectInspector()
+  );
+  await select.selectOption('pair');
+  await expect(note).toContainText('Select a body that has a primary');
+  await select.selectOption('off');
+  await expect(note).toContainText('mass-weighted mean position');
+});
+
+test('offline before its first use, the choice goes back to Off', async ({
+  page,
+  app,
+  errors,
+}) => {
+  await page.route('**/js/sceneStatement.js*', route => route.abort());
+  await app.boot();
+  await app.loadScenario('binary-pair', 'e2e', { run: false });
+  await app.railControl('barycenterMarkerSelect');
+  const select = page.locator('#barycenterMarkerSelect');
+  await select.selectOption('system');
+  await expect(select).toHaveValue('off');
+  // The refused fetches are the test's own; anything else still fails it.
+  const other = errors.consoleErrors.filter(
+    e => !/Failed to load resource: net::ERR_FAILED/.test(e)
+  );
+  expect(other).toEqual([]);
+  errors.consoleErrors.length = 0;
 });

@@ -32,17 +32,52 @@ registerCommands({ lightingNotes });
 let sizes = null;
 let scene = null;
 /**
- * The scene's words and marker (js/sceneStatement.js). Fetched by the
- * description's first rebuild, or by the Tools marker's first choice; the
- * canvas and the readout only read it once it is here.
+ * Fetch the scene's words and marker (js/sceneStatement.js), once; a failed
+ * fetch (offline before its first use) can be tried again.
+ * @returns {Promise<object>} The module
+ */
+export function loadSceneWords() {
+  if (typeof scene?.frameLine === 'function') return Promise.resolve(scene);
+  if (!scene)
+    scene = import('./sceneStatement.js').then(
+      m => (scene = m),
+      err => {
+        scene = null;
+        throw err;
+      }
+    );
+  return scene;
+}
+
+/**
+ * The scene's words and marker, once here. The canvas and the readout only
+ * read them; the fetch starts after the route is usable (deferSceneWords),
+ * at the first key or press, or at the Tools marker's first choice.
  * @param {boolean} [load] - Start the fetch if it has not started
  * @returns {?object} The module once it has arrived, null until then
  */
 export const sceneWords = (load = false) => {
-  if (!scene && load)
-    scene = import('./sceneStatement.js').then(m => (scene = m));
+  if (load) loadSceneWords().catch(() => {});
   return typeof scene?.frameLine === 'function' ? scene : null;
 };
+
+let deferred = false;
+// After the first rebuild: three seconds on, at idle, or at the first key or
+// press, whichever comes first, so a route is usable before they are fetched.
+function deferSceneWords() {
+  if (deferred) return;
+  deferred = true;
+  const go = () => sceneWords(true);
+  setTimeout(
+    () =>
+      window.requestIdleCallback
+        ? window.requestIdleCallback(go, { timeout: 2000 })
+        : go(),
+    3000
+  );
+  for (const type of ['pointerdown', 'keydown'])
+    window.addEventListener(type, go, { once: true, passive: true });
+}
 const sizeModule = () => {
   if (!sizes)
     sizes = import('./sizeFacts.js')
@@ -173,7 +208,8 @@ export function summaryText() {
 
   // Where the description stops and the interface takes over. A reader who
   // wants numbers should be told they exist and where.
-  const words = sceneWords(true);
+  deferSceneWords();
+  const words = sceneWords();
   if (words)
     parts.push(
       `${words.frameLine()}.`,

@@ -1326,6 +1326,8 @@ export const ES = {
   'rv.survey.measurementsLabel': 'Medidas',
   'astrometry.keepObserving': 'Sigue observando…',
   'lightCurve.relativeBrightness': 'Brillo relativo',
+  'rail.barycenterMarker.failed':
+    'Marcador del baricentro no disponible sin conexión.',
   'frame.barycenter': 'Baricentro',
   'chrome.canvas.label': 'Simulación gravitatoria',
   'summary.scenario': 'Escenario: {name}.',

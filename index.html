@@ -1790,6 +1790,7 @@ try {
               class="rail-select"
               title="The mass-weighted mean position of these bodies. Nothing is there."
               data-i18n-title="rail.barycenterMarker.hint"
+              aria-describedby="barycenterMarkerNote"
             >
               <option value="off" data-i18n="rail.barycenterMarker.off">
                 Off
@@ -1802,6 +1803,13 @@ try {
               </option>
             </select>
           </div>
+          <p
+            class="rail-field-note"
+            id="barycenterMarkerNote"
+            data-i18n="rail.barycenterMarker.hint"
+          >
+            The mass-weighted mean position of these bodies. Nothing is there.
+          </p>
           <p class="rail-subhead" data-i18n="rail.sub.share">Capture</p>
           <!--
             Two ways of taking the same picture, side by side: a still and a

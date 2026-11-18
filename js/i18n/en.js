@@ -1341,6 +1341,7 @@ export const EN = {
   'rv.survey.measurementsLabel': 'Measurements',
   'astrometry.keepObserving': 'Keep observing…',
   'lightCurve.relativeBrightness': 'Relative Brightness',
+  'rail.barycenterMarker.failed': 'Barycenter marker unavailable offline.',
   'frame.barycenter': 'Barycenter',
   'chrome.canvas.label': 'Gravitational simulation',
   'summary.scenario': 'Scenario: {name}.',

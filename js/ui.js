@@ -14,8 +14,8 @@ import {
 import { SPACE_OBJECT_NAMES } from './data/objectNames.js';
 import { SCENARIO_INFO } from './data/scenarioInfo.js';
 
-import { onLocaleChange } from './i18n/index.js';
-import { loadFailed } from './notify.js';
+import { onLocaleChange, t } from './i18n/index.js';
+import { loadFailed, announce } from './notify.js';
 import { scenarioTitle, scenarioSummary } from './i18n/scenario.js';
 
 import { generateStarfield } from './render.js';
@@ -46,7 +46,7 @@ import {
   setupOverlayMinimize,
   setupReferenceFrameControl,
 } from './inspectorGate.js';
-import { sceneWords } from './canvasSummary.js';
+import { loadSceneWords } from './canvasSummary.js';
 import {
   initPlacement,
   initObjectPicker,
@@ -532,15 +532,20 @@ initPlacement({ canvas });
 // The rail's reference-frame selector. The inspector card's own buttons are
 // wired when its code arrives (js/inspectorGate.js).
 setupReferenceFrameControl();
-// The Tools barycenter marker: its module loads on the first choice.
+// The Tools barycenter marker: its module loads on the first choice. Offline
+// before that, the choice goes back to Off and says why.
 document
   .getElementById('barycenterMarkerSelect')
-  ?.addEventListener('change', e =>
-    import('./sceneStatement.js').then(m => {
-      m.setMarkerMode(e.target.value);
-      sceneWords(true);
-    })
-  );
+  ?.addEventListener('change', e => {
+    const select = e.target;
+    loadSceneWords().then(
+      m => m.setMarkerMode(select.value),
+      () => {
+        select.value = 'off';
+        announce(t('rail.barycenterMarker.failed'));
+      }
+    );
+  });
 
 /**
  * Settings is one dialog with one way in and one way out.

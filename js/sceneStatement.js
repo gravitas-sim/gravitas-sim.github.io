@@ -33,6 +33,7 @@ import { dominantPrimary } from './orbital.js';
 import { barycenterOf, drawBarycenterCross } from './lesson/barycenter.js';
 import { frameState, WORLD, BARYCENTER, OBJECT } from './referenceFrame.js';
 import { t, getLocale, registerMessages } from './i18n/index.js';
+import { announce } from './notify.js';
 import { EN_SCENE } from './i18n/en.scene.js';
 import { ES_SCENE } from './i18n/es.scene.js';
 
@@ -86,6 +87,9 @@ const LIST_WORD = {
   debris: 'readout.count.debris',
 };
 
+let lastKey = '';
+let lastLine = '';
+
 /**
  * Which bodies pull on others and which only feel gravity, in one line.
  * @param {object} [settings] - mutual_gravity and star_only_gravity in force
@@ -106,8 +110,12 @@ export function sourcesStatement(settings = physicsSettings) {
   };
   const counts = {};
   for (const [k, v] of Object.entries(lists)) counts[k] = v.length;
-  const { pulling, feeling } = sceneSources(counts, settings);
   const locale = getLocale();
+  // The readout is rewritten many times a second; the line changes only
+  // with a count, a setting or the language.
+  const key = `${Object.values(counts)}|${settings?.mutual_gravity}|${settings?.star_only_gravity}|${locale}`;
+  if (key === lastKey) return lastLine;
+  const { pulling, feeling } = sceneSources(counts, settings);
   const words = group =>
     group
       .map(({ list, n }) =>
@@ -122,7 +130,9 @@ export function sourcesStatement(settings = physicsSettings) {
     parts.push(t('sources.pulling', { list: words(pulling) }));
   if (feeling.length)
     parts.push(t('sources.feeling', { list: words(feeling) }));
-  return parts.join(' ');
+  lastKey = key;
+  lastLine = parts.join(' ');
+  return lastLine;
 }
 
 // --- The barycenter marker ----------------------------------------------------
@@ -174,14 +184,35 @@ export function markerPoint(mode, selected = state.selectedObject?.object) {
   };
 }
 
+let noPrimary = false;
+/**
+ * Say under the control, and once aloud, when "Selected body and its primary"
+ * has nothing to mark; put the description back when it has.
+ * @param {boolean} none - Whether the pair mode has no pair
+ */
+function noteNoPrimary(none) {
+  if (none === noPrimary) return;
+  noPrimary = none;
+  const note = document.getElementById('barycenterMarkerNote');
+  const key = none
+    ? 'rail.barycenterMarker.noPrimary'
+    : 'rail.barycenterMarker.hint';
+  if (note) {
+    note.textContent = t(key);
+    note.setAttribute('data-i18n', key);
+  }
+  if (none) announce(t(key), false);
+}
+
 /**
  * Draw the Tools marker, if on, and keep the names a summary quotes.
  * @param {CanvasRenderingContext2D} ctx - The scene context, world transform off
  */
 export function drawMarker(ctx) {
-  if (marker.mode === 'off') return;
+  if (marker.mode === 'off') return noteNoPrimary(false);
   const { center, members } = markerPoint(marker.mode);
   marker.members = center ? members.map(b => b.name || '') : [];
+  noteNoPrimary(marker.mode === 'pair' && !center);
   if (center)
     drawBarycenterCross(
       ctx,

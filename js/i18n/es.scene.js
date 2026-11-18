@@ -8,12 +8,14 @@ export const ES_SCENE = {
   'rail.barycenterMarker.off': 'No',
   'rail.barycenterMarker.system': 'Todo el sistema',
   'rail.barycenterMarker.pair': 'El cuerpo seleccionado y su primario',
+  'rail.barycenterMarker.noPrimary':
+    'Selecciona un cuerpo que tenga un primario para marcarlo junto con él.',
   'frame.world': 'Mundo',
   'frame.object': 'Objeto seleccionado',
   'frame.line': 'Sistema de referencia: {name}',
   'frame.line.trails':
     'Sistema de referencia: {name}. Estelas dibujadas en este sistema',
-  'readout.frame': 'Sistema',
+  'readout.frame': 'Sistema de referencia',
   'sources.item': '{kind} ({n})',
   'sources.pulling': 'Atraen a los demás: {list}.',
   'sources.feeling': 'Sienten la gravedad sin atraer: {list}.',

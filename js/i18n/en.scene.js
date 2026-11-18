@@ -8,6 +8,8 @@ export const EN_SCENE = {
   'rail.barycenterMarker.off': 'Off',
   'rail.barycenterMarker.system': 'Whole system',
   'rail.barycenterMarker.pair': 'Selected body and its primary',
+  'rail.barycenterMarker.noPrimary':
+    'Select a body that has a primary to mark it and its primary.',
   'frame.world': 'World',
   'frame.object': 'Selected object',
   'frame.line': 'Frame: {name}',
