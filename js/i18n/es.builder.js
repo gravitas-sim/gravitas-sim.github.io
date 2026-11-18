@@ -133,7 +133,7 @@ export const ES_BUILDER = {
   'builder.studio.link': 'Abrir el Estudio de escenarios',
   'builder.close': 'Cerrar',
   'builder.built':
-    'Se construyeron {count} cuerpos. El sistema está en marcha; Recargar escenario lo vuelve a construir desde el principio.',
+    'Se construyeron {count} cuerpos. El sistema está en marcha; Reiniciar escenario lo vuelve a construir desde el principio.',
   'builder.invalid':
     '{count} campos necesitan atención antes de poder construir este sistema.',
   'builder.blocked':

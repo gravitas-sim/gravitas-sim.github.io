@@ -278,10 +278,10 @@ page's GRAVITAS link. Its content is unchanged until Prompt 73.
 
 **First run.** One overlay at a time, in order:
 1. Home (marked pending from the moment it is decided, so nothing rises under it).
-2. The scenario card, once Home closes. On a phone it sits above the transport bar, not over the readout.
+2. The scene, with the scenario's text closed as "About this scenario" in the readout panel: nothing rises over the bodies.
 3. The touch tips, at the first touch on a clear screen.
 
-Escape closes each one. A card closed for a scenario does not return when that scenario is rebuilt. The footer's year is generated from `tools/project-metadata.mjs`.
+Escape closes Home and the touch tips. "About this scenario" stays as the reader set it when the same scenario is rebuilt, and closes when another scenario loads. The footer's year is generated from `tools/project-metadata.mjs`.
 
 ## As built (Prompt 53)
 

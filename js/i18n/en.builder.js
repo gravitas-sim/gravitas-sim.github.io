@@ -137,7 +137,7 @@ export const EN_BUILDER = {
   'builder.studio.link': 'Open the Scenario Studio',
   'builder.close': 'Close',
   'builder.built':
-    'Built {count} bodies. The system is running; Refresh Scenario builds it again from the start.',
+    'Built {count} bodies. The system is running; Restart Scenario builds it again from the start.',
   'builder.invalid':
     '{count} fields need attention before this system can be built.',
   'builder.blocked': 'This system cannot be built as entered. See the checks.',

@@ -1,0 +1,2772 @@
+{
+  "format": "gravitas.workspace-walk-set/1",
+  "note": "Presses to reach and use each control, a drawer or rail section opened counting as one; Tab presses (and Enter) in the keyboard runs, counted from the top of the page for each control. A task result is not waited for: the stopwatch is armed, not read.",
+  "before": {
+    "commit": null,
+    "measuredAt": "2026-11-17",
+    "runs": [
+      {
+        "format": "gravitas.workspace-walk/1",
+        "commit": null,
+        "mode": "mouse",
+        "lang": "en",
+        "viewport": {
+          "width": 1366,
+          "height": 800
+        },
+        "measuredAt": "2026-11-17",
+        "note": "Actions count presses to reach and use each control, opening a drawer or a rail section as one. A task result is not waited for.",
+        "tasks": [
+          {
+            "id": "load",
+            "label": "Load a scenario",
+            "result": "done",
+            "actions": 2,
+            "first": {
+              "control": "loadScenarioBtn",
+              "visibleAtStart": true,
+              "y": 71
+            },
+            "steps": [
+              {
+                "control": "loadScenarioBtn",
+                "name": "Load Scenario",
+                "tier": "one step away",
+                "visibleAtStart": true,
+                "y": 71,
+                "opened": [],
+                "reached": true
+              },
+              {
+                "control": "sc-card:solar-system",
+                "name": "Solar System card",
+                "tier": "one step away",
+                "opened": [],
+                "visibleAtStart": false,
+                "y": null,
+                "reached": true
+              }
+            ],
+            "open": []
+          },
+          {
+            "id": "find",
+            "label": "Find a planet",
+            "result": "done",
+            "actions": 1,
+            "first": {
+              "control": "simulationCanvas",
+              "visibleAtStart": true,
+              "y": 393
+            },
+            "steps": [
+              {
+                "control": "simulationCanvas",
+                "name": "Mercury",
+                "tier": "at hand",
+                "opened": [],
+                "visibleAtStart": true,
+                "y": 393,
+                "reached": true
+              }
+            ],
+            "open": []
+          },
+          {
+            "id": "follow",
+            "label": "Follow the planet",
+            "result": "PARTIAL: follows a type, not the chosen body",
+            "actions": 3,
+            "first": {
+              "control": "settingsBtn",
+              "visibleAtStart": true,
+              "y": 141
+            },
+            "steps": [
+              {
+                "control": "settingsBtn",
+                "name": "Settings",
+                "tier": "advanced",
+                "visibleAtStart": true,
+                "y": 141,
+                "opened": [],
+                "reached": true
+              },
+              {
+                "control": "followSelect",
+                "name": "Follow mode",
+                "tier": "advanced",
+                "opened": [],
+                "visibleAtStart": false,
+                "y": null,
+                "reached": true,
+                "note": "a type (Planet), not the chosen body"
+              },
+              {
+                "control": "settingsApply",
+                "name": "Apply & Restart",
+                "tier": "advanced",
+                "visibleAtStart": true,
+                "y": 700,
+                "opened": [],
+                "reached": true
+              }
+            ],
+            "open": [
+              {
+                "what": "follow the chosen body (Settings follows a type)",
+                "owner": 467
+              }
+            ]
+          },
+          {
+            "id": "period",
+            "label": "Measure its period (stopwatch on periapsis)",
+            "result": "armed (the lap was not waited for)",
+            "actions": 4,
+            "first": {
+              "control": "simulationCanvas",
+              "visibleAtStart": true,
+              "y": 393
+            },
+            "steps": [
+              {
+                "control": "simulationCanvas",
+                "name": "Mercury",
+                "tier": "at hand",
+                "opened": [],
+                "visibleAtStart": true,
+                "y": 393,
+                "reached": true
+              },
+              {
+                "control": "toggleStopwatch",
+                "name": "Stopwatch",
+                "tier": "one step away",
+                "visibleAtStart": false,
+                "y": null,
+                "opened": ["railTools"],
+                "reached": true
+              },
+              {
+                "control": "stopwatchLatch",
+                "name": "⌖ Periapsis",
+                "tier": "one step away",
+                "visibleAtStart": true,
+                "y": 348,
+                "opened": [],
+                "reached": true
+              }
+            ],
+            "open": []
+          },
+          {
+            "id": "reset",
+            "label": "Reset: fit the view, then start the scenario again",
+            "result": "done",
+            "actions": 4,
+            "first": {
+              "control": "resetViewBtn",
+              "visibleAtStart": false,
+              "y": null
+            },
+            "steps": [
+              {
+                "control": "resetViewBtn",
+                "name": "Reset View",
+                "tier": "at hand",
+                "visibleAtStart": false,
+                "y": null,
+                "opened": ["railTools"],
+                "reached": true
+              },
+              {
+                "control": "refreshScenarioBtn",
+                "name": "Refresh Scenario",
+                "tier": "one step away",
+                "visibleAtStart": false,
+                "y": null,
+                "opened": ["railScenario"],
+                "reached": true
+              }
+            ],
+            "open": []
+          },
+          {
+            "id": "speed",
+            "label": "Slow the simulation down",
+            "result": "done",
+            "actions": 2,
+            "first": {
+              "control": "slowDownBtn",
+              "visibleAtStart": false,
+              "y": null
+            },
+            "steps": [
+              {
+                "control": "slowDownBtn",
+                "name": "Decrease speed",
+                "tier": "at hand",
+                "visibleAtStart": false,
+                "y": null,
+                "opened": ["railTools"],
+                "reached": true
+              }
+            ],
+            "open": []
+          },
+          {
+            "id": "step",
+            "label": "Pause, then step once",
+            "result": "done",
+            "actions": 2,
+            "first": {
+              "control": "timelinePlay",
+              "visibleAtStart": true,
+              "y": 745
+            },
+            "steps": [
+              {
+                "control": "timelinePlay",
+                "name": "Pause simulation",
+                "tier": "at hand",
+                "visibleAtStart": true,
+                "y": 745,
+                "opened": [],
+                "reached": true
+              },
+              {
+                "control": "timelineStepFwd",
+                "name": "Step forward",
+                "tier": "at hand",
+                "visibleAtStart": true,
+                "y": 745,
+                "opened": [],
+                "reached": true
+              }
+            ],
+            "open": []
+          }
+        ]
+      },
+      {
+        "format": "gravitas.workspace-walk/1",
+        "commit": null,
+        "mode": "mouse",
+        "lang": "es",
+        "viewport": {
+          "width": 1366,
+          "height": 800
+        },
+        "measuredAt": "2026-11-17",
+        "note": "Actions count presses to reach and use each control, opening a drawer or a rail section as one. A task result is not waited for.",
+        "tasks": [
+          {
+            "id": "load",
+            "label": "Load a scenario",
+            "result": "done",
+            "actions": 2,
+            "first": {
+              "control": "loadScenarioBtn",
+              "visibleAtStart": true,
+              "y": 71
+            },
+            "steps": [
+              {
+                "control": "loadScenarioBtn",
+                "name": "Cargar escenario",
+                "tier": "one step away",
+                "visibleAtStart": true,
+                "y": 71,
+                "opened": [],
+                "reached": true
+              },
+              {
+                "control": "sc-card:solar-system",
+                "name": "Solar System card",
+                "tier": "one step away",
+                "opened": [],
+                "visibleAtStart": false,
+                "y": null,
+                "reached": true
+              }
+            ],
+            "open": []
+          },
+          {
+            "id": "find",
+            "label": "Find a planet",
+            "result": "done",
+            "actions": 1,
+            "first": {
+              "control": "simulationCanvas",
+              "visibleAtStart": true,
+              "y": 393
+            },
+            "steps": [
+              {
+                "control": "simulationCanvas",
+                "name": "Mercury",
+                "tier": "at hand",
+                "opened": [],
+                "visibleAtStart": true,
+                "y": 393,
+                "reached": true
+              }
+            ],
+            "open": []
+          },
+          {
+            "id": "follow",
+            "label": "Follow the planet",
+            "result": "PARTIAL: follows a type, not the chosen body",
+            "actions": 3,
+            "first": {
+              "control": "settingsBtn",
+              "visibleAtStart": true,
+              "y": 141
+            },
+            "steps": [
+              {
+                "control": "settingsBtn",
+                "name": "Ajustes",
+                "tier": "advanced",
+                "visibleAtStart": true,
+                "y": 141,
+                "opened": [],
+                "reached": true
+              },
+              {
+                "control": "followSelect",
+                "name": "Follow mode",
+                "tier": "advanced",
+                "opened": [],
+                "visibleAtStart": false,
+                "y": null,
+                "reached": true,
+                "note": "a type (Planet), not the chosen body"
+              },
+              {
+                "control": "settingsApply",
+                "name": "Aplicar y reiniciar",
+                "tier": "advanced",
+                "visibleAtStart": true,
+                "y": 700,
+                "opened": [],
+                "reached": true
+              }
+            ],
+            "open": [
+              {
+                "what": "follow the chosen body (Settings follows a type)",
+                "owner": 467
+              }
+            ]
+          },
+          {
+            "id": "period",
+            "label": "Measure its period (stopwatch on periapsis)",
+            "result": "armed (the lap was not waited for)",
+            "actions": 4,
+            "first": {
+              "control": "simulationCanvas",
+              "visibleAtStart": true,
+              "y": 393
+            },
+            "steps": [
+              {
+                "control": "simulationCanvas",
+                "name": "Mercury",
+                "tier": "at hand",
+                "opened": [],
+                "visibleAtStart": true,
+                "y": 393,
+                "reached": true
+              },
+              {
+                "control": "toggleStopwatch",
+                "name": "Cronómetro",
+                "tier": "one step away",
+                "visibleAtStart": false,
+                "y": null,
+                "opened": ["railTools"],
+                "reached": true
+              },
+              {
+                "control": "stopwatchLatch",
+                "name": "⌖ Periastro",
+                "tier": "one step away",
+                "visibleAtStart": true,
+                "y": 348,
+                "opened": [],
+                "reached": true
+              }
+            ],
+            "open": []
+          },
+          {
+            "id": "reset",
+            "label": "Reset: fit the view, then start the scenario again",
+            "result": "done",
+            "actions": 4,
+            "first": {
+              "control": "resetViewBtn",
+              "visibleAtStart": false,
+              "y": null
+            },
+            "steps": [
+              {
+                "control": "resetViewBtn",
+                "name": "Restablecer vista",
+                "tier": "at hand",
+                "visibleAtStart": false,
+                "y": null,
+                "opened": ["railTools"],
+                "reached": true
+              },
+              {
+                "control": "refreshScenarioBtn",
+                "name": "Recargar escenario",
+                "tier": "one step away",
+                "visibleAtStart": false,
+                "y": null,
+                "opened": ["railScenario"],
+                "reached": true
+              }
+            ],
+            "open": []
+          },
+          {
+            "id": "speed",
+            "label": "Slow the simulation down",
+            "result": "done",
+            "actions": 2,
+            "first": {
+              "control": "slowDownBtn",
+              "visibleAtStart": false,
+              "y": null
+            },
+            "steps": [
+              {
+                "control": "slowDownBtn",
+                "name": "Reducir la velocidad",
+                "tier": "at hand",
+                "visibleAtStart": false,
+                "y": null,
+                "opened": ["railTools"],
+                "reached": true
+              }
+            ],
+            "open": []
+          },
+          {
+            "id": "step",
+            "label": "Pause, then step once",
+            "result": "done",
+            "actions": 2,
+            "first": {
+              "control": "timelinePlay",
+              "visibleAtStart": true,
+              "y": 745
+            },
+            "steps": [
+              {
+                "control": "timelinePlay",
+                "name": "Pausar la simulación",
+                "tier": "at hand",
+                "visibleAtStart": true,
+                "y": 745,
+                "opened": [],
+                "reached": true
+              },
+              {
+                "control": "timelineStepFwd",
+                "name": "Avanzar un paso",
+                "tier": "at hand",
+                "visibleAtStart": true,
+                "y": 745,
+                "opened": [],
+                "reached": true
+              }
+            ],
+            "open": []
+          }
+        ]
+      },
+      {
+        "format": "gravitas.workspace-walk/1",
+        "commit": null,
+        "mode": "keyboard",
+        "lang": "en",
+        "viewport": {
+          "width": 1366,
+          "height": 800
+        },
+        "measuredAt": "2026-11-17",
+        "note": "Actions count presses to reach and use each control, opening a drawer or a rail section as one. A task result is not waited for.",
+        "tasks": [
+          {
+            "id": "load",
+            "label": "Load a scenario",
+            "result": "done",
+            "actions": 16,
+            "first": {
+              "control": "loadScenarioBtn",
+              "visibleAtStart": null,
+              "y": null
+            },
+            "steps": [
+              {
+                "control": "loadScenarioBtn",
+                "name": "Load Scenario",
+                "tier": "one step away",
+                "tabs": 14,
+                "opened": [],
+                "visibleAtStart": null,
+                "y": null,
+                "reached": true
+              },
+              {
+                "control": "sc-card:solar-system",
+                "name": "Solar System card",
+                "tier": "one step away",
+                "opened": [],
+                "visibleAtStart": false,
+                "y": null,
+                "reached": true
+              }
+            ],
+            "open": []
+          },
+          {
+            "id": "find",
+            "label": "Find a planet",
+            "result": "OPEN",
+            "actions": 1,
+            "first": {
+              "control": "simulationCanvas",
+              "visibleAtStart": null,
+              "y": null
+            },
+            "steps": [
+              {
+                "control": "simulationCanvas",
+                "name": "canvas",
+                "tier": "at hand",
+                "tabs": null,
+                "opened": [],
+                "visibleAtStart": null,
+                "y": null,
+                "reached": false
+              }
+            ],
+            "open": [
+              {
+                "what": "select a body from the keyboard",
+                "owner": 475
+              }
+            ]
+          },
+          {
+            "id": "follow",
+            "label": "Follow the planet",
+            "result": "PARTIAL: a type, not the chosen body; the dialog fields were not walked by Tab",
+            "actions": 18,
+            "first": {
+              "control": "settingsBtn",
+              "visibleAtStart": null,
+              "y": null
+            },
+            "steps": [
+              {
+                "control": "settingsBtn",
+                "name": "Settings",
+                "tier": "advanced",
+                "tabs": 16,
+                "opened": [],
+                "visibleAtStart": null,
+                "y": null,
+                "reached": true
+              },
+              {
+                "control": "followSelect",
+                "name": "Follow mode",
+                "tier": "advanced",
+                "opened": [],
+                "visibleAtStart": false,
+                "y": null,
+                "reached": true,
+                "note": "a type (Planet), not the chosen body"
+              }
+            ],
+            "open": [
+              {
+                "what": "follow the chosen body (Settings follows a type)",
+                "owner": 467
+              }
+            ]
+          },
+          {
+            "id": "period",
+            "label": "Measure its period (stopwatch on periapsis)",
+            "result": "OPEN: the latch needs a selected body",
+            "actions": 0,
+            "first": null,
+            "steps": [],
+            "open": [
+              {
+                "what": "select a body from the keyboard",
+                "owner": 475
+              }
+            ]
+          },
+          {
+            "id": "reset",
+            "label": "Reset: fit the view, then start the scenario again",
+            "result": "done",
+            "actions": 62,
+            "first": {
+              "control": "resetViewBtn",
+              "visibleAtStart": null,
+              "y": null
+            },
+            "steps": [
+              {
+                "control": "resetViewBtn",
+                "name": "Reset View",
+                "tier": "at hand",
+                "tabs": 42,
+                "opened": [],
+                "visibleAtStart": null,
+                "y": null,
+                "reached": true
+              },
+              {
+                "control": "refreshScenarioBtn",
+                "name": "Refresh Scenario",
+                "tier": "one step away",
+                "tabs": 18,
+                "opened": [],
+                "visibleAtStart": null,
+                "y": null,
+                "reached": true
+              }
+            ],
+            "open": []
+          },
+          {
+            "id": "speed",
+            "label": "Slow the simulation down",
+            "result": "done",
+            "actions": 38,
+            "first": {
+              "control": "slowDownBtn",
+              "visibleAtStart": null,
+              "y": null
+            },
+            "steps": [
+              {
+                "control": "slowDownBtn",
+                "name": "Decrease speed",
+                "tier": "at hand",
+                "tabs": 37,
+                "opened": [],
+                "visibleAtStart": null,
+                "y": null,
+                "reached": true
+              }
+            ],
+            "open": []
+          },
+          {
+            "id": "step",
+            "label": "Pause, then step once",
+            "result": "done",
+            "actions": 54,
+            "first": {
+              "control": "timelinePlay",
+              "visibleAtStart": null,
+              "y": null
+            },
+            "steps": [
+              {
+                "control": "timelinePlay",
+                "name": "Pause simulation",
+                "tier": "at hand",
+                "tabs": 25,
+                "opened": [],
+                "visibleAtStart": null,
+                "y": null,
+                "reached": true
+              },
+              {
+                "control": "timelineStepFwd",
+                "name": "Step forward",
+                "tier": "at hand",
+                "tabs": 27,
+                "opened": [],
+                "visibleAtStart": null,
+                "y": null,
+                "reached": true
+              }
+            ],
+            "open": []
+          }
+        ]
+      },
+      {
+        "format": "gravitas.workspace-walk/1",
+        "commit": null,
+        "mode": "keyboard",
+        "lang": "es",
+        "viewport": {
+          "width": 1366,
+          "height": 800
+        },
+        "measuredAt": "2026-11-17",
+        "note": "Actions count presses to reach and use each control, opening a drawer or a rail section as one. A task result is not waited for.",
+        "tasks": [
+          {
+            "id": "load",
+            "label": "Load a scenario",
+            "result": "done",
+            "actions": 16,
+            "first": {
+              "control": "loadScenarioBtn",
+              "visibleAtStart": null,
+              "y": null
+            },
+            "steps": [
+              {
+                "control": "loadScenarioBtn",
+                "name": "Cargar escenario",
+                "tier": "one step away",
+                "tabs": 14,
+                "opened": [],
+                "visibleAtStart": null,
+                "y": null,
+                "reached": true
+              },
+              {
+                "control": "sc-card:solar-system",
+                "name": "Solar System card",
+                "tier": "one step away",
+                "opened": [],
+                "visibleAtStart": false,
+                "y": null,
+                "reached": true
+              }
+            ],
+            "open": []
+          },
+          {
+            "id": "find",
+            "label": "Find a planet",
+            "result": "OPEN",
+            "actions": 1,
+            "first": {
+              "control": "simulationCanvas",
+              "visibleAtStart": null,
+              "y": null
+            },
+            "steps": [
+              {
+                "control": "simulationCanvas",
+                "name": "canvas",
+                "tier": "at hand",
+                "tabs": null,
+                "opened": [],
+                "visibleAtStart": null,
+                "y": null,
+                "reached": false
+              }
+            ],
+            "open": [
+              {
+                "what": "select a body from the keyboard",
+                "owner": 475
+              }
+            ]
+          },
+          {
+            "id": "follow",
+            "label": "Follow the planet",
+            "result": "PARTIAL: a type, not the chosen body; the dialog fields were not walked by Tab",
+            "actions": 18,
+            "first": {
+              "control": "settingsBtn",
+              "visibleAtStart": null,
+              "y": null
+            },
+            "steps": [
+              {
+                "control": "settingsBtn",
+                "name": "Ajustes",
+                "tier": "advanced",
+                "tabs": 16,
+                "opened": [],
+                "visibleAtStart": null,
+                "y": null,
+                "reached": true
+              },
+              {
+                "control": "followSelect",
+                "name": "Follow mode",
+                "tier": "advanced",
+                "opened": [],
+                "visibleAtStart": false,
+                "y": null,
+                "reached": true,
+                "note": "a type (Planet), not the chosen body"
+              }
+            ],
+            "open": [
+              {
+                "what": "follow the chosen body (Settings follows a type)",
+                "owner": 467
+              }
+            ]
+          },
+          {
+            "id": "period",
+            "label": "Measure its period (stopwatch on periapsis)",
+            "result": "OPEN: the latch needs a selected body",
+            "actions": 0,
+            "first": null,
+            "steps": [],
+            "open": [
+              {
+                "what": "select a body from the keyboard",
+                "owner": 475
+              }
+            ]
+          },
+          {
+            "id": "reset",
+            "label": "Reset: fit the view, then start the scenario again",
+            "result": "done",
+            "actions": 62,
+            "first": {
+              "control": "resetViewBtn",
+              "visibleAtStart": null,
+              "y": null
+            },
+            "steps": [
+              {
+                "control": "resetViewBtn",
+                "name": "Restablecer vista",
+                "tier": "at hand",
+                "tabs": 42,
+                "opened": [],
+                "visibleAtStart": null,
+                "y": null,
+                "reached": true
+              },
+              {
+                "control": "refreshScenarioBtn",
+                "name": "Recargar escenario",
+                "tier": "one step away",
+                "tabs": 18,
+                "opened": [],
+                "visibleAtStart": null,
+                "y": null,
+                "reached": true
+              }
+            ],
+            "open": []
+          },
+          {
+            "id": "speed",
+            "label": "Slow the simulation down",
+            "result": "done",
+            "actions": 38,
+            "first": {
+              "control": "slowDownBtn",
+              "visibleAtStart": null,
+              "y": null
+            },
+            "steps": [
+              {
+                "control": "slowDownBtn",
+                "name": "Reducir la velocidad",
+                "tier": "at hand",
+                "tabs": 37,
+                "opened": [],
+                "visibleAtStart": null,
+                "y": null,
+                "reached": true
+              }
+            ],
+            "open": []
+          },
+          {
+            "id": "step",
+            "label": "Pause, then step once",
+            "result": "done",
+            "actions": 54,
+            "first": {
+              "control": "timelinePlay",
+              "visibleAtStart": null,
+              "y": null
+            },
+            "steps": [
+              {
+                "control": "timelinePlay",
+                "name": "Pausar la simulación",
+                "tier": "at hand",
+                "tabs": 25,
+                "opened": [],
+                "visibleAtStart": null,
+                "y": null,
+                "reached": true
+              },
+              {
+                "control": "timelineStepFwd",
+                "name": "Avanzar un paso",
+                "tier": "at hand",
+                "tabs": 27,
+                "opened": [],
+                "visibleAtStart": null,
+                "y": null,
+                "reached": true
+              }
+            ],
+            "open": []
+          }
+        ]
+      },
+      {
+        "format": "gravitas.workspace-walk/1",
+        "commit": null,
+        "mode": "touch",
+        "lang": "en",
+        "viewport": {
+          "width": 375,
+          "height": 812
+        },
+        "measuredAt": "2026-11-17",
+        "note": "Actions count presses to reach and use each control, opening a drawer or a rail section as one. A task result is not waited for.",
+        "tasks": [
+          {
+            "id": "load",
+            "label": "Load a scenario",
+            "result": "done",
+            "actions": 3,
+            "first": {
+              "control": "loadScenarioBtn",
+              "visibleAtStart": false,
+              "y": 169
+            },
+            "steps": [
+              {
+                "control": "loadScenarioBtn",
+                "name": "Load Scenario",
+                "tier": "one step away",
+                "visibleAtStart": false,
+                "y": 169,
+                "opened": ["mobileMenuToggle"],
+                "reached": true
+              },
+              {
+                "control": "sc-card:solar-system",
+                "name": "Solar System card",
+                "tier": "one step away",
+                "opened": [],
+                "visibleAtStart": false,
+                "y": null,
+                "reached": true
+              }
+            ],
+            "open": []
+          },
+          {
+            "id": "find",
+            "label": "Find a planet",
+            "result": "done",
+            "actions": 1,
+            "first": {
+              "control": "simulationCanvas",
+              "visibleAtStart": true,
+              "y": 399
+            },
+            "steps": [
+              {
+                "control": "simulationCanvas",
+                "name": "Mercury",
+                "tier": "at hand",
+                "opened": [],
+                "visibleAtStart": true,
+                "y": 399,
+                "reached": true
+              }
+            ],
+            "open": []
+          },
+          {
+            "id": "follow",
+            "label": "Follow the planet",
+            "result": "PARTIAL: follows a type, not the chosen body",
+            "actions": 4,
+            "first": {
+              "control": "settingsBtn",
+              "visibleAtStart": false,
+              "y": 259
+            },
+            "steps": [
+              {
+                "control": "settingsBtn",
+                "name": "Settings",
+                "tier": "advanced",
+                "visibleAtStart": false,
+                "y": 259,
+                "opened": ["mobileMenuToggle"],
+                "reached": true
+              },
+              {
+                "control": "followSelect",
+                "name": "Follow mode",
+                "tier": "advanced",
+                "opened": [],
+                "visibleAtStart": false,
+                "y": null,
+                "reached": true,
+                "note": "a type (Planet), not the chosen body"
+              },
+              {
+                "control": "settingsApply",
+                "name": "Apply & Restart",
+                "tier": "advanced",
+                "visibleAtStart": true,
+                "y": 682,
+                "opened": [],
+                "reached": true
+              }
+            ],
+            "open": [
+              {
+                "what": "follow the chosen body (Settings follows a type)",
+                "owner": 467
+              }
+            ]
+          },
+          {
+            "id": "period",
+            "label": "Measure its period (stopwatch on periapsis)",
+            "result": "error: locator.tap: Timeout 30000ms exceeded.",
+            "actions": 1,
+            "first": {
+              "control": "simulationCanvas",
+              "visibleAtStart": true,
+              "y": 399
+            },
+            "steps": [
+              {
+                "control": "simulationCanvas",
+                "name": "Mercury",
+                "tier": "at hand",
+                "opened": [],
+                "visibleAtStart": true,
+                "y": 399,
+                "reached": true
+              }
+            ],
+            "open": []
+          },
+          {
+            "id": "reset",
+            "label": "Reset: fit the view, then start the scenario again",
+            "result": "error: locator.tap: Timeout 30000ms exceeded.",
+            "actions": 4,
+            "first": {
+              "control": "resetViewBtn",
+              "visibleAtStart": false,
+              "y": null
+            },
+            "steps": [
+              {
+                "control": "resetViewBtn",
+                "name": "Reset View",
+                "tier": "at hand",
+                "visibleAtStart": false,
+                "y": null,
+                "opened": ["mobileMenuToggle", "railTools", "scroll"],
+                "reached": true
+              }
+            ],
+            "open": []
+          },
+          {
+            "id": "speed",
+            "label": "Slow the simulation down",
+            "result": "control not reachable",
+            "actions": 5,
+            "first": {
+              "control": "slowDownBtn",
+              "visibleAtStart": false,
+              "y": null
+            },
+            "steps": [
+              {
+                "control": "slowDownBtn",
+                "name": "Decrease speed",
+                "tier": "at hand",
+                "visibleAtStart": false,
+                "y": null,
+                "opened": [
+                  "mobileMenuToggle",
+                  "railTools",
+                  "mobileMenuToggle",
+                  "mobileMenuToggle"
+                ],
+                "reached": false
+              }
+            ],
+            "open": []
+          },
+          {
+            "id": "step",
+            "label": "Pause, then step once",
+            "result": "done",
+            "actions": 2,
+            "first": {
+              "control": "timelinePlay",
+              "visibleAtStart": true,
+              "y": 750
+            },
+            "steps": [
+              {
+                "control": "timelinePlay",
+                "name": "Pause simulation",
+                "tier": "at hand",
+                "visibleAtStart": true,
+                "y": 750,
+                "opened": [],
+                "reached": true
+              },
+              {
+                "control": "timelineStepFwd",
+                "name": "Step forward",
+                "tier": "at hand",
+                "visibleAtStart": true,
+                "y": 750,
+                "opened": [],
+                "reached": true
+              }
+            ],
+            "open": []
+          }
+        ]
+      },
+      {
+        "format": "gravitas.workspace-walk/1",
+        "commit": null,
+        "mode": "touch",
+        "lang": "es",
+        "viewport": {
+          "width": 375,
+          "height": 812
+        },
+        "measuredAt": "2026-11-17",
+        "note": "Actions count presses to reach and use each control, opening a drawer or a rail section as one. A task result is not waited for.",
+        "tasks": [
+          {
+            "id": "load",
+            "label": "Load a scenario",
+            "result": "done",
+            "actions": 3,
+            "first": {
+              "control": "loadScenarioBtn",
+              "visibleAtStart": false,
+              "y": 169
+            },
+            "steps": [
+              {
+                "control": "loadScenarioBtn",
+                "name": "Cargar escenario",
+                "tier": "one step away",
+                "visibleAtStart": false,
+                "y": 169,
+                "opened": ["mobileMenuToggle"],
+                "reached": true
+              },
+              {
+                "control": "sc-card:solar-system",
+                "name": "Solar System card",
+                "tier": "one step away",
+                "opened": [],
+                "visibleAtStart": false,
+                "y": null,
+                "reached": true
+              }
+            ],
+            "open": []
+          },
+          {
+            "id": "find",
+            "label": "Find a planet",
+            "result": "done",
+            "actions": 1,
+            "first": {
+              "control": "simulationCanvas",
+              "visibleAtStart": true,
+              "y": 399
+            },
+            "steps": [
+              {
+                "control": "simulationCanvas",
+                "name": "Mercury",
+                "tier": "at hand",
+                "opened": [],
+                "visibleAtStart": true,
+                "y": 399,
+                "reached": true
+              }
+            ],
+            "open": []
+          },
+          {
+            "id": "follow",
+            "label": "Follow the planet",
+            "result": "PARTIAL: follows a type, not the chosen body",
+            "actions": 4,
+            "first": {
+              "control": "settingsBtn",
+              "visibleAtStart": false,
+              "y": 259
+            },
+            "steps": [
+              {
+                "control": "settingsBtn",
+                "name": "Ajustes",
+                "tier": "advanced",
+                "visibleAtStart": false,
+                "y": 259,
+                "opened": ["mobileMenuToggle"],
+                "reached": true
+              },
+              {
+                "control": "followSelect",
+                "name": "Follow mode",
+                "tier": "advanced",
+                "opened": [],
+                "visibleAtStart": false,
+                "y": null,
+                "reached": true,
+                "note": "a type (Planet), not the chosen body"
+              },
+              {
+                "control": "settingsApply",
+                "name": "Aplicar y reiniciar",
+                "tier": "advanced",
+                "visibleAtStart": true,
+                "y": 682,
+                "opened": [],
+                "reached": true
+              }
+            ],
+            "open": [
+              {
+                "what": "follow the chosen body (Settings follows a type)",
+                "owner": 467
+              }
+            ]
+          },
+          {
+            "id": "period",
+            "label": "Measure its period (stopwatch on periapsis)",
+            "result": "error: locator.tap: Timeout 30000ms exceeded.",
+            "actions": 1,
+            "first": {
+              "control": "simulationCanvas",
+              "visibleAtStart": true,
+              "y": 399
+            },
+            "steps": [
+              {
+                "control": "simulationCanvas",
+                "name": "Mercury",
+                "tier": "at hand",
+                "opened": [],
+                "visibleAtStart": true,
+                "y": 399,
+                "reached": true
+              }
+            ],
+            "open": []
+          },
+          {
+            "id": "reset",
+            "label": "Reset: fit the view, then start the scenario again",
+            "result": "error: locator.tap: Timeout 30000ms exceeded.",
+            "actions": 4,
+            "first": {
+              "control": "resetViewBtn",
+              "visibleAtStart": false,
+              "y": null
+            },
+            "steps": [
+              {
+                "control": "resetViewBtn",
+                "name": "Restablecer vista",
+                "tier": "at hand",
+                "visibleAtStart": false,
+                "y": null,
+                "opened": ["mobileMenuToggle", "railTools", "scroll"],
+                "reached": true
+              }
+            ],
+            "open": []
+          },
+          {
+            "id": "speed",
+            "label": "Slow the simulation down",
+            "result": "control not reachable",
+            "actions": 5,
+            "first": {
+              "control": "slowDownBtn",
+              "visibleAtStart": false,
+              "y": null
+            },
+            "steps": [
+              {
+                "control": "slowDownBtn",
+                "name": "Reducir la velocidad",
+                "tier": "at hand",
+                "visibleAtStart": false,
+                "y": null,
+                "opened": [
+                  "mobileMenuToggle",
+                  "railTools",
+                  "mobileMenuToggle",
+                  "mobileMenuToggle"
+                ],
+                "reached": false
+              }
+            ],
+            "open": []
+          },
+          {
+            "id": "step",
+            "label": "Pause, then step once",
+            "result": "done",
+            "actions": 2,
+            "first": {
+              "control": "timelinePlay",
+              "visibleAtStart": true,
+              "y": 750
+            },
+            "steps": [
+              {
+                "control": "timelinePlay",
+                "name": "Pausar la simulación",
+                "tier": "at hand",
+                "visibleAtStart": true,
+                "y": 750,
+                "opened": [],
+                "reached": true
+              },
+              {
+                "control": "timelineStepFwd",
+                "name": "Avanzar un paso",
+                "tier": "at hand",
+                "visibleAtStart": true,
+                "y": 750,
+                "opened": [],
+                "reached": true
+              }
+            ],
+            "open": []
+          }
+        ]
+      }
+    ]
+  },
+  "after": {
+    "commit": "a14687e6e",
+    "measuredAt": "2026-11-17",
+    "runs": [
+      {
+        "format": "gravitas.workspace-walk/1",
+        "commit": "a14687e6e",
+        "mode": "mouse",
+        "lang": "en",
+        "viewport": {
+          "width": 1366,
+          "height": 800
+        },
+        "measuredAt": "2026-11-17",
+        "note": "Actions count presses to reach and use each control, opening a drawer or a rail section as one. A task result is not waited for.",
+        "tasks": [
+          {
+            "id": "load",
+            "label": "Load a scenario",
+            "result": "done",
+            "actions": 2,
+            "first": {
+              "control": "loadScenarioBtn",
+              "visibleAtStart": true,
+              "y": 122
+            },
+            "steps": [
+              {
+                "control": "loadScenarioBtn",
+                "name": "Load Scenario",
+                "tier": "one step away",
+                "visibleAtStart": true,
+                "y": 122,
+                "opened": [],
+                "reached": true
+              },
+              {
+                "control": "sc-card:solar-system",
+                "name": "Solar System card",
+                "tier": "one step away",
+                "opened": [],
+                "visibleAtStart": false,
+                "y": null,
+                "reached": true
+              }
+            ],
+            "open": []
+          },
+          {
+            "id": "find",
+            "label": "Find a planet",
+            "result": "done",
+            "actions": 1,
+            "first": {
+              "control": "simulationCanvas",
+              "visibleAtStart": true,
+              "y": 393
+            },
+            "steps": [
+              {
+                "control": "simulationCanvas",
+                "name": "Mercury",
+                "tier": "at hand",
+                "opened": [],
+                "visibleAtStart": true,
+                "y": 393,
+                "reached": true
+              }
+            ],
+            "open": []
+          },
+          {
+            "id": "follow",
+            "label": "Follow the planet",
+            "result": "PARTIAL: follows a type, not the chosen body",
+            "actions": 3,
+            "first": {
+              "control": "settingsBtn",
+              "visibleAtStart": true,
+              "y": 192
+            },
+            "steps": [
+              {
+                "control": "settingsBtn",
+                "name": "Settings",
+                "tier": "advanced",
+                "visibleAtStart": true,
+                "y": 192,
+                "opened": [],
+                "reached": true
+              },
+              {
+                "control": "followSelect",
+                "name": "Follow mode",
+                "tier": "advanced",
+                "opened": [],
+                "visibleAtStart": false,
+                "y": null,
+                "reached": true,
+                "note": "a type (Planet), not the chosen body"
+              },
+              {
+                "control": "settingsApply",
+                "name": "Apply & Restart",
+                "tier": "advanced",
+                "visibleAtStart": true,
+                "y": 700,
+                "opened": [],
+                "reached": true
+              }
+            ],
+            "open": [
+              {
+                "what": "follow the chosen body (Settings follows a type)",
+                "owner": 467
+              }
+            ]
+          },
+          {
+            "id": "period",
+            "label": "Measure its period (stopwatch on periapsis)",
+            "result": "armed (the lap was not waited for)",
+            "actions": 4,
+            "first": {
+              "control": "simulationCanvas",
+              "visibleAtStart": true,
+              "y": 393
+            },
+            "steps": [
+              {
+                "control": "simulationCanvas",
+                "name": "Mercury",
+                "tier": "at hand",
+                "opened": [],
+                "visibleAtStart": true,
+                "y": 393,
+                "reached": true
+              },
+              {
+                "control": "toggleStopwatch",
+                "name": "Stopwatch",
+                "tier": "one step away",
+                "visibleAtStart": false,
+                "y": null,
+                "opened": ["railTools"],
+                "reached": true
+              },
+              {
+                "control": "stopwatchLatch",
+                "name": "⌖ Periapsis",
+                "tier": "one step away",
+                "visibleAtStart": true,
+                "y": 399,
+                "opened": [],
+                "reached": true
+              }
+            ],
+            "open": []
+          },
+          {
+            "id": "reset",
+            "label": "Reset: fit the view, then start the scenario again",
+            "result": "done",
+            "actions": 2,
+            "first": {
+              "control": "resetViewBtn",
+              "visibleAtStart": true,
+              "y": 29
+            },
+            "steps": [
+              {
+                "control": "resetViewBtn",
+                "name": "Fit View to Bodies",
+                "tier": "at hand",
+                "visibleAtStart": true,
+                "y": 29,
+                "opened": [],
+                "reached": true
+              },
+              {
+                "control": "refreshScenarioBtn",
+                "name": "Restart Scenario",
+                "tier": "one step away",
+                "visibleAtStart": true,
+                "y": 227,
+                "opened": [],
+                "reached": true
+              }
+            ],
+            "open": []
+          },
+          {
+            "id": "speed",
+            "label": "Slow the simulation down",
+            "result": "done",
+            "actions": 1,
+            "first": {
+              "control": "slowDownBtn",
+              "visibleAtStart": true,
+              "y": 745
+            },
+            "steps": [
+              {
+                "control": "slowDownBtn",
+                "name": "Decrease speed",
+                "tier": "at hand",
+                "visibleAtStart": true,
+                "y": 745,
+                "opened": [],
+                "reached": true
+              }
+            ],
+            "open": []
+          },
+          {
+            "id": "step",
+            "label": "Pause, then step once",
+            "result": "done",
+            "actions": 2,
+            "first": {
+              "control": "timelinePlay",
+              "visibleAtStart": true,
+              "y": 745
+            },
+            "steps": [
+              {
+                "control": "timelinePlay",
+                "name": "Pause simulation",
+                "tier": "at hand",
+                "visibleAtStart": true,
+                "y": 745,
+                "opened": [],
+                "reached": true
+              },
+              {
+                "control": "timelineStepFwd",
+                "name": "Step forward",
+                "tier": "at hand",
+                "visibleAtStart": true,
+                "y": 745,
+                "opened": [],
+                "reached": true
+              }
+            ],
+            "open": []
+          }
+        ]
+      },
+      {
+        "format": "gravitas.workspace-walk/1",
+        "commit": "a14687e6e",
+        "mode": "mouse",
+        "lang": "es",
+        "viewport": {
+          "width": 1366,
+          "height": 800
+        },
+        "measuredAt": "2026-11-17",
+        "note": "Actions count presses to reach and use each control, opening a drawer or a rail section as one. A task result is not waited for.",
+        "tasks": [
+          {
+            "id": "load",
+            "label": "Load a scenario",
+            "result": "done",
+            "actions": 2,
+            "first": {
+              "control": "loadScenarioBtn",
+              "visibleAtStart": true,
+              "y": 122
+            },
+            "steps": [
+              {
+                "control": "loadScenarioBtn",
+                "name": "Cargar escenario",
+                "tier": "one step away",
+                "visibleAtStart": true,
+                "y": 122,
+                "opened": [],
+                "reached": true
+              },
+              {
+                "control": "sc-card:solar-system",
+                "name": "Solar System card",
+                "tier": "one step away",
+                "opened": [],
+                "visibleAtStart": false,
+                "y": null,
+                "reached": true
+              }
+            ],
+            "open": []
+          },
+          {
+            "id": "find",
+            "label": "Find a planet",
+            "result": "done",
+            "actions": 1,
+            "first": {
+              "control": "simulationCanvas",
+              "visibleAtStart": true,
+              "y": 393
+            },
+            "steps": [
+              {
+                "control": "simulationCanvas",
+                "name": "Mercury",
+                "tier": "at hand",
+                "opened": [],
+                "visibleAtStart": true,
+                "y": 393,
+                "reached": true
+              }
+            ],
+            "open": []
+          },
+          {
+            "id": "follow",
+            "label": "Follow the planet",
+            "result": "PARTIAL: follows a type, not the chosen body",
+            "actions": 3,
+            "first": {
+              "control": "settingsBtn",
+              "visibleAtStart": true,
+              "y": 192
+            },
+            "steps": [
+              {
+                "control": "settingsBtn",
+                "name": "Ajustes",
+                "tier": "advanced",
+                "visibleAtStart": true,
+                "y": 192,
+                "opened": [],
+                "reached": true
+              },
+              {
+                "control": "followSelect",
+                "name": "Follow mode",
+                "tier": "advanced",
+                "opened": [],
+                "visibleAtStart": false,
+                "y": null,
+                "reached": true,
+                "note": "a type (Planet), not the chosen body"
+              },
+              {
+                "control": "settingsApply",
+                "name": "Aplicar y reiniciar",
+                "tier": "advanced",
+                "visibleAtStart": true,
+                "y": 700,
+                "opened": [],
+                "reached": true
+              }
+            ],
+            "open": [
+              {
+                "what": "follow the chosen body (Settings follows a type)",
+                "owner": 467
+              }
+            ]
+          },
+          {
+            "id": "period",
+            "label": "Measure its period (stopwatch on periapsis)",
+            "result": "armed (the lap was not waited for)",
+            "actions": 4,
+            "first": {
+              "control": "simulationCanvas",
+              "visibleAtStart": true,
+              "y": 393
+            },
+            "steps": [
+              {
+                "control": "simulationCanvas",
+                "name": "Mercury",
+                "tier": "at hand",
+                "opened": [],
+                "visibleAtStart": true,
+                "y": 393,
+                "reached": true
+              },
+              {
+                "control": "toggleStopwatch",
+                "name": "Cronómetro",
+                "tier": "one step away",
+                "visibleAtStart": false,
+                "y": null,
+                "opened": ["railTools"],
+                "reached": true
+              },
+              {
+                "control": "stopwatchLatch",
+                "name": "⌖ Periastro",
+                "tier": "one step away",
+                "visibleAtStart": true,
+                "y": 399,
+                "opened": [],
+                "reached": true
+              }
+            ],
+            "open": []
+          },
+          {
+            "id": "reset",
+            "label": "Reset: fit the view, then start the scenario again",
+            "result": "done",
+            "actions": 2,
+            "first": {
+              "control": "resetViewBtn",
+              "visibleAtStart": true,
+              "y": 29
+            },
+            "steps": [
+              {
+                "control": "resetViewBtn",
+                "name": "Ajustar vista a los cuerpos",
+                "tier": "at hand",
+                "visibleAtStart": true,
+                "y": 29,
+                "opened": [],
+                "reached": true
+              },
+              {
+                "control": "refreshScenarioBtn",
+                "name": "Reiniciar escenario",
+                "tier": "one step away",
+                "visibleAtStart": true,
+                "y": 227,
+                "opened": [],
+                "reached": true
+              }
+            ],
+            "open": []
+          },
+          {
+            "id": "speed",
+            "label": "Slow the simulation down",
+            "result": "done",
+            "actions": 1,
+            "first": {
+              "control": "slowDownBtn",
+              "visibleAtStart": true,
+              "y": 745
+            },
+            "steps": [
+              {
+                "control": "slowDownBtn",
+                "name": "Reducir la velocidad",
+                "tier": "at hand",
+                "visibleAtStart": true,
+                "y": 745,
+                "opened": [],
+                "reached": true
+              }
+            ],
+            "open": []
+          },
+          {
+            "id": "step",
+            "label": "Pause, then step once",
+            "result": "done",
+            "actions": 2,
+            "first": {
+              "control": "timelinePlay",
+              "visibleAtStart": true,
+              "y": 745
+            },
+            "steps": [
+              {
+                "control": "timelinePlay",
+                "name": "Pausar la simulación",
+                "tier": "at hand",
+                "visibleAtStart": true,
+                "y": 745,
+                "opened": [],
+                "reached": true
+              },
+              {
+                "control": "timelineStepFwd",
+                "name": "Avanzar un paso",
+                "tier": "at hand",
+                "visibleAtStart": true,
+                "y": 745,
+                "opened": [],
+                "reached": true
+              }
+            ],
+            "open": []
+          }
+        ]
+      },
+      {
+        "format": "gravitas.workspace-walk/1",
+        "commit": "a14687e6e",
+        "mode": "keyboard",
+        "lang": "en",
+        "viewport": {
+          "width": 1366,
+          "height": 800
+        },
+        "measuredAt": "2026-11-17",
+        "note": "Actions count presses to reach and use each control, opening a drawer or a rail section as one. A task result is not waited for.",
+        "tasks": [
+          {
+            "id": "load",
+            "label": "Load a scenario",
+            "result": "done",
+            "actions": 17,
+            "first": {
+              "control": "loadScenarioBtn",
+              "visibleAtStart": null,
+              "y": null
+            },
+            "steps": [
+              {
+                "control": "loadScenarioBtn",
+                "name": "Load Scenario",
+                "tier": "one step away",
+                "tabs": 15,
+                "opened": [],
+                "visibleAtStart": null,
+                "y": null,
+                "reached": true
+              },
+              {
+                "control": "sc-card:solar-system",
+                "name": "Solar System card",
+                "tier": "one step away",
+                "opened": [],
+                "visibleAtStart": false,
+                "y": null,
+                "reached": true
+              }
+            ],
+            "open": []
+          },
+          {
+            "id": "find",
+            "label": "Find a planet",
+            "result": "OPEN",
+            "actions": 1,
+            "first": {
+              "control": "simulationCanvas",
+              "visibleAtStart": null,
+              "y": null
+            },
+            "steps": [
+              {
+                "control": "simulationCanvas",
+                "name": "canvas",
+                "tier": "at hand",
+                "tabs": null,
+                "opened": [],
+                "visibleAtStart": null,
+                "y": null,
+                "reached": false
+              }
+            ],
+            "open": [
+              {
+                "what": "select a body from the keyboard",
+                "owner": 475
+              }
+            ]
+          },
+          {
+            "id": "follow",
+            "label": "Follow the planet",
+            "result": "PARTIAL: a type, not the chosen body; the dialog fields were not walked by Tab",
+            "actions": 19,
+            "first": {
+              "control": "settingsBtn",
+              "visibleAtStart": null,
+              "y": null
+            },
+            "steps": [
+              {
+                "control": "settingsBtn",
+                "name": "Settings",
+                "tier": "advanced",
+                "tabs": 17,
+                "opened": [],
+                "visibleAtStart": null,
+                "y": null,
+                "reached": true
+              },
+              {
+                "control": "followSelect",
+                "name": "Follow mode",
+                "tier": "advanced",
+                "opened": [],
+                "visibleAtStart": false,
+                "y": null,
+                "reached": true,
+                "note": "a type (Planet), not the chosen body"
+              }
+            ],
+            "open": [
+              {
+                "what": "follow the chosen body (Settings follows a type)",
+                "owner": 467
+              }
+            ]
+          },
+          {
+            "id": "period",
+            "label": "Measure its period (stopwatch on periapsis)",
+            "result": "OPEN: the latch needs a selected body",
+            "actions": 0,
+            "first": null,
+            "steps": [],
+            "open": [
+              {
+                "what": "select a body from the keyboard",
+                "owner": 475
+              }
+            ]
+          },
+          {
+            "id": "reset",
+            "label": "Reset: fit the view, then start the scenario again",
+            "result": "done",
+            "actions": 33,
+            "first": {
+              "control": "resetViewBtn",
+              "visibleAtStart": null,
+              "y": null
+            },
+            "steps": [
+              {
+                "control": "resetViewBtn",
+                "name": "Fit View to Bodies",
+                "tier": "at hand",
+                "tabs": 13,
+                "opened": [],
+                "visibleAtStart": null,
+                "y": null,
+                "reached": true
+              },
+              {
+                "control": "refreshScenarioBtn",
+                "name": "Restart Scenario",
+                "tier": "one step away",
+                "tabs": 18,
+                "opened": [],
+                "visibleAtStart": null,
+                "y": null,
+                "reached": true
+              }
+            ],
+            "open": []
+          },
+          {
+            "id": "speed",
+            "label": "Slow the simulation down",
+            "result": "done",
+            "actions": 31,
+            "first": {
+              "control": "slowDownBtn",
+              "visibleAtStart": null,
+              "y": null
+            },
+            "steps": [
+              {
+                "control": "slowDownBtn",
+                "name": "Decrease speed",
+                "tier": "at hand",
+                "tabs": 30,
+                "opened": [],
+                "visibleAtStart": null,
+                "y": null,
+                "reached": true
+              }
+            ],
+            "open": []
+          },
+          {
+            "id": "step",
+            "label": "Pause, then step once",
+            "result": "done",
+            "actions": 56,
+            "first": {
+              "control": "timelinePlay",
+              "visibleAtStart": null,
+              "y": null
+            },
+            "steps": [
+              {
+                "control": "timelinePlay",
+                "name": "Pause simulation",
+                "tier": "at hand",
+                "tabs": 26,
+                "opened": [],
+                "visibleAtStart": null,
+                "y": null,
+                "reached": true
+              },
+              {
+                "control": "timelineStepFwd",
+                "name": "Step forward",
+                "tier": "at hand",
+                "tabs": 28,
+                "opened": [],
+                "visibleAtStart": null,
+                "y": null,
+                "reached": true
+              }
+            ],
+            "open": []
+          }
+        ]
+      },
+      {
+        "format": "gravitas.workspace-walk/1",
+        "commit": "a14687e6e",
+        "mode": "keyboard",
+        "lang": "es",
+        "viewport": {
+          "width": 1366,
+          "height": 800
+        },
+        "measuredAt": "2026-11-17",
+        "note": "Actions count presses to reach and use each control, opening a drawer or a rail section as one. A task result is not waited for.",
+        "tasks": [
+          {
+            "id": "load",
+            "label": "Load a scenario",
+            "result": "done",
+            "actions": 17,
+            "first": {
+              "control": "loadScenarioBtn",
+              "visibleAtStart": null,
+              "y": null
+            },
+            "steps": [
+              {
+                "control": "loadScenarioBtn",
+                "name": "Cargar escenario",
+                "tier": "one step away",
+                "tabs": 15,
+                "opened": [],
+                "visibleAtStart": null,
+                "y": null,
+                "reached": true
+              },
+              {
+                "control": "sc-card:solar-system",
+                "name": "Solar System card",
+                "tier": "one step away",
+                "opened": [],
+                "visibleAtStart": false,
+                "y": null,
+                "reached": true
+              }
+            ],
+            "open": []
+          },
+          {
+            "id": "find",
+            "label": "Find a planet",
+            "result": "OPEN",
+            "actions": 1,
+            "first": {
+              "control": "simulationCanvas",
+              "visibleAtStart": null,
+              "y": null
+            },
+            "steps": [
+              {
+                "control": "simulationCanvas",
+                "name": "canvas",
+                "tier": "at hand",
+                "tabs": null,
+                "opened": [],
+                "visibleAtStart": null,
+                "y": null,
+                "reached": false
+              }
+            ],
+            "open": [
+              {
+                "what": "select a body from the keyboard",
+                "owner": 475
+              }
+            ]
+          },
+          {
+            "id": "follow",
+            "label": "Follow the planet",
+            "result": "PARTIAL: a type, not the chosen body; the dialog fields were not walked by Tab",
+            "actions": 19,
+            "first": {
+              "control": "settingsBtn",
+              "visibleAtStart": null,
+              "y": null
+            },
+            "steps": [
+              {
+                "control": "settingsBtn",
+                "name": "Ajustes",
+                "tier": "advanced",
+                "tabs": 17,
+                "opened": [],
+                "visibleAtStart": null,
+                "y": null,
+                "reached": true
+              },
+              {
+                "control": "followSelect",
+                "name": "Follow mode",
+                "tier": "advanced",
+                "opened": [],
+                "visibleAtStart": false,
+                "y": null,
+                "reached": true,
+                "note": "a type (Planet), not the chosen body"
+              }
+            ],
+            "open": [
+              {
+                "what": "follow the chosen body (Settings follows a type)",
+                "owner": 467
+              }
+            ]
+          },
+          {
+            "id": "period",
+            "label": "Measure its period (stopwatch on periapsis)",
+            "result": "OPEN: the latch needs a selected body",
+            "actions": 0,
+            "first": null,
+            "steps": [],
+            "open": [
+              {
+                "what": "select a body from the keyboard",
+                "owner": 475
+              }
+            ]
+          },
+          {
+            "id": "reset",
+            "label": "Reset: fit the view, then start the scenario again",
+            "result": "done",
+            "actions": 33,
+            "first": {
+              "control": "resetViewBtn",
+              "visibleAtStart": null,
+              "y": null
+            },
+            "steps": [
+              {
+                "control": "resetViewBtn",
+                "name": "Ajustar vista a los cuerpos",
+                "tier": "at hand",
+                "tabs": 13,
+                "opened": [],
+                "visibleAtStart": null,
+                "y": null,
+                "reached": true
+              },
+              {
+                "control": "refreshScenarioBtn",
+                "name": "Reiniciar escenario",
+                "tier": "one step away",
+                "tabs": 18,
+                "opened": [],
+                "visibleAtStart": null,
+                "y": null,
+                "reached": true
+              }
+            ],
+            "open": []
+          },
+          {
+            "id": "speed",
+            "label": "Slow the simulation down",
+            "result": "done",
+            "actions": 31,
+            "first": {
+              "control": "slowDownBtn",
+              "visibleAtStart": null,
+              "y": null
+            },
+            "steps": [
+              {
+                "control": "slowDownBtn",
+                "name": "Reducir la velocidad",
+                "tier": "at hand",
+                "tabs": 30,
+                "opened": [],
+                "visibleAtStart": null,
+                "y": null,
+                "reached": true
+              }
+            ],
+            "open": []
+          },
+          {
+            "id": "step",
+            "label": "Pause, then step once",
+            "result": "done",
+            "actions": 56,
+            "first": {
+              "control": "timelinePlay",
+              "visibleAtStart": null,
+              "y": null
+            },
+            "steps": [
+              {
+                "control": "timelinePlay",
+                "name": "Pausar la simulación",
+                "tier": "at hand",
+                "tabs": 26,
+                "opened": [],
+                "visibleAtStart": null,
+                "y": null,
+                "reached": true
+              },
+              {
+                "control": "timelineStepFwd",
+                "name": "Avanzar un paso",
+                "tier": "at hand",
+                "tabs": 28,
+                "opened": [],
+                "visibleAtStart": null,
+                "y": null,
+                "reached": true
+              }
+            ],
+            "open": []
+          }
+        ]
+      },
+      {
+        "format": "gravitas.workspace-walk/1",
+        "commit": "a14687e6e",
+        "mode": "touch",
+        "lang": "en",
+        "viewport": {
+          "width": 375,
+          "height": 812
+        },
+        "measuredAt": "2026-11-17",
+        "note": "Actions count presses to reach and use each control, opening a drawer or a rail section as one. A task result is not waited for.",
+        "tasks": [
+          {
+            "id": "load",
+            "label": "Load a scenario",
+            "result": "done",
+            "actions": 3,
+            "first": {
+              "control": "loadScenarioBtn",
+              "visibleAtStart": false,
+              "y": 222
+            },
+            "steps": [
+              {
+                "control": "loadScenarioBtn",
+                "name": "Load Scenario",
+                "tier": "one step away",
+                "visibleAtStart": false,
+                "y": 222,
+                "opened": ["mobileMenuToggle"],
+                "reached": true
+              },
+              {
+                "control": "sc-card:solar-system",
+                "name": "Solar System card",
+                "tier": "one step away",
+                "opened": [],
+                "visibleAtStart": false,
+                "y": null,
+                "reached": true
+              }
+            ],
+            "open": []
+          },
+          {
+            "id": "find",
+            "label": "Find a planet",
+            "result": "done",
+            "actions": 1,
+            "first": {
+              "control": "simulationCanvas",
+              "visibleAtStart": true,
+              "y": 399
+            },
+            "steps": [
+              {
+                "control": "simulationCanvas",
+                "name": "Mercury",
+                "tier": "at hand",
+                "opened": [],
+                "visibleAtStart": true,
+                "y": 399,
+                "reached": true
+              }
+            ],
+            "open": []
+          },
+          {
+            "id": "follow",
+            "label": "Follow the planet",
+            "result": "PARTIAL: follows a type, not the chosen body",
+            "actions": 4,
+            "first": {
+              "control": "settingsBtn",
+              "visibleAtStart": false,
+              "y": 312
+            },
+            "steps": [
+              {
+                "control": "settingsBtn",
+                "name": "Settings",
+                "tier": "advanced",
+                "visibleAtStart": false,
+                "y": 312,
+                "opened": ["mobileMenuToggle"],
+                "reached": true
+              },
+              {
+                "control": "followSelect",
+                "name": "Follow mode",
+                "tier": "advanced",
+                "opened": [],
+                "visibleAtStart": false,
+                "y": null,
+                "reached": true,
+                "note": "a type (Planet), not the chosen body"
+              },
+              {
+                "control": "settingsApply",
+                "name": "Apply & Restart",
+                "tier": "advanced",
+                "visibleAtStart": true,
+                "y": 682,
+                "opened": [],
+                "reached": true
+              }
+            ],
+            "open": [
+              {
+                "what": "follow the chosen body (Settings follows a type)",
+                "owner": 467
+              }
+            ]
+          },
+          {
+            "id": "period",
+            "label": "Measure its period (stopwatch on periapsis)",
+            "result": "error: locator.tap: Timeout 30000ms exceeded.",
+            "actions": 1,
+            "first": {
+              "control": "simulationCanvas",
+              "visibleAtStart": true,
+              "y": 399
+            },
+            "steps": [
+              {
+                "control": "simulationCanvas",
+                "name": "Mercury",
+                "tier": "at hand",
+                "opened": [],
+                "visibleAtStart": true,
+                "y": 399,
+                "reached": true
+              }
+            ],
+            "open": []
+          },
+          {
+            "id": "reset",
+            "label": "Reset: fit the view, then start the scenario again",
+            "result": "done",
+            "actions": 4,
+            "first": {
+              "control": "resetViewBtn",
+              "visibleAtStart": false,
+              "y": 117
+            },
+            "steps": [
+              {
+                "control": "resetViewBtn",
+                "name": "Fit View to Bodies",
+                "tier": "at hand",
+                "visibleAtStart": false,
+                "y": 117,
+                "opened": ["mobileMenuToggle"],
+                "reached": true
+              },
+              {
+                "control": "refreshScenarioBtn",
+                "name": "Restart Scenario",
+                "tier": "one step away",
+                "visibleAtStart": false,
+                "y": 357,
+                "opened": ["mobileMenuToggle"],
+                "reached": true
+              }
+            ],
+            "open": []
+          },
+          {
+            "id": "speed",
+            "label": "Slow the simulation down",
+            "result": "control not reachable",
+            "actions": 1,
+            "first": {
+              "control": "slowDownBtn",
+              "visibleAtStart": false,
+              "y": null
+            },
+            "steps": [
+              {
+                "control": "slowDownBtn",
+                "name": "Decrease speed",
+                "tier": "at hand",
+                "visibleAtStart": false,
+                "y": null,
+                "opened": [],
+                "reached": false
+              }
+            ],
+            "open": []
+          },
+          {
+            "id": "step",
+            "label": "Pause, then step once",
+            "result": "done",
+            "actions": 2,
+            "first": {
+              "control": "timelinePlay",
+              "visibleAtStart": true,
+              "y": 750
+            },
+            "steps": [
+              {
+                "control": "timelinePlay",
+                "name": "Pause simulation",
+                "tier": "at hand",
+                "visibleAtStart": true,
+                "y": 750,
+                "opened": [],
+                "reached": true
+              },
+              {
+                "control": "timelineStepFwd",
+                "name": "Step forward",
+                "tier": "at hand",
+                "visibleAtStart": true,
+                "y": 750,
+                "opened": [],
+                "reached": true
+              }
+            ],
+            "open": []
+          }
+        ]
+      },
+      {
+        "format": "gravitas.workspace-walk/1",
+        "commit": "a14687e6e",
+        "mode": "touch",
+        "lang": "es",
+        "viewport": {
+          "width": 375,
+          "height": 812
+        },
+        "measuredAt": "2026-11-17",
+        "note": "Actions count presses to reach and use each control, opening a drawer or a rail section as one. A task result is not waited for.",
+        "tasks": [
+          {
+            "id": "load",
+            "label": "Load a scenario",
+            "result": "done",
+            "actions": 3,
+            "first": {
+              "control": "loadScenarioBtn",
+              "visibleAtStart": false,
+              "y": 229
+            },
+            "steps": [
+              {
+                "control": "loadScenarioBtn",
+                "name": "Cargar escenario",
+                "tier": "one step away",
+                "visibleAtStart": false,
+                "y": 229,
+                "opened": ["mobileMenuToggle"],
+                "reached": true
+              },
+              {
+                "control": "sc-card:solar-system",
+                "name": "Solar System card",
+                "tier": "one step away",
+                "opened": [],
+                "visibleAtStart": false,
+                "y": null,
+                "reached": true
+              }
+            ],
+            "open": []
+          },
+          {
+            "id": "find",
+            "label": "Find a planet",
+            "result": "done",
+            "actions": 1,
+            "first": {
+              "control": "simulationCanvas",
+              "visibleAtStart": true,
+              "y": 399
+            },
+            "steps": [
+              {
+                "control": "simulationCanvas",
+                "name": "Mercury",
+                "tier": "at hand",
+                "opened": [],
+                "visibleAtStart": true,
+                "y": 399,
+                "reached": true
+              }
+            ],
+            "open": []
+          },
+          {
+            "id": "follow",
+            "label": "Follow the planet",
+            "result": "PARTIAL: follows a type, not the chosen body",
+            "actions": 4,
+            "first": {
+              "control": "settingsBtn",
+              "visibleAtStart": false,
+              "y": 319
+            },
+            "steps": [
+              {
+                "control": "settingsBtn",
+                "name": "Ajustes",
+                "tier": "advanced",
+                "visibleAtStart": false,
+                "y": 319,
+                "opened": ["mobileMenuToggle"],
+                "reached": true
+              },
+              {
+                "control": "followSelect",
+                "name": "Follow mode",
+                "tier": "advanced",
+                "opened": [],
+                "visibleAtStart": false,
+                "y": null,
+                "reached": true,
+                "note": "a type (Planet), not the chosen body"
+              },
+              {
+                "control": "settingsApply",
+                "name": "Aplicar y reiniciar",
+                "tier": "advanced",
+                "visibleAtStart": true,
+                "y": 682,
+                "opened": [],
+                "reached": true
+              }
+            ],
+            "open": [
+              {
+                "what": "follow the chosen body (Settings follows a type)",
+                "owner": 467
+              }
+            ]
+          },
+          {
+            "id": "period",
+            "label": "Measure its period (stopwatch on periapsis)",
+            "result": "error: locator.tap: Timeout 30000ms exceeded.",
+            "actions": 1,
+            "first": {
+              "control": "simulationCanvas",
+              "visibleAtStart": true,
+              "y": 399
+            },
+            "steps": [
+              {
+                "control": "simulationCanvas",
+                "name": "Mercury",
+                "tier": "at hand",
+                "opened": [],
+                "visibleAtStart": true,
+                "y": 399,
+                "reached": true
+              }
+            ],
+            "open": []
+          },
+          {
+            "id": "reset",
+            "label": "Reset: fit the view, then start the scenario again",
+            "result": "done",
+            "actions": 4,
+            "first": {
+              "control": "resetViewBtn",
+              "visibleAtStart": false,
+              "y": 117
+            },
+            "steps": [
+              {
+                "control": "resetViewBtn",
+                "name": "Ajustar vista a los cuerpos",
+                "tier": "at hand",
+                "visibleAtStart": false,
+                "y": 117,
+                "opened": ["mobileMenuToggle"],
+                "reached": true
+              },
+              {
+                "control": "refreshScenarioBtn",
+                "name": "Reiniciar escenario",
+                "tier": "one step away",
+                "visibleAtStart": false,
+                "y": 364,
+                "opened": ["mobileMenuToggle"],
+                "reached": true
+              }
+            ],
+            "open": []
+          },
+          {
+            "id": "speed",
+            "label": "Slow the simulation down",
+            "result": "control not reachable",
+            "actions": 1,
+            "first": {
+              "control": "slowDownBtn",
+              "visibleAtStart": false,
+              "y": null
+            },
+            "steps": [
+              {
+                "control": "slowDownBtn",
+                "name": "Reducir la velocidad",
+                "tier": "at hand",
+                "visibleAtStart": false,
+                "y": null,
+                "opened": [],
+                "reached": false
+              }
+            ],
+            "open": []
+          },
+          {
+            "id": "step",
+            "label": "Pause, then step once",
+            "result": "done",
+            "actions": 2,
+            "first": {
+              "control": "timelinePlay",
+              "visibleAtStart": true,
+              "y": 750
+            },
+            "steps": [
+              {
+                "control": "timelinePlay",
+                "name": "Pausar la simulación",
+                "tier": "at hand",
+                "visibleAtStart": true,
+                "y": 750,
+                "opened": [],
+                "reached": true
+              },
+              {
+                "control": "timelineStepFwd",
+                "name": "Avanzar un paso",
+                "tier": "at hand",
+                "visibleAtStart": true,
+                "y": 750,
+                "opened": [],
+                "reached": true
+              }
+            ],
+            "open": []
+          }
+        ]
+      }
+    ]
+  }
+}
