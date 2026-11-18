@@ -31,8 +31,6 @@ import {
   BlackHole,
   accretion_disk_particles,
   getPhysicsSetting,
-  EARTH_MASS_UNIT,
-  Planet,
   NeutronStar,
   SOLAR_MASS_UNIT,
   StarObject,
@@ -116,6 +114,43 @@ let snapshots = [];
  * panel's own tick, which runs after layout and after the boot has settled.
  */
 let pendingFit = false;
+
+/**
+ * What a controlled run saves before it rebuilds the stage, so the stage can be
+ * stood back on the bodies a state restore makes. @returns {object}
+ */
+export const stageMemo = () => ({
+  entries: staged.slice(),
+  key: stagedKey,
+  scale: stagedScale,
+  declared: lastDeclaration,
+  pair: lastStarPair,
+  fit: pendingFit,
+});
+
+/**
+ * Put the stage back the way `stageMemo` found it, on the bodies a restore has
+ * just built: each entry follows its body by id, and the key, so that the next
+ * step sharing this stage still keeps these bodies.
+ * @param {object} memo - From stageMemo()
+ * @param {Array<object>} bodies - The restored world's bodies
+ * @returns {Array<string>} The roles bound
+ */
+export function adoptStage(memo, bodies) {
+  const byId = new Map(bodies.map(b => [b.id, b]));
+  staged = memo.entries.filter(e => {
+    const star = byId.get(e.star.id);
+    if (star) Object.assign(e, { star });
+    if (star) star.persistent = true;
+    return Boolean(star);
+  });
+  stagedKey = memo.key;
+  stagedScale = memo.scale;
+  lastDeclaration = memo.declared;
+  lastStarPair = memo.pair;
+  pendingFit = memo.fit;
+  return bindRoles(rolesOfStage(), {}).bound;
+}
 
 /** What is on the stage now. @returns {Array} */
 export const stagedStars = () => staged.slice();
@@ -249,7 +284,7 @@ export function resetStageForTests() {
 /** How much of the population is on the canvas, and of how many. @returns {?object} */
 export const stagedPopulation = () => lastPopulation;
 
-/** The black-hole stage kinds (js/lessonStageHole.js), fetched by loadStageKinds. */
+/** The black-hole and system stage kinds (js/lessonStageHole.js), fetched by loadStageKinds. */
 let holeKinds = null;
 
 /** What those kinds build through. */
@@ -264,7 +299,8 @@ const family = {
   },
 };
 
-const needsHole = stage => Boolean(stage?.hole || stage?.equalMass);
+const needsHole = stage =>
+  Boolean(stage?.hole || stage?.equalMass || stage?.system);
 
 /** Whether a declaration names kinds not fetched yet. @returns {boolean} */
 export const stageKindsPending = stage => needsHole(stage) && !holeKinds;
@@ -330,7 +366,7 @@ export function applyStage(stage, { force = false } = {}) {
     if (!force && key === stagedKey) {
       return { built: false, roles: staged.map(x => x.role), problems: {} };
     }
-    const out = applySystemStage(stage.system);
+    const out = holeKinds.applySystemStage(stage.system, family);
     stagedKey = key;
     return { built: true, roles: out.roles, problems: {} };
   }
@@ -935,82 +971,6 @@ export function applyBinaryStage(spec = {}) {
   fitAttempts = 0;
   fitApplied = null;
   const bound = bindRoles(rolesOfStage(), { modelOwned: ['a', 'b'] });
-  return { built: true, roles: bound.bound };
-}
-
-/**
- * Stand a star with planets on it, on orbits with a declared eccentricity.
- *
- * Engine-owned: these are ordinary bodies and the integrator moves them, which
- * is what makes the periapsis and apoapsis a lesson stops at real turning
- * points rather than marks on a drawing.
- *
- * Each planet starts at apoapsis, moving perpendicular to the line to the
- * star - the standard two-body initial condition, so the orbit closes and the
- * semi-major axis it settles on is the one that was asked for. Masses are
- * Earth-sized and the star's is solar, so the planets do not perturb each
- * other measurably over the few years a lesson watches.
- *
- * @param {object} spec - {starName, luminositySun, planets: [{name, aAU, ecc, radius}]}
- * @returns {{built: boolean, roles: Array<string>}} What was staged
- */
-export function applySystemStage(spec = {}) {
-  clearWorld();
-  // The integrator's own constant, not the application's copy of it. The two
-  // are synced while the app runs and are NOT synced anywhere else, so a stage
-  // built from SETTINGS lays out an orbit for a gravity the engine is not
-  // using - which is how a pair set up at apoapsis was found spiralling
-  // outward instead of closing.
-  const G = getPhysicsSetting('gravitational_constant');
-  const AU = 100;
-  const star = new StarObject({ x: 0, y: 0 }, { x: 0, y: 0 }, 1);
-  star.name = spec.starName || 'Sun';
-  star.mass = SOLAR_MASS_UNIT;
-  star.massInSuns = 1;
-  star.luminosityInSuns =
-    Number(spec.luminositySun) > 0 ? spec.luminositySun : 1;
-  star.temperature = Number(spec.teffK) > 0 ? spec.teffK : 5780;
-  star.radius = 10;
-  star.persistent = true;
-  star.model_owned = false;
-  stars.push(star);
-  staged.push({
-    role: 'star',
-    star,
-    model: null,
-    spec: { name: star.name },
-    physicalRadiusSun: null,
-  });
-
-  (spec.planets || []).forEach(w => {
-    const a = Number(w.aAU) > 0 ? Number(w.aAU) * AU : AU;
-    const e = Math.min(0.9, Math.max(0, Number(w.ecc) || 0));
-    // Apoapsis: furthest point, slowest speed. The vis-viva speed there for an
-    // ellipse of semi-major axis a is sqrt(GM (2/r - 1/a)).
-    const r = a * (1 + e);
-    const v = Math.sqrt(SOLAR_MASS_UNIT * G * (2 / r - 1 / a));
-    const planet = new Planet({ x: r, y: 0 }, { x: 0, y: v }, 1);
-    planet.name = w.name;
-    planet.mass = EARTH_MASS_UNIT;
-    planet.massInEarths = 1;
-    planet.radius = Number(w.radius) > 0 ? Number(w.radius) : 4.5;
-    if (w.color) planet.baseColor = w.color;
-    planet.persistent = true;
-    planet.model_owned = false;
-    planets.push(planet);
-    staged.push({
-      role: w.role || w.name.toLowerCase(),
-      star: planet,
-      model: null,
-      spec: { name: planet.name },
-      physicalRadiusSun: null,
-    });
-  });
-  bumpWorldGeneration();
-  requestFit(spec.fit);
-  fitAttempts = 0;
-  fitApplied = null;
-  const bound = bindRoles(rolesOfStage(), {});
   return { built: true, roles: bound.bound };
 }
 

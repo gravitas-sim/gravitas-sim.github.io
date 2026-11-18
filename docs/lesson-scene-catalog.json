@@ -119989,6 +119989,12 @@
   "prose": 58,
   "mismatched": 5,
   "rebuilds": 80,
+  "canvas": {
+   "scene": 0,
+   "portrait": 0,
+   "quiet": 0,
+   "unstated": 1521
+  },
   "lessons": 124,
   "loops": 195,
   "closedLoops": 195,
