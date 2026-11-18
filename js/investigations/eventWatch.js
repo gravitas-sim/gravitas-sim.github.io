@@ -1,40 +1,22 @@
-// =============================================================================
-// Letting a lesson step drive the pause-at-event tool
-// -----------------------------------------------------------------------------
-// Three lessons ask a student to catch a moment: periapsis and apoapsis of an
-// eccentric planet, the top of a transfer arc, the middle of a transit. All
-// three used to say "press Space and try to stop it near the right place",
-// which measures reaction time rather than orbital mechanics - and on a fast
-// machine the interesting instant goes past in two frames.
+// Lets a lesson step drive the pause-at-event tool (js/pauseAtEvent.js), which
+// does the real work: it watches integration steps and reports the overshoot.
+// This module is the thin piece between a step and that tool and contains no
+// physics.
 //
-// js/pauseAtEvent.js already does the hard part properly: it watches
-// integration steps rather than frames, brackets the crossing, and reports how
-// far past the event the pause actually is. This module is the thin piece
-// between a lesson step and that tool. It computes nothing about orbits and
-// contains no physics; if it did, the lesson would be measuring something the
-// tool is not.
+// Opens the tool with the right bodies and event already chosen. Arming is the
+// student's own click wherever the question is the moment itself ("when is
+// periapsis?"). A step may arm for the student (`pauseAt.auto`, through
+// armForLesson, js/investigations/eventWindow.js) only where the moment is the
+// setting, not the answer; the author rule interaction/auto-arm
+// (tools/authoring/autoArmRules.mjs) refuses an auto step that asks when.
 //
-// What it is actually for
-// -----------------------------------------------------------------------------
-//   Open the tool with the right bodies and the right event already chosen,
-//   and stop there. Arming is the student's own click. A lesson that armed a
-//   watch on their behalf would be a lesson that answered its own question,
-//   and the panel's own Arm button is where that decision belongs.
+// A reader's own watch is never taken: arming over a foreign watch is refused
+// and needs a second, explicit press (`force`).
 //
-//   Never clobber a watch the reader set up themselves. Somebody who armed a
-//   separation crossing to answer their own question and then advanced a step
-//   should not silently lose it: arming over a foreign watch is refused and
-//   needs a second, explicit press.
+// No stale callback may land: every arm carries a generation and the world it
+// was armed in, and a fire matching neither is dropped.
 //
-//   Never let a stale callback land. A watch armed on step 11 must not fire
-//   into step 12, into a rebuilt world, or into a closed lesson. Every arm
-//   carries a generation and the world it was armed in, and a fire that does
-//   not match both is dropped.
-//
-// Lazy, and imported only from the step that needs it: the tool, its panel and
-// its prose are not in the start-up path and a lesson that never reaches one of
-// these steps never fetches them.
-// =============================================================================
+// Lazy: imported only from the step that needs it.
 
 /** What the lesson's own watch is doing. */
 export const WATCH = Object.freeze({
@@ -58,20 +40,12 @@ let unsubscribe = null;
 let ourEvent = null;
 /** State, for the step's own readout. */
 let state = WATCH.IDLE;
-/** The world our watch was armed in, so a rebuild invalidates it. */
 /**
- * Whether a lesson step is currently offering this tool.
- *
- * The ownership rule, and it took a failing test to get it right. A watch
- * armed while a `pauseAt` step is on screen belongs to that step's activity,
- * however it was armed - through the step's own button or through the panel's
- * Arm button, which is what the step tells the reader to press. Leaving the
- * step releases it.
- *
- * A watch armed with no such step showing is the reader's own, and the lesson
- * will not take it. So "whose watch is this" is answered by *when* it was
- * armed rather than by *which function* armed it, which is the only version of
- * the question that matches what a reader would say.
+ * Whether a lesson step is currently offering this tool, with its world. The
+ * ownership rule: a watch armed while a `pauseAt` step is showing is that
+ * step's, whether armed by the step's button or the panel's Arm button; leaving
+ * the step releases it. A watch armed with no such step showing is the
+ * reader's. Ownership follows when it was armed, not which function armed it.
  */
 let activity = null;
 
@@ -85,8 +59,8 @@ let loaded = null;
  */
 async function ensureLoaded() {
   if (!loaded) {
-    // Through the bridge, which wires the panel once and lets the timeline
-    // marker and a screenshot's note see the event this watch produces.
+    // The bridge wires the panel once, so the timeline marker and screenshot
+    // note see this watch's event.
     loaded = Promise.all([
       import('../pauseAtEventBridge.js').then(b => b.ensurePauseAtEvent()),
       import('../physics.js'),
@@ -103,23 +77,16 @@ async function ensureLoaded() {
 export const lessonWatchState = () => state;
 
 /**
- * The event our own watch produced.
- *
- * Deliberately not `lastEvent()` from the tool: that returns whatever fired
- * most recently including a watch the reader armed themselves, and a lesson
- * field filled from somebody else's event is a wrong answer that looks right.
+ * The event our own watch produced. Not the tool's `lastEvent()`, which also
+ * returns a reader's own watch and would fill a lesson field with a wrong answer.
  *
  * @returns {?object} The event, or null
  */
 export const lastLessonEvent = () => (ourEvent ? { ...ourEvent } : null);
 
 /**
- * Find a body by the name a lesson uses.
- *
- * Lessons name bodies - "Eccentric planet", "Probe" - because a lesson cannot
- * know the ids a world build hands out. Matched exactly first, then
- * case-insensitively, and never by prefix: "Star" and "Star B" are different
- * bodies and a prefix match would silently point the watch at the wrong one.
+ * Find a body by the name a lesson uses (lessons cannot know build ids). Exact
+ * match first, then case-insensitive, never by prefix ("Star" vs "Star B").
  *
  * @param {Array<object>} bodies - Candidates
  * @param {string} name - As the lesson writes it
@@ -137,25 +104,24 @@ export function resolveByName(bodies, name) {
 }
 
 /**
- * Open the tool with the right bodies and event chosen, and arm nothing.
- *
- * Opening also begins the activity: from here until release(), a watch that
- * appears is this step's, and the listener that watches for it is ours to drop.
+ * Open the tool with the bodies and event chosen, and arm nothing. This begins
+ * the activity: until release(), a watch that appears is this step's.
  *
  * @param {object} spec - { kind, bodyId, primaryId, separation }
+ * @param {object} [opts] - { onFired }, called with our event when it fires
  * @returns {Promise<{ok: boolean, reason?: string}>} Whether it could be shown
  */
-export async function openToolFor(spec) {
+export async function openToolFor(spec, { onFired = null } = {}) {
   const { events, panel, physics } = await ensureLoaded();
 
-  // A watch already armed before the step opened is the reader's, and stays
-  // theirs: the activity records that so armForLesson can refuse to take it.
+  // A watch armed before the step opened is the reader's; armForLesson refuses it.
   const preexisting = Boolean(events.armedEvent());
   const mine = ++generation;
   activity = {
     generation: mine,
     preexisting,
     world: physics.getWorldGeneration(),
+    onFired,
   };
 
   unsubscribe?.();
@@ -166,13 +132,22 @@ export async function openToolFor(spec) {
       return;
     }
     if (payload?.type === 'fired') {
-      ourEvent = { ...payload.event, lessonGeneration: mine };
+      // The event's moment on the simulation clock that recorded frames use:
+      // days scale linearly from the same zero, so it is at
+      // timeDays / (timeDays + overshootDays) of the clock now.
+      const e = payload.event;
+      const now = e.timeDays + e.overshootDays;
+      const clock = physics.getSimulationTime();
+      ourEvent = {
+        ...e,
+        lessonGeneration: mine,
+        clock: now > 0 ? (clock * e.timeDays) / now : clock,
+      };
       state = WATCH.FIRED;
       activity.armed = false;
       activity.onFired?.(lastLessonEvent());
     } else if (payload?.type === 'armed') {
-      // Armed while this step is showing - by the step's button or by the
-      // panel's - so it is this activity's watch.
+      // Armed while this step shows, by either button: this activity's watch.
       activity.armed = true;
       activity.preexisting = false;
       state = WATCH.ARMED;
@@ -183,15 +158,13 @@ export async function openToolFor(spec) {
   });
 
   panel.setPauseAtEventEnabled(true);
-  // Preselect through the panel's own API rather than by writing to its DOM,
-  // so the panel stays the only thing that knows its markup.
+  // Via the panel's API, so only the panel knows its markup.
   const shown = panel.presetSelection?.(spec);
   return shown === false ? { ok: false, reason: 'cannotSelect' } : { ok: true };
 }
 
 /**
  * Whether the tool already holds a watch that is not ours.
- *
  * @returns {Promise<boolean>} True when somebody else's watch is armed
  */
 export async function foreignWatchArmed() {
@@ -202,11 +175,8 @@ export async function foreignWatchArmed() {
 }
 
 /**
- * Arm a watch on the lesson's behalf, once the student has asked for it.
- *
- * Refuses rather than clobbering a watch the reader set up themselves; a
- * second call with `force` takes it, which is what a second press of a button
- * that has just said so amounts to.
+ * Arm a watch on the lesson's behalf, once the student has asked. Refuses
+ * rather than clobber a reader's own watch; `force` (a second press) takes it.
  *
  * @param {object} spec - { kind, bodyId, primaryId, separation, note }
  * @param {object} opts - { onFired, force }
@@ -221,12 +191,11 @@ export async function armForLesson(
     return { ok: false, reason: 'foreignWatch' };
   }
 
-  // No activity open means no step is offering the tool, so there is nothing
-  // for a lesson to arm on behalf of.
+  // No activity: no step is offering the tool.
   if (!activity) {
     await openToolFor(spec);
   }
-  activity.onFired = onFired;
+  if (onFired) activity.onFired = onFired;
   const resolved = await armThroughPanel(spec);
   if (!resolved.ok) {
     state = WATCH.REFUSED;
@@ -237,14 +206,7 @@ export async function armForLesson(
   return { ok: true };
 }
 
-/**
- * Arm through the panel, so the deps come from one place.
- *
- * The panel already builds the dependency block the watcher needs - the body
- * resolver, the pause, the clock, the step hook, the transit log - and a second
- * copy here would be a second thing that could disagree with it about what the
- * clock is.
- */
+/** Arm through the panel, which builds the watcher's deps in one place. */
 async function armThroughPanel(spec) {
   const { panel } = await ensureLoaded();
   if (!panel.armFromSpec) return { ok: false, reason: 'noPanelArm' };
@@ -252,18 +214,14 @@ async function armThroughPanel(spec) {
 }
 
 /**
- * Stop watching on the lesson's behalf.
- *
- * Called on every step change, when the lesson closes, and before a new arm.
- * Disarms the tool only if the armed watch is ours: a reader's own watch is
- * theirs to keep.
+ * Stop watching on the lesson's behalf (step change, lesson close, before a new
+ * arm). Disarms only our own watch.
  *
  * @param {object} [opts] - `keepEvent` to leave a fired event in place
  */
 export function release({ keepEvent = false } = {}) {
   generation++;
-  // Whatever this activity armed is this activity's, and goes with it. A watch
-  // that pre-dated the activity was never ours and is left alone.
+  // A watch that pre-dated the activity was never ours.
   const wasOurs = Boolean(activity && activity.armed && !activity.preexisting);
   activity = null;
   unsubscribe?.();
@@ -273,8 +231,7 @@ export function release({ keepEvent = false } = {}) {
     state = WATCH.IDLE;
   }
   if (wasOurs && loaded) {
-    // Fire-and-forget: the modules are already resolved by the time a watch of
-    // ours exists, and release() is called from synchronous teardown paths.
+    // Fire-and-forget: release() runs in synchronous teardown paths.
     loaded.then(({ events }) => {
       if (events.armedEvent()) events.disarm('lessonLeft');
     });

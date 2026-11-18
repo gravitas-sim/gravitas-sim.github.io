@@ -172,10 +172,10 @@ their ceilings:
 | --- | ---: | ---: |
 | `js/data/instructorContent.js` | 6,761 | 6,761 |
 | `js/i18n/es.deferred.js` | 4,250 | 4,250 |
-| `js/i18n/en.deferred.js` | 4,001 | 4,001 |
+| `js/i18n/en.deferred.js` | 3,998 | 3,998 |
 | `js/data/investigations/observing-sequence.js` | 3,341 | 3,341 |
 | `js/data/investigations/measurement-sequence.js` | 3,270 | 3,270 |
-| `js/investigations.js` | 3,144 | 3,144 |
+| `js/investigations.js` | 3,108 | 3,108 |
 | `js/render.js` | 2,856 | 2,856 |
 | `js/data/investigations/depth/measurement-sequence.js` | 2,840 | 2,840 |
 <!--/fact-block-->
@@ -443,6 +443,11 @@ Rules that are not obvious:
   a lesson needs a number the engine cannot produce, fix the engine.
 - **Answers carry a tolerance and a reason.** `tolerance` is not a fudge
   factor; it is the precision the instrument can actually deliver.
+- **A step arms a watch only where the moment is not the answer.**
+  `pauseAt.auto` stops the scene at an event so the student can measure
+  something there; a step that asks when the event happens leaves Arm to the
+  student. `time`, `pauseAt.replay` and `pauseAt.rewind` are described in
+  `INTERACTION.md` section 7.
 
 ### The authoring toolchain
 
