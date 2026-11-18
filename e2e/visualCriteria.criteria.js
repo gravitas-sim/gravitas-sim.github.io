@@ -16,9 +16,10 @@
 //         bodies sit outside every panel (the desktop clause).
 //   I-9   drawing. Arrow length rises with the speed it shows and the legend
 //         states its scale; a trail spans a time that does not follow the
-//         frame rate. (The label clause on the main canvas lives in
-//         canvasLegibility.spec.js, and the plot clause, ticks at least 11 px
-//         and titles 12 px with marker shapes, in plotReadingSize.spec.js.)
+//         frame rate. (The label and selection clauses on the main canvas
+//         passed and moved to e2e/bodyLabels.spec.js, and the plot clause,
+//         ticks at least 11 px and titles 12 px with marker shapes, to
+//         e2e/plotReadingSize.spec.js, both in the suite.)
 //
 // On demand, not in CI. These tests state what the 3.0 pilots are measured
 // against, and most of the pilot states miss it: they FAIL, and that is the
@@ -46,25 +47,17 @@
 import { test, expect } from './fixtures.js';
 import {
   LESSON_PILOTS,
-  DRAWING_STATES,
   PHONE_SIZES,
   TABLET_SIZE,
   DESKTOP_SIZES,
-  DEVICE_PIXEL_RATIOS,
-  CUE_LUMA_STEP,
   SCENE_ACTION_NAME,
   ARROW_RATIO_FACTOR,
   TRAIL_FRAME_RATES,
-  installCanvasTextRecorder,
   openLessonStep,
   measureLayoutInPage,
-  readMainCanvasLabels,
-  measureSelectionCue,
   measureVelocityArrow,
   measureTrailSpan,
   judgeLayout,
-  judgeLabels,
-  judgeCue,
   judgeArrows,
   judgeTrailSpans,
 } from '../tools/visual-criteria.mjs';
@@ -167,88 +160,6 @@ test.describe('I-9: arrows and trails mean what they show', () => {
 
   // The plot clause (ticks, titles, marker shapes) passes on both pilot plots
   // and is the suite's: e2e/plotReadingSize.spec.js.
-});
-
-// -----------------------------------------------------------------------------
-// The main canvas, criterion I-9 (labels and the selection cue)
-// -----------------------------------------------------------------------------
-// The sandbox canvas draws its labels in backing-store pixels with no scaling
-// for the display (js/quality.js renderScale makes the store larger on a HiDPI
-// screen and the context is not scaled to match), so a font of 10 px covers 10
-// CSS pixels on an ordinary screen and about 5 on a display with a ratio of 2.
-// e2e/canvasLegibility.spec.js records that baseline in CI as a ratchet; these
-// are the criteria it is measured against. A label belongs to a body when its
-// anchor is within reach of one; a symbol glyph after a mass belongs to the
-// label before it.
-// -----------------------------------------------------------------------------
-
-const MAIN_STATES = [
-  ...LESSON_PILOTS.filter(p => p.subject === 'scene'),
-  { ...LESSON_PILOTS[3] },
-  { id: 'keplers-wedges', ...DRAWING_STATES.wedges },
-];
-const CUE_ROLE = {
-  'keplers-2nd-law': 'eccentric',
-  'keplers-wedges': 'eccentric',
-  'transit-lab': 'planet',
-  'weighing-stars-binary': 'a',
-  'galilean-resonance': 'star',
-};
-
-for (const dpr of DEVICE_PIXEL_RATIOS) {
-  test.describe(`I-9: main canvas labels at device pixel ratio ${dpr}`, () => {
-    test.use({ deviceScaleFactor: dpr });
-    for (const state of MAIN_STATES) {
-      const open = async page => {
-        await page.addInitScript(installCanvasTextRecorder);
-        await page.setViewportSize({ width: 1366, height: 800 });
-        await openLessonStep(page, state);
-        return page.evaluate(readMainCanvasLabels);
-      };
-      test(`body labels: ${state.id}`, async ({ page }) => {
-        const r = await open(page);
-        expect(
-          r.bodyLabels.length,
-          'the scene drew body labels'
-        ).toBeGreaterThan(0);
-        const v = judgeLabels(r.bodyLabels);
-        expect(
-          { small: v.small, overlaps: v.overlaps },
-          `canvas scale ${r.canvasScale.toFixed(2)}`
-        ).toEqual({ small: [], overlaps: [] });
-      });
-      test(`other canvas text: ${state.id}`, async ({ page }) => {
-        const r = await open(page);
-        expect(r.otherText.length, 'the scene drew other text').toBeGreaterThan(
-          0
-        );
-        const v = judgeLabels(r.otherText);
-        expect(
-          { small: v.small, overlaps: v.overlaps },
-          `canvas scale ${r.canvasScale.toFixed(2)}`
-        ).toEqual({ small: [], overlaps: [] });
-      });
-    }
-  });
-}
-
-test.describe('I-9: the selected body is marked on the canvas', () => {
-  for (const state of MAIN_STATES) {
-    test(`cue: ${state.id}`, async ({ page }) => {
-      await page.addInitScript(installCanvasTextRecorder);
-      await page.setViewportSize({ width: 1366, height: 800 });
-      await openLessonStep(page, state);
-      const m = await page.evaluate(measureSelectionCue, {
-        role: CUE_ROLE[state.id],
-        lumaStep: CUE_LUMA_STEP,
-      });
-      expect(m.selected, 'the body was selected').toBe(true);
-      expect(
-        judgeCue(m).pass,
-        `${m.changed} pixels changed in luminance (frame noise ${m.noise})`
-      ).toBe(true);
-    });
-  }
 });
 
 test.describe('the harness can pass and can fail', () => {

@@ -30,16 +30,12 @@
 // says anything useful, which no test can decide.
 // =============================================================================
 
-import { readFileSync } from 'node:fs';
 import { test, expect } from './fixtures.js';
 import { TYPE } from '../js/widgetCanvas.js';
 import {
   LESSON_PILOTS,
-  DRAWING_STATES,
-  DEVICE_PIXEL_RATIOS,
   installCanvasTextRecorder,
   openLessonStep,
-  readMainCanvasLabels,
   judgeLabels,
 } from '../tools/visual-criteria.mjs';
 
@@ -274,73 +270,15 @@ test.describe('instrument labels are legible', () => {
 });
 
 // =============================================================================
-// The main canvas, as it is today (criterion I-9, label clause, baseline)
+// The main canvas (criterion I-9, label clause)
 // -----------------------------------------------------------------------------
-// The sandbox canvas draws its labels in backing-store pixels with no scaling
-// for the display (js/quality.js renderScale makes the store larger on a HiDPI
-// screen and the context is not scaled to match), so a font of 10 px covers
-// 10 CSS pixels on an ordinary screen and about 5 on a display with a ratio of
-// 2. Nobody sees that from the machine they wrote it on, which is why this
-// measures it: the same recorder as above, on `simulationCanvas`, each label
-// converted to CSS pixels through the transform it was drawn under and the
-// canvas's own scale (tools/visual-criteria.mjs).
-//
-// What runs here is the baseline of the 3.0 pilot states, committed before
-// Prompt 336 changes how labels are drawn (tests/fixtures/visual-baseline.json,
-// "criteria.labels"): at device pixel ratios 1 and 2 no body label may come out
-// smaller than it did, and none may overlap another it did not overlap. A
-// change that makes labels larger passes, and its prompt raises the recorded
-// numbers. The criterion itself (11 CSS px, no overlap, the selected body
-// marked) is stated as tests that fail on these states in
-// e2e/visualCriteria.criteria.js, which runs on demand and is not in this suite.
+// The sandbox canvas used to draw its labels in backing-store pixels with no
+// scaling for the display, so a font of 10 px covered about 5 CSS pixels at a
+// device pixel ratio of 2. The labels authority (js/bodyLabels.js) sizes them in
+// CSS pixels, and the criterion itself (11 CSS px, none on another, at ratios 1
+// and 2 on the lesson pilots) is held by e2e/bodyLabels.spec.js. What stays
+// here is the proof that the harness can pass and can fail.
 // =============================================================================
-
-const BASELINE = JSON.parse(
-  readFileSync('tests/fixtures/visual-baseline.json', 'utf8')
-);
-const MAIN_STATES = [
-  ...LESSON_PILOTS.filter(p => p.subject === 'scene'),
-  { ...LESSON_PILOTS[3] },
-  { id: 'keplers-wedges', ...DRAWING_STATES.wedges },
-];
-
-for (const dpr of DEVICE_PIXEL_RATIOS) {
-  test.describe(`main canvas labels, baseline, at device pixel ratio ${dpr}`, () => {
-    test.use({ deviceScaleFactor: dpr });
-
-    for (const state of MAIN_STATES) {
-      test(`no smaller than recorded: ${state.id}`, async ({ page }) => {
-        const was = BASELINE.criteria.labels.find(
-          l => l.state === state.id && l.dpr === dpr
-        );
-        expect(was, 'the baseline has this state').toBeTruthy();
-        await page.addInitScript(installCanvasTextRecorder);
-        await page.setViewportSize({ width: 1366, height: 800 });
-        await openLessonStep(page, state);
-        const r = await page.evaluate(readMainCanvasLabels);
-        expect(r.canvasScale).toBeCloseTo(dpr === 1 ? 1 : was.canvasScale, 1);
-        const body = judgeLabels(r.bodyLabels);
-        const other = judgeLabels(r.otherText);
-        expect(body.count, 'body labels drawn').toBeGreaterThanOrEqual(
-          was.bodyLabels.count
-        );
-        // A tenth of a pixel of slack for the rounding of the canvas scale.
-        expect(body.smallest).toBeGreaterThanOrEqual(
-          was.bodyLabels.smallestCssPx - 0.1
-        );
-        expect(other.smallest).toBeGreaterThanOrEqual(
-          was.otherText.smallestCssPx - 0.1
-        );
-        expect(body.overlaps.length).toBeLessThanOrEqual(
-          was.bodyLabels.overlaps
-        );
-        expect(other.overlaps.length).toBeLessThanOrEqual(
-          was.otherText.overlaps
-        );
-      });
-    }
-  });
-}
 
 test.describe('the label harness can pass and can fail', () => {
   test.use({ deviceScaleFactor: 2 });

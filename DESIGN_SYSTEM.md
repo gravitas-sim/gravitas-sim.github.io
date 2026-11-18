@@ -136,20 +136,20 @@ that file) from `e2e/visualCriteria.criteria.js`. Most of the 3.0 pilots miss
 them, and that is the result: the file fails by design, so it is run on demand
 (`npm run e2e:criteria`) and is not part of the browser suite or CI. It is not
 marked as an expected failure and not run non-fatal, because a red test
-recorded as green weakens the gate. What CI does run on the same measurements
-is a ratchet in `e2e/canvasLegibility.spec.js` (no body label smaller, and no
-more overlaps, than the committed baseline, at device pixel ratios 1 and 2) and
-the judges' own tests. The prompt that makes a criterion pass on its pilots
-moves its test from the criteria file into the suite as a `.spec.js` with a
-README row, in the same change.
+recorded as green weakens the gate. What CI runs on the same measurements are
+the judges' own tests and the criteria that have passed and moved into the
+suite: the label and selection clauses of I-9, in `e2e/bodyLabels.spec.js`. The
+prompt that makes a criterion pass on its pilots moves its test from the
+criteria file into the suite as a `.spec.js` with a README row, in the same
+change.
 
 | Criterion | Statement | Test |
 |---|---|---|
 | **I-8**, phone | At 375x812 and 412x915, during a step that uses the scene, the bound bodies are fully visible outside every panel and at least a third of the viewport height is unobscured canvas, or one announced action reaches that state with the step's controls reachable. | `e2e/visualCriteria.criteria.js` |
 | **I-8**, tablet | At 768x1024 the step and the scene are both readable side by side. | same |
 | **I-8**, desktop clause | At 1366x800 and 1440x900 the bound bodies sit outside every panel. | same |
-| **I-9**, labels | Bound-body labels are at least 11 CSS px effective and do not overlap at the pilot states, at device pixel ratios 1 and 2; other canvas text is at least 11. | `e2e/visualCriteria.criteria.js` (baseline ratchet in `e2e/canvasLegibility.spec.js`) |
-| **I-9**, selection | The selected body carries a cue that shows in luminance, not only in hue. | `e2e/visualCriteria.criteria.js` |
+| **I-9**, labels | Bound-body labels are at least 11 CSS px effective and do not overlap at the pilot states, at device pixel ratios 1 and 2; other canvas text is at least 11. | `e2e/bodyLabels.spec.js`, in the suite |
+| **I-9**, selection | The selected body carries a cue that shows in luminance, not only in hue. | `e2e/bodyLabels.spec.js`, in the suite |
 | **I-9**, arrows | Arrow length rises with the speed it shows, and the legend states the scale. | `e2e/visualCriteria.criteria.js` |
 | **I-9**, trails | A trail spans a stated simulated time that does not follow the frame rate (30, 60 and 144 frames a second). | same |
 | **I-9**, plots | Ticks are at least 11 px and labels at least 12 px; with several series, each differs by marker shape. | `e2e/plotReadingSize.spec.js` (passes on both pilot plots; on demand before) |
