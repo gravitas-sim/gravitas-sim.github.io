@@ -1,8 +1,46 @@
 {
   "conditions": "tools/depth-ii-perf.spike.mjs: perf-probe launch flags, CPU x4, low tier, 1440x900, dpr 1; scene in force staged by the harness (the product does not stage a deeper step, criterion 2)",
-  "loadAverages": ["22.77 49.02 69.54 at the first set", "27.27 42.39 64.51 to 42.85 42.96 60.78 across the controls"],
-  "runFrameMs": [20.08, 69.27, 56.85, 57.70, 56.50],
-  "idleSameSceneFrameMs": [71.44, 59.75],
-  "binaryPairControl": { "frameMs": 49.67, "profileMeasuredFrameMs": 5.01, "profileThresholdMs": 8 },
-  "reading": "The profile's own reference scene measured 49.67 ms against its recorded 5.01 ms in the same minutes, so the machine was not at the profile's conditions; the run cost no more than the same scene without one. Criterion 6 is NOT RUN."
+  "loadAverages": [
+    "22.77 49.02 69.54 at the first set",
+    "27.27 42.39 64.51 to 42.85 42.96 60.78 across the controls"
+  ],
+  "runFrameMs": [
+    20.08,
+    69.27,
+    56.85,
+    57.7,
+    56.5
+  ],
+  "idleSameSceneFrameMs": [
+    71.44,
+    59.75
+  ],
+  "binaryPairControl": {
+    "frameMs": 49.67,
+    "profileMeasuredFrameMs": 5.01,
+    "profileThresholdMs": 8
+  },
+  "reading": "The profile's own reference scene measured 49.67 ms against its recorded 5.01 ms in the same minutes, so the machine was not at the profile's conditions; the run cost no more than the same scene without one. Criterion 6 is NOT RUN.",
+  "rerun2026-11-18": {
+    "conditions": "same script and probe, TRIALS=1 per invocation, control, run and idle interleaved three times; Node 22",
+    "loadAverages": "one-minute 10.3 to 13.0 (five-minute 8.7 to 9.4)",
+    "runFrameMs": [
+      9.5,
+      8.48,
+      13.55
+    ],
+    "idleSameSceneFrameMs": [
+      9.03,
+      8.42,
+      11.22
+    ],
+    "binaryPairControlFrameMs": [
+      9.08,
+      8.27,
+      9.55
+    ],
+    "profileMeasuredFrameMs": 5.01,
+    "profileThresholdMs": 8,
+    "reading": "The control scene measured 8.27 to 9.55 ms against its recorded 5.01, above the 8.0 bound itself, so the machine was again not at the profile's conditions. The run cost no more than the same scene idle (medians 9.50 and 9.03). Criterion 6 stays NOT RUN."
+  }
 }
