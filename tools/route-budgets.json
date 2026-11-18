@@ -4,32 +4,32 @@
   "routes": {
     "sources": {
       "front-door": {
-        "kb": 1926.8,
-        "requests": 109
+        "kb": 1940.0,
+        "requests": 113
       },
       "sandbox": {
-        "kb": 1926.8,
-        "requests": 109
+        "kb": 1940.0,
+        "requests": 113
       },
       "kepler": {
-        "kb": 2648.2,
-        "requests": 141
+        "kb": 2660.8,
+        "requests": 145
       },
       "transit": {
-        "kb": 2659.9,
-        "requests": 141,
-        "toolKb": 2742.0,
-        "toolRequests": 146
+        "kb": 2672.5,
+        "requests": 145,
+        "toolKb": 2756.5,
+        "toolRequests": 150
       },
       "power-law": {
-        "kb": 2625.4,
-        "requests": 141,
-        "toolKb": 2678.7,
-        "toolRequests": 144
+        "kb": 2638.0,
+        "requests": 145,
+        "toolKb": 2691.3,
+        "toolRequests": 148
       },
       "largest-lesson": {
         "kb": 2955.8,
-        "requests": 149
+        "requests": 153
       },
       "teaching": {
         "kb": 248.1,
@@ -44,8 +44,8 @@
         "requests": 42
       },
       "figure": {
-        "kb": 2203.6,
-        "requests": 129
+        "kb": 2217.0,
+        "requests": 133
       },
       "experiments": {
         "kb": 1090.5,
@@ -68,7 +68,7 @@
         "requests": 10
       },
       "studio": {
-        "kb": 953.0,
+        "kb": 954.2,
         "requests": 52
       },
       "composer": {
@@ -130,32 +130,32 @@
     },
     "build": {
       "front-door": {
-        "kb": 543.6,
-        "requests": 58
+        "kb": 549.4,
+        "requests": 60
       },
       "sandbox": {
-        "kb": 543.6,
-        "requests": 58
+        "kb": 549.4,
+        "requests": 60
       },
       "kepler": {
-        "kb": 915.4,
-        "requests": 77
+        "kb": 921.2,
+        "requests": 79
       },
       "transit": {
-        "kb": 926.7,
-        "requests": 77,
-        "toolKb": 968.6,
-        "toolRequests": 82
+        "kb": 932.6,
+        "requests": 79,
+        "toolKb": 974.5,
+        "toolRequests": 84
       },
       "power-law": {
-        "kb": 900.0,
-        "requests": 77,
-        "toolKb": 916.5,
-        "toolRequests": 80
+        "kb": 905.8,
+        "requests": 79,
+        "toolKb": 922.4,
+        "toolRequests": 82
       },
       "largest-lesson": {
-        "kb": 1031.9,
-        "requests": 82
+        "kb": 1037.8,
+        "requests": 84
       },
       "teaching": {
         "kb": 110.8,
@@ -170,11 +170,11 @@
         "requests": 2
       },
       "figure": {
-        "kb": 679.6,
-        "requests": 60
+        "kb": 685.4,
+        "requests": 62
       },
       "experiments": {
-        "kb": 296.9,
+        "kb": 297.0,
         "requests": 4
       },
       "observatory": {

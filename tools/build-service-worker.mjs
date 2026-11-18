@@ -674,6 +674,11 @@ export const NEVER_PRECACHED = [
   // under a data-budget ceiling the standing size approval does not cover.
   /^js\/(orbitGeometry|orbitGeometryOverlay|sizeStatement|sizeFacts|twoBodyModel|twoBodySettings)\.js$/,
   /^js\/i18n\/(en|es)\.(orbitGeometry|sizes)\.js$/,
+  // The scene's words and the Tools barycenter marker (D-R4-449-06): fetched by the canvas
+  // description's first rebuild, with the source names and their two word files; kept after
+  // their first online use, not installed, for the same reason.
+  /^js\/(sceneStatement|engine\/sources)\.js$/,
+  /^js\/i18n\/(en|es)\.scene\.js$/,
 ];
 
 const ON_DEMAND_ONLY = new Set([
