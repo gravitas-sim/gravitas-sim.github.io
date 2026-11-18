@@ -674,6 +674,11 @@ export const NEVER_PRECACHED = [
   // under a data-budget ceiling the standing size approval does not cover.
   /^js\/(orbitGeometry|orbitGeometryOverlay|sizeStatement|sizeFacts|twoBodyModel|twoBodySettings)\.js$/,
   /^js\/i18n\/(en|es)\.(orbitGeometry|sizes)\.js$/,
+  // The figures drawn from the model and their declaration list: fetched when a step declares
+  // one (no shipped lesson does yet), so an install has no use for them. A lesson that adopts
+  // a figure deletes this entry, so its figure works offline from the first visit.
+  /^js\/lessonFigures\.js$/,
+  /^js\/lesson\/figureSpec\.js$/,
 ];
 
 const ON_DEMAND_ONLY = new Set([

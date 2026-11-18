@@ -266,17 +266,13 @@ export function stepMarkup(step, c) {
   if (boxed) parts.push(boxed);
   else if (predicted) {
     parts.push(
-      `<div class="inv-verdict ${predicted.right ? 'is-right' : 'is-wrong'}">
-         <p class="inv-verdict-head">${prose(
-           t('inv.predict.youSaid', { choice: predicted.chose })
-         )}</p>
-         <p class="inv-verdict-mark">${prose(
-           predicted.right
-             ? t('inv.predict.right')
-             : t('inv.predict.wrong', { answer: predicted.answer })
-         )}</p>
-         ${predicted.because ? `<p class="inv-because">${prose(predicted.because)}</p>` : ''}
-       </div>`
+      `<div class="inv-verdict ${predicted.right ? 'is-right' : 'is-wrong'}"><p class="inv-verdict-head">${prose(
+        t('inv.predict.youSaid', { choice: predicted.chose })
+      )}</p><p class="inv-verdict-mark">${prose(
+        predicted.right
+          ? t('inv.predict.right')
+          : t('inv.predict.wrong', { answer: predicted.answer })
+      )}</p>${predicted.because ? `<p class="inv-because">${prose(predicted.because)}</p>` : ''}</div>`
     );
   }
 
@@ -317,18 +313,7 @@ export function stepMarkup(step, c) {
       const shown = responses[`${id}:shown`] === true;
       const ready = String(saved || '').trim().length >= SHORT_ANSWER_MIN;
       parts.push(
-        `<div class="inv-short-reveal">
-           <button type="button" class="ui-button" data-reveal="${attr(id)}"
-                   ${shown ? 'hidden' : ''} ${ready ? '' : 'disabled'}>
-             ${escape(t('inv.model.compare'))}
-           </button>
-           <span class="inv-short-hint" data-reveal-hint ${shown || ready ? 'hidden' : ''}>
-             ${escape(t('inv.model.writeFirst'))}
-           </span>
-           <div class="inv-because is-model" data-reveal-body ${shown ? '' : 'hidden'}>
-             <strong>${escape(t('inv.answer.oneGood'))}</strong> ${prose(step.because)}
-           </div>
-         </div>`
+        `<div class="inv-short-reveal"><button type="button" class="ui-button" data-reveal="${attr(id)}" ${shown ? 'hidden' : ''} ${ready ? '' : 'disabled'}>${escape(t('inv.model.compare'))}</button><span class="inv-short-hint" data-reveal-hint ${shown || ready ? 'hidden' : ''}>${escape(t('inv.model.writeFirst'))}</span><div class="inv-because is-model" data-reveal-body ${shown ? '' : 'hidden'}><strong>${escape(t('inv.answer.oneGood'))}</strong> ${prose(step.because)}</div></div>`
       );
     }
   }
@@ -344,12 +329,7 @@ export function stepMarkup(step, c) {
     if (step.formula && !Number.isFinite(step.answer))
       parts.push(`<p class="inv-hint">${escape(t('inv.formula.needs'))}</p>`);
     parts.push(
-      `<div class="inv-numeric">
-         <input type="text" inputmode="decimal" class="inv-answer-num" data-numeric="${attr(id)}"
-                value="${attr(typed[id] ?? saved ?? '')}" placeholder="${attr(numericPlaceholder(step))}" />
-         ${step.unit ? `<span class="inv-unit">${escape(step.unit)}</span>` : ''}
-         <button type="button" class="ui-button" data-check-numeric="${attr(id)}">${escape(t('inv.answer.check'))}</button>
-       </div>`
+      `<div class="inv-numeric"><input type="text" inputmode="decimal" class="inv-answer-num" data-numeric="${attr(id)}" value="${attr(typed[id] ?? saved ?? '')}" placeholder="${attr(numericPlaceholder(step))}" />${step.unit ? `<span class="inv-unit">${escape(step.unit)}</span>` : ''}<button type="button" class="ui-button" data-check-numeric="${attr(id)}">${escape(t('inv.answer.check'))}</button></div>`
     );
 
     if (graded?.status === 'unreadable') {
