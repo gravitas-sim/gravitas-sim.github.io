@@ -219,7 +219,7 @@ export const EN = {
   'rail.slowDown.hint': 'Decrease speed by 0.5x',
   'rail.speedUp.hint': 'Increase speed by 0.5x',
   'rail.resetView.hint':
-    'Centre the camera on the bodies and zoom to fit them. Bodies, settings, seed, clock and pause stay as they are.',
+    'Center the camera on the bodies and zoom to fit them. Bodies, settings, seed, clock and pause stay as they are.',
   'rail.shortcuts.hint': 'Keyboard shortcuts (?)',
   'rail.objectType.hint':
     'Choose what to add, then click the canvas to place it',
@@ -1160,7 +1160,7 @@ export const EN = {
   'shortcut.live': 'Jump back to live',
   'shortcut.pan': 'Pan the view',
   'shortcut.zoom': 'Zoom in and out',
-  'shortcut.resetView': 'Centre the view at 1\u00d7 zoom',
+  'shortcut.resetView': 'Center the view at 1\u00d7 zoom',
   'shortcut.investigations': 'Open the guided investigations',
   'shortcut.share': 'Share a link to this simulation',
   'shortcut.export': 'Export the recorded data as CSV',
