@@ -174,7 +174,14 @@ function summaryOf(body, g) {
 
 // --- Drawing -----------------------------------------------------------------
 
-function drawMarker(ctx, id, s, chosen, k) {
+/**
+ * One marker: its shape always, its name only where the name has room. Two
+ * markers a few pixels apart (the foci of a near-circle) would print one name
+ * over the other, so a name that would overlap one already placed is left
+ * out; the panel's list still names every marker.
+ * @param {Array<number[]>} placed - Label boxes drawn so far, [x0, y0, x1, y1]
+ */
+function drawMarker(ctx, id, s, chosen, k, placed) {
   const r = 6 * k;
   ctx.save();
   ctx.lineWidth = 2 * k;
@@ -212,7 +219,17 @@ function drawMarker(ctx, id, s, chosen, k) {
   ctx.shadowColor = 'rgba(0,0,0,0.6)';
   ctx.shadowBlur = 3;
   ctx.fillStyle = MARK;
-  ctx.fillText(markerName(id), s.x + r + 6 * k, s.y);
+  const name = markerName(id);
+  const x = s.x + r + 6 * k;
+  const h = 8 * k;
+  const box = [x, s.y - h, x + ctx.measureText(name).width, s.y + h];
+  const clash = placed.some(
+    b => box[0] < b[2] && b[0] < box[2] && box[1] < b[3] && b[1] < box[3]
+  );
+  if (!clash) {
+    ctx.fillText(name, x, s.y);
+    placed.push(box);
+  }
   ctx.restore();
 }
 
@@ -267,8 +284,20 @@ function draw(ctx) {
     ctx.stroke();
     ctx.setLineDash([]);
   }
-  for (const [id, s] of Object.entries(screenMarkers))
-    drawMarker(ctx, id, s, cfg.selected.includes(id), k);
+  // Chosen markers first, so theirs are the names that keep their room.
+  const placed = [];
+  const order = Object.keys(screenMarkers).sort(
+    (a, b) => cfg.selected.includes(b) - cfg.selected.includes(a)
+  );
+  for (const id of order)
+    drawMarker(
+      ctx,
+      id,
+      screenMarkers[id],
+      cfg.selected.includes(id),
+      k,
+      placed
+    );
 
   // What the curve is (or why there is none), above it or above the body.
   const at = top || world_to_screen(body.pos);
@@ -323,6 +352,11 @@ function mount() {
   );
 }
 
+// Folded, the panel is its title bar alone, so on a phone it leaves the orbit
+// it describes in view; the label on the canvas still says what is drawn.
+let folded =
+  typeof matchMedia === 'function' && matchMedia('(max-width: 600px)').matches;
+
 function build() {
   root.innerHTML = `
     <div class="obs-panel-toolbar">
@@ -330,10 +364,11 @@ function build() {
         <span class="obs-panel-title" id="ogTitle">${esc(t('orbitGeometry.title'))}</span>
       </div>
       <div class="obs-panel-actions">
+        <button id="ogFold" class="obs-panel-btn" type="button" aria-controls="ogBody" aria-label="${esc(t('orbitGeometry.fold'))}" title="${esc(t('orbitGeometry.fold'))}"></button>
         <button id="ogClose" class="obs-panel-btn" type="button" aria-label="${esc(t('orbitGeometry.close'))}" title="${esc(t('orbitGeometry.close'))}">✕</button>
       </div>
     </div>
-    <div class="og-body">
+    <div class="og-body" id="ogBody">
       <p id="ogStatus" class="og-status"></p>
       <fieldset class="og-parts"><legend>${esc(t('orbitGeometry.parts'))}</legend>
         ${PARTS.map(
@@ -347,6 +382,17 @@ function build() {
       <p id="ogDistance" class="og-distance"></p>
     </div>`;
   root.querySelector('#ogClose').onclick = () => setOrbitGeometry(false);
+  const fold = root.querySelector('#ogFold');
+  const showFold = () => {
+    root.classList.toggle('is-collapsed', folded);
+    fold.setAttribute('aria-expanded', String(!folded));
+    fold.textContent = folded ? '▸' : '▾';
+  };
+  fold.onclick = () => {
+    folded = !folded;
+    showFold();
+  };
+  showFold();
   root.querySelectorAll('[data-part]').forEach(box => {
     box.checked = og().parts[box.dataset.part] !== false;
     box.onchange = () => {

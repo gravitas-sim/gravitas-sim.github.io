@@ -31,6 +31,7 @@ export const ES_ORBITGEOMETRY = {
     'Elige dos puntos para leer la distancia entre ellos.',
   'orbitGeometry.chosen': '{name} elegido',
   'orbitGeometry.cleared': 'Puntos borrados',
+  'orbitGeometry.fold': 'Detalles de la geometría de la órbita',
   'orbitGeometry.close': 'Cerrar la geometría de la órbita',
   'orbitGeometry.summary': 'Geometría de la órbita de {name}: {label}.',
 };

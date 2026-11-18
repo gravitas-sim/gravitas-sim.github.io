@@ -31,6 +31,7 @@ export const EN_ORBITGEOMETRY = {
     'Choose two points to read the distance between them.',
   'orbitGeometry.chosen': '{name} chosen',
   'orbitGeometry.cleared': 'Points cleared',
+  'orbitGeometry.fold': 'Orbit geometry details',
   'orbitGeometry.close': 'Close orbit geometry',
   'orbitGeometry.summary': 'Orbit geometry for {name}: {label}.',
 };
