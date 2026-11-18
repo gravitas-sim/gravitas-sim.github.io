@@ -237,12 +237,12 @@ test('ios-fire find-the-interiors: any two pairs inside the observed range pass,
 
   // The instrument opens with k2 = 0.8 and Q = 250: under the observed range, not at it.
   const opening = row(await readout(page), /^Heating$/i);
-  expect(String(opening)).toMatch(/10¹³/);
+  expect(opening.text).toMatch(/10¹³/);
 
   // Too much heat: k2 = 1.5 and Q = 50 give 1.87 x 10^14 W.
   await setControl(page, 'k2', 1.5);
   await setControl(page, 'Q', 50);
-  expect(String(row(await readout(page), /^Heating$/i))).toMatch(/10¹⁴/);
+  expect(row(await readout(page), /^Heating$/i).text).toMatch(/10¹⁴/);
   const L = 'ios-fire';
   const S = 'find-the-interiors';
   await recordFields(page, L, S, { k2a: 1.5, qa: 50, k2b: 0.5, qb: 30 });
@@ -252,7 +252,7 @@ test('ios-fire find-the-interiors: any two pairs inside the observed range pass,
   // Two pairs the instrument puts inside the range, with k2 at least 0.2 apart.
   await setControl(page, 'k2', 0.5);
   await setControl(page, 'Q', 30);
-  const pairOne = String(row(await readout(page), /^Heating$/i));
+  const pairOne = row(await readout(page), /^Heating$/i).text;
   expect(pairOne).toMatch(/10¹⁴/);
   await recordFields(page, L, S, { k2a: 0.5, qa: 30, k2b: 1.0, qb: 60 });
   await expect(verdictOf(page)).toHaveClass(/is-ok/);
@@ -277,7 +277,7 @@ test('ios-fire: the two readings are taken from the instrument by a button, and 
 
   // The instrument opens at the smallest eccentricity, away from either reading.
   const first = await readout(page);
-  expect(String(row(first, /^Heating$/i))).toMatch(/10¹²/);
+  expect(row(first, /^Heating$/i).text).toMatch(/10¹²/);
   const take = field =>
     page.locator(`#investigationBody [data-take="${field}"]`);
   await setControl(page, 'e', 0.0041);
@@ -318,14 +318,14 @@ test('tides-that-move-the-moon match-the-recession: the Q is found on the slider
   const S = 'match-the-recession';
   await walkToSid(page, plan, S);
   // Opens at Q = 40, which recedes more slowly than laser ranging measures.
-  expect(String(row(await readout(page), /Moon’s recession now/i))).toMatch(
+  expect(row(await readout(page), /Moon’s recession now/i).text).toMatch(
     /^1\.1/
   );
   await recordFields(page, L, S, { q: 40, day: 0.7 });
   await expect(verdictOf(page)).toHaveClass(/is-error/);
   await expect(verdictOf(page)).toContainText(/slower than laser/);
   await setControl(page, 'Q', 12);
-  expect(String(row(await readout(page), /Moon’s recession now/i))).toMatch(
+  expect(row(await readout(page), /Moon’s recession now/i).text).toMatch(
     /^3\.7/
   );
   await recordFields(page, L, S, { q: 12, day: 2.05 });
