@@ -22,6 +22,9 @@
 // task is to find it); a shape cannot be hidden, so the author chooses.
 // =============================================================================
 
+// Bare: the engine's start-up chunk stays whole (esbuild splits a chunk that a
+// lazy module reaches only part of; orbitGeometry reaches js/engine/state.js).
+import './physics.js';
 import { orbitGeometry } from './orbitGeometry.js';
 import {
   geometryFor,
