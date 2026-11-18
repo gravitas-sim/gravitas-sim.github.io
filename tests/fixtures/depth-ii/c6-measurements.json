@@ -1,0 +1,8 @@
+{
+  "conditions": "tools/depth-ii-perf.spike.mjs: perf-probe launch flags, CPU x4, low tier, 1440x900, dpr 1; scene in force staged by the harness (the product does not stage a deeper step, criterion 2)",
+  "loadAverages": ["22.77 49.02 69.54 at the first set", "27.27 42.39 64.51 to 42.85 42.96 60.78 across the controls"],
+  "runFrameMs": [20.08, 69.27, 56.85, 57.70, 56.50],
+  "idleSameSceneFrameMs": [71.44, 59.75],
+  "binaryPairControl": { "frameMs": 49.67, "profileMeasuredFrameMs": 5.01, "profileThresholdMs": 8 },
+  "reading": "The profile's own reference scene measured 49.67 ms against its recorded 5.01 ms in the same minutes, so the machine was not at the profile's conditions; the run cost no more than the same scene without one. Criterion 6 is NOT RUN."
+}
