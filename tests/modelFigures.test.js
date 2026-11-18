@@ -214,8 +214,9 @@ const refs = {
 
 describe('the words, in both languages', () => {
   test.each(figureSteps.map(s => [s.sid, s]))('%s', (sid, step) => {
-    const en = figureFor(step.figure, 'en');
-    const es = figureFor(clone({ ...step.figure, unit: undefined }), 'es');
+    const whole = { ...step.figure, withhold: undefined };
+    const en = figureFor(whole, 'en');
+    const es = figureFor(clone({ ...whole, unit: undefined }), 'es');
     for (const r of [en, es]) {
       expect(r.ok).toBe(true);
       // As long as the photograph form's alt text must be.
@@ -235,18 +236,39 @@ describe('the words, in both languages', () => {
     expect(es.numbers).not.toMatch(/\d\.\d/);
   });
 
-  test('a withheld quantity is not in the words, and the shape is still drawn', () => {
+  test('a withheld quantity is not in the words, nor anything that fixes it; the shape is still drawn', () => {
     const f = clone(figureSteps[1].figure);
     const r = figureFor(f, 'en');
-    expect(r.alt + r.numbers).not.toMatch(/eccentricity|0\.5/);
-    expect(r.alt).toMatch(/semi-major axis 100/);
+    expect(r.alt + r.numbers).not.toMatch(
+      /eccentricity|periapsis distance|apoapsis distance|foci|0\.5/
+    );
+    expect(r.alt).toMatch(/Semi-major axis 100\./);
     expect(read(r.svg).ellipse.e).toBeCloseTo(0.5, 5);
     const es = figureFor(f, 'es');
-    expect(es.alt + es.numbers).not.toMatch(/excentricidad|0,5/);
-    // Unwithheld, it is there.
+    expect(es.alt + es.numbers).not.toMatch(
+      /excentricidad|periastro|apoastro|focos|0,5/
+    );
+    // Unwithheld, it is all there.
     f.withhold = [];
     expect(figureFor(f, 'en').alt).toMatch(/eccentricity 0\.500/);
   });
+
+  test.each(figureSteps.map(s => [s.sid, s]))(
+    '%s: whatever is withheld, the words name at most one number of the two that fix the figure',
+    (sid, step) => {
+      for (const q of FIGURES[step.figure.from].quantities) {
+        const f = { ...clone(step.figure), withhold: [q] };
+        for (const locale of ['en', 'es']) {
+          const r = figureFor(f, locale);
+          // One number: one "; "-separated item at most.
+          expect((r.numbers.match(/;/g) || []).length).toBe(0);
+          expect(r.numbers).not.toContain(
+            figureFor({ ...f, withhold: [] }, locale).numbers
+          );
+        }
+      }
+    }
+  );
 });
 
 describe('the drawing', () => {

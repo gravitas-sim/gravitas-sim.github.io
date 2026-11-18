@@ -18,7 +18,9 @@
 // scenario it was recorded from.
 //
 // `withhold` lists quantities the figure's words leave out, for a step whose
-// task is to find one of them; the drawing itself cannot hide a shape.
+// task is to find one of them. Any two of a figure's numbers fix the rest
+// (`basis`), so a figure with a withhold names at most one of them; the drawing
+// itself cannot hide a shape.
 // =============================================================================
 
 const finite = v => Number.isFinite(v);
@@ -33,12 +35,14 @@ const BODY = {
 export const FIGURES = Object.freeze({
   orbit: {
     quantities: ['a', 'e', 'periapsis', 'apoapsis', 'focalSeparation'],
+    basis: ['a', 'e'],
     constants: { a: v => v > 0, e: v => v >= 0 && v < 1, omegaDeg: finite },
     required: ['a', 'e'],
     state: { primary: BODY.orbit, body: BODY.orbit },
   },
   transit: {
     quantities: ['k', 'b', 'contactLength', 'innerLength'],
+    basis: ['k', 'b'],
     constants: { k: v => v > 0 && v <= 1, b: (v, p) => v >= 0 && v < 1 + p.k },
     required: ['k', 'b'],
     state: {

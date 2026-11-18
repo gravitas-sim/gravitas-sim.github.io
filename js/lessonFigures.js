@@ -248,7 +248,7 @@ function drawTransit(v, w) {
   const xc = Math.sqrt(Math.max(0, (1 + v.k) ** 2 - v.b ** 2)) * R;
   const xi = v.innerLength ? (v.innerLength / 2) * R : 0;
   const m = w.marks;
-  const ly = y + rp + 14 < H - 6 ? y + rp + 14 : y - rp - 6;
+  const ly = y - rp - 7 >= 16 ? y - rp - 7 : y + rp + 14;
   const f = n => n.toFixed(1);
   const disc = (x, cls, extra = '') =>
     `<circle class="${cls}" cx="${f(cx + x)}" cy="${f(y)}" r="${f(rp)}"${extra}/>`;
@@ -288,13 +288,17 @@ export function figureFor(f, locale = getLocale()) {
     return { ok: false, reason: 'state' };
   const stellar = f.from === 'transit';
   const unit = f.unit ? `${NBSP}${f.unit}` : '';
+  // Any two numbers fix the rest, so a withhold leaves at most one of the basis.
   const hide = new Set(f.withhold || []);
-  const shown = spec.quantities.filter(
-    q => !hide.has(q) && v[q] !== null && v[q] !== undefined
-  );
+  const shown = hide.size
+    ? spec.basis.filter(q => !hide.has(q)).slice(0, 1)
+    : spec.quantities.filter(q => v[q] !== null && v[q] !== undefined);
   const fmt = q =>
     formatNumber(v[q], { sig: 3, locale }) + (stellar || q === 'e' ? '' : unit);
-  const words = shown.map(q => `${w.names[q]} ${fmt(q)}`).join('; ');
+  const words = shown
+    .map(q => `${w.names[q]} ${fmt(q)}`)
+    .join('; ')
+    .replace(/^./, c => c.toUpperCase());
   const lengths = stellar ? w.stellar : f.unit ? '' : w.scene;
   const alt = `${w[f.from]}${words ? ` ${words}.` : ''} ${lengths}`.trim();
   const drawn = stellar ? drawTransit(v, w) : drawOrbit(v, w);
