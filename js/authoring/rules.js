@@ -140,7 +140,11 @@ export function readingProblems(step, { ctx, widget }) {
       );
       const live = widget?.live ? ctx : undefined;
       return (
-        widget?.readout({ ...v, ...step.tool?.values }, live, step.tool) || []
+        widget?.readout(
+          { ...v, ...(step.tool?.start ?? step.tool?.values) },
+          live,
+          step.tool
+        ) || []
       );
     } catch {
       return [];
@@ -495,7 +499,7 @@ export function checkCatalog(inputs, { skip = [] } = {}) {
           'id/step',
           step.sid === undefined
             ? 'step has no sid; run `node tools/add-step-ids.mjs` to mint one'
-            : `sid ${JSON.stringify(step.sid)} is not usable as a key: it must be lowercase letters, digits and single hyphens, and not only digits`
+            : `sid ${JSON.stringify(step.sid)} is not usable as a key: lowercase letters, digits and single hyphens, not only digits`
         );
       } else if (sidsSeen.has(step.sid)) {
         E('id/step', `sid "${step.sid}" is already used by another step`);
@@ -543,7 +547,7 @@ export function checkCatalog(inputs, { skip = [] } = {}) {
         ) {
           E(
             'content/hints',
-            `misconception "${rule?.id ?? '?'}" is not a standard one and gives no factor or value to match`
+            `misconception "${rule?.id ?? '?'}" is not standard and gives no factor or value`
           );
         }
       }
@@ -622,22 +626,27 @@ export function checkCatalog(inputs, { skip = [] } = {}) {
           } else {
             const controls = new Map((w.controls || []).map(c => [c.id, c]));
 
-            for (const [key, raw] of Object.entries(step.tool.values || {})) {
+            // `start` is where the instrument opens when that is not where the
+            // check is satisfied; it names controls the way `values` does.
+            const placed = ['values', 'start'].flatMap(part =>
+              Object.entries(step.tool[part] || {}).map(e => [...e, part])
+            );
+            for (const [key, raw, part] of placed) {
               const c = controls.get(key);
               if (!c) {
                 E(
                   'ref/control',
-                  `tool.values sets "${key}", which ${w.id} has no control for`
+                  `tool.${part} sets "${key}", which ${w.id} has no control for`
                 );
                 continue;
               }
               const v = Number(raw);
               if (!Number.isFinite(v)) {
-                E('setup/value', `tool.values.${key} is not a number`);
+                E('setup/value', `tool.${part}.${key} is not a number`);
               } else if (v < c.min || v > c.max) {
                 E(
                   'setup/value',
-                  `tool.values.${key} = ${v} is outside the control range ${c.min}..${c.max}, so the widget can never reach it`
+                  `tool.${part}.${key} = ${v} is outside the range ${c.min}..${c.max}`
                 );
               } else if (
                 Number.isFinite(c.step) &&
@@ -656,7 +665,7 @@ export function checkCatalog(inputs, { skip = [] } = {}) {
                 if (offGrid > 1e-6 && !recoverable) {
                   W(
                     'setup/value',
-                    `tool.values.${key} = ${v} is not on the visible control's ${c.step} step and no preset of ${w.id} sets ${key} to it, so a student who moves it cannot get back`
+                    `tool.${part}.${key} = ${v} is off the ${c.step} step and no preset sets it, so a student cannot get back`
                   );
                 }
               }
@@ -675,11 +684,12 @@ export function checkCatalog(inputs, { skip = [] } = {}) {
             // the control's own name is read by nothing (a string, like the
             // playback's `track`, is a different spec field and is left alone).
             for (const key of Object.keys(step.tool)) {
-              if (key === 'values' || !controls.has(key)) continue;
+              if (key === 'values' || key === 'start' || !controls.has(key))
+                continue;
               if (typeof step.tool[key] !== 'number') continue;
               E(
                 'ref/control',
-                `tool.${key} = ${step.tool[key]} names a control of ${w.id}, so it belongs under tool.values — where it is now, nothing reads it and the control opens at its own default`
+                `tool.${key} = ${step.tool[key]} names a control of ${w.id}: put it under tool.values, where nothing reads it now`
               );
             }
 
@@ -779,7 +789,7 @@ export function checkCatalog(inputs, { skip = [] } = {}) {
               if (!ids.has(name) && !ids.has(base)) {
                 E(
                   'ref/field',
-                  `field "${f.id}" computes from "${name}", which this step does not declare, so it can only ever be blank`
+                  `field "${f.id}" computes from "${name}", which this step does not declare`
                 );
               }
             }
@@ -1228,7 +1238,7 @@ export function checkCatalog(inputs, { skip = [] } = {}) {
             'agree/manifest',
             inv.id,
             null,
-            `the ${locale} manifest's ${key} is not the lesson's: ${JSON.stringify(entry[key])} vs ${JSON.stringify(expected[key])}`
+            `${locale} manifest ${key} is ${JSON.stringify(entry[key])}, not ${JSON.stringify(expected[key])}`
           );
         }
       }
@@ -1530,7 +1540,7 @@ function checkTranslationShape(
     if (overlay.length > base.length) {
       report(
         'error',
-        `${locale}: ${path.join('.')} has ${overlay.length} entries for ${base.length} in English; the extras are dropped`,
+        `${locale}: ${path.join('.')} has ${overlay.length} entries for ${base.length}; extras are dropped`,
         stepIndex
       );
     }
@@ -1561,7 +1571,7 @@ function checkTranslationShape(
       if (!Object.hasOwn(base, key)) {
         report(
           'error',
-          `${locale}: ${[...path, key].join('.')} is not a key the lesson has, so this translation is silently discarded`,
+          `${locale}: ${[...path, key].join('.')} is not a lesson key and is discarded`,
           stepIndex
         );
         continue;

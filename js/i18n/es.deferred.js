@@ -604,8 +604,7 @@ export const ES_DEFERRED = {
   'sweep.guide.run': 'Ejecutar el barrido guiado',
 
   // --- Tareas para clase --------------------------------------------------
-  // Shown from lazy chunks (the builder, the link bridge, a lesson panel with an
-  // assignment open), never a first visit; ensureDeferredMessages() registers them.
+  // Shown from lazy chunks (the builder, the link bridge, a lesson panel with an assignment open), never a first visit; ensureDeferredMessages() registers them.
   'assign.title': 'Crear una actividad',
   'assign.hint':
     'Elige los pasos que quieres asignar. Los pasos que construyen el mundo del que trata otro paso se añaden solos, y se indican donde corresponden.',
@@ -733,6 +732,7 @@ export const ES_DEFERRED = {
   'inv.tool.reloadNeeded':
     'Este instrumento sigue sin poder cargarse. Vuelva a cargar la página para intentarlo de nuevo; sus respuestas se conservan.',
   'inv.tool.reload': 'Volver a cargar la página',
+  'inv.tool.start': 'Devolver el instrumento a su posición inicial',
   'inv.tool.pickable':
     'Un diagrama al que puedes apuntar. Haz clic o arrastra para mover el cursor; las flechas también lo mueven, y los deslizadores de abajo hacen lo mismo con números.',
   'inv.error.scenario': 'No se pudo cargar el escenario de este paso.',

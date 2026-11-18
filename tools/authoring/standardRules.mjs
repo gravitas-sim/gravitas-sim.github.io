@@ -14,7 +14,8 @@
 // carry is held by tools/lesson-standard.mjs and its committed ratchet file:
 // a count may fall and never rise.
 //
-//   leak/instrument-at-answer       L2  the instrument opens at an accepted value
+//   leak/instrument-at-answer       L2  the instrument opens at an accepted value (a heuristic on the controls)
+//   leak/opens-at-answer            L2  the opening readouts, written into the fields, pass validate
 //   leak/prediction-stated-earlier  L3  a predicted answer already stated (report only)
 //   leak/question-states-answer     L4  a numeric question's body holds its answer
 //   task/measure-all-computed       T1  a core measure step with nothing typed
@@ -28,6 +29,7 @@ import {
   emptyProbeContext,
   leaksAnswer,
 } from '../../js/authoring/rules.js';
+import { isFindOrSet, judgeOpening } from './neutralStart.mjs';
 import {
   DEPTHS,
   inDepth,
@@ -38,6 +40,8 @@ import {
 export const STANDARD_RULES = {
   'leak/instrument-at-answer':
     "A step's instrument does not open at a value its validator accepts",
+  'leak/opens-at-answer':
+    "A core find-or-set step's opening readouts, written into the fields they would fill, do not pass its validate (a step that reads a prepared state says `prepared: true`)",
   'leak/prediction-stated-earlier':
     'A predicted option, or a number in its explanation, is not already in an earlier body, tip or checklist (report only)',
   'leak/question-states-answer':
@@ -60,6 +64,7 @@ export const REPORT_ONLY = new Set(['leak/prediction-stated-earlier']);
 /** The rules that say a held answer reached the screen (the acceptance map's `leakFree`). */
 export const LEAK_RULES = [
   'leak/instrument-at-answer',
+  'leak/opens-at-answer',
   'leak/prediction-stated-earlier',
   'leak/question-states-answer',
 ];
@@ -129,10 +134,14 @@ export function lessonTexts(lesson) {
  * @param {object} lesson - The lesson with every depth's steps laid in
  * @param {object} [shadows] - `{ lesson, steps }`: the Spanish lesson-level
  *   words and an array parallel to `lesson.steps` (null where there is none)
+ * @param {object} [context] - `{ widgets, map }`: the instruments and the
+ *   reviewed field-to-readout table, for the rules that read an instrument
  * @returns {object} The view the rules read
  */
-export function makeView(lesson, shadows = {}) {
+export function makeView(lesson, shadows = {}, context = {}) {
   return {
+    widgets: context.widgets ?? null,
+    map: context.map ?? {},
     id: lesson.id,
     lesson,
     steps: lesson.steps,
@@ -184,9 +193,9 @@ const gradeAt = (step, values, ctx) => {
  * so a validator that accepts any number does not call every instrument a leak.
  */
 export function openingAccepted(step, ctx = emptyProbeContext()) {
-  const values = Object.entries(step?.tool?.values ?? {}).filter(
-    ([, v]) => typeof v === 'number' && Number.isFinite(v)
-  );
+  const values = Object.entries(
+    step?.tool?.start ?? step?.tool?.values ?? {}
+  ).filter(([, v]) => typeof v === 'number' && Number.isFinite(v));
   const typed = (step?.fields ?? []).filter(
     f => typeof f.compute !== 'function' && f.id
   );
@@ -233,6 +242,27 @@ function instrumentAtAnswer(view) {
         `the instrument opens at ${JSON.stringify(step.tool.values)}, and the validator accepts ${JSON.stringify(hit)}`
       )
     );
+  });
+  return out;
+}
+
+/** (a2) The instrument's opening readouts, put into the fields they fill, are an accepted answer. */
+function opensAtAnswer(view) {
+  const out = [];
+  if (!view.widgets) return out;
+  view.steps.forEach((step, i) => {
+    if (!isCore(step) || !isFindOrSet(step)) return;
+    const widget = view.widgets.find(w => w.id === step.tool.id);
+    const r = judgeOpening(step, widget, view.map[`${view.id}/${step.sid}`]);
+    if (r.verdict === 'opens-at-answer')
+      out.push(
+        found(
+          'leak/opens-at-answer',
+          view,
+          i,
+          `the instrument opens showing ${JSON.stringify(r.fields)}, and the validator accepts it`
+        )
+      );
   });
   return out;
 }
@@ -542,6 +572,7 @@ function questionStatesAnswer(view) {
 export function viewFindings(view) {
   return [
     ...instrumentAtAnswer(view),
+    ...opensAtAnswer(view),
     ...predictionStated(view),
     ...questionStatesAnswer(view),
     ...measureAllComputed(view),
