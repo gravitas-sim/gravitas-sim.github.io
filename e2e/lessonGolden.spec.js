@@ -171,20 +171,26 @@ async function settle(page, [n, total]) {
       );
     });
   // Glossary marks become term buttons a moment after a step is drawn, and the Spanish text can redraw the step once more as it
-  // arrives; the screen is recorded after two short waits with no mark left.
-  for (let k = 0; k < 2; k++) {
-    await page.waitForTimeout(400);
-    await page
-      .waitForFunction(
-        () =>
-          !document
-            .querySelector('#investigationBody')
-            ?.textContent.includes('[['),
-        null,
-        { timeout: 15000 }
-      )
-      .catch(() => {});
-  }
+  // arrives; the screen is recorded once the step has stood unchanged for 600 ms with no mark left.
+  await page
+    .waitForFunction(
+      () => {
+        const body = document.querySelector('#investigationBody');
+        const html = body?.innerHTML ?? '';
+        if (window.__goldenSeen !== html) {
+          window.__goldenSeen = html;
+          window.__goldenAt = performance.now();
+          return false;
+        }
+        return (
+          performance.now() - window.__goldenAt > 600 &&
+          !body.textContent.includes('[[')
+        );
+      },
+      null,
+      { timeout: 20000, polling: 100 }
+    )
+    .catch(() => {});
 }
 
 function compare(name, got) {
