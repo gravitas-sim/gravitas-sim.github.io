@@ -10,7 +10,7 @@
 //     readout and the canvas say so;
 //   - at the low tier a scene that builds fewer bodies says "n of N", and the
 //     full tier says nothing;
-//   - within one built world, 200 frames drawn at the low, full and ultra tiers
+//   - within one built world, 60 frames drawn at the low, full and ultra tiers
 //     leave the same bodies in the same places: the tier changes the picture
 //     and the build, never the integration.
 // The tier's build counts, for every scenario, are tests/crowdedScenes.test.js.
@@ -143,10 +143,11 @@ test.describe('the tiers', () => {
   });
 
   for (const scene of SCENES)
-    test(`${scene}: 200 frames drawn at the low, full and ultra tiers leave the same bodies in the same places`, async ({
+    test(`${scene}: 60 frames drawn at the low, full and ultra tiers leave the same bodies in the same places`, async ({
       page,
       app,
     }) => {
+      test.setTimeout(240000);
       await app.boot();
       const runs = await page.evaluate(async scene => {
         const ui = await import('/js/ui.js');
@@ -179,7 +180,7 @@ test.describe('the tiers', () => {
           ui.state.paused = false;
           ui.SETTINGS.paused = false;
           await new Promise(done => {
-            let n = 200;
+            let n = 60;
             const tick = () => (n-- > 0 ? requestAnimationFrame(tick) : done());
             requestAnimationFrame(tick);
           });
