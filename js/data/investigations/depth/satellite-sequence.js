@@ -1731,8 +1731,13 @@ export const INSTRUCTOR = {
       },
       {
         from: 'double-predict',
+        to: 'double-predict',
+        text: 'The prediction, committed before any reading.',
+      },
+      {
+        from: 'heating-at-two-eccentricities',
         to: 'what-doubling-did',
-        text: 'Doubling the eccentricity quadruples the heat: predicted, measured and compared.',
+        text: 'Two readings at e and 2e, and the reveal that sets them beside the prediction.',
       },
       {
         from: 'find-the-interiors',
