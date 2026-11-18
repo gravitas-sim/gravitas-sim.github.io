@@ -23,7 +23,7 @@
 // =============================================================================
 
 import { orbitGeometry } from './orbitGeometry.js';
-import { geometryFor, projectedSeparation } from './observerGeometry.js';
+import { geometryFor, projectPositionToSky } from './observerGeometry.js';
 import { formatNumber, NBSP } from './format.js';
 import { getLocale } from './i18n/index.js';
 import { escapeHtml as esc } from './lessonMarkup.js';
@@ -221,11 +221,11 @@ function transitValues(p) {
   if (p.state) {
     const { star, planet, observer } = p.state;
     k = planet.r / star.r;
-    b =
-      projectedSeparation(
-        { x: planet.x - star.x, y: planet.y - star.y },
-        geometryFor(observer.phiDeg, observer.incDeg)
-      ) / star.r;
+    const sky = projectPositionToSky(
+      { x: planet.x - star.x, y: planet.y - star.y },
+      geometryFor(observer.phiDeg, observer.incDeg)
+    );
+    b = Math.hypot(sky.x, sky.y) / star.r;
   }
   const half = q => (q > 0 ? 2 * Math.sqrt(q) : null);
   return {
