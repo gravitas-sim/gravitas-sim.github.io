@@ -1218,7 +1218,7 @@ export const EN = {
   'inv.browser.activities.link': 'See the classroom activities',
   'canvas.sizeDisclosure': 'Sizes not to scale: details under Sizes',
   'canvas.sizeDisclosure.detail':
-    'Distances are to scale and drawn sizes are not: each kind of body is enlarged by its own factor, so neither a size nor the ratio of two sizes can be read off the canvas. The Sizes button in the readout says by how much, body by body.',
+    'Distances are drawn to one scale, the one the scale bar shows. Body sizes are not to one scale: each kind of body is enlarged by its own factor, so neither a size nor the ratio of two sizes can be read off the canvas. The Sizes button in the readout says by how much, and the inspector gives each radius.',
   'sizes.button': 'Sizes',
   'sizes.timesRange': '{lo}× to {hi}×',
   'sizes.summary': 'Drawn larger than real: {list}.',

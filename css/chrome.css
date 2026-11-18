@@ -544,8 +544,16 @@
 
   .ui-container .rail-chip[aria-pressed='true'] {
     color: var(--text-primary);
-    background: color-mix(in srgb, var(--accent) 20%, transparent);
-    border-color: color-mix(in srgb, var(--accent) 55%, transparent);
+    background: color-mix(
+      in srgb,
+      var(--accent) 20%,
+      transparent
+    );
+    border-color: color-mix(
+      in srgb,
+      var(--accent) 55%,
+      transparent
+    );
   }
 
   /* Three of a kind, one per row. Three columns fits in 57px each, and
@@ -1603,37 +1611,24 @@
 
   body.investigation-open.bench-open .inv-plot-panel {
     /* 120px is the stack's own base offset, which is where the bench starts. */
-    max-height: calc(
-      100vh - var(--space-3) - var(--shell-height, 0px) - 120px -
-        var(--bench-reserve)
-    );
+    max-height: calc(100vh - var(--space-3) - var(--shell-height, 0px) - 120px - var(--bench-reserve));
   }
 
   /* A step carrying an instrument and a plot at once already splits the column
      0.62/0.38; with the bench open it is the same split of a shorter column. */
   body.investigation-split.bench-open #investigationTool {
     max-height: calc(
-      (
-          100vh - var(--space-3) - var(--shell-height, 0px) - 120px -
-            var(--bench-reserve)
-        ) *
-        0.62
+      (100vh - var(--space-3) - var(--shell-height, 0px) - 120px - var(--bench-reserve)) * 0.62
     );
   }
   body.investigation-split.bench-open #investigationPlot {
     top: calc(
-      (
-          100vh - var(--space-3) - var(--shell-height, 0px) - 120px -
-            var(--bench-reserve)
-        ) *
-        0.62 + var(--space-3) * 2 + var(--shell-height, 0px)
+      (100vh - var(--space-3) - var(--shell-height, 0px) - 120px - var(--bench-reserve)) * 0.62 +
+        var(--space-3) * 2 + var(--shell-height, 0px)
     );
     max-height: calc(
-      (
-          100vh - var(--space-3) - var(--shell-height, 0px) - 120px -
-            var(--bench-reserve)
-        ) *
-        0.38 - var(--space-3)
+      (100vh - var(--space-3) - var(--shell-height, 0px) - 120px - var(--bench-reserve)) * 0.38 -
+        var(--space-3)
     );
   }
 
@@ -1668,8 +1663,8 @@
         var(--transport-reserve, 76px) + var(--lesson-sheet) + var(--space-2)
       ) !important;
       max-height: calc(
-        100vh - var(--shell-height, 0px) - var(--transport-reserve, 76px) -
-          var(--lesson-sheet) - var(--space-2) * 3
+        100vh - var(--shell-height, 0px) - var(--transport-reserve, 76px) - var(--lesson-sheet) -
+          var(--space-2) * 3
       ) !important;
     }
 
@@ -1684,8 +1679,8 @@
         var(--transport-reserve, 76px) + var(--lesson-sheet) + var(--space-2)
       );
       max-height: calc(
-        100vh - var(--shell-height, 0px) - var(--transport-reserve, 76px) -
-          var(--lesson-sheet) - var(--space-2) * 3
+        100vh - var(--shell-height, 0px) - var(--transport-reserve, 76px) - var(--lesson-sheet) -
+          var(--space-2) * 3
       );
     }
 
@@ -1697,8 +1692,8 @@
     }
     body.investigation-open.bench-open .inv-plot-panel {
       max-height: calc(
-        100vh - var(--shell-height, 0px) - var(--transport-reserve, 76px) -
-          var(--lesson-sheet) - min(30vh, 260px) - var(--space-2) * 4
+        100vh - var(--shell-height, 0px) - var(--transport-reserve, 76px) - var(--lesson-sheet) -
+          min(30vh, 260px) - var(--space-2) * 4
       );
     }
     body.investigation-split.bench-open #investigationTool,
@@ -1774,8 +1769,7 @@
        ends on a short screen: the rail stops above it. */
     .ui-container {
       max-height: calc(
-        100vh - var(--space-10) - 64px - var(--transport-space) -
-          var(--shell-height, 0px) - 68px
+        100vh - var(--space-10) - 64px - var(--transport-space) - var(--shell-height, 0px) - 68px
       );
     }
   }
@@ -1794,8 +1788,7 @@
       width: min(420px, 38vw);
       max-height: min(
         70vh,
-        100vh - var(--space-3) - var(--shell-height, 0px) -
-          var(--transport-reserve, 88px)
+        100vh - var(--space-3) - var(--shell-height, 0px) - var(--transport-reserve, 88px)
       );
     }
   }
@@ -1870,9 +1863,7 @@
     }
     body.investigation-split #investigationTool,
     body.investigation-split #investigationPlot {
-      top: calc(
-        var(--space-3) * 2 + var(--shell-height, 0px) + var(--dock-tabs)
-      );
+      top: calc(var(--space-3) * 2 + var(--shell-height, 0px) + var(--dock-tabs));
       max-height: calc(70vh - var(--space-3) - var(--dock-tabs));
     }
   }
@@ -1881,14 +1872,15 @@
   @media (max-width: 900px) {
     body.investigation-open {
       --lesson-band: calc(
-        100vh * 2 / 3 - var(--shell-height, 0px) -
-          var(--transport-reserve, 76px) - var(--space-2)
+        100vh * 2 / 3 - var(--shell-height, 0px) - var(--transport-reserve, 76px) -
+          var(--space-2)
       );
       --lesson-sheet: min(50vh, var(--lesson-band));
     }
     body.investigation-open .investigation-panel {
       max-height: var(--lesson-sheet);
     }
+
   }
 
   /* The footer. On a phone the lesson's sheet stands on the transport bar
@@ -1928,9 +1920,7 @@
       max-height: var(--lesson-band);
     }
     body.investigation-split .inv-dock-tabs {
-      bottom: calc(
-        var(--transport-reserve, 76px) + var(--lesson-band) - var(--dock-tabs)
-      );
+      bottom: calc(var(--transport-reserve, 76px) + var(--lesson-band) - var(--dock-tabs));
     }
     body.investigation-split #investigationTool,
     body.investigation-split #investigationPlot {
@@ -2011,9 +2001,7 @@
       top: auto;
       left: var(--space-2);
       right: var(--space-2);
-      bottom: calc(
-        var(--transport-reserve, 76px) + var(--lesson-sheet) + var(--space-2)
-      );
+      bottom: calc(var(--transport-reserve, 76px) + var(--lesson-sheet) + var(--space-2));
       width: auto;
       height: auto;
       min-height: 0;
@@ -2024,8 +2012,8 @@
     }
     body.investigation-split .inv-dock-tabs {
       bottom: calc(
-        var(--transport-reserve, 76px) + var(--lesson-sheet) +
-          var(--dock-sheet) - var(--dock-tabs) + var(--space-2)
+        var(--transport-reserve, 76px) + var(--lesson-sheet) + var(--dock-sheet) -
+          var(--dock-tabs) + var(--space-2)
       );
     }
     body.investigation-split #investigationTool,
@@ -2041,18 +2029,16 @@
       --bench-sheet: min(30vh, 260px);
     }
     body.investigation-aux.bench-open .inv-plot-panel,
-    body.investigation-lightcurve.investigation-open.bench-open
-      .light-curve-container {
+    body.investigation-lightcurve.investigation-open.bench-open .light-curve-container {
       bottom: calc(
-        var(--transport-reserve, 76px) + var(--lesson-sheet) +
-          var(--bench-sheet) + var(--space-2) * 2
+        var(--transport-reserve, 76px) + var(--lesson-sheet) + var(--bench-sheet) +
+          var(--space-2) * 2
       );
     }
     body.investigation-split.bench-open .inv-dock-tabs {
       bottom: calc(
-        var(--transport-reserve, 76px) + var(--lesson-sheet) +
-          var(--bench-sheet) + var(--dock-sheet) - var(--dock-tabs) +
-          var(--space-2) * 2
+        var(--transport-reserve, 76px) + var(--lesson-sheet) + var(--bench-sheet) +
+          var(--dock-sheet) - var(--dock-tabs) + var(--space-2) * 2
       );
     }
 
@@ -2642,27 +2628,6 @@
   width: min(34rem, calc(100% - 2 * var(--space-4)));
 }
 
-/* The Sizes statement (js/sizeStatement.js): the precise dialog's width. */
-.sizes-statement {
-  width: min(36rem, calc(100% - 2 * var(--space-4)));
-}
-
-.sizes-table {
-  border-collapse: collapse;
-  margin: var(--space-2) 0;
-  font-variant-numeric: tabular-nums;
-}
-
-.sizes-table caption {
-  text-align: start;
-  font-weight: 600;
-}
-
-.sizes-table :is(th, td) {
-  padding: 2px var(--space-3) 2px 0;
-  text-align: start;
-}
-
 .precise-row {
   display: flex;
   flex-direction: column;
@@ -2774,15 +2739,11 @@
     min-width: 0;
   }
 
-  body[data-lesson-canvas='quiet']
-    .timeline-bar.is-folded
-    > :not(.timeline-fold) {
+  body[data-lesson-canvas='quiet'] .timeline-bar.is-folded > :not(.timeline-fold) {
     display: none;
   }
 
-  body[data-lesson-canvas='quiet']:not(
-      :has(.rail-section-toggle[aria-expanded='true'])
-    )
+  body[data-lesson-canvas='quiet']:not(:has(.rail-section-toggle[aria-expanded='true']))
     #objectAdd {
     display: none;
   }

@@ -6,13 +6,14 @@
 // softening, MOND and halo the engine has in force, and draws what it returns.
 //
 // The primary is the source pulling hardest on the body. Whether an ellipse
-// may be drawn at all is twoBodyModel's answer (js/orbital.js), asked for the
+// may be drawn at all is twoBodyModel's answer (js/twoBodyModel.js), asked for the
 // current separation and for periapsis, because the curve claims the whole
 // orbit: a body outside the softening length now that dives inside it at
 // periapsis is not on a Kepler ellipse.
 // =============================================================================
 
-import { orbitalElements, dominantPrimary, twoBodyModel } from './orbital.js';
+import { orbitalElements, dominantPrimary } from './orbital.js';
+import { twoBodyModel } from './twoBodyModel.js';
 
 const { Math } = globalThis;
 

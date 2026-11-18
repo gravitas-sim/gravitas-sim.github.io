@@ -1200,7 +1200,7 @@ export const ES = {
   'inv.browser.activities.link': 'Ver las actividades de clase',
   'canvas.sizeDisclosure': 'Tamaños no a escala: detalles en Tamaños',
   'canvas.sizeDisclosure.detail':
-    'Las distancias están a escala y los tamaños dibujados no: cada tipo de cuerpo se amplía con su propio factor, así que ni un tamaño ni la proporción entre dos tamaños se pueden leer en el lienzo. El botón Tamaños de la lectura dice cuánto, cuerpo a cuerpo.',
+    'Las distancias se dibujan a una sola escala, la que muestra la barra de escala. Los tamaños de los cuerpos no siguen una misma escala: cada tipo de cuerpo se amplía con su propio factor, así que ni un tamaño ni la proporción entre dos tamaños se pueden leer en el lienzo. El botón Tamaños de la lectura dice cuánto, y el inspector da cada radio.',
   'sizes.button': 'Tamaños',
   'sizes.timesRange': 'de {lo}× a {hi}×',
   'sizes.summary': 'Dibujados mayores que en la realidad: {list}.',

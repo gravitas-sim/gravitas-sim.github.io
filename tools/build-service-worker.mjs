@@ -663,6 +663,13 @@ export const NEVER_PRECACHED = [
   /^js\/lab3d\/libration\.js$/,
   // Its addendum's step-budget rule, in the same position: only the validator and the tests import it.
   /^js\/lab3d\/stepBudget\.js$/,
+  // The orbit geometry overlay and the Sizes statement (D-R4-447-08): the two lazy modules, the
+  // size facts the canvas description fetches on its first rebuild, the geometry and two-body
+  // model only the overlay imports, and their words. Kept by the service worker after their first
+  // online use, not installed: the first-visit tier has 1.2 KB of room under a data-budget ceiling
+  // the standing size approval does not cover.
+  /^js\/(orbitGeometry|orbitGeometryOverlay|sizeStatement|sizeFacts|twoBodyModel)\.js$/,
+  /^js\/i18n\/(en|es)\.(orbitGeometry|sizes)\.js$/,
 ];
 
 const ON_DEMAND_ONLY = new Set([

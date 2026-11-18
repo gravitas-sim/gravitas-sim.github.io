@@ -4,9 +4,8 @@ import {
   dominantPrimary,
   pairEnergy,
   createPeriodTimer,
-  twoBodyModel,
-  isGravitySource,
 } from '../js/orbital.js';
+import { twoBodyModel, isGravitySource } from '../js/twoBodyModel.js';
 
 // A star heavy enough that the orbiter's own mass is negligible, so the
 // textbook two-body results apply cleanly.
@@ -274,7 +273,7 @@ describe('twoBodyModel', () => {
     bh_behavior: 'Orbiting',
     softening: 5,
     mondA0: 0,
-    halo: null,
+    haloAt: null,
   };
   const at = (kind, x, mass = 1) => ({
     kind,
@@ -376,13 +375,21 @@ describe('twoBodyModel', () => {
     ).toBe('mond');
   });
 
-  test('a halo at 1 percent or more of the primary marks the claim approximate', () => {
+  test('a halo at 1 percent or more of the primary marks the claim approximate', async () => {
+    const { haloAcceleration } = await import('../js/darkMatter.js');
+    const field = halo => pos => haloAcceleration(pos, halo);
     const star = at('StarObject', 0, 1);
     // A flat halo: pull v^2 / r. At r = 100 the star pulls 1e-4.
     const weak = { vFlat: Math.sqrt(0.009 * 1e-2), coreRadius: 1e-9 };
     const strong = { vFlat: Math.sqrt(0.011 * 1e-2), coreRadius: 1e-9 };
-    const w = twoBodyModel(at('Planet', 100), star, { ...base, halo: weak });
-    const s = twoBodyModel(at('Planet', 100), star, { ...base, halo: strong });
+    const w = twoBodyModel(at('Planet', 100), star, {
+      ...base,
+      haloAt: field(weak),
+    });
+    const s = twoBodyModel(at('Planet', 100), star, {
+      ...base,
+      haloAt: field(strong),
+    });
     expect(w.haloRatio).toBeLessThan(0.01);
     expect(w.approximate).toBe(false);
     expect(s.haloRatio).toBeGreaterThan(0.01);

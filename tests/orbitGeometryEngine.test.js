@@ -8,7 +8,7 @@ import * as P from '../js/physics.js';
 import { twoBodySettings } from '../js/engine/forces.js';
 import { makeLab, makeStar } from '../js/validation/harness.js';
 import { orbitGeometry } from '../js/orbitGeometry.js';
-import { twoBodyModel } from '../js/orbital.js';
+import { twoBodyModel } from '../js/twoBodyModel.js';
 
 const TOL = JSON.parse(
   readFileSync(

@@ -196,6 +196,7 @@ as pending acceptance; Prompt 278 activates them.
 | `lab3d.camera` | `e2e/lab3dView.spec.js` | `e2e/interactionContract.spec.js` (presets); `e2e/a11ySweep.spec.js` (the view pad) | `e2e/a11ySweep.spec.js` (where the view is from and how much it holds, once the pressing stops) |
 | `sandbox.windows` | `e2e/a11ySweep.spec.js` | `e2e/a11ySweep.spec.js` (the spacetime view, the inspector and a pinned card) | `e2e/a11ySweep.spec.js` |
 | `sandbox.observer` | `e2e/a11ySweep.spec.js` | `e2e/a11ySweep.spec.js` | not applicable: a native slider says its own value |
+| `sandbox.orbitGeometry` | `e2e/orbitGeometry.spec.js` | `e2e/orbitGeometry.spec.js` (one press on a marker; no drag) | `e2e/orbitGeometry.spec.js` (the distance, when the second point is chosen) |
 | `sandbox.spacetime` | `e2e/a11ySweep.spec.js` | `e2e/a11ySweep.spec.js` | not applicable: a picture of a grid moves |
 
 ### The walk inventory

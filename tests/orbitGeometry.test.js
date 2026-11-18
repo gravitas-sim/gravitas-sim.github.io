@@ -11,7 +11,8 @@ import {
   toggleMarker,
   MARKERS,
 } from '../js/orbitGeometry.js';
-import { orbitalElements, twoBodyModel } from '../js/orbital.js';
+import { orbitalElements } from '../js/orbital.js';
+import { twoBodyModel } from '../js/twoBodyModel.js';
 
 const TOL = JSON.parse(
   readFileSync(
@@ -27,7 +28,7 @@ const ONE_WAY = {
   bh_behavior: 'Orbiting',
   softening: 5,
   mondA0: 0,
-  halo: null,
+  haloAt: null,
 };
 
 /**

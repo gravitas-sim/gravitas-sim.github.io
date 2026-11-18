@@ -23,6 +23,7 @@
 
 import { registerOverlay } from './overlays.js';
 import { state } from './appState.js';
+import { familyName } from './sizeFacts.js';
 import {
   world_to_screen,
   gravitySourcesFor,
@@ -52,11 +53,15 @@ import {
   getLocale,
   registerMessages,
 } from './i18n/index.js';
-import { familyName } from './sizeFacts.js';
 import { formatDistance } from './units.js';
 import { formatNumber } from './format.js';
 import { announce } from './notify.js';
 import { labelFont, pixelScale } from './bodyLabels.js';
+
+// The panel's own rules, put in the page when it is first built, so a reader
+// who never switches the overlay on does not download them. A chosen point is
+// said by a tick and weight as well as by colour.
+const STYLE = `.orbit-geometry-panel{width:300px;} .og-body{padding:0 var(--space-3);font-size:var(--text-sm);} .og-parts{display:flex;flex-wrap:wrap;gap:2px var(--space-3);margin:0 0 var(--space-2);padding:0;border:0;} .og-parts label, .og-option{display:flex;align-items:center;gap:6px;min-height:24px;} .og-option{padding:0 6px;border:1px solid transparent;border-radius:var(--radius-sm);cursor:pointer;} .og-option.is-active{border-color:var(--border);} .og-list:focus-visible .og-option.is-active{outline:2px solid var(--accent-primary, currentColor);} .og-option[aria-selected='true']{font-weight:600;background:var(--surface-2);} .og-option[aria-selected='true']::before{content:'\\2713';} @media (pointer:coarse){.og-parts label, .og-option{min-height:44px;}}`;
 
 const INK = 'rgba(120, 222, 200, 0.95)';
 const MARK = 'rgba(236, 244, 255, 0.98)';
@@ -297,6 +302,9 @@ async function ensureMessages() {
 
 function mount() {
   if (root) return;
+  const style = document.createElement('style');
+  style.textContent = STYLE;
+  document.head.append(style);
   root = document.createElement('div');
   root.id = 'orbitGeometryPanel';
   root.className = 'obs-panel orbit-geometry-panel';

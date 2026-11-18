@@ -448,7 +448,7 @@ sources the integrator itself sums over; the ellipse is the orbit about that
 primary **if only it pulled**, and the label says so.
 
 Whether a two-body ellipse is a claim the model can make is decided in one
-place, `twoBodyModel` in `js/orbital.js`: the pair's class (each pulls the
+place, `twoBodyModel` in `js/twoBodyModel.js`: the pair's class (each pulls the
 other, so mu = G(M+m); only the primary pulls, so mu = G M; or the primary
 does not pull on the body at all) read from the engine's own rule for what is a
 source, and whether the force is inverse-square over the distances the claim

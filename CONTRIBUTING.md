@@ -176,8 +176,8 @@ their ceilings:
 | `js/data/investigations/observing-sequence.js` | 3,341 | 3,341 |
 | `js/data/investigations/measurement-sequence.js` | 3,270 | 3,270 |
 | `js/investigations.js` | 3,108 | 3,108 |
-| `js/render.js` | 2,856 | 2,856 |
 | `js/data/investigations/depth/measurement-sequence.js` | 2,840 | 2,840 |
+| `js/render.js` | 2,810 | 2,810 |
 <!--/fact-block-->
 
 | Layer | What lives there | Examples |

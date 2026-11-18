@@ -3,7 +3,7 @@
 export const ES_SIZES = {
   'sizes.title': 'Qué se dibuja a escala',
   'sizes.distances':
-    'Las distancias están a escala. Las posiciones y separaciones son las del propio modelo, a {perAu} unidades por unidad astronómica, y la barra de escala las mide.',
+    'Las distancias se dibujan a una sola escala, la del propio modelo, y la barra de escala las mide. Donde un escenario dispone un sistema más compacto que el real, el dibujo también lo es.',
   'sizes.notSizes':
     'Los tamaños no. Cada cuerpo se dibuja mayor que en la realidad, cada tipo con su propio factor, así que ni un tamaño ni la proporción entre dos tamaños se pueden leer en el lienzo.',
   'sizes.collision':

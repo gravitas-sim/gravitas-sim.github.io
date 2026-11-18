@@ -4,7 +4,7 @@
 // One answer for the Sizes statement (js/sizeStatement.js) and the canvas
 // description (js/canvasSummary.js). Every figure comes from the body as the
 // world built it - Sol is 15 units in `solar-system` and 10 by default
-// elsewhere - never from a constructor default. Distances are to scale; sizes
+// elsewhere - never from a constructor default. Distances share one scale; sizes
 // are not, and by how much depends on the family (js/bodyVisuals.js).
 //
 // The real radius is the one the inspector reports where it reports one with
@@ -26,7 +26,10 @@ import {
 import { stellarStateFor } from './stellar/state.js';
 import { t } from './i18n/index.js';
 import { formatNumber } from './format.js';
-import { PLANET_RADIUS, GAS_GIANT_RADIUS } from './engine/bodies.js';
+// From physics.js, not js/engine/bodies.js: this module loads lazily, and a
+// lazy module that reaches part of a start-up chunk splits it in two
+// (js/instrumentStartup.js says why). physics.js reaches the whole chunk.
+import { PLANET_RADIUS, GAS_GIANT_RADIUS } from './physics.js';
 
 /** Families with no size to state: a horizon, a halo, a fragment. */
 export const NOT_A_SIZE = Object.freeze(['BlackHole', 'Galaxy', 'Debris']);

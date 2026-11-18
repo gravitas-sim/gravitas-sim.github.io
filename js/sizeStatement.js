@@ -12,8 +12,8 @@ import { t, getLocale, registerMessages } from './i18n/index.js';
 import { formatDistance } from './units.js';
 import { SIM_UNITS_PER_AU } from './constants.js';
 import { DISPLAY_MIN_PX } from './bodyVisuals.js';
-import { sizeFacts, familyRows, timesText, familyName } from './sizeFacts.js';
 import { state } from './appState.js';
+import { sizeFacts, familyRows, familyName, timesText } from './sizeFacts.js';
 import {
   stars,
   planets,
@@ -93,6 +93,9 @@ function familyTable(rows) {
 
 let panel = null;
 
+/** The statement's rules, put in the page with it (the precise dialog's width). */
+const STYLE = `.sizes-statement{width:min(36rem, calc(100% - 2 * var(--space-4)));} .sizes-table{border-collapse:collapse;margin:var(--space-2) 0;font-variant-numeric:tabular-nums;} .sizes-table caption{text-align:start;font-weight:600;} .sizes-table :is(th, td){padding:2px var(--space-3) 2px 0;text-align:start;}`;
+
 /** The statement's words, fetched with it, for the language in use. */
 async function ensureMessages() {
   const locale = getLocale();
@@ -111,6 +114,9 @@ async function ensureMessages() {
 export async function openSizeStatement(trigger) {
   await ensureMessages().catch(() => {});
   if (!panel) {
+    const style = document.createElement('style');
+    style.textContent = STYLE;
+    document.head.append(style);
     panel = document.createElement('div');
     panel.className = 'modal-panel sizes-statement';
     panel.id = 'sizesStatement';
@@ -123,7 +129,7 @@ export async function openSizeStatement(trigger) {
   }
   const selected = state.selectedObject?.object;
   panel.innerHTML = `<h2 id="sizesStatementTitle">${esc(t('sizes.title'))}</h2>
-    <p>${esc(t('sizes.distances', { perAu: SIM_UNITS_PER_AU }))}</p>
+    <p>${esc(t('sizes.distances'))}</p>
     <p>${esc(t('sizes.notSizes'))}</p>
     ${selected ? bodyTable(selected) : familyTable(familyRows(allBodies()))}
     <p>${esc(t('sizes.collision', { floor: DISPLAY_MIN_PX }))}</p>

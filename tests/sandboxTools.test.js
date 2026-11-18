@@ -367,7 +367,7 @@ describe('the canvas instrumentation', () => {
     // it is inside every screenshot and every recording.
     expect(ctx.text.length).toBe(2);
     expect(ctx.text[0]).toMatch(/AU|km|m\b/);
-    expect(ctx.text[1].toLowerCase()).toContain('not to one scale');
+    expect(ctx.text[1].toLowerCase()).toContain('not to scale');
     // No panel: nothing rounded was filled behind anything.
     expect(ctx.calls.some(c => c[0] === 'roundRect')).toBe(false);
   });
@@ -412,8 +412,9 @@ describe('the canvas instrumentation', () => {
     // The bar goes, the statement about body sizes does not: it is about the
     // bodies, and a figure without a bar still shows them enlarged.
     expect(ctx.text).toHaveLength(1);
-    expect(ctx.text[0].toLowerCase()).toContain('not to one scale');
-    expect(ctx.text[0].toLowerCase()).toContain('inspector');
+    expect(ctx.text[0].toLowerCase()).toContain('not to scale');
+    // And it points to where the figures are: the readout's Sizes button.
+    expect(ctx.text[0]).toContain('Sizes');
   });
 
   test('a scale or trail note in the key is text without a swatch, and wraps rather than drops', () => {

@@ -42,11 +42,19 @@ import {
 } from './physics.js';
 import { t } from './i18n/index.js';
 import { lightingNotes } from './bodyDraw.js';
-import { sizeSentence } from './sizeFacts.js';
 
 // For the inspector's Appearance disclosure, which loads lazily and must not
 // import the drawing modules itself (js/inspectorView.js says why).
 registerCommands({ lightingNotes });
+// The size facts (js/sizeFacts.js) are fetched on the first description, not
+// at start-up: the first-visit install has no room for them. Until they
+// arrive the description says what it said before, and the next rebuild,
+// at most REFRESH_MS later, adds the sentence.
+let sizes = null;
+const sizeModule = () => {
+  if (!sizes) sizes = import('./sizeFacts.js').then(m => (sizes = m));
+  return typeof sizes.sizeSentence === 'function' ? sizes : null;
+};
 import { scenarioTitle } from './i18n/scenario.js';
 
 /** A scenario id, as opposed to 'None', the sentinel for a hand-built world. */
@@ -157,11 +165,12 @@ export function summaryText() {
   // see the canvas gets the whole explanation, because for them this is the
   // only place it appears.
   parts.push(t('canvas.sizeDisclosure.detail'));
-  const sizes = sizeSentence(
+  // By how much, from the same facts the Sizes statement shows.
+  const facts = sizeModule()?.sizeSentence(
     [...stars, ...planets, ...gas_giants, ...asteroids, ...comets],
     selected
   );
-  if (sizes) parts.push(sizes);
+  if (facts) parts.push(facts);
 
   // The orbit geometry overlay writes its own sentence while it is on, with
   // only the parts the reader has left showing (js/orbitGeometryOverlay.js).
