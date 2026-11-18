@@ -67,7 +67,7 @@ const CASES = [
     id: ID,
     depth: 'advanced',
     sid: 'the-zone-at-three-ages',
-    row: /A planet at 1 AU/i,
+    row: /A\splanet\sat\s1\sAU/i,
     rowEs: /Un planeta a 1 UA/i,
     title: /^Where the zone is/i,
     titleEs: /^Dónde está la zona/i,

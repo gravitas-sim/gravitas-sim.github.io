@@ -263,9 +263,6 @@ export const NEVER_PRECACHED = [
   // The controlled-run code: fetched by a lesson step that declares a variation
   // and kept by the service worker after that, not installed (first-visit tier).
   /^js\/lesson\/runs\.js$/,
-  // The lesson frame (where the scene sits and the sheet that holds the rest on a phone): fetched by the first lesson step and kept by the
-  // service worker after that, not installed (both precache tiers are at their data-budget ceilings).
-  /^js\/lessonFrame\.js$/,
   // The Worker pool (Prompt 153, WORKER_POOL.md): no shipped module imports it
   // yet, so no page can fetch it and an install has no use for it, and the
   // first-visit tier has 49 bytes of room (the adoption is a wait: its
