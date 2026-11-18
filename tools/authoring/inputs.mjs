@@ -28,6 +28,7 @@ import { flowFor } from '../../js/instructorFlow.js';
 import { gradedSteps } from '../../js/data/investigations/catalog.js';
 import { cueFindings } from './cueRules.mjs';
 import { retiredFindings } from './retiredRules.mjs';
+import { autoArmFindings } from './autoArmRules.mjs';
 
 export const LESSON_DIR = 'js/data/investigations';
 export const LOCALES = ['es'];
@@ -87,6 +88,7 @@ export async function loadAuthoringInputs() {
     gradedSteps,
     cueFindings,
     retiredFindings,
+    autoArmFindings,
   };
 }
 

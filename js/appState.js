@@ -55,6 +55,9 @@ export const DEFAULT_SETTINGS = {
   // are the two facts a screenshot most often has to carry.
   show_scale_bar: true,
   show_elapsed_time: true,
+  // Which bodies the canvas names: 'all' (the level of detail decides), 'bound'
+  // (the selected body and a lesson's own bodies) or 'none'.
+  body_labels: 'all',
   // The conservation check. OFF by default, and this is a presentation choice
   // rather than a retreat from the numbers.
   //
@@ -423,8 +426,8 @@ let held = null;
 
 /**
  * A lesson's reading step holds the clock, so nothing runs behind the panels,
- * unless it says `motion: true` or carries an instrument or a `pauseAt` watch,
- * which need the clock. The next step releases what this held. `world` is what
+ * unless it says `motion: true` or carries an instrument, a `pauseAt` watch or
+ * its own `time`, which need the clock (or set it). The next step releases what this held. `world` is what
  * the scene was built from: a rebuild owns the clock again.
  *
  * @param {object|undefined} step - The step now on screen
@@ -433,7 +436,8 @@ let held = null;
 export function holdClock(step, world) {
   world ||= state;
   const hold =
-    step?.type === 'read' && !(step.motion || step.tool || step.pauseAt);
+    step?.type === 'read' &&
+    !(step.motion || step.tool || step.pauseAt || step.time);
   if (!state.paused || held !== world) held = null;
   if (hold ? !state.paused : held) {
     state.paused = hold;

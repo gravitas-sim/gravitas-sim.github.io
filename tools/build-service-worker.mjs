@@ -241,6 +241,18 @@ export const NEVER_PRECACHED = [
   // until it is: a module a page imports is installed, and its bytes are that
   // change's to find.
   /^js\/numeric\/(roots|interp)\.js$/,
+  // The lesson canvas code and its words: fetched by a lesson that declares a
+  // canvas and kept by the service worker after that, not installed (the
+  // first-visit tier is at its data-budget ceiling).
+  /^js\/lessonCanvas\.js$/,
+  /^js\/lesson\/canvasKind\.js$/,
+  /^js\/i18n\/(en|es)\.canvas\.js$/,
+  // The words of a lesson step's Replay and armed watch: fetched by a step that
+  // declares one and kept by the service worker after that, not installed (the
+  // first-visit tier is at its data-budget ceiling). The module that reads
+  // them, js/investigations/eventWindow.js, is installed: every pauseAt step
+  // opens its tool through it.
+  /^js\/i18n\/(en|es)\.eventWindow\.js$/,
   // The lesson plot's glue, the ring a step draws round an object and their
   // words: fetched by the first lesson step that needs them and kept by the
   // service worker after that, not installed (the first-visit tier is at its
@@ -248,6 +260,9 @@ export const NEVER_PRECACHED = [
   // they draw with is installed already.
   /^js\/investigations\/(plotView|pointing)\.js$/,
   /^js\/i18n\/(en|es)\.linked\.js$/,
+  // The controlled-run code: fetched by a lesson step that declares a variation
+  // and kept by the service worker after that, not installed (first-visit tier).
+  /^js\/lesson\/runs\.js$/,
   // The Worker pool (Prompt 153, WORKER_POOL.md): no shipped module imports it
   // yet, so no page can fetch it and an install has no use for it, and the
   // first-visit tier has 49 bytes of room (the adoption is a wait: its
