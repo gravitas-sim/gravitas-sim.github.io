@@ -367,7 +367,7 @@ describe('the canvas instrumentation', () => {
     // it is inside every screenshot and every recording.
     expect(ctx.text.length).toBe(2);
     expect(ctx.text[0]).toMatch(/AU|km|m\b/);
-    expect(ctx.text[1].toLowerCase()).toContain('enlarged for visibility');
+    expect(ctx.text[1].toLowerCase()).toContain('not to one scale');
     // No panel: nothing rounded was filled behind anything.
     expect(ctx.calls.some(c => c[0] === 'roundRect')).toBe(false);
   });
@@ -399,7 +399,7 @@ describe('the canvas instrumentation', () => {
     expect(shot.text).toContain('acceleration');
   });
 
-  test('the scale bar can be switched off and only the size disclosure stays', () => {
+  test('the scale bar can be switched off; the size notice stays', () => {
     const ctx = recordingContext();
     drawInstrumentation(
       ctx,
@@ -409,8 +409,43 @@ describe('the canvas instrumentation', () => {
       0,
       []
     );
+    // The bar goes, the statement about body sizes does not: it is about the
+    // bodies, and a figure without a bar still shows them enlarged.
     expect(ctx.text).toHaveLength(1);
-    expect(ctx.text[0].toLowerCase()).toContain('enlarged for visibility');
+    expect(ctx.text[0].toLowerCase()).toContain('not to one scale');
+    expect(ctx.text[0].toLowerCase()).toContain('inspector');
+  });
+
+  test('a scale or trail note in the key is text without a swatch, and wraps rather than drops', () => {
+    const legend = [
+      { color: '#3ef2a0', label: 'velocity 29.8 km/s', dash: false },
+      {
+        color: 'transparent',
+        label: 'Velocity arrow: 1 cm = 12 km/s',
+        dash: false,
+        note: true,
+      },
+      {
+        color: 'transparent',
+        label: 'Trails: the last 19 d',
+        dash: false,
+        note: true,
+      },
+    ];
+    setCaptureMode(true);
+    const shot = recordingContext();
+    drawInstrumentation(
+      shot,
+      { width: 360, height: 400 },
+      settings,
+      1,
+      0,
+      legend
+    );
+    setCaptureMode(false);
+    for (const l of legend) expect(shot.text).toContain(l.label);
+    // Only the arrow row is a line with a swatch.
+    expect(shot.calls.filter(c => c[0] === 'stroke')).toHaveLength(2);
   });
 
   test('burns the scenario name into a captured frame', () => {

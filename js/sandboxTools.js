@@ -696,28 +696,32 @@ export function drawInstrumentation(
   let legendBottom = barY - 20;
   if (capturing && legend.length) {
     let x = pad + 2;
-    const y = legendBottom;
+    let y = legendBottom;
     for (const l of legend) {
       const label = l.label;
-      const w = 26 + ctx.measureText(label).width;
-      // Anything that would run off the right edge is dropped rather than
-      // wrapped: a key that reaches the far side of the canvas has stopped
-      // being a key.
-      if (x + w > W - pad) break;
-      ctx.save();
-      ctx.strokeStyle = l.color;
-      ctx.lineWidth = l.dash ? 1.8 : 3;
-      ctx.setLineDash(l.dash ? [5, 3] : []);
-      ctx.beginPath();
-      ctx.moveTo(x, y);
-      ctx.lineTo(x + 18, y);
-      ctx.stroke();
-      ctx.restore();
+      const w = (l.note ? 0 : 26) + ctx.measureText(label).width;
+      // Wrap upward rather than drop: the scale and trail span must stay.
+      if (x + w > W - pad && x > pad + 2) {
+        x = pad + 2;
+        y -= 16;
+      }
+      if (x + w > W - pad) continue;
+      if (!l.note) {
+        ctx.save();
+        ctx.strokeStyle = l.color;
+        ctx.lineWidth = l.dash ? 1.8 : 3;
+        ctx.setLineDash(l.dash ? [5, 3] : []);
+        ctx.beginPath();
+        ctx.moveTo(x, y);
+        ctx.lineTo(x + 18, y);
+        ctx.stroke();
+        ctx.restore();
+      }
       ctx.fillStyle = 'rgba(214, 226, 244, 0.95)';
-      ctx.fillText(label, x + 24, y);
+      ctx.fillText(label, x + (l.note ? 0 : 24), y);
       x += w + 14;
     }
-    legendBottom -= 16;
+    legendBottom = y - 16;
   }
 
   if (settings.show_scale_bar !== false) {
@@ -743,8 +747,8 @@ export function drawInstrumentation(
     ctx.fillText(readings.join('   '), pad + 2, barY);
   }
 
-  // What the scale bar does not say: the bodies are drawn on a compressed
-  // scale. Always drawn, at the canvas edge, so it is in every screenshot.
+  // Body sizes are not to one scale; said on the canvas, with or without the
+  // bar, so it is in every screenshot.
   ctx.font = `12px ${INSTRUMENT_MONO}`;
   ctx.fillStyle = 'rgb(200, 214, 235)';
   halo(ctx, t('canvas.sizeDisclosure'), pad + 2, barY + 14);

@@ -420,7 +420,7 @@ const RETROGRADE = {
              \n\nA point older than the origin body's own recorded history cannot
              be re-expressed at all, and is not drawn. So a freshly rebuilt
              system has no loop yet: the trail has to grow first.`,
-      tip: 'The trail here holds about 110 days of history, which is a little longer than a whole retrograde episode. That is deliberate: much shorter and the loop never closes.',
+      tip: 'The trail here holds about a year of history, several times longer than a whole retrograde episode of about 72 days. That is deliberate: much shorter and the loop never closes.',
     },
     {
       sid: 'put-yourself-on-earth',

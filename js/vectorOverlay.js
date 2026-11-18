@@ -1,51 +1,33 @@
-// =============================================================================
-// Velocity, acceleration and the potential well
-// -----------------------------------------------------------------------------
-// Three drawings, all of them about one misconception: that a body moves in the
-// direction it is pulled. It is the most durable wrong idea in introductory
-// mechanics, and an eccentric orbit refutes it every second - the velocity runs
-// along the track and the acceleration points at the star, and near periapsis
-// they are close to perpendicular. Drawing both, in colors that cannot be
-// mistaken for each other, makes that refutation something a student sees
-// rather than something they are told.
-//
-// What is drawn, for the selected body:
-//
-//   velocity          one arrow, along the track
-//   total acceleration one arrow, the sum the integrator actually used
-//   per-source arrows  one for each gravitating source, drawn from the body
-//                      toward that source
-//
-// and, optionally, a potential-well underlay for the whole scene.
-//
-// The numbers come from js/physics.js, which publishes the acceleration each
-// body was stepped with and can decompose it by source on request. Nothing here
-// computes gravity: a drawing that recomputed the force would be a second
-// implementation of the force law, free to disagree with the one the simulation
-// is running, and an arrow that disagrees with the motion is worse than no
-// arrow at all.
-//
-// Cost. The per-source arrows are drawn for one body, so they are a handful of
-// vectors however large the scene is. The potential well is the expensive one
-// and is sampled on a coarse grid into a small offscreen canvas, from a capped
-// number of the heaviest sources, and recomputed only when the view or the
-// configuration has actually moved. See the notes on POTENTIAL_CELL and
-// POTENTIAL_SOURCE_CAP below.
-// =============================================================================
+// Velocity and acceleration arrows for the selected body, per-source components,
+// and the potential-well underlay. Nothing here computes gravity: the numbers come
+// from js/physics.js (the acceleration the integrator used), so an arrow cannot
+// disagree with the motion. Arrow length means magnitude (see below).
 
-import { accelerationBreakdown, gravitySourcesFor } from './physics.js';
+import {
+  accelerationBreakdown,
+  gravitySourcesFor,
+  physicsSettings,
+  planets,
+  stars,
+  gas_giants,
+  asteroids,
+  comets,
+  neutron_stars,
+  white_dwarfs,
+} from './physics.js';
 import { t } from './i18n/index.js';
+import {
+  isPhysical,
+  formatSpeed,
+  formatTime,
+  sig,
+  velocityUnitToMs,
+  timeUnitSeconds,
+} from './units.js';
+import { withUnit } from './format.js';
+import { trailSpanTime } from './trailSpan.js';
 
-// --- Palette ------------------------------------------------------------------
-//
-// Chosen so the three classes stay distinct in the one case that matters: an
-// eccentric orbit near periapsis, where velocity and acceleration are nearly
-// perpendicular and both are long. Velocity is a cool green that appears
-// nowhere else in the app; total acceleration is a hot magenta, its opposite on
-// the wheel, so the two can never be confused at a glance or in a screenshot.
-// The per-source arrows are a muted amber family, deliberately lower in
-// contrast than the total: they are components of it, and reading as louder
-// than their own sum would be the wrong emphasis.
+// --- Palette: velocity green and total acceleration magenta are opposites, sources muted amber ---
 
 const VELOCITY_COLOR = '#3ef2a0';
 const ACCEL_COLOR = '#ff45c8';
@@ -63,8 +45,25 @@ const HALO = 'rgba(4, 8, 16, 0.85)';
 
 /** The most component arrows drawn at once. See the note where it is used. */
 const MAX_SOURCE_ARROWS = 8;
-const LABEL_FONT =
-  '600 11px ui-monospace, SFMono-Regular, Menlo, Consolas, monospace';
+const MONO = 'ui-monospace, SFMono-Regular, Menlo, Consolas, monospace';
+
+/** The smallest label the main canvas draws, in CSS pixels. */
+const LABEL_MIN_CSS_PX = 11;
+
+/** Canvas pixels per CSS pixel (1 where unreadable). */
+export function canvasRatio(ctx) {
+  const c = ctx && ctx.canvas;
+  const ratio = c && c.clientWidth > 0 ? c.width / c.clientWidth : 1;
+  return ratio > 0 && Number.isFinite(ratio) ? ratio : 1;
+}
+
+/** A font shorthand raised to 11 CSS px and scaled to canvas pixels. */
+export const fitFont = (ctx, font) =>
+  font.replace(
+    /(\d+(?:\.\d+)?)px/,
+    (_, n) =>
+      `${Math.round(Math.max(LABEL_MIN_CSS_PX, Number(n)) * canvasRatio(ctx) * 100) / 100}px`
+  );
 
 /**
  * The color a given gravitational source's arrow is drawn in.
@@ -139,7 +138,7 @@ function arrow(ctx, from, to, opts = {}) {
   }
 
   if (label) {
-    ctx.font = LABEL_FONT;
+    ctx.font = fitFont(ctx, `600 11px ${MONO}`);
     ctx.textAlign = ux >= 0 ? 'left' : 'right';
     ctx.textBaseline = uy >= 0 ? 'top' : 'bottom';
     const lx = to.x + ux * 8;
@@ -153,32 +152,91 @@ function arrow(ctx, from, to, opts = {}) {
   ctx.restore();
 }
 
-/**
- * Pixels per unit of a vector quantity, chosen so the arrow is a readable
- * length on screen whatever the scenario's units happen to be.
- *
- * Velocity and acceleration have different dimensions and cannot share a scale;
- * each is normalized against its own magnitude so that both are always visible.
- * That means the arrows show direction faithfully and length only comparatively
- * - which is stated on the legend, because an arrow whose length looked like a
- * number would be lying about a quantity nobody can read off a screen anyway.
- *
- * @param {number} magnitude - The vector's length in its own units
- * @param {number} target - Desired arrow length in pixels
- * @returns {number} Pixels per unit
- */
-const arrowScale = (magnitude, target) =>
-  magnitude > 0 ? target / magnitude : 0;
+// --- Length means magnitude: one scale per kind, shared by the scene ---
 
-/**
- * Draw the vector overlay for one body.
- *
- * @param {CanvasRenderingContext2D} ctx - Screen-space context
- * @param {object} body - The selected body
- * @param {Function} toScreen - World-to-screen transform
- * @param {object} settings - Live settings
- * @returns {?object} What was drawn, for tests: the vectors in world units
- */
+/** Arrow for the largest magnitude in the scene, in CSS pixels. */
+const ARROW_REF_PX = 96;
+const ARROW_FLOOR_PX = 14;
+const ARROW_CEIL_PX = 220;
+/** What one centimetre is in CSS pixels (CSS defines 96 pixels to the inch). */
+const CSS_PX_PER_CM = 96 / 2.54;
+/** How far the scale moves toward the scene each frame it is drawn. */
+const SCALE_EASE = 0.12;
+
+/** CSS pixels of arrow per simulation unit, by kind; 0 until first drawn. */
+const arrowScales = { v: 0, a: 0 };
+
+/** Forget the scales, so the next scene sets them afresh. */
+export function resetVectorScale() {
+  arrowScales.v = 0;
+  arrowScales.a = 0;
+}
+
+/** The largest speed and the largest step acceleration among the live bodies. */
+function sceneMaxima() {
+  let v = 0;
+  let a = 0;
+  for (const list of [
+    planets,
+    stars,
+    gas_giants,
+    asteroids,
+    comets,
+    neutron_stars,
+    white_dwarfs,
+  ]) {
+    for (let i = 0; i < list.length; i++) {
+      const b = list[i];
+      if (!b || b.alive === false) continue;
+      if (b.vel) v = Math.max(v, Math.hypot(b.vel.x, b.vel.y));
+      if (b.last_accel)
+        a = Math.max(a, Math.hypot(b.last_accel.x, b.last_accel.y));
+    }
+  }
+  return { v, a };
+}
+
+/** Move one scale toward the value that gives `max` the reference length. */
+function followScale(kind, max) {
+  if (!(max > 0)) return arrowScales[kind];
+  const target = ARROW_REF_PX / max;
+  const now = arrowScales[kind];
+  arrowScales[kind] =
+    now > 0 && now / target < 4 && target / now < 4
+      ? now + (target - now) * SCALE_EASE
+      : target;
+  return arrowScales[kind];
+}
+
+/** Length in canvas pixels of an arrow for `magnitude`, and whether a limit */
+function arrowLength(magnitude, k, ratio) {
+  const css = magnitude * k;
+  if (css < ARROW_FLOOR_PX)
+    return { px: ARROW_FLOOR_PX * ratio, limit: 'floor' };
+  if (css > ARROW_CEIL_PX)
+    return { px: ARROW_CEIL_PX * ratio, limit: 'ceiling' };
+  return { px: css * ratio, limit: null };
+}
+
+/** An acceleration as a readable quantity. */
+function formatAcceleration(a) {
+  if (!isPhysical()) return withUnit(sig(a), 'u/t²');
+  const ms2 = (a * velocityUnitToMs()) / timeUnitSeconds();
+  const m = Math.abs(ms2);
+  if (m >= 1) return withUnit(sig(ms2), 'm/s²');
+  if (m >= 1e-3) return withUnit(sig(ms2 * 1e3), 'mm/s²');
+  return withUnit(sig(ms2 * 1e6), 'µm/s²');
+}
+
+/** What one centimetre of arrow stands for, as a quantity. */
+function perCentimetre(kind) {
+  const k = arrowScales[kind];
+  if (!(k > 0)) return '';
+  const unit = CSS_PX_PER_CM / k;
+  return kind === 'v' ? formatSpeed(unit) : formatAcceleration(unit);
+}
+
+/** Draw the vector overlay for one body. */
 export function drawBodyVectors(ctx, body, toScreen, settings) {
   if (!body || body.alive === false) return null;
   const wantV = settings.show_velocity_vectors === true;
@@ -186,23 +244,18 @@ export function drawBodyVectors(ctx, body, toScreen, settings) {
   if (!wantV && !wantA) return null;
 
   const origin = toScreen(body.pos);
+  const ratio = canvasRatio(ctx);
   const drawn = { velocity: null, total: null, sources: [] };
-
-  // A single length both classes are drawn against, so the two arrows are
-  // comparable in prominence and neither can dominate the picture by accident.
-  const BASE = 78;
+  const maxima = sceneMaxima();
 
   if (wantV) {
     const speed = Math.hypot(body.vel.x, body.vel.y);
-    const k = arrowScale(speed, BASE);
-    if (k > 0) {
-      // The canvas is not transformed here, so the world's +y has to be flipped
-      // by hand: an overlay drawn in screen space with the world's sign would
-      // point the velocity arrow at the mirror image of the motion, which is
-      // exactly the kind of error the overlay exists to prevent.
+    const k = followScale('v', Math.max(maxima.v, speed));
+    if (speed > 0 && k > 0) {
+      const len = arrowLength(speed, k, ratio);
       const tip = {
-        x: origin.x + body.vel.x * k,
-        y: origin.y - body.vel.y * k,
+        x: origin.x + (body.vel.x / speed) * len.px,
+        y: origin.y - (body.vel.y / speed) * len.px,
       };
       arrow(ctx, origin, tip, {
         color: VELOCITY_COLOR,
@@ -210,6 +263,9 @@ export function drawBodyVectors(ctx, body, toScreen, settings) {
         label: 'v',
       });
       drawn.velocity = { x: body.vel.x, y: body.vel.y };
+      drawn.speed = speed;
+      drawn.velocityLimit = len.limit;
+      drawn.velocityScale = perCentimetre('v');
     }
   }
 
@@ -217,29 +273,21 @@ export function drawBodyVectors(ctx, body, toScreen, settings) {
     const parts = accelerationBreakdown(body);
     if (parts) {
       const mag = Math.hypot(parts.total.ax, parts.total.ay);
-      const k = arrowScale(mag, BASE);
-      if (k > 0) {
-        // The components go down first and the total on top of them, so that
-        // where a single source accounts for nearly all of the pull the total
-        // is the arrow you see rather than the one hidden underneath.
-        //
-        // With exactly one source there is nothing to decompose: the component
-        // and the total are the same vector, and drawing both would put a
-        // dashed line under a solid one and say nothing. The decomposition
-        // appears when there is something to decompose.
+      const k = followScale('a', Math.max(maxima.a, mag));
+      if (mag > 0 && k > 0) {
         if (parts.sources.length > 1) {
-          // Only the strongest few. A cluster scenario can have two hundred
-          // sources, and the arrows below the top handful are shorter than
-          // their own arrowheads: they would cost a frame's worth of drawing
-          // to produce a smudge at the body's center.
           const shown = parts.sources.slice(0, MAX_SOURCE_ARROWS);
           for (const s of shown) {
             const sm = Math.hypot(s.ax, s.ay);
-            if (!(sm * k > 6)) continue;
+            const px = Math.min(sm * k, ARROW_CEIL_PX) * ratio;
+            if (!(px > 6)) continue;
             arrow(
               ctx,
               origin,
-              { x: origin.x + s.ax * k, y: origin.y - s.ay * k },
+              {
+                x: origin.x + (s.ax / sm) * px,
+                y: origin.y - (s.ay / sm) * px,
+              },
               {
                 color: sourceColor(s.id),
                 width: 1.8,
@@ -252,16 +300,20 @@ export function drawBodyVectors(ctx, body, toScreen, settings) {
           }
         }
 
+        const len = arrowLength(mag, k, ratio);
         arrow(
           ctx,
           origin,
           {
-            x: origin.x + parts.total.ax * k,
-            y: origin.y - parts.total.ay * k,
+            x: origin.x + (parts.total.ax / mag) * len.px,
+            y: origin.y - (parts.total.ay / mag) * len.px,
           },
           { color: ACCEL_COLOR, width: 3, label: 'a' }
         );
         drawn.total = { x: parts.total.ax, y: parts.total.ay };
+        drawn.pull = mag;
+        drawn.pullLimit = len.limit;
+        drawn.pullScale = perCentimetre('a');
         drawn.sourceCount = parts.sources.length;
       }
     }
@@ -270,67 +322,72 @@ export function drawBodyVectors(ctx, body, toScreen, settings) {
   return drawn;
 }
 
-/**
- * The legend rows for whatever was drawn, as data rather than as a drawing.
- *
- * Returned rather than painted so the caller can put them wherever there is
- * room. They end up in the instrumentation panel on the left, because the
- * bottom-right corner - the obvious place for a legend - is underneath the
- * control rail on a desktop window, and a legend behind a panel is a legend
- * nobody reads.
- *
- * @param {?object} drawn - What drawBodyVectors reported
- * @returns {Array<{color: string, label: string, dash: boolean}>} Rows
- */
-export function vectorLegendRows(drawn) {
-  if (!drawn) return [];
+/** The legend rows for whatever was drawn, as data rather than as a drawing. */
+export function vectorLegendRows(drawn, settings) {
   const rows = [];
-  if (drawn.velocity) {
-    rows.push({
-      color: VELOCITY_COLOR,
-      label: t('vector.velocity'),
-      dash: false,
-    });
-  }
-  if (drawn.total) {
-    rows.push({
-      color: ACCEL_COLOR,
-      label:
+  const note = label =>
+    rows.push({ color: 'transparent', label, dash: false, note: true });
+  if (drawn) {
+    if (drawn.velocity) {
+      rows.push({
+        color: VELOCITY_COLOR,
+        label:
+          drawn.speed > 0
+            ? `${t('vector.velocity')} ${formatSpeed(drawn.speed)}`
+            : t('vector.velocity'),
+        dash: false,
+      });
+    }
+    if (drawn.total) {
+      const name =
         drawn.sources.length > 0
           ? t('vector.acceleration.total')
-          : t('vector.acceleration'),
-      dash: false,
-    });
+          : t('vector.acceleration');
+      rows.push({
+        color: ACCEL_COLOR,
+        label:
+          drawn.pull > 0 ? `${name} ${formatAcceleration(drawn.pull)}` : name,
+        dash: false,
+      });
+    }
+    for (const s of drawn.sources) {
+      rows.push({
+        color: sourceColor(s.id),
+        label: t('vector.source', { body: s.label }),
+        dash: true,
+      });
+    }
+    const limited = limit => (limit ? ` (${t(`vector.limit.${limit}`)})` : '');
+    if (drawn.velocityScale) {
+      note(
+        `${t('vector.scale.velocity', { value: drawn.velocityScale })}${limited(drawn.velocityLimit)}`
+      );
+    }
+    if (drawn.pullScale) {
+      note(
+        `${t('vector.scale.acceleration', { value: drawn.pullScale })}${limited(drawn.pullLimit)}`
+      );
+    }
   }
-  for (const s of drawn.sources) {
-    rows.push({
-      color: sourceColor(s.id),
-      label: t('vector.source', { body: s.label }),
-      dash: true,
-    });
+  if (settings && settings.show_trails) {
+    note(
+      t('vector.trails', {
+        span: formatTime(
+          trailSpanTime(
+            physicsSettings.trail_length,
+            physicsSettings.max_timestep,
+            physicsSettings.sim_speed
+          )
+        ),
+      })
+    );
   }
   return rows;
 }
 
 // --- The potential well -------------------------------------------------------
-//
-// Phi(x) = -sum G m_i / max(r_i, softening), sampled on a grid and painted as a
-// smooth underlay. Three things keep it affordable:
-//
-//   POTENTIAL_CELL      the grid is one sample per 10 screen pixels, painted
-//                       into a canvas that small and then scaled up with the
-//                       browser's own smoothing. A full-resolution field would
-//                       be 900x more samples for a picture that is a smooth
-//                       gradient either way.
-//   POTENTIAL_SOURCE_CAP only the heaviest sources contribute. The field is
-//                       dominated by them by construction - potential falls as
-//                       1/r and scales with mass - and a scenario with six
-//                       hundred asteroids would otherwise cost six hundred
-//                       terms per sample for a contribution below the width of
-//                       one color step.
-//   the cache           recomputed only when the view or the sources have
-//                       actually changed, so a paused or slowly drifting scene
-//                       repaints the same bitmap.
+// Phi(x) = -sum G m_i / max(r_i, softening), sampled on a coarse grid from the
+// heaviest sources into a small canvas and redrawn only when the view moves.
 
 const POTENTIAL_CELL = 12;
 const POTENTIAL_SOURCE_CAP = 24;
@@ -535,6 +592,7 @@ export function drawPotentialWell(ctx, canvas, toWorld, G, softening, sources) {
 
 /** Forget the cached field. Called when a new world is built. */
 export function resetPotentialCache() {
+  resetVectorScale();
   potentialKey = '';
   potentialCanvas = null;
   potentialCtx = null;

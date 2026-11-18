@@ -252,7 +252,8 @@ test.describe('the canvas admits what it is doing', () => {
       const i18n = await import('/js/i18n/index.js');
       return i18n.t('canvas.sizeDisclosure');
     });
-    expect(text.toLowerCase()).toContain('enlarged for visibility');
+    expect(text.toLowerCase()).toContain('not to one scale');
+    expect(text.toLowerCase()).toContain('inspector');
 
     // Two lines of ink in that corner: the scale bar with its label, and the
     // disclosure underneath it. One line means the disclosure is not there.
@@ -269,7 +270,7 @@ test.describe('the canvas admits what it is doing', () => {
       const el = document.getElementById('canvasSummary');
       return el ? el.textContent : '';
     });
-    expect(described.toLowerCase()).toContain('compressed scale');
+    expect(described.toLowerCase()).toContain('not to one scale');
     expect(described.toLowerCase()).toContain('inspector');
     // And it does not overclaim about distance, which some scenarios compress
     // too.
@@ -306,7 +307,7 @@ test.describe('the canvas admits what it is doing', () => {
     expect(strings.es.short).not.toBe(strings.en.short);
     expect(strings.es.long).not.toBe(strings.en.long);
     expect(strings.es.radiusTip).not.toBe(strings.en.radiusTip);
-    expect(strings.es.short.toLowerCase()).toContain('visibilidad');
+    expect(strings.es.short.toLowerCase()).toContain('escala común');
   });
 
   test('a screenshot carries the disclosure with it', async ({ page, app }) => {
@@ -330,11 +331,11 @@ test.describe('the inspector says which radius it is reporting', () => {
       return i18n.t('inspector.tip.radius');
     });
     const lower = tip.toLowerCase();
-    expect(lower).toContain('physical radius');
+    expect(lower).toContain('model radius');
     expect(lower).toContain('collision');
     // The claim the old text made, and the one this pass exists to remove.
     expect(lower).not.toContain('visual appearance');
-    expect(lower).toContain('not the size the body is drawn at');
+    expect(lower).toContain('not the size drawn');
   });
 });
 
