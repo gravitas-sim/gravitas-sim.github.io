@@ -11,14 +11,34 @@ import { SETTINGS, state } from '../js/appState.js';
 import {
   LABEL_CAP,
   LABEL_MIN_CSS_PX,
+  LABEL_MODES,
   bodyLabel,
   claim,
   drawBodyMarks,
+  drawnLabels,
   frameScale,
   labelFont,
   labelMode,
   setBoundTest,
 } from '../js/bodyLabels.js';
+import {
+  BlackHole,
+  Comet,
+  GasGiant,
+  NeutronStar,
+  Planet,
+  StarObject,
+  WhiteDwarf,
+  setStateReference,
+} from '../js/physics.js';
+import '../js/bodyDraw.js';
+import { summaryText } from '../js/canvasSummary.js';
+import { recordBuild } from '../js/quality.js';
+import { formatNumber } from '../js/format.js';
+import {
+  EARTH_MASSES_PER_JUPITER_MASS,
+  SOLAR_MASS_UNIT,
+} from '../js/constants.js';
 
 /** A context that records what is filled and stroked, with a plain text width. */
 function recorder() {
@@ -71,8 +91,14 @@ describe('sizes are CSS pixels', () => {
 });
 
 describe('the setting', () => {
+  test('the modes are one setting: all, names, masses, bound, none', () => {
+    expect(LABEL_MODES).toEqual(['all', 'names', 'masses', 'bound', 'none']);
+  });
+
   test.each([
     ['all', 'all'],
+    ['names', 'names'],
+    ['masses', 'masses'],
     ['bound', 'bound'],
     ['none', 'none'],
     [undefined, 'all'],
@@ -218,5 +244,150 @@ describe('claim', () => {
     expect(claim(placed, 10, 10, 20, 10)).toBe(true);
     expect(claim(placed, 15, 12, 20, 10)).toBe(false);
     expect(claim(placed, 100, 10, 20, 10)).toBe(true);
+  });
+});
+
+/** A context that takes any call and does nothing, for a body's own draw path. */
+const quiet = () =>
+  new Proxy(
+    { createRadialGradient: () => ({ addColorStop() {} }) },
+    { get: (t, k) => (k in t ? t[k] : () => {}), set: () => true }
+  );
+
+describe('what a label says', () => {
+  const view = {
+    paused: true,
+    zoom: 40,
+    pan: { x: 0, y: 0 },
+    frameOffset: { x: 0, y: 0 },
+    frame_count: 0,
+  };
+
+  /** Draw one body through its own drawer; the label texts that result. */
+  const labelsOf = (o, mode, zoom = 40) => {
+    setStateReference(view);
+    view.zoom = zoom;
+    SETTINGS.body_labels = mode;
+    frameScale({ clientWidth: 1000, width: 1000 });
+    o.draw(quiet());
+    const ctx = recorder();
+    drawBodyMarks(ctx, p => ({ x: 500, y: 400 + 0 * p.x }));
+    return ctx.drawn.map(d => d.text);
+  };
+  const named = (o, name) => ((o.name = name), o);
+  const mkPlanet = () => {
+    const p = new Planet({ x: 0, y: 0 }, { x: 0, y: 0 }, 5);
+    p.alive = true;
+    return p;
+  };
+
+  test('a mass label reads the formatted mass of its body, family by family', () => {
+    const sun = 1;
+    const cases = [
+      [mkPlanet(), 'masses', `${formatNumber(5)} M`],
+      [
+        Object.assign(new GasGiant({ x: 0, y: 0 }, { x: 0, y: 0 }, 2), {
+          alive: true,
+        }),
+        'masses',
+        null,
+      ],
+      [
+        Object.assign(new StarObject({ x: 0, y: 0 }, { x: 0, y: 0 }, 1.5), {
+          alive: true,
+        }),
+        'masses',
+        `${formatNumber(1.5 * sun)} M`,
+      ],
+      [
+        Object.assign(new NeutronStar({ x: 0, y: 0 }, { x: 0, y: 0 }, 1.4), {
+          alive: true,
+        }),
+        'masses',
+        `${formatNumber(1.4)} M`,
+      ],
+      [
+        Object.assign(new WhiteDwarf({ x: 0, y: 0 }, { x: 0, y: 0 }, 0.6), {
+          alive: true,
+        }),
+        'masses',
+        `${formatNumber(0.6)} M`,
+      ],
+    ];
+    for (const [o, mode, want] of cases) {
+      const texts = labelsOf(o, mode);
+      expect(texts.length).toBeGreaterThan(0);
+      if (want) expect(texts[0]).toBe(want);
+    }
+    const giant = cases[1][0];
+    const gTexts = labelsOf(giant, 'masses');
+    expect(gTexts[0]).toBe(
+      `${Math.round(giant.massInJupiters * EARTH_MASSES_PER_JUPITER_MASS)} M`
+    );
+  });
+
+  test('a comet and a black hole read their masses too', () => {
+    const c = Object.assign(new Comet({ x: 0, y: 0 }, { x: 0, y: 0 }), {
+      alive: true,
+    });
+    const [cText] = labelsOf(c, 'masses', 5000);
+    expect(cText).toContain(formatNumber(c.massInComets));
+    const b = Object.assign(new BlackHole({ x: 0, y: 0 }, { x: 0, y: 0 }, 10), {
+      alive: true,
+    });
+    const [bText] = labelsOf(b, 'masses');
+    expect(bText).toBe(`${formatNumber(b.mass / SOLAR_MASS_UNIT)} M`);
+  });
+
+  test('names shows only a body with a name; masses never shows a name; all is today', () => {
+    const p = named(mkPlanet(), 'Eris');
+    expect(labelsOf(p, 'names')).toEqual(['Eris']);
+    expect(labelsOf(p, 'masses')[0]).toBe(`${formatNumber(5)} M`);
+    // Named in the model (a Solar System planet): the default shows the name.
+    p.isSolarSystemPlanet = true;
+    expect(labelsOf(p, 'all')).toEqual(['Eris']);
+    p.isSolarSystemPlanet = false;
+    // Named only as data: the default is still its mass, as before.
+    expect(labelsOf(p, 'all')[0]).toBe(`${formatNumber(5)} M`);
+    // Nameless in names mode: nothing, unless it is the chosen body.
+    const n = named(mkPlanet(), '');
+    expect(labelsOf(n, 'names')).toEqual([]);
+    state.selectedObject = { type: 'Planet', object: n };
+    expect(labelsOf(n, 'names')[0]).toBe(`${formatNumber(5)} M`);
+    state.selectedObject = null;
+  });
+
+  test('the text of what was drawn reaches the description', () => {
+    const p = named(mkPlanet(), 'Eris');
+    labelsOf(p, 'names');
+    expect(drawnLabels()).toEqual(['Eris']);
+    labelsOf(mkPlanet(), 'masses');
+    expect(drawnLabels()).toEqual([`${formatNumber(5)} M⊕`]);
+  });
+
+  test('the description lists the labels and says what the tier left out', () => {
+    const p = named(mkPlanet(), 'Eris');
+    labelsOf(p, 'names');
+    recordBuild(
+      key => (key === 'num_planets' ? 12 : 0),
+      {
+        num_planets: 80,
+        num_stars: 0,
+        num_gas_giants: 0,
+        num_asteroids: 0,
+        enable_asteroids: true,
+        num_comets: 0,
+        num_micro_stars: 0,
+      },
+      0,
+      [[1, 2, 3]]
+    );
+    const text = summaryText();
+    expect(text).toContain('Labelled on the canvas: Eris.');
+    expect(text).toContain(
+      'Reduced population on this device: 3 of 71 bodies.'
+    );
+    recordBuild(null, {}, 0, []);
+    expect(summaryText()).not.toContain('Reduced population');
   });
 });

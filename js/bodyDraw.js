@@ -302,9 +302,10 @@ function drawPlanet(o, ctx) {
   bodyLabel(o, world_to_screen(world_pos), r * state.zoom, {
     px: 11,
     gate: o.radius * state.zoom > 4,
-    ...(o.isSolarSystemPlanet
-      ? { name: o.name }
-      : { value: formatNumber(o.massInEarths), symbol: EARTH_SYMBOL }),
+    value: formatNumber(o.massInEarths),
+    symbol: EARTH_SYMBOL,
+    known: o.name,
+    ...(o.isSolarSystemPlanet && { name: o.name }),
   });
 }
 
@@ -877,14 +878,10 @@ function drawGasGiant(o, ctx) {
     px: 11,
     gap: 12,
     gate: o.radius * state.zoom > 6,
-    ...(o.isSolarSystemPlanet
-      ? { name: o.name }
-      : {
-          value: String(
-            Math.round(o.massInJupiters * EARTH_MASSES_PER_JUPITER_MASS)
-          ),
-          symbol: EARTH_SYMBOL,
-        }),
+    value: String(Math.round(o.massInJupiters * EARTH_MASSES_PER_JUPITER_MASS)),
+    symbol: EARTH_SYMBOL,
+    known: o.name,
+    ...(o.isSolarSystemPlanet && { name: o.name }),
   });
 
   // ...and the near half over the top, which is what makes the disk read as
@@ -1082,6 +1079,7 @@ function drawBlackHole(o, ctx) {
     px: 14,
     gate: true,
     value: formatNumber(o.mass / SOLAR_MASS_UNIT),
+    known: o.name,
   });
 }
 
@@ -1140,7 +1138,8 @@ function drawComet(o, ctx) {
   bodyLabel(o, world_to_screen(world_pos), r * z, {
     px: 11,
     gate: r * z > 4,
-    name: withUnit(formatNumber(o.massInComets), 'C'),
+    text: withUnit(formatNumber(o.massInComets), 'C'),
+    known: o.name,
   });
 }
 

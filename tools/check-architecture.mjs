@@ -47,7 +47,8 @@
  *
  * The render layer (Prompt 107, step 2b) holds what paints a body: js/bodyDraw.js
  * and js/bodyDrawSky.js (the drawers and what they share), js/bodyLabels.js (the
- * names and the selection cue they queue), js/bodyEffects.js (the
+ * names and the selection cue they queue), js/crowdDraw.js (which bodies of a
+ * crowd keep a trail or get detail), js/bodyEffects.js (the
  * particles and the merger explosions) and the black hole renderer. The engine
  * and the layers below never import it, in any form; they hold a table of
  * drawers and of effects that the render layer fills.
@@ -226,7 +227,10 @@ const LAYERS = [
       'by registration (registerBodyDrawers and registerEffects in ' +
       'js/physics.js), so an engine -> render import fails this check. Prompt ' +
       '107, step 2b.',
-    match: [/^js\/body(Draw(Sky)?|Effects|Labels)\.js$/, /^js\/blackHole\//],
+    match: [
+      /^js\/(body(Draw(Sky)?|Effects|Labels)|crowdDraw)\.js$/,
+      /^js\/blackHole\//,
+    ],
   },
   {
     name: 'feature',

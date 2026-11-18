@@ -27,8 +27,8 @@ import {
   drawnRadius,
   displayRadius,
   markerFloorPx,
-  CROWD_SOFT_START,
 } from './bodyVisuals.js';
+import { crowdDetail, isCrowd } from './crowdDraw.js';
 import {
   state,
   stars,
@@ -108,7 +108,8 @@ const lodOf = (obj, type) => {
   const z = (state && state.zoom) || 1;
   return lodFor(displayRadius(obj.radius, type) * z, {
     tier: currentTier(),
-    crowded: liveBodyCount > CROWD_SOFT_START,
+    crowded: isCrowd(liveBodyCount),
+    detailed: crowdDetail(obj),
   });
 };
 
@@ -371,9 +372,9 @@ function drawStar(o, ctx) {
     bodyLabel(o, world_to_screen(world_pos), r * state.zoom, {
       px: 12,
       gate: o.radius * state.zoom > 5,
-      ...(o.isSolarSystemSun
-        ? { name: o.name }
-        : { value: formatNumber(o.massInSuns) }),
+      value: formatNumber(o.massInSuns),
+      known: o.name,
+      ...(o.isSolarSystemSun && { name: o.name }),
     });
 }
 
@@ -452,6 +453,7 @@ function drawNeutronStar(o, ctx) {
     gate: o.radius * state.zoom > 2,
     value: formatNumber(o.massInSuns),
     suffix: ' NS',
+    known: o.name,
   });
 }
 
@@ -517,6 +519,7 @@ function drawWhiteDwarf(o, ctx) {
     gate: o.radius * state.zoom > 3,
     value: formatNumber(o.massInSuns),
     suffix: ' WD',
+    known: o.name,
   });
 }
 

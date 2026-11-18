@@ -332,6 +332,17 @@ export function renderScale(cssW, cssH) {
 /**
  * Caps applied to the generic population settings when a world is built.
  *
+ * Read once, while the world is generated, because that is the only moment the
+ * counts mean anything. They are a read-time override and never written back:
+ * the first version assigned them into the live SETTINGS, which the generator
+ * reads in nineteen places, and that was harmful because SETTINGS is the
+ * reader's own document - what a share link serializes, what a saved state
+ * restores and what the A/B bench hashes. A teacher on a slow laptop silently
+ * exported num_asteroids: 40 to a class on faster machines, and the bench
+ * could report a difference between two runs that differed only in frame rate.
+ * The tier may spend fewer pixels and draw fewer bodies. It may not edit the
+ * document.
+ *
  * Only the counts a scenario asks for generically. Scenarios that place every
  * body by hand - the resonance systems, TRAPPIST-1, the galaxy discs - are left
  * alone, because their body count is the physics rather than a decoration, and
@@ -351,6 +362,39 @@ export function populationCaps() {
     num_stars: 40,
   };
 }
+
+// The world a tier built, for the readout. Set once per build by js/world/build.js.
+let builtNote = null;
+
+/**
+ * Record a build: how many bodies it made and, for a capped build, how many the
+ * full tier would have made (what each cap cut, by the rule the generator
+ * follows for that count). `pop` is the build's own count function, null when
+ * nothing was capped; `starsAlready` the stars a preset placed before the
+ * generic count began.
+ */
+export function recordBuild(pop, settings, starsAlready, lists) {
+  const built = lists.reduce((n, l) => n + l.length, 0);
+  let cut = 0;
+  if (pop) {
+    const lost = key => Math.max(0, settings[key] - pop(key));
+    const stars = k => Math.max(0, k - starsAlready);
+    const micro = k => Math.min(600, Math.floor(k) || 0);
+    cut =
+      stars(settings.num_stars) -
+      stars(pop('num_stars')) +
+      lost('num_planets') +
+      lost('num_gas_giants') +
+      (settings.enable_asteroids ? lost('num_asteroids') : 0) +
+      lost('num_comets') +
+      micro(settings.num_micro_stars) -
+      micro(pop('num_micro_stars'));
+  }
+  builtNote = cut > 0 ? { built, wanted: built + cut } : null;
+}
+
+/** @returns {?{built: number, wanted: number}} Set when this tier built fewer bodies */
+export const builtPopulation = () => builtNote;
 
 /**
  * Render features switched off at the low tier.

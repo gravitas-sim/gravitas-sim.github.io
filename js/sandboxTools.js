@@ -32,7 +32,13 @@
 // =============================================================================
 
 import { AU_METERS } from './constants.js';
-import { labelFont, pixelScale } from './bodyLabels.js';
+import {
+  keepClear,
+  labelFont,
+  pixelScale,
+  resetKeepClear,
+} from './bodyLabels.js';
+import { crowdNotes } from './crowdDraw.js';
 import { SIM_UNITS_PER_AU, formatTime } from './units.js';
 import {
   world_to_screen,
@@ -616,6 +622,9 @@ export function drawInstrumentation(
 
   const pad = 12;
   const barY = H - pad - 10 - Math.max(0, bottomInset);
+  // The widest of the scale line's text, kept clear of body labels below.
+  resetKeepClear();
+  let keptW = 0;
 
   ctx.save();
   ctx.scale(k, k);
@@ -690,10 +699,31 @@ export function drawInstrumentation(
     ctx.restore();
   }
 
+  // What a small device or a crowd left out, stated on the scene itself (and in
+  // the readout): at most two lines of two, above the scale line.
+  let legendBottom = barY - 20;
+  ctx.font = `11px ${INSTRUMENT_MONO}`;
+  ctx.fillStyle = 'rgb(200, 214, 235)';
+  for (const note of crowdNotes()) {
+    const words = note.split(' ');
+    const lines = [''];
+    for (const w of words) {
+      const tail = `${lines.at(-1)} ${w}`.trim();
+      if (lines.at(-1) && ctx.measureText(tail).width > W - 2 * pad)
+        lines.push(w);
+      else lines[lines.length - 1] = tail;
+    }
+    for (let i = lines.length - 1; i >= 0; i--) {
+      halo(ctx, lines[i], pad + 2, legendBottom);
+      keptW = Math.max(keptW, ctx.measureText(lines[i]).width);
+      legendBottom -= 16;
+    }
+  }
+  const noteTop = legendBottom + 20;
+
   // The key, one row of swatches above the scale line. Horizontal rather than
   // stacked: three arrows explained in three short phrases fit across the
   // bottom of any canvas wide enough to be worth drawing arrows on.
-  let legendBottom = barY - 20;
   if (capturing && legend.length) {
     let x = pad + 2;
     const y = legendBottom;
@@ -748,6 +778,14 @@ export function drawInstrumentation(
   ctx.font = `12px ${INSTRUMENT_MONO}`;
   ctx.fillStyle = 'rgb(200, 214, 235)';
   halo(ctx, t('canvas.sizeDisclosure'), pad + 2, barY + 14);
+  const bar =
+    settings.show_scale_bar !== false ? Math.min(160, W * 0.22) + 70 : 0;
+  keptW = Math.max(
+    keptW,
+    bar,
+    ctx.measureText(t('canvas.sizeDisclosure')).width
+  );
+  keepClear(pad, Math.min(noteTop, barY) - 8, pad + keptW + 6, barY + 24);
 
   ctx.restore();
 }

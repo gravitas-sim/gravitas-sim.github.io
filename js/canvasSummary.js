@@ -42,6 +42,8 @@ import {
 } from './physics.js';
 import { t } from './i18n/index.js';
 import { lightingNotes } from './bodyDraw.js';
+import { drawnLabels } from './bodyLabels.js';
+import { crowdNotes } from './crowdDraw.js';
 
 // For the inspector's Appearance disclosure, which loads lazily and must not
 // import the drawing modules itself (js/inspectorView.js says why).
@@ -119,6 +121,15 @@ export function summaryText() {
   ) {
     parts.push(...lightingNotes(selected));
   }
+
+  // What the canvas has named, and what a small device or a crowd left out of
+  // it: the drawn labels are text on pixels and nowhere else.
+  const named = drawnLabels();
+  if (named.length)
+    parts.push(
+      t('summary.labels', { list: named.join(t('summary.listSeparator')) })
+    );
+  parts.push(...crowdNotes().map(n => `${n}.`));
 
   // The stage of a star's life, where a lesson is drawing one. The canvas is
   // showing a collapsing cloud, a wind, or the remains of an explosion, and

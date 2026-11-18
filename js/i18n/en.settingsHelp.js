@@ -66,7 +66,7 @@ export const EN_SETTINGSHELP = {
   'setHelp.show_scale_bar':
     'Draws a scale bar in real distance units in the bottom-left corner of the canvas, matched to the current zoom, with a note that body sizes are not to scale; it also appears in saved screenshots. Takes effect at once.',
   'setHelp.body_labels':
-    "Which bodies the canvas names: all, the selected one and an investigation step's own, or none. Crowded names are spread apart or left out. The B key cycles them.",
+    "What the canvas labels: all (a name where the body has one, otherwise its mass), names only, masses only, the selected body and an investigation step's own, or none. Crowded labels are spread apart, and beyond 24 the lightest are left out. The B key cycles them.",
   'setHelp.show_elapsed_time':
     'Stamps the simulated time (t = …) along the bottom of saved screenshots. The live readout shows the elapsed time whatever this is set to. Takes effect at once.',
   'setHelp.show_accretion_disk':

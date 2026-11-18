@@ -150,6 +150,7 @@ change.
 | **I-8**, desktop clause | At 1366x800 and 1440x900 the bound bodies sit outside every panel. | same |
 | **I-9**, labels | Bound-body labels are at least 11 CSS px effective and do not overlap at the pilot states, at device pixel ratios 1 and 2; other canvas text is at least 11. | `e2e/bodyLabels.spec.js`, in the suite |
 | **I-9**, selection | The selected body carries a cue that shows in luminance, not only in hue. | `e2e/bodyLabels.spec.js`, in the suite |
+| **I-9**, crowd | In the star cluster and the Kuiper belt at their scene records, at 1366 and 375 wide and device pixel ratios 1 and 2, no two body labels overlap, none is under 11 CSS px, and no more than the cap (24, besides the selected and a step's bodies) are drawn; a crowd draws trails for the selected body and the 12 heaviest only and the scene says so. | `e2e/crowdedScene.spec.js`, in the suite |
 | **I-9**, arrows | Arrow length rises with the speed it shows, and the legend states the scale. | `e2e/visualCriteria.criteria.js` |
 | **I-9**, trails | A trail spans a stated simulated time that does not follow the frame rate (30, 60 and 144 frames a second). | same |
 | **I-9**, plots | Ticks are at least 11 px and labels at least 12 px; with several series, each differs by marker shape. | same |
