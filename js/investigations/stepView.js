@@ -159,7 +159,12 @@ export function stepMarkup(step, c) {
     );
   }
 
-  if (step.figure) {
+  if (step.figure?.from) {
+    // Drawn from the model's own numbers: js/lesson/figures.js fills it (bindStepInputs).
+    parts.push(
+      `<figure class="inv-figure" data-figure-from="${attr(step.figure.from)}"></figure>`
+    );
+  } else if (step.figure) {
     const f = step.figure;
     // Credit is part of the block rather than a footnote: these are other
     // people's photographs, used under licenses that require naming them.
@@ -759,6 +764,11 @@ export function bindStepInputs(h) {
       }
     });
   }
+  const drawn = els.body.querySelector('[data-figure-from]');
+  if (drawn)
+    import('../lessonFigures.js').then(m =>
+      m.fill(drawn, h.currentStep().figure)
+    );
   if (els.body.querySelector('[data-recover]'))
     import('./recovery.js').then(m => m.fill(h, announce, getLocale, hintsFor));
 }

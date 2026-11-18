@@ -1,6 +1,6 @@
 // What the model-figure tests compare a figure with: scenes run on the real
 // integrator, the state recorded from them, and the numbers derived from that
-// state by paths that share no code with js/lesson/figures.js (vis-viva, the
+// state by paths that share no code with js/lessonFigures.js (vis-viva, the
 // angular momentum and the eccentricity vector for an orbit; the vector
 // projection on the observer's two sky axes for a transit). The bounds are in
 // tests/fixtures/model-figure-tolerances.json, committed before the figure.

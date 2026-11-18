@@ -1,6 +1,6 @@
 {
   "schema": "gravitas.model-figure-tolerances/1",
-  "about": "Fixed before any figure code exists (js/lesson/figures.js). A figure's numbers are compared with numbers derived from the integrator's own state by a path that shares no code with the figure. A criterion that fails is reported with its numbers; no bound here is moved, widened or made conditional after a result.",
+  "about": "Fixed before any figure code exists (js/lessonFigures.js). A figure's numbers are compared with numbers derived from the integrator's own state by a path that shares no code with the figure. A criterion that fails is reported with its numbers; no bound here is moved, widened or made conditional after a result.",
   "world": {
     "settings": "G read from the world after the lab is built (twoBodySettings), never from the constants handed to a figure; the lab's integrator is Velocity Verlet with mutual gravity off, a star of mass 1 and a body of mass 0.1 (orbit) or 1e-6 (transit)",
     "step": 0.1

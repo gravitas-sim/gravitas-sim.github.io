@@ -1,6 +1,6 @@
 // The integrator against the constants a lesson would hand a figure, at the
 // bounds committed in tests/fixtures/model-figure-tolerances.json before
-// js/lesson/figures.js existed. If the engine misses a bound here, a figure
+// js/lessonFigures.js existed. If the engine misses a bound here, a figure
 // drawn from the lesson's constants would disagree with the scene: that is an
 // integrator finding, never a reason to widen a bound. The figures themselves
 // are compared in tests/modelFigures.test.js, with the same derivations.
