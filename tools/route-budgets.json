@@ -144,7 +144,7 @@
       "transit": {
         "kb": 912.1,
         "requests": 75,
-        "toolKb": 952.5,
+        "toolKb": 952.4,
         "toolRequests": 80
       },
       "power-law": {
