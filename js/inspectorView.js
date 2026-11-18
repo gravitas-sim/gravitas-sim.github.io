@@ -78,9 +78,28 @@ import {
   resolveFrameOrigin,
   frameState,
 } from './referenceFrame.js';
-import { t } from './i18n/index.js';
+import { t, registerMessages } from './i18n/index.js';
 import { formatSpeed, formatDistance } from './units.js';
 import { state, SETTINGS, current_scenario_name, command } from './appState.js';
+
+// The orbit geometry row's help is in the overlay's words, fetched on first draw.
+let ogWords = null;
+const orbitGeometryHelp = () => {
+  if (!ogWords)
+    ogWords = Promise.all([
+      import('./i18n/en.orbitGeometry.js'),
+      import('./i18n/es.orbitGeometry.js'),
+    ])
+      .then(([en, es]) => {
+        registerMessages('en', en.EN_ORBITGEOMETRY);
+        registerMessages('es', es.ES_ORBITGEOMETRY);
+        ogWords = true;
+      })
+      .catch(() => {});
+  return ogWords === true
+    ? t('overlay.orbitGeometry.help')
+    : t('overlay.orbitGeometry');
+};
 
 const markWorldTouched = command('markWorldTouched');
 const computeAreaSweep = command('computeAreaSweep');
@@ -240,14 +259,13 @@ export const wireInspectorOverlayToggles = () => {
       const obj = state.selectedObject?.object;
       if (!obj) return;
       const on = !(
-        state.orbitGeometry.active && state.orbitGeometry.objectId === obj.id
+        state.orbitGeometry?.active && state.orbitGeometry.objectId === obj.id
       );
       orbitBtn.setAttribute('data-state', on ? 'on' : 'off');
       orbitBtn.setAttribute('aria-checked', on ? 'true' : 'false');
       orbitBtn.textContent = on
         ? t('settings.toggle.on')
         : t('settings.toggle.off');
-      // Fetched on first use: nobody who never asks pays for it.
       import('./orbitGeometryOverlay.js').then(m =>
         m.setOrbitGeometry(on, obj)
       );
@@ -401,14 +419,13 @@ export const buildInspectorView = (object, type, info) => {
     help: 'Re-express every position, and every trail, as this body would see them. Unlike Follow Mode, which only moves the camera, this redraws the recorded paths: put the Solar System into Earth\u2019s frame and Mars traces a loop that doubles back on itself.',
   });
 
-  // The two-body ellipse about this body's primary, drawn from live elements.
   // Every kind may ask; where no ellipse is a fair claim the overlay says why.
   overlays.push({
     id: 'orbitGeometryToggleBtn',
     label: t('overlay.orbitGeometry'),
     on:
-      state.orbitGeometry.active && state.orbitGeometry.objectId === object.id,
-    help: t('overlay.orbitGeometry.help'),
+      state.orbitGeometry?.active && state.orbitGeometry.objectId === object.id,
+    help: orbitGeometryHelp(),
   });
 
   const sweepScenarios = [

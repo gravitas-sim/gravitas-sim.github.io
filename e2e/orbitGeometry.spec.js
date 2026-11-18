@@ -40,14 +40,14 @@ async function orbiter(page, app) {
 async function markerOnPage(page, id) {
   return page.evaluate(async which => {
     const physics = await import('/js/physics.js');
-    const forces = await import('/js/engine/forces.js');
+    const settings = await import('/js/twoBodySettings.js');
     const geo = await import('/js/orbitGeometry.js');
     const body = physics.planets.find(p => p.name === 'Eccentric Orbiter');
     physics.barycenterBodies();
     const g = geo.orbitGeometry(
       body,
       physics.gravitySourcesFor(body),
-      forces.twoBodySettings()
+      settings.twoBodySettings()
     );
     const p = g.foci[which] || g.apsides[which];
     const s = physics.world_to_screen(p);

@@ -228,12 +228,14 @@ describe('createPeriodTimer', () => {
   });
 });
 
-describe('orbitalElements: the optional mu and the periapsis angle', () => {
+describe('orbitalElements with a known mu, as the orbit overlay asks', () => {
   const G = 1;
   const body = { pos: { x: 100, y: 0 }, vel: { x: 0, y: 0.1 }, mass: 0.1 };
   const sun = { pos: { x: 0, y: 0 }, vel: { x: 0, y: 0 }, mass: 1 };
+  // js/orbitGeometry.js passes mu in through G: G' = mu / (M + m).
+  const withMu = (b, mu) => orbitalElements(b, sun, mu / (sun.mass + b.mass));
 
-  test('without mu a present caller gets G(M+m), as before', () => {
+  test('without a mu the caller gets G(M+m), as before', () => {
     const el = orbitalElements(body, sun, G);
     expect(el.mu).toBe(1.1);
     expect(el.a).toBeCloseTo(91.6666666667, 9);
@@ -241,27 +243,20 @@ describe('orbitalElements: the optional mu and the periapsis angle', () => {
   });
 
   test('with mu = G M the one-way circle is a circle', () => {
-    const el = orbitalElements(body, sun, G, 1);
+    const el = withMu(body, 1);
+    expect(Math.abs(el.mu - 1)).toBeLessThan(1e-15);
     expect(Math.abs(el.a - 100)).toBeLessThan(1e-9 * 100);
     expect(el.e).toBeLessThan(1e-9);
   });
 
-  test('periapsis points along the eccentricity vector; a circle uses the body', () => {
-    const fast = { ...body, vel: { x: 0, y: 0.12 } };
+  test('the body direction less the true anomaly points at periapsis', () => {
+    const at = b => Math.atan2(b.pos.y, b.pos.x) - withMu(b, 1).trueAnomaly;
+    const wrap = x => Math.atan2(Math.sin(x), Math.cos(x));
     // Faster than circular at r: the body is at periapsis, angle 0.
-    expect(orbitalElements(fast, sun, G, 1).periapsisAngle).toBeCloseTo(0, 12);
-    const slow = { ...body, vel: { x: 0, y: 0.08 } };
+    expect(wrap(at({ ...body, vel: { x: 0, y: 0.12 } }))).toBeCloseTo(0, 12);
     // Slower: the body is at apoapsis, so periapsis is opposite.
-    expect(
-      Math.abs(
-        Math.abs(orbitalElements(slow, sun, G, 1).periapsisAngle) - Math.PI
-      )
-    ).toBeLessThan(1e-12);
-    const up = { pos: { x: 0, y: 50 }, vel: { x: -Math.sqrt(1 / 50), y: 0 } };
-    expect(orbitalElements(up, sun, G, 1).periapsisAngle).toBeCloseTo(
-      Math.PI / 2,
-      6
-    );
+    const slow = wrap(at({ ...body, vel: { x: 0, y: 0.08 } }));
+    expect(Math.abs(Math.abs(slow) - Math.PI)).toBeLessThan(1e-12);
   });
 });
 

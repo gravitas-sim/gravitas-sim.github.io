@@ -87,7 +87,12 @@ export function orbitGeometry(body, sources, settings) {
   if (now.pairClass === 'none') return fail('none');
   if (!now.inverseSquare) return fail(now.domain);
 
-  const el = orbitalElements(body, primary, G, now.mu);
+  // The pair's mu goes in through G: G' = mu / (M + m) gives it back to rounding.
+  const el = orbitalElements(
+    body,
+    primary,
+    now.mu / (primary.mass + (body.mass || 0))
+  );
   if (!el || !el.bound || !(el.e < 1)) return fail('unbound');
 
   const model = twoBodyModel(body, primary, settings, [el.r, el.periapsis]);
@@ -97,7 +102,8 @@ export function orbitGeometry(body, sources, settings) {
   const omega =
     e < CIRCLE_E
       ? Math.atan2(body.pos.y - primary.pos.y, body.pos.x - primary.pos.x)
-      : el.periapsisAngle;
+      : Math.atan2(body.pos.y - primary.pos.y, body.pos.x - primary.pos.x) -
+        el.trueAnomaly;
   const sense = el.angularMomentum < 0 ? -1 : 1;
   const p = a * (1 - e * e);
   const ux = Math.cos(omega);

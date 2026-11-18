@@ -1,6 +1,7 @@
 // The orbit geometry overlay (js/orbitGeometryOverlay.js), in English: its
 // label, the reasons it draws no curve, its parts and markers, and the ruler.
-// Registered by that module when it is first switched on.
+// Registered by the overlay, and by the inspector card for the help of the
+// overlay's row (js/inspectorView.js).
 export const EN_ORBITGEOMETRY = {
   'orbitGeometry.title': 'Orbit geometry',
   'orbitGeometry.label': 'Orbit about {primary} if only it pulled',
@@ -34,4 +35,6 @@ export const EN_ORBITGEOMETRY = {
   'orbitGeometry.fold': 'Orbit geometry details',
   'orbitGeometry.close': 'Close orbit geometry',
   'orbitGeometry.summary': 'Orbit geometry for {name}: {label}.',
+  'overlay.orbitGeometry.help':
+    'The ellipse this body would follow about its primary if only that primary pulled, with both foci and the nearest and farthest points. Choose two points to read the distance between them.',
 };

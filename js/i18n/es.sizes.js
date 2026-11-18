@@ -1,5 +1,6 @@
 // The Sizes statement (js/sizeStatement.js), in Spanish: what is drawn to scale
-// and what is not. Registered by that module when it is first opened.
+// and what is not, and the canvas description's size sentence. Registered
+// by js/sizeFacts.js when it loads.
 export const ES_SIZES = {
   'sizes.title': 'Qué se dibuja a escala',
   'sizes.distances':
@@ -17,4 +18,7 @@ export const ES_SIZES = {
   'sizes.notModelled': 'no se modela como tamaño',
   'sizes.close': 'Cerrar',
   'sizes.empty': 'Todavía no hay nada en el mundo.',
+  'sizes.timesRange': 'de {lo}× a {hi}×',
+  'sizes.summary': 'Dibujados mayores que en la realidad: {list}.',
+  'sizes.summary.selected': '{name} se dibuja {times} su radio real.',
 };

@@ -6,7 +6,7 @@
 // geometry overlay (js/orbitGeometry.js), which loads lazily, so it lives
 // here rather than in js/orbital.js, a start-up module. It imports nothing:
 // the caller hands it the halo's field as a function, as it hands it the
-// softening (js/engine/forces.js, twoBodySettings).
+// softening (js/twoBodySettings.js).
 // =============================================================================
 
 // Bound once: free globals are 8-25x slower in Jest's vm context.

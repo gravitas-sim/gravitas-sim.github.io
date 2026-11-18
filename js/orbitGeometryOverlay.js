@@ -38,7 +38,7 @@ import {
   bh_list,
   galaxies,
 } from './physics.js';
-import { twoBodySettings } from './engine/forces.js';
+import { twoBodySettings } from './twoBodySettings.js';
 import {
   orbitGeometry,
   markerPoints,
@@ -74,7 +74,17 @@ let screenMarkers = {};
 let active = 0;
 let painted = {};
 
-const og = () => state.orbitGeometry;
+// The overlay's state, made here on first use so the start-up state module
+// carries none of it: `parts` the reader can hide, `selected` up to two marker
+// ids (oldest first), `summary` the canvas description's sentence while on.
+const og = () =>
+  (state.orbitGeometry ||= {
+    active: false,
+    objectId: null,
+    parts: { ellipse: true, apsides: true, foci: true },
+    selected: [],
+    summary: '',
+  });
 const esc = s =>
   String(s).replace(
     /[&<>"]/g,

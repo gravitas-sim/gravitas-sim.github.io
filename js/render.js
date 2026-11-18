@@ -47,8 +47,17 @@ import {
   STAR_PALETTE,
   generateStarfield as buildStarfield,
   indexStarfield,
+  beginCrowdFrame,
+  crowdNotes,
+  crowdTrails,
 } from './bodyDrawSky.js';
-import { LOD_POINT_MAX_PX, hitRadius, starColor } from './bodyVisuals.js';
+import {
+  LOD_POINT_MAX_PX,
+  TRAIL_MIN_INTENSITY,
+  hitRadius,
+  starColor,
+  trailSpeedScale,
+} from './bodyVisuals.js';
 import { setBloomLayer } from './bodyDraw.js';
 import {
   claim,
@@ -1003,11 +1012,11 @@ function framedTrail(trail, shifts, newestTick) {
   return framedTrailView;
 }
 
-// Original drawScene function from index.html
 const drawScene = () => {
   ctx.setTransform(1, 0, 0, 1, 0, 0);
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   frameScale(canvas);
+  beginCrowdFrame();
 
   // Resolve the reference frame once per rendered frame. Everything downstream
   // reads state.frameOffset - the canvas transform below, world_to_screen for
@@ -1059,28 +1068,6 @@ const drawScene = () => {
   ctx.scale(state.zoom, -state.zoom);
   ctx.translate(-state.frameOffset.x, -state.frameOffset.y);
 
-  /**
-   * Brightness reference for a trail, in the object's own speed units.
-   * Scaled to the fastest point in the trail rather than a fixed 50 units/time,
-   * which hid the trail of anything slow (a 1.58 units/time binary fell under
-   * the 0.05 draw threshold); the floor keeps a circular orbit off the bottom.
-   *
-   * @param {Array<{velocity: number}>} trail - The object's trail points
-   * @returns {number} Speed to treat as full brightness, never zero
-   */
-  function trailSpeedScale(trail) {
-    let peak = 0;
-    for (let i = 0; i < trail.length; i++) {
-      if (trail[i].velocity > peak) peak = trail[i].velocity;
-    }
-    return peak > 0 ? peak : 1;
-  }
-
-  // Slowest a trail point is ever drawn at, as a fraction of full brightness.
-  // A circular orbit has no speed variation to show, so without a floor it would
-  // render at whatever the ramp's bottom happens to be.
-  const TRAIL_MIN_INTENSITY = 0.45;
-
   if (SETTINGS.show_trails) {
     // The correction a trail point needs depends only on when it was recorded,
     // not on which body recorded it, so it is computed once for the whole scene
@@ -1090,7 +1077,7 @@ const drawScene = () => {
       ? frameShifts(frameOrigin, newestTick, trailBudget() + 2)
       : null;
 
-    [
+    crowdTrails([
       ...planets,
       ...gas_giants,
       ...asteroids,
@@ -1099,7 +1086,7 @@ const drawScene = () => {
       ...neutron_stars,
       ...white_dwarfs,
       ...galaxies,
-    ].forEach(obj => {
+    ]).forEach(obj => {
       const trail = framedTrail(obj.trail, shifts, newestTick);
       if (obj.alive && trail.length > 1) {
         // A star with no authored color is colored by its temperature, the
@@ -1951,6 +1938,9 @@ function readoutHtml(drawn) {
       `<p class="readout-empty">${escapeHtml(t('readout.count.empty'))}</p>`
     );
   }
+
+  for (const note of crowdNotes())
+    sections.push(`<p class="readout-caveat">${escapeHtml(note)}</p>`);
 
   // --- Measurements in progress -------------------------------------------
   // The stopwatch and the vector key used to be painted on the canvas in a

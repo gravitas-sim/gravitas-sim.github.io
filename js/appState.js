@@ -396,19 +396,6 @@ export const state = {
     /** Said on screen: the propagation speed here is a display choice. */
     illustrative: true,
   },
-  /**
-   * The selected body's two-body ellipse, drawn from live elements each frame
-   * by js/orbitGeometryOverlay.js. `parts` the reader can hide; `selected` is
-   * up to two marker ids, oldest first; `summary` is the sentence the canvas
-   * description carries while it is on.
-   */
-  orbitGeometry: {
-    active: false,
-    objectId: null,
-    parts: { ellipse: true, apsides: true, foci: true },
-    selected: [],
-    summary: '',
-  },
   barycenterOverlay: {
     active: false,
     // Which bodies to average over. The renderer resolves these each frame;

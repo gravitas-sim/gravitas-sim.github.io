@@ -564,8 +564,10 @@ export const ES = {
   'settings.label.showAccelerationVectors': 'Mostrar vectores de aceleración',
   'settings.label.showPotentialWell': 'Mostrar el pozo de potencial',
   'settings.label.showScaleBar': 'Mostrar la barra de escala',
-  'settings.label.bodyLabels': 'Nombres de los cuerpos',
+  'settings.label.bodyLabels': 'Etiquetas de los cuerpos',
   'settings.option.bodyLabels.all': 'Todos',
+  'settings.option.bodyLabels.names': 'Solo nombres',
+  'settings.option.bodyLabels.masses': 'Solo masas',
   'settings.option.bodyLabels.bound':
     'El seleccionado y los de la investigación',
   'settings.option.bodyLabels.none': 'Ninguno',
@@ -1166,7 +1168,7 @@ export const ES = {
   'shortcut.units': 'Alternar unidades físicas / de simulación',
   'shortcut.trails': 'Alternar estelas',
   'shortcut.bodyLabels':
-    'Rotar los nombres: todos, seleccionado e investigación, ninguno',
+    'Rotar las etiquetas: todas, nombres, masas, seleccionado e investigación, ninguna',
   'shortcut.undo': 'Deshacer el último objeto colocado',
   'shortcut.inspect': 'Inspeccionar un objeto',
   'shortcut.place': 'Colocar un objeto con velocidad',
@@ -1199,15 +1201,14 @@ export const ES = {
     '¿Con poco tiempo? Las actividades de clase son formatos de enseñanza preparados —una demostración de cinco minutos, una actividad de veinte, una práctica completa— recortados de estas mismas investigaciones.',
   'inv.browser.activities.link': 'Ver las actividades de clase',
   'canvas.sizeDisclosure': 'Tamaños no a escala: detalles en Tamaños',
+  'canvas.reducedPopulation':
+    'Población reducida en este dispositivo: {n} de {total} cuerpos',
+  'canvas.crowdTrails':
+    'Estelas: el cuerpo seleccionado y los {n} más masivos de {total} cuerpos',
   'canvas.sizeDisclosure.detail':
-    'Las distancias se dibujan a una sola escala, la que muestra la barra de escala. Los tamaños de los cuerpos no siguen una misma escala: cada tipo de cuerpo se amplía con su propio factor, así que ni un tamaño ni la proporción entre dos tamaños se pueden leer en el lienzo. El botón Tamaños de la lectura dice cuánto, y el inspector da cada radio.',
+    'Las distancias comparten una escala, la de la barra de escala. Los tamaños no: cada tipo de cuerpo se amplía con su propio factor, así que ningún tamaño ni proporción de tamaños se lee en el lienzo. El botón Tamaños de la lectura dice cuánto.',
   'sizes.button': 'Tamaños',
-  'sizes.timesRange': 'de {lo}× a {hi}×',
-  'sizes.summary': 'Dibujados mayores que en la realidad: {list}.',
-  'sizes.summary.selected': '{name} se dibuja {times} su radio real.',
   'overlay.orbitGeometry': 'Geometría de la órbita',
-  'overlay.orbitGeometry.help':
-    'La elipse que seguiría este cuerpo alrededor de su primario si solo ese primario tirara de él, con los dos focos y los puntos más cercano y más lejano. Elige dos puntos para leer la distancia entre ellos.',
   'capture.screenshotFailed': 'No se pudo guardar la captura',
   'chart.notReady': 'El gráfico aún no está listo',
   'chart.exportFailed': 'No se pudo exportar el gráfico',
@@ -1375,6 +1376,7 @@ export const ES = {
     one: '{n} galaxia',
     other: '{n} galaxias',
   },
+  'summary.labels': 'Etiquetas en el lienzo: {list}.',
   'summary.selected': '{name} está seleccionado.',
   'summary.noSelection': 'No hay nada seleccionado.',
   'summary.unnamedBody': 'un cuerpo sin nombre',

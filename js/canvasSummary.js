@@ -1,31 +1,11 @@
 // =============================================================================
 // A textual equivalent of the simulation
-// -----------------------------------------------------------------------------
-// The canvas is the application. Everything a sighted reader learns at a glance
-// - which system is loaded, whether it is running, what is in it, what they
-// have selected - is painted as pixels and is otherwise unavailable.
-//
-// This writes the same facts as a sentence, into a hidden element that the
-// canvas points at with aria-describedby. A screen reader reaching the canvas
-// hears what is in it rather than "graphic".
-//
-// What it is not
-// -----------------------------------------------------------------------------
-// It is not a live region. The simulation changes sixty times a second, and a
-// live region attached to it would produce an unusable stream of speech that no
-// reader could interrupt - which is worse than saying nothing, because it also
-// drowns out the announcements that matter. The description is read when a
-// reader asks for it, by moving to the canvas.
-//
-// Discrete events - a scenario loaded, the simulation paused, a body selected -
-// are different: those are worth interrupting for, they happen when a reader
-// did something, and they go to the existing polite live region through
-// announce(). Nothing here announces on a timer.
-//
-// The honest limit is written down in ACCESSIBILITY.md: a sentence describing
-// four planets on elliptical orbits is not equivalent to watching them move,
-// and no amount of text makes it so. What it can do is make the state of the
-// simulation legible, which is what most of the interface's controls act on.
+// The canvas is the application; this writes what it shows (the system, whether
+// it runs, what is in it, what is selected, what is labelled) as a sentence in a
+// hidden element the canvas points at with aria-describedby. It is not a live
+// region (sixty changes a second would drown the announcements that matter);
+// discrete events go to the polite live region through announce(). The honest
+// limit is in ACCESSIBILITY.md: text makes the state legible, not equivalent.
 // =============================================================================
 
 import { state, current_scenario_name, registerCommands } from './appState.js';
@@ -42,14 +22,13 @@ import {
 } from './physics.js';
 import { t } from './i18n/index.js';
 import { lightingNotes } from './bodyDraw.js';
+import { drawnLabels } from './bodyLabels.js';
+import { crowdNotes } from './bodyDrawSky.js';
 
 // For the inspector's Appearance disclosure, which loads lazily and must not
 // import the drawing modules itself (js/inspectorView.js says why).
 registerCommands({ lightingNotes });
-// The size facts (js/sizeFacts.js) are fetched on the first description, not
-// at start-up: the first-visit install has no room for them. Until they
-// arrive the description says what it said before, and the next rebuild,
-// at most REFRESH_MS later, adds the sentence.
+// js/sizeFacts.js loads with the first description; the next rebuild adds it.
 let sizes = null;
 const sizeModule = () => {
   if (!sizes) sizes = import('./sizeFacts.js').then(m => (sizes = m));
@@ -129,6 +108,13 @@ export function summaryText() {
     parts.push(...lightingNotes(selected));
   }
 
+  const named = drawnLabels();
+  if (named.length)
+    parts.push(
+      t('summary.labels', { list: named.join(t('summary.listSeparator')) })
+    );
+  parts.push(...crowdNotes().map(n => `${n}.`));
+
   // The stage of a star's life, where a lesson is drawing one. The canvas is
   // showing a collapsing cloud, a wind, or the remains of an explosion, and
   // none of that is a body in the object list - so for a reader who cannot
@@ -165,15 +151,13 @@ export function summaryText() {
   // see the canvas gets the whole explanation, because for them this is the
   // only place it appears.
   parts.push(t('canvas.sizeDisclosure.detail'));
-  // By how much, from the same facts the Sizes statement shows.
   const facts = sizeModule()?.sizeSentence(
     [...stars, ...planets, ...gas_giants, ...asteroids, ...comets],
     selected
   );
   if (facts) parts.push(facts);
 
-  // The orbit geometry overlay writes its own sentence while it is on, with
-  // only the parts the reader has left showing (js/orbitGeometryOverlay.js).
+  // Written by js/orbitGeometryOverlay.js while it is on.
   if (state.orbitGeometry?.active && state.orbitGeometry.summary) {
     parts.push(state.orbitGeometry.summary);
   }
@@ -181,10 +165,7 @@ export function summaryText() {
   return parts.join(' ');
 }
 
-/**
- * The readout's Sizes button opens the statement, fetched on first use.
- * Wired here because this module already owns what the canvas says about size.
- */
+/** The readout's Sizes button opens the statement, fetched on first use. */
 function wireSizesButton() {
   const btn = document.getElementById('readoutSizes');
   if (!btn || btn.dataset.wired) return;

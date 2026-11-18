@@ -10,10 +10,6 @@
 // tests/keplerSolver.test.js. Three modules keep their own: js/lab3d/elements.js (an
 // instructor-bundle source, held bit-identical), js/kernels/sky/planets.js (the
 // Sky Lab's weight gate) and js/resonance/systems.js (a bit-for-bit world golden).
-//
-// Which of a pair pulls the other, and whether the force between them is
-// inverse-square, is js/twoBodyModel.js: only the lazy orbit overlay asks it,
-// so it is kept out of this start-up module.
 // =============================================================================
 
 // Bound once: free globals are 8-25x slower in Jest's vm context.
@@ -57,11 +53,9 @@ export function solveKepler(M, e) {
  * @param {Object} body - {pos:{x,y}, vel:{x,y}, mass}
  * @param {Object} primary - {pos:{x,y}, vel:{x,y}, mass}
  * @param {number} G - Gravitational constant, simulation units
- * @param {number} [muIn] - The pair's mu, when a caller knows it (from
- *   twoBodyModel). Omitted, mu is G(M+m), as it always was.
  * @returns {Object|null} Elements, or null if the inputs are unusable
  */
-export function orbitalElements(body, primary, G, muIn) {
+export function orbitalElements(body, primary, G) {
   if (!body || !primary || !isFinite(G) || G <= 0) return null;
 
   const rx = body.pos.x - primary.pos.x;
@@ -73,9 +67,8 @@ export function orbitalElements(body, primary, G, muIn) {
   const v = Math.hypot(vx, vy);
   if (!isFinite(r) || r <= 0) return null;
 
-  // Both masses: equal-mass binaries are a 50% period error otherwise. A
-  // caller that knows only the primary pulls passes G M instead.
-  const mu = muIn !== undefined ? muIn : G * (primary.mass + (body.mass || 0));
+  // Both masses: equal-mass binaries are a 50% period error otherwise.
+  const mu = G * (primary.mass + (body.mass || 0));
   if (!isFinite(mu) || mu <= 0) return null;
 
   // Specific orbital energy. Negative is bound, positive escapes.
@@ -115,9 +108,6 @@ export function orbitalElements(body, primary, G, muIn) {
     mu,
     // True anomaly, so a step can tell how far round the orbit the body is.
     trueAnomaly: Math.atan2(ry, rx) - Math.atan2(ey, ex),
-    // Where periapsis points, from the primary. A circle has none, so the
-    // body's own direction stands in for it.
-    periapsisAngle: e > 0 ? Math.atan2(ey, ex) : Math.atan2(ry, rx),
   };
 }
 

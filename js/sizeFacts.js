@@ -24,7 +24,9 @@ import {
   SOLAR_MASS_UNIT,
 } from './constants.js';
 import { stellarStateFor } from './stellar/state.js';
-import { t } from './i18n/index.js';
+import { t, registerMessages } from './i18n/index.js';
+import { EN_SIZES } from './i18n/en.sizes.js';
+import { ES_SIZES } from './i18n/es.sizes.js';
 import { formatNumber } from './format.js';
 // From physics.js, not js/engine/bodies.js: this module loads lazily, and a
 // lazy module that reaches part of a start-up chunk splits it in two
@@ -32,6 +34,11 @@ import { formatNumber } from './format.js';
 import { PLANET_RADIUS, GAS_GIANT_RADIUS } from './physics.js';
 
 /** Families with no size to state: a horizon, a halo, a fragment. */
+// The words for sizes, both languages: this module and the statement load
+// lazily, together, and a language switch must not leave a key on screen.
+registerMessages('en', EN_SIZES);
+registerMessages('es', ES_SIZES);
+
 export const NOT_A_SIZE = Object.freeze(['BlackHole', 'Galaxy', 'Debris']);
 
 /** The readout's word for each family, reused so the names agree. */

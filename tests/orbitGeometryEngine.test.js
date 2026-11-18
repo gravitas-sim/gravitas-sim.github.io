@@ -5,7 +5,7 @@
 import { describe, test, expect } from '@jest/globals';
 import { readFileSync } from 'node:fs';
 import * as P from '../js/physics.js';
-import { twoBodySettings } from '../js/engine/forces.js';
+import { twoBodySettings } from '../js/twoBodySettings.js';
 import { makeLab, makeStar } from '../js/validation/harness.js';
 import { orbitGeometry } from '../js/orbitGeometry.js';
 import { twoBodyModel } from '../js/twoBodyModel.js';

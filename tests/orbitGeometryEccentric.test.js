@@ -9,7 +9,7 @@ import { readFileSync } from 'node:fs';
 import * as physics from '../js/physics.js';
 import { build } from '../tools/tides-scenarios.mjs';
 import { frameAdvance, substepPlan } from '../js/timestep.js';
-import { twoBodySettings } from '../js/engine/forces.js';
+import { twoBodySettings } from '../js/twoBodySettings.js';
 import { orbitGeometry } from '../js/orbitGeometry.js';
 import { engine } from '../js/random/streams.js';
 

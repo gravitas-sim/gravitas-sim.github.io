@@ -8,7 +8,7 @@
 // =============================================================================
 
 import { openDialog, closeDialog } from './dialog.js';
-import { t, getLocale, registerMessages } from './i18n/index.js';
+import { t } from './i18n/index.js';
 import { formatDistance } from './units.js';
 import { SIM_UNITS_PER_AU } from './constants.js';
 import { DISPLAY_MIN_PX } from './bodyVisuals.js';
@@ -96,23 +96,12 @@ let panel = null;
 /** The statement's rules, put in the page with it (the precise dialog's width). */
 const STYLE = `.sizes-statement{width:min(36rem, calc(100% - 2 * var(--space-4)));} .sizes-table{border-collapse:collapse;margin:var(--space-2) 0;font-variant-numeric:tabular-nums;} .sizes-table caption{text-align:start;font-weight:600;} .sizes-table :is(th, td){padding:2px var(--space-3) 2px 0;text-align:start;}`;
 
-/** The statement's words, fetched with it, for the language in use. */
-async function ensureMessages() {
-  const locale = getLocale();
-  const m =
-    locale === 'es'
-      ? await import('./i18n/es.sizes.js')
-      : await import('./i18n/en.sizes.js');
-  registerMessages(locale, m.ES_SIZES || m.EN_SIZES);
-}
-
 /**
  * Open the statement.
  * @param {HTMLElement} [trigger] - Where focus returns on close
  * @returns {Promise<HTMLElement>} The dialog
  */
 export async function openSizeStatement(trigger) {
-  await ensureMessages().catch(() => {});
   if (!panel) {
     const style = document.createElement('style');
     style.textContent = STYLE;
