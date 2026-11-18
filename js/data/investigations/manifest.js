@@ -929,7 +929,7 @@ export const MANIFEST = [
       'Tidal heating as energy per orbit, bounded by what nobody knows about Io’s interior',
     duration: '15-25 min',
     level: 'Majors and upper-level astronomy',
-    thumbnail: 'images/investigations/ios-fire.webp',
+    thumbnail: 'images/scenarios/galilean-resonance.webp',
     depths: 3,
     stepCount: 7,
     gradedCount: 4,

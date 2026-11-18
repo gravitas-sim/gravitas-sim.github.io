@@ -81,6 +81,9 @@ export function mergeTranslation(base, overlay) {
   return base;
 }
 
+/** Keys whose whole value, string or record, is machinery for the coverage count. */
+const MACHINERY_RECORDS = new Set(['retired', 'evidence', 'source']);
+
 /**
  * Which of a lesson's words a translation has supplied, and which it has not.
  *
@@ -99,6 +102,10 @@ export function translationCoverage(base, overlay, skip = STRUCTURAL) {
 
   const walk = (b, o, path, key) => {
     if (typeof b === 'function') return;
+    // A whole record of machinery: where a retired step went and what it said
+    // (both languages written inline), the earlier steps and fields a reveal
+    // draws on, and the tool row a field is read from. None is for a translator.
+    if (MACHINERY_RECORDS.has(key)) return;
     if (typeof b === 'string') {
       if (skip.has(key)) return;
       total++;

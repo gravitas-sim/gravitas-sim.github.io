@@ -166,8 +166,8 @@ export const TIDES_THAT_MOVE_THE_MOON = {
       title: 'Elige la Q que ajusta a la Luna',
       body: 'La telemetría láser lunar, luz que rebota en los espejos que las tripulaciones Apolo dejaron en la Luna, mide que la Luna se aleja 3,82 &plusmn; 0,07 cm por año. El modelo tiene un solo número que puedes elegir, <em>Q</em>, cuán poca energía pierde la marea. Deja k2 en 0,30 y el tiempo en 0, y cambia <em>Q</em> hasta que la fila <strong>Alejamiento de la Luna ahora</strong> quede lo más cerca posible de esa medida. Anota la <em>Q</em> que elegiste, y toma el <strong>alargamiento del día</strong> que da esa misma <em>Q</em>, en milisegundos por siglo.',
       fields: [
-        { label: 'La Q que coincide con el alejamiento medido' },
-        { label: 'El alargamiento del día (ms por siglo)' },
+        { label: 'La Q que coincide con el alejamiento medido', want: '12' },
+        { label: 'El alargamiento del día (ms por siglo)', want: '2,05' },
       ],
     },
     {
@@ -190,14 +190,16 @@ export const TIDES_THAT_MOVE_THE_MOON = {
       title: 'Mil millones de años adelante',
       body: 'Deja k2 en 0,30 y <em>Q</em> en el valor que hallaste. Pon el tiempo en <strong>1</strong> mil millones de años y lee la distancia de la Luna en miles de km y la duración del día en horas.',
       fields: [
-        { label: 'La distancia de la Luna (miles de km)' },
-        { label: 'El día' },
+        { label: 'La distancia de la Luna (miles de km)', want: '414,6' },
+        { label: 'El día', want: '29,5' },
       ],
     },
     {
       title: 'Córrelo hacia atrás',
       body: 'Corre hacia atrás el mismo modelo. Pon el tiempo en <strong>&minus;2</strong> mil millones de años. El modelo no puede ir tan atrás. Lee hace cuántos miles de millones de años la órbita habría llegado a la superficie de la Tierra.',
-      fields: [{ label: 'Contacto, hace miles de millones de años' }],
+      fields: [
+        { label: 'Contacto, hace miles de millones de años', want: '1,58' },
+      ],
     },
     {
       title: 'Lo que has deducido',
@@ -220,7 +222,7 @@ export const IOS_FIRE = {
   steps: [
     {
       title: 'El cuerpo más volcánico que conocemos',
-      body: 'Ío es el cuerpo con más actividad volcánica del sistema solar, y el Sol no lo calienta. Lo calienta Júpiter: levanta un abultamiento en Ío, y como la órbita de Ío no es del todo circular el abultamiento sube y baja una vez por órbita, así que la roca de Ío se flexiona y el rozamiento de esa flexión es calor. La imagen de fondo de esta lección es Júpiter con Ío, la más interior de sus cuatro lunas grandes, detenida. Vas a predecir cómo depende el calor de la órbita, medirlo en un instrumento y luego buscar cómo debe ser el interior de Ío para dar el calor que se observa.',
+      body: 'Ío es el cuerpo con más actividad volcánica del sistema solar, y el Sol no lo calienta. Lo calienta Júpiter: levanta un abultamiento en Ío, y como la órbita de Ío no es del todo circular el abultamiento sube y baja una vez por órbita, así que la roca de Ío se flexiona y el rozamiento de esa flexión es calor. La imagen de fondo de esta actividad es Júpiter con Ío, la más interior de sus cuatro lunas grandes, detenida. Vas a predecir cómo depende el calor de la órbita, medirlo en un instrumento y luego buscar cómo debe ser el interior de Ío para dar el calor que se observa.',
     },
     {
       title: 'Una órbita más excéntrica',
@@ -241,10 +243,16 @@ export const IOS_FIRE = {
     },
     {
       title: 'El calentamiento con la excentricidad de Ío, y con el doble',
-      body: 'Cambia una sola cosa y deja el resto: deja k2 y <em>Q</em> donde se abre el instrumento y mueve solo la <strong>Excentricidad</strong>. Ponla en el valor de Ío, 0,0041, y toma el <strong>Calentamiento</strong>. Luego ponla en el doble de ese valor y toma otra vez el Calentamiento. Cada lectura está en unidades de 10<sup>13</sup> W.',
+      body: 'Cambia una sola cosa y deja el resto: deja k2 y <em>Q</em> donde se abre el instrumento y mueve solo la <strong>[[eccentricity|Excentricidad]]</strong>. Ponla en el valor de Ío, 0,0041, y toma el <strong>Calentamiento</strong>. Luego ponla en el doble de ese valor y toma otra vez el Calentamiento. Cada lectura está en unidades de 10<sup>13</sup> W.',
       fields: [
-        { label: 'Calentamiento con la excentricidad de Ío (10¹³ W)' },
-        { label: 'Calentamiento con el doble de esa excentricidad (10¹³ W)' },
+        {
+          label: 'Calentamiento con la excentricidad de Ío (10¹³ W)',
+          want: '1,99',
+        },
+        {
+          label: 'Calentamiento con el doble de esa excentricidad (10¹³ W)',
+          want: '7,96',
+        },
       ],
     },
     {
@@ -257,10 +265,10 @@ export const IOS_FIRE = {
       title: 'Interiores que dan el calor',
       body: 'Ío irradia cerca de 1 &times; 10<sup>14</sup> W, y se observa entre las dos líneas trazadas en 0,6 y 1,6 &times; 10<sup>14</sup> W. Deja la excentricidad en 0,0041, la de Ío, y busca con k2 y <em>Q</em> un par que meta la fila <strong>Calentamiento</strong> dentro de ese intervalo observado, y anótalo. Luego halla un segundo par que también lo haga, con un k2 que difiera al menos en 0,2.',
       fields: [
-        { label: 'Primer par: k2' },
-        { label: 'Primer par: Q' },
-        { label: 'Segundo par: k2' },
-        { label: 'Segundo par: Q' },
+        { label: 'Primer par: k2', want: '0,5' },
+        { label: 'Primer par: Q', want: '30' },
+        { label: 'Segundo par: k2', want: '1,0' },
+        { label: 'Segundo par: Q', want: '60' },
       ],
     },
     {
@@ -276,7 +284,7 @@ export const IOS_FIRE = {
     },
     {
       title: 'Lo que has deducido',
-      body: 'El calor de Ío es el rozamiento de una marea que sube y baja una vez por órbita, y creció como el cuadrado de la excentricidad. Ío, Europa y Ganímedes tiran unas de otras en una resonancia que impide que esa órbita se haga circular, como muestra la imagen. En cuanto al interior, el calor observado fijó solo k2 dividido entre <em>Q</em>: hallaste dos pares distintos que lo dan, así que la fórmula da una cota y la observación elige un punto dentro de ella. Lo que el modelo deja fuera es el interior: una capa parcialmente fundida cambia cómo se flexiona Ío. Haría falta una medida que dependa solo de k2 para separarlos, y los pasos más profundos preguntan cuál.',
+      body: 'El calor de Ío es el rozamiento de una marea que sube y baja una vez por órbita, y creció como el cuadrado de la excentricidad. Ío, Europa y Ganímedes tiran unas de otras en una [[resonance|resonancia]] que impide que esa órbita se haga circular, como muestra la imagen. En cuanto al interior, el calor observado fijó solo k2 dividido entre <em>Q</em>: hallaste dos pares distintos que lo dan, así que la fórmula da una cota y la observación elige un punto dentro de ella. Lo que el modelo deja fuera es el interior: una capa parcialmente fundida cambia cómo se flexiona Ío. Haría falta una medida que dependa solo de k2 para separarlos, y los pasos más profundos preguntan cuál.',
     },
   ],
 };

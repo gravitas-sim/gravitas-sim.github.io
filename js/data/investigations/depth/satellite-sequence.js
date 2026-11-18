@@ -1518,7 +1518,7 @@ export const INSTRUCTOR = {
       placement:
         'After Tides and the Galilean moons. It needs squares and a power of ten. It supports OpenStax Astronomy 2e chapter 12 (section 12.2, the Galilean moons).',
       overview:
-        'Students predict what doubling Io’s eccentricity does to the heating, then change only the eccentricity on an instrument that opens at k2 = 0.8, Q = 250 and e = 0.001 and take two readings (1.99 and 7.96 × 10¹³ W); the reveal sets the prediction beside their readings. They then search the k2 and Q sliders for two different interiors whose heating at e = 0.0041 falls inside the observed 0.6 to 1.6 × 10¹⁴ W, and say why two interiors can give one heat. The quantitative layer reads the k2/Q they share (0.0177, seventeen times below the model’s largest) and how wide the observed range leaves it (a factor of 2.7); the advanced layer asks which other measurement would separate k2 from Q. The picture behind the lesson is Jupiter and its four large moons, held still.',
+        'Students predict what doubling Io’s eccentricity does to the heating, then change only the eccentricity on an instrument that opens at k2 = 0.8, Q = 250 and e = 0.001 and take two readings (1.99 and 7.96 × 10¹³ W); the reveal sets the prediction beside their readings. They then search the k2 and Q sliders for two different interiors whose heating at e = 0.0041 falls inside the observed 0.6 to 1.6 × 10¹⁴ W, and say why two interiors can give one heat. The quantitative layer reads the k2/Q they share (0.0177, seventeen times below the model’s largest) and how wide the observed range leaves it (a factor of 2.7); the advanced layer asks which other measurement would separate k2 from Q. The picture behind the activity is Jupiter and its four large moons, held still.',
       priorKnowledge: [
         'Tides and the tidal bulge',
         'Orbital eccentricity',
@@ -1808,7 +1808,7 @@ export const INSTRUCTOR = {
       quantitative: 'medium',
       advanced: 'medium',
     },
-    'ios-fire': { core: 'short', quantitative: 'medium', advanced: 'medium' },
+    'ios-fire': { core: 'short', quantitative: 'medium', advanced: 'long' },
     'weighing-jupiter': {
       core: 'medium',
       quantitative: 'long',

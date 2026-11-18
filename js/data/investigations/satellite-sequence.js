@@ -543,6 +543,7 @@ export const TIDES_THAT_MOVE_THE_MOON = {
   steps: [
     {
       sid: 'the-bulge-ahead',
+      stage: STAGE,
       type: 'read',
       title: 'A bulge that runs ahead',
       body: `The Moon raises two bulges on the Earth&rsquo;s oceans and body. The Earth spins
@@ -735,7 +736,7 @@ const IO_HEAT = 6.2226e15;
 const IO_OBSERVED = [6e13, 1.6e14];
 export const IOS_FIRE = {
   id: 'ios-fire',
-  thumbnail: 'images/investigations/ios-fire.webp',
+  thumbnail: 'images/scenarios/galilean-resonance.webp',
   title: 'Io’s Fire',
   subtitle:
     'Tidal heating as energy per orbit, bounded by what nobody knows about Io’s interior',
@@ -793,7 +794,7 @@ export const IOS_FIRE = {
       body: `Io is the most volcanically active body in the Solar System, and the Sun does not
              heat it. Jupiter does: it raises a bulge on Io, and because Io&rsquo;s orbit is not
              quite circular the bulge rises and falls once an orbit, so Io&rsquo;s rock flexes
-             and the friction in that flexing is heat. The picture behind this lesson is Jupiter
+             and the friction in that flexing is heat. The picture behind this activity is Jupiter
              with Io, the innermost of its four large moons, held still. You will predict how
              the heat depends on the orbit, measure it on an instrument, and then search for
              what Io&rsquo;s interior must be like to give the heat that is observed.`,
@@ -827,7 +828,7 @@ export const IOS_FIRE = {
       type: 'measure',
       title: 'Heating at Io’s eccentricity, and at twice it',
       body: `Change one thing and hold the rest: leave k2 and <em>Q</em> where the instrument
-             opens, and move only the <strong>Eccentricity</strong>. Set it to Io&rsquo;s value,
+             opens, and move only the <strong>[[eccentricity|Eccentricity]]</strong>. Set it to Io&rsquo;s value,
              0.0041, and take the <strong>Heating</strong>. Then set it to twice that value and
              take the Heating again. Each reading is in units of 10<sup>13</sup> W.`,
       fields: [
@@ -964,7 +965,7 @@ export const IOS_FIRE = {
       title: 'What you worked out',
       body: `Io&rsquo;s heat is the friction of a tide that rises and falls once an orbit, and it
              grew as the square of the eccentricity. Io, Europa and Ganymede pull on each other in
-             a resonance that keeps that orbit from becoming circular, which the picture shows. For
+             a [[resonance|resonance]] that keeps that orbit from becoming circular, which the picture shows. For
              the interior, the observed heat fixed only k2 divided by <em>Q</em>: you found two
              different pairs that match it, so the formula gives a bound and the observation picks
              a point inside it. What the model leaves out is the interior: a partly molten layer

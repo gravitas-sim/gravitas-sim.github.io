@@ -89380,11 +89380,20 @@
      "type": "read",
      "title": "A bulge that runs ahead",
      "declares": {
-      "stage": null,
+      "stage": {
+       "objects": 1,
+       "kind": "named",
+       "scale": "display",
+       "fits": true,
+       "anonymous": false
+      },
       "bound": [],
-      "roles": []
+      "roles": [
+       "star"
+      ]
      },
      "kinds": [
+      "scene-declared",
       "model-result",
       "panel-diagram"
      ],
@@ -89434,7 +89443,9 @@
       "stamps instrument values",
       "lesson locks: placement, inspector"
      ],
-     "recovery": []
+     "recovery": [
+      "wrong body: the object list names what the step staged"
+     ]
     },
     {
      "sid": "match-the-recession",
@@ -89785,7 +89796,7 @@
    ],
    "totals": {
     "steps": 6,
-    "declared": 0,
+    "declared": 1,
     "student": 0,
     "engine": 0,
     "model": 5,
@@ -89793,7 +89804,7 @@
     "diagram": 5,
     "evidence": 3,
     "computation": 0,
-    "declaredButInert": 0,
+    "declaredButInert": 1,
     "prose": 1,
     "mismatched": 0,
     "rebuilds": 0
@@ -119964,7 +119975,7 @@
  ],
  "totals": {
   "steps": 1522,
-  "declared": 1424,
+  "declared": 1425,
   "student": 167,
   "engine": 177,
   "model": 1007,
@@ -119972,7 +119983,7 @@
   "diagram": 876,
   "evidence": 388,
   "computation": 14,
-  "declaredButInert": 1257,
+  "declaredButInert": 1258,
   "prose": 59,
   "mismatched": 5,
   "rebuilds": 81,

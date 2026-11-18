@@ -11,7 +11,7 @@ The hand-written, human-reviewed acceptance map is
 [`lesson-acceptance.json`](lesson-acceptance.json); `npm run
 audit:scene:check` fails if it disagrees with what is generated here.
 
-Across 124 investigations and 1522 steps: 1424 steps
+Across 124 investigations and 1522 steps: 1425 steps
 declare a scene, 167 let a reader change one, 177 read the
 running integration, 1007 show a prescribed model result, 161 draw
 on a stored dataset, 876 put a self-contained panel beside the text,
@@ -1032,16 +1032,16 @@ The canvas behind a step is stated as scene on 0, portrait on 7, quiet on 6; 150
 
 ## Tides That Move the Moon (`tides-that-move-the-moon`)
 
-- **Steps:** 6. Scene declared on 0; a reader can change something on 0; 0 declare a scene nobody on that step can touch.
+- **Steps:** 6. Scene declared on 1; a reader can change something on 0; 1 declare a scene nobody on that step can touch.
 - **Where the numbers come from:** 0 live engine, 5 prescribed model, 0 stored dataset, 5 self-contained panel.
 - **What students do:** move-an-instrument-control, record-values, commit-a-prediction.
-- **Objects the steps declare:** none.
+- **Objects the steps declare:** star.
 - **Instruments:** tides-moon.
 - **Canvas:** quiet.
 - **Stored data:** none.
 - **Evidence kept:** notebook-fields.
 - **Prediction loops:** forward-predict → forward-one-billion, the-model-run-backward, what-the-model-leaves-out → forward-one-billion.
-- **Recovery:** ambiguous result: the check says in words how close is close enough.
+- **Recovery:** wrong body: the object list names what the step staged; ambiguous result: the check says in words how close is close enough.
 - **Scene rebuilds:** none.
 - **Accepted central experiment** (reviewed 2026-09-11): object `panel:tides-moon`, control tides-moon/gyr, measures the Moon's distance in a constant-Q model a given time on: 62.9 Earth radii in half a billion years and 65.1 in one billion, against the 60.3 of today, evidence `notebook-fields`, covered by `e2e/centralExperiments.spec.js`.
 

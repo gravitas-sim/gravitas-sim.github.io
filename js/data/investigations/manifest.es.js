@@ -938,7 +938,7 @@ export const MANIFEST = [
       'El calentamiento de marea como energía por órbita, acotado por lo que nadie sabe del interior de Ío',
     duration: '15-25 min',
     level: 'Majors and upper-level astronomy',
-    thumbnail: 'images/investigations/ios-fire.webp',
+    thumbnail: 'images/scenarios/galilean-resonance.webp',
     depths: 3,
     stepCount: 7,
     gradedCount: 4,
