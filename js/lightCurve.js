@@ -132,6 +132,7 @@ function drawChart() {
     xTitle: 'Time (days)',
     yTitle: 'Brightness',
     yRange,
+    direct: true,
     series: [
       {
         id: 'flux',

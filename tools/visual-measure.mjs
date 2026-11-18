@@ -184,11 +184,10 @@ export async function measureAll({ origin, browser }) {
       await page.locator('#investigationPlotCanvas').scrollIntoViewIfNeeded();
       await page.waitForTimeout(500);
       const r = await page.evaluate(
-        V.readCanvasText,
-        'investigationPlotCanvas'
+        V.readSvgPlotText,
+        '#investigationPlotCanvas'
       );
-      const v = V.judgePlotType(r.texts);
-      out.plots.keplerPlot = { kind: 'canvas', ...v };
+      out.plots.keplerPlot = { kind: 'svg', ...V.judgePlotType(r.texts) };
     }
   );
   await withPage(

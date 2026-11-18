@@ -219,8 +219,8 @@ describe('what the recording can tell apart', () => {
     const at = site => all.hazards[site] ?? { hyphen: false, nonFinite: false };
     for (const site of [
       'js/investigations/plotView.js:26:9',
-      'js/investigations/plotView.js:385:24',
-      'js/investigations/stepView.js:771:13',
+      'js/investigations/plotView.js:420:32',
+      'js/investigations/stepView.js:755:13',
       'js/observatory/guides/core.js:320:27',
     ])
       expect(at(site).hyphen).toBe(true);
