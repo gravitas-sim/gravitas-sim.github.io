@@ -225,9 +225,16 @@ test.describe('a crowded scene shows its important names and no others', () => {
     const r = await page.evaluate(readMainCanvasLabels);
     const v = judgeLabels(r.bodyLabels);
     expect(v.count, 'some names drawn').toBeGreaterThan(0);
-    expect(v.count, `at most ${LABEL_CAP} names`).toBeLessThanOrEqual(
-      LABEL_CAP
+    // Count labels, not drawn pieces: a mass label's suffix (" WD") is a piece
+    // of its own, and the scale bar or the size note can sit near a body.
+    const labels = r.bodyLabels.filter(
+      b =>
+        !/^\s/.test(b.text) &&
+        !/^[\d.,]+\s*AU$/.test(b.text.trim()) &&
+        !/enlarged/i.test(b.text)
     );
+    const named = judgeLabels(labels).count;
+    expect(named, `at most ${LABEL_CAP} names`).toBeLessThanOrEqual(LABEL_CAP);
     expect({ small: v.small, overlaps: v.overlaps }).toEqual({
       small: [],
       overlaps: [],
