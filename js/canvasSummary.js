@@ -48,12 +48,26 @@ export const sceneWords = (load = false) => {
   return typeof scene?.frameLine === 'function' ? scene : null;
 };
 
+// Offline, a module the install does not carry is asked for only if the worker
+// kept it from an online visit; otherwise the request would fail. It is tried
+// again when the network returns.
+const kept = async rel =>
+  navigator.onLine !== false ||
+  !!(await window.caches?.match(new URL(rel, import.meta.url)));
+
 let deferred = false;
 // Fetched 3 s after the splash, at idle: after the route is usable.
 function deferSceneWords() {
   if (deferred || !window.splashScreenEnded) return;
   deferred = true;
-  const go = () => sceneWords(true);
+  const go = () =>
+    kept('./sceneStatement.js').then(ok =>
+      ok
+        ? sceneWords(true)
+        : window.addEventListener('online', () => sceneWords(true), {
+            once: true,
+          })
+    );
   setTimeout(
     () =>
       window.requestIdleCallback
@@ -64,8 +78,14 @@ function deferSceneWords() {
 }
 const sizeModule = () => {
   if (!sizes)
-    sizes = import('./sizeFacts.js')
+    sizes = kept('./sizeFacts.js')
+      .then(ok => {
+        if (ok) return import('./sizeFacts.js');
+        sizes = null;
+        window.addEventListener('online', sizeModule, { once: true });
+      })
       .then(m => {
+        if (!m) return;
         sizes = m;
         labelSizesButton();
         onLocaleChange(labelSizesButton);
