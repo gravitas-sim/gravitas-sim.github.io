@@ -2595,8 +2595,8 @@ export const INSTRUCTOR = {
       },
       {
         from: 'predict-the-plain',
-        to: 'measure-the-plain',
-        text: 'The width of a dark plain: predicted at about 600 km and measured at about 634.',
+        to: 'squeezed-at-the-plain',
+        text: 'The width of a dark plain: predicted, measured at about 634 km, and the share of it that the slant squeezes.',
       },
       {
         from: 'what-would-change-it',

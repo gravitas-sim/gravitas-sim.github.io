@@ -532,7 +532,12 @@ export const MEASURING_THE_MOON = {
     'squeezed-at-the-plain': {
       title: 'La llanura se ve de soslayo',
       body: 'La llanura no está en el centro del disco, así que la ves de soslayo: un accidente redondo aquí se ve más estrecho que en realidad a lo largo de la línea hacia el centro del disco. Mueve el centro del círculo a la llanura, cerca de <em>x</em> = 289, <em>y</em> = 306, y toma ese ancho como parte del ancho verdadero. Luego prueba un punto más cerca del borde y mira cómo cambia el número.',
-      fields: [{ label: 'Ancho de un accidente redondo a lo largo de la línea al centro' }],
+      fields: [
+        {
+          label:
+            'Ancho de un accidente redondo a lo largo de la línea al centro',
+        },
+      ],
     },
     'what-would-change-it': {
       rubric:

@@ -1656,23 +1656,70 @@
       "audit": "STRONG",
       "scene_class": null,
       "limits": null,
-      "open_items": [],
-      "questions": { "Q1": "", "Q2": "", "Q3": "", "Q4": "", "Q5": "" },
+      "open_items": [
+        {
+          "ref": "D-R4-330-08",
+          "owner": 330,
+          "note": "ratio and planet-radius still ask for retyped values; guide capture is not in K1's form."
+        },
+        {
+          "ref": "D-R4-330-08",
+          "owner": 330,
+          "note": "'Too many free parameters' was measured and dropped: fits converge from 7 d windows up."
+        },
+        {
+          "ref": "D-R4-330-08",
+          "owner": 330,
+          "note": "Release label '3.1' on the retired map is a placeholder."
+        },
+        {
+          "ref": "D-R4-330-08",
+          "owner": 330,
+          "note": "The guide is loaded on first use and not installed; it needs one online visit offline (data-budget ceiling)."
+        }
+      ],
+      "questions": {
+        "Q1": "The reader decides what the fit leaves free and which published stellar radius to use, sees the planet radius move with that choice and finds which uncertainty limits it: a result a paragraph could state but not let the reader move.",
+        "Q2": "choose-fit names what can be changed (the free parameters, the window), star-radius names the two published radii, and whose-star says what the radius comparison answers.",
+        "Q3": "The checked values read the saved fit document (parameters, data span, k and its sigma) and the answer key is generated from the same reference run; the radii shown are the ones the check accepts.",
+        "Q4": "The reader chooses the free parameters, the window (a span under 7 d is refused with the reason) and the stellar radius; a fit with too few free parameters or too short a window is refused in words (gd.check.fitTooFew, gd.check.fitWindow).",
+        "Q5": "whose-star asks which of the two uncertainties limits the planet radius (factor-of-two rule); ratio and planet-radius still ask for retyped values (a guide field has no capture of the K1 form)."
+      },
       "leak": {
         "L1": "HOLDS: its steps carry no field hint or step placeholder, and its panels print no expected value in an empty box (source searched).",
-        "L2": "",
-        "L3": "",
-        "L4": "",
-        "L5": ""
+        "L2": "HOLDS: the fit panel opens with the reference defaults, not the state choose-fit asks for; the check reads what the reader changed.",
+        "L3": "HOLDS: choose-fit and star-radius come before any text states which free parameters or which radius is right; the two radii are both listed as published.",
+        "L4": "HOLDS: no step states the planet radius or which radius limits it before ratio, planet-radius and whose-star; the show text for stellar radius gives both published radii.",
+        "L5": "HOLDS: the answer key is an instructor document built from the reference run; no string visible to students holds it."
       },
-      "task_rule_items": [],
-      "editorial": "OPEN",
-      "redesign": "OPEN",
-      "reason": "",
-      "step_revisions": [],
-      "walk": "NOT RUN",
-      "pr": null,
-      "hash": null
+      "task_rule_items": [
+        "T1: the fit is the reader's own fit document, checked from its settings, parameters and data.",
+        "T3: free parameters and the stellar radius are changed one choice at a time and the check says which.",
+        "T5: authored refusals for too few free parameters and for a window under 7 days."
+      ],
+      "editorial": "REVISED",
+      "redesign": "REVISED",
+      "reason": "The task changed (retired steps with successors): the reader now chooses the fit and the radius, and the check reads what was chosen.",
+      "step_revisions": [
+        {
+          "sid": "choose-fit",
+          "from": "fit",
+          "change": "REVISED: the reader chooses the free parameters and window; refusals in words."
+        },
+        {
+          "sid": "star-radius",
+          "from": "radius",
+          "change": "REVISED: either published stellar radius is accepted, both shown."
+        },
+        {
+          "sid": "whose-star",
+          "from": "torres",
+          "change": "REVISED: which radius limits the planet radius, by a factor-of-two rule."
+        }
+      ],
+      "walk": "NOT VERIFIED",
+      "pr": 675,
+      "hash": "69d3e958c1e2fccafb3cfec3f6128d7449c9079f98af9438106394cd2a029bfc"
     },
     {
       "id": "investigation:exo-planet",
@@ -3194,23 +3241,85 @@
       "audit": "STRONG",
       "scene_class": "portrait or backdrop",
       "limits": null,
-      "open_items": [],
-      "questions": { "Q1": "", "Q2": "", "Q3": "", "Q4": "", "Q5": "" },
-      "leak": {
-        "L1": "HOLDS: no field cue or step placeholder holds a numeral at any depth, in either language, and the panel renders none that does (tests/fieldCue.test.js); the expected value is the field's `want`, which no page reads.",
-        "L2": "",
-        "L3": "",
-        "L4": "",
-        "L5": ""
+      "open_items": [
+        {
+          "ref": "D-R4-330-08",
+          "owner": 330,
+          "note": "Interpolated validate messages have no Spanish translation (English literals, as at 3.0)."
+        },
+        {
+          "ref": "D-R4-330-08",
+          "owner": 330,
+          "note": "The readout lists the foreshortening and offset rows on every step."
+        },
+        {
+          "ref": "D-R4-330-08",
+          "owner": 330,
+          "note": "Release label '3.1' on the retired map is a placeholder until the release is named."
+        },
+        {
+          "ref": "D-R4-330-08",
+          "owner": 330,
+          "note": "T4 transfer: not added; no honest second case in this lesson (recorded, not a failure)."
+        }
+      ],
+      "questions": {
+        "Q1": "The student finds the Moon's diameter by placing a pair on the photograph themselves, sees a too-short pair refused with the scale it implies, then finds that the plain they measure is squeezed along the line of sight (about 96 percent): none of that is a paragraph's job.",
+        "Q2": "The quiet canvas leaves the photograph and one instrument; each step says which two marks to place and what the readout rows (pair, scale, diameter, foreshortening) mean at that moment, and the held predictions return at the reveal step.",
+        "Q3": "The pair, scale, diameter and share the fields capture are the instrument's own readout rows (ids pair, scale, diameterKm, foreshort); the 3474.8 km figure, the 4.45 percent foreshortening and the plain's offset were re-derived from the image.",
+        "Q4": "The student decides where the two marks go (the instrument opens at a short pair on purpose), when a pair is long enough, which plain to measure and where to centre the squeeze; a short pair, a wrong plain and an unsqueezed diameter each get authored feedback (e2e/imageLessons.spec.js).",
+        "Q5": "The quantitative step asks for the diameter with the squeeze and the uncertainty the student produced (660 +/- up to 60); the advanced steps keep the limb and the slant as reasoning about a model limit."
       },
-      "task_rule_items": [],
-      "editorial": "OPEN",
-      "redesign": "OPEN",
-      "reason": "",
-      "step_revisions": [],
-      "walk": "NOT RUN",
-      "pr": null,
-      "hash": null
+      "leak": {
+        "L1": "HOLDS: no field cue or step placeholder holds a numeral at any depth, in either language (tests/fieldCue.test.js, which now names a-diameter-with-the-squeeze); the expected value is the field's `want`, which no page reads.",
+        "L2": "HOLDS: the pair instrument opens at 60 and 440, which the validator refuses, and the squeeze instrument opens at the disc centre, not at the plain (`tool.start`); tests/neutralStart.test.js.",
+        "L3": "HOLDS: the predictions predict-the-scale and predict-the-plain come before any body states the scale, the foreshortening or the plain's diameter; the first hint of predict-the-plain only locates the control.",
+        "L4": "HOLDS: no body states 634 km, the 96 percent or the 660 km before its measuring step; the first rung of each hint never hands over a value.",
+        "L5": "HOLDS: the readout rows and the instructor text visible to students carry no held answer; the instructor expectations name the answers only in the instructor guide."
+      },
+      "task_rule_items": [
+        "T1: the scale, the pair and the share are captured from the readout with their provenance (K1); the km fields are the student's own measurement.",
+        "T2: the held prediction of the scale and of the plain return at the reveal step beside the measurement.",
+        "T5: authored feedback for a short pair, a scale under 7.4, a diameter that does not match the pair, and a pair that is too long."
+      ],
+      "editorial": "REVISED",
+      "redesign": "REVISED",
+      "reason": "The task changed (retired steps with successors): the student now places and decides, and the answers leave the page.",
+      "step_revisions": [
+        {
+          "sid": "mark-the-disc-width",
+          "from": "scale-from-the-disc",
+          "change": "REVISED: the student places the pair and captures the scale; the instrument opens at a short pair that is refused in words."
+        },
+        {
+          "sid": "a-pair-that-stops-short",
+          "change": "NEW: a short pair's diameter follows from its scale (km within 3 of 50 times the scale)."
+        },
+        {
+          "sid": "predict-the-scale",
+          "change": "NEW: a held prediction before the first mark, revealed at mark-the-disc-width."
+        },
+        {
+          "sid": "predict-the-plain",
+          "change": "NEW: a held prediction of the plain's width before measuring it."
+        },
+        {
+          "sid": "measure-the-plain",
+          "change": "REVISED: the diameter is the student's own, 634 within 45, captured."
+        },
+        {
+          "sid": "squeezed-at-the-plain",
+          "change": "NEW: the share along the line of sight is captured from the foreshort row (96 within 3); the instrument opens at the disc centre."
+        },
+        {
+          "sid": "a-diameter-with-the-squeeze",
+          "from": "a-diameter-with-an-error-bar",
+          "change": "REVISED: quantitative, answer 660, tolerance 4, uncertainty up to 60."
+        }
+      ],
+      "walk": "NOT VERIFIED",
+      "pr": 675,
+      "hash": "f9bb895ac7e00d196cb3678c95cebda4fe1504b142c3481b5caf6be32508813e"
     },
     {
       "id": "investigation:missing-mass",
