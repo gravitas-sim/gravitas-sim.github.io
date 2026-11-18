@@ -8,6 +8,8 @@ import { readFileSync } from 'node:fs';
 import * as P from '../js/physics.js';
 import { twoBodySettings } from '../js/twoBodySettings.js';
 import { makeLab, makeStar } from '../js/validation/harness.js';
+import { build } from '../tools/tides-scenarios.mjs';
+import { getInclination, getPositionAngle } from '../js/observerGeometry.js';
 
 export const TOL = JSON.parse(
   readFileSync(
@@ -29,8 +31,17 @@ export const worldG = () => twoBodySettings().gravitational_constant;
  * @returns {{state: object, wp: number}} The recorded state (the declaration's
  *   form) and the angular rate at periapsis
  */
-export function orbitScene({ a, e, omegaDeg = 0, sense = 1, fraction, dt }) {
+export function orbitScene({
+  a,
+  e,
+  omegaDeg = 0,
+  sense = 1,
+  fraction,
+  dt,
+  G: setG,
+}) {
   lab.reset({
+    ...(setG ? { gravitational_constant: setG } : {}),
     mutual_gravity: false,
     integrator: 'Velocity Verlet',
     min_interaction_distance: 5,
@@ -229,5 +240,56 @@ export function deriveTransit(s) {
     b,
     contactLength: half((1 + k) ** 2 - b * b),
     innerLength: half((1 - k) ** 2 - b * b),
+  };
+}
+
+/**
+ * The orbit of a body of a shipped scenario as the world builder leaves it
+ * (seed 1, before any step), recorded in the declaration's form, with the G the
+ * world runs under.
+ * @param {string} key - Scenario id
+ * @param {string} body - The orbiting body's name
+ */
+export function scenarioOrbit(key, body) {
+  build(key, 1);
+  const star = P.stars[0];
+  const planet = P.planets.find(b => b.name === body);
+  return {
+    G: worldG(),
+    primary: {
+      x: star.pos.x,
+      y: star.pos.y,
+      vx: star.vel.x,
+      vy: star.vel.y,
+      m: star.mass,
+    },
+    body: {
+      x: planet.pos.x,
+      y: planet.pos.y,
+      vx: planet.vel.x,
+      vy: planet.vel.y,
+      m: planet.mass,
+    },
+  };
+}
+
+/**
+ * A scenario's transit recorded at the moment its planet, stepped on the
+ * engine, is `b` stellar radii from the star's centre on the sky and in front
+ * of it (the observer as the page leaves it).
+ */
+export function scenarioTransit(key, b, dt = 0.002) {
+  build(key, 1);
+  const star = P.stars[0];
+  const planet = P.planets[0];
+  for (let i = 0; i < 4000; i++) {
+    P.updatePhysics(dt);
+    if (planet.pos.x > 0 && planet.pos.y - star.pos.y >= -b * star.radius)
+      break;
+  }
+  return {
+    star: { x: star.pos.x, y: star.pos.y, r: star.radius },
+    planet: { x: planet.pos.x, y: planet.pos.y, r: planet.radius },
+    observer: { phiDeg: getPositionAngle(), incDeg: getInclination() },
   };
 }

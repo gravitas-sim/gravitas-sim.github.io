@@ -1,7 +1,7 @@
 // =============================================================================
 // Figures drawn from the model's own numbers
 // -----------------------------------------------------------------------------
-// A step declares `figure: {from: 'orbit' | 'transit', params, unit?, withhold?}`
+// A step declares `figure: {from: 'orbit' | 'transit', params, lengthUnit?, withhold?}`
 // (js/lesson/figureSpec.js) and this module, loaded by dynamic import only when
 // a step does, returns the SVG, its text alternative and its caption from the
 // same numbers. Pure: no DOM, no engine, no stored field.
@@ -23,11 +23,15 @@
 // =============================================================================
 
 import { orbitGeometry } from './orbitGeometry.js';
-import { geometryFor, projectPositionToSky } from './observerGeometry.js';
+import {
+  geometryFor,
+  lineOfSightDepth,
+  projectPositionToSky,
+} from './observerGeometry.js';
 import { formatNumber, NBSP } from './format.js';
 import { getLocale } from './i18n/index.js';
 import { escapeHtml as esc } from './lessonMarkup.js';
-import { FIGURES } from './lesson/figureSpec.js';
+import { FIGURES, shownQuantities } from './lesson/figureSpec.js';
 
 const { Math } = globalThis;
 const W = 320;
@@ -177,27 +181,101 @@ function orbitValues(p) {
   };
 }
 
+/** A label's width in viewBox units: 11 px system type, generously. */
+const textWidth = t => t.length * 6.3 + 2;
+
 function drawOrbit(v, w) {
   const bAxis = v.a * Math.sqrt(1 - v.e * v.e);
   const c = Math.cos(v.omega);
   const s = Math.sin(v.omega);
   const hx = Math.hypot(v.a * c, bAxis * s);
   const hy = Math.hypot(v.a * s, bAxis * c);
-  const k = Math.min((W / 2 - 40) / hx, (H / 2 - 34) / hy);
+  const k0 = Math.min((W / 2 - 40) / hx, (H / 2 - 34) / hy);
   const mid = {
     x: (v.at.periapsis.x + v.at.apoapsis.x) / 2,
     y: (v.at.periapsis.y + v.at.apoapsis.y) / 2,
   };
+  const out = c >= 0 ? 1 : -1;
+  const m = w.marks;
+  const round = v.e < 0.03;
+  // Where each label goes at scale k: apsides along the axis, away from the
+  // body; the two foci's labels below and above, anchored toward the middle.
+  const labelsAt = (k, flip) => {
+    const px = p => W / 2 + k * (p.x - mid.x);
+    const py = p => H / 2 - k * (p.y - mid.y);
+    const focus = (p, text, dy) => {
+      const dx = px(p) - W / 2;
+      const near = Math.abs(dx) < 40;
+      return {
+        text,
+        x: px(p) + (near ? 0 : dx > 0 ? -8 : 8),
+        y: py(p) + dy,
+        anchor: near ? 'middle' : dx > 0 ? 'end' : 'start',
+      };
+    };
+    return [
+      {
+        text: m[0],
+        x: px(v.at.periapsis) + out * 12,
+        y: py(v.at.periapsis) + 4,
+        anchor: out > 0 ? 'start' : 'end',
+      },
+      {
+        text: m[1],
+        x: px(v.at.apoapsis) - out * 12,
+        y: py(v.at.apoapsis) + 4,
+        anchor: out > 0 ? 'end' : 'start',
+      },
+      focus(v.at.focus, m[2], flip ? -13 : 21),
+      ...(round ? [] : [focus(v.at.empty, m[3], flip ? 21 : -13)]),
+    ];
+  };
+  const span = l => {
+    const wd = textWidth(l.text);
+    const x0 =
+      l.anchor === 'start' ? l.x : l.anchor === 'end' ? l.x - wd : l.x - wd / 2;
+    return [x0, x0 + wd];
+  };
+  const box = l => {
+    const [x0, x1] = span(l);
+    return [x0, l.y - 12, x1, l.y + 4];
+  };
+  /** Which side the focus labels go (false: primary below), or null if no side fits at k. */
+  const fits = k => {
+    for (const flip of [false, true]) {
+      const ls = labelsAt(k, flip).map(box);
+      const inside = ls.every(
+        ([x0, y0, x1, y1]) => x0 >= 3 && x1 <= W - 3 && y0 >= 1 && y1 <= H - 1
+      );
+      const clear = ls.every((a, i) =>
+        ls.every(
+          (b, j) =>
+            j <= i ||
+            a[2] <= b[0] ||
+            b[2] <= a[0] ||
+            a[3] <= b[1] ||
+            b[3] <= a[1]
+        )
+      );
+      if (inside && clear) return flip;
+    }
+    return null;
+  };
+  // Shrink the ellipse until every label fits the box and clears the others, down to a floor.
+  let k = k0;
+  let flip;
+  while ((flip = fits(k)) === null && k > 0.3 * k0) k *= 0.97;
   const px = p => W / 2 + k * (p.x - mid.x);
   const py = p => H / 2 - k * (p.y - mid.y);
   const q = p => `cx="${px(p).toFixed(1)}" cy="${py(p).toFixed(1)}"`;
   const data = (p, name, d) =>
     `data-q="${name}" data-x="${full(p.x)}" data-y="${full(p.y)}" data-value="${full(d)}"`;
-  const label = (p, text, dx, dy, anchor) =>
-    `<text class="mf-t" x="${(px(p) + dx).toFixed(1)}" y="${(py(p) + dy).toFixed(1)}" text-anchor="${anchor}">${esc(text)}</text>`;
-  const out = c >= 0 ? 1 : -1;
-  const m = w.marks;
-  const round = v.e < 0.03;
+  // A label that still overruns the box (the floor) is pushed back inside.
+  const label = l => {
+    const [x0, x1] = span(l);
+    const shift = x0 < 3 ? 3 - x0 : x1 > W - 3 ? W - 3 - x1 : 0;
+    return `<text class="mf-t" x="${(l.x + shift).toFixed(1)}" y="${Math.min(H - 3, Math.max(11, l.y)).toFixed(1)}" text-anchor="${l.anchor}">${esc(l.text)}</text>`;
+  };
   return (
     `<ellipse class="mf-c" cx="${W / 2}" cy="${H / 2}" rx="${(k * v.a).toFixed(1)}" ry="${(k * bAxis).toFixed(1)}" transform="rotate(${((-v.omega * 180) / Math.PI).toFixed(3)} ${W / 2} ${H / 2})" data-q="ellipse" data-a="${full(v.a)}" data-e="${full(v.e)}"/>` +
     `<line class="mf-d" x1="${px(v.at.periapsis).toFixed(1)}" y1="${py(v.at.periapsis).toFixed(1)}" x2="${px(v.at.apoapsis).toFixed(1)}" y2="${py(v.at.apoapsis).toFixed(1)}"/>` +
@@ -207,10 +285,9 @@ function drawOrbit(v, w) {
       ? ''
       : `<circle class="mf-o" ${q(v.at.empty)} r="4" ${data(v.at.empty, 'empty-focus', v.focalSeparation)}/>`) +
     `<circle class="mf-f" ${q(v.at.focus)} r="5" ${data(v.at.focus, 'focus', 0)}/>` +
-    label(v.at.periapsis, m[0], out * 12, 4, out > 0 ? 'start' : 'end') +
-    label(v.at.apoapsis, m[1], -out * 12, 4, out > 0 ? 'end' : 'start') +
-    label(v.at.focus, m[2], 0, 19, 'middle') +
-    (round ? '' : label(v.at.empty, m[3], 0, -11, 'middle'))
+    labelsAt(k, flip === true)
+      .map(label)
+      .join('')
   );
 }
 
@@ -221,10 +298,12 @@ function transitValues(p) {
   if (p.state) {
     const { star, planet, observer } = p.state;
     k = planet.r / star.r;
-    const sky = projectPositionToSky(
-      { x: planet.x - star.x, y: planet.y - star.y },
-      geometryFor(observer.phiDeg, observer.incDeg)
-    );
+    const rel = { x: planet.x - star.x, y: planet.y - star.y };
+    const geo = geometryFor(observer.phiDeg, observer.incDeg);
+    // Behind the star, or a body with no size: there is no transit to draw.
+    if (!(star.r > 0 && planet.r > 0) || lineOfSightDepth(rel, geo) <= 0)
+      return null;
+    const sky = projectPositionToSky(rel, geo);
     b = Math.hypot(sky.x, sky.y) / star.r;
   }
   const half = q => (q > 0 ? 2 * Math.sqrt(q) : null);
@@ -274,11 +353,15 @@ function drawTransit(v, w) {
 /**
  * One figure: its SVG, text alternative and caption, from the same numbers.
  *
+ * A figure with a `withhold` ships no numeric data attributes (they would
+ * hand over what the step asks for); `opts.keepData` keeps them for the tests.
+ *
  * @param {Object} f - A step's `figure` declaration
  * @param {string} [locale] - 'en' or 'es'; the page's when omitted
+ * @param {{keepData?: boolean}} [opts]
  * @returns {{ok: true, svg: string, alt: string, numbers: string, caption: string, values: Object}|{ok: false, reason: string}}
  */
-export function figureFor(f, locale = getLocale()) {
+export function figureFor(f, locale = getLocale(), opts = {}) {
   const w = WORDS[locale] || WORDS.en;
   const spec = FIGURES[f?.from];
   if (!spec || !f.params) return { ok: false, reason: 'figure' };
@@ -287,21 +370,19 @@ export function figureFor(f, locale = getLocale()) {
   if (!v || (f.from === 'transit' && !(v.b >= 0 && v.b < 1 + v.k)))
     return { ok: false, reason: 'state' };
   const stellar = f.from === 'transit';
-  const unit = f.unit ? `${NBSP}${f.unit}` : '';
-  // Any two numbers fix the rest, so a withhold leaves at most one of the basis.
-  const hide = new Set(f.withhold || []);
-  const shown = hide.size
-    ? spec.basis.filter(q => !hide.has(q)).slice(0, 1)
-    : spec.quantities.filter(q => v[q] !== null && v[q] !== undefined);
+  const unit = f.lengthUnit ? `${NBSP}${f.lengthUnit}` : '';
+  const shown = shownQuantities(f, v);
   const fmt = q =>
     formatNumber(v[q], { sig: 3, locale }) + (stellar || q === 'e' ? '' : unit);
   const words = shown
     .map(q => `${w.names[q]} ${fmt(q)}`)
     .join('; ')
     .replace(/^./, c => c.toUpperCase());
-  const lengths = stellar ? w.stellar : f.unit ? '' : w.scene;
+  const lengths = stellar ? w.stellar : f.lengthUnit ? '' : w.scene;
   const alt = `${w[f.from]}${words ? ` ${words}.` : ''} ${lengths}`.trim();
-  const drawn = stellar ? drawTransit(v, w) : drawOrbit(v, w);
+  let drawn = stellar ? drawTransit(v, w) : drawOrbit(v, w);
+  if (f.withhold?.length && !opts.keepData)
+    drawn = drawn.replace(/ data-(?:q|x|y|value|a|e)="[^"]*"/g, '');
   const small = stellar && v.k * transitScale(v) < 3;
   return {
     ok: true,
@@ -315,19 +396,27 @@ export function figureFor(f, locale = getLocale()) {
 
 /**
  * Draw a step's figure under its body text, once its module has loaded.
+ * Draws nothing if the text it was to follow is gone from the page, or if
+ * this step's figure is already there (two renders while the import was
+ * pending).
  *
- * @param {Element} body - The step panel's body
- * @param {Object} f - The step's `figure`
+ * @param {Element} at - The step panel's `.inv-step-body`
+ * @param {Object} step - The step, with its `sid` and `figure`
  * @param {string} [locale] - The page's when omitted
  */
-export function fill(body, f, locale) {
-  const r = figureFor(f, locale);
-  const at = body.querySelector('.inv-step-body');
-  if (!r.ok || !at) return;
+export function fill(at, step, locale) {
+  if (
+    !at.isConnected ||
+    at.nextElementSibling?.dataset.modelFigure === step.sid
+  )
+    return;
+  const r = figureFor(step.figure, locale);
+  if (!r.ok) return;
   const el = document.createElement('figure');
   el.className = 'inv-figure';
+  el.dataset.modelFigure = step.sid;
   el.innerHTML =
     `${r.svg}<figcaption><span class="inv-figure-caption">${esc(r.caption)}</span>` +
-    `<span class="inv-figure-credit">${esc(r.numbers)}</span></figcaption>`;
+    `<span class="inv-figure-caption inv-figure-readout">${esc(r.numbers)}</span></figcaption>`;
   at.after(el);
 }

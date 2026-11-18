@@ -160,7 +160,7 @@ would catch, because a changed meaning is a revision and so a new id.
 A step can show a picture that is drawn from the numbers the task uses, so it
 cannot disagree with what the student measures. Beside the photograph form of
 `step.figure` (`src`, `alt`, `caption`, credit), a step may declare
-`figure: { from, params, unit?, withhold? }`, where `from` is `orbit` (the
+`figure: { from, params, lengthUnit?, withhold? }`, where `from` is `orbit` (the
 ellipse with its foci and apsides) or `transit` (two discs and the impact
 parameter). `params` are the lesson's own constants (`{a, e}` or `{k, b}`) or a
 recorded state with the `scenarioId` it came from; the state is what the

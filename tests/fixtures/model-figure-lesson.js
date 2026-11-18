@@ -4,28 +4,30 @@
 // against the authoring rules, and the browser check loads it through the
 // authoring preview's draft door (?author=draft-model-figures).
 //
-// The two recorded states were taken from the validation laboratory's
-// integrator (tests/modelFigureScenes.js: a = 100, e = 0.5 a quarter period
-// after periapsis, and a transit at b = 0.4), so G is the laboratory's 1.
-// A lesson that adopts a figure records its own state from the scenario it
-// names.
+// The two recorded states were taken from the scenarios the steps name, by
+// tests/modelFigureScenes.js (scenarioOrbit: 'keplers-2nd-law', the Eccentric
+// Orbiter as the world builder leaves it under seed 1, G = 1 as that scenario
+// runs; scenarioTransit: 'transit-lab', the planet stepped on the engine to
+// 0.39 stellar radii from the star's centre on the sky and in front of it,
+// the observer as the page leaves it). tests/modelFigures.test.js records them
+// again and holds the fixture to them.
 
 export const ORBIT_STATE = {
   G: 1,
-  primary: { x: 0, y: 0, vx: 0, vy: 0, m: 1 },
+  primary: { x: 0, y: 0, vx: 0, vy: 0, m: 1000 },
   body: {
-    x: -121.60900000492,
-    y: 5.9950454495515,
-    vx: -0.040431312017965,
-    vy: -0.06922075244736,
-    m: 0.1,
+    x: -15.4508497187474,
+    y: 47.5528258147577,
+    vx: -5.46340373825573,
+    vy: -1.77516748303177,
+    m: 0.000901046884837231,
   },
 };
 
 export const TRANSIT_STATE = {
-  star: { x: 0, y: 0, r: 10 },
-  planet: { x: 79.863550983553, y: 60.181502376098, r: 1.2 },
-  observer: { phiDeg: 37, incDeg: 87.707557224044 },
+  star: { x: 0, y: 0, r: 0.537129285 },
+  planet: { x: 4.72687925861923, y: -0.210496127679996, r: 0.06594968230818 },
+  observer: { phiDeg: 0, incDeg: 90 },
 };
 
 export const LESSON = {
@@ -44,13 +46,13 @@ export const LESSON = {
       type: 'read',
       title: 'An orbit from its constants',
       body: 'This ellipse is drawn from a semi-major axis of 100 au and an eccentricity of 0.5.',
-      figure: { from: 'orbit', params: { a: 100, e: 0.5 }, unit: 'au' },
+      figure: { from: 'orbit', params: { a: 100, e: 0.5 }, lengthUnit: 'au' },
     },
     {
       sid: 'orbit-state',
       type: 'read',
       title: 'An orbit from a recorded state',
-      body: 'The same orbit, drawn from the positions and velocities the scene held at one moment. Its eccentricity is left out of the words.',
+      body: 'An orbit drawn from the positions and velocities the scene held at one moment. Its eccentricity is left out of the words.',
       figure: {
         from: 'orbit',
         params: { scenarioId: 'keplers-2nd-law', state: ORBIT_STATE },
@@ -98,6 +100,7 @@ export const SHADOW = {
     {
       title: 'Una órbita desde sus constantes',
       body: 'Esta elipse se dibuja con un semieje mayor de 100 ua y una excentricidad de 0,5.',
+      figure: { lengthUnit: 'ua' },
     },
     {
       title: 'Una órbita desde un estado registrado',

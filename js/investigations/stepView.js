@@ -61,7 +61,11 @@ export const misconceptionText = missed =>
 // correct terse answer is not held hostage.
 export const SHORT_ANSWER_MIN = 40;
 
-/** Six places a lazy module adds to a step; an empty slot is the step as it was. */
+/**
+ * Six places a lazy module adds to a step (an empty slot is the step as it was),
+ * filled when a lesson opens: field (importFromSelection, source, take, span),
+ * runs (variation), reveal, time, canvas, feedback.
+ */
 export const slots = {
   field: null,
   runs: null,
@@ -738,9 +742,14 @@ export function bindStepInputs(h) {
       }
     });
   }
-  const drawn = h.currentStep().figure;
-  if (drawn?.from)
-    import('../lessonFigures.js').then(m => m.fill(els.body, drawn));
+  const drawn = h.currentStep();
+  if (drawn.figure?.from) {
+    // The text the figure follows, taken now: the panel may re-render or move on before the import resolves.
+    const at = els.body.querySelector('.inv-step-body');
+    import('../lessonFigures.js')
+      .then(m => h.currentStep() === drawn && m.fill(at, drawn))
+      .catch(() => {});
+  }
   if (els.body.querySelector('[data-recover]'))
     import('./recovery.js').then(m => m.fill(h, announce, getLocale, hintsFor));
 }

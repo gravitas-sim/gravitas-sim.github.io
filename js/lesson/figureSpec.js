@@ -1,7 +1,7 @@
 // =============================================================================
 // The figures a step may declare, drawn from the model
 // -----------------------------------------------------------------------------
-// `step.figure = { from, params, unit?, withhold? }` is the second form of
+// `step.figure = { from, params, lengthUnit?, withhold? }` is the second form of
 // `step.figure` (the first is a photograph, with `src`). `from` names a figure
 // in js/lessonFigures.js, which loads only when a step declares one. The
 // declaration's checks (`ref/figure`, run by `npm run author:check`) are in
@@ -33,3 +33,18 @@ export const FIGURES = Object.freeze({
     basis: ['k', 'b'],
   },
 });
+
+/**
+ * The quantities a figure's words name: all of them, or, with a withhold, at
+ * most one of the two that fix the figure (never one the step withholds).
+ * @param {{from: string, withhold?: string[]}} f - A figure declaration
+ * @param {Object} v - The figure's numbers by name
+ * @returns {string[]} Quantity names
+ */
+export function shownQuantities(f, v) {
+  const spec = FIGURES[f.from];
+  const hide = new Set(f.withhold || []);
+  return hide.size
+    ? spec.basis.filter(q => !hide.has(q)).slice(0, 1)
+    : spec.quantities.filter(q => v[q] !== null && v[q] !== undefined);
+}
