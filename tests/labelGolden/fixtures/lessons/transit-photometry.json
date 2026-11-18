@@ -44,17 +44,17 @@
     ["steps.recover-the-real-planet.fields.6.unit","R⊕"]
    ],
    "numbered": [
-    ["steps.correct-it-and-get-a.fields.2.label","Corrected ratio √(δ / 1.215)"],
-    ["steps.recover-the-real-planet.fields.3.label","Depth ratio = 1 + F₂/F₁"],
-    ["steps.recover-the-real-planet.fields.5.label","Radius correction √(1 + F₂/F₁)"]
+    ["steps.correct-it-and-get-a.fields.2.label","Corrected ratio √(<em>δ</em> / 1.215)"],
+    ["steps.recover-the-real-planet.fields.3.label","Depth ratio = 1 + <em>F</em>₂/<em>F</em>₁"],
+    ["steps.recover-the-real-planet.fields.5.label","Radius correction √(1 + <em>F</em>₂/<em>F</em>₁)"]
    ]
   },
   "es": {
    "units": [],
    "numbered": [
-    ["steps.correct-it-and-get-a.fields.2.label","Cociente corregido √(δ / 1,215)"],
-    ["steps.recover-the-real-planet.fields.3.label","Cociente de profundidades = 1 + F₂/F₁"],
-    ["steps.recover-the-real-planet.fields.5.label","Corrección del radio √(1 + F₂/F₁)"]
+    ["steps.correct-it-and-get-a.fields.2.label","Cociente corregido √(<em>δ</em> / 1,215)"],
+    ["steps.recover-the-real-planet.fields.3.label","Cociente de profundidades = 1 + <em>F</em>₂/<em>F</em>₁"],
+    ["steps.recover-the-real-planet.fields.5.label","Corrección del radio √(1 + <em>F</em>₂/<em>F</em>₁)"]
    ]
   }
  },

@@ -3709,11 +3709,26 @@
     line-height: 1.22;
     letter-spacing: -0.012em;
   }
+  /* A line of 45 to 75 characters reads best (measured on the pilots: 13 px
+     gives a median of 53 at the 362 px desktop panel, 14 px gives 49 there but
+     45 at the 333 px phone sheet, where the lines would be too short). So the
+     body is 14 px once the text column is 350 px wide or more, and 13 px
+     below; a column wider than 36em (a tablet sheet) is capped so its lines
+     stay under 75. The container is the body, so zoom narrows it like the rest. */
+  .inv-step-body {
+    container-type: inline-size;
+  }
   .inv-step-body p {
+    max-width: 36em;
     margin: 0 0 var(--space-3);
     font-size: var(--text-sm);
     line-height: 1.62;
     color: var(--text-secondary);
+  }
+  @container (min-width: 350px) {
+    .inv-step-body p {
+      font-size: var(--text-base);
+    }
   }
   .inv-step-body strong {
     color: var(--text-primary);
@@ -7607,14 +7622,25 @@
 
   /* A glossary term in prose (js/glossaryTerms.js): a button that reads as the
      word it is, marked by a dotted underline, and the definition it opens. */
-  .gl-term {
+  .gl-term,
+  .gl-term:hover,
+  .gl-term:active {
+    display: inline;
+    min-height: 0;
+    padding: 0;
     background: none;
     border: 0;
     border-bottom: 1px dotted currentcolor;
+    border-radius: 0;
+    box-shadow: none;
     color: inherit;
     cursor: help;
     font: inherit;
-    padding: 0;
+    letter-spacing: inherit;
+    line-height: inherit;
+    text-align: inherit;
+    transform: none;
+    user-select: auto;
   }
 
   .gl-term:focus-visible {
@@ -7626,6 +7652,7 @@
     border-left: 3px solid var(--accent);
     display: block;
     font-size: 0.8rem;
+    font-style: normal;
     line-height: 1.45;
     margin: 0.3rem 0;
     padding: 0.2rem 0 0.2rem 0.6rem;

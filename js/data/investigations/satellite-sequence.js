@@ -536,7 +536,7 @@ export const TIDES_THAT_MOVE_THE_MOON = {
       stage: STAGE,
       type: 'measure',
       title: 'How fast the Moon recedes now',
-      body: `With k2 = 0.30 and Q = 12 and time 0, read how fast the Moon is receding,
+      body: `With k2 = 0.30 and <em>Q</em> = 12 and time 0, read how fast the Moon is receding,
              in cm per year, and how much the day lengthens, in milliseconds per century.`,
       fields: [
         {
@@ -621,7 +621,7 @@ export const TIDES_THAT_MOVE_THE_MOON = {
         return {
           level: 'error',
           message:
-            'Keep k2 = 0.30 and Q = 12, set the time to 1, and read the distance and the day.',
+            'Keep k2 = 0.30 and <em>Q</em> = 12, set the time to 1, and read the distance and the day.',
         };
       },
       tool: TM({ k2: 0.3, Q: 12, gyr: 1 }),
@@ -669,7 +669,7 @@ export const TIDES_THAT_MOVE_THE_MOON = {
              eclipses. Run backward, the same model puts the Moon in contact with the Earth
              1.58 billion years ago, well within the age of the Solar System. So Q was not
              constant: in a real history it changed with the oceans and the continents. A
-             parameter that fits the present is not a law.`,
+             [[parameter|parameter]] that fits the present is not a law.`,
       tool: TM({ k2: 0.3, Q: 12, gyr: -2 }),
     },
   ],
@@ -708,7 +708,7 @@ export const IOS_FIRE = {
       title: 'The most volcanic body we know',
       body: `Io is the most volcanically active body in the Solar System, with no help from
              the Sun. Its heat is the tide: Jupiter raises a bulge on Io, and because
-             Io&rsquo;s orbit is not quite circular (e = 0.0041) the bulge rises and falls
+             Io&rsquo;s orbit is not quite circular (<em>e</em> = 0.0041) the bulge rises and falls
              once an orbit, and the friction in that flexing is heat. How much depends on how
              easily Io flexes (k2) and how much it loses as it does (Q), and neither is known
              for Io.`,
@@ -720,7 +720,7 @@ export const IOS_FIRE = {
       type: 'measure',
       title: 'The heat for k2 = 1.5 and Q = 100',
       body: `Set k2 to 1.5 (the most a body can have, for a fluid), Q to 100 and the
-             eccentricity to 0.0041. Read the <strong>heating</strong> in units of 10<sup>13</sup>
+             [[eccentricity|eccentricity]] to 0.0041. Read the <strong>heating</strong> in units of 10<sup>13</sup>
              W, and the energy in one orbit in units of 10<sup>19</sup> J.`,
       fields: [
         { id: 'power', label: 'Heating', unit: '1e13 W', want: '9.33' },
@@ -743,7 +743,7 @@ export const IOS_FIRE = {
         return {
           level: 'error',
           message:
-            'Set k2 = 1.5, Q = 100, e = 0.0041, then read “Heating” and “Energy in one orbit”.',
+            'Set k2 = 1.5, <em>Q</em> = 100, <em>e</em> = 0.0041, then read “Heating” and “Energy in one orbit”.',
         };
       },
       tool: TH({ k2: 1.5, Q: 100, e: 0.0041 }),
@@ -764,9 +764,9 @@ export const IOS_FIRE = {
         'unchanged',
       ],
       answer: 1,
-      hints: ['Heating goes as e squared.'],
+      hints: ['Heating goes as <em>e</em> squared.'],
       because:
-        'The heating goes as e squared, so doubling the eccentricity gives four times the heat: from 9.33 × 10¹³ W to 3.73 × 10¹⁴ W for k2 = 1.5 and Q = 100.',
+        'The heating goes as <em>e</em> squared, so doubling the eccentricity gives four times the heat: from 9.33 × 10¹³ W to 3.73 × 10¹⁴ W for k2 = 1.5 and <em>Q</em> = 100.',
       tool: TH({ k2: 1.5, Q: 100, e: 0.0041 }),
     },
     {
@@ -788,7 +788,7 @@ export const IOS_FIRE = {
         return {
           level: 'error',
           message:
-            'Keep k2 = 1.5 and Q = 100, set e = 0.0082, and read “Heating”.',
+            'Keep k2 = 1.5 and <em>Q</em> = 100, set <em>e</em> = 0.0082, and read “Heating”.',
         };
       },
       tool: TH({ k2: 1.5, Q: 100, e: 0.0082 }),
@@ -799,7 +799,7 @@ export const IOS_FIRE = {
       type: 'measure',
       title: 'What the formula can and cannot say',
       body: `Set the eccentricity back to 0.0041. The line <strong>Range the model allows</strong>
-             is the heat for the largest k2/Q (k2 = 1.5, Q = 5) and a thousandth of it. Read the
+             is the heat for the largest k2/<em>Q</em> (k2 = 1.5, <em>Q</em> = 5) and a thousandth of it. Read the
              <strong>k2/Q</strong> the middle of the observed heat flow needs.`,
       fields: [
         {
@@ -815,13 +815,13 @@ export const IOS_FIRE = {
           return {
             level: 'ok',
             message:
-              'k2/Q = 0.0177, a value inside what the model allows (from 0.0003 to 0.3). The heat spans three orders of magnitude, 1.9 × 10¹² to 1.9 × 10¹⁵ W, so the formula cannot tell us the interior; the heat we see tells us the interior’s k2/Q.',
+              'k2/<em>Q</em> = 0.0177, a value inside what the model allows (from 0.0003 to 0.3). The heat spans three orders of magnitude, 1.9 × 10¹² to 1.9 × 10¹⁵ W, so the formula cannot tell us the interior; the heat we see tells us the interior’s k2/Q.',
           };
         }
         return {
           level: 'error',
           message:
-            'Set e = 0.0041 and read “k2/Q the observed middle value needs”.',
+            'Set <em>e</em> = 0.0041 and read “k2/Q the observed middle value needs”.',
         };
       },
       tool: TH({ k2: 1.5, Q: 100, e: 0.0041 }),

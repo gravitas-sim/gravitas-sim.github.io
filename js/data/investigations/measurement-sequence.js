@@ -1257,7 +1257,7 @@ export const MEASURING_THE_MOON = {
              differences in the ground, so its gray levels are for the eye and are
              not a measure of the light the Moon reflects. The Observatory calls such
              a picture <strong>display-only</strong>: you may mark it and measure
-             it in pixels, and nothing more.
+             it in [[pixel|pixels]], and nothing more.
              \n\nA picture has no scale of its own. This one is 496 pixels across,
              and a pixel is not a kilometer. The pixels are numbered from the lower
              left, x to the right and y up, and the disc is cropped close: its right
@@ -1301,7 +1301,7 @@ export const MEASURING_THE_MOON = {
              the scale it gives.
              \n\nThe right end sits on the last column of the frame, so the disc may
              be a pixel or two wider than the picture. Keep that in mind: it is not in
-             the uncertainty the tool states.`,
+             the [[uncertainty|uncertainty]] the tool states.`,
       fields: [
         { id: 'pair', label: 'Length of the pair', unit: 'px', want: '493' },
         {
@@ -1369,7 +1369,7 @@ export const MEASURING_THE_MOON = {
       reveal: 'measure-the-plain',
       title: 'How wide is the dark plain?',
       body: `Near the middle of the disc there is a large dark plain, nearly round,
-             with its center close to x = 289, y = 306. The Moon&rsquo;s dark plains are
+             with its center close to <em>x</em> = 289, <em>y</em> = 306. The Moon&rsquo;s dark plains are
              old lava flows. Before you measure it, look at it beside the whole disc.`,
       prompt: 'Across, the plain is about&hellip;',
       options: ['6 km', '60 km', '600 km', '6,000 km'],
@@ -1386,7 +1386,7 @@ export const MEASURING_THE_MOON = {
       stage: STAGE,
       type: 'measure',
       title: 'A circle on the plain',
-      body: `The pair stays across the disc. The circle starts at x = 289, y = 306.
+      body: `The pair stays across the disc. The circle starts at <em>x</em> = 289, <em>y</em> = 306.
              Change the <strong>radius</strong> until the circle follows the edge of the
              dark plain, and nudge the center if the circle drifts to one side. Read
              the diameter of the circle in kilometers.`,
