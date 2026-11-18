@@ -28,7 +28,7 @@ import { crowdNotes } from './bodyDrawSky.js';
 // For the inspector's Appearance disclosure, which loads lazily and must not
 // import the drawing modules itself (js/inspectorView.js says why).
 registerCommands({ lightingNotes });
-let sizes = null;
+let sizes = 0;
 let scene = null;
 export function loadSceneWords() {
   if (typeof scene?.frameLine === 'function') return Promise.resolve(scene);
@@ -72,7 +72,7 @@ const sizeModule = () => {
         onLocaleChange(labelSizesButton);
       })
       .catch(() => {});
-  return typeof sizes?.sizeSentence === 'function' ? sizes : null;
+  return typeof sizes.sizeSentence === 'function' ? sizes : null;
 };
 
 // Shown once the size facts' words are here.
