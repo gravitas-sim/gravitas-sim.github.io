@@ -328,13 +328,26 @@ Recorded in [DECISION_REGISTER.md](DECISION_REGISTER.md), D-LIB-01.
 - **The teaching page's activity list and the scenario gallery** stay their
   own lists (PLATFORM_MODEL.md names them as Library filters later).
 
+## Pictures and facts at the start and on an item page (Prompt 455)
+
+The seven start cards are the same card as every other (picture, kind, title,
+summary, facts); nothing marks them compact any more. An item page shows the
+entry's own thumbnail beside its text (above it on a phone), its kind and
+format, the same facts as a card (`factsOf` in `js/library/card.js`), its
+summary, then Open it and Preview as a student, and Save. Its pathway lines are
+links ("Sequence: name, number n of N"). An entry with no thumbnail (53 of 248)
+stays a plain card and a header without a picture; no picture is made for it
+here. On an item page the page title and introduction of the start view are not
+repeated (the heading stays for screen readers). The default view's choices are
+19 at 1280 by 800 and 9 at 390 by 844 (ceilings 23 and 11).
+
 ## Prerequisites on a card (Prompt 276)
 
 A card of the results carries "You may want this first:" and a link when the
 entry's `prerequisites` name an investigation the reader has not finished (the
 first such, by the progress the browser holds), unless the card's own
 investigation is finished. It is advice: the card's link is unchanged and
-nothing is locked or disabled. The compact cards of the default view carry
+nothing is locked or disabled. The start cards of the default view carry
 none. The "ready" facet and the item page's "Before this" are as they were.
 
 <!-- Listed in DOCUMENTS.md. -->
