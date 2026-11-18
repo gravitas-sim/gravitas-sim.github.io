@@ -851,8 +851,10 @@ export const EN = {
   'settings.label.showAccelerationVectors': 'Show Acceleration Vectors',
   'settings.label.showPotentialWell': 'Show Potential Well',
   'settings.label.showScaleBar': 'Show Scale Bar',
-  'settings.label.bodyLabels': 'Body Names',
+  'settings.label.bodyLabels': 'Body Labels',
   'settings.option.bodyLabels.all': 'All',
+  'settings.option.bodyLabels.names': 'Names only',
+  'settings.option.bodyLabels.masses': 'Masses only',
   'settings.option.bodyLabels.bound': 'Selected and investigation bodies',
   'settings.option.bodyLabels.none': 'None',
   'settings.label.showElapsedTime': 'Show Elapsed Time',
@@ -1186,7 +1188,7 @@ export const EN = {
   'shortcut.units': 'Toggle physical / simulation units',
   'shortcut.trails': 'Toggle trails',
   'shortcut.bodyLabels':
-    'Cycle body names: all, selected and investigation, none',
+    'Cycle body labels: all, names, masses, selected and investigation, none',
   'shortcut.undo': 'Undo last placed object',
   'shortcut.inspect': 'Inspect an object',
   'shortcut.place': 'Place an object with velocity',
@@ -1219,6 +1221,11 @@ export const EN = {
   'inv.browser.activities.link': 'See the classroom activities',
   'canvas.sizeDisclosure':
     'Bodies enlarged, not to one scale (radii: inspector)',
+  'canvas.sizeDisclosure': 'Body sizes enlarged for visibility',
+  'canvas.reducedPopulation':
+    'Reduced population on this device: {n} of {total} bodies',
+  'canvas.crowdTrails':
+    'Trails: the selected body and the {n} heaviest of {total} bodies',
   'canvas.sizeDisclosure.detail':
     'Canvas diameters are illustrative. Each kind of body is enlarged by a different factor, so sizes are not to one scale and their ratios are not physical. Use the inspector and investigation measurements for radii.',
   'capture.screenshotFailed': 'The screenshot could not be saved',
@@ -1385,6 +1392,7 @@ export const EN = {
     one: '{n} galaxy',
     other: '{n} galaxies',
   },
+  'summary.labels': 'Labeled on the canvas: {list}.',
   'summary.selected': '{name} is selected.',
   'summary.noSelection': 'Nothing is selected.',
   'summary.unnamedBody': 'an unnamed body',

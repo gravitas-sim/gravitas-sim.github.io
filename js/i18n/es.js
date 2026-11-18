@@ -565,8 +565,10 @@ export const ES = {
   'settings.label.showAccelerationVectors': 'Mostrar vectores de aceleración',
   'settings.label.showPotentialWell': 'Mostrar el pozo de potencial',
   'settings.label.showScaleBar': 'Mostrar la barra de escala',
-  'settings.label.bodyLabels': 'Nombres de los cuerpos',
+  'settings.label.bodyLabels': 'Etiquetas de los cuerpos',
   'settings.option.bodyLabels.all': 'Todos',
+  'settings.option.bodyLabels.names': 'Solo nombres',
+  'settings.option.bodyLabels.masses': 'Solo masas',
   'settings.option.bodyLabels.bound':
     'El seleccionado y los de la investigación',
   'settings.option.bodyLabels.none': 'Ninguno',
@@ -1167,7 +1169,7 @@ export const ES = {
   'shortcut.units': 'Alternar unidades físicas / de simulación',
   'shortcut.trails': 'Alternar estelas',
   'shortcut.bodyLabels':
-    'Rotar los nombres: todos, seleccionado e investigación, ninguno',
+    'Rotar las etiquetas: todas, nombres, masas, seleccionado e investigación, ninguna',
   'shortcut.undo': 'Deshacer el último objeto colocado',
   'shortcut.inspect': 'Inspeccionar un objeto',
   'shortcut.place': 'Colocar un objeto con velocidad',
@@ -1201,6 +1203,11 @@ export const ES = {
   'inv.browser.activities.link': 'Ver las actividades de clase',
   'canvas.sizeDisclosure':
     'Cuerpos ampliados, sin escala común (radios: inspector)',
+  'canvas.sizeDisclosure': 'Tamaños de los cuerpos ampliados para visibilidad',
+  'canvas.reducedPopulation':
+    'Población reducida en este dispositivo: {n} de {total} cuerpos',
+  'canvas.crowdTrails':
+    'Estelas: el cuerpo seleccionado y los {n} más masivos de {total} cuerpos',
   'canvas.sizeDisclosure.detail':
     'Los diámetros del lienzo son ilustrativos. Cada tipo de cuerpo se amplía con un factor distinto, así que los tamaños no siguen una misma escala y sus proporciones no son físicas. Usa el inspector y las mediciones de las investigaciones para los radios.',
   'capture.screenshotFailed': 'No se pudo guardar la captura',
@@ -1370,6 +1377,7 @@ export const ES = {
     one: '{n} galaxia',
     other: '{n} galaxias',
   },
+  'summary.labels': 'Etiquetas en el lienzo: {list}.',
   'summary.selected': '{name} está seleccionado.',
   'summary.noSelection': 'No hay nada seleccionado.',
   'summary.unnamedBody': 'un cuerpo sin nombre',

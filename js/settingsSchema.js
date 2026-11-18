@@ -286,7 +286,7 @@ export const SETTING_ITEMS = Object.freeze([
     labelId: 'settings.label.bodyLabels',
     key: 'body_labels',
     type: 'option',
-    options: ['all', 'bound', 'none'],
+    options: ['all', 'names', 'masses', 'bound', 'none'],
   },
   {
     section: 'visuals',

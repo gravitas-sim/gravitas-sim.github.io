@@ -8,8 +8,8 @@
 //     pixels and none sits on another, at device pixel ratios 1 and 2;
 //   - the selected body carries a cue that shows in luminance, not only in hue;
 //   - a step's own bodies are named at any zoom, apart, whatever else is drawn;
-//   - the body_labels setting turns names to all, selected-and-lesson, or none,
-//     and the B key walks the three;
+//   - the body_labels setting turns labels to all, names, masses,
+//     selected-and-lesson, or none, and the B key walks the five;
 //   - a crowded scene is thinned to a stated cap, never smeared;
 //   - the size disclosure is drawn with the scale bar on or off.
 //
@@ -155,7 +155,7 @@ test.describe('names follow the step, the zoom and the setting', () => {
     }
   });
 
-  test('the setting turns names to all, selected-and-lesson, or none', async ({
+  test('the setting turns labels to all, names, masses, selected-and-lesson, or none', async ({
     page,
   }) => {
     const at = value =>
@@ -168,13 +168,17 @@ test.describe('names follow the step, the zoom and the setting', () => {
         value
       );
     expect((await at('all')).v.count).toBeGreaterThanOrEqual(3);
+    expect((await at('names')).v.count).toBeGreaterThanOrEqual(3);
+    expect((await at('masses')).v.count).toBeGreaterThanOrEqual(3);
     expect((await at('bound')).v.count).toBeGreaterThanOrEqual(3);
     expect((await at('none')).v.count).toBe(0);
     // An old save or link has no value; a bad one means the default.
     expect((await at('sideways')).v.count).toBeGreaterThanOrEqual(3);
   });
 
-  test('B walks all, selected and lesson, none', async ({ page }) => {
+  test('B walks all, names, masses, selected and lesson, none', async ({
+    page,
+  }) => {
     const mode = () =>
       page.evaluate(
         async () => (await import('/js/ui.js')).SETTINGS.body_labels
@@ -183,11 +187,11 @@ test.describe('names follow the step, the zoom and the setting', () => {
       (await import('/js/ui.js')).SETTINGS.body_labels = 'all';
     });
     const seen = [];
-    for (let i = 0; i < 3; i++) {
+    for (let i = 0; i < 5; i++) {
       await page.keyboard.press('b');
       seen.push(await mode());
     }
-    expect(seen).toEqual(['bound', 'none', 'all']);
+    expect(seen).toEqual(['names', 'masses', 'bound', 'none', 'all']);
   });
 
   test('the size disclosure is drawn with the scale bar off', async ({

@@ -175,8 +175,8 @@ their ceilings:
 | `js/i18n/en.deferred.js` | 3,998 | 3,998 |
 | `js/data/investigations/observing-sequence.js` | 3,341 | 3,341 |
 | `js/data/investigations/measurement-sequence.js` | 3,270 | 3,270 |
-| `js/investigations.js` | 3,052 | 3,052 |
-| `js/render.js` | 2,856 | 2,856 |
+| `js/investigations.js` | 3,104 | 3,104 |
+| `js/render.js` | 2,846 | 2,846 |
 | `js/data/investigations/depth/measurement-sequence.js` | 2,840 | 2,840 |
 <!--/fact-block-->
 
@@ -490,20 +490,6 @@ the record with `node tools/lesson-standard.mjs --record`, which also refreshes 
 in `docs/lesson-acceptance.json`. `node tools/lesson-standard.mjs --list` names each finding
 by lesson and step. None of it judges prose, and a lesson with no finding has avoided these
 patterns and nothing more.
-
-Where an instrument opens is its own declaration. `tool.values` is where the controls start
-and, when `tool.start` is absent, what the step's check may accept, as before. A step
-that wants the instrument to open somewhere else writes `tool: { id, values, start: { control:
-number } }`: the controls open at `start`, a student's own saved control values still go over
-it, and the instrument gets a button, "Return the instrument to its starting position", that
-puts the controls back. The rule `leak/opens-at-answer` judges the right object: it runs the
-instrument's own readout at the opening state, writes each readout into the field it would fill
-(a field's `source: { tool: rowId }`, else the reviewed table `tools/neutral-start-map.json`, keyed
-`lesson/sid`, where a field names a readout row by its label or id, a slider by `{ "control": id }`,
-or `null` for a field that is no instrument reading) and grades that object with the step's own
-`validate`. A core `measure` step with a tool whose opening passes is a finding; a step that reads
-a state prepared earlier says `prepared: true`; a step with no mapping is reported unmapped, never
-fine. `node tools/neutral-start-report.mjs [--steps] [--depths]` prints the three lists with counts per lesson.
 
 A measure field's expected value is written as `want: '9.33'` and no page reads it
 except the checks and the instructor key. `hint` is words for the empty box ("from
