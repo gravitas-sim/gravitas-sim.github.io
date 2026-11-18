@@ -112,6 +112,7 @@ describe('the two crowded scenes at each tier', () => {
   test('the belt is the same at every tier except its asteroids', () => {
     const { low, full } = table['kuiper-belt'];
     expect(full.total).toBe(309);
+    expect(low.total).toBe(49);
     expect(low.counts.planets).toBe(full.counts.planets);
     expect(low.counts.asteroids).toBeLessThan(full.counts.asteroids);
   });

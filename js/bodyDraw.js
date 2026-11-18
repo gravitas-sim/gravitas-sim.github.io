@@ -1,13 +1,9 @@
 // =============================================================================
 // How the bodies are painted
-// -----------------------------------------------------------------------------
-// The draw code for the planets, gas giants and their rings, asteroids, debris,
-// comets and black holes, formerly a `draw(ctx)` method on each class in
-// js/physics.js. The engine holds a table of drawers (registerBodyDrawers) that
-// this module fills, so the engine imports nothing that paints (the render
-// layer rule in check:architecture). Each function is the old method with
-// `this` passed as `o`. Stars, remnants, galaxies, particles and the shared
-// helpers: js/bodyDrawSky.js.
+// Planets, gas giants and rings, asteroids, debris, comets and black holes: the
+// table of drawers the engine holds (registerBodyDrawers) is filled here, so the
+// engine imports nothing that paints. Stars, remnants, galaxies, particles and
+// the shared helpers are in js/bodyDrawSky.js.
 // =============================================================================
 
 import { EARTH_MASSES_PER_JUPITER_MASS, SOLAR_MASS_UNIT } from './constants.js';
@@ -1168,28 +1164,10 @@ function drawComa(ctx, at, r, activity) {
 }
 
 /**
- * The two tails.
- *
- * A comet has two, pointing different directions; telling them apart is most
- * of what the picture teaches.
- *
- *   The ion tail is gas swept straight out by the stellar wind: narrow, blue,
- *   directly away from the star, so on the way out it leads rather than
- *   follows. (The old drawing pointed it opposite the velocity, which is the
- *   picture students already hold and the real geometry contradicts.)
- *
- *   The dust tail is grains the wind only nudges. They leave with the
- *   nucleus's orbital motion and fall behind, so it lies between anti-solar
- *   and the orbital trail: broader, yellower, drawn as an arc.
- *
- * Geometry from js/bodyVisuals.js, where it is tested.
- *
- * @param {CanvasRenderingContext2D} ctx - World-transformed context
- * @param {{x: number, y: number}} at - The nucleus
- * @param {number} r - Drawn nucleus radius, world units
- * @param {number} z - Current zoom
- * @param {Object} sun - The dominant light source
- * @param {number} activity - 0 to 1
+ * The two tails. The ion tail is gas swept straight away from the star by the
+ * wind: narrow, blue, leading on the way out. The dust tail is grains that fall
+ * behind the nucleus's orbital motion: broader, yellower, an arc between
+ * anti-solar and the orbital trail. Geometry is in js/bodyVisuals.js.
  */
 function drawTails(o, ctx, at, r, z, sun, activity) {
   // `tailLength` was written as screen pixels at zoom 1, so it carries over

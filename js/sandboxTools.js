@@ -38,7 +38,7 @@ import {
   pixelScale,
   resetKeepClear,
 } from './bodyLabels.js';
-import { crowdNotes } from './crowdDraw.js';
+import { crowdNotes } from './bodyDrawSky.js';
 import { SIM_UNITS_PER_AU, formatTime } from './units.js';
 import {
   world_to_screen,
@@ -622,7 +622,6 @@ export function drawInstrumentation(
 
   const pad = 12;
   const barY = H - pad - 10 - Math.max(0, bottomInset);
-  // The widest of the scale line's text, kept clear of body labels below.
   resetKeepClear();
   let keptW = 0;
 
@@ -699,8 +698,7 @@ export function drawInstrumentation(
     ctx.restore();
   }
 
-  // What a small device or a crowd left out, stated on the scene itself (and in
-  // the readout): at most two lines of two, above the scale line.
+  // What the tier or a crowd left out, above the scale line.
   let legendBottom = barY - 20;
   ctx.font = `11px ${INSTRUMENT_MONO}`;
   ctx.fillStyle = 'rgb(200, 214, 235)';

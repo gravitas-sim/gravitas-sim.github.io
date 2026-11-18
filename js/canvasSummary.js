@@ -1,31 +1,11 @@
 // =============================================================================
 // A textual equivalent of the simulation
-// -----------------------------------------------------------------------------
-// The canvas is the application. Everything a sighted reader learns at a glance
-// - which system is loaded, whether it is running, what is in it, what they
-// have selected - is painted as pixels and is otherwise unavailable.
-//
-// This writes the same facts as a sentence, into a hidden element that the
-// canvas points at with aria-describedby. A screen reader reaching the canvas
-// hears what is in it rather than "graphic".
-//
-// What it is not
-// -----------------------------------------------------------------------------
-// It is not a live region. The simulation changes sixty times a second, and a
-// live region attached to it would produce an unusable stream of speech that no
-// reader could interrupt - which is worse than saying nothing, because it also
-// drowns out the announcements that matter. The description is read when a
-// reader asks for it, by moving to the canvas.
-//
-// Discrete events - a scenario loaded, the simulation paused, a body selected -
-// are different: those are worth interrupting for, they happen when a reader
-// did something, and they go to the existing polite live region through
-// announce(). Nothing here announces on a timer.
-//
-// The honest limit is written down in ACCESSIBILITY.md: a sentence describing
-// four planets on elliptical orbits is not equivalent to watching them move,
-// and no amount of text makes it so. What it can do is make the state of the
-// simulation legible, which is what most of the interface's controls act on.
+// The canvas is the application; this writes what it shows (the system, whether
+// it runs, what is in it, what is selected, what is labelled) as a sentence in a
+// hidden element the canvas points at with aria-describedby. It is not a live
+// region (sixty changes a second would drown the announcements that matter);
+// discrete events go to the polite live region through announce(). The honest
+// limit is in ACCESSIBILITY.md: text makes the state legible, not equivalent.
 // =============================================================================
 
 import { state, current_scenario_name, registerCommands } from './appState.js';
@@ -43,7 +23,7 @@ import {
 import { t } from './i18n/index.js';
 import { lightingNotes } from './bodyDraw.js';
 import { drawnLabels } from './bodyLabels.js';
-import { crowdNotes } from './crowdDraw.js';
+import { crowdNotes } from './bodyDrawSky.js';
 
 // For the inspector's Appearance disclosure, which loads lazily and must not
 // import the drawing modules itself (js/inspectorView.js says why).
@@ -122,8 +102,6 @@ export function summaryText() {
     parts.push(...lightingNotes(selected));
   }
 
-  // What the canvas has named, and what a small device or a crowd left out of
-  // it: the drawn labels are text on pixels and nowhere else.
   const named = drawnLabels();
   if (named.length)
     parts.push(

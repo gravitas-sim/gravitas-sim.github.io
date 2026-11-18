@@ -47,6 +47,9 @@ import {
   STAR_PALETTE,
   generateStarfield as buildStarfield,
   indexStarfield,
+  beginCrowdFrame,
+  crowdNotes,
+  crowdTrails,
 } from './bodyDrawSky.js';
 import {
   LOD_POINT_MAX_PX,
@@ -55,7 +58,6 @@ import {
   starColor,
   trailSpeedScale,
 } from './bodyVisuals.js';
-import { beginCrowdFrame, crowdNotes, crowdTrails } from './crowdDraw.js';
 import { setBloomLayer } from './bodyDraw.js';
 import {
   claim,
@@ -1010,7 +1012,6 @@ function framedTrail(trail, shifts, newestTick) {
   return framedTrailView;
 }
 
-// Original drawScene function from index.html
 const drawScene = () => {
   ctx.setTransform(1, 0, 0, 1, 0, 0);
   ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -1984,7 +1985,6 @@ function readoutHtml(drawn) {
     );
   }
 
-  // What the tier or the crowd left out of the drawing or the build.
   for (const note of crowdNotes())
     sections.push(`<p class="readout-caveat">${escapeHtml(note)}</p>`);
 

@@ -1,25 +1,20 @@
-// Body names and the selected-body cue (criterion I-9, DESIGN_SYSTEM.md).
-// Drawers queue a label with bodyLabel; drawBodyMarks draws the cue, then the
-// labels by priority, each placed only where no placed label is. A label says a
-// name or a mass (the body_labels setting). Sizes are CSS pixels: the backing
-// store is renderScale times the CSS box, so a font in "px" is smaller than it
-// says on a sharp screen.
+// Body labels and the selected-body cue (criterion I-9). Drawers queue a label;
+// drawBodyMarks draws the cue, then the labels by priority, each only where no
+// placed label is. Sizes are CSS pixels (the backing store is scaled).
 import { SETTINGS, state } from './appState.js';
 import { drawnRadiusPx } from './bodyVisuals.js';
 import { SUN_SYMBOL, drawSolarLabel } from './utils.js';
 
 export const LABEL_MIN_CSS_PX = 11;
 export const LABEL_CAP = 24; // labels beyond the chosen and bound bodies
-// all: a name where the body has one given, otherwise its mass (the default);
-// names or masses: one kind only; bound: the chosen and a lesson's bodies.
+// all: a name where the model gives one, else the mass; bound: chosen and lesson bodies.
 export const LABEL_MODES = ['all', 'names', 'masses', 'bound', 'none'];
 
 let k = 1;
 let queue = [];
 let spots = [];
 let isBound = () => false;
-// Where the canvas draws text of its own (the scale bar and its notes), in
-// backing-store pixels. Labels are placed around it; it is set a frame ahead.
+// Canvas text of its own (scale bar, notes), set a frame ahead; labels keep off it.
 let keptClear = [];
 
 export const setBoundTest = fn => {
@@ -35,12 +30,10 @@ export function frameScale(canvas) {
 
 export const pixelScale = () => k;
 
-/** Start a frame's list of places the labels must leave alone. */
 export const resetKeepClear = () => {
   keptClear = [];
 };
 
-/** Keep the labels off this box (CSS pixels), which the canvas fills itself. */
 export const keepClear = (x0, y0, x1, y1) =>
   keptClear.push({ x0: x0 * k, y0: y0 * k, x1: x1 * k, y1: y1 * k });
 
@@ -50,18 +43,13 @@ export const labelFont = (px, family = 'Roboto Mono', weight = '') =>
 export const labelMode = () =>
   LABEL_MODES.includes(SETTINGS.body_labels) ? SETTINGS.body_labels : 'all';
 
-/**
- * Queue a label: `at` the body's screen centre, `r` where the label starts below it.
- * The spec holds `name` (what the default shows, for a body named in the model),
- * `known` (any name the body has, for the names setting) and its mass as `text`
- * or as `value` with `symbol` and `suffix`.
- */
+/** Queue a label at screen point `at`, starting `r` below it. spec: name (default view), known (any name), mass as text or value+symbol+suffix. */
 export function bodyLabel(o, at, r, spec) {
   const chosen = o === state.selectedObject?.object;
   if (spec.gate || chosen || isBound(o)) queue.push({ o, at, r, spec, chosen });
 }
 
-/** What this label says in this mode: its name, or null for its mass, or false for nothing. */
+/** What a label says: a name, null for its mass, false for nothing. */
 function say({ spec, chosen, o }, mode) {
   const mass = spec.text !== undefined || spec.value !== undefined;
   if (mode === 'names') {
@@ -74,7 +62,6 @@ function say({ spec, chosen, o }, mode) {
   return spec.name !== undefined ? spec.name : mass ? null : false;
 }
 
-/** The text of a mass label, as the reader hears it. */
 const massText = spec =>
   spec.text ??
   `${spec.value} M${spec.symbol || SUN_SYMBOL}${spec.suffix || ''}`;
@@ -84,7 +71,7 @@ const overlaps = (a, b) =>
 
 export const nameSpots = () => [...spots];
 
-/** The labels of the last frame, as text, in the order they were placed. */
+/** Last frame's label texts. */
 export const drawnLabels = () => spots.filter(p => p.text).map(p => p.text);
 
 /** Take a spot for text w by h centred at (x, y); false if one in `placed` is there. */
@@ -150,7 +137,6 @@ export function drawBodyMarks(ctx, toScreen, cap = LABEL_CAP) {
     ctx.font = labelFont(spec.px);
     const h = Math.max(spec.px, LABEL_MIN_CSS_PX) * k * 1.15;
     const plain = named || spec.text !== undefined;
-    // The unit's symbol is drawn smaller; its width is allowed for beside the text.
     const w =
       ctx.measureText(
         named ? word : (spec.text ?? `${spec.value} M${spec.suffix || ''}`)

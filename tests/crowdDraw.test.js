@@ -1,8 +1,8 @@
 // =============================================================================
 // What a crowd draws: trails, detail, names
 // -----------------------------------------------------------------------------
-// js/crowdDraw.js decides, once a frame, which bodies of a crowded scene keep a
-// trail and which are drawn in full; js/bodyDrawSky.js asks it. Drawing is the
+// The crowd rules in js/bodyDrawSky.js decide, once a frame, which bodies of a crowded scene keep a
+// trail and which are drawn in full; the level-of-detail rule asks them. Drawing is the
 // only thing any of it changes, so the last block drives the real draw path
 // and checks that every body is still drawn at every tier.
 // =============================================================================
@@ -27,9 +27,9 @@ import {
   crowdDetail,
   crowdTrails,
   isCrowd,
+  lodOf,
   setCrowdCaps,
-} from '../js/crowdDraw.js';
-import { lodOf } from '../js/bodyDrawSky.js';
+} from '../js/bodyDrawSky.js';
 
 const view = {
   paused: true,

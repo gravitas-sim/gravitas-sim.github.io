@@ -263,7 +263,7 @@ export const LOD_SHADED_MAX_PX = 10;
  * @param {string} [options.tier] - 'full' or 'low'
  * @param {boolean} [options.crowded] - True in a field of hundreds of bodies
  * @param {boolean} [options.detailed] - A crowd's grant of full detail to this
- *   body (js/crowdDraw.js); the low tier never takes it
+ *   body (crowd rules in js/bodyDrawSky.js); the low tier never takes it
  * @returns {string} One of LOD
  */
 export function lodFor(
@@ -297,15 +297,7 @@ export function lodAtLeast(level, atLeast) {
 
 // --- Trails ----------------------------------------------------------------------
 
-/**
- * Brightness reference for a trail, in the object's own speed units.
- * Scaled to the fastest point in the trail rather than a fixed 50 units/time,
- * which hid the trail of anything slow (a 1.58 units/time binary fell under
- * the 0.05 draw threshold); the floor keeps a circular orbit off the bottom.
- *
- * @param {Array<{velocity: number}>} trail - The object's trail points
- * @returns {number} Speed to treat as full brightness, never zero
- */
+/** Speed taken as full brightness for a trail: its own fastest point, never zero. */
 export function trailSpeedScale(trail) {
   let peak = 0;
   for (let i = 0; i < trail.length; i++) {
@@ -314,9 +306,7 @@ export function trailSpeedScale(trail) {
   return peak > 0 ? peak : 1;
 }
 
-// Slowest a trail point is ever drawn at, as a fraction of full brightness.
-// A circular orbit has no speed variation to show, so without a floor it would
-// render at whatever the ramp's bottom happens to be.
+// Slowest a trail point is drawn, as a fraction of full brightness.
 export const TRAIL_MIN_INTENSITY = 0.45;
 
 // --- Deterministic per-object variation --------------------------------------

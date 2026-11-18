@@ -332,16 +332,8 @@ export function renderScale(cssW, cssH) {
 /**
  * Caps applied to the generic population settings when a world is built.
  *
- * Read once, while the world is generated, because that is the only moment the
- * counts mean anything. They are a read-time override and never written back:
- * the first version assigned them into the live SETTINGS, which the generator
- * reads in nineteen places, and that was harmful because SETTINGS is the
- * reader's own document - what a share link serializes, what a saved state
- * restores and what the A/B bench hashes. A teacher on a slow laptop silently
- * exported num_asteroids: 40 to a class on faster machines, and the bench
- * could report a difference between two runs that differed only in frame rate.
- * The tier may spend fewer pixels and draw fewer bodies. It may not edit the
- * document.
+ * Read once as the world is built, as a read-time override, never written into
+ * the reader's SETTINGS (what share links, saves and the A/B bench hash).
  *
  * Only the counts a scenario asks for generically. Scenarios that place every
  * body by hand - the resonance systems, TRAPPIST-1, the galaxy discs - are left
@@ -366,13 +358,7 @@ export function populationCaps() {
 // The world a tier built, for the readout. Set once per build by js/world/build.js.
 let builtNote = null;
 
-/**
- * Record a build: how many bodies it made and, for a capped build, how many the
- * full tier would have made (what each cap cut, by the rule the generator
- * follows for that count). `pop` is the build's own count function, null when
- * nothing was capped; `starsAlready` the stars a preset placed before the
- * generic count began.
- */
+/** Record a build: bodies made and, if capped, what the full tier would have made. `pop` is the builder's count function (null if uncapped). */
 export function recordBuild(pop, settings, starsAlready, lists) {
   const built = lists.reduce((n, l) => n + l.length, 0);
   let cut = 0;
