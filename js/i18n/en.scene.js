@@ -1,6 +1,6 @@
 // The sandbox scene's own words in English: the frame the picture is drawn in,
 // which bodies pull on which, and the barycenter marker and its Tools control.
-// Registered at start-up by js/barycentreMarker.js.
+// Registered at start-up by js/referenceFrame.js.
 export const EN_SCENE = {
   'rail.barycenterMarker': 'Show barycenter',
   'rail.barycenterMarker.hint':

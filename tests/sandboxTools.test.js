@@ -361,13 +361,15 @@ describe('the canvas instrumentation', () => {
   test('draws a scale bar and its disclosure, and nothing else', () => {
     const ctx = recordingContext();
     drawInstrumentation(ctx, canvas, settings, 1, 0, []);
-    // Two lines. The bar labels itself with a distance, and underneath it the
-    // canvas admits that the bodies are not drawn to the same scale the bar
-    // measures. The second line is here rather than in the interface so that
-    // it is inside every screenshot and every recording.
-    expect(ctx.text.length).toBe(2);
+    // Three texts. The bar labels itself with a distance, and underneath it
+    // the canvas admits that the bodies are not drawn to the same scale the
+    // bar measures, and names the frame the picture is drawn in. Both are
+    // here rather than in the interface so that they are inside every
+    // screenshot and every recording.
+    expect(ctx.text.length).toBe(3);
     expect(ctx.text[0]).toMatch(/AU|km|m\b/);
     expect(ctx.text[1].toLowerCase()).toContain('not to scale');
+    expect(ctx.text[2]).toBe('Frame: World');
     // No panel: nothing rounded was filled behind anything.
     expect(ctx.calls.some(c => c[0] === 'roundRect')).toBe(false);
   });
@@ -411,8 +413,9 @@ describe('the canvas instrumentation', () => {
     );
     // The bar goes, the statement about body sizes does not: it is about the
     // bodies, and a figure without a bar still shows them enlarged.
-    expect(ctx.text).toHaveLength(1);
+    expect(ctx.text).toHaveLength(2);
     expect(ctx.text[0].toLowerCase()).toContain('not to scale');
+    expect(ctx.text[1]).toBe('Frame: World');
     // And it points to where the figures are: the readout's Sizes button.
     expect(ctx.text[0]).toContain('Sizes');
   });

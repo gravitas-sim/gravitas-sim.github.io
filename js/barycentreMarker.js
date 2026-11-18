@@ -19,13 +19,8 @@ import {
 } from './physics.js';
 import { dominantPrimary } from './orbital.js';
 import { barycenterOf } from './lesson/barycenter.js';
-import { t, registerMessages } from './i18n/index.js';
-import { EN_SCENE } from './i18n/en.scene.js';
-import { ES_SCENE } from './i18n/es.scene.js';
-
-// The scene's words (frame, sources, marker) are read on every frame.
-registerMessages('en', EN_SCENE);
-registerMessages('es', ES_SCENE);
+// The scene's words are registered by js/referenceFrame.js.
+import { t } from './i18n/index.js';
 
 /** Off, the whole system, or the selected body and its primary. */
 export const MARKER_MODES = ['off', 'system', 'pair'];

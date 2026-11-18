@@ -24,7 +24,14 @@
 // used from physics, render and ui without a cycle.
 // =============================================================================
 
-import { t } from './i18n/index.js';
+import { t, registerMessages } from './i18n/index.js';
+import { EN_SCENE } from './i18n/en.scene.js';
+import { ES_SCENE } from './i18n/es.scene.js';
+
+// The scene's own words (the frame line, what pulls on what, the barycenter
+// marker), read every frame; registered here, which the step loads at start-up.
+registerMessages('en', EN_SCENE);
+registerMessages('es', ES_SCENE);
 
 /** Positions as the scenario integrates them. No transform. */
 export const WORLD = 'world';

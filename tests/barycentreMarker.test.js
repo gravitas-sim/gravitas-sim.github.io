@@ -9,7 +9,7 @@ import { readFileSync } from 'node:fs';
 import * as physics from '../js/physics.js';
 import { physicsSettings, updatePhysicsSettings } from '../js/engine/state.js';
 import { LIST_KIND, sourceLists, isSourceKind } from '../js/engine/sources.js';
-import { buildScene, RATES } from './barycentreRuns.js';
+import { buildScene } from './barycentreRuns.js';
 import { markerPoint } from '../js/barycentreMarker.js';
 import { sourcesStatement } from '../js/canvasSummary.js';
 import {
