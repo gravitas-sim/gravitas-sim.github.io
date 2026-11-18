@@ -175,8 +175,9 @@ number:
   judged alone.
 - *Arrow, trail and plot.* The arrow is the shaft the overlay strokes in its own
   colour, drawn for a body at its speed and at three times it; the trail span is
-  the trail's sample budget times the step the app plans at that frame rate
-  (`js/timestep.js`); plot text is read from the canvas recorder or from the
+  the engine's own `trailSpan()` (`js/trailSpan.js`), a stated simulated time
+  that does not depend on the step the frame rate gives; the proof at three
+  frame rates drives the real engine in `tests/trailSpan.test.js`; plot text is read from the canvas recorder or from the
   plot SVG's `text` nodes scaled by the viewBox.
 - *The announced action.* A control in the lesson panel whose name matches
   `SCENE_ACTION_NAME` in `tools/visual-criteria.mjs`. None exists at 3.0; the

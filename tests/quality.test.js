@@ -316,7 +316,10 @@ describe('what the tier actually changes', () => {
   test('the presentation keys are overrides, not caps', () => {
     setTier('low');
     const off = renderOverrides();
-    expect(off.trail_length).toBeLessThan(15);
+    expect(off.show_object_lensing).toBe(false);
+    // The low tier thins a trail's samples in the engine and leaves its span
+    // alone (tests/trailSpan.test.js); it must not shorten the setting.
+    expect('trail_length' in off).toBe(false);
   });
 
   test('the tier does not also override star_density', () => {

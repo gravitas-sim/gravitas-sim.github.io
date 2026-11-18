@@ -52,13 +52,13 @@ export const ES_SETTINGSHELP = {
   'setHelp.trail_style':
     '«Nube» dibuja trazos superpuestos y difusos; «Simple», una línea fina; «Resplandor», una hilera de puntos luminosos, más brillantes donde el cuerpo iba más rápido. Es solo un efecto visual; surte efecto de inmediato.',
   'setHelp.trail_length':
-    'Cuántas posiciones registradas conserva cada traza, una por paso de integración, así que una traza más larga muestra más órbita. La longitud también varía con el zoom (de 0,6× a 1,5×) y puede reducirse con «Detalle adaptativo» o con el nivel de calidad Baja. Es solo un efecto visual; surte efecto de inmediato.',
+    'Cuánto tiempo simulado abarca cada traza, indicado junto al deslizador; una traza más larga muestra más órbita. El tramo es el mismo con cualquier tasa de fotogramas, velocidad o zoom. «Detalle adaptativo» y el nivel de calidad Baja dibujan menos puntos a lo largo de él, pero no lo acortan. Es solo un efecto visual; surte efecto de inmediato.',
   'setHelp.trail_color_mode':
     '«Por tipo» colorea cada traza con el color del propio cuerpo o el de su tipo (las estrellas, según su temperatura). «Por velocidad» colorea cada traza en una escala de morado a amarillo según la velocidad actual del cuerpo, de modo que un cuerpo en una órbita excéntrica cambia de color al acelerar y frenar. Es solo un efecto visual; surte efecto de inmediato.',
   'setHelp.show_velocity_vectors':
-    'Dibuja una flecha de velocidad (v) sobre el cuerpo seleccionado; un clic en un cuerpo lo selecciona. La flecha tiene longitud fija y solo indica la dirección, no la rapidez. Surte efecto de inmediato.',
+    'Dibuja una flecha de velocidad (v) sobre el cuerpo seleccionado; un clic en un cuerpo lo selecciona. Su longitud sigue la rapidez, con una única escala para toda la escena, y la leyenda indica qué representa 1 cm. Surte efecto de inmediato.',
   'setHelp.show_acceleration_vectors':
-    'Dibuja la aceleración total del cuerpo seleccionado, la que de verdad usó el integrador, como una flecha de longitud fija, con flechas discontinuas a la misma escala para las ocho fuentes más intensas como máximo. Junto a la flecha de velocidad, muestra que un cuerpo no se mueve en la dirección en que se lo atrae. Surte efecto de inmediato.',
+    'Dibuja la aceleración total del cuerpo seleccionado, la que de verdad usó el integrador, como una flecha con su propia escala, indicada en la leyenda, con flechas discontinuas a la misma escala para las ocho fuentes más intensas como máximo. Junto a la flecha de velocidad, muestra que un cuerpo no se mueve en la dirección en que se lo atrae. Surte efecto de inmediato.',
   'setHelp.show_potential_well':
     'Sombrea el fondo con el potencial gravitatorio newtoniano de los cuerpos más masivos (hasta 24), en una escala de color logarítmica, con la G actual y el mismo suavizado que la ley de fuerza. Es solo una imagen del campo y no cambia el movimiento. Surte efecto de inmediato.',
   'setHelp.show_scale_bar':
@@ -106,9 +106,9 @@ export const ES_SETTINGSHELP = {
   'setHelp.barnes_hut_theta':
     'El ángulo de apertura del árbol de Barnes-Hut: cuanto menor, más preciso y más lento. Medido en un cúmulo de 78 cuerpos, el valor por defecto 0,4 da un error medio en la fuerza cercano al 0,5 % y 0,7 cercano al 4 %, con casos extremos mucho mayores. Solo importa mientras la gravedad aproximada está realmente en uso.',
   'setHelp.adaptive_detail':
-    'Cuando los fotogramas van más lentos que el objetivo de 60 por segundo, las trazas se acortan, hasta el 60 % de la longitud fijada, y vuelven a crecer cuando la máquina se recupera; se revisa cada 5 segundos. No cambia nada más, y nunca la física. Surte efecto de inmediato.',
+    'Cuando los fotogramas van más lentos que el objetivo de 60 por segundo, las trazas se dibujan con menos puntos, hasta el 60 %, y conservan su duración; los puntos vuelven cuando la máquina se recupera; se revisa cada 5 segundos. No cambia nada más, y nunca la física. Surte efecto de inmediato.',
   'setHelp.quality_tier':
-    'La opción automática pasa a Baja cuando la frecuencia medida se mantiene por debajo de unos 32 fotogramas por segundo y vuelve a Completa por encima de unos 48; Completa y Baja fijan el nivel. Baja dibuja el lienzo al 70 % de resolución, desactiva la lente gravitatoria y los anillos de ondas gravitatorias, acorta las trazas, aclara el campo de estrellas y, en la siguiente reconstrucción, limita las poblaciones generadas (los escenarios con cuerpos colocados a mano los conservan todos). El dibujo cambia de inmediato, y la elección se mantiene al cargar otro escenario.',
+    'La opción automática pasa a Baja cuando la frecuencia medida se mantiene por debajo de unos 32 fotogramas por segundo y vuelve a Completa por encima de unos 48; Completa y Baja fijan el nivel. Baja dibuja el lienzo al 70 % de resolución, desactiva la lente gravitatoria y los anillos de ondas gravitatorias, dibuja las trazas con la mitad de los puntos, aclara el campo de estrellas y, en la siguiente reconstrucción, limita las poblaciones generadas (los escenarios con cuerpos colocados a mano los conservan todos). El dibujo cambia de inmediato, y la elección se mantiene al cargar otro escenario.',
   'settings.level.introductory.hint':
     'Los valores por defecto: unidades físicas, tres cifras significativas y la lectura de conservación desactivada. Ningún nivel oculta nada.',
   'settings.level.majors.hint':

@@ -54,7 +54,7 @@ import {
   advanceSimulationTime,
   setLiveBodyCount,
   trailTick,
-  advanceTrailTick,
+  advanceTrailClock,
   trailBudget,
   worldGeneration,
   minInteractionDistance,
@@ -557,9 +557,10 @@ export const updatePhysics = dt => {
     workerSentAt = performance.now();
   }
 
-  // One tick per step, before anything appends: every point pushed below shares
-  // this number, which is what makes cross-body frame changes possible.
-  advanceTrailTick();
+  // The trail clock runs every step; a sample is taken when a reference step of
+  // simulated time has passed (js/trailSpan.js). Every point pushed below shares
+  // the tick, which is what makes cross-body frame changes possible.
+  const trailSample = advanceTrailClock(dt);
 
   // One place for the halo, applied before whichever gravity solver runs.
   //
@@ -603,15 +604,17 @@ export const updatePhysics = dt => {
 
   applyIntegratorStep(cachedAllPhysicsObjects, stepCount, dt, halo);
 
-  for (let i = 0; i < stepCount; i++) {
-    const obj = cachedAllPhysicsObjects[i];
-    if (!obj.alive) continue;
-    obj.update_trail();
-  }
+  if (trailSample) {
+    for (let i = 0; i < stepCount; i++) {
+      const obj = cachedAllPhysicsObjects[i];
+      if (!obj.alive) continue;
+      obj.update_trail();
+    }
 
-  // Same tick, same budget as the trails just appended, so the barycenter frame
-  // can be resolved for exactly the span the trails cover.
-  recordBarycenter(trailTick, cachedBarycenterBodies, trailBudget());
+    // Same tick, same budget as the trails just appended, so the barycenter
+    // frame can be resolved for exactly the span the trails cover.
+    recordBarycenter(trailTick, cachedBarycenterBodies, trailBudget());
+  }
 
   // Update black hole orbits and effects
   // Same two-pass rule as the bodies above: every hole's acceleration comes

@@ -20,6 +20,7 @@ import {
   ringGeometryFor,
 } from '../bodyVisuals.js';
 import { gravitational_acceleration } from './forces.js';
+import { trailReferenceStep } from '../trailSpan.js';
 import {
   nextPhysicsObjectId,
   particlePool,
@@ -27,6 +28,8 @@ import {
   tracerColor,
   physicsSettings,
   trailTick,
+  getTrailTime,
+  trailSpan,
   trailBudget,
   MASS_UNIT_KG,
   paintBody,
@@ -512,25 +515,37 @@ export class PhysicsObject {
     this.pos.y = py;
   }
 
+  /** Append a trail point; drop points older than the span. */
   update_trail() {
     if (!this.alive) return;
+    const now = getTrailTime();
+    const unit = trailReferenceStep(
+      physicsSettings.max_timestep,
+      physicsSettings.sim_speed
+    );
+    const span = trailSpan();
     const budget = trailBudget();
 
-    // Ensure array does not exceed budget
-    if (this.trail.length >= budget) {
-      this.trail.shift();
+    let stale = 0;
+    while (
+      stale < this.trail.length &&
+      (now - this.trail[stale].t >= span || this.trail.length - stale >= budget)
+    ) {
+      stale++;
     }
+    if (stale) this.trail.splice(0, stale);
+
     this.trail.push({
       ...this.pos,
       tick: trailTick,
       timestamp: Date.now(),
       velocity: Math.hypot(this.vel.x, this.vel.y),
       age: 0,
+      t: now,
     });
 
-    // Increment ages
     for (let i = 0; i < this.trail.length; i++) {
-      this.trail[i].age += 1;
+      this.trail[i].age = (now - this.trail[i].t) / unit;
     }
   }
 
