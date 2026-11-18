@@ -1208,8 +1208,6 @@ export const ES = {
     'Estelas: el cuerpo seleccionado y los {n} más masivos de {total} cuerpos',
   'canvas.sizeDisclosure.detail':
     'Las distancias se dibujan a una sola escala, la que muestra la barra de escala. Los tamaños de los cuerpos no siguen una misma escala: cada tipo de cuerpo se amplía con su propio factor, así que ni un tamaño ni la proporción entre dos tamaños se pueden leer en el lienzo. El botón Tamaños de la lectura dice cuánto, y el inspector da cada radio.',
-  'sizes.button': 'Tamaños',
-  'overlay.orbitGeometry': 'Geometría de la órbita',
   'capture.screenshotFailed': 'No se pudo guardar la captura',
   'chart.notReady': 'El gráfico aún no está listo',
   'chart.exportFailed': 'No se pudo exportar el gráfico',
