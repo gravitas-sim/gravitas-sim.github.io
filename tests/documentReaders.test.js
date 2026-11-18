@@ -166,6 +166,11 @@ const PARSES = {
     'a notebook and an input, bounded and checked against the catalogue',
   ],
   'js/lab3dPage.js': [1, 'none', 'route room: a system file'],
+  'js/lesson/runs.js': [
+    1,
+    'none',
+    'a run row this lesson saved itself, in a try',
+  ],
   'js/lab3dLab.js': [
     2,
     'none',

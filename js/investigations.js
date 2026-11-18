@@ -15,6 +15,7 @@ import {
   parseFieldNumber,
   progressFor,
   fieldModule,
+  runsModule,
   renderProgressNotice,
   renderSaveStatus,
   save,
@@ -62,7 +63,9 @@ import {
   comets,
   neutron_stars,
   white_dwarfs,
+  DT,
   getSimulationTime,
+  setSimulationTime,
   conservationDrift,
   getWorldGeneration,
 } from './physics.js';
@@ -73,7 +76,8 @@ import {
   relativeInsolation,
   stellarPropertiesFor,
 } from './habitability.js';
-import { habitableZoneModelFromSettings } from './render.js';
+import { habitableZoneModelFromSettings, setFixedStep } from './render.js';
+import { STEP_SECONDS, frameAdvance } from './timestep.js';
 import { currentRadialVelocity, observedStar } from './radialVelocity.js';
 import { orbitalElements, dominantPrimary, pairEnergy } from './orbital.js';
 import {
@@ -151,6 +155,7 @@ import { helpStages, helpTaken } from './answerFeedback.js';
 import { frameState } from './referenceFrame.js';
 import {
   SCALE,
+  adoptStage,
   applyStage,
   centerOnSelected,
   clearStage,
@@ -160,6 +165,7 @@ import {
   setStageScale,
   stageContext,
   stageLoaded,
+  stageMemo,
   stageScale,
   stagePresence,
   stagedStars,
@@ -343,11 +349,9 @@ function probeContext() {
     speed: formatSpeed,
     time: formatTime,
     mass: formatMass,
-    // The simulated clock itself, in simulated seconds. An instrument that
-    // measures anything over time - a period, a resonant angle, a libration -
-    // needs the engine's own clock rather than wall time, because the two are
-    // not proportional: the frame rate varies and the scenarios run at speeds
-    // from one to seven and a half thousand.
+    // The simulated clock, in simulated seconds: an instrument that measures a
+    // period or a libration needs it, not wall time (scenarios run at speeds
+    // from one to seven and a half thousand).
     clock: () => getSimulationTime(),
     // Plain numbers, for steps that need to compute rather than display.
     years: simTime => (simTime * timeUnitSeconds()) / 3.15576e7,
@@ -359,21 +363,15 @@ function probeContext() {
     days: () => currentTimeDays(),
     observerAngle: () => getObserverAngle(),
     // What the recorded light curve contains: the baseline, every complete
-    // transit in it and a running count. A transit that goes past in half a
-    // second cannot be caught by hand, and a real measurement is not made that
-    // way either.
+    // transit and a running count (one passes in half a second).
     photometry: () => transitAnalysis(),
-    // The rotation curve and the cluster measurements, so a step can ask a
-    // student to read a slope or a dispersion and then check what they read.
-    // Same functions the panel itself calls: a lesson and the instrument it
-    // points at must not be able to disagree.
+    // The rotation curve and cluster measurements, from the same functions the
+    // panel calls, so a lesson and its instrument cannot disagree.
     rotationCurve: () => rotationCurveState(),
     cluster: () => clusterState(),
     haloOn: () => darkMatterHaloOn(),
     // Which reference frame the view is in, and where a body lies as seen from
-    // its origin. A lesson about retrograde motion has to be able to say
-    // "you have not switched frames yet" and to report the direction a body is
-    // in, which is the observable the whole subject rests on.
+    // its origin (retrograde motion rests on both).
     frame: () => frameState(),
     seenFrom: (body, originName) => {
       const origin = allBodies().find(b =>
@@ -876,21 +874,25 @@ function validateStep(step, id) {
 // Fetched when a lesson opens (loadSeams), so draws and reads stay synchronous.
 let figures = null;
 
-/** Fetch the plot, ellipse and import code the steps need. @returns {?Promise} */
+/** Fetch the plot, ellipse, import and controlled-run code the steps need. @returns {?Promise} */
 const loadSeams = steps =>
-  !figures &&
-  steps.some(
-    s =>
-      s.plot ||
-      s.point ||
-      s.type === 'ellipse' ||
-      s.importFromSelection ||
-      s.fields?.some(f => f.source)
-  )
-    ? import('./investigations/figures.js').then(m =>
+  Promise.all([
+    !figures &&
+      steps.some(
+        s =>
+          s.plot ||
+          s.point ||
+          s.type === 'ellipse' ||
+          s.importFromSelection ||
+          s.fields?.some(f => f.source)
+      ) &&
+      import('./investigations/figures.js').then(m =>
         fieldModule((figures = m))
-      )
-    : null;
+      ),
+    !slots.runs &&
+      steps.some(s => s.variation) &&
+      import('./lesson/runs.js').then(runsModule),
+  ]);
 
 /** Draw the step's scatter plot from the lesson's current state. */
 function drawPlot(step, id) {
@@ -962,6 +964,15 @@ function renderStep() {
     renderStep,
     refreshMeasurements,
     importSelection,
+    visited: () => visited,
+    runs: {
+      probe: x => x.probe?.(probeContext()),
+      payloadFromSetup,
+      applyLocks,
+      bind: () => bindStepRoles(false),
+      stageUp: () => stagedStars().length > 0,
+      world: runWorld,
+    },
   });
   refreshMeasurements();
 }
@@ -1129,13 +1140,10 @@ function syncToolPanel(step) {
   const spec = step?.tool;
   const widget = spec ? getWidget(spec.id) : null;
   stopToolLoop();
-  // An instrument whose family is fetched on demand. The panel says it is
-  // loading, in the note - made a status region for as long as it is saying
-  // so, because it is not one otherwise - fetches the family, and redraws only
-  // if the reader is still on this step. A failed fetch says so in the same
-  // region. If asking again can help, it offers a retry, which takes focus; if
-  // it cannot (see WidgetLoadError), it offers a reload, which keeps the
-  // reader's answers because they are already saved.
+  // An instrument whose family is fetched on demand: the note says it is
+  // loading (a status region only while it does), and the step redraws only if
+  // the reader is still on it. A failed fetch offers a retry, or when asking
+  // again cannot help (WidgetLoadError) a reload, which keeps saved answers.
   els.toolNote.removeAttribute('role');
   if (spec && !widget && needsLoading(spec.id)) {
     els.toolNote.setAttribute('role', 'status');
@@ -1372,12 +1380,11 @@ function clearToolInstrument() {
 }
 
 /**
- * Let a widget be driven by pointing at its canvas, if it declares `pick`.
- * The hook gets a position in CSS pixels, writes into the values, and goes
- * through paintTool like a slider, so the sliders move to match. A widget that
- * declares `pick` also names the two controls the arrow keys step, and its
- * canvas becomes focusable: a diagram only a drag can drive is closed to some
- * students.
+ * Let a widget be driven by pointing at its canvas, if it declares `pick`: the
+ * hook gets a position in CSS pixels, writes into the values and goes through
+ * paintTool like a slider. It also names the two controls the arrow keys step,
+ * and the canvas becomes focusable (a diagram only a drag can drive is closed
+ * to some students).
  * @param {Object} widget - The widget being shown
  * @param {Object} spec - The step's tool spec
  * @param {Function} applied - The runner's own "a control moved" path
@@ -1506,13 +1513,9 @@ function paintTool({ quiet = false } = {}) {
     if (!quiet) responses[`${id}:tool:${c.id}`] = String(toolValues[c.id]);
   }
 
-  // A toggle's label is a statement about the state it is in, so it has to be
-  // re-read rather than written once when the step opened. The playback's
-  // button said "Pause" for as long as the step lasted - including while the
-  // playback was stopped - and because the text is the button's accessible
-  // name, a screen reader was told the same wrong thing. The descriptors are
-  // the ones the buttons were rendered from and their labels are getters, so
-  // this reads the widget's current answer without rebuilding anything.
+  // A toggle's label names its state, so it is re-read, not written once (a
+  // playback button read "Pause" while stopped, and was its accessible name).
+  // The labels are getters on the rendered descriptors: nothing is rebuilt.
   for (const action of toolActionsShown) {
     const btn = els.toolActions?.querySelector(
       `[data-tool-action="${CSS.escape(action.id)}"]`
@@ -1770,10 +1773,8 @@ function renderObjectList() {
     els.objects.replaceChildren();
     return;
   }
-  // A stage of three stars lists three chips. A population stage of a hundred
-  // and twenty would list a hundred and twenty, which is not an accessibility
-  // feature but a wall, so past a dozen the list becomes a count plus whatever
-  // is selected - and the canvas, which is where a population is read anyway.
+  // Past a dozen chips (a population stage lists a wall) the list becomes a
+  // count plus whatever is selected; the canvas is where a population is read.
   const all = selectableBodies().filter(entry => entry.role);
   const crowded = all.length > OBJECT_LIST_MAX;
   const named = crowded ? all.filter(e => e.selected) : all;
@@ -1782,11 +1783,9 @@ function renderObjectList() {
     .join('|')}`;
   if (key === lastObjectsKey) return;
   lastObjectsKey = key;
-  // Selecting from this list changes the list - the selected entry is marked -
-  // which rebuilds it, which throws away the focus a keyboard user was
-  // standing on. Remembering which entry had it and putting it back is what
-  // makes the list usable with a keyboard at all: press Enter and you are
-  // still on the thing you just selected, not at the top of the document.
+  // Selecting marks the entry, which rebuilds the list and drops a keyboard
+  // user's focus: remembering the entry and restoring it keeps Enter on the
+  // thing just selected, not at the top of the document.
   const hadFocus = els.objects.contains(document.activeElement)
     ? document.activeElement.dataset.objectId
     : null;
@@ -1857,18 +1856,12 @@ let lastProbeSelection = null;
 
 function renderProbe() {
   const step = currentStep();
-  // A stage owns the whole scene, so if something else has replaced the scene
-  // the stage puts itself back. This happens on a cold load into a staged step:
-  // the application rebuilds its own world after the lesson has opened, and
-  // without this the reader is left looking at a scenario the step knows
-  // nothing about. Cheap: it rebuilds only when the stars have actually gone.
+  // A stage owns the scene: if something else replaced it (a cold load into a
+  // staged step, where the app rebuilds its world after the lesson opened) the
+  // stage puts itself back. Cheap: it rebuilds only when the stars have gone.
   if (step?.stage) {
-    // Only when the scene has been *replaced*, not when the reader has been
-    // experimenting. Deleting a body, firing one into a star, letting two
-    // merge - those are things a reader did on purpose, and rebuilding the
-    // stage under them would be the application undoing their work every
-    // quarter of a second. A world that has been swapped wholesale leaves
-    // nothing of the stage behind, and that is what this waits for.
+    // Only when the scene was *replaced*, never when the reader experimented
+    // (deleted a body, merged two): a wholesale swap leaves nothing of the stage.
     const presence = stagePresence();
     if (presence.allGone) {
       applyStage(step.stage, { force: true });
@@ -1953,6 +1946,25 @@ function renderProbe() {
   }
 }
 
+/** What a controlled run needs of the world (js/lesson/runs.js imports nothing). */
+const runWorld = {
+  SETTINGS,
+  STEP_SECONDS,
+  adoptStage,
+  allBodies,
+  applyShareState,
+  applyStage,
+  captureShareState,
+  getSimulationTime,
+  selectBody,
+  setFixedStep,
+  setSimulationTime,
+  stageMemo,
+  state,
+  timeUnitSeconds,
+  frameSeconds: () => frameAdvance(STEP_SECONDS, SETTINGS.sim_speed, DT),
+};
+
 /** Take a reading, or copy the selected object's measurements into the next empty row. */
 const importSelection = req =>
   slots.field?.take(
@@ -2013,6 +2025,7 @@ function releaseLessonAudio() {
 /** Move to a step; `rebuild` reloads the scenario (and stage) in force there. */
 function goToStep(index, { rebuild = false, open = false } = {}) {
   if (!active) return;
+  slots.runs?.release();
   const at = Math.max(0, Math.min(active.steps.length - 1, index));
   // A step that stages waits for the stage code; opening rejects on failure.
   const declared = active.steps[at]?.stage;
@@ -2054,11 +2067,8 @@ function goToStep(index, { rebuild = false, open = false } = {}) {
   releaseLessonAudio();
   bindStepRoles(rebuild);
 
-  // A lesson that leaves the inspector reachable, as the black hole one does,
-  // can have its object card open when the student moves on. The card is a
-  // 600px panel docked in exactly the place an instrument goes, so a step that
-  // carries one would open with its picture completely hidden behind a card
-  // about the previous step. Steps with nothing docked keep the card.
+  // The object card (600px) docks where an instrument goes and would hide a
+  // step's picture; steps with nothing docked keep it.
   const opened =
     active.lock?.inspector === false ||
     active.steps.some(x => x.allowInspector);
@@ -2101,12 +2111,9 @@ async function changeDepth(by) {
 /**
  * Whether a step is for this student. A remediation step (`when`, from an
  * investigation pack: js/platform/investigation.js) is shown only when the
- * graded step it names has an answer that is wrong - or right - now. One not
- * yet answered, or answered the other way, is passed over by Next and
- * Previous; every other step always applies. A held prediction counts as not
- * yet answered until its reveal step is reached, as renderStep() holds its
- * verdict: the compiler refuses remediation before the reveal, and a lesson
- * compiled before it did must not give the answer away by skipping one.
+ * graded step it names is answered wrong (or right) now; Next and Previous
+ * pass over one not yet answered. A held prediction counts as unanswered until
+ * its reveal step, so skipping can not give the answer away.
  */
 function stepApplies(index) {
   if (!inDepth(active.steps[index], depth)) return false;
@@ -2295,15 +2302,12 @@ export async function openInvestigation(id, opts = {}) {
   // but never out of an open modal: D-R10-228-08.
   if (!document.activeElement?.closest?.('[aria-modal="true"]'))
     els.title.focus?.();
-  // A scenario introduction card left over from before the lesson opened lands
-  // squarely on top of the instrument panel. New ones are suppressed for the
-  // duration; this dismisses the one that may already be up.
+  // A scenario card left from before the lesson lands on the instrument panel:
+  // new ones are suppressed meanwhile, and this dismisses the one already up.
   const infoBox = document.getElementById('scenarioInfoBox');
   if (infoBox) infoBox.classList.remove('showUI', 'show');
-  // What the lesson is about to borrow, saved once. Entering is idempotent, so
-  // the twenty step changes that follow cannot overwrite these with values the
-  // lesson itself set - which is what makes "close the lesson and you are back
-  // where you were" true rather than nearly true.
+  // What the lesson borrows, saved once (entering is idempotent), so "close the
+  // lesson and you are back where you were" is true rather than nearly true.
   enterLessonScope({
     selection: state.selectedObject
       ? { id: state.selectedObject.object?.id ?? null, generation: null }
@@ -2386,19 +2390,13 @@ function restoreSelection(selection) {
 }
 
 /**
- * Whether the scene on the canvas is still the lesson's to hand back.
- *
- * True while the lesson owns it: a stage is up, or the last thing to build the
- * world was one of the lesson's own step setups. False once the reader has
- * loaded something themselves, which is the case a delayed restore must not
- * overwrite.
- *
+ * Whether the scene on the canvas is still the lesson's to hand back: a stage
+ * is up, or the last build was one of its step setups. False once the reader
+ * has loaded something themselves, which a restore must not overwrite.
  * @returns {boolean} Whether restoring is the right thing to do
  */
 function sandboxIsStillOurs() {
-  // A stage is up: the world on screen is one the lesson built.
   if (stagedStars().length) return true;
-  // Or the last thing to rebuild it was one of the lesson's own step setups.
   return appliedSetup !== null;
 }
 
@@ -2410,6 +2408,7 @@ export function closeInvestigation() {
   els.panel.hidden = true;
   els.panel.classList.remove('is-open');
   document.body.classList.remove('investigation-open');
+  slots.runs?.release();
   stopProbeLoop();
   releaseLocks();
   if (els.plotPanel) els.plotPanel.hidden = true;

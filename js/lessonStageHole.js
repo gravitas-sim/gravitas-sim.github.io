@@ -1,4 +1,4 @@
-// The black-hole stage kinds (`hole`, `equalMass`), fetched with the stage by a
+// The black-hole and system stage kinds (`hole`, `equalMass`, `system`), fetched with the stage by a
 // lesson that declares one. They build through `family` (js/lessonStage.js):
 // begin() empties the canvas and returns the staged list, end(fit) settles the
 // world and returns the bound roles.
@@ -6,11 +6,14 @@
 import {
   Asteroid,
   BlackHole,
+  EARTH_MASS_UNIT,
+  Planet,
   getPhysicsSetting,
   SOLAR_MASS_UNIT,
   StarObject,
   asteroids,
   bh_list,
+  planets,
   stars,
 } from './physics.js';
 
@@ -140,4 +143,67 @@ export function applyEqualMassStage(spec = {}, family) {
   );
   const bound = family.end(spec.fit);
   return { built: true, roles: bound, orbitRadius: r };
+}
+
+/**
+ * A star with planets on declared orbits, eccentricity included. Engine-owned:
+ * the integrator moves them, so a periapsis a lesson stops at is a real turning
+ * point. Each planet starts at apoapsis, moving perpendicular to the line to
+ * the star (the two-body initial condition, so the orbit closes on the
+ * semi-major axis asked for); planets are Earth-sized and do not perturb each
+ * other measurably over a lesson's few years.
+ * @param {object} spec - {starName, luminositySun, starMassSun (default 1),
+ *   planets: [{name, aAU, ecc, radius}], fit}
+ */
+export function applySystemStage(spec = {}, family) {
+  // Solar, unless the step declares a mass: the one key a controlled run varies.
+  const massSun = Number(spec.starMassSun) > 0 ? Number(spec.starMassSun) : 1;
+  const staged = family.begin();
+  // The integrator's own constant: the app's copy is not synced here, and a
+  // layout for the wrong G is a pair that spirals instead of closing.
+  const G = getPhysicsSetting('gravitational_constant');
+  const AU = 100;
+  const star = new StarObject({ x: 0, y: 0 }, { x: 0, y: 0 }, massSun);
+  star.name = spec.starName || 'Sun';
+  star.mass = massSun * SOLAR_MASS_UNIT;
+  star.massInSuns = massSun;
+  star.luminosityInSuns =
+    Number(spec.luminositySun) > 0 ? spec.luminositySun : 1;
+  star.temperature = Number(spec.teffK) > 0 ? spec.teffK : 5780;
+  star.radius = 10;
+  star.persistent = true;
+  star.model_owned = false;
+  stars.push(star);
+  staged.push({
+    role: 'star',
+    star,
+    model: null,
+    spec: { name: star.name },
+    physicalRadiusSun: null,
+  });
+
+  (spec.planets || []).forEach(w => {
+    const a = Number(w.aAU) > 0 ? Number(w.aAU) * AU : AU;
+    const e = Math.min(0.9, Math.max(0, Number(w.ecc) || 0));
+    // Apoapsis: furthest point, slowest speed; vis-viva for semi-major axis a.
+    const r = a * (1 + e);
+    const v = Math.sqrt(star.mass * G * (2 / r - 1 / a));
+    const planet = new Planet({ x: r, y: 0 }, { x: 0, y: v }, 1);
+    planet.name = w.name;
+    planet.mass = EARTH_MASS_UNIT;
+    planet.massInEarths = 1;
+    planet.radius = Number(w.radius) > 0 ? Number(w.radius) : 4.5;
+    if (w.color) planet.baseColor = w.color;
+    planet.persistent = true;
+    planet.model_owned = false;
+    planets.push(planet);
+    staged.push({
+      role: w.role || w.name.toLowerCase(),
+      star: planet,
+      model: null,
+      spec: { name: planet.name },
+      physicalRadiusSun: null,
+    });
+  });
+  return { built: true, roles: family.end(spec.fit) };
 }

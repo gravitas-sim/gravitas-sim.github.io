@@ -60,17 +60,31 @@ export const misconceptionText = missed =>
 export const SHORT_ANSWER_MIN = 40;
 
 /**
- * Five places a lazy module adds to a step (an empty slot is the step as it was),
+ * Six places a lazy module adds to a step (an empty slot is the step as it was),
  * filled when a lesson opens: field (importFromSelection, source, take, span),
- * reveal, time, canvas, feedback.
+ * runs (variation), reveal, time, canvas, feedback.
  */
 export const slots = {
   field: null,
+  runs: null,
   reveal: null,
   time: null,
   canvas: null,
   feedback: null,
 };
+
+/** Install the runs slot's module with the words and helpers it needs. */
+export function runsModule(m) {
+  m.setKit({
+    announce,
+    escape,
+    formatNumber,
+    lessonText,
+    predictionState,
+    t,
+  });
+  return (slots.runs = m);
+}
 
 /** Install the field slot's module with the engine functions it needs. */
 export function fieldModule(m) {
@@ -405,6 +419,7 @@ export function stepMarkup(step, c) {
     parts.push(slots.field?.spanGroups(step, c) ?? '');
     parts.push('<div class="inv-check" data-check-slot></div>');
   }
+  if (step.variation) parts.push(slots.runs?.markup(step, c) ?? '');
   return parts;
 }
 
@@ -696,6 +711,7 @@ export function bindStepInputs(h) {
     h.importSelection();
   });
   h.importSelection?.({ mount: true });
+  slots.runs?.mount(h);
 
   const numeric = els.body.querySelector('[data-numeric]');
   const checkBtn = els.body.querySelector('[data-check-numeric]');

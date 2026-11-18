@@ -181,6 +181,9 @@ export const STRUCTURAL = new Set([
   'pace',
   'mode',
   'bind',
+  // A controlled run's parameter and the probe rows it reads: identifiers.
+  'param',
+  'read',
   // Which phase of a track a step parks the playback on. An identifier from
   // js/stellar/evolution.js, not a word for a reader - translating it parks
   // the playhead nowhere and the step opens on a cloud.

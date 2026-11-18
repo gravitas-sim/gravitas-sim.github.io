@@ -44,6 +44,11 @@ import {
 } from './authoring/forwardSources.mjs';
 import { STANDARD_RULES, ratchetFindings } from './lesson-standard.mjs';
 import {
+  VARIATION_RULE,
+  VARIATION_RULE_DESCRIPTION,
+  variationFindings,
+} from './authoring/variationRules.mjs';
+import {
   generate as generateLessonText,
   RULE_ID as STEPS_RULE,
   RULE_DESCRIPTION as STEPS_RULE_DESCRIPTION,
@@ -78,6 +83,7 @@ if (has('--rules')) {
     // Node-only rule: kept out of js/authoring/rules.js, which ships on the Composer route
     [MODEL_RULE]: MODEL_RULE_DESCRIPTION,
     [STEPS_RULE]: STEPS_RULE_DESCRIPTION,
+    [VARIATION_RULE]: VARIATION_RULE_DESCRIPTION,
     // Node-only and ratcheted: a lesson may not carry more than its record
     ...STANDARD_RULES,
   })) {
@@ -180,6 +186,7 @@ for (const f of (await generateLessonText(undefined, undefined, text => text))
 // one that fell without the record being lowered. `node tools/lesson-standard.mjs
 // --list` names every finding by lesson and step.
 findings.push(...(await ratchetFindings(inputs)));
+findings.push(...variationFindings(inputs));
 
 const only = value('lesson');
 if (only) {
