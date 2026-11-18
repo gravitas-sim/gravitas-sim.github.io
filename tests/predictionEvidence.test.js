@@ -401,7 +401,7 @@ describe('the step on screen, held and revealed', () => {
     );
     expect(heading.tagName).toBe('H4');
     expect(box.textContent).toContain('You estimated: 3 to 4 d');
-    expect(box.textContent).toContain('Your reading, Period: 3.2504 d');
+    expect(box.textContent).toContain('Your reading, Period: 3.2504\u00a0d');
     expect(box.textContent).toContain(
       'Your reading is inside the range you gave.'
     );
@@ -454,7 +454,7 @@ describe('the step on screen, held and revealed', () => {
     go('result');
     const text = body.querySelector('[data-verdict]').textContent;
     expect(text).toContain('3,0 to 4,0 d');
-    expect(text).toContain('3,2504 d');
+    expect(text).toContain('3,2504\u00a0d');
     expect(text).toContain('inside the range you gave');
   });
 
@@ -505,7 +505,7 @@ describe('the step on screen, held and revealed', () => {
     expect(box.className).toContain('is-right');
     expect(box.textContent).toContain('You predicted: Shorter');
     expect(box.textContent).toContain('That is what happened.');
-    expect(box.textContent).toContain('Your reading, Period: 3.25 d');
+    expect(box.textContent).toContain('Your reading, Period: 3.25\u00a0d');
     expect(box.textContent).toContain(SENTENCE);
     expect(box.textContent).not.toContain('You estimated');
   });
