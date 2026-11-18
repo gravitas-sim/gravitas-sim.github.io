@@ -396,6 +396,9 @@ export const state = {
     /** Said on screen: the propagation speed here is a display choice. */
     illustrative: true,
   },
+  // The Tools control's barycenter marker: 'off', 'system' or 'pair'
+  // (js/barycentreMarker.js). Never stored, so a link or save never carries it.
+  barycenterMarker: { mode: 'off', members: [] },
   barycenterOverlay: {
     active: false,
     // Which bodies to average over. The renderer resolves these each frame;

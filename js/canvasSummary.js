@@ -19,8 +19,14 @@ import {
   white_dwarfs,
   bh_list,
   galaxies,
+  debris,
+  barycenterBodies,
 } from './physics.js';
-import { t } from './i18n/index.js';
+import { physicsSettings } from './engine/state.js';
+import { sceneSources } from './engine/sources.js';
+import { frameLine } from './referenceFrame.js';
+import { markerSentence } from './barycentreMarker.js';
+import { t, getLocale } from './i18n/index.js';
 import { lightingNotes } from './bodyDraw.js';
 import { drawnLabels } from './bodyLabels.js';
 import { crowdNotes } from './bodyDrawSky.js';
@@ -63,6 +69,60 @@ const KINDS = [
   ['summary.count.blackHoles', () => bh_list.length],
   ['summary.count.galaxies', () => galaxies.length],
 ];
+
+// The readout's count key for each engine list the statement can name.
+const LIST_WORD = {
+  bh_list: 'readout.count.blackHoles',
+  stars: 'readout.count.stars',
+  galaxies: 'readout.count.galaxies',
+  gas_giants: 'readout.count.gasGiants',
+  neutron_stars: 'readout.count.neutronStars',
+  white_dwarfs: 'readout.count.whiteDwarfs',
+  planets: 'readout.count.planets',
+  asteroids: 'readout.count.asteroids',
+  comets: 'readout.count.comets',
+  debris: 'readout.count.debris',
+};
+
+/**
+ * Which bodies pull on others and which only feel gravity, in one line read
+ * from the rule the engine builds its sources from (js/engine/sources.js).
+ * @param {object} [settings] - mutual_gravity and star_only_gravity in force
+ * @returns {string} The statement, or '' for an empty scene
+ */
+export function sourcesStatement(settings = physicsSettings) {
+  const lists = {
+    bh_list,
+    stars,
+    galaxies,
+    gas_giants,
+    neutron_stars,
+    white_dwarfs,
+    planets,
+    asteroids,
+    comets,
+    debris,
+  };
+  const counts = {};
+  for (const [k, v] of Object.entries(lists)) counts[k] = v.length;
+  const { pulling, feeling } = sceneSources(counts, settings);
+  const locale = getLocale();
+  const words = group =>
+    group
+      .map(({ list, n }) =>
+        t('sources.item', {
+          kind: t(LIST_WORD[list]).toLocaleLowerCase(locale),
+          n,
+        })
+      )
+      .join(t('summary.listSeparator'));
+  const parts = [];
+  if (pulling.length)
+    parts.push(t('sources.pulling', { list: words(pulling) }));
+  if (feeling.length)
+    parts.push(t('sources.feeling', { list: words(feeling) }));
+  return parts.join(' ');
+}
 
 /**
  * The sentence.
@@ -144,6 +204,12 @@ export function summaryText() {
 
   // Where the description stops and the interface takes over. A reader who
   // wants numbers should be told they exist and where.
+  parts.push(`${frameLine(barycenterBodies())}.`);
+  const marker = markerSentence();
+  if (marker) parts.push(marker);
+  const pulls = sourcesStatement();
+  if (pulls) parts.push(pulls);
+
   parts.push(t('summary.readoutPointer'));
 
   // And the one thing the drawing is not telling the truth about. The canvas

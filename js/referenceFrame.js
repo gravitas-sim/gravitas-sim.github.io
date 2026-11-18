@@ -280,6 +280,30 @@ export function resolveFrameOrigin(bodies) {
 }
 
 /**
+ * What the readout and the canvas call the frame the picture is drawn in.
+ * @param {Array} bodies - Every live body, for a body frame's name
+ * @returns {string} World, Barycenter, or the body's name
+ */
+export function frameName(bodies) {
+  if (frame.mode === BARYCENTER) return t('frame.barycenter');
+  if (frame.mode === OBJECT) {
+    const body = bodies.find(b => b && b.id === frame.objectId);
+    if (body && body.alive !== false) return body.name || t('frame.object');
+  }
+  return t('frame.world');
+}
+
+/**
+ * The frame in one line, saying the trails follow it when it is not the world.
+ * @param {Array} bodies - Every live body
+ * @returns {string} The line
+ */
+export function frameLine(bodies) {
+  const name = frameName(bodies);
+  return t(frame.mode === WORLD ? 'frame.line' : 'frame.line.trails', { name });
+}
+
+/**
  * The velocity of the frame's origin.
  *
  * A frame that re-expresses positions and says nothing about velocities leaves

@@ -1777,6 +1777,31 @@ try {
             </select>
           </div>
           <p class="rail-field-note" id="referenceFrameNote" hidden=""></p>
+          <div class="rail-field">
+            <label
+              class="rail-field-label"
+              for="barycenterMarkerSelect"
+              data-i18n="rail.barycenterMarker"
+            >
+              Show barycenter
+            </label>
+            <select
+              id="barycenterMarkerSelect"
+              class="rail-select"
+              title="The mass-weighted mean position of these bodies. Nothing is there."
+              data-i18n-title="rail.barycenterMarker.hint"
+            >
+              <option value="off" data-i18n="rail.barycenterMarker.off">
+                Off
+              </option>
+              <option value="system" data-i18n="rail.barycenterMarker.system">
+                Whole system
+              </option>
+              <option value="pair" data-i18n="rail.barycenterMarker.pair">
+                Selected body and its primary
+              </option>
+            </select>
+          </div>
           <p class="rail-subhead" data-i18n="rail.sub.share">Capture</p>
           <!--
             Two ways of taking the same picture, side by side: a still and a

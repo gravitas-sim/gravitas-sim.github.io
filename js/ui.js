@@ -46,6 +46,7 @@ import {
   setupOverlayMinimize,
   setupReferenceFrameControl,
 } from './inspectorGate.js';
+import { setupBarycentreControl } from './barycentreMarker.js';
 import {
   initPlacement,
   initObjectPicker,
@@ -531,6 +532,7 @@ initPlacement({ canvas });
 // The rail's reference-frame selector. The inspector card's own buttons are
 // wired when its code arrives (js/inspectorGate.js).
 setupReferenceFrameControl();
+setupBarycentreControl();
 
 /**
  * Settings is one dialog with one way in and one way out.
