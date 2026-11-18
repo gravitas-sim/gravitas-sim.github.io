@@ -173,11 +173,11 @@ their ceilings:
 | `js/data/instructorContent.js` | 6,761 | 6,761 |
 | `js/i18n/es.deferred.js` | 4,250 | 4,250 |
 | `js/i18n/en.deferred.js` | 3,998 | 3,998 |
-| `js/data/investigations/measurement-sequence.js` | 3,387 | 3,270 |
 | `js/data/investigations/observing-sequence.js` | 3,341 | 3,341 |
 | `js/investigations.js` | 3,052 | 3,052 |
-| `js/data/investigations/depth/measurement-sequence.js` | 2,846 | 2,840 |
+| `js/data/investigations/measurement-sequence.js` | 3,041 | 3,041 |
 | `js/render.js` | 2,846 | 2,846 |
+| `js/data/investigations/stellar-sequence.js` | 2,733 | 2,733 |
 <!--/fact-block-->
 
 | Layer | What lives there | Examples |

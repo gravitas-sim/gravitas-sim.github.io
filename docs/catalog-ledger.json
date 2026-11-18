@@ -622,7 +622,9 @@
         "js/data/investigations/a-binary-stars-orbit.js",
         "js/data/investigations/depth/a-binary-stars-orbit.js",
         "js/data/investigations/depth/measurement-sequence.js",
-        "js/data/investigations/measurement-sequence.js"
+        "js/data/investigations/depth/measuring-the-moon.js",
+        "js/data/investigations/measurement-sequence.js",
+        "js/data/investigations/measuring-the-moon.js"
       ],
       "shadows": [
         "js/data/investigations/depth/es/a-binary-stars-orbit.js",
@@ -1349,7 +1351,9 @@
         "js/data/investigations/craters-by-size.js",
         "js/data/investigations/depth/craters-by-size.js",
         "js/data/investigations/depth/measurement-sequence.js",
-        "js/data/investigations/measurement-sequence.js"
+        "js/data/investigations/depth/measuring-the-moon.js",
+        "js/data/investigations/measurement-sequence.js",
+        "js/data/investigations/measuring-the-moon.js"
       ],
       "shadows": [
         "js/data/investigations/depth/es/craters-by-size.js",
@@ -2173,8 +2177,10 @@
       "source": [
         "js/data/investigations/depth/how-far-is-that-star.js",
         "js/data/investigations/depth/measurement-sequence.js",
+        "js/data/investigations/depth/measuring-the-moon.js",
         "js/data/investigations/how-far-is-that-star.js",
-        "js/data/investigations/measurement-sequence.js"
+        "js/data/investigations/measurement-sequence.js",
+        "js/data/investigations/measuring-the-moon.js"
       ],
       "shadows": [
         "js/data/investigations/depth/es/how-far-is-that-star.js",
@@ -3220,9 +3226,7 @@
       "format": "lesson",
       "title": "Measuring the Moon",
       "source": [
-        "js/data/investigations/depth/measurement-sequence.js",
         "js/data/investigations/depth/measuring-the-moon.js",
-        "js/data/investigations/measurement-sequence.js",
         "js/data/investigations/measuring-the-moon.js"
       ],
       "shadows": [
@@ -3319,7 +3323,7 @@
       ],
       "walk": "NOT VERIFIED",
       "pr": 675,
-      "hash": "2e66edb133caad185dee658c9a059d163671266df1a3fa8a33ea35a85d8ab75e"
+      "hash": "1a83aa9a4c72435bf90119fdb6370287db8c70ffa3bc7b198dadbcb82213885a"
     },
     {
       "id": "investigation:missing-mass",
@@ -6170,8 +6174,10 @@
       "title": "What a Crater Diameter Is Worth",
       "source": [
         "js/data/investigations/depth/measurement-sequence.js",
+        "js/data/investigations/depth/measuring-the-moon.js",
         "js/data/investigations/depth/what-a-crater-diameter-is-worth.js",
         "js/data/investigations/measurement-sequence.js",
+        "js/data/investigations/measuring-the-moon.js",
         "js/data/investigations/what-a-crater-diameter-is-worth.js"
       ],
       "shadows": [
@@ -6325,8 +6331,10 @@
       "title": "What Does ± Claim?",
       "source": [
         "js/data/investigations/depth/measurement-sequence.js",
+        "js/data/investigations/depth/measuring-the-moon.js",
         "js/data/investigations/depth/what-does-plus-minus-claim.js",
         "js/data/investigations/measurement-sequence.js",
+        "js/data/investigations/measuring-the-moon.js",
         "js/data/investigations/what-does-plus-minus-claim.js"
       ],
       "shadows": [
@@ -6458,8 +6466,10 @@
       "title": "What Is a Measurement?",
       "source": [
         "js/data/investigations/depth/measurement-sequence.js",
+        "js/data/investigations/depth/measuring-the-moon.js",
         "js/data/investigations/depth/what-is-a-measurement.js",
         "js/data/investigations/measurement-sequence.js",
+        "js/data/investigations/measuring-the-moon.js",
         "js/data/investigations/what-is-a-measurement.js"
       ],
       "shadows": [
@@ -6513,8 +6523,10 @@
       "title": "What Is in This Field?",
       "source": [
         "js/data/investigations/depth/measurement-sequence.js",
+        "js/data/investigations/depth/measuring-the-moon.js",
         "js/data/investigations/depth/what-is-in-this-field.js",
         "js/data/investigations/measurement-sequence.js",
+        "js/data/investigations/measuring-the-moon.js",
         "js/data/investigations/what-is-in-this-field.js"
       ],
       "shadows": [
@@ -6768,8 +6780,10 @@
       "title": "When the Method Must Refuse",
       "source": [
         "js/data/investigations/depth/measurement-sequence.js",
+        "js/data/investigations/depth/measuring-the-moon.js",
         "js/data/investigations/depth/when-the-method-must-refuse.js",
         "js/data/investigations/measurement-sequence.js",
+        "js/data/investigations/measuring-the-moon.js",
         "js/data/investigations/when-the-method-must-refuse.js"
       ],
       "shadows": [
@@ -6961,8 +6975,10 @@
       "title": "Which Surface Is Older?",
       "source": [
         "js/data/investigations/depth/measurement-sequence.js",
+        "js/data/investigations/depth/measuring-the-moon.js",
         "js/data/investigations/depth/which-surface-is-older.js",
         "js/data/investigations/measurement-sequence.js",
+        "js/data/investigations/measuring-the-moon.js",
         "js/data/investigations/which-surface-is-older.js"
       ],
       "shadows": [
