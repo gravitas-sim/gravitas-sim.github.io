@@ -53,7 +53,7 @@ const BUDGETS = [
   {
     id: 'initial',
     label: 'Initial download (CSS + eager JS)',
-    limit: 738.2,
+    limit: 738.5,
     reason:
       'Was 743 KB when this budget was first asked for. The application had ' +
       'already grown to 771 KB on its own - the extracted state module, the ' +
@@ -116,7 +116,7 @@ const BUDGETS = [
       '\n\nRaised from 735 to 735.3 KB for the lesson canvas, controlled runs and event window changes taken together (D-R4-TRAIN-01): a Node 22 build measures 752,868 bytes, 735.2 KB, and the limit is that figure rounded up to 0.1 KB, under the standing approval of 2026-10-10.' +
       '\n\nA world seen close (D-R4-448-06): the night side, the phase, the seeded markings and the lighting sentences are drawn by the start-up drawing modules; raised from 735.3 to 738.5 KB, the exact overrun of a Node 22 build over v4 1f1235254 (756,163 bytes, 738.44 KB; the same build matched CI to the byte on the previous base) rounded up to 0.1 KB, under the standing approval of 2026-10-10.' +
       '\n\nCrowded-scene drawing (D-R4-450-07): the trail, detail and label rules, the label choice and the tier note are start-up drawing code; raised from 738.5 to 742.2 KB, the exact overrun of a Node 22 build over the light-and-phase change merged with v4 (759,937 bytes, 742.13 KB; the same build matched CI to the byte on the previous base) rounded up to 0.1 KB, under the standing approval of 2026-10-10.' +
-      '\n\nThe Sizes statement and the orbit geometry overlay (D-R4-447-07): set to 738.2 KB, the measured size of a Node 22 build of the branch merged with v4 2c503d59c and 1ed519a17 and with the crowded-scene change (755,829 bytes, 738.11 KB) rounded up to 0.1 KB, under the standing approval of 2026-10-10; the size facts, the two-body model and the overlay state load lazily, and the readout button and its strings are paid for by the frozen circle and its inspector code, which are gone.',
+      '\n\nThe Sizes statement and the orbit geometry overlay (D-R4-447-07): set to 738.5 KB, the measured size of a Node 22 build of the branch merged with v4 1ed519a17 and with the crowded-scene change (756,125 bytes, 738.40 KB) rounded up to 0.1 KB, under the standing approval of 2026-10-10; the size facts, the two-body model and the overlay state load lazily, and the readout button and its strings are paid for by the frozen circle and its inspector code, which are gone.',
   },
   {
     id: 'deferred',
