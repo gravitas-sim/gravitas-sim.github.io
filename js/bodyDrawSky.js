@@ -19,6 +19,8 @@ import {
   lodFor,
   lodAtLeast,
   dominantLight,
+  lightDirection,
+  phaseCos,
   starColor,
   paintStarDisc,
   spriteFor,
@@ -30,6 +32,8 @@ import {
 import {
   state,
   stars,
+  planets,
+  gas_giants,
   bh_list,
   liveBodyCount,
   physicsSettings,
@@ -38,6 +42,8 @@ import {
   registerBodyDrawers,
   currentTier,
   stellarPropertiesFor,
+  GAS_GIANT_TO_STAR_THRESHOLD,
+  JUPITER_MASS_UNIT,
 } from './physics.js';
 
 // --- What every drawer shares -------------------------------------------------
@@ -54,13 +60,9 @@ const setBloomLayer = provider => {
 /**
  * The clock the black-hole drawing animates against.
  *
- * The simulated clock, so a paused world draws the same frame for as long as
- * it stays paused and two runs of one scenario draw the same picture at the
- * same time. It used to be Date.now(), which meant the flow kept turning while
- * the simulation was frozen and no two screenshots ever matched.
- *
- * Under reduced motion it returns a constant: the picture is complete and
- * legible, it simply does not move.
+ * The simulated clock, so a paused world draws the same frame and two runs of
+ * a scenario match; it was Date.now(), so the flow kept turning while paused.
+ * Under reduced motion it returns a constant: complete, legible, still.
  *
  * @returns {number} Seconds
  */
@@ -76,12 +78,10 @@ const visualClockSeconds = () =>
  */
 const drawRadius = (obj, type) =>
   // `stageRadius` is a presentation override: a lesson comparing stellar sizes
-  // sets it to say how big to draw this body and nothing else. It is used
-  // *instead of* the model radius rather than as well as it, so the family
-  // display factor cannot compress a size the lesson has already chosen -
-  // two scalings fighting each other is how a true-scale comparison stopped
-  // being to scale. The engine radius is untouched, so collisions, tides and
-  // every measured orbital property are the same whichever scale is showing.
+  // sets it to say how big to draw this body. It is used *instead of* the
+  // model radius so the family display factor cannot compress a size the
+  // lesson chose. The engine radius is untouched, so collisions, tides and
+  // measured orbits are the same at either scale.
   Number.isFinite(obj.stageRadius) && obj.stageRadius > 0
     ? Math.max(
         obj.stageRadius,
@@ -92,17 +92,13 @@ const drawRadius = (obj, type) =>
 /**
  * How much detail this body is worth, at its current size on screen.
  *
- * One call, so every family draws at the same thresholds and a reader zooming
- * out watches the whole scene simplify together rather than one class at a
- * time.
+ * One call, so every family uses the same thresholds and the whole scene
+ * simplifies together as a reader zooms out.
  *
- * Measured on the *display* radius before the floor, which is the size the
- * body is about to be drawn at, and deliberately not on the model radius. When
- * the two were the same number this distinction did not exist; now that a
- * planet is drawn at three eighths of its model radius, asking the model would
- * put surface marks and cloud bands on a body occupying three pixels. Before
- * the floor, because a body held at the floor is a marker standing in for
- * something too small to see, and drawing weather on it would be a fiction.
+ * Measured on the *display* radius before the floor, not the model radius: a
+ * planet is drawn at three eighths of its model radius, so the model radius
+ * would put surface marks on a three-pixel body. Before the floor, because a
+ * body held at the floor is a marker for something too small to see.
  *
  * @param {Object} obj - Body with a radius
  * @param {string} type - Which family, for the display policy
@@ -119,25 +115,39 @@ const lodOf = (obj, type) => {
 /**
  * The luminous bodies in the scene, as light sources, recomputed once a frame.
  *
- * Positions are held by reference, so a moving star needs no refresh; what is
- * cached is the array and the luminosity, which is the part that would
- * otherwise be recomputed once per lit body per frame. A hundred planets in a
- * two-star system asked for this two hundred times a frame before it was
- * memoised.
+ * Positions are held by reference, so a moving star needs no refresh; the
+ * cached part is the array and the luminosity, which would otherwise be
+ * recomputed once per lit body per frame.
+ *
+ * A Star-class body below the mass at which a gas giant becomes a star is not a
+ * light: the Galilean scenario's Jupiter is one, and it lit its own moons.
  *
  * @returns {Array<{pos: Object, luminosity: number}>} Sources, possibly empty
  */
 let lightCacheFrame = -1;
+let lightCacheStars = null;
+let lightCacheCount = -1;
+let lightCacheFirst = null;
 let lightCacheList = [];
 const luminousSources = () => {
+  // The frame, and which stars: a rebuilt world can have as many as the last.
   const frame = (state && state.frame_count) || 0;
-  if (frame === lightCacheFrame && lightCacheList.length === stars.length) {
+  if (
+    frame === lightCacheFrame &&
+    stars === lightCacheStars &&
+    stars.length === lightCacheCount &&
+    stars[0] === lightCacheFirst
+  ) {
     return lightCacheList;
   }
   lightCacheFrame = frame;
+  lightCacheStars = stars;
+  lightCacheCount = stars.length;
+  lightCacheFirst = stars[0];
   lightCacheList = [];
   for (const star of stars) {
     if (!star || star.alive === false) continue;
+    if (star.mass < GAS_GIANT_TO_STAR_THRESHOLD * JUPITER_MASS_UNIT) continue;
     const props = stellarPropertiesFor(star, SOLAR_MASS_UNIT);
     if (!(props.luminositySolar > 0)) continue;
     lightCacheList.push({
@@ -150,20 +160,69 @@ const luminousSources = () => {
   return lightCacheList;
 };
 
+/** The star each body was lit by last, so the choice holds (LIGHT_HOLD). */
+const lightOf = new WeakMap();
+
 /**
  * The star that lights this body, or null in a scene with none.
  * @param {{x: number, y: number}} pos - Where the light is received
+ * @param {object} [body] - The body, so its light holds between frames
  * @returns {?Object} A light source
  */
-const dominantStarFor = pos => dominantLight(pos, luminousSources());
+const dominantStarFor = (pos, body) => {
+  const s = dominantLight(pos, luminousSources(), body && lightOf.get(body));
+  if (body) lightOf.set(body, s?.star ?? null);
+  return s;
+};
+
+/**
+ * What lights a body and from where its phase is seen: the one answer the
+ * drawing, the inspector and the canvas description share.
+ *
+ * The observer is the planet or giant whose Hill sphere the body is inside,
+ * the nearest if several: the Hill radius is the host's distance times the
+ * cube root of the mass ratio over three, the host being the star that pulls
+ * on the planet hardest. Not the strongest pull on the body itself (the orbit
+ * helper's rule, js/orbital.js): the Sun pulls the real Moon about twice as
+ * hard as the Earth does. A body inside no Hill sphere goes round a star and
+ * shows the half-lit disc seen from above the orbital plane. With no star,
+ * `source` is null and the direction is the fixed one.
+ *
+ * @param {object} body - A planet, moon or giant
+ * @returns {{source: ?object, light: object, observer: ?object, cosA: number}}
+ */
+const lightingFor = body => {
+  const source = dominantStarFor(body.pos, body);
+  const light = lightDirection(body.pos, source ? source.pos : null);
+  let observer = null;
+  let nearest = Infinity;
+  for (const c of source ? [...planets, ...gas_giants] : []) {
+    if (c === body || c.alive === false || !(c.mass > body.mass)) continue;
+    const d = Math.hypot(c.pos.x - body.pos.x, c.pos.y - body.pos.y);
+    // The host: the star pulling on c hardest (js/orbital.js's rule, inlined
+    // so start-up does not fetch that module's chunk).
+    let host = null;
+    let pull = 0;
+    for (const st of d < nearest ? stars : []) {
+      const q =
+        st.mass / ((st.pos.x - c.pos.x) ** 2 + (st.pos.y - c.pos.y) ** 2);
+      if (q > pull) [host, pull] = [st, q];
+    }
+    if (!host) continue;
+    const D = Math.hypot(host.pos.x - c.pos.x, host.pos.y - c.pos.y);
+    if (d < D * Math.cbrt(c.mass / (3 * host.mass)))
+      [observer, nearest] = [c, d];
+  }
+  const cosA = observer ? (phaseCos(body.pos, light, observer.pos) ?? 0) : 0;
+  return { source, light, observer, cosA };
+};
 
 /**
  * Does the reader want animation held still?
  *
- * Read through matchMedia rather than from a setting, because it is an
- * operating-system preference and the rest of the interface already honors it
- * that way (see the reduced-motion block in css/tokens.css). Cached: matchMedia
- * is not free and this is asked once per pulsar per frame.
+ * Read through matchMedia because it is an operating-system preference the
+ * rest of the interface honors that way (see css/tokens.css). Cached: it is
+ * asked once per pulsar per frame.
  *
  * @returns {boolean} True when animation should be held
  */
@@ -184,11 +243,8 @@ const prefersReducedMotion = () => {
 };
 
 /**
- * How far a star's corona reaches, in stellar radii.
- *
- * Was three, at more than twice this alpha. A corona that wide is not a
- * corona; it is a glow that hides whatever is orbiting inside it, and on a
- * zoomed-in star it covered the inner planets entirely.
+ * How far a star's corona reaches, in stellar radii. It was three, at more
+ * than twice this alpha: that wide it hides orbiting inner planets.
  */
 const CORONA_SCALE = 1.9;
 
@@ -259,12 +315,10 @@ function drawStar(o, ctx) {
     ctx.arc(world_pos.x, world_pos.y, r, 0, 2 * Math.PI);
     ctx.fill();
   } else {
-    // A limb-darkened disc from a cached sprite. The sprite is radially
-    // symmetric, so the render pass's flipped Y axis does not matter, and it
-    // is keyed on color and size buckets - a cluster of similar stars shares
-    // one rather than building a gradient each, every frame.
-    // The painter is in js/bodyVisuals.js so that the Stellar Lab's preview
-    // and this draw the same star.
+    // A limb-darkened disc from a cached sprite, radially symmetric so the
+    // flipped Y axis does not matter, keyed on color and size buckets so a
+    // cluster of similar stars shares one. The painter is in js/bodyVisuals.js
+    // so the Stellar Lab preview draws the same star.
     const disc = spriteFor('star-disc', rgb, screenR, paintStarDisc);
     if (disc) {
       ctx.drawImage(disc, world_pos.x - r, world_pos.y - r, r * 2, r * 2);
@@ -277,12 +331,9 @@ function drawStar(o, ctx) {
   }
 
   // The corona, into the offscreen layer js/render.js composites additively.
-  //
-  // Tighter than what was here: the old bloom ran to three times the stellar
-  // radius at 0.35 alpha, which on a zoomed-in star swallowed everything
-  // near it and made a planet at half an astronomical unit look like it was
-  // inside the photosphere. Restrained, and cached as a sprite rather than
-  // built as a gradient per star per frame.
+  // Tighter than the old bloom (three stellar radii at 0.35 alpha), which on a
+  // zoomed-in star swallowed everything near it. Cached as a sprite rather
+  // than built as a gradient per star per frame.
   try {
     const glow = lodAtLeast(level, LOD.SHADED) && screenR > 2 && bloomLayer();
     if (glow) {
@@ -335,14 +386,10 @@ function drawNeutronStar(o, ctx) {
 
   // Pulsar effect
   o.pulsar_phase += 0.1;
-  // The pulse, held still when the reader has asked for that.
-  //
-  // A pulsar beam sweeping at a few hertz is exactly the kind of repeating
-  // motion prefers-reduced-motion exists for, and it is the only animation
-  // in the body drawing that runs on its own whether or not the simulation
-  // is playing. Held at its mid-brightness rather than switched off: the
-  // beam is what says "this is a pulsar", and removing it would remove the
-  // information along with the movement.
+  // The pulse, held still under reduced motion. A beam sweeping at a few hertz
+  // is the only body animation that runs whether or not the simulation is
+  // playing. Held at mid-brightness rather than removed, since the beam is
+  // what says "this is a pulsar".
   const pulse_intensity = prefersReducedMotion()
     ? 0.65
     : 0.5 + 0.5 * Math.sin(o.pulsar_phase / o.pulsar_period);
@@ -357,14 +404,11 @@ function drawNeutronStar(o, ctx) {
   ctx.arc(world_pos.x, world_pos.y, nsR, 0, 2 * Math.PI);
   ctx.fill();
 
-  // The magnetosphere ring: the cue that says "neutron star" rather than
-  // "white dwarf". Both are small, bright and dense; this is a stated
-  // boundary at a distance rather than a glow, which is the visual
-  // difference between a magnetic field and an atmosphere.
-  //
-  // Gated on the level of detail like everything else, and its reach is
-  // capped: magnetic_field_strength is unbounded in the constructor, and a
-  // strongly magnetised star drew a ring several times its own size.
+  // The magnetosphere ring is the cue for "neutron star" rather than "white
+  // dwarf": a stated boundary at a distance rather than an atmosphere-like
+  // glow. Gated on the level of detail, and its reach is capped, because
+  // magnetic_field_strength is unbounded in the constructor and a strongly
+  // magnetised star drew a ring several times its own size.
   const nsLevel = lodOf(o, 'NeutronStar');
   if (lodAtLeast(nsLevel, LOD.SHADED) && nsR * state.zoom > 2) {
     const field_radius =
@@ -429,12 +473,10 @@ function drawWhiteDwarf(o, ctx) {
   ctx.arc(world_pos.x, world_pos.y, wdR, 0, 2 * Math.PI);
   ctx.fill();
 
-  // Glow, bounded and gated.
-  //
-  // The reach used to be 1.5 + T/20000 stellar radii, which for a hot young
-  // dwarf is two and a half times the body and reads as a small star rather
-  // than as the Earth-sized cinder it is. Capped, and skipped entirely at
-  // the point level where a halo is one lighter ring of pixels.
+  // Glow, bounded and gated. The reach was 1.5 + T/20000 stellar radii, which
+  // for a hot young dwarf reads as a small star rather than an Earth-sized
+  // cinder. Capped, and skipped at the point level, where a halo is one
+  // lighter ring of pixels.
   if (lodAtLeast(wdLevel, LOD.SHADED) && wdR * wdZ > 3) {
     const glow_radius = wdR * Math.min(2.0, 1.3 + (o.temperature || 0) / 40000);
     const glow_intensity = Math.min(0.32, (o.temperature / 20000) * 0.3);
@@ -579,6 +621,7 @@ export {
   drawRadius,
   lodOf,
   dominantStarFor,
+  lightingFor,
   rgba,
   bloomLayer,
   setBloomLayer,
@@ -591,43 +634,28 @@ export {
 // =============================================================================
 // The background sky: what is in it, and where
 // -----------------------------------------------------------------------------
-// Generation only. This module decides how many stars there are, where, how
-// bright, what color and in which parallax layer; js/render.js decides how to
-// paint them. Keeping the two apart is what lets the whole model be tested
-// without a canvas, and what lets the painting be rewritten - as it has been,
-// from ten thousand individual fills per repaint to three blits - without
-// touching the sky itself.
+// Generation only. This module decides how many stars, where, how bright, what
+// color and which parallax layer; js/render.js decides how to paint them. The
+// split keeps the model testable without a canvas and lets the painting change
+// (ten thousand fills per repaint became three blits) without touching the sky.
 //
-// What was here before
-// -----------------------------------------------------------------------------
-// Ten thousand stars, uniformly distributed, uniformly white, all the same
-// brightness range, all twinkling, regenerated from Math.random on every
-// resize, and repainted in full: twenty times a second on an empty sky, and
-// twenty-eight once anything on it lensed. Measured at 1440x900: 4.1ms a
-// repaint for an empty scene, 19.6ms for a crowded one. See
-// tools/starfield-probe.mjs.
+// The old sky was ten thousand uniformly white, uniformly bright, twinkling
+// stars regenerated from Math.random on every resize and repainted in full:
+// 4.1 ms a repaint for an empty scene and 19.6 ms for a crowded one, at
+// 1440x900. See tools/starfield-probe.mjs. Four requirements follow.
 //
-// Four things follow from that and shape everything below.
+// Deterministic: a screenshot, A/B run, shared link and reset must show the
+// same sky, so everything comes from the world seed and the viewport size.
 //
-// It has to be deterministic. A screenshot of a seeded scenario, an A/B run, a
-// shared link and a reset all have to show the same sky, and Math.random gives
-// none of them that. Everything here comes from the world seed and the
-// viewport size.
+// Sky-like: a uniform brightness distribution reads as noise; a real field is
+// overwhelmingly faint stars with a handful of bright ones. The distribution
+// below is a restrained version, and looks denser than its point count.
 //
-// It has to look like a sky. A uniform brightness distribution reads as noise;
-// a real field is overwhelmingly faint stars with a handful of bright ones,
-// which is what makes it look deep. The distribution below is a restrained
-// version of that, and the field looks denser than its point count because of
-// it.
+// Paintable once: three parallax layers let js/render.js pre-render each to its
+// own canvas and blit it. Nothing here changes between repaints.
 //
-// It has to be paintable once. The stars are split into three parallax layers
-// so js/render.js can pre-render each to its own canvas and blit them, rather
-// than walking every star every frame. Nothing here changes between repaints,
-// which is the property that makes the caching sound.
-//
-// And it has to be cheap to ask "which stars are near this point", because the
-// lensing and gravitational-wave distortion need exactly that and used to get
-// it by testing all ten thousand.
+// Cheap to ask "which stars are near this point", which lensing and
+// gravitational-wave distortion need and used to get by testing all of them.
 // =============================================================================
 
 /** The three parallax depths, far to near. Also the paint order. */
@@ -642,12 +670,10 @@ const LAYER_SHARE = Object.freeze({ far: 0.55, mid: 0.3, near: 0.15 });
 /**
  * Stars per megapixel of viewport, by quality tier.
  *
- * Chosen by measurement rather than by taste: at these counts the pre-rendered
- * layers below cost under a millisecond to build and nothing per frame, and
- * the magnitude distribution makes the field read as considerably denser than
- * the number suggests. The old fixed 10,000 was the same sky on a 320-pixel
- * phone and on a lecture projector - four times too dense on one and sparse on
- * the other.
+ * Chosen by measurement: at these counts the pre-rendered layers cost under a
+ * millisecond to build and nothing per frame, and the magnitude distribution
+ * makes the field read denser than its count. The old fixed 10,000 was four
+ * times too dense on a 320-pixel phone and sparse on a projector.
  */
 export const STARS_PER_MEGAPIXEL = Object.freeze({ full: 2600, low: 1000 });
 
@@ -667,12 +693,11 @@ const MAX_STARS = 9000;
  * The star_density setting's default, and so the value that means "the natural
  * count for this window".
  *
- * The setting used to be the literal number of stars, which is why its default
- * is a round ten thousand. It is now read as a proportion of that: leaving it
- * alone gives the density this module chose for the window, halving it halves
- * the sky, and zero empties it. Keeping the same key and the same default
- * means saved states, share links and scenario definitions written before the
- * rewrite still describe the sky their author saw.
+ * The setting was once the literal star count, hence the round ten thousand.
+ * It is now a proportion of it: the default gives this module's density for
+ * the window, halving halves the sky, zero empties it. The key and default are
+ * unchanged, so saved states, share links and scenario definitions keep the
+ * sky their author saw.
  */
 export const DEFAULT_STAR_DENSITY = 10000;
 
@@ -718,11 +743,9 @@ export function starCountFor(
 /**
  * The colors a star may be.
  *
- * Deliberately short and deliberately weighted toward neutral. Real starlight
- * is subtly colored and a sky of saturated dots is confetti, so the first two
- * entries - both within a few percent of white - take four fifths of the
- * field, and the visibly warm and visibly blue entries are rare enough to read
- * as a detail somebody noticed rather than as decoration.
+ * Short and weighted toward neutral: real starlight is subtly colored and
+ * saturated dots are confetti, so the first two entries (within a few percent
+ * of white) take four fifths of the field and the warm and blue ones stay rare.
  */
 export const STAR_PALETTE = Object.freeze([
   { r: 255, g: 255, b: 255 }, // neutral
@@ -750,11 +773,10 @@ export function paletteIndexFor(u) {
 /**
  * The three magnitude bands, and how much of the sky each is.
  *
- * Written as bands rather than as a curve because the requirement is a
- * statement about proportions - many very dim, fewer medium, a tiny number of
- * bright - and a curve makes that something you have to integrate to check. A
- * cube law was tried first and put thirteen per cent of the field above two
- * pixels, which is not a tiny number and reads as glitter.
+ * Bands rather than a curve, because the requirement is about proportions
+ * (many very dim, fewer medium, a tiny number bright) and a curve must be
+ * integrated to check. A cube law put thirteen per cent of the field above two
+ * pixels, which reads as glitter.
  *
  * `size` is the square's side in pixels: the faint band is sub-pixel on
  * purpose, which is what a star at the limit of visibility looks like.
@@ -882,11 +904,10 @@ export const GRID_CELL = 64;
 /**
  * A spatial index over one field, for the distortion passes.
  *
- * The lensing and gravitational-wave effects displace the stars inside a disc
- * a few dozen pixels across. Finding them used to mean testing every star in
- * the sky against every compact object on screen - ten thousand times a dozen,
- * every repaint, which is where the crowded scene's 19.6ms went. A grid turns
- * that into a walk over the handful of buckets the disc touches.
+ * Lensing and gravitational-wave effects displace the stars inside a disc a
+ * few dozen pixels across. Testing every star against every compact object
+ * cost 19.6 ms a repaint in the crowded scene; a grid walks only the buckets
+ * the disc touches.
  *
  * @param {object} field - From generateStarfield
  * @returns {object} An index with a `near` method

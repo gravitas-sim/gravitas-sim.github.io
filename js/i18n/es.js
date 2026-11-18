@@ -666,6 +666,20 @@ export const ES = {
   'inspector.tip.rings':
     'Este cuerpo se dibuja con un sistema de anillos. Los anillos son ilustrativos: aproximadamente una cuarta parte de los gigantes gaseosos generados los reciben por variedad visual, y un escenario puede activarlos o desactivarlos deliberadamente. No tienen masa ni gravedad, y no afectan a las colisiones, a la profundidad del tránsito ni a ninguna medición.',
   'inspector.stat.radius': 'Radio',
+  // El bloque «Aspecto» de un planeta, una luna o un gigante, y la descripción
+  // del lienzo para el cuerpo elegido: qué se modela y qué es ilustración.
+  'inspector.light.title': 'Aspecto',
+  'inspector.light.litBy':
+    'La luz viene de {star}, la estrella que más luz le envía (modelado).',
+  'inspector.light.none':
+    'No hay ninguna estrella en esta escena: el sombreado es ilustración.',
+  'inspector.light.above':
+    'Mitades de día y de noche vistas desde encima de la órbita (modelado).',
+  'inspector.light.phase': 'Fase vista desde {observer} (modelado).',
+  'inspector.light.markings':
+    'Marcas de la superficie, cuando se ve grande en pantalla: ilustración.',
+  'inspector.light.bands':
+    'Bandas y achatamiento, cuando se ve grande en pantalla: ilustración.',
   // El bloque «Aspecto y entorno» del agujero negro. Todo lo que contiene es
   // una decisión de dibujo; las filas de arriba se calculan a partir de la masa.
   'inspector.bh.appearance': 'Aspecto y entorno',

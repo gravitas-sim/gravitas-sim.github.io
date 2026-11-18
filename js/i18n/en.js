@@ -573,6 +573,19 @@ export const EN = {
   'inspector.tip.rings':
     'This body is drawn with a ring system. Rings are illustrative: about a quarter of generated gas giants are given them for visual variety, and a scenario may set them on or off deliberately. They have no mass, no gravity and no effect on collisions, transit depth or any measurement.',
   'inspector.stat.radius': 'Radius',
+  // A planet's, moon's or giant's Appearance disclosure, and the canvas
+  // description of the selected body: what is modeled and what is illustration.
+  'inspector.light.title': 'Appearance',
+  'inspector.light.litBy':
+    'Lit by {star}, the star that sends it the most light (modeled).',
+  'inspector.light.none': 'No star in this scene: shading is illustration.',
+  'inspector.light.above':
+    'Day and night halves as seen from above the orbit (modeled).',
+  'inspector.light.phase': 'Phase as seen from {observer} (modeled).',
+  'inspector.light.markings':
+    'Surface markings, when it is large on screen: illustration.',
+  'inspector.light.bands':
+    'Bands and flattening, when it is large on screen: illustration.',
   // The black hole's "Appearance and environment" disclosure. Everything in it
   // is a display choice; the rows above it are computed from the mass.
   'inspector.bh.appearance': 'Appearance and environment',
