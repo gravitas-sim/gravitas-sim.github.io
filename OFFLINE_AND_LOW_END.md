@@ -54,7 +54,7 @@ Measured from the committed `sw-manifest.js` and the files it lists, by
 | --- | ---: | ---: |
 | JavaScript | 1003 | 16.3 MB |
 | Images | 121 | 870 KB |
-| Stylesheets | 10 | 510 KB |
+| Stylesheets | 10 | 500 KB |
 | Fonts | 9 | 140 KB |
 | Panel markup | 10 | 70 KB |
 | Pages | 12 | 330 KB |
@@ -103,7 +103,7 @@ The idle tier, by surface (gzip level 6, to the nearest 10 KB: Node versions dif
 | 3-D lab | 46 | ~200 KB |
 | data tables | 33 | ~260 KB |
 | activity builder | 6 | ~20 KB |
-| instructor modules | 37 | ~350 KB |
+| instructor modules | 37 | ~360 KB |
 | mission lab | 41 | ~230 KB |
 | Sky Lab | 22 | ~170 KB |
 | image measurement | 9 | ~40 KB |

@@ -173,6 +173,10 @@ const en = {
   'key.correct': '(correct answer)',
   'key.rowCorrect': 'Correct answer',
   'key.rowConclusion': 'Conclusion after experimenting',
+  'key.rowEstimate': 'Estimate',
+  'key.estimateNote':
+    'A value or a range in {unit}. It is held, never marked, and shown beside the student’s own reading at the step where the result arrives. This key holds no estimate.',
+  'key.rowEvidence': 'Set beside the prediction',
   'key.rowValue': 'Expected value',
   'key.rowFormula': 'Expected value, from the student’s own numbers',
   'key.rowRange': 'Accepted range',
@@ -440,6 +444,10 @@ const es = {
   'key.correct': '(respuesta correcta)',
   'key.rowCorrect': 'Respuesta correcta',
   'key.rowConclusion': 'Conclusión tras experimentar',
+  'key.rowEstimate': 'Estimación',
+  'key.estimateNote':
+    'Un valor o un intervalo en {unit}. Queda en reserva, nunca se corrige, y se muestra junto a la lectura del propio estudiante en el paso donde llega el resultado. Esta clave no contiene ninguna estimación.',
+  'key.rowEvidence': 'Junto a la predicción',
   'key.rowValue': 'Valor esperado',
   'key.rowFormula':
     'Valor esperado, a partir de los números del propio estudiante',

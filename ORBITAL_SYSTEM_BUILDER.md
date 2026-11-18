@@ -3,7 +3,7 @@
 A form that builds a physically coherent two-dimensional hierarchical system
 from orbital elements, so a student or an instructor never has to turn
 elements into positions and velocities by hand. It opens from the Scenario
-section of the rail, beside Blank Simulation: like a scenario, it replaces the
+section of the rail, beside Clear All Bodies: like a scenario, it replaces the
 world.
 
 ## What you enter
@@ -141,7 +141,7 @@ outer bodies of a wide system.
   starfield.
 - **Selectable, editable and exportable.** These are ordinary bodies in the
   ordinary lists.
-- **Rebuildable.** Refresh Scenario builds the system again. Any other world
+- **Rebuildable.** Restart Scenario builds the system again. Any other world
   build forgets it.
 - **Shareable.** A built world is hand-made, so Share offers a full link. The
   link rebuilds from the default settings, against which its settings delta
@@ -198,7 +198,7 @@ outer bodies of a wide system.
 
 `e2e/systemBuilder.spec.js` runs against the sources and dist/. It covers
 building Kepler-16, which shows its published 41.1-day and 229-day periods,
-and Refresh Scenario. It also covers the field errors, the black-hole
+and Restart Scenario. It also covers the field errors, the black-hole
 refusal, the file round trip, a newer file refused, and a share link opened
 in another tab. It runs in Spanish, with axe and Escape, and at 375 pixels.
 On the sources only, it checks that the initial state is exactly the

@@ -18,7 +18,7 @@
       "transit": {
         "kb": 2659.9,
         "requests": 141,
-        "toolKb": 2740.1,
+        "toolKb": 2741.3,
         "toolRequests": 146
       },
       "power-law": {
@@ -40,7 +40,7 @@
         "requests": 5
       },
       "instructors": {
-        "kb": 2863.5,
+        "kb": 2863.8,
         "requests": 42
       },
       "figure": {
@@ -68,7 +68,7 @@
         "requests": 10
       },
       "studio": {
-        "kb": 952.7,
+        "kb": 953.0,
         "requests": 52
       },
       "composer": {
@@ -138,23 +138,23 @@
         "requests": 58
       },
       "kepler": {
-        "kb": 914.8,
+        "kb": 915.1,
         "requests": 77
       },
       "transit": {
-        "kb": 926.1,
+        "kb": 926.4,
         "requests": 77,
-        "toolKb": 966.4,
+        "toolKb": 968.3,
         "toolRequests": 82
       },
       "power-law": {
-        "kb": 899.4,
+        "kb": 899.7,
         "requests": 77,
-        "toolKb": 915.9,
+        "toolKb": 916.2,
         "toolRequests": 80
       },
       "largest-lesson": {
-        "kb": 1031.3,
+        "kb": 1031.6,
         "requests": 82
       },
       "teaching": {
@@ -166,15 +166,15 @@
         "requests": 2
       },
       "instructors": {
-        "kb": 1988.4,
+        "kb": 1988.8,
         "requests": 2
       },
       "figure": {
-        "kb": 679.2,
+        "kb": 679.3,
         "requests": 60
       },
       "experiments": {
-        "kb": 296.5,
+        "kb": 296.9,
         "requests": 4
       },
       "observatory": {
@@ -194,15 +194,15 @@
         "requests": 4
       },
       "studio": {
-        "kb": 221.4,
+        "kb": 221.5,
         "requests": 3
       },
       "composer": {
-        "kb": 293.8,
+        "kb": 295.8,
         "requests": 16
       },
       "course-builder": {
-        "kb": 697.1,
+        "kb": 697.4,
         "requests": 13
       },
       "course-home": {
@@ -242,7 +242,7 @@
         "requests": 2
       },
       "course-packs": {
-        "kb": 337.6,
+        "kb": 338.0,
         "requests": 13
       },
       "sky": {

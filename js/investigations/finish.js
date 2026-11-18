@@ -229,8 +229,12 @@ async function report(host, format) {
     const createDoc = html
       ? (await import('../htmlReport.js')).createHtmlDocument
       : undefined;
+    const ev = active.steps.some(s => s.evidence || s.kind === 'estimate')
+      ? await import('./evidence.js')
+      : null;
     const bytes = buildLabReport({
       createDoc,
+      ev,
       helpFor: id => helpTaken(helpStages(responses[`${id}:help`])),
       investigation: active,
       plot,

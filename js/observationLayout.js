@@ -54,9 +54,7 @@ const PANEL_IDS = [
 const BASE_BOTTOM = 120;
 const GAP = 12;
 
-// Leave a margin at the top of the window. The scenario card lives up there
-// too, but it is dismissible and the instruments are not, so the panels get the
-// room: 40px is enough that a panel never touches the very edge.
+// A margin at the top of the window, so a panel never touches the edge.
 const TOP_MARGIN = 40;
 
 // Below this a panel stops being usable, and it is better to run off the
@@ -78,6 +76,11 @@ let recency = [];
  */
 export function noteObservationPanelUsed(id) {
   recency = [id, ...recency.filter(other => other !== id)];
+}
+
+/** A panel that opens by itself on a phone opens as its title bar. */
+export function openCollapsedOnPhone(el) {
+  if (matchMedia('(max-width: 767px)').matches) el.dataset.collapsed = '';
 }
 
 /**
@@ -144,7 +147,7 @@ export function layoutObservationPanels() {
   // would ratchet them smaller and smaller.
   for (const el of open) {
     el.style.removeProperty('max-height');
-    el.classList.remove('is-collapsed');
+    el.classList.toggle('is-collapsed', 'collapsed' in el.dataset);
   }
 
   // Collapse from the least recently used end until the stack fits. A collapsed
@@ -206,6 +209,7 @@ export function initObservationLayout() {
     if (event.target.closest?.('.experiment-body')) return;
     if (!panel || !panel.id) return;
     if (event.target.closest('button, input, label')) return;
+    delete panel.dataset.collapsed;
     noteObservationPanelUsed(panel.id);
     layoutObservationPanels();
   });

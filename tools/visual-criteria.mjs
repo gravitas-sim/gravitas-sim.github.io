@@ -793,17 +793,19 @@ export function readSvgPlotText(selector) {
         ) * scale,
       role: numeric.test(t.textContent.trim()) ? 'tick' : 'label',
     }));
-  // Series: a data mark is a path or polyline with a stroke, or a circle; its
-  // marker is the shape of any `circle`, `rect` or `use` mark it carries.
+  // Series: a mark that says its shape (`data-marker`: the dots' group, a line
+  // series' markers, the fit line's triangles). A line that draws no markers is
+  // one series with none, so a second series like it fails the judge.
   const series = [];
-  for (const e of svg.querySelectorAll('path, polyline, circle')) {
-    const stroke = e.getAttribute('stroke');
-    const fill = e.getAttribute('fill');
-    const colour = stroke && stroke !== 'none' ? stroke : fill;
-    if (!colour || colour === 'none') continue;
+  for (const e of svg.querySelectorAll('[data-marker]')) {
+    if (e.tagName === 'path' && !e.getAttribute('d')) continue;
+    const css = getComputedStyle(e);
+    const colour = [e.getAttribute('stroke'), e.getAttribute('fill')].find(
+      c => c && c !== 'none'
+    );
     series.push({
-      colour,
-      marker: e.tagName === 'circle' ? 'circle' : null,
+      colour: colour ?? (css.fill !== 'none' ? css.fill : css.stroke),
+      marker: e.getAttribute('data-marker'),
       dash: e.getAttribute('stroke-dasharray') || '',
     });
   }

@@ -136,7 +136,7 @@ axe in both languages, and fits a phone.
   - a scenario with bodies has them restored, each made by its own class;
   - the panels and tools it names are pressed on the rail, as a reader's click
     would press them, so each brings its own module and strings;
-  - Refresh Scenario builds the same world again, bodies included.
+  - Restart Scenario builds the same world again, bodies included.
 - **An extension:** `npm run sdk -- init scenario-pack <id> --from <file>` wraps
   the file as a scenario-pack extension (SDK 1.5.0).
   - `validate` checks it and `test` builds its world under its seed.

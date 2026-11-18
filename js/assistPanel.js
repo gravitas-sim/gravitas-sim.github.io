@@ -28,6 +28,7 @@ import { OBJECT, WORLD, setFrame, frameState } from './referenceFrame.js';
 import {
   layoutObservationPanels,
   noteObservationPanelUsed,
+  openCollapsedOnPhone,
 } from './observationLayout.js';
 import { formatNumber } from './format.js';
 import { MONO } from './widgetCanvas.js';
@@ -453,6 +454,7 @@ function showForCurrentScenario() {
     dismissed = false;
   }
   if (mode && !dismissed) {
+    if (!enabled) openCollapsedOnPhone(e.container);
     setAssistEnabled(true);
     if (e.impact) e.impact.value = String(SETTINGS.assist_impact_parameter);
     if (!currentAssist()) armAssistRun();
