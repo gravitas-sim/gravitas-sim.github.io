@@ -53,7 +53,7 @@ const BUDGETS = [
   {
     id: 'initial',
     label: 'Initial download (CSS + eager JS)',
-    limit: 735.8,
+    limit: 739.9,
     reason:
       'Was 743 KB when this budget was first asked for. The application had ' +
       'already grown to 771 KB on its own - the extracted state module, the ' +
@@ -114,12 +114,13 @@ const BUDGETS = [
       '811.3 to 731.3 KB measured on a Node 22.23.4 build, the ceiling the ' +
       'measurement plus 0.5%, rounded up to 0.1 KB (D-R4-311-01).' +
       '\n\nRaised from 735 to 735.3 KB for the lesson canvas, controlled runs and event window changes taken together (D-R4-TRAIN-01): a Node 22 build measures 752,868 bytes, 735.2 KB, and the limit is that figure rounded up to 0.1 KB, under the standing approval of 2026-10-10.' +
-      '\n\nCrowded-scene drawing (D-R4-450-07): the trail, detail and label rules, the label choice and the tier note are start-up drawing code; raised from 735.3 to 735.8 KB, the exact overrun of a Node 22 build over v4 dc0112f6b (753,420 bytes, 735.76 KB) rounded up to 0.1 KB, under the standing approval of 2026-10-10.',
+      '\n\nCrowded-scene drawing (D-R4-450-07): the trail, detail and label rules, the label choice and the tier note are start-up drawing code; raised from 735.3 to 735.8 KB, the exact overrun of a Node 22 build over v4 dc0112f6b (753,420 bytes, 735.76 KB) rounded up to 0.1 KB, under the standing approval of 2026-10-10.' +
+      '\n\nRaised from 735.8 to 739.9 KB for the overlay, Library, lesson type, instrument start, reading feedback and lesson layout changes taken together (D-R4-TRAIN-03): a Node 22 build over v4 5c9942253 measures 757,604 bytes, 739.85 KB, and the limit is that figure rounded up to 0.1 KB, under the standing approval of 2026-10-10.',
   },
   {
     id: 'deferred',
     label: 'Deferred JavaScript (lazy chunks, gzipped)',
-    limit: 3184.3,
+    limit: 3188.7,
     reason:
       'Jumped from 1369 KB to 2105 KB when three.js and Chart.js stopped being ' +
       'CDN requests and became bundled chunks. That is the point of the change ' +
@@ -719,7 +720,8 @@ const BUDGETS = [
       '\n\nThe lesson canvas, controlled runs and event window changes taken together (D-R4-TRAIN-01): the limit is raised from 3169.9 to 3178.2 KB, the exact overrun at CI (3,254,459 bytes gzipped, 3178.2 KB) rounded up to 0.1 KB, under the standing approval of 2026-10-10. The three are raised once, together, so that one CI run judges all of them.' +
       '\n\nThe prediction evidence, sandbox workspace, plot reading size and lazy gate selection changes taken together with the lesson canvas train (D-R4-TRAIN-02): the limit is raised from 3178.2 to 3183.7 KB, the exact overrun at CI (3,260,094 bytes gzipped, 3183.7 KB) rounded up to 0.1 KBary and CI reads a few tens of bytes higher, under the standing approval of 2026-10-10. The changes are raised once, together, so that one CI run judges all of them.' +
       '\n\nA world seen close (D-R4-448-06): the limit is raised from 3183.7 to 3184.0 KB, the exact overrun of a Node 22 build over v4 1ed519a17 (3,260,367 bytes gzipped, 3183.95 KB) rounded up to 0.1 KB, under the standing approval of 2026-10-10.' +
-      '\n\nCrowded-scene drawing (D-R4-450-07): the limit is raised from 3184.0 to 3184.3 KB, the exact overrun of a Node 22 build over v4 dc0112f6b (3,260,637 bytes gzipped, 3184.22 KB) rounded up to 0.1 KB, under the standing approval of 2026-10-10.',
+      '\n\nCrowded-scene drawing (D-R4-450-07): the limit is raised from 3184.0 to 3184.3 KB, the exact overrun of a Node 22 build over v4 dc0112f6b (3,260,637 bytes gzipped, 3184.22 KB) rounded up to 0.1 KB, under the standing approval of 2026-10-10.' +
+      '\n\nOverlay, Library, lesson type, instrument start, reading feedback and lesson layout changes taken together (D-R4-TRAIN-03): the limit is raised from 3184.3 to 3188.7 KB, the exact overrun of a Node 22 build over v4 5c9942253 (3,265,116 bytes gzipped, 3188.59 KB) rounded up to 0.1 KB plus 0.1 KB because the margin is under 50 bytes, under the standing approval of 2026-10-10.',
   },
 ];
 
