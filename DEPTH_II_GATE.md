@@ -6,11 +6,14 @@ This is a gate. It decides on criteria fixed in advance, and it builds the
 decision rule that every verdict needs. The verdict is recorded here and as a
 decision-register row.
 
-**Status of this file: thresholds committed, no prototype run.** The
-machine-readable criteria are `tests/fixtures/depth-ii/thresholds.json`. Every
-section of this file down to "Verdict and slices" is as committed before any
-prototype existed. Sections written after the prototype ran are added below
-that one and say so.
+**Status of this file: verdict C.** The
+machine-readable criteria are `tests/fixtures/depth-ii/thresholds.json` and the
+results `tests/fixtures/depth-ii/results.json`; `tests/depthIIGate.test.js`
+recomputes the verdict and slices from the two. Every section of this file
+from "The question" to "Verdict and slices" is as committed in edbf2e33d,
+before any prototype existed, apart from this paragraph. The sections after
+it were written once the prototype had run. The prototype is on
+`gate/depth-ii` (20f07144a), which is never merged.
 
 ## The question and what is already known
 
@@ -124,3 +127,55 @@ Slices, as Prompt 327 Part B names them:
 In every verdict a deeper step still opens no `setup`, `stage` or scenario of
 its own. A threshold, value, tolerance or slice here is never moved after a
 result.
+
+## What the prototype measured
+
+Written after the prototype ran, on `gate/depth-ii` over v4 1f1235254.
+
+| | Criterion | Result | Measured |
+|---|---|---|---|
+| 1 | Stored work opens | pass | A progress record, assignment link (`d`), course pin (lesson and assignment items) and submission token (`dp`), each made by the v3.0 build, open on the spike. No answer was lost, the depth was honored, every assignment step was present and unchanged, both course items reviewed `same`, and grading found no stale or changed step. Seen, and not a failure: restore reports three core steps moved by position (their answers are kept by step id), and grading at that depth lists the added step as not yet answered. |
+| 2 | Depth switch and restoration | **fail** | No answer or reading was lost and the prediction was kept, but **Go deeper** onto the prototype step removed the staged pair. A deeper step has no `stage`, and opening it stages nothing, so **Run A** did nothing and said nothing. After **Fewer steps** the core scene was re-staged from its start rather than put back: both stars' positions and velocities differed, and so did `interactive_add`. The control, **Go deeper** from `weigh-the-pair` onto the existing `how-sure-is-the-total`, also leaves nothing staged. With the scene put up by the test harness, the run restores the pair exactly (1e-11). |
+| 3 | Report numbering | pass | The core walk is identical (36 steps). In the deeper walks every existing deeper step keeps its number, and the three core steps after the prototype move down by one. |
+| 4 | Existing deeper steps pass unchanged | pass | `author:check` gives 0 findings on the base and on the spike, and `ref/variation` finds nothing on the laid prototype step. |
+| 5 | The variation agrees with the model | pass | m1 = 1 read 1.000 and m1 = 3 read 3.000, against m1/m2 = 1 and 3. |
+| 6 | Low-tier frame time | NOT RUN | 20 to 69 ms per frame during the run and 60 to 71 ms for the same scene with no run. In the same minutes the profile's own `binary-pair` scene measured 49.67 ms against its recorded 5.01 ms (load average 23 to 43). The machine was nowhere near the profile's conditions, so the 8.0 ms bound could not be judged. The run cost no more than the scene without it. |
+
+A correction to the committed text: the base has **459** deeper steps, as the
+roadmap counted. The 558 written into criterion 4 counted each step of the
+three sequence files twice, once in the sequence file and once in the
+per-lesson file that re-exports it. Criterion 4's pass condition did not use
+the number, and the committed text is left as it was.
+
+## Verdict: C
+
+Criterion 2 failed, so A is out. Criterion 6 was not run, so B, which needs 4
+and 6, is out too. The rule stays as it is: a deeper step opens no setup, stage
+or scenario. `depth/world` is not extended to admit `variation`, and no
+shipped deeper step declares one. Nothing stops an author adding one, since
+the prototype passed `author:check`, but it could not run in the product. Q5
+is applied analytically, and Part B builds slices 1, 4 and 5:
+
+- **Slice 1.** `depth/decision` in the lesson-standard ratchet
+  (`tools/authoring/standardRules.mjs`). A deeper step names what the student
+  decides in `decides`, and a deeper measure step may not have every field
+  computed or copied. The baseline is what the rule counts: 444 of the 459
+  deeper steps, 3 of them computed or copied. The count may only fall.
+- **Slice 4.** `DEPTH.md` says so.
+- **Slice 5.** No deeper step is rewritten. The rule's list goes to 332 and
+  the batches.
+
+What would change the verdict: criterion 6 measured on a quiet machine with
+`tools/depth-ii-perf.spike.mjs` would make B reachable. A needs the failure in
+criterion 2 fixed first. Opening a deeper step should keep, or put back, the
+scene its anchor stood. That is a change to the lesson runtime and is outside
+this gate.
+
+## What this finds that is not about variations
+
+Any deeper step reached by **Go deeper**, or by **Next** from a staged core
+step, opens with nothing staged. At the base this already happens on
+`how-sure-is-the-total`. A deeper step that reads the scene (a probe, a
+barycentre, a reading) is read off an empty canvas. A run refused for want of
+a scene says nothing to the student. Both go to the maintainer as findings,
+not fixes.

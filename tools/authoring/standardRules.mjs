@@ -46,8 +46,6 @@ export const STANDARD_RULES = {
     'A core measure step has at least one field the student types',
   'depth/decision':
     'A deeper step names what the student decides (`decides`), and a deeper measure step has a field that is neither computed nor copied from a number the lesson already gave',
-  'depth/tool-choice':
-    'A deeper step that opens an instrument names the choice the student makes with it (`decides`)',
   'text/internal-vocabulary':
     'Student text carries no prompt numbers, gate talk, NOT RUN, file names or leg ids',
   'text/step-reference':
@@ -350,10 +348,8 @@ function copied(field, step, earlier) {
 }
 
 /**
- * Q5 of the lesson standard at depth. Two rules over the deeper steps of the
- * laid lesson: `depth/decision` for a step with no instrument, and
- * `depth/tool-choice` for one with an instrument, so no step is counted
- * twice. A read step asks nothing and is skipped. A measure step whose every
+ * Q5 of the lesson standard at depth, over the deeper steps of the laid
+ * lesson. A read step asks nothing and is skipped. A measure step whose every
  * field is computed or copied is a `depth/decision` finding whatever its
  * `decides` says: naming a decision does not make one.
  */
@@ -383,10 +379,9 @@ function depthDecision(view) {
       }
     }
     if (named) return;
-    const rule = step.tool ? 'depth/tool-choice' : 'depth/decision';
     out.push(
       found(
-        rule,
+        'depth/decision',
         view,
         i,
         step.tool

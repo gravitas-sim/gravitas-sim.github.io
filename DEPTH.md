@@ -44,14 +44,13 @@ every per-step rule over the deeper steps, laid into their lesson):
 | `depth/expectation` | A deeper step that `restates` a core numeric step carries the same answer and unit, within the core tolerance; one that `agrees` with a core computed field gets the value that field computes (by the lesson's own code) |
 | `depth/translation` | Every deeper step has its Spanish, text for text; the Spanish is written under its sid in `lesson-text/depth-es/` and `npm run lesson-text` lines it up |
 
-Two more rules count rather than fail, in the lesson-standard ratchet
+One more rule counts rather than fails, in the lesson-standard ratchet
 (`node tools/lesson-standard.mjs`, run by `author:check`). A lesson may not
 rise above its recorded count, and the record can only fall:
 
 | Rule | What it counts |
 |---|---|
-| `depth/decision` | A deeper step without an instrument that does not name what the student decides, and any deeper measure step whose every field is computed or copied from a number the lesson already gave |
-| `depth/tool-choice` | A deeper step that opens an instrument and does not name the choice the student makes with it |
+| `depth/decision` | A deeper step that does not name what the student decides (with an instrument, the choice the student makes with it), and any deeper measure step whose every field is computed or copied from a number the lesson already gave |
 
 ## What a deeper step must add
 
@@ -63,17 +62,26 @@ the author and the reviewer that students never see (for example
 `decides: 'which star to time, and over how many laps'`). A read step asks
 nothing and is not counted.
 
-The two rules above hold this. They were added with every existing deeper step
+The rule above holds this. They were added with every existing deeper step
 as it stands, and no step was rewritten to fit them. At v4 1f1235254 they count
-444 of the 459 deeper steps: 22 `depth/decision` and 422 `depth/tool-choice`,
-because no step named a decision yet. Only three measure steps had every field
+444 of the 459 deeper steps (422 of them open an instrument), because no step
+named a decision yet. Only three measure steps had every field
 computed or copied: Kepler's Laws `weighted-fit`, The Sun's Power
 `compare-with-the-nominal` and What a Telescope Resolves `the-crossover`. Most
 deeper measure fields are readings the student types. The list
-(`node tools/lesson-standard.mjs --list`, the `depth/` lines) is where Weighing
+(`node tools/lesson-standard.mjs --list`, the `depth/decision` lines) is where Weighing
 the Stars (Prompt 332) and the lesson batches start. The audit that called many
 deeper steps copied arithmetic was a reading of the lessons, not a count. The
 count is the rule's.
+
+## Controlled variations at depth (the Depth II gate)
+
+`DEPTH_II_GATE.md` asked whether a deeper step could run the lesson's own scene
+twice with one value changed. Its verdict is **C**. `depth/world` is unchanged
+and not extended to admit `variation`, no deeper step declares one, and Q5 is
+met with the reasoning a step asks for, not with a run. The prototype found that a deeper step opens with no
+scene staged, whichever way it is reached. Until that changes, a deeper step
+cannot read the canvas.
 
 ## A number with its uncertainty
 

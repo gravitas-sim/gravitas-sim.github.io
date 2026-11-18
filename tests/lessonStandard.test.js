@@ -247,7 +247,7 @@ describe('task/measure-all-computed', () => {
   });
 });
 
-describe('depth/decision and depth/tool-choice', () => {
+describe('depth/decision', () => {
   const deep = (step, depth = 'quantitative') => ({ ...step, depth });
   const core = { type: 'read', body: 'The pair is 4 AU apart.' };
 
@@ -268,13 +268,12 @@ describe('depth/decision and depth/tool-choice', () => {
     expect(rulesOf(lesson)).toContain('depth/decision');
   });
 
-  test('a deeper step with an instrument and no named choice is a tool-choice finding', () => {
+  test('a deeper step with an instrument and no named choice is found', () => {
     const lesson = lessonOf([
       core,
       deep({ type: 'question', kind: 'numeric', tool: { id: 'binary' } }),
     ]);
-    expect(rulesOf(lesson)).toContain('depth/tool-choice');
-    expect(rulesOf(lesson)).not.toContain('depth/decision');
+    expect(rulesOf(lesson)).toContain('depth/decision');
   });
 
   test('a deeper step that names its decision and has a typed reading is clean', () => {
@@ -292,7 +291,6 @@ describe('depth/decision and depth/tool-choice', () => {
     ]);
     const rules = rulesOf(lesson);
     expect(rules).not.toContain('depth/decision');
-    expect(rules).not.toContain('depth/tool-choice');
   });
 
   test('core and read steps are not judged', () => {
@@ -302,7 +300,6 @@ describe('depth/decision and depth/tool-choice', () => {
     ]);
     const rules = rulesOf(lesson);
     expect(rules).not.toContain('depth/decision');
-    expect(rules).not.toContain('depth/tool-choice');
   });
 });
 
