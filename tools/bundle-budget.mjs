@@ -53,7 +53,7 @@ const BUDGETS = [
   {
     id: 'initial',
     label: 'Initial download (CSS + eager JS)',
-    limit: 735.3,
+    limit: 736.3,
     reason:
       'Was 743 KB when this budget was first asked for. The application had ' +
       'already grown to 771 KB on its own - the extracted state module, the ' +
@@ -113,12 +113,13 @@ const BUDGETS = [
       'panel and the rotation curve panel became fetches at their first use: ' +
       '811.3 to 731.3 KB measured on a Node 22.23.4 build, the ceiling the ' +
       'measurement plus 0.5%, rounded up to 0.1 KB (D-R4-311-01).' +
-      '\n\nRaised from 735 to 735.3 KB for the lesson canvas, controlled runs and event window changes taken together (D-R4-TRAIN-01): a Node 22 build measures 752,868 bytes, 735.2 KB, and the limit is that figure rounded up to 0.1 KB, under the standing approval of 2026-10-10.',
+      '\n\nRaised from 735 to 735.3 KB for the lesson canvas, controlled runs and event window changes taken together (D-R4-TRAIN-01): a Node 22 build measures 752,868 bytes, 735.2 KB, and the limit is that figure rounded up to 0.1 KB, under the standing approval of 2026-10-10.' +
+      '\n\nRaised from 735.3 to 736.3 KB for the overlay, Library, lesson type, instrument start, reading feedback and lesson layout changes taken together (D-R4-TRAIN-03): a Node 22 build over v4 dc0112f6b measures 753,828 bytes, 736.16 KB, and the limit is that figure rounded up to 0.1 KB plus 0.1 KB because the margin is under 50 bytes, under the standing approval of 2026-10-10.',
   },
   {
     id: 'deferred',
     label: 'Deferred JavaScript (lazy chunks, gzipped)',
-    limit: 3184.0,
+    limit: 3188.5,
     reason:
       'Jumped from 1369 KB to 2105 KB when three.js and Chart.js stopped being ' +
       'CDN requests and became bundled chunks. That is the point of the change ' +
@@ -717,7 +718,8 @@ const BUDGETS = [
       '\n\nBody names and the selection cue (D-R4-336-02): the limit is raised from 3169.6 to 3169.9 KB, the exact overrun of a Node 22 build over v4 091aa6186 (3,245,883 bytes gzipped, 3169.8 KB) plus the offset CI usually adds, rounded up to 0.1 KB, under the standing approval of 2026-10-10.' +
       '\n\nThe lesson canvas, controlled runs and event window changes taken together (D-R4-TRAIN-01): the limit is raised from 3169.9 to 3178.2 KB, the exact overrun at CI (3,254,459 bytes gzipped, 3178.2 KB) rounded up to 0.1 KB, under the standing approval of 2026-10-10. The three are raised once, together, so that one CI run judges all of them.' +
       '\n\nThe prediction evidence, sandbox workspace, plot reading size and lazy gate selection changes taken together with the lesson canvas train (D-R4-TRAIN-02): the limit is raised from 3178.2 to 3183.7 KB, the exact overrun at CI (3,260,094 bytes gzipped, 3183.7 KB) rounded up to 0.1 KBary and CI reads a few tens of bytes higher, under the standing approval of 2026-10-10. The changes are raised once, together, so that one CI run judges all of them.' +
-      '\n\nA world seen close (D-R4-448-06): the limit is raised from 3183.7 to 3184.0 KB, the exact overrun of a Node 22 build over v4 1ed519a17 (3,260,367 bytes gzipped, 3183.95 KB) rounded up to 0.1 KB, under the standing approval of 2026-10-10.',
+      '\n\nA world seen close (D-R4-448-06): the limit is raised from 3183.7 to 3184.0 KB, the exact overrun of a Node 22 build over v4 1ed519a17 (3,260,367 bytes gzipped, 3183.95 KB) rounded up to 0.1 KB, under the standing approval of 2026-10-10.' +
+      '\n\nOverlay, Library, lesson type, instrument start, reading feedback and lesson layout changes taken together (D-R4-TRAIN-03): the limit is raised from 3184.0 to 3188.5 KB, the exact overrun of a Node 22 build over v4 dc0112f6b (3,264,910 bytes gzipped, 3188.39 KB) rounded up to 0.1 KB plus 0.1 KB because the margin is under 50 bytes, under the standing approval of 2026-10-10.',
   },
 ];
 
