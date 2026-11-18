@@ -11,16 +11,16 @@ The hand-written, human-reviewed acceptance map is
 [`lesson-acceptance.json`](lesson-acceptance.json); `npm run
 audit:scene:check` fails if it disagrees with what is generated here.
 
-Across 124 investigations and 1521 steps: 1429 steps
+Across 124 investigations and 1523 steps: 1421 steps
 declare a scene, 167 let a reader change one, 177 read the
-running integration, 1012 show a prescribed model result, 161 draw
-on a stored dataset, 881 put a self-contained panel beside the text,
-389 keep something, and 58 are prose.
+running integration, 1014 show a prescribed model result, 161 draw
+on a stored dataset, 883 put a self-contained panel beside the text,
+391 keep something, and 58 are prose.
 Of 195 prediction loops, 195 are returned to,
 195 produce a measurement before they are answered, and
 0 end in an explanation in the reader's own words.
 195 hold their marking until the experiment settles them.
-The canvas behind a step is stated as scene on 0, portrait on 0, quiet on 0; 1521 state none.
+The canvas behind a step is stated as scene on 0, portrait on 0, quiet on 10; 1513 state none.
 
 ## Kepler's Laws (`keplers-laws`)
 
@@ -906,15 +906,16 @@ The canvas behind a step is stated as scene on 0, portrait on 0, quiet on 0; 152
 
 ## Measuring the Moon (`measuring-the-moon`)
 
-- **Steps:** 8. Scene declared on 8; a reader can change something on 0; 8 declare a scene nobody on that step can touch.
-- **Where the numbers come from:** 0 live engine, 8 prescribed model, 0 stored dataset, 8 self-contained panel.
+- **Steps:** 10. Scene declared on 0; a reader can change something on 0; 0 declare a scene nobody on that step can touch.
+- **Where the numbers come from:** 0 live engine, 10 prescribed model, 0 stored dataset, 10 self-contained panel.
 - **What students do:** move-an-instrument-control, press-an-instrument-preset, commit-a-prediction, record-values, choose-an-option, answer-in-words.
-- **Objects the steps declare:** star.
+- **Objects the steps declare:** none.
 - **Instruments:** moon-marks.
+- **Canvas:** quiet.
 - **Stored data:** none.
 - **Evidence kept:** notebook-fields.
-- **Prediction loops:** predict-the-scale → scale-from-the-disc, why-a-pair → scale-from-the-disc; predict-the-plain → measure-the-plain, what-would-change-it, what-you-worked-out → measure-the-plain.
-- **Recovery:** wrong body: the object list names what the step staged; ambiguous result: the check says in words how close is close enough.
+- **Prediction loops:** predict-the-scale → mark-the-disc-width, a-pair-that-stops-short, why-a-pair → mark-the-disc-width; predict-the-plain → measure-the-plain, squeezed-at-the-plain, what-would-change-it, what-you-worked-out → measure-the-plain.
+- **Recovery:** ambiguous result: the check says in words how close is close enough.
 - **Scene rebuilds:** none.
 - **Accepted central experiment** (reviewed 2026-09-11): object `panel:moon-marks`, control moon-marks/r, measures the diameter in kilometers of a circle drawn on the Galileo picture of the Moon, from the scale a reference pair of known length sets, evidence `notebook-fields`, covered by `e2e/centralExperiments.spec.js`.
 

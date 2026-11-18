@@ -3185,8 +3185,8 @@
         "js/data/investigations/es/measuring-the-moon.js"
       ],
       "instrument_files": ["js/imagingWidgets.js"],
-      "depths": { "core": 8, "quantitative": 2, "advanced": 2 },
-      "spanish_steps": { "core": 8, "deeper": 4 },
+      "depths": { "core": 10, "quantitative": 2, "advanced": 2 },
+      "spanish_steps": { "core": 10, "deeper": 4 },
       "languages": ["en", "es"],
       "sequences": [{ "id": "observing-and-measuring", "position": 11 }],
       "courses": [],

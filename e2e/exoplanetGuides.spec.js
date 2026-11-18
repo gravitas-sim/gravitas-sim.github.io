@@ -180,6 +180,56 @@ test.describe('the Exoplanet Observatory guides', () => {
     ]);
   });
 
+  test('the fit guide: the reader holds the limb darkening fixed, takes a published star radius, and ends on what limits the planet’s radius', async ({
+    page,
+  }) => {
+    test.slow();
+    await openGuide(page, 'guide=exo-fit');
+    await expect(title(page)).toContainText('Step 1 of 7');
+    await next(page);
+    await expect(title(page)).toContainText('Choose what the fit leaves free');
+    await page.locator('#gdGo').click();
+    await expect(page.locator('#fitRun')).toBeVisible({ timeout: 30_000 });
+    // No fit yet: the check says so. Then hold q1 and q2 fixed (at the panel's
+    // own values) and fit: any defensible choice passes.
+    await page.locator('#gdCheck').click();
+    await expect(feedback(page)).toHaveAttribute('data-ok', 'false');
+    for (const name of ['q1', 'q2'])
+      await page.locator(`#fitMode-${name}`).selectOption('fixed');
+    await page.locator('#fitRun').click();
+    await expect(page.locator('#fitStatus')).toContainText(/Fitted in/, {
+      timeout: 180_000,
+    });
+    await page.locator('#gdCheck').click();
+    await expect(feedback(page)).toHaveAttribute('data-ok', 'true');
+    await expect(feedback(page)).toContainText('Fitted: k = ');
+    // The star's radius: the step no longer says which; the table gives two.
+    await next(page);
+    await next(page);
+    await expect(title(page)).toContainText('From a ratio to a radius');
+    await expect(page.locator('#gdShow')).toContainText('Torres');
+    await expect(page.locator('#gdShow')).toContainText('Stassun');
+    await page.locator('#fitStellarRadius').fill('1.155');
+    await page.locator('#fitStellarRadiusSigma').fill('0.015');
+    await page.locator('#fitRun').click();
+    await expect(page.locator('#fitStatus')).toContainText(/Fitted in/, {
+      timeout: 180_000,
+    });
+    await page.locator('#gdCheck').click();
+    await expect(feedback(page)).toHaveAttribute('data-ok', 'true');
+    // The closing question reads the reader's own fit: nothing is typed.
+    await next(page);
+    await next(page);
+    await expect(title(page)).toContainText('What limits the planet’s radius?');
+    await expect(page.locator('#gdShow')).toContainText('Your fit');
+    await page.locator('input[value="fit"]').check();
+    await page.locator('#gdCheck').click();
+    await expect(feedback(page)).toHaveAttribute('data-ok', 'false');
+    await page.locator('input[value="star"]').check();
+    await page.locator('#gdCheck').click();
+    await expect(feedback(page)).toHaveAttribute('data-ok', 'true');
+  });
+
   test('in Spanish, and with no accessibility violations in either language', async ({
     page,
   }) => {
