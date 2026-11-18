@@ -801,8 +801,8 @@ export const MANIFEST = [
     level: 'Introductory astronomy',
     thumbnail: 'images/investigations/measuring-the-moon.webp',
     depths: 3,
-    stepCount: 8,
-    gradedCount: 6,
+    stepCount: 10,
+    gradedCount: 8,
     objectiveCount: 4,
   },
   {

@@ -27,7 +27,8 @@ import { expectationsFor } from '../../js/instructorExpectations.js';
 import { flowFor } from '../../js/instructorFlow.js';
 import { gradedSteps } from '../../js/data/investigations/catalog.js';
 import { cueFindings } from './cueRules.mjs';
-import { retiredFindings } from './retiredRules.mjs';
+import { retiredFindings as retired } from './retiredRules.mjs';
+import { DEPTH_LESSONS, loadDepthSteps } from '../../js/investigations/depth.js';
 import { autoArmFindings } from './autoArmRules.mjs';
 
 export const LESSON_DIR = 'js/data/investigations';
@@ -75,6 +76,12 @@ export async function loadAuthoringInputs() {
   // allWidgets() lists only the families fetched so far; the rules check
   // every tool id against the whole catalog, lazily loaded families included.
   await whenWidgetsReady();
+  // A revised step may be succeeded by a deeper one, which the lesson file does not hold.
+  const deeper = {};
+  for (const inv of INVESTIGATIONS)
+    if (inv.retired && DEPTH_LESSONS.includes(inv.id))
+      deeper[inv.id] = (await loadDepthSteps(inv.id)).map(s => s.sid);
+  const retiredFindings = lesson => retired(lesson, deeper[lesson.id]);
   return {
     investigations: INVESTIGATIONS,
     manifests: { en: MANIFEST_EN, es: MANIFEST_ES },

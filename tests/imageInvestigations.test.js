@@ -220,11 +220,19 @@ describe('every validator accepts what the instrument reads and refuses a wrong 
   };
   test('Measuring the Moon', () => {
     const f = W.moonView({ x1: 3, x2: 496, cx: 289, cy: 306, r: 45 });
-    ok('measuring-the-moon', 'scale-from-the-disc', {
+    ok('measuring-the-moon', 'mark-the-disc-width', {
       pair: W.moonView({ x1: 3, x2: 496, cx: 289, cy: 306, r: 20 }).pairPx,
       scale: f.scale.value,
     });
+    const short = W.moonView({ x1: 3, x2: 440, cx: 289, cy: 306, r: 25 });
+    ok('measuring-the-moon', 'a-pair-that-stops-short', {
+      scale: short.scale.value,
+      km: short.diameterKm,
+    });
     ok('measuring-the-moon', 'measure-the-plain', { km: f.diameterKm });
+    ok('measuring-the-moon', 'squeezed-at-the-plain', {
+      share: 100 * f.foreshorten,
+    });
     const l = W.moonView({ x1: 3, x2: 496, cx: 470, cy: 245, r: 20 });
     ok('measuring-the-moon', 'near-the-limb', {
       off: l.offset,
@@ -291,9 +299,9 @@ describe('every validator accepts what the instrument reads and refuses a wrong 
       0.4
     );
     near(
-      deeper('measuring-the-moon', 'a-diameter-with-an-error-bar').answer,
-      f.diameterKm,
-      40
+      deeper('measuring-the-moon', 'a-diameter-with-the-squeeze').answer,
+      f.diameterKm / f.foreshorten,
+      4
     );
     const j = W.parallaxView({ fit: 2, n: 14 }, earth).res;
     near(

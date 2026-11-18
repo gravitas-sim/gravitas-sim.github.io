@@ -1238,6 +1238,26 @@ export const MEASURING_THE_MOON = {
   prerequisites: ['what-is-a-measurement'],
   tags: ['observing'],
   lock: { placement: true, inspector: true },
+  // The picture is the subject, so nothing is staged behind it (D-R4-330-01).
+  canvas: 'quiet',
+  retired: {
+    'scale-from-the-disc': {
+      to: 'mark-the-disc-width',
+      release: '3.1',
+      was: {
+        en: 'Set the two ends of the reference pair to the numbers the step named and read its length and scale.',
+        es: 'Poner los dos extremos del par de referencia en los números que indicaba el paso y leer su longitud y su escala.',
+      },
+    },
+    'a-diameter-with-an-error-bar': {
+      to: 'a-diameter-with-the-squeeze',
+      release: '3.1',
+      was: {
+        en: 'Give the plain’s diameter with an uncertainty that includes the soft edge, without the slant of the plain.',
+        es: 'Dar el diámetro de la llanura con una incertidumbre que incluye el borde suave, sin la inclinación de la llanura.',
+      },
+    },
+  },
   objectives: [
     'Say why a picture has no scale of its own, and where a scale comes from',
     'Give a real picture a scale from a length you know, and read a size in kilometers from a circle on it',
@@ -1247,7 +1267,6 @@ export const MEASURING_THE_MOON = {
   steps: [
     {
       sid: 'a-picture-of-the-moon',
-      stage: STAGE,
       type: 'read',
       title: 'A real picture of the Moon',
       body: `This is a <strong>real</strong> picture: the Moon, photographed by NASA&rsquo;s
@@ -1267,9 +1286,8 @@ export const MEASURING_THE_MOON = {
     },
     {
       sid: 'predict-the-scale',
-      stage: STAGE,
       type: 'predict',
-      reveal: 'scale-from-the-disc',
+      reveal: 'mark-the-disc-width',
       title: 'What gives a picture its scale?',
       body: `You want a length on the picture in kilometers, and you have only
              pixels.`,
@@ -1289,54 +1307,113 @@ export const MEASURING_THE_MOON = {
       tool: MM({}, ['x1', 'x2', 'cx', 'cy', 'r']),
     },
     {
-      sid: 'scale-from-the-disc',
-      stage: STAGE,
+      sid: 'mark-the-disc-width',
       type: 'measure',
-      title: 'A reference pair across the disc',
-      body: `Mark the full width of the disc with a <strong>reference pair</strong>: a
-             line along the horizontal through the middle of the disc (row 245), from
-             its left edge to its right edge. Set the left end to <strong>3</strong>
-             and the right end to <strong>496</strong>. The pair is taken to span
-             3,474.8 km, the Moon&rsquo;s mean diameter. Read its length in pixels and
-             the scale it gives.
-             \n\nThe right end sits on the last column of the frame, so the disc may
-             be a pixel or two wider than the picture. Keep that in mind: it is not in
-             the [[uncertainty|uncertainty]] the tool states.`,
+      title: 'Mark the width of the disc',
+      body: `The <strong>reference pair</strong> is a line along row 245, through the middle of
+             the disc, and the tool takes it to span the Moon&rsquo;s mean diameter,
+             3,474.8 km. Where you put its two ends sets the scale.
+             \n\nMove <strong>Left end of the pair</strong> and <strong>Right end of the
+             pair</strong> to the two edges of the Moon, then take the length of the pair
+             and the scale it gives. The right edge touches the last column, so the disc may
+             be a pixel or two wider than the picture: that is not in the
+             [[uncertainty|uncertainty]] the tool states.`,
       fields: [
-        { id: 'pair', label: 'Length of the pair', unit: 'px', want: '493' },
+        {
+          id: 'pair',
+          label: 'Length of the pair',
+          unit: 'px',
+          want: '493',
+          source: { tool: 'pair' },
+        },
         {
           id: 'scale',
           label: 'Scale from the pair, in km per pixel',
           unit: '',
           want: '7.05',
+          source: { tool: 'scale' },
         },
       ],
       validate: v => {
         if (![v.pair, v.scale].every(Number.isFinite)) return null;
-        if (near(v.pair, 493, 3) && near(v.scale, 7.05, 0.05)) {
+        if (!near(v.scale * v.pair, 3474.8, 8)) {
           return {
-            level: 'ok',
+            level: 'error',
             message:
-              'The pair spans 493 pixels, so one pixel is 7.05 km on the Moon. The scale is only as good as the two things it rests on: the diameter you assumed, and where you put the two ends.',
+              'The scale is the Moon’s width divided by the length of the pair. Take both readings from the instrument.',
+          };
+        }
+        if (v.pair < 486) {
+          return {
+            level: 'error',
+            message:
+              'The pair stops short of the Moon’s edge. The tool still counts it as the Moon’s whole width, so every pixel is made to look bigger than it is. Look at where each end of the line meets the edge of the disc.',
           };
         }
         return {
-          level: 'error',
+          level: 'ok',
           message:
-            'Set the left end to 3 and the right end to 496, then read “Length of the pair” and “Scale from the pair”.',
+            'The pair reaches both edges, so one pixel is about 7 km on the Moon. The scale is only as good as the two things it rests on: the diameter assumed, and where the two ends sit.',
         };
       },
       tool: MM({ x1: 60, x2: 440 }, ['cx', 'cy', 'r']),
     },
     {
+      sid: 'a-pair-that-stops-short',
+      type: 'measure',
+      title: 'A pair that stops short',
+      body: `Now make the mistake on purpose. Move an end of the pair well inside the
+             edge of the Moon, and take the scale and the diameter of the circle in
+             kilometers. The circle stays the same size; a longer or shorter pair changes
+             only the scale.`,
+      fields: [
+        {
+          id: 'scale',
+          label: 'Scale from the short pair, in km per pixel',
+          unit: '',
+          want: '8',
+          source: { tool: 'scale' },
+        },
+        {
+          id: 'km',
+          label: 'Diameter of the circle',
+          unit: 'km',
+          want: '398',
+          source: { tool: 'diameterKm' },
+        },
+      ],
+      validate: v => {
+        if (![v.scale, v.km].every(Number.isFinite)) return null;
+        // The circle is 25 px in radius: its diameter is 50 pixels of this scale.
+        if (!near(v.km, 50 * v.scale, 3)) {
+          return {
+            level: 'error',
+            message:
+              'The scale and the diameter must come from the same pair. Take both again once the pair is where you want it.',
+          };
+        }
+        if (v.scale < 7.4) {
+          return {
+            level: 'error',
+            message:
+              'That pair is still close to the edge, within what the tool already states. Move the right end in by 30 pixels or more, then take both readings again.',
+          };
+        }
+        return {
+          level: 'ok',
+          message:
+            'The circle did not change, yet its diameter did. A pair that is short by some share makes every length read off the picture too long by the same share, so a scale error is carried into every size.',
+        };
+      },
+      tool: MM({ x1: 3, x2: 496, cx: 289, cy: 306, r: 25 }, ['cx', 'cy', 'r']),
+    },
+    {
       sid: 'why-a-pair',
-      stage: STAGE,
       type: 'question',
       kind: 'choice',
       title: 'Why the scale comes from you',
-      body: `The Observatory can give an image a scale in arcseconds per pixel when
-             the image carries world coordinates, and it refuses to for this picture.
-             The scale you just made came from a pair you marked.`,
+      body: `Some pictures carry world coordinates, and from them the Observatory can read a
+             scale in arcseconds per pixel.`,
       prompt: 'Why does the scale have to come from a pair that you mark?',
       options: [
         'The picture was taken by a spacecraft, so it has no pixels',
@@ -1364,7 +1441,6 @@ export const MEASURING_THE_MOON = {
     },
     {
       sid: 'predict-the-plain',
-      stage: STAGE,
       type: 'predict',
       reveal: 'measure-the-plain',
       title: 'How wide is the dark plain?',
@@ -1375,7 +1451,8 @@ export const MEASURING_THE_MOON = {
       options: ['6 km', '60 km', '600 km', '6,000 km'],
       answer: 2,
       hints: [
-        'The whole Moon is about 3,500 km across. What share of it is the plain?',
+        'Compare the plain with the pair drawn across the whole disc.',
+        'The pair stands for the Moon’s width. What share of it is the plain?',
       ],
       because:
         'About 600 km, a little under a fifth of the Moon’s width: the plain spans roughly a fifth of the disc and the disc is 3,475 km across. The next step measures it.',
@@ -1383,19 +1460,19 @@ export const MEASURING_THE_MOON = {
     },
     {
       sid: 'measure-the-plain',
-      stage: STAGE,
       type: 'measure',
       title: 'A circle on the plain',
-      body: `The pair stays across the disc. The circle starts at <em>x</em> = 289, <em>y</em> = 306.
-             Change the <strong>radius</strong> until the circle follows the edge of the
-             dark plain, and nudge the center if the circle drifts to one side. Read
-             the diameter of the circle in kilometers.`,
+      body: `The pair is set across the disc for you, so the scale is fixed. The circle starts at
+             <em>x</em> = 289, <em>y</em> = 306. Change the <strong>radius</strong> until the circle
+             follows the edge of the dark plain, and nudge the center if the circle drifts to one
+             side. Then take the diameter of the circle in kilometers.`,
       fields: [
         {
           id: 'km',
           label: 'Diameter of the circle',
           unit: 'km',
-          want: '630',
+          want: '634',
+          source: { tool: 'diameterKm' },
         },
       ],
       validate: v => {
@@ -1404,34 +1481,70 @@ export const MEASURING_THE_MOON = {
           return {
             level: 'ok',
             message:
-              'About 634 km across, as the prediction said, within the few pixels a careful person can place the edge of a soft dark plain. The tool states about 6 km; the next step is about what that number does and does not include.',
+              'That is within the few pixels a careful person can place the edge of a soft dark plain. The tool states a much smaller uncertainty; the next steps are about what it leaves out.',
           };
         }
         return {
           level: 'error',
           message:
-            'Fit the circle to the edge of the dark plain, then read “Diameter of the circle in kilometers”.',
+            'Fit the circle to the edge of the dark plain, then take the diameter of the circle in kilometers.',
         };
       },
       tool: MM({ x1: 3, x2: 496, cx: 289, cy: 306, r: 30 }, ['x1', 'x2']),
     },
     {
+      sid: 'squeezed-at-the-plain',
+      type: 'measure',
+      title: 'The plain is seen at a slant',
+      body: `The plain is not at the middle of the disc, so you see it at a slant: a round
+             feature here looks narrower along the line to the disc&rsquo;s center than it is.
+             Move the circle&rsquo;s center onto the plain, near <em>x</em> = 289, <em>y</em> = 306,
+             and take that width as a share of the true width. Then try a spot nearer the
+             edge and see how the number changes.`,
+      fields: [
+        {
+          id: 'share',
+          label: 'Width of a round feature along the line to the center',
+          unit: '%',
+          want: '96',
+          source: { tool: 'foreshort' },
+        },
+      ],
+      validate: v => {
+        if (!Number.isFinite(v.share)) return null;
+        if (near(v.share, 96, 3)) {
+          return {
+            level: 'ok',
+            message:
+              'Along the line to the disc’s center the plain looks a few percent narrower than it is, and across that line it does not. A round circle on it therefore measures somewhat less than the plain’s true width.',
+          };
+        }
+        return {
+          level: 'error',
+          message:
+            'Put the circle back on the plain (center near x = 289, y = 306), then take the width along the line to the center.',
+        };
+      },
+      tool: {
+        ...MM({ x1: 3, x2: 496, cx: 289, cy: 306, r: 45 }, ['x1', 'x2']),
+        start: { x1: 3, x2: 496, cx: 250, cy: 245, r: 45 },
+      },
+    },
+    {
       sid: 'what-would-change-it',
-      stage: STAGE,
       type: 'question',
       kind: 'short',
       rubric:
-        'Full credit for naming two things that change the diameter, for example where the edge of the plain is placed (a soft edge, so two careful people differ by a few pixels), where the two ends of the pair are placed, the assumed diameter of the Moon, or the picture being cropped at the right, and for saying that the stated uncertainty of about 6 km includes only the rounding of each placement, and so leaves the softness of the edge and the assumptions out. Do not credit saying the number is exact, or that more marks of the same kind remove the assumptions.',
+        'Full credit for naming two things that change the diameter, for example where the edge of the plain is placed (a soft edge, so two careful people differ by a few pixels), where the two ends of the pair are placed, the assumed diameter of the Moon, the picture being cropped at the right, or the plain being seen at a slant, and for saying that the stated uncertainty includes only the rounding of each placement, and so leaves the softness of the edge, the slant and the assumptions out. Do not credit saying the number is exact, or that more marks of the same kind remove the assumptions.',
       title: 'What would change the number?',
-      body: `The tool states the diameter as about 634 &plusmn; 6 km. Two people who each
-             fit the circle by eye will not agree to 6 km.`,
+      body: `Two people who each fit the circle by eye will not agree exactly, and the
+             tool prints an uncertainty beside the diameter.`,
       prompt:
         'In two or three sentences: name two things that would change the diameter you got, and say which of them the stated uncertainty includes.',
       tool: MM({ x1: 3, x2: 496, cx: 289, cy: 306, r: 45 }, ['x1', 'x2']),
     },
     {
       sid: 'what-you-worked-out',
-      stage: STAGE,
       type: 'read',
       title: 'What you worked out',
       body: `A picture has no scale until you give it one, and the scale you give it is
@@ -1439,7 +1552,7 @@ export const MEASURING_THE_MOON = {
              placed. With it, a circle on a feature gave a size in kilometers, about
              634 km for the plain, and the tool&rsquo;s stated uncertainty covered only the
              rounding of your marks. The softness of the edge, the crop at the right,
-             the assumed diameter and the foreshortening (96 percent at the plain) are not in it. And because the picture is a
+             the assumed diameter and the slant of the plain (about 4 percent narrower along the line to the center) are not in it. And because the picture is a
              display picture, its gray levels are not light: you measured where things
              are and how big they are, and nothing about how bright.`,
       tool: MM({ x1: 3, x2: 496, cx: 289, cy: 306, r: 45 }, ['x1', 'x2']),

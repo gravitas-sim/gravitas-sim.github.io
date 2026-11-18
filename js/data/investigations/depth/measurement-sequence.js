@@ -501,7 +501,7 @@ export const MEASURING_THE_MOON_DEEPER = {
       tool: MM({ x1: 3, x2: 496, cx: 289, cy: 306, r: 45 }, ['x1', 'x2']),
     },
     {
-      sid: 'a-diameter-with-an-error-bar',
+      sid: 'a-diameter-with-the-squeeze',
       after: 'a-pixel-at-each-end',
       depth: 'quantitative',
       type: 'question',
@@ -509,25 +509,27 @@ export const MEASURING_THE_MOON_DEEPER = {
       uncertainty: true,
       title: 'The diameter with an error bar',
       body: `Report the diameter of the dark plain as a value, then &plusmn;, then an uncertainty
-             you can defend. A careful person places the soft edge of this plain to within about
-             three pixels either way, which is 21 km. It counts as right when the range you
-             give overlaps the range the plain allows, and is no wider than 60 km.`,
+             you can defend. Two things are not in the tool&rsquo;s own figure. A careful person
+             places the soft edge to within about three pixels either way, which is 21 km. And if
+             the plain is round, the slant you measured makes it wider than your round circle by
+             that share, along one direction only. It counts as right when the range you give
+             reaches the plain&rsquo;s allowed diameter, and is no wider than 60 km.`,
       prompt: 'The diameter, with its uncertainty',
       unit: 'km',
       placeholder: 'a value, then ± its uncertainty',
-      answer: 634,
-      tolerance: 40,
+      answer: 660,
+      tolerance: 4,
       maxUncertainty: 60,
       hints: [
-        'Write the diameter, then ±, then an uncertainty that includes how well the edge can be placed.',
+        'Write the diameter, then ±, then an uncertainty that includes how well the edge can be placed and the slant.',
       ],
       because:
-        'About 634 km, give or take 20 to 40: the 6 km the tool states is the rounding of the marks and is too small to be the whole uncertainty, because the edge of the plain is soft. An error bar you can defend includes what the stated one leaves out.',
+        'About 634 km, and up to about 660 if the plain is round: the 6 km the tool states is only the rounding of the marks. The soft edge adds about 21 km either way, and the slant, about 4 percent of 634 km, adds about 26 km upward only, so an error bar you can defend is longer above the value than below it.',
       tool: MM({ x1: 3, x2: 496, cx: 289, cy: 306, r: 45 }, ['x1', 'x2']),
     },
     {
       sid: 'near-the-limb',
-      after: 'a-diameter-with-an-error-bar',
+      after: 'a-diameter-with-the-squeeze',
       depth: 'advanced',
       type: 'measure',
       title: 'The same circle near the limb',
@@ -2236,7 +2238,7 @@ export const INSTRUCTOR = {
       placement:
         'After What Is a Measurement?, which supplies marks, spread and the standard error. It needs only ratios and a diameter. It supports OpenStax Astronomy 2e chapter 6 on how astronomers observe, and it is the first of the image investigations of the observing-and-measuring sequence, placed after the detector investigations.',
       overview:
-        'Students work on a real picture, the Moon from the Galileo spacecraft on 7 December 1992, an enhanced-color composite shown in gray, which the Observatory treats as display-only. They predict what gives a picture its scale (a length in it that is known by other means), mark a reference pair across the disc from x = 3 to x = 496 and read 493 pixels, so 7.05 km per pixel from the Moon’s mean diameter of 3,474.8 km, and say why the scale must come from them (the picture records no coordinates or units). They predict the width of a large dark plain near the middle of the disc (about 600 km) and measure it with a circle centered at (289, 306): about 634 km, with the tool stating 6 km. They say what would change the number. The quantitative depth gives the worst case of a pixel at each end (14.1 km) and the diameter with a defensible error bar, about 634 ± 20 to 40 km. The advanced depth moves the circle to the limb, where a round feature looks 45 percent as wide along the radius, and says that a gray level of an enhanced picture is not light.',
+        'Students work on a real picture, the Moon from the Galileo spacecraft on 7 December 1992, an enhanced-color composite shown in gray, which the Observatory treats as display-only. They predict what gives a picture its scale (a length in it that is known by other means), place the two ends of a reference pair on the edges of the disc themselves (about 493 pixels, so about 7.05 km per pixel from the Moon’s mean diameter of 3,474.8 km, NASA’s Moon fact sheet), see on purpose what a short pair does to the scale and to a size, and say why the scale must come from them (the picture records no coordinates or units). The instrument opens with the pair 380 pixels wide, which is not the answer. They predict the width of a large dark plain near the middle of the disc (about 600 km) and measure it with a circle centered at (289, 306): about 634 km, with the tool stating 6 km. They read how much the slant narrows the plain along the line to the disc’s center (about 4 percent: the plain is at 0.29 of the disc’s radius from its center, and the width is the square root of one minus 0.29 squared of the true one), and say what would change the number. The quantitative depth gives the worst case of a pixel at each end (14.1 km) and the diameter with a defensible error bar that also holds the slant, about 634 km with up to 26 km more above and about 21 km either way for the edge. The advanced depth moves the circle to the limb, where a round feature looks 45 percent as wide along the radius, and says that a gray level of an enhanced picture is not light.',
       priorKnowledge: [
         'A position on a picture in pixels',
         'Ratios and a scale',
@@ -2249,7 +2251,7 @@ export const INSTRUCTOR = {
         },
         {
           heading: 'What the stated uncertainty includes',
-          body: 'The tool states the rounding of each placement. The softness of an edge, a cropped limb and the assumed diameter are not in it, so a defensible error bar is wider than the stated one.',
+          body: 'The tool states the rounding of each placement. The softness of an edge, a cropped limb, the assumed diameter and the slant of the plain are not in it, so a defensible error bar is wider than the stated one, and longer above the value than below it.',
         },
         {
           heading: 'Display-only',
@@ -2267,7 +2269,7 @@ export const INSTRUCTOR = {
         },
         {
           name: 'Depth',
-          text: 'Quantitative: a pixel at each end (14.1 km) and the diameter with an error bar. Advanced: foreshortening near the limb (0.89 of the radius, 45 percent) and why gray levels are not light.',
+          text: 'Quantitative: a pixel at each end (14.1 km) and the diameter with an error bar that includes the soft edge and the slant. Advanced: foreshortening near the limb (0.89 of the radius, 45 percent) and why gray levels are not light.',
         },
       ],
       misconceptions: [
@@ -2587,9 +2589,9 @@ export const INSTRUCTOR = {
         text: 'A real, display-only picture, and what gives it a scale.',
       },
       {
-        from: 'scale-from-the-disc',
+        from: 'mark-the-disc-width',
         to: 'why-a-pair',
-        text: 'A reference pair across the disc gives 7.05 km per pixel, and why the scale comes from the student.',
+        text: 'A reference pair on the two edges of the disc gives about 7.05 km per pixel, a short pair shows how a scale error carries into every size, and why the scale comes from the student.',
       },
       {
         from: 'predict-the-plain',
@@ -2765,10 +2767,14 @@ export const INSTRUCTOR = {
         'Parabola: reduced chi-square 0.37 (within 0.04) and squared term 0.089 (within 0.005).',
     },
     'measuring-the-moon': {
-      'scale-from-the-disc':
-        'Pair length 493 px (within 3) and a scale of 7.05 km per pixel (within 0.05), with the left end at 3 and the right end at 496.',
+      'mark-the-disc-width':
+        'A pair of at least 486 px with the scale it gives (a scale times the length of the pair of 3,474.8 km, within 8): the ends at 3 and 496 give 493 px and 7.05 km per pixel. The readings are taken from the instrument.',
+      'a-pair-that-stops-short':
+        'A scale above 7.4 km per pixel, that is a pair at least about 30 px short, and the diameter of the 25 px circle that goes with it, both taken from the instrument.',
       'measure-the-plain':
         'A circle centered at (289, 306) with a radius of about 45 px gives a diameter of 634 km (the validator accepts within 45 km), with the tool stating ± 6 km.',
+      'squeezed-at-the-plain':
+        'The width of a round feature along the line to the disc’s center as a share of its true width, 96 percent at the plain (the validator accepts within 3), taken from the instrument with the circle on the plain.',
     },
     'how-far-is-that-star': {
       'the-shift':

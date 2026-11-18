@@ -474,17 +474,25 @@ export const MEASURING_THE_MOON = {
       because:
         'Una longitud en la imagen que ya conoces. Una imagen registra ángulos y píxeles y nunca dice a qué distancia está la cosa, así que la única vía a una escala es señalar algo en ella cuyo tamaño conozcas por otros medios. Aquí es la propia Luna, cuyo diámetro medio, 3474,8 km, se midió por otros medios.',
     },
-    'scale-from-the-disc': {
-      title: 'Un par de referencia a través del disco',
-      body: 'Marca el ancho completo del disco con un <strong>par de referencia</strong>: una línea a lo largo de la horizontal por el centro del disco (fila 245), de su borde izquierdo a su borde derecho. Pon el extremo izquierdo en <strong>3</strong> y el derecho en <strong>496</strong>. Se toma que el par abarca 3474,8 km, el diámetro medio de la Luna. Lee su longitud en píxeles y la escala que da.\n\nEl extremo derecho está sobre la última columna del cuadro, así que el disco puede ser uno o dos píxeles más ancho que la imagen. Tenlo presente: no está en la [[uncertainty|incertidumbre]] que indica la herramienta.',
+    'mark-the-disc-width': {
+      title: 'Marca el ancho del disco',
+      body: 'El <strong>par de referencia</strong> es una línea a lo largo de la fila 245, por el centro del disco, y la herramienta toma que abarca el diámetro medio de la Luna, 3474,8 km. Dónde pongas sus dos extremos fija la escala.\n\nMueve <strong>Extremo izquierdo del par</strong> y <strong>Extremo derecho del par</strong> a los dos bordes de la Luna, y luego toma la longitud del par y la escala que da. El borde derecho toca la última columna, así que el disco puede ser uno o dos píxeles más ancho que la imagen: eso no está en la [[uncertainty|incertidumbre]] que indica la herramienta.',
       fields: [
         { label: 'Longitud del par' },
         { label: 'Escala a partir del par, en km por píxel' },
       ],
     },
+    'a-pair-that-stops-short': {
+      title: 'Un par que se queda corto',
+      body: 'Ahora comete el error a propósito. Mueve un extremo del par bien dentro del borde de la Luna, y toma la escala y el diámetro del círculo en kilómetros. El círculo conserva su tamaño; un par más largo o más corto cambia solo la escala.',
+      fields: [
+        { label: 'Escala a partir del par corto, en km por píxel' },
+        { label: 'Diámetro del círculo' },
+      ],
+    },
     'why-a-pair': {
       title: 'Por qué la escala sale de ti',
-      body: 'El Observatorio puede dar a una imagen una escala en segundos de arco por píxel cuando la imagen lleva coordenadas del mundo, y se niega a hacerlo con esta imagen. La escala que acabas de hacer salió de un par que marcaste.',
+      body: 'Algunas imágenes llevan coordenadas del mundo, y con ellas el Observatorio puede leer una escala en segundos de arco por píxel.',
       prompt: '¿Por qué la escala tiene que salir de un par que marcas tú?',
       options: [
         'La imagen la tomó una sonda, así que no tiene píxeles',
@@ -510,27 +518,33 @@ export const MEASURING_THE_MOON = {
       prompt: 'De lado a lado, la llanura mide unos&hellip;',
       options: ['6 km', '60 km', '600 km', '6000 km'],
       hints: [
-        'Toda la Luna mide unos 3500 km de ancho. ¿Qué parte de ella es la llanura?',
+        'Compara la llanura con el par dibujado a través de todo el disco.',
+        'El par representa el ancho de la Luna. ¿Qué parte de él es la llanura?',
       ],
       because:
         'Unos 600 km, algo menos de una quinta parte del ancho de la Luna: la llanura abarca más o menos una quinta parte del disco y el disco mide 3475 km. El paso siguiente la mide.',
     },
     'measure-the-plain': {
       title: 'Un círculo sobre la llanura',
-      body: 'El par se queda a través del disco. El círculo empieza en <em>x</em> = 289, <em>y</em> = 306. Cambia el <strong>radio</strong> hasta que el círculo siga el borde de la llanura oscura, y mueve el centro si el círculo se va hacia un lado. Lee el diámetro del círculo en kilómetros.',
+      body: 'El par ya está puesto a través del disco, así que la escala queda fija. El círculo empieza en <em>x</em> = 289, <em>y</em> = 306. Cambia el <strong>radio</strong> hasta que el círculo siga el borde de la llanura oscura, y mueve el centro si el círculo se va hacia un lado. Luego toma el diámetro del círculo en kilómetros.',
       fields: [{ label: 'Diámetro del círculo' }],
+    },
+    'squeezed-at-the-plain': {
+      title: 'La llanura se ve de soslayo',
+      body: 'La llanura no está en el centro del disco, así que la ves de soslayo: un accidente redondo aquí se ve más estrecho que en realidad a lo largo de la línea hacia el centro del disco. Mueve el centro del círculo a la llanura, cerca de <em>x</em> = 289, <em>y</em> = 306, y toma ese ancho como parte del ancho verdadero. Luego prueba un punto más cerca del borde y mira cómo cambia el número.',
+      fields: [{ label: 'Ancho de un accidente redondo a lo largo de la línea al centro' }],
     },
     'what-would-change-it': {
       rubric:
-        'Crédito completo por nombrar dos cosas que cambian el diámetro, por ejemplo dónde se coloca el borde de la llanura (un borde suave, así que dos personas cuidadosas difieren en unos píxeles), dónde se colocan los dos extremos del par, el diámetro supuesto de la Luna, o el recorte de la imagen a la derecha, y por decir que la incertidumbre indicada de unos 6 km incluye solo el redondeo de cada colocación, y deja fuera lo suave del borde y los supuestos. No dar crédito por decir que el número es exacto, ni que más marcas del mismo tipo quitan los supuestos.',
+        'Crédito completo por nombrar dos cosas que cambian el diámetro, por ejemplo dónde se coloca el borde de la llanura (un borde suave, así que dos personas cuidadosas difieren en unos píxeles), dónde se colocan los dos extremos del par, el diámetro supuesto de la Luna, el recorte de la imagen a la derecha, o que la llanura se ve de soslayo, y por decir que la incertidumbre indicada incluye solo el redondeo de cada colocación, y deja fuera lo suave del borde, la inclinación y los supuestos. No dar crédito por decir que el número es exacto, ni que más marcas del mismo tipo quitan los supuestos.',
       title: '¿Qué cambiaría el número?',
-      body: 'La herramienta indica el diámetro como unos 634 &plusmn; 6 km. Dos personas que ajusten el círculo a ojo no coincidirán en 6 km.',
+      body: 'Dos personas que ajusten el círculo a ojo no coincidirán exactamente, y la herramienta imprime una incertidumbre junto al diámetro.',
       prompt:
         'En dos o tres frases: nombra dos cosas que cambiarían el diámetro que obtuviste, y di cuál de ellas incluye la incertidumbre indicada.',
     },
     'what-you-worked-out': {
       title: 'Lo que has deducido',
-      body: 'Una imagen no tiene escala hasta que se la das, y la escala que le das es una medida tuya, apoyada en una longitud que supusiste y en dos marcas que colocaste. Con ella, un círculo sobre un accidente dio un tamaño en kilómetros, unos 634 km para la llanura, y la incertidumbre indicada por la herramienta cubría solo el redondeo de tus marcas. Lo suave del borde, el recorte a la derecha, el diámetro supuesto y el escorzo (96 por ciento en la llanura) no están en ella. Y como la imagen es para mostrar, sus niveles de gris no son luz: mediste dónde están las cosas y cuán grandes son, y nada sobre su brillo.',
+      body: 'Una imagen no tiene escala hasta que se la das, y la escala que le das es una medida tuya, apoyada en una longitud que supusiste y en dos marcas que colocaste. Con ella, un círculo sobre un accidente dio un tamaño en kilómetros, unos 634 km para la llanura, y la incertidumbre indicada por la herramienta cubría solo el redondeo de tus marcas. Lo suave del borde, el recorte a la derecha, el diámetro supuesto y la inclinación de la llanura (un 4 por ciento más estrecha a lo largo de la línea al centro) no están en ella. Y como la imagen es para mostrar, sus niveles de gris no son luz: mediste dónde están las cosas y cuán grandes son, y nada sobre su brillo.',
     },
   },
 };
