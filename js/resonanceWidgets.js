@@ -322,7 +322,7 @@ function frame(g, box, colors, title) {
   g.lineWidth = 1;
   g.strokeRect(box.x, box.y, box.w, box.h);
   if (title) {
-    g.font = `10px ${MONO}`;
+    g.font = `11px ${MONO}`;
     g.fillStyle = colors.muted;
     g.textAlign = 'left';
     g.textBaseline = 'top';
@@ -988,7 +988,7 @@ function dial(g, cx, cy, r, events, cluster, colors, label) {
     g.stroke();
   }
 
-  g.font = `10px ${MONO}`;
+  g.font = `11px ${MONO}`;
   g.fillStyle = colors.muted;
   g.textAlign = 'center';
   g.textBaseline = 'top';
@@ -1113,7 +1113,7 @@ const FRAME = {
     g.arc(X(1), Y(0), 4, 0, Math.PI * 2);
     g.fill();
 
-    g.font = `10px ${MONO}`;
+    g.font = `11px ${MONO}`;
     g.textAlign = 'center';
     g.textBaseline = 'middle';
     for (const [name, p] of Object.entries(m.points)) {

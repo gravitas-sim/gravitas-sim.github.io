@@ -152,7 +152,7 @@ change.
 | **I-9**, selection | The selected body carries a cue that shows in luminance, not only in hue. | `e2e/bodyLabels.spec.js`, in the suite |
 | **I-9**, arrows | Arrow length rises with the speed it shows, and the legend states the scale. | `e2e/visualCriteria.criteria.js` |
 | **I-9**, trails | A trail spans a stated simulated time that does not follow the frame rate (30, 60 and 144 frames a second). | same |
-| **I-9**, plots | Ticks are at least 11 px and labels at least 12 px; with several series, each differs by marker shape. | same |
+| **I-9**, plots | Ticks are at least 11 px and labels at least 12 px; with several series, each differs by marker shape. | `e2e/plotReadingSize.spec.js` (passes on both pilot plots; on demand before) |
 
 How each is measured, so a later prompt can argue with the method and not the
 number:
@@ -326,6 +326,48 @@ instructor page for preparing and reviewing) is given its identity once, by its
 pilot, from two or three composed alternatives shown as matched captures and
 chosen by the maintainer; the choice is recorded here when it is made. None has
 been chosen.
+
+### Workspace for doing
+
+The sandbox is the pilot of this family (Prompt 452). The hierarchy below is
+what it applies; the family's direction (its first-screen composition, type
+scale and imagery) is **proposed, not chosen**: the maintainer chooses it once,
+from the matched captures and the alternative the pull request shows (rule 7.2
+item 19), and until he does the sandbox's surface row is FOUNDATIONS ONLY.
+
+**Three tiers.** Every control of the workspace belongs to one.
+
+| Tier | What it means | Where each sits now (desktop; phone) |
+|---|---|---|
+| **At hand** | On the screen at first sight, in a fixed place, with nothing opened. | Run and pause, step back, step forward, the scrubber, Slow, the speed readout, Fast and the clock: the transport bar (phone: one speed button that shows the speed, each press one rung up, the top rung back to 1x). Fit View to Bodies and Undo Placement: above the rail's sections (phone: in the Menu drawer). Select a body: a click or tap on the canvas (keyboard: OPEN, 475). |
+| **One step away** | One press, or one opened section, from the scene. | Scenario (Load Scenario, Restart Scenario, Reset Settings and Scenario, Clear All Bodies) and Add object: the rail. Frame, units, the Measure tools and the instrument chips: the rail's Tools section. "About this scenario": a disclosure in the readout panel, closed until opened. A scenario's own lab panel (the binary run, the gravity assist): open on a wide screen, its title bar on a phone, one tap to open. |
+| **Advanced** | Rarely wanted while doing; may live behind a dialog or a fold. | Settings (and its Advanced fold), the Orbital System Builder, Save and Load State, Share Link, Export Data, the A/B bench. |
+
+**Rules.** Nothing a task asks about is folded (the "More" pattern, D-R10-45,
+and its task rule): the seven tasks of `tools/workspace-walk.mjs` (load a
+scenario, find a planet, follow it, measure its period, reset, change the speed,
+pause and step) each reach their controls at hand or one step away, except
+where a step has no route yet, which is recorded OPEN with its owner and not
+worked around. A card, banner or panel that rises on its own never lies over the
+bodies: the scenario's text is a disclosure, and a lab panel opens collapsed on
+a phone (criterion I-8 holds on the three scenes in
+`e2e/sandboxWorkspace.spec.js`). A new control goes in a tier before it goes in
+a place.
+
+**Names say their effect.** A reset is named for what it touches, and its hint
+states the six things a reset can change: the world, the settings, the camera,
+the clock, the seed and the pause. `e2e/resetEffects.spec.js` holds each name and
+hint to the world it describes, in both languages.
+
+| Name | World | Settings | Camera | Clock | Seed | Pause |
+|---|---|---|---|---|---|---|
+| Fit View to Bodies | stays | stay | centred and zoomed to fit | stays | stays | stays |
+| Restart Scenario | rebuilt; added or changed bodies are gone | return to those the scenario sets | the scenario's view | zero | new | runs |
+| Reset Settings and Scenario | Binary Black Hole, rebuilt | every default | its view | zero | new | runs |
+| Clear All Bodies | empty | stay (speed back to 1x) | 1x at the centre | stays | stays | runs |
+
+The R key, Home and a double tap are a different command: they centre the view
+at 1x zoom, and their shortcut is named for that.
 
 ## Breakpoints
 

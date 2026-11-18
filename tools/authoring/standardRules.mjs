@@ -44,6 +44,8 @@ export const STANDARD_RULES = {
     "A numeric question's body does not contain the value the step accepts",
   'task/measure-all-computed':
     'A core measure step has at least one field the student types',
+  'depth/decision':
+    'A deeper step names what the student decides (`decides`), and a deeper measure step has a field that is neither computed nor copied from a number the lesson already gave',
   'text/internal-vocabulary':
     'Student text carries no prompt numbers, gate talk, NOT RUN, file names or leg ids',
   'text/step-reference':
@@ -322,6 +324,75 @@ function measureAllComputed(view) {
   return out;
 }
 
+// ---- (c2) a deeper step that asks for no decision (DEPTH_II_GATE.md) ---------
+
+/** Numbers a student can read off the text: "4.0", "3", "0,75" as 0.75. */
+const numbersIn = text =>
+  (plain(text).match(/-?\d+(?:[.,]\d+)?/g) ?? []).map(x =>
+    Number(x.replace(',', '.'))
+  );
+
+/** Whether `want` is a number the lesson put in front of the student already. */
+function copied(field, step, earlier) {
+  const want = Number(String(field.want ?? '').replace(',', '.'));
+  if (field.want === undefined || !Number.isFinite(want)) return false;
+  const given = [
+    ...numbersIn(step.body),
+    ...numbersIn(step.prompt),
+    ...earlier.flatMap(e => [
+      ...(e.fields ?? []).map(f => Number(f.want)),
+      Number.isFinite(e.answer) ? e.answer : NaN,
+    ]),
+  ];
+  return given.some(g => Number.isFinite(g) && Math.abs(g - want) < 1e-9);
+}
+
+/**
+ * Q5 of the lesson standard at depth, over the deeper steps of the laid
+ * lesson. A read step asks nothing and is skipped. A measure step whose every
+ * field is computed or copied is a `depth/decision` finding whatever its
+ * `decides` says: naming a decision does not make one.
+ */
+function depthDecision(view) {
+  const out = [];
+  view.steps.forEach((step, i) => {
+    if (isCore(step) || step.type === 'read') return;
+    const named =
+      typeof step.decides === 'string' && step.decides.trim().length > 0;
+    const fields = step.fields ?? [];
+    if (step.type === 'measure' && fields.length) {
+      const earlier = view.steps.slice(0, i);
+      if (
+        fields.every(
+          f => typeof f.compute === 'function' || copied(f, step, earlier)
+        )
+      ) {
+        out.push(
+          found(
+            'depth/decision',
+            view,
+            i,
+            `every one of its ${fields.length} field(s) is computed or copied from a number already given`
+          )
+        );
+        return;
+      }
+    }
+    if (named) return;
+    out.push(
+      found(
+        'depth/decision',
+        view,
+        i,
+        step.tool
+          ? `opens ${step.tool.id ?? 'an instrument'} and does not name the choice the student makes with it (decides)`
+          : 'does not name what the student decides (decides)'
+      )
+    );
+  });
+  return out;
+}
+
 // ---- (d) the project's own vocabulary in student text ------------------------
 
 /**
@@ -474,6 +545,7 @@ export function viewFindings(view) {
     ...predictionStated(view),
     ...questionStatesAnswer(view),
     ...measureAllComputed(view),
+    ...depthDecision(view),
     ...internalVocabulary(view),
     ...stepReferences(view),
   ];

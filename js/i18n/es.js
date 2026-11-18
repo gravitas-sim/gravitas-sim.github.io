@@ -92,7 +92,6 @@ export const ES = {
 
   // --- Application chrome ----------------------------------------------------
   'chrome.readout.label': 'Lectura de la simulación',
-  'chrome.scenarioInfo.label': 'Información del escenario',
   'chrome.mobileMenuToggle.hint': 'Mostrar los controles de la simulación',
   'chrome.mobileMenuToggle.label': 'Abrir el menú de controles',
   'chrome.tutorial.hint':
@@ -117,11 +116,11 @@ export const ES = {
   'rail.settings.hint':
     'Abrir el panel completo de ajustes: número de objetos, gravedad, aspecto visual y rendimiento. Los cambios estructurales reinician la simulación; el resto se aplica en directo.',
   'rail.refreshScenario.hint':
-    'Reconstruir el escenario actual desde cero, descartando todo lo añadido o modificado.',
+    'Reconstruir este escenario con una semilla nueva: los cuerpos añadidos o cambiados desaparecen y los ajustes vuelven a los del escenario. La cámara vuelve a su vista, el reloj a cero y la simulación corre.',
   'rail.resetAll.hint':
-    'Devolver todos los ajustes a sus valores de fábrica y cargar el escenario Agujeros negros binarios.',
+    'Devolver todos los ajustes a sus valores por defecto y cargar Agujeros negros binarios con una semilla nueva, con su vista, el reloj a cero y la simulación en marcha.',
   'rail.cleanSim.hint':
-    'Vaciar el universo hasta dejar espacio vacío, para construir un sistema desde cero haciendo clic y arrastrando.',
+    'Quitar todos los cuerpos para dejar espacio vacío. Los ajustes, la semilla y el reloj se conservan; la cámara y la velocidad vuelven a 1\u00d7 y la simulación corre.',
 
   // --- Rail: state -----------------------------------------------------------
   'rail.railState.hint': 'Mostrar u ocultar los controles de estado',
@@ -169,7 +168,8 @@ export const ES = {
     'Abrir el panel de astrometría: la diminuta elipse que la estrella traza en el cielo mientras su planeta la hace girar alrededor del centro de masas común. Donde la velocidad radial falla, en una órbita vista de frente, la astrometría funciona mejor.',
   'rail.slowDown.hint': 'Reducir la velocidad en 0,5×',
   'rail.speedUp.hint': 'Aumentar la velocidad en 0,5×',
-  'rail.resetView.hint': 'Recentrar la cámara y volver a la ampliación 1× (R).',
+  'rail.resetView.hint':
+    'Centrar la cámara en los cuerpos y ajustar el zoom para que quepan. Los cuerpos, los ajustes, la semilla, el reloj y la pausa no cambian.',
   'rail.shortcuts.hint': 'Atajos de teclado (?)',
 
   // --- Rail: learn -----------------------------------------------------------
@@ -200,9 +200,9 @@ export const ES = {
   'rail.loadScenario': 'Cargar escenario',
   'rail.investigations': 'Investigaciones',
   'rail.settings': 'Ajustes',
-  'rail.refreshScenario': 'Recargar escenario',
-  'rail.resetAll': 'Restablecer valores',
-  'rail.cleanSim': 'Simulación vacía',
+  'rail.refreshScenario': 'Reiniciar escenario',
+  'rail.resetAll': 'Restablecer ajustes y escenario',
+  'rail.cleanSim': 'Quitar todos los cuerpos',
   'rail.railState': 'Estado',
   'rail.save': 'Guardar estado',
   'rail.load': 'Cargar estado',
@@ -245,6 +245,7 @@ export const ES = {
   'rail.toggleExperiments.hint':
     'Abrir el banco de experimentos A/B: captura un estado inicial, graba una ejecución de referencia, vuelve exactamente a ese inicio, cambia una variable y graba una segunda ejecución, y compara ambas sobre el mismo eje de tiempo simulado.',
   'failure.load': 'No se pudo cargar. Comprueba tu conexión.',
+  'failure.loading': 'Cargando…',
   'failure.retry': 'Reintentar',
   'failure.reload':
     'Sigue sin cargar. Recarga la página; tu trabajo se conserva.',
@@ -254,7 +255,7 @@ export const ES = {
   'rail.toggleAstrometry': 'Astrometría',
   'rail.slowDown': 'Lento',
   'rail.speedUp': 'Rápido',
-  'rail.resetView': 'Restablecer vista',
+  'rail.resetView': 'Ajustar vista a los cuerpos',
   'rail.shortcuts': 'Atajos',
   'rail.objectType.choose': 'Añadir objeto',
   'rail.objectType.placing': 'Haz clic para colocar · Esc',
@@ -264,7 +265,7 @@ export const ES = {
 
   // --- Readout ---------------------------------------------------------------
   'readout.overlayMinimize.hint': 'Minimizar',
-  'readout.closeScenarioInfo.hint': 'Descartar esta descripción del escenario',
+  'readout.aboutScenario': 'Acerca de este escenario',
   'readout.closeMobileInstructions.hint':
     'Descartar estas instrucciones táctiles',
   'readout.mobileInstructions': 'Controles táctiles',
@@ -438,7 +439,7 @@ export const ES = {
   'tutorial.scenario.body':
     'Cincuenta y tres escenarios, desde el Sistema Solar y TRAPPIST-1 hasta GW150914, la primera fusión de agujeros negros detectada por LIGO. Varios son modelos a escala y lo indican en su ficha. Busca por nombre o filtra por concepto.',
   'tutorial.scenario.tip':
-    'Reiniciar escenario lo reconstruye desde cero si un experimento se te va de las manos. Cada escenario se construye a partir de una semilla, así que la misma semilla da el mismo mundo.',
+    'Reiniciar escenario lo reconstruye desde su inicio si un experimento se te va de las manos. Cada escenario se construye a partir de una semilla, así que la misma semilla da el mismo mundo.',
 
   'tutorial.investigations.title': 'Investigaciones guiadas',
   'tutorial.investigations.body':
@@ -1153,7 +1154,7 @@ export const ES = {
   'shortcut.live': 'Volver al directo',
   'shortcut.pan': 'Desplazar la vista',
   'shortcut.zoom': 'Acercar y alejar',
-  'shortcut.resetView': 'Restablecer la vista',
+  'shortcut.resetView': 'Centrar la vista a 1\u00d7',
   'shortcut.investigations': 'Abrir las investigaciones guiadas',
   'shortcut.share': 'Compartir un enlace a esta simulación',
   'shortcut.export': 'Exportar los datos grabados en CSV',

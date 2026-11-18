@@ -241,6 +241,16 @@ export function answerKeyDocument(
       );
     }
 
+    if (e.estimate)
+      doc.row(L('key.rowEstimate'), L('key.estimateNote', e.estimate));
+    if (e.evidence)
+      doc.row(
+        L('key.rowEvidence'),
+        [e.evidence.readings.join(', '), e.evidence.compare]
+          .filter(Boolean)
+          .join(': ')
+      );
+
     if (e.answerFormula !== undefined) {
       doc.row(
         L('key.rowFormula'),

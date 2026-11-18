@@ -97,17 +97,14 @@ export const MONO = 'ui-monospace, SFMono-Regular, Menlo, Consolas, monospace';
  *   NOTE   a sentence on the canvas - rare, and usually better in HTML
  *   TITLE  the one heading a canvas is allowed
  *
- * MIN and TICK are one pixel apart on purpose. MIN is what the whole
- * repository is held to by e2e/canvasLegibility.spec.js, and it is a floor
- * rather than a target: thirteen widget families had settled on ten pixels
- * and moving all of them at once would relay out fifty panels for a change
- * nobody asked for. TICK is where the families the brief named - the stellar
- * and gravitational-wave instruments - now sit, and where new work starts.
+ * MIN is the floor e2e/canvasLegibility.spec.js holds every instrument panel
+ * to, 11 like TICK since the plots went to reading size (it was 10); the
+ * series chart (js/plot/chart.js) takes its tick and title sizes from here.
  *
  * Where a canvas cannot fit its labels at this size the answer is fewer
  * labels, not smaller ones.
  */
-export const TYPE = { MIN: 10, TICK: 11, LABEL: 12, NOTE: 12, TITLE: 13 };
+export const TYPE = { MIN: 11, TICK: 11, LABEL: 12, NOTE: 12, TITLE: 13 };
 
 /**
  * A canvas font string at one of the sizes above.

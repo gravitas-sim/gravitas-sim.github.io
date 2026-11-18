@@ -1293,39 +1293,19 @@ try {
         </div>
       </div>
       <div id="overlayStats" class="overlay-stats"></div>
+      <!-- Closed until the reader opens it; the scenario's title and summary
+           are written by js/world.js. -->
+      <details id="scenarioInfoBox" class="scenario-about" hidden>
+        <summary data-i18n="readout.aboutScenario">About this scenario</summary>
+        <div class="scenario-about-body">
+          <p id="scenarioInfoTitle" class="scenario-about-title"></p>
+          <p id="scenarioInfoSummary"></p>
+          <ul id="scenarioInfoFeatures"></ul>
+        </div>
+      </details>
     </div>
     <div id="scenarioInfoDisplay"></div>
 
-    <!-- Enhanced Scenario Info Box -->
-    <div
-      id="scenarioInfoBox"
-      class="scenario-info-box"
-      role="region"
-      aria-label="Scenario information"
-      data-i18n-aria-label="chrome.scenarioInfo.label"
-    >
-      <div class="scenario-info-content">
-        <div class="scenario-info-header">
-          <h2 id="scenarioInfoTitle">Scenario Loaded</h2>
-          <div class="scenario-info-actions">
-            <button
-              id="closeScenarioInfo"
-              class="scenario-info-close"
-              title="Dismiss this scenario description"
-              data-i18n-title="readout.closeScenarioInfo.hint"
-            >
-              ×
-            </button>
-          </div>
-        </div>
-        <div class="scenario-info-body">
-          <p id="scenarioInfoSummary">Loading scenario information...</p>
-          <div class="scenario-info-details">
-            <ul id="scenarioInfoFeatures"></ul>
-          </div>
-        </div>
-      </div>
-    </div>
     <div id="mobileInstructions">
       <div class="mobile-instructions-content">
         <h3 data-i18n="readout.mobileInstructions">Touch controls</h3>
@@ -1381,6 +1361,31 @@ try {
       tabindex="-1"
       data-i18n-aria-label="rail.mainControls.label"
     >
+      <!-- At hand: the two commands a student reaches for most that live in
+           the rail. Fit view was in Tools and Undo in State, each behind a
+           closed section. -->
+      <div class="rail-at-hand">
+        <button
+          id="resetViewBtn"
+          class="ui-button"
+          title="Centre the camera on the bodies and zoom to fit them. Bodies, settings, seed, clock and pause stay as they are."
+          data-i18n-title="rail.resetView.hint"
+          data-i18n="rail.resetView"
+        >
+          Fit View to Bodies
+        </button>
+        <button
+          id="undoBtn"
+          class="ui-button"
+          disabled=""
+          title="Remove the last object you placed (Z)"
+          data-i18n-title="rail.undo.hint"
+          data-i18n="rail.undo"
+        >
+          Undo Placement
+        </button>
+      </div>
+
       <div class="rail-group">
         <button
           type="button"
@@ -1430,29 +1435,29 @@ try {
           <button
             id="refreshScenarioBtn"
             class="ui-button"
-            title="Rebuild the current scenario from scratch, discarding anything you have added or changed."
+            title="Rebuild this scenario on a new seed: added or changed bodies are gone and the settings return to those the scenario sets. The camera returns to its view, the clock to zero, and the simulation runs."
             data-i18n-title="rail.refreshScenario.hint"
             data-i18n="rail.refreshScenario"
           >
-            Refresh Scenario
+            Restart Scenario
           </button>
           <button
             id="resetAllBtn"
             class="ui-button"
-            title="Restore every setting to its factory default and load the Binary Black Hole scenario."
+            title="Return every setting to its default and load Binary Black Hole on a new seed, with its view, the clock at zero and the simulation running."
             data-i18n-title="rail.resetAll.hint"
             data-i18n="rail.resetAll"
           >
-            Reset to Default
+            Reset Settings and Scenario
           </button>
           <button
             id="cleanSimBtn"
             class="ui-button"
-            title="Clear the universe to empty space so you can build a system from nothing by clicking and dragging."
+            title="Remove every body to leave empty space. Settings, seed and clock stay; the camera and speed return to 1× and the simulation runs."
             data-i18n-title="rail.cleanSim.hint"
             data-i18n="rail.cleanSim"
           >
-            Blank Simulation
+            Clear All Bodies
           </button>
           <!-- js/systemBuilder.js mounts its own dialog. -->
           <button
@@ -1505,16 +1510,6 @@ try {
             data-i18n="rail.load"
           >
             Load State
-          </button>
-          <button
-            id="undoBtn"
-            class="ui-button"
-            disabled=""
-            title="Remove the last object you placed (Z)"
-            data-i18n-title="rail.undo.hint"
-            data-i18n="rail.undo"
-          >
-            Undo Placement
           </button>
           <button
             id="shareBtn"
@@ -1781,32 +1776,6 @@ try {
             </select>
           </div>
           <p class="rail-field-note" id="referenceFrameNote" hidden=""></p>
-          <div class="speed-controls">
-            <button
-              id="slowDownBtn"
-              class="ui-button speed-btn"
-              title="Decrease speed by 0.5x"
-              aria-label="Decrease speed"
-              data-i18n-title="rail.slowDown.hint"
-              data-i18n-aria-label="rail.slowDown.label"
-            >
-              <span class="icon icon-rewind" aria-hidden="true"></span>
-              <span data-i18n="rail.slowDown">Slow</span>
-            </button>
-            <span id="speedDisplay" class="speed-display">1.0x</span>
-            <button
-              id="speedUpBtn"
-              class="ui-button speed-btn"
-              title="Increase speed by 0.5x"
-              aria-label="Increase speed"
-              data-i18n-title="rail.speedUp.hint"
-              data-i18n-aria-label="rail.speedUp.label"
-            >
-              <span data-i18n="rail.speedUp">Fast</span>
-              <span class="icon icon-fast-forward" aria-hidden="true"></span>
-            </button>
-          </div>
-
           <p class="rail-subhead" data-i18n="rail.sub.share">Capture</p>
           <!--
             Two ways of taking the same picture, side by side: a still and a
@@ -1845,15 +1814,6 @@ try {
             <span data-i18n="lecture.action.enter">Lecture Mode</span>
           </button>
           <div class="rail-grid">
-            <button
-              id="resetViewBtn"
-              class="ui-button"
-              title="Recenter the camera and return to 1× zoom (R)."
-              data-i18n-title="rail.resetView.hint"
-              data-i18n="rail.resetView"
-            >
-              Reset View
-            </button>
             <button
               id="shortcutsBtn"
               class="ui-button"
@@ -2071,6 +2031,34 @@ try {
       </span>
 
       <span id="timelineTime" class="timeline-time numeric">0 s</span>
+      <!-- Speed moved here from the rail. On a phone one button stands for
+           the group: its text is the speed and each press goes up a rung. -->
+      <span class="timeline-speed">
+        <button
+          id="slowDownBtn"
+          class="timeline-btn"
+          title="Decrease speed by 0.5x"
+          aria-label="Decrease speed"
+          data-i18n-title="rail.slowDown.hint"
+          data-i18n-aria-label="rail.slowDown.label"
+        >
+          <span class="icon icon-rewind" aria-hidden="true"></span>
+          <span class="timeline-speed-text" data-i18n="rail.slowDown">Slow</span>
+        </button>
+        <span id="speedDisplay" class="speed-display numeric">1.0x</span>
+        <button
+          id="speedUpBtn"
+          class="timeline-btn"
+          data-speed="1.0×"
+          title="Increase speed by 0.5x"
+          aria-label="Increase speed"
+          data-i18n-title="rail.speedUp.hint"
+          data-i18n-aria-label="rail.speedUp.label"
+        >
+          <span class="timeline-speed-text" data-i18n="rail.speedUp">Fast</span>
+          <span class="icon icon-fast-forward" aria-hidden="true"></span>
+        </button>
+      </span>
       <button
         id="timelineLive"
         class="timeline-btn timeline-live"

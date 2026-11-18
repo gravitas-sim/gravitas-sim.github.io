@@ -1690,6 +1690,14 @@
       "student": false
     },
     {
+      "file": "DEPTH_II_GATE.md",
+      "kind": "gate",
+      "purpose": "Depth II gate: may a deeper step run the lesson's scene twice with one value changed; six criteria, three verdicts and their slices, fixed before any prototype (Prompt 327).",
+      "owner": 327,
+      "added": "2026-11-18",
+      "student": false
+    },
+    {
       "file": "STEP_POLICY_GATE.md",
       "kind": "gate",
       "purpose": "Step-policy gate: may a number read in the sandbox depend on how fast a screen draws; five candidate step policies, eight thresholds, two slices, fixed before any measurement (Prompt 446).",

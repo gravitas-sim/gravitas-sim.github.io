@@ -1,36 +1,8 @@
-// =============================================================================
-// One piece of evidence
-// -----------------------------------------------------------------------------
-// A notebook entry is two things joined, and the whole design is about keeping
-// them apart:
-//
-//   the snapshot   numbers, a figure and the conditions they were taken under.
-//                  Written once, at capture, and never again. Frozen, not by
-//                  convention but by Object.freeze, because the failure this
-//                  guards against is not somebody deciding to rewrite history
-//                  - it is a panel that still holds a reference to an array it
-//                  handed over, mutating it on the next frame, and quietly
-//                  editing evidence a student wrote a claim about last week.
-//
-//   the prose      the claim, the evidence for it, the limitations. The
-//                  student's own words, revised as often as they like.
-//
-// Annotating produces a new entry that shares the *same frozen snapshot
-// object*. So there is no code path, correct or buggy, that changes a recorded
-// number: the only writable half is the half a student is supposed to write.
-//
-// Measured, analytic, revealed
-// -----------------------------------------------------------------------------
-// Every quantity carries which of the three it is. A student who writes "my
-// measured period agrees with the model" needs the report to show whether the
-// second number was measured, predicted from theory, or read out of the
-// simulation's own state - and the last of those is not a measurement at all.
-// A figure's series carry the same tag, so a curve read off the truth is drawn
-// differently from one fitted to data.
-//
-// Pure: no DOM, no storage, no imports from a panel. The capture helpers in
-// capture.js turn instrument output into these; store.js persists them.
-// =============================================================================
+// One piece of evidence: a notebook entry is a frozen snapshot (numbers, a figure, the conditions, written once at
+// capture, Object.freeze so no panel can edit evidence a claim was written about) joined to the student's own prose
+// (claim, evidence, limitations, revised freely). Annotating makes a new entry that shares the same frozen snapshot, so
+// no code path changes a recorded number. Every quantity says whether it was measured, analytic or the simulation's own
+// truth, so a report never presents the last as a measurement. Pure: capture.js makes entries, store.js keeps them.
 
 import { deriveEnvelope } from './ledger.js';
 import { fnvBase36 } from '../hash.js';
@@ -39,13 +11,8 @@ import { fnvBase36 } from '../hash.js';
 export const SCHEMA_VERSION = 1;
 
 /**
- * Where a number came from.
- *
- * The distinction the report has to preserve. `MEASURED` is something the
- * student obtained from data the instrument produced; `ANALYTIC` is what a
- * closed-form model says should happen; `TRUTH` is the simulation's own state,
- * available only because this is a simulation and unavailable in any real
- * observation.
+ * Where a number came from: `MEASURED` from data an instrument produced, `ANALYTIC` from a closed-form model,
+ * `TRUTH` the simulation's own state (unavailable in any real observation).
  */
 export const KIND = Object.freeze({
   MEASURED: 'measured',

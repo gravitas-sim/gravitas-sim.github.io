@@ -18,6 +18,10 @@ export default {
       lesson: lesson(),
       responses: {
         'tides:guess': 0,
+        // An estimate: the range as typed, with the convention it was typed in.
+        'tides:size': '3,0;4,0',
+        'tides:size:locale': 'es',
+        'tides:size:first': '3,0;4,0',
         'tides:measure:d': '3.2504',
         'tides:measure:d:locale': 'en',
         'tides:measure:d:src':

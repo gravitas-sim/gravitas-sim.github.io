@@ -48,7 +48,11 @@ import {
   toolsPointerMove,
   toolsPointerUp,
 } from './sandboxTools.js';
-import { showObjectInspector, hideObjectInspector } from './inspectorGate.js';
+import {
+  showObjectInspector,
+  hideObjectInspector,
+  inspectorPending,
+} from './inspectorGate.js';
 import { worldToScreen, debugLog } from './utils.js';
 import { resetFollowCamera } from './followCamera.js';
 import {
@@ -944,7 +948,8 @@ export function initPlacement(ctx) {
     }
 
     // Only close inspector if we clicked on empty space and inspector is open
-    if (state.inspector_open && !clickedObject) {
+    // or still on its way
+    if ((state.inspector_open || inspectorPending()) && !clickedObject) {
       hideObjectInspector();
       // Do not add on this click when closing inspector
       return;
@@ -1166,7 +1171,7 @@ export function initPlacement(ctx) {
       takeScreenshot();
     } else if (e.key === 'Escape') {
       debugLog('Escape key pressed, inspector_open:', state.inspector_open);
-      if (state.inspector_open) {
+      if (state.inspector_open || inspectorPending()) {
         hideObjectInspector();
       }
     }

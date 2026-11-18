@@ -25,6 +25,7 @@ import {
   localeOfAnswer,
   parseNumber,
   recordAnswer,
+  typedNumber,
 } from '../answerParse.js';
 import {
   answerClass,
@@ -42,6 +43,7 @@ import { assignmentStorageKey, shortHash } from '../assignments/assignment.js';
 import {
   classifyStorageError,
   readProgress,
+  stepKey,
   writeProgress,
 } from './progressSchema.js';
 import { KEY_INVESTIGATION_PREFIX } from '../names.js';
@@ -96,6 +98,12 @@ export function fieldModule(m) {
     predictionState,
   });
   return (slots.field = m);
+}
+
+/** Install the reveal slot's module (an estimate, and the box where a prediction meets the readings) with the engine functions it needs. */
+export function revealModule(m) {
+  m.setKit({ announce, localeOfAnswer, recordAnswer, stepKey, typedNumber });
+  return (slots.reveal = m);
 }
 
 /**
@@ -204,7 +212,9 @@ export function stepMarkup(step, c) {
     );
   }
 
-  if (step.type === 'predict' || step.kind === 'choice') {
+  if (step.kind === 'estimate')
+    parts.push(slots.reveal?.estimate(step, c) ?? '');
+  else if (step.type === 'predict' || step.kind === 'choice') {
     const locked = saved !== undefined;
     // A step that names `reveal` holds the marking and the explanation until
     // the reader reaches the step where the result arrives: marked the instant
@@ -269,7 +279,9 @@ export function stepMarkup(step, c) {
   // says what was predicted and how it turned out. Without this the verdict
   // would sit on a screen the reader has already left.
   const predicted = predictionAnsweredHere(step);
-  if (predicted) {
+  const boxed = step.evidence && slots.reveal?.verdict(step, c, predicted);
+  if (boxed) parts.push(boxed);
+  else if (predicted) {
     parts.push(
       `<div class="inv-verdict ${predicted.right ? 'is-right' : 'is-wrong'}">
          <p class="inv-verdict-head">${prose(
@@ -575,6 +587,7 @@ export function bindStepInputs(h) {
   const els = h.els();
   const id = h.stepId();
 
+  slots.reveal?.bind(h, els.body);
   els.body.querySelector('[data-change]')?.addEventListener('click', () => {
     delete h.responses()[id];
     h.save();

@@ -1,36 +1,12 @@
-// =============================================================================
-// Backing up a student's progress
-// -----------------------------------------------------------------------------
-// Progress lives in localStorage, which is the right place for it - no account,
-// no backend, nothing leaves the machine - and is also a place that can vanish.
-// Private browsing refuses to write. A full disk refuses to write. A shared lab
-// machine clears site data between sessions. A student who has spent forty
-// minutes on The Missing Mass and loses it to any of those has lost real work.
+// Backing up a student's progress. Progress lives in localStorage (no account, nothing leaves the machine), which
+// private browsing, a full disk or a shared lab machine can lose, so it can be written to a file and read back. The
+// file is the recovery format (editable, machine-readable); the PDF report is what gets handed in.
 //
-// So progress can be written to a file and read back. The file is the recovery
-// format; the PDF report remains the thing that gets handed in. They are
-// different jobs: one has to be editable and machine-readable, the other has to
-// be readable by a marker and impossible to tamper with casually.
-//
-// Stable step identity
-// -----------------------------------------------------------------------------
-// Version 2 of this format keys progress by a step's `sid` - the stable id
-// written into the lesson (tools/add-step-ids.mjs) and protected from
-// translation by STRUCTURAL. A sid survives reordering, rewording and a change
-// of language, because it is derived from none of them.
-//
-// Version 1 keyed by *position* and carried a structural fingerprint per step.
-// Position is not identity (insert a step at the top and every answer below it
-// belongs to the question above), and neither is a fingerprint: two four-option
-// predict steps produce the same string, and swapping them moved one answer onto
-// the other's question while reporting that nothing had moved.
-//
-// So a v1 backup is restored *by position*, the only mapping its contents
-// support, and the fingerprints are a **check**, not a matcher: where the one at
-// a position disagrees with the step now there, the restore says so instead of
-// hunting for a better-looking home. Reporting uncertainty is the improvement;
-// guessing plausibly is what went wrong before.
-// =============================================================================
+// Version 2 keys progress by a step's stable `sid` (tools/add-step-ids.mjs, protected from translation), which survives
+// reordering, rewording and a change of language. Version 1 keyed by position with a structural fingerprint per step;
+// neither is identity (two four-option predict steps share a fingerprint, and swapping them moved an answer onto the
+// other's question while reporting nothing moved). A v1 backup is therefore restored by position, the only mapping its
+// contents support, and the fingerprints are a check, not a matcher: a disagreement is reported, never guessed around.
 
 /**
  * Bumped when the shape below changes in a way a reader must notice.

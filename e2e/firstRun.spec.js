@@ -1,11 +1,11 @@
 // =============================================================================
 // First run: one overlay at a time, in order, and none twice
 // -----------------------------------------------------------------------------
-// PLATFORM_MODEL.md, "First run". On a first visit Home comes first and the
-// card that names the scenario after it - it used to rise in the moment
-// Home's module was loading and sit underneath it. Each closes from the
-// keyboard, and a card the reader closed does not come back for the same
-// scenario when it is rebuilt. The phone's touch tips, which wait for the
+// PLATFORM_MODEL.md, "First run". On a first visit Home comes first, then the
+// scene with the scenario's text closed, as a disclosure in the readout panel
+// ("About this scenario"): nothing rises over the bodies. The disclosure opens
+// from the keyboard and, once the reader has opened it, stays as they left it
+// when the same scenario is rebuilt. The phone's touch tips, which wait for the
 // first touch and for a clear screen, are in mobile.spec.js, the spec that runs
 // on a touch profile.
 // =============================================================================
@@ -13,43 +13,47 @@
 import { test, expect } from './workflow.js';
 
 const CARD = '#scenarioInfoBox';
-const shown = page =>
-  page.evaluate(
-    sel => document.querySelector(sel)?.classList.contains('showUI') ?? false,
-    CARD
-  );
+const opened = page =>
+  page.evaluate(sel => document.querySelector(sel)?.open ?? false, CARD);
 
 test.describe('on a first visit', () => {
-  test('Home first, and the scenario card only after it', async ({
+  test('Home first, and the scenario text closed after it', async ({
     page,
     app,
   }) => {
     await app.boot({ firstVisit: true });
     await expect(page.locator('#welcomeScreen')).toBeVisible();
-    expect(await shown(page), 'no card under the front door').toBe(false);
+    expect(await opened(page), 'nothing open under the front door').toBe(false);
 
     await page.keyboard.press('Escape');
     await expect(page.locator('#welcomeScreen')).toBeHidden();
-    await expect.poll(() => shown(page)).toBe(true);
+    await expect(page.locator(CARD)).toBeVisible();
+    expect(await opened(page)).toBe(false);
   });
 
-  test('the card closes from the keyboard, and stays closed on a rebuild', async ({
+  test('About this scenario opens from the keyboard and stays as set on a rebuild', async ({
     page,
     app,
   }) => {
     await app.boot({ firstVisit: true });
-    // The front door is up before a key is pressed to close it.
     await expect(page.locator('#welcomeScreen')).toBeVisible();
     await page.keyboard.press('Escape');
-    await expect.poll(() => shown(page)).toBe(true);
+    await expect(page.locator(CARD)).toBeVisible();
 
-    await page.keyboard.press('Escape');
-    await expect.poll(() => shown(page)).toBe(false);
+    await page.locator(`${CARD} summary`).focus();
+    await page.keyboard.press('Enter');
+    expect(await opened(page)).toBe(true);
 
-    // Refresh rebuilds the same scenario. The card was closed for it.
+    // Restart rebuilds the same scenario. The reader left it open.
     await page.locator('#refreshScenarioBtn').evaluate(el => el.click());
     await app.waitForFrames(30);
-    expect(await shown(page)).toBe(false);
+    expect(await opened(page)).toBe(true);
+
+    await page.keyboard.press('Enter');
+    expect(await opened(page)).toBe(false);
+    await page.locator('#refreshScenarioBtn').evaluate(el => el.click());
+    await app.waitForFrames(30);
+    expect(await opened(page)).toBe(false);
   });
 });
 

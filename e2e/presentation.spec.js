@@ -408,7 +408,7 @@ test.describe('lecture mode', () => {
       const bar = document.getElementById('lectureBar').getBoundingClientRect();
       return {
         readout: px('#overlay'),
-        cardTitle: px('#scenarioInfoTitle') || px('#scenarioInfoBox h2'),
+        cardTitle: px('#scenarioInfoTitle'),
         buttons,
         canvasArea: c.width * c.height,
         viewportArea: window.innerWidth * window.innerHeight,

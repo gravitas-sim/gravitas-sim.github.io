@@ -226,10 +226,8 @@ test.describe('instrument labels are legible', () => {
 
       expect(boxes.length, 'the panel drew some text').toBeGreaterThan(0);
 
-      // 1. Nothing below the shared floor. The floor is TYPE.MIN rather than
-      // TYPE.TICK on purpose: thirteen widget families had settled on ten
-      // pixels, and the brief was to get rid of the eight and nine pixel
-      // labels, not to relay out fifty panels. New work uses TICK.
+      // 1. Nothing below the shared floor, TYPE.MIN: 11 px, which is TICK.
+      // It was 10 until the plots went to reading size (criterion I-9).
       const small = boxes
         .filter(b => b.size > 0 && b.size < TYPE.MIN)
         .map(b => `${b.size}px "${b.text.slice(0, 24)}"`);

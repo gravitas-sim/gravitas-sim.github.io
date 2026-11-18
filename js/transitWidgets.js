@@ -801,7 +801,7 @@ const SPECTRUM = {
     ctx.strokeStyle = grid;
     ctx.lineWidth = 1;
     ctx.strokeRect(padL + 0.5, padT + 0.5, pw - 1, ph - 1);
-    ctx.font = '10px ui-monospace, SFMono-Regular, Menlo, monospace';
+    ctx.font = '11px ui-monospace, SFMono-Regular, Menlo, monospace';
     ctx.fillStyle = muted;
     ctx.textAlign = 'center';
     ctx.textBaseline = 'top';
@@ -1019,10 +1019,16 @@ const DILUTION = {
     ctx.setLineDash([]);
     ctx.globalAlpha = 1;
     ctx.fillStyle = muted;
-    ctx.font = '10px ui-monospace, SFMono-Regular, Menlo, monospace';
+    ctx.font = '11px ui-monospace, SFMono-Regular, Menlo, monospace';
     ctx.textAlign = 'center';
     ctx.textBaseline = 'top';
-    ctx.fillText('one photometric aperture', cx + 4, cy + 66);
+    // Centred under the ring, nudged right where the words are wider than it.
+    const aperture = 'one photometric aperture';
+    ctx.fillText(
+      aperture,
+      Math.max(cx + 4, ctx.measureText(aperture).width / 2 + 2),
+      cy + 66
+    );
     ctx.fillText(`Δm = ${fixed(v.dm, 1)}`, cx + 4, cy + 80);
 
     // Right: the true curve and the blended one it turns into.
@@ -1047,7 +1053,7 @@ const DILUTION = {
 
     // Legend above the box, not inside it: the blended curve's baseline runs
     // along the top edge and was drawing straight through the labels.
-    ctx.font = '10px ui-monospace, SFMono-Regular, Menlo, monospace';
+    ctx.font = '11px ui-monospace, SFMono-Regular, Menlo, monospace';
     ctx.textAlign = 'left';
     ctx.textBaseline = 'bottom';
     ctx.fillStyle = muted;
@@ -1296,7 +1302,7 @@ const RESOLVE = {
     ctx.moveTo(x0 + 10, y0 + size - 12);
     ctx.lineTo(x0 + 10 + barPx, y0 + size - 12);
     ctx.stroke();
-    ctx.font = '10px ui-monospace, SFMono-Regular, Menlo, monospace';
+    ctx.font = '11px ui-monospace, SFMono-Regular, Menlo, monospace';
     ctx.fillStyle = '#ffffff';
     ctx.textAlign = 'left';
     ctx.textBaseline = 'bottom';

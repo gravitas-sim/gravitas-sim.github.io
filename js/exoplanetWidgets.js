@@ -76,7 +76,7 @@ function drawFrame(ctx, box, labels, t) {
   ctx.lineWidth = 1;
   ctx.strokeRect(box.x, box.y, box.w, box.h);
   ctx.fillStyle = t.label;
-  ctx.font = '10px system-ui, sans-serif';
+  ctx.font = '11px system-ui, sans-serif';
   ctx.textAlign = 'center';
   if (labels.x) ctx.fillText(labels.x, box.x + box.w / 2, box.y + box.h + 24);
   if (labels.y) {
@@ -225,7 +225,7 @@ const reflexMotion = {
     ctx.lineTo(cx, cy + 6);
     ctx.stroke();
     ctx.fillStyle = t.label;
-    ctx.font = '10px system-ui, sans-serif';
+    ctx.font = '11px system-ui, sans-serif';
     ctx.fillText('center of mass', cx + 9, cy - 7);
 
     // Opposite sides, always: that is what "both orbit the barycenter" means.
@@ -254,7 +254,7 @@ const reflexMotion = {
     ctx.fill();
 
     ctx.fillStyle = t.tick;
-    ctx.font = '10px system-ui, sans-serif';
+    ctx.font = '11px system-ui, sans-serif';
     ctx.fillText(`stellar wobble shown ×${Math.round(v.mag)}`, 8, h - 8);
   },
   readout(v) {
@@ -373,7 +373,7 @@ const rvObserver = {
     ctx.stroke();
     ctx.setLineDash([]);
     ctx.fillStyle = t.label;
-    ctx.font = '10px system-ui, sans-serif';
+    ctx.font = '11px system-ui, sans-serif';
     // Over the near end of the dashed line rather than the far end. The far
     // end is a few pixels from the plot's own rotated "RV (m/s)" title, and
     // the two ran together at a legible size.
@@ -429,7 +429,7 @@ const rvObserver = {
     ctx.fill();
 
     ctx.fillStyle = t.tick;
-    ctx.font = '10px system-ui, sans-serif';
+    ctx.font = '11px system-ui, sans-serif';
     ctx.fillText(rv > 0 ? 'away from us' : 'toward us', box.x, h - 8);
   },
   readout(v) {
@@ -689,7 +689,7 @@ const rvInclination = {
     ctx.arc(cx, cy, 7, 0, TAU);
     ctx.fill();
     ctx.fillStyle = t.tick;
-    ctx.font = '10px system-ui, sans-serif';
+    ctx.font = '11px system-ui, sans-serif';
     ctx.textAlign = 'center';
     ctx.fillText(`${Math.round(v.inc)}° from face-on view`, cx, h - 8);
     ctx.textAlign = 'left';
@@ -703,7 +703,7 @@ const rvInclination = {
       ctx.fillStyle = color;
       ctx.fillRect(bx, y, bw * Math.max(0, Math.min(1, frac)), 16);
       ctx.fillStyle = t.label;
-      ctx.font = '10px system-ui, sans-serif';
+      ctx.font = '11px system-ui, sans-serif';
       ctx.fillText(label, bx, y - 4);
     };
     const maxShown = Math.max(v.mp, 0.01);
@@ -898,7 +898,7 @@ const astrometrySignature = {
 
     const c = this.compute(v);
     ctx.fillStyle = t.tick;
-    ctx.font = '10px system-ui, sans-serif';
+    ctx.font = '11px system-ui, sans-serif';
     ctx.textAlign = 'center';
     ctx.fillText(
       `${formatNumber(c.unit.value, { sig: 3 })} ${c.unit.unit} across`,
@@ -1262,7 +1262,7 @@ const planetCharacterization = {
       ctx.font = `${TYPE.MIN}px system-ui, sans-serif`;
       ctx.fillText(row[0].toUpperCase(), 10, y + 13);
       ctx.fillStyle = t.label;
-      ctx.font = '10px system-ui, sans-serif';
+      ctx.font = '11px system-ui, sans-serif';
       ctx.fillText(row[1], 10, y + 26);
       ctx.fillStyle = t.accent;
       ctx.font = '600 12px system-ui, sans-serif';
@@ -2117,7 +2117,7 @@ const transitNoise = {
     ];
     const scaleMax = Math.max(c.depth, ...terms.map(x => x.value)) * 1.15 || 1;
     const rowH = (left.h - 12) / (terms.length + 1);
-    ctx.font = '10px ui-monospace, monospace';
+    ctx.font = '11px ui-monospace, monospace';
 
     terms.forEach((term, i) => {
       const y = left.y + 8 + i * rowH;
@@ -2192,7 +2192,7 @@ const transitNoise = {
 
     ctx.fillStyle = th.muted;
     ctx.textAlign = 'left';
-    ctx.font = '10px ui-monospace, monospace';
+    ctx.font = '11px ui-monospace, monospace';
     ctx.fillText(
       t('exoW.depthOverNoise', { ratio: formatNumber(c.ratio, { sig: 2 }) }),
       right.x + 4,

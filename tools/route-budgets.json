@@ -40,7 +40,7 @@
         "requests": 5
       },
       "instructors": {
-        "kb": 2862.8,
+        "kb": 2862.3,
         "requests": 42
       },
       "figure": {
@@ -116,7 +116,7 @@
         "requests": 6
       },
       "course-packs": {
-        "kb": 739.3,
+        "kb": 738.8,
         "requests": 46
       },
       "sky": {
@@ -130,27 +130,27 @@
     },
     "build": {
       "front-door": {
-        "kb": 532.7,
+        "kb": 529.5,
         "requests": 56
       },
       "sandbox": {
-        "kb": 532.7,
+        "kb": 529.5,
         "requests": 56
       },
       "kepler": {
-        "kb": 904.0,
+        "kb": 900.9,
         "requests": 75
       },
       "transit": {
-        "kb": 915.3,
+        "kb": 912.3,
         "requests": 75,
-        "toolKb": 955.6,
+        "toolKb": 954.2,
         "toolRequests": 80
       },
       "power-law": {
-        "kb": 888.6,
+        "kb": 885.6,
         "requests": 75,
-        "toolKb": 905.1,
+        "toolKb": 902.1,
         "toolRequests": 78
       },
       "largest-lesson": {
@@ -166,11 +166,11 @@
         "requests": 2
       },
       "instructors": {
-        "kb": 1987.8,
+        "kb": 1987.5,
         "requests": 2
       },
       "figure": {
-        "kb": 667.8,
+        "kb": 664.4,
         "requests": 58
       },
       "experiments": {
@@ -198,11 +198,11 @@
         "requests": 3
       },
       "composer": {
-        "kb": 293.1,
+        "kb": 294.6,
         "requests": 16
       },
       "course-builder": {
-        "kb": 696.4,
+        "kb": 696.2,
         "requests": 13
       },
       "course-home": {
@@ -242,7 +242,7 @@
         "requests": 2
       },
       "course-packs": {
-        "kb": 337.0,
+        "kb": 336.7,
         "requests": 13
       },
       "sky": {

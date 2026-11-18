@@ -41,6 +41,7 @@ import {
 import {
   layoutObservationPanels,
   noteObservationPanelUsed,
+  openCollapsedOnPhone,
 } from './observationLayout.js';
 import { formatNumber, grouped } from './format.js';
 import { MONO } from './widgetCanvas.js';
@@ -412,11 +413,13 @@ export function setBinaryRunEnabled(on) {
  */
 function showForCurrentScenario() {
   const mode = activeMode();
+  const e = cacheElements();
   if (current_scenario_name !== lastScenario) {
     lastScenario = current_scenario_name;
     dismissed = false;
   }
   if (mode && !dismissed) {
+    if (!enabled) openCollapsedOnPhone(e.container);
     setBinaryRunEnabled(true);
     syncForm();
     if (!currentRun()) armBinaryRun();

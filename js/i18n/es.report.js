@@ -99,6 +99,10 @@ export const ES_REPORT = {
   'rp.outcome': 'Resultado',
   'rp.reached': 'alcanzado',
   'rp.notReached': 'no alcanzado',
+  'rp.range': '{low} a {high}',
+  'rp.reading': 'Tu lectura: {what}',
+  'rp.inside': 'La lectura está dentro del intervalo dado.',
+  'rp.outside': 'La lectura está fuera del intervalo dado.',
   'led.systems': 'Escenarios y experimentos entregados',
   'led.systemsNote':
     'Adjuntos a la evidencia de arriba. Abre el enlace para ver el mismo mundo, o usa el archivo que el estudiante envía con el informe. La versión y el motor dicen qué lo hizo.',

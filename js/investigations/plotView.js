@@ -159,22 +159,29 @@ const raws = v => new Set(Array.from(v.selection.rows(), i => v.rows[i]?.row));
 /** Scale what the component draws in its own units to the panel's real width. */
 function size(v) {
   const wide = v.svg.getBoundingClientRect?.().width || UNITS_WIDE;
-  const k = Math.max(1, Math.min(2.4, UNITS_WIDE / wide));
+  // Rounded up to a hundredth: type is never a hair under its size.
+  const k = Math.max(
+    1,
+    Math.min(2.4, Math.ceil((UNITS_WIDE / wide) * 100) / 100)
+  );
   v.k = k;
   for (const c of v.svg.querySelectorAll('.ow-pt, .ow-focus')) {
     c.setAttribute('r', (c.classList.contains('ow-focus') ? 8 : 4) * k);
     c.style.strokeWidth = `${2 * k}px`;
   }
-  for (const x of v.svg.querySelectorAll('.ow-tick, .ow-label, .inv-plot-tag'))
+  // Numbers at 11 px as the reader sees them, titles and names at 12.
+  for (const x of v.svg.querySelectorAll('.ow-tick'))
     x.style.fontSize = `${11 * k}px`;
+  for (const x of v.svg.querySelectorAll('.ow-label, .inv-plot-tag'))
+    x.style.fontSize = `${12 * k}px`;
   // Larger type needs room under the axis: the frame grows downward only.
-  const extra = Math.round(14 * (k - 1));
+  const extra = Math.round(16 * (k - 1));
   v.svg.setAttribute('viewBox', `0 0 ${UNITS_WIDE} ${UNITS_TALL + extra}`);
   for (const x of v.svg.querySelectorAll('.ow-axes text')) {
     if (x.hasAttribute('transform')) {
       // The y title is turned: its tall letters need room on the left.
       x.dataset.t ??= x.getAttribute('transform');
-      const at = 14 + 11 * (k - 1);
+      const at = 14 + 12 * (k - 1);
       x.setAttribute('x', at);
       x.setAttribute('transform', x.dataset.t.replace(/ 14 /, ` ${at} `));
       continue;
@@ -350,12 +357,82 @@ export function draw(step, vals, { canvas, els, transformed, log, scene }) {
     });
   else e.plotTable.replaceChildren();
   size(v);
-  tag(v, slope);
+  tag(v, slope, b0);
   size(v);
 }
 
+/** The part of the line y = m x + b inside the plot's box, as two x values. */
+function inside(st, m, b) {
+  const xs = [st.x0, st.x1];
+  if (m) xs.push((st.y0 - b) / m, (st.y1 - b) / m);
+  const tol = 1e-9 * (st.y1 - st.y0 || 1);
+  const seen = xs
+    .filter(
+      x =>
+        x >= st.x0 - 1e-9 &&
+        x <= st.x1 + 1e-9 &&
+        m * x + b >= st.y0 - tol &&
+        m * x + b <= st.y1 + tol
+    )
+    .sort((p, q) => p - q);
+  return seen.length > 1 ? [seen[0], seen.at(-1)] : null;
+}
+
+/**
+ * The fit line told from the points without its color: triangles along it, and
+ * its name, the slope, at its upper end where a legend would be looked up.
+ */
+function fitMark(v, g, st, { sx, sy }, slope, b0, say) {
+  const ends = inside(st, slope, b0);
+  if (!ends) return;
+  const [a, z] = ends;
+  const at = f => [sx(a + (z - a) * f), sy(slope * (a + (z - a) * f) + b0)];
+  // Three places along the line that keep farthest from the dots and from each
+  // other, so a triangle never sits on a reading.
+  const dots = v.rows.map(p => [sx(p.x), sy(p.y)]);
+  const spots = [];
+  for (let n = 0; n < 3; n++) {
+    let best = null;
+    for (let f = 0.1; f < 0.95; f += 0.05) {
+      const c = at(f);
+      const gap = Math.min(
+        ...[...dots, ...spots].map(d => Math.hypot(d[0] - c[0], d[1] - c[1]))
+      );
+      if (!best || gap > best.gap) best = { gap, c };
+    }
+    spots.push(best.c);
+  }
+  const mark = document.createElementNS(NS, 'path');
+  mark.setAttribute('class', 'inv-plot-mark');
+  mark.setAttribute('data-marker', 'triangle');
+  const r = 6 * v.k;
+  mark.setAttribute(
+    'd',
+    spots.map(([x, y]) => `M${x},${y - r}l${r},${2 * r}h${-2 * r}z`).join('')
+  );
+  g.append(mark);
+  // Its name at the upper end, on the empty side of the line: below it where
+  // the line rises (the points' names are above their points).
+  const [ex, ey] = at(slope >= 0 ? 1 : 0);
+  const [mx, my] = at(0.5);
+  const lean = Math.abs((ey - my) / (ex - mx || 1));
+  const k = v.k;
+  const words = `slope ${slope.toFixed(3)}`;
+  say(words, {
+    x: slope >= 0 ? ex : ex + 8 * k,
+    y:
+      slope >= 0
+        ? Math.min(
+            ey + 16 * k + lean * words.length * 7.2 * k,
+            UNITS_TALL - PAD.bottom - 4 * k
+          )
+        : Math.max(PAD.top + 13 * k, ey - 10 * k),
+    'text-anchor': slope >= 0 ? 'end' : 'start',
+  });
+}
+
 /** The points' names, the slope and the empty-plot words, over the plot. */
-function tag(v, slope) {
+function tag(v, slope, b0) {
   const st = v.plot.at();
   const g = document.createElementNS(NS, 'g');
   g.setAttribute('aria-hidden', 'true');
@@ -374,18 +451,14 @@ function tag(v, slope) {
     const name = String(p.label ?? '');
     if (!name) continue;
     const k = v.k;
-    const flip = px + 8 * k + name.length * 6.5 * k > right;
+    const flip = px + 8 * k + name.length * 7.2 * k > right;
     say(name, {
       x: flip ? px - 8 * k : px + 8 * k,
       y: py - 12 * k < PAD.top ? py + 16 * k : py - 6 * k,
       'text-anchor': flip ? 'end' : 'start',
     });
   }
-  if (slope !== null)
-    say(`slope ${slope.toFixed(3)}`, {
-      x: PAD.left + 8,
-      y: PAD.top + 14 * v.k,
-    });
+  if (slope !== null) fitMark(v, g, st, { sx, sy }, slope, b0, say);
   if (!v.rows.length)
     say(t('inv.plot.placeholder'), {
       x: UNITS_WIDE / 2,

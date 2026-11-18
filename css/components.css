@@ -1088,70 +1088,6 @@
   }
 
   /* ==========================================================================
-     Scenario info card
-     ====================================================================== */
-  /* The wrapper positions; .scenario-info-content carries the surface. Styling
-     both produced two nested rounded boxes, one inset from the other. */
-  #scenarioInfoBox,
-  .scenario-info-box {
-    background: none;
-    border: 0;
-    border-radius: 0;
-    box-shadow: none;
-    backdrop-filter: none;
-    -webkit-backdrop-filter: none;
-    z-index: var(--z-panel);
-
-    /* Center in the band between the HUD and the rail, not in the viewport,
-       so the card cannot sit on top of the readout panel. */
-    --side-left: calc(var(--hud-width) + var(--panel-inset) + var(--space-3));
-    --side-right: calc(var(--rail-width) + var(--panel-inset) + var(--space-3));
-    width: min(720px, calc(100vw - var(--side-left) - var(--side-right)));
-    transform: translateX(
-      calc(-50% + (var(--side-left) - var(--side-right)) / 2)
-    );
-  }
-
-  /* Below the rail's breakpoint the HUD and rail no longer flank it. */
-  @media (max-width: 1200px) {
-    #scenarioInfoBox,
-    .scenario-info-box {
-      --side-left: var(--space-4);
-      --side-right: var(--space-4);
-      width: min(720px, calc(100vw - var(--space-8)));
-      transform: translateX(-50%);
-    }
-  }
-
-  .scenario-info-content {
-    width: 100%;
-    max-width: none;
-    padding: var(--space-4) var(--space-5);
-    background: color-mix(in srgb, var(--surface-1) 92%, transparent);
-    backdrop-filter: blur(20px) saturate(1.2);
-    -webkit-backdrop-filter: blur(20px) saturate(1.2);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-md);
-    box-shadow: var(--shadow-lg);
-    color: var(--text-secondary);
-    font-size: var(--text-sm);
-    line-height: var(--leading-normal);
-  }
-
-  .scenario-info-body p {
-    margin: 0;
-    color: var(--text-secondary);
-  }
-
-  #scenarioInfoBox h3 {
-    color: var(--accent);
-    font-size: var(--text-lg);
-    font-weight: var(--weight-semibold);
-    letter-spacing: 0.01em;
-    margin: 0 0 var(--space-2);
-  }
-
-  /* ==========================================================================
      Tutorial affordance
      ====================================================================== */
   .tutorial-btn {
@@ -1191,17 +1127,18 @@
   }
 
   /* ==========================================================================
-     Speed control cluster
+     Speed, in the transport bar
      ====================================================================== */
-  .speed-controls {
+  .timeline-speed {
+    flex: none;
     display: flex;
     align-items: center;
     gap: var(--space-1);
-    margin: var(--space-1) 0;
-    background: var(--surface-2);
-    border: 1px solid var(--border-subtle);
-    border-radius: var(--radius);
-    padding: var(--space-1);
+  }
+
+  .timeline-speed .timeline-btn {
+    gap: 4px;
+    white-space: nowrap;
   }
 
   .ui-container::-webkit-scrollbar {
@@ -1222,22 +1159,6 @@
     }
   }
 
-  /* The two buttons mirror each other so the arrows point outward: "rewind
-     Slow" on the left, "Fast forward" on the right. That only reads as a pair
-     when both stay on one line and take the same width - at the rail's width
-     "Slow" was wrapping under its own arrow while "Fast" stayed beside its own,
-     which made the two look like different kinds of control. */
-  .speed-controls .ui-button {
-    flex: 1 1 0;
-    justify-content: center;
-    align-items: center;
-    gap: 4px;
-    min-height: 28px;
-    padding: var(--space-1) var(--space-1);
-    font-size: var(--text-xs);
-    white-space: nowrap;
-  }
-
   #speedDisplay,
   .speed-display {
     font-family: var(--font-mono);
@@ -1246,6 +1167,37 @@
     color: var(--accent);
     min-width: 44px;
     text-align: center;
+  }
+
+  /* One button on a phone: its text is the speed, each press is a rung up. */
+  @media (max-width: 767px) {
+    #slowDownBtn {
+      display: none;
+    }
+
+    .timeline-speed-text,
+    #speedDisplay {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+      clip-path: inset(50%);
+      white-space: nowrap;
+    }
+
+    #speedUpBtn {
+      min-width: 52px;
+      font-family: var(--font-mono);
+      color: var(--accent);
+    }
+
+    #speedUpBtn::before {
+      content: attr(data-speed);
+    }
+
+    #speedUpBtn .icon {
+      display: none;
+    }
   }
 }
 
@@ -1890,8 +1842,53 @@
   }
 
   #overlay.minimized .sonification-panel,
-  #overlay.minimized #overlayStats {
+  #overlay.minimized #overlayStats,
+  #overlay.minimized .scenario-about,
+  body.investigation-open #scenarioInfoBox {
     display: none;
+  }
+
+  /* "About this scenario": closed until opened, inside the panel, so the
+     scene stays clear. */
+  .scenario-about {
+    border-top: 1px solid var(--hud-border);
+    font-size: var(--text-xs);
+    color: var(--text-secondary);
+  }
+
+  .scenario-about > summary {
+    padding: var(--space-2) var(--space-4);
+    cursor: pointer;
+    color: var(--hud-text-strong);
+  }
+
+  @media (pointer: coarse) {
+    .scenario-about > summary {
+      display: flex;
+      align-items: center;
+      min-height: 44px;
+    }
+  }
+
+  .scenario-about-body {
+    max-height: 40vh;
+    overflow-y: auto;
+    padding: 0 var(--space-4) var(--space-3);
+    line-height: var(--leading-normal);
+  }
+
+  .scenario-about-body p {
+    margin: 0 0 var(--space-2);
+  }
+
+  .scenario-about-body .scenario-about-title {
+    font-weight: var(--weight-semibold);
+    color: var(--accent);
+  }
+
+  .scenario-about-body ul {
+    margin: 0;
+    padding-left: var(--space-4);
   }
 
   /* Collapsed: the panel shrinks to the labeled chip itself, so the whole
@@ -2031,8 +2028,7 @@
 @layer components {
   .inspector-close,
   .inspector-delete,
-  #closeScenarioList,
-  .scenario-info-close {
+  #closeScenarioList {
     width: 30px;
     height: 30px;
     min-height: 30px;
@@ -2051,8 +2047,7 @@
   }
 
   .inspector-close:hover,
-  #closeScenarioList:hover,
-  .scenario-info-close:hover {
+  #closeScenarioList:hover {
     background: var(--surface-2);
     border-color: var(--border-subtle);
     color: var(--text-primary);
@@ -2600,24 +2595,6 @@
     /* Scenario cards: one column, comfortable tap height */
     #scenarioListItems {
       grid-template-columns: 1fr;
-    }
-
-    /* --- Scenario info card sits just above the transport bar ------------
-       It sat under the top chrome, which on a phone is where the readout chip
-       is, and the chip's height changes with what it shows. Above the
-       transport reserve and the 44px help button that stands on it, it
-       covers none of the three. */
-    #scenarioInfoBox,
-    .scenario-info-box {
-      top: auto;
-      bottom: calc(
-        var(--transport-reserve, 76px) + env(safe-area-inset-bottom, 0px) +
-          44px + var(--space-3)
-      );
-      left: var(--space-2);
-      right: var(--space-2);
-      width: auto;
-      transform: none;
     }
   }
 
@@ -4369,14 +4346,6 @@
     color: var(--text-muted);
   }
 
-  /* The scenario introduction card is 720px wide and docks exactly where the
-     lesson's instrument panel goes. A lesson loads a scenario on every step
-     that asks for one, so during an investigation the card is both redundant
-     (the step text introduces the scenario) and directly in the way. */
-  body.investigation-open #scenarioInfoBox {
-    display: none !important;
-  }
-
   /* --- Narrow screens ----------------------------------------------------- */
   @media (max-width: 900px) {
     /* Only once the panel is a bottom sheet does the floating help button land
@@ -4657,6 +4626,13 @@
   }
   .inv-plot-tag {
     fill: var(--text-primary);
+  }
+  /* The fit line's triangles: a shape, so the line is told from the dots in
+     grayscale and in forced colors, where the fill follows the system. */
+  .inv-plot-mark {
+    fill: var(--accent);
+    stroke: var(--text-primary);
+    stroke-width: 1;
   }
   .inv-plot-panel .inv-plot-note {
     margin-top: var(--space-2);
