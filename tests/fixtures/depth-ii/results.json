@@ -1,0 +1,36 @@
+{
+  "format": "gravitas.depth-ii-results/1",
+  "base": "v4 1f1235254",
+  "spike": "gate/depth-ii 20f07144a (never merged)",
+  "criteria": {
+    "1": {
+      "status": "pass",
+      "evidence": "tests/compat/depth-ii on the spike: progress record, assignment link (d), course pin (lesson and assignment items) and submission token (dp), made by V3_COMMIT and read by the spike. All accepted; 0 answers lost; depth quantitative honored; stepBindings 7 present, 0 changed, 0 missing; course review 'same', needsReview false, for both items; grading reports 0 stale and 0 changed steps.",
+      "observed": "restoreProgress reports 3 core steps moved by position (answers kept by step id); grading at quantitative lists the added step as not yet answered."
+    },
+    "2": {
+      "status": "fail",
+      "evidence": "e2e/depthIIGate.spike.spec.js on the spike: 0 answers or readings lost and the prediction kept, but Go deeper onto the stage-less prototype step left 0 staged bodies (the pair 'one-on-your-own' stood was removed), so Run A did nothing and said nothing (0 run rows); after Fewer steps the core scene was re-staged from its start, not put back: 9 differences (both stars' positions and velocities, and interactive_add true against false). The control, Go deeper from 'weigh-the-pair' onto the existing 'how-sure-is-the-total', also leaves 0 staged bodies.",
+      "restorationUnderHarness": "tests/depthIIGate.spike.test.js: with the scene put up by the harness, the pair equals its capture after each run (1e-11 relative)."
+    },
+    "3": {
+      "status": "pass",
+      "evidence": "Core walk: 36 steps, identical numbering. Quantitative and advanced walks: every base deeper step keeps its number; and-which-one-is-heavier, say-how-the-weighing-worked and what-you-can-now-say move down by one."
+    },
+    "4": {
+      "status": "pass",
+      "evidence": "author:check on the base and on the spike: 0 findings each; ref/variation on the laid prototype step: none.",
+      "countCorrection": "The base has 459 deeper steps, as the roadmap counted. The 558 written into the thresholds counted each step of the three sequence files (atmosphere, measurement, satellite) twice, once in the sequence file and once in the per-lesson file that re-exports it. The pass condition did not use the number."
+    },
+    "5": {
+      "status": "pass",
+      "evidence": "tests/depthIIGate.spike.test.js: m1 = 1 read ratio 1.000 (want 1), m1 = 3 read 3.000 (want 3); 0 relative error against a 0.02 tolerance."
+    },
+    "6": {
+      "status": "not run",
+      "evidence": "tools/depth-ii-perf.spike.mjs: 20.1 to 69.3 ms per frame during the run and 59.7 to 71.4 ms for the same scene with no run, while the profile's own binary-pair scene measured 49.67 ms against its recorded 5.01 ms in the same minutes (load average 23 to 43). The machine was not at the profile's conditions, so the 8.0 ms bound could not be judged. tests/fixtures/depth-ii/c6-measurements.json on the spike."
+    }
+  },
+  "verdict": "C",
+  "slices": [1, 4, 5]
+}
