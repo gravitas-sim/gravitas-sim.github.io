@@ -1,0 +1,149 @@
+// Body names and the selected-body cue (criterion I-9, DESIGN_SYSTEM.md).
+// Drawers queue a name with bodyLabel; drawBodyMarks draws the cue, then the
+// names by priority. Sizes are CSS pixels: the backing store is renderScale
+// times the CSS box, so a font in "px" is smaller than it says on a sharp screen.
+import { SETTINGS, state } from './appState.js';
+import { drawnRadiusPx } from './bodyVisuals.js';
+import { drawSolarLabel } from './utils.js';
+
+export const LABEL_MIN_CSS_PX = 11;
+export const LABEL_CAP = 24; // names beyond the chosen and bound bodies
+export const LABEL_MODES = ['all', 'bound', 'none'];
+
+let k = 1;
+let queue = [];
+let spots = [];
+let isBound = () => false;
+
+export const setBoundTest = fn => {
+  isBound = fn;
+};
+
+export function frameScale(canvas) {
+  queue = [];
+  spots = [];
+  const w = canvas.clientWidth;
+  return (k = w > 0 && canvas.width > 0 ? canvas.width / w : 1);
+}
+
+export const pixelScale = () => k;
+
+export const labelFont = (px, family = 'Roboto Mono', weight = '') =>
+  `${weight} ${Math.max(px, LABEL_MIN_CSS_PX) * k}px ${family}`.trim();
+
+export const labelMode = () =>
+  LABEL_MODES.includes(SETTINGS.body_labels) ? SETTINGS.body_labels : 'all';
+
+/** Queue a name: `at` the body's screen centre, `r` where the name starts below it. */
+export function bodyLabel(o, at, r, spec) {
+  const chosen = o === state.selectedObject?.object;
+  if (spec.gate || chosen || isBound(o)) queue.push({ o, at, r, spec, chosen });
+}
+
+const overlaps = (a, b) =>
+  a.x0 < b.x1 && b.x0 < a.x1 && a.y0 < b.y1 && b.y0 < a.y1;
+
+export const nameSpots = () => [...spots];
+
+/** Take a spot for text w by h centred at (x, y); false if one in `placed` is there. */
+export function claim(placed, x, y, w, h) {
+  const box = { x0: x - w / 2, x1: x + w / 2, y0: y - h / 2, y1: y + h / 2 };
+  if (placed.some(p => overlaps(p, box))) return false;
+  placed.push(box);
+  return true;
+}
+
+export function drawBodyMarks(ctx, toScreen) {
+  const picked = state.selectedObject;
+  ctx.save();
+  ctx.setTransform(1, 0, 0, 1, 0, 0);
+  if (picked?.object?.pos && picked.object.alive !== false) {
+    const c = toScreen(picked.object.pos);
+    const r =
+      Math.max(
+        drawnRadiusPx(picked.object.radius, picked.type, state.zoom),
+        4
+      ) +
+      6 * k;
+    // Ring and four corner ticks, light over dark: seen in grayscale, static.
+    for (const [w, ink] of [
+      [4.5, 'rgba(0,0,0,0.75)'],
+      [2, '#fff'],
+    ]) {
+      ctx.strokeStyle = ink;
+      ctx.lineWidth = w * k;
+      ctx.beginPath();
+      ctx.arc(c.x, c.y, r, 0, 2 * Math.PI);
+      for (const a of [1, 3, 5, 7]) {
+        const dx = Math.cos((a * Math.PI) / 4);
+        const dy = Math.sin((a * Math.PI) / 4);
+        ctx.moveTo(c.x + dx * r, c.y + dy * r);
+        ctx.lineTo(c.x + dx * (r + 6 * k), c.y + dy * (r + 6 * k));
+      }
+      ctx.stroke();
+    }
+  }
+  const mode = labelMode();
+  const shown = queue.filter(q =>
+    mode === 'bound' ? q.chosen || isBound(q.o) : mode === 'all'
+  );
+  queue = [];
+  const rank = q => (q.chosen ? 0 : isBound(q.o) ? 1 : 2);
+  shown.sort((a, b) => rank(a) - rank(b) || (b.o.mass || 0) - (a.o.mass || 0));
+  let spare = LABEL_CAP;
+  const placed = (spots = []);
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  ctx.shadowColor = 'black';
+  ctx.shadowBlur = 3 * k;
+  for (const q of shown) {
+    const { spec, at } = q;
+    const keep = rank(q) < 2;
+    if (!keep && spare <= 0) continue;
+    const named = spec.name !== undefined;
+    ctx.font = labelFont(spec.px);
+    const h = Math.max(spec.px, LABEL_MIN_CSS_PX) * k * 1.15;
+    const w =
+      ctx.measureText(named ? spec.name : `${spec.value} M${spec.suffix || ''}`)
+        .width + (named ? 0 : 0.7 * spec.px * k);
+    // The chosen body's ticks reach 12 px out; its name starts past them.
+    const dy = q.r + (q.chosen ? 15 : spec.gap || 10) * k;
+    // Home spot; if taken, slide down past what is there, else up.
+    let at0 = null;
+    for (const sign of [1, -1]) {
+      let d = sign * dy;
+      for (let n = 0; n < 4 && at0 === null; n++) {
+        const box = {
+          x0: at.x - w / 2,
+          x1: at.x + w / 2,
+          y0: at.y + d - h / 2,
+          y1: at.y + d + h / 2,
+        };
+        const hit = placed.find(p => overlaps(p, box));
+        if (hit) d = (sign > 0 ? hit.y1 + h / 2 : hit.y0 - h / 2) - at.y;
+        else (placed.push(box), (at0 = d));
+      }
+    }
+    if (at0 === null) {
+      if (!keep) continue;
+      at0 = dy;
+    }
+    if (!keep) spare--;
+    if (at0 !== dy) {
+      const side = Math.sign(at0);
+      ctx.save();
+      ctx.shadowBlur = 0;
+      ctx.strokeStyle = 'rgba(255,255,255,0.7)';
+      ctx.lineWidth = k;
+      ctx.beginPath();
+      ctx.moveTo(at.x, at.y + side * q.r);
+      ctx.lineTo(at.x, at.y + at0 - side * (h / 2));
+      ctx.stroke();
+      ctx.restore();
+    }
+    ctx.fillStyle = '#fff';
+    if (named) ctx.fillText(spec.name, at.x, at.y + at0);
+    else drawSolarLabel(ctx, spec.value, at.x, at.y + at0, spec);
+  }
+  ctx.restore();
+}
