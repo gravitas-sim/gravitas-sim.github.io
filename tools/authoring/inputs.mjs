@@ -28,7 +28,10 @@ import { flowFor } from '../../js/instructorFlow.js';
 import { gradedSteps } from '../../js/data/investigations/catalog.js';
 import { cueFindings } from './cueRules.mjs';
 import { retiredFindings as retired } from './retiredRules.mjs';
-import { DEPTH_LESSONS, loadDepthSteps } from '../../js/investigations/depth.js';
+import {
+  DEPTH_LESSONS,
+  loadDepthSteps,
+} from '../../js/investigations/depth.js';
 import { autoArmFindings } from './autoArmRules.mjs';
 
 export const LESSON_DIR = 'js/data/investigations';

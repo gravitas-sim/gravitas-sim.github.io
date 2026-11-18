@@ -59,6 +59,10 @@ export const EN_GUIDES = {
     'The workspace does not hold that change yet: the step says what to make.',
   'gd.check.fitSettings':
     'There is a fit, but not with the settings this step asks for.',
+  'gd.check.fitTooFew':
+    'The fit holds too many parameters fixed: at least four must be free, and the epoch and the radius ratio k must be among them.',
+  'gd.check.fitWindow':
+    'The data you used cover less than about a week. Crop to a longer stretch, or undo the crop, so that at least two transits are in it.',
   'gd.check.unknown': 'This step cannot be checked.',
   'gd.check.notANumber': 'Type a number, such as 0.5 or 3.52.',
   'gd.check.notYet':

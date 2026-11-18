@@ -17,7 +17,13 @@ export const EN_EXOPLANET = {
   'gd.show.crowdHd': 'HD 209458: CROWDSAP',
   'gd.show.crowdK13': 'Kepler-13: CROWDSAP',
   'gd.show.shareA': 'Kepler-13A’s share of the pair’s light, from the catalog',
-  'gd.show.adoptedRadius': 'HD 209458’s radius, adopted',
+  'gd.show.radiusA': 'A published radius of HD 209458',
+  'gd.show.radiusB': 'Another published radius of HD 209458',
+  'gd.show.myK': 'Your fit: k, its uncertainty',
+  'gd.show.notFitted': 'not fitted yet',
+  'gd.show.myRp': 'The planet’s radius you derived',
+  'gd.show.rpEach': 'The radius your k gives with each published star',
+  'gd.show.starsApart': 'How far apart the two published stellar radii are',
   'gd.show.depthOf': '{target}: depth',
   'gd.show.ppm': '{value} ± {error} parts per million',
   'gd.show.period': 'Period used',
@@ -38,7 +44,9 @@ export const EN_EXOPLANET = {
   'gd.show.how.crowding':
     'HD 209458’s value is from the header of the SPOC file its dataset was made from; Kepler-13’s is from its dataset; A’s share is from the TESS Input Catalog’s magnitudes.',
   'gd.show.how.stellarRadius':
-    'Adopted, not measured here: a light curve gives k, and the radius has to come from the star.',
+    'Published, not measured here: a light curve gives k, and the radius has to come from the star.',
+  'gd.show.how.myFit':
+    'Read from your own fit; nothing here is typed. The planet’s radius is k times the star’s, so each radius is k times a published one.',
   'gd.show.vA': 'Planet A (grazing)',
   'gd.show.vB': 'Planet B (grazing, 40 percent larger)',
   'gd.show.vPlanet': 'k {k}, b {b}, a/R* {aRs}',
@@ -182,10 +190,10 @@ export const EN_EXOPLANET = {
   'gd.exo-fit.intro.title': 'A model of a transit',
   'gd.exo-fit.intro.text':
     'The fit panel’s transit model is a dark disk crossing a star that is brighter at its center than at its edge (limb darkening), on a circular orbit. Its parameters are the period and the epoch, the ratio k of the planet’s radius to the star’s, the orbit’s size in stellar radii (a/R*), how far from the star’s center the planet crosses (the impact parameter, b), and two limb-darkening parameters.\n\nThe fit finds the values that bring the model closest to the data, weighted by the data’s errors, and their uncertainties.',
-  'gd.exo-fit.fit.title': 'Fit HD 209458’s transit',
-  'gd.exo-fit.fit.text':
-    'Open the fit panel on HD 209458’s light curve, not folded. Choose the transit model, leave the other stars’ share of the light at 0, and fit.',
-  'gd.exo-fit.fit.ok': 'Fitted: k = {value}.',
+  'gd.exo-fit.choose-fit.title': 'Choose what the fit leaves free',
+  'gd.exo-fit.choose-fit.text':
+    'Open the fit panel on HD 209458’s light curve, not folded. Its table lists the transit model’s parameters, and each can be fitted or held fixed at a value you give it. Decide which to leave free: the epoch and the radius ratio k have to be, and the rest are yours to choose. You can also crop the light curve first, with the workspace’s Crop change, to the stretch of data the fit will use; keep at least a week of it. Leave the other stars’ share of the light at 0, and fit. The panel then says which of the parameters your choice left tangled together.',
+  'gd.exo-fit.choose-fit.ok': 'Fitted: k = {value}.',
   'gd.exo-fit.ratio.title': 'The radius ratio',
   'gd.exo-fit.ratio.text':
     'What radius ratio k did your fit find? Copy it from the table of results.',
@@ -212,24 +220,29 @@ export const EN_EXOPLANET = {
     'Beta = {value}. The results table’s column “Also by the correlated noise” allows for it: those are the uncertainties to quote.',
   'gd.exo-fit.residuals.no':
     'Copy beta from the list of statistics under the results table.',
-  'gd.exo-fit.radius.title': 'From a ratio to a radius',
-  'gd.exo-fit.radius.text':
-    'k is a ratio: the planet’s radius is k times the star’s, and the star’s radius is not in the light curve. This investigation adopts R* = 1.19 ± 0.02 solar radii (Stassun et al. 2017). Enter it and its uncertainty in the fit panel’s fields for the star’s radius, and fit again.',
-  'gd.exo-fit.radius.ok':
+  'gd.exo-fit.star-radius.title': 'From a ratio to a radius',
+  'gd.exo-fit.star-radius.text':
+    'k is a ratio: the planet’s radius is k times the star’s, and the star’s radius is not in the light curve. Published values of it differ. The table gives two, each with its uncertainty and its source. Choose one, enter it and its uncertainty in the fit panel’s fields for the star’s radius, and fit again.',
+  'gd.exo-fit.star-radius.ok':
     'Fitted with the star’s radius: the fit now derives the planet’s radius, Rp = {value} Jupiter radii, with the star’s uncertainty added to the fit’s.',
   'gd.exo-fit.planet-radius.title': 'The planet’s radius',
   'gd.exo-fit.planet-radius.text':
     'What planet radius Rp did the fit derive, in Jupiter radii?',
   'gd.exo-fit.planet-radius.ok':
-    '{value} Jupiter radii. Stassun et al. (2017) give 1.39 ± 0.02.',
+    '{value} Jupiter radii. Stassun et al. (2017) give 1.39 ± 0.02, and Torres, Winn and Holman (2008) 1.359.',
   'gd.exo-fit.planet-radius.no':
     'Copy Rp from the derived rows of the results table.',
-  'gd.exo-fit.torres.title': 'Whose star?',
-  'gd.exo-fit.torres.text':
-    'Torres, Winn and Holman (2008) give the star’s radius as 1.155 solar radii instead. With your k, what would the planet’s radius be with their star? Rp = k × R*, and a solar radius is 9.7312 Jupiter radii.',
-  'gd.exo-fit.torres.ok':
-    '{value} Jupiter radii: a star 3 percent smaller makes the planet 3 percent smaller. A planet’s radius is only as good as its star’s, and no light curve can check the star’s.',
-  'gd.exo-fit.torres.no': 'Multiply your k by 1.155 and by 9.7312.',
+  'gd.exo-fit.whose-star.title': 'What limits the planet’s radius?',
+  'gd.exo-fit.whose-star.text':
+    'Your own fit, beside the star. The table gives your k with its uncertainty, the planet radius you derived, the radius your k gives with each published star, and how far apart the two published radii of the star are. Which of these limits how well the planet’s radius is known?',
+  'gd.exo-fit.whose-star.opt.fit': 'The fit: k is the less certain of the two',
+  'gd.exo-fit.whose-star.opt.star':
+    'The star: its two published radii differ by more than the fit’s uncertainty on k',
+  'gd.exo-fit.whose-star.opt.equal': 'Neither more than the other: about equal',
+  'gd.exo-fit.whose-star.ok':
+    'The planet’s radius is k times the star’s, so it is limited by whichever relative uncertainty is larger. Here the star’s two published radii differ by more than your fit’s uncertainty on k, so a smaller error bar on k alone would not make the planet’s radius better known, and no light curve can check the star’s.',
+  'gd.exo-fit.whose-star.no':
+    'Compare two shares in the table: the fit’s uncertainty on k as a share of k, and how far apart the star’s two published radii are. A radius that is a product is limited by the larger share.',
   'gd.exo-fit.density.title': 'The star’s density',
   'gd.exo-fit.density.text':
     'The orbit alone gives the star’s mean density: Kepler’s third law with the period and the orbit’s size in stellar radii, ρ = 3π (a/R*)³ / (G P²). The results table lists it under derived values, for a circular orbit and neglecting the planet’s mass. What mean density, in g/cm³, did your fit derive?',
@@ -243,7 +256,7 @@ export const EN_EXOPLANET = {
   'gd.exo-fit.eccentric.ok':
     '{value}. A transit alone cannot tell a circular orbit from an eccentric one, so the density it gives is a density only if the orbit is circular, which is why the fit says so and offers the correction as an assumption, never as a result.',
   'gd.exo-fit.eccentric.no':
-    'Compute (1 + 0.2 × sin 90°) / √(1 − 0.2²), then cube it.',
+    'Not quite. Put e = 0.2 and ω = 90° into the correction in the step, and mind that the cube applies to the whole fraction.',
   'gd.exo-fit.ellipse.title': 'The ellipse of k and b',
   'gd.exo-fit.ellipse.text':
     'Under the results the panel draws the covariance ellipse of the radius ratio k against the impact parameter b, with a table. A long, thin, tilted ellipse is a degeneracy; a round one is two parameters the data fix separately. What is the correlation between k and b in the ellipse’s table?',
@@ -266,7 +279,7 @@ export const EN_EXOPLANET = {
     'Compare the chi-square difference in the table with 4: below it, the data cannot choose.',
   'gd.exo-fit.wrap.title': 'What the fit decided, and what it assumed',
   'gd.exo-fit.wrap.text':
-    'The light curve decided k and the transit’s shape, and decided a/R* and b only together. The planet’s radius took one more number, the star’s, adopted from the literature and carried with its uncertainty. The fit panel names every parameter as fitted, fixed or derived: that list is the honest statement of what the data decided.',
+    'The light curve decided k and the transit’s shape, and decided a/R* and b only together; what you left free, and the stretch of data you used, were your choices, and the fit records them. The planet’s radius took one more number, the star’s, from a published source you chose and carried with its uncertainty. The fit panel names every parameter as fitted, fixed or derived: that list is the honest statement of what the data decided.',
   'gd.exo-dilution.title': '4. A star that is not alone',
   'gd.exo-dilution.summary':
     'Kepler-13: a companion’s light hides much of the transit, and the light curve cannot say whose planet it is.',
