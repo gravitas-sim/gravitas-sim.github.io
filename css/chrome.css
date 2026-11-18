@@ -2735,20 +2735,13 @@
     background: var(--panel-bg);
     border: 1px solid var(--border);
     border-radius: var(--radius-lg);
-    box-shadow: var(--shadow-lg);
-  }
-
-  .stage-more:not([open]) > :not(summary) {
-    display: none;
   }
 
   /* On a tablet and a phone it stands where the playback bar stood folded:
      the middle of the bottom edge, under the lesson's sheet. */
   @media (max-width: 900px) {
     .stage-more {
-      right: auto;
-      bottom: var(--space-2);
-      left: 50%;
+      inset: auto auto var(--space-2) 50%;
       transform: translateX(-50%);
     }
   }
