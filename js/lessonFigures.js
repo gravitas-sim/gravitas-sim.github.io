@@ -31,7 +31,7 @@ import {
   lineOfSightDepth,
   projectPositionToSky,
 } from './observerGeometry.js';
-import { formatNumber, NBSP } from './format.js';
+import { formatNumber, NBSP, roundSig } from './format.js';
 import { getLocale } from './i18n/index.js';
 import { escapeHtml as esc } from './lessonMarkup.js';
 import { FIGURES, shownQuantities } from './lesson/figureSpec.js';
@@ -39,7 +39,10 @@ import { FIGURES, shownQuantities } from './lesson/figureSpec.js';
 const { Math } = globalThis;
 const W = 320;
 const H = 240;
-const full = v => String(Number(v.toPrecision(15)));
+const full = v => String(roundSig(v, 15));
+// Coordinates and angles are machine text for SVG attributes, not numbers a
+// student reads, so they are rounded to a fixed grid here and never localised.
+const rnd = (v, d = 1) => Math.round(v * 10 ** d) / 10 ** d;
 
 const WORDS = {
   en: {
@@ -270,20 +273,20 @@ function drawOrbit(v, w) {
   while ((flip = fits(k)) === null && k > 0.3 * k0) k *= 0.97;
   const px = p => W / 2 + k * (p.x - mid.x);
   const py = p => H / 2 - k * (p.y - mid.y);
-  const q = p => `cx="${px(p).toFixed(1)}" cy="${py(p).toFixed(1)}"`;
+  const q = p => `cx="${rnd(px(p))}" cy="${rnd(py(p))}"`;
   const data = (p, name, d) =>
     `data-q="${name}" data-x="${full(p.x)}" data-y="${full(p.y)}" data-value="${full(d)}"`;
   // A label that still overruns the box (the floor) is pushed back inside.
   const label = l => {
     const [x0, x1] = span(l);
     const shift = x0 < 3 ? 3 - x0 : x1 > W - 3 ? W - 3 - x1 : 0;
-    return `<text class="mf-t" x="${(l.x + shift).toFixed(1)}" y="${Math.min(H - 3, Math.max(11, l.y)).toFixed(1)}" text-anchor="${l.anchor}">${esc(l.text)}</text>`;
+    return `<text class="mf-t" x="${rnd(l.x + shift)}" y="${rnd(Math.min(H - 3, Math.max(11, l.y)))}" text-anchor="${l.anchor}">${esc(l.text)}</text>`;
   };
   return (
-    `<ellipse class="mf-c" cx="${W / 2}" cy="${H / 2}" rx="${(k * v.a).toFixed(1)}" ry="${(k * bAxis).toFixed(1)}" transform="rotate(${((-v.omega * 180) / Math.PI).toFixed(3)} ${W / 2} ${H / 2})" data-q="ellipse" data-a="${full(v.a)}" data-e="${full(v.e)}"/>` +
-    `<line class="mf-d" x1="${px(v.at.periapsis).toFixed(1)}" y1="${py(v.at.periapsis).toFixed(1)}" x2="${px(v.at.apoapsis).toFixed(1)}" y2="${py(v.at.apoapsis).toFixed(1)}"/>` +
-    `<rect class="mf-s" x="${(px(v.at.periapsis) - 4).toFixed(1)}" y="${(py(v.at.periapsis) - 4).toFixed(1)}" width="8" height="8" ${data(v.at.periapsis, 'periapsis', v.periapsis)}/>` +
-    `<path class="mf-s" d="M${px(v.at.apoapsis).toFixed(1)} ${(py(v.at.apoapsis) - 5.5).toFixed(1)}l5.5 5.5-5.5 5.5-5.5-5.5z" ${data(v.at.apoapsis, 'apoapsis', v.apoapsis)}/>` +
+    `<ellipse class="mf-c" cx="${W / 2}" cy="${H / 2}" rx="${rnd(k * v.a)}" ry="${rnd(k * bAxis)}" transform="rotate(${rnd((-v.omega * 180) / Math.PI, 3)} ${W / 2} ${H / 2})" data-q="ellipse" data-a="${full(v.a)}" data-e="${full(v.e)}"/>` +
+    `<line class="mf-d" x1="${rnd(px(v.at.periapsis))}" y1="${rnd(py(v.at.periapsis))}" x2="${rnd(px(v.at.apoapsis))}" y2="${rnd(py(v.at.apoapsis))}"/>` +
+    `<rect class="mf-s" x="${rnd(px(v.at.periapsis) - 4)}" y="${rnd(py(v.at.periapsis) - 4)}" width="8" height="8" ${data(v.at.periapsis, 'periapsis', v.periapsis)}/>` +
+    `<path class="mf-s" d="M${rnd(px(v.at.apoapsis))} ${rnd(py(v.at.apoapsis) - 5.5)}l5.5 5.5-5.5 5.5-5.5-5.5z" ${data(v.at.apoapsis, 'apoapsis', v.apoapsis)}/>` +
     (round
       ? ''
       : `<circle class="mf-o" ${q(v.at.empty)} r="4" ${data(v.at.empty, 'empty-focus', v.focalSeparation)}/>`) +
@@ -331,7 +334,7 @@ function drawTransit(v, w) {
   const xi = v.innerLength ? (v.innerLength / 2) * R : 0;
   const m = w.marks;
   const ly = y - rp - 7 >= 16 ? y - rp - 7 : y + rp + 14;
-  const f = n => n.toFixed(1);
+  const f = rnd;
   const disc = (x, cls, extra = '') =>
     `<circle class="${cls}" cx="${f(cx + x)}" cy="${f(y)}" r="${f(rp)}"${extra}/>`;
   return (
