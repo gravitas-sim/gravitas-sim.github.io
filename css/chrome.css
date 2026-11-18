@@ -2721,23 +2721,47 @@
   font-weight: 400;
 }
 
-/* A quiet canvas (js/lessonCanvas.js): the controls that act on a scene fold. */
+/* A quiet canvas (js/lessonCanvas.js): the rail and the playback bar are in one
+   More, a closed <details> that takes them out of sight and out of the Tab
+   order, so the instrument gets the width they stood in. The summary is a pill
+   in the free corner; the panels keep their own fixed positions when it opens. */
 @layer overrides {
-  body[data-lesson-canvas='quiet'] .timeline-bar.is-folded {
-    left: 50%;
-    right: auto;
-    transform: translateX(-50%);
-    margin-inline: 0;
-    width: auto;
-    min-width: 0;
+  .stage-more {
+    position: fixed;
+    right: var(--space-3);
+    /* Above the attribution line, which keeps the corner. */
+    bottom: 48px;
+    z-index: var(--z-panel);
+    background: var(--panel-bg);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-lg);
   }
 
-  body[data-lesson-canvas='quiet'] .timeline-bar.is-folded > :not(.timeline-fold) {
+  .stage-more:not([open]) > :not(summary) {
     display: none;
   }
 
-  body[data-lesson-canvas='quiet']:not(:has(.rail-section-toggle[aria-expanded='true']))
-    #objectAdd {
-    display: none;
+  /* On a tablet and a phone it stands where the playback bar stood folded:
+     the middle of the bottom edge, under the lesson's sheet. */
+  @media (max-width: 900px) {
+    .stage-more {
+      right: auto;
+      bottom: var(--space-2);
+      left: 50%;
+      transform: translateX(-50%);
+    }
+  }
+
+  /* Beside the lesson, the instrument takes what the rail used to stand in:
+     every docked panel starts where the lesson panel ends, and ends a gap short
+     of the window's edge. The width is set by this rule and never by the More,
+     because an instrument draws into its box once: a panel resized after that
+     stretches its picture, so the rail, when the reader opens it, lies over the
+     panel's edge and goes again when it is shut. */
+  @media (min-width: 901px) {
+    body[data-lesson-canvas='quiet'] :is(.inv-plot-panel, .inv-dock-tabs) {
+      width: min(calc(100vw - var(--lesson-width) - var(--space-3) * 3), 1100px);
+    }
   }
 }

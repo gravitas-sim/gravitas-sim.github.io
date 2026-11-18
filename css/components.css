@@ -429,14 +429,23 @@
     transition:
       max-height var(--duration-slow) var(--ease),
       opacity var(--duration) var(--ease),
-      padding var(--duration-slow) var(--ease);
+      padding var(--duration-slow) var(--ease),
+      visibility 0s;
   }
 
+  /* Folded means out of the Tab order and the reading order, not only out of
+     sight: visibility goes once the fold has finished, so it still animates. */
   .settings-section.collapsed .settings-section-content {
     max-height: 0;
     padding-top: 0;
     padding-bottom: 0;
     opacity: 0;
+    visibility: hidden;
+    transition:
+      max-height var(--duration-slow) var(--ease),
+      opacity var(--duration) var(--ease),
+      padding var(--duration-slow) var(--ease),
+      visibility 0s linear var(--duration-slow);
   }
 
   .settings-header,
