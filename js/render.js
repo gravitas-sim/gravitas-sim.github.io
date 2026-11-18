@@ -1495,52 +1495,6 @@ const drawScene = () => {
     // ignore preview rendering errors
   }
 
-  // If inspector orbit overlay is active, draw it as a blue dashed loop
-  // Skip when area sweep is active to avoid visual overlap
-  if (
-    state.inspectorOrbitOverlay &&
-    state.inspectorOrbitOverlay.active &&
-    !(state.areaSweepOverlay && state.areaSweepOverlay.active)
-  ) {
-    const pts = state.inspectorOrbitOverlay.points || [];
-    if (pts.length > 1) {
-      ctx.save();
-      ctx.setLineDash([12, 8]);
-      ctx.lineWidth = 3;
-      ctx.strokeStyle = 'rgba(90, 160, 255, 0.95)';
-      ctx.beginPath();
-      const p0 = world_to_screen(pts[0]);
-      ctx.moveTo(p0.x, p0.y);
-      for (let i = 1; i < pts.length; i++) {
-        const ps = world_to_screen(pts[i]);
-        ctx.lineTo(ps.x, ps.y);
-      }
-      ctx.stroke();
-      ctx.setLineDash([]);
-      ctx.restore();
-
-      // Label for inspector stable orbit
-      let top = null;
-      for (let i = 0; i < pts.length; i++) {
-        const s = world_to_screen(pts[i]);
-        if (!top || s.y < top.y) top = s;
-      }
-      if (top) {
-        ctx.save();
-        ctx.font = labelFont(14, 'sans-serif', 'bold');
-        ctx.fillStyle = 'rgba(90, 160, 255, 0.95)';
-        ctx.textAlign = 'center';
-        ctx.textBaseline = 'bottom';
-        ctx.shadowColor = 'rgba(0,0,0,0.35)';
-        ctx.shadowBlur = 4;
-        ctx.shadowOffsetX = 0;
-        ctx.shadowOffsetY = 1;
-        ctx.fillText(t('overlay.stableOrbit'), top.x, top.y - 8);
-        ctx.restore();
-      }
-    }
-  }
-
   // The balance point, when a lesson step has asked for it.
   if (state.evolutionOverlay?.active) {
     drawEvolutionScene(ctx);

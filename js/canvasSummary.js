@@ -42,6 +42,7 @@ import {
 } from './physics.js';
 import { t } from './i18n/index.js';
 import { lightingNotes } from './bodyDraw.js';
+import { sizeSentence } from './sizeFacts.js';
 
 // For the inspector's Appearance disclosure, which loads lazily and must not
 // import the drawing modules itself (js/inspectorView.js says why).
@@ -156,8 +157,32 @@ export function summaryText() {
   // see the canvas gets the whole explanation, because for them this is the
   // only place it appears.
   parts.push(t('canvas.sizeDisclosure.detail'));
+  const sizes = sizeSentence(
+    [...stars, ...planets, ...gas_giants, ...asteroids, ...comets],
+    selected
+  );
+  if (sizes) parts.push(sizes);
+
+  // The orbit geometry overlay writes its own sentence while it is on, with
+  // only the parts the reader has left showing (js/orbitGeometryOverlay.js).
+  if (state.orbitGeometry?.active && state.orbitGeometry.summary) {
+    parts.push(state.orbitGeometry.summary);
+  }
 
   return parts.join(' ');
+}
+
+/**
+ * The readout's Sizes button opens the statement, fetched on first use.
+ * Wired here because this module already owns what the canvas says about size.
+ */
+function wireSizesButton() {
+  const btn = document.getElementById('readoutSizes');
+  if (!btn || btn.dataset.wired) return;
+  btn.dataset.wired = '1';
+  btn.addEventListener('click', () =>
+    import('./sizeStatement.js').then(m => m.openSizeStatement(btn))
+  );
 }
 
 /** The three facts a reader is interrupted for. */
@@ -196,7 +221,10 @@ function announceChanges() {
  * @param {number} [now] - Timestamp, for testing
  */
 export function updateCanvasSummary(now = Date.now()) {
-  if (!el) el = document.getElementById('canvasSummary');
+  if (!el) {
+    el = document.getElementById('canvasSummary');
+    wireSizesButton();
+  }
   if (!el) return;
 
   // The throttle exists to stop the sentence being rebuilt sixty times a

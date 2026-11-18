@@ -87,66 +87,157 @@
     <link rel="icon" type="image/x-icon" href="favicon.ico" />
     <!-- Startup lifecycle (ACCESSIBILITY.md, "Startup"): decided before first paint -->
     <script>
-      (function(d,r,m){try{var n=performance.getEntriesByType('navigation')[0],s=sessionStorage;
-      if(!/embed=/.test(location.search)&&((n&&n.type!='navigate')||(d.referrer&&new URL(d.referrer).origin==location.origin)||s.getItem('gravitas_visit')))m='skip';
-      s.setItem('gravitas_visit',1)}catch(e){}
-      r.dataset.startup=m;
-      if(m=='skip'||matchMedia('(prefers-reduced-motion:reduce)').matches)
-      addEventListener('DOMContentLoaded',function(){setTimeout(function(){var p=d.getElementById('splash');
-      p&&p.dispatchEvent(new AnimationEvent('animationend',{animationName:'splashFadeOut'}))})});
-      if(m=='splash')setTimeout(function(){window.splashScreenEnded||(r.dataset.startup='failsafe')},6e3)
-      })(document,document.documentElement,'splash');
+      (function (d, r, m) {
+        try {
+          var n = performance.getEntriesByType('navigation')[0],
+            s = sessionStorage;
+          if (
+            !/embed=/.test(location.search) &&
+            ((n && n.type != 'navigate') ||
+              (d.referrer && new URL(d.referrer).origin == location.origin) ||
+              s.getItem('gravitas_visit'))
+          )
+            m = 'skip';
+          s.setItem('gravitas_visit', 1);
+        } catch (e) {}
+        r.dataset.startup = m;
+        if (
+          m == 'skip' ||
+          matchMedia('(prefers-reduced-motion:reduce)').matches
+        )
+          addEventListener('DOMContentLoaded', function () {
+            setTimeout(function () {
+              var p = d.getElementById('splash');
+              p &&
+                p.dispatchEvent(
+                  new AnimationEvent('animationend', {
+                    animationName: 'splashFadeOut',
+                  })
+                );
+            });
+          });
+        if (m == 'splash')
+          setTimeout(function () {
+            window.splashScreenEnded || (r.dataset.startup = 'failsafe');
+          }, 6e3);
+      })(document, document.documentElement, 'splash');
     </script>
     <!-- shell:head -->
-<link rel="stylesheet" href="/css/shell.css" />
-<script>
-try {
-  const r = document.documentElement;
-  const t = localStorage.getItem('gravitas_theme');
-  if (['deep', 'observatory', 'daylight'].includes(t)) {
-    r.setAttribute('data-theme', t);
-    r.style.colorScheme = t === 'daylight' ? 'light' : 'dark';
-  }
-  const m = localStorage.gravitas_motion;
-  if (m === 'reduce' || m === 'step') r.dataset.motion = m;
-} catch {}
-(() => {
-  const sync = () => {
-    const el = document.querySelector('.gs-offline');
-    const box = el && el.querySelector('.gs-offline-box');
-    if (!el) return;
-    if (navigator.onLine) return box && box.remove();
-    if (box) return;
-    el.append(el.querySelector('template').content.cloneNode(true));
-    el.querySelector('button').onclick = () =>
-      el.querySelector('.gs-offline-box').remove();
-  };
-  addEventListener('offline', sync);
-  addEventListener('online', sync);
-  addEventListener('DOMContentLoaded', sync);
-  addEventListener('keydown', e => {
-    const box = document.querySelector('.gs-offline-box');
-    if (e.key === 'Escape' && box) box.remove();
-  });
-})();
-</script>
-<!-- /shell:head -->
+    <link rel="stylesheet" href="/css/shell.css" />
+    <script>
+      try {
+        const r = document.documentElement;
+        const t = localStorage.getItem('gravitas_theme');
+        if (['deep', 'observatory', 'daylight'].includes(t)) {
+          r.setAttribute('data-theme', t);
+          r.style.colorScheme = t === 'daylight' ? 'light' : 'dark';
+        }
+        const m = localStorage.gravitas_motion;
+        if (m === 'reduce' || m === 'step') r.dataset.motion = m;
+      } catch {}
+      (() => {
+        const sync = () => {
+          const el = document.querySelector('.gs-offline');
+          const box = el && el.querySelector('.gs-offline-box');
+          if (!el) return;
+          if (navigator.onLine) return box && box.remove();
+          if (box) return;
+          el.append(el.querySelector('template').content.cloneNode(true));
+          el.querySelector('button').onclick = () =>
+            el.querySelector('.gs-offline-box').remove();
+        };
+        addEventListener('offline', sync);
+        addEventListener('online', sync);
+        addEventListener('DOMContentLoaded', sync);
+        addEventListener('keydown', e => {
+          const box = document.querySelector('.gs-offline-box');
+          if (e.key === 'Escape' && box) box.remove();
+        });
+      })();
+    </script>
+    <!-- /shell:head -->
   </head>
   <body>
     <a class="skip-link" href="#mainControls" data-i18n="chrome.text1"
       >Skip to controls</a
     >
     <!-- shell:header main=mainControls -->
-<header class="gs-shell gs-app">
-<a class="gs-brand" href="/#home"><span class="gs-vh"><span class="gs-en">Gravitas home</span><span class="gs-es" lang="es">Inicio de Gravitas</span></span><span aria-hidden="true">GRAVITAS</span></a>
-<button type="button" class="gs-toggle" aria-expanded="false" aria-controls="gs-nav" hidden><span class="gs-en">Menu</span><span class="gs-es" lang="es">Menú</span></button>
-<nav id="gs-nav" class="gs-nav" aria-label="Gravitas"><ul><li><a href="/" data-dest="explore" aria-current="page"><span class="gs-en">Explore</span><span class="gs-es" lang="es">Explorar</span></a></li><li><a href="/library/" data-dest="learn"><span class="gs-en">Learn</span><span class="gs-es" lang="es">Aprender</span></a></li><li><a href="/observatory/" data-dest="observe"><span class="gs-en">Observe</span><span class="gs-es" lang="es">Observar</span></a></li><li><a href="/my-work/" data-dest="my-work"><span class="gs-en">My work</span><span class="gs-es" lang="es">Mi trabajo</span></a></li><li><a href="/teaching/" data-dest="teach"><span class="gs-en">Teach</span><span class="gs-es" lang="es">Enseñar</span></a></li></ul></nav>
-<div class="gs-controls" hidden>
-<label><span class="gs-vh"><span class="gs-en">Language</span><span class="gs-es" lang="es">Idioma</span></span><select data-gs-lang><option value="en" lang="en">English</option><option value="es" lang="es">Español</option></select></label>
-<label><span class="gs-vh"><span class="gs-en">Theme</span><span class="gs-es" lang="es">Tema</span></span><select data-gs-theme><option value="midnight" data-es="Medianoche">Midnight</option><option value="deep" data-es="Espacio profundo">Deep space</option><option value="observatory" data-es="Rojo de observatorio">Observatory red</option><option value="daylight" data-es="Luz de día">Daylight</option></select></label>
-</div>
-</header>
-<!-- /shell:header -->
+    <header class="gs-shell gs-app">
+      <a class="gs-brand" href="/#home"
+        ><span class="gs-vh"
+          ><span class="gs-en">Gravitas home</span
+          ><span class="gs-es" lang="es">Inicio de Gravitas</span></span
+        ><span aria-hidden="true">GRAVITAS</span></a
+      >
+      <button
+        type="button"
+        class="gs-toggle"
+        aria-expanded="false"
+        aria-controls="gs-nav"
+        hidden
+      >
+        <span class="gs-en">Menu</span><span class="gs-es" lang="es">Menú</span>
+      </button>
+      <nav id="gs-nav" class="gs-nav" aria-label="Gravitas">
+        <ul>
+          <li>
+            <a href="/" data-dest="explore" aria-current="page"
+              ><span class="gs-en">Explore</span
+              ><span class="gs-es" lang="es">Explorar</span></a
+            >
+          </li>
+          <li>
+            <a href="/library/" data-dest="learn"
+              ><span class="gs-en">Learn</span
+              ><span class="gs-es" lang="es">Aprender</span></a
+            >
+          </li>
+          <li>
+            <a href="/observatory/" data-dest="observe"
+              ><span class="gs-en">Observe</span
+              ><span class="gs-es" lang="es">Observar</span></a
+            >
+          </li>
+          <li>
+            <a href="/my-work/" data-dest="my-work"
+              ><span class="gs-en">My work</span
+              ><span class="gs-es" lang="es">Mi trabajo</span></a
+            >
+          </li>
+          <li>
+            <a href="/teaching/" data-dest="teach"
+              ><span class="gs-en">Teach</span
+              ><span class="gs-es" lang="es">Enseñar</span></a
+            >
+          </li>
+        </ul>
+      </nav>
+      <div class="gs-controls" hidden>
+        <label
+          ><span class="gs-vh"
+            ><span class="gs-en">Language</span
+            ><span class="gs-es" lang="es">Idioma</span></span
+          ><select data-gs-lang>
+            <option value="en" lang="en">English</option>
+            <option value="es" lang="es">Español</option>
+          </select></label
+        >
+        <label
+          ><span class="gs-vh"
+            ><span class="gs-en">Theme</span
+            ><span class="gs-es" lang="es">Tema</span></span
+          ><select data-gs-theme>
+            <option value="midnight" data-es="Medianoche">Midnight</option>
+            <option value="deep" data-es="Espacio profundo">Deep space</option>
+            <option value="observatory" data-es="Rojo de observatorio">
+              Observatory red
+            </option>
+            <option value="daylight" data-es="Luz de día">Daylight</option>
+          </select></label
+        >
+      </div>
+    </header>
+    <!-- /shell:header -->
 
     <!--
       The document's one top-level heading. The splash carries a visible
@@ -1259,6 +1350,19 @@ try {
         </span>
         <div class="readout-head-actions">
           <!--
+            What is drawn to scale and what is not, body by body: the canvas
+            note points here (js/sizeStatement.js, fetched on first press).
+          -->
+          <button
+            id="readoutSizes"
+            type="button"
+            class="readout-icon-btn readout-sizes-btn"
+            aria-haspopup="dialog"
+            data-i18n="sizes.button"
+          >
+            Sizes
+          </button>
+          <!--
             The speaker. It opens a panel rather than toggling directly,
             because there are now two entirely different things it can be
             playing - the sandbox's designed sonification, and a computed
@@ -1875,41 +1979,76 @@ try {
           >
             <span id="viewPadName" class="visually-hidden"
               ><span class="gs-en">Move and zoom the view</span
-              ><span class="gs-es" lang="es">Mover y ampliar la vista</span></span
+              ><span class="gs-es" lang="es"
+                >Mover y ampliar la vista</span
+              ></span
             >
             <span id="viewPadZoom" hidden
               ><span class="gs-en">Zoom {x} times</span
               ><span class="gs-es" lang="es">Zoom de {x} aumentos</span></span
             >
-            <button id="viewZoomOut" class="ui-button" type="button" data-view=",,0.8">
+            <button
+              id="viewZoomOut"
+              class="ui-button"
+              type="button"
+              data-view=",,0.8"
+            >
               <span aria-hidden="true">&minus;</span
               ><span class="visually-hidden gs-en">Zoom out</span
               ><span class="visually-hidden gs-es" lang="es">Alejar</span>
             </button>
-            <button id="viewZoomIn" class="ui-button" type="button" data-view=",,1.25">
+            <button
+              id="viewZoomIn"
+              class="ui-button"
+              type="button"
+              data-view=",,1.25"
+            >
               <span aria-hidden="true">+</span
               ><span class="visually-hidden gs-en">Zoom in</span
               ><span class="visually-hidden gs-es" lang="es">Acercar</span>
             </button>
-            <button id="panLeft" class="ui-button" type="button" data-view="1,0">
+            <button
+              id="panLeft"
+              class="ui-button"
+              type="button"
+              data-view="1,0"
+            >
               <span aria-hidden="true">&larr;</span
               ><span class="visually-hidden gs-en">Move the view left</span
-              ><span class="visually-hidden gs-es" lang="es">Mover la vista a la izquierda</span>
+              ><span class="visually-hidden gs-es" lang="es"
+                >Mover la vista a la izquierda</span
+              >
             </button>
-            <button id="panRight" class="ui-button" type="button" data-view="-1,0">
+            <button
+              id="panRight"
+              class="ui-button"
+              type="button"
+              data-view="-1,0"
+            >
               <span aria-hidden="true">&rarr;</span
               ><span class="visually-hidden gs-en">Move the view right</span
-              ><span class="visually-hidden gs-es" lang="es">Mover la vista a la derecha</span>
+              ><span class="visually-hidden gs-es" lang="es"
+                >Mover la vista a la derecha</span
+              >
             </button>
             <button id="panUp" class="ui-button" type="button" data-view="0,1">
               <span aria-hidden="true">&uarr;</span
               ><span class="visually-hidden gs-en">Move the view up</span
-              ><span class="visually-hidden gs-es" lang="es">Mover la vista hacia arriba</span>
+              ><span class="visually-hidden gs-es" lang="es"
+                >Mover la vista hacia arriba</span
+              >
             </button>
-            <button id="panDown" class="ui-button" type="button" data-view="0,-1">
+            <button
+              id="panDown"
+              class="ui-button"
+              type="button"
+              data-view="0,-1"
+            >
               <span aria-hidden="true">&darr;</span
               ><span class="visually-hidden gs-en">Move the view down</span
-              ><span class="visually-hidden gs-es" lang="es">Mover la vista hacia abajo</span>
+              ><span class="visually-hidden gs-es" lang="es"
+                >Mover la vista hacia abajo</span
+              >
             </button>
           </div>
         </div>
@@ -2144,9 +2283,10 @@ try {
           <div>
             <h3 id="investigationBrowserTitle">Investigations</h3>
             <p class="inv-browser-sub">
-              Guided investigations you work through beside the simulation, each one a
-              sitting's worth of measuring and writing down. Progress saves as
-              you go, and finishing one gets you a lab report with your answers.
+              Guided investigations you work through beside the simulation, each
+              one a sitting's worth of measuring and writing down. Progress
+              saves as you go, and finishing one gets you a lab report with your
+              answers.
             </p>
             <p class="inv-browser-links">
               <a href="/model/">About the physics model</a>
@@ -2288,8 +2428,8 @@ try {
               Ways through
             </h4>
             <p class="inv-seq-intro" data-i18n="inv.seq.intro">
-              Investigations stand alone, but some build on each other. These are
-              orders that work, with what each one assumes you have already
+              Investigations stand alone, but some build on each other. These
+              are orders that work, with what each one assumes you have already
               done.
             </p>
             <div id="investigationSequenceList" class="inv-seq-list"></div>
@@ -2464,9 +2604,18 @@ try {
           </p>
         </div>
         <div class="share-embed-row">
-          <label for="shareMineName" data-i18n="share.mine.name">Name in My work</label>
+          <label for="shareMineName" data-i18n="share.mine.name"
+            >Name in My work</label
+          >
           <input type="text" id="shareMineName" maxlength="120" />
-          <button type="button" id="shareMineBtn" class="ui-button secondary" data-i18n="share.mine.save">Save to My work</button>
+          <button
+            type="button"
+            id="shareMineBtn"
+            class="ui-button secondary"
+            data-i18n="share.mine.save"
+          >
+            Save to My work
+          </button>
         </div>
         <p id="shareMeta" class="share-meta" role="status"></p>
         <p id="shareStale" class="share-note" hidden="">
@@ -2677,7 +2826,11 @@ try {
     </a>
 
     <footer id="attribution" class="attribution attribution-fade">
-      <span>©&nbsp;<span class="attribution-year"><!--fact:copyrightYear-->2025<!--/fact--></span></span>
+      <span
+        >©&nbsp;<span class="attribution-year"
+          ><!--fact:copyrightYear-->2025<!--/fact--></span
+        ></span
+      >
       <a
         href="https://carlziegler.space/"
         target="_blank"

@@ -1198,10 +1198,16 @@ export const ES = {
   'inv.browser.activities':
     '¿Con poco tiempo? Las actividades de clase son formatos de enseñanza preparados —una demostración de cinco minutos, una actividad de veinte, una práctica completa— recortados de estas mismas investigaciones.',
   'inv.browser.activities.link': 'Ver las actividades de clase',
-  'canvas.sizeDisclosure':
-    'Cuerpos ampliados, sin escala común (radios: inspector)',
+  'canvas.sizeDisclosure': 'Tamaños no a escala: detalles en Tamaños',
   'canvas.sizeDisclosure.detail':
-    'Los diámetros del lienzo son ilustrativos. Cada tipo de cuerpo se amplía con un factor distinto, así que los tamaños no siguen una misma escala y sus proporciones no son físicas. Usa el inspector y las mediciones de las investigaciones para los radios.',
+    'Las distancias están a escala y los tamaños dibujados no: cada tipo de cuerpo se amplía con su propio factor, así que ni un tamaño ni la proporción entre dos tamaños se pueden leer en el lienzo. El botón Tamaños de la lectura dice cuánto, cuerpo a cuerpo.',
+  'sizes.button': 'Tamaños',
+  'sizes.timesRange': 'de {lo}× a {hi}×',
+  'sizes.summary': 'Dibujados mayores que en la realidad: {list}.',
+  'sizes.summary.selected': '{name} se dibuja {times} su radio real.',
+  'overlay.orbitGeometry': 'Geometría de la órbita',
+  'overlay.orbitGeometry.help':
+    'La elipse que seguiría este cuerpo alrededor de su primario si solo ese primario tirara de él, con los dos focos y los puntos más cercano y más lejano. Elige dos puntos para leer la distancia entre ellos.',
   'capture.screenshotFailed': 'No se pudo guardar la captura',
   'chart.notReady': 'El gráfico aún no está listo',
   'chart.exportFailed': 'No se pudo exportar el gráfico',

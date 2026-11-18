@@ -232,6 +232,28 @@ export const wireInspectorOverlayToggles = () => {
     };
   }
 
+  const orbitBtn = document.getElementById('orbitGeometryToggleBtn');
+  if (orbitBtn) {
+    orbitBtn.onclick = event => {
+      event.preventDefault();
+      event.stopPropagation();
+      const obj = state.selectedObject?.object;
+      if (!obj) return;
+      const on = !(
+        state.orbitGeometry.active && state.orbitGeometry.objectId === obj.id
+      );
+      orbitBtn.setAttribute('data-state', on ? 'on' : 'off');
+      orbitBtn.setAttribute('aria-checked', on ? 'true' : 'false');
+      orbitBtn.textContent = on
+        ? t('settings.toggle.on')
+        : t('settings.toggle.off');
+      // Fetched on first use: nobody who never asks pays for it.
+      import('./orbitGeometryOverlay.js').then(m =>
+        m.setOrbitGeometry(on, obj)
+      );
+    };
+  }
+
   const sweepBtn = document.getElementById('sweepToggleBtn');
   if (sweepBtn) {
     sweepBtn.onclick = event => {
@@ -377,6 +399,16 @@ export const buildInspectorView = (object, type, info) => {
     label: t('overlay.referenceFrame'),
     on: frameState().mode === OBJECT && frameState().objectId === object.id,
     help: 'Re-express every position, and every trail, as this body would see them. Unlike Follow Mode, which only moves the camera, this redraws the recorded paths: put the Solar System into Earth\u2019s frame and Mars traces a loop that doubles back on itself.',
+  });
+
+  // The two-body ellipse about this body's primary, drawn from live elements.
+  // Every kind may ask; where no ellipse is a fair claim the overlay says why.
+  overlays.push({
+    id: 'orbitGeometryToggleBtn',
+    label: t('overlay.orbitGeometry'),
+    on:
+      state.orbitGeometry.active && state.orbitGeometry.objectId === object.id,
+    help: t('overlay.orbitGeometry.help'),
   });
 
   const sweepScenarios = [

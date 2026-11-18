@@ -1216,10 +1216,16 @@ export const EN = {
   'inv.browser.activities':
     'Short on time? Classroom activities are prepared teaching formats — a five-minute demonstration, a twenty-minute activity, a full lab — cut from these same investigations.',
   'inv.browser.activities.link': 'See the classroom activities',
-  'canvas.sizeDisclosure':
-    'Bodies enlarged, not to one scale (radii: inspector)',
+  'canvas.sizeDisclosure': 'Sizes not to scale: details under Sizes',
   'canvas.sizeDisclosure.detail':
-    'Canvas diameters are illustrative. Each kind of body is enlarged by a different factor, so sizes are not to one scale and their ratios are not physical. Use the inspector and investigation measurements for radii.',
+    'Distances are to scale and drawn sizes are not: each kind of body is enlarged by its own factor, so neither a size nor the ratio of two sizes can be read off the canvas. The Sizes button in the readout says by how much, body by body.',
+  'sizes.button': 'Sizes',
+  'sizes.timesRange': '{lo}× to {hi}×',
+  'sizes.summary': 'Drawn larger than real: {list}.',
+  'sizes.summary.selected': '{name} is drawn {times} its real radius.',
+  'overlay.orbitGeometry': 'Orbit geometry',
+  'overlay.orbitGeometry.help':
+    'The ellipse this body would follow about its primary if only that primary pulled, with both foci and the nearest and farthest points. Choose two points to read the distance between them.',
   'capture.screenshotFailed': 'The screenshot could not be saved',
   'chart.notReady': 'The chart is not ready yet',
   'chart.exportFailed': 'Could not export the chart',

@@ -1063,6 +1063,57 @@
     }
   }
 
+  /* Orbit geometry (js/orbitGeometryOverlay.js): the parts, the points to
+     measure and the distance. A chosen point is said by a tick and weight
+     as well as by colour. */
+  .orbit-geometry-panel {
+    width: 300px;
+  }
+  .og-body {
+    padding: 0 var(--space-3);
+    font-size: var(--text-sm);
+  }
+  .og-parts {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2px var(--space-3);
+    margin: 0 0 var(--space-2);
+    padding: 0;
+    border: 0;
+  }
+  .og-parts label,
+  .og-option {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    min-height: 24px;
+  }
+  .og-option {
+    padding: 0 6px;
+    border: 1px solid transparent;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+  }
+  .og-option.is-active {
+    border-color: var(--border);
+  }
+  .og-list:focus-visible .og-option.is-active {
+    outline: 2px solid var(--accent-primary, currentColor);
+  }
+  .og-option[aria-selected='true'] {
+    font-weight: 600;
+    background: var(--surface-2);
+  }
+  .og-option[aria-selected='true']::before {
+    content: '\2713';
+  }
+  @media (pointer: coarse) {
+    .og-parts label,
+    .og-option {
+      min-height: 44px;
+    }
+  }
+
   /* ==========================================================================
      HUD overlay (top-left readout)
      ====================================================================== */
@@ -1331,7 +1382,10 @@
          top of its lower edge, so whichever control landed in the last fifty
          pixels was underneath the playback controls. This is the width where
          the reservation is needed and the only one where it is. */
-      max-height: calc(100vh - var(--space-10) - 64px - var(--transport-space) - var(--shell-height, 0px));
+      max-height: calc(
+        100vh - var(--space-10) - 64px - var(--transport-space) -
+          var(--shell-height, 0px)
+      );
 
       opacity: 0;
       visibility: hidden;
@@ -2013,11 +2067,11 @@
        the system's selection color on the edge, and an underline on the words,
        which the palette never touches. */
     :is(
-        [aria-pressed='true'],
-        [aria-selected='true'],
-        [aria-checked='true'],
-        [aria-current]:not([aria-current='false'])
-      ):is(button, a, [role='tab'], [role='option'], [role='menuitem']) {
+      [aria-pressed='true'],
+      [aria-selected='true'],
+      [aria-checked='true'],
+      [aria-current]:not([aria-current='false'])
+    ):is(button, a, [role='tab'], [role='option'], [role='menuitem']) {
       border-color: Highlight;
       text-decoration: underline;
     }
@@ -2453,7 +2507,10 @@
 
     /* --- Readout: collapsed by default, tap to expand -------------------- */
     #overlay {
-      top: calc(var(--space-2) + env(safe-area-inset-top, 0px) + var(--shell-height, 0px));
+      top: calc(
+        var(--space-2) + env(safe-area-inset-top, 0px) +
+          var(--shell-height, 0px)
+      );
       left: calc(var(--space-2) + env(safe-area-inset-left, 0px));
       right: auto;
       width: auto;
@@ -2476,7 +2533,10 @@
 
     /* --- Menu button clears the notch ------------------------------------ */
     .mobile-menu-toggle {
-      top: calc(var(--space-2) + env(safe-area-inset-top, 0px) + var(--shell-height, 0px));
+      top: calc(
+        var(--space-2) + env(safe-area-inset-top, 0px) +
+          var(--shell-height, 0px)
+      );
       right: calc(var(--space-2) + env(safe-area-inset-right, 0px));
       width: 44px;
       height: 44px;
@@ -2484,7 +2544,10 @@
     }
 
     .ui-container {
-      top: calc(var(--space-2) + 52px + env(safe-area-inset-top, 0px) + var(--shell-height, 0px));
+      top: calc(
+        var(--space-2) + 52px + env(safe-area-inset-top, 0px) +
+          var(--shell-height, 0px)
+      );
       left: var(--space-2);
       right: var(--space-2);
       max-height: calc(100vh - 200px - env(safe-area-inset-top, 0px));
@@ -2625,7 +2688,9 @@
   .placement-armed-hint {
     position: fixed;
     left: 50%;
-    top: calc(var(--space-8) + env(safe-area-inset-top, 0px) + var(--shell-height, 0px));
+    top: calc(
+      var(--space-8) + env(safe-area-inset-top, 0px) + var(--shell-height, 0px)
+    );
     transform: translateX(-50%);
     z-index: var(--z-toast);
 
@@ -4591,7 +4656,10 @@
     /* Clears the transport bar, same as the lesson panel. Anything taller than
        the window scrolls inside the panel rather than off the bottom of it,
        which is what the widgets with three sliders and five presets need. */
-    max-height: calc(100vh - var(--space-3) - var(--shell-height, 0px) - var(--transport-reserve, 88px));
+    max-height: calc(
+      100vh - var(--space-3) - var(--shell-height, 0px) -
+        var(--transport-reserve, 88px)
+    );
     overflow-y: auto;
     overscroll-behavior: contain;
     padding: var(--space-3) var(--space-4) var(--space-4);
@@ -4719,8 +4787,8 @@
       left: var(--space-2);
       right: var(--space-2);
       max-height: calc(
-        100vh - var(--shell-height, 0px) - var(--transport-reserve, 76px) - min(38vh, 300px) -
-          var(--space-2) * 3
+        100vh - var(--shell-height, 0px) - var(--transport-reserve, 76px) -
+          min(38vh, 300px) - var(--space-2) * 3
       );
     }
     body.investigation-aux .investigation-panel {
@@ -4968,7 +5036,9 @@
     height: 168px;
   }
   body.investigation-lightcurve .inv-plot-panel {
-    max-height: calc(100vh - var(--space-3) - var(--shell-height, 0px) - 88px - 184px);
+    max-height: calc(
+      100vh - var(--space-3) - var(--shell-height, 0px) - 88px - 184px
+    );
   }
 
   /* --- A step that carries both an instrument and a plot ------------------- */
@@ -4981,11 +5051,29 @@
      a caption. At 0.56 the slider a measurement step tells students to move
      ended up below the fold. */
   body.investigation-split #investigationTool {
-    max-height: calc((100vh - var(--space-3) - var(--shell-height, 0px) - var(--transport-reserve, 88px)) * 0.62);
+    max-height: calc(
+      (
+          100vh - var(--space-3) - var(--shell-height, 0px) -
+            var(--transport-reserve, 88px)
+        ) *
+        0.62
+    );
   }
   body.investigation-split #investigationPlot {
-    top: calc((100vh - var(--space-3) - var(--shell-height, 0px) - var(--transport-reserve, 88px)) * 0.62 + var(--space-3) * 2 + var(--shell-height, 0px));
-    max-height: calc((100vh - var(--space-3) - var(--shell-height, 0px) - var(--transport-reserve, 88px)) * 0.38 - var(--space-3));
+    top: calc(
+      (
+          100vh - var(--space-3) - var(--shell-height, 0px) -
+            var(--transport-reserve, 88px)
+        ) *
+        0.62 + var(--space-3) * 2 + var(--shell-height, 0px)
+    );
+    max-height: calc(
+      (
+          100vh - var(--space-3) - var(--shell-height, 0px) -
+            var(--transport-reserve, 88px)
+        ) *
+        0.38 - var(--space-3)
+    );
   }
   @media (max-width: 900px) {
     /* Two panels above a bottom sheet, sharing the band between them in the
@@ -5003,8 +5091,8 @@
     body.investigation-split #investigationTool {
       max-height: calc(
         (
-            100vh - var(--shell-height, 0px) - var(--transport-reserve, 76px) - min(38vh, 300px) -
-              var(--space-2) * 3
+            100vh - var(--shell-height, 0px) - var(--transport-reserve, 76px) -
+              min(38vh, 300px) - var(--space-2) * 3
           ) *
           0.62
       );
@@ -5012,15 +5100,15 @@
     body.investigation-split #investigationPlot {
       top: calc(
         (
-            100vh - var(--shell-height, 0px) - var(--transport-reserve, 76px) - min(38vh, 300px) -
-              var(--space-2) * 3
+            100vh - var(--shell-height, 0px) - var(--transport-reserve, 76px) -
+              min(38vh, 300px) - var(--space-2) * 3
           ) *
           0.62 + var(--space-2) * 2 + var(--shell-height, 0px)
       );
       max-height: calc(
         (
-            100vh - var(--shell-height, 0px) - var(--transport-reserve, 76px) - min(38vh, 300px) -
-              var(--space-2) * 3
+            100vh - var(--shell-height, 0px) - var(--transport-reserve, 76px) -
+              min(38vh, 300px) - var(--space-2) * 3
           ) *
           0.38
       );

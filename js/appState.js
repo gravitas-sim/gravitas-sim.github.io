@@ -351,11 +351,6 @@ export const state = {
     centralId: null,
     snappedVel: null,
   },
-  // Overlay for showing stable orbit when inspector is open
-  inspectorOrbitOverlay: {
-    active: false,
-    points: [],
-  },
   // The balance point two staged stars are both going round, drawn on the main
   // scene when a lesson step asks for it. World coordinates, recomputed each
   // frame from the live bodies rather than stored, so it is a measurement of
@@ -400,6 +395,19 @@ export const state = {
     crests: [],
     /** Said on screen: the propagation speed here is a display choice. */
     illustrative: true,
+  },
+  /**
+   * The selected body's two-body ellipse, drawn from live elements each frame
+   * by js/orbitGeometryOverlay.js. `parts` the reader can hide; `selected` is
+   * up to two marker ids, oldest first; `summary` is the sentence the canvas
+   * description carries while it is on.
+   */
+  orbitGeometry: {
+    active: false,
+    objectId: null,
+    parts: { ellipse: true, apsides: true, foci: true },
+    selected: [],
+    summary: '',
   },
   barycenterOverlay: {
     active: false,
