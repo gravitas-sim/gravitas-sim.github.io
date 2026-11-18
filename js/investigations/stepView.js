@@ -143,15 +143,7 @@ export function stepMarkup(step, c) {
   if (step.type === 'wedges') {
     const n = getAreaSweepWedges();
     parts.push(
-      `<div class="inv-wedge-control">
-         <label class="inv-ecc-row" for="invWedgeCount">
-           <span>Slices</span>
-           <input type="range" id="invWedgeCount" data-wedges min="3" max="16"
-                  step="1" value="${n}" />
-           <output data-wedges-out>${n}</output>
-         </label>
-         <p class="inv-wedge-readout" data-wedges-readout></p>
-       </div>`
+      `<div class="inv-wedge-control"><label class="inv-ecc-row" for="invWedgeCount"><span>Slices</span><input type="range" id="invWedgeCount" data-wedges min="3" max="16" step="1" value="${n}" /><output data-wedges-out>${n}</output></label><p class="inv-wedge-readout" data-wedges-readout></p></div>`
     );
   }
 
