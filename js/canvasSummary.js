@@ -19,14 +19,8 @@ import {
   white_dwarfs,
   bh_list,
   galaxies,
-  debris,
-  barycenterBodies,
 } from './physics.js';
-import { physicsSettings } from './engine/state.js';
-import { sceneSources } from './engine/sources.js';
-import { frameLine } from './referenceFrame.js';
-import { markerSentence } from './barycentreMarker.js';
-import { t, getLocale } from './i18n/index.js';
+import { t } from './i18n/index.js';
 import { lightingNotes } from './bodyDraw.js';
 import { drawnLabels } from './bodyLabels.js';
 import { crowdNotes } from './bodyDrawSky.js';
@@ -36,6 +30,19 @@ import { crowdNotes } from './bodyDrawSky.js';
 registerCommands({ lightingNotes });
 // js/sizeFacts.js loads with the first description; the next rebuild adds it.
 let sizes = null;
+let scene = null;
+/**
+ * The scene's words and marker (js/sceneStatement.js). Fetched by the
+ * description's first rebuild, or by the Tools marker's first choice; the
+ * canvas and the readout only read it once it is here.
+ * @param {boolean} [load] - Start the fetch if it has not started
+ * @returns {?object} The module once it has arrived, null until then
+ */
+export const sceneWords = (load = false) => {
+  if (!scene && load)
+    scene = import('./sceneStatement.js').then(m => (scene = m));
+  return typeof scene?.frameLine === 'function' ? scene : null;
+};
 const sizeModule = () => {
   if (!sizes) sizes = import('./sizeFacts.js').then(m => (sizes = m));
   return typeof sizes.sizeSentence === 'function' ? sizes : null;
@@ -69,60 +76,6 @@ const KINDS = [
   ['summary.count.blackHoles', () => bh_list.length],
   ['summary.count.galaxies', () => galaxies.length],
 ];
-
-// The readout's count key for each engine list the statement can name.
-const LIST_WORD = {
-  bh_list: 'readout.count.blackHoles',
-  stars: 'readout.count.stars',
-  galaxies: 'readout.count.galaxies',
-  gas_giants: 'readout.count.gasGiants',
-  neutron_stars: 'readout.count.neutronStars',
-  white_dwarfs: 'readout.count.whiteDwarfs',
-  planets: 'readout.count.planets',
-  asteroids: 'readout.count.asteroids',
-  comets: 'readout.count.comets',
-  debris: 'readout.count.debris',
-};
-
-/**
- * Which bodies pull on others and which only feel gravity, in one line read
- * from the rule the engine builds its sources from (js/engine/sources.js).
- * @param {object} [settings] - mutual_gravity and star_only_gravity in force
- * @returns {string} The statement, or '' for an empty scene
- */
-export function sourcesStatement(settings = physicsSettings) {
-  const lists = {
-    bh_list,
-    stars,
-    galaxies,
-    gas_giants,
-    neutron_stars,
-    white_dwarfs,
-    planets,
-    asteroids,
-    comets,
-    debris,
-  };
-  const counts = {};
-  for (const [k, v] of Object.entries(lists)) counts[k] = v.length;
-  const { pulling, feeling } = sceneSources(counts, settings);
-  const locale = getLocale();
-  const words = group =>
-    group
-      .map(({ list, n }) =>
-        t('sources.item', {
-          kind: t(LIST_WORD[list]).toLocaleLowerCase(locale),
-          n,
-        })
-      )
-      .join(t('summary.listSeparator'));
-  const parts = [];
-  if (pulling.length)
-    parts.push(t('sources.pulling', { list: words(pulling) }));
-  if (feeling.length)
-    parts.push(t('sources.feeling', { list: words(feeling) }));
-  return parts.join(' ');
-}
 
 /**
  * The sentence.
@@ -204,11 +157,13 @@ export function summaryText() {
 
   // Where the description stops and the interface takes over. A reader who
   // wants numbers should be told they exist and where.
-  parts.push(`${frameLine(barycenterBodies())}.`);
-  const marker = markerSentence();
-  if (marker) parts.push(marker);
-  const pulls = sourcesStatement();
-  if (pulls) parts.push(pulls);
+  const words = sceneWords(true);
+  if (words)
+    parts.push(
+      `${words.frameLine()}.`,
+      words.markerSentence(),
+      words.sourcesStatement()
+    );
 
   parts.push(t('summary.readoutPointer'));
 
@@ -228,7 +183,7 @@ export function summaryText() {
     parts.push(state.orbitGeometry.summary);
   }
 
-  return parts.join(' ');
+  return parts.filter(Boolean).join(' ');
 }
 
 /** The readout's Sizes button opens the statement, fetched on first use. */

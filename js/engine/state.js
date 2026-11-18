@@ -207,6 +207,20 @@ export let physicsSettings = {
 // the integrator used; the point of publishing it is that it cannot.
 // =============================================================================
 
+/**
+ * The engine's one source rule (js/engine/sources.js says it in words): the
+ * lists whose bodies the step sums as sources, in its summation order.
+ * @param {object} s - mutual_gravity and star_only_gravity
+ * @returns {string[]} List names
+ */
+export const sourceLists = s => {
+  const only = s?.star_only_gravity === true;
+  const lists = ['bh_list', 'stars', 'galaxies'];
+  if (!only) lists.push('gas_giants', 'neutron_stars', 'white_dwarfs');
+  if (s?.mutual_gravity && !only) lists.push('planets', 'asteroids');
+  return lists;
+};
+
 export let simulationTime = 0;
 
 /** @returns {number} Simulated time since the world was built, in sim units */

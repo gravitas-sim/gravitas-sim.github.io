@@ -10,13 +10,15 @@ import * as physics from '../js/physics.js';
 import { physicsSettings, updatePhysicsSettings } from '../js/engine/state.js';
 import { LIST_KIND, sourceLists, isSourceKind } from '../js/engine/sources.js';
 import { buildScene } from './barycentreRuns.js';
-import { markerPoint } from '../js/barycentreMarker.js';
-import { sourcesStatement } from '../js/canvasSummary.js';
+import {
+  markerPoint,
+  sourcesStatement,
+  frameLine,
+} from '../js/sceneStatement.js';
 import {
   setFrame,
   resetFrame,
   resolveFrameOrigin,
-  frameLine,
   BARYCENTER,
 } from '../js/referenceFrame.js';
 import { engine } from '../js/random/streams.js';

@@ -1,4 +1,10 @@
-import { describe, test, expect, beforeEach } from '@jest/globals';
+import {
+  describe,
+  test,
+  expect,
+  beforeEach,
+  beforeAll,
+} from '@jest/globals';
 import {
   drawInstrumentation,
   setCaptureMode,
@@ -356,6 +362,13 @@ describe('the canvas instrumentation', () => {
 
   beforeEach(() => {
     setCaptureMode(false);
+  });
+
+  // The frame line comes from js/sceneStatement.js, which loads on first use.
+  beforeAll(async () => {
+    (await import('../js/canvasSummary.js')).sceneWords(true);
+    await import('../js/sceneStatement.js');
+    await new Promise(r => setTimeout(r, 0));
   });
 
   test('draws a scale bar and its disclosure, and nothing else', () => {

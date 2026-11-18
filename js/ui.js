@@ -46,7 +46,7 @@ import {
   setupOverlayMinimize,
   setupReferenceFrameControl,
 } from './inspectorGate.js';
-import { setupBarycentreControl } from './barycentreMarker.js';
+import { sceneWords } from './canvasSummary.js';
 import {
   initPlacement,
   initObjectPicker,
@@ -532,7 +532,15 @@ initPlacement({ canvas });
 // The rail's reference-frame selector. The inspector card's own buttons are
 // wired when its code arrives (js/inspectorGate.js).
 setupReferenceFrameControl();
-setupBarycentreControl();
+// The Tools barycenter marker: its module loads on the first choice.
+document
+  .getElementById('barycenterMarkerSelect')
+  ?.addEventListener('change', e =>
+    import('./sceneStatement.js').then(m => {
+      m.setMarkerMode(e.target.value);
+      sceneWords(true);
+    })
+  );
 
 /**
  * Settings is one dialog with one way in and one way out.

@@ -69,10 +69,9 @@ import {
 } from './bodyLabels.js';
 import { getWorldSeed } from './rng.js';
 import { state, SETTINGS, registerCommands } from './appState.js';
-import { drawBarycentreMarkers } from './barycentreMarker.js';
-import { sourcesStatement } from './canvasSummary.js';
+import { barycenterOf, drawBarycenterCross } from './lesson/barycenter.js';
 import { sceneFor } from './lesson/evolutionScene.js';
-import { updateCanvasSummary } from './canvasSummary.js';
+import { updateCanvasSummary, sceneWords } from './canvasSummary.js';
 
 /**
  * Draw the crests a wave source has emitted.
@@ -304,7 +303,6 @@ import {
   frameShifts,
   isWorldFrame,
   resetFrame,
-  frameName,
 } from './referenceFrame.js';
 import {
   drawSandboxTools,
@@ -1497,8 +1495,37 @@ const drawScene = () => {
     drawGwWavefronts(ctx);
   }
 
-  // The lesson's barycenter and the Tools marker (js/barycentreMarker.js).
-  drawBarycentreMarkers(ctx);
+  // The overlay carries only body ids; the point is recomputed from those
+  // bodies every frame, so a student watches it stay still while two stars
+  // swing round it (not a value pushed in by the panel). Any bodies, not only
+  // stars. The Tools marker is js/sceneStatement.js's, loaded on first use.
+  if (state.barycenterOverlay?.active) {
+    const ids = state.barycenterOverlay.ids || [];
+    const members = barycenterBodies().filter(o => ids.includes(o.id));
+    const center = members.length >= 2 ? barycenterOf(members) : null;
+    if (center) {
+      state.barycenterOverlay.x = center.x;
+      state.barycenterOverlay.y = center.y;
+      state.barycenterOverlay.arms = members.map(o => ({
+        id: o.id,
+        name: o.name,
+        r: Math.hypot(o.pos.x - center.x, o.pos.y - center.y),
+      }));
+      state.barycenterOverlay.separation =
+        members.length === 2
+          ? Math.hypot(
+              members[0].pos.x - members[1].pos.x,
+              members[0].pos.y - members[1].pos.y
+            )
+          : 0;
+      drawBarycenterCross(
+        ctx,
+        world_to_screen(center),
+        members.map(o => world_to_screen(o.pos))
+      );
+    }
+  }
+  sceneWords()?.drawMarker(ctx);
 
   // Kepler's 2nd Law area sweep overlay. Checked here rather than on a timer
   // so a stale overlay is never drawn even once.
@@ -1852,7 +1879,7 @@ function readoutHtml(drawn) {
     [t('readout.elapsed'), formatTime(getSimulationTime())],
     [t('readout.zoom'), `${state.zoom.toFixed(2)}\u00d7`],
     [t('readout.speed'), `${SETTINGS.sim_speed.toFixed(1)}\u00d7`],
-    [t('readout.frame'), frameName(barycenterBodies())],
+    ...(sceneWords()?.frameMetric() || []),
   ];
   sections.push(
     `<dl class="readout-metrics">${metrics
@@ -1897,7 +1924,7 @@ function readoutHtml(drawn) {
     );
   }
 
-  for (const note of [sourcesStatement(), ...crowdNotes()])
+  for (const note of [sceneWords()?.sourcesStatement(), ...crowdNotes()])
     if (note)
       sections.push(`<p class="readout-caveat">${escapeHtml(note)}</p>`);
 

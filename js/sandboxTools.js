@@ -53,7 +53,6 @@ import {
   gas_giants,
   asteroids,
   comets,
-  barycenterBodies,
 } from './physics.js';
 import {
   scaleBar,
@@ -63,7 +62,7 @@ import {
 } from './instruments.js';
 import { formatNumber } from './format.js';
 import { t } from './i18n/index.js';
-import { frameLine } from './referenceFrame.js';
+import { sceneWords } from './canvasSummary.js';
 
 /** Meters in one simulation length unit. */
 const METERS_PER_UNIT = AU_METERS / SIM_UNITS_PER_AU;
@@ -717,11 +716,11 @@ export function drawInstrumentation(
   // The frame the picture and its trails are drawn in: beside the size line
   // where it fits, else the lowest note above the scale line.
   const sizeLine = t('canvas.sizeDisclosure');
-  const frame = frameLine(barycenterBodies());
+  const frame = sceneWords()?.frameLine() || '';
   ctx.font = `12px ${INSTRUMENT_MONO}`;
   const sizeW = ctx.measureText(sizeLine).width;
   const frameW = ctx.measureText(frame).width;
-  const beside = sizeW + 24 + frameW <= W - 2 * pad;
+  const beside = !frame || sizeW + 24 + frameW <= W - 2 * pad;
 
   // What the tier or a crowd left out, above the scale line.
   let legendBottom = barY - 20;
@@ -796,10 +795,10 @@ export function drawInstrumentation(
   ctx.font = `12px ${INSTRUMENT_MONO}`;
   ctx.fillStyle = 'rgb(200, 214, 235)';
   halo(ctx, sizeLine, pad + 2, barY + 14);
-  if (beside) halo(ctx, frame, pad + 2 + sizeW + 24, barY + 14);
+  if (frame && beside) halo(ctx, frame, pad + 26 + sizeW, barY + 14);
   const bar =
     settings.show_scale_bar !== false ? Math.min(160, W * 0.22) + 70 : 0;
-  keptW = Math.max(keptW, bar, beside ? sizeW + 24 + frameW : sizeW);
+  keptW = Math.max(keptW, bar, sizeW + (frame && beside ? 24 + frameW : 0));
   keepClear(pad, Math.min(noteTop, barY) - 8, pad + keptW + 6, barY + 24);
 
   ctx.restore();

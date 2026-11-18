@@ -13,8 +13,8 @@ test.beforeEach(async ({ page }) => {
 
 const marker = page =>
   page.evaluate(async () => {
-    const ui = await import('/js/ui.js');
-    return { ...ui.state.barycenterMarker };
+    const scene = await import('/js/sceneStatement.js');
+    return scene.markerState();
   });
 
 const summary = page =>

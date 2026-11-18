@@ -20,7 +20,6 @@ import {
   isOffscreen,
 } from '../utils.js';
 import { recordBarycenter } from '../referenceFrame.js';
-import { sourceLists } from './sources.js';
 import { followCamera, resetFollowCamera } from '../followCamera.js';
 import { hitRadius } from '../bodyVisuals.js';
 import {
@@ -62,6 +61,7 @@ import {
   activeIntegrator,
   setWorkerFailed,
   isBarnesHutActive,
+  sourceLists,
 } from './state.js';
 import {
   ENERGY_SAMPLE_RATE,
