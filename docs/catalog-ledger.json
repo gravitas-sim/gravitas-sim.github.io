@@ -2174,6 +2174,7 @@
       "title": "How Fast Does It Spin?",
       "source": [
         "js/data/investigations/depth/how-fast-does-it-spin.js",
+        "js/data/investigations/depth/ios-fire.js",
         "js/data/investigations/depth/satellite-sequence.js",
         "js/data/investigations/how-fast-does-it-spin.js",
         "js/data/investigations/satellite-sequence.js"
@@ -2511,7 +2512,6 @@
       "title": "Io’s Fire",
       "source": [
         "js/data/investigations/depth/ios-fire.js",
-        "js/data/investigations/depth/satellite-sequence.js",
         "js/data/investigations/ios-fire.js",
         "js/data/investigations/satellite-sequence.js"
       ],
@@ -4774,6 +4774,7 @@
       "format": "lesson",
       "title": "The Gaps in the Belt",
       "source": [
+        "js/data/investigations/depth/ios-fire.js",
         "js/data/investigations/depth/satellite-sequence.js",
         "js/data/investigations/depth/the-gaps-in-the-belt.js",
         "js/data/investigations/satellite-sequence.js",
@@ -5455,6 +5456,7 @@
       "format": "lesson",
       "title": "Tides That Move the Moon",
       "source": [
+        "js/data/investigations/depth/ios-fire.js",
         "js/data/investigations/depth/satellite-sequence.js",
         "js/data/investigations/depth/tides-that-move-the-moon.js",
         "js/data/investigations/satellite-sequence.js",
@@ -5858,6 +5860,7 @@
       "format": "lesson",
       "title": "Weighing Jupiter From Its Moons",
       "source": [
+        "js/data/investigations/depth/ios-fire.js",
         "js/data/investigations/depth/satellite-sequence.js",
         "js/data/investigations/depth/weighing-jupiter.js",
         "js/data/investigations/satellite-sequence.js",
@@ -6958,6 +6961,7 @@
       "format": "lesson",
       "title": "Why Rings?",
       "source": [
+        "js/data/investigations/depth/ios-fire.js",
         "js/data/investigations/depth/satellite-sequence.js",
         "js/data/investigations/depth/why-rings.js",
         "js/data/investigations/satellite-sequence.js",
