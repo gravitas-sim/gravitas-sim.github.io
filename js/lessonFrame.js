@@ -53,7 +53,17 @@ export function lessonInset() {
     if (b.left < view.width * 0.5) left = Math.max(left, b.right);
     else right = Math.max(right, view.width - b.left);
   }
-  return { left, right, top: 0, bottom: 0 };
+  // What spans the free region (light curve, plot, bar) takes a band, not a side.
+  let top = 0;
+  let bottom = 0;
+  const free = view.width - left - right;
+  for (const b of boxesOf(SHEET_PARTS)) {
+    if (b.right <= left || b.left >= view.width - right || b.width < free * 0.6)
+      continue;
+    if (b.top + b.bottom < view.height) top = Math.max(top, b.bottom);
+    else bottom = Math.max(bottom, view.height - b.top);
+  }
+  return { left, right, top, bottom };
 }
 
 /** The bounding box of the ellipse a body sweeps about its primary, as points. */
@@ -192,7 +202,7 @@ export function takeFit() {
 }
 
 export function frameScene() {
-  if (window.innerWidth <= SHEET_MAX_WIDTH) requestFit();
+  requestFit();
 }
 
 export function refit() {

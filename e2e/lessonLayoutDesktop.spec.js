@@ -8,7 +8,8 @@
 //     instrument panel is as wide on one step as on the next;
 //   - a quiet canvas gives the instrument the width the rail stood in, and the
 //     instrument is drawn at that width, not stretched to it;
-//   - a scene the step stages stands inside the region the panels leave free;
+//   - a scene the step stages, or binds by role, stands inside the region the
+//     panels leave free;
 //   - a folded control cannot take focus: not in the lesson layout and not in
 //     the Settings dialog, whose collapsed sections used to hide their content
 //     with `max-height` and `opacity` alone.
@@ -199,6 +200,30 @@ test.describe('quiet and scene canvases on a laptop', () => {
       expect(verdict.reasons, JSON.stringify(m.bodies)).toEqual([]);
       expect(m.bodies.length).toBe(2);
     });
+  }
+});
+
+// --- A scene bound by role is framed in the free region -----------------------
+
+test.describe('a bound scene stands in the free region on a laptop', () => {
+  // Kepler's second law: the rail used to cover the circular orbiter. Transit
+  // Lab: the light curve lay over the star and the planet.
+  for (const pilot of LESSON_PILOTS.filter(p =>
+    ['keplers-2nd-law', 'transit-lab'].includes(p.id)
+  )) {
+    for (const size of DESKTOP_SIZES) {
+      test(`${pilot.id} at ${size.width}`, async ({ page }) => {
+        await page.setViewportSize(size);
+        await openLessonStep(page, pilot);
+        await frames(page);
+        const m = await page.evaluate(measureLayoutInPage);
+        const verdict = judgeLayout(m, {
+          kind: 'desktop',
+          subject: pilot.subject,
+        });
+        expect(verdict.reasons, JSON.stringify(m.bodies)).toEqual([]);
+      });
+    }
   }
 });
 
