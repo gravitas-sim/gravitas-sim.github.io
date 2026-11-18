@@ -247,6 +247,12 @@ export const NEVER_PRECACHED = [
   /^js\/lessonCanvas\.js$/,
   /^js\/lesson\/canvasKind\.js$/,
   /^js\/i18n\/(en|es)\.canvas\.js$/,
+  // The words of a lesson step's Replay and armed watch: fetched by a step that
+  // declares one and kept by the service worker after that, not installed (the
+  // first-visit tier is at its data-budget ceiling). The module that reads
+  // them, js/investigations/eventWindow.js, is installed: every pauseAt step
+  // opens its tool through it.
+  /^js\/i18n\/(en|es)\.eventWindow\.js$/,
   // The lesson plot's glue, the ring a step draws round an object and their
   // words: fetched by the first lesson step that needs them and kept by the
   // service worker after that, not installed (the first-visit tier is at its

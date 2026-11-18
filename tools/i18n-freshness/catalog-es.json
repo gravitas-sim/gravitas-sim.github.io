@@ -14464,11 +14464,23 @@
     "welcome.shownAgain": "f219cc3a:1ac25585",
     "welcome.welcomeClose.hint": "1cbe0c30:fcc23c83",
     "welcome.welcomeClose.label": "1cbe0c30:fcc23c83",
+    "window.armAgain": "6a6039cd:99d289f6",
+    "window.armed": "8c22b94c:bffcbf81",
+    "window.at": "0dd431bf:da144a62",
+    "window.atEvent": "b102d844:889f2564",
+    "window.foreign": "4bd4b6bc:125fe2ea",
+    "window.jumped": "f6840e7e:a941346d",
+    "window.limit": "0f41d0ac:ce2762de",
     "window.move.arm": "252819e6:c2e77f1c",
     "window.move.done": "2c802828:f0045d53",
     "window.move.label": "77301ba6:2626480b",
+    "window.refused": "5fc7d474:5a357852",
+    "window.replayHelp": "830b62bb:360a72d9",
+    "window.rewindDrops": "3f6a6637:ca1872ad",
+    "window.rewindWhy": "4c9dcff3:a5923486",
     "window.size.arm": "ebbfac7e:472cc067",
     "window.size.done": "b74b15c5:0cc73761",
-    "window.size.label": "4d79c1e1:370c212c"
+    "window.size.label": "4d79c1e1:370c212c",
+    "window.wait": "5ed431ee:88d9488b"
   }
 }
