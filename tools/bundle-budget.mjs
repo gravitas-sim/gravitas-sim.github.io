@@ -53,7 +53,7 @@ const BUDGETS = [
   {
     id: 'initial',
     label: 'Initial download (CSS + eager JS)',
-    limit: 741.5,
+    limit: 741.4,
     reason:
       'Was 743 KB when this budget was first asked for. The application had ' +
       'already grown to 771 KB on its own - the extracted state module, the ' +
@@ -117,12 +117,12 @@ const BUDGETS = [
       '\n\nCrowded-scene drawing (D-R4-450-07): the trail, detail and label rules, the label choice and the tier note are start-up drawing code; raised from 735.3 to 735.8 KB, the exact overrun of a Node 22 build over v4 dc0112f6b (753,420 bytes, 735.76 KB) rounded up to 0.1 KB, under the standing approval of 2026-10-10.' +
       '\n\nRaised from 735.8 to 739.9 KB for the overlay, Library, lesson type, instrument start, reading feedback and lesson layout changes taken together (D-R4-TRAIN-03): a Node 22 build over v4 5c9942253 measures 757,604 bytes, 739.85 KB, and the limit is that figure rounded up to 0.1 KB, under the standing approval of 2026-10-10.' +
       '\n\nOrbit geometry and sizes (D-R4-447-07): raised from 739.9 to 740.2 KB, the exact overrun of a Node 22 build over v4 6852131e7 (757,903 bytes, 740.14 KB) rounded up to 0.1 KB, under the standing approval of 2026-10-10.' +
-      '\n\nBarycenter marker, frame and source statement, and lesson figures drawn from the model, taken together (D-R4-TRAIN-04): raised from 740.2 to 741.5 KB. A Node 22 build over v4 6852131e7 with the orbit geometry and barycenter changes measures 759,118 bytes (741.33 KB, limit 741.4); the lesson figures add 69 bytes, the hook that loads them, for 759,187 bytes (741.39 KB), and the limit takes 0.1 KB more because the margin is under 50 bytes. Under the standing approval of 2026-10-10; the share of the figures is listed for the maintainer, since that change was asked to raise no ceiling.',
+      '\n\nBarycenter marker, frame and source statement, and lesson figures drawn from the model, taken together (D-R4-TRAIN-04): raised from 740.2 to 741.4 KB, the measurement by CI of the combined branch (run 44415955830): 759,138 bytes (741.35 KB), rounded up to 0.1 KB. The share of the lesson figures is 69 bytes, the hook that loads them. Under the standing approval of 2026-10-10; that share was adopted as a maintainer decision of 2026-11-18 (D-R4-457-03).',
   },
   {
     id: 'deferred',
     label: 'Deferred JavaScript (lazy chunks, gzipped)',
-    limit: 3207.0,
+    limit: 3206.9,
     reason:
       'Jumped from 1369 KB to 2105 KB when three.js and Chart.js stopped being ' +
       'CDN requests and became bundled chunks. That is the point of the change ' +
@@ -726,7 +726,7 @@ const BUDGETS = [
       '\n\nOverlay, Library, lesson type, instrument start, reading feedback and lesson layout changes taken together (D-R4-TRAIN-03): the limit is raised from 3184.3 to 3188.7 KB, the exact overrun of a Node 22 build over v4 5c9942253 (3,265,116 bytes gzipped, 3188.59 KB) rounded up to 0.1 KB plus 0.1 KB because the margin is under 50 bytes, under the standing approval of 2026-10-10.' +
       '\n\nOrbit geometry and sizes (D-R4-447-07): the limit is raised from 3188.7 to 3199.6 KB, the exact overrun of a Node 22 build over v4 6852131e7 (3,276,315 bytes gzipped, 3199.53 KB) rounded up to 0.1 KB, under the standing approval of 2026-10-10.' +
       '\n\nBarycenter marker, frame and source statement (D-R4-TRAIN-04): raised from 3199.6 to 3202.2 KB, a Node 22 build over v4 6852131e7 with the orbit geometry change measuring 3,278,935 bytes gzipped (3202.08 KB), rounded up to 0.1 KB plus 0.1 KB because the margin is under 50 bytes, under the standing approval of 2026-10-10.' +
-      '\n\nLesson figures drawn from the model (D-R4-TRAIN-04, D-R4-457-03), listed separately for the maintainer: raised from 3202.2 to 3207.0 KB, the same build with the figures measuring 3,283,874 bytes gzipped (3206.91 KB) rounded up to 0.1 KB. The change was asked to raise no ceiling; the raise is applied so the combined branch builds, and stands or is reversed by the decision of the maintainer.',
+      '\n\nLesson figures drawn from the model (D-R4-TRAIN-04, D-R4-457-03), listed separately for the maintainer: raised from 3202.2 to 3206.9 KB, the measurement by CI of the combined branch (run 44415955830) at 3,283,804 bytes gzipped (3206.84 KB) rounded up to 0.1 KB. The change was asked to raise no ceiling; the raise was adopted as a maintainer decision of 2026-11-18 (D-R4-457-03).',
   },
 ];
 
