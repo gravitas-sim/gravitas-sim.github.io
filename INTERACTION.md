@@ -321,3 +321,30 @@ recorded, so they are not brought back either. Recorded frames stay one per
 The thresholds (a restore equals the live capture to 1e-11 relative on
 positions, velocities and masses; the capture costs under 5 ms on the
 255-body `star-cluster`) are `tests/fixtures/time-controls/thresholds.json`.
+The light curve takes no sample while a recorded frame is shown.
+
+### In a lesson step (Prompt 323)
+
+A step can use the same two actions on its own event
+(`js/investigations/eventWindow.js`, fetched only by a step that declares one
+of these):
+
+- `time: { paused, speed }` is applied once, on entering the step (a re-render
+  of the step leaves the reader's own changes alone). The lesson's scope puts
+  the reader's pause and speed back when the lesson closes.
+- `pauseAt.auto: true` arms the step's watch on entry, for a step whose
+  question is not the moment itself; the author rule `interaction/auto-arm`
+  fails one that asks when or reads a time. A watch the reader armed themselves
+  is refused and the step says so. Leaving the step releases its watch.
+- `pauseAt.replay: true` offers **Replay** once the event has fired: the
+  recorded frames from about 3 s before the event to as long after it, then
+  the live moment exactly as it was (scene, clock, recording, light curve,
+  armed watch). Under reduced motion it shows the event frame instead, and
+  the live button goes back. Leaving the step mid-replay goes back too.
+- `pauseAt.rewind: true` adds **Rewind to here**, enabled only while a recorded
+  frame is shown; it says that later history is dropped.
+
+When the event is older than the recording (900 frames, about 90 s of running,
+fewer for a crowded scene) the step says so and offers to arm again. The step
+names the event and never its time; while a lesson holds an answer
+(`data-answer-held`), the Pause at event panel hides its time readout too.

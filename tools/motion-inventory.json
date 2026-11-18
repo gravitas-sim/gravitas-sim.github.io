@@ -268,6 +268,13 @@
       "test": "tests/motionInventory.test.js"
     },
     {
+      "file": "js/investigations/eventWindow.js",
+      "kind": "raf",
+      "treatment": "timer",
+      "what": "A lesson step's Replay and Rewind to here buttons, redrawn when the timeline starts or stops showing a recorded frame (the replay itself is the timeline's)",
+      "reason": "Text or a readout updates on a timer; nothing on the page moves."
+    },
+    {
       "file": "js/lab3d/embed.js",
       "kind": "interval",
       "treatment": "timer",
@@ -289,6 +296,13 @@
       "pause": "The lab's Play and Pause button",
       "reduced": "A Reduced box, checked when the system asks for it: the lab does not start playing by itself and the camera is not eased after a drag",
       "test": "e2e/lab3dView.spec.js"
+    },
+    {
+      "file": "js/lesson/runs.js",
+      "kind": "raf",
+      "treatment": "opt-in",
+      "what": "The count of pinned frames a controlled run lets the lesson scene run, after the student presses Run",
+      "reason": "A run is started only by the student's press, ends by itself or on Cancel run, and puts the scene back; the motion on the canvas is the main loop's."
     },
     {
       "file": "js/main.js",

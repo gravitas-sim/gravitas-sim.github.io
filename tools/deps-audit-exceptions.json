@@ -1,3 +1,10 @@
 {
-  "exceptions": []
+  "exceptions": [
+    {
+      "id": "GHSA-fc5q-39xc-vjpf",
+      "reason": "picomatch <= 4.0.7 (every release published, 4.0.7 is the latest; the 2.x line is affected too), ReDoS through single-branch repeated extglobs. No patched release exists, so a lockfile change cannot clear it. Locked as 4.0.7 under jest-util, jest-message-util, @parcel/watcher and fdir, and as 2.3.2 under anymatch, all of them dev-only paths under jest; none is reachable from the shipped site, and the production audit (npm audit --omit=dev) stays exception-free.",
+      "basis": "dev-only path; no patched release; recorded 2026-11-17",
+      "expires": "2026-12-17"
+    }
+  ]
 }
