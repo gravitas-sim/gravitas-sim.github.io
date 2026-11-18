@@ -522,7 +522,7 @@
      header, because the section header is the thing that opens and shuts and
      these are only signposts within it. */
   .rail-subhead {
-    margin: var(--space-2) 0 2px;
+    margin: 6px 0 2px;
     padding: 0 var(--space-3);
     font-size: 9px;
     font-weight: var(--weight-semibold);

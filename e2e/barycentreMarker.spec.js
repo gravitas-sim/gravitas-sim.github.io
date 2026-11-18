@@ -1,5 +1,5 @@
 // The barycenter marker, the frame line and the statement of what pulls on
-// what, walked as a reader would: the Tools control reached and changed from
+// what, walked as a reader would: the rail control reached and changed from
 // the keyboard and by touch, the marker's members, and the readout and the
 // canvas summary saying the frame and the sources in words.
 import { test, expect } from './fixtures.js';

@@ -200,9 +200,11 @@ export const isLocaleLoaded = id => baseLoaded.has(id);
  *
  * @param {string} locale - Which catalog to extend
  * @param {object} messages - Ids to strings
+ * @param {boolean} [quiet] - Do not announce the change: for words only their
+ *   own module reads, which can arrive while a panel is being used
  * @returns {void}
  */
-export function registerMessages(locale, messages) {
+export function registerMessages(locale, messages, quiet) {
   if (!locale || !messages) return;
   registered[locale] = { ...(registered[locale] || {}), ...messages };
   // A string that was asked for before its chunk arrived was recorded as
@@ -214,7 +216,7 @@ export function registerMessages(locale, messages) {
   // Whether a panel rendered before or after its own strings arrived is a race
   // a lesson, a share link or a test can lose by driving a panel directly;
   // announcing the change removes it. Only for the locale on screen.
-  if (locale === current) notifyLocaleListeners();
+  if (locale === current && !quiet) notifyLocaleListeners();
 }
 
 let current = DEFAULT_LOCALE;

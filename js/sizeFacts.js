@@ -36,8 +36,8 @@ import { PLANET_RADIUS, GAS_GIANT_RADIUS } from './physics.js';
 /** Families with no size to state: a horizon, a halo, a fragment. */
 // The words for sizes, both languages: this module and the statement load
 // lazily, together, and a language switch must not leave a key on screen.
-registerMessages('en', EN_SIZES);
-registerMessages('es', ES_SIZES);
+registerMessages('en', EN_SIZES, true);
+registerMessages('es', ES_SIZES, true);
 
 export const NOT_A_SIZE = Object.freeze(['BlackHole', 'Galaxy', 'Debris']);
 

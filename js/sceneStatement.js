@@ -4,7 +4,7 @@
 // Loaded on first use (js/canvasSummary.js, sceneWords), never at start-up.
 // The frame line names the frame the picture and its trails are drawn in. The
 // source line reads the engine's own rule (js/engine/sources.js), so it cannot
-// differ from what the step sums. The Tools marker is the mass-weighted mean
+// differ from what the step sums. The rail marker is the mass-weighted mean
 // position of the whole system, as the barycentric frame averages it
 // (barycenterBodies()), or of the selected body and its primary, the source
 // that pulls hardest on it (dominantPrimary, as the orbit geometry overlay
@@ -42,10 +42,13 @@ import { announce } from './notify.js';
 import { EN_SCENE } from './i18n/en.scene.js';
 import { ES_SCENE } from './i18n/es.scene.js';
 
-registerMessages('en', EN_SCENE);
-registerMessages('es', ES_SCENE);
+// Quiet: these words arrive at idle, 3 s after the splash, and announcing them
+// would repaint a lesson step a reader is typing in. translateControl, below,
+// and the canvas description, which rebuilds itself, are the readers.
+registerMessages('en', EN_SCENE, true);
+registerMessages('es', ES_SCENE, true);
 
-// The Tools control's words live here, not in the start-up catalogs, so its
+// The rail control's words live here, not in the start-up catalogs, so its
 // markup carries English and data-scene-i18n keys that only this module
 // applies: text set in place on the existing nodes, so a choice being made
 // keeps its focus and type-ahead (and nothing shows a raw key before this
@@ -171,6 +174,10 @@ export const markerState = () => ({ ...marker, members: [...marker.members] });
 export function setMarkerMode(mode) {
   marker.mode = MARKER_MODES.includes(mode) ? mode : 'off';
   marker.members = [];
+  // The rail note is shown only while a marker is on: a permanent three-line
+  // explainer is more than the Scenario group wants.
+  const note = document.getElementById('barycenterMarkerNote');
+  if (note) note.hidden = marker.mode === 'off';
 }
 
 const alive = b => b && b.alive !== false;
@@ -228,7 +235,7 @@ function noteNoPrimary(none) {
 }
 
 /**
- * Draw the Tools marker, if on, and keep the names a summary quotes.
+ * Draw the rail marker, if on, and keep the names a summary quotes.
  * @param {CanvasRenderingContext2D} ctx - The scene context, world transform off
  */
 export function drawMarker(ctx) {

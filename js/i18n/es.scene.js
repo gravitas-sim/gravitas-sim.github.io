@@ -1,5 +1,5 @@
 // The sandbox scene's own words in Spanish: the frame the picture is drawn in,
-// which bodies pull on which, and the barycenter marker and its Tools control.
+// which bodies pull on which, and the barycenter marker and its rail control.
 // Registered by js/sceneStatement.js, which loads on first use.
 export const ES_SCENE = {
   'rail.barycenterMarker': 'Baricentro',
